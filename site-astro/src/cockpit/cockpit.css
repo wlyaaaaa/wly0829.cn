@@ -30,7 +30,10 @@
 .cp-hero h1 { margin: 0; line-height: 0; }
 .cp-hero h1 img { height: 76px; width: auto; }
 .cp-h1-text { display: none; }
-.cp-hero-art { grid-area: art; width: 100%; align-self: center; max-height: 330px; object-fit: contain; }
+.cp-hero-art { grid-area: art; width: 100%; align-self: center; margin: 0; position: relative; }
+/* 小鸟（环境动画引擎）按这张图的框落脚：图按宽度等比显示，不留 contain 的空边 */
+.cp-hero-art > img { display: block; width: 100%; height: auto; max-height: 330px; object-fit: contain; }
+.cp-page .living-bird img { max-width: none; } /* 小鸟图集按帧裁切，不能被全页 img 的 max-width: 100% 压扁 */
 .cp-lead { margin: 8px 0 0; color: var(--cp-soft); font-size: 15px; }
 .cp-overview { display: contents; }
 .cp-security-wrap { grid-area: sec; }

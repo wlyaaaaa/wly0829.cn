@@ -1,4 +1,4 @@
-"""驾驶舱 W2 显示：时间写日期、电脑卡原因句、验收合并、项目红灯只给等你的、今天出错清单传给河。"""
+"""驾驶舱 W2 显示：时间写日期、处理器卡不再自己猜资源原因、内存/系统资源卡用后端原文、首屏电脑摘要分开说、验收合并、项目红灯只给等你的、今天出错清单传给河。"""
 import subprocess
 import unittest
 from pathlib import Path
@@ -19,7 +19,8 @@ const assert = require('node:assert/strict');
   const v = normalize({
     schema: 'pcconfig.cockpit-view.v1',
     sections: {
-      computer: [{ id: 'computer_health', title: '电脑资源', text: '处理器 24%', state: 'attention', observed_at: '2026-10-12T00:29:00+08:00' },
+      computer: [{ id: 'computer_health', title: '处理器', text: '电脑读数：处理器 24%，52℃', state: 'ok', observed_at: '2026-10-12T00:29:00+08:00' },
+                 { id: 'system_resources', title: '内存/系统资源', text: '系统内核内存 8.5 GB，偏高；可分页内核内存 6.8 GB，偏高', state: 'attention', observed_at: '2026-10-12T00:29:00+08:00' },
                  { id: 'traffic', title: '套餐流量', text: '已用 521 GB', state: 'unavailable', observed_at: '2026-10-10T14:18:00+08:00' }],
       remote: [{ id: 'remote', title: '远程连接', text: '远程连接在线', state: 'ok' }],
       backup_cloud: [{ id: 'drive_upload', title: 'Google Drive 上传', text: '上传器：现在有没有在上传还不知道。18:47 读到时没在传。', state: 'ok' }],
@@ -35,9 +36,19 @@ const assert = require('node:assert/strict');
   });
   const ctx = { now, offline: false, projectUrls: {}, img: {} };
   const pc = R.computer(v, ctx);
-  assert.match(pc, /原因：系统资源超过了警戒线：非分页池（系统内核自己占的内存）现在 8 GB，24 小时涨了 5 GB/);
-  assert.match(pc, /之前定过的办法（你有空时）：下次电脑卡住时，先按几个简单步骤查一下</);
-  assert.doesNotMatch(pc, /换键盘/);
+  // 本人 10-12：内存引起的黄不能挂在处理器上；前端不再从 pc_health 自己挑触发项，用后端 system_resources 卡的原文
+  assert.doesNotMatch(pc, /原因：|cp-reason|cp-plan|非分页池/);
+  assert.match(pc, /cp-card is-green"><h3>.*?处理器<\/h3><p>电脑读数：处理器 24%，52℃<\/p>/);
+  assert.match(pc, /cp-card is-yellow"><h3>.*?内存\/系统资源<\/h3><p>系统内核内存 8.5 GB，偏高；可分页内核内存 6.8 GB，偏高<\/p>/);
+  // 首屏：总览给 ok 但资源卡亮黄时不能显示成全好；说的是资源，不是处理器
+  const ov = { stale: () => false, lamp: () => '' };
+  const top = R.page({ ...v, overview: { as_of: '2026-10-12T00:29:00+08:00', score: 90, signals: [{ id: 'computer', level: 'ok' }], reasons: [] } }, { ...ctx, ov });
+  const cell = /<li class="cp-tri-cell is-(\w+)" data-signal="computer">(.*?)<\/li>/.exec(top);
+  assert.ok(cell, '首屏有电脑格');
+  assert.equal(cell[1], 'yellow');
+  assert.match(cell[2], /内存\/系统资源偏高/);
+  assert.match(cell[2], /系统内核内存 8.5 GB，偏高/);
+  assert.doesNotMatch(cell[2], /处理器偏热|处理器 24%/);
   assert.match(pc, /这是 10月10日 14:18 读到的，之后 34 小时没读到新的/);
   assert.match(pc, /笔记本（副机）：在线/);
   assert.match(R.backup(v, ctx), /上传器：18:47 读到时没在传。现在有没有在上传还不知道。/);

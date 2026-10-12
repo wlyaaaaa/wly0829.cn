@@ -12,6 +12,9 @@ import '../../cockpit/cockpit.css';
 import '../../cockpit/refresh-button.css';
 import riverJs from '../../../../scripts/today-river.js?url&no-inline';
 import riverCss from '../../../../scripts/today-river.css?url';
+import birdConfig from '../../cockpit/bird.config.json?url&no-inline';
+import livingEngine from '../../chrome/living-engine.json';
+import motionRuntime from '../../../public/_living/quality-runtime/manifest.json';
 
 // 精简视图；边缘函数还没转发 view 时 live 回全量，asView 照样认
 const ENDPOINTS = ['https://live.wly0829.cn/computer-access/state?view=cockpit', 'https://mcp.wly0829.cn/computer-access/api/status?view=cockpit'];
@@ -65,7 +68,14 @@ const cockpitRuntime = runtimeFiles['../../chrome/runtime/cockpit.json'];
 const navLabels = (() => { const m = cockpitRuntime?.tail?.match(/<script id="page-data" type="application\/json">(.*?)<\/script>/s); try { return m ? JSON.parse(m[1]).shared?.nav_labels || {} : {}; } catch { return {}; } })();
 const tocLabels = Object.fromEntries(toc.map((t) => [t.label, labelData[t.label] || navLabels[t.label]]).filter(([, v]) => v && v.src && v.size));
 
-const html = page(view, { now: new Date(), offline: false, projectUrls, img, ov });
+// 小鸟：和其他页同一个环境动画引擎（样式、脚本取其他页运行件里的同一份标签，按 Site.astro 的同样规则换成现行地址），
+// 只给首屏插画一份只有小鸟的配置（src/cockpit/bird.config.json，落在显示器右前方的木桌上），不带路、不去卡片上，不挡卡片和按钮；手机上插画收起，小鸟也不出现。
+const engineRt = runtimeFiles['../../chrome/runtime/agents.json'];
+const engineUrl = (s: string) => Object.entries(motionRuntime.urls).reduce((x, [from, to]) => x.replaceAll(from, to as string), s.replace(`/_living/_engine/${livingEngine.deployed}`, `/_living/_engine/${livingEngine.fixed}`));
+const livingCss = (engineRt?.head || []).find((h: string) => h.startsWith('<link data-living-runtime')) || '';
+const jsAt = (engineRt?.tail || '').indexOf('<script data-living-runtime'), jsEnd = jsAt < 0 ? -1 : engineRt.tail.indexOf('</' + 'script>', jsAt);
+const livingTags = engineUrl(livingCss + (jsEnd < 0 ? '' : engineRt.tail.slice(jsAt, jsEnd + 9)));
+const html = page(view, { now: new Date(), offline: false, projectUrls, img, ov, birdConfig });
 const safe = (o: unknown) => JSON.stringify(o).replace(/</g, '\\u003c');
 const boot = safe({ endpoints: ENDPOINTS, local: ['/__status?view=cockpit'], snapshot, projectUrls, img });
 ---
@@ -74,6 +84,7 @@ const boot = safe({ endpoints: ENDPOINTS, local: ['/__status?view=cockpit'], sna
   <script is:inline>/* 主导航标出当前页是驾驶舱（下划线），和发布时导航修复的写法一致 */document.querySelectorAll('a[href="/cockpit/"]').forEach((a)=>{if(a.closest('header,#menu,footer,.primary-nav'))a.setAttribute('aria-current','page');});</script>
   <link rel="stylesheet" href={riverCss} />
   <link rel="stylesheet" href="/_overview/overview-screen.css" />
+  <Fragment set:html={livingTags} />
   <div class="cp-page"><Fragment set:html={html} /></div>
   <div class="cockpit-refresh-wrap">
     <button type="button" class="cockpit-refresh" data-cockpit-refresh aria-label="刷新驾驶舱数据" title="立刻重读电脑">

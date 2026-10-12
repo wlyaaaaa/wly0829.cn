@@ -1,6 +1,6 @@
 // 驾驶舱各块的 HTML。构建时用最近一份快照画出首帧，浏览器拿到新数据后用同一组函数原地换掉每块里面的内容。
 // 每块外框（[data-cp] 所在的元素）始终在，数据没到只换字，不出空框、不换版式。
-import { hm, dateHm, when, ago, light, splitChecked, dedupeCards, isToday } from './model.js';
+import { hm, dateHm, when, ago, light, dedupeCards, isToday } from './model.js';
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 // 图片地址由页面传入（构建时 Vite 给的带指纹地址）；没传时按素材原名
@@ -211,7 +211,8 @@ export function computer(v, ctx) {
     : `<article class="cp-card is-gray"><h3>${dot('unavailable')}24 小时曲线</h3><p>图表网页现在打不开${g.checked_at ? `（上次检查 ${esc(when(g.checked_at, ctx.now))}）` : ''}。</p></article>`;
   // Grafana 后台登录：根地址来自接口，后面拼 login；接口没给地址就不出这张卡
   const login = g.url ? `<a class="cp-card cp-chart cp-login" href="${esc(new URL('login', g.url).href)}" target="_blank" rel="noopener"><h3><span class="cp-login-icon" aria-hidden="true"></span>Grafana 后台登录 →</h3><p>登录后看全部图表、改面板（新标签页）。</p></a>` : '';
-  const cards = dedupeCards(v.sections.computer).map((c) => (c.id === 'computer_health' ? card(c, ctx.now).replace('</p>', '</p>' + pcReason(v)) : card(c, ctx.now))).join('');
+  // 处理器卡只按温度上色；内存和系统资源是后端单独的一张卡（system_resources），正文就是真实触发项，这里不再自己补猜的原因
+  const cards = dedupeCards(v.sections.computer).map((c) => card(c, ctx.now)).join('');
   // 副机（笔记本）在不在线，接在远程连接卡里（remote_network.secondary_laptop；没读到就不写这一行）
   const lap = LAPTOP[v.laptop.state];
   const remote = (dedupeCards(v.sections.remote).map((c) => card(c, ctx.now)).join('') || card({ title: '远程连接', state: 'unavailable', text: '' }, ctx.now)).replace('<article ', '<article id="remote" ')
@@ -219,23 +220,6 @@ export function computer(v, ctx) {
   return `<div class="cp-grid">${cards}${remote}</div><div id="grafana" class="cp-grid cp-charts">${graf}${login}</div>`;
 }
 const LAPTOP = { online: ['在线', 'ok'], offline: ['离线（要用它时得先开机连网）', 'attention'] };
-
-// 电脑有预警时说清原因：哪一项涨得最多、现在多少；“AI 核对、你不用关软件”是后端 pc-health 待办的原话。
-// 再列出之前定过、和电脑卡有关的暂缓办法（你有空时）。原因字段没到就什么都不加。
-const PC_METRIC = { nonpaged_pool_bytes: '非分页池（系统内核自己占的内存）', paged_pool_bytes: '分页池（系统内核占的内存）', committed_bytes: '已提交内存', handle_count: '句柄数' };
-const gb = (b) => `${Math.round(b / 2 ** 30 * 10) / 10} GB`;
-function pcReason(v) {
-  const h = v.pc_health;
-  if (!['warn', 'error'].includes(h.state)) return '';
-  const m = h.metrics || {}, d = h.changes_24h || {};
-  const top = Object.keys(PC_METRIC).filter((k) => Number.isFinite(m[k]) && d[k] > 0 && m[k] > d[k]).sort((a, b) => d[b] / (m[b] - d[b]) - d[a] / (m[a] - d[a]))[0];
-  const what = String(h.reason_code || '').startsWith('resource_growth') ? '系统资源一直在涨' : '系统资源超过了警戒线';
-  const fmt = (k, n) => (k === 'handle_count' ? `${Math.round(n / 1e4) / 10} 万个` : gb(n));
-  const detail = top ? `：${PC_METRIC[top]}现在 ${fmt(top, m[top])}，24 小时涨了 ${fmt(top, d[top])}` : '';
-  const plan = v.deferred.filter((x) => /卡住|卡死|超频|BIOS/.test(x.title || '')).map((x) => splitChecked(x.title).title);
-  return `<p class="cp-reason">原因：${what}${esc(detail)}。卡顿原因还没查明，由 AI 按现有办法核对，你不用自己关软件。</p>`
-    + (plan.length ? `<p class="cp-plan">之前定过的办法（你有空时）：${plan.map(esc).join('；')}</p>` : '');
-}
 
 export function backup(v, ctx) {
   const cards = dedupeCards(v.sections.backup_cloud).map((c) => card(c.id === 'drive_upload' ? { ...c, text: knownFirst(c.text) } : c, ctx.now)).join('');
@@ -413,9 +397,16 @@ function tri(v, ctx, off) {
   const handled = (s, fallback) => (s?.handler_text ? s.handler_text : fallback);
   // 电脑
   const pc = sigOf(ov, 'computer'), pcWhy = whyOf(ov, 'computer');
-  const pcCard = (v.sections.computer.find((c) => c.id === 'computer_health') || {}).text || '';
-  const pcStatus = pc.level === 'ok' ? '正常' : pc.level === 'act' || pc.level === 'watch' ? (pcWhy.some((t) => /资源/.test(t)) || !pcWhy.length ? '资源有预警' : pcWhy[0]) : '读不到';
-  const pcWho = pc.level === 'ok' ? '你不用管' : handled(pc, '不用你动手 · 交给 AI 盯着');
+  // 处理器（computer_health，只看温度）和内存/系统资源（system_resources）分开说：哪张卡亮了就说哪张，原因用后端卡片原文，不把资源问题说成处理器的
+  const pcOf = (id) => v.sections.computer.find((c) => c.id === id) || null;
+  const proc = pcOf('computer_health'), res = pcOf('system_resources');
+  const bad = (c) => !!c && ['attention', 'red'].includes(c.state);
+  const pcLevel = pc.level === 'ok' && (bad(proc) || bad(res)) ? 'watch' : pc.level;
+  const pcBad = [bad(proc) && '处理器偏热', bad(res) && '内存/系统资源偏高'].filter(Boolean);
+  const pcStatus = pcLevel === 'ok' ? '正常' : pcLevel === 'act' || pcLevel === 'watch' ? (pcBad.length ? pcBad.join('，') : pcWhy[0] || '资源有预警') : '读不到';
+  const pcWho = pcLevel === 'ok' ? '你不用管' : handled(pc, '不用你动手 · 交给 AI 盯着');
+  const pcText = (c) => String(c?.text || '').replace(/^电脑读数：/, '');
+  const pcDetail = (pcBad.length ? [bad(res) && pcText(res), bad(proc) && pcText(proc)] : [proc?.text && '现在 ' + pcText(proc)]).filter(Boolean).join('；');
   // 自动任务：今天出错数和“今天的动态”同一份（today_activity.summary.errors）
   const tk = sigOf(ov, 'today_tasks'), errs = todayErrors(v), sum = v.today_activity?.summary || {};
   const nErr = errs ? errs.owner + errs.other : Number.isFinite(tk.value) ? tk.value : null;
@@ -429,7 +420,7 @@ function tri(v, ctx, off) {
   const bkWho = bk.level === 'ok' ? '你不用管' : handled(bk, '不用你动手 · 交给 AI');
   const bkMore = bkWhy.length > 1 ? `另有 ${bkWhy.length - 1} 项：${bkWhy.slice(1).join('、')}` : Number.isFinite(bk.value) && bk.level !== 'ok' ? `共 ${bk.value} 项不正常` : '';
   return `<ul class="cp-tri">`
-    + cell('computer', '电脑', pc.level, pcStatus, pcWho, pcCard.replace(/^电脑读数：/, '现在 '))
+    + cell('computer', '电脑', pcLevel, pcStatus, pcWho, pcDetail)
     + cell('tasks', '自动任务', tk.level, tkStatus, tkWho, tkWhy)
     + cell('backup', '备份', bk.level, bkStatus, bkWho, bkMore)
     + `</ul>`;
@@ -482,7 +473,7 @@ export function page(v, ctx) {
     <h1><img src="${src(ctx, 'cockpit-01-title-01.png')}" alt="驾驶舱" width="483" height="198" loading="eager"><span class="cp-h1-text" aria-hidden="true">驾驶舱</span></h1>
     <p class="cp-lead">先看你现在要做几件事，再看电脑、自动任务、备份谁在办。每分钟从电脑读一次，时间都是北京时间；右下角 ↻ 立刻重读。</p>
   </div>
-  <img class="cp-hero-art" src="${src(ctx, 'cockpit-01-illustration-01.png')}" alt="" width="866" height="326" loading="eager">
+  <figure class="cp-hero-art"${ctx?.birdConfig ? ` data-living-config="${ctx.birdConfig}"` : ''}><img src="${src(ctx, 'cockpit-01-illustration-01.png')}" alt="" width="866" height="326" loading="eager" crossorigin="anonymous"></figure>
   <div class="cp-overview" data-cp="overview">${overview(v, ctx)}</div>
   <div class="cp-security-wrap"><h2 class="cp-security-title"><img src="${src(ctx, 'cockpit-07-title-01.png')}" alt="安全和授权" width="719" height="180" loading="eager"></h2><div class="cp-security" data-cp="security">${security(v, ctx)}</div></div>
 </section>
