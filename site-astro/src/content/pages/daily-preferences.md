@@ -670,7 +670,7 @@
      "text": "26,306 行",
      "meaning": "Python 23,822 行（36 文件）＋mjs 2,484 行（7 文件），不含测试和额外 js",
      "as_of": "2026-10-11",
-     "source": "见来源记录 daily-preferences-n-code-0，观察于 2026-10-11",
+     "source": "提交 b334b3aa 静态计行",
      "screens": [
       "daily-preferences-10"
      ]
@@ -680,7 +680,7 @@
      "text": "测试定义 775 个（只计数）",
      "meaning": "Python 718＋Node 57；10 月 11 日没有重跑",
      "as_of": "2026-10-11",
-     "source": "见来源记录 daily-preferences-n-tests-0，观察于 2026-10-11",
+     "source": "提交 b334b3aa 测试定义计数；历史实跑保留原日期",
      "screens": [
       "daily-preferences-10"
      ]
@@ -934,8 +934,8 @@
  },
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
-  "sha256": "1769b0d6b6c8b029902c53e6c2e7c264b45d2c8e971bb50fe10a4c61c71c38ff",
-  "converted_at_beijing": "2026-10-12T06:47:11+08:00"
+  "sha256": "4324fea12fc052312bb385ec02b6f6334ca6d00492722327344e6f7acb128d47",
+  "converted_at_beijing": "2026-10-12T15:05:45+08:00"
  }
 }
 ---

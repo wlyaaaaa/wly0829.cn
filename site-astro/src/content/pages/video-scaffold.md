@@ -463,9 +463,9 @@
     {
      "id": "n-lines",
      "text": "15331 行",
-     "meaning": "Git 里不在 tests/ 下的 57 个 .py 文件总行数（含空行注释），截止 cc41e514",
-     "as_of": "2026-10-12",
-     "source": "cc41e514 的非 tests/ .py 逐文件行数，14:00 前截点",
+     "meaning": "Git 里不在 tests/ 下的 57 个 .py 文件按 LF 换行符计数（含空行注释），截止 c4eec887",
+     "as_of": "2026-10-11",
+     "source": "c4eec887 的非 tests/ 57 个 .py 按 LF 换行符计数：15331 行（含空行和注释）；截至北京时间 2026-10-11 15:09:53 的提交窗口",
      "screens": [
       "video-scaffold-06"
      ]
@@ -473,9 +473,9 @@
     {
      "id": "n-commits",
      "text": "113 次",
-     "meaning": "截止 cc41e514 的全部提交数，6 月 26 日–10 月 11 日 13:57（北京时间）",
-     "as_of": "2026-10-12",
-     "source": "git rev-list --count cc41e514，14:00 前截点",
+     "meaning": "截止 c4eec887 的全部提交数，6 月 26 日–10 月 11 日 15:09:53（北京时间）",
+     "as_of": "2026-10-11",
+     "source": "c4eec887 的全部提交数：113 次；窗口为北京时间 2026-06-26 至 2026-10-11 15:09:53",
      "screens": [
       "video-scaffold-06"
      ]
@@ -674,8 +674,8 @@
  },
  "source": {
   "page": "sources/pages/video-scaffold/page.json",
-  "sha256": "495ff82afd8047c256de09f918353542b4dc6f89fd5965e17097b34da1a84f9c",
-  "converted_at_beijing": "2026-10-12T05:03:52+08:00"
+  "sha256": "2429496e996ea71ea7aa18b0d3f4e63cced5e36ba39257dbedc5afa98e6e1660",
+  "converted_at_beijing": "2026-10-12T15:05:56+08:00"
  }
 }
 ---

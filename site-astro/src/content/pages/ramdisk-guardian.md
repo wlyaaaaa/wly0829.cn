@@ -293,7 +293,7 @@
      "text": "7,444 轮",
      "meaning": "守护巡查轮数（现存日志里 guardian run 行），最早为北京时间 7 月 24 日 12:19:54，更早的已轮换",
      "as_of": "2026-10-11",
-     "source": "见来源记录 ramdisk-guardian-n-runs-0，观察于 2026-10-11",
+     "source": "现存日志里的 guardian run 行；截至 10 月 11 日 13:46（北京时间，14:00 前的最后一轮）；更早的已轮换掉，有 59 处间隔超过 15.5 分钟，最长 1,751 分钟",
      "screens": [
       "ramdisk-guardian-01"
      ]
@@ -547,8 +547,8 @@
  },
  "source": {
   "page": "sources/pages/ramdisk-guardian/page.json",
-  "sha256": "c48fc1a884c6d1fecc91ebec06e7204a7929de6e224117c6acb06e5cd05da217",
-  "converted_at_beijing": "2026-10-12T06:55:07+08:00"
+  "sha256": "7b751f3f06cd233badd2ce0e196b358a25d385998a90d630fba8ab5a3d0c4967",
+  "converted_at_beijing": "2026-10-12T15:05:51+08:00"
  }
 }
 ---
