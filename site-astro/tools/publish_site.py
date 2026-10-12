@@ -334,7 +334,9 @@ def publish(args):
             # Bind the actual HEAD proofs to this immutable plan before its pin is retired.
             verification = {**manifest['oss']['verification'], 'plan_sha256': retention.digest(output/oss.PLAN)}
             step('retention_proofs', lambda: retention.write(output/'remote-verification.json', verification))
-            step('retention_inventory', lambda: retention.pin(preparation))
+            pin_path = step('retention_inventory', lambda: retention.pin(preparation))
+            receipt['oss_retention_pin'] = {'path': str(pin_path), 'plan_sha256': verification['plan_sha256'],
+                                            'storage': 'plan_snapshot in shared Git pin'}
             code = step('oss_retirement', lambda: retention.collect(SimpleNamespace(
                 preparation=preparation, commit=receipt['commit'], rollback=manifest.get('rollback_ref'),
                 cli=CLI, profile='website-images', lock_holder=args.lock_holder, report=report,

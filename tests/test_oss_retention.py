@@ -65,28 +65,54 @@ class RetentionTests(unittest.TestCase):
                 with self.assertRaises(ValueError): retention.versions('fake', 'fixture')
 
     def test_current_and_inflight_are_kept_but_unpinned_obsolete_objects_are_collected(self):
-        pin_path = self.shared / 'pins' / 'pending.json'
-        plan_path = self.root / 'pending-plan.json'; retention.write(plan_path, {'fixture': True})
-        retention.write(pin_path, {'schema': 'wly.oss-pin.v1', 'bucket': retention.BUCKET, 'plan': str(plan_path),
-            'plan_sha256': retention.digest(plan_path), 'objects': {self.pending: self.fingerprint}})
+        plan_path = self.preparation/'oss-plan.json'
+        retention.write(plan_path, {'schema': 'wly.oss-release-plan.v1', 'asset_base_url': retention.BASE,
+            'objects': {'x.js': {'key': self.pending, **self.fingerprint}}, 'github_files': {}, 'release_id': 'pending'})
+        plan_path.write_bytes(b'\xef\xbb\xbf'+plan_path.read_bytes())
+        with patch.object(retention, 'shared', return_value=self.shared): pin_path = retention.pin(self.preparation)
+        saved = retention.read(pin_path)
+        self.assertEqual(saved['plan_snapshot'].encode('utf-8'), plan_path.read_bytes())
+        plan_path.unlink()
         before = {key: [self.version(key)] for key in (self.keep, self.pending, self.obsolete)}
         after = {key: [self.version(key)] for key in (self.keep, self.pending)}
         partial = 'releases/partial/x.js'; managed = retention.read(self.shared/'managed.json')
+        managed['objects']['_v.gif'] = self.fingerprint
         managed['objects'][partial] = {**self.fingerprint, 'etag': ''}; retention.write(self.shared/'managed.json', managed)
         before[partial] = [self.version(partial)]; after[partial] = [self.version(partial)]
         current = {'rollback_ref': 'old', 'oss': {'asset_base_url': retention.BASE, 'objects': {'x': {'key': self.keep}}}}
         with patch.object(retention, 'shared', return_value=self.shared), patch.object(retention, 'manifest', return_value=current), \
              patch.object(retention, 'plan_pin', return_value=(self.shared/'pins/own.json', {'plan_sha256': 'own'}, {})), \
              patch.object(retention, 'exact_versions', side_effect=[{key: before[key] for key in (self.obsolete, partial)},
-                                                                   {self.obsolete: before[self.obsolete]}, {}]), patch.object(retention, 'require_lock'), \
+                                                                   {self.obsolete: before[self.obsolete]}, {}]) as listings, patch.object(retention, 'require_lock'), \
              patch.object(retention, 'command', side_effect=['live refs/heads/main', 'live refs/heads/main', 'deleted']) as commands:
             self.assertEqual(retention.collect(self.args), 1)
         batch = (self.root/'oss-delete-0.xml').read_text()
         self.assertIn(self.obsolete, batch); self.assertNotIn(self.keep, batch); self.assertNotIn(self.pending, batch)
+        self.assertNotIn('_v.gif', batch); self.assertEqual(listings.call_args_list[0].args[2], [self.obsolete, partial])
+        self.assertIn('_v.gif', retention.read(self.shared/'managed.json')['objects'])
         self.assertEqual(retention.read(self.args.report)['deleted_objects'], 1)
         self.assertEqual(retention.read(self.args.report)['status'], 'incomplete')
         self.assertIn(partial, retention.read(self.args.report)['deferred'])
         self.assertTrue(pin_path.exists()); self.assertEqual(len(commands.call_args_list), 3)
+
+    def test_missing_legacy_plan_retains_its_objects_while_other_candidates_are_deleted(self):
+        pin_path = self.shared/'pins/legacy.json'
+        retention.write(pin_path, {'schema': 'wly.oss-pin.v1', 'bucket': retention.BUCKET,
+            'plan': str(self.root/'gone/oss-plan.json'), 'plan_sha256': 'a'*64, 'objects': {self.pending: self.fingerprint}})
+        current = {'rollback_ref': 'old', 'oss': {'asset_base_url': retention.BASE, 'objects': {'x': {'key': self.keep}}}}
+        before = {self.obsolete: [self.version(self.obsolete)]}
+        with patch.object(retention, 'shared', return_value=self.shared), patch.object(retention, 'manifest', return_value=current), \
+             patch.object(retention, 'plan_pin', return_value=(self.shared/'pins/own.json', {'plan_sha256': 'own'}, {})), \
+             patch.object(retention, 'exact_versions', side_effect=[before, before, {}]) as listings, \
+             patch.object(retention, 'require_lock'), \
+             patch.object(retention, 'command', side_effect=['live refs/heads/main', 'live refs/heads/main', 'deleted']):
+            self.assertEqual(retention.collect(self.args), 1)
+        report = retention.read(self.args.report)
+        self.assertEqual(report['status'], 'incomplete'); self.assertEqual(report['deleted_objects'], 1)
+        self.assertEqual(report['pending_pins'][0]['reason'], 'In-flight plan missing; registered objects retained')
+        self.assertEqual(listings.call_args_list[0].args[2], [self.obsolete])
+        self.assertIn(self.pending, retention.read(self.shared/'managed.json')['objects']); self.assertTrue(pin_path.exists())
+        self.assertNotIn(self.pending, (self.root/'oss-delete-0.xml').read_text())
 
     def test_exact_prefix_query_filters_neighbours_and_pages_to_completion(self):
         first = {'schema_version': '1', 'complete': False, 'returned': 1, 'items': [self.version(self.obsolete)], 'next_cursor': 'next'}
@@ -163,6 +189,25 @@ class RetentionTests(unittest.TestCase):
              patch.object(retention, 'command', return_value='live refs/heads/main'), patch.object(retention, 'versions') as listings:
             with self.assertRaises(ValueError): retention.collect(self.args)
         listings.assert_not_called()
+
+    def test_changed_snapshot_or_existing_legacy_plan_blocks_before_cloud_queries(self):
+        plan_path = self.root/'changed-plan.json'; retention.write(plan_path, {'fixture': True})
+        current = {'rollback_ref': 'old', 'oss': {'asset_base_url': retention.BASE, 'objects': {'x': {'key': self.keep}}}}
+        for snapshot, change_original in ((None, False), ('changed', False), (plan_path.read_bytes().decode('utf-8'), True)):
+            value = {'schema': 'wly.oss-pin.v1', 'bucket': retention.BUCKET, 'plan': str(plan_path),
+                     'plan_sha256': 'b'*64, 'objects': {self.pending: self.fingerprint}}
+            if snapshot is not None: value['plan_snapshot'] = snapshot
+            if change_original:
+                value['plan_sha256'] = retention.digest(plan_path)
+                self.assertEqual(retention.hashlib.sha256(snapshot.encode('utf-8')).hexdigest(), value['plan_sha256'])
+                retention.write(plan_path, {'changed': True})
+            retention.write(self.shared/'pins/changed.json', value)
+            with self.subTest(snapshot=snapshot), patch.object(retention, 'shared', return_value=self.shared), \
+                 patch.object(retention, 'manifest', return_value=current), \
+                 patch.object(retention, 'plan_pin', return_value=(self.shared/'pins/own.json', {}, {})), \
+                 patch.object(retention, 'command', return_value='live refs/heads/main'), patch.object(retention, 'exact_versions') as listings:
+                with self.assertRaisesRegex(ValueError, 'changed in-flight pin'): retention.collect(self.args)
+            listings.assert_not_called()
 
     def test_object_changed_since_real_receipt_blocks_delete(self):
         before = {self.obsolete: [self.version(self.obsolete)]}; before[self.obsolete][0]['etag'] = 'B' * 32
