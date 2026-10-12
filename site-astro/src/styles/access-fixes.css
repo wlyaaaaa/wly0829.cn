@@ -60,3 +60,9 @@ html body .typeset-live-flow-layer:has(> button.b2-native.b2-image-action[data-b
 .typeset-live-flow-region:has([data-b2-slot="ca-results"]) .typeset-live-flow-cards {
   max-width: 760px;
 }
+
+/* 首屏小鸟层（access-bird.js）：叠在新插画 .o3-art 上，点击穿透 */
+#computer-access-01 .access-bird { position: absolute; z-index: 2; pointer-events: none; }
+#computer-access-01 .access-bird, #computer-access-01 .access-bird * { pointer-events: none !important; }
+/* O3 重排隐藏了首屏所有 img，小鸟精灵图要放出来 */
+#computer-access-01.o3-ready .access-bird img.lb-i { display: block !important; }
