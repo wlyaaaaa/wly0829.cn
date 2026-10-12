@@ -8,6 +8,12 @@ personal AI collaboration workspace; public presentation is secondary.
 
 本人问网站搜索词、点击、展示、平均排名或收录时，查询入口是 `python -B -X utf8 tools/query-search-terms.py --days 28`（默认 28 天，可改天数或用 `--end YYYY-MM-DD`；凭据须经密码中心登记程序供给，未配置或读取失败会明确报错）；Google 按太平洋日期切日、默认截止到当地三天前，数据通常晚 2–3 天且低频词会被隐去，网站总量与可见词表分开，Bing 词统计按返回日期筛选但每周更新且周覆盖区间未知，Google 全站收录需另读 Page Indexing 或通过 `--google-index-snapshot <本机快照.json>` 显示带日期的非实时快照，Bing 显示最新可取得的收录快照，空记录不等于无人搜索。
 
+月度热门页面用 `python -B -X utf8 tools/query-site-visitors.py --month 2026-10`。普通查询同时输出离线 ip2region 省市、IPtoASN 机构网络与 App 分布、新访客/回头客、每页停留和按省份/运营商分组的打开速度中位数；地区与机构只是 IP 网络归属线索，不证明个人身份、精确位置或雇主，原始 IP 不出本机。离线数据库与首次观察编号历史只保存在本机默认缓存 `E:\Cache\wly-site-visitors`，不提交仓库；数据库不可用时汇总明确为未知，不用网络查询 IP。新/回头客依据已观察日志中的首次日期，首次观察不证明绝对首次来访，苹果 Safari 与微信清存储会使回头客偏少。
+
+推断某个日期附近的可能访问来源，用 `python -B -X utf8 tools/query-site-visitors.py --around 2026-10-12 --city 上海 --days 14`，可加 `--org 中国电信` 等机构网络关键字；`--days` 表示以该日期为中心的总窗口天数，默认 14 天。仅此模式列出匹配的访客编号、首次观察时间、城市、机构网络、App、看过的页面和停留；结论只能写“可能”，不得据此确认是谁，也不建立投递记录。
+
+停留优先采用离开/隐藏信标累计的实际可见秒数，同一页面实例的多次发送只取最大值；缺离开信标时用相邻页面的时间差后备（最多 30 分钟），最后一页保持未知。打开速度为 Navigation Timing 从导航开始到首字节、DOM 完成和 load 完成的毫秒数，只汇总已收到的字段。图片桶日志另统计 GPTBot、ClaudeBot、PerplexityBot、Bytespider、Amazonbot、meta-externalagent、Google-Extended 等声称的 UA 次数与日期，注明“只是下限，看不到只抓网页的爬虫”。
+
 ## Product boundary
 
 - This is a personal project, rules, capabilities and collaboration workspace.

@@ -18,11 +18,15 @@ from pathlib import Path
 import re
 import select
 import socket
+import shutil
+from statistics import median
+import struct
 import subprocess
 from threading import Thread
 import time
+import zlib
 from urllib.parse import parse_qs, unquote, urlsplit
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 
 TZ = timezone(timedelta(hours=8))
 BUCKET = "wly0829-access-logs-shanghai"
@@ -31,6 +35,100 @@ PREFIX = "access/" + SOURCE + "/"
 TOKEN = re.compile(r'"((?:\\.|[^"\\])*)"|\[([^\]]*)\]|([^\s"\[\]]+)')
 BOT = re.compile(r"bot|crawl|spider|headless|curl|wget|python|probe|lighthouse|uptime|httpclient|scanner|playwright|puppeteer", re.I)
 BROWSER = re.compile(r"Chrome/|Firefox/|Safari/|Edg/|OPR/|SamsungBrowser/", re.I)
+AI_BOTS = ("GPTBot", "ClaudeBot", "PerplexityBot", "Bytespider", "Amazonbot", "meta-externalagent", "Google-Extended")
+NETWORK_ERRORS = (OSError, ValueError, RuntimeError, struct.error, EOFError, zlib.error)
+
+
+def network_failure(error):
+    return {"status": "error", "reason": f"离线地区/机构数据库不可用（{type(error).__name__}）；地区与机构保持未知，访客统计继续"}
+
+
+class OfflineNetworks:
+    """Only download whole public databases; never send a visitor IP to a service."""
+    def __init__(self, cache, download=True):
+        self.root, self.asns, self.xdb = cache / "networks", {}, {}
+        urls = {f"ip2region_v{v}.xdb": f"https://raw.githubusercontent.com/lionsoul2014/ip2region/master/data/ip2region_v{v}.xdb" for v in (4, 6)}
+        urls["ip2asn-combined.tsv.gz"] = "https://iptoasn.com/data/ip2asn-combined.tsv.gz"
+        for name, url in urls.items():
+            path = self.root / name
+            if not path.exists() and download:
+                self.root.mkdir(parents=True, exist_ok=True)
+                temporary = path.with_suffix(f".{os.getpid()}.tmp")
+                try:
+                    with urlopen(Request(url, headers={"User-Agent": "wly0829-site-visitors/1.0"}), timeout=90) as response, temporary.open("wb") as stream:
+                        shutil.copyfileobj(response, stream)
+                    temporary.replace(path)
+                finally:
+                    temporary.unlink(missing_ok=True)
+            if not path.exists():
+                raise ValueError("离线网络库未缓存；先联网运行一次或指定已有 --cache-dir")
+        for version in (4, 6):
+            data = (self.root / f"ip2region_v{version}.xdb").read_bytes()
+            if len(data) < 524544 or struct.unpack_from("<H", data)[0] != 3 or struct.unpack_from("<HH", data, 16) != (version, 4):
+                raise ValueError("ip2region 离线库格式不兼容")
+            self.xdb[version] = data
+        self.metadata = {"status": "ready", **{name: {"source": url, "sha256": digest(self.root / name),
+                              "cached_at": datetime.fromtimestamp((self.root / name).stat().st_mtime, TZ)} for name, url in urls.items()}}
+
+    def prepare(self, addresses):
+        wanted = {v: sorted({int(ipaddress.ip_address(ip)) for ip in addresses if ipaddress.ip_address(ip).version == v}) for v in (4, 6)}
+        if not any(wanted.values()):
+            return
+        pending = sum(map(len, wanted.values()))
+        with gzip.open(self.root / "ip2asn-combined.tsv.gz", "rt", encoding="utf-8") as stream:
+            for line in stream:
+                begin, end, asn, country, name = line.rstrip("\n").split("\t", 4)
+                version = 6 if ":" in begin else 4
+                if not wanted[version]:
+                    continue
+                lo, hi = int(ipaddress.ip_address(begin)), int(ipaddress.ip_address(end))
+                offset = bisect.bisect_left(wanted[version], lo)
+                while offset < len(wanted[version]) and wanted[version][offset] <= hi:
+                    self.asns[(version, wanted[version][offset])] = f"AS{asn} {name}" if asn != "0" else "未知机构网络"
+                    offset += 1
+                    pending -= 1
+                if not pending:
+                    break
+
+    def __call__(self, address):
+        ip = ipaddress.ip_address(address)
+        data, width = self.xdb[ip.version], len(ip.packed)
+        begin, end = struct.unpack_from("<II", data, 256 + int.from_bytes(ip.packed[:2], "big") * 8)
+        lo, hi, region = 0, (end - begin) // (width * 2 + 6), ""
+        while begin and end and lo <= hi:
+            middle = (lo + hi) // 2
+            offset = begin + middle * (width * 2 + 6)
+            byteorder = "little" if ip.version == 4 else "big"
+            left = int.from_bytes(data[offset:offset + width], byteorder)
+            right = int.from_bytes(data[offset + width:offset + width * 2], byteorder)
+            if int(ip) < left:
+                hi = middle - 1
+            elif int(ip) > right:
+                lo = middle + 1
+            else:
+                length, pointer = struct.unpack_from("<HI", data, offset + width * 2)
+                region = data[pointer:pointer + length].decode("utf-8")
+                break
+        fields = [part if part and part != "0" else "未知" for part in (region.split("|") + [""] * 5)[:5]]
+        return {"country": fields[0], "province": fields[1], "city": fields[2], "operator": fields[3],
+                "organization": self.asns.get((ip.version, int(ip)), "未知机构网络")}
+
+
+def app_name(ua):
+    lowered = ua.lower()
+    for name, tokens in (("企业微信", ("wxwork",)), ("微信", ("micromessenger",)), ("钉钉", ("dingtalk",)),
+                         ("飞书/Lark", ("lark", "feishu")), ("Boss 直聘", ("bosszp", "zhipin", "boss/"))):
+        if any(token in lowered for token in tokens):
+            return name
+    return "普通浏览器/其他 App（UA 未识别）"
+
+
+def metric(params, key):
+    try:
+        value = float(params.get(key, ""))
+        return value if 0 <= value <= (86400 if key == "visible" else 3600000) else None
+    except (TypeError, ValueError):
+        return None
 
 def dates(start, end):
     return [start + timedelta(days=i) for i in range((end - start).days + 1)]
@@ -41,7 +139,7 @@ def parse_uri(uri):
     parsed = urlsplit(uri)
     query = parse_qs(parsed.query, keep_blank_values=True)
     params = {name: query.get("x-" + name, query.get(name, [""]))[0]
-              for name in ("v", "p", "ref", "self", "monitor")}
+              for name in ("v", "p", "ref", "self", "monitor", "event", "id", "visible", "ttfb", "dom", "load", "first")}
     params["p"] = urlsplit(params["p"]).path or "未知页面"
     params["ref"] = urlsplit(params["ref"]).hostname or "直接访问/未知"
     return unquote(parsed.path), params
@@ -270,7 +368,72 @@ def sync_cloud(args, start, end, now):
     return paths, records, sync, file_range
 
 
-def analyze(paths, start, end, include_self=False, include_monitor=False, extra_records=(), file_range=None):
+def visitor_metrics(events, history, start, end, networks=None, city=None, org=None):
+    locations = {ip: {"province": "未知", "city": "未知", "operator": "未知", "organization": "未知机构网络"} for ip in {r["ip"] for r in events}}
+    if networks:
+        try:
+            networks.prepare(locations)
+            locations = {ip: networks(ip) for ip in locations}
+        except NETWORK_ERRORS as error:
+            networks.metadata = network_failure(error)
+    regions, organizations, apps, speed, groups, people = Counter(), Counter(), Counter(), defaultdict(lambda: defaultdict(list)), defaultdict(list), defaultdict(list)
+    views = sorted((r for r in events if r["params"]["event"] in ("", "view")), key=lambda r: r["time"])
+    fallback = {}
+    for row in reversed(views):
+        visitor = row["params"]["v"]
+        if visitor and visitor in fallback:
+            seconds = (fallback[visitor] - row["time"]).total_seconds()
+            row["fallback_seconds"] = seconds if 0 <= seconds <= 1800 else None
+        if visitor:
+            fallback[visitor] = row["time"]
+        location = locations[row["ip"]]
+        regions[f'{location["province"]}/{location["city"]}'] += 1
+        organizations[location["organization"]] += 1
+        apps[app_name(row["ua"])] += 1
+    for row in events:
+        params = row["params"]
+        groups[(params["v"], params["id"] or row["identity"])].append(row)
+        if params["v"]:
+            people[params["v"]].append(row)
+    dwell, visitor_dwell = defaultdict(list), defaultdict(lambda: defaultdict(list))
+    for rows in groups.values():
+        rows.sort(key=lambda r: r["time"])
+        row, location = rows[0], locations[rows[0]["ip"]]
+        visible = [value for r in rows if r["params"]["event"] == "leave" and (value := metric(r["params"], "visible")) is not None]
+        seconds, method = (max(visible), "visible_beacon") if visible else (row.get("fallback_seconds"), "time_gap_estimate")
+        item = {"seconds": round(seconds, 2) if seconds is not None else None, "method": method if seconds is not None else "unknown"}
+        dwell[row["params"]["p"]].append(item)
+        if row["params"]["v"]:
+            visitor_dwell[row["params"]["v"]][row["params"]["p"]].append(item)
+        for key in ("ttfb", "dom", "load"):
+            samples = [value for r in rows if (value := metric(r["params"], key)) is not None]
+            if samples:
+                speed[f'{location["province"]}/{location["operator"]}'][key].append(samples[-1])
+    def dwell_summary(items):
+        known = [item["seconds"] for item in items if item["seconds"] is not None]
+        return {"observed_seconds": round(sum(known), 2), "samples": len(known), "unknown_opens": len(items) - len(known),
+                "median_seconds": median(known) if known else None, "methods": dict(Counter(item["method"] for item in items))}
+    first = history.get("first_seen", {})
+    returning = sum(first.get(visitor, "9999")[:10] < start.isoformat() for visitor in people)
+    result = {"region_pageviews": dict(regions), "organization_pageviews": dict(organizations), "app_pageviews": dict(apps),
+              "visitor_cohorts": {"first_observed_in_window": len(people) - returning, "returning_observed_before_window": returning,
+                                  "observation_from": history.get("observation_from"), "observation_to": history.get("observation_to"), "complete": False},
+              "page_dwell": {page: dwell_summary(items) for page, items in dwell.items()},
+              "navigation_timing_ms": {group: {key: {"median": median(values), "samples": len(values)} for key, values in metrics.items()} for group, metrics in speed.items()}}
+    if city:
+        matches = []
+        for visitor, rows in people.items():
+            matched = [locations[r["ip"]] for r in rows if city in locations[r["ip"]]["city"] and (not org or org.casefold() in (locations[r["ip"]]["organization"] + " " + locations[r["ip"]]["operator"]).casefold())]
+            if matched:
+                matches.append({"conclusion": "可能", "visitor": visitor, "first_observed": first.get(visitor),
+                                "cities": sorted({r["city"] for r in matched}), "organizations": sorted({r["organization"] for r in matched}),
+                                "apps": sorted({app_name(r["ua"]) for r in rows}),
+                                "pages": {page: dwell_summary(items) for page, items in visitor_dwell[visitor].items()}})
+        result["possible_sources"] = {"conclusion": "可能", "city": city, "org": org, "visitors": matches}
+    return result
+
+
+def analyze(paths, start, end, include_self=False, include_monitor=False, extra_records=(), file_range=None, networks=None, history=None, city=None, org=None):
     records, seen, malformed, duplicates = list(extra_records), set(), 0, 0
     for path in paths:
         opener = gzip.open if path.suffix == ".gz" else open
@@ -294,6 +457,8 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
         seen.add(row["identity"])
         unique.append(row)
     records = unique
+    history = history if history is not None else {}
+    first = history.setdefault("first_seen", {})
     excluded, allowed = defaultdict(list), defaultdict(list)
     filtered = Counter()
     def exclusion(row):
@@ -324,11 +489,20 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
     daily = {day.isoformat(): {"visitors": set(), "ips": set(), "pv": 0, "log_lines": 0} for day in dates(start, end)}
     visitors, ips, pages, refs, devices = set(), set(), Counter(), Counter(), Counter()
     no_id = 0
+    events, ai_requests = [], defaultdict(list)
     for row in records:
+        if row["bucket"] == SOURCE and row["path"] == "/_v.gif" and row["status"] == 200 and not exclusion(row) and row["params"]["v"]:
+            stamp, visitor = row["time"].isoformat(), row["params"]["v"]
+            first[visitor] = min(first.get(visitor, stamp), stamp)
+            history["observation_from"] = min(history.get("observation_from", stamp), stamp)
+            history["observation_to"] = max(history.get("observation_to", stamp), stamp)
         day = row["time"].date().isoformat()
         if day not in daily or row["bucket"] != SOURCE:
             continue
         daily[day]["log_lines"] += 1
+        for name in AI_BOTS:
+            if name.casefold() in row["ua"].casefold():
+                ai_requests[name].append(day)
         reason = exclusion(row)
         beacon = row["path"] == "/_v.gif"
         if not reason and not beacon and near(excluded, row) and not near(allowed, row):
@@ -343,10 +517,13 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
         if not beacon or row["status"] != 200:
             continue
         params = row["params"]
+        events.append(row)
         if params["v"]:
             visitors.add(params["v"])
             daily[day]["visitors"].add(params["v"])
-        else:
+        if params["event"] not in ("", "view"):
+            continue
+        if not params["v"]:
             no_id += 1
         daily[day]["pv"] += 1
         pages[params["p"]] += 1
@@ -357,7 +534,10 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
     output_daily = [{"date": day, "unique_visitors": len(row["visitors"]), "unique_ips": len(row["ips"]),
                      "pageviews": row["pv"], "log_lines": row["log_lines"],
                      "coverage": "observed_partial" if row["log_lines"] else "no_logs"} for day, row in daily.items()]
-    return {"timezone": "Asia/Shanghai", "start": start.isoformat(), "end": end.isoformat(), "daily": output_daily,
+    enhancements = visitor_metrics(events, history, start, end, networks, city, org)
+    enhancements["ai_crawler_lower_bound"] = {"by_ua": {name: {"requests": len(values), "dates": dict(Counter(values))} for name, values in ai_requests.items()},
+                                               "note": "只是下限，看不到只抓网页的爬虫；UA 声称身份不代表经过身份验证。"}
+    return {**enhancements, "timezone": "Asia/Shanghai", "start": start.isoformat(), "end": end.isoformat(), "daily": output_daily,
             "total": {"unique_visitors": len(visitors), "unique_ips": len(ips), "pageviews": sum(pages.values())},
             "top_pages": dict(pages.most_common(20)), "referrers": dict(refs.most_common(20)), "device_classes": dict(devices),
             "log_coverage": {"files": len(paths), "malformed_lines": malformed, "duplicate_lines": duplicates,
@@ -365,7 +545,11 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
                              "last_observed": max((r["time"] for r in records), default=None), "complete": False},
             "filtered_lines": dict(filtered), "pageviews_without_visitor_id": no_id,
             "include_self": include_self, "include_monitor": include_monitor,
-            "notes": ["以访客编号为主：同一浏览器跨天只算一次；换设备、清存储会多算，共用浏览器会少算。",
+            "notes": ["新/回头客依据本机已观察日志的首次日期，窗口内首次仅为首次观察，未证明绝对新客；苹果 Safari 与微信清存储会使回头客偏少。",
+                      "离线 IP 地区及 ASN 只是网络归属线索，不代表个人身份或雇主；App 来自 UA，可能漏识别或伪装。",
+                      "停留优先累计可见秒数，重复离开只取最大值；无离开信标时用相邻页时间差（最多 30 分钟），最后一页及丢失事件保持未知。",
+                      "打开速度为 Navigation Timing 的 responseStart、domComplete、loadEventEnd 各减 startTime，即导航开始后的累计完成毫秒数；仅统计有字段的页面打开，按省份/运营商给中位数。",
+                      "以访客编号为主：同一浏览器跨天只算一次；换设备、清存储会多算，共用浏览器会少算。",
                       "IP 是浏览器访问图片桶的替代口径：换网络可能多算，共用 IP 可能少算，缓存资源可能漏算。",
                       "本人/巡检资源仅按同 IP 与同 UA 的信标前后 30 秒排除；附近有正常信标时保留资源，避免误删共享 IP。",
                       "近 7 天 SLS 实时日志约延迟 3 分钟，更早的 OSS 转存最多延迟 48 小时；SLS 首次开通不回填之前的访问，no_logs 或计数为 0 均不是零访客的确证。"]}
@@ -374,6 +558,10 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
 def main():
     parser = argparse.ArgumentParser(description="按北京时间查询网站访客（输出 JSON）")
     parser.add_argument("--days", type=int)
+    parser.add_argument("--month", help="自然月 YYYY-MM（北京时间）")
+    parser.add_argument("--around", type=date.fromisoformat, help="以此日期为中心，默认共 14 天")
+    parser.add_argument("--city", help="可能来源查询的城市关键字")
+    parser.add_argument("--org", help="可能来源查询的 ASN/机构网络关键字")
     parser.add_argument("--start", type=date.fromisoformat)
     parser.add_argument("--end", type=date.fromisoformat)
     parser.add_argument("--logs-dir", type=Path, help="只分析本地日志，不访问 OSS 或 SLS")
@@ -389,8 +577,19 @@ def main():
     args = parser.parse_args()
     if bool(args.start) != bool(args.end) or (args.start and args.days is not None) or (args.days is not None and args.days < 1):
         parser.error("同时指定 --start 和 --end，或使用正数 --days")
+    if (args.month and (args.start or args.around or args.days is not None)) or (args.around and args.start) or bool(args.around) != bool(args.city) or (args.org and not args.around):
+        parser.error("--month 独立使用；--around 与 --city 配对，可加 --org 和正数 --days")
     end = args.end or datetime.now(TZ).date()
     start = args.start or end - timedelta(days=(args.days or 7) - 1)
+    if args.month:
+        try:
+            start = datetime.strptime(args.month, "%Y-%m").date().replace(day=1)
+            end = (start.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
+        except ValueError:
+            parser.error("--month 格式应为 YYYY-MM")
+    if args.around:
+        start = args.around - timedelta(days=(args.days or 14) // 2)
+        end = start + timedelta(days=(args.days or 14) - 1)
     if start > end:
         parser.error("起始日期不得晚于结束日期")
     try:
@@ -402,11 +601,25 @@ def main():
             sync = {"mode": "local_only", "sources": [{"source": "local_logs"}]}
         else:
             paths, records, sync, file_range = sync_cloud(args, start, end, datetime.now(TZ))
-        output = analyze(paths, start, end, args.include_self, args.include_monitor, records, file_range)
+        history_path = args.cache_dir / "visitor-history.json"
+        history = json.loads(history_path.read_text("utf-8")) if not args.logs_dir and history_path.exists() else {}
+        cached = any((args.cache_dir / "networks" / name).is_file() for name in ("ip2region_v4.xdb", "ip2region_v6.xdb", "ip2asn-combined.tsv.gz"))
+        database_state = {"status": "unavailable", "reason": "本地模式未缓存地区库，不访问网络；地区/机构保持未知"}
+        try:
+            networks = None if args.logs_dir and not cached else OfflineNetworks(args.cache_dir, download=not args.logs_dir)
+        except NETWORK_ERRORS as error:
+            networks, database_state = None, network_failure(error)
+        output = analyze(paths, start, end, args.include_self, args.include_monitor, records, file_range, networks, history, args.city, args.org)
+        output["offline_network_databases"] = networks.metadata if networks else database_state
+        if not args.logs_dir:
+            args.cache_dir.mkdir(parents=True, exist_ok=True)
+            temporary = history_path.with_suffix(f".{os.getpid()}.tmp")
+            temporary.write_text(json.dumps(history, ensure_ascii=False), "utf-8")
+            temporary.replace(history_path)
         output["log_coverage"]["sources"] = sync["sources"]
         output["sync"] = sync
         print(json.dumps(output, ensure_ascii=False, indent=2, default=lambda value: value.isoformat()))
-    except (OSError, ValueError, RuntimeError, subprocess.TimeoutExpired) as error:
+    except (OSError, ValueError, RuntimeError, struct.error, subprocess.TimeoutExpired) as error:
         print(json.dumps({"status": "error", "reason": str(error)}, ensure_ascii=False))
         return 1
     return 0

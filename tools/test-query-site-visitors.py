@@ -9,7 +9,7 @@ import sys
 import tempfile
 from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 from urllib.parse import quote, urlencode
 
 SPEC = importlib.util.spec_from_file_location("visitors", Path(__file__).with_name("query-site-visitors.py"))
@@ -198,6 +198,79 @@ class VisitorTests(unittest.TestCase):
         self.assertEqual(result["status"], "error")
         self.assertNotIn("total", result)
 
+    def test_leave_dedup_speed_apps_cohorts_possible_sources_and_no_ips(self):
+        location = {"province": "广东省", "city": "深圳市", "operator": "电信", "organization": "AS123 Example Network"}
+        networks = Mock(return_value=location)
+        rows = log(extra={"x-id": "one", "x-event": "view", "x-ttfb": "100", "x-dom": "200"}, ua=UA + " wxwork MicroMessenger")
+        rows += log("12/Oct/2026:10:00:05 +0800", extra={"x-id": "one", "x-event": "perf", "x-load": "300"}, ua=UA + " wxwork MicroMessenger")
+        for second, visible in ((10, "8"), (11, "8"), (20, "15")):
+            rows += log(f"12/Oct/2026:10:00:{second:02d} +0800", extra={"x-id": "one", "x-event": "leave", "x-visible": visible}, ua=UA + " wxwork MicroMessenger")
+        rows += log("12/Oct/2026:10:01:00 +0800", v="visitor-B", p="/new/", extra={"x-event": "view", "x-first": "2020-01-01"})
+        history = {"first_seen": {"visitor-A": "2026-10-10T12:00:00+08:00"}}
+        result = self.analyze([rows], networks=networks, history=history, city="深圳", org="example")
+        self.assertEqual(result["total"]["pageviews"], 2)
+        self.assertEqual(result["page_dwell"]["/"]["observed_seconds"], 15)
+        self.assertEqual(result["page_dwell"]["/new/"]["unknown_opens"], 1)
+        self.assertEqual(result["navigation_timing_ms"]["广东省/电信"]["load"], {"median": 300, "samples": 1})
+        self.assertEqual(result["app_pageviews"]["企业微信"], 1)
+        self.assertEqual(result["visitor_cohorts"]["returning_observed_before_window"], 1)
+        self.assertEqual(result["visitor_cohorts"]["first_observed_in_window"], 1)
+        self.assertEqual(len(result["possible_sources"]["visitors"]), 2)
+        self.assertTrue(all(r["conclusion"] == "可能" for r in result["possible_sources"]["visitors"]))
+        self.assertNotIn("203.0.113.1", json.dumps(result, default=str))
+        self.assertTrue(history["first_seen"]["visitor-B"].startswith("2026-10-12"))
+
+    def test_time_gap_fallback_invalid_metrics_and_ai_lower_bound(self):
+        rows = log(extra={"x-id": "one", "x-load": "NaN"})
+        rows += log("12/Oct/2026:10:00:20 +0800", p="/two/", extra={"x-id": "two", "x-visible": "-1"})
+        rows += log(ua="GPTBot/1.0", path="/image.png") + log(ua="ClaudeBot/1.0", status=404)
+        result = self.analyze([rows])
+        self.assertEqual(result["page_dwell"]["/"]["observed_seconds"], 20)
+        self.assertEqual(result["page_dwell"]["/two/"]["unknown_opens"], 1)
+        self.assertEqual(result["navigation_timing_ms"], {})
+        self.assertEqual(result["ai_crawler_lower_bound"]["by_ua"]["GPTBot"]["requests"], 1)
+        self.assertEqual(result["total"]["pageviews"], 2)
+        self.assertEqual([query.app_name(UA + token) for token in (" MicroMessenger", " DingTalk", " Lark", " bosszp")], ["微信", "钉钉", "飞书/Lark", "Boss 直聘"])
+
+    def test_offline_ipv4_ipv6_network_database_boundaries(self):
+        root = self.root / "networks"
+        root.mkdir()
+        for version, address in ((4, "203.0.113.1"), (6, "2001:db8::1")):
+            ip = query.ipaddress.ip_address(address)
+            data = bytearray(524544)
+            query.struct.pack_into("<H", data, 0, 3)
+            query.struct.pack_into("<HH", data, 16, version, 4)
+            region = "中国|广东省|深圳市|电信|CN".encode()
+            pointer = len(data)
+            data.extend(region)
+            index = len(data)
+            packed = ip.packed[::-1] if version == 4 else ip.packed
+            data.extend(packed * 2 + query.struct.pack("<HI", len(region), pointer))
+            query.struct.pack_into("<II", data, 256 + int.from_bytes(ip.packed[:2], "big") * 8, index, index)
+            (root / f"ip2region_v{version}.xdb").write_bytes(data)
+        with query.gzip.open(root / "ip2asn-combined.tsv.gz", "wt") as stream:
+            stream.write("203.0.113.1\t203.0.113.1\t123\tCN\tExample Network\n2001:db8::1\t2001:db8::1\t456\tCN\tExample IPv6\n")
+        networks = query.OfflineNetworks(self.root, download=False)
+        networks.prepare(["203.0.113.1", "2001:db8::1"])
+        self.assertEqual(networks("203.0.113.1")["city"], "深圳市")
+        self.assertEqual(networks("2001:db8::1")["organization"], "AS456 Example IPv6")
+        self.assertEqual(networks("203.0.113.2")["province"], "未知")
+
+    def test_month_and_around_cli_windows(self):
+        networks = Mock()
+        networks.metadata = {}
+        for arguments, expected in ((["--month", "2026-02"], (date(2026, 2, 1), date(2026, 2, 28))),
+                                    (["--around", "2026-10-12", "--city", "深圳", "--days", "14"], (date(2026, 10, 5), date(2026, 10, 18)))):
+            with patch.object(sys, "argv", [query.__file__, "--cache-dir", str(self.root), *arguments]), patch.object(query, "sync_cloud", return_value=([], [], {"sources": []}, None)) as cloud, patch.object(query, "OfflineNetworks", return_value=networks), patch("builtins.print"):
+                self.assertEqual(query.main(), 0)
+                self.assertEqual(cloud.call_args.args[1:3], expected)
+
+    def test_database_failures_preserve_counts_and_report_unknown(self):
+        for phase in ("init", "prepare"):
+            networks = Mock(); networks.prepare.side_effect = EOFError("203.0.113.1 must stay local")
+            with patch.object(sys, "argv", [query.__file__, "--cache-dir", str(self.root), "--start", "2026-10-12", "--end", "2026-10-12"]), patch.object(query, "sync_cloud", return_value=([], [query.parse_line(log())], {"sources": []}, None)), patch.object(query, "OfflineNetworks", return_value=networks, side_effect=ValueError("broken partial cache") if phase == "init" else None), patch("builtins.print") as printed:
+                self.assertEqual(query.main(), 0); result = json.loads(printed.call_args.args[0])
+                self.assertEqual(result["total"]["pageviews"], 1); self.assertEqual(result["region_pageviews"], {"未知/未知": 1}); self.assertEqual(result["offline_network_databases"]["status"], "error"); self.assertNotIn("203.0.113.1", json.dumps(result))
 
 if __name__ == "__main__":
     unittest.main()

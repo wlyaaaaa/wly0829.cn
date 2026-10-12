@@ -303,7 +303,7 @@ def build(pages=None):
     for route in set(snapshot['routes']) - entries.keys():
         entries[route] = {'fingerprint': generated_fp, 'kind': 'generated'}
     entries['/cockpit/stutter/']['fingerprint'] = fingerprint(stutter_inputs + [SITE / 'tools/cockpit_stutter.py'])
-    visitor_fp = fingerprint([ROOT / 'scripts/visitor-beacon.js'])
+    visitor_fp = fingerprint([ROOT / 'scripts/visitor-beacon.js', ROOT / 'scripts/footer-email-copy.js'])
     for row in entries.values(): row['fingerprint'] += visitor_fp
     if requested and requested - entries.keys(): raise ValueError('Unknown routes: ' + ', '.join(sorted(requested - entries.keys())))
     selected = requested if requested is not None else set(entries)
