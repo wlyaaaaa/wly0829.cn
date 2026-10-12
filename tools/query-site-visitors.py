@@ -419,6 +419,8 @@ def visitor_metrics(events, history, start, end, networks=None, city=None, org=N
               "visitor_cohorts": {"first_observed_in_window": len(people) - returning, "returning_observed_before_window": returning,
                                   "observation_from": history.get("observation_from"), "observation_to": history.get("observation_to"), "complete": False},
               "page_dwell": {page: dwell_summary(items) for page, items in dwell.items()},
+              "visitor_dwell": {visitor: {"total": dwell_summary([item for items in pages.values() for item in items]),
+                                         "pages": {page: dwell_summary(items) for page, items in pages.items()}} for visitor, pages in visitor_dwell.items()},
               "navigation_timing_ms": {group: {key: {"median": median(values), "samples": len(values)} for key, values in metrics.items()} for group, metrics in speed.items()}}
     if city:
         matches = []

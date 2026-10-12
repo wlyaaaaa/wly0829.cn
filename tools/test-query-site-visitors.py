@@ -227,6 +227,7 @@ class VisitorTests(unittest.TestCase):
         result = self.analyze([rows])
         self.assertEqual(result["page_dwell"]["/"]["observed_seconds"], 20)
         self.assertEqual(result["page_dwell"]["/two/"]["unknown_opens"], 1)
+        self.assertEqual((result["visitor_dwell"]["visitor-A"]["total"]["observed_seconds"], result["visitor_dwell"]["visitor-A"]["total"]["unknown_opens"], set(result["visitor_dwell"]["visitor-A"]["pages"])), (20, 1, {"/", "/two/"}))
         self.assertEqual(result["navigation_timing_ms"], {})
         self.assertEqual(result["ai_crawler_lower_bound"]["by_ua"]["GPTBot"]["requests"], 1)
         self.assertEqual(result["total"]["pageviews"], 2)
