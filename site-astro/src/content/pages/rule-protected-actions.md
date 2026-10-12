@@ -45,10 +45,10 @@
    "numbers": [
     {
      "id": "n-release",
-     "text": "E257（北京时间 10 月 11 日 13:02 起生效）",
-     "meaning": "原文屏里留作快照的文字依据的规则版本（拼页时原文按当时生效的版本现读，版本由拼页程序标出）",
-     "as_of": "2026-10-11",
-     "source": "活动规则入口 Inspect：release_id=E257，activated_at_utc=2026-10-11T05:02:36.7738409+00:00；原文 sha256=5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa",
+     "text": "E259（网页来源快照，北京时间 10 月 12 日 05:01 起生效）",
+     "meaning": "本页原文采用的网站来源快照；AI 实际开工以活动规则入口核验结果为准",
+     "as_of": "2026-10-12",
+     "source": "sources/rules/current-rules.json 与 release.json：网页来源快照 release_id=E259，activated_at_utc=2026-10-11T21:01:29.2652522+00:00；2026-10-12 19:12（北京时间）正式 Inspect：pass/e_rules_active_verified，活动 release_id=E268；protected_actions_contract 作者 sha256=5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa，与本页 E259 作者源一致；公开源 sha256=29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1，公开字节也一致",
      "screens": [
       "rule-protected-actions-07"
      ]
@@ -254,8 +254,8 @@
  },
  "source": {
   "page": "sources/pages/rule-protected-actions/page.json",
-  "sha256": "a048782809d19fc456c026dc9174440667a9a42a8154f7f4f1273a64edf85d07",
-  "converted_at_beijing": "2026-10-12T05:45:50+08:00"
+  "sha256": "3b28c20830d397ad3f898b413c1ec2b8dd7efc34cf254b68803216e7cd91c742",
+  "converted_at_beijing": "2026-10-12T19:17:15+08:00"
  }
 }
 ---
@@ -536,7 +536,7 @@
 
 删库　把关　四选一　通行密钥　手机验证码　恢复码
 
-现在开没开无限制授权、个人资料解没解锁：〔现在的授权状态 → 授权与状态〕
+现在开没开无限制授权、个人资料解没解锁：〔现在的授权状态 → 授权与状态〕。网页原文保留 E259 来源快照；2026 年 10 月 12 日 19:12 正式核验活动规则 E268，本专题作者原文与本页 E259 来源的 SHA256 相同，正文仍有现行依据。
 
 ::screen{#rule-protected-actions-09 section="points"}
 

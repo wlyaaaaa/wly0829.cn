@@ -405,11 +405,11 @@
      "id": "f-patrol",
      "group": "g-upkeep",
      "name": "驾驶舱定时巡检",
-     "what": "按时真开线上驾驶舱，电脑手机两种宽度，坏了叫醒 AI",
-     "how": "自动运行",
-     "status": "待实施",
+     "what": "每 15 分钟以 HTTP 检查驾驶舱页面、主接口和小对照文件；连续 10 分钟且多次失败发故障邮件，恢复再通知；本机慢或链路未确认时记未知",
+     "how": "自动：Wly Cockpit Monitor；跟 AI 说停掉驾驶舱巡检，只停巡检提醒，网站和数据服务照常运行",
+     "status": "在用",
      "screen": "wly0829-cn-12",
-     "source": "派活说明已核事实／现有页面原文；状态“待实施”的项上线并回读后改“在用”"
+     "source": "PCConfig registries/task_purpose_catalog.json、registries/dashboard_sources.json、docs/runtime/cockpit-monitor.md；CockpitMonitor/latest.json 于 2026-10-12 19:08 回执 success"
     },
     {
      "id": "f-recover-first",
@@ -725,8 +725,8 @@
  },
  "source": {
   "page": "sources/pages/wly0829-cn/page.json",
-  "sha256": "5c554d0a5be6c581d9b05151fda5d4c4775973ce06ba34639d08b500b3147f85",
-  "converted_at_beijing": "2026-10-12T05:03:53+08:00"
+  "sha256": "611b8b7ab2603a76bfdab6024e18639ced8e9e06737270d59a60642dfd9984f6",
+  "converted_at_beijing": "2026-10-12T19:17:04+08:00"
  }
 }
 ---
@@ -2037,6 +2037,8 @@
 “现在”框里的状态从电脑上的只读接口现读，读不到就换备用入口。电脑资源预警只认最近 3 分钟内的数据，趋势要攒满一天多才下判断；10 月 7 日 18:14 回读时资源正常，趋势还在观察期。现在实时入口已带上这份数据，驾驶舱里的显示本人还没验收，一闪而过的卡顿也不一定抓得到。
 
 每次发布前先扫这次改过的页：等页面稳定、已开始加载的图片都到齐后整页看，查大块空白、文字压叠、文字被裁、空图框、404 和断链、点不动的按钮；有一项不过，或要发的成品和扫描时不是同一份字节，发布器就不发。首页已验收锁定、不参加扫描，动效由我自己看。没改的页这次不重扫，所以扫过不等于全站没有错。
+
+**两项已登记的自动运行归属**｜驾驶舱巡检 `Wly Cockpit Monitor` 与 `github:wlyaaaaa/wly0829.cn/pages.yml` 都属于个人网站（总看板），PCConfig 提供任务登记与回执。巡检每 15 分钟用 HTTP 读取驾驶舱页面、主接口和小对照文件；连续 10 分钟且多次失败才发故障邮件，恢复再通知，本机慢或链路未确认时记为未知。跟 AI 说停掉驾驶舱巡检，只会停止巡检提醒，网站和数据服务照常运行。`pages.yml` 由人工发起，部署已经构建并扫描通过的 `site-dist` 成品；源码推送本身不会触发这份工作流。停用它会阻断这条 Pages 部署入口，线上旧版继续保留。GitHub 工作流运行记录尚未接入驾驶舱，最新运行状态为 Unknown。
 
 ::screen{#wly0829-cn-09 section="tech"}
 
