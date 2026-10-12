@@ -37,9 +37,9 @@ export function dateHm(v) {
 
 export const isToday = (v, now = new Date()) => { const d = parse(v); return !!d && day(d) === day(now); };
 
-// 灯色：ok 绿、attention 黄、red 红；没读到、正在读、正常关着都是灰
+// 灯色：ok 绿、attention 黄、red 红；neutral 是“有状况但 AI 在管、不用你动手”的中性色；没读到、正在读、正常关着、数据源停了都是灰
 export function light(state) {
-  return state === 'ok' ? 'green' : state === 'attention' ? 'yellow' : state === 'red' ? 'red' : 'gray';
+  return state === 'ok' ? 'green' : state === 'attention' ? 'yellow' : state === 'red' ? 'red' : state === 'neutral' ? 'neutral' : 'gray';
 }
 
 // 待办标题末尾的“最后核对：2026-10-10 20:11（北京时间）。”拆出来单独小字显示
@@ -96,6 +96,11 @@ export function normalize(raw) {
       daily: list(c.daily), projects_7d: list(c.projects_7d) }; })(),
     // 健康分、扣分原因、6 个信号、各分区的灯都由后端 overview 给（O6 裁定），前端不算
     overview: v.overview && typeof v.overview === 'object' ? v.overview : null,
+    // 下面几块等后端新字段：字段不在就是 null，页面不出这一块，照旧数据显示
+    // “你得知道”：AI 在修、影响你用电脑的毛病；刚办好、改变你用法的事；你没回又该知道的汇报
+    know: Array.isArray(v.know) ? list(v.know) : null,
+    // 网站上次发布的回执（时间、成没成功、发布后回读通过没有）
+    site_release: v.site_release && typeof v.site_release === 'object' ? v.site_release : null,
   };
 }
 
@@ -105,11 +110,34 @@ export function dedupeCards(cards) {
   return cards.filter((c) => { const k = (c.text || '').trim() || c.id; if (seen.has(k)) return false; seen.add(k); return true; });
 }
 
+// 每周体检这一轮到哪一步了，用人话说：跑完了（有结果数）/ 几点开始、正在跑 / 这周还没开始。
+// 后端 governance.last_run（有 counts 才算跑完）和 run_state / started_at / ended_at 有就用；没有就看自动任务清单里体检那一行的状态和上次运行时间。
+// 只说查得到的：“这周已跑过”只能证明开始过，不当成跑完。
+export function govState(v, now = new Date()) {
+  const g = obj(v.governance), r = obj(g.last_run), c = obj(r.counts);
+  const task = v.automation.items.find((t) => t.id && t.id === g.id) || null;
+  const next = g.next_run_at || r.next_run_at || null;
+  const n = (x) => (Number.isInteger(x) && x >= 0 ? x : null);
+  const nums = [['修好', c.fixed], ['关掉', c.closed], ['还在跟', c.following], ['要你', c.need_you]].filter(([, x]) => n(x) != null);
+  const ended = r.ended_at || g.ended_at || null, started = r.started_at || g.started_at || (task && task.last_run_at) || null;
+  const weekAgo = now.getTime() - 7 * 864e5, recent = (x) => { const d = parse(x); return !!d && d.getTime() > weekAgo; };
+  if (nums.length && (recent(ended) || recent(started))) return { state: 'done', text: `跑完了${ended ? `（${dateHm(ended)}）` : ''}：${nums.map(([k, x]) => `${k} ${x}`).join('、')} 件`, next, need: n(c.need_you) || 0 };
+  const failed = g.run_state === 'failed' || (task && task.state === 'failed' && recent(started));
+  if (failed) return { state: 'failed', text: `${started ? dateHm(started) + ' 开始的那一轮' : '这一轮'}没跑成${g.run_reason ? '：' + g.run_reason : ''}`, next, need: 0 };
+  const running = g.run_state === 'running' || (task && task.state === 'running') || (recent(started) && g.last_run_ok == null && !nums.length);
+  if (running && started) return { state: 'running', text: `${dateHm(started)} 开始，正在跑（还没收到跑完的回执）`, next, need: 0 };
+  if (!task && !g.id) return null;
+  return { state: 'idle', text: '这周还没开始', next, need: 0 };
+}
+
 // 给“今天的河”（scripts/today-river.js，代码不动）还原它原来读的任务形状
-export function riverSnapshot(v) {
+export function riverSnapshot(v, now = new Date()) {
   const a = v.automation;
+  const gov = govState(v, now), govId = obj(v.governance).id;
   const items = a.items.map((t) => {
     const p = obj(t.panel);
+    // 体检那一行不再写“这周已跑过”：换成查得到的那一步
+    if (gov && govId && t.id === govId && /这周已跑过/.test(t.note || '')) t = { ...t, note: gov.text };
     const raw = {
       id: t.id, group: t.group, state: t.state, enabled: t.enabled, last_run_at: t.last_run_at, next_run_at: t.next_run_at,
       runs_today: t.runs_today, schedule_zh: t.schedule || '', heartbeat_at: t.heartbeat_at || null, failures_7d: Number.isFinite(t.failures_7d) ? t.failures_7d : undefined,

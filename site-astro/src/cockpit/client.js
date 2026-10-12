@@ -10,7 +10,9 @@ const local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
 const endpoints = (local ? boot.local : boot.endpoints) || [];
 let view = normalize(boot.snapshot ? asView(boot.snapshot) : {});
 let offline = false, busy = null;
-const ctx = () => ({ now: new Date(), offline, projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen });
+let asked = 0, shown = 0;
+// phase：还没收到过任何一次读取结果时是 snapshot（首帧那份构建时的数），之后是 live；读不到另由 offline 说明
+const ctx = () => ({ now: new Date(), offline, phase: shown ? 'live' : 'snapshot', projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen });
 
 async function read(wake) {
   for (const base of endpoints) {
@@ -87,7 +89,6 @@ document.addEventListener('click', (e) => {
 
 // 几次读取可能同时在路上（页面刚打开那次、每分钟那次、刷新按钮那次），回来的先后不一定。
 // 只认比已显示那次更晚发出的：晚到的旧失败不能把新结果说成“连不上”，晚到的旧数据也不能盖掉新数据。
-let asked = 0, shown = 0;
 async function load(wake = false) {
   const turn = ++asked;
   const v = await read(wake);

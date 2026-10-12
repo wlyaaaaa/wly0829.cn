@@ -45,7 +45,12 @@ const assert = require('node:assert/strict');
   const top = R.page({ ...v, overview: { as_of: '2026-10-12T00:29:00+08:00', score: 90, signals: [{ id: 'computer', level: 'ok' }], reasons: [] } }, { ...ctx, ov });
   const cell = /<li class="cp-tri-cell is-(\w+)" data-signal="computer">(.*?)<\/li>/.exec(top);
   assert.ok(cell, '首屏有电脑格');
-  assert.equal(cell[1], 'yellow');
+  // 颜色只看要不要你出手：没写要你做、写着交给 AI 的，用中性色写“AI 在管”，不用黄红
+  assert.equal(cell[1], 'neutral');
+  assert.match(cell[2], /AI 在管/);
+  // 后端明说要你出手（owner_action: do）时才用黄
+  const mine = R.page({ ...v, overview: { as_of: '2026-10-12T00:29:00+08:00', score: 90, signals: [{ id: 'computer', level: 'ok', owner_action: 'do' }], reasons: [] } }, { ...ctx, ov });
+  assert.equal(/<li class="cp-tri-cell is-(\w+)" data-signal="computer">/.exec(mine)[1], 'yellow');
   assert.match(cell[2], /内存\/系统资源偏高/);
   assert.match(cell[2], /系统内核内存 8.5 GB，偏高/);
   assert.doesNotMatch(cell[2], /处理器偏热|处理器 24%/);

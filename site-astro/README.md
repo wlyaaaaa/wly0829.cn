@@ -16,11 +16,18 @@
 
 首屏关键插画和标题直接以高优先级加载；其他正文图片与 SVG 图像按实际视口加载，无 JavaScript 时保留完整原图。资源按内容指纹发布；静图与动画纹理的尺寸、色彩信息和解码像素完全相同时，复用已有原文件中较小的一份，不重新编码。可见静图显示后，浏览器空闲便开始加载环境动画和小鸟；第一帧画好后无缝接手，不额外等待。滚动、点击或键盘操作会提前启动，浏览器往返缓存恢复时立即恢复。这个时机在 `src/scripts/living-mount.js` 中调整。
 
-## 首页和驾驶舱
+## 首页、授权页和驾驶舱
 
-首页、驾驶舱保留候选站原 HTML、原图和动效，由 Astro 静态路由输出。
+首页和授权页保留候选站原 HTML、原图和动效，由 Astro 静态路由输出：入口直接读 `sources/retained-home-cockpit/home.html`、`computer-access.html` 的已接受源码，附加样式和交互保持原样。普通构建不再复制到 `src/chrome/retained`，也不从旧站生成运行件或反向改写作者输入。
 
-首页、驾驶舱、授权页的 Astro 入口直接读 `sources/retained-home-cockpit/*.html` 的已接受源码；附加样式和交互保持原样。普通构建不再复制到 `src/chrome/retained`，也不从旧站生成运行件或反向改写作者输入。
+驾驶舱是 Astro 原生页，不再读保留 HTML：入口 `src/pages/cockpit/index.astro`，外壳、页头、目录条、页尾和全站一样。
+
+- 数据：PCConfig 状态服务的精简视图（`pcconfig.cockpit-view.v1`，线上 `live.wly0829.cn/computer-access/state?view=cockpit`，退到 `mcp.wly0829.cn`）；接口回全量时 `src/cockpit/full-adapter.js` 在浏览器里投影成同一份精简视图。`src/cockpit/model.js` 把视图整理成页面要的样子，构建时和浏览器里共用。
+- 首帧：构建时读一次最新视图（读不到用仓库里的 `src/cockpit/snapshot.json`），`src/cockpit/render.js` 画好整页。首帧明写“这是 HH:MM 的数，不是现在的，正在读最新…”，数字和灯整体灰着，不冒充现在。
+- 浏览器里：`src/cockpit/client.js` 每分钟读一次（页面在后台不读），用同一组 `render.js` 函数原地换每块里面的字，不换版式；右下角刷新按钮（`refresh-button.js`）叫醒电脑重读。读不到电脑时事实卡变淡、灯灰、写“读不到（最后 HH:MM 读到）”，图表链接先收起。
+- 首屏：一句话结论（要你做几件、是什么，点标题跳到那张卡；其余三格各一句），电脑 / 自动任务 / 备份三格，电脑健康分小字，安全和授权一行。颜色只看要不要你出手：要你做的红黄；有状况但 AI 在管的用中性蓝灰写“AI 在管”；数据源停了、读不到的灰。手机首屏按“结论 → 你得知道 → 三格 → 安全和授权”排，健康分不上手机首屏。
+- 总览打分和各区的灯由后端 `overview` 给，共用脚本 `public/_overview/overview-screen.js`（首页小屏也用它）。自动任务的“今天的河”是 `scripts/today-river.js`，图在 `sources/creative/today-river/assets2/`；驾驶舱的标题图、插画、图标在 `sources/assets/cockpit/`；首屏插画上的小鸟配置是 `src/cockpit/bird.config.json`。
+- 测试：`tests/test_cockpit_*.py`（浏览器测试底座 `tests/cockpit_native_harness.py` 照 `index.astro` 拼页，数据全部虚构、只在 127.0.0.1 上跑）和 `tests/test_today_river.py`。
 
 209 个旧生成器页面及其本地小资源以 probe03 的成品字节存入 `sources/frozen-site`。其 `manifest.json` 列明完整路由、冻结页指纹和资源来源：已有仓库文件直接复用；标题图按既有配方重建；确切的外壳依赖放入本地 `vendor-deps`，原图和视频保持原字节。原远端依赖已一次性入库到 `sources/vendor-deps/<原相对路径>`，按依赖清单核验 SHA 和字节数；所有构建只读本地，缺文件就报具体路径，不联网补取。点名迁移某个旧页时，再转移该路由的生成归属；普通构建不运行旧生成器。
 首页每次新加载、刷新都从纸色播放原开场；图片到达后 3 秒未开播，或开场连续 5 帧超过 100 毫秒，就跳到完成图并恢复环境动画。后退缓存与减少动态不播。顶栏固定用原 WebP 背景，避免显示途中切换未接收完的 AVIF；加载占位和标签行布局在首绘前确定，不用低清预览。
@@ -43,7 +50,7 @@ npm run dev -- --host 127.0.0.1 --port 4173
 
 构建最后调用 `python scripts/prepare-oss-release.py finalize-dist --dist dist`，离线完成上线前资源地址处理，再检查公开内容和记录所有最终文件的 SHA。该命令由 G2 提供；尚未合入、命令不存在或执行失败时，构建明确失败，不保留旧成功回执，也不省略这一步。
 
-`public/` 中的依赖、冻结路由和控制文件，以及 `.cache/`、`src/content/rendered/` 是可重建工作文件，不另入库；维护输入在 `sources/frozen-site`、`sources/retained-home-cockpit`、仓库原件和各原生脚本。公开规则源仍从版本化 `sources/rules` 生成。
+`public/` 中的依赖、冻结路由和控制文件，以及 `.cache/`、`src/content/rendered/` 是可重建工作文件，不另入库；维护输入在 `sources/frozen-site`、`sources/retained-home-cockpit`（首页和授权页）、`src/cockpit`（驾驶舱）、仓库原件和各原生脚本。公开规则源仍从版本化 `sources/rules` 生成。
 
 ## 内容文件怎么写
 
@@ -135,9 +142,9 @@ python tools/rule_article_check.py <现在网站构建目录> rules.json        
 
 同一工作树的 `dist` 只有一个写入者；连续构建等前一轮结束再启动，独立任务用各自工作树。宿主 `Invoke-HeavyTaskSlot.ps1` 当前只检查物理内存，不提供同一输出目录的互斥；预览读取独立且核过指纹的快照时，可以与另一工作树的构建并行。
 
-`npm run build -- --pages /how/,/projects/agents/` 在已有完整成品上选择这些路由。未变页不重新排版；页面 Markdown、版式和 `src/typeset/**` 的引擎内容共同决定每屏缓存。页面外壳变化会更新相关页，首页和驾驶舱的附加注入仍由 `src/retained-page.ts` 承接。`src/content/rendered/`、`.cache/` 与 Astro 暂存输出是生成物，不提交。
+`npm run build -- --pages /how/,/projects/agents/` 在已有完整成品上选择这些路由。未变页不重新排版；页面 Markdown、版式和 `src/typeset/**` 的引擎内容共同决定每屏缓存。页面外壳变化会更新相关页，首页和授权页的附加注入仍由 `src/retained-page.ts` 承接。`src/content/rendered/`、`.cache/` 与 Astro 暂存输出是生成物，不提交。
 
-首页、驾驶舱和授权页直接从 `sources/retained-home-cockpit/*.html` 读取。首页首帧脚本与首页包按 `manifest.json` 的 `bundled` 发布路径拷贝，带指纹文件名由清单提供；构建没有写死文件名。当前相册、环境动画和屏幕缓存仍沿用现有源码算法，六个保留页补丁不再构建时重跑。
+首页和授权页直接从 `sources/retained-home-cockpit/*.html` 读取；驾驶舱是原生页（见上面“首页、授权页和驾驶舱”）。首页首帧脚本与首页包按 `manifest.json` 的 `bundled` 发布路径拷贝，带指纹文件名由清单提供；构建没有写死文件名。当前相册、环境动画和屏幕缓存仍沿用现有源码算法，六个保留页补丁不再构建时重跑。
 
 每次成功构建写 `dist/.build-receipt.json`，格式为 `wly.site-build-receipt.v1`：
 

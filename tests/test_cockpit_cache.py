@@ -186,8 +186,11 @@ class CockpitRetentionTests(unittest.TestCase):
             self.refresh(200, body)
             self.wait_link('能')
             cell = self.page.locator('.cp-tri-cell[data-signal="backup"]')
-            self.assertEqual(cell.locator('.cp-tri-status').inner_text().strip(), '问题备份：备份目标没接上')
-            self.assertIn('is-red', cell.get_attribute('class'))
+            # 手机上这一格只显示一个词（状态句收起），所以按文字内容比
+            self.assertEqual(cell.locator('.cp-tri-status').text_content().strip(), '问题备份：备份目标没接上')
+            # 颜色只看要不要你出手：后端没说要你做、这一格写着交给 AI 时是中性色“AI 在管”，不是红色
+            self.assertIn('is-neutral', cell.get_attribute('class'))
+            self.assertIn('AI 在管', cell.text_content())
             bad = self.page.locator('[data-cp="backup"] .cp-card.is-yellow')
             self.assertEqual(bad.count(), 1)
             self.assertIn('备份目标没接上', bad.inner_text())
@@ -200,6 +203,14 @@ class CockpitRetentionTests(unittest.TestCase):
             chips = self.page.locator('[data-cp="projects"] .cp-chips').inner_text()
             self.assertIn('正常项目', chips)
             self.assertIn('待验收项目', chips)
+        # 后端明说要你出手（owner_action: do）时，这一格才是红色，写“要你看一眼”
+        mine = h.view()
+        mine['overview']['signals'][2] = {'id': 'backup', 'level': 'act', 'value': 1, 'owner_action': 'do'}
+        self.refresh(200, mine)
+        self.wait_link('能')
+        cell = self.page.locator('.cp-tri-cell[data-signal="backup"]')
+        self.assertIn('is-red', cell.get_attribute('class'))
+        self.assertIn('要你看', cell.text_content())
 
     def test_storage_unavailable_uses_memory_only(self):
         self.context.add_init_script("Object.defineProperty(window,'localStorage',{get(){throw Error('fictional storage unavailable')}})")

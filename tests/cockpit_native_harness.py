@@ -68,7 +68,7 @@ process.stdin.on('data', (d) => input += d).on('end', async () => {
   const { page } = await import(base + 'render.js');
   const ov = await import(ovUrl);
   const { snapshot, projectUrls } = JSON.parse(input);
-  process.stdout.write(page(normalize(asView(snapshot)), { now: new Date(), offline: false, projectUrls, img: {}, ov }));
+  process.stdout.write(page(normalize(asView(snapshot)), { now: new Date(), offline: false, phase: 'snapshot', projectUrls, img: {}, ov }));
 });
 """
 

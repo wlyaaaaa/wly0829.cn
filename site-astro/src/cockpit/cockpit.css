@@ -2,6 +2,7 @@
 .cp-page {
   --cp-ink: #24352c; --cp-soft: #5d7266; --cp-title: #0a7232; --cp-line: #cfe6d7; --cp-card: #fbfefc;
   --cp-green: #2f9e5a; --cp-yellow: #d4a21c; --cp-red: #c2473a; --cp-gray: #a9b3ae;
+  --cp-neutral: #6f8ca6; /* 有状况、AI 在管、不用你动手：中性的蓝灰，不和要你出手的黄红混 */
   font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
   color: var(--cp-ink); font-size: 16px; line-height: 1.6;
   padding: 8px clamp(14px, 3vw, 40px) 40px;
@@ -25,7 +26,7 @@
 
 /* 第一屏（场景 1）：左边标题和“你现在 N 件事”，右边插画；下面一行三格（电脑 / 自动任务 / 备份），再下面分数小字和安全授权。
    总览块用 display: contents，让三行直接排进第一屏的网格；浏览器换字时外框不变 */
-.cp-hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-areas: "title art" "you art" "tri tri" "score score" "sec sec"; gap: 12px 28px; align-items: start; padding-top: 14px; }
+.cp-hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-areas: "title art" "you art" "know know" "tri tri" "score score" "sec sec"; gap: 12px 28px; align-items: start; padding-top: 14px; }
 .cp-hero-copy { grid-area: title; }
 .cp-hero h1 { margin: 0; line-height: 0; }
 .cp-hero h1 img { height: 76px; width: auto; }
@@ -69,6 +70,10 @@
 .cp-tri-cell.is-yellow a { border-left-color: var(--cp-yellow); background: #fffdf6; }
 .cp-tri-cell.is-red a { border-left-color: var(--cp-red); background: #fffaf8; }
 .cp-tri-cell.is-gray a { border-left-color: var(--cp-gray); }
+.cp-tri-cell.is-neutral a { border-left-color: var(--cp-neutral); background: #f8fafc; }
+.cp-tri-cell.is-neutral .cp-tri-who { color: #4f6b84; }
+.cp-tri-short { display: none; }
+.cp-tri-note { font-size: 12.5px; color: #8a9790; }
 .cp-tri-label { font-size: 13px; color: var(--cp-soft); }
 .cp-tri-status { font-size: 20px; line-height: 1.3; }
 .cp-tri-who { font-size: 14px; font-weight: 600; color: var(--cp-title); }
@@ -112,6 +117,7 @@
 .cp-dot.is-green { background: var(--cp-green); }
 .cp-dot.is-yellow { background: var(--cp-yellow); }
 .cp-dot.is-red { background: var(--cp-red); }
+.cp-dot.is-neutral { background: var(--cp-neutral); }
 
 /* 卡片网格：电脑三列，手机一列；卡片高度跟内容走，同一行等高 */
 /* 弹性换行：一行放得下几张放几张，最后一行的卡自动拉宽填满，不留半行空洞 */
@@ -171,6 +177,10 @@
 .cp-card p, .cp-proj p { margin: 0 0 6px; overflow-wrap: anywhere; }
 .cp-card.is-red { border-color: #efc3bd; background: #fffaf8; }
 .cp-card.is-yellow { border-color: #ecdcae; background: #fffdf6; }
+.cp-card.is-neutral { border-color: #d5e0ea; background: #f9fbfd; }
+.cp-card.is-neutral h3 { color: #3f5f7a; }
+.cp-card.is-off { opacity: .55; filter: grayscale(1); }
+.cp-off-note { color: var(--cp-soft); }
 .cp-todo h3 { color: var(--cp-ink); }
 .cp-chart { text-decoration: none; color: var(--cp-ink) !important; }
 .cp-chart:hover { border-color: #9ddcae; background: #f4fcf6; }
@@ -335,3 +345,55 @@
 #today-river .row.fold > summary .nm { color: var(--cp-soft); }
 #today-river .row.fold[open] { background: #fbfdfc; }
 #today-river div.row > summary { cursor: default; }
+
+/* 结论句的后半句：三格各一句（AI 在管 / 正常 / 要你看） */
+.cp-you-rest { margin: 6px 0 4px !important; font-size: 15px; line-height: 1.55; color: var(--cp-ink); overflow-wrap: anywhere; }
+.cp-you.is-none .cp-you-rest { margin-top: 8px !important; }
+/* 首帧是构建时的旧数：写明几点的，下面的数字和灯一起灰着，读到新数据就换掉（client.js 换字时这一行消失） */
+.cp-snap { margin: 0 0 8px !important; padding: 4px 10px; border-radius: 8px; background: #f1f3f2; color: var(--cp-soft); font-size: 13.5px; font-weight: 700; }
+.cp-page:has(.cp-snap) :is(.cp-you-n, .cp-you-list, .cp-you-rest, .cp-know, .cp-tri, .cp-score, .cp-security, .cp-body, .cp-lamp, .cp-river) { filter: grayscale(1); opacity: .6; }
+/* 你得知道（字段到了才出） */
+.cp-know { grid-area: know; padding: 10px 16px; border: 1px solid #d5e0ea; border-radius: 14px; background: #fbfcfe; }
+.cp-know p { margin: 0; }
+.cp-know.is-empty { padding: 6px 14px; font-size: 14px; color: var(--cp-soft); }
+.cp-know-k { font-size: 13px; font-weight: 700; color: #4f6b84; letter-spacing: .08em; margin-bottom: 4px !important; }
+.cp-know-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.cp-know-list li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 4px 0; scroll-margin-top: 130px; }
+.cp-know-list li:target { outline: 3px solid #b9cde0; outline-offset: 2px; border-radius: 6px; }
+.cp-know-tag { font-size: 12px; font-weight: 700; padding: 0 8px; border-radius: 999px; border: 1px solid #d5e0ea; color: #4f6b84; white-space: nowrap; }
+.cp-know-tag.is-green { border-color: #bfe8cc; color: var(--cp-title); }
+.cp-know-text { font-size: 15px; overflow-wrap: anywhere; }
+.cp-know-text small { display: block; font-size: 12.5px; color: var(--cp-soft); }
+.cp-know-more { font-size: 13px; color: var(--cp-soft); }
+.cp-know-more.is-phone { display: none; }
+/* 安全和授权：手机上压成一行，电脑宽度不出 */
+.cp-sec-line { display: none; }
+/* 网站上次发布一行（字段到了才出） */
+.cp-release { display: flex; align-items: baseline; gap: 0; margin: 0 0 12px; padding: 8px 14px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fbfefc; font-size: 15px; overflow-wrap: anywhere; }
+.cp-release.is-bad { border-color: #ecdcae; background: #fffdf6; }
+.cp-net { font-size: 14px; }
+.ov-sec.is-neutral { --ov-c: var(--cp-neutral); }
+
+@media (max-width: 767.98px) {
+  /* 手机首屏（方案第六节）：结论句 + 最多 3 个待办 → 你得知道 2—3 行 → 电脑 / 自动任务 / 备份三小块一行 → 安全和授权一行；健康分不上首屏 */
+  .cp-hero { grid-template-areas: "title" "you" "know" "tri" "sec" "score"; }
+  .cp-score { display: none; }
+  .cp-you-rest { font-size: 13.5px; }
+  .cp-tri-status, .cp-tri-who, .cp-tri-note { display: none; }
+  .cp-tri-short { display: block; font-size: 15px; line-height: 1.3; }
+  .cp-tri-cell.is-neutral .cp-tri-short { color: #4f6b84; }
+  .cp-tri-cell.is-red .cp-tri-short { color: var(--cp-red); }
+  .cp-tri-cell.is-yellow .cp-tri-short { color: #9a7409; }
+  .cp-tri-cell.is-gray .cp-tri-short { color: var(--cp-soft); }
+  .cp-tri-cell.is-gray .cp-tri-who { display: block; font-size: 11.5px; } /* 读不到时写上次几点读到 */
+  .cp-know { padding: 8px 12px; }
+  .cp-know-list li:nth-child(n+4) { display: none; }
+  .cp-know-more.is-phone { display: block; }
+  .cp-know-text { font-size: 14px; }
+  .cp-security-wrap { margin-top: 0; padding: 0; border: 0; background: none; }
+  .cp-security-title, .cp-sec-item { display: none !important; }
+  .cp-security { display: block; }
+  .cp-sec-line { display: flex; align-items: center; gap: 0; padding: 8px 12px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fff; font-size: 13px; line-height: 1.45; color: var(--cp-ink) !important; text-decoration: none; }
+  .cp-sec-line span { flex: 1; min-width: 0; }
+  .cp-sec-line b { color: var(--cp-title); margin-left: 6px; }
+}
