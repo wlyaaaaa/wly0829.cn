@@ -40,7 +40,7 @@ export function fromFull(full) {
   const collectors = obj(obj(f.display_cache).collectors), host = obj(f.host);
   const tasks = rows(f.automation).map((r) => {
     const p = obj(r.plain), o = obj(r.outcomes), rel = obj(r.related_status);
-    return { id: text(r.id), name: text(p.name || r.project), group: text(r.group), state: text(r.state) || 'unknown', enabled: typeof r.enabled === 'boolean' ? r.enabled : null,
+    return { id: text(r.id), name: text(p.name || r.project), project: text(r.project), group: text(r.group), state: text(r.state) || 'unknown', enabled: typeof r.enabled === 'boolean' ? r.enabled : null,
       mine: p.mine === true, last_run_at: r.last_run_at, next_run_at: r.next_run_at, runs_today: r.runs_today === true, schedule: text(r.schedule_zh || p.schedule_zh),
       note: text(p.status_note), what: text(p.what), stop: text(p.stop), impact: text(p.impact), heartbeat_at: o.heartbeat_at || r.heartbeat_at || null, failures_7d: Number.isFinite(r.failures_7d) ? r.failures_7d : null,
       panel: { is_panel: 'panel' in rel || o.kind === 'panel_heartbeat', execution_failed: o.execution_failed === true, related_state: rel.panel || o.state || null },
