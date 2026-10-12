@@ -96,11 +96,11 @@ export function normalize(raw) {
       daily: list(c.daily), projects_7d: list(c.projects_7d) }; })(),
     // 健康分、扣分原因、6 个信号、各分区的灯都由后端 overview 给（O6 裁定），前端不算
     overview: v.overview && typeof v.overview === 'object' ? v.overview : null,
-    // 下面几块等后端新字段：字段不在就是 null，页面不出这一块，照旧数据显示
-    // “你得知道”：AI 在修、影响你用电脑的毛病；刚办好、改变你用法的事；你没回又该知道的汇报
-    know: Array.isArray(v.know) ? list(v.know) : null,
-    // 网站上次发布的回执（时间、成没成功、发布后回读通过没有）
-    site_release: v.site_release && typeof v.site_release === 'object' ? v.site_release : null,
+    // 下面两块是后端 10 月 12 日加的；字段不在就是 null，页面不出这一块，照旧数据显示
+    // “你得知道”（must_know）：{state: ok|empty|unavailable, text, items[{id, kind: repairing|recovered|report, text, at, exit_when}], archived_items}
+    must_know: (() => { const m = v.must_know; if (!m || typeof m !== 'object') return null; return { state: ['ok', 'empty', 'unavailable'].includes(m.state) ? m.state : 'unavailable', text: typeof m.text === 'string' ? m.text : '', observed_at: m.observed_at || null, items: list(m.items), archived: list(m.archived_items) }; })(),
+    // 网站上次成功发布的回执（website_release）：{state: success|unavailable, published_at, version, verified, text}；只证明上次成功那次
+    website_release: v.website_release && typeof v.website_release === 'object' ? v.website_release : null,
   };
 }
 
@@ -117,6 +117,14 @@ export function govState(v, now = new Date()) {
   const g = obj(v.governance), r = obj(g.last_run), c = obj(r.counts);
   const task = v.automation.items.find((t) => t.id && t.id === g.id) || null;
   const next = g.next_run_at || r.next_run_at || null;
+  // 后端给了 phase（not_started / running / completed / unavailable）就按它；跑完的结果句用后端 status_note（“跑完：修好N、关掉N……”）
+  if (['not_started', 'running', 'completed', 'unavailable'].includes(g.phase)) {
+    const need = Number.isInteger(c.need_you) ? c.need_you : 0;
+    if (g.phase === 'completed') return { state: 'done', text: (typeof g.status_note === 'string' && g.status_note ? g.status_note : '跑完了，数量没记录') + (r.ended_at ? `（${dateHm(r.ended_at)}）` : ''), next, need };
+    if (g.phase === 'running') return { state: 'running', text: `${r.started_at || (task && task.last_run_at) ? dateHm(r.started_at || task.last_run_at) + ' 开始，' : ''}正在跑（还没收到跑完的回执）`, next, need: 0 };
+    if (g.phase === 'not_started') return { state: 'idle', text: '这周还没开始', next, need: 0 };
+    return { state: 'failed', text: '这周的体检情况读不到', next, need: 0 };
+  }
   const n = (x) => (Number.isInteger(x) && x >= 0 ? x : null);
   const nums = [['修好', c.fixed], ['关掉', c.closed], ['还在跟', c.following], ['要你', c.need_you]].filter(([, x]) => n(x) != null);
   const ended = r.ended_at || g.ended_at || null, started = r.started_at || g.started_at || (task && task.last_run_at) || null;
@@ -142,6 +150,8 @@ export function riverSnapshot(v, now = new Date()) {
       id: t.id, group: t.group, state: t.state, enabled: t.enabled, last_run_at: t.last_run_at, next_run_at: t.next_run_at,
       runs_today: t.runs_today, schedule_zh: t.schedule || '', heartbeat_at: t.heartbeat_at || null, failures_7d: Number.isFinite(t.failures_7d) ? t.failures_7d : undefined,
       public_message: t.public_message || undefined, notice_kind: t.notice_kind || undefined,
+      // 后端的显示颜色（neutral = 有状况但 AI 在管）和 AI 在管什么；河据此升中性旗，不升红黄旗
+      color: t.color || undefined, ai_handling: t.ai_handling || undefined,
       plain: { name: t.name, what: t.what || '', stop: t.stop || '', impact: t.impact || '', status_note: t.note || '', mine: t.mine === true },
     };
     if (p.is_panel) raw.outcomes = { kind: 'panel_heartbeat', execution_failed: p.execution_failed === true, state: p.related_state || null, heartbeat_at: t.heartbeat_at || null };

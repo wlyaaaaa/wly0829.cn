@@ -60,7 +60,9 @@ function sort(snap) {
     t.note = panelUnknown ? '' : raw.status_note || raw.plain?.status_note || raw.reason || '';
     t.off = raw.enabled === false || raw.state === 'disabled';
     t.flag = raw.state === 'failed' ? 'bad' : ['warn', 'overdue', 'stale'].includes(raw.state) ? 'warn' : ['success', 'running'].includes(raw.state) ? 'ok' : 'gray';
-    t.alert = !t.off && (t.flag === 'bad' || t.flag === 'warn');
+    // 后端说这条有状况但 AI 在管（color=neutral）：不升红黄旗，用中性的蓝灰旗，说明写 AI 在管什么
+    if ((t.flag === 'bad' || t.flag === 'warn') && raw.color === 'neutral') { t.flag = 'ai'; if (raw.ai_handling) t.note = String(raw.ai_handling).replace(/^AI\s*在管[：:]\s*/, ''); }
+    t.alert = !t.off && (t.flag === 'bad' || t.flag === 'warn' || t.flag === 'ai');
     // 守护：一直开着的，或者每隔半小时以内就查一趟的。它们不算“一趟一趟的船”，是岸边的灯
     t.guard = !t.off && !['unknown', 'never'].includes(raw.state) && (raw.state === 'running' || t.every <= 30 || /常驻/.test(raw.schedule_zh || ''));
     t.ran = !t.off && !t.guard && t.last <= now && dkey(t.last) === today;
@@ -68,7 +70,7 @@ function sort(snap) {
     t.home = t.off ? 'off' : t.guard ? 'guard' : (t.ran || t.coming || t.alert) ? 'trip' : raw.state === 'unknown' ? 'fog' : (raw.state === 'paused' || (raw.state === 'never' && !(t.next > now))) ? 'off' : 'idle';
     return t;
   });
-  const rank = t => t.flag === 'bad' ? 0 : t.flag === 'warn' ? 1 : 2;
+  const rank = t => t.flag === 'bad' ? 0 : t.flag === 'warn' ? 1 : t.flag === 'ai' ? 1.5 : 2;
   const past = tasks.filter(t => t.ran || (t.home === 'trip' && t.alert && !t.ran)).map(t => ({ t, at: t.last, kind: 'past' })).sort((a, b) => rank(a.t) - rank(b.t) || (b.at || 0) - (a.at || 0));
   const future = tasks.filter(t => t.coming).map(t => ({ t, at: t.next, kind: 'future' })).sort((a, b) => a.at - b.at);
   const by = h => tasks.filter(t => t.home === h);
@@ -77,7 +79,7 @@ function sort(snap) {
            alerts: tasks.filter(t => t.alert).sort((a, b) => rank(a) - rank(b)), stale: !!snap.reason || ['unknown', 'unavailable', 'stale'].includes(A.state) };
 }
 const whenText = (M, ms) => { if (!(ms > 0)) return ''; const d = dkey(ms) - M.today, b = bj(ms); return (d === 0 ? '今天 ' : `${b.getUTCMonth() + 1} 月 ${b.getUTCDate()} 日 `) + hm(ms); };
-const STATE = { ok: '正常', bad: '出错了', warn: '要留意', gray: '还不知道' };
+const STATE = { ok: '正常', bad: '出错了', warn: '要留意', ai: 'AI 在管', gray: '还不知道' };
 const frequency = (t, once = false) => {
   const s = t.every < 1 ? `每 ${Math.round(t.every * 60)} 秒` : t.every === 1 ? '每分钟' : t.every <= 30 ? `每 ${t.every} 分钟` : '常驻';
   return s + (once && t.every <= 30 ? '一次' : '');
@@ -86,7 +88,7 @@ function stateOf(t) {
   if (t.off) return ['gray', '已停用'];
   if (t.panelUnknown) return ['gray', '没读到副屏心跳'];
   if (t.raw.state === 'overdue') return ['warn', '过期'];
-  if (t.flag === 'bad' || t.flag === 'warn') return [t.flag, STATE[t.flag]];
+  if (t.flag === 'bad' || t.flag === 'warn' || t.flag === 'ai') return [t.flag, STATE[t.flag]];
   if (t.raw.state === 'running') return ['ok', '正在运行'];
   if (t.raw.state === 'never') return ['gray', '还没跑过'];
   if (t.raw.state === 'paused') return ['gray', '按需，暂停中'];
@@ -98,7 +100,7 @@ function stateOf(t) {
 const v = x => x ? esc(x) : '<span class="none">还没写</span>';
 function six(M, t) {
   const [cls, word] = stateOf(t), r = t.raw;
-  const err = t.off ? '已停用，不算出错' : t.panelUnknown ? '不知道，这次没读到副屏心跳' : r.state === 'overdue' ? '过期' + (t.note ? '：' + t.note : '') : t.flag === 'bad' ? '出错了' + (t.note ? '：' + t.note : '') : t.flag === 'warn' ? '要留意' + (t.note ? '：' + t.note : '') :
+  const err = t.off ? '已停用，不算出错' : t.panelUnknown ? '不知道，这次没读到副屏心跳' : r.state === 'overdue' ? '过期' + (t.note ? '：' + t.note : '') : t.flag === 'bad' ? '出错了' + (t.note ? '：' + t.note : '') : t.flag === 'warn' ? '要留意' + (t.note ? '：' + t.note : '') : t.flag === 'ai' ? 'AI 在管，不用你动手' + (t.note ? '：' + t.note : '') :
     r.state === 'unknown' ? '不知道，这次没读到它的运行结果' : r.state === 'paused' ? '按需运行，现在暂停着，不算出错' : r.state === 'never' ? '还没跑过，谈不上出错' : r.state === 'running' ? '没有，正在运行' : '没有，上次运行正常';
   const next = t.off ? '已停用，不会自动跑' : t.next > M.now ? whenText(M, t.next) + (r.schedule_zh ? `（${r.schedule_zh}）` : '') : r.schedule_zh || '';
   return `<h4>${esc(t.name)}<span class="state ${cls}">${word}</span><small>${esc(t.group)}</small></h4><div class="six">
@@ -189,7 +191,7 @@ function build(snap) {
   // 一直在岗的守护：岸边的灯
   const nG = M.guards.length;
   M.guards.forEach((t, k) => {
-    const x = nG > 1 ? 50 + 47.2 * k / (nG - 1) : 73, l = mk('button', 'lamp' + (t.flag === 'bad' ? ' l-bad' : t.flag === 'warn' ? ' l-warn' : '') + (t.every <= 30 ? ' beat' : ''), layer, '<i class="glow"></i><i class="post"></i><i class="lit"></i>');
+    const x = nG > 1 ? 50 + 47.2 * k / (nG - 1) : 73, l = mk('button', 'lamp' + (t.flag === 'bad' ? ' l-bad' : t.flag === 'warn' ? ' l-warn' : t.flag === 'ai' ? ' l-ai' : '') + (t.every <= 30 ? ' beat' : ''), layer, '<i class="glow"></i><i class="post"></i><i class="lit"></i>');
     l.type = 'button'; put(l, x, at(TOP, x) - .4); l.style.setProperty('--bd', (-rnd() * 5).toFixed(2) + 's'); l.dataset.i = t.i; l.setAttribute('aria-label', t.name);
     l.dataset.tip = t.alert ? stateOf(t)[1] : t.raw.state === 'running' ? '正在运行' + (t.every <= 30 ? ' · ' + frequency(t, true) : '') : frequency(t, true) + ' · 上次正常';
     remember(t, l); acts.push(tb => l.classList.toggle('lit', tb >= I.lamps + k * (nG > 1 ? 5 / (nG - 1) : 0)));   // 一盏一盏点亮，前后约 2 秒
@@ -235,19 +237,19 @@ function perch(signEl) {
 
 // ---------- 河上面的一句话、提醒，河下面的日志 ----------
 function texts(ranToday, nShore) {
-  const nBad = M.alerts.filter(t => t.flag === 'bad').length, nWarn = M.alerts.length - nBad, b = bj(M.now), obs = `${b.getUTCMonth() + 1} 月 ${b.getUTCDate()} 日 ${hm(M.now)}`;
+  const nBad = M.alerts.filter(t => t.flag === 'bad').length, nAi = M.alerts.filter(t => t.flag === 'ai').length, nWarn = M.alerts.length - nBad - nAi, b = bj(M.now), obs = `${b.getUTCMonth() + 1} 月 ${b.getUTCDate()} 日 ${hm(M.now)}`;
   const nGuardAlert = M.guards.filter(t => t.alert).length;
-  const lead = nBad || nWarn ? [nBad ? `<span class="bad">有 ${nBad} 个任务出错</span>` : '', nWarn ? `<span class="warn">${nBad ? '' : '有 '}${nWarn} 个${nBad ? '' : '任务'}要留意</span>` : ''].filter(Boolean).join('、') + '，详情见下面。' : M.fog.length ? `读到结果的任务都没有出错，也没有要留意的；${M.fog.length} 个这次没读到结果。` : '没有出错的，也没有要留意的。';
+  const lead = nBad || nWarn || nAi ? [nBad ? `<span class="bad">有 ${nBad} 个任务出错</span>` : '', nWarn ? `<span class="warn">${nBad ? '' : '有 '}${nWarn} 个${nBad ? '' : '任务'}要留意</span>` : '', nAi ? `<span class="ai">${nBad || nWarn ? '' : '有 '}${nAi} 个有状况、AI 在管（不用你动手）</span>` : ''].filter(Boolean).join('、') + '，详情见下面。' : M.fog.length ? `读到结果的任务都没有出错，也没有要留意的；${M.fog.length} 个这次没读到结果。` : '没有出错的，也没有要留意的。';
   const unavailable = ({offline:'现在读不到电脑。', unreadable:'自动任务暂时读不到。', stale:'自动任务的记录没有及时更新。'})[M.snap.reason || (M.A.state === 'stale' ? 'stale' : 'unreadable')];
   $('#headline').innerHTML = M.stale ? `<span class="warn">旧数据，之后的情况不知道。${unavailable}</span>下面是 ${obs} 最后一次读到的样子。` : M.A.state === 'empty' ? '电脑上现在没有登记的自动任务。' : lead +
     `今天定时任务已经跑完 <b>${ranToday}</b> 个，还有 <b>${M.future.length}</b> 个要跑；常驻和高频任务 <b>${M.guards.length}</b> 个，${nGuardAlert ? `其中 ${nGuardAlert} 个有问题` : '都正常'}。另有 ${nShore} 个今天没有安排或已停用${(nBad || nWarn) && M.fog.length ? `，${M.fog.length} 个这次没读到结果` : ''}。`;
   $('#when').textContent = `读到电脑的时间：${obs}（北京时间）· 一共 ${M.tasks.length} 个自动任务`;
   const al = $('#alerts'); al.textContent = '';
   M.alerts.forEach(t => { const e = mk('button', 'alert ' + t.flag, al, `<b>${esc(t.name)}</b>${stateOf(t)[1]}${t.note ? '：' + esc(t.note) : ''}${t.last > 0 ? `（上次运行：${esc(whenText(M, t.last))}）` : ''}`); e.type = 'button'; e.onclick = () => pick(t, true); });
-  $('#legend').innerHTML = `<span>浮标：${M.stale ? '最后读到时刻' : '现在'}（左边跑完，右边还没到点）</span>` + [['var(--ok)', '绿旗：跑完，正常'], ['var(--warn)', '黄旗：要留意'], ['var(--bad)', '红旗：出错'], ['#c3ccc8', '灰旗：跑了，但没读到结果']]
+  $('#legend').innerHTML = `<span>浮标：${M.stale ? '最后读到时刻' : '现在'}（左边跑完，右边还没到点）</span>` + [['var(--ok)', '绿旗：跑完，正常'], ['var(--warn)', '黄旗：要留意'], ['var(--bad)', '红旗：出错'], ['var(--ai)', '蓝灰旗：有状况，AI 在管'], ['#c3ccc8', '灰旗：跑了，但没读到结果']]
     .map(([c, s]) => `<span><i style="--c:${c}"></i>${s}</span>`).join('') + '<span>没升旗的船：还没到点</span><span>灯：常驻和高频任务（一直开着，或每半小时内就跑一次）</span><span>岸上的船：今天没有安排或已停用</span><span>雾里的船：这次没读到结果</span>';
   const log = $('#log'); log.innerHTML = '<h4>任务清单<small>点一行，看它在做什么、上次和下次、有没有出错、怎么停、停了影响什么</small></h4>';
-  const C = { ok: 'var(--ok)', warn: 'var(--warn)', bad: 'var(--bad)', gray: 'var(--gray)' };
+  const C = { ok: 'var(--ok)', warn: 'var(--warn)', bad: 'var(--bad)', ai: 'var(--ai)', gray: 'var(--gray)' };
   // 别的软件自带的任务（Office、浏览器更新这类）折成一行；用途目录没标“你的”就不折
   const anyMine = M.tasks.some(t => t.raw.plain?.mine === true), other = x => anyMine && (x.t || x).raw?.plain?.mine !== true;
   const group = (key, title, say, list, open, timeOf, colorOf, head, fold, nameOf = x => (x.t || x).name) => { if (!list.length) return;
@@ -263,9 +265,9 @@ function texts(ranToday, nShore) {
   // 今天出过错的：和上面总览“今天的任务 N 个出错”同一份清单，一行写“几点出错 → 现在怎样”
   const byId = new Map(M.tasks.map(t => [t.raw.id, t]));
   const errs = (Array.isArray(M.snap.today_errors) ? M.snap.today_errors : []).map(e => ({ e, t: byId.get(e.task_id), name: e.name || '没写名字的任务' }));
-  const latest = t => ({ ok: '最近一次正常', bad: '最近一次出错', warn: '最近一次要留意', gray: '最近一次结果还不知道' })[t.flag];
+  const latest = t => ({ ok: '最近一次正常', bad: '最近一次出错', warn: '最近一次要留意', ai: '最近一次有状况，AI 在管', gray: '最近一次结果还不知道' })[t.flag];
   const after = x => { const t = x.t, at = parse(x.e.at); if (!t) return '没在任务清单里找到它'; return t.flag === 'ok' && t.last > at ? `${hm(t.last)} 又跑了一次，正常` : latest(t); };
-  group('errtoday', '今天出过错的', '和最上面“今天的任务出错”是同一份；出错后又跑成功的写在后面', errs, true, x => parse(x.e.at) > 0 ? hm(parse(x.e.at)) : '', x => x.t?.flag === 'bad' ? C.bad : C.warn, C.bad, null, x => `${(x.t || x).name}${x.e.owner === 'other' ? '（别的软件自带）' : ''} · ${after(x)}`);
+  group('errtoday', '今天出过错的', '和最上面“今天的任务出错”是同一份；出错后又跑成功的写在后面', errs, true, x => parse(x.e.at) > 0 ? hm(parse(x.e.at)) : '', x => x.t?.flag === 'bad' ? C.bad : x.t?.flag === 'ai' ? C.ai : C.warn, C.bad, null, x => `${(x.t || x).name}${x.e.owner === 'other' ? '（别的软件自带）' : ''} · ${after(x)}`);
   // 这周反复出错：后端给每个任务近 7 天失败次数 failures_7d；没给这个字段就不出这一组
   const repeat = M.tasks.filter(t => Number.isFinite(t.raw.failures_7d) && t.raw.failures_7d >= 3).sort((a, b) => b.raw.failures_7d - a.raw.failures_7d);
   group('repeat', '这周反复出错', '近 7 天出错 3 次以上；今天好了也列在这里', repeat, true, t => `${t.raw.failures_7d} 次`, t => C[t.flag === 'ok' ? 'warn' : t.flag], C.warn, null, t => `${t.name} · ${latest(t)}`);
@@ -281,7 +283,7 @@ function texts(ranToday, nShore) {
 function mark(t, occurrence = null) { host.querySelectorAll('#layer .on').forEach(e => e.classList.remove('on')); if (t) (els.get(t.i) || []).forEach((e, i) => { if (occurrence == null || i === occurrence) e.classList.add('on'); }); }
 function pick(t, scroll, occurrence = 0) {
   picked = { id: t.raw.id, occurrence }; mark(t, occurrence); const p = $('#pick'); p.hidden = false; p.dataset.taskId = t.raw.id; p.dataset.occurrence = occurrence;
-  if (['bad', 'warn'].includes(t.flag) || t.raw.state === 'unknown') {
+  if (['bad', 'warn', 'ai'].includes(t.flag) || t.raw.state === 'unknown') {
     p.textContent = t.raw.public_message || STATE[t.flag];
     document.dispatchEvent(new CustomEvent('today-river-selected-notice', {detail:{taskId:t.raw.id, task:t.raw, target:p}}));
   } else p.innerHTML = six(M, t);

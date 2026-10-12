@@ -78,6 +78,12 @@ export function html(ov, { size = 'big', now = Date.now() } = {}) {
   // 小屏的颜色只看要不要你出手（和驾驶舱同一规则）：后端给 owner_action=do（或 owner_action_needed=true）才保留红黄、写“要你看”；
   // owner_action=know 用黄写“要你知道”；其余有状况的都是 AI 在管，用中性色写“AI 在管”，不用红色配“交给 AI”
   const owner = (s) => {
+    // 后端 10 月 12 日起每个信号带显示颜色 color（ok / neutral / unavailable / yellow / red）：有就以它为准
+    if (s.color === 'neutral') return { ...s, level: 'neutral', word: 'AI 在管' };
+    if (s.color === 'ok') return { ...s, level: 'ok', word: s.level === 'ok' ? s.word : '正常' };
+    if (s.color === 'unavailable') return { ...s, level: 'unknown', word: '读不到' };
+    if (s.color === 'yellow') return { ...s, level: 'watch', word: '要你看' };
+    if (s.color === 'red') return { ...s, level: 'act', word: '要你看' };
     if (!s.level || s.level === 'ok' || s.level === 'unknown') return s;
     if (s.owner_action === 'do' || s.owner_action_needed === true) return { ...s, word: '要你看' };
     if (s.owner_action === 'know') return { ...s, level: 'watch', word: '要你知道' };
@@ -85,7 +91,7 @@ export function html(ov, { size = 'big', now = Date.now() } = {}) {
   };
   // 今天的任务只数还没恢复的（后端 task_health.unrecovered_today 有才换；没有照旧写“曾出错”），和驾驶舱同一口径
   const th = ov?.task_health;
-  const open = (s) => (s.id === 'today_tasks' && th && Number.isFinite(th.unrecovered_today) ? { ...s, value: th.unrecovered_today, unit: '个没恢复', level: th.unrecovered_today ? s.level : 'ok', word: th.unrecovered_today ? s.word : '正常' } : s);
+  const open = (s) => (s.id === 'today_tasks' && Number.isFinite(s.recovered_today) && s.value != null ? { ...s, unit: '个没恢复' } : s.id === 'today_tasks' && th && Number.isFinite(th.unrecovered_today) ? { ...s, value: th.unrecovered_today, unit: '个没恢复', level: th.unrecovered_today ? s.level : 'ok', word: th.unrecovered_today ? s.word : '正常' } : s);
   const sigs = ids.map((id) => { const s = { id, ...find(id) }; return signal(size === 'big' ? s : owner(open(small(s))), off); }).join('');
   const reasons = !off && Array.isArray(ov.reasons) ? ov.reasons : [];
   const line = (r) => `<li>${esc(r.text)}${Number.isFinite(r.delta) && r.delta ? ` <b>${r.delta > 0 ? '+' : '−'}${Math.abs(r.delta)}</b>` : ''}</li>`;
