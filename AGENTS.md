@@ -6,6 +6,8 @@ personal AI collaboration workspace; public presentation is secondary.
 
 本人问网站某天或某几天访问人数时，在仓库根运行 `python -B -X utf8 tools/query-site-visitors.py --start 2026-10-12 --end 2026-10-12`（替换日期；最近七天用 `--days 7`）：默认排除本人和巡检、北京时间切日，以浏览器访客编号及整段跨天去重为主（换设备或清存储会多算、共用浏览器会少算），独立 IP 是辅助口径（换网络多算、共用 IP 少算、资源缓存会漏算）；近 7 天从 SLS 实时日志查询，约延迟 3 分钟，更早来自 OSS 日志转存，可能延迟最多 48 小时，输出会列出各段来源，零条日志不能认定零访客，本人设备访问任一页带 `?self=1` 后持续排除，`?self=0` 取消。
 
+本人问网站搜索词、点击、展示、平均排名或收录时，查询入口是 `python -B -X utf8 tools/query-search-terms.py --days 28`（默认 28 天，可改天数或用 `--end YYYY-MM-DD`；凭据须经密码中心登记程序供给，未配置或读取失败会明确报错）；Google 按太平洋日期切日、默认截止到当地三天前，数据通常晚 2–3 天且低频词会被隐去，网站总量与可见词表分开，Bing 词统计按返回日期筛选但每周更新且周覆盖区间未知，Google 全站收录需另读 Page Indexing 或通过 `--google-index-snapshot <本机快照.json>` 显示带日期的非实时快照，Bing 显示最新可取得的收录快照，空记录不等于无人搜索。
+
 ## Product boundary
 
 - This is a personal project, rules, capabilities and collaboration workspace.
