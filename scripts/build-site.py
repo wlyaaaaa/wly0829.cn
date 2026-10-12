@@ -303,6 +303,7 @@ def build(pages=None):
     for route in set(snapshot['routes']) - entries.keys():
         entries[route] = {'fingerprint': generated_fp, 'kind': 'generated'}
     entries['/cockpit/stutter/']['fingerprint'] = fingerprint(stutter_inputs + [SITE / 'tools/cockpit_stutter.py'])
+    entries['/cv/'] = {'fingerprint': fingerprint([ROOT / 'scripts/build-site.py']), 'kind': 'generated'}
     visitor_fp = fingerprint([ROOT / 'scripts/visitor-beacon.js', ROOT / 'scripts/footer-email-copy.js'])
     for row in entries.values(): row['fingerprint'] += visitor_fp
     if requested and requested - entries.keys(): raise ValueError('Unknown routes: ' + ', '.join(sorted(requested - entries.keys())))
@@ -350,6 +351,9 @@ def build(pages=None):
         if not source.is_file(): raise ValueError('Missing registered verification file: ' + name)
         assets_changed = copy_changed(source, dist / name) or assets_changed
     stage('assets')
+    if '/cv/' in changed:
+        target = dist / 'cv/index.html'; target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="robots" content="noindex"><noscript><meta http-equiv="refresh" content="0;url=/"></noscript></head><body></body></html>\n', encoding='utf8')
     converted = {route: {'producer': 'astro'} for route, row in entries.items() if row['kind'] != 'frozen'}
     if changed or prepare_changed or assets_changed:
         runtime.finish(dist, snapshot, pin, converted, changed_routes={r for r in changed if entries[r]['kind'] != 'frozen'})

@@ -259,6 +259,25 @@ class VisitorTests(unittest.TestCase):
         self.assertEqual(result["total"]["pageviews"], 2)
         self.assertEqual([query.app_name(UA + token) for token in (" MicroMessenger", " DingTalk", " Lark", " bosszp")], ["微信", "钉钉", "飞书/Lark", "Boss 直聘"])
 
+    def test_entry_first_attribution_dedup_history_and_dwell(self):
+        history = {}
+        entry = log("11/Oct/2026:23:59:59 +0800", p="/cv/", extra={"x-event": "entry", "x-entry": "cv"})
+        rows = log(extra={"x-id": "home", "x-entry": "cv"}) + entry + entry
+        rows += log("12/Oct/2026:10:00:20 +0800", extra={"x-id": "home", "x-event": "leave", "x-visible": "15"})
+        rows += log("12/Oct/2026:11:00:00 +0800", extra={"x-entry": "other"}) + log(v="direct")
+        rows += log(v="self", extra={"x-self": "1", "x-entry": "cv"}) + log(v="bot", ua=UA + " Googlebot", extra={"x-entry": "cv"})
+        result = self.analyze([rows], history=history, networks=Mock(return_value={"province": "广东省", "city": "深圳市", "operator": "电信", "organization": "AS123"}))
+        group = result["entry"]["cv"]
+        self.assertEqual((group["label"], group["unique_visitors"], group["first_at"]), ("简历来的（/cv）", 1, "2026-10-11T23:59:59+08:00"))
+        self.assertEqual(group["visitors"][0]["cities"], ["深圳市"])
+        self.assertEqual(group["visitors"][0]["pages"]["/"]["observed_seconds"], 15)
+        self.assertNotIn("/cv/", group["visitors"][0]["pages"])
+        self.assertEqual(result["entry"]["unmarked"]["unique_visitors"], 1)
+        self.assertNotIn("other", result["entry"])
+        again = self.analyze([log(extra={"x-entry": "other"})], history=history)
+        self.assertEqual(again["entry"]["cv"]["unique_visitors"], 1)
+        self.assertEqual(self.analyze([])["entry"]["cv"]["unique_visitors"], 0)
+
     def test_deep_read_thresholds_sessions_watermark_exclusions_and_no_ips(self):
         rows = ""
         for visitor, page, seconds, minute, extra, ua in (("project", "/projects/demo/", 120, "02", {}, UA), ("project", "/projects/demo/", 120, "03", {}, UA),

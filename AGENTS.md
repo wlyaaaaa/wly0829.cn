@@ -14,6 +14,8 @@ personal AI collaboration workspace; public presentation is secondary.
 
 停留优先采用离开/隐藏信标累计的实际可见秒数，同一页面实例的多次发送只取最大值；缺离开信标时用相邻页面的时间差后备（最多 30 分钟），最后一页保持未知。打开速度为 Navigation Timing 从导航开始到首字节、DOM 完成和 load 完成的毫秒数，只汇总已收到的字段。图片桶日志另统计 GPTBot、ClaudeBot、PerplexityBot、Bytespider、Amazonbot、meta-externalagent、Google-Extended 等声称的 UA 次数与日期，注明“只是下限，看不到只抓网页的爬虫”。
 
+普通访客查询默认单列“简历来的（/cv）”（`entry.cv`），按首次已标记入口去重，包含人数、首次时间、城市、看过的页和停留；`/cv` 自动跳到首页，跳转本身不计阅读停留。
+
 ## Product boundary
 
 - This is a personal project, rules, capabilities and collaboration workspace.
