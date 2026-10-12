@@ -14,6 +14,7 @@
 .ov.is-yellow, .ov .is-yellow { --ov-c: var(--ov-yellow); }
 .ov.is-red, .ov .is-red { --ov-c: var(--ov-red); }
 .ov.is-gray, .ov .is-gray { --ov-c: var(--ov-gray); }
+.ov .is-neutral { --ov-c: #6f8ca6; } /* 有状况但 AI 在管、不用你动手：中性蓝灰，和要你出手的黄红分开 */
 .ov ul { list-style: none; margin: 0; padding: 0; }
 .ov p { margin: 0; }
 

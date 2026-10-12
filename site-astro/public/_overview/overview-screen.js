@@ -3,7 +3,7 @@
 // 服务端（驾驶舱构建时）import 它画首帧；浏览器里用 <script type="module" src="/_overview/overview-screen.js"> 加载，
 // 用 window.OverviewScreen.render(元素, overview, { size: 'big' | 'small' }) 原地更新。
 const TZ = 'Asia/Shanghai';
-const COLOR = { ok: 'green', watch: 'yellow', act: 'red', unknown: 'gray' };
+const COLOR = { ok: 'green', watch: 'yellow', act: 'red', unknown: 'gray', neutral: 'neutral' };
 const WORD = { ok: '正常', watch: '留意', act: '要处理', unknown: '读不到' };
 const LEVEL_WORD = { ok: '稳', watch: '留意', act: '要你处理' };
 // 首页小屏放哪 3 块：要你做、电脑、备份——一眼回答“要不要我动手、电脑好不好、东西保住没有”
@@ -75,7 +75,15 @@ export function html(ov, { size = 'big', now = Date.now() } = {}) {
   // 小屏：电脑那块写“正常 / 有预警”而不是“在线”；不正常的块写“交给 AI”，不写没有主语的“要处理”
   // 备份那块的数是“有问题的项数”（后端 backup_problems），写成“0 项有问题”，不写成会被读成“0 项正常”的“0 项 · 正常”
   const small = (s) => (s.id === 'computer' ? { ...s, value: STATUS[s.level] || s.value, unit: '' } : s.id === 'backup' && s.value !== '' && Number.isFinite(Number(s.value)) ? { ...s, unit: '项有问题' } : s);
-  const sigs = ids.map((id) => { const s = { id, ...find(id) }; return signal(size === 'big' ? s : { ...small(s), word: s.level && s.level !== 'ok' ? '交给 AI' : s.word }, off); }).join('');
+  // 小屏的颜色只看要不要你出手（和驾驶舱同一规则）：后端给 owner_action=do（或 owner_action_needed=true）才保留红黄、写“要你看”；
+  // owner_action=know 用黄写“要你知道”；其余有状况的都是 AI 在管，用中性色写“AI 在管”，不用红色配“交给 AI”
+  const owner = (s) => {
+    if (!s.level || s.level === 'ok' || s.level === 'unknown') return s;
+    if (s.owner_action === 'do' || s.owner_action_needed === true) return { ...s, word: '要你看' };
+    if (s.owner_action === 'know') return { ...s, level: 'watch', word: '要你知道' };
+    return { ...s, level: 'neutral', word: 'AI 在管' };
+  };
+  const sigs = ids.map((id) => { const s = { id, ...find(id) }; return signal(size === 'big' ? s : owner(small(s)), off); }).join('');
   const reasons = !off && Array.isArray(ov.reasons) ? ov.reasons : [];
   const line = (r) => `<li>${esc(r.text)}${Number.isFinite(r.delta) && r.delta ? ` <b>${r.delta > 0 ? '+' : '−'}${Math.abs(r.delta)}</b>` : ''}</li>`;
   const rules = !off && Array.isArray(ov.rules) ? ov.rules.map((r) => (typeof r === 'string' ? { text: r } : r)) : [];

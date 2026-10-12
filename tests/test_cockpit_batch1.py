@@ -128,6 +128,13 @@ const assert = require('node:assert/strict');
   // 13 首页小屏：备份写“0 项有问题”，不写成“0 项 · 正常”
   const small = OV.html(ov(), { size: 'small', now: now.getTime() });
   assert.match(small, /data-signal="backup">.*?<span class="ov-sig-value">0<small>项有问题<\/small>/);
+  // 首页小屏的颜色也只看要不要你出手：电脑、今天的任务有状况但没要你做时是中性色“AI 在管”，不再红色配“交给 AI”
+  assert.match(small, /ov-sig is-neutral" data-signal="computer">.*?AI 在管/);
+  assert.match(small, /ov-sig is-neutral" data-signal="today_tasks">.*?AI 在管/);
+  assert.doesNotMatch(small, /交给 AI|ov-sig is-red/);
+  const smallDo = OV.html(ov({ signals: [{ id: 'computer', level: 'act', owner_action: 'do' }, { id: 'today_tasks', level: 'act', value: 2, owner_action: 'know' }, { id: 'backup', level: 'ok', value: 0 }] }), { size: 'small', now: now.getTime() });
+  assert.match(smallDo, /ov-sig is-red" data-signal="computer">.*?要你看/);
+  assert.match(smallDo, /ov-sig is-yellow" data-signal="today_tasks">.*?要你知道/);
 })().catch((e) => { console.error(e); process.exit(1); });
 """
 
