@@ -606,40 +606,40 @@
       "bytes": 106692
     },
     "projects/cacb/blind-quality-review/index.html": {
-      "sha256": "84904b41ae0b3fea52691922c77eff3b1f815400370e7393959d9e20e6131747",
-      "bytes": 118855
+      "sha256": "6b1e320d31b35180fbe1519876897d19968fe4923e13149bd4219246a6175439",
+      "bytes": 119040
     },
     "projects/cacb/campaign-workspace/index.html": {
-      "sha256": "650c441c664707f67bfa4630b1dd99dfeebb0f70e295f5a5301783a778fc200a",
-      "bytes": 115939
+      "sha256": "3a1ef934721825ca8ab7a96156dbb78a26afc4e48aea6fdf882d6599f1afc5e2",
+      "bytes": 116124
     },
     "projects/cacb/deterministic-verification/index.html": {
-      "sha256": "769bc590fe0129e52141cdddd2e9a32aefeeb28cfa0498d688d808af76b75898",
-      "bytes": 112113
+      "sha256": "c6cfaca5b23654f2db4222aff35a4728fd32d8e426a6ba369cc2a7c93c11def3",
+      "bytes": 112298
     },
     "projects/cacb/failure-reporting/index.html": {
-      "sha256": "70ed9c0b654619a527bcd18be8b95726342a6aa13aace6f04d2b3c9138febcf0",
-      "bytes": 116447
+      "sha256": "70a69c21bb5a9404425892e7aabb18cf2cf2036d1014ae65982b06979a2b8fce",
+      "bytes": 116632
     },
     "projects/cacb/identity-evidence/index.html": {
-      "sha256": "ae1542df20a479594c3fb8444c0b1e63446c01a65ee29a7ac6417ecb6db176af",
-      "bytes": 118562
+      "sha256": "e4d3f6c4722a3ff39dd7b400f7f03ae751110535ca2d19b0e0fd090be70c1ec7",
+      "bytes": 118747
     },
     "projects/cacb/index.html": {
-      "sha256": "39521992063b2a9bdeac65572f843657d327afdc59b4691e2a9b081eced3f2d8",
-      "bytes": 156734
+      "sha256": "964cb5fcb0734d7bc6159c57e358fec4368169d0ee8856a53ac5988fab462f17",
+      "bytes": 156919
     },
     "projects/cacb/native-orchestration/index.html": {
-      "sha256": "18f7abd67977d5ee2aebc85d6133b7515d862c8d8873993b563b353e9fa89454",
-      "bytes": 110454
+      "sha256": "48ad2d33a8d959c422375769a83bfecd5cbb4db8ae36ecd1eebbe653d3269321",
+      "bytes": 110639
     },
     "projects/cacb/question-bank/index.html": {
-      "sha256": "4bfa8eab5ce22890b4829b9463a88713f91094af7b0ed4bc0182d28c41dca75e",
-      "bytes": 108301
+      "sha256": "74462d9e1dd28db3846ae3d40362508f4eb43a00ab9c873672e7ecfdf982fc4b",
+      "bytes": 108486
     },
     "projects/cacb/quota-cost-probes/index.html": {
-      "sha256": "b177967becc476d1dbdc8e2d7fd8a0f2fd4f849dfa4690805efe815fe6d70fa3",
-      "bytes": 109831
+      "sha256": "821941c227d1d2f6cec23d9b0c9bb716b613bf949c985fb57eb8aa77d44922bf",
+      "bytes": 110016
     },
     "projects/chinese-asr/audit-evidence/index.html": {
       "sha256": "0923efc61fda598f838b84d5eefe36413875aa8eacd7b12a38c3783dd7ad4e73",
@@ -706,40 +706,40 @@
       "bytes": 103954
     },
     "projects/codex-remote/conversation-control/index.html": {
-      "sha256": "d6ca605872cbec59c69ee1e4907301226c2c32dad9de0dc6c38aa17206c1ba09",
-      "bytes": 121524
+      "sha256": "16292bd463d8c9bf18ac0fb4095ee9cb92aee99de154b2481c1bd2d84d2f8fbf",
+      "bytes": 121709
     },
     "projects/codex-remote/installation-update-rollback/index.html": {
-      "sha256": "925dde5f6058151544f65a928f7357523736f4cb1117ed785d1a548bb3be9bed",
-      "bytes": 125192
+      "sha256": "f52904799f969c3568c7bf15d41289acc53f06b8b44670228bd8253a503dc8cd",
+      "bytes": 125377
     },
     "projects/codex-remote/models-approvals-context/index.html": {
-      "sha256": "60574026470899f3ac04b84e6882271da128c1cdc5df922aed3b6b62d62ebfcb",
-      "bytes": 116368
+      "sha256": "253e2eaafa12737bbb42e4bdf1ed72e857adfd34ed059726e06dd3c6b9fece73",
+      "bytes": 116553
     },
     "projects/codex-remote/projects-files-input/index.html": {
-      "sha256": "2aa9b09c079bb2a5da2093afd117273195f3911187e14e71eae1a255a21f8049",
-      "bytes": 116300
+      "sha256": "bdc70026def0e492e68a6c9fe7c0db383cf690a6f0ff66e9cc1515ad088c611e",
+      "bytes": 116485
     },
     "projects/codex-remote/same-task-control/index.html": {
-      "sha256": "88084aa27e8c5faf3bcb88f31c3b5741fcf27012770a1f7d6808b3f3f9ad3450",
-      "bytes": 116404
+      "sha256": "791b20241c2ae4d440eb970af769725e8f26696f22bc75a9e6897b738dcaedf6",
+      "bytes": 116589
     },
     "projects/codex-remote/security-public-access/index.html": {
-      "sha256": "27063977b55521480a509381361ab555db6a0192e9ee7b39dc1b45bc5f4deb84",
-      "bytes": 116476
+      "sha256": "3db488e58b9104d005dd35f098096ff7f8b832794ed1dc6143eda4fd59d71528",
+      "bytes": 116661
     },
     "projects/codex-remote/shared-realtime-architecture/index.html": {
-      "sha256": "deb9020c43a7453f2540a367dfe23169a1901e6eff71ec1174bf255a5b4e8c37",
-      "bytes": 117240
+      "sha256": "94746cc1fdaf8819595392c21d408469d13145381a6ef8c591ad678bf658b439",
+      "bytes": 117425
     },
     "projects/codex-remote/subagent-navigation/index.html": {
-      "sha256": "3c451524745c71f91d28a0b1a897a67895ea4ffb605f4eca32a792595d5ec36e",
-      "bytes": 119757
+      "sha256": "8243bd529fd86643238752847c6b5118b01106bd0bff399448fc7c982521b9d5",
+      "bytes": 119942
     },
     "projects/codex-remote/versions-evidence/index.html": {
-      "sha256": "d7b34866d10f1d188bd80ad298f4f11be38726aa4b53c5382ab14a290786a470",
-      "bytes": 118635
+      "sha256": "201c11f78449d4a1504bafd0d9c1c795d99f2100bb34c620098d1079479a7b20",
+      "bytes": 118820
     },
     "projects/daily-preferences/current-corrections/index.html": {
       "sha256": "f29c82f47d5add5e1d0440dd4de31d4f8c1913c3c35c3a2c35dd8bd58180ccae",
@@ -914,36 +914,36 @@
       "bytes": 88906
     },
     "projects/openclaw-gateway/backup-restore/index.html": {
-      "sha256": "18befae144caf86060c5114833e4a070a2e2ba2fc09f7372bb24a4ecac57621e",
-      "bytes": 109922
+      "sha256": "c93e9da03056812f10dc51b85fc1ebd921f0333dfaa58b3b54b7037e8f1194df",
+      "bytes": 110107
     },
     "projects/openclaw-gateway/bootstrap-install/index.html": {
-      "sha256": "1a838ad286044b15b497c7ff3ddaaf1e5de38a5a4d2f84b87145354587e30342",
-      "bytes": 102462
+      "sha256": "a86aaa795f76a5b13a953a8f83218c3c8455905961b1c16ab86176d7ef69c5f8",
+      "bytes": 102647
     },
     "projects/openclaw-gateway/channel-handoff/index.html": {
-      "sha256": "0770c6514e874c0a5ae07becaca157c09b97b778cfc0ef221a8a00ec8a0a535f",
-      "bytes": 103689
+      "sha256": "5ccf6d53fb4770f2c209fb49c77fc38d61cbe131d6b6472ad907963c17027092",
+      "bytes": 103874
     },
     "projects/openclaw-gateway/codeg-bridge/index.html": {
-      "sha256": "449c0a7345619513b2beba950f3092c6c43b1a3c6dbfeeaf901864b1bb8d1e9f",
-      "bytes": 101968
+      "sha256": "22c7f4d0fdc0a15cbe999d75413453e3104fc3719d01a9ae01baf261b4920cd2",
+      "bytes": 102153
     },
     "projects/openclaw-gateway/gateway-runtime/index.html": {
-      "sha256": "9169d981ab3655b5da04c9f9755eefbc31717b0b4607a103f8adcc9e5a3edf09",
-      "bytes": 102837
+      "sha256": "d6d1b212d9208ac37f29cfb54465b44e4ff3555b8ee2b02cbeff48a816619190",
+      "bytes": 103022
     },
     "projects/openclaw-gateway/index.html": {
-      "sha256": "71e8220224a82948c8d985929201faadabc2e949d279bd529acd0db938e2c2bd",
-      "bytes": 152498
+      "sha256": "6127f1408a376c7876d94ed07b431630a8e124ce87e00b7d0023832fbd4e9f71",
+      "bytes": 152683
     },
     "projects/openclaw-gateway/managed-update/index.html": {
-      "sha256": "2cf0f5ae91f6ffdeed4c21d57fb6191900f76524a1539aa6e6593f8871ef9c15",
-      "bytes": 103907
+      "sha256": "173e7cb13a54ee2ae029bc22d8d2cfc8e67fb1171b3818951856ffbcdd572c2f",
+      "bytes": 104092
     },
     "projects/openclaw-gateway/model-cost/index.html": {
-      "sha256": "d96a1d94b78b2631412b822f0d0b2dae84b6d49f29783accbbcd21644ccb116a",
-      "bytes": 102376
+      "sha256": "b49794ddf1ec3581bc14a7a24210477f3dc650920ab4dd02f19d1ae107b315b8",
+      "bytes": 102561
     },
     "projects/pc-panel-hub/case-panel-rendering/index.html": {
       "sha256": "14108cabc0db48f57058a7facea122ffed0e3bf529c93431b9722fb89dc60d76",
@@ -1314,24 +1314,24 @@
       "bytes": 101643
     },
     "projects/wechat-history-ai-bridge/ai-consumer-contract-and-metadata-envelope/index.html": {
-      "sha256": "ea8083be2f857e702262fe79029d0a214d721b9c7223fed21db1f5e0aceb5ad5",
-      "bytes": 94161
+      "sha256": "d12ed8a3ed17341e8e6d9fee4f4dc3653755d42aa5caaf6886755bcac136fd68",
+      "bytes": 94346
     },
     "projects/wechat-history-ai-bridge/boot-guardian-and-multi-profile-watchdog/index.html": {
-      "sha256": "b3c596f245c7c91a163f7ac1c863510cdcfcc971341aa78c586326d264c3ce52",
-      "bytes": 94322
+      "sha256": "b36c80e90b4729faa7f5d297749a4786bb83c1b74ed9aac125bf49b6cb5c6f86",
+      "bytes": 94507
     },
     "projects/wechat-history-ai-bridge/metadata-first-probe-and-boundary-verification/index.html": {
-      "sha256": "23e0529e27e3c51a591d6fa396ac4f4095e108402c827e65c8dd6a593ccadcac",
-      "bytes": 94972
+      "sha256": "a224cf849d7797cae6d80a4243a20f98451d02b25a6b9e9163253b8d626f6a57",
+      "bytes": 95157
     },
     "projects/wechat-history-ai-bridge/private-snapshot-integrity-and-consumer-handoff/index.html": {
-      "sha256": "51e8d7a8e162a79afe46856a4086d82b7ae7bbf5fcd1b6ea6156daf570a62dfc",
-      "bytes": 94938
+      "sha256": "73f9b47c1753d68e241738f7fb47aacc9470dde696dd486795e827d417e12f71",
+      "bytes": 95123
     },
     "projects/wechat-history-ai-bridge/public-safe-openapi-and-endpoint-governance/index.html": {
-      "sha256": "f91e79efcc3fa39a7d50311e73c19546091920e39d75d5382cd772c152f2938f",
-      "bytes": 93811
+      "sha256": "99ee959ba376cb4dd7ba9a6ea074492cdad1e8683fc93f054b6de462690bdb51",
+      "bytes": 93996
     },
     "projects/work-delivery/consistent-deliverables/index.html": {
       "sha256": "901fa51adb7b17571f04502ae1306a4773d70ac9b1c326f23f3766a8bc407d5b",
@@ -1358,8 +1358,8 @@
       "bytes": 98679
     },
     "search/index.html": {
-      "sha256": "ef3491637f56adf7bb97d0676181ec3159c5ed229d98854f16a5bc20d7c141fe",
-      "bytes": 60980
+      "sha256": "71a4b7e7a33d1e7aac520d73b6279d61700b65f879a15443355a0a90a875c390",
+      "bytes": 61165
     },
     "skills/document-materials/index.html": {
       "sha256": "3567b3d66db060d547372562ae92d3584a68710b5df458a8fcff3031f79dfb19",
@@ -19312,6 +19312,11 @@
     "_living/pcconfig/bird-perch.0b5098ed5b16/config.json": {
       "sha256": "0b5098ed5b1617a7c3fc11544a5a0efdb8dc05c43decdcec1ea7ebeebd29d837",
       "bytes": 21665
+    },
+    "_interactions/header-bird.js": {
+      "source_path": "site-astro/sources/frozen-site/assets/_interactions/header-bird.js",
+      "bytes": 3679,
+      "sha256": "edaca026cf6291e125ddc61d203925f11a85a55ede6d1383ae060a5ccc2871d3"
     }
   },
   "inherited_assets": {
