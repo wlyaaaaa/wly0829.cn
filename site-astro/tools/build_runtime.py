@@ -5,6 +5,7 @@ import importlib.util
 import json
 import re
 import shutil
+import subprocess
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
@@ -102,6 +103,12 @@ def sync_search(root, previous, converted, pin, changed_routes):
     replacements = {}; generated = []
     targets = {nav.route_file(route): nav.PageFacts((root / nav.route_file(route)).read_text('utf8'), root) for route in changed_routes}
     author = {data['url']: data for data in (read(path) for path in (ROOT/'sources/pages').glob('*/page.json')) if data.get('url')}
+    # Keep the diagnostic Skill's established requests after chapter rebuilding.
+    # Reuse its aliases without restoring older copy or rerouting other Skills.
+    skill_aliases = {}
+    if any(route.startswith('/skills/') and route in author for route in converted):
+        code = "import {globalSearchEntries} from './app/search.js'; console.log(JSON.stringify(Object.fromEntries(globalSearchEntries.filter(e=>e.type==='Skill'&&e.href==='/skills/timeaudit-diagnostics').map(e=>[new URL(e.href,'https://wly0829.cn').pathname.replace(/\\/?$/, '/'),e.aliases]))));"
+        skill_aliases = json.loads(subprocess.check_output(['node', '--input-type=module', '-e', code], cwd=ROOT, encoding='utf8'))
     for route in converted:
         if route not in changed_routes or converted[route].get('destination') or route not in author: continue
         if route.startswith('/rules/'):
@@ -132,8 +139,13 @@ def sync_search(root, previous, converted, pin, changed_routes):
             else:
                 match = next((i for i, value in enumerate(added) if (value['type'], value['href']) == (row['type'], row['href'])), None)
                 if match is not None: kept.append(added.pop(match))
+        # Incremental builds also repair overview records inherited from old assets.
+        for row in kept + added:
+            target = urlsplit(row['href'])
+            if target.path in skill_aliases and row['type'] in {'Skill', '页面'} and target.fragment in {'', 'top'}:
+                row['aliases'] = list(dict.fromkeys([*row.get('aliases', []), *skill_aliases.get(target.path, [])]))
         prefix = 'window.' + ('__WLY_SEARCH_INDEX__' if rel == 'search-index.js' else '__WLY_PROJECT_SEARCH_INDEX__') + '='
-        old.write_bytes((prefix + json.dumps(kept + added, ensure_ascii=False).replace('<', '\\u003c') + ';\n').encode())
+        old.write_bytes((prefix + json.dumps(kept + added, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c') + ';\n').encode())
         replacements[obj['url']] = '/' + rel
     # The global search client has literal index URLs; keep its code intact and
     # change only those existing resource literals, then retain its new hash.

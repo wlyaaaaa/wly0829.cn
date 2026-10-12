@@ -32,7 +32,7 @@ import { projectReferenceLinks, skillProjectLinks } from "../app/content-capabil
 import { globalSearchEntries, searchPanel, searchScopeForPath } from "../app/search.js";
 import { createTermAnnotator } from "../app/term-annotator.js";
 import { publicSearchText } from "../app/public-search-projection.js";
-import { searchCompactEntries } from "../app/compact-search.js";
+import { createCompactSearchEntry, searchCompactEntries } from "../app/compact-search.js";
 import {
   systemDependencyNodes,
   systemEvidenceLayers,
@@ -596,23 +596,25 @@ test("the shared enhancement and search indices stay within their measured revie
     assert.ok(projectIndex.every((candidate) => candidate.type === "项目内容" && candidate.projectSlug === name.slice(15, -3)), `${name} project search index leaks another project`);
   }
   const completeCompactIndex = [...compactIndex, ...compactProjectIndex];
+  // Legacy source contracts use their own projection; current author chapters use the built index.
+  const sourceCompactIndex = globalSearchEntries.map((entry) => { const target = new URL(entry.href, site.url); return createCompactSearchEntry(entry, `${canonicalPath(target.pathname)}${target.search}${target.hash}`); });
   const compactAliasCases = [
     ["C盘规则为什么不能阻塞spawn", "AI 自己的规则怎么更新，怎样保证正式版本不是半新半旧？", "/rules/?rule=rule_release_contract"],
     ["dirty source 不能冒充 current release", "AI 自己的规则怎么更新，怎样保证正式版本不是半新半旧？", "/rules/?rule=rule_release_contract"],
     ["同一个目标不要反复问我授权", "哪些事 AI 可以直接做，哪些变化必须再问我？", "/rules/?rule=authorization_contract"],
     ["本地构建通过为什么还不能说网站完成", "怎样才算真的做完，而不是“代码改了”或“测试绿了”？", "/rules/?rule=engineering_delivery_contract"],
     ["怎么避免全局规则覆盖项目自己的验收方式", "我把事情交给 AI 后，它应该怎样自己做完？", "/rules/?rule=agents_root_rules"],
-    ["过去一小时为什么卡", skills.find((item) => item.slug === "timeaudit-diagnostics").title, "/skills/timeaudit-diagnostics/"]
+    ["过去一小时为什么卡", `${currentPages.find((page) => page.url === "/skills/timeaudit-diagnostics/").title} · 总览`, "/skills/timeaudit-diagnostics/#top"]
   ];
   for (const [query, title, href] of compactAliasCases) {
     const match = searchCompactEntries(completeCompactIndex, query)[0];
     assert.equal(match?.title, title, `production compact search loses: ${query}`);
     assert.equal(match?.href, href, `production compact search misroutes: ${query}`);
   }
-  const dailyNaturalResults = searchCompactEntries(completeCompactIndex, "吃什么");
+  const dailyNaturalResults = searchCompactEntries(sourceCompactIndex, "吃什么");
   assert.equal(dailyNaturalResults[0]?.href, "/projects/daily-preferences/recommendation-choice/");
   assert.equal(new Set(dailyNaturalResults.map((item) => item.href)).size, dailyNaturalResults.length, "compact search repeats one daily-preferences Skill href");
-  assert.equal(searchCompactEntries(completeCompactIndex, "根据我的偏好怎样取证")[0]?.href, "/projects/daily-preferences/evidence-query/");
+  assert.equal(searchCompactEntries(sourceCompactIndex, "根据我的偏好怎样取证")[0]?.href, "/projects/daily-preferences/evidence-query/");
   const compactSystemCases = [
     ["重要邮件原始发件人去重", "自动协作", "/#system-automations"],
     ["仓库公开性分支远端工作树同步状态怎么确认", "系统组成", "/skills/project-entry-gate/"],
@@ -622,19 +624,19 @@ test("the shared enhancement and search indices stay within their measured revie
   ];
   for (const [query, type, href] of compactSystemCases) {
     const full = searchPanel(query, "system")[0];
-    const compact = searchCompactEntries(compactIndex, query, "system")[0];
+    const compact = searchCompactEntries(sourceCompactIndex, query, "system")[0];
     assert.equal(full?.type, type, `full System search mistypes: ${query}`);
     assert.equal(compact?.type, type, `compact System search mistypes: ${query}`);
     assert.equal(canonicalPath(new URL(full.href, "https://wly0829.cn").pathname) + new URL(full.href, "https://wly0829.cn").hash, href, `full System search misroutes: ${query}`);
     assert.equal(compact?.href, href, `compact System search misroutes: ${query}`);
     assert.ok(compact.detail.length >= 12, `compact System search has no useful summary: ${query}`);
   }
-  for (const entry of completeCompactIndex) {
+  for (const entry of sourceCompactIndex) {
     for (const alias of entry.aliases) {
       const expected = searchPanel(alias)[0];
       const target = new URL(expected.href, "https://wly0829.cn");
       const expectedHref = `${canonicalPath(target.pathname)}${target.search}${target.hash}`;
-      const actual = searchCompactEntries(completeCompactIndex, alias)[0];
+      const actual = searchCompactEntries(sourceCompactIndex, alias)[0];
       assert.equal(actual?.title, expected.title, `compact alias changes full-search title: ${alias}`);
       assert.equal(actual?.href, expectedHref, `compact alias changes full-search route: ${alias}`);
     }
