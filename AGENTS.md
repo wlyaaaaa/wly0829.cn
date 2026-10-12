@@ -4,6 +4,8 @@ This repository is public. Every tracked file must be suitable for an unknown
 visitor to read, clone and quote. The website itself is primarily the owner's
 personal AI collaboration workspace; public presentation is secondary.
 
+本人问网站某天或某几天访问人数时，在仓库根运行 `python -B -X utf8 tools/query-site-visitors.py --start 2026-10-12 --end 2026-10-12`（替换日期；最近七天用 `--days 7`）：默认排除本人和巡检、北京时间切日，以浏览器访客编号及整段跨天去重为主（换设备或清存储会多算、共用浏览器会少算），独立 IP 是辅助口径（换网络多算、共用 IP 少算、资源缓存会漏算）；日志可能延迟最多 48 小时，零条日志不能认定零访客，本人设备访问任一页带 `?self=1` 后持续排除，`?self=0` 取消。
+
 ## Product boundary
 
 - This is a personal project, rules, capabilities and collaboration workspace.

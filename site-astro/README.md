@@ -18,9 +18,9 @@
 
 ## 首页和驾驶舱
 
-首页、驾驶舱保留候选站原 HTML、原图和动效，由 Astro 静态路由输出。
+首页保留候选站原 HTML、原图和动效，由 Astro 静态路由输出；驾驶舱已改为 Astro 原生页，使用全站共用外壳。
 
-首页、驾驶舱、授权页的 Astro 入口直接读 `sources/retained-home-cockpit/*.html` 的已接受源码；附加样式和交互保持原样。普通构建不再复制到 `src/chrome/retained`，也不从旧站生成运行件或反向改写作者输入。
+首页和授权页的 Astro 入口直接读 `sources/retained-home-cockpit/*.html` 的已接受源码；附加样式和交互保持原样。驾驶舱入口 `src/pages/cockpit/index.astro` 在构建时读取实时状态接口，无法取数时使用 `src/cockpit/snapshot.json` 的上一份数据，并标明读取时间；浏览器由 `src/cockpit/client.js` 获取新数据并原地更新。普通构建不再复制到 `src/chrome/retained`，也不从旧站生成运行件或反向改写作者输入。
 
 209 个旧生成器页面及其本地小资源以 probe03 的成品字节存入 `sources/frozen-site`。其 `manifest.json` 列明完整路由、冻结页指纹和资源来源：已有仓库文件直接复用；标题图按既有配方重建；确切的外壳依赖放入本地 `vendor-deps`，原图和视频保持原字节。原远端依赖已一次性入库到 `sources/vendor-deps/<原相对路径>`，按依赖清单核验 SHA 和字节数；所有构建只读本地，缺文件就报具体路径，不联网补取。点名迁移某个旧页时，再转移该路由的生成归属；普通构建不运行旧生成器。
 首页每次新加载、刷新都从纸色播放原开场；图片到达后 3 秒未开播，或开场连续 5 帧超过 100 毫秒，就跳到完成图并恢复环境动画。后退缓存与减少动态不播。顶栏固定用原 WebP 背景，避免显示途中切换未接收完的 AVIF；加载占位和标签行布局在首绘前确定，不用低清预览。
@@ -135,9 +135,9 @@ python tools/rule_article_check.py <现在网站构建目录> rules.json        
 
 同一工作树的 `dist` 只有一个写入者；连续构建等前一轮结束再启动，独立任务用各自工作树。宿主 `Invoke-HeavyTaskSlot.ps1` 当前只检查物理内存，不提供同一输出目录的互斥；预览读取独立且核过指纹的快照时，可以与另一工作树的构建并行。
 
-`npm run build -- --pages /how/,/projects/agents/` 在已有完整成品上选择这些路由。未变页不重新排版；页面 Markdown、版式和 `src/typeset/**` 的引擎内容共同决定每屏缓存。页面外壳变化会更新相关页，首页和驾驶舱的附加注入仍由 `src/retained-page.ts` 承接。`src/content/rendered/`、`.cache/` 与 Astro 暂存输出是生成物，不提交。
+`npm run build -- --pages /how/,/projects/agents/` 在已有完整成品上选择这些路由。未变页不重新排版；页面 Markdown、版式和 `src/typeset/**` 的引擎内容共同决定每屏缓存。页面外壳变化会更新相关页，首页和授权页的附加注入仍由 `src/retained-page.ts` 承接。`src/content/rendered/`、`.cache/` 与 Astro 暂存输出是生成物，不提交。
 
-首页、驾驶舱和授权页直接从 `sources/retained-home-cockpit/*.html` 读取。首页首帧脚本与首页包按 `manifest.json` 的 `bundled` 发布路径拷贝，带指纹文件名由清单提供；构建没有写死文件名。当前相册、环境动画和屏幕缓存仍沿用现有源码算法，六个保留页补丁不再构建时重跑。
+首页和授权页直接从 `sources/retained-home-cockpit/*.html` 读取；驾驶舱按前述原生页取数和渲染。首页首帧脚本与首页包按 `manifest.json` 的 `bundled` 发布路径拷贝，带指纹文件名由清单提供；构建没有写死文件名。当前相册、环境动画和屏幕缓存仍沿用现有源码算法，六个保留页补丁不再构建时重跑。
 
 每次成功构建写 `dist/.build-receipt.json`，格式为 `wly.site-build-receipt.v1`：
 

@@ -325,6 +325,9 @@ def publish(args):
             'manifest': manifest, 'readback': receipt['get'], 'verified_at_beijing': oss.stamp()}))
         receipt['status'] = 'published'
         receipt['publication_status'] = 'published'
+        if getattr(args, 'skip_retention', False):
+            receipt['oss_retention'] = {'status': 'skipped_by_request', 'deleted_objects': 0, 'deleted_bytes': 0}
+            return receipt
         report = output/'oss-retention.json'
         try:
             renew_lock()
@@ -369,6 +372,7 @@ if __name__ == '__main__':
     parser.add_argument('--pages-timeout', type=int, default=600)
     parser.add_argument('--upload-workers', type=int, default=12, help='parallel OSS uploads; existing identical objects are skipped')
     parser.add_argument('--retention-max-keys', type=int, default=1000, help='maximum exact obsolete managed keys checked after successful publication')
+    parser.add_argument('--skip-retention', action='store_true', help='publish without deleting existing OSS objects when the task excludes cloud cleanup')
     parser.add_argument('--lock-holder', default='codex:publish:'+ROOT.parent.name)
     options = parser.parse_args()
     result = publish(options)

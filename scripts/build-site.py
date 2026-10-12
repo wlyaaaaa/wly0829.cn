@@ -19,6 +19,7 @@ SITE = ROOT / 'site-astro'
 SNAPSHOT = SITE / 'sources/frozen-site'
 HASH_CACHE_PATH = SITE / '.cache/file-fingerprints.json'
 HASH_CACHE = None
+VERIFICATION_HTML = ('baidu_verify_codeva-DRgaQnAmTK.html',)
 sys.path.insert(0, str(ROOT / 'scripts'))
 import astro_rules
 
@@ -302,6 +303,8 @@ def build(pages=None):
     for route in set(snapshot['routes']) - entries.keys():
         entries[route] = {'fingerprint': generated_fp, 'kind': 'generated'}
     entries['/cockpit/stutter/']['fingerprint'] = fingerprint(stutter_inputs + [SITE / 'tools/cockpit_stutter.py'])
+    visitor_fp = fingerprint([ROOT / 'scripts/visitor-beacon.js'])
+    for row in entries.values(): row['fingerprint'] += visitor_fp
     if requested and requested - entries.keys(): raise ValueError('Unknown routes: ' + ', '.join(sorted(requested - entries.keys())))
     selected = requested if requested is not None else set(entries)
     changed = {route for route in selected if not (dist / route_file(route)).is_file()
@@ -342,6 +345,10 @@ def build(pages=None):
                 if asset_sources.get(key) == source_sha and (dist / relative).is_file(): continue
                 asset_sources[key] = source_sha
             assets_changed = copy_changed(source, dist / relative) or assets_changed
+    for name in VERIFICATION_HTML:
+        source = ROOT / 'public' / name
+        if not source.is_file(): raise ValueError('Missing registered verification file: ' + name)
+        assets_changed = copy_changed(source, dist / name) or assets_changed
     stage('assets')
     converted = {route: {'producer': 'astro'} for route, row in entries.items() if row['kind'] != 'frozen'}
     if changed or prepare_changed or assets_changed:
@@ -350,6 +357,7 @@ def build(pages=None):
         if entries[file_route(relative)]['kind'] != 'frozen' or (finalized_before and file_route(relative) not in changed): continue
         expected_body = runtime.transport.localize((SNAPSHOT / 'pages' / relative).read_bytes().decode('utf8'), snapshot)
         if relative == 'search/index.html': expected_body = runtime.search_index_entry(expected_body, snapshot)
+        expected_body = runtime.visitor_html(expected_body)
         if (dist / relative).read_bytes() != expected_body.encode('utf8'):
             raise ValueError('Frozen HTML changed beyond resource addresses: ' + relative)
     if not all((dist / route_file(route)).is_file() for route in snapshot['routes']): raise ValueError('Complete build lost a required route')

@@ -38,11 +38,11 @@ npm run verify:snapshot
 npm run verify:public
 ```
 
-`npm run build` 生成完整静态站到仓库根 `dist`；`npm run dev` 一条命令先构建再启动同一成品的本地预览，`preview` 只启动已有成品。修改内容后重新运行，当前不承诺热更新。构建直接读取首页、驾驶舱和授权页的 HTML 源文件及已入库运行件，原样带上 209 个冻结页；只从本地依赖包取资源，不读取旧站构建目录，也不联网恢复外壳。内容指纹决定哪些页面需要更新；`--pages` 只选择指定路由，须先有完整 `dist`。每次构建把分步耗时、重建页面和完整文件清单写入 `dist/.build-receipt.json`。来源、缓存、准备链和按需迁移方法见 [site-astro/README.md](site-astro/README.md)。保留已有 5194 预览时复用可控会话，不另开重复服务。
+`npm run build` 生成完整静态站到仓库根 `dist`；`npm run dev` 一条命令先构建再启动同一成品的本地预览，`preview` 只启动已有成品。修改内容后重新运行，当前不承诺热更新。构建直接读取首页和授权页的 HTML 源文件及已入库运行件，驾驶舱由 Astro 原生页取数并渲染，原样带上 209 个冻结页；只从本地依赖包取资源，不读取旧站构建目录，也不联网恢复外壳。内容指纹决定哪些页面需要更新；`--pages` 只选择指定路由，须先有完整 `dist`。每次构建把分步耗时、重建页面和完整文件清单写入 `dist/.build-receipt.json`。来源、缓存、准备链和按需迁移方法见 [site-astro/README.md](site-astro/README.md)。保留已有 5194 预览时复用可控会话，不另开重复服务。
 
 ## AI 快速刷新
 
-网页正文由 AI 更新。用户只需要说“刷新个人看板里的 PCConfig”或“全部更新一下”；AI 读取 Registry 和真实 Owner、形成独立产品判断、自动修复必要源问题并原位更新内容。小改默认不更新，全量复核也允许全部项目保持字节不变。来源发布造成实质快照漂移时，`personal-panel-refresh` 每次只处理这个来源的对应快照与直接表面，不把事件扩成全站复核；它先现场确认网站任务状态精确为 active 且当前 Owner 范围覆盖本次发布，再把绑定来源、提交、路径、观察时间与活动代际的增量并入同一稳定批次。仍匹配的证据才复用，批次稳定后只运行一次最终完整门；预览服务在可控后台会话中限时运行。没有合格活动 Owner 时才异步创建一个新网站任务。受理只证明安排成功，来源对话不等待。网站门通过后自动发布到现有 PUBLIC `main` 并完成 Pages 回读。
+网页正文由 AI 更新。用户只需要说“刷新个人看板里的 PCConfig”或“全部更新一下”；AI 读取 Registry 和真实 Owner、形成独立产品判断、自动修复必要源问题并原位更新内容。只有本人要求“更新网站”时才开始更新；来源项目、规则或 Skill 发布后不自动交接，也不新建网站任务。AI 在别的工作中发现网站已过时，只在汇报里提一句，等本人要求更新。一次定向请求只处理点名的登记快照及受影响的直接表面，小改默认不更新，全量复核也允许全部项目保持字节不变。仍匹配的证据才复用，批次稳定后只运行一次最终完整门；预览服务在可控后台会话中限时运行。网站门通过后自动发布到现有 PUBLIC `main` 并完成 Pages 回读。
 
 AI 内部可先取得定向或全量刷新计划：
 
@@ -84,14 +84,14 @@ npm run refresh:agents-snapshot
 
 该结构化刷新只属于 `.agents`。Rules 正文、路径和 SHA 只取 `Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json` 返回的 frozen current E release；当前 source checkout 即使 dirty 或已进入下一候选提交，也只能作为非活动施工状态展示，不能覆盖 E release。刷新通过独占锁、前后 Git/E pointer 完整指纹和原子替换避免半新半旧；快速刷新不重跑整个源码测试集，没有新全量回归证据就明确显示 Unknown。解释是否准确仍由 AI 内容终审负责，不冒充 hash 检查能力。
 
-判断 Source 变化是否需要网站任务：
+定位 Source 变化影响的候选页面：
 
 ```powershell
 npm run impact -- --project agents --path AGENTS.md
 npm run impact -- --project agents --path AGENTS.md --material-change
 ```
 
-路径命中只表示影响候选；只有 Source Owner 确认页面会实质失真并显式传入 `--material-change`，才要求路由网站工作。已有活动网站发布 Owner 时合并增量，没有时才创建新的独立 projectless 网站任务。
+路径命中只表示影响候选，`--material-change` 标明已确认的实质漂移；来源变化不自动路由或新建网站任务。AI 在来源任务的汇报中说明过时内容，等本人要求更新网站后，再按该请求的范围处理候选页面。
 
 ## 事实来源
 
