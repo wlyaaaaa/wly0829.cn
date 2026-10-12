@@ -191,6 +191,12 @@ def album_index(dist, snapshot, changed_routes):
         path.write_bytes(body.encode('utf8'))
     return {'resource': address, 'routes': len(routes)}
 
+def visitor_html(body):
+    script = (ROOT / 'scripts/visitor-beacon.js').read_text('utf8').strip()
+    body = re.sub(r'<script data-site-visitors>[\s\S]*?</script>\s*', '', body)
+    return body.replace('</body>', '<script data-site-visitors>' + script + '</script>\n</body>')
+
+
 def finish(dist, snapshot, pin, converted, changed_routes=None):
     dist = Path(dist); changed_routes = set(converted) if changed_routes is None else set(changed_routes)
     prior = read(dist / 'release-manifest.json') if (dist / 'release-manifest.json').is_file() else {}
@@ -230,6 +236,9 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
         path.write_bytes(transport.localize(path.read_text('utf8'), snapshot).encode('utf8'))
     routes = sorted(file_route(p.relative_to(dist).as_posix()) for p in dist.rglob('*.html'))
     write_sitemap(dist, routes)
+    for path in dist.rglob('*.html'):
+        body = path.read_bytes().decode('utf8'); updated = visitor_html(body)
+        if updated != body: path.write_bytes(updated.encode('utf8'))
     files = {p.relative_to(dist).as_posix(): {'bytes': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
              for p in dist.rglob('*') if p.is_file() and p.name not in {'.build-receipt.json', 'release-manifest.json', 'release-identity.json'}}
     manifest = {'schema': 'wly.hybrid-release.v1', 'files': files, 'routes': routes,

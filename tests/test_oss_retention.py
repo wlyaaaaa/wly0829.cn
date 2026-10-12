@@ -36,6 +36,18 @@ class RetentionTests(unittest.TestCase):
     def version(self, key):
         return {'key': key, 'size': 4, 'etag': 'A' * 32, 'kind': 'version', 'version_id': 'null', 'is_latest': True}
 
+    def test_permanent_visitor_pixel_is_excluded_from_generated_pins(self):
+        plan = {'schema': 'wly.oss-release-plan.v1', 'test_only': False, 'asset_base_url': retention.BASE,
+                'objects': {'x.js': {'key': self.keep, 'bytes': 4, 'sha256': 'a' * 64}},
+                'reference_keys': ['_v.gif'], 'github_files': {}, 'release_id': 'fixture'}
+        retention.write(self.preparation/'oss-plan.json', plan)
+        with patch.object(retention, 'shared', return_value=self.shared):
+            self.assertEqual(set(retention.plan_pin(self.preparation)[1]['objects']), {self.keep})
+            plan['reference_keys'].append('_other.gif')
+            retention.write(self.preparation/'oss-plan.json', plan)
+            with self.assertRaisesRegex(ValueError, 'Invalid website object keys'):
+                retention.plan_pin(self.preparation)
+
     def test_only_actual_boolean_latest_is_accepted(self):
         for latest in ('false', 'unknown', 'true', False, 1):
             before = {self.obsolete: [self.version(self.obsolete)]}; before[self.obsolete][0]['is_latest'] = latest

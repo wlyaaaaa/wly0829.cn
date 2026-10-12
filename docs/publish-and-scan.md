@@ -27,6 +27,8 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <
 - 每轮默认最多核对 1000 个受管候选，可用 `--retention-max-keys` 调整；超出的对象如实列为待下一次按需更新处理。已核实不存在或已删的受管登记同步移除，后续更新不会重复查询这些空对象。退役结果和预演分别写 `oss-retention.json`、`oss-retention-plan.json`，发布回执另含 `oss_retention`。无候选也写实际结果；清理受阻时保留已上线事实 `publication_status=published`，整体状态为 `published_with_retention_incomplete` 且命令退出 1。发布、验收失败或 `--upload-only` 不退役；`--dry-run` 不触发退役。
 - 沿用已有 `aliyun ossutil` 的 `website-images` 配置，程序不读取、复制或记录凭据内容。没有新增 CDN 刷新步骤，既有被替换的发布链也没有这一步。
 
+本次任务明确排除删除既有 OSS 对象时，发布命令加 `--skip-retention`：上传、部署与回读照常完成，回执记录 `skipped_by_request` 和删除数 0，不调用对象退役。
+
 每次运行在输出目录写 `publish-receipt.json`，包含逐步秒数、计划与实际传输文件数和字节数、HEAD/GET 结果、部署标识及失败原因。`--output <新目录>` 可指定落点；默认写到 dist 的同级唯一目录。失败回执会保留，不把上传完成当成发布成功。
 
 `--dry-run` 同样先核扫描文件哈希，只读上一版清单，计算差异，并在独立临时仓库生成真实的 `site-dist` 提交。首次提交没有父提交；已存在分支时从其提交接续。预演不领发布锁、不 pin、不上传、不推送、不触发部署、不写成功记录。传输时间按固定 10,000,000 字节/秒估算；回执明确记录这个假设，它不是网络实测，也不包含 GitHub Pages 排队时间。

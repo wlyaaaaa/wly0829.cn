@@ -6,7 +6,7 @@ spec = importlib.util.spec_from_file_location('publisher', Path(__file__).resolv
 publisher = importlib.util.module_from_spec(spec); spec.loader.exec_module(publisher)
 class PublishTests(unittest.TestCase):
     def test_post_acceptance_retirement_binds_head_proofs_and_keeps_publication_fact_on_error(self):
-        for fail_page, fail_cleanup in ((False, False), (False, True), (True, False)):
+        for fail_page, fail_cleanup, skip_retention in ((False, False, False), (False, True, False), (True, False, False), (False, False, True)):
             with self.subTest(fail_page=fail_page, fail_cleanup=fail_cleanup), tempfile.TemporaryDirectory() as temporary:
                 folder = Path(temporary); root = folder/'dist'; root.mkdir()
                 for rel in ('index.html', 'cockpit/index.html', 'computer-access/index.html', 'a.js'):
@@ -17,7 +17,8 @@ class PublishTests(unittest.TestCase):
                 publisher.oss.write(scan, {'failures': [], 'dist_files_sha256':
                     {path.relative_to(root).as_posix(): publisher.oss.digest(path) for path in root.rglob('*') if path.is_file()}})
                 options = types.SimpleNamespace(output=folder/'run', dist=root, scan_result=scan, previous_manifest=None,
-                    source_commit=None, dry_run=False, upload_only=False, lock_holder='fixture', upload_workers=1, pages_timeout=1)
+                    source_commit=None, dry_run=False, upload_only=False, lock_holder='fixture', upload_workers=1, pages_timeout=1,
+                    skip_retention=skip_retention)
                 shared = folder/'shared'
                 def proof(item, dist):
                     rel, row = item
@@ -45,7 +46,10 @@ class PublishTests(unittest.TestCase):
                         result = publisher.publish(options)
                         self.assertEqual(result['status'], 'published_with_retention_incomplete' if fail_cleanup else 'published')
                         self.assertEqual(result['publication_status'], 'published')
-                        cleanup.assert_called_once()
+                        if skip_retention:
+                            cleanup.assert_not_called()
+                            self.assertEqual(result['oss_retention'], {'status': 'skipped_by_request', 'deleted_objects': 0, 'deleted_bytes': 0})
+                        else: cleanup.assert_called_once()
                         if fail_cleanup: self.assertIn('cloud delete failed', result['oss_retention']['reason'])
     def test_pages_dispatches_main_and_waits_for_returned_run_id(self):
         with unittest.mock.patch.object(publisher, 'command', side_effect=[
