@@ -66,6 +66,26 @@ const assert = require('node:assert/strict');
   const pc0 = R.computer(bare, ctx);
   assert.doesNotMatch(pc0, /原因：|笔记本|cp-plan/);
   assert.deepEqual(riverSnapshot(bare).today_errors, []);
+  // 要你处理的卡：短标题不遮 next_step；完成条件写成“办完后”；空说明不出栏；按种类给按钮
+  const todo = { id: 'pending-1', copy_ai_id: 'pending-1', title: '十月旅游去哪 · 三方盲测对照', project: '', where: 'pc', minutes: 5,
+    next_step: '两道题各选一个，点页里的“生成我的答复” 最后核对：2026-10-12 13:34（北京时间）。', done_when: 'AI 收到你的答复后关闭本条。',
+    steps: ['在电脑上打开汇报页'], options: [], why_you: '这是你自己的选择', consequence: '待补说明', at: '2026-10-12T12:49:00+08:00' };
+  const one = (x) => R.needYou(normalize({ schema: 'pcconfig.cockpit-view.v1', need_you: [x] }), ctx);
+  const d = one({ ...todo, ask_kind: 'decision' });
+  assert.match(d, /<ol class="cp-steps"><li>在电脑上打开汇报页<\/li><li>两道题各选一个，点页里的“生成我的答复”<\/li><\/ol>/);
+  assert.match(d, /在电脑上办，约 5 分钟<i aria-hidden="true"> · <\/i>办完后：AI 收到你的答复后关闭本条/);
+  assert.doesNotMatch(d, /待补说明|不做会怎样|项目：|复制我的回答|复制给 AI|最后核对/);
+  assert.match(d, />不做了<\/button>/); assert.match(d, />问 AI<\/button>/); assert.doesNotMatch(d, /cp-btn-main/);
+  assert.match(d, /data-copy-text="（驾驶舱条目 pending-1）「十月旅游去哪 · 三方盲测对照」这件不做了，请核对后移出要做的事并记下结果"/);
+  assert.match(d, /按钮只复制一句话，贴到任意 AI 对话发送即可/);
+  const a = one({ ...todo, ask_kind: 'action' });
+  assert.match(a, /cp-btn-main" data-copy-text="（驾驶舱条目 pending-1）「十月旅游去哪 · 三方盲测对照」我已经做完了，请核实后关掉这条">我做完了/);
+  const q = one({ ...todo, ask_kind: 'decision', questions: [{ id: 'q1', text: '去哪', options: ['海边', '山里'], note: true }, { id: 'q2', text: '几天', options: ['三天', '五天'] }] });
+  assert.equal((q.match(/class="cp-q"/g) || []).length, 2);
+  assert.equal((q.match(/data-note/g) || []).length, 1);
+  assert.match(q, /data-copy-answer[^>]*disabled>复制我的答复/);
+  // 旧条目只有 options：当成一道题
+  assert.equal((one({ ...todo, options: ['甲', '乙'] }).match(/class="cp-q"/g) || []).length, 1);
 })().catch((e) => { console.error(e); process.exit(1); });
 """
 

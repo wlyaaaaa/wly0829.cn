@@ -23,13 +23,13 @@ const card = (r) => {
 };
 const notice = (r) => {
   const a = obj(r.action);
-  return { id: text(r.id), title: text(r.title), project: text(r.project), next_step: text(r.user_action || a.label), done_when: text(a.due_text || r.when), severity: text(r.severity) || 'grey', state: text(r.state), message: text(r.public_message || r.what_happened), at: r.at_beijing, copy_ai_id: text(r.id),
+  return { id: text(r.id), title: text(r.title), project: text(r.project), next_step: text(r.user_action || a.label), done_when: text(r.done_when) || text(a.due_text || r.when), severity: text(r.severity) || 'grey', state: text(r.state), message: text(r.public_message || r.what_happened), at: r.at_beijing, copy_ai_id: text(r.id),
     // 首屏和“需要你”卡片要的字段：后端有就带上（P2 的按需问字段还没上线时都是空，页面按旧字段显示）
     action_owner: text(r.action_owner), last_checked_at: r.last_checked_at || obj(r.ai_hint).last_checked_at || null, due_at: a.due_at || null,
     where: r.where || a.where || null, minutes: r.minutes ?? a.estimated_minutes ?? null, consequence: r.consequence || a.consequence || null,
     ...Object.fromEntries(PASS.filter((k) => r[k] != null).map((k) => [k, r[k]])) };
 };
-const PASS = ['ask_kind', 'why_you', 'steps', 'options', 'handler', 'asked_count', 'urgent', 'headline', 'stuck', 'stuck_reason', 'done_when_text', 'reason', 'deferred_reason'];
+const PASS = ['ask_kind', 'why_you', 'steps', 'options', 'questions', 'handler', 'asked_count', 'urgent', 'headline', 'stuck', 'stuck_reason', 'done_when_text', 'reason', 'deferred_reason'];
 const LABELS = { 'cpu-gpu': 'CPU 和显卡', 'memory-network': '内存和网络' };
 
 export function fromFull(full) {

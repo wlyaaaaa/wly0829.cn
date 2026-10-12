@@ -245,7 +245,8 @@
   .cp-tri-who i { display: none; }
   .cp-tri-why { display: none; }
   .cp-ask { padding: 14px; }
-  .cp-ask-head h3 { font-size: 16.5px; }
+  .cp-ask-title { font-size: 16.5px; }
+  .cp-steps, .cp-ask-body { font-size: 15px; }
   .cp-wait li { grid-template-columns: 1fr; gap: 2px; }
   .cp-security { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
   .cp-features { grid-template-columns: 1fr; }
@@ -259,26 +260,43 @@
 }
 
 /* “要我处理的事”卡片（场景 2、5）：标题一句话，正文、步骤或选项，小字放登记时间和路径；按钮只复制文字 */
-.cp-ask { padding: 16px 20px; border: 1px solid #ecdcae; border-radius: 16px; background: #fffdf6; min-width: 0; scroll-margin-top: 130px; }
-.cp-ask.is-urgent { border-color: #efc3bd; background: #fffaf8; }
+.cp-ask { padding: 16px 20px 14px; border: 1px solid #ecdcae; border-left: 4px solid #e2c36c; border-radius: 14px; background: var(--cp-card); box-shadow: 0 2px 10px rgba(21, 68, 35, .04); min-width: 0; scroll-margin-top: 130px; }
+.cp-ask.is-urgent { border-color: #efc3bd; border-left-color: var(--cp-red); }
 .cp-ask:target { outline: 3px solid #9ddcae; outline-offset: 2px; }
-.cp-ask-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 14px; }
-.cp-ask-head h3 { margin: 0; font-size: 18px; line-height: 1.45; color: var(--cp-ink); }
-.cp-chips-row { display: inline-flex; flex-wrap: wrap; gap: 6px; }
-.cp-ask-body { margin: 8px 0 0; overflow-wrap: anywhere; }
-.cp-steps { margin: 8px 0 0; padding-left: 1.6em; display: grid; gap: 4px; }
-.cp-steps li { overflow-wrap: anywhere; }
-.cp-opts { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
-.cp-btn.cp-opt { padding: 7px 16px; font-size: 15px; border-color: #9ddcae; }
-.cp-btn.cp-opt b { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 8px; border-radius: 50%; background: var(--cp-green); color: #fff; font-size: 13px; }
-.cp-hint { margin: 6px 0 0; font-size: 13px; color: var(--cp-soft); }
-.cp-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 6px 18px; margin: 10px 0 0; }
-.cp-facts dt { font-size: 12.5px; color: var(--cp-soft); }
-.cp-facts dd { margin: 0; }
-.cp-ask .cp-meta { margin: 10px 0 0; }
-.cp-path { margin: 2px 0 0; font-size: 12px; color: #8a9790; overflow-wrap: anywhere; }
-.cp-ask .cp-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.cp-ask-title { margin: 0; font-size: 18px; line-height: 1.45; color: var(--cp-ink); overflow-wrap: anywhere; }
+/* 要做什么：卡片的主角，编号步骤 */
+.cp-ask-do { margin: 10px 0 0; }
+.cp-ask-k { margin: 0 0 4px; font-size: 13px; font-weight: 700; color: var(--cp-title); }
+.cp-ask-body { margin: 0; font-size: 16px; overflow-wrap: anywhere; }
+.cp-steps { margin: 0; padding-left: 1.5em; display: grid; gap: 4px; font-size: 16px; }
+.cp-steps li { overflow-wrap: anywhere; padding-left: 2px; }
+.cp-steps li::marker { color: var(--cp-title); font-weight: 700; }
+/* 卡片上直接答题 */
+.cp-quiz { display: grid; gap: 10px; margin: 12px 0 0; }
+.cp-q { margin: 0; padding: 0; border: 0; min-width: 0; }
+.cp-q legend { padding: 0; margin: 0 0 6px; font-size: 15px; overflow-wrap: anywhere; }
+.cp-q legend b { margin-right: 6px; color: var(--cp-title); }
+.cp-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.cp-btn.cp-opt { padding: 6px 16px; font-size: 15px; border-color: #9ddcae; }
+.cp-btn.cp-opt[aria-pressed="true"] { background: var(--cp-green); border-color: var(--cp-green); color: #fff; }
+.cp-note { display: block; width: 100%; max-width: 32em; box-sizing: border-box; margin: 8px 0 0; padding: 6px 10px; font: inherit; font-size: 14px; border: 1px solid var(--cp-line); border-radius: 8px; background: #fff; }
+/* 在哪办、多久、怎么算办完：一行轻量信息 */
+.cp-ask-info { margin: 10px 0 0; font-size: 14px; color: var(--cp-soft); overflow-wrap: anywhere; }
+.cp-ask-info i { font-style: normal; color: #b6c4bb; }
+.cp-ask-info .is-urgent { color: var(--cp-red); font-weight: 700; }
+/* 为什么要你 / 不做会怎样：次要信息，并排小字 */
+.cp-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 4px 20px; margin: 8px 0 0; font-size: 13.5px; color: var(--cp-soft); }
+.cp-facts dt { display: inline; font-weight: 700; color: var(--cp-soft); }
+.cp-facts dt::after { content: "："; }
+.cp-facts dd { display: inline; margin: 0; overflow-wrap: anywhere; }
+.cp-path { margin: 6px 0 0; font-size: 12px; color: #8a9790; overflow-wrap: anywhere; }
+.cp-ask .cp-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 8px; margin-top: 12px; }
+.cp-btn.cp-btn-main { padding: 6px 18px; background: var(--cp-green); border-color: var(--cp-green); color: #fff; font-weight: 700; }
+.cp-btn.cp-btn-main:hover { filter: brightness(1.05); background: var(--cp-green); }
+.cp-btn.cp-btn-main:disabled { background: #e8efe9; border-color: #dfe8e2; color: #9aa8a0; font-weight: 400; cursor: not-allowed; }
 .cp-btn-quiet { color: var(--cp-soft); border-color: #dfe8e2; }
+.cp-hint { margin: 6px 0 0; font-size: 12.5px; color: var(--cp-soft); }
+.cp-ask .cp-meta { margin: 8px 0 0; padding-top: 8px; border-top: 1px dashed #e8eee9; font-size: 12.5px; }
 
 /* 交给 AI 的事（场景 4） */
 .cp-ai { margin-top: 22px; }
