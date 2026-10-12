@@ -135,6 +135,10 @@ const assert = require('node:assert/strict');
   const smallDo = OV.html(ov({ signals: [{ id: 'computer', level: 'act', owner_action: 'do' }, { id: 'today_tasks', level: 'act', value: 2, owner_action: 'know' }, { id: 'backup', level: 'ok', value: 0 }] }), { size: 'small', now: now.getTime() });
   assert.match(smallDo, /ov-sig is-red" data-signal="computer">.*?要你看/);
   assert.match(smallDo, /ov-sig is-yellow" data-signal="today_tasks">.*?要你知道/);
+  // 后端给了 task_health 时，今天的任务只数还没恢复的；都恢复了就是正常
+  const smallTh = (n) => OV.html(ov({ task_health: { unrecovered_today: n, recovered_today: 1 } }), { size: 'small', now: now.getTime() });
+  assert.match(smallTh(1), /data-signal="today_tasks">.*?<span class="ov-sig-value">1<small>个没恢复<\/small>.*?AI 在管/);
+  assert.match(smallTh(0), /ov-sig is-green" data-signal="today_tasks">.*?0<small>个没恢复<\/small>.*?正常/);
 })().catch((e) => { console.error(e); process.exit(1); });
 """
 

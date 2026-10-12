@@ -83,7 +83,10 @@ export function html(ov, { size = 'big', now = Date.now() } = {}) {
     if (s.owner_action === 'know') return { ...s, level: 'watch', word: '要你知道' };
     return { ...s, level: 'neutral', word: 'AI 在管' };
   };
-  const sigs = ids.map((id) => { const s = { id, ...find(id) }; return signal(size === 'big' ? s : owner(small(s)), off); }).join('');
+  // 今天的任务只数还没恢复的（后端 task_health.unrecovered_today 有才换；没有照旧写“曾出错”），和驾驶舱同一口径
+  const th = ov?.task_health;
+  const open = (s) => (s.id === 'today_tasks' && th && Number.isFinite(th.unrecovered_today) ? { ...s, value: th.unrecovered_today, unit: '个没恢复', level: th.unrecovered_today ? s.level : 'ok', word: th.unrecovered_today ? s.word : '正常' } : s);
+  const sigs = ids.map((id) => { const s = { id, ...find(id) }; return signal(size === 'big' ? s : owner(open(small(s))), off); }).join('');
   const reasons = !off && Array.isArray(ov.reasons) ? ov.reasons : [];
   const line = (r) => `<li>${esc(r.text)}${Number.isFinite(r.delta) && r.delta ? ` <b>${r.delta > 0 ? '+' : '−'}${Math.abs(r.delta)}</b>` : ''}</li>`;
   const rules = !off && Array.isArray(ov.rules) ? ov.rules.map((r) => (typeof r === 'string' ? { text: r } : r)) : [];
