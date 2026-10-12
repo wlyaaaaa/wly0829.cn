@@ -1,56 +1,326 @@
 {
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
-  "source_commit": "a84399e2111cf78f29f9a149e36591581bf25f5e",
-  "prepared_at_beijing": "2026-10-12T18:31:10.955951+08:00",
-  "seconds": 51.63,
+  "source_commit": "fc771a1ede793e7ac34864f8b177c1caf68aebfd",
+  "prepared_at_beijing": "2026-10-12T19:56:13.212172+08:00",
+  "seconds": 428.395,
   "steps": [
     {
       "name": "source",
-      "seconds": 2.07
+      "seconds": 37.883
     },
     {
       "name": "fingerprint",
-      "seconds": 1.155
+      "seconds": 1.225
     },
     {
       "name": "prepare",
-      "seconds": 0.251
+      "seconds": 24.302
     },
     {
       "name": "native_inputs",
-      "seconds": 0.0
+      "seconds": 6.548
     },
     {
       "name": "blocks",
-      "seconds": 0.701
+      "seconds": 73.798
     },
     {
       "name": "astro",
-      "seconds": 0.0
+      "seconds": 35.423
     },
     {
       "name": "assets",
-      "seconds": 2.18
+      "seconds": 14.188
     },
     {
       "name": "finish",
-      "seconds": 0.014
+      "seconds": 58.038
     },
     {
       "name": "finalize",
-      "seconds": 7.345
+      "seconds": 139.624
     },
     {
       "name": "public",
-      "seconds": 37.321
+      "seconds": 36.254
     },
     {
       "name": "inventory",
-      "seconds": 0.593
+      "seconds": 1.113
     }
   ],
-  "rebuilt_pages": [],
+  "rebuilt_pages": [
+    "/",
+    "/404/",
+    "/cockpit/",
+    "/github-profile/",
+    "/how-this-site/",
+    "/how/",
+    "/mcp/",
+    "/projects/",
+    "/projects/agents/",
+    "/projects/agents/authorization-owner/",
+    "/projects/agents/capability-routing/",
+    "/projects/agents/context-evidence/",
+    "/projects/agents/protected-policy/",
+    "/projects/agents/rules-contracts/",
+    "/projects/agents/skills-plugins/",
+    "/projects/agents/working-tree-hot-mirror/",
+    "/projects/ai-cli-profile-manager/",
+    "/projects/ai-cli-profile-manager/background-openai-children/",
+    "/projects/ai-cli-profile-manager/doctor-validation/",
+    "/projects/ai-cli-profile-manager/engines-providers/",
+    "/projects/ai-cli-profile-manager/install-recovery/",
+    "/projects/ai-cli-profile-manager/local-proxies/",
+    "/projects/ai-cli-profile-manager/native-desktop-integration/",
+    "/projects/ai-cli-profile-manager/profiles-launch/",
+    "/projects/ai-cli-profile-manager/recoverable-runs/",
+    "/projects/ai-cli-profile-manager/secrets-isolation/",
+    "/projects/chinese-asr/",
+    "/projects/chinese-asr/audit-evidence/",
+    "/projects/chinese-asr/desktop-dictation/",
+    "/projects/chinese-asr/installation-recovery/",
+    "/projects/chinese-asr/known-text-alignment/",
+    "/projects/chinese-asr/long-batch/",
+    "/projects/chinese-asr/models-modes/",
+    "/projects/chinese-asr/runtime-privacy/",
+    "/projects/chinese-asr/speaker-attribution/",
+    "/projects/chinese-asr/task-routing/",
+    "/projects/codex-agent-model-benchmark/",
+    "/projects/codex-local-remote/",
+    "/projects/codex-memory/",
+    "/projects/codex-memory/claude-project-memory/",
+    "/projects/codex-memory/config-memory-whitelist-sync/",
+    "/projects/codex-memory/content-addressed-storage-cold-sync/",
+    "/projects/codex-memory/gemini-workspace-memory/",
+    "/projects/codex-memory/isolated-disaster-recovery/",
+    "/projects/codex-memory/openclaw-workspace-recovery/",
+    "/projects/codex-memory/vss-conversation-hot-backup/",
+    "/projects/codex-remote/",
+    "/projects/daily-preferences/",
+    "/projects/daily-preferences/current-corrections/",
+    "/projects/daily-preferences/evidence-query/",
+    "/projects/daily-preferences/fact-verification/",
+    "/projects/daily-preferences/mobile-context-delivery/",
+    "/projects/daily-preferences/personal-understanding/",
+    "/projects/daily-preferences/recommendation-choice/",
+    "/projects/daily-preferences/source-coverage/",
+    "/projects/devconfig-backup/",
+    "/projects/devconfig-backup/recovery-and-tasks/",
+    "/projects/devconfig-backup/source-catalog/",
+    "/projects/devconfig-backup/tiered-distribution/",
+    "/projects/devconfig-backup/wechat-native-backup/",
+    "/projects/document-materials/",
+    "/projects/document-materials/current-matter-sources/",
+    "/projects/document-materials/editable-docx-pdf/",
+    "/projects/document-materials/page-audit-release/",
+    "/projects/document-materials/reality-readback-recovery/",
+    "/projects/document-materials/signature-delivery-version/",
+    "/projects/emerald-veil/",
+    "/projects/emerald-veil/native-bubbles-idle-overlay/",
+    "/projects/emerald-veil/reversibility-preimage-and-remote-compatibility/",
+    "/projects/emerald-veil/wallpaper-engine-coexistence-and-rain-experiment/",
+    "/projects/emerald-veil/windows-desktop-and-lockscreen-background/",
+    "/projects/github-index/",
+    "/projects/github-index/project-admission/",
+    "/projects/github-index/protected-major-actions/",
+    "/projects/github-index/publication-gate/",
+    "/projects/github-index/repository-ledger/",
+    "/projects/github-index/snapshot-recovery/",
+    "/projects/github-index/worktree-sync/",
+    "/projects/github-local-index/",
+    "/projects/learning/",
+    "/projects/learning/authoritative-research/",
+    "/projects/learning/dialogue-revision/",
+    "/projects/learning/human-control-simple/",
+    "/projects/learning/plain-language/",
+    "/projects/learning/questions-validation/",
+    "/projects/learning/route-checkpoint/",
+    "/projects/localocr/",
+    "/projects/localocr/document-structure/",
+    "/projects/localocr/input-routing/",
+    "/projects/localocr/installation-recovery/",
+    "/projects/localocr/jobs-cache/",
+    "/projects/localocr/results-evidence/",
+    "/projects/localocr/runtime-resources/",
+    "/projects/meshclip-kit/",
+    "/projects/meshclip-kit/exact-peer-firewall-hardening/",
+    "/projects/meshclip-kit/kde-connect-pairing-sync/",
+    "/projects/meshclip-kit/silent-watchdog-and-session-lifecycle/",
+    "/projects/meshclip-kit/tailscale-peer-reachability/",
+    "/projects/openclaw/",
+    "/projects/password-center/",
+    "/projects/pc-panel-hub/",
+    "/projects/pc-panel-hub/case-panel-rendering/",
+    "/projects/pc-panel-hub/hs2-overlay/",
+    "/projects/pc-panel-hub/installation-binding-migration/",
+    "/projects/pc-panel-hub/power-recovery/",
+    "/projects/pc-panel-hub/serial-transport/",
+    "/projects/pc-panel-hub/telemetry-trust/",
+    "/projects/pcconfig/",
+    "/projects/pcconfig/authorization-files/",
+    "/projects/pcconfig/drift-acceptance/",
+    "/projects/pcconfig/machine-facts/",
+    "/projects/pcconfig/memory-diagnostics/",
+    "/projects/pcconfig/owner-takeover/",
+    "/projects/pcconfig/protected-actions/",
+    "/projects/pcconfig/protected-data/",
+    "/projects/pcconfig/recovery-backup/",
+    "/projects/pcconfig/remote-computer-mcp/",
+    "/projects/pcconfig/runtime-startup/",
+    "/projects/pcconfig/secondary-laptop/",
+    "/projects/pcconfig/secrets-providers/",
+    "/projects/personal-expression/",
+    "/projects/personal-expression/corpus-extension-and-private-recovery/",
+    "/projects/personal-expression/explain-to-me/",
+    "/projects/personal-expression/feedback-consolidation-and-lessons-sync/",
+    "/projects/personal-expression/reply-as-me/",
+    "/projects/personal-formal-documents/",
+    "/projects/personal-health/",
+    "/projects/personal-health/current-evidence-route/",
+    "/projects/personal-health/evidence-three-state/",
+    "/projects/personal-health/health-owner-boundary/",
+    "/projects/personal-health/offline-decision-brief/",
+    "/projects/personal-health/protected-foreground-refresh/",
+    "/projects/personal-health/raw-preservation-resume/",
+    "/projects/personal-materials/",
+    "/projects/personal-materials/bounded-discovery/",
+    "/projects/personal-materials/exact-intake/",
+    "/projects/personal-materials/registered-lookup/",
+    "/projects/personal-materials/verified-open/",
+    "/projects/personal-media/",
+    "/projects/personal-media/classification/",
+    "/projects/personal-media/cloud-candidates/",
+    "/projects/personal-media/local-ingest/",
+    "/projects/personal-media/phone-preservation/",
+    "/projects/personal-media/phone-recovery/",
+    "/projects/personal-media/search-browse/",
+    "/projects/proxyclean/",
+    "/projects/proxyclean/dead-port-and-route-cleanup/",
+    "/projects/proxyclean/dynamic-proxy-status/",
+    "/projects/proxyclean/ipv6-routing-control/",
+    "/projects/proxyclean/one-click-and-troubleshooting-boundaries/",
+    "/projects/proxyclean/targeted-port-shutdown/",
+    "/projects/proxyclean/wifi-rebind-and-recovery/",
+    "/projects/ramdisk-guardian/",
+    "/projects/ramdisk-guardian/drive-arrival-sensing-and-skeleton-healing/",
+    "/projects/ramdisk-guardian/host-memory-telemetry-and-silent-monitoring/",
+    "/projects/ramdisk-guardian/installation-and-application-recovery/",
+    "/projects/ramdisk-guardian/unaccounted-watchdog-and-driver-auto-release/",
+    "/projects/ramdisk-guardian/volatile-cache-contract-and-backup-retirement/",
+    "/projects/remote-control/",
+    "/projects/steam-millennium-config-backup/",
+    "/projects/steam-millennium-config-backup/allowlist-config-and-style-snapshot/",
+    "/projects/steam-millennium-config-backup/plugin-manifest-and-install-state-tracking/",
+    "/projects/steam-millennium-config-backup/scheduled-snapshot-guardian-and-clean-restore-boundary/",
+    "/projects/steam-millennium-config-backup/theme-options-palette-and-dual-baseline-tracking/",
+    "/projects/sunshine-remote-streaming/",
+    "/projects/sunshine-remote-streaming/bitrate-codec-strategy/",
+    "/projects/sunshine-remote-streaming/capture-failover/",
+    "/projects/sunshine-remote-streaming/remote-power-and-repair/",
+    "/projects/sunshine-remote-streaming/transport-ipv6-direct/",
+    "/projects/sunshine-remote-streaming/vdd-display-settings/",
+    "/projects/timeaudit/",
+    "/projects/timeaudit/backup-recovery/",
+    "/projects/timeaudit/clipboard-history/",
+    "/projects/timeaudit/collection-pipeline/",
+    "/projects/timeaudit/hardware-performance/",
+    "/projects/timeaudit/process-forensics/",
+    "/projects/timeaudit/runtime-reliability/",
+    "/projects/timeaudit/usage-energy/",
+    "/projects/typora-theme-pack/",
+    "/projects/typora-theme-pack/controlled-preview-and-visual-qa/",
+    "/projects/typora-theme-pack/multi-scenario-export-profiles/",
+    "/projects/typora-theme-pack/theme-installation-and-lifecycle/",
+    "/projects/typora-theme-pack/transactional-pdf-export-pipeline/",
+    "/projects/typora-theme-pack/verdant-mint-theme-system/",
+    "/projects/vault-tool/",
+    "/projects/vault-tool/ai-local-interface/",
+    "/projects/vault-tool/dual-password/",
+    "/projects/vault-tool/files-encryption/",
+    "/projects/vault-tool/image-carrier/",
+    "/projects/vault-tool/maintenance-recovery/",
+    "/projects/vault-tool/passwords-formats/",
+    "/projects/vault-tool/private-backup/",
+    "/projects/vault-tool/view-extract/",
+    "/projects/video-scaffold/",
+    "/projects/video-scaffold/delivery-verify/",
+    "/projects/video-scaffold/deterministic-render/",
+    "/projects/video-scaffold/preflight-preview/",
+    "/projects/video-scaffold/project-bootstrap/",
+    "/projects/video-scaffold/recovery-reuse/",
+    "/projects/video-scaffold/scene-authoring/",
+    "/projects/video-scaffold/voice-timing/",
+    "/projects/wechat-direct/",
+    "/projects/wechat-direct/account-source-identity/",
+    "/projects/wechat-direct/bounded-chat-context/",
+    "/projects/wechat-direct/moments-local-cache/",
+    "/projects/wechat-direct/named-chat-archive/",
+    "/projects/wechat-direct/preservation-verification/",
+    "/projects/wechat-direct/reply-media-relations/",
+    "/projects/wechat-history-ai-bridge/",
+    "/projects/wechatdirect/",
+    "/projects/wly0829-cn/",
+    "/projects/work-delivery-copilot/",
+    "/projects/work-delivery/",
+    "/projects/work-delivery/consistent-deliverables/",
+    "/projects/work-delivery/evidence-quality/",
+    "/projects/work-delivery/package-sources/",
+    "/projects/work-delivery/source-change-next-version/",
+    "/projects/work-delivery/value-state-recovery/",
+    "/rescue/",
+    "/rules/",
+    "/rules/authorization/",
+    "/rules/capabilities-runtime/",
+    "/rules/charter/",
+    "/rules/claude-adapter/",
+    "/rules/codex-adapter/",
+    "/rules/context-sources/",
+    "/rules/engineering-delivery/",
+    "/rules/execution-coordination/",
+    "/rules/privacy-data/",
+    "/rules/protected-actions/",
+    "/rules/rule-release/",
+    "/search/",
+    "/skills/",
+    "/skills/authorization-file-broker/",
+    "/skills/browser-control-continuity/",
+    "/skills/chinese-asr/",
+    "/skills/cloud-asset-channel/",
+    "/skills/cockpit/",
+    "/skills/control-plane-doctor/",
+    "/skills/daily-preferences/",
+    "/skills/document-materials/",
+    "/skills/documents/",
+    "/skills/explain-to-me/",
+    "/skills/file-intake-router/",
+    "/skills/google-workspace-direct/",
+    "/skills/learning/",
+    "/skills/llm-backend-toolkit/",
+    "/skills/local-secret-broker/",
+    "/skills/localocr/",
+    "/skills/md-to-pdf/",
+    "/skills/media-person-self/",
+    "/skills/mojibake-doctor/",
+    "/skills/native-economy-routing/",
+    "/skills/pdf-render-safe/",
+    "/skills/pdf/",
+    "/skills/personal-formal-documents/",
+    "/skills/personal-health/",
+    "/skills/personal-materials/",
+    "/skills/personal-media/",
+    "/skills/personal-panel-refresh/",
+    "/skills/project-entry-gate/",
+    "/skills/reply-as-me/",
+    "/skills/report-page/",
+    "/skills/tailscale-safe-exposure/",
+    "/skills/timeaudit-diagnostics/",
+    "/skills/token-budget-advisor/",
+    "/skills/vault-workflow/",
+    "/skills/wechat-direct/",
+    "/skills/work-delivery/"
+  ],
   "html_files": 313,
   "files": [
     {
@@ -279,6 +549,11 @@
       "sha256": "bd47e7c787406eb9cff22679a5945af6e294186a0bbce87f053e0ea5f3dacfa4"
     },
     {
+      "path": "_astro/index.astro_astro_type_script_index_0_lang.BdlHdUCm.js",
+      "bytes": 64074,
+      "sha256": "334893fd24918dbc31e7157308e8422a32c002ba411d2d0f2af0c9d89ade8d8a"
+    },
+    {
       "path": "_astro/index.astro_astro_type_script_index_0_lang.BRkMT7nu.js",
       "bytes": 30376,
       "sha256": "d5e43aaa7616785a98a0e4698f86b54939311fca69ea811d0b7f4603fcd8779c"
@@ -417,6 +692,11 @@
       "path": "_astro/today-river.DNAGKo16.js",
       "bytes": 48430,
       "sha256": "a1b5f5657e0f8321df4555ee8cb6e1d28b2e02c73cd388a92523eaeb75eab12c"
+    },
+    {
+      "path": "_astro/today-river.DNuW33qX.js",
+      "bytes": 50230,
+      "sha256": "64ccbe0d730bbca4e7482ecb04fa887d837535fa08ce0fdd89688f0916f769d1"
     },
     {
       "path": "_astro/today-river.DwQrh1hR.js",
@@ -1290,8 +1570,8 @@
     },
     {
       "path": "_living/how/astro/shared-config.json",
-      "bytes": 19471,
-      "sha256": "ccf63e10455688f787383ce8f8b4d5bf8483d4d68bf66952e2801a3c715b650e"
+      "bytes": 697,
+      "sha256": "4663f53e521f2d05afef841613c037cfb9bea7a900b6e6a6933f36c69e2c7e61"
     },
     {
       "path": "_living/how/bird-first-only.c7b591064984/config.json",
@@ -1545,8 +1825,8 @@
     },
     {
       "path": "_living/pcconfig/astro/shared-config.json",
-      "bytes": 25589,
-      "sha256": "42bd9d68a61703360606f8651fbaa8a77318b4f25f339a8f3ddbd4a18ed36d56"
+      "bytes": 25590,
+      "sha256": "2a4733c4b6135c569c769748aedad5157539bec6f979ac6659c2fd6574ded16a"
     },
     {
       "path": "_living/pcconfig/bird-first-only.24313bded135/config.json",
@@ -2945,8 +3225,8 @@
     },
     {
       "path": "_living/timeaudit/astro/shared-config.json",
-      "bytes": 18497,
-      "sha256": "370daeb200fe6d598b84f7b17cf712bc4b8f5f4c0efb0b4399be7c0744325a6d"
+      "bytes": 18484,
+      "sha256": "903f98ce1dd71c6f1c912d34ea86f8044c0585a828c4360949d88ac0c493b132"
     },
     {
       "path": "_living/timeaudit/bird-first-only.a07df7515cfd/config.json",
@@ -3000,8 +3280,8 @@
     },
     {
       "path": "_living/video-scaffold/astro/shared-config.json",
-      "bytes": 16029,
-      "sha256": "c26dddfd45f97c955adcb3d90d1d8c233c38425ab554bb6f5b2e73e60add0b24"
+      "bytes": 15949,
+      "sha256": "8558cb64574e67eb770aa59aa335378b5248ae523231980271a97a3457add870"
     },
     {
       "path": "_living/video-scaffold/bird-first-only.03f16afd8139/config.json",
@@ -8556,12 +8836,12 @@
     {
       "path": "_shared/resource-retry-82ad6b7628c29f5d06da.js",
       "bytes": 68675,
-      "sha256": "1e6d2508170dd1a1e1376a7294346715d44f4103b8c998b93fdfe480477fb1c0"
+      "sha256": "fef39e286965ab4ad525b481a3bb87f9d460f9412b6f0ed2c4b1ae32ee177fba"
     },
     {
       "path": "_shared/resource-retry-8979d157b795746597ac.js",
       "bytes": 68538,
-      "sha256": "122f8a9eef37772df318f8e4637b65a49f9d0f657846b8d756308874f80d0e40"
+      "sha256": "76ec4cca25be3e8234ba7ede9be508c5b19d6e16dfb0ea874063ee5d91bcd0fe"
     },
     {
       "path": "_shared/resource-retry-bba8b033ec9f2b9787a6.js",
@@ -22629,6 +22909,11 @@
       "sha256": "e7598251375823757e41799e0143b9b9a27aa61a18fe098e31722d77fb87f8de"
     },
     {
+      "path": "assets/_fonts/charter-a93fe0354526.woff2",
+      "bytes": 221756,
+      "sha256": "3053878f050d0e899d19f07f3745db57cfde4532ab1632444ec73385080b498a"
+    },
+    {
       "path": "assets/_fonts/chinese-asr-4e2aff763aad.woff2",
       "bytes": 217916,
       "sha256": "03ee1e4bd368dd3c5be0378d5dc7ec1945a510db2e16468bdd271ef1d282f6da"
@@ -23229,6 +23514,11 @@
       "sha256": "0103985be0c5aec3791b757eff79948179739a04dbff840b3c2fd0849457c410"
     },
     {
+      "path": "assets/_fonts/pcconfig-7803fdba0dca.woff2",
+      "bytes": 240152,
+      "sha256": "baed59f6d926eb09b765b6a3086ef34f0a2a00ca796a5183d1c7d11263b8f83b"
+    },
+    {
       "path": "assets/_fonts/pcconfig-a224b2418a5d.woff2",
       "bytes": 235688,
       "sha256": "e24a0ab026050eb314fa1a37ae0ff56ff435a96ede7ba5adc9a718efab0ea430"
@@ -23604,6 +23894,11 @@
       "sha256": "58f31301472daa80cc877635618752fbc36648ab9aaad807921f380b88de0d84"
     },
     {
+      "path": "assets/_fonts/rescue-41d4bbdfbd51.woff2",
+      "bytes": 181468,
+      "sha256": "a2d099beb67c2ccf72fbe2b97b6c7936ba372270b5641858290c68d84638c0e4"
+    },
+    {
       "path": "assets/_fonts/rescue-44b72705891a.woff2",
       "bytes": 172180,
       "sha256": "d514f3d05ab73c3e5f5f7a207db5824e3656a00f9b3265c9c805511168dcd753"
@@ -23699,6 +23994,11 @@
       "sha256": "9efabe336a6bab0302e0dd37d1fc41661b94f6fe9a2e4fb75c9c3864ed5c730c"
     },
     {
+      "path": "assets/_fonts/rule-protected-actions-8ec229123d4a.woff2",
+      "bytes": 173164,
+      "sha256": "57b9b36ae8ceef58a09da793c1b778cae79e179c64260ba9097366d593ec1325"
+    },
+    {
       "path": "assets/_fonts/rule-protected-actions-b44d0fa0136f.woff2",
       "bytes": 169184,
       "sha256": "c4f6cfb037c54281be6945dc78bb0ced6665a4ef48c915435e7b8284c8e5e9bb"
@@ -23712,6 +24012,11 @@
       "path": "assets/_fonts/rules-home-5cccd2d7d337.woff2",
       "bytes": 149948,
       "sha256": "845661442219e8abeea5748d3f13673b772ae905785340e7ed0c17cffb223a11"
+    },
+    {
+      "path": "assets/_fonts/rules-home-db7e67d94603.woff2",
+      "bytes": 150884,
+      "sha256": "b85ee62b58770e6bba5e8727b7c3fe120c3093a6ea6be6b356c6a1efa90af6d2"
     },
     {
       "path": "assets/_fonts/skill-authorization-file-broker-06a3239ee9fb.woff2",
@@ -24454,6 +24759,11 @@
       "sha256": "e14945f2d04c4e362de6ca062b8e7aae4036d5304faa4a09f4aaebeb4a59db00"
     },
     {
+      "path": "assets/_fonts/wly0829-cn-57826e936b37.woff2",
+      "bytes": 215200,
+      "sha256": "55b81968556b4654e5f8777f90ca6aa20af81386a6fbdd028a4380e6076e1828"
+    },
+    {
       "path": "assets/_fonts/wly0829-cn-69d2b79d1ac6.woff2",
       "bytes": 197060,
       "sha256": "e6c9120ec8e308b2d22150639b3ee89dba9c6f45f117aab5c7cd78bd8331defc"
@@ -24870,8 +25180,8 @@
     },
     {
       "path": "cockpit/assets/today-river-d6e2d14e41fb5adb5c58.js",
-      "bytes": 49857,
-      "sha256": "1815b8b8466484d2ae0dec3211f97269f6ed77249a355615b1dd1f2068b2e3ac"
+      "bytes": 50230,
+      "sha256": "64ccbe0d730bbca4e7482ecb04fa887d837535fa08ce0fdd89688f0916f769d1"
     },
     {
       "path": "cockpit/assets/today-river-f36ca903ec4e711209dc.css",
@@ -24880,8 +25190,8 @@
     },
     {
       "path": "cockpit/index.html",
-      "bytes": 425102,
-      "sha256": "e83885d9301b656c9dc8f61803987e8f6918cebd207c245fa9c9a1a20f3cffda"
+      "bytes": 556548,
+      "sha256": "9aa95c9cc3c582ac177c52e6e99bfba669ff235ceec839a2bd36a1f708186318"
     },
     {
       "path": "cockpit/stutter/assets/site-live-runtime-0fe059c637ff196ccc5d.js",
@@ -24936,12 +25246,12 @@
     {
       "path": "how/index.html",
       "bytes": 570763,
-      "sha256": "82f07b58b5b85d1c00d1fafa75614c96e3510c23cc8766355d920d41a1f517ef"
+      "sha256": "66f6e581fe56effb62c8789b6b45dd836eaa51b4bf4c7fd2d3e4731e0f5e95b4"
     },
     {
       "path": "how-this-site/index.html",
       "bytes": 331059,
-      "sha256": "9ac46e6e8f8048a68803a3274312f7465a75eb9debd256ba68f0218c98db3f19"
+      "sha256": "8a775f720d23210be214a0a9d531cab241719d3732319a7cbc623afec713531f"
     },
     {
       "path": "images/personal-ai-experience/codex-204-4.png",
@@ -24961,12 +25271,12 @@
     {
       "path": "index.html",
       "bytes": 399148,
-      "sha256": "3d0c0abaac486dea3f33cb7fa927d50f95ba3880a3ca448f06a8706cb4528878"
+      "sha256": "09ffb688c48b4f3fd0a28f737f39af70cf9a0a76c710e14a1ecdebafed09d68e"
     },
     {
       "path": "mcp/index.html",
       "bytes": 262566,
-      "sha256": "d4db2851243675b1e3c05d48c200d70f3569d17fdc60b0492a3811d974680dbf"
+      "sha256": "e94c7ff3408edf5b0dd36c2ac0dee4458d318e6c2a7d3c5b8b8d4de59e3ce6a5"
     },
     {
       "path": "media/brand/wuleyang-logo-full.png",
@@ -25015,8 +25325,8 @@
     },
     {
       "path": "projects/agents/index.html",
-      "bytes": 639786,
-      "sha256": "bbc4f1ac0b3f19d4495751b5b1080c333aa0458ad04da2eeb4371bd2ea63bc3f"
+      "bytes": 639954,
+      "sha256": "b4b7ec7ed36b928c2004f0ae66989c3f60323ccb69980168eefb7eda3ce36bcd"
     },
     {
       "path": "projects/agents/protected-policy/index.html",
@@ -25066,7 +25376,7 @@
     {
       "path": "projects/ai-cli-profile-manager/index.html",
       "bytes": 604212,
-      "sha256": "1ffc7ea266b21d6b3519d35ec216b2f31804e347fe177a5d0e40f5468a57f8e3"
+      "sha256": "14c50a6c555d44a41f2cc9d5fb4f4060683cb32ed18a8800458eb463ea3e68e5"
     },
     {
       "path": "projects/ai-cli-profile-manager/install-recovery/index.html",
@@ -25256,7 +25566,7 @@
     {
       "path": "projects/codex-memory/index.html",
       "bytes": 428963,
-      "sha256": "fd78467bb76f16fa95fae2aba3e40dbfa35707b0e684b4da63a257d9a387af62"
+      "sha256": "1c7e5d45bd58ae8e38befa2121e052c93bc2908ef53fbbf6a3e7cfa0c18fad92"
     },
     {
       "path": "projects/codex-memory/isolated-disaster-recovery/index.html",
@@ -25281,7 +25591,7 @@
     {
       "path": "projects/codex-remote/index.html",
       "bytes": 352651,
-      "sha256": "ea5efe6bba2e94e222acd2f968a4268258c58fabc3d8d8c0ef3c08b16a8ebee1"
+      "sha256": "c10a307783b041c9843a6c2f690a2bf939ee1fe7124889df80b3d1a813282c4a"
     },
     {
       "path": "projects/codex-remote/installation-update-rollback/index.html",
@@ -25351,7 +25661,7 @@
     {
       "path": "projects/daily-preferences/index.html",
       "bytes": 544939,
-      "sha256": "fa03e766f19a251602d52e51053bb290bbbd985be3bf78806603461783290271"
+      "sha256": "09f3ee1b215981eff41caeaa95a11b3719c820c11d571f2ea96dcee31d004405"
     },
     {
       "path": "projects/daily-preferences/mobile-context-delivery/index.html",
@@ -25386,7 +25696,7 @@
     {
       "path": "projects/devconfig-backup/index.html",
       "bytes": 419570,
-      "sha256": "f6bbc14dd1f9329d1696de14263d71553f411c512039163665cc3e7ce5e95539"
+      "sha256": "2190d7f829492b0982b15e15a305069e601b68b1ebe7b063a19b702bea29f2fe"
     },
     {
       "path": "projects/devconfig-backup/recovery-and-tasks/index.html",
@@ -25516,7 +25826,7 @@
     {
       "path": "projects/index.html",
       "bytes": 439128,
-      "sha256": "d2967e95f19770e9506dd24ff257eac5598c38d7822f5903da62e8599e14bd26"
+      "sha256": "9c4cd19154f96cc71b535973484727bb8f2cc0817c4ea1085869d5f33004885b"
     },
     {
       "path": "projects/learning/assets/hero-cd2ff8de844666bc-mask.png",
@@ -25546,7 +25856,7 @@
     {
       "path": "projects/learning/index.html",
       "bytes": 377890,
-      "sha256": "b86738758f64d2a0d367ac446b35cab492b21ba544f68b45e728f01866054878"
+      "sha256": "e1e488c1aa091271668490e89996fcd2a21121cba2fd0c3e0a8c8fc778497e2b"
     },
     {
       "path": "projects/learning/plain-language/index.html",
@@ -25766,7 +26076,7 @@
     {
       "path": "projects/pc-panel-hub/index.html",
       "bytes": 576562,
-      "sha256": "ec39706405df2956e93a20be20ac85e3f4d45a94c631aaee24d2d7e6e12efb5d"
+      "sha256": "8ff68611df7161948c32d288d766b6e9b0b2f0febcc3859be368cf40ba0b12c7"
     },
     {
       "path": "projects/pc-panel-hub/installation-binding-migration/index.html",
@@ -25810,8 +26120,8 @@
     },
     {
       "path": "projects/pcconfig/index.html",
-      "bytes": 938853,
-      "sha256": "2c78cbfc005532b2e273329a5eb0eaa7d7063bdbdf9f6e4052d660cc3ad62c9e"
+      "bytes": 939633,
+      "sha256": "61d6d86575210c29d55b42fc459fb23f7f1ae2d60b34812dcbefc294d09cd719"
     },
     {
       "path": "projects/pcconfig/machine-facts/index.html",
@@ -25911,7 +26221,7 @@
     {
       "path": "projects/personal-formal-documents/index.html",
       "bytes": 376004,
-      "sha256": "7d7ca3f016d16521304801a9f4bb8000209fc27abe100fda4af78a9f68e70de9"
+      "sha256": "ac02844adabcdfc26e5ea36ef7d24cc51bfa48e6511d50b86c81ee06ce72ab86"
     },
     {
       "path": "projects/personal-health/current-evidence-route/index.html",
@@ -25931,7 +26241,7 @@
     {
       "path": "projects/personal-health/index.html",
       "bytes": 357848,
-      "sha256": "2672d79d1c19f34d91afa000232a7269cb225458396e8f2de85117dd5202cf52"
+      "sha256": "50135b326d4b349958bf01e196561632bb7dfc3f82711805c875d6a8dc72e9d2"
     },
     {
       "path": "projects/personal-health/offline-decision-brief/index.html",
@@ -25961,7 +26271,7 @@
     {
       "path": "projects/personal-materials/index.html",
       "bytes": 401546,
-      "sha256": "aaf4e68afeaa39b50782a2c61daa1d975295c721b852c1b7e9f9905b9fa33599"
+      "sha256": "dbd1962c1fd4bd66a36269db9be088b09b5f0be9ad8318a80da09fa572adde15"
     },
     {
       "path": "projects/personal-materials/registered-lookup/index.html",
@@ -25996,7 +26306,7 @@
     {
       "path": "projects/personal-media/index.html",
       "bytes": 544526,
-      "sha256": "a2018b05985a22587792833288e026284d82653e8d16588b5bc16f1f9742b047"
+      "sha256": "368bccedeb9ffa4f2b1a0c74ca3c3fe08e1d3c748dc8d65db4f7597b0a1ce23f"
     },
     {
       "path": "projects/personal-media/local-ingest/index.html",
@@ -26041,7 +26351,7 @@
     {
       "path": "projects/proxyclean/index.html",
       "bytes": 348682,
-      "sha256": "ab85ae20ad60f8497becaacc2bad4a6e6e72336d9b94d1e7104a655aecdc752d"
+      "sha256": "161ae4f509f553e0dbec23e60fcebfc105fd2c804d130334b05ba8c4ec2c7d7a"
     },
     {
       "path": "projects/proxyclean/ipv6-routing-control/index.html",
@@ -26116,7 +26426,7 @@
     {
       "path": "projects/remote-control/index.html",
       "bytes": 469475,
-      "sha256": "a94d5fcde9391c85ad4ec398d08aabf190c8f8f902285e7cb72024869f4da0ad"
+      "sha256": "a93b886a3bd69c2fa89cae7f76d5a0e1fae70d8b6043adc85eef5396c77df730"
     },
     {
       "path": "projects/steam-millennium-config-backup/allowlist-config-and-style-snapshot/index.html",
@@ -26136,7 +26446,7 @@
     {
       "path": "projects/steam-millennium-config-backup/index.html",
       "bytes": 410668,
-      "sha256": "bbc368aeb0618dffe265e58fb3144490f3d5116ec963640d6dc145d08f8274a8"
+      "sha256": "2284dc538110ff70af3470fea4642de31bd1cae8db787fe186ce91c3c8f053bb"
     },
     {
       "path": "projects/steam-millennium-config-backup/plugin-manifest-and-install-state-tracking/index.html",
@@ -26216,7 +26526,7 @@
     {
       "path": "projects/timeaudit/index.html",
       "bytes": 639666,
-      "sha256": "6f905d8b58d7401315340516fd263785fa855989049f314618fefbef36228af2"
+      "sha256": "697b8e949de979c3e08fc008bbd01614906df6a7ced82ca4e8606593c5f31727"
     },
     {
       "path": "projects/timeaudit/process-forensics/index.html",
@@ -26251,7 +26561,7 @@
     {
       "path": "projects/typora-theme-pack/index.html",
       "bytes": 377871,
-      "sha256": "d9af41a4a6818eff4ebce330ebeab5e4d5f3048883b2e09da26b9475bdf5df03"
+      "sha256": "e426eb277a0e66c0c97b54977b60c928d223aa8944e13aba5ecd4f26923bea42"
     },
     {
       "path": "projects/typora-theme-pack/multi-scenario-export-profiles/index.html",
@@ -26426,7 +26736,7 @@
     {
       "path": "projects/wechat-history-ai-bridge/index.html",
       "bytes": 263123,
-      "sha256": "3c220986a44f633bcfbbd697db78989a73a7b11a24817714d649cbbaa71ac6ce"
+      "sha256": "a2585c8131c63ca7f08b821251c0cc22b417bb6de11e8a1d69d4c04c3aae0b39"
     },
     {
       "path": "projects/wechat-history-ai-bridge/metadata-first-probe-and-boundary-verification/index.html",
@@ -26460,8 +26770,8 @@
     },
     {
       "path": "projects/wly0829-cn/index.html",
-      "bytes": 504974,
-      "sha256": "7bdbce4fba9a3107690e2533056527e3f7b91fb4d847e4035f99e4a66a3641ac"
+      "bytes": 508366,
+      "sha256": "e5996ec80ea646b5a1499fa12e23cc60aae8e55bc57dceff6454e61c89760b45"
     },
     {
       "path": "projects/work-delivery/consistent-deliverables/index.html",
@@ -26506,22 +26816,22 @@
     {
       "path": "projects/work-delivery-copilot/index.html",
       "bytes": 404557,
-      "sha256": "40fc7c59421099516a9237d16d7bcf9a7a2ac4e3ea3ff42f64b99a4857631aca"
+      "sha256": "ac88a6298b7048dc49e0f96175cbf2618f5cacb4fe91e422b06b9ae22c252143"
     },
     {
       "path": "release-identity.json",
       "bytes": 211,
-      "sha256": "981c4e4f5cfb78b290029e6f30f94772ac3d9338d6854c57f9bfa1c305d9c19c"
+      "sha256": "d42bb9f4d76179a6689488a29b483b34c8e9ecd4eeb41fe1b3ce57f2c561de1b"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 5007119,
-      "sha256": "4f7452ee9541ba163897e0b86f51b7ad3d5f31d274ef038c0e9ca52aabbb27b0"
+      "bytes": 5013054,
+      "sha256": "cbeeb51eeb703248a898eabad6a77b0470f3806b94c2ad7e1c578bc8a5c08060"
     },
     {
       "path": "rescue/index.html",
-      "bytes": 287550,
-      "sha256": "982b5f41aa0f4195e184aca7733a8bf48f84d99a9f6cb0acf58c6ffc5452e5f4"
+      "bytes": 287614,
+      "sha256": "8b624cb3e8e0e91788b28465d6857afd6c14ea727faef100ab6d7a862bfa4043"
     },
     {
       "path": "robots.txt",
@@ -26551,12 +26861,12 @@
     {
       "path": "rules/authorization/index.html",
       "bytes": 216937,
-      "sha256": "b8765bdab1008f6aedc850c945b065fc8a19d124963637bebbe153ded6da9927"
+      "sha256": "3f8fb15b71ed83c32516ba416930314093a0e883537324cccd50a327d298ef36"
     },
     {
       "path": "rules/capabilities-runtime/index.html",
       "bytes": 336801,
-      "sha256": "1bffffbd46b5376d068c8a2bfd4c5a370516aa01f87a54aa7c9d98c0c385347c"
+      "sha256": "4b9a07a6123de3446b60c1643fd5ac98c783824aeab08a99760f2a29d580ae77"
     },
     {
       "path": "rules/charter/assets/hero-c2f6f292d8b962f4-mask.png",
@@ -26570,8 +26880,8 @@
     },
     {
       "path": "rules/charter/index.html",
-      "bytes": 171767,
-      "sha256": "c47bb765ba8f1b6b3d8f1e3346d60da709676ae1cd391841fecabd95f0d96b14"
+      "bytes": 172273,
+      "sha256": "661f7507c2abed5bac41e4f9dfa4664631f14dbc8e3af1dcaf35fbd00f86ab4c"
     },
     {
       "path": "rules/claude-adapter/assets/hero-51f0e1f616a07390-mask.png",
@@ -26586,12 +26896,12 @@
     {
       "path": "rules/claude-adapter/index.html",
       "bytes": 386229,
-      "sha256": "a1ddfa15f7864a96cb4799de5a9cb1614c091b9adb751ef97bd709154ef0a2f5"
+      "sha256": "2a18cb2a67fb11e64e73c296b3fbed4c6447dcd71f9af8874adee238ff274c07"
     },
     {
       "path": "rules/codex-adapter/index.html",
       "bytes": 210412,
-      "sha256": "37bae15a9c84a36b833fe967c099bad4bb7a998a4c4cc712e2ff21a16af7b8e1"
+      "sha256": "ff7b21b5ff4df50b0a6bf88c40a2f91595b4f160fde91e03436381ba7c184485"
     },
     {
       "path": "rules/context-sources/assets/hero-1b1b8896e9249396-mask.png",
@@ -26606,7 +26916,7 @@
     {
       "path": "rules/context-sources/index.html",
       "bytes": 286913,
-      "sha256": "de9a3d376d2cf53bf6691140bc732e097f8f263a29298606f59a9a87a1e391df"
+      "sha256": "2017b897c7f82d0df2f93805855693ea4ec20edec70ca8e97341f30e9e61c3be"
     },
     {
       "path": "rules/engineering-delivery/assets/hero-243c2b74e1033366-mask.png",
@@ -26621,7 +26931,7 @@
     {
       "path": "rules/engineering-delivery/index.html",
       "bytes": 285165,
-      "sha256": "f650fbd8e72911773cd9b41e8bca80f6c2c83e1bed279801de3761fd178b489f"
+      "sha256": "744428c2b9471971e0a6fcdcd7a4080bb357a56029abcd55e1c4e232c8529eb3"
     },
     {
       "path": "rules/execution-coordination/assets/hero-b45385d937591584-mask.png",
@@ -26636,12 +26946,12 @@
     {
       "path": "rules/execution-coordination/index.html",
       "bytes": 271746,
-      "sha256": "b68dbe711b207a4932116e8cd36ca166c45b44dafbd59fa28b4a2fcc4ab2178b"
+      "sha256": "67a07c2b860a7d06114ae444a4b542a0c8b820a450dcc19fba27d8dcce4c0754"
     },
     {
       "path": "rules/index.html",
-      "bytes": 197886,
-      "sha256": "584f0d2bf6b7279b566b15c1c742c42da3895eb8db03ae873d3867a47757447e"
+      "bytes": 198392,
+      "sha256": "bae5d84425c686577ec30d5b623dc18ec4b3f0a38a012d6731a53060eb0a6fda"
     },
     {
       "path": "rules/privacy-data/assets/hero-503011727f87e5d8-mask.png",
@@ -26656,12 +26966,12 @@
     {
       "path": "rules/privacy-data/index.html",
       "bytes": 289946,
-      "sha256": "406593e93bfd8735b5b00e1a240446f9d4e981200985e9ad7ee057de57ae4ebb"
+      "sha256": "9dc57038ce947874cc51e343680622b1c390dfe0486cb7908d431457fdaf4b93"
     },
     {
       "path": "rules/protected-actions/index.html",
-      "bytes": 262496,
-      "sha256": "61db01e66e6efd35782f1cd0bc35ad4ad8474cb9bd6b95c8256e1a888b09fe37"
+      "bytes": 263184,
+      "sha256": "8038f50aa2c85ab2458ebc45463ebd9c23ed2d6f67cbe337954b9412f926f448"
     },
     {
       "path": "rules/rule-release/assets/hero-7fee25516ac2071e-mask.png",
@@ -26676,17 +26986,17 @@
     {
       "path": "rules/rule-release/index.html",
       "bytes": 210490,
-      "sha256": "1808e262d3d575444771cebe0a7f13c82138a13769a64aebb88a44a444018892"
+      "sha256": "cb6f0d5efa5172f87c9a41b8b68d7576fab89d89d7f2b09260d4ee5760ecb6e1"
     },
     {
       "path": "search/index.html",
       "bytes": 67286,
-      "sha256": "c96b67d7c108a858eecddc5088bfb299e015f25305d90a6f7ccb88e16de9feb0"
+      "sha256": "3d94af9da9ab97b19ef5a32a2dc2a54372954008328e575d1a78c9cc086b114e"
     },
     {
       "path": "search-index.js",
-      "bytes": 1518623,
-      "sha256": "74aceafd682a6aea031bc8afbd242e636f3f6ae63c09ff2f748ee35363a29253"
+      "bytes": 1518741,
+      "sha256": "e49e9f71c22636fe82d75f543005f75f71d964f0bf9159cc32d2cabe1fceadc9"
     },
     {
       "path": "search-project-localocr.js",
@@ -26695,8 +27005,8 @@
     },
     {
       "path": "search-projects.js",
-      "bytes": 4675267,
-      "sha256": "556de3518f5c339527a959587bc2cb1314c663bfbce759d618caebcec5802b8b"
+      "bytes": 4676469,
+      "sha256": "2a491dda34a30d2703b3b53a935a7dc777d8a00305611de1252ccfe2636e0d53"
     },
     {
       "path": "sitemap.xml",
@@ -26731,7 +27041,7 @@
     {
       "path": "skills/browser-control-continuity/index.html",
       "bytes": 251469,
-      "sha256": "3b4cfe56918dda5362ddd95aa3d7a9f82ef9be1b12264f9ab4d19cd61e0009c8"
+      "sha256": "5c093b7842260b0e7f4dbdcef65ac7fcfda8d6fee3d1de513736788fb009ea21"
     },
     {
       "path": "skills/chinese-asr/assets/hero-fb71da432eb4f536-mask.png",
@@ -26746,7 +27056,7 @@
     {
       "path": "skills/chinese-asr/index.html",
       "bytes": 208894,
-      "sha256": "0cf56c3fa03bca8b6e9474ea0a9c86661a3b93d384f682b6b89bf53fe23e65ac"
+      "sha256": "9f02fb9ba9cd48491371c2fc23103521af0bd6963a38fe58d1e0a6d56aed72c9"
     },
     {
       "path": "skills/cloud-asset-channel/index.html",
@@ -26841,7 +27151,7 @@
     {
       "path": "skills/learning/index.html",
       "bytes": 193278,
-      "sha256": "a88a5949af6c688662e02d0a1a8650d73ab15ad1ef6ff3304a74d60aa38b8e2b"
+      "sha256": "397fa54e493923cde7032d7f1542752eb4b4ef0e4a95fec38678d1237c9fd771"
     },
     {
       "path": "skills/llm-backend-toolkit/index.html",
@@ -26941,7 +27251,7 @@
     {
       "path": "skills/personal-formal-documents/index.html",
       "bytes": 181969,
-      "sha256": "e6248e527f32edb2ab4f4229e8411b0d0e13b82324b549ff728fabb734753dd9"
+      "sha256": "9fc2883baf4d9f484d8f4df56a21058ff49d1ddb578edca9a67681e10663375e"
     },
     {
       "path": "skills/personal-health/assets/hero-06bc43bdf9ba1655-mask.png",
@@ -26956,7 +27266,7 @@
     {
       "path": "skills/personal-health/index.html",
       "bytes": 200242,
-      "sha256": "72bba224cdae6b49347dff4f5d93305c198b7f76cd9f11f043e7393d912fdc4d"
+      "sha256": "78779911fe892ccc62fb00e378d7f50d662662e6a9c3a678f60d38b61380f996"
     },
     {
       "path": "skills/personal-materials/assets/hero-b58b147d9dfbc3e7-mask.png",
@@ -27021,12 +27331,12 @@
     {
       "path": "skills/reply-as-me/index.html",
       "bytes": 162678,
-      "sha256": "7ceef08af05f8bcb903711bd1facafb025320f75e7e98fe3b889d8240288132b"
+      "sha256": "a204692f361bd16b0edd6dcb070938736811341c4c4162c47d7e63f12f245a2f"
     },
     {
       "path": "skills/report-page/index.html",
       "bytes": 310221,
-      "sha256": "895f93061432694a2f659f1317d5dd2f0dd91b8982bf58ba0350372e530bdbca"
+      "sha256": "88c99c3307353108d502e067685aca97c8aa62214335a4dcf4be6615df019f8b"
     },
     {
       "path": "skills/tailscale-safe-exposure/assets/hero-7ea0c7e2981cf84c-mask.png",
@@ -27106,7 +27416,7 @@
     {
       "path": "skills/work-delivery/index.html",
       "bytes": 193150,
-      "sha256": "6c6e39126f5312cca69245ec4af2c5ada9cae5e1f865257a6ebec38364577b28"
+      "sha256": "68fe499f1e383403d6179b594b5469e4d37aa8768c5bd0f364912b451502abe5"
     },
     {
       "path": "source-tools/Find-DuplicateContent.ps1",
@@ -27121,5 +27431,5 @@
   ],
   "output": "E:\\Cache\\wly-site-build\\wt\\dist",
   "previous_oss_source": "published",
-  "previous_release_id": "7c09b77883197c431ec06e90650b700730d96918fe68dc9bf5b5d0f2f1f103ec"
+  "previous_release_id": "cf0ad39e65400ff59782fca3d8d7456995ac876c9b429c56c82ec9afafba4c70"
 }
