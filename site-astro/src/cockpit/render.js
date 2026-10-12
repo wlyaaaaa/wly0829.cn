@@ -117,6 +117,8 @@ const questionsOf = (x, r) => {
 };
 const ACTION_KINDS = ['action', 'cooperate', 'do'];
 const isBlank = (s) => !s || /^\s*(待补|待补充|暂无|无)(说明)?[。\s]*$/.test(String(s));
+export const PICK_FIRST = '先在上面选一项，才能复制答复';
+export const COPY_HINT = '按钮只复制一句话，贴到任意 AI 对话发送即可';
 function askCard(x, r, ctx) {
   const id = x.copy_ai_id || x.id;
   const ref = `（驾驶舱条目 ${id}）`, name = `「${r.head}」`;
@@ -133,7 +135,7 @@ function askCard(x, r, ctx) {
   const facts = [['为什么要你', x.why_you], ['不做会怎样', x.consequence]].filter(([, val]) => !isBlank(val));
   const meta = [x.at ? '登记于 ' + when(x.at, ctx.now) : '', Number.isFinite(x.asked_count) ? `问过你 ${x.asked_count} 次` : '', x.last_checked_at ? checkedAgo(x.last_checked_at, ctx.now) : '', x.project ? '项目：' + x.project : ''].filter(Boolean);
   const main = qs.length
-    ? `<button type="button" class="cp-btn cp-btn-main" data-copy-answer data-ref="${esc(ref)}" data-name="${esc(name)}" disabled>复制我的答复</button>`
+    ? `<button type="button" class="cp-btn cp-btn-main" data-copy-answer data-ref="${esc(ref)}" data-name="${esc(name)}" aria-describedby="${esc(todoId(x))}-hint" data-disabled-reason="${PICK_FIRST}" disabled>复制我的答复</button>`
     : ACTION_KINDS.includes(x.ask_kind) ? copyText(`${ref}${name}我已经做完了，请核实后关掉这条`, '我做完了', ' cp-btn-main') : '';
   return `<article class="cp-ask${r.urgent ? ' is-urgent' : ''}" id="${esc(todoId(x))}">`
     + `<h3 class="cp-ask-title">${dot(r.urgent ? 'red' : 'attention')}<span>${esc(r.head)}</span></h3>`
@@ -143,7 +145,7 @@ function askCard(x, r, ctx) {
     + (r.path ? `<p class="cp-path">电脑上的文件：${esc(r.path)}</p>` : '')
     + `<div class="cp-actions">${main}${copyText(`${ref}${name}这件不做了，请核对后移出要做的事并记下结果`, '不做了', ' cp-btn-quiet')}`
     + `${copyText(`${ref}${name}这条请你处理：读驾驶舱状态里这条的详情，用一两句话告诉我要做什么；能由 AI 直接办的就直接办掉并核实关掉`, '问 AI', ' cp-btn-quiet')}</div>`
-    + `<p class="cp-hint">按钮只复制一句话，贴到任意 AI 对话发送即可</p>`
+    + `<p class="cp-hint" id="${esc(todoId(x))}-hint">${qs.length ? PICK_FIRST : COPY_HINT}</p>`
     + (meta.length ? `<p class="cp-meta">${meta.map(esc).join(' · ')}</p>` : '') + `</article>`;
 }
 
