@@ -1011,10 +1011,10 @@
       },
       {
         "id": "n-clip",
-        "text": "11,376 次",
+        "text": "11,382 次",
         "meaning": "剪贴板 events 表行数；blobs 表行数",
-        "as_of": "2026-10-11",
-        "source": "E:\\Data\\TimeAudit\\ClipboardHistory\\clipboard_history.sqlite3 只读（mode=ro）COUNT：events 11,363、blobs 4,270；北京时间 2026-10-11 约 16:11",
+        "as_of": "2026-10-12",
+        "source": "E:\\Data\\TimeAudit\\ClipboardHistory\\clipboard_history.sqlite3 只读（mode=ro）同一事务 COUNT：events 11,382、blobs 4,277；北京时间 2026-10-12 05:37:47，不读取内容正文",
         "screens": [
           "timeaudit-01",
           "timeaudit-06"
@@ -1022,10 +1022,10 @@
       },
       {
         "id": "n-db",
-        "text": "64.0 GiB",
+        "text": "64.3 GiB",
         "meaning": "pg_database_size",
-        "as_of": "2026-10-11",
-        "source": "68,234,567,015 字节；北京时间 2026-10-11 16:04 BEGIN READ ONLY 回读（13:33–13:35 为 68,061,093,223 字节）",
+        "as_of": "2026-10-12",
+        "source": "pg_database_size：69,057,674,599 字节（64.3 GiB）；北京时间 2026-10-12 05:37:48 只读回读，与正文大小使用同一观察窗口",
         "screens": [
           "timeaudit-10"
         ]
