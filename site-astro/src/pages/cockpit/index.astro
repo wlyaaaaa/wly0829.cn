@@ -75,7 +75,8 @@ const engineUrl = (s: string) => Object.entries(motionRuntime.urls).reduce((x, [
 const livingCss = (engineRt?.head || []).find((h: string) => h.startsWith('<link data-living-runtime')) || '';
 const jsAt = (engineRt?.tail || '').indexOf('<script data-living-runtime'), jsEnd = jsAt < 0 ? -1 : engineRt.tail.indexOf('</' + 'script>', jsAt);
 const livingTags = engineUrl(livingCss + (jsEnd < 0 ? '' : engineRt.tail.slice(jsAt, jsEnd + 9)));
-const html = page(view, { now: new Date(), offline: false, projectUrls, img, ov, birdConfig });
+// phase: 'snapshot'：首帧是构建时的数，页面上写明是几点的、整体灰着，浏览器读到新数据再换（读不到时写“读不到（最后 HH:MM 读到）”）
+const html = page(view, { now: new Date(), offline: false, phase: 'snapshot', projectUrls, img, ov, birdConfig });
 const safe = (o: unknown) => JSON.stringify(o).replace(/</g, '\\u003c');
 const boot = safe({ endpoints: ENDPOINTS, local: ['/__status?view=cockpit'], snapshot, projectUrls, img });
 ---
@@ -85,6 +86,7 @@ const boot = safe({ endpoints: ENDPOINTS, local: ['/__status?view=cockpit'], sna
   <link rel="stylesheet" href={riverCss} />
   <link rel="stylesheet" href="/_overview/overview-screen.css" />
   <Fragment set:html={livingTags} />
+  <noscript><style>.cp-snap-reading{display:none}</style></noscript>
   <div class="cp-page"><Fragment set:html={html} /></div>
   <div class="cockpit-refresh-wrap">
     <button type="button" class="cockpit-refresh" data-cockpit-refresh aria-label="刷新驾驶舱数据" title="立刻重读电脑">

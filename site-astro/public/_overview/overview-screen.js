@@ -73,7 +73,8 @@ export function html(ov, { size = 'big', now = Date.now() } = {}) {
   const ids = size === 'big' ? ORDER : SMALL_SIGNALS;
   const find = (id) => (ov?.signals || []).find((x) => x?.id === id) || {};
   // 小屏：电脑那块写“正常 / 有预警”而不是“在线”；不正常的块写“交给 AI”，不写没有主语的“要处理”
-  const small = (s) => (s.id === 'computer' ? { ...s, value: STATUS[s.level] || s.value, unit: '' } : s);
+  // 备份那块的数是“有问题的项数”（后端 backup_problems），写成“0 项有问题”，不写成会被读成“0 项正常”的“0 项 · 正常”
+  const small = (s) => (s.id === 'computer' ? { ...s, value: STATUS[s.level] || s.value, unit: '' } : s.id === 'backup' && s.value !== '' && Number.isFinite(Number(s.value)) ? { ...s, unit: '项有问题' } : s);
   const sigs = ids.map((id) => { const s = { id, ...find(id) }; return signal(size === 'big' ? s : { ...small(s), word: s.level && s.level !== 'ok' ? '交给 AI' : s.word }, off); }).join('');
   const reasons = !off && Array.isArray(ov.reasons) ? ov.reasons : [];
   const line = (r) => `<li>${esc(r.text)}${Number.isFinite(r.delta) && r.delta ? ` <b>${r.delta > 0 ? '+' : '−'}${Math.abs(r.delta)}</b>` : ''}</li>`;
