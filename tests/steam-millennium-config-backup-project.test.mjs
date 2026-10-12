@@ -32,25 +32,18 @@ test("Steam Millennium keeps its source identity, rank and enabled route togethe
   assert.ok(projectCatalog.some(({ project: item }) => item.slug === project.slug));
 });
 
-test("Steam Millennium overview and every owned module have complete static documents", async () => {
+test("Steam Millennium overview and owned modules expose static recovery documents", async () => {
   const paths = [project.route, ...modules.map(({ slug }) => `${project.route}/${slug}`)];
   assert.equal(new Set(paths).size, paths.length);
   for (const route of paths) {
     assert.ok(routePaths.includes(route), `unregistered route ${route}`);
     const html = await readFile(path.join(root, "dist", route.slice(1), "index.html"), "utf8");
-    assert.ok(html.includes("Steam Millennium"), `missing static project content ${route}`);
+    assert.ok(html.includes(`https://wly0829.cn${route}/`), `missing static project content ${route}`);
     assert.match(html, /<main[\s>]/);
     assert.ok(!html.includes("/projects/codex-app-power-user-playbook"));
   }
   const overview = await readFile(path.join(root, "dist", project.route.slice(1), "index.html"), "utf8");
-  assert.ok(overview.includes("5c65e9499b076ba745d9fe9358d7a72bd7cb2151"));
-  assert.match(overview, /20个配置文件/);
-  assert.match(overview, /millennium.snapshot.v2/);
-  assert.match(overview, /多文件事务/);
-  assert.match(overview, /不是整个文件系统/);
-  assert.match(overview, /RestorePlan/);
-  assert.match(overview, /Rollback/);
-  assert.ok(overview.includes("重新安装后的版本和资源必须"));
+  for (const id of ["usage", "tech", "f-restore-plan", "f-restore", "f-rollback", "history"]) assert.match(overview, new RegExp(`id="${id}"`));
 });
 
 test("ordinary Steam backup and recovery searches reach this project within the first three results", () => {

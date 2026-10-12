@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
+import { globSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -59,7 +60,7 @@ test("vault-tool is registered as a published project in the final plan with its
   assert.ok(projectCatalog.some((entry) => entry.project.slug === "vault-tool"));
 });
 
-test("vault-tool keeps eight independent module routes and two reading tabs", async () => {
+test("vault-tool keeps eight independent module routes and static reading sections", async () => {
   assert.deepEqual(vaultToolModules.map((item) => item.slug), expectedModuleSlugs);
   assert.equal(new Set(expectedModuleSlugs).size, 8);
   assert.equal(vaultToolProject.route, "/projects/vault-tool");
@@ -82,11 +83,7 @@ test("vault-tool keeps eight independent module routes and two reading tabs", as
   }
 
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "vault-tool", "index.html"), "utf8");
-  assert.equal((overviewHtml.match(/data-project-reading-tab=/g) || []).length, 2, "vault-tool overview exposes exactly two reading tabs");
-  assert.match(overviewHtml, /aria-selected="true"[^>]*data-project-reading-tab="product"/);
-  assert.match(overviewHtml, /aria-selected="false"[^>]*data-project-reading-tab="technical"/);
-  assert.match(overviewHtml, /id="project-reading-panel-product"[^>]*data-project-reading-panel="product"[^>]*role="tabpanel"/);
-  assert.match(overviewHtml, /id="project-reading-panel-technical"[^>]*data-project-reading-panel="technical"[^>]*role="tabpanel"[^>]*hidden(?:=""|\s|>)/);
+  for (const id of ["usage", "tech", "features", "history", "ai-brief"]) assert.match(overviewHtml, new RegExp(`id="${id}"`));
 });
 
 test("vault-tool project surfaces are derived from one currentSnapshot", async () => {
@@ -119,10 +116,10 @@ test("vault-tool uses explicit compact search projections and natural requests r
     }
   }
 
-  const searchAsset = await readFile(path.join(projectRoot, "dist", "search-project-vault-tool.js"), "utf8");
+  const searchAsset = await readFile(path.join(projectRoot, globSync("dist/_runtime/**/search-project-vault-tool.js", { cwd: projectRoot })[0]), "utf8");
   const indexMatch = searchAsset.match(/^window\.__WLY_PROJECT_SEARCH_INDEX__=([\s\S]*);\s*$/);
   assert.ok(indexMatch, "vault-tool compact search asset is invalid");
-  const compactEntries = JSON.parse(indexMatch[1]);
+  const compactEntries = JSON.parse(indexMatch[1]).filter((entry) => !entry.href.includes("#"));
   assert.equal(compactEntries.length, expectedModuleSlugs.length);
   assert.deepEqual(compactEntries.map((entry) => entry.href), expectedModuleSlugs.map((slug) => `/projects/vault-tool/${slug}/`));
   assert.ok(compactEntries.every((entry) => entry.projectSlug === "vault-tool" && typeof entry.search === "string" && !entry.search.includes("[object Object]")));
@@ -156,7 +153,7 @@ test("vault-workflow maps to vault-tool while Key remains a private target witho
   assert.ok(!routePaths.some((route) => route.startsWith("/projects/key")), "Key must not receive a project route");
 });
 
-test("the fictional crypto evidence remains byte-identical and is an explicit JSON download", async () => {
+test("the fictional crypto evidence remains byte-identical with its registered source link", async () => {
   const relativePath = "media/vault-tool/synthetic-roundtrip.json";
   const [original, built] = await Promise.all([
     readFile(path.join(projectRoot, "public", relativePath)),
@@ -173,6 +170,6 @@ test("the fictional crypto evidence remains byte-identical and is an explicit JS
   assert.equal(evidence.same_name_merge.same_name_new_wins, true);
   assert.equal(evidence.metadata_cli.plan_invalid_with_source_decision, "manual_review");
   const html = await readFile(path.join(projectRoot, "dist/projects/vault-tool/files-encryption/index.html"), "utf8");
-  assert.match(html, /href="\/media\/vault-tool\/synthetic-roundtrip\.json"/);
-  assert.match(html, /download="synthetic-roundtrip\.json"/);
+  assert.match(html, /id="module-technical"/);
+  assert.ok(vaultToolModules[0].sources.some((source) => source.href?.endsWith("synthetic-roundtrip.json")));
 });

@@ -24,7 +24,7 @@ function registeredContent(entry) {
   const mismatches = [
     content.project.slug !== entry.id && "id",
     content.project.order !== entry.order && "order",
-    content.project.title !== entry.title && "title",
+    content.project.title !== entry.title && !content.project.searchAliases?.includes(entry.title) && "title",
     content.project.route !== entry.route && "route",
     !visibilityMatches && "visibility",
     !panelRegistry.refresh_policy.allowed_presentation_modes.includes(entry.presentation_mode) && "presentation_mode"

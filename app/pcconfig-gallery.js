@@ -106,10 +106,10 @@ export const pcconfigGallery = [
     "proves": "展示本轮本人提供的真实产品界面与操作入口。",
     "doesNotProve": "图中的数量、剩余时间与在线状态是当时画面，不代表现在；截图不替代对应操作的运行回执。",
     "observedAt": "2026-09-24",
-    "originalSha256": "15a637685dec4513cb2ee2df78a34f7e5368b06353f02758e1ec1e4969f4937d",
-    "originalBytes": 97602,
+    "originalSha256": "5afe7ff1f7809893ba42ea8a2336e8bb99fedde9a95370169fab88dd4e18dd6e",
+    "originalBytes": 60374,
     "width": 868,
-    "height": 1304
+    "height": 1244
   },
   {
     "src": "/media/pcconfig/09-totp.png",

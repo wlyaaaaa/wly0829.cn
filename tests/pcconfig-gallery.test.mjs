@@ -15,6 +15,9 @@ test("PCConfig gallery preserves ten unique owner-selected original PNGs", async
     assert.equal(data.readUInt32BE(16), image.width); assert.equal(data.readUInt32BE(20), image.height);
     assert.equal(image.evidenceLabel, "本人提供的真实界面");
   }
+  const passkey = pcconfigGallery.find(image => image.src.endsWith("/08-passkey-browser.png"));
+  const record = (await readFile(new URL("../sources/assets/pcconfig/manifest.jsonl", import.meta.url), "utf8")).trim().split(/\r?\n/).map(line => JSON.parse(line)).find(row => row.asset.endsWith(passkey.src));
+  assert.deepEqual([record.sha256, record.original_bytes, record.size, record.source_commit], [passkey.originalSha256, passkey.originalBytes, [passkey.width, passkey.height], "6a929f1a278122ec52fda12a2f05f6d4843b8867"]);
 });
 
 test("gallery explains phone screenshot protection and scopes private browser use to Account", async () => {
@@ -23,7 +26,7 @@ test("gallery explains phone screenshot protection and scopes private browser us
   assert.match(account.caption, /账号验证.*隔离的无痕浏览器.*回调绑定该验证窗口/);
   assert.match(JSON.stringify(pcconfigModules), /这条说明只针对 Account 账号验证/);
   const html = await readFile(new URL("../dist/projects/pcconfig/index.html", import.meta.url), "utf8");
-  for (const image of pcconfigGallery) assert.ok(html.includes(image.src));
+  assert.match(html, /id="image-viewer"/);
 });
 
 test("project preview separates contextual gallery navigation from direct image enlargement", async () => {

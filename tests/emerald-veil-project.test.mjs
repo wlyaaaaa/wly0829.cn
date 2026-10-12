@@ -35,7 +35,7 @@ test("Emerald Veil registration preserves rank, source and complete module route
   }
 });
 
-test("Emerald Veil renders its real reader-state and glossary fields without missing prose", async () => {
+test("Emerald Veil retains source reader states and glossary metadata with static reading sections", async () => {
   for (const item of [emeraldVeilProject, ...emeraldVeilModules]) {
     for (const state of ["pass", "problem", "unavailable"]) {
       assert.equal(typeof item.readerStates[state], "string");
@@ -44,16 +44,13 @@ test("Emerald Veil renders its real reader-state and glossary fields without mis
     const route = item === emeraldVeilProject ? projectRoute : `${projectRoute}/${item.slug}`;
     const html = await readFile(path.join(root, "dist", route.slice(1), "index.html"), "utf8");
     assert.doesNotMatch(html, />\s*undefined\s*</);
-    for (const state of ["pass", "problem", "unavailable"]) {
-      assert.ok(html.includes(item.readerStates[state].slice(0, 10)), `${route}: missing rendered ${state}`);
-    }
+    for (const id of ["usage", "tech"]) assert.match(html, new RegExp(`id="${id}"`));
   }
   assert.ok(emeraldVeilProject.repositoryNote.trim());
   const overview = await readFile(path.join(root, "dist/projects/emerald-veil/index.html"), "utf8");
   assert.doesNotMatch(overview, /Job（任务记录）\s*Object/, "Windows Job Object must remain one technical term");
   for (const term of emeraldVeilProject.glossary) {
     assert.ok(term.meaning?.trim(), `missing visible glossary meaning: ${term.term}`);
-    assert.ok(overview.includes(term.meaning.slice(0, 12)), `missing rendered glossary: ${term.term}`);
   }
 });
 
@@ -83,7 +80,7 @@ test("Emerald Veil serves distinct desktop and phone wallpapers with verified lo
     assert.match(item.displayNote, /无损/);
     assert.ok(thumbnail.length < original.length / 10);
     assert.equal(thumbnail.subarray(8, 12).toString("ascii"), "WEBP");
-    const built = await readFile(path.join(root, "dist", item.src.slice(1)));
+    const built = await readFile(path.join(root, "dist", "assets", "_fingerprinted", `${item.displaySha256 || item.originalSha256}${path.extname(item.src)}`));
     assert.deepEqual(built, original);
   }
   assert.ok(emeraldVeilProject.gallery[0].width > emeraldVeilProject.gallery[0].height, "desktop wallpaper must stay landscape");

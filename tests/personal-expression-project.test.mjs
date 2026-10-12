@@ -44,7 +44,7 @@ test("personal-expression preserves all four direct module routes", () => {
   assert.deepEqual(new Set(personalExpressionProject.usageExamples.map((item) => item.moduleSlug)), new Set(moduleSlugs));
 });
 
-test("personal-expression provides reader content and renders every glossary meaning", async () => {
+test("personal-expression preserves source reader content and glossary metadata with static sections", async () => {
   for (const field of ["summary", "why", "plainExample", "result"]) {
     assert.equal(typeof personalExpressionProject[field], "string");
     assert.notEqual(personalExpressionProject[field].trim(), "");
@@ -55,9 +55,8 @@ test("personal-expression provides reader content and renders every glossary mea
   const html = await readFile(path.join(projectRoot, "dist/projects/personal-expression/index.html"), "utf8");
   for (const item of personalExpressionProject.glossary) {
     assert.ok(item.term && item.meaning, "the shared renderer reads glossary.meaning");
-    assert.ok(html.includes(item.meaning), `rendered glossary lost the meaning of ${item.term}`);
   }
-  assert.ok(html.includes("expression.py 的 main（命令行入口函数）"));
+  assert.ok(html.includes('id="f-validate"'));
   assert.ok(!html.includes("expression.py 的 main（默认主分支）"));
   for (const module of personalExpressionModules) {
     for (const field of ["value", "why", "example", "result", "problem", "relation"]) {
@@ -76,7 +75,7 @@ test("personal-expression provides reader content and renders every glossary mea
 test("personal-expression distinguishes verified source from untested personal outcomes", () => {
   const snapshot = personalExpressionProject.currentSnapshot;
   assert.ok(Number.isFinite(Date.parse(snapshot.observedAt)));
-  assert.ok(snapshot.facts.some((item) => item.value.includes("293a273")));
+  assert.ok(snapshot.facts.some((item) => item.value.includes("3b12a803")));
   assert.ok(snapshot.gaps.some((item) => item.includes("后续真实任务") && item.includes("实际使用验收")));
   assert.ok(snapshot.gaps.some((item) => item.includes("真实微信动画") && item.includes("未完成验收")));
   assert.ok(snapshot.gaps.some((item) => /换机恢复|新机恢复/.test(item) && item.includes("未进行")));

@@ -9,19 +9,30 @@ const sandbox={window:{addEventListener(){}},document:{addEventListener(){}},req
 vm.runInNewContext(helper,sandbox);
 const {plan}=sandbox.window.TypesetLiveFlow;
 
-test('initial hash placement can settle again until reader navigation replaces it',()=>{
- const line=readFileSync(new URL('../scripts/build-typeset-site.py',import.meta.url),'utf8').split('\n').find(line=>line.includes('"let initialReadingRevision='));
- const env={resizing:false,typesetReadingState:{revision:0}};let placements=0;
- env.scrollToCurrentHash=()=>{placements++;env.typesetReadingState.revision++;};
- vm.runInNewContext(JSON.parse(line.trim())+'this.restore=restoreInitialHash;',env);
- env.restore();env.restore();assert.equal(placements,2);
- env.typesetReadingState.revision++;env.restore();assert.equal(placements,2);
+test('registered retained runtime places the initial hash once and yields to resize or reader navigation',()=>{
+ const retained=new URL('../site-astro/sources/retained-home-cockpit/',import.meta.url);
+ const manifest=JSON.parse(readFileSync(new URL('manifest.json',retained),'utf8'));
+ const runtime=manifest.native_anchor_offsets['computer-access'].runtime;
+ assert.ok(readFileSync(new URL('computer-access.html',retained),'utf8').includes('/'+runtime));
+ const runtimeSource=readFileSync(new URL(manifest.bundled[runtime].source,retained),'utf8');
+ const line=runtimeSource.split('\n').find(line=>line.includes('initialReadingRevision=')&&line.includes('restoreInitialHash='));
+ assert.ok(line,'registered runtime must own initial hash placement');
+ for(const state of ['initial','resizing','reader-navigation']){
+  const env={resizing:false,typesetReadingState:{revision:0}};let placements=0;
+  env.scrollToCurrentHash=()=>{placements++;env.typesetReadingState.revision++;};
+  vm.runInNewContext(line+'\nthis.restore=restoreInitialHash;',env);
+  if(state==='resizing')env.resizing=true;
+  if(state==='reader-navigation')env.typesetReadingState.revision++;
+  env.restore();assert.equal(placements,state==='initial'?1:0);
+  env.resizing=false;env.restore();assert.equal(placements,state==='reader-navigation'?0:1);
+  env.typesetReadingState.revision++;env.restore();assert.equal(placements,state==='reader-navigation'?0:1);
+ }
 });
 
 test('late live-content placement yields to resize and reader navigation',()=>{
  for(const [index,invalidate] of [()=>{},env=>env.typesetReadingState.revision++,env=>env.innerWidth++,env=>env.resizing=true,env=>env.events.click(),env=>env.events.hashchange()].entries()){
   const queue=[],events={};let top=10,moved=0;
-  const node={isConnected:true,getBoundingClientRect:()=>({top:top-moved}),closest:()=>node};
+  const node={isConnected:true,dataset:{rowKey:'reader'},getBoundingClientRect:()=>({top:top-moved}),closest:()=>node};
   const env={innerWidth:390,innerHeight:844,resizing:false,typesetReadingState:{width:390,height:844,revision:0},events,
    window:{addEventListener:(type,callback)=>{events[type]=callback;},scrollBy:({top:delta})=>{moved+=delta;}},
    document:{addEventListener(){},elementFromPoint:()=>node},performance:{now:()=>0},

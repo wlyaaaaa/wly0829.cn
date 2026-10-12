@@ -31,7 +31,7 @@ test('the website is a visible project and its card, counts and complete source 
   const pages = await Promise.all((await readdir(new URL('sources/pages/', root))).map(name => json(`sources/pages/${name}/page.json`)));
   const selected = pages.filter(item => urls.includes(item.url));
   assert.equal(selected.length, urls.length);
-  const projectPages = pages.filter(item => ['project', 'frozen'].includes(item.kind));
+  const projectPages = pages.filter(item => ['project', 'frozen'].includes(item.kind) && !Object.hasOwn(item, 'parent'));
   assert.deepEqual(new Set(urls), new Set(projectPages.map(item => item.url)));
   assert.equal(home.registry.numbers.find(item => item.id === 'n-projects').text, `${projectPages.length} 个项目`);
   assert.equal(home.registry.numbers.find(item => item.id === 'n-projects').text, `${selected.length} 个项目`);

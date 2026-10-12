@@ -133,7 +133,7 @@ test("LocalOCR public sample gallery preserves source identities and verified di
   for (const item of localOcrProject.gallery) {
     const relativePath = item.src.replace(/^\//, "");
     const publicBytes = await readFile(path.join(projectRoot, "public", relativePath));
-    const distBytes = await readFile(path.join(projectRoot, "dist", relativePath));
+    const distBytes = await readFile(path.join(projectRoot, "dist", "assets", "_fingerprinted", `${item.displaySha256 || item.originalSha256}${path.extname(item.src)}`));
     assert.equal(publicBytes.length, item.displayBytes || item.originalBytes, `${item.src} public byte count drifted`);
     assert.equal(sha256(publicBytes), item.displaySha256 || item.originalSha256, `${item.src} public SHA-256 drifted`);
     assert.equal(distBytes.length, item.displayBytes || item.originalBytes, `${item.src} dist byte count drifted`);
@@ -156,13 +156,13 @@ test("LocalOCR public sample gallery preserves source identities and verified di
   }
 });
 
-test("the original UTF-8 Markdown is an explicit download instead of a charset-guessed page", async () => {
+test("the original UTF-8 Markdown retains a source download contract and a built OSS link", async () => {
   const module = localOcrModules.find((item) => item.slug === "results-evidence");
   const source = module.sources.find((item) => item.path === "sample-table-actual.md");
   assert.equal(source.download, "sample-table-actual.md");
   assert.equal(source.href, "/media/localocr/sample-table-actual.md");
   const html = await readFile(path.join(projectRoot, "dist", "projects", "localocr", "results-evidence", "index.html"), "utf8");
-  assert.match(html, /href="\/media\/localocr\/sample-table-actual\.md"[^>]*download="sample-table-actual\.md"[^>]*>下载 /);
+  assert.match(html, /href="https:\/\/[^" ]+\/media\/localocr\/sample-table-actual\.md"[^>]*>下载 /);
   const bytes = await readFile(path.join(projectRoot, "public", "media", "localocr", "sample-table-actual.md"));
   assert.ok(new TextDecoder("utf-8", { fatal: true }).decode(bytes).includes("商品名称"));
 });

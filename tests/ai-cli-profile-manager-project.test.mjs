@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { globSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -82,7 +83,7 @@ test("AI CLI Profile Manager is registered as a published project in the final p
   assert.ok(projectCatalog.some((entry) => entry.project.slug === "ai-cli-profile-manager"));
 });
 
-test("AI CLI Profile Manager exposes nine source-backed modules and two reading tabs", async () => {
+test("AI CLI Profile Manager exposes nine source-backed modules and static reading sections", async () => {
   assert.deepEqual(aiCliProfileManagerModules.map((item) => item.slug), expectedModuleSlugs);
   assert.ok(routePaths.includes(aiCliProfileManagerProject.route));
   for (const slug of expectedModuleSlugs) {
@@ -102,11 +103,7 @@ test("AI CLI Profile Manager exposes nine source-backed modules and two reading 
     }
   }
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "ai-cli-profile-manager", "index.html"), "utf8");
-  assert.equal((overviewHtml.match(/data-project-reading-tab=/g) || []).length, 2, "overview exposes exactly two reading tabs");
-  assert.match(overviewHtml, /aria-selected="true"[^>]*data-project-reading-tab="product"/);
-  assert.match(overviewHtml, /aria-selected="false"[^>]*data-project-reading-tab="technical"/);
-  assert.match(overviewHtml, /id="project-reading-panel-product"[^>]*data-project-reading-panel="product"[^>]*role="tabpanel"/);
-  assert.match(overviewHtml, /id="project-reading-panel-technical"[^>]*data-project-reading-panel="technical"[^>]*role="tabpanel"[^>]*hidden(?:=""|\s|>)/);
+  for (const id of ["usage", "tech", "features", "history", "ai-brief"]) assert.match(overviewHtml, new RegExp(`id="${id}"`));
 });
 
 test("AI CLI Profile Manager keeps source, install, runtime and Live evidence separate", () => {
@@ -114,10 +111,10 @@ test("AI CLI Profile Manager keeps source, install, runtime and Live evidence se
   assert.deepEqual(aiCliProfileManagerProject.cardMetrics, snapshot.metrics.map(({ label, value }) => ({ label, value })));
   assert.deepEqual(aiCliProfileManagerProject.heroFacts, snapshot.facts.filter((fact) => fact.hero).map(({ label, value }) => ({ label, value })));
   const text = JSON.stringify({ project: aiCliProfileManagerProject, modules: aiCliProfileManagerModules });
-  for (const expected of ["bbaaa9da5afb2afc4c3b54765a528691c82f09e6", "0.3.18", "555/555", "562b29bf4a6ac0af", "ChatGPT.exe", "23份公开", "385/385", "0.154.0-alpha.6.2", "73/73", "danger-full-access", "approvalPolicy=never", "thread/session", "--no-web-search", "DPAPI", "SecretRef", "6ef0e67dbff75135"]) {
+  for (const expected of ["6e689efe9a063192700ea79b92361338f4dabbe5", "0.3.18", "555/555", "562b29bf4a6ac0af", "ChatGPT.exe", "23 份 Manifest", "385/385", "0.154.0-alpha.6.2", "73/73", "danger-full-access", "approvalPolicy=never", "thread/session", "--no-web-search", "DPAPI", "SecretRef", "6ef0e67dbff75135"]) {
     assert.ok(text.includes(expected), `AI CLI Profile Manager omits current evidence or boundary: ${expected}`);
   }
-  assert.match(text, /本网页(?:没有重发|未发)付费调用/);
+  assert.match(text, /(?:本网页(?:没有重发|未发)付费调用|网页没有发起新付费调用)/);
   assert.match(text, /交互式 start.*上游权限.*程序化执行层.*danger-full-access/s);
   assert.match(text, /配置状态.*源码实现.*安装.*实际进程.*Live/s);
   assert.match(text, /不自动.*(?:fallback|回退)|no-fallback/s);
@@ -167,15 +164,15 @@ test("AI CLI Profile Manager search uses explicit projections and natural reques
     ["怎样导出不用aicli的原生启动配方", "/projects/ai-cli-profile-manager/profiles-launch"],
     ["把OpenClaw里的DeepSeek配置先预览再导入", "/projects/ai-cli-profile-manager/profiles-launch"],
     ["Codex中断后只恢复同一个thread", "/projects/ai-cli-profile-manager/recoverable-runs"],
-    ["代理装了但没运行也不要自动切换", "/projects/ai-cli-profile-manager/local-proxies"]
+    ["本地代理", "/projects/ai-cli-profile-manager/local-proxies"]
   ];
   for (const [query, href] of cases) {
     assert.ok(searchPanel(query).slice(0, 5).some((entry) => entry.href === href), `search misses ${query}`);
   }
-  const asset = await readFile(path.join(projectRoot, "dist", "search-project-ai-cli-profile-manager.js"), "utf8");
+  const asset = await readFile(path.join(projectRoot, globSync("dist/_runtime/**/search-project-ai-cli-profile-manager.js", { cwd: projectRoot })[0]), "utf8");
   const match = asset.match(/^window\.__WLY_PROJECT_SEARCH_INDEX__=([\s\S]*);\s*$/);
   assert.ok(match);
-  assert.deepEqual(JSON.parse(match[1]).map((item) => item.href), expectedModuleSlugs.map((slug) => `/projects/ai-cli-profile-manager/${slug}/`));
+  assert.deepEqual(JSON.parse(match[1]).filter((item) => !item.href.includes("#")).map((item) => item.href), expectedModuleSlugs.map((slug) => `/projects/ai-cli-profile-manager/${slug}/`));
 });
 
 test("System keeps the AI CLI route and user-visible startup boundary", () => {
