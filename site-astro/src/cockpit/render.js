@@ -99,7 +99,10 @@ export function readTodo(x, now) {
   rest = rest.replace(/[，；\s]+$/g, '');
   // 标题之外的下一步（next_step）不能被短标题遮掉：有步骤就接在步骤后面，没有步骤就作为正文
   const next = x.title && x.next_step ? clean(x.next_step).replace(/\s*汇报在电脑上：[^（]*（路径\s*[^）]+）。?/, '').replace(/[。；\s]+$/, '') : '';
-  if (next && next !== head && !steps.some((s) => s.includes(next) || next.includes(s)) && !rest.includes(next)) {
+  // 下一步和大标题说的是同一件事（一个包含另一个，或冒号、间隔号前的开头一样，如“十月旅游去哪 · 三方盲测对照”和“十月旅游去哪：北京、九寨沟还是武汉”）时，不再当成多出来的一步
+  const topic = (a) => String(a || '').split(/\s*[：:·・｜|]\s*/)[0].trim();
+  const sameTopic = (a, b) => !!a && !!b && (a.includes(b) || b.includes(a) || (topic(a).length >= 2 && topic(a) === topic(b)));
+  if (next && next !== head && ![head, t, clean(x.title)].some((h) => sameTopic(h, next)) && !steps.some((s) => s.includes(next) || next.includes(s)) && !rest.includes(next)) {
     if (steps.length) steps = [...steps, next]; else rest = rest ? `${rest}。${next}` : next;
   }
   // 后端给了一句话标题和步骤或选项，就不再显示从旧标题里拆出来的正文

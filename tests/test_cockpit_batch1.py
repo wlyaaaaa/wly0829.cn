@@ -120,6 +120,11 @@ const assert = require('node:assert/strict');
   assert.match(R.todayBlock(normalize({ ...base0, site_release: { at: '2026-10-12T08:18:00+08:00', ok: true, readback_ok: false, reason: '虚构文件对不上' } }), ctx), /cp-release is-bad"><span class="cp-dot is-yellow".*发布后回读没通过：虚构文件对不上；AI 在处理/);
   // 12 安全和授权：手机那一行
   assert.match(R.security(v, ctx), /cp-sec-line.*资料已解锁到 10月13日 13:37 · 无限制授权关 · 未锁屏 · 能连上/);
+  // 14 下一步和大标题说的是同一件事时不再当成第 N 步接在后面；不同的事照旧接上
+  const same = R.readTodo({ title: '虚构旅游去哪 · 三方对照', next_step: '虚构旅游去哪：甲、乙还是丙', steps: ['看这条下面的两道题'] }, now);
+  assert.deepEqual(same.steps, ['看这条下面的两道题']);
+  const diff = R.readTodo({ title: '虚构旅游去哪 · 三方对照', next_step: '先在电脑上打开汇报页', steps: ['看这条下面的两道题'] }, now);
+  assert.deepEqual(diff.steps, ['看这条下面的两道题', '先在电脑上打开汇报页']);
   // 13 首页小屏：备份写“0 项有问题”，不写成“0 项 · 正常”
   const small = OV.html(ov(), { size: 'small', now: now.getTime() });
   assert.match(small, /data-signal="backup">.*?<span class="ov-sig-value">0<small>项有问题<\/small>/);
