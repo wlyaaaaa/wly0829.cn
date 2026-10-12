@@ -1,4 +1,4 @@
-"""驾驶舱 W2 显示：时间写日期、电脑卡原因句、验收合并、项目红灯只给等你的、今天出错清单传给河。"""
+"""驾驶舱 W2 显示：时间写日期、处理器卡不再自己猜资源原因、内存/系统资源卡用后端原文、首屏电脑摘要分开说、验收合并、项目红灯只给等你的、今天出错清单传给河。"""
 import subprocess
 import unittest
 from pathlib import Path
@@ -19,7 +19,8 @@ const assert = require('node:assert/strict');
   const v = normalize({
     schema: 'pcconfig.cockpit-view.v1',
     sections: {
-      computer: [{ id: 'computer_health', title: '电脑资源', text: '处理器 24%', state: 'attention', observed_at: '2026-10-12T00:29:00+08:00' },
+      computer: [{ id: 'computer_health', title: '处理器', text: '电脑读数：处理器 24%，52℃', state: 'ok', observed_at: '2026-10-12T00:29:00+08:00' },
+                 { id: 'system_resources', title: '内存/系统资源', text: '系统内核内存 8.5 GB，偏高；可分页内核内存 6.8 GB，偏高', state: 'attention', observed_at: '2026-10-12T00:29:00+08:00' },
                  { id: 'traffic', title: '套餐流量', text: '已用 521 GB', state: 'unavailable', observed_at: '2026-10-10T14:18:00+08:00' }],
       remote: [{ id: 'remote', title: '远程连接', text: '远程连接在线', state: 'ok' }],
       backup_cloud: [{ id: 'drive_upload', title: 'Google Drive 上传', text: '上传器：现在有没有在上传还不知道。18:47 读到时没在传。', state: 'ok' }],
@@ -35,9 +36,19 @@ const assert = require('node:assert/strict');
   });
   const ctx = { now, offline: false, projectUrls: {}, img: {} };
   const pc = R.computer(v, ctx);
-  assert.match(pc, /原因：系统资源超过了警戒线：非分页池（系统内核自己占的内存）现在 8 GB，24 小时涨了 5 GB/);
-  assert.match(pc, /之前定过的办法（你有空时）：下次电脑卡住时，先按几个简单步骤查一下</);
-  assert.doesNotMatch(pc, /换键盘/);
+  // 本人 10-12：内存引起的黄不能挂在处理器上；前端不再从 pc_health 自己挑触发项，用后端 system_resources 卡的原文
+  assert.doesNotMatch(pc, /原因：|cp-reason|cp-plan|非分页池/);
+  assert.match(pc, /cp-card is-green"><h3>.*?处理器<\/h3><p>电脑读数：处理器 24%，52℃<\/p>/);
+  assert.match(pc, /cp-card is-yellow"><h3>.*?内存\/系统资源<\/h3><p>系统内核内存 8.5 GB，偏高；可分页内核内存 6.8 GB，偏高<\/p>/);
+  // 首屏：总览给 ok 但资源卡亮黄时不能显示成全好；说的是资源，不是处理器
+  const ov = { stale: () => false, lamp: () => '' };
+  const top = R.page({ ...v, overview: { as_of: '2026-10-12T00:29:00+08:00', score: 90, signals: [{ id: 'computer', level: 'ok' }], reasons: [] } }, { ...ctx, ov });
+  const cell = /<li class="cp-tri-cell is-(\w+)" data-signal="computer">(.*?)<\/li>/.exec(top);
+  assert.ok(cell, '首屏有电脑格');
+  assert.equal(cell[1], 'yellow');
+  assert.match(cell[2], /内存\/系统资源偏高/);
+  assert.match(cell[2], /系统内核内存 8.5 GB，偏高/);
+  assert.doesNotMatch(cell[2], /处理器偏热|处理器 24%/);
   assert.match(pc, /这是 10月10日 14:18 读到的，之后 34 小时没读到新的/);
   assert.match(pc, /笔记本（副机）：在线/);
   assert.match(R.backup(v, ctx), /上传器：18:47 读到时没在传。现在有没有在上传还不知道。/);
@@ -55,6 +66,26 @@ const assert = require('node:assert/strict');
   const pc0 = R.computer(bare, ctx);
   assert.doesNotMatch(pc0, /原因：|笔记本|cp-plan/);
   assert.deepEqual(riverSnapshot(bare).today_errors, []);
+  // 要你处理的卡：短标题不遮 next_step；完成条件写成“办完后”；空说明不出栏；按种类给按钮
+  const todo = { id: 'pending-1', copy_ai_id: 'pending-1', title: '十月旅游去哪 · 三方盲测对照', project: '', where: 'pc', minutes: 5,
+    next_step: '两道题各选一个，点页里的“生成我的答复” 最后核对：2026-10-12 13:34（北京时间）。', done_when: 'AI 收到你的答复后关闭本条。',
+    steps: ['在电脑上打开汇报页'], options: [], why_you: '这是你自己的选择', consequence: '待补说明', at: '2026-10-12T12:49:00+08:00' };
+  const one = (x) => R.needYou(normalize({ schema: 'pcconfig.cockpit-view.v1', need_you: [x] }), ctx);
+  const d = one({ ...todo, ask_kind: 'decision' });
+  assert.match(d, /<ol class="cp-steps"><li>在电脑上打开汇报页<\/li><li>两道题各选一个，点页里的“生成我的答复”<\/li><\/ol>/);
+  assert.match(d, /在电脑上办，约 5 分钟<i aria-hidden="true"> · <\/i>办完后：AI 收到你的答复后关闭本条/);
+  assert.doesNotMatch(d, /待补说明|不做会怎样|项目：|复制我的回答|复制给 AI|最后核对/);
+  assert.match(d, />不做了<\/button>/); assert.match(d, />问 AI<\/button>/); assert.doesNotMatch(d, /cp-btn-main/);
+  assert.match(d, /data-copy-text="（驾驶舱条目 pending-1）「十月旅游去哪 · 三方盲测对照」这件不做了，请核对后移出要做的事并记下结果"/);
+  assert.match(d, /按钮只复制一句话，贴到任意 AI 对话发送即可/);
+  const a = one({ ...todo, ask_kind: 'action' });
+  assert.match(a, /cp-btn-main" data-copy-text="（驾驶舱条目 pending-1）「十月旅游去哪 · 三方盲测对照」我已经做完了，请核实后关掉这条">我做完了/);
+  const q = one({ ...todo, ask_kind: 'decision', questions: [{ id: 'q1', text: '去哪', options: ['海边', '山里'], note: true }, { id: 'q2', text: '几天', options: ['三天', '五天'] }] });
+  assert.equal((q.match(/class="cp-q"/g) || []).length, 2);
+  assert.equal((q.match(/data-note/g) || []).length, 1);
+  assert.match(q, /data-copy-answer[^>]*disabled>复制我的答复/);
+  // 旧条目只有 options：当成一道题
+  assert.equal((one({ ...todo, options: ['甲', '乙'] }).match(/class="cp-q"/g) || []).length, 1);
 })().catch((e) => { console.error(e); process.exit(1); });
 """
 

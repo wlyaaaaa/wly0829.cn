@@ -35,18 +35,64 @@ function paint() {
     if (!c.ov && /^(overview|lamp-)/.test(node.dataset.cp)) continue;
     const html = fn(view, c);
     if (node.innerHTML !== html) {
-      // 展开着的“AI 在核对”保持展开
+      // 展开着的“AI 在核对”保持展开；卡片上已经选的答案和写的补充，换字时原样留着
       const open = [...node.querySelectorAll('details[open]')].map((d) => d.id).filter(Boolean);
+      const answers = saveAnswers(node);
       node.innerHTML = html;
       open.forEach((id) => node.querySelector('#' + CSS.escape(id))?.setAttribute('open', ''));
+      restoreAnswers(node, answers);
     }
   }
   const river = window.todayRiver;
   if (river?.ready && view.automation.items.length) river.setSnapshot(riverSnapshot(view), false);
 }
 
+// 卡片上的题：单选，再点一次取消；至少选了一题，“复制我的答复”才能点
+const qKey = (q) => (q.closest('.cp-ask')?.id || '') + '/' + q.dataset.q;
+function saveAnswers(node) {
+  return [...node.querySelectorAll('.cp-q')].map((q) => ({ key: qKey(q), opt: q.querySelector('.cp-opt[aria-pressed="true"]')?.dataset.opt, note: q.querySelector('[data-note]')?.value || '' })).filter((a) => a.opt || a.note);
+}
+function restoreAnswers(node, answers) {
+  for (const a of answers) {
+    const q = [...node.querySelectorAll('.cp-q')].find((x) => qKey(x) === a.key);
+    if (!q) continue;
+    q.querySelectorAll('.cp-opt').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.opt === a.opt)));
+    const n = q.querySelector('[data-note]'); if (n) n.value = a.note;
+  }
+  node.querySelectorAll('.cp-ask').forEach(syncAnswer);
+}
+function syncAnswer(card) {
+  const b = card.querySelector('[data-copy-answer]');
+  if (b) b.disabled = !card.querySelector('.cp-opt[aria-pressed="true"]');
+}
+function answerText(card, b) {
+  const qs = [...card.querySelectorAll('.cp-q')];
+  const parts = qs.map((q) => {
+    const opt = q.querySelector('.cp-opt[aria-pressed="true"]')?.dataset.opt;
+    if (!opt) return '';
+    const head = qs.length > 1 || q.dataset.qtext ? `第${q.dataset.qn}题${q.dataset.qtext ? ' ' + q.dataset.qtext : ''}→` : '';
+    return head + opt;
+  }).filter(Boolean);
+  const notes = qs.map((q) => q.querySelector('[data-note]')?.value.trim()).filter(Boolean);
+  return `${b.dataset.ref}关于${b.dataset.name}，我的答复：${parts.join('；')}${notes.length ? `；补充：${notes.join('；')}` : ''}`;
+}
+document.addEventListener('click', (e) => {
+  const o = e.target instanceof Element ? e.target.closest('.cp-q .cp-opt') : null;
+  if (!o) return;
+  const on = o.getAttribute('aria-pressed') !== 'true';
+  o.closest('.cp-q').querySelectorAll('.cp-opt').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+  o.setAttribute('aria-pressed', String(on));
+  syncAnswer(o.closest('.cp-ask'));
+});
+
+// 几次读取可能同时在路上（页面刚打开那次、每分钟那次、刷新按钮那次），回来的先后不一定。
+// 只认比已显示那次更晚发出的：晚到的旧失败不能把新结果说成“连不上”，晚到的旧数据也不能盖掉新数据。
+let asked = 0, shown = 0;
 async function load(wake = false) {
+  const turn = ++asked;
   const v = await read(wake);
+  if (turn < shown) return v;
+  shown = turn;
   if (v) { view = v; offline = false; } else offline = true;
   paint();
   return v;
@@ -71,12 +117,12 @@ window.CockpitData = { refresh, get view() { return view; } };
 // 复制给 AI：只给条目 id，让 AI 去本机接口读那一条的 ai_hint，不内嵌日志
 const prompt = (ids) => ids.map((id) => `驾驶舱条目 ${id}`).join('；') + '：请读本机状态接口（/computer-access/api/status 全量）里这些 id 的条目和 ai_hint，处理后核实，按规矩关闭。';
 document.addEventListener('click', async (e) => {
-  const b = e.target instanceof Element ? e.target.closest('[data-copy-ai],[data-copy-ai-all],[data-copy-text]') : null;
-  if (!b) return;
-  // “复制我的选择 / 复制我的回答 / 这件不做了”：只把按钮上写好的一段话放进剪贴板，不发任何请求
+  const b = e.target instanceof Element ? e.target.closest('[data-copy-ai],[data-copy-ai-all],[data-copy-text],[data-copy-answer]') : null;
+  if (!b || b.disabled) return;
+  // “复制我的答复 / 我做完了 / 不做了 / 问 AI”：只把一段话放进剪贴板，不发任何请求
   const ids = b.hasAttribute('data-copy-ai-all') ? view.need_you.map((x) => x.copy_ai_id || x.id) : [b.dataset.copyAi];
-  const text = b.hasAttribute('data-copy-text') ? b.dataset.copyText : prompt(ids);
-  try { await navigator.clipboard.writeText(text); b.dataset.done = '已复制，贴给 AI'; } catch { b.dataset.done = '复制不了，请手动选中'; }
+  const text = b.hasAttribute('data-copy-answer') ? answerText(b.closest('.cp-ask'), b) : b.hasAttribute('data-copy-text') ? b.dataset.copyText : prompt(ids);
+  try { await navigator.clipboard.writeText(text); b.dataset.done = '已复制，去 AI 对话粘贴发送'; } catch { b.dataset.done = '复制不了，请手动选中'; }
   setTimeout(() => delete b.dataset.done, 2500);
 });
 

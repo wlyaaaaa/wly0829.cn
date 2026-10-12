@@ -23,13 +23,13 @@ const assert = require('node:assert/strict');
     newly_deferred: [{ id: 'd1', title: '换键盘', reason: '14 天没回应' }], next_run_at: '2026-10-19T13:00:00+08:00' };
   const v = normalize({ schema: 'pcconfig.cockpit-view.v1', ai_following: ai, deferred, governance: { next_run_at: last_run.next_run_at, last_run } });
   const html = R.needYou(v, ctx);
-  assert.match(html, /这周 AI 体检（10月12日 13:00）：修好 5、关掉 3、转暂缓 2、还在跟 12、要你 1 件（在上面） · 下次 10月19日 13:00/);
-  assert.match(html, /复制给 AI 问详情/);
+  assert.match(html, /这周 AI 体检（10月12日 13:00）：修好 5、关掉 3、转暂缓 2、还在跟 12、要你办 1 件（在上面） · 下次 10月19日 13:00/);
+  assert.match(html, /问 AI 详情/);
   assert.equal((html.match(/data-copy-ai="act-/g) || []).length, 3, '行动项最多 3 条');
   assert.match(html, /<details class="cp-more cp-gov-more" id="gov-closed"><summary>本周自动关掉 1 件<\/summary>.*视频那条.*本人 06:05/);
   assert.match(html, /id="gov-deferred"><summary>本周新转暂缓 1 件/);
   assert.match(html, /暂缓 · 你有空时可以做（1 件，不急）/);
-  assert.match(html, /为什么暂缓：14 天没回应，你可能不想做，想做时说一声 · 什么时候/);
+  assert.match(html, /为什么暂缓：14 天没回应，你可能不想做，想做时说一声<\/small>/);
   assert.match(html, /暂缓 · AI 等条件到了再做（1 件，你不用管）/);
   // 没有交给 AI 的事时体检行照样出
   assert.match(R.needYou(normalize({ schema: 'pcconfig.cockpit-view.v1', governance: { last_run } }), ctx), /现在没有交给 AI 的事。<\/p><div class="cp-gov">/);
