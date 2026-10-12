@@ -85,8 +85,14 @@ document.addEventListener('click', (e) => {
   syncAnswer(o.closest('.cp-ask'));
 });
 
+// 几次读取可能同时在路上（页面刚打开那次、每分钟那次、刷新按钮那次），回来的先后不一定。
+// 只认比已显示那次更晚发出的：晚到的旧失败不能把新结果说成“连不上”，晚到的旧数据也不能盖掉新数据。
+let asked = 0, shown = 0;
 async function load(wake = false) {
+  const turn = ++asked;
   const v = await read(wake);
+  if (turn < shown) return v;
+  shown = turn;
   if (v) { view = v; offline = false; } else offline = true;
   paint();
   return v;
