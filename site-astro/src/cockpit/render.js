@@ -548,7 +548,8 @@ function triCells(v, ctx, off) {
   const bkMore = bkWhy.length > 1 ? `另有 ${bkWhy.length - 1} 项：${bkWhy.slice(1).join('、')}` : Number.isFinite(bk.value) && bk.level !== 'ok' ? `共 ${bk.value} 项不正常` : '';
   return [
     make('computer', '电脑', pcLevel, pc, pcStatus, '你不用管', '正常', pcDetail),
-    make('tasks', '自动任务', tkLevel, tk, tkStatus, '电脑自己按时跑', '都正常', tkWhy, tkNote),
+    // 现在没有仍失败的、也没有当前反复出错的：这一格就是正常（绿），不因后端 color=neutral 写成“今天都正常，AI 在管”
+    make('tasks', '自动任务', tkLevel, nErr === 0 && !repeat.length ? { ...tk, color: 'ok' } : tk, tkStatus, '电脑自己按时跑', '都正常', tkWhy, tkNote),
     make('backup', '备份', bk.level, bk, bkStatus, '你不用管', '都按时', bkMore),
   ];
 }
