@@ -157,7 +157,8 @@ def plan_pin(preparation):
     immutable['github_files'] = {key: value for key, value in plan['github_files'].items() if key != 'release-manifest.json'}
     identity = hashlib.sha256(json.dumps(immutable, sort_keys=True, separators=(',', ':')).encode('utf-8')).hexdigest()
     return shared() / 'pins' / (pin_id + '.json'), {'schema': 'wly.oss-pin.v1', 'bucket': BUCKET, 'plan': str(plan_path),
-        'plan_sha256': digest(plan_path), 'identity_sha256': identity, 'release_id': plan['release_id'], 'objects': objects}, plan
+        'plan_sha256': digest(plan_path), 'plan_snapshot': plan_path.read_bytes().decode('utf-8'),
+        'identity_sha256': identity, 'release_id': plan['release_id'], 'objects': objects}, plan
 
 
 def pin(preparation):
@@ -258,10 +259,24 @@ def collect_verified(args):
             raise ValueError('Finalized publication requires its frozen predecessor fingerprint and rollback inventory')
     rollback = rollback_keep(args.preparation, plan, args.commit, persist=not dry_run)
     keep.update(rollback)
-    retired, pending = None, []
+    retired, pending, missing_plans = None, [], False
     for path in (shared() / 'pins').glob('*.json'):
         value = read(path)
-        if value.get('schema') != 'wly.oss-pin.v1' or value.get('bucket') != BUCKET or digest(value['plan']) != value['plan_sha256']:
+        if value.get('schema') != 'wly.oss-pin.v1' or value.get('bucket') != BUCKET:
+            raise ValueError('Unknown or changed in-flight pin; collection is incomplete')
+        snapshot = value.get('plan_snapshot')
+        try:
+            source_sha = digest(value['plan'])
+        except FileNotFoundError:
+            source_sha = None
+        plan_sha = hashlib.sha256(snapshot.encode('utf-8')).hexdigest() if snapshot is not None else source_sha
+        if plan_sha is None:
+            keep.update(value['objects'])
+            pending.append({'pin_id': path.stem, 'plan_sha256': value['plan_sha256'], 'objects': len(value['objects']),
+                            'reason': 'In-flight plan missing; registered objects retained'})
+            missing_plans = True
+            continue
+        if plan_sha != value['plan_sha256'] or (source_sha is not None and source_sha != plan_sha):
             raise ValueError('Unknown or changed in-flight pin; collection is incomplete')
         if (path == own and value['plan_sha256'] == own_value['plan_sha256'] and current.get('release_id')
                 and value.get('release_id') == plan.get('release_id') == current['release_id']
@@ -298,7 +313,7 @@ def collect_verified(args):
             deferred[key] = 'Missing or differing verification receipt; retained'
         else: targets.append(key)
     args.report.parent.mkdir(parents=True, exist_ok=True)
-    result = {'schema': 'wly.oss-collection.v1', 'status': 'incomplete' if deferred else 'complete',
+    result = {'schema': 'wly.oss-collection.v1', 'status': 'incomplete' if deferred or missing_plans else 'complete',
               'dry_run': dry_run, 'deferred': deferred, 'pending_pins': pending,
               'retired_pin': retired.stem if retired else None, 'candidate_objects': len(candidates),
               'inspected_objects': len(inspected), 'max_keys': budget, 'already_absent_objects': len(absent),
@@ -307,7 +322,7 @@ def collect_verified(args):
     write(args.report.with_name(args.report.stem+'-plan.json'), {**result, 'status': 'dry_run'})
     if dry_run:
         write(args.report, {**result, 'status': 'dry_run'})
-        return 1 if deferred else 0
+        return 1 if deferred or missing_plans else 0
     if retired:
         require_lock(args.lock_holder)
         retired.unlink()
@@ -335,13 +350,13 @@ def collect_verified(args):
         deleted.extend(key for key in keys if key not in after)
         for key in after:
             deferred[key] = 'Exact target remains after deletion; retained'
-    result.update(status='incomplete' if deferred else 'complete', deferred=deferred,
+    result.update(status='incomplete' if deferred or missing_plans else 'complete', deferred=deferred,
                   deleted_objects=len(deleted), deleted_bytes=sum(managed['objects'][key]['bytes'] for key in deleted))
     for key in set(deleted) | absent:
         managed['objects'].pop(key)
     write(shared()/'managed.json', managed)
     write(args.report, result)
-    return 1 if deferred else 0
+    return 1 if deferred or missing_plans else 0
 
 
 def main():

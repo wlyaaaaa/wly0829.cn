@@ -124,7 +124,7 @@ class VisitorTests(unittest.TestCase):
 
     def sls_row(self):
         return {"__time__": str(datetime(2026, 10, 12, 10, tzinfo=query.TZ).timestamp()),
-                "client_ip": "203.0.113.1", "user_agent": UA, "http_status": "200",
+                "client_ip": "203.0.113.1", "user_agent": UA, "http_status": "200", "http_method": "GET",
                 "bucket": query.SOURCE, "operation": "GetObject", "request_id": "shared",
                 "request_uri": quote("/_v.gif?" + urlencode({"x-v": "visitor-A", "x-p": "/甲&/",
                     "x-ref": "https://example.com/?a=1&b=2", "x-self": "0"}), safe="")}
@@ -174,7 +174,7 @@ class VisitorTests(unittest.TestCase):
         def page(data, progress="Complete"):
             return {"meta": {"count": len(data), "progress": progress}, "data": data}
         row = self.sls_row()
-        pages = [{"body": page([], "Incomplete")}, page([row] * 100), {"body": json.dumps(page([row]))}]
+        pages = [page([], "Incomplete"), page([row] * 100), page([row])]
         stamp = datetime(2026, 10, 12, tzinfo=query.TZ)
         with patch.object(query, "cli_run", side_effect=[json.dumps(p) for p in pages]) as cloud, patch.object(query.time, "sleep"):
             self.assertEqual(len(query.sls_logs(args, stamp, stamp + timedelta(days=1))), 101)
