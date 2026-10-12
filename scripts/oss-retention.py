@@ -147,6 +147,8 @@ def plan_pin(preparation):
         raise ValueError('Only the existing Shanghai website generation is authorized')
     objects = {row['key']: {'bytes': row['bytes'], 'sha256': row['sha256']} for row in plan['objects'].values()}
     for key in plan.get('reference_keys', []):
+        # The permanent no-store visitor pixel is not a generated release object.
+        if key == '_v.gif': continue
         objects.setdefault(key, {})
     if not objects or any(not key.startswith('releases/') for key in objects):
         raise ValueError('Invalid website object keys')
