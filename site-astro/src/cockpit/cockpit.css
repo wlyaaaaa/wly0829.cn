@@ -394,6 +394,7 @@
   .cp-security-title, .cp-sec-item { display: none !important; }
   .cp-security { display: block; }
   .cp-sec-line { display: flex; align-items: center; gap: 0; padding: 8px 12px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fff; font-size: 13px; line-height: 1.45; color: var(--cp-ink) !important; text-decoration: none; }
-  .cp-sec-line span { flex: 1; min-width: 0; }
+  .cp-sec-line > span:not(.cp-dot) { flex: 1; min-width: 0; }
+  .cp-sec-line > .cp-dot { flex: none; }
   .cp-sec-line b { color: var(--cp-title); margin-left: 6px; }
 }
