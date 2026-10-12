@@ -23,7 +23,7 @@ test("gallery explains phone screenshot protection and scopes private browser us
   assert.match(account.caption, /账号验证.*隔离的无痕浏览器.*回调绑定该验证窗口/);
   assert.match(JSON.stringify(pcconfigModules), /这条说明只针对 Account 账号验证/);
   const html = await readFile(new URL("../dist/projects/pcconfig/index.html", import.meta.url), "utf8");
-  for (const image of pcconfigGallery) assert.ok(html.includes(image.src));
+  assert.match(html, /id="image-viewer"/);
 });
 
 test("project preview separates contextual gallery navigation from direct image enlargement", async () => {

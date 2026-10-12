@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { globSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -54,7 +55,7 @@ test("video-scaffold is registered as a published project in the final plan", as
   assert.ok(projectCatalog.some((entry) => entry.project.slug === "video-scaffold"));
 });
 
-test("video-scaffold exposes seven source-backed modules and two reading tabs", async () => {
+test("video-scaffold exposes seven source-backed modules and static reading sections", async () => {
   assert.deepEqual(videoScaffoldModules.map((item) => item.slug), expectedModuleSlugs);
   assert.ok(routePaths.includes(videoScaffoldProject.route));
   for (const slug of expectedModuleSlugs) {
@@ -74,11 +75,7 @@ test("video-scaffold exposes seven source-backed modules and two reading tabs", 
     }
   }
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "video-scaffold", "index.html"), "utf8");
-  assert.equal((overviewHtml.match(/data-project-reading-tab=/g) || []).length, 2);
-  assert.match(overviewHtml, /aria-selected="true"[^>]*data-project-reading-tab="product"/);
-  assert.match(overviewHtml, /aria-selected="false"[^>]*data-project-reading-tab="technical"/);
-  assert.match(overviewHtml, /id="project-reading-panel-product"[^>]*data-project-reading-panel="product"[^>]*role="tabpanel"/);
-  assert.match(overviewHtml, /id="project-reading-panel-technical"[^>]*data-project-reading-panel="technical"[^>]*role="tabpanel"[^>]*hidden(?:=""|\s|>)/);
+  for (const id of ["usage", "tech", "features", "history", "ai-brief"]) assert.match(overviewHtml, new RegExp(`id="${id}"`));
 });
 
 test("video-scaffold snapshot separates verified source and environment from an unrun full video", () => {
@@ -108,10 +105,10 @@ test("video-scaffold module search is explicit and natural requests reach the ow
   for (const [query, href] of cases) {
     assert.ok(searchPanel(query).slice(0, 5).some((entry) => entry.href === href), `search misses ${query}`);
   }
-  const asset = await readFile(path.join(projectRoot, "dist", "search-project-video-scaffold.js"), "utf8");
+  const asset = await readFile(path.join(projectRoot, globSync("dist/_runtime/**/search-project-video-scaffold.js", { cwd: projectRoot })[0]), "utf8");
   const match = asset.match(/^window\.__WLY_PROJECT_SEARCH_INDEX__=([\s\S]*);\s*$/);
   assert.ok(match);
-  assert.deepEqual(JSON.parse(match[1]).map((item) => item.href), expectedModuleSlugs.map((slug) => `/projects/video-scaffold/${slug}/`));
+  assert.deepEqual(JSON.parse(match[1]).filter((item) => !item.href.includes("#")).map((item) => item.href), expectedModuleSlugs.map((slug) => `/projects/video-scaffold/${slug}/`));
 });
 
 test("video-scaffold stays reachable from its own project route without a duplicate System card", () => {

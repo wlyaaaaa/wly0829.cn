@@ -45,7 +45,7 @@ test("sunshine-remote-streaming is registered as a published project in the fina
   assert.ok(projectCatalog.some((item) => item.project.slug === "sunshine-remote-streaming"));
 });
 
-test("sunshine-remote-streaming exposes source-backed modules and two reading tabs", async () => {
+test("sunshine-remote-streaming exposes source-backed modules and static reading sections", async () => {
   assert.ok(moduleSlugs.length > 0);
   assert.equal(new Set(moduleSlugs).size, moduleSlugs.length, "module slugs must remain unique");
   assert.ok(routePaths.includes(sunshineRemoteStreamingProject.route));
@@ -74,11 +74,7 @@ test("sunshine-remote-streaming exposes source-backed modules and two reading ta
     overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "sunshine-remote-streaming", "index.html"), "utf8");
   } catch {}
   if (overviewHtml) {
-    assert.equal((overviewHtml.match(/data-project-reading-tab=/g) || []).length, 2);
-    assert.match(overviewHtml, /aria-selected="true"[^>]*data-project-reading-tab="product"/);
-    assert.match(overviewHtml, /aria-selected="false"[^>]*data-project-reading-tab="technical"/);
-    assert.match(overviewHtml, /id="project-reading-panel-product"[^>]*data-project-reading-panel="product"[^>]*role="tabpanel"/);
-    assert.match(overviewHtml, /id="project-reading-panel-technical"[^>]*data-project-reading-panel="technical"[^>]*role="tabpanel"[^>]*hidden(?:=""|\s|>)/);
+    for (const id of ["usage", "tech", "features", "history", "ai-brief"]) assert.match(overviewHtml, new RegExp(`id="${id}"`));
   }
 });
 

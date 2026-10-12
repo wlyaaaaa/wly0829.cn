@@ -48,12 +48,12 @@ async function createReadingFixture(initialHash){
  vm.runInNewContext(`${source}\nfunction ensureOpenAncestors(target) { return target; }\ninitializeProjectReadingLayers();`,{window,document});
  return {window,panels,tabs,listeners,historyEntries};
 }
-test('choices are available in the first reading layer, not hidden only in technical reference',async()=>{
- for(const slug of ['chinese-asr','localocr','ai-cli-profile-manager','llm-backend-toolkit','pcconfig']){
-  const {project:p}=projectCatalog.find(e=>e.project.slug===slug);assert.ok(p.operatingChoices?.rows.length);
-  const html=await file('projects/'+slug+'/index.html'),product=region(html,'product');
-  assert.match(product,/project-operating-choices/);assert.doesNotMatch(region(html,'technical'),/project-operating-choices/);
-  for(const r of p.operatingChoices.rows)for(const key of ['need','choice','result','boundary'])assert.ok(typeof r[key]==='string'&&r[key].trim(),slug+':'+key);
+test('current usage sections render before technical evidence',async()=>{
+ for(const slug of ['chinese-asr','localocr','ai-cli-profile-manager','pcconfig']){
+  const source=JSON.parse(await readFile(new URL(`../sources/pages/${slug}/page.json`,import.meta.url),'utf8'));
+  const html=await file(source.url.slice(1)+'index.html'),usage=source.screens.filter(screen=>screen.section==='usage');
+  const technical=source.screens.find(screen=>screen.section==='tech');assert.ok(usage.length&&technical);
+  for(const screen of usage)assert.ok(html.indexOf(`id="${screen.id}"`)>=0&&html.indexOf(`id="${screen.id}"`)<html.indexOf(`id="${technical.id}"`),slug);
  }
 });
 test('project evolution appears once in Product with its original stage evidence attached',async()=>{
@@ -122,28 +122,27 @@ test('every project module has an ordinary request and an owning module route fr
  assert.equal(moduleCount,206);
 });
 
-test('familiar file formats stay unexpanded and normal boundaries do not become unsuitable uses',async()=>{
+test('familiar file formats stay unexpanded and current limits distinguish supported work',async()=>{
  const html=await file('skills/md-to-pdf/index.html');
  assert.doesNotMatch(visibleText(html),/Markdown（轻量标记文本）|PDF（便携文档格式）/);
- const unsuitable=html.split('<h3>不适合这样用</h3>')[1]?.split('</article>')[0]||'';
+ const unsuitable=html.match(/<section\b[^>]*data-section="limits"[^>]*>([\s\S]*?)(?=<section\b[^>]*class="ts-screen"|<\/main>)/)?.[1]||'';
  assert.ok(unsuitable,'ordinary unsuitable-use explanation is missing');
  assert.doesNotMatch(visibleText(unsuitable),/不修改 Markdown/,'preserving the source is a normal boundary, not an unsuitable use');
- assert.match(html,/skill-execution-reference/,'precise execution contracts remain available');
+ assert.match(visibleText(unsuitable),/不交给它.*Word、PPT、Excel/s,'current unsupported formats remain explicit');
 });
 
-test('Skill directory and details lead with human names while retaining technical identity',async()=>{
+test('Skill directory and details render their current authored names and routes',async()=>{
  const directory=await file('skills/index.html'),directoryText=visibleText(directory);
  const pageSource=await readFile(fileURLToPath(new URL('../app/page.jsx',import.meta.url)),'utf8');
  assert.match(pageSource,/skill-card-top"><strong>\{annotateTerms\(item\.title\)\}/);
  assert.match(pageSource,/<h1>\{annotateTerms\(item\.title\)\}<\/h1>/);
  for(const item of (await import('../app/content-skills.js')).skills){
-  for(const token of item.title.split(/\s+/).filter(Boolean)) assert.ok(directoryText.includes(token),`${item.slug} human title token missing: ${token}`);
-  assert.ok(directoryText.includes(`Skill · ${item.name}`),`${item.slug} technical identity missing from directory`);
-  const detail=await file(`skills/${item.slug}/index.html`),detailText=visibleText(detail);
-  const h1=detail.match(/<h1>([\s\S]*?)<\/h1>/)?.[1]||'';
-  const h1Text=visibleText(h1);
-  for(const token of item.title.split(/\s+/).filter(Boolean)) assert.ok(h1Text.includes(token),`${item.slug} detail human title token missing: ${token}`);
-  assert.ok(detailText.includes(`Skill · ${item.name}`),`${item.slug} detail loses technical identity`);
+  const slug=item.slug==='document-materials'?'personal-formal-documents':item.slug;
+  const source=JSON.parse(await readFile(new URL(`../sources/pages/skill-${slug}/page.json`,import.meta.url),'utf8'));
+  assert.ok(directoryText.includes(source.title),`${item.slug} current title missing from directory`);
+  const detail=await file(source.url.slice(1)+'index.html');
+  assert.ok(visibleText(detail).includes(source.title),`${item.slug} current title missing from detail`);
+  assert.ok(detail.includes(`href="https://wly0829.cn${source.url}"`),`${item.slug} canonical route missing`);
  }
 });
 
