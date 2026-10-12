@@ -259,6 +259,26 @@ class VisitorTests(unittest.TestCase):
         self.assertEqual(result["total"]["pageviews"], 2)
         self.assertEqual([query.app_name(UA + token) for token in (" MicroMessenger", " DingTalk", " Lark", " bosszp")], ["微信", "钉钉", "飞书/Lark", "Boss 直聘"])
 
+    def test_deep_read_thresholds_sessions_watermark_exclusions_and_no_ips(self):
+        rows = ""
+        for visitor, page, seconds, minute, extra, ua in (("project", "/projects/demo/", 120, "02", {}, UA), ("project", "/projects/demo/", 120, "03", {}, UA),
+                ("home", "/", 120, "02", {}, UA), ("short", "/projects/demo/", 119, "02", {}, UA), ("self", "/", 999, "02", {"x-self": "1"}, UA),
+                ("monitor", "/", 999, "02", {"x-monitor": "1"}, UA), ("bot", "/", 999, "02", {}, UA + " Googlebot"), ("old", "/", 120, "00", {}, UA)):
+            rows += log(f"12/Oct/2026:10:{minute}:00 +0800", v=visitor, p=page, ua=ua, extra={"x-id": page, "x-event": "leave", "x-visible": str(seconds), **extra})
+        for visitor, hours in (("multi", (10, 10, 10)), ("split", (10, 10, 11))):
+            for index, hour in enumerate(hours):
+                rows += log(f"12/Oct/2026:{hour}:0{index + 2}:00 +0800", v=visitor, p=f"/page-{index}", extra={"x-id": str(index), "x-event": "leave", "x-visible": "60"})
+        rows += log("12/Oct/2026:10:02:00 +0800", v="estimate", p="/", extra={"x-event": "view"}) + log("12/Oct/2026:10:04:00 +0800", v="estimate", p="/second", extra={"x-event": "view"})
+        since = datetime(2026, 10, 12, 10, 1, tzinfo=query.TZ)
+        output = self.analyze([rows], deep_since=since)["deep_read"]
+        people = {person["id"]: person for person in output["visitors"]}
+        self.assertEqual(set(people), {"project", "home", "multi"})
+        self.assertEqual(people["project"]["pages"], [{"path": "/projects/demo", "visible_seconds": 120}])
+        self.assertEqual(sum(page["visible_seconds"] for page in people["multi"]["pages"]), 180)
+        self.assertEqual(people["project"]["first_at"], "2026-10-12T10:02:00+08:00")
+        self.assertNotIn("203.0.113.1", json.dumps(output))
+        self.assertEqual(set(json.loads(subprocess.run([sys.executable, "-B", "-X", "utf8", query.__file__, "--logs-dir", str(self.root), "--cache-dir", str(self.root), "--deep-read", "--since", since.isoformat(), "--json"], capture_output=True, check=True).stdout)), {"checked_at", "visitors"})
+
     def test_offline_ipv4_ipv6_network_database_boundaries(self):
         root = self.root / "networks"
         root.mkdir()
