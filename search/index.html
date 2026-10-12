@@ -364,7 +364,7 @@
     
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfilePage","name":"吴乐阳","url":"https://wly0829.cn/","mainEntity":{"@type":"Person","name":"吴乐阳","sameAs":["https://github.com/wlyaaaaa","https://x.com/wlyaaaaaaa","https://space.bilibili.com/179179701"]}}</script>
     <script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/a8d2d831d2c4738e624fa55ee53a362ecf889813f391a840a146a60f23ea8cd5/_runtime/8465bc86a1a2c30cdc04/how-demo-search-8465bc86a1a2c30cdc04.js" data-resource-retry-initial="1"></script>
-    <script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/e0e74606bbca0ecb90f96d55589432adb940f3a0bf7ee7a2191f8a98b559a406/search-index.js"></script><script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/dffd18acce668f6c9a8730e4bf17ad940d6c88a397bfa4616d4aaed9fb7a6d54/search-projects.js" data-resource-retry-initial="1"></script>
+    <script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/a61ae8a771ee2088d0851aa2273ed23a4fd0a1d0655471e363254a69422e7b97/search-index.js"></script><script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/fa9b01b3fa8a3a6c280a3eda44f98fa2d848944f196fd340fdb42a69f0f35de3/search-projects.js" data-resource-retry-initial="1"></script>
     <script type="module" crossorigin  data-album-runtime data-src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/6cca073a8b59ebdd20b46ba009c34a4db861d3daea5977703fb338a47a86da63/assets/index-audit-nav-dc91cac753f20e2e4100.js"></script>
     <link rel="stylesheet" crossorigin href="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/3b61d88abc93d5d6c0fe966149d723831908f8847aa7a561eca0bd3b2d0100c7/_runtime/b7c6490c171a16672cb4/index-C6w07o1G.css" data-resource-retry-stylesheet="1">
       
@@ -418,5 +418,41 @@
       <style>[data-rule-panel][hidden], [data-project-reading-panel][hidden] { display: block !important; } .system-workflow-tabs { display: none !important; }</style>
       <p class="noscript">脚本关闭时仍可阅读完整正文、全部工作场景并使用目录链接；搜索、规则切换和画廊缩放需要脚本增强。</p>
     </noscript>
-  </body>
+  <script data-site-visitors>(() => {
+  const endpoint = 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/_v.gif';
+  let visitor = '', self = false;
+  const query = new URLSearchParams(location.search);
+  try {
+    if (query.get('self') === '1') localStorage.setItem('wly-site-self', '1');
+    if (query.get('self') === '0') localStorage.removeItem('wly-site-self');
+    self = localStorage.getItem('wly-site-self') === '1';
+    visitor = localStorage.getItem('wly-site-visitor') || '';
+    if (!visitor) {
+      visitor = crypto.randomUUID();
+      localStorage.setItem('wly-site-visitor', visitor);
+    }
+  } catch { visitor = ''; }
+  self = query.get('self') === '1' || (query.get('self') !== '0' && self);
+  const send = () => {
+    try {
+      // 来源分布只需域名和路径，避免把来源网址中的凭据查询串写入日志。
+      const ref = document.referrer ? new URL(document.referrer) : null;
+      const params = new URLSearchParams({
+        'x-v': visitor, 'x-p': location.pathname,
+        'x-ref': ref ? ref.origin + ref.pathname : '',
+        'x-self': self ? '1' : '0', 'x-monitor': query.get('monitor') === '1' ? '1' : '0',
+        'x-r': crypto.randomUUID(), 'x-ms': String(Math.round(performance.now()))
+      });
+      const beacon = new Image(1, 1);
+      window.__siteVisitorBeacon = beacon;
+      beacon.onload = beacon.onerror = () => {
+        if (window.__siteVisitorBeacon === beacon) delete window.__siteVisitorBeacon;
+      };
+      beacon.src = endpoint + '?' + params;
+    } catch { /* 统计失败不影响网页。 */ }
+  };
+  setTimeout(send, 0);
+  addEventListener('pageshow', event => { if (event.persisted) setTimeout(send, 0); });
+})();</script>
+</body>
 </html>

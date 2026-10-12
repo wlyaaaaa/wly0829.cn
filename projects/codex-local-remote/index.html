@@ -13,4 +13,40 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'||(e.key===' '&&e.targ
       const L=ti.scrollLeft>2,R=ti.scrollLeft<max-2;ti.classList.toggle('toc-more-left',L);ti.classList.toggle('toc-more-right',R);
       ti.style.setProperty('--toc-fl',L?(fl?Math.min(Math.max(fl,24),b.width/2):12)+'px':'0px');ti.style.setProperty('--toc-fr',R?(fr?Math.min(Math.max(fr,24),b.width/2):12)+'px':'0px');};
     document.addEventListener('scroll',(e)=>{if(e.target instanceof Element&&e.target.matches('nav.toc .toc-inner'))edge();},{capture:true,passive:true});
-    addEventListener('resize',edge);addEventListener('load',edge);edge();})();</script><script defer src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/0fab744f43ecc03d060b38a23b7ee985bc7bf20004127965dc1f4b8154bd095c/_astro/toc-consistency.CWU8O7Lm.js"></script><script defer src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/fecadc194a46735c6e09b7827dda426bc4727266779bb690c635d8445dd95784/_interactions/anchor-offset.js"></script></body></html>
+    addEventListener('resize',edge);addEventListener('load',edge);edge();})();</script><script defer src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/0fab744f43ecc03d060b38a23b7ee985bc7bf20004127965dc1f4b8154bd095c/_astro/toc-consistency.CWU8O7Lm.js"></script><script defer src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/fecadc194a46735c6e09b7827dda426bc4727266779bb690c635d8445dd95784/_interactions/anchor-offset.js"></script><script data-site-visitors>(() => {
+  const endpoint = 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/_v.gif';
+  let visitor = '', self = false;
+  const query = new URLSearchParams(location.search);
+  try {
+    if (query.get('self') === '1') localStorage.setItem('wly-site-self', '1');
+    if (query.get('self') === '0') localStorage.removeItem('wly-site-self');
+    self = localStorage.getItem('wly-site-self') === '1';
+    visitor = localStorage.getItem('wly-site-visitor') || '';
+    if (!visitor) {
+      visitor = crypto.randomUUID();
+      localStorage.setItem('wly-site-visitor', visitor);
+    }
+  } catch { visitor = ''; }
+  self = query.get('self') === '1' || (query.get('self') !== '0' && self);
+  const send = () => {
+    try {
+      // 来源分布只需域名和路径，避免把来源网址中的凭据查询串写入日志。
+      const ref = document.referrer ? new URL(document.referrer) : null;
+      const params = new URLSearchParams({
+        'x-v': visitor, 'x-p': location.pathname,
+        'x-ref': ref ? ref.origin + ref.pathname : '',
+        'x-self': self ? '1' : '0', 'x-monitor': query.get('monitor') === '1' ? '1' : '0',
+        'x-r': crypto.randomUUID(), 'x-ms': String(Math.round(performance.now()))
+      });
+      const beacon = new Image(1, 1);
+      window.__siteVisitorBeacon = beacon;
+      beacon.onload = beacon.onerror = () => {
+        if (window.__siteVisitorBeacon === beacon) delete window.__siteVisitorBeacon;
+      };
+      beacon.src = endpoint + '?' + params;
+    } catch { /* 统计失败不影响网页。 */ }
+  };
+  setTimeout(send, 0);
+  addEventListener('pageshow', event => { if (event.persisted) setTimeout(send, 0); });
+})();</script>
+</body></html>
