@@ -604,7 +604,7 @@ function knowBlock(v, ctx) {
   if (!all.length) return `<div class="cp-know is-empty"><p>${dot('ok')}${esc(m.text || '没有要你知道的新事')}</p>${folded}</div>`;
   const list = all.slice(0, 5);
   return `<div class="cp-know"><p class="cp-know-k">你得知道</p><ul class="cp-know-list">${list.map(row).join('')}</ul>`
-    + (list.length > 3 ? `<p class="cp-know-more is-phone">还有 ${list.length - 3} 条（电脑上看得全）</p>` : '') + folded + `</div>`;
+    + (all.length > 2 ? `<p class="cp-know-more is-phone">还有 ${all.length - 2} 条（电脑上看得全）</p>` : '') + folded + `</div>`;
 }
 const overview = (v, ctx) => {
   if (!ctx.ov) return '';
