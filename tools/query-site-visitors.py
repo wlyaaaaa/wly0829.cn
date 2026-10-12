@@ -7,6 +7,7 @@ import argparse
 import bisect
 from collections import Counter, defaultdict
 from datetime import date, datetime, timedelta, timezone
+from functools import lru_cache
 import gzip
 import hashlib
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -79,7 +80,7 @@ def parse_sls_row(row):
         operation = row["operation"]
         return {"time": datetime.fromtimestamp(float(row["__time__"]), TZ),
                 "ip": str(ipaddress.ip_address(row["client_ip"])),
-                "method": row.get("http_method", {"GetObject": "GET", "HeadObject": "HEAD"}.get(operation, "")),
+                "method": row["http_method"],
                 "status": int(row["http_status"]), "path": path, "params": params,
                 "ua": ua,
                 "bucket": row["bucket"], "operation": operation,
@@ -89,10 +90,8 @@ def parse_sls_row(row):
 
 
 class SlsTunnel(BaseHTTPRequestHandler):
-    """Process-local CONNECT relay; TLS and CLI credential handling remain intact."""
     def log_message(self, *args):
         pass
-
     def do_CONNECT(self):
         host, _, port = self.path.rpartition(":")
         if port != "443" or not (host == "cn-shanghai.log.aliyuncs.com" or host.endswith(".cn-shanghai.log.aliyuncs.com")):
@@ -112,19 +111,28 @@ class SlsTunnel(BaseHTTPRequestHandler):
         except OSError:
             return
 
+@lru_cache(maxsize=1)
+def sls_address():
+    for attempt in range(3):
+        try:
+            with urlopen("https://dns.google/resolve?name=cn-shanghai.log.aliyuncs.com&type=A", timeout=15) as response:
+                answers = json.load(response).get("Answer", [])
+            addresses = [str(ipaddress.IPv4Address(row["data"])) for row in answers if row.get("type") == 1]
+            if addresses:
+                return addresses[0]
+        except OSError:
+            if attempt == 2:
+                raise
+    raise RuntimeError("无法解析 SLS 服务地址；未将连接失败当作零访客")
+
 
 def cli_run(command):
     relay, env = None, None
     if command[1] == "sls" and any(address[4][0].startswith(("198.18.", "198.19."))
                                   for address in socket.getaddrinfo("cn-shanghai.log.aliyuncs.com", 443)):
-        # The installed TUN's fake-IP route failed; resolve only the public SLS host.
-        with urlopen("https://dns.google/resolve?name=cn-shanghai.log.aliyuncs.com&type=A", timeout=15) as response:
-            answers = json.load(response).get("Answer", [])
-        addresses = [str(ipaddress.IPv4Address(row["data"])) for row in answers if row.get("type") == 1]
-        if not addresses:
-            raise RuntimeError("无法解析 SLS 服务地址；未将连接失败当作零访客")
+        address = sls_address()
         relay = ThreadingHTTPServer(("127.0.0.1", 0), SlsTunnel)
-        relay.sls_address = addresses[0]
+        relay.sls_address = address
         Thread(target=relay.serve_forever, daemon=True).start()
         env = {**os.environ, "NO_PROXY": "", "HTTPS_PROXY": f"http://127.0.0.1:{relay.server_port}"}
     try:
@@ -214,8 +222,6 @@ def sls_logs(args, start, end):
                    "--profile", args.profile, "--body", json.dumps(body)]
         for attempt in range(3):
             page = json.loads(cli_run(command))
-            page = page.get("body", page) if isinstance(page, dict) else page
-            page = json.loads(page) if isinstance(page, str) else page
             if not isinstance(page, dict):
                 raise ValueError("Unknown SLS response schema")
             meta, data = page.get("meta", {}), page.get("data")
