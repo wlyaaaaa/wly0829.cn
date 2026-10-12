@@ -1014,7 +1014,7 @@
         "text": "11,382 次",
         "meaning": "剪贴板 events 表行数；blobs 表行数",
         "as_of": "2026-10-12",
-        "source": "剪贴板 clipboard_history.sqlite3 只读（mode=ro）同一事务 COUNT：events 11,382、blobs 4,277；北京时间 2026-10-12 05:37:47，不读取内容正文",
+        "source": "E:\\Data\\TimeAudit\\ClipboardHistory\\clipboard_history.sqlite3 只读（mode=ro）同一事务 COUNT：events 11,382、blobs 4,277；北京时间 2026-10-12 05:37:47，不读取内容正文",
         "screens": [
           "timeaudit-01",
           "timeaudit-06"
