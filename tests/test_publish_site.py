@@ -51,6 +51,12 @@ class PublishTests(unittest.TestCase):
                             self.assertEqual(result['oss_retention'], {'status': 'skipped_by_request', 'deleted_objects': 0, 'deleted_bytes': 0})
                         else: cleanup.assert_called_once()
                         if fail_cleanup: self.assertIn('cloud delete failed', result['oss_retention']['reason'])
+                attempt = publisher.retention.read(shared/'last-attempt.json')
+                self.assertEqual(attempt['status'], 'failed' if fail_page else result['status'])
+                self.assertEqual((attempt['dry_run'], attempt['source_commit']), (False, 'Unknown'))
+                self.assertTrue(attempt['completed_at_beijing'].endswith('+08:00'))
+                self.assertNotIn('head', attempt)
+                if fail_page: self.assertIn('GET mismatch', attempt['error'])
     def test_pages_dispatches_main_and_waits_for_returned_run_id(self):
         with unittest.mock.patch.object(publisher, 'command', side_effect=[
                 'https://github.com/wlyaaaaa/wly0829.cn/actions/runs/42',
@@ -148,6 +154,14 @@ class PublishTests(unittest.TestCase):
             with unittest.mock.patch.object(publisher, 'urlopen', opener):
                 with self.assertRaises(ValueError): publisher.head(('a.css', {'url': 'https://example.invalid/a.css', 'bytes': 1, 'sha256': '0'}), Path(folder))
             self.assertEqual(opener.call_count, 1)
+    def test_last_attempt_write_failure_keeps_the_original_error_and_receipt(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            folder = Path(temporary); (folder/'dist').mkdir()
+            options = types.SimpleNamespace(output=folder/'run', dist=folder/'dist', dry_run=False)
+            with unittest.mock.patch.object(publisher.retention, 'shared', side_effect=OSError('shared unavailable')) as shared:
+                with self.assertRaises(FileNotFoundError): publisher.publish(options)
+            shared.assert_called_once()
+            self.assertEqual(publisher.retention.read(folder/'run'/'publish-receipt.json')['status'], 'failed')
     def test_one_html_zero_resources_and_same_hash_new_key(self):
         old = {'a.js': {'key': 'releases/old/a.js', 'sha256': 'a'}, 'index.html': {'sha256': 'b'}}
         self.assertEqual(set(publisher.delta({'old/a.js': old['a.js'], 'index.html': {'sha256': 'c'}}, old)), {'index.html'})
@@ -165,8 +179,9 @@ class PublishTests(unittest.TestCase):
                 {path.relative_to(root).as_posix(): publisher.oss.digest(path) for path in root.rglob('*') if path.is_file()}})
             options = types.SimpleNamespace(output=Path(temporary)/'run', dist=root, scan_result=scan, previous_manifest=None, source_commit=None, dry_run=True)
             real = publisher.command
-            with unittest.mock.patch.object(publisher.retention, 'predecessor', return_value=None), unittest.mock.patch.object(publisher, 'command', side_effect=lambda *args, **kwargs: '' if 'ls-remote' in args else real(*args)) as commands:
+            with unittest.mock.patch.object(publisher.retention, 'predecessor', return_value=None), unittest.mock.patch.object(publisher.retention, 'shared') as shared, unittest.mock.patch.object(publisher, 'command', side_effect=lambda *args, **kwargs: '' if 'ls-remote' in args else real(*args)) as commands:
                 receipt = publisher.publish(options)
+            shared.assert_not_called()  # 干跑不写 last-attempt.json
             self.assertEqual((receipt['status'], receipt['site_dist']['parent'], receipt['uploaded_files']), ('dry_run', [], 0))
             self.assertEqual((receipt['source_commit'], receipt['source_commit_evidence']), ('a'*40, 'build receipt'))
             self.assertFalse(any('push' in call.args or publisher.CLI in call.args or 'gh' in call.args for call in commands.call_args_list))

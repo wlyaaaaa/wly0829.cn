@@ -36,6 +36,8 @@ def command(*args, timeout=None):
         raise subprocess.CalledProcessError(done.returncode, done.args, done.stdout, done.stderr)
     return done.stdout.strip()
 
+LAST_ATTEMPT_KEYS = ('schema', 'status', 'publication_status', 'dry_run', 'started_at_beijing', 'completed_at_beijing',
+                     'total_seconds', 'source_commit', 'source_commit_evidence', 'commit', 'deployment', 'error')
 RETRY_DELAYS = (0.5, 1, 2, 2, 2, 2, 2, 2)  # 连接层错误最多重试 8 次；内容核对不一致、HTTP 状态和其他错误一律不重试
 HEAD_TIMEOUT, PAGE_TIMEOUT, GH_TIMEOUT, GIT_TIMEOUT, PUSH_TIMEOUT = 8, 15, 60, 120, 600
 GIT_NET = ('-c', 'http.lowSpeedLimit=1000', '-c', 'http.lowSpeedTime=30')
@@ -357,6 +359,11 @@ def publish(args):
     finally:
         receipt['total_seconds'] = round(time.monotonic()-started, 3)
         receipt['completed_at_beijing'] = oss.stamp()
+        if not args.dry_run:  # 驾驶舱读的固定“最近一次正式尝试”，与 published.json 同目录；尽力写，写不成不改变结果和退出码
+            try:
+                retention.write(retention.shared()/'last-attempt.json', {key: receipt[key] for key in LAST_ATTEMPT_KEYS if key in receipt})
+            except Exception:
+                pass
         oss.write(output/'publish-receipt.json', receipt)
         if owned:
             command('pwsh', '-NoProfile', '-File', LOCK, '-Mode', 'Release',
