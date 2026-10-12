@@ -10,9 +10,17 @@ from urllib.request import Request, urlopen
 
 URLS = {
     'page': 'https://wly0829.cn/cockpit/',
-    'api': 'https://live.wly0829.cn/computer-access/state',
+    'api': 'https://live.wly0829.cn/computer-access/state?view=cockpit',
     'control': 'https://wly0829.cn/robots.txt',
 }
+# 驾驶舱页读的是精简包；上限只防异常大响应，不当正常体量的判定。
+MAX_BYTES = 4 * 1024 * 1024
+
+
+def api_valid(data):
+    stamp = data.get('served_at_unix', data.get('observed_at_unix'))
+    shaped = isinstance(data.get('host'), dict) or isinstance(data.get('overview'), dict)
+    return shaped and isinstance(stamp, (int, float)), stamp
 
 
 def probe(item, timeout=20):
@@ -27,9 +35,9 @@ def probe(item, timeout=20):
             response = error
         with response:
             row['http'] = response.status
-            body = response.read(1024 * 1024 + 1)
+            body = response.read(MAX_BYTES + 1)
         row['bytes'] = len(body)
-        if len(body) > 1024 * 1024:
+        if len(body) > MAX_BYTES:
             row['invalid'] = 'response_too_large'
         elif name == 'page':
             row['valid'] = b'id="page-data"' in body and b'cockpit-01' in body
@@ -40,8 +48,7 @@ def probe(item, timeout=20):
                 data = None
             if not isinstance(data, dict):
                 data = {}
-            stamp = data.get('served_at_unix', data.get('observed_at_unix'))
-            row['valid'] = isinstance(data.get('host'), dict) and isinstance(stamp, (int, float))
+            row['valid'], stamp = api_valid(data)
             age = data.get('max_age_seconds') or 120
             row['fresh'] = row['valid'] and isinstance(age, (int, float)) and -60 <= time.time() - stamp <= age
         else:

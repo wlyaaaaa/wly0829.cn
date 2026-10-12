@@ -34,6 +34,14 @@ class MonitorClassification(unittest.TestCase):
         rows[1]['error'] = 'TimeoutError'
         self.assertEqual(monitor.verdict(rows)[0], 'unknown')
 
+    def test_cockpit_view_shape_is_valid_and_limit_allows_full_payload(self):
+        self.assertTrue(monitor.URLS['api'].endswith('?view=cockpit'))
+        self.assertTrue(monitor.api_valid({'overview': {}, 'served_at_unix': 1.0})[0])
+        self.assertTrue(monitor.api_valid({'host': {}, 'observed_at_unix': 1})[0])
+        self.assertFalse(monitor.api_valid({'overview': {}})[0])
+        self.assertFalse(monitor.api_valid({'served_at_unix': 1.0})[0])
+        self.assertGreater(monitor.MAX_BYTES, 1_200_000)
+
 
 if __name__ == '__main__':
     unittest.main()
