@@ -364,7 +364,7 @@
     
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfilePage","name":"吴乐阳","url":"https://wly0829.cn/","mainEntity":{"@type":"Person","name":"吴乐阳","sameAs":["https://github.com/wlyaaaaa","https://x.com/wlyaaaaaaa","https://space.bilibili.com/179179701"]}}</script>
     <script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/a8d2d831d2c4738e624fa55ee53a362ecf889813f391a840a146a60f23ea8cd5/_runtime/8465bc86a1a2c30cdc04/how-demo-search-8465bc86a1a2c30cdc04.js" data-resource-retry-initial="1"></script>
-    <script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/132cf85441d422baacd4ebaed8f49aaefdcf5604d8286b3dc324a7e967d319f7/search-index.js"></script><script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/ed5f16c748fac2f9c1e9a65e7b4f023852433e6762b1bce2a62617432cb20443/search-projects.js" data-resource-retry-initial="1"></script>
+    <script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2bd26c18be1e0f408e3a37ca65471caedc0a8d4337d49e949a933a8bcb6e1f0c/search-index.js"></script><script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/e229135eaa918ee3d06d98f5216e6c62b09eefff9a8655d63c50dfff1ba9e232/search-projects.js" data-resource-retry-initial="1"></script>
     <script type="module" crossorigin  data-album-runtime data-src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/6cca073a8b59ebdd20b46ba009c34a4db861d3daea5977703fb338a47a86da63/assets/index-audit-nav-dc91cac753f20e2e4100.js"></script>
     <link rel="stylesheet" crossorigin href="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/3b61d88abc93d5d6c0fe966149d723831908f8847aa7a561eca0bd3b2d0100c7/_runtime/b7c6490c171a16672cb4/index-C6w07o1G.css" data-resource-retry-stylesheet="1">
       
@@ -422,7 +422,8 @@
   <script data-site-visitors>(() => {
   const endpoint = 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/_v.gif';
   const randomId = () => globalThis.crypto?.randomUUID?.() || Date.now().toString(36) + Math.random().toString(36).slice(2);
-  let visitor = '', self = false;
+  let visitor = '', self = false, entry = '';
+  const entryRedirect = /^\/cv\/?$/.test(location.pathname);
   const query = new URLSearchParams(location.search);
   try {
     if (query.get('self') === '1') localStorage.setItem('wly-site-self', '1');
@@ -433,6 +434,14 @@
       visitor = randomId();
       localStorage.setItem('wly-site-visitor', visitor);
     }
+    if (entryRedirect && !localStorage.getItem('wly-site-entry')) {
+      entry = 'cv';
+      localStorage.setItem('wly-site-entry', entry);
+      sessionStorage.setItem('wly-site-entry-pending', entry);
+    } else if (location.pathname === '/') {
+      entry = sessionStorage.getItem('wly-site-entry-pending') || '';
+      sessionStorage.removeItem('wly-site-entry-pending');
+    }
   } catch { visitor = ''; }
   self = query.get('self') === '1' || (query.get('self') !== '0' && self);
   const pageId = randomId();
@@ -442,7 +451,7 @@
       // 来源分布只需域名和路径，避免把来源网址中的凭据查询串写入日志。
       const ref = document.referrer ? new URL(document.referrer) : null;
       const params = new URLSearchParams({
-        'x-v': visitor, 'x-p': location.pathname,
+        'x-v': visitor, 'x-p': location.pathname, 'x-entry': entry,
         'x-ref': ref ? ref.origin + ref.pathname : '',
         'x-self': self ? '1' : '0', 'x-monitor': query.get('monitor') === '1' ? '1' : '0',
         'x-r': randomId(), 'x-ms': String(Math.round(performance.now())),
@@ -466,6 +475,7 @@
       beacon.src = url;
     } catch { /* 统计失败不影响网页。 */ }
   };
+  if (entryRedirect) { send('entry', true); location.replace('/'); return; }
   const leave = () => {
     if (visibleSince !== null) { visibleMs += Math.max(0, performance.now() - visibleSince); visibleSince = null; }
     // hidden 和 pagehide 可能连续触发；同页累计值只发一次，恢复后继续增加。

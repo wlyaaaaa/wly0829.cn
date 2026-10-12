@@ -422,7 +422,8 @@
   <script data-site-visitors>(() => {
   const endpoint = 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/_v.gif';
   const randomId = () => globalThis.crypto?.randomUUID?.() || Date.now().toString(36) + Math.random().toString(36).slice(2);
-  let visitor = '', self = false;
+  let visitor = '', self = false, entry = '';
+  const entryRedirect = /^\/cv\/?$/.test(location.pathname);
   const query = new URLSearchParams(location.search);
   try {
     if (query.get('self') === '1') localStorage.setItem('wly-site-self', '1');
@@ -433,6 +434,14 @@
       visitor = randomId();
       localStorage.setItem('wly-site-visitor', visitor);
     }
+    if (entryRedirect && !localStorage.getItem('wly-site-entry')) {
+      entry = 'cv';
+      localStorage.setItem('wly-site-entry', entry);
+      sessionStorage.setItem('wly-site-entry-pending', entry);
+    } else if (location.pathname === '/') {
+      entry = sessionStorage.getItem('wly-site-entry-pending') || '';
+      sessionStorage.removeItem('wly-site-entry-pending');
+    }
   } catch { visitor = ''; }
   self = query.get('self') === '1' || (query.get('self') !== '0' && self);
   const pageId = randomId();
@@ -442,7 +451,7 @@
       // 来源分布只需域名和路径，避免把来源网址中的凭据查询串写入日志。
       const ref = document.referrer ? new URL(document.referrer) : null;
       const params = new URLSearchParams({
-        'x-v': visitor, 'x-p': location.pathname,
+        'x-v': visitor, 'x-p': location.pathname, 'x-entry': entry,
         'x-ref': ref ? ref.origin + ref.pathname : '',
         'x-self': self ? '1' : '0', 'x-monitor': query.get('monitor') === '1' ? '1' : '0',
         'x-r': randomId(), 'x-ms': String(Math.round(performance.now())),
@@ -466,6 +475,7 @@
       beacon.src = url;
     } catch { /* 统计失败不影响网页。 */ }
   };
+  if (entryRedirect) { send('entry', true); location.replace('/'); return; }
   const leave = () => {
     if (visibleSince !== null) { visibleMs += Math.max(0, performance.now() - visibleSince); visibleSince = null; }
     // hidden 和 pagehide 可能连续触发；同页累计值只发一次，恢复后继续增加。
