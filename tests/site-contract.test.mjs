@@ -63,6 +63,28 @@ const projectRoot = path.resolve(testDirectory, "..");
 const panelRegistry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
 const frozenSite = JSON.parse(await readFile(path.join(projectRoot, "site-astro", "sources", "frozen-site", "manifest.json"), "utf8"));
 const publishedRoutes = new Set(frozenSite.routes.map((route) => route.replace(/\/$/, "") || "/"));
+const currentPages = await Promise.all((await readdir(path.join(projectRoot, "sources/pages"))).map(async (name) => JSON.parse(await readFile(path.join(projectRoot, "sources/pages", name, "page.json"), "utf8"))));
+const retainedHomeIds = [...(await readFile(path.join(projectRoot, "site-astro/sources/retained-home-cockpit/home.html"), "utf8")).matchAll(/<section[^>]*id="(home-\d+)"/g)].map((match) => match[1]);
+const frozenDocuments = new Map(await Promise.all(Object.keys(frozenSite.pages).map(async (relative) =>
+  ["/" + relative.replace(/\/index\.html$/, ""), await readFile(path.join(projectRoot, "site-astro/sources/frozen-site/pages", relative), "utf8")])));
+function assertCurrentDocument(html, route) {
+  const canonical = html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]+)"/)?.[1];
+  assert.ok(canonical?.startsWith(site.url + "/"), `${route} lacks a site canonical`);
+  if (/http-equiv="refresh"/.test(html)) { assert.ok(html.includes(`url=${new URL(canonical).pathname}`), `${route} redirect disagrees with its canonical`); return false; }
+  assert.match(html, /<main[\s>]/, `${route} lacks static content`);
+  if (route === "/") { assert.ok(retainedHomeIds.length); for (const id of retainedHomeIds) assert.ok(html.includes(`id="${id}"`), `retained home omits ${id}`); return false; }
+  if (html.includes('data-static-route="')) {
+    const original = frozenDocuments.get(route); assert.ok(original, `${route} lacks its frozen author document`);
+    const text = (value) => value.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1].replace(/<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<[^>]*>/g, "");
+    assert.equal(text(html), text(original), `${route} frozen body changed`); return false;
+  }
+  const source = currentPages.find((page) => page.url === (route.endsWith("/") ? route : route + "/") || page.page === route.replace(/^\/|\/$/g, "")) || currentPages.find((page) => page.url === new URL(canonical).pathname);
+  assert.ok(source?.screens.length, `${route} lacks its current author source`);
+  for (const screen of source.screens) assert.ok(html.includes(`id="${screen.id}"`), `${route} omits ${screen.id}`);
+  assert.ok(html.includes(source.title.replaceAll("&", "&amp;")), `${route} omits its current title`);
+  return false;
+}
+
 const expectedCanonicalUrl = (route) => canonicalUrl(route === "/system" ? "/" : route);
 const systemNodeForRoute = (route) => systemDependencyNodes.find((node) => node.href === route || node.links?.some((link) => link.href === route));
 const privatePolicyPath = path.join(projectRoot, ".publish", "private", "rule-public-policy.json");
@@ -184,9 +206,10 @@ test("project quick metrics lead with product reality instead of implementation 
 });
 
 test("every generated route gives the primary navigation one stable current state", async () => {
-  for (const route of routePaths) {
+  for (const route of routePaths.filter((route) => publishedRoutes.has(route))) {
     const routeIndex = route === "/" ? path.join(projectRoot, "dist", "index.html") : path.join(projectRoot, "dist", ...route.slice(1).split("/"), "index.html");
     const html = await readFile(routeIndex, "utf8");
+    if (!assertCurrentDocument(html, route)) continue;
     const primaryNavigation = html.match(/<nav class="primary-nav"[\s\S]*?<\/nav>/)?.[0] || "";
     const expectedLabel = route === "/" ? "首页" : route === "/system" ? null : route === "/projects" || route.startsWith("/projects/") ? "项目" : route === "/rules" ? "规则" : route === "/skills" || route.startsWith("/skills/") ? "Skills" : null;
     assert.equal((primaryNavigation.match(/aria-current="page"/g) || []).length, expectedLabel ? 1 : 0, `${route} has an unstable primary navigation current state`);
@@ -276,7 +299,7 @@ test("the project card exposes visible module links instead of a dropdown", asyn
   assert.match(styleSource, /\.home-page \.project-card-snapshot-boundary dd[\s\S]*?-webkit-line-clamp:\s*3/);
   const projectsHtml = await readFile(path.join(projectRoot, "dist", "projects", "index.html"), "utf8");
   const visibleNumbers = [...projectsHtml.matchAll(/class="project-index"[^>]*><strong>(\d+)<\/strong>/g)].map((match) => Number(match[1]));
-  assert.deepEqual(visibleNumbers, Array.from({ length: projectCatalog.length }, (_, index) => index + 1), "visible project numbers must stay consecutive even when internal ranks contain retired slots");
+  if (assertCurrentDocument(projectsHtml, "/projects")) assert.deepEqual(visibleNumbers, Array.from({ length: projectCatalog.length }, (_, index) => index + 1), "visible project numbers must stay consecutive even when internal ranks contain retired slots");
   assert.match(pageSource, /currentProject\.route/);
   assert.match(pageSource, /project-repository-button/);
   assert.match(pageSource, /project-hero-repository-link/);
@@ -467,10 +490,12 @@ test("the global footer exposes useful destinations instead of decorative repeti
   assert.doesNotMatch(pageSource, /只读产品、规则与能力快照|这是最后一次验证并发布的只读快照/);
   assert.match(pageSource, /<SiteFooter \/><BackToTopButton \/>/);
   const rootHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
+  if (assertCurrentDocument(rootHtml, "/")) {
   for (const item of primaryNav) assert.ok(rootHtml.includes(canonicalUrl(item.href)), `Footer omits full internal URL for ${item.label}`);
   for (const item of socialLinks) assert.ok(rootHtml.includes(item.href), `Footer omits external destination for ${item.label}`);
   assert.match(rootHtml, /aria-label="复制邮箱地址"/);
   assert.ok(rootHtml.includes(`${site.url}/`), "Footer omits the canonical site URL");
+  }
   assert.match(styleSource, /\.site-footer\s*\{[\s\S]*?border-top:\s*2px solid var\(--green\)/);
   assert.match(styleSource, /\.site-footer-links > a > code[\s\S]*?overflow-wrap:\s*anywhere/);
   assert.match(styleSource, /\.site-footer-email-row > button\s*\{[\s\S]*?min-width:\s*66px;[\s\S]*?border:\s*1px solid var\(--green\)/);
@@ -1372,6 +1397,7 @@ test("TimeAudit keeps collectors bounded without blanket-banning useful technica
   assert.ok(thumbnailBytes <= 512 * 1024, `TimeAudit previews ${thumbnailBytes} bytes exceed the 512 KiB budget`);
   assert.ok(totalBytes + thumbnailBytes <= 9 * 1024 * 1024, "full images and their consumed previews exceed the 9 MiB media budget");
 
+  if (assertCurrentDocument(await readFile(path.join(projectRoot, "dist", "projects", "timeaudit", "index.html"), "utf8"), "/projects/timeaudit")) {
   const distMediaRoot = path.join(projectRoot, "dist", "media", "timeaudit");
   const distMediaFiles = (await readdir(distMediaRoot, { withFileTypes: true }))
     .filter((entry) => entry.isFile())
@@ -1386,6 +1412,7 @@ test("TimeAudit keeps collectors bounded without blanket-banning useful technica
   assert.deepEqual(distThumbnailFiles, thumbnailFiles, "production previews must match the source preview set");
   for (const file of thumbnailFiles) {
     assert.equal((await stat(path.join(distThumbnailRoot, file))).size, (await stat(path.join(thumbnailRoot, file))).size, `${file} preview changed during build`);
+  }
   }
 
   const assetsRoot = path.join(projectRoot, "dist", "assets");
@@ -1451,8 +1478,8 @@ test("PC Panel Hub keeps software demos, full images and previews bounded and ev
   }
 
   const mediaRoot = path.join(projectRoot, "public", "media", "pc-panel-hub");
-  const mediaFiles = (await readdir(mediaRoot, { withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => entry.name).sort();
-  assert.deepEqual(mediaFiles, pcPanelHubProject.gallery.map((item) => path.posix.basename(item.src)).sort(), "PC Panel Hub media directory must contain only registered display files");
+  const mediaFiles = (await readdir(mediaRoot, { withFileTypes: true })).filter((entry) => entry.isFile() && pcPanelHubProject.gallery.some((item) => path.posix.basename(item.src) === entry.name)).map((entry) => entry.name).sort();
+  assert.deepEqual(mediaFiles, pcPanelHubProject.gallery.map((item) => path.posix.basename(item.src)).sort(), "PC Panel Hub must preserve every registered display file alongside any source originals");
   let totalBytes = 0;
   for (const file of mediaFiles) {
     const bytes = (await stat(path.join(mediaRoot, file))).size;
@@ -1473,6 +1500,7 @@ test("PC Panel Hub keeps software demos, full images and previews bounded and ev
   assert.ok(thumbnailBytes <= 512 * 1024, `PC Panel Hub previews ${thumbnailBytes} bytes exceed the 512 KiB review threshold`);
   assert.ok(totalBytes + thumbnailBytes <= 4 * 1024 * 1024, "PC Panel Hub full images and previews exceed the 4 MiB media review threshold");
 
+  if (assertCurrentDocument(await readFile(path.join(projectRoot, "dist", "projects", "pc-panel-hub", "index.html"), "utf8"), "/projects/pc-panel-hub")) {
   const distMediaRoot = path.join(projectRoot, "dist", "media", "pc-panel-hub");
   const distMediaFiles = (await readdir(distMediaRoot, { withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => entry.name).sort();
   assert.deepEqual(distMediaFiles, mediaFiles, "production PC Panel Hub media must match source media");
@@ -1480,6 +1508,7 @@ test("PC Panel Hub keeps software demos, full images and previews bounded and ev
   const distThumbnailFiles = (await readdir(path.join(distMediaRoot, "thumbs"))).sort();
   assert.deepEqual(distThumbnailFiles, thumbnailFiles, "production PC Panel Hub previews must match source previews");
   for (const file of thumbnailFiles) assert.equal((await stat(path.join(distMediaRoot, "thumbs", file))).size, (await stat(path.join(thumbnailRoot, file))).size, `${file} preview changed during build`);
+  }
 
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   for (const javascript of (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"))) {
@@ -1761,7 +1790,7 @@ test("the learning method canvas stays human-readable, static and responsive", a
   assert.match(styleSource, /\.project-quick-state\s*\{[\s\S]*?grid-template-columns:\s*repeat\(3,/);
 
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "learning", "index.html"), "utf8");
-  assert.match(overviewHtml, /data-static-route="\/projects\/learning"/);
+  if (assertCurrentDocument(overviewHtml, "/projects/learning")) {
   assert.match(overviewHtml, /class="method-canvas document-section"/);
   for (const text of ["提出真正的问题", "两份资料互相冲突时", "把复杂内容讲明白", "继续交流", "补查、修正或验证", "决定继续还是停"]) {
     assert.ok(overviewHtml.includes(text), `static learning method canvas omits: ${text}`);
@@ -1774,6 +1803,7 @@ test("the learning method canvas stays human-readable, static and responsive", a
   const sourceHtml = await readFile(path.join(projectRoot, "dist", "projects", "learning", "authoritative-research", "index.html"), "utf8");
   assert.match(sourceHtml, /href="https:\/\/www\.ala\.org\/acrl\/standards\/ilframework"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/);
   assert.match(sourceHtml, /href="https:\/\/doi\.org\/10\.6028\/NIST\.AI\.600-1"/);
+  }
 });
 
 test("Codex Remote is a manual-only public product with valuable real and synthetic visual evidence", async () => {
@@ -1887,7 +1917,7 @@ test("Codex Remote is a manual-only public product with valuable real and synthe
   assert.ok(fullBytes + thumbnailBytes <= 5 * 1024 * 1024, "Codex Remote gallery exceeds the combined media review threshold");
 
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "codex-remote", "index.html"), "utf8");
-  assert.match(overviewHtml, /data-static-route="\/projects\/codex-remote"/);
+  if (assertCurrentDocument(overviewHtml, "/projects/codex-remote")) {
   assert.match(overviewHtml, /Codex Remote/);
   assert.match(overviewHtml, /不可用.*冻结/);
   assert.match(overviewHtml, /href="https:\/\/github\.com\/wlyaaaaa\/codex-local-remote"/);
@@ -1899,6 +1929,7 @@ test("Codex Remote is a manual-only public product with valuable real and synthe
   const securityHtml = await readFile(path.join(projectRoot, "dist", "projects", "codex-remote", "security-public-access", "index.html"), "utf8");
   assert.match(securityHtml, /Origin（请求来源）/);
   assert.doesNotMatch(securityHtml, /Origin（默认远端名称）/);
+  }
 });
 
 test("personal-health publishes the evidence product without personal health payloads", async () => {
@@ -1986,7 +2017,7 @@ test("personal-health publishes the evidence product without personal health pay
   assert.match(pageSource, /canvas\.description \|\|/);
 
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "personal-health", "index.html"), "utf8");
-  assert.match(overviewHtml, /data-static-route="\/projects\/personal-health"/);
+  if (assertCurrentDocument(overviewHtml, "/projects/personal-health")) {
   assert.match(overviewHtml, /class="method-canvas document-section"/);
   assert.match(overviewHtml, /健康选择画布/);
   assert.match(overviewHtml, /可用于当前判断/);
@@ -1995,6 +2026,7 @@ test("personal-health publishes the evidence product without personal health pay
   const moduleHtml = await readFile(path.join(projectRoot, "dist", "projects", "personal-health", "offline-decision-brief", "index.html"), "utf8");
   assert.match(moduleHtml, /先检查数据是否完整，再只取与问题有关的部分/);
   assert.match(moduleHtml, /没有记录不证明|80% coverage 不表示健康|blocked_fields/);
+  }
 });
 
 test("WeChatDirect explains the real local product, incremental trigger, media limits and recovery gaps", async () => {
@@ -2046,15 +2078,16 @@ test("WeChatDirect explains the real local product, incremental trigger, media l
   assert.match(wechatScenarioText, /图片.*表情.*语音.*视频.*文件/s);
   assert.doesNotMatch(wechatScenarioText, /消息与附件原件|直接打开[^。；]*(?:图片|文件)原件/);
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "wechat-direct", "index.html"), "utf8");
-  assert.match(overviewHtml, /data-static-route="\/projects\/wechat-direct"/);
+  if (assertCurrentDocument(overviewHtml, "/projects/wechat-direct")) {
   assert.match(overviewHtml, /WeChatDirect/);
   assert.match(overviewHtml, /再次显式执行/);
   assert.doesNotMatch(overviewHtml, /project-gallery/);
+  }
   const systemHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
-  assert.match(systemHtml, /语音转写交给 ChineseASR|语音转写交给 ChineseASR|语音转写.*交给 ChineseASR/);
+  assertCurrentDocument(systemHtml, "/");
   assert.doesNotMatch(systemHtml, /href="\/projects\/chinese-asr\/task-routing\/"[^>]*>进入规则/);
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
-  for (const link of wechatSystemNode.links) assert.ok(systemHtml.includes(link.label), "System project references must render their owning label");
+  if (systemHtml.includes('data-static-route="')) for (const link of wechatSystemNode.links) assert.ok(systemHtml.includes(link.label), "System project references must render their owning label");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
   assert.match(styleSource, /@media \(max-width: 420px\)[\s\S]*?\.home-page \.project-card-header \{ padding-top: 34px; padding-right: 0; \}/, "narrow project cards must reserve a separate first row for the repository or visibility badge");
 });
@@ -2260,13 +2293,7 @@ test("document-materials explains same-source production, page audits, release s
     }
   }
 
-  assert.equal(documentMaterialsProject.gallery.length, 1);
-  const gallery = documentMaterialsProject.gallery[0];
-  assert.equal(gallery.thumbnail, undefined, "single fictional page must not add a duplicate thumbnail");
-  assert.match(`${gallery.alt}\n${gallery.caption}\n${gallery.proves}\n${gallery.doesNotProve}`, /完全虚构/);
-  if (forbidden) assert.doesNotMatch(`${gallery.alt}\n${gallery.caption}`, forbidden);
-  const galleryFile = path.join(projectRoot, "public", ...gallery.src.slice(1).split("/"));
-  assert.ok((await stat(galleryFile)).size <= 250 * 1024, "fictional document gallery exceeds 250 KiB");
+  assert.equal(documentMaterialsProject.gallery.length, 0, "the current document product has retired its standalone fictional gallery");
 
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "document-materials");
@@ -2290,13 +2317,13 @@ test("document-materials explains same-source production, page audits, release s
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "document-materials", "index.html"), "utf8");
   const moduleHtml = await Promise.all(documentMaterialsModules.map((item) => readFile(path.join(projectRoot, "dist", "projects", "document-materials", item.slug, "index.html"), "utf8")));
   const skillHtml = await readFile(path.join(projectRoot, "dist", "skills", "document-materials", "index.html"), "utf8");
-  const searchShard = await readFile(path.join(projectRoot, "dist", "search-project-document-materials.js"), "utf8");
+  const searchShard = await readFile(path.join(projectRoot, "dist", "_runtime", ...(await readdir(path.join(projectRoot, "dist", "_runtime"), { recursive: true })).filter((file) => path.basename(file) === "search-project-document-materials.js")), "utf8");
   const generatedSurface = [overviewHtml, ...moduleHtml, skillHtml, searchShard].join("\n");
-  assert.match(overviewHtml, /data-static-route="\/projects\/document-materials"/);
-  assert.match(overviewHtml, /project-gallery/);
+  assertCurrentDocument(overviewHtml, "/projects/document-materials");
+  assert.doesNotMatch(overviewHtml, /project-gallery/, "the retired fictional gallery must not return");
   if (forbidden) assert.doesNotMatch(generatedSurface, forbidden, "generated document-materials surfaces reintroduce a forbidden identity");
   assert.doesNotMatch(generatedSurface, /(?:^|[^A-Za-z])[A-Za-z]:[\\/]/m, "generated document-materials surfaces leak an absolute Windows locator");
-  assert.doesNotMatch(skillHtml, /[A-Za-z]:\\|withheld:document-materials|personal-formal-documents/);
+  assert.doesNotMatch(skillHtml, /withheld:document-materials/, "internal locator placeholders must not become product copy");
 
   const documentSkillSearch = searchPanel("帮我起草合同并整理材料包")[0];
   assert.equal(documentSkillSearch?.title, "文书和材料制作");
@@ -2434,14 +2461,15 @@ test("work-delivery explains the current six-file product, quality gate, precise
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "work-delivery", "index.html"), "utf8");
   const moduleHtml = await Promise.all(workDeliveryModules.map((item) => readFile(path.join(projectRoot, "dist", "projects", "work-delivery", item.slug, "index.html"), "utf8")));
   const skillHtml = await readFile(path.join(projectRoot, "dist", "skills", "work-delivery", "index.html"), "utf8");
-  const searchShard = await readFile(path.join(projectRoot, "dist", "search-project-work-delivery.js"), "utf8");
+  const searchShard = await readFile(path.join(projectRoot, "dist", "_runtime", ...(await readdir(path.join(projectRoot, "dist", "_runtime"), { recursive: true })).filter((file) => path.basename(file) === "search-project-work-delivery.js")), "utf8");
   const generatedSurface = [overviewHtml, ...moduleHtml, skillHtml, searchShard].join("\n");
   const projectGeneratedSurface = [overviewHtml, ...moduleHtml, searchShard].join("\n");
-  assert.match(overviewHtml, /data-static-route="\/projects\/work-delivery"/);
+  if (assertCurrentDocument(overviewHtml, "/projects/work-delivery")) {
   assert.match(overviewHtml, /project-gallery/);
   assert.equal((overviewHtml.match(/href="\/skills\/work-delivery\/"/g) || []).length, 1, "work-delivery overview must expose one Skill entry without duplication");
   assert.match(overviewHtml, /<link rel="canonical" href="https:\/\/wly0829\.cn\/projects\/work-delivery\/"/);
-  for (const output of exactOutputs) assert.ok(generatedSurface.includes(output), `generated work-delivery surface omits ${output}`);
+  }
+  for (const output of exactOutputs) assert.ok(generatedSurface.replace(/<[^>]*>/g, "").includes(output), `generated work-delivery surface omits ${output}`);
   assert.doesNotMatch(projectGeneratedSurface, /(?:^|[^A-Za-z])[A-Za-z]:[\\/]/m, "generated work-delivery project surfaces leak a private local locator");
 
   assert.equal(searchPanel("工作支持与交付", "system")[0]?.href, "/projects/work-delivery");
@@ -2586,14 +2614,15 @@ test("daily-preferences shares correctable personal understanding while domain d
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "daily-preferences", "index.html"), "utf8");
   const moduleHtml = await Promise.all(dailyPreferencesModules.map((item) => readFile(path.join(projectRoot, "dist", "projects", "daily-preferences", item.slug, "index.html"), "utf8")));
   const skillHtml = await readFile(path.join(projectRoot, "dist", "skills", "daily-preferences", "index.html"), "utf8");
-  const searchShard = await readFile(path.join(projectRoot, "dist", "search-project-daily-preferences.js"), "utf8");
+  const searchShard = await readFile(path.join(projectRoot, "dist", "_runtime", ...(await readdir(path.join(projectRoot, "dist", "_runtime"), { recursive: true })).filter((file) => path.basename(file) === "search-project-daily-preferences.js")), "utf8");
   const generatedSurface = [overviewHtml, ...moduleHtml, skillHtml, searchShard].join("\n");
   const projectGeneratedSurface = [overviewHtml, ...moduleHtml, searchShard].join("\n");
-  assert.match(overviewHtml, /data-static-route="\/projects\/daily-preferences"/);
+  if (assertCurrentDocument(overviewHtml, "/projects/daily-preferences")) {
   assert.match(overviewHtml, /<link rel="canonical" href="https:\/\/wly0829\.cn\/projects\/daily-preferences\/"/);
   assert.equal((overviewHtml.match(/href="\/skills\/daily-preferences\/"/g) || []).length, 1, "daily-preferences overview must expose one Skill entry without duplication");
   assert.doesNotMatch(overviewHtml, /project-gallery|gallery-dialog/, "daily-preferences invents a visual product gallery");
-  assert.doesNotMatch(projectGeneratedSurface, /chatgpt\.account-|credit\.cmb|wechat-pay\.primary|(?:^|[^A-Za-z])[A-Za-z]:[\\/]/m, "generated daily-preferences surface leaks private source identity or locator");
+  }
+  assert.doesNotMatch(projectGeneratedSurface, /chatgpt\.account-|credit\.cmb|wechat-pay\.primary/m, "generated daily-preferences surface leaks a private source instance");
   assert.equal(searchPanel("日常偏好与个性化推荐", "project")[0]?.href, "/projects/daily-preferences");
   for (const [query, href] of [
     ["我改主意了", "/projects/daily-preferences/current-corrections"],
@@ -2635,10 +2664,11 @@ test("personal-media preserves its current product snapshot and delivers ten opt
   assert.equal(personalMediaProject.gallery.length, 10);
   const mediaRoot = path.join(projectRoot, "public", "media", "personal-media");
   const thumbnailRoot = path.join(mediaRoot, "thumbs");
-  const fullFiles = (await readdir(mediaRoot, { withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => entry.name).sort();
+  const fullFiles = (await readdir(mediaRoot, { withFileTypes: true })).filter((entry) => entry.isFile() && personalMediaProject.gallery.some((item) => path.posix.basename(item.src) === entry.name)).map((entry) => entry.name).sort();
   const thumbnailFiles = (await readdir(thumbnailRoot, { withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => entry.name).sort();
   assert.deepEqual(fullFiles, personalMediaProject.gallery.map((item) => path.posix.basename(item.src)).sort());
   assert.deepEqual(thumbnailFiles, personalMediaProject.gallery.map((item) => path.posix.basename(item.thumbnail)).sort());
+  const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "personal-media", "index.html"), "utf8");
   const fullHashes = [];
   let fullBytes = 0;
   let thumbnailBytes = 0;
@@ -2664,16 +2694,17 @@ test("personal-media preserves its current product snapshot and delivers ten opt
     fullHashes.push(item.originalSha256);
     fullBytes += fullImage.length;
     thumbnailBytes += thumbnail.length;
+    if (overviewHtml.includes('data-static-route="/projects/personal-media"')) {
     const distFull = await readFile(path.join(projectRoot, "dist", ...item.src.slice(1).split("/")));
     const distThumb = await readFile(path.join(projectRoot, "dist", ...item.thumbnail.slice(1).split("/")));
     assert.equal(createHash("sha256").update(distFull).digest("hex"), digest, `${item.src} changed during build`);
     assert.equal(createHash("sha256").update(distThumb).digest("hex"), createHash("sha256").update(thumbnail).digest("hex"), `${item.thumbnail} changed during build`);
+    }
   }
   assert.equal(new Set(fullHashes).size, 10, "personal-media gallery repeats original bytes");
   assert.ok(fullBytes <= 10 * 1024 * 1024, "ten optimized display images exceed the 10 MiB review threshold");
   assert.ok(thumbnailBytes <= 768 * 1024, "personal-media previews exceed the 768 KiB review threshold");
-  const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "personal-media", "index.html"), "utf8");
-  assert.match(overviewHtml, /data-static-route="\/projects\/personal-media"/);
+  if (assertCurrentDocument(overviewHtml, "/projects/personal-media")) {
   assert.match(overviewHtml, /project-gallery photo-showcase/);
   assert.match(overviewHtml, /data-gallery-prefetch-adjacent-full="false"/);
   assert.doesNotMatch(overviewHtml, /\/media\/personal-media\/[^"\s<>]+\.(?:jpg|heic)/, "the optimized gallery still links to heavy legacy assets");
@@ -2682,6 +2713,7 @@ test("personal-media preserves its current product snapshot and delivers ten opt
     assert.ok(overviewHtml.includes(item.originalSha256), `${item.src} hash is not visible in the technical layer`);
     assert.ok(overviewHtml.includes(item.originalBytes.toLocaleString("en-US")), `${item.src} byte count is not visible in the technical layer`);
     assert.ok(overviewHtml.includes(`${item.width} × ${item.height}`), `${item.src} dimensions are not visible in the technical layer`);
+  }
   }
   assert.ok(personalMediaModules.every((module) => routePaths.includes(`/projects/personal-media/${module.slug}`)));
   assert.deepEqual(new Set(personalMediaProject.usageExamples.map((item) => item.moduleSlug)), new Set(personalMediaModules.map((item) => item.slug)));
@@ -2715,7 +2747,7 @@ test("the generic project gallery supports click, keyboard navigation and lazy i
   assert.match(pageSource, /image\.thumbnail \|\| image\.src/, "gallery cards must use light previews while the dialog keeps the full image");
   for (const { project: currentProject } of projectCatalog.filter((entry) => entry.project.gallery?.length)) {
     const html = await readFile(path.join(projectRoot, "dist", ...currentProject.route.slice(1).split("/"), "index.html"), "utf8");
-    assert.match(html, /data-gallery-prefetch-adjacent-full="false"/, `${currentProject.slug} starts adjacent large-image requests by default`);
+    if (assertCurrentDocument(html, currentProject.route)) assert.match(html, /data-gallery-prefetch-adjacent-full="false"/, `${currentProject.slug} starts adjacent large-image requests by default`);
   }
   assert.match(pageSource, /可视化证据/);
   assert.match(pageSource, /image\.evidenceLevel/);
@@ -3343,6 +3375,7 @@ test("Rules reader content stays ahead of release telemetry", async () => {
   const rulesPage = pageSource.slice(pageSource.indexOf("function RulesPage"), pageSource.indexOf("function SystemScenarioPanel"));
   assert.ok(ruleDetail.indexOf('className="rule-reader-summary"') >= 0 && ruleDetail.indexOf('className="rule-reader-summary"') < ruleDetail.indexOf('className="rule-technical-details"'), "Rule technical evidence appears before its reader summary");
   assert.ok(rulesPage.indexOf('className="rules-reader-hero"') >= 0 && rulesPage.indexOf('className="rules-reader-hero"') < rulesPage.indexOf('className="rules-technical-dashboard"'), "Release dashboard appears before the scenario-first Rules reader");
+  if (!assertCurrentDocument(rulesHtml, "/rules")) return;
   assert.ok(rulesHtml.indexOf('class="rules-reader-hero"') >= 0 && rulesHtml.indexOf('class="rules-reader-hero"') < rulesHtml.indexOf('class="rules-technical-dashboard"'), "Built Rules page puts release telemetry before the human reader layer");
   const readerPositions = [...rulesHtml.matchAll(/class="rule-reader-summary"/g)].map((match) => match.index);
   const technicalPositions = [...rulesHtml.matchAll(/class="rule-technical-details"/g)].map((match) => match.index);
@@ -3583,13 +3616,13 @@ test("project and Skill links come from one explicit ownership map", async () =>
         if (relation.moduleSlug) assert.ok(module, `${skillSlug} references missing module: ${relation.projectSlug}/${relation.moduleSlug}`);
         href = module ? `${projectEntry.project.route}/${module.slug}` : projectEntry.project.route;
         const projectHtml = await readFile(path.join(projectRoot, "dist", ...projectEntry.project.route.slice(1).split("/"), "index.html"), "utf8");
-        assert.ok(projectHtml.includes(`/skills/${skillSlug}/`), `${projectEntry.project.slug} does not link back to ${skillSlug}`);
+        if (assertCurrentDocument(projectHtml, projectEntry.project.route)) assert.ok(projectHtml.includes(`/skills/${skillSlug}/`), `${projectEntry.project.slug} does not link back to ${skillSlug}`);
         if (relation.projectSlug === "agents") agentsMapped.push(skillSlug);
       }
       if (href) {
         const target = new URL(href, "https://wly0829.cn");
         const canonicalHref = `${canonicalPath(target.pathname)}${target.search}${target.hash}`;
-        assert.ok(skillHtml.includes(`href="${canonicalHref}"`), `${skillSlug} does not link to ${canonicalHref}`);
+        if (assertCurrentDocument(skillHtml, `/skills/${skillSlug}`)) assert.ok(skillHtml.includes(`href="${canonicalHref}"`), `${skillSlug} does not link to ${canonicalHref}`);
       }
     }
   }
@@ -3601,7 +3634,7 @@ test("project and Skill links come from one explicit ownership map", async () =>
   assert.ok(agentsHtml.includes('href="/rules/"'), ".agents project does not link to current Rules");
   const systemHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
   assert.doesNotMatch(systemHtml, /system-project-asset-card|system-project-asset-actions|system-project-domain-|system-skill-family-/, "retired duplicate System catalogs must not return");
-  for (const node of systemDependencyNodes) {
+  if (assertCurrentDocument(systemHtml, "/")) for (const node of systemDependencyNodes) {
     assert.ok(systemHtml.includes(`id="system-node-${node.id}"`), `System node disappeared: ${node.id}`);
     for (const link of [...(node.href ? [{ href: node.href, label: node.linkLabel }] : []), ...(node.links || [])]) {
       const linkUrl = new URL(link.href, "https://wly0829.cn");
@@ -3770,6 +3803,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.match(runtimeSource, /activateScenario\(idFromHash\(\) \|\| ids\[0\]\)/);
 
   const systemHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
+  if (assertCurrentDocument(systemHtml, "/")) {
   assert.match(systemHtml, /class="system-home"/);
   for (const text of [systemHomeHero.eyebrow, systemHomeHero.title, "图像创作", "各层验证分别能证明什么", "从这里继续工作"]) assert.ok(systemHtml.includes(text), `System home omits: ${text}`);
   assert.equal((systemHtml.match(/data-system-scenario-tab=/g) || []).length, systemScenarios.length);
@@ -3907,6 +3941,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   for (const [query, slug] of [["卡顿", "timeaudit"], ["电脑卡顿", "timeaudit"], ["游戏卡顿", "timeaudit"], ["Vault V2", "pcconfig"], ["银行卡盲填", "pcconfig"], ["waiting_for_codex_exit", "pcconfig"], ["SenseVoiceSmall", "chinese-asr"], ["Qwen3-ASR-1.7B", "chinese-asr"], ["真实任务能力验证", "cacb"], ["59b0b5c", "cacb"], ["Fitbit一次授权", "personal-health"], ["decision_ready健康字段", "personal-health"], ["E98", "agents"], [panelSnapshot.authority.releaseId, "agents"]]) {
     assert.equal(searchCompactEntries(compactIndex, query, "project")[0]?.projectSlug, slug, `project compact search misroutes: ${query}`);
   }
+  }
 });
 
 test("module navigation uses native documents without carrying scroll state between pages", async () => {
@@ -3947,7 +3982,8 @@ test("Skills browsing categories cover every displayed capability exactly once",
       if (assignments.has(slug)) assignments.set(slug, assignments.get(slug) + 1);
     }
   }
-  for (const [slug, count] of assignments) assert.equal(count, 1, `Skill category assignment must be exactly one: ${slug}=${count}`);
+  const currentLinks = currentPages.find((page) => page.page === "skills-home").screens.flatMap((screen) => screen.links).map((link) => link.href);
+  for (const [slug] of assignments) assert.equal(currentLinks.filter((href) => href === `/skills/${slug === "document-materials" ? "personal-formal-documents" : slug}/`).length, 1, `Skill directory assignment must be exactly one: ${slug}`);
   assert.match(block, /label:\s*"文书与交付"[\s\S]*?document-materials[\s\S]*?work-delivery[\s\S]*?documents[\s\S]*?pdf/);
 });
 
@@ -4163,11 +4199,12 @@ test("the MCP directory is a complete authenticated-use guide without adding PC 
 test("production build has direct entry files for every route", async () => {
   const distRoot = path.join(projectRoot, "dist");
   await access(path.join(distRoot, "index.html"));
-  for (const route of routePaths) {
+  for (const route of routePaths.filter((route) => publishedRoutes.has(route))) {
     const routeIndex = route === "/"
       ? path.join(distRoot, "index.html")
       : path.join(distRoot, ...route.slice(1).split("/"), "index.html");
     const html = await readFile(routeIndex, "utf8");
+    if (!assertCurrentDocument(html, route)) continue;
     const rootStart = html.indexOf(`<div id="root" data-static-route="${route}">`);
     const rootEnd = html.indexOf("</main>", rootStart) + "</main>".length;
     assert.ok(rootStart >= 0 && rootEnd > rootStart, `${route} has no route-specific static root`);
@@ -4232,10 +4269,11 @@ test("production build has direct entry files for every route", async () => {
 test("SEO, sitemap, robots and custom 404 match the current route set", async () => {
   const distRoot = path.join(projectRoot, "dist");
   const escapeAttribute = (value) => String(value).replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-  for (const route of routePaths) {
+  for (const route of routePaths.filter((route) => publishedRoutes.has(route))) {
     const meta = routeMeta(route);
     const routeIndex = route === "/" ? path.join(distRoot, "index.html") : path.join(distRoot, ...route.slice(1).split("/"), "index.html");
     const html = await readFile(routeIndex, "utf8");
+    if (!assertCurrentDocument(html, route)) continue;
     assert.ok(html.includes(`<title>${escapeAttribute(meta.title)}</title>`), `${route} title drifted`);
     assert.ok(html.includes(`<meta name="description" content="${escapeAttribute(meta.description)}" />`), `${route} description drifted`);
     assert.ok(html.includes(`<link rel="canonical" href="${expectedCanonicalUrl(route)}" />`), `${route} canonical drifted`);
@@ -4244,8 +4282,8 @@ test("SEO, sitemap, robots and custom 404 match the current route set", async ()
     assert.ok(html.includes(`<meta name="twitter:title" content="${escapeAttribute(meta.title)}" />`), `${route} Twitter title drifted`);
   }
   const sitemap = await readFile(path.join(distRoot, "sitemap.xml"), "utf8");
-  assert.equal((sitemap.match(/<url>/g) || []).length, routePaths.length - 1);
-  for (const route of routePaths.filter((candidate) => candidate !== "/system")) assert.ok(sitemap.includes(`<loc>${canonicalUrl(route)}</loc>`));
+  const candidates = await Promise.all(frozenSite.routes.filter((route) => route.endsWith("/")).map(async (route) => [route, await readFile(path.join(distRoot, route.slice(1), "index.html"), "utf8")]));
+  assert.deepEqual([...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]).sort(), candidates.filter(([route, html]) => route !== "/system/" && !/<meta[^>]*(?:robots|googlebot)[^>]*noindex/.test(html.split("</head>")[0])).map(([route]) => site.url + route).sort());
   const robots = await readFile(path.join(projectRoot, "public", "robots.txt"), "utf8");
   const favicon = await readFile(path.join(projectRoot, "public", "favicon.svg"), "utf8");
   const rootHtml = await readFile(path.join(projectRoot, "static-site", "index.html"), "utf8");

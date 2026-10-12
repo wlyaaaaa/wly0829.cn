@@ -1705,6 +1705,8 @@
         {
           "kind": "proxy_install_update_and_retirement",
           "paths": [
+            "data/local-model-set.json",
+            "scripts/Sync-LocalModelConfiguration.ps1",
             "data/ports/*",
             "data/proxy-artifacts/*",
             "src/AiCliProfileManager/Private/ProxyService.ps1",
