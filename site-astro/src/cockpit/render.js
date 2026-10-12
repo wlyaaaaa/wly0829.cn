@@ -85,7 +85,10 @@ export function readTodo(x, now) {
   let head = typeof x.headline === 'string' && x.headline ? x.headline : '', rest = t;
   if (!head) {
     const m = /^(.{4,46}?)[：；]/.exec(t) || /^(.{4,60}?)。/.exec(t);
-    if (m) { head = m[1]; rest = t.slice(m[0].length); } else { head = t; rest = ''; }
+    // 冒号后面只是一小句（如“十月旅游去哪：北京、九寨沟还是武汉”），整句就是标题，不在冒号处截断
+    const tail = m && m[0].endsWith('：') ? t.slice(m[0].length) : '';
+    if (m && tail && t.length <= 60 && !/[。；！？]|[①-⑳]/.test(tail.replace(/[。\s]+$/, ''))) { head = t.replace(/[。\s]+$/, ''); rest = ''; }
+    else if (m) { head = m[1]; rest = t.slice(m[0].length); } else { head = t; rest = ''; }
   }
   rest = rest.replace(/^[，。；\s]+/, '');
   let steps = Array.isArray(x.steps) ? x.steps.filter((s) => typeof s === 'string' && s) : [];
@@ -604,7 +607,7 @@ function knowBlock(v, ctx) {
   if (!all.length) return `<div class="cp-know is-empty"><p>${dot('ok')}${esc(m.text || '没有要你知道的新事')}</p>${folded}</div>`;
   const list = all.slice(0, 5);
   return `<div class="cp-know"><p class="cp-know-k">你得知道</p><ul class="cp-know-list">${list.map(row).join('')}</ul>`
-    + (all.length > 2 ? `<p class="cp-know-more is-phone">还有 ${all.length - 2} 条（电脑上看得全）</p>` : '') + folded + `</div>`;
+    + (list.length > 2 ? `<details class="cp-know-more is-phone" id="know-more"><summary><span class="is-shut">还有 ${list.length - 2} 条，点开看</span><span class="is-open">收起</span></summary></details>` : '') + folded + `</div>`;
 }
 const overview = (v, ctx) => {
   if (!ctx.ov) return '';
