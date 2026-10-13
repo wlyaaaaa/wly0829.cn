@@ -76,7 +76,7 @@ async def run(args):
                 async def render(snapshot, options=None, raw=False):
                     await page.evaluate('([s,o,r])=>renderHardware(s,o,r)', [snapshot, {'now': snapshot.get('observed_at_unix', STAMP), **(options or {})}, raw])
                     await page.evaluate('Promise.all([...document.images].map(i=>i.decode().catch(()=>{})))')
-                    return await page.evaluate("""()=>({overflow:document.documentElement.scrollWidth>innerWidth,fullText:document.querySelector('#full').textContent,compactText:document.querySelector('#compact').textContent,link:document.querySelector('.live-hardware-compact').getAttribute('href'),brokenImages:[...document.images].filter(i=>!i.naturalWidth).map(i=>i.src),rowKeys:[...document.querySelector('#full').querySelectorAll('[data-row-key]')].map(i=>i.dataset.rowKey),risks:[...document.querySelectorAll('.live-hardware-disk')].map(i=>({key:i.dataset.rowKey,risk:i.dataset.risk,fill:i.querySelector('.live-hardware-meter-fill')?getComputedStyle(i.querySelector('.live-hardware-meter-fill')).backgroundColor:null}))})""")
+                    return await page.evaluate("""()=>({overflow:document.documentElement.scrollWidth>innerWidth,fullText:document.querySelector('#full').textContent,compactText:document.querySelector('#compact').textContent,link:document.querySelector('.live-hardware-compact').getAttribute('href'),brokenImages:[...document.images].filter(i=>!i.naturalWidth).map(i=>i.src),rowKeys:[...document.querySelector('#full').querySelectorAll('[data-row-key]')].map(i=>i.dataset.rowKey),risks:[...document.querySelectorAll('.live-hardware-disk')].map(i=>({key:i.dataset.rowKey,risk:i.dataset.risk,fill:getComputedStyle(i.querySelector('.live-hardware-meter-fill')).backgroundColor}))})""")
                 source = fixture()
                 normal = await render(source)
                 assert not normal['overflow'] and not normal['brokenImages'], normal
@@ -84,21 +84,6 @@ async def run(args):
                 assert '0 KiB/s' in normal['fullText'] and 'G: 剩余4%' in normal['compactText'] and normal['link'] == '/cockpit/#pc'
                 assert len(normal['rowKeys']) == len(set(normal['rowKeys'])), 'duplicate stable keys'
                 assert [d['risk'] for d in normal['risks']] == ['ok', 'warn', 'error']
-                optical = copy.deepcopy(source)
-                optical['hardware']['volumes'].append({
-                    'letter': 'I:', 'type': 'optical', 'filesystem': 'CDFS',
-                    'free_bytes': 0, 'total_bytes': 4 * 1024**3, 'connected': True,
-                })
-                optical_view = await render(optical)
-                assert not optical_view['overflow'] and not optical_view['brokenImages'], optical_view
-                assert 'G: 剩余4%' in optical_view['compactText'], optical_view['compactText']
-                assert optical_view['risks'][-1]['risk'] == 'not-applicable', optical_view['risks']
-                optical_row = page.locator('[data-row-key="disk-I:"]')
-                assert 'CDFS · 只读介质' in await optical_row.inner_text() and '剩余空间不适用' in await optical_row.inner_text()
-                assert '0%' not in await optical_row.inner_text()
-                assert await optical_row.locator('.live-hardware-meter, .live-hardware-disk-warning').count() == 0
-                await page.screenshot(path=str(args.output / (device + '-optical-volume.png')), full_page=True)
-                await render(source)
                 await page.locator('.live-hardware-compact').focus()
                 assert await page.evaluate("document.activeElement.matches('.live-hardware-compact')"), 'compact link is not keyboard reachable'
                 await page.screenshot(path=str(args.output / (device + '-full-and-compact.png')), full_page=True)
@@ -115,7 +100,7 @@ async def run(args):
                 assert await page.locator('[data-field=cpu-usage]').get_attribute('data-state') == 'ok', 'one stale field tainted fresh fields'
                 await page.screenshot(path=str(args.output / (device + '-partial-stale.png')), full_page=True)
                 cached = await render(source, {'cached': True})
-                assert '上次读到' in cached['fullText'] and '显示上一次读数' in cached['compactText'] and '北京时间' in cached['compactText']
+                assert '上次读到' in cached['fullText'] and '电脑当前读不到' in cached['compactText'] and '北京时间' in cached['compactText']
                 unknown = await render({'observed_at_unix': STAMP, 'hardware': {'state': 'unavailable'}})
                 assert '读不到' in unknown['fullText'] and not unknown['overflow'] and '0%' not in unknown['fullText']
                 await page.screenshot(path=str(args.output / (device + '-unknown.png')), full_page=True)

@@ -51,8 +51,6 @@ function grafanaGroupRow(part){
 }
 function grafanaGroupValue(part){return grafanaGroupRow(part);}
 const staticHardwareFields=new Set(['model','cores','threads','total_bytes','vram_total_bytes','letter','connection_type']);
-const volumeValue=v=>v&&typeof v==='object'&&Object.hasOwn(v,'value')?v.value:v;
-const opticalVolume=row=>['optical','cdrom','cd-rom'].includes(String(volumeValue(row?.type??row?.kind)||'').toLowerCase())||String(volumeValue(row?.filesystem)||'').toUpperCase()==='CDFS';
 function blockHealth(key){const b=status?.[key];if(!b||['unavailable','unknown'].includes(b.state))return 'unknown';if(['failed','error'].includes(b.state))return 'error';const at=blockTime(b);if(b.state==='stale'||!Number.isFinite(at)||at>clock()+60||clock()-at>(Number(b.max_age_seconds)||120))return 'stale';return ['ok','partial','empty'].includes(b.state)?'ok':'unknown';}
 const rawList=key=>['ok','partial','empty','stale'].includes(status?.[key]?.state)&&Array.isArray(status[key].items)?status[key].items:null;
 let historical=false;
@@ -63,8 +61,8 @@ const cadenceText=s=>({daily:'每天',weekly:'每周',monthly:'每月',hourly:'�
 const rowState=rows=>rows?.some(x=>x.enabled!==false&&['failed','error'].includes(x.state))?'error':rows?.some(x=>x.enabled!==false&&['warn','stale','overdue'].includes(x.state))?'warn':!rows||rows.some(x=>x.enabled!==false&&(!['success','running','disabled','never'].includes(x.state)||x.state==='success'&&!Number.isFinite(Date.parse(x.last_success_at||x.last_run_at))))?'unknown':'ok';
 function hardwareReadGaps(){
  const hw=status?.hardware;if(!hw||['unknown','unavailable','error','failed'].includes(hw.state))return [{key:'hardware',label:'硬件状态',source:hw,health:'unknown'}];
- const unwrapped=volumeValue;
- const groups=[['cpu','处理器',hw.cpu,['model','usage_percent','temperature_celsius','power_watts']],['memory','内存',hw.memory,['used_bytes','total_bytes']],['network','网络',hw.network,[Object.hasOwn(hw.network||{},'connected')?'connected':'connection_type','download_bytes_per_second','upload_bytes_per_second',...['latency_ms','jitter_ms','packet_loss_percent'].filter(f=>Object.hasOwn(hw.network||{},f))]],['display','屏幕',hw.display,['width_px','height_px','refresh_hz']],...(hw.gpus||[]).map((row,i)=>['gpu'+i,'显卡'+(i+1),row,['model','usage_percent','temperature_celsius','vram_used_bytes','vram_total_bytes']]),...(hw.volumes||[]).filter(v=>unwrapped(v.connected)!==false).map(row=>['disk'+unwrapped(row.letter),unwrapped(row.letter)+'磁盘',row,opticalVolume(row)?['letter','total_bytes']:['letter','free_bytes','total_bytes']])];
+ const unwrapped=v=>v&&typeof v==='object'&&Object.hasOwn(v,'value')?v.value:v;
+ const groups=[['cpu','处理器',hw.cpu,['model','usage_percent','temperature_celsius','power_watts']],['memory','内存',hw.memory,['used_bytes','total_bytes']],['network','网络',hw.network,[Object.hasOwn(hw.network||{},'connected')?'connected':'connection_type','download_bytes_per_second','upload_bytes_per_second',...['latency_ms','jitter_ms','packet_loss_percent'].filter(f=>Object.hasOwn(hw.network||{},f))]],['display','屏幕',hw.display,['width_px','height_px','refresh_hz']],...(hw.gpus||[]).map((row,i)=>['gpu'+i,'显卡'+(i+1),row,['model','usage_percent','temperature_celsius','vram_used_bytes','vram_total_bytes']]),...(hw.volumes||[]).filter(v=>unwrapped(v.connected)!==false).map(row=>['disk'+unwrapped(row.letter),unwrapped(row.letter)+'磁盘',row,['letter','free_bytes','total_bytes']])];
  const labels={model:'型号',usage_percent:'占用率',temperature_celsius:'温度',power_watts:'功耗',used_bytes:'已用容量',total_bytes:'总容量',connected:'连接状态',connection_type:'连接类型',download_bytes_per_second:'下载速度',upload_bytes_per_second:'上传速度',latency_ms:'延迟',jitter_ms:'抖动',packet_loss_percent:'丢包率',width_px:'宽度',height_px:'高度',refresh_hz:'刷新率',vram_used_bytes:'已用显存',vram_total_bytes:'总显存',letter:'盘符',free_bytes:'剩余空间'},gaps=[];
  const collector=status?.display_cache?.collectors?.hardware,hardwareAt=hardwareSnapshot(status)?.observed_at_unix;
  for(const [id,label,row,fields] of groups)for(const field of fields){
@@ -184,18 +182,11 @@ function backupLamp(x){
  return 'ok';
 }
 function diskLamp(x){
- if(opticalVolume(x))return 'ok';
  if(x.connected===false||x.connected?.value===false)return 'ok';
  const free=numeric(x.free_bytes),total=numeric(x.total_bytes),drive=x.letter?.value??x.letter??x.drive;
  if(free===null||!total)return 'ok';
  if(free/total<lampPolicy.diskErrorFraction||String(drive).toUpperCase()==='C:'&&free<lampPolicy.systemDiskMinBytes)return 'error';
  return free/total<lampPolicy.diskWarnFraction?'warn':'ok';
-}
-function volumeSummary(v){
- const drive=reading(v.letter||v.drive||'磁盘').replace(/:+$/,'');
- if(volumeValue(v.connected)===false)return drive+'：没接上';
- if(opticalVolume(v)){const filesystem=volumeValue(v.filesystem);return drive+'：光盘'+(filesystem?'（'+filesystem+'）':'')+(String(filesystem).toUpperCase()==='CDFS'?'，只读介质':'')+'，剩余空间不适用';}
- return drive+'：'+capacity(v.free_bytes)+' / '+capacity(v.total_bytes);
 }
 function summary(){
  if(!online())return {text:offline(status?.observed_at_unix||lastRead),state:'unknown'};
@@ -354,7 +345,7 @@ function liveValue(slot){
 
  if(slot==='cockpit-pc'&&(!status.hardware||['unavailable','unknown'].includes(status.hardware.state)||status.display_cache?.collectors?.hardware?.state==='reading'&&!hardwareSnapshot(status)))return {text:status.display_cache?.collectors?.hardware?.state==='reading'?'硬件正在读取':'硬件状态暂时读不到',state:'unknown'};
 
- if(slot==='cockpit-pc')return {hardwareDisplay:hardwareSnapshot(status),cacheable:!!hardwareSnapshot(status),rows:[{text:'处理器：'+reading(hw.cpu?.model)+' · '+reading(hw.cpu?.usage_percent,'%')+' · '+reading(hw.cpu?.temperature_celsius,'℃')+' · '+reading(hw.cpu?.power_watts,'W')},...(hw.gpus||[]).map(g=>({text:'显卡：'+reading(g.model)+' · '+reading(g.usage_percent,'%')+' · '+reading(g.temperature_celsius,'℃')+' · 显存 '+capacity(g.vram_used_bytes)+' / '+capacity(g.vram_total_bytes)})),{text:'内存：'+capacity(hw.memory?.used_bytes)+' / '+capacity(hw.memory?.total_bytes)},...(hw.volumes||[]).map(v=>({text:volumeSummary(v)})),{text:'网络：'+networkConnection(hw.network)+' · 下行 '+rate(hw.network?.download_bytes_per_second)+' · 上行 '+rate(hw.network?.upload_bytes_per_second)},{text:'屏幕：'+reading(hw.display?.width_px)+' × '+reading(hw.display?.height_px)+' · '+reading(hw.display?.refresh_hz,'Hz')}],state:hardwareHealth()==='ok'?'ok':'unknown'};
+ if(slot==='cockpit-pc')return {hardwareDisplay:hardwareSnapshot(status),cacheable:!!hardwareSnapshot(status),rows:[{text:'处理器：'+reading(hw.cpu?.model)+' · '+reading(hw.cpu?.usage_percent,'%')+' · '+reading(hw.cpu?.temperature_celsius,'℃')+' · '+reading(hw.cpu?.power_watts,'W')},...(hw.gpus||[]).map(g=>({text:'显卡：'+reading(g.model)+' · '+reading(g.usage_percent,'%')+' · '+reading(g.temperature_celsius,'℃')+' · 显存 '+capacity(g.vram_used_bytes)+' / '+capacity(g.vram_total_bytes)})),{text:'内存：'+capacity(hw.memory?.used_bytes)+' / '+capacity(hw.memory?.total_bytes)},...(hw.volumes||[]).map(v=>({text:reading(v.letter||v.drive||'磁盘').replace(/:+$/,'')+'：'+(v.connected===false?'没接上':capacity(v.free_bytes)+' / '+capacity(v.total_bytes))})),{text:'网络：'+networkConnection(hw.network)+' · 下行 '+rate(hw.network?.download_bytes_per_second)+' · 上行 '+rate(hw.network?.upload_bytes_per_second)},{text:'屏幕：'+reading(hw.display?.width_px)+' × '+reading(hw.display?.height_px)+' · '+reading(hw.display?.refresh_hz,'Hz')}],state:hardwareHealth()==='ok'?'ok':'unknown'};
 
  if(slot==='cockpit-tasks'&&!list('automation')&&!status?.cockpit?.detail_groups)return {text:'自动任务暂时读不到',state:'unknown'};
 
