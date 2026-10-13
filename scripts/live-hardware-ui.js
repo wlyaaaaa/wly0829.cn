@@ -11,6 +11,7 @@
   const staticFields = new Set(['model', 'cores', 'threads', 'type', 'manufacturer', 'data_rate_mt_s', 'module_count', 'module_capacity_bytes', 'installed_bytes', 'total_bytes', 'vram_total_bytes', 'letter', 'filesystem', 'physical_disks', 'connection_type']);
   const aliases = { temperature_celsius: 'temperature_c', power_watts: 'power_w', vram_used_bytes: 'memory_used_bytes', vram_total_bytes: 'memory_total_bytes', letter: 'drive', total_bytes: 'usable_total_bytes', installed_bytes: 'installed_total_bytes' };
   const unwrap = value => value && typeof value === 'object' && Object.hasOwn(value, 'value') ? value.value : value;
+  const opticalVolume = row => ['optical', 'cdrom', 'cd-rom'].includes(String(unwrap(row?.type ?? row?.kind) || '').toLowerCase()) || String(unwrap(row?.filesystem) || '').toUpperCase() === 'CDFS';
   const stamp = value => typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : typeof value === 'string' && Number.isFinite(Date.parse(value)) ? Date.parse(value) / 1000 : null;
   const number = value => typeof value === 'number' && Number.isFinite(value) ? value : null;
   const format = (value, digits = 1) => value.toLocaleString('zh-CN', { maximumFractionDigits: digits });
@@ -72,10 +73,11 @@
     const disks = (Array.isArray(hardware.volumes) ? hardware.volumes : []).map((row, index) => {
       const free = get(row, 'free_bytes'), total = get(row, 'total_bytes'), remaining = ratio(free, total);
       const connected = unwrap(row.connected) !== false && row.state !== 'disconnected';
-      return { row, key: 'disk-' + (unwrap(row.letter) || unwrap(row.drive) || index), name: label(get(row, 'letter')), free, total, remaining, connected,
-        risk: connected && remaining.value !== null ? remaining.value < 5 ? 'error' : remaining.value < 10 ? 'warn' : 'ok' : 'unknown' };
+      const optical = opticalVolume(row);
+      return { row, key: 'disk-' + (unwrap(row.letter) || unwrap(row.drive) || index), name: label(get(row, 'letter')), free, total, remaining, connected, optical,
+        risk: optical ? 'not-applicable' : connected && remaining.value !== null ? remaining.value < 5 ? 'error' : remaining.value < 10 ? 'warn' : 'ok' : 'unknown' };
     });
-    const tightest = disks.filter(disk => disk.connected && disk.remaining.value !== null).sort((a, b) => a.remaining.value - b.remaining.value)[0];
+    const tightest = disks.filter(disk => disk.connected && !disk.optical && disk.remaining.value !== null).sort((a, b) => a.remaining.value - b.remaining.value)[0];
     const screen = metric(status?.host, 'screen_state', { ...context, cached: !!options.cached, old: false, unavailable: false });
     const served = stamp(status?.served_at_unix);
     const online = !!status && !options.cached && (served ? served <= now + 60 && now - served <= maxAge : options.online === true || !!at && !old);
@@ -209,10 +211,13 @@
       const row = el('div', 'live-hardware-disk', null, disk.key); row.dataset.risk = disk.risk;
       const heading = el('div', 'live-hardware-disk-heading', null, disk.key + '-heading');
       const type = unwrap(disk.row.type ?? disk.row.kind);
-      heading.append(el('strong', '', disk.name, disk.key + '-name'), el('span', 'live-hardware-disk-type', { ramdisk: '内存盘', virtual: '虚拟盘', ssd: '固态盘', hdd: '机械盘' }[type] || '磁盘', disk.key + '-type'));
-      heading.append(reading('strong', 'live-hardware-disk-percent', disk.remaining, disk.connected ? label(disk.remaining, '%') + ' 剩余' : '没接上', disk.key + '-remaining'));
+      heading.append(el('strong', '', disk.name, disk.key + '-name'), el('span', 'live-hardware-disk-type', disk.optical ? '光盘' : { ramdisk: '内存盘', virtual: '虚拟盘', ssd: '固态盘', hdd: '机械盘' }[type] || '磁盘', disk.key + '-type'));
+      heading.append(disk.optical && disk.connected ? el('strong', 'live-hardware-disk-percent', '剩余空间不适用', disk.key + '-remaining') : reading('strong', 'live-hardware-disk-percent', disk.remaining, disk.connected ? label(disk.remaining, '%') + ' 剩余' : '没接上', disk.key + '-remaining'));
       row.append(heading);
-      if (disk.connected) {
+      if (disk.connected && disk.optical) {
+        const filesystem = unwrap(disk.row.filesystem);
+        row.append(el('p', 'live-hardware-disk-capacity', (filesystem ? filesystem + ' · ' : '') + (String(filesystem).toUpperCase() === 'CDFS' ? '只读介质' : '光盘介质'), disk.key + '-capacity'));
+      } else if (disk.connected) {
         row.append(reading('p', 'live-hardware-disk-capacity', disk.free, '剩余 ' + capacity(disk.free) + ' / 共 ' + capacity(disk.total), disk.key + '-capacity'), meter(disk.remaining, disk.name + '剩余空间', disk.key + '-meter', disk.risk));
         if (disk.risk !== 'ok' && disk.risk !== 'unknown') row.append(el('p', 'live-hardware-disk-warning', disk.risk === 'error' ? '剩余不足 5%，请尽快腾空间' : '剩余不足 10%，需要留意', disk.key + '-warning'));
       }

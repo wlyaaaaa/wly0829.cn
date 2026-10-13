@@ -35,7 +35,7 @@ function cockpit(saved=storage()) {
  const sandbox={...model,Date:ClockDate,Intl,URLSearchParams,localStorage:saved,sessionStorage:storage(),window:{SiteLiveRuntime:live,top:null},location:{origin:'https://wly0829.cn',hash:'',search:''},document:{querySelector:()=>({textContent:JSON.stringify({kind:'cockpit',page:'cockpit',project:null,screens:[{parts:[{native_live:slots.map(slot=>({slot}))}]}]})}),querySelectorAll:()=>[]},setTimeout:(...args)=>setTimeout(...args).unref(),clearTimeout};
  sandbox.window.top=sandbox.window;
  const copying=source.slice(source.indexOf('function cpPublicSentence('),source.indexOf('function cpNoticeNode('));
- vm.runInNewContext(pure+copying+"\nglobalThis.subject={value,time,slotTime,grafanaGroupValue,summary,cpTyped,cpItemTime,pendingRows,cpPublicSentence,cpCopyMeta,cpCopyRecords,cpCopyPrompt,cpCopyReady,operationRecords(request,items=[]){grant=request;actions=items;},set(data,p='ready',at=data?.observed_at_unix){status=data?adaptStatus(data):null;phase=p;lastRead=p==='ready'?clock():at||0;if(p==='ready')rememberCockpitValues(lastRead*1000);}};",sandbox);
+ vm.runInNewContext(pure+copying+"\nglobalThis.subject={value,time,slotTime,grafanaGroupValue,summary,diskLamp,cpTyped,cpItemTime,pendingRows,cpPublicSentence,cpCopyMeta,cpCopyRecords,cpCopyPrompt,cpCopyReady,operationRecords(request,items=[]){grant=request;actions=items;},set(data,p='ready',at=data?.observed_at_unix){status=data?adaptStatus(data):null;phase=p;lastRead=p==='ready'?clock():at||0;if(p==='ready')rememberCockpitValues(lastRead*1000);}};",sandbox);
  return {...sandbox.subject,advance(ms){current+=ms;}};
 }
 const groupUrls={all:'https://grafana.wly0829.cn/public-dashboards/cccccccccccccccccccccccccccccccc?theme=light','cpu-gpu':'https://grafana.wly0829.cn/public-dashboards/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa?theme=light','memory-network':'https://grafana.wly0829.cn/public-dashboards/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb?theme=light'};
@@ -79,6 +79,14 @@ test('LC-01/02: source-backed drive letters and backup names remain readable Chi
  const app=cockpit(),data=fixture();data.cockpit={detail_groups:{need_you:[],ai_following:[],deferred:[],history:[]}};app.set(data);
  const pc=app.value('cockpit-pc');assert.ok(pc.rows.some(x=>x.text.startsWith('E：')));assert.ok(!JSON.stringify(pc).includes('[object Object]'));assert.ok(!pc.rows.some(x=>x.text.includes('::')||x.text.includes(':：')));
  const backup=app.value('cockpit-backups');assert.match(backup.rows[0].text,/中文备份/);assert.ok(!JSON.stringify(backup).includes('[object Object]'));
+});
+test('optical media stays visible without a free-space warning or missing-metric gap',()=>{
+ const data=fixture(),optical={letter:'I:',type:'optical',filesystem:'CDFS',free_bytes:0,total_bytes:4*1024**3,connected:true,
+  sources:{letter:{status:'ok',observed_at_unix:now/1000},total_bytes:{status:'ok',observed_at_unix:now/1000},free_bytes:{status:'unavailable',observed_at_unix:now/1000}}};
+ data.hardware.volumes.push(optical);const app=cockpit();app.set(data);
+ assert.equal(app.diskLamp(optical),'ok');
+ assert.match(app.value('cockpit-pc').rows.find(row=>row.text.startsWith('I：')).text,/光盘.*只读介质.*剩余空间不适用/);
+ assert.equal(app.value('cockpit-pc').state,'ok');
 });
 test('LC-05: past, future and next-year timestamps retain Beijing calendar dates',()=>{
  const app=cockpit(),data=fixture();data.backups.items[0].last_success_at='2026-09-28T10:30:00+08:00';app.set(data);
