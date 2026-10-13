@@ -61,6 +61,9 @@ def prepare(snapshot):
         if rel.startswith('_home-cockpit/cockpit-offline.') and not (source / 'cockpit.html').is_file(): continue
         copy(source / row['source'], public / rel)
     copy(ROOT / 'scripts/site-live-runtime.js', public / '_live/site-live-runtime.js')
+    for path in (SITE / 'sources/hero-motion').rglob('*'):
+        if path.is_file():
+            copy(path, public / '_living/hero-motion' / path.relative_to(SITE / 'sources/hero-motion'))
     return {'retained_dependencies': len(dependencies)}
 
 def seed_file(rel, target):

@@ -12,7 +12,7 @@ import '../../cockpit/cockpit.css';
 import '../../cockpit/refresh-button.css';
 import riverJs from '../../../../scripts/today-river.js?url&no-inline';
 import riverCss from '../../../../scripts/today-river.css?url';
-import birdConfig from '../../cockpit/bird.config.json?url&no-inline';
+import birdConfig from '../../cockpit/hero.config.json?url&no-inline';
 import livingEngine from '../../chrome/living-engine.json';
 import motionRuntime from '../../../public/_living/quality-runtime/manifest.json';
 
@@ -68,8 +68,8 @@ const cockpitRuntime = runtimeFiles['../../chrome/runtime/cockpit.json'];
 const navLabels = (() => { const m = cockpitRuntime?.tail?.match(/<script id="page-data" type="application\/json">(.*?)<\/script>/s); try { return m ? JSON.parse(m[1]).shared?.nav_labels || {} : {}; } catch { return {}; } })();
 const tocLabels = Object.fromEntries(toc.map((t) => [t.label, labelData[t.label] || navLabels[t.label]]).filter(([, v]) => v && v.src && v.size));
 
-// 小鸟：和其他页同一个环境动画引擎（样式、脚本取其他页运行件里的同一份标签，按 Site.astro 的同样规则换成现行地址），
-// 只给首屏插画一份只有小鸟的配置（src/cockpit/bird.config.json，落在显示器右前方的木桌上），不带路、不去卡片上，不挡卡片和按钮；手机上插画收起，小鸟也不出现。
+// 首屏景物沿用全站活画引擎，恢复已有十项背景动效；样式与脚本按 Site.astro 的规则换成现行地址。
+// hero.config.json 对应当前裁边与白设备、蓝绿灯光；小鸟仍停在原生页木桌落点，手机插画收起时整层不出现。
 const engineRt = runtimeFiles['../../chrome/runtime/agents.json'];
 const engineUrl = (s: string) => Object.entries(motionRuntime.urls).reduce((x, [from, to]) => x.replaceAll(from, to as string), s.replace(`/_living/_engine/${livingEngine.deployed}`, `/_living/_engine/${livingEngine.fixed}`));
 const livingCss = (engineRt?.head || []).find((h: string) => h.startsWith('<link data-living-runtime')) || '';

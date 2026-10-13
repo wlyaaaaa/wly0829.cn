@@ -1,0 +1,237 @@
+{
+ "schema": "living-art/1",
+ "page": "how",
+ "art": "how",
+ "speed_reference": 2.5,
+ "paper": [
+  254,
+  254,
+  254
+ ],
+ "h": {
+  "image": {
+   "size": [
+    1536,
+    1024
+   ]
+  },
+  "box": [
+   0,
+   0,
+   1,
+   1
+  ],
+  "source_sha256": "dc38a8f11e534da259e3c6f2c81638d07471d02f92e93e7ca07b68dcd280459b",
+  "masks": [
+   {
+    "src": "/_living/hero-motion/how/m0.a5ab7b12690e.webp",
+    "rect": [
+     0,
+     0,
+     1,
+     1
+    ]
+   },
+   {
+    "src": "/_living/hero-motion/how/m1.fb3f26f76a03.webp",
+    "rect": [
+     0,
+     0,
+     1,
+     1
+    ]
+   }
+  ],
+  "effects": [
+   {
+    "type": "drift",
+    "name": "湖水流动与水光",
+    "region": {
+     "mask": "m0.g"
+    },
+    "dir": [
+     0.014,
+     0.0015
+    ],
+    "period": 8.5,
+    "scale": 4,
+    "wobble": 0.22,
+    "glints": 0.18
+   },
+   {
+    "type": "sway",
+    "name": "盆栽叶尖与垂藤轻晃",
+    "region": {
+     "mask": "m0.r"
+    },
+    "amp": 0.0045,
+    "period": 6.2,
+    "freq": 5,
+    "gust": {
+     "every": 15,
+     "dur": 3.4,
+     "amp": 1.3
+    },
+    "gustDir": "right"
+   },
+   {
+    "type": "sway",
+    "name": "窗帘随微风轻动",
+    "region": {
+     "mask": "m0.b"
+    },
+    "amp": 0.002,
+    "period": 9,
+    "freq": 3
+   },
+   {
+    "type": "drift",
+    "name": "窗外白云缓慢移动",
+    "region": {
+     "mask": "m1.r"
+    },
+    "dir": [
+     0.009,
+     0
+    ],
+    "period": 14,
+    "scale": 4,
+    "wobble": 0.1
+   },
+   {
+    "type": "daylight",
+    "name": "场景随杭州天色变化",
+    "region": {
+     "mask": "m1.g"
+    },
+    "amount": 1
+   }
+  ],
+  "bird": {
+   "perches": [
+    {
+     "x": 0.94,
+     "y": 0.2,
+     "facing": "left",
+     "span": 0
+    }
+   ],
+   "size": 0.065,
+   "minSize": 22,
+   "from": "right"
+  }
+ },
+ "v": {
+  "image": {
+   "size": [
+    1536,
+    1024
+   ]
+  },
+  "box": [
+   0,
+   0,
+   1,
+   1
+  ],
+  "source_sha256": "dc38a8f11e534da259e3c6f2c81638d07471d02f92e93e7ca07b68dcd280459b",
+  "masks": [
+   {
+    "src": "/_living/hero-motion/how/m0.a5ab7b12690e.webp",
+    "rect": [
+     0,
+     0,
+     1,
+     1
+    ]
+   },
+   {
+    "src": "/_living/hero-motion/how/m1.fb3f26f76a03.webp",
+    "rect": [
+     0,
+     0,
+     1,
+     1
+    ]
+   }
+  ],
+  "effects": [
+   {
+    "type": "drift",
+    "name": "湖水流动与水光",
+    "region": {
+     "mask": "m0.g"
+    },
+    "dir": [
+     0.014,
+     0.0015
+    ],
+    "period": 8.5,
+    "scale": 4,
+    "wobble": 0.22,
+    "glints": 0.18
+   },
+   {
+    "type": "sway",
+    "name": "盆栽叶尖与垂藤轻晃",
+    "region": {
+     "mask": "m0.r"
+    },
+    "amp": 0.0045,
+    "period": 6.2,
+    "freq": 5,
+    "gust": {
+     "every": 15,
+     "dur": 3.4,
+     "amp": 1.3
+    },
+    "gustDir": "right"
+   },
+   {
+    "type": "sway",
+    "name": "窗帘随微风轻动",
+    "region": {
+     "mask": "m0.b"
+    },
+    "amp": 0.002,
+    "period": 9,
+    "freq": 3
+   },
+   {
+    "type": "drift",
+    "name": "窗外白云缓慢移动",
+    "region": {
+     "mask": "m1.r"
+    },
+    "dir": [
+     0.009,
+     0
+    ],
+    "period": 14,
+    "scale": 4,
+    "wobble": 0.1
+   },
+   {
+    "type": "daylight",
+    "name": "场景随杭州天色变化",
+    "region": {
+     "mask": "m1.g"
+    },
+    "amount": 1
+   }
+  ],
+  "bird": {
+   "perches": [
+    {
+     "x": 0.94,
+     "y": 0.2,
+     "facing": "left",
+     "span": 0
+    }
+   ],
+   "size": 0.065,
+   "minSize": 22,
+   "from": "right"
+  }
+ }
+}

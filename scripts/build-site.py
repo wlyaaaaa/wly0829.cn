@@ -251,7 +251,7 @@ def build(pages=None):
     before_refs = {file_route(p.relative_to(dist).as_posix()): html_references(p) for p in dist.rglob('*.html')}
     sources = sync_markdown(old.get('json_sources', {})); stage('source')
     preparation = [SNAPSHOT / 'manifest.json', SITE / 'sources/retained-home-cockpit',
-        SITE / 'sources/vendor-deps', SITE / 'public/_home-cockpit', SITE / 'src/chrome/runtime',
+        SITE / 'sources/vendor-deps', SITE / 'sources/hero-motion', SITE / 'public/_home-cockpit', SITE / 'src/chrome/runtime',
         ROOT / 'sources/rules', ROOT / 'sources/assets', ROOT / 'src/typeset',
         SITE / 'tools/build_runtime.py', SITE / 'tools/pack_living.py', SITE / 'tools/adapt_motion.py',
         SITE / 'tools/cockpit_stutter.py', ROOT / 'scripts/astro_rules.py', ROOT / 'scripts/album-runtime.js',

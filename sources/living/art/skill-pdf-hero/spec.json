@@ -1,0 +1,16 @@
+{
+  "art": "skill-pdf-hero",
+  "source": "sources/assets/_library/skills-new-20261012/pdf/pdf-01-v01.png",
+  "note": "现行 PDF 首屏插画；只动右上角真实树叶，文档、字线、勾选、签名与笔固定。",
+  "masks": {
+    "size": 640,
+    "m0.r": {
+      "name": "右上角真实树叶",
+      "layers": [{"poly": [[0.685,0],[1,0],[1,0.41],[0.816,0.434],[0.72,0.31],[0.687,0.18]], "rule": "leaf"}],
+      "roots": {"points": [[0.965,0.03]], "r0": 0.016, "r1": 0.15},
+      "feather": 0.004,
+      "hug": 0.003
+    }
+  },
+  "effects": [{"type": "sway", "name": "右上树叶随微风轻晃", "region": {"mask": "m0.r"}, "amp": 0.0045, "period": 6.4, "freq": 5}]
+}
