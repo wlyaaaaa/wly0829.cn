@@ -363,7 +363,7 @@ function smoothPath(path, n = 10) {   // 折线拐角处圆一点（Catmull-Rom�
 //   b) 连续 3 帧以上、每帧都超过 1 秒，而且这几帧加起来超过 5 秒（一帧接一帧的长帧就是卡死）。
 // 不算的：刚开始播的头 2 秒、滚动中和最后一次滚动后 1.5 秒、页面隐藏或画滚出屏幕（浏览器自己暂停）、
 // 手动取帧；单次长帧只占窗口里的一个间隔，拉不动中位数，也凑不成“连续 3 帧”。
-// 首页和每页的活画共用这一份：o = { label, shouldRun(), exempt()（手动取帧、定格时为真）, shared（含 scrollingUntil）, stop(why) }
+// 首页和每页共用：reportOnly 只记录调度慢，未传时保留停止语义。
 function makeGuard(o) {
   const GUARD = { graceMs: 2000, windowMs: 6000, minIntervals: 5, slowMedianMs: 100, longMs: 1000, longRun: 3, longRunMs: 5000 };
   const guardGaps = [];
@@ -392,6 +392,10 @@ function makeGuard(o) {
     if (!why) return false;
     guardTrigger = { rule: why, intervals: guardGaps.length, windowMs: Math.round(guardSpan), medianIntervalMs: +guardMedian.toFixed(1),
       medianFPS: guardMedian ? +(1000 / guardMedian).toFixed(2) : 0, consecutiveLong: guardLong, consecutiveLongMs: Math.round(guardLongMs) };
+    if (o.reportOnly) {
+      console.info(`[${o.label}] 动效调度较慢：保留诊断，继续播放。`);
+      resetGuard(GUARD.graceMs); return false;
+    }
     console.info(why === 'long-frames'
       ? `[${o.label}] 动效退回静态：可见播放时连续 ${guardLong} 帧每帧都超过 1 秒（共 ${(guardLongMs / 1000).toFixed(1)} 秒）；仅本页本次生效。`
       : `[${o.label}] 动效退回静态：可见播放时最近 ${(guardSpan / 1000).toFixed(1)} 秒实际帧率中位数 ${(1000 / guardMedian).toFixed(1)} FPS（帧间隔中位数 ${guardMedian.toFixed(0)} 毫秒）；仅本页本次生效。`);
@@ -790,7 +794,7 @@ function createScene(part, orient, cfg, shared, opts) {
   function canAnimate() { return !destroyed && active && !failed && !reduce && texReady; }
   function shouldRun() { return canAnimate() && !shared.paused; }
   // 防卡死的保险：和首页同一份代码（makeGuard），口径见那里的注释
-  const guard = makeGuard({ label: 'LivingArt', shouldRun: () => shouldRun(), exempt: () => Vt.manual, shared, stop: why => stop(why) });
+  const guard = makeGuard({ label: 'LivingArt', shouldRun: () => shouldRun(), exempt: () => Vt.manual, shared, reportOnly: true, stop: why => stop(why) });
   const GUARD = guard.rules;
   function resetGuard(grace = 0) { guard.reset(grace); }
   function resetBudget() { last = 0; guard.reset(GUARD.graceMs); }

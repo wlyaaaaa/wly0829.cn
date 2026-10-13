@@ -32,6 +32,19 @@ NEW_TEXTURE = 'const q=new URL(p.src,u.base).href,y=q===(T.currentSrc||T.src)&&C
 if fixed.count(OLD_TEXTURE) != 1:
     sys.exit("找不到原纹理加载入口")
 fixed = fixed.replace(OLD_TEXTURE, NEW_TEXTURE)
+# 普通页的帧回调间隔只记录调度慢；活画和读页小鸟继续播放。
+# 未传 reportOnly 的共享保护保留原语义，首页独立引擎不改。
+TIMING_PATCHES = [
+    ('console.info(te==="long-frames"?',
+     'e.reportOnly?(console.info("["+e.label+"] 动效调度较慢：保留诊断，继续播放。"),fe(i.graceMs),!1):(console.info(te==="long-frames"?'),
+    ('e.stop("slow-frames"),!0):!1}', 'e.stop("slow-frames"),!0)):!1}'),
+    ('const xt=zt({label:"LivingArt",', 'const xt=zt({label:"LivingArt",reportOnly:!0,'),
+    ('guardFactory:U?zt:null,', 'guardFactory:U?H=>zt({...H,reportOnly:!0}):null,'),
+]
+for old, new in TIMING_PATCHES:
+    if fixed.count(old) != 1:
+        sys.exit("找不到唯一的普通页计时保护入口：" + old)
+    fixed = fixed.replace(old, new)
 # 读页小鸟只改停靠点的 DOM 适配；飞行、精灵图、停留节奏和旧页分支原样保留。
 bird_src = os.path.join(ENG, "bird.fffa187360")
 bird = open(os.path.join(bird_src, "bird.js"), encoding="utf-8").read()
