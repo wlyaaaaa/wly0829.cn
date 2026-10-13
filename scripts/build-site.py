@@ -287,7 +287,11 @@ def build(pages=None):
         fixed[route] = path
     for md in sorted((SITE / 'src/content/pages').glob('*.md')):
         fm = markdown_frontmatter(md); name = md.stem
-        render_fps[name] = fingerprint([md, SITE / 'src/chrome/runtime' / (name + '.json')]) + engine_fp
+        runtime_path = SITE / 'src/chrome/runtime' / (name + '.json')
+        render_inputs = [md, runtime_path]
+        living_config = read(runtime_path).get('living_config') if runtime_path.is_file() else None
+        if living_config: render_inputs.append(public / living_config.lstrip('/'))
+        render_fps[name] = fingerprint(render_inputs) + engine_fp
         for route in [fm.get('url') or '/' + name + '/', *(fm.get('old_urls') or [])]:
             route = normalize_route(route)
             if route in {'/', '/cockpit/', '/computer-access/'}: continue

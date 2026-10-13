@@ -38,7 +38,8 @@ def select_pages(dist, mode, hashes, previous, locked=False):
     else: selected = [route_name(x.strip()) for x in mode.split(",") if x.strip()]
     missing = set(selected) - hashes.keys()
     if missing: raise ValueError(f"成品缺少页面：{sorted(missing)}")
-    return sorted(set(selected) - ({"/"} if locked else set()))
+    # 这两个入口只跳转首页；首页锁定也覆盖它的直达别名。
+    return sorted(set(selected) - ({"/", "/cv/", "/system/"} if locked else set()))
 
 def successful_routes(selected, rows, unchanged=True):
     expected = {f"{w}x{h}" for w, h in VIEWPORTS}
