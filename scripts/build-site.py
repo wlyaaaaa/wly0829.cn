@@ -276,7 +276,7 @@ def build(pages=None):
     engine_fp = fingerprint([ROOT / 'src/typeset', ROOT / 'sources/assets', SITE / 'tools/render_blocks.py'])
     wrapper_paths = [p for p in (SITE / 'src').rglob('*') if p.is_file()
         and 'content' not in p.relative_to(SITE / 'src').parts and p.parent.name not in {'runtime', 'retained'}
-        and p.name not in {'living-engine.json', 'retained-page.ts'} and 'cockpit' not in p.relative_to(SITE / 'src').parts]
+        and p.name != 'retained-page.ts' and 'cockpit' not in p.relative_to(SITE / 'src').parts]
     wrapper_fp = fingerprint(wrapper_paths + [SITE / 'astro.config.mjs', SITE / 'package-lock.json'])
     entries = {}; render_fps = {}; fixed = {}
     for path in (SITE / 'src/pages').rglob('*.astro'):
@@ -295,7 +295,7 @@ def build(pages=None):
             entries[route] = {'name': name, 'fingerprint': render_fps[name] + wrapper_fp, 'kind': 'native'}
     for name, route in [('home', '/'), ('cockpit', '/cockpit/'), ('computer-access', '/computer-access/')]:
         native_cockpit = name == 'cockpit' and "retainedPage('cockpit')" not in fixed[route].read_text('utf8')
-        retained_fp = fingerprint([fixed[route], SITE / 'src/cockpit', SITE / 'public/_overview'] if native_cockpit else retained_inputs(name, snapshot))
+        retained_fp = fingerprint([fixed[route], SITE / 'src/cockpit', SITE / 'public/_overview', SITE / 'src/chrome/living-engine.json'] if native_cockpit else retained_inputs(name, snapshot))
         entries[route] = {'fingerprint': retained_fp, 'kind': 'retained'}
     for relative in snapshot['pages']:
         entries.setdefault(file_route(relative), {'fingerprint': fingerprint([SNAPSHOT / 'pages' / relative]), 'kind': 'frozen'})
