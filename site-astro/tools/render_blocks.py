@@ -850,9 +850,13 @@ def run(names, workers=2):
             fm, page, jobs = prepare_page(n, reg, css_files, libfp)
         except Exception as e:  # 一页出错不拦别的页，最后列出来
             failed.append(n); print(f"{n}：区块库排这一页出错 {repr(e)[:200]}", flush=True); continue
+        page_binds = bindings(n, page["screens"][0]["id"]) if page["screens"] else {}
+        binds.update(page_binds)
+        # 实际首屏动效绑定影响 art/artBox，必须跟着参与缓存键。
+        for j in jobs:
+            binding_rect = page_binds.get((j["screen"], j["o"]))
+            j["key"] = hashlib.sha256(json.dumps([j["key"], binding_rect], separators=(",", ":"), sort_keys=True).encode()).hexdigest()[:20]
         fms[n] = fm; all_jobs += jobs
-        if page["screens"]:
-            binds.update(bindings(n, page["screens"][0]["id"]))
     names = [n for n in names if n not in failed]
     # 增量：指纹没变的屏用上次的结果
     cache_p = os.path.join(WORK, "_cache.json")
