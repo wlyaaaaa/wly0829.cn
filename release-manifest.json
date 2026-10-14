@@ -18,8 +18,8 @@
       "sha256": "df478787a83412e9211fa82a88dfd43016943ec03010b87e22f731af45da2cc3"
     },
     "cockpit/index.html": {
-      "bytes": 564291,
-      "sha256": "11a7d22e91cd5ddb8eb861de994d37c20c5c64f22a821b067473ef1652a429fc"
+      "bytes": 565137,
+      "sha256": "0506b077b5dadc1a30d7104a0aabd53bb7596885aa6af0b574af02e51dd405ec"
     },
     "cockpit/stutter/index.html": {
       "bytes": 16362,
@@ -1586,7 +1586,7 @@
     "/skills/work-delivery/",
     "/system/"
   ],
-  "release_id": "8ebdaeb21ca54ff41e536375adb9fcfdb59fa802bf5b83e4d9392ce47520c3e7",
+  "release_id": "6935970c871bdb0d8df56a11b16fcc89f22200cacb938ba48b9c323c6a64011b",
   "baseline_production_commit": "2872547b5925b782419ec7bf5cb0f162c1b53c3e",
   "rules_pin": {
     "schema": "wly.astro-rules-pin.v1",
@@ -3766,34 +3766,34 @@
     "/computer-access/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
-      "producer": "astro"
-    },
     "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
-      "producer": "astro"
-    },
-    "/cockpit/stutter/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
       "producer": "astro"
     },
     "/projects/llm-backend-toolkit/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
+    "/cockpit/stutter/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
       "producer": "astro"
     },
     "/404.html": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
       "producer": "astro"
     },
     "/cv/": {
@@ -4352,12 +4352,12 @@
     "html_files": 314
   },
   "previous_oss_source": "published",
-  "previous_release_id": "a22de4e223c26812d8766e46a64e5dad368b4c25321168c7de6ff17991849775",
+  "previous_release_id": "8ebdaeb21ca54ff41e536375adb9fcfdb59fa802bf5b83e4d9392ce47520c3e7",
   "oss": {
     "schema": "wly.oss-assets.v1",
     "asset_base_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com",
-    "prefix": "releases/7f94517aeb7ec607127b0d9172698f16d0364e1699280e7ca32c88398cce3560",
-    "source_release_id": "e760369d7d5349e4c7b0431228280d2a50946b1bae1b05286d8134efab2d792c",
+    "prefix": "releases/1155e36fef35c61522b779b92e535484a79936affd3bd4e6d282435a992b2ce6",
+    "source_release_id": "1321ba7d468b1fe5454cacadfb6ebd5bbdecd9e1ebec68b7232ce49087ae9289",
     "objects": {
       "_album/album-1a72f07ce279b5d3fdf8.css": {
         "bytes": 4721,
@@ -5232,6 +5232,18 @@
         "source": {
           "bytes": 46048,
           "sha256": "d6e2d14e41fb5adb5c58c7ff3621b1b58676ce2701ee859560dfbaa87c40f8e0"
+        },
+        "byte_preserved": true
+      },
+      "_astro/today-river.DkqxxE76.js": {
+        "bytes": 49802,
+        "sha256": "ba013e50b178ce6db9c317109fb63332edb6e88f589746f342c2fa19b3696738",
+        "key": "releases/29b0f2a53efb6b4cda21dcabc4c0d57823f9af7083a7a6001b3fdb8897bde0f9/_astro/today-river.DkqxxE76.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/29b0f2a53efb6b4cda21dcabc4c0d57823f9af7083a7a6001b3fdb8897bde0f9/_astro/today-river.DkqxxE76.js",
+        "content_type": "application/javascript",
+        "source": {
+          "bytes": 49802,
+          "sha256": "ba013e50b178ce6db9c317109fb63332edb6e88f589746f342c2fa19b3696738"
         },
         "byte_preserved": true
       },
@@ -66700,6 +66712,7 @@
       "releases/2973d1a68e21dda3269a7840237e7ac5caecba84b916907a71d93e6fad9b6aa0/_typeset/runtime/live-sans-part-e8-7697abd3dcc8d2cdce5b.woff2",
       "releases/298ccdd5bdb3d1931102aece29e4ccef57510d2339f3bfa0dc66ff6b0df74a6f/_shared/nav-1123245d1bed.webp",
       "releases/2990685a1e8942df329943d91e4ae60a3726e37b998208df910db08463551b1c/_shared/nav-bad6e882e38b.avif",
+      "releases/29b0f2a53efb6b4cda21dcabc4c0d57823f9af7083a7a6001b3fdb8897bde0f9/_astro/today-river.DkqxxE76.js",
       "releases/29b583c0d1c215329b59180510c23ab60c1646d4029d878bfbd3f187c862acb5/assets/_fingerprinted/76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491.png",
       "releases/29b674c18014f85fc0abd2b80cbbfecd66b5a919e1fe5652f6528fde2ec9120a/_typeset/runtime/live-sans-part-cf-76ffa8c28d6aa69aefe4.woff2",
       "releases/29bf27914b852ed1a839af129e736d0fadd217d12ce443184199db96dd94a410/_shared/nav-d44b78dbb8-1f928f3d8be7.avif",
@@ -66920,7 +66933,6 @@
       "releases/357522c55c9fbefbc608a0c42a5cf5433f82606bb9d40084facf002fbfc67cef/_shared/nav-0571025156-44fb3c90818c.webp",
       "releases/3597b9debd5ecf8ea4a6242b95ad388cec17dbd3378a4f757d31394f6697b241/assets/_fingerprinted/008a140f3153a727ff401191849fe05dca0b9e36cb8e9697238f36d3342532b6.png",
       "releases/359b5849096308fa47c553f486b5bbe551e644d54d67db15f251d5d9d156b9be/_shared/nav-73075237fd-4e476b4ee481.webp",
-      "releases/35a80b0c62b223aaba1f04afad070c8044cf4f39a9899263e0d49119cc244cc5/_astro/today-river.DNuW33qX.js",
       "releases/35c9dff075d4d94c558a2dcf29dd0b4bdcaeae5537a0dea9b094df5bb8d13fda/_typeset/skill-reply-as-me/5d61e484b95caf25d574-skill-reply-as-me-01-h.webp",
       "releases/35d0f47df9e73a1077fd29e47d582386cfb21c0d8c1385c7255e6c1bdfcdf114/_typeset/personal-materials/f972ba3dcb35381e8c4f-personal-materials-01-h.webp",
       "releases/35d40042c73a5ec82c678079ee3264ec7f7c307f9658c27c49a6f90f7d78710c/assets/_fonts/document-materials-editable-docx-pdf-2d8000a75816.woff2",
