@@ -318,7 +318,7 @@ function nightOf(ms) {
 // ---------- 水：让画里的河真的流起来 ----------
 const VS = 'attribute vec2 a; varying vec2 vUv; void main(){ vUv = vec2(a.x*.5+.5, .5-a.y*.5); gl_Position = vec4(a,0.,1.); }';
 const FS = `precision highp float;
-varying vec2 vUv; uniform sampler2D uTex, uMask; uniform float uT, uA, uReveal, uNight, uWarm; uniform vec4 uBoat[14];
+varying vec2 vUv; uniform sampler2D uTex, uMask; uniform float uT, uA, uReveal; uniform vec4 uBoat[14];
 float hash(vec2 p){ p = fract(p*vec2(123.34,456.21)); p += dot(p,p+45.32); return fract(p.x*p.y); }
 float noise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x), mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),f.x), f.y); }
 float fbm(vec2 p){ float s=0., a=.5; for(int i=0;i<3;i++){ s+=a*noise(p); p=p*2.03+vec2(17.3,9.1); a*=.5; } return s; }
@@ -350,16 +350,12 @@ void main(){
   // 水面上漂着的光网和碎光
   vec2 q = p*vec2(9., 13.) - vec2(uT*.25, 0.) + (fbm(p*4. + uT*.05) - .5)*1.5;
   float ca = pow(1. - abs(2.*noise(q) - 1.), 7.) + .6*pow(1. - abs(2.*noise(q*1.9 + 4.7) - 1.), 9.);
-  col += vec3(1., 1., .9) * ca * .12 * m * (1. - .55*uNight);
+  col += vec3(1., 1., .9) * ca * .12 * m;
   vec2 gp = vec2(p.x - uT*.0045, p.y) * 46.; vec2 gc = floor(gp); float gh = hash(gc);
   vec2 gq = gc + .25 + .5*vec2(hash(gc + 3.1), hash(gc + 7.7));
   float glint = smoothstep(.17, 0., length(gp - gq)) * pow(max(0., sin(uT*(.35 + gh*.6) + gh*40.)), 10.) * step(.8, gh);
-  col += glint * .8 * m * (1. - .3*uNight);
+  col += glint * .8 * m;
   col = mix(col, vec3(.96, 1., .97), clamp(foam, 0., 1.) * .78 * m);
-  // 天色：夜里偏蓝偏暗，日出日落偏暖；纸的留白不跟着变
-  float ink = smoothstep(.985, .8, min(col.r, min(col.g, col.b)));
-  col = mix(col, col*vec3(.5,.69,.86)*.92 + vec3(0.,.012,.035), uNight*.62*ink);
-  col = mix(col, col*vec3(1.08,.95,.78), uWarm*.55*ink);
   // 四边化进白纸里；开场从浮标那里晕开
   float nz = fbm(p*4.5); vec2 ed = min(uv, 1.-uv);
   float show = smoothstep(0., .05, ed.x + (nz-.5)*.03) * smoothstep(0., .075, ed.y + (nz-.5)*.045);
@@ -384,7 +380,7 @@ async function initGL() {
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, im);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); });
-    ['uTex', 'uMask', 'uT', 'uA', 'uReveal', 'uNight', 'uWarm', 'uBoat'].forEach(n => GL.u[n] = gl.getUniformLocation(pr, n));
+    ['uTex', 'uMask', 'uT', 'uA', 'uReveal', 'uBoat'].forEach(n => GL.u[n] = gl.getUniformLocation(pr, n));
     gl.uniform1i(GL.u.uTex, 0); gl.uniform1i(GL.u.uMask, 1); GL.gl = gl; GL.ok = true; stage.classList.remove('nogl');
     canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); GL.ok = false; stage.classList.add('nogl'); });
   } catch (err) { console.info('[今天的河] 水面动效没开起来，改用静止的画：', err.message || err); stage.classList.add('nogl'); }
@@ -397,7 +393,7 @@ function draw(tb) {
   if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
   boatBuf.fill(0); wakes.filter(o => o.s > .02).sort((a, b) => b.s - a.s).slice(0, 14).forEach((o, k) => boatBuf.set([o.x / 100, o.y / 100, o.w / 100 * GEOM.aspect, o.s], k * 4));
   gl.uniform4fv(u.uBoat, boatBuf); gl.uniform1f(u.uT, Math.min(tb, 1e6) % 4000); gl.uniform1f(u.uA, GEOM.aspect); gl.uniform1f(u.uReveal, clamp(tb / I.reveal));
-  if (M.stale) boatBuf.fill(0), gl.uniform4fv(u.uBoat, boatBuf); gl.uniform1f(u.uNight, M.night.n); gl.uniform1f(u.uWarm, M.night.w);
+  if (M.stale) boatBuf.fill(0), gl.uniform4fv(u.uBoat, boatBuf);
   metrics.draws++; gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 }
 
