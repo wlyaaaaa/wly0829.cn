@@ -299,7 +299,8 @@ def build(pages=None):
             entries[route] = {'name': name, 'fingerprint': render_fps[name] + wrapper_fp, 'kind': 'native'}
     for name, route in [('home', '/'), ('cockpit', '/cockpit/'), ('computer-access', '/computer-access/')]:
         native_cockpit = name == 'cockpit' and "retainedPage('cockpit')" not in fixed[route].read_text('utf8')
-        retained_fp = fingerprint([fixed[route], SITE / 'src/cockpit', SITE / 'public/_overview', SITE / 'src/chrome/living-engine.json'] if native_cockpit else retained_inputs(name, snapshot))
+        retained_fp = fingerprint([fixed[route], SITE / 'src/cockpit', SITE / 'public/_overview', SITE / 'src/chrome/living-engine.json',
+            ROOT / 'scripts/today-river.js', ROOT / 'scripts/today-river.css', ROOT / 'sources/creative/today-river/assets2'] if native_cockpit else retained_inputs(name, snapshot))
         entries[route] = {'fingerprint': retained_fp, 'kind': 'retained'}
     for relative in snapshot['pages']:
         entries.setdefault(file_route(relative), {'fingerprint': fingerprint([SNAPSHOT / 'pages' / relative]), 'kind': 'frozen'})
