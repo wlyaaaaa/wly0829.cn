@@ -18,8 +18,8 @@
       "sha256": "df478787a83412e9211fa82a88dfd43016943ec03010b87e22f731af45da2cc3"
     },
     "cockpit/index.html": {
-      "bytes": 583632,
-      "sha256": "ff54a86857cf64b5953d36891b52d76ed060e46cb1115c449be673d48b863b31"
+      "bytes": 574358,
+      "sha256": "2d3a5b1311fb37c9dcc9a361bf80cca245b2a08c0fba415afae58e8ed2d024a1"
     },
     "cockpit/stutter/index.html": {
       "bytes": 16362,
@@ -1586,7 +1586,7 @@
     "/skills/work-delivery/",
     "/system/"
   ],
-  "release_id": "b39ab328d3cfd6e1be7f6473fd8aec907826cc1e58ba55874327d1795260f789",
+  "release_id": "5cec4eccb8059b5ba5c670a2754d3d6ebdbd039b9e2ecbd4083ea8634624f5d9",
   "baseline_production_commit": "2872547b5925b782419ec7bf5cb0f162c1b53c3e",
   "rules_pin": {
     "schema": "wly.astro-rules-pin.v1",
@@ -3766,31 +3766,31 @@
     "/computer-access/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
+    "/cockpit/stutter/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
       "producer": "astro"
     },
     "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
       "producer": "astro"
     },
-    "/cockpit/stutter/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
+    "/projects/llm-backend-toolkit/": {
       "producer": "astro"
     },
     "/404.html": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/": {
+    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
+    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
       "producer": "astro"
     },
     "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
@@ -4352,12 +4352,12 @@
     "html_files": 314
   },
   "previous_oss_source": "published",
-  "previous_release_id": "f11874ae33e723b4b6ff94f7c61661a5ea57cbfae395bddf0805eee75aa2c455",
+  "previous_release_id": "b39ab328d3cfd6e1be7f6473fd8aec907826cc1e58ba55874327d1795260f789",
   "oss": {
     "schema": "wly.oss-assets.v1",
     "asset_base_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com",
-    "prefix": "releases/8fa8c618b522dd99a45dc48215253a0dd7b775ed6d850835833cc86965beccc6",
-    "source_release_id": "86ca2c19aadcd41cabee7c826ae4a10fa883ab6d2529f4baccca1bf353e6166f",
+    "prefix": "releases/37af99272907355175eb9d13ee9203dede958ec035f55a1f22fee1f8cdf24c2f",
+    "source_release_id": "d8adb1e1785abf45673c7a85356488c8eb383f6442887fef131cc6d26dd41fa7",
     "objects": {
       "_album/album-1a72f07ce279b5d3fdf8.css": {
         "bytes": 4721,
@@ -4908,6 +4908,18 @@
         "source": {
           "bytes": 64074,
           "sha256": "334893fd24918dbc31e7157308e8422a32c002ba411d2d0f2af0c9d89ade8d8a"
+        },
+        "byte_preserved": true
+      },
+      "_astro/index.astro_astro_type_script_index_0_lang.Bf_NMWNs.js": {
+        "bytes": 65007,
+        "sha256": "2b60bbff69a7a7ac53d69c2808c7c531cb4af0ddc61948f536f57abf3c0f1ccd",
+        "key": "releases/367add9feb4be9124562e3e8aa3d2efd21ebd027b4b3c1d835c7093770779176/_astro/index.astro_astro_type_script_index_0_lang.Bf_NMWNs.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/367add9feb4be9124562e3e8aa3d2efd21ebd027b4b3c1d835c7093770779176/_astro/index.astro_astro_type_script_index_0_lang.Bf_NMWNs.js",
+        "content_type": "application/javascript",
+        "source": {
+          "bytes": 65007,
+          "sha256": "2b60bbff69a7a7ac53d69c2808c7c531cb4af0ddc61948f536f57abf3c0f1ccd"
         },
         "byte_preserved": true
       },
@@ -66969,6 +66981,7 @@
       "releases/36425032bb86c1f7875d3f12df2d4ea60766489b87ffc478c7bfe5645adc251e/assets/_fingerprinted/0ca4ae434bc5425b50c85b9d6172d9767c4a4ff2c223fe69978a3ac767b05888.png",
       "releases/365926576c38826a033b1d25517a7c13fc1cd23f506743ad2cf635f03eed6184/_shared/home-living/assets/bird-hop2.7addfa5c0c.webp",
       "releases/3676aab36c2cab8de539922e2a3b03aa3715fbe2e5dd8c192b27af62fed2ab97/_shared/resource-retry-18676b91471c92131107.js",
+      "releases/367add9feb4be9124562e3e8aa3d2efd21ebd027b4b3c1d835c7093770779176/_astro/index.astro_astro_type_script_index_0_lang.Bf_NMWNs.js",
       "releases/3693f26ca4f0a37f3f72597a7e07077878f4093290c3c68319cc771efdb1198e/assets/_fonts/codex-local-remote-157fa688c8e1.woff2",
       "releases/36c23cce863d748b4d35ddbb8a88aea77180cabe719ed7d5eb7feb50ded59222/assets/_fingerprinted/bab6f96f1e3e885c69662bea0b91c9a54e66fe625772029e8907b0179f0a179d.png",
       "releases/36c62b4e502f828e7da514cbf63c299b723fabc564f13cc950a6f70fc4f019b6/assets/_fingerprinted/5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433.png",
@@ -67234,7 +67247,6 @@
       "releases/44d1f516fcbcb068c8c9cc73557b5df4b823e679000bb84156e13b4a8f283067/assets/_fingerprinted/3e0cdd463fabc5be85fa7985b626d59a51531ed70e75e6f0e2669c0445367a2d.json",
       "releases/44d68e802c4f169ae915e2e2b9dddfbfd67cc13f1faade731383a60229af5ec6/assets/_fingerprinted/46d1cad12b7c02ee513dff730303ee80f1eea1fb8d77e5dc73fa60f352cafbb2.png",
       "releases/44e05c11c1fdfbe1fb75e9da5d9d14fd1834b95899f7893d60849a67f8501fc7/_shared/nav-13c165c620-7139a8609516.webp",
-      "releases/44e9803a77b9681c85a9b97f52de5d3375d751b5fbceb239debe8f955361a59a/_astro/index.astro_astro_type_script_index_0_lang.ndFMvVeM.js",
       "releases/44e98691e7c30382543aa3efbf79e75f28541569f8afc51a5d7b8a0c70085256/assets/home-02-v-fallback640-f147cdf93f11.webp",
       "releases/44f32e0ce70ad1582a5cdd19742856083ac7631a6e1e502bffea61015f5ccdfd/_shared/nav-d233654716-5ca43878e3cf.avif",
       "releases/450727c1ab5f1245d806b3e87c7ffe659606797f493631a1c3baa86100b44d9f/_living/_engine/living.ec6ce11b72.js",
