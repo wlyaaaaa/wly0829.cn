@@ -18,8 +18,8 @@
       "sha256": "df478787a83412e9211fa82a88dfd43016943ec03010b87e22f731af45da2cc3"
     },
     "cockpit/index.html": {
-      "bytes": 565137,
-      "sha256": "0506b077b5dadc1a30d7104a0aabd53bb7596885aa6af0b574af02e51dd405ec"
+      "bytes": 585403,
+      "sha256": "022b66fee063578cc5dc7f46a0cae5d1d807763f873c7e26db4d60b838034d6d"
     },
     "cockpit/stutter/index.html": {
       "bytes": 16362,
@@ -1586,7 +1586,7 @@
     "/skills/work-delivery/",
     "/system/"
   ],
-  "release_id": "6935970c871bdb0d8df56a11b16fcc89f22200cacb938ba48b9c323c6a64011b",
+  "release_id": "f11874ae33e723b4b6ff94f7c61661a5ea57cbfae395bddf0805eee75aa2c455",
   "baseline_production_commit": "2872547b5925b782419ec7bf5cb0f162c1b53c3e",
   "rules_pin": {
     "schema": "wly.astro-rules-pin.v1",
@@ -3766,7 +3766,22 @@
     "/computer-access/": {
       "producer": "astro"
     },
+    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
+      "producer": "astro"
+    },
+    "/404.html": {
+      "producer": "astro"
+    },
     "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
       "producer": "astro"
     },
     "/projects/llm-backend-toolkit/": {
@@ -3775,25 +3790,10 @@
     "/cockpit/stutter/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
-      "producer": "astro"
-    },
-    "/404.html": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
-      "producer": "astro"
-    },
     "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
+    "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
       "producer": "astro"
     },
     "/cv/": {
@@ -4352,12 +4352,12 @@
     "html_files": 314
   },
   "previous_oss_source": "published",
-  "previous_release_id": "8ebdaeb21ca54ff41e536375adb9fcfdb59fa802bf5b83e4d9392ce47520c3e7",
+  "previous_release_id": "6935970c871bdb0d8df56a11b16fcc89f22200cacb938ba48b9c323c6a64011b",
   "oss": {
     "schema": "wly.oss-assets.v1",
     "asset_base_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com",
-    "prefix": "releases/1155e36fef35c61522b779b92e535484a79936affd3bd4e6d282435a992b2ce6",
-    "source_release_id": "1321ba7d468b1fe5454cacadfb6ebd5bbdecd9e1ebec68b7232ce49087ae9289",
+    "prefix": "releases/1594c71e612fd15d6a80b7686720c4ee5d9edbc936e86ff0ebab900113504be1",
+    "source_release_id": "5ac4a96fe76805fab10d62b22bba1209d96be4728430d67b1d6d18bdb4f7254e",
     "objects": {
       "_album/album-1a72f07ce279b5d3fdf8.css": {
         "bytes": 4721,
@@ -4920,6 +4920,18 @@
         "source": {
           "bytes": 30376,
           "sha256": "d5e43aaa7616785a98a0e4698f86b54939311fca69ea811d0b7f4603fcd8779c"
+        },
+        "byte_preserved": true
+      },
+      "_astro/index.astro_astro_type_script_index_0_lang.BxabkcGP.js": {
+        "bytes": 64353,
+        "sha256": "081f93778958dec43cb5d0c4a2c694c2bc618eac20f12ccf391b5f6c984c41f5",
+        "key": "releases/3dbade875bbcb41e4f1deb4ecb6991a04d42b669ae06493785e13bc7bd69104c/_astro/index.astro_astro_type_script_index_0_lang.BxabkcGP.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/3dbade875bbcb41e4f1deb4ecb6991a04d42b669ae06493785e13bc7bd69104c/_astro/index.astro_astro_type_script_index_0_lang.BxabkcGP.js",
+        "content_type": "application/javascript",
+        "source": {
+          "bytes": 64353,
+          "sha256": "081f93778958dec43cb5d0c4a2c694c2bc618eac20f12ccf391b5f6c984c41f5"
         },
         "byte_preserved": true
       },
@@ -66502,7 +66514,6 @@
       "releases/1b5a63f73e52a69f99335ef151a70c88afedd141c3755cddc0ed1179f00ecc9d/_typeset/runtime/live-sans-part-4ab-1ff464629aae17c4773f.woff2",
       "releases/1b5fecf92695605b52526a2139a4852c123d436b45c16cb6c793f90c2c74f9f0/assets/_fonts/video-scaffold-deterministic-render-1fe38ba32760.woff2",
       "releases/1b76570d09ee9277856bfd93036abdac5486e631ff0e4393c309c106dcad31fe/_shared/nav-7371cd297c8d.avif",
-      "releases/1b8b584061532ba689071959bb9732e67579babc83b2a88f5b6742d320f12183/_astro/index.astro_astro_type_script_index_0_lang.BdlHdUCm.js",
       "releases/1b95c85ca96c7b36f114d853693d5d6a3452dd17f240011e96d070711fbd00ac/_shared/app-e1341af01d5d95870433.js",
       "releases/1b97fea231d431770c723d008acce9fb8723911a3948bd8cf6294cb7e3aab191/_typeset/skill-local-secret-broker/5ce08638ce0ecd3fe27a-skill-local-secret-broker-01-v.png",
       "releases/1bdbd368c8781ee28030b650a7a15296e55ee5b4e9f97ebbecc5b25c0fcef45c/assets/_fingerprinted/2c483eea38a1d1bba0756eb968791b7983805611b5c9699dd1a38b66ae77fc33.png",
@@ -67065,6 +67076,7 @@
       "releases/3da31bfc30d2c5b78cfe0d10374b1c79efdbd8cbacfa40fef611c1709b169396/assets/_fingerprinted/57a4f020cb6007e67f4e17abbdd16d6585d8f2182143db3e6268739016385514.png",
       "releases/3da5a22847ceadcd655a2f8835e3f45b507595e205a96b7035548e723fb27277/_typeset/runtime/live-sans-part-566-f6747c2fa8f1ff0c8abf.woff2",
       "releases/3db2d3c35372ca45d0d86e1580b73e0afa3e1767b66725558278e65416a562b3/assets/_fonts/ai-cli-profile-manager-recoverable-runs-f9adac1a2d57.woff2",
+      "releases/3dbade875bbcb41e4f1deb4ecb6991a04d42b669ae06493785e13bc7bd69104c/_astro/index.astro_astro_type_script_index_0_lang.BxabkcGP.js",
       "releases/3dbdfe1126ff4eb75cdb34560bc739a12763e4b4d29e5639ba5be119f4f8b6fd/assets/_fingerprinted/cfabf5684563501c96a859b1f117642a1034d0a3e12bb123fe2f36d9a8ce7b8e.png",
       "releases/3dbec00cdfc1587aed38a07f1d881e3176ac0e7f7f4c2131b3f113e2466ecb80/assets/_fingerprinted/cd44921167d6988bad006203b53dce9838d0cfda682a4a874dafdbde0844fec1.png",
       "releases/3dc03cba9d98ee3948778f07b2beda0ec77e088a8f9b49c7a4b0a6d7a6cb6301/_typeset/runtime/live-sans-part-599-a30a4d26c8d4963846bc.woff2",
