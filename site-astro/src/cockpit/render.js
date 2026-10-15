@@ -239,14 +239,14 @@ function govRun(v, ctx) {
   }
   const list = (k) => (Array.isArray(r[k]) ? r[k].filter((x) => x && typeof x === 'object' && x.title) : []);
   const acts = list('actions').slice(0, 3), closed = list('auto_closed'), deferred = list('newly_deferred');
-  const nums = [['修好', c.fixed], ['关掉', c.closed], ['转暂缓', c.deferred], ['还在跟', c.following], ['要你办', c.need_you]].filter(([, n]) => nOf(n) != null);
-  const need = nOf(c.need_you), at = r.started_at || r.ended_at, next = r.next_run_at || g.next_run_at;
-  const head = `这周 AI 体检${at ? `（${dateHm(at)}）` : ''}：` + (nums.length ? nums.map(([k, n]) => `${k} ${n}`).join('、') + ' 件' + (need ? '（在上面）' : '') : esc(r.summary || '跑完了'));
+  const nums = [['修好', c.fixed], ['关掉', c.closed], ['转暂缓', c.deferred], ['还在跟', c.following], ['待你办', c.need_you]].filter(([, n]) => nOf(n) != null);
+  const at = r.started_at || r.ended_at, next = r.next_run_at || g.next_run_at;
+  const head = `上次 AI 体检${at ? `（${dateHm(at)}）` : ''}记录：` + (nums.length ? '当时' + nums.map(([k, n]) => `${k} ${n}`).join('、') + ' 件' : esc(r.summary || '跑完了'));
   const ask = `驾驶舱每周 AI 体检${at ? `（${dateHm(at)} 那一轮）` : ''}：请读本机状态接口（/computer-access/api/status 全量）里的 governance.last_run 和这一轮的体检回执，告诉我修好、关掉、转暂缓、还在跟的各是哪几件。`;
   const sub = (key, label, items, note) => (items.length ? `<details class="cp-more cp-gov-more" id="${key}"><summary>${label} ${items.length} 件</summary><ul class="cp-ailist">${items.map((x) => `<li><span>${esc(x.title)}</span>${x[note] ? `<small>${esc(x[note])}</small>` : ''}</li>`).join('')}</ul></details>` : '');
-  return `<div class="cp-gov"><p class="cp-gov-line">${dot(need ? 'attention' : 'ok')}<span class="cp-gov-text">${head}${next ? ` · 下次 ${esc(dateHm(next))}` : ''}</span>${copyText(ask, '问 AI 详情', ' cp-btn-quiet')}</p>`
-    + (acts.length ? `<ul class="cp-gov-acts">${acts.map((x) => `<li><span>${esc(x.title)}</span>${copyBtn(x.copy_ai_id)}</li>`).join('')}</ul>` : '')
-    + sub('gov-closed', '本周自动关掉', closed, 'evidence') + sub('gov-deferred', '本周新转暂缓', deferred, 'reason') + `</div>`;
+  return `<div class="cp-gov"><p class="cp-gov-line">${dot('neutral')}<span class="cp-gov-text">${head}${next ? ` · 下次 ${esc(dateHm(next))}` : ''}</span>${copyText(ask, '问 AI 详情', ' cp-btn-quiet')}</p>`
+    + (acts.length ? `<details class="cp-more cp-gov-more" id="gov-actions"><summary>当时留下的说明 ${acts.length} 条</summary><p>这是上次体检的记录；现在要办的事以上面的当前待办为准。</p><ul class="cp-gov-acts">${acts.map((x) => `<li><span>${esc(x.title)}</span>${copyText(`${ask}这条记录：${x.title}。请先核对现在是否仍需处理，再说明当前进展。`, '问 AI 这条记录')}</li>`).join('')}</ul></details>` : '')
+    + sub('gov-closed', '那次自动关掉', closed, 'evidence') + sub('gov-deferred', '那次新转暂缓', deferred, 'reason') + `</div>`;
 }
 // AI 现在在做（ai_work）：在跑的自动任务、留下没合并的分支；后端没给这块就不出
 function aiWork(v, ctx) {
