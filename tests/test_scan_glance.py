@@ -9,6 +9,26 @@ ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location("scan_glance", ROOT / "site-astro/tools/scan_glance.py")
 scan = importlib.util.module_from_spec(SPEC); SPEC.loader.exec_module(scan)
 class ScanGlanceTests(unittest.TestCase):
+    def test_preview_status_forwards_query_and_headers(self):
+        spec = importlib.util.spec_from_file_location("preview_site", ROOT / "tools/preview_site.py")
+        preview = importlib.util.module_from_spec(spec); spec.loader.exec_module(preview)
+        body = b'{"schema":"pcconfig.cockpit-view.v1"}'
+        for query in ("", "?view=cockpit", "?view=cockpit&refresh=1"):
+            with self.subTest(query=query):
+                handler = object.__new__(preview.Preview)
+                handler.path = "/__status" + query; handler.wfile = io.BytesIO()
+                handler.send_response = mock.Mock(); handler.send_header = mock.Mock(); handler.end_headers = mock.Mock()
+                upstream = mock.MagicMock(); upstream.__enter__.return_value.read.return_value = body
+                with mock.patch.object(preview, "urlopen", return_value=upstream) as opened:
+                    handler.do_GET()
+                request = opened.call_args.args[0]
+                self.assertEqual(request.full_url, "https://mcp.wly0829.cn/computer-access/api/status" + query)
+                self.assertEqual(request.get_header("User-agent"), "wly-local-preview")
+                self.assertEqual(request.get_header("Origin"), "https://wly0829.cn")
+                self.assertEqual(request.get_header("Referer"), "https://wly0829.cn/")
+                self.assertEqual(opened.call_args.kwargs, {"timeout": 15})
+                handler.send_response.assert_called_once_with(200)
+                self.assertEqual(handler.wfile.getvalue(), body)
     def test_horizontal_content_imbalance_uses_pcconfig_12_text(self):
         from playwright.sync_api import sync_playwright
         # 固定本轮修改前 pcconfig-12 五个真实节点；生成 Markdown 随构建变化，不充当测试夹具。

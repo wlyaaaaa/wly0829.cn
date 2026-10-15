@@ -31,9 +31,9 @@ class Preview(SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path.split('?')[0] != '/__status': return super().do_GET()
         try:
-            query = '?refresh=1' if 'refresh=1' in self.path else ''
+            query = '?' + self.path.split('?', 1)[1] if '?' in self.path else ''
             request = Request('https://mcp.wly0829.cn/computer-access/api/status' + query,
-                              headers={'Origin': 'https://wly0829.cn', 'Referer': 'https://wly0829.cn/'})
+                              headers={'Origin': 'https://wly0829.cn', 'Referer': 'https://wly0829.cn/', 'User-Agent': 'wly-local-preview'})
             with urlopen(request, timeout=15) as response: body = response.read()
             self.send_response(200); self.send_header('Content-Type', 'application/json; charset=utf-8')
             self.send_header('Cache-Control', 'no-store'); self.send_header('Content-Length', str(len(body)))
