@@ -262,7 +262,7 @@ function aiWork(v, ctx) {
   const bits = [
     tasks.length ? `已读到的 AI 后台任务：${names(tasks, 'running_tasks')}${taskGap ? '；另有项目状态未读到' : ''}` : taskGap ? '部分项目的 AI 后台任务状态暂时读不到' : '已接入的 AI 后台任务当前未运行',
     run.length ? `已读到的自动任务：${names(run, 'running_automations')}${runGap ? '；另有项目状态未读到' : ''}` : runGap ? '部分项目的自动任务状态暂时读不到' : '已登记项目没有正在运行的自动任务',
-    nb ? `改动还没合进正式版本：${branches.length} 个项目共 ${nb} 处，AI 会合进去或清掉` : '',
+    nb ? `代码分支记录：${branches.length} 个项目共 ${nb} 条未合入主版本；需逐项核对用途后，才能判断哪些要处理。` : '',
   ].filter(Boolean);
   return `<div class="cp-aiwork"><b>项目后台进展</b><small>这里只统计已接入的后台任务，不代表所有 AI 聊天。</small><ul>${bits.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>${v.ai_work.observed_at ? `<small>${esc(when(v.ai_work.observed_at, ctx.now))} 读到</small>` : ''}</div>`;
 }
