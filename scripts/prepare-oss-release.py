@@ -56,6 +56,11 @@ def measured(name, operation):
         if _FINALIZE_CACHE is not None: _FINALIZE_CACHE.timings[name] = _FINALIZE_CACHE.timings.get(name, 0) + time.perf_counter() - started
 
 
+def rewrite_cached(rewriter, data, owner):
+    return measured('rewrite', lambda: _FINALIZE_CACHE.rewrite(rewriter, data, owner)
+                    if _FINALIZE_CACHE is not None else rewriter.rewrite(data, owner))
+
+
 class FinalizeCache:
     """Local acceleration only; cache state never enters a release identity."""
     def __init__(self, dist, full, timings):
@@ -89,6 +94,7 @@ class FinalizeCache:
         return value
 
     def rewrite(self, rewriter, data, owner):
+        rewriter.changes.pop(owner, None)
         if rewriter not in self.contracts:
             self.contracts[rewriter] = hashlib.sha256(json.dumps(sorted(rewriter.files)).encode()).hexdigest()
         def contract(row):
@@ -816,7 +822,7 @@ def offline_asset_keys(rewriter, source, inherited):
 def validate_retained_text(rewriter, source, inherited):
     while rewriter.retained:
         changed = [rel for rel, obj in rewriter.retained.items() if rel not in inherited and Path(rel).suffix in TEXT_ASSETS
-            and hashlib.sha256(rewriter.rewrite((source/rel).read_bytes(), rel)).hexdigest() != obj['sha256']]
+            and hashlib.sha256(rewrite_cached(rewriter, (source/rel).read_bytes(), rel)).hexdigest() != obj['sha256']]
         if not changed: break
         for rel in changed:
             rejected = rewriter.retained.pop(rel)
@@ -903,8 +909,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
             continue
         if rel.endswith('.html') or Path(rel).suffix in TEXT_ASSETS:
             payload=home_bytes if rel=='index.html' else (source/rel).read_bytes()
-            result = measured('rewrite', lambda: _FINALIZE_CACHE.rewrite(rewriter, payload, rel)
-                              if _FINALIZE_CACHE is not None else rewriter.rewrite(payload, rel))
+            result = rewrite_cached(rewriter, payload, rel)
             if (_FINALIZE_CACHE is not None and not _FINALIZE_CACHE.full and result == payload
                     and (rel != 'index.html' or payload == (source/rel).read_bytes())): virtual[rel] = source/rel
             else: destination.write_bytes(result)
@@ -1057,8 +1062,7 @@ def verify_local(output, virtual=None):
         target = virtual.get(rel, output / ('github' if rel in plan['github_files'] else 'oss') / rel)
         if rel.endswith('.html') or Path(rel).suffix in TEXT_ASSETS:
             payload=home_bytes if rel=='index.html' else (source/rel).read_bytes()
-            expected_bytes = measured('rewrite', lambda: _FINALIZE_CACHE.rewrite(rewriter, payload, rel)
-                                      if _FINALIZE_CACHE is not None else rewriter.rewrite(payload, rel))
+            expected_bytes = rewrite_cached(rewriter, payload, rel)
             if target.read_bytes() != expected_bytes:
                 raise ValueError('Changes outside deterministic URL rewrite: ' + rel)
         elif digest(source/rel) != digest(target):

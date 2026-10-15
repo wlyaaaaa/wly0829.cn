@@ -90,6 +90,35 @@ class OssReleaseTests(unittest.TestCase):
         current.retained.pop(owner)
         self.assertEqual(cache.rewrite(current, text, owner), current.rewrite(text, owner))
 
+    def test_retained_bird_fallback_does_not_replay_obsolete_changes(self):
+        owner = '_living/_engine/bird.fixture/bird.js'; atlas = owner.replace('bird.js', 'bird-atlas.webp')
+        text = b'const atlas={image:"bird-atlas.webp"}; img.src=base+atlas.image;'
+        path = self.source/owner; path.parent.mkdir(parents=True); path.write_bytes(text)
+        current = oss.Rewriter({owner:{}, atlas:{}}, 'https://example.oss.invalid', 'releases/new',
+                               'https://wly0829.cn', version=6, source_root=self.source)
+        current.asset_keys = {rel:'releases/new/'+rel for rel in (owner, atlas)}
+        fallback = {'url':current.base+'/releases/local/'+owner, 'sha256':oss.hashlib.sha256(text).hexdigest()}
+        current.retained = {owner:{**fallback, 'url':current.base+'/releases/remote/'+owner},
+                            atlas:{'url':current.base+'/releases/local/'+atlas}}
+        current.local_retained_candidates = {owner:fallback}
+        cache = oss.FinalizeCache(self.source, False, {})
+        with patch.object(oss, '_FINALIZE_CACHE', cache):
+            oss.validate_retained_text(current, self.source, {})
+            self.assertIs(current.retained[owner], fallback)
+            current.changes.clear()
+            replayed = cache.replayed
+            self.assertEqual(cache.rewrite(current, text, owner), text)
+            self.assertEqual(cache.replayed, replayed+1)
+            self.assertNotIn(owner, current.changes)
+            self.assertEqual(current.references[owner], {atlas})
+            current.retained.pop(owner)
+            edited = cache.rewrite(current, text, owner)
+            self.assertNotEqual(edited, text)
+            changes = copy.deepcopy(current.changes[owner])
+            current.changes.clear()
+            self.assertEqual(cache.rewrite(current, text, owner), edited)
+            self.assertEqual(current.changes[owner], changes)
+
     def test_living_config_attribute_migrates_with_connect_csp_and_keeps_old_replay(self):
         config='_living/cockpit/bird-source.fixture/config.json'
         files={'cockpit/index.html':{},config:{}}
