@@ -161,6 +161,30 @@ const assert = require('node:assert/strict');
   assert.match(sm, /data-signal="today_tasks">.*?1<small>个没恢复<\/small>.*?AI 在管/);
   // 12 安全和授权：手机那一行
   assert.match(R.security(v, ctx), /cp-sec-line.*资料已解锁到 10月13日 13:37 · 无限制授权关 · 未锁屏 · 能连上/);
+  // 12b 离线、首帧及读取失败都不能把旧安全状态当现在；恢复不改写原 view
+  const securityBefore = JSON.stringify(v), liveSecurity = R.security(v, ctx);
+  const priorStates = [v, { ...v, security: { ...v.security, personal_data: { state: 'locked' }, unrestricted: { state: 'active', expires_at: at }, windows: { state: 'locked' } } }];
+  for (const [stateCtx, ok] of [[{ ...ctx, offline: true }, true], [{ ...ctx, phase: 'snapshot' }, true], [ctx, false]]) {
+    for (const prior of priorStates) for (const observedAt of [at, null]) {
+      const view = { ...prior, ok, security: { ...prior.security, observed_at: observedAt } }, before = JSON.stringify(view);
+      const html = R.security(view, stateCtx), mobile = html.split('</a>')[0];
+      const desktop = [...html.matchAll(/<a class="cp-sec-item"[^]*?<\/a>/g)].map((m) => m[0]);
+      const lastRead = observedAt ? '上次 14:59 读到' : '还没读到过';
+      assert.equal(desktop.length, 4);
+      for (const item of desktop.slice(0, 3)) {
+        assert.match(item, /cp-sec-word"><span class="cp-dot is-gray"[^>]*><\/span>没读到<\/span>/);
+        assert.ok(item.includes(`<span class="cp-sec-sub">${lastRead}</span>`));
+      }
+      assert.match(mobile, /cp-dot is-gray/);
+      assert.ok(mobile.includes(`资料、授权和锁屏状态没读到（${lastRead}）`));
+      assert.doesNotMatch(mobile + desktop.slice(0, 3).join(''), /已解锁|锁着|开着|正常关着|已锁屏|未锁屏/);
+      assert.ok(desktop[3].includes(stateCtx.offline || !ok ? '连不上' : '>能</span>'));
+      assert.equal(JSON.stringify(view), before);
+      assert.equal(R.security({ ...view, ok: true }, ctx), R.security({ ...prior, security: { ...prior.security, observed_at: observedAt } }, ctx));
+    }
+  }
+  assert.equal(JSON.stringify(v), securityBefore);
+  assert.equal(R.security(v, ctx), liveSecurity);
   // 14 下一步和大标题说的是同一件事时不再当成第 N 步接在后面；不同的事照旧接上
   const same = R.readTodo({ title: '虚构旅游去哪 · 三方对照', next_step: '虚构旅游去哪：甲、乙还是丙', steps: ['看这条下面的两道题'] }, now);
   assert.deepEqual(same.steps, ['看这条下面的两道题']);

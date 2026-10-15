@@ -52,19 +52,22 @@ export function card(c, now, off = false) {
 export function security(v, ctx) {
   const s = v.security, pd = s.personal_data.state, un = s.unrestricted.state, win = s.windows.state;
   const off = ctx.offline || !v.ok;
+  const unread = off || ctx.phase === 'snapshot';
+  const lastRead = s.observed_at ? '上次 ' + when(s.observed_at, ctx.now) + ' 读到' : '还没读到过';
+  const missing = ['没读到', lastRead, 'gray'];
   const rows = [
-    ['cockpit-07-icon-01.png', '个人资料', pd === 'unlocked' ? ['已解锁', s.personal_data.expires_at ? '到 ' + dateHm(s.personal_data.expires_at) : '', 'ok'] : pd === 'locked' ? ['锁着', '要用时再解锁', 'gray'] : ['没读到', '', 'gray'], '/computer-access/#personal-data'],
-    ['cockpit-07-icon-02.png', '无限制授权', un === 'active' ? ['开着', s.unrestricted.expires_at ? '到 ' + dateHm(s.unrestricted.expires_at) : '', 'attention'] : un === 'inactive' ? ['正常关着', '', 'gray'] : ['没读到', '', 'gray'], '/computer-access/#unrestricted'],
-    ['cockpit-07-icon-03.png', 'Windows', win === 'locked' ? ['已锁屏', '', 'ok'] : win === 'unlocked' ? ['未锁屏', '', 'ok'] : ['没读到', '', 'gray'], '/computer-access/#windows'],
+    ['cockpit-07-icon-01.png', '个人资料', unread ? missing : pd === 'unlocked' ? ['已解锁', s.personal_data.expires_at ? '到 ' + dateHm(s.personal_data.expires_at) : '', 'ok'] : pd === 'locked' ? ['锁着', '要用时再解锁', 'gray'] : ['没读到', '', 'gray'], '/computer-access/#personal-data'],
+    ['cockpit-07-icon-02.png', '无限制授权', unread ? missing : un === 'active' ? ['开着', s.unrestricted.expires_at ? '到 ' + dateHm(s.unrestricted.expires_at) : '', 'attention'] : un === 'inactive' ? ['正常关着', '', 'gray'] : ['没读到', '', 'gray'], '/computer-access/#unrestricted'],
+    ['cockpit-07-icon-03.png', 'Windows', unread ? missing : win === 'locked' ? ['已锁屏', '', 'ok'] : win === 'unlocked' ? ['未锁屏', '', 'ok'] : ['没读到', '', 'gray'], '/computer-access/#windows'],
     // 这里只说“连不连得上”；电脑好不好看上面“电脑”那一格
     ['', '能不能连上电脑', off ? ['连不上', s.observed_at ? '上次 ' + when(s.observed_at, ctx.now) : '', 'gray'] : ['能', s.computer.uptime_hours != null ? `开机 ${s.computer.uptime_hours} 小时` : '', 'ok'], '/computer-access/'],
   ];
   // 手机上四项压成一行（电脑宽度照旧四格）
-  const words = [pd === 'unlocked' ? `资料已解锁${s.personal_data.expires_at ? '到 ' + dateHm(s.personal_data.expires_at) : ''}` : pd === 'locked' ? '资料锁着' : '资料没读到',
+  const words = unread ? [`资料、授权和锁屏状态没读到（${lastRead}）`] : [pd === 'unlocked' ? `资料已解锁${s.personal_data.expires_at ? '到 ' + dateHm(s.personal_data.expires_at) : ''}` : pd === 'locked' ? '资料锁着' : '资料没读到',
     un === 'active' ? `无限制授权开着${s.unrestricted.expires_at ? '到 ' + dateHm(s.unrestricted.expires_at) : ''}` : un === 'inactive' ? '无限制授权关' : '无限制授权没读到',
-    win === 'locked' ? '已锁屏' : win === 'unlocked' ? '未锁屏' : '锁屏没读到',
-    off ? `连不上电脑${s.observed_at ? '（最后 ' + when(s.observed_at, ctx.now) + '）' : ''}` : '能连上'];
-  const line = `<a class="cp-sec-line" href="/computer-access/">${dot(off ? 'unavailable' : un === 'active' ? 'attention' : 'ok')}<span>${words.map(esc).join(' · ')}</span><b aria-hidden="true">▸</b></a>`;
+    win === 'locked' ? '已锁屏' : win === 'unlocked' ? '未锁屏' : '锁屏没读到'];
+  words.push(off ? `连不上电脑${s.observed_at ? '（最后 ' + when(s.observed_at, ctx.now) + '）' : ''}` : '能连上');
+  const line = `<a class="cp-sec-line" href="/computer-access/">${dot(unread ? 'unavailable' : un === 'active' ? 'attention' : 'ok')}<span>${words.map(esc).join(' · ')}</span><b aria-hidden="true">▸</b></a>`;
   return line + rows.map(([icon, label, [word, sub, state], href]) => `<a class="cp-sec-item" href="${href}">`
     + (icon ? `<img src="${src(ctx, icon)}" alt="" width="58" height="35" loading="eager">` : `<span class="cp-sec-pc" aria-hidden="true"></span>`)
     + `<span class="cp-sec-label">${label}</span><span class="cp-sec-word">${dot(state)}${esc(word)}</span><span class="cp-sec-sub">${esc(sub)}</span><span class="cp-sec-go">${href === '/computer-access/' ? '看连接状态 →' : '去授权页办理 →'}</span></a>`).join('');
