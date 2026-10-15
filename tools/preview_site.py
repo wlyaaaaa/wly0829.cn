@@ -32,7 +32,7 @@ class Preview(SimpleHTTPRequestHandler):
         if self.path.split('?')[0] != '/__status': return super().do_GET()
         try:
             query = '?' + self.path.split('?', 1)[1] if '?' in self.path else ''
-            request = Request('https://mcp.wly0829.cn/computer-access/api/status' + query,
+            request = Request('https://live.wly0829.cn/computer-access/state' + query,
                               headers={'Origin': 'https://wly0829.cn', 'Referer': 'https://wly0829.cn/', 'User-Agent': 'wly-local-preview'})
             with urlopen(request, timeout=15) as response: body = response.read()
             self.send_response(200); self.send_header('Content-Type', 'application/json; charset=utf-8')

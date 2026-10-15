@@ -22,7 +22,7 @@ class ScanGlanceTests(unittest.TestCase):
                 with mock.patch.object(preview, "urlopen", return_value=upstream) as opened:
                     handler.do_GET()
                 request = opened.call_args.args[0]
-                self.assertEqual(request.full_url, "https://mcp.wly0829.cn/computer-access/api/status" + query)
+                self.assertEqual(request.full_url, "https://live.wly0829.cn/computer-access/state" + query)
                 self.assertEqual(request.get_header("User-agent"), "wly-local-preview")
                 self.assertEqual(request.get_header("Origin"), "https://wly0829.cn")
                 self.assertEqual(request.get_header("Referer"), "https://wly0829.cn/")
