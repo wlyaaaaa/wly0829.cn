@@ -11,7 +11,8 @@ const plan = JSON.parse(await readFile(path.join(projectRoot, "config", "final-p
 const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
 const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
 const readme = await readFile(path.join(projectRoot, "README.md"), "utf8");
-const agentsRules = await readFile(path.join(projectRoot, "AGENTS.md"), "utf8");
+const agentsRules = await readFile(path.join(projectRoot, "AGENTS.md"), "utf8")
+  + "\n" + await readFile(path.join(projectRoot, "docs", "design", "panel-content-contract.md"), "utf8");
 const wechatDirectSource = await readFile(path.join(projectRoot, "app", "content-wechatdirect.js"), "utf8");
 const personalHealthSource = await readFile(path.join(projectRoot, "app", "content-personal-health.js"), "utf8");
 const systemSource = await readFile(path.join(projectRoot, "app", "system-home-content.js"), "utf8");

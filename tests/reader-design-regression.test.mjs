@@ -131,7 +131,8 @@ test('current maintenance contracts do not freeze an obsolete E generation or ru
  assert.ok(reviewed.paths.includes('releases/*/AGENTS.md'));
  assert.ok(reviewed.paths.includes('releases/*/rules-catalog.json'));
  assert.ok(reviewed.paths.every(value=>!/^releases\/E\d+\//.test(value)),reviewed.paths.join(','));
- const rootRules=await readFile(fileURLToPath(new URL('../AGENTS.md',import.meta.url)),'utf8');
+ const rootRules=await readFile(fileURLToPath(new URL('../AGENTS.md',import.meta.url)),'utf8')
+  + '\n' + await readFile(fileURLToPath(new URL('../docs/design/panel-content-contract.md',import.meta.url)),'utf8');
  const readme=await readFile(fileURLToPath(new URL('../README.md',import.meta.url)),'utf8');
  assert.doesNotMatch(rootRules,/five current rules/);
  assert.doesNotMatch(readme,/五份活动规则|活动规则E\d+/);

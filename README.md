@@ -117,4 +117,4 @@ Windows 发布二进制通过 SHA256 缓存 `E:\Cache\wly0829\release-assets` �
 - 远端 `main`、Pages deployment 和公网 read-back 指向同一提交；
 - 直接路由、自定义 404、robots、sitemap 与 SEO 全部核对。
 
-当前产品边界、模块规则和发布合同以 [项目规则](AGENTS.md)、[项目 Registry](config/panel-projects.json) 与实际内容对象为准；[最终项目顺序](config/final-project-order.json) 拥有保留项目的内部价值顺序、施工顺序和已闭合的非卡归类证据，不复制模块数、Skill 数或项目快照状态。页面编号按实际展示列表连续生成。长期内容原则见 [看板内容建设原则](docs/design/内容建设原则与MVP重构方案.md)。
+当前产品边界、模块规则和发布合同以 [项目规则](AGENTS.md)、[看板产品与内容规则](docs/design/panel-content-contract.md)、[项目 Registry](config/panel-projects.json) 与实际内容对象为准；[最终项目顺序](config/final-project-order.json) 拥有保留项目的内部价值顺序、施工顺序和已闭合的非卡归类证据，不复制模块数、Skill 数或项目快照状态。页面编号按实际展示列表连续生成。长期内容原则见 [看板内容建设原则](docs/design/内容建设原则与MVP重构方案.md)。
