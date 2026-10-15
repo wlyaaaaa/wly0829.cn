@@ -1,21 +1,21 @@
 {
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
-  "source_commit": "1fc517451d122b123ade6636e0da84e7cf3b5105",
-  "prepared_at_beijing": "2026-10-15T19:12:35.632612+08:00",
-  "seconds": 198.592,
+  "source_commit": "895a9132087bc5c916674ab46edf7e7b82a4d5a1",
+  "prepared_at_beijing": "2026-10-15T19:39:17.003878+08:00",
+  "seconds": 102.997,
   "steps": [
     {
       "name": "source",
-      "seconds": 19.893
+      "seconds": 1.817
     },
     {
       "name": "fingerprint",
-      "seconds": 1.167
+      "seconds": 0.877
     },
     {
       "name": "prepare",
-      "seconds": 0.378
+      "seconds": 0.174
     },
     {
       "name": "native_inputs",
@@ -23,31 +23,31 @@
     },
     {
       "name": "blocks",
-      "seconds": 5.849
+      "seconds": 0.642
     },
     {
       "name": "astro",
-      "seconds": 23.162
+      "seconds": 7.618
     },
     {
       "name": "assets",
-      "seconds": 3.503
+      "seconds": 2.846
     },
     {
       "name": "finish",
-      "seconds": 32.712
+      "seconds": 4.947
     },
     {
       "name": "finalize",
-      "seconds": 75.893
+      "seconds": 75.553
     },
     {
       "name": "public",
-      "seconds": 35.424
+      "seconds": 7.93
     },
     {
       "name": "inventory",
-      "seconds": 0.611
+      "seconds": 0.593
     }
   ],
   "rebuilt_pages": [
@@ -339,6 +339,11 @@
       "path": "_astro/index.astro_astro_type_script_index_0_lang.lbuGgX5u.js",
       "bytes": 52076,
       "sha256": "e468d693a3ec899618b9c9da4af8b657ee6cfa649a35f502ddad73f0d7cf4755"
+    },
+    {
+      "path": "_astro/index.astro_astro_type_script_index_0_lang.ndFMvVeM.js",
+      "bytes": 64802,
+      "sha256": "95f58cdb5f752f6488b01fe653a8ce0ce67c63e2abd860ebc5d8541d0092ee27"
     },
     {
       "path": "_astro/index.astro_astro_type_script_index_0_lang.ZEaooG7N.js",
@@ -25097,8 +25102,8 @@
     },
     {
       "path": "cockpit/index.html",
-      "bytes": 585403,
-      "sha256": "022b66fee063578cc5dc7f46a0cae5d1d807763f873c7e26db4d60b838034d6d"
+      "bytes": 583632,
+      "sha256": "ff54a86857cf64b5953d36891b52d76ed060e46cb1115c449be673d48b863b31"
     },
     {
       "path": "cockpit/stutter/assets/site-live-runtime-0fe059c637ff196ccc5d.js",
@@ -26733,12 +26738,12 @@
     {
       "path": "release-identity.json",
       "bytes": 211,
-      "sha256": "0c05021edd082334eb5fe870bfe9bc1fa63a3fab7b606bd7142e6fc7f6a26324"
+      "sha256": "f57a3db77394b81853b2dc537fb26fa6d3b40e9be8248789feacc78e1cba6a1a"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 5042598,
-      "sha256": "89c68260099e415512b4791f84c669aa71816f261eebfb7e3a2ff5544add9278"
+      "bytes": 5043399,
+      "sha256": "7839b46a1b85573e774423d4bff8d6e3efdd43e5539aebdd09fa4d11c4965e81"
     },
     {
       "path": "rescue/index.html",
@@ -27343,5 +27348,5 @@
   ],
   "output": "E:\\Cache\\wly-site-build\\wt\\dist",
   "previous_oss_source": "published",
-  "previous_release_id": "6935970c871bdb0d8df56a11b16fcc89f22200cacb938ba48b9c323c6a64011b"
+  "previous_release_id": "f11874ae33e723b4b6ff94f7c61661a5ea57cbfae395bddf0805eee75aa2c455"
 }
