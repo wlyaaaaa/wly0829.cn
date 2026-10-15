@@ -248,19 +248,20 @@ function govRun(v, ctx) {
     + (acts.length ? `<details class="cp-more cp-gov-more" id="gov-actions"><summary>当时留下的说明 ${acts.length} 条</summary><p>这是上次体检的记录；现在要办的事以上面的当前待办为准。</p><ul class="cp-gov-acts">${acts.map((x) => `<li><span>${esc(x.title)}</span>${copyText(`${ask}这条记录：${x.title}。请先核对现在是否仍需处理，再说明当前进展。`, '问 AI 这条记录')}</li>`).join('')}</ul></details>` : '')
     + sub('gov-closed', '那次自动关掉', closed, 'evidence') + sub('gov-deferred', '那次新转暂缓', deferred, 'reason') + `</div>`;
 }
-// AI 现在在做（ai_work）：在跑的自动任务、留下没合并的分支；后端没给这块就不出
+// 项目后台进展（ai_work）：已接入的后台任务、留下没合并的分支；后端没给这块就不出
 function aiWork(v, ctx) {
   const items = v.ai_work?.items || [];
   if (!items.length) return '';
-  const run = items.filter((p) => Number(p.running_automations) > 0), tasks = items.filter((p) => Number(p.running_tasks) > 0);
+  const run = items.filter((p) => nOf(p.running_automations) > 0), tasks = items.filter((p) => nOf(p.running_tasks) > 0);
+  const taskGap = items.some((p) => nOf(p.running_tasks) == null), runGap = items.some((p) => nOf(p.running_automations) == null);
   const branches = items.filter((p) => Number(p.unmerged_branches) > 0), nb = branches.reduce((n, p) => n + Number(p.unmerged_branches), 0);
-  const names = (list, k) => list.map((p) => `${p.project}${Number(p[k]) > 1 ? ` ${p[k]} 个` : ''}`).join('、');
+  const names = (list, k) => list.map((p) => `${p.project}${k === 'running_tasks' && p.running_tasks_basis === 'confirmed_minimum' ? ` 至少${p[k]}个` : Number(p[k]) > 1 ? ` ${p[k]} 个` : ''}`).join('、');
   const bits = [
-    tasks.length ? `AI 在干活：${names(tasks, 'running_tasks')}` : items.every((p) => p.running_tasks == null) ? '' : '现在没有 AI 对话在干活',
-    run.length ? `在跑的自动任务：${names(run, 'running_automations')}` : '现在没有自动任务在跑',
+    tasks.length ? `已读到的 AI 后台任务：${names(tasks, 'running_tasks')}${taskGap ? '；另有项目状态未读到' : ''}` : taskGap ? '部分项目的 AI 后台任务状态暂时读不到' : '已接入的 AI 后台任务当前未运行',
+    run.length ? `已读到的自动任务：${names(run, 'running_automations')}${runGap ? '；另有项目状态未读到' : ''}` : runGap ? '部分项目的自动任务状态暂时读不到' : '已登记项目没有正在运行的自动任务',
     nb ? `改动还没合进正式版本：${branches.length} 个项目共 ${nb} 处，AI 会合进去或清掉` : '',
   ].filter(Boolean);
-  return `<div class="cp-aiwork"><b>AI 现在在做</b><ul>${bits.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>${v.ai_work.observed_at ? `<small>${esc(when(v.ai_work.observed_at, ctx.now))} 读到</small>` : ''}</div>`;
+  return `<div class="cp-aiwork"><b>项目后台进展</b><small>这里只统计已接入的后台任务，不代表所有 AI 聊天。</small><ul>${bits.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>${v.ai_work.observed_at ? `<small>${esc(when(v.ai_work.observed_at, ctx.now))} 读到</small>` : ''}</div>`;
 }
 
 // 要我处理的事 + 交给 AI 的事 + 等条件到了再做

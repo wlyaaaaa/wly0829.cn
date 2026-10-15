@@ -50,6 +50,27 @@ const assert = require('node:assert/strict');
   // 全量接口：暂缓原因透传
   const full = fromFull({ cockpit: { detail_groups: { deferred: [{ id: 'p1', title: '换键盘', reason: '14 天没回应' }] } } });
   assert.equal(full.deferred[0].reason, '14 天没回应');
+  // 后台任务只描述已接入项目：未知不能算零，下限不能说成精确数量。
+  const work = (items) => R.needYou(normalize({ schema: 'pcconfig.cockpit-view.v1', ai_following: ai, ai_work: { items } }), ctx);
+  const row = (n, extra = {}) => ({ project: '甲', running_tasks: n, running_automations: n, ...extra });
+  const unknown = ['部分项目的 AI 后台任务状态暂时读不到', '部分项目的自动任务状态暂时读不到'];
+  const zero = ['已接入的 AI 后台任务当前未运行', '已登记项目没有正在运行的自动任务'];
+  for (const [items, expected] of [
+    [[row(0), row(null)], unknown], [[row(0), row(0)], zero], [[{ project: '甲' }], unknown],
+    ...['0', '2', NaN, -1, 0.5].map((n) => [[row(0), row(n)], unknown]),
+  ]) {
+    const text = work(items);
+    for (const message of expected) assert.ok(text.includes(message), message);
+    assert.match(text, /项目后台进展.*这里只统计已接入的后台任务，不代表所有 AI 聊天。/);
+    assert.doesNotMatch(text, /现在没有 AI 对话在干活|现在没有自动任务在跑/);
+  }
+  for (const n of [1, 2]) {
+    const text = work([row(n, { running_tasks_basis: 'confirmed_minimum' }), row(null)]);
+    assert.ok(text.includes(`已读到的 AI 后台任务：甲 至少${n}个；另有项目状态未读到`));
+    assert.match(text, /已读到的自动任务：甲(?: 2 个)?；另有项目状态未读到/);
+  }
+  assert.match(work([row(2, { running_tasks_basis: 'complete' })]), /已读到的 AI 后台任务：甲 2 个/);
+  assert.doesNotMatch(work([]), /cp-aiwork|项目后台进展/);
 })().catch((e) => { console.error(e); process.exit(1); });
 """
 
