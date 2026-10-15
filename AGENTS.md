@@ -794,7 +794,8 @@ personal AI collaboration workspace; public presentation is secondary.
   work-delivery, daily-preferences, personal-media, LocalOCR, vault-tool,
   video-scaffold, AI CLI Profile Manager, OpenClawGateway and Sunshine remote
   streaming additions, are standing-authorized to commit, normal-push
-  existing PUBLIC `main`, wait for Pages and read back the deployed commit automatically
+  existing PUBLIC `main` and complete publication and read-back under
+  [docs/publish-and-scan.md](docs/publish-and-scan.md) automatically
   after all content, test, build and public gates pass.
   Do not ask for another publication approval. A new public destination, paid
   effect, secret exposure, force-push or explicit owner hold remains outside
@@ -826,7 +827,8 @@ personal AI collaboration workspace; public presentation is secondary.
 ## Verification and publication
 
 - 按需更新执行清单见 [docs/ondemand-update.md](docs/ondemand-update.md)；常驻工作树与回退操作见 [docs/maintenance.md](docs/maintenance.md)，发布和回读契约见 [docs/publish-and-scan.md](docs/publish-and-scan.md)。
-- Preserve the existing React, Vite and GitHub Pages route-generation chain.
+- Preserve the current `scripts/build-site.py` -> `site-astro` single build and
+  route-generation chain; see [site-astro/README.md](site-astro/README.md).
 - Verify build, direct routes, custom 404, keyboard navigation, desktop/mobile
   overflow and browser console before normal-pushing `main`.
 - Content acceptance is a real reading test, not a schema check: for a sample
@@ -864,5 +866,6 @@ personal AI collaboration workspace; public presentation is secondary.
   production artifact regardless of extension. Directory-route canonical,
   Open Graph and sitemap URLs use the trailing-slash URL that Pages serves as
   `200`, not the redirecting form.
-- Public completion requires local HEAD, remote `main` and the Pages deployment
-  commit to match.
+- Verify source commit, built artifacts, resource upload, Pages deployment and
+  public read-back separately under [docs/publish-and-scan.md](docs/publish-and-scan.md).
+  Source push alone does not establish public completion.
