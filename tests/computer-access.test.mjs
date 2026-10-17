@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { GRANT_STAGE_KEY, adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, canRestartUnsubmittedGrant, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, grantResultNeedsQuery, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, markGrantVerificationSubmitted, memorySpecification, networkConnection, readGrantStage, queryResultUpdate, rate, reductionAction, reductionFailureResult, resourceReadLabel, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
+import { GRANT_STAGE_KEY, adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, canRestartUnsubmittedGrant, capacity, createGrantAttempt, createGrantRecovery, saveGrantRequest, createStatusReader, durationMinutes, grantLabel, grantResultNeedsQuery, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, markGrantVerificationSubmitted, memorySpecification, networkConnection, readGrantStage, queryResultUpdate, rate, reductionAction, reductionFailureResult, resourceReadLabel, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
 
 test("only a complete authoritative grant updates remaining time and returns the form to ready", () => {
   const before = { state_version: "old", personal_data: { state: "unlocked", expires_at_unix: 100 }, unrestricted: { state: "active", expires_at_unix: 200 } };
@@ -409,6 +409,53 @@ test("manual first read cancels unused early GET instead of consuming it", async
   const results = [];
   const reader = createStatusReader(async (_, options) => { fetched++; assert.equal(options.refresh, true); return "fresh"; }, value => results.push(value), error => { throw error; }, { initialRead: { started: 100, promise: Promise.resolve("early"), cancel: () => cancelled++ }, now: () => 200 });
   await reader.read({ refresh: true }); assert.equal(cancelled, 1); assert.equal(fetched, 1); assert.deepEqual(results, ["fresh"]);
+});
+
+test("finished requests do not revive as unknown after reloading the same tab", () => {
+  const values = new Map(), storage = { setItem: (k, v) => values.set(k, v), removeItem: k => values.delete(k) }, key = "site-b2-access-request-v1";
+  for (const state of ["succeeded", "failed", "expired", "cancelled"]) {
+    values.set(GRANT_STAGE_KEY, JSON.stringify({request_id: "same-request", factor_submitted: true}));
+    saveGrantRequest(storage, key, { request_id: "same-request", state: "unknown" });
+    assert.equal(values.get(key), "same-request");
+    saveGrantRequest(storage, key, { request_id: "same-request", state });
+    assert.equal(values.has(key), false); assert.equal(values.has(GRANT_STAGE_KEY), false);
+  }
+  for (const part of ["unknown", "pending", "verifying", "succeeded"]) {
+    saveGrantRequest(storage, key, { request_id: "same-request", state: "failed", personal_data: {state: part} });
+    assert.equal(values.get(key), "same-request");
+  }
+});
+
+test("original-request recovery is bounded, serial and stops at a definite outcome", async () => {
+  let calls = 0, pending = true, timers = [], active = 0, peak = 0;
+  const recovery = createGrantRecovery(async () => { active++; peak = Math.max(peak, active); calls++; active--; }, {
+    canQuery: () => pending, setTimer: fn => { timers.push(fn); return fn; }, clearTimer: fn => { timers = timers.filter(x => x !== fn); }
+  });
+  await recovery.start();
+  while (timers.length) await timers.shift()();
+  assert.equal(calls, 3); assert.equal(peak, 1);
+  pending = false; await recovery.start(); assert.equal(calls, 3);
+  pending = true; await recovery.start(); assert.equal(calls, 4);
+  recovery.stop(); assert.equal(timers.length, 0);
+  const settled = createGrantRecovery(async () => { calls++; pending = false; }, {
+    canQuery: () => pending, setTimer: fn => { timers.push(fn); return fn; }, clearTimer() {}
+  });
+  pending = true; await settled.start(); assert.equal(calls, 5); assert.equal(timers.length, 0);
+});
+
+test("returning to the page during an in-flight query resumes within one bounded budget", async () => {
+  let calls = 0, release, timers = [], visible = true;
+  const waiting = new Promise(resolve => { release = resolve; });
+  const recovery = createGrantRecovery(async () => { calls++; if (calls === 1) await waiting; }, {
+    canQuery: () => visible, setTimer: fn => { timers.push(fn); return fn; }, clearTimer: fn => { timers = timers.filter(x => x !== fn); }
+  });
+  const first = recovery.start();
+  visible = false; recovery.stop();
+  visible = true; recovery.start();
+  assert.equal(calls, 1);
+  release(); await first;
+  while (timers.length) await timers.shift()();
+  assert.equal(calls, 3);
 });
 
 test("only definite grant outcomes leave lookup mode; missing or partial responses stay query-only", () => {

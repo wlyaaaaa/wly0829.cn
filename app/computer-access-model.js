@@ -87,6 +87,39 @@ export function grantResultNeedsQuery(result) {
   return affectedPart || !["failed", "expired", "cancelled"].includes(result.state);
 }
 
+// Persist unresolved work only. A finished request must not become unknown on reload.
+export function saveGrantRequest(storage, key, request) {
+  try {
+    if (request && grantResultNeedsQuery(request)) storage.setItem(key, request.request_id);
+    else { storage.removeItem(key); storage.removeItem(GRANT_STAGE_KEY); }
+  } catch {}
+}
+
+// Bounded, read-only recovery of the original request; never replays a factor.
+export function createGrantRecovery(query, { canQuery, setTimer = setTimeout, clearTimer = clearTimeout, maxAttempts = 3, retryDelay = 2000 }) {
+  let timer = null, attempts = 0, running = false, restartRequested = false;
+  async function run() {
+    timer = null;
+    if (running || attempts >= maxAttempts || !canQuery()) return;
+    running = true; attempts++;
+    try { await query(); }
+    finally {
+      running = false;
+      if (restartRequested) { restartRequested = false; attempts = 1; }
+      if (attempts < maxAttempts && canQuery()) timer = setTimer(run, retryDelay);
+    }
+  }
+  return {
+    start() {
+      clearTimer(timer); timer = null;
+      if (running) { restartRequested = true; return; }
+      attempts = 0;
+      return run();
+    },
+    stop() { clearTimer(timer); timer = null; attempts = maxAttempts; restartRequested = false; },
+  };
+}
+
 export function successfulGrantSnapshot(snapshot, result, freshPost = false) {
   // A stored request describes a past action, never today's authority.
   if (!freshPost || result?.state !== "succeeded") return null;

@@ -1,4 +1,4 @@
-import {HOST_ORIGIN,apiRequest,createStatusReader,createGrantAttempt,durationMinutes,minutesLabel,remainingMinutes,grantLabel,canEndGrant,isAccessOrigin,markGrantVerificationSubmitted,readGrantStage,grantResultNeedsQuery,canRestartUnsubmittedGrant,queryResultUpdate,reductionFailureResult,successfulGrantSnapshot,successfulReductionSnapshot,unresolvedAction,errorMessages,capacity,adaptStatus,reading,numeric,rate,networkConnection,beijingTime,freshStatus,hardwareSnapshot} from './b2-access-model.js';
+import {HOST_ORIGIN,apiRequest,createStatusReader,createGrantAttempt,createGrantRecovery,saveGrantRequest,durationMinutes,minutesLabel,remainingMinutes,grantLabel,canEndGrant,isAccessOrigin,markGrantVerificationSubmitted,readGrantStage,grantResultNeedsQuery,canRestartUnsubmittedGrant,queryResultUpdate,reductionFailureResult,successfulGrantSnapshot,successfulReductionSnapshot,unresolvedAction,errorMessages,capacity,adaptStatus,reading,numeric,rate,networkConnection,beijingTime,freshStatus,hardwareSnapshot} from './b2-access-model.js';
 
 // The owner's cockpit lamp policy; partial reads keep their own unknown state.
 const lampPolicy={computerMaxAge:120,unreadableGrace:600,taskWarnFailures:2,taskErrorFailures:4,backupWarnAge:{daily:36*3600,weekly:9*86400},backupErrorAge:{daily:48*3600,weekly:14*86400},diskWarnFraction:.1,diskErrorFraction:.05,systemDiskMinBytes:15*1024**3};
@@ -117,7 +117,7 @@ const stateLabel=(grant,key)=>{
 
 function message(text,state='warn'){toast=text;toastState=state;clearTimeout(toastTimer);render();toastTimer=setTimeout(()=>{toast='';render();},10000);}
 
-function rememberGrant(request){grant=request;try{request?sessionStorage.setItem(grantKey,request.request_id):sessionStorage.removeItem(grantKey);}catch{}}
+function rememberGrant(request){grant=request;try{saveGrantRequest(sessionStorage,grantKey,request);}catch{}}
 
 function rememberAction(value){actions=[...actions.filter(x=>x.request_id!==value.request_id),value];try{sessionStorage.setItem(actionsKey,JSON.stringify(actions.map(({request_id,action,state,error})=>({request_id,action,state,error}))));}catch{}}
 
@@ -943,15 +943,15 @@ async function submit(){
 
  attempt=createGrantAttempt({requestId:id,body:{purpose,combined,save_default:saveDefault,duration_hours:hours,state_version:status.state_version},api:(p,o)=>apiRequest(base,p,o),onCreated:r=>rememberGrant({...r,factor_submitted:false}),onVerificationStarted:requestId=>{if(!markGrantVerificationSubmitted(sessionStorage,requestId))throw Error('请求阶段未保存，验证码未提交');rememberGrant({...grant,factor_submitted:true});}});
 
- try{const value=await attempt.run(submitted);if(value)await acceptGrant(value,attempt.factorSubmitted);}catch(error){rememberGrant({...grant,state:'unknown',error:error.data?.error});message('本次结果尚未确认，请查询同一请求，不要重复提交验证码。');}finally{attempt=null;busy=false;render();reader.read({replace:true});}
+ try{const value=await attempt.run(submitted);if(value)await acceptGrant(value,attempt.factorSubmitted);}catch(error){rememberGrant({...grant,state:'unknown',error:error.data?.error});message('本次结果尚未确认，请查询同一请求，不要重复提交验证码。');}finally{attempt=null;busy=false;render();reader.read({replace:true});grantRecovery.start();}
 
 }
 
-async function query(){
+async function query({automatic=false}={}){
 
  if(busy||!grant?.request_id)return;
 
- busy=true;render();try{const value=await apiRequest(base,'/requests/'+encodeURIComponent(grant.request_id));if(canRestartUnsubmittedGrant(grant,value)){rememberGrant(null);message('本次尚未提交验证码，请按当前状态重新办理。');}else await acceptGrant(queryResultUpdate(grant,value,clock()),false);}catch(error){if(canRestartUnsubmittedGrant(grant,null,error)){rememberGrant(null);message('原请求未建立，已有授权保持。');}else message('本次查询未完成，原请求已保留。');}finally{busy=false;render();reader.read({replace:true});}
+ busy=true;if(automatic)message('正在查询上次办理结果，确认后自动恢复输入。');render();try{const value=await apiRequest(base,'/requests/'+encodeURIComponent(grant.request_id));if(canRestartUnsubmittedGrant(grant,value)){rememberGrant(null);message('本次尚未提交验证码，请按当前状态重新办理。');}else await acceptGrant(queryResultUpdate(grant,value,clock()),false);}catch(error){if(canRestartUnsubmittedGrant(grant,null,error)){rememberGrant(null);message('原请求未建立，已有授权保持。');}else message('本次查询未完成，原请求已保留。');}finally{busy=false;render();reader.read({replace:true});}
 
 }
 
@@ -1005,6 +1005,8 @@ const reader=createStatusReader((signal,{refresh})=>{statusReading=true;if(cockp
 
 function readStatus(options){if(!formal&&!(data.kind==='cockpit'&&['localhost','127.0.0.1','::1','[::1]'].includes(location.hostname))){phase='error';problem='connection';render();return Promise.resolve();}return reader.read(options);}
 
+const grantRecovery=createGrantRecovery(()=>query({automatic:true}),{canQuery:()=>formal&&!document.hidden&&!busy&&!!grant?.request_id&&grantResultNeedsQuery(grant)});
+
 let pollTimer,pollObserverTried=null;
 function schedule(){
  clearTimeout(pollTimer);if(!formal||document.hidden)return;
@@ -1013,11 +1015,11 @@ function schedule(){
  pollTimer=setTimeout(async()=>{if(document.hidden)return;if(!busy&&!statusReading){if(early)pollObserverTried=observed;await readStatus({refresh:early});}schedule();},early?Math.max(0,(deadline-clock())*1000):60000);
 }
 
-document.addEventListener('visibilitychange',()=>{clearTimeout(pollTimer);if(document.hidden)reader.invalidate();else{if(!busy)readStatus({replace:true});schedule();}});
+document.addEventListener('visibilitychange',()=>{clearTimeout(pollTimer);if(document.hidden){reader.invalidate();grantRecovery.stop();}else{if(!busy)readStatus({replace:true});grantRecovery.start();schedule();}});
 
 addEventListener('site-live-ready',()=>{if(!document.hidden&&phase!=='ready')readStatus({replace:true});},{once:true});
 setTimeout(()=>{if(!document.hidden&&phase==='loading')readStatus();},8000);
-document.addEventListener('site-layout',mount);mount();if(!document.hidden&&window.SiteLiveRuntime)readStatus();if(formal&&validRequest(linkedRequest))query();schedule();setInterval(()=>{if(!document.hidden)render();},15000);
+document.addEventListener('site-layout',mount);mount();if(!document.hidden&&window.SiteLiveRuntime)readStatus();grantRecovery.start();schedule();setInterval(()=>{if(!document.hidden)render();},15000);
 
 addEventListener('hashchange',()=>{target=liveAnchors.find(x=>x.id===decodeURIComponent(location.hash.slice(1)))||null;render();});
 
