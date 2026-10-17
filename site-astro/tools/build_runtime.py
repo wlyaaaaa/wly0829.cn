@@ -53,7 +53,8 @@ def prepare(snapshot):
         if rel.startswith('_home-cockpit/cockpit-offline.') and not (source / 'cockpit.html').is_file(): continue
         origin = ROOT / row['source_path'] if 'source_path' in row else SITE / 'sources/vendor-deps' / rel
         raw = origin.read_bytes()
-        authored = row.get('source_path', '').startswith(('site-astro/public/_home-cockpit/', 'site-astro/sources/retained-home-cockpit/'))
+        # The access model is an authored input; computer_access_native versions its current bytes.
+        authored = row.get('source_path') == 'app/computer-access-model.js' or row.get('source_path', '').startswith(('site-astro/public/_home-cockpit/', 'site-astro/sources/retained-home-cockpit/'))
         if not authored and (len(raw) != row['bytes'] or hashlib.sha256(raw).hexdigest() != row['sha256']):
             raise ValueError('Retained source dependency changed: ' + rel)
         copy(origin, public / rel)
