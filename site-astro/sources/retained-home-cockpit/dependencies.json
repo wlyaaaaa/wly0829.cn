@@ -61,8 +61,7 @@
   },
   "_how-demo/how-demo-panorama-f2d6619bf893d9a4268f.js": {
     "bytes": 4258,
-    "sha256": "f2d6619bf893d9a4268f6da7efb798db7b03e28a25041cd9c2b881fc46da9dcd",
-    "source_path": "scripts/how-demo-panorama.js"
+    "sha256": "f2d6619bf893d9a4268f6da7efb798db7b03e28a25041cd9c2b881fc46da9dcd"
   },
   "_living/_engine/bird.d929c4d5aa/bird-atlas.webp": {
     "bytes": 3304704,
@@ -8481,7 +8480,7 @@
   "cockpit/assets/today-river-d6e2d14e41fb5adb5c58.js": {
     "bytes": 50230,
     "sha256": "64ccbe0d730bbca4e7482ecb04fa887d837535fa08ce0fdd89688f0916f769d1",
-    "source_path": "scripts/today-river.js"
+    "source_path": "site-astro/sources/vendor-deps/cockpit/assets/today-river-64ccbe0d730bbca4e748.js"
   },
   "cockpit/assets/today-river-f36ca903ec4e711209dc.css": {
     "bytes": 20265,
