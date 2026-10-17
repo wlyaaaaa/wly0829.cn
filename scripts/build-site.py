@@ -154,7 +154,11 @@ def retained_inputs(name, snapshot):
     if name != 'home': refs.update({'/_interactions/anchor-offset.css', '/_interactions/anchor-offset.js'})
     paths = [html, SITE / 'src/retained-page.ts',
         SITE / 'src/pages' / ('index.astro' if name == 'home' else name + '/index.astro')]
-    if name == 'computer-access': paths += [SITE / 'src/styles/access-fixes.css', SITE / 'src/scripts/access-bird.js']  # retained-page.ts 内联它们
+    if name == 'computer-access':
+        paths += [SITE / 'src/styles/access-fixes.css', SITE / 'src/scripts/access-bird.js',
+            ROOT / 'app/computer-access-model.js', ROOT / 'scripts/b2-live-runtime.js',
+            ROOT / 'scripts/update-live-release.py', ROOT / 'scripts/prepare-cockpit-cache.py',
+            SITE / 'tools/computer_access_native.py']
     if name != 'computer-access':
         paths += [SITE / 'src/styles/typeset-page.css', SITE / 'public/_album/astro-runtime.json',
             SITE / 'public/_living/quality-runtime/manifest.json']
@@ -333,6 +337,8 @@ def build(pages=None):
             source = stage_dir / route_file(route)
             if not source.is_file(): raise ValueError('Astro did not generate selected route: ' + route)
             copy_changed(source, dist / route_file(route))
+    if '/computer-access/' in astro_routes:
+        load('build_computer_access', 'site-astro/tools/computer_access_native.py').build(public, dist / 'computer-access/index.html')
     stage('astro')
     for path in dist.rglob('*.html'):
         if any('/' + rel in re.findall(r'<script\b[^>]*\b(?:data-)?src="([^"]+)"', path.read_text('utf8')) for rel in retired):

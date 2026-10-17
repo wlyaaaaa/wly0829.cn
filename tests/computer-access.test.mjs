@@ -322,6 +322,23 @@ test("initial page GET expires during slow hydration and retains service failure
   assert.equal(failures[0].httpStatus, 502);
 });
 
+test("built access page binds the current grant model and recovery runtime", async () => {
+  const dist = new URL("../dist/", import.meta.url);
+  const html = await readFile(new URL("computer-access/index.html", dist), "utf8");
+  const manifest = JSON.parse(await readFile(new URL("release-manifest.json", dist), "utf8"));
+  const runtimeUrl = html.match(/(?:data-)?src="([^"]*b2-typeset-[\w]+\.js)"/)?.[1];
+  assert.ok(runtimeUrl, "access runtime is referenced");
+  const artifact = url => Object.entries(manifest.oss.objects).find(([, row]) => row.url === url)?.[0];
+  const runtimePath = artifact(runtimeUrl);
+  assert.ok(runtimePath, "access runtime belongs to the finalized manifest");
+  const runtime = await readFile(new URL(runtimePath, dist), "utf8");
+  assert.match(runtime, /createGrantRecovery\(\(\)=>query\(\{automatic:true\}\)/);
+  const modelUrl = new URL(runtime.match(/from ['"]([^'"]*b2-access-model[^'"]*\.js)['"]/)?.[1], runtimeUrl).href;
+  const modelPath = artifact(modelUrl);
+  assert.ok(modelPath, "current access model belongs to the finalized manifest");
+  assert.equal(await readFile(new URL(modelPath, dist), "utf8"), await readFile(new URL("../app/computer-access-model.js", import.meta.url), "utf8"));
+});
+
 test("computer routes stay in the current tab while external links retain their target", async () => {
   const html = await readFile(new URL("../dist/computer-access/index.html", import.meta.url), "utf8");
   const anchors = html.match(/<a\b[^>]*>/g) || [];
