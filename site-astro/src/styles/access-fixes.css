@@ -66,3 +66,8 @@ html body .typeset-live-flow-layer:has(> button.b2-native.b2-image-action[data-b
 #computer-access-01 .access-bird, #computer-access-01 .access-bird * { pointer-events: none !important; }
 /* O3 重排隐藏了首屏所有 img，小鸟精灵图要放出来 */
 #computer-access-01.o3-ready .access-bird img.lb-i { display: block !important; }
+
+/* 宽屏结果表建立后，原位图已被替换，不再显示它遗留的加载提示。 */
+@media (orientation: landscape) and (min-width: 981px) {
+  #computer-access-03.o3-ready .image-loading-wrap { display: none; }
+}
