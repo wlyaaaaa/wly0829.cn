@@ -18,8 +18,8 @@
       "sha256": "df478787a83412e9211fa82a88dfd43016943ec03010b87e22f731af45da2cc3"
     },
     "cockpit/index.html": {
-      "bytes": 637442,
-      "sha256": "25784513b59c8608b8b3eef9d07c4b5274707ef57464adc900dec1bf514e87fe"
+      "bytes": 641482,
+      "sha256": "5feb90da516026b169a97275c129c54ccdae339f2b16399b8d8950f26d7272ee"
     },
     "cockpit/stutter/index.html": {
       "bytes": 16362,
@@ -1586,7 +1586,7 @@
     "/skills/work-delivery/",
     "/system/"
   ],
-  "release_id": "3c4dd49f44094670e0db4cb659f241d2e4be2da9b17d4fcec3e07b512cd006a9",
+  "release_id": "f5b1d8d1af7dd384667665aaf93abcc283c57e54e392a20d46f7e4837d7c34da",
   "baseline_production_commit": "2872547b5925b782419ec7bf5cb0f162c1b53c3e",
   "rules_pin": {
     "schema": "wly.astro-rules-pin.v1",
@@ -3766,34 +3766,34 @@
     "/computer-access/": {
       "producer": "astro"
     },
-    "/cockpit/stutter/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
-      "producer": "astro"
-    },
     "/projects/llm-backend-toolkit/": {
+      "producer": "astro"
+    },
+    "/404.html": {
       "producer": "astro"
     },
     "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
+    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
       "producer": "astro"
     },
     "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
       "producer": "astro"
     },
-    "/404.html": {
+    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
+      "producer": "astro"
+    },
+    "/cockpit/stutter/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
       "producer": "astro"
     },
     "/cv/": {
@@ -4352,12 +4352,12 @@
     "html_files": 314
   },
   "previous_oss_source": "published",
-  "previous_release_id": "6ab2ea8eeefcbe5aed4569d2e032a33949677162c1671dd24057c713e64c2c19",
+  "previous_release_id": "3c4dd49f44094670e0db4cb659f241d2e4be2da9b17d4fcec3e07b512cd006a9",
   "oss": {
     "schema": "wly.oss-assets.v1",
     "asset_base_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com",
-    "prefix": "releases/fa4fc9b8e784cbd24e425f3e21be07f886984b5f2f3f1ae2d3042a1f97cee631",
-    "source_release_id": "9d1c77d8d070ad015d31109e27a3975bcf8120be1048f29a4f2af25796cb522f",
+    "prefix": "releases/3b5268e1856e2a2c0007b97a424adf1325392b058606f0c60fec17737134087c",
+    "source_release_id": "df93cacdeb1f7a69060693aa2b859d90a1e9291aa578a953dd7c9be98638003f",
     "objects": {
       "_album/album-1a72f07ce279b5d3fdf8.css": {
         "bytes": 4721,
@@ -5364,6 +5364,18 @@
         "source": {
           "bytes": 49016,
           "sha256": "d6ef46750a8ef27b48497191cdd9f5a1ef4c76894699a1cd680cd83171652378"
+        },
+        "byte_preserved": true
+      },
+      "_astro/today-river.DZBKpnE5.js": {
+        "bytes": 50241,
+        "sha256": "092b482638b9155cd86f99bd83dac81fd449c4e5cdf22994adf02c7e15537a1c",
+        "key": "releases/1ea47ff002bd86c433ed7ce4751e1631e80417ffe728381e475dc2c9b57f99fe/_astro/today-river.DZBKpnE5.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/1ea47ff002bd86c433ed7ce4751e1631e80417ffe728381e475dc2c9b57f99fe/_astro/today-river.DZBKpnE5.js",
+        "content_type": "application/javascript",
+        "source": {
+          "bytes": 50241,
+          "sha256": "092b482638b9155cd86f99bd83dac81fd449c4e5cdf22994adf02c7e15537a1c"
         },
         "byte_preserved": true
       },
@@ -66643,6 +66655,7 @@
       "releases/1e8e1603ea61f6bae6f2458c5b6cd2dfdd459f2eca24f1b48e4b0bc083c96a44/_typeset/runtime/live-sans-part-57c-6e66a68bb6dfb4913ee0.woff2",
       "releases/1e8e405dad9768ec96d89c6d3fd88353f2c37fc189a8752f57b6eeb415f3434f/_typeset/localocr/f11ce2be2abb476e74c5-localocr-01-v.webp",
       "releases/1e94ad76cb87ed9efb9c904745070d4264dd87d2b5eb3eb69fc377509914d4b2/assets/_fingerprinted/0453858457028fd3bbd5564e5051a101705b0ad4fde99c591a3ac467ca0667f5.png",
+      "releases/1ea47ff002bd86c433ed7ce4751e1631e80417ffe728381e475dc2c9b57f99fe/_astro/today-river.DZBKpnE5.js",
       "releases/1ea755c3cd4ad61ccc57d0c5e73ebcdebc0f633603fe1caafe0725af5e87e0e4/assets/_fingerprinted/fc1b1a43be5c1d5d8a2a88c4d55520d3350731febfae9c008ca75a2c46da8eae.webp",
       "releases/1eb5f4f2867c26e935b681bd811ab691a72c694551f3e32797bd908476d7fcad/assets/_fingerprinted/949552ca177a232ed3b44c1317063063492f68efc7701bcfbc62ea1a57e4816f.png",
       "releases/1eca74f04c4906fd385035b8d074ad71e23bb5bd85e37c278f358e495f3d4e38/_typeset/runtime/live-sans-part-3e4-ec5ce5b72cea574d216b.woff2",
@@ -67369,7 +67382,6 @@
       "releases/48272f36ba7ad7baecc88ec29db62525606763aa6ec9bc7b5487a9627f2794a1/assets/_fingerprinted/3869c32538df473ffa3b10f21666900039360d00f860158eacc1102c7f645d42.png",
       "releases/483cbd2f95dcc0f8dac0fcfe1a247db2c59dba21eca412f4e636db08aa3d5314/assets/_fingerprinted/f8bfbeab33962185146cc85fa14dde1302ed59bb91164bab0e4767d014a4bd18.png",
       "releases/485274d1e2315cc744f58bc1fae56829f62a664a11c19f8e63d789461cef3a5d/assets/_fingerprinted/a40c0d37919ce4ca754eab2e225951ed03b2693c46bc944a74329f1affb2cec8.png",
-      "releases/487f33642fe6bd81238a7ab2954246edb35a231af240ee9dd716beeb51c9e32d/_astro/today-river.Ba5epiQE.js",
       "releases/487f4106acce32eaeb9b0fc15a2002d0261fafdb7dc1480896921cf5b779b839/_typeset/runtime/live-sans-part-d9-043c30832d8a87354a4b.woff2",
       "releases/487f5f99018bf015d6eda9c228e285914ebf2bbeb28ff9a932cd6cf7bdff6edb/assets/_fingerprinted/f36f6a20596c96dd2952b072b2ca1c94d2d034d772c781a15ca39ac6e7aadaf4.webp",
       "releases/488725cdd712ab1537ca5f27c75de1bc3988b74aa369b1ba51ffeaf251af433f/_living/agents/bird-source.ab17fa0c02d3/config.json",
