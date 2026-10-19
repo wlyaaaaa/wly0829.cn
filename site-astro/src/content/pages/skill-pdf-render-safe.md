@@ -40,7 +40,7 @@
     "近 7 天 AI 用了 1 次"
    ],
    "as_of": "2026-10-12",
-   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
   },
   "public": false,
   "repo_url": null,
@@ -315,8 +315,8 @@
  },
  "source": {
   "page": "sources/pages/skill-pdf-render-safe/page.json",
-  "sha256": "b7a643aed7271ea0e170d2837396d844ec64218d7e67a1eb5bcfe259bd1e4a82",
-  "converted_at_beijing": "2026-10-12T05:03:50+08:00"
+  "sha256": "402cbf9b9e0b8d0bd24d555da5c2684ad62fbc000a4019543aac615ee3aa65ba",
+  "converted_at_beijing": "2026-10-20T07:45:06+08:00"
  }
 }
 ---
@@ -367,7 +367,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）",
      "row": "intro"
     },
     {
@@ -446,7 +446,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
     },
     {
      "type": "prose",

@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E259",
-   "commit": "2d764224dfda1d65ee065ce4d1f590c598b19850",
-   "ruleset_sha256": "eefcc585ae714fd4ecdf99c64c750ad47d4ddd35a80fe05de2e7203cba01291f",
-   "activated_at": "2026-10-12T05:01:29.265252+08:00",
+   "release": "E275",
+   "commit": "dfc6b406fb43175d44ff4436f854f7129cb560ec",
+   "ruleset_sha256": "32c6ff6e32f441dac925edbac4a3d0af6d5c5cc5d8a2be0575483f2cfce5e6eb",
+   "activated_at": "2026-10-17T11:38:31.183019+08:00",
    "file": "sources/rules/docs/contracts/agents.context-sources.md",
-   "sha256": "c6dd00ecb9cba5da30911d74f0cc72ee651435dc1307a3bcbdf9b3d1e8679d30",
-   "public_sha256": "9a41b24a4f69f30687d9c26edc0157e154c37d09a90ce50ca77a435eed5c894e"
+   "sha256": "610a7823f7ffdd3f62d51d3b439ecf9d876c9266ae98abb862c2cfaa451ec87b",
+   "public_sha256": "ebcae351c7d488e91e7db2f2ffb5d3cbe52d8a5b6b6320f30b2da427464b222e"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：林间小路上几片叶子缓缓飘落；三座小木屋的窗子依次亮起暖光又暗下；路口三叉指路牌的三只箭头轮流微微发亮；路边贴着雪花封条的小木箱上，霜花轻轻闪一下；摊开的厚书被风翻过两页，绿色书签始终夹在原处、尾巴轻轻摆动；背景淡水彩纸纹缓慢流动。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -410,8 +410,8 @@
  },
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
-  "sha256": "54e32caf2bb6f6f73b8132dfa67c971a61e77e80f1709e624794644fa436565d",
-  "converted_at_beijing": "2026-10-12T05:45:50+08:00"
+  "sha256": "863c1e7e1549d2aa2eeffada0aa2df2954324115d4123b5cc5fcee656b83d7d4",
+  "converted_at_beijing": "2026-10-20T07:45:04+08:00"
  }
 }
 ---
@@ -2446,9 +2446,9 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E259",
-   "sha256": "c6dd00ecb9cba5da30911d74f0cc72ee651435dc1307a3bcbdf9b3d1e8679d30",
-   "public_sha256": "9a41b24a4f69f30687d9c26edc0157e154c37d09a90ce50ca77a435eed5c894e",
+   "release": "E275",
+   "sha256": "610a7823f7ffdd3f62d51d3b439ecf9d876c9266ae98abb862c2cfaa451ec87b",
+   "public_sha256": "ebcae351c7d488e91e7db2f2ffb5d3cbe52d8a5b6b6320f30b2da427464b222e",
    "from": null,
    "to": "## 三档维护",
    "start": 0,
@@ -2466,7 +2466,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-08",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "9a41b24a4f69f30687d9c26edc0157e154c37d09a90ce50ca77a435eed5c894e",
+  "source_public_sha256": "ebcae351c7d488e91e7db2f2ffb5d3cbe52d8a5b6b6320f30b2da427464b222e",
   "source_rule_part": "rule-context-sources/rule-context-sources-08"
  },
  "layout": {
@@ -2474,7 +2474,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版，一字不改"
+     "text_ref": "原文·E275版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2508,7 +2508,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版，一字不改"
+     "text_ref": "原文·E275版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2586,7 +2586,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
 }
 ```
 
-原文 · E259 版，一字不改
+原文 · E275 版，一字不改
 
 # 事实来源与任务上下文
 
@@ -2637,13 +2637,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E259",
-   "sha256": "c6dd00ecb9cba5da30911d74f0cc72ee651435dc1307a3bcbdf9b3d1e8679d30",
-   "public_sha256": "9a41b24a4f69f30687d9c26edc0157e154c37d09a90ce50ca77a435eed5c894e",
+   "release": "E275",
+   "sha256": "610a7823f7ffdd3f62d51d3b439ecf9d876c9266ae98abb862c2cfaa451ec87b",
+   "public_sha256": "ebcae351c7d488e91e7db2f2ffb5d3cbe52d8a5b6b6320f30b2da427464b222e",
    "from": "## 三档维护",
    "to": "### 一样东西只存一处",
    "start": 1597,
-   "end": 4051,
+   "end": 4421,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -2657,7 +2657,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-09",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "9a41b24a4f69f30687d9c26edc0157e154c37d09a90ce50ca77a435eed5c894e",
+  "source_public_sha256": "ebcae351c7d488e91e7db2f2ffb5d3cbe52d8a5b6b6320f30b2da427464b222e",
   "source_rule_part": "rule-context-sources/rule-context-sources-09"
  },
  "layout": {
@@ -2665,7 +2665,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版·续"
+     "text_ref": "原文·E275版·续"
     },
     {
      "type": "source_text_card",
@@ -2696,7 +2696,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版·续"
+     "text_ref": "原文·E275版·续"
     },
     {
      "type": "source_text_card",
@@ -2763,7 +2763,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E259 版 · 续
+原文 · E275 版 · 续
 
 ## 三档维护
 
@@ -2783,22 +2783,26 @@ owner: `E:\.agents`
 
 ## 长任务接续
 
-派活、向本人提问或请本人决定之前，按本次任务的来源取回必要的现行决定；普通回复不自动注入。Claude、Codex 压缩或恢复后由同一 `tools/current_decision_context.py` 投影现行决定表；原生子代理压缩跳过 SessionStart 时，从原任务接续状态读取目标、原话、更正和未结事项。相同边界的重复投递去重，不改全局窗口、不强制换对话。
+根会话派活、提问或请本人决定前，按任务取回必要现行决定；普通回复不自动注入。Claude、Codex 压缩或恢复共用 `tools/current_decision_context.py`，短表只留禁令和当前项目相关条目，其余按查询入口取回。原生子代理跳过 SessionStart 时从派单和原任务状态接续，不额外读原话。相同边界去重，不改全局窗口、不强制换对话。
 
-用现有的任务状态分清：本人原话和更正、已确认的结果和授权、现场事实和未知、可替换的方案、真正做完的和还剩的。做取舍前先看现行决定索引，详情按出处查。摘要和计划不产生新需求；转述会改变意思的关键原话保留原句。会影响其他 AI 做决定或理解情况的经验、教训、本人决定和必要事实，当场写进对应的项目或基座文件（例如项目的 AGENTS.md、说明文档、登记表），不写进 Codex 或 Claude 自己的记忆区；写的是结论，不是日志和过程记录（约法 L30）。简单任务不机械建文档，不建全景个人库或新的记忆服务，不记录隐藏推理。停下时还有没做完的，留下能接着做的状态：在哪里、做到哪、还差什么。
+用现有的任务状态分清：本人原话和更正、已确认的结果和授权、现场事实和未知、可替换的方案、真正做完的和还剩的。做取舍前先看现行决定索引，详情按出处查。摘要和计划不产生新需求；转述会改变意思的关键原话保留原句。会影响其他 AI 做决定或理解情况的经验、教训、本人决定和必要事实，按共享经验的落点（`#共享经验的落点`）归位到对应的项目或基座文件（例如项目的 AGENTS.md、说明文档、登记表），不写进 Codex 或 Claude 自己的记忆区；写的是结论，不是日志和过程记录（约法 L30）。简单任务不机械建文档，不建全景个人库或新的记忆服务，不记录隐藏推理。停下时还有没做完的，留下能接着做的状态：在哪里、做到哪、还差什么。
 
-README 只给 AI 和维护使用，简短列出现行入口，不再另写一份给本人看的长文档。给本人看的说明、指南和急救步骤统一由网站 `wly0829.cn` 从各自唯一来源生成；电脑离线时，网站的急救页也必须可读。项目的 AGENTS 只写这个项目真正不同的地方；实现或入口变了、影响到它写的承诺时同步更新。网站取材和去副本按下一节执行（出处：决定 FZ7）。
+README 只给 AI 和维护使用，简短列出现行入口，不再另写一份给本人看的长文档。给本人看的说明、指南和急救步骤统一由网站 `wly0829.cn` 从各自唯一来源生成；电脑离线时，网站的急救页也必须可读。项目的 AGENTS 只写这个项目真正不同的地方；实现或入口变了、影响到它写的承诺时同步更新。网站取材和去副本按下一节执行。
 
 第三方 CLI 长任务由 AICLI 和具体项目负责接续，不再交给个人技能。到自然边界保存压缩前 checkpoint；恢复时重读项目规则、当前状态、`git status` / `git diff` 和待改源码，摘要只作线索。
 
+通过电脑 MCP 操作项目时，不得在 ChatGPT 中新增任务；后续事项及提醒写入电脑端对应项目的上下文，由后续读取上下文的 AI 承接。
+
+个人项目中需要电脑智能体执行的后续事项，归入电脑端对应项目现有需求、待办或接续入口，由电脑 Codex／Claude 在相应操作时承接并提醒。无论本人从手机还是通过 MCP 发起，包括媒体库按需更新，都不另建 ChatGPT 定时提醒来代替项目接续；本人另行明确指定提醒方式时按新指示。记录后续条件不等于立即执行，也不等于获准向另一个现有会话发送任务。来源：决定月卷“个人项目后续电脑智能体操作由电脑端接续提醒（北京时间2026-10-15 18:10:22）”。补充来源：决定月卷“电脑MCP项目不新增ChatGPT任务与小吊梨汤点餐（北京时间2026-10-17 11:31:03）”，将电脑项目提醒统一为上下文接续。
+
 ### 压缩后的后台复核
 
-Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务做增量复核；正常工作不等它。根会话持续维护并在压缩前更新项目已有的短任务状态；没有现成入口时用本任务 `work/task-state.md`，保留当前目标、要求出处、已完成与未结事项、下一步和证据位置，不再复制整段历史。当前用 Sol ultra，资料定位优先脚本；不让 Luna 的初筛成为跳过最终复核的唯一依据。（出处：决定文档“压缩后增量复核与汇报提问”）
+Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务做增量复核；正常工作不等它。根会话持续维护并在压缩前更新项目已有的短任务状态；没有现成入口时用本任务 `work/task-state.md`，保留当前目标、要求出处、已完成与未结事项、下一步和证据位置，不再复制整段历史。当前用 Sol ultra，资料定位优先脚本；不让 Luna 的初筛成为跳过最终复核的唯一依据。
 
 纯技术工作不依赖资料解锁（约法 L18）。资料锁着或未知、又到了压缩预警时，根会话若已确认整个现有会话确为纯技术，可用技术范围登记（`../operations/context-hooks.md#锁定时的技术复核`）记录当前原话边界及确为技术资料的证据位置，命令见该运维文档。登记由 AI 做，不请本人另行批准；新增或改写的真人消息不继承旧判断。旧历史混有私人内容或范围不明时不登记整段技术，仍走原资料入口，不先读私人历史来补这个判断。该登记不解锁资料、不放行私人库；未读取的部分继续列为未覆盖。
 
 - 每个新压缩边界只排一次，同根会话最多一批在跑；普通新消息不新开复核，子代理的压缩不递归派发。未覆盖部分保留，不把重复恢复当成新一批。
-- 对照本批全部新增用户原话，查交接或待办漏记的小要求，并对照仍有效的旧未结要求；检查事实出处、实际完成证据、擅改决定及压缩接续。按[原话分类表](/rules/engineering-delivery/#本人的话怎么分类怎么对待ai-写的稿子可以改)核对，分类分歧只把禁令边界上的作为提醒交回，不阻塞工作；审查意见不产生用户决定。
+- 按本批新增消息查交接或待办漏记的小要求，对照旧未结要求，检查实际完成证据、擅改决定及接续。本人原话出处由根认定，复核者不另查、不报无出处；按[分类表](/rules/engineering-delivery/#本人的话怎么分类怎么对待ai-写的稿子可以改)核对，只有禁令边界上的分类分歧作为提醒交回，不阻塞工作，审查意见不产生用户决定。
 - 按原文和产物位置分段读取，不把整个窗口塞给复核者。覆盖位置和未结项落在现有任务状态，只有有效覆盖回执才推进；失败、超时、资料缺口和未检查的摘要如实列明，不写成通过。
 - 复核只读，短结果在原根会话下一可投递的工具或消息边界送回，详细证据按需读取。根先对照当前版本，再处理仍存在的问题；已经修好的不重复打扰。普通提醒不阻塞主任务，影响当前决定或交付的实质问题由根核实处理，重大动作仍按原把关规则。
 - 每批有效工作预算当前为 8 分钟，正常短回报目标 500 字；这是可调的 AI 实现参数，不是牺牲覆盖或删除关键问题的理由。排队、重试和收尾宽限单列；不自动无限延时。中断在原批次接续，不反复新建替身。
@@ -2815,13 +2819,13 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E259",
-   "sha256": "c6dd00ecb9cba5da30911d74f0cc72ee651435dc1307a3bcbdf9b3d1e8679d30",
-   "public_sha256": "9a41b24a4f69f30687d9c26edc0157e154c37d09a90ce50ca77a435eed5c894e",
+   "release": "E275",
+   "sha256": "610a7823f7ffdd3f62d51d3b439ecf9d876c9266ae98abb862c2cfaa451ec87b",
+   "public_sha256": "ebcae351c7d488e91e7db2f2ffb5d3cbe52d8a5b6b6320f30b2da427464b222e",
    "from": "### 一样东西只存一处",
    "to": null,
-   "start": 4051,
-   "end": 6253,
+   "start": 4421,
+   "end": 6655,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -2852,7 +2856,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-10",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "9a41b24a4f69f30687d9c26edc0157e154c37d09a90ce50ca77a435eed5c894e",
+  "source_public_sha256": "ebcae351c7d488e91e7db2f2ffb5d3cbe52d8a5b6b6320f30b2da427464b222e",
   "source_rule_part": "rule-context-sources/rule-context-sources-10"
  },
  "layout": {
@@ -2860,7 +2864,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版·续"
+     "text_ref": "原文·E275版·续"
     },
     {
      "type": "source_text_card",
@@ -2886,7 +2890,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版·续"
+     "text_ref": "原文·E275版·续"
     },
     {
      "type": "source_text_card",
@@ -2904,7 +2908,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
 }
 ```
 
-原文 · E259 版 · 续
+原文 · E275 版 · 续
 
 ### 一样东西只存一处
 
@@ -2912,13 +2916,15 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
 
 ### 共享经验的落点
 
-记忆的使用边界按[约法 L30](/rules/charter/#十关于规则本身)，两个宿主的关闭配置见各自适配专题。本人纠正、本人新定的规矩和踩过的坑，当轮写到下面对应的共享位置，写完在回复里一句话说明写在哪；不能因为记忆关了就不记。
+记忆的使用边界按[约法 L30](/rules/charter/#十关于规则本身)，两个宿主的关闭配置见各自适配专题。需要留下的原话、经验和教训按下述时点写到对应的共享位置，写完在回复里一句话说明写在哪；不能因为记忆关了就不记。
 
-本人对 AI、项目和电脑的决定原话，现行存 `docs/owner-decisions/YYYY-MM.md`，分卷索引为 `docs/owner-decisions.md`。新增原话用 `python -B -X utf8 tools/owner_decision_store.py append --input <原话节.md>` 写入月卷，分卷索引只作导航。新增或大改功能、新定或推翻决定时，当场原样记原话与北京时间；分类含义、混合消息拆分、AI 取法、哪些消息不进决定文档和索引、本人改分类，按[工程与交付的唯一分类表](/rules/engineering-delivery/#本人的话怎么分类怎么对待ai-写的稿子可以改)。决定索引另标来源、性质、范围和取代关系。同一主题新决定默认覆盖旧决定；被取代或已办完的一次性记录整节原样移入 `docs/archive/`，默认搜索不命中，只供审查；历史另在 Git。别处只写现行做法与出处，不抄原话。移动时标取代关系，搜旧编号和节名改引用，行号改节标题；别的负责人管的发给对应会话。拿不准的留现行交本人定。编号和引用写法见决定文档分卷索引。本人自己的事实、偏好和价值记在理解库明示。
+本人对 AI、项目和电脑的决定原话存 `docs/owner-decisions/YYYY-MM.md`，索引 `docs/owner-decisions.md` 只作导航。新增用 `python -B -X utf8 tools/owner_decision_store.py append --input <原话节.md>`：默认只写盘，显式 `--commit` 才提交。禁令、纠正和长期授权当场原样写盘，带北京时间；其余在交付收尾或压缩前一次归位。本会话钩子已存的本人消息也算出处，标“本人原话（待归位）”，不因未分类、未写月卷或未提交报警。要求登记同样只写盘，不为两种记录各做提交；在交付收尾或压缩前批量提交，推送随任务正常收尾。
+
+后台每 3 小时只补已归档或最后活动超过 3 小时且有未归位原话的根会话，源消息 UUID 已引用就跳过；资料锁着或未知时记录跳过，不解锁、不降级。分类统一按[工程与交付](/rules/engineering-delivery/#本人的话怎么分类怎么对待ai-写的稿子可以改)。索引标来源、性质、范围、取代关系；同主题新决定覆盖旧决定，被取代或已办完的一次性记录整节原样移入 `docs/archive/`，默认搜索排除，历史留在 Git。别处只写现行结论和指针。移动时标取代、修旧编号和节名引用，不用行号；别的负责人管的发给对应会话。拿不准的留现行交本人定。编号写法见索引，个人事实、偏好和价值记理解库明示。
 
 原话整条原样放引用块，连发各占一块，写来源（会话、源消息 UUID）；分类行写 `- 分类：①类别〔范围·修饰〕「片段」；②…`，每单元带范围（本次、项目或主题名、长期、至 YYYY-MM-DD，可组合），片段必须是同节某个引用块一字不差的子串，尽量在 20 字以内。选项、纠正、询问或回答 AI 请示的，写回答对象；新主题新开带北京时间的节，不追加到按会话命名的节。
 
-记录原话的根会话当轮分类，两个宿主一致，不设审批；子代理不记原话、不改分类。“性质和范围／性质与范围”等旧段落原样保留。按类别搜 `rg -n "^- 分类：.*禁令〔" E:\.agents\docs\owner-decisions -g "*.md"`，换类别词即可。
+记录原话的根会话按上述时点归位并分类，两个宿主一致，不设审批；后台补漏 GPT 按同一分类表执行，其他子代理不记原话、不改分类。“性质和范围／性质与范围”等旧段落原样保留。按类别搜 `rg -n "^- 分类：.*禁令〔" E:\.agents\docs\owner-decisions -g "*.md"`，换类别词即可。
 
 | 内容 | 写到哪里 |
 |---|---|
@@ -2928,4 +2934,4 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
 | 本人的决定原话 | 决定月卷 `docs/owner-decisions/YYYY-MM.md`（索引 `docs/owner-decisions.md`）；别处写现行做法加出处编号。 |
 | 拿不准放哪里 | 先写进现有共享文档的待办，发布规则时归位。 |
 
-三基座周治理长期每周运行，做什么以自动任务定义为准；现役定义为 Codex 自动化 `github` 的 `E:\Data\AppData\Codex\automations\github\automation.toml`，定位见 `E:\PCConfig\registries\task_purpose_catalog.json`（出处：决定月卷 `docs/owner-decisions/2026-10.md`“驾驶舱与每周治理”“本轮基座完善范围”）。仍按现行个人资料状态取用私人内容，合并同类并保留原话语境，不把 AI 的猜测写成本人决定。网站不单设每周复核；暂停的手动入口仅在本人启动时运行，不算正在定时更新（出处：决定文档“网站：设计稿逐项审定、单层分工、留锚点、不重复介绍”）。
+三基座周治理长期每周运行，做什么以自动任务定义为准；现役定义为 Codex 自动化 `github` 的 `E:\Data\AppData\Codex\automations\github\automation.toml`，定位见 `E:\PCConfig\registries\task_purpose_catalog.json`。仍按现行个人资料状态取用私人内容，合并同类并保留原话语境，不把 AI 的猜测写成本人决定。网站不单设每周复核；暂停的手动入口仅在本人启动时运行，不算正在定时更新。

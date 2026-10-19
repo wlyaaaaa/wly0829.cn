@@ -40,7 +40,7 @@
     "近 7 天 AI 用了 10 次"
    ],
    "as_of": "2026-10-12",
-   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
   },
   "based_on": {
    "commit": "6dd21f643bef0efb33263afe9e9527bf4362879d",
@@ -240,8 +240,8 @@
  },
  "source": {
   "page": "sources/pages/skill-mojibake-doctor/page.json",
-  "sha256": "c23493b86b29d04a528c72dad96d7c37e2c2367d687897689cdea3a184903fb7",
-  "converted_at_beijing": "2026-10-12T05:03:50+08:00"
+  "sha256": "13e79bda40b4814e687600c3560ec53f6e0bd2d4a954315fa3b25ddb2f38491a",
+  "converted_at_beijing": "2026-10-20T07:45:06+08:00"
  }
 }
 ---
@@ -287,7 +287,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）",
      "row": "hero"
     },
     {
@@ -356,7 +356,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
     },
     {
      "type": "illustration",

@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E259",
-   "commit": "2d764224dfda1d65ee065ce4d1f590c598b19850",
-   "ruleset_sha256": "eefcc585ae714fd4ecdf99c64c750ad47d4ddd35a80fe05de2e7203cba01291f",
-   "activated_at": "2026-10-12T05:01:29.265252+08:00",
+   "release": "E275",
+   "commit": "dfc6b406fb43175d44ff4436f854f7129cb560ec",
+   "ruleset_sha256": "32c6ff6e32f441dac925edbac4a3d0af6d5c5cc5d8a2be0575483f2cfce5e6eb",
+   "activated_at": "2026-10-17T11:38:31.183019+08:00",
    "file": "sources/rules/docs/contracts/agents.protected-actions.md",
    "sha256": "5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa",
    "public_sha256": "29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1"
@@ -254,8 +254,8 @@
  },
  "source": {
   "page": "sources/pages/rule-protected-actions/page.json",
-  "sha256": "3b28c20830d397ad3f898b413c1ec2b8dd7efc34cf254b68803216e7cd91c742",
-  "converted_at_beijing": "2026-10-12T19:17:15+08:00"
+  "sha256": "bfb74e1189f8d7c6bc034bc35b2dfca439e6ebc95546a67d1ff807519ba7508a",
+  "converted_at_beijing": "2026-10-20T07:45:05+08:00"
  }
 }
 ---
@@ -2682,7 +2682,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.protected-actions.md",
-   "release": "E259",
+   "release": "E275",
    "sha256": "5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa",
    "public_sha256": "29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1",
    "from": null,
@@ -2725,7 +2725,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E259版，一字不改"
+     "text_ref": "原文·E275版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2768,7 +2768,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E259版，一字不改"
+     "text_ref": "原文·E275版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2868,7 +2868,7 @@
 }
 ```
 
-原文 · E259 版，一字不改
+原文 · E275 版，一字不改
 
 # 重大动作与本人验证
 
@@ -2912,7 +2912,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.protected-actions.md",
-   "release": "E259",
+   "release": "E275",
    "sha256": "5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa",
    "public_sha256": "29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1",
    "from": "## GitHub 重大动作",
@@ -2942,7 +2942,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E259版·续"
+     "text_ref": "原文·E275版·续"
     },
     {
      "type": "source_text_card",
@@ -2982,7 +2982,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E259版·续"
+     "text_ref": "原文·E275版·续"
     },
     {
      "type": "source_text_card",
@@ -3088,7 +3088,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E259 版 · 续
+原文 · E275 版 · 续
 
 ## GitHub 重大动作
 

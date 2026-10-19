@@ -40,7 +40,7 @@
     "近 7 天 AI 用了 9 次"
    ],
    "as_of": "2026-10-12",
-   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
   },
   "based_on": {
    "commit": "98829877960b32e0f62685a859f449d9308edec3",
@@ -98,8 +98,8 @@
  },
  "source": {
   "page": "sources/pages/skill-chinese-asr/page.json",
-  "sha256": "3483380de54272bfbbe0643f2219f1ca396a462c60e54ed9ad1fe6d57b15368c",
-  "converted_at_beijing": "2026-10-12T05:03:50+08:00"
+  "sha256": "68f2618835f241449de6c97712edd5398eb33dd9e5a16c19bc131fe29dc83d26",
+  "converted_at_beijing": "2026-10-20T07:45:05+08:00"
  }
 }
 ---
@@ -150,7 +150,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）",
      "row": "hero"
     },
     {
@@ -250,7 +250,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
     },
     {
      "type": "prose",

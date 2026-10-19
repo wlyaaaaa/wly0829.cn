@@ -38,7 +38,7 @@
    },
    "facts": [],
    "as_of": "2026-10-12",
-   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
   },
   "public": false,
   "repo_url": null,
@@ -122,8 +122,8 @@
  },
  "source": {
   "page": "sources/pages/skill-cockpit/page.json",
-  "sha256": "6d94e2a53aab378e397dfb18c0b910ec76747f4b44b27f759293040c66aa8dcb",
-  "converted_at_beijing": "2026-10-12T05:03:50+08:00"
+  "sha256": "92a1f763413f863e09e25c4e86bbbd6ed2c8051deeeb54e076db6619f55049ee",
+  "converted_at_beijing": "2026-10-20T07:45:05+08:00"
  }
 }
 ---
@@ -171,7 +171,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）",
      "row": "hero"
     },
     {
@@ -234,7 +234,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
     },
     {
      "type": "prose",

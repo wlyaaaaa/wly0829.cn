@@ -40,7 +40,7 @@
     "近 7 天 AI 用了 743 次"
    ],
    "as_of": "2026-10-11",
-   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
   },
   "based_on": {
    "commit": "8244785b97b2e5cecdb62e2a0d933467e57eb66b",
@@ -144,8 +144,8 @@
  },
  "source": {
   "page": "sources/pages/skill-project-entry-gate/page.json",
-  "sha256": "a601453c0f705cce17318e583e3d2a555fb0258423669e73e5708bf0c560976a",
-  "converted_at_beijing": "2026-10-12T00:29:48+08:00"
+  "sha256": "fa42b9954e7d773604e1560dbbb18dd8cfe81ac2200976197294ac0cea506b1d",
+  "converted_at_beijing": "2026-10-20T07:45:06+08:00"
  }
 }
 ---
@@ -196,7 +196,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -262,7 +262,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
     },
     {
      "type": "prose",

@@ -38,13 +38,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E259",
-   "commit": "2d764224dfda1d65ee065ce4d1f590c598b19850",
-   "ruleset_sha256": "eefcc585ae714fd4ecdf99c64c750ad47d4ddd35a80fe05de2e7203cba01291f",
-   "activated_at": "2026-10-12T05:01:29.265252+08:00",
+   "release": "E275",
+   "commit": "dfc6b406fb43175d44ff4436f854f7129cb560ec",
+   "ruleset_sha256": "32c6ff6e32f441dac925edbac4a3d0af6d5c5cc5d8a2be0575483f2cfce5e6eb",
+   "activated_at": "2026-10-17T11:38:31.183019+08:00",
    "file": "sources/rules/AGENTS.md",
-   "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
-   "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d"
+   "sha256": "0dea2a617659ad2d198cf682c4c66856be31e40d9f0491b56bd0e5bd0d2c677f",
+   "public_sha256": "47f2675bedbb88c1bfab4b223d38e5ca76310823e5be6cfec7d2d1cbe85377f2"
   },
   "video_prompt": "5–8 秒无缝循环，白底水彩风，和开头一屏的插画一致：书桌上那本摊开的精装厚书，书页被一阵微风轻轻掀起一两页又落回原处；绿色丝带书签微微摆动；书页上浅绿色的细横线从左到右依次淡淡亮起一遍，像有人一行行读过去；书上方 Claude 和 OpenAI 两个小徽章轻轻上下浮动；几片水彩绿叶从右上角慢慢飘落。镜头固定，不出现任何文字。",
   "registry": {
@@ -165,8 +165,8 @@
  },
  "source": {
   "page": "sources/pages/charter/page.json",
-  "sha256": "b941bc09e1507c651b3d0323d5b2f8677ab5a61341091df36714a34c67bc467f",
-  "converted_at_beijing": "2026-10-12T19:17:15+08:00"
+  "sha256": "c6ebdc0f2dd700c74e7b53a6f95f6c34615404f04fd013821a485ad600bacd7d",
+  "converted_at_beijing": "2026-10-20T07:44:56+08:00"
  }
 }
 ---
@@ -487,9 +487,9 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E259",
-   "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
-   "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
+   "release": "E275",
+   "sha256": "0dea2a617659ad2d198cf682c4c66856be31e40d9f0491b56bd0e5bd0d2c677f",
+   "public_sha256": "47f2675bedbb88c1bfab4b223d38e5ca76310823e5be6cfec7d2d1cbe85377f2",
    "from": null,
    "to": "### 三、怎样做事",
    "start": 0,
@@ -570,7 +570,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-02",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
+  "source_public_sha256": "47f2675bedbb88c1bfab4b223d38e5ca76310823e5be6cfec7d2d1cbe85377f2",
   "source_rule_part": "charter/charter-02"
  },
  "layout": {
@@ -655,7 +655,7 @@
 }
 ```
 
-约法 · L1–L10 · E259
+约法 · L1–L10 · E275
 
 # 我的 AI 约法与工作约定
 
@@ -695,9 +695,9 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E259",
-   "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
-   "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
+   "release": "E275",
+   "sha256": "0dea2a617659ad2d198cf682c4c66856be31e40d9f0491b56bd0e5bd0d2c677f",
+   "public_sha256": "47f2675bedbb88c1bfab4b223d38e5ca76310823e5be6cfec7d2d1cbe85377f2",
    "from": "### 三、怎样做事",
    "to": "### 五、我的个人资料",
    "start": 1710,
@@ -761,7 +761,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-03",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
+  "source_public_sha256": "47f2675bedbb88c1bfab4b223d38e5ca76310823e5be6cfec7d2d1cbe85377f2",
   "source_rule_part": "charter/charter-03"
  },
  "layout": {
@@ -886,7 +886,7 @@
 }
 ```
 
-约法 · L11–L17 · E259
+约法 · L11–L17 · E275
 
 ### 三、怎样做事
 
@@ -911,9 +911,9 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E259",
-   "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
-   "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
+   "release": "E275",
+   "sha256": "0dea2a617659ad2d198cf682c4c66856be31e40d9f0491b56bd0e5bd0d2c677f",
+   "public_sha256": "47f2675bedbb88c1bfab4b223d38e5ca76310823e5be6cfec7d2d1cbe85377f2",
    "from": "### 五、我的个人资料",
    "to": "### 八、项目与维护",
    "start": 2947,
@@ -973,7 +973,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-04",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
+  "source_public_sha256": "47f2675bedbb88c1bfab4b223d38e5ca76310823e5be6cfec7d2d1cbe85377f2",
   "source_rule_part": "charter/charter-04"
  },
  "layout": {
@@ -1135,7 +1135,7 @@
 }
 ```
 
-约法 · L18–L23 · E259
+约法 · L18–L23 · E275
 
 ### 五、我的个人资料
 
@@ -1167,13 +1167,13 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E259",
-   "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
-   "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
+   "release": "E275",
+   "sha256": "0dea2a617659ad2d198cf682c4c66856be31e40d9f0491b56bd0e5bd0d2c677f",
+   "public_sha256": "47f2675bedbb88c1bfab4b223d38e5ca76310823e5be6cfec7d2d1cbe85377f2",
    "from": "### 八、项目与维护",
    "to": null,
    "start": 4827,
-   "end": 7443,
+   "end": 7473,
    "approved_omissions": []
   },
   "title": "项目、汇报网站和电脑、规则本身（L24–L30）",
@@ -1233,7 +1233,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-05",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
+  "source_public_sha256": "47f2675bedbb88c1bfab4b223d38e5ca76310823e5be6cfec7d2d1cbe85377f2",
   "source_rule_part": "charter/charter-05"
  },
  "layout": {
@@ -1376,7 +1376,7 @@
 }
 ```
 
-约法 · L24–L30 · E259
+约法 · L24–L30 · E275
 
 ### 八、项目与维护
 
@@ -1392,13 +1392,13 @@
 
 ### 十、关于规则本身
 
-- **L30 规则只写现在怎么做，决定写在找得到的地方。** 规则（包括这一页）只写现在怎么做。为什么这么定、以前是怎么定的，放在 Git（版本记录工具）的历史里，不写进正文。会影响其他 AI 做事的经验、教训和本人决定，当场写进对应的项目或基座文件里，别的 AI 才找得到；一样东西只存一处，别处只写一句结论并指过去，不抄副本；两边的自动记忆都已关闭，不再往各自的记忆区写内容。写进去的是决定和必要的事实，不是日志和过程记录。
+- **L30 规则只写现在怎么做，决定写在找得到的地方。** 规则（包括这一页）只写现在怎么做。为什么这么定、以前是怎么定的，放在 Git（版本记录工具）的历史里，不写进正文。会影响其他 AI 做事的经验、教训和本人决定，写进对应的项目或基座文件：禁令、纠正和长期授权当场归位，其余在交付收尾或压缩前预警时一次归位、一次提交，后台定时补漏；一样东西只存一处，别处只写一句结论并指过去，不抄副本；两边的自动记忆都已关闭，不再往各自的记忆区写内容。写进去的是决定和必要的事实，不是日志和过程记录。
 
 ## 每次都要做的几件事
 
 1. **核验活动规则。** 任务开始、续作或上下文压缩后，按宿主入口（Claude 的 `CLAUDE.md`、Codex 的 `AGENTS.md`、电脑 MCP 的 `ComputerContext`）核验活动版本，只从核验返回的路径读规则；规则源码、候选改动和旧快照都不是活动规则。入口不可用时照入口里的降级办法继续普通工作。
 2. **核对个人资料状态。** 每条真实的新消息开始时，从 Hook（Codex、Claude）或 `ComputerContext`（电脑 MCP）读当前个人资料状态；自动续作、上下文压缩和工具消息不是新消息。锁着或不明时不取用私人资料；根会话问到本人自己的事，第一步先请本人验证解锁，通过后再查资料、派子代理和作答，不给降级回答；纯技术工作照常。资料需求判断和发起解锁只由根会话做；子代理只在读取被拦、途中缺资料或到期时以“需要本人资料：……”交回，不自己验证。细则见[个人资料与数据处理](/rules/privacy-data/)。
-3. **事实找对来源。** 按[事实找谁](/rules/context-sources/#事实找谁)定位当前证据，遵守[一样东西只存一处](/rules/context-sources/#一样东西只存一处)；需要留下的经验、决定和原话按[共享经验的落点](/rules/context-sources/#共享经验的落点)当轮归位（约法 L30）。
+3. **事实找对来源。** 按[事实找谁](/rules/context-sources/#事实找谁)定位当前证据，遵守[一样东西只存一处](/rules/context-sources/#一样东西只存一处)；需要留下的经验、决定和原话按[共享经验的落点](/rules/context-sources/#共享经验的落点)归位（约法 L30）。
 4. **日常技术默认。** Windows 命令、编码、任务临时目录和时间处理按[工程与交付的技术默认](/rules/engineering-delivery/#日常技术默认)执行。
 5. **向本人说明时**，完整的表达教训在 `explain-to-me` 技能，需要时读。
 

@@ -40,7 +40,7 @@
     "近 7 天 AI 用了 7 次"
    ],
    "as_of": "2026-10-12",
-   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
   },
   "public": false,
   "repo_url": null,
@@ -106,8 +106,8 @@
  },
  "source": {
   "page": "sources/pages/skill-wechat-direct/page.json",
-  "sha256": "497d6ff510d2dc753e82b73bb69c4dfe8eefccc548625f33b23adb6173eef8e0",
-  "converted_at_beijing": "2026-10-12T05:03:50+08:00"
+  "sha256": "e93cae78b5e31794e79c9a2643cd4ac36f0de3780e5b9d6f64d84978fac23fb0",
+  "converted_at_beijing": "2026-10-20T07:45:07+08:00"
  }
 }
 ---
@@ -157,7 +157,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）",
      "row": "intro"
     },
     {
@@ -220,7 +220,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
     },
     {
      "type": "prose",

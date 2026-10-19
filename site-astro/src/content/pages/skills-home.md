@@ -182,7 +182,7 @@
      "id": "n-skills",
      "text": "29 个技能",
      "meaning": "网站上有技能页的技能数",
-     "as_of": "2026-10-12",
+     "as_of": "2026-10-20",
      "source": "本仓库 sources/pages/*/page.json 的 kind=skill 实取 29 个；含新增 Word 文档和 PDF 读写和表单，两页为 Codex 自带插件；去向页不计入。与受管共享技能安装数分开。",
      "screens": [
       "skills-home-01"
@@ -599,8 +599,8 @@
  },
  "source": {
   "page": "sources/pages/skills-home/page.json",
-  "sha256": "476f84226b80e02ef60dbd021613587f40af34932a24b9ccdce7c2df46bf8d08",
-  "converted_at_beijing": "2026-10-12T03:13:07+08:00"
+  "sha256": "b541ff07aba60341a23fad19c0b49b7c3e1cf342764503e722b547230541533c",
+  "converted_at_beijing": "2026-10-20T07:45:07+08:00"
  }
 }
 ---
@@ -898,7 +898,7 @@
 
 **怎么用**：直接跟 AI 说要办的事，AI 自己挑用哪个技能，不用记名字。
 
-**29 个技能**　截至 10 月 12 日，按用途分 7 组。
+**29 个技能**　截至 10 月 20 日，按用途分 7 组。
 
 卡片右下角带“属于：项目名”的 18 个，是某个项目的入口：它能做的事全列在那个项目页，技能页只讲怎么跟 AI 说、例子和边界。
 

@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E259",
-   "commit": "2d764224dfda1d65ee065ce4d1f590c598b19850",
-   "ruleset_sha256": "eefcc585ae714fd4ecdf99c64c750ad47d4ddd35a80fe05de2e7203cba01291f",
-   "activated_at": "2026-10-12T05:01:29.265252+08:00",
+   "release": "E275",
+   "commit": "dfc6b406fb43175d44ff4436f854f7129cb560ec",
+   "ruleset_sha256": "32c6ff6e32f441dac925edbac4a3d0af6d5c5cc5d8a2be0575483f2cfce5e6eb",
+   "activated_at": "2026-10-17T11:38:31.183019+08:00",
    "file": "sources/rules/docs/contracts/agents.capabilities-runtime.md",
-   "sha256": "165c36170a30e477a3cb8d05bb65f5f9af21aacebe6f682f693777f6246b3957",
-   "public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498"
+   "sha256": "a1a5cd2356d05fc26730af4c7b10272fb151a76728038792125f025849984780",
+   "public_sha256": "b55fd64418d85254489fc2fef3d896efa5da5e3e2d91936432793deef7b77210"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小 AI 助手抬手从洞洞板上取下放大镜看了看又挂回去，洞洞板上的 Chrome、Gmail、Google 云盘三个标志轻轻晃动；脚边贴着“E:”的绿色储物箱里几片绿叶慢慢舒展；右下笔记本电脑屏幕上的看板里，三个小圆点状态灯依次轻轻呼吸（绿、绿、黄）；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，三块小牌子上的字保持不动、不变形。",
   "registry": {
@@ -396,8 +396,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "3dd24d8f6d77c11f9fa7b99d9a60f60d1fc6da27bf6454a509ee0e95981180a1",
-  "converted_at_beijing": "2026-10-12T05:45:49+08:00"
+  "sha256": "27fd4d5616feb5f62c75dc290f9b1ad18e215b589463607169e8696ee088e446",
+  "converted_at_beijing": "2026-10-20T07:45:04+08:00"
  }
 }
 ---
@@ -2908,9 +2908,9 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E259",
-   "sha256": "165c36170a30e477a3cb8d05bb65f5f9af21aacebe6f682f693777f6246b3957",
-   "public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
+   "release": "E275",
+   "sha256": "a1a5cd2356d05fc26730af4c7b10272fb151a76728038792125f025849984780",
+   "public_sha256": "b55fd64418d85254489fc2fef3d896efa5da5e3e2d91936432793deef7b77210",
    "from": null,
    "to": "## 常用入口",
    "start": 0,
@@ -2933,7 +2933,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-11",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
+  "source_public_sha256": "b55fd64418d85254489fc2fef3d896efa5da5e3e2d91936432793deef7b77210",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-11"
  },
  "layout": {
@@ -2941,7 +2941,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版"
+     "text_ref": "原文·E275版"
     },
     {
      "type": "chapter_title",
@@ -2982,7 +2982,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版"
+     "text_ref": "原文·E275版"
     },
     {
      "type": "chapter_title",
@@ -3075,7 +3075,7 @@
 }
 ```
 
-原文 · E259 版
+原文 · E275 版
 
 # 能力与运行方式
 
@@ -3103,13 +3103,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E259",
-   "sha256": "165c36170a30e477a3cb8d05bb65f5f9af21aacebe6f682f693777f6246b3957",
-   "public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
+   "release": "E275",
+   "sha256": "a1a5cd2356d05fc26730af4c7b10272fb151a76728038792125f025849984780",
+   "public_sha256": "b55fd64418d85254489fc2fef3d896efa5da5e3e2d91936432793deef7b77210",
    "from": "## 常用入口",
    "to": "## 浏览器",
    "start": 1427,
-   "end": 5455,
+   "end": 5668,
    "approved_omissions": []
   },
   "title": "原文（二）：常用入口",
@@ -3123,7 +3123,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-12",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
+  "source_public_sha256": "b55fd64418d85254489fc2fef3d896efa5da5e3e2d91936432793deef7b77210",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-12"
  },
  "layout": {
@@ -3131,7 +3131,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版·续"
+     "text_ref": "原文·E275版·续"
     },
     {
      "type": "source_text_card",
@@ -3159,7 +3159,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版·续"
+     "text_ref": "原文·E275版·续"
     },
     {
      "type": "source_text_card",
@@ -3205,12 +3205,13 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E259 版 · 续
+原文 · E275 版 · 续
 
 ## 常用入口
 
 - **本机小工具。** 问本机已有的小工具、以前用过的工具、图片超分或本机现成做法时，先查唯一清单 `E:\Tools\LocalToolbox\catalog.json`；按用途检索用 `E:\Tools\LocalToolbox\Find-LocalTool.ps1 -Query '<用途>' -Json`。工具列表、型号和哈希只在那份清单里。
 - **快速计算机清理文件。** 直达 PCConfig 的 `E:\PCConfig\docs\runtime\ai-cache-sweep.md`“快速计算机清理文件”流程：先执行已核实的明显无用项并清本批回收实体、回读实际空间，疑难对象和基座源码修复并行；复用已有证据，不反复整盘扫描，不把全量引擎修好当作普通项清理的前置。
+- **内存快满时自动处理。** AI 不等本人，按 PCConfig 的 `E:\PCConfig\registries\memory_guard.json` 登记的失控优先、安全回收与急救规则自动处理；有失控增长者时只处理增长者，清单及规则外的对象不动。AI 自己的任务若是占用大户，先停自己的。触发阈值、安全边界和分类只读 PCConfig 登记，不在全局规则复制；AI 安装会常驻后台的软件时，同时在该登记给它分类。
 - **生成图片和设计画面。** 图片默认用本人指定的 Codex 内置图片生成能力。它背后是独立的生图模型，出图好坏看生图模型和提示，不看由哪个文字模型去调用：Codex 的任何对话直接调用；Claude 写好提示，经包装器派 Luna 照提示调用并落盘（图像任务的 Generation 方式，见 `docs/claude-gpt-child-traffic.md`）。不为生图派 Astra，也不因为没有 Astra 授权就改派别的型号。按量收费的 API 密钥回退只在本人明确要时用。当前选用的生图模型记在模型清单，不把能力排名写成永久结论。
   - **能做什么。** 只用文字生成；以参考图为基准，延续它的风格、构图或角色；精准局部替换（换背景、去掉或改动某一处、透明底）；整套图保持一致；一次出几版拿来比对。
   - **用在哪。** 不限网页：界面设计和风格、插画、配图、封面、横幅、头像、图标和标志的设计，PPT 的整页设计、配图和底图，视频的风格参考、分镜、关键帧和封面，以及直接当成品的图（海报、带字的说明图）。
@@ -3251,13 +3252,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E259",
-   "sha256": "165c36170a30e477a3cb8d05bb65f5f9af21aacebe6f682f693777f6246b3957",
-   "public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
+   "release": "E275",
+   "sha256": "a1a5cd2356d05fc26730af4c7b10272fb151a76728038792125f025849984780",
+   "public_sha256": "b55fd64418d85254489fc2fef3d896efa5da5e3e2d91936432793deef7b77210",
    "from": "## 浏览器",
    "to": "## 汇报、网站和自动运行的东西",
-   "start": 5455,
-   "end": 6519,
+   "start": 5668,
+   "end": 6781,
    "approved_omissions": []
   },
   "title": "原文（三）：浏览器",
@@ -3276,7 +3277,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-13",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
+  "source_public_sha256": "b55fd64418d85254489fc2fef3d896efa5da5e3e2d91936432793deef7b77210",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-13"
  },
  "layout": {
@@ -3284,7 +3285,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版·续"
+     "text_ref": "原文·E275版·续"
     },
     {
      "type": "source_text_card",
@@ -3310,7 +3311,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版·续"
+     "text_ref": "原文·E275版·续"
     },
     {
      "type": "source_text_card",
@@ -3384,11 +3385,13 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E259 版 · 续
+原文 · E275 版 · 续
 
 ## 浏览器
 
 浏览器默认用本人正在用的外部 Chrome（约法 L29），优先用 Chrome 插件在本人已开着的 Chrome 里操作；没开时可以用现有受管能力启动，任务要求不弹窗口时用下述无窗口办法。本人明确选别的浏览器时听本人的。不把某个工具的默认浏览器或应用内浏览器当成本人的默认，也不悄悄换浏览器家族。Claude 的不同处（要用本人登录状态的网页默认派 GPT 子任务做，不需要登录的网页可用自己的内置浏览器看）见[Claude 适配](/rules/claude-adapter/#宿主接线)的“浏览器”。控制会话断了、运行环境要恢复时按 `browser-control-continuity` 技能处理，保留本人已打开的页面；这不改变网站上动作、账号和内容的授权。
+
+点击后页面没变化，先截图看实际画面里的弹窗或遮罩；仍没变化就停下这一步、交回卡点，不重复点击。
 
 本人的 Chrome 打不开或连不上时不要卡住，改用同一个 Chrome 程序的无头浏览器（不出窗口，使用任务独立临时配置，不读取、复制或改动本人浏览器资料）或其他不打扰本人的办法，继续完成能独立进行的操作和验收，并在汇报里写明实际方法、结果和仍未验到的部分。不换成别的浏览器品牌冒充本人的 Chrome，不把临时会话当成本人的登录状态。确实依赖本人登录状态或需要本人在场的步骤，只交回该步骤和缺口，其余已授权工作继续（出处：决定文档“默认 Chrome 不通时换办法、子代理可静默提权”）。
 
@@ -3406,13 +3409,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E259",
-   "sha256": "165c36170a30e477a3cb8d05bb65f5f9af21aacebe6f682f693777f6246b3957",
-   "public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
+   "release": "E275",
+   "sha256": "a1a5cd2356d05fc26730af4c7b10272fb151a76728038792125f025849984780",
+   "public_sha256": "b55fd64418d85254489fc2fef3d896efa5da5e3e2d91936432793deef7b77210",
    "from": "## 汇报、网站和自动运行的东西",
    "to": "## 安装位置、配置和本机约定",
-   "start": 6519,
-   "end": 7829,
+   "start": 6781,
+   "end": 8091,
    "approved_omissions": []
   },
   "title": "原文（四）：汇报、网站和自动运行；软件更新和兼容",
@@ -3426,7 +3429,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-14",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
+  "source_public_sha256": "b55fd64418d85254489fc2fef3d896efa5da5e3e2d91936432793deef7b77210",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-14"
  },
  "layout": {
@@ -3434,7 +3437,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版·续"
+     "text_ref": "原文·E275版·续"
     },
     {
      "type": "source_text_card",
@@ -3454,7 +3457,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版·续"
+     "text_ref": "原文·E275版·续"
     },
     {
      "type": "source_text_card",
@@ -3524,7 +3527,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E259 版 · 续
+原文 · E275 版 · 续
 
 ## 汇报、网站和自动运行的东西
 
@@ -3551,13 +3554,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E259",
-   "sha256": "165c36170a30e477a3cb8d05bb65f5f9af21aacebe6f682f693777f6246b3957",
-   "public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
+   "release": "E275",
+   "sha256": "a1a5cd2356d05fc26730af4c7b10272fb151a76728038792125f025849984780",
+   "public_sha256": "b55fd64418d85254489fc2fef3d896efa5da5e3e2d91936432793deef7b77210",
    "from": "## 安装位置、配置和本机约定",
    "to": null,
-   "start": 7829,
-   "end": 9239,
+   "start": 8091,
+   "end": 9501,
    "approved_omissions": []
   },
   "title": "原文（五）：安装位置、配置和本机约定",
@@ -3576,7 +3579,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-15",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
+  "source_public_sha256": "b55fd64418d85254489fc2fef3d896efa5da5e3e2d91936432793deef7b77210",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-15"
  },
  "layout": {
@@ -3584,7 +3587,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版·续"
+     "text_ref": "原文·E275版·续"
     },
     {
      "type": "source_text_card",
@@ -3604,7 +3607,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E259版·续"
+     "text_ref": "原文·E275版·续"
     },
     {
      "type": "source_text_card",
@@ -3650,7 +3653,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E259 版 · 续
+原文 · E275 版 · 续
 
 ## 安装位置、配置和本机约定
 
