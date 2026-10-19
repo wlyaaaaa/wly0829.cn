@@ -66,6 +66,9 @@ const assert = require('node:assert/strict'), vm = require('node:vm');
   assert.doesNotMatch(ctx.cur.html, /归属项目/);
   ctx.cur = card(); ctx.pick(task({ id: 'e', state: 'success', project: '虚构项目（总看板）' }), false);
   assert.match(ctx.cur.html, /归属项目/);
+  ctx.URL = URL;
+  ctx.cur = card(); ctx.pick(task({ id: 'gmail', state: 'unknown', project_url: 'https://script.google.com/home/projects/fixture/edit', plain: { what: '虚构转发', stop: '虚构停止', impact: '虚构影响' } }), false); assert.match(ctx.cur.html, /href="https:\/\/script\.google\.com\/home\/projects\/fixture\/edit" target="_blank" rel="noopener noreferrer">打开Google脚本项目<\/a>/); for (const label of ['在做什么', '上次什么时候跑的', '下次什么时候跑', '有没有出错', '怎么停', '停了影响什么', '虚构停止', '虚构影响']) assert.ok(ctx.cur.html.includes(label), label);
+  ctx.cur = card(); ctx.pick({ ...task({ id: 'phone', state: 'failed', plain: { what: '换WiFi后连同一路由器' } }, 'ai'), name: '回家收手机数据' }, false); assert.match(ctx.cur.html, /换WiFi后连同一路由器/);
   process.stdout.write('ok');
 })().catch((e) => { console.error(e); process.exit(1); });
 """
