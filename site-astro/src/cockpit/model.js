@@ -147,7 +147,7 @@ export function riverSnapshot(v, now = new Date()) {
     // 体检那一行不再写“这周已跑过”：换成查得到的那一步
     if (gov && govId && t.id === govId && /这周已跑过/.test(t.note || '')) t = { ...t, note: gov.text };
     const raw = {
-      id: t.id, project: t.project || '', group: t.group, state: t.state, enabled: t.enabled, last_run_at: t.last_run_at, next_run_at: t.next_run_at,
+      id: t.id, project: t.project || '', project_url: t.project_url || '', group: t.group, state: t.state, enabled: t.enabled, last_run_at: t.last_run_at, next_run_at: t.next_run_at,
       runs_today: t.runs_today, schedule_zh: t.schedule || '', heartbeat_at: t.heartbeat_at || null, failures_7d: Number.isFinite(t.failures_7d) ? t.failures_7d : undefined,
       public_message: t.public_message || undefined, notice_kind: t.notice_kind || undefined,
       // 后端的显示颜色（neutral = 有状况但 AI 在管）和 AI 在管什么；河据此升中性旗，不升红黄旗

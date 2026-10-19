@@ -99,7 +99,12 @@ function stateOf(t) {
 // ---------- 选中一条：那六样 ----------
 const v = x => x ? esc(x) : '<span class="none">还没写</span>';
 // 归属项目：后端给了才显示，没给就不出这一行（不写“未知”占位）
-const owner = r => r && r.project ? `<div class="owner" style="grid-column:1/-1"><b>归属项目</b>${esc(r.project)}</div>` : '';
+const owner = r => {
+  const project = r?.project ? `<b>归属项目</b>${esc(r.project)}` : '';
+  let link = '';
+  try { const url = new URL(r?.project_url); if (url.protocol === 'https:' && url.hostname === 'script.google.com') link = `<a href="${esc(url.href)}" target="_blank" rel="noopener noreferrer">打开Google脚本项目</a>`; } catch {}
+  return project || link ? `<div class="owner" style="grid-column:1/-1">${project}${project && link ? ' · ' : ''}${link}</div>` : '';
+};
 function six(M, t) {
   const [cls, word] = stateOf(t), r = t.raw;
   const err = t.off ? '已停用，不算出错' : t.panelUnknown ? '不知道，这次没读到副屏心跳' : r.state === 'overdue' ? '过期' + (t.note ? '：' + t.note : '') : t.flag === 'bad' ? '出错了' + (t.note ? '：' + t.note : '') : t.flag === 'warn' ? '要留意' + (t.note ? '：' + t.note : '') : t.flag === 'ai' ? 'AI 在管，不用你动手' + (t.note ? '：' + t.note : '') :
@@ -288,7 +293,7 @@ function pick(t, scroll, occurrence = 0) {
   if (['bad', 'warn', 'ai'].includes(t.flag) || t.raw.state === 'unknown') {
     p.textContent = t.raw.public_message || STATE[t.flag];
     document.dispatchEvent(new CustomEvent('today-river-selected-notice', {detail:{taskId:t.raw.id, task:t.raw, target:p}}));
-    if (t.raw.project) p.insertAdjacentHTML('afterbegin', owner(t.raw));   // 未知/出错走提醒这一支，也要看得到归属
+    if (t.raw.project || t.raw.project_url) p.insertAdjacentHTML('afterbegin', owner(t.raw));   // 未知/出错走提醒这一支，也要看得到归属
   } else p.innerHTML = six(M, t);
   p.insertAdjacentHTML('beforeend', '<button type="button" data-close-pick>收起说明</button>');
   p.querySelector('[data-close-pick]').onclick = () => { picked = null; p.hidden = true; mark(null); };
