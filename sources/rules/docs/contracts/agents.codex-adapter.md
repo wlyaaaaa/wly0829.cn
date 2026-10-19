@@ -12,7 +12,15 @@ SessionStart 的 startup/compact/resume 从原话分类生成现行禁令和授�
 
 根会话压缩后的只读复核按[共用复核规则](/rules/context-sources/#压缩后的后台复核)执行。此项已授权自动任务使用共用 GPT 后台包装器，并保留真实 Codex 父会话号；不受普通派发的“原生满槽才转包装器”条件限制，不扩大其他任务的调用范围。程序换窗是否触发与原生压缩分开核验，具体入口见运维说明（`../operations/context-hooks.md`）。
 
-Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false`、`use_memories=false`；当轮需要留下的内容统一按[共享经验的落点](/rules/context-sources/#共享经验的落点)处理，Codex 工具的已核实教训归本专题。
+Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false`、`use_memories=false`；需要留下的内容统一按[共享经验的落点](/rules/context-sources/#共享经验的落点)处理，Codex 工具的已核实教训归本专题。
+
+## 读取聊天结果
+
+仅查看进度时优先用 `wait_threads` 的紧凑快照；确需正文才用 `read_thread`。`turnLimit` 限制轮数，`maxOutputCharsPerItem` 约束工具说明列出的单项输出或聊天消息，都不是总输出大小保证。
+
+`read_thread` 的消息 `id` 可能与原话存档的 `uuid` 不同；登记源消息 UUID 时，按对应原话存档的 `uuid` 填写，不能直接拿读取结果的 `id` 替代。
+
+在 `functions.exec` 内解析返回的 JSON，只输出本次所需字段或消息，并对输出设总字数上限；更多内容按游标或明确选择续取，不直接 `text` 整个结果或把原始大数组回灌上下文。调用参数以当前工具能力为准；必须完整阅读的规则或原文仍要分段取齐。
 
 ## 无限制授权
 
@@ -21,8 +29,9 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
 ## 派子代理：Codex 的不同处
 
 共同原则见[分工与并行施工](/rules/execution-coordination/)，可派范围见 `config/model-roster.json`。
+原生子代理和包装器子任务统一按[子代理原则](/rules/execution-coordination/#派子代理的原则)：根负责出处，子代理不查、不报无出处，只按派单交付；核验由根或包装器完成，子代理按需读给定版本的专题。
 
-GPT 原生子代理在 `reasoning_effort` 中按共同原则填写当前默认档位：GPT-6.1 Sol 用 `ultra`，GPT-6 Luna 用可用最高档 `max`（照写好的提示生图、落盘用 `low`，见模型清单场景表“生图”）；GPT-6.1 Sol、GPT-6 Astra 原先的 xhigh 派单改填 `ultra`，GPT-6 Luna 没有 ultra。型号换代时按约法 L23 和[新型号怎么调研](/rules/execution-coordination/#新型号怎么调研)重新评估、直接更新，不自动沿用旧型号的设置。其他公司的模型档位沿用原设置。
+原生 GPT 的 `reasoning_effort` 按共同原则第 4 条填写，包括 Sol 简单只读单用 medium 的例外；其他厂商沿用各自设置。型号换代按[新型号怎么调研](/rules/execution-coordination/#新型号怎么调研)重评。
 
 - **主对话是 GPT 时**：容量够用时优先用原生子代理（`spawn_agent`），在 GPT-6 Luna、Sol、Astra 里按模型清单 `routing` 的场景表和难度分级（GPT 那一列）选型号和档位，各型号的档位和适用范围见 `hosts.codex.root_openai`；表里写“交 Claude”的活怎么办见 `routing.vendor_rule`。显式传 `model` 和 `reasoning_effort`，派完核对实际启动值。跨型号或跨档位时 `fork_turns` 用 `none` 或有限轮数；只有身份参数相同、完整历史确实有用时才用 `all`。
 - **主对话是其他公司的模型时**：可以派 GPT-6 Sol 或 Luna，不派 Astra。容量够用时优先调用宿主工具 `openai_child`，显式填写 `agent_type`、`model`、`reasoning_effort`、`task_name`、`message`，不传 `fork_turns`；续聊走同一入口，子代理回话走 `openai_parent`，查看、等待和停止走 `openai_child_control`。子代理要再分工时，回原父任务安排。约法 L23 里“实际调用按我给这个对话或项目的授权”说的是 Claude 调用 Codex，不给 Codex 自己派 GPT 子代理另加一次授权要求。入口因容量以外的原因不可用时，主对话继续能做的部分，说清实际缺口，不悄悄换模型，也不借别的通道绕过真实限制；容量不足按下面的例外办理。
@@ -32,7 +41,7 @@ GPT 原生子代理在 `reasoning_effort` 中按共同原则填写当前默认�
 
 ### 原生容量不足时转用共用包装器
 
-实时确认宿主原生槽不足后，自动转用 `E:\.agents\tools\Invoke-ClaudeGptChild.ps1`，显式传 `-ParentHarness Codex` 和 `-SessionId '<当前真实父任务完整编号>'`。默认结果目录是 `E:\Cache\Codex\Temp\<完整SessionId>\gpt-children`，不借 Claude 会话号或截短编号。容量判断、回执不明时的核对、同额度子代理续作及后台管理统一见[分工与并行施工的共用接续](/rules/execution-coordination/#原生容量不足与原线程接续)，不因入口改变扩大授权和业务范围。（出处：决定文档“Codex 满槽派发与同额度子代理续作”）
+实时确认宿主原生槽不足后，自动转用 `E:\.agents\tools\Invoke-ClaudeGptChild.ps1`，显式传 `-ParentHarness Codex` 和 `-SessionId '<当前真实父任务完整编号>'`。默认结果目录是 `E:\Cache\Codex\Temp\<完整SessionId>\gpt-children`，不借 Claude 会话号或截短编号。容量判断、回执不明时的核对、同额度子代理续作及后台管理统一见[分工与并行施工的共用接续](/rules/execution-coordination/#原生容量不足与原线程接续)，不因入口改变扩大授权和业务范围。
 
 ```powershell
 $child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
@@ -43,17 +52,13 @@ $child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
 
 执行器监测和接续状态与 Claude 共用，新版后台订阅在周期到点时内部续等；旧轮终态后 Resume 在原线程接入。Start 默认启动后返回，需要等候时显式加 `-Wait`；旧 `-NoWait` 仍可用。Watch 可加 `-WakeOnEach` 在任一任务结束时叫醒，回执只列剩余任务；Resume 保留原默认等候。派活单和 M1 的具体用法见派发说明（`../claude-gpt-child-dispatch.md`）。
 
-上例的 `-ContinueOnQuota` 只在同一 Codex 额度下根会话仍能正常调用时启用；否则省略。Sol、Luna 派活单开头带 `---` 栏位段，写齐任务、出处、方案、仓库、基线、工作树、范围、代码上限、测试上限和时限分钟，方案为“已定”。Astra 至少写“时限分钟”。修改代码的工作树必须是任务专用的；只读任务用 `-WorkDir '<已有目录>'` 替换工作副本参数。Extend、预算放行 `-AllowOverBudget` 和纠错 `-Correction` 都带 `-Reason`。验收完用 `Status -Ack`。
+上例的 `-ContinueOnQuota` 只在同额度根会话仍能正常调用时启用。派活字段和验收统一见派发说明（`../claude-gpt-child-dispatch.md`），出处、方案和成本估算可选；修改代码用任务专用工作树，只读用 `-WorkDir '<已有目录>'`。Extend、`-AllowOverBudget`、`-Correction` 带 `-Reason`。
 
 ## 新消息里的状态
 
-Hook 在每条真实新消息和子代理启动时带来共享个人资料状态、本人接管状态及可核实的本会话型号和思考档位；读不到的写未知，子代理启动时档位写未知，不借父会话的记录。根会话状态未知时先用 `StatusPersonalEnvironment` 重读；需要资料而状态锁着、未知或 Hook 出错时，先请本人验证解锁，通过后再查资料、派活和完整作答，纯技术工作继续。资料需求判断和验证只由根会话做；子代理仅读取被拦、途中缺资料或到期时单列“需要本人资料：<缺什么、为什么>”交回，由根会话读完整报告处理，不重新判断要不要解锁、不自行验证、不凑事实、不降级回答。
+Hook 每条真实新消息和子代理启动带来共享资料、本人接管及可核实的型号和档位；未知如实写，子代理启动不借父记录。根状态未知用 `StatusPersonalEnvironment` 回读；个人资料的判断、解锁和缺口交回按[资料锁](/rules/privacy-data/#个人资料的锁和解锁)与共同原则第 7 条，纯技术工作继续。
 
-Stop 按本轮真实 Report 回执核对明确目标集合；本轮业务被拦而未实际发起解锁，或 Report 验收不全时可能拦截。根会话按原因先验证解锁并重试被拦命令或按缺口重派、补做，或补齐验收；拦截后宿主让模型继续，同轮第二次只提示、不再拦。
-
-程序细节、部署和维护见状态钩子说明（`../operations/context-hooks.md#个人资料先解锁与结束兜底`），验证等待见[个人资料锁与解锁](/rules/privacy-data/#个人资料的锁和解锁)。
-
-Stop 复用与 Claude 同一份版本、验收和缺口检查；本轮边界核验失败时放行受影响检查，并留固定诊断码。资料顺序由每轮提示、业务回执和根会话验收落实。Hook 不替模型选型号、思考档位或决定要不要委派，也不另设派发许可登记，不按关键词自动弹验证窗口。
+Stop 与 Claude 共用版本、明确 Report 目标集合、验收和资料缺口检查；首次拦截按真实原因补解锁或验收，同轮第二次只提示。边界核验失败只放行受影响检查并留诊断码。Hook 不选型号、档位或是否委派，不加派发许可、不按关键词弹验证。具体接线见状态钩子（`../operations/context-hooks.md#个人资料先解锁与结束兜底`）。
 
 ## 官方升级
 
