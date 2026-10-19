@@ -191,6 +191,25 @@ class VisitorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             query.parse_sls_row({**row, "request_id": "-"})
 
+    def test_sls_deep_read_filters_both_beacon_forms_without_changing_window(self):
+        args = SimpleNamespace(aliyun="aliyun", profile="website-images", sls_project="oss-log-test", sls_logstore="oss-log-store")
+        start = datetime(2026, 10, 12, 10, tzinfo=query.TZ)
+        end = start + timedelta(hours=1)
+        rows = [self.sls_row(), {**self.sls_row(), "request_uri": "/_v.gif?x-v=plain&x-p=/"}]
+        page = {"meta": {"count": len(rows), "progress": "Complete"}, "data": rows}
+        base = f"__topic__:oss_access_log AND bucket:{query.SOURCE}"
+        for deep_read in (None, False, True):
+            if deep_read is not None:
+                args.deep_read = deep_read
+            with self.subTest(deep_read=deep_read), patch.object(query, "cli_run", return_value=json.dumps(page)) as cloud:
+                records = query.sls_logs(args, start, end)
+            self.assertEqual([record["path"] for record in records], ["/_v.gif", "/_v.gif"])
+            expected = base + ' AND (request_uri: "/_v.gif" OR request_uri: "%2F_v.gif")' if deep_read else base
+            self.assertEqual(json.loads(cloud.call_args.args[0][-1]),
+                {"from": int(start.timestamp()), "to": int(end.timestamp()), "query": expected,
+                 "line": 100, "offset": 0, "reverse": False})
+            cloud.assert_called_once()
+
     def test_sls_relay_preserves_oauth_and_retries_network_failures(self):
         relay = Mock(server_port=12345)
         failed = SimpleNamespace(returncode=2, stdout=b"", stderr=b"request failed: EOF")

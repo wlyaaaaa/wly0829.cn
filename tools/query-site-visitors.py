@@ -339,9 +339,12 @@ def sls_logs(args, start, end):
     if not args.sls_project:
         raise ValueError("SLS 项目未配置；请指定 --sls-project")
     records, offset, page_size = [], 0, 100
+    search = f"__topic__:oss_access_log AND bucket:{SOURCE}"
+    if getattr(args, "deep_read", False):
+        search += ' AND (request_uri: "/_v.gif" OR request_uri: "%2F_v.gif")'
     while True:
         body = {"from": int(start.timestamp()), "to": int(end.timestamp()),
-                "query": f"__topic__:oss_access_log AND bucket:{SOURCE}",
+                "query": search,
                 "line": page_size, "offset": offset, "reverse": False}
         command = [args.aliyun, "sls", "GetLogsV2", "--project", args.sls_project,
                    "--logstore", args.sls_logstore, "--region", "cn-shanghai",
