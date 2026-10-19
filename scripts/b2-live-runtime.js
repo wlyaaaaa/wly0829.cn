@@ -983,7 +983,9 @@ function action(key){
 
  if(!formal||!online()||busy)return;
 
- if(key.startsWith('choose-')){purpose=key.slice(7);combined=false;window.TypesetLiveFlow?.cancelReader?.();navigatingForm=performance.now()+1200;render();requestAnimationFrame(()=>requestAnimationFrame(()=>{document.querySelector('[data-screen="computer-access-02"]')?.scrollIntoView({behavior:'smooth',block:'start'});document.querySelector('[data-b2-slot="ca-form-hours"]')?.focus({preventScroll:true});}));return;}
+ // Touch: programmatic focus opens the soft keyboard; its viewport resize cut the smooth
+ // scroll short of the form. Jump there instantly and leave the keyboard to the owner's tap.
+ if(key.startsWith('choose-')){purpose=key.slice(7);combined=false;window.TypesetLiveFlow?.cancelReader?.();navigatingForm=performance.now()+1200;render();requestAnimationFrame(()=>requestAnimationFrame(()=>{const touch=matchMedia('(pointer: coarse)').matches;document.querySelector('[data-screen="computer-access-02"]')?.scrollIntoView({behavior:touch?'instant':'smooth',block:'start'});if(!touch)document.querySelector('[data-b2-slot="ca-form-hours"]')?.focus({preventScroll:true});}));return;}
 
  else if(key.startsWith('purpose-'))purpose=key.slice(8);
 

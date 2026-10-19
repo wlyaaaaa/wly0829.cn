@@ -301,3 +301,11 @@ test('generic notices retain their friendly issue context in display and copied 
  const row={id:'traffic',title:'套餐流量',public_message:message,notice_kind:'warn',ai_hint:{issue_ids:[issue.id],task_name:'PRIVATE_TASK',last_error:'PRIVATE_ERROR'}},sentence=app.cpPublicSentence(row);assert.equal(sentence,issue.title+'：'+message);assert.match(app.cpCopyPrompt([app.cpCopyMeta(row,sentence)],'item',''),/统计本机代理流量：这次没有完成/);assert.doesNotMatch(sentence,/PRIVATE_|套餐流量/);
  assert.equal(app.cpPublicSentence({...issue,public_message:issue.title+'：'+message}),issue.title+'：'+message);assert.equal(app.cpPublicSentence({plain:{name:'检查电脑记录备份'},public_message:message}),'检查电脑记录备份：'+message);
 });
+
+test('touch unlock jumps to the grant form without opening the soft keyboard',()=>{
+ const source=readFileSync(new URL('../scripts/b2-live-runtime.js',import.meta.url),'utf8');
+ const choose=source.slice(source.indexOf("if(key.startsWith('choose-'))"),source.indexOf("else if(key.startsWith('purpose-'))"));
+ assert.match(choose,/const touch=matchMedia\('\(pointer: coarse\)'\)\.matches/);
+ assert.match(choose,/behavior:touch\?'instant':'smooth'/);
+ assert.match(choose,/if\(!touch\)document\.querySelector\('\[data-b2-slot="ca-form-hours"\]'\)\?\.focus/);
+});
