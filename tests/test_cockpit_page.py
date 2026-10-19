@@ -42,6 +42,43 @@ def fixture(counter=itertools.count(1), **over):
 
 
 class CockpitPageTests(unittest.TestCase):
+    def test_phone_power_values_stay_inside_their_cells(self):
+        from playwright.sync_api import sync_playwright
+        OUT.mkdir(parents=True, exist_ok=True)
+        server = h.StatusServer()
+        body = fixture(power_today={'state': 'ok', 'observed_at': h.ago(seconds=5),
+                                    'uptime_hours': 23.9, 'energy_kwh': 12.3, 'peak_watts': 999})
+        server.default = (200, body, 0)
+        server.pages['/cockpit/'] = h.document(body)
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(executable_path=h.CHROME, headless=True)
+                for width in (320, 390):
+                    context = browser.new_context(viewport={'width': width, 'height': 915}, is_mobile=True, has_touch=True)
+                    h.isolate(context)
+                    page = context.new_page()
+                    page.goto(server.origin + '/cockpit/', wait_until='domcontentloaded')
+                    page.wait_for_function('window.CockpitData')
+                    card = page.locator('.cp-power')
+                    card.scroll_into_view_if_needed()
+                    self.assertEqual(card.locator('small').all_text_contents(), ['小时', '度', '瓦'])
+                    bounds = card.locator('.cp-stats3 li').evaluate_all('''cells => cells.map(cell => {
+                        const c = cell.getBoundingClientRect();
+                        const value = cell.querySelector('b').getBoundingClientRect();
+                        const unit = cell.querySelector('small').getBoundingClientRect();
+                        return {left: c.left, right: c.right, valueLeft: value.left, valueRight: value.right,
+                                unitLeft: unit.left, unitRight: unit.right, overflow: cell.scrollWidth > cell.clientWidth};
+                    })''')
+                    for b in bounds:
+                        self.assertFalse(b['overflow'], b)
+                        self.assertGreaterEqual(min(b['valueLeft'], b['unitLeft']), b['left'])
+                        self.assertLessEqual(max(b['valueRight'], b['unitRight']), b['right'])
+                    page.screenshot(path=str(OUT / f'power-{width}.png'))
+                    context.close()
+                browser.close()
+        finally:
+            server.close()
+
     def test_phone_and_desktop(self):
         from playwright.sync_api import sync_playwright
         OUT.mkdir(parents=True, exist_ok=True)

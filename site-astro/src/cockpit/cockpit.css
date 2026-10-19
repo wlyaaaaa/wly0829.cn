@@ -260,6 +260,12 @@
   .cp-wait li { grid-template-columns: 1fr; gap: 2px; }
   .cp-security { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
   .cp-features { grid-template-columns: 1fr; }
+  /* 窄屏用电卡按行排：数值和单位有整行空间，不挤到相邻统计格。 */
+  .cp-power .cp-stats3 { grid-template-columns: 1fr; }
+  .cp-power .cp-stats3 li { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; }
+  .cp-power .cp-stats3 b { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+  .cp-power .cp-stats3 small { display: inline-block; white-space: nowrap; }
+  .cp-power .cp-stats3 li.cp-stat-note { grid-column: auto; }
   .cp-big b { font-size: 44px; }
   .cp-sec-item { grid-template-columns: 40px 1fr; padding: 6px 4px; }
   .cp-sec-item img, .cp-sec-pc { width: 40px; }
