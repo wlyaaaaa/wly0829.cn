@@ -3,8 +3,8 @@
 status: passed-local-ready-for-publication
 publication: authorized-existing-public-main
 observed_at: 2026-10-20
-artifact_source_commit: c6f8cb82bbd6b6a2342547c0e16f01d826e082b4
-artifact_release_id: 8139ae795e2ad8f445fec97e53d532df1f135d83e334f8c6f491aa650e2ff77b
+artifact_source_commit: 7739b5137c4db59d8abbb11e9a6c7e53b921ae44
+artifact_release_id: d363e251436821247847034a64144286c1f6fd2e2ed657e32c4a12663e2ec33e
 
 本轮修复刷新作者源、页面元信息、首页成果图、驾驶舱数据传输和深读查询，并删除已退役的 React 渲染链与被原生页接管的冻结正文。没有借架构修复重新宣称所有业务数字都在今天观察。首页仅允许既有“这套东西办过的事”图随引用数字重新生成，其他首页内容保持锁定。
 
@@ -13,14 +13,14 @@ artifact_release_id: 8139ae795e2ad8f445fec97e53d532df1f135d83e334f8c6f491aa650e2
 - targeted/all 计划覆盖真实作者源、模块、当前 Markdown 与仍上线的冻结子页。五处项目别名按真实路由处理，两个没有 JSON 作者源的冻结项目保留其实际来源；AI 仍是唯一叙述作者。
 - 正常可收录页有摘要、Open Graph 和 Twitter 标题；去向页与 noindex 页保持例外。独立卡顿模板补齐同组标签和既有站标，首屏没有插画时使用现有 PNG 标识。
 - 旧 React 正文、无生产消费者的快照链、根 React/Vite 依赖和旧包文案测试已删除；app 只保留三个现有生产消费者仍需的小文件。176 份已被原生页接管的冻结正文已删除，33 份仍上线的冻结正文保留；不以此删除资源。
-- 驾驶舱直接使用精简视图，移除全量适配；Edge 重新 gzip 压缩解码后的正文，保持现有 no-store、CORS、查询白名单与 HEAD 语义。深读查询从 since−30 分钟的精确时间点开始，单次 SLS 25 秒且不叠普通模式重试。
+- 驾驶舱直接使用精简视图，移除全量适配；Edge 直接读写 CompressionStream 并统一 ArrayBuffer/视图分片，重新 gzip 压缩解码后的正文；压缩异常保留已有原文并给出诊断头，保持现有 no-store、CORS、查询白名单与 HEAD 语义。深读查询从 since−30 分钟的精确时间点开始，单次 SLS 25 秒且不叠普通模式重试。
 - 合入 main 已接收的存储页、个人理解库作者源说明和总索引技术引用更新。旧 React 副本的 modify/delete 冲突按退役处理，新作者源及其当前 Markdown 更新均保留；总索引 Markdown 由既有转换器同步。
 - 卡顿页无事项、尚未取到状态或读取失败时，复制按钮仍禁用，并以原有文案提供 aria-description；没有改变可复制范围或扫描标准。
 
 ## 验证
 
 - 正式 npm run build 通过：315 份 HTML。完整 Node 146/146、完整成品 Python 3/3 通过；312 条冻结清单路由基线保持，并严格核对新增原生路由和既有两份辅助 HTML 的完整集合。
-- 289 个可收录 HTML 的摘要与分享标签齐全，缺失 0；搜索所有权文件与 public 原字节一致。首页横竖成果图通过 G1—G6 检查，已看图并核对数字与来源日期；剔除该屏后首页与基线相同。
+- 289 个可收录 HTML 的摘要与分享标签齐全，缺失 0；搜索所有权文件与 public 原字节一致，搜狗 TXT 归入 Pages 根文件且不再是 OSS 对象；兼容旧前驱只限该精确文件名，普通 TXT 的分类不变。首页横竖成果图通过 G1—G6 检查，已看图并核对数字与来源日期；剔除该屏后首页与基线相同。
 - 全站首轮扫描 311 页、622 个视口。仅卡顿空状态的禁用说明报两条失败；保留首轮实录，补齐辅助描述后通过定点复验。后续只扫真实变页或原未通过页，最终扫描绑定完整 dist 哈希，继承核实 312 个非首页跳转路由，失败 0，成品字节未在扫描中变化。
 - 任务独立 Google Chrome 实际 GET 资源，三页各在 390/1440 检查：无文档横向溢出、页面异常、控制台 warning/error 或可见坏图；Tab/Enter 可以进入真实项目链接，自定义 404 返回 404 并有恢复入口。新增 storage/stutter 同样无文档溢出或 JS 异常；存储表格内部横滚符合既定说明。
 - 旧 check-site-ui 的 567 条失败实录保留：该次策略主动拦图，且把多行状态卡、统计卡内部层当单行按钮或卡片行；真实 Chrome 对应检查已分别验证，没有改检查器或用改样式掩盖这些假设。
@@ -30,4 +30,4 @@ artifact_release_id: 8139ae795e2ad8f445fec97e53d532df1f135d83e334f8c6f491aa650e2
 
 ## 发布边界
 
-使用既有 publish_site.py 入口预演、正常推送、OSS/Pages 发布及公网逐项回读。保留本轮既有 OSS 对象与回滚资源，使用 --skip-retention，不扩大本单正文退役到云资源清理。EdgeOne 函数由 main 的既有工作流单独更新；GitHub 成功不能代替公网 gzip 实测或平台记录。实际发布身份、工作流、回读与证据缺口由本轮任务报告和 publish-receipt.json 给出，本页记录已完成的本地验收。
+使用既有 publish_site.py 入口预演、正常推送、OSS/Pages 发布及公网逐项回读。保留本轮既有 OSS 对象与回滚资源，使用 --skip-retention，不扩大本单正文退役到云资源清理。EdgeOne 函数由 main 的既有工作流单独更新；GitHub 成功不能代替公网 gzip 实测或平台记录。实际发布身份、工作流、回读与证据缺口由本轮任务报告和 publish-receipt.json 给出，本页记录已完成的本地验收。搜狗最终分包修复后的全部 HTML 哈希与上一轮一致，沿用已核实浏览器场景，最后一次扫描核对完整成品哈希并继承 312 个已验收路由。
