@@ -104,6 +104,7 @@ test("exact project names, existing aliases and commands keep their navigation p
   assert.equal(searchPanel("verify-export")[0]?.href, "/projects/wechat-direct/preservation-verification");
   assert.equal(searchPanel("过去一小时为什么卡")[0]?.href, "/skills/timeaudit-diagnostics");
   assert.equal(searchPanel("scripts\\transcribe-folder.ps1 -InputDir <folder>")[0]?.projectSlug, "chinese-asr");
+  assert.equal(searchPanel("E:\\PCConfig\\tools\\scan_tasks.ps1 -NoWrite -Json")[0]?.projectSlug, "pcconfig");
   assert.equal(searchPanel("E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json")[0]?.projectSlug, "pcconfig");
 });
 

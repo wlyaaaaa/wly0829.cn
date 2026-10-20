@@ -172,7 +172,7 @@ class PublishTests(unittest.TestCase):
             (root/'index.html').write_bytes(b'<h1>fixture</h1>\r\n')
             (root/'a.js').write_bytes(b'console.log(1)')
             publisher.oss.write(root/'release-manifest.json', {'fixture': True, 'release_id': 'fixture', 'files': publisher.oss.inventory(root)})
-            publisher.oss.finalize_dist(root)
+            publisher.oss.finalize_dist(root, source_commit='a'*40)
             publisher.oss.write(root/'.build-receipt.json', {'source_commit': 'a'*40})
             scan = Path(temporary)/'scan.json'
             publisher.oss.write(scan, {'fixture': True, 'failures': [], 'dist_files_sha256':
@@ -184,6 +184,7 @@ class PublishTests(unittest.TestCase):
             shared.assert_not_called()  # 干跑不写 last-attempt.json
             self.assertEqual((receipt['status'], receipt['site_dist']['parent'], receipt['uploaded_files']), ('dry_run', [], 0))
             self.assertEqual((receipt['source_commit'], receipt['source_commit_evidence']), ('a'*40, 'build receipt'))
+            self.assertEqual(publisher.oss.read(Path(receipt['site_dist']['root'])/'release-identity.json')['source_commit'], receipt['source_commit'])
             self.assertFalse(any('push' in call.args or publisher.CLI in call.args or 'gh' in call.args for call in commands.call_args_list))
             self.assertFalse((Path(receipt['site_dist']['root'])/'.github/workflows/pages.yml').exists())
             for name in ('index.html', 'release-manifest.json', 'release-identity.json'): self.assertEqual((root/name).read_bytes(), (Path(receipt['site_dist']['root'])/name).read_bytes())

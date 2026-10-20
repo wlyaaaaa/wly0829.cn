@@ -1267,7 +1267,7 @@ test("PCConfig exposes secondary-laptop and drift acceptance as complete product
   ]) assert.ok(laptopText.includes(expected), `secondary-laptop omits: ${expected}`);
   assert.match(laptop.readerStates.unavailable, /只说明对应部分未知.*不能替代缺少的副机现场/);
   for (const expected of [
-    "status", "evidence_status", "check id", "selector", "bounded", "zero-write", "Test-PCConfigDrift", "Invoke-PCConfigAcceptance", "pass", "warn", "block", "unknown"
+    "status", "evidence_status", "check id", "selector", "bounded", "zero-write", "Invoke-PCConfigAcceptance", "pass", "warn", "block", "unknown"
   ]) assert.ok(driftText.toLowerCase().includes(expected.toLowerCase()), `drift-acceptance omits: ${expected}`);
   assert.match(driftText, /derived|派生|临时产物/);
   assert.ok(pcconfigProject.usageExamples.filter((item) => item.moduleSlug === "secondary-laptop").length >= 3);
@@ -1286,6 +1286,10 @@ test("PCConfig exposes secondary-laptop and drift acceptance as complete product
   assert.match(JSON.stringify(pcconfigProject.currentState), /complete_visibility|needs_attention=false/);
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "pcconfig");
+  const taskCollector = registration.ai_refresh.collectors.find((item) => item.includes("scan_tasks.ps1"));
+  assert.match(taskCollector, /scan_tasks\.ps1 -NoWrite -Json/);
+  assert.match(taskCollector, /schema=pcconfig\.tasks\.v1[\s\S]*observer_elevated=true[\s\S]*task_visibility_complete=true/);
+  assert.doesNotMatch(registration.ai_refresh.collectors.join("\n"), /Test-PCConfigDrift\.ps1|scan_tasks\.ps1 -Write/);
   assert.ok(Number.isInteger(registration.ai_refresh.semantic_revision) && registration.ai_refresh.semantic_revision >= 19, "valid semantic revision");
   assert.match(registration.ai_refresh.scope, /Twelve modules/);
   assert.ok(registration.ai_refresh.conditional_collectors.some((item) => item.includes("Get-SecondaryLaptopHealth") && item.includes("host_mismatch")));

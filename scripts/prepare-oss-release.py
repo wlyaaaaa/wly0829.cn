@@ -975,13 +975,24 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     return plan
 
 
-def finalize_dist(dist, full=False, timings=None):
+def finalize_dist(dist, full=False, timings=None, source_commit=None):
     global _FINALIZE_CACHE
+    if source_commit is not None and source_commit != 'Unknown' and not re.fullmatch('[a-f0-9]{40}', source_commit):
+        raise ValueError('source-commit must be an exact source SHA, or Unknown')
     started = time.perf_counter(); timings = {} if timings is None else timings
     for name in ('hash', 'inventory', 'copy', 'home', 'rewrite', 'verify', 'manifest', 'cache'): timings.setdefault(name, 0)
     cache = FinalizeCache(Path(dist).resolve(), full, timings); _FINALIZE_CACHE = cache
     try:
-        final = _finalize_dist(dist); measured('cache', cache.save); return final
+        final = _finalize_dist(dist)
+        if source_commit is not None and final.get('source_commit') != source_commit:
+            final['source_commit'] = source_commit
+            measured('manifest', lambda: write(Path(dist)/MANIFEST, final))
+        identity = {'release_id': final['release_id'], 'manifest_sha256': digest(Path(dist)/MANIFEST),
+                    'source_commit': final.get('source_commit', 'Unknown')}
+        identity_path = Path(dist)/'release-identity.json'
+        if not identity_path.is_file() or read(identity_path) != identity:
+            measured('manifest', lambda: write(identity_path, identity))
+        measured('cache', cache.save); return final
     finally:
         _FINALIZE_CACHE = None; timings['total'] = time.perf_counter() - started
 
@@ -1003,8 +1014,6 @@ def _finalize_dist(dist):
         final = read(prepared/'github'/MANIFEST); final['finalized_dist'] = True
         final['oss'].update(retained_objects=plan['retained_objects'], reference_keys=plan['reference_keys'])
         measured('manifest', lambda: write(prepared/'github'/MANIFEST, final))
-        measured('manifest', lambda: write(prepared/'github'/'release-identity.json', {'release_id': final['release_id'],
-              'manifest_sha256': digest(prepared/'github'/MANIFEST), 'source_commit': final.get('source_commit', 'Unknown')}))
         for kind in ('github', 'oss'):
             for path in (prepared/kind).rglob('*'):
                 if path.is_file() and path.relative_to(prepared/kind).as_posix() != MANIFEST: path.replace(dist/path.relative_to(prepared/kind))
@@ -1184,6 +1193,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
     p = commands.add_parser('finalize-dist'); p.add_argument('--dist', required=True); p.add_argument('--full', action='store_true')
+    p.add_argument('--source-commit', help='Source SHA established by the build, or Unknown for an uncommitted source')
     p = commands.add_parser('prepare')
     p.add_argument('--source', required=True)
     p.add_argument('--asset-base-url', required=True)
@@ -1199,7 +1209,7 @@ def main():
         p.add_argument('--confirm-download-over-5gb',action='store_true')
     args = parser.parse_args()
     if args.command == 'finalize-dist':
-        timings = {}; final = finalize_dist(args.dist, full=args.full, timings=timings)
+        timings = {}; final = finalize_dist(args.dist, full=args.full, timings=timings, source_commit=args.source_commit)
         print(json.dumps({'status': 'finalized', 'release_id': final['release_id'], 'timings': timings}))
     elif args.command == 'prepare':
         plan = prepare(args.source, args.asset_base_url, args.prefix, args.output, args.html_origin, args.test_loopback,args.rewriter_version,args.previous_manifest)

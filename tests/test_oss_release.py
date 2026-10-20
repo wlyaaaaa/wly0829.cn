@@ -7,6 +7,7 @@ from pathlib import Path
 import threading
 import shutil
 import subprocess
+import sys
 import unittest
 import uuid
 from email.message import Message
@@ -512,6 +513,33 @@ class OssReleaseTests(unittest.TestCase):
                 self.assertEqual(oss.verify_local(output)['rewriter_version'],version)
         self.assertEqual((self.source/'index.html').read_bytes(),home)
 
+
+    def test_finalize_binds_build_source_before_scan_and_updates_noop_build_identity(self):
+        self.addCleanup(oss.FinalizeCache(self.source, False, {}).path.unlink, missing_ok=True)
+        oss.finalize_dist(self.source)
+        self.assertEqual(oss.read(self.source/'release-identity.json')['source_commit'], 'Unknown')
+        for source_commit in ('a'*40, 'b'*40, 'Unknown'):
+            with self.subTest(source_commit=source_commit):
+                final = oss.finalize_dist(self.source, source_commit=source_commit)
+                self.assertEqual(final['source_commit'], source_commit)
+                self.assertEqual(oss.read(self.source/'release-identity.json'), {
+                    'release_id': final['release_id'], 'manifest_sha256': oss.digest(self.source/oss.MANIFEST),
+                    'source_commit': source_commit})
+                before = {p.relative_to(self.source): p.read_bytes() for p in self.source.rglob('*') if p.is_file()}
+                oss.finalize_dist(self.source, source_commit=source_commit)
+                self.assertEqual(before, {p.relative_to(self.source): p.read_bytes() for p in self.source.rglob('*') if p.is_file()})
+        before = (self.source/oss.MANIFEST).read_bytes()
+        with self.assertRaisesRegex(ValueError, 'source-commit'):
+            oss.finalize_dist(self.source, source_commit='not-a-source-sha')
+        self.assertEqual((self.source/oss.MANIFEST).read_bytes(), before)
+
+    def test_finalize_cli_accepts_the_build_source_commit(self):
+        self.addCleanup(oss.FinalizeCache(self.source, False, {}).path.unlink, missing_ok=True)
+        subprocess.run([sys.executable, '-B', '-X', 'utf8', str(ROOT/'scripts/prepare-oss-release.py'),
+                        'finalize-dist', '--dist', str(self.source), '--source-commit', 'c'*40],
+                       check=True, capture_output=True, timeout=30,
+                       creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+        self.assertEqual(oss.read(self.source/'release-identity.json')['source_commit'], 'c'*40)
 
     def test_finalize_incremental_matches_full_and_rejects_changed_final_bytes(self):
         self.addCleanup(oss.FinalizeCache(self.source, False, {}).path.unlink, missing_ok=True)
