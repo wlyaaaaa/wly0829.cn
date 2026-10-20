@@ -1,57 +1,65 @@
 {
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
-  "source_commit": "c6f8cb82bbd6b6a2342547c0e16f01d826e082b4",
-  "prepared_at_beijing": "2026-10-20T18:56:56.539524+08:00",
-  "seconds": 77.362,
+  "source_commit": "65dfa22e1eea63c694e11b87e248df488f3b038e",
+  "prepared_at_beijing": "2026-10-20T19:36:20.291486+08:00",
+  "seconds": 143.088,
   "steps": [
     {
       "name": "source",
-      "seconds": 2.13
+      "seconds": 3.884
     },
     {
       "name": "fingerprint",
-      "seconds": 0.983
+      "seconds": 1.021
     },
     {
       "name": "prepare",
-      "seconds": 2.243
+      "seconds": 2.437
     },
     {
       "name": "native_inputs",
-      "seconds": 1.418
+      "seconds": 1.629
     },
     {
       "name": "blocks",
-      "seconds": 0.754
+      "seconds": 16.834
     },
     {
       "name": "astro",
-      "seconds": 0.0
+      "seconds": 24.77
     },
     {
       "name": "assets",
-      "seconds": 4.189
+      "seconds": 4.62
     },
     {
       "name": "finish",
-      "seconds": 5.04
+      "seconds": 6.386
     },
     {
       "name": "finalize",
-      "seconds": 50.746
+      "seconds": 72.459
     },
     {
       "name": "public",
-      "seconds": 9.051
+      "seconds": 8.434
     },
     {
       "name": "inventory",
-      "seconds": 0.808
+      "seconds": 0.614
     }
   ],
   "rebuilt_pages": [
-    "/cockpit/stutter/"
+    "/cockpit/",
+    "/projects/localocr/",
+    "/projects/pcconfig/machine-facts/",
+    "/projects/pcconfig/recovery-backup/",
+    "/projects/proxyclean/",
+    "/projects/vault-tool/",
+    "/projects/wechat-direct/",
+    "/projects/wechatdirect/",
+    "/search/"
   ],
   "html_files": 315,
   "files": [
@@ -269,6 +277,11 @@
       "path": "_astro/index.astro_astro_type_script_index_0_lang.3vw0GO78.js",
       "bytes": 62637,
       "sha256": "4c801bb42fad77a450a429e686c8d99f8bbe6747774c1ac8378ed84f83b76afb"
+    },
+    {
+      "path": "_astro/index.astro_astro_type_script_index_0_lang.BfY-R6Sz.js",
+      "bytes": 62929,
+      "sha256": "ca07da3ec4ec7e489cd3151925964a4e63ff787832196f5fcd9b72c16d6e0296"
     },
     {
       "path": "_astro/index.astro_astro_type_script_index_0_lang.BL3rrIKM.js",
@@ -13391,6 +13404,11 @@
       "sha256": "002433b5ae396eaf655830c0baf691f1177c49a7bc5600c9cffdfecb4c63c122"
     },
     {
+      "path": "assets/_fingerprinted/005ecff58d5a9fe61cfb8ef593a20e6374a4e41c601c4c1fe98e8841d0f94dea.png",
+      "bytes": 1507331,
+      "sha256": "005ecff58d5a9fe61cfb8ef593a20e6374a4e41c601c4c1fe98e8841d0f94dea"
+    },
+    {
       "path": "assets/_fingerprinted/00653ca40564cf51cc7009666f287b16fef0519070b64cdee9416a4842a9cdfc.png",
       "bytes": 29561,
       "sha256": "00653ca40564cf51cc7009666f287b16fef0519070b64cdee9416a4842a9cdfc"
@@ -22956,6 +22974,11 @@
       "sha256": "56f78ad68e9a56fb6e590f5eaa432805afd5b827c63d3123c7372a02e6756c5a"
     },
     {
+      "path": "assets/_fonts/pcconfig-machine-facts-57603ebe585b.woff2",
+      "bytes": 189880,
+      "sha256": "ce9f5e2046c21f992941cbccacdee4a88c86147ca1a87616e80c4ec99131bd88"
+    },
+    {
       "path": "assets/_fonts/pcconfig-memory-diagnostics-715d9704705a.woff2",
       "bytes": 176568,
       "sha256": "9b81d03cb559df01c3df4a7375f4b7c250959f7d2c14bedb44186f1d0a8fc6b3"
@@ -24377,8 +24400,8 @@
     },
     {
       "path": "cockpit/index.html",
-      "bytes": 590015,
-      "sha256": "8867545a64b7dd7803ed39b047d1d8b1bb3ea0458aa241dae33b488b4a6a1875"
+      "bytes": 605263,
+      "sha256": "f9627d91df239a78cce71e6eac5dafc98fc9e3a9e09009dfd8df086c3bb7b52c"
     },
     {
       "path": "cockpit/storage/index.html",
@@ -25138,7 +25161,7 @@
     {
       "path": "projects/localocr/index.html",
       "bytes": 443021,
-      "sha256": "41b34168db8635316433ffea11e1b19672b2ba86cd5480885d3e63e5b58213d6"
+      "sha256": "6ee197a660673bdd25e20ef8d592f878664791a76b8cb23e77f430814dcc20d4"
     },
     {
       "path": "projects/localocr/input-routing/index.html",
@@ -25332,8 +25355,8 @@
     },
     {
       "path": "projects/pcconfig/machine-facts/index.html",
-      "bytes": 184037,
-      "sha256": "d8aad814a507f1a4814c8e7c3492552a89b8c70c2a06bfcc44516d8e1250e14c"
+      "bytes": 185915,
+      "sha256": "56c98b3f423d92b696b70697a759bb0d7b19883884eb15232839918eb3ba357f"
     },
     {
       "path": "projects/pcconfig/memory-diagnostics/index.html",
@@ -25357,8 +25380,8 @@
     },
     {
       "path": "projects/pcconfig/recovery-backup/index.html",
-      "bytes": 206927,
-      "sha256": "9657043f9c4308ccc8817a5522955385dbedeef5a976b61db198b504b7eb541c"
+      "bytes": 207253,
+      "sha256": "c977f447074c113b13e8dc101e614fced3b7ba59893df37bd12b6339661aad48"
     },
     {
       "path": "projects/pcconfig/remote-computer-mcp/index.html",
@@ -25557,8 +25580,8 @@
     },
     {
       "path": "projects/proxyclean/index.html",
-      "bytes": 350026,
-      "sha256": "827b794ff42a4832847b98bb07f874e7e918e4a74b757bc4529dc020732adc5e"
+      "bytes": 350022,
+      "sha256": "3f349046c94944f28768ac6d888e0f6b68368d56c846edbdc25852eac879bd57"
     },
     {
       "path": "projects/proxyclean/ipv6-routing-control/index.html",
@@ -25813,7 +25836,7 @@
     {
       "path": "projects/vault-tool/index.html",
       "bytes": 404944,
-      "sha256": "5648ab65ff5036e92444a68c64723cdea17f9f28b4758c0363a69ae5378bde20"
+      "sha256": "d3a38247d2632aabc77fa5e7ae4f9300b33dec51924cb92d5c0c12b49d4ad164"
     },
     {
       "path": "projects/vault-tool/maintenance-recovery/index.html",
@@ -25973,7 +25996,7 @@
     {
       "path": "projects/wechatdirect/index.html",
       "bytes": 401362,
-      "sha256": "a70e26a547226f7ab72120999139f8b39abd50a0b6e2a79a4820c959621e9c7b"
+      "sha256": "975e059e91a07c3d6afa055019711e52de59042bcead7d57b79971bf8fb10cd0"
     },
     {
       "path": "projects/wly0829-cn/index.html",
@@ -26028,12 +26051,12 @@
     {
       "path": "release-identity.json",
       "bytes": 244,
-      "sha256": "4a25f08c980704a3ec0317095aedc422639122ea653139da8c8a3195a96ad8ba"
+      "sha256": "8144faafb8097e10fc299e1c6fd012fe5f75ef3d898f5a83c377b95225ce7c6a"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 4930973,
-      "sha256": "4ae49ec918f4fbad86f991e9fb818dfdc6f28a83585eeb2c84c37b690615019c"
+      "bytes": 4933074,
+      "sha256": "b5b7260c62ac5ad2148d58f01e703eb082354d520a2f07e181e29fae88d814d6"
     },
     {
       "path": "rescue/index.html",
@@ -26198,12 +26221,12 @@
     {
       "path": "search/index.html",
       "bytes": 68664,
-      "sha256": "ddfc7855d6a52a25bc815b374a9d67e7c4bab1585f724a49297143df27765a3d"
+      "sha256": "bdf96d84a139cc2ea196d6da3d8546dbd6a169e02d46208345a9ebc0a350a8f7"
     },
     {
       "path": "search-index.js",
-      "bytes": 1492803,
-      "sha256": "9dd14a8caf336f8aed6fc3bb71842555d4b262197e2f329b5f6bd77ea65baecf"
+      "bytes": 1492866,
+      "sha256": "0e75e41a7a33d7594ea6ba26aa92616c6fb7379c388c2e279deb30b5d1db3295"
     },
     {
       "path": "search-project-localocr.js",
@@ -26212,8 +26235,8 @@
     },
     {
       "path": "search-projects.js",
-      "bytes": 3447640,
-      "sha256": "0aa390dcc6bca20e2123722ece85a3d7e4ada17136b34a99693c89ca82e0c51f"
+      "bytes": 3448243,
+      "sha256": "db9d391ed3e212458896fe28435d0820f455ef0756d4da444799128944c4f984"
     },
     {
       "path": "sitemap.xml",
@@ -26643,5 +26666,5 @@
   ],
   "output": "E:\\Cache\\Claude\\Temp\\f68cc255\\gpt-children\\20261020-171647-b2-site-6b16e020\\wt\\dist",
   "previous_oss_source": "published",
-  "previous_release_id": "c3ae691e4cabd02aa24005f16a4da5dc4057cda2a3b0531626e04dc5ad3ed472"
+  "previous_release_id": "8139ae795e2ad8f445fec97e53d532df1f135d83e334f8c6f491aa650e2ff77b"
 }
