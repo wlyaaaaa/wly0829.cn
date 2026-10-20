@@ -215,7 +215,7 @@ const assert = require('node:assert/strict');
       { id: 'age-decision', title: 'AI 跟了14天的1件，请逐条定', kind: 'ai_age_decision', ask_kind: 'decision', questions: [{ id: 'old-ai', text: '虚构旧事，已跟15天，没有进展记录', options: ['A 让 AI 限期根治，10月19日前完成', 'B 不修了，接受现状：提醒仍不可用', 'C 你来处理'] }] }],
     scheduled: [{ id: 'future-review', title: '虚构未来事项', scheduled_for: '2026-10-21' }],
     ai_following: [{ id: 'ai-short', title: '虚构期限内的事' }],
-    counts: { ai_following: 3 }, ai_overdue: [{ id: 'ai-old', title: '虚构超期的事', overdue_since: '2026-10-10', overdue_days: 2, age_days: 4 }],
+    counts: { ai_following: 3 }, ai_overdue: [{ id: 'ai-old', title: '虚构超期的事', overdue_since: '2026-10-10', overdue_days: 2, age_days: 4, reason: 'original_deadline_overdue', stuck_reason: 'original_deadline_overdue' }, { id: 'ai-undated', title: '虚构无日期的事', reason: 'undated_wake_condition', stuck_reason: 'undated_wake_condition' }],
     deferred: [{ id: 'owner-wait', title: '虚构本人暂缓', action_owner: 'user' }],
     sections: { ...base0.sections, backup_cloud: [{ id: 'backup_h', title: 'H盘备份', state: 'attention', text: '上次没有跑完', details: [{ title: '测试分类', text: '测试缺口' }] }] } });
   const front = R.REGIONS.overview(improved, ctx), todos = R.needYou(improved, ctx);
@@ -227,6 +227,7 @@ const assert = require('node:assert/strict');
   assert.match(todos, /约 2 分钟/); assert.match(todos, /会错过提醒/);
   assert.match(todos, /手机借电脑 MCP 办/); assert.match(todos, /data-copy-text="请用电脑 MCP 读取条目 fixture-review/);
   assert.match(todos, /原定 10 月 10 日，已过 2 天/); assert.doesNotMatch(todos, /虚构期限内的事/);
+  assert.match(todos, /唤醒条件没有日期，等待 AI 明确期限/); assert.doesNotMatch(todos, /original_deadline_overdue|undated_wake_condition/);
   assert.match(todos, /data-q="old-ai"[^>]*data-qtext="（条目 old-ai）虚构旧事/); assert.match(todos, /A 让 AI 限期根治/); assert.match(todos, /B 不修了/); assert.match(todos, /C 你来处理/);
   const backup = R.backup(improved, ctx); assert.match(backup, /<details[^>]*><summary>查看具体缺口/); assert.match(backup, /测试分类/);
   assert.doesNotMatch(R.needYou(normalize({ schema: SCHEMA, need_you: [{ title: '虚构无效链接', action: { href: 'javascript:alert(1)' } }] }), ctx), /href="javascript:/);

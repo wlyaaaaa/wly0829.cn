@@ -217,7 +217,7 @@ function aiBlock(v, ctx) {
       const at = x.overdue_since ? monthDay(x.overdue_since) : '';
       const why = at ? `原定 ${at}，已过 ${x.overdue_days ?? 0} 天` : '唤醒条件没有日期，等待 AI 明确期限';
       const age = x.registration_unknown ? '登记时间不明，按满 14 天处理' : Number.isFinite(x.age_days) ? `已跟 ${x.age_days} 天` : '';
-      return `<li><span>${esc(clean(x.title) || x.project)}</span><small>${esc([why, age, x.latest_progress || x.stuck_reason].filter(Boolean).join(' · '))}</small></li>`;
+      return `<li><span>${esc(clean(x.title) || x.project)}</span><small>${esc([why, age, x.latest_progress || stuckWhy(x.stuck_reason)].filter(Boolean).join(' · '))}</small></li>`;
     }).join('');
     const n = v.counts.ai_following || v.ai_following.length;
     return `<div class="cp-ai" id="ai"><h3 class="cp-sub">AI 在跟 ${n} 件</h3>`
