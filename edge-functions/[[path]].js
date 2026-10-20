@@ -33,7 +33,11 @@ export default async function onRequest({ request }) {
         phase = 'stream';
         const reading = (async () => {
           const chunks = []; let length = 0;
-          for (;;) { const { done, value } = await reader.read(); if (done) break; chunks.push(value); length += value.byteLength; }
+          for (;;) {
+            const { done, value } = await reader.read(); if (done) break;
+            const chunk = ArrayBuffer.isView(value) ? new Uint8Array(value.buffer, value.byteOffset, value.byteLength) : new Uint8Array(value);
+            chunks.push(chunk); length += chunk.byteLength;
+          }
           const result = new Uint8Array(length); let offset = 0;
           for (const chunk of chunks) { result.set(chunk, offset); offset += chunk.byteLength; }
           return result;
