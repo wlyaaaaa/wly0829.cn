@@ -224,7 +224,7 @@ const assert = require('node:assert/strict');
   assert.match(R.REGIONS.overview({ ...improved, need_you: [], overview: ov({ owner_count: 0 }), summary: { text: 'AI 在跟 3 件' } }, ctx), /AI 在跟 3 件/);
   const compact = normalize({ ...base0, access_summary: improved.access_summary, verdict: { text: '要你做 2 件，都能在手机上办（其中 1 件借电脑 MCP） · AI 在跟 44 件（其中 23 件过期，12 件已跟满 14 天） · 你暂缓 6 件' } });
   const compactFront = R.REGIONS.overview(compact, ctx);
-  assert.match(compactFront, /AI 在跟 44 件（其中 23 件过期，12 件已跟满 14 天） · 你暂缓 6 件/); assert.match(compactFront, /<p class="cp-you-sub">都能在手机上办（其中 1 件借电脑 MCP）<\/p>/);
+  assert.match(compactFront, /AI 在跟 44 件（其中 23 件过期，12 件已跟满 14 天） · 你暂缓 6 件/); assert.doesNotMatch(compactFront, /<p class="cp-you-sub">都能在手机上办/); assert.equal((compactFront.match(/都能在手机上办（其中 1 件借电脑 MCP）/g) || []).length, 1);
   assert.deepEqual(normalize({ ...base0, summary: { text: '已有总结', state: 'ok' }, verdict: compact.summary }).summary, { text: '已有总结', state: 'ok' });
   assert.match(todos, /排在 10 月 21 日：虚构未来事项/);
   assert.match(todos, /href="https:\/\/example.invalid\/find"[^>]*>去办 →/);

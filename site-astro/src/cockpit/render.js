@@ -655,7 +655,7 @@ const overview = (v, ctx) => {
   const list = items.slice(0, 3).map(({ x, r }) => `<li><a href="#${esc(todoId(x))}">${dot(r.red ? 'red' : 'attention')}<span class="cp-you-title">${esc(r.head)}</span><span class="cp-you-chips">${chips(r)}</span></a></li>`).join('');
   const summary = !off && read && typeof v.summary.text === 'string' ? v.summary.text : '';
   const rest = `<p class="cp-you-rest">${esc(summary ? (n ? summary.split(/\s*·\s*/).slice(1).join(' · ') : summary) : restLine(cells, n, off || !read, at))}</p>`;
-  const access = v.access_summary.text ? `<p class="cp-you-sub">${esc(v.access_summary.text)}</p>` : '';
+  const access = v.access_summary.text && !summary.split(/\s*·\s*/)[0].includes(v.access_summary.text) ? `<p class="cp-you-sub">${esc(v.access_summary.text)}</p>` : '';
   const you = !read && !v.need_you.length
     ? `<div class="cp-you is-off">${snap}<p class="cp-you-n">要你做的事还没读到</p><p class="cp-you-sub">${notRead(v.served_at, ctx.now)}</p></div>`
     : !n
