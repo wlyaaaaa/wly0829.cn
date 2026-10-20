@@ -6,7 +6,7 @@
   const date=t=>{if(!valid(t))return c.unknown;const fmt=new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}),parts=d=>Object.fromEntries(fmt.formatToParts(new Date(d)).map(p=>[p.type,p.value])),p=parts(t*1000),today=parts(Date.now());return (p.year===today.year&&p.month===today.month&&p.day===today.day?'今天':p.month+'月'+p.day+'日')+' '+p.hour+':'+p.minute;};
   const duration=s=>valid(s)?s<3600?Math.floor(s/60)+c.minute:s<86400?Math.floor(s/3600)+c.hour:Math.floor(s/86400)+c.day+(Math.floor(s%86400/3600)?' '+Math.floor(s%86400/3600)+c.hour:''):c.unknown;
   let snapshot=null, health={}, points=[], issues=[], busy=false, controller, allIssues=[];
-  function button(id,rows,key,minimum=1){const b=$(id);b.hidden=id==='copy-all'?false:rows.length<minimum;b.disabled=!rows.length;b.textContent=fill(rows.length?key:'copy-none',{N:rows.length});b.setAttribute('aria-label',rows.length?fill(id.replace('copy','aria'),{N:rows.length}):b.textContent);}
+  function button(id,rows,key,minimum=1){const b=$(id);b.hidden=id==='copy-all'?false:rows.length<minimum;b.disabled=!rows.length;b.textContent=fill(rows.length?key:'copy-none',{N:rows.length});b.setAttribute('aria-label',rows.length?fill(id.replace('copy','aria'),{N:rows.length}):b.textContent);b.setAttribute('aria-description',rows.length?'':b.textContent);}
   function chart(){
     const key=$('metric').value, usable=points.filter(p=>valid(p.metrics?.[key])), percent=key==='commit_ratio', unit=percent?'%':key.endsWith('_bytes')?'GiB':'', factor=percent?100:key.endsWith('_bytes')?1/1024**3:1;
     $('chart').hidden=usable.length<2;$('chart-note').hidden=usable.length<2;if(usable.length<2)return;
@@ -52,7 +52,7 @@
   }
   async function refresh(){
     if(busy||document.hidden)return;busy=true;$('refresh').disabled=true;controller=new AbortController();
-    try{render(await window.SiteLiveRuntime.readStatus(controller.signal));}catch{say('headline',snapshot?fill('offline-prior',{at:date(snapshot.hardware?.health?.pc_health?.observed_at_unix)}):c.offline);document.querySelector('.hero').setAttribute('data-state','unknown');$('chart').hidden=true;$('copy-all').disabled=true;say('copy-all',c['copy-wait']);$('copy-one').hidden=$('copy-block').hidden=true;}finally{busy=false;$('refresh').disabled=false;}
+    try{render(await window.SiteLiveRuntime.readStatus(controller.signal));}catch{say('headline',snapshot?fill('offline-prior',{at:date(snapshot.hardware?.health?.pc_health?.observed_at_unix)}):c.offline);document.querySelector('.hero').setAttribute('data-state','unknown');$('chart').hidden=true;$('copy-all').disabled=true;say('copy-all',c['copy-wait']);$('copy-all').setAttribute('aria-description',c['copy-wait']);$('copy-one').hidden=$('copy-block').hidden=true;}finally{busy=false;$('refresh').disabled=false;}
   }
   $('metric').onchange=chart;$('refresh').onclick=refresh;for(const kind of ['one','block','all','felt'])$('copy-'+kind).onclick=()=>copy(kind);
   document.addEventListener('visibilitychange',()=>document.hidden?controller?.abort():refresh());addEventListener('resize',chart);refresh();setInterval(refresh,60000);
