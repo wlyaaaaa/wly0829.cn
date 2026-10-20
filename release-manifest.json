@@ -18,16 +18,16 @@
       "sha256": "df478787a83412e9211fa82a88dfd43016943ec03010b87e22f731af45da2cc3"
     },
     "cockpit/index.html": {
-      "bytes": 537418,
-      "sha256": "a83056acc3d1f482bd0ec7545af49deccf5adf791a651bae446a17f2c4c678f7"
+      "bytes": 550458,
+      "sha256": "8e16601973e08ac8e70d45ac13af3b41b36721b0160bd4a5c2ae81510ed92cb3"
     },
     "cockpit/stutter/index.html": {
-      "bytes": 16362,
-      "sha256": "4c2348c3282dd44ba994c293ff73edfb12723e5b9d9f6d558df67398f3369a38"
+      "bytes": 17116,
+      "sha256": "dacfd95124592b260548f6739f91d1246253e99ed45a3175330838ef8a4e86e4"
     },
     "computer-access/index.html": {
       "bytes": 235811,
-      "sha256": "30294afa5b58e35b4dfd8bc1ab5469f74cccfcb63099b0adc4b51242b9a80b8b"
+      "sha256": "947aacc858cd74a9562684e4df502b1388e5e052b0ce6cd4a127e9ddf79f6c63"
     },
     "cv/index.html": {
       "bytes": 5362,
@@ -1586,7 +1586,7 @@
     "/skills/work-delivery/",
     "/system/"
   ],
-  "release_id": "060468902b65668386cf85baca41bf5ce7b0c45cb71f397965ce06d6d7e9ff4d",
+  "release_id": "c3ae691e4cabd02aa24005f16a4da5dc4057cda2a3b0531626e04dc5ad3ed472",
   "baseline_production_commit": "2872547b5925b782419ec7bf5cb0f162c1b53c3e",
   "rules_pin": {
     "schema": "wly.astro-rules-pin.v1",
@@ -3766,22 +3766,19 @@
     "/computer-access/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
-      "producer": "astro"
-    },
     "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
       "producer": "astro"
     },
     "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/": {
+    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
       "producer": "astro"
     },
     "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
       "producer": "astro"
     },
     "/404.html": {
@@ -3790,10 +3787,13 @@
     "/cockpit/stutter/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
+    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
+    "/projects/llm-backend-toolkit/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
       "producer": "astro"
     },
     "/cv/": {
@@ -4352,12 +4352,12 @@
     "html_files": 314
   },
   "previous_oss_source": "published",
-  "previous_release_id": "1c7b90321ac6431d9ac403d81228f41bd63e67aa5a9c047df59191ed0d7787b1",
+  "previous_release_id": "060468902b65668386cf85baca41bf5ce7b0c45cb71f397965ce06d6d7e9ff4d",
   "oss": {
     "schema": "wly.oss-assets.v1",
     "asset_base_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com",
-    "prefix": "releases/3fe2676c38249d0625eaa7aa58f7e113afd058cd63f98e44d78bbf9086c122f0",
-    "source_release_id": "45099906d0ba87c02abba69a7eca55f7f1205ae9ee0c2570bed79176c327861e",
+    "prefix": "releases/8e0dbbc0b9912c52f6d228e148548a8c95840abcd01a60a9a3581b29e553468d",
+    "source_release_id": "bd4bf5e0b06574060892a7c58e3ca3b73c5a1257fcace06f47014d7781efc37a",
     "objects": {
       "_album/album-1a72f07ce279b5d3fdf8.css": {
         "bytes": 4721,
@@ -4968,6 +4968,18 @@
         "source": {
           "bytes": 65046,
           "sha256": "6b9b63103b41f25e362da79b4ad12790c428d742347c0d5103dc09e38a05010c"
+        },
+        "byte_preserved": true
+      },
+      "_astro/index.astro_astro_type_script_index_0_lang.BVenaLIh.js": {
+        "bytes": 69732,
+        "sha256": "d8c339a18c43058dee77efbc59d54cbd7bda03621e0b442baf6075417c340677",
+        "key": "releases/bba772476503c61ab93f3ce15fd157c4d9a1a5fe26c9789eb7774df34d65dc20/_astro/index.astro_astro_type_script_index_0_lang.BVenaLIh.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/bba772476503c61ab93f3ce15fd157c4d9a1a5fe26c9789eb7774df34d65dc20/_astro/index.astro_astro_type_script_index_0_lang.BVenaLIh.js",
+        "content_type": "application/javascript",
+        "source": {
+          "bytes": 69732,
+          "sha256": "d8c339a18c43058dee77efbc59d54cbd7bda03621e0b442baf6075417c340677"
         },
         "byte_preserved": true
       },
@@ -29235,15 +29247,15 @@
         },
         "byte_preserved": true
       },
-      "_typeset/runtime/b2-typeset-1373a7d3a7bc78dfdcda.js": {
-        "bytes": 141085,
-        "sha256": "37a75a58740091de62bfce47f15701c47214b89664421e9a2c7f3e44a850f9d0",
-        "key": "releases/4c2ab951d83ad732d7ac6fc5bb072517f2cd540730c3577a23955751192c4af7/_typeset/runtime/b2-typeset-1373a7d3a7bc78dfdcda.js",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/4c2ab951d83ad732d7ac6fc5bb072517f2cd540730c3577a23955751192c4af7/_typeset/runtime/b2-typeset-1373a7d3a7bc78dfdcda.js",
+      "_typeset/runtime/b2-typeset-1960b299bd094f4cb6e8.js": {
+        "bytes": 141270,
+        "sha256": "42e0f947e757aeb785bb994570c5b1db0f995e1aba8799eebb51ec8df80490eb",
+        "key": "releases/586ed8f8e60d46c25b63c3934b11b3c6b515e38ae66cb494382d37f8193ee596/_typeset/runtime/b2-typeset-1960b299bd094f4cb6e8.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/586ed8f8e60d46c25b63c3934b11b3c6b515e38ae66cb494382d37f8193ee596/_typeset/runtime/b2-typeset-1960b299bd094f4cb6e8.js",
         "content_type": "application/javascript",
         "source": {
-          "bytes": 140932,
-          "sha256": "1373a7d3a7bc78dfdcdabab5893b1878661e852a06a374057fe59e3143811421"
+          "bytes": 141117,
+          "sha256": "1960b299bd094f4cb6e87a39d5f4d5e321c02ed486cc9b7e8374ba5d0b69e9f4"
         },
         "byte_preserved": false
       },
@@ -65679,6 +65691,18 @@
         },
         "byte_preserved": true
       },
+      "cockpit/stutter/assets/stutter-page-58c34f8a5e7df23b1c52.js": {
+        "bytes": 8970,
+        "sha256": "58c34f8a5e7df23b1c526280d7f5c3850cdf42ef10888af930742d6e83e5eff5",
+        "key": "releases/475f2c386dde8a2a0e9d4a1370b8fd7f77165029aacf53ef4ff9f3287c211a42/cockpit/stutter/assets/stutter-page-58c34f8a5e7df23b1c52.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/475f2c386dde8a2a0e9d4a1370b8fd7f77165029aacf53ef4ff9f3287c211a42/cockpit/stutter/assets/stutter-page-58c34f8a5e7df23b1c52.js",
+        "content_type": "application/javascript",
+        "source": {
+          "bytes": 8970,
+          "sha256": "58c34f8a5e7df23b1c526280d7f5c3850cdf42ef10888af930742d6e83e5eff5"
+        },
+        "byte_preserved": true
+      },
       "computer-access/assets/b2-controls-f2afbded2566.css": {
         "bytes": 1742,
         "sha256": "f2afbded2566e7dff956ccddd1667610dd11e589ad36be70e256cc80b9abd5e6",
@@ -68499,6 +68523,7 @@
       "releases/471efb35d37b56ac9178f085ba45b3b0921e2c0cf1fb8227379cf6a7cec35a44/assets/_fingerprinted/9908cd0f9e8c4cef4b88f5400923eb0c6f33861b14df8a3f907cad5f0710c3c2.png",
       "releases/47322b4988fbe6b67e35f99cd2d148171abfd029765e120f5976400d9501c9aa/_shared/nav-4000723935-60fd9e83fca6.webp",
       "releases/47446e28e42d6e667e4f350a2c55b23b41afec6af73f259b3f9b373d5c3d5674/_shared/footer-email.avif",
+      "releases/475f2c386dde8a2a0e9d4a1370b8fd7f77165029aacf53ef4ff9f3287c211a42/cockpit/stutter/assets/stutter-page-58c34f8a5e7df23b1c52.js",
       "releases/4779530060918c31e90adb1a9c5ede585b2c2fc5e1cf0972a4634170fb0d14c5/assets/_fingerprinted/01474b751f0ad926e5909a58311a103321c579e572685995668bcb34333f4daf.png",
       "releases/478e7c6f93ff27720f7db9ff4e60cfad5e4715a507bc7c188b70d6a5a31ac8f9/assets/_fingerprinted/7a2f6467e99f4929496315bd3b91efe1978aeb7e0a0a53de2c3d0c8a0bba1b4b.png",
       "releases/479738c54a210b6c6d44b4439d272fc79e456f247f759c5da1d214d46f47c4d7/assets/_fonts/wechat-history-ai-bridge-84d305909c50.woff2",
@@ -68575,7 +68600,6 @@
       "releases/4c0f3f47019609d0a0598762dc03cd8c2fa4d59b130b21ea8e2bddf99ee896fa/assets/_fingerprinted/7e01717807a3d582618a59de041b626f61933253097a6ef391fa0228a0ba3825.png",
       "releases/4c177ed3685ca781f53c3069ecf1dd8775756483df14d51f831be93d0c242214/assets/_fingerprinted/e2535658f393e0f484acdf555ce03e9b33814385f7bccf3c834c395ace254a13.png",
       "releases/4c264eae7c35225f73a97912883286282bc0af5d9a81e416c70e3901b603afb5/assets/_fingerprinted/16ac3e81af046e47df771e2137366613cf3de6ab03e1447793d69fc520c7fdc3.png",
-      "releases/4c2ab951d83ad732d7ac6fc5bb072517f2cd540730c3577a23955751192c4af7/_typeset/runtime/b2-typeset-1373a7d3a7bc78dfdcda.js",
       "releases/4c3228582d805a551735911cede1bd16744bfabd63229146b255f47cab8b67ee/cockpit/stutter/assets/stutter-page-240a508e760213f27f05.css",
       "releases/4c3bcaa1ed3e09680a5f1d4dbbfbbcc98fec6c46358d9307c38bef40f6ff1534/assets/_fingerprinted/ced1bd3dccfbe5ec4d7c3b064a258e0d3ab3ea0c13492e8311696dcc67eda12c.png",
       "releases/4c41a87d086e81ab85c2e1000389b06e847f02dba4e9a62524da849d8b4b9b7c/assets/_fingerprinted/c78ef39cb9fc04a3614861dec40e4648934996722b4d934a1dbb399970c70def.png",
@@ -68790,6 +68814,7 @@
       "releases/583ebc6e37f4c116f1e7876635330e00f8a8127da3bbb0547ae09d6d8976bb4f/assets/_fingerprinted/62435394f5456d6ee0f84d2d42b2d244790fbee549c08c38ea6589cd4f7c1f80.png",
       "releases/584a6dd73a18912f47dbece545d58d472fc20cf402434c1cf112fb7e3b9dda47/_typeset/codex-memory/86ada0c2f2a3f34521ec-codex-memory-01-h.png",
       "releases/584cf15fbbe6d69652bc2211fdd2bf1de673c1045df380a6bf4f7fd0d4db4363/assets/_fingerprinted/3924cefcf3aeab5351538da83cee45e41c6bb3454dd2102f43ad510802b4eafb.png",
+      "releases/586ed8f8e60d46c25b63c3934b11b3c6b515e38ae66cb494382d37f8193ee596/_typeset/runtime/b2-typeset-1960b299bd094f4cb6e8.js",
       "releases/587ca08f89ee489c98911eb87df1aa686789b3b40ff34ea8c8239274fc200d94/_living/_textures/94d3a0a5d4ce5b27ed3e329a1fda88f184d8cb9f1c1d2313b55b499c50b39292.webp",
       "releases/58828d844c346b552fd6eba649b9a18bfb79703f41db66d1e52fcf023bd1b775/_runtime/730a956f432c3afb473a/how-demo-panorama-730a956f432c3afb473a.js",
       "releases/5886f7be6b43e1ef497cca0988b14fabc199ad3a3085246806679e5912e7f09b/assets/_fingerprinted/775a33d4e50a6cefd78d14ee936ece12ffde2b37cf8972a05a0bb65b66f1bc66.png",
@@ -69803,7 +69828,6 @@
       "releases/921bac357a30669e2e4015a94889ec9e4204f9ba8196e22d657feaa2228f51c3/assets/_fingerprinted/36cb0fd9d20b6e2c86ad460dc5df714da2626567a479ebe98731f0f46ebaa824.webp",
       "releases/92208f5241708f40c3c562750d59b0e6d73d863f9962266ffebe913ec72fd17a/_living/wechat-history-ai-bridge/bird-first-only.1554a3aef453/config.json",
       "releases/922cd9334bc089fda939b0e04c662d9f81330a86c30be594902d2016aa94f026/assets/_fingerprinted/a15d23154f14d0aa414286888bb7fe9ff9614397b9b415f4e4b728012cdc90a4.png",
-      "releases/922d8f89c333ebedc11e864f84eed1e6838f42ecba3b2392b6d72406e98d361c/_astro/index.astro_astro_type_script_index_0_lang.C78ZbaAK.js",
       "releases/922e84f58440e3103d3d5406ac949f020d0b2f58a44bebb7346cdebb89ed75fb/assets/_fingerprinted/6c72e4f5952136aadb1fcb1d805ee9f717e2479bdcdc52c1646247d00706d423.png",
       "releases/9236f7c874d0af4b39794c7a58347b0eabf9adfedd350a2bb435602896ea7775/_shared/nav-4aa1a3c674-c22b631e1292.avif",
       "releases/9249d291d695d5ade64242c05141cce6cc443d7dc01de1cb7688817025abea7b/assets/_fingerprinted/724cfcaa551519d8509dcd38018ded5f817b8900396802bcfdf089e326db4118.png",
@@ -70539,6 +70563,7 @@
       "releases/bb8d0936451a81a3f8debbe5c95f6441f2e6eff36044dfd657830eff88c19166/_shared/nav-ac5fa6b95fb3.webp",
       "releases/bb8d707b8ed063cb334729422e8757b5b203c55487bfb65cb962f6b3cff849ed/assets/_fingerprinted/d371d588cdc0ca01b6d8174df0e5afd7180378f4e2a746846a3569b4aa724906.png",
       "releases/bb970f5fdb88a9498c8e54ef53e8c722ca0ba6e35128b7f4f98e65c2101241b0/assets/_fingerprinted/6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97.png",
+      "releases/bba772476503c61ab93f3ce15fd157c4d9a1a5fe26c9789eb7774df34d65dc20/_astro/index.astro_astro_type_script_index_0_lang.BVenaLIh.js",
       "releases/bbcaa576d9b180fcb61563bdfcf3d20ad2200f630ee51838bb915d34e20fa530/_typeset/runtime/live-sans-part-117-93c699868cfcc471698f.woff2",
       "releases/bbd5b450b50daefb27d647a3954ca0ab53a2e0370934748be582a359bf349d21/assets/_fingerprinted/047a33d69ba26958abd6a599d2c95a075d21f715682a13c5485618a928406af5.png",
       "releases/bbe12f822e39cde806de5304b562ab06e6af183f2993f39ac81918f9f86ef3bb/_shared/nav-fbcb5d6d6e0c.avif",
