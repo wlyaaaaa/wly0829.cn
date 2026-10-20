@@ -291,7 +291,8 @@ function mark(t, occurrence = null) { host.querySelectorAll('#layer .on').forEac
 function pick(t, scroll, occurrence = 0) {
   picked = { id: t.raw.id, occurrence }; mark(t, occurrence); const p = $('#pick'); p.hidden = false; p.dataset.taskId = t.raw.id; p.dataset.occurrence = occurrence;
   if ((['bad', 'warn', 'ai'].includes(t.flag) || t.raw.state === 'unknown') && !t.raw.project_url && t.name !== '回家收手机数据') {
-    p.innerHTML = six(M, t) + `<p>${esc(t.raw.public_message || STATE[t.flag] || '')}</p>`;
+    // 上面六格已写明状态；只有后端另给了一句公开说明才补在下面，不再重复“还不知道”之类的状态词
+    p.innerHTML = six(M, t) + (t.raw.public_message ? `<p>${esc(t.raw.public_message)}</p>` : '');
     document.dispatchEvent(new CustomEvent('today-river-selected-notice', {detail:{taskId:t.raw.id, task:t.raw, target:p}}));
   } else p.innerHTML = six(M, t);
   p.insertAdjacentHTML('beforeend', '<button type="button" data-close-pick>收起说明</button>');
