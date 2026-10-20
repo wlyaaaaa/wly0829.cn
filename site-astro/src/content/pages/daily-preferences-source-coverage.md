@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/daily-preferences-source-coverage/page.json",
-  "sha256": "f1c2674e6ced7889811d0bfd8df4d14a15230a341a4ac6e11796864d9f4654d0",
-  "converted_at_beijing": "2026-10-20T08:56:31+08:00"
+  "sha256": "964fcaed15c68578ed0c517938a3879a1acacd4883e86f3b43d524167392830e",
+  "converted_at_beijing": "2026-10-20T17:09:49+08:00"
  }
 }
 ---
@@ -1088,7 +1088,7 @@
 
 - collector_sources.py 读取 Collector 目录的 JSONL/JSON，把 events、runs、packages 三路分别导入（逻辑来源 phone_usage_events、phone_collector_runs 与 mobile_apps 清单快照）；exits/tools/sms 与 status/state/config 只保全不导入。同日日志增量去重，坏尾忽略、中间坏行记 gap；覆盖只按 completedThrough 计算。
 
-- phone_source_collect.py 下载手机原件：临时网络错误最多重试两次，同名原件并发发布时先核已发布内容，避免覆盖不同字节，失败照实返回。
+- phone_source_collect.py 读取电脑本地投递区的手机原件：在家经无线 adb 收取，出门期间先存在手机上；读取时校验内容并保留不可变版本，失败照实返回。
 
 - B 站 current（当前状态） set 先验证账号、Schema（数据结构）、range、分页、计数和成员唯一性；条件完整才局部退役本次缺失成员并让依赖推定 stale，历史与原件不删除。
 
@@ -1855,7 +1855,7 @@
 
 - **collector_sources.py**：Collector 事件、采集运行、装机清单三路导入，覆盖与坏行处理。
 
-- **phone_source_collect.py**：手机原件下载、有限重试和同名并发保护。
+- **phone_source_collect.py**：手机本地投递区读取、内容校验与不可变版本保留。
 
 ::screen{#daily-preferences-source-coverage-22 section="tech"}
 
