@@ -14,6 +14,22 @@ const naturalTerms = [
 ];
 const normalizeMeaning = (value) => naturalTerms.reduce((text, [pattern, term]) => text.replace(pattern, term), value);
 
+// search-wire:start
+const decodedSearchEntries = globalThis[Symbol.for("wly.search.decoded")] ||= new WeakMap();
+export function decodeCompactSearchEntry(entry) {
+  if (decodedSearchEntries.has(entry)) return decodedSearchEntries.get(entry);
+  const search = entry.search;
+  const value = typeof search === "string" && search.startsWith("\u0001")
+    ? { ...entry, search: search.startsWith("\u0001d")
+      ? entry.detail.replace(/[A-Z]/g, (letter) => letter.toLowerCase()) + search.slice(2)
+      : search.startsWith("\u0001s") ? search.slice(2) : search }
+    : entry;
+  decodedSearchEntries.set(entry, value);
+  decodedSearchEntries.set(value, value);
+  return value;
+}
+// search-wire:end
+
 export function createCompactSearchEntry(entry, href = entry.href) {
   const detailLimit = entry.type === "项目资产" ? 120 : entry.type === "系统组成" ? 140 : entry.type === "项目" ? 240 : 180;
   return {

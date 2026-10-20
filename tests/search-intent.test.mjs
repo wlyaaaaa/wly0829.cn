@@ -1,6 +1,14 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { compactSearchScore, createCompactSearchEntry, searchCompactEntries } from "../app/compact-search.js";
+
+test("ordinary compact entries preserve literal wire markers", () => {
+  for (const type of ["页面", "项目内容"]) {
+    const entry = { type, title: "Literal", detail: "prefix", search: "\u0001dLiteral", href: "/literal/", aliases: [] };
+    assert.equal(createCompactSearchEntry(entry).search, "\u0001dliteral");
+    assert.equal(searchCompactEntries([entry], "Literal")[0], entry);
+  }
+});
 import { globalSearchEntries, searchPanel } from "../app/search.js";
 import { canonicalPath } from "../app/site-content.js";
 

@@ -169,7 +169,7 @@
  "source": {
   "page": "sources/pages/skill-browser-control-continuity/page.json",
   "sha256": "712147e33ec96722dd47274e06091c66a1181861578ee305ebfbbbb62a1066cb",
-  "converted_at_beijing": "2026-10-20T08:56:34+08:00"
+  "converted_at_beijing": "2026-10-20T09:15:16+08:00"
  }
 }
 ---
@@ -1055,7 +1055,8 @@
      "item_rows": [
       2,
       2,
-      2,
+      1,
+      1,
       2,
       2,
       1

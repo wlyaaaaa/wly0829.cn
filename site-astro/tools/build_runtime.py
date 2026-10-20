@@ -102,6 +102,29 @@ def search_index_entry(body, snapshot, prior=None):
     if anchor is None: raise ValueError('搜索页没有可定位的项目索引入口')
     return body[:anchor] + '<script src="/search-index.js"></script>' + body[anchor:]
 
+def search_wire(rows, encode=False):
+    """Reference a repeated detail prefix without changing the search text."""
+    result = []
+    lowercase = str.maketrans('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')
+    for source in rows:
+        row = dict(source); search = row.get('search', '')
+        prefix = row.get('detail', '').translate(lowercase)
+        if encode:
+            if prefix and search.startswith(prefix): row['search'] = '\x01d' + search[len(prefix):]
+            elif search.startswith('\x01'): row['search'] = '\x01s' + search
+        elif search.startswith('\x01d'): row['search'] = prefix + search[2:]
+        elif search.startswith('\x01s'): row['search'] = search[2:]
+        result.append(row)
+    return result
+
+
+def search_wire_loader():
+    # Use the exact same decoder in the retained production client and new code.
+    source = (ROOT/'app/compact-search.js').read_text('utf8')
+    decoder = source.split('// search-wire:start\n', 1)[1].split('// search-wire:end', 1)[0].replace('export function ', 'function ')
+    return '(function(){\n' + decoder + '\nconst key="__WLY_PROJECT_SEARCH_INDEX__";if(Array.isArray(window[key]))window[key]=window[key].map(decodeCompactSearchEntry);\n})();\n'
+
+
 def sync_search(root, previous, converted, pin, changed_routes):
     replacements = {}; generated = []
     targets = {nav.route_file(route): nav.PageFacts((root / nav.route_file(route)).read_text('utf8'), root) for route in changed_routes}
@@ -134,7 +157,9 @@ def sync_search(root, previous, converted, pin, changed_routes):
     for rel in ('search-index.js', 'search-projects.js', 'search-project-localocr.js'):
         obj = previous['oss']['objects'][rel]; old = root/rel
         if not old.is_file(): seed_file(rel, old)
-        rows = nav.search_records(old.read_text('utf8')); kept = []
+        rows = nav.search_records(old.read_text('utf8'))
+        if rel == 'search-projects.js': rows = search_wire(rows)
+        kept = []
         added = [row for row in generated if (row['type'] == '项目内容') == (rel != 'search-index.js') and (rel != 'search-project-localocr.js' or row['projectSlug'] == 'localocr')]
         for row in rows:
             if row['href'].split('#')[0] not in changed_routes:
@@ -153,7 +178,8 @@ def sync_search(root, previous, converted, pin, changed_routes):
             for field in ('title', 'search', 'detail'):
                 if field in row: row[field] = row.pop(field)
         prefix = 'window.' + ('__WLY_SEARCH_INDEX__' if rel == 'search-index.js' else '__WLY_PROJECT_SEARCH_INDEX__') + '='
-        old.write_bytes((prefix + json.dumps(kept + added, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c') + ';\n').encode())
+        payload = search_wire(kept + added, encode=True) if rel == 'search-projects.js' else kept + added
+        old.write_bytes((prefix + json.dumps(payload, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c') + ';\n').encode())
         replacements[obj['url']] = '/' + rel
     # The global search client has literal index URLs; keep its code intact and
     # change only those existing resource literals, then retain its new hash.
@@ -168,6 +194,18 @@ def sync_search(root, previous, converted, pin, changed_routes):
         raw = target.read_text('utf8'); patched = raw
         for old, new in replacements.items(): patched = patched.replace(old, new)
         target.write_bytes(patched.encode()); replacements[obj['url']] = '/' + rel
+    # search_objects contains only indexes, so locate the retained client from
+    # the scripts actually loaded by /search/, rather than that smaller table.
+    loaded = [urlsplit(attrs.get('src') or attrs['data-src']).path for tag, attrs, _, _ in oss.HtmlTags(search_html).tags
+              if tag == 'script' and (attrs.get('src') or attrs.get('data-src'))]
+    for rel in read(SITE/'sources/frozen-site/manifest.json').get('assets', {}):
+        if not rel.startswith('assets/') or not rel.endswith('.js') or not any(path.endswith('/' + rel) for path in loaded): continue
+        target = root/rel
+        if not target.is_file(): seed_file(rel, target)
+        raw = target.read_text('utf8')
+        if '__WLY_SEARCH_INDEX__' in raw and '__WLY_PROJECT_SEARCH_INDEX__' in raw:
+            loader = search_wire_loader()
+            if not raw.startswith(loader): target.write_bytes((loader + raw).encode('utf8'))
     for path in (root / nav.route_file(route) for route in changed_routes):
         rel = path.relative_to(root).as_posix(); raw = path.read_bytes(); patched = raw
         applied = {old: new for old, new in replacements.items() if old.encode() in raw}

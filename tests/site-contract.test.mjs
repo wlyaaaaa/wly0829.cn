@@ -32,7 +32,7 @@ import { projectReferenceLinks, skillProjectLinks } from "../app/content-capabil
 import { globalSearchEntries, searchPanel, searchScopeForPath } from "../app/search.js";
 import { createTermAnnotator } from "../app/term-annotator.js";
 import { publicSearchText } from "../app/public-search-projection.js";
-import { createCompactSearchEntry, searchCompactEntries } from "../app/compact-search.js";
+import { createCompactSearchEntry, decodeCompactSearchEntry, searchCompactEntries } from "../app/compact-search.js";
 import {
   systemDependencyNodes,
   systemEvidenceLayers,
@@ -572,7 +572,7 @@ test("the shared enhancement and search indices stay within their measured revie
   const projectSearchAsset = await readFile(path.join(projectRoot, "dist", "search-projects.js"), "utf8");
   const projectIndexMatch = projectSearchAsset.match(/^window\.__WLY_PROJECT_SEARCH_INDEX__=([\s\S]*);\s*$/);
   assert.ok(projectIndexMatch, "all-project search index asset is invalid");
-  const compactProjectIndex = JSON.parse(projectIndexMatch[1]);
+  const compactProjectIndex = JSON.parse(projectIndexMatch[1]).map(decodeCompactSearchEntry);
   assert.ok(gzipSync(projectSearchAsset).length <= registry.refresh_policy.project_search_index_gzip_budget_kib * 1024, "all-project compact search index exceeds registry budget");
   assert.equal(compactProjectIndex.length, new Set(compactProjectIndex.map(({ type, href, title }) => JSON.stringify([type, href, title]))).size, "project search repeats a record");
   for (const page of currentPages.filter((page) => page.url?.startsWith("/projects/") && page.url !== "/projects/")) {
@@ -3913,7 +3913,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   const compactIndex = JSON.parse(indexMatch[1]);
   const projectSearchAsset = await readFile(path.join(projectRoot, "dist", "search-projects.js"), "utf8");
   const projectIndexMatch = projectSearchAsset.match(/^window\.__WLY_PROJECT_SEARCH_INDEX__=([\s\S]*);\s*$/);
-  const compactProjectIndex = JSON.parse(projectIndexMatch[1]);
+  const compactProjectIndex = JSON.parse(projectIndexMatch[1]).map(decodeCompactSearchEntry);
   assert.equal(searchCompactEntries(compactIndex, "AI 如何协助工作", "system")[0]?.group, "系统", "System compact search is not available from the shared index");
   assert.equal(searchCompactEntries(compactIndex, "以后按我的偏好推荐", "skills")[0]?.href, "/skills/daily-preferences/", "daily-preferences natural request does not reach the Skill");
   for (const node of systemDependencyNodes.filter((item) => item.searchAliases?.length)) {

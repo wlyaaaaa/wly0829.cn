@@ -980,6 +980,11 @@
         "columns": 3,
         "portrait_columns": 1,
         "last_row": "fill",
+        "row_counts": [
+          1,
+          3
+        ],
+        "fill_first_row": true,
         "illustration": "left_inside",
         "icons": "auto",
         "status_position": "top_right",

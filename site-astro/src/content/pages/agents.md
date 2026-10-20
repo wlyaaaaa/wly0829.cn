@@ -942,7 +942,7 @@
  "source": {
   "page": "sources/pages/agents/page.json",
   "sha256": "424b6c191a9a614607aa23987828a1ba577656766d1cb141928667b4b9a4fedb",
-  "converted_at_beijing": "2026-10-20T08:56:31+08:00"
+  "converted_at_beijing": "2026-10-20T09:15:16+08:00"
  }
 }
 ---
@@ -3918,6 +3918,11 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
      "columns": 3,
      "portrait_columns": 1,
      "last_row": "fill",
+     "row_counts": [
+      1,
+      3
+     ],
+     "fill_first_row": true,
      "illustration": "left_inside",
      "icons": "auto",
      "status_position": "top_right",

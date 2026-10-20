@@ -11,6 +11,15 @@ spec = importlib.util.spec_from_file_location('astro_search_tests', ROOT/'site-a
 runtime = importlib.util.module_from_spec(spec); spec.loader.exec_module(runtime)
 
 class AstroSearchTests(unittest.TestCase):
+    def test_wire_roundtrip_preserves_unicode_and_literal_markers(self):
+        rows = [{'detail': '😀ABCΣ', 'search': value} for value in ('😀abcΣtail', '\x01dliteral😀', '\x01sliteral', '')]
+        wire = runtime.search_wire(rows, encode=True)
+        self.assertEqual(runtime.search_wire(wire), rows)
+        self.assertEqual(runtime.search_wire(runtime.search_wire(wire), encode=True), wire)
+        code = 'globalThis.window={__WLY_PROJECT_SEARCH_INDEX__:' + json.dumps(wire) + '};' + runtime.search_wire_loader()
+        code += runtime.search_wire_loader() + 'console.log(JSON.stringify(window.__WLY_PROJECT_SEARCH_INDEX__));'
+        self.assertEqual(json.loads(runtime.subprocess.check_output(['node', '-e', code], encoding='utf8')), rows)
+
     def test_refresh_replaces_in_place_removes_stale_and_appends_new(self):
         with tempfile.TemporaryDirectory() as workspace:
             root = Path(workspace); route = '/projects/localocr/'

@@ -1,7 +1,7 @@
 import "../app/style.css";
 import "../app/computer-access-header.css";
 import "../app/personal-media-gallery.css";
-import { searchCompactEntries, searchResultExcerpt } from "../app/compact-search.js";
+import { decodeCompactSearchEntry, searchCompactEntries, searchResultExcerpt } from "../app/compact-search.js";
 import "../app/continuation-brief.css";
 import { initializeContinuationBriefs } from "../app/continuation-brief.js";
 
@@ -13,7 +13,7 @@ if (document.querySelector("[data-access-summary]")) import("../app/computer-acc
 
 const searchEntries = [
   ...(Array.isArray(window.__WLY_SEARCH_INDEX__) ? window.__WLY_SEARCH_INDEX__ : []),
-  ...(Array.isArray(window.__WLY_PROJECT_SEARCH_INDEX__) ? window.__WLY_PROJECT_SEARCH_INDEX__ : [])
+  ...(Array.isArray(window.__WLY_PROJECT_SEARCH_INDEX__) ? window.__WLY_PROJECT_SEARCH_INDEX__.map(decodeCompactSearchEntry) : [])
 ];
 function initializeSearch(container) {
   const input = container.querySelector("input");
