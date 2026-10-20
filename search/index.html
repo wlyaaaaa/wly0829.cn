@@ -364,8 +364,25 @@
     
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfilePage","name":"吴乐阳","url":"https://wly0829.cn/","mainEntity":{"@type":"Person","name":"吴乐阳","sameAs":["https://github.com/wlyaaaaa","https://x.com/wlyaaaaaaa","https://space.bilibili.com/179179701"]}}</script>
     <script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/a8d2d831d2c4738e624fa55ee53a362ecf889813f391a840a146a60f23ea8cd5/_runtime/8465bc86a1a2c30cdc04/how-demo-search-8465bc86a1a2c30cdc04.js" data-resource-retry-initial="1"></script>
-    <script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2bd26c18be1e0f408e3a37ca65471caedc0a8d4337d49e949a933a8bcb6e1f0c/search-index.js"></script><script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/e229135eaa918ee3d06d98f5216e6c62b09eefff9a8655d63c50dfff1ba9e232/search-projects.js" data-resource-retry-initial="1"></script>
-    <script type="module" crossorigin  data-album-runtime data-src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/6cca073a8b59ebdd20b46ba009c34a4db861d3daea5977703fb338a47a86da63/assets/index-audit-nav-dc91cac753f20e2e4100.js"></script>
+    <script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/a00f8277730fb5bb83f326e5af353631f3feda1a6bec3d22b7b9fd1ed221b44d/search-index.js"></script><script src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/91ea499dd01eb1d8563a1480bca5133e30a11ab013ae216cbd8e372a83b755c8/search-projects.js" data-resource-retry-initial="1"></script>
+    <script data-search-wire>(function(){
+const decodedSearchEntries = globalThis[Symbol.for("wly.search.decoded")] ||= new WeakMap();
+function decodeCompactSearchEntry(entry) {
+  if (decodedSearchEntries.has(entry)) return decodedSearchEntries.get(entry);
+  const search = entry.search;
+  const value = typeof search === "string" && search.startsWith("\u0001")
+    ? { ...entry, search: search.startsWith("\u0001d")
+      ? entry.detail.replace(/[A-Z]/g, (letter) => letter.toLowerCase()) + search.slice(2)
+      : search.startsWith("\u0001s") ? search.slice(2) : search }
+    : entry;
+  decodedSearchEntries.set(entry, value);
+  decodedSearchEntries.set(value, value);
+  return value;
+}
+
+const key="__WLY_PROJECT_SEARCH_INDEX__";if(Array.isArray(window[key]))window[key]=window[key].map(decodeCompactSearchEntry);
+})();
+</script><script type="module" crossorigin  data-album-runtime data-src="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/6cca073a8b59ebdd20b46ba009c34a4db861d3daea5977703fb338a47a86da63/assets/index-audit-nav-dc91cac753f20e2e4100.js"></script>
     <link rel="stylesheet" crossorigin href="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/3b61d88abc93d5d6c0fe966149d723831908f8847aa7a561eca0bd3b2d0100c7/_runtime/b7c6490c171a16672cb4/index-C6w07o1G.css" data-resource-retry-stylesheet="1">
       
   <title>搜索｜吴乐阳</title><link rel="canonical" href="https://wly0829.cn/search/"><meta name="description" content="按项目、系统、规则、Skills 或当前项目作用域查看完整搜索结果。"><meta property="og:type" content="website"><meta property="og:title" content="搜索｜吴乐阳"><meta property="og:description" content="按项目、系统、规则、Skills 或当前项目作用域查看完整搜索结果。"><meta property="og:url" content="https://wly0829.cn/search/"><meta property="og:image" content="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/fc73db77d972b7296204b0935025ce28ee943fbc05e91178ba1c2adc72bdafc4/assets/home-01-h-fallback640-cc8b2ccf8653.webp"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="搜索｜吴乐阳"><meta name="twitter:description" content="按项目、系统、规则、Skills 或当前项目作用域查看完整搜索结果。"><meta name="twitter:image" content="https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/fc73db77d972b7296204b0935025ce28ee943fbc05e91178ba1c2adc72bdafc4/assets/home-01-h-fallback640-cc8b2ccf8653.webp">
