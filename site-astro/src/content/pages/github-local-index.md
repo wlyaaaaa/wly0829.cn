@@ -411,7 +411,7 @@
      "how": "已搬走",
      "status": "已停用",
      "screen": "github-local-index-10",
-     "source": "04_计划任务/用户自动化任务治理建议.md；刷新日志最后一次 user automation map 在 8 月 21 日（本机时间）"
+     "source": "Git 历史提交 e2ccb3712acc6c50665935bc50c11c0e08699c3e；刷新日志最后一次 user automation map 在 8 月 21 日（本机时间）"
     }
    ],
    "numbers": [
@@ -778,8 +778,8 @@
  },
  "source": {
   "page": "sources/pages/github-local-index/page.json",
-  "sha256": "4dad3d3b2456a5d0019b09cc00bf2324febf0525ad98bd385bd61819e67a2ec7",
-  "converted_at_beijing": "2026-10-20T08:56:32+08:00"
+  "sha256": "8269703e3c97640f46b3d67c53214971f6aff02d5fb80e331fee24939ca80862",
+  "converted_at_beijing": "2026-10-20T18:50:53+08:00"
  }
 }
 ---
