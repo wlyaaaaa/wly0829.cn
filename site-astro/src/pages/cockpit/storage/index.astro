@@ -1,0 +1,56 @@
+---
+import Site from '../../../layouts/Site.astro';
+import '../../../cockpit/cockpit.css';
+---
+<Site title="存储占用与增长" kind="cockpit" url="/cockpit/storage/" page="cockpit-storage" toc={[]}>
+  <div class="cp-page storage-page">
+    <p><a href="/cockpit/#computer">← 回驾驶舱·电脑</a></p>
+    <h1>存储占用与增长</h1>
+    <p>看看 AI 临时文件、对话记录、数据库和备份用了多少地方，近一周有没有持续挤占磁盘。</p>
+    <p>可重建的 AI 产物由既有维护入口按下表规则清理；异常交给驾驶舱“AI 在跟”的现有故障处理流程。本人原件、未归位的本人原话和唯一备份不自动清理。</p>
+    <button class="cp-btn" type="button" id="storage-refresh">重读状态</button>
+    <p id="storage-status" role="status">尚未读到在线采样，下面没有当前读数。</p>
+    <p class="storage-notes">容量单位为 GiB（1 GiB = 1,073,741,824 字节），时间为北京时间。嵌套类别可能重叠，不可相加；手机上可横向滑动查看全部列。</p>
+    <div class="storage-table" role="region" aria-label="各类别存储统计，可横向滚动" tabindex="0">
+      <table><caption>各类别存储采样</caption>
+        <thead><tr><th scope="col">类别</th><th scope="col">占用</th><th scope="col">近 7 天净变化</th><th scope="col">谁清与保留规则</th><th scope="col">状态</th><th scope="col">采样时间</th></tr></thead>
+        <tbody id="storage-rows"><tr><td colspan="6">尚无可显示的在线采样。重读失败时不以旧数代替当前状态。</td></tr></tbody>
+      </table>
+    </div>
+    <noscript><p>需要启用 JavaScript 才能读取电脑的在线采样；本页没有预置的当前读数。</p></noscript>
+  </div>
+</Site>
+<style>
+  .storage-page h1 { color:var(--cp-title);font-size:clamp(26px,4vw,36px);line-height:1.3 } .storage-notes { color:var(--cp-soft);font-size:15px }
+  .storage-table { overflow-x:auto;border:1px solid var(--cp-line);border-radius:12px;margin:20px 0 }
+  table { border-collapse:collapse;width:100%;min-width:980px;text-align:left;font-size:15px } caption { padding:12px;text-align:left;color:var(--cp-soft) }
+  th,td { padding:12px 14px;border-top:1px solid var(--cp-line);vertical-align:top;overflow-wrap:anywhere } th { background:#f1faf4 } td:nth-child(4) { min-width:230px } td:nth-child(6) { min-width:150px }
+</style>
+<script>
+  const rows = document.getElementById('storage-rows'), note = document.getElementById('storage-status'), button = document.getElementById('storage-refresh');
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const size = (n) => Number.isFinite(n) && n >= 0 ? (n / 1073741824).toLocaleString('zh-CN', {maximumFractionDigits:2}) + ' GiB' : '未知';
+  const time = (s) => Number.isFinite(Date.parse(s)) ? new Date(s).toLocaleString('zh-CN', {timeZone:'Asia/Shanghai', hour12:false}) : '时间未知';
+  const endpoints = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname) ? ['/__status?view=cockpit'] : ['https://live.wly0829.cn/computer-access/state?view=cockpit', 'https://mcp.wly0829.cn/computer-access/api/status?view=cockpit'];
+  async function load() {
+    button.disabled = true;
+    try {
+      let data;
+      for (const url of endpoints) { try { const r = await fetch(url, {cache:'no-store', credentials:'omit', signal:AbortSignal.timeout(12000)}); if (!r.ok) continue; const d = (await r.json()).storage_pressure; if (d?.schema === 'pcconfig.ai-storage-pressure.v1' && Array.isArray(d.categories) && d.categories.length) { data = d; break; } } catch {} }
+      if (!data) throw new Error('unavailable');
+      const age = Date.now() - Date.parse(data.observed_at), fresh = Number.isFinite(age) && age >= -60000 && age <= 7200000;
+      note.textContent = fresh ? `采样于 ${time(data.observed_at)}；显示采样时的状态。` : `采样已过期或时间无法确认（${time(data.observed_at)}），下表仅作历史参考，不代表当前异常。`;
+      rows.innerHTML = data.categories.map(c => {
+        const complete = c.complete === true && Number.isFinite(c.bytes) && c.bytes >= 0;
+        const used = complete ? size(c.bytes) : `${Number.isFinite(c.partial_bytes) && c.partial_bytes >= 0 ? '≥ ' + size(c.partial_bytes) : '未知'}（统计不完整）`;
+        const growth = c.baseline_at && Number.isFinite(c.weekly_growth_bytes) ? `${c.weekly_growth_bytes > 0 ? '+' : c.weekly_growth_bytes < 0 ? '−' : ''}${size(Math.abs(c.weekly_growth_bytes))}；对比 ${time(c.baseline_at)}` : '尚无可比快照';
+        const status = c.alert === null ? (complete ? '未触发阈值' : '统计不完整') : ({budget:'超过容量预算，AI 处理', weekly_growth:'一周增长异常，AI 处理', measurement_incomplete:'统计不完整，AI 核对'}[c.alert] || '状态未知');
+        const cells = [c.label, `${used}；预算 ${size(c.budget_bytes)}`, `${growth}；周增长阈值 ${size(c.growth_limit_bytes)}`, c.retention_zh || '规则未读到', `${fresh ? '' : '历史采样：'}${status}`, time(data.observed_at)];
+        return '<tr>' + cells.map(s => `<td>${esc(s)}</td>`).join('') + '</tr>';
+      }).join('');
+    } catch { rows.innerHTML = '<tr><td colspan="6">当前读不到在线采样，不能判断占用和增长。稍后可重读状态。</td></tr>'; note.textContent = '在线数据不可用；没有把旧读数作为当前状态。'; }
+    finally { button.disabled = false; }
+  }
+  button.addEventListener('click', load);
+  load();
+</script>
