@@ -3,8 +3,8 @@
 status: passed-local-ready-for-publication
 publication: authorized-existing-public-main
 observed_at: 2026-10-20
-artifact_source_commit: 7739b5137c4db59d8abbb11e9a6c7e53b921ae44
-artifact_release_id: d363e251436821247847034a64144286c1f6fd2e2ed657e32c4a12663e2ec33e
+artifact_source_commit: 65dfa22e1eea63c694e11b87e248df488f3b038e
+artifact_release_id: 25418ba20dbb420d51930d9f2eaf5019367fa7cccadc5a380d67a2bedb6eaea4
 
 本轮修复刷新作者源、页面元信息、首页成果图、驾驶舱数据传输和深读查询，并删除已退役的 React 渲染链与被原生页接管的冻结正文。没有借架构修复重新宣称所有业务数字都在今天观察。首页仅允许既有“这套东西办过的事”图随引用数字重新生成，其他首页内容保持锁定。
 
@@ -14,7 +14,7 @@ artifact_release_id: d363e251436821247847034a64144286c1f6fd2e2ed657e32c4a12663e2
 - 正常可收录页有摘要、Open Graph 和 Twitter 标题；去向页与 noindex 页保持例外。独立卡顿模板补齐同组标签和既有站标，首屏没有插画时使用现有 PNG 标识。
 - 旧 React 正文、无生产消费者的快照链、根 React/Vite 依赖和旧包文案测试已删除；app 只保留三个现有生产消费者仍需的小文件。176 份已被原生页接管的冻结正文已删除，33 份仍上线的冻结正文保留；不以此删除资源。
 - 驾驶舱直接使用精简视图，移除全量适配；Edge 直接读写 CompressionStream 并统一 ArrayBuffer/视图分片，重新 gzip 压缩解码后的正文；压缩异常保留已有原文并给出诊断头，保持现有 no-store、CORS、查询白名单与 HEAD 语义。深读查询从 since−30 分钟的精确时间点开始，单次 SLS 25 秒且不叠普通模式重试。
-- 合入 main 已接收的存储页、个人理解库作者源说明和总索引技术引用更新。旧 React 副本的 modify/delete 冲突按退役处理，新作者源及其当前 Markdown 更新均保留；总索引 Markdown 由既有转换器同步。
+- 合入 main 已接收的存储页、个人理解库作者源说明、总索引技术引用、自启动变化提示，以及机器事实等六页的技术来源更正。旧 React 副本的 modify/delete 冲突按退役处理，新作者源及其当前 Markdown 更新均保留；总索引 Markdown 由既有转换器同步。
 - 卡顿页无事项、尚未取到状态或读取失败时，复制按钮仍禁用，并以原有文案提供 aria-description；没有改变可复制范围或扫描标准。
 
 ## 验证
@@ -30,4 +30,4 @@ artifact_release_id: d363e251436821247847034a64144286c1f6fd2e2ed657e32c4a12663e2
 
 ## 发布边界
 
-使用既有 publish_site.py 入口预演、正常推送、OSS/Pages 发布及公网逐项回读。保留本轮既有 OSS 对象与回滚资源，使用 --skip-retention，不扩大本单正文退役到云资源清理。EdgeOne 函数由 main 的既有工作流单独更新；GitHub 成功不能代替公网 gzip 实测或平台记录。实际发布身份、工作流、回读与证据缺口由本轮任务报告和 publish-receipt.json 给出，本页记录已完成的本地验收。搜狗最终分包修复后的全部 HTML 哈希与上一轮一致，沿用已核实浏览器场景，最后一次扫描核对完整成品哈希并继承 312 个已验收路由。
+使用既有 publish_site.py 入口预演、正常推送、OSS/Pages 发布及公网逐项回读。保留本轮既有 OSS 对象与回滚资源，使用 --skip-retention，不扩大本单正文退役到云资源清理。EdgeOne 函数由 main 的既有工作流单独更新；GitHub 成功不能代替公网 gzip 实测或平台记录。Edge gzip 已由公网完整解压为有效精简 JSON 验证，手机宽度公开驾驶舱约 59.2 秒的两次自动读取均为 200/gzip，深读两个自然轮通过。实际发布身份、工作流、回读与证据缺口由本轮任务报告和 publish-receipt.json 给出，本页记录已完成的本地验收。搜狗最终分包修复后继续保留并验证并行 main 的最新改动；原页面和资源字节未变时继承已核实场景，变化页面按同一扫描入口复查，最终扫描绑定完整成品哈希。

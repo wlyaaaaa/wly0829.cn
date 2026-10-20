@@ -374,8 +374,8 @@
      "id": "r-pcconfig-card",
      "with": "pcconfig",
      "direction": "被登记",
-     "flow": "项目卡登记入口、验证命令和恢复记录路径；换电脑只从 Git 恢复程序，不带恢复记录和旧代理值",
-     "source": "PCConfig registries/project_cards.json（project_id proxy_clean）"
+     "flow": "恢复锚点登记入口、验证命令和恢复记录路径；换电脑只从 Git 恢复程序，不带恢复记录和旧代理值",
+     "source": "PCConfig registries/project_restore_anchors.json（ProxyClean）；GitHub 总索引 config/repository-paths.json（仓库导航快照）"
     },
     {
      "id": "r-tailscale-entries",
@@ -475,8 +475,8 @@
  },
  "source": {
   "page": "sources/pages/proxyclean/page.json",
-  "sha256": "70170e6820d50c3c50219ba58d3e4b397c3501e3cb7a9f41496d08d05136c493",
-  "converted_at_beijing": "2026-10-12T05:03:48+08:00"
+  "sha256": "590fd82475020bdda7ea9d1ddeb8b967e66acc6307ae96ae3a42be3313c327aa",
+  "converted_at_beijing": "2026-10-20T19:34:00+08:00"
  }
 }
 ---

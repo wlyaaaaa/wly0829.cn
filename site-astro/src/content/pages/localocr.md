@@ -536,7 +536,7 @@
      "with": "pcconfig",
      "direction": "被登记",
      "flow": "项目路径、端口 18665、恢复锚点、换机时按来源重下模型",
-     "source": "PCConfig registries/projects.json、project_restore_anchors.json、core_recovery.json、wsl_user_data_backup.json"
+     "source": "PCConfig registries/project_restore_anchors.json、core_recovery.json、wsl_user_data_backup.json；GitHub 总索引 config/repository-paths.json（仓库导航快照）"
     },
     {
      "id": "r-ollama",
@@ -632,8 +632,8 @@
  },
  "source": {
   "page": "sources/pages/localocr/page.json",
-  "sha256": "1af63cfdd0a44fd93df69f752be6c78632af63e3232a27fa144722ec8028675e",
-  "converted_at_beijing": "2026-10-20T08:59:21+08:00"
+  "sha256": "533297010df3700a3f0592ba3e9b00cf3f39ee501cc4e8e019c589233ea1e358",
+  "converted_at_beijing": "2026-10-20T19:34:00+08:00"
  }
 }
 ---
