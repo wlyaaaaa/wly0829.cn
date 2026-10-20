@@ -4,7 +4,7 @@ import { gunzipSync } from 'node:zlib';
 import onRequest from '../edge/edgeone/edge-functions/[[path]].js';
 
 test('cockpit edge recompresses decoded JSON and respects gzip negotiation', async () => {
-  const original = globalThis.fetch, payload = JSON.stringify({ schema: 'pcconfig.cockpit-view.v1', items: Array(2000).fill('虚构状态') });
+  const original = globalThis.fetch, payload = JSON.stringify({ schema: 'pcconfig.cockpit-view.v1', items: Array(30000).fill('虚构状态') });
   let forwarded;
   globalThis.fetch = async (url) => {
     forwarded = url;
@@ -35,6 +35,20 @@ test('cockpit edge recompresses decoded JSON and respects gzip negotiation', asy
       assert.equal(await fallback.text(), payload);
       assert.equal(fallback.headers.get('Content-Encoding'), null);
       assert.equal(fallback.headers.get('X-Compression-Result'), 'identity');
+    } finally { globalThis.CompressionStream = originalCompression; }
+    try {
+      globalThis.CompressionStream = class {
+        constructor(format) {
+          const stream = new originalCompression(format), reader = stream.readable.getReader();
+          this.writable = stream.writable;
+          this.readable = { getReader: () => ({ read: async () => {
+            const part = await reader.read(), value = part.value;
+            return part.done ? part : { done: false, value: value.buffer.slice(value.byteOffset, value.byteOffset + value.byteLength) };
+          } }) };
+        }
+      };
+      const bufferChunks = await onRequest({ request: new Request('https://live.wly0829.cn/computer-access/state', { headers: { 'Accept-Encoding': 'gzip' } }) });
+      assert.equal(gunzipSync(Buffer.from(await bufferChunks.arrayBuffer())).toString(), payload);
     } finally { globalThis.CompressionStream = originalCompression; }
   } finally { globalThis.fetch = original; }
 });
