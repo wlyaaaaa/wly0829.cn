@@ -33,14 +33,17 @@ class NoCascadeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, '项目索引入口'):
             build_runtime.search_index_entry('<script>window.note="search-projects.js"</script>', {})
 
-    def test_cold_frozen_search_only_adds_the_declared_index_entry(self):
+    def test_cold_frozen_search_only_changes_declared_search_entries(self):
         snapshot = build_runtime.read(ROOT/'site-astro/sources/frozen-site/manifest.json')
         body = (ROOT/'site-astro/sources/frozen-site/pages/search/index.html').read_bytes().decode('utf8')
         before = build_runtime.transport.localize(body, snapshot)
         after = build_runtime.search_index_entry(before, snapshot)
         addition = '<script src="/search-index.js"></script>'
         self.assertEqual(after.count(addition), 1)
-        self.assertEqual(after.replace(addition, '', 1), before)
+        shared = 'data-src="/assets/index-audit-nav-dc91cac753f20e2e4100.js"'
+        isolated = 'data-src="/assets/search-wire-index-audit-nav-dc91cac753f20e2e4100.js"'
+        self.assertEqual(before.count(shared), 1)
+        self.assertEqual(after.replace(addition, '', 1), before.replace(shared, isolated, 1))
         self.assertEqual(build_runtime.search_index_entry(after, snapshot), after)
 
     def test_body_and_search_change_leave_home_and_other_page_identical(self):
