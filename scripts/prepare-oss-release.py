@@ -35,8 +35,9 @@ MANIFEST = 'release-manifest.json'
 PLAN = 'oss-plan.json'
 # These files describe the HTML host rather than page content. Moving robots or
 # the sitemap to OSS would change crawler behavior; CNAME/.nojekyll are Pages
-# controls. The release manifest remains the existing online recovery entry.
-HOST_CONTROLS = {MANIFEST, 'CNAME', '.nojekyll', 'robots.txt', 'sitemap.xml'}
+# controls. Search ownership TXT must also remain at the site's root.
+# The release manifest remains the existing online recovery entry.
+HOST_CONTROLS = {MANIFEST, 'CNAME', '.nojekyll', 'robots.txt', 'sitemap.xml', 'sogousiteverification.txt'}
 TEXT_ASSETS = {'.js', '.mjs', '.css', '.svg', '.json', '.webmanifest'}
 STRINGS = re.compile(r'(?P<quote>["\'`])(?P<value>(?:\\.|(?!(?P=quote)).)*)(?P=quote)', re.S)
 TAG = re.compile(r'<[^>]+>', re.S)
@@ -315,7 +316,8 @@ def verify_manifest(manifest, require_remote=True):
     for rel, obj in objects.items():
         if rel.startswith('/') or '\\' in rel or any(x in ('', '.', '..') for x in rel.split('/')):
             raise ValueError('Invalid OSS object path: ' + rel)
-        if rel in files or rel.endswith('.html') or rel in HOST_CONTROLS:
+        # Keep existing, wrongly split Sogou publications readable as predecessors.
+        if rel in files or rel.endswith('.html') or rel in HOST_CONTROLS - {'sogousiteverification.txt'}:
             raise ValueError('OSS object overlaps HTML-host inventory: ' + rel)
         key = obj.get('key', '')
         validate_target(base, key[:-len(rel)-1])
@@ -873,7 +875,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
         if predecessor and predecessor.get('oss'):
             previous = verify_manifest(predecessor)
     rewriter.retained = {rel: obj for rel, obj in previous['oss']['objects'].items()
-        if rel in actual and previous['oss']['asset_base_url'] == base and obj.get('source') == actual[rel]} if previous else {}
+        if rel in rewriter.assets and previous['oss']['asset_base_url'] == base and obj.get('source') == actual[rel]} if previous else {}
     if offline:
         previous_oss = source_manifest.get('previous_oss', {})
         if previous_oss.get('asset_base_url') == base:

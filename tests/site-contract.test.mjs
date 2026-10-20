@@ -54,4 +54,7 @@ test('search ownership verification files survive the complete build', async () 
   for (const name of ['baidu_verify_codeva-DRgaQnAmTK.html', 'sogousiteverification.txt']) {
     assert.deepEqual(await readFile(path.join(root, 'dist', name)), await readFile(path.join(root, 'public', name)), name);
   }
+  const manifest = JSON.parse(await readFile(path.join(root, 'dist/release-manifest.json'), 'utf8'));
+  assert.ok(manifest.files['sogousiteverification.txt'], 'Sogou ownership TXT must be a root Pages file');
+  assert.ok(!manifest.oss.objects['sogousiteverification.txt'], 'Sogou ownership TXT must not be split to OSS');
 });
