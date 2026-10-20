@@ -82,13 +82,61 @@ class RetrievalTests(unittest.TestCase):
             ("tool", now - timedelta(hours=1)), ("skill", now + timedelta(days=1)))]
         path = self.root / "events.jsonl"
         path.write_text("\n".join(json.dumps(e) for e in events), encoding="utf-8")
+        for ai in ("codex", "claude"):
+            path.with_name(f"state-{ai}.json").write_text(json.dumps({"bootstrap_complete": True,
+                "last_completed": (now + timedelta(minutes=1)).isoformat()}), encoding="utf-8")
         entry = {"path": str(path), "format": "jsonl", "key_field": "name", "time_field": "ts",
                  "filter": {"kind": "skill"}, "read_only": True, "owner_project": "agents"}
         methods = [{"kind": "usage_ledger", "key": "materials", "operation": op} for op in ("count_7d", "last_time")]
         with patch.object(Path, "open", autospec=True, side_effect=Path.open) as read:
             self.assertEqual(refresh.retrieve_batch(methods, self.root, {LEDGER: entry}, 10),
                              [1, (now - timedelta(hours=2)).isoformat(timespec="seconds")])
-            self.assertEqual(read.call_count, 1)
+            self.assertEqual(read.call_count, 3)  # 两路水位各一次，账本仍只扫描一次。
+
+    def test_incomplete_ledger_cannot_refresh_numbers_dates_or_display_entry(self):
+        now = datetime.now(refresh.BEIJING)
+        path = self.root / "events.jsonl"
+        path.write_text(json.dumps({"name": "demo", "ts": now.isoformat()}), encoding="utf-8")
+        method = {"kind": "usage_ledger", "key": "demo", "operation": "count_7d"}
+        entries = {LEDGER: {"path": str(path), "read_only": True, "owner_project": "demo"},
+                   "display": dict(self.entry, requires_usage_ledger=True)}
+        page = self.root / "sources/pages/demo/page.json"
+        page.parent.mkdir(parents=True)
+        page.write_text(json.dumps({"page": "demo", "screens": [{"id": "top",
+            "text": "3 次；截至 2026-10-01"}]}), encoding="utf-8")
+        number = dict(id="n", page="demo", screen="top", label="用量", automatic=True,
+                      scope_status="verified", as_of="2026-10-01", source_location="合成账本",
+                      page_pattern=r"(3) 次", retrieve=method)
+        cutoff = dict(number, id="d", page_pattern=r"截至 (2026-10-01)", qualifies=["n"])
+        for bad in (None, {"bootstrap_complete": False, "last_completed": now.isoformat()},
+                    {"bootstrap_complete": True, "last_completed": "bad"},
+                    {"bootstrap_complete": True, "last_completed": now.replace(tzinfo=None).isoformat()},
+                    {"bootstrap_complete": True, "last_completed": now.replace(hour=0, minute=0, second=0).isoformat()}):
+            for ai in ("codex", "claude"):
+                state = bad if ai == "claude" else {"bootstrap_complete": True,
+                    "last_completed": (now + timedelta(minutes=1)).isoformat()}
+                state_path = path.with_name(f"state-{ai}.json")
+                if state is None:
+                    state_path.unlink(missing_ok=True)
+                else:
+                    state_path.write_text(json.dumps(state), encoding="utf-8")
+            values = refresh.retrieve_batch([method], self.root, entries, 10)
+            self.assertIn("Unknown", values[0]["error"])
+            with patch.object(refresh, "bounded", return_value=json.dumps(values)):
+                result = refresh.collect(self.root, {"records": [number, cutoff]}, entries=entries)
+            self.assertTrue(all(r["status"] == "unavailable" and r["new_value"] is None for r in result["rows"]))
+            from apply_edits import build_number_edits
+            self.assertEqual(build_number_edits(self.root, result)["edits"], [])
+            self.assertEqual(result["rows"][1]["old_value"], "2026-10-01")
+            with patch.object(refresh, "bounded") as command:
+                display = refresh.retrieve_batch([{"kind": "entry", "entry": "display"}], self.root, entries, 10)
+            command.assert_not_called()
+            self.assertIn("Unknown", display[0]["error"])
+        for ai in ("codex", "claude"):
+            path.with_name(f"state-{ai}.json").write_text(json.dumps({"bootstrap_complete": True,
+                "last_completed": now.isoformat()}), encoding="utf-8")
+        with self.assertRaises(ValueError):
+            refresh.require_ledger_coverage(entries[LEDGER], self.root, now)
 
     def test_parallel_sources_and_qualifies_unknown_preserves_date(self):
         page_path = self.root / "sources/pages/demo/page.json"

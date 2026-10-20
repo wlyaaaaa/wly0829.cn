@@ -31,7 +31,9 @@ SQLite 以 URI `mode=ro` 打开，只接受一条 select 和单行单列结果�
 `{"path":"E:/已核实账本.jsonl","format":"jsonl","key_field":"key","time_field":"used_at","read_only":true,"owner_project":"agents"}`。
 也支持 `format=json` 的数组，或用 `pointer` 指定数组；字段支持点分路径。
 登记或 retrieve 的 `filter` 是字段相等筛选（例如 `{"kind":"skill"}`），防止同名工具与技能混计。每行是一次使用；`count_7d` 数当前观察时刻前七天内相同 key 的行，
-`last_time` 返回相同 key 的最后时间。账本停写另标 source_broken，不能把统计结果当仍在写。
+`last_time` 返回相同 key 的最后时间。读取前核对账本旁两路 `state-codex.json` / `state-claude.json`：均须 `bootstrap_complete=true` 且排他水位 `last_completed` 晚于观察时刻；缺失、损坏或覆盖不足返回 Unknown，不生成改数或推进关联截至。仅读到当天零点仍不能声称当前滚动七天完整。账本停写另标 source_broken。
+普通入口若也从该账本生成当前用量文案，登记 `requires_usage_ledger=true`，执行前共用上述覆盖检查。
+项目 `page_count` 仅数启用项目身份对应的无 `parent` 顶级页，保留 `kinds/status/public` 过滤；无类型限制的页数仍统计全部作者输入。
 
 截至日期记录使用 `qualifies:["数字记录id",...]`，不用独立 retrieve，
 仍须通过 field/page_pattern 绑定实际日期。只有所有被注明数字均取得同口径新值时，

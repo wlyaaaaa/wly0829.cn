@@ -15,6 +15,13 @@ PAST = re.compile(r'曾经|当时|此前|旧版|原先|以前|退役|停用|冻�
 NUMBER = re.compile(r'(?<![A-Za-z0-9_.])\d[\d,]*(?:\.\d+)?(?![\d._])')
 WORDS = {'text', 'title', 'caption', 'name', 'tagline', 'label', 'value', 'number', 'description', 'status', 'nav_title'}
 BLOCK = {'interface-url', 'commit-id', 'terminal-menu', 'fixed-rule-version', 'count-mismatch'}
+SKILL_COUNT = re.compile(r'(?<!\d)(\d+)\s*个\s*(?:在用的\s*)?(个人\s*|插件\s*)?技能|(?:(个人|插件)\s*)?技能(?:有|共|一共|合计|总共|总计)\s*(\d+)\s*个?')
+
+
+def _scoped_skill_count(text, matched):
+    # 安装来源子集不能与网站全部详情页比较；后面的独立合计仍会被检查。
+    return bool(matched[2] or matched[3] or re.search(
+        r'(?:个人|插件|安装|供应|供给|源码|目录)[^。！？；，,\n\d]{0,20}$', text[:matched.start()]))
 
 def _copy(value, field=''):
     """Whitelist rendered words, excluding paths, URLs, scene and metadata."""
@@ -73,6 +80,8 @@ def audit_pages(pages_root: Path, today: date | None = None, retired_names=(), i
             findings.append(dict(page=page, screen=first.get('id', ''), field='title', line=1, code='retired-current-entry', tier='block', excerpt=str(data.get('title', ''))[:220], message='已退役入口仍登记为现行页，核对去向，不自动删'))
         for number in data.get('registry', {}).get('numbers', []) if data.get('page') in {'skills-home', 'agents'} else []:
             matched = re.match(r'\s*(\d+)\s*个', number.get('text', '')) if number.get('id') == 'n-skills' else None
+            if re.search(r'个人|插件|安装|供应|供给', number.get('meaning', '') + number.get('text', '')):
+                continue
             if matched and skill_total is not None and int(matched[1]) != skill_total:
                 findings.append(dict(page=page, screen=next(iter(number.get('screens', [])), first.get('id', '')), field='registry.numbers[n-skills].text', line=1, code='count-mismatch', tier='block', excerpt=number['text'], message=f'技能登记数{matched[1]}与kind=skill子页实数{skill_total}不符。'))
         for screen in data.get('screens', []):
@@ -98,9 +107,9 @@ def audit_pages(pages_root: Path, today: date | None = None, retired_names=(), i
                     if not historical and not dated_version and not PAST.search(line) and VERSION.search(line):
                         add('fixed-rule-version', '把现行规则写成固定 E2xx；应由活动规则生成，历史版本保留。')
                     if data.get('page') in {'skills-home', 'agents'} and skill_total is not None and not historical and not PAST.search(line):
-                        for matched in re.finditer(r'(?<!\d)(\d+)\s*个\s*(?:在用的\s*)?(?:个人\s*)?技能|技能(?:有|共|一共)\s*(\d+)\s*个', line):
-                            if int(matched[1] or matched[2]) != skill_total:
-                                add('count-mismatch', f'声明技能数{matched[1] or matched[2]}与kind=skill子页实数{skill_total}不符。')
+                        for matched in SKILL_COUNT.finditer(line):
+                            if not _scoped_skill_count(line, matched) and int(matched[1] or matched[4]) != skill_total:
+                                add('count-mismatch', f'声明技能数{matched[1] or matched[4]}与kind=skill子页实数{skill_total}不符。')
                     bold_number = re.match(r'^\s*(?:[-*]\s*)?\*\*\s*(?:[①-⑳]\s*)?\d', line)
                     plain_number = re.match(r'^\s*(?:[-*]\s*)?\d[^｜|]*[｜|]', line) and not re.match(r'^\s*\d+[.)、]', line)
                     metric = field.endswith(('.value', '.number')) or bool(bold_number or plain_number)

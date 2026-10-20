@@ -104,16 +104,15 @@
       "id": "agents-n-skills-0",
       "page": "agents",
       "screen": "agents-01",
-      "label": "技能详情页数（按页面类型现数）",
+      "label": "个人类启用技能数",
       "current_value": 27,
       "as_of": "2026-10-10",
       "category": "文件个数",
-      "source_location": "本仓库 sources/pages/*/page.json 的 kind=skill；不含去向页",
+      "source_location": "E:/.agents/config/personal-skill-supply.json 的 kind=personal 且 install=true 技能对象",
       "retrieve": {
-        "kind": "page_count",
-        "kinds": [
-          "skill"
-        ]
+        "kind": "regex_count",
+        "path": "E:/.agents/config/personal-skill-supply.json",
+        "pattern": "\\{(?=[^{}]*\"kind\"\\s*:\\s*\"personal\")(?=[^{}]*\"install\"\\s*:\\s*true)[^{}]*\\}"
       },
       "automatic": true,
       "private": false,
@@ -123,7 +122,7 @@
       "affected_screens": [
         "agents-01"
       ],
-      "measurement_scope": "本工作树 sources/pages/*/page.json，kind=skill；不以安装数或去向页替代。",
+      "measurement_scope": "personal-skill-supply.json每个独立扁平skill对象内同时kind=personal与install=true，跨换行且字段顺序无关；不以网站详情总数替代个人来源子集。",
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "这 ([\\d,]+) 个个人技能",
@@ -3907,7 +3906,7 @@
       "source_location": "E:\\PCConfig\\registries\\tasks.json；10月7日管理员扫描，普通权限只见112不能替换此登记",
       "retrieve": {
         "kind": "manual",
-        "instructions": "由PCConfig canonical task-scan SYSTEM/Administrator入口完整重扫，核验complete_visibility=true；本轮不提权不改源，保留10月7日127/90/37及31/30/66日期。"
+        "instructions": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。"
       },
       "automatic": false,
       "private": false,
@@ -3925,7 +3924,7 @@
       "measurement_scope": "指定JSON逐键/数组索引取[\"scheduled_tasks\"]；全部数组元素个数，无状态过滤。",
       "scope_status": "verified",
       "manual_reason": "needs_admin_rescan",
-      "manual_route": "由PCConfig canonical task-scan SYSTEM/Administrator入口完整重扫，核验complete_visibility=true；本轮不提权不改源，保留10月7日127/90/37及31/30/66日期。",
+      "manual_route": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。",
       "field": "screens[0].text"
     },
     {
@@ -3971,7 +3970,7 @@
       "source_location": "E:\\PCConfig\\registries\\tasks.json",
       "retrieve": {
         "kind": "manual",
-        "instructions": "由PCConfig canonical task-scan SYSTEM/Administrator入口完整重扫，核验complete_visibility=true；本轮不提权不改源，保留10月7日127/90/37及31/30/66日期。"
+        "instructions": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。"
       },
       "automatic": false,
       "private": false,
@@ -3986,7 +3985,7 @@
       "original_value_index": 0,
       "page_pattern": "\\ 个，不算\\ Windows\\ 自带的。其中\\ ([\\d,]+(?:\\.\\d+)?)\\ 个开着、",
       "manual_reason": "needs_admin_rescan",
-      "manual_route": "由PCConfig canonical task-scan SYSTEM/Administrator入口完整重扫，核验complete_visibility=true；本轮不提权不改源，保留10月7日127/90/37及31/30/66日期。",
+      "manual_route": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。",
       "scope_status": "verified",
       "measurement_scope": "已启用任务数原口径；未伪造现场结果",
       "field": "screens[10].text"
@@ -4002,7 +4001,7 @@
       "source_location": "E:\\PCConfig\\registries\\tasks.json",
       "retrieve": {
         "kind": "manual",
-        "instructions": "由PCConfig canonical task-scan SYSTEM/Administrator入口完整重扫，核验complete_visibility=true；本轮不提权不改源，保留10月7日127/90/37及31/30/66日期。"
+        "instructions": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。"
       },
       "automatic": false,
       "private": false,
@@ -4017,7 +4016,7 @@
       "original_value_index": 1,
       "page_pattern": "\\ 个开着、([\\d,]+(?:\\.\\d+)?)\\ 个停着",
       "manual_reason": "needs_admin_rescan",
-      "manual_route": "由PCConfig canonical task-scan SYSTEM/Administrator入口完整重扫，核验complete_visibility=true；本轮不提权不改源，保留10月7日127/90/37及31/30/66日期。",
+      "manual_route": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。",
       "scope_status": "verified",
       "measurement_scope": "已停用任务数原口径；未伪造现场结果",
       "field": "screens[10].text"
@@ -4033,7 +4032,7 @@
       "source_location": "E:\\PCConfig\\registries\\task_purpose_catalog.json + dashboard_sources.json",
       "retrieve": {
         "kind": "manual",
-        "instructions": "由PCConfig canonical task-scan SYSTEM/Administrator入口完整重扫，核验complete_visibility=true；本轮不提权不改源，保留10月7日127/90/37及31/30/66日期。"
+        "instructions": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。"
       },
       "automatic": false,
       "private": false,
@@ -4048,7 +4047,7 @@
       "page_pattern": "([\\d,]+) 个 · 电脑配置自己的",
       "field": "screens[10].text",
       "manual_reason": "needs_admin_rescan",
-      "manual_route": "由PCConfig canonical task-scan SYSTEM/Administrator入口完整重扫，核验complete_visibility=true；本轮不提权不改源，保留10月7日127/90/37及31/30/66日期。",
+      "manual_route": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。",
       "scope_status": "verified",
       "measurement_scope": "电脑配置自己的任务数原口径；未伪造现场结果"
     },
@@ -4063,7 +4062,7 @@
       "source_location": "E:\\PCConfig\\registries\\task_purpose_catalog.json + dashboard_sources.json",
       "retrieve": {
         "kind": "manual",
-        "instructions": "由PCConfig canonical task-scan SYSTEM/Administrator入口完整重扫，核验complete_visibility=true；本轮不提权不改源，保留10月7日127/90/37及31/30/66日期。"
+        "instructions": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。"
       },
       "automatic": false,
       "private": false,
@@ -4076,7 +4075,7 @@
       "field": "screens[10].text",
       "page_pattern": "([\\d,]+) 个 · 别的项目的",
       "manual_reason": "needs_admin_rescan",
-      "manual_route": "由PCConfig canonical task-scan SYSTEM/Administrator入口完整重扫，核验complete_visibility=true；本轮不提权不改源，保留10月7日127/90/37及31/30/66日期。",
+      "manual_route": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。",
       "scope_status": "verified",
       "measurement_scope": "别的项目任务数原口径；未伪造现场结果"
     },
@@ -4091,7 +4090,7 @@
       "source_location": "E:\\PCConfig\\registries\\task_purpose_catalog.json + dashboard_sources.json",
       "retrieve": {
         "kind": "manual",
-        "instructions": "由PCConfig canonical task-scan SYSTEM/Administrator入口完整重扫，核验complete_visibility=true；本轮不提权不改源，保留10月7日127/90/37及31/30/66日期。"
+        "instructions": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。"
       },
       "automatic": false,
       "private": false,
@@ -4106,7 +4105,7 @@
       "page_pattern": "([\\d,]+) 个 · 第三方软件自带的",
       "field": "screens[10].text",
       "manual_reason": "needs_admin_rescan",
-      "manual_route": "由PCConfig canonical task-scan SYSTEM/Administrator入口完整重扫，核验complete_visibility=true；本轮不提权不改源，保留10月7日127/90/37及31/30/66日期。",
+      "manual_route": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。",
       "scope_status": "verified",
       "measurement_scope": "第三方软件任务数原口径；未伪造现场结果"
     },
@@ -6314,7 +6313,7 @@
       "affected_screens": [
         "projects-home-01"
       ],
-      "measurement_scope": "给定网页根sources/pages全部page.json，按kind=['project', 'frozen']和status/public明示过滤计页数；退役去向页不算skill，不用安装数代替。",
+      "measurement_scope": "本工作树config/panel-projects.json中enabled项目身份对应的无parent顶级页，按kind=['project', 'frozen']和status/public明示过滤；排除模块与冻结子页。",
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "(?m)^\\| \\*\\*([\\d,]+) 个\\*\\* \\|"
@@ -6345,7 +6344,7 @@
       "affected_screens": [
         "projects-home-01"
       ],
-      "measurement_scope": "给定网页根sources/pages全部page.json，按kind=['project', 'frozen']和status/public明示过滤计页数；退役去向页不算skill，不用安装数代替。",
+      "measurement_scope": "本工作树config/panel-projects.json中enabled项目身份对应的无parent顶级页，按kind=['project', 'frozen']和status/public明示过滤；排除模块与冻结子页。",
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "(?m)^\\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*([\\d,]+) 个\\*\\* \\|"
@@ -6376,7 +6375,7 @@
       "affected_screens": [
         "projects-home-01"
       ],
-      "measurement_scope": "给定网页根sources/pages全部page.json，按kind=['project', 'frozen']和status/public明示过滤计页数；退役去向页不算skill，不用安装数代替。",
+      "measurement_scope": "本工作树config/panel-projects.json中enabled项目身份对应的无parent顶级页，按kind=['project', 'frozen']和status/public明示过滤；排除模块与冻结子页。",
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "(?m)^\\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*([\\d,]+) 个\\*\\* \\|"
@@ -6406,7 +6405,7 @@
         "projects-home-01",
         "projects-home-41"
       ],
-      "measurement_scope": "给定网页根sources/pages全部page.json，按kind=['frozen']和status/public明示过滤计页数；退役去向页不算skill，不用安装数代替。",
+      "measurement_scope": "本工作树config/panel-projects.json中enabled项目身份对应的无parent顶级页，按kind=['frozen']和status/public明示过滤；排除模块与冻结子页。",
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "(?m)^\\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*([\\d,]+) 个\\*\\* \\|"
@@ -6437,7 +6436,7 @@
       "affected_screens": [
         "projects-home-01"
       ],
-      "measurement_scope": "给定网页根sources/pages全部page.json，按kind=['project', 'frozen']和status/public明示过滤计页数；退役去向页不算skill，不用安装数代替。",
+      "measurement_scope": "本工作树config/panel-projects.json中enabled项目身份对应的无parent顶级页，按kind=['project', 'frozen']和status/public明示过滤；排除模块与冻结子页。",
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "公开 \\*\\*([\\d,]+) 个\\*\\*"
@@ -6468,7 +6467,7 @@
       "affected_screens": [
         "projects-home-01"
       ],
-      "measurement_scope": "给定网页根sources/pages全部page.json，按kind=['project', 'frozen']和status/public明示过滤计页数；退役去向页不算skill，不用安装数代替。",
+      "measurement_scope": "本工作树config/panel-projects.json中enabled项目身份对应的无parent顶级页，按kind=['project', 'frozen']和status/public明示过滤；排除模块与冻结子页。",
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "私有 \\*\\*([\\d,]+) 个\\*\\*"
@@ -6497,7 +6496,7 @@
       "affected_screens": [
         "projects-home-01"
       ],
-      "measurement_scope": "给定网页根sources/pages全部page.json，按kind=['project']和status/public明示过滤计页数；退役去向页不算skill，不用安装数代替。",
+      "measurement_scope": "本工作树config/panel-projects.json中enabled项目身份对应的无parent顶级页，按kind=['project']和status/public明示过滤；排除模块与冻结子页。",
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "\\*\\*([\\d,]+) 个在用的项目"
@@ -13532,7 +13531,7 @@
       "page_pattern": "\\*\\*([\\d,]+)\\s*个\\*\\*｜项目",
       "field": "screens[0].text",
       "scope_status": "verified",
-      "measurement_scope": "sources/pages所有kind=project/frozen页，不把final-order计划数当已发表页数。"
+      "measurement_scope": "本工作树config/panel-projects.json中enabled项目身份对应的无parent顶级project/frozen页；模块和冻结子页不算项目，不把计划数当已发表数。"
     },
     {
       "id": "wly0829-cn-pages",

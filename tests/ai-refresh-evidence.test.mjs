@@ -111,7 +111,7 @@ test("AI refresh evidence accepts bounded declared collectors and requires recei
       id: "pcconfig-task-definitions",
       principal: "SYSTEM",
       schema: "pcconfig.tasks.v1",
-      pointer_path: "E:\\PCConfig\\state\\generated-publications\\task-scan\\current.json",
+      pointer_path: plan.selected_projects[0].collector_requirements[0].pointer_path,
       complete_visibility: true,
       generation_id: "taskscan-20260909t220000-3ff5ec92330242fc",
       manifest_sha256: "c7142da1c440b1fda250c44fb7c0e60029e5f5e2e653140b7a025868921e98d8",

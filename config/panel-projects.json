@@ -357,7 +357,7 @@
         "scope": "Twelve modules retain machine history, runtime and separate file/image/bootstrap recovery. Password Center integrated desktop has released and installed evidence, while current Inspect reports two registry differences and no new human-factor acceptance. Its GUI P5 is not the protected-data Vault P5–P7 migration stages, which remain isolated fixtures. Keep Google Gmail/Drive/Tasks provider capability separate from OAuth and actual effects; Calendar stays frozen. Secondary weekly AI audit is paused while existing daily Windows backups continue. Retain computer MCP, SYSTEM versus desktop, stutter diagnostics, Veeam, host Python, cold-set and whole-machine recovery boundaries with their actual evidence dates.",
         "collectors": [
           "git -C E:\\PCConfig status --porcelain=v2 --branch",
-          "SYSTEM/Administrator read-only: E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json; require a bounded receipt with principal and tasks.live_match.complete_visibility=true",
+          "SYSTEM/Administrator read-only: E:\\PCConfig\\tools\\scan_tasks.ps1 -NoWrite -Json; require schema=pcconfig.tasks.v1, observer_elevated=true and task_visibility_complete=true; normalize task_visibility_complete to bounded receipt.complete_visibility=true",
           "E:\\PCConfig\\tools\\Get-DevStorageHealth.ps1 -Json",
           "E:\\PCConfig\\tools\\Install-CoreRecoveryTasks.ps1 -Mode Inspect -Json",
           "E:\\PCConfig\\tools\\Invoke-CoreRecoveryMaintenance.ps1 -Mode Inspect -Json",
@@ -378,13 +378,12 @@
           {
             "id": "pcconfig-task-definitions",
             "owner": "PCConfig",
-            "invocation_contract": "E:\\PCConfig\\tools\\scan_tasks.ps1 -Write -Json through the canonical task-scan publication pipeline",
+            "invocation_contract": "E:\\PCConfig\\tools\\scan_tasks.ps1 -NoWrite -Json; require observer_elevated=true; map task_visibility_complete to receipt.complete_visibility",
             "required_principals": [
               "SYSTEM",
               "Administrator"
             ],
             "expected_schema": "pcconfig.tasks.v1",
-            "pointer_path": "E:\\PCConfig\\state\\generated-publications\\task-scan\\current.json",
             "required_evidence": {
               "complete_visibility": true
             },
@@ -428,7 +427,6 @@
             "docs/governance/*.md",
             "docs/recovery/*.md",
             "tests/*.ps1",
-            "tools/Test-PCConfigDrift.ps1",
             "tools/scan_tasks.ps1",
             "tools/Get-DevStorageHealth.ps1",
             "tools/Get-RuntimeInventory.ps1",
@@ -711,7 +709,6 @@
         "collectors": [
           "git -C E:\\GitHub总索引 status --porcelain=v2 --branch",
           "E:\\GitHub总索引\\tools\\Get-GitOwnerStatus.ps1 -Json",
-          "E:\\GitHub总索引\\tools\\Get-ProjectCognitionSource.ps1 -Json",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/github-local-index -ForPublication -Json",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/wly0829.cn -ForPublication -Json",
           "E:\\GitHub总索引\\tools\\Test-GitHubLocalIndexConsistency.ps1 -SkipFetch"
@@ -745,7 +742,6 @@
             "tests/*.ps1",
             "tools/Get-GitOwnerStatus.ps1",
             "tools/Get-ProjectAdmission.ps1",
-            "tools/Get-ProjectCognitionSource.ps1",
             "tools/Add-PushRecord.ps1",
             "tools/GitHubIndex*.psm1",
             "tools/Install-GitHook.ps1",
