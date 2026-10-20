@@ -249,6 +249,14 @@ const assert = require('node:assert/strict');
   const ap = R.aiPrompt(['pending-a', 'pending-b']);
   assert.match(ap, /^驾驶舱条目 pending-a、pending-b：/); assert.match(ap, /电脑 MCP/); assert.match(ap, /驾驶舱待办登记和来源登记/);
   assert.match(ap, /不从公开状态接口读取/);
+  // 要到电脑前的事（后端 mobile_method.kind=in_person）：首屏和卡片都写“要到电脑前”，不写手机能办；问 AI 用后端提示；全部交给 AI 照样带它的编号
+  const pcItem = { id: 'pending-at-pc', title: '虚构插拔硬盘', ask_kind: 'action', where: 'pc', mobile_method: { kind: 'in_person', label: '要到电脑前', copy_prompt: '虚构后端提示：这一步必须本人到电脑前' } };
+  const atPc = normalize({ ...base0, overview: ov({ owner_count: 1 }), need_you: [pcItem], verdict: { text: '要你做 1 件（1 件要到电脑前） · AI 在跟 2 件' }, access_summary: { direct: 0, mcp: 0, in_person: 1, text: '1 件要到电脑前' } });
+  const atPcFront = R.REGIONS.overview(atPc, ctx), atPcTodos = R.needYou(atPc, ctx);
+  assert.match(atPcFront, /要你做 1 件（1 件要到电脑前）/); assert.match(atPcFront, /<span class="cp-chip is-pc">要到电脑前<\/span>/); assert.doesNotMatch(atPcFront, /手机能办|手机借电脑|都能在手机上办/);
+  assert.match(atPcTodos, /要到电脑前/); assert.doesNotMatch(atPcTodos, /手机上就能办|复制给手机上的 AI/);
+  assert.match(atPcTodos, /data-copy-text="虚构后端提示：这一步必须本人到电脑前">问 AI/);
+  assert.deepEqual(R.promptIds(atPc.need_you), ['pending-at-pc']);
   // 14 天决定卡按每题原条目编号交给 AI，普通卡用自己的编号
   assert.deepEqual(R.promptIds(improved.need_you), ['fixture-review', 'old-ai']);
   assert.doesNotMatch(ap, /ai_hint|\/computer-access|api\/status|[A-Za-z]:\\|registries\/|\.json/);
