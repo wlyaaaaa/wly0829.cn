@@ -7,13 +7,15 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 
 class CompleteBuildTests(unittest.TestCase):
-    def test_complete_site_has_312_html_files_and_all_registered_routes(self):
+    def test_complete_site_has_312_routes_and_required_auxiliary_html(self):
         snapshot = json.loads((ROOT / 'site-astro/sources/frozen-site/manifest.json').read_text('utf8'))
         dist = ROOT / 'dist'
-        self.assertEqual(len(list(dist.rglob('*.html'))), 312)
+        self.assertEqual(len(snapshot['routes']), 312)
+        expected = {'cv/index.html', 'baidu_verify_codeva-DRgaQnAmTK.html'}
         for route in snapshot['routes']:
             rel = 'index.html' if route == '/' else route.lstrip('/') if route.endswith('.html') else route.strip('/') + '/index.html'
-            self.assertTrue((dist / rel).is_file(), route)
+            expected.add(rel)
+        self.assertEqual({p.relative_to(dist).as_posix() for p in dist.rglob('*.html')}, expected)
 
     def test_complete_artifact_has_no_old_aliyun_release_addresses(self):
         snapshot = (ROOT / 'site-astro/sources/frozen-site/manifest.json').read_text('utf8')
