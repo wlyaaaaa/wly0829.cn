@@ -15,6 +15,9 @@ class CompleteBuildTests(unittest.TestCase):
         for route in snapshot['routes']:
             rel = 'index.html' if route == '/' else route.lstrip('/') if route.endswith('.html') else route.strip('/') + '/index.html'
             expected.add(rel)
+        native = ROOT / 'site-astro/src/pages'
+        expected.update(p.relative_to(native).as_posix().removesuffix('.astro') + '.html'
+                        for p in native.rglob('index.astro') if '[' not in str(p.relative_to(native)))
         self.assertEqual({p.relative_to(dist).as_posix() for p in dist.rglob('*.html')}, expected)
 
     def test_complete_artifact_has_no_old_aliyun_release_addresses(self):
