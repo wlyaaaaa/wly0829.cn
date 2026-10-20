@@ -293,8 +293,8 @@ test('AI handoff deduplicates exact IDs and copies source time without private d
  const record=(id,color,at)=>app.cpCopyMeta({id,title:id,current:true,notice_kind:color==='未知'?'unknown':'warn',severity:color==='红'?'red':'yellow',first_seen_at:at,ai_hint:{last_error:'PRIVATE_ERROR',log_ref:'PRIVATE_PATH'}},'公共一句话');
  const newer=record('yellow-new','黄',iso(now-60000)),older=record('yellow-old','黄',iso(now-120000)),red=record('red','红',null),unknown=record('unknown','未知',null);
  const rows=app.cpCopyRecords({querySelectorAll:()=>[newer,red,unknown,older,newer].map(_cpCopy=>({_cpCopy}))},true);assert.deepEqual(Array.from(rows,row=>row.id),['red','yellow-old','yellow-new','unknown']);
- const prompt=app.cpCopyPrompt(rows,'all','');assert.match(prompt,/http:\/\/127\.0\.0\.1:18793\/computer-access\/api\/status/);assert.match(prompt,/页面读到时间：10月4日 01:58（北京时间）。/);assert.doesNotMatch(prompt,/PRIVATE_|公共一句话/);
- const missing={...red,hasHint:false};assert.match(app.cpCopyPrompt([missing],'item',''),/id=red 这一条还没有 ai_hint/);assert.match(app.cpCopyPrompt([missing],'block','电脑'),/id=red：red（还没有 ai_hint）/);
+ const prompt=app.cpCopyPrompt(rows,'all','');assert.match(prompt,/编号 red：red/);assert.match(prompt,/电脑 MCP（先用 ComputerContext 核对当前上下文）/);assert.match(prompt,/驾驶舱待办登记和来源登记/);assert.match(prompt,/不从公开状态接口读取/);assert.doesNotMatch(prompt,/ai_hint|18793|\/computer-access|api\/status|[A-Za-z]:\\|registries\/|\.json/);assert.match(prompt,/页面读到时间：10月4日 01:58（北京时间）。/);assert.doesNotMatch(prompt,/PRIVATE_|公共一句话/);
+ const missing={...red,hasHint:false};for(const scope of ['item','block']){const text=app.cpCopyPrompt([missing],scope,'电脑');assert.match(text,/编号 red/);assert.match(text,/驾驶舱待办登记和来源登记/);assert.doesNotMatch(text,/ai_hint|补上|18793/);}
 });
 test('generic notices retain their friendly issue context in display and copied text',()=>{
  const app=cockpit(),data=fixture(),message='这次没有完成。AI 会在下次治理里处理。',issue={id:'public-issue',title:'统计本机代理流量',public_message:message};data.cockpit={detail_groups:{need_you:[],ai_following:[issue],deferred:[],history:[]}};app.set(data);
@@ -308,4 +308,13 @@ test('touch unlock jumps to the grant form without opening the soft keyboard',()
  assert.match(choose,/const touch=matchMedia\('\(pointer: coarse\)'\)\.matches/);
  assert.match(choose,/behavior:touch\?'instant':'smooth'/);
  assert.match(choose,/if\(!touch\)document\.querySelector\('\[data-b2-slot="ca-form-hours"\]'\)\?\.focus/);
+});
+test('stutter page copy prompts send AI to the local registries by item id',()=>{
+ const copy=JSON.parse(readFileSync(new URL('../scripts/stutter-page-copy.json',import.meta.url),'utf8'));
+ assert.equal(copy['one-missing-prompt'],undefined);assert.equal(copy['missing-hint'],'');
+ for(const key of ['one-prompt','block-prompt','all-prompt','felt-prompt']){const text=copy[key];
+  assert.match(text,/电脑 MCP（先用 ComputerContext 核对当前上下文）/,key);assert.match(text,/驾驶舱待办登记和来源登记/,key);assert.match(text,/不从公开状态接口读取/,key);assert.match(text,/匹配不到就说明缺口/,key);
+  assert.doesNotMatch(text,/ai_hint|18793|\/computer-access|api\/status|[A-Za-z]:\\|registries\/|\.json/,key);}
+ assert.match(copy['one-prompt'],/编号 \{id\}/);assert.match(copy['felt-prompt'],/编号 \{id\}/);
+ const page=readFileSync(new URL('../scripts/stutter-page.js',import.meta.url),'utf8');assert.doesNotMatch(page,/one-missing-prompt|missing-hint/);
 });

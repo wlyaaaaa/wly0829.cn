@@ -140,7 +140,7 @@ export function readTodo(x, now) {
 }
 const chips = (r) => [r.dueText ? `<span class="cp-chip${r.urgent ? ' is-urgent' : ''}">${r.overdue ? '已过期限 ' + esc(r.dueText) : esc(r.dueText) + (r.hasDue ? ' 前' : '')}</span>` : '',
   r.minutes ? `<span class="cp-chip">${esc(r.minutes)}</span>` : '',
-  r.mobile ? `<span class="cp-chip">${MOBILE[r.mobile.kind]}</span>` : r.where === 'phone' ? '<span class="cp-chip is-phone">手机能办</span>' : r.where === 'pc' ? '<span class="cp-chip is-pc">要在电脑上办</span>' : ''].join('');
+  r.mobile ? `<span class="cp-chip${r.mobile.kind === 'in_person' ? ' is-pc' : r.mobile.kind === 'direct' ? ' is-phone' : ''}">${MOBILE[r.mobile.kind]}</span>` : r.where === 'phone' ? '<span class="cp-chip is-phone">手机能办</span>' : r.where === 'pc' ? '<span class="cp-chip is-pc">要在电脑上办</span>' : ''].join('');
 // “你现在 N 件”：件数优先用后端 overview.owner_count / owner_urgent（P1），没有就数“要你做的事”清单
 export function ownerNow(v, now) {
   const ov = v.overview || {};

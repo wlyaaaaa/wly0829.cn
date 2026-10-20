@@ -44,10 +44,10 @@
   }
   async function copy(kind){
     const rows=kind==='all'?allIssues:issues, at=date(snapshot?.hardware?.health?.pc_health?.observed_at_unix), row=rows[0], values={N:rows.length,id:row?.id,title:row?.title,line:row?.text||row?.what_happened||row?.title,at,uptime:duration(snapshot?.host?.uptime_seconds)};
-    values.rows=rows.map((r,i)=>`${i+1}. ${kind==='all'?'['+(r.severity==='red'?c.red:r.severity==='yellow'?c.yellow:c.unknown_label)+'] ':''}id=${r.id}：${r.title}${r.missing?c['missing-hint']:''}`).join('\n');
+    values.rows=rows.map((r,i)=>`${i+1}. ${kind==='all'?'['+(r.severity==='red'?c.red:r.severity==='yellow'?c.yellow:c.unknown_label)+'] ':''}id=${r.id}：${r.title}`).join('\n');
     const feltRow=snapshot?.cockpit?.know?.find(r=>r.id==='pc-health')||snapshot?.cockpit?.cards?.find(r=>r.id==='computer_health');
     if(kind==='felt'){values.id=feltRow?.id||'computer_health';values.title=c.title;values.line=$('headline').textContent;}
-    const text=kind==='felt'&&!feltRow?.ai_hint?c['felt-prefix']+'\n'+fill('one-missing-prompt',values):fill(kind==='felt'?'felt-prompt':kind==='all'?'all-prompt':kind==='block'?'block-prompt':row?.missing?'one-missing-prompt':'one-prompt',values);
+    const text=fill(kind==='felt'?'felt-prompt':kind==='all'?'all-prompt':kind==='block'?'block-prompt':'one-prompt',values);
     try{await navigator.clipboard.writeText(text);say('copy-feedback',fill(kind==='all'||kind==='block'?'copied-many':'copied-one',values));$('copy-manual').hidden=true;}catch{say('copy-feedback',c['copy-failed']);$('copy-manual').hidden=false;$('copy-manual').value=text;}
   }
   async function refresh(){

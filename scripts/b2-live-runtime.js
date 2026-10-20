@@ -512,17 +512,19 @@ function cpCopyObserved(){
  const parts=Object.fromEntries(timeFormatter.formatToParts(new Date(at*1000)).map(part=>[part.type,part.value]));return parts.month+'月'+parts.day+'日 '+parts.hour+':'+parts.minute;
 }
 function cpCopyReady(){const rows=Object.values(cpGroups()||{}).flat(),cards=status?.cockpit?.cards||[];return online()&&!statusReading&&(rows.length?rows.every(row=>Object.hasOwn(row,'notice_kind')):cards.some(card=>Object.hasOwn(card,'notice_kind')));}
+// 复制给 AI：只给编号和页面上已公开的一句话；细节让 AI 用电脑 MCP 或在本机读驾驶舱待办登记和来源登记，
+// 不去公开状态接口找（那里不带 AI 侧自由文本），不写本机路径，不内嵌日志或正文
+const CP_LOCAL_LOOKUP=what=>`请用电脑 MCP（先用 ComputerContext 核对当前上下文）或直接在这台电脑上，读取电脑配置项目（PCConfig）的驾驶舱待办登记和来源登记，按编号定位${what}的细节；公开编号按 PCConfig 的公开编号规则和原编号对应。细节只从本机登记读取，不从公开状态接口读取；匹配不到就说明缺口，不另建事项。`;
 function cpCopyPrompt(rows,scope,label){
- const endpoint='http://127.0.0.1:18793/computer-access/api/status',stamp='页面读到时间：'+cpCopyObserved()+'（北京时间）。';
+ const stamp='页面读到时间：'+cpCopyObserved()+'（北京时间）。';
  if(scope==='item'){
-  const row=rows[0],detail=row.hasHint?`细节在本机状态接口 ${endpoint} 里 id=${row.id} 的 ai_hint。`:`本机状态接口 ${endpoint} 里 id=${row.id} 这一条还没有 ai_hint，请先从这条的来源查起。`;
-  const finish=row.hasHint?'请查清原因、修好、验证；修完让驾驶舱这条变绿，再用一两句话告诉我原因和结果。':'请查清原因、修好、验证，并给这一条补上 ai_hint；修完让驾驶舱这条变绿，再用一两句话告诉我原因和结果。';
-  return `请处理驾驶舱这条：${row.name}（${row.sentence}）。\n${detail}\n${finish}\n${stamp}`;
+  const row=rows[0];
+  return `请处理驾驶舱这条（编号 ${row.id}）：${row.name}（${row.sentence}）。\n${CP_LOCAL_LOOKUP('这条')}\n请查清原因、修好、验证；修完让驾驶舱这条变绿，再用一两句话告诉我原因和结果。\n${stamp}`;
  }
- const list=rows.map((row,index)=>`${index+1}. ${scope==='all'?'['+row.color+'] ':''}id=${row.id}：${row.name}${row.hasHint?'':'（还没有 ai_hint）'}`).join('\n');
+ const list=rows.map((row,index)=>`${index+1}. ${scope==='all'?'['+row.color+'] ':''}编号 ${row.id}：${row.name}`).join('\n');
  const start=scope==='all'?`请处理驾驶舱现在所有要处理的 ${rows.length} 条，按下面的顺序（先红、再黄、最后结果未知）：`:`请处理驾驶舱“${label}”里要处理的 ${rows.length} 条：`;
  const finish=scope==='all'?'请逐条查清原因、修好、验证；修完让驾驶舱整页变绿，最后按条告诉我原因和结果，没修好的写明卡在哪。':'请逐条查清原因、修好、验证；修完让这几条都变绿，最后按条告诉我原因和结果，没修好的写明卡在哪。';
- return `${start}\n${list}\n每条的细节在本机状态接口 ${endpoint} 里对应 id 的 ai_hint。\n${finish}\n${stamp}`;
+ return `${start}\n${list}\n${CP_LOCAL_LOOKUP('每条')}\n${finish}\n${stamp}`;
 }
 function cpCopyButton(rows,scope,label){
  const count=rows.length,ready=cpCopyReady(),text=scope==='item'?'复制给 AI':scope==='block'?'本区 '+count+' 条复制给 AI':!ready?'读到状态后才能复制':count?'全部 '+count+' 条复制给 AI':'现在没有要交给 AI 的事';
