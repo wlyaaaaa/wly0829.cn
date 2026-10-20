@@ -420,7 +420,7 @@
      "id": "f-page-collect",
      "group": "g-sources",
      "name": "在已登录网页里采集",
-     "what": "B站、京东、美团、饿了么、12306：在我已登录的 Chrome 里跑只读脚本，不读 cookie 和密码，不点按钮不下单",
+     "what": "B站、京东、美团、饿了么：在我已登录的 Chrome 里跑只读脚本，不读 cookie 和密码，不点按钮不下单",
      "how": "说“把京东订单更新一下”",
      "status": "在用",
      "screen": "daily-preferences-14",
@@ -818,7 +818,7 @@
     },
     {
      "id": "r-sites",
-     "with": "B站、京东、美团、饿了么、12306",
+     "with": "B站、京东、美团、饿了么",
      "direction": "拿来",
      "flow": "在本人已登录的 Chrome 里只读采集订单、观看和收藏，经页面下载交给导入工具",
      "source": "tools/claude_page_collect/README.md；source-refresh.md"
@@ -911,11 +911,11 @@
     "命令 profile --pending-review（读待复核的旧卡）并进 f-correct。",
     "tools/wechat_update.py 的 seed-history、status 并进 f-wechat。",
     "tools/amap_mobility_broker_worker.py（高德区域查询）并进 f-mobility，出事怎么办里单列一行。",
-    "tools/claude_page_collect、claude_page_import.mjs 和 Codex 的 cdp 采集器（bilibili/commerce/takeaway/rail_browser_collect.mjs）都写成 f-page-collect：读者看来是同一件事，差别是哪个 AI 在采。"
+    "tools/claude_page_collect、claude_page_import.mjs 和 Codex 的 cdp 采集器（bilibili_browser_collect.mjs、commerce_browser_collect.mjs、takeaway_browser_collect.mjs）都写成 f-page-collect：读者看来是同一件事，差别是哪个 AI 在采。"
    ],
    "dropped": [
     "命令 init（建库）：技术步骤，本人不会用到。",
-    "12306 的 Claude 页面脚本单独一条：字段名还没在真实响应上核对过；12306 采集整体已在 f-page-collect 里，这个差别写进 audit.md。",
+    "12306 不再单独网页采集；车票、改签和退票由 AI 按需读取 Gmail 中的 12306 邮件，既有 rail_history 快照仍可查询与重解析。",
     "README 里本人手机号的查询入口（personal.basics）：手机号是私人联系方式（分级表 L3），这页讲功能用不到它。",
     "sha256:f983c51cc9d65d2c9a1037f84287f5222891cbe0acc7ad18d1b9932f1b086717",
     "旧网站 ai-cli-profile-manager 画廊里那张“问偏好”的截图不放：属于别的项目。本项目在旧网站和仓库里没有自己的截图。",
@@ -934,8 +934,8 @@
  },
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
-  "sha256": "d30f7e6ca661c49a4f3d984624b582346728505f19cd7ae6bdcc82aac08f560c",
-  "converted_at_beijing": "2026-10-20T08:56:32+08:00"
+  "sha256": "b728b12052aa9b4a2c138e199b0d798743ad90c87deba003215a465c0e1bddca",
+  "converted_at_beijing": "2026-10-20T17:41:55+08:00"
  }
 }
 ---
@@ -2395,7 +2395,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
 说“要更新了”之后
 
 1. **先看谁停了**：33 类来源各有应有的节奏——定位每小时、短信每天、支付宝每月、网易云每半年。超期的标“静默”：停了的几个手动导出来源并成一个问题，一次问我，写清要哪份、从哪天开始重叠；自动来源停了，有我的说明就按说明，没有就照实报，不认定是故障，也不认定我没活动。
-2. **拉新**：手机日志在家时由电脑经无线调试（无线 adb）直接收到本地，直接读；不在家时手机先存着，回家后补收；Gmail、Tasks 走已有的 Google 连接；B站、京东、美团、饿了么、12306 在我已登录的 Chrome 里只读采集；ChatGPT、支付宝这类，我导出后交给它。
+2. **拉新**：手机日志在家时由电脑经无线调试（无线 adb）直接收到本地，直接读；不在家时手机先存着，回家后补收；Gmail、Tasks 走已有的 Google 连接；车票、改签和退票由 AI 按需读取 Gmail 中的 12306 邮件；B站、京东、美团、饿了么 在我已登录的 Chrome 里只读采集；ChatGPT、支付宝这类，我导出后交给它。
 3. **导入**：原件先挪进 E:\PersonalData 下的来源投递区保全（这个目录每天有备份），按内容指纹去重，默认增量导入。
 4. **读**：导入会列出这次新增、改动了哪些记录，AI 按编号去读；ChatGPT 只读有新消息的对话，微信只读每个会话新的一段。
 5. **改卡**：新材料影响哪张卡就改哪段；因来源变化退场的卡，复核后重写。
@@ -3465,7 +3465,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
 | 已退役，只留旧记录 | 应用使用 109,118（AppUsage：手机后台全放开也会被系统停掉，所有时期的时长都不可信；10 月 8 日退役，不再采） | 不再更新 |
 | Google 账号 | Gmail 4,759、Tasks 12（走已有的 Google 连接）｜Keep 5（在 Chrome 里读） | 每天 |
 | 本机直接读 | Chrome 浏览记录 128,193｜Steam 游戏 160、商店信息 132｜电脑软件 771｜电脑使用 109（来自〔电脑使用与性能记录〕） | 每周；电脑使用随查随读 |
-| 在我已登录的 Chrome 里采集 | B站 6,571｜饿了么 1,367｜京东 166｜美团 25｜12306 9 | B站每周，其余每月 |
+| 在我已登录的 Chrome 里采集 | B站 6,571｜饿了么 1,367｜京东 166｜美团 25 | B站每周，其余每月 |
+| 铁路历史快照与邮件 | 12306 9（既有快照记录保留查询与重解析）；车票、改签和退票由 AI 按需读取 Gmail 中的 12306 邮件 | 按需读邮件，不单独网页采集 |
 | 我导出后交给它 | ChatGPT、Gemini 对话 59,187｜支付宝 18,763｜淘宝 2,222｜微信支付 1,779｜信用卡账单 1,534｜Google Play 546｜网易云喜欢 199｜滴滴 172｜航旅纵横 8 | 每月；航旅纵横每季度，网易云每半年 |
 | 读过的外部原文 | 微信原文、录音转写片段、附件 1,255 | 随阅读 |
 
@@ -5535,7 +5536,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
 30. ChatGPT 只读新增｜按消息编号增量导入，只读新增或有新消息的对话；让 ChatGPT 操作电脑的对话整段跳过
 31. 本机来源刷新｜Chrome、Steam 直接读本机；B站用这次在 Chrome 里采到的结果
 32. 已连接来源刷新｜Gmail、Tasks、Keep、手机日志（在家无线收到本地的原件）、电脑软件清单、电脑使用、网易云快照，一条命令更新
-33. 在已登录网页里采集｜B站、京东、美团、饿了么、12306：在我已登录的 Chrome 里跑只读脚本，不读 cookie 和密码，不点按钮不下单
+33. 在已登录网页里采集｜B站、京东、美团、饿了么：在我已登录的 Chrome 里跑只读脚本，不读 cookie 和密码，不点按钮不下单
 34. 读微信新消息｜比对每个会话读到哪，只收新的一段；读完、改完卡才推进阅读位置
 35. 引用别处原文｜读过的微信原文、转写片段、附件存成已核对引用；被引用的那一版按 SHA-256 冻结一份
 36. 来源静默提醒｜每类来源有应有的节奏，超期在给 AI 读的首页（CURRENT.md）顶部标“静默”；停了的几个手动导出来源并成一个问题一次问我
