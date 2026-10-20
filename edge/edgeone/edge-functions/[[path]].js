@@ -27,12 +27,24 @@ export default async function onRequest({ request }) {
     });
     if (gzip) {
       // fetch 已解压上游正文；重新压缩，不沿用上游的 Content-Encoding。
+      let phase = 'constructor';
       try {
-        body = await new Response(new Response(body).body.pipeThrough(new CompressionStream('gzip'))).arrayBuffer();
+        const stream = new CompressionStream('gzip'), writer = stream.writable.getWriter(), reader = stream.readable.getReader();
+        phase = 'stream';
+        const reading = (async () => {
+          const chunks = []; let length = 0;
+          for (;;) { const { done, value } = await reader.read(); if (done) break; chunks.push(value); length += value.byteLength; }
+          const result = new Uint8Array(length); let offset = 0;
+          for (const chunk of chunks) { result.set(chunk, offset); offset += chunk.byteLength; }
+          return result;
+        })();
+        const writing = (async () => { await writer.write(new TextEncoder().encode(body)); await writer.close(); })();
+        [body] = await Promise.all([reading, writing]);
         headers.set('Content-Encoding', 'gzip');
       } catch (error) {
         // 压缩运行时故障不能丢掉已取得的状态；回执保留失败而不伪报 gzip。
         headers.set('X-Compression-Result', 'identity');
+        headers.set('X-Compression-Phase', phase);
         headers.set('X-Compression-Error', encodeURIComponent(String(error?.message || error).slice(0, 120)));
       }
     }
