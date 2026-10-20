@@ -28,7 +28,7 @@
   "status_line": {
    "state": "偶尔用",
    "as_of": "2026-10-11",
-   "source": "源仓库 10 月 1 日的最新提交，加上北京时间 10 月 11 日 13:32 的只读状态核对",
+   "source": "源仓库 10 月 1 日的最新提交（10 月 20 日回读远端无新提交，本机另有 7 个未提交的清单文件），加上北京时间 10 月 20 日 7:34—7:43 之间的零写入状态核对",
    "last": {
     "label": "快照核对",
     "at": "2026-10-11 13:32"
@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/steam-millennium-config-backup-plugin-manifest-and-install-state-tracking/page.json",
-  "sha256": "73362e187b09c9ade7932446f6f3109c5aa1127ae4f9fa916821ca0b57972a8c",
-  "converted_at_beijing": "2026-10-11T19:07:12+08:00"
+  "sha256": "c825cd85032dec05dfa4c6bae658713dce791b68079847b4bf621e376eb41680",
+  "converted_at_beijing": "2026-10-20T08:56:34+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源仓库 10 月 1 日的最新提交，加上北京时间 10 月 11 日 13:32 的只读状态核对",
+     "static_note": "截至 10 月 11 日 · 源仓库 10 月 1 日的最新提交（10 月 20 日回读远端无新提交，本机另有 7 个未提交的清单文件），加上北京时间 10 月 20 日 7:34—7:43 之间的零写入状态核对",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源仓库 10 月 1 日的最新提交，加上北京时间 10 月 11 日 13:32 的只读状态核对"
+     "static_note": "截至 10 月 11 日 · 源仓库 10 月 1 日的最新提交（10 月 20 日回读远端无新提交，本机另有 7 个未提交的清单文件），加上北京时间 10 月 20 日 7:34—7:43 之间的零写入状态核对"
     },
     {
      "type": "action_button",
@@ -404,7 +404,7 @@ Steam Millennium 配置备份 · 功能说明
 
 ## 需要处理什么
 
-清单与当前安装版本不一致时逐个核对，不能由旧记录推断插件今天可运行。
+清单与当前安装版本不一致时逐个核对，不能由旧记录推断插件今天可运行。现在就有这种情况：Size on Disk、Easy SteamGrid 在电脑上已升级，本机最新备份跟着记了新版本，公开仓库里还是旧版本号。
 
 ## 什么时候不可用
 
@@ -632,7 +632,7 @@ Steam Millennium 配置备份 · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-5 款清单；配置启用 3 款
+5 款清单；配置启用 3 款；Size on Disk、Easy SteamGrid 的本机新版本号尚未提交
 
 ## 关键规则与设计选择
 
@@ -646,9 +646,9 @@ Steam Millennium 配置备份 · 功能说明
 
 - Extendium 2.0.4：为 Steam 提供 Chrome 扩展支持；backendType=lua，include=fake-header-extension；快照提交 3f9ffb0cd9ada58a7de7f71b3ed8d094ca7130f6。
 
-- Size on Disk 1.1.0：显示游戏磁盘占用；useBackend=false；快照提交 8ebb14647f6a3be231069d11bd8e7002383df45b。
+- Size on Disk：显示游戏磁盘占用；本机最新备份为 1.2.0（backendType=lua，未提交）；公开仓库里是 1.1.0（useBackend=false，快照提交 8ebb14647f6a3be231069d11bd8e7002383df45b）。
 
-- Easy SteamGrid 4.1.0：SteamGridDB 封面集成；backendType=lua；快照提交 44860b53bedb672675a55981863890d9be86025a。
+- Easy SteamGrid：SteamGridDB 封面集成；backendType=lua；本机最新备份为 4.4.0（未提交）；公开仓库里是 4.1.0（快照提交 44860b53bedb672675a55981863890d9be86025a）。
 
 - HLTB for Steam 2.1.0：显示 How Long To Beat 通关时长；backendType=lua；已提交文件、当前快照和安装元数据的提交都是 7decc0a06bb26b365a779c9d1a85195834c940e1（9 月 19 日核对时快照还记着旧提交 49d59edf7475ceef42734627687bdb71d7d08709，现已对齐）。
 
@@ -964,7 +964,7 @@ Steam Millennium 配置备份 · 功能说明
 
 - 原有测试证明插件描述会复制，缓存和插件源码被排除。
 
-- 当前快照与安装目录的插件描述内容一致，HLTB 元数据也已对齐（以前看到的差异是 9 月 19 日的历史）；这是文件内容核对，没有执行插件加载验收。
+- 当前快照与安装目录的插件描述内容一致，HLTB 元数据也已对齐（以前看到的差异是 9 月 19 日的历史）；10 月 20 日 git diff 显示 Size on Disk（1.1.0→1.2.0）和 Easy SteamGrid（4.1.0→4.4.0）的 plugin.json、metadata.json 是本机未提交的新投影，公开 master 仍是旧值。这是文件内容核对，没有执行插件加载验收，新版本在 Steam 里能不能用没看。
 
 ## 与其他模块的关系
 

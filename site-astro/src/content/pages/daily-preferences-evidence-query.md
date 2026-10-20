@@ -28,13 +28,13 @@
   "status_line": {
    "state": "在用",
    "as_of": "2026-10-11",
-   "source": "来源仓库 b334b3aa（北京 10/8 00:23）与 10/11 16:35–16:39 只读 activity、device-inventory、status；本次没有新采集或调用高德，历史验收保留原日期"
+   "source": "来源仓库 b51db6d8（北京 10/19 23:40）的定位读取规则与 b334b3aa（北京 10/8 00:23）；10/11 16:35–16:39 只读 activity、device-inventory、status；本次没有新采集、没有连接手机或调用高德，历史验收保留原日期"
   }
  },
  "source": {
   "page": "sources/pages/daily-preferences-evidence-query/page.json",
-  "sha256": "d7baaf1eeb6e568b9092dfb15e884dc8b5437d592c13c66acb82925f2c4ebe0c",
-  "converted_at_beijing": "2026-10-11T18:44:36+08:00"
+  "sha256": "b13a97a7ce1ebde6f39ba7676799b1d679b0874fea430e8f04ac926b29e2930a",
+  "converted_at_beijing": "2026-10-20T08:56:31+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 b334b3aa（北京 10/8 00:23）与 10/11 16:35–16:39 只读 activity、device-inventory、status；本次没有新采集或调用高德，历史验收保留原日期",
+     "static_note": "截至 10 月 11 日 · 来源仓库 b51db6d8（北京 10/19 23:40）的定位读取规则与 b334b3aa（北京 10/8 00:23）；10/11 16:35–16:39 只读 activity、device-inventory、status；本次没有新采集、没有连接手机或调用高德，历史验收保留原日期",
      "row": "top"
     },
     {
@@ -131,7 +131,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 b334b3aa（北京 10/8 00:23）与 10/11 16:35–16:39 只读 activity、device-inventory、status；本次没有新采集或调用高德，历史验收保留原日期"
+     "static_note": "截至 10 月 11 日 · 来源仓库 b51db6d8（北京 10/19 23:40）的定位读取规则与 b334b3aa（北京 10/8 00:23）；10/11 16:35–16:39 只读 activity、device-inventory、status；本次没有新采集、没有连接手机或调用高德，历史验收保留原日期"
     },
     {
      "type": "action_button",
@@ -787,7 +787,7 @@
 
 17. device-inventory比较 Collector 清单快照与 AppUsage CSV 的真实时点：先比时间，同一时间才比序号，支持换机或重装后序号重置。最新的 Collector 清单胜出时，取其包名、版本、安装/更新时间、启用和系统状态。2026-10-11 正常入口选 10 月 7 日 07:31 的 Collector 清单：803 个包、803 个已安装，包含系统组件。9 月 23 日 02:00 的 App CSV 841 行（801 已安装/40 未安装）只是历史。
 
-18. mobility可一次读完整期间，默认紧凑保留停留、移动、空档和来源日期，端点/原件定位按--details展开；只用GPS区域级近似和本人确认解释，历史长空档技术原因未知。
+18. mobility可一次读完整期间，默认紧凑保留停留、移动、空档和来源日期，端点/原件定位按--details展开；只用GPS区域级近似和本人确认解释，历史长空档技术原因未知。来源 b51db6d8（北京 10 月 19 日 23:40）起，同一天的定位原件除 GPSLogger、MacroDroid 外，还读手机采集程序 Collector 的定位文件：只收 gps、network、fused 三类、坐标和精度合法的点，按定位本身的时间（location_time）排序，坏行记缺口、不中断整天。MacroDroid 的点只有写入时间（write_time），位置可能是手机缓存的旧值，标成 location_may_be_cached、use_for_mobility=false：仍作原始记录返回，但不参与停留和移动推断。Collector 新输入不倒推历史空档的原因；本次没有连接手机，也没有实际运行这条读取。
 
 19. 手机 AppUsage 已退役：所有时期的时长、排名和使用频次都不可信（change_date_local=null，表示没有任何可信时期），不再把 9 月 23 日以后当可信。旧原件和记录保留，应用是否出现过和独立安装清单仍可用；失真时长支撑过的旧认识已撤回或修订，独立 Steam/手游兴趣证据并未因此清空。
 
@@ -937,7 +937,7 @@
 
 ## 技术实现与依据（五）
 
-- device_inventory.py 按真实时点在 Collector 清单与 App CSV 之间选最新完整清单（先 time、同 time 才 sequence），Installed 与安装/更新时间分开；mobility.py按期间汇总GPS事件、停留、移动、空档和本人声明，默认有界输出仍包含全部已发现事件。
+- device_inventory.py 按真实时点在 Collector 清单与 App CSV 之间选最新完整清单（先 time、同 time 才 sequence），Installed 与安装/更新时间分开；mobility.py按期间汇总GPS事件、停留、移动、空档和本人声明，默认有界输出仍包含全部已发现事件；同一天读 GPSLogger、MacroDroid 和 Collector 三处定位原件，Collector 有效点按 location_time 进入汇总，MacroDroid 点标 time_basis=write_time、use_for_mobility=false，只保留不进停留/移动计算。
 
 - mobility.py 的 AMapClient 默认 from_password_center：tools/amap_mobility_refresh.py 只在补全缺失区域缓存时由密码中心批量代办高德调用，key 不交给默认业务进程；正常查询只读缓存。
 

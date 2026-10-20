@@ -333,8 +333,8 @@
       "page": "agents",
       "screen": "agents-13",
       "label": "全部功能中的决定原话小节数",
-      "current_value": 506,
-      "as_of": "2026-10-10",
+      "current_value": 907,
+      "as_of": "2026-10-12",
       "category": "人工",
       "source_location": "E:/.agents/tools/owner_decision_store.py 的只读read_decision_bytes/_verify；docs/owner-decisions/YYYY-MM.md 与order.json",
       "retrieve": {
@@ -350,7 +350,7 @@
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-jia\\content-refresh-jia.md",
       "refreshed_value": 892,
-      "page_pattern": "写入上锁、只提交本次文件；([\\d,]+) 节（",
+      "page_pattern": "(?m)^22\\. 决定原话[^\\n]*；([\\d,]+) 节（",
       "field": "screens[12].text",
       "measurement_scope": "E:/.agents/docs/owner-decisions/????-??.md经order.json原序重建，只统计^## 二级标题，不把索引页或归档再加进来。",
       "scope_status": "verified",
@@ -411,8 +411,6 @@
       "measurement_scope": "仅 E:/Documents/AI汇报 根目录当前存在的 .html 文件；不递归、不按最近14日另外筛选、不计附件、JSON或目录。页面原先“最近两周”是现存页面的描述，不是此项筛选条件。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "start": 263,
-      "end": 266,
       "observed_at": "2026-10-11T17:58:04.732226+08:00"
     },
     {
@@ -439,8 +437,6 @@
       "refreshed_value": 130,
       "page_pattern": "（([\\d,]+) 个不同标题）",
       "field": "screens[0].text",
-      "start": 288,
-      "end": 291,
       "affected_screens": [
         "skill-report-page-01"
       ],
@@ -477,8 +473,6 @@
       "original_value_index": 0,
       "page_pattern": "\\*\\*([\\d,]+) 张\\*\\*",
       "field": "screens[0].text",
-      "start": 315,
-      "end": 318,
       "scope_status": "verified",
       "measurement_scope": "同一根目录现存HTML；按生成器 yyyy-MM-dd-HHmm-标题.html 去掉时间前缀，兼容 yyyy-MM-dd-标题.html 的1个旧文件；按标题去重，各标题选文件名北京时间最新一版；仅数源代码渲染的 data-q=\"...\" 决策卡属性（不数脚本文字），输出聚合数字。",
       "observed_at": "2026-10-11T17:58:04.732226+08:00"
@@ -507,8 +501,6 @@
       "refreshed_value": 91,
       "page_pattern": " 个标题各取最新一版，其中 ([\\d,]+) 份带决策卡",
       "field": "screens[0].text",
-      "start": 340,
-      "end": 343,
       "affected_screens": [
         "skill-report-page-01"
       ],
@@ -520,18 +512,16 @@
       "id": "skill-report-page-n-runs-0",
       "page": "skill-report-page",
       "screen": "skill-report-page-01",
-      "label": "汇报生成命令使用次数",
-      "current_value": 322,
-      "as_of": "2026-10-08",
+      "label": "固定历史窗口汇报生成命令使用次数",
+      "current_value": 334,
+      "as_of": "2026-10-09",
       "category": "日志",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
       "retrieve": {
-        "kind": "regex_count",
-        "path": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
-        "pattern": "^(?=[^\\n]*\"kind\"\\s*:\\s*\"command\")(?=[^\\n]*\"name\"\\s*:\\s*\"New-ReportPage\\.ps1\")[^\\n]+$",
-        "flags": "m"
+        "kind": "manual",
+        "instructions": "只读E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl，逐行JSON解析并按ts真实时区换北京；筛北京时间[2026-09-26 03:31:00,2026-10-09 23:50:00)、kind=command且name=New-ReportPage.ps1；先核对原统计回执是否以该起止时分为过滤窗还是仅事件极值，再按原方法数事件条数。不读报告正文、不把skill调用或成功页数算入。缺原窗口取法/覆盖证据时保留页面旧值与10月9日截止，Unknown，不将全量409冒充固定历史窗。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": true,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-jia\\content-refresh-jia.md",
@@ -542,74 +532,70 @@
       "registry_number": "n-runs",
       "original_value_index": 0,
       "page_pattern": "\\*\\*([\\d,]+) 次\\*\\*",
-      "measurement_scope": "账本全量、kind=command 且 name=New-ReportPage.ps1 的使用事件条数；是命令调用次数，不是成功生成份数，也不是 kind=skill 的读取次数。",
-      "scope_status": "verified",
+      "measurement_scope": "页面9月26日03:31–10月9日23:49的固定历史命令事件；使用小记录记到10月9日。kind=command且name=New-ReportPage.ps1，不是至今日累计。原窗口边界及覆盖须按manual_route复核。",
+      "scope_status": "needs_owner_review",
       "field": "screens[0].text",
-      "start": 366,
-      "end": 369,
-      "known_gap": "账本正常按完整自然日结算；last/累计是最新已完成快照，非当日直播。滚动7天两项另补今日源日志；覆盖证据见round02 ledger-evidence。"
+      "known_gap": "本轮取到的409/269/140是全量累计候选，且账本当前覆盖有缺口；不能用它证明或更新本页历史334/234/100。未执行本条人工回溯，保留旧日期。",
+      "manual_reason": "judgment",
+      "manual_route": "只读E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl，逐行JSON解析并按ts真实时区换北京；筛北京时间[2026-09-26 03:31:00,2026-10-09 23:50:00)、kind=command且name=New-ReportPage.ps1；先核对原统计回执是否以该起止时分为过滤窗还是仅事件极值，再按原方法数事件条数。不读报告正文、不把skill调用或成功页数算入。缺原窗口取法/覆盖证据时保留页面旧值与10月9日截止，Unknown，不将全量409冒充固定历史窗。"
     },
     {
       "id": "skill-report-page-text-0-15",
       "page": "skill-report-page",
       "screen": "skill-report-page-01",
-      "label": "Claude生成命令使用次数",
-      "current_value": 228,
-      "as_of": "2026-10-08",
+      "label": "固定历史窗口Claude汇报生成命令使用次数",
+      "current_value": 234,
+      "as_of": "2026-10-09",
       "category": "人工",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
       "retrieve": {
-        "kind": "regex_count",
-        "path": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
-        "pattern": "^(?=[^\\n]*\"kind\"\\s*:\\s*\"command\")(?=[^\\n]*\"name\"\\s*:\\s*\"New-ReportPage\\.ps1\")(?=[^\\n]*\"ai\"\\s*:\\s*\"claude\")[^\\n]+$",
-        "flags": "m"
+        "kind": "manual",
+        "instructions": "只读E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl，逐行JSON解析并按ts真实时区换北京；筛北京时间[2026-09-26 03:31:00,2026-10-09 23:50:00)、kind=command且name=New-ReportPage.ps1且ai=claude；先核对原统计回执是否以该起止时分为过滤窗还是仅事件极值，再按原方法数事件条数。不读报告正文、不把skill调用或成功页数算入。缺原窗口取法/覆盖证据时保留页面旧值与10月9日截止，Unknown，不将全量409冒充固定历史窗。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": true,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-jia\\content-refresh-jia.md",
       "refreshed_value": null,
       "page_pattern": "Claude ([\\d,]+) 次、Codex ",
       "field": "screens[0].text",
-      "start": 381,
-      "end": 384,
       "affected_screens": [
         "skill-report-page-01"
       ],
-      "scope_status": "verified",
-      "measurement_scope": "账本全量、kind=command 且 name=New-ReportPage.ps1 的使用事件条数，ai=claude；是命令调用次数，不是成功生成份数，也不是 kind=skill 的读取次数。",
-      "known_gap": "账本正常按完整自然日结算；last/累计是最新已完成快照，非当日直播。滚动7天两项另补今日源日志；覆盖证据见round02 ledger-evidence。"
+      "scope_status": "needs_owner_review",
+      "measurement_scope": "页面9月26日03:31–10月9日23:49的固定历史命令事件；使用小记录记到10月9日。kind=command且name=New-ReportPage.ps1且ai=claude，不是至今日累计。原窗口边界及覆盖须按manual_route复核。",
+      "known_gap": "本轮取到的409/269/140是全量累计候选，且账本当前覆盖有缺口；不能用它证明或更新本页历史334/234/100。未执行本条人工回溯，保留旧日期。",
+      "manual_reason": "judgment",
+      "manual_route": "只读E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl，逐行JSON解析并按ts真实时区换北京；筛北京时间[2026-09-26 03:31:00,2026-10-09 23:50:00)、kind=command且name=New-ReportPage.ps1且ai=claude；先核对原统计回执是否以该起止时分为过滤窗还是仅事件极值，再按原方法数事件条数。不读报告正文、不把skill调用或成功页数算入。缺原窗口取法/覆盖证据时保留页面旧值与10月9日截止，Unknown，不将全量409冒充固定历史窗。"
     },
     {
       "id": "skill-report-page-text-0-16",
       "page": "skill-report-page",
       "screen": "skill-report-page-01",
-      "label": "Codex生成命令使用次数",
-      "current_value": 94,
-      "as_of": "2026-10-08",
+      "label": "固定历史窗口Codex汇报生成命令使用次数",
+      "current_value": 100,
+      "as_of": "2026-10-09",
       "category": "人工",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
       "retrieve": {
-        "kind": "regex_count",
-        "path": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
-        "pattern": "^(?=[^\\n]*\"kind\"\\s*:\\s*\"command\")(?=[^\\n]*\"name\"\\s*:\\s*\"New-ReportPage\\.ps1\")(?=[^\\n]*\"ai\"\\s*:\\s*\"codex\")[^\\n]+$",
-        "flags": "m"
+        "kind": "manual",
+        "instructions": "只读E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl，逐行JSON解析并按ts真实时区换北京；筛北京时间[2026-09-26 03:31:00,2026-10-09 23:50:00)、kind=command且name=New-ReportPage.ps1且ai=codex；先核对原统计回执是否以该起止时分为过滤窗还是仅事件极值，再按原方法数事件条数。不读报告正文、不把skill调用或成功页数算入。缺原窗口取法/覆盖证据时保留页面旧值与10月9日截止，Unknown，不将全量409冒充固定历史窗。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": true,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-jia\\content-refresh-jia.md",
       "refreshed_value": null,
       "page_pattern": " 次、Codex ([\\d,]+) 次运行生成命令",
       "field": "screens[0].text",
-      "start": 393,
-      "end": 395,
       "affected_screens": [
         "skill-report-page-01"
       ],
-      "scope_status": "verified",
-      "measurement_scope": "账本全量、kind=command 且 name=New-ReportPage.ps1 的使用事件条数，ai=codex；是命令调用次数，不是成功生成份数，也不是 kind=skill 的读取次数。",
-      "known_gap": "账本正常按完整自然日结算；last/累计是最新已完成快照，非当日直播。滚动7天两项另补今日源日志；覆盖证据见round02 ledger-evidence。"
+      "scope_status": "needs_owner_review",
+      "measurement_scope": "页面9月26日03:31–10月9日23:49的固定历史命令事件；使用小记录记到10月9日。kind=command且name=New-ReportPage.ps1且ai=codex，不是至今日累计。原窗口边界及覆盖须按manual_route复核。",
+      "known_gap": "本轮取到的409/269/140是全量累计候选，且账本当前覆盖有缺口；不能用它证明或更新本页历史334/234/100。未执行本条人工回溯，保留旧日期。",
+      "manual_reason": "judgment",
+      "manual_route": "只读E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl，逐行JSON解析并按ts真实时区换北京；筛北京时间[2026-09-26 03:31:00,2026-10-09 23:50:00)、kind=command且name=New-ReportPage.ps1且ai=codex；先核对原统计回执是否以该起止时分为过滤窗还是仅事件极值，再按原方法数事件条数。不读报告正文、不把skill调用或成功页数算入。缺原窗口取法/覆盖证据时保留页面旧值与10月9日截止，Unknown，不将全量409冒充固定历史窗。"
     },
     {
       "id": "learning-n-lessons-0",
@@ -814,7 +800,7 @@
       ],
       "registry_number": "n-sets-g",
       "original_value_index": 0,
-      "page_pattern": "G、H 上各有 ([\\d,]+) 份恢复副本",
+      "page_pattern": "G、H 上各有 ([\\d,]+) 份完整恢复副本",
       "scope_status": "verified",
       "measurement_scope": "G 恢复 sets 直属目录中 schema 正确、complete=true、plaintext_included=false 的完整 manifest 数；不读取加密资产正文",
       "field": "screens[9].text"
@@ -846,7 +832,7 @@
       ],
       "registry_number": "n-sets-h",
       "original_value_index": 0,
-      "page_pattern": "G、H 上各有 ([\\d,]+) 份恢复副本",
+      "page_pattern": "G、H 上各有 ([\\d,]+) 份完整恢复副本",
       "scope_status": "verified",
       "measurement_scope": "H 恢复 sets 直属目录中 schema 正确、complete=true、plaintext_included=false 的完整 manifest 数；不读取加密资产正文",
       "field": "screens[9].text"
@@ -9314,7 +9300,7 @@
       "screen": "codex-memory-01",
       "label": "当前对话备份大小（GB）",
       "current_value": 39.2,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-20",
       "category": "JSON 字段",
       "source_location": "C:\\Users\\10979\\AppData\\Local\\CodexConversationBackup\\hot-last.json /total_size_bytes",
       "retrieve": {
@@ -9329,7 +9315,7 @@
       "automatic": true,
       "private": true,
       "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
       "refreshed_value": 39.2,
       "affected_screens": [
         "codex-memory-01",
@@ -9341,20 +9327,18 @@
       "original_value_index": 0,
       "page_pattern": "^- \\*\\*([\\d,]+(?:\\.\\d+)?) GB\\*\\*　Codex 完整对话，",
       "field": "screens[0].text",
-      "start": 297,
-      "end": 301,
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点清单所列逻辑文件length总和；十进制GB=字节/10^9，四舍五入到1位；不是源目录当前大小或去重对象库占盘量。",
-      "observed_at": "2026-10-11T17:59:16+08:00",
-      "source_observed_at": "2026-10-11T04:55:31.1854772+00:00"
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00"
     },
     {
       "id": "codex-memory-n-conv-size-1",
       "page": "codex-memory",
       "screen": "codex-memory-01",
       "label": "当前对话备份文件数",
-      "current_value": 10491,
-      "as_of": "2026-10-11",
+      "current_value": "11,108",
+      "as_of": "2026-10-20",
       "category": "JSON 字段",
       "source_location": "C:\\Users\\10979\\AppData\\Local\\CodexConversationBackup\\hot-last.json /file_count",
       "retrieve": {
@@ -9367,7 +9351,7 @@
       "automatic": true,
       "private": true,
       "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
       "refreshed_value": 10491,
       "affected_screens": [
         "codex-memory-01",
@@ -9377,36 +9361,29 @@
       ],
       "registry_number": "n-conv-size",
       "original_value_index": 1,
-      "page_pattern": "^- \\*\\*[\\d.]+ GB\\*\\*　Codex 完整对话，([\\d,]+) 个文件，",
+      "page_pattern": "^- \\*\\*[\\d.]+ GB\\*\\*　Codex 完整对话，([\\d,]+) 个文件（",
       "field": "screens[0].text",
-      "start": 318,
-      "end": 324,
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点成功收录的逻辑文件数；与同point manifest.file_count及files数组长度核对，不用当前源目录文件数代替。",
-      "observed_at": "2026-10-11T17:59:16+08:00",
-      "source_observed_at": "2026-10-11T04:55:31.1854772+00:00"
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00"
     },
     {
       "id": "codex-memory-n-reuse-0",
       "page": "codex-memory",
       "screen": "codex-memory-08",
-      "label": "当前复用对象大小（GB）",
+      "label": "10月11日恢复点复用对象GB",
       "current_value": 19.8,
       "as_of": "2026-10-11",
       "category": "JSON 字段",
       "source_location": "C:\\Users\\10979\\AppData\\Local\\CodexConversationBackup\\hot-last.json /reused_object_bytes",
       "retrieve": {
-        "kind": "json",
-        "path": "C:\\Users\\10979\\AppData\\Local\\CodexConversationBackup\\hot-last.json",
-        "pointer": [
-          "reused_object_bytes"
-        ],
-        "scale": 1e-09,
-        "digits": 1
+        "kind": "manual",
+        "instructions": "固定10月11日恢复点历史复用/新写量；保留原值与日期，不拿当前滚动hot-last覆盖。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": true,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
       "refreshed_value": 19.8,
       "affected_screens": [
@@ -9416,8 +9393,6 @@
       "original_value_index": 0,
       "page_pattern": "GB 里，([\\d.]+) GB 是直接复用的",
       "field": "screens[7].text",
-      "start": 208,
-      "end": 212,
       "scope_status": "verified",
       "measurement_scope": "最近已完成热备这次捕获中按逻辑文件引用累加的复用已有内容对象字节；十进制GB=字节/10^9、1位小数；不是物理磁盘节省量。",
       "observed_at": "2026-10-11T17:59:16+08:00",
@@ -9427,23 +9402,18 @@
       "id": "codex-memory-n-reuse-1",
       "page": "codex-memory",
       "screen": "codex-memory-08",
-      "label": "当前新写对象大小（GB）",
+      "label": "10月11日恢复点新写对象GB",
       "current_value": 19.5,
       "as_of": "2026-10-11",
       "category": "JSON 字段",
       "source_location": "C:\\Users\\10979\\AppData\\Local\\CodexConversationBackup\\hot-last.json /new_object_bytes",
       "retrieve": {
-        "kind": "json",
-        "path": "C:\\Users\\10979\\AppData\\Local\\CodexConversationBackup\\hot-last.json",
-        "pointer": [
-          "new_object_bytes"
-        ],
-        "scale": 1e-09,
-        "digits": 1
+        "kind": "manual",
+        "instructions": "固定10月11日恢复点历史复用/新写量；保留原值与日期，不拿当前滚动hot-last覆盖。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": true,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
       "refreshed_value": 19.5,
       "affected_screens": [
@@ -9453,8 +9423,6 @@
       "original_value_index": 1,
       "page_pattern": "这次新写了 ([\\d.]+) GB。",
       "field": "screens[7].text",
-      "start": 238,
-      "end": 242,
       "scope_status": "verified",
       "measurement_scope": "最近已完成热备这次捕获中按逻辑文件引用累加的缺失内容对象的新写字节；十进制GB=字节/10^9、1位小数；不是物理磁盘节省量。",
       "observed_at": "2026-10-11T17:59:16+08:00",
@@ -9618,7 +9586,7 @@
       "page": "codex-memory",
       "screen": "codex-memory-01",
       "label": "保留不变：9 月 28 日停掉的 Codex 设置和记忆、Claude 记忆、Antigravity 设置和知识三套备份",
-      "current_value": 3,
+      "current_value": "3",
       "as_of": "2026-09-28",
       "category": "人工",
       "source_location": "owner-decisions.md“网站：AI 备份的去留和写法”及本人 23:1x 原话（协调转达）",
@@ -9628,7 +9596,7 @@
       },
       "automatic": false,
       "private": true,
-      "historical": true,
+      "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
       "refreshed_value": null,
       "affected_screens": [
@@ -9639,8 +9607,10 @@
       ],
       "field": "screens[0].text",
       "page_pattern": "^- \\*\\*([\\d,]+) 套退役\\*\\*",
-      "start": 429,
-      "end": 430
+      "manual_reason": "judgment",
+      "manual_route": "沿用已审定9月28日退役决定与既有来源记录，逐项数Codex设置和记忆、Claude记忆、Antigravity设置和知识三种独立备份，共3套；这是页面对既定退役范围的分组数，不是本轮又退役3套，不新查被冻结旧项目、不声称10/20重验其运行。",
+      "scope_status": "verified",
+      "measurement_scope": "既定2026-09-28退役范围在当前首屏的分组数；保留原日期，不涉及新退役或重新运行。"
     },
     {
       "id": "codex-memory-n-keep-0",
@@ -12138,10 +12108,10 @@
       "page": "ramdisk-guardian",
       "screen": "ramdisk-guardian-01",
       "label": "本屏数字截至",
-      "current_value": "10 月 11 日 13:33",
-      "as_of": "2026-10-11",
+      "current_value": "10 月 20 日 07:31",
+      "as_of": "2026-10-20",
       "category": "只读取数",
-      "source_location": "见retrieve与pc-findings.md",
+      "source_location": "E:/Projects/Tools/RamdiskGuardian/logs/guardian.log.1 + guardian.log、health.json及现有ramdisk-health/ramdisk-log-cadence；本轮证据round-01/evidence/scope-desktop.json中ramdisk-guardian项目和refresh/result.json。",
       "automatic": true,
       "private": false,
       "historical": false,
@@ -12149,13 +12119,12 @@
       "affected_screens": [
         "ramdisk-guardian-01"
       ],
-      "measurement_scope": "说明当前巡查轮数、重建次数、Z盘占用与日志间隔；124项测试的10月10日独立历史日期不由本句刷新。任一当前数字Unknown保留旧日期。",
+      "measurement_scope": "注明当前保留日志轮数4124、日志间隔20处/最长911分钟约15小时、Z盘占用0.5GiB和计划15分钟周期；07:31是保留日志最近一次巡查记录时间（2026-10-20 07:31:02北京），不是取数执行时间。38次旧规则历史总数及124个未重跑的测试定义均不由本句刷新；任一当前来源Unknown保留旧日期。",
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "截至 ([\\d]+ 月 [\\d]+ 日 [\\d:]+)（",
       "qualifies": [
         "ramdisk-guardian-n-runs-0",
-        "ramdisk-guardian-n-reinit-0",
         "ramdisk-guardian-n-used-0",
         "ramdisk-guardian-gap-count",
         "ramdisk-guardian-gap-hours",
@@ -12219,7 +12188,7 @@
       "affected_screens": [
         "ramdisk-guardian-01"
       ],
-      "page_pattern": "最长约 ([\\d]+(?:\\.\\d+)?) 小时",
+      "page_pattern": "最长 [\\d,]+ 分钟（约 ([\\d,]+) 小时）",
       "measurement_scope": "guardian.log.1后接guardian.log实际guardian run标记，逐邻时间差；>15.5分钟计间隔，最长分钟按原页面整数分钟口径取整，不去重、不外推轮换历史；小时为近似整数。",
       "scope_status": "verified",
       "field": "screens[0].text"
@@ -12802,7 +12771,7 @@
       "screen": "codex-memory-04",
       "label": "第4屏当前对话恢复点大小（GB）",
       "current_value": 39.2,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-20",
       "category": "JSON 字段",
       "source_location": "C:\\Users\\10979\\AppData\\Local\\CodexConversationBackup\\hot-last.json /total_size_bytes",
       "retrieve": {
@@ -12817,7 +12786,7 @@
       "automatic": true,
       "private": true,
       "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
       "refreshed_value": 39.2,
       "affected_screens": [
         "codex-memory-04"
@@ -12826,12 +12795,10 @@
       "original_value_index": 0,
       "page_pattern": "^- \\*\\*多大\\*\\*　[\\d,]+ 个文件，([\\d.]+) GB",
       "field": "screens[3].text",
-      "start": 133,
-      "end": 137,
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点清单所列逻辑文件length总和；十进制GB=字节/10^9，四舍五入到1位；不是源目录当前大小或去重对象库占盘量。",
-      "observed_at": "2026-10-11T17:59:16+08:00",
-      "source_observed_at": "2026-10-11T04:55:31.1854772+00:00"
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00"
     },
     {
       "id": "codex-memory-n-conv-files-screen04",
@@ -12839,7 +12806,7 @@
       "screen": "codex-memory-04",
       "label": "第4屏当前对话恢复点文件数",
       "current_value": 10491,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-20",
       "category": "JSON 字段",
       "source_location": "C:\\Users\\10979\\AppData\\Local\\CodexConversationBackup\\hot-last.json /file_count",
       "retrieve": {
@@ -12852,7 +12819,7 @@
       "automatic": true,
       "private": true,
       "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
       "refreshed_value": 10491,
       "affected_screens": [
         "codex-memory-04"
@@ -12861,12 +12828,10 @@
       "original_value_index": 1,
       "page_pattern": "^- \\*\\*多大\\*\\*　([\\d,]+) 个文件，[\\d.]+ GB",
       "field": "screens[3].text",
-      "start": 122,
-      "end": 128,
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点成功收录的逻辑文件数；与同point manifest.file_count及files数组长度核对，不用当前源目录文件数代替。",
-      "observed_at": "2026-10-11T17:59:16+08:00",
-      "source_observed_at": "2026-10-11T04:55:31.1854772+00:00"
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00"
     },
     {
       "id": "codex-memory-n-encrypted-disks-0",
@@ -13229,8 +13194,6 @@
       "private": true,
       "field": "screens[0].text",
       "page_pattern": "(?m)^([\\d,]+) 个标题各取最新一版",
-      "start": 323,
-      "end": 326,
       "affected_screens": [
         "skill-report-page-01"
       ],
@@ -16339,21 +16302,19 @@
       "id": "b6-password-center-asof-10",
       "page": "password-center",
       "screen": "password-center-10",
-      "label": "G/H 恢复副本及现役程序包观察日期",
-      "current_value": "10 月 11 日",
-      "as_of": "2026-10-11",
+      "label": "现役批准程序包文件数观察日期",
+      "current_value": "10 月 12 日",
+      "as_of": "2026-10-12",
       "category": "自动",
-      "source_location": "注明同段 G/H 完整恢复份数、G批准程序包文件数；任一来源不可用则保留旧截至日期",
+      "source_location": "G:\\PasswordCenter 的 approved_record 所指程序包",
       "automatic": true,
       "private": false,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "注明同段 G/H 完整恢复份数、G批准程序包文件数；任一来源不可用则保留旧截至日期",
+      "measurement_scope": "仅注明紧邻后文G/H指向同一个现役批准程序包及G程序包2218文件；不注明前半段10月20日恢复副本集合元数据。只读程序包真实来源不可用时保留原10月12日日期。",
       "field": "screens[9].text",
       "page_pattern": "截至 ([\\d ]+月[\\d ]+日)：",
       "qualifies": [
-        "password-center-n-sets-g-0",
-        "password-center-n-sets-h-0",
         "password-center-n-package-0"
       ]
     },
@@ -16587,15 +16548,15 @@
       "page": "github-local-index",
       "screen": "github-local-index-01",
       "label": "首屏数字截至日期",
-      "current_value": "10 月 11 日",
-      "as_of": "2026-10-11",
+      "current_value": "10 月 12 日",
+      "as_of": "2026-10-12",
       "category": "自动",
-      "source_location": "注明同屏 GitHub仓库总数/公开数、活动冻结项目数、固定区间仓库查询调用数，以及同截至句现存基线规模、新增身份数、本机相对缓存origin/main未推提交数；75个工作目录/30个临时目录单独注明旧总表9月28日快照，不绑定当前日期。任一被注明来源未知时保留旧截至。",
+      "source_location": "现有github-index-readonly-counts与github-admission-fixed-window入口；本轮实际取数见round-01/evidence/refresh/result.json，现场主线比较另见round-01/evidence/github-owner-status.json。",
       "automatic": true,
       "private": false,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "注明同屏 GitHub仓库总数/公开数、活动冻结项目数、固定区间仓库查询调用数，以及同截至句现存基线规模、新增身份数、本机相对缓存origin/main未推提交数；75个工作目录/30个临时目录单独注明旧总表9月28日快照，不绑定当前日期。任一被注明来源未知时保留旧截至。",
+      "measurement_scope": "注明首屏仓库总数/公开数/冻结数和保存基线及新增身份规模；398次查询自有9月16日–10月9日历史窗，75/30个目录自有9月28日总表日期；10月20日主线一致及无未提交改动是另一次观察，不受本10月12日截至注明，也不将不再展示的数值0加入日期依赖。",
       "field": "screens[0].text",
       "page_pattern": "截至 ([\\d ]+月[\\d ]+日)\\。",
       "qualifies": [
@@ -16604,8 +16565,7 @@
         "b6-github-local-index-frozen-count",
         "b6-github-local-index-admission-calls",
         "b6-github-local-index-baseline-count",
-        "b6-github-local-index-unregistered-count",
-        "b6-github-local-index-unpushed-count"
+        "b6-github-local-index-unregistered-count"
       ]
     },
     {
@@ -17780,10 +17740,10 @@
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
       "label": "G当前生产回执文件数",
-      "current_value": "10,491",
-      "as_of": "2026-10-11",
+      "current_value": "11,108",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "G 当前[^\\n]*?([\\d,]+) 个文件",
+      "page_pattern": "G 当前[^\\n；]*?([\\d,]+) 个文件",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -17799,17 +17759,20 @@
       "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": false,
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-g-bytes",
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
       "label": "G当前生产回执总字节数",
-      "current_value": "39,234,419,908",
-      "as_of": "2026-10-11",
+      "current_value": "39,488,518,338",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "个文件、([\\d,]+) 字节",
+      "page_pattern": "G 当前[^\\n；]*?个文件、([\\d,]+) 字节",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -17825,73 +17788,62 @@
       "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.jsontotal_size_bytes，单点文件清单字节汇总；入口校验complete/readback/current。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": false,
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-reuse-gb",
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
-      "label": "Greuse-gb",
+      "label": "2026-10-11恢复点复用对象GB",
       "current_value": "19.8",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
       "page_pattern": "复用 ([\\d.]+) GB",
       "retrieve": {
-        "kind": "entry",
-        "entry": "b7-ai-backup-task-archive-status",
-        "pointer": [
-          "g",
-          "receipt",
-          "reused_object_bytes"
-        ],
-        "scale": 1e-09,
-        "digits": 1
+        "kind": "manual",
+        "instructions": "正文此处明确是10/12核对的10/11恢复点历史数字；保留19.8/19.5及2026-10-11日期，不读取滚动hot-last覆盖。"
       },
-      "automatic": true,
+      "automatic": false,
       "scope_status": "verified",
-      "measurement_scope": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['reused_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
+      "measurement_scope": "固定20261011T043524Z-0dc21e1e恢复点历史值；10/19恢复点同字段本轮未读，Unknown。",
       "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['reused_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": true
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-new-gb",
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
-      "label": "Gnew-gb",
+      "label": "2026-10-11恢复点新写对象GB",
       "current_value": "19.5",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
       "page_pattern": "新写 ([\\d.]+) GB",
       "retrieve": {
-        "kind": "entry",
-        "entry": "b7-ai-backup-task-archive-status",
-        "pointer": [
-          "g",
-          "receipt",
-          "new_object_bytes"
-        ],
-        "scale": 1e-09,
-        "digits": 1
+        "kind": "manual",
+        "instructions": "正文此处明确是10/12核对的10/11恢复点历史数字；保留19.8/19.5及2026-10-11日期，不读取滚动hot-last覆盖。"
       },
-      "automatic": true,
+      "automatic": false,
       "scope_status": "verified",
-      "measurement_scope": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['new_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
+      "measurement_scope": "固定20261011T043524Z-0dc21e1e恢复点历史值；10/19恢复点同字段本轮未读，Unknown。",
       "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['new_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": true
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-h-file-count",
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
       "label": "H当前生产回执文件数",
-      "current_value": "9,815",
-      "as_of": "2026-10-11",
+      "current_value": "11,093",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "H 当前[^\\n]*?([\\d,]+) 个文件",
+      "page_pattern": "H 当前[^\\n；]*?([\\d,]+) 个文件",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -17907,17 +17859,20 @@
       "source_location": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": false,
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-h-gb",
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
-      "label": "H当前生产回执总量GB",
-      "current_value": "35.1",
-      "as_of": "2026-10-11",
+      "label": "H当前生产回执总字节数（沿用旧绑定id）",
+      "current_value": "39,461,693,231",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "H 当前[^\\n]*?、([\\d.]+) GB",
+      "page_pattern": "H 当前[^\\n；]*?个文件、([\\d,]+) 字节",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -17925,17 +17880,18 @@
           "h",
           "receipt",
           "total_size_bytes"
-        ],
-        "scale": 1e-09,
-        "digits": 1
+        ]
       },
       "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.jsontotal_size_bytes除10^9、四舍五入一位；只读H本身生产回执并强制complete/readback/current。",
+      "measurement_scope": "H自己当前点cold-last回执total_size_bytes原字节数；不换算GB，不用G值；入口核对complete/readback/current身份。",
       "source_location": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.jsontotal_size_bytes除10^9、四舍五入一位；只读H本身生产回执并强制complete/readback/current。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": false,
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-cold-coverage-percent",
@@ -17943,7 +17899,7 @@
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
       "label": "H生产回执覆盖率百分数",
       "current_value": "100",
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
       "page_pattern": "覆盖 (\\d+(?:\\.\\d+)?)%",
       "retrieve": {
@@ -17959,17 +17915,20 @@
       "source_location": "H receipts/cold-last.json coverage_percent，与现有入口强制complete/current/all_manifest_files/无警告条件共同使用；不重跑逐文件校验。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": false,
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "b7-codex-memory-isolated-disaster-recovery-g-file-count",
       "page": "codex-memory-isolated-disaster-recovery",
       "screen": "codex-memory-isolated-disaster-recovery-05",
       "label": "G当前生产回执文件数",
-      "current_value": "10,491",
-      "as_of": "2026-10-11",
+      "current_value": "11,108",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "G、H 当前[^\\n]*?各 ([\\d,]+) 个文件",
+      "page_pattern": "G 当前[^\\n；]*?([\\d,]+) 个文件",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -17985,17 +17944,20 @@
       "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": false,
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "b7-codex-memory-isolated-disaster-recovery-h-file-count",
       "page": "codex-memory-isolated-disaster-recovery",
       "screen": "codex-memory-isolated-disaster-recovery-05",
       "label": "H当前生产回执文件数",
-      "current_value": "9,815",
-      "as_of": "2026-10-11",
+      "current_value": "11,093",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "H 当前[^\\n]*?([\\d,]+) 个文件",
+      "page_pattern": "H 当前[^\\n；]*?([\\d,]+) 个文件",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -18011,17 +17973,20 @@
       "source_location": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": false,
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-g-file-count",
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-05",
       "label": "G当前生产回执文件数",
-      "current_value": "10,491",
-      "as_of": "2026-10-11",
+      "current_value": "11,108",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "G 当前[^\\n]*?([\\d,]+) 个文件",
+      "page_pattern": "G 当前[^\\n；]*?([\\d,]+) 个文件",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -18037,17 +18002,20 @@
       "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": false,
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-g-bytes",
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-05",
       "label": "G当前生产回执总字节数",
-      "current_value": "39,234,419,908",
-      "as_of": "2026-10-11",
+      "current_value": "39,488,518,338",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "个文件、([\\d,]+) 字节",
+      "page_pattern": "G 当前[^\\n；]*?个文件、([\\d,]+) 字节",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -18063,73 +18031,62 @@
       "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.jsontotal_size_bytes，单点文件清单字节汇总；入口校验complete/readback/current。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": false,
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-reuse-gb",
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-05",
-      "label": "Greuse-gb",
+      "label": "2026-10-11恢复点复用对象GB",
       "current_value": "19.8",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
       "page_pattern": "复用 ([\\d.]+) GB",
       "retrieve": {
-        "kind": "entry",
-        "entry": "b7-ai-backup-task-archive-status",
-        "pointer": [
-          "g",
-          "receipt",
-          "reused_object_bytes"
-        ],
-        "scale": 1e-09,
-        "digits": 1
+        "kind": "manual",
+        "instructions": "正文此处明确是10/12核对的10/11恢复点历史数字；保留19.8/19.5及2026-10-11日期，不读取滚动hot-last覆盖。"
       },
-      "automatic": true,
+      "automatic": false,
       "scope_status": "verified",
-      "measurement_scope": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['reused_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
+      "measurement_scope": "固定20261011T043524Z-0dc21e1e恢复点历史值；10/19恢复点同字段本轮未读，Unknown。",
       "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['reused_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": true
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-new-gb",
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-05",
-      "label": "Gnew-gb",
+      "label": "2026-10-11恢复点新写对象GB",
       "current_value": "19.5",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
       "page_pattern": "新写 ([\\d.]+) GB",
       "retrieve": {
-        "kind": "entry",
-        "entry": "b7-ai-backup-task-archive-status",
-        "pointer": [
-          "g",
-          "receipt",
-          "new_object_bytes"
-        ],
-        "scale": 1e-09,
-        "digits": 1
+        "kind": "manual",
+        "instructions": "正文此处明确是10/12核对的10/11恢复点历史数字；保留19.8/19.5及2026-10-11日期，不读取滚动hot-last覆盖。"
       },
-      "automatic": true,
+      "automatic": false,
       "scope_status": "verified",
-      "measurement_scope": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['new_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
+      "measurement_scope": "固定20261011T043524Z-0dc21e1e恢复点历史值；10/19恢复点同字段本轮未读，Unknown。",
       "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['new_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": true
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-h-file-count",
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-05",
       "label": "H当前生产回执文件数",
-      "current_value": "9,815",
-      "as_of": "2026-10-11",
+      "current_value": "11,093",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "H 当前[^\\n]*?([\\d,]+) 个文件",
+      "page_pattern": "H 当前[^\\n；]*?([\\d,]+) 个文件",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -18145,17 +18102,20 @@
       "source_location": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": false,
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-h-gb",
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-05",
       "label": "H当前生产回执总量GB",
-      "current_value": "35.1",
-      "as_of": "2026-10-11",
+      "current_value": "39.5",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "H 当前[^\\n]*?、([\\d.]+) GB",
+      "page_pattern": "H 当前[^\\n；]*?字节（([\\d.]+) GB）",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -18173,7 +18133,10 @@
       "source_location": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.jsontotal_size_bytes除10^9、四舍五入一位；只读H本身生产回执并强制complete/readback/current。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": false,
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-hot-warning-count",
@@ -18181,7 +18144,7 @@
       "screen": "codex-memory-vss-conversation-hot-backup-05",
       "label": "G生产回执文件警告数",
       "current_value": "0",
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
       "page_pattern": "警告 (\\d+)",
       "retrieve": {
@@ -18198,33 +18161,31 @@
       "source_location": "G receipts/hot-last.json file_warnings数组长度；只输出数量，与完整指针护栏共用，不输出相对文件名。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": false,
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "b7-codex-memory-isolated-disaster-recovery-conversation-task-result",
       "page": "codex-memory-isolated-disaster-recovery",
       "screen": "codex-memory-isolated-disaster-recovery-05",
-      "label": "会话计划任务最后运行结果码",
+      "label": "10/12已观察的10/11会话任务运行结果码（历史）",
       "current_value": "0",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
       "page_pattern": "自然运行、结果 (\\d+)",
       "retrieve": {
-        "kind": "entry",
-        "entry": "b7-ai-backup-task-archive-status",
-        "pointer": [
-          "tasks",
-          "LastTaskResult",
-          "CodexConversationBackup-Hot-Daily"
-        ]
+        "kind": "manual",
+        "instructions": "保留页面明示的10/12只读观察和10/11自然运行结果0；本轮未重读任务现场，禁止用新任务结果覆盖。"
       },
-      "automatic": true,
+      "automatic": false,
       "scope_status": "verified",
       "measurement_scope": "Get-ScheduledTaskInfo -TaskName CodexConversationBackup-Hot-Daily的LastTaskResult；只读观察最近自然运行返回码，不是本轮重跑成功，不等同使用账本采集成功，也不代表新机恢复。",
       "source_location": "Get-ScheduledTaskInfo -TaskName CodexConversationBackup-Hot-Daily的LastTaskResult；只读观察最近自然运行返回码，不是本轮重跑成功，不等同使用账本采集成功，也不代表新机恢复。",
       "source_project": "codex-memory",
       "private": false,
-      "historical": false
+      "historical": true
     },
     {
       "id": "b7-agents-skills-plugins-as_of-item-21",
@@ -18313,53 +18274,55 @@
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
       "label": "数据截至日期关联它注明的真实计数",
-      "current_value": "2026-10-11 14:00",
-      "as_of": "2026-10-11",
+      "current_value": "2026-10-20 07:41",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "start": 47,
-      "end": 63,
       "qualifies": [
         "b7-codex-memory-content-addressed-storage-cold-sync-g-file-count",
         "b7-codex-memory-content-addressed-storage-cold-sync-g-bytes",
-        "b7-codex-memory-content-addressed-storage-cold-sync-reuse-gb",
-        "b7-codex-memory-content-addressed-storage-cold-sync-new-gb",
         "b7-codex-memory-content-addressed-storage-cold-sync-h-file-count",
         "b7-codex-memory-content-addressed-storage-cold-sync-h-gb",
         "b7-codex-memory-content-addressed-storage-cold-sync-cold-coverage-percent"
       ],
       "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "只关联该取数句所注明的同页实际数量；日期+14:00捕获完整，新观察日没有clock时只能输出候选交事实组/Opus审核，不能拼回旧14:00当新验证时间。",
-      "source_location": "qualifies=b7-codex-memory-content-addressed-storage-cold-sync-g-file-count,b7-codex-memory-content-addressed-storage-cold-sync-g-bytes,b7-codex-memory-content-addressed-storage-cold-sync-reuse-gb,b7-codex-memory-content-addressed-storage-cold-sync-new-gb,b7-codex-memory-content-addressed-storage-cold-sync-h-file-count,b7-codex-memory-content-addressed-storage-cold-sync-h-gb,b7-codex-memory-content-addressed-storage-cold-sync-cold-coverage-percent",
+      "measurement_scope": "2026-10-20 07:41仅注明本轮scope-tools.json实际读取的G/H各自当前点数量、字节/GB及覆盖/警告；不包括10/11历史复用/新写量、10/12计划任务观察或未读字段。",
+      "source_location": "qualifies=b7-codex-memory-content-addressed-storage-cold-sync-g-file-count,b7-codex-memory-content-addressed-storage-cold-sync-g-bytes,b7-codex-memory-content-addressed-storage-cold-sync-h-file-count,b7-codex-memory-content-addressed-storage-cold-sync-h-gb,b7-codex-memory-content-addressed-storage-cold-sync-cold-coverage-percent",
       "source_project": "codex-memory",
       "private": false,
       "historical": false,
       "date_precision": "datetime",
-      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。"
+      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。",
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "page_pattern": "截至 (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})："
     },
     {
       "id": "b7-codex-memory-isolated-disaster-recovery-as_of-item-105",
       "page": "codex-memory-isolated-disaster-recovery",
       "screen": "codex-memory-isolated-disaster-recovery-05",
       "label": "数据截至日期关联它注明的真实计数",
-      "current_value": "2026-10-11 14:00",
-      "as_of": "2026-10-11",
+      "current_value": "2026-10-20 07:41",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
       "qualifies": [
         "b7-codex-memory-isolated-disaster-recovery-g-file-count",
-        "b7-codex-memory-isolated-disaster-recovery-h-file-count",
-        "b7-codex-memory-isolated-disaster-recovery-conversation-task-result"
+        "b7-codex-memory-isolated-disaster-recovery-h-file-count"
       ],
       "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "只关联该取数句所注明的同页实际数量；日期+14:00捕获完整，新观察日没有clock时只能输出候选交事实组/Opus审核，不能拼回旧14:00当新验证时间。",
-      "source_location": "qualifies=b7-codex-memory-isolated-disaster-recovery-g-file-count,b7-codex-memory-isolated-disaster-recovery-h-file-count,b7-codex-memory-isolated-disaster-recovery-conversation-task-result",
+      "measurement_scope": "2026-10-20 07:41仅注明本轮scope-tools.json实际读取的G/H各自当前点数量、字节/GB及覆盖/警告；不包括10/11历史复用/新写量、10/12计划任务观察或未读字段。",
+      "source_location": "qualifies=b7-codex-memory-isolated-disaster-recovery-g-file-count,b7-codex-memory-isolated-disaster-recovery-h-file-count",
       "source_project": "codex-memory",
       "private": false,
       "historical": false,
       "date_precision": "datetime",
       "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。",
-      "page_pattern": "截至 (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})："
+      "page_pattern": "截至 (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})：",
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-as_of-item-110",
@@ -18395,29 +18358,29 @@
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-05",
       "label": "数据截至日期关联它注明的真实计数",
-      "current_value": "2026-10-11 14:00",
-      "as_of": "2026-10-11",
+      "current_value": "2026-10-20 07:41",
+      "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "start": 47,
-      "end": 63,
       "qualifies": [
         "b7-codex-memory-vss-conversation-hot-backup-g-file-count",
         "b7-codex-memory-vss-conversation-hot-backup-g-bytes",
-        "b7-codex-memory-vss-conversation-hot-backup-reuse-gb",
-        "b7-codex-memory-vss-conversation-hot-backup-new-gb",
         "b7-codex-memory-vss-conversation-hot-backup-h-file-count",
         "b7-codex-memory-vss-conversation-hot-backup-h-gb",
         "b7-codex-memory-vss-conversation-hot-backup-hot-warning-count"
       ],
       "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "只关联该取数句所注明的同页实际数量；日期+14:00捕获完整，新观察日没有clock时只能输出候选交事实组/Opus审核，不能拼回旧14:00当新验证时间。",
-      "source_location": "qualifies=b7-codex-memory-vss-conversation-hot-backup-g-file-count,b7-codex-memory-vss-conversation-hot-backup-g-bytes,b7-codex-memory-vss-conversation-hot-backup-reuse-gb,b7-codex-memory-vss-conversation-hot-backup-new-gb,b7-codex-memory-vss-conversation-hot-backup-h-file-count,b7-codex-memory-vss-conversation-hot-backup-h-gb,b7-codex-memory-vss-conversation-hot-backup-hot-warning-count",
+      "measurement_scope": "2026-10-20 07:41仅注明本轮scope-tools.json实际读取的G/H各自当前点数量、字节/GB及覆盖/警告；不包括10/11历史复用/新写量、10/12计划任务观察或未读字段。",
+      "source_location": "qualifies=b7-codex-memory-vss-conversation-hot-backup-g-file-count,b7-codex-memory-vss-conversation-hot-backup-g-bytes,b7-codex-memory-vss-conversation-hot-backup-h-file-count,b7-codex-memory-vss-conversation-hot-backup-h-gb,b7-codex-memory-vss-conversation-hot-backup-hot-warning-count",
       "source_project": "codex-memory",
       "private": false,
       "historical": false,
       "date_precision": "datetime",
-      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。"
+      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。",
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "page_pattern": "截至 (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})："
     },
     {
       "id": "b7-daily-preferences-current-corrections-statements-all",
@@ -31098,8 +31061,8 @@
       "page": "codex-memory",
       "screen": "codex-memory-04",
       "label": "第4屏当前对话恢复点文件数",
-      "current_value": 10491,
-      "as_of": "2026-10-11",
+      "current_value": "11,108",
+      "as_of": "2026-10-20",
       "category": "JSON 字段",
       "source_location": "C:\\Users\\10979\\AppData\\Local\\CodexConversationBackup\\hot-last.json /file_count",
       "retrieve": {
@@ -31112,27 +31075,27 @@
       "automatic": true,
       "private": true,
       "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
       "refreshed_value": 10491,
       "affected_screens": [
         "codex-memory-04"
       ],
       "registry_number": "n-conv-size",
       "original_value_index": 1,
-      "page_pattern": "各 ([\\d,]+) 个文件、[\\d.]+ GB",
+      "page_pattern": "G 是[^\\n；。]*?（([\\d,]+) 个文件、[\\d.]+ GB",
       "field": "screens[3].text",
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点成功收录的逻辑文件数；与同point manifest.file_count及files数组长度核对，不用当前源目录文件数代替。",
-      "observed_at": "2026-10-11T17:59:16+08:00",
-      "source_observed_at": "2026-10-11T04:55:31.1854772+00:00"
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00"
     },
     {
       "id": "int3-codex-memory-g-comparison-gb",
       "page": "codex-memory",
       "screen": "codex-memory-04",
       "label": "第4屏当前对话恢复点大小（GB）",
-      "current_value": 39.2,
-      "as_of": "2026-10-11",
+      "current_value": "39.5",
+      "as_of": "2026-10-20",
       "category": "JSON 字段",
       "source_location": "C:\\Users\\10979\\AppData\\Local\\CodexConversationBackup\\hot-last.json /total_size_bytes",
       "retrieve": {
@@ -31147,29 +31110,29 @@
       "automatic": true,
       "private": true,
       "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
       "refreshed_value": 39.2,
       "affected_screens": [
         "codex-memory-04"
       ],
       "registry_number": "n-conv-size",
       "original_value_index": 0,
-      "page_pattern": "各 [\\d,]+ 个文件、([\\d.]+) GB",
+      "page_pattern": "G 是[^\\n；。]*?（[\\d,]+ 个文件、([\\d.]+) GB",
       "field": "screens[3].text",
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点清单所列逻辑文件length总和；十进制GB=字节/10^9，四舍五入到1位；不是源目录当前大小或去重对象库占盘量。",
-      "observed_at": "2026-10-11T17:59:16+08:00",
-      "source_observed_at": "2026-10-11T04:55:31.1854772+00:00"
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00"
     },
     {
       "id": "int3-codex-memory-h-comparison-files",
       "page": "codex-memory",
       "screen": "codex-memory-04",
       "label": "H当前生产回执文件数",
-      "current_value": 9815,
-      "as_of": "2026-10-11",
+      "current_value": "11,093",
+      "as_of": "2026-10-20",
       "field": "screens[3].text",
-      "page_pattern": "各 ([\\d,]+) 个文件、[\\d.]+ GB",
+      "page_pattern": "H 还是[^\\n；。]*?（([\\d,]+) 个文件、[\\d.]+ GB",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -31188,17 +31151,20 @@
       "historical": false,
       "affected_screens": [
         "codex-memory-04"
-      ]
+      ],
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "int3-codex-memory-h-comparison-gb",
       "page": "codex-memory",
       "screen": "codex-memory-04",
       "label": "H当前生产回执总量GB",
-      "current_value": 35.1,
-      "as_of": "2026-10-11",
+      "current_value": "39.5",
+      "as_of": "2026-10-20",
       "field": "screens[3].text",
-      "page_pattern": "各 [\\d,]+ 个文件、([\\d.]+) GB",
+      "page_pattern": "H 还是[^\\n；。]*?（[\\d,]+ 个文件、([\\d.]+) GB",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -31219,7 +31185,10 @@
       "historical": false,
       "affected_screens": [
         "codex-memory-04"
-      ]
+      ],
+      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
     },
     {
       "id": "int3-codex-memory-current-comparison-asof",

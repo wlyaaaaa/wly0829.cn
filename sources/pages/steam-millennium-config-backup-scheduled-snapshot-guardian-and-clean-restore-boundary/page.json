@@ -8,7 +8,7 @@
   "status_line": {
     "state": "偶尔用",
     "as_of": "2026-10-11",
-    "source": "源仓库 10 月 1 日的最新提交，加上北京时间 10 月 11 日 13:32 的只读状态核对",
+    "source": "源仓库 10 月 1 日的最新提交（10 月 20 日回读远端无新提交，本机另有 7 个未提交的清单文件），加上北京时间 10 月 20 日 7:34—7:43 之间的零写入状态核对",
     "last": {
       "label": "快照核对",
       "at": "2026-10-11 13:32"
@@ -154,7 +154,7 @@
       "id": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-09",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\ntools/Invoke-MillenniumBackup.ps1 / tools/millennium_backup.py\n真实采集、状态、恢复与失败处理；杀毒拦截告警的判定在 tools/backup_file_warnings.py。原 tools/snapshot-millennium-config.ps1 保留为兼容转交。\n\ntools/Manage-MillenniumTask.ps1\n安装、自查周任务及任务参数；原 register 脚本保留为兼容转交。\n\ntools/snapshot-millennium-config-hidden.vbs\n隐藏调用与退出码传递。\n\nruntime/snapshot-state.json / README.md / tests/\n现行清单、绑定成功状态、操作指南与隔离回归；9月8日19项仅是历史。\n\n## 如何验证\n\n- 9 月 8 日原有 19 项断言全部通过；重试参数的两项检查属于源码断言，不是实际失败重试演练。9 月 18 日已发布的洁净源码实跑 55 项 Python 测试和 11 项 Windows 检查全部通过；现在源码里共有 63 个测试定义，本轮没有重跑。\n\n- 2026-10-11 13:32 只读状态：健康、零写入，当前代号 20260928T023001Z（9 月 28 日创建）共 20 个文件、无变化；E/G/H 三处回读同代通过，G 保留 3 代，没有告警；任务就绪、上次结果 0，最近成功 10 月 5 日 10:30。没有再次触发真实采集。\n\n- 9月8日20文件隔离采集与回填字节一致，19 JSON解析成功，3个虚构已安装资源/私有设置保留；本次未做真实Steam恢复。\n\n## 与其他模块的关系\n\n负责前三类配置的定期留存和恢复操作；Steam、Millennium 及插件主题各自负责实际运行。",
+      "text": "## 依据与来源\n\n## 真实入口\n\ntools/Invoke-MillenniumBackup.ps1 / tools/millennium_backup.py\n真实采集、状态、恢复与失败处理；杀毒拦截告警的判定在 tools/backup_file_warnings.py。原 tools/snapshot-millennium-config.ps1 保留为兼容转交。\n\ntools/Manage-MillenniumTask.ps1\n安装、自查周任务及任务参数；原 register 脚本保留为兼容转交。\n\ntools/snapshot-millennium-config-hidden.vbs\n隐藏调用与退出码传递。\n\nruntime/snapshot-state.json / README.md / tests/\n现行清单、绑定成功状态、操作指南与隔离回归；9月8日19项仅是历史。\n\n## 如何验证\n\n- 9 月 8 日原有 19 项断言全部通过；重试参数的两项检查属于源码断言，不是实际失败重试演练。9 月 18 日已发布的洁净源码实跑 55 项 Python 测试和 11 项 Windows 检查全部通过；现在源码里共有 63 个测试定义，本轮没有重跑。\n\n- 2026-10-20 早上（7:34—7:43 之间）零写入 Status：status=healthy，但它的范围只是本地快照、任务和 G 热备（health_scope=local_snapshot_task_and_hot_replica）。当前代号 20261019T023001Z-942cbd851a1f（北京时间 10 月 19 日 10:30 创建）共 20 个文件、核对通过、和现在的设置比无变化；G 回读同代通过，保留 4 代；H 冷备 cold_replica=stale_or_invalid：H 上能回读且自身完整，但还是 20260928T023001Z 那一代，冷备尝试回执仍是 9 月 18 日，所以不能说三处同代。任务 enabled、上次结果 0，最近成功 10 月 19 日 10:30，下一次 10 月 26 日 10:30。没有再次触发真实采集，也没有手动复制到 H。历史：10 月 11 日 13:32 那次 E/G/H 三处回读的是 9 月 28 日同一代。\n\n- 9月8日20文件隔离采集与回填字节一致，19 JSON解析成功，3个虚构已安装资源/私有设置保留；本次未做真实Steam恢复。\n\n## 与其他模块的关系\n\n负责前三类配置的定期留存和恢复操作；Steam、Millennium 及插件主题各自负责实际运行。",
       "links": [
         {
           "text": "上一个模块 主题选项与配色",

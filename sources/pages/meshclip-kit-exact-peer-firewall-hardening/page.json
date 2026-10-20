@@ -8,7 +8,7 @@
   "status_line": {
     "state": "偶尔用",
     "as_of": "2026-10-11",
-    "source": "源码核至 9 月 29 日提交 61fa792e，运行情况取北京时间 10 月 11 日 13:33 的一次主机自检",
+    "source": "源码核至 9 月 29 日提交 61fa792e（10 月 20 日回读远端无新提交），运行情况取北京时间 10 月 20 日 7:34—7:43 之间的一次主机只读自检",
     "last": {
       "label": "快照核对",
       "at": "2026-10-11"
@@ -19,7 +19,7 @@
       "id": "meshclip-kit-exact-peer-firewall-hardening-01",
       "section": "top",
       "title": "精确对端防火墙与宽泛规则防御",
-      "text": "# 精确对端防火墙与宽泛规则防御\n\n〔回到项目 → 双机剪贴板〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nMeshClip Kit · 功能说明\n\n能够说清本项目开放给谁、通过哪个接口和程序，并可逆撤销自己的配置。\n\n当前情况：10 月 11 日 13:33 主机上两条项目规则合规，也没发现别的生效 KDE 入站放行；这是主机一端的检查，两端配对和实际传输仍需自己的结果。\n\n项目快照核对于 2026-10-11（北京时间），运行情况依据当天 13:33 的主机自检；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "text": "# 精确对端防火墙与宽泛规则防御\n\n〔回到项目 → 双机剪贴板〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nMeshClip Kit · 功能说明\n\n能够说清本项目开放给谁、通过哪个接口和程序，并可逆撤销自己的配置。\n\n当前情况：10 月 20 日早上（7:34—7:43 之间）主机只读自检，两条项目规则仍合规，但“别的规则有没有放行 KDE Connect”这一项失败：主机上另有不属于本项目、不限来源的入站放行指向 KDE Connect。何时、被哪个安装程序或谁加回来的没查到；这次只发现、没修，要不要按本功能先预览再停用由我决定。这是主机一端的检查，副机规则没查，两端配对和实际传输仍需自己的结果。\n\n项目快照核对于 2026-10-20（北京时间），运行情况依据当天早上 7:34—7:43 之间的主机只读自检；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
       "links": [
         {
           "text": "回到项目 → 双机剪贴板",
@@ -93,7 +93,7 @@
       "id": "meshclip-kit-exact-peer-firewall-hardening-05",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n10 月 11 日 13:33 主机精确入站与非项目规则检查通过；副机规则这次没查\n\n### 关键规则与设计选择\n\n1. 规则同时约束协议、端口、程序、接口与单对端地址，不把0.0.0.0监听地址等同于防火墙远程放行范围。\n\n2. 宽泛非项目规则只在显式选项下禁用，不删除，保留恢复记录。\n\n3. 卸载核对资源是否仍由本项目拥有且未变化，变化资源保留并报告。\n\n## 当前怎样实现\n\n- Get-MeshClipKdeFirewallAudit读取指向可信kdeconnectd.exe的入站规则和过滤条件。\n\n- Disable-MeshClipBroadKdeFirewallRules禁用明确冲突规则并记录。\n\n- New-MeshClipFirewallRules创建TCP/UDP两条精确过滤规则；事务失败按记录回滚。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n10 月 20 日早上主机精确入站检查通过，非项目宽泛规则检查失败（另有宽泛放行指向 KDE Connect，未处理）；副机规则这次没查\n\n### 关键规则与设计选择\n\n1. 规则同时约束协议、端口、程序、接口与单对端地址，不把0.0.0.0监听地址等同于防火墙远程放行范围。\n\n2. 宽泛非项目规则只在显式选项下禁用，不删除，保留恢复记录。\n\n3. 卸载核对资源是否仍由本项目拥有且未变化，变化资源保留并报告。\n\n## 当前怎样实现\n\n- Get-MeshClipKdeFirewallAudit读取指向可信kdeconnectd.exe的入站规则和过滤条件。\n\n- Disable-MeshClipBroadKdeFirewallRules禁用明确冲突规则并记录。\n\n- New-MeshClipFirewallRules创建TCP/UDP两条精确过滤规则；事务失败按记录回滚。",
       "links": [],
       "anchors": [
         {
@@ -154,7 +154,7 @@
       "id": "meshclip-kit-exact-peer-firewall-hardening-09",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- `scripts\\configure-peer.ps1`防火墙加固与规则创建入口\n\n- `scripts\\uninstall.ps1`规则清理与历史宽泛规则可逆恢复\n\n- `tests\\MeshClip.Common.Tests.ps1`防火墙过滤契约等价性测试\n\n## 如何验证\n\n- 当前测试源码覆盖防火墙规则名哈希确定性、精准过滤契约与多余地址排除断言；这次没有重新运行测试。\n\n- 10 月 11 日 13:33 主机 doctor 只读检查：Exact-peer firewall 为 PASS，Unmanaged KDE firewall 为 PASS；不代表副机规则或真实传输也已核过。\n\n## 与其他模块的关系\n\n让KDE网络访问范围与批准对端一致，配对仍由KDE及用户负责。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `scripts\\configure-peer.ps1`防火墙加固与规则创建入口\n\n- `scripts\\uninstall.ps1`规则清理与历史宽泛规则可逆恢复\n\n- `tests\\MeshClip.Common.Tests.ps1`防火墙过滤契约等价性测试\n\n## 如何验证\n\n- 当前测试源码覆盖防火墙规则名哈希确定性、精准过滤契约与多余地址排除断言；这次没有重新运行测试。\n\n- 10 月 20 日早上（7:34—7:43 之间）主机 `doctor.ps1 -AsJson` 只读检查，22 项为 20 PASS / 1 FAIL / 1 WARN：Exact-peer firewall 为 PASS；Unmanaged KDE firewall 为 FAIL（Broad non-project inbound allow rules target KDE Connect，即有不属于本项目的宽泛入站放行指向 KDE Connect）；KDE peer availability 为 WARN（此刻没有已配对且可达的设备）。10 月 11 日 13:33 那次两项防火墙检查都是 PASS，宽泛规则何时重新出现没取证。不代表副机规则或真实传输也已核过；这次没有运行 Disable 选项。\n\n## 与其他模块的关系\n\n让KDE网络访问范围与批准对端一致，配对仍由KDE及用户负责。",
       "links": [
         {
           "text": "上一个模块 跨网组网与对端发现",

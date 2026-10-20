@@ -524,7 +524,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "经验当场写进文件，不写进记忆区",
+        "text_ref": "经验按时写进文件，不写进记忆区",
         "columns": 1,
         "whole_block": true,
         "illustration": "left_inside",
@@ -608,7 +608,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "经验当场写进文件，不写进记忆区",
+        "text_ref": "经验按时写进文件，不写进记忆区",
         "columns": 1,
         "whole_block": true,
         "illustration": "left_inside",
@@ -753,7 +753,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "当轮就记，记完说一句",
+        "text_ref": "按时点记，记完说一句",
         "columns": 1,
         "whole_block": true,
         "illustration": "left_inside",
@@ -827,7 +827,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "当轮就记，记完说一句",
+        "text_ref": "按时点记，记完说一句",
         "columns": 1,
         "whole_block": true,
         "illustration": "none",

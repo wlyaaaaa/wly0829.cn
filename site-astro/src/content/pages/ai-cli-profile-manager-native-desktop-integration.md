@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-native-desktop-integration/page.json",
-  "sha256": "9dd82c48860630b0d95d85e3e3da36f768d75ad55800988b8f0547f6c0c477be",
-  "converted_at_beijing": "2026-10-12T00:29:44+08:00"
+  "sha256": "cf291613a87dd5a670ba2e36109cd0cbef7728be96c996242d3bb36078b96bf9",
+  "converted_at_beijing": "2026-10-20T08:56:31+08:00"
  }
 }
 ---
@@ -182,7 +182,7 @@ AI CLI Profile Manager · 功能说明
 
 继续在官方 Codex 桌面使用原来的任务、工具和历史，只把本次明确选择的本地或第三方模型接进来；跨服务另开任务。
 
-**当前情况：**模型菜单里现有本机 4 个、云端 4 个模型（云端要先配好厂商引用才显示）；9 月 16 日到 28 日用这些模型开过至少 131 个桌面任务，9 月 29 日以后还没再用。本地模型的实际任务已有验收，现用桥接文件也已核对；其他模型、服务或旧任务不能直接借用这份证明。
+**当前情况：**模型菜单里现有本机 4 个、云端 4 个模型（云端要先配好厂商引用才显示）；9 月 16 日到 28 日用这些模型开过至少 131 个桌面任务，9 月 29 日以后还没再用。本地模型的实际任务已有验收；10 月 11 日核对过当时启用的桥接文件，但 10 月 20 日读到配置里选中的已是另一个桥版本，它是否真被桌面加载、文件是否与登记一致，目前无法证实；其他模型、服务或旧任务不能直接借用这份证明。
 
 内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；具体测试保留各自日期，页面不实时探测运行状态。
 
@@ -566,7 +566,7 @@ AI CLI Profile Manager · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-9 月 15 日本地桌面实际任务已验收；10 月 11 日核对现用桥 b47fea3ce81f7a67 七个文件全部一致
+9 月 15 日本地桌面实际任务已验收；10 月 11 日核对当时启用的桥 b47fea3ce81f7a67 七个文件全部一致；10 月 20 日配置选中的是 b25709497bb4d290，加载与七文件验真未核对
 
 ## 关键规则与设计选择
 
@@ -582,7 +582,7 @@ AI CLI Profile Manager · 功能说明
 
 - 官方debug models与实际模型目录一起提供完整指令、上下文、工具和模型身份；CODEX_CLI_PATH使用PCConfig登记的内容寻址发行，而不是另造聊天执行器。
 
-- 桌面发行由GetDesktopModelPlan.ps1、GetDesktopProviderToken.ps1、ResolveDesktopEngine.ps1及bridge目录内AiCli.CodexDesktopBridge.deps.json、AiCli.CodexDesktopBridge.dll、AiCli.CodexDesktopBridge.exe、AiCli.CodexDesktopBridge.runtimeconfig.json七文件组成。当前登记 36 个版本，启用的是 10 月 3 日登记的 b47fea3ce81f7a67，桥里的原生 Codex 引擎为 0.162.0-alpha.17.2（npm 上的 Codex CLI 另为 0.160.0）。旧 562b29bf4a6ac0af、3b7600a 只属各自历史。
+- 桌面发行由GetDesktopModelPlan.ps1、GetDesktopProviderToken.ps1、ResolveDesktopEngine.ps1及bridge目录内AiCli.CodexDesktopBridge.deps.json、AiCli.CodexDesktopBridge.dll、AiCli.CodexDesktopBridge.exe、AiCli.CodexDesktopBridge.runtimeconfig.json七文件组成。当前登记 36 个版本。10 月 20 日 07:41 只读桌面配置 desktop/state.json：接入 enabled=true，选中 b25709497bb4d290，它的 bridge\AiCli.CodexDesktopBridge.exe 文件存在；这份配置最后写于北京时间 10 月 11 日 16:42，晚于本页 10 月 11 日 14:00 的整理。选中和文件存在已证实；桌面进程是否真的加载了它、七个文件的大小和 SHA-256 是否与登记一致、它带的原生引擎版本，本轮都没核对，目前无法证实。10 月 11 日核对一致的是 10 月 3 日登记的 b47fea3ce81f7a67（桥里的原生 Codex 引擎为 0.162.0-alpha.17.2，npm 上的 Codex CLI 另为 0.160.0），那次结论只属于它。旧 562b29bf4a6ac0af、3b7600a 只属各自历史。
 
 - 四种本地模型共用既有Broker（显卡协调器）与256K配置；GLM、Qwen、DeepSeek仍保留不同Provider/协议身份。旧配置不会悄悄指向另一模型，跨Provider创建新任务。10 月 2 日起，非 OpenAI 的受管模型会关闭厂商不支持的 token-budget 和 history-notes 功能，保留所选模型原来在 90% 时压缩的设置。
 

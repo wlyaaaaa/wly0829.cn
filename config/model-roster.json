@@ -1,14 +1,14 @@
 {
   "schema": "agents.model-roster.v1",
-  "updated_beijing_date": "2026-10-08",
+  "updated_beijing_date": "2026-10-12",
   "purpose": "可派模型清单：列出各宿主现在能派哪些型号、各适合什么活。只作参考，不当门禁；实际能不能派以宿主当时真实支持的为准。",
-  "update_rule": "本人告知有新型号或新档位、或要求重估分工时，按《分工与并行施工》“新型号怎么调研”查公开数据，重新评估后直接更新选择，不为型号路线和档位再问本人，不自动沿用旧型号设置。AA 尚未出分时可用厂商公布的评测；数据足够可直接定稿，需等 AA 的对应条目标“暂定（厂商数据，日期）”。本人告知 AA 出分后，对这次新型号相关的选择做一次短复核：有变化就改，暂定的核实后去掉“暂定”。授权、预算仍按约法 L23 由本人确认。Sol ultra、Luna max 和生图 low 例外的现约定限当前代际，换代按新数据重评直接更新。",
+  "update_rule": "本人告知有新型号或新档位、或要求重估分工时，按《分工与并行施工》“新型号怎么调研”查公开数据，重新评估后直接更新选择，不为型号路线和档位再问本人，不自动沿用旧型号设置。AA 尚未出分时可用厂商公布的评测；数据足够可直接定稿，需等 AA 的对应条目标“暂定（厂商数据，日期）”。本人告知 AA 出分后，对这次新型号相关的选择做一次短复核：有变化就改，暂定的核实后去掉“暂定”。授权、预算仍按约法 L23 由本人确认。Sol 档位、Luna max 和生图 low 例外的现约定限当前代际，换代按新数据重评直接更新。",
   "hosts": {
     "codex": {
       "root_openai": {
         "description": "Codex 主对话是 GPT 时，容量够用优先用原生子代理（spawn_agent），显式传 model 和 reasoning_effort；容量不足时按 slot_fallback 转用共用包装器。",
         "slot_fallback": "hosts.codex.slot_fallback",
-        "effort_rule": "型号和档位按 routing 的当前场景和难度选；当前 Sol 子代理统一用 ultra，Luna 用最高可用档 max，照写好的提示生图、落盘例外用 low。Astra 要紧审图用 high、疑难和重大改动复核用 ultra；两家同档都做不对时才最后用一次 max。验收失败按《分工与并行施工》“做错了怎么办”，不把同模型 xhigh→max 当默认下一步。Astra 许可按 L23，换代按 update_rule 重查公开数据。",
+        "effort_rule": "型号和档位按 routing 的当前场景和难度选；当前 GPT-6.1 Sol 只读且步骤简单的小单（读一页、查一项现成数据、回读状态，代码上限 0）用 medium；施工、要判断的分析和难活仍用 ultra，Luna 用最高可用档 max，照写好的提示生图、落盘例外用 low。Astra 要紧审图用 high、疑难和重大改动复核用 ultra；两家同档都做不对时才最后用一次 max。验收失败按《分工与并行施工》“做错了怎么办”，不把同模型 xhigh→max 当默认下一步。Astra 许可按 L23，换代按 update_rule 重查公开数据。",
         "dispatchable": [
           {
             "model": "gpt-6-astra",
@@ -19,9 +19,9 @@
           },
           {
             "model": "gpt-6.1-sol",
-            "efforts": "low、medium、high、ultra、max；只记宿主支持的兼容档位，当前派单用 ultra，以宿主目录实际支持的为准",
+            "efforts": "low、medium、high、ultra、max；只记宿主支持的兼容档位，当前派单按 effort_rule 用 medium 或 ultra，以宿主目录实际支持的为准",
             "default_effort": "ultra",
-            "fit": "按 routing 的当前公开数据选择，子代理统一用 ultra：写代码和修复、按来源调研、材料整理、采集和清单审查；做不对时按“做错了怎么办”纠正或换人。AA 2026-10-05 的 Codex 编码代理 DeepSWE：medium 72.0%、xhigh 73.2%、high 70.5%；不是固定施工员，要惊艳的样板和分析另按成品质量场景选型。",
+            "fit": "按 routing 的当前公开数据和 effort_rule 选择：写代码和修复、按来源调研、材料整理、采集和清单审查；做不对时按“做错了怎么办”纠正或换人。AA 2026-10-05 的 Codex 编码代理 DeepSWE：medium 72.0%、xhigh 73.2%、high 70.5%；不是固定施工员，要惊艳的样板和分析另按成品质量场景选型。",
             "relative_cost": "中"
           },
           {
@@ -68,7 +68,7 @@
           "gpt-6.1-sol",
           "gpt-6-luna"
         ],
-        "efforts": "按本文件 routing 选当前 GPT-6.1 Sol、GPT-6 Luna、GPT-6 Astra 的档位，每次显式传 -Model 和 -Effort：Luna 当前用 max，Sol 当前用 ultra，Astra 按场景用 high、ultra 或 max。包装器缺省 Astra 取 max、Sol 取 ultra、Luna 取 max；Luna 的旧 xhigh 或 ultra 参数及续作保存值改用 max；其余 GPT 的旧 xhigh 改用 ultra，其他显式兼容档位保留；各型号仍以实际 model/list 支持为准。",
+        "efforts": "按本文件 routing 选当前 GPT-6.1 Sol、GPT-6 Luna、GPT-6 Astra 的档位，每次显式传 -Model 和 -Effort：Luna 当前用 max，GPT-6.1 Sol 只读且步骤简单的小单（读一页、查一项现成数据、回读状态，代码上限 0）用 medium；施工、要判断的分析和难活用 ultra，Astra 按场景用 high、ultra 或 max。包装器缺省 Astra 取 max、Sol 取 ultra、Luna 取 max；Luna 的旧 xhigh 或 ultra 参数及续作保存值改用 max；其余 GPT 的旧 xhigh 改用 ultra，其他显式兼容档位保留；各型号仍以实际 model/list 支持为准。",
         "scope": "Sol、Luna 随时可派；Astra 按本人给这个对话或项目的授权，保留原话里的项目、对话、期限和选型限制，不扩成全局许可。任何型号都不扩大任务范围。"
       },
       "dispatchable": [
@@ -124,7 +124,7 @@
           "requires_owner_authorization": false,
           "standing_authorization": "约法 L23（本人 2026-09-30）：Claude 不用本人另行授权就可以派 Sol 和 Luna，任何对话都可以派；不扩大任务范围。",
           "fit": "按 routing 场景表派 Sol、Luna；能用就行的交能胜任里最划算的，机械活交最便宜的，要惊艳的样板和关键部分按对应公开评测选择，不给型号固定身份。",
-          "invocation": "默认 AppServer，显式传 -Model <型号> -Effort <档位>；档位名单为包装器接受的兼容参数联合列表，各型号按实际支持选择；当前推荐 Sol ultra、Luna 最高可用档 max；不用 openai_child、不直接 codex exec。"
+          "invocation": "默认 AppServer，显式传 -Model <型号> -Effort <档位>；档位名单为包装器接受的兼容参数联合列表，各型号按实际支持选择；当前 GPT-6.1 Sol 只读且步骤简单的小单（读一页、查一项现成数据、回读状态，代码上限 0）用 medium，施工、要判断的分析和难活仍用 ultra；Luna 最高可用档 max；不用 openai_child、不直接 codex exec。"
         },
         {
           "via": "tools/Invoke-ClaudeGptChild.ps1",
@@ -157,7 +157,7 @@
         {
           "model": "claude-haiku-5-5",
           "efforts": "low、medium、high、xhigh、max（都不派）",
-          "reason": "定位（厂商）：高量、窄范围、看重成本的子任务。按“先能胜任，再更快，再省额度”，现有选择在每个能放的位置都更合适（AA 2026-10-08）。①Claude 会话验收清单和机械兜底：sonnet-low 的编码代理 42.06、每题 6.35 分钟、0.48 美元，Haiku low 只有 28.18、11.56 分钟、0.14 美元，更弱也更慢；Haiku 编码最好的 xhigh 41.44 也要 25.88 分钟、0.61 美元。②便宜复核：opus-low 综合 42.31、Omniscience 38.87、AA-LCR 80.67，Haiku low 只有 29.45、3.25、72.00，xhigh 的 Omniscience 也只有 6.05，凭记忆易出错，不适合找错。③机械批量活按场景表交 Luna max。本人猜的“强于 Luna、弱于 Sol”只部分成立：xhigh／max 综合 41.25／43.40 在 Luna 38.12 和 Sol 51.04 之间，但 Automation 全档低于 Luna、LCR 全档低于 Luna、max 的 Briefcase 和 GDPval 反超 Sol。2026-10-08 另派 Sol 专找反例，结论“没找到推翻的反例”：短回答 Haiku 确实更快（OpenRouter 中位延迟 1.24 对 Sonnet 2.31 秒），Claude 订阅里也比 Sonnet 少占额度（官方只给定性说法），但官方 Haiku 提示指南写明 low、medium 有时没检查就报告完成，不适合验收清单；看图表、操作界面、长材料 max 档等单项优势对应的活已有 GPT 或 Opus 接。以后要用时档位只考虑 xhigh（Haiku 自身编码最高点；max 编码回落到 36.47、花费翻 4 倍）。完整数据见决定文档“Haiku 5.5 定位与 Claude 三型号选型”。"
+          "reason": "定位（厂商）：高量、窄范围、看重成本的子任务。按“先能胜任，再更快，再省额度”，现有选择在每个能放的位置都更合适（AA 2026-10-08）。①Claude 会话验收清单和机械兜底：sonnet-low 的编码代理 42.06、每题 6.35 分钟、0.48 美元，Haiku low 只有 28.18、11.56 分钟、0.14 美元，更弱也更慢；Haiku 编码最好的 xhigh 41.44 也要 25.88 分钟、0.61 美元。②便宜复核：opus-low 综合 42.31、Omniscience 38.87、AA-LCR 80.67，Haiku low 只有 29.45、3.25、72.00，xhigh 的 Omniscience 也只有 6.05，凭记忆易出错，不适合找错。③机械批量活按场景表交 Luna max。本人猜的“强于 Luna、弱于 Sol”只部分成立：xhigh／max 综合 41.25／43.40 在 Luna 38.12 和 Sol 51.04 之间，但 Automation 全档低于 Luna、LCR 全档低于 Luna、max 的 Briefcase 和 GDPval 反超 Sol。2026-10-08 另派 Sol 专找反例，结论“没找到推翻的反例”：短回答 Haiku 确实更快（OpenRouter 中位延迟 1.24 对 Sonnet 2.31 秒），Claude 订阅里也比 Sonnet 少占额度（官方只给定性说法）；看图表、操作界面、长材料 max 档等单项优势对应的活已有 GPT 或 Opus 接。以后要用时档位只考虑 xhigh（Haiku 自身编码最高点；max 编码回落到 36.47、花费翻 4 倍）。完整数据见决定文档“Haiku 5.5 定位与 Claude 三型号选型”。"
         }
       ],
       "builtin_only": [
@@ -178,7 +178,7 @@
   },
   "routing": {
     "basis": "Claude 和 Codex 两边共用：主持的想和把关，具体的活按成品要求派出去。能用就行的交能胜任里最划算的；要惊艳的，样板和关键部分交做得最好的亲手做，其余照样板铺开；机械活交最便宜的。谁能胜任、谁做得最好，只以厂商公布的数据和 AA 等权威评测为准，不在本机试跑比较，本人说的强弱也不作依据。场景表是按数据得出的现在的选择，不是固定身份，不默认 Sol 是施工员；换代按《分工与并行施工》“新型号怎么调研”重查后直接更新路线和档位，不再确认。当前 Sol、Luna、Astra 指 GPT-6.1 Sol、GPT-6 Luna、GPT-6 Astra。2026-10-05 本轮查询 AA 分档数据、Arena 人类偏好榜和 Towards AI ToneBench；完整口径、出处、查询日及缺口见决定文档“Claude 动脑把关、GPT 动手汇报；“推理不够”不能当升档条件”的“调研数据”。保留的历史数据另标 2026-09-29／30，不拿旧 Sol 分数证明 6.1 Sol。运行记录只说明宿主支持、实际型号、耗时、卡住和落盘，不用于能力排名。同一家里才比花费，两边订阅额度各自独立；Luna 不花额度。",
-    "effort_rule": "开工前按剩下的真实难点选型号和档位，能胜任的最低一档就够；当前 Sol 子代理统一用 ultra，Luna 用最高可用档 max，照写好的提示生图、落盘例外用 low。Astra 和 Claude 先看场景表，没覆盖的按难度分级。做错了只看根会话验收看到的事实，按《分工与并行施工》“做错了怎么办”补材料、退回纠正或换人；开工后发现更难的，当场按剩余难点重选。同一个模型不把 xhigh→max 当默认下一步，两家同档都做不对时才最后用一次 max，写明难点和验收办法。AA 档位对照（原查询日 2026-09-29／30，2026-10-05 本轮复核）：Astra 终端编程题 xhigh 59.6%、max 59.1%；Opus 终端科研流程 xhigh 61.9%、max 59.1%。这两组是各自同一评测的档位比较，不跨评测比较，不证明 max 总更好；最高档的分数不能给低档作证。",
+    "effort_rule": "开工前按剩下的真实难点选型号和档位，能胜任的最低一档就够；当前 GPT-6.1 Sol 只读且步骤简单的小单（读一页、查一项现成数据、回读状态，代码上限 0）用 medium；施工、要判断的分析和难活仍用 ultra，Luna 用最高可用档 max，照写好的提示生图、落盘例外用 low。Astra 和 Claude 先看场景表，没覆盖的按难度分级。做错了只看根会话验收看到的事实，按《分工与并行施工》“做错了怎么办”补材料、退回纠正或换人；开工后发现更难的，当场按剩余难点重选。同一个模型不把 xhigh→max 当默认下一步，两家同档都做不对时才最后用一次 max，写明难点和验收办法。AA 档位对照（原查询日 2026-09-29／30，2026-10-05 本轮复核）：Astra 终端编程题 xhigh 59.6%、max 59.1%；Opus 终端科研流程 xhigh 61.9%、max 59.1%。这两组是各自同一评测的档位比较，不跨评测比较，不证明 max 总更好；最高档的分数不能给低档作证。",
     "evals_note": "各评测量的是什么、分数怎么读。分数是在很难的题上比高低，不是日常活的成功率；按场景、按确切型号和档位比较，最高档不能给低档作证。口径、完整数据和出处见决定文档的新调研数据；无匹配公开数据时标缺口，不以本机试跑或本人强弱判断补齐。",
     "evals": [
       {"eval": "Terminal-Bench 4.0", "measures": "66 道很难的终端工程题，按验证器判成败；AA 模型指数与原生编码代理榜使用的执行宿主不同", "read_as": "终端工程能力的公开旁证，不是日常修复成功率。只在相同题集、执行宿主和档位口径里比；不能把本机修好几次当成能力锚点。"},
@@ -201,15 +201,16 @@
       {"tier": "疑难", "examples": "困难设计，并发、一致性、安全、难测的路径，同类故障反复", "claude": "opus-xhigh", "gpt": "Astra ultra"},
       {"tier": "最难", "examples": "两家同档都做不对、要最后一试的难点", "claude": "opus-max", "gpt": "Astra max"}
     ],
-    "scenarios_note": "先按成品要求看场景表，没覆盖的再按难度分级；开工前主持的在计划里写明这件成品是能用就行、要惊艳还是机械活，本人随时可改。每个场景写对应公开评测、当前选择和依据；缺口标待公开数据，换代按《分工与并行施工》“新型号怎么调研”重查，不试跑比较。Sol ultra、Luna max 和生图 low 的当前约定照旧。Claude 一列的施工适用条件见 tiers_note。",
+    "scenarios_note": "先按成品要求看场景表，没覆盖的再按难度分级；开工前主持的在计划里写明这件成品是能用就行、要惊艳还是机械活，本人随时可改。每个场景写对应公开评测、当前选择和依据；缺口标待公开数据，换代按《分工与并行施工》“新型号怎么调研”重查，不试跑比较。GPT-6.1 Sol 只读且步骤简单的小单（读一页、查一项现成数据、回读状态，代码上限 0）用 medium，施工、要判断的分析和难活仍用 ultra；Luna max 和生图 low 的当前约定照旧。Claude 一列的施工适用条件见 tiers_note。",
     "scenarios": [
+      {"scenario": "只读且步骤简单的小单：读一页、查一项现成数据、回读状态（代码上限 0）", "evals": "同一只读浏览器小单的档位对比记录", "choose": "派 GPT-6.1 Sol medium；施工、要判断的分析和难活仍用 Sol ultra。", "why": "2026-10-12 实测：同一只读浏览器小单 medium 168 秒、ultra 231 秒，结果质量相同。两者都如实读到页面，读不出图表悬停数字，均未编造；该记录仅支持此类简单只读小单的档位选择。"},
       {"scenario": "给本人看的文字和分析：汇报、网站文案、方案、对本人经历和偏好的理解", "evals": "GDPval-AA v2.1、AA-Briefcase v1.1、Text Arena Creative Writing", "choose": "当前交 Claude：材料齐的整理和初稿 opus-medium，完整分析和方案 opus-high，要紧的取舍 opus-xhigh。本人定过由 Claude 写的成品、分析、网站文案和对本人价值、偏好的理解照旧；GPT 也可以写或出主意，涉及本人价值和偏好的内容单列，由 Claude 按原话和语境把关。只用一边时那一边全做，主持的根会话承担最终责任。", "why": "AA 2026-10-05：Opus high 的 GDPval／Briefcase 1707／1689，高于 Astra high 1485／1507 和 Sol xhigh 1510／1507；Opus medium 的 Briefcase 1628。Text Arena 2026-10-02 创意写作 Opus high 1516（1058 票）、Sol max 1460（686 票）、Astra max 1449（2029 票）；分档样本不同，不能外推成所有中文成品排名。"},
       {"scenario": "写代码、改脚本、修 bug", "evals": "AA 编码代理指数 v1.5（DeepSWE、SWE-Atlas、Terminal-Bench，按执行宿主与档位区分）、Terminal-Bench 4.0", "choose": "范围清楚、有验收办法的当前交 Sol ultra；GPT 用不了时交 opus-medium，改动大到根会话没法逐处核对的用 opus-high。需求不清、要设计取舍、跨系统的，先交 Astra（有授权时）或 opus-high 定方案，定了再交 Sol ultra 照做（《分工与并行施工》“要自己定方案的，不交 Sol”）；做不对（见做错了怎么办）时纠正或换 Astra high、opus-high。要读懂大代码库、解释程序行为和根因的当前交 opus-high；并发、一致性、安全、难测的路径用 Astra ultra 或 opus-xhigh，一件活选一家。照明确要求的小改动交 Sol ultra，GPT 用不了时 opus-low；纯机械改名、套已定补丁优先脚本或 Luna max，GPT 用不了时 sonnet-low。Luna 当前不派需要判断的写代码和修复。", "why": "AA 2026-10-05 编码代理榜：Sol xhigh 的综合／DeepSWE／SWE-Atlas／终端为 62.91／73.16%／61.02%／54.55%；Astra max 61.65／67.55%／61.83%／55.56%；Opus max 65.99／68.44%／66.40%／63.13%。Sol xhigh 平均每题约 15.5 分钟、1.04 美元，Astra max 29.4 分钟、7.47 美元；花费只在同一家里比较。Luna max 综合 41.07、终端 15.15%，暂不接需要判断的编码；这不是它完全不会写代码。Opus high 的代码库理解分档仍待公开数据，保留当前选择，不借 max 作证。"},
       {"scenario": "调研、查事实（要可靠、少编造）", "evals": "AA-Omniscience（只说明凭记忆靠不靠得住）、AA-Briefcase v1.1、GDPval-AA v2.1", "choose": "按指定来源收集、摘录交 Sol ultra，材料已给定时用 Luna max，GPT 用不了时 sonnet-low；多来源综合、比较交 Sol ultra，GPT 用不了时 opus-medium。证据冲突、结论要拿去做决定的交 Sol ultra；做不对（见做错了怎么办）时纠正或换 Astra high、opus-high。要紧的决定用 Astra ultra 或 opus-xhigh。事实一律查原文、写出处，不凭记忆答；主持的把关结论。", "why": "AA 2026-10-05 的 Briefcase：Sol xhigh 1507、Astra high 1507、Opus medium 1628，体现多材料成品和分析的相对质量；不能把闭卷知识得分当成联网调研成功率。没有本机修复记录或旧 Sol 分数作为当前能力依据。"},
       {"scenario": "排障、找根因（系统和程序故障）", "evals": "ITBench-AA、AA 编码代理指数的 SWE-Atlas-QnA、Terminal-Bench-Science", "choose": "范围明确、知道组件并能复现的当前交 Sol ultra；GPT 用不了时 opus-medium。系统级根因目前保留 Sol ultra 的选择、标待公开数据；做不对（见做错了怎么办）时纠正或换 Astra high，没有 Astra 授权时按场景交 opus-high 或其他 GPT 选择。程序行为的根因当前交 opus-high；根因不明时 Sol ultra 先收材料，按剩余难点重选。同类故障反复、牵涉数据一致性用 Astra ultra 或 opus-xhigh，一件活选一家。结论由主持的根会话把关。", "why": "AA 2026-10-05 ITBench max：Astra 48.6%、Opus 38.2%；6.1 Sol 的字段为空，不能拿旧 Sol 的 49.4% 代替，系统级根因待公开数据。当前编码代理 SWE-Atlas 的 Opus max 66.40%、Astra max 61.83%、Sol xhigh 61.02%；终端科研流程 max 的 Astra 63.3%、Opus 59.1%（Opus xhigh 61.9%）、Sol 58.1%。高档数据不替低档位作证。"},
       {"scenario": "多步自动化流程", "evals": "AutomationBench-AA（分清目标完成比例和整题全对）", "choose": "调用链完全定好的交 Luna max，GPT 用不了时 sonnet-low；短的、带条件的交 Sol ultra，GPT 用不了时 opus-low；多分支、要处理异常的交 Sol ultra，GPT 用不了时 opus-medium。陌生长流程当前交 Sol ultra；做不对（见做错了怎么办）时纠正或换 Astra high、opus-high。约束复杂的用 Astra ultra 或 opus-xhigh，一件活选一家。", "why": "AA 2026-09-30 历史严格全对：max 的 Astra 41.6%、Opus 41.3%，6.1 Sol xhigh 37.1%、max 37.0%；2026-10-05 当前主分 max 的 Astra 68.5%、Opus 69.5%、Sol 64.9%，主分不是整件活成功率。陌生长流程必须验收。"},
       {"scenario": "长材料读取、摘录、整理（答案就在材料里）", "evals": "AA-LCR v1.1", "choose": "逐字定位、搬运优先脚本或 Luna max，GPT 用不了时 sonnet-low；要读懂、跨材料对齐交 Luna max，GPT 用不了时 opus-low；多文件综合、判断矛盾交 Sol ultra，GPT 用不了时 opus-medium。主会话等着结果时按运行耗时记录改交 Sol ultra，不拿耗时当能力排名。", "why": "AA 2026-10-05 长材料理解：Luna max 83.3%、Opus low 80.7%、medium 84.3%、max 84.7%，6.1 Sol low 84.0%、medium 83.3%、xhigh 79.7%，Astra max 80.7%。这些是各自档位，不把最高档分数给低档作证；Luna 适用给定材料，不凭记忆答事实。"},
-      {"scenario": "看图、审图、截图录屏、操作电脑和浏览器", "evals": "MMMU-Pro（只作看图推理旁证）", "choose": "截图、录屏、操作电脑和浏览器、批量采集派出去做好、编号送来；按固定清单逐条审图交 Sol ultra，要紧的图、密集图表或有歧义的交 Astra high、opus-medium，困难的用 Astra ultra、opus-high。主持的定抽查看哪些风险，亲自看材料和成品整体，执行者交完整材料清单；主持的也可以自己挑没被推荐的样本。看一两页可以自己看，小事例外看整段总量；Claude 主持时要用本人登录状态的 Chrome 页面照旧交 GPT（见 Claude 适配“浏览器”）。", "why": "AA 2026-10-05 MMMU-Pro 的 high 档：Astra 86.4%、Opus 85.8%、Sol 84.9%；选择题只能作看图推理旁证，不证明能找全错字或审美缺陷。宿主有没有所需工具和登录身份按实际记录，不把本机审图次数和本人审美排序作能力依据。"},
+      {"scenario": "看图、审图、截图录屏、操作电脑和浏览器", "evals": "MMMU-Pro（只作看图推理旁证）", "choose": "截图、录屏、操作电脑和浏览器、批量采集派出去做好、编号送来；操作浏览器（含本人已登录的 Chrome、只读看一页也算）当前代际一律交 Sol，不交 Luna；读一页用 medium，施工和难活仍用 ultra（本人 2026-10-12 15:29 要求、15:48 批准）；按固定清单逐条审图交 Sol ultra，要紧的图、密集图表或有歧义的交 Astra high、opus-medium，困难的用 Astra ultra、opus-high。主持的定抽查看哪些风险，亲自看材料和成品整体，执行者交完整材料清单；主持的也可以自己挑没被推荐的样本。看一两页可以自己看，小事例外看整段总量；Claude 主持时要用本人登录状态的 Chrome 页面照旧交 GPT（见 Claude 适配“浏览器”）。", "why": "AA 2026-10-05 MMMU-Pro 的 high 档：Astra 86.4%、Opus 85.8%、Sol 84.9%；选择题只能作看图推理旁证，不证明能找全错字或审美缺陷。宿主有没有所需工具和登录身份按实际记录，不把本机审图次数和本人审美排序作能力依据。"},
       {"scenario": "要惊艳的成品（给人看的网页样子和交互、视频编排、文案、设计）", "evals": "Code Arena WebDev、Text Arena Creative Writing、Towards AI ToneBench；AA-Briefcase 的呈现质量作旁证", "choose": "样板和关键部分交公开评测里做得最好的亲手做：当前选 Opus 5.5，保留 opus-high 起、按真实难点选档。网页 high／xhigh 的人类偏好分档、完整视频编排和中文专项质量待公开数据，不借 max 结果证明低档。其余照样板铺开交能胜任里最划算的，现在通常选 Sol ultra；机械填充交 Luna max 或脚本。只用 GPT 时由 GPT 主对话把关，交场景表里 GPT 这边最合适的型号或自己做。样板定稿前和交付前各一次最终头脑风暴，问从良好到惊艳还差什么（见《工程与交付》）。", "why": "2026-10-05 查询：Code Arena 网页榜（2026-10-01）四型号 max 的 Opus／Astra／Sol／Fable 为 1815／1788／1758／1749；Text Arena 创意写作（2026-10-02）Opus high 1516，高于 Fable max 1482、Sol max 1460、Astra max 1449。Towards AI ToneBench（10 脚本各 5 稿、4 模型裁判，2026-10-01 北京时间的评分）Opus high／xhigh 写作 Elo 2356／2523，Sol xhigh 1946、Astra max 1921；它只作单一英语作者的视频脚本旁证。Design Arena 缺 Sol 6.1 且部分档位不明；完整视频、中文文案和其他设计专项没有充分对照，保留当前选择、标待公开数据。"},
       {"scenario": "法律文书和案件材料", "evals": "Harvey LAB-AA（匹配语境及型号数据有缺口）", "choose": "原文摘录、做索引交 Luna max，GPT 用不了时 sonnet-low；材料归类、时间线、要点整理交 Sol ultra，GPT 用不了时 opus-medium。本人定过的正式文书和法律分析当前交 Claude opus-high 起，重大争点和程序风险用 opus-xhigh；GPT 负责材料归类、事实核对和技术意见；正式文书正文按本人已定的分工由 Claude 写和审。只用一边时那一边全做。", "why": "2026-09-29／30 的历史 Harvey Claude 数据 91%—93% 是细项通过比例，不是文书无错率。没有本轮可靠的 GPT-6 与中国法律语境匹配对照，当前选择待公开数据；本人已定的文书分工保留，不用本机经历补能力证据。"},
       {"scenario": "重大改动的独立复核", "evals": "独立视角原则；AA 编码代理、AA-Briefcase 和对应专项公开评测作旁证", "choose": "先按《分工与并行施工》第 5 条定不另派、聚焦或完整；需要复核时再按现有换家原则选人，至少用独立上下文。GPT 写的交 Claude，Claude 写的交有授权的 Astra，没有 Astra 授权交 Sol；具体型号和档位按本次风险、材料量、难度及各型号当前默认选，聚焦和完整可以不同档，不写死一种型号或档位。复核材料和后续更新范围照第 5 条，只提实质问题，修完只复查那一处并补反例测试；最终由主持按测试与实际运行验收。重大动作前的把关另按《重大动作与本人验证》。", "why": "是否另派和复核多深先看本次风险，不把代码一律不复核，也不把每次交付都变成完整复核。需要复核时，独立上下文和视角才有增量，不把本机查出一次漏洞当成能力排名。AA 2026-10-05 的编码代理与 Briefcase 表明各模型在实现、材料理解和成品分析上有不同表现；Astra 终端题 xhigh 59.6%、max 59.1% 也说明拉满档位不是自动提高分数的办法。"},
@@ -236,10 +237,10 @@
   },
   "owner_decisions": [
     "分工、选型与额度处理按约法 L22、L23；完整原话和新公开数据见 docs/owner-decisions.md 的“Claude 动脑把关、GPT 动手汇报；“推理不够”不能当升档条件”。现在的模型选择不是固定身份，换代按《分工与并行施工》“新型号怎么调研”重查后直接更新路线和档位，不再确认。",
-    "当前 Sol ultra、Luna 最高可用档 max 的档位约定保留；Astra 原 xhigh 派单对应 ultra 仍见归档 docs/archive/owner-decisions-superseded.md 中“GPT xhigh 统一改派 ultra”。同一归档中“Sol 默认 ultra、Luna 最高档与前端审美判断”及“当前代际的模型判断与档位规则”里的本人审美排序不再作能力依据，按新决定以公开数据为准。",
+    "当前 Sol 档位按 routing.effort_rule，Luna 最高可用档 max 的约定保留；Astra 原 xhigh 派单对应 ultra 仍见归档 docs/archive/owner-decisions-superseded.md 中“GPT xhigh 统一改派 ultra”。同一归档中“Sol 默认 ultra、Luna 最高档与前端审美判断”及“当前代际的模型判断与档位规则”里的本人审美排序不再作能力依据，按新决定以公开数据为准。",
     "Claude 与 Codex 当前代际的型号约定及授权限制见约法 L23；新型号路线和档位按公开数据重评后直接更新，授权和预算仍由本人确认。",
     "Sonnet 5.5 的既定型号限制仍见约法 L23 和决定文档“经济路由按 Sonnet 5.5 升级”；现在的用途和选型以 L22 与 routing 场景表为准，GPT 能用时不派 Sonnet。",
-    "主持的想和把关，按成品要求和公开数据选执行者，见约法 L22 和决定文档本轮新节；当前 Sol ultra、Luna max 照旧。哪边额度多都不改分工；GPT 额度少时 Claude 自己施工，Claude 额度少时 Claude 自己判断等重置还是抽查后认为现在可以，只用一边时那一边全做（L23）。",
+    "主持的想和把关，按成品要求和公开数据选执行者，见约法 L22 和决定文档本轮新节；当前 Sol 档位按 routing.effort_rule，Luna max 照旧。哪边额度多都不改分工；GPT 额度少时 Claude 自己施工，Claude 额度少时 Claude 自己判断等重置还是抽查后认为现在可以，只用一边时那一边全做（L23）。",
     "Claude 不用本人另行授权就可以派自己的子代理和 GPT 的 Sol、Luna；派 Astra 要本人对这个对话或项目授权，保留原授权的项目、对话、期限和选型限制，不逐次重复授权、不扩成全局许可；有授权的高档活在 Opus 和 Astra 里选一家，交叉复核另算，按 L22、L23。",
     "Claude 与 GPT 的当前分工按 L22、L23 和决定文档本轮新节；GPT 可以写或出主意，涉及本人价值取舍、偏好和理解的内容单列，由 Claude 按原话和语境把关。独立 Codex 主持时当前根会话承担同样最终责任。",
     "未经本人许可，不启用 fast 快速模式。",
