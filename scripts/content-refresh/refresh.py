@@ -9,6 +9,7 @@ import json
 import os
 from pathlib import Path
 import re
+import runpy
 import sqlite3
 import subprocess
 import sys
@@ -122,9 +123,25 @@ def timestamp(text):
     return parsed.astimezone(BEIJING)
 
 
+def require_ledger_coverage(entry, root, now):
+    """当前窗口必须由两路完成水位覆盖；事件最大时间不能证明没有漏采。"""
+    ledger = resolve(entry["path"], root)
+    for ai in ("codex", "claude"):
+        try:
+            state = read_json(ledger.with_name(f"state-{ai}.json"))
+            end = datetime.fromisoformat(state["last_completed"].replace("Z", "+00:00"))
+            if state.get("bootstrap_complete") is not True or end.tzinfo is None:
+                raise ValueError("补采未完成或水位缺时区")
+            if end <= now:
+                raise ValueError(f"完成水位仅到 {end.astimezone(BEIJING).isoformat()}，未覆盖观察时刻")
+        except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+            raise ValueError(f"Unknown：{ai} 账本覆盖不足；{exc}") from None
+
+
 def ledger_values(methods, entry, root):
     path = resolve(entry["path"], root)
     now = datetime.now(BEIJING)
+    require_ledger_coverage(entry, root, now)
     counts, last = [0] * len(methods), [None] * len(methods)
     groups = {}
     for i, method in enumerate(methods):
@@ -166,6 +183,8 @@ def retrieve(method, root, entries=None, cache=None):
         if name not in entry_cache:
             validate_entries({name: entry})
             try:
+                if entry.get("requires_usage_ledger"):
+                    require_ledger_coverage(entries[LEDGER], root, datetime.now(BEIJING))
                 entry_cache[name] = json.loads(bounded(entry["argv"], cache.get("entry_timeouts", {}).get(name, method.get("timeout", entry.get("timeout", 20))),
                                                 cwd=str(resolve(entry["cwd"], root))))
             except Exception as exc:
@@ -235,6 +254,12 @@ def retrieve(method, root, entries=None, cache=None):
     elif kind in ("page_count", "feature_count", "group_count"):
         selected = pages(root)
         if kind == "page_count":
+            if set(method.get("kinds", [])) & {"project", "frozen"}:
+                config = root / "config/panel-projects.json"
+                registered = {p["id"] for p in read_json(config)["projects"] if p.get("enabled", True)} if config.exists() else None
+                aliases = runpy.run_path(str(ROOT / "scripts/audit-content-refresh.py"))["PROJECT_ALIASES"] if registered is not None else {}
+                selected = [p for p in selected if not p.get("parent") and
+                            (p.get("kind") not in {"project", "frozen"} or registered is None or aliases.get(p["page"], p["page"]) in registered)]
             value = sum(all(k not in method or p.get(k) == method[k] for k in ("status", "public"))
                         and (not method.get("kinds") or p.get("kind") in method["kinds"]) for p in selected)
         elif kind == "feature_count":
@@ -268,7 +293,10 @@ def retrieve_batch(methods, root, entries, seconds):
     if all(m["kind"] == "usage_ledger" for m in methods):
         for method in methods:
             validate_method(method, entries)
-        return ledger_values(methods, entries[LEDGER], root)
+        try:
+            return ledger_values(methods, entries[LEDGER], root)
+        except Exception as exc:
+            return [{"error": f"来源读取失败（{type(exc).__name__}）：{exc}"}] * len(methods)
     result = []
     method_cache = cache.setdefault("methods", {})
     for method in methods:

@@ -81,6 +81,7 @@
     "verification": "2026-10-11 核实固定代码：仅Path.read_text、JSON解析、正则和计数；不导入业务模块，不写文件，不调模型；只输出原则/案例/有效本人样本/AI稿对照的整数，不输出私人正文。"
   },
   "personal-expression-usage-display": {
+    "requires_usage_ledger": true,
     "argv": [
       "python",
       "-B",
@@ -760,6 +761,7 @@
     "timeout": 20
   },
   "media-person-self-usage-display": {
+    "requires_usage_ledger": true,
     "argv": [
       "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
       "-B",
