@@ -90,7 +90,8 @@ def search_index_entry(body, snapshot, prior=None):
         absolute = urlsplit(urljoin('https://wly0829.cn/search/', value))
         normalized = unquote(urlunsplit((absolute.scheme, absolute.netloc, absolute.path, '', '')))
         return absolute.path.lstrip('/') if absolute.netloc in {'wly0829.cn', 'www.wly0829.cn'} else urls.get(normalized, '')
-    # Both synchronization and the fresh frozen-HTML check own this exact URL.
+    # Both synchronization and the fresh frozen-HTML check own this bootstrap.
+    body = re.sub(r'<script data-search-wire>[\s\S]*?</script>', '', body)
     for tag, attrs, raw, offset in reversed(oss.HtmlTags(body).tags):
         source = attrs.get('src') or attrs.get('data-src')
         if tag != 'script' or not source: continue
@@ -99,8 +100,8 @@ def search_index_entry(body, snapshot, prior=None):
         if not rel.startswith('assets/') or not rel.endswith('.js') or not row.get('source_path'): continue
         client = (ROOT/row['source_path']).read_text('utf8')
         if '__WLY_SEARCH_INDEX__' not in client or '__WLY_PROJECT_SEARCH_INDEX__' not in client: continue
-        replacement = '/' + 'assets/search-wire-' + Path(rel).name
-        body = body[:offset] + raw.replace(source, replacement, 1) + body[offset + len(raw):]
+        bootstrap = '<script data-search-wire>' + search_wire_loader() + '</script>'
+        body = body[:offset] + bootstrap + raw.replace(source, '/' + rel, 1) + body[offset + len(raw):]
     scripts = [(attrs, raw, offset, resource(attrs.get('src', ''))) for tag, attrs, raw, offset in oss.HtmlTags(body).tags
                if tag == 'script' and attrs.get('src')]
     existing = [(raw, offset, rel) for _, raw, offset, rel in scripts if is_index(rel, 'search-index.js')]
@@ -209,7 +210,6 @@ def sync_search(root, previous, converted, pin, changed_routes):
     # the scripts actually loaded by /search/, rather than that smaller table.
     loaded = [(attrs, raw, offset) for tag, attrs, raw, offset in oss.HtmlTags(search_html).tags
               if tag == 'script' and (attrs.get('src') or attrs.get('data-src'))]
-    client_edits = []
     for rel in read(SITE/'sources/frozen-site/manifest.json').get('assets', {}):
         if not rel.startswith('assets/') or not rel.endswith('.js'): continue
         isolated = 'assets/search-wire-' + Path(rel).name
@@ -222,13 +222,7 @@ def sync_search(root, previous, converted, pin, changed_routes):
         seed_file(rel, target)
         raw = target.read_text('utf8')
         if '__WLY_SEARCH_INDEX__' in raw and '__WLY_PROJECT_SEARCH_INDEX__' in raw:
-            loader = search_wire_loader()
-            (root/isolated).write_bytes((loader + raw).encode('utf8'))
-            for attrs, tag, offset in consumers:
-                source = attrs.get('src') or attrs['data-src']
-                client_edits.append((offset, len(tag), tag.replace(source, '/' + isolated, 1)))
-    for offset, length, tag in sorted(client_edits, reverse=True):
-        search_html = search_html[:offset] + tag + search_html[offset + length:]
+            (root/isolated).unlink(missing_ok=True)
     search_path.write_bytes(search_html.encode('utf8'))
     for path in (root / nav.route_file(route) for route in changed_routes):
         rel = path.relative_to(root).as_posix(); raw = path.read_bytes(); patched = raw

@@ -41,9 +41,11 @@ class NoCascadeTests(unittest.TestCase):
         addition = '<script src="/search-index.js"></script>'
         self.assertEqual(after.count(addition), 1)
         shared = 'data-src="/assets/index-audit-nav-dc91cac753f20e2e4100.js"'
-        isolated = 'data-src="/assets/search-wire-index-audit-nav-dc91cac753f20e2e4100.js"'
+        bootstrap = '<script data-search-wire>' + build_runtime.search_wire_loader() + '</script>'
         self.assertEqual(before.count(shared), 1)
-        self.assertEqual(after.replace(addition, '', 1), before.replace(shared, isolated, 1))
+        self.assertEqual(after.count(bootstrap), 1)
+        self.assertLess(after.index(bootstrap), after.index(shared))
+        self.assertEqual(after.replace(addition, '', 1).replace(bootstrap, '', 1), before)
         self.assertEqual(build_runtime.search_index_entry(after, snapshot), after)
 
     def test_body_and_search_change_leave_home_and_other_page_identical(self):
