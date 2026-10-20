@@ -74,7 +74,7 @@ const heroHtml = ['html', 'overlay'].map((key) => blocks?.screens?.[0]?.h?.[key]
 const heroTag = heroHtml.match(/<img\b(?=[^>]*\bdata-ts-art=)[^>]*>/)?.[0]
   || heroHtml.match(/data-comp="illustration"[^>]*>[\s\S]*?(<img\b[^>]*>)/)?.[1] || '';
 const shareImage = new URL(heroTag.match(/\bsrc="([^"]+)"/)?.[1]
-  || (page === 'cockpit' ? cockpitHero : motion?.art?.src) || '/favicon.svg', 'https://wly0829.cn').href;
+  || (page === 'cockpit' ? cockpitHero : motion?.art?.src) || '/media/brand/wuleyang-logo-full.png', 'https://wly0829.cn').href;
 const canonical = new URL(url, 'https://wly0829.cn').href;
 const indexable = !moved && !noindex;
 const briefRepo = pageData ? (pageData.status_binding?.repo || (pageData.repo_url ? String(pageData.repo_url).replace(/^https:\/\/github.com\//, '') : '页面未提供仓库地址')) : '';
