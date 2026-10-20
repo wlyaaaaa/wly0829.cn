@@ -1,165 +1,67 @@
-# 个人看板 AI 快速刷新合同
+# AI 刷新计划适配合同
 
-## 产品入口
+网站更新的唯一主流程是 [按需更新操作清单](../ondemand-update.md)。范围确认、事实重取、内容判断、独立复核、构建、预览、发布和公网回读均按该清单执行；本文只规定现有 `refresh:ai` 只读计划与 v2 结果校验包怎样接入，不再维护另一套刷新或发布步骤。
 
-网页内容只由网站项目里的 AI 任务更新。用户不需要运行脚本或填写参数，直接说：
+## 只读计划入口
 
-- “刷新个人看板里的 PCConfig”——只复核并可能更新 PCConfig；
-- “刷新个人看板”或“全部更新一下”——按 Registry 顺序复核所有启用项目；
+```powershell
+npm run refresh:ai -- --project <id>
+npm run refresh:ai -- --project cacb --manual-owner-request
+npm run refresh:ai -- --all
+```
 
-只有本人要求“更新网站”时才开始更新。来源项目、规则或 Skill 发布后不自动交接，也不新建网站任务；不安排每周定时复核。AI 在别的工作中发现网站已过时，只在给本人的汇报里提一句，等本人要求更新。一次定向请求只处理点名的登记快照和会因此说错的直接表面，不枚举无关项目、不调用全站刷新。
+`prepare-ai-panel-refresh.mjs` 读取 `config/panel-projects.json` 和当前作者输入，返回 `wly.ai-panel-refresh-plan.v2`。它不运行采集器、不判断内容是否重要、不改正文、不创建网站任务。本人要求更新网站后，主持可将这个计划作为按需流程的来源、范围和指纹附件；来源项目、规则或 Skill 变化本身不能启动刷新，只在原任务汇报可能过时之处。
 
-脚本和 Provider 只能采集事实、计算指纹、检查闭包和验证产物。它们不能决定内容是否重要，也不能机械重写专业叙述。
+- `--project` 只选择一个启用项目，`--all` 按 Registry 的固定名次选择全部启用项目，两者互斥。
+- `manual_owner_only` 项目必须已有本人的明确更新请求，才能附 `--manual-owner-request`。没有该标记时计划返回 `manual_owner_request_required`，不能据此取证或改动其内容；带标记不会自行创造本人授权。
+- `collectors`、`conditional_collectors` 与 `impact_sources` 是候选事实入口。由本轮 AI 按已确定的范围选择，不把它们当成每次必须全跑的清单。
+- 型号与档位按活动路由和实际执行身份记录；Registry 中的 null 不是可调用型号。
 
-网站发布 Owner 把每个已接收增量绑定为“来源身份 + 正式回读提交 + 改动路径 + 观察时间 + 活动代际”。只有这些输入、E 代际、Registry revision 和负责表面仍匹配时才复用证据；同源后继提交只替换它实际包含的同源证据，不反复改变责任范围。先完成一个连贯编辑批次和对应聚焦检查；批次稳定后只运行一次最终完整测试、构建、公开内容门与浏览验收。同一失败类别在输入未变时重复两次，应先诊断共同原因。预览服务必须在可控后台会话中运行，带就绪期限，并在成功、失败或超时后只关闭本任务拥有的进程或会话。
+## 作者源与指纹
 
-`manual_owner_only` 是独立手动快照模式。Source、材料、反馈、规则、Skill、commit、
-测试或报告变化都不能触发这类项目的网站任务；`personal-panel-refresh` 不适用。
-只有 owner 明确说更新 CACB、学习方法、Codex Remote、personal-health，或明确要求包含 manual-only 项目的全量更新时，网站任务才可
-携带 `--manual-owner-request` 继续。缺少该标记时计划返回
-`manual_owner_request_required`，不得取证、改文案或发布。
+项目 ID、路由和作者目录不保证同名，以 Registry 的 `ai_refresh.content_path` 为总览入口。`panel-content-paths.mjs` 同时按登记项目身份与该入口的真实目录、路由收集所属页，避免只改总览或按 ID 猜错目录。
 
-## 默认不更新
+| 计划字段 | 实际含义 |
+|---|---|
+| `content_path` | 当前总览入口：原生项目指向真实 `sources/pages/<作者目录>/page.json`；尚由冻结字节提供总览的项目指向实际冻结 HTML |
+| `content_files` | 该项目总览和全部模块的逐文件路径及 SHA-256；包含页面 JSON、布局、当前 `site-astro/src/content/pages/*.md`，以及同项目仍上线的冻结子页 |
+| `content_sha256` | 对按路径排序的 `content_files` 清单计算的聚合 SHA-256；不是总览单文件的 SHA |
+| `source_fingerprint` | 由 AI 根据本次选用的 Owner 观察和保留证据填写，计划阶段为 null；网页文件未变不能证明来源状态未变 |
+| `observed_at` | 作者输入声明的观察日期；没有声明就明确 Unknown，不用脚本运行时间冒充事实新鲜度 |
 
-本人要求更新后，结束时都要用人话逐项汇报：哪个项目或页面、原来与现在有什么实质差别、修复了什么、是否已发布及访问地址，以及仍未解决的问题。没有实质变化，也要说明核对范围和无需更新的结论。页数、测试数和“已同步”不能代替变化说明；汇报放在任务最终回复，不给网页增加更新日志或额外操作。
+直接编辑的 Markdown 也是实际构建输入，因此必须进入指纹，不能只校验 JSON。内容更新、转换与直接 Markdown 的冲突处理继续遵守 [Astro 作者源说明](../../site-astro/README.md)。新页或迁移完成后，同步维护 Registry 的真实入口；冻结与原生并存的项目不能漏掉仍上线的子页。
 
-AI 只有在“继续保留当前页面会让用户对能力、边界、当前状态、用法、成熟度、安全判断或下一步决策产生实质错误”时才修改网页。
+全局表面的 `content_paths` 可以登记作者目录；计划和验证器展开为相同的实际文件清单：Rules 包含 `sources/rules` 与当前规则页面源，Skills 包含当前目录和详情源，System 指向已合并内容的保留首页。`/system/` 是去向页。首页可修改范围继续服从按需清单的首页锁定与明确例外，计划列出文件不代表获得编辑授权。
 
-以下变化默认是 no-op（不改网页）：
+旧 React 正文、`app/panel-facts.generated.js` 及其专用快照生成、保留、验证脚本已退役。规则作者源使用现有 `prepare-astro-release.py refresh` 更新并由生产构建的 `astro_rules.py` 核对；不得以旧快照 PASS 代替当前作者源或活动规则验证。
 
-- 格式、注释、重构、文件移动；
-- 单个测试、文案或实现细节调整；
-- 时间戳、hash、普通计数或无语义版本变化；
-- 页面已经准确写明的 blocked、dirty source 或 unreleased source 状态；
-- 不改变用户判断的小 Bug 修复。
+## v2 结果包
 
-全量刷新是全量复核，不是全量重写。没有实质变化的项目必须保持内容文件 SHA-256 不变。
-
-## 首次基线与后续增量不是一件事
-
-首次完整版本发布前，原始项目已经具备但网页漏写的能力、普通读者无法复述的谜语文案、盲读或盲审暴露的产品表达缺陷，都属于基线建设缺陷。它们必须回到 owning source（事实源）补全和纠错，不能先发布后称为“下一次增量快照”。
-
-基线通过内容阅读、设计、技术和真实页面验收并发布后，增量刷新才开始。增量只把新发生且会改变读者判断的事实合并到当前正文：
-
-- 不用较短摘要、旧字段或生成快照覆盖已经完整、仍然正确的内容；
-- 不受影响的项目、段落和卡片保持字节不变；
-- 新事实原位合并，过期事实只有在 Owner 证据证明已经替代或退役时才删除；
-- 发现原有页面本来就写错或写漏时，明确归类为内容修复，并按完整阅读验收处理，不伪装成普通 drift（漂移）更新。
-
-## System 总览怎样派生
-
-System 首页不是第四个事实源，也不从 Git 提交记录直接生成。本人要求全量复核时，按以下顺序进行：
-
-1. 先让项目、Rules 和 Skills 三个拥有正文的页面闭合到本轮已验证、可发布的状态：项目回到各自 Owner 证据，Rules 只认活动 E release，Skills 只认当前供应、公开指南和对应项目关系；`manual_owner_only` 页面没有新的明确 owner 请求时保留上次已验证快照。
-2. Git 提交范围、变更路径和发布记录只用来指出“哪里值得看”；提交存在不等于产品能力、边界或页面说明已经变化。
-3. AI 读取受影响页面的新旧产品语义，再判断 System 的真实场景、组成与分工、定时协作或验证层是否会让读者形成错误理解。具体规则与完整能力目录由 Rules 和 Skills 拥有，System 不再复制一整段规则故事或第二份能力目录。
-4. 只有上述聚合意义发生实质变化时，才原位更新 首页真实作者源 `site-astro/sources/retained-home-cockpit/home.html`（System 已并入首页，`/system/` 仅作去向页）；否则 System 保持字节不变。
-5. System 更新与其他页面一起经过内容阅读、构建、公开边界、桌面与移动端真实页面验收，再按既有发布链提交、发布和公网回读。
-
-以下通常不更新 System：单个实现修复、测试数字、提交哈希、时间戳、文件移动、页面已经准确表达的证据新鲜度变化，以及不改变能力角色或用户用法的项目内调整。新增或退役一个长期职责、项目身份/归属变化、规则怎样影响任务发生变化、Skill 入口增删或能力边界改变、定时协作真实增删，才是 System 的典型实质触发。
-
-这条链不需要 watcher（文件监视器）、数据库、后台同步服务或第二个叙述生成器。本人要求更新后，网站任务完成一次有界复核；来源发布本身不触发交接或更新。
-
-## 定向刷新流程
-
-1. 运行 `npm run refresh:ai -- --project <id>`，读取本次项目、内容路径、总览及全部模块作者输入的聚合指纹、逐文件清单、Owner 采集入口和影响来源；manual-only 项目必须由明确 owner 请求改用 `--manual-owner-request`。
-2. 完整阅读该项目当前总览、模块、状态、缺口和演化，不能只看结构化字段。
-3. 从 Registry 登记的只读 collectors 中选择会改变本次判断的入口，并按问题增补最小 Owner 回读；保留证据注明原观察时间，未执行的入口不填通过，不把候选清单当成每次必跑的全量检查。不复制任意原始输出到网站。
-4. 比较新证据与当前页面，先作 material/no-op 判断。
-5. 发现无需用户决策、可逆且有真实 Owner 验证入口的问题时，按 Owner 边界自动修复并重新取证。
-6. 只有 material change 才原位改写、合并或删除该项目内容；不触碰其他项目。
-7. 运行内容合同、构建、公开边界和本地预览；四项目 MVP 验收后的已登记刷新默认自动提交到现有 PUBLIC `main`，等待 Pages 并完成公网回读，不再单独询问发布授权。
-
-AI 完成取证和内容判断后，生成 `wly.ai-panel-refresh-result.v2` 结果包并运行：
+本轮 AI 按按需主流程完成内容判断后，可生成 `wly.ai-panel-refresh-result.v2` 并运行：
 
 ```powershell
 npm run verify:ai-refresh -- --bundle <ai-result.json>
 ```
 
-AI 在改正文前必须先交付一份简洁语义差分：产品与技术分别列出新增、修改、退役/替代和 Unknown，并把结论映射到项目、Rules、Skills、System。每项只保留人话结论和 Owner 证据，不暴露内部推理。Git、路径、commit 和 hash 只定位候选，不能生成或否决这份差分。
+结果包保留这些接口：
 
-计划的 `content_path` 是总览入口，`content_files` 包含该项目实际使用的页面 JSON、布局、当前 Markdown；四个未迁移项目列出全部冻结 HTML。`content_sha256` 是按路径排序的逐文件 SHA 清单的聚合指纹，模块、布局或直接 Markdown 改动均会改变它。全局表面的目录路径同样展开为实际作者文件，Rules 包含 `sources/rules`，Skills 包含当前目录与详情，System 指向保留首页。
+- `mode` 为 targeted 或 all。targeted 恰有一个项目；all 与 Registry 的全部启用项目闭合，满足 `enabled = changed + unchanged + blocked`。
+- `projects` 逐项声明入口、旧/新聚合内容 SHA、旧/新 semantic revision、source fingerprint、观察时间、material、semantic_change、理由、实际采集器及需要的回执。
+- `source_deltas` 对每个所选项目分别保留产品与技术的 added、changed、retired 桶、unknowns，以及受影响的项目、Rules、Skills、System 表面。每项是 AI 写的人话结论与 Owner 证据；路径、提交和 hash 只定位输入，不能代替语义判断。
+- `global_surfaces` 对计划中的每个全局表面逐文件声明旧/新 SHA 与 changed、unchanged 或 blocked；目录必须展开成计划采用的实际文件清单。
+- `auto_repairs` 和 `blockers` 分别列真实修复与未解决项，不能用计数替代说明。
 
-Verifier 检查 changed/unchanged/blocked 闭包、当前聚合内容 SHA、每项目 source fingerprint、materiality、semantic revision，以及项目、Rules、Skills、System 的逐文件 no-op 字节不变性。它只检查 AI 差分与实际改动是否闭合，绝不替 AI 判断新增、修改或退役语义是否正确。
+验证器检查当前作者文件、聚合指纹、登记身份、结果闭包、semantic revision、materiality、逐文件 no-op，以及已声明采集器/回执的接口约束。只有声明新鲜 SYSTEM/Administrator 快照时才要求相应登记回执，回执需满足 schema、principal、pointer、完整可见性与 SHA 约束。它不执行来源采集，也不证明正文已经准确、完整或好读；阅读、来源完整性及发布验收仍由唯一主流程负责。
 
-本人要求复核多个项目时，可使用对应项目各自的 targeted 计划取证，再合并为一个 `all` v2 结果，统一使用本轮真实基线与最终文件 SHA 闭合全局表面；这不把缺少手动请求的 `--all` 计划改为可执行。未请求更新的 `manual_owner_only` 页面以 `status=unchanged`、`retained_manual_snapshot=true` 保留，两个 `manual_owner_request` 字段均为 false 或省略，旧/新内容 SHA 与 semantic revision 相同，`material=false`、`semantic_change=false`、`source_fingerprint=null`，collectors、collector_receipts、产品/技术六个差分桶及 affected_surfaces 均为空。保留原 observedAt，并在 reason 说明只核对网站快照字节、未读取或更新来源；这是保留旧快照，不是新鲜来源复核。其余手动刷新仍须明确 owner 请求；普通项目不能使用该保留标记。
+未变化或 blocked 项目保留原内容字节；只有 semantic_change=true 才将 semantic revision 加一。发生实际内容变化的表面须与 AI 声明的 affected_surfaces 闭合，不能用通过的 hash 检查替 AI 决定新增、修改或退役的意义。
 
-## 全量刷新流程
+## 未请求的手动快照怎样保留
 
-运行 `npm run refresh:ai -- --all`。当清单包含 manual-only 项目时，只有 owner 明确要求全量复核才追加 `--manual-owner-request`；否则计划停在 `manual_owner_request_required`。AI 只刷新 Registry 中已经发布的项目，并按 `config/final-project-order.json` 投影出的固定名次排序；缺号保持缺号，未建项目不进入刷新计划。AI 可根据当前原生并发槽位分批取证，每个项目仍独立判断：
+合并多个 targeted 计划形成 all 结果时，未被本人点名更新的 manual_owner_only 项目可以保留旧快照，不能借 all 结果制造一次新鲜来源复核。其接口为：
 
-```text
-enabled = changed + unchanged + blocked
-```
+- `status=unchanged`、`retained_manual_snapshot=true`；包级和项目级 `manual_owner_request` 为 false 或省略。
+- 旧/新内容 SHA 与 semantic revision 相同，`material=false`、`semantic_change=false`、`source_fingerprint=null`。
+- collectors、collector_receipts、产品/技术六个差分桶和 affected_surfaces 均为空。
+- 保留原观察时间，reason 明说只核对网站快照字节，未读取或更新来源。
 
-- `changed`：有实质变化，已更新并验证；
-- `unchanged`：完成新鲜取证，但内容文件字节不变；
-- `blocked`：Owner 证据缺失或矛盾，保留旧快照并明确缺口。
-
-全量模式允许 40 多个项目中绝大多数为 unchanged。不能为了证明“刷新过”更新时间、追加日志或改写无关句子。
-
-## 每项目证据包
-
-AI 在任务上下文中为每个项目保留最小公开安全证据：
-
-- Registry 项目 ID、来源仓库、默认分支与当前 content path；
-- 旧/新 source fingerprint 和内容 SHA-256；
-- AI 判定的产品/技术新增、修改、退役/替代、Unknown 及受影响页面；
-- observedAt 与只读 collectors 的有界结论；
-- materiality 结论和人话理由；
-- 自动修复、验证结果、真实 blocker；
-- changed 或 unchanged 结论。
-
-不得把凭据、私人正文、完整日志、任意 Owner 原始 payload 或机器全景复制进证据包。
-
-## 设计与产品阅读验收
-
-用户举例是缺陷探针，不是全部范围。明确要求设计审计时，先检查阅读层、导航、选择说明、状态、演化、搜索与维护约束是否共同导致误解，再决定受影响正文；不按关键词机械重写全站。
-
-每项能力从正常需求解释：在哪里开始、本人提供什么、按什么实际步骤进行、哪项功能或模型处理、会拿到什么、什么条件会改变选择或使它停下。不能只补用途、例子、结果字段就称用法完整。模型/工具名在改变用法时进入产品层，参数和验证细节仍在技术层。演化只保留一份，放入产品层，说明原来缺什么、后来怎样满足，以及仍未实现的边界；不把每次网页刷新写成项目阶段。
-
-验收同时核对普通请求与结果、首屏与模块、当前事实与历史阶段。真实来源变化先完成语义差分，纯表达保持事实和观察时间；设计明确未实施的能力不能升级为现役。检验器证明数据与改动对应，不凭固定文句或页数裁决内容可理解。
-
-每次内容验收必须额外做一次“陌生人 30 秒测试”：假设读者从未见过本人的电脑、项目名、Owner、Provider、E rules 或模型路由。默认可见层必须让他不展开技术证据就能回答：这是什么、能直接做什么、该怎样说、系统会做什么、会拿到什么、何时会停/问本人、当前还不能做什么。需要先理解内部名词才能回答，判为内容失败，即使测试、hash、字段和来源都正确也不能发布。
-
-“既人话又专业”通过分层实现，不通过删技术实现。项目总览、每个模块和Skill详情统一使用“产品用法 / 技术与依据”两个整块页签，默认产品；产品用法完整解释开始、输入、过程、结果、条件、例外、失败与恢复，技术页完整保留模型、Provider、路径、commit、SHA、测试、运行时和来源身份。两页正文随初始HTML提供，不点击加载；普通跨页不沿用上一页滚动位置，旧锚点和浏览器前进后退须落到正确页签。Rules的技术证据默认展开，Skill选中技术页签后直接看完整正文，System组成正常可见；项目阶段的引用可随该阶段按需展开，不得因版面长删掉专业事实。
-
-项目 Overview 的产品页不能只放一个总例子。每个已展示模块都必须有现有、自然的人类需求作为代表入口，让本人不进入技术层也能看出“现在可以拿它做哪些事”；总览保留整体使用流程与一份能力目录，模块自己解释完整步骤与边界，不在其他章节再复制同一目录或同一组例子。只有真实选择会改变执行时才增加模型或路线选择表，不为视觉统一强迫所有项目使用同一模板。
-
-Skills 受影响时，AI 还必须把本轮 current supply（当前供应）逐项闭合为 `displayed`、`represented_by` 或 `excluded`：独立有价值且适合公开的入口显示；已经由公开别名/产品入口完整代表的能力只建立关系；明确私人、冻结、重复或不适合公开的能力保持排除。涉及私人领域名称的排除依据只留本地私有内容规则或来源 Skill 元数据，PUBLIC 结果只保留公开安全的展示数量与关系。脚本可以验证供应数量和页面闭包，不能代替 AI 决定谁应展示。
-
-## 内容与反膨胀
-
-- 更新必须替换、合并或删除旧内容，不追加“本次更新记录”。
-- 不因刷新新增卡片、章节、重复证据表或“旧说法 + 新说法”。
-- 当前状态只保留当前事实和必要缺口；过期动态值被直接替换。
-- 演化只记录重要产品阶段：能力、边界或用户使用方式的重要变化。一个阶段可以是一天或时间段，并可合并多次相关建设。
-- 小修、测试补充、单个 Bug、提交和普通发布不新增演化项。
-- 不设置固定字数上限；通过重复语义、无消费者章节、同阶段演化和未受影响项目字节漂移检查控制膨胀。
-
-## 规则边界
-
-Rules 只根据 `Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json` 正式回读的 current E release 更新。Canonical source 的 dirty/unreleased 修改只作为施工状态显示，不进入活动规则正文、路径或 SHA，也不阻断非规则项目刷新。历史 C 盘 generation、Publisher、anchor、ledger 和回执只可出现在恢复历史说明中。
-
-活动规则作者源由现有 `python scripts/prepare-astro-release.py refresh --output <本轮回执.json>` 更新到 `sources/rules`，正式构建通过 `scripts/astro_rules.py` 核对已提交快照、完整发布文件与当前 E 身份，并生成规则阅读页。Skill 供应由 Owner 的现有只读入口取证后更新当前 `sources/pages/skills-home` 和详情；不再写不参与构建的 `app/panel-facts.generated.js`。旧 React 专用快照生成、保留和校验脚本已删除，不用旧证据的 PASS 冒充上线页面的新鲜状态。下一代规则发布资格仍由源码 Owner 按改动影响面验证；没有新全量测试证据时保留原观察时间并明确未重跑。
-
-## 40+ 项目扩展
-
-`config/final-project-order.json` 是保留项目、价值顺序与施工状态的唯一清单；Registry只登记已经完成的内容包，项目数量和固定名次从现行配置读取。已退役项目不复活、不补占位；来源拥有实际模块边界。项目扩展、维护和发布依本人当前要求，而非历史建设任务的模型分工或仅本地暂停安排。新增完整包沿同一来源取证、内容验收、构建及已授权发布链闭合。
-
-Registry 中当前启用的已发布项目为每条路由生成含完整正文的静态 HTML；共享 JavaScript 只负责菜单、搜索、规则选择、背景与画廊等增强，路由使用原生目录页面导航，并最多预取下一条非兼容路由。共享脚本、共享 CSS、全站紧凑搜索和全部项目模块搜索的 gzip 防膨胀审查阈值分别读取 Registry 的四个对应 budget 字段，而不是在本文复制动态数值；这些阈值不是永久内容上限。每次增加项目后都从本轮构建产物重新记录实际 gzip 数值，不把旧项目数和旧模块数继续写成当前事实。超过当前阈值时仍先审真实重复、依赖和公网墙钟，只有无法无损压缩且仍满足流畅性时才记录证据并调整审查线。禁止把完整正文重新塞入公共 JS，也禁止点击后加载正文、fetch、spinner、骨架屏、空白或以删除专业正文换体积；图片画廊可先显示轻量缩略图，并在用户打开后解码完整图片。派生搜索索引只能保留类型、标题、短摘要、链接、明确 aliases（别名）和有界搜索短语，由权威正文在构建时投影，不能成为第二份语义正文。
-
-## 完成标准
-
-一次 AI 刷新必须返回：
-
-- 实际检查项目；
-- changed / unchanged / blocked；
-- 真实耗时；
-- 自动修复及证据；
-- 内容、测试、构建和预览结论；
-- 是否发生提交、发布和正式回读；所有门通过后默认自动发布，若未发布必须说明用户暂停或精确阻断。
-
-文件存在、脚本成功、hash 一致或测试通过都不能单独代替内容准确、专业、详细且人话的阅读验收。
-
-网页语义判断、正文写入、设计与内容验收按活动原生经济路由选择，不再强制Astra或固定思考档位。保留本人选择的主任务模型，再按剩余难度、质量、独立审查价值与总投入决定直接完成或委派，并核验实际model/effort。Registry的型号和档位为空时由AI执行者按此原则选择，不能当成可调用型号。机械收集、hash与测试只提供证据，不替代语义差分、内容取舍或阅读验收。
+普通项目不能使用这个保留标记；实际手动更新仍须本人的明确请求。该接口只处理结果包闭合，不改变按需清单规定的更新范围、事实来源或发布责任。
