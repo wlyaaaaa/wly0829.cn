@@ -65,6 +65,10 @@ const assert = require('node:assert/strict');
   const proj = R.projects(v, ctx);
   assert.match(proj, /cp-proj is-yellow"[^>]*><h3>.*?甲/);
   assert.match(proj, /cp-proj is-red"[^>]*><h3>.*?乙/);
+  const info = { name: '电脑配置与恢复', run_health: 'ok', overview: 'ok', know: [{ text: '自启动新增 2 条 <测试>', observed_at: '2026-10-12T00:20:00+08:00' }] };
+  const known = R.projects(normalize({ projects: { items: [info] } }), ctx);
+  assert.match(known, /cp-proj is-green.*知道就行.*自启动新增 2 条 &lt;测试&gt; · 00:20 读到/);
+  assert.doesNotMatch(R.projects(normalize({ projects: { items: [{ ...info, know: [] }] } }), ctx), /知道就行|cp-project-know/);
   assert.equal(riverSnapshot(v).today_errors.length, v.today_activity.summary.errors.owner + v.today_activity.summary.errors.other);
   // 字段没到：不加原因句、不加笔记本行、不出空框
   const bare = normalize({ schema: 'pcconfig.cockpit-view.v1', sections: { computer: [{ id: 'computer_health', title: '电脑资源', text: '处理器 24%', state: 'ok' }] } });
