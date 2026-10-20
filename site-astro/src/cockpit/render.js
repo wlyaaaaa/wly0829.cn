@@ -388,12 +388,14 @@ export function projects(v, ctx) {
   // 红只给“等你动手”的（契约：本人必须动手才红）；任务没跑成、AI 还要查的是黄
   const stateOf = (p) => (p.waiting_user > 0 ? 'red' : ['ok', 'not_applicable'].includes(p.run_health) && p.overview === 'ok' ? 'ok' : ['error', 'failed', 'red', 'warn', 'attention'].includes(p.run_health) || ['error', 'red', 'run_failed', 'warn', 'attention'].includes(p.overview) ? 'attention' : ['ok', 'not_applicable'].includes(p.run_health) || p.overview === 'ok' ? 'ok' : 'unavailable');
   const name = (p) => (ctx.projectUrls?.[p.name] ? `<a href="${esc(ctx.projectUrls[p.name])}">${esc(p.name)}</a>` : esc(p.name));
+  const know = (p) => Array.isArray(p.know) ? p.know.filter((x) => typeof x?.text === 'string' && x.text.trim()) : [];
   const card1 = (p, s) => {
     const wait = [p.waiting_user ? `等你 ${p.waiting_user} 件` : '', p.waiting_ai ? `等 AI ${p.waiting_ai} 件` : '', p.on_hold ? `暂缓 ${p.on_hold} 件` : ''].filter(Boolean).join(' · ');
     const [id, ...more] = idsOf(slugOf(ctx.projectUrls?.[p.name]));
-    return `<article class="cp-proj is-${light(s)}"${id ? ` id="${esc(id)}"` : ''}>${more.map(anchor).join('')}<h3>${dot(s)}${name(p)}</h3>${p.health_reason ? `<p>${esc(p.health_reason)}</p>` : ''}${wait ? `<p class="cp-meta">${esc(wait)}</p>` : ''}</article>`;
+    const info = know(p).map((x) => `<p class="cp-meta">${esc(x.text)}${x.observed_at ? ` · ${esc(when(x.observed_at, ctx.now))} 读到` : ''}</p>`).join('');
+    return `<article class="cp-proj is-${light(s)}"${id ? ` id="${esc(id)}"` : ''}>${more.map(anchor).join('')}<h3>${dot(s)}${name(p)}</h3>${p.health_reason ? `<p>${esc(p.health_reason)}</p>` : ''}${wait ? `<p class="cp-meta">${esc(wait)}</p>` : ''}${info ? `<div class="cp-project-know"><b>知道就行</b>${info}</div>` : ''}</article>`;
   };
-  const busy = live.filter((p) => stateOf(p) !== 'ok' || p.waiting_user > 0), calm = live.filter((p) => !busy.includes(p));
+  const busy = live.filter((p) => stateOf(p) !== 'ok' || p.waiting_user > 0 || know(p).length), calm = live.filter((p) => !busy.includes(p));
   const cards = busy.map((p) => card1(p, stateOf(p))).join('');
   const chips = calm.map((p) => { const [id, ...more] = idsOf(slugOf(ctx.projectUrls?.[p.name])); return `<li${id ? ` id="${esc(id)}"` : ''}>${more.map(anchor).join('')}${dot('ok')}${name(p)}</li>`; }).join('');
   // 驾驶舱里没有的项目（冻结的、接口没给的），锚点落在项目区开头
