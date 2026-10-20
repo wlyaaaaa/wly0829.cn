@@ -27,5 +27,14 @@ test('cockpit edge recompresses decoded JSON and respects gzip negotiation', asy
     const head = await onRequest({ request: new Request('https://live.wly0829.cn/computer-access/state', { method: 'HEAD', headers: { 'Accept-Encoding': 'gzip' } }) });
     assert.equal(head.headers.get('Content-Encoding'), 'gzip');
     assert.equal(await head.text(), '');
+    const originalCompression = globalThis.CompressionStream;
+    try {
+      globalThis.CompressionStream = class { constructor() { throw new TypeError('runtime compression unavailable'); } };
+      const fallback = await onRequest({ request: new Request('https://live.wly0829.cn/computer-access/state', { headers: { 'Accept-Encoding': 'gzip' } }) });
+      assert.equal(fallback.status, 200);
+      assert.equal(await fallback.text(), payload);
+      assert.equal(fallback.headers.get('Content-Encoding'), null);
+      assert.equal(fallback.headers.get('X-Compression-Result'), 'identity');
+    } finally { globalThis.CompressionStream = originalCompression; }
   } finally { globalThis.fetch = original; }
 });
