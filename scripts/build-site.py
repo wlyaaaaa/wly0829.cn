@@ -306,6 +306,7 @@ def build(pages=None):
         retained_fp = fingerprint([fixed[route], SITE / 'src/cockpit', SITE / 'public/_overview', SITE / 'src/chrome/living-engine.json',
             ROOT / 'scripts/today-river.js', ROOT / 'scripts/today-river.css', ROOT / 'sources/creative/today-river/assets2'] if native_cockpit else retained_inputs(name, snapshot))
         entries[route] = {'fingerprint': retained_fp, 'kind': 'retained'}
+    entries['/cockpit/storage/'] = {'fingerprint': fingerprint([fixed['/cockpit/storage/'], SITE / 'src/cockpit/cockpit.css']) + wrapper_fp, 'kind': 'retained'}
     for relative in snapshot['pages']:
         entries.setdefault(file_route(relative), {'fingerprint': fingerprint([SNAPSHOT / 'pages' / relative]), 'kind': 'frozen'})
     generated_fp = fingerprint([ROOT / 'config/final-project-order.json', SITE / 'tools/cockpit_stutter.py'])

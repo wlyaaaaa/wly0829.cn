@@ -363,7 +363,7 @@ export function computer(v, ctx) {
     .replace(/<\/p>/, (m) => m + (net ? `<p class="cp-net"><a href="#${esc(knowId({ id: net.must_know_id }))}">间歇断开的情况看这里 →</a></p>` : '') + (lap && !off ? `<p class="cp-laptop">${dot(lap[1])}笔记本（副机）：${lap[0]}</p>` : ''));
   // 读不到电脑时图表网页也打不开：链接先收起，只留一行说明
   const chartsRow = off ? `<p class="cp-line cp-off-note">${dot('unavailable')}读不到电脑，图表链接先收起，读到后再出来。</p>` : `<div id="grafana" class="cp-grid cp-charts">${graf}${login}</div>`;
-  return `<div class="cp-grid">${cards}${remote}</div>${chartsRow}`;
+  return `<div class="cp-grid">${cards}${remote}</div><p class="cp-line"><a href="/cockpit/storage/">存储占用与增长：按类别看容量、近一周变化和清理规则 →</a></p>${chartsRow}`;
 }
 const LAPTOP = { online: ['在线', 'ok'], offline: ['离线（要用它时得先开机连网）', 'attention'] };
 
