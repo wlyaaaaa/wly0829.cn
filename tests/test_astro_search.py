@@ -33,7 +33,7 @@ class AstroSearchTests(unittest.TestCase):
             manifest = root/'site-astro/sources/frozen-site/manifest.json'; manifest.parent.mkdir(parents=True); manifest.write_text('{}', encoding='utf8')
             skill_route = '/skills/example/'
             skill_source = root/'sources/pages/example/page.json'; skill_source.parent.mkdir(parents=True)
-            skill_source.write_text(json.dumps({'url': skill_route}), encoding='utf8')
+            skill_source.write_text(json.dumps({'url': skill_route, 'search_aliases': ['ordinary request', 'ordinary request']}), encoding='utf8')
             record = lambda kind, href: {'type': kind, 'href': href, 'detail': 'Old'}
             kept = record('页面', '/kept/'); tail = record('页面', '/tail/')
             a = record('项目内容', route+'#a'); gone = record('项目内容', route+'#gone')
@@ -43,7 +43,7 @@ class AstroSearchTests(unittest.TestCase):
             for rel, rows in before.items():
                 (root/rel).write_text('window.index='+json.dumps(rows)+';', encoding='utf8')
             previous = {'oss': {'objects': {rel: {'url': '/old/'+rel} for rel in before}}}
-            with patch.object(runtime, 'ROOT', root), patch.object(runtime, 'SITE', root/'site-astro'), patch.object(runtime.subprocess, 'check_output', return_value=json.dumps({skill_route: ['ordinary request', 'ordinary request']})):
+            with patch.object(runtime, 'ROOT', root), patch.object(runtime, 'SITE', root/'site-astro'):
                 runtime.sync_search(root, previous, {route: {}, skill_route: {}}, {}, {route})
             after = {rel: runtime.nav.search_records((root/rel).read_text('utf8')) for rel in before}
             expected = {'search-index.js': ['/kept/', route+'#top', '/tail/', skill_route],

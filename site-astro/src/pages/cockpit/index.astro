@@ -6,7 +6,6 @@ import Site from '../../layouts/Site.astro';
 import { pathToFileURL } from 'node:url';
 import fallback from '../../cockpit/snapshot.json';
 import { normalize } from '../../cockpit/model.js';
-import { asView } from '../../cockpit/full-adapter.js';
 import { page } from '../../cockpit/render.js';
 import '../../cockpit/cockpit.css';
 import '../../cockpit/refresh-button.css';
@@ -16,14 +15,14 @@ import birdConfig from '../../cockpit/hero.config.json?url&no-inline';
 import livingEngine from '../../chrome/living-engine.json';
 import motionRuntime from '../../../public/_living/quality-runtime/manifest.json';
 
-// 精简视图；边缘函数还没转发 view 时 live 回全量，asView 照样认
+// 两个入口都返回精简视图；格式不符时换下一个，最后用仓库快照。
 const ENDPOINTS = ['https://live.wly0829.cn/computer-access/state?view=cockpit', 'https://mcp.wly0829.cn/computer-access/api/status?view=cockpit'];
 async function latest() {
   for (const url of ENDPOINTS) {
     try {
       const r = await fetch(url, { headers: { Origin: 'https://wly0829.cn' }, signal: AbortSignal.timeout(8000) });
       if (!r.ok) continue;
-      const v = asView(await r.json());
+      const v = await r.json();
       if (normalize(v).ok) return v;
     } catch { /* 用下一个，最后用仓库里的上一份 */ }
   }

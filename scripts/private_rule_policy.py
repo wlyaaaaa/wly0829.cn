@@ -36,10 +36,6 @@ def load_policy():
     return policy
 
 
-def private_source_root(root):
-    return Path(root) / '.publish/private/rule-sources'
-
-
 def omission_id(value):
     return 'omit:' + hashlib.sha256(value.encode('utf8')).hexdigest()
 

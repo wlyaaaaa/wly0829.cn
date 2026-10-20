@@ -2,13 +2,12 @@
 // 每分钟读一次（页面在后台时不读）；刷新按钮叫醒电脑重读，等三个采集器都完成再换。
 import { normalize, riverSnapshot, freshAfter } from './model.js';
 import { REGIONS, PICK_FIRST, COPY_HINT, aiPrompt, promptIds } from './render.js';
-import { asView } from './full-adapter.js';
 
 const boot = JSON.parse(document.getElementById('cockpit-boot')?.textContent || '{}');
 // 本机预览走预览脚本的转发入口，线上走 live（边缘）再退到 mcp
 const local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
 const endpoints = (local ? boot.local : boot.endpoints) || [];
-let view = normalize(boot.snapshot ? asView(boot.snapshot) : {});
+let view = normalize(boot.snapshot);
 let offline = false, busy = null;
 let asked = 0, shown = 0;
 // phase：还没收到过任何一次读取结果时是 snapshot（首帧那份构建时的数），之后是 live；读不到另由 offline 说明
@@ -21,7 +20,7 @@ async function read(wake) {
     try {
       const r = await fetch(url, { cache: 'no-store', credentials: 'omit', signal: AbortSignal.timeout(12000) });
       if (!r.ok) continue;
-      const v = normalize(asView(await r.json()));
+      const v = normalize(await r.json());
       if (v.ok) return v;
     } catch { /* 换下一个地址 */ }
   }

@@ -241,7 +241,7 @@ def cli_error(result):
     return "CLI 调用失败"
 
 
-def cli_run(command):
+def cli_run(command, *, timeout=None, attempts=None):
     relay, env = None, None
     is_sls = command[1] == "sls"
     if is_sls and any(address[4][0].startswith(("198.18.", "198.19."))
@@ -254,16 +254,17 @@ def cli_run(command):
         env = {**os.environ, "NO_PROXY": "oauth.aliyun.com,oauth.alibabacloud.com,signin.aliyun.com,signin.alibabacloud.com",
                "HTTPS_PROXY": f"http://127.0.0.1:{relay.server_port}"}
     try:
-        for attempt in range(3 if is_sls else 1):
+        attempts = attempts if attempts is not None else (3 if is_sls else 1)
+        for attempt in range(attempts):
             try:
-                result = subprocess.run(command, capture_output=True, timeout=60 if is_sls else 180, env=env)
+                result = subprocess.run(command, capture_output=True, timeout=timeout if timeout is not None else (60 if is_sls else 180), env=env)
             except subprocess.TimeoutExpired:
                 category = "连接超时"
             else:
                 if not result.returncode:
                     return result.stdout.decode("utf-8-sig")
                 category = cli_error(result)
-            if is_sls and category in ("连接超时", "DNS 解析失败", "连接中断") and attempt < 2:
+            if is_sls and category in ("连接超时", "DNS 解析失败", "连接中断") and attempt < attempts - 1:
                 time.sleep(attempt + 1)
                 continue
             raise RuntimeError(f"阿里云命令失败（{category}，尝试 {attempt + 1} 次）；未输出可能含凭据的原始错误")
@@ -340,7 +341,8 @@ def sls_logs(args, start, end):
         raise ValueError("SLS 项目未配置；请指定 --sls-project")
     records, offset, page_size = [], 0, 100
     search = f"__topic__:oss_access_log AND bucket:{SOURCE}"
-    if getattr(args, "deep_read", False):
+    deep_read = getattr(args, "deep_read", False)
+    if deep_read:
         search += ' AND (request_uri: "/_v.gif" OR request_uri: "%2F_v.gif")'
     while True:
         body = {"from": int(start.timestamp()), "to": int(end.timestamp()),
@@ -350,8 +352,10 @@ def sls_logs(args, start, end):
                    "--logstore", args.sls_logstore, "--region", "cn-shanghai",
                    "--endpoint", "cn-shanghai.log.aliyuncs.com", "--read-timeout", "20", "--connect-timeout", "10",
                    "--profile", args.profile, "--body", json.dumps(body)]
-        for attempt in range(3):
-            page = json.loads(cli_run(command))
+        attempts = 2 if deep_read else 3
+        for attempt in range(attempts):
+            # 深读一页最多两次 25 秒调用；不叠加 CLI 的三次网络重试。
+            page = json.loads(cli_run(command, timeout=25, attempts=1) if deep_read else cli_run(command))
             if not isinstance(page, dict):
                 raise ValueError("Unknown SLS response schema")
             meta, data = page.get("meta", {}), page.get("data")
@@ -359,7 +363,7 @@ def sls_logs(args, start, end):
                 raise ValueError("Unknown SLS response schema")
             if meta["progress"] == "Complete":
                 break
-            if attempt < 2:
+            if attempt < attempts - 1:
                 time.sleep(1)
         else:
             raise RuntimeError("SLS 查询未完成；未将部分日志当作完整结果")
@@ -371,8 +375,8 @@ def sls_logs(args, start, end):
         offset += len(data)
 
 
-def source_windows(start, end, now):
-    begin = datetime.combine(start, datetime.min.time(), TZ) - timedelta(seconds=30)
+def source_windows(start, end, now, begin_at=None):
+    begin = begin_at if begin_at is not None else datetime.combine(start, datetime.min.time(), TZ) - timedelta(seconds=30)
     finish = datetime.combine(end + timedelta(days=1), datetime.min.time(), TZ) + timedelta(seconds=30)
     cutoff = now - timedelta(days=7)
     windows = []
@@ -386,7 +390,8 @@ def source_windows(start, end, now):
 def sync_cloud(args, start, end, now):
     paths, records, file_range = [], [], None
     sync = {"mode": "hybrid", "listed_objects": 0, "objects": 0, "downloaded": 0, "reused": 0, "sources": []}
-    for source, begin, finish in source_windows(start, end, now):
+    begin_at = args.since.astimezone(TZ) - timedelta(minutes=30) if getattr(args, "deep_read", False) else None
+    for source, begin, finish in source_windows(start, end, now, begin_at):
         segment = {"source": source, "from": begin, "to": finish}
         if source == "oss_archive":
             paths, archive_sync = sync_logs(args, begin.date(), finish.date())
@@ -670,6 +675,7 @@ def main():
     end = args.end or datetime.now(TZ).date()
     start = args.start or end - timedelta(days=(args.days or 7) - 1)
     if args.deep_read:
+        # 日期只用于分析切日；sync_cloud 的深读查询保留这个起点的具体时分秒。
         start = (args.since.astimezone(TZ) - timedelta(minutes=30)).date()
     if args.month:
         try:

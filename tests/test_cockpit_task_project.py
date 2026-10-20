@@ -1,4 +1,4 @@
-"""驾驶舱任务的归属项目（数据全部虚构）：后端任务对象带 project 时，精简视图和全量备用入口都把它传到“今天的河”，
+"""驾驶舱任务的归属项目（数据全部虚构）：后端精简视图的任务对象带 project 时，把它传到“今天的河”，
 展开说明（正常那一支和未知/出错走提醒那一支）首行显示“归属项目”；没有 project 时不出这一行，也不写“未知”占位。"""
 import json
 import subprocess
@@ -23,7 +23,6 @@ const assert = require('node:assert/strict'), vm = require('node:vm');
 (async () => {
   const [base, helpers, pick] = process.argv.slice(1);
   const { normalize, riverSnapshot } = await import(base + 'model.js');
-  const { fromFull } = await import(base + 'full-adapter.js');
   const at = '2026-10-12T14:59:30+08:00', now = new Date('2026-10-12T15:00:00+08:00');
   const item = (id, project) => ({ id, name: '虚构' + id, state: 'success', last_run_at: at, what: '虚构在做的事', ...(project ? { project } : {}) });
 
@@ -34,13 +33,13 @@ const assert = require('node:assert/strict'), vm = require('node:vm');
   assert.equal(snap.find((t) => t.id === 'pages').project, '虚构项目（总看板）');
   assert.equal(snap.find((t) => t.id === 'plain').project, '');
 
-  // 全量备用入口：automation.items[].project 也保留，名字仍取 plain.name
-  const full = fromFull({ status: 'ok', automation: { items: [
-    { id: 'pages', project: '虚构项目（总看板）', plain: { name: '虚构部署', what: '虚构工作', stop: '虚构停止', impact: '虚构影响' }, last_run_at: at, next_run_at: '2026-10-13T15:00:00+08:00', state: 'success' },
-    { id: 'plain', plain: { name: '虚构无归属' }, state: 'success' }] } });
-  const ft = full.automation ? full.automation.items : full.tasks;
+  // 精简视图同时保留项目名和任务的用法说明
+  const detailed = { schema: 'pcconfig.cockpit-view.v1', automation: { items: [
+    { id: 'pages', project: '虚构项目（总看板）', name: '虚构部署', what: '虚构工作', stop: '虚构停止', impact: '虚构影响', last_run_at: at, next_run_at: '2026-10-13T15:00:00+08:00', state: 'success' },
+    { id: 'plain', name: '虚构无归属', project: '', state: 'success' }] } };
+  const ft = detailed.automation.items;
   const fa = (ft || []).find((t) => t.id === 'pages'), fb = (ft || []).find((t) => t.id === 'plain');
-  assert.ok(fa, JSON.stringify(full).slice(0, 400));
+  assert.ok(fa, JSON.stringify(detailed).slice(0, 400));
   assert.equal(fa.project, '虚构项目（总看板）'); assert.equal(fa.name, '虚构部署'); assert.equal(fb.project, '');
 
   // 河的展开说明：正常那一支（six）和提醒那一支（pick 的未知/出错分支）
@@ -69,8 +68,8 @@ const assert = require('node:assert/strict'), vm = require('node:vm');
   ctx.cur = card(); ctx.pick(task({ id: 'e', state: 'success', project: '虚构项目（总看板）' }), false);
   assert.match(ctx.cur.html, /归属项目/);
   ctx.URL = URL;
-  const fullTask = riverSnapshot(normalize(full), now).automation.items.find((t) => t.id === 'pages');
-  ctx.cur = card(); ctx.pick({ ...task(fullTask, 'ai'), name: fullTask.plain.name, last: Date.parse(fullTask.last_run_at), next: Date.parse(fullTask.next_run_at) }, false);
+  const detailTask = riverSnapshot(normalize(detailed), now).automation.items.find((t) => t.id === 'pages');
+  ctx.cur = card(); ctx.pick({ ...task(detailTask, 'ai'), name: detailTask.plain.name, last: Date.parse(detailTask.last_run_at), next: Date.parse(detailTask.next_run_at) }, false);
   for (const label of ['虚构部署', '虚构工作', '虚构停止', '虚构影响', '上次什么时候跑的', '下次什么时候跑', '15:00']) assert.ok(ctx.cur.html.includes(label), label);
   ctx.cur = card(); ctx.pick(task({ id: 'gmail', state: 'unknown', project_url: 'https://script.google.com/home/projects/fixture/edit', plain: { what: '虚构转发', stop: '虚构停止', impact: '虚构影响' } }), false); assert.match(ctx.cur.html, /href="https:\/\/script\.google\.com\/home\/projects\/fixture\/edit" target="_blank" rel="noopener noreferrer">打开Google脚本项目<\/a>/); for (const label of ['在做什么', '上次什么时候跑的', '下次什么时候跑', '有没有出错', '怎么停', '停了影响什么', '虚构停止', '虚构影响']) assert.ok(ctx.cur.html.includes(label), label);
   ctx.cur = card(); ctx.pick({ ...task({ id: 'phone', state: 'failed', plain: { what: '换WiFi后连同一路由器' } }, 'ai'), name: '回家收手机数据' }, false); assert.match(ctx.cur.html, /换WiFi后连同一路由器/);

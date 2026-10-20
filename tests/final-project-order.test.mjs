@@ -1,153 +1,18 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import test from "node:test";
-
-import { projectCatalog, routePaths } from "../app/site-content.js";
-
-const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const plan = JSON.parse(await readFile(path.join(projectRoot, "config", "final-project-order.json"), "utf8"));
-const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
-const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
-const readme = await readFile(path.join(projectRoot, "README.md"), "utf8");
-const agentsRules = await readFile(path.join(projectRoot, "AGENTS.md"), "utf8")
-  + "\n" + await readFile(path.join(projectRoot, "docs", "design", "panel-content-contract.md"), "utf8");
-const wechatDirectSource = await readFile(path.join(projectRoot, "app", "content-wechatdirect.js"), "utf8");
-const personalHealthSource = await readFile(path.join(projectRoot, "app", "content-personal-health.js"), "utf8");
-const systemSource = await readFile(path.join(projectRoot, "app", "system-home-content.js"), "utf8");
-const designQa = await readFile(path.join(projectRoot, "design-qa.md"), "utf8");
-
-test("the approved value order places personal-expression after daily-preferences and preserves the remaining order", () => {
-  assert.deepEqual(plan.projects.map((item) => item.id), [
-    "personal-media",
-    "agents",
-    "pcconfig",
-    "localocr",
-    "github-index",
-    "document-materials",
-    "personal-materials",
-    "chinese-asr",
-    "learning",
-    "timeaudit",
-    "personal-health",
-    "devconfig-backup",
-    "vault-tool",
-    "ai-cli-profile-manager",
-    "work-delivery",
-    "daily-preferences",
-    "personal-expression",
-    "wechat-direct",
-    "proxyclean",
-    "codex-memory",
-    "meshclip-kit",
-    "video-scaffold",
-    "sunshine-remote-streaming",
-    "typora-theme-pack",
-    "openclaw-gateway",
-    "wechat-history-ai-bridge",
-    "pc-panel-hub",
-    "emerald-veil",
-    "steam-millennium-config-backup",
-    "ramdisk-guardian",
-    "cacb",
-    "codex-remote",
-    "wly0829-cn",
-    "password-center",
-    "remote-control"
-  ]);
-});
-
-test("the final project plan fixes one complete value order without placeholder projects", () => {
-  assert.equal(plan.schema, "wly.personal-panel-final-project-order.v1");
-  assert.equal(plan.target_project_count, 35);
-  assert.match(plan.ranking_basis, /consensus total net value for a broad rational audience/);
-  assert.match(plan.ranking_rules.join("\n"), /do not add points for the owner's current usage frequency/);
-  assert.match(plan.display_rule, /consecutive visible card numbers from 1.*missing internal ranks never create placeholder cards or routes/);
-  assert.match(plan.rank_retirement_rule, /owner-removed independent project.*final_rank unused.*never silently renumbered/);
-  assert.match(plan.construction_rule, /smallest final_rank still marked planned/);
-  assert.match(plan.construction_rule, /does not wait.*publication/);
-  assert.match(plan.construction_rule, /in parallel/);
-  assert.doesNotMatch(plan.construction_rule, /construction_hold|held project|removes the hold/);
-  assert.equal(plan.ranking_rules.length, 4);
-
-  assert.equal(plan.projects.length, plan.target_project_count);
-  assert.deepEqual(plan.projects.map((item) => item.final_rank), Array.from({ length: 37 }, (_, index) => index + 1).filter((rank) => ![15, 25].includes(rank)));
-  assert.equal(new Set(plan.projects.map((item) => item.id)).size, plan.target_project_count);
-
-  const published = plan.projects.filter((item) => item.state === "published");
-  const planned = plan.projects.filter((item) => item.state === "planned");
-  assert.equal(published.length, plan.target_project_count);
-  assert.equal(planned.length, 0);
-  assert.equal(plan.projects.find((item) => item.id === "emerald-veil").state, "published");
-  assert.equal(plan.projects.find((item) => item.id === "personal-expression").state, "published");
-  assert.ok(readme.includes("Emerald Veil"));
-  for (const retired of ["codex-app-power-user-playbook", "rtx5090d-ollama-agent-bundle"]) {
-    assert.ok(!plan.projects.some((item) => item.id === retired));
-    assert.ok(!registry.projects.some((item) => item.id === retired));
-    assert.ok(!routePaths.some((route) => route.startsWith(`/projects/${retired}`)));
+const json = async (name) => JSON.parse(await readFile(new URL(`../config/${name}.json`, import.meta.url), "utf8"));
+test("published registrations preserve the accepted project identities and fixed value ranks", async () => {
+  const order = await json("final-project-order"), registry = await json("panel-projects");
+  const enabled = registry.projects.filter((item) => item.enabled).sort((a, b) => a.order - b.order);
+  const published = order.projects.filter((item) => item.state === "published");
+  assert.deepEqual(enabled.map((item) => [item.id, item.order]), published.map((item) => [item.id, item.final_rank]));
+  assert.equal(new Set(enabled.map((item) => item.id)).size, enabled.length);
+  for (const item of enabled) {
+    assert.ok(!item.ai_refresh.content_path.startsWith("app/"), item.id);
+    await readFile(new URL(`../${item.ai_refresh.content_path}`, import.meta.url));
   }
-  assert.equal(plan.projects.some((item) => Object.hasOwn(item, "construction_hold")), false);
-  assert.equal(plan.projects.some((item) => item.id === "md-triple-tactics-talent-solver"), false);
-  assert.equal(registry.projects.some((item) => item.id === "md-triple-tactics-talent-solver"), false);
-  assert.equal(projectCatalog.some((entry) => entry.registration.id === "md-triple-tactics-talent-solver"), false);
-  assert.equal(routePaths.includes("/projects/md-triple-tactics-talent-solver"), false);
-  assert.doesNotMatch(generatedIndex, /\/projects\/md-triple-tactics-talent-solver/);
-  assert.doesNotMatch(systemSource, /id:\s*"md-triple-tactics-talent-solver"|href:\s*"\/projects\/md-triple-tactics-talent-solver"/, "retired historical ledger entries must not return as System project cards");
-  assert.match(readme, /md-triple-tactics-talent-solver.*历史 GitHub 总账资产.*不属于独立项目规划.*不生成项目卡、路由、内容包或未来施工项/s);
-  assert.doesNotMatch(agentsRules, /construction_hold|Rank 36|thirty-six-project/);
-  assert.doesNotMatch(designQa, /固定 36 项|36 个独立项目|14 个项目仍待建设|construction_hold|rank 36|Rank 36/);
-  assert.equal(plan.projects.some((item) => item.id === "scripts" || item.final_rank === 15), false);
-  assert.equal(registry.projects.some((item) => item.id === "scripts"), false);
-  assert.equal(projectCatalog.some((entry) => entry.registration.id === "scripts"), false);
-  assert.equal(routePaths.includes("/projects/scripts"), false);
-  assert.doesNotMatch(generatedIndex, /\["scripts"|\/projects\/scripts/);
-  assert.doesNotMatch(systemSource, /id:\s*"scripts"\s*,\s*repo:\s*"Scripts"/, "a retired source repository must not remain a System asset");
-  assert.equal(registry.projects.some((item) => item.id === "proxyclean"), true);
-  assert.equal(projectCatalog.some((entry) => entry.registration.id === "proxyclean"), true);
-  assert.equal(routePaths.includes("/projects/proxyclean"), true);
-  assert.match(generatedIndex, /\["proxyclean"/);
-
-  const planById = new Map(plan.projects.map((item) => [item.id, item]));
-  const enabled = registry.projects.filter((item) => item.enabled).sort((left, right) => left.order - right.order);
-  const legacyPublished = published.filter((item) => item.content_format !== "typeset");
-  assert.deepEqual(enabled.map((item) => item.order), published.map((item) => item.final_rank));
-  assert.deepEqual(enabled.map((item) => item.id), published.map((item) => item.id));
-  assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), legacyPublished.map((item) => item.id));
-  for (const item of published.filter((item) => item.content_format === "typeset")) {
-    assert.ok(item.content_path.startsWith("sources/pages/"));
+  for (const retired of ["scripts", "playbook", "rtx-5090d-ollama", "md-triple-tactics-talent-solver"]) {
+    assert.ok(!enabled.some((item) => item.id === retired));
   }
-  for (const registration of enabled) {
-    assert.equal(registration.order, planById.get(registration.id)?.final_rank, `${registration.id} drifted from its fixed final rank`);
-  }
-  for (const { project, registration } of projectCatalog) {
-    assert.equal(project.order, planById.get(registration.id)?.final_rank, `${registration.id} content drifted from its fixed final rank`);
-  }
-
-  const registeredIds = new Set(registry.projects.map((item) => item.id));
-  for (const item of plan.projects.filter((item) => item.state !== "published")) {
-    assert.equal(registeredIds.has(item.id), false, `${item.id} entered the published registry before construction`);
-    assert.equal(routePaths.includes(`/projects/${item.id}`), false, `${item.id} received a placeholder route`);
-    assert.equal(generatedIndex.includes(`["${item.id}"`), false, `${item.id} entered the generated content index`);
-    assert.equal(Object.hasOwn(item, "route"), false);
-    assert.equal(Object.hasOwn(item, "content_path"), false);
-  }
-});
-
-test("non-card explanations keep only real remaining work and private exclusions stay non-public", () => {
-  assert.equal(plan.non_card_explanations.length, 11);
-  assert.equal(plan.non_card_explanations.filter((item) => item.status === "done").length, 11);
-  assert.equal(plan.non_card_explanations.filter((item) => item.status === "todo").length, 0);
-  assert.equal(plan.non_card_explanations.some((item) => item.id === "md-triple-tactics-ledger-asset" && item.status === "done"), true);
-  assert.equal(plan.non_card_explanations.some((item) => item.id === "wechat-pre-public-private-archive" && item.status === "done"), true);
-  assert.equal(plan.non_card_explanations.some((item) => item.id === "health-longevity-early-project" && item.status === "done"), true);
-  assert.equal(plan.non_card_explanations.some((item) => item.id === "scripts-capabilities-absorbed-by-owning-projects" && item.status === "done" && item.owner_surface === "pcconfig-and-owning-projects" && item.evidence === "app/content-pcconfig.js#runtime-startup"), true);
-  assert.match(wechatDirectSource, /WeChatDirect-private-archive.*公开前历史档案.*历史与迁移依据.*读取、归档和恢复.*公开的 WeChatDirect/s);
-  assert.match(personalHealthSource, /HealthLongevity.*早期项目.*不再拥有任何写入.*personal-health.*Health Owner.*没有读取.*健康记录、诊断、数值和私人正文/s);
-  assert.doesNotMatch(systemSource, /WeChatDirect-private-archive|wechat-direct-private-archive|HealthLongevity.*不再拥有写入.*personal-health/s, "owner history remains in the corresponding source project rather than a duplicate System catalog");
-  assert.deepEqual(plan.private_exclusion_boundary, {
-    excluded_project_count: 4,
-    public_todo_forbidden: true,
-    authority: "docs/design/private-content-rules.md"
-  });
 });

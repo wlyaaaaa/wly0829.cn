@@ -74,24 +74,23 @@ def audit(root=ROOT, now=None):
         active = {}; unknown.append({'path': str(ENTRY), 'reason': 'Unknown: '+str(error)})
     pages = [(str(path.relative_to(root)).replace('\\', '/'), read(path)) for path in sorted((root/'sources/pages').glob('*/page.json'))]
     if not pages: unknown.append({'path': 'sources/pages', 'reason': 'Unknown: 作者源清单不可用或为空'})
-    try: app = (root/'app/content-skills.js').read_text('utf-8-sig')
-    except OSError: app = ''; unknown.append({'path': 'app/content-skills.js', 'reason': 'Unknown: 已选能力定义不可用'})
-    definitions = re.findall(r'\bslug:\s*["\']([^"\']+)["\']([\s\S]*?)(?=\bslug:|$)', app)
-    if not definitions: unknown.append({'path': 'app/content-skills.js', 'reason': 'Unknown: 无法提取已选能力'})
     canonical = lambda name: SKILL_ALIASES.get(name, name)
-    host = [name for name, body in definitions if re.search(r'sourceKind:\s*["\']host_integrated', body)]
-    selected = [canonical(name) for name, body in definitions if name not in host]
+    catalog = next((data for _, data in pages if data.get('page') == 'skills-home'), {})
+    definitions = [url.strip('/').split('/')[-1] for group in catalog.get('registry', {}).get('groups', []) for url in group.get('members', [])]
+    if not definitions: unknown.append({'path': 'sources/pages/skills-home/page.json', 'reason': 'Unknown: 已选能力目录不可用'})
+    host = [data['url'].strip('/').split('/')[-1] for _, data in pages if data.get('kind') == 'skill' and data.get('source_kind') == 'host_integrated']
+    selected = [canonical(name) for name in definitions if name not in host]
     retired = {item.get('name') if isinstance(item, dict) else item for item in supply.get('retired_skills', [])}
     local = [item['name'] for item in supply.get('skills', []) if item.get('install') is True and item['name'] not in retired]
     author_skills = [canonical(data.get('url', '').strip('/').split('/')[-1]) for path, data in pages if data.get('kind') == 'skill']
     expected_skills = sorted(set(local)-UNSELECTED_PERSONAL_DOMAINS)
-    skills = {'current': sorted(local), 'website_app_selected': sorted(selected), 'website_author_source': sorted(author_skills),
+    skills = {'current': sorted(local), 'website_catalog_selected': sorted(selected), 'website_author_source': sorted(author_skills),
         'selected_current': expected_skills, 'unselected_local': sorted(set(local)-set(expected_skills)), 'host_capabilities_outside_personal_supply': host,
-        **difference(expected_skills, author_skills), 'app_retired': sorted(set(selected)-set(local)),
-        'app_missing_selected': sorted(set(expected_skills)-set(selected))}
+        **difference([*expected_skills, *host], author_skills), 'catalog_retired': sorted(set(selected)-set(local)),
+        'catalog_missing_selected': sorted(set(expected_skills)-set(selected))}
     expected_projects = [item['id'] for item in order.get('projects', []) if item.get('state') == 'published']
     selected_projects = [item for item in registry.get('projects', []) if item.get('enabled') is True]
-    author_projects = [PROJECT_ALIASES.get(data.get('page'), data.get('page')) for path, data in pages if data.get('kind') in ('project', 'frozen')]
+    author_projects = [PROJECT_ALIASES.get(data.get('page'), data.get('page')) for path, data in pages if data.get('kind') in ('project', 'frozen') and not data.get('parent')]
     missing_sources = [item['id'] for item in selected_projects if item['id'] in expected_projects and not (root/(item.get('ai_refresh', {}).get('content_path') or '__missing__')).is_file()]
     for name in missing_sources: unknown.append({'project': name, 'reason': 'Unknown: 已选项目的注册网站内容源缺失'})
     projects = {'current_selected': expected_projects, 'website_registry': [item['id'] for item in selected_projects], 'website_author_source': author_projects,
@@ -138,7 +137,7 @@ def audit(root=ROOT, now=None):
     for row in (*stale, *stale_unknown): row['tier'] = 'advisory'
     refresh_registry = read(root/'sources/refresh/registry.json')
     writing = audit_pages(root/'sources/pages', now.date(), refresh_registry.get('retired_names', []), refresh_registry.get('interface_url_allowlist', {}))
-    misaligned = any(item.get(key) for item in (skills, projects, rules, projects['registry_mismatches']) for key in ('missing', 'retired_or_unselected', 'duplicate', 'app_retired', 'app_missing_selected', 'selected_source_missing')) or counts or versions or any(item['blocking'] for item in duplicates) or any(row['tier'] == 'block' for row in writing['findings'])
+    misaligned = any(item.get(key) for item in (skills, projects, rules, projects['registry_mismatches']) for key in ('missing', 'retired_or_unselected', 'duplicate', 'catalog_retired', 'catalog_missing_selected', 'selected_source_missing')) or counts or versions or any(item['blocking'] for item in duplicates) or any(row['tier'] == 'block' for row in writing['findings'])
     return {'schema': 'wly.content-refresh-audit.v1', 'observed_at_beijing': now.isoformat(), 'status': 'Unknown' if unknown else 'block' if misaligned else 'pass',
         'aligned': not unknown and not bool(misaligned), 'skills': skills, 'projects': projects, 'rules': rules,
         'website_author_source': [{'path': path, 'page': data.get('page'), 'kind': data.get('kind'), 'url': data.get('url')} for path, data in pages],

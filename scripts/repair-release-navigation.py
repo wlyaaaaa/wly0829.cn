@@ -182,7 +182,7 @@ def patch_history_runtime(text):
     match = pattern.search(text)
     if not match:
         if 'projectReadingTab' in text and 'pageshow' in text:
-            raise ValueError('Unsupported old reading runtime; rebuild static-site/main.jsx instead')
+            raise ValueError('Unsupported frozen reading runtime; migrate this route to the native reading tabs')
         return text
     fn, layer, target, locate, panel, show, reveal, event = match.groups()
     new = (f'function {fn}(scroll=true){{let{{id:{layer},target:{target}}}={locate}(),{panel}={show}({layer});'

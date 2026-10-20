@@ -1,8 +1,7 @@
-import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { panelSnapshot, projectCatalog } from "../app/site-content.js";
+import { contentFiles, projectContentSnapshot } from "./panel-content-paths.mjs";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, "..");
@@ -23,22 +22,10 @@ const selected = allRequested ? enabled : enabled.filter((item) => item.id === p
 if (!selected.length) throw new Error(`Unknown or disabled panel project: ${projectId}`);
 const manualSelected = selected.filter((item) => item.ai_refresh?.mode === "manual_owner_only");
 
-function safeContentPath(relativePath) {
-  const resolved = path.resolve(projectRoot, relativePath);
-  const relative = path.relative(projectRoot, resolved);
-  if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) throw new Error(`Invalid content path: ${relativePath}`);
-  return resolved;
-}
-
 const projects = [];
 for (const registration of selected) {
-  const entry = projectCatalog.find((candidate) => candidate.registration.id === registration.id);
-  const typeset = registration.content_format === "typeset" || registration.ai_refresh.content_format === "typeset";
-  if (!entry && !typeset) throw new Error(`Registered content package is not loaded: ${registration.id}`);
-  const contentPath = safeContentPath(registration.ai_refresh.content_path);
-  const contentBytes = await readFile(contentPath);
-  const authored = typeset ? JSON.parse(contentBytes.toString("utf8")) : null;
-  const isAgents = registration.id === "agents";
+  const snapshot = await projectContentSnapshot(registration);
+  const authored = snapshot.authored;
   projects.push({
     id: registration.id,
     order: registration.order,
@@ -47,20 +34,18 @@ for (const registration of selected) {
     source: registration.source,
     presentation_mode: registration.presentation_mode,
     refresh_mode: registration.ai_refresh.mode || "event_driven_material",
-    automatic_handoff: registration.ai_refresh.automatic_handoff !== false,
     manual_owner_request: registration.ai_refresh.mode === "manual_owner_only" ? manualOwnerRequest : null,
     refresh_scope: registration.ai_refresh.scope,
     content_path: registration.ai_refresh.content_path,
-    content_sha256: createHash("sha256").update(contentBytes).digest("hex"),
+    content_sha256: snapshot.sha256,
+    content_files: snapshot.files,
     semantic_revision: registration.ai_refresh.semantic_revision,
     source_fingerprint: null,
     source_fingerprint_state: registration.ai_refresh.mode === "manual_owner_only"
       ? "Fresh Owner evidence is allowed only after an explicit owner refresh request"
       : "AI must populate from the selected decision-relevant Owner observations and dated retained evidence; registered collectors are candidate entrypoints, not a mandatory full-run checklist",
-    observed_at: isAgents ? panelSnapshot.observedAt : authored?.observed_at || entry?.project.currentState?.observedAt || null,
-    current_gap_count: isAgents
-      ? panelSnapshot.validation.rows.filter((row) => row.status !== "pass").length
-      : typeset ? null : entry.project.currentState?.gaps?.length || 0,
+    observed_at: authored?.observed_at || authored?.status_line?.as_of || authored?.based_on?.commit_time || "Unknown: source observation not declared",
+    current_gap_count: null,
     collectors: registration.ai_refresh.collectors,
     collector_requirements: registration.ai_refresh.collector_requirements || [],
     conditional_collectors: registration.ai_refresh.conditional_collectors || [],
@@ -70,20 +55,12 @@ for (const registration of selected) {
 
 const globalSurfaces = [];
 for (const surface of registry.global_surfaces || []) {
-  const contentFiles = [];
-  for (const contentPath of surface.content_paths || []) {
-    const resolvedPath = safeContentPath(contentPath);
-    const contentBytes = await readFile(resolvedPath);
-    contentFiles.push({
-      path: contentPath,
-      content_sha256: createHash("sha256").update(contentBytes).digest("hex")
-    });
-  }
+  const files = await contentFiles(surface.content_paths || []);
   globalSurfaces.push({
     id: surface.id,
     title: surface.title,
     role: surface.role,
-    content_files: contentFiles
+    content_files: files
   });
 }
 

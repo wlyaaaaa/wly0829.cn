@@ -19,7 +19,7 @@ SITE = ROOT / 'site-astro'
 SNAPSHOT = SITE / 'sources/frozen-site'
 HASH_CACHE_PATH = SITE / '.cache/file-fingerprints.json'
 HASH_CACHE = None
-VERIFICATION_HTML = ('baidu_verify_codeva-DRgaQnAmTK.html',)
+VERIFICATION_FILES = ('baidu_verify_codeva-DRgaQnAmTK.html', 'sogousiteverification.txt')
 sys.path.insert(0, str(ROOT / 'scripts'))
 import astro_rules
 
@@ -357,7 +357,7 @@ def build(pages=None):
                 if asset_sources.get(key) == source_sha and (dist / relative).is_file(): continue
                 asset_sources[key] = source_sha
             assets_changed = copy_changed(source, dist / relative) or assets_changed
-    for name in VERIFICATION_HTML:
+    for name in VERIFICATION_FILES:
         source = ROOT / 'public' / name
         if not source.is_file(): raise ValueError('Missing registered verification file: ' + name)
         assets_changed = copy_changed(source, dist / name) or assets_changed

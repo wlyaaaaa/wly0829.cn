@@ -74,11 +74,11 @@ const result = {
   project_id: project.id,
   impact_candidate: uniqueReasons.length > 0,
   material_change_confirmed: materialChange,
-  task_required: uniqueReasons.length > 0 && materialChange,
+  task_required: false,
   reasons: uniqueReasons,
   changed_paths: changedPaths,
   action: uniqueReasons.length > 0 && materialChange
-    ? "create_fresh_independent_website_project_task_after_source_readback"
+    ? "report_material_drift_and_wait_for_owner_website_request"
     : uniqueReasons.length
       ? "record_candidate_and_wait_for_materiality_decision"
       : "no_website_task",

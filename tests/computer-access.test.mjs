@@ -251,15 +251,6 @@ test("built route preserves the complete static shell and only allows submitting
   assert.ok(!html.includes('class="ca-card ca-network-card"'));
 });
 
-test("website entry mounts in place without redirecting or discarding request locators", async () => {
-  const runtime = await readFile(new URL("../static-site/main.jsx", import.meta.url), "utf8");
-  const entry = runtime.slice(runtime.indexOf('if (document.querySelector("[data-computer-access]"))'), runtime.indexOf("const searchEntries"));
-  assert.ok(entry.includes('import("../app/computer-access-client.jsx")'));
-  assert.ok(!entry.includes("location.replace"));
-  assert.ok(!entry.includes("sessionStorage"));
-  const home = await readFile(new URL("../dist/index.html", import.meta.url), "utf8");
-  assert.ok(!home.includes("Content-Security-Policy"));
-});
 
 test("end buttons reflect actual grant state without conflating pending request cancellation", () => {
   for (const state of ["locked", "inactive", "expired", "revoked", "unknown"]) assert.equal(canEndGrant({ state, expires_at_unix: 200 }, 100), false);
@@ -410,8 +401,7 @@ test("home and MCP summaries only provide links to the common authority page", a
     assert.ok(!html.includes('id="ca-totp"'), route); assert.ok(!/<form\b|<input\b/.test(html), route);
     assert.ok(!/method:\s*["']POST/.test(html), route);
   }
-  const summary = await readFile(new URL("../app/computer-access-summary.jsx", import.meta.url), "utf8");
-  assert.ok(!summary.includes('method: "POST"'));
+
 });
 
 test("resource time summary merges shared reads without inventing one timestamp for independent sources", () => {

@@ -141,12 +141,8 @@ def sync_search(root, previous, converted, pin, changed_routes):
     replacements = {}; generated = []
     targets = {nav.route_file(route): nav.PageFacts((root / nav.route_file(route)).read_text('utf8'), root) for route in changed_routes}
     author = {data['url']: data for data in (read(path) for path in (ROOT/'sources/pages').glob('*/page.json')) if data.get('url')}
-    # Keep the diagnostic Skill's established requests after chapter rebuilding.
-    # Reuse its aliases without restoring older copy or rerouting other Skills.
-    skill_aliases = {}
-    if any(route.startswith('/skills/') and route in author for route in converted):
-        code = "import {globalSearchEntries} from './app/search.js'; console.log(JSON.stringify(Object.fromEntries(globalSearchEntries.filter(e=>e.type==='Skill'&&e.href==='/skills/timeaudit-diagnostics').map(e=>[new URL(e.href,'https://wly0829.cn').pathname.replace(/\\/?$/, '/'),e.aliases]))));"
-        skill_aliases = json.loads(subprocess.check_output(['node', '--input-type=module', '-e', code], cwd=ROOT, encoding='utf8'))
+    # Authored aliases travel with the same page as its current explanation.
+    skill_aliases = {route: page['search_aliases'] for route, page in author.items() if page.get('search_aliases')}
     for route in converted:
         if route not in changed_routes or converted[route].get('destination') or route not in author: continue
         if route.startswith('/rules/'):

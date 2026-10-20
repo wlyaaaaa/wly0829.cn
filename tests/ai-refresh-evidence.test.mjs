@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -198,4 +198,19 @@ test("AI refresh all closure retains unrequested manual snapshots without claimi
   } finally {
     await rm(tempRoot, { recursive: true, force: true });
   }
+});
+
+test("refresh plans cover published module sources and reject an overview-only fingerprint", async () => {
+  const plan = refreshPlan("personal-media"), item = plan.selected_projects[0];
+  assert.equal(item.content_path, "sources/pages/personal-media/page.json");
+  assert.ok(item.content_files.filter((file) => file.path.startsWith("sources/pages/") && file.path.endsWith("/page.json")).length > 1);
+  assert.ok(item.content_files.some((file) => file.path.startsWith("site-astro/src/content/pages/")));
+  assert.equal(Object.hasOwn(item, "automatic_handoff"), false);
+  const bundle = unchangedBundle(plan);
+  bundle.projects[0].new_content_sha256 = sha256(await readFile(path.join(projectRoot, item.content_path)));
+  const tempRoot = await mkdtemp(path.join(tmpdir(), "wly-ai-refresh-sources-"));
+  try {
+    const result = await verify(path.join(tempRoot, "bundle.json"), bundle);
+    assert.notEqual(result.status, 0); assert.match(result.stdout, /bundle_current_content_mismatch/);
+  } finally { await rm(tempRoot, { recursive: true, force: true }); }
 });

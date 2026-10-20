@@ -191,6 +191,17 @@ class VisitorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             query.parse_sls_row({**row, "request_id": "-"})
 
+    def test_deep_read_keeps_exact_time_across_midnight_and_afternoon(self):
+        for hour, minute in ((0, 10), (16, 25)):
+            since = datetime(2026, 10, 12, hour, minute, tzinfo=query.TZ)
+            begin, now = since - timedelta(minutes=30), since + timedelta(minutes=15)
+            args = SimpleNamespace(deep_read=True, since=since)
+            with patch.object(query, "sync_logs") as archive, patch.object(query, "sls_logs", return_value=[]) as realtime:
+                _, _, sync, _ = query.sync_cloud(args, begin.date(), now.date(), now)
+            archive.assert_not_called()
+            self.assertEqual(realtime.call_args.args[1:], (begin, now + timedelta(seconds=1)))
+            self.assertEqual(sync["sources"][0]["from"], begin)
+
     def test_sls_deep_read_filters_both_beacon_forms_without_changing_window(self):
         args = SimpleNamespace(aliyun="aliyun", profile="website-images", sls_project="oss-log-test", sls_logstore="oss-log-store")
         start = datetime(2026, 10, 12, 10, tzinfo=query.TZ)
@@ -209,6 +220,19 @@ class VisitorTests(unittest.TestCase):
                 {"from": int(start.timestamp()), "to": int(end.timestamp()), "query": expected,
                  "line": 100, "offset": 0, "reverse": False})
             cloud.assert_called_once()
+            self.assertEqual(cloud.call_args.kwargs, {"timeout": 25, "attempts": 1} if deep_read else {})
+        with patch.object(query, "cli_run", return_value=json.dumps({"meta": {"count": 0, "progress": "Incomplete"}, "data": []})) as cloud, patch.object(query.time, "sleep"):
+            with self.assertRaises(RuntimeError):
+                query.sls_logs(args, start, end)
+        self.assertEqual(cloud.call_count, 2)
+
+    def test_deep_read_cli_timeout_does_not_stack_network_retries(self):
+        with patch.object(query.socket, "getaddrinfo", return_value=[]), patch.object(query.subprocess, "run", side_effect=subprocess.TimeoutExpired("aliyun", 25)) as run, patch.object(query.time, "sleep") as sleep:
+            with self.assertRaisesRegex(RuntimeError, "连接超时"):
+                query.cli_run(["aliyun", "sls", "GetLogsV2"], timeout=25, attempts=1)
+        run.assert_called_once()
+        self.assertEqual(run.call_args.kwargs["timeout"], 25)
+        sleep.assert_not_called()
 
     def test_sls_relay_preserves_oauth_and_retries_network_failures(self):
         relay = Mock(server_port=12345)

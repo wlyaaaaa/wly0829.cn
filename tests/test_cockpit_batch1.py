@@ -204,8 +204,7 @@ const assert = require('node:assert/strict');
   const smallTh = (n) => OV.html(ov({ task_health: { unrecovered_today: n, recovered_today: 1 } }), { size: 'small', now: now.getTime() });
   assert.match(smallTh(1), /data-signal="today_tasks">.*?<span class="ov-sig-value">1<small>个没恢复<\/small>.*?AI 在管/);
   assert.match(smallTh(0), /ov-sig is-green" data-signal="today_tasks">.*?0<small>个没恢复<\/small>.*?正常/);
-  // 新投影：未来事项单独排期；手机办法、去处、期限决策和AI逾期事实都能读到。
-  const { fromFull } = await import(base + 'full-adapter.js');
+  // 精简视图：未来事项单独排期；手机办法、去处、期限决策和AI逾期事实都能读到。
   const action = { href: 'https://example.invalid/find', estimated_minutes: 2, consequence: '会错过提醒' };
   const mobile = { kind: 'computer_mcp', copy_prompt: '请用电脑 MCP 读取条目 fixture-review，打开其中的汇报页并把截图发给我。' };
   const improved = normalize({ ...base0, overview: ov({ owner_count: 2 }),
@@ -264,10 +263,10 @@ const assert = require('node:assert/strict');
   assert.match(todos, /data-q="old-ai"[^>]*data-qtext="（条目 old-ai）虚构旧事/); assert.match(todos, /A 让 AI 限期根治/); assert.match(todos, /B 不修了/); assert.match(todos, /C 你来处理/);
   const backup = R.backup(improved, ctx); assert.match(backup, /<details[^>]*><summary>查看具体缺口/); assert.match(backup, /测试分类/);
   assert.doesNotMatch(R.needYou(normalize({ schema: SCHEMA, need_you: [{ title: '虚构无效链接', action: { href: 'javascript:alert(1)' } }] }), ctx), /href="javascript:/);
-  const full = normalize(fromFull({ status: 'ok', cockpit: { summary: improved.summary, access_summary: improved.access_summary,
-    scheduled: improved.scheduled, ai_overdue: improved.ai_overdue, detail_groups: { need_you: improved.need_you } } }));
-  assert.equal(full.need_you[0].action.href, action.href); assert.equal(full.need_you[0].mobile_method.copy_prompt, mobile.copy_prompt);
-  assert.equal(full.scheduled[0].scheduled_for, '2026-10-21'); assert.equal(full.ai_overdue[0].overdue_days, 2);
+  const lean = normalize({ schema: SCHEMA, summary: improved.summary, access_summary: improved.access_summary,
+    scheduled: improved.scheduled, ai_overdue: improved.ai_overdue, need_you: improved.need_you });
+  assert.equal(lean.need_you[0].action.href, action.href); assert.equal(lean.need_you[0].mobile_method.copy_prompt, mobile.copy_prompt);
+  assert.equal(lean.scheduled[0].scheduled_for, '2026-10-21'); assert.equal(lean.ai_overdue[0].overdue_days, 2);
   const nested = riverSnapshot(normalize({ schema: SCHEMA, automation: { items: [{ id: 'nested', state: 'failed', plain: { name: '虚构任务', what: '虚构工作', stop: '虚构停止办法', impact: '虚构影响' } }] } }), now);
   assert.equal(nested.automation.items[0].plain.stop, '虚构停止办法'); assert.equal(nested.automation.items[0].plain.name, '虚构任务');
   const missing = { history: [{ date: '2026-10-17', total: null }] };

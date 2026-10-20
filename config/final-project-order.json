@@ -249,7 +249,7 @@
       "id": "github-profile-discovery-entry",
       "owner_surface": "system",
       "status": "done",
-      "evidence": "app/system-home-content.js#wlyaaaaa"
+      "evidence": "site-astro/sources/retained-home-cockpit/home.html"
     },
     {
       "id": "gemini-readable-state-backup",
@@ -285,25 +285,25 @@
       "id": "md-triple-tactics-ledger-asset",
       "owner_surface": "system",
       "status": "done",
-      "evidence": "app/system-home-content.js#md-triple-tactics-talent-solver"
+      "evidence": "site-astro/sources/retained-home-cockpit/home.html"
     },
     {
       "id": "wechat-pre-public-private-archive",
       "owner_surface": "wechat-direct",
       "status": "done",
-      "evidence": "app/content-wechatdirect.js#evolution"
+      "evidence": "sources/pages/wechatdirect/page.json"
     },
     {
       "id": "health-longevity-early-project",
       "owner_surface": "personal-health",
       "status": "done",
-      "evidence": "app/content-personal-health.js#evolution"
+      "evidence": "sources/pages/personal-health/page.json"
     },
     {
       "id": "scripts-capabilities-absorbed-by-owning-projects",
       "owner_surface": "pcconfig-and-owning-projects",
       "status": "done",
-      "evidence": "app/content-pcconfig.js#runtime-startup"
+      "evidence": "sources/pages/pcconfig-runtime-startup/page.json"
     }
   ],
   "private_exclusion_boundary": {

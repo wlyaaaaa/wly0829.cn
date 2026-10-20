@@ -5,28 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "python scripts/build-site.py && python tools/preview_site.py",
-    "generate:project-index": "node scripts/generate-project-content-index.mjs",
     "build": "python scripts/build-site.py",
     "impact": "node scripts/assess-panel-impact.mjs",
     "refresh:ai": "node scripts/prepare-ai-panel-refresh.mjs",
     "preview": "python tools/preview_site.py",
-    "refresh:agents-snapshot": "node scripts/refresh-panel-snapshot.mjs",
-    "refresh:snapshot": "npm run refresh:agents-snapshot",
-    "verify:snapshot": "node scripts/verify-panel-snapshot.mjs",
     "verify:ai-refresh": "node scripts/verify-ai-panel-refresh.mjs",
     "verify:public": "node scripts/verify-public-content.mjs --dist dist",
     "pretest": "npm run build",
     "test": "npm run test:built",
     "test:built": "node --test tests/*.test.mjs"
-  },
-  "dependencies": {
-    "@icons-pack/react-simple-icons": "13.15.1",
-    "@phosphor-icons/react": "2.1.10",
-    "react": "19.2.8",
-    "react-dom": "19.2.8"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "6.0.5",
-    "vite": "8.2.1"
   }
 }

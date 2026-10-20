@@ -53,7 +53,7 @@ System 首页不是第四个事实源，也不从 Git 提交记录直接生成�
 1. 先让项目、Rules 和 Skills 三个拥有正文的页面闭合到本轮已验证、可发布的状态：项目回到各自 Owner 证据，Rules 只认活动 E release，Skills 只认当前供应、公开指南和对应项目关系；`manual_owner_only` 页面没有新的明确 owner 请求时保留上次已验证快照。
 2. Git 提交范围、变更路径和发布记录只用来指出“哪里值得看”；提交存在不等于产品能力、边界或页面说明已经变化。
 3. AI 读取受影响页面的新旧产品语义，再判断 System 的真实场景、组成与分工、定时协作或验证层是否会让读者形成错误理解。具体规则与完整能力目录由 Rules 和 Skills 拥有，System 不再复制一整段规则故事或第二份能力目录。
-4. 只有上述聚合意义发生实质变化时，才原位更新 `app/system-home-content.js` 和它仍在使用的内容源说明；否则 System 保持字节不变。
+4. 只有上述聚合意义发生实质变化时，才原位更新 首页真实作者源 `site-astro/sources/retained-home-cockpit/home.html`（System 已并入首页，`/system/` 仅作去向页）；否则 System 保持字节不变。
 5. System 更新与其他页面一起经过内容阅读、构建、公开边界、桌面与移动端真实页面验收，再按既有发布链提交、发布和公网回读。
 
 以下通常不更新 System：单个实现修复、测试数字、提交哈希、时间戳、文件移动、页面已经准确表达的证据新鲜度变化，以及不改变能力角色或用户用法的项目内调整。新增或退役一个长期职责、项目身份/归属变化、规则怎样影响任务发生变化、Skill 入口增删或能力边界改变、定时协作真实增删，才是 System 的典型实质触发。
@@ -62,7 +62,7 @@ System 首页不是第四个事实源，也不从 Git 提交记录直接生成�
 
 ## 定向刷新流程
 
-1. 运行 `npm run refresh:ai -- --project <id>`，读取本次项目、内容路径、当前内容指纹、Owner 采集入口和影响来源；manual-only 项目必须由明确 owner 请求改用 `--manual-owner-request`。
+1. 运行 `npm run refresh:ai -- --project <id>`，读取本次项目、内容路径、总览及全部模块作者输入的聚合指纹、逐文件清单、Owner 采集入口和影响来源；manual-only 项目必须由明确 owner 请求改用 `--manual-owner-request`。
 2. 完整阅读该项目当前总览、模块、状态、缺口和演化，不能只看结构化字段。
 3. 从 Registry 登记的只读 collectors 中选择会改变本次判断的入口，并按问题增补最小 Owner 回读；保留证据注明原观察时间，未执行的入口不填通过，不把候选清单当成每次必跑的全量检查。不复制任意原始输出到网站。
 4. 比较新证据与当前页面，先作 material/no-op 判断。
@@ -78,7 +78,9 @@ npm run verify:ai-refresh -- --bundle <ai-result.json>
 
 AI 在改正文前必须先交付一份简洁语义差分：产品与技术分别列出新增、修改、退役/替代和 Unknown，并把结论映射到项目、Rules、Skills、System。每项只保留人话结论和 Owner 证据，不暴露内部推理。Git、路径、commit 和 hash 只定位候选，不能生成或否决这份差分。
 
-Verifier 检查 changed/unchanged/blocked 闭包、当前内容 SHA、每项目 source fingerprint、materiality、semantic revision，以及项目、Rules、Skills、System 的逐文件 no-op 字节不变性。它只检查 AI 差分与实际改动是否闭合，绝不替 AI 判断新增、修改或退役语义是否正确。
+计划的 `content_path` 是总览入口，`content_files` 包含该项目实际使用的页面 JSON、布局、当前 Markdown；四个未迁移项目列出全部冻结 HTML。`content_sha256` 是按路径排序的逐文件 SHA 清单的聚合指纹，模块、布局或直接 Markdown 改动均会改变它。全局表面的目录路径同样展开为实际作者文件，Rules 包含 `sources/rules`，Skills 包含当前目录与详情，System 指向保留首页。
+
+Verifier 检查 changed/unchanged/blocked 闭包、当前聚合内容 SHA、每项目 source fingerprint、materiality、semantic revision，以及项目、Rules、Skills、System 的逐文件 no-op 字节不变性。它只检查 AI 差分与实际改动是否闭合，绝不替 AI 判断新增、修改或退役语义是否正确。
 
 本人要求复核多个项目时，可使用对应项目各自的 targeted 计划取证，再合并为一个 `all` v2 结果，统一使用本轮真实基线与最终文件 SHA 闭合全局表面；这不把缺少手动请求的 `--all` 计划改为可执行。未请求更新的 `manual_owner_only` 页面以 `status=unchanged`、`retained_manual_snapshot=true` 保留，两个 `manual_owner_request` 字段均为 false 或省略，旧/新内容 SHA 与 semantic revision 相同，`material=false`、`semantic_change=false`、`source_fingerprint=null`，collectors、collector_receipts、产品/技术六个差分桶及 affected_surfaces 均为空。保留原 observedAt，并在 reason 说明只核对网站快照字节、未读取或更新来源；这是保留旧快照，不是新鲜来源复核。其余手动刷新仍须明确 owner 请求；普通项目不能使用该保留标记。
 
@@ -139,9 +141,7 @@ Skills 受影响时，AI 还必须把本轮 current supply（当前供应）逐�
 
 Rules 只根据 `Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json` 正式回读的 current E release 更新。Canonical source 的 dirty/unreleased 修改只作为施工状态显示，不进入活动规则正文、路径或 SHA，也不阻断非规则项目刷新。历史 C 盘 generation、Publisher、anchor、ledger 和回执只可出现在恢复历史说明中。
 
-`refresh:agents-snapshot` 是快速结构化刷新，不是每次重跑整个 `.agents` 测试仓库。它重新验证 current/previous 指针、release record、完整发布文件闭包、专用 E release validator、Skill 供应和合同覆盖；当前源码全量回归没有新证据时明确显示 Unknown（证据不足），不能沿用旧 PASS。下一代规则是否允许发布，仍由源码 Owner 根据 change surface（改动影响面）运行聚焦或标准验证。
-
-一次刷新只在以下条件全部稳定时替换生成文件：同一进程独占刷新锁；开始与结束的 source HEAD、origin/main、branch、ahead/behind 和完整 dirty porcelain（工作树原始状态）一致；current/previous、pointer revision/SHA、release record、完整发布文件路径/bytes/SHA 全部一致。输出先写同目录临时文件，再原子替换正式快照。任一事实中途变化时保留旧文件并要求重跑，不产生半新半旧快照。
+活动规则作者源由现有 `python scripts/prepare-astro-release.py refresh --output <本轮回执.json>` 更新到 `sources/rules`，正式构建通过 `scripts/astro_rules.py` 核对已提交快照、完整发布文件与当前 E 身份，并生成规则阅读页。Skill 供应由 Owner 的现有只读入口取证后更新当前 `sources/pages/skills-home` 和详情；不再写不参与构建的 `app/panel-facts.generated.js`。旧 React 专用快照生成、保留和校验脚本已删除，不用旧证据的 PASS 冒充上线页面的新鲜状态。下一代规则发布资格仍由源码 Owner 按改动影响面验证；没有新全量测试证据时保留原观察时间并明确未重跑。
 
 ## 40+ 项目扩展
 

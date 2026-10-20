@@ -10,7 +10,6 @@ const assert = require('node:assert/strict');
 (async () => {
   const base = process.argv[1];
   const { normalize } = await import(base + 'model.js');
-  const { fromFull } = await import(base + 'full-adapter.js');
   const R = await import(base + 'render.js');
   const now = new Date('2026-10-12T18:00:00+08:00');
   const ctx = { now, offline: false, projectUrls: {}, img: {} };
@@ -47,9 +46,9 @@ const assert = require('node:assert/strict');
     assert.doesNotMatch(old, /cp-gov|这周 AI 体检|为什么暂缓/);
     assert.match(old, /交给 AI 的事：1 件/);
   }
-  // 全量接口：暂缓原因透传
-  const full = fromFull({ cockpit: { detail_groups: { deferred: [{ id: 'p1', title: '换键盘', reason: '14 天没回应' }] } } });
-  assert.equal(full.deferred[0].reason, '14 天没回应');
+  // 精简视图：暂缓原因透传
+  const lean = normalize({ schema: 'pcconfig.cockpit-view.v1', deferred: [{ id: 'p1', title: '换键盘', reason: '14 天没回应' }] });
+  assert.equal(lean.deferred[0].reason, '14 天没回应');
   // 后台任务只描述已接入项目：未知不能算零，下限不能说成精确数量。
   const work = (items) => R.needYou(normalize({ schema: 'pcconfig.cockpit-view.v1', ai_following: ai, ai_work: { items } }), ctx);
   const row = (n, extra = {}) => ({ project: '甲', running_tasks: n, running_automations: n, ...extra });

@@ -22,14 +22,14 @@
 
 驾驶舱是 Astro 原生页，不再读保留 HTML：入口 `src/pages/cockpit/index.astro`，外壳、页头、目录条、页尾和全站一样。
 
-- 数据：PCConfig 状态服务的精简视图（`pcconfig.cockpit-view.v1`，线上 `live.wly0829.cn/computer-access/state?view=cockpit`，退到 `mcp.wly0829.cn`）；接口回全量时 `src/cockpit/full-adapter.js` 在浏览器里投影成同一份精简视图。`src/cockpit/model.js` 把视图整理成页面要的样子，构建时和浏览器里共用。
+- 数据：PCConfig 状态服务的精简视图（`pcconfig.cockpit-view.v1`，线上 `live.wly0829.cn/computer-access/state?view=cockpit`，退到 `mcp.wly0829.cn`）。`src/cockpit/model.js` 把视图整理成页面要的样子，构建时和浏览器里共用；格式不符时按读不到处理。
 - 首帧：构建时读一次最新视图（读不到用仓库里的 `src/cockpit/snapshot.json`），`src/cockpit/render.js` 画好整页。首帧明写“这是 HH:MM 的数，不是现在的，正在读最新…”，数字和灯整体灰着，不冒充现在。
 - 浏览器里：`src/cockpit/client.js` 每分钟读一次（页面在后台不读），用同一组 `render.js` 函数原地换每块里面的字，不换版式；右下角刷新按钮（`refresh-button.js`）叫醒电脑重读。读不到电脑时事实卡变淡、灯灰、写“读不到（最后 HH:MM 读到）”，图表链接先收起。
 - 首屏：一句话结论（要你做几件、是什么，点标题跳到那张卡；其余三格各一句），电脑 / 自动任务 / 备份三格，电脑健康分小字，安全和授权一行。颜色只看要不要你出手：要你做的红黄；有状况但 AI 在管的用中性蓝灰写“AI 在管”；数据源停了、读不到的灰。手机首屏按“结论 → 你得知道 → 三格 → 安全和授权”排，健康分不上手机首屏。
 - 总览打分和各区的灯由后端 `overview` 给，共用脚本 `public/_overview/overview-screen.js`（首页小屏也用它）。自动任务的“今天的河”是 `scripts/today-river.js`，图在 `sources/creative/today-river/assets2/`；驾驶舱的标题图、插画、图标在 `sources/assets/cockpit/`；首屏插画上的小鸟配置是 `src/cockpit/bird.config.json`。
 - 测试：`tests/test_cockpit_*.py`（浏览器测试底座 `tests/cockpit_native_harness.py` 照 `index.astro` 拼页，数据全部虚构、只在 127.0.0.1 上跑）和 `tests/test_today_river.py`。
 
-209 个旧生成器页面及其本地小资源以 probe03 的成品字节存入 `sources/frozen-site`。其 `manifest.json` 列明完整路由、冻结页指纹和资源来源：已有仓库文件直接复用；标题图按既有配方重建；确切的外壳依赖放入本地 `vendor-deps`，原图和视频保持原字节。原远端依赖已一次性入库到 `sources/vendor-deps/<原相对路径>`，按依赖清单核验 SHA 和字节数；所有构建只读本地，缺文件就报具体路径，不联网补取。点名迁移某个旧页时，再转移该路由的生成归属；普通构建不运行旧生成器。
+33 个仍由冻结字节提供的页（4 个冻结项目 31 页，加 `/search/`、`/system/`）及其本地小资源存入 `sources/frozen-site`。其 `manifest.json` 列明完整路由、冻结页指纹和资源来源：已有仓库文件直接复用；标题图按既有配方重建；确切的外壳依赖放入本地 `vendor-deps`，原图和视频保持原字节。原远端依赖已一次性入库到 `sources/vendor-deps/<原相对路径>`，按依赖清单核验 SHA 和字节数；所有构建只读本地，缺文件就报具体路径，不联网补取。以后迁移一页时，同步从 `pages` 清单删除对应冻结条目和 HTML；旧字节留在 Git 历史，需要重转时从历史取。普通构建不运行旧生成器。
 首页每次新加载、刷新都从纸色播放原开场；图片到达后 3 秒未开播，或开场连续 5 帧超过 100 毫秒，就跳到完成图并恢复环境动画。后退缓存与减少动态不播。顶栏固定用原 WebP 背景，避免显示途中切换未接收完的 AVIF；加载占位和标签行布局在首绘前确定，不用低清预览。
 
 ## 一次完整生成
@@ -76,7 +76,7 @@ npm run dev -- --host 127.0.0.1 --port 4173
 - 全新的页（只有 `page.json`、没有 `layout.json`）：转换器照样出内容文件，区块库按文字自动分块，电脑、手机两份都会排出来（毛笔标题、正文、编号步骤卡、列表、表格）；但没有插画、分组图标和左右分栏，要和现有页一样图文并排，得补素材表里的图、写 `layout.json`。
 - 改了地址的页：`page.json` 的 `url` 写现在的地址，旧地址列在 `old_urls`。旧地址出一句话的去向页（两秒后跳到现在的地址、不收录），站内链到旧地址的链接在排版时改指现在的地址。
 - 退役技能的去向页（`kind: skill-redirect`，`page.json` 只有一屏：标题加一句话）：转换器不用各页旧的构图，照共用版式排这一屏（`convert_page.py` 的 `redirect_layout`）——电脑一行两栏，左栏和全站一样的毛笔大标题（没有同字标题图，排版时用行楷字截图）和那句话（〔〕括起的词按 `links` 变成能点的链接），右栏一张小图标（素材库“工具箱回收站”），图按文字高度定大小；手机从上到下：标题、图标、那句话。卡片按内容高，不留大块空；不收录（noindex），不自动跳（要让人看清为什么退役）；不用旧技能页的运行件（旧目录条指向已经撤下的小节）。
-- GitHub 个人主页稿（`/github-profile/`，`kind: github-profile`）照常构建，给 GitHub 主页用，站内没有入口；页面加 noindex。站点地图只在旧流水线 `scripts/generate-routes.mjs` 里生成，不进地图由那边过滤。
+- GitHub 个人主页稿（`/github-profile/`，`kind: github-profile`）照常构建，给 GitHub 主页用，站内没有入口；页面加 noindex。站点地图由当前原生路由构建生成，noindex 页不进入地图。
 - 构图认块用的 `text_ref` 写的是这一块开头的原话；内容刷新了数字以后，只差数字的转换器按源里现在的写法认（打印“只差数字”），别的认不出的打印出来，要改 `layout.json`。
 
 ### 首屏先放状态（K1-A，本人 10 月 10 日选 A）
@@ -154,3 +154,7 @@ python tools/rule_article_check.py <现在网站构建目录> rules.json        
 - `files`：完整文件数组，每项 `{path, bytes, sha256}`；路径相对 `dist`，SHA256 为实际成品字节。回执自身不进入清单，避免自引用；`release-manifest.json` 属于实际成品文件并列入。
 
 G2 的发布与扫描直接消费这份回执。旧全站拼装命令已移除；仍被其他工具导入的素材与引用检查函数不承担构建。冻结源 HTML 保留 probe03 原字节，旧发布目录地址由来源清单先映射到当前资源；构建最后通过 G2 的唯一 `finalize-dist` 命令完成部署资源引用与发布策略，回执绑定最终字节。没有实际 script 归属的旧 B2 运行件和对应预热引用从成品退出；当前 OSS 地址下仍被引用的脚本照常保留。相册更新只新增当前指纹表，仍被引用的旧表保留，已最终处理的表不会在下一轮被解开当前地址。
+
+## AI 刷新作者源
+
+`npm run refresh:ai -- --project <id>` 从 Registry 定位实际作者输入：原生项目的 `sources/pages/<页>/page.json`、所属模块、布局和当前 `src/content/pages/*.md` 共同进入指纹。仍由冻结字节提供的项目列出其全部冻结 HTML；迁移后再更新登记。Rules 读取 `sources/rules` 和规则页面源，Skills 读取当前能力目录与详情源，System 已并入保留首页。根目录 `app/` 只保留搜索解码/匹配、公开搜索字段投影、电脑授权状态模型三个仍复用的小模块；不再包含 React 页面、第二套项目正文或 Vite 渲染入口。

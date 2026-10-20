@@ -131,11 +131,13 @@ See [Project expansion gate](docs/design/panel-content-contract.md#project-expan
   from `config/panel-projects.json`, including the current content path, source
   identity, evidence collectors and existing snapshot fingerprint. Plans are
   context for AI, not a second writer.
-- `scripts/refresh-panel-snapshot.mjs` owns only the `.agents` current E-release,
-  source-checkout and Skill evidence payload. Rules always bind to the frozen,
-  verified current E release. A dirty or newer source checkout is shown as
-  non-active candidate work; it cannot overwrite the release and does not block
-  an otherwise truthful snapshot or unrelated project refresh.
+- `scripts/prepare-astro-release.py refresh` owns the committed `sources/rules`
+  snapshot; `scripts/astro_rules.py` verifies its current E-release identity and
+  complete source inventory during the production build. Project and Skill
+  explanations live in `sources/pages` and current native Markdown. The AI
+  refresh plan fingerprints every owned page and layout, never retired React
+  content. A dirty or newer rule source checkout remains non-active candidate
+  work and cannot overwrite the verified release or block unrelated refreshes.
 - A refresh collector that needs full Windows visibility is explicitly allowed
   to run as Administrator or SYSTEM for this read-only snapshot. It must return
   a bounded public-safe receipt and leave no persistent task, service, queue or

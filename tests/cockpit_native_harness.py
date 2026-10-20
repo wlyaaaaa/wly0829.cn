@@ -1,7 +1,7 @@
 """现行驾驶舱（site-astro 原生页）的浏览器测试底座；全部数据虚构，只在 127.0.0.1 上跑。
 
 不走整站构建（构建时会去读线上电脑状态），而是照 site-astro/src/pages/cockpit/index.astro 的做法拼一页：
-- 首帧：用 node 调现行的 model.js / full-adapter.js / render.js / overview-screen.js，和构建时一样画好整页；
+- 首帧：用 node 调现行的 model.js / render.js / overview-screen.js，和构建时一样画好整页；
 - 浏览器里：原样加载 src/cockpit/client.js、refresh-button.js、today-river.js、overview-screen.js；
 - 刷新按钮的外框、cockpit-boot 里的本机读取地址，都从 index.astro 原文里取，页面改了这里跟着变。
 """
@@ -64,11 +64,10 @@ const [base, ovUrl] = process.argv.slice(1);
 let input = '';
 process.stdin.on('data', (d) => input += d).on('end', async () => {
   const { normalize } = await import(base + 'model.js');
-  const { asView } = await import(base + 'full-adapter.js');
   const { page } = await import(base + 'render.js');
   const ov = await import(ovUrl);
   const { snapshot, projectUrls } = JSON.parse(input);
-  process.stdout.write(page(normalize(asView(snapshot)), { now: new Date(), offline: false, phase: 'snapshot', projectUrls, img: {}, ov }));
+  process.stdout.write(page(normalize(snapshot), { now: new Date(), offline: false, phase: 'snapshot', projectUrls, img: {}, ov }));
 });
 """
 

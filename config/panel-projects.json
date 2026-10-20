@@ -8,17 +8,17 @@
     "semantic_reasoning_effort": null,
     "targeted_refresh_prompt": "刷新个人看板中的<project-id>",
     "full_refresh_prompt": "全部更新一下",
-    "trigger": "displayed_fact_or_explanation_changed",
-    "non_trigger": "implementation_change_that_does_not_change_any_displayed_fact",
+    "trigger": "explicit_owner_website_refresh_request",
+    "non_trigger": "source_rule_or_skill_changes_only_report_possible_website_drift_to_owner",
     "website_repo": "wlyaaaaa/wly0829.cn",
     "website_project_type": "projectless",
-    "website_task_rule": "for one material refresh goal, resolve only that source's corresponding registered snapshot and directly derived surfaces; never enumerate unrelated projects or turn the event into an all-project review. Inspect the live task list and reuse only the website publisher whose status is exactly active and whose current Owner scope covers this publication transaction; title, recency, old handoff, historical binding, source conversation, notLoaded, idle, archived, completed, interrupted, failed, unavailable and every other non-active state are insufficient. Send that publisher one bounded delta bound to source identity, published read-back commit, changed paths, observedAt and active generation even when another source created it or it is refreshing another panel snapshot; only when none qualifies create one asynchronous projectless website task. Reuse evidence only while source inputs, E identity, Registry revision and owned surface match; close one coherent edit batch with focused checks, then one final complete gate and controllable background preview per stable publication batch. Follow-up acceptance or task-id return is only the dispatch receipt; never block or poll from the source conversation, reuse a non-active task, or create a competing task after an existing-Owner send failure",
+    "website_task_rule": "Start website work only after an explicit owner request. A targeted request reviews only the named registered snapshot and directly affected surfaces; source, Rule and Skill changes never create or hand off a website task. One publisher owns the requested update and its in-scope evidence. Reuse evidence only while source inputs, E identity, Registry revision and owned surfaces match. Close one coherent edit batch with focused checks, then one final complete gate and controllable background preview per stable publication batch.",
     "full_refresh_rule": "the current website AI task iterates enabled published projects by the final rank projected into registry order; unchanged projects remain byte-identical",
     "fact_collector_boundary": "scripts and providers collect evidence and verify contracts; they never write narrative content or decide materiality",
-    "publication_boundary": "source project publication completes first; website refresh is a separate asynchronous post-publication handoff to an existing release Owner or, when none exists, a fresh task. It cannot block or roll back the source transaction",
+    "publication_boundary": "source project publication completes independently; only an owner-requested website refresh may collect its current evidence and publish the affected registered surfaces",
     "publication_mode": "after the accepted four-project MVP, verified registered refreshes automatically commit, normal-push existing PUBLIC main, wait for Pages and read back the deployed commit unless the owner explicitly holds publication",
-    "task_creation_threshold": "route work to an active website release Owner, or create a fresh task only when none exists, after the source owner confirms a material displayed fact or explanation would become wrong; path matches alone are candidates",
-    "small_change_policy": "do not create an asynchronous task for formatting, refactors, timestamps, hash-only drift, blocked candidates already shown accurately, or other changes that do not alter a user decision",
+    "task_creation_threshold": "explicit owner website request; source path matches and material drift are report-only candidates until that request",
+    "small_change_policy": "formatting, refactors, timestamps, hash-only drift and accurately disclosed blocked candidates do not justify a website edit; never create automatic website tasks from source events",
     "default_change_policy": "no website change unless the existing page would make a material user judgment wrong",
     "anti_append_policy": "replace, merge or remove current content in place; never append refresh logs, duplicate sections, cards or timeline entries because a refresh ran",
     "evolution_policy": "record only important product stages; one entry may cover a date or date range and may merge related changes; connect the original need to the capability and current boundary, render once in the product layer, never append refresh logs",
@@ -42,9 +42,9 @@
     {
       "id": "authority-supply-facts",
       "title": "Rules and Skills shared facts",
-      "role": "Generated current E-release and Skill-supply evidence shared by the Rules and Skills pages; it carries facts, not narrative decisions.",
+      "role": "Verified E-release identity used by native Rules; current Skill supply is explained in the authored Skills pages.",
       "content_paths": [
-        "app/panel-facts.generated.js"
+        "sources/rules/release.json"
       ]
     },
     {
@@ -52,8 +52,19 @@
       "title": "Rules",
       "role": "Current primary rule explanations and reader guides derived from the verified same-release catalog; complete release files are validated separately.",
       "content_paths": [
-        "app/content-rule-guides.js",
-        "app/content-rule-reader.js"
+        "sources/rules",
+        "sources/pages/charter",
+        "sources/pages/rule-authorization",
+        "sources/pages/rule-capabilities-runtime",
+        "sources/pages/rule-claude-adapter",
+        "sources/pages/rule-codex-adapter",
+        "sources/pages/rule-context-sources",
+        "sources/pages/rule-engineering-delivery",
+        "sources/pages/rule-execution-coordination",
+        "sources/pages/rule-privacy-data",
+        "sources/pages/rule-protected-actions",
+        "sources/pages/rule-rule-release",
+        "sources/pages/rules-home"
       ]
     },
     {
@@ -61,18 +72,44 @@
       "title": "Skills",
       "role": "The usable Skill catalog, detailed guides and project-to-Skill relationships.",
       "content_paths": [
-        "app/content-skills.js",
-        "app/content-skill-guides.js",
-        "app/content-capability-links.js"
+        "sources/pages/skill-authorization-file-broker",
+        "sources/pages/skill-browser-control-continuity",
+        "sources/pages/skill-chinese-asr",
+        "sources/pages/skill-cloud-asset-channel",
+        "sources/pages/skill-cockpit",
+        "sources/pages/skill-daily-preferences",
+        "sources/pages/skill-documents",
+        "sources/pages/skill-explain-to-me",
+        "sources/pages/skill-google-workspace-direct",
+        "sources/pages/skill-learning",
+        "sources/pages/skill-local-secret-broker",
+        "sources/pages/skill-localocr",
+        "sources/pages/skill-md-to-pdf",
+        "sources/pages/skill-media-person-self",
+        "sources/pages/skill-mojibake-doctor",
+        "sources/pages/skill-pdf",
+        "sources/pages/skill-pdf-render-safe",
+        "sources/pages/skill-personal-formal-documents",
+        "sources/pages/skill-personal-health",
+        "sources/pages/skill-personal-materials",
+        "sources/pages/skill-personal-media",
+        "sources/pages/skill-project-entry-gate",
+        "sources/pages/skill-reply-as-me",
+        "sources/pages/skill-report-page",
+        "sources/pages/skill-tailscale-safe-exposure",
+        "sources/pages/skill-timeaudit-diagnostics",
+        "sources/pages/skill-vault-workflow",
+        "sources/pages/skill-wechat-direct",
+        "sources/pages/skill-work-delivery",
+        "sources/pages/skills-home"
       ]
     },
     {
       "id": "system",
       "title": "System",
-      "role": "The derived system map, responsibilities, scenarios and collaboration relationships after Projects, Rules and Skills are closed.",
+      "role": "System has merged into the retained homepage; /system/ is a destination page, not a second content owner.",
       "content_paths": [
-        "app/system-home-content.js",
-        "app/system-content.js"
+        "site-astro/sources/retained-home-cockpit/home.html"
       ]
     }
   ],
@@ -85,7 +122,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/personal-media",
       "ai_refresh": {
-        "content_path": "app/content-personal-media.js",
+        "content_path": "sources/pages/personal-media/page.json",
         "semantic_revision": 14,
         "scope": "Existing six modules retain original retrieval, classification, recording passages and three-phase phone/backup flows. Add named photo albums and one-entry SHA-bound updates without copying originals or changing classification. Current local catalog4358=3485images+116video+757audio; local desired synced mappings are not a fresh provider probe. Preserve September13 remote4230 proof and current playback/phone/zero-start Unknown.",
         "collectors": [
@@ -100,7 +137,8 @@
           "one connected-phone preservation or exact-clear acceptance only after an explicit current device request; never connect, clear or keep a phone occupied merely to refresh the website",
           "one cloud upload or external read-back only after the owner reviews a concrete candidate list and explicitly authorizes that external action; upload=0 is the normal current state",
           "one selected-original person:self check only when the owner asks whether they appear in that exact image; never perform a broad person scan"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/personal-media",
@@ -182,7 +220,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/agents",
       "ai_refresh": {
-        "content_path": "app/content-core.js",
+        "content_path": "sources/pages/agents/page.json",
         "semantic_revision": 27,
         "scope": "Current verified E release and its same-version primary-topic catalog, with the entire release inventory independently verified. Keep seven project modules; explain one shared personal-data permission and deadline versus installed implementation, finite owner authorization, ordinary and protected routes, verified model/child identity, recoverable cleanup and source/test/install/real-use separation. Published Skill changes do not replace active E rule authority.",
         "collectors": [
@@ -194,7 +232,8 @@
         ],
         "conditional_collectors": [
           "Run the source-owned full Local regression only when changed source behavior or unresolved evidence requires it; otherwise preserve its original observation and explicitly retain not-rerun status"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/.agents",
@@ -241,7 +280,8 @@
             "pointer.activated_at_utc",
             "verified_current.required_rule_paths",
             "verified_current.files"
-          ]
+          ],
+          "paths": []
         },
         {
           "kind": "rule_semantics",
@@ -352,7 +392,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/pcconfig",
       "ai_refresh": {
-        "content_path": "app/content-pcconfig.js",
+        "content_path": "sources/pages/pcconfig/page.json",
         "semantic_revision": 23,
         "scope": "Twelve modules retain machine history, runtime and separate file/image/bootstrap recovery. Password Center integrated desktop has released and installed evidence, while current Inspect reports two registry differences and no new human-factor acceptance. Its GUI P5 is not the protected-data Vault P5–P7 migration stages, which remain isolated fixtures. Keep Google Gmail/Drive/Tasks provider capability separate from OAuth and actual effects; Calendar stays frozen. Secondary weekly AI audit is paused while existing daily Windows backups continue. Retain computer MCP, SYSTEM versus desktop, stutter diagnostics, Veeam, host Python, cold-set and whole-machine recovery boundaries with their actual evidence dates.",
         "collectors": [
@@ -394,7 +434,8 @@
           "E:\\PCConfig\\tools\\Get-SecondaryLaptopHealth.ps1 -Json only after live host identity exactly matches LAPTOP-E48N0DRJ/C:\\Users\\wly; on WLY or any other host record only not_applicable/host_mismatch and never reuse laptop paths as current facts",
           "E:\\PCConfig\\tools\\Get-ProtectedPolicyAuthorityStatus.ps1 -Json when displayed protected-policy retirement state may change",
           "owner-specific protected installers/tests only when their displayed implementation or evidence changed"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/PCConfig",
@@ -573,7 +614,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/localocr",
       "ai_refresh": {
-        "content_path": "app/content-localocr.js",
+        "content_path": "sources/pages/localocr/page.json",
         "semantic_revision": 6,
         "scope": "Complete six source-defined product modules, preserving direct native-reader versus OCR/VL separation, full output identity and coordinates, per-page escalation, quality manifests and honest partial completion. Add installed runtime management and review tools with strict job identity, reuse, cancellation, whole-request deadlines and GPU coordination. Model default and offline dependencies require independent evidence; no fabricated recognition or fresh model run.",
         "collectors": [
@@ -587,7 +628,8 @@
           "one bounded, explicitly selected public or synthetic sample through ocr_smart.ps1 when the user-visible OCR output or runtime needs current evidence; keep input, actual output, quality, omitted regions and human review distinct",
           "tests/run_tests.py --allow-heavy or scripts/download_models.py --allow-heavy only for an explicitly authorized heavy multi-model integration or environment-recovery task",
           "never install, restart, stop unrelated work, scan a private library or publish private sample pixels merely to refresh this page"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/LocalOCR",
@@ -703,7 +745,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/github-index",
       "ai_refresh": {
-        "content_path": "app/content-github-index.js",
+        "content_path": "sources/pages/github-local-index/page.json",
         "semantic_revision": 16,
         "scope": "Six modules retain exact identity, public-content/transport/authorization, all nine typed major actions, worktree/branch and immutable generation recovery. Current Owner baseline48 repositories25public23private,44local4remote; no current delta. Add registered private-companion discovery and separate failed Git reads from identity conflict, dirty worktrees from active ownership, and secondary backup branches from feature merge obligations. Historical milestones remain dated.",
         "collectors": [
@@ -717,7 +759,8 @@
           "E:\\GitHub总索引\\tests\\Test-ProjectAdmission.ps1 when admission or public-exposure implementation changed",
           "E:\\GitHub总索引\\tests\\Test-ProtectedGitHubMajorAction.ps1 when major-action source or displayed evidence changed",
           "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json only when displayed E rules compatibility or major-action contract evidence may change"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/github-local-index",
@@ -798,7 +841,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/document-materials",
       "ai_refresh": {
-        "content_path": "app/content-document-materials.js",
+        "content_path": "sources/pages/personal-formal-documents/page.json",
         "semantic_revision": 7,
         "scope": "Five existing modules. Published f0a3c28 medium-specific design: screen PDF requires useful color hierarchy/navigation; print checks grayscale, same source not identical layout or mandatory two versions, originals/signed history unchanged. Existing v3 render artifacts and old synthetic acceptance are retained, no new real materials.",
         "collectors": [
@@ -809,7 +852,8 @@
         "conditional_collectors": [
           "one explicit user-authorized real document build only when current real compatibility would otherwise change; keep all personal inputs, outputs, paths, signatures, receipts and hashes outside public content",
           "one exact restored-release verification only for an explicitly reviewed public-safe or fictional package; never scan private output roots to find a candidate"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/personal-formal-documents",
@@ -887,7 +931,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/personal-materials",
       "ai_refresh": {
-        "content_path": "app/content-personal-materials.js",
+        "content_path": "sources/pages/personal-materials/page.json",
         "semantic_revision": 13,
         "scope": "Existing five modules retain source-routed lookup, hash verification, selected-document passage location and trusted-deletion sync. Current status47sources154locators44texts;110registered materials lack text. Bounded200000-file inventory attempts25roots, completes21 with3missing and cutoff:194648 non-media path lower bound,194540 discovered unregistered lower bound are different scopes, not full totals or proof of deletion. No original body read/hash or mutation.",
         "collectors": [
@@ -899,7 +943,8 @@
         "conditional_collectors": [
           "one explicit user-requested real find or discover E2E only when a current compatibility claim would otherwise change; keep all candidates, roots, paths, identifiers, hashes, tokens and gaps outside public content",
           "one explicit selected-candidate inspect/open/open-discovered E2E only when the user separately requests that private action; review the bounded receipt before deciding whether any non-payload product fact changed"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/personal-materials",
@@ -970,7 +1015,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/chinese-asr",
       "ai_refresh": {
-        "content_path": "app/content-chinese-asr.js",
+        "content_path": "sources/pages/chinese-asr/page.json",
         "semantic_revision": 14,
         "scope": "Nine source-defined modules: desktop dictation, file task routing, models, installation/recovery, long/batch, audit, speakers, runtime/privacy and independent known-text alignment. Bounded model workers and explicit VAD/quality review preserve actual defaults. Alignment supplies timing for known text, not proof of textual truth. Source482 tests with1optional skip, actual public samples, installed status and personal microphone/offline recovery remain separate.",
         "collectors": [
@@ -983,7 +1028,8 @@
           "E:\\Projects\\Tools\\ChineseASR\\scripts\\smoke-asr-smart.ps1 -Json when runtime, default strict routing or user-visible output changed",
           "E:\\Projects\\Tools\\ChineseASR\\scripts\\smoke-evidence-asr.ps1 -Audio <explicit-important-audio> -Json when the evidence route changed and an authorized sample is available",
           "E:\\Projects\\Tools\\ChineseASR\\scripts\\benchmark.ps1 only when a model, normalization or accuracy decision needs a fixed truth corpus"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/ChineseASR",
@@ -1124,15 +1170,15 @@
       "route": "/projects/learning",
       "ai_refresh": {
         "mode": "manual_owner_only",
-        "automatic_handoff": false,
-        "content_path": "app/content-learning.js",
+        "content_path": "sources/pages/learning/page.json",
         "semantic_revision": 9,
         "scope": "curated public overview and six modules covering authoritative research, a first complete final lecture after prior-unit cross-check, counterexample and self-review, dialogue-driven rechecking with proactive notice of understanding-changing corrections, optional low-stakes questions, bounded verification, an independent AI-owned capability/dependency/depth/stop/checkpoint route lifecycle, human final authority, small attention and low-complexity implementation without exposing any learning subject or progress",
         "collectors": [
           "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator and reduce current method rules, source-selection principles, question design, feedback mechanics, validation boundaries and human-control decisions to public-safe product mechanics without subjects, materials, inventory, personal feedback or progress"
         ],
         "conditional_collectors": [],
-        "manual_refresh_rule": "source, material, feedback, rule, Skill and private-state changes never update this page or create a website task; only an explicit owner request for the learning method or an explicitly owner-requested full refresh may produce a new snapshot"
+        "manual_refresh_rule": "source, material, feedback, rule, Skill and private-state changes never update this page or create a website task; only an explicit owner request for the learning method or an explicitly owner-requested full refresh may produce a new snapshot",
+        "content_format": "typeset"
       },
       "source": {
         "repo": "PRIVATE_MANAGED_SOURCE",
@@ -1176,7 +1222,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/timeaudit",
       "ai_refresh": {
-        "content_path": "app/content-timeaudit.js",
+        "content_path": "sources/pages/timeaudit/page.json",
         "semantic_revision": 14,
         "scope": "Seven existing modules retain hardware/process/activity, runtime, clipboard and recovery. Add bounded personal-activity full-window and Beijing-day summaries, preserving coverage gaps and independent source unions; personal usage is separate from performance diagnosis. Clipboard results group identical content and count actual copy events without double-counting repeated observation. Current bounded health is healthy with unavailable hotspot, not proof of game performance, personal presence or full restore. Retain reliable sampling, sensor-or-null fields, immutable CSV, shared health, anomaly and recovery boundaries.",
         "collectors": [
@@ -1202,7 +1248,8 @@
           "allowed": "owner/profile identity, bounded time window, sample count, coverage freshness, aggregate anomaly id/severity/count/first-last time, threshold reference, recheck recommendation and explicit payload-omission flags (named privacy flags by the provider schema)",
           "provider_omits": "raw telemetry rows and series, window titles, process names/paths/command lines, per-process activity, network identifiers, credentials, database rows and machine identifiers so this collector stays bounded and fast; these field classes are not blanket public-content bans, and only actual personal-sensitive or credential values require redaction",
           "unknown_semantics": "missing Docker/PostgreSQL, invalid digest, stale coverage or unavailable Owner evidence makes only the affected live fields Unknown with the last verified observation time; it never authorizes a direct raw-data fallback or a claim of live synchronization"
-        }
+        },
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/TimeAudit",
@@ -1336,8 +1383,7 @@
       "route": "/projects/personal-health",
       "ai_refresh": {
         "mode": "manual_owner_only",
-        "automatic_handoff": false,
-        "content_path": "app/content-personal-health.js",
+        "content_path": "sources/pages/personal-health/page.json",
         "semantic_revision": 10,
         "scope": "Six product modules retain current-evidence and health-Owner boundaries. Source-backed first full history then all-21-field increments from last incomplete China day, gzip original bytes, flattened history segments and no repeated network history; per-import 5000-request budget with same-manifest progress-only foreground continuation. Offline dates/trends use effective segments without double counting. No personal health payload or live account/device operation.",
         "collectors": [
@@ -1345,7 +1391,8 @@
           "manual_public_product_evidence: read only AGENTS.md, google_health_enroll.py, google_health_refresh.py, google_health_import.py, google_health_capture.py, google_health_brief.py and their five test modules; run python -m pytest -q; never read CURRENT.md, SOURCES.md, raw reports, manifests, briefs, provider payloads or credentials, and never invoke Google, Secret Broker or a device runtime"
         ],
         "conditional_collectors": [],
-        "manual_refresh_rule": "all source, health-material, device, rule, Skill, test and runtime changes remain outside automatic website handoff; only an explicit owner request for personal-health or an explicitly owner-requested full refresh may produce a new snapshot"
+        "manual_refresh_rule": "all source, health-material, device, rule, Skill, test and runtime changes remain outside automatic website handoff; only an explicit owner request for personal-health or an explicitly owner-requested full refresh may produce a new snapshot",
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/personal-health",
@@ -1393,7 +1440,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/devconfig-backup",
       "ai_refresh": {
-        "content_path": "app/content-devconfig-backup.js",
+        "content_path": "sources/pages/devconfig-backup/page.json",
         "semantic_revision": 10,
         "scope": "Four modules retain current-manifest local/G/Drive/H distribution, source catalog, native WeChat preservation and controlled recovery/tasks. Current local/G generations are newer than the last verified H generation; an observed in-progress configuration Drive job and a failed WeChat Drive copy do not imply remote success. Per-generation receipts and source-follow deletion remain separate from application acceptance, production imports and whole-machine restore. Do not rerun backup merely for website freshness.",
         "collectors": [
@@ -1418,7 +1465,8 @@
           "never perform Restore-WeChat Execute as a website collector; real recovery remains a separate explicitly selected operation and the website may use only read-only preflight evidence",
           "inspect Task Scheduler states using powershell.exe without registering, starting, disabling or modifying existing tasks",
           "read H cold-backup meaning and status only through PCConfig; do not execute or duplicate its maintenance flow"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/devconfig-backup",
@@ -1522,7 +1570,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/vault-tool",
       "ai_refresh": {
-        "content_path": "app/content-vault-tool.js",
+        "content_path": "sources/pages/vault-tool/page.json",
         "semantic_revision": 6,
         "scope": "Eight product modules retain format/KDF, file encryption, selection, views, dual-password and image-carrier boundaries. Version2.3.1 defaults to keeping input, all metadata outputs are readonly with exact vault-file, VAULT03 current-slot edits preserve opaque other slot. New independent rebuild/credential plan/synthetic recovery self-test, durable cipher transactions, exclusive checked cleanup and truthful partial plaintext export. PRIVATE README protection verifies full stub/fixed tree/final bytes and never replays unknown effects.",
         "collectors": [
@@ -1537,7 +1585,8 @@
           "one explicitly fictional fixture with text, CSV and binary members through actual KDF/AES for content roundtrip, selective extraction, maintenance and image/dual-password checks; public evidence never contains passwords or keyfile bytes/hashes",
           "isolated local-UI callbacks and real cryptographic persistence tests when the existing viewer/editor changes; a GUI test double does not prove physical desktop entry",
           "metadata-only reads of an owner-selected real artifact or remote target only when that exact observation is requested; never decrypt private contents, read README bodies, publish fixtures to Key or run PromptOnly against auto-discovered real vaults merely for the website"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/vault-tool",
@@ -1616,7 +1665,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/ai-cli-profile-manager",
       "ai_refresh": {
-        "content_path": "app/content-ai-cli-profile-manager.js",
+        "content_path": "sources/pages/ai-cli-profile-manager/page.json",
         "semantic_revision": 8,
         "scope": "Nine modules retain native CLI/Profile/Provider, secrets, Doctor versus Live, recoverable machine runs, installation and desktop/child collaboration. Current 0.3.18 release and CurrentUser installation, protected 562b29 desktop bridge and actual GUI parent process chain are verified separately. Sol/Astra protected tiers, official model-catalog continuity and first-permission diagnostics do not create ordinary OpenAI permission. Release-time 555 tests replace inherited old failures only at that scope; new parent tool exposure and provider Live remain separately unverified. Preserve 23 public Profile choices and frozen Gemini boundaries.",
         "collectors": [
@@ -1630,7 +1679,8 @@
           "run a paid or remote Provider Live test only when the exact account, Profile, expected charge and external call are authorized; one old or differently fingerprinted receipt never refreshes another route",
           "run a zero-cost local Codex task only when LocalGpuBroker and the exact model are currently available without disrupting another GPU owner, and report actual model, Provider, permissions, tools, cleanup and result separately",
           "refresh an approved proxy artifact only as an explicit source-product change with current upstream checksum/signature evidence and its own install/runtime tests; a newer upstream tag alone is a named gap, not authorization to execute it"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/ai-cli-profile-manager",
@@ -1745,7 +1795,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/work-delivery",
       "ai_refresh": {
-        "content_path": "app/content-work-delivery.js",
+        "content_path": "sources/pages/work-delivery-copilot/page.json",
         "semantic_revision": 7,
         "scope": "Existing work-support project and five retained delivery-engine modules: lightweight real work understanding, communication, decisions and review complete directly without forcing packages; only selected continuing source-version relationships trigger the existing evidence/typed-fact/review/quality engine, six same-build deliverables and precise rebound/stale handling; relevant shared personal background is read and evidence-backed new personal understanding written back through its owning interface, never promoted to confirmed business facts or copied work state; preserve post-commit timing, per-file replacement, installation/Office evidence and honest baseline/recovery gaps at their original observation times",
         "collectors": [
@@ -1758,7 +1808,8 @@
         "conditional_collectors": [
           "one explicit user-selected real work item only when the owner requests it; keep every real source, package, database, output, path, identifier and business result outside public content",
           "one explicit real source-change acceptance only after a real package exists; publish only reusable product conclusions, never the private payload"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/work-delivery-copilot",
@@ -1840,7 +1891,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/daily-preferences",
       "ai_refresh": {
-        "content_path": "app/content-daily-preferences.js",
+        "content_path": "sources/pages/daily-preferences/page.json",
         "semantic_revision": 15,
         "scope": "Seven common-background modules retain precise source/provenance, complete-card reader and exact same-byte artifact locator repair, and YouTube/Maps exclusion. Current v0.18.0 expands source navigation, period activity, device inventory, GPS, connected-source refresh and correction propagation. New source coverage and existing records are not full semantic reading or guaranteed personal inference. Three update triggers are owner request, an evidence-gap question followed by a provided snapshot, and phone connection; ordinary queries do not refresh all sources and no understanding-library weekly task is scheduled. Preserve unreliable pre-correction AppUsage duration, historical GPS gaps and explicit missing-source boundaries.",
         "collectors": [
@@ -1853,7 +1904,8 @@
         "conditional_collectors": [
           "one owner-selected new ordinary L2 preference example only when it materially improves product explanation; omit its private source payload and locator",
           "one explicit source migration or recovery acceptance only when implementation changes require it; publish aggregate integrity and key-drift results, never backup paths or private records"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/daily-preferences",
@@ -1986,7 +2038,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/personal-expression",
       "ai_refresh": {
-        "content_path": "app/content-personal-expression.js",
+        "content_path": "sources/pages/personal-expression/page.json",
         "semantic_revision": 7,
         "scope": "Existing four modules retain explain/draft separation, source/author/context and stage feedback. Current active privacy/data rules keep expression samples out of operator-identity judgment and use one shared personal-data access lifecycle. Originating task learns useful lessons for the next similar result without preserving unverified words as user samples. No sending, model-auth claim, actual private sample reading or new-machine restoration.",
         "collectors": [
@@ -1997,7 +2049,8 @@
         "conditional_collectors": [
           "网页验收只读公开安全的源码、规则、产品说明、技能入口与虚构测试，不默认执行会读取私人资料的 explain/scenes/reply/validate。",
           "真实任务已经产生新的补读、反馈写回、媒体或恢复验收时，读取该来源任务提供的公开安全结论；不为网页制造真人试写、真实微信调用或恢复演练。"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/personal-expression",
@@ -2061,7 +2114,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/wechat-direct",
       "ai_refresh": {
-        "content_path": "app/content-wechatdirect.js",
+        "content_path": "sources/pages/wechatdirect/page.json",
         "semantic_revision": 10,
         "scope": "Six modules updated to0.2.1: bounded context and hash/offset-bound long-message continuation, selected fulltext export, truthful partial delivery, native local media and explicit same-message emoji CDN boundary. Named incremental archive supports local-only repair-media and known-transaction recover-export; two directory renames are not filesystem atomic. Environment-only Doctor, committed WAL prefix and scoped temp management are separate. Old4archive7934message facts retain September14 date, no actual chat read.",
         "collectors": [
@@ -2074,7 +2127,8 @@
         "conditional_collectors": [
           "one explicit user-authorized named contact/group context or sync E2E only when the displayed live compatibility or runtime claim would otherwise change; never read a private body merely to refresh the website",
           "wechat-direct verify-export --output <explicit-reviewed-export> only when an existing export integrity claim changes and the resulting bounded receipt is separately reviewed as public-safe"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/WeChatDirect",
@@ -2173,7 +2227,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/proxyclean",
       "ai_refresh": {
-        "content_path": "app/content-proxyclean.js",
+        "content_path": "sources/pages/proxyclean/page.json",
         "semantic_revision": 9,
         "scope": "Six modules retain preview, bounded cleanup, explicit Direct exclusions, exact process revalidation, pre-effect journal and conditional Undo. Published writable-registry repair fixes failures while clearing selected client references; source regression evidence does not prove the current live proxy was closed or network restored. Preserve IPv6/adapter controls, no-write diagnosis and the five original owner screenshots; no real network effects in this refresh.",
         "collectors": [
@@ -2186,7 +2240,8 @@
           "never terminate active proxy listeners, modify WinINET or environment settings, remove routes, toggle IPv6, release DHCP, disable network adapters or run external exit probes merely to refresh the website",
           "inspect Docker Desktop configuration and recent proxy-mode evidence read-only; do not publish raw local paths, endpoints, addresses, process environment values or IPs and do not alter daemon or container settings",
           "use formal Source Owner default-branch/test readback for mutation contracts; source tests do not replace real route, process, WiFi, IPv6, Docker or public-network E2E"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/ProxyClean",
@@ -2319,7 +2374,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/codex-memory",
       "ai_refresh": {
-        "content_path": "app/content-codex-memory.js",
+        "content_path": "sources/pages/codex-memory/page.json",
         "semantic_revision": 13,
         "scope": "Four independent backup consumers and original module boundaries retained; do not maintain frozen consumers. Current Codex G and H conversation recovery points differ and each keeps its own capture/readback time. Safe Git settings, complete local conversation objects and actual login/new-machine recovery remain separate. Preserve Gemini compatibility output boundaries and no retired model invocation; no new backup or restoration for this website update.",
         "collectors": [
@@ -2336,7 +2391,8 @@
           "inspect conversation backup metadata read-only; never execute destructive restore, trigger heavy live backups or modify scheduled tasks merely to refresh the panel",
           "never access, parse or expose raw private conversation transcripts, user memory contents or auth tokens",
           "H cold sync is evaluated read-only without forcing external media insertion or mount"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/codex-memory",
@@ -2425,7 +2481,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/meshclip-kit",
       "ai_refresh": {
-        "content_path": "app/content-meshclip-kit.js",
+        "content_path": "sources/pages/meshclip-kit/page.json",
         "semantic_revision": 7,
         "scope": "Existing four Windows integration modules add visible pause/resume without stopping KDE/Tailscale, typed durable interrupted configuration recovery and strict diagnostics. Current peer discovery is available but pairing identity/password-sharing warnings and real two-device transfer stay unverified. Synthetic marker/file acceptance guide and exact cleanup are tooling, not actual transfer proof; source installed process and GUI behavior remain distinct.",
         "collectors": [
@@ -2437,7 +2493,8 @@
           "inspect network, process, watchdog and firewall state read-only; never trigger mutating configuration, approve pairing requests or alter Windows firewall rules merely to refresh the panel",
           "never read, capture or display real clipboard contents, transferred files or unredacted IP addresses",
           "Android tablet and pre-login scenarios remain non-goals of the current acceptance gate"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/meshclip-kit",
@@ -2532,7 +2589,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/video-scaffold",
       "ai_refresh": {
-        "content_path": "app/content-video-scaffold.js",
+        "content_path": "sources/pages/video-scaffold/page.json",
         "semantic_revision": 5,
         "scope": "Seven production modules retain clean bootstrap, Fish voice, reviewed SVG, preview, deterministic4K60 resume, delivery and bounded reuse. Prefer native voice timestamps then shared ChineseASR known-text alignment; Whisper is optional validated reuse/fallback rather than mandatory duplicated ASR. Doctor10pass1unknown, staged audio listening and recovery/report/caption contracts are source-backed; no new paid Fish call, production GPU render or actual whole video acceptance.",
         "collectors": [
@@ -2546,7 +2603,8 @@
           "doctor-live only when current Fish network compatibility materially changes the page and the exact external probe is authorized; never reveal the configured key",
           "one explicitly authorized fictional or owner-supplied video through prompts, preview, render, merge, cover, chapters, verify and human viewing only when actual full-pipeline evidence is required; do not invent a topic or demo for an ordinary website refresh",
           "a tracked background frame or clearly labelled template visualization may be used only when it improves the page without being presented as a completed video; never use SAMPLE GEAR / PLACEHOLDER as project-output proof"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/video-scaffold",
@@ -2641,7 +2699,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/sunshine-remote-streaming",
       "ai_refresh": {
-        "content_path": "app/content-sunshine-remote-streaming.js",
+        "content_path": "sources/pages/sunshine-remote-streaming/page.json",
         "semantic_revision": 7,
         "scope": "Five modules preserve physical-main capture, verified VDD fallback, window recovery, headless/network and wake boundaries. Correct existing mixed-version prose to published 3f3ebed: short config transactions have write readback and conditional preimage rollback, never an unconditional restoration promise. The retained September GPU gate, client Unknown and physical phone/display gaps keep their original dates. No current stream, display or network mutation.",
         "collectors": [
@@ -2655,7 +2713,8 @@
           "run active display mode mutation or Apply only with explicit user authorization; preflight and test mode never substitute for live monitor changes",
           "perform real streaming connection or disconnect test only when an interactive client session is authorized; service running never proves interactive stream quality",
           "perform Tailscale unattended or IPv6 binding repair only when actual network failure occurs and authorization is given"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/sunshine-remote-streaming",
@@ -2753,7 +2812,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/typora-theme-pack",
       "ai_refresh": {
-        "content_path": "app/content-typora-theme-pack.js",
+        "content_path": "sources/pages/typora-theme-pack/page.json",
         "semantic_revision": 5,
         "scope": "Source-complete theme pack: one editor theme, three export styles, external-converter transactional PDF delivery, theme installation and backup, and differentiated real PDF versus browser preview evidence",
         "collectors": [
@@ -2764,7 +2823,8 @@
         "conditional_collectors": [
           "inspect theme files, export profiles, and test results read-only; never modify user's active Typora installation or global themes directory merely to refresh the panel",
           "preview rendering requires Microsoft Edge, Node.js, and Playwright, and is executed on-demand rather than on every panel refresh"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/typora-theme-pack",
@@ -2835,7 +2895,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/openclaw-gateway",
       "ai_refresh": {
-        "content_path": "app/content-openclaw-gateway.js",
+        "content_path": "site-astro/sources/frozen-site/pages/projects/openclaw-gateway/index.html",
         "semantic_revision": 8,
         "scope": "Seven existing modules retain Gateway/channel/update/backup boundaries. db51ae7 extends existing Gemini-compatible backup to Antigravity Desktop and CLI settings/annotations/brain, excludes credentials/raw conversations/cache/binaries and never invokes retired Gemini model CLI. Scope definition is not a fresh payload, gateway or application recovery acceptance.",
         "collectors": [
@@ -2851,7 +2911,8 @@
           "run a remote model Live request only with exact Provider, expected charge and authorization; route or auth presence never proves a paid response",
           "run the local 27B model only through the current GPU owner path when it will not disrupt another workload; catalog local=true proves placement, not natural-language output",
           "perform update, restart, Gateway repair, disaster-recovery activation, real private backup task or CodeG MCP tool call only when that exact machine effect is in scope, then report it as a separate evidence layer"
-        ]
+        ],
+        "content_format": "frozen_html"
       },
       "source": {
         "repo": "wlyaaaaa/OpenClawGateway",
@@ -2944,7 +3005,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/wechat-history-ai-bridge",
       "ai_refresh": {
-        "content_path": "app/content-wechat-history-ai-bridge.js",
+        "content_path": "sources/pages/wechat-history-ai-bridge/page.json",
         "semantic_revision": 5,
         "scope": "Source-first product and technical coverage of WeFlow API data categories, active-library judgment, latest-message checks, bounded ChatLab Pull pagination and sync metadata, reply and media context, public metadata envelope versus private runtime content, documented OpenAPI AI flags rather than runtime HTTP interception, metadata probe required/optional endpoint semantics, bounded multi-profile startup and PCConfig task preservation, external file-set double-pass verification without export/copy/signature/immutability claims, and evidence separation from the current WeChatDirect route.",
         "collectors": [
@@ -2955,7 +3016,8 @@
         "conditional_collectors": [
           "Read installed WeFlow version, exact scheduled-task state and unauthenticated loopback /health only when they change displayed state; never execute startup or installation scripts merely for this page.",
           "MetadataOnly still requests sessions, contacts, group members and SNS statistics with credentials. Do not run it under a no-real-data website review; use existing synthetic endpoint tests. No real messages, contacts, moments, media, database or token reads in this acceptance."
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/wechat-history-ai-bridge",
@@ -3029,7 +3091,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/pc-panel-hub",
       "ai_refresh": {
-        "content_path": "app/content-pc-panel-hub.js",
+        "content_path": "sources/pages/pc-panel-hub/page.json",
         "semantic_revision": 15,
         "scope": "Six modules preserve metrics/transport, HS2 events, install and physical display evidence. Ordinary-window guard runs independently of HS2 overlay readiness, excludes Bubbles/Emerald/blackout/instruments/WallpaperEngine/shell, treats empty snapshots as no-op and never mutates display topology for window return. Precise metrics/COM lifecycle recovery is separated from physical pixels; historical frame and owner visual proof retain dates.",
         "collectors": [
@@ -3060,7 +3122,8 @@
             },
             "failure_semantics": "mark only the scheduled-task fields Unknown with the last verified evidence time; never substitute a partial ordinary-user task view or call the project unavailable"
           }
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/PC-Panel-Hub",
@@ -3174,7 +3237,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/emerald-veil",
       "ai_refresh": {
-        "content_path": "app/content-emerald-veil.js",
+        "content_path": "sources/pages/emerald-veil/page.json",
         "semantic_revision": 8,
         "scope": "Four modules preserve static black-cat Windows desktop/lock-screen assets and native Bubbles lifecycle. Bubbles background now snapshots the VDD-selected WallpaperEngine material, falling back to that VDD Windows wallpaper; only verified physical screens show, absent primary waits. Tray doubleclick/CtrlWinE start until input, preview15seconds; session-pause/tray-exit retired, application restart registered without new watcher. Source/install/actual screen/remote/reboot distinct.",
         "collectors": [
@@ -3187,7 +3250,8 @@
         "conditional_collectors": [
           "Read current source rules, product-design, windows-background, supported scripts and code before describing runtime. Inspect enabled setting, process and exact installation separately; investigate real failures under existing source repair authorization. Never force preview, lock the session, switch accepted wallpaper or inject idle merely to collect website evidence.",
           "Preserve existing untracked rejected cat experiments; they are neither current features nor permission for cleanup. Use the two actual project background assets with lightweight thumbnails and complete originals."
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/emerald-veil",
@@ -3258,7 +3322,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/steam-millennium-config-backup",
       "ai_refresh": {
-        "content_path": "app/content-steam-millennium-config-backup.js",
+        "content_path": "sources/pages/steam-millennium-config-backup/page.json",
         "semantic_revision": 7,
         "scope": "Four modules retain core CSS/config, plugin and theme metadata, and original weekly task. Add schema-v2 integrity generations, strict whitelisted core projection, fixed lock and persistent multi-file recovery, zero-write RestorePlan, ExpectedPlan-bound restore and conditional Rollback. No seven-day throttle or dirty override; snapshot no-change avoids duplicates. GUI and independentG/H evidence do not prove actual Steam theme/plugins, and application data/assets stay excluded.",
         "collectors": [
@@ -3270,7 +3334,8 @@
           "run tests/run-snapshot-tests.ps1 only when the tools or related contracts changed, with TEMP/TMP/TMPDIR under the owning task temp root",
           "use isolated targets for snapshot and manual merge-restore checks; never overwrite the Steam installation or launch/restart Steam for page acceptance",
           "preserve concurrent source configuration changes and distinguish actual installation readback from local or committed snapshots"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/steam-millennium-config-backup",
@@ -3350,7 +3415,7 @@
       "presentation_mode": "real_dashboard",
       "route": "/projects/ramdisk-guardian",
       "ai_refresh": {
-        "content_path": "app/content-ramdisk-guardian.js",
+        "content_path": "sources/pages/ramdisk-guardian/page.json",
         "semantic_revision": 8,
         "scope": "Five modules preserve12GiB disposable cache,12directories, health, checked Primo recovery and existing scheduled task. Rebuild requires sustained3samples/10seconds pressure, current consumer evidence, explicit user intent and cooldown;1hour failure/6hour insufficient-gain suppression. Structured health and visible pause/control, separate logical/image/driver allocation and unknown speedup, explicit verified image compaction distinct from actual driver rebuild or reboot.",
         "collectors": [
@@ -3362,7 +3427,8 @@
         "conditional_collectors": [
           "inspect RAM disk status, logs, and scheduled tasks read-only; never execute deploy.ps1, reinitialize Primo Ramdisk, modify driver memory budgets, or alter Windows Fast Startup merely to refresh the website panel",
           "verify target volume label is strictly RAMDISK before referencing Z: contents; never trigger emergency rxprd reset during read-only panel evaluation"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/RamdiskGuardian",
@@ -3443,15 +3509,15 @@
       "route": "/projects/cacb",
       "ai_refresh": {
         "mode": "manual_owner_only",
-        "automatic_handoff": false,
-        "content_path": "app/content-cacb.js",
+        "content_path": "site-astro/sources/frozen-site/pages/projects/cacb/index.html",
         "semantic_revision": 11,
         "scope": "curated product overview and eight project-defined modules covering the question bank, isolated formal execution, native_managed/local_async_job/cloud_api_async_job identities and lifecycles, an independent Sol Max root orchestration module with role-specific direct-child delivery and fail-closed evidence, deterministic hard gates, Sol Max identity-blind arbitration review as rebuttable inferred quality evidence, an independent 1/10-task quota-cost probe and exact-cleanup module, compatible final selection and reports without publishing any tested-configuration score or rank",
         "collectors": [
           "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator, read the current default-branch commit and bounded product/test facts, and reduce them to public-safe framework evidence without tested-configuration outputs, private samples, raw runs or hidden answers"
         ],
         "conditional_collectors": [],
-        "manual_refresh_rule": "source, rule and Skill events never update this page or create a website task; only an explicit owner request for CACB or an explicitly owner-requested full refresh may produce a new snapshot"
+        "manual_refresh_rule": "source, rule and Skill events never update this page or create a website task; only an explicit owner request for CACB or an explicitly owner-requested full refresh may produce a new snapshot",
+        "content_format": "frozen_html"
       },
       "source": {
         "repo": "wlyaaaaa/codex-agent-model-benchmark",
@@ -3496,8 +3562,7 @@
       "route": "/projects/codex-remote",
       "ai_refresh": {
         "mode": "manual_owner_only",
-        "automatic_handoff": false,
-        "content_path": "app/content-codex-remote.js",
+        "content_path": "sources/pages/codex-local-remote/page.json",
         "semantic_revision": 8,
         "scope": "curated public overview and nine modules covering same-task identity, subagent navigation, current-turn steer/interrupt and durable next-turn queue control, models/approvals/context, project and owner-file workflows, shared Broker/Sidecar architecture, installation/rolling update/rollback, public access safety, versions and layered evidence without invoking any Remote runtime or claiming current online status; all direct detail routes inherit the frozen-runtime boundary and do not imply current operation",
         "collectors": [
@@ -3505,7 +3570,8 @@
           "manual_public_product_evidence: read only PUBLIC source, documentation, tests, release/CI receipts and individually approved media; never invoke a dispatcher, scheduled task, Broker, Sidecar, app-server, installed runtime or Remote endpoint"
         ],
         "conditional_collectors": [],
-        "manual_refresh_rule": "source, release, test, rule, Skill, screenshot and runtime changes never update this page or create a website task; only an explicit owner request for Codex Remote or an explicitly owner-requested full refresh may produce a new snapshot"
+        "manual_refresh_rule": "source, release, test, rule, Skill, screenshot and runtime changes never update this page or create a website task; only an explicit owner request for Codex Remote or an explicitly owner-requested full refresh may produce a new snapshot",
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/codex-local-remote",
@@ -3560,7 +3626,8 @@
         "conditional_collectors": [
           "Read current runtime or delivery receipts only when they change a displayed decision; configuration and authored snapshots do not prove current operation",
           "Never run credential access, private-data export, remote-control effects or source maintenance merely to refresh this page"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/wly0829.cn",
@@ -3578,7 +3645,7 @@
           "kind": "website_product_and_publication",
           "paths": [
             "AGENTS.md",
-            "app/**",
+            "sources/pages/**",
             "config/**",
             "scripts/**",
             "site-astro/**",
@@ -3618,7 +3685,8 @@
         "conditional_collectors": [
           "Read current runtime or delivery receipts only when they change a displayed decision; configuration and authored snapshots do not prove current operation",
           "Never run credential access, private-data export, remote-control effects or source maintenance merely to refresh this page"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/PasswordCenter",
@@ -3670,7 +3738,8 @@
         "conditional_collectors": [
           "Read current runtime or delivery receipts only when they change a displayed decision; configuration and authored snapshots do not prove current operation",
           "Never run credential access, private-data export, remote-control effects or source maintenance merely to refresh this page"
-        ]
+        ],
+        "content_format": "typeset"
       },
       "source": {
         "repo": "wlyaaaaa/PCConfig",

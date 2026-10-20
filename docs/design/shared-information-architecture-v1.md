@@ -124,7 +124,7 @@ bookkeeping（内部施工台账）渲染到公网。
 ## Skills 分类
 
 Skills 页面保留现有目录布局，只增加一条单行分类栏。标签、成员与顺序只由
-`app/page.jsx` 的 `skillCategoryDefinitions` 维护；本文不复制 Skill slug、动态数量或
+`sources/pages/skills-home/page.json` 的 `registry.groups` 维护；本文不复制 Skill slug、动态数量或
 第二份分类清单。
 
 - `全部` 默认选中；

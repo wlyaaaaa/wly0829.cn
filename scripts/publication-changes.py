@@ -65,7 +65,7 @@ def rule_pin(value):
 def owners(path, projects):
     result = {key: set() for key in ('rules', 'projects', 'skills', 'pages')}
     aliases = {alias: project['id'] for project in projects for alias in
-               (project['id'], Path(project.get('ai_refresh', {}).get('content_path') or '').stem.removeprefix('content-'))}
+               (project['id'], Path(project.get('ai_refresh', {}).get('content_path') or '').parent.name)}
     for project in projects:
         if path == project.get('ai_refresh', {}).get('content_path'):
             result['projects'].add(project['id']); result['pages'].add(project['id'])
@@ -74,13 +74,13 @@ def owners(path, projects):
         page = match[1]; result['pages'].add(page)
         if page.startswith('rule-'): result['rules'].add(page[5:])
         elif page.startswith('skill-'): result['skills'].add(page[6:])
-        elif page in aliases: result['projects'].add(aliases[page])
-    if path.startswith('sources/rules/') or path == 'config/assembled-rules-pin.json' or path.startswith('app/content-rule'):
+        else:
+            owner = next((alias for alias in sorted(aliases, key=len, reverse=True) if page == alias or page.startswith(alias+'-')), None)
+            if owner: result['projects'].add(aliases[owner])
+    if path.startswith('sources/rules/') or path == 'config/assembled-rules-pin.json':
         result['rules'].add(Path(path).stem.removeprefix('agents.')); result['pages'].add('rules')
     if path.startswith(('skills/', 'plugins/')) and '/skills/' in '/'+path:
         result['skills'].add(path.split('skills/', 1)[1].split('/')[0])
-    if path.startswith(('app/content-skill', 'app/content-capability-links')):
-        result['skills'].add('catalog'); result['pages'].add('skills')
     return {key: sorted(ids) for key, ids in result.items() if ids} or {'other': [path]}
 def changes(previous_manifest, current_rules, current_snapshot=None, root=ROOT, baseline_ref=None):
     root = Path(root); previous = read(previous_manifest) if isinstance(previous_manifest, (str, Path)) else previous_manifest

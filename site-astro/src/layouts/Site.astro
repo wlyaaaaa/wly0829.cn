@@ -16,6 +16,7 @@ import typesetMotion from '../scripts/typeset-motion.js?url&no-inline';
 import pageBird from '../scripts/page-bird.js?url&no-inline';
 import { readFileSync } from 'node:fs';
 import { currentImageLoading } from '../image-loading';
+import cockpitHero from '../../../sources/assets/cockpit/cockpit-01-illustration-01.png?url';
 const runtimes = import.meta.glob('../chrome/runtime/*.json', { eager: true, import: 'default' }) as Record<string, any>;
 interface Props { title: string; kind: string; url: string; page: string; motion?: any; blocks?: any; pageMeta?: any; moved?: string; noindex?: boolean; toc: { id: string; label: string; img?: string }[] }
 const { title, kind, url, toc, page, motion, blocks, pageMeta, moved, noindex } = Astro.props;
@@ -64,6 +65,18 @@ const head = rt ? currentImageLoading(withoutTocRuntime(rt.head.map((h: string) 
 // 现在网站上没有对应页、因而没有运行件的页（例如旧项目名的别名页），用内容文件里的页面数据
 const pageData = (() => { const m = rt?.tail.match(/<script id="page-data" type="application\/json">(.*?)<\/script>/s); try { return m ? JSON.parse(m[1]) : null; } catch { return null; } })() ?? pageMeta ?? null;
 const authorPages = import.meta.glob('../../../sources/pages/*/page.json', { eager: true, import: 'default' }) as Record<string, any>;
+const authorPage = authorPages[`../../../sources/pages/${page}/page.json`] || pageMeta || pageData;
+const paragraphs = (authorPage?.screens || []).flatMap((s: any) => String(s.text || '').split(/\n\s*\n/));
+const firstParagraph = paragraphs.find((p: string) => p.trim().length > 20 && !/^(?:#|\||〔)/.test(p.trim()));
+const description = [...String(authorPage?.tagline || authorPage?.subtitle || firstParagraph || title)
+  .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[#*`〔〕]/g, '').replace(/\s+/g, ' ').trim()].slice(0, 120).join('');
+const heroHtml = ['html', 'overlay'].map((key) => blocks?.screens?.[0]?.h?.[key] || '').join('');
+const heroTag = heroHtml.match(/<img\b(?=[^>]*\bdata-ts-art=)[^>]*>/)?.[0]
+  || heroHtml.match(/data-comp="illustration"[^>]*>[\s\S]*?(<img\b[^>]*>)/)?.[1] || '';
+const shareImage = new URL(heroTag.match(/\bsrc="([^"]+)"/)?.[1]
+  || (page === 'cockpit' ? cockpitHero : motion?.art?.src) || '/favicon.svg', 'https://wly0829.cn').href;
+const canonical = new URL(url, 'https://wly0829.cn').href;
+const indexable = !moved && !noindex;
 const briefRepo = pageData ? (pageData.status_binding?.repo || (pageData.repo_url ? String(pageData.repo_url).replace(/^https:\/\/github.com\//, '') : '页面未提供仓库地址')) : '';
 const briefText = pageData && ['project', 'frozen'].includes(pageData.kind)
   ? `项目：${pageData.title}；${briefRepo.startsWith('private-project-') ? '项目键' : '仓库'}：${briefRepo}；范围：整个项目；目标：（这里写这次要做的事）。先读项目的 AGENTS.md 和说明，按现行规则做。` : '';
@@ -79,7 +92,17 @@ const tail = rt ? withoutTocRuntime(rt.tail).replace(`/_living/_engine/${livingE
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title} · 吴乐阳</title>
-  <link rel="canonical" href={new URL(url, 'https://wly0829.cn').href} />
+  <link rel="canonical" href={canonical} />
+  {indexable && <>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={`${title} · 吴乐阳`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={shareImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${title} · 吴乐阳`} />
+  </>}
   {moved && <meta http-equiv="refresh" content={`2; url=${moved}`} />}
   {(moved || noindex) && <meta name="robots" content="noindex" />}
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

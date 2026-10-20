@@ -1,3 +1,4 @@
+import { contentFiles, projectContentSnapshot } from "./panel-content-paths.mjs";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
@@ -166,7 +167,7 @@ for (const result of projectResults) {
   const contentPath = path.resolve(projectRoot, registration.ai_refresh.content_path);
   const relative = path.relative(projectRoot, contentPath);
   requireFact(relative && !relative.startsWith("..") && !path.isAbsolute(relative), "bundle_content_path_outside_project", result.id);
-  const currentSha = sha256(await readFile(contentPath));
+  const currentSha = (await projectContentSnapshot(registration)).sha256;
   requireFact(currentSha === result.new_content_sha256, "bundle_current_content_mismatch", `${result.id}:${currentSha}`);
   requireFact(result.new_semantic_revision === registration.ai_refresh.semantic_revision, "bundle_registry_semantic_revision_mismatch", result.id);
 
@@ -200,7 +201,7 @@ for (const surface of globalSurfaceResults) {
   requireFact(["changed", "unchanged", "blocked"].includes(surface.status), "bundle_global_surface_status_invalid", `${surface.id}:${surface.status}`);
   requireFact(typeof surface.reason === "string" && surface.reason.trim().length >= 8, "bundle_global_surface_reason_missing", surface.id);
   const files = Array.isArray(surface.files) ? surface.files : [];
-  requireFact(JSON.stringify(files.map((item) => item?.path)) === JSON.stringify(definition.content_paths), "bundle_global_surface_files_invalid", surface.id);
+  requireFact(JSON.stringify(files.map((item) => item?.path)) === JSON.stringify((await contentFiles(definition.content_paths)).map((item) => item.path)), "bundle_global_surface_files_invalid", surface.id);
   let changedFileCount = 0;
   for (const file of files) {
     const addedFile = file?.change_kind === "added";

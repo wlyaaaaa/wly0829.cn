@@ -1,10 +1,10 @@
 # GitHub 总索引项目内容设计
 
-> 本文保留 2026-08-29 三项目建设阶段的设计与验收记录，不拥有当前仓库数量、工作树状态、发布状态或项目名次。当前产品事实看 `app/content-github-index.js`，固定项目名次看 `config/final-project-order.json`，实际公网提交与 Pages 状态以每次发布后的正式回读为准。
+> 本文保留 2026-08-29 三项目建设阶段的设计与验收记录，不拥有当前仓库数量、工作树状态、发布状态或项目名次。当前产品事实看 `sources/pages/github-local-index/page.json` 及其模块源，固定项目名次看 `config/final-project-order.json`，实际公网提交与 Pages 状态以每次发布后的正式回读为准。
 
 ## 历史交付状态（2026-08-29）
 
-本文件和 `app/content-github-index.js` 已进入现行公开看板；实际公网版本、提交与 Pages 状态仍以每次发布后的正式回读为准，不由本设计文档固定。
+本文件记录的早期方案已由当前 `sources/pages/github-local-index/page.json` 及其模块源承接；实际公网版本、提交与 Pages 状态仍以每次发布后的正式回读为准，不由本设计文档固定。
 
 - 已完成：项目总览、六个真实模块、术语、工作流、组件、失败恢复、验证层、阶段时间线和维护入口；内容对象与三态字段已进入项目 Registry、可见路由、通用项目页面和网站合同测试。
 - 已通过：JavaScript import（导入）、字段闭包、六个唯一模块、readerStates（三态）和项目隔离约束。
@@ -78,7 +78,7 @@ GitHub 总索引不是项目陈列柜，而是当前 GitHub Owner（仓库责任
 
 ## 数据导出合同
 
-`app/content-github-index.js` 导出：
+早期内容包的导出结构（仅在 Git 历史中保留）：
 
 ```js
 export const githubIndexProject = { /* 项目总览 */ };
@@ -141,7 +141,7 @@ export const githubIndexModules = [ /* 六个项目自有模块 */ ];
 - `tests/Test-GitOwnerStatus.ps1`：exit 0，最终输出 `Git owner provider tests passed.`。
 - `tests/Test-ProjectCognitionSource.ps1`：exit 0，最终输出 `Project cognition source provider tests passed.`。
 - `tools/Test-GitHubLocalIndexConsistency.ps1 -SkipFetch`：exit 1，准确报告 8/8 stable drift；这是当前事实缺口，不是用跳过或改期望值制造的绿灯。
-- `app/content-github-index.js`：原生 ESM（JavaScript 模块）import 成功；项目必需字段、六个唯一 module slug（模块标识）及每模块完整字段校验通过。
+- 当时的旧内容包：原生 ESM（JavaScript 模块）import 成功；项目必需字段、六个唯一 module slug（模块标识）及每模块完整字段校验通过。
 - 两个新文件的 `git diff --no-index --check` 未报告空白错误；命令因“空文件对新文件”按预期返回差异码 1，并提示本机 Git 将来会按仓库设置把 LF（换行）转为 CRLF（Windows 换行）。两个源文件当前均为 UTF-8 无 BOM（字节顺序标记）。
 
 当时的本地 build 和合同测试已经覆盖本包、Registry 与可见路由；三项目浏览器/Owner 验收已经完成，但在那个建设节点仍不构成 Pages（公网部署）验收。该句只记录当时为何不能把本地接入冒充网站上线，不描述当前发布状态。
