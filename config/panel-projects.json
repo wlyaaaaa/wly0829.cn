@@ -1976,7 +1976,6 @@
             "phone_activity.py",
             "phone_event_sources.py",
             "phone_source_collect.py",
-            "rail_browser_collect.mjs",
             "source_assertions.py",
             "source_snapshot_state.py",
             "spending.py",
