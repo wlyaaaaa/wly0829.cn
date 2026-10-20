@@ -743,6 +743,10 @@ test("the maintenance registry drives all completed candidate packages", async (
   const generation = JSON.parse(execFileSync(process.execPath, [path.join(projectRoot, "scripts", "generate-project-content-index.mjs")], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
   assert.equal(generation.status, "no_change");
 
+  const retiredSourceRoutes = {
+    "pcconfig/drift-acceptance/tools/Test-PCConfigDrift.ps1": "tools/scan_tasks.ps1",
+    "github-index/repository-ledger/tools/Get-ProjectCognitionSource.ps1": "tools/Get-GitOwnerStatus.ps1"
+  };
   for (const entry of projectCatalog) {
     if (entry.registration.ai_refresh.mode === "manual_owner_only") {
       assert.deepEqual(entry.registration.impact_sources, []);
@@ -765,7 +769,10 @@ test("the maintenance registry drives all completed candidate packages", async (
         if (!normalized.toLowerCase().startsWith(root.toLowerCase())) continue;
         const relative = normalized.slice(root.length);
         if (/[<>]/.test(relative)) continue; // A withheld locator is a source label, not a concrete impact path.
-        assert.ok(patterns.some((pattern) => impactPatternMatches(pattern, relative)), `${entry.project.slug}/${module.slug} source is missing from impact_sources: ${relative}`);
+        // db1d43d3 replaced these historical source entrypoints with current read-only Owner routes.
+        const currentRelative = retiredSourceRoutes[`${entry.project.slug}/${module.slug}/${relative}`] ?? relative;
+        if (currentRelative !== relative) assert.ok(entry.registration.ai_refresh.collectors.some((collector) => collector.replaceAll("\\", "/").includes(`${root}${currentRelative}`)), `retired source has no current Owner collector: ${currentRelative}`);
+        assert.ok(patterns.some((pattern) => impactPatternMatches(pattern, currentRelative)), `${entry.project.slug}/${module.slug} source is missing from impact_sources: ${currentRelative}`);
       }
     }
   }
