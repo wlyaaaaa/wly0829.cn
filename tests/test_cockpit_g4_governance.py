@@ -38,7 +38,7 @@ const assert = require('node:assert/strict');
   assert.match(html, /id="gov-deferred"><summary>那次新转暂缓 1 件/);
   assert.match(html, /暂缓 · 你有空时可以做（1 件，不急）/);
   assert.match(html, /为什么暂缓：14 天没回应，你可能不想做，想做时说一声<\/small>/);
-  assert.match(html, /暂缓 · AI 等条件到了再做（1 件，你不用管）/);
+  assert.match(html, /AI 在跟（1 件，等条件）/); assert.doesNotMatch(html, /暂缓 · AI/);
   // 没有交给 AI 的事时体检行照样出
   assert.match(R.needYou(normalize({ schema: 'pcconfig.cockpit-view.v1', governance: { last_run } }), ctx), /现在没有交给 AI 的事。<\/p><div class="cp-gov">/);
   // 后端没给 last_run / counts：不出体检行，其余照旧
