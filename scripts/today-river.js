@@ -291,9 +291,8 @@ function mark(t, occurrence = null) { host.querySelectorAll('#layer .on').forEac
 function pick(t, scroll, occurrence = 0) {
   picked = { id: t.raw.id, occurrence }; mark(t, occurrence); const p = $('#pick'); p.hidden = false; p.dataset.taskId = t.raw.id; p.dataset.occurrence = occurrence;
   if ((['bad', 'warn', 'ai'].includes(t.flag) || t.raw.state === 'unknown') && !t.raw.project_url && t.name !== '回家收手机数据') {
-    p.textContent = t.raw.public_message || STATE[t.flag];
+    p.innerHTML = six(M, t) + `<p>${esc(t.raw.public_message || STATE[t.flag] || '')}</p>`;
     document.dispatchEvent(new CustomEvent('today-river-selected-notice', {detail:{taskId:t.raw.id, task:t.raw, target:p}}));
-    if (t.raw.project || t.raw.project_url) p.insertAdjacentHTML('afterbegin', owner(t.raw));   // 未知/出错走提醒这一支，也要看得到归属
   } else p.innerHTML = six(M, t);
   p.insertAdjacentHTML('beforeend', '<button type="button" data-close-pick>收起说明</button>');
   p.querySelector('[data-close-pick]').onclick = () => { picked = null; p.hidden = true; mark(null); };

@@ -9,6 +9,8 @@ const anchor = (id) => `<span class="cp-anchor" id="${esc(id)}"></span>`;
 const dot = (state) => `<span class="cp-dot is-${light(state)}" aria-hidden="true"></span>`;
 const notRead = (at, now) => `还没读到${at ? `（上次 ${esc(when(at, now))}）` : ''}`;
 const copyBtn = (id, label = '交给 AI 处理') => (id ? `<button type="button" class="cp-btn" data-copy-ai="${esc(id)}">${label}</button>` : '');
+const MOBILE = { direct: '手机直接办', computer_mcp: '手机借电脑 MCP 办', in_person: '要到电脑前' };
+const https = (s) => { try { const u = new URL(s); return u.protocol === 'https:' && !u.username && !u.password ? u.href : ''; } catch { return ''; } };
 
 // 卡片颜色只看“要不要你出手”：后端给了 owner_action（do / know / none）或 owner_action_needed 就按它；
 // 没给时以卡片自己的文字结论为准——写着交给 AI、AI 在管的，用中性色，不用黄红吓人；
@@ -43,7 +45,9 @@ export function card(c, now, off = false) {
   const items = Array.isArray(c.trigger_items) ? c.trigger_items.filter((t) => t && LINE[t.reason] && Number.isFinite(Number(t.value_gb))) : [];
   const lines = items.filter((t) => !(c.text || '').includes(Number(t.value_gb).toFixed(1))).map((t) => LINE[t.reason](t));
   const trig = off ? '' : lines.length ? `<p class="cp-reason">触发的是：${esc(lines.join('；'))}</p>` : typeof c.trigger_text === 'string' && c.trigger_text ? `<p class="cp-reason">触发的是：${esc(c.trigger_text)}</p>` : '';
+  const details = Array.isArray(c.details) ? c.details.filter((d) => d && (d.title || d.text)) : [];
   return `<article class="cp-card is-${light(state)}${off ? ' is-off' : ''}"><h3>${dot(state)}${esc(c.title)}</h3><p>${text}</p>` + trig
+    + (details.length ? `<details class="cp-more"><summary>查看具体缺口</summary><ul class="cp-list">${details.map((d) => `<li><span>${esc(d.title)}</span>${d.text ? `<small>${esc(d.text)}</small>` : ''}</li>`).join('')}</ul></details>` : '')
     + (c.criteria_text ? `<p class="cp-criteria">判断标准：${esc(c.criteria_text)}</p>` : '')
     + time + (!off && ['red', 'attention'].includes(state) ? `<div class="cp-actions">${copyBtn(c.copy_ai_id)}</div>` : '') + `</article>`;
 }
@@ -81,7 +85,8 @@ export function readTodo(x, now) {
   let t = clean(x.title || x.next_step);
   let path = '';
   t = t.replace(/\s*汇报在电脑上：[^（]*（路径\s*([^）]+)）。?/, (_, p) => { path = p.trim(); return ''; }).replace(/\s*（路径\s*([^）]+)）/, (_, p) => { path ||= p.trim(); return ''; }).trim();
-  let minutes = Number.isFinite(x.minutes) ? `约 ${x.minutes} 分钟` : '';
+  const mins = x.minutes ?? x.action?.estimated_minutes;
+  let minutes = Number.isFinite(mins) ? `约 ${mins} 分钟` : '';
   t = t.replace(/（约\s*(\d+|几)\s*分钟）/, (_, n) => { minutes ||= n === '几' ? '几分钟' : `约 ${n} 分钟`; return ''; });
   let label = '';
   t = t.replace(/^(等你选|等你定|请你定|要你定)[：:]\s*/, (_, l) => { label = l; return ''; });
@@ -130,11 +135,12 @@ export function readTodo(x, now) {
   const urgent = typeof x.urgent === 'boolean' ? x.urgent : Number.isFinite(left) && left < 864e5;
   // 卡片红不红：后端给了 color 就按它（本人待办用黄色“要你处理”，红色只给确有失败又有期限的）；没给按期限急不急
   const red = x.color ? x.color === 'red' : urgent;
-  return { head: label && !x.headline ? `${label}：${head}` : head, body: rest, steps, options, minutes, path, where, dueText, doneText, hasDue: Number.isFinite(dueAt), overdue: left < 0, urgent, red };
+  const mobile = x.mobile_method && MOBILE[x.mobile_method.kind] ? x.mobile_method : null;
+  return { head: label && !x.headline ? `${label}：${head}` : head, body: rest, steps, options, minutes, path, where, mobile, dueText, doneText, hasDue: Number.isFinite(dueAt), overdue: left < 0, urgent, red };
 }
 const chips = (r) => [r.dueText ? `<span class="cp-chip${r.urgent ? ' is-urgent' : ''}">${r.overdue ? '已过期限 ' + esc(r.dueText) : esc(r.dueText) + (r.hasDue ? ' 前' : '')}</span>` : '',
   r.minutes ? `<span class="cp-chip">${esc(r.minutes)}</span>` : '',
-  r.where === 'phone' ? '<span class="cp-chip is-phone">手机能办</span>' : r.where === 'pc' ? '<span class="cp-chip is-pc">要在电脑上办</span>' : ''].join('');
+  r.mobile ? `<span class="cp-chip">${MOBILE[r.mobile.kind]}</span>` : r.where === 'phone' ? '<span class="cp-chip is-phone">手机能办</span>' : r.where === 'pc' ? '<span class="cp-chip is-pc">要在电脑上办</span>' : ''].join('');
 // “你现在 N 件”：件数优先用后端 overview.owner_count / owner_urgent（P1），没有就数“要你做的事”清单
 export function ownerNow(v, now) {
   const ov = v.overview || {};
@@ -170,28 +176,30 @@ function askCard(x, r, ctx) {
   const ref = `（驾驶舱条目 ${id}）`, name = `「${r.head}」`;
   const qs = questionsOf(x, r);
   const doList = r.steps.length ? `<ol class="cp-steps">${r.steps.map((s) => `<li>${esc(s)}</li>`).join('')}</ol>` : r.body ? `<p class="cp-ask-body">${esc(r.body)}</p>` : '';
-  const quiz = qs.length ? `<div class="cp-quiz">${qs.map((q, i) => `<fieldset class="cp-q" data-q="${esc(q.id)}" data-qn="${i + 1}" data-qtext="${esc(q.text)}">`
+  const quiz = qs.length ? `<div class="cp-quiz">${qs.map((q, i) => `<fieldset class="cp-q" data-q="${esc(q.id)}" data-qn="${i + 1}" data-qtext="${esc((x.kind === 'ai_age_decision' ? `（条目 ${q.id}）` : '') + q.text)}">`
       + `<legend>${qs.length > 1 || q.text ? `<b>第 ${i + 1} 题</b>${esc(q.text)}` : '选一个'}</legend>`
       + `<div class="cp-opts">${q.options.map((o) => `<button type="button" class="cp-btn cp-opt" data-opt="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</div>`
       + (q.note ? `<input class="cp-note" type="text" data-note placeholder="想补一句可以写在这里（可不写）" aria-label="第 ${i + 1} 题补充说明">` : '')
       + `</fieldset>`).join('')}</div>` : '';
   const due = r.dueText ? `<span class="${r.urgent ? 'is-urgent' : ''}">${r.overdue ? '已过期限 ' + esc(r.dueText) : esc(r.dueText) + (r.hasDue ? ' 前办' : '')}</span>` : '';
-  const where = r.where === 'phone' ? '手机上就能办' : r.where === 'pc' ? '在电脑上办' : '';
+  const where = r.mobile ? MOBILE[r.mobile.kind] : r.where === 'phone' ? '手机上就能办' : r.where === 'pc' ? '在电脑上办' : '';
   const info = [due, [where, r.minutes].filter(Boolean).map(esc).join('，'), r.doneText ? '办完后：' + esc(r.doneText) : ''].filter(Boolean);
-  const facts = [['为什么要你', x.why_you], ['不做会怎样', x.consequence]].filter(([, val]) => !isBlank(val));
+  const facts = [['为什么要你', x.why_you], ['不做会怎样', x.consequence || x.action?.consequence]].filter(([, val]) => !isBlank(val));
+  const href = https(x.action?.href || x.href);
+  const prompt = r.mobile?.copy_prompt || `${ref}${name}这条请你处理：读驾驶舱状态里这条的详情，用一两句话告诉我要做什么；能由 AI 直接办的就直接办掉并核实关掉`;
   const meta = [x.at ? '登记于 ' + when(x.at, ctx.now) : '', Number.isFinite(x.asked_count) ? `问过你 ${x.asked_count} 次` : '', x.last_checked_at ? `最后核对 ${when(x.last_checked_at, ctx.now)}` : '', x.project ? '项目：' + x.project : ''].filter(Boolean);
   const main = qs.length
     ? `<button type="button" class="cp-btn cp-btn-main" data-copy-answer data-ref="${esc(ref)}" data-name="${esc(name)}" aria-describedby="${esc(todoId(x))}-hint" data-disabled-reason="${PICK_FIRST}" disabled>复制我的答复</button>`
     : ACTION_KINDS.includes(x.ask_kind) ? copyText(`${ref}${name}我已经做完了，请核实后关掉这条`, '我做完了', ' cp-btn-main') : '';
   return `<article class="cp-ask${r.red ? ' is-urgent' : ''}" id="${esc(todoId(x))}">`
-    + `<h3 class="cp-ask-title">${dot(r.red ? 'red' : 'attention')}<span>${esc(r.head)}</span></h3>`
+    + `<h3 class="cp-ask-title">${dot(r.scheduled ? 'neutral' : r.red ? 'red' : 'attention')}<span>${esc(r.head)}</span></h3>`
     + (typeof x.report_title === 'string' && x.report_title && x.report_title !== r.head ? `<p class="cp-report-title">汇报页：${esc(x.report_title)}</p>` : '')
     + (doList ? `<div class="cp-ask-do"><p class="cp-ask-k">要做什么</p>${doList}</div>` : '') + quiz
     + (info.length ? `<p class="cp-ask-info">${info.join('<i aria-hidden="true"> · </i>')}</p>` : '')
     + (facts.length ? `<dl class="cp-facts">${facts.map(([k, val]) => `<div><dt>${k}</dt><dd>${esc(val)}</dd></div>`).join('')}</dl>` : '')
     + (r.path ? `<p class="cp-path">电脑上的文件：${esc(r.path)}</p>` : '')
-    + `<div class="cp-actions">${main}${copyText(`${ref}${name}这件不做了，请核对后移出要做的事并记下结果`, '不做了', ' cp-btn-quiet')}`
-    + `${copyText(`${ref}${name}这条请你处理：读驾驶舱状态里这条的详情，用一两句话告诉我要做什么；能由 AI 直接办的就直接办掉并核实关掉`, '问 AI', ' cp-btn-quiet')}</div>`
+    + `<div class="cp-actions">${href ? `<a class="cp-btn cp-btn-main" href="${esc(href)}" target="_blank" rel="noopener noreferrer">去办 →</a>` : ''}${main}${copyText(`${ref}${name}这件不做了，请核对后移出要做的事并记下结果`, '不做了', ' cp-btn-quiet')}`
+    + `${copyText(prompt, r.mobile?.kind === 'computer_mcp' ? '复制给手机上的 AI' : '问 AI', ' cp-btn-quiet')}</div>`
     + `<p class="cp-hint" id="${esc(todoId(x))}-hint">${qs.length ? PICK_FIRST : COPY_HINT}</p>`
     + (meta.length ? `<p class="cp-meta">${meta.map(esc).join(' · ')}</p>` : '') + `</article>`;
 }
@@ -204,6 +212,18 @@ const GENERIC_DONE = /^\s*AI\s*核实登记的完成条件已满足后关闭本�
 // 交给 AI 的事：卡住的先列（P2 给 stuck/handler；没给时只认“检查点已过”这一条硬事实），其余收起来
 function aiBlock(v, ctx) {
   const now = ctx.now;
+  if (v.ai_overdue) {
+    const overdue = v.ai_overdue.map((x) => {
+      const at = x.overdue_since ? monthDay(x.overdue_since) : '';
+      const why = at ? `原定 ${at}，已过 ${x.overdue_days ?? 0} 天` : '唤醒条件没有日期，等待 AI 明确期限';
+      const age = x.registration_unknown ? '登记时间不明，按满 14 天处理' : Number.isFinite(x.age_days) ? `已跟 ${x.age_days} 天` : '';
+      return `<li><span>${esc(clean(x.title) || x.project)}</span><small>${esc([why, age, x.latest_progress || stuckWhy(x.stuck_reason)].filter(Boolean).join(' · '))}</small></li>`;
+    }).join('');
+    const n = v.counts.ai_following || v.ai_following.length;
+    return `<div class="cp-ai" id="ai"><h3 class="cp-sub">AI 在跟 ${n} 件</h3>`
+      + (overdue ? `<p class="cp-ai-cap">${dot('neutral')}过了自己定的日子还没结果</p><ul class="cp-ailist">${overdue}</ul>` : '')
+      + govRun(v, ctx) + aiWork(v, ctx) + `</div>`;
+  }
   const rows = v.ai_following.map((x) => {
     const title = clean(x.title);
     const bare = !title || title === x.project;
@@ -288,9 +308,13 @@ export function needYou(v, ctx) {
   const known = mine.length + theirs.length === v.deferred.length;
   const wait = !v.deferred.length ? '' : known
     ? (mine.length ? `<h3 class="cp-sub">暂缓 · 你有空时可以做（${mine.length} 件，不急）</h3><ul class="cp-list cp-wait">${mine.map(fmt).join('')}</ul>` : '')
-      + (theirs.length ? `<details class="cp-more" id="ai-wait"><summary>暂缓 · AI 等条件到了再做（${theirs.length} 件，你不用管）</summary><ul class="cp-list cp-wait">${theirs.map(fmt).join('')}</ul></details>` : '')
+      + (theirs.length ? `<details class="cp-more" id="ai-wait"><summary>AI 在跟（${theirs.length} 件，等条件）</summary><ul class="cp-list cp-wait">${theirs.map(fmt).join('')}</ul></details>` : '')
     : `<h3 class="cp-sub">暂缓 · 等条件到了再做（${v.deferred.length} 件）</h3><ul class="cp-list cp-wait">${v.deferred.map(fmt).join('')}</ul>`;
-  return anchor('pending') + body + aiBlock(v, ctx) + wait;
+  const scheduled = v.scheduled.map((x) => {
+    const r = { ...readTodo(x, ctx.now), scheduled: true, red: false, urgent: false };
+    return `<details class="cp-more"><summary>排在 ${esc(monthDay(x.scheduled_for || x.due_at))}：${esc(r.head)}</summary>${askCard(x, r, ctx)}</details>`;
+  }).join('');
+  return anchor('pending') + body + scheduled + aiBlock(v, ctx) + wait;
 }
 
 // 电脑：读数卡 + 两张 Grafana 曲线卡 + 远程和网络
@@ -362,7 +386,7 @@ const EVENT = { acceptance_reviewed: (x) => `AI 核对了 ${x.count ?? ''} 件�
 const short = (d) => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d || ''); return m ? `${+m[3]}日` : ''; };
 const bars = (rows, unit) => {
   const max = Math.max(1, ...rows.map((r) => r.n || 0));
-  return `<ol class="cp-bars">${rows.map((r) => `<li class="${r.n == null ? 'is-none' : ''}${r.now ? ' is-now' : ''}" title="${esc(r.label)} ${r.n == null ? '没数' : r.n + unit}"><span class="cp-bar" style="--h:${r.n == null ? 6 : Math.max(6, Math.round(r.n / max * 100))}%"></span><b>${r.n == null ? '—' : esc(r.n)}</b><small>${esc(r.label)}</small></li>`).join('')}</ol>`;
+  return `<ol class="cp-bars">${rows.map((r) => `<li class="${r.n == null ? 'is-none' : ''}${r.now ? ' is-now' : ''}" title="${esc(r.label)} ${r.n == null ? '没统计到' : r.n + unit}"><span class="cp-bar" style="--h:${r.n == null ? 6 : Math.max(6, Math.round(r.n / max * 100))}%"></span><b>${r.n == null ? '—' : esc(r.n)}</b><small>${esc(r.label)}</small></li>`).join('')}</ol>`;
 };
 function codeCard(v, ctx) {
   const c = v.changes, n = c.today.commits;
@@ -394,6 +418,8 @@ function wordsCard(v, ctx) {
   if (cats) {
     const count = (list, k) => { const x = (list || []).find((y) => y && y.category === k); return Number.isFinite(x?.count) ? x.count : 0; };
     const days = (Array.isArray(oc.history) ? oc.history : []).filter((d) => d && Array.isArray(d.by_category));
+    const missing = (Array.isArray(oc.history) ? oc.history : []).filter((d) => d && d.total === null).map((d) => monthDay(d.date));
+    const gap = missing.length ? `<p class="cp-cap">${esc(missing.join('、'))}没统计到，近 7 天只合计已统计的日期。</p>` : '';
     const cells = WORDS9.map((k) => {
       const hot = k === '禁令' || k === '纠正';
       const week = days.reduce((n, d) => n + count(d.by_category, k), 0);
@@ -403,7 +429,7 @@ function wordsCard(v, ctx) {
     const none = WORDS9.every((k) => count(cats, k) === 0);
     const prev = days.filter((d) => d.date && d.date < (oc.date || '')).pop();
     const yline = prev && (early(ctx) || none) ? `<p class="cp-cap cp-yesterday">昨天（${esc(monthDay(prev.date))}）：${WORDS9.map((k) => `${k} ${count(prev.by_category, k)}`).join('、')}</p>` : '';
-    return `<article class="cp-feature cp-words"><h3>你对 AI 说的话（按 9 类）</h3><p class="cp-cap">${none ? (oc.complete === false && oc.observed_at ? `今天截至 ${esc(hm(oc.observed_at))}，还没跟 AI 说话（0 条）` : '今天还没跟 AI 说话（0 条）') : `大数字是${asof}，小字是近 7 天；一条话含几类就各算一次`}</p>${yline}<ol class="cp-words9">${cells}</ol></article>`;
+    return `<article class="cp-feature cp-words"><h3>你对 AI 说的话（按 9 类）</h3><p class="cp-cap">${none ? (oc.complete === false && oc.observed_at ? `今天截至 ${esc(hm(oc.observed_at))}，还没跟 AI 说话（0 条）` : '今天还没跟 AI 说话（0 条）') : `大数字是${asof}，小字是近 7 天；一条话含几类就各算一次`}</p>${gap}${yline}<ol class="cp-words9">${cells}</ol></article>`;
   }
   const hist = Array.isArray(oc.history) ? oc.history.filter((d) => d && d.date) : [];
   const known = hist.filter((d) => Number.isFinite(d.total));
@@ -411,7 +437,7 @@ function wordsCard(v, ctx) {
   const head = last
     ? `<div class="cp-big"><b>${esc(last.total)}</b><span>次纠正 AI<br>${last.today ? '今天' : `最近有数的一天（${esc(short(last.date))}）`}</span></div>`
     : `<div class="cp-big"><b class="is-none">—</b><span>纠正次数还没读到</span></div>`;
-  const trend = hist.length ? `<p class="cp-cap">近 ${hist.length} 天每天纠正几次（— 是那天没有数）</p>` + bars(hist.map((d, i) => ({ label: short(d.date), n: Number.isFinite(d.total) ? d.total : null, now: i === hist.length - 1 })), ' 次') : '';
+  const trend = hist.length ? `<p class="cp-cap">近 ${hist.length} 天每天纠正几次（— 表示没统计到）</p>` + bars(hist.map((d, i) => ({ label: short(d.date), n: Number.isFinite(d.total) ? d.total : null, now: i === hist.length - 1 })), ' 次') : '';
   return `<article class="cp-feature cp-words"><h3>你纠正 AI 的次数</h3>${head}${trend}<p class="cp-time">以后按 9 类分开显示：禁令、纠正、授权、要求、建议、偏好、事实、询问、好奇</p></article>`;
 }
 
@@ -627,12 +653,14 @@ const overview = (v, ctx) => {
   const verb = kinds.length && kinds.every((k) => DECIDE.includes(k)) ? '要你拍板' : kinds.length && kinds.every((k) => ACTION_KINDS.includes(k)) ? '要你动手' : '要你处理';
   const tag = !n ? '' : urgent ? `<span class="cp-you-tag is-urgent">${urgent === n ? (n === 1 ? '急' : '都急') : `${urgent} 件急`}</span>` : '<span class="cp-you-tag">都不急</span>';
   const list = items.slice(0, 3).map(({ x, r }) => `<li><a href="#${esc(todoId(x))}">${dot(r.red ? 'red' : 'attention')}<span class="cp-you-title">${esc(r.head)}</span><span class="cp-you-chips">${chips(r)}</span></a></li>`).join('');
-  const rest = `<p class="cp-you-rest">${esc(restLine(cells, n, off || !read, at))}</p>`;
+  const summary = !off && read && typeof v.summary.text === 'string' ? v.summary.text : '';
+  const rest = `<p class="cp-you-rest">${esc(summary ? (n ? summary.split(/\s*·\s*/).slice(1).join(' · ') : summary) : restLine(cells, n, off || !read, at))}</p>`;
+  const access = v.access_summary.text && !summary.split(/\s*·\s*/)[0].includes(v.access_summary.text) ? `<p class="cp-you-sub">${esc(v.access_summary.text)}</p>` : '';
   const you = !read && !v.need_you.length
     ? `<div class="cp-you is-off">${snap}<p class="cp-you-n">要你做的事还没读到</p><p class="cp-you-sub">${notRead(v.served_at, ctx.now)}</p></div>`
     : !n
       ? `<div class="cp-you is-none">${snap}<p class="cp-you-n">${dot('ok')}现在没有要你做的事</p>${rest}</div>`
-      : `<div class="cp-you${urgent ? ' is-urgent' : ''}">${snap}<p class="cp-you-n">${verb} <b>${n}</b> 件事${tag}</p>`
+      : `<div class="cp-you${urgent ? ' is-urgent' : ''}">${snap}<p class="cp-you-n">${summary ? esc(summary.split(/\s*·\s*/)[0]) : `${verb} <b>${n}</b> 件事${tag}`}</p>${access}`
         + `<ol class="cp-you-list">${list}</ol>` + rest
         + `<p class="cp-you-sub">${n > 3 ? `<a href="#need-you">还有 ${n - 3} 件 ↓</a> · ` : ''}<a href="#need-you">去处理 ↓</a>${!read && v.served_at ? ` · 这是 ${esc(when(v.served_at, ctx.now))} 读到的` : ''}</p></div>`;
   return you + knowBlock(v, ctx) + tri(cells) + score(v, ctx, off);

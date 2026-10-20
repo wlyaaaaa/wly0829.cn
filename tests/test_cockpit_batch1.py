@@ -12,7 +12,7 @@ SCRIPT = r"""
 const assert = require('node:assert/strict');
 (async () => {
   const [base, ovUrl] = process.argv.slice(1);
-  const { normalize, riverSnapshot, govState } = await import(base + 'model.js');
+  const { normalize, riverSnapshot, govState, SCHEMA } = await import(base + 'model.js');
   const R = await import(base + 'render.js');
   const OV = await import(ovUrl);
   const now = new Date('2026-10-12T15:00:00+08:00');
@@ -204,6 +204,46 @@ const assert = require('node:assert/strict');
   const smallTh = (n) => OV.html(ov({ task_health: { unrecovered_today: n, recovered_today: 1 } }), { size: 'small', now: now.getTime() });
   assert.match(smallTh(1), /data-signal="today_tasks">.*?<span class="ov-sig-value">1<small>个没恢复<\/small>.*?AI 在管/);
   assert.match(smallTh(0), /ov-sig is-green" data-signal="today_tasks">.*?0<small>个没恢复<\/small>.*?正常/);
+  // 新投影：未来事项单独排期；手机办法、去处、期限决策和AI逾期事实都能读到。
+  const { fromFull } = await import(base + 'full-adapter.js');
+  const action = { href: 'https://example.invalid/find', estimated_minutes: 2, consequence: '会错过提醒' };
+  const mobile = { kind: 'computer_mcp', copy_prompt: '请用电脑 MCP 读取条目 fixture-review，打开其中的汇报页并把截图发给我。' };
+  const improved = normalize({ ...base0, overview: ov({ owner_count: 2 }),
+    summary: { text: '要你做 2 件 · AI 在跟 3 件（其中 1 件过期）· 你暂缓 1 件' },
+    access_summary: { text: '都能在手机上办（其中 1 件借电脑 MCP）' },
+    need_you: [{ id: 'fixture-review', title: '虚构汇报', ask_kind: 'action', action, mobile_method: mobile },
+      { id: 'age-decision', title: 'AI 跟了14天的1件，请逐条定', kind: 'ai_age_decision', ask_kind: 'decision', questions: [{ id: 'old-ai', text: '虚构旧事，已跟15天，没有进展记录', options: ['A 让 AI 限期根治，10月19日前完成', 'B 不修了，接受现状：提醒仍不可用', 'C 你来处理'] }] }],
+    scheduled: [{ id: 'future-review', title: '虚构未来事项', scheduled_for: '2026-10-21' }],
+    ai_following: [{ id: 'ai-short', title: '虚构期限内的事' }],
+    counts: { ai_following: 3 }, ai_overdue: [{ id: 'ai-old', title: '虚构超期的事', overdue_since: '2026-10-10', overdue_days: 2, age_days: 4, reason: 'original_deadline_overdue', stuck_reason: 'original_deadline_overdue' }, { id: 'ai-undated', title: '虚构无日期的事', reason: 'undated_wake_condition', stuck_reason: 'undated_wake_condition' }],
+    deferred: [{ id: 'owner-wait', title: '虚构本人暂缓', action_owner: 'user' }],
+    sections: { ...base0.sections, backup_cloud: [{ id: 'backup_h', title: 'H盘备份', state: 'attention', text: '上次没有跑完', details: [{ title: '测试分类', text: '测试缺口' }] }] } });
+  const front = R.REGIONS.overview(improved, ctx), todos = R.needYou(improved, ctx);
+  assert.match(front, /要你做 2 件/); assert.match(front, /都能在手机上办（其中 1 件借电脑 MCP）/);
+  assert.match(front, /AI 在跟 3 件（其中 1 件过期）/); assert.doesNotMatch(front, /future-review/);
+  assert.match(R.REGIONS.overview({ ...improved, need_you: [], overview: ov({ owner_count: 0 }), summary: { text: 'AI 在跟 3 件' } }, ctx), /AI 在跟 3 件/);
+  const compact = normalize({ ...base0, access_summary: improved.access_summary, verdict: { text: '要你做 2 件，都能在手机上办（其中 1 件借电脑 MCP） · AI 在跟 44 件（其中 23 件过期，12 件已跟满 14 天） · 你暂缓 6 件' } });
+  const compactFront = R.REGIONS.overview(compact, ctx);
+  assert.match(compactFront, /AI 在跟 44 件（其中 23 件过期，12 件已跟满 14 天） · 你暂缓 6 件/); assert.doesNotMatch(compactFront, /<p class="cp-you-sub">都能在手机上办/); assert.equal((compactFront.match(/都能在手机上办（其中 1 件借电脑 MCP）/g) || []).length, 1);
+  assert.deepEqual(normalize({ ...base0, summary: { text: '已有总结', state: 'ok' }, verdict: compact.summary }).summary, { text: '已有总结', state: 'ok' });
+  assert.match(todos, /排在 10 月 21 日：虚构未来事项/);
+  assert.match(todos, /href="https:\/\/example.invalid\/find"[^>]*>去办 →/);
+  assert.match(todos, /约 2 分钟/); assert.match(todos, /会错过提醒/);
+  assert.match(todos, /手机借电脑 MCP 办/); assert.match(todos, /data-copy-text="请用电脑 MCP 读取条目 fixture-review/);
+  assert.match(todos, /原定 10 月 10 日，已过 2 天/); assert.doesNotMatch(todos, /虚构期限内的事/);
+  assert.match(todos, /唤醒条件没有日期，等待 AI 明确期限/); assert.doesNotMatch(todos, /original_deadline_overdue|undated_wake_condition/);
+  assert.match(todos, /data-q="old-ai"[^>]*data-qtext="（条目 old-ai）虚构旧事/); assert.match(todos, /A 让 AI 限期根治/); assert.match(todos, /B 不修了/); assert.match(todos, /C 你来处理/);
+  const backup = R.backup(improved, ctx); assert.match(backup, /<details[^>]*><summary>查看具体缺口/); assert.match(backup, /测试分类/);
+  assert.doesNotMatch(R.needYou(normalize({ schema: SCHEMA, need_you: [{ title: '虚构无效链接', action: { href: 'javascript:alert(1)' } }] }), ctx), /href="javascript:/);
+  const full = normalize(fromFull({ status: 'ok', cockpit: { summary: improved.summary, access_summary: improved.access_summary,
+    scheduled: improved.scheduled, ai_overdue: improved.ai_overdue, detail_groups: { need_you: improved.need_you } } }));
+  assert.equal(full.need_you[0].action.href, action.href); assert.equal(full.need_you[0].mobile_method.copy_prompt, mobile.copy_prompt);
+  assert.equal(full.scheduled[0].scheduled_for, '2026-10-21'); assert.equal(full.ai_overdue[0].overdue_days, 2);
+  const nested = riverSnapshot(normalize({ schema: SCHEMA, automation: { items: [{ id: 'nested', state: 'failed', plain: { name: '虚构任务', what: '虚构工作', stop: '虚构停止办法', impact: '虚构影响' } }] } }), now);
+  assert.equal(nested.automation.items[0].plain.stop, '虚构停止办法'); assert.equal(nested.automation.items[0].plain.name, '虚构任务');
+  const missing = { history: [{ date: '2026-10-17', total: null }] };
+  assert.match(R.todayBlock(normalize({ schema: SCHEMA, owner_corrections: missing }), ctx), /title="17日 没统计到"/);
+  assert.match(R.todayBlock(normalize({ schema: SCHEMA, owner_corrections: { ...missing, by_category: [{ category: '纠正', count: 2 }] } }), ctx), /10 月 17 日没统计到，近 7 天只合计已统计的日期/);
 })().catch((e) => { console.error(e); process.exit(1); });
 """
 

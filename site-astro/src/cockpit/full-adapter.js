@@ -20,19 +20,19 @@ const grant = (v) => ({ state: text(obj(v).state) || 'unknown', expires_at: ['un
 const card = (r) => {
   const d = obj(r.display), n = obj(r.normal);
   return { id: text(r.id), title: text(r.title), text: text(d.text), state: stateOf(d.state), observed_at: d.observed_at, unavailable_since: d.unavailable_since, criteria_text: n.configured === true ? text(n.value) : '', copy_ai_id: text(r.id),
-    ...Object.fromEntries(COLOR_KEYS.filter((k) => d[k] != null).map((k) => [k, d[k]])), ...(r.must_know_id || d.must_know_id ? { must_know_id: text(r.must_know_id || d.must_know_id) } : {}) };
+    ...Object.fromEntries(COLOR_KEYS.filter((k) => d[k] != null).map((k) => [k, d[k]])), details: Array.isArray(d.details) ? d.details : [], ...(r.must_know_id || d.must_know_id ? { must_know_id: text(r.must_know_id || d.must_know_id) } : {}) };
 };
 const notice = (r) => {
   const a = obj(r.action);
   return { id: text(r.id), title: text(r.title), project: text(r.project), next_step: text(r.user_action || a.label), done_when: text(r.done_when) || text(a.due_text || r.when), severity: text(r.severity) || 'grey', state: text(r.state), message: text(r.public_message || r.what_happened), at: r.at_beijing, copy_ai_id: text(r.id),
     // 首屏和“需要你”卡片要的字段：后端有就带上（P2 的按需问字段还没上线时都是空，页面按旧字段显示）
-    action_owner: text(r.action_owner), last_checked_at: r.last_checked_at || obj(r.ai_hint).last_checked_at || null, due_at: a.due_at || null,
-    where: r.where || a.where || null, minutes: r.minutes ?? a.estimated_minutes ?? null, consequence: r.consequence || a.consequence || null,
+    kind: text(r.kind), action_owner: text(r.action_owner), last_checked_at: r.last_checked_at || obj(r.ai_hint).last_checked_at || null, due_at: a.due_at || null,
+    where: r.where || a.where || null, minutes: r.minutes ?? a.estimated_minutes ?? null, consequence: r.consequence || a.consequence || null, action: a,
     ...Object.fromEntries(PASS.filter((k) => r[k] != null).map((k) => [k, r[k]])) };
 };
 // 后端 10 月 12 日加的显示颜色和责任字段（color 只取 ok/neutral/unavailable/yellow/red），有就原样带上
 const COLOR_KEYS = ['color', 'owner_action', 'owner_action_needed', 'ai_handling', 'trigger_items', 'source_over_limit'];
-const PASS = ['report_title', 'color', 'owner_action', 'owner_action_needed', 'ai_handling', 'ask_kind', 'why_you', 'steps', 'options', 'questions', 'handler', 'asked_count', 'urgent', 'headline', 'stuck', 'stuck_reason', 'done_when_text', 'reason', 'deferred_reason'];
+const PASS = ['report_title', 'color', 'owner_action', 'owner_action_needed', 'ai_handling', 'ask_kind', 'why_you', 'steps', 'options', 'questions', 'handler', 'asked_count', 'urgent', 'headline', 'stuck', 'stuck_reason', 'done_when_text', 'reason', 'deferred_reason', 'mobile_method', 'scheduled_for', 'first_registered_at', 'age_days', 'registration_unknown', 'overdue_since', 'overdue_days', 'latest_progress'];
 const LABELS = { 'cpu-gpu': 'CPU 和显卡', 'memory-network': '内存和网络' };
 
 export function fromFull(full) {
@@ -59,6 +59,8 @@ export function fromFull(full) {
     counts: { need_you: counts.need_you || 0, ai_following: counts.ai_following || 0, deferred: counts.deferred || 0, history: counts.history || 0,
       backup_problems: backups.filter((r) => r.enabled !== false && ['failed', 'stale', 'warn'].includes(r.state)).length },
     need_you: (groups.need_you || []).map(notice), ai_following: (groups.ai_following || []).map(notice), deferred: (groups.deferred || []).map(notice),
+    scheduled: (cp.scheduled || []).map(notice), access_summary: obj(cp.access_summary), summary: obj(cp.summary),
+    ...(Array.isArray(cp.ai_overdue) ? { ai_overdue: cp.ai_overdue.map(notice) } : {}),
     history_counts: obj(cp.history_counts),
     security: { personal_data: grant(f.personal_data), unrestricted: grant(f.unrestricted), windows: { state: text(screen) || 'unknown' },
       computer: { online: true, uptime_hours: typeof host.uptime_seconds === 'number' ? Math.round(host.uptime_seconds / 360) / 10 : null },

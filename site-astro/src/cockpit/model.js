@@ -68,6 +68,8 @@ export function normalize(raw) {
     verdict: { severity: obj(v.verdict).severity || 'gray', state: st(obj(v.verdict).state), observed_at: obj(v.verdict).observed_at || null },
     counts: { need_you: 0, ai_following: 0, deferred: 0, history: 0, tasks_failed_today: 0, backup_problems: 0, ...obj(v.counts) },
     need_you: list(v.need_you), ai_following: list(v.ai_following), deferred: list(v.deferred),
+    scheduled: list(v.scheduled), access_summary: obj(v.access_summary), summary: { ...obj(v.summary), text: obj(v.summary).text || obj(v.verdict).text || '' },
+    ai_overdue: Array.isArray(v.ai_overdue) ? list(v.ai_overdue) : null,
     history_counts: obj(v.history_counts),
     security: {
       personal_data: obj(sec.personal_data), unrestricted: obj(sec.unrestricted), windows: obj(sec.windows), computer: obj(sec.computer),
@@ -152,7 +154,7 @@ export function riverSnapshot(v, now = new Date()) {
       public_message: t.public_message || undefined, notice_kind: t.notice_kind || undefined,
       // 后端的显示颜色（neutral = 有状况但 AI 在管）和 AI 在管什么；河据此升中性旗，不升红黄旗
       color: t.color || undefined, ai_handling: t.ai_handling || undefined,
-      plain: { name: t.name, what: t.what || '', stop: t.stop || '', impact: t.impact || '', status_note: t.note || '', mine: t.mine === true },
+      plain: { ...obj(t.plain), name: t.name || obj(t.plain).name, what: t.what || obj(t.plain).what || '', stop: t.stop || obj(t.plain).stop || '', impact: t.impact || obj(t.plain).impact || '', status_note: t.note || obj(t.plain).status_note || '', mine: t.mine === true || obj(t.plain).mine === true },
     };
     if (p.is_panel) raw.outcomes = { kind: 'panel_heartbeat', execution_failed: p.execution_failed === true, state: p.related_state || null, heartbeat_at: t.heartbeat_at || null };
     return raw;

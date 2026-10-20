@@ -36,7 +36,7 @@ const assert = require('node:assert/strict'), vm = require('node:vm');
 
   // 全量备用入口：automation.items[].project 也保留，名字仍取 plain.name
   const full = fromFull({ status: 'ok', automation: { items: [
-    { id: 'pages', project: '虚构项目（总看板）', plain: { name: '虚构部署' }, state: 'success' },
+    { id: 'pages', project: '虚构项目（总看板）', plain: { name: '虚构部署', what: '虚构工作', stop: '虚构停止', impact: '虚构影响' }, last_run_at: at, next_run_at: '2026-10-13T15:00:00+08:00', state: 'success' },
     { id: 'plain', plain: { name: '虚构无归属' }, state: 'success' }] } });
   const ft = full.automation ? full.automation.items : full.tasks;
   const fa = (ft || []).find((t) => t.id === 'pages'), fb = (ft || []).find((t) => t.id === 'plain');
@@ -61,12 +61,17 @@ const assert = require('node:assert/strict'), vm = require('node:vm');
   assert.match(ctx.six(ctx.M, task({ id: 'x', state: 'success', project: '<b>' })), /&lt;b&gt;/);
 
   ctx.cur = card(); ctx.pick(task({ id: 'c', state: 'unknown', project: '虚构项目（总看板）', public_message: '虚构没读到结果' }), false);
-  assert.match(ctx.cur.html, /^<div class="owner"[^>]*><b>归属项目<\/b>虚构项目（总看板）<\/div>虚构没读到结果/);
+  assert.match(ctx.cur.html, /<b>归属项目<\/b>虚构项目（总看板）/); assert.match(ctx.cur.html, /虚构没读到结果/);
+  for (const label of ['在做什么', '上次什么时候跑的', '下次什么时候跑', '怎么停', '停了影响什么']) assert.ok(ctx.cur.html.includes(label), label);
   ctx.cur = card(); ctx.pick(task({ id: 'd', state: 'failed', public_message: '虚构出错了' }, 'bad'), false);
   assert.doesNotMatch(ctx.cur.html, /归属项目/);
+  assert.match(ctx.cur.html, /在做什么/); assert.match(ctx.cur.html, /虚构出错了/);
   ctx.cur = card(); ctx.pick(task({ id: 'e', state: 'success', project: '虚构项目（总看板）' }), false);
   assert.match(ctx.cur.html, /归属项目/);
   ctx.URL = URL;
+  const fullTask = riverSnapshot(normalize(full), now).automation.items.find((t) => t.id === 'pages');
+  ctx.cur = card(); ctx.pick({ ...task(fullTask, 'ai'), name: fullTask.plain.name, last: Date.parse(fullTask.last_run_at), next: Date.parse(fullTask.next_run_at) }, false);
+  for (const label of ['虚构部署', '虚构工作', '虚构停止', '虚构影响', '上次什么时候跑的', '下次什么时候跑', '15:00']) assert.ok(ctx.cur.html.includes(label), label);
   ctx.cur = card(); ctx.pick(task({ id: 'gmail', state: 'unknown', project_url: 'https://script.google.com/home/projects/fixture/edit', plain: { what: '虚构转发', stop: '虚构停止', impact: '虚构影响' } }), false); assert.match(ctx.cur.html, /href="https:\/\/script\.google\.com\/home\/projects\/fixture\/edit" target="_blank" rel="noopener noreferrer">打开Google脚本项目<\/a>/); for (const label of ['在做什么', '上次什么时候跑的', '下次什么时候跑', '有没有出错', '怎么停', '停了影响什么', '虚构停止', '虚构影响']) assert.ok(ctx.cur.html.includes(label), label);
   ctx.cur = card(); ctx.pick({ ...task({ id: 'phone', state: 'failed', plain: { what: '换WiFi后连同一路由器' } }, 'ai'), name: '回家收手机数据' }, false); assert.match(ctx.cur.html, /换WiFi后连同一路由器/);
   process.stdout.write('ok');
