@@ -179,6 +179,11 @@ export function aiPrompt(ids, name = '') {
     + '细节只从本机登记读取，不从公开状态接口读取；匹配不到就说明缺口，不另建事项。'
     + '能由 AI 办的直接办掉并核实，要我动手的说清哪一步要我做；完成后按规矩关闭原条目，再用一两句话告诉我结果。';
 }
+// “全部交给 AI”用的编号：14 天决定卡本身只是一组题，本机登记里能定位的是每题的原条目编号
+export const promptIds = (items) => (Array.isArray(items) ? items : []).flatMap((x) => {
+  const qs = x?.kind === 'ai_age_decision' && Array.isArray(x.questions) ? x.questions.map((q) => q && q.id).filter(Boolean) : [];
+  return qs.length ? qs : [x?.copy_ai_id || x?.id];
+}).filter(Boolean);
 export const PICK_FIRST = '先在上面选一项，才能复制答复';
 export const COPY_HINT = '按钮只复制一句话，贴到任意 AI 对话发送即可';
 function askCard(x, r, ctx) {
@@ -196,7 +201,7 @@ function askCard(x, r, ctx) {
   const info = [due, [where, r.minutes].filter(Boolean).map(esc).join('，'), r.doneText ? '办完后：' + esc(r.doneText) : ''].filter(Boolean);
   const facts = [['为什么要你', x.why_you], ['不做会怎样', x.consequence || x.action?.consequence]].filter(([, val]) => !isBlank(val));
   const href = https(x.action?.href || x.href);
-  const prompt = r.mobile?.copy_prompt || aiPrompt([id], r.head);
+  const prompt = r.mobile?.copy_prompt || aiPrompt(promptIds([x]), r.head);
   const meta = [x.at ? '登记于 ' + when(x.at, ctx.now) : '', Number.isFinite(x.asked_count) ? `问过你 ${x.asked_count} 次` : '', x.last_checked_at ? `最后核对 ${when(x.last_checked_at, ctx.now)}` : '', x.project ? '项目：' + x.project : ''].filter(Boolean);
   const main = qs.length
     ? `<button type="button" class="cp-btn cp-btn-main" data-copy-answer data-ref="${esc(ref)}" data-name="${esc(name)}" aria-describedby="${esc(todoId(x))}-hint" data-disabled-reason="${PICK_FIRST}" disabled>复制我的答复</button>`
@@ -229,7 +234,7 @@ function aiBlock(v, ctx) {
     const overdue = late.map((x) => {
       const at = x.overdue_since ? monthDay(x.overdue_since) : '';
       const d = Number(x.overdue_days);
-      const why = at ? `原定 ${at}${d >= 1 ? `，已过 ${d} 天` : '，今天到期还没结果'}` : '没写哪天该有结果，等 AI 定下期限';
+      const why = at ? `原定 ${at}${d >= 1 ? `，已过 ${d} 天` : '，刚过不到 1 天'}` : '没写哪天该有结果，等 AI 定下期限';
       const age = x.registration_unknown ? '登记时间不明，按满 14 天处理' : Number.isFinite(x.age_days) ? (x.age_days >= 1 ? `已跟 ${x.age_days} 天` : '今天登记') : '';
       return `<li><span>${esc(clean(x.title) || x.project)}</span><small>${esc([why, age, x.latest_progress || stuckWhy(x.stuck_reason)].filter(Boolean).join(' · '))}</small></li>`;
     }).join('');

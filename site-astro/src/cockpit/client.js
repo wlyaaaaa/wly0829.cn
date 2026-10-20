@@ -1,7 +1,7 @@
 // 驾驶舱浏览器端：页面一打开就是构建时那份快照画好的最终版式；这里只负责读新数据、原地换字。
 // 每分钟读一次（页面在后台时不读）；刷新按钮叫醒电脑重读，等三个采集器都完成再换。
 import { normalize, riverSnapshot, freshAfter } from './model.js';
-import { REGIONS, PICK_FIRST, COPY_HINT, aiPrompt } from './render.js';
+import { REGIONS, PICK_FIRST, COPY_HINT, aiPrompt, promptIds } from './render.js';
 import { asView } from './full-adapter.js';
 
 const boot = JSON.parse(document.getElementById('cockpit-boot')?.textContent || '{}');
@@ -124,7 +124,7 @@ document.addEventListener('click', async (e) => {
   const b = e.target instanceof Element ? e.target.closest('[data-copy-ai],[data-copy-ai-all],[data-copy-text],[data-copy-answer]') : null;
   if (!b || b.disabled) return;
   // “复制我的答复 / 我做完了 / 不做了 / 问 AI”：只把一段话放进剪贴板，不发任何请求
-  const ids = b.hasAttribute('data-copy-ai-all') ? view.need_you.map((x) => x.copy_ai_id || x.id) : [b.dataset.copyAi];
+  const ids = b.hasAttribute('data-copy-ai-all') ? promptIds(view.need_you) : [b.dataset.copyAi];
   const text = b.hasAttribute('data-copy-answer') ? answerText(b.closest('.cp-ask'), b) : b.hasAttribute('data-copy-text') ? b.dataset.copyText : aiPrompt(ids);
   try { await navigator.clipboard.writeText(text); b.dataset.done = '已复制，去 AI 对话粘贴发送'; } catch { b.dataset.done = '复制不了，请手动选中'; }
   setTimeout(() => delete b.dataset.done, 2500);

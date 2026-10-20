@@ -240,7 +240,7 @@ const assert = require('node:assert/strict');
     { id: 'n0', title: '虚构今天到期', overdue_since: '2026-10-12T09:30:00+08:00', overdue_days: 0, age_days: 0 },
     { id: 'n9', title: '虚构跟了九天', overdue_since: '2026-10-05', overdue_days: 7, age_days: 9 },
     { id: 'nu', title: '虚构登记不明', overdue_since: '2026-10-11', overdue_days: 1, registration_unknown: true }] }), ctx);
-  assert.doesNotMatch(late, /已过 0 天|已跟 0 天/); assert.match(late, /原定 10 月 12 日，今天到期还没结果 · 今天登记/);
+  assert.doesNotMatch(late, /已过 0 天|已跟 0 天/); assert.match(late, /原定 10 月 12 日，刚过不到 1 天 · 今天登记/);
   assert.ok(late.indexOf('虚构登记不明') < late.indexOf('虚构跟了九天') && late.indexOf('虚构跟了九天') < late.indexOf('虚构今天到期'));
   // 排期标题自带日期时不重复
   const dup = R.needYou(normalize({ ...base0, need_you: [], scheduled: [{ id: 's1', title: '10月21日（周三）：虚构复盘', scheduled_for: '2026-10-21' }, { id: 's2', title: '11/6 虚构快照', scheduled_for: '2026-11-06' }] }), ctx);
@@ -249,6 +249,8 @@ const assert = require('node:assert/strict');
   const ap = R.aiPrompt(['pending-a', 'pending-b']);
   assert.match(ap, /^驾驶舱条目 pending-a、pending-b：/); assert.match(ap, /电脑 MCP/); assert.match(ap, /驾驶舱待办登记和来源登记/);
   assert.match(ap, /不从公开状态接口读取/);
+  // 14 天决定卡按每题原条目编号交给 AI，普通卡用自己的编号
+  assert.deepEqual(R.promptIds(improved.need_you), ['fixture-review', 'old-ai']);
   assert.doesNotMatch(ap, /ai_hint|\/computer-access|api\/status|[A-Za-z]:\\|registries\/|\.json/);
   assert.match(R.needYou(normalize({ ...base0, need_you: [{ id: 'plain-ask', title: '虚构普通事', ask_kind: 'action' }] }), ctx), /data-copy-text="驾驶舱条目 plain-ask「虚构普通事」：请用电脑 MCP/);
   assert.match(todos, /data-q="old-ai"[^>]*data-qtext="（条目 old-ai）虚构旧事/); assert.match(todos, /A 让 AI 限期根治/); assert.match(todos, /B 不修了/); assert.match(todos, /C 你来处理/);
@@ -275,7 +277,8 @@ class CockpitBatch1Test(unittest.TestCase):
     def test_copy_prompt_reads_local_registries(self):
         # 普通卡片和“全部交给 AI”都走 render.js 的 aiPrompt；不再让 AI 去公开接口的 ai_hint 找细节
         client = (ROOT / 'site-astro' / 'src' / 'cockpit' / 'client.js').read_text(encoding='utf-8')
-        self.assertIn("aiPrompt } from './render.js'", client)
+        self.assertIn("aiPrompt, promptIds } from './render.js'", client)
+        self.assertIn("promptIds(view.need_you)", client)
         self.assertIn(': aiPrompt(ids);', client)
         self.assertNotIn('api/status', client)
         self.assertNotIn('ai_hint', client.split('// 复制给 AI')[1])
