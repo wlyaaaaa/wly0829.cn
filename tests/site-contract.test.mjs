@@ -13,9 +13,9 @@ const documents = new Map(await Promise.all(snapshot.routes.map(async route => [
 const decode = value => value?.replace(/&(?:amp|quot|apos|lt|gt|#39);/g, entity => ({'&amp;':'&','&quot;':'"','&apos;':"'",'&#39;':"'",'&lt;':'<','&gt;':'>'})[entity]);
 const meta = (html, name) => decode(html.match(new RegExp(`<meta\\b[^>]*\\b(?:name|property)="${name}"[^>]*\\bcontent="([^"]*)"`))?.[1]);
 function assertCurrentDocument(html, route) {
+  if (/http-equiv="refresh"/.test(html) || /<meta[^>]*(?:robots|googlebot)[^>]*noindex/.test(html.split('</head>')[0])) return false;
   const canonical = html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]+)"/)?.[1];
   assert.ok(canonical?.startsWith(siteUrl + '/'), `${route} lacks a site canonical`);
-  if (/http-equiv="refresh"/.test(html) || /<meta[^>]*(?:robots|googlebot)[^>]*noindex/.test(html.split('</head>')[0])) return false;
   assert.equal(canonical, siteUrl + route, `${route} canonical drifted`);
   assert.match(html, /<main[\s>]/, `${route} lacks static content`);
   const source = sources.find(page => page.url === new URL(canonical).pathname);
@@ -42,7 +42,8 @@ test('SEO, sitemap, robots and custom 404 match the current route set', async ()
   assert.deepEqual([...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]).sort(), indexable.sort());
   assert.match(await readFile(path.join(root, 'dist/robots.txt'), 'utf8'), /Sitemap: https:\/\/wly0829\.cn\/sitemap\.xml/);
   const notFound = await readFile(path.join(root, 'dist/404.html'), 'utf8');
-  assert.match(notFound, /啦啦啦，没找到页面啦/);
+  assert.match(notFound, /这个网址没有页面/);
+  assert.match(notFound, /href="\/projects\/"/);
   assert.match(notFound, /name="robots" content="noindex/);
 });
 
