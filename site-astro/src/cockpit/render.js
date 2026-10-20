@@ -169,6 +169,21 @@ const questionsOf = (x, r) => {
 const ACTION_KINDS = ['action', 'cooperate', 'do'];
 const DECIDE = ['decide', 'decision', 'choose'];
 const isBlank = (s) => !s || /^\s*(待补|待补充|暂无|无)(说明)?[。\s]*$/.test(String(s));
+// 复制给 AI：只给条目编号，让 AI 用电脑 MCP 或在本机读驾驶舱待办登记和来源登记定位细节。
+// 公开状态接口不再带 AI 侧的自由文本（验收办法、备注、完成条件、汇报位置），所以不让 AI 去那里找；
+// 和后端手机提示 mobile_method.copy_prompt 同一思路：不写本机文件路径，不内嵌正文或日志。
+export function aiPrompt(ids, name = '') {
+  const list = (Array.isArray(ids) ? ids : [ids]).map((id) => String(id || '').trim()).filter(Boolean);
+  return `驾驶舱条目 ${list.join('、')}${name ? `「${name}」` : ''}：请用电脑 MCP（先用 ComputerContext 核对当前上下文）或直接在这台电脑上，`
+    + '读取电脑配置项目（PCConfig）的驾驶舱待办登记和来源登记，按编号逐条定位细节；公开编号按 PCConfig 的公开编号规则和原编号对应。'
+    + '细节只从本机登记读取，不从公开状态接口读取；匹配不到就说明缺口，不另建事项。'
+    + '能由 AI 办的直接办掉并核实，要我动手的说清哪一步要我做；完成后按规矩关闭原条目，再用一两句话告诉我结果。';
+}
+// “全部交给 AI”用的编号：14 天决定卡本身只是一组题，本机登记里能定位的是每题的原条目编号
+export const promptIds = (items) => (Array.isArray(items) ? items : []).flatMap((x) => {
+  const qs = x?.kind === 'ai_age_decision' && Array.isArray(x.questions) ? x.questions.map((q) => q && q.id).filter(Boolean) : [];
+  return qs.length ? qs : [x?.copy_ai_id || x?.id];
+}).filter(Boolean);
 export const PICK_FIRST = '先在上面选一项，才能复制答复';
 export const COPY_HINT = '按钮只复制一句话，贴到任意 AI 对话发送即可';
 function askCard(x, r, ctx) {
@@ -186,7 +201,7 @@ function askCard(x, r, ctx) {
   const info = [due, [where, r.minutes].filter(Boolean).map(esc).join('，'), r.doneText ? '办完后：' + esc(r.doneText) : ''].filter(Boolean);
   const facts = [['为什么要你', x.why_you], ['不做会怎样', x.consequence || x.action?.consequence]].filter(([, val]) => !isBlank(val));
   const href = https(x.action?.href || x.href);
-  const prompt = r.mobile?.copy_prompt || `${ref}${name}这条请你处理：读驾驶舱状态里这条的详情，用一两句话告诉我要做什么；能由 AI 直接办的就直接办掉并核实关掉`;
+  const prompt = r.mobile?.copy_prompt || aiPrompt(promptIds([x]), r.head);
   const meta = [x.at ? '登记于 ' + when(x.at, ctx.now) : '', Number.isFinite(x.asked_count) ? `问过你 ${x.asked_count} 次` : '', x.last_checked_at ? `最后核对 ${when(x.last_checked_at, ctx.now)}` : '', x.project ? '项目：' + x.project : ''].filter(Boolean);
   const main = qs.length
     ? `<button type="button" class="cp-btn cp-btn-main" data-copy-answer data-ref="${esc(ref)}" data-name="${esc(name)}" aria-describedby="${esc(todoId(x))}-hint" data-disabled-reason="${PICK_FIRST}" disabled>复制我的答复</button>`
@@ -213,16 +228,24 @@ const GENERIC_DONE = /^\s*AI\s*核实登记的完成条件已满足后关闭本�
 function aiBlock(v, ctx) {
   const now = ctx.now;
   if (v.ai_overdue) {
-    const overdue = v.ai_overdue.map((x) => {
+    // 跟得最久的排最前（登记时间不明按满 14 天算）；“已过 0 天”“已跟 0 天”换成人话
+    const ageOf = (x) => (x.registration_unknown ? 14 : Number.isFinite(x.age_days) ? x.age_days : -1);
+    const late = [...v.ai_overdue].sort((a, b) => ageOf(b) - ageOf(a));
+    const overdue = late.map((x) => {
       const at = x.overdue_since ? monthDay(x.overdue_since) : '';
-      const why = at ? `原定 ${at}，已过 ${x.overdue_days ?? 0} 天` : '唤醒条件没有日期，等待 AI 明确期限';
-      const age = x.registration_unknown ? '登记时间不明，按满 14 天处理' : Number.isFinite(x.age_days) ? `已跟 ${x.age_days} 天` : '';
+      const d = Number(x.overdue_days);
+      const why = at ? `原定 ${at}${d >= 1 ? `，已过 ${d} 天` : '，刚过不到 1 天'}` : '没写哪天该有结果，等 AI 定下期限';
+      const age = x.registration_unknown ? '登记时间不明，按满 14 天处理' : Number.isFinite(x.age_days) ? (x.age_days >= 1 ? `已跟 ${x.age_days} 天` : '今天登记') : '';
       return `<li><span>${esc(clean(x.title) || x.project)}</span><small>${esc([why, age, x.latest_progress || stuckWhy(x.stuck_reason)].filter(Boolean).join(' · '))}</small></li>`;
     }).join('');
+    // 没过期的也列出来（收起），总数和清单对得上，不藏
+    const lateIds = new Set(v.ai_overdue.map((x) => x.id));
+    const rest = v.ai_following.filter((x) => !lateIds.has(x.id));
+    const restList = rest.length ? `<details class="cp-more" id="ai-rest"><summary>其余 ${rest.length} 件还没到约定日子，你不用动手</summary><ul class="cp-ailist">${rest.map((x) => `<li><span>${esc(clean(x.title) || x.project)}</span>${x.last_checked_at ? `<small>${esc(checkedAgo(x.last_checked_at, now))}</small>` : ''}</li>`).join('')}</ul></details>` : '';
     const n = v.counts.ai_following || v.ai_following.length;
-    return `<div class="cp-ai" id="ai"><h3 class="cp-sub">AI 在跟 ${n} 件</h3>`
-      + (overdue ? `<p class="cp-ai-cap">${dot('neutral')}过了自己定的日子还没结果</p><ul class="cp-ailist">${overdue}</ul>` : '')
-      + govRun(v, ctx) + aiWork(v, ctx) + `</div>`;
+    return `<div class="cp-ai" id="ai"><h3 class="cp-sub">AI 在跟 ${n} 件${v.ai_overdue.length ? `<span class="cp-ai-parts">其中 ${v.ai_overdue.length} 件过了约定日子</span>` : ''}</h3>`
+      + (overdue ? `<p class="cp-ai-cap">${dot('neutral')}过了自己定的日子还没结果（跟得最久的在前）</p><ul class="cp-ailist">${overdue}</ul>` : '')
+      + restList + govRun(v, ctx) + aiWork(v, ctx) + `</div>`;
   }
   const rows = v.ai_following.map((x) => {
     const title = clean(x.title);
@@ -268,7 +291,7 @@ function govRun(v, ctx) {
   const ask = `驾驶舱每周 AI 体检${at ? `（${dateHm(at)} 那一轮）` : ''}：请读本机状态接口（/computer-access/api/status 全量）里的 governance.last_run 和这一轮的体检回执，告诉我修好、关掉、转暂缓、还在跟的各是哪几件。`;
   const sub = (key, label, items, note) => (items.length ? `<details class="cp-more cp-gov-more" id="${key}"><summary>${label} ${items.length} 件</summary><ul class="cp-ailist">${items.map((x) => `<li><span>${esc(x.title)}</span>${x[note] ? `<small>${esc(x[note])}</small>` : ''}</li>`).join('')}</ul></details>` : '');
   return `<div class="cp-gov"><p class="cp-gov-line">${dot('neutral')}<span class="cp-gov-text">${head}${next ? ` · 下次 ${esc(dateHm(next))}` : ''}</span>${copyText(ask, '问 AI 详情', ' cp-btn-quiet')}</p>`
-    + (acts.length ? `<details class="cp-more cp-gov-more" id="gov-actions"><summary>当时留下的说明 ${acts.length} 条</summary><p>这是上次体检的记录；现在要办的事以上面的当前待办为准。</p><ul class="cp-gov-acts">${acts.map((x) => `<li><span>${esc(x.title)}</span>${copyText(`${ask}这条记录：${x.title}。请先核对现在是否仍需处理，再说明当前进展。`, '问 AI 这条记录')}</li>`).join('')}</ul></details>` : '')
+    + (acts.length ? `<details class="cp-more cp-gov-more" id="gov-actions"><summary>当时留下的说明 ${acts.length} 条</summary><p>这是上次体检的记录；现在要办的事以上面的当前待办为准。</p><ul class="cp-gov-acts">${acts.map((x) => `<li><span>${esc(x.title)}</span>${copyText(`${ask}这条记录：${String(x.title).replace(/[。.\s]+$/, '')}。请先核对现在是否仍需处理，再说明当前进展。`, '问 AI 这条记录')}</li>`).join('')}</ul></details>` : '')
     + sub('gov-closed', '那次自动关掉', closed, 'evidence') + sub('gov-deferred', '那次新转暂缓', deferred, 'reason') + `</div>`;
 }
 // 项目后台进展（ai_work）：已接入的后台任务、留下没合并的分支；后端没给这块就不出
@@ -312,7 +335,9 @@ export function needYou(v, ctx) {
     : `<h3 class="cp-sub">暂缓 · 等条件到了再做（${v.deferred.length} 件）</h3><ul class="cp-list cp-wait">${v.deferred.map(fmt).join('')}</ul>`;
   const scheduled = v.scheduled.map((x) => {
     const r = { ...readTodo(x, ctx.now), scheduled: true, red: false, urgent: false };
-    return `<details class="cp-more"><summary>排在 ${esc(monthDay(x.scheduled_for || x.due_at))}：${esc(r.head)}</summary>${askCard(x, r, ctx)}</details>`;
+    // 标题自己已带日期（“10月21日（周三）：”“11/6 ”）时不再重复一遍
+    const head = r.head.replace(/^\s*(?:\d{1,2}\s*月\s*\d{1,2}\s*日(?:\s*[（(]周.[)）])?\s*[：:]|\d{1,2}\/\d{1,2}\s+)\s*/, '') || r.head;
+    return `<details class="cp-more"><summary>排在 ${esc(monthDay(x.scheduled_for || x.due_at))}：${esc(head)}</summary>${askCard(x, r, ctx)}</details>`;
   }).join('');
   return anchor('pending') + body + scheduled + aiBlock(v, ctx) + wait;
 }
@@ -654,13 +679,16 @@ const overview = (v, ctx) => {
   const tag = !n ? '' : urgent ? `<span class="cp-you-tag is-urgent">${urgent === n ? (n === 1 ? '急' : '都急') : `${urgent} 件急`}</span>` : '<span class="cp-you-tag">都不急</span>';
   const list = items.slice(0, 3).map(({ x, r }) => `<li><a href="#${esc(todoId(x))}">${dot(r.red ? 'red' : 'attention')}<span class="cp-you-title">${esc(r.head)}</span><span class="cp-you-chips">${chips(r)}</span></a></li>`).join('');
   const summary = !off && read && typeof v.summary.text === 'string' ? v.summary.text : '';
-  const rest = `<p class="cp-you-rest">${esc(summary ? (n ? summary.split(/\s*·\s*/).slice(1).join(' · ') : summary) : restLine(cells, n, off || !read, at))}</p>`;
-  const access = v.access_summary.text && !summary.split(/\s*·\s*/)[0].includes(v.access_summary.text) ? `<p class="cp-you-sub">${esc(v.access_summary.text)}</p>` : '';
+  // 后端一句话的第一段是“要你做 N 件（……）”时才拿来当标题，否则仍用自己数的件数；急不急的标签照样挂
+  const parts = summary.split(/\s*·\s*/), lead = n && /^要你做/.test(parts[0]) ? parts[0] : '';
+  const restText = summary ? (lead ? parts.slice(1).join(' · ') : n ? parts.filter((s) => !/^要你做/.test(s)).join(' · ') : summary) : restLine(cells, n, off || !read, at);
+  const rest = restText ? `<p class="cp-you-rest">${esc(restText)}</p>` : '';
+  const access = v.access_summary.text && !lead.includes(v.access_summary.text) ? `<p class="cp-you-sub">${esc(v.access_summary.text)}</p>` : '';
   const you = !read && !v.need_you.length
     ? `<div class="cp-you is-off">${snap}<p class="cp-you-n">要你做的事还没读到</p><p class="cp-you-sub">${notRead(v.served_at, ctx.now)}</p></div>`
     : !n
       ? `<div class="cp-you is-none">${snap}<p class="cp-you-n">${dot('ok')}现在没有要你做的事</p>${rest}</div>`
-      : `<div class="cp-you${urgent ? ' is-urgent' : ''}">${snap}<p class="cp-you-n">${summary ? esc(summary.split(/\s*·\s*/)[0]) : `${verb} <b>${n}</b> 件事${tag}`}</p>${access}`
+      : `<div class="cp-you${urgent ? ' is-urgent' : ''}">${snap}<p class="cp-you-n">${lead ? esc(lead) + tag : `${verb} <b>${n}</b> 件事${tag}`}</p>${access}`
         + `<ol class="cp-you-list">${list}</ol>` + rest
         + `<p class="cp-you-sub">${n > 3 ? `<a href="#need-you">还有 ${n - 3} 件 ↓</a> · ` : ''}<a href="#need-you">去处理 ↓</a>${!read && v.served_at ? ` · 这是 ${esc(when(v.served_at, ctx.now))} 读到的` : ''}</p></div>`;
   return you + knowBlock(v, ctx) + tri(cells) + score(v, ctx, off);

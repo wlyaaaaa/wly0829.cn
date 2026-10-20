@@ -1,7 +1,7 @@
 // 驾驶舱浏览器端：页面一打开就是构建时那份快照画好的最终版式；这里只负责读新数据、原地换字。
 // 每分钟读一次（页面在后台时不读）；刷新按钮叫醒电脑重读，等三个采集器都完成再换。
 import { normalize, riverSnapshot, freshAfter } from './model.js';
-import { REGIONS, PICK_FIRST, COPY_HINT } from './render.js';
+import { REGIONS, PICK_FIRST, COPY_HINT, aiPrompt, promptIds } from './render.js';
 import { asView } from './full-adapter.js';
 
 const boot = JSON.parse(document.getElementById('cockpit-boot')?.textContent || '{}');
@@ -118,14 +118,14 @@ async function refresh() {
 }
 window.CockpitData = { refresh, get view() { return view; } };
 
-// 复制给 AI：只给条目 id，让 AI 去本机接口读那一条的 ai_hint，不内嵌日志
-const prompt = (ids) => ids.map((id) => `驾驶舱条目 ${id}`).join('；') + '：请读本机状态接口（/computer-access/api/status 全量）里这些 id 的条目和 ai_hint，处理后核实，按规矩关闭。';
+// 复制给 AI：只给条目编号；提示词由 render.js 的 aiPrompt 生成——让 AI 用电脑 MCP 或在本机读驾驶舱待办登记和来源登记，
+// 不去公开状态接口找细节（那里已不带 AI 侧自由文本），不写本机路径、不内嵌正文
 document.addEventListener('click', async (e) => {
   const b = e.target instanceof Element ? e.target.closest('[data-copy-ai],[data-copy-ai-all],[data-copy-text],[data-copy-answer]') : null;
   if (!b || b.disabled) return;
   // “复制我的答复 / 我做完了 / 不做了 / 问 AI”：只把一段话放进剪贴板，不发任何请求
-  const ids = b.hasAttribute('data-copy-ai-all') ? view.need_you.map((x) => x.copy_ai_id || x.id) : [b.dataset.copyAi];
-  const text = b.hasAttribute('data-copy-answer') ? answerText(b.closest('.cp-ask'), b) : b.hasAttribute('data-copy-text') ? b.dataset.copyText : prompt(ids);
+  const ids = b.hasAttribute('data-copy-ai-all') ? promptIds(view.need_you) : [b.dataset.copyAi];
+  const text = b.hasAttribute('data-copy-answer') ? answerText(b.closest('.cp-ask'), b) : b.hasAttribute('data-copy-text') ? b.dataset.copyText : aiPrompt(ids);
   try { await navigator.clipboard.writeText(text); b.dataset.done = '已复制，去 AI 对话粘贴发送'; } catch { b.dataset.done = '复制不了，请手动选中'; }
   setTimeout(() => delete b.dataset.done, 2500);
 });
