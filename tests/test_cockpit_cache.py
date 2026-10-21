@@ -298,9 +298,9 @@ class CockpitRetentionTests(unittest.TestCase):
         self.assertIn(self.when(t1) + ' 读到', self.text('computer'))
         self.assertEqual(self.storage(), {})
 
-    def test_xiaomi_real_device_profile_never_shows_unreachable_graph(self):
+    def test_android_412x915_profile_never_shows_unreachable_graph(self):
         self.new_context(viewport={'width': 412, 'height': 915}, device_scale_factor=3.5, is_mobile=True, has_touch=True,
-                         user_agent='Mozilla/5.0 (Linux; Android 15; Xiaomi 15 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36')
+                         user_agent='Mozilla/5.0 (Linux; Android 15) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36')
         self.load(h.view(observed=h.ago(hours=2)))
         good = h.view()
         good['grafana'] = {'state': 'ok', 'checked_at': good['served_at'], 'links': [

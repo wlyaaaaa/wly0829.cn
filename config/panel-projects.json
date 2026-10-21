@@ -508,7 +508,6 @@
             "tools/Install-CursorSchemeGuard.ps1",
             "tools/CursorSchemeGuard/**",
             "tools/Invoke-DisplayTopologyRecovery.ps1",
-            "tools/Invoke-XiaomiShareWatchdog.ps1",
             "tools/PrimaryOledBlackout/**",
             "tools/rtss-powershell.cfg",
             "docs/recovery/runtime_restore_order.md",

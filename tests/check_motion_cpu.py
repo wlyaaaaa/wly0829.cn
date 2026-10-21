@@ -76,7 +76,7 @@ async def run(args, address):
                 profile=args.cache/('cpu-'+str(factor)+'-'+view+'-'+uuid.uuid4().hex)
                 context=await pw.chromium.launch_persistent_context(str(profile), executable_path=str(args.chrome), headless=True,
                     viewport={'width':width,'height':height}, device_scale_factor=3.5 if phone else 1, is_mobile=phone, has_touch=phone,
-                    **({'user_agent':'Mozilla/5.0 (Linux; Android 15; Xiaomi 15 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36'} if phone else {}))
+                    **({'user_agent':'Mozilla/5.0 (Linux; Android 15) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36'} if phone else {}))
                 try:
                     page=context.pages[0]; cdp=await context.new_cdp_session(page)
                     acknowledgement=await cdp.send('Emulation.setCPUThrottlingRate',{'rate':factor if factor==4 else 1})

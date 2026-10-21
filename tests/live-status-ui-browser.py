@@ -54,7 +54,7 @@ async def run(args):
     '''.replace('CASES', json.dumps(CASES, ensure_ascii=False)).replace('ICONS', json.dumps(icon_urls, ensure_ascii=False)) + '</script></body></html>'
     records, errors = [], []
     async with async_playwright() as pw:
-        for device, options in [('desktop', {'viewport': {'width': 1440, 'height': 1000}}), ('xiaomi-portrait', {'viewport': {'width': 412, 'height': 915}, 'device_scale_factor': 3.5, 'is_mobile': True, 'has_touch': True})]:
+        for device, options in [('desktop', {'viewport': {'width': 1440, 'height': 1000}}), ('android-412x915', {'viewport': {'width': 412, 'height': 915}, 'device_scale_factor': 3.5, 'is_mobile': True, 'has_touch': True})]:
             context = await pw.chromium.launch_persistent_context(str(args.temp / device), executable_path=str(args.chrome), headless=True, timezone_id='America/Chicago', **options)
             async def route(handler):
                 request = handler.request

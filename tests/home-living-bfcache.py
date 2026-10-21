@@ -75,7 +75,7 @@ async def run(args):
     try:
         async with async_playwright() as pw:
             for device, options in [('desktop', {'viewport': {'width': 1440, 'height': 900}}),
-                                    ('xiaomi', {'viewport': {'width': 412, 'height': 915}, 'device_scale_factor': 3.5, 'is_mobile': True, 'has_touch': True})]:
+                                    ('android-412x915', {'viewport': {'width': 412, 'height': 915}, 'device_scale_factor': 3.5, 'is_mobile': True, 'has_touch': True})]:
                 context = await pw.chromium.launch_persistent_context(str(profiles/device), executable_path=str(args.chrome), headless=True,
                     # Playwright's real installed default disables this browser feature.
                     ignore_default_args=['--disable-back-forward-cache'],
@@ -104,9 +104,9 @@ async def run(args):
                 await page.wait_for_function('window.__cacheShows?.some(e=>e.persisted)')
                 restored = await page.evaluate('({id:__cacheDocument,shows:__cacheShows,hides:__cacheHides,diagnostics:HomeLiving.diagnostics()})')
                 assert restored['id'] == first['id'] and any(x['persisted'] for x in restored['shows']), (first, restored, not_used)
-                alternate = {'width': 915, 'height': 412} if device == 'xiaomi' else {'width': 412, 'height': 915}
-                target = 'landscape' if device == 'xiaomi' else 'portrait'
-                original = 'portrait' if device == 'xiaomi' else 'landscape'
+                alternate = {'width': 915, 'height': 412} if device == 'android-412x915' else {'width': 412, 'height': 915}
+                target = 'landscape' if device == 'android-412x915' else 'portrait'
+                original = 'portrait' if device == 'android-412x915' else 'landscape'
                 await page.set_viewport_size(alternate)
                 await page.wait_for_function("o=>HomeLiving.diagnostics().orientation===o&&HomeLiving.diagnostics().phase==='live'", arg=target)
                 await page.wait_for_timeout(250)

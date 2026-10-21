@@ -48,11 +48,11 @@ const cases=[
 const viewers=['ai-cli-profile-manager','emerald-veil','localocr','meshclip-kit','pc-panel-hub','proxyclean','ramdisk-guardian','timeaudit','video-scaffold','work-delivery-copilot'].map(x=>'/projects/'+x+'/').concat('/skills/pdf-render-safe/');
 try{
   for(const mobile of [false,true]){
-    scope=mobile?'小米 15 Pro 竖屏':'电脑 1440';
+    scope=mobile?'安卓 412×915 竖屏':'电脑 1440';
     await c.send('Emulation.setDeviceMetricsOverride',{width:mobile?412:1440,height:mobile?915:900,deviceScaleFactor:mobile?3.5:1,mobile,screenOrientation:{type:'portraitPrimary',angle:0}});
     await c.send('Emulation.setTouchEmulationEnabled',{enabled:mobile,maxTouchPoints:5});
     const version=browser.version.Browser.replace('HeadlessChrome','Chrome');
-    await c.send('Emulation.setUserAgentOverride',{userAgent:mobile?'Mozilla/5.0 (Linux; Android 15; Xiaomi 15 Pro) AppleWebKit/537.36 (KHTML, like Gecko) '+version+' Mobile Safari/537.36':browser.version['User-Agent'],platform:mobile?'Linux armv8l':'Win32'});
+    await c.send('Emulation.setUserAgentOverride',{userAgent:mobile?'Mozilla/5.0 (Linux; Android 15) AppleWebKit/537.36 (KHTML, like Gecko) '+version+' Mobile Safari/537.36':browser.version['User-Agent'],platform:mobile?'Linux armv8l':'Win32'});
     for(const [source,target] of cases){
       await go(source);await click(`[...document.querySelectorAll('a[href]')].find(e=>e.getAttribute('href')===${JSON.stringify(target)}&&e.getClientRects().length)`,{touch:mobile});await waitReady();
       const s=await state();assert.equal(s.url,target);record('named-navigation',{source,target,state:s});

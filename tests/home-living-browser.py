@@ -127,7 +127,7 @@ async def run(args):
     try:
         async with async_playwright() as pw:
             for device, opts in [('desktop', {'viewport': {'width': 1440, 'height': 900}}),
-                                 ('xiaomi', {'viewport': {'width': 412, 'height': 915}, 'device_scale_factor': 3.5, 'is_mobile': True, 'has_touch': True})]:
+                                 ('android-412x915', {'viewport': {'width': 412, 'height': 915}, 'device_scale_factor': 3.5, 'is_mobile': True, 'has_touch': True})]:
                 if args.device and args.device != device:
                     continue
                 context = await pw.chromium.launch_persistent_context(str(profiles/device), executable_path=str(args.chrome), headless=True,
@@ -224,11 +224,11 @@ async def run(args):
 
                 await load()
                 await page.wait_for_timeout(6000)
-                if device in ['desktop', 'xiaomi']:
-                    alternate = {'width': 915, 'height': 412} if device == 'xiaomi' else {'width': 412, 'height': 915}
+                if device in ['desktop', 'android-412x915']:
+                    alternate = {'width': 915, 'height': 412} if device == 'android-412x915' else {'width': 412, 'height': 915}
                     original_viewport = opts['viewport']
-                    alternate_orientation = 'landscape' if device == 'xiaomi' else 'portrait'
-                    original_orientation = 'portrait' if device == 'xiaomi' else 'landscape'
+                    alternate_orientation = 'landscape' if device == 'android-412x915' else 'portrait'
+                    original_orientation = 'portrait' if device == 'android-412x915' else 'landscape'
                     before = await page.evaluate('HomeLiving.diagnostics()')
                     await page.set_viewport_size(alternate)
                     try:
@@ -256,8 +256,8 @@ async def run(args):
                     assert all(not x['visible'] or x['it'] >= 6.5 for x in final_rotate['probe']['intros'] if x['scene'] != '1')
                     state['delay_h'] = False
                     results.append({'device': device, 'case': 'rapid-rotation-late-old-assets-do-not-cover-new-scene', 'snapshot': final_rotate['diagnostics']})
-                    if device == 'xiaomi':
-                        await page.locator('#home-01 .hero-live-layer [data-hl="screen"]').screenshot(path=str(output/'xiaomi-screen-crop.png'), scale='css')
+                    if device == 'android-412x915':
+                        await page.locator('#home-01 .hero-live-layer [data-hl="screen"]').screenshot(path=str(output/'android-412x915-screen-crop.png'), scale='css')
 
                 await cdp.send('Emulation.setCPUThrottlingRate', {'rate': 4})
                 await load()
@@ -300,6 +300,6 @@ if __name__ == '__main__':
     parser.add_argument('--release', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--chrome', type=Path, default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'))
-    parser.add_argument('--device', choices=['desktop', 'xiaomi'])
+    parser.add_argument('--device', choices=['desktop', 'android-412x915'])
     parser.add_argument('--status-only',action='store_true',help='Only regress the shared status model on the current homepage')
     asyncio.run(run(parser.parse_args()))

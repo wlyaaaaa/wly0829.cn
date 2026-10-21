@@ -125,7 +125,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "这台电脑上有 30 个项目分工干活"
+        "text_ref": "这台电脑上的现役项目分工干活"
       },
       {
         "type": "illustration",
@@ -180,7 +180,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "这台电脑上有 30 个项目分工干活"
+        "text_ref": "这台电脑上的现役项目分工干活"
       },
       {
         "type": "illustration",
@@ -1090,8 +1090,8 @@
       },
       {
         "type": "content_card",
-        "text_ref": "⑦ 复制粘贴",
-        "columns": 3,
+        "text_ref": "⑧ 临时接力",
+        "columns": 2,
         "columns_v": 1,
         "align": "left",
         "connector": "none",
@@ -1099,7 +1099,7 @@
         "icons": "none"
       }
     ],
-    "notes": "新构图，待样张；本方向没有原图，参照 how-05。参照 how-13 单列场景卡，五项各独立卡，不增全景图。 横版为新构图：按同页 how-05 卡片组两列自适应，上下顺序按定稿。 qa04 清理：原能做/前提/限制文字全部由正文输出；移除core未消费的copy_labels，不删原字、不改变当前可见结构。",
+    "notes": "新构图，待样张；本方向没有原图，参照 how-05。参照 how-13 单列场景卡，四项各独立卡，不增全景图。 横版为新构图：按同页 how-05 卡片组两列自适应，上下顺序按定稿。 qa04 清理：原能做/前提/限制文字全部由正文输出；移除core未消费的copy_labels，不删原字、不改变当前可见结构。",
     "reference_screen": "how-05"
   },
   {
@@ -1140,16 +1140,6 @@
       },
       {
         "type": "content_card",
-        "text_ref": "⑦ 复制粘贴",
-        "columns": 1,
-        "columns_v": 1,
-        "align": "left",
-        "connector": "none",
-        "illustration": "none",
-        "icons": "none"
-      },
-      {
-        "type": "content_card",
         "text_ref": "⑧ 临时接力",
         "columns": 1,
         "columns_v": 1,
@@ -1169,7 +1159,7 @@
         "icons": "none"
       }
     ],
-    "notes": "新构图，待样张；本方向没有原图，参照 how-13。参照 how-13 单列场景卡，五项各独立卡，不增全景图。 qa04 清理：原能做/前提/限制文字全部由正文输出；移除core未消费的copy_labels，不删原字、不改变当前可见结构。",
+    "notes": "新构图，待样张；本方向没有原图，参照 how-13。参照 how-13 单列场景卡，四项各独立卡，不增全景图。 qa04 清理：原能做/前提/限制文字全部由正文输出；移除core未消费的copy_labels，不删原字、不改变当前可见结构。",
     "reference_screen": "how-13"
   },
   {

@@ -918,7 +918,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "两台电脑的剪贴板不同步",
+        "text_ref": "ChatGPT添加副机连接时，授权一直转圈",
         "columns": 1,
         "whole_block": true,
         "illustration": "left_inside",
@@ -928,24 +928,6 @@
         ],
         "status_tag": "shape_only",
         "commands": "monospace",
-        "row": "symptoms",
-        "width": "50%",
-        "icon_position": "header_left"
-      },
-      {
-        "type": "points_card",
-        "text_ref": "ChatGPT添加副机连接时，授权一直转圈",
-        "columns": 1,
-        "whole_block": true,
-        "illustration": "left_inside",
-        "icons": "auto",
-        "header_icon": [
-          1
-        ],
-        "status_tag": "shape_only",
-        "commands": "monospace",
-        "row": "symptoms",
-        "width": "50%",
         "icon_position": "header_left"
       }
     ],
@@ -968,27 +950,13 @@
       },
       {
         "type": "points_card",
-        "text_ref": "两台电脑的剪贴板不同步",
-        "columns": 1,
-        "whole_block": true,
-        "illustration": "left_inside",
-        "icons": "auto",
-        "header_icon": [
-          0
-        ],
-        "status_tag": "shape_only",
-        "commands": "monospace",
-        "icon_position": "header_left"
-      },
-      {
-        "type": "points_card",
         "text_ref": "ChatGPT添加副机连接时，授权一直转圈",
         "columns": 1,
         "whole_block": true,
         "illustration": "left_inside",
         "icons": "auto",
         "header_icon": [
-          1
+          0
         ],
         "status_tag": "shape_only",
         "commands": "monospace",
