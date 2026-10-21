@@ -1,0 +1,1013 @@
+---
+{
+ "title": "手机直取",
+ "kind": "skill",
+ "url": "/skills/phone-direct/",
+ "tagline": "AI 要用我手机上的文件、短信、通知或截图，自己去取；连不上就请我连一下。",
+ "toc": [
+  {
+   "id": "top",
+   "label": "开头"
+  },
+  {
+   "id": "examples",
+   "label": "例子"
+  },
+  {
+   "id": "abilities",
+   "label": "能做的事"
+  },
+  {
+   "id": "limits",
+   "label": "边界"
+  }
+ ],
+ "page": {
+  "schema": "site-b1.page.v1",
+  "page": "skill-phone-direct",
+  "kind": "skill",
+  "title": "手机直取",
+  "url": "/skills/phone-direct/",
+  "tagline": "AI 要用我手机上的文件、短信、通知或截图，自己去取；连不上就请我连一下。",
+  "status": "",
+  "status_line": {
+   "state": "在用",
+   "last": {
+    "label": "上次更新",
+    "at": "2026-10-21 21:13"
+   },
+   "facts": [],
+   "as_of": "2026-10-22",
+   "source": "技能和电脑配置与恢复的提交记录；使用次数 Unknown（AI 使用小记录只记到 10 月 20 日，技能 10 月 21 日才建）"
+  },
+  "public": false,
+  "repo_url": null,
+  "capability": "",
+  "based_on": {
+   "commit": "0348800dc0491d04a8d0b3bf266a4f6e6f0eeb49",
+   "commit_time": "2026-10-21T21:13:44+08:00",
+   "file": "E:\\.agents\\skills\\phone-direct\\SKILL.md；E:\\PCConfig\\docs\\runtime\\phone-direct.md（PCConfig 7df54f9b）；E:\\PCConfig\\registries\\phone_direct.json",
+   "rules_release": "E279"
+  },
+  "video_prompt": "",
+  "registry": {
+   "relations": [
+    {
+     "id": "r-pcconfig",
+     "with": "pcconfig",
+     "direction": "入口",
+     "flow": "技能只调用电脑配置与恢复的 tools/phone_direct.py，复用常驻无线 ADB 手机桥的共用连接；运行事实在 docs/runtime/phone-direct.md",
+     "source": "E:\\.agents\\skills\\phone-direct\\SKILL.md 第 8、16–22 行；E:\\PCConfig\\docs\\runtime\\phone-direct.md 第 3–8 行"
+    },
+    {
+     "id": "r-personal-media",
+     "with": "personal-media",
+     "direction": "交给",
+     "flow": "照片视频的保全、清空和回写不走手机直取",
+     "source": "E:\\.agents\\skills\\phone-direct\\SKILL.md 第 14 行；E:\\PCConfig\\docs\\runtime\\phone-direct.md 第 35 行"
+    },
+    {
+     "id": "r-wechat-direct",
+     "with": "wechat-direct",
+     "direction": "交给",
+     "flow": "微信聊天由看微信聊天读取",
+     "source": "E:\\.agents\\skills\\phone-direct\\SKILL.md 第 14 行"
+    },
+    {
+     "id": "r-cockpit",
+     "with": "cockpit",
+     "direction": "交给",
+     "flow": "无人值守连不上时经 Set-OwnerItem 登记“手机连一下”，来源“手机桥连接恢复”；连上后由手机桥或 ensure 核实关闭",
+     "source": "E:\\PCConfig\\docs\\runtime\\phone-direct.md 第 33–34 行；E:\\PCConfig\\registries\\pending_acceptance.json phone-direct-1792581836、phone-direct-1792581894"
+    }
+   ],
+   "mentions": [
+    {
+     "target": "/projects/pcconfig/",
+     "screen": "skill-phone-direct-01",
+     "text": "电脑配置与恢复"
+    },
+    {
+     "target": "/projects/pcconfig/",
+     "screen": "skill-phone-direct-03",
+     "text": "去看电脑配置与恢复"
+    },
+    {
+     "target": "/skills/personal-media/",
+     "screen": "skill-phone-direct-04",
+     "text": "找照片和录音"
+    },
+    {
+     "target": "/projects/pcconfig/",
+     "screen": "skill-phone-direct-04",
+     "text": "取短信验证码"
+    },
+    {
+     "target": "/skills/wechat-direct/",
+     "screen": "skill-phone-direct-04",
+     "text": "看微信聊天"
+    },
+    {
+     "target": "/projects/pcconfig/",
+     "screen": "skill-phone-direct-04",
+     "text": "电脑配置与恢复"
+    },
+    {
+     "target": "/cockpit/",
+     "screen": "skill-phone-direct-04",
+     "text": "驾驶舱"
+    }
+   ]
+  },
+  "notes": {
+   "merged": [],
+   "dropped": [
+    "命令、子命令参数、JSON 格式名、退出码、暂存目录和删除白名单的通配写法是给 AI 的操作说明，用人话写成规矩，不上页。",
+    "手机号、短信和通知内容、手机里的具体文件名、配对码、IP 和端口不上页；远程端口只写“远程端口”。"
+   ],
+   "unsure": [
+    "第 1 屏六句“怎么跟 AI 说”和第 2 屏两句“我：……”是替本人口吻写的示例说法；第 2 屏整屏是示例，已写明。",
+    "第 1 屏实测那句出自 owner-decisions 2026-10.md“手机远程可以用 Tailscale……”一节上下文（AI 整理：10 月 21 日 19:05—19:10 家里约 25 秒自动重连、关 Wi-Fi 经 Tailscale 取回测试文件两端 SHA-256 一致）和 PCConfig registries/pending_acceptance.json 两条 phone-direct 条目（19:23、19:24 登记，19:24、19:25 AI 机核关闭）。",
+    "现用手机 vivo X500 Pro Max 出自 owner-decisions 2026-10.md 10 月 6 日“换新手机定 vivo X500 Pro Max”一节；小米 15 Pro 10 月 21 日已卖出，旧做法已退役，页上不写。",
+    "使用次数 Unknown：AI 使用小记录最后一条在 10 月 20 日 23:46，技能 10 月 21 日 19:26 才建。",
+    "第 1 屏插画复用素材库“手机远程”（手机到笔记本、信封飘过），不是专门为这页画的。"
+   ]
+  },
+  "search_aliases": [
+   "从手机取文件到电脑",
+   "手机短信里的解压码",
+   "看手机通知",
+   "手机截图到电脑",
+   "手机连不上电脑",
+   "无线调试连手机"
+  ]
+ },
+ "source": {
+  "page": "sources/pages/skill-phone-direct/page.json",
+  "sha256": "581edd8f2224cc263c2e508d1658b6d0346a562bb2e1ff3404a66956ea126b4d",
+  "converted_at_beijing": "2026-10-22T07:41:51+08:00"
+ }
+}
+---
+
+::screen{#skill-phone-direct-01 section="top"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-phone-direct-01",
+  "section": "top",
+  "title": "做什么、怎么跟 AI 说",
+  "scene": "横版画面：左上大标题毛笔艺术字，下面一行小字（技能名那一行，〔电脑配置与恢复〕画成绿色下划线的链接）。左半边上“它做什么”两段，下面一段浅绿底的小字（不用点名那段）和一行灰色小字（10 月 21 日实测那行）。右半边一张大的水彩对话卡片“怎么跟 AI 说”：六句说法，每句画成一个浅绿色圆角对话气泡，两列排，气泡里的字就是引号里的话（引号也画）。下面一幅水彩插画：左边一部手机、右边一台笔记本电脑，一封信沿着绿色的丝带从手机飘到电脑，周围是清新亮绿的叶子。插画里不画字。",
+  "portrait": "竖版：标题和技能名一行；“它做什么”两段；插画缩成一行；六个对话气泡一行一个；浅绿小字和灰色小字在最后。",
+  "links": [
+   {
+    "text": "电脑配置与恢复",
+    "href": "/projects/pcconfig/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "手机直取",
+     "align": "left",
+     "size": "large",
+     "row": "hero",
+     "width": "50%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次更新 10 月 21 日 21:13",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 22 日 · 技能和电脑配置与恢复的提交记录；使用次数 Unknown（AI 使用小记录只记到 10 月 20 日，技能 10 月 21 日才建）",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "技能名",
+     "row": "hero"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "它做什么",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "电脑上的 AI",
+     "row": "hero"
+    },
+    {
+     "type": "notice",
+     "text_ref": "不用点名",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "10 月 21 日",
+     "row": "hero"
+    },
+    {
+     "type": "dialogue",
+     "text_ref": "怎么跟 AI 说",
+     "columns": 2,
+     "split_paras": true,
+     "illustration": "none",
+     "row": "hero",
+     "width": "50%"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "row": "hero",
+     "align": "center"
+    }
+   ],
+   "notes": "新页，照看驾驶舱技能页第 1 屏写：左栏标题、技能名、它做什么、不用点名、实测一行；右栏六句说法，下面放插画，按右栏空出来的高度放。插画复用素材库“手机远程”（手机到笔记本、信封沿绿丝带飘过，清新亮绿叶子），已看过图。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "手机直取",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次更新 10 月 21 日 21:13",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 22 日 · 技能和电脑配置与恢复的提交记录；使用次数 Unknown（AI 使用小记录只记到 10 月 20 日，技能 10 月 21 日才建）"
+    },
+    {
+     "type": "prose",
+     "text_ref": "技能名"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "它做什么"
+    },
+    {
+     "type": "prose",
+     "text_ref": "电脑上的 AI"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "size": "banner"
+    },
+    {
+     "type": "dialogue",
+     "text_ref": "怎么跟 AI 说",
+     "columns": 1,
+     "split_paras": true,
+     "illustration": "none"
+    },
+    {
+     "type": "notice",
+     "text_ref": "不用点名"
+    },
+    {
+     "type": "prose",
+     "text_ref": "10 月 21 日"
+    }
+   ],
+   "notes": "竖版照画面描述：标题和技能名、它做什么两段、插画一行、六个气泡一行一个，浅绿小字和灰色小字在最后。"
+  }
+ },
+ "images": [
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/手机远程.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-01-illustration-01",
+   "source_phrase": "一部手机、一台笔记本电脑，一封信沿着绿色丝带从手机飘到电脑（不画字）",
+   "sha256": "3317f722ba53b862b350f39fe53147912db4d115fd2e82e9f181c1023b9d7054",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+手机直取
+
+技能名 phone-direct · 〔电脑配置与恢复〕里手机桥的取用入口
+
+**它做什么**
+电脑上的 AI 干活时，常常要用到我手机里的东西：刚在手机上导出的账单、短信里的解压码、一条通知、手机屏幕现在的样子。以前得我自己传到电脑上；现在 AI 需要时直接经无线调试去手机上取，不先问我。在家走家里 Wi-Fi；我在外面时，把手机的 VPN 切到 Tailscale，也能远程取。
+
+连不上，AI 先自己重连；还不行，就用一句话告诉我该在手机上做什么。取回的文件两头核对过才算数；默认只读，不动手机的设置。
+
+**怎么跟 AI 说**
+“把我刚在手机上下载的微信支付账单拿过来。”
+“滴滴的个人信息导出好了，取到电脑上，核对完把手机上那份删了。”
+“看看短信里有没有那个压缩包的解压码。”
+“手机上现在有什么通知？”
+“截一张手机屏幕给我看看。”
+“我在外面，手机已经切到 Tailscale 了，把下载目录里最新的文件取过来。”
+
+不用点名：AI 要用手机上的东西时自己会用上它。照片视频的保全和清空、网站登录验证码、微信聊天各有自己的入口，见最后一屏。
+
+10 月 21 日晚在真手机上试过：家里断开后自动连回；关掉 Wi-Fi、切到 Tailscale 后远程取回一个测试文件，两头指纹一致；后台任务连不上时在驾驶舱登记“手机连一下”，连上后自动关掉。
+
+::screen{#skill-phone-direct-02 section="examples"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-phone-direct-02",
+  "section": "examples",
+  "title": "一个完整例子",
+  "scene": "横版画面：左上标题，旁边一枚灰色小标签（“示例”）。左边约三分之二宽画成一段竖向的对话：最上面“我”的气泡（右对齐，浅绿底），下面“AI 做了什么”五步画成一条细竖线串起的小节点（每个节点一个小水彩图标：一个插头、一把小锁、一个文件夹、一张清单被放大镜照着、一个回收箱），再下面“AI 交回”画成左对齐的白底气泡。右边约三分之一宽一张竖卡片“连不上时”，一问一答两个气泡，下面一张两列小表格。",
+  "portrait": "竖版：标题和标签；对话从上到下：我的气泡、五步、AI 的回复；“连不上时”的问答和表格放在最后。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "一个完整例子",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
+     "type": "dialogue",
+     "text_ref": "我：",
+     "sides": [
+      "right"
+     ],
+     "illustration": "none"
+    },
+    {
+     "type": "timeline",
+     "text_ref": "AI 做了什么",
+     "direction": "vertical",
+     "columns": 1,
+     "connector": "ribbon",
+     "illustration": "left_inside",
+     "icons": "auto"
+    },
+    {
+     "type": "dialogue",
+     "text_ref": "AI 交回",
+     "sides": [
+      "left"
+     ],
+     "illustration": "none"
+    },
+    {
+     "type": "dialogue",
+     "text_ref": "连不上时",
+     "split_paras": true,
+     "sides": [
+      "right",
+      "left"
+     ],
+     "illustration": "none"
+    },
+    {
+     "type": "table",
+     "text_ref": "电脑看到的情况"
+    }
+   ],
+   "notes": "照看驾驶舱第 2 屏：我的问话、AI 做了什么五步（各一个小图标）、AI 交回；最后“连不上时”一问一答，再接五种情况的两列表。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "一个完整例子",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
+     "type": "dialogue",
+     "text_ref": "我：",
+     "sides": [
+      "right"
+     ],
+     "illustration": "none"
+    },
+    {
+     "type": "timeline",
+     "text_ref": "AI 做了什么",
+     "direction": "vertical",
+     "columns": 1,
+     "connector": "ribbon",
+     "illustration": "left_inside",
+     "icons": "auto"
+    },
+    {
+     "type": "dialogue",
+     "text_ref": "AI 交回",
+     "sides": [
+      "left"
+     ],
+     "illustration": "none"
+    },
+    {
+     "type": "dialogue",
+     "text_ref": "连不上时",
+     "split_paras": true,
+     "sides": [
+      "right",
+      "left"
+     ],
+     "illustration": "none"
+    },
+    {
+     "type": "table",
+     "text_ref": "电脑看到的情况"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/手机电脑连接.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-02-icon-01",
+   "source_phrase": "手机和电脑连着：先确认连着手机",
+   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/04-锁-clean.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-02-icon-02",
+   "source_phrase": "一把小锁：先过资料锁",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文件夹.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-02-icon-03",
+   "source_phrase": "一个文件夹：看下载目录找到那份账单",
+   "sha256": "ee8723cb2fa06df3b8158d41e608706146cb7eb566edcba01341bd8371f5a06f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-02-icon-04",
+   "source_phrase": "清单被放大镜照着：两头核对指纹和大小",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/47-回收站文件-clean.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-02-icon-05",
+   "source_phrase": "一个回收箱：名单内的导出核对后删手机副本",
+   "sha256": "d71f70f2ef8e55126d0f2d5ad821da30ff08a54adce39f5ecd0fd14c3d31eea6",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "skill-md-to-pdf/skill-md-to-pdf-02-title-01.png",
+   "fallback": false,
+   "key": "skill-phone-direct-02-title-01",
+   "sha256": "ebeedcd896facfd1af9e0b5b28e5faf151361e1fe40c83443eab292fd4e32f07",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+一个完整例子
+
+示例：照这个技能的做法写的，不是某一次的记录
+
+我：“把我刚在手机上导出的微信支付账单拿到电脑上，拿完手机上那份可以删了。”
+
+**AI 做了什么**
+1. 先确认连着手机：手机在家里 Wi-Fi 上、开着无线调试，直接连上，并核对连上的确实是我这台手机。
+2. 再过资料锁：账单是我的私人资料，锁着就停下，请我在电脑上验证解锁后再取。
+3. 看手机的下载目录，按修改时间从新到旧列出来，找到刚导出的那份账单。
+4. 先拉到电脑上一个英文名的暂存处，手机那头和电脑这头各算一遍指纹（SHA-256）、比大小，一致才挪到我要的文件夹，原来的中文名和修改时间都保留；那里已有同名但内容不同的文件，就另起一个名字，不覆盖。
+5. 微信支付账单在我同意过“取回核对后可以删”的名单里：删之前再核一次手机上那份没变，删完确认手机上已经没有了。
+
+**AI 交回**
+“账单已经放进你要的文件夹，两头核对一致；手机上那份已经删掉。”
+
+**连不上时**
+我：“手机上现在有什么通知？”
+AI：“电脑在家里的网络上找不到手机。你在外面的话，把手机 VPN 切到 Tailscale，我就能远程取，取完你再切回；你在家的话，确认手机连着家里 Wi-Fi、开着无线调试。”
+
+| 电脑看到的情况 | AI 请你做的事 |
+|---|---|
+| 手机上要确认一次调试授权 | 屏幕上有“允许无线调试”提示就点“允许”（勾上始终允许）；没有提示就进无线调试里“使用配对码配对设备”，把屏幕上的地址和六位配对码发给 AI |
+| 无线调试开着，电脑却连不上 | 重新配对一次，做法同上 |
+| 手机在家里 Wi-Fi 上，但无线调试没开 | 设置 → 开发者选项 → 打开“无线调试” |
+| 家里网络上找不到手机 | 在外面就切 Tailscale；在家就连上家里 Wi-Fi、开着无线调试（只开数据网络时连不上） |
+| 切了 Tailscale，但远程端口关着 | 手机重启过就会这样，这次远程取不到；回到家连上 Wi-Fi 后电脑会自动重新打开，到时再取 |
+
+::screen{#skill-phone-direct-03 section="abilities"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-phone-direct-03",
+  "section": "abilities",
+  "title": "能做的事",
+  "scene": "横版画面：上方一条横跨整屏的浅绿底圆角横幅，写能做的事那一句，右端一个白底细绿边按钮（〔去看电脑配置与恢复〕）。横幅下一张两列三行的小表格“两条线，AI 自己挑”。再下面一张大卡片“用这个技能时，AI 守的规矩”，八条短句两列排，每条前一个小水彩图标（一部手机、一个插头、一个岔路口的指路牌、一张打钩的待办纸、一张清单被放大镜照着、一个回收箱、一把小锁、一道栏杆闸门）。",
+  "portrait": "竖版：横幅和按钮在上（按钮单独一行）；表格；八条规矩一行一条。",
+  "links": [
+   {
+    "text": "去看电脑配置与恢复",
+    "href": "/projects/pcconfig/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "能做的事",
+     "size": "large",
+     "align": "center"
+    },
+    {
+     "type": "notice",
+     "text_ref": "从手机取四样东西"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "两条线，AI 自己挑"
+    },
+    {
+     "type": "table",
+     "text_ref": "我在哪"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "用这个技能时",
+     "columns": 1,
+     "item_cards": true,
+     "inner_columns": 2,
+     "icons": "auto",
+     "illustration": "left_inside"
+    }
+   ],
+   "notes": "照看驾驶舱第 3 屏：一句能做的事（带去看电脑配置与恢复的链接），中间两条线的小表，下面八条规矩两列小卡，每条一个小图标。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "能做的事",
+     "size": "large",
+     "align": "center"
+    },
+    {
+     "type": "notice",
+     "text_ref": "从手机取四样东西"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "两条线，AI 自己挑"
+    },
+    {
+     "type": "table",
+     "text_ref": "我在哪"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "用这个技能时",
+     "columns": 1,
+     "item_cards": true,
+     "inner_columns": 1,
+     "icons": "auto",
+     "illustration": "left_inside"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/手机.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-03-icon-01",
+   "source_phrase": "一部手机：要用就去取",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-03-icon-02",
+   "source_phrase": "一把扳手：连不上先自己修",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/岔路.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-03-icon-03",
+   "source_phrase": "岔路口的指路牌：不假设我在家或在电脑前",
+   "sha256": "60c8c99a88b19baf8d010994b8a9b34841a6138e79791cbeef9e79686267047a",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/打钩协议.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-03-icon-04",
+   "source_phrase": "一张打钩的待办纸：后台任务登记“手机连一下”",
+   "sha256": "38bfbb0b14144de8d31dae2c44e827fb5c523a9d66355d5385fd91ec86487061",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-03-icon-05",
+   "source_phrase": "清单被放大镜照着：两头核对",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/47-回收站文件-clean.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-03-icon-06",
+   "source_phrase": "一个回收箱：只删说好的",
+   "sha256": "d71f70f2ef8e55126d0f2d5ad821da30ff08a54adce39f5ecd0fd14c3d31eea6",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/04-锁-clean.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-03-icon-07",
+   "source_phrase": "一把小锁：私人资料先过锁",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/闸门.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-03-icon-08",
+   "source_phrase": "一道栏杆闸门：只走这一个入口",
+   "sha256": "eee93d6e0a2d4999039530b2ce668ce4beebb63c2370a8befee8c33aa87b4ae5",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-r3-7dadc2c869cdb800f4de.png",
+   "fallback": false,
+   "key": "skill-phone-direct-03-title-01",
+   "sha256": "ea2afebfd1846c75e18aab7cec4ed1200b479bfa134dde5540602e3a65bc59a9",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+能做的事
+
+从手机取四样东西：下载目录等处的文件、短信、当前的通知、屏幕截图。确认连接、自动重连、连不上时请我连一下，也归它管；手机通知转到电脑、三端剪贴板这些常驻功能在项目页，〔去看电脑配置与恢复〕
+
+**两条线，AI 自己挑**
+| 我在哪 | 怎么连 | 要知道的 |
+|---|---|---|
+| 家里 | 手机连着家里 Wi-Fi、开着无线调试，电脑直接连上 | 手机回到家里 Wi-Fi 后，常驻的手机桥几秒内就自动连回 |
+| 外面 | 手机 VPN 切到 Tailscale，任何网络都行 | 用手机流量，每条命令一结束就断开；切 Tailscale 期间代理暂停，取完可切回；手机重启后要先回家连一次 Wi-Fi 才能再远程取 |
+
+**用这个技能时，AI 守的规矩**
+- 要用就去取：AI 需要手机上的东西时直接去拿，不先问我（10 月 21 日我定的）；没连上才请我。
+- 连不上先自己修：先把能试的路一条条试过（已连着的、家里网络里找到的、上次记下的家里地址、Tailscale），每条都核对连上的是不是我这台手机；仍不行才用一句话请我，写清是点“允许”、重新配对、打开无线调试还是切 Tailscale。
+- 不假设我在家或在电脑前：我在家却连不上，算故障；我人在外面，就把“在外面怎么做”“在家怎么做”都说清。
+- 后台任务不干等：没人看着时连不上，就在驾驶舱登记一条“手机连一下”，写明要取什么，先做不依赖手机的部分，回执里写明手机那部分还没做；已有没关的同类条目不重复登记；手机连上后核实了就关掉。
+- 取回的文件两头核对：手机和电脑两头的 SHA-256 和大小一致才算取到；保留中文名和修改时间；同名不同内容另起名，不覆盖。
+- 只删说好的：只删我同意过的两类导出（微信支付账单、滴滴个人信息导出），而且要取回核对成功、删前手机上那份没变、删后确认没了；名单外的一律不删，要加新类型先问我。
+- 私人资料先过锁：文件、短信、通知、截图都是我的私人资料，锁着就停下请我验证；短信和通知的正文只在这次回答里用，不写进文件、日志或提交；配对码不显示、不留存。
+- 只走这一个入口：不用电脑上另装的 adb，也不重启 adb 服务，免得打断常驻的手机桥。
+
+::screen{#skill-phone-direct-04 section="limits"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-phone-direct-04",
+  "section": "limits",
+  "title": "边界",
+  "scene": "横版画面：左上标题。左边约三分之一宽一张卡片“管”，一段字；右边约三分之二宽一张两列表格“不管，交给谁”，右列的名字画成链接；表格下面一张卡片“不做”。每块左上一个小水彩图标（一面打钩的盾牌、一个指路牌、一个禁止小标）。",
+  "portrait": "竖版：“管”卡片在上；表格改成小卡片一行一张（粗体写“这些事”，下面写找谁）；“不做”在最后。",
+  "links": [
+   {
+    "text": "找照片和录音",
+    "href": "/skills/personal-media/"
+   },
+   {
+    "text": "取短信验证码",
+    "href": "/projects/pcconfig/"
+   },
+   {
+    "text": "看微信聊天",
+    "href": "/skills/wechat-direct/"
+   },
+   {
+    "text": "电脑配置与恢复",
+    "href": "/projects/pcconfig/"
+   },
+   {
+    "text": "驾驶舱",
+    "href": "/cockpit/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "边界",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "管",
+     "columns": 1,
+     "illustration": "left_inside",
+     "icon_position": "header_left",
+     "header_icon": [
+      0
+     ]
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "不管，交给谁"
+    },
+    {
+     "type": "table",
+     "text_ref": "这些事"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "不做",
+     "columns": 1,
+     "illustration": "left_inside",
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/icons/禁止文件.png"
+     ]
+    }
+   ],
+   "notes": "照看驾驶舱第 4 屏：管、不管交给谁（表格）、不做。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "边界",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "管",
+     "columns": 1,
+     "illustration": "left_inside",
+     "icon_position": "header_left",
+     "header_icon": [
+      0
+     ]
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "不管，交给谁"
+    },
+    {
+     "type": "table",
+     "text_ref": "这些事"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "不做",
+     "columns": 1,
+     "illustration": "left_inside",
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/icons/禁止文件.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/盾牌对勾.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skill-phone-direct-04-icon-01",
+   "source_phrase": "管",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/禁止文件.png",
+   "fallback": false,
+   "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
+   "key": "skill-phone-direct-04-icon-02",
+   "source_phrase": "不做",
+   "sha256": "416e742e6b404499ba1014eaab7d17a21ab518cd3139112dadfb009f47a3ed3e",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-r3-7a7e13ca96796233d6be.png",
+   "fallback": false,
+   "key": "skill-phone-direct-04-title-01",
+   "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+边界
+
+**管**
+从我现在的手机（vivo X500 Pro Max）取文件、短信、当前通知和截图；确认连接、自动重连，连不上时请我连一下；取回的文件核对一致，名单内的导出核对后删手机副本。
+
+**不管，交给谁**
+| 这些事 | 找谁 |
+|---|---|
+| 手机照片视频的保全、清空和回写 | 〔找照片和录音〕 |
+| 网站登录要的短信验证码 | 按需取码，见〔取短信验证码〕 |
+| 微信聊天记录 | 〔看微信聊天〕 |
+| 手机通知转到电脑、三端剪贴板 | 常驻的手机桥，见〔电脑配置与恢复〕 |
+| 驾驶舱上“手机连一下”那条 | 在〔驾驶舱〕看；手机连上后 AI 核实关闭 |
+
+**不做**
+- 不改手机系统设置，不装卸应用，不动账号。
+- 不持续拉取，也不远程操作手机；每次只取这一次要的。
+- 名单外的文件不删；照片视频的清空归照片视频那边。
+- 不另开服务：复用现有的手机桥，没有为它新装后台服务或定时任务。
