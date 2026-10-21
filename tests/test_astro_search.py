@@ -11,6 +11,23 @@ spec = importlib.util.spec_from_file_location('astro_search_tests', ROOT/'site-a
 runtime = importlib.util.module_from_spec(spec); spec.loader.exec_module(runtime)
 
 class AstroSearchTests(unittest.TestCase):
+    def test_search_budget_overrun_warns_without_rewriting_or_failing(self):
+        with tempfile.TemporaryDirectory() as workspace:
+            root = Path(workspace)
+            payload = b'window.index="complete searchable text";'
+            for name in ('search-index.js', 'search-projects.js', 'search-project-demo.js'):
+                (root/name).write_bytes(payload)
+            policy = {key + '_gzip_budget_kib': 0.001 for key in
+                      ('search_index', 'project_search_index', 'project_search_shard')}
+            with patch.object(runtime, 'read', return_value={'refresh_policy': policy}), patch('builtins.print') as output:
+                result = runtime.search_budget_review(root)
+            self.assertEqual(len(result), 3)
+            self.assertEqual(output.call_count, 3)
+            for name, row in result.items():
+                self.assertEqual(row['status'], 'warning')
+                self.assertGreater(row['gzip_bytes'], row['review_bytes'])
+                self.assertEqual((root/name).read_bytes(), payload)
+
     def test_wire_roundtrip_preserves_unicode_and_literal_markers(self):
         rows = [{'detail': '😀ABCΣ', 'search': value} for value in ('😀abcΣtail', '\x01dliteral😀', '\x01sliteral', '')]
         wire = runtime.search_wire(rows, encode=True)
