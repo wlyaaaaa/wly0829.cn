@@ -3775,6 +3775,62 @@
         ]
       },
       "runtime_status_key": "remote-control"
+    },
+    {
+      "id": "personal-finance",
+      "order": 38,
+      "title": "个人财务",
+      "enabled": true,
+      "presentation_mode": "curated_packaging",
+      "route": "/projects/personal-finance",
+      "content_format": "typeset",
+      "ai_refresh": {
+        "mode": "manual_owner_only",
+        "content_path": "sources/pages/personal-finance/page.json",
+        "semantic_revision": 1,
+        "scope": "Method-only explanation selected by the owner on 2026-10-22 06:47 (Beijing): how bills are collected each month, how they are reconciled, how real spending is separated from repayments and self-transfers, and how the monthly figures are reported. Three modules: bill-collection, reconciliation, monthly-report. Never publish amounts, balances, monthly averages, transaction counts, merchants or shops, bill entries, account or card suffixes, or the specific bank and card product; Alipay and WeChat Pay may be named as bill sources, banks appear only as bank credit-card or debit-card statements, and commerce or life services only as categories (e-commerce orders, food delivery, ride-hailing).",
+        "collectors": [
+          "manual_git_owner_evidence: only after an explicit owner refresh request, read back the PRIVATE wlyaaaaa/personal-finance main identity, default branch, commit, file list and clean/sync facts through Git Owner without exposing a local source locator",
+          "manual_method_evidence: read only personal-finance AGENTS.md, the personal-finance Skill, the daily-preferences spending/debit/commerce/gmail source modules, tests/test_spending.py and docs/source-rules.md, and PCConfig monthly runbook, monthly export reminder script, checklist registry and scheduled-task state; CURRENT.md and bill originals may be opened only to understand structure and no concrete value from them enters the page; never log into a bank or payment platform, read credentials, run imports or send reminders for this page"
+        ],
+        "conditional_collectors": [],
+        "manual_refresh_rule": "this page is updated only when the owner explicitly names personal-finance (or explicitly includes it in an owner-requested full refresh); source commits, monthly updates, bill imports, rule, Skill, test and runtime changes never create a website task",
+        "content_format": "typeset"
+      },
+      "source": {
+        "repo": "wlyaaaaa/personal-finance",
+        "visibility": "PRIVATE",
+        "default_branch": "main",
+        "public_identity": "private-personal-finance-method-source",
+        "locator_owner": "ignored-private-content-rules",
+        "method_dependencies": [
+          "wlyaaaaa/daily-preferences (spending reconciliation)",
+          "wlyaaaaa/PCConfig (monthly export reminder and runbook)"
+        ]
+      },
+      "displayed_areas": [
+        "curated_project_overview",
+        "project_modules",
+        "monthly_export_reminder_and_owner_started_monthly_update",
+        "ai_fetch_hash_verify_and_incremental_import",
+        "spending_vs_repayment_and_self_transfer_separation",
+        "dedupe_refund_foreign_currency_and_bnpl_order_status",
+        "monthly_report_snapshot_runway_and_receivables_method",
+        "method_only_snapshot_without_financial_values"
+      ],
+      "impact_sources": [],
+      "refresh_rules": {
+        "manual_refresh_when": [
+          "the owner explicitly requests a personal-finance project refresh",
+          "the owner explicitly includes personal-finance in a full panel refresh"
+        ],
+        "automatic_refresh_when": [],
+        "ignore_when": [
+          "all source commits, monthly updates, bill imports, rules, Skills, tests and runtime changes when there is no explicit owner refresh request",
+          "all CURRENT.md, bill original, balance, debt, receivable and individual spending changes because those values are outside the public method page",
+          "any source-side materiality claim or impact assessment because this project has no automatic website handoff"
+        ]
+      }
     }
   ]
 }

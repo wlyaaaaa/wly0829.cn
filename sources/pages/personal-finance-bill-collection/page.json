@@ -1,0 +1,151 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "personal-finance-bill-collection",
+  "kind": "project",
+  "title": "账单每月收一次，AI 自己去取",
+  "url": "/projects/personal-finance/bill-collection/",
+  "parent": "personal-finance",
+  "status_line": {
+    "state": "待验收",
+    "as_of": "2026-10-22",
+    "source": "每月手册和提醒任务 10 月 21 日建成；提醒任务从未运行，第一次排在 11 月 6 日 09:00（10 月 22 日只读查看）"
+  },
+  "screens": [
+    {
+      "id": "personal-finance-bill-collection-01",
+      "section": "top",
+      "title": "账单每月收一次，AI 自己去取",
+      "text": "# 账单每月收一次，AI 自己去取\n\n〔回到项目 → 个人财务〕　〔复制 AI 续作说明〕\n\n个人财务 · 功能说明\n\n我每月只负责点导出、回一封信；取文件、核对、放好、导入都由 AI 做，缺哪家写清楚，不让一家拖住整轮。\n\n**当前情况：**提醒任务 10 月 21 日已注册，还没正式发过一次；取回和导入的做法已写进每月手册和个人理解库的来源规则，还没完整跑过一轮月度更新。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 个人财务",
+          "href": "/projects/personal-finance/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/personal-finance/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-finance-bill-collection-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n各家账单散在 App、邮箱和手机里，有的要申请、要等一天、还带解压码。我自己去收，总会漏一两家；漏了，这个月的花费就偏低，而且看不出来。\n\n## 举个实际例子\n\n（示例）6 号早上收到“导出日”邮件，我在支付宝申请交易流水、在微信支付下载账单、在银行 App 申请储蓄卡流水，回信写上解压码和几项余额。7 号说“开始月度总更新”，AI 把邮箱附件、手机下载目录里的账单、电脑下载目录里的电商订单表都取回来，核对后导入。\n\n## 最后我会得到什么\n\n一个按来源和批次日期分好的原件目录、一次增量导入，以及驾驶舱里一行当月回执：哪几家到了、哪家缺了、为什么。\n\n## 结果怎么看\n\n## 成功时\n\n原件指纹核对过、已经导入：这个月的对账可以开始。\n\n## 发现问题时\n\n某家没到、解压失败或手机没连上：回执里写明缺哪家，其余来源照常往下走。\n\n## 做不了时\n\n资料锁着：先挂驾驶舱请我解锁，这一轮记“没做成”；我还没回信：能做的照做，最后挂一条请我补报。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-finance-bill-collection-03",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n6 号收到提醒邮件后点好导出；7 号跟 AI 说“开始月度总更新”。平时想补一次账单，也可以直接说“把这个月的账单取回来”。\n\n## 需要准备什么\n\n- 在各 App 点好导出：支付宝交易流水、微信支付账单、银行储蓄卡流水、银行信用卡账单、电商订单表、出行记录导出\n- 回信里的解压码；没写的，AI 从手机通知或短信里读\n- 手机开着无线调试（只有微信支付账单和出行导出需要）\n\n## 从开始到拿到结果\n\n1. **取回**　AI 从邮箱附件、手机 Download 目录、电脑下载目录拿到当月文件；要登录的网页在我已登录的 Chrome 后台标签页里操作。\n\n2. **放好**　按来源和批次日期放进私有来源投递区，核对 SHA-256；手机副本两端一致后才删，电脑下载副本进回收站。\n\n3. **导入**　个人理解库按原来源编号增量导入；电商订单和售后、外卖记录由 AI 用浏览器采集。\n\n4. **交付与接续**　驾驶舱登记当月回执；缺的来源写明，下次补上后按同一来源编号接着导入。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-finance-bill-collection-04",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n**10 月 22 日核对**　计划任务 PCConfig Monthly Export Reminder 状态 Ready、从未运行，下次运行折合北京时间 11 月 6 日 09:00。提醒脚本的测试 tools/monthly_export_reminder.test.ps1 只测 -DryRun 渲染，这次没有运行。\n\n## 关键规则与设计选择\n\n1. 不设 AI 自动开工的定时任务：6 号只提醒，7 号由我开口（本人 10 月 21 日 15:17 定）。\n\n2. 一次做完：开工后不为每一步找我确认，要我补的集中问一次或挂驾驶舱。\n\n3. 一次性解压码只在本轮用，不写进文件、日志或回执。\n\n4. 缺一家不阻塞其余来源。\n\n5. 账单文件取回后不留在手机：两端 SHA-256 一致才删手机副本。\n\n## 当前怎样实现\n\n- PCConfig tools/Send-MonthlyExportReminder.ps1：经已绑定的 Google 账号给本人发信，并登记驾驶舱待办；-DryRun、-WhatIf 只把邮件渲染到文件，不发送、不写回执。\n\n- registries/monthly_export_checklist.json：导出清单 7 项（6 项账单类，另一项是 AI 对话导出）和 10 行回信模板；templates/monthly-export-reminder.html 是邮件样式。\n\n- tools/Register-MonthlyExportReminderTask.ps1 -Execute -Json 注册任务：短锁、XML 备份和回滚、完整回读；运行时刻按北京时间 6 号 09:00 换算成本机日期。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-finance-bill-collection-05",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 发送前检查个人资料期；同月已是 sent、sending 或 unknown 就不重发，文件锁阻止并发发送。\n\n- 退出码：0 表示邮件和待办都已确认，3 表示资料锁，2 表示待核实或失败；回执格式 pcconfig.monthly-export-reminder.v1。sent 只证明 Gmail 收下了，不证明我看到了。\n\n- 取回规则写在个人理解库 docs/source-rules.md；手机取回按 phone-direct 技能的 pull --delete-after-verify，没连上时 ensure --unattended，驾驶舱挂“手机连一下”。\n\n- 月度回执用 Set-OwnerItem.ps1 -Mode Add -Kind know 在驾驶舱登记一行，下个月总更新时退场，不另写文件。\n\n## 执行流程\n\n1. 读 6 号提醒的回信。\n\n2. 取回人工快照，放进投递区并核对指纹。\n\n3. 刷新理解库已接入的来源（含电商订单和售后）。\n\n4. 查重复扣款。\n\n5. 理解库读进本月新材料。\n\n6. 更新各个人项目，其中本项目改余额快照、月均、跑道和应收应付。\n\n7. 收尾：关闭当月待办、登记回执、各仓库提交、清理临时文件。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-finance-bill-collection-06",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| 人工快照 | 要我在 App 里点导出才拿得到的账单文件 |\n| 来源投递区 | 个人资料目录下按来源、批次日期放原件的地方，不进 Git |\n| 增量导入 | 按原来源编号只导入新内容；同一份文件按内容指纹认出，不重复 |\n| 驾驶舱回执 | 驾驶舱里一行“这个月更新了什么、缺什么” |\n\n## 专业定义\n\n人工快照只证明“当月拿到了这份文件”，不证明它覆盖了全部消费；覆盖缺口写进回执，在对账时继续保留。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-finance-bill-collection-07",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n解决账单收不齐、手机里留一堆账单副本、解压码到处散落，以及缺一家就整轮卡住。\n\n## 边界\n\n- 不登录银行或支付平台，不读密码明文。\n\n- 只收我导出的文件，不建自动采集或常驻同步。\n\n- 提醒发出不等于我看到了，也不等于导出已完成。\n\n## 失败与恢复\n\n- **提醒没发出**：回执写 blocked（资料锁）或 failed；同月已发不重发，待核实的不自动重发\n\n- **某家没导出**：回执写缺哪家，下次补上用原来源编号接着导入\n\n- **手机没连上**：驾驶舱挂“手机连一下”，先做其余来源\n\n- **解压码不对**：问我一次，不反复猜",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-finance-bill-collection-08",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- PCConfig docs/runtime/monthly-personal-update-runbook.md　每月总更新手册（7 步）\n\n- PCConfig tools/Send-MonthlyExportReminder.ps1、registries/monthly_export_checklist.json　提醒邮件和回信模板\n\n- 个人理解库 docs/source-rules.md　各来源的取回和导入规则\n\n## 如何验证\n\n- 提醒：-DryRun 渲染样例；正式运行看任务的上次结果和回执状态。\n\n- 取回：投递区每个批次的 SHA-256 和导入结果对得上。\n\n- 第一次正式提醒在 11 月 6 日；在那之前没有真实运行记录。\n\n## 与其他模块的关系\n\n取回并导入后交给〔对账〕；对账结果和我的回信一起进〔月度报数〕。",
+      "links": [
+        {
+          "text": "下一个模块 对账",
+          "href": "/projects/personal-finance/reconciliation/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}
