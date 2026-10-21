@@ -100,9 +100,14 @@ def matching_files(method, root):
     if method.get("tracked"):
         names = bounded(["git", "-C", str(base), "ls-files", "-z"], 30).split("\0")
         candidates = (base / n for n in names if n)
+    def text_file(path):
+        with path.open("rb") as stream:
+            prefix = stream.read(8192)
+        return prefix.startswith((b"\xff\xfe", b"\xfe\xff", b"\x00\x00\xfe\xff")) or b"\x00" not in prefix
     return [p for p in candidates if p.is_file()
             and match(p.relative_to(base).as_posix(), method.get("include", ["**/*"]))
-            and not match(p.relative_to(base).as_posix(), method.get("exclude", []))]
+            and not match(p.relative_to(base).as_posix(), method.get("exclude", []))
+            and (not method.get("text_only") or text_file(p))]
 
 
 def field_value(value, field):

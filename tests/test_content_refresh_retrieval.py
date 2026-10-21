@@ -75,6 +75,16 @@ class RetrievalTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             refresh.retrieve(dict(method, days=7), self.root, {})
 
+    def test_text_only_line_count_skips_binary_and_keeps_bom_text(self):
+        (self.root / "text.md").write_text("一\n二", encoding="utf-8")
+        (self.root / "wide.txt").write_text("三\n", encoding="utf-16")
+        (self.root / "image.webp").write_bytes(b"RIFF\x00\x00\x00\x00WEBP")
+        method = dict(kind="line_count", path=".", text_only=True)
+        self.assertEqual(refresh.retrieve(method, self.root, {}), 3)
+        (self.root / "bad.txt").write_bytes(b"\xffbad")
+        with self.assertRaises(UnicodeDecodeError):
+            refresh.retrieve(method, self.root, {})
+
     def test_ledger_streams_once_filters_kind_and_preserves_last_time(self):
         now = datetime(2026, 10, 22, 6, tzinfo=refresh.BEIJING)
         end = now.replace(hour=0)
