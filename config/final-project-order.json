@@ -242,6 +242,15 @@
       "source": "wlyaaaaa/PCConfig",
       "content_format": "typeset",
       "content_path": "sources/pages/remote-control/page.json"
+    },
+    {
+      "final_rank": 38,
+      "id": "personal-finance",
+      "title": "个人财务",
+      "state": "published",
+      "source": "wlyaaaaa/personal-finance",
+      "content_format": "typeset",
+      "content_path": "sources/pages/personal-finance/page.json"
     }
   ],
   "non_card_explanations": [

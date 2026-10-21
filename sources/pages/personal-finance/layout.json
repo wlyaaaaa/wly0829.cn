@@ -1,0 +1,671 @@
+[
+  {
+    "screen": "personal-finance-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "首屏",
+        "width": "50%",
+        "text_ref": "个人财务"
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "illustration": "outside",
+        "row": "首屏",
+        "width": "49%",
+        "index": 0,
+        "size": "large"
+      },
+      {
+        "type": "stat_card",
+        "columns": 4,
+        "columns_v": 2,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/日历时钟.png",
+          "_library/icons/岔路.png",
+          "_library/icons/趋势图.png",
+          "_library/hires-icons/打勾清单.png"
+        ],
+        "text_ref": "每月 1 次"
+      },
+      {
+        "type": "prose",
+        "align": "right",
+        "text_ref": "截至10月22"
+      },
+      {
+        "type": "action_button",
+        "align": "left",
+        "columns": 2,
+        "text_ref": "花钱怎么核对"
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "个人财务"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "每个月我只做两件小事"
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "illustration": "outside",
+        "index": 0,
+        "size": "large"
+      },
+      {
+        "type": "stat_card",
+        "columns": 2,
+        "columns_v": 2,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/日历时钟.png",
+          "_library/icons/岔路.png",
+          "_library/icons/趋势图.png",
+          "_library/hires-icons/打勾清单.png"
+        ],
+        "text_ref": "每月 1 次"
+      },
+      {
+        "type": "prose",
+        "align": "right",
+        "text_ref": "截至10月22"
+      },
+      {
+        "type": "action_button",
+        "align": "center",
+        "columns": 1,
+        "columns_v": 1,
+        "text_ref": "花钱怎么核对"
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "平时怎么用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "只有一件事会自动发生"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 2,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/日历时钟.png",
+          "_library/icons/盖章信封.png",
+          "_library/icons/双气泡.png",
+          "_library/icons/铃铛.png"
+        ],
+        "text_ref": "① 6 号：点几下导出",
+        "item_count": 4
+      },
+      {
+        "type": "notice",
+        "align": "left",
+        "text_ref": "每个数都分清"
+      },
+      {
+        "type": "prose",
+        "text_ref": "对账怎么分清消费和还款"
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "平时怎么用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "只有一件事会自动发生"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/日历时钟.png",
+          "_library/icons/盖章信封.png",
+          "_library/icons/双气泡.png",
+          "_library/icons/铃铛.png"
+        ],
+        "text_ref": "① 6 号：点几下导出",
+        "item_count": 4
+      },
+      {
+        "type": "notice",
+        "text_ref": "每个数都分清"
+      },
+      {
+        "type": "prose",
+        "text_ref": "对账怎么分清消费和还款"
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "缺了、对不上、做不了怎么办"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/文件夹.png",
+          "_library/icons/手机.png",
+          "_library/icons/梳理乱线.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "_library/icons/沙漏.png",
+          "_library/round3/clean-assets/png/04-锁-clean.png"
+        ],
+        "text_ref": "某家账单没导出或还没到",
+        "item_count": 7
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "缺了、对不上、做不了怎么办"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/文件夹.png",
+          "_library/icons/手机.png",
+          "_library/icons/梳理乱线.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "_library/icons/沙漏.png",
+          "_library/round3/clean-assets/png/04-锁-clean.png"
+        ],
+        "text_ref": "某家账单没导出或还没到",
+        "item_count": 7
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "每月一轮的一条链"
+      },
+      {
+        "type": "flow",
+        "columns": 6,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "connector": "arrow",
+        "icons": [
+          "_library/icons/铃铛.png",
+          "_library/icons/盖章信封.png",
+          "_library/icons/文件夹.png",
+          "_library/hires-icons/数据库.png",
+          "_library/icons/岔路.png",
+          "_library/hires-icons/打勾清单.png"
+        ],
+        "text_ref": "提醒"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "row": "底部两卡",
+        "width": "49%",
+        "size": "medium",
+        "text_ref": "东西放在哪"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "row": "底部两卡",
+        "width": "49%",
+        "size": "medium",
+        "text_ref": "谁管哪一段"
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "section_heading",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "每月一轮的一条链"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "arrow",
+        "icons": [
+          "_library/icons/铃铛.png",
+          "_library/icons/盖章信封.png",
+          "_library/icons/文件夹.png",
+          "_library/hires-icons/数据库.png",
+          "_library/icons/岔路.png",
+          "_library/hires-icons/打勾清单.png"
+        ],
+        "text_ref": "提醒"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "text_ref": "东西放在哪"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "text_ref": "谁管哪一段"
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "width": "64%",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 2,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/岔路.png",
+          "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "_library/icons/沙漏.png",
+          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/round3/clean-assets/png/04-锁-clean.png",
+          "_library/icons/日历时钟.png"
+        ],
+        "text_ref": "还款不是消费。"
+      },
+      {
+        "type": "stat_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "right_inside",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/hires-icons/代码窗口.png",
+          "_library/hires-icons-r2/版本循环文件.png"
+        ],
+        "text_ref": "2 个文件"
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/岔路.png",
+          "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "_library/icons/沙漏.png",
+          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/round3/clean-assets/png/04-锁-clean.png",
+          "_library/icons/日历时钟.png"
+        ],
+        "text_ref": "还款不是消费。"
+      },
+      {
+        "type": "stat_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "right_inside",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/hires-icons/代码窗口.png",
+          "_library/hires-icons-r2/版本循环文件.png"
+        ],
+        "text_ref": "2 个文件"
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 3,
+        "illustration": "top_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/岔路.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ],
+        "text_ref": "还掉的钱，不会被算成花掉的钱。"
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/岔路.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ],
+        "text_ref": "还掉的钱，不会被算成花掉的钱。"
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "标题与图例",
+        "width": "43%",
+        "text_ref": "全部功能（15 项）"
+      },
+      {
+        "type": "status_legend",
+        "align": "left",
+        "row": "标题与图例",
+        "width": "55%",
+        "text_ref": "图例："
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/铃铛.png",
+          "_library/icons/日历时钟.png",
+          "_library/icons/手机.png",
+          "_library/hires-icons/数据库.png"
+        ],
+        "size": "medium",
+        "text_ref": "收账单",
+        "fill_last_row": true
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/岔路.png",
+          "_library/icons/梳理乱线.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+          "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "_library/icons/铃铛.png"
+        ],
+        "size": "medium",
+        "text_ref": "对账",
+        "fill_last_row": true
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/round3/clean-assets/png/45-钱包-clean.png",
+          "_library/icons/趋势图.png",
+          "_library/icons/沙漏.png",
+          "_library/icons/文件写作.png",
+          "_library/icons/双气泡.png"
+        ],
+        "size": "medium",
+        "text_ref": "报数",
+        "fill_last_row": true
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部功能（15 项）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例："
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/铃铛.png",
+          "_library/icons/日历时钟.png",
+          "_library/icons/手机.png",
+          "_library/hires-icons/数据库.png"
+        ],
+        "size": "medium",
+        "text_ref": "收账单"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/岔路.png",
+          "_library/icons/梳理乱线.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+          "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "_library/icons/铃铛.png"
+        ],
+        "size": "medium",
+        "text_ref": "对账"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/round3/clean-assets/png/45-钱包-clean.png",
+          "_library/icons/趋势图.png",
+          "_library/icons/沙漏.png",
+          "_library/icons/文件写作.png",
+          "_library/icons/双气泡.png"
+        ],
+        "size": "medium",
+        "text_ref": "报数"
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "icons": [
+          "_library/icons/小旗.png",
+          "_library/icons/日历时钟.png",
+          "_library/icons/岔路.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/round3/clean-assets/png/45-钱包-clean.png",
+          "_library/icons/文件写作.png"
+        ],
+        "width": "100%",
+        "text_ref": "10 月 20 日",
+        "direction": "vertical",
+        "connector_style": "thin_line"
+      }
+    ]
+  },
+  {
+    "screen": "personal-finance-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "icons": [
+          "_library/icons/小旗.png",
+          "_library/icons/日历时钟.png",
+          "_library/icons/岔路.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/round3/clean-assets/png/45-钱包-clean.png",
+          "_library/icons/文件写作.png"
+        ],
+        "text_ref": "10 月 20 日",
+        "direction": "vertical",
+        "connector_style": "thin_line"
+      }
+    ]
+  }
+]

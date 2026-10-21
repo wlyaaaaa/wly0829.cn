@@ -1,0 +1,566 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "personal-finance",
+  "kind": "project",
+  "title": "个人财务",
+  "url": "/projects/personal-finance/",
+  "tagline": "每月把账单收齐、对清楚，分清花掉的和还掉的，再报一次数。",
+  "status": "在用",
+  "status_line": {
+    "state": "在用",
+    "last": {
+      "label": "上次更新",
+      "at": "2026-10-21"
+    },
+    "facts": [
+      "每月导出提醒还没正式发过"
+    ],
+    "as_of": "2026-10-22",
+    "source": "财务私有仓库最近提交北京 10 月 21 日 17:58；提醒任务已注册、从未运行（10 月 22 日只读查看）"
+  },
+  "public": false,
+  "repo_url": null,
+  "capability": "每月把钱的账对清楚",
+  "based_on": {
+    "commit": "7b7c212358a4a6f58fc0e6140777257817b59cd0",
+    "commit_time": "2026-10-21T17:58:28+08:00"
+  },
+  "video_prompt": "开头短视频提示词：6 秒无缝循环，白底水彩画风，纯绿主色，照开头这屏的插画出发。几张空白的小纸条从信封、手机和购物袋里轻轻飘出，沿几条绿色细虚线汇进中间一本翻开的小账册；账册一页缓缓翻过，页面上只有灰色横线；一架小天平两端轻轻晃动后停在持平，回到起始画面。不出现任何文字、数字、货币符号、表格、银行或商家标志和人脸，镜头固定，动作轻柔。",
+  "screens": [
+    {
+      "id": "personal-finance-01",
+      "section": "top",
+      "title": "开头",
+      "scene": "横版：左上大标题，下面一段介绍（约五行）。右上一幅水彩插画（待生成，见生图提示词）。中间一排四张等宽数字卡，每张左上角一个小水彩图标（依次是：一本日历、一个分岔路牌、一个趋势小图、一张带对勾的清单），上面大号绿色粗体字，下面一两行小字。数字卡下面右对齐一行灰色小字“截至 10 月 22 日”。最下面左对齐两个白底细浅绿描边的圆角按钮。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+      "portrait": "竖版 9:16：标题和介绍在上；插画缩到整宽放在介绍下面；四张数字卡两行两列；“截至”一行和按钮在最下面。字和横版完全一样。",
+      "text": "# 个人财务\n\n每个月我只做两件小事：6 号在几个 App 里点“导出”、回一封信，7 号跟 AI 说一声“开始月度总更新”。AI 自己把支付宝、微信支付、银行信用卡和储蓄卡账单、电商订单、外卖和出行记录取回来，去重、扣掉退款，分清哪些是真花掉的、哪些只是还款或在自己账户之间倒钱；再按一张固定的报数单问我几项它算不出来的数，最后写成一份带日期和出处的财务现状：这个月实际花了多少、下个月要还多少、手头的钱按现在的花法能撑多久。平时问钱的事，AI 先读这份现状。网页上只讲做法，不放任何金额、余额和账单。\n\n| **每月 1 次** | **5 类** | **3 个月** | **55 个** |\n|---|---|---|---|\n| 6 号提醒导出，7 号我开口才更新；没有 AI 自动开工的定时任务 | 储蓄卡流水分成：本人操作、还款借贷、收入、退款、消费 | 月均消费取最近 3 个完整自然月，没过完的月不算 | 消费统计的自动测试用例，用合成数据；10 月 22 日只清点了数量，没有重跑 |\n\n截至 10 月 22 日\n\n〔花钱怎么核对 → 个人理解库〕　〔复制 AI 续作说明〕",
+      "links": [
+        {
+          "text": "花钱怎么核对 → 个人理解库",
+          "href": "/projects/daily-preferences/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/personal-finance/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-finance-02",
+      "section": "usage",
+      "title": "平时怎么用",
+      "scene": "横版：左上标题，标题下一行灰色小字。中间四张大圆角卡片两行两列，每张左上角一个圆形绿色编号和一个小水彩图标（①一本日历，②一个信封，③一对对话气泡，④一只小铃铛），卡片标题粗体，下面一段正文。四张卡片下面横跨整屏一条浅绿底细条，写那句“每个数都分清……”。最下面左对齐一行小字，末尾是链接。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+      "portrait": "竖版 9:16：标题和灰色小字在上；四张卡片一行一张上下排；浅绿细条和链接在最下面。字和横版完全一样。",
+      "text": "# 平时怎么用\n\n只有一件事会自动发生：每月 6 号上午 9 点（北京时间），电脑给我发一封“导出日”提醒邮件，并在驾驶舱挂一条待办。其余都是我开口才做。\n\n**① 6 号：点几下导出**\n照邮件里的清单，在支付宝、微信支付、银行 App、电商和出行 App 里点导出（有的要等约一天才出文件），再回一封信：解压码，以及资产合计、信用卡和先用后付各欠多少、下个月要还多少、有没有在途的钱。答不上的空着就行。\n\n**② 7 号：说“开始月度总更新”**\nAI 去邮箱、手机下载目录、电脑下载目录把文件取回，核对指纹后增量导入，再对账、查重复扣款、更新财务现状。中途不一项一项问我；要我补的事最后集中问一次，或挂在驾驶舱。\n\n**③ 平时问钱的事**\n比如（示例）“下个月信用卡要还多少？这个月比上个月多花在哪？”AI 先读财务现状里有日期、有出处的结论；只有现状里没有、又会改变答案时，才去翻最小的那份账单。\n\n**④ 它主动提醒我的两件事**\n发现同一笔钱真被扣了两次，挂到驾驶舱“需要你”；没有就不提。一张储蓄卡的余额推不出我的总家底和在途的钱，这几项每月直接问我，不靠猜。\n\n每个数都分清：哪个是我报的，哪个是账单算出来的，哪个是 AI 推算的，哪些还不知道。\n\n对账怎么分清消费和还款：〔看对账模块〕",
+      "links": [
+        {
+          "text": "看对账模块",
+          "href": "/projects/personal-finance/reconciliation/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-finance-03",
+      "section": "usage",
+      "title": "缺了、对不上、做不了怎么办",
+      "scene": "横版：左上标题。下面七张横向小卡片两列排，每张左边一个小水彩图标（一个文件夹、一部手机、一团理开的乱线、一个地球、一只放大镜、一个沙漏、一把小锁），右边粗体小标题加两三行正文。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+      "portrait": "竖版 9:16：标题在上；七张卡片一行一张上下排。字和横版完全一样。",
+      "text": "# 缺了、对不上、做不了怎么办\n\n**某家账单没导出或还没到**\n缺哪家记进当月回执，其余来源照常导入、照常更新；不因为一家没到就整轮停下。下个月补上后，按同一个来源编号接着导入。\n\n**手机没连上**\n微信支付账单和出行导出只能下到手机。没连上就在驾驶舱挂“手机连一下”，先做别的来源，连上后再补。\n\n**一笔付款对不上订单**\n不靠“同一天、同一金额”硬凑。证据不够的放进“待归并”单列，不算进消费，也不悄悄丢掉。\n\n**外币消费**\n美元消费以信用卡账单上实际结算的人民币为准；当天的消费通知和账单日期可以差一天。分不清币种的金额不和人民币相加。\n\n**售后退款还没着落**\n先核订单最终状态再下结论；没有证据就写“待核”，不当成已退，也不当成没退。\n\n**余额或欠款不知道**\n写“待本人报数”，不从消费倒推余额。余额未知、月份缺失或月均消费不为正时，不报能撑几个月。\n\n**资料锁着**\n读账单和财务现状前先过个人资料锁；锁着就在驾驶舱请我解锁，这一轮记“没做成”后结束，不绕过。见约法〔个人资料锁着时〕",
+      "links": [
+        {
+          "text": "个人资料锁着时",
+          "href": "/rules/charter/#L18"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-finance-04",
+      "section": "tech",
+      "title": "它是怎么搭的",
+      "scene": "横版：左上标题，标题下一行小标题“每月一轮的一条链”。上半部一张从左到右的流程图，六个节点排成一行（圆角卡片，每张一个小水彩图标：一只小铃铛、一个信封、一个文件夹、一个数据库、一个分岔路牌、一张带对勾的清单），绿色箭头依次连起来；节点标题粗体，下面两三行小字。下半部左右两张说明卡：左边“东西放在哪”，右边“谁管哪一段”。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+      "portrait": "竖版 9:16：标题、小标题；六步整宽上下排，箭头向下；两张说明卡上下排。字和横版完全一样。",
+      "text": "# 它是怎么搭的\n\n**每月一轮的一条链**\n\n1. **提醒**｜每月北京时间 6 号 09:00，计划任务 PCConfig Monthly Export Reminder 运行 Send-MonthlyExportReminder.ps1：发一封带回信模板的提醒邮件，并在驾驶舱登记待办\n2. **我导出、回信**｜在各 App 点导出；回信里写解压码和几项余额、欠款\n3. **取回**｜我说“开始月度总更新”后，AI 从邮箱附件、手机 Download 目录（两端 SHA-256 一致才删手机副本）、电脑下载目录取回，按来源和批次日期放进私有来源投递区\n4. **导入**｜个人理解库按原来源编号增量导入；电商订单和售后由 AI 在我已登录的 Chrome 后台标签页里采集\n5. **对账**｜理解库的 spending 命令去重、扣退款、剔除还款和本人转账，按币种出月度消费净额\n6. **报数**｜AI 结合我的回信改财务现状 CURRENT.md 受影响的几段，在驾驶舱登记一行当月回执，提交私有仓库\n\n**东西放在哪**\n- 财务现状和项目规则：私有 GitHub 仓库，只有 AGENTS.md、CURRENT.md 两个文件，没有程序\n- 账单原件：电脑本地的个人资料目录（来源投递区，按来源、批次日期分），不进 Git\n- 逐笔交易：只在个人理解库的本地数据库里，财务项目不复制一份\n\n**谁管哪一段**\n- 提醒和每月手册：电脑配置（PCConfig）\n- 取回规则、导入、去重和消费统计：个人理解库\n- 余额快照、月均消费、现金跑道、应收应付：本项目",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-finance-05",
+      "section": "tech",
+      "title": "为什么这样设计",
+      "scene": "横版：左上标题。左边约三分之二宽，六张横向小卡片两列三行，每张左边一个小水彩图标（一个分岔路牌、一只放大镜、一个沙漏、一个工具箱、一把小锁、一本日历），右边粗体一句加一两行小字。右边约三分之一宽，竖着三张大数字卡。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+      "portrait": "竖版 9:16：标题；六张卡片一行一张上下排；三张大数字卡放在最下面，一行一张。字和横版完全一样。",
+      "text": "# 为什么这样设计\n\n**还款不是消费。**\n信用卡还款、先用后付还款、转到自己另一个账户，都只是钱换了个地方；算进去，同一笔钱会被算两遍。\n\n**拿不准先自己对，不先问我。**\n储蓄卡一笔支出看不出是什么，先拿支付宝和信用卡账单去对；组合付款、几家店合并付款拆开看。对不上才单列。\n\n**没记录不等于零。**\n缺账单不填零，未知余额不从消费倒猜，没过完的月不当完整月；已识别的小计不说成全部花费。\n\n**不另起一套。**\n财务项目不写程序、不建数据库、不存交易副本、不自动采集；消费统计直接用理解库现成的命令。\n\n**不登录银行。**\n余额只来自我报的数或已收的账单，不登录银行和支付平台，不读密码明文。\n\n**固定支出不预设。**\n不维护“固定支出清单”，每月以账单上实际扣了什么为准；上个月在扣的，不默认这个月还在扣。\n\n| **2 个文件** | **4 个程序** | **9 次** |\n|---|---|---|\n| 财务项目自己只有规则 AGENTS.md 和现状 CURRENT.md，没有程序和测试 | 对账用的是个人理解库里的 spending.py、debit_sources.py、commerce_records.py、gmail_sources.py | 财务仓库提交，北京时间 10 月 20 日到 21 日 |",
+      "links": [],
+      "anchors": [
+        {
+          "id": "design",
+          "text": "为什么这样设计"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-finance-06",
+      "section": "highlights",
+      "title": "亮点",
+      "scene": "横版：左上标题，三张大卡片横排，每张上面一幅小水彩图标，卡片标题用大字，下面一段正文。图标：1 一个分岔路牌；2 一个地球；3 一张带对勾的纸箱。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+      "portrait": "竖版 9:16：标题；三张卡片一行一张上下排，每张图标在卡片上方。字和横版完全一样。",
+      "text": "# 亮点\n\n**还掉的钱，不会被算成花掉的钱。**\n储蓄卡流水里堆着大量还款、转账和自己倒钱，最难对。现在每一笔先分进五类：本人操作、还款借贷、收入、退款、消费，只有“消费”进月度花费。信用卡还款、先用后付还款、转进自己的钱包都排除在外，原来那笔消费也不会因为还款再算一次；替我代付、代充值买的服务照样算消费。\n\n**美元消费，按真正扣的人民币算。**\n境外消费当天收到的通知是美元，月底账单上是结算后的人民币，日期还可能差一天。程序按原币金额对上同一张卡、同一商户，日期允许差一天，最后用账单上实际结算的人民币；外币退款按实际退回的人民币扣，汇差留着不抹平。\n\n**先用后付的账，以电商订单为准。**\n电商平台自带的先用后付，消费只出现在那家的订单里，短信和邮件只是过程通知。消费、取消、拒收和退款都看订单最终状态（含返修退换货），所以这类订单每月都采一次；查售后、退款先核订单状态，再下结论。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-finance-07",
+      "section": "features",
+      "title": "全部功能",
+      "scene": "横版：和标杆页“全部功能”一样的画法：每组的组名（毛笔字）写在这组卡片上方一行，下面卡片排成三列；三组依次往下排。每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态。顶上标题，标题下一行图例，图例下一行小字。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+      "portrait": "竖版 9:16：标题、图例和说明在上；组名在上，卡片一行一张。字和横版完全一样。",
+      "text": "# 全部功能（15 项）\n\n图例：● 在用　● 待验收　○ 待实施　● 没用过　● 说不准　✕ 已停用\n待验收＝做好了，还没在真实使用里验过；说不准＝用的时候不留记录，也没找到用过的痕迹。\n\n**收账单**\n1. 每月导出提醒｜6 号 09:00 发提醒邮件并挂驾驶舱待办，附回信模板；同月不重发｜待验收\n2. 月度总更新｜我说“开始月度总更新”，AI 照每月手册取回、导入、对账、报数，最后登记回执｜待验收\n3. 自己取回账单｜邮箱附件、手机下载目录、电脑下载目录；手机副本核对指纹后才删｜待验收\n4. 增量导入｜按原来源编号导入；同一份文件按内容指纹认出，不重复导｜在用\n\n**对账**\n5. 分清消费和还款｜储蓄卡流水分五类；信用卡还款、先用后付还款、本人转账不算消费｜在用\n6. 去重和扣退款｜订单、支付、卡记录归成一笔；同一交易链的成功退款扣掉；同日同额不自动合并｜在用\n7. 外币按结算核对｜美元消费按账单上实际结算的人民币；通知和账单日期可差一天｜在用\n8. 先用后付以订单为准｜电商平台先用后付的消费、取消、退款看订单最终状态，每月都采｜在用\n9. 拿不准时交叉核对｜储蓄卡支出先拿支付宝和信用卡账单对；组合付款、合并付款拆开看｜在用\n10. 重复扣款提醒｜每轮导入后查；有就挂驾驶舱，没有不提；靠 AI 按规则查，没有专门程序｜待验收\n\n**报数**\n11. 余额快照｜每月一次；我报的数或账单推算，记快照日、币种、出处｜在用\n12. 月均消费｜理解库最近 3 个完整自然月消费净额合计 ÷ 3，币种分开｜在用\n13. 现金跑道和下月压力｜（能马上用 + 在途 − 全部欠款）÷ 月均消费；另看下个月要还的和手头能马上用的｜在用\n14. 应收应付｜每条记对象、方向、状态、日期、出处；没证据写待核；到账后不重复加｜在用\n15. 主动问几项数｜资产合计、各类欠款和下月还款、在途资金每月直接问，不靠一张卡推｜在用",
+      "links": [],
+      "anchors": [
+        {
+          "id": "g-collect",
+          "text": "收账单"
+        },
+        {
+          "id": "f-reminder",
+          "text": "每月导出提醒"
+        },
+        {
+          "id": "f-monthly",
+          "text": "月度总更新"
+        },
+        {
+          "id": "f-fetch",
+          "text": "自己取回账单"
+        },
+        {
+          "id": "f-import",
+          "text": "增量导入"
+        },
+        {
+          "id": "g-reconcile",
+          "text": "对账"
+        },
+        {
+          "id": "f-split",
+          "text": "分清消费和还款"
+        },
+        {
+          "id": "f-dedupe",
+          "text": "去重和扣退款"
+        },
+        {
+          "id": "f-fx",
+          "text": "外币按结算核对"
+        },
+        {
+          "id": "f-bnpl",
+          "text": "先用后付以订单为准"
+        },
+        {
+          "id": "f-cross",
+          "text": "拿不准时交叉核对"
+        },
+        {
+          "id": "f-dup",
+          "text": "重复扣款提醒"
+        },
+        {
+          "id": "g-report",
+          "text": "报数"
+        },
+        {
+          "id": "f-snapshot",
+          "text": "余额快照"
+        },
+        {
+          "id": "f-avg",
+          "text": "月均消费"
+        },
+        {
+          "id": "f-runway",
+          "text": "现金跑道和下月压力"
+        },
+        {
+          "id": "f-ar",
+          "text": "应收应付"
+        },
+        {
+          "id": "f-ask",
+          "text": "主动问几项数"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-finance-08",
+      "section": "history",
+      "title": "演进",
+      "scene": "横版：左上标题，一条竖向时间线，每个节点一个小水彩图标、粗体日期、一两行字。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+      "portrait": "竖版 9:16：标题；时间线一行一个节点上下排。字和横版完全一样。",
+      "text": "# 演进\n\n- **10 月 20 日**：建项目：只做文档，管余额快照、现金跑道和应收应付；月均消费直接用个人理解库的消费统计，不另写程序、不存交易副本\n- **10 月 21 日下午**：定下每月节奏：6 号提醒我导出、7 号由我开口更新，不设 AI 自动开工；账单由 AI 自己取回，手机副本核对后删掉，每轮查重复扣款\n- **10 月 21 日下午**：储蓄卡流水和信用卡每日通知接入并分类，还款和本人转账不再算消费；拿不准时综合支付宝和信用卡账单核对\n- **10 月 21 日傍晚**：先用后付以电商订单状态为准；美元消费对上人民币结算后再算月均\n- **10 月 21 日**：报数格式定下：资产、各类欠款和下月还款、在途资金每月直接问；现金跑道改为先减去全部欠款\n- **10 月 22 日**：网站加上这一页，只讲做法，不放金额",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "groups": [
+      {
+        "id": "g-collect",
+        "name": "收账单"
+      },
+      {
+        "id": "g-reconcile",
+        "name": "对账"
+      },
+      {
+        "id": "g-report",
+        "name": "报数"
+      }
+    ],
+    "features": [
+      {
+        "id": "f-reminder",
+        "group": "g-collect",
+        "name": "每月导出提醒",
+        "what": "6 号 09:00 发提醒邮件并挂驾驶舱待办，附回信模板；同月不重发",
+        "how": "自动：PCConfig Monthly Export Reminder；跟 AI 说停掉每月导出提醒",
+        "status": "待验收",
+        "screen": "personal-finance-07",
+        "source": "PCConfig tools/Send-MonthlyExportReminder.ps1；docs/runtime/monthly-export-reminder.md；任务 Ready、从未运行（10 月 22 日只读查看）"
+      },
+      {
+        "id": "f-monthly",
+        "group": "g-collect",
+        "name": "月度总更新",
+        "what": "我说“开始月度总更新”，AI 照每月手册取回、导入、对账、报数，最后登记回执",
+        "how": "说“开始月度总更新”",
+        "status": "待验收",
+        "screen": "personal-finance-07",
+        "source": "PCConfig docs/runtime/monthly-personal-update-runbook.md（10 月 21 日写成，还没完整跑过一轮）"
+      },
+      {
+        "id": "f-fetch",
+        "group": "g-collect",
+        "name": "自己取回账单",
+        "what": "邮箱附件、手机下载目录、电脑下载目录；手机副本核对指纹后才删",
+        "how": "月度总更新时自动做",
+        "status": "待验收",
+        "screen": "personal-finance-07",
+        "source": "daily-preferences docs/source-rules.md；phone-direct pull --delete-after-verify"
+      },
+      {
+        "id": "f-import",
+        "group": "g-collect",
+        "name": "增量导入",
+        "what": "按原来源编号导入；同一份文件按内容指纹认出，不重复导",
+        "how": "月度总更新时自动做",
+        "status": "在用",
+        "screen": "personal-finance-07",
+        "source": "daily-preferences ingest（--profile debit_card、credit_card、gmail 等）；10 月 21 日储蓄卡与信用卡每日通知接入"
+      },
+      {
+        "id": "f-split",
+        "group": "g-reconcile",
+        "name": "分清消费和还款",
+        "what": "储蓄卡流水分五类；信用卡还款、先用后付还款、本人转账不算消费",
+        "how": "问“这个月实际花了多少”",
+        "status": "在用",
+        "screen": "personal-finance-07",
+        "source": "daily-preferences debit_sources.py classify_debit"
+      },
+      {
+        "id": "f-dedupe",
+        "group": "g-reconcile",
+        "name": "去重和扣退款",
+        "what": "订单、支付、卡记录归成一笔；同一交易链的成功退款扣掉；同日同额不自动合并",
+        "how": "问某段时间花了多少",
+        "status": "在用",
+        "screen": "personal-finance-07",
+        "source": "daily-preferences spending.py aggregate_spending；tests/test_spending.py"
+      },
+      {
+        "id": "f-fx",
+        "group": "g-reconcile",
+        "name": "外币按结算核对",
+        "what": "美元消费按账单上实际结算的人民币；通知和账单日期可差一天",
+        "how": "月度对账时自动做",
+        "status": "在用",
+        "screen": "personal-finance-07",
+        "source": "spending.py _notice_matches_statement；10 月 21 日 17:58 据此重算月均"
+      },
+      {
+        "id": "f-bnpl",
+        "group": "g-reconcile",
+        "name": "先用后付以订单为准",
+        "what": "电商平台先用后付的消费、取消、退款看订单最终状态，每月都采",
+        "how": "月度总更新时自动做",
+        "status": "在用",
+        "screen": "personal-finance-07",
+        "source": "daily-preferences docs/source-rules.md；commerce_records.py"
+      },
+      {
+        "id": "f-cross",
+        "group": "g-reconcile",
+        "name": "拿不准时交叉核对",
+        "what": "储蓄卡支出先拿支付宝和信用卡账单对；组合付款、合并付款拆开看",
+        "how": "AI 自己判断，不用专门说",
+        "status": "在用",
+        "screen": "personal-finance-07",
+        "source": "daily-preferences docs/source-rules.md（本人 10 月 21 日 14:46）"
+      },
+      {
+        "id": "f-dup",
+        "group": "g-reconcile",
+        "name": "重复扣款提醒",
+        "what": "每轮导入后查；有就挂驾驶舱，没有不提；靠 AI 按规则查，没有专门程序",
+        "how": "月度总更新时自动做",
+        "status": "待验收",
+        "screen": "personal-finance-07",
+        "source": "daily-preferences docs/source-rules.md；每月手册第 4 步"
+      },
+      {
+        "id": "f-snapshot",
+        "group": "g-report",
+        "name": "余额快照",
+        "what": "每月一次；我报的数或账单推算，记快照日、币种、出处",
+        "how": "回信报数，或直接跟 AI 说新数",
+        "status": "在用",
+        "screen": "personal-finance-07",
+        "source": "personal-finance AGENTS.md；10 月 21 日第一份快照"
+      },
+      {
+        "id": "f-avg",
+        "group": "g-report",
+        "name": "月均消费",
+        "what": "理解库最近 3 个完整自然月消费净额合计 ÷ 3，币种分开",
+        "how": "问“最近每月花多少”",
+        "status": "在用",
+        "screen": "personal-finance-07",
+        "source": "personal-finance AGENTS.md；spending consumption_net"
+      },
+      {
+        "id": "f-runway",
+        "group": "g-report",
+        "name": "现金跑道和下月压力",
+        "what": "（能马上用 + 在途 − 全部欠款）÷ 月均消费；另看下个月要还的和手头能马上用的",
+        "how": "问“按现在的花法能撑多久”",
+        "status": "在用",
+        "screen": "personal-finance-07",
+        "source": "CURRENT.md 公式（本人 10 月 21 日定）"
+      },
+      {
+        "id": "f-ar",
+        "group": "g-report",
+        "name": "应收应付",
+        "what": "每条记对象、方向、状态、日期、出处；没证据写待核；到账后不重复加",
+        "how": "问“还有哪些钱没收回来”",
+        "status": "在用",
+        "screen": "personal-finance-07",
+        "source": "personal-finance AGENTS.md"
+      },
+      {
+        "id": "f-ask",
+        "group": "g-report",
+        "name": "主动问几项数",
+        "what": "资产合计、各类欠款和下月还款、在途资金每月直接问，不靠一张卡推",
+        "how": "回 6 号提醒邮件",
+        "status": "在用",
+        "screen": "personal-finance-07",
+        "source": "CURRENT.md 报数格式；registries/monthly_export_checklist.json"
+      }
+    ],
+    "numbers": [
+      {
+        "id": "n-monthly",
+        "text": "每月 1 次",
+        "meaning": "6 号提醒导出、7 号由本人开口更新；没有 AI 自动开工的定时任务",
+        "as_of": "2026-10-22",
+        "source": "PCConfig docs/runtime/monthly-personal-update-runbook.md；docs/runtime/monthly-export-reminder.md",
+        "screens": [
+          "personal-finance-01"
+        ]
+      },
+      {
+        "id": "n-debit-classes",
+        "text": "5 类",
+        "meaning": "储蓄卡流水分类：本人操作、还款借贷、收入、退款、消费",
+        "as_of": "2026-10-22",
+        "source": "daily-preferences debit_sources.py classify_debit；docs/source-rules.md",
+        "screens": [
+          "personal-finance-01",
+          "personal-finance-06"
+        ]
+      },
+      {
+        "id": "n-window",
+        "text": "3 个月",
+        "meaning": "月均净消费取最近 3 个完整自然月",
+        "as_of": "2026-10-22",
+        "source": "personal-finance AGENTS.md",
+        "screens": [
+          "personal-finance-01"
+        ]
+      },
+      {
+        "id": "n-tests",
+        "text": "55 个",
+        "meaning": "daily-preferences tests/test_spending.py 的测试函数数（静态计数，没有重跑）",
+        "as_of": "2026-10-22",
+        "source": "test_spending.py def test_ 计数；最后变更提交 f2fc1f7（北京 10 月 21 日 17:51）",
+        "screens": [
+          "personal-finance-01"
+        ]
+      },
+      {
+        "id": "n-files",
+        "text": "2 个文件",
+        "meaning": "personal-finance 仓库入库文件：AGENTS.md、CURRENT.md",
+        "as_of": "2026-10-22",
+        "source": "git ls-files（提交 7b7c212）",
+        "screens": [
+          "personal-finance-05"
+        ]
+      },
+      {
+        "id": "n-programs",
+        "text": "4 个程序",
+        "meaning": "对账依赖的理解库程序：spending.py、debit_sources.py、commerce_records.py、gmail_sources.py",
+        "as_of": "2026-10-22",
+        "source": "daily-preferences 源码只读核对",
+        "screens": [
+          "personal-finance-05"
+        ]
+      },
+      {
+        "id": "n-commits",
+        "text": "9 次",
+        "meaning": "personal-finance 仓库提交数，北京 10 月 20 日 17:17 到 10 月 21 日 17:58",
+        "as_of": "2026-10-22",
+        "source": "git rev-list --count HEAD",
+        "screens": [
+          "personal-finance-05"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "r-daily-preferences-spending",
+        "with": "daily-preferences",
+        "direction": "拿来",
+        "flow": "账单导入、去重、扣退款、消费与还款区分和月度消费净额都由个人理解库的 spending 命令只读给出",
+        "source": "personal-finance AGENTS.md；daily-preferences spending.py"
+      },
+      {
+        "id": "r-daily-preferences-back",
+        "with": "daily-preferences",
+        "direction": "交出",
+        "flow": "财务对话里有依据的本人新信息按理解库入口回写并回读；余额、债务和财务判断留在本项目",
+        "source": "personal-finance AGENTS.md"
+      },
+      {
+        "id": "r-pcconfig-reminder",
+        "with": "pcconfig",
+        "direction": "拿来",
+        "flow": "每月 6 号提醒邮件、驾驶舱待办和每月总更新手册",
+        "source": "PCConfig tools/Send-MonthlyExportReminder.ps1；docs/runtime/monthly-personal-update-runbook.md"
+      },
+      {
+        "id": "r-pcconfig-lock",
+        "with": "pcconfig",
+        "direction": "拿来",
+        "flow": "读财务现状和账单前先过个人资料锁（无代码项目入口）",
+        "source": "personal-finance AGENTS.md；PCConfig docs/runtime/personal-data-access.md"
+      },
+      {
+        "id": "r-cockpit",
+        "with": "cockpit",
+        "direction": "交出",
+        "flow": "重复扣款提醒、请本人补报和每月回执登记到驾驶舱",
+        "source": "每月手册第 4、7 步；Set-OwnerItem.ps1"
+      }
+    ],
+    "highlights": [
+      {
+        "id": "h-repayment",
+        "title": "还掉的钱，不会被算成花掉的钱。",
+        "screen": "personal-finance-06"
+      },
+      {
+        "id": "h-fx",
+        "title": "美元消费，按真正扣的人民币算。",
+        "screen": "personal-finance-06"
+      },
+      {
+        "id": "h-bnpl",
+        "title": "先用后付的账，以电商订单为准。",
+        "screen": "personal-finance-06"
+      }
+    ],
+    "mentions": [
+      {
+        "target": "/projects/daily-preferences/",
+        "screen": "personal-finance-01",
+        "text": "花钱怎么核对 → 个人理解库"
+      },
+      {
+        "target": "/projects/personal-finance/reconciliation/",
+        "screen": "personal-finance-02",
+        "text": "看对账模块"
+      },
+      {
+        "target": "/rules/charter/#L18",
+        "screen": "personal-finance-03",
+        "text": "个人资料锁着时"
+      }
+    ],
+    "live": []
+  },
+  "notes": {
+    "merged": [
+      "底稿“储蓄卡五类”“还款不算消费”“本人转账不算消费”合成一条“分清消费和还款”。"
+    ],
+    "dropped": [
+      "CURRENT.md 的全部数值、余额、欠款、应收应付条目、来源条目和提交标题里的金额：按本人 10 月 22 日要求不公开。",
+      "具体银行和卡种、具体电商和外卖平台名，以及与本页做法无关的私人事项：不上页面。"
+    ],
+    "unsure": [
+      "“自己取回账单”“重复扣款提醒”“月度总更新”“每月导出提醒”标待验收：每月手册 10 月 21 日写成，提醒任务从未运行，没有找到完整一轮的回执。",
+      "第 2 屏的示例问法是替本人口吻编的，不是真实提问。"
+    ]
+  }
+}
