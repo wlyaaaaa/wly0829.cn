@@ -115,7 +115,14 @@ def body_link(page, row, field, start, end, number, rows):
     parent, key = field_at(page, field)
     text = parent[key]
     anchors = ([number] if number else page.get("registry", {}).get("numbers", [])) + [row]
-    proven = False
+    pattern = re.sub(r"\\[dDsSwWbB]", "", row.get("page_pattern", ""))
+    matches = list(re.finditer(row["page_pattern"], text, re.M)) if row.get("page_pattern") else []
+    proven = bool(row.get("field") == field and row.get("page_pattern")
+                  and re.search(r"[\u3400-\u9fff]{2}|[A-Za-z]{2}", pattern)
+                  and len(matches) == 1 and matches[0].lastindex
+                  and matches[0].span(1) == (start, end))
+    if row.get("source_precision") == "estimated" and row.get("display_precision") == "exact":
+        raise ValueError("estimated_source_cannot_replace_exact")
     for anchor in anchors:
         phrase = anchor.get("text", "")
         if re.fullmatch(r"(?:个|份|次|条|页|行|项|组|种|千|万|亿|秒|分钟|小时|天|[KMGTPE]?i?B)*", re.sub(r"[\d\W_]+", "", phrase), re.I):
@@ -127,6 +134,12 @@ def body_link(page, row, field, start, end, number, rows):
             proven = True
     if not proven:
         raise ValueError("scope_mismatch_or_unverified")
+    paired = [r for r in rows if row["id"] in r.get("qualifies", [])]
+    if paired:
+        if any(r.get("new_value") is None or r.get("status") not in {"changed", "unchanged"}
+               or r.get("date_semantics") != "coverage_end" and qualified_date_review(page, r) for r in paired):
+            raise ValueError("as_of_link_required")
+        return None  # 显式日期记录独占截至编辑，支持跨字段配对。
     sentences = list(re.finditer(r"[^\n。；;！!？?]+", text))
     own = next(i for i, m in enumerate(sentences) if m.start() <= start < m.end())
     spans = [sentences[own]]
@@ -185,6 +198,17 @@ def qualified_date_review(page, row):
 def build_number_edits(root, result):
     root, pages, edits, skipped, manual_reviews = Path(root), {}, {}, [], []
     accepted = set()
+    links, owners, unpaired = defaultdict(set), defaultdict(set), defaultdict(list)
+    for row in result["rows"]:
+        for ref in row.get("qualifies", []):
+            links[row["id"]].add(ref)
+            links[ref].add(row["id"])
+    for row in result["rows"]:
+        if row["id"] not in links and row.get("status") != "historical" and not row.get("dynamic"):
+            unpaired[(row["page"], row.get("screen"), row.get("field", "").split(".")[0])].append(row["id"])
+    for group in unpaired.values():
+        for rid in group:
+            links[rid].update(group)
     for row in sorted(result["rows"], key=lambda r: bool(r.get("qualifies"))):
         if row.get("manual_review_reason"):
             manual_reviews.append({k: row.get(k) for k in ("page", "field", "old_value", "date_candidate", "source_observed_at")} |
@@ -202,6 +226,8 @@ def build_number_edits(root, result):
             page = pages[slug]
             if row.get("requires_semantic_refresh"):
                 raise ValueError("scope_mismatch_or_unverified")
+            if row.get("source_precision") == "estimated" and row.get("display_precision") == "exact":
+                raise ValueError("estimated_source_cannot_replace_exact")
             review = qualified_date_review(page, row) if row.get("qualifies") and row.get("date_semantics") != "coverage_end" else None
             if review:
                 manual_reviews.append(dict(page=slug, record_id=rid, field=row.get("field"), old_value=row["old_value"],
@@ -242,9 +268,17 @@ def build_number_edits(root, result):
                         observed_at=row["source_observed_at"], record_id=rid))
             number = numbers[ni] if ni is not None else None
             if field.startswith("screens[") and NUMBER.fullmatch(parent[key][start:end]):
-                da, db = body_link(page, row, field, start, end, number, result["rows"])
-                add(field, da, db, row["source_observed_at"])
-            add(field, start, end, row["source_observed_at"] if CHINESE_DATE.fullmatch(parent[key][start:end]) and CHINESE_DATE.fullmatch(parent[key][start:end])[4] else row["new_value"])
+                linked = body_link(page, row, field, start, end, number, result["rows"])
+                if linked:
+                    add(field, *linked, row.get("source_coverage_end") or row["source_observed_at"])
+            value = row["new_value"]
+            stamp = CHINESE_DATE.fullmatch(parent[key][start:end])
+            if row.get("qualifies") and (DATETIME.fullmatch(parent[key][start:end]) or stamp and stamp[4]):
+                observed = datetime.fromisoformat(row["source_observed_at"]).astimezone(BEIJING)
+                if row.get("date_semantics") == "coverage_end" or str(value)[:10] != observed.date().isoformat():
+                    raise ValueError("覆盖末日不提供时分，不能用取数时刻替代")
+                value = row["source_observed_at"]
+            add(field, start, end, value)
             if ni is not None and not row.get("qualifies"):
                 number = numbers[ni]
                 nf = f"registry.numbers[{ni}].text"
@@ -253,7 +287,7 @@ def build_number_edits(root, result):
                     raise ValueError("数字登记与正文口径不一致")
                 add(nf, a, b, row["new_value"])
                 if number.get("as_of"):
-                    add(f"registry.numbers[{ni}].as_of", 0, len(number["as_of"]), row["source_observed_at"])
+                    add(f"registry.numbers[{ni}].as_of", 0, len(number["as_of"]), row.get("source_coverage_end") or row["source_observed_at"])
                 # 完整登记原话在其绑定屏唯一出现时，才同步正文；绝不按裸数字搜索。
                 screens = {row.get("screen"), *row.get("affected_screens", []), *number.get("screens", [])}
                 for index, screen in enumerate(page.get("screens", [])):
@@ -265,15 +299,20 @@ def build_number_edits(root, result):
                         target = f"screens[{index}].text"
                         start, end = hits[0].start() + a, hits[0].start() + b
                         whole_number(text, start, end)
-                        da, db = body_link(page, row, target, start, end, number, result["rows"])
+                        linked = body_link(page, row, target, start, end, number, result["rows"])
                         add(target, start, end, row["new_value"])
-                        add(target, da, db, row["source_observed_at"])
+                        if linked:
+                            add(target, *linked, row.get("source_coverage_end") or row["source_observed_at"])
             for edit in pending:
                 location = (slug, edit["field"], edit["start"], edit["end"])
+                for prior in owners[location]:
+                    links[rid].add(prior)
+                    links[prior].add(rid)
                 if location in edits and edits[location]["new_value"] != edit["new_value"]:
                     raise ValueError("同一位置有冲突的新值")
             for edit in pending:
                 location = (slug, edit["field"], edit["start"], edit["end"])
+                owners[location].add(rid)
                 edits[location] = edit
             accepted.add(rid)
         except (OSError, KeyError, ValueError, IndexError, InvalidOperation, re.error) as exc:
@@ -281,27 +320,31 @@ def build_number_edits(root, result):
     grouped = defaultdict(list)
     for edit in edits.values():
         grouped[(edit["page"], edit["field"])].append(edit)
-    conflicted = set()
+    blocked = {r["id"] for r in result["rows"]} - accepted
+    for (slug, field), group in grouped.items():
+        ordered = sorted(group, key=lambda e: e["start"])
+        if any(a["end"] > b["start"] for a, b in zip(ordered, ordered[1:])):
+            blocked.update(e["record_id"] for e in group)
+            skipped.extend(dict(page=slug, record_id=e["record_id"], reason="字符范围互相重叠") for e in group)
+    pending = list(blocked)
+    while pending:
+        for rid in links[pending.pop()] - blocked:
+            blocked.add(rid)
+            pending.append(rid)
+    reported = {r["record_id"] for r in skipped}
+    skipped.extend(dict(page=r["page"], record_id=r["id"], reason="as_of_link_required")
+                   for r in result["rows"] if r["id"] in (blocked & accepted) - reported)
     valid = []
     for (slug, field), group in grouped.items():
+        group = [e for e in group if e["record_id"] not in blocked]
         parent, key = field_at(pages[slug], field)
-        before, after, limit = parent[key], parent[key], len(parent[key])
+        before, after = parent[key], parent[key]
         for edit in sorted(group, key=lambda e: e["start"], reverse=True):
-            if edit["end"] > limit:
-                conflicted.add(slug)
-                skipped.append(dict(page=slug, record_id=edit["record_id"], reason="字符范围互相重叠"))
-                break
             after = after[:edit["start"]] + edit["new_value"] + after[edit["end"]:]
-            limit = edit["start"]
-        else:
-            for edit in group:
-                edit.update(field_before_sha256=digest(before), field_after_sha256=digest(after))
-            valid.extend(group)
-    conflicted.update(r["page"] for r in skipped)
-    blocked = {(e["page"], e["record_id"]) for e in valid if e["page"] in conflicted}
-    blocked -= {(r["page"], r["record_id"]) for r in skipped}
-    skipped.extend(dict(page=p, record_id=rid, reason="as_of_link_required") for p, rid in sorted(blocked))
-    return dict(schema="content-refresh.number-edits.v1", edits=[e for e in valid if e["page"] not in conflicted], skipped=skipped, manual_reviews=manual_reviews)
+        for edit in group:
+            edit.update(field_before_sha256=digest(before), field_after_sha256=digest(after))
+        valid.extend(group)
+    return dict(schema="content-refresh.number-edits.v1", edits=valid, skipped=skipped, manual_reviews=manual_reviews)
 
 
 def apply_edits(root, payload, only=None):

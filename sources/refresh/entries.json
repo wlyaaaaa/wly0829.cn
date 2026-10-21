@@ -549,13 +549,14 @@
       "-X",
       "utf8",
       "-c",
-      "import json;from pathlib import Path;r=Path('E:/.agents');c=json.loads((r/'config/personal-skill-supply.json').read_text(encoding='utf-8-sig'));d=Path(c['discovery_root']);a=[s for s in c['skills'] if s.get('install')];assert a and Path('C:/Users/10979/.claude/skills').resolve()==d.resolve(),'discovery_mismatch';assert all((r/s['source']).exists() and (d/s['name']).exists() and (r/s['source']).resolve()==(d/s['name']).resolve() for s in a),'source_link_mismatch';print(json.dumps({'shared_source_sets':1,'installed_skills':len(a),'mismatch_count':0}))"
+      "import json;from pathlib import Path;r=Path('E:/.agents');c=json.loads((r/'config/personal-skill-supply.json').read_text(encoding='utf-8-sig'));d=Path(c['discovery_root']);a=[s for s in c['skills'] if s.get('install')];assert a and Path('C:/Users/10979/.claude/skills').resolve()==d.resolve(),'discovery_mismatch';resolved=sum((r/s['source']).exists() and (d/s['name']).exists() and (r/s['source']).resolve()==(d/s['name']).resolve() for s in a);print(json.dumps({'shared_source_sets':1 if resolved==len(a) else None,'installed_skills':resolved,'declared_skills':len(a),'mismatch_count':len(a)-resolved}))"
     ],
     "cwd": "E:/.agents",
     "read_only": true,
     "owner_project": "agents",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "verification": "只读声明清单与路径resolve；分别返回声明数、实际匹配数和缺失数，不因单个链接缺失丢掉其余计数，也不把声明数当全部安装成功。"
   },
   "agents-inspect-stopwatch": {
     "argv": [

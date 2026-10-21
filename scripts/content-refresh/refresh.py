@@ -262,12 +262,14 @@ def retrieve(method, root, entries=None, cache=None):
     elif kind in ("page_count", "feature_count", "group_count"):
         selected = pages(root)
         if kind == "page_count":
+            if method.get("project_scope") == "active_projects" and method.get("kinds") != ["project"]:
+                raise ValueError("项目计数口径冲突：在用项目不能包含模块或冻结页")
             if set(method.get("kinds", [])) & {"project", "frozen"}:
                 config = root / "config/panel-projects.json"
-                registered = {p["id"] for p in read_json(config)["projects"] if p.get("enabled", True)} if config.exists() else None
-                aliases = runpy.run_path(str(ROOT / "scripts/audit-content-refresh.py"))["PROJECT_ALIASES"] if registered is not None else {}
+                registered = {p["id"] for p in read_json(config)["projects"] if p.get("enabled", True)}
+                aliases = runpy.run_path(str(ROOT / "scripts/audit-content-refresh.py"))["PROJECT_ALIASES"]
                 selected = [p for p in selected if not p.get("parent") and
-                            (p.get("kind") not in {"project", "frozen"} or registered is None or aliases.get(p["page"], p["page"]) in registered)]
+                            p.get("kind") in method["kinds"] and aliases.get(p["page"], p["page"]) in registered]
             value = sum(all(k not in method or p.get(k) == method[k] for k in ("status", "public"))
                         and (not method.get("kinds") or p.get("kind") in method["kinds"]) for p in selected)
         elif kind == "feature_count":
@@ -405,6 +407,8 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
             row["reason"] = record["retrieve"].get("instructions", "人工口径，未取得新值")
         elif record.get("scope_status") != "verified":
             row.update(status="scope_pending", reason=record.get("scope_reason", "统计口径未确认一致，不能算作变化"))
+        elif record.get("source_precision") == "estimated" and record.get("display_precision") == "exact":
+            row.update(status="scope_pending", reason="estimated_source_cannot_replace_exact")
         elif row.get("page_error"):
             row["reason"] = row["page_error"]
         else:

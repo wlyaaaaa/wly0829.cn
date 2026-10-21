@@ -173,6 +173,47 @@ class NumberEditsTests(unittest.TestCase):
         payload = self.one("167 次调用。\n截至10月9日", "167 次调用", 167, 168)
         self.assertFalse(payload["skipped"])
 
+    def test_field_pattern_and_cross_field_qualified_coverage_date(self):
+        self.page['screens'][0]['text'] = '当前材料有 165 份'
+        self.page['status_line'] = {'as_of': '2026-10-09'}
+        self.page['registry']['numbers'] = []
+        self.save()
+        number = dict(self.rows[0], page_number=None, field='screens[0].text',
+                      page_pattern=r'当前材料有 (\d+) 份', old_value=165, new_value=166)
+        cutoff = dict(self.rows[-1], field='status_line.as_of', page_pattern=r'(2026-10-09)',
+                      qualifies=[number['id']], new_value='2026-10-10')
+        payload = build_number_edits(self.root, {'rows': [number, cutoff]})
+        self.assertFalse(payload['skipped'])
+        self.assertEqual(len(payload['edits']), 2)
+        self.assertFalse(apply_edits(self.root, payload)['skipped'])
+        self.assertEqual(json.loads(self.path.read_text('utf-8'))['status_line']['as_of'], '2026-10-10')
+        self.save()
+        unrelated = dict(number, id='other', screen='other', field='screens[1].text', requires_semantic_refresh=True)
+        payload = build_number_edits(self.root, {'rows': [number, cutoff, unrelated]})
+        self.assertEqual({e['record_id'] for e in payload['edits']}, {number['id'], cutoff['id']})
+        self.assertFalse(apply_edits(self.root, payload)['skipped'])
+        self.save()
+        cutoff['qualifies'].append(unrelated['id'])
+        self.assertFalse(build_number_edits(self.root, {'rows': [number, cutoff, unrelated]})['edits'])
+        cutoff['qualifies'].pop()
+        self.page['status_line']['as_of'] = '10月9日 14:00'
+        self.save()
+        timed = dict(cutoff, page_pattern=r'(10月9日 14:00)', old_value='10月9日 14:00', date_semantics='coverage_end')
+        payload = build_number_edits(self.root, {'rows': [number, timed]})
+        self.assertFalse(payload['edits'])
+        self.assertIn('覆盖末日不提供时分', str(payload['skipped']))
+        for field in ('screens[0].text', 'status_line.as_of'):
+            blocked = dict(number, field=field, source_precision='estimated', display_precision='exact')
+            payload = build_number_edits(self.root, {'rows': [blocked, cutoff]})
+            self.assertFalse(payload['edits'])
+            self.assertEqual(payload['skipped'][0]['reason'], 'estimated_source_cannot_replace_exact')
+
+    def test_stale_offsets_do_not_prove_a_mismatched_pattern(self):
+        payload = self.one('165 份材料（10月9日）', '165 份', 165, 166,
+                           page_pattern=r'别的材料(\d+)', page_number=None)
+        self.assertFalse(payload['edits'])
+        self.assertEqual(payload['skipped'][0]['reason'], 'scope_mismatch_or_unverified')
+
     def test_number_date_batch_is_atomic_for_drift_and_illegal_payload(self):
         for mode in ("body", "registry", "illegal"):
             payload = self.one("167 次调用，截至10月9日 14:00", "167 次调用", 167, 168)

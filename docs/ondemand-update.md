@@ -63,6 +63,10 @@
 
 截至日期使用 `qualifies` 明确指向它注明的数据记录，不另造一份日期来源。程序的同屏邻近数字建议由 GPT 核对后写入；建议本身不算登记。新截至日期取这些记录里最早的观察日期，有一项 Unknown 就保留原日期。只读入口登记前核实不写东西，私人库只取计数和状态，不把条目原文输出给模型。
 
+改数绑定优先登记实际 `field` 与唯一、含具体含义的 `page_pattern`，完整捕获数字；已迁移的记录删除旧 `start/end`，避免改稿后字符偏移漂移。裸数字正则、旧值片段、失配或非唯一捕获仍拦下。数字与日期可跨字段通过 `qualifies` 配对，由日期记录独占截至编辑；共享同一日期的数字一起通过，独立配对不因同页其他失败项连坐，字段哈希在筛掉失败组后重算。覆盖末日不提供时分，不能拿取数时刻补成新的验证时间。
+
+项目计数必须读取当前 enabled Registry 并排除 `parent` 模块；`project_scope=active_projects` 只接受 `kinds=["project"]`，不含冻结页。明确写“含冻结”的既有总量采用独立的 `registered_projects_including_frozen` 口径，不用在用项目数替换它。配置不可读时返回 Unknown，不回退到遍历页面凑数。来源为 `source_precision=estimated`、展示要求 `display_precision=exact` 的项保持待核，估算值不能覆盖精确值。
+
 `--strict` 是必须通过的门。分路施工先运行 `refresh.py --inventory --strict --only <页id,...>` 修自己的页，合入前再跑全站严格盘点和 `tests.test_refresh_registry_complete`。漏登记会列页、屏及原文片段并非零退出；全站漏登记须为零，当前非历史、非 state 展示项自动覆盖至少 85%，人工项不超过 15%。局部 `--only` 通过不能证明全站通过。
 
 ## 0 准备常驻工作树
