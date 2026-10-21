@@ -4,7 +4,7 @@
 
 ```powershell
 python -B -X utf8 scripts/prepare-oss-release.py finalize-dist --dist <dist>
-python -B -X utf8 site-astro/tools/scan_glance.py --dist <dist> --pages changed
+python -B -X utf8 site-astro/tools/scan_glance.py --dist <dist>
 python -B -X utf8 site-astro/tools/scan_glance.py --dist <dist> --pages all
 python -B -X utf8 site-astro/tools/scan_glance.py --dist <dist> --pages /projects/daily-preferences/,/projects/password-center/
 python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <scan-result.json> --dry-run
@@ -77,7 +77,7 @@ gh workflow enable edgeone-live.yml --repo wlyaaaaa/wly0829.cn
 
 ## 扫描做什么
 
-`changed` 优先读取 `.build-receipt.json` 的 `rebuilt_pages`；没有回执时，比较当前页面 SHA256 与同一输出目录里上一份扫描记录。第一次没有记录时扫描所有页面。检查未完成的页面不会记成已完成，因此下次仍会选中。`--out <目录>` 可保存独立的一次验收，默认写到 dist 同级 `scan-glance`。
+默认 `published-diff` 比较 Git 共享目录 `wly-oss/published.json` 内上一成功发布清单与当前 HTML 的 SHA256，覆盖多轮构建累计的新增和变化页。规则换版仍使用该范围；只有外壳、排版引擎或共享脚本变化时另跑 `--pages all`，不是因 E 版本号变化就重扫全站。缺少成功记录时明确提示回退 `changed`，比较同一输出目录上一份扫描的页面哈希；没有扫描记录时选择全部页面。回退不证明成功前版，须核实实际累计范围。检查未完成的页面不会记成已完成，因此下次仍会选中。`--out <目录>` 可保存独立的一次验收，默认写到 dist 同级 `scan-glance`。
 
 扫描器沿用 `rescue-sweep.py` 和 `rescue-sweep-dom.js` 的文字范围、可见性、滚动、哈希和截图方法。四个独立无头 Chrome 并行检查 1920×1080、3840×2160，设备像素比为 1。它启动任务自己的本机静态服务，按最终清单把尚未上传的新 OSS 地址映射到 dist 中的确切资源字节；旧继承资源和实时只读数据继续以公网一致的 Origin/Referer 请求，写请求不转发。预览仅在内存里把 URL 换成本机代理地址，磁盘成品不变。临时浏览器配置位于任务输出目录，用完释放，不读取本人的 Chrome 登录资料。
 
