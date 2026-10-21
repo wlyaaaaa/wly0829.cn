@@ -20,6 +20,10 @@
   {
    "id": "limits",
    "label": "边界"
+  },
+  {
+   "id": "tech",
+   "label": "技术"
   }
  ],
  "page": {
@@ -122,12 +126,11 @@
   "notes": {
    "merged": [],
    "dropped": [
-    "命令、子命令参数、JSON 格式名、退出码、暂存目录和删除白名单的通配写法是给 AI 的操作说明，用人话写成规矩，不上页。",
-    "手机号、短信和通知内容、手机里的具体文件名、配对码、IP 和端口不上页；远程端口只写“远程端口”。"
+    "IP、端口号、手机序列号、配对码、手机号、短信和通知内容、手机里的具体文件名不上页；技术层只写字段名和判定，不写这些值。"
    ],
    "unsure": [
     "第 1 屏六句“怎么跟 AI 说”和第 2 屏两句“我：……”是替本人口吻写的示例说法；第 2 屏整屏是示例，已写明。",
-    "第 1 屏实测那句出自 owner-decisions 2026-10.md“手机远程可以用 Tailscale……”一节上下文（AI 整理：10 月 21 日 19:05—19:10 家里约 25 秒自动重连、关 Wi-Fi 经 Tailscale 取回测试文件两端 SHA-256 一致）和 PCConfig registries/pending_acceptance.json 两条 phone-direct 条目（19:23、19:24 登记，19:24、19:25 AI 机核关闭）。",
+    "第 1 屏实测那句出自 owner-decisions 2026-10.md“手机远程可以用 Tailscale……”一节上下文（AI 整理：10 月 21 日 19:05—19:10 家里约 25 秒自动重连、关 Wi-Fi 经 Tailscale 取回测试文件两端 SHA-256 一致）和 PCConfig registries/pending_acceptance.json 两条 phone-direct 条目（19:23、19:24 登记，19:24、19:25 AI 机核关闭）。“约 25 秒连回”是这一次实测，不当时限保证；之后 aec9b3f9 的 3 秒探测只有合成测试。",
     "现用手机 vivo X500 Pro Max 出自 owner-decisions 2026-10.md 10 月 6 日“换新手机定 vivo X500 Pro Max”一节；小米 15 Pro 10 月 21 日已卖出，旧做法已退役，页上不写。",
     "使用次数 Unknown：AI 使用小记录最后一条在 10 月 20 日 23:46，技能 10 月 21 日 19:26 才建。",
     "第 1 屏插画复用素材库“手机远程”（手机到笔记本、信封飘过），不是专门为这页画的。"
@@ -144,8 +147,8 @@
  },
  "source": {
   "page": "sources/pages/skill-phone-direct/page.json",
-  "sha256": "581edd8f2224cc263c2e508d1658b6d0346a562bb2e1ff3404a66956ea126b4d",
-  "converted_at_beijing": "2026-10-22T07:41:51+08:00"
+  "sha256": "f8169b97a2c901930523cc0597fed0a2ac3ea06814a67b747daef3e9640ded68",
+  "converted_at_beijing": "2026-10-22T07:58:26+08:00"
  }
 }
 ---
@@ -333,7 +336,7 @@
 
 不用点名：AI 要用手机上的东西时自己会用上它。照片视频的保全和清空、网站登录验证码、微信聊天各有自己的入口，见最后一屏。
 
-10 月 21 日晚在真手机上试过：家里断开后自动连回；关掉 Wi-Fi、切到 Tailscale 后远程取回一个测试文件，两头指纹一致；后台任务连不上时在驾驶舱登记“手机连一下”，连上后自动关掉。
+10 月 21 日晚在真手机上各试过一次：在家打开调试端口后，常驻的手机桥约 25 秒自动连回；关掉 Wi-Fi、切到 Tailscale 后远程取回一个测试文件，两头指纹一致；模拟后台任务连不上时在驾驶舱登记了“手机连一下”，连上后由 AI 核实关掉。
 
 ::screen{#skill-phone-direct-02 section="examples"}
 
@@ -580,7 +583,7 @@ AI：“电脑在家里的网络上找不到手机。你在外面的话，把手
 | 无线调试开着，电脑却连不上 | 重新配对一次，做法同上 |
 | 手机在家里 Wi-Fi 上，但无线调试没开 | 设置 → 开发者选项 → 打开“无线调试” |
 | 家里网络上找不到手机 | 在外面就切 Tailscale；在家就连上家里 Wi-Fi、开着无线调试（只开数据网络时连不上） |
-| 切了 Tailscale，但远程端口关着 | 手机重启过就会这样，这次远程取不到；回到家连上 Wi-Fi 后电脑会自动重新打开，到时再取 |
+| 切了 Tailscale，但远程端口关着 | 手机重启过就会这样，这次远程取不到；回到家连上家里 Wi-Fi，等电脑下一次收取时自动重新打开端口，再取 |
 
 ::screen{#skill-phone-direct-03 section="abilities"}
 
@@ -814,7 +817,7 @@ AI：“电脑在家里的网络上找不到手机。你在外面的话，把手
 **两条线，AI 自己挑**
 | 我在哪 | 怎么连 | 要知道的 |
 |---|---|---|
-| 家里 | 手机连着家里 Wi-Fi、开着无线调试，电脑直接连上 | 手机回到家里 Wi-Fi 后，常驻的手机桥几秒内就自动连回 |
+| 家里 | 手机连着家里 Wi-Fi、开着无线调试，电脑直接连上 | 手机回到家里 Wi-Fi 后，常驻的手机桥会自己试着连回（10 月 21 日实测一次，约 25 秒连回）；没连回时按上一屏的表在手机上操作 |
 | 外面 | 手机 VPN 切到 Tailscale，任何网络都行 | 用手机流量，每条命令一结束就断开；切 Tailscale 期间代理暂停，取完可切回；手机重启后要先回家连一次 Wi-Fi 才能再远程取 |
 
 **用这个技能时，AI 守的规矩**
@@ -1011,3 +1014,204 @@ AI：“电脑在家里的网络上找不到手机。你在外面的话，把手
 - 不持续拉取，也不远程操作手机；每次只取这一次要的。
 - 名单外的文件不删；照片视频的清空归照片视频那边。
 - 不另开服务：复用现有的手机桥，没有为它新装后台服务或定时任务。
+
+::screen{#skill-phone-direct-05 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-phone-direct-05",
+  "section": "tech",
+  "title": "技术实现与依据（一）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {},
+ "images": []
+}
+```
+
+## 技术实现与依据（一）
+
+这里保留入口、子命令、输出、退出码、连接和核对的实现。
+
+**10 月 22 日核对**　技能 E:\.agents\skills\phone-direct\SKILL.md（.agents 0348800d，北京时间 10 月 21 日 21:13）；入口脚本 E:\PCConfig	ools\phone_direct.py（PCConfig 7df54f9b，同日 21:13），运行说明 docs/runtime/phone-direct.md，配置 registries/phone_direct.json；合成测试 tools/test_phone_direct.py 共 25 个测试函数，这次没有重跑。复用常驻无线 ADB 手机桥（tools/phone_bridge.py，计划任务 PCConfig Phone Bridge）的共用连接，没有为它新增服务、MCP 或计划任务。
+
+## 入口和子命令
+
+`python -B E:\PCConfig	ools\phone_direct.py 子命令`；`--unattended --purpose "要从手机取什么"` 放在子命令前后都可以；`--help` 输出帮助文字，是唯一不出 JSON 的情况。
+
+| 子命令 | 做什么 | 主要参数 |
+| --- | --- | --- |
+| ensure | 确认连接；已连上时关闭驾驶舱里未结的“手机连一下” | 无 |
+| ls 手机目录 | 列一层目录，按修改时间从新到旧 | 只收绝对路径 |
+| pull 手机路径… --dest 电脑目录 | 取回并核对，可一次多个 | --delete-after-verify：核对后删手机副本，只限白名单 |
+| sms | 按条件读短信 | --since-minutes（默认 1440）、--address、--contains、--limit（默认 20）、--box inbox 或 all |
+| notifications | 读取并筛选当前通知 | --package、--contains、--limit（默认 30） |
+| screenshot --dest 电脑目录 | 存一张 PNG，文件名 phone-年月日-时分秒.png | 无 |
+| pair 地址 六位配对码 | 配对后再走一遍 ensure | 配对码不输出、不落盘 |
+
+除 pair 外，每条子命令都先跑 ensure；ls、pull、sms、notifications、screenshot 连上后再经密码中心查个人资料锁（Invoke-SecretBroker.ps1 CheckPersonalDataAccess），锁着就不读。
+
+::screen{#skill-phone-direct-06 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-phone-direct-06",
+  "section": "tech",
+  "title": "技术实现与依据（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {},
+ "images": []
+}
+```
+
+## 技术实现与依据（二）
+
+## 输出
+
+每条命令在标准输出打印一份 UTF-8 JSON，schema 为 pcconfig.phone-direct.v1，都带 status，时间用北京时间。短信、通知正文只出现在这次输出里，不写日志或状态文件。
+
+- **ensure**：连上是 status=connected，带 device（连上的设备地址，页上不写值）和 route（lan 家里 / tailscale 远程）；没连上是 status=not_connected，带 kind（下一屏五种之一）和 owner_message（给本人的一句话）；驾驶舱登记失败另带 owner_item_error。
+- **ls**：entries，每项 name、path、size、mtime、type（file / dir / other）。
+- **pull**：status 为 ok、partial 或 delete_not_allowed；files 每项 remote、local、size、sha256、result（pulled / already_present / verification_failed）、deleted。
+- **sms**：messages，每条 id、address、date、body。
+- **notifications**：notifications，每条 package、app、title、text、posted_at。
+- **screenshot**：local、size、sha256。
+- **出错**：status=error，reason 是一个英文短词（如 invalid_arguments、invalid_remote_path、source_changed、remote_disconnect_failed），认不出的一律 operation_failed。
+
+## 退出码
+
+| 退出码 | 含义 |
+| --- | --- |
+| 0 | 成功：status 为 ok 或 connected |
+| 2 | 手机没连上（not_connected），看 kind 和 owner_message；驾驶舱登记失败也仍是 2 |
+| 3 | 个人资料锁着（personal_data_locked）：根会话请本人验证解锁后再取；子代理不自己验证，写“需要本人资料：……”交回 |
+| 1 | 其他：有文件没核对通过（partial）、要删的不在白名单（delete_not_allowed，整条拒绝，不拉也不删）、参数或执行错误（error） |
+
+::screen{#skill-phone-direct-07 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-phone-direct-07",
+  "section": "tech",
+  "title": "连接与核对",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {},
+ "images": []
+}
+```
+
+## 连接与核对
+
+## 连接顺序
+
+1. adb 已列为在线的设备里先找这台手机；每个候选都读 ro.serialno，和手机桥配置里登记的本机手机对上才算。
+2. mDNS 广播里本机手机的无线调试服务，连上再核对。
+3. 手机桥 E:\Data\PCConfig\PhoneBridge\peer.json 记下的上次家里端点，和家里地址上的传统调试端口（peer.json 里的手机须是本机手机）；先探 TCP 再连，不通或不是本机的端点从 adb 断开，不让 adb 一直重拨死端点。前三步是收取任务、手机桥和本入口共用的 connect()。
+4. 都不行，就取 Tailscale 里每台在线 Android 设备的第一个 IPv4，连它的传统调试端口并核对。连上的是 Tailscale 地址就记 route=tailscale，在命令结束时（finally）断开；家里连接保持。
+
+传统调试端口由每半小时一次的收取在手机在家时自动打开；手机重启后会关，回家连上 Wi-Fi 才恢复。
+
+## 连不上时的判定顺序
+
+1. 手机桥判定为 pairing_required → authorize：点“允许”或用配对码配对。
+2. 判定为 lan_unreachable：mDNS 里有本机手机的无线调试连接记录 → repair（重新配对）；没有 → enable_debugging（打开无线调试）。
+3. 其他情况：Tailscale 里有在线的 Android 设备 → remote_port_closed（远程端口关着）；没有 → not_home_network（在外面切 Tailscale，在家连上 Wi-Fi、开着无线调试）。
+
+带 --unattended 时，驾驶舱里没有来源为“手机桥连接恢复”的 pending、on_hold 或 failed 条目，才经 tools/Set-OwnerItem.ps1 登记一条“手机连一下：……”，写明 --purpose；已有就不重复。之后 ensure 连上会把这些条目以“AI机核：phone_direct ensure 已连上手机”关闭，手机桥重连成功也会关。
+
+## 取回怎么核对
+
+1. 手机路径只收绝对文件路径，拒绝 ..、控制字符和通配符；/storage/emulated/0/ 先规范成 /sdcard/。
+2. 先在手机上读指纹：类型、大小、修改时间和 SHA-256，前后两次 stat 一致才算没在变；不是普通文件或是链接就拒绝。
+3. 拉到纯英文的暂存根 E:\Cache\PhoneDirect\staging 下一个随机名的 .part 文件；它的大小和 SHA-256 都要等于手机指纹，再读一次手机指纹也没变，才往下走。
+4. 挪到目标目录：已有同名且内容相同记 already_present；同名不同内容改名为“原名 (phone-哈希前 8 位)”，绝不覆盖；挪完再核一次大小和 SHA-256，修改时间设成手机上的。截图走同一套挪放和核对。
+5. 要删时：路径先对白名单（registries/phone_direct.json 里微信支付账单、滴滴个人信息导出两类），有一个不在就整条拒绝；删前再核一次手机指纹和电脑上的文件，删后确认手机上不存在。暂存文件不论成败最后都清掉。
+
+::screen{#skill-phone-direct-08 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-phone-direct-08",
+  "section": "tech",
+  "title": "出问题时",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {},
+ "images": []
+}
+```
+
+## 出问题时
+
+- **自动连不回**：按产品层“连不上时”的表在手机上操作；电脑这边不保证多久能连回。
+- **远程端口关着**（手机重启过）：这次远程取不到；回家连上家里 Wi-Fi，等下一次收取把端口打开后再取。
+- **取回对不上**：那一项记 verification_failed，整条 status=partial、退出码 1；暂存文件删掉，目标目录不留半个文件，手机副本不删。
+- **要删的不在白名单**：整条 delete_not_allowed，不拉取也不删除；加新类型要本人同意后再改 registries/phone_direct.json。
+- **资料锁着**：退出码 3，什么都不读。
+- **驾驶舱登记失败**：只在 JSON 里带 owner_item_error，退出码仍是 2。
+- **远程断开失败**：status=error，reason=remote_disconnect_failed。
+- **别碰的**：不用 Scoop 装的另一个 adb，也不 adb kill-server，那会打断常驻的手机桥。
+
+## 实测和缺口
+
+- 10 月 21 日 19:05—19:10 各一次：在家打开传统调试端口后，手机桥约 25 秒自动连回；手机关 Wi-Fi、VPN 切到 Tailscale 后，电脑经 Tailscale 取回测试文件，两端 SHA-256 一致。
+- 同日 19:23、19:24 模拟离线各登记一条“手机连一下”，约 12 秒后由 ensure 核实关闭。
+- 之后（20:49 的 PCConfig aec9b3f9）手机桥改为没连上时每 3 秒探一次上次的家里端点、一通就重连；这一改动只有合成测试，还没有真机实测，所以页上不写重连要多久。
+- 短信、通知、截图三项，这页没查到单独的真机验收记录（Unknown）。
+
+::screen{#skill-phone-direct-09 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-phone-direct-09",
+  "section": "tech",
+  "title": "依据与来源",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {},
+ "images": []
+}
+```
+
+## 依据与来源
+
+- E:\.agents\skills\phone-direct\SKILL.md（.agents 0348800d）　什么时候用、连接步骤、取用规矩
+- E:\PCConfig	ools\phone_direct.py（PCConfig 7df54f9b）　子命令、输出、退出码、判定顺序、核对与删除
+- E:\PCConfig	ools\phone_personalos_pull.py 的 connect()（PCConfig aec9b3f9）　家里连接顺序
+- E:\PCConfig\docsuntime\phone-direct.md　运行事实和给本人的五句话
+- E:\PCConfigegistries\phone_direct.json　暂存根和删除白名单
+- E:\PCConfig\docsecovery\phone-link.md　常驻手机桥
+- E:\PCConfigegistries\pending_acceptance.json　phone-direct-1792581836、phone-direct-1792581894 两条登记和关闭
+- E:\.agents\docs\owner-decisions6-10.md　10 月 21 日 18:41 的授权、19:04—19:12 的远程线决定和实测记录
