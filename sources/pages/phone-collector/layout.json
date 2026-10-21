@@ -1,0 +1,671 @@
+[
+  {
+    "screen": "phone-collector-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "首屏",
+        "width": "50%",
+        "text_ref": "手机采集"
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "illustration": "outside",
+        "row": "首屏",
+        "width": "49%",
+        "index": 0,
+        "size": "large"
+      },
+      {
+        "type": "stat_card",
+        "columns": 4,
+        "columns_v": 2,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/手机.png",
+          "_library/icons/秒表.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/hires-icons/打勾清单.png"
+        ],
+        "text_ref": "4 类"
+      },
+      {
+        "type": "prose",
+        "align": "right",
+        "text_ref": "截至10月22"
+      },
+      {
+        "type": "action_button",
+        "align": "left",
+        "columns": 2,
+        "text_ref": "原料交给谁"
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "手机采集"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "手机上有几样东西只有手机自己拿得到"
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "illustration": "outside",
+        "index": 0,
+        "size": "large"
+      },
+      {
+        "type": "stat_card",
+        "columns": 2,
+        "columns_v": 2,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/手机.png",
+          "_library/icons/秒表.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/hires-icons/打勾清单.png"
+        ],
+        "text_ref": "4 类"
+      },
+      {
+        "type": "prose",
+        "align": "right",
+        "text_ref": "截至10月22"
+      },
+      {
+        "type": "action_button",
+        "align": "center",
+        "columns": 1,
+        "columns_v": 1,
+        "text_ref": "原料交给谁"
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "平时怎么用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "装好、放行一次以后"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 2,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/icons/日历时钟.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/round3/clean-assets/png/03-放大镜-clean.png"
+        ],
+        "text_ref": "① 装一次，放行一次",
+        "item_count": 4
+      },
+      {
+        "type": "notice",
+        "align": "left",
+        "text_ref": "要问的事问理解库"
+      },
+      {
+        "type": "prose",
+        "text_ref": "理解库怎么读这些记录"
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "平时怎么用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "装好、放行一次以后"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/icons/日历时钟.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/round3/clean-assets/png/03-放大镜-clean.png"
+        ],
+        "text_ref": "① 装一次，放行一次",
+        "item_count": 4
+      },
+      {
+        "type": "notice",
+        "text_ref": "要问的事问理解库"
+      },
+      {
+        "type": "prose",
+        "text_ref": "理解库怎么读这些记录"
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "被杀、断档、连不上怎么办"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/盾牌对勾.png",
+          "_library/icons/沙漏.png",
+          "_library/icons/梳理乱线.png",
+          "_library/icons/文件夹.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/icons/断线.png",
+          "_library/icons/白纸.png"
+        ],
+        "text_ref": "被系统杀掉或冻住",
+        "item_count": 7
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "被杀、断档、连不上怎么办"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/盾牌对勾.png",
+          "_library/icons/沙漏.png",
+          "_library/icons/梳理乱线.png",
+          "_library/icons/文件夹.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/icons/断线.png",
+          "_library/icons/白纸.png"
+        ],
+        "text_ref": "被系统杀掉或冻住",
+        "item_count": 7
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "从叫醒到进理解库的一条链"
+      },
+      {
+        "type": "flow",
+        "columns": 6,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "connector": "arrow",
+        "icons": [
+          "_library/icons/铃铛.png",
+          "_library/icons/数据库循环.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/icons/文件写作.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/hires-icons/数据库.png"
+        ],
+        "text_ref": "叫醒"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "row": "底部两卡",
+        "width": "49%",
+        "size": "medium",
+        "text_ref": "东西放在哪"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "row": "底部两卡",
+        "width": "49%",
+        "size": "medium",
+        "text_ref": "谁管哪一段"
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "section_heading",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "从叫醒到进理解库的一条链"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "arrow",
+        "icons": [
+          "_library/icons/铃铛.png",
+          "_library/icons/数据库循环.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/icons/文件写作.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/hires-icons/数据库.png"
+        ],
+        "text_ref": "叫醒"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "text_ref": "东西放在哪"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "text_ref": "谁管哪一段"
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "width": "64%",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 2,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/开关.png",
+          "_library/icons/硬盘循环.png",
+          "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/icons/笔记本电脑.png",
+          "_library/icons/手机.png"
+        ],
+        "text_ref": "不常驻，也能按时醒。"
+      },
+      {
+        "type": "stat_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "right_inside",
+        "icons": [
+          "_library/hires-icons/代码窗口.png",
+          "_library/icons/断链.png",
+          "_library/hires-icons-r2/版本循环文件.png"
+        ],
+        "text_ref": "0.1.12"
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/开关.png",
+          "_library/icons/硬盘循环.png",
+          "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/icons/笔记本电脑.png",
+          "_library/icons/手机.png"
+        ],
+        "text_ref": "不常驻，也能按时醒。"
+      },
+      {
+        "type": "stat_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "right_inside",
+        "icons": [
+          "_library/hires-icons/代码窗口.png",
+          "_library/icons/断链.png",
+          "_library/hires-icons-r2/版本循环文件.png"
+        ],
+        "text_ref": "0.1.12"
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 3,
+        "illustration": "top_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/盾牌对勾.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/icons/月亮.png"
+        ],
+        "text_ref": "被杀几次，记录也不断。"
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/盾牌对勾.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/icons/月亮.png"
+        ],
+        "text_ref": "被杀几次，记录也不断。"
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "标题与图例",
+        "width": "43%",
+        "text_ref": "全部功能（16 项）"
+      },
+      {
+        "type": "status_legend",
+        "align": "left",
+        "row": "标题与图例",
+        "width": "55%",
+        "text_ref": "图例："
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/数据库循环.png",
+          "_library/icons/纸箱.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/icons/秒表.png"
+        ],
+        "size": "medium",
+        "text_ref": "采集",
+        "fill_last_row": true
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文件夹.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/hires-icons/数据库.png",
+          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+        ],
+        "size": "medium",
+        "text_ref": "交给电脑",
+        "fill_last_row": true
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/铃铛.png",
+          "_library/icons/日历时钟.png",
+          "_library/icons/插头.png",
+          "_library/icons/硬盘循环.png",
+          "_library/icons/文件写作.png",
+          "_library/icons/月亮.png",
+          "_library/icons/手机.png",
+          "_library/round3/clean-assets/png/03-放大镜-clean.png"
+        ],
+        "size": "medium",
+        "text_ref": "保活和自查",
+        "fill_last_row": true
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部功能（16 项）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例："
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/数据库循环.png",
+          "_library/icons/纸箱.png",
+          "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/icons/秒表.png"
+        ],
+        "size": "medium",
+        "text_ref": "采集"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文件夹.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/hires-icons/数据库.png",
+          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+        ],
+        "size": "medium",
+        "text_ref": "交给电脑"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/铃铛.png",
+          "_library/icons/日历时钟.png",
+          "_library/icons/插头.png",
+          "_library/icons/硬盘循环.png",
+          "_library/icons/文件写作.png",
+          "_library/icons/月亮.png",
+          "_library/icons/手机.png",
+          "_library/round3/clean-assets/png/03-放大镜-clean.png"
+        ],
+        "size": "medium",
+        "text_ref": "保活和自查"
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "icons": [
+          "_library/icons/小旗.png",
+          "_library/icons/手机.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/月亮.png",
+          "_library/icons/文件写作.png"
+        ],
+        "width": "100%",
+        "text_ref": "10 月 6—7 日",
+        "direction": "vertical",
+        "connector_style": "thin_line"
+      }
+    ]
+  },
+  {
+    "screen": "phone-collector-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "icons": [
+          "_library/icons/小旗.png",
+          "_library/icons/手机.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/月亮.png",
+          "_library/icons/文件写作.png"
+        ],
+        "text_ref": "10 月 6—7 日",
+        "direction": "vertical",
+        "connector_style": "thin_line"
+      }
+    ]
+  }
+]
