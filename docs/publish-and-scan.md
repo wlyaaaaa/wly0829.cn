@@ -3,15 +3,17 @@
 先构建成品，再用一个扫描入口检查稳定后的画面。发布入口只传新增或内容变化的文件，并留下实测计时。扫描失败只报告问题；扫描器不改页面，也不替本人按授权、解锁、锁屏等按钮。
 
 ```powershell
-python -B -X utf8 scripts/prepare-oss-release.py finalize-dist --dist <dist>
-python -B -X utf8 site-astro/tools/scan_glance.py --dist <dist> --pages changed
+python -B -X utf8 site-astro/tools/scan_glance.py --dist <dist>
+# 只有外壳、排版引擎或共享脚本变化时另跑全站。
 python -B -X utf8 site-astro/tools/scan_glance.py --dist <dist> --pages all
 python -B -X utf8 site-astro/tools/scan_glance.py --dist <dist> --pages /projects/daily-preferences/,/projects/password-center/
 python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <scan-result.json> --dry-run
-python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <scan-result.json>
+python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <scan-result.json> --output <正式发布输出新目录>
+# 上条发布完成、释放锁后，另跑清理；可与下一轮取数并行。
+python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发布输出目录>
 ```
 
-`<dist>` 是完整构建目录。构建最后调用离线 `finalize-dist`，一次完成资源地址改写和 OSS/Pages 分包身份；扫描和发布都使用收口后的同一份磁盘字节。这个函数不读取线上清单，同一输入的结果可重复，已收口且未改变的目录再次运行不变。G1 接线前可以手动执行第一条命令；发布入口不再改写页面或资源。没有构建回执时，扫描仍能读取成品并自行计算文件哈希。
+`<dist>` 是完整构建目录。构建最后调用离线 `finalize-dist`，一次完成资源地址改写和 OSS/Pages 分包身份；扫描和发布都使用收口后的同一份磁盘字节。这个函数不读取线上清单，同一输入的结果可重复，已收口且未改变的目录再次运行不变。唯一构建链已调用该收口步骤；发布入口不再改写页面或资源。没有构建回执时，扫描仍能读取成品并自行计算文件哈希。
 
 资源地址由该资源和实际依赖的内容决定。修改一份 JSON 时，无关脚本和页面不会因为整包指纹变化而换地址；读取该 JSON 的脚本会随真正变化的依赖更新。循环引用使用有限的源依赖闭包，重复定稿不在循环中反复换键。
 
@@ -22,13 +24,13 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <
 - 显式 `--previous-manifest <文件>` 无效时直接报错；未指定时，沿用 `oss-retention.py` 对真实成功 GitHub Pages 部署的发现方式。不会把未部署的最新提交当成上一版。
 - 先逐个比较整份 dist 的文件 SHA256 与指定扫描记录，增、删、改任何文件均拒绝发布并列出差异。再按最终成品清单与真实成功前版计算上传计划；对象地址变化也必须上传对应字节，不能因为哈希相同就跳过新地址。资源先上传 OSS，随后把原字节的 Pages 成品提交到专用 `site-dist` 分支；全部部署和回读通过后，最后写既有 Git 共享目录的 `wly-oss/published.json` 成功记录。
 - OSS 对本次上传对象做 HEAD，核大小及 ETag 或 Content-MD5；首页、驾驶舱、`/computer-access/` 和变化的 HTML 做 GET，核 HTTP 200 和正文 SHA256。推完 `site-dist` 后，从 `main` 手动触发 `pages.yml` 并传入刚推的 `sha`；按触发命令返回的运行网址取得 run id，等待该次运行成功才开始页面回读。`--pages-timeout`（默认 600 秒）覆盖触发和等待，失败或超时直接报错；若 GitHub CLI 未返回运行网址，也报错而不猜是哪次运行。
-- `oss-retention.py pin` 在上传前保留本次所需对象。保留集包含清单对象，以及成品 HTML、CSS、JS 中实际引用的绝对 OSS 地址。正式部署和公网回读通过、成功基线写入后，发布器以本轮真实 HEAD 证明补齐已有受管对象登记，并在同一发布锁下调用现有 `collect`，退役本轮精确施工清单。
+- `oss-retention.py pin` 在上传前保留本次所需对象。保留集包含清单对象，以及成品 HTML、CSS、JS 中实际引用的绝对 OSS 地址。资源回读后，以本轮真实 HEAD 证明补齐受管对象登记并保存 pin；正式发布本身不调用 `collect`，不删除旧对象。部署和公网回读成功后写成功基线，返回 `status=published`、`publication_status=published`、`oss_retention.status=deferred`，删除数 0，退出 0。
 - 每份施工登记在 Git 共享目录 `wly-oss/pins/<pin-id>.json` 的 `plan_snapshot` 保存清单原文，并以 `plan_sha256` 核对原始字节；`plan` 路径保留来源定位，原文件仍在时也核对其哈希，准备目录清掉不影响已保存的快照。发布回执的 `oss_retention_pin` 记录落点和清单哈希。历史登记没有快照且原清单已缺失时，保留该登记的全部精确 key，在 `pending_pins` 列明原因，继续核对其他候选；结果仍如实记为 `incomplete`，不会自动撤销其他施工登记。未知登记格式或现存清单哈希变化仍停止退役。
-- OSS 退役属于按需更新的收尾步骤：现役资源和引用、有效回滚以及其他施工清单组成保留集。只核对已有受管登记中不被保留的精确 key，不整桶扫描、不按年龄认定用途。每个候选完整查询全部版本，核唯一 `null`、确为最新、大小和非空 ETag 与原证明一致，保存预演计划；删除前再核精确版本、线上成品提交和本地保留登记未变化，以原 API 精确删除 `VersionId=null`，删除后再次回读。缺证明、多版本或未知清单保留并列明原因，其他施工清单不会自动撤销。
-- 每轮默认最多核对 1000 个受管候选，可用 `--retention-max-keys` 调整；超出的对象如实列为待下一次按需更新处理。已核实不存在或已删的受管登记同步移除，后续更新不会重复查询这些空对象。退役结果和预演分别写 `oss-retention.json`、`oss-retention-plan.json`，发布回执另含 `oss_retention`。无候选也写实际结果；清理受阻时保留已上线事实 `publication_status=published`，整体状态为 `published_with_retention_incomplete` 且命令退出 1。发布、验收失败或 `--upload-only` 不退役；`--dry-run` 不触发退役。
+- OSS 退役在发布命令结束、释放发布锁后独立运行 `publish_site.py --retention-only <正式发布输出目录>`，可与下一轮调查、取数并行。该命令只接受成功实发回执，重新取得现有短锁，结束后释放自己取得的锁；不借用仍由发布过程持有的锁。保留该输出目录直至清理结束；后续已部署新成品时，须使用当前成功发布的输出目录，旧提交清理会被拒绝。现役资源和引用、有效回滚以及其他施工清单组成保留集。只核对已有受管登记中不被保留的精确 key，不整桶扫描、不按年龄认定用途。每个候选完整查询全部版本，核唯一 `null`、确为最新、大小和非空 ETag 与原证明一致，保存预演计划；删除前再核精确版本、线上成品提交和本地保留登记未变化，以原 API 精确删除 `VersionId=null`，删除后再次回读。缺证明、多版本或未知清单保留并列明原因，其他施工清单不会自动撤销。
+- 每轮默认最多核对 1000 个受管候选，使用已有 8 路并发查询，可用 `--retention-max-keys` 调整；超出的对象留待下次单独清理。已核实不存在或已删的受管登记同步移除，不重复查询空对象。退役结果和预演分别写 `oss-retention.json`、`oss-retention-plan.json`。清理命令返回 `retention_complete` 或 `retention_incomplete`，残留只让清理命令退出 1，不改已上线的发布结果；可加 `--dry-run` 仅查询计划，返回 `retention_dry_run`，有未完成项仍非零退出。发布失败、仅上传或发布预演均不触发清理。
 - 沿用已有 `aliyun ossutil` 的 `website-images` 配置，程序不读取、复制或记录凭据内容。没有新增 CDN 刷新步骤，既有被替换的发布链也没有这一步。
 
-本次任务明确排除删除既有 OSS 对象时，发布命令加 `--skip-retention`：上传、部署与回读照常完成，回执记录 `skipped_by_request` 和删除数 0，不调用对象退役。
+正式发布默认延后清理，不必再加参数。`--skip-retention` 保留兼容性，显式使用时回执记录 `skipped_by_request` 和删除数 0；它同样不在发布内清理。发布回执中的 `oss_retention.command` 给出后续独立命令，清理失败不把已上线状态改成发布失败。
 
 每次运行在输出目录写 `publish-receipt.json`，包含逐步秒数、计划与实际传输文件数和字节数、HEAD/GET 结果、部署标识及失败原因。`--output <新目录>` 可指定落点；默认写到 dist 的同级唯一目录。失败回执会保留，不把上传完成当成发布成功。
 
@@ -77,7 +79,7 @@ gh workflow enable edgeone-live.yml --repo wlyaaaaa/wly0829.cn
 
 ## 扫描做什么
 
-`changed` 优先读取 `.build-receipt.json` 的 `rebuilt_pages`；没有回执时，比较当前页面 SHA256 与同一输出目录里上一份扫描记录。第一次没有记录时扫描所有页面。检查未完成的页面不会记成已完成，因此下次仍会选中。`--out <目录>` 可保存独立的一次验收，默认写到 dist 同级 `scan-glance`。
+默认 `published-diff` 比较 Git 共享目录 `wly-oss/published.json` 内上一成功发布清单与当前 HTML 的 SHA256，覆盖多轮构建累计的新增和变化页。规则换版仍使用该范围；只有外壳、排版引擎或共享脚本变化时另跑 `--pages all`，不是因 E 版本号变化就重扫全站。缺少成功记录时明确提示回退 `changed`，比较同一输出目录上一份扫描的页面哈希；没有扫描记录时选择全部页面。回退不证明成功前版，须核实实际累计范围。检查未完成的页面不会记成已完成，因此下次仍会选中。`--out <目录>` 可保存独立的一次验收，默认写到 dist 同级 `scan-glance`。
 
 扫描器沿用 `rescue-sweep.py` 和 `rescue-sweep-dom.js` 的文字范围、可见性、滚动、哈希和截图方法。四个独立无头 Chrome 并行检查 1920×1080、3840×2160，设备像素比为 1。它启动任务自己的本机静态服务，按最终清单把尚未上传的新 OSS 地址映射到 dist 中的确切资源字节；旧继承资源和实时只读数据继续以公网一致的 Origin/Referer 请求，写请求不转发。预览仅在内存里把 URL 换成本机代理地址，磁盘成品不变。临时浏览器配置位于任务输出目录，用完释放，不读取本人的 Chrome 登录资料。
 

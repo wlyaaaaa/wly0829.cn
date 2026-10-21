@@ -33,8 +33,14 @@ class CountScopeTests(unittest.TestCase):
                                           ({'kinds': ['frozen']}, 1)]:
                     self.assertEqual(refresh.retrieve(dict(method, **filter_), root, {}), expected)
                 self.assertEqual(refresh.retrieve({'kind': 'page_count'}, root, {}), 5)
+                with self.assertRaises(ValueError):
+                    refresh.retrieve(dict(method, project_scope='active_projects'), root, {})
+                with self.assertRaises(ValueError):
+                    refresh.retrieve(dict(kind='page_count', project_scope='active_projects'), root, {})
+                self.assertEqual(refresh.retrieve(dict(method, kinds=['project'], project_scope='active_projects'), root, {}), 1)
                 config.unlink()
-                self.assertEqual(refresh.retrieve(method, root, {}), 3)
+                with self.assertRaises(FileNotFoundError):
+                    refresh.retrieve(method, root, {})
 
     def test_scoped_skill_counts_leave_total_claims_checked(self):
         with tempfile.TemporaryDirectory() as directory:

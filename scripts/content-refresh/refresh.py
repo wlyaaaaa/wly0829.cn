@@ -100,9 +100,14 @@ def matching_files(method, root):
     if method.get("tracked"):
         names = bounded(["git", "-C", str(base), "ls-files", "-z"], 30).split("\0")
         candidates = (base / n for n in names if n)
+    def text_file(path):
+        with path.open("rb") as stream:
+            prefix = stream.read(8192)
+        return prefix.startswith((b"\xff\xfe", b"\xfe\xff", b"\x00\x00\xfe\xff")) or b"\x00" not in prefix
     return [p for p in candidates if p.is_file()
             and match(p.relative_to(base).as_posix(), method.get("include", ["**/*"]))
-            and not match(p.relative_to(base).as_posix(), method.get("exclude", []))]
+            and not match(p.relative_to(base).as_posix(), method.get("exclude", []))
+            and (not method.get("text_only") or text_file(p))]
 
 
 def field_value(value, field):
@@ -124,24 +129,25 @@ def timestamp(text):
 
 
 def require_ledger_coverage(entry, root, now):
-    """当前窗口必须由两路完成水位覆盖；事件最大时间不能证明没有漏采。"""
+    """取两路已初始化账本共同完成的日界；不要求水位覆盖正在进行的今天。"""
     ledger = resolve(entry["path"], root)
+    completed = [now.astimezone(BEIJING)]
     for ai in ("codex", "claude"):
         try:
             state = read_json(ledger.with_name(f"state-{ai}.json"))
             end = datetime.fromisoformat(state["last_completed"].replace("Z", "+00:00"))
             if state.get("bootstrap_complete") is not True or end.tzinfo is None:
                 raise ValueError("补采未完成或水位缺时区")
-            if end <= now:
-                raise ValueError(f"完成水位仅到 {end.astimezone(BEIJING).isoformat()}，未覆盖观察时刻")
+            completed.append(end.astimezone(BEIJING))
         except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
             raise ValueError(f"Unknown：{ai} 账本覆盖不足；{exc}") from None
+    return min(completed).replace(hour=0, minute=0, second=0, microsecond=0)
 
 
-def ledger_values(methods, entry, root):
+def ledger_values(methods, entry, root, include_metadata=False):
     path = resolve(entry["path"], root)
     now = datetime.now(BEIJING)
-    require_ledger_coverage(entry, root, now)
+    end = require_ledger_coverage(entry, root, now)
     counts, last = [0] * len(methods), [None] * len(methods)
     groups = {}
     for i, method in enumerate(methods):
@@ -161,14 +167,16 @@ def ledger_values(methods, entry, root):
                 if not indices:
                     continue
                 used = timestamp(field_value(row, entry.get("time_field", "used_at")))
-                if used <= now:
+                if used < end:
                     for i in indices:
-                        if now - timedelta(days=7) <= used:
+                        if end - timedelta(days=7) <= used:
                             counts[i] += 1
                         if last[i] is None or used > last[i]:
                             last[i] = used
-    return [counts[i] if m["operation"] == "count_7d" else
+    values = [counts[i] if m["operation"] == "count_7d" else
             last[i].isoformat(timespec="seconds") if last[i] else None for i, m in enumerate(methods)]
+    return [{"value": value, "source_coverage_end": (end - timedelta(days=1)).date().isoformat()}
+            for value in values] if include_metadata else values
 
 
 def retrieve(method, root, entries=None, cache=None):
@@ -254,12 +262,14 @@ def retrieve(method, root, entries=None, cache=None):
     elif kind in ("page_count", "feature_count", "group_count"):
         selected = pages(root)
         if kind == "page_count":
+            if method.get("project_scope") == "active_projects" and method.get("kinds") != ["project"]:
+                raise ValueError("项目计数口径冲突：在用项目不能包含模块或冻结页")
             if set(method.get("kinds", [])) & {"project", "frozen"}:
                 config = root / "config/panel-projects.json"
-                registered = {p["id"] for p in read_json(config)["projects"] if p.get("enabled", True)} if config.exists() else None
-                aliases = runpy.run_path(str(ROOT / "scripts/audit-content-refresh.py"))["PROJECT_ALIASES"] if registered is not None else {}
+                registered = {p["id"] for p in read_json(config)["projects"] if p.get("enabled", True)}
+                aliases = runpy.run_path(str(ROOT / "scripts/audit-content-refresh.py"))["PROJECT_ALIASES"]
                 selected = [p for p in selected if not p.get("parent") and
-                            (p.get("kind") not in {"project", "frozen"} or registered is None or aliases.get(p["page"], p["page"]) in registered)]
+                            p.get("kind") in method["kinds"] and aliases.get(p["page"], p["page"]) in registered]
             value = sum(all(k not in method or p.get(k) == method[k] for k in ("status", "public"))
                         and (not method.get("kinds") or p.get("kind") in method["kinds"]) for p in selected)
         elif kind == "feature_count":
@@ -285,7 +295,7 @@ def retrieve(method, root, entries=None, cache=None):
     return value
 
 
-def retrieve_batch(methods, root, entries, seconds):
+def retrieve_batch(methods, root, entries, seconds, include_metadata=False):
     cache = {"deadline": time.monotonic() + seconds}
     cache["entry_timeouts"] = {name: max(m.get("timeout", entries[name].get("timeout", 20))
                                       for m in methods if m.get("entry") == name)
@@ -294,7 +304,7 @@ def retrieve_batch(methods, root, entries, seconds):
         for method in methods:
             validate_method(method, entries)
         try:
-            return ledger_values(methods, entries[LEDGER], root)
+            return ledger_values(methods, entries[LEDGER], root, include_metadata)
         except Exception as exc:
             return [{"error": f"来源读取失败（{type(exc).__name__}）：{exc}"}] * len(methods)
     result = []
@@ -397,6 +407,8 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
             row["reason"] = record["retrieve"].get("instructions", "人工口径，未取得新值")
         elif record.get("scope_status") != "verified":
             row.update(status="scope_pending", reason=record.get("scope_reason", "统计口径未确认一致，不能算作变化"))
+        elif record.get("source_precision") == "estimated" and record.get("display_precision") == "exact":
+            row.update(status="scope_pending", reason="estimated_source_cannot_replace_exact")
         elif row.get("page_error"):
             row["reason"] = row["page_error"]
         else:
@@ -432,6 +444,9 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
         for future in as_completed(pending):
             values, observed = future.result()
             for row, value in zip(pending[future], values):
+                if isinstance(value, dict) and "source_coverage_end" in value and row["retrieve"]["kind"] == "usage_ledger":
+                    row["source_coverage_end"] = date.fromisoformat(value["source_coverage_end"]).isoformat()
+                    value = value["value"]
                 if value is None or isinstance(value, (dict, list)):
                     row["reason"] = value.get("error", "来源未返回标量") if isinstance(value, dict) else "来源未返回标量"
                 else:
@@ -454,7 +469,7 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
                         row.update(new_value=None, status="unavailable", reason="覆盖末日来源 Unknown 或日期无效，保留旧截至日期")
                         continue
                 else:
-                    value = min(timestamp(r["source_observed_at"]).date().isoformat() for r in qualified)
+                    value = min(r.get("source_coverage_end") or timestamp(r["source_observed_at"]).date().isoformat() for r in qualified)
                 review = None if coverage_end else qualified_date_review(catalog[row["page"]], row)
                 row.update(new_value=None if review else value, date_candidate=value, manual_review_reason=review,
                            source_observed_at=min(r["source_observed_at"] for r in qualified), scope_status="verified",
@@ -556,7 +571,7 @@ def main():
     if args.retrieve or args.retrieve_batch:
         try:
             validate_entries(entries)
-            value = retrieve_batch(json.loads(args.retrieve_batch), args.root, entries, args.item_seconds) if args.retrieve_batch else retrieve(json.loads(args.retrieve), args.root, entries)
+            value = retrieve_batch(json.loads(args.retrieve_batch), args.root, entries, args.item_seconds, include_metadata=True) if args.retrieve_batch else retrieve(json.loads(args.retrieve), args.root, entries)
         except Exception as exc:
             value = {"error": f"来源读取失败（{type(exc).__name__}）：{exc}"}
         print(json.dumps(value, ensure_ascii=False))

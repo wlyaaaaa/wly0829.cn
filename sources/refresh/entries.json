@@ -153,7 +153,7 @@
       "C:/Program Files/Docker/Docker/resources/bin/docker.exe",
       "exec",
       "-e",
-      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=8000 -c lock_timeout=500",
+      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=120000 -c lock_timeout=500",
       "audit-postgres",
       "psql",
       "-X",
@@ -171,14 +171,15 @@
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
-    "timeout": 12
+    "timeout": 130,
+    "verification": "2026-10-22 原8秒上限实跑确认为statement timeout；放宽后精确COUNT成功；default_transaction_read_only=on、lock_timeout=500保持，总取数时限仍约束入口。"
   },
   "timeaudit-count-lifecycle": {
     "argv": [
       "C:/Program Files/Docker/Docker/resources/bin/docker.exe",
       "exec",
       "-e",
-      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=8000 -c lock_timeout=500",
+      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=120000 -c lock_timeout=500",
       "audit-postgres",
       "psql",
       "-X",
@@ -196,14 +197,15 @@
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
-    "timeout": 12
+    "timeout": 130,
+    "verification": "2026-10-22 原8秒上限实跑确认为statement timeout；放宽后精确COUNT成功；default_transaction_read_only=on、lock_timeout=500保持，总取数时限仍约束入口。"
   },
   "timeaudit-count-registry": {
     "argv": [
       "C:/Program Files/Docker/Docker/resources/bin/docker.exe",
       "exec",
       "-e",
-      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=8000 -c lock_timeout=500",
+      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=120000 -c lock_timeout=500",
       "audit-postgres",
       "psql",
       "-X",
@@ -221,7 +223,8 @@
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
-    "timeout": 12
+    "timeout": 130,
+    "verification": "2026-10-22 原8秒上限实跑确认为statement timeout；放宽后精确COUNT成功；default_transaction_read_only=on、lock_timeout=500保持，总取数时限仍约束入口。"
   },
   "timeaudit-count-context": {
     "argv": [
@@ -359,7 +362,7 @@
       "-NoProfile",
       "-NonInteractive",
       "-Command",
-      "$ErrorActionPreference='Stop'; $out=[ordered]@{}; foreach($letter in @('C','E','D','G','H','V','Z')){ $v=Get-Volume -DriveLetter $letter -ErrorAction Stop; $out[$letter]=@{size_bytes=$v.Size;used_bytes=($v.Size-$v.SizeRemaining)} }; $out|ConvertTo-Json -Depth 3 -Compress"
+      "$ErrorActionPreference='Stop'; $out=[ordered]@{}; foreach($letter in @('C','E','D','G','H','V','Z')){ try { $v=Get-Volume -DriveLetter $letter -ErrorAction Stop; $out[$letter]=@{size_bytes=$v.Size;used_bytes=($v.Size-$v.SizeRemaining)} } catch { $out[$letter]=@{error='source_broken: volume unavailable'} } }; $out|ConvertTo-Json -Depth 3 -Compress"
     ],
     "cwd": "E:/PCConfig",
     "read_only": true,
@@ -546,13 +549,14 @@
       "-X",
       "utf8",
       "-c",
-      "import json;from pathlib import Path;r=Path('E:/.agents');c=json.loads((r/'config/personal-skill-supply.json').read_text(encoding='utf-8-sig'));d=Path(c['discovery_root']);a=[s for s in c['skills'] if s.get('install')];assert a and Path('C:/Users/10979/.claude/skills').resolve()==d.resolve(),'discovery_mismatch';assert all((r/s['source']).exists() and (d/s['name']).exists() and (r/s['source']).resolve()==(d/s['name']).resolve() for s in a),'source_link_mismatch';print(json.dumps({'shared_source_sets':1,'installed_skills':len(a),'mismatch_count':0}))"
+      "import json;from pathlib import Path;r=Path('E:/.agents');c=json.loads((r/'config/personal-skill-supply.json').read_text(encoding='utf-8-sig'));d=Path(c['discovery_root']);a=[s for s in c['skills'] if s.get('install')];assert a and Path('C:/Users/10979/.claude/skills').resolve()==d.resolve(),'discovery_mismatch';resolved=sum((r/s['source']).exists() and (d/s['name']).exists() and (r/s['source']).resolve()==(d/s['name']).resolve() for s in a);print(json.dumps({'shared_source_sets':1 if resolved==len(a) else None,'installed_skills':resolved,'declared_skills':len(a),'mismatch_count':len(a)-resolved}))"
     ],
     "cwd": "E:/.agents",
     "read_only": true,
     "owner_project": "agents",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "verification": "只读声明清单与路径resolve；分别返回声明数、实际匹配数和缺失数，不因单个链接缺失丢掉其余计数，也不把声明数当全部安装成功。"
   },
   "agents-inspect-stopwatch": {
     "argv": [

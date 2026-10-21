@@ -1,4 +1,5 @@
 """Local source dependencies and artifact finishing; no legacy site assembly."""
+import gzip
 import hashlib
 import html
 import importlib.util
@@ -227,6 +228,22 @@ def sync_search(root, previous, converted, pin, changed_routes):
         if patched != raw:
             path.write_bytes(patched)
 
+def search_budget_review(root):
+    policy = read(ROOT / 'config/panel-projects.json')['refresh_policy']
+    reviewed = {}
+    for path in sorted(Path(root).glob('search-*.js')):
+        key = ('search_index' if path.name == 'search-index.js' else
+               'project_search_index' if path.name == 'search-projects.js' else 'project_search_shard')
+        budget = policy[key + '_gzip_budget_kib'] * 1024
+        measured = len(gzip.compress(path.read_bytes(), mtime=0))
+        reviewed[path.name] = {'gzip_bytes': measured, 'review_bytes': budget,
+                               'status': 'warning' if measured > budget else 'within_threshold'}
+        if measured > budget:
+            print(f'WARNING 搜索体积复核：{path.name} gzip {measured} B > {budget:g} B；'
+                  '继续构建，复核重复内容、依赖和加载耗时，不删减有效正文。', flush=True)
+    return reviewed
+
+
 def has_noindex(path):
     class Robots(HTMLParser):
         noindex = False
@@ -285,6 +302,7 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
     if (dist / '404/index.html').exists(): copy(dist / '404/index.html', dist / '404.html')
     previous = {'oss': {'objects': snapshot['search_objects']}, 'files': snapshot['pages']}
     sync_search(dist, previous, converted, pin, changed_routes)
+    search_review = search_budget_review(dist)
     # Current O6 requires every deployed resource address to be same-origin.
     for route in changed_routes | {'/', '/cockpit/', '/computer-access/'} | {file_route(rel) for rel in snapshot['pages']}:
         path = dist / nav.route_file(route)
@@ -315,7 +333,7 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
         if updated != body: path.write_bytes(updated.encode('utf8'))
     files = {p.relative_to(dist).as_posix(): {'bytes': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
              for p in dist.rglob('*') if p.is_file() and p.name not in {'.build-receipt.json', 'release-manifest.json', 'release-identity.json'}}
-    manifest = {'schema': 'wly.hybrid-release.v1', 'files': files, 'routes': routes,
+    manifest = {'schema': 'wly.hybrid-release.v1', 'files': files, 'routes': routes, 'search_budget_review': search_review,
         'release_id': hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest(),
         'baseline_production_commit': snapshot['baseline_production_commit'], 'rules_pin': pin,
         'accepted_pages': {**{file_route(rel): {'producer': 'frozen'} for rel in snapshot['pages']}, **converted},

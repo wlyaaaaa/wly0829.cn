@@ -37,7 +37,7 @@ def command(*args, timeout=None):
     return done.stdout.strip()
 
 LAST_ATTEMPT_KEYS = ('schema', 'status', 'publication_status', 'dry_run', 'started_at_beijing', 'completed_at_beijing',
-                     'total_seconds', 'source_commit', 'source_commit_evidence', 'commit', 'deployment', 'error')
+                     'total_seconds', 'source_commit', 'source_commit_evidence', 'commit', 'deployment', 'error', 'oss_retention')
 RETRY_DELAYS = (0.5, 1, 2, 2, 2, 2, 2, 2)  # 连接层错误最多重试 8 次；内容核对不一致、HTTP 状态和其他错误一律不重试
 HEAD_TIMEOUT, PAGE_TIMEOUT, GH_TIMEOUT, GIT_TIMEOUT, PUSH_TIMEOUT = 8, 15, 60, 120, 600
 GIT_NET = ('-c', 'http.lowSpeedLimit=1000', '-c', 'http.lowSpeedTime=30')
@@ -234,6 +234,10 @@ def publish(args):
         receipt['planned_bytes'] = sum(row['bytes'] for row in [*assets.values(), *documents.values()])+plan['github_files'][oss.MANIFEST]['bytes']
         receipt['estimated_transfer_seconds'] = round(receipt['planned_bytes']/10_000_000, 3)
         receipt['estimate_bytes_per_second'] = 10_000_000
+        receipt['oss_retention'] = {'status': 'skipped_by_request' if getattr(args, 'skip_retention', False) else 'deferred',
+            'deleted_objects': 0, 'deleted_bytes': 0, 'rollback_ref': source.get('rollback_ref'),
+            'reason': 'Run separately after successful publication and publication-lock release',
+            'command': ['python', '-B', '-X', 'utf8', 'site-astro/tools/publish_site.py', '--retention-only', str(output)]}
         if args.dry_run:
             receipt['site_dist'] = step('local_site_dist_commit', lambda:
                     artifact_commit(args.dist, plan, output, source_commit))
@@ -302,6 +306,12 @@ def publish(args):
             'release_id': plan['release_id'], 'complete': True, 'verified_at_beijing': oss.stamp(),
             'method': 'uploaded HEAD size and MD5; unchanged retained receipts',
             'objects': {**plan['retained_objects'], **receipt['head']}}
+        # Preserve actual HEAD proofs before deployment; deletion is a separate invocation.
+        verification = {**manifest['oss']['verification'], 'plan_sha256': retention.digest(output/oss.PLAN)}
+        step('retention_proofs', lambda: retention.write(output/'remote-verification.json', verification))
+        pin_path = step('retention_inventory', lambda: retention.pin(preparation))
+        receipt['oss_retention_pin'] = {'path': str(pin_path), 'plan_sha256': verification['plan_sha256'],
+                                       'storage': 'plan_snapshot in shared Git pin'}
 
         receipt['site_dist'] = step('local_site_dist_commit', lambda:
                 artifact_commit(args.dist, plan, output, source_commit))
@@ -327,31 +337,6 @@ def publish(args):
             'manifest': manifest, 'readback': receipt['get'], 'verified_at_beijing': oss.stamp()}))
         receipt['status'] = 'published'
         receipt['publication_status'] = 'published'
-        if getattr(args, 'skip_retention', False):
-            receipt['oss_retention'] = {'status': 'skipped_by_request', 'deleted_objects': 0, 'deleted_bytes': 0}
-            return receipt
-        report = output/'oss-retention.json'
-        try:
-            renew_lock()
-            # Bind the actual HEAD proofs to this immutable plan before its pin is retired.
-            verification = {**manifest['oss']['verification'], 'plan_sha256': retention.digest(output/oss.PLAN)}
-            step('retention_proofs', lambda: retention.write(output/'remote-verification.json', verification))
-            pin_path = step('retention_inventory', lambda: retention.pin(preparation))
-            receipt['oss_retention_pin'] = {'path': str(pin_path), 'plan_sha256': verification['plan_sha256'],
-                                            'storage': 'plan_snapshot in shared Git pin'}
-            code = step('oss_retirement', lambda: retention.collect(SimpleNamespace(
-                preparation=preparation, commit=receipt['commit'], rollback=manifest.get('rollback_ref'),
-                cli=CLI, profile='website-images', lock_holder=args.lock_holder, report=report,
-                dry_run=False, max_keys=getattr(args, 'retention_max_keys', 1000))))
-            receipt['oss_retention'] = retention.read(report)
-            if code:
-                receipt['status'] = 'published_with_retention_incomplete'
-        except Exception as error:
-            receipt['oss_retention'] = retention.read(report) if report.exists() else {
-                'status': 'incomplete', 'deleted_objects': None, 'deleted_bytes': None}
-            receipt['oss_retention'].update(status='incomplete', reason=str(error))
-            retention.write(report, receipt['oss_retention'])
-            receipt['status'] = 'published_with_retention_incomplete'
         return receipt
     except Exception as error:
         receipt.update(status='failed', error=str(error))
@@ -369,9 +354,34 @@ def publish(args):
             command('pwsh', '-NoProfile', '-File', LOCK, '-Mode', 'Release',
                     '-Name', 'wly0829-publication', '-Holder', args.lock_holder, '-Json')
 
+def collect_after_publication(args):
+    preparation = args.retention_only.resolve()
+    publication = retention.read(preparation/'publish-receipt.json')
+    if publication.get('publication_status') != 'published' or publication.get('dry_run') is not False:
+        raise ValueError('Standalone retention requires a successful real publication receipt')
+    claim = json.loads(command('pwsh', '-NoProfile', '-File', LOCK, '-Mode', 'Acquire',
+        '-Name', 'wly0829-publication', '-Holder', args.lock_holder, '-Minutes', '30',
+        '-Reason', 'Standalone website object retention', '-Json'))
+    if claim.get('status') != 'acquired':
+        raise ValueError('Standalone retention must acquire a fresh lock after publication releases it')
+    try:
+        report = preparation/'oss-retention.json'
+        code = retention.collect(SimpleNamespace(preparation=preparation, commit=publication['commit'],
+            rollback=publication.get('oss_retention', {}).get('rollback_ref'), cli=CLI, profile='website-images',
+            lock_holder=args.lock_holder, report=report, dry_run=args.dry_run, max_keys=args.retention_max_keys))
+        return {'status': 'retention_dry_run' if args.dry_run else 'retention_complete' if not code else 'retention_incomplete',
+                'publication_status': 'published', 'oss_retention': retention.read(report), 'exit_code': code}
+    finally:
+        if claim['status'] == 'acquired':
+            command('pwsh', '-NoProfile', '-File', LOCK, '-Mode', 'Release',
+                '-Name', 'wly0829-publication', '-Holder', args.lock_holder, '-Json')
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--dist', type=Path, required=True)
+    operation = parser.add_mutually_exclusive_group(required=True)
+    operation.add_argument('--dist', type=Path)
+    operation.add_argument('--retention-only', type=Path, metavar='PUBLICATION_OUTPUT',
+                           help='collect old objects separately using a successful publication output directory')
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--upload-only', action='store_true', help='upload and read back OSS assets, then stop before site-dist and Pages')
     parser.add_argument('--scan-result', type=Path)
@@ -380,11 +390,10 @@ if __name__ == '__main__':
     parser.add_argument('--source-commit')
     parser.add_argument('--pages-timeout', type=int, default=600)
     parser.add_argument('--upload-workers', type=int, default=12, help='parallel OSS uploads; existing identical objects are skipped')
-    parser.add_argument('--retention-max-keys', type=int, default=1000, help='maximum exact obsolete managed keys checked after successful publication')
-    parser.add_argument('--skip-retention', action='store_true', help='publish without deleting existing OSS objects when the task excludes cloud cleanup')
+    parser.add_argument('--retention-max-keys', type=int, default=1000, help='maximum exact obsolete managed keys checked by --retention-only')
+    parser.add_argument('--skip-retention', action='store_true', help='compatibility flag: publication always defers cloud cleanup to a separate command')
     parser.add_argument('--lock-holder', default='codex:publish:'+ROOT.parent.name)
     options = parser.parse_args()
-    result = publish(options)
+    result = collect_after_publication(options) if options.retention_only else publish(options)
     print(json.dumps({key: value for key, value in result.items() if key not in ('planned_assets', 'planned_documents', 'head', 'get')}, ensure_ascii=False))
-    if result['status'] == 'published_with_retention_incomplete':
-        raise SystemExit(1)
+    raise SystemExit(result.get('exit_code', 0))

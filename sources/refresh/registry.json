@@ -2602,16 +2602,10 @@
       "category": "人工",
       "source_location": "Windows计划任务RAMDisk_Code_Backup",
       "retrieve": {
-        "kind": "entry",
-        "entry": "ramdisk-health",
-        "pointer": [
-          "Task",
-          "IntervalSeconds"
-        ],
-        "scale": 0.016666666666666666,
-        "digits": 0
+        "kind": "manual",
+        "instructions": "RamdiskGuardian Owner与网站发布者：旧项目入口已退役，确认当前项目边界及可用只读入口后重绑；不从Git历史恢复旧运行功能。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": false,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
@@ -2620,7 +2614,9 @@
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "真实启用重复触发器间隔秒/60；需同时核对Reasons不含guardian-periodic-trigger-missing，默认值不冒充有效周期。",
-      "scope_evidence": "本轮读取来源与源码；见pc-findings.md"
+      "scope_evidence": "本轮读取来源与源码；见pc-findings.md",
+      "manual_reason": "source_broken",
+      "manual_route": "RamdiskGuardian Owner与网站发布者：旧项目入口已退役，确认当前项目边界及可用只读入口后重绑；不从Git历史恢复旧运行功能。"
     },
     {
       "id": "ramdisk-guardian-n-image-now-0",
@@ -4330,7 +4326,7 @@
         "pcconfig-10"
       ],
       "field": "screens[5].text",
-      "page_pattern": "\\*\\*C 盘\\*\\* ([\\d,]+) GiB",
+      "page_pattern": "\\*\\*C 盘\\*\\* ([\\d,]+(?:\\.\\d+)?) GiB",
       "scope_status": "verified",
       "measurement_scope": "Get-Volume同批Size或Size-SizeRemaining/2^30，整数GiB；不可读即Unknown，不用目录大小替代。",
       "scope_evidence": "本轮读取来源与源码；见pc-findings.md"
@@ -4399,7 +4395,7 @@
         "pcconfig-10"
       ],
       "field": "screens[5].text",
-      "page_pattern": "\\*\\*E 盘\\*\\* ([\\d,]+) GiB",
+      "page_pattern": "\\*\\*E 盘\\*\\* ([\\d,]+(?:\\.\\d+)?) GiB",
       "scope_status": "verified",
       "measurement_scope": "Get-Volume同批Size或Size-SizeRemaining/2^30，整数GiB；不可读即Unknown，不用目录大小替代。",
       "scope_evidence": "本轮读取来源与源码；见pc-findings.md"
@@ -4468,7 +4464,7 @@
         "pcconfig-10"
       ],
       "field": "screens[5].text",
-      "page_pattern": "\\*\\*D 盘\\*\\* ([\\d,]+) GiB",
+      "page_pattern": "\\*\\*D 盘\\*\\* ([\\d,]+(?:\\.\\d+)?) GiB",
       "scope_status": "verified",
       "measurement_scope": "Get-Volume同批Size或Size-SizeRemaining/2^30，整数GiB；不可读即Unknown，不用目录大小替代。",
       "scope_evidence": "本轮读取来源与源码；见pc-findings.md"
@@ -4503,7 +4499,7 @@
         "pcconfig-10"
       ],
       "field": "screens[5].text",
-      "page_pattern": "\\*\\*G 盘\\*\\* ([\\d,]+) GiB",
+      "page_pattern": "\\*\\*G 盘\\*\\* ([\\d,]+(?:\\.\\d+)?) GiB",
       "scope_status": "verified",
       "measurement_scope": "Get-Volume同批Size或Size-SizeRemaining/2^30，整数GiB；不可读即Unknown，不用目录大小替代。",
       "scope_evidence": "本轮读取来源与源码；见pc-findings.md"
@@ -4572,7 +4568,7 @@
         "pcconfig-10"
       ],
       "field": "screens[6].text",
-      "page_pattern": "\\*\\*H 盘\\*\\* 外接 USB 固态 ([\\d,]+) GiB",
+      "page_pattern": "\\*\\*H 盘\\*\\* 外接 USB 固态 ([\\d,]+(?:\\.\\d+)?) GiB",
       "scope_status": "verified",
       "measurement_scope": "Get-Volume同批Size或Size-SizeRemaining/2^30，整数GiB；不可读即Unknown，不用目录大小替代。",
       "scope_evidence": "本轮读取来源与源码；见pc-findings.md"
@@ -4641,7 +4637,7 @@
         "pcconfig-10"
       ],
       "field": "screens[6].text",
-      "page_pattern": "\\*\\*V 盘\\*\\* ([\\d,]+) GiB",
+      "page_pattern": "\\*\\*V 盘\\*\\* ([\\d,]+(?:\\.\\d+)?) GiB",
       "scope_status": "verified",
       "measurement_scope": "Get-Volume同批Size或Size-SizeRemaining/2^30，整数GiB；不可读即Unknown，不用目录大小替代。",
       "scope_evidence": "本轮读取来源与源码；见pc-findings.md"
@@ -4656,16 +4652,10 @@
       "category": "人工",
       "source_location": "Get-Volume，北京时间 9/28 19:5x",
       "retrieve": {
-        "kind": "entry",
-        "entry": "pcconfig-volumes",
-        "pointer": [
-          "Z",
-          "size_bytes"
-        ],
-        "scale": 9.313225746154785e-10,
-        "digits": 0
+        "kind": "manual",
+        "instructions": "PCConfig Owner：核实Z卷当前是否存在及其Owner容量入口；其他卷继续独立只读取数，不用目录大小或旧配置替代。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": false,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
@@ -4679,7 +4669,9 @@
       "page_pattern": "\\*\\*Z 盘\\*\\* ([\\d,]+) GiB",
       "scope_status": "verified",
       "measurement_scope": "Get-Volume同批Size或Size-SizeRemaining/2^30，整数GiB；不可读即Unknown，不用目录大小替代。",
-      "scope_evidence": "本轮读取来源与源码；见pc-findings.md"
+      "scope_evidence": "本轮读取来源与源码；见pc-findings.md",
+      "manual_reason": "source_broken",
+      "manual_route": "PCConfig Owner：核实Z卷当前是否存在及其Owner容量入口；其他卷继续独立只读取数，不用目录大小或旧配置替代。"
     },
     {
       "id": "pcconfig-n-g-usage-0",
@@ -6302,7 +6294,8 @@
         "kinds": [
           "project",
           "frozen"
-        ]
+        ],
+        "project_scope": "registered_projects_including_frozen"
       },
       "automatic": true,
       "private": false,
@@ -6333,7 +6326,8 @@
           "project",
           "frozen"
         ],
-        "status": "常用"
+        "status": "常用",
+        "project_scope": "registered_projects_including_frozen"
       },
       "automatic": true,
       "private": false,
@@ -6364,7 +6358,8 @@
           "project",
           "frozen"
         ],
-        "status": "偶尔用"
+        "status": "偶尔用",
+        "project_scope": "registered_projects_including_frozen"
       },
       "automatic": true,
       "private": false,
@@ -6425,7 +6420,8 @@
           "project",
           "frozen"
         ],
-        "public": true
+        "public": true,
+        "project_scope": "registered_projects_including_frozen"
       },
       "automatic": true,
       "private": false,
@@ -6456,7 +6452,8 @@
           "project",
           "frozen"
         ],
-        "public": false
+        "public": false,
+        "project_scope": "registered_projects_including_frozen"
       },
       "automatic": true,
       "private": false,
@@ -6485,7 +6482,8 @@
         "kind": "page_count",
         "kinds": [
           "project"
-        ]
+        ],
+        "project_scope": "active_projects"
       },
       "automatic": true,
       "private": false,
@@ -6936,7 +6934,8 @@
           "value"
         ],
         "scale": 0.0001,
-        "digits": 0
+        "digits": 0,
+        "timeout": 130
       },
       "automatic": true,
       "private": true,
@@ -6969,7 +6968,8 @@
           "value"
         ],
         "scale": 0.0001,
-        "digits": 0
+        "digits": 0,
+        "timeout": 130
       },
       "automatic": true,
       "private": true,
@@ -7002,7 +7002,8 @@
           "value"
         ],
         "scale": 0.0001,
-        "digits": 0
+        "digits": 0,
+        "timeout": 130
       },
       "automatic": true,
       "private": true,
@@ -7198,7 +7199,9 @@
       "page_pattern": "\\| 每 3 秒一次的逐程序明细 \\| ([\\d,.]+) 亿条",
       "field": "screens[10].text",
       "measurement_scope": "fact_process_activity分区树叶分区pg_class.reltuples非负值合计/1亿，两位；统计估算，非精确count。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "source_precision": "estimated",
+      "display_precision": "exact"
     },
     {
       "id": "timeaudit-n-activity-1",
@@ -9450,8 +9453,6 @@
       ],
       "field": "screens[9].text",
       "page_pattern": "10 月 11 日删了 ([\\d,]+) 个点、",
-      "start": 275,
-      "end": 276,
       "scope_status": "verified",
       "measurement_scope": "具体备份事件的删除数量；不是现在仍保留的数量，也不是当前策略。",
       "observed_at": "2026-10-11T17:59:16+08:00"
@@ -9481,8 +9482,6 @@
       "original_value_index": 1,
       "page_pattern": "10 月 11 日删了 [\\d,]+ 个点、([\\d.]+) GB",
       "field": "screens[9].text",
-      "start": 280,
-      "end": 284,
       "scope_status": "verified",
       "measurement_scope": "具体备份事件的删除数量；不是现在仍保留的数量，也不是当前策略。",
       "observed_at": "2026-10-11T17:59:16+08:00"
@@ -9636,8 +9635,6 @@
       ],
       "page_pattern": "\\*\\*留几份\\*\\*　G 和 H 各留最新(两)份",
       "field": "screens[3].text",
-      "start": 229,
-      "end": 230,
       "observed_numeric_value": 2,
       "manual_reason": "judgment",
       "manual_route": "只读hot-last.json的hot_retention_limit并核对源码DesktopHotRetentionKeep，读取G/H当前cold-payload/points目录数量；把数值2人工对上正文“两份”。恢复点警告或延期清理可能使实际目录数超过策略数，不把目录数冒充策略。若框架增加明确中文数字展示转换，再将本条改为json自动来源。",
@@ -9827,7 +9824,8 @@
           "value"
         ],
         "scale": 0.0001,
-        "digits": 0
+        "digits": 0,
+        "timeout": 130
       },
       "automatic": true,
       "private": true,
@@ -11065,9 +11063,7 @@
         "codex-memory-12"
       ],
       "field": "screens[0].text",
-      "page_pattern": "^- \\*\\*([\\d.]+) GB\\*\\*　8 月 30 日试恢复：",
-      "start": 379,
-      "end": 383
+      "page_pattern": "^- \\*\\*([\\d.]+) GB\\*\\*　8 月 30 日试恢复："
     },
     {
       "id": "codex-memory-n-restore-test-3",
@@ -11093,9 +11089,7 @@
         "codex-memory-12"
       ],
       "field": "screens[0].text",
-      "page_pattern": "8 月 30 日试恢复：([\\d,]+) 个文件还原到空文件夹",
-      "start": 401,
-      "end": 406
+      "page_pattern": "8 月 30 日试恢复：([\\d,]+) 个文件还原到空文件夹"
     },
     {
       "id": "personal-media-n-first-clear-1",
@@ -11378,7 +11372,7 @@
       "historical": false,
       "field": "status_line.last.at",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=daily-preferences；最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=daily-preferences；共同完成水位之前最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "daily-preferences",
@@ -11400,7 +11394,7 @@
       "historical": true,
       "field": "status_line.facts[0]",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=daily-preferences；从观察时刻往前7天的已记录调用次数，不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=daily-preferences；截至两路共同完成水位前一日的7个完整日内已记录调用次数（北京时间），不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "daily-preferences",
@@ -11469,7 +11463,7 @@
       "historical": true,
       "field": "status_line.facts[0]",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=explain-to-me；从观察时刻往前7天的已记录调用次数，不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=explain-to-me；截至两路共同完成水位前一日的7个完整日内已记录调用次数（北京时间），不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "explain-to-me",
@@ -11514,7 +11508,7 @@
       "historical": false,
       "field": "status_line.last.at",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=daily-preferences；最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=daily-preferences；共同完成水位之前最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "daily-preferences",
@@ -11536,7 +11530,7 @@
       "historical": false,
       "field": "status_line.facts[0]",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=daily-preferences；从观察时刻往前7天的已记录调用次数，不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=daily-preferences；截至两路共同完成水位前一日的7个完整日内已记录调用次数（北京时间），不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "daily-preferences",
@@ -11579,7 +11573,7 @@
       "historical": false,
       "field": "status_line.last.at",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=explain-to-me；最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=explain-to-me；共同完成水位之前最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "explain-to-me",
@@ -11601,7 +11595,7 @@
       "historical": false,
       "field": "status_line.facts[0]",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=explain-to-me；从观察时刻往前7天的已记录调用次数，不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=explain-to-me；截至两路共同完成水位前一日的7个完整日内已记录调用次数（北京时间），不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "explain-to-me",
@@ -11644,7 +11638,7 @@
       "historical": false,
       "field": "status_line.last.at",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=reply-as-me；最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=reply-as-me；共同完成水位之前最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "reply-as-me",
@@ -12409,21 +12403,19 @@
       "category": "某个 JSON 字段",
       "source_location": "只核对personal-skill-supply.json所有install=true源码与发现目录逐项resolve一致，Claude技能目录resolve等于Codex发现目录；份数指同一套源码，不是目录根数。",
       "retrieve": {
-        "kind": "entry",
-        "entry": "agents-shared-skill-source",
-        "pointer": [
-          "shared_source_sets"
-        ],
-        "timeout": 20
+        "kind": "manual",
+        "instructions": ".agents Owner：修复personal-finance发现链接缺失，再以同一入口核实所有install=true路径resolve一致；网站不修改技能安装。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": false,
       "historical": false,
       "field": "screens[0].text",
       "page_pattern": "^- \\*\\*([\\d,]+) 份\\*\\*　技能源码只有一份",
       "measurement_scope": "只核对personal-skill-supply.json所有install=true源码与发现目录逐项resolve一致，Claude技能目录resolve等于Codex发现目录；份数指同一套源码，不是目录根数。",
       "scope_status": "verified",
-      "observed_at": "2026-10-11T17:54:12+08:00"
+      "observed_at": "2026-10-11T17:54:12+08:00",
+      "manual_reason": "source_broken",
+      "manual_route": ".agents Owner：修复personal-finance发现链接缺失，再以同一入口核实所有install=true路径resolve一致；网站不修改技能安装。"
     },
     {
       "id": "agents-n-release-files",
@@ -12569,7 +12561,7 @@
       "current_value": 47364,
       "as_of": "2026-10-04",
       "category": "某个 JSON 字段",
-      "source_location": "文件/行数取当前Git跟踪且文件存在的全部类型（含测试、文档、配置，不含未跟踪releases）；逐行包括空行、末尾无LF残行。测试数仅test-registry.json数组长度，不是通过数；提交数为main可达提交，不是分支或最近一个月。",
+      "source_location": "文件/行数取当前Git跟踪且文件存在的文本文件（含测试、文档、配置，不含二进制和未跟踪releases）；逐行包括空行、末尾无LF残行。测试数仅test-registry.json数组长度，不是通过数；提交数为main可达提交，不是分支或最近一个月。",
       "retrieve": {
         "kind": "line_count",
         "path": "E:/.agents",
@@ -12577,14 +12569,15 @@
         "include": [
           "**/*"
         ],
-        "exclude": []
+        "exclude": [],
+        "text_only": true
       },
       "automatic": true,
       "private": false,
       "historical": false,
       "field": "screens[4].text",
       "page_pattern": "个文件、([\\d,]+) 行（",
-      "measurement_scope": "文件/行数取当前Git跟踪且文件存在的全部类型（含测试、文档、配置，不含未跟踪releases）；逐行包括空行、末尾无LF残行。测试数仅test-registry.json数组长度，不是通过数；提交数为main可达提交，不是分支或最近一个月。",
+      "measurement_scope": "文件/行数取当前Git跟踪且文件存在的文本文件（含测试、文档、配置，不含二进制和未跟踪releases）；逐行包括空行、末尾无LF残行。测试数仅test-registry.json数组长度，不是通过数；提交数为main可达提交，不是分支或最近一个月。",
       "scope_status": "verified",
       "observed_at": "2026-10-11T17:54:12+08:00",
       "refreshed_value": 82348
@@ -12860,8 +12853,6 @@
       ],
       "field": "screens[0].text",
       "page_pattern": "^- \\*\\*([\\d,]+) 块加密盘\\*\\*",
-      "start": 346,
-      "end": 347,
       "known_gap": "本轮实时CIM读取仍Unknown；来源为有日期的有效缓存执行证据。"
     },
     {
@@ -12890,9 +12881,7 @@
       "observed_at": "2026-10-11T17:59:16+08:00",
       "source_observed_at": "2026-10-11T06:01:50.2889551Z",
       "field": "screens[1].text",
-      "page_pattern": "系统镜像带着它们，只留 ([\\d,]+) 天",
-      "start": 921,
-      "end": 922
+      "page_pattern": "系统镜像带着它们，只留 ([\\d,]+) 天"
     },
     {
       "id": "codex-memory-as-of-screen01",
@@ -13055,8 +13044,6 @@
       "private": true,
       "field": "status_line.facts[0]",
       "page_field": "status_line.facts[0]",
-      "start": 12,
-      "end": 15,
       "page_pattern": "近 7 天 AI 用了 ([\\d,]+) 次",
       "retrieve": {
         "kind": "entry",
@@ -13139,8 +13126,6 @@
       "private": true,
       "field": "status_line.facts[0]",
       "page_field": "status_line.facts[0]",
-      "start": 12,
-      "end": 14,
       "page_pattern": "近 7 天 AI 用了 ([\\d,]+) 次",
       "retrieve": {
         "kind": "entry",
@@ -13523,7 +13508,8 @@
         "kinds": [
           "project",
           "frozen"
-        ]
+        ],
+        "project_scope": "registered_projects_including_frozen"
       },
       "automatic": true,
       "private": false,
@@ -17230,7 +17216,7 @@
       "id": "b7-agents-skills-plugins-installed-count",
       "page": "agents-skills-plugins",
       "screen": "agents-skills-plugins-05",
-      "label": "按现行技能供应清单启用且路径匹配的技能数",
+      "label": "清单声明启用技能数",
       "current_value": "29",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
@@ -17239,16 +17225,18 @@
         "kind": "entry",
         "entry": "agents-shared-skill-source",
         "pointer": [
-          "installed_skills"
+          "declared_skills"
         ]
       },
       "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "复用agents-shared-skill-source：读取personal-skill-supply.json中install=true条目，逐个检查源/发现路径存在且resolve一致；不证明新会话发现或真实使用。",
+      "measurement_scope": "清单install=true声明总数，不代表路径全部匹配。",
       "source_location": "复用agents-shared-skill-source：读取personal-skill-supply.json中install=true条目，逐个检查源/发现路径存在且resolve一致；不证明新会话发现或真实使用。",
       "source_project": "agents",
       "private": false,
-      "historical": false
+      "historical": false,
+      "requires_semantic_refresh": true,
+      "known_gap": "存在声明项缺发现链接，需发布者同时改写全量一致断言；仅换数字不足以说明当前状态。"
     },
     {
       "id": "b7-agents-skills-plugins-personal-installed-count",
@@ -17258,7 +17246,7 @@
       "current_value": "27",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "page_pattern": "（个人 (\\d+)、",
+      "page_pattern": "（个人 Skill (\\d+) 个、",
       "retrieve": {
         "kind": "regex_count",
         "path": "E:/.agents/config/personal-skill-supply.json",
@@ -17280,7 +17268,7 @@
       "current_value": "2",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "page_pattern": "插件 (\\d+)）",
+      "page_pattern": "插件自带 Skill (\\d+) 个",
       "retrieve": {
         "kind": "regex_count",
         "path": "E:/.agents/config/personal-skill-supply.json",
@@ -17302,7 +17290,7 @@
       "current_value": "29",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "page_pattern": "检查 (\\d+)/29 链接",
+      "page_pattern": "(\\d+)/\\d+ 链接指向清单来源",
       "retrieve": {
         "kind": "entry",
         "entry": "agents-shared-skill-source",
@@ -17312,35 +17300,39 @@
       },
       "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "现有agents-shared-skill-source对每个install=true项断言源/发现路径存在且resolve一致，全部通过才返回链接数。",
+      "measurement_scope": "逐个核对源码和发现路径存在且resolve一致的成功数；不把声明总数当成功数。",
       "source_location": "现有agents-shared-skill-source对每个install=true项断言源/发现路径存在且resolve一致，全部通过才返回链接数。",
       "source_project": "agents",
       "private": false,
-      "historical": false
+      "historical": false,
+      "requires_semantic_refresh": true,
+      "known_gap": "存在声明项缺发现链接，需发布者同时改写全量一致断言；仅换数字不足以说明当前状态。"
     },
     {
       "id": "b7-agents-skills-plugins-declared-link-count",
       "page": "agents-skills-plugins",
       "screen": "agents-skills-plugins-05",
-      "label": "清单应存在的启用链接数",
+      "label": "清单声明启用技能数",
       "current_value": "29",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "page_pattern": "检查 29/(\\d+) 链接",
+      "page_pattern": "\\d+/(\\d+) 链接指向清单来源",
       "retrieve": {
         "kind": "entry",
         "entry": "agents-shared-skill-source",
         "pointer": [
-          "installed_skills"
+          "declared_skills"
         ]
       },
       "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "personal-skill-supply.json install=true对象总数；分母是应检查项数量，不是实际成功数。",
+      "measurement_scope": "清单install=true声明总数，不代表路径全部匹配。",
       "source_location": "personal-skill-supply.json install=true对象总数；分母是应检查项数量，不是实际成功数。",
       "source_project": "agents",
       "private": false,
-      "historical": false
+      "historical": false,
+      "requires_semantic_refresh": true,
+      "known_gap": "存在声明项缺发现链接，需发布者同时改写全量一致断言；仅换数字不足以说明当前状态。"
     },
     {
       "id": "b7-agents-skills-plugins-skill-document-count",
@@ -20576,19 +20568,15 @@
       "field": "screens[4].text",
       "page_pattern": "登录触发加独立 (\\d+) 分钟周期",
       "retrieve": {
-        "kind": "entry",
-        "entry": "ramdisk-health",
-        "pointer": [
-          "Task",
-          "IntervalSeconds"
-        ],
-        "scale": 0.016666666666666666,
-        "timeout": 20
+        "kind": "manual",
+        "instructions": "RamdiskGuardian Owner与网站发布者：旧项目入口已退役，确认当前项目边界及可用只读入口后重绑；不从Git历史恢复旧运行功能。"
       },
-      "automatic": true,
+      "automatic": false,
       "scope_status": "verified",
       "measurement_scope": "已核实零写入体检真实任务周期秒数/60；入口拒绝缺周期、禁用或默认900秒回退。",
-      "source_location": "已核实零写入体检真实任务周期秒数/60；入口拒绝缺周期、禁用或默认900秒回退。"
+      "source_location": "已核实零写入体检真实任务周期秒数/60；入口拒绝缺周期、禁用或默认900秒回退。",
+      "manual_reason": "source_broken",
+      "manual_route": "RamdiskGuardian Owner与网站发布者：旧项目入口已退役，确认当前项目边界及可用只读入口后重绑；不从Git历史恢复旧运行功能。"
     },
     {
       "id": "ramdisk-guardian-installation-and-application-recovery-image-size-gib",

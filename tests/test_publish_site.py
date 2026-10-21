@@ -5,7 +5,7 @@ from pathlib import Path
 spec = importlib.util.spec_from_file_location('publisher', Path(__file__).resolve().parents[1]/'site-astro/tools/publish_site.py')
 publisher = importlib.util.module_from_spec(spec); spec.loader.exec_module(publisher)
 class PublishTests(unittest.TestCase):
-    def test_post_acceptance_retirement_binds_head_proofs_and_keeps_publication_fact_on_error(self):
+    def test_publication_defers_retirement_and_preserves_head_proofs_and_failure_state(self):
         for fail_page, fail_cleanup, skip_retention in ((False, False, False), (False, True, False), (True, False, False), (False, False, True)):
             with self.subTest(fail_page=fail_page, fail_cleanup=fail_cleanup), tempfile.TemporaryDirectory() as temporary:
                 folder = Path(temporary); root = folder/'dist'; root.mkdir()
@@ -44,19 +44,39 @@ class PublishTests(unittest.TestCase):
                         cleanup.assert_not_called(); self.assertFalse((shared/'published.json').exists())
                     else:
                         result = publisher.publish(options)
-                        self.assertEqual(result['status'], 'published_with_retention_incomplete' if fail_cleanup else 'published')
+                        self.assertEqual(result['status'], 'published')
                         self.assertEqual(result['publication_status'], 'published')
-                        if skip_retention:
-                            cleanup.assert_not_called()
-                            self.assertEqual(result['oss_retention'], {'status': 'skipped_by_request', 'deleted_objects': 0, 'deleted_bytes': 0})
-                        else: cleanup.assert_called_once()
-                        if fail_cleanup: self.assertIn('cloud delete failed', result['oss_retention']['reason'])
+                        cleanup.assert_not_called()
+                        registered = publisher.retention.read(shared/'managed.json')['objects']
+                        self.assertTrue(all(row['etag'] == 'a'*32 for row in registered.values()))
+                        self.assertEqual(result['oss_retention']['status'], 'skipped_by_request' if skip_retention else 'deferred')
+                        self.assertEqual(result['oss_retention']['deleted_objects'], 0)
                 attempt = publisher.retention.read(shared/'last-attempt.json')
                 self.assertEqual(attempt['status'], 'failed' if fail_page else result['status'])
                 self.assertEqual((attempt['dry_run'], attempt['source_commit']), (False, 'Unknown'))
                 self.assertTrue(attempt['completed_at_beijing'].endswith('+08:00'))
                 self.assertNotIn('head', attempt)
                 if fail_page: self.assertIn('GET mismatch', attempt['error'])
+    def test_standalone_retention_uses_success_receipt_and_releases_its_own_lock(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary); receipt = {'publication_status': 'published', 'dry_run': False, 'commit': 'a'*40}
+            publisher.retention.write(root/'publish-receipt.json', receipt)
+            publisher.retention.write(root/'oss-retention.json', {'status': 'complete'})
+            args = types.SimpleNamespace(retention_only=root, lock_holder='cleanup', dry_run=False, retention_max_keys=1000)
+            with unittest.mock.patch.object(publisher, 'command', return_value='{"status":"acquired"}') as commands, unittest.mock.patch.object(publisher.retention, 'collect', return_value=0) as collect:
+                self.assertEqual(publisher.collect_after_publication(args)['status'], 'retention_complete')
+                self.assertEqual(collect.call_args.args[0].commit, receipt['commit'])
+                self.assertIn('Release', commands.call_args.args)
+                receipt['dry_run'] = True; publisher.retention.write(root/'publish-receipt.json', receipt)
+                with self.assertRaisesRegex(ValueError, 'successful real publication'): publisher.collect_after_publication(args)
+                self.assertEqual(collect.call_count, 1)
+                receipt['dry_run'] = False; publisher.retention.write(root/'publish-receipt.json', receipt)
+                commands.return_value = '{"status":"renewed"}'
+                with self.assertRaisesRegex(ValueError, 'fresh lock'): publisher.collect_after_publication(args)
+                self.assertEqual(collect.call_count, 1)
+                commands.return_value = '{"status":"acquired"}'; collect.side_effect = OSError('cleanup failed')
+                with self.assertRaisesRegex(OSError, 'cleanup failed'): publisher.collect_after_publication(args)
+                self.assertIn('Release', commands.call_args.args)
     def test_pages_dispatches_main_and_waits_for_returned_run_id(self):
         with unittest.mock.patch.object(publisher, 'command', side_effect=[
                 'https://github.com/wlyaaaaa/wly0829.cn/actions/runs/42',
