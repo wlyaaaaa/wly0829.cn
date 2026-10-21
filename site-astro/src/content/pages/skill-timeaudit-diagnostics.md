@@ -97,12 +97,19 @@
     "技能写“最长 168 小时”，9 月 28 日实测 24 小时的摘要就超时（见项目 audit.md）；第 3 屏两样都写了。“内存黑匣子最早能追到 13 小时前”取自 9/28 20:35 健康检查 rolling_span_hours=13.777，会随时间变。",
     "agents/openai.yaml 的中文显示名是“TimeAudit 历史诊断”，和页面标题不同。"
    ]
-  }
+  },
+  "search_aliases": [
+   "过去一小时为什么卡",
+   "没有游戏帧是不是掉帧",
+   "电脑昨天为什么发热",
+   "睡眠还是采集断档",
+   "TimeAudit 历史证据"
+  ]
  },
  "source": {
   "page": "sources/pages/skill-timeaudit-diagnostics/page.json",
-  "sha256": "8359bc6ff0bc4f9971d7c764e61839b10c2eb7cb6a2f0720e140059ff95affce",
-  "converted_at_beijing": "2026-10-20T07:45:07+08:00"
+  "sha256": "a548d357209e93dd221cf15f6b5f0c2cca9372d1682a7f7135a06205b258deb0",
+  "converted_at_beijing": "2026-10-22T07:02:37+08:00"
  }
 }
 ---

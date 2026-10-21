@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/github-index-repository-ledger/page.json",
-  "sha256": "89e5977b92730ed43152f0f37fbf2e3816195b705f8e77ff48c03631decf210d",
-  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
+  "sha256": "01937a1a960923c07a67f7c5ef569682ba4bbd8afcbe7835eb069b65b4fe87c6",
+  "converted_at_beijing": "2026-10-22T07:02:31+08:00"
  }
 }
 ---
@@ -737,7 +737,7 @@ GitHub 总索引 · 功能说明
 
 ## 专业定义
 
-把仓库身份、公开属性和本地副本放进同一张账；当前基线 45 个、现场 47 个，零写查询只报告变化，完整刷新才推进基线。
+把仓库身份、公开属性和本地副本放进同一张账；当前基线 48 个、现场 48 个，零写查询只报告变化，完整刷新才推进基线。
 
 ::screen{#github-index-repository-ledger-08 section="tech"}
 

@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup-source-catalog/page.json",
-  "sha256": "e364f93111657532c5dff5b9e627e6eb6ef528e4a478ccf26ecbf6446aeb3d5c",
-  "converted_at_beijing": "2026-10-12T00:29:45+08:00"
+  "sha256": "d530e6c2e1a1869700587da42caacfe664e7862bd0c232471a7969bae58a8d42",
+  "converted_at_beijing": "2026-10-22T07:02:30+08:00"
  }
 }
 ---
@@ -1037,7 +1037,7 @@ DevConfig Backup · 功能说明
 
 ## 如何验证
 
-- tests/Assert-NoBackupArtifacts.ps1 只检查 Git 文件候选有没有落入已知备份目录、归档/密钥容器扩展名或微信数据库路径，不证明任意文本内容零秘密。9 月 18 日它与当时 15 个检查脚本在 PowerShell 7 和 5.1 下共 30 组全部通过；现在源码里有 24 个 Assert 脚本和 1 个 Python 测试文件，本轮没有运行，不是 24 个都刚通过。
+- tests/Assert-NoBackupArtifacts.ps1 只检查 Git 文件候选有没有落入已知备份目录、归档/密钥容器扩展名或微信数据库路径，不证明任意文本内容零秘密。9 月 18 日它与当时 15 个检查脚本在 PowerShell 7 和 5.1 下共 30 组全部通过；现在源码里有 26 个 Assert 脚本和 1 个 Python 测试文件，本轮没有运行，不是 24 个都刚通过。
 
 - tests/Assert-DockerScope.ps1 验证 Docker 只走 allowlist（允许清单），不收整个 .docker 或 Docker Desktop 树。
 

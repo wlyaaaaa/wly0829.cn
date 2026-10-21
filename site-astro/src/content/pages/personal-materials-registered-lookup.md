@@ -40,8 +40,8 @@
  },
  "source": {
   "page": "sources/pages/personal-materials-registered-lookup/page.json",
-  "sha256": "3abff839ef2c26ab904132d0353ea713e0ae7cc606124ffa1da976ae29d9b1a2",
-  "converted_at_beijing": "2026-10-12T00:29:46+08:00"
+  "sha256": "979f1cee3b2aaa8363a7644b2aa948434e4f25eeb4c493e5253378c8d8aefc99",
+  "converted_at_beijing": "2026-10-22T07:02:34+08:00"
  }
 }
 ---
@@ -844,7 +844,7 @@
 
 | 名词 | 意思 |
 | --- | --- |
-| Registered index（登记索引） | 只包含明确接入的来源和非媒体原件定位，不是整盘文件清单；现在 58 个来源、165 份登记。 |
+| Registered index（登记索引） | 只包含明确接入的来源和非媒体原件定位，不是整盘文件清单；现在 55 个来源、166 份登记。 |
 | Logical family（逻辑版本族） | 同一现实材料的多个来源原生版本；它与相同字节副本不是同一概念。 |
 | Exact duplicate（精确重复） | 只有完整 SHA-256 相同才成立；标题相同或迁移回执不能证明。 |
 | Hash-bound text（哈希绑定文字） | OCR（光学字符识别）、提取或原生文字与一份精确原件身份绑定；只帮助召回，引用仍回到原件。 |
@@ -937,7 +937,7 @@
 
 - 绑定文字不拥有高于原件的证据地位，也不进入人物、事件或领域判断。
 
-- 来源覆盖是 complete、partial 或 unknown（未验证）的登记声明，不等于整台电脑；目前 4 个来源声明完整、54 个部分。
+- 来源覆盖是 complete、partial 或 unknown（未验证）的登记声明，不等于整台电脑；目前 4 个来源声明完整、51 个部分。
 
 ## 失败与恢复
 

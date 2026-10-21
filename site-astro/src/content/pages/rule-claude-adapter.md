@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E275",
-   "commit": "dfc6b406fb43175d44ff4436f854f7129cb560ec",
-   "ruleset_sha256": "32c6ff6e32f441dac925edbac4a3d0af6d5c5cc5d8a2be0575483f2cfce5e6eb",
-   "activated_at": "2026-10-17T11:38:31.183019+08:00",
+   "release": "E279",
+   "commit": "dfca0d10888eadf1b2f724da417da9079a6ef938",
+   "ruleset_sha256": "11064e71ec4ea1a426f5ced03d95d2d0a00131025c7b4c8f606c5d0c67772681",
+   "activated_at": "2026-10-21T21:20:08.660355+08:00",
    "file": "sources/rules/docs/contracts/agents.claude-adapter.md",
-   "sha256": "19b9e7fec5e9acac0c1f9824f2ac29e8bc70fc8ba3007a7458a5baa8d2017761",
-   "public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5"
+   "sha256": "e62a5bdd359c8dfb69c58da9e4a02ced5b0e4dbf0397ed58b488db3457a986c8",
+   "public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：Claude 橙色星芒小窗口轻轻亮一下，一颗小绿光点顺着垂下的绿色细绳经过三个小木块，落到底部的铜牌上，铜牌微微一闪；右边五级木台阶从 low 到 max 依次泛起一层浅绿光；台阶顶上的小木桥上走过一张小任务卡，被右边胸前是 OpenAI 黑色花结的小机器人接住；左下角木钩上的便签轻轻摆动；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，牌子上的字保持不动、不变形。",
   "registry": {
@@ -234,8 +234,8 @@
  },
  "source": {
   "page": "sources/pages/rule-claude-adapter/page.json",
-  "sha256": "417a8db74778124f224c42d2b8bd6fee181d022abfd0d93b27e9d4027458f0a2",
-  "converted_at_beijing": "2026-10-20T08:56:33+08:00"
+  "sha256": "378a5867b303ee38b442a64b7f4e107ae5f13b35ec0deaa72a93d33f2a517cca",
+  "converted_at_beijing": "2026-10-22T07:02:35+08:00"
  }
 }
 ---
@@ -3041,9 +3041,9 @@ Hook 是 Claude 在固定时刻自动运行的程序，现在有两个，共用�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.claude-adapter.md",
-   "release": "E275",
-   "sha256": "19b9e7fec5e9acac0c1f9824f2ac29e8bc70fc8ba3007a7458a5baa8d2017761",
-   "public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5",
+   "release": "E279",
+   "sha256": "e62a5bdd359c8dfb69c58da9e4a02ced5b0e4dbf0397ed58b488db3457a986c8",
+   "public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a",
    "from": null,
    "to": "## 派子代理：Claude 的不同处",
    "start": 0,
@@ -3066,7 +3066,7 @@ Hook 是 Claude 在固定时刻自动运行的程序，现在有两个，共用�
   "reuse": "",
   "source_excerpt_id": "rule-claude-adapter/rule-claude-adapter-11",
   "source_logical_id": "claude_adapter_contract",
-  "source_public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5",
+  "source_public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a",
   "source_rule_part": "rule-claude-adapter/rule-claude-adapter-11"
  },
  "layout": {
@@ -3074,7 +3074,7 @@ Hook 是 Claude 在固定时刻自动运行的程序，现在有两个，共用�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版，一字不改"
+     "text_ref": "原文·E279版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -3112,7 +3112,7 @@ Hook 是 Claude 在固定时刻自动运行的程序，现在有两个，共用�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版，一字不改"
+     "text_ref": "原文·E279版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -3214,7 +3214,7 @@ Hook 是 Claude 在固定时刻自动运行的程序，现在有两个，共用�
 }
 ```
 
-原文 · E275 版，一字不改
+原文 · E279 版，一字不改
 
 # Claude 适配
 
@@ -3250,9 +3250,9 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.claude-adapter.md",
-   "release": "E275",
-   "sha256": "19b9e7fec5e9acac0c1f9824f2ac29e8bc70fc8ba3007a7458a5baa8d2017761",
-   "public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5",
+   "release": "E279",
+   "sha256": "e62a5bdd359c8dfb69c58da9e4a02ced5b0e4dbf0397ed58b488db3457a986c8",
+   "public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a",
    "from": "## 派子代理：Claude 的不同处",
    "to": "- **从包装器进入。**",
    "start": 739,
@@ -3279,7 +3279,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
   "reuse": "",
   "source_excerpt_id": "rule-claude-adapter/rule-claude-adapter-12",
   "source_logical_id": "claude_adapter_contract",
-  "source_public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5",
+  "source_public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a",
   "source_rule_part": "rule-claude-adapter/rule-claude-adapter-12"
  },
  "layout": {
@@ -3287,7 +3287,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -3324,7 +3324,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -3378,7 +3378,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
 }
 ```
 
-原文 · E275 版 · 续
+原文 · E279 版 · 续
 
 ## 派子代理：Claude 的不同处
 
@@ -3406,13 +3406,13 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.claude-adapter.md",
-   "release": "E275",
-   "sha256": "19b9e7fec5e9acac0c1f9824f2ac29e8bc70fc8ba3007a7458a5baa8d2017761",
-   "public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5",
+   "release": "E279",
+   "sha256": "e62a5bdd359c8dfb69c58da9e4a02ced5b0e4dbf0397ed58b488db3457a986c8",
+   "public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a",
    "from": "- **从包装器进入。**",
    "to": "Steer 的长消息可用",
    "start": 2292,
-   "end": 5552,
+   "end": 5536,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -3439,7 +3439,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
   "reuse": "",
   "source_excerpt_id": "rule-claude-adapter/rule-claude-adapter-13",
   "source_logical_id": "claude_adapter_contract",
-  "source_public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5",
+  "source_public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a",
   "source_rule_part": "rule-claude-adapter/rule-claude-adapter-13"
  },
  "layout": {
@@ -3447,7 +3447,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -3480,7 +3480,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -3506,18 +3506,18 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
 }
 ```
 
-原文 · E275 版 · 续
+原文 · E279 版 · 续
 
-- **从包装器进入。** 使用 `E:\.agents\tools\Invoke-ClaudeGptChild.ps1`，`-ParentHarness` 默认 `Claude`，原来的 Claude 调用、会话号来源和结果目录不变。新 Start 默认走私有 AppServer（后台服务）并脱离运行，长任务优先这样派；确实需要桌面身份的整项任务可传 `-Detached:$false`，也可把凭据动作交回根会话。Resume 沿用已保存的传输和脱离方式，旧目录缺脱离字段时保留原方式，显式 `-Detached` 可切换。运行中纠偏用同轮 Steer（运行中引导）。不直接调用 `codex exec`，不用 Codex 的 `openai_child` 或专用判断角色。需要 Exec 回退时仍走包装器，显式加 `-Transport Exec`；Exec 不支持同轮 Steer。共用的容量和接续行为见[分工与并行施工](/rules/execution-coordination/#原生容量不足与原线程接续)；`-ParentHarness Codex` 只供[Codex 适配中的已授权转用](/rules/codex-adapter/#原生容量不足时转用共用包装器)，不把 Claude 的型号许可搬过去。
+- **从包装器进入。** 使用 `E:\.agents\tools\Invoke-ClaudeGptChild.ps1`，`-ParentHarness` 默认 `Claude`，原来的 Claude 调用、会话号来源和结果目录不变。Start、Resume 统一走私有 AppServer（后台服务）；新 Start 默认脱离运行，长任务优先这样派。确实需要桌面身份的整项任务可传 `-Detached:$false`，也可把凭据动作交回根会话。Resume 沿用已保存的脱离方式，旧目录缺脱离字段时保留原方式，显式 `-Detached` 可切换。运行中纠偏用同轮 Steer（运行中引导）。不直接调用 `codex exec`，不用 Codex 的 `openai_child` 或专用判断角色。共用的容量和接续行为见[分工与并行施工](/rules/execution-coordination/#原生容量不足与原线程接续)；`-ParentHarness Codex` 只供[Codex 适配中的已授权转用](/rules/codex-adapter/#原生容量不足时转用共用包装器)，不把 Claude 的型号许可搬过去。
 - **资料与权限。** Codex 子任务按正常 Codex 配置和当前授权工作，不复制 Claude 对话授权值，不另加沙箱或审批覆盖。独立执行者没有桌面祖先身份：真正依赖密码中心桌面身份的凭据步骤交回根会话，其余已授权步骤照常完成；不另行登录、转交秘密或改身份核验来补。资料需求、共享资料期和缺口交回按共同原则第 7 条。
-- **派活单和预算。** 字段、模板、预算统计和验收只维护在派发说明（`../claude-gpt-child-dispatch.md`）。任务修改代码时用专用工作树；出处、方案和成本估算等可选，不能因缺栏拒绝。Extend、预算放行 `-AllowOverBudget` 和纠错 `-Correction` 带 `-Reason`。
+- **派活单和预算。** 字段、模板、预算统计和验收只维护在派发说明（`E:/.agents/docs/claude-gpt-child-dispatch.md`）。任务修改代码时用专用工作树；出处、方案和成本估算等可选，不能因缺栏拒绝。Extend、预算放行 `-AllowOverBudget` 和纠错 `-Correction` 带 `-Reason`。
 - **交代和交付。** 子任务是非交互的：技术做法自己定，不能自己定的需求或取舍写进最终汇报，由根会话整理；先做完不依赖该决定的工作，不在无人回答的地方等提问。交付简短结论、必要证据和汇报路径，除任务明确要求网页外，不做可视化，也不打开窗口。本机 UAC 为不通知，任务范围内需要管理员权限时可静默提权，按[用户授权](/rules/authorization/#长期授权)办理；权限/ACL 改动、撤回快照和重大动作等仍按各自专题，需要本人在场的步骤交根会话安排。会影响其他会话的决定写到对应项目文件；仅在同改一处、发生事故或确需协调时发消息，不用中途进度刷屏。
 - **保存和接续。** 保留会话，不加 `--ephemeral`；Claude 默认不启用 `-ContinueOnQuota`。失败、超时或额度恢复后在原线程 Resume，具体接续按共用专题。会话保存、CLI 列表和桌面即时可见分别报告，不保证运行中可在桌面输入，不为刷新列表重启桌面。
-- **命令不断线。** 独立隐藏执行者不随派活命令、Claude 退出或更新停止。Start 默认立即返回，`-Wait` 才等候；Resume 沿原线程等候，返回后按共用接续原则挂覆盖全部运行任务的后台 Watch，不另挂 Backstop。订阅、风险、旧轮兼容和回执见派发说明（`../claude-gpt-child-dispatch.md`）。
+- **命令不断线。** 独立隐藏执行者不随派活命令、Claude 退出或更新停止。Start 默认立即返回，`-Wait` 才等候；Resume 沿原线程等候，返回后按共用接续原则挂覆盖全部运行任务的后台 Watch，不另挂 Backstop。订阅、风险、旧轮兼容和回执见派发说明（`E:/.agents/docs/claude-gpt-child-dispatch.md`）。
 - **后台命令时限。** 长时间 Start、Resume、Watch 显式设 `run_in_background:true`，`timeout` 用回执 `watch_timeout_ms`（当前 7200000 毫秒）。Watch 周期不改变任务截止，监测和停止入口由独立执行者持有。
-- **时间按需延长。** 派活单时限优先，无派活单才用 `-TimeoutSeconds`（默认 7200 秒）。截止前总时长的 10%（5–30 分钟）返回一次 `deadline_soon`，先 Steer 交已有结果；根调整范围或做法及新时限后才 `Extend -Minutes N -Reason` 并重挂 Watch，不自动延期。超预算续作用 `Resume -Minutes N -Reason`；N 默认为本轮预算，显式 `-TimeoutSeconds` 时加在秒数上，两者都没给就拒绝。无人处理时自动提醒收尾，接受提醒后宽限 1–3 分钟，以 `timeout` 停止；Exec 到点直接停。
+- **时间按需延长。** 派活单时限优先，无派活单才用 `-TimeoutSeconds`（默认 7200 秒）。截止前总时长的 10%（5–30 分钟）返回一次 `deadline_soon`，先 Steer 交已有结果；根调整范围或做法及新时限后才 `Extend -Minutes N -Reason` 并重挂 Watch，不自动延期。超预算续作用 `Resume -Minutes N -Reason`；N 默认为本轮预算，显式 `-TimeoutSeconds` 时加在秒数上，两者都没给就拒绝。无人处理时自动提醒收尾，接受提醒后宽限 1–3 分钟，以 `timeout` 停止。
 - **执行者消失和重启。** 进程号或启动时间对不上时标 `failed/runner_gone`；Watch 发现可恢复任务给 `runner_gone_recoverable`、`recovery_command`。Claude 恢复先用 `Recover -SessionId <完整父会话号>`：仅续作该父会话下执行者消失、最新轮无非空报告、未永久删除的任务，原线程核对半截产物，能续就续，不能续就重做。单项失败不挡其他任务；已有报告交根验收，归属不明旧目录用 Status 核对后手动 Resume。恢复后照 `watch_command` 覆盖所有运行任务；后台命令结束不证明子任务停止。
-- **结束后清理。** 验收和清理条件见派发说明（`../claude-gpt-child-dispatch.md`）；`Accept -RunDir <结果目录>` 跑登记的验收命令并留证据，全过才登记。Stop 默认保留线程和成果，只有显式 `-DeleteThread` 才永久删本轮线程及后代。清理只处理本任务目录内待清理清单和 `tmp`，汇报、代码成果保留；失败、超时、额度或登录失效自动归档，Resume 取消归档，自动重试保留原线程。不追删已归档对话，删除、归档、清理失败均留回执，不改任务结局。
+- **结束后清理。** 验收和清理条件见派发说明（`E:/.agents/docs/claude-gpt-child-dispatch.md`）；`Accept -RunDir <结果目录>` 跑登记的验收命令并留证据，全过才登记。Stop 默认保留线程和成果，只有显式 `-DeleteThread` 才永久删本轮线程及后代。清理只处理本任务目录内待清理清单和 `tmp`，汇报、代码成果保留；失败、超时、额度或登录失效自动归档，Resume 取消归档，自动重试保留原线程。不追删已归档对话，删除、归档、清理失败均留回执，不改任务结局。
 
 常用命令如下，路径和会话号换成本次真实值；修改仓库用 `-NewWorktree -RepoPath`，只读任务可换成 `-WorkDir '<已有目录>'`。结果目录由 Start 创建，后续各命令的 `-RunDir` 指向同一个结果目录。
 
@@ -3543,13 +3543,13 @@ $child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.claude-adapter.md",
-   "release": "E275",
-   "sha256": "19b9e7fec5e9acac0c1f9824f2ac29e8bc70fc8ba3007a7458a5baa8d2017761",
-   "public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5",
+   "release": "E279",
+   "sha256": "e62a5bdd359c8dfb69c58da9e4a02ced5b0e4dbf0397ed58b488db3457a986c8",
+   "public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a",
    "from": "Steer 的长消息可用",
    "to": "- **要在新会话里验收的**",
-   "start": 5552,
-   "end": 7276,
+   "start": 5536,
+   "end": 7458,
    "approved_omissions": []
   },
   "title": "原文（四）",
@@ -3576,7 +3576,7 @@ $child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
   "reuse": "",
   "source_excerpt_id": "rule-claude-adapter/rule-claude-adapter-14",
   "source_logical_id": "claude_adapter_contract",
-  "source_public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5",
+  "source_public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a",
   "source_rule_part": "rule-claude-adapter/rule-claude-adapter-14"
  },
  "layout": {
@@ -3584,7 +3584,7 @@ $child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -3619,7 +3619,7 @@ $child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -3672,9 +3672,9 @@ $child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
 }
 ```
 
-原文 · E275 版 · 续
+原文 · E279 版 · 续
 
-Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息里有中文引号“”时一律用 `-PromptFile`，PowerShell 会把中文引号当成字符串边界、把后面的字拆成别的参数。用 Status 核对是否接受、是否被模型看到及汇报中的处理结果，不把入队当成完成。Resume 只用于当前轮已结束的原线程，沿用原型号、档位和已保存的传输方式。Watch 优先照返回里的 `watch_command` 原样挂，它已涵盖本次所有仍在跑的结果目录。Check、Watch、Extend、WaitQuota 的完整说明见脚本顶部注释，`Get-Help E:\.agents\tools\Invoke-ClaudeGptChild.ps1 -Full` 可列出参数。
+Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息里有中文引号“”时一律用 `-PromptFile`，PowerShell 会把中文引号当成字符串边界、把后面的字拆成别的参数。用 Status 核对是否接受、是否被模型看到及汇报中的处理结果，不把入队当成完成。Resume 只用于当前轮已结束的原线程，使用 AppServer，沿用原型号、档位和已保存的脱离方式。Watch 优先照返回里的 `watch_command` 原样挂，它已涵盖本次所有仍在跑的结果目录。Check、Watch、Extend、WaitQuota 的完整说明见脚本顶部注释，`Get-Help E:\.agents\tools\Invoke-ClaudeGptChild.ps1 -Full` 可列出参数。
 
 ## 宿主接线
 
@@ -3683,7 +3683,7 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
 - **档位子代理**：规范源是 `templates/claude-home/agents/`，`~/.claude/agents` 是指向它的目录链接。
 - **记忆**：Claude 账号聊天记忆已关闭，Claude Code 的关闭配置为 `~/.claude/settings.json` 中的 `autoMemoryEnabled=false`；需要留下的内容统一按[共享经验的落点](/rules/context-sources/#共享经验的落点)处理，Claude 工具的已核实教训归本专题。
 - **MCP**：用户级配置在 `%USERPROFILE%\.claude.json`（`claude mcp add -s user`）。Google 业务按[能力与运行方式](/rules/capabilities-runtime/#常用入口)，走 PCConfig 的 `google-workspace` stdio 入口，不接 claude.ai 的云连接器。电脑 MCP 只认目标机登记过的客户端；Claude 的 OAuth 回调固定为 `http://localhost:<端口>/callback`，不能复用 Codex 的 `127.0.0.1` 客户端，要在目标机登记独立的 Claude 客户端和固定回调端口。主机上的 Claude 直接用本机工具，不连本机的电脑 MCP。
-- **浏览器**：Claude 根和子代理不能操作本人已登录页面；要用登录状态时派 GPT，AppServer 接 Codex Chrome 插件，Exec 不接，优先本人已开的 Chrome。连不上按[浏览器规则](/rules/capabilities-runtime/#浏览器)和 `browser-control-continuity` 无窗口继续，真正依赖本人登录的步骤单独交回。无登录需求看一两页可用 Claude 内置浏览器（`mcp__Claude_Browser__*`）；成批截图、录屏和操作按共同原则派。选型与 Astra 授权照常，Codex 仍用本人 Chrome；这是可由本人当场改的默认。
+- **浏览器**：Claude 根和子代理访问网站、看网页、查网页资料或使用本人登录状态，一律派 GPT（AppServer）用 Codex Chrome 插件在本人 Chrome 自己新开的后台标签页里做，Exec 不接这类任务。Claude 桌面版内置浏览器（`mcp__Claude_Browser__*`）只用于本机文件和本机回环地址（`127.0.0.1`、`localhost`、`[::1]`）的本地预览，不用于任何网站；`preview_start` 按 name 启动时只允许 `.claude/launch.json` 中的本地开发服务器。Claude in Chrome 扩展继续由 Hook 拦截，本人当轮明确点名时放行的例外保留。GPT 的 Chrome 通道不通时按[浏览器规则](/rules/capabilities-runtime/#浏览器)和 `browser-control-continuity` 无窗口修一次；仍不通就停下网页步骤、交回卡点，不由 Claude 内置浏览器或无头浏览器代做。选型与 Astra 授权照常；这是可由本人当场改的默认。
 
 ::screen{#rule-claude-adapter-15 section="original"}
 
@@ -3695,13 +3695,13 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.claude-adapter.md",
-   "release": "E275",
-   "sha256": "19b9e7fec5e9acac0c1f9824f2ac29e8bc70fc8ba3007a7458a5baa8d2017761",
-   "public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5",
+   "release": "E279",
+   "sha256": "e62a5bdd359c8dfb69c58da9e4a02ced5b0e4dbf0397ed58b488db3457a986c8",
+   "public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a",
    "from": "- **要在新会话里验收的**",
    "to": "## Hook 和个人资料状态",
-   "start": 7276,
-   "end": 8685,
+   "start": 7458,
+   "end": 9042,
    "approved_omissions": []
   },
   "title": "原文（五）",
@@ -3724,7 +3724,7 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
   "reuse": "",
   "source_excerpt_id": "rule-claude-adapter/rule-claude-adapter-15",
   "source_logical_id": "claude_adapter_contract",
-  "source_public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5",
+  "source_public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a",
   "source_rule_part": "rule-claude-adapter/rule-claude-adapter-15"
  },
  "layout": {
@@ -3732,7 +3732,7 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -3758,7 +3758,7 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -3785,13 +3785,14 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
 }
 ```
 
-原文 · E275 版 · 续
+原文 · E279 版 · 续
 
 - **要在新会话里验收的**（Hook、MCP、技能）：用真正的新桌面会话，运行中的会话仍持旧 Hook 和 MCP。`spawn_task` 继承型号档位，不用于此项验收；给可复制提示，首行注明 Sonnet 5.5、low，让本人新开、选好后粘贴，结果交回或由根回读。MCP 原命令可按 `%USERPROFILE%\.claude.json` 的 `mcpServers` 跑 stdio 作补充，两种证据分开。嵌套 `claude -p` 没登录、也非新桌面会话，不能代替，不为它登录或转交凭据。
 - **权限**：用户设置里全局使用 `permissions.defaultMode=bypassPermissions`，和 Codex 的完全访问对等；不用 auto 模式或 `autoMode` 条目复制授权。宿主固定拦截的操作（删除盘根或一级目录、`Remove-Item` 通配、前台长时间 sleep、`AskUserQuestion` 等）不是停工理由：改用字面子路径、回收站工具（见[工程与交付](/rules/engineering-delivery/)），或用后台任务、Monitor 等待。
 - 清理、删除或其他因 Claude 硬限制卡住的已授权事项，按[Claude 受限的事项交给 Codex](/rules/execution-coordination/#claude-受限的事项交给-codex)提醒本人并提供接手提示词。
 - **文件预览**：工作区外的链接按 [Claude 入口模板](/rule-sources/templates/claude-home/CLAUDE.md)的文件预览要求办理；该模板随活动版本部署，命令行目录设置不能代替桌面预览权限。
 - **按命令文字拦截的删除**：Claude 桌面版会拦住同一条 PowerShell 命令里同时出现 `Remove-Item` 和 `E:\PCConfig` 字样的调用；它只看命令文字，不看实际删什么，被拦时整条命令都不执行。删任务临时目录单独写一条命令，读 `E:\PCConfig` 的 git 命令放另一条。临时文件按[工程与交付的清理入口](/rules/engineering-delivery/#下载临时文件和清理)处理。
+- **桌面版定时任务不回原对话**：用 `scheduled-tasks` 建的任务到点在它自己的新会话里运行，不唤醒、也不回报给建它的对话（2026-10-21 实测）。原对话要用结果，就去读它的运行记录（`list_task_runs`），或在任务说明里写明跑完把结论发给原会话；不对本人说“到点结果会自动回到这个对话”。一次性任务用完就删。
 - **写路径和中文的坑**：Bash 工具会先把命令里的双反斜杠变成单个（单引号里也一样），Bash 再吃掉引号外的反斜杠，所以引号外的 Windows 路径写一个还是两个反斜杠都会坏（`E:\\.agents\\skills` 最后成了 `E:.agentsskills`，读不到文件，写文件则落到别处）；在 Bash 里写路径用正斜杠 `E:/...` 或放进单引号。内联脚本里的 Windows 路径会让 `\3`、`\r` 这类被当成转义、写出控制字符；PowerShell 工具的命令要整体再解析一次，双引号字符串里的中文弯引号“”会被当成引号，整条命令报语法错、一步都不执行。所以含 Windows 路径、中文引号的文字（脚本、提交说明、文档片段）先用 Write 工具写成文件，路径用原始字符串，写完检查没有控制字符。给 `pwsh -File` 传数组参数会被拼成一个字符串，要传数组就在当前会话里用 `&` 调用，或改用 `-Command`。
 
 ::screen{#rule-claude-adapter-16 section="original"}
@@ -3804,13 +3805,13 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.claude-adapter.md",
-   "release": "E275",
-   "sha256": "19b9e7fec5e9acac0c1f9824f2ac29e8bc70fc8ba3007a7458a5baa8d2017761",
-   "public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5",
+   "release": "E279",
+   "sha256": "e62a5bdd359c8dfb69c58da9e4a02ced5b0e4dbf0397ed58b488db3457a986c8",
+   "public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a",
    "from": "## Hook 和个人资料状态",
    "to": "## 受信任 AI 的其他能力",
-   "start": 8685,
-   "end": 10878,
+   "start": 9042,
+   "end": 11261,
    "approved_omissions": []
   },
   "title": "原文（六）",
@@ -3824,7 +3825,7 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
   "reuse": "",
   "source_excerpt_id": "rule-claude-adapter/rule-claude-adapter-16",
   "source_logical_id": "claude_adapter_contract",
-  "source_public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5",
+  "source_public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a",
   "source_rule_part": "rule-claude-adapter/rule-claude-adapter-16"
  },
  "layout": {
@@ -3832,7 +3833,7 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -3868,7 +3869,7 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -3944,11 +3945,11 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
 }
 ```
 
-原文 · E275 版 · 续
+原文 · E279 版 · 续
 
 ## Hook 和个人资料状态
 
-根会话压缩后的只读复核按[共用复核规则](/rules/context-sources/#压缩后的后台复核)执行，复用下述受管运行时和现有 GPT 包装器；结果通过工具后或恢复、新消息边界回到原会话，不用审查者直接改代码或阻塞提示。程序入口与暂停开关见上下文 Hook 运维（`../operations/context-hooks.md`）。
+根会话压缩后的只读复核按[共用复核规则](/rules/context-sources/#压缩后的后台复核)执行，复用下述受管运行时和现有 GPT 包装器；结果通过工具后或恢复、新消息边界回到原会话，不用审查者直接改代码或阻塞提示。程序入口与暂停开关见上下文 Hook 运维（`E:/.agents/docs/operations/context-hooks.md`）。
 
 `UserPromptSubmit` 每条真实新消息带来会话坐标、可核实的型号和档位、共享资料状态及已核验的无限制授权。资料需求和本人验证由根负责，按[个人资料锁与解锁](/rules/privacy-data/#个人资料的锁和解锁)和共同原则第 7 条执行；纯技术工作继续。同一驾驶舱、健康提醒每会话只提示一次或状态变化时再提示。
 
@@ -3956,7 +3957,7 @@ Stop 核对本轮真实 Report 的明确目标集合，未解锁的资料拦截�
 
 根会话有 GPT 等候、原生后台 Agent 或 Bash/PowerShell 等未完成后台任务时，受管 Stop 用一个会话级 `asyncRewake`（异步唤醒）保活等待，按主代理最近真实活动加 55 分钟计时；新消息、主代理工具调用和下一次停止刷新活动，多个任务共用一次唤醒。未完成状态优先读宿主 `background_tasks`，GPT 执行器状态作补判；任务全结束或无法确认还在后台运行时以退出码 0 静默结束，仍有后台任务且主代理空闲达到 55 分钟时以退出码 2 叫醒，主持可继续等待。子代理自己的进度和 SendMessage 发出时刻不算主代理活动。该保活不改 Watch/Resume 的内部续等或子任务执行；宿主能力依据见官方 [asyncRewake 与后台 Hook](https://code.claude.com/docs/en/hooks#limitations)及 [Stop 输入](https://code.claude.com/docs/en/hooks#stop-input)。
 
-程序细节、部署和维护见上下文 Hook 运维（`../operations/context-hooks.md#个人资料先解锁与结束兜底`），验证等待见[个人资料的锁和解锁](/rules/privacy-data/#个人资料的锁和解锁)。
+程序细节、部署和维护见上下文 Hook 运维（`E:/.agents/docs/operations/context-hooks.md#个人资料先解锁与结束兜底`），验证等待见[个人资料的锁和解锁](/rules/privacy-data/#个人资料的锁和解锁)。
 
 受管根 Hook 用 `tools/Invoke-ClaudeRootHooks.ps1` 安装，运行时按内容哈希放入受管目录，以 `active-runtime.json` 选择，再合并 `~/.claude/settings.json`，保留其他设置和 Hook；宿主重读设置后生效。部署细节只维护在运维文档。
 
@@ -3982,13 +3983,13 @@ Claude、本机、图形界面和电脑 MCP 共用资料状态。用 `CheckPerso
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.claude-adapter.md",
-   "release": "E275",
-   "sha256": "19b9e7fec5e9acac0c1f9824f2ac29e8bc70fc8ba3007a7458a5baa8d2017761",
-   "public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5",
+   "release": "E279",
+   "sha256": "e62a5bdd359c8dfb69c58da9e4a02ced5b0e4dbf0397ed58b488db3457a986c8",
+   "public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a",
    "from": "## 受信任 AI 的其他能力",
    "to": null,
-   "start": 10878,
-   "end": 11662,
+   "start": 11261,
+   "end": 12045,
    "approved_omissions": []
   },
   "title": "原文（七）",
@@ -4007,7 +4008,7 @@ Claude、本机、图形界面和电脑 MCP 共用资料状态。用 `CheckPerso
   "reuse": "",
   "source_excerpt_id": "rule-claude-adapter/rule-claude-adapter-17",
   "source_logical_id": "claude_adapter_contract",
-  "source_public_sha256": "68c44b3b2f69a771eb2b081a0db728500f6af1a207df9471411a5bf7caeadaa5",
+  "source_public_sha256": "ab6aae48c64d931d32b1add1a68b57c00dd43e29f38cb2b32b468cb3f8622b3a",
   "source_rule_part": "rule-claude-adapter/rule-claude-adapter-17"
  },
  "layout": {
@@ -4015,7 +4016,7 @@ Claude、本机、图形界面和电脑 MCP 共用资料状态。用 `CheckPerso
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -4052,7 +4053,7 @@ Claude、本机、图形界面和电脑 MCP 共用资料状态。用 `CheckPerso
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -4129,7 +4130,7 @@ Claude、本机、图形界面和电脑 MCP 共用资料状态。用 `CheckPerso
 }
 ```
 
-原文 · E275 版 · 续
+原文 · E279 版 · 续
 
 ## 受信任 AI 的其他能力
 

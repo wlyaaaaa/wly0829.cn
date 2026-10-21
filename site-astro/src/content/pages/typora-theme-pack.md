@@ -46,10 +46,10 @@
    "state": "偶尔用",
    "last": {
     "label": "上次更新",
-    "at": "2026-09-29 01:36"
+    "at": "2026-10-20 16:21"
    },
    "facts": [],
-   "as_of": "2026-10-12",
+   "as_of": "2026-10-22",
    "source": "项目修改记录"
   },
   "public": true,
@@ -455,8 +455,8 @@
  },
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
-  "sha256": "ec578c875ce4f1b6dac1c714f3a488bae59334df31b13d4e275f0097739e3581",
-  "converted_at_beijing": "2026-10-12T05:03:51+08:00"
+  "sha256": "bb64a9bb79443f665da9ef0349f6fbd2a5675f95c2535db82ce068786ee2181b",
+  "converted_at_beijing": "2026-10-22T07:02:38+08:00"
  }
 }
 ---
@@ -536,11 +536,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次更新 9 月 29 日 01:36",
+       "text": "偶尔用 · 上次更新 10 月 20 日 16:21",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 项目修改记录",
+     "static_note": "截至 10 月 22 日 · 项目修改记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -611,11 +611,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次更新 9 月 29 日 01:36",
+       "text": "偶尔用 · 上次更新 10 月 20 日 16:21",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 项目修改记录"
+     "static_note": "截至 10 月 22 日 · 项目修改记录"
     },
     {
      "type": "stat_card",

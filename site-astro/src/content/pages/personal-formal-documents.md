@@ -269,10 +269,10 @@
     },
     {
      "id": "n-lines",
-     "text": "1,839 行",
+     "text": "1,859 行",
      "meaning": "src/legal_filing_kit/formal_documents.py 的行数（不含空行，含注释；含空行共 2,013 行），不限定文书种类",
-     "as_of": "2026-10-12",
-     "source": "PowerShell Get-Content | Measure-Object -Line，提交 ae11211",
+     "as_of": "2026-10-22",
+     "source": "见来源记录 personal-formal-documents-n-lines-0，观察于 2026-10-22T06:47:52+08:00",
      "screens": [
       "personal-formal-documents-06",
       "personal-formal-documents-07"
@@ -280,10 +280,10 @@
     },
     {
      "id": "n-audit-lines",
-     "text": "1,426 行",
+     "text": "1,437 行",
      "meaning": "共用检查模块 audit.py 的行数（不含空行）",
-     "as_of": "2026-10-12",
-     "source": "同上",
+     "as_of": "2026-10-22",
+     "source": "见来源记录 personal-formal-documents-n-audit-lines-0，观察于 2026-10-22T06:47:52+08:00",
      "screens": [
       "personal-formal-documents-06"
      ]
@@ -423,8 +423,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "3521f85f9b25f67b0bf599ecaa0a1b0f03d658d1ff500d5b5d06ef819de28288",
-  "converted_at_beijing": "2026-10-12T05:03:47+08:00"
+  "sha256": "27604eed8ea3551536d47e989f895dcb81f346fc2d110920043ea5a94256431b",
+  "converted_at_beijing": "2026-10-22T07:02:33+08:00"
  }
 }
 ---
@@ -1839,7 +1839,7 @@
 7. **封存**｜原样的输入、Word、PDF、附件、检查结果、签名快照连同清单放进一个新文件夹；全部通过，才另复制出一份“可以交出”的材料包
 8. **随时再核**｜按清单重新比每个文件的大小和内容指纹，再重跑一遍检查
 
-Python 写成：主程序 1,839 行（不算空行），另用共用的检查模块 1,426 行；39 个自动测试只用虚构内容，不碰真实事项和我的签名。
+Python 写成：主程序 1,859 行（不算空行），另用共用的检查模块 1,437 行；39 个自动测试只用虚构内容，不碰真实事项和我的签名。
 
 ::screen{#personal-formal-documents-07 section="tech"}
 

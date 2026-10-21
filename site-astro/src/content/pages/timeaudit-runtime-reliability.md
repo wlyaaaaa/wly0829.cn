@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/timeaudit-runtime-reliability/page.json",
-  "sha256": "041bb1ac3c835ab9853751c0b3e1ffb651da2f4f48c031e0cde98e632bbca6fd",
-  "converted_at_beijing": "2026-10-20T08:56:34+08:00"
+  "sha256": "cf6ab7764fbf2391c7ec4c671e2fce93df836cb668ad175ddea115ff552543bf",
+  "converted_at_beijing": "2026-10-22T07:02:38+08:00"
  }
 }
 ---
@@ -1023,7 +1023,7 @@ TimeAudit 大盘停止更新时，在已接入本机诊断的 AI 对话中说明
 
 - 8 月 31 日基线：三条 heartbeat 新鲜、3 容器运行、ingester healthy、LHM 18085 返回 HTTP 200、看门狗结果 0；10 月 12 日 05:36 完整健康检查仍全部 healthy，待写事件、字符、文件、字节都是 0，写入失败、溢出、捕获错误都是 0，FPS 采集 active、GPU 热点仍 unsupported；05:39 看门狗回执 healthy、没有降级组件，任务结果 0。这只是当时的运行快照，没有注入故障，不等于自愈路径已端到端验收。
 
-- 8 月 31 日运行/入库回归纳入 001cee0 的 182 项 + 11 子测试，LHM/看门狗定向 10/10；9 月 8 日 e5459ce 另验证 39 项相关回归。之后未重新运行；当前源码有 332 个以 test_ 开头的测试函数，这次没有运行。
+- 8 月 31 日运行/入库回归纳入 001cee0 的 182 项 + 11 子测试，LHM/看门狗定向 10/10；9 月 8 日 e5459ce 另验证 39 项相关回归。之后未重新运行；当前源码有 345 个以 test_ 开头的测试函数，这次没有运行。
 
 ::screen{#timeaudit-runtime-reliability-11 section="tech"}
 

@@ -303,12 +303,13 @@
     "能做的事",
     "边界"
    ]
-  }
+  },
+  "source_kind": "host_integrated"
  },
  "source": {
   "page": "sources/pages/skill-pdf/page.json",
-  "sha256": "b126e4ae5076257338bc49f529f23c505dff325f71f51d25b945658eb48c981b",
-  "converted_at_beijing": "2026-10-20T07:45:06+08:00"
+  "sha256": "a1fce5202a59781cdb3e941dcf142ee0e058b7724bedc04861d3715b399ce0fb",
+  "converted_at_beijing": "2026-10-22T07:02:37+08:00"
  }
 }
 ---

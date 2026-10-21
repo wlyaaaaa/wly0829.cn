@@ -524,20 +524,20 @@
     },
     {
      "id": "n-code",
-     "text": "39,957 行代码",
+     "text": "38,960 行代码",
      "meaning": "Git 跟踪的 PowerShell、C#、Python、JS 共 125 个文件的非空行；不含文档、JSON 数据和 PDF",
-     "as_of": "2026-10-11",
-     "source": "git ls-files '*.ps1' '*.psm1' '*.psd1' '*.cs' '*.py' '*.js' 逐个数非空行（同法在 7a2e38d 复核得 42,072，与原数一致）；HEAD 6e689ef",
+     "as_of": "2026-10-22",
+     "source": "见来源记录 ai-cli-profile-manager-n-code-0，观察于 2026-10-22T06:47:36+08:00",
      "screens": [
       "ai-cli-profile-manager-01"
      ]
     },
     {
      "id": "n-test-lines",
-     "text": "测试 16,252 行",
+     "text": "测试 15,947 行",
      "meaning": "tests/ 下代码文件的非空行",
-     "as_of": "2026-10-11",
-     "source": "同上，筛 tests/*",
+     "as_of": "2026-10-22",
+     "source": "见来源记录 ai-cli-profile-manager-n-test-lines-0，观察于 2026-10-22T06:47:36+08:00",
      "screens": [
       "ai-cli-profile-manager-01"
      ]
@@ -802,8 +802,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
-  "sha256": "9ed614664fa58d69c00607e353fed111adb0107b0efa95e01f5aa89f62ef9d3d",
-  "converted_at_beijing": "2026-10-12T06:47:11+08:00"
+  "sha256": "a2878dd689f243867f9f49907dde0c072848a5219f9e9e3ded17e9cd863af26d",
+  "converted_at_beijing": "2026-10-22T07:02:28+08:00"
  }
 }
 ---
@@ -1039,7 +1039,7 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
 **21 条路线**｜5 种原版工具配云端和本机模型；其中 2 条连的本机模型没装，眼下用不上（截至 10 月 11 日）
 **8 个模型**｜加进 Codex 桌面版菜单：本机 4 个、云端 4 个
 **131 个任务**｜9 月 16 日以来在桌面版里用这些模型开的（至少）
-**39,957 行代码**｜其中测试 16,252 行
+**38,960 行代码**｜其中测试 15,947 行
 
 现在　升级观察（Codex 里按需启动的自动任务，平时停着）　本机模型服务　〔现在正不正常 → 驾驶舱〕
 
@@ -2841,7 +2841,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 | DeepSeek | DeepSeek Flash（官方自动升到最新的 Flash，能看图）、DeepSeek V4 Pro 0813（只在终端），上下文约 100 万 token | 云端 |
 | 阿里云百炼 | Qwen3.8 Max 0902、Qwen3.7 Max 06-08，北京按量计费，上下文约 98 万 token | 云端 |
 | 本机模型 | Qwen3.8 27B、Qwen3.6 35B 和各自的去限制版，4 位量化，上下文 262,144 token | 本机显卡 |
-| 模型服务 | Ollama 0.35.0，同一时间只跑一个请求，空闲 3 分钟卸载；用显卡前经电脑配置的显卡排队服务 | 本机 |
+| 模型服务 | Ollama 0.40.4，同一时间只跑一个请求，空闲 3 分钟卸载；用显卡前经电脑配置的显卡排队服务 | 本机 |
 | 桌面桥 | .NET 10 的 C# 程序 | 本机 |
 | 后台运行 | Codex app-server（Codex 自带的后台服务接口）和它原生的“恢复同一会话” | 本机 |
 

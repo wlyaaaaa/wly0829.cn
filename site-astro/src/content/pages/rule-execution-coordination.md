@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E275",
-   "commit": "dfc6b406fb43175d44ff4436f854f7129cb560ec",
-   "ruleset_sha256": "32c6ff6e32f441dac925edbac4a3d0af6d5c5cc5d8a2be0575483f2cfce5e6eb",
-   "activated_at": "2026-10-17T11:38:31.183019+08:00",
+   "release": "E279",
+   "commit": "dfca0d10888eadf1b2f724da417da9079a6ef938",
+   "ruleset_sha256": "11064e71ec4ea1a426f5ced03d95d2d0a00131025c7b4c8f606c5d0c67772681",
+   "activated_at": "2026-10-21T21:20:08.660355+08:00",
    "file": "sources/rules/docs/contracts/agents.execution-coordination.md",
-   "sha256": "fc7cf01281aaacfdc8e0a81387af2fb550f16f224df1911bde541018206cca0b",
-   "public_sha256": "80cb4d6e61aa08f2ac602d7fa3badc8aed9edb838a53814634824cf2c2bd447b"
+   "sha256": "4a769967b758b3c674f6ad8ad4dff87c16430c4942e98b168d4bbaa5620e2197",
+   "public_sha256": "b3f5f48f7a5e267c2b79bd5d7e9f5739321e5df9c3406bfb789071589fb3f928"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：左边小绿树的三根细绿丝带轻轻飘动，丝带上各有一张小任务卡顺着滑到三张小书桌上，桌前的小 AI 助手接过卡片低头写几笔；右边三张工作台上的蓝图各自被添上几条绿色线条；墙上挂钩里的黄铜钥匙被一只手取下、沙漏翻转一次、钥匙又挂回原处；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -205,8 +205,8 @@
  },
  "source": {
   "page": "sources/pages/rule-execution-coordination/page.json",
-  "sha256": "0ce50e8d3f0c15390eca8d76924c34d79f59939167c578d47ef5562b25af4834",
-  "converted_at_beijing": "2026-10-20T08:56:34+08:00"
+  "sha256": "4cb5bf7ee25745cca506537b762062a45062b8943a31768c078f1cbafddbd9b9",
+  "converted_at_beijing": "2026-10-22T07:02:36+08:00"
  }
 }
 ---
@@ -1449,13 +1449,13 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.execution-coordination.md",
-   "release": "E275",
-   "sha256": "fc7cf01281aaacfdc8e0a81387af2fb550f16f224df1911bde541018206cca0b",
-   "public_sha256": "80cb4d6e61aa08f2ac602d7fa3badc8aed9edb838a53814634824cf2c2bd447b",
+   "release": "E279",
+   "sha256": "4a769967b758b3c674f6ad8ad4dff87c16430c4942e98b168d4bbaa5620e2197",
+   "public_sha256": "b3f5f48f7a5e267c2b79bd5d7e9f5739321e5df9c3406bfb789071589fb3f928",
    "from": null,
    "to": "## 改动与花费成比例",
    "start": 0,
-   "end": 4364,
+   "end": 4302,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -1478,7 +1478,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
   "reuse": "",
   "source_excerpt_id": "rule-execution-coordination/rule-execution-coordination-06",
   "source_logical_id": "execution_coordination_contract",
-  "source_public_sha256": "80cb4d6e61aa08f2ac602d7fa3badc8aed9edb838a53814634824cf2c2bd447b",
+  "source_public_sha256": "b3f5f48f7a5e267c2b79bd5d7e9f5739321e5df9c3406bfb789071589fb3f928",
   "source_rule_part": "rule-execution-coordination/rule-execution-coordination-06"
  },
  "layout": {
@@ -1487,7 +1487,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E275版，一字不改"
+     "text_ref": "原文·E279版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1511,7 +1511,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E275版，一字不改"
+     "text_ref": "原文·E279版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1587,7 +1587,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
 }
 ```
 
-原文 · E275 版，一字不改
+原文 · E279 版，一字不改
 
 # 分工与并行施工
 
@@ -1603,19 +1603,19 @@ owner: `E:\.agents`
 
 1. **主持的想和把关，活派出去做**（约法 L22）。主持的根会话管战略、头脑风暴、抽查、QA 和最后以人的角度看成品；具体的活派子代理做完、把结果送回来看，哪怕自己做也很快。只有整段活一两步就完的小事（看一个文件、改一句话、记一条本人决定）顺手做：看整段的目的和总量，不看单次操作多容易，50 张截图不是 50 件小事。相关的动作合成一单、一次交代清楚，不一个点击派一次。0 个子代理也正常：整件事只需要判断，或者本来就一两步。
 2. **按成品和公开数据选人，能胜任的最低一档就够。** 计划注明成品是“要惊艳”（人眼判断好坏）还是“能用就行”（测试、报错可判断），本人可改。前者样板和关键部分交最好的，其余照样板铺开；后者交最划算的，机械活交最便宜的。只用厂商、AA 等权威评测判断能力，不本机试跑比较、不用本人强弱印象作依据（约法 L22）；当前选择见模型清单 `routing`。按剩余难点选档位，需要时可高于根会话，不逐次问。
-   给人看的图、地图和示意图属于“要惊艳的关键部分”，样板交公开评测最好的模型，做法见 推荐流程（`../../skills/report-page/references/decision-reports.md`）。
+   给人看的图、地图和示意图属于“要惊艳的关键部分”，样板交公开评测最好的模型，做法见 推荐流程（`E:/.agents/skills/report-page/references/decision-reports.md`）。
 3. **别浪费额度。** 算未来的总投入：自己做要花的执行、验证和返工，对比委派要花的交代、上下文重建、来回沟通、审阅集成和返工。已经花掉的不算。
-4. **每次显式写型号和档位，派完核对实际值。** GPT-6.1 Sol 只读、步骤简单且代码上限 0 的小单用 medium，施工、分析和难活用 ultra；GPT-6 Luna 用 max，照既定提示生图、落盘用 low；Astra 按已有授权和模型清单选择。Sol、Astra 的旧 xhigh 派单统一用 ultra，它相当于子代理的 xhigh，不比 max 更高；Luna 没有 ultra。Claude 档位按模型清单选择。换代按约法 L23 和“新型号怎么调研”重评，不沿用旧型号设置。
+4. **每次显式写型号和档位，派完核对实际值。** 按模型清单（`E:/.agents/config/model-roster.json`） `routing.effort_rule` 选择，旧档位映射也只查清单。换代按约法 L23 和“新型号怎么调研”重评，不沿用旧型号设置。
 5. **复核按本次改动的风险定深浅**（约法 L22）。主持先看改动、相关测试和实际运行验收；代码以能用、能根治、能维护为标准。再看坏了会有什么后果、能否撤回、测试能证明多少、影响面多大，决定不另派、聚焦复核还是完整复核，在计划中用一行写明档次和理由，本人随时可改。
    - **不另派复核。** 测试和实际运行能证明对错、可以撤回、影响面小的改动，由主持验收即可，例如普通脚本和后台的报错修复。
    - **聚焦复核。** 每个会话或每轮都会用到的 Hook、入口、共用组件，或者故障不容易发现的改动，只查计划中列出的风险点，给改动差异和相关上下文，不重审整个项目。
    - **完整复核。** 会导致泄密、把本人锁在外面、丢唯一数据或不可逆后果的改动，包括密码中心（PasswordCenter）、授权、本人验证、资料锁本身，以及有上述后果的迁移和删除；重大设计、规则取舍和决定也这样办。主持先理解本人原话，再给复核者本单必要的事实、约束和改动，分清已核事实、未知和主持的推断，不附原话清单、不预设结论，让它先独立形成意见。
 
-   给本人拿去做决定的推荐、取舍、计划类汇报，交本人前用 Astra 独立复核断言证据和偏好外推；派 Astra 复核前每次先问本人，本人没有给长期授权，不派 Sol 做这项复核，做法见 推荐流程（`../../skills/report-page/references/decision-reports.md`）。
+   给本人拿去做决定的推荐、取舍、计划类汇报，交本人前用 Astra 独立复核断言证据和偏好外推；派 Astra 复核前每次先问本人，本人没有给长期授权，不派 Sol 做这项复核，做法见 推荐流程（`E:/.agents/skills/report-page/references/decision-reports.md`）。
 
    需要复核时，按模型清单的现有换家原则选人，至少用独立的上下文，型号和档位按本次风险与难度选，不写死。只提有证据、反例或失败路径的实质问题，没有就直说，不为凑问题改东西。问题修好后只复查那一处，补上能守住该反例的测试，不重开一轮全项目复核。后续更新按本次变更的风险重定深浅，用已有回归测试守住旧风险；碰到测试守不住的那一处，再做聚焦复核。主持仍负责最终验收。重大动作前的“把关”另按[重大动作与本人验证](/rules/protected-actions/)办理，不受这三档影响。
 6. **一次交代清楚。** 所有型号采用同一标准：只给本单必要的目标、事实、授权范围、测试上限和验收方式，用中文说清，不灌历史、不写死每一步。子代理只查派单要求的内容；关键事实冲突或超范围决定连同已有结果和证据交回。交付分清事实与推断，附结果、验证和未解决风险；型号名称和“同意”不证明正确。
-7. **根核验规则和判断资料需求，子代理按需读专题。** 原生派发前由根核验，包装器 Start/Resume 机械 Inspect；给出通过版本和专题路径，子代理不自行核验、不通读根规则。公开范围、资料锁和授权只引用现行专题，不写摘要、不沿用决定记录的旧说法；公开内容先读约法 L20 的公开分级表原文。
+7. **根核验规则和判断资料需求，子代理按需读专题。** 原生派发前由根核验，包装器 Start/Resume 机械 Inspect；给出通过版本和专题路径，子代理不自行核验、不通读根规则。公开范围、资料锁和授权只引用现行专题，不写摘要、不沿用决定记录的旧说法；公开内容先读[个人资料与数据处理的公开分级表](/rules/privacy-data/#公开个人数据分级表)原文。
 
    根派活前判断资料需求，需要时先请本人验证解锁，不先派“只用给定材料”的降级版本。资料期全机共用，子代理从正式入口取用，不重新判断或发起验证；实际被拦、途中缺资料或到期时单列“需要本人资料：<缺什么、为什么>”交回，根解锁后补做，不用已记事实凑、不收降级结论。举例可以用假设或亮点，不为找真实例子读私人资料，不把假设说成真事。派活固定写：“需要本人私人资料而资料锁着时，不自己发起解锁，只写明缺什么交回（汇报里单列一行“需要本人资料：……”），不用已知事实凑、不降级回答（约法 L18）。”GPT 包装器已附带，不重复写。
 8. **本人的限制优先。** 本人明确限定的型号、厂商、档位或预算，子代理和后代都照样遵守，不能自己放宽。子代理的业务范围和授权只能比父代理窄（见[用户授权](/rules/authorization/)）。
@@ -1633,7 +1633,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
 
 本人限制只用一边时由该根会话全程负责：GPT 额度少则 Claude 施工，Claude 额度少则它判断等重置还是抽查后交付；只有 GPT 则由 GPT 主对话把关、按清单选最合适的惊艳执行者，不等 Claude。另一家公开评测优势确实影响结果时说明差别和数据缺口，无数据只说缺口；不为选型查全部账号额度。Claude 派 GPT 的入口见[Claude 适配](/rules/claude-adapter/#派-gpt)。
 
-本人新说的一句只覆盖它明说的那件事，没提到的旧分工照旧，做法见 推荐流程（`../../skills/report-page/references/decision-reports.md`）。
+本人新说的一句只覆盖它明说的那件事，没提到的旧分工照旧，做法见 推荐流程（`E:/.agents/skills/report-page/references/decision-reports.md`）。
 
 未经本人许可，不启用 fast 快速模式。故障后先核对并接回被打断的任务，排查可以另行并行；需要等真实额度恢复的任务，恢复后在原对话继续，并告诉本人额度已恢复、任务已继续，不为恢复额度重建替身。同一 Codex 额度下根会话仍能正常工作、只有子代理报额度耗尽时，按下面的规则立即接续。需要更换上下文时先核对原任务的真实状态，交接或停止后再安排，不重复执行。
 
@@ -1649,13 +1649,13 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.execution-coordination.md",
-   "release": "E275",
-   "sha256": "fc7cf01281aaacfdc8e0a81387af2fb550f16f224df1911bde541018206cca0b",
-   "public_sha256": "80cb4d6e61aa08f2ac602d7fa3badc8aed9edb838a53814634824cf2c2bd447b",
+   "release": "E279",
+   "sha256": "4a769967b758b3c674f6ad8ad4dff87c16430c4942e98b168d4bbaa5620e2197",
+   "public_sha256": "b3f5f48f7a5e267c2b79bd5d7e9f5739321e5df9c3406bfb789071589fb3f928",
    "from": "## 改动与花费成比例",
    "to": null,
-   "start": 4364,
-   "end": 10376,
+   "start": 4302,
+   "end": 10314,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1694,7 +1694,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
   "reuse": "",
   "source_excerpt_id": "rule-execution-coordination/rule-execution-coordination-07",
   "source_logical_id": "execution_coordination_contract",
-  "source_public_sha256": "80cb4d6e61aa08f2ac602d7fa3badc8aed9edb838a53814634824cf2c2bd447b",
+  "source_public_sha256": "b3f5f48f7a5e267c2b79bd5d7e9f5739321e5df9c3406bfb789071589fb3f928",
   "source_rule_part": "rule-execution-coordination/rule-execution-coordination-07"
  },
  "layout": {
@@ -1703,7 +1703,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -1777,7 +1777,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -1875,7 +1875,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
 }
 ```
 
-原文 · E275 版 · 续
+原文 · E279 版 · 续
 
 ## 改动与花费成比例
 

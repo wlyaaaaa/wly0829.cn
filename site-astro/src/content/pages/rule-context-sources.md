@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E275",
-   "commit": "dfc6b406fb43175d44ff4436f854f7129cb560ec",
-   "ruleset_sha256": "32c6ff6e32f441dac925edbac4a3d0af6d5c5cc5d8a2be0575483f2cfce5e6eb",
-   "activated_at": "2026-10-17T11:38:31.183019+08:00",
+   "release": "E279",
+   "commit": "dfca0d10888eadf1b2f724da417da9079a6ef938",
+   "ruleset_sha256": "11064e71ec4ea1a426f5ced03d95d2d0a00131025c7b4c8f606c5d0c67772681",
+   "activated_at": "2026-10-21T21:20:08.660355+08:00",
    "file": "sources/rules/docs/contracts/agents.context-sources.md",
-   "sha256": "610a7823f7ffdd3f62d51d3b439ecf9d876c9266ae98abb862c2cfaa451ec87b",
-   "public_sha256": "ebcae351c7d488e91e7db2f2ffb5d3cbe52d8a5b6b6320f30b2da427464b222e"
+   "sha256": "da0d8bc4860c8668fb8bf5929f33c877fd633eb816c5953f45e1c909ae436a7f",
+   "public_sha256": "4b297bf738be56dcb31b88b1dd580fb84ef82fc4cf4ba38f737b3c0c7be405dc"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：林间小路上几片叶子缓缓飘落；三座小木屋的窗子依次亮起暖光又暗下；路口三叉指路牌的三只箭头轮流微微发亮；路边贴着雪花封条的小木箱上，霜花轻轻闪一下；摊开的厚书被风翻过两页，绿色书签始终夹在原处、尾巴轻轻摆动；背景淡水彩纸纹缓慢流动。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -410,8 +410,8 @@
  },
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
-  "sha256": "b56d6665512d881b5e24b2483d723395d80db0a234848bad81fe195e89dcc5cd",
-  "converted_at_beijing": "2026-10-20T08:56:33+08:00"
+  "sha256": "4cf7e085631931933b59638d41160fb869356e45190ded9f8508276907962fdc",
+  "converted_at_beijing": "2026-10-22T07:02:36+08:00"
  }
 }
 ---
@@ -2449,13 +2449,13 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E275",
-   "sha256": "610a7823f7ffdd3f62d51d3b439ecf9d876c9266ae98abb862c2cfaa451ec87b",
-   "public_sha256": "ebcae351c7d488e91e7db2f2ffb5d3cbe52d8a5b6b6320f30b2da427464b222e",
+   "release": "E279",
+   "sha256": "da0d8bc4860c8668fb8bf5929f33c877fd633eb816c5953f45e1c909ae436a7f",
+   "public_sha256": "4b297bf738be56dcb31b88b1dd580fb84ef82fc4cf4ba38f737b3c0c7be405dc",
    "from": null,
    "to": "## 三档维护",
    "start": 0,
-   "end": 1597,
+   "end": 1643,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -2469,7 +2469,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-08",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "ebcae351c7d488e91e7db2f2ffb5d3cbe52d8a5b6b6320f30b2da427464b222e",
+  "source_public_sha256": "4b297bf738be56dcb31b88b1dd580fb84ef82fc4cf4ba38f737b3c0c7be405dc",
   "source_rule_part": "rule-context-sources/rule-context-sources-08"
  },
  "layout": {
@@ -2477,7 +2477,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版，一字不改"
+     "text_ref": "原文·E279版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2511,7 +2511,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版，一字不改"
+     "text_ref": "原文·E279版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2589,7 +2589,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
 }
 ```
 
-原文 · E275 版，一字不改
+原文 · E279 版，一字不改
 
 # 事实来源与任务上下文
 
@@ -2627,6 +2627,7 @@ owner: `E:\.agents`
 | 对齐数据集 | `human-alignment-dataset-001` |
 | Gemini 记忆备份（退役留档） | `gemini-memory` |
 | Claude 记忆备份（退役留档） | `claude-memory` |
+| MeshClip Kit 两机剪贴板（停用留档） | `meshclip-kit` |
 
 冻结管的是 AI 维护范围，和路径、运行、恢复或备份状态是两回事：PCConfig 里写着在用、还有依赖、目录还在或 Git 能正常同步，都不说明可以维护；放在备份仓库或 `Archives` 目录里也不单独说明已冻结。冻结不删资料：冻结项目的数据照常留在备份里，也照常被机器的备份覆盖，不因冻结而删除或停止备份；停用的只是冻结项目自己的计划任务。本人新增或更正名单时改这里，其他基座引用这里，不另存第二份名单。
 
@@ -2640,13 +2641,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E275",
-   "sha256": "610a7823f7ffdd3f62d51d3b439ecf9d876c9266ae98abb862c2cfaa451ec87b",
-   "public_sha256": "ebcae351c7d488e91e7db2f2ffb5d3cbe52d8a5b6b6320f30b2da427464b222e",
+   "release": "E279",
+   "sha256": "da0d8bc4860c8668fb8bf5929f33c877fd633eb816c5953f45e1c909ae436a7f",
+   "public_sha256": "4b297bf738be56dcb31b88b1dd580fb84ef82fc4cf4ba38f737b3c0c7be405dc",
    "from": "## 三档维护",
    "to": "### 一样东西只存一处",
-   "start": 1597,
-   "end": 4421,
+   "start": 1643,
+   "end": 4409,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -2660,7 +2661,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-09",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "ebcae351c7d488e91e7db2f2ffb5d3cbe52d8a5b6b6320f30b2da427464b222e",
+  "source_public_sha256": "4b297bf738be56dcb31b88b1dd580fb84ef82fc4cf4ba38f737b3c0c7be405dc",
   "source_rule_part": "rule-context-sources/rule-context-sources-09"
  },
  "layout": {
@@ -2668,7 +2669,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -2699,7 +2700,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -2766,7 +2767,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E275 版 · 续
+原文 · E279 版 · 续
 
 ## 三档维护
 
@@ -2778,9 +2779,11 @@ owner: `E:\.agents`
 
 新项目默认是日用，本人另说的除外。
 
+`aicli run` 保留，按偶用处理，不主动维护；真要用时坏了再修。Codex 云端读者也先放着，偶用、不维护；换账号后新账号没建云端环境，暂不可用，具体状态见[云端素材通道](/rules/capabilities-runtime/#云端素材通道)。
+
 | 档位 | 项目 |
 |---|---|
-| 偶用 | 屏保 emerald-veil（`emerald-veil`）、Steam 皮肤备份（`steam-millennium-config-backup`）、Typora 主题（`typora-theme-pack`）、两台电脑的剪贴板同步 meshclip-kit（`meshclip-kit`）、机箱小屏的曲面屏叠加层（PC-Panel-Hub 仓库里的一个功能，仓库本身按日用）、工作交付（`work-delivery-copilot`）、视频制作（`video-scaffold`）、vault 加密工具（`vault-tool`）、GitHub 个人主页（`wlyaaaaa`）、公开项目的私有配套库（`public-project-private-backup`）、Key 仓库（`Key`） |
+| 偶用 | 屏保 emerald-veil（`emerald-veil`）、Steam 皮肤备份（`steam-millennium-config-backup`）、Typora 主题（`typora-theme-pack`）、机箱小屏的曲面屏叠加层（PC-Panel-Hub 仓库里的一个功能，仓库本身按日用）、工作交付（`work-delivery-copilot`）、视频制作（`video-scaffold`）、vault 加密工具（`vault-tool`）、GitHub 个人主页（`wlyaaaaa`）、公开项目的私有配套库（`public-project-private-backup`）、Key 仓库（`Key`） |
 | 存档 | 冻结名单里的全部项目 |
 | 日用 | 其余所有项目 |
 
@@ -2794,15 +2797,13 @@ README 只给 AI 和维护使用，简短列出现行入口，不再另写一份
 
 第三方 CLI 长任务由 AICLI 和具体项目负责接续，不再交给个人技能。到自然边界保存压缩前 checkpoint；恢复时重读项目规则、当前状态、`git status` / `git diff` 和待改源码，摘要只作线索。
 
-通过电脑 MCP 操作项目时，不得在 ChatGPT 中新增任务；后续事项及提醒写入电脑端对应项目的上下文，由后续读取上下文的 AI 承接。
-
-个人项目中需要电脑智能体执行的后续事项，归入电脑端对应项目现有需求、待办或接续入口，由电脑 Codex／Claude 在相应操作时承接并提醒。无论本人从手机还是通过 MCP 发起，包括媒体库按需更新，都不另建 ChatGPT 定时提醒来代替项目接续；本人另行明确指定提醒方式时按新指示。记录后续条件不等于立即执行，也不等于获准向另一个现有会话发送任务。来源：决定月卷“个人项目后续电脑智能体操作由电脑端接续提醒（北京时间2026-10-15 18:10:22）”。补充来源：决定月卷“电脑MCP项目不新增ChatGPT任务与小吊梨汤点餐（北京时间2026-10-17 11:31:03）”，将电脑项目提醒统一为上下文接续。
+通过电脑 MCP 操作项目，以及个人项目中需要电脑智能体执行的后续事项，归入电脑端对应项目现有需求、待办或接续入口，由电脑 Codex／Claude 在相应操作时承接并提醒。无论本人从手机还是通过 MCP 发起，包括媒体库按需更新，都不在 ChatGPT 新增任务，也不另建 ChatGPT 定时提醒来代替项目接续；本人另行明确指定提醒方式时按新指示。记录后续条件不等于立即执行，也不等于获准向另一个现有会话发送任务。
 
 ### 压缩后的后台复核
 
 Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务做增量复核；正常工作不等它。根会话持续维护并在压缩前更新项目已有的短任务状态；没有现成入口时用本任务 `work/task-state.md`，保留当前目标、要求出处、已完成与未结事项、下一步和证据位置，不再复制整段历史。当前用 Sol ultra，资料定位优先脚本；不让 Luna 的初筛成为跳过最终复核的唯一依据。
 
-纯技术工作不依赖资料解锁（约法 L18）。资料锁着或未知、又到了压缩预警时，根会话若已确认整个现有会话确为纯技术，可用技术范围登记（`../operations/context-hooks.md#锁定时的技术复核`）记录当前原话边界及确为技术资料的证据位置，命令见该运维文档。登记由 AI 做，不请本人另行批准；新增或改写的真人消息不继承旧判断。旧历史混有私人内容或范围不明时不登记整段技术，仍走原资料入口，不先读私人历史来补这个判断。该登记不解锁资料、不放行私人库；未读取的部分继续列为未覆盖。
+纯技术工作不依赖资料解锁（约法 L18）。资料锁着或未知、又到了压缩预警时，根会话若已确认整个现有会话确为纯技术，可用技术范围登记（`E:/.agents/docs/operations/context-hooks.md#锁定时的技术复核`）记录当前原话边界及确为技术资料的证据位置，命令见该运维文档。登记由 AI 做，不请本人另行批准；新增或改写的真人消息不继承旧判断。旧历史混有私人内容或范围不明时不登记整段技术，仍走原资料入口，不先读私人历史来补这个判断。该登记不解锁资料、不放行私人库；未读取的部分继续列为未覆盖。
 
 - 每个新压缩边界只排一次，同根会话最多一批在跑；普通新消息不新开复核，子代理的压缩不递归派发。未覆盖部分保留，不把重复恢复当成新一批。
 - 按本批新增消息查交接或待办漏记的小要求，对照旧未结要求，检查实际完成证据、擅改决定及接续。本人原话出处由根认定，复核者不另查、不报无出处；按[分类表](/rules/engineering-delivery/#本人的话怎么分类怎么对待ai-写的稿子可以改)核对，只有禁令边界上的分类分歧作为提醒交回，不阻塞工作，审查意见不产生用户决定。
@@ -2810,7 +2811,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
 - 复核只读，短结果在原根会话下一可投递的工具或消息边界送回，详细证据按需读取。根先对照当前版本，再处理仍存在的问题；已经修好的不重复打扰。普通提醒不阻塞主任务，影响当前决定或交付的实质问题由根核实处理，重大动作仍按原把关规则。
 - 每批有效工作预算当前为 8 分钟，正常短回报目标 500 字；这是可调的 AI 实现参数，不是牺牲覆盖或删除关键问题的理由。排队、重试和收尾宽限单列；不自动无限延时。中断在原批次接续，不反复新建替身。
 
-程序入口、暂停开关和两宿主实际支持的事件见上下文 Hook 运维（`../operations/context-hooks.md`）。纯模型主动换窗与原生压缩分别验收，不能从一种事件的成功推定另一种也已接通。
+程序入口、暂停开关和两宿主实际支持的事件见上下文 Hook 运维（`E:/.agents/docs/operations/context-hooks.md`）。纯模型主动换窗与原生压缩分别验收，不能从一种事件的成功推定另一种也已接通。
 
 ::screen{#rule-context-sources-10 section="original"}
 
@@ -2822,13 +2823,13 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E275",
-   "sha256": "610a7823f7ffdd3f62d51d3b439ecf9d876c9266ae98abb862c2cfaa451ec87b",
-   "public_sha256": "ebcae351c7d488e91e7db2f2ffb5d3cbe52d8a5b6b6320f30b2da427464b222e",
+   "release": "E279",
+   "sha256": "da0d8bc4860c8668fb8bf5929f33c877fd633eb816c5953f45e1c909ae436a7f",
+   "public_sha256": "4b297bf738be56dcb31b88b1dd580fb84ef82fc4cf4ba38f737b3c0c7be405dc",
    "from": "### 一样东西只存一处",
    "to": null,
-   "start": 4421,
-   "end": 6655,
+   "start": 4409,
+   "end": 6647,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -2859,7 +2860,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-10",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "ebcae351c7d488e91e7db2f2ffb5d3cbe52d8a5b6b6320f30b2da427464b222e",
+  "source_public_sha256": "4b297bf738be56dcb31b88b1dd580fb84ef82fc4cf4ba38f737b3c0c7be405dc",
   "source_rule_part": "rule-context-sources/rule-context-sources-10"
  },
  "layout": {
@@ -2867,7 +2868,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -2893,7 +2894,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -2911,7 +2912,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
 }
 ```
 
-原文 · E275 版 · 续
+原文 · E279 版 · 续
 
 ### 一样东西只存一处
 
@@ -2921,7 +2922,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
 
 记忆的使用边界按[约法 L30](/rules/charter/#十关于规则本身)，两个宿主的关闭配置见各自适配专题。需要留下的原话、经验和教训按下述时点写到对应的共享位置，写完在回复里一句话说明写在哪；不能因为记忆关了就不记。
 
-本人对 AI、项目和电脑的决定原话存 `docs/owner-decisions/YYYY-MM.md`，索引 `docs/owner-decisions.md` 只作导航。新增用 `python -B -X utf8 tools/owner_decision_store.py append --input <原话节.md>`：默认只写盘，显式 `--commit` 才提交。禁令、纠正和长期授权当场原样写盘，带北京时间；其余在交付收尾或压缩前一次归位。本会话钩子已存的本人消息也算出处，标“本人原话（待归位）”，不因未分类、未写月卷或未提交报警。要求登记同样只写盘，不为两种记录各做提交；在交付收尾或压缩前批量提交，推送随任务正常收尾。
+本人对 AI、项目和电脑的决定原话存 `docs/owner-decisions/YYYY-MM.md`，索引 `docs/owner-decisions.md` 只作导航。新增用 `python -B -X utf8 tools/owner_decision_store.py append --input <原话节.md>`：记录时只写盘，不传 `--commit`。禁令、纠正和长期授权当场原样写盘，带北京时间；其余在交付收尾或压缩前一次归位。本会话钩子已存的本人消息也算出处，标“本人原话（待归位）”，不因未分类、未写月卷或未提交报警。要求登记同样只写盘，不逐条提交，也不为两种记录各做提交；在交付收尾或压缩前批量提交，推送随任务正常收尾。
 
 后台每 3 小时只补已归档或最后活动超过 3 小时且有未归位原话的根会话，源消息 UUID 已引用就跳过；资料锁着或未知时记录跳过，不解锁、不降级。分类统一按[工程与交付](/rules/engineering-delivery/#本人的话怎么分类怎么对待ai-写的稿子可以改)。索引标来源、性质、范围、取代关系；同主题新决定覆盖旧决定，被取代或已办完的一次性记录整节原样移入 `docs/archive/`，默认搜索排除，历史留在 Git。别处只写现行结论和指针。移动时标取代、修旧编号和节名引用，不用行号；别的负责人管的发给对应会话。拿不准的留现行交本人定。编号写法见索引，个人事实、偏好和价值记理解库明示。
 

@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E275",
-   "commit": "dfc6b406fb43175d44ff4436f854f7129cb560ec",
-   "ruleset_sha256": "32c6ff6e32f441dac925edbac4a3d0af6d5c5cc5d8a2be0575483f2cfce5e6eb",
-   "activated_at": "2026-10-17T11:38:31.183019+08:00",
+   "release": "E279",
+   "commit": "dfca0d10888eadf1b2f724da417da9079a6ef938",
+   "ruleset_sha256": "11064e71ec4ea1a426f5ced03d95d2d0a00131025c7b4c8f606c5d0c67772681",
+   "activated_at": "2026-10-21T21:20:08.660355+08:00",
    "file": "sources/rules/docs/contracts/agents.authorization.md",
-   "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
-   "public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b"
+   "sha256": "5ca8180b618f61d6ff11b8d00378a336bcd70ab1011bc6b17c0310d8161ddc13",
+   "public_sha256": "fb8d8384e35f04ee50c7a047deaeb39c67c71cff45a540f4cf9458dddd3ca37a"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小路起点的 AI 助手抱着文件轻快走几步，“直接做”木牌旁的草叶轻轻摇；栅栏门前的信封、硬币和小木箱静静排着，门边的人影抬手，栅栏门缓缓打开一条缝又合上；木桩上的绿色通行证随风轻摆；小桌上的沙漏翻转一次、细沙往下流，旁边的金色钥匙闪一下光；右上角两扇小窗户里亮起柔和的光，中间的绿色盾牌徽章轻轻呼吸；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -237,8 +237,8 @@
  },
  "source": {
   "page": "sources/pages/rule-authorization/page.json",
-  "sha256": "8888a59879c4254dedb9cf48420de6026d660c94ed90f4fb233894c98ccd1d6c",
-  "converted_at_beijing": "2026-10-20T07:45:04+08:00"
+  "sha256": "d3bb10db03335e59be3bb50e73346be5bd5c18490773042d0437055d16536b18",
+  "converted_at_beijing": "2026-10-22T07:02:35+08:00"
  }
 }
 ---
@@ -1553,13 +1553,13 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E275",
-   "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
-   "public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
+   "release": "E279",
+   "sha256": "5ca8180b618f61d6ff11b8d00378a336bcd70ab1011bc6b17c0310d8161ddc13",
+   "public_sha256": "fb8d8384e35f04ee50c7a047deaeb39c67c71cff45a540f4cf9458dddd3ca37a",
    "from": null,
    "to": "## 子代理和项目规则不扩大授权",
    "start": 0,
-   "end": 1527,
+   "end": 1611,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -1582,7 +1582,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-05",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
+  "source_public_sha256": "fb8d8384e35f04ee50c7a047deaeb39c67c71cff45a540f4cf9458dddd3ca37a",
   "source_rule_part": "rule-authorization/rule-authorization-05"
  },
  "layout": {
@@ -1590,7 +1590,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版，一字不改"
+     "text_ref": "原文·E279版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1625,7 +1625,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版，一字不改"
+     "text_ref": "原文·E279版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1719,7 +1719,7 @@
 }
 ```
 
-原文 · E275 版，一字不改
+原文 · E279 版，一字不改
 
 # 用户授权
 
@@ -1746,7 +1746,7 @@ owner: `E:\.agents`
 - **申请管理员权限**：需要时直接用 sudo 或 UAC 申请提权，节奏由 AI 安排，不因此推迟已授权的工作，也不专门把普通提权步骤当成产品问题请本人决定；只有本人、上级规则或适用项目规则明确说不提权时才不用。这项长期授权同样适用于子代理；不弹窗口的任务在系统支持时使用静默提权，需要本人在场的步骤交根会话安排。管理员权限本身不是卡点；权限/ACL 改动、撤回快照和重大动作等仍按各自专题办理。提权只让命令拿到 Windows 写权限，不产生、也不扩大动作授权（出处：决定文档“默认 Chrome 不通时换办法、子代理可静默提权”）。
 - **选型号和思考档位**：AI 按质量和总花费自己选；质量需要时可以用比根会话或父代理更强的型号或更高的档位，不逐次问（见[分工与并行施工](/rules/execution-coordination/)和模型清单）。本人这次明确限定的型号、档位、预算或厂商优先。
 - **Claude 派 Sol 和 Luna**：Claude 不用本人对对话或项目另行授权，就可以派 GPT 的 Sol 和 Luna（约法 L23）；派 Astra 仍按本人给这个对话或项目的授权。派出的 Codex 按自己真实的身份和有效授权，只做交给它的任务。
-- **已经在用的目标继续收尾**：本人授权之前就已登记、现在仍在用的目标（仓库、网站、已登记的发布目标），验证、发布、部署、回读和同步默认继续，本人说只留本地或不发布时除外。第一次新建或选择新的外部目标、新的公开或部署目标、花钱、不可恢复的迁移、强制推送、改信任根（受信任 AI 的登记或本人验证依据）或授权边界，仍要本人明确同意。
+- **已经在用的目标继续收尾**：本人授权之前就已登记、现在仍在用的目标（仓库、网站、已登记的发布目标），验证、发布、部署、回读和同步默认继续，本人说只留本地或不发布时除外。新建本人 GitHub 私有仓库、把远端改成本人 GitHub 账号下的仓库、核对过不丢提交的历史改写（含强制推送），按普通 Git 收尾直接做。除此以外，第一次新建或选择新的外部目标、新的公开或部署目标、花钱、不可恢复的迁移、可能丢提交的强制推送、改信任根（受信任 AI 的登记或本人验证依据）或授权边界，仍要本人明确同意。
 
 授权已经覆盖、目标和前提都成立时，直接调用一次真实的工具，不要先猜平台会拒绝而自己停下。工具真的拒绝、要求再验证、不可用或报错，就按真实结果处理和报告，不伪造成功，也不盲目重试。
 
@@ -1760,13 +1760,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E275",
-   "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
-   "public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
+   "release": "E279",
+   "sha256": "5ca8180b618f61d6ff11b8d00378a336bcd70ab1011bc6b17c0310d8161ddc13",
+   "public_sha256": "fb8d8384e35f04ee50c7a047deaeb39c67c71cff45a540f4cf9458dddd3ca37a",
    "from": "## 子代理和项目规则不扩大授权",
    "to": "## 受信任的 AI",
-   "start": 1527,
-   "end": 2833,
+   "start": 1611,
+   "end": 2917,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1797,7 +1797,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-06",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
+  "source_public_sha256": "fb8d8384e35f04ee50c7a047deaeb39c67c71cff45a540f4cf9458dddd3ca37a",
   "source_rule_part": "rule-authorization/rule-authorization-06"
  },
  "layout": {
@@ -1805,7 +1805,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -1838,7 +1838,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -1915,7 +1915,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E275 版 · 续
+原文 · E279 版 · 续
 
 ## 子代理和项目规则不扩大授权
 
@@ -1945,13 +1945,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E275",
-   "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
-   "public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
+   "release": "E279",
+   "sha256": "5ca8180b618f61d6ff11b8d00378a336bcd70ab1011bc6b17c0310d8161ddc13",
+   "public_sha256": "fb8d8384e35f04ee50c7a047deaeb39c67c71cff45a540f4cf9458dddd3ca37a",
    "from": "## 受信任的 AI",
    "to": null,
-   "start": 2833,
-   "end": 3498,
+   "start": 2917,
+   "end": 3582,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -1970,7 +1970,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-07",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
+  "source_public_sha256": "fb8d8384e35f04ee50c7a047deaeb39c67c71cff45a540f4cf9458dddd3ca37a",
   "source_rule_part": "rule-authorization/rule-authorization-07"
  },
  "layout": {
@@ -1978,7 +1978,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -2015,7 +2015,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E275版·续"
+     "text_ref": "原文·E279版·续"
     },
     {
      "type": "source_text_card",
@@ -2068,7 +2068,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E275 版 · 续
+原文 · E279 版 · 续
 
 ## 受信任的 AI
 

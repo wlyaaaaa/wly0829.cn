@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/timeaudit-backup-recovery/page.json",
-  "sha256": "0fe28f7b84a3334ec00a02e68a5d26d85933e4fda20e7cd0de3d79c36641edfc",
-  "converted_at_beijing": "2026-10-12T06:00:53+08:00"
+  "sha256": "43338d0bd96575c1747ffce1f3c267f19dded268c3db4b63848adec819893006",
+  "converted_at_beijing": "2026-10-22T07:02:38+08:00"
  }
 }
 ---
@@ -1323,7 +1323,7 @@ TimeAudit · 功能说明
 
 ## 依据与来源（三）
 
-- 备份、恢复与看板合同纳入定向测试并通过（历史）；当前源码有 332 个以 test_ 开头的测试函数，这次没有运行。
+- 备份、恢复与看板合同纳入定向测试并通过（历史）；当前源码有 345 个以 test_ 开头的测试函数，这次没有运行。
 
 - README 与 setup_runtime.ps1 当前证明运行环境应在目标机重建、看门狗为每分钟检查；它们不证明某次换机已经完成。当前数据库约 63.6 GiB（统计估算，精确总行数这次没有数）。
 
