@@ -122,7 +122,7 @@
       "id": "github-index-repository-ledger-07",
       "section": "tech",
       "title": "名词和入口",
-      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Owner baseline（责任源基线） | 完整仓库 identity 的受管 current（当前状态）/previous 快照；不是 PUBLIC（公开） 子集，也不是一次 live 自比。 |\n| domain_status（领域状态） | 事实是 current（当前状态）、review_needed、blocked 还是 unknown（未验证）；与 Provider 是否成功执行分开。 |\n| history_gap（历史缺口） | 第一次迁移没有可信 previous 全量基线；即使 current（当前状态） 内容有效，也不能伪装成连续历史。当前为 false。 |\n| clone occurrence（clone 出现记录） | 统一导航给出候选路径后，实际 `.git` origin 与 repo identity 一致的本机副本关联。 |\n| semantic fingerprint（语义指纹） | 对稳定事实规范化后计算的 SHA-256；字段顺序、观察时间和工作树噪声不会改变它。 |\n| Milestone record（里程碑记录，已退役） | 原来外层确认的少量 Git 发布节点；2026-09-26 随推送记录功能一起删除，现在的状态输出不再包含它。 |\n\n## 专业定义\n\n把仓库身份、公开属性和本地副本放进同一张账；当前基线 45 个、现场 47 个，零写查询只报告变化，完整刷新才推进基线。",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Owner baseline（责任源基线） | 完整仓库 identity 的受管 current（当前状态）/previous 快照；不是 PUBLIC（公开） 子集，也不是一次 live 自比。 |\n| domain_status（领域状态） | 事实是 current（当前状态）、review_needed、blocked 还是 unknown（未验证）；与 Provider 是否成功执行分开。 |\n| history_gap（历史缺口） | 第一次迁移没有可信 previous 全量基线；即使 current（当前状态） 内容有效，也不能伪装成连续历史。当前为 false。 |\n| clone occurrence（clone 出现记录） | 统一导航给出候选路径后，实际 `.git` origin 与 repo identity 一致的本机副本关联。 |\n| semantic fingerprint（语义指纹） | 对稳定事实规范化后计算的 SHA-256；字段顺序、观察时间和工作树噪声不会改变它。 |\n| Milestone record（里程碑记录，已退役） | 原来外层确认的少量 Git 发布节点；2026-09-26 随推送记录功能一起删除，现在的状态输出不再包含它。 |\n\n## 专业定义\n\n把仓库身份、公开属性和本地副本放进同一张账；当前基线 48 个、现场 48 个，零写查询只报告变化，完整刷新才推进基线。",
       "links": [],
       "anchors": [],
       "live": null,

@@ -166,7 +166,7 @@
       "id": "devconfig-backup-source-catalog-10",
       "section": "tech",
       "title": "依据与来源（一）",
-      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- **sources.psd1**：纯数据驱动的备份源清单、必需来源、数据库登记与排除名单\n\n- **DevConfig.Sources.ps1**：按清单枚举来源、逐文件核对复制、整轮重采和系统导出\n\n- **DevConfig.Sqlite.py**：活动配置数据库的一致副本与完整性检查\n\n- **_manifests/**：生成的配置包里的软件与编辑器插件导出清单目录（不是源码仓库里的文件夹）\n\n- **tests/Assert-NoBackupArtifacts.ps1**：提交前防泄密与备份产物过滤的机械检查\n\n- **tests/Assert-DockerScope.ps1**：Docker 配置范围严格限定的自动化断言\n\n## 如何验证\n\n- tests/Assert-NoBackupArtifacts.ps1 只检查 Git 文件候选有没有落入已知备份目录、归档/密钥容器扩展名或微信数据库路径，不证明任意文本内容零秘密。9 月 18 日它与当时 15 个检查脚本在 PowerShell 7 和 5.1 下共 30 组全部通过；现在源码里有 24 个 Assert 脚本和 1 个 Python 测试文件，本轮没有运行，不是 24 个都刚通过。\n\n- tests/Assert-DockerScope.ps1 验证 Docker 只走 allowlist（允许清单），不收整个 .docker 或 Docker Desktop 树。",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- **sources.psd1**：纯数据驱动的备份源清单、必需来源、数据库登记与排除名单\n\n- **DevConfig.Sources.ps1**：按清单枚举来源、逐文件核对复制、整轮重采和系统导出\n\n- **DevConfig.Sqlite.py**：活动配置数据库的一致副本与完整性检查\n\n- **_manifests/**：生成的配置包里的软件与编辑器插件导出清单目录（不是源码仓库里的文件夹）\n\n- **tests/Assert-NoBackupArtifacts.ps1**：提交前防泄密与备份产物过滤的机械检查\n\n- **tests/Assert-DockerScope.ps1**：Docker 配置范围严格限定的自动化断言\n\n## 如何验证\n\n- tests/Assert-NoBackupArtifacts.ps1 只检查 Git 文件候选有没有落入已知备份目录、归档/密钥容器扩展名或微信数据库路径，不证明任意文本内容零秘密。9 月 18 日它与当时 15 个检查脚本在 PowerShell 7 和 5.1 下共 30 组全部通过；现在源码里有 26 个 Assert 脚本和 1 个 Python 测试文件，本轮没有运行，不是 24 个都刚通过。\n\n- tests/Assert-DockerScope.ps1 验证 Docker 只走 allowlist（允许清单），不收整个 .docker 或 Docker Desktop 树。",
       "links": [],
       "anchors": [],
       "live": null,
