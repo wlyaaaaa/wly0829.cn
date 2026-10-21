@@ -306,6 +306,82 @@ def block_text_len(s, bl):
     return {id(b): sum(len(node_text(n)) for n in g["nodes"]) for b, g in zip(bl, got)}, {id(b): g["nodes"] for b, g in zip(bl, got)}
 
 
+_preflight_registry = None
+
+
+def check_text_layout(page, screen, blocks):
+    """只检查字符串：复用组件的真实分排，不启动浏览器或测量像素。"""
+    from bs4 import BeautifulSoup
+    from engine.layout import Ctx
+    from engine.registry import load
+    global _preflight_registry
+    issues = []
+    canon = lambda value: re.sub(r"\s+|[*`#]", "", str(value))
+    text = canon(screen.get("text", ""))
+    headings = [canon(screen.get("title", "")), canon(screen.get("nav_title", ""))]
+    headings.extend(canon(a or b) for a, b in re.findall(r"(?m)^\s*(?:#{1,6}[ \t]+(.+)|\*\*(.+?)\*\*)", screen.get("text", "")))
+    for anchor in screen.get("anchors") or []:
+        # p-/g- 是正文小节/组标题；f- 是功能简称，module/panel 是容器快照，并非目录标题。
+        if not isinstance(anchor, dict) or not str(anchor.get("id", "")).startswith(("p-", "g-")):
+            continue
+        def matches(label):
+            label = canon(label)
+            # 目录可以省略长标题中的扩展词，但不能替换正文标题的字。
+            return not label or any(all(char in stream for char in label) for stream in map(iter, headings))
+        located = any(canon(value) in text for value in (anchor.get("locator_text") or {}).values())
+        if not matches(anchor.get("text", "")) and not located:
+            issues.append(f"目录标题与正文不一致：{anchor.get('id', '')} = {anchor['text']!r}")
+    selected = [b for b in blocks if b["type"] in ("feature_card", "flow")]
+    if selected and _preflight_registry is None:
+        _preflight_registry = load()[0]
+
+    def rows(grid, columns):
+        row, occupied = [], 0
+        for card in grid.find_all(recursive=False):
+            classes = card.get("class", [])
+            if "feature-layout-row" in classes or "feature-last-row" in classes:
+                if row:
+                    yield row, columns
+                    row, occupied = [], 0
+                match = re.search(r"--feature-(?:row|last)-columns:(\d+)", card.get("style", ""))
+                yield from rows(card, int(match[1]) if match else columns)
+                continue
+            if not any(c in classes for c in ("feature-item", "sequence-item")):
+                continue
+            span = re.search(r"grid-column:\s*span\s+(\d+)", card.get("style", ""))
+            span = int(span[1]) if span else 1
+            if row and occupied + span > columns:
+                yield row, columns
+                row, occupied = [], 0
+            body = card.select(".feature-text, .dg-body")
+            row.append(len(canon("".join(n.get_text() for n in body))))
+            occupied += span
+            if occupied >= columns:
+                yield row, columns
+                row, occupied = [], 0
+        if row:
+            yield row, columns
+
+    for block in selected:
+        # 组件只生成 HTML 字符串；用同一个分排实现覆盖显式分排及失效后的回退。
+        ctx = Ctx(page, screen, "h", _preflight_registry, [])
+        soup = BeautifulSoup(ctx.render(block), "html.parser")
+        for grid in soup.select(".feature-group-grid, .sequence-row"):
+            if grid.get("data-flow") in ("column", "masonry", "independent_columns"):
+                continue
+            flow = grid.find_parent(attrs={"data-comp": "flow"})
+            if flow and flow.get("data-direction") != "horizontal":
+                continue
+            match = re.search(r"--(?:feature|sequence)-columns:(\d+)", grid.get("style", ""))
+            for sizes, columns in rows(grid, int(match[1]) if match else 1):
+                sizes = sorted(sizes)
+                # 10-20 的三处失败约为：240/30/30、200/30/30、430/60 字。
+                # 三列起 180 字、两列 360 字；还须长 150 字且达 3 倍，宽卡和短标签不误报。
+                if len(sizes) > 1 and sizes[-1] >= (180 if columns >= 3 else 360) and sizes[-1] - sizes[-2] >= 150 and sizes[-1] >= 3 * max(1, sizes[-2]):
+                    issues.append(f"横排卡片正文失衡：{block['type']} {block['spec'].get('text_ref', '')!r}，同排字数 {sizes}；请调整分排")
+    return issues
+
+
 def fit_text_rows(blocks, lens):
     """横版的输入卡和步骤按真实正文量选并排/上下；不改原文或同栏后续块归属。"""
     from engine.layout import row_widths
@@ -769,6 +845,7 @@ def convert(page, check_only=False):
             specs[(it["screen"], it.get("orientation", "h"))] = {k: v for k, v in it.items()
                                                                  if k not in ("screen", "orientation", "source_image", "source_images", "composition_basis")}
     parts, sections = [], []
+    layout_issues = []
     redirect = data.get("kind") == "skill-redirect"
     first = True
     for s in data["screens"]:
@@ -806,15 +883,20 @@ def convert(page, check_only=False):
             if not did_status:   # 首屏已按 K1-A 排好（扫过 0 处），不再动
                 LONE[page] = LONE.get(page, 0) + pair_lone_illustrations(hsp["blocks"], block_text_len(s, hsp["blocks"])[0])
                 FITTED_ALL[page] = FITTED_ALL.get(page, 0) + fit_rows(hsp["blocks"], TEXTISH_ALL)
-        if hsp and hsp.get("blocks"):
-            fit_card_rows(data, "h", assign_by_spec(parse(s.get("text", ""), markdown_links=original_markdown(s)), hsp["blocks"], []))
+        assigned = assign_by_spec(parse(s.get("text", ""), markdown_links=original_markdown(s)), hsp["blocks"], []) if hsp and hsp.get("blocks") else []
+        if assigned:
+            fit_card_rows(data, "h", assigned)
         text = gallery_title(meta, s.get("text", ""))
+        if check_only:
+            layout_issues.extend(f"{s['id']}: {issue}" for issue in check_text_layout(data, {**s, "text": text}, assigned))
         check_screen_images(page, data, {**s, "text": text}, meta)
         parts.append(f'::screen{{#{s["id"]} section="{s.get("section", "")}"}}\n\n```typeset\n'
                      + json.dumps(meta, ensure_ascii=False, indent=1) + "\n```\n\n" + text.rstrip("\n") + "\n")
         if s.get("section") and s["section"] not in [x[0] for x in sections] and not redirect:   # 去向页只有一屏，不出目录条
             sections.append((s["section"], s.get("title", "")))
     if check_only:
+        if layout_issues:
+            raise ValueError("版面文本预检失败：\n" + "\n".join(layout_issues))
         return len(parts)
     labels = {}
     if os.path.exists(TOC_LABELS):
