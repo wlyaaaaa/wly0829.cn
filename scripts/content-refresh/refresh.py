@@ -124,24 +124,25 @@ def timestamp(text):
 
 
 def require_ledger_coverage(entry, root, now):
-    """当前窗口必须由两路完成水位覆盖；事件最大时间不能证明没有漏采。"""
+    """取两路已初始化账本共同完成的日界；不要求水位覆盖正在进行的今天。"""
     ledger = resolve(entry["path"], root)
+    completed = [now.astimezone(BEIJING)]
     for ai in ("codex", "claude"):
         try:
             state = read_json(ledger.with_name(f"state-{ai}.json"))
             end = datetime.fromisoformat(state["last_completed"].replace("Z", "+00:00"))
             if state.get("bootstrap_complete") is not True or end.tzinfo is None:
                 raise ValueError("补采未完成或水位缺时区")
-            if end <= now:
-                raise ValueError(f"完成水位仅到 {end.astimezone(BEIJING).isoformat()}，未覆盖观察时刻")
+            completed.append(end.astimezone(BEIJING))
         except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
             raise ValueError(f"Unknown：{ai} 账本覆盖不足；{exc}") from None
+    return min(completed).replace(hour=0, minute=0, second=0, microsecond=0)
 
 
-def ledger_values(methods, entry, root):
+def ledger_values(methods, entry, root, include_metadata=False):
     path = resolve(entry["path"], root)
     now = datetime.now(BEIJING)
-    require_ledger_coverage(entry, root, now)
+    end = require_ledger_coverage(entry, root, now)
     counts, last = [0] * len(methods), [None] * len(methods)
     groups = {}
     for i, method in enumerate(methods):
@@ -161,14 +162,16 @@ def ledger_values(methods, entry, root):
                 if not indices:
                     continue
                 used = timestamp(field_value(row, entry.get("time_field", "used_at")))
-                if used <= now:
+                if used < end:
                     for i in indices:
-                        if now - timedelta(days=7) <= used:
+                        if end - timedelta(days=7) <= used:
                             counts[i] += 1
                         if last[i] is None or used > last[i]:
                             last[i] = used
-    return [counts[i] if m["operation"] == "count_7d" else
+    values = [counts[i] if m["operation"] == "count_7d" else
             last[i].isoformat(timespec="seconds") if last[i] else None for i, m in enumerate(methods)]
+    return [{"value": value, "source_coverage_end": (end - timedelta(days=1)).date().isoformat()}
+            for value in values] if include_metadata else values
 
 
 def retrieve(method, root, entries=None, cache=None):
@@ -285,7 +288,7 @@ def retrieve(method, root, entries=None, cache=None):
     return value
 
 
-def retrieve_batch(methods, root, entries, seconds):
+def retrieve_batch(methods, root, entries, seconds, include_metadata=False):
     cache = {"deadline": time.monotonic() + seconds}
     cache["entry_timeouts"] = {name: max(m.get("timeout", entries[name].get("timeout", 20))
                                       for m in methods if m.get("entry") == name)
@@ -294,7 +297,7 @@ def retrieve_batch(methods, root, entries, seconds):
         for method in methods:
             validate_method(method, entries)
         try:
-            return ledger_values(methods, entries[LEDGER], root)
+            return ledger_values(methods, entries[LEDGER], root, include_metadata)
         except Exception as exc:
             return [{"error": f"来源读取失败（{type(exc).__name__}）：{exc}"}] * len(methods)
     result = []
@@ -432,6 +435,9 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
         for future in as_completed(pending):
             values, observed = future.result()
             for row, value in zip(pending[future], values):
+                if isinstance(value, dict) and "source_coverage_end" in value and row["retrieve"]["kind"] == "usage_ledger":
+                    row["source_coverage_end"] = date.fromisoformat(value["source_coverage_end"]).isoformat()
+                    value = value["value"]
                 if value is None or isinstance(value, (dict, list)):
                     row["reason"] = value.get("error", "来源未返回标量") if isinstance(value, dict) else "来源未返回标量"
                 else:
@@ -454,7 +460,7 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
                         row.update(new_value=None, status="unavailable", reason="覆盖末日来源 Unknown 或日期无效，保留旧截至日期")
                         continue
                 else:
-                    value = min(timestamp(r["source_observed_at"]).date().isoformat() for r in qualified)
+                    value = min(r.get("source_coverage_end") or timestamp(r["source_observed_at"]).date().isoformat() for r in qualified)
                 review = None if coverage_end else qualified_date_review(catalog[row["page"]], row)
                 row.update(new_value=None if review else value, date_candidate=value, manual_review_reason=review,
                            source_observed_at=min(r["source_observed_at"] for r in qualified), scope_status="verified",
@@ -556,7 +562,7 @@ def main():
     if args.retrieve or args.retrieve_batch:
         try:
             validate_entries(entries)
-            value = retrieve_batch(json.loads(args.retrieve_batch), args.root, entries, args.item_seconds) if args.retrieve_batch else retrieve(json.loads(args.retrieve), args.root, entries)
+            value = retrieve_batch(json.loads(args.retrieve_batch), args.root, entries, args.item_seconds, include_metadata=True) if args.retrieve_batch else retrieve(json.loads(args.retrieve), args.root, entries)
         except Exception as exc:
             value = {"error": f"来源读取失败（{type(exc).__name__}）：{exc}"}
         print(json.dumps(value, ensure_ascii=False))

@@ -76,22 +76,28 @@ class RetrievalTests(unittest.TestCase):
             refresh.retrieve(dict(method, days=7), self.root, {})
 
     def test_ledger_streams_once_filters_kind_and_preserves_last_time(self):
-        now = datetime.now(refresh.BEIJING)
+        now = datetime(2026, 10, 22, 6, tzinfo=refresh.BEIJING)
+        end = now.replace(hour=0)
         events = [{"name": "materials", "kind": k, "ts": t.isoformat()} for k, t in (
-            ("skill", now - timedelta(days=8)), ("skill", now - timedelta(hours=2)),
+            ("skill", end - timedelta(days=7)), ("skill", end - timedelta(seconds=1)),
+            ("skill", end - timedelta(days=7, seconds=1)), ("skill", end),
             ("tool", now - timedelta(hours=1)), ("skill", now + timedelta(days=1)))]
         path = self.root / "events.jsonl"
         path.write_text("\n".join(json.dumps(e) for e in events), encoding="utf-8")
         for ai in ("codex", "claude"):
             path.with_name(f"state-{ai}.json").write_text(json.dumps({"bootstrap_complete": True,
-                "last_completed": (now + timedelta(minutes=1)).isoformat()}), encoding="utf-8")
+                "last_completed": end.isoformat()}), encoding="utf-8")
         entry = {"path": str(path), "format": "jsonl", "key_field": "name", "time_field": "ts",
                  "filter": {"kind": "skill"}, "read_only": True, "owner_project": "agents"}
         methods = [{"kind": "usage_ledger", "key": "materials", "operation": op} for op in ("count_7d", "last_time")]
-        with patch.object(Path, "open", autospec=True, side_effect=Path.open) as read:
+        with patch.object(refresh, "datetime") as clock, patch.object(Path, "open", autospec=True, side_effect=Path.open) as read:
+            clock.now.return_value = now
+            clock.fromisoformat.side_effect = datetime.fromisoformat
             self.assertEqual(refresh.retrieve_batch(methods, self.root, {LEDGER: entry}, 10),
-                             [1, (now - timedelta(hours=2)).isoformat(timespec="seconds")])
+                             [2, (end - timedelta(seconds=1)).isoformat(timespec="seconds")])
             self.assertEqual(read.call_count, 3)  # 两路水位各一次，账本仍只扫描一次。
+            values = refresh.retrieve_batch(methods, self.root, {LEDGER: entry}, 10, include_metadata=True)
+            self.assertEqual(values[0], {"value": 2, "source_coverage_end": "2026-10-21"})
 
     def test_incomplete_ledger_cannot_refresh_numbers_dates_or_display_entry(self):
         now = datetime.now(refresh.BEIJING)
@@ -110,8 +116,7 @@ class RetrievalTests(unittest.TestCase):
         cutoff = dict(number, id="d", page_pattern=r"截至 (2026-10-01)", qualifies=["n"])
         for bad in (None, {"bootstrap_complete": False, "last_completed": now.isoformat()},
                     {"bootstrap_complete": True, "last_completed": "bad"},
-                    {"bootstrap_complete": True, "last_completed": now.replace(tzinfo=None).isoformat()},
-                    {"bootstrap_complete": True, "last_completed": now.replace(hour=0, minute=0, second=0).isoformat()}):
+                    {"bootstrap_complete": True, "last_completed": now.replace(tzinfo=None).isoformat()}):
             for ai in ("codex", "claude"):
                 state = bad if ai == "claude" else {"bootstrap_complete": True,
                     "last_completed": (now + timedelta(minutes=1)).isoformat()}
@@ -135,8 +140,12 @@ class RetrievalTests(unittest.TestCase):
         for ai in ("codex", "claude"):
             path.with_name(f"state-{ai}.json").write_text(json.dumps({"bootstrap_complete": True,
                 "last_completed": now.isoformat()}), encoding="utf-8")
-        with self.assertRaises(ValueError):
-            refresh.require_ledger_coverage(entries[LEDGER], self.root, now)
+        self.assertEqual(refresh.require_ledger_coverage(entries[LEDGER], self.root, now),
+                         now.replace(hour=0, minute=0, second=0, microsecond=0))
+        payload = [{"value": 4, "source_coverage_end": "2026-10-18"}]
+        with patch.object(refresh, "bounded", return_value=json.dumps(payload)):
+            result = refresh.collect(self.root, {"records": [number, cutoff]}, entries=entries)
+        self.assertEqual(result["rows"][1]["new_value"], "2026-10-18")
 
     def test_parallel_sources_and_qualifies_unknown_preserves_date(self):
         page_path = self.root / "sources/pages/demo/page.json"

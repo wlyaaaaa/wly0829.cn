@@ -11378,7 +11378,7 @@
       "historical": false,
       "field": "status_line.last.at",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=daily-preferences；最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=daily-preferences；共同完成水位之前最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "daily-preferences",
@@ -11400,7 +11400,7 @@
       "historical": true,
       "field": "status_line.facts[0]",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=daily-preferences；从观察时刻往前7天的已记录调用次数，不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=daily-preferences；截至两路共同完成水位前一日的7个完整日内已记录调用次数（北京时间），不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "daily-preferences",
@@ -11469,7 +11469,7 @@
       "historical": true,
       "field": "status_line.facts[0]",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=explain-to-me；从观察时刻往前7天的已记录调用次数，不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=explain-to-me；截至两路共同完成水位前一日的7个完整日内已记录调用次数（北京时间），不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "explain-to-me",
@@ -11514,7 +11514,7 @@
       "historical": false,
       "field": "status_line.last.at",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=daily-preferences；最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=daily-preferences；共同完成水位之前最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "daily-preferences",
@@ -11536,7 +11536,7 @@
       "historical": false,
       "field": "status_line.facts[0]",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=daily-preferences；从观察时刻往前7天的已记录调用次数，不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=daily-preferences；截至两路共同完成水位前一日的7个完整日内已记录调用次数（北京时间），不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "daily-preferences",
@@ -11579,7 +11579,7 @@
       "historical": false,
       "field": "status_line.last.at",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=explain-to-me；最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=explain-to-me；共同完成水位之前最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "explain-to-me",
@@ -11601,7 +11601,7 @@
       "historical": false,
       "field": "status_line.facts[0]",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=explain-to-me；从观察时刻往前7天的已记录调用次数，不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=explain-to-me；截至两路共同完成水位前一日的7个完整日内已记录调用次数（北京时间），不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "explain-to-me",
@@ -11644,7 +11644,7 @@
       "historical": false,
       "field": "status_line.last.at",
       "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=reply-as-me；最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "measurement_scope": "kind=skill、name=reply-as-me；共同完成水位之前最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "reply-as-me",
