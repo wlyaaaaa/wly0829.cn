@@ -27,12 +27,14 @@ python -B -X utf8 site-astro/tools/scan_glance.py --dist dist
 python -B -X utf8 site-astro/tools/publish_site.py --dist dist --scan-result <扫描结果绝对路径> --dry-run
 # 在已有发布授权内，先上传并回读资源，再正式部署同一份成品。
 python -B -X utf8 site-astro/tools/publish_site.py --dist dist --scan-result <扫描结果绝对路径> --upload-only
-python -B -X utf8 site-astro/tools/publish_site.py --dist dist --scan-result <扫描结果绝对路径>
+python -B -X utf8 site-astro/tools/publish_site.py --dist dist --scan-result <扫描结果绝对路径> --output <正式发布输出新目录>
+# 发布返回、释放锁以后单独清理，可与下一轮取数并行。
+python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发布输出目录>
 ```
 
 扫描默认使用 `published-diff`，比较上一成功发布清单与最终 HTML 哈希，覆盖多轮构建累计的新增及变化路由，不依赖最后一次重建页。规则换版仍只扫这些变化页；只有外壳、排版引擎或共享脚本变化时另外使用 `--pages all`。缺少成功发布记录时工具提示回退 `changed`，按已有扫描记录比较页面哈希；此时核实真实成功前版和累计范围，不能把回退当作发布证据。指定路由可用逗号分隔的 `--pages /route-a/,/route-b/`；首页锁定时仍跳过 `/`。扫描覆盖大块空白、压叠、裁字、空图框、404 和点不动，结果及稳定后的截图留在扫描目录。动效由本人看，AI 不录屏或判断开场与动效。
 
-正式发布沿用本机已配置的阿里云 CLI、OSS profile 和 `wly0829-publication` 短锁；不新增登录或凭据。发布器只上传变化资源和文档，先资源、后 HTML、最后成功记录；先以 HEAD 核资源大小和 MD5，再 GET 关键页和本次变化页核正文哈希。`--upload-only` 只上传并回读资源，不推 `site-dist`、不切换公网、不写成功指针。正式部署和公网回读全部通过后，才更新 Git 共享目录的 `wly-oss/published.json`。验收成功后的 OSS 退役与独立回执按[按需更新清单](ondemand-update.md#7-先上传资源再正式发布)和[发布与扫描](publish-and-scan.md)执行。`publish-receipt.json` 区分本地计划、上传、Pages 和公网回读，不能把 dry-run 或资源上传写成已经上线。
+正式发布沿用本机已配置的阿里云 CLI、OSS profile 和 `wly0829-publication` 短锁；不新增登录或凭据。发布器只上传变化资源和文档，先资源、后 HTML、最后成功记录；先以 HEAD 核资源大小和 MD5，再 GET 关键页和本次变化页核正文哈希。`--upload-only` 只上传并回读资源，不推 `site-dist`、不切换公网、不写成功指针。正式部署和公网回读全部通过后，才更新 Git 共享目录的 `wly-oss/published.json`。正式发布默认不清理旧对象，成功时 `status=published`、`oss_retention.status=deferred` 并退出 0。保留正式发布输出目录，在发布锁释放后用独立命令清理；清理残留只影响该命令的退出码，不改变已上线事实。OSS 退役与独立回执按[按需更新清单](ondemand-update.md#7-先上传资源再正式发布)和[发布与扫描](publish-and-scan.md)执行。`publish-receipt.json` 区分本地计划、上传、Pages 和公网回读，不能把 dry-run 或资源上传写成已经上线。
 
 ## 独立阅读与几何检查
 
