@@ -121,7 +121,7 @@ async def restore_checks(pw,args,address,result,selected_routes=None):
         profile=args.cache/('restore-'+view+'-'+uuid.uuid4().hex)
         context=await pw.chromium.launch_persistent_context(str(profile),executable_path=str(args.chrome),headless=True,
             viewport={'width':width,'height':height},device_scale_factor=3.5 if phone else 1,is_mobile=phone,has_touch=phone,
-            **({'user_agent':'Mozilla/5.0 (Linux; Android 15; Xiaomi 15 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36'} if phone else {}))
+            **({'user_agent':'Mozilla/5.0 (Linux; Android 15) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36'} if phone else {}))
         try:
             page=context.pages[0];page.on('pageerror',lambda error:result['issues'].append(str(error)))
             await context.add_init_script("""window.__numberCalls=[];const animate=Element.prototype.animate;Element.prototype.animate=function(frames,options){const animation=animate.call(this,frames,options);if(this.classList.contains('number-track'))window.__numberCalls.push({options,animation});return animation;};""")

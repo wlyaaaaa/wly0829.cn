@@ -332,7 +332,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "17. Xiaomi Share 在 MiService 正常时只补一个签名有效的交互界面；10 月 11 日修正了厂商服务自动恢复期间的瞬时失败（提交 9181327e），服务恢复中不再误报。多个界面或身份不符就停止；界面活着不证明手机文件已经传完。",
+        "text_ref": "18. “软件每周维护”沿用原 PCConfig Governance Check 任务名，执行 Invoke-ManagedSoftwareMaintenance.ps1：查受管软件版本，在空闲时为已授权的主 Python 打同一 3.14 系列稳定补丁、更新 Codex CLI 正式版；正在被使用就等空闲，不终止程序、不跨次版本，也不重建已退役的综合自查。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -352,7 +352,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "17. Xiaomi Share 在 MiService 正常时只补一个签名有效的交互界面；10 月 11 日修正了厂商服务自动恢复期间的瞬时失败（提交 9181327e），服务恢复中不再误报。多个界面或身份不符就停止；界面活着不证明手机文件已经传完。",
+        "text_ref": "18. “软件每周维护”沿用原 PCConfig Governance Check 任务名，执行 Invoke-ManagedSoftwareMaintenance.ps1：查受管软件版本，在空闲时为已授权的主 Python 打同一 3.14 系列稳定补丁、更新 Codex CLI 正式版；正在被使用就等空闲，不终止程序、不跨次版本，也不重建已退役的综合自查。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",

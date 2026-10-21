@@ -144,12 +144,6 @@
      "source": "E:\\Projects\\Backups\\codex-memory\\CONVERSATION_BACKUP.md:43–58、67–76"
     },
     {
-     "id": "e-clipboard",
-     "name": "剪贴板不同步",
-     "phone": "手机经远控",
-     "source": "V:\\Personal\\Projects\\meshclip-kit\\docs\\TROUBLESHOOTING.md:3–15、37–55"
-    },
-    {
      "id": "e-chatgpt-auth",
      "name": "ChatGPT 授权转圈",
      "phone": "有 ChatGPT 界面就能做",
@@ -204,11 +198,6 @@
      "text": "AI 备份"
     },
     {
-     "target": "/projects/meshclip-kit/",
-     "screen": "rescue-09",
-     "text": "双机剪贴板"
-    },
-    {
      "target": "/projects/pcconfig/#pcconfig-07",
      "screen": "rescue-10",
      "text": "电脑配置与恢复：电脑坏了怎么办"
@@ -238,7 +227,7 @@
     "电脑配置与恢复页写救急 U 盘根目录有一份《救急先看》，和本页同名；没核对那份内容是否和本页一致。本页第 9 屏只提 U 盘里有 PE 工具，没说 U 盘里的《救急先看》和网页一样。",
     "“手机直接做”这条用在“远程连不上”：依据是事实单“手机可使用已配置的远控”，没核实手机上 ToDesk、网易 UU 这两个 App 现在都装着、能登录。",
     "全站规矩是“一切是图”，本页又要求“网络慢时手机也要能打开”。建议本页的图压得最小（字为主、插画极少），并把 text 同时作为网页文字（例如图片的替代文字）放进页面，图没下载完时步骤也能读到；要不要这样做请 Claude 定。",
-    "按钮和步骤里写了几条命令（听写状态、启动听写任务、修小屏、串流体检、对话备份只读校验、kdeconnect-cli --refresh、codex resume --all）：照规则页能登本机路径和命令的先例保留，方便电脑上的 AI 直接照做；觉得太技术可以只留文字步骤。",
+    "按钮和步骤里写了几条命令（听写状态、启动听写任务、修小屏、串流体检、对话备份只读校验、codex resume --all）：照规则页能登本机路径和命令的先例保留，方便电脑上的 AI 直接照做；觉得太技术可以只留文字步骤。",
     "替本人口吻写的句子：第 1 屏介绍两句“电脑出事时先看这一页……”。",
     "【10 月 1 日内容主次改稿，北京时间 10-02 00:29】按 GPT 复核 B06，把“电脑坏了，要换一台”从第 9 屏“其他”提成独立的 rescue-10，放在“密码中心打不开”之前；首屏按钮〔电脑坏了要换〕仍落 #e-replace（锚点搬到 rescue-10）。步骤照 START_RECOVERY.md:9–21，要准备的照 factcheck2.md 第 10 节；只写 9 月 22 日测过的文件级范围，整机还原、启动、新硬件都写“还没演练”。第 8 屏句子照 factcheck2.md 第 9 节改。"
    ]
@@ -246,8 +235,8 @@
  },
  "source": {
   "page": "sources/pages/rescue/page.json",
-  "sha256": "681ea7ca5f7799eec1437f89fa4f90dab972ca8ad21f3dc8f572fdf1dbf1735b",
-  "converted_at_beijing": "2026-10-12T19:13:28+08:00"
+  "sha256": "f80e5a3da97519551a2d8e9b4ca790c65f3a552cb41781b7547f6c69211c8722",
+  "converted_at_beijing": "2026-10-21T19:45:00+08:00"
  }
 }
 ---
@@ -310,10 +299,6 @@
    {
     "text": "Codex 对话要恢复",
     "href": "/rescue/#e-codex"
-   },
-   {
-    "text": "剪贴板不同步",
-    "href": "/rescue/#e-clipboard"
    },
    {
     "text": "ChatGPT 授权转圈",
@@ -492,7 +477,7 @@
 **按症状找**
 〔卡死〕　〔远程连不上〕　〔代理坏了〕　〔借电脑上网不行〕　〔Win+H 没反应〕
 〔听写不出字〕　〔串流没画面〕　〔主屏全黑〕　〔机箱小屏不刷新〕　〔水冷屏不亮〕
-〔密码中心打不开〕　〔Codex 对话要恢复〕　〔剪贴板不同步〕　〔ChatGPT 授权转圈〕　〔电脑坏了要换〕
+〔密码中心打不开〕　〔Codex 对话要恢复〕　〔ChatGPT 授权转圈〕　〔电脑坏了要换〕
 
 步骤出自各项目现在的说明（10 月 11 日核对）。
 
@@ -2319,19 +2304,10 @@ Invoke-CodexConversationBackup.ps1 -Mode Validate -PayloadStore Hot -ReadOnly -J
   "id": "rescue-09",
   "section": "other",
   "title": "其他",
-  "scene": "横版：左上小节标题“其他”。两张症状卡片左右并排、等宽等高。每条症状一张白底细浅绿描边圆角卡片：卡片顶上粗体绿色症状名（锚点落在这里），下面编号步骤，“别做”一行用浅橙色小字、前面一个小叉，最后一行“手机上：…”前面画一个小手机线描图标。卡片里不放插画，只在卡片左上角放一个很小的水彩线描图标（写在各屏 scene 里）。 两张卡的图标依次是：两台笔记本之间一张小纸片；一个转圈的弹窗。每条症状标题右边画一枚小圆角标签，标出“手机上”那一行的结论：深绿实心＝手机直接做，浅绿描边＝手机经远控，灰色描边＝要到电脑前；标签只画颜色和形状，不另写字（字已经在“手机上”那一行里）。 本页不加任何动效，也不放开头短视频；图要小、要轻，手机网络慢时也先出字。",
-  "portrait": "竖版：小节标题；两张卡片上下排、满宽。",
-  "links": [
-   {
-    "text": "双机剪贴板",
-    "href": "/projects/meshclip-kit/"
-   }
-  ],
+  "scene": "横版：左上小节标题“其他”。一张症状卡片按正文宽度排。每条症状一张白底细浅绿描边圆角卡片：卡片顶上粗体绿色症状名（锚点落在这里），下面编号步骤，“别做”一行用浅橙色小字、前面一个小叉，最后一行“手机上：…”前面画一个小手机线描图标。卡片里不放插画，只在卡片左上角放一个很小的水彩线描图标（写在各屏 scene 里）。 卡片图标是：一个转圈的弹窗。每条症状标题右边画一枚小圆角标签，标出“手机上”那一行的结论：深绿实心＝手机直接做，浅绿描边＝手机经远控，灰色描边＝要到电脑前；标签只画颜色和形状，不另写字（字已经在“手机上”那一行里）。 本页不加任何动效，也不放开头短视频；图要小、要轻，手机网络慢时也先出字。",
+  "portrait": "竖版：小节标题；一张卡片满宽。",
+  "links": [],
   "anchors": [
-   {
-    "id": "e-clipboard",
-    "text": "两台电脑的剪贴板不同步"
-   },
    {
     "id": "e-chatgpt-auth",
     "text": "ChatGPT 添加副机连接时，授权一直转圈"
@@ -2353,7 +2329,7 @@ Invoke-CodexConversationBackup.ps1 -Mode Validate -PayloadStore Hot -ReadOnly -J
     },
     {
      "type": "points_card",
-     "text_ref": "两台电脑的剪贴板不同步",
+     "text_ref": "ChatGPT添加副机连接时，授权一直转圈",
      "columns": 1,
      "whole_block": true,
      "illustration": "left_inside",
@@ -2363,24 +2339,6 @@ Invoke-CodexConversationBackup.ps1 -Mode Validate -PayloadStore Hot -ReadOnly -J
      ],
      "status_tag": "shape_only",
      "commands": "monospace",
-     "row": "symptoms",
-     "width": "50%",
-     "icon_position": "header_left"
-    },
-    {
-     "type": "points_card",
-     "text_ref": "ChatGPT添加副机连接时，授权一直转圈",
-     "columns": 1,
-     "whole_block": true,
-     "illustration": "left_inside",
-     "icons": "auto",
-     "header_icon": [
-      1
-     ],
-     "status_tag": "shape_only",
-     "commands": "monospace",
-     "row": "symptoms",
-     "width": "50%",
      "icon_position": "header_left"
     }
    ],
@@ -2396,27 +2354,13 @@ Invoke-CodexConversationBackup.ps1 -Mode Validate -PayloadStore Hot -ReadOnly -J
     },
     {
      "type": "points_card",
-     "text_ref": "两台电脑的剪贴板不同步",
-     "columns": 1,
-     "whole_block": true,
-     "illustration": "left_inside",
-     "icons": "auto",
-     "header_icon": [
-      0
-     ],
-     "status_tag": "shape_only",
-     "commands": "monospace",
-     "icon_position": "header_left"
-    },
-    {
-     "type": "points_card",
      "text_ref": "ChatGPT添加副机连接时，授权一直转圈",
      "columns": 1,
      "whole_block": true,
      "illustration": "left_inside",
      "icons": "auto",
      "header_icon": [
-      1
+      0
      ],
      "status_tag": "shape_only",
      "commands": "monospace",
@@ -2430,51 +2374,6 @@ Invoke-CodexConversationBackup.ps1 -Mode Validate -PayloadStore Hot -ReadOnly -J
   {
    "role": "icon",
    "slot_ordinal": 1,
-   "orientations": [
-    "h",
-    "v"
-   ],
-   "asset": "_library/icons/笔记本电脑.png",
-   "fallback": false,
-   "semantic_status": "text_inferred_object_unverified",
-   "key": "笔记本电脑",
-   "source_phrase": "两台电脑都登录着，KDE Connect 都开着。",
-   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
-   "status": "ready"
-  },
-  {
-   "role": "icon",
-   "slot_ordinal": 2,
-   "orientations": [
-    "h",
-    "v"
-   ],
-   "asset": "_library/icons/文稿堆.png",
-   "fallback": false,
-   "semantic_status": "text_inferred_object_unverified",
-   "key": "文稿堆",
-   "source_phrase": "对方的“剪贴板”插件开着；先复制一段纯文字试，别两边同时复制。",
-   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
-   "status": "ready"
-  },
-  {
-   "role": "icon",
-   "slot_ordinal": 3,
-   "orientations": [
-    "h",
-    "v"
-   ],
-   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
-   "fallback": true,
-   "semantic_status": "unresolved_semantics_fallback",
-   "key": "绿叶装饰",
-   "source_phrase": "找不到对方：看两台是不是在同一个 Tailscale 里、对方醒着、配对的是不是这台，再运行 kdeconnect-cli --refresh。",
-   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
-   "status": "ready"
-  },
-  {
-   "role": "icon",
-   "slot_ordinal": 4,
    "orientations": [
     "h",
     "v"
@@ -2516,13 +2415,6 @@ Invoke-CodexConversationBackup.ps1 -Mode Validate -PayloadStore Hot -ReadOnly -J
 ```
 
 ## 其他
-
-### 两台电脑的剪贴板不同步
-1. 两台电脑都登录着，KDE Connect 都开着。
-2. 对方的“剪贴板”插件开着；先复制一段纯文字试，别两边同时复制。
-3. 找不到对方：看两台是不是在同一个 Tailscale 里、对方醒着、配对的是不是这台，再运行 kdeconnect-cli --refresh。
-现在只同步文字，不同步图片；没登录的电脑不同步。
-手机上：手机经远控。见〔双机剪贴板〕。
 
 ### ChatGPT 添加副机连接时，授权一直转圈
 1. 关掉整个“添加副机 MCP”弹窗，从“连接”重新发起一次；只关小窗、等旧弹窗没用。

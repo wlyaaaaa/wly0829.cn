@@ -186,8 +186,8 @@ async def run(args):
     try:
         async with async_playwright() as pw:
             for device, options in [('desktop', {'viewport': {'width': 1440, 'height': 900}}),
-                                    ('xiaomi', {'viewport': {'width': 412, 'height': 915}, 'device_scale_factor': 3.5, 'is_mobile': True, 'has_touch': True,
-                                               'user_agent': 'Mozilla/5.0 (Linux; Android 15; Xiaomi 15 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36'})]:
+                                    ('android-412x915', {'viewport': {'width': 412, 'height': 915}, 'device_scale_factor': 3.5, 'is_mobile': True, 'has_touch': True,
+                                               'user_agent': 'Mozilla/5.0 (Linux; Android 15) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36'})]:
                 profile = args.temp_dir / device
                 profiles.append(profile)
                 context = await pw.chromium.launch_persistent_context(str(profile), executable_path=str(args.chrome), headless=True,
@@ -363,7 +363,7 @@ async def run(args):
                 cdp = await context.new_cdp_session(page)
                 results.append(await verify_real_hidden(page, device))
 
-                if device == 'xiaomi':
+                if device == 'android-412x915':
                     await page.set_viewport_size({'width': 915, 'height': 412})
                     await page.wait_for_function("HomeLiving.diagnostics().orientation==='landscape'&&HomeLiving.diagnostics().phase==='live'")
                     landscape = await page.evaluate(SNAP)

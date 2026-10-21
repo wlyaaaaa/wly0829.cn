@@ -152,7 +152,7 @@ async def run(args):
     records, large_records, errors, missing, writes = [], [], [], [], []
     mode = {'value': 'normal'}
     async with async_playwright() as pw:
-        for device, options in [('desktop', {'viewport': {'width': 1440, 'height': 1000}}), ('xiaomi-portrait', {'viewport': {'width': 412, 'height': 915}, 'device_scale_factor': 3.5, 'is_mobile': True, 'has_touch': True})]:
+        for device, options in [('desktop', {'viewport': {'width': 1440, 'height': 1000}}), ('android-412x915', {'viewport': {'width': 412, 'height': 915}, 'device_scale_factor': 3.5, 'is_mobile': True, 'has_touch': True})]:
             context = await pw.chromium.launch_persistent_context(str(args.temp / device), executable_path=str(args.chrome), headless=True, reduced_motion='reduce', **options)
             async def intercept(handler):
                 request = handler.request
@@ -265,7 +265,7 @@ async def run(args):
     receipt = {'schema': 'website.typeset-live-flow-browser.v1', 'observed_at_beijing': datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).isoformat(), 'chrome': str(args.chrome), 'candidate': str(candidate), 'fixture_only': True, 'results': records, 'large_frames':large_records, 'page_errors': errors, 'missing_local': sorted(set(missing)), 'blocked_writes': writes}
     (args.output / 'browser-results.json').write_text(json.dumps(receipt, ensure_ascii=False, indent=2), 'utf8')
     assert not errors and not writes, receipt
-    for device in ([] if args.only_large else ['desktop', 'xiaomi-portrait']):
+    for device in ([] if args.only_large else ['desktop', 'android-412x915']):
         rows = [row for row in records if row['device'] == device]
         thumbs = []
         for row in rows:

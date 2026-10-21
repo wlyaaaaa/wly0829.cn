@@ -112,7 +112,7 @@ async def main(args):
     results, console_errors, page_errors = [], [], []
     try:
         async with async_playwright() as pw:
-            for device, options in [('desktop', {'viewport': {'width': 1440, 'height': 1000}}), ('xiaomi-portrait', {'viewport': {'width': 412, 'height': 915}, 'device_scale_factor': 3.5, 'is_mobile': True, 'has_touch': True, 'user_agent': 'Mozilla/5.0 (Linux; Android 15; Xiaomi 15 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36'})]:
+            for device, options in [('desktop', {'viewport': {'width': 1440, 'height': 1000}}), ('android-412x915', {'viewport': {'width': 412, 'height': 915}, 'device_scale_factor': 3.5, 'is_mobile': True, 'has_touch': True, 'user_agent': 'Mozilla/5.0 (Linux; Android 15) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36'})]:
                 context = await pw.chromium.launch_persistent_context(str(args.temp_dir / device), executable_path=str(args.chrome), headless=True, timezone_id='America/Chicago', **options)
 
                 async def route(request_route):
@@ -208,12 +208,12 @@ async def main(args):
                 assert watch_slot['state'] == 'failed' and '失败' in watch_slot['text']
                 assert watch_slot['textFits'] and watch_slot['overflowX'] == 'visible', watch_slot
                 results.append({'device': device, 'case': 'LC-07/09', 'snapshot': watch})
-                if device == 'xiaomi-portrait':
+                if device == 'android-412x915':
                     await page.set_viewport_size({'width': 915, 'height': 412})
                     await page.wait_for_timeout(500)
                     landscape = await snap()
                     assert not landscape['overflow']
-                    results.append({'device': 'xiaomi-landscape', 'case': 'LC-09', 'snapshot': landscape})
+                    results.append({'device': 'android-915x412', 'case': 'LC-09', 'snapshot': landscape})
                     await page.set_viewport_size({'width': 412, 'height': 915})
 
                 if real:

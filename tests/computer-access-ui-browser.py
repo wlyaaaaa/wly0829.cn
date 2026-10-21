@@ -56,7 +56,7 @@ async def run(args):
     origin=f'http://127.0.0.1:{server.server_port}'
     try:
         async with async_playwright() as pw:
-            for device, viewport in [('desktop',{'width':1440,'height':1000}),('xiaomi-portrait',{'width':412,'height':915})]:
+            for device, viewport in [('desktop',{'width':1440,'height':1000}),('android-412x915',{'width':412,'height':915})]:
                 context=await pw.chromium.launch_persistent_context(str(args.temp/device),executable_path=str(args.chrome),headless=True,viewport=viewport,device_scale_factor=3.5 if device!='desktop' else 1,is_mobile=device!='desktop',has_touch=device!='desktop',timezone_id='America/Chicago')
                 async def route(request_route):
                     request=request_route.request; url=urlsplit(request.url)

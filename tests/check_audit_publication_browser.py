@@ -8,7 +8,7 @@ import threading
 from playwright.sync_api import sync_playwright
 
 CHROME=Path(r'C:\Program Files\Google\Chrome\Application\chrome.exe')
-ANDROID_UA='Mozilla/5.0 (Linux; Android 15; Xiaomi 15 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36'
+ANDROID_UA='Mozilla/5.0 (Linux; Android 15) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36'
 ROUTES=['/','/projects/localocr/','/skills/localocr/','/cockpit/','/rescue/','/projects/localocr/runtime-resources/']
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
@@ -24,7 +24,7 @@ def check(root, profile_root):
     try:
         with sync_playwright() as driver:
             for mode,options in [('desktop',{'viewport':{'width':1440,'height':1000},'device_scale_factor':1}),
-                                 ('xiaomi15pro',{'viewport':{'width':412,'height':915},'device_scale_factor':3.5,'is_mobile':True,'has_touch':True,'user_agent':ANDROID_UA})]:
+                                 ('android-412x915',{'viewport':{'width':412,'height':915},'device_scale_factor':3.5,'is_mobile':True,'has_touch':True,'user_agent':ANDROID_UA})]:
                 context=driver.chromium.launch_persistent_context(str(profile_root/mode),executable_path=str(CHROME),headless=True,
                     args=['--no-first-run','--no-default-browser-check'],**options)
                 try:
