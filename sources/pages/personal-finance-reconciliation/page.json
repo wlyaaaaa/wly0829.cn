@@ -15,7 +15,7 @@
       "id": "personal-finance-reconciliation-01",
       "section": "top",
       "title": "先分清消费和还款，再算花了多少",
-      "text": "# 先分清消费和还款，再算花了多少\n\n〔回到项目 → 个人财务〕　〔复制 AI 续作说明〕\n\n个人财务 · 功能说明\n\n我在意的是“真花掉了多少”，不是“钱进进出出了多少”。同一笔钱在几个账单里出现好几次，只算一次；还款和倒钱不算花。\n\n**当前情况：**消费统计在个人理解库里实现，有 55 个测试用例；10 月 21 日储蓄卡流水分类和美元结算核对已用于重算月均消费。重复扣款目前靠 AI 按规则查，没有专门程序。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "text": "# 先分清消费和还款，再算花了多少\n\n〔回到项目 → 个人财务〕　〔复制 AI 续作说明〕\n\n个人财务 · 功能说明\n\n我在意的是“真花掉了多少”，不是“钱进进出出了多少”。同一笔钱在几个账单里出现好几次，只算一次；还款和倒钱不算花。\n\n**当前情况：**消费统计在个人理解库里实现，有专项自动测试；10 月 21 日储蓄卡流水分类和美元结算核对已用于重算月均消费。重复扣款由程序先列出疑似，AI 再逐条核对。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
       "links": [
         {
           "text": "回到项目 → 个人财务",
@@ -73,7 +73,7 @@
       "id": "personal-finance-reconciliation-04",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n**10 月 22 日核对**　实现都在个人理解库（另一个私有仓库，相关程序最后变更在北京 10 月 21 日 17:51）：spending.py 的 aggregate_spending、debit_sources.py 的 classify_debit、commerce_records.py（订单与售后状态）、gmail_sources.py（信用卡月单和每日通知邮件）。tests/test_spending.py 共 55 个测试函数（静态计数，这次没有运行）。\n\n## 关键规则与设计选择\n\n1. 还款和本人转账不是消费，也不和原来那笔消费重复算。\n\n2. 订单只证明买过；支付宝、微信、信用卡和同一订单可靠对上时只作支付旁证，不重复计。没有详细订单的有效支付照样算消费。\n\n3. 同日同额不自动合并；候选和金额冲突都保留。\n\n4. 不同币种不相加；币种不明单列。\n\n5. 替我代付、代充值买的服务照样算消费；几块钱的零碎不追，不影响结论。\n\n## 当前怎样实现\n\n- aggregate_spending 把同一笔消费的订单、支付、卡记录归成一组（并查集）；只有候选关联的不强行合并。\n\n- _notice_matches_statement 把信用卡每日通知和月单对上：同一张卡、同一商户、同金额或原币金额一致；外币时日期可差一天。\n\n- classify_debit 把储蓄卡流水分成本人操作、还款借贷、收入、退款、消费五类，按配置的还款关键词和本人名称判断。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n**10 月 22 日核对**　实现都在个人理解库（另一个私有仓库，相关程序最后变更在北京 10 月 22 日 07:19）：spending.py 的 aggregate_spending、debit_sources.py 的 classify_debit、commerce_records.py（订单与售后状态）、gmail_sources.py（信用卡月单和每日通知邮件）。tests/test_spending.py 是专项测试，只用合成数据（这次没有运行）。\n\n## 关键规则与设计选择\n\n1. 还款和本人转账不是消费，也不和原来那笔消费重复算。\n\n2. 订单只证明买过；支付宝、微信、信用卡和同一订单可靠对上时只作支付旁证，不重复计。没有详细订单的有效支付照样算消费。\n\n3. 同日同额不自动合并；候选和金额冲突都保留。\n\n4. 不同币种不相加；币种不明单列。\n\n5. 替我代付、代充值买的服务照样算消费；几块钱的零碎不追，不影响结论。\n\n## 当前怎样实现\n\n- aggregate_spending 把同一笔消费的订单、支付、卡记录归成一组（并查集）；只有候选关联的不强行合并。\n\n- _notice_matches_statement 把信用卡每日通知和月单对上：同一张卡、同一商户、同金额或原币金额一致；外币时日期可差一天。\n\n- _duplicate_charge_alerts 找疑似重复扣款，结果放在 duplicate_charges：同一商户、同一币种、扣掉已关联退款后还剩同样金额的几笔独立扣款才列出；分期、预授权、冲正、撤销、失败、取消、关闭的不列，退款状态说不清的不列，商户只写成支付宝、微信支付这类泛称的也不列。它只提示，不改任何一笔的消费归属；列出来的由 AI 逐条核对，真重复才挂驾驶舱。\n\n- classify_debit 把储蓄卡流水分成本人操作、还款借贷、收入、退款、消费五类，按配置的还款关键词和本人名称判断。",
       "links": [],
       "anchors": [
         {
@@ -98,7 +98,7 @@
       "id": "personal-finance-reconciliation-05",
       "section": "tech",
       "title": "技术实现与依据（二）",
-      "text": "## 技术实现与依据（二）\n\n- 输出字段：按币种的 consumption_net；total_interpretation 默认是“已识别消费小计，不含待归并和商户预付”；uncertainty 写候选组数和是否证明完整；unresolved_amounts、unknown_currency_amounts 单列。\n\n- 两套日期口径：consumption_net 按购买归属记账，日期取这一笔最早的付款或订单时间，已关联的成功退款（含跨月退款）在这一笔里扣掉；observed_flow_net 是期间资金流，付款按付款时间加、退款按退款时间减。退款没有真实时间的，不进资金流，也不补造日期。personal-finance 的月均和跑道只取 consumption_net（AGENTS.md 指定）。\n\n- 只有本人确认账本基本覆盖、又没有待归并和币种不明时，total_interpretation 才改成“扣退款后的消费净额”。\n\n- 商户预付：品名里明确写着购物金、储值卡、储值金、储值余额、储值充值或预付余额的，单列 merchant_prepayment_net（另有 merchant_prepayment_gross 和 merchant_prepayment_refunds），不进 consumption_net；付款仍记进期间资金流。merchant_prepayment_net 是本期购买的预付扣掉已关联退款，不等于商户那边的余额净增；找不到原购买的预付退款另列 unattributed_merchant_prepayment_refunds。普通 AI、游戏、通信充值不凭“充值”二字排除。personal-finance 把商户储值排除在可动用余额之外。\n\n- 命令：daily_preferences.py spending --from --to --as-of --group-by month --json（--to 不含当天）。\n\n## 执行流程\n\n1. 读区间内全部已导入记录。\n\n2. 规范化金额、币种和角色。\n\n3. 归并同一笔。\n\n4. 剔除还款与本人转账；把明确的商户预付单列。\n\n5. 扣关联退款，按购买归属记进消费净额；付款和退款再按各自时间记进期间资金流。\n\n6. 输出净额、待归并和覆盖说明。\n\n7. AI 按来源规则查重复扣款。",
+      "text": "## 技术实现与依据（二）\n\n- 输出字段：按币种的 consumption_net；total_interpretation 默认是“已识别消费小计，不含待归并和商户预付”；uncertainty 写候选组数和是否证明完整；unresolved_amounts、unknown_currency_amounts 单列。\n\n- 两套日期口径：consumption_net 按购买归属记账，日期取这一笔最早的付款或订单时间，已关联的成功退款（含跨月退款）在这一笔里扣掉；observed_flow_net 是期间资金流，付款按付款时间加、退款按退款时间减。退款没有真实时间的，不进资金流，也不补造日期。personal-finance 的月均和跑道只取 consumption_net（AGENTS.md 指定）。\n\n- 只有本人确认账本基本覆盖、又没有待归并和币种不明时，total_interpretation 才改成“扣退款后的消费净额”。\n\n- 商户预付：品名里明确写着购物金、储值卡、储值金、储值余额、储值充值或预付余额的，单列 merchant_prepayment_net（另有 merchant_prepayment_gross 和 merchant_prepayment_refunds），不进 consumption_net；付款仍记进期间资金流。merchant_prepayment_net 是本期购买的预付扣掉已关联退款，不等于商户那边的余额净增；找不到原购买的预付退款另列 unattributed_merchant_prepayment_refunds。普通 AI、游戏、通信充值不凭“充值”二字排除。personal-finance 把商户储值排除在可动用余额之外。\n\n- 命令：daily_preferences.py spending --from --to --as-of --group-by month --json（--to 不含当天）。\n\n## 执行流程\n\n1. 读区间内全部已导入记录。\n\n2. 规范化金额、币种和角色。\n\n3. 归并同一笔。\n\n4. 剔除还款与本人转账；把明确的商户预付单列。\n\n5. 扣关联退款，按购买归属记进消费净额；付款和退款再按各自时间记进期间资金流。\n\n6. 输出净额、待归并和覆盖说明。\n\n7. 程序列出疑似重复扣款（duplicate_charges），AI 按来源规则逐条核对。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -134,7 +134,7 @@
       "id": "personal-finance-reconciliation-08",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- 个人理解库 spending.py、debit_sources.py、commerce_records.py、gmail_sources.py　消费统计、储蓄卡分类、订单与售后、信用卡邮件\n\n- tests/test_spending.py　跨月退款、日报让位月单、外币日期相邻、同日同额不合并、未知币种不相加、还款与重复行（55 个测试函数）\n\n- 个人理解库 docs/source-rules.md　重复扣款、先用后付、储蓄卡五类和交叉核对规则\n\n## 如何验证\n\n- 测试只用合成数据，不碰真实账单。\n\n- 真实月度结果靠覆盖说明和驾驶舱回执核对；这次没有重跑测试。\n\n## 与其他模块的关系\n\n输入来自〔账单每月收一次〕；输出的月度消费净额进〔月度报数〕算月均和跑道。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- 个人理解库 spending.py、debit_sources.py、commerce_records.py、gmail_sources.py　消费统计、储蓄卡分类、订单与售后、信用卡邮件\n\n- tests/test_spending.py　跨月退款、日报让位月单、外币日期相邻、同日同额不合并、未知币种不相加、还款与重复行、重复扣款候选（专项测试，只用合成数据）\n\n- 个人理解库 docs/source-rules.md　重复扣款、先用后付、储蓄卡五类和交叉核对规则\n\n## 如何验证\n\n- 测试只用合成数据，不碰真实账单。\n\n- 真实月度结果靠覆盖说明和驾驶舱回执核对；这次没有重跑测试。\n\n## 与其他模块的关系\n\n输入来自〔账单每月收一次〕；输出的月度消费净额进〔月度报数〕算月均和跑道。",
       "links": [
         {
           "text": "上一个模块 账单每月收一次",
