@@ -279,7 +279,9 @@ class VisitorTests(unittest.TestCase):
         result = self.analyze([rows], networks=networks, history=history, city="深圳", org="example")
         self.assertEqual(result["total"]["pageviews"], 2)
         self.assertEqual(result["page_dwell"]["/"]["observed_seconds"], 15)
+        self.assertEqual(result["page_dwell"]["/"]["last_report_at"], "2026-10-12T10:00:20+08:00")
         self.assertEqual(result["page_dwell"]["/new/"]["unknown_opens"], 1)
+        self.assertIsNone(result["page_dwell"]["/new/"]["last_report_at"])
         self.assertEqual(result["navigation_timing_ms"]["广东省/电信"]["load"], {"median": 300, "samples": 1})
         self.assertEqual(result["app_pageviews"]["企业微信"], 1)
         self.assertEqual(result["visitor_cohorts"]["returning_observed_before_window"], 1)
@@ -288,6 +290,23 @@ class VisitorTests(unittest.TestCase):
         self.assertTrue(all(r["conclusion"] == "可能" for r in result["possible_sources"]["visitors"]))
         self.assertNotIn("203.0.113.1", json.dumps(result, default=str))
         self.assertTrue(history["first_seen"]["visitor-B"].startswith("2026-10-12"))
+
+    def test_live_visible_reports_dedup_instances_without_leave(self):
+        rows = log(extra={"x-id": "one", "x-event": "view"})
+        for second, instance, event, visible in ((15, "one", "heartbeat", "60"), (20, "one", "resume", "60"),
+                (30, "one", "heartbeat", "90"), (35, "one", "heartbeat", "80"), (40, "two", "view", "0"),
+                (45, "two", "heartbeat", "45"), (50, "two", "heartbeat", "NaN"), (55, "two", "resume", "-1")):
+            rows += log(f"12/Oct/2026:10:00:{second:02d} +0800", extra={"x-id": instance, "x-event": event, "x-visible": visible})
+        rows += log("12/Oct/2026:10:00:59 +0800", extra={"x-id": "two", "x-event": "perf", "x-visible": "999"})
+        result = self.analyze([rows], deep_since=datetime(2026, 10, 12, 10, tzinfo=query.TZ))
+        self.assertEqual(result["total"]["pageviews"], 2)
+        self.assertEqual(result["page_dwell"]["/"]["observed_seconds"], 135)
+        self.assertEqual(result["page_dwell"]["/"]["samples"], 2)
+        self.assertEqual(result["page_dwell"]["/"]["unknown_opens"], 0)
+        self.assertEqual(result["page_dwell"]["/"]["last_report_at"], "2026-10-12T10:00:45+08:00")
+        self.assertEqual(result["visitor_dwell"]["visitor-A"]["total"]["observed_seconds"], 135)
+        self.assertEqual(result["visitor_dwell"]["visitor-A"]["total"]["last_report_at"], "2026-10-12T10:00:45+08:00")
+        self.assertEqual(result["deep_read"]["visitors"][0]["pages"], [{"path": "/", "visible_seconds": 135}])
 
     def test_time_gap_fallback_invalid_metrics_and_ai_lower_bound(self):
         rows = log(extra={"x-id": "one", "x-load": "NaN"})

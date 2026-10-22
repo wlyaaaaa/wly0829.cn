@@ -12,7 +12,7 @@ personal AI collaboration workspace; public presentation is secondary.
 
 推断某个日期附近的可能访问来源，用 `python -B -X utf8 tools/query-site-visitors.py --around 2026-10-12 --city 上海 --days 14`，可加 `--org 电信` 等实际机构网络名或运营商名片段；`--days` 表示以该日期为中心的总窗口天数，默认 14 天。此模式额外列出匹配编号对应的首次观察时间、城市、机构网络、App、看过的页面和停留；结论只能写“可能”，不得据此确认是谁，也不建立投递记录。
 
-停留优先采用离开/隐藏信标累计的实际可见秒数，同一页面实例的多次发送只取最大值；缺离开信标时用相邻页面的时间差后备（最多 30 分钟），最后一页保持未知。打开速度为 Navigation Timing 从导航开始到首字节、DOM 完成和 load 完成的毫秒数，只汇总已收到的字段。图片桶日志另统计 GPTBot、ClaudeBot、PerplexityBot、Bytespider、Amazonbot、meta-externalagent、Google-Extended 等声称的 UA 次数与日期，注明“只是下限，看不到只抓网页的爬虫”。
+停留表示已收到的累计可见时长：离开/隐藏、恢复前台即时上报及每 15 秒前台心跳，在同一页面实例内只取合法累计秒数最大值，再跨实例相加；隐藏时不计时、不发心跳，恢复/心跳不增加 PV。last_report_at 是最新合法可见时长信标的真实事件时间（无则 null），不能证明认真阅读或访问已结束；15 秒采样仍叠加原有 SLS 约 3 分钟延迟。没有合法可见时长信标时用相邻页面时间差后备（最多 30 分钟），最后一页保持未知。打开速度为 Navigation Timing 从导航开始到首字节、DOM 完成和 load 完成的毫秒数，只汇总已收到的字段。图片桶日志另统计 GPTBot、ClaudeBot、PerplexityBot、Bytespider、Amazonbot、meta-externalagent、Google-Extended 等声称的 UA 次数与日期，注明“只是下限，看不到只抓网页的爬虫”。
 
 普通访客查询默认单列“简历来的（/cv）”（`entry.cv`），按首次已标记入口去重，包含人数、首次时间、城市、看过的页和停留；`/cv` 自动跳到首页，跳转本身不计阅读停留。
 
