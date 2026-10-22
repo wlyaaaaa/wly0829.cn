@@ -33,7 +33,7 @@
  },
  "source": {
   "page": "sources/pages/proxyclean-targeted-port-shutdown/page.json",
-  "sha256": "a4fc8f3ea170417e4e821d69d63da9f7d3d97a7ffbc182ae3f485f00f0940759",
+  "sha256": "000d77e4d010c453108480fd5ab37aca08a2d6ba13bafd4e9dbc58fa2027e886",
   "converted_at_beijing": "2026-10-22T08:32:35+08:00"
  }
 }
@@ -402,7 +402,7 @@ ProxyClean · 功能说明
 
 ### 入口不可用或证据不足时
 
-受保护进程或服务需要管理员权限时，Windows 弹一次 UAC（管理员确认）；回来后程序带着已选客户端和同一 Windows 用户重新核对原身份再执行，不再另外确认。拿不到权限就停下，不重弹、不按不完整的状态继续；仍无法安全识别时不结束未知进程。
+受保护进程或服务的操作需要时自动提权，系统需要确认时才显示 UAC（管理员确认）；随后程序带着已选客户端和同一 Windows 用户重新核对原身份再执行，不再另外确认。拿不到权限就停下，不重弹、不按不完整的状态继续；仍无法安全识别时不结束未知进程。
 
 ::screen{#proxyclean-targeted-port-shutdown-04 section="usage"}
 

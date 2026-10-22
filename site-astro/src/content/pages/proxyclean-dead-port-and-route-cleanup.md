@@ -33,7 +33,7 @@
  },
  "source": {
   "page": "sources/pages/proxyclean-dead-port-and-route-cleanup/page.json",
-  "sha256": "1c08924a2ca4c8ff1fdaa034379ae86e331c07f33ceac9acd4530ac3930ba147",
+  "sha256": "b1b2a5e40af2f8995555f195345d77848158430d4fee575ec1ee629ab39c82cd",
   "converted_at_beijing": "2026-10-22T08:32:35+08:00"
  }
 }
@@ -402,7 +402,7 @@ ProxyClean · 功能说明
 
 ### 入口不可用或证据不足时
 
-需要删除系统路线却没有管理员权限时停止这一步，明确提示如何在同一用户的管理员窗口继续。
+需要删除系统路线时，保持同一用户的身份核对，需要时自动提权；自动提权失败则停止这一步并明确报错。
 
 ::screen{#proxyclean-dead-port-and-route-cleanup-04 section="usage"}
 
