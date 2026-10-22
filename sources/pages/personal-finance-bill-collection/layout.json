@@ -331,7 +331,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- PCConfig docs/runtime/monthly-personal-update-runbook.md　每月总更新手册（7 步）",
+        "text_ref": "- PCConfig docs/runtime/monthly-personal-update-runbook.md　每月总更新手册",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -350,7 +350,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- PCConfig docs/runtime/monthly-personal-update-runbook.md　每月总更新手册（7 步）",
+        "text_ref": "- PCConfig docs/runtime/monthly-personal-update-runbook.md　每月总更新手册",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

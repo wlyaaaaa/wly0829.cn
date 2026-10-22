@@ -73,7 +73,7 @@
       "id": "personal-finance-bill-collection-04",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n**10 月 22 日核对**　计划任务 PCConfig Monthly Export Reminder 状态 Ready、从未运行，下次运行折合北京时间 11 月 6 日 09:00。提醒脚本的测试 tools/monthly_export_reminder.test.ps1 只测 -DryRun 渲染，这次没有运行。\n\n## 关键规则与设计选择\n\n1. 不设 AI 自动开工的定时任务：6 号只提醒，7 号由我开口（本人 10 月 21 日 15:17 定）。\n\n2. 一次做完：开工后不为每一步找我确认，要我补的集中问一次或挂驾驶舱。\n\n3. 一次性解压码只在本轮用，不写进文件、日志或回执。\n\n4. 缺一家不阻塞其余来源。\n\n5. 账单文件取回后不留在手机：两端 SHA-256 一致才删手机副本。\n\n## 当前怎样实现\n\n- PCConfig tools/Send-MonthlyExportReminder.ps1：经已绑定的 Google 账号给本人发信，并登记驾驶舱待办；-DryRun、-WhatIf 只把邮件渲染到文件，不发送、不写回执。\n\n- registries/monthly_export_checklist.json：导出清单 7 项（6 项账单类，另一项是 AI 对话导出）和 10 行回信模板；templates/monthly-export-reminder.html 是邮件样式。\n\n- tools/Register-MonthlyExportReminderTask.ps1 -Execute -Json 注册任务：短锁、XML 备份和回滚、完整回读；运行时刻按北京时间 6 号 09:00 换算成本机日期。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n**10 月 22 日核对**　计划任务 PCConfig Monthly Export Reminder 状态 Ready、从未运行，下次运行折合北京时间 11 月 6 日 09:00。提醒脚本的测试 tools/monthly_export_reminder.test.ps1 只测 -DryRun 渲染，这次没有运行。\n\n## 关键规则与设计选择\n\n1. 不设 AI 自动开工的定时任务：6 号只提醒，7 号由我开口（本人 10 月 21 日 15:17 定）。\n\n2. 一次做完：开工后不为每一步找我确认，要我补的集中问一次或挂驾驶舱。\n\n3. 一次性解压码只在本轮用，不写进文件、日志或回执。\n\n4. 缺一家不阻塞其余来源。\n\n5. 账单文件取回后不留在手机：两端 SHA-256 一致才删手机副本。\n\n## 当前怎样实现\n\n- PCConfig tools/Send-MonthlyExportReminder.ps1：经已绑定的 Google 账号给本人发信，并登记驾驶舱待办；-DryRun、-WhatIf 只把邮件渲染到文件，不发送、不写回执。\n\n- registries/monthly_export_checklist.json：导出清单（各项账单，外加一项 AI 对话导出）和回信模板；templates/monthly-export-reminder.html 是邮件样式。\n\n- tools/Register-MonthlyExportReminderTask.ps1 -Execute -Json 注册任务：短锁、XML 备份和回滚、完整回读；运行时刻按北京时间 6 号 09:00 换算成本机日期。",
       "links": [],
       "anchors": [
         {
@@ -134,7 +134,7 @@
       "id": "personal-finance-bill-collection-08",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- PCConfig docs/runtime/monthly-personal-update-runbook.md　每月总更新手册（7 步）\n\n- PCConfig tools/Send-MonthlyExportReminder.ps1、registries/monthly_export_checklist.json　提醒邮件和回信模板\n\n- 个人理解库 docs/source-rules.md　各来源的取回和导入规则\n\n## 如何验证\n\n- 提醒：-DryRun 渲染样例；正式运行看任务的上次结果和回执状态。\n\n- 取回：投递区每个批次的 SHA-256 和导入结果对得上。\n\n- 第一次正式提醒在 11 月 6 日；在那之前没有真实运行记录。\n\n## 与其他模块的关系\n\n取回并导入后交给〔对账〕；对账结果和我的回信一起进〔月度报数〕。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- PCConfig docs/runtime/monthly-personal-update-runbook.md　每月总更新手册\n\n- PCConfig tools/Send-MonthlyExportReminder.ps1、registries/monthly_export_checklist.json　提醒邮件和回信模板\n\n- 个人理解库 docs/source-rules.md　各来源的取回和导入规则\n\n## 如何验证\n\n- 提醒：-DryRun 渲染样例；正式运行看任务的上次结果和回执状态。\n\n- 取回：投递区每个批次的 SHA-256 和导入结果对得上。\n\n- 第一次正式提醒在 11 月 6 日；在那之前没有真实运行记录。\n\n## 与其他模块的关系\n\n取回并导入后交给〔对账〕；对账结果和我的回信一起进〔月度报数〕。",
       "links": [
         {
           "text": "下一个模块 对账",
