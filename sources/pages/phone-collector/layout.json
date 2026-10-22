@@ -196,11 +196,12 @@
           "_library/icons/梳理乱线.png",
           "_library/icons/文件夹.png",
           "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/icons/手机.png",
           "_library/icons/断线.png",
           "_library/icons/白纸.png"
         ],
         "text_ref": "被系统杀掉或冻住",
-        "item_count": 7
+        "item_count": 8
       }
     ]
   },
@@ -226,11 +227,12 @@
           "_library/icons/梳理乱线.png",
           "_library/icons/文件夹.png",
           "_library/round3/clean-assets/png/46-地球-clean.png",
+          "_library/icons/手机.png",
           "_library/icons/断线.png",
           "_library/icons/白纸.png"
         ],
         "text_ref": "被系统杀掉或冻住",
-        "item_count": 7
+        "item_count": 8
       }
     ]
   },
@@ -289,6 +291,54 @@
         "width": "49%",
         "size": "medium",
         "text_ref": "谁管哪一段"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "row": "入口两卡",
+        "width": "49%",
+        "size": "medium",
+        "text_ref": "入口和前提"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "row": "入口两卡",
+        "width": "49%",
+        "size": "medium",
+        "text_ref": "代码和契约怎么对应"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "row": "证据两卡",
+        "width": "49%",
+        "size": "medium",
+        "text_ref": "记录能说明什么、不能说明什么"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "row": "证据两卡",
+        "width": "49%",
+        "size": "medium",
+        "text_ref": "版本和证据分四层"
       }
     ]
   },
@@ -343,6 +393,46 @@
         "icons": "none",
         "size": "medium",
         "text_ref": "谁管哪一段"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "text_ref": "入口和前提"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "text_ref": "代码和契约怎么对应"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "text_ref": "记录能说明什么、不能说明什么"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "text_ref": "版本和证据分四层"
       }
     ]
   },
