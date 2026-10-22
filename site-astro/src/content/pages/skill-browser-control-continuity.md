@@ -169,7 +169,7 @@
  "source": {
   "page": "sources/pages/skill-browser-control-continuity/page.json",
   "sha256": "575a3308999472b1ea9ecdf3ee92db2f1b9053638fdb0f6c7b30632d2be1310c",
-  "converted_at_beijing": "2026-10-22T08:32:38+08:00"
+  "converted_at_beijing": "2026-10-22T09:31:53+08:00"
  }
 }
 ---
@@ -1053,7 +1053,8 @@
      "text_ref": "1先判断要不要开浏览器",
      "direction": "horizontal",
      "item_rows": [
-      2,
+      1,
+      1,
       2,
       1,
       1,

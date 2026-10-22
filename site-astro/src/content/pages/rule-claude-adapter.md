@@ -235,7 +235,7 @@
  "source": {
   "page": "sources/pages/rule-claude-adapter/page.json",
   "sha256": "0a6c4c2d1f3dd50940384265468a4e5a1e1060b1e5dfe6455f155d832c6ef6dd",
-  "converted_at_beijing": "2026-10-22T09:10:17+08:00"
+  "converted_at_beijing": "2026-10-22T09:31:53+08:00"
  }
 }
 ---
@@ -2380,7 +2380,7 @@ Claude 和 GPT 在这套规则下实际怎么分工、干过哪些活：〔在�
      "icons": "auto",
      "icon_position": "header_left",
      "row": "cards-top",
-     "width": "33.333%"
+     "width": "37%"
     },
     {
      "type": "points_card",
@@ -2391,7 +2391,7 @@ Claude 和 GPT 在这套规则下实际怎么分工、干过哪些活：〔在�
      "icons": "auto",
      "icon_position": "header_left",
      "row": "cards-top",
-     "width": "33.333%"
+     "width": "37%"
     },
     {
      "type": "points_card",
@@ -2402,7 +2402,7 @@ Claude 和 GPT 在这套规则下实际怎么分工、干过哪些活：〔在�
      "icons": "auto",
      "icon_position": "header_left",
      "row": "cards-top",
-     "width": "33.333%"
+     "width": "26%"
     },
     {
      "type": "points_card",

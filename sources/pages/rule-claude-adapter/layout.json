@@ -1069,7 +1069,7 @@
         "icons": "auto",
         "icon_position": "header_left",
         "row": "cards-top",
-        "width": "33.333%"
+        "width": "37%"
       },
       {
         "type": "points_card",
@@ -1080,7 +1080,7 @@
         "icons": "auto",
         "icon_position": "header_left",
         "row": "cards-top",
-        "width": "33.333%"
+        "width": "37%"
       },
       {
         "type": "points_card",
@@ -1091,7 +1091,7 @@
         "icons": "auto",
         "icon_position": "header_left",
         "row": "cards-top",
-        "width": "33.333%"
+        "width": "26%"
       },
       {
         "type": "points_card",
