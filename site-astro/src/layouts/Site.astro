@@ -78,7 +78,9 @@ const shareImage = new URL(heroTag.match(/\bsrc="([^"]+)"/)?.[1]
   || (page === 'cockpit' ? cockpitHero : motion?.art?.src) || '/media/brand/wuleyang-logo-full.png', 'https://wly0829.cn').href;
 const canonical = new URL(url, 'https://wly0829.cn').href;
 const indexable = !moved && !noindex;
-const briefRepo = pageData ? (pageData.status_binding?.repo || (pageData.repo_url ? String(pageData.repo_url).replace(/^https:\/\/github.com\//, '') : '页面未提供仓库地址')) : '';
+const briefParent = authorPage?.parent ? authorPages[`../../../sources/pages/${authorPage.parent}/page.json`] : null;
+const briefRepository = (data: any) => data?.status_binding?.repo || (data?.repo_url ? String(data.repo_url).replace(/^https:\/\/github.com\//, '') : '');
+const briefRepo = briefRepository(pageData) || briefRepository(briefParent) || '页面未提供仓库地址';
 const briefText = pageData && ['project', 'frozen'].includes(pageData.kind)
   ? `项目：${pageData.title}；${briefRepo.startsWith('private-project-') ? '项目键' : '仓库'}：${briefRepo}；范围：整个项目；目标：（这里写这次要做的事）。先读项目的 AGENTS.md 和说明，按现行规则做。` : '';
 const tail = rt ? withoutTocRuntime(rt.tail).replace(`/_living/_engine/${livingEngine.deployed}`, `/_living/_engine/${livingEngine.fixed}`).replace(/(<script id="page-data" type="application\/json">)(.*?)(<\/script>)/s, (_m: string, a: string, body: string, c: string) => {
