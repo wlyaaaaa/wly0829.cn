@@ -610,7 +610,7 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
-  "sha256": "347daa76cf46a98f9280d3dbdb92f681e886cab1c2e4e5f69b4afa971be55f4c",
+  "sha256": "a68423389f71dff26f80f64381e6d8b4f97444209359a24a7267d9f52f6b92ff",
   "converted_at_beijing": "2026-10-22T08:32:29+08:00"
  }
 }
@@ -2710,7 +2710,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 3. **整份核对、换上**　每个文件的 SHA-256 都对上才换上，上一份留着
 4. **每周一上云**　先查回执，再用 rclone 传，传完两遍比对
 
-**用到的工具**　PowerShell 7（没有就退回 5.1）、7-Zip、rclone（接 Google 云盘，限速每秒 4 MB，走电脑当前的代理）、Windows 卷影快照（要管理员权限，只有微信那个任务用最高权限）、计划任务配隐藏启动器，不弹黑窗口；Python（只用标准库，给活动 SQLite 做一致副本）。
+**用到的工具**　PowerShell 7（没有就退回 5.1）、7-Zip、rclone（接 Google 云盘，限速每秒 4 MB，走电脑当前的代理）、Windows 卷影快照（微信实际使用 -UseVss 且非 Plan/List 时，需要则自动提权；普通备份和预览不触发，只有微信那个任务用最高权限）、计划任务配隐藏启动器，不弹黑窗口；Python（只用标准库，给活动 SQLite 做一致副本）。
 
 **回执**　每次运行写一份：每一步成没成、跳过了哪些文件、出错的是哪个（只写路径，不写内容）。
 

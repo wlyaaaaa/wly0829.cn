@@ -33,7 +33,7 @@
  },
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-remote-power-and-repair/page.json",
-  "sha256": "ebd89d4691ce168ebfa99c44d0c5d3ee8b61489295c8bea1b552fffaac6c0816",
+  "sha256": "069c5776bb6c2f64006ce18c0d28364c414e690950dc22d6132b54b436c61e81",
   "converted_at_beijing": "2026-10-20T08:56:34+08:00"
  }
 }
@@ -868,7 +868,7 @@ Sunshine 远程串流 · 功能说明
 
 - **远程开机后电脑没起来**　按电脑配置项目的救援说明现场确认插座供电和主板行为；不要远程反复断电尝试。
 
-- **Tailscale 服务无法启动**　先运行 repair-stream.ps1 看计划，确认步骤后用管理员权限加 -Apply；检查服务依赖与网络协议绑定，失败项按回执逆序恢复。
+- **Tailscale 服务无法启动**　先运行 repair-stream.ps1 看计划，入口需要时自动提权（预检也一样）；确认步骤后加 -Apply 才实际修改，网络服务重启还要显式加 -AllowNetworkRestart。检查服务依赖与网络协议绑定，失败项按回执逆序恢复。
 
 ::screen{#sunshine-remote-streaming-remote-power-and-repair-09 section="tech"}
 

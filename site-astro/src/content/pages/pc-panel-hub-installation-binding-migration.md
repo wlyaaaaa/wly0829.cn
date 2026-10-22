@@ -33,7 +33,7 @@
  },
  "source": {
   "page": "sources/pages/pc-panel-hub-installation-binding-migration/page.json",
-  "sha256": "76b03c33ea7ce537b7199eadf564876192e00f3ce8b2a403312204ef1256d201",
+  "sha256": "87741b189ad847b56bea36463625bc7ec8b9c66f7bb22decba8c891c08db301c",
   "converted_at_beijing": "2026-10-22T08:32:32+08:00"
  }
 }
@@ -868,7 +868,7 @@ HS2 包 1.0.0.2 注册在永久目录，9 月 28 日正式安装位置验收关�
 
 8. 在 HS2 目标显示器选择 Wallpaper Engine 背景或 Windows 静态背景；浮层本身不复制或修改壁纸资产。
 
-9. 以管理员 PowerShell 安装当前交互用户的登录任务，并回读任务动作、Root、Highest 与唯一 watchdog。
+9. start.ps1、install-startup-admin.ps1 和 uninstall-startup-admin.ps1 在需要时自动提权；安装仍面向当前交互用户，并回读任务动作、Root、Highest 与唯一 watchdog。
 
 10. 检查 runtime（运行环境）、唯一进程、heartbeat、HS2 落点和公开安全边界。
 
@@ -1029,7 +1029,7 @@ HS2 包 1.0.0.2 注册在永久目录，9 月 28 日正式安装位置验收关�
 
 - 内部 USB 排针改线属于实体操作，必须关机并断开整机电源；安装页面不会把源码接线说明写成已完成实测。
 
-- 安装启动任务需要管理员 PowerShell，会改变当前用户的 Task Scheduler；网站刷新和本模块证据采集保持只读。
+- 安装和卸载启动任务需要时自动提权，会改变当前用户的 Task Scheduler；repair-hs2.ps1 仅在 -Apply 且非 -WhatIf 的实际硬件修复时自动提权。网站刷新和本模块证据采集保持只读。
 
 - 当前主机健康、公开 ZIP 回归或 source contract 都不能证明另一台机器、重装系统、睡眠或异常断电后的真实 E2E（端到端验证）。
 

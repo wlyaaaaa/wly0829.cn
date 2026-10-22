@@ -672,7 +672,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- **ToDesk SYSTEM 任务普通权限不可见**：返回需要完整权限、任务存在性为空；只读升级核验，不据此重装或停服务。",
+        "text_ref": "- **ToDesk SYSTEM 任务普通权限不可见**：需要完整视角时自动提权做只读核验，按回读结果判断任务存在性，不据普通权限的缺项重装或停服务。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -691,7 +691,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- **ToDesk SYSTEM 任务普通权限不可见**：返回需要完整权限、任务存在性为空；只读升级核验，不据此重装或停服务。",
+        "text_ref": "- **ToDesk SYSTEM 任务普通权限不可见**：需要完整视角时自动提权做只读核验，按回读结果判断任务存在性，不据普通权限的缺项重装或停服务。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

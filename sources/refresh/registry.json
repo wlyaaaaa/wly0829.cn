@@ -3895,20 +3895,20 @@
       "id": "pcconfig-n-tasks-0",
       "page": "pcconfig",
       "screen": "pcconfig-01",
-      "label": "登记自动任务数",
+      "label": "PCConfig现行筛选范围自动任务数",
       "current_value": 140,
-      "as_of": "2026-10-07",
+      "as_of": "2026-10-22",
       "category": "某个 JSON 字段",
-      "source_location": "E:\\PCConfig\\registries\\tasks.json；10月7日管理员扫描，普通权限只见112不能替换此登记",
+      "source_location": "E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -IncludeRuntime -Json；2026-10-22 10:43:46管理员完整只读现场，非registries/tasks.json恢复投影",
       "retrieve": {
         "kind": "manual",
-        "instructions": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。"
+        "instructions": "由PCConfig Owner以Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -IncludeRuntime -Json，核对observer_elevated=true和task_visibility_complete=true，读取现行筛选范围的任务数与enabled状态；不从registries/tasks.json恢复投影替代现场，不写任务登记、不运行任务。"
       },
       "automatic": false,
       "private": false,
       "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
-      "refreshed_value": 127,
+      "report_ref": "E:/Documents/Codex/2026-10-21/10-22-09-59-c417a025-e280/outputs/pcconfig-task-counts.json",
+      "refreshed_value": 140,
       "affected_screens": [
         "pcconfig-01",
         "pcconfig-11",
@@ -3917,10 +3917,10 @@
       "registry_number": "n-tasks",
       "original_value_index": 0,
       "page_pattern": "- \\*\\*([\\d,]+) 个\\*\\*　自动任务，[\\d,]+ 个有人话说明",
-      "measurement_scope": "指定JSON逐键/数组索引取[\"scheduled_tasks\"]；全部数组元素个数，无状态过滤。",
+      "measurement_scope": "PCConfig现行筛选范围scheduled_tasks共140项，含138项有用途登记任务与2项SoftLanding系统临时任务；非Windows全系统任务总数。",
       "scope_status": "verified",
       "manual_reason": "needs_admin_rescan",
-      "manual_route": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。",
+      "manual_route": "由PCConfig Owner以Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -IncludeRuntime -Json，核对observer_elevated=true和task_visibility_complete=true，读取现行筛选范围的任务数与enabled状态；不从registries/tasks.json恢复投影替代现场，不写任务登记、不运行任务。",
       "field": "screens[0].text"
     },
     {
@@ -3928,8 +3928,8 @@
       "page": "pcconfig",
       "screen": "pcconfig-22",
       "label": "自动任务人话说明条数",
-      "current_value": 145,
-      "as_of": "2026-10-07",
+      "current_value": 165,
+      "as_of": "2026-10-22",
       "category": "某个 JSON 字段",
       "source_location": "E:\\PCConfig\\registries\\task_purpose_catalog.json",
       "retrieve": {
@@ -3943,8 +3943,8 @@
       "automatic": true,
       "private": false,
       "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
-      "refreshed_value": 145,
+      "report_ref": "E:/Documents/Codex/2026-10-21/10-22-09-59-c417a025-e280/outputs/pcconfig-task-counts.json",
+      "refreshed_value": 165,
       "affected_screens": [
         "pcconfig-22"
       ],
@@ -3960,30 +3960,30 @@
       "page": "pcconfig",
       "screen": "pcconfig-11",
       "label": "已启用任务数",
-      "current_value": 90,
-      "as_of": "2026-10-07",
+      "current_value": 99,
+      "as_of": "2026-10-22",
       "category": "人工",
-      "source_location": "E:\\PCConfig\\registries\\tasks.json",
+      "source_location": "E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -IncludeRuntime -Json；2026-10-22 10:43:46管理员完整只读现场，非registries/tasks.json恢复投影",
       "retrieve": {
         "kind": "manual",
-        "instructions": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。"
+        "instructions": "由PCConfig Owner以Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -IncludeRuntime -Json，核对observer_elevated=true和task_visibility_complete=true，读取现行筛选范围的任务数与enabled状态；不从registries/tasks.json恢复投影替代现场，不写任务登记、不运行任务。"
       },
       "automatic": false,
       "private": false,
       "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
-      "refreshed_value": 90,
+      "report_ref": "E:/Documents/Codex/2026-10-21/10-22-09-59-c417a025-e280/outputs/pcconfig-task-counts.json",
+      "refreshed_value": 99,
       "affected_screens": [
         "pcconfig-11",
         "pcconfig-22"
       ],
       "registry_number": "n-tasks-enabled",
       "original_value_index": 0,
-      "page_pattern": "\\ 个，不算\\ Windows\\ 自带的。其中\\ ([\\d,]+(?:\\.\\d+)?)\\ 个开着、",
+      "page_pattern": "其中 ([\\d,]+) 个开着",
       "manual_reason": "needs_admin_rescan",
-      "manual_route": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。",
+      "manual_route": "由PCConfig Owner以Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -IncludeRuntime -Json，核对observer_elevated=true和task_visibility_complete=true，读取现行筛选范围的任务数与enabled状态；不从registries/tasks.json恢复投影替代现场，不写任务登记、不运行任务。",
       "scope_status": "verified",
-      "measurement_scope": "已启用任务数原口径；未伪造现场结果",
+      "measurement_scope": "上述完整现场140项中enabled=true为99项，含1项SoftLanding临时任务。",
       "field": "screens[10].text"
     },
     {
@@ -3991,19 +3991,19 @@
       "page": "pcconfig",
       "screen": "pcconfig-11",
       "label": "已停用任务数",
-      "current_value": 37,
-      "as_of": "2026-10-07",
+      "current_value": 41,
+      "as_of": "2026-10-22",
       "category": "人工",
-      "source_location": "E:\\PCConfig\\registries\\tasks.json",
+      "source_location": "E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -IncludeRuntime -Json；2026-10-22 10:43:46管理员完整只读现场，非registries/tasks.json恢复投影",
       "retrieve": {
         "kind": "manual",
-        "instructions": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。"
+        "instructions": "由PCConfig Owner以Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -IncludeRuntime -Json，核对observer_elevated=true和task_visibility_complete=true，读取现行筛选范围的任务数与enabled状态；不从registries/tasks.json恢复投影替代现场，不写任务登记、不运行任务。"
       },
       "automatic": false,
       "private": false,
       "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
-      "refreshed_value": 37,
+      "report_ref": "E:/Documents/Codex/2026-10-21/10-22-09-59-c417a025-e280/outputs/pcconfig-task-counts.json",
+      "refreshed_value": 41,
       "affected_screens": [
         "pcconfig-11",
         "pcconfig-22"
@@ -4012,9 +4012,9 @@
       "original_value_index": 1,
       "page_pattern": "\\ 个开着、([\\d,]+(?:\\.\\d+)?)\\ 个停着",
       "manual_reason": "needs_admin_rescan",
-      "manual_route": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。",
+      "manual_route": "由PCConfig Owner以Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -IncludeRuntime -Json，核对observer_elevated=true和task_visibility_complete=true，读取现行筛选范围的任务数与enabled状态；不从registries/tasks.json恢复投影替代现场，不写任务登记、不运行任务。",
       "scope_status": "verified",
-      "measurement_scope": "已停用任务数原口径；未伪造现场结果",
+      "measurement_scope": "上述完整现场140项中enabled=false为41项，含1项SoftLanding临时任务。",
       "field": "screens[10].text"
     },
     {
@@ -4022,19 +4022,19 @@
       "page": "pcconfig",
       "screen": "pcconfig-11",
       "label": "电脑配置自己的任务数",
-      "current_value": 31,
-      "as_of": "2026-10-07",
+      "current_value": 39,
+      "as_of": "2026-10-22",
       "category": "人工",
-      "source_location": "E:\\PCConfig\\registries\\task_purpose_catalog.json + dashboard_sources.json",
+      "source_location": "E:/PCConfig/registries/task_purpose_catalog.json；entries中source=windows的138项稳定用途登记，按owner_project归组；不含2项SoftLanding临时观察任务",
       "retrieve": {
         "kind": "manual",
-        "instructions": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。"
+        "instructions": "只读现行task_purpose_catalog.json，筛选source=windows后按owner_project核对PCConfig、其它项目及第三方软件；另2项SoftLanding系统临时任务按现行规则只作现场观察，不计用途缺口，不写分类。"
       },
       "automatic": false,
       "private": false,
       "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
-      "refreshed_value": 31,
+      "report_ref": "E:/Documents/Codex/2026-10-21/10-22-09-59-c417a025-e280/outputs/pcconfig-task-counts.json",
+      "refreshed_value": 39,
       "affected_screens": [
         "pcconfig-11"
       ],
@@ -4043,9 +4043,9 @@
       "page_pattern": "([\\d,]+) 个 · 电脑配置自己的",
       "field": "screens[10].text",
       "manual_reason": "needs_admin_rescan",
-      "manual_route": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。",
+      "manual_route": "只读现行task_purpose_catalog.json，筛选source=windows后按owner_project核对PCConfig、其它项目及第三方软件；另2项SoftLanding系统临时任务按现行规则只作现场观察，不计用途缺口，不写分类。",
       "scope_status": "verified",
-      "measurement_scope": "电脑配置自己的任务数原口径；未伪造现场结果"
+      "measurement_scope": "现行用途目录source=windows且owner_project=E:/PCConfig，共39项。"
     },
     {
       "id": "pcconfig-n-tasks-split-1",
@@ -4053,17 +4053,17 @@
       "screen": "pcconfig-11",
       "label": "别的项目任务数",
       "current_value": 30,
-      "as_of": "2026-10-07",
+      "as_of": "2026-10-22",
       "category": "人工",
-      "source_location": "E:\\PCConfig\\registries\\task_purpose_catalog.json + dashboard_sources.json",
+      "source_location": "E:/PCConfig/registries/task_purpose_catalog.json；entries中source=windows的138项稳定用途登记，按owner_project归组；不含2项SoftLanding临时观察任务",
       "retrieve": {
         "kind": "manual",
-        "instructions": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。"
+        "instructions": "只读现行task_purpose_catalog.json，筛选source=windows后按owner_project核对PCConfig、其它项目及第三方软件；另2项SoftLanding系统临时任务按现行规则只作现场观察，不计用途缺口，不写分类。"
       },
       "automatic": false,
       "private": false,
       "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
+      "report_ref": "E:/Documents/Codex/2026-10-21/10-22-09-59-c417a025-e280/outputs/pcconfig-task-counts.json",
       "refreshed_value": 30,
       "affected_screens": [
         "pcconfig-11"
@@ -4071,28 +4071,28 @@
       "field": "screens[10].text",
       "page_pattern": "([\\d,]+) 个 · 别的项目的",
       "manual_reason": "needs_admin_rescan",
-      "manual_route": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。",
+      "manual_route": "只读现行task_purpose_catalog.json，筛选source=windows后按owner_project核对PCConfig、其它项目及第三方软件；另2项SoftLanding系统临时任务按现行规则只作现场观察，不计用途缺口，不写分类。",
       "scope_status": "verified",
-      "measurement_scope": "别的项目任务数原口径；未伪造现场结果"
+      "measurement_scope": "现行用途目录source=windows且属于PCConfig以外项目，共30项。"
     },
     {
       "id": "pcconfig-n-tasks-split-2",
       "page": "pcconfig",
       "screen": "pcconfig-11",
       "label": "第三方软件任务数",
-      "current_value": 66,
-      "as_of": "2026-10-07",
+      "current_value": 69,
+      "as_of": "2026-10-22",
       "category": "人工",
-      "source_location": "E:\\PCConfig\\registries\\task_purpose_catalog.json + dashboard_sources.json",
+      "source_location": "E:/PCConfig/registries/task_purpose_catalog.json；entries中source=windows的138项稳定用途登记，按owner_project归组；不含2项SoftLanding临时观察任务",
       "retrieve": {
         "kind": "manual",
-        "instructions": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。"
+        "instructions": "只读现行task_purpose_catalog.json，筛选source=windows后按owner_project核对PCConfig、其它项目及第三方软件；另2项SoftLanding系统临时任务按现行规则只作现场观察，不计用途缺口，不写分类。"
       },
       "automatic": false,
       "private": false,
       "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
-      "refreshed_value": 66,
+      "report_ref": "E:/Documents/Codex/2026-10-21/10-22-09-59-c417a025-e280/outputs/pcconfig-task-counts.json",
+      "refreshed_value": 69,
       "affected_screens": [
         "pcconfig-11"
       ],
@@ -4101,9 +4101,9 @@
       "page_pattern": "([\\d,]+) 个 · 第三方软件自带的",
       "field": "screens[10].text",
       "manual_reason": "needs_admin_rescan",
-      "manual_route": "由PCConfig Owner以SYSTEM/Administrator只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json，核对schema=pcconfig.tasks.v1、observer_elevated=true和task_visibility_complete=true，再按本条source_location与measurement_scope核对聚合；不写任务登记、不输出任务参数或正文。失败保留旧值旧日期并标Unknown，修复去向为PCConfig Owner的只读扫描入口或运行通道。",
+      "manual_route": "只读现行task_purpose_catalog.json，筛选source=windows后按owner_project核对PCConfig、其它项目及第三方软件；另2项SoftLanding系统临时任务按现行规则只作现场观察，不计用途缺口，不写分类。",
       "scope_status": "verified",
-      "measurement_scope": "第三方软件任务数原口径；未伪造现场结果"
+      "measurement_scope": "现行用途目录source=windows且归第三方软件，共69项。"
     },
     {
       "id": "pcconfig-n-rebuild-0",
@@ -32126,24 +32126,25 @@
       "id": "r3-pcconfig-full-task-classification-boundary",
       "page": "pcconfig",
       "screen": "pcconfig-01",
-      "label": "完整任务分类尚未登记的Unknown边界",
-      "current_value": "三组完整分类因 3 项未登记仍 Unknown",
-      "as_of": "2026-10-12",
+      "label": "完整任务分类与系统临时任务边界",
+      "current_value": "138 项有用途说明，2 项为无需固定登记的 Windows SoftLanding 临时任务",
+      "as_of": "2026-10-22",
       "category": "现状边界",
       "field": "status_line.source",
-      "page_pattern": "（(三组完整分类因 3 项未登记仍 Unknown)）",
-      "source_location": "PCConfig Owner的SYSTEM完整只读scan_tasks结果及任务登记分类",
+      "page_pattern": "(138 项有用途说明，2 项为无需固定登记的 Windows SoftLanding 临时任务)",
+      "source_location": "PCConfig Owner 2026-10-22 10:43:46管理员完整只读scan_tasks结果及现行task_purpose_catalog.json；扫描器与校验器的SoftLanding稳定登记排除规则",
       "retrieve": {
         "kind": "manual",
-        "instructions": "PCConfig Owner只读对照SYSTEM扫描与任务登记，确认3项未登记任务如何归组；未完成前保留Unknown及旧状态日期，不把140总任务已读冒充三组分类都已读。"
+        "instructions": "只读对照完整任务现场与用途目录；138项本机任务按用途登记，另2个Windows SoftLanding临时项按源码规则只观察、不作稳定登记；不把它们计为用途缺口。"
       },
       "automatic": false,
       "scope_status": "verified",
-      "measurement_scope": "此记录只注明完整分类Unknown，不影响已读总任务140。",
+      "measurement_scope": "PCConfig现行筛选范围140项=138项稳定用途登记+2项Windows SoftLanding临时观察项；非Windows全系统任务总数。",
       "manual_reason": "judgment",
-      "manual_route": "PCConfig Owner对照完整SYSTEM只读扫描与现行任务说明登记处理3项未登记分类；不运行业务任务、不写分类。",
+      "manual_route": "PCConfig Owner只读复用完整扫描并核对当前用途目录及SoftLanding排除规则；不运行业务任务、不写任务登记。",
       "private": false,
-      "historical": false
+      "historical": false,
+      "report_ref": "E:/Documents/Codex/2026-10-21/10-22-09-59-c417a025-e280/outputs/pcconfig-task-counts.json"
     },
     {
       "id": "r3-phone-collector-phone-period",

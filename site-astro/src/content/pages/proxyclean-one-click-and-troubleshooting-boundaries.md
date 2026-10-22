@@ -33,7 +33,7 @@
  },
  "source": {
   "page": "sources/pages/proxyclean-one-click-and-troubleshooting-boundaries/page.json",
-  "sha256": "dd7893a5ee435e56432a6e43fdddb665897e968f22ed1e57cfcf6148b908a7e2",
+  "sha256": "1b1a46b8e3e5cc2305805386b3446349d922390096cb420df09a28f0078a6cef",
   "converted_at_beijing": "2026-10-22T08:32:35+08:00"
  }
 }
@@ -579,7 +579,7 @@ ProxyClean · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. 打开窗口不要求预先提权；只有所选受保护动作需要时才请求 UAC（Windows 管理员确认）。关闭代理在 UAC 回来后带着原选择、按同一 Windows 用户重核身份直接继续，不再另外确认；普通修复和维护工具仍保留各自的预览确认。旧快捷方式保留在旧版入口。",
+     "text_ref": "1. 窗口打开后只读；普通修复先确认范围，需要管理员权限的操作自动提权，Windows 需要时会显示 UAC（管理员确认）。关闭代理在 UAC 回来后带着原选择、按同一 Windows 用户重核身份直接继续，不再另外确认；普通修复和维护工具仍保留各自的预览确认。旧快捷方式保留在旧版入口。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -601,7 +601,7 @@ ProxyClean · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. 打开窗口不要求预先提权；只有所选受保护动作需要时才请求 UAC（Windows 管理员确认）。关闭代理在 UAC 回来后带着原选择、按同一 Windows 用户重核身份直接继续，不再另外确认；普通修复和维护工具仍保留各自的预览确认。旧快捷方式保留在旧版入口。",
+     "text_ref": "1. 窗口打开后只读；普通修复先确认范围，需要管理员权限的操作自动提权，Windows 需要时会显示 UAC（管理员确认）。关闭代理在 UAC 回来后带着原选择、按同一 Windows 用户重核身份直接继续，不再另外确认；普通修复和维护工具仍保留各自的预览确认。旧快捷方式保留在旧版入口。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -632,7 +632,7 @@ ProxyClean · 功能说明
 
 ### 关键规则与设计选择
 
-1. 打开窗口不要求预先提权；只有所选受保护动作需要时才请求 UAC（Windows 管理员确认）。关闭代理在 UAC 回来后带着原选择、按同一 Windows 用户重核身份直接继续，不再另外确认；普通修复和维护工具仍保留各自的预览确认。旧快捷方式保留在旧版入口。
+1. 窗口打开后只读；普通修复先确认范围，需要管理员权限的操作自动提权，Windows 需要时会显示 UAC（管理员确认）。关闭代理在 UAC 回来后带着原选择、按同一 Windows 用户重核身份直接继续，不再另外确认；普通修复和维护工具仍保留各自的预览确认。旧快捷方式保留在旧版入口。
 
 2. 日常预防姿态是只保留一个主要代理路径：客户端 TUN/虚拟网卡负责出站，终端和项目不固定 HTTP_PROXY/HTTPS_PROXY/ALL_PROXY 或第三方 API 端点；System Proxy 默认关闭。
 
@@ -648,7 +648,7 @@ ProxyClean · 功能说明
 
 ## 当前怎样实现
 
-- 根目录唯一 VBS 检查完整文件包并启动 ControlCenter.ps1；首页只做本机只读检查，不连公网，异常启动有中文提示。旧批处理及重复 VBS 移到旧版入口并修正相对路径。
+- 根目录唯一 VBS 检查完整文件包并启动 ControlCenter.ps1；首页只做本机只读检查，不连公网，异常启动有中文提示。普通修复由工作流自动调用管理员子进程；提权失败后，窗口仍保留“授权后继续”的备用重试分支，这次没有实跑该分支。旧批处理及重复 VBS 移到旧版入口并修正相对路径。
 
 ::screen{#proxyclean-one-click-and-troubleshooting-boundaries-06 section="tech"}
 

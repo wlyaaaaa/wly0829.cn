@@ -37,7 +37,7 @@
  },
  "source": {
   "page": "sources/pages/timeaudit-runtime-reliability/page.json",
-  "sha256": "cf6ab7764fbf2391c7ec4c671e2fce93df836cb668ad175ddea115ff552543bf",
+  "sha256": "e666383947a0e3e47ee358a772b08c0ab7ae7f19c2ad5557f53daf44c4af8477",
   "converted_at_beijing": "2026-10-22T08:32:41+08:00"
  }
 }
@@ -721,7 +721,7 @@ TimeAudit 大盘停止更新时，在已接入本机诊断的 AI 对话中说明
 
 ## 执行流程
 
-1. 交互用户会话提权启动。
+1. 在 Windows 交互用户会话中启动主程序，非管理员时由现有入口自动隐藏提权，保留原 Python 和参数；start_all.bat 通过 Start-ElevatedEngine.ps1 启动。
 
 ::screen{#timeaudit-runtime-reliability-07 section="tech"}
 

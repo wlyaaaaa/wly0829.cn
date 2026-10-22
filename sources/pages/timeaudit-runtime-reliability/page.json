@@ -114,7 +114,7 @@
       "id": "timeaudit-runtime-reliability-06",
       "section": "tech",
       "title": "技术实现与依据（二）",
-      "text": "## 技术实现与依据（二）\n\n- start_all.bat 固定 CRLF、WorkingDirectory 和项目 `.venv` 里的 pythonw.exe（从 Python 3.11 基座重建，当前 3.11.9）；保留已有的精确 AHK 实例，容器用 `up -d --no-recreate` 启动，配置变更要另行部署，不靠重启自动套用。\n\n- 历史诊断 summary 只做有界聚合：数据库语句 12 秒、锁 1 秒，外层总超时 14 秒，输出上限 1 MiB，最长 168 小时，拒绝畸形、非有限或意外字段。原先给电脑配置项目的异常摘要 v2（连续观测、游标和待重查标记）已于 2026-09-29 删除，不再运行。\n\n- 看门狗最多每 10 分钟用现有数据库容器只读查询一次，按北京时间切今天和昨天，写 CPU 封装与显卡板功率积分的用电回执；采样间隔 60 秒以上不累计。回执写失败不改变恢复结果和退出码，也不另起采集进程。\n\n- GUI 状态、AI 健康与看门狗读同一个 timeaudit_health.py；core-only 排除备份、黑匣子和上一次守护结果，避免递归。exit 2 可以是有效的 degraded/unavailable，心跳、实际持久写入和最后守护结果分开判断；可选两秒开销统计只看精确主采集链子进程，不含独立传感器、Docker 与原生记录，RSS 相加不是独占内存。\n\n## 执行流程\n\n1. 交互用户会话提权启动。",
+      "text": "## 技术实现与依据（二）\n\n- start_all.bat 固定 CRLF、WorkingDirectory 和项目 `.venv` 里的 pythonw.exe（从 Python 3.11 基座重建，当前 3.11.9）；保留已有的精确 AHK 实例，容器用 `up -d --no-recreate` 启动，配置变更要另行部署，不靠重启自动套用。\n\n- 历史诊断 summary 只做有界聚合：数据库语句 12 秒、锁 1 秒，外层总超时 14 秒，输出上限 1 MiB，最长 168 小时，拒绝畸形、非有限或意外字段。原先给电脑配置项目的异常摘要 v2（连续观测、游标和待重查标记）已于 2026-09-29 删除，不再运行。\n\n- 看门狗最多每 10 分钟用现有数据库容器只读查询一次，按北京时间切今天和昨天，写 CPU 封装与显卡板功率积分的用电回执；采样间隔 60 秒以上不累计。回执写失败不改变恢复结果和退出码，也不另起采集进程。\n\n- GUI 状态、AI 健康与看门狗读同一个 timeaudit_health.py；core-only 排除备份、黑匣子和上一次守护结果，避免递归。exit 2 可以是有效的 degraded/unavailable，心跳、实际持久写入和最后守护结果分开判断；可选两秒开销统计只看精确主采集链子进程，不含独立传感器、Docker 与原生记录，RSS 相加不是独占内存。\n\n## 执行流程\n\n1. 在 Windows 交互用户会话中启动主程序，非管理员时由现有入口自动隐藏提权，保留原 Python 和参数；start_all.bat 通过 Start-ElevatedEngine.ps1 启动。",
       "links": [],
       "anchors": [],
       "live": null,
