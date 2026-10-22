@@ -34,13 +34,13 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-09 10:15"
+    "at": "2026-10-20 00:04"
    },
    "facts": [
-    "近 7 天 AI 用了 1 次"
+    "近 7 天 AI 用了 2 次"
    ],
-   "as_of": "2026-10-12",
-   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
+   "as_of": "2026-10-20",
+   "source": "AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
   },
   "public": false,
   "repo_url": null,
@@ -315,8 +315,8 @@
  },
  "source": {
   "page": "sources/pages/skill-pdf-render-safe/page.json",
-  "sha256": "402cbf9b9e0b8d0bd24d555da5c2684ad62fbc000a4019543aac615ee3aa65ba",
-  "converted_at_beijing": "2026-10-20T07:45:06+08:00"
+  "sha256": "03de1049e7d74dc78584bad217d71c4aae3498c1363eb33de8a8dcb11348ecbc",
+  "converted_at_beijing": "2026-10-22T08:32:39+08:00"
  }
 }
 ---
@@ -359,15 +359,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 9 日 10:15",
+       "text": "偶尔用 · 上次使用 10 月 20 日 00:04",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 1 次",
+       "text": "近 7 天 AI 用了 2 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）",
+     "static_note": "截至 10 月 20 日 · AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。",
      "row": "intro"
     },
     {
@@ -438,15 +438,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 9 日 10:15",
+       "text": "偶尔用 · 上次使用 10 月 20 日 00:04",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 1 次",
+       "text": "近 7 天 AI 用了 2 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
+     "static_note": "截至 10 月 20 日 · AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
     },
     {
      "type": "prose",
@@ -504,12 +504,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/illustrations/页面扇形网格核验.png",
+   "asset": "_library/illustrations/页面扇形网格核验-bright-green-20261022.png",
    "fallback": false,
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "页面扇形网格核验",
    "source_phrase": "右边一幅水彩插画：一份 PDF 像扇子一样摊开成一页页的图片，铺在一张桌上排成网格；一枚放大镜停在其中一页的表格上；桌角一个小相框里放着同一份 PDF 的“复印件”，表示先复制一份再看。",
-   "sha256": "5b248feb481e7689d5abe285a3346104fe6ce031e46a31d0f178d232f7e0228a",
+   "sha256": "c17a02446cbda545535ed542464fc4e0bc181da1528a60c5becfc7d8296cf3d5",
    "status": "ready",
    "original_elements": [
     "一份 PDF 像扇子一样摊开成一页页的图片，铺在一张桌上排成网格；一枚放大镜停在其中一页的表格上；桌角一个小相框里放着同一份 PDF 的抽象图形，表示先复制一份再看"

@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/document-materials-current-matter-sources/page.json",
-  "sha256": "b41a530780f2d660122a65e7e53661b40c4a33ec610a0e809d87e99cbe29c5d9",
-  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
+  "sha256": "920e0b3263b614ad706eb2c00386e0a8998c91a53873a4c855514c3d32c9c169",
+  "converted_at_beijing": "2026-10-22T08:32:29+08:00"
  }
 }
 ---
@@ -1010,7 +1010,7 @@
 
 - PRIVATE source · formal_documents.py　输入原字节存档与语义比对、附件、相对路径解释、协议各方核对
 
-- PRIVATE tests · test_formal_documents.py　输出字段漂移和四类材料回归（28 个测试函数，展开 39 个用例，10 月 11 日静态计数）
+- PRIVATE tests · test_formal_documents.py　输出字段漂移和四类材料回归（31 个测试函数，展开 51 个用例，10 月 22 日静态计数，本次没有运行）
 
 ## 如何验证
 

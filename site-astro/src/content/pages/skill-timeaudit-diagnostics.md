@@ -34,13 +34,13 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-10 12:34"
+    "at": "2026-10-20 15:02"
    },
    "facts": [
-    "近 7 天 AI 用了 122 次"
+    "近 7 天 AI 用了 41 次"
    ],
-   "as_of": "2026-10-12",
-   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
+   "as_of": "2026-10-20",
+   "source": "AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
   },
   "public": null,
   "repo_url": null,
@@ -108,8 +108,8 @@
  },
  "source": {
   "page": "sources/pages/skill-timeaudit-diagnostics/page.json",
-  "sha256": "a548d357209e93dd221cf15f6b5f0c2cca9372d1682a7f7135a06205b258deb0",
-  "converted_at_beijing": "2026-10-22T07:02:37+08:00"
+  "sha256": "26d5b29e135d74266934c973c68ca7250e0b232f31922fa1d3c792e315d1ae08",
+  "converted_at_beijing": "2026-10-22T08:32:39+08:00"
  }
 }
 ---
@@ -154,15 +154,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 10 日 12:34",
+       "text": "常用 · 上次使用 10 月 20 日 15:02",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 122 次",
+       "text": "近 7 天 AI 用了 41 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）",
+     "static_note": "截至 10 月 20 日 · AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。",
      "row": "hero"
     },
     {
@@ -225,15 +225,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 10 日 12:34",
+       "text": "常用 · 上次使用 10 月 20 日 15:02",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 122 次",
+       "text": "近 7 天 AI 用了 41 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
+     "static_note": "截至 10 月 20 日 · AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
     },
     {
      "type": "prose",
@@ -280,12 +280,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/illustrations/main-timeaudit.png",
+   "asset": "_library/illustrations/main-timeaudit-bright-green-20261022.png",
    "fallback": false,
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "main-timeaudit",
    "source_phrase": "右上角一幅小插画：一个对话气泡连着一卷心电图纸带，纸带上一个小尖峰被放大镜照着（不画字）。",
-   "sha256": "4b03450f4e4fb2573f755522fa2e8d519ff7e1c31de3583f53d11f33df87b651",
+   "sha256": "f73ac554816451c19f7f2b18a5db3cd977e4ece9045508df29abc9b0c0cc3d4f",
    "status": "ready",
    "original_elements": [
     "一个对话气泡连着一卷心电图纸带，纸带上一个小尖峰被放大镜照着（不画字"

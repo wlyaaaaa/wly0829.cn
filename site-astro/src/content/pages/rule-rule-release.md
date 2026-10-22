@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E279",
-   "commit": "dfca0d10888eadf1b2f724da417da9079a6ef938",
-   "ruleset_sha256": "11064e71ec4ea1a426f5ced03d95d2d0a00131025c7b4c8f606c5d0c67772681",
-   "activated_at": "2026-10-21T21:20:08.660355+08:00",
+   "release": "E280",
+   "commit": "9e6c296def23c918a78334b02c597da68efd0233",
+   "ruleset_sha256": "33c65cb3c6152825d5fb89b7be9688f534ab9ebe6ffa1841358b315b98b0b87f",
+   "activated_at": "2026-10-22T08:43:25.661700+08:00",
    "file": "sources/rules/docs/contracts/agents.rule-release.md",
    "sha256": "1eb0a037a37ff6efd85a2663c2b11f029fcd0cf532932167a96534f2fea65d57",
    "public_sha256": "1eb0a037a37ff6efd85a2663c2b11f029fcd0cf532932167a96534f2fea65d57"
@@ -152,8 +152,8 @@
  },
  "source": {
   "page": "sources/pages/rule-rule-release/page.json",
-  "sha256": "16211d278cd9d6115b6821db054d4ced517ddaba1519270d3d9d540639b44f0a",
-  "converted_at_beijing": "2026-10-22T07:02:36+08:00"
+  "sha256": "f02badaf4aa014afed1ac1373fbb4f386df56fced5554ef4df4654753e6d7fd3",
+  "converted_at_beijing": "2026-10-22T09:10:17+08:00"
  }
 }
 ---
@@ -939,7 +939,7 @@ E186　E187　当前　上一版　SYSTEM
 - 发布只用 Invoke-EAgentRulesRelease.ps1 -Mode Activate，回退只用 -Mode Rollback。
 - 发布器从选定的提交取文件，生成这一版的文件清单和内容指纹，切换“当前”和“上一版”，再读回核对。
 - 只查真正参与发布的文件有没有没提交的改动：别的项目或技能正改着东西，不拦发布，也不把别人没做完的改动混进来。
-- **限制句按意思判断**：带“不得、禁止、先问本人”这类限制的句子，只是换了措辞、缩短、挪了位置，或改成指向同一版里仍然有效的同一条规则时，发布门用 GPT-6.1 Sol medium 档按意思比一次：限制管谁、管多大范围、在什么条件下、有多严都没变，就自动放行，不请本人同意，判为改写的旧句和新位置写进发布回执和版本记录。真正放宽或删掉限制，或者改动约法正文（规则根文件里“我的 AI 约法”那一节），仍要用现有的本人同意核对（附上本人那条消息的编号）；比对用不了或拿不准时，按“意思变了”处理。
+- **限制句按意思判断**：带“不得、禁止、先问本人”这类限制的句子，只是换了措辞、缩短、挪了位置，或改成指向同一版里仍然有效的同一条规则时，发布门用 GPT-6.1 Sol medium 档按意思比一次：限制管谁、管多大范围、在什么条件下、有多严都没变，就自动放行，不请本人同意，判为改写的旧句和新位置写进发布回执和版本记录。真正放宽或删掉限制，或者改动约法正文（规则根文件里“我的 AI 约法”那一节），仍要用现有的本人同意核对：发布时给发布入口加 `-OwnerApproval <本人那条消息的编号>`；比对用不了或拿不准时，按“意思变了”处理。
 
 ### 同时有人发布
 - 发布器先核对指针的内容指纹；别的任务刚发布过，就先重读，把它的结果并进来，不覆盖。
@@ -948,6 +948,7 @@ E186　E187　当前　上一版　SYSTEM
 
 ### 失败和回退
 - 发布失败，就把原来的指针和入口恢复原样，旧版照常能用。
+- “当前”指针丢了、但发布目录里的 E 版本目录还在时，核验会报 `e_rules_current_pointer_missing`：这不等于没有规则。照现存版本目录里的 `release.json` 把指针重建回来，再重新核验一遍；不当成重新安装，不重新生成同一个代号去覆盖，也不跳过核验直接用。
 - 发布成功后只留“当前”和“上一版”两份目录，都能重新生成；更早的历史由私有 Git 保存。
 - 例（9 月 28 日核对时）：当时发布目录里只有 E187 和 E186 两份；E186 的 14 个文件逐个比对内容指纹，全部对得上。
 - 回退把规则正文、规则目录表和入口模板一起恢复到上一版。
@@ -1289,7 +1290,7 @@ E186　E187　当前　上一版　SYSTEM
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.rule-release.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "1eb0a037a37ff6efd85a2663c2b11f029fcd0cf532932167a96534f2fea65d57",
    "public_sha256": "1eb0a037a37ff6efd85a2663c2b11f029fcd0cf532932167a96534f2fea65d57",
    "from": null,
@@ -1319,7 +1320,7 @@ E186　E187　当前　上一版　SYSTEM
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E279版，一字不改"
+     "text_ref": "原文·E280版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1349,7 +1350,7 @@ E186　E187　当前　上一版　SYSTEM
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E279版，一字不改"
+     "text_ref": "原文·E280版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1442,7 +1443,7 @@ E186　E187　当前　上一版　SYSTEM
 }
 ```
 
-原文 · E279 版，一字不改
+原文 · E280 版，一字不改
 
 # 规则发布与恢复
 
@@ -1472,7 +1473,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.rule-release.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "1eb0a037a37ff6efd85a2663c2b11f029fcd0cf532932167a96534f2fea65d57",
    "public_sha256": "1eb0a037a37ff6efd85a2663c2b11f029fcd0cf532932167a96534f2fea65d57",
    "from": "## 发布和回退",
@@ -1501,7 +1502,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E279版·续"
+     "text_ref": "原文·E280版·续"
     },
     {
      "type": "source_text_card",
@@ -1524,7 +1525,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E279版·续"
+     "text_ref": "原文·E280版·续"
     },
     {
      "type": "source_text_card",
@@ -1594,7 +1595,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E279 版 · 续
+原文 · E280 版 · 续
 
 ## 发布和回退
 

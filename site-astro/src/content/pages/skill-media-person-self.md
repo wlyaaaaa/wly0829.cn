@@ -34,13 +34,13 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-09-29 03:04"
+    "at": "2026-10-11 17:48"
    },
    "facts": [
     "近 7 天没用过"
    ],
-   "as_of": "2026-10-12",
-   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+   "as_of": "2026-10-20",
+   "source": "AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
   },
   "public": false,
   "repo_url": null,
@@ -100,8 +100,8 @@
  },
  "source": {
   "page": "sources/pages/skill-media-person-self/page.json",
-  "sha256": "6f8fcbf7dbf79af9dc04f60c43dc3cb69fe3b25051369fc2eb92ad028cb2e73d",
-  "converted_at_beijing": "2026-10-12T05:03:50+08:00"
+  "sha256": "51f517a4da923b7f63fe3a5ddc87f1fe6d19662b1b1c264185ed0740834d8052",
+  "converted_at_beijing": "2026-10-22T08:32:39+08:00"
  }
 }
 ---
@@ -139,7 +139,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 29 日 03:04",
+       "text": "偶尔用 · 上次使用 10 月 11 日 17:48",
        "state": "ok"
       },
       {
@@ -147,7 +147,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 20 日 · AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。",
      "row": "hero"
     },
     {
@@ -199,7 +199,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 29 日 03:04",
+       "text": "偶尔用 · 上次使用 10 月 11 日 17:48",
        "state": "ok"
       },
       {
@@ -207,7 +207,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 20 日 · AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
     },
     {
      "type": "prose",
@@ -313,12 +313,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/illustrations/手机照片通用构图.png",
+   "asset": "_library/illustrations/手机照片通用构图-bright-green-20261022.png",
    "fallback": false,
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "手机照片通用构图",
    "source_phrase": "横版：左边大标题毛笔艺术字“照片录音里有没有我”，下面两行说明；右边一幅水彩插画：一张合影照片上一张脸被绿色细框框住，旁边一条录音波形，其中一段标成绿色。",
-   "sha256": "753312b6e6ed1ff47c67a989c96803d31f85ce2566a2b45440dfb21a9af85169",
+   "sha256": "bc42e3fa2c86d2044abe310dfccdcd148bc207eb33267c6e095433e75ba93899",
    "status": "ready",
    "original_elements": [
     "一张合影照片上一张脸被绿色细框框住，旁边一条录音波形，其中一段标成绿色"
@@ -620,12 +620,12 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/illustrations/手机照片通用构图.png",
+   "asset": "_library/illustrations/手机照片通用构图-bright-green-20261022.png",
    "fallback": false,
    "semantic_status": "round2_same_project_main_reuse",
    "key": "手机照片通用构图",
    "source_phrase": "横版：左上标题“怎么判断”。下面左右两栏，各是一条从上到下的三步小流程，每步一个圆圈编号、粗体小标题和一两行小字，步与步之间绿色箭头：左栏顶上一个照片图标和小标题“照片”，右栏顶上一个麦克风图标和小标题“录音和视频”。最下面横跨两条细长圆角卡片：上面一条是“一例”（左边一个小雪景相册图标），下面一条放最后那句话。风格照照片视频录音管理页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
-   "sha256": "753312b6e6ed1ff47c67a989c96803d31f85ce2566a2b45440dfb21a9af85169",
+   "sha256": "bc42e3fa2c86d2044abe310dfccdcd148bc207eb33267c6e095433e75ba93899",
    "status": "ready"
   },
   {
@@ -838,12 +838,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/illustrations/手机照片通用构图.png",
+   "asset": "_library/illustrations/手机照片通用构图-bright-green-20261022.png",
    "fallback": false,
    "semantic_status": "round2_same_project_main_reuse",
    "key": "手机照片通用构图",
    "source_phrase": "横版：左上标题“能做的事”。下面六张同样大小的圆角小卡片，两行三列，每张左边一个小水彩图标，粗体一句，下面一行小字。风格照照片视频录音管理页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
-   "sha256": "753312b6e6ed1ff47c67a989c96803d31f85ce2566a2b45440dfb21a9af85169",
+   "sha256": "bc42e3fa2c86d2044abe310dfccdcd148bc207eb33267c6e095433e75ba93899",
    "status": "ready"
   },
   {

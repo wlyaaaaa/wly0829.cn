@@ -33,12 +33,14 @@
   "based_on": {
    "commit": "cc41e514b2886fff8e04b1883562d25bd59089ef",
    "commit_time": "2026-10-11T13:57:49+08:00"
-  }
+  },
+  "public": false,
+  "repo_url": null
  },
  "source": {
   "page": "sources/pages/video-scaffold-deterministic-render/page.json",
-  "sha256": "62d3a162e94ff16370651cbdca719dae6d8fc757d5afc074db584f343fc933d3",
-  "converted_at_beijing": "2026-10-11T19:04:27+08:00"
+  "sha256": "b416ca48bc00e3b5a4aa355856492ff1b4163374263ef042761bc845617ca579",
+  "converted_at_beijing": "2026-10-22T08:32:42+08:00"
  }
 }
 ---
@@ -55,10 +57,6 @@
    {
     "text": "回到项目 → 本地视频制作",
     "href": "/projects/video-scaffold/"
-   },
-   {
-    "text": "GitHub",
-    "href": "https://github.com/wlyaaaaa/video-scaffold"
    },
    {
     "text": "复制 AI 续作说明",
@@ -97,7 +95,7 @@
     },
     {
      "type": "action_button",
-     "text_ref": "〔回到项目 → 本地视频制作〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "text_ref": "〔回到项目 → 本地视频制作〕　**私有**　〔复制 AI 续作说明〕",
      "row": "top",
      "brand_icons": {
       "GitHub": "_library/icons/GitHub标志.png"
@@ -138,7 +136,7 @@
     },
     {
      "type": "action_button",
-     "text_ref": "〔回到项目 → 本地视频制作〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "text_ref": "〔回到项目 → 本地视频制作〕　**私有**　〔复制 AI 续作说明〕",
      "brand_icons": {
       "GitHub": "_library/icons/GitHub标志.png"
      }
@@ -171,7 +169,7 @@
 
 # 每帧按时间算出来，中断后也不能把新旧画面混在一起
 
-〔回到项目 → 本地视频制作〕　〔GitHub〕　〔复制 AI 续作说明〕
+〔回到项目 → 本地视频制作〕　**私有**　〔复制 AI 续作说明〕
 
 video-scaffold · 功能说明
 

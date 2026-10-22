@@ -28,13 +28,13 @@
   "status_line": {
    "state": "在用",
    "as_of": "2026-10-11",
-   "source": "来源仓库 b51db6d8（北京 10/19 23:40）的定位读取规则与 b334b3aa（北京 10/8 00:23）；10/11 16:35–16:39 只读 activity、device-inventory、status；本次没有新采集、没有连接手机或调用高德，历史验收保留原日期"
+   "source": "来源仓库现为 4717320（北京 10/22 07:22）；实现说明沿用 b51db6d8（北京 10/19 23:40）的定位读取规则与 b334b3aa（北京 10/8 00:23）；10/11 16:35–16:39 只读 activity、device-inventory、status；10/22 06:47–06:48 另读来源类别数、Collector 事件条数与已存时期（各自注明）；本次没有新采集、没有连接手机或调用高德，历史验收保留原日期"
   }
  },
  "source": {
   "page": "sources/pages/daily-preferences-evidence-query/page.json",
-  "sha256": "b13a97a7ce1ebde6f39ba7676799b1d679b0874fea430e8f04ac926b29e2930a",
-  "converted_at_beijing": "2026-10-20T08:56:31+08:00"
+  "sha256": "78a54dc343764f64c7207f9bc1a57f2a1f2829a8a3e2aa5b84bc6bcbdf17a780",
+  "converted_at_beijing": "2026-10-22T08:32:28+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 b51db6d8（北京 10/19 23:40）的定位读取规则与 b334b3aa（北京 10/8 00:23）；10/11 16:35–16:39 只读 activity、device-inventory、status；本次没有新采集、没有连接手机或调用高德，历史验收保留原日期",
+     "static_note": "截至 10 月 11 日 · 来源仓库现为 4717320（北京 10/22 07:22）；实现说明沿用 b51db6d8（北京 10/19 23:40）的定位读取规则与 b334b3aa（北京 10/8 00:23）；10/11 16:35–16:39 只读 activity、device-inventory、status；10/22 06:47–06:48 另读来源类别数、Collector 事件条数与已存时期（各自注明）；本次没有新采集、没有连接手机或调用高德，历史验收保留原日期",
      "row": "top"
     },
     {
@@ -131,7 +131,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 b51db6d8（北京 10/19 23:40）的定位读取规则与 b334b3aa（北京 10/8 00:23）；10/11 16:35–16:39 只读 activity、device-inventory、status；本次没有新采集、没有连接手机或调用高德，历史验收保留原日期"
+     "static_note": "截至 10 月 11 日 · 来源仓库现为 4717320（北京 10/22 07:22）；实现说明沿用 b51db6d8（北京 10/19 23:40）的定位读取规则与 b334b3aa（北京 10/8 00:23）；10/11 16:35–16:39 只读 activity、device-inventory、status；10/22 06:47–06:48 另读来源类别数、Collector 事件条数与已存时期（各自注明）；本次没有新采集、没有连接手机或调用高德，历史验收保留原日期"
     },
     {
      "type": "action_button",
@@ -631,7 +631,7 @@
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-2026-10-11 只读：正常 activity 入口已返回 phone.collector.events，9 月 28 日到 10 月 6 日九个完整北京日 trusted=true，9 月 27 日和 10 月 7 日两天是部分日、trusted=false；这是读取截至 10 月 7 日已入库的原件，本次没有新采集。device-inventory 选 10 月 7 日 07:31 的 Collector 清单，803 个包。旧 9 月 8 日 190266 记录/48 卡只是历史聚合；旧 AppUsage 时长在所有时期都不可信。
+2026-10-11 只读：正常 activity 入口已返回 phone.collector.events，9 月 28 日到 10 月 6 日九个完整北京日 trusted=true，9 月 27 日和 10 月 7 日两天是部分日、trusted=false；这是读取截至 10 月 7 日已入库的原件，本次没有新采集。device-inventory 选 10 月 7 日 07:31 的 Collector 清单，803 个包。2026-10-22 06:48 只读：Collector 已存使用事件的最后原生事件日期为 10 月 21 日（北京时间）；这是已存原件的时期，不证明之后持续或每天完整覆盖，这次没有重跑 activity 的逐日 trusted 判断，也没有重选 device-inventory 清单。旧 9 月 8 日 190266 记录/48 卡只是历史聚合；旧 AppUsage 时长在所有时期都不可信。
 
 ## 关键规则与设计选择
 
@@ -720,11 +720,11 @@
 
 13. 真实订单权重高于长 AI 文本；Steam 累计游玩时长只保留为事实，不参与偏好评分。当前免费游戏在其他条件相同时只低 0.5 分。
 
-14. profile/evidence的source_discovery可见实际登记的逻辑来源（2026-10-11 为 34 类，其中 33 类有现行记录，160 个来源实例）、本次检索范围和后续读取入口；有相关认识时不同时扫描全部原文，未匹配认识时仍能发现原文候选。
+14. profile/evidence的source_discovery可见实际登记的逻辑来源（2026-10-22 06:48 只读为 35 类，其中 34 类有现行记录，163 个来源实例；10 月 11 日是 34 类、33 类、160 个）、本次检索范围和后续读取入口；有相关认识时不同时扫描全部原文，未匹配认识时仍能发现原文候选。
 
 15. facts可在明确逻辑来源/平台/实例时无关键词分页浏览；长正文默认标preview_not_full，--full或original才给完整内容，不能把预览当全文已读。
 
-16. activity按实际问句期间分别返回手机和电脑，北京时间逐日摘要、主要应用、覆盖、状态、异常与省略数量。手机优先用 Collector 系统事件：完整北京日可信，部分日只报已观察部分，有 Collector 覆盖的时段不再叠加 AppUsage。手机亮屏、应用活动和桌面前台口径不同，两设备时长不相加。phone_usage_events 的 143,822 条是事件记录量，不是应用打开次数。
+16. activity按实际问句期间分别返回手机和电脑，北京时间逐日摘要、主要应用、覆盖、状态、异常与省略数量。手机优先用 Collector 系统事件：完整北京日可信，部分日只报已观察部分，有 Collector 覆盖的时段不再叠加 AppUsage。手机亮屏、应用活动和桌面前台口径不同，两设备时长不相加。phone_usage_events 的 312,150 条（2026-10-22 06:47 只读；10 月 11 日为 143,822 条）是事件记录量，不是应用打开次数。
 
 ::screen{#daily-preferences-evidence-query-07 section="tech"}
 
@@ -904,7 +904,7 @@
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- device_inventory.py 按真实时点在 Collector 清单与 App CSV 之间选最新完整清单（先 time、同 time 才 sequence），Installed 与安装/更新时间分开；mobility.py按期间汇总GPS事件、停留、移动、空档和本人声明，默认有界输出仍包含全部已发现事件。",
+     "text_ref": "device_inventory.py按真实时点在Collector清单与AppCSV之间选最新完整清单（先time、同time才sequence），Installed与安装/更新时间分开；mobil",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -922,7 +922,7 @@
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- device_inventory.py 按真实时点在 Collector 清单与 App CSV 之间选最新完整清单（先 time、同 time 才 sequence），Installed 与安装/更新时间分开；mobility.py按期间汇总GPS事件、停留、移动、空档和本人声明，默认有界输出仍包含全部已发现事件。",
+     "text_ref": "device_inventory.py按真实时点在Collector清单与AppCSV之间选最新完整清单（先time、同time才sequence），Installed与安装/更新时间分开；mobil",
      "columns": 1,
      "icons": "none",
      "illustration": "none",

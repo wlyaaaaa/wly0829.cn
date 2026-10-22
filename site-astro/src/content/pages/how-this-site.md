@@ -273,7 +273,7 @@
  "source": {
   "page": "sources/pages/how-this-site/page.json",
   "sha256": "279ac7038a2142e64cb2afaa49b62c0529ccc8f0cd245fdbb877009a7b81902c",
-  "converted_at_beijing": "2026-10-11T16:10:54+08:00"
+  "converted_at_beijing": "2026-10-22T08:32:31+08:00"
  }
 }
 ---
@@ -1736,7 +1736,7 @@
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/round3/clean-assets/png/03-放大镜-clean.png",
-      "_library/illustrations/页面扇形网格核验.png"
+      "_library/illustrations/页面扇形网格核验-bright-green-20261022.png"
      ],
      "equal_height": true
     },
@@ -1799,7 +1799,7 @@
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/round3/clean-assets/png/03-放大镜-clean.png",
-      "_library/illustrations/页面扇形网格核验.png"
+      "_library/illustrations/页面扇形网格核验-bright-green-20261022.png"
      ],
      "equal_height": true
     },

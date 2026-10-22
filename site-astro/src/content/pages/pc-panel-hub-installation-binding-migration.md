@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/pc-panel-hub-installation-binding-migration/page.json",
   "sha256": "76b03c33ea7ce537b7199eadf564876192e00f3ce8b2a403312204ef1256d201",
-  "converted_at_beijing": "2026-10-20T08:56:33+08:00"
+  "converted_at_beijing": "2026-10-22T08:32:32+08:00"
  }
 }
 ---
@@ -577,7 +577,7 @@ PC Panel Hub · 功能说明
     },
     {
      "type": "prose",
-     "text_ref": "HS2包1.0.0.2注册在永久目录，9月28日正式安装位置验收关闭；9月7日公"
+     "text_ref": "HS2包1.0.0.2注册在永久目录，9月28日正式安装位置验收关闭；10月20日早上运行中进程旁AppxManifest为1.0.0.4（安装位置未重新验收）；9月7日公开ZIP和本机既有任务重新启"
     },
     {
      "type": "numbered_steps",
@@ -599,7 +599,7 @@ PC Panel Hub · 功能说明
     },
     {
      "type": "prose",
-     "text_ref": "HS2包1.0.0.2注册在永久目录，9月28日正式安装位置验收关闭；9月7日公"
+     "text_ref": "HS2包1.0.0.2注册在永久目录，9月28日正式安装位置验收关闭；10月20日早上运行中进程旁AppxManifest为1.0.0.4（安装位置未重新验收）；9月7日公开ZIP和本机既有任务重新启"
     },
     {
      "type": "numbered_steps",

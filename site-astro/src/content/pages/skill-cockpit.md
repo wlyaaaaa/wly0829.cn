@@ -34,11 +34,11 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-10 20:04"
+    "at": "2026-10-20 16:00"
    },
    "facts": [],
-   "as_of": "2026-10-12",
-   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
+   "as_of": "2026-10-20",
+   "source": "AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
   },
   "public": false,
   "repo_url": null,
@@ -122,8 +122,8 @@
  },
  "source": {
   "page": "sources/pages/skill-cockpit/page.json",
-  "sha256": "7d2b6d5b08c8c55292faf948dd2831923f5e95b79de30004e484094f51eea6ac",
-  "converted_at_beijing": "2026-10-20T08:56:34+08:00"
+  "sha256": "a07dfee07d4cf14095b37fe458508ced51903d635958be28ea9c0698aba7b4bc",
+  "converted_at_beijing": "2026-10-22T08:32:38+08:00"
  }
 }
 ---
@@ -167,11 +167,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 10 日 20:04",
+       "text": "常用 · 上次使用 10 月 20 日 16:00",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）",
+     "static_note": "截至 10 月 20 日 · AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。",
      "row": "hero"
     },
     {
@@ -230,11 +230,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 10 日 20:04",
+       "text": "常用 · 上次使用 10 月 20 日 16:00",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
+     "static_note": "截至 10 月 20 日 · AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
     },
     {
      "type": "prose",
@@ -280,12 +280,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/illustrations/skill-cockpit-dashboard.png",
+   "asset": "_library/illustrations/skill-cockpit-dashboard-bright-green-20261022.png",
    "fallback": false,
    "semantic_status": "explicit_owner_selected_asset",
    "key": "skill-cockpit-01-illustration-01",
    "source_phrase": "总灯与红黄绿指示、贴入新便签",
-   "sha256": "3058a090d21aee5edea850a68754a5f878bca91e474c9eda0f9ef890984f3bde",
+   "sha256": "ec5e593739cbfdbd44b558627e9a5e48ffa043c82b13c05f17e9809b627a83a6",
    "status": "ready"
   },
   {
@@ -295,12 +295,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/illustrations/skill-cockpit-dashboard.png",
+   "asset": "_library/illustrations/skill-cockpit-dashboard-bright-green-20261022.png",
    "fallback": false,
    "semantic_status": "explicit_owner_selected_asset",
    "key": "skill-cockpit-01-illustration-01",
    "source_phrase": "总灯与红黄绿指示、贴入新便签",
-   "sha256": "3058a090d21aee5edea850a68754a5f878bca91e474c9eda0f9ef890984f3bde",
+   "sha256": "ec5e593739cbfdbd44b558627e9a5e48ffa043c82b13c05f17e9809b627a83a6",
    "status": "ready"
   },
   {

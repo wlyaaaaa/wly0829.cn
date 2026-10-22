@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/daily-preferences-mobile-context-delivery/page.json",
-  "sha256": "450a31a76ee384ffa198ed68d03361533c07f0dd6b83ae0393b2d9ee73fef443",
-  "converted_at_beijing": "2026-10-11T18:44:36+08:00"
+  "sha256": "1fb2cfec4d575cf31707f6df6fa3ed695ea8ac6f2908b3bc3fb07571fe5ef0c8",
+  "converted_at_beijing": "2026-10-22T08:32:28+08:00"
  }
 }
 ---
@@ -55,6 +55,10 @@
    {
     "text": "复制 AI 续作说明",
     "href": "/projects/daily-preferences/#ai-brief"
+   },
+   {
+    "text": "手机采集",
+    "href": "/projects/phone-collector/"
    }
   ],
   "anchors": [],

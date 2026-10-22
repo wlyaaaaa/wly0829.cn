@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/timeaudit-collection-pipeline/page.json",
   "sha256": "a4e07af2a4b0ff2464429349b7b82f982efac82e5d997f9891e6b1ff012f1478",
-  "converted_at_beijing": "2026-10-22T07:02:38+08:00"
+  "converted_at_beijing": "2026-10-22T08:32:41+08:00"
  }
 }
 ---
@@ -1001,7 +1001,7 @@ TimeAudit · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- runtime（运行环境）hardening 与 ingest resilience 纳入 001cee0 的 182 项 + 11 个子测试完整通过结果（2026-08-31，之后未重新运行；当前源码有 332 个以 test_ 开头的测试函数，这次没有运行）。",
+     "text_ref": "runtime（运行环境）hardening与ingestresilience纳入001cee0的182项+11个子测试完整通过结果（2026-08-31，之后未重新运行；当前源码有345个以test",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1018,7 +1018,7 @@ TimeAudit · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- runtime（运行环境）hardening 与 ingest resilience 纳入 001cee0 的 182 项 + 11 个子测试完整通过结果（2026-08-31，之后未重新运行；当前源码有 332 个以 test_ 开头的测试函数，这次没有运行）。",
+     "text_ref": "runtime（运行环境）hardening与ingestresilience纳入001cee0的182项+11个子测试完整通过结果（2026-08-31，之后未重新运行；当前源码有345个以test",
      "columns": 1,
      "icons": "none",
      "illustration": "none"

@@ -5,9 +5,9 @@
   "title": "手机采集",
   "url": "/projects/phone-collector/",
   "tagline": "安卓手机上的一个小 App：把只有手机拿得到的几样记录存好，等电脑在家时收走。",
-  "status": "在用",
+  "status": "常用",
   "status_line": {
-    "state": "在用",
+    "state": "常用",
     "last": {
       "label": "上次更新",
       "at": "2026-10-21"

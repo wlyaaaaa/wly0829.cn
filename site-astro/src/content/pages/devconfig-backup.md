@@ -320,10 +320,10 @@
     },
     {
      "id": "n-config-size",
-     "text": "压缩后 286 MiB · 压缩前 0.88 GiB",
-     "meaning": "同一个包：299,791,772 字节；清单 bytes 942,360,581",
-     "as_of": "2026-10-10",
-     "source": "latest.zip.receipt.json package_bytes；latest.zip.manifest.json bytes",
+     "text": "压缩后 428.5 MiB · 压缩前 1.3 GiB",
+     "meaning": "本轮读取的同一最新配置包；1.3 GiB 是压缩前大小，428.5 MiB 是压缩后大小",
+     "as_of": "2026-10-22",
+     "source": "10 月 22 日 06:47 只读核对的最新配置包：out/latest.zip.receipt.json 与 latest.zip.manifest.json，来源详情见本轮现行备份快照",
      "screens": [
       "devconfig-backup-01"
      ]
@@ -610,8 +610,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
-  "sha256": "db4859afb2fe3db9c247524abd9cd3a266fa5452e5fb0dd43582c0fdae878278",
-  "converted_at_beijing": "2026-10-20T08:56:32+08:00"
+  "sha256": "347daa76cf46a98f9280d3dbdb92f681e886cab1c2e4e5f69b4afa971be55f4c",
+  "converted_at_beijing": "2026-10-22T08:32:29+08:00"
  }
 }
 ---
@@ -743,7 +743,7 @@
     {
      "type": "prose",
      "align": "right",
-     "text_ref": "截至10月20日"
+     "text_ref": "截至10月22日"
     }
    ],
    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n标题与入口按钮应横版同一行；现有 row 只能把多个独立块纵向并入同一栏，不能把标题旁按钮排到同一基线。\n定稿 **现在** 一行解析成 card；core.live_strip 只消费 now，会丢按钮。本规格先以 prose 保留该行全部文字，并用 config、wechat 两个无字 live_box 表达实时空位；原要求的‘左标签、中间两框、右按钮’一条横排与竖版‘标签、框、框、按钮’需支持 card 型实时条后接入。\n日期小字要求右对齐，prose 的 align 字段目前未消费。GitHub 按钮前品牌小标、插画中允许的 G 字和指定品牌只能按素材核对，不能据候选顺序认定已完成。\n资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。\n资产清单的 icon 仅 1 项，文字盘点预算 4 个图标位；差 3 个候选位（预算为盘点估计，不作已核实语义结论）。 本轮主程序已支持**现在**解析为now，本轮改接live_strip并去掉临时两个独立live_box，避免重复实时空位。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。",
@@ -834,7 +834,7 @@
     {
      "type": "prose",
      "align": "right",
-     "text_ref": "截至10月20日"
+     "text_ref": "截至10月22日"
     },
     {
      "type": "action_button",
@@ -983,13 +983,13 @@
 重装系统或电脑坏了，最难重建的是各种开发软件和 AI 工具的设置，还有微信里的聊天记录。它每天把这两样复制出来、逐个文件核对，存到机箱里的 G 盘；配置每天、微信每周再传到 Google 云盘；外接盘那一份由电脑配置与恢复同步。全程是脚本，不用 AI 模型。
 
 - **70 个来源**　开发配置清单；Codex 的配置和记忆、Antigravity 和 OpenCode 的设置只有它在备
-- **153,226 个文件**　微信原始文件 43.4 GiB（10 月 18 日最近一次完成的 G 副本），每天拍快照复制一份到 G
-- **6,298 个文件**　最新一个开发配置包，压缩后 285.7 MiB
+- **154,371 个文件**　微信原始文件 43.5 GiB（10 月 21 日完成的 G 副本），每天拍快照复制一份到 G
+- **6,342 个文件**　最新一个开发配置包，压缩后 428.5 MiB
 - **4 个自动任务**　配置每天存 G、每天上云；微信每天存 G、每周上云
 
-现在三处不是同一代（10 月 20 日 07:41 只读核对，没有重跑）。配置这条线正常：10 月 19 日 12:07 新包在本机和 G 盘做成并核对，13:03 上云也完成（这是本机记录，没联网重查云端）。微信这条线卡住了：19 日 09:30 开始的 G 盘热备到核对时还显示“进行中”、没有完成，状态入口因此把微信当前副本标成“说不准”；最近一次完成的是 18 日 10:14 那份，但在这次没收尾之前不能当作当前已核对的副本；11:00 的微信上云同样因此失败，云端最近成功仍是 10 月 12 日。14:30 外接 H 盘冷备检查到微信备份不够新，整次停下、没写 H，所以 H 不能再说和 G 同代。以前也出过一次不同的问题：10 月 11 日配置采集因 Codex 的一个状态数据库没能限时做出一致副本而失败，当时没出新包，前一天的好包原样留着——失败不覆盖旧包就是这样起作用的。
+现在本机和 G 都是新的（10 月 22 日 06:47 只读核对，没有重跑，也没联网看云端）。配置：10 月 21 日 12:08 新包在本机做成、12:08 G 盘也到位，两边都核对过、没有文件警告。微信：前几天 19 日那次卡在“进行中”的 G 盘热备已经过去，10 月 21 日 10:22 新的一份完成，每个文件都核对过、删除也跟着原件走了，没有文件警告。外接 H 盘：10 月 21 日下午电脑配置与恢复那一轮冷备里，配置和微信两项都完成了；整轮仍带警告，但警告来自别的项目，不是这两项。云端这次没联网查：配置最近一次已知上云是 10 月 19 日 13:03（本机记录），微信云端最近已知成功是 10 月 12 日，之后有没有新的成功是 Unknown。19 日那次卡住时，微信上云和 H 冷备都跟着停过一天。以前也出过一次不同的问题：10 月 11 日配置采集因 Codex 的一个状态数据库没能限时做出一致副本而失败，当时没出新包，前一天的好包原样留着——失败不覆盖旧包就是这样起作用的。
 
-截至 10 月 20 日（来源数 70 沿用 10 月 12 日的数）
+截至 10 月 22 日
 
 **现在**　〔现在正不正常 → 驾驶舱〕
 
@@ -2256,7 +2256,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     },
     {
      "type": "content_card",
-     "columns": 2,
+     "columns": 1,
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": "auto",
@@ -2716,7 +2716,9 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 
 **规模**　50 个受 Git 管的文件、约 6,000 行，其中 24 个是自检脚本；79 次提交（10 月 12 日 05:39 回读，源码没有新提交、没有未提交改动）。
 
-**截至 10 月 20 日 07:41 的状态**（只读回读，没重跑；状态入口 Backup-Status -NoDrive 为零写入，整体 attention_required）　配置：本地/G 均为 current，当前包 devconfig-20261018-230702-098e60a2.zip（北京时间 10 月 19 日 12:07:21 完成，6,298 个文件、299,627,858 字节，7-Zip 自检通过，无文件警告；生产者已核对，状态入口没有重算哈希）。上云 10 月 19 日 13:00–13:03:49 package=verified_existing、drive=complete，这是本机生产回执，没联网重读云端。微信：verification=unknown，reason=backup_tree_transaction_pending——10 月 19 日 09:30 启动的 G 热备回执仍是 running，计划任务上次结果 125；当天 11:00 微信上云因同样原因失败。最近一份完成的 G 热备是 10 月 18 日 10:14（153,226 个文件、46,623,230,809 字节），事务没收尾前不能凭它说当前完整；微信云端最近成功是 10 月 12 日 12:18（148,878 个文件、46,034,606,676 字节）。外接盘：PCConfig 10 月 19 日 14:30:11 的冷备 status=blocked，reason=required_backup_freshness_not_ready:wechat，H 写入状态 unknown_no_complete_receipt；本轮没有改 PCConfig，也没有修复或重跑。
+**截至 10 月 22 日 06:47 的状态**（只读回读，没重跑、没联网；状态入口 Backup-Status -NoDrive -Json 退出码 0、write_mode=zero_write，整体 receipts_current）　配置：本地/G 均为 current，当前包 devconfig-20261020-230752-4c4e7d61.zip（北京时间 10 月 21 日 12:08:35 本机完成、12:08:48 G 完成，6,342 个文件、449,276,059 字节即 428.5 MiB，无文件警告；verification=producer_verified_not_rehashed_by_status，状态入口没有重算哈希）。Drive：not_contacted，本轮没联网，配置和微信的云端当前状态都是 Unknown。微信：G 热备 10 月 21 日 10:22:48 完成，154,371 个文件、46,691,567,251 字节（43.5 GiB），collection complete、sha256_full_tree、source_follow_verified、无文件警告；19 日卡住的 backup_tree_transaction_pending 已不再出现。外接盘：PCConfig 的 core-recovery/cold-last.json 记 10 月 21 日 16:47:54 整轮 complete_with_warnings，20 个集合没有 blocked，devconfig 和 wechat 两项都是 complete；警告是密码中心那一项 H 落后 G、另有四个来源新鲜度 unknown，不是微信。应用恢复 not_tested。
+
+**10 月 20 日 07:41 回读到的历史状态**（整体 attention_required）　配置：本地/G 均为 current，当前包 devconfig-20261018-230702-098e60a2.zip（北京时间 10 月 19 日 12:07:21 完成，6,298 个文件、299,627,858 字节，7-Zip 自检通过，无文件警告；生产者已核对，状态入口没有重算哈希）。上云 10 月 19 日 13:00–13:03:49 package=verified_existing、drive=complete，这是本机生产回执，没联网重读云端。微信：verification=unknown，reason=backup_tree_transaction_pending——10 月 19 日 09:30 启动的 G 热备回执仍是 running，计划任务上次结果 125；当天 11:00 微信上云因同样原因失败。最近一份完成的 G 热备是 10 月 18 日 10:14（153,226 个文件、46,623,230,809 字节），事务没收尾前不能凭它说当前完整；微信云端最近成功是 10 月 12 日 12:18（148,878 个文件、46,034,606,676 字节）。外接盘：PCConfig 10 月 19 日 14:30:11 的冷备 status=blocked，reason=required_backup_freshness_not_ready:wechat，H 写入状态 unknown_no_complete_receipt；本轮没有改 PCConfig，也没有修复或重跑。
 
 **10 月 12 日 05:40 回读到的历史状态**　配置：10 月 11 日本地 12:06–12:25 失败，failure=backup_sqlite_capture_failed、TimeoutException、阶段 source_capture、文件 home/.codex/state_5.sqlite（DevConfig.Sources.ps1 第 87 行），没发布新包；当前包仍是 devconfig-20261009-231229-9de61253.zip（北京 10 月 10 日 12:12 完成，6,270 个文件）。上云 10 月 11 日 13:00–13:02 package=verified_existing、drive=complete，传的是这个旧包，回执带 1 个 source_disappeared 警告。微信：G 热备 10 月 11 日 11:01:58 完成，148,592 个文件、45,972,129,496 字节；云盘最近一次成功是 10 月 5 日（147,560 个文件），本轮没联网重查，不能说云盘和 G 一致。外接盘：10 月 11 日 14:15 启动的热维护 14:15:20 完成；14:30 启动的 H 冷备同步 18:39:26 完成，20 个集合都有结果，其中配置和微信两项都是 complete，整体结果是 complete_with_warnings（仍带警告）。
 

@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-secrets-isolation/page.json",
-  "sha256": "09d75a8fabdd57ed3d263cf783b1a5ce71e17367545788680e12bff5b55de411",
-  "converted_at_beijing": "2026-10-11T18:50:42+08:00"
+  "sha256": "3173964c54b3dc4486282e1087074a62b88d384adcca6de80771fecb1bf1550b",
+  "converted_at_beijing": "2026-10-22T08:32:27+08:00"
  }
 }
 ---
@@ -582,7 +582,7 @@ Qwen、GLM、DeepSeek 三家的钥匙各一把，统一放在我的密码中心�
 
 1. 进程环境隔离不是文件权限沙箱；Codex run 仍是完全访问。
 
-2. OpenClaw 导入脚本仍会把 DeepSeek Key 写成一份本机 DPAPI 密文，但它只是维护旧环境的入口；导入后的配置档运行时一样改用密码中心的厂商引用，这份副本既不覆盖厂商登记，也不是现在取钥匙的来源。
+2. OpenClaw 导入脚本已经退役并从源码删除，不会再写新的 DeepSeek 本机 DPAPI 密文。它以前写下的那份副本若还在，既不覆盖厂商登记，也不是现在取钥匙的来源；DeepSeek 运行时一样用密码中心的厂商引用。旧副本有没有清理，本轮没有核实。
 
 3. 官方 run 只在独占 CODEX_HOME 复制 auth.json，不复制用户配置、rules、skills 或其他会话。
 
@@ -596,7 +596,7 @@ Qwen、GLM、DeepSeek 三家的钥匙各一把，统一放在我的密码中心�
 
 - ProfileService 只保存引用，并限制同 Provider/认证域复用；删除本工具的配置档不删除密码中心里的厂商钥匙，旧接法删到最后一个引用时才移除对应本机密文，官方登录不受影响。诊断状态写作“引用已配置，密钥未验证”。
 
-- Import-FromOpenClaw.ps1 只在来源主机能证明是 api.deepseek.com、目标是当前 codex-deepseek-flash 时才写入，默认预览零写入；它产生的 DPAPI 副本只服务旧环境维护，不是三家的当前钥匙来源。
+- 原来的 Import-FromOpenClaw.ps1 只在来源主机能证明是 api.deepseek.com、目标是 codex-deepseek-flash 时才写入，默认预览零写入；这个脚本现已从源码删除（10 月 22 日 scripts 目录里没有），不再是可用入口，它当年产生的 DPAPI 副本也不是三家的当前钥匙来源。
 
 ::screen{#ai-cli-profile-manager-secrets-isolation-05 section="tech"}
 

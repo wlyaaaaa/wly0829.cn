@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/timeaudit-runtime-reliability/page.json",
   "sha256": "cf6ab7764fbf2391c7ec4c671e2fce93df836cb668ad175ddea115ff552543bf",
-  "converted_at_beijing": "2026-10-22T07:02:38+08:00"
+  "converted_at_beijing": "2026-10-22T08:32:41+08:00"
  }
 }
 ---
@@ -105,7 +105,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "系统不因进程仍显示 Running 就假定它工作，而以最近成功写入判断真假健康。看门狗每分钟先查数据库和看板依赖，再查各条采集链，只恢复确认出问题的那一条；它还顺带最多每 10 分钟写一份“今日用电”回执，供驾驶舱显示。",
+     "text_ref": "系统不因进程仍显示Running就假定它工作，而以最近成功写入判断真假健康。看门狗每分钟先查数据库和看板依赖，再查各条采集链，只恢复确认出问题的那一条；它依赖的Docker只有在明确显示“已停止”连续",
      "row": "top"
     },
     {
@@ -145,7 +145,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "系统不因进程仍显示 Running 就假定它工作，而以最近成功写入判断真假健康。看门狗每分钟先查数据库和看板依赖，再查各条采集链，只恢复确认出问题的那一条；它还顺带最多每 10 分钟写一份“今日用电”回执，供驾驶舱显示。"
+     "text_ref": "系统不因进程仍显示Running就假定它工作，而以最近成功写入判断真假健康。看门狗每分钟先查数据库和看板依赖，再查各条采集链，只恢复确认出问题的那一条；它依赖的Docker只有在明确显示“已停止”连续"
     },
     {
      "type": "illustration",
@@ -879,7 +879,7 @@ TimeAudit 大盘停止更新时，在已接入本机诊断的 AI 对话中说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 看门狗只恢复 TimeAudit 精确组件，不重启共享的 Docker 引擎。",
+     "text_ref": "看门狗只恢复TimeAudit精确组件；对共享的Docker，只在明确停止连续10分钟后做一次有时限的官方重启，失败才只结束Docker安装目录里的四类进程并走原有开机任务，同一次故障不重复。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -896,7 +896,7 @@ TimeAudit 大盘停止更新时，在已接入本机诊断的 AI 对话中说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 看门狗只恢复 TimeAudit 精确组件，不重启共享的 Docker 引擎。",
+     "text_ref": "看门狗只恢复TimeAudit精确组件；对共享的Docker，只在明确停止连续10分钟后做一次有时限的官方重启，失败才只结束Docker安装目录里的四类进程并走原有开机任务，同一次故障不重复。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"

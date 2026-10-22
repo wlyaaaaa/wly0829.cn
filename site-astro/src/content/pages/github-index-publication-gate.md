@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/github-index-publication-gate/page.json",
-  "sha256": "6e0120f90b574751be66ea48de668f489b199eebe5149a445e24c23be9ddb443",
-  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
+  "sha256": "4ce7a52ee8b86bf1ff1196685855162084adcb4accd737257ba7a9675d9ec51b",
+  "converted_at_beijing": "2026-10-22T08:32:30+08:00"
  }
 }
 ---
@@ -1169,7 +1169,7 @@ GitHub 总索引 · 功能说明
 
 - 合同测试要求完整矩阵只有一个副本，旧脱敏文档只保留 redirect role。
 
-- 2026-08-29 live admission（仓库准入检查） 证明 PUBLIC（公开）/main/0-0 仍因 dirty 返回 warn，这是当时的历史；总索引现在是私有仓库，10 月 11 日 16:34 只读检查为 PRIVATE（私有）/main、本地领先 2 个提交、warn。旧 Hook 测试只算退役历史，不作现在的防泄露证据；本轮没有执行候选复审、正常推送或网站构建的秘密检查，标“本轮未执行”，不代表这些能力不能用。
+- 2026-08-29 live admission（仓库准入检查） 证明 PUBLIC（公开）/main/0-0 仍因 dirty 返回 warn，这是当时的历史；总索引现在是私有仓库，10 月 11 日 16:34 只读检查为 PRIVATE（私有）/main、本地领先 2 个提交、warn；10 月 22 日 06:48 只读再数，本地相对本机缓存的 origin/main 领先 0 个提交（未 fetch，未重出 warn/pass 结论）。旧 Hook 测试只算退役历史，不作现在的防泄露证据；本轮没有执行候选复审、正常推送或网站构建的秘密检查，标“本轮未执行”，不代表这些能力不能用。
 
 ## 与其他模块的关系
 

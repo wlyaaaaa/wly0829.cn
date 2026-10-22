@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E279",
-   "commit": "dfca0d10888eadf1b2f724da417da9079a6ef938",
-   "ruleset_sha256": "11064e71ec4ea1a426f5ced03d95d2d0a00131025c7b4c8f606c5d0c67772681",
-   "activated_at": "2026-10-21T21:20:08.660355+08:00",
+   "release": "E280",
+   "commit": "9e6c296def23c918a78334b02c597da68efd0233",
+   "ruleset_sha256": "33c65cb3c6152825d5fb89b7be9688f534ab9ebe6ffa1841358b315b98b0b87f",
+   "activated_at": "2026-10-22T08:43:25.661700+08:00",
    "file": "sources/rules/docs/contracts/agents.engineering-delivery.md",
    "sha256": "cba143c6564bf3dc1056bfeffa783853187cdbcbdd24b444dda86e7b31b50a72",
    "public_sha256": "57f96d9793a58e5a01a2ac4b99d6aa925b3841f1514f71fcb93e80d35c3ef643"
@@ -259,8 +259,8 @@
  },
  "source": {
   "page": "sources/pages/rule-engineering-delivery/page.json",
-  "sha256": "14a288a95bc6f34c2ccd70d99de770219f761a1ce8de0f533ce932c65cd0d9d2",
-  "converted_at_beijing": "2026-10-22T07:02:36+08:00"
+  "sha256": "673189a7cd0f73f0ef4742000586fc7451f5fef3c874d119b0a02513aa2a27db",
+  "converted_at_beijing": "2026-10-22T09:10:17+08:00"
  }
 }
 ---
@@ -898,7 +898,7 @@
 
 1. **对照本人要求**　本人的话先分类：禁令照办，觉得不对先拿事实问本人；要求、建议和本人选的选项，AI 判断有更好做法（事实或直觉都行）可以不照做，当场说清没照做什么、为什么；好奇和提问不当规矩。没定到的 AI 放手做，AI 写的稿子点过‘同意’也能改，改了单列。逐条核对可派人做，主持的看整体、拍板；没做到的如实列出，AI 补的标“AI 补充”。
 2. **按实际用法验证**　本人会碰到的改动，部署前按本人的用法验：新开对话试一次、真点按钮、真用手机；网页和图放进真正用的地方看整体。AI 自己能验的自己验，必须本人在场才请本人；惊艳类样板定稿前、交付前各一轮头脑风暴，找最值得的提升。〔验证〕
-3. **在约定范围交付、同步**　只暂存这次的改动，提交、正常推送，合进实际的默认分支；这是长期授权，不再问本人。〔Git 收尾〕
+3. **在约定范围交付、同步**　只暂存这次的改动，提交、正常推送，合进实际的默认分支；这是长期授权，不再问本人。新建本人 GitHub 私有仓库、远端改成本人账号下的仓库、核对过不丢提交的历史改写，也在这项授权里。〔Git 收尾〕
 4. **回读**　从远端默认分支读回，确认真的看得到；计划任务和技能在用的活动检出快进到最新；改过的每个仓库都回读，包括私人配套库。
 5. **清理**　这次的下载和临时文件清掉：确认属于本任务的可以直接删，也可以用回收站工具、核对回执；用过的分支和工作副本合并后删掉，或写明用途和什么时候删再留。〔下载、临时文件和清理〕
 
@@ -906,7 +906,7 @@
 - 第 1 步｜禁令确实做不到或不对：先说清卡在哪、给替代做法，本人同意再改；本人定过的用图还是网页字、版式、内容和动效，不拿“技术选择”当理由改掉。
 - 第 2 步｜只跑了测试：只说“测试通过”，不说已经装好、能用了；没验证的直说不知道。
 - 第 3 步｜本人说只留本地、不提交或不推送：照办，按本人说的验收；没发生的同步不说成已完成。
-- 第 3 步｜仓库或目标不明、没有上游、不能快进、同步冲突、公开内容审查没过：停下说明；强制推送不在长期授权里。
+- 第 3 步｜没有上游或不能快进：先看是不是已授权的普通收尾，并证明旧提交都保留着，是就照常做完；仓库或目标不明、同步真冲突、公开内容审查没过，才停下说明；可能丢提交的强制推送要本人明确同意。
 - 第 5 步｜回收站放不下或回收工具拒绝：确认属于本任务、可以清的直接删除，不用请本人决定；本人的原件、别的任务的、归属不明或正在用的照旧不动。
 
 ::screen{#rule-engineering-delivery-03 section="points"}
@@ -1559,9 +1559,11 @@
 ```
 
 ### Git 收尾
-- 长期授权：让 AI 在仓库里干活，就包括验证后只暂存这次的改动、提交、正常推送到已有上游，不再问（〔约法 L13〕，见〔用户授权〕）。
+- 长期授权：让 AI 在仓库里干活，就包括验证后只暂存这次的改动、提交、正常推送，不再问（〔约法 L13〕，见〔用户授权〕）。
+- 这几件也算普通收尾，按“重大动作与本人验证”专题里 GitHub 普通收尾的核对办法核对后直接做：新建本人 GitHub 私有仓库；把远端改成本人 GitHub 账号下的仓库；先核对过旧提交都有别的分支或标签保留、不会丢的历史改写（含强制推送）。
 - 本人说只留本地、不提交或不推送时，照办。
-- 仓库或目标不明、没有上游、不能快进、同步有冲突，或者公开内容的审查没过，就停下；强制推送不在长期授权里。
+- 没有上游或不能快进时，不一律停下请示：先看是不是上面这些已授权的普通收尾，并证明旧提交都保留着；是就直接做完。
+- 仓库或目标不明、同步真的有冲突，或者公开内容的审查没过，就停下；可能丢提交的强制推送仍要本人明确同意。
 - 做到默认分支才算完成：本人的仓库要合进实际的默认分支、正常推送，再回读远端默认分支确认看得到；只在 AI 的分支或工作副本上的改动不算完成。
 - 合并推送后，把计划任务或技能直接在用的那份检出（活动检出）快进到最新（见〔分工与并行施工〕）。
 - 本人明确只要本地、保留实验分支或只要方案时，按本人说的验收：排除掉的动作不算没收尾，没发生的同步也不说成已完成。
@@ -1834,7 +1836,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "cba143c6564bf3dc1056bfeffa783853187cdbcbdd24b444dda86e7b31b50a72",
    "public_sha256": "57f96d9793a58e5a01a2ac4b99d6aa925b3841f1514f71fcb93e80d35c3ef643",
    "from": null,
@@ -1871,7 +1873,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E279版，一字不改",
+     "text_ref": "原文·E280版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -1911,7 +1913,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E279版，一字不改",
+     "text_ref": "原文·E280版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -2032,7 +2034,7 @@
 }
 ```
 
-原文 · E279 版，一字不改
+原文 · E280 版，一字不改
 
 # 工程与交付
 
@@ -2117,7 +2119,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "cba143c6564bf3dc1056bfeffa783853187cdbcbdd24b444dda86e7b31b50a72",
    "public_sha256": "57f96d9793a58e5a01a2ac4b99d6aa925b3841f1514f71fcb93e80d35c3ef643",
    "from": "## 验证",
@@ -2154,7 +2156,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E279版·续",
+     "text_ref": "原文·E280版·续",
      "align": "left",
      "size": "small"
     },
@@ -2201,7 +2203,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E279版·续",
+     "text_ref": "原文·E280版·续",
      "align": "left",
      "size": "small"
     },
@@ -2293,7 +2295,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E279 版 · 续
+原文 · E280 版 · 续
 
 ## 验证
 
@@ -2325,7 +2327,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "cba143c6564bf3dc1056bfeffa783853187cdbcbdd24b444dda86e7b31b50a72",
    "public_sha256": "57f96d9793a58e5a01a2ac4b99d6aa925b3841f1514f71fcb93e80d35c3ef643",
    "from": "## 下载、临时文件和清理",
@@ -2358,7 +2360,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E279版·续",
+     "text_ref": "原文·E280版·续",
      "align": "left",
      "size": "small"
     },
@@ -2399,7 +2401,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E279版·续",
+     "text_ref": "原文·E280版·续",
      "align": "left",
      "size": "small"
     },
@@ -2479,7 +2481,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E279 版 · 续
+原文 · E280 版 · 续
 
 ## 下载、临时文件和清理
 
@@ -2502,7 +2504,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "cba143c6564bf3dc1056bfeffa783853187cdbcbdd24b444dda86e7b31b50a72",
    "public_sha256": "57f96d9793a58e5a01a2ac4b99d6aa925b3841f1514f71fcb93e80d35c3ef643",
    "from": "## Git 收尾",
@@ -2543,7 +2545,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E279版·续",
+     "text_ref": "原文·E280版·续",
      "align": "left",
      "size": "small"
     },
@@ -2587,7 +2589,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E279版·续",
+     "text_ref": "原文·E280版·续",
      "align": "left",
      "size": "small"
     },
@@ -2679,7 +2681,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E279 版 · 续
+原文 · E280 版 · 续
 
 ## Git 收尾
 

@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-profiles-launch/page.json",
-  "sha256": "8a9abaac9dc40da28da1bb93f23e0cd3aefad505faa4c9c88d282092b3c87bdc",
-  "converted_at_beijing": "2026-10-11T18:50:42+08:00"
+  "sha256": "593d5f1bad3de1d6c614213798e34943713a4a5d5f4ca52be6e392b938666358",
+  "converted_at_beijing": "2026-10-22T08:32:27+08:00"
  }
 }
 ---
@@ -574,7 +574,7 @@ AI CLI Profile Manager · 功能说明
 
 2. profile remove 默认确认。三家厂商的配置档只保存密码中心引用，删除它不会删除密码中心里的厂商钥匙；其他旧接法删到最后一个引用时才删除本工具的 DPAPI 密文。两种情况都不会删除上游官方登录。
 
-3. OpenClaw 导入是维护旧环境的入口，默认只预览；只有 -Apply 才写 Profile，已有同名项还需 -Force 才替换。新配置直接用 configure 保存厂商引用即可。
+3. 原来的 OpenClaw 导入入口已经退役、脚本从源码删除，现在没有这条导入路。新配置直接用 configure 保存厂商引用即可，DeepSeek 也一样引用密码中心里的厂商钥匙。
 
 4. machine-only 的 Qwen Code / OpenCode 路线不提供交互式 start。
 
@@ -586,7 +586,7 @@ AI CLI Profile Manager · 功能说明
 
 - ProfileService 实现 list/show/configure/set-default/remove。三家厂商保存 passwordcenter:qwen/glm/deepseek 引用，configure 不询问也不复制 Key；用自定义 ID 加 --model 可保存或合并一个独立型号（modelOverride），已有的预设 ID 不会被改绑，没见过的型号也不沿用旧型号的上下文大小和目录信息。删除最后一个 SecretRef 引用时只删本工具的 DPAPI 密文。损坏对象不会回退到同名模板。
 
-- Import-FromOpenClaw.ps1 读取一个明确 JSON 并验证来源；默认预览，-Apply 只导入当前 codex-deepseek-flash。它仍会留下一份旧式 DPAPI 副本，但导入后的运行配置档会转成密码中心厂商引用，这份副本不是现在取钥匙的来源。旧 Codex Flash/Pro、Claude、OI 四目标导入已经被此单目标入口替代。
+- Import-FromOpenClaw.ps1 已退役：源码变更记录（尚未正式发行的“未发布/移除”段落）写明删除，10 月 22 日 scripts 目录里已没有这个文件。它以前读取一个明确 JSON 并验证来源，默认预览，-Apply 只导入 codex-deepseek-flash，并会留下一份旧式 DPAPI 副本；那份副本若还在，也不是现在取钥匙的来源。更早的 Codex Flash/Pro、Claude、OI 四目标导入在它之前就已被替代。
 
 ::screen{#ai-cli-profile-manager-profiles-launch-05 section="tech"}
 

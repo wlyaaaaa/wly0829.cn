@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/timeaudit-process-forensics/page.json",
   "sha256": "98b3a05def7c5bb0feb3f330a278b417a9962a18c2d0b9f8f98e7014641ca2bd",
-  "converted_at_beijing": "2026-10-12T06:00:53+08:00"
+  "converted_at_beijing": "2026-10-22T08:32:41+08:00"
  }
 }
 ---
@@ -1011,7 +1011,7 @@ TimeAudit · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 未读取用户活动进程、路径、标题或连接明细；生命周期记录约 2820 万行、约 3.9 GiB（数据库统计估算，不是精确数）。",
+     "text_ref": "未读取用户活动进程、路径、标题或连接明细；生命周期记录按数据库统计估算约2820万行、约4.0GiB（10月12日05:38读，估算不是精确数）。另一份10月12日05:40逐条数出的精确数是3,32",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1028,7 +1028,7 @@ TimeAudit · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 未读取用户活动进程、路径、标题或连接明细；生命周期记录约 2820 万行、约 3.9 GiB（数据库统计估算，不是精确数）。",
+     "text_ref": "未读取用户活动进程、路径、标题或连接明细；生命周期记录按数据库统计估算约2820万行、约4.0GiB（10月12日05:38读，估算不是精确数）。另一份10月12日05:40逐条数出的精确数是3,32",
      "columns": 1,
      "icons": "none",
      "illustration": "none"

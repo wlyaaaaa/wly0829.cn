@@ -115,8 +115,8 @@
  },
  "source": {
   "page": "sources/pages/github-profile/page.json",
-  "sha256": "8d14d53e1bc1a7ddd02ec35589d0c178d719cab0bd0545d4180acc7fb9506bd5",
-  "converted_at_beijing": "2026-10-12T05:03:45+08:00"
+  "sha256": "ee7163c81189dd77d4d91b85c1a129043f9152daf9bd844638779ecfba6f6246",
+  "converted_at_beijing": "2026-10-22T08:32:30+08:00"
  }
 }
 ---
@@ -571,7 +571,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
     },
     {
      "type": "feature_card",
-     "text_ref": "654.0万秒",
+     "text_ref": "740.0万秒",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -626,7 +626,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 
 每秒记下硬件、程序和窗口，事后查为什么卡、时间花在哪。
 
-**654.0 万秒**　硬件记录（截至 10 月 12 日）
+**740.0 万秒**　硬件记录（截至 10 月 22 日）
 
 ::screen{#github-profile-06 section="projects"}
 
@@ -729,7 +729,7 @@ AI 工具配置管理
 
 选好模型，打开原版 Codex、Claude Code；请求发到哪家，启动前写清。
 
-**21 条**　模型路线（截至 10 月 12 日）
+**21 条**　模型路线（截至 10 月 22 日）
 
 ::screen{#github-profile-07 section="projects"}
 
@@ -847,7 +847,7 @@ AI 工具配置管理
   "links": [
    {
     "text": "video-scaffold",
-    "href": "https://github.com/wlyaaaaa/video-scaffold"
+    "href": "/projects/video-scaffold/"
    }
   ],
   "anchors": [],
@@ -936,6 +936,8 @@ AI 工具配置管理
 把文案和素材做成 4K 视频，动画踩着旁白出现，配好封面和字幕。
 
 **39 种**　动画，成片 3840×2160、60 帧
+
+**私有**
 
 ::screen{#github-profile-09 section="projects"}
 

@@ -472,7 +472,7 @@
      "id": "n-routes",
      "text": "21 条路线",
      "meaning": "随程序发布的公开路线模板数（data/providers 共 23 份，去掉 hidden=true 的 codex-custom-responses、codex-ollama 两份）；其中 2 条本机眼下用不上：claude-ollama、oi-ollama 的模型本机没装。claude-chatgpt-ccp、claude-chatgpt-cliproxy 9 月 29 日退役删掉",
-     "as_of": "2026-10-12",
+     "as_of": "2026-10-22",
      "source": "HEAD 6e689ef 的 data/providers/*.json 23 份，筛 hidden 不为 true 得 21；ollama list 现查只有 qwen3.6-35b、qwen3.8-27b 及去限制版，qwen3:8b、qwen3-coder:30b 仍没装",
      "screens": [
       "ai-cli-profile-manager-01",
@@ -484,7 +484,7 @@
      "id": "n-tools",
      "text": "5 种原版工具",
      "meaning": "21 条路线的 engine 去重：Codex、Claude Code、Qwen Code、OpenCode、Open Interpreter",
-     "as_of": "2026-10-12",
+     "as_of": "2026-10-22",
      "source": "同上",
      "screens": [
       "ai-cli-profile-manager-01"
@@ -494,7 +494,7 @@
      "id": "n-desktop-models",
      "text": "8 个模型",
      "meaning": "Codex 桌面版菜单里由它加入的模型：本机 4 + 云端 4；云端只有配好钥匙引用才出现",
-     "as_of": "2026-10-12",
+     "as_of": "2026-10-22",
      "source": "HEAD 6e689ef：data/local-model-set.json profiles 4 个 + data/desktop-cloud-model-set.json profiles 4 个",
      "screens": [
       "ai-cli-profile-manager-01",
@@ -802,8 +802,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
-  "sha256": "a2878dd689f243867f9f49907dde0c072848a5219f9e9e3ded17e9cd863af26d",
-  "converted_at_beijing": "2026-10-22T07:02:28+08:00"
+  "sha256": "e346c0bf80ede67fe18c29adeca1d5eed15837316be85d3b7dac45127835e544",
+  "converted_at_beijing": "2026-10-22T08:32:26+08:00"
  }
 }
 ---
@@ -1036,10 +1036,10 @@ AI 工具配置管理
 
 Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex 换用智谱 GLM、DeepSeek、阿里云千问和本机显卡上跑的 Qwen，Claude Code、OpenCode 这些也能接本机 Qwen：界面、历史和工具都还是原版的。每一种“工具＋模型＋服务”的组合叫一条路线；用哪条路线、请求发到哪家，启动前就写清楚；选的模型出错就报错，不悄悄换一个顶上。终端里敲 aicli 用，在 Codex 桌面版里直接出现在模型菜单。
 
-**21 条路线**｜5 种原版工具配云端和本机模型；其中 2 条连的本机模型没装，眼下用不上（截至 10 月 11 日）
+**21 条路线**｜5 种原版工具配云端和本机模型；其中 2 条连的本机模型没装，眼下用不上（截至 10 月 22 日）
 **8 个模型**｜加进 Codex 桌面版菜单：本机 4 个、云端 4 个
 **131 个任务**｜9 月 16 日以来在桌面版里用这些模型开的（至少）
-**38,960 行代码**｜其中测试 15,947 行
+**38,960 行代码**｜其中测试 15,947 行（10 月 22 日数）
 
 现在　升级观察（Codex 里按需启动的自动任务，平时停着）　本机模型服务　〔现在正不正常 → 驾驶舱〕
 
@@ -1471,12 +1471,12 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
     "h",
     "v"
    ],
-   "asset": "_library/illustrations/ill-14a7ac5383807e.png",
+   "asset": "_library/illustrations/ill-14a7ac5383807e-bright-green-20261022.png",
    "fallback": false,
    "semantic_status": "matched_existing_objects",
    "key": "ill-14a7ac5383807e",
    "source_phrase": "三张竖向大卡片横排，每张上面一幅小水彩插画（1 一个桌面窗口展开模型菜单；2 一个终端窗口，光标后面画一行 aicli；3 一只大手把一张任务卡递给一个小机器人，机器人头上一个小时钟），卡片标题粗体，下面两三行正文，再下面一个浅绿底的对话气泡写“跟 AI 说”。",
-   "sha256": "eab6393429edc847f4ff85229f8a8ca40cf5632548b91647a347dd9e91ed263f",
+   "sha256": "87072e9c97d13818e35470782d27d9a375160a3bd536fd7e81003b9202990462",
    "status": "ready",
    "original_elements": [
     "一只大手把一张任务卡递给一个小机器人，机器人头上一个小时钟"
@@ -2738,7 +2738,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 4. **原版工具**｜Codex、Claude Code、Qwen Code、OpenCode、Open Interpreter
 5. **回读核对**｜后台运行时核对实际模型、服务、权限，对不上就停
 
-**桌面桥**：用 .NET 10 写的 C# 小程序，夹在 Codex 桌面版和它的引擎之间，按 JSON-RPC（程序之间一问一答的消息格式）原样转发，不认识的消息也透传。它只在两处动手：引擎启动前把“官方最新型号＋本机和云端模型”合成一份完整菜单；给别家模型的任务加上请 GPT 帮手的工具。每个新版本要先在〔电脑配置与恢复〕登记全部 7 个文件的指纹才能启用；9 月 15 日到 10 月 3 日一共构建过 35 个版本。
+**桌面桥**：用 .NET 10 写的 C# 小程序，夹在 Codex 桌面版和它的引擎之间，按 JSON-RPC（程序之间一问一答的消息格式）原样转发，不认识的消息也透传。它只在两处动手：引擎启动前把“官方最新型号＋本机和云端模型”合成一份完整菜单；给别家模型的任务加上请 GPT 帮手的工具。每个新版本要先在〔电脑配置与恢复〕登记全部 7 个文件的指纹才能启用；9 月 15 日到 10 月 3 日一共构建过 35 个版本。现在的源码在新桥启用成功后会清掉能认出来的旧版本，只留当前版、上一版和不能安全清理的目录，所以 10 月 22 日本机发行目录只剩 4 个：这是留下来的数，不是一共构建过多少个。当前配置选中的桥是 ee35736204370d9b（配置 10 月 20 日 18:04 写入），只核到配置和程序文件存在，7 个文件是否与登记一致、桌面是否真加载了它还没核对。
 
 ::screen{#ai-cli-profile-manager-10 section="tech"}
 
@@ -2841,7 +2841,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 | DeepSeek | DeepSeek Flash（官方自动升到最新的 Flash，能看图）、DeepSeek V4 Pro 0813（只在终端），上下文约 100 万 token | 云端 |
 | 阿里云百炼 | Qwen3.8 Max 0902、Qwen3.7 Max 06-08，北京按量计费，上下文约 98 万 token | 云端 |
 | 本机模型 | Qwen3.8 27B、Qwen3.6 35B 和各自的去限制版，4 位量化，上下文 262,144 token | 本机显卡 |
-| 模型服务 | Ollama 0.40.4，同一时间只跑一个请求，空闲 3 分钟卸载；用显卡前经电脑配置的显卡排队服务 | 本机 |
+| 模型服务 | Ollama 0.40.4（10 月 22 日读到的版本；换版本后本机模型没有重新实跑），同一时间只跑一个请求，空闲 3 分钟卸载；用显卡前经电脑配置的显卡排队服务 | 本机 |
 | 桌面桥 | .NET 10 的 C# 程序 | 本机 |
 | 后台运行 | Codex app-server（Codex 自带的后台服务接口）和它原生的“恢复同一会话” | 本机 |
 

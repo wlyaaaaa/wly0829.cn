@@ -33,12 +33,14 @@
   "based_on": {
    "commit": "cc41e514b2886fff8e04b1883562d25bd59089ef",
    "commit_time": "2026-10-11T13:57:49+08:00"
-  }
+  },
+  "public": false,
+  "repo_url": null
  },
  "source": {
   "page": "sources/pages/video-scaffold-recovery-reuse/page.json",
-  "sha256": "1b8a6d4d25157a8f667979d764e03978b595287273420acae7a997a0b8cd979b",
-  "converted_at_beijing": "2026-10-12T00:29:49+08:00"
+  "sha256": "1fc96b00602646d9d6397d395ca1345bb4611659477390b3cdd48dd064a3a124",
+  "converted_at_beijing": "2026-10-22T08:32:42+08:00"
  }
 }
 ---
@@ -55,10 +57,6 @@
    {
     "text": "回到项目 → 本地视频制作",
     "href": "/projects/video-scaffold/"
-   },
-   {
-    "text": "GitHub",
-    "href": "https://github.com/wlyaaaaa/video-scaffold"
    },
    {
     "text": "复制 AI 续作说明",
@@ -97,7 +95,7 @@
     },
     {
      "type": "action_button",
-     "text_ref": "〔回到项目 → 本地视频制作〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "text_ref": "〔回到项目 → 本地视频制作〕　**私有**　〔复制 AI 续作说明〕",
      "row": "top",
      "brand_icons": {
       "GitHub": "_library/icons/GitHub标志.png"
@@ -138,7 +136,7 @@
     },
     {
      "type": "action_button",
-     "text_ref": "〔回到项目 → 本地视频制作〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "text_ref": "〔回到项目 → 本地视频制作〕　**私有**　〔复制 AI 续作说明〕",
      "brand_icons": {
       "GitHub": "_library/icons/GitHub标志.png"
      }
@@ -171,7 +169,7 @@
 
 # 旧产物只有身份匹配才复用，清理也只删可再生部分
 
-〔回到项目 → 本地视频制作〕　〔GitHub〕　〔复制 AI 续作说明〕
+〔回到项目 → 本地视频制作〕　**私有**　〔复制 AI 续作说明〕
 
 video-scaffold · 功能说明
 

@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E279",
-   "commit": "dfca0d10888eadf1b2f724da417da9079a6ef938",
-   "ruleset_sha256": "11064e71ec4ea1a426f5ced03d95d2d0a00131025c7b4c8f606c5d0c67772681",
-   "activated_at": "2026-10-21T21:20:08.660355+08:00",
+   "release": "E280",
+   "commit": "9e6c296def23c918a78334b02c597da68efd0233",
+   "ruleset_sha256": "33c65cb3c6152825d5fb89b7be9688f534ab9ebe6ffa1841358b315b98b0b87f",
+   "activated_at": "2026-10-22T08:43:25.661700+08:00",
    "file": "sources/rules/docs/contracts/agents.context-sources.md",
    "sha256": "da0d8bc4860c8668fb8bf5929f33c877fd633eb816c5953f45e1c909ae436a7f",
    "public_sha256": "4b297bf738be56dcb31b88b1dd580fb84ef82fc4cf4ba38f737b3c0c7be405dc"
@@ -410,8 +410,8 @@
  },
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
-  "sha256": "4cf7e085631931933b59638d41160fb869356e45190ded9f8508276907962fdc",
-  "converted_at_beijing": "2026-10-22T07:02:36+08:00"
+  "sha256": "620f2f926fd5fac48c3ae7046d240616b430dd0274051d5841d2621651cf00b3",
+  "converted_at_beijing": "2026-10-22T09:10:17+08:00"
  }
 }
 ---
@@ -1344,7 +1344,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
 - 要认出和排除冻结项目时，只读最少的身份和状态信息。
 
 ### 冻结名单
-- 〔Codex 远程〕、〔CACB 模型评测〕（整个项目）、〔微信历史桥 WeFlowBridge〕、〔OpenClaw 网关〕和它的备份仓库，以及已经退役留档的 Gemini 记忆备份、Claude 记忆备份；冻结名单和仓库标识见本页的活动规则公开副本。
+- 〔Codex 远程〕、〔CACB 模型评测〕（整个项目）、〔微信历史桥 WeFlowBridge〕、〔OpenClaw 网关〕和它的备份仓库、两台电脑的剪贴板同步 MeshClip Kit（停用留档，原来在偶用名单里），以及已经退役留档的 Gemini 记忆备份、Claude 记忆备份；冻结名单和仓库标识见本页的活动规则公开副本。
 - 名单只在这一处维护，本人新增或更正时改这里；别的基座都来这里读，不另存第二份。仓库名比对不分大小写。
 - 例：GitHub 项目总索引按这份名单给仓库标“冻结”；驾驶舱也读它，冻结的项目只标“冻结”，不去读它的仓库。
 
@@ -1453,7 +1453,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
     },
     {
      "type": "points_card",
-     "text_ref": "偶用名单（11项：10个仓库加1个功能）",
+     "text_ref": "偶用名单（10项：9个仓库加1个功能）",
      "columns": 1,
      "whole_block": true,
      "illustration": "left_inside",
@@ -1503,7 +1503,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
     },
     {
      "type": "points_card",
-     "text_ref": "偶用名单（11项：10个仓库加1个功能）",
+     "text_ref": "偶用名单（10项：9个仓库加1个功能）",
      "columns": 1,
      "whole_block": true,
      "illustration": "left_inside",
@@ -1612,11 +1612,17 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
 - **存档**：不维护，就是冻结名单里的全部项目。
 - 这三档是〔约法 L25〕定的。新项目默认是日用，本人另说的除外；没列进偶用和存档的，其余全是日用。
 
-### 偶用名单（11 项：10 个仓库加 1 个功能）
-- 屏保〔emerald-veil〕、〔Steam 皮肤备份〕、〔Typora 主题〕、两台电脑的剪贴板同步〔meshclip-kit〕
+### 偶用名单（10 项：9 个仓库加 1 个功能）
+- 屏保〔emerald-veil〕、〔Steam 皮肤备份〕、〔Typora 主题〕
 - 机箱小屏的曲面屏叠加层：只是〔PC-Panel-Hub〕仓库里的一个功能，仓库本身按日用
 - 〔工作交付〕、〔视频制作〕、〔vault 加密工具〕
 - GitHub 个人主页、公开项目的私有配套库、Key 仓库
+- 两台电脑的剪贴板同步 meshclip-kit 已经移进冻结名单（停用留档），不再算偶用。
+
+### 表外还有两件按偶用对待的
+- `aicli run` 命令保留，按偶用处理、不主动维护；真要用时坏了再修。
+- Codex 云端读者也先放着，偶用、不维护：换账号后新账号没建云端环境，现在不可用，不提交云端任务；具体状态见“能力与运行方式”里的云端素材通道。
+- 这两件是规则正文另外写明的维护说明，不在下面这张表里，也不计进上面的 10 项。
 
 ### 谁在读这张表
 - 〔驾驶舱〕直接读活动规则里的冻结名单和这张表，给每个项目标上日用、偶用或存档，不另存名单；所以表里除了只写到一个功能的那一项，每一项后面都写着仓库名，程序才认得出是哪个仓库。
@@ -2415,7 +2421,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
 - 两边的自动记忆都已关闭，但不能因为记忆关了就不记。
 
 ### 决定原话只存一处
-- 本人对 AI、项目和电脑的现行决定原话，存决定文档一处，按月分卷：每月一卷 `docs/owner-decisions/YYYY-MM.md`，总索引 `docs/owner-decisions.md` 只管导航；新原话用 `owner_decision_store.py append` 写进当月那一卷，默认只写盘，显式 `--commit` 才提交；要求登记也只写盘，两种记录在交付收尾或压缩前一起批量提交，推送随任务正常收尾。索引区分建议、要求、禁令、技术授权与 AI 补全，并标来源、范围和取代关系，不把 AI 补全倒写成本人禁令。
+- 本人对 AI、项目和电脑的现行决定原话，存决定文档一处，按月分卷：每月一卷 `docs/owner-decisions/YYYY-MM.md`，总索引 `docs/owner-decisions.md` 只管导航；新原话用 `owner_decision_store.py append` 写进当月那一卷，记录时只写盘，不传 `--commit`；要求登记也只写盘，两种记录都不逐条提交、也不各做一次提交，在交付收尾或压缩前一起批量提交，推送随任务正常收尾。索引区分建议、要求、禁令、技术授权与 AI 补全，并标来源、范围和取代关系，不把 AI 补全倒写成本人禁令。
 - AI 按本人要求新加或大改一个功能、本人新定或推翻一个决定时，按上面的时点把原话原样连同北京时间日期记进去，靠钩子存下的原话归位，不靠事后凭印象翻对话记录。
 - 每条原话整条原样放进引用块，连着发的各占一块，写明来自哪个会话、哪条消息；下面一行写分类，每个分类单元都标范围（本次、某个项目或主题、长期、到某天为止），并引一小段和原话一字不差的片段。
 - 记原话的主对话按上面的时点归位并分类，Codex 和 Claude 一样，不设审批；后台补漏的 GPT 按同一张分类表做，其他子代理不记原话，也不改分类。
@@ -2449,7 +2455,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "da0d8bc4860c8668fb8bf5929f33c877fd633eb816c5953f45e1c909ae436a7f",
    "public_sha256": "4b297bf738be56dcb31b88b1dd580fb84ef82fc4cf4ba38f737b3c0c7be405dc",
    "from": null,
@@ -2477,7 +2483,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E279版，一字不改"
+     "text_ref": "原文·E280版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2511,7 +2517,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E279版，一字不改"
+     "text_ref": "原文·E280版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2589,7 +2595,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
 }
 ```
 
-原文 · E279 版，一字不改
+原文 · E280 版，一字不改
 
 # 事实来源与任务上下文
 
@@ -2641,7 +2647,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "da0d8bc4860c8668fb8bf5929f33c877fd633eb816c5953f45e1c909ae436a7f",
    "public_sha256": "4b297bf738be56dcb31b88b1dd580fb84ef82fc4cf4ba38f737b3c0c7be405dc",
    "from": "## 三档维护",
@@ -2669,7 +2675,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E279版·续"
+     "text_ref": "原文·E280版·续"
     },
     {
      "type": "source_text_card",
@@ -2700,7 +2706,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E279版·续"
+     "text_ref": "原文·E280版·续"
     },
     {
      "type": "source_text_card",
@@ -2767,7 +2773,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E279 版 · 续
+原文 · E280 版 · 续
 
 ## 三档维护
 
@@ -2823,7 +2829,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "da0d8bc4860c8668fb8bf5929f33c877fd633eb816c5953f45e1c909ae436a7f",
    "public_sha256": "4b297bf738be56dcb31b88b1dd580fb84ef82fc4cf4ba38f737b3c0c7be405dc",
    "from": "### 一样东西只存一处",
@@ -2868,7 +2874,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E279版·续"
+     "text_ref": "原文·E280版·续"
     },
     {
      "type": "source_text_card",
@@ -2894,7 +2900,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E279版·续"
+     "text_ref": "原文·E280版·续"
     },
     {
      "type": "source_text_card",
@@ -2912,7 +2918,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
 }
 ```
 
-原文 · E279 版 · 续
+原文 · E280 版 · 续
 
 ### 一样东西只存一处
 

@@ -26,15 +26,15 @@
   "url": "/projects/ramdisk-guardian/volatile-cache-contract-and-backup-retirement/",
   "parent": "ramdisk-guardian",
   "status_line": {
-   "state": "常用",
+   "state": "已退役",
    "as_of": "2026-10-11",
-   "source": "缓存边界按现行源码和电脑配置（PCConfig）截止前的存放策略核对（均早于 10 月 11 日 14:00）；盘占用取截止前最后一轮巡查，提速仍未实测"
+   "source": "按 RamdiskGuardian 源提交 8c39cfd（2026-10-20 22:35 北京时间，2026-10-22 只读核对）：守护、体检、部署、暂停/登记脚本与全部测试已删除，README 只留退役声明；Z 盘、计划任务和 Chrome 缓存连接的现状未读（Unknown）；正文其余数字与证据保留退役前各自日期"
   }
  },
  "source": {
   "page": "sources/pages/ramdisk-guardian-volatile-cache-contract-and-backup-retirement/page.json",
-  "sha256": "fb6f8cbbc6f667a08f49006bc3c499e301e16be5f257d523005b2c02f5fde96e",
-  "converted_at_beijing": "2026-10-11T19:04:26+08:00"
+  "sha256": "26ac741112f4b6a42ef056a37d98128a4555e871ea47c8d71843bbf915fe44c2",
+  "converted_at_beijing": "2026-10-22T08:32:36+08:00"
  }
 }
 ---
@@ -84,11 +84,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用",
+       "text": "已退役",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 缓存边界按现行源码和电脑配置（PCConfig）截止前的存放策略核对（均早于 10 月 11 日 14:00）；盘占用取截止前最后一轮巡查，提速仍未实测",
+     "static_note": "截至 10 月 11 日 · 按 RamdiskGuardian 源提交 8c39cfd（2026-10-20 22:35 北京时间，2026-10-22 只读核对）：守护、体检、部署、暂停/登记脚本与全部测试已删除，README 只留退役声明；Z 盘、计划任务和 Chrome 缓存连接的现状未读（Unknown）；正文其余数字与证据保留退役前各自日期",
      "row": "top"
     },
     {
@@ -101,7 +101,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "避免为了读写速度，把唯一资料的生存时间绑在内存盘上。",
+     "text_ref": "曾经用来避免为了读写速度，把唯一资料的生存时间绑在内存盘上。",
      "row": "top"
     },
     {
@@ -126,11 +126,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用",
+       "text": "已退役",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 缓存边界按现行源码和电脑配置（PCConfig）截止前的存放策略核对（均早于 10 月 11 日 14:00）；盘占用取截止前最后一轮巡查，提速仍未实测"
+     "static_note": "截至 10 月 11 日 · 按 RamdiskGuardian 源提交 8c39cfd（2026-10-20 22:35 北京时间，2026-10-22 只读核对）：守护、体检、部署、暂停/登记脚本与全部测试已删除，README 只留退役声明；Z 盘、计划任务和 Chrome 缓存连接的现状未读（Unknown）；正文其余数字与证据保留退役前各自日期"
     },
     {
      "type": "action_button",
@@ -141,7 +141,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "避免为了读写速度，把唯一资料的生存时间绑在内存盘上。"
+     "text_ref": "曾经用来避免为了读写速度，把唯一资料的生存时间绑在内存盘上。"
     },
     {
      "type": "illustration",
@@ -171,9 +171,11 @@
 
 RamdiskGuardian · 功能说明
 
-避免为了读写速度，把唯一资料的生存时间绑在内存盘上。
+曾经用来避免为了读写速度，把唯一资料的生存时间绑在内存盘上。
 
-**当前情况：**当前只允许有界、可重建缓存使用内存盘；截止前最后一轮巡查（10 月 11 日 13:46）12 GiB 的盘只用了 0.5 GiB，基本是 Chrome 的三类缓存。它没有替唯一文件备份或自动识别误放资料的功能，用它到底快了多少也一直没实测。
+**现在：**已随整个内存盘守护退役。10 月 20 日 22:35（北京时间）源仓库提交 8c39cfd 删掉了守护、体检、部署、暂停/登记脚本和全部测试，README 只剩一句退役声明，旧实现只留在 Git 历史里，其中包括盘根《Z_使用说明》和效率查询入口。Z 盘本身还挂不挂着、计划任务 RAMDisk_Code_Backup 是否已停用或删除、Chrome 三类缓存还连不连在 Z 上，本轮都没读，Unknown。替代方式来源未写明。
+
+**退役前的情况（历史）：**只允许有界、可重建缓存使用内存盘；10 月 11 日 13:46 那轮巡查时 12 GiB 的盘只用了 0.5 GiB，基本是 Chrome 的三类缓存。它没有替唯一文件备份或自动识别误放资料的功能，用它到底快了多少一直没实测——这也是退役的理由。
 
 具体测试保留各自日期，页面不实时探测运行状态。
 
@@ -286,19 +288,19 @@ RamdiskGuardian · 功能说明
 
 ## 这项功能怎样使用
 
-用途与实际影响
+用途与实际影响（退役前，留作历史）
 
 ## 为什么需要它
 
-历史镜像备份曾在空源时覆盖目标；继续给RAM Disk补备份并不能消除它承担唯一数据的风险。当前做法直接让正式文件退出Z，只保留丢后可重建的内容。
+历史镜像备份曾在空源时覆盖目标；继续给RAM Disk补备份并不能消除它承担唯一数据的风险。当时的做法是直接让正式文件退出Z，只保留丢后可重建的内容。
 
 ## 举个实际例子
 
-“我要跑一个临时测试，能用Z吗？”如果输入和代码已在E或V，Z里只是可再生成且有上限的中间输出，可以评估；如果它会成为唯一一份未提交代码，就留在持久磁盘。
+退役前常见的问法：“我要跑一个临时测试，能用Z吗？”如果输入和代码已在E或V，Z里只是可再生成且有上限的中间输出，可以评估；如果它会成为唯一一份未提交代码，就留在持久磁盘。
 
 ## 最后我会得到什么
 
-得到一块容量受限、只放可重建缓存的内存盘；每个应用仍负责清自己的旧缓存。它不再承担正式文件的备份来源。
+退役前得到的是一块容量受限、只放可重建缓存的内存盘；每个应用仍负责清自己的旧缓存，它不承担正式文件的备份来源。守护 10 月 20 日退役后，这条约定没有程序配套照看；Z 盘本身现状 Unknown，“只放可丢的东西”这条常识仍然成立。
 
 ::screen{#ramdisk-guardian-volatile-cache-contract-and-backup-retirement-outcome_cards-01 section="usage"}
 
@@ -343,6 +345,8 @@ RamdiskGuardian · 功能说明
 
 ## 结果怎么看
 
+以下是退役前的判断方式，留作历史。
+
 ## 正常工作
 
 选中的内容能完整重建、体积有界，并有真实使用收益，才适合迁入。
@@ -381,7 +385,7 @@ RamdiskGuardian · 功能说明
     },
     {
      "type": "prose",
-     "text_ref": "在为应用配置缓存目录时，先读项目 Z_使用说明，只把可再生缓存指向 Z 盘；正式文件留持久磁盘。",
+     "text_ref": "现在没有入口：项目里的Z_使用说明10月20日已随退役删除，守护也不再照看Z盘，替代方式来源未写明。退役前的做法是：为应用配置缓存目录时，先读项目Z_使用说明，只把可再生缓存指向Z盘；正式文件留持久磁",
      "row": "start",
      "width": "40%"
     },
@@ -420,7 +424,7 @@ RamdiskGuardian · 功能说明
     },
     {
      "type": "prose",
-     "text_ref": "在为应用配置缓存目录时，先读项目 Z_使用说明，只把可再生缓存指向 Z 盘；正式文件留持久磁盘。"
+     "text_ref": "现在没有入口：项目里的Z_使用说明10月20日已随退役删除，守护也不再照看Z盘，替代方式来源未写明。退役前的做法是：为应用配置缓存目录时，先读项目Z_使用说明，只把可再生缓存指向Z盘；正式文件留持久磁"
     },
     {
      "type": "source_text_card",
@@ -469,7 +473,7 @@ RamdiskGuardian · 功能说明
 
 ## 从哪里开始
 
-在为应用配置缓存目录时，先读项目 Z_使用说明，只把可再生缓存指向 Z 盘；正式文件留持久磁盘。
+现在没有入口：项目里的 Z_使用说明 10 月 20 日已随退役删除，守护也不再照看 Z 盘，替代方式来源未写明。退役前的做法是：为应用配置缓存目录时，先读项目 Z_使用说明，只把可再生缓存指向 Z 盘；正式文件留持久磁盘。
 
 ## 需要准备什么
 
@@ -526,7 +530,7 @@ RamdiskGuardian · 功能说明
     },
     {
      "type": "prose",
-     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+     "text_ref": "这里保留退役前的实现、关键条件、入口、历史记录和验证结果；所列脚本与说明10月20日已在源提交8c39cfd中删除。"
     },
     {
      "type": "numbered_steps",
@@ -548,7 +552,7 @@ RamdiskGuardian · 功能说明
     },
     {
      "type": "prose",
-     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+     "text_ref": "这里保留退役前的实现、关键条件、入口、历史记录和验证结果；所列脚本与说明10月20日已在源提交8c39cfd中删除。"
     },
     {
      "type": "numbered_steps",
@@ -577,9 +581,9 @@ RamdiskGuardian · 功能说明
 
 ## 技术实现与依据（一）
 
-这里保留实现、关键条件、精确入口、历史记录和验证结果。
+这里保留退役前的实现、关键条件、入口、历史记录和验证结果；所列脚本与说明 10 月 20 日已在源提交 8c39cfd 中删除。
 
-当前使用约定；截止前最后一轮巡查 Z 已用 0.5 GiB、空闲 11.5 GiB；驱动实际分配和提速仍为空值
+退役前的使用约定；10 月 11 日 13:46 那轮巡查 Z 已用 0.5 GiB、空闲 11.5 GiB；驱动实际分配和提速仍为空值
 
 ## 关键规则与设计选择
 
@@ -589,7 +593,7 @@ RamdiskGuardian · 功能说明
 
 3. Personal/Work仅是组织分区，共享内存盘不产生账号或数据隔离。
 
-## 当前怎样实现
+## 退役前怎样实现
 
 - 源目录数组只包含Caches、Scratch、TEMP及既有子目录，不包含退役的projects/docs/others。
 
@@ -623,7 +627,7 @@ RamdiskGuardian · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- 效率查询入口 Get-RamdiskEfficiency.ps1 -Json 把逻辑容量、已用、镜像逻辑/实际分配与DriverAllocatedBytes分开；可选的 -IncludePrimo 只读 Primo 列表和设置，需要管理员。无法取得可靠驱动计数时为null，SpeedupPercent没有同条件计时则为空（未实测），不从镜像大小推内存或编造性能倍数。",
+     "text_ref": "效率查询入口Get-RamdiskEfficiency.ps1-Json（已删除）把逻辑容量、已用、镜像逻辑/实际分配与DriverAllocatedBytes分开；可选的-IncludePrimo只",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -641,7 +645,7 @@ RamdiskGuardian · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- 效率查询入口 Get-RamdiskEfficiency.ps1 -Json 把逻辑容量、已用、镜像逻辑/实际分配与DriverAllocatedBytes分开；可选的 -IncludePrimo 只读 Primo 列表和设置，需要管理员。无法取得可靠驱动计数时为null，SpeedupPercent没有同条件计时则为空（未实测），不从镜像大小推内存或编造性能倍数。",
+     "text_ref": "效率查询入口Get-RamdiskEfficiency.ps1-Json（已删除）把逻辑容量、已用、镜像逻辑/实际分配与DriverAllocatedBytes分开；可选的-IncludePrimo只",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -656,9 +660,9 @@ RamdiskGuardian · 功能说明
 
 ## 技术实现与依据（二）
 
-- 效率查询入口 Get-RamdiskEfficiency.ps1 -Json 把逻辑容量、已用、镜像逻辑/实际分配与DriverAllocatedBytes分开；可选的 -IncludePrimo 只读 Primo 列表和设置，需要管理员。无法取得可靠驱动计数时为null，SpeedupPercent没有同条件计时则为空（未实测），不从镜像大小推内存或编造性能倍数。
+- 效率查询入口 Get-RamdiskEfficiency.ps1 -Json（已删除） 把逻辑容量、已用、镜像逻辑/实际分配与DriverAllocatedBytes分开；可选的 -IncludePrimo 只读 Primo 列表和设置，需要管理员。无法取得可靠驱动计数时为null，SpeedupPercent没有同条件计时则为空（未实测），不从镜像大小推内存或编造性能倍数。
 
-## 执行流程
+## 执行流程（退役前）
 
 1. 确定正式输入与可再生成输出分别在哪里。
 
@@ -726,7 +730,7 @@ RamdiskGuardian · 功能说明
 
 ## 专业定义
 
-先判断值得加速的对象，再给缓存设置体积和生命周期边界。
+先判断值得加速的对象，再给缓存设置体积和生命周期边界。退役时的结论是：一直没量到明显的实际提速，于是整套守护退役。
 
 ::screen{#ramdisk-guardian-volatile-cache-contract-and-backup-retirement-07 section="tech"}
 
@@ -805,7 +809,7 @@ RamdiskGuardian · 功能说明
 
 解决什么
 
-这些规则不会自动阻止文件写入。误放进去的唯一资料仍可能在驱动重建时丢失，所以不能把使用约定写成自动数据保护能力。
+守护退役后连这些规则的配套照看也没有了；退役前这些规则也不会自动阻止文件写入。误放进去的唯一资料仍可能在驱动重建时丢失，所以不能把使用约定写成自动数据保护能力。
 
 ## 边界
 
@@ -815,7 +819,7 @@ RamdiskGuardian · 功能说明
 
 ## 失败与恢复
 
-- **发现Z里放了唯一文件**：在任何重置前转存并验证持久副本；守护器没有文件版本恢复能力。
+- **发现Z里放了唯一文件**：在任何重置前转存并验证持久副本；守护器本来就没有文件版本恢复能力，现在也已退役。
 
 - **长期超过8GiB软上限**：检查各生产者自己的有效缓存和清理规则，不按目录外观盲目整盘删除。
 
@@ -850,7 +854,7 @@ RamdiskGuardian · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 只读核对当前代码：没有 robocopy、Z_Drive_Backup 或旧 projects/docs/others 通道；静态检查仍定义 15 条断言，本轮没有运行（旧页“本轮静态检查通过”是 9 月 18 日那次）。",
+     "text_ref": "退役前只读核对代码：没有robocopy、Z_Drive_Backup或旧projects/docs/others通道；静态检查仍定义15条断言，本轮没有运行（旧页“本轮静态检查通过”是9月18日那次",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -867,7 +871,7 @@ RamdiskGuardian · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 只读核对当前代码：没有 robocopy、Z_Drive_Backup 或旧 projects/docs/others 通道；静态检查仍定义 15 条断言，本轮没有运行（旧页“本轮静态检查通过”是 9 月 18 日那次）。",
+     "text_ref": "退役前只读核对代码：没有robocopy、Z_Drive_Backup或旧projects/docs/others通道；静态检查仍定义15条断言，本轮没有运行（旧页“本轮静态检查通过”是9月18日那次",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -891,17 +895,17 @@ RamdiskGuardian · 功能说明
 
 ## 依据与来源
 
-## 真实入口
+## 原来的入口（10 月 20 日已删除）
 
-盘根使用约定（Z_使用说明.md）。
+盘根使用约定（Z_使用说明.md，仓库里的规范源已删除；盘根那份副本现在还在不在 Unknown）。
 
-角色与历史退役背景：当前 README 只保留短入口，缓存原件误删的历史在 git 提交 5f8cf40，旧备份通道 7 月 21 日退役的证据在 ecd7111。
+角色与历史退役背景：README 先是只保留短入口，10 月 20 日起只剩一句退役声明，缓存原件误删的历史在 git 提交 5f8cf40，旧备份通道 7 月 21 日退役的证据在 ecd7111。
 
 机器级E/V/Z放置策略。
 
 ## 如何验证
 
-- 只读核对当前代码：没有 robocopy、Z_Drive_Backup 或旧 projects/docs/others 通道；静态检查仍定义 15 条断言，本轮没有运行（旧页“本轮静态检查通过”是 9 月 18 日那次）。
+- 退役前只读核对代码：没有 robocopy、Z_Drive_Backup 或旧 projects/docs/others 通道；静态检查仍定义 15 条断言，本轮没有运行（旧页“本轮静态检查通过”是 9 月 18 日那次）。
 
 - 效率查询把容量、卷已用、镜像长度、SSD 实际分配和驱动分配分开，互相不能顶替；驱动实际分配仍为 null，提速没做同条件测试，镜像小也不证明内存已等量释放或业务变快。Primo 部分要管理员才能读。
 
@@ -909,4 +913,4 @@ RamdiskGuardian · 功能说明
 
 ## 与其他模块的关系
 
-这条边界使后续缓存盘恢复可接受，但它本身不是自动拦截或备份系统。
+这条边界使后续缓存盘恢复可接受，但它本身不是自动拦截或备份系统。五个模块随整个守护 10 月 20 日一起退役。

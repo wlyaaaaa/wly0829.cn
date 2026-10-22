@@ -45,11 +45,11 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-10 21:51"
+    "at": "2026-10-20 15:16"
    },
    "facts": [],
-   "as_of": "2026-10-12",
-   "source": "AI 使用记录"
+   "as_of": "2026-10-20",
+   "source": "AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
   },
   "public": false,
   "repo_url": null,
@@ -372,8 +372,8 @@
  },
  "source": {
   "page": "sources/pages/work-delivery-copilot/page.json",
-  "sha256": "47cda12665f10024650fa9ed0080a8a806fabfbdf6a2d44f4e492fcef2b48dfb",
-  "converted_at_beijing": "2026-10-12T05:03:53+08:00"
+  "sha256": "d67d021d86b2f5c970749ea847ca3cac7eea2fc9d5f864a125cbd1576de332e3",
+  "converted_at_beijing": "2026-10-22T08:32:43+08:00"
  }
 }
 ---
@@ -460,11 +460,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 10 日 21:51",
+       "text": "偶尔用 · 上次使用 10 月 20 日 15:16",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用记录",
+     "static_note": "截至 10 月 20 日 · AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。",
      "row": "hero"
     },
     {
@@ -520,11 +520,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 10 日 21:51",
+       "text": "偶尔用 · 上次使用 10 月 20 日 15:16",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用记录"
+     "static_note": "截至 10 月 20 日 · AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
     },
     {
      "type": "stat_card",

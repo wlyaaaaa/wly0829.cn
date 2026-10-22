@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/chinese-asr-runtime-privacy/page.json",
-  "sha256": "6c5525e7b3778b9a8cc7abb3bcaca78048ff66a164eec026e92ab1f03958e048",
-  "converted_at_beijing": "2026-10-11T18:50:42+08:00"
+  "sha256": "fb4574077dd3fb6ddc7100a4237843a354d2b935c4e672e63607c37d6029e2f4",
+  "converted_at_beijing": "2026-10-22T08:32:27+08:00"
  }
 }
 ---
@@ -757,11 +757,11 @@ ChineseASR · 功能说明
 
 - FireRed worker 隔离在专用运行环境，不改变默认模型。
 
-- asr-professional-cloud.ps1 在读音频前要求 Important / QualityReview 二选一，以及 CloudUploadAuthorized 或带本地结果目录和疑难证据的 AutomaticReview；Legacy 不能用于自动模式。重要路线写 importance=important，质量复核写 purpose=quality_review 且不写 importance。
+- asr-professional-cloud.ps1 在读音频前要求 Important / QualityReview 二选一，以及 CloudUploadAuthorized 或带本地结果目录和疑难证据的 AutomaticReview；原来的 -Legacy 开关 10 月 20 日已删，现在可用 -ResumeJobId 沿用原云请求和检查点续作。重要路线写 importance=important，质量复核写 purpose=quality_review 且不写 importance。
 
-- 云 provider 仍是 Alibaba Cloud Model Studio（阿里云百炼）北京区：`qwen-audio-3.1-asr-flash` 走 HTTPS Base64、每段不超过 120 秒，用于短录音、说话人和方言；`qwen-audio-3.1-asr-flash-message` 走 WebSocket、每段不超过 30 秒 PCM，用于较长录音和热词。两者免费期配置都到北京时间 2026-12-21 00:00（不含截止点）。`qwen-audio-3.0-asr-flash` 的 180 秒路线只作显式 Legacy 后备，其免费期配置已于北京时间 2026-09-27 02:00 过期；filetrans 仍未接入，不借公网 URL。
+- 云 provider 仍是 Alibaba Cloud Model Studio（阿里云百炼）北京区：`qwen-audio-3.1-asr-flash` 走 HTTPS Base64、每段不超过 120 秒，用于短录音、说话人和方言；`qwen-audio-3.1-asr-flash-message` 走 WebSocket、每段不超过 30 秒 PCM，用于较长录音和热词。两者免费期配置都到北京时间 2026-12-21 00:00（不含截止点）。`qwen-audio-3.0-asr-flash` 的 180 秒路线原来只作显式 Legacy 后备（免费期配置已于北京时间 2026-09-27 02:00 过期），10 月 20 日连同 -Legacy 开关一起删除；filetrans 仍未接入，不借公网 URL。
 
-- 项目流水线只准备 HTTP 请求体或 WebSocket 帧，用 SecretRefRequestPath 把精确请求交给密码中心的 vendor_api_worker 发送，PCConfig 管它的安装路径和固定哈希；qwen_audio3_broker_worker.py 现为不持钥的兼容入口（9 月 28 日迁移，49b7d76）。续作保留 intent、unclaimed、provider 与 checkpoint：已成功的 operation 不重发；结果不明（previous_outcome_unknown）不自动另开作业，只有明确允许后在原请求加 retry_uncertain=true，且请求体、模型和音频摘要必须一致；批量补跑先 dry-run，按原音哈希、用途和声道复用已有成功。
+- 项目流水线只准备 HTTP 请求体或 WebSocket 帧，用 SecretRefRequestPath 把精确请求交给密码中心的 vendor_api_worker 发送，PCConfig 管它的安装路径和固定哈希；原来不持钥的兼容入口 qwen_audio3_broker_worker.py（9 月 28 日迁移，49b7d76）10 月 20 日已删除。续作保留 intent、unclaimed、provider 与 checkpoint：已成功的 operation 不重发；结果不明（previous_outcome_unknown）不自动另开作业，只有明确允许后在原请求加 retry_uncertain=true，且请求体、模型和音频摘要必须一致；批量补跑先 dry-run，按原音哈希、用途和声道复用已有成功。
 
 - transcript_readback.py 同时检索已保留本地 job（任务记录） 与完成态云结果，核对 schema（数据结构）、purpose、成功状态、原音哈希、每块范围和输出字节；完整云块只形成 chunk 时间粒度，quality 保持 unknown（未验证），不因更新日期更近就优先。
 
@@ -838,7 +838,7 @@ ChineseASR · 功能说明
 
 4. 本地任务完成后，有疑难证据就写 pending_ai_session 交 AI 接手；云路线在读取音频前验证唯一用途、上传依据、免费期和暂停/停用状态。
 
-5. 本地切片：短录音按不超过 120 秒走 `qwen-audio-3.1-asr-flash` 的 HTTPS Base64，较长录音或需热词时按不超过 30 秒 PCM 走 `qwen-audio-3.1-asr-flash-message` 的 WebSocket；3.0 只在显式 Legacy 下使用，filetrans 路线保持未接入。
+5. 本地切片：短录音按不超过 120 秒走 `qwen-audio-3.1-asr-flash` 的 HTTPS Base64，较长录音或需热词时按不超过 30 秒 PCM 走 `qwen-audio-3.1-asr-flash-message` 的 WebSocket；3.0 Legacy 路线 10 月 20 日已删，filetrans 路线保持未接入。
 
 ::screen{#chinese-asr-runtime-privacy-08 section="tech"}
 
@@ -1048,7 +1048,7 @@ ChineseASR · 功能说明
 
 - 云复核不能由普通模式、文件夹批量或音频长度隐式触发；只由本地疑难证据（免费期内、未暂停）或我点名触发。
 
-- 云入口的精确数据目的地是阿里云百炼北京区 `qwen-audio-3.1-asr-flash` 与 `qwen-audio-3.1-asr-flash-message`；3.0 只是显式 Legacy 后备，需要公网 URL 的 filetrans 不属于当前能力。
+- 云入口的精确数据目的地是阿里云百炼北京区 `qwen-audio-3.1-asr-flash` 与 `qwen-audio-3.1-asr-flash-message`；3.0 Legacy 后备 10 月 20 日已删，需要公网 URL 的 filetrans 不属于当前能力。
 
 - 任何输出都不能包含 API Key。
 

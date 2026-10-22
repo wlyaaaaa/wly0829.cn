@@ -26,15 +26,15 @@
   "url": "/projects/ramdisk-guardian/installation-and-application-recovery/",
   "parent": "ramdisk-guardian",
   "status_line": {
-   "state": "常用",
+   "state": "已退役",
    "as_of": "2026-10-11",
-   "source": "部署流程按现行源码重写（最后提交 10 月 6 日，早于 10 月 11 日 14:00 截止）：默认只预检、显式范围、初始化不重建、PowerShell 7、失败回滚；任务定义、Chrome 连接、快速启动设置和镜像文件按现存静态配置核对；Primo 运行设置需管理员，之后未重新核对"
+   "source": "按 RamdiskGuardian 源提交 8c39cfd（2026-10-20 22:35 北京时间，2026-10-22 只读核对）：守护、体检、部署、暂停/登记脚本与全部测试已删除，README 只留退役声明；Z 盘、计划任务和 Chrome 缓存连接的现状未读（Unknown）；正文其余数字与证据保留退役前各自日期"
   }
  },
  "source": {
   "page": "sources/pages/ramdisk-guardian-installation-and-application-recovery/page.json",
-  "sha256": "d6f60b34de1eb1daa6906b11f4a1b66a09656dfdcdc7452c3efaa07353ed966d",
-  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
+  "sha256": "cd3efbc93269be359904a3a4b22fad4068d8a1d6920a36e303f4c8561f5ccd52",
+  "converted_at_beijing": "2026-10-22T08:32:36+08:00"
  }
 }
 ---
@@ -84,11 +84,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用",
+       "text": "已退役",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 部署流程按现行源码重写（最后提交 10 月 6 日，早于 10 月 11 日 14:00 截止）：默认只预检、显式范围、初始化不重建、PowerShell 7、失败回滚；任务定义、Chrome 连接、快速启动设置和镜像文件按现存静态配置核对；Primo 运行设置需管理员，之后未重新核对",
+     "static_note": "截至 10 月 11 日 · 按 RamdiskGuardian 源提交 8c39cfd（2026-10-20 22:35 北京时间，2026-10-22 只读核对）：守护、体检、部署、暂停/登记脚本与全部测试已删除，README 只留退役声明；Z 盘、计划任务和 Chrome 缓存连接的现状未读（Unknown）；正文其余数字与证据保留退役前各自日期",
      "row": "top"
     },
     {
@@ -101,7 +101,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "重装系统或任务丢失后，知道需要恢复哪些组件，也知道哪些结果还没有证明。",
+     "text_ref": "曾经用来在重装系统或任务丢失后，知道需要恢复哪些组件，也知道哪些结果还没有证明。",
      "row": "top"
     },
     {
@@ -126,11 +126,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用",
+       "text": "已退役",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 部署流程按现行源码重写（最后提交 10 月 6 日，早于 10 月 11 日 14:00 截止）：默认只预检、显式范围、初始化不重建、PowerShell 7、失败回滚；任务定义、Chrome 连接、快速启动设置和镜像文件按现存静态配置核对；Primo 运行设置需管理员，之后未重新核对"
+     "static_note": "截至 10 月 11 日 · 按 RamdiskGuardian 源提交 8c39cfd（2026-10-20 22:35 北京时间，2026-10-22 只读核对）：守护、体检、部署、暂停/登记脚本与全部测试已删除，README 只留退役声明；Z 盘、计划任务和 Chrome 缓存连接的现状未读（Unknown）；正文其余数字与证据保留退役前各自日期"
     },
     {
      "type": "action_button",
@@ -141,7 +141,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "重装系统或任务丢失后，知道需要恢复哪些组件，也知道哪些结果还没有证明。"
+     "text_ref": "曾经用来在重装系统或任务丢失后，知道需要恢复哪些组件，也知道哪些结果还没有证明。"
     },
     {
      "type": "illustration",
@@ -171,9 +171,11 @@
 
 RamdiskGuardian · 功能说明
 
-重装系统或任务丢失后，知道需要恢复哪些组件，也知道哪些结果还没有证明。
+曾经用来在重装系统或任务丢失后，知道需要恢复哪些组件，也知道哪些结果还没有证明。
 
-**当前情况：**部署现在默认只出一份只读计划，加 -Apply 才动手，关快速启动和接 Chrome 缓存要各自点名；任务用 PowerShell 7 隐藏运行。现存配置：任务启用、每 15 分钟一轮，Chrome 三类缓存都接在 Z 上，快速启动关着。驱动开机加载、应用缓存的实际收益和下次自然重启仍分别待确认。
+**现在：**已随整个内存盘守护退役，部署和恢复脚本都没了，换电脑也不再重建守护。10 月 20 日 22:35（北京时间）源仓库提交 8c39cfd 删掉了守护、体检、部署、暂停/登记脚本和全部测试，README 只剩一句退役声明，旧实现只留在 Git 历史里，其中包括 deploy.ps1、DEPLOY.md 和隐藏启动器。Z 盘本身还挂不挂着、计划任务 RAMDisk_Code_Backup 是否已停用或删除、Chrome 三类缓存还连不连在 Z 上，本轮都没读，Unknown；快速启动现在是否仍关着也没读。替代方式来源未写明。
+
+**退役前的情况（历史）：**部署默认只出一份只读计划，加 -Apply 才动手，关快速启动和接 Chrome 缓存要各自点名；任务用 PowerShell 7 隐藏运行。10 月 11 日核对的静态配置：任务启用、每 15 分钟一轮，Chrome 三类缓存都接在 Z 上，快速启动关着。驱动开机加载、应用缓存的实际收益和自然重启验收直到退役都没有单独确认。
 
 具体测试保留各自日期，页面不实时探测运行状态。
 
@@ -286,7 +288,7 @@ RamdiskGuardian · 功能说明
 
 ## 这项功能怎样使用
 
-用途与实际影响
+用途与实际影响（退役前，留作历史）
 
 ## 为什么需要它
 
@@ -294,11 +296,11 @@ RamdiskGuardian · 功能说明
 
 ## 举个实际例子
 
-“重装后恢复 Z 盘缓存用途。”先按既有指南在 Primo 建盘，再让 AI 跑一遍部署预检，看它打算改哪些东西；确认后再执行，需要时另外点名“顺便关快速启动”“把 Chrome 缓存接过去”。Chrome 还开着就先不改它的缓存连接，完成后等一次自然重启验证盘是否自动回来。
+退役前的问法：“重装后恢复 Z 盘缓存用途。”当时先按既有指南在 Primo 建盘，再让 AI 跑一遍部署预检，看它打算改哪些东西；确认后再执行，需要时另外点名“顺便关快速启动”“把 Chrome 缓存接过去”。Chrome 还开着就先不改它的缓存连接，完成后等一次自然重启验证盘是否自动回来。
 
 ## 最后我会得到什么
 
-交回盘、任务、目录和应用缓存连接各自是否就绪，以及这次部署具体改了什么；中途失败会按原样退回。自然重启后的自动加载仍需实际观察。
+退役前交回盘、任务、目录和应用缓存连接各自是否就绪，以及这次部署具体改了什么；中途失败会按原样退回。自然重启后的自动加载需实际观察。退役后不再部署；Chrome 三类缓存若仍指向 Z，这些连接没有程序维护，现状 Unknown。
 
 ::screen{#ramdisk-guardian-installation-and-application-recovery-03 section="usage"}
 
@@ -343,6 +345,8 @@ RamdiskGuardian · 功能说明
 
 ## 结果怎么看
 
+以下是退役前的判断方式，留作历史。
+
 ## 正常工作
 
 内存盘出现、任务按计划运行、选定应用真的把可丢缓存放进去，才算日常路径就绪。
@@ -381,7 +385,7 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
     },
     {
      "type": "prose",
-     "text_ref": "先按 DEPLOY.md 配好 Primo 盘和镜像，再运行 deploy.ps1 -Json 看只读计划；确认后用管理员 PowerShell 7 加 -Apply 执行。应用缓存连接和自然重启验收分别做。",
+     "text_ref": "现在没有入口：DEPLOY.md和deploy.ps110月20日已随退役删除，AI不会从Git历史里翻出来部署。退役前的做法是：先按DEPLOY.md配好Primo盘和镜像，再运行deploy.ps",
      "row": "start",
      "width": "40%"
     },
@@ -420,7 +424,7 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
     },
     {
      "type": "prose",
-     "text_ref": "先按 DEPLOY.md 配好 Primo 盘和镜像，再运行 deploy.ps1 -Json 看只读计划；确认后用管理员 PowerShell 7 加 -Apply 执行。应用缓存连接和自然重启验收分别做。"
+     "text_ref": "现在没有入口：DEPLOY.md和deploy.ps110月20日已随退役删除，AI不会从Git历史里翻出来部署。退役前的做法是：先按DEPLOY.md配好Primo盘和镜像，再运行deploy.ps"
     },
     {
      "type": "source_text_card",
@@ -469,7 +473,7 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
 
 ## 从哪里开始
 
-先按 DEPLOY.md 配好 Primo 盘和镜像，再运行 deploy.ps1 -Json 看只读计划；确认后用管理员 PowerShell 7 加 -Apply 执行。应用缓存连接和自然重启验收分别做。
+现在没有入口：DEPLOY.md 和 deploy.ps1 10 月 20 日已随退役删除，AI 不会从 Git 历史里翻出来部署。退役前的做法是：先按 DEPLOY.md 配好 Primo 盘和镜像，再运行 deploy.ps1 -Json 看只读计划；确认后用管理员 PowerShell 7 加 -Apply 执行。应用缓存连接和自然重启验收分别做。
 
 ## 需要准备什么
 
@@ -479,7 +483,7 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
 
 - 是否需要下次自然重启后验收
 
-## 从开始到拿到结果
+## 从开始到拿到结果（退役前）
 
 1. **先有正确 RAM 盘**　在 Primo 配置目标盘，不由守护器猜盘或创建唯一数据。
 
@@ -526,11 +530,11 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
     },
     {
      "type": "prose",
-     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+     "text_ref": "这里保留退役前的实现、关键条件、入口、历史记录和验证结果；deploy.ps1、DEPLOY.md、run_hidden.vbs等10月20日已在源提交8c39cfd中删除。"
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. 当前配置为12GiB，不沿用旧截图或提示中的32GiB。9 月 18 日记录的 Primo 设置是配置为 DMM Compact、运行为 DMM、紧凑镜像、关机保存；10 月 11 日普通权限读不到运行设置，之后未重新核对。",
+     "text_ref": "1退役前配置为12GiB，不沿用旧截图或提示中的32GiB。9月18日记录的Primo设置是配置为DMMCompact、运行为DMM、紧凑镜像、关机保存；10月11日普通权限读不到运行设置，之后未重新",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -548,11 +552,11 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
     },
     {
      "type": "prose",
-     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+     "text_ref": "这里保留退役前的实现、关键条件、入口、历史记录和验证结果；deploy.ps1、DEPLOY.md、run_hidden.vbs等10月20日已在源提交8c39cfd中删除。"
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. 当前配置为12GiB，不沿用旧截图或提示中的32GiB。9 月 18 日记录的 Primo 设置是配置为 DMM Compact、运行为 DMM、紧凑镜像、关机保存；10 月 11 日普通权限读不到运行设置，之后未重新核对。",
+     "text_ref": "1退役前配置为12GiB，不沿用旧截图或提示中的32GiB。9月18日记录的Primo设置是配置为DMMCompact、运行为DMM、紧凑镜像、关机保存；10月11日普通权限读不到运行设置，之后未重新",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -577,13 +581,13 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
 
 ## 技术实现与依据（一）
 
-这里保留实现、关键条件、精确入口、历史记录和验证结果。
+这里保留退役前的实现、关键条件、入口、历史记录和验证结果；deploy.ps1、DEPLOY.md、run_hidden.vbs 等 10 月 20 日已在源提交 8c39cfd 中删除。
 
-现存静态配置：任务启用、交互用户、Highest，登录触发加独立 15.0 分钟周期，经 run_hidden.vbs 调 PowerShell 7；Chrome Default 三类缓存为指向 Z 的连接；快速启动关闭；镜像文件 0.68 GiB、最后写入 10 月 1 日。Primo 运行设置因需管理员未读到
+10 月 11 日核对的静态配置：任务启用、交互用户、Highest，登录触发加独立 15.0 分钟周期，经 run_hidden.vbs 调 PowerShell 7；Chrome Default 三类缓存为指向 Z 的连接；快速启动关闭；镜像文件 0.68 GiB、最后写入 10 月 1 日。Primo 运行设置因需管理员未读到
 
 ## 关键规则与设计选择
 
-1. 当前配置为12GiB，不沿用旧截图或提示中的32GiB。9 月 18 日记录的 Primo 设置是配置为 DMM Compact、运行为 DMM、紧凑镜像、关机保存；10 月 11 日普通权限读不到运行设置，之后未重新核对。
+1. 退役前配置为12GiB，不沿用旧截图或提示中的32GiB。9 月 18 日记录的 Primo 设置是配置为 DMM Compact、运行为 DMM、紧凑镜像、关机保存；10 月 11 日普通权限读不到运行设置，之后未重新核对。
 
 2. deploy.ps1 默认只出只读计划；-Apply 才写；-TaskOnly -Apply 只装任务；-DisableFastStartup、-WireChromeCaches 各自显式选择，且不能和 -TaskOnly 混用。
 
@@ -593,7 +597,7 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
 
 5. 撤销RAMDisk_Code_Backup只删除计划任务，不删Primo盘、镜像或缓存；任务名里的“Backup”是旧名字，它早就不做备份了。
 
-## 当前怎样实现
+## 退役前怎样实现
 
 - deploy.ps1 默认预检普通权限可跑；完整 -Apply 需要已挂载的 RAMDISK 和管理员 PowerShell 7，初次安装必须选真实交互用户，拒绝 SYSTEM 或服务账号。只有选 -DisableFastStartup 时才写 HiberbootEnabled=0。
 
@@ -662,13 +666,13 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
 
 - 完整 -Apply 的初始化调用 zguardian.ps1 -NoRecovery -WaitSeconds 0：只验证骨架和健康，禁止重建真实盘；-TaskOnly 不跑初始化。360解压临时目录由用户在其设置中指定。
 
-- 回滚先保存原任务 XML、盘符覆盖、电源设置前值和 Chrome 改名记录，失败时按逆序恢复；初始化失败会重新拿到同一把互斥锁再走生产回滚，拿不到锁就明确留下材料并报未完成。明确停用守护器时，回退命令为 Unregister-ScheduledTask -TaskName RAMDisk_Code_Backup -Confirm:$false。
+- 回滚先保存原任务 XML、盘符覆盖、电源设置前值和 Chrome 改名记录，失败时按逆序恢复；初始化失败会重新拿到同一把互斥锁再走生产回滚，拿不到锁就明确留下材料并报未完成。明确停用守护器时，回退命令为 Unregister-ScheduledTask -TaskName RAMDisk_Code_Backup -Confirm:$false；10 月 20 日退役后这条有没有执行过，本轮没读，Unknown。
 
 - 镜像压缩不是一个可直接调用的命令，而是文档里的人工维护步骤：rxprd save <实际编号> -a <候选> -F COMPACT -s，核对身份、大小、哈希和回执后原子替换，保留 1 份可用回退；不为压缩重建实际驱动。自然重启能否采用新镜像仍需另验。
 
-- 电脑配置（PCConfig）的 Show-StreamingMaintenance 小窗显示状态、下次检查、使用者和冷却，关闭窗口不停止任务。9 月 26 日撤掉的是它的开始菜单快捷方式，程序本身还在，需要时可用 pwsh -NoProfile -File E:\PCConfig\tools\Show-StreamingMaintenance.ps1 -Launch 直接打开；换机时不自动重建快捷方式。
+- 电脑配置（PCConfig）的 Show-StreamingMaintenance 小窗显示状态、下次检查、使用者和冷却，关闭窗口不停止任务。9 月 26 日撤掉的是它的开始菜单快捷方式，程序文件现在仍在 PCConfig 里（守护退役后它还显不显示有效的内存盘状态，本轮没核对），需要时可用 pwsh -NoProfile -File E:\PCConfig\tools\Show-StreamingMaintenance.ps1 -Launch 直接打开；换机时不自动重建快捷方式。
 
-## 执行流程
+## 执行流程（退役前）
 
 1. 按DEPLOY.md先设置Primo驱动盘和镜像。
 
@@ -730,6 +734,8 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
 ```
 
 ## 技术实现与依据（三）
+
+（接上一屏退役前的执行流程）
 
 2. 运行 deploy.ps1 -Json 看只读计划，选定范围（完整、仅任务、是否关快速启动、是否接 Chrome）。
 
@@ -800,7 +806,7 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
 
 ## 专业定义
 
-先只读预检，再按显式范围恢复12GiB Primo配置下的任务、基础目录和选定的缓存链接，失败按逆序回滚，最后验证下一次自然启动。
+退役前：先只读预检，再按显式范围恢复12GiB Primo配置下的任务、基础目录和选定的缓存链接，失败按逆序回滚，最后验证下一次自然启动。
 
 解决什么
 
@@ -836,7 +842,7 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 本轮没有运行 deploy.ps1、关闭 Chrome、改快速启动或重启系统；只读回看了任务、连接、注册表和镜像文件。",
+     "text_ref": "10月11日那轮没有运行deploy.ps1、关闭Chrome、改快速启动或重启系统，只读回看了任务、连接、注册表和镜像文件；10月22日这轮只核对了源仓库的退役提交，没有回看这些。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -857,7 +863,7 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 本轮没有运行 deploy.ps1、关闭 Chrome、改快速启动或重启系统；只读回看了任务、连接、注册表和镜像文件。",
+     "text_ref": "10月11日那轮没有运行deploy.ps1、关闭Chrome、改快速启动或重启系统，只读回看了任务、连接、注册表和镜像文件；10月22日这轮只核对了源仓库的退役提交，没有回看这些。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -887,11 +893,11 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
 
 ## 边界
 
-- 本轮没有运行 deploy.ps1、关闭 Chrome、改快速启动或重启系统；只读回看了任务、连接、注册表和镜像文件。
+- 10 月 11 日那轮没有运行 deploy.ps1、关闭 Chrome、改快速启动或重启系统，只读回看了任务、连接、注册表和镜像文件；10 月 22 日这轮只核对了源仓库的退役提交，没有回看这些。
 
 - Primo配置检查、自然周期执行和冷启动验收是不同证据；Primo 6.6.0 安装文件、12GiB 卷和现有镜像文件，都不能代替对运行设置的核对。
 
-## 失败与恢复
+## 失败与恢复（退役前；脚本已删除）
 
 - **任务存在但Z尚未创建**　部署会说明部分完成；先恢复Primo配置，再执行所需后续步骤。
 
@@ -973,7 +979,7 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
 
 ## 依据与来源
 
-## 真实入口
+## 原来的入口（10 月 20 日已删除）
 
 当前12GiB部署、预检范围、检查与回退说明（DEPLOY.md，PDF 版 9 月 26 日已删除，以 Markdown 为准）。
 
@@ -985,7 +991,7 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
 
 - 9月8日已回读Primo为0号Z、12288MB、非临时、镜像启用、快速启动关闭及三个Chrome连接；9月14日仅重证卷、目录、说明、镜像大小与自然任务状态。
 
-- 现存静态配置核对：任务启用、每 15 分钟一轮、调用 PowerShell 7；Chrome 三类缓存连接分别指向 Z:\Caches 下的三个目录；快速启动关闭（这只说明现在是关的，不证明 6 月 15 日以来从没变过）；镜像文件 732,168,704 字节、最后写入 10 月 1 日 03:53；Primo 已装版本 6.6.0。Primo 当前编号、运行模式和镜像格式需要管理员才能读，之后未重新核对。
+- 10 月 11 日静态配置核对：任务启用、每 15 分钟一轮、调用 PowerShell 7；Chrome 三类缓存连接分别指向 Z:\Caches 下的三个目录；快速启动关闭（这只说明现在是关的，不证明 6 月 15 日以来从没变过）；镜像文件 732,168,704 字节、最后写入 10 月 1 日 03:53；Primo 已装版本 6.6.0。Primo 编号、运行模式和镜像格式需要管理员才能读，之后未重新核对；退役后这些配置是否还在，本轮没读（Unknown）。
 
 - README/DEPLOY 曾生成 3 页/2 页 PDF 并核对过，这些 PDF 已于 9 月 26 日删除，现在只保留 Markdown 和网站入口。
 
@@ -993,4 +999,4 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
 
 ## 与其他模块的关系
 
-这是其余四个模块的实际运行入口，也界定驱动、脚本和应用分别负责的恢复步骤。
+退役前这是其余四个模块的实际运行入口，也界定驱动、脚本和应用分别负责的恢复步骤。五个模块随整个守护 10 月 20 日一起退役。

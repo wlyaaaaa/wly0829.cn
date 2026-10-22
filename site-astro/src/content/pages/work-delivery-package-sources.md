@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/work-delivery-package-sources/page.json",
   "sha256": "264e41908d093a1eeefab0a63417dac8569343b9360d9342e9b9d9ae593e3d53",
-  "converted_at_beijing": "2026-10-12T00:29:49+08:00"
+  "converted_at_beijing": "2026-10-22T08:32:43+08:00"
  }
 }
 ---
@@ -657,7 +657,7 @@
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- run_batch 的 store._transaction 一起提交新包、来源、事实和审阅，事务里出错整体回滚；提交之后才检查第一次 15 秒时间门，超时不会回滚已经提交的事务。",
+     "text_ref": "run_batch的store._transaction一起提交新包、来源、事实和审阅，事务里出错整体回滚；提交之后才检查第一次15.0秒时间门，超时不会回滚已经提交的事务。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -675,7 +675,7 @@
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- run_batch 的 store._transaction 一起提交新包、来源、事实和审阅，事务里出错整体回滚；提交之后才检查第一次 15 秒时间门，超时不会回滚已经提交的事务。",
+     "text_ref": "run_batch的store._transaction一起提交新包、来源、事实和审阅，事务里出错整体回滚；提交之后才检查第一次15.0秒时间门，超时不会回滚已经提交的事务。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",

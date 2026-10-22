@@ -34,13 +34,13 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-09-27 20:17"
+    "at": "2026-10-20 14:34"
    },
    "facts": [
-    "近 7 天没用过"
+    "近 7 天 AI 用了 2 次"
    ],
-   "as_of": "2026-10-12",
-   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+   "as_of": "2026-10-20",
+   "source": "AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
   },
   "based_on": {
    "commit": "64c67cacad880fbe6c121db838db8e82bdcb3768",
@@ -103,8 +103,8 @@
  },
  "source": {
   "page": "sources/pages/skill-reply-as-me/page.json",
-  "sha256": "fc13a48f90b2464595d203323532c9449e7e039ea1d42309494a62eabfc720b8",
-  "converted_at_beijing": "2026-10-12T05:03:50+08:00"
+  "sha256": "acde05b7cd2aa8c0b0466f957c89860e74b63fb709ec9f83b00f509ee0bc1c23",
+  "converted_at_beijing": "2026-10-22T08:32:39+08:00"
  }
 }
 ---
@@ -192,15 +192,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 27 日 20:17",
+       "text": "偶尔用 · 上次使用 10 月 20 日 14:34",
        "state": "ok"
       },
       {
-       "text": "近 7 天没用过",
+       "text": "近 7 天 AI 用了 2 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 20 日 · AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -319,15 +319,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 27 日 20:17",
+       "text": "偶尔用 · 上次使用 10 月 20 日 14:34",
        "state": "ok"
       },
       {
-       "text": "近 7 天没用过",
+       "text": "近 7 天 AI 用了 2 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 20 日 · AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
     },
     {
      "type": "prose",

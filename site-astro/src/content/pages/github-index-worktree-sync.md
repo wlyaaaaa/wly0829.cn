@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/github-index-worktree-sync/page.json",
-  "sha256": "0535cebe014c9837e69fafbad2ee769340afcaaca2e9d58154e0194fcb0bb19a",
-  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
+  "sha256": "b93c7ca5816791bd2de168d60e1800208af48d1b58fc575729b3f96231696df1",
+  "converted_at_beijing": "2026-10-22T08:32:30+08:00"
  }
 }
 ---
@@ -169,7 +169,7 @@ GitHub 总索引 · 功能说明
 
 防止“当前分支已 push（推送）”掩盖另一个工作树的未提交修改、独有提交或没有进入 main（默认主分支）的 feature（功能分支）历史。
 
-**当前情况：**已有查清各份工作副本、分支和默认主线差异的功能；发现独有修改时保留它，不自动删除或宣布已经交付。10 月 11 日 16:34 看总索引自己：唯一的 main 工作树没有未提交修改，但有 2 个提交还没进入远端 main，所以不算已交付。
+**当前情况：**已有查清各份工作副本、分支和默认主线差异的功能；发现独有修改时保留它，不自动删除或宣布已经交付。10 月 11 日 16:34 看总索引自己：唯一的 main 工作树没有未提交修改，但有 2 个提交还没进入远端 main，所以当时不算已交付。10 月 22 日 06:48 再只读数：本地相对本机缓存的远端 main 领先 0 个提交；没有拉取远端，所以只说明按缓存没有待推送的提交。
 
 项目事实核对截至 2026-10-11 14:00（北京时间）；14:00 后的现场读数单独注明时间；页面不实时探测运行状态。
 
@@ -698,7 +698,7 @@ GitHub 总索引 · 功能说明
 
 - branch（分支） inventory 枚举无 worktree（Git 工作树） 的本地 refs 和 remote-tracking refs；用 ancestry 与 `git cherry` 区分 unmerged、merged_ancestry 和 patch_equivalent。
 
-- artifact governance 只对 exact repo/ref 生效；必要 retention 必须同时匹配 repo、绝对 path 与 HEAD，并带 Owner、用途、exit condition。当前登记 3 条专门治理项、1 个冻结历史仓库例外、1 个必要保留项（10 月 11 日核对的登记数，不代表每项的使用方都已重新验收）。
+- artifact governance 只对 exact repo/ref 生效；必要 retention 必须同时匹配 repo、绝对 path 与 HEAD，并带 Owner、用途、exit condition。当前登记 3 条专门治理项、1 个冻结历史仓库例外，必要保留项 0 个（10 月 22 日 06:48 数的登记项；10 月 11 日时必要保留项还是 1 个。只数了登记条目，不代表每项的使用方都已重新验收）。
 
 - frozen_history 保留冻结仓库的非默认 refs 与独有提交，不回灌默认分支，也不把它们当普通清理候选。
 

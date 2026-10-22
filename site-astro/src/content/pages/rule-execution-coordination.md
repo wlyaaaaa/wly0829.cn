@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E279",
-   "commit": "dfca0d10888eadf1b2f724da417da9079a6ef938",
-   "ruleset_sha256": "11064e71ec4ea1a426f5ced03d95d2d0a00131025c7b4c8f606c5d0c67772681",
-   "activated_at": "2026-10-21T21:20:08.660355+08:00",
+   "release": "E280",
+   "commit": "9e6c296def23c918a78334b02c597da68efd0233",
+   "ruleset_sha256": "33c65cb3c6152825d5fb89b7be9688f534ab9ebe6ffa1841358b315b98b0b87f",
+   "activated_at": "2026-10-22T08:43:25.661700+08:00",
    "file": "sources/rules/docs/contracts/agents.execution-coordination.md",
    "sha256": "4a769967b758b3c674f6ad8ad4dff87c16430c4942e98b168d4bbaa5620e2197",
    "public_sha256": "b3f5f48f7a5e267c2b79bd5d7e9f5739321e5df9c3406bfb789071589fb3f928"
@@ -205,8 +205,8 @@
  },
  "source": {
   "page": "sources/pages/rule-execution-coordination/page.json",
-  "sha256": "4cb5bf7ee25745cca506537b762062a45062b8943a31768c078f1cbafddbd9b9",
-  "converted_at_beijing": "2026-10-22T07:02:36+08:00"
+  "sha256": "55a9607bad1d8d10da5f4212ab7221161d73b6ce3d690d4970ea2bd47d699938",
+  "converted_at_beijing": "2026-10-22T09:10:17+08:00"
  }
 }
 ---
@@ -471,12 +471,12 @@
 | 型号 | 任务场景与档位 |
 |---|---|
 | GPT-6 Luna | 机械调用、逐字摘录、理解材料和跨材料对齐都用 max；纯机械改名、套已定补丁可以派，需要判断的写代码和修复不派；照写好的提示生图、落盘用 low |
-| GPT-6.1 Sol | 照已定方案的代码修改、常规排障、综合调研、批量审图，统一用 ultra；根因不明时先收材料。只接方案、范围、文件和预算都写死的施工，要自己定方案的（架构、跨模块、开放问题、取舍）先交 Claude Opus 或有授权的 Astra；做不对先纠正，同一关键错再犯才换 Astra high 或 Opus high |
+| GPT-6.1 Sol | 照已定方案的代码修改、常规排障、综合调研、批量审图用 ultra；只读、步骤简单、代码上限为 0 的小单（读一页、查一项现成数据、回读状态）用 medium（这一条按 2026-10-22 读到的模型清单补齐）。根因不明时先收材料。只接方案、范围、文件和预算都写死的施工，要自己定方案的（架构、跨模块、开放问题、取舍）先交 Claude Opus 或有授权的 Astra；做不对先纠正，同一关键错再犯才换 Astra high 或 Opus high |
 | GPT-6 Astra | 要紧审图、密集图表 high；疑难、重大改动复核、并发和安全这类难测的路径 ultra；不为生图派它 |
 | Claude Opus 5.5 | 小判断 low；整理初稿 medium；完整分析、方案、程序根因、正式文书 high；疑难 xhigh |
 | Claude Sonnet 5.5 | 只在 GPT 不可用时接机械活，用 low；GPT 能用时不派 |
 
-**怎么搭配**：Sol 用 ultra，Luna 用 max（最高档），照写好的提示生图、落盘交 Luna low；其他型号选能胜任的最低档。做错先按验收事实补材料、退回改，同一关键错再犯，或方案走不通、活变难，就重选执行者；两家同档都做不对，才最后用一次 max，同一个模型不把从 xhigh 加到 max 当默认的下一步。Opus 与 Astra 的高档活选一家实施，可交叉独立复核。给本人看的成品、分析和价值取舍优先 Opus，主对话最终把关。
+**怎么搭配**：Sol 用 ultra，Luna 用 max（最高档）；Sol 只读、步骤简单、代码上限为 0 的小单例外用 medium，照写好的提示生图、落盘交 Luna low；其他型号选能胜任的最低档。做错先按验收事实补材料、退回改，同一关键错再犯，或方案走不通、活变难，就重选执行者；两家同档都做不对，才最后用一次 max，同一个模型不把从 xhigh 加到 max 当默认的下一步。Opus 与 Astra 的高档活选一家实施，可交叉独立复核。给本人看的成品、分析和价值取舍优先 Opus，主对话最终把关。具体型号和档位以模型清单为准。
 
 **三种宿主怎样派**
 - Claude：自己的子代理用 Agent 类型选档；Sol、Luna 无需另授权；Astra 按对话或项目授权，GPT 都经包装器写明型号和档位。
@@ -520,7 +520,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
    },
    {
     "id": "p-review",
-    "text": "重大的事独立复核"
+    "text": "按风险决定复核深浅"
    }
   ],
   "live": [],
@@ -1449,7 +1449,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.execution-coordination.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "4a769967b758b3c674f6ad8ad4dff87c16430c4942e98b168d4bbaa5620e2197",
    "public_sha256": "b3f5f48f7a5e267c2b79bd5d7e9f5739321e5df9c3406bfb789071589fb3f928",
    "from": null,
@@ -1487,7 +1487,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E279版，一字不改"
+     "text_ref": "原文·E280版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1511,7 +1511,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E279版，一字不改"
+     "text_ref": "原文·E280版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1587,7 +1587,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
 }
 ```
 
-原文 · E279 版，一字不改
+原文 · E280 版，一字不改
 
 # 分工与并行施工
 
@@ -1649,7 +1649,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.execution-coordination.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "4a769967b758b3c674f6ad8ad4dff87c16430c4942e98b168d4bbaa5620e2197",
    "public_sha256": "b3f5f48f7a5e267c2b79bd5d7e9f5739321e5df9c3406bfb789071589fb3f928",
    "from": "## 改动与花费成比例",
@@ -1703,7 +1703,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E279版·续"
+     "text_ref": "原文·E280版·续"
     },
     {
      "type": "source_text_card",
@@ -1777,7 +1777,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E279版·续"
+     "text_ref": "原文·E280版·续"
     },
     {
      "type": "source_text_card",
@@ -1875,7 +1875,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
 }
 ```
 
-原文 · E279 版 · 续
+原文 · E280 版 · 续
 
 ## 改动与花费成比例
 

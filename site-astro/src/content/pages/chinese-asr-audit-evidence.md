@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/chinese-asr-audit-evidence/page.json",
-  "sha256": "5e32b7067b2a2e2e30f7ddb6abe6fd317ef8799dc6ecd29ebe2046a82aa19243",
-  "converted_at_beijing": "2026-10-22T07:02:29+08:00"
+  "sha256": "12606c33b6a6fea782071c032874fb132dbff350e62b774c0f1772d773c41b6f",
+  "converted_at_beijing": "2026-10-22T08:32:27+08:00"
  }
 }
 ---
@@ -676,11 +676,11 @@ ChineseASR · 功能说明
 
 3. 主引擎失败会改变证据等级。
 
-4. LLM 仲裁默认关闭；只有显式启用且 chunk 带 flags、needs_review 或低相似度时才触发。
+4. 原来可选的 LLM 仲裁（默认关闭、只看结构化证据）10 月 20 日已随代码删除，现在不能再打开。
 
-5. 仲裁只读结构化 audit 证据、不读音频，只写 merged audit / metrics；两路 raw ASR（自动语音识别） JSON 永不被它覆盖。
+5. 分歧只靠两路比对、风险规则和人工回听处理；两路 raw ASR（自动语音识别） JSON 只由两个识别引擎写出，之后不被改写。
 
-6. 本地 Ollama 不可用或返回无效 JSON 时保留原始分歧和人工复核队列，基础转写不依赖它成功。
+6. 基础转写从来不依赖大模型；删掉仲裁不改变正文、audit 和复核队列怎么生成。
 
 7. 内容文件与回执不一致时 verified 自动失效。
 
@@ -832,9 +832,9 @@ ChineseASR · 功能说明
 
 2. 遇到标记、关键姓名数字或争议句时，打开 `*.strict.audit.md` 或 `*.strict.audit.json`，比较主/对照原文、相似度、规则命中、错误和选择依据。
 
-3. 长音频只有在配置显式启用时，才把带 flags、needs_review 或低相似度的 chunk audit 送给本地 Ollama；调用在 ASR（自动语音识别） chunk 处理之后进行，`keep_alive=0` 让模型用完卸载。
+3. 长音频把各段 audit 合并成一份 merged audit；原来可选的“送本地 Ollama 仲裁”这一步 10 月 20 日已删。
 
-4. 把仲裁决定追加到 merged audit / metrics，同时保留两路 strict raw JSON；Ollama 失败、缺失或响应不可解析时不改写基础结果。
+4. 两路 strict raw JSON 原样保留，合并只汇总、不改写基础结果。
 
 5. 再读 `*.strict.review.json` 的结构化队列，按可用时间区间回到原音频逐项核听；评测 / benchmark 的聚合复核队列另看 `review.md`。
 
@@ -967,11 +967,11 @@ ChineseASR · 功能说明
 | indeterminate（无法确定） | 当前证据不足，不能断言有语音或无语音。 |
 | evidence receipt | 列出六项严格内容制品的相对路径、大小、SHA-256、声明与 bundle hash（内容指纹）；它不是签名、可信时间戳、文字真值或事实认证。 |
 | review queue（复核队列） | 按风险收集需要回听的句段，而不是让用户从头听完整录音。 |
-| evidence-only arbitration（只读证据仲裁） | 可选本地 LLM 只看不确定 chunk 的两路文字、相似度、规则和上下文，结论进入 audit / metrics；它不听音频、不改 raw，也不替代人工核听。 |
+| evidence-only arbitration（只读证据仲裁，已删） | 以前可选的本地 LLM，只看不确定 chunk 的两路文字、相似度和规则给意见；从没默认开启，10 月 20 日连同代码删除。 |
 
 ## 专业定义
 
-先读正文，再点开值得回听的差异；数字、否定和实际声音一起核对，补充模型或可选 LLM 都不能替我改掉原始证据。
+先读正文，再点开值得回听的差异；数字、否定和实际声音一起核对，补充模型不能替我改掉原始证据。
 
 ::screen{#chinese-asr-audit-evidence-10 section="tech"}
 
@@ -1050,9 +1050,9 @@ ChineseASR · 功能说明
 
 - verified 回执不能替代原音频和人工核听。
 
-- Ollama 仲裁默认关闭；没有它时基础链必须稳定，启用它也不能把 LLM 偏好当成原始证据或最终真值。
+- 原来默认关闭的 Ollama 仲裁 10 月 20 日已删；基础链从来不依赖它，任何 LLM 偏好也不能当成原始证据或最终真值。
 
-- `keep_alive=0` 避免模型长期驻留 GPU；仲裁在 ASR（自动语音识别） chunk 完成后运行，不与两路 ASR（自动语音识别） 同时争抢资源。
+- 审计层不再调用本地大模型，不与两路 ASR（自动语音识别） 争抢显卡。
 
 - 低分、空文本和失败必须分别表达。
 
@@ -1141,7 +1141,7 @@ ChineseASR · 功能说明
 
 - **两路模型对关键句冲突**：保留两路原始输出、audit 依据和时间位置，进入人工回听；没有时间戳时按长音频 chunk 或原文上下文定位并保留未知。
 
-- **显式启用仲裁但本地 Ollama 不可达或响应不是有效 JSON**：只把该 chunk 的仲裁标为不可用或低置信，保留两路 raw、原 audit 与人工复核队列；不重启服务、不覆盖正文，也不让基础长音频任务失败。
+- **想打开大模型仲裁**：这个开关 10 月 20 日已随代码删除，不能再开；分歧照常保留两路 raw、原 audit 与人工复核队列，按时间回听。
 
 ::screen{#chinese-asr-audit-evidence-12 section="tech"}
 
@@ -1235,7 +1235,7 @@ ChineseASR · 功能说明
 
 - 人工 truth 对齐、指标与 benchmark/review 成品
 
-- 默认关闭的本地 Ollama evidence-only 仲裁、结构化请求与失败回退
+- 本地 Ollama evidence-only 仲裁已于 10 月 20 日删除（32df3b9：arbitration.py 及其测试）
 
 ::screen{#chinese-asr-audit-evidence-13 section="tech"}
 

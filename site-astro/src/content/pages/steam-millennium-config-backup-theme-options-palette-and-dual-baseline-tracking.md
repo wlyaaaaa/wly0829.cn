@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking/page.json",
   "sha256": "f37d4a54d1f9ddf1ad7e7e7240c93f50d426084753af70368135f73e2bf9dc6f",
-  "converted_at_beijing": "2026-10-20T08:56:34+08:00"
+  "converted_at_beijing": "2026-10-22T08:32:40+08:00"
  }
 }
 ---
@@ -454,7 +454,7 @@ Steam Millennium 配置备份 · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. **确定基线**　分清现在这份（已提交、本机保存和已安装三者一致）和想找回的历史快照，选要恢复的那一份。",
+     "text_ref": "1确定基线分清公开仓库里已提交的、本机保存的这份（和已安装的一致）以及想找回的历史快照，选要恢复的那一份；Zehn现在本机和仓库就不是同一版。",
      "row": "start",
      "columns": 1,
      "icons": "none",
@@ -488,7 +488,7 @@ Steam Millennium 配置备份 · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. **确定基线**　分清现在这份（已提交、本机保存和已安装三者一致）和想找回的历史快照，选要恢复的那一份。",
+     "text_ref": "1确定基线分清公开仓库里已提交的、本机保存的这份（和已安装的一致）以及想找回的历史快照，选要恢复的那一份；Zehn现在本机和仓库就不是同一版。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",

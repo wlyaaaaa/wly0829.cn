@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/chinese-asr-models-modes/page.json",
-  "sha256": "55eb259be6d67c9c3d25dfeee9267055da85f120c5c488e8bc10ebfa4065c2b3",
-  "converted_at_beijing": "2026-10-11T18:50:42+08:00"
+  "sha256": "5a536230ba56851aeefda141a602625517068a1d296bbd67e27d17ea8fcb9c74",
+  "converted_at_beijing": "2026-10-22T08:32:27+08:00"
  }
 }
 ---
@@ -101,12 +101,12 @@
     },
     {
      "type": "prose",
-     "text_ref": "我按用途选路线：对电脑说话打字用 Qwen3-ASR-1.7B；先快速看录音内容用 SenseVoiceSmall；平常的录音默认用 Qwen 与 SenseVoice 两路严格核对；重要录音点名走高质量路线，由 FireRedASR2-LLM 主听、Qwen 校验。Fun-ASR 是可明确选择的另一中文路线；多人录音的分段可用 Paraformer，确认文案配时间用 Qwen3-ForcedAligner。本地标出疑点的文件在免费期内会再请阿里云 Qwen Audio 3.1 听一遍；普通录音不会因安装新模型而自动改路线或上传云端。",
+     "text_ref": "我按用途选路线：对电脑说话打字用Qwen3-ASR-1.7B；先快速看录音内容用SenseVoiceSmall；平常的录音默认用Qwen与SenseVoice两路严格核对；重要录音点名走高质量路线，由",
      "row": "top"
     },
     {
      "type": "prose",
-     "text_ref": "**当前情况：**已有快速初稿、日常双模型核对、重要录音高质量路线、可明确选择的其他本地路线和疑难云复核；Whisper目前只有登记，不能直接转写，也不会自动成为后备。",
+     "text_ref": "当前情况：已有快速初稿、日常双模型核对、重要录音高质量路线、带逐句时间的Paraformer路线和疑难云复核。文件转写现在登记4个识别引擎（FireRedASR2-LLM、Qwen3-ASR-1.7B",
      "row": "top"
     },
     {
@@ -146,11 +146,11 @@
     },
     {
      "type": "prose",
-     "text_ref": "我按用途选路线：对电脑说话打字用 Qwen3-ASR-1.7B；先快速看录音内容用 SenseVoiceSmall；平常的录音默认用 Qwen 与 SenseVoice 两路严格核对；重要录音点名走高质量路线，由 FireRedASR2-LLM 主听、Qwen 校验。Fun-ASR 是可明确选择的另一中文路线；多人录音的分段可用 Paraformer，确认文案配时间用 Qwen3-ForcedAligner。本地标出疑点的文件在免费期内会再请阿里云 Qwen Audio 3.1 听一遍；普通录音不会因安装新模型而自动改路线或上传云端。"
+     "text_ref": "我按用途选路线：对电脑说话打字用Qwen3-ASR-1.7B；先快速看录音内容用SenseVoiceSmall；平常的录音默认用Qwen与SenseVoice两路严格核对；重要录音点名走高质量路线，由"
     },
     {
      "type": "prose",
-     "text_ref": "**当前情况：**已有快速初稿、日常双模型核对、重要录音高质量路线、可明确选择的其他本地路线和疑难云复核；Whisper目前只有登记，不能直接转写，也不会自动成为后备。"
+     "text_ref": "当前情况：已有快速初稿、日常双模型核对、重要录音高质量路线、带逐句时间的Paraformer路线和疑难云复核。文件转写现在登记4个识别引擎（FireRedASR2-LLM、Qwen3-ASR-1.7B"
     },
     {
      "type": "illustration",
@@ -180,11 +180,11 @@
 
 ChineseASR · 功能说明
 
-我按用途选路线：对电脑说话打字用 Qwen3-ASR-1.7B；先快速看录音内容用 SenseVoiceSmall；平常的录音默认用 Qwen 与 SenseVoice 两路严格核对；重要录音点名走高质量路线，由 FireRedASR2-LLM 主听、Qwen 校验。Fun-ASR 是可明确选择的另一中文路线；多人录音的分段可用 Paraformer，确认文案配时间用 Qwen3-ForcedAligner。本地标出疑点的文件在免费期内会再请阿里云 Qwen Audio 3.1 听一遍；普通录音不会因安装新模型而自动改路线或上传云端。
+我按用途选路线：对电脑说话打字用 Qwen3-ASR-1.7B；先快速看录音内容用 SenseVoiceSmall；平常的录音默认用 Qwen 与 SenseVoice 两路严格核对；重要录音点名走高质量路线，由 FireRedASR2-LLM 主听、Qwen 校验。多人录音要逐句时间和按声音分组时点名 Paraformer，确认文案配时间用 Qwen3-ForcedAligner。本地标出疑点的文件在免费期内会再请阿里云 Qwen Audio 3.1 听一遍；普通录音不会因安装新模型而自动改路线或上传云端。
 
-**当前情况：**已有快速初稿、日常双模型核对、重要录音高质量路线、可明确选择的其他本地路线和疑难云复核；Whisper目前只有登记，不能直接转写，也不会自动成为后备。
+**当前情况：**已有快速初稿、日常双模型核对、重要录音高质量路线、带逐句时间的 Paraformer 路线和疑难云复核。文件转写现在登记 4 个识别引擎（FireRedASR2-LLM、Qwen3-ASR-1.7B、SenseVoiceSmall、Paraformer）和 2 套组合（日常 baseline、重要录音 high_quality）。10 月 20 日起，一直没在用的 Fun-ASR-Nano、只登记没接上的 Whisper、本地大模型仲裁和过期的云端 Qwen Audio 3.0 都已删除，不再是可选路线。
 
-项目技术事实核对于 2026-10-11（北京时间），采用当天 14:00 前的源码状态；具体测试保留各自日期，页面不实时探测运行状态。
+项目技术事实核对于 2026-10-11（北京时间），采用当天 14:00 前的源码状态；模型登记、路线退役和本机模型目录按 10 月 22 日读到的当前源码（325b0c4）更正；具体测试保留各自日期，页面不实时探测运行状态。
 
 项目源码：公开仓库
 
@@ -334,7 +334,7 @@ ChineseASR · 功能说明
 
 ## 最后我会得到什么
 
-每次交回实际使用的模型、初稿或双路文字、需要回听的差异与时间位置；对齐任务另给逐词秒数。Whisper Large V3 目前只有登记，不能直接执行，也不是失败后的自动备选。云端识别分两种：本地标出疑点的文件，在免费期内由 AI 自动请云端复核；想跳过本地直接整段上云，或免费期已过，仍须我明确同意这一次。
+每次交回实际使用的模型、初稿或双路文字、需要回听的差异与时间位置；对齐任务另给逐词秒数。以前登记过的 Whisper Large V3 和 Fun-ASR-Nano 已在 10 月 20 日删除，点名它们会直接报“没有这个引擎”，也不会成为失败后的自动备选。云端识别分两种：本地标出疑点的文件，在免费期内由 AI 自动请云端复核；想跳过本地直接整段上云，或免费期已过，仍须我明确同意这一次。
 
 ## 正常时
 
@@ -346,7 +346,7 @@ ChineseASR · 功能说明
 
 ## 入口不可用或证据不足时
 
-所选权重或运行环境缺失时只暂停对应路线。Whisper 当前不能直接转写，不会用相近模型顶替，也不会自行下载、换默认，或拿上传云端顶替缺失的本地模型。
+所选权重或运行环境缺失时只暂停对应路线；点名已删除的路线（Whisper、Fun-ASR-Nano）直接报错。不会用相近模型顶替，也不会自行下载、换默认，或拿上传云端顶替缺失的本地模型。
 
 ::screen{#chinese-asr-models-modes-03 section="usage"}
 
@@ -452,7 +452,7 @@ Qwen 主识别失败而 SenseVoice 有结果时，只交暂定文字和失败原
 
 ## 入口不可用或证据不足时
 
-所选权重或运行环境缺失时只暂停对应路线。Whisper 当前不能直接转写，不会用相近模型顶替，也不会自行下载、换默认或上传。
+所选权重或运行环境缺失时只暂停对应路线；点名已删除的路线（Whisper、Fun-ASR-Nano）直接报错，不会用相近模型顶替，也不会自行下载、换默认或上传。
 
 ::screen{#chinese-asr-models-modes-04 section="usage"}
 
@@ -670,7 +670,7 @@ Qwen 主识别失败而 SenseVoice 有结果时，只交暂定文字和失败原
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 月 11 日重读仍相同）；quick/strict 固定，重要录音 high_quality 显式选择；Whisper Large V3 仅 fallback（后备路线）/comparison、当前不可直接执行
+Registry（登记清单） 现登记 4 个识别引擎、2 套 profiles（baseline、high_quality），10 月 22 日重读；quick/strict 固定，重要录音 high_quality 显式选择；Fun-ASR-Nano、Whisper Large V3 占位、LLM 仲裁和云端 Qwen Audio 3.0 已于 10 月 20 日（32df3b9）删除
 
 ## 关键规则与设计选择
 
@@ -682,11 +682,11 @@ Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 
 
 4. quick 与 strict 的质量和成本边界明确；重要录音的 high_quality（FireRedASR2-LLM 主听、Qwen3-ASR 校验）只按用途显式选择，不改全局 strict、quick 或桌面听写。
 
-5. 证据级、时间线和备用模型必须显式选择。
+5. 证据级和时间线路线必须显式选择；不再保留只登记、不能执行的“备用模型”。
 
-6. Registry（登记清单） 当前登记 6 个 Profile，但 list_transcription_engine_names 只返回 5 个可直接执行引擎；数量不能互相冒充，云模型也不算在内。
+6. Registry（登记清单） 的 engines 段现有 4 个识别引擎；profiles 段只有 baseline（Qwen3-ASR-1.7B 主、SenseVoiceSmall 对照）和 high_quality（FireRedASR2-LLM 主、Qwen3-ASR-1.7B 对照）两套组合。引擎数不能叫 Profile 数，云模型也不算在内；以前写的“6 个 Profile、5 个可直接执行”是 10 月 20 日删除前把引擎叫成 Profile 的旧数。
 
-7. Whisper Large V3 是 fallback（后备路线）/comparison 设计记录，当前 pipeline 看到 is_whisper=true 会在模型加载前明确拒绝。
+7. Whisper Large V3 原来只是 fallback（后备路线）/comparison 的登记占位、从没接上；10 月 20 日连同 is_whisper 守卫一起删除，现在点名它和任何未登记模型一样，在加载前报 Unknown ASR engine。
 
 8. 每次结果记录实际引擎，而不是只记录模式名。
 
@@ -753,17 +753,17 @@ Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 
 
 ## 当前怎样实现
 
-- configs/models.yaml 声明本地模型 id、适配器、版本、能力和设备要求；另有独立的 cloud_review 段登记两款 Qwen Audio 3.1 云模型（`qwen-audio-3.1-asr-flash`、`qwen-audio-3.1-asr-flash-message`）及只作 Legacy 后备的 3.0，云模型不计入本地 6 个 Profile。
+- configs/models.yaml 声明本地模型 id、适配器、版本、能力和设备要求；另有独立的 cloud_review 段登记两款 Qwen Audio 3.1 云模型（`qwen-audio-3.1-asr-flash`、`qwen-audio-3.1-asr-flash-message`）；过期的 3.0 Legacy 后备 10 月 20 日已删。云模型不计入本地 4 个引擎和 2 套 profiles。
 
 - config.py 读取并验证模型配置；未知引擎直接失败。
 
-- config.py 分开 list_engine_names（全部登记）与 list_transcription_engine_names（排除 is_whisper 的直接转写闭集）。
+- config.py 的 list_engine_names 列出全部登记引擎，list_transcription_engine_names 只列有可用适配器（firered-worker、funasr、qwen-asr）的引擎；随 Whisper 占位删除，原来排除 is_whisper 的那层守卫也撤了。
 
-- pipeline.py 按 quick、strict、high_quality 和显式参数组织主/对照引擎；build_model 在加载前拒绝 is_whisper Profile。
+- pipeline.py 按 quick、strict、high_quality 和显式参数组织主/对照引擎；点名未登记的引擎或 profile，在加载前报 Unknown ASR engine / Unknown ASR profile。
 
 - adapters 分离 Qwen、FunASR 与 FireRed 的运行差异。
 
-- fun-asr-nano 使用 ModelScope hub、funasr-automodel、GPU 与 trust_remote_code=true，固定 revision 05201c46…；Paraformer 固定 v2.0.4，并显式携带 VAD（语音活动检测）/PUNC/CAM++ aliases。
+- Paraformer 固定 v2.0.4，并显式携带 VAD（语音活动检测）/PUNC/CAM++ aliases。原来的 fun-asr-nano（ModelScope hub、funasr-automodel、GPU、trust_remote_code=true、revision 05201c46…）10 月 20 日已删；要恢复，须从 32df3b9 的父版本取回 configs/models.yaml 条目和 pipeline.py 语言映射，再运行 scripts/download-models.ps1 -Engine fun-asr-nano（本机权重已可恢复地移入回收站）。
 
 - qwen_identity.py 对 Qwen runtime（运行环境） 与模型身份做精确约束。
 
@@ -832,7 +832,7 @@ Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 
 
 2. 从 Registry（登记清单） 取得精确 profile。
 
-3. 检查 Profile 是否进入 direct transcription 闭集；Whisper registered-only 请求在加载前停止。
+3. 检查引擎是否在登记表里、有没有可用适配器；未登记的（包括已删除的 Nano、Whisper）在加载前停止。
 
 4. 检查依赖、权重、设备和输入能力。
 
@@ -840,7 +840,7 @@ Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 
 
 6. 把实际身份和执行状态写入结果。
 
-7. 交给仲裁与审计层生成正文和复核结论。
+7. 交给审计层生成正文和复核结论（原来可选的本地大模型仲裁 10 月 20 日已删）。
 
 ::screen{#chinese-asr-models-modes-08 section="tech"}
 
@@ -900,8 +900,8 @@ Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 
 | Registry | 模型配置的唯一登记表，决定 id、角色、适配器和边界。 |
 | primary engine（主引擎） | 严格模式主要正文候选的来源。 |
 | secondary engine（对照引擎） | 独立转写同一输入，用于发现分歧和疑似幻觉。 |
-| profile | 一个精确模型及其运行合同，不是模糊产品别名。 |
-| registered-only profile（仅登记配置） | 为了记录备用/对照身份而保留在 Registry（登记清单），但当前没有直接转写执行路径；Whisper Large V3 属于这一类。 |
+| engine / profile | engine 是一个精确模型及其运行合同；profile 是主、对照两个 engine 的固定组合（现有 baseline、high_quality）。都不是模糊产品别名。 |
+| registered-only profile（仅登记配置） | 以前为记录备用/对照身份留在 Registry（登记清单）、却没有执行路径的登记；Whisper Large V3 曾是这一类，10 月 20 日已删，现在没有这类登记。 |
 
 ## 专业定义
 
@@ -984,15 +984,15 @@ Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 
 
 ## 边界
 
-- Fun-ASR-Nano、FireRed 和 Paraformer 可按各自显式路线执行但不会接管 quick/strict；FireRed 只在重要录音点名 high_quality 时担任主听。Whisper 仅登记为备用/对照，当前不能直接转写。
+- FireRed 和 Paraformer 可按各自显式路线执行但不会接管 quick/strict；FireRed 只在重要录音点名 high_quality 时担任主听。Fun-ASR-Nano 和 Whisper 占位 10 月 20 日已删，不再可选。
 
-- Fun-ASR-Nano 精确身份为 FunAudioLLM/Fun-ASR-Nano-2512@05201c46f1c38592b1567f857c0d56eab3d0d8ef；Paraformer 精确身份为 iic/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-pytorch@v2.0.4。
+- Paraformer 精确身份为 iic/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-pytorch@v2.0.4；已删除的 Fun-ASR-Nano 原身份为 FunAudioLLM/Fun-ASR-Nano-2512@05201c46f1c38592b1567f857c0d56eab3d0d8ef，只作恢复线索。
 
 - 模型安装成功不等于真实音频 E2E（端到端验证） 通过。
 
 - 对照模型不是投票多数，也不自动证明主模型错误。
 
-- 云模型与本地模型分属不同授权和证据边界：疑难文件在免费期内自动复核，整段直接上云或免费期外须显式同意；云模型不与本地 6 个登记 Profile、5 个直接执行引擎混算。
+- 云模型与本地模型分属不同授权和证据边界：疑难文件在免费期内自动复核，整段直接上云或免费期外须显式同意；云模型不与本地 4 个识别引擎、2 套 profiles 混算。
 
 ## 失败与恢复
 
@@ -1024,7 +1024,7 @@ Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 
     },
     {
      "type": "bullet_list",
-     "text_ref": "- **用户直接请求 Whisper Large V3**：返回 fallback（后备路线）/comparison only 的明确不可用结果；不加载模型、不生成假转写，也不静默改走另一个引擎。",
+     "text_ref": "用户直接请求已删除的WhisperLargeV3或Fun-ASR-Nano：按未登记引擎直接报错（UnknownASRengine）；不加载模型、不生成假转写，也不静默改走另一个引擎。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1041,7 +1041,7 @@ Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 
     },
     {
      "type": "bullet_list",
-     "text_ref": "- **用户直接请求 Whisper Large V3**：返回 fallback（后备路线）/comparison only 的明确不可用结果；不加载模型、不生成假转写，也不静默改走另一个引擎。",
+     "text_ref": "用户直接请求已删除的WhisperLargeV3或Fun-ASR-Nano：按未登记引擎直接报错（UnknownASRengine）；不加载模型、不生成假转写，也不静默改走另一个引擎。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1065,7 +1065,7 @@ Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 
 
 ## 出问题时（二）
 
-- **用户直接请求 Whisper Large V3**：返回 fallback（后备路线）/comparison only 的明确不可用结果；不加载模型、不生成假转写，也不静默改走另一个引擎。
+- **用户直接请求已删除的 Whisper Large V3 或 Fun-ASR-Nano**：按未登记引擎直接报错（Unknown ASR engine）；不加载模型、不生成假转写，也不静默改走另一个引擎。
 
 - **主引擎失败、对照成功**：保留对照文本但标为 provisional，并记录主引擎错误。
 
@@ -1157,7 +1157,7 @@ Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 
 
 - quick / strict 流水线
 
-- Whisper fallback-only标记与直接转写闭集回归
+- 闲置路线退役记录（32df3b9：Nano、Whisper 占位、LLM 仲裁、Audio 3.0）
 
 - Qwen ASR（自动语音识别） 适配器
 
@@ -1167,7 +1167,7 @@ Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 
 
 ## 如何验证
 
-- 2026-08-31 Doctor 枚举六个登记 Profile，并确认 FunASR、Qwen ASR（自动语音识别）、PyTorch 已安装；登记数量不等于可直接执行数量。
+- 2026-08-31 Doctor 枚举当时登记的六个引擎（含后来删除的 Nano 和 Whisper 占位），并确认 FunASR、Qwen ASR（自动语音识别）、PyTorch 已安装；这是历史，登记数量也不等于可直接执行数量。
 
 ::screen{#chinese-asr-models-modes-12 section="tech"}
 
@@ -1195,7 +1195,7 @@ Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 2026-10-11 重读配置与直接转写守卫：仍登记 6 个 Profile、直接转写闭集 5 个；test_config 验证 whisper-large-v3 带 is_whisper 且不进入该闭集，pipeline 在加载前拒绝它（本轮只读测试定义，未执行）。",
+     "text_ref": "2026-10-22重读当前配置：engines登记4个（fireredasr2-llm、qwen3-asr-1.7b、sensevoice、paraformer），profiles为baseline",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1212,7 +1212,7 @@ Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 2026-10-11 重读配置与直接转写守卫：仍登记 6 个 Profile、直接转写闭集 5 个；test_config 验证 whisper-large-v3 带 is_whisper 且不进入该闭集，pipeline 在加载前拒绝它（本轮只读测试定义，未执行）。",
+     "text_ref": "2026-10-22重读当前配置：engines登记4个（fireredasr2-llm、qwen3-asr-1.7b、sensevoice、paraformer），profiles为baseline",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1236,13 +1236,13 @@ Registry（登记清单） 登记 6 个 Profile，直接转写闭集 5 个（10 
 
 ## 依据与来源（二）
 
-- 2026-10-11 重读配置与直接转写守卫：仍登记 6 个 Profile、直接转写闭集 5 个；test_config 验证 whisper-large-v3 带 is_whisper 且不进入该闭集，pipeline 在加载前拒绝它（本轮只读测试定义，未执行）。
+- 2026-10-22 重读当前配置：engines 登记 4 个（fireredasr2-llm、qwen3-asr-1.7b、sensevoice、paraformer），profiles 为 baseline、high_quality 两套，cloud_review 只剩两款 Qwen Audio 3.1。32df3b9（10 月 20 日 16:27）删掉了 fun-asr-nano、whisper-large-v3 占位、llm_arbitration 和 3.0 旧云模型，相关测试一并删改；10 月 11 日读到的“登记 6 个、直接转写闭集 5 个”是删除前的旧配置。之后 9343a8e、ed8d64f、325b0c4（10 月 21 日 13:00—13:12）只把测试输出、隐藏入口报错、FireRed 进出和云结果固定为 UTF-8，没有改默认模型（本轮只读源码，未执行测试）。
 
 - config、pipeline、Qwen identity、FireRed worker 等单元回归包含在 2026-08-31 的 345 项通过结果中；之后各次全量运行保留各自日期，不合并成新的全量通过。
 
-- Registry（登记清单） 静态回读确认 Fun-ASR-Nano revision=05201c46…、Paraformer revision=v2.0.4、Qwen revision=a04930db…（runtime qwen-asr 0.0.6）、FireRed 源码 4e7d9aaf…/权重 2c5e0f41…。10 月 11 日本机 9 个模型目录合计 30,645,308,894 字节（约 28.54 GiB，含辅助模型、对齐器和目录里的源码/元数据/样例，不是 6 个引擎体积相加）；目录存在只算“在、未验证”，精确配置不冒充推理E2E（端到端验证）。
+- Registry（登记清单） 静态回读确认 Paraformer revision=v2.0.4、Qwen revision=a04930db…（runtime qwen-asr 0.0.6）、FireRed 源码 4e7d9aaf…/权重 2c5e0f41…（Fun-ASR-Nano revision=05201c46… 已随路线删除）。10 月 11 日本机 9 个模型目录合计 30,645,308,894 字节（约 28.54 GiB，含辅助模型、对齐器和目录里的源码/元数据/样例，不是当时 6 个引擎体积相加）；10 月 22 日重数为 8 个目录、约 26.5 GiB（Nano 权重已移入回收站）；目录存在只算“在、未验证”，精确配置不冒充推理E2E（端到端验证）。
 
-- 本次没有对六个 profile 分别运行真实录音，实际速度与准确率仍以具名 benchmark 为准。
+- 本次没有对 4 个引擎分别运行真实录音，实际速度与准确率仍以具名 benchmark 为准。
 
 ## 与其他模块的关系
 

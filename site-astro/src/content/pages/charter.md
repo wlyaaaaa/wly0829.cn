@@ -38,10 +38,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E279",
-   "commit": "dfca0d10888eadf1b2f724da417da9079a6ef938",
-   "ruleset_sha256": "11064e71ec4ea1a426f5ced03d95d2d0a00131025c7b4c8f606c5d0c67772681",
-   "activated_at": "2026-10-21T21:20:08.660355+08:00",
+   "release": "E280",
+   "commit": "9e6c296def23c918a78334b02c597da68efd0233",
+   "ruleset_sha256": "33c65cb3c6152825d5fb89b7be9688f534ab9ebe6ffa1841358b315b98b0b87f",
+   "activated_at": "2026-10-22T08:43:25.661700+08:00",
    "file": "sources/rules/AGENTS.md",
    "sha256": "0dea2a617659ad2d198cf682c4c66856be31e40d9f0491b56bd0e5bd0d2c677f",
    "public_sha256": "47f2675bedbb88c1bfab4b223d38e5ca76310823e5be6cfec7d2d1cbe85377f2"
@@ -165,8 +165,8 @@
  },
  "source": {
   "page": "sources/pages/charter/page.json",
-  "sha256": "a75cc60ffc9bca6c04a99f18948e1ee4f0a2a7040b0d9f12e2f774f2e64a2a02",
-  "converted_at_beijing": "2026-10-22T07:02:29+08:00"
+  "sha256": "8c7ed89da14248a95708c998699799e19d00331e8a41c1de40a1ef5e6259336c",
+  "converted_at_beijing": "2026-10-22T09:10:16+08:00"
  }
 }
 ---
@@ -487,7 +487,7 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "0dea2a617659ad2d198cf682c4c66856be31e40d9f0491b56bd0e5bd0d2c677f",
    "public_sha256": "47f2675bedbb88c1bfab4b223d38e5ca76310823e5be6cfec7d2d1cbe85377f2",
    "from": null,
@@ -655,7 +655,7 @@
 }
 ```
 
-约法 · L1–L10 · E279
+约法 · L1–L10 · E280
 
 # 我的 AI 约法与工作约定
 
@@ -695,7 +695,7 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "0dea2a617659ad2d198cf682c4c66856be31e40d9f0491b56bd0e5bd0d2c677f",
    "public_sha256": "47f2675bedbb88c1bfab4b223d38e5ca76310823e5be6cfec7d2d1cbe85377f2",
    "from": "### 三、怎样做事",
@@ -886,7 +886,7 @@
 }
 ```
 
-约法 · L11–L17 · E279
+约法 · L11–L17 · E280
 
 ### 三、怎样做事
 
@@ -911,7 +911,7 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "0dea2a617659ad2d198cf682c4c66856be31e40d9f0491b56bd0e5bd0d2c677f",
    "public_sha256": "47f2675bedbb88c1bfab4b223d38e5ca76310823e5be6cfec7d2d1cbe85377f2",
    "from": "### 五、我的个人资料",
@@ -1135,7 +1135,7 @@
 }
 ```
 
-约法 · L18–L23 · E279
+约法 · L18–L23 · E280
 
 ### 五、我的个人资料
 
@@ -1167,7 +1167,7 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "0dea2a617659ad2d198cf682c4c66856be31e40d9f0491b56bd0e5bd0d2c677f",
    "public_sha256": "47f2675bedbb88c1bfab4b223d38e5ca76310823e5be6cfec7d2d1cbe85377f2",
    "from": "### 八、项目与维护",
@@ -1376,7 +1376,7 @@
 }
 ```
 
-约法 · L24–L30 · E279
+约法 · L24–L30 · E280
 
 ### 八、项目与维护
 

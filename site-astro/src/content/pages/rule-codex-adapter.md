@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E279",
-   "commit": "dfca0d10888eadf1b2f724da417da9079a6ef938",
-   "ruleset_sha256": "11064e71ec4ea1a426f5ced03d95d2d0a00131025c7b4c8f606c5d0c67772681",
-   "activated_at": "2026-10-21T21:20:08.660355+08:00",
+   "release": "E280",
+   "commit": "9e6c296def23c918a78334b02c597da68efd0233",
+   "ruleset_sha256": "33c65cb3c6152825d5fb89b7be9688f534ab9ebe6ffa1841358b315b98b0b87f",
+   "activated_at": "2026-10-22T08:43:25.661700+08:00",
    "file": "sources/rules/docs/contracts/agents.codex-adapter.md",
    "sha256": "ef451e46abc2c675add27119bee0588fb7bb96697b35db6b06aa954a5243a8eb",
    "public_sha256": "33eb24a829b84b2578f07f2538250dfc426c1dea79bf23456c0f1b09447c9403"
@@ -221,8 +221,8 @@
  },
  "source": {
   "page": "sources/pages/rule-codex-adapter/page.json",
-  "sha256": "a7a784c739ba904903d3c3e60c97a3517c9463d530c7e8bd164492a93a9ceab9",
-  "converted_at_beijing": "2026-10-22T07:02:36+08:00"
+  "sha256": "3214f87f745201e38554e23167426b9541c4d813e5783d7e263ff115b4065366",
+  "converted_at_beijing": "2026-10-22T09:10:17+08:00"
  }
 }
 ---
@@ -548,6 +548,10 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
    {
     "text": "电脑配置与恢复",
     "href": "/projects/pcconfig/"
+   },
+   {
+    "text": "能力与运行方式",
+    "href": "/rules/capabilities-runtime/#p-browser"
    }
   ],
   "anchors": [
@@ -712,6 +716,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
 - 通过 MCP（外接工具接口）调用时，本机 Codex 原来的任务入口不变。新开对话、上下文压缩后和恢复时，Hook 都会从本人原话的分类里生成一张“现在有效的禁令和授权”短表带进来，所以新开的对话也能拿回当前有效的决定；派活和提问前用同一份决定投影。普通的每条回复不会自动去读决定。原生子代理压缩后没有这个接续事件时，读原任务状态。
 - 技术上这是 SessionStart 的 startup、compact、resume 三种事件生成禁令和授权短表，派活、提问前的 PreToolUse 用共同决定投影。
 - 新消息、Hook、子代理的真实身份和执行结果，都在本机正在用的入口核实；不凭标题、模型自称或别的 AI 留下的环境借身份。
+- 上网站时，Codex 要明确点名用本人的 Chrome（`agent.browsers.get("chrome")`），不用 `getDefault()`、`getForUrl()` 或应用内浏览器（`iab`）让运行时替它挑；应用内浏览器只用来看本机文件、本地预览，或本人这一轮点名要用时。后台标签页怎么开、Chrome 插件不通时修一次再交回、只有本机渲染自检能用无头，这些共同流程见〔能力与运行方式〕专题的浏览器一节。
 - Codex 的自动记忆关着：memories、generate_memories、use_memories 三个开关都是 false。当轮要留下的经验按〔共享经验的落点〕写；Codex 工具本身已核实的教训写进本专题。
 
 ### 无限制授权
@@ -1003,12 +1008,12 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
 
 ## 人话要点 · 派子代理：Codex 的不同处
 
-**先说派谁**：主持的想和把关，具体活派出去；整段一两步小事顺手做；机械活交 GPT-6 Luna max，照写好的提示生图、落盘用 Luna low；常规写代码、排障、调研、按固定标准批量审图交 GPT-6.1 Sol，更难的按场景升级；疑难、最难、要紧审图交 GPT-6 Astra。主对话是别家模型时只派 Sol、Luna，本该交 Astra 的活改用 Sol ultra 或自己做。惊艳类的样板、关键部分交做得最好的亲手做；能力只看厂商和 AA 等权威评测。型号、档位换代时按公开数据重新评估、直接更新，不沿用旧设置。完整的表见〔型号与派法〕；共同原则见〔分工与并行施工〕。
+**先说派谁**：主持的想和把关，具体活派出去；整段一两步小事顺手做；机械活交 GPT-6 Luna max，照写好的提示生图、落盘用 Luna low；常规写代码、排障、调研、按固定标准批量审图交 GPT-6.1 Sol，更难的按场景升级；疑难、最难、要紧审图交 GPT-6 Astra。主对话是别家模型时只派 Sol、Luna，本该交 Astra 的活改用 Sol ultra 或自己做。惊艳类的样板、关键部分交做得最好的亲手做；能力只看厂商和 AA 等权威评测。型号、档位换代时按公开数据重新评估、直接更新，不沿用旧设置。具体型号、档位和场景以模型清单为准，完整的表见〔型号与派法〕；共同原则见〔分工与并行施工〕。
 
 普通派活时，桌面子代理名额真满了，才自动改用现成的 GPT 包装器接能做的活；登录、参数、网络这类故障先修真原因，不当成满了。唯一例外是主对话上下文压缩后自动做的那次只读复核：它是已授权的自动任务，直接用共用的 GPT 后台包装器，记真实的 Codex 父会话号，不用等名额满，也不因此让别的任务这样调用（完整流程见〔事实来源与任务上下文〕的“压缩后的后台复核”）。它仍是当前主对话管的后台任务，不另开顶层对话；型号、权限和任务范围不放宽。包装器记的是 Codex 当前任务的完整编号，不借 Claude 的会话号；接着做时接回原来那一份，不重开一份。新版包装器一次后台订阅后内部续等；Start 默认返回，要等加 -Wait；Watch 可在任一任务结束时叫醒，Resume 沿用原线程。派活单写清范围、授权、代码与测试上限、时限和验收方式；出处、方案和成本估算等栏可选，不因缺栏拒派；扩时和预算纠错写理由，验收后 Status -Ack。原生子代理和包装器子任务都一样：规则由根会话或包装器核验，子代理按需读给定版本的专题；出处由根会话负责，子代理不查出处、不报“无出处”，只按派单交付。等候、额度和停止的共同办法见〔分工与并行施工〕。
 
 ### 主对话是 GPT 时
-- 桌面子代理有空位时，用 spawn_agent，按任务选 GPT-6 Luna、GPT-6.1 Sol 或 GPT-6 Astra，显式写 model 和 reasoning_effort：现在 GPT-6.1 Sol 只读、步骤简单、代码上限为 0 的小单填 medium，施工、要判断的分析和难活填 ultra，GPT-6 Luna 填它最高的 max（照写好的提示生图、落盘用 low），Sol、Astra 原来派 xhigh 的改填 ultra；派完核对实际启动值。
+- 桌面子代理有空位时，用 spawn_agent，按任务选 GPT-6 Luna、GPT-6.1 Sol 或 GPT-6 Astra，显式写 model 和 reasoning_effort：现在模型清单里，GPT-6.1 Sol 只读、步骤简单、代码上限为 0 的小单填 medium，施工、要判断的分析和难活填 ultra，GPT-6 Luna 填它最高的 max（照写好的提示生图、落盘用 low），Sol、Astra 原来派 xhigh 的改填 ultra；派完核对实际启动值。
 - 跨型号、跨档位时不带或只带有限历史；只有参数相同、完整历史确有用时才全带。
 
 ### 主对话是别家模型时
@@ -1227,7 +1232,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.codex-adapter.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "ef451e46abc2c675add27119bee0588fb7bb96697b35db6b06aa954a5243a8eb",
    "public_sha256": "33eb24a829b84b2578f07f2538250dfc426c1dea79bf23456c0f1b09447c9403",
    "from": null,
@@ -1266,7 +1271,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E279版，一字不改"
+     "text_ref": "原文·E280版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1291,7 +1296,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E279版，一字不改"
+     "text_ref": "原文·E280版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1382,7 +1387,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
 }
 ```
 
-原文 · E279 版，一字不改
+原文 · E280 版，一字不改
 
 # Codex 适配
 
@@ -1424,7 +1429,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.codex-adapter.md",
-   "release": "E279",
+   "release": "E280",
    "sha256": "ef451e46abc2c675add27119bee0588fb7bb96697b35db6b06aa954a5243a8eb",
    "public_sha256": "33eb24a829b84b2578f07f2538250dfc426c1dea79bf23456c0f1b09447c9403",
    "from": "## 派子代理：Codex 的不同处",
@@ -1467,7 +1472,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E279版·续"
+     "text_ref": "原文·E280版·续"
     },
     {
      "type": "source_text_card",
@@ -1494,7 +1499,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E279版·续"
+     "text_ref": "原文·E280版·续"
     },
     {
      "type": "source_text_card",
@@ -1612,7 +1617,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
 }
 ```
 
-原文 · E279 版 · 续
+原文 · E280 版 · 续
 
 ## 派子代理：Codex 的不同处
 

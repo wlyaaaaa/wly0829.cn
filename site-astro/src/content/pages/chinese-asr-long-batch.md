@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/chinese-asr-long-batch/page.json",
-  "sha256": "8f49b4cb6087fa9293401e4974b5e1371f6377f1fccfa8cfbf684f1fc77ad67a",
-  "converted_at_beijing": "2026-10-11T18:50:42+08:00"
+  "sha256": "e249e468f8c20fe30a96f1c61fd872a675fb8dcc3cda856e797d056abbf8b4d4",
+  "converted_at_beijing": "2026-10-22T08:32:27+08:00"
  }
 }
 ---
@@ -720,7 +720,7 @@ VAD（语音活动检测） 边界、局部恢复与逐文件隔离已实现；�
 
 6. 续跑时验证旧制品后只补缺失段。
 
-7. 重新仲裁并检查 0 到结尾覆盖。
+7. 重新合并各段正文和审计，并检查 0 到结尾覆盖。
 
 ::screen{#chinese-asr-long-batch-07 section="tech"}
 
@@ -957,7 +957,7 @@ VAD（语音活动检测） 边界、局部恢复与逐文件隔离已实现；�
 
 - 分段、manifest（清单）、续跑和覆盖
 
-- 分段和双模型仲裁
+- 分段和双模型合并（原来可选的大模型仲裁 10 月 20 日已删）
 
 - 批量模型复用与逐文件隔离
 
@@ -967,7 +967,7 @@ VAD（语音活动检测） 边界、局部恢复与逐文件隔离已实现；�
 
 ## 如何验证
 
-- long_audio、arbitration、batch 进入2026-08-31 的 345 项通过的全量单测。
+- long_audio、arbitration、batch 进入2026-08-31 的 345 项通过的全量单测（arbitration 及其测试 10 月 20 日已删，这条只是历史）。
 
 - 覆盖验证测试包含 gap、overlap、子证据和旧 manifest（清单） 身份场景。
 

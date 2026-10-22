@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/document-materials-editable-docx-pdf/page.json",
-  "sha256": "390fb4db81f31543ea7c83d4311ccfedadfc59b44a4c0062aa2ed5ad8cb4c7d7",
-  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
+  "sha256": "e17c56ab69fa2043a4653b5104c8c02192ccd047ff4017c84509137b3829e49c",
+  "converted_at_beijing": "2026-10-22T08:32:29+08:00"
  }
 }
 ---
@@ -972,7 +972,7 @@
 
 - PRIVATE source · packaged Word exporter　安装包内 Word 固定版导出
 
-- PRIVATE tests · four-type build/verify　四类材料、Word/备用引擎、协议签署位与隔离安装回归（28 个测试函数、39 个用例，10 月 11 日静态计数）
+- PRIVATE tests · four-type build/verify　四类材料、Word/备用引擎、协议签署位与隔离安装回归（31 个测试函数、51 个用例，10 月 22 日静态计数，本次没有运行）
 
 ## 如何验证
 

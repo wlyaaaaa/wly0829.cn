@@ -34,13 +34,13 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-10 08:49"
+    "at": "2026-10-20 17:05"
    },
    "facts": [
-    "近 7 天 AI 用了 12 次"
+    "近 7 天 AI 用了 27 次"
    ],
-   "as_of": "2026-10-12",
-   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
+   "as_of": "2026-10-20",
+   "source": "AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
   },
   "public": false,
   "repo_url": null,
@@ -166,8 +166,8 @@
  },
  "source": {
   "page": "sources/pages/skill-daily-preferences/page.json",
-  "sha256": "c9057d1d67a5ab2b8c70663b9b060ed2fca3d32ac84805dd04038258c884b264",
-  "converted_at_beijing": "2026-10-20T07:45:05+08:00"
+  "sha256": "eb2185a04626f95a3cfda4672efdcfe83b4b9f2b48d1550781aadfd17c283a28",
+  "converted_at_beijing": "2026-10-22T08:32:38+08:00"
  }
 }
 ---
@@ -210,15 +210,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 10 日 08:49",
+       "text": "常用 · 上次使用 10 月 20 日 17:05",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 12 次",
+       "text": "近 7 天 AI 用了 27 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）",
+     "static_note": "截至 10 月 20 日 · AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。",
      "row": "intro"
     },
     {
@@ -280,15 +280,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 10 日 08:49",
+       "text": "常用 · 上次使用 10 月 20 日 17:05",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 12 次",
+       "text": "近 7 天 AI 用了 27 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
+     "static_note": "截至 10 月 20 日 · AI 使用小记录（10 月 14 日—10 月 20 日，7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
     },
     {
      "type": "prose",
