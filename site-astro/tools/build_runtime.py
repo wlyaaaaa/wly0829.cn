@@ -292,6 +292,15 @@ def visitor_html(body):
     return body.replace('</body>', '<script data-site-visitors>' + script + '</script>\n<script data-footer-email-copy>' + email + '</script>\n' + menu + '</body>')
 
 
+def home_visitor_bytes(raw):
+    marker = b'<script data-site-visitors>'
+    match = re.search(rb'<script data-site-visitors>([\s\S]*?)</script>', raw)
+    if raw.count(marker) != 1 or match is None:
+        raise ValueError('已验收首页需要唯一且完整的 data-site-visitors 脚本')
+    start, end = match.span(1)
+    return raw[:start] + (ROOT / 'scripts/visitor-beacon.js').read_bytes().strip() + raw[end:]
+
+
 def accepted_home(dist, published):
     expected = published.get('files', {}).get('index.html')
     if not expected: return None

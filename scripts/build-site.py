@@ -119,13 +119,14 @@ def html_references(path):
     return {value for value in re.findall(r'''\b(?:src|href|data-src)=["']([^"']+)["']''', Path(path).read_text('utf8'))
             if re.search(r'\.(?:js|mjs|css|json|png|jpe?g|webp|avif|svg|gif|woff2?|ttf|mp4)(?:[?#]|$)', value)}
 
-def guard_unchanged_html(dist, entries, previous_pages, published, previous_refs):
+def guard_unchanged_html(dist, entries, previous_pages, published, previous_refs, preserved_home=None):
     changed = []
     for route, row in entries.items():
         rel = route_file(route); accepted = published.get('files', {}).get(rel)
         if previous_pages.get(route) != row['fingerprint'] or not accepted: continue
         path = dist / rel
         if proof(path)['sha256'] == accepted['sha256']: continue
+        if route == '/' and preserved_home is not None and path.read_bytes() == preserved_home: continue
         refs = html_references(path)
         differences = refs ^ previous_refs[route] if route in previous_refs else set()
         # A saved SHA cannot reconstruct old HTML. Only name an observed
@@ -269,6 +270,7 @@ def build(pages=None):
     prepare_changed = prepare_changed or any(not (dist / relative).is_file() for relative in snapshot['assets'] if relative not in retired and not (relative.startswith('_home-cockpit/cockpit-offline.') and not (SITE / 'sources/retained-home-cockpit/cockpit.html').is_file()))
     runtime = load('build_runtime', 'site-astro/tools/build_runtime.py')
     preserved_home = runtime.accepted_home(dist, runtime.published_manifest()) if os.environ.get('SITE_ALLOW_HOME_BYTES') != '1' else None
+    if preserved_home is not None: preserved_home = runtime.home_visitor_bytes(preserved_home)
     if prepare_changed:
         restore(snapshot); pin = astro_rules.generate(public); runtime.prepare(snapshot)
     else: pin = old['pin']
@@ -381,7 +383,7 @@ def build(pages=None):
     stage('finish')
     run(sys.executable, str(ROOT / 'scripts/prepare-oss-release.py'), 'finalize-dist', '--dist', str(dist),
         '--source-commit', source_commit, cwd=ROOT)
-    guard_unchanged_html(dist, entries, old.get('pages', {}), runtime.published_manifest(), before_refs)
+    guard_unchanged_html(dist, entries, old.get('pages', {}), runtime.published_manifest(), before_refs, preserved_home=preserved_home)
     stage('finalize')
     if preserved_home is not None and (dist / 'index.html').read_bytes() != preserved_home:
         raise ValueError('资源收尾改变了已验收的首页字节，构建未通过')

@@ -18,6 +18,27 @@ retry = load('cascade_retry', 'scripts/prepare-resource-retry.py')
 build_runtime = load('cascade_runtime', 'site-astro/tools/build_runtime.py')
 
 class NoCascadeTests(unittest.TestCase):
+    def test_preserved_home_changes_only_unique_visitor_body_and_guard_requires_exact_bytes(self):
+        prefix = b'\xef\xbb\xbf<head>accepted</head>\r\n<body>unchanged<script data-site-visitors>'
+        suffix = b'</script>\r\n<footer>accepted</footer></body>\r\n'
+        approved = prefix + b'oldVisitor();' + suffix
+        script = (ROOT/'scripts/visitor-beacon.js').read_bytes().strip()
+        with tempfile.TemporaryDirectory() as temp:
+            dist = Path(temp); home = dist/'index.html'; home.write_bytes(approved)
+            published = {'files': {'index.html': {'bytes': len(approved), 'sha256': hashlib.sha256(approved).hexdigest()}}}
+            preserved = build_runtime.home_visitor_bytes(build_runtime.accepted_home(dist, published))
+            self.assertEqual(preserved, prefix + script + suffix)
+            self.assertEqual(home.read_bytes(), approved)
+            for invalid in (b'<body>missing marker</body>', approved + b'<script data-site-visitors>second</script>'):
+                with self.subTest(invalid=invalid), self.assertRaisesRegex(ValueError, '唯一且完整'):
+                    build_runtime.home_visitor_bytes(invalid)
+            home.write_bytes(preserved); entries = {'/': {'fingerprint': 'same'}}
+            with patch.dict(os.environ, {'SITE_ALLOW_HOME_BYTES': '0'}), patch('builtins.print'):
+                self.assertEqual(build.guard_unchanged_html(dist, entries, {'/': 'same'}, published, {}, preserved_home=preserved), [])
+                home.write_bytes(preserved.replace(b'<footer>accepted', b'<footer>tampered'))
+                with self.assertRaisesRegex(ValueError, '首页字节连带变化'):
+                    build.guard_unchanged_html(dist, entries, {'/': 'same'}, published, {}, preserved_home=preserved)
+
     def test_accepted_home_recovers_only_a_proven_album_reference(self):
         with tempfile.TemporaryDirectory() as temp:
             dist = Path(temp); album = dist/'_album/routes-abcd.json'
