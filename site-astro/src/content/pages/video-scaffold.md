@@ -2332,8 +2332,6 @@
     },
     {
      "type": "numbered_steps",
-     "row": "design",
-     "width": "67%",
      "columns": 2,
      "align": "left",
      "illustration": "left_inside",
@@ -2354,9 +2352,7 @@
     },
     {
      "type": "stat_card",
-     "row": "design",
-     "width": "33%",
-     "columns": 1,
+     "columns": 3,
      "align": "left",
      "illustration": "top_inside",
      "icons": "auto",

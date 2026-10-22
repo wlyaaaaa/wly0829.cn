@@ -125,13 +125,15 @@ _SEQUENCE_EDGES_JS = r"""(() => {
         const middle = (ax+bx)/2;
         add(`M ${ax} ${ay} H ${middle} V ${by} H ${bx}`, 'same-row',i,[ax,ay,bx,by]);
       } else {
-        // 换行只经过上下两节点之间的空带；同列蛇形退化为一根短竖线。
+        // 换行横段走完整两行之间的空带，不能按较短的端点卡片决定高度。
         const ap=previous.getBoundingClientRect(),bp=next.getBoundingClientRect();
-        if(bp.top<=ap.bottom) {next.dataset.incomplete='跨行节点缺少真实上下空隙，未画穿卡连接';continue;}
+        const rowBoxes=row=>nodes.filter(n=>n.closest('.sequence-row')===row).map(n=>n.getBoundingClientRect());
+        const bottom=Math.max(...rowBoxes(ar).map(r=>r.bottom)),top=Math.min(...rowBoxes(br).map(r=>r.top));
+        if(top<=bottom) {next.dataset.incomplete='跨行节点缺少真实上下空隙，未画穿卡连接';continue;}
         const overlapLeft=Math.max(a.left,b.left),overlapRight=Math.min(a.right,b.right);
         const aligned=overlapRight-overlapLeft>4?(overlapLeft+overlapRight)/2-ox:null;
         const ax=aligned===null?(a.left+a.right)/2-ox:aligned,bx=aligned===null?(b.left+b.right)/2-ox:aligned;
-        const sy=ap.bottom-oy,ty=bp.top-oy,middle=(sy+ty)/2;
+        const sy=ap.bottom-oy,ty=bp.top-oy,middle=(bottom+top)/2-oy;
         add(Math.abs(ax-bx)<.05?`M ${ax} ${sy} V ${ty}`
           :`M ${ax} ${sy} V ${middle} H ${bx} V ${ty}`, 'row-turn',i,[ax,sy,bx,ty]);
       }

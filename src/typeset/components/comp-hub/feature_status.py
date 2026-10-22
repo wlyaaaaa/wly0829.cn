@@ -28,7 +28,7 @@ _STATE_ALIASES = {
 FEATURE_SPEC_FIELDS = (
     "columns", "columns_v", "portrait_columns", "flow", "rows", "item_spans",
     "row_counts", "portrait_row_counts", "last_row", "last_row_fill", "icons", "illustration",
-    "status", "statuses", "status_position", "status_display", "status_text", "status_from_trailing_parentheses", "muted", "off_background",
+    "status", "statuses", "status_source", "status_position", "status_display", "status_text", "status_from_trailing_parentheses", "muted", "off_background",
     "group_heading", "group_heading_style", "group_heading_font", "font", "heading_size",
     "group_heading_assets", "group_heading_asset", "group_heading_source_image", "group_heading_source_box",
     "group_heading_variant", "group_heading_icons", "group_heading_icon",
@@ -64,6 +64,22 @@ def _status_parts(value, states=None):
     token = r"(?:[" + _SYMBOLS + r"]?\s*(?:" + words + r")|[" + _SYMBOLS + r"])"
     match = re.fullmatch(r"(" + token + r"|〈\s*" + token + r"\s*〉)(?:\s*(·)\s*(只修报错|真实数据测过))?", plain)
     return match.groups() if match else None
+
+
+def _registry_feature(fields, ctx, required=False):
+    """显式绑定当前屏的同名登记项；缺失或重名都不推定状态。"""
+    name = next((str(value).strip() for role, value in fields if role == "feature-name"), "")
+    page = ctx.page if isinstance(getattr(ctx, "page", None), dict) else {}
+    registry = page.get("registry", {})
+    features = registry.get("features", []) if isinstance(registry, dict) else []
+    screen = ctx.screen.get("id") if isinstance(getattr(ctx, "screen", None), dict) else None
+    matches = [row for row in features if isinstance(row, dict)
+               and row.get("screen") == screen and row.get("name") == name] if isinstance(features, list) else []
+    if len(matches) != 1 or required and not matches[0].get("status"):
+        if required:
+            ctx.incomplete(f"功能卡“{name}”在 page.registry.features 没有当前屏唯一完整的状态记录，未推定状态。", "composition")
+        return None
+    return matches[0]
 
 
 def _feature_para(node, states=None, explicit_state=False):
@@ -120,7 +136,8 @@ def _status(values, states=None):
             tail = re.search(r"〈[^〈〉]+〉(?:\s*·\s*(?:只修报错|真实数据测过))?\s*$", plain)
             parts = _status_parts(tail.group(), states) if tail else None
         if not parts and "｜" in plain:
-            parts = _status_parts(plain.rsplit("｜", 1)[-1], states)
+            parts = (_status_parts(plain.rsplit("｜", 1)[-1], states)
+                     or _status_parts(plain.split("｜", 1)[0], states))
         if parts:
             labelled = _MARK.sub("", parts[0]).strip("〈〉 \t\n")
             return states.get(labelled, states.get(parts[0]))
@@ -217,7 +234,7 @@ def _parenthetical_field(value, ctx, role, data_role=None):
 
 def _card(fields, ctx, number=None, icon=None, illustration="left_inside", span=1,
           status_display=None, keep_separator=True, state=None, status_position="top_right", muted=False, states=None,
-          numeric_emphasis=False, status_style=None, trailing_parentheses=False, preserve_status_text=False, body_nodes=()):
+          numeric_emphasis=False, status_style=None, trailing_parentheses=False, preserve_status_text=False, body_nodes=(), feature_id=None):
     states = states or _STATUS
     fields = list(fields)
     parentheses_mode = trailing_parentheses or preserve_status_text
@@ -244,6 +261,8 @@ def _card(fields, ctx, number=None, icon=None, illustration="left_inside", span=
     if status_style == "pill" and not status_tail and not parentheses_mode:
         ctx.incomplete("状态胶囊没有原文状态词可承接，未从场景或配置补写状态字。", "composition")
     attrs = f' data-state="{state}"' if state else ""
+    if feature_id:
+        attrs += f' data-feature-id="{html.escape(str(feature_id), quote=True)}"'
     attrs += f' data-illustration="{illustration}"'
     attrs += f' data-status-position="{"inline" if parentheses_mode else status_position}"'
     if muted:
@@ -1005,6 +1024,10 @@ def render_feature_card(block: dict, ctx) -> str:
         ctx.incomplete(f"功能卡 status_text={spec['status_text']} 没有可执行的状态表达。", "composition")
     if spec.get("statuses") is not None and not isinstance(spec["statuses"], list):
         ctx.incomplete("功能卡 statuses 没有逐卡数组映射，未据此推定状态。", "composition")
+    status_source = spec.get("status_source")
+    if status_source not in (None, "page.registry.features"):
+        ctx.incomplete(f"功能卡 status_source={status_source} 没有可执行的状态来源，未推定状态。", "composition")
+        status_source = None
     position = spec.get("status_position", "top_right")
     if position not in ("top_right", "bottom_right", "right"):
         ctx.incomplete(f"功能卡 status_position={position} 没有可执行的定位。", "composition")
@@ -1175,6 +1198,13 @@ def render_feature_card(block: dict, ctx) -> str:
         statuses = spec.get("statuses")
         if isinstance(statuses, list) and card_index < len(statuses):
             status = statuses[card_index]
+        feature = _registry_feature(fields, ctx, required=bool(status_source))
+        if status_source:
+            status = feature.get("status") if feature else None
+        elif (status is None and "status_source" not in spec and feature
+              and (statuses is None or isinstance(statuses, list))
+              and not ("status_display" in spec and spec["status_display"] in (None, False, "none", "off"))):
+            status = feature.get("status")
         state = _status([status], states) or _STATE_ALIASES.get(str(status or "").lower())
         if status and not state:
             ctx.incomplete(f"功能卡状态 {status} 没有原文或规格里的明确颜色对应。", "composition")
@@ -1187,7 +1217,7 @@ def render_feature_card(block: dict, ctx) -> str:
         off = spec.get("off_background") == "gray" and (source_state or state) == "off"
         cards.append(_card(fields, ctx, number, icon, illustration, span, status_display, keep_separator,
                            state, position, bool(spec.get("muted") or off), card_states, numeric_emphasis, status_style,
-                           trailing_parentheses, preserve_status_text, body_nodes))
+                           trailing_parentheses, preserve_status_text, body_nodes, feature_id=feature.get("id") if feature else None))
         card_spans.append(span)
         card_index += 1
         if inline_after is not None and str(number) == str(inline_after):

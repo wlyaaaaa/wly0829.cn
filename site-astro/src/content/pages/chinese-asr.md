@@ -4116,6 +4116,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": "auto",
+     "statuses": [null, null, null, null, "off"],
      "text_ref": "找出要回听的地方"
     },
     {
@@ -4138,6 +4139,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": "auto",
+     "statuses": [null, null, null, null, "off"],
      "text_ref": "找出要回听的地方"
     },
     {

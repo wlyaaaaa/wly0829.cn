@@ -1343,6 +1343,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "1问我的情况",
         "align": "left",
         "size": "medium",
@@ -1363,6 +1364,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "7记下我的原话",
         "align": "left",
         "size": "medium",
@@ -1383,6 +1385,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "11讲清认识变了什么",
         "align": "left",
         "size": "medium",
@@ -1393,7 +1396,7 @@
         "icons": "auto"
       }
     ],
-    "notes": "实看横图：顶栏标题左42%/图例与说明右58%；认识我6项3列2排，记下和纠正4项一排4列，检查写得对不对4项一排4列。v 首6项左插画右文，v2 7–14无插画；每组小毛笔标题在上方，无重复大标题/图例。状态1–4绿、5黄、6–13绿、14灰。状态只在scene/registry中，steps文本没有状态列；当前feature_card仅从定稿字段识别状态，不能显示这些准确状态点，需组件读registry或明确状态映射，禁止补字。毛笔组标题及状态点需样张。",
+    "notes": "实看横图：顶栏标题左42%/图例与说明右58%；认识我6项3列2排，记下和纠正4项一排4列，检查写得对不对4项一排4列。v 首6项左插画右文，v2 7–14无插画；每组小毛笔标题在上方，无重复大标题/图例。状态1–4绿、5黄、6–13绿、14灰。状态只在scene/registry中，steps文本没有状态列；feature_card通过status_source按当前屏同名登记项读取准确状态点，不复制状态、不补字。毛笔组标题及状态点需样张。",
     "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
   },
   {
@@ -1439,6 +1442,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "1问我的情况",
         "align": "left",
         "size": "medium",
@@ -1459,6 +1463,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "7记下我的原话",
         "align": "left",
         "size": "medium",
@@ -1479,6 +1484,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "11讲清认识变了什么",
         "align": "left",
         "size": "medium",
@@ -1489,7 +1495,7 @@
         "icons": "auto"
       }
     ],
-    "notes": "实看横图：顶栏标题左42%/图例与说明右58%；认识我6项3列2排，记下和纠正4项一排4列，检查写得对不对4项一排4列。v 首6项左插画右文，v2 7–14无插画；每组小毛笔标题在上方，无重复大标题/图例。状态1–4绿、5黄、6–13绿、14灰。状态只在scene/registry中，steps文本没有状态列；当前feature_card仅从定稿字段识别状态，不能显示这些准确状态点，需组件读registry或明确状态映射，禁止补字。毛笔组标题及状态点需样张。",
+    "notes": "实看横图：顶栏标题左42%/图例与说明右58%；认识我6项3列2排，记下和纠正4项一排4列，检查写得对不对4项一排4列。v 首6项左插画右文，v2 7–14无插画；每组小毛笔标题在上方，无重复大标题/图例。状态1–4绿、5黄、6–13绿、14灰。状态只在scene/registry中，steps文本没有状态列；feature_card通过status_source按当前屏同名登记项读取准确状态点，不复制状态、不补字。毛笔组标题及状态点需样张。",
     "source_images": [
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-12-v.png",
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-12-v2.png"
@@ -1512,6 +1518,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "15查记录和出处",
         "align": "left",
         "size": "medium",
@@ -1533,6 +1540,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "23日常推荐菜单",
         "align": "left",
         "size": "medium",
@@ -1554,6 +1562,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "25别的项目写回来",
         "align": "left",
         "size": "medium",
@@ -1584,6 +1593,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "15查记录和出处",
         "align": "left",
         "size": "medium",
@@ -1604,6 +1614,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "23日常推荐菜单",
         "align": "left",
         "size": "medium",
@@ -1624,6 +1635,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "25别的项目写回来",
         "align": "left",
         "size": "medium",
@@ -1657,6 +1669,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "29导入新导出",
         "align": "left",
         "size": "medium",
@@ -1677,6 +1690,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "41读之前先过资料锁",
         "align": "left",
         "size": "medium",
@@ -1706,6 +1720,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "29导入新导出",
         "align": "left",
         "size": "medium",
@@ -1726,6 +1741,7 @@
       },
       {
         "type": "feature_card",
+        "status_source": "page.registry.features",
         "text_ref": "41读之前先过资料锁",
         "align": "left",
         "size": "medium",

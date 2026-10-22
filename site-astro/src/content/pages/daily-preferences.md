@@ -4216,6 +4216,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "1问我的情况",
      "align": "left",
      "size": "medium",
@@ -4236,6 +4237,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "7记下我的原话",
      "align": "left",
      "size": "medium",
@@ -4256,6 +4258,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "11讲清认识变了什么",
      "align": "left",
      "size": "medium",
@@ -4309,6 +4312,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "1问我的情况",
      "align": "left",
      "size": "medium",
@@ -4329,6 +4333,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "7记下我的原话",
      "align": "left",
      "size": "medium",
@@ -4349,6 +4354,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "11讲清认识变了什么",
      "align": "left",
      "size": "medium",
@@ -4720,6 +4726,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "15查记录和出处",
      "align": "left",
      "size": "medium",
@@ -4741,6 +4748,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "23日常推荐菜单",
      "align": "left",
      "size": "medium",
@@ -4762,6 +4770,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "25别的项目写回来",
      "align": "left",
      "size": "medium",
@@ -4789,6 +4798,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "15查记录和出处",
      "align": "left",
      "size": "medium",
@@ -4809,6 +4819,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "23日常推荐菜单",
      "align": "left",
      "size": "medium",
@@ -4829,6 +4840,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "25别的项目写回来",
      "align": "left",
      "size": "medium",
@@ -5191,6 +5203,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "29导入新导出",
      "align": "left",
      "size": "medium",
@@ -5211,6 +5224,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "41读之前先过资料锁",
      "align": "left",
      "size": "medium",
@@ -5237,6 +5251,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "29导入新导出",
      "align": "left",
      "size": "medium",
@@ -5257,6 +5272,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "feature_card",
+     "status_source": "page.registry.features",
      "text_ref": "41读之前先过资料锁",
      "align": "left",
      "size": "medium",

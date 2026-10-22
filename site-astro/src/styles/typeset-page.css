@@ -85,6 +85,10 @@
 .ai-brief-static h2{margin:0 0 6px;font-size:1.1rem;color:#285d3c}
 .ai-brief-static p{margin:0}
 .ai-brief-static .ai-brief-note{margin-top:6px;font-size:.9rem;color:#5a7262}
+.ai-brief-static[hidden],.back-to-top[hidden],.easter-bird[hidden]{display:none!important}
+#image-viewer[data-native] .viewer-stage{touch-action:none}
+@media(prefers-reduced-motion:reduce){.scenery-wide .scenery-subject{transition:none}}
+@media(prefers-reduced-motion:reduce){.easter-bird[data-feedback]:not([hidden]){display:block!important;animation:none!important}}
 
 /* 手机：子导航一行放不下时可以横滑。停下时总是停在“一项的开头”（最后一项停在它的结尾），不会停在半个字上；
    哪一头后面还有项，哪一头就淡出（脚本按滚动位置加 toc-more-left / toc-more-right），露出半截的那一项只剩三成浓淡，提示可以接着滑。

@@ -1101,6 +1101,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
+        "statuses": [null, null, null, null, "off"],
         "text_ref": "找出要回听的地方"
       },
       {
@@ -1129,6 +1130,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
+        "statuses": [null, null, null, null, "off"],
         "text_ref": "找出要回听的地方"
       },
       {

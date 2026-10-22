@@ -285,7 +285,11 @@ def visitor_html(body):
     body = re.sub(r'<script data-site-visitors>[\s\S]*?</script>\s*', '', body)
     email = (ROOT / 'scripts/footer-email-copy.js').read_text('utf8').strip()
     body = re.sub(r'<script data-footer-email-copy>[\s\S]*?</script>\s*', '', body)
-    return body.replace('</body>', '<script data-site-visitors>' + script + '</script>\n<script data-footer-email-copy>' + email + '</script>\n</body>')
+    body = re.sub(r'<script data-header-menu>[\s\S]*?</script>\s*', '', body)
+    home = re.search(r'''<link\b(?=[^>]*\srel=["']canonical["'])(?=[^>]*\shref=["']https://wly0829\.cn/["'])[^>]*>''', body, re.I)
+    has_menu = re.search(r'''<dialog\b[^>]*\sid=["']menu["'][\s>]''', body, re.I)
+    menu = '<script data-header-menu>' + (ROOT / 'scripts/header-menu.js').read_text('utf8').strip() + '</script>\n' if has_menu and not home else ''
+    return body.replace('</body>', '<script data-site-visitors>' + script + '</script>\n<script data-footer-email-copy>' + email + '</script>\n' + menu + '</body>')
 
 
 def finish(dist, snapshot, pin, converted, changed_routes=None):

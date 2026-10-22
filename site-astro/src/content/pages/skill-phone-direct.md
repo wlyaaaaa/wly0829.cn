@@ -147,8 +147,8 @@
  },
  "source": {
   "page": "sources/pages/skill-phone-direct/page.json",
-  "sha256": "f8169b97a2c901930523cc0597fed0a2ac3ea06814a67b747daef3e9640ded68",
-  "converted_at_beijing": "2026-10-22T07:58:26+08:00"
+  "sha256": "97c8736ce46c1ef76df9ed54fea6212c2cfe4e4b95dd5e858d5510b177849cba",
+  "converted_at_beijing": "2026-10-23T00:17:11+08:00"
  }
 }
 ---
@@ -1039,11 +1039,11 @@ AI：“电脑在家里的网络上找不到手机。你在外面的话，把手
 
 这里保留入口、子命令、输出、退出码、连接和核对的实现。
 
-**10 月 22 日核对**　技能 E:\.agents\skills\phone-direct\SKILL.md（.agents 0348800d，北京时间 10 月 21 日 21:13）；入口脚本 E:\PCConfig	ools\phone_direct.py（PCConfig 7df54f9b，同日 21:13），运行说明 docs/runtime/phone-direct.md，配置 registries/phone_direct.json；合成测试 tools/test_phone_direct.py 共 25 个测试函数，这次没有重跑。复用常驻无线 ADB 手机桥（tools/phone_bridge.py，计划任务 PCConfig Phone Bridge）的共用连接，没有为它新增服务、MCP 或计划任务。
+**10 月 22 日核对**　技能 E:\.agents\skills\phone-direct\SKILL.md（.agents 0348800d，北京时间 10 月 21 日 21:13）；入口脚本 E:\PCConfig\tools\phone_direct.py（PCConfig 7df54f9b，同日 21:13），运行说明 docs/runtime/phone-direct.md，配置 registries/phone_direct.json；合成测试 tools/test_phone_direct.py 共 25 个测试函数，这次没有重跑。复用常驻无线 ADB 手机桥（tools/phone_bridge.py，计划任务 PCConfig Phone Bridge）的共用连接，没有为它新增服务、MCP 或计划任务。
 
 ## 入口和子命令
 
-`python -B E:\PCConfig	ools\phone_direct.py 子命令`；`--unattended --purpose "要从手机取什么"` 放在子命令前后都可以；`--help` 输出帮助文字，是唯一不出 JSON 的情况。
+`python -B E:\PCConfig\tools\phone_direct.py 子命令`；`--unattended --purpose "要从手机取什么"` 放在子命令前后都可以；`--help` 输出帮助文字，是唯一不出 JSON 的情况。
 
 | 子命令 | 做什么 | 主要参数 |
 | --- | --- | --- |
@@ -1208,10 +1208,10 @@ AI：“电脑在家里的网络上找不到手机。你在外面的话，把手
 ## 依据与来源
 
 - E:\.agents\skills\phone-direct\SKILL.md（.agents 0348800d）　什么时候用、连接步骤、取用规矩
-- E:\PCConfig	ools\phone_direct.py（PCConfig 7df54f9b）　子命令、输出、退出码、判定顺序、核对与删除
-- E:\PCConfig	ools\phone_personalos_pull.py 的 connect()（PCConfig aec9b3f9）　家里连接顺序
-- E:\PCConfig\docsuntime\phone-direct.md　运行事实和给本人的五句话
-- E:\PCConfigegistries\phone_direct.json　暂存根和删除白名单
-- E:\PCConfig\docsecovery\phone-link.md　常驻手机桥
-- E:\PCConfigegistries\pending_acceptance.json　phone-direct-1792581836、phone-direct-1792581894 两条登记和关闭
-- E:\.agents\docs\owner-decisions6-10.md　10 月 21 日 18:41 的授权、19:04—19:12 的远程线决定和实测记录
+- E:\PCConfig\tools\phone_direct.py（PCConfig 7df54f9b）　子命令、输出、退出码、判定顺序、核对与删除
+- E:\PCConfig\tools\phone_personalos_pull.py 的 connect()（PCConfig aec9b3f9）　家里连接顺序
+- E:\PCConfig\docs\runtime\phone-direct.md　运行事实和给本人的五句话
+- E:\PCConfig\registries\phone_direct.json　暂存根和删除白名单
+- E:\PCConfig\docs\recovery\phone-link.md　常驻手机桥
+- E:\PCConfig\registries\pending_acceptance.json　phone-direct-1792581836、phone-direct-1792581894 两条登记和关闭
+- E:\.agents\docs\owner-decisions\2026-10.md　10 月 21 日 18:41 的授权、19:04—19:12 的远程线决定和实测记录

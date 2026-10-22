@@ -14,6 +14,7 @@ import '../styles/typeset-page.css';
 import tocConsistency from '../../../scripts/toc-consistency.js?url&no-inline';
 import typesetMotion from '../scripts/typeset-motion.js?url&no-inline';
 import pageBird from '../scripts/page-bird.js?url&no-inline';
+import pageInteractions from '../scripts/page-interactions.js?url&no-inline';
 import { readFileSync } from 'node:fs';
 import { currentImageLoading } from '../image-loading';
 import cockpitHero from '../../../sources/assets/cockpit/cockpit-01-illustration-01.png?url';
@@ -61,7 +62,7 @@ const head = rt ? currentImageLoading(withoutTocRuntime(rt.head.map((h: string) 
   : h.replace(/\/_album\/album-[\w]+\.css/g, albumRuntime.css)).join('\n'))) : '';
 // 站点运行脚本按 page-data 里的旧“整屏图”逐屏排版；新页没有整屏图，把屏清单置空，其余（落叶、水彩、页头、目录用的共用数据）原样
 // “复制 AI 续作说明”（项目页、冻结页）：现在网站只在脚本里临时造一个 #ai-brief 对话框，脚本没跑时按钮点了没反应。
-// 这里在页面末尾放一个真实的 #ai-brief：没有脚本也能跳到这里、看到并手动复制说明；脚本在时照旧弹对话框（静态这块隐藏、改名让出 id）。
+// 这里保留真实的 #ai-brief；只有增强弹窗完成接管后才隐藏静态后备。
 // 现在网站上没有对应页、因而没有运行件的页（例如旧项目名的别名页），用内容文件里的页面数据
 const pageData = (() => { const m = rt?.tail.match(/<script id="page-data" type="application\/json">(.*?)<\/script>/s); try { return m ? JSON.parse(m[1]) : null; } catch { return null; } })() ?? pageMeta ?? null;
 const authorPages = import.meta.glob('../../../sources/pages/*/page.json', { eager: true, import: 'default' }) as Record<string, any>;
@@ -133,14 +134,15 @@ const tail = rt ? withoutTocRuntime(rt.tail).replace(`/_living/_engine/${livingE
   <main id="content" class="paper ts-page" data-entry-motion={['how', 'skills-home'].includes(page) ? 'cards' : undefined}>
     <script is:inline>(()=>{const m=document.currentScript.parentElement;const z=()=>{const w=m.clientWidth;if(!w)return;m.style.setProperty('--tz-h',String(w/1672));m.style.setProperty('--tz-v',String(w/941));m.style.setProperty('--tz-card',String((innerWidth<768?w:(w-16)/2)/1672));};z();new ResizeObserver(z).observe(m);
 const fit=()=>{for(const c of m.querySelectorAll('.ts-canvas')){const o=c.parentElement,h=c.offsetHeight;if(h&&h>parseFloat(o.style.getPropertyValue('--ch')))o.style.setProperty('--ch',h+'px');}};document.fonts.ready.then(fit);addEventListener('load',fit);document.addEventListener('site-live-layout',fit);
-const activate=e=>{if(!(e.target instanceof Element))return;const t=e.target.closest('.ts-canvas [data-href]:not(a):not([data-hot="live"]),.rule-original-prose a[data-href]:not([href])');if(!t)return;
+const activate=e=>{if(e.defaultPrevented||!(e.target instanceof Element))return;const t=e.target.closest('.ts-canvas [data-href]:not(a):not([data-hot="live"]),.rule-original-prose a[data-href]:not([href])');if(!t)return;
 if(t.matches('button[data-href="刷新状态"]')){e.preventDefault();window.SiteB2?.refresh?.();return;}
+if(t.dataset.href==='#ai-brief'&&window.SiteBrief?.open){e.preventDefault();window.SiteBrief.open(t);return;}
 if(t.matches('.slot-shot-frame,.dd-shot')&&window.SiteImageViewer?.openGallery){const shots=[...m.querySelectorAll('.slot-shot-frame[data-href],.dd-shot[data-href]')].filter(s=>s.getClientRects().length);const list=shots.map(s=>({src:new URL(s.dataset.href,location.href).href,title:s.closest('.c-slot-shots')?.querySelector(`[data-shot-caption-index="${s.closest('.slot-shot-item')?.dataset.shotIndex}"]`)?.textContent.trim()||'截图'}));e.preventDefault();window.SiteImageViewer.openGallery(list,shots.indexOf(t),t);}else location.href=t.dataset.href;};
 document.addEventListener('click',activate);
 document.addEventListener('keydown',e=>{if(e.key==='Enter'||(e.key===' '&&e.target instanceof Element&&e.target.closest('.slot-shot-frame[data-href],.dd-shot[data-href]')))activate(e);});})();</script>
     <slot />
     {briefText && (
-      <section id="ai-brief" class="ai-brief-static" aria-label="复制 AI 续作说明">
+      <section id="ai-brief" class="ai-brief-static" aria-label="复制 AI 续作说明" data-project-title={pageData.title} data-repo={briefRepo}>
         <h2>复制 AI 续作说明</h2>
         <p class="ai-brief-text">{briefText}</p>
         <p class="ai-brief-note">把“目标”换成这次要做的事，整段复制给 AI。</p>
@@ -148,7 +150,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'||(e.key===' '&&e.targ
     )}
   </main>
   <Fragment set:html={footer} />
-  {briefText && <script is:inline>(()=>{const s=document.getElementById('ai-brief');if(s&&s.classList.contains('ai-brief-static')){s.id='ai-brief-text';s.hidden=true;}})();</script>}
+  {rt && briefText && <script is:inline>(()=>{const s=document.querySelector('.ai-brief-static');const takeOver=()=>{if(!window.SiteBrief?.open||!document.querySelector('dialog#ai-brief'))return false;s.id='ai-brief-text';s.hidden=true;return true;};const observer=new MutationObserver(()=>{if(takeOver())observer.disconnect();});if(!takeOver())observer.observe(document.body,{childList:true,subtree:true});})();</script>}
   <script is:inline>(()=>{/* 手机上往下读时把“回到顶部”收起来，往上翻时再出来（停手 2.5 秒又收起），免得压住正文 */if(!matchMedia('(max-width: 767.98px)').matches)return;let y=scrollY,idle=0;const root=document.documentElement;root.classList.add('btt-hide');addEventListener('scroll',()=>{const d=scrollY-y;y=scrollY;if(Math.abs(d)<4)return;root.classList.toggle('btt-hide',d>0);clearTimeout(idle);if(d<0)idle=setTimeout(()=>root.classList.add('btt-hide'),2500);},{passive:true});
     /* 手机子导航：哪一头后面还有项，哪一头淡出 */
     /* 站点脚本可能重画目录条，所以每次现找，滚动在捕获阶段统一听 */
@@ -160,6 +162,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'||(e.key===' '&&e.targ
     document.addEventListener('scroll',(e)=>{if(e.target instanceof Element&&e.target.matches('nav.toc .toc-inner'))edge();},{capture:true,passive:true});
     addEventListener('resize',edge);addEventListener('load',edge);edge();})();</script>
   <Fragment set:html={tail} />
+  {!rt && <script is:inline defer src={pageInteractions}></script>}
   {needsPageBird && <script is:inline defer src={pageBird} data-bird={safe({script: `/_living/_engine/${birdFolder}bird.js`, atlas: `/_living/_engine/${birdFolder}bird-atlas.webp`})}></script>}
   {blocks && <script is:inline defer src={typesetMotion}></script>}
   <script is:inline defer src={tocConsistency}></script>
