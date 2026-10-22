@@ -13,7 +13,7 @@
       },
       {
         "type": "tag",
-        "text_ref": "偶尔用·只修报错、不加新功能（约法L2",
+        "text_ref": "已冻结·冻结的项目，AI不主动看、不维护（约法L24）",
         "row": "hero"
       },
       {
@@ -29,7 +29,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截至10月11"
+        "text_ref": "数字卡片（截至 10 月 12 日）："
       },
       {
         "type": "feature_card",
@@ -47,11 +47,6 @@
       {
         "type": "prose",
         "text_ref": "想让AI到另一台电脑上办事（读写文件、跑命令，也能直"
-      },
-      {
-        "type": "live_strip",
-        "text_ref": "现在现在正不正常→驾驶舱",
-        "frame_mode": "plain"
       }
     ],
     "source_images": [
@@ -109,7 +104,7 @@
       },
       {
         "type": "tag",
-        "text_ref": "偶尔用·只修报错、不加新功能（约法L2"
+        "text_ref": "已冻结·冻结的项目，AI不主动看、不维护（约法L24）"
       },
       {
         "type": "prose",
@@ -121,7 +116,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截至10月11"
+        "text_ref": "数字卡片（截至 10 月 12 日）："
       },
       {
         "type": "feature_card",
@@ -139,11 +134,6 @@
       {
         "type": "prose",
         "text_ref": "想让AI到另一台电脑上办事（读写文件、跑命令，也能直"
-      },
-      {
-        "type": "live_strip",
-        "text_ref": "现在现在正不正常→驾驶舱",
-        "frame_mode": "plain"
       }
     ],
     "source_images": [
@@ -352,7 +342,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "现在能不能用（主机10月11日13:33",
+        "text_ref": "现在能不能用（项目已冻结，10月21日归档后没再查，现在的状态是Unknown；下面是冻结前最后的情况：主机10月20日早上查，其余9月29日查）",
         "whole_block": true,
         "columns": 1,
         "illustration": "left_inside",
@@ -433,7 +423,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "现在能不能用（主机10月11日13:33",
+        "text_ref": "现在能不能用（项目已冻结，10月21日归档后没再查，现在的状态是Unknown；下面是冻结前最后的情况：主机10月20日早上查，其余9月29日查）",
         "whole_block": true,
         "columns": 1,
         "illustration": "left_inside",

@@ -89,7 +89,7 @@
       "id": "chinese-asr-audit-evidence-05",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n本地质量复核页、片段笔记绑定与比较门已实现；原始证据完整不等于文字真值\n\n## 关键规则与设计选择\n\n1. 静音出字和模板废话进入高风险复核。\n\n2. 空文本不再自动等于无语音。\n\n3. 主引擎失败会改变证据等级。\n\n4. LLM 仲裁默认关闭；只有显式启用且 chunk 带 flags、needs_review 或低相似度时才触发。\n\n5. 仲裁只读结构化 audit 证据、不读音频，只写 merged audit / metrics；两路 raw ASR（自动语音识别） JSON 永不被它覆盖。\n\n6. 本地 Ollama 不可用或返回无效 JSON 时保留原始分歧和人工复核队列，基础转写不依赖它成功。\n\n7. 内容文件与回执不一致时 verified 自动失效。\n\n8. 阅读从 `*.strict.md` 开始，不让用户先钻进 raw JSON。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n本地质量复核页、片段笔记绑定与比较门已实现；原始证据完整不等于文字真值\n\n## 关键规则与设计选择\n\n1. 静音出字和模板废话进入高风险复核。\n\n2. 空文本不再自动等于无语音。\n\n3. 主引擎失败会改变证据等级。\n\n4. 原来可选的 LLM 仲裁（默认关闭、只看结构化证据）10 月 20 日已随代码删除，现在不能再打开。\n\n5. 分歧只靠两路比对、风险规则和人工回听处理；两路 raw ASR（自动语音识别） JSON 只由两个识别引擎写出，之后不被改写。\n\n6. 基础转写从来不依赖大模型；删掉仲裁不改变正文、audit 和复核队列怎么生成。\n\n7. 内容文件与回执不一致时 verified 自动失效。\n\n8. 阅读从 `*.strict.md` 开始，不让用户先钻进 raw JSON。",
       "links": [],
       "anchors": [
         {
@@ -126,7 +126,7 @@
       "id": "chinese-asr-audit-evidence-07",
       "section": "tech",
       "title": "技术实现与依据（三）",
-      "text": "## 技术实现与依据（三）\n\n- metadata.py 与回执绑定输入、模型、六项严格内容制品、相对路径、大小、SHA-256 和 bundle hash（内容指纹）。\n\n- 质量HTML只播放本地音频，SenseVoice仅在不是原两路且有复核片段时补听；笔记导出绑定该片段和审计哈希，不能误用于别的录音。复核失败、quality_result.needs_review=null或lexical_truth_verified=false均保持明确，不伪装为没有疑点。\n\n## 执行流程\n\n1. 日常先打开 `outputs.final` 指向的 `*.strict.md`，阅读正文并保留其中的 `[疑似]` / `[听不清]` 标记。\n\n2. 遇到标记、关键姓名数字或争议句时，打开 `*.strict.audit.md` 或 `*.strict.audit.json`，比较主/对照原文、相似度、规则命中、错误和选择依据。\n\n3. 长音频只有在配置显式启用时，才把带 flags、needs_review 或低相似度的 chunk audit 送给本地 Ollama；调用在 ASR（自动语音识别） chunk 处理之后进行，`keep_alive=0` 让模型用完卸载。\n\n4. 把仲裁决定追加到 merged audit / metrics，同时保留两路 strict raw JSON；Ollama 失败、缺失或响应不可解析时不改写基础结果。\n\n5. 再读 `*.strict.review.json` 的结构化队列，按可用时间区间回到原音频逐项核听；评测 / benchmark 的聚合复核队列另看 `review.md`。\n\n6. 需要追查模型到底返回什么时，分别打开主引擎和对照引擎的两路 `*.raw.json`，不把 raw 直接当最终稿。",
+      "text": "## 技术实现与依据（三）\n\n- metadata.py 与回执绑定输入、模型、六项严格内容制品、相对路径、大小、SHA-256 和 bundle hash（内容指纹）。\n\n- 质量HTML只播放本地音频，SenseVoice仅在不是原两路且有复核片段时补听；笔记导出绑定该片段和审计哈希，不能误用于别的录音。复核失败、quality_result.needs_review=null或lexical_truth_verified=false均保持明确，不伪装为没有疑点。\n\n## 执行流程\n\n1. 日常先打开 `outputs.final` 指向的 `*.strict.md`，阅读正文并保留其中的 `[疑似]` / `[听不清]` 标记。\n\n2. 遇到标记、关键姓名数字或争议句时，打开 `*.strict.audit.md` 或 `*.strict.audit.json`，比较主/对照原文、相似度、规则命中、错误和选择依据。\n\n3. 长音频把各段 audit 合并成一份 merged audit；原来可选的“送本地 Ollama 仲裁”这一步 10 月 20 日已删。\n\n4. 两路 strict raw JSON 原样保留，合并只汇总、不改写基础结果。\n\n5. 再读 `*.strict.review.json` 的结构化队列，按可用时间区间回到原音频逐项核听；评测 / benchmark 的聚合复核队列另看 `review.md`。\n\n6. 需要追查模型到底返回什么时，分别打开主引擎和对照引擎的两路 `*.raw.json`，不把 raw 直接当最终稿。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -150,7 +150,7 @@
       "id": "chinese-asr-audit-evidence-09",
       "section": "tech",
       "title": "名词和入口",
-      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| strict transcript（严格正文） | `*.strict.md` 是给人先读的最终候选；其中的疑似和听不清标记不得被静默删掉。 |\n| strict audit（严格审计） | Markdown 便于阅读，JSON 便于机器处理；两者保存两路原文、分歧、规则命中、错误和选择依据。 |\n| review projection（复核投影） | `*.strict.review.json` 是单份严格结果的结构化队列；评测 / benchmark 的 `review.md` 再按 P0/P1/P2 汇总最值得人工复核的位置。 |\n| objective outcome | 只表达音频内容的客观状态，不混入执行和覆盖失败。 |\n| indeterminate（无法确定） | 当前证据不足，不能断言有语音或无语音。 |\n| evidence receipt | 列出六项严格内容制品的相对路径、大小、SHA-256、声明与 bundle hash（内容指纹）；它不是签名、可信时间戳、文字真值或事实认证。 |\n| review queue（复核队列） | 按风险收集需要回听的句段，而不是让用户从头听完整录音。 |\n| evidence-only arbitration（只读证据仲裁） | 可选本地 LLM 只看不确定 chunk 的两路文字、相似度、规则和上下文，结论进入 audit / metrics；它不听音频、不改 raw，也不替代人工核听。 |\n\n## 专业定义\n\n先读正文，再点开值得回听的差异；数字、否定和实际声音一起核对，补充模型或可选 LLM 都不能替我改掉原始证据。",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| strict transcript（严格正文） | `*.strict.md` 是给人先读的最终候选；其中的疑似和听不清标记不得被静默删掉。 |\n| strict audit（严格审计） | Markdown 便于阅读，JSON 便于机器处理；两者保存两路原文、分歧、规则命中、错误和选择依据。 |\n| review projection（复核投影） | `*.strict.review.json` 是单份严格结果的结构化队列；评测 / benchmark 的 `review.md` 再按 P0/P1/P2 汇总最值得人工复核的位置。 |\n| objective outcome | 只表达音频内容的客观状态，不混入执行和覆盖失败。 |\n| indeterminate（无法确定） | 当前证据不足，不能断言有语音或无语音。 |\n| evidence receipt | 列出六项严格内容制品的相对路径、大小、SHA-256、声明与 bundle hash（内容指纹）；它不是签名、可信时间戳、文字真值或事实认证。 |\n| review queue（复核队列） | 按风险收集需要回听的句段，而不是让用户从头听完整录音。 |\n| evidence-only arbitration（只读证据仲裁，已删） | 以前可选的本地 LLM，只看不确定 chunk 的两路文字、相似度和规则给意见；从没默认开启，10 月 20 日连同代码删除。 |\n\n## 专业定义\n\n先读正文，再点开值得回听的差异；数字、否定和实际声音一起核对，补充模型不能替我改掉原始证据。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -162,7 +162,7 @@
       "id": "chinese-asr-audit-evidence-10",
       "section": "tech",
       "title": "出问题时（一）",
-      "text": "## 出问题时（一）\n\n解决什么\n\n解决流畅幻觉、空文本误判、双模型分歧被隐藏、结果文件被替换后仍显示通过，以及结构化回执被误当成外部真实性证明的问题。\n\n## 边界\n\n- SHA-256 一致只能证明字节未变，不能证明文字正确。\n\n- verified 回执不能替代原音频和人工核听。\n\n- Ollama 仲裁默认关闭；没有它时基础链必须稳定，启用它也不能把 LLM 偏好当成原始证据或最终真值。\n\n- `keep_alive=0` 避免模型长期驻留 GPU；仲裁在 ASR（自动语音识别） chunk 完成后运行，不与两路 ASR（自动语音识别） 同时争抢资源。\n\n- 低分、空文本和失败必须分别表达。\n\n- 公开仓库不包含任何用户结果包。\n\n- 繁简规范化只统一字形，不把两路的用词改成同一种地区说法；用词差异仍是要人判断的证据。\n\n## 失败与恢复\n\n- **正文存在但主证据引擎失败**：保留文本但标为 provisional，并列出 evidence failure。",
+      "text": "## 出问题时（一）\n\n解决什么\n\n解决流畅幻觉、空文本误判、双模型分歧被隐藏、结果文件被替换后仍显示通过，以及结构化回执被误当成外部真实性证明的问题。\n\n## 边界\n\n- SHA-256 一致只能证明字节未变，不能证明文字正确。\n\n- verified 回执不能替代原音频和人工核听。\n\n- 原来默认关闭的 Ollama 仲裁 10 月 20 日已删；基础链从来不依赖它，任何 LLM 偏好也不能当成原始证据或最终真值。\n\n- 审计层不再调用本地大模型，不与两路 ASR（自动语音识别） 争抢显卡。\n\n- 低分、空文本和失败必须分别表达。\n\n- 公开仓库不包含任何用户结果包。\n\n- 繁简规范化只统一字形，不把两路的用词改成同一种地区说法；用词差异仍是要人判断的证据。\n\n## 失败与恢复\n\n- **正文存在但主证据引擎失败**：保留文本但标为 provisional，并列出 evidence failure。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -174,7 +174,7 @@
       "id": "chinese-asr-audit-evidence-11",
       "section": "tech",
       "title": "出问题时（二）",
-      "text": "## 出问题时（二）\n\n- **正文出现 `[疑似]`**：保留标记，按 audit 的两路原文和 review 时间/chunk 回听原音频；人工确认前不把候选润色成确定事实。\n\n- **正文出现 `[听不清]`**：查看两路 raw、执行错误和客观结果，再回听原音频；它表示当前不能可靠转写，不等于没有语音。\n\n- **空文本且覆盖或执行不完整**：返回 indeterminate，不宣称无语音。\n\n- **回执引用的文件缺失、大小或指纹不符**：证据状态降为 unavailable，要求重新生成或恢复。\n\n- **两路模型对关键句冲突**：保留两路原始输出、audit 依据和时间位置，进入人工回听；没有时间戳时按长音频 chunk 或原文上下文定位并保留未知。\n\n- **显式启用仲裁但本地 Ollama 不可达或响应不是有效 JSON**：只把该 chunk 的仲裁标为不可用或低置信，保留两路 raw、原 audit 与人工复核队列；不重启服务、不覆盖正文，也不让基础长音频任务失败。",
+      "text": "## 出问题时（二）\n\n- **正文出现 `[疑似]`**：保留标记，按 audit 的两路原文和 review 时间/chunk 回听原音频；人工确认前不把候选润色成确定事实。\n\n- **正文出现 `[听不清]`**：查看两路 raw、执行错误和客观结果，再回听原音频；它表示当前不能可靠转写，不等于没有语音。\n\n- **空文本且覆盖或执行不完整**：返回 indeterminate，不宣称无语音。\n\n- **回执引用的文件缺失、大小或指纹不符**：证据状态降为 unavailable，要求重新生成或恢复。\n\n- **两路模型对关键句冲突**：保留两路原始输出、audit 依据和时间位置，进入人工回听；没有时间戳时按长音频 chunk 或原文上下文定位并保留未知。\n\n- **想打开大模型仲裁**：这个开关 10 月 20 日已随代码删除，不能再开；分歧照常保留两路 raw、原 audit 与人工复核队列，按时间回听。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -186,7 +186,7 @@
       "id": "chinese-asr-audit-evidence-12",
       "section": "tech",
       "title": "依据与来源（一）",
-      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- 双模型审计与风险汇总\n\n- 幻觉和格式风险规则\n\n- 执行、覆盖、质量和客观结果\n\n- strict 正文、audit、review、raw 与 receipt（执行回执） 成品写入\n\n- 内容制品与 sidecar（侧车文件） 写入\n\n- 输入、模型和制品身份\n\n- 人工 truth 对齐、指标与 benchmark/review 成品\n\n- 默认关闭的本地 Ollama evidence-only 仲裁、结构化请求与失败回退",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- 双模型审计与风险汇总\n\n- 幻觉和格式风险规则\n\n- 执行、覆盖、质量和客观结果\n\n- strict 正文、audit、review、raw 与 receipt（执行回执） 成品写入\n\n- 内容制品与 sidecar（侧车文件） 写入\n\n- 输入、模型和制品身份\n\n- 人工 truth 对齐、指标与 benchmark/review 成品\n\n- 本地 Ollama evidence-only 仲裁已于 10 月 20 日删除（32df3b9：arbitration.py 及其测试）",
       "links": [
         {
           "text": "上一个模块 长音频与批量",

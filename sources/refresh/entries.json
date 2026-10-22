@@ -1650,5 +1650,68 @@
     "output": "json",
     "timeout": 10,
     "verification": "复用现有 b7-usage-ledger-complete-day 的 jq 只读两份 state 输入。要求两路 bootstrap_complete=true、午夜北京时区 last_completed，取较早的排他边界日期，不减一天；输出仅 complete_until_date。原稿截至 10 月 11 日、source 说明记到当天零点，不能用本轮读旧账本的观察日期推进。无写入、网络或业务模块执行。"
+  },
+  "r3-phone-direct-method-modified": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import subprocess,json,datetime\ns=subprocess.check_output([\"git\",\"-C\",\"E:/.agents\",\"log\",\"-1\",\"--format=%cI\",\"--\",\"skills/phone-direct\"],text=True).strip()\nassert s,\"skill_commit_time_missing\"\nd=datetime.datetime.fromisoformat(s).astimezone(datetime.timezone(datetime.timedelta(hours=8)))\nprint(json.dumps({\"last_update\":d.strftime(\"%Y-%m-%d %H:%M\")}))"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "agents",
+    "output": "json",
+    "timeout": 20,
+    "source_evidence": "仅固定Git或gh api元数据、Skill方法常量或Get-ScheduledTask/Info读取；无提交标题、财务快照、账单、业务采集或写入；stdout仅给网站所需方法常量和状态。"
+  },
+  "r3-finance-method-metadata": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import subprocess,json,datetime,re,ast\nfrom pathlib import Path\ns=Path(r\"E:/.agents/skills/personal-finance/SKILL.md\").read_text(encoding=\"utf-8\")\nm=re.findall(r\"近([一二三四五六七八九十]+)个月月均净消费\",s)\nassert len(m)==1 and m[0] in \"一二三四五六七八九十\",\"finance_window_method_unknown\"\nraw=subprocess.check_output([\"gh\",\"api\",\"repos/wlyaaaaa/personal-finance/commits/main\",\"--jq\",\".commit.committer.date\"],text=True).strip()\nd=datetime.datetime.fromisoformat(raw.replace(\"Z\",\"+00:00\")).astimezone(datetime.timezone(datetime.timedelta(hours=8)))\na=ast.parse(Path(r\"V:/Personal/Projects/daily-preferences/debit_sources.py\").read_text(encoding=\"utf-8\"))\ndicts=[n for n in ast.walk(a) if isinstance(n,ast.Dict) and all(isinstance(k,ast.Constant) and isinstance(k.value,str) for k in n.keys) and {\"本人操作\",\"还款借贷\",\"收入\",\"退款\",\"消费\"}=={k.value for k in n.keys}]\nassert len(dicts)==1,\"debit_category_map_unknown\"\nprint(json.dumps({\"debit_categories\":len(dicts[0].keys),\"average_months\":\"一二三四五六七八九十\".index(m[0])+1,\"last_update\":d.strftime(\"%Y-%m-%d\")}))"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "personal-finance",
+    "output": "json",
+    "timeout": 30,
+    "source_evidence": "仅固定Git或gh api元数据、Skill方法常量或Get-ScheduledTask/Info读取；无提交标题、财务快照、账单、业务采集或写入；stdout仅给网站所需方法常量和状态。"
+  },
+  "r3-finance-reminder-task-state": {
+    "argv": [
+      "pwsh",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new($false);$OutputEncoding=[Console]::OutputEncoding;$ErrorActionPreference='Stop'; $t=Get-ScheduledTask -TaskName 'PCConfig Monthly Export Reminder' -ErrorAction Stop; $i=Get-ScheduledTaskInfo -TaskName 'PCConfig Monthly Export Reminder' -ErrorAction Stop; $never=($i.LastRunTime.Year -lt 2000 -and [int64]$i.LastTaskResult -eq 267011); [pscustomobject]@{registered=$true;state=[string]$t.State;last_run=[string]$i.LastRunTime.ToString('o');last_result=[int64]$i.LastTaskResult;never_run=$never;fact=$(if($never){'每月导出提醒还没正式发过'}else{'每月导出提醒已有运行记录，发送结果须另查回执'})}|ConvertTo-Json -Compress"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "pcconfig",
+    "output": "json",
+    "timeout": 20,
+    "source_evidence": "仅固定Git或gh api元数据、Skill方法常量或Get-ScheduledTask/Info读取；无提交标题、财务快照、账单、业务采集或写入；stdout仅给网站所需方法常量和状态。"
+  },
+  "r3-phone-collector-method-metadata": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,re,subprocess,datetime\nfrom pathlib import Path\np=Path(r\"V:/Personal/Projects/phone-collector\")\ns=(p/\"app/src/main/java/cn/wly/collector/CollectorRuntime.kt\").read_text(encoding=\"utf-8\")\nsteps_source=(p/\"app/src/main/java/cn/wly/collector/CollectorEngine.kt\").read_text(encoding=\"utf-8\")\ngroups=set(re.findall(r'step\\(steps, \"([A-Za-z]+)\"\\)',steps_source)) - {\"exportPending\"}\nassert \"store.append(\\\"runs\\\"\" in steps_source and {\"location\",\"usage\",\"packages\",\"exits\"}<=groups,\"source_output_groups_unknown\"\nm=re.findall(r\"\\.setPeriodic\\((\\d+) \\* 60_000L\\)\",s)\nassert len(m)==1,\"periodic_interval_ambiguous\"\ns2=Path(r\"E:/PCConfig/tools/Manage-PhonePersonalOSPull.ps1\").read_text(encoding=\"utf-8-sig\")\nm2=re.findall(r\"else \\{ New-ScheduledTaskTrigger[^\\n]*FromMinutes\\((\\d+)\\)\\)\",s2)\nassert len(m2)==1,\"pull_interval_ambiguous\"\nraw=subprocess.check_output([\"git\",\"-C\",str(p),\"log\",\"-1\",\"--format=%cI\"],text=True).strip()\nd=datetime.datetime.fromisoformat(raw).astimezone(datetime.timezone(datetime.timedelta(hours=8)))\nprint(json.dumps({\"data_groups\":len(groups),\"phone_period_minutes\":int(m[0]),\"pc_pull_minutes\":int(m2[0]),\"last_update\":d.strftime(\"%Y-%m-%d\")}))"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "phone-collector",
+    "output": "json",
+    "timeout": 20,
+    "source_evidence": "只读手机App周期源码、电脑现行任务注册源码及Git提交时间，不连手机、不读取定位/使用/装机记录、不安装或运行采集。"
   }
 }

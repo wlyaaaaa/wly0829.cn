@@ -421,7 +421,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- device_inventory.py 按真实时点在 Collector 清单与 App CSV 之间选最新完整清单（先 time、同 time 才 sequence），Installed 与安装/更新时间分开；mobility.py按期间汇总GPS事件、停留、移动、空档和本人声明，默认有界输出仍包含全部已发现事件。",
+        "text_ref": "device_inventory.py按真实时点在Collector清单与AppCSV之间选最新完整清单（先time、同time才sequence），Installed与安装/更新时间分开；mobil",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -441,7 +441,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- device_inventory.py 按真实时点在 Collector 清单与 App CSV 之间选最新完整清单（先 time、同 time 才 sequence），Installed 与安装/更新时间分开；mobility.py按期间汇总GPS事件、停留、移动、空档和本人声明，默认有界输出仍包含全部已发现事件。",
+        "text_ref": "device_inventory.py按真实时点在Collector清单与AppCSV之间选最新完整清单（先time、同time才sequence），Installed与安装/更新时间分开；mobil",
         "columns": 1,
         "icons": "none",
         "illustration": "none",

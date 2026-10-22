@@ -22,12 +22,12 @@
       },
       {
         "type": "prose",
-        "text_ref": "我按用途选路线：对电脑说话打字用 Qwen3-ASR-1.7B；先快速看录音内容用 SenseVoiceSmall；平常的录音默认用 Qwen 与 SenseVoice 两路严格核对；重要录音点名走高质量路线，由 FireRedASR2-LLM 主听、Qwen 校验。Fun-ASR 是可明确选择的另一中文路线；多人录音的分段可用 Paraformer，确认文案配时间用 Qwen3-ForcedAligner。本地标出疑点的文件在免费期内会再请阿里云 Qwen Audio 3.1 听一遍；普通录音不会因安装新模型而自动改路线或上传云端。",
+        "text_ref": "我按用途选路线：对电脑说话打字用Qwen3-ASR-1.7B；先快速看录音内容用SenseVoiceSmall；平常的录音默认用Qwen与SenseVoice两路严格核对；重要录音点名走高质量路线，由",
         "row": "top"
       },
       {
         "type": "prose",
-        "text_ref": "**当前情况：**已有快速初稿、日常双模型核对、重要录音高质量路线、可明确选择的其他本地路线和疑难云复核；Whisper目前只有登记，不能直接转写，也不会自动成为后备。",
+        "text_ref": "当前情况：已有快速初稿、日常双模型核对、重要录音高质量路线、带逐句时间的Paraformer路线和疑难云复核。文件转写现在登记4个识别引擎（FireRedASR2-LLM、Qwen3-ASR-1.7B",
         "row": "top"
       },
       {
@@ -58,11 +58,11 @@
       },
       {
         "type": "prose",
-        "text_ref": "我按用途选路线：对电脑说话打字用 Qwen3-ASR-1.7B；先快速看录音内容用 SenseVoiceSmall；平常的录音默认用 Qwen 与 SenseVoice 两路严格核对；重要录音点名走高质量路线，由 FireRedASR2-LLM 主听、Qwen 校验。Fun-ASR 是可明确选择的另一中文路线；多人录音的分段可用 Paraformer，确认文案配时间用 Qwen3-ForcedAligner。本地标出疑点的文件在免费期内会再请阿里云 Qwen Audio 3.1 听一遍；普通录音不会因安装新模型而自动改路线或上传云端。"
+        "text_ref": "我按用途选路线：对电脑说话打字用Qwen3-ASR-1.7B；先快速看录音内容用SenseVoiceSmall；平常的录音默认用Qwen与SenseVoice两路严格核对；重要录音点名走高质量路线，由"
       },
       {
         "type": "prose",
-        "text_ref": "**当前情况：**已有快速初稿、日常双模型核对、重要录音高质量路线、可明确选择的其他本地路线和疑难云复核；Whisper目前只有登记，不能直接转写，也不会自动成为后备。"
+        "text_ref": "当前情况：已有快速初稿、日常双模型核对、重要录音高质量路线、带逐句时间的Paraformer路线和疑难云复核。文件转写现在登记4个识别引擎（FireRedASR2-LLM、Qwen3-ASR-1.7B"
       },
       {
         "type": "illustration",
@@ -443,7 +443,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- **用户直接请求 Whisper Large V3**：返回 fallback（后备路线）/comparison only 的明确不可用结果；不加载模型、不生成假转写，也不静默改走另一个引擎。",
+        "text_ref": "用户直接请求已删除的WhisperLargeV3或Fun-ASR-Nano：按未登记引擎直接报错（UnknownASRengine）；不加载模型、不生成假转写，也不静默改走另一个引擎。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -462,7 +462,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- **用户直接请求 Whisper Large V3**：返回 fallback（后备路线）/comparison only 的明确不可用结果；不加载模型、不生成假转写，也不静默改走另一个引擎。",
+        "text_ref": "用户直接请求已删除的WhisperLargeV3或Fun-ASR-Nano：按未登记引擎直接报错（UnknownASRengine）；不加载模型、不生成假转写，也不静默改走另一个引擎。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -519,7 +519,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 2026-10-11 重读配置与直接转写守卫：仍登记 6 个 Profile、直接转写闭集 5 个；test_config 验证 whisper-large-v3 带 is_whisper 且不进入该闭集，pipeline 在加载前拒绝它（本轮只读测试定义，未执行）。",
+        "text_ref": "2026-10-22重读当前配置：engines登记4个（fireredasr2-llm、qwen3-asr-1.7b、sensevoice、paraformer），profiles为baseline",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -538,7 +538,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 2026-10-11 重读配置与直接转写守卫：仍登记 6 个 Profile、直接转写闭集 5 个；test_config 验证 whisper-large-v3 带 is_whisper 且不进入该闭集，pipeline 在加载前拒绝它（本轮只读测试定义，未执行）。",
+        "text_ref": "2026-10-22重读当前配置：engines登记4个（fireredasr2-llm、qwen3-asr-1.7b、sensevoice、paraformer），profiles为baseline",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

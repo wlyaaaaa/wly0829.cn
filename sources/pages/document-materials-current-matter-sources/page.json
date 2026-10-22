@@ -158,7 +158,7 @@
       "id": "document-materials-current-matter-sources-10",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- PRIVATE source · formal-document-input schema　严格输入字段、类型、签名要求和可选依据\n\n- PRIVATE source · formal_documents.py　输入原字节存档与语义比对、附件、相对路径解释、协议各方核对\n\n- PRIVATE tests · test_formal_documents.py　输出字段漂移和四类材料回归（28 个测试函数，展开 39 个用例，10 月 11 日静态计数）\n\n## 如何验证\n\n- 五类输出字段修改并重算摘要后均被 verify 拒绝。\n\n- 旧的“解析后改动请求”测试挂在已经不用的写入路径上，现在不会触发改动，不能当成新拒绝策略已经测过的证据；新策略目前只有实现，实际执行验证未知。\n\n- 重复 ID、缺失附件和末端链接失败关闭；相对路径按请求所在目录解释。\n\n- 真实事项和逐事实来源的端到端验证本次没有运行。\n\n## 与其他模块的关系\n\n本模块提供计划的可信输入；下一模块只消费这份输入，不重新扫描或猜事实。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- PRIVATE source · formal-document-input schema　严格输入字段、类型、签名要求和可选依据\n\n- PRIVATE source · formal_documents.py　输入原字节存档与语义比对、附件、相对路径解释、协议各方核对\n\n- PRIVATE tests · test_formal_documents.py　输出字段漂移和四类材料回归（31 个测试函数，展开 51 个用例，10 月 22 日静态计数，本次没有运行）\n\n## 如何验证\n\n- 五类输出字段修改并重算摘要后均被 verify 拒绝。\n\n- 旧的“解析后改动请求”测试挂在已经不用的写入路径上，现在不会触发改动，不能当成新拒绝策略已经测过的证据；新策略目前只有实现，实际执行验证未知。\n\n- 重复 ID、缺失附件和末端链接失败关闭；相对路径按请求所在目录解释。\n\n- 真实事项和逐事实来源的端到端验证本次没有运行。\n\n## 与其他模块的关系\n\n本模块提供计划的可信输入；下一模块只消费这份输入，不重新扫描或猜事实。",
       "links": [
         {
           "text": "下一个模块 DOCX 与 PDF",

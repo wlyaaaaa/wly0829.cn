@@ -799,7 +799,7 @@
       ],
       "registry_number": "n-sets-g",
       "original_value_index": 0,
-      "page_pattern": "G、H 上各有 ([\\d,]+) 份完整恢复副本",
+      "page_pattern": "G、H 上各有 ([\\d,]+) 份完整、不含明文的恢复副本",
       "scope_status": "verified",
       "measurement_scope": "G 恢复 sets 直属目录中 schema 正确、complete=true、plaintext_included=false 的完整 manifest 数；不读取加密资产正文",
       "field": "screens[9].text"
@@ -831,7 +831,7 @@
       ],
       "registry_number": "n-sets-h",
       "original_value_index": 0,
-      "page_pattern": "G、H 上各有 ([\\d,]+) 份完整恢复副本",
+      "page_pattern": "G、H 上各有 ([\\d,]+) 份完整、不含明文的恢复副本",
       "scope_status": "verified",
       "measurement_scope": "H 恢复 sets 直属目录中 schema 正确、complete=true、plaintext_included=false 的完整 manifest 数；不读取加密资产正文",
       "field": "screens[9].text"
@@ -2527,7 +2527,7 @@
       ],
       "registry_number": "n-used",
       "original_value_index": 0,
-      "page_pattern": "- \\*\\*([\\d,.]+) GiB\\*\\*　Z 盘只用了这么多，",
+      "page_pattern": "- \\*\\*([\\d,.]+) GiB\\*\\*　退役前最后一轮巡查时 Z 盘只用了这么多",
       "measurement_scope": "指定JSON逐键/数组索引取[\"Metrics\", \"UsedGB\"]；字段原始单值。保留1位小数，五入。",
       "scope_status": "verified",
       "field": "screens[0].text"
@@ -3896,7 +3896,7 @@
       "page": "pcconfig",
       "screen": "pcconfig-01",
       "label": "登记自动任务数",
-      "current_value": 127,
+      "current_value": 140,
       "as_of": "2026-10-07",
       "category": "某个 JSON 字段",
       "source_location": "E:\\PCConfig\\registries\\tasks.json；10月7日管理员扫描，普通权限只见112不能替换此登记",
@@ -3916,7 +3916,7 @@
       ],
       "registry_number": "n-tasks",
       "original_value_index": 0,
-      "page_pattern": "\\-\\ \\*\\*([\\d,]+(?:\\.\\d+)?)\\ 个\\*\\*　自动任务，每个都有人话说明：做什么、怎么停",
+      "page_pattern": "- \\*\\*([\\d,]+) 个\\*\\*　自动任务，[\\d,]+ 个有人话说明",
       "measurement_scope": "指定JSON逐键/数组索引取[\"scheduled_tasks\"]；全部数组元素个数，无状态过滤。",
       "scope_status": "verified",
       "manual_reason": "needs_admin_rescan",
@@ -7294,7 +7294,7 @@
         "timeaudit-10"
       ],
       "registry_number": "n-backup",
-      "page_pattern": "最近一份约 ([\\d,.]+) GiB，留",
+      "page_pattern": "最近一份约 ([\\d,.]+) GiB（",
       "field": "screens[10].text",
       "measurement_scope": "health对最新time_audit_*.dump的stat.st_size/2^20返回MiB，再/1024一位GiB；不读取归档内容，不复算hash，不是恢复演练。",
       "scope_status": "verified"
@@ -7324,7 +7324,7 @@
         "timeaudit-10"
       ],
       "field": "screens[10].text",
-      "page_pattern": "GiB，留 ([\\d,.]+) 天。",
+      "page_pattern": "看），留 ([\\d,.]+) 天。",
       "measurement_scope": "backup_db.ps1 RetentionDays默认值；每日入口默认保留天数，非现存备份份数。",
       "scope_status": "verified"
     },
@@ -7355,7 +7355,7 @@
         "timeaudit-10"
       ],
       "registry_number": "n-backup",
-      "page_pattern": "再看：还是 ([\\d,.]+) 份；",
+      "page_pattern": "再看：现有 ([\\d,.]+) 份完整备份",
       "field": "screens[10].text",
       "measurement_scope": "G:/80_Backup/TimeAudit/postgresql下time_audit_*.dump份数，不计partial，未逐档复核。",
       "scope_status": "verified"
@@ -7741,7 +7741,7 @@
         "remote-control-02"
       ],
       "registry_number": "n-call-split",
-      "page_pattern": "开工核对 ([\\d,]+)",
+      "page_pattern": "开工核对 ([\\d,]+)（每次开工",
       "field": "screens[1].text",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
       "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。",
@@ -7775,7 +7775,7 @@
         "remote-control-02"
       ],
       "registry_number": "n-call-split",
-      "page_pattern": "截图和读界面 ([\\d,]+)",
+      "page_pattern": "截图和读界面 ([\\d,]+) · 开工核对",
       "field": "screens[1].text",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
       "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。",
@@ -7809,7 +7809,7 @@
         "remote-control-02"
       ],
       "registry_number": "n-call-split",
-      "page_pattern": "其他 ([\\d,]+)",
+      "page_pattern": "· 其他 ([\\d,]+)\\n主机处理",
       "field": "screens[1].text",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
       "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。",
@@ -8568,7 +8568,7 @@
       ],
       "registry_number": "n-code",
       "page_pattern": "\\*\\*([\\d,]+) 行\\*\\*｜Python 和 JavaScript 正式代码",
-      "measurement_scope": "Git跟踪的Python与.mjs正式代码，排除tests/**，不计网页注入.js；按换行符统计，共43个文件",
+      "measurement_scope": "Git跟踪的Python与.mjs正式代码，排除tests/**，不计网页注入.js；按换行符统计，本轮现数45个文件（39个Python、6个.mjs）",
       "scope_status": "verified",
       "field": "screens[9].text"
     },
@@ -10476,7 +10476,7 @@
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\sources\\pages\\daily-preferences\\page.json",
       "refreshed_value": 12,
-      "page_pattern": "Tasks ([\\d,]+)",
+      "page_pattern": "｜Tasks ([\\d,]+)（",
       "measurement_scope": "records 现行版本 is_current=1 按逻辑来源 google_tasks 聚合行数，不按source实例数、导入次数或条目内容统计",
       "scope_status": "verified",
       "field": "screens[7].text"
@@ -11890,29 +11890,27 @@
     },
     {
       "id": "timeaudit-cutoff-main",
-      "label": "首屏硬件、生命周期、主看板数字截至日期",
-      "current_value": "10 月 10 日",
-      "page_pattern": "^截至 (\\d+ 月 \\d+ 日)$",
+      "label": "首屏仍沿用旧值的主看板张数及图表数截止日期",
+      "current_value": "10 月 12 日",
+      "page_pattern": "^截至 (\\d+ 月 \\d+ 日)（复制次数本轮已重读；",
       "qualifies": [
-        "timeaudit-n-hw-samples-0",
-        "timeaudit-n-lifecycle-0",
         "timeaudit-n-panels-0",
-        "timeaudit-n-panels-1",
-        "timeaudit-n-clip-first-screen"
+        "timeaudit-n-panels-1"
       ],
       "page": "timeaudit",
       "screen": "timeaudit-01",
       "field": "screens[0].text",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-12",
       "category": "数字观察日期",
       "source_location": "E:/Cache/Claude/Temp/6428793e/wt-B2/sources/pages/timeaudit/page.json screens[0].text；由qualifies注明数字的重取结果衍生",
       "automatic": true,
       "private": false,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "仅当qualifies所列全部同口径数字取得新值，取最早观察日期；任何Unknown保留原日期。",
+      "measurement_scope": "本句10月12日仅注明仍保留旧数的主看板张数和图表数。复制次数本轮已重读；硬件、程序启动退出已于10月22日08:06—08:07做同口径精确计数，各按括号说明，不受这句旧截止覆盖。任一主看板数未取得同口径新值则保旧日期。",
       "report_ref": "E:/Cache/Claude/Temp/6428793e/gpt-children/20261011-174134-web-bind-B2-f81fad6f/round-01/evidence/timeaudit-findings.md",
-      "refreshed_value": null
+      "refreshed_value": null,
+      "known_gap": "本轮看板来源返回0，但未通过内容Owner的同口径语义审查；既有主看板数保留10月12日旧值、当前Unknown。automatic表示有既有自动读取办法，不表示新0已验收，不据此修改页面或推进日期。"
     },
     {
       "id": "timeaudit-cutoff-clip",
@@ -13207,7 +13205,7 @@
       "historical": false,
       "private": true,
       "field": "screens[0].text",
-      "page_pattern": "现存的汇报页[^\\n]*\\n截至 (\\d+ 月 \\d+ 日)",
+      "page_pattern": "数的是现存的页，不是累计做过多少份\\n截至 (\\d+ 月 \\d+ 日)",
       "affected_screens": [
         "skill-report-page-01"
       ],
@@ -13814,7 +13812,7 @@
       "page": "personal-media",
       "screen": "personal-media-01",
       "field": "screens[0].text",
-      "page_pattern": "截至 (\\d+ 月 \\d+ 日 \\d+:\\d+—\\d+:\\d+)（只读核对；",
+      "page_pattern": "截至 (\\d+ 月 \\d+ 日 \\d+:\\d+—\\d+:\\d+)（只读取数；",
       "label": "现行媒体总量与手机精选计划截至日期",
       "current_value": "10 月 9 日",
       "as_of": "2026-10-09",
@@ -14592,7 +14590,7 @@
         "typora-theme-pack-n-tests-0",
         "typora-theme-pack-n-commits-0"
       ],
-      "page_pattern": "截至\\s*(\\d{4} 年 \\d{1,2} 月 \\d{1,2} 日)（北京时间）"
+      "page_pattern": "截至\\s*(\\d{4} 年 \\d{1,2} 月 \\d{1,2} 日)（北京时间；"
     },
     {
       "id": "skill-md-to-pdf-b5-last-use",
@@ -14620,8 +14618,8 @@
       "page": "skill-md-to-pdf",
       "screen": "skill-md-to-pdf-01",
       "label": "uses-7d",
-      "current_value": 0,
-      "as_of": "2026-10-11",
+      "current_value": 2,
+      "as_of": "2026-10-20",
       "category": "技能使用记录",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；只返回技能计数和时间",
       "automatic": true,
@@ -14635,7 +14633,8 @@
         "key": "md-to-pdf",
         "operation": "count_7d"
       },
-      "page_pattern": "^(近 7 天没用过)$"
+      "page_pattern": "^近 7 天 AI 用了 ([\\d,]+) 次$",
+      "binding_note": "本轮整表取数后，根会话按已核闭合窗口14—20日写入“近7天AI用了N次”；此正则只捕获当前数字，包括0。使用记录不证明业务完成，统计覆盖与排他补采边界按本页source及根本轮取数回执。"
     },
     {
       "id": "skill-md-to-pdf-b5-status-as-of",
@@ -15579,8 +15578,8 @@
       "page": "skill-vault-workflow",
       "screen": "skill-vault-workflow-01",
       "label": "近七天 vault-workflow 技能调用数",
-      "current_value": 0,
-      "as_of": "2026-10-11",
+      "current_value": 2,
+      "as_of": "2026-10-20",
       "category": "只读入口事实",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；name=vault-workflow，ts",
       "automatic": true,
@@ -15594,7 +15593,8 @@
         "key": "vault-workflow",
         "operation": "count_7d"
       },
-      "page_pattern": "^(近 7 天没用过)$"
+      "page_pattern": "^近 7 天 AI 用了 ([\\d,]+) 次$",
+      "binding_note": "本轮整表取数后，根会话按已核闭合窗口14—20日写入“近7天AI用了N次”；此正则只捕获当前数字，包括0。使用记录不证明业务完成，统计覆盖与排他补采边界按本页source及根本轮取数回执。"
     },
     {
       "id": "proxyclean-refresh-last",
@@ -15793,8 +15793,8 @@
       "page": "skill-authorization-file-broker",
       "screen": "skill-authorization-file-broker-01",
       "label": "近七天技能调用次数",
-      "current_value": 0,
-      "as_of": "2026-10-11",
+      "current_value": 4,
+      "as_of": "2026-10-20",
       "category": "使用记录",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
       "automatic": true,
@@ -15803,7 +15803,7 @@
       "field": "status_line.facts[0]",
       "scope_status": "verified",
       "measurement_scope": "AI 使用小记录：kind=skill，name 精确匹配；最近七天按观察时刻回溯 7×24 小时，最后时间为已登记技能调用的最后时刻；不证明业务完成。源水位以 state-codex.json/state-claude.json 各自的 last_completed 为准，日内未采集时段不表示未使用。",
-      "page_pattern": "(没用过)",
+      "page_pattern": "^近 7 天 AI 用了 ([\\d,]+) 次$",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "authorization-file-broker",
@@ -15813,7 +15813,7 @@
         "operation": "count_7d",
         "timeout": 60
       },
-      "known_gap": "页面用“没用过”表示 0；机器取回数字后须按次数改写这段文字，不能将数字直接替换这三个字。"
+      "binding_note": "本轮整表取数后，根会话按已核闭合窗口14—20日写入“近7天AI用了N次”；此正则只捕获当前数字，包括0。使用记录不证明业务完成，统计覆盖与排他补采边界按本页source及根本轮取数回执。"
     },
     {
       "id": "skill-authorization-file-broker-refresh-as-of",
@@ -16238,8 +16238,8 @@
       "page": "skill-work-delivery",
       "screen": "skill-work-delivery-01",
       "label": "近七天技能调用次数",
-      "current_value": 0,
-      "as_of": "2026-10-11",
+      "current_value": 2,
+      "as_of": "2026-10-20",
       "category": "使用记录",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
       "automatic": true,
@@ -16248,7 +16248,7 @@
       "field": "status_line.facts[0]",
       "scope_status": "verified",
       "measurement_scope": "AI 使用小记录：kind=skill，name 精确匹配；最近七天按观察时刻回溯 7×24 小时，最后时间为已登记技能调用的最后时刻；不证明业务完成。源水位以 state-codex.json/state-claude.json 各自的 last_completed 为准，日内未采集时段不表示未使用。",
-      "page_pattern": "(没用过)",
+      "page_pattern": "^近 7 天 AI 用了 ([\\d,]+) 次$",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "work-delivery",
@@ -16258,7 +16258,7 @@
         "operation": "count_7d",
         "timeout": 60
       },
-      "known_gap": "页面用“没用过”表示 0；机器取回数字后须按次数改写这段文字，不能将数字直接替换这三个字。"
+      "binding_note": "本轮整表取数后，根会话按已核闭合窗口14—20日写入“近7天AI用了N次”；此正则只捕获当前数字，包括0。使用记录不证明业务完成，统计覆盖与排他补采边界按本页source及根本轮取数回执。"
     },
     {
       "id": "skill-work-delivery-refresh-as-of",
@@ -16541,16 +16541,13 @@
       "private": false,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "注明首屏仓库总数/公开数/冻结数和保存基线及新增身份规模；398次查询自有9月16日–10月9日历史窗，75/30个目录自有9月28日总表日期；10月20日主线一致及无未提交改动是另一次观察，不受本10月12日截至注明，也不将不再展示的数值0加入日期依赖。",
+      "measurement_scope": "只注明总索引10月21日20:54:55已成功完整刷新保存的仓库总数/公开数/冻结数；75/30个工作目录有9月28日日期，398次查询有固定历史窗口，新增仓库2个已在10月21日补齐且作为历史过程，不纳入本句日期依赖；10月22日现场入口失败为Unknown不推进。",
       "field": "screens[0].text",
       "page_pattern": "截至 ([\\d ]+月[\\d ]+日)\\。",
       "qualifies": [
         "b6-github-local-index-repo-count",
         "b6-github-local-index-public-count",
-        "b6-github-local-index-frozen-count",
-        "b6-github-local-index-admission-calls",
-        "b6-github-local-index-baseline-count",
-        "b6-github-local-index-unregistered-count"
+        "b6-github-local-index-frozen-count"
       ]
     },
     {
@@ -17685,10 +17682,10 @@
       "page": "codex-memory-config-memory-whitelist-sync",
       "screen": "codex-memory-config-memory-whitelist-sync-05",
       "label": "笔记本独立云分支全部提交数",
-      "current_value": "59",
+      "current_value": 69,
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "page_pattern": "共 (\\d+) 次提交",
+      "page_pattern": "远端全部提交 (\\d+) 次",
       "retrieve": {
         "kind": "entry",
         "entry": "codex-memory-laptop-snapshot-history",
@@ -17698,7 +17695,7 @@
       },
       "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "复用codex-memory-laptop-snapshot-history，只读远端commits GET，branch=backup/secondary-laptop，统计全部提交（含初始化），现有提交跨度为9/10–10/10共59；严格snapshot标题匹配仅58，不能代替网页全部提交59。超过单页100入口拒绝，须人工分页复核。新增提交使正文跨度变化时交Opus同时更新范围，本清单不机械改写起迄日期。",
+      "measurement_scope": "最新远端backup/secondary-laptop全部提交，含初始化；不是9/10–10/11历史59个正式快照。",
       "source_location": "复用codex-memory-laptop-snapshot-history，只读远端commits GET，branch=backup/secondary-laptop，统计全部提交（含初始化），现有提交跨度为9/10–10/10共59；严格snapshot标题匹配仅58，不能代替网页全部提交59。超过单页100入口拒绝，须人工分页复核。新增提交使正文跨度变化时交Opus同时更新范围，本清单不机械改写起迄日期。",
       "source_project": "codex-memory",
       "private": true,
@@ -17709,10 +17706,10 @@
       "page": "codex-memory-config-memory-whitelist-sync",
       "screen": "codex-memory-config-memory-whitelist-sync-05",
       "label": "本机缓存的笔记本分支提交数",
-      "current_value": "49",
+      "current_value": 68,
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "page_pattern": "缓存仍是 (\\d+) 次",
+      "page_pattern": "本机缓存 (\\d+) 次（都含初始化提交）",
       "retrieve": {
         "kind": "git_count",
         "path": "E:/Projects/Backups/codex-memory",
@@ -17731,10 +17728,10 @@
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
       "label": "G当前生产回执文件数",
-      "current_value": "11,108",
+      "current_value": "11,322",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "G 当前[^\\n；]*?([\\d,]+) 个文件",
+      "page_pattern": "当前同为[^\\n；。]*?[，（]([\\d,]+) 个文件",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -17763,7 +17760,7 @@
       "current_value": "39,488,518,338",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "G 当前[^\\n；]*?个文件、([\\d,]+) 字节",
+      "page_pattern": "当前同为[^\\n；。]*?个文件、([\\d,]+) 字节",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -17831,10 +17828,10 @@
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
       "label": "H当前生产回执文件数",
-      "current_value": "11,093",
+      "current_value": "11,322",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "H 当前[^\\n；]*?([\\d,]+) 个文件",
+      "page_pattern": "当前同为[^\\n；。]*?[，（]([\\d,]+) 个文件",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -17863,7 +17860,7 @@
       "current_value": "39,461,693,231",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "H 当前[^\\n；]*?个文件、([\\d,]+) 字节",
+      "page_pattern": "当前同为[^\\n；。]*?个文件、([\\d,]+) 字节",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -17916,10 +17913,10 @@
       "page": "codex-memory-isolated-disaster-recovery",
       "screen": "codex-memory-isolated-disaster-recovery-05",
       "label": "G当前生产回执文件数",
-      "current_value": "11,108",
+      "current_value": "11,322",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "G 当前[^\\n；]*?([\\d,]+) 个文件",
+      "page_pattern": "当前同为[^\\n；。]*?[，（]([\\d,]+) 个文件",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -17945,10 +17942,10 @@
       "page": "codex-memory-isolated-disaster-recovery",
       "screen": "codex-memory-isolated-disaster-recovery-05",
       "label": "H当前生产回执文件数",
-      "current_value": "11,093",
+      "current_value": "11,322",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "H 当前[^\\n；]*?([\\d,]+) 个文件",
+      "page_pattern": "当前同为[^\\n；。]*?[，（]([\\d,]+) 个文件",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -17974,10 +17971,10 @@
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-05",
       "label": "G当前生产回执文件数",
-      "current_value": "11,108",
+      "current_value": "11,322",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "G 当前[^\\n；]*?([\\d,]+) 个文件",
+      "page_pattern": "当前同为[^\\n；。]*?[，（]([\\d,]+) 个文件",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -18006,7 +18003,7 @@
       "current_value": "39,488,518,338",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "G 当前[^\\n；]*?个文件、([\\d,]+) 字节",
+      "page_pattern": "当前同为[^\\n；。]*?个文件、([\\d,]+) 字节",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -18074,10 +18071,10 @@
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-05",
       "label": "H当前生产回执文件数",
-      "current_value": "11,093",
+      "current_value": "11,322",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "H 当前[^\\n；]*?([\\d,]+) 个文件",
+      "page_pattern": "当前同为[^\\n；。]*?[，（]([\\d,]+) 个文件",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -18106,7 +18103,7 @@
       "current_value": "39.5",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "H 当前[^\\n；]*?字节（([\\d.]+) GB）",
+      "page_pattern": "当前同为[^\\n；。]*?字节（([\\d.]+) GB）",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -18137,7 +18134,7 @@
       "current_value": "0",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
-      "page_pattern": "警告 (\\d+)",
+      "page_pattern": "回读已核对、警告 (\\d+)",
       "retrieve": {
         "kind": "json",
         "path": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json",
@@ -18214,22 +18211,21 @@
       "current_value": "2026-10-11 14:00",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "start": 47,
-      "end": 63,
       "qualifies": [
         "b7-codex-memory-config-memory-whitelist-sync-desktop-task-state",
         "b7-codex-memory-config-memory-whitelist-sync-laptop-window-commits",
         "b7-codex-memory-config-memory-whitelist-sync-laptop-cached-commits"
       ],
-      "automatic": true,
+      "automatic": false,
       "scope_status": "verified",
-      "measurement_scope": "只关联该取数句所注明的同页实际数量；日期+14:00捕获完整，新观察日没有clock时只能输出候选交事实组/Opus审核，不能拼回旧14:00当新验证时间。",
+      "measurement_scope": "此句明确保存2026-10-12远端59快照+1初始化的固定历史窗口；10月22日69次总提交的口径不同，不能更新历史日期。",
       "source_location": "qualifies=b7-codex-memory-config-memory-whitelist-sync-desktop-task-state,b7-codex-memory-config-memory-whitelist-sync-laptop-window-commits,b7-codex-memory-config-memory-whitelist-sync-laptop-cached-commits",
       "source_project": "codex-memory",
       "private": false,
-      "historical": false,
+      "historical": true,
       "date_precision": "datetime",
-      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。"
+      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。",
+      "page_pattern": "截至 (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})："
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-as_of-item-98",
@@ -19176,7 +19172,7 @@
       "field": "screens[8].text",
       "measurement_scope": "正式 _server/jobs/*.json 全集按 status 计数，不排除样例；写盘登记不是实时服务忙碌状态。",
       "scope_status": "verified",
-      "page_pattern": "、失败 ([\\d,]+)",
+      "page_pattern": "正式任务目录有 [\\d,]+ 份登记：完成 [\\d,]+、失败 ([\\d,]+)、运行中",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-localocr-module-field-counts",
@@ -19326,7 +19322,7 @@
       "field": "screens[9].text",
       "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 outcomes_recorded，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
       "scope_status": "verified",
-      "page_pattern": "有 ([\\d,]+) 条保存了文字检测结论",
+      "page_pattern": "再数：保存了文字检测结论的完成记录 ([\\d,]+) 条",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-localocr-module-field-counts",
@@ -19351,7 +19347,7 @@
       "field": "screens[9].text",
       "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 outcome_text_detected，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
       "scope_status": "verified",
-      "page_pattern": "：有字 ([\\d,]+)",
+      "page_pattern": "再数：[^\\n。]*?条（有字 ([\\d,]+)、",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-localocr-module-field-counts",
@@ -19376,7 +19372,7 @@
       "field": "screens[9].text",
       "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 outcome_indeterminate，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
       "scope_status": "verified",
-      "page_pattern": "、说不准 ([\\d,]+)",
+      "page_pattern": "再数：[^\\n。]*?、说不准 ([\\d,]+)、",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-localocr-module-field-counts",
@@ -19401,7 +19397,7 @@
       "field": "screens[9].text",
       "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 outcome_no_text_detected，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
       "scope_status": "verified",
-      "page_pattern": "、无字 ([\\d,]+)",
+      "page_pattern": "再数：[^\\n。]*?、无字 ([\\d,]+)）",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-localocr-module-field-counts",
@@ -19426,7 +19422,7 @@
       "field": "screens[9].text",
       "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 originals_text_detected，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
       "scope_status": "verified",
-      "page_pattern": "三类分别涉及 ([\\d,]+)、",
+      "page_pattern": "再数：[^\\n。]*?三类分别涉及 ([\\d,]+)、",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-localocr-module-field-counts",
@@ -19451,7 +19447,7 @@
       "field": "screens[9].text",
       "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 originals_indeterminate，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
       "scope_status": "verified",
-      "page_pattern": "三类分别涉及 [\\d,]+、([\\d,]+)、",
+      "page_pattern": "再数：[^\\n。]*?三类分别涉及 [\\d,]+、([\\d,]+)、",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-localocr-module-field-counts",
@@ -19476,7 +19472,7 @@
       "field": "screens[9].text",
       "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 originals_no_text_detected，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
       "scope_status": "verified",
-      "page_pattern": "三类分别涉及 [\\d,]+、[\\d,]+、([\\d,]+) 份原件",
+      "page_pattern": "再数：[^\\n。]*?三类分别涉及 [\\d,]+、[\\d,]+、([\\d,]+) 份原件",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-localocr-module-field-counts",
@@ -19497,7 +19493,7 @@
       "source_location": "E:/Projects/Tools/LocalOCR",
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "field": "screens[8].text",
       "measurement_scope": "原页面排除集合与原截止时间必须复核，同口径未确认。",
       "scope_status": "verified",
@@ -19519,7 +19515,7 @@
       "source_location": "E:/Projects/Tools/LocalOCR",
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "field": "screens[9].text",
       "measurement_scope": "原页面排除集合与原截止时间必须复核，同口径未确认。",
       "scope_status": "verified",
@@ -19541,7 +19537,7 @@
       "source_location": "E:/Projects/Tools/LocalOCR",
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "field": "screens[9].text",
       "measurement_scope": "原文409依赖16074原排除集合，不沿用不同集合的408或410。",
       "scope_status": "verified",
@@ -19790,8 +19786,7 @@
         "b7-localocr-jobs-cache-027",
         "b7-localocr-jobs-cache-028",
         "b7-localocr-jobs-cache-029",
-        "b7-localocr-jobs-cache-030",
-        "b7-localocr-jobs-cache-042"
+        "b7-localocr-jobs-cache-030"
       ],
       "manual_review_required": true,
       "manual_review_note": "真实日期时间必须由实际 source_observed_at 和同口径范围核对；机械程序如只生成新日期或遇中文计数/布尔表述，交候选给事实/Opus审，不应用。"
@@ -19874,7 +19869,7 @@
       "source_location": "同页已定位事实来源（qualifies）",
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "field": "screens[9].text",
       "measurement_scope": "实际数据取数时间，只注明同页对应计数/配置字段；原句若带14:00则捕获完整日期时间。新观察日缺时分时只作候选交事实/Opus审阅，绝不拼接旧时分，不自动应用。",
       "scope_status": "verified",
@@ -31069,7 +31064,7 @@
       ],
       "registry_number": "n-conv-size",
       "original_value_index": 1,
-      "page_pattern": "G 是[^\\n；。]*?（([\\d,]+) 个文件、[\\d.]+ GB",
+      "page_pattern": "G 10 月 21 日 12:25 存好（([\\d,]+) 个文件、",
       "field": "screens[3].text",
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点成功收录的逻辑文件数；与同point manifest.file_count及files数组长度核对，不用当前源目录文件数代替。",
@@ -31104,7 +31099,7 @@
       ],
       "registry_number": "n-conv-size",
       "original_value_index": 0,
-      "page_pattern": "G 是[^\\n；。]*?（[\\d,]+ 个文件、([\\d.]+) GB",
+      "page_pattern": "G 10 月 21 日 12:25 存好（[\\d,]+ 个文件、([\\d.]+) GB）",
       "field": "screens[3].text",
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点清单所列逻辑文件length总和；十进制GB=字节/10^9，四舍五入到1位；不是源目录当前大小或去重对象库占盘量。",
@@ -31119,7 +31114,7 @@
       "current_value": "11,093",
       "as_of": "2026-10-20",
       "field": "screens[3].text",
-      "page_pattern": "H 还是[^\\n；。]*?（([\\d,]+) 个文件、[\\d.]+ GB",
+      "page_pattern": "多大\\*\\*　([\\d,]+) 个文件，[\\d.]+ GB（G、H",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -31151,7 +31146,7 @@
       "current_value": "39.5",
       "as_of": "2026-10-20",
       "field": "screens[3].text",
-      "page_pattern": "H 还是[^\\n；。]*?（[\\d,]+ 个文件、([\\d.]+) GB",
+      "page_pattern": "多大\\*\\*　[\\d,]+ 个文件，([\\d.]+) GB（G、H",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -31454,7 +31449,7 @@
       "page": "personal-media",
       "screen": "personal-media-01",
       "field": "screens[0].text",
-      "page_pattern": "10 月 7 日最近一次放回手机就是这 ([\\d,]+) 件",
+      "page_pattern": "10 月 7 日最近一次真正放回手机的是 ([\\d,]+) 件",
       "label": "10月7日手机实际放回件数",
       "current_value": 2377,
       "as_of": "2026-10-07",
@@ -31564,7 +31559,8 @@
       "source_location": "同状态条source说明的实际同页计数来源",
       "qualifies": [
         "pcconfig-n-image-chain-0",
-        "pcconfig-text-0-163"
+        "pcconfig-text-0-163",
+        "r3-pcconfig-full-task-classification-boundary"
       ],
       "automatic": true,
       "private": false,
@@ -31621,7 +31617,7 @@
     {
       "page": "skill-documents",
       "screen": "skill-documents-01",
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-21",
       "historical": false,
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
       "scope_status": "verified",
@@ -31634,13 +31630,14 @@
       "field": "status_line.facts[0]",
       "private": true,
       "automatic": true,
-      "page_pattern": "^(近 7 天没有记录)$",
+      "page_pattern": "^近 7 天 AI 用了 ([\\d,]+) 次$",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "documents",
         "operation": "count_7d"
       },
-      "measurement_scope": "kind=skill，name 精确匹配 documents；每行一次调用，last_time 取最大 ts，count_7d 按观察时刻前 7×24 小时的已记录调用。本稿快照明确 2026-10-04 23:52 至 2026-10-11 00:00；本轮复核固定窗口与滚动窗口结果一致。两路 last_completed 均为 2026-10-11T00:00:00+08:00，之后未补采；调用不证明完成。"
+      "measurement_scope": "kind=skill，name 精确匹配 documents；每行一次调用，last_time 取最大 ts，count_7d 按观察时刻前 7×24 小时的已记录调用。本稿快照明确 2026-10-04 23:52 至 2026-10-11 00:00；本轮复核固定窗口与滚动窗口结果一致。两路 last_completed 均为 2026-10-11T00:00:00+08:00，之后未补采；调用不证明完成。",
+      "binding_note": "本轮整表取数后，根会话按已核闭合窗口14—20日写入“近7天AI用了N次”；此正则只捕获当前数字，包括0。使用记录不证明业务完成，统计覆盖与排他补采边界按本页source及根本轮取数回执。"
     },
     {
       "page": "skill-documents",
@@ -31814,7 +31811,7 @@
       "automatic": false,
       "private": false,
       "historical": false,
-      "page_pattern": "\\*\\*最近一次\\*\\*　(镜像 [\\d]+ 月 [\\d]+ 日 \\d+:\\d+ 做完；同步到外接盘 [\\d]+ 月 [\\d]+ 日 \\d+:\\d+ 做完，但带告警：[^\\n]+)",
+      "page_pattern": "\\*\\*最近一次\\*\\*　(镜像 [\\d]+ 月 [\\d]+ 日 \\d+:\\d+ 做完（[^\\n]+)",
       "manual_reason": "judgment",
       "manual_route": "GPT只读两类具名生产回执及必要上游任务结果，按北京时间分别核对完成事件；区分AI使用账本补采失败、开发配置日备报错和文件告警的实际原因，交Claude/Opus核对整句语义。不从回执观察时刻改写备份完成时刻，不以成功的独立账本倒推自然备份中的补采成功。",
       "measurement_scope": "首屏最近一次整句的综合判读；本轮镜像完成于10月11日14:01:50，冷备完成于10月11日18:39:26且complete_with_warnings。生产回执已核对，未重散列全部载荷、未补跑备份、未验证整机还原。",
@@ -31867,6 +31864,586 @@
       "measurement_scope": "仅指本轮只读回读观察时点，不改变旧备份生成时刻；云端未联网重查的缺口保留。",
       "date_precision": "datetime",
       "date_review_route": "人工重读对应回执和事实单后才更新完整日期时刻。"
+    },
+    {
+      "id": "r3-personal-materials-filename-description",
+      "page": "personal-materials",
+      "screen": "personal-materials-01",
+      "label": "可查文件名条数",
+      "current_value": "文件名，每天更新",
+      "as_of": "2026-10-09",
+      "category": "人工",
+      "source_location": "个人材料库状态入口、filename_entries及同步回执",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读核对材料库注册来源和PCConfig现行任务：此句说明覆盖的目录类别及每日节奏，不把28942个文件名误当每日同步全部原件。"
+      },
+      "automatic": false,
+      "private": true,
+      "historical": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
+      "refreshed_value": 15105,
+      "affected_screens": [
+        "personal-materials-01",
+        "personal-materials-03",
+        "personal-materials-06"
+      ],
+      "registry_number": "n-filenames",
+      "original_value_index": 0,
+      "page_pattern": "登记过的文件夹（蓝湖产品资料那一个除外）、微信收到的文件和下载文件夹的(文件名，每天更新)",
+      "field": "screens[0].text",
+      "scope_status": "verified",
+      "measurement_scope": "filename_entries 全表行数，只查 COUNT，不输出 relative_path 或正文。",
+      "manual_reason": "judgment",
+      "manual_route": "材料库Owner只读核对来源注册表及PCConfig每日文件名清单任务的范围与节奏。"
+    },
+    {
+      "id": "r3-personal-finance-monthly-cadence",
+      "page": "personal-finance",
+      "screen": "personal-finance-01",
+      "label": "每月一次提醒方法",
+      "current_value": 1,
+      "as_of": "2026-10-22",
+      "category": "方法与来源登记",
+      "field": "screens[0].text",
+      "source_location": "PCConfig月度提醒任务注册源码",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "任务注册源码的月历触发器ScheduleByMonth出现次数；仅指每月提醒一次，不声称AI自动更新。",
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "E:/PCConfig/tools/Register-MonthlyExportReminderTask.ps1",
+        "pattern": "<ScheduleByMonth>"
+      },
+      "page_pattern": "\\*\\*每月 (\\d+) 次\\*\\*"
+    },
+    {
+      "id": "r3-personal-finance-months",
+      "page": "personal-finance",
+      "screen": "personal-finance-01",
+      "label": "月均消费完整自然月窗口",
+      "current_value": 3,
+      "as_of": "2026-10-22",
+      "category": "方法与来源登记",
+      "field": "screens[0].text",
+      "source_location": "私人身份wlyaaaaa/personal-finance的AGENTS方法约定；只核对每月一次、最近三个完整自然月与余额快照方法，不读CURRENT、账单或金额。",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "月均消费完整自然月窗口",
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "page_pattern": "\\*\\*(\\d+) 个月\\*\\*",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "r3-finance-method-metadata",
+        "pointer": [
+          "average_months"
+        ]
+      },
+      "observed_at": "2026-10-22T07:54:14.662145+08:00",
+      "source_observed_at": "2026-10-22T07:54:14.662145+08:00",
+      "refreshed_value": 3
+    },
+    {
+      "id": "r3-personal-finance-months-description",
+      "page": "personal-finance",
+      "screen": "personal-finance-01",
+      "label": "最近三个完整自然月方法说明",
+      "current_value": 3,
+      "as_of": "2026-10-22",
+      "category": "方法与来源登记",
+      "field": "screens[0].text",
+      "source_location": "私人身份wlyaaaaa/personal-finance的AGENTS方法约定；只核对每月一次、最近三个完整自然月与余额快照方法，不读CURRENT、账单或金额。",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "最近三个完整自然月方法说明",
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "page_pattern": "月均消费取最近 (\\d+) 个完整自然月",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "r3-finance-method-metadata",
+        "pointer": [
+          "average_months"
+        ]
+      },
+      "observed_at": "2026-10-22T07:54:14.662479+08:00",
+      "source_observed_at": "2026-10-22T07:54:14.662479+08:00",
+      "refreshed_value": 3
+    },
+    {
+      "id": "r3-personal-finance-reminder-state",
+      "page": "personal-finance",
+      "screen": "personal-finance-01",
+      "label": "每月提醒未运行状态",
+      "current_value": "每月导出提醒还没正式发过",
+      "as_of": "2026-10-22",
+      "category": "方法与来源登记",
+      "field": "status_line.facts[0]",
+      "source_location": "PCConfig Owner只读Get-ScheduledTask和Get-ScheduledTaskInfo，核对PCConfig Monthly Export Reminder的注册状态、LastRunTime与LastTaskResult；不触发、不发送。",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "每月提醒未运行状态",
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "r3-finance-reminder-task-state",
+        "pointer": [
+          "fact"
+        ]
+      },
+      "observed_at": "2026-10-22T07:54:38.210384+08:00",
+      "source_observed_at": "2026-10-22T07:54:38.210384+08:00",
+      "refreshed_value": "每月导出提醒还没正式发过"
+    },
+    {
+      "id": "r3-personal-finance-last-update",
+      "page": "personal-finance",
+      "screen": "personal-finance-01",
+      "label": "方法源上次更新",
+      "current_value": "2026-10-21",
+      "as_of": "2026-10-22",
+      "category": "方法与来源登记",
+      "field": "status_line.last.at",
+      "source_location": "Git Owner只读wlyaaaaa/personal-finance main最后提交时间并转换北京时间；不取提交标题、不打开CURRENT或财务原件。",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "方法源上次更新",
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "r3-finance-method-metadata",
+        "pointer": [
+          "last_update"
+        ]
+      },
+      "observed_at": "2026-10-22T07:54:16.255426+08:00",
+      "source_observed_at": "2026-10-22T07:54:16.255426+08:00",
+      "refreshed_value": "2026-10-22"
+    },
+    {
+      "id": "r3-personal-finance-asof",
+      "page": "personal-finance",
+      "screen": "personal-finance-01",
+      "label": "方法核对截至",
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "category": "方法与来源登记",
+      "field": "screens[0].text",
+      "source_location": "同页已定位数字的既有只读来源",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只注明方法频次、月均窗口及静态测试定义；方法确认和计数全部重读才推进。",
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "qualifies": [
+        "r3-personal-finance-monthly-cadence",
+        "r3-personal-finance-months",
+        "r3-personal-finance-months-description",
+        "r3-personal-finance-debit-categories"
+      ],
+      "page_pattern": "截至 (\\d+ 月 \\d+ 日)"
+    },
+    {
+      "id": "r3-personal-finance-status-asof",
+      "page": "personal-finance",
+      "screen": "personal-finance-01",
+      "label": "方法及提醒状态核对日期",
+      "current_value": "2026-10-22",
+      "as_of": "2026-10-22",
+      "category": "方法与来源登记",
+      "field": "status_line.as_of",
+      "source_location": "同页已定位数字的既有只读来源",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "方法及提醒状态核对日期",
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "qualifies": [
+        "r3-personal-finance-reminder-state",
+        "r3-personal-finance-last-update"
+      ]
+    },
+    {
+      "id": "r3-skill-phone-direct-last-update",
+      "page": "skill-phone-direct",
+      "screen": "skill-phone-direct-01",
+      "label": "技能源最后修改时间",
+      "current_value": "2026-10-21 21:13",
+      "as_of": "2026-10-22",
+      "category": "方法与来源登记",
+      "field": "status_line.last.at",
+      "source_location": "Git Owner只读E:/.agents当前活动源中skills/phone-direct最后提交时间，转北京时间；与PCConfig手机直取方法提交对照，不用usage_ledger.last_time替代上次更新。",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "技能源最后修改时间",
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "r3-phone-direct-method-modified",
+        "pointer": [
+          "last_update"
+        ]
+      },
+      "observed_at": "2026-10-22T07:54:16.383464+08:00",
+      "source_observed_at": "2026-10-22T07:54:16.383464+08:00",
+      "refreshed_value": "2026-10-21 21:13"
+    },
+    {
+      "id": "r3-skill-phone-direct-status-asof",
+      "page": "skill-phone-direct",
+      "screen": "skill-phone-direct-01",
+      "label": "技能和手机桥方法核对日期",
+      "current_value": "2026-10-22",
+      "as_of": "2026-10-22",
+      "category": "方法与来源登记",
+      "field": "status_line.as_of",
+      "source_location": "同页已定位数字的既有只读来源",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只注明技能源路径最后修改记录的观察日；使用账本尚未覆盖新技能创建日期，使用次数保持Unknown且不虚构旧日期。",
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "qualifies": [
+        "r3-skill-phone-direct-last-update"
+      ]
+    },
+    {
+      "id": "r3-pcconfig-full-task-classification-boundary",
+      "page": "pcconfig",
+      "screen": "pcconfig-01",
+      "label": "完整任务分类尚未登记的Unknown边界",
+      "current_value": "三组完整分类因 3 项未登记仍 Unknown",
+      "as_of": "2026-10-12",
+      "category": "现状边界",
+      "field": "status_line.source",
+      "page_pattern": "（(三组完整分类因 3 项未登记仍 Unknown)）",
+      "source_location": "PCConfig Owner的SYSTEM完整只读scan_tasks结果及任务登记分类",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "PCConfig Owner只读对照SYSTEM扫描与任务登记，确认3项未登记任务如何归组；未完成前保留Unknown及旧状态日期，不把140总任务已读冒充三组分类都已读。"
+      },
+      "automatic": false,
+      "scope_status": "verified",
+      "measurement_scope": "此记录只注明完整分类Unknown，不影响已读总任务140。",
+      "manual_reason": "judgment",
+      "manual_route": "PCConfig Owner对照完整SYSTEM只读扫描与现行任务说明登记处理3项未登记分类；不运行业务任务、不写分类。",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "r3-phone-collector-phone-period",
+      "page": "phone-collector",
+      "screen": "phone-collector-01",
+      "label": "手机请求周期分钟数",
+      "current_value": 15,
+      "as_of": "2026-10-22",
+      "field": "screens[0].text",
+      "source_location": "phone-collector源码、合成测试定义及PCConfig手机收取任务注册源码；不取手机记录",
+      "scope_status": "verified",
+      "measurement_scope": "手机请求周期分钟数；方法配置和静态定义，不证明真机夜间存活或实际采集及时。",
+      "automatic": true,
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "r3-phone-collector-method-metadata",
+        "pointer": [
+          "phone_period_minutes"
+        ]
+      },
+      "page_pattern": "\\*\\*(\\d+) 分钟\\*\\* \\| \\*\\*30 分钟",
+      "observed_at": "2026-10-22T07:56:32.998255+08:00",
+      "source_observed_at": "2026-10-22T07:56:32.998255+08:00",
+      "refreshed_value": 15
+    },
+    {
+      "id": "r3-phone-collector-pc-pull-period",
+      "page": "phone-collector",
+      "screen": "phone-collector-01",
+      "label": "电脑请求收取周期分钟数",
+      "current_value": 30,
+      "as_of": "2026-10-22",
+      "field": "screens[0].text",
+      "source_location": "phone-collector源码、合成测试定义及PCConfig手机收取任务注册源码；不取手机记录",
+      "scope_status": "verified",
+      "measurement_scope": "电脑请求收取周期分钟数；方法配置和静态定义，不证明真机夜间存活或实际采集及时。",
+      "automatic": true,
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "r3-phone-collector-method-metadata",
+        "pointer": [
+          "pc_pull_minutes"
+        ]
+      },
+      "page_pattern": "\\*\\*(\\d+) 分钟\\*\\* \\| \\*\\*40 个",
+      "observed_at": "2026-10-22T07:56:32.998510+08:00",
+      "source_observed_at": "2026-10-22T07:56:32.998510+08:00",
+      "refreshed_value": 30
+    },
+    {
+      "id": "r3-phone-collector-static-test-definitions",
+      "page": "phone-collector",
+      "screen": "phone-collector-01",
+      "label": "合成自动测试定义数",
+      "current_value": 40,
+      "as_of": "2026-10-22",
+      "field": "screens[0].text",
+      "source_location": "phone-collector源码、合成测试定义及PCConfig手机收取任务注册源码；不取手机记录",
+      "scope_status": "verified",
+      "measurement_scope": "合成自动测试定义数；方法配置和静态定义，不证明真机夜间存活或实际采集及时。",
+      "automatic": true,
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "V:/Personal/Projects/phone-collector/app/src/test",
+        "include": [
+          "**/*.kt"
+        ],
+        "pattern": "@Test\\b"
+      },
+      "page_pattern": "\\*\\*(\\d+) 个\\*\\*",
+      "observed_at": "2026-10-22T07:56:47.969371+08:00",
+      "source_observed_at": "2026-10-22T07:56:47.969371+08:00",
+      "refreshed_value": 40
+    },
+    {
+      "id": "r3-phone-collector-phone-period-description",
+      "page": "phone-collector",
+      "screen": "phone-collector-01",
+      "label": "手机周期请求方法说明",
+      "current_value": 15,
+      "as_of": "2026-10-22",
+      "field": "screens[0].text",
+      "source_location": "phone-collector源码、合成测试定义及PCConfig手机收取任务注册源码；不取手机记录",
+      "scope_status": "verified",
+      "measurement_scope": "手机周期请求方法说明；方法配置和静态定义，不证明真机夜间存活或实际采集及时。",
+      "automatic": true,
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "r3-phone-collector-method-metadata",
+        "pointer": [
+          "phone_period_minutes"
+        ]
+      },
+      "page_pattern": "请系统每 (\\d+) 分钟叫醒一次",
+      "observed_at": "2026-10-22T07:56:32.999550+08:00",
+      "source_observed_at": "2026-10-22T07:56:32.999550+08:00",
+      "refreshed_value": 15
+    },
+    {
+      "id": "r3-phone-collector-pc-pull-period-description",
+      "page": "phone-collector",
+      "screen": "phone-collector-01",
+      "label": "电脑收取周期方法说明",
+      "current_value": 30,
+      "as_of": "2026-10-22",
+      "field": "screens[0].text",
+      "source_location": "phone-collector源码、合成测试定义及PCConfig手机收取任务注册源码；不取手机记录",
+      "scope_status": "verified",
+      "measurement_scope": "电脑收取周期方法说明；方法配置和静态定义，不证明真机夜间存活或实际采集及时。",
+      "automatic": true,
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "r3-phone-collector-method-metadata",
+        "pointer": [
+          "pc_pull_minutes"
+        ]
+      },
+      "page_pattern": "电脑在家每 (\\d+) 分钟经无线调试收一次",
+      "observed_at": "2026-10-22T07:56:32.999657+08:00",
+      "source_observed_at": "2026-10-22T07:56:32.999657+08:00",
+      "refreshed_value": 30
+    },
+    {
+      "id": "r3-phone-collector-last-update",
+      "page": "phone-collector",
+      "screen": "phone-collector-01",
+      "label": "方法源上次更新日期",
+      "current_value": "2026-10-21",
+      "as_of": "2026-10-22",
+      "field": "status_line.last.at",
+      "source_location": "phone-collector源码、合成测试定义及PCConfig手机收取任务注册源码；不取手机记录",
+      "scope_status": "verified",
+      "measurement_scope": "方法源上次更新日期；方法配置和静态定义，不证明真机夜间存活或实际采集及时。",
+      "automatic": true,
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "r3-phone-collector-method-metadata",
+        "pointer": [
+          "last_update"
+        ]
+      },
+      "observed_at": "2026-10-22T07:56:32.999746+08:00",
+      "source_observed_at": "2026-10-22T07:56:32.999746+08:00",
+      "refreshed_value": "2026-10-21"
+    },
+    {
+      "id": "r3-phone-collector-night-observation-boundary",
+      "page": "phone-collector",
+      "screen": "phone-collector-01",
+      "label": "真机夜间可靠性尚未验收",
+      "current_value": "夜里会不会被系统停掉，还在真机观察",
+      "as_of": "2026-10-22",
+      "field": "status_line.facts[0]",
+      "source_location": "phone-collector源码、合成测试定义及PCConfig手机收取任务注册源码；不取手机记录",
+      "scope_status": "verified",
+      "measurement_scope": "真机夜间可靠性尚未验收；方法配置和静态定义，不证明真机夜间存活或实际采集及时。",
+      "automatic": false,
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "phone-collector Owner核对已有真机验收说明是否仍明确夜间可靠性未验收；不连手机、不读定位/使用/装机清单，不以40个桌面合成测试冒充夜间通过。观察未完成保留Unknown边界。"
+      },
+      "manual_reason": "judgment",
+      "manual_route": "phone-collector Owner核对已有真机验收说明是否仍明确夜间可靠性未验收；不连手机、不读定位/使用/装机清单，不以40个桌面合成测试冒充夜间通过。观察未完成保留Unknown边界。"
+    },
+    {
+      "id": "r3-phone-collector-cards-asof",
+      "page": "phone-collector",
+      "screen": "phone-collector-01",
+      "label": "源码方法参数和静态测试定义核对日期",
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "field": "screens[0].text",
+      "source_location": "phone-collector源码、合成测试定义及PCConfig手机收取任务注册源码；不取手机记录",
+      "scope_status": "verified",
+      "measurement_scope": "源码方法参数和静态测试定义核对日期；方法配置和静态定义，不证明真机夜间存活或实际采集及时。",
+      "automatic": true,
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "qualifies": [
+        "r3-phone-collector-phone-period",
+        "r3-phone-collector-pc-pull-period",
+        "r3-phone-collector-static-test-definitions",
+        "r3-phone-collector-data-groups"
+      ],
+      "page_pattern": "截至 (\\d+ 月 \\d+ 日)"
+    },
+    {
+      "id": "r3-phone-collector-status-asof",
+      "page": "phone-collector",
+      "screen": "phone-collector-01",
+      "label": "源码方法修改记录的核对日期",
+      "current_value": "2026-10-22",
+      "as_of": "2026-10-22",
+      "field": "status_line.as_of",
+      "source_location": "phone-collector源码、合成测试定义及PCConfig手机收取任务注册源码；不取手机记录",
+      "scope_status": "verified",
+      "measurement_scope": "源码方法修改记录的核对日期；方法配置和静态定义，不证明真机夜间存活或实际采集及时。",
+      "automatic": true,
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
+      "qualifies": [
+        "r3-phone-collector-last-update"
+      ]
+    },
+    {
+      "id": "r3-personal-finance-debit-categories",
+      "page": "personal-finance",
+      "screen": "personal-finance-01",
+      "label": "储蓄卡方法分类数：按本人操作、还款借贷、收入、退款、消费的AST分类映射计键数",
+      "current_value": 5,
+      "as_of": "2026-10-22",
+      "category": "源码方法定义",
+      "field": "screens[0].text",
+      "page_pattern": "\\*\\*(\\d+) 类\\*\\*",
+      "source_location": "已授权方法源码与固定只读元数据入口；不读私人记录",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "r3-finance-method-metadata",
+        "pointer": [
+          "debit_categories"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "储蓄卡方法分类数：按本人操作、还款借贷、收入、退款、消费的AST分类映射计键数",
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md"
+    },
+    {
+      "id": "r3-phone-collector-data-groups",
+      "page": "phone-collector",
+      "screen": "phone-collector-01",
+      "label": "采集输出方法分组数：location、usage、packages、exits（含同轮runs），不含内部exportPending步骤",
+      "current_value": 4,
+      "as_of": "2026-10-22",
+      "category": "源码方法定义",
+      "field": "screens[0].text",
+      "page_pattern": "\\*\\*(\\d+) 类\\*\\*",
+      "source_location": "已授权方法源码与固定只读元数据入口；不读私人记录",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "r3-phone-collector-method-metadata",
+        "pointer": [
+          "data_groups"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "采集输出方法分组数：location、usage、packages、exits（含同轮runs），不含内部exportPending步骤",
+      "historical": false,
+      "private": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md"
+    },
+    {
+      "id": "r3-skill-phone-direct-static-test-definitions",
+      "page": "skill-phone-direct",
+      "screen": "skill-phone-direct-05",
+      "label": "手机直取静态合成测试函数数",
+      "current_value": 25,
+      "as_of": "2026-10-22",
+      "field": "screens[4].text",
+      "page_pattern": "共 ([\\d,]+) 个测试函数",
+      "source_location": "E:/PCConfig/tools/test_phone_direct.py；只数test_方法定义，不执行",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "E:/PCConfig/tools/test_phone_direct.py",
+        "pattern": "^\\s+def test_\\w+\\(",
+        "flags": "m"
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "源码中def test_*测试方法定义数；不含类/辅助函数，不表示本轮执行或通过，不以它证明短信/通知/截图真机验收。",
+      "historical": false,
+      "private": false,
+      "observed_at": "2026-10-22T08:01:51.858217+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md"
     }
   ]
 }

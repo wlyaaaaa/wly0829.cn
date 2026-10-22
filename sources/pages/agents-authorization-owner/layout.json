@@ -506,7 +506,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 活动用户授权专题（authorization：长期授权、子代理不扩大授权、无限制授权、受信任的 AI）",
+        "text_ref": "活动用户授权专题（authorization：长期授权、子代理不扩大授权、无限制授权、受信任的AI及其可免验证的凭据操作、长期提权许可）",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -525,7 +525,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 活动用户授权专题（authorization：长期授权、子代理不扩大授权、无限制授权、受信任的 AI）",
+        "text_ref": "活动用户授权专题（authorization：长期授权、子代理不扩大授权、无限制授权、受信任的AI及其可免验证的凭据操作、长期提权许可）",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

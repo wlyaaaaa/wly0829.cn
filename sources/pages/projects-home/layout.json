@@ -1122,78 +1122,6 @@
     "aspect": "941:550"
   },
   {
-    "screen": "projects-home-15",
-    "orientation": "h",
-    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\projects-home\\img\\projects-home-15.png",
-    "source_kind": "original_image",
-    "source_size": [
-      1586,
-      992
-    ],
-    "source_sha256": "63070879cc6cdd19bf4feaaed4c72043341fd196483d054d0e64fde097e8cb75",
-    "shape": "card",
-    "blocks": [
-      {
-        "type": "project_tile",
-        "text_ref": "内存盘守护",
-        "align": "left",
-        "illustration": "right_inside",
-        "connector": "none",
-        "icons": "none",
-        "size": "medium",
-        "title_style": "sans_bold",
-        "title_position": "top_left",
-        "status_position": "after_title",
-        "badge_position": "top_right",
-        "tagline_position": "left_inside_below_title",
-        "footer_position": "bottom_left",
-        "link_layout": "one_row",
-        "show_badge": true,
-        "frozen": false,
-        "source_regions": {
-          "title": "upper_left",
-          "tagline": "middle_left",
-          "illustration": "upper_right",
-          "retirement": null
-        }
-      }
-    ],
-    "portrait_required": true,
-    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
-  },
-  {
-    "screen": "projects-home-15",
-    "orientation": "v",
-    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\projects-home\\img\\projects-home-15.png",
-    "source_kind": "mobile_reflow_from_horizontal",
-    "source_size": [
-      1586,
-      992
-    ],
-    "source_sha256": "63070879cc6cdd19bf4feaaed4c72043341fd196483d054d0e64fde097e8cb75",
-    "shape": "card",
-    "blocks": [
-      {
-        "type": "project_tile",
-        "text_ref": "内存盘守护",
-        "align": "left",
-        "illustration": "right_inside",
-        "connector": "none",
-        "icons": "none",
-        "size": "medium",
-        "title_style": "sans_bold",
-        "title_position": "top_left",
-        "status_position": "after_title",
-        "footer_position": "bottom_left",
-        "link_layout": "auto",
-        "show_badge": true,
-        "frozen": false
-      }
-    ],
-    "portrait_required": true,
-    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
-  },
-  {
     "screen": "projects-home-16",
     "orientation": "h",
     "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\projects-home\\img\\projects-home-16.png",
@@ -1754,82 +1682,6 @@
     "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
-    "screen": "projects-home-24",
-    "orientation": "h",
-    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\projects-home-surgery\\projects-home-24.png",
-    "source_kind": "approved_replace_image",
-    "source_size": [
-      1586,
-      992
-    ],
-    "source_sha256": "d717b64ea73f13c09430ad81d48a2cee748c4cae369dd00eb398ad1ed5d8116e",
-    "shape": "card",
-    "blocks": [
-      {
-        "type": "project_tile",
-        "text_ref": "双机剪贴板",
-        "align": "left",
-        "illustration": "right_inside",
-        "connector": "none",
-        "icons": "none",
-        "size": "medium",
-        "title_style": "sans_bold",
-        "title_position": "top_left",
-        "status_position": "after_title",
-        "badge_position": "top_right",
-        "tagline_position": "left_inside_below_title",
-        "footer_position": "bottom_left",
-        "link_layout": "one_row",
-        "show_badge": true,
-        "frozen": false,
-        "source_regions": {
-          "title": "upper_left",
-          "tagline": "middle_left",
-          "illustration": "upper_right",
-          "retirement": null
-        },
-        "link_fill_width": false,
-        "status_style": "plain"
-      }
-    ],
-    "portrait_required": true,
-    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
-  },
-  {
-    "screen": "projects-home-24",
-    "orientation": "v",
-    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\projects-home-surgery\\projects-home-24.png",
-    "source_kind": "mobile_reflow_from_horizontal",
-    "source_size": [
-      1586,
-      992
-    ],
-    "source_sha256": "d717b64ea73f13c09430ad81d48a2cee748c4cae369dd00eb398ad1ed5d8116e",
-    "shape": "card",
-    "blocks": [
-      {
-        "type": "project_tile",
-        "text_ref": "双机剪贴板",
-        "align": "left",
-        "illustration": "right_inside",
-        "connector": "none",
-        "icons": "none",
-        "size": "medium",
-        "title_style": "sans_bold",
-        "title_position": "top_left",
-        "status_position": "after_title",
-        "footer_position": "bottom_left",
-        "link_layout": "auto",
-        "show_badge": true,
-        "frozen": false,
-        "link_fill_width": false,
-        "status_style": "plain"
-      }
-    ],
-    "portrait_required": true,
-    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
-  },
-  {
     "screen": "projects-home-25",
     "orientation": "h",
     "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\projects-home-surgery\\projects-home-25-h.png",
@@ -2038,6 +1890,122 @@
     ],
     "portrait_required": true,
     "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
+  },
+  {
+    "screen": "projects-home-46",
+    "orientation": "h",
+    "shape": "card",
+    "blocks": [
+      {
+        "type": "project_tile",
+        "text_ref": "个人财务",
+        "align": "left",
+        "illustration": "right_inside",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "title_style": "sans_bold",
+        "title_position": "top_left",
+        "status_position": "after_title",
+        "badge_position": "top_right",
+        "tagline_position": "left_inside_below_title",
+        "footer_position": "bottom_left",
+        "link_layout": "one_row",
+        "show_badge": true,
+        "frozen": false,
+        "source_regions": {
+          "title": "upper_left",
+          "tagline": "middle_left",
+          "illustration": "upper_right",
+          "retirement": null
+        }
+      }
+    ],
+    "portrait_required": true,
+    "notes": "新增目录卡：复用本项目已接受主插画；标题、状态、私有徽章、一句话和真实模块入口按内容自然排列。"
+  },
+  {
+    "screen": "projects-home-46",
+    "orientation": "v",
+    "shape": "card",
+    "blocks": [
+      {
+        "type": "project_tile",
+        "text_ref": "个人财务",
+        "align": "left",
+        "illustration": "right_inside",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "title_style": "sans_bold",
+        "title_position": "top_left",
+        "status_position": "after_title",
+        "footer_position": "bottom_left",
+        "link_layout": "auto",
+        "show_badge": true,
+        "frozen": false
+      }
+    ],
+    "portrait_required": true,
+    "notes": "新增目录卡：复用本项目已接受主插画；标题、状态、私有徽章、一句话和真实模块入口按内容自然排列。"
+  },
+  {
+    "screen": "projects-home-47",
+    "orientation": "h",
+    "shape": "card",
+    "blocks": [
+      {
+        "type": "project_tile",
+        "text_ref": "手机采集",
+        "align": "left",
+        "illustration": "right_inside",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "title_style": "sans_bold",
+        "title_position": "top_left",
+        "status_position": "after_title",
+        "badge_position": "top_right",
+        "tagline_position": "left_inside_below_title",
+        "footer_position": "bottom_left",
+        "link_layout": "one_row",
+        "show_badge": true,
+        "frozen": false,
+        "source_regions": {
+          "title": "upper_left",
+          "tagline": "middle_left",
+          "illustration": "upper_right",
+          "retirement": null
+        }
+      }
+    ],
+    "portrait_required": true,
+    "notes": "新增目录卡：复用本项目已接受主插画；标题、状态、私有徽章、一句话和真实模块入口按内容自然排列。"
+  },
+  {
+    "screen": "projects-home-47",
+    "orientation": "v",
+    "shape": "card",
+    "blocks": [
+      {
+        "type": "project_tile",
+        "text_ref": "手机采集",
+        "align": "left",
+        "illustration": "right_inside",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "title_style": "sans_bold",
+        "title_position": "top_left",
+        "status_position": "after_title",
+        "footer_position": "bottom_left",
+        "link_layout": "auto",
+        "show_badge": true,
+        "frozen": false
+      }
+    ],
+    "portrait_required": true,
+    "notes": "新增目录卡：复用本项目已接受主插画；标题、状态、私有徽章、一句话和真实模块入口按内容自然排列。"
   },
   {
     "screen": "projects-home-28",
@@ -3328,5 +3296,157 @@
     ],
     "portrait_required": true,
     "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。保留原停下原因、现在的替代办法及其链接。"
+  },
+  {
+    "screen": "projects-home-15",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\projects-home\\img\\projects-home-15.png",
+    "source_kind": "original_image",
+    "source_size": [
+      1586,
+      992
+    ],
+    "source_sha256": "63070879cc6cdd19bf4feaaed4c72043341fd196483d054d0e64fde097e8cb75",
+    "shape": "card",
+    "blocks": [
+      {
+        "type": "project_tile",
+        "text_ref": "内存盘守护",
+        "align": "left",
+        "illustration": "right_inside",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "title_style": "sans_bold",
+        "title_position": "top_left",
+        "status_position": "after_title",
+        "badge_position": "top_right",
+        "tagline_position": "left_inside_below_title",
+        "footer_position": "bottom_left",
+        "link_layout": "one_row",
+        "show_badge": false,
+        "frozen": true,
+        "source_regions": {
+          "title": "upper_left",
+          "tagline": "middle_left",
+          "illustration": "upper_right"
+        },
+        "separator_before_footer": true,
+        "retirement_inline_link_style": "underlined_inline"
+      }
+    ],
+    "portrait_required": true,
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
+  },
+  {
+    "screen": "projects-home-15",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\projects-home\\img\\projects-home-15.png",
+    "source_kind": "mobile_reflow_from_horizontal",
+    "source_size": [
+      1586,
+      992
+    ],
+    "source_sha256": "63070879cc6cdd19bf4feaaed4c72043341fd196483d054d0e64fde097e8cb75",
+    "shape": "card",
+    "blocks": [
+      {
+        "type": "project_tile",
+        "text_ref": "内存盘守护",
+        "align": "left",
+        "illustration": "right_inside",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "title_style": "sans_bold",
+        "title_position": "top_left",
+        "status_position": "after_title",
+        "footer_position": "bottom_left",
+        "link_layout": "auto",
+        "show_badge": false,
+        "frozen": true,
+        "separator_before_footer": true,
+        "retirement_inline_link_style": "underlined_inline"
+      }
+    ],
+    "portrait_required": true,
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
+  },
+  {
+    "screen": "projects-home-24",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\projects-home-surgery\\projects-home-24.png",
+    "source_kind": "approved_replace_image",
+    "source_size": [
+      1586,
+      992
+    ],
+    "source_sha256": "d717b64ea73f13c09430ad81d48a2cee748c4cae369dd00eb398ad1ed5d8116e",
+    "shape": "card",
+    "blocks": [
+      {
+        "type": "project_tile",
+        "text_ref": "双机剪贴板",
+        "align": "left",
+        "illustration": "right_inside",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "title_style": "sans_bold",
+        "title_position": "top_left",
+        "status_position": "after_title",
+        "badge_position": "top_right",
+        "tagline_position": "left_inside_below_title",
+        "footer_position": "bottom_left",
+        "link_layout": "one_row",
+        "show_badge": false,
+        "frozen": true,
+        "source_regions": {
+          "title": "upper_left",
+          "tagline": "middle_left",
+          "illustration": "upper_right"
+        },
+        "link_fill_width": false,
+        "separator_before_footer": true,
+        "retirement_inline_link_style": "underlined_inline"
+      }
+    ],
+    "portrait_required": true,
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
+  },
+  {
+    "screen": "projects-home-24",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\projects-home-surgery\\projects-home-24.png",
+    "source_kind": "mobile_reflow_from_horizontal",
+    "source_size": [
+      1586,
+      992
+    ],
+    "source_sha256": "d717b64ea73f13c09430ad81d48a2cee748c4cae369dd00eb398ad1ed5d8116e",
+    "shape": "card",
+    "blocks": [
+      {
+        "type": "project_tile",
+        "text_ref": "双机剪贴板",
+        "align": "left",
+        "illustration": "right_inside",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "title_style": "sans_bold",
+        "title_position": "top_left",
+        "status_position": "after_title",
+        "footer_position": "bottom_left",
+        "link_layout": "auto",
+        "show_badge": false,
+        "frozen": true,
+        "link_fill_width": false,
+        "separator_before_footer": true,
+        "retirement_inline_link_style": "underlined_inline"
+      }
+    ],
+    "portrait_required": true,
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   }
 ]

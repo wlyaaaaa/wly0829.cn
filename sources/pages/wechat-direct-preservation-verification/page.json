@@ -8,7 +8,7 @@
   "status_line": {
     "state": "常用",
     "as_of": "2026-10-11",
-    "source": "来源代码核对到 10 月 7 日最后一次提交（v0.2.3）；本轮没有新建保全包，也没有运行验真或测试"
+    "source": "来源代码核对到 10 月 20 日最后一次提交（v0.2.3，10 月 22 日复核；这次提交只改安装方式和语音自检用的 Python）；本轮没有新建保全包，也没有运行验真或测试"
   },
   "screens": [
     {
@@ -77,7 +77,7 @@
       "id": "wechat-direct-preservation-verification-04",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n保全包、目录发布、四种格式验真、路径 containment（隔离处置） 和媒体派生关系均有回归测试定义（当前源码 v0.2.3 共 224 个测试函数，本轮没有运行）\n\n## 关键规则与设计选择\n\n1. preserve 只由明确保全请求触发，不把普通问答自动升级成证据包。\n\n2. 保全包与 sync 导出是两种产品：前者有界自包含，后者可持续增量。格式不同，但都能用 verify-export 独立验真。\n\n3. 原始消息先保存；当前可打开的 SILK 语音保留原件，WAV 只是带来源哈希的派生文件。\n\n4. preserve 只物化当前本机媒体；export-context 是另一个面向 AI 的有序阅读包。同一个 verify-export 可以分别验这两种包，但各验各的目录，一份通过不能证明另一份也通过。\n\n5. verify-export 不需要账号配置或源数据库，可以在恢复后独立验真。\n\n6. 任何错误都以列表返回，不能用其余文件通过来掩盖一个不一致。\n\n## 当前怎样实现\n\n- preserve 先调用 context 得到账号、对象、窗口、消息、引用和 gaps。\n\n- 保全包在具名 .incomplete 候选目录写完所选消息、可用媒体、每项 hash/size 和 manifest（清单）后，一次 rename 发布成正式目录；它没有增量 state，也不在发布前自动跑整包 verify-export。两次改名与事务恢复只属于替换已有归档。packageCreated=true和exit0不等于全部所选内容可用，status=partial、delivery与hasMore必须独立读取。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n保全包、目录发布、四种格式验真、路径 containment（隔离处置） 和媒体派生关系均有回归测试定义（当前源码 v0.2.3，最后提交 2026-10-20，共 225 个测试函数，2026-10-22 重数，本轮没有运行）\n\n## 关键规则与设计选择\n\n1. preserve 只由明确保全请求触发，不把普通问答自动升级成证据包。\n\n2. 保全包与 sync 导出是两种产品：前者有界自包含，后者可持续增量。格式不同，但都能用 verify-export 独立验真。\n\n3. 原始消息先保存；当前可打开的 SILK 语音保留原件，WAV 只是带来源哈希的派生文件。\n\n4. preserve 只物化当前本机媒体；export-context 是另一个面向 AI 的有序阅读包。同一个 verify-export 可以分别验这两种包，但各验各的目录，一份通过不能证明另一份也通过。\n\n5. verify-export 不需要账号配置或源数据库，可以在恢复后独立验真。\n\n6. 任何错误都以列表返回，不能用其余文件通过来掩盖一个不一致。\n\n## 当前怎样实现\n\n- preserve 先调用 context 得到账号、对象、窗口、消息、引用和 gaps。\n\n- 保全包在具名 .incomplete 候选目录写完所选消息、可用媒体、每项 hash/size 和 manifest（清单）后，一次 rename 发布成正式目录；它没有增量 state，也不在发布前自动跑整包 verify-export。两次改名与事务恢复只属于替换已有归档。packageCreated=true和exit0不等于全部所选内容可用，status=partial、delivery与hasMore必须独立读取。",
       "links": [],
       "anchors": [
         {

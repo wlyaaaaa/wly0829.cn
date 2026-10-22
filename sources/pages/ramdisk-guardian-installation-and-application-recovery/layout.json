@@ -22,7 +22,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "重装系统或任务丢失后，知道需要恢复哪些组件，也知道哪些结果还没有证明。",
+        "text_ref": "曾经用来在重装系统或任务丢失后，知道需要恢复哪些组件，也知道哪些结果还没有证明。",
         "row": "top"
       },
       {
@@ -53,7 +53,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "重装系统或任务丢失后，知道需要恢复哪些组件，也知道哪些结果还没有证明。"
+        "text_ref": "曾经用来在重装系统或任务丢失后，知道需要恢复哪些组件，也知道哪些结果还没有证明。"
       },
       {
         "type": "illustration",
@@ -145,7 +145,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "先按 DEPLOY.md 配好 Primo 盘和镜像，再运行 deploy.ps1 -Json 看只读计划；确认后用管理员 PowerShell 7 加 -Apply 执行。应用缓存连接和自然重启验收分别做。",
+        "text_ref": "现在没有入口：DEPLOY.md和deploy.ps110月20日已随退役删除，AI不会从Git历史里翻出来部署。退役前的做法是：先按DEPLOY.md配好Primo盘和镜像，再运行deploy.ps",
         "row": "start",
         "width": "40%"
       },
@@ -186,7 +186,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "先按 DEPLOY.md 配好 Primo 盘和镜像，再运行 deploy.ps1 -Json 看只读计划；确认后用管理员 PowerShell 7 加 -Apply 执行。应用缓存连接和自然重启验收分别做。"
+        "text_ref": "现在没有入口：DEPLOY.md和deploy.ps110月20日已随退役删除，AI不会从Git历史里翻出来部署。退役前的做法是：先按DEPLOY.md配好Primo盘和镜像，再运行deploy.ps"
       },
       {
         "type": "source_text_card",
@@ -221,11 +221,11 @@
       },
       {
         "type": "prose",
-        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+        "text_ref": "这里保留退役前的实现、关键条件、入口、历史记录和验证结果；deploy.ps1、DEPLOY.md、run_hidden.vbs等10月20日已在源提交8c39cfd中删除。"
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 当前配置为12GiB，不沿用旧截图或提示中的32GiB。9 月 18 日记录的 Primo 设置是配置为 DMM Compact、运行为 DMM、紧凑镜像、关机保存；10 月 11 日普通权限读不到运行设置，之后未重新核对。",
+        "text_ref": "1退役前配置为12GiB，不沿用旧截图或提示中的32GiB。9月18日记录的Primo设置是配置为DMMCompact、运行为DMM、紧凑镜像、关机保存；10月11日普通权限读不到运行设置，之后未重新",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -245,11 +245,11 @@
       },
       {
         "type": "prose",
-        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+        "text_ref": "这里保留退役前的实现、关键条件、入口、历史记录和验证结果；deploy.ps1、DEPLOY.md、run_hidden.vbs等10月20日已在源提交8c39cfd中删除。"
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 当前配置为12GiB，不沿用旧截图或提示中的32GiB。9 月 18 日记录的 Primo 设置是配置为 DMM Compact、运行为 DMM、紧凑镜像、关机保存；10 月 11 日普通权限读不到运行设置，之后未重新核对。",
+        "text_ref": "1退役前配置为12GiB，不沿用旧截图或提示中的32GiB。9月18日记录的Primo设置是配置为DMMCompact、运行为DMM、紧凑镜像、关机保存；10月11日普通权限读不到运行设置，之后未重新",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -385,7 +385,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 本轮没有运行 deploy.ps1、关闭 Chrome、改快速启动或重启系统；只读回看了任务、连接、注册表和镜像文件。",
+        "text_ref": "10月11日那轮没有运行deploy.ps1、关闭Chrome、改快速启动或重启系统，只读回看了任务、连接、注册表和镜像文件；10月22日这轮只核对了源仓库的退役提交，没有回看这些。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -408,7 +408,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 本轮没有运行 deploy.ps1、关闭 Chrome、改快速启动或重启系统；只读回看了任务、连接、注册表和镜像文件。",
+        "text_ref": "10月11日那轮没有运行deploy.ps1、关闭Chrome、改快速启动或重启系统，只读回看了任务、连接、注册表和镜像文件；10月22日这轮只核对了源仓库的退役提交，没有回看这些。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

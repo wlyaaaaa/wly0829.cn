@@ -1,7 +1,7 @@
 {
   "schema": "wly.personal-panel-final-project-order.v1",
   "finalized_at": "2026-10-07",
-  "target_project_count": 35,
+  "target_project_count": 37,
   "ranking_basis": "consensus total net value for a broad rational audience, balanced by a capped multiplier for proven consumers in the actual personal AI, Windows and Git ecosystem; count direct utility, loss avoidance and reusable value, adjust for maturity, then subtract adoption, maintenance, complexity and side-effect costs",
   "ranking_rules": [
     "give proven shared infrastructure a bounded multiplier instead of ignoring it or adding every downstream project's full value again",
@@ -10,7 +10,7 @@
     "do not add points for the owner's current usage frequency, historical build order, current card position, personal preference or construction convenience"
   ],
   "display_rule": "render only published projects in final_rank order, with consecutive visible card numbers from 1 through the displayed project count; missing internal ranks never create placeholder cards or routes",
-  "rank_retirement_rule": "An owner-removed independent project normally leaves its final_rank unused; surviving projects are never silently renumbered. The owner explicitly removed rank 27 Playbook from display and decremented every later rank by one on 2026-09-07. The earlier vacant rank 15 remains unused. The owner also retired the planned rank 32 RTX bundle on 2026-09-07 and decremented later ranks by one; rank 15 remains unused. The 2026-09-22 value-order correction places personal-expression after daily-preferences at rank 18; prior ranks 18–33 move down one slot while their relative order is preserved. The unused rank 15 remains unused. The owner removed the entire LLM Backend Toolkit project on 2026-09-27; rank 25 remains unused. Existing independently authored Password Center and remote computer control pages are registered at appended ranks 36 and 37 without changing any retained rank.",
+  "rank_retirement_rule": "An owner-removed independent project normally leaves its final_rank unused; surviving projects are never silently renumbered. The owner explicitly removed rank 27 Playbook from display and decremented every later rank by one on 2026-09-07. The earlier vacant rank 15 remains unused. The owner also retired the planned rank 32 RTX bundle on 2026-09-07 and decremented later ranks by one; rank 15 remains unused. The 2026-09-22 value-order correction places personal-expression after daily-preferences at rank 18; prior ranks 18–33 move down one slot while their relative order is preserved. The unused rank 15 remains unused. The owner removed the entire LLM Backend Toolkit project on 2026-09-27; rank 25 remains unused. Existing independently authored Password Center and remote computer control pages are registered at appended ranks 36 and 37 without changing any retained rank. The owner selected personal-finance and phone-collector on 2026-10-22; they use appended ranks 38 and 39 without changing any retained rank.",
   "construction_rule": "The website AI selects the smallest final_rank still marked planned after the owner reports its latest completed project; an independent next assignment does not wait for unrelated acceptance, UI work, integration or publication. Native collaborators may work on UI, content, source-project acceptance, necessary repairs and package integration in parallel with non-overlapping ownership when useful. Choose actual model and effort through active economy routing, combine results for final acceptance and follow the owner's current publication request.",
   "projects": [
     {
@@ -251,6 +251,15 @@
       "source": "wlyaaaaa/personal-finance",
       "content_format": "typeset",
       "content_path": "sources/pages/personal-finance/page.json"
+    },
+    {
+      "final_rank": 39,
+      "id": "phone-collector",
+      "title": "手机采集",
+      "state": "published",
+      "source": "wlyaaaaa/phone-collector",
+      "content_format": "typeset",
+      "content_path": "sources/pages/phone-collector/page.json"
     }
   ],
   "non_card_explanations": [

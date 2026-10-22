@@ -39,7 +39,7 @@
           "proto:a01-ic3",
           "proto:a01-ic4"
         ],
-        "text_ref": "166次"
+        "text_ref": "188次"
       },
       {
         "type": "live_strip",
@@ -88,7 +88,7 @@
           "proto:a01-ic3",
           "proto:a01-ic4"
         ],
-        "text_ref": "166次"
+        "text_ref": "188次"
       },
       {
         "type": "live_strip",
@@ -142,7 +142,7 @@
           "_library/hires-icons-r2/a02-sub.png",
           "_library/hires-icons-r2/a02-cal.png"
         ],
-        "text_ref": "子代理也一样|每周一 13:00"
+        "text_ref": "子代理不再自己核验规则由派活的主对话核验：主对话派原生子代理前先核验，经包装脚本派的GPT在启动和续作时由脚本自动核验一次；派单里给出已通过的版本和要读的专题路径，子代理照派单读需要的专题，不再自己核|每周一 13:00"
       }
     ],
     "notes": "原图：标题居中；五站图标在卡外、丝带相连，编号和名称在卡外，卡里只有说明",
@@ -189,7 +189,7 @@
           "_library/hires-icons-r2/a02-sub.png",
           "_library/hires-icons-r2/a02-cal.png"
         ],
-        "text_ref": "子代理也一样"
+        "text_ref": "子代理不再自己核验规则由派活的主对话核验：主对话派原生子代理前先核验，经包装脚本派的GPT在启动和续作时由脚本自动核验一次；派单里给出已通过的版本和要读的专题路径，子代理照派单读需要的专题，不再自己核"
       }
     ],
     "source_images": [

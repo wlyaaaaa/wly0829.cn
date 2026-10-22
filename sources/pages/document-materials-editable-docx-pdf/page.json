@@ -158,7 +158,7 @@
       "id": "document-materials-editable-docx-pdf-10",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- PRIVATE source · formal_documents.py　按用途编排的 DOCX/PDF、各方签署位、附件、导出与不可覆盖构建\n\n- PRIVATE source · packaged Word exporter　安装包内 Word 固定版导出\n\n- PRIVATE tests · four-type build/verify　四类材料、Word/备用引擎、协议签署位与隔离安装回归（28 个测试函数、39 个用例，10 月 11 日静态计数）\n\n## 如何验证\n\n- 四类通用材料的合成构建与复验、隔离安装包两个入口用 Microsoft Word + Poppler 的运行，都是 9 月初的历史记录。\n\n- DOCX 不含内部角色代码、事项编号或原始渠道值。\n\n- 本次没有运行测试，也没有确认当前 Word、字体和 Poppler 安装可用。\n\n- 真实个人正文和真实打印验收本次没有运行。\n\n## 与其他模块的关系\n\n本模块形成“已生成”或“本人已签”的构建；逐页审计和自包含材料包由下一模块决定是否可进入“已具备递送条件”。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- PRIVATE source · formal_documents.py　按用途编排的 DOCX/PDF、各方签署位、附件、导出与不可覆盖构建\n\n- PRIVATE source · packaged Word exporter　安装包内 Word 固定版导出\n\n- PRIVATE tests · four-type build/verify　四类材料、Word/备用引擎、协议签署位与隔离安装回归（31 个测试函数、51 个用例，10 月 22 日静态计数，本次没有运行）\n\n## 如何验证\n\n- 四类通用材料的合成构建与复验、隔离安装包两个入口用 Microsoft Word + Poppler 的运行，都是 9 月初的历史记录。\n\n- DOCX 不含内部角色代码、事项编号或原始渠道值。\n\n- 本次没有运行测试，也没有确认当前 Word、字体和 Poppler 安装可用。\n\n- 真实个人正文和真实打印验收本次没有运行。\n\n## 与其他模块的关系\n\n本模块形成“已生成”或“本人已签”的构建；逐页审计和自包含材料包由下一模块决定是否可进入“已具备递送条件”。",
       "links": [
         {
           "text": "上一个模块 事项与原件",

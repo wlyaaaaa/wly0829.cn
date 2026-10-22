@@ -22,7 +22,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "避免为了读写速度，把唯一资料的生存时间绑在内存盘上。",
+        "text_ref": "曾经用来避免为了读写速度，把唯一资料的生存时间绑在内存盘上。",
         "row": "top"
       },
       {
@@ -53,7 +53,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "避免为了读写速度，把唯一资料的生存时间绑在内存盘上。"
+        "text_ref": "曾经用来避免为了读写速度，把唯一资料的生存时间绑在内存盘上。"
       },
       {
         "type": "illustration",
@@ -145,7 +145,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "在为应用配置缓存目录时，先读项目 Z_使用说明，只把可再生缓存指向 Z 盘；正式文件留持久磁盘。",
+        "text_ref": "现在没有入口：项目里的Z_使用说明10月20日已随退役删除，守护也不再照看Z盘，替代方式来源未写明。退役前的做法是：为应用配置缓存目录时，先读项目Z_使用说明，只把可再生缓存指向Z盘；正式文件留持久磁",
         "row": "start",
         "width": "40%"
       },
@@ -186,7 +186,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "在为应用配置缓存目录时，先读项目 Z_使用说明，只把可再生缓存指向 Z 盘；正式文件留持久磁盘。"
+        "text_ref": "现在没有入口：项目里的Z_使用说明10月20日已随退役删除，守护也不再照看Z盘，替代方式来源未写明。退役前的做法是：为应用配置缓存目录时，先读项目Z_使用说明，只把可再生缓存指向Z盘；正式文件留持久磁"
       },
       {
         "type": "source_text_card",
@@ -221,7 +221,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+        "text_ref": "这里保留退役前的实现、关键条件、入口、历史记录和验证结果；所列脚本与说明10月20日已在源提交8c39cfd中删除。"
       },
       {
         "type": "numbered_steps",
@@ -245,7 +245,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+        "text_ref": "这里保留退役前的实现、关键条件、入口、历史记录和验证结果；所列脚本与说明10月20日已在源提交8c39cfd中删除。"
       },
       {
         "type": "numbered_steps",
@@ -269,7 +269,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 效率查询入口 Get-RamdiskEfficiency.ps1 -Json 把逻辑容量、已用、镜像逻辑/实际分配与DriverAllocatedBytes分开；可选的 -IncludePrimo 只读 Primo 列表和设置，需要管理员。无法取得可靠驱动计数时为null，SpeedupPercent没有同条件计时则为空（未实测），不从镜像大小推内存或编造性能倍数。",
+        "text_ref": "效率查询入口Get-RamdiskEfficiency.ps1-Json（已删除）把逻辑容量、已用、镜像逻辑/实际分配与DriverAllocatedBytes分开；可选的-IncludePrimo只",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -289,7 +289,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 效率查询入口 Get-RamdiskEfficiency.ps1 -Json 把逻辑容量、已用、镜像逻辑/实际分配与DriverAllocatedBytes分开；可选的 -IncludePrimo 只读 Primo 列表和设置，需要管理员。无法取得可靠驱动计数时为null，SpeedupPercent没有同条件计时则为空（未实测），不从镜像大小推内存或编造性能倍数。",
+        "text_ref": "效率查询入口Get-RamdiskEfficiency.ps1-Json（已删除）把逻辑容量、已用、镜像逻辑/实际分配与DriverAllocatedBytes分开；可选的-IncludePrimo只",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -387,7 +387,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 只读核对当前代码：没有 robocopy、Z_Drive_Backup 或旧 projects/docs/others 通道；静态检查仍定义 15 条断言，本轮没有运行（旧页“本轮静态检查通过”是 9 月 18 日那次）。",
+        "text_ref": "退役前只读核对代码：没有robocopy、Z_Drive_Backup或旧projects/docs/others通道；静态检查仍定义15条断言，本轮没有运行（旧页“本轮静态检查通过”是9月18日那次",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -406,7 +406,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 只读核对当前代码：没有 robocopy、Z_Drive_Backup 或旧 projects/docs/others 通道；静态检查仍定义 15 条断言，本轮没有运行（旧页“本轮静态检查通过”是 9 月 18 日那次）。",
+        "text_ref": "退役前只读核对代码：没有robocopy、Z_Drive_Backup或旧projects/docs/others通道；静态检查仍定义15条断言，本轮没有运行（旧页“本轮静态检查通过”是9月18日那次",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

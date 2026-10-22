@@ -558,7 +558,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 使用账本（覆盖到 10/9 23:59，本轮聚合）：GPT 包装器调用 3,148 次（Codex 534、Claude 2,614），fast 71 次；这是命令调用次数，不是成功任务数。",
+        "text_ref": "使用账本（完整覆盖到10月11日00:00之前，10月12日04:41聚合）：GPT包装器调用3,504次（Claude2,862、Codex642）；这是命令调用次数，不是成功任务数。10月11日零",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -577,7 +577,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 使用账本（覆盖到 10/9 23:59，本轮聚合）：GPT 包装器调用 3,148 次（Codex 534、Claude 2,614），fast 71 次；这是命令调用次数，不是成功任务数。",
+        "text_ref": "使用账本（完整覆盖到10月11日00:00之前，10月12日04:41聚合）：GPT包装器调用3,504次（Claude2,862、Codex642）；这是命令调用次数，不是成功任务数。10月11日零",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

@@ -5,9 +5,9 @@
   "title": "个人财务",
   "url": "/projects/personal-finance/",
   "tagline": "每月把账单收齐、对清楚，分清花掉的和还掉的，再报一次数。",
-  "status": "在用",
+  "status": "常用",
   "status_line": {
-    "state": "在用",
+    "state": "常用",
     "last": {
       "label": "上次更新",
       "at": "2026-10-22"

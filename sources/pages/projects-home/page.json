@@ -46,7 +46,9 @@
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\page.json",
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\page.json",
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\page.json",
-      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\page.json"
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\page.json",
+      "sources/pages/personal-finance/page.json",
+      "sources/pages/phone-collector/page.json"
     ],
     "scale_source": "sources/pages/*/page.json:kind/status/public/registry.features"
   },
@@ -713,7 +715,7 @@
       "title": "组名条：让电脑顺手、状态看得见",
       "scene": "横条 1600×180：白底，左端一片小水彩绿叶，旁边是粗体深绿的组名（字号比卡片上的项目名再大一号），组名右边隔一段空白、同一行是灰绿色常规字的那一句话；条子底下一道很淡的水彩绿色笔刷线，右端几片淡淡的绿叶。只画这些字，不画别的。",
       "portrait": "竖版条 940×240：白底，第一行左边一片小水彩绿叶加粗体深绿的组名，第二行灰绿色常规字的那一句话（可以折成两行），底下一道很淡的水彩绿色笔刷线。只画这些字。",
-      "text": "## 让电脑顺手、状态看得见\n\n内存盘有程序照看，断网和卡顿查得清；电脑的状态抬眼就看到，闲下来换上屏保。",
+      "text": "## 让电脑顺手、状态看得见\n\n断网和卡顿查得清；电脑的状态抬眼就看到，闲下来换上屏保。",
       "links": [],
       "anchors": [
         {
@@ -725,69 +727,6 @@
       "screenshots": [],
       "chain": "",
       "reuse": ""
-    },
-    {
-      "id": "projects-home-15",
-      "shape": "card",
-      "section": "groups",
-      "title": "内存盘守护",
-      "scene": "单张项目卡片，1200×750 横放，画布就是卡片本身：白底、细浅绿描边、大圆角、很淡的阴影，四周只留很窄的白边，不画页面背景、别的卡片或组名。所有项目卡同一个版式、同一配色，风格照样张（白底、纯绿主色 #16a34a、深绿标题、深蓝灰正文、水彩插画）。\n①左上：项目名，大号粗体绿色字，画成链接样式（细下划线、末尾小 ↗）；紧右边是状态小标签：常用＝浅绿底深绿字，偶尔用＝白底浅绿描边、灰绿字，冻结＝浅灰底灰字。②右上角：公开项目画〔GitHub〕徽章（深绿底白字圆角，左边白色 GitHub 猫头标志）；私有项目画浅灰底深灰字的“私有”徽章，左边一把小锁；冻结项目不画徽章。③左边中间：深蓝灰常规字的一句话，最多两行。④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。每张卡的插画内容各不相同，画法统一。⑤冻结项目在一句话下方写明“停下原因：……”，再写“现在：……”；原因较长时允许自然折成两行，文字仍要可读，里面〔〕括起来的是链接。⑥最下面一行：灰绿小字“直达：”，后面最多 3 个浅绿底圆角小胶囊，每个是链接（绿色字、末尾小 ↗），一行排完。卡上的字以“字”为准，一字不差；不画连线。",
-      "portrait": "卡片不画竖版（拼页按组内张数排满每一行）。",
-      "text": "**〔内存盘守护〕**　常用　　〔GitHub〕\n照看只放缓存的内存盘，内存被卡住时帮它腾出来。\n直达：〔每 15 分钟的照看〕　〔自动腾内存〕　〔查询、部署和维护〕",
-      "links": [
-        {
-          "text": "内存盘守护",
-          "href": "/projects/ramdisk-guardian/"
-        },
-        {
-          "text": "每 15 分钟的照看",
-          "href": "/projects/ramdisk-guardian/#g-upkeep"
-        },
-        {
-          "text": "自动腾内存",
-          "href": "/projects/ramdisk-guardian/#g-release"
-        },
-        {
-          "text": "查询、部署和维护",
-          "href": "/projects/ramdisk-guardian/#g-tools"
-        },
-        {
-          "text": "GitHub",
-          "href": "https://github.com/wlyaaaaa/RamdiskGuardian"
-        }
-      ],
-      "anchors": [
-        {
-          "id": "p-ramdisk-guardian",
-          "text": "内存盘守护"
-        }
-      ],
-      "live": [],
-      "screenshots": [],
-      "chain": "",
-      "reuse": "",
-      "card": {
-        "name": "内存盘守护",
-        "href": "/projects/ramdisk-guardian/",
-        "status": "常用",
-        "visibility": "public",
-        "github": "https://github.com/wlyaaaaa/RamdiskGuardian",
-        "tagline": "照看只放缓存的内存盘，内存被卡住时帮它腾出来。",
-        "links": [
-          {
-            "text": "每 15 分钟的照看",
-            "href": "/projects/ramdisk-guardian/#g-upkeep"
-          },
-          {
-            "text": "自动腾内存",
-            "href": "/projects/ramdisk-guardian/#g-release"
-          },
-          {
-            "text": "查询、部署和维护",
-            "href": "/projects/ramdisk-guardian/#g-tools"
-          }
-        ]
-      }
     },
     {
       "id": "projects-home-16",
@@ -1111,7 +1050,7 @@
       "title": "组名条：人不在电脑前也能办事",
       "scene": "横条 1600×180：白底，左端一片小水彩绿叶，旁边是粗体深绿的组名（字号比卡片上的项目名再大一号），组名右边隔一段空白、同一行是灰绿色常规字的那一句话；条子底下一道很淡的水彩绿色笔刷线，右端几片淡淡的绿叶。只画这些字，不画别的。",
       "portrait": "竖版条 940×240：白底，第一行左边一片小水彩绿叶加粗体深绿的组名，第二行灰绿色常规字的那一句话（可以折成两行），底下一道很淡的水彩绿色笔刷线。只画这些字。",
-      "text": "## 人不在电脑前也能办事\n\n手机或笔记本上的 AI 能直接在这台电脑上办事，我也能远程看着画面操作；两台电脑共用剪贴板、互传文件。",
+      "text": "## 人不在电脑前也能办事\n\n手机或笔记本上的 AI 能直接在这台电脑上办事，我也能远程看着画面操作。",
       "links": [],
       "anchors": [
         {
@@ -1242,69 +1181,6 @@
           {
             "text": "体检和修复",
             "href": "/projects/sunshine-remote-streaming/#g-check"
-          }
-        ]
-      }
-    },
-    {
-      "id": "projects-home-24",
-      "shape": "card",
-      "section": "groups",
-      "title": "双机剪贴板",
-      "scene": "单张项目卡片，1200×750 横放，画布就是卡片本身：白底、细浅绿描边、大圆角、很淡的阴影，四周只留很窄的白边，不画页面背景、别的卡片或组名。所有项目卡同一个版式、同一配色，风格照样张（白底、纯绿主色 #16a34a、深绿标题、深蓝灰正文、水彩插画）。\n①左上：项目名，大号粗体绿色字，画成链接样式（细下划线、末尾小 ↗）；紧右边是状态小标签：常用＝浅绿底深绿字，偶尔用＝白底浅绿描边、灰绿字，冻结＝浅灰底灰字。②右上角：公开项目画〔GitHub〕徽章（深绿底白字圆角，左边白色 GitHub 猫头标志）；私有项目画浅灰底深灰字的“私有”徽章，左边一把小锁；冻结项目不画徽章。③左边中间：深蓝灰常规字的一句话，最多两行。④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。每张卡的插画内容各不相同，画法统一。⑤冻结项目在一句话下方写明“停下原因：……”，再写“现在：……”；原因较长时允许自然折成两行，文字仍要可读，里面〔〕括起来的是链接。⑥最下面一行：灰绿小字“直达：”，后面最多 3 个浅绿底圆角小胶囊，每个是链接（绿色字、末尾小 ↗），一行排完。卡上的字以“字”为准，一字不差；不画连线。",
-      "portrait": "卡片不画竖版（拼页按组内张数排满每一行）。",
-      "text": "**〔双机剪贴板〕**　偶尔用　　〔GitHub〕\n两台电脑互相粘贴复制的文字，也能互传文件\n直达：〔同步和传输〕　〔连接和放行〕　〔自动恢复〕",
-      "links": [
-        {
-          "text": "双机剪贴板",
-          "href": "/projects/meshclip-kit/"
-        },
-        {
-          "text": "同步和传输",
-          "href": "/projects/meshclip-kit/#g-share"
-        },
-        {
-          "text": "连接和放行",
-          "href": "/projects/meshclip-kit/#g-link"
-        },
-        {
-          "text": "自动恢复",
-          "href": "/projects/meshclip-kit/#g-recover"
-        },
-        {
-          "text": "GitHub",
-          "href": "https://github.com/wlyaaaaa/meshclip-kit"
-        }
-      ],
-      "anchors": [
-        {
-          "id": "p-meshclip-kit",
-          "text": "双机剪贴板"
-        }
-      ],
-      "live": [],
-      "screenshots": [],
-      "chain": "",
-      "reuse": "",
-      "card": {
-        "name": "双机剪贴板",
-        "href": "/projects/meshclip-kit/",
-        "status": "偶尔用",
-        "visibility": "public",
-        "github": "https://github.com/wlyaaaaa/meshclip-kit",
-        "tagline": "两台电脑互相粘贴复制的文字，也能互传文件",
-        "links": [
-          {
-            "text": "同步和传输",
-            "href": "/projects/meshclip-kit/#g-share"
-          },
-          {
-            "text": "连接和放行",
-            "href": "/projects/meshclip-kit/#g-link"
-          },
-          {
-            "text": "自动恢复",
-            "href": "/projects/meshclip-kit/#g-recover"
           }
         ]
       }
@@ -1443,6 +1319,124 @@
           {
             "text": "查设备记录",
             "href": "/projects/personal-health/#g-query"
+          }
+        ]
+      }
+    },
+    {
+      "id": "projects-home-46",
+      "shape": "card",
+      "section": "groups",
+      "title": "个人财务",
+      "scene": "单张项目卡片，1200×750 横放，画布就是卡片本身：白底、细浅绿描边、大圆角、很淡的阴影，四周只留很窄的白边，不画页面背景、别的卡片或组名。所有项目卡同一个版式、同一配色，风格照样张（白底、纯绿主色 #16a34a、深绿标题、深蓝灰正文、水彩插画）。\n①左上：项目名，大号粗体绿色字，画成链接样式（细下划线、末尾小 ↗）；紧右边是状态小标签：常用＝浅绿底深绿字，偶尔用＝白底浅绿描边、灰绿字，冻结＝浅灰底灰字。②右上角：公开项目画〔GitHub〕徽章（深绿底白字圆角，左边白色 GitHub 猫头标志）；私有项目画浅灰底深灰字的“私有”徽章，左边一把小锁；冻结项目不画徽章。③左边中间：深蓝灰常规字的一句话，最多两行。④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。每张卡的插画内容各不相同，画法统一。⑤冻结项目在一句话下方写明“停下原因：……”，再写“现在：……”；原因较长时允许自然折成两行，文字仍要可读，里面〔〕括起来的是链接。⑥最下面一行：灰绿小字“直达：”，后面最多 3 个浅绿底圆角小胶囊，每个是链接（绿色字、末尾小 ↗），一行排完。卡上的字以“字”为准，一字不差；不画连线。",
+      "portrait": "卡片不画竖版（拼页按组内张数排满每一行）。",
+      "text": "**〔个人财务〕**　常用　　私有\n每月把账单收齐、对清楚，分清花掉的和还掉的，再报一次数。\n直达：〔收账单〕　〔对账〕　〔月度报数〕",
+      "links": [
+        {
+          "text": "个人财务",
+          "href": "/projects/personal-finance/"
+        },
+        {
+          "text": "收账单",
+          "href": "/projects/personal-finance/bill-collection/"
+        },
+        {
+          "text": "对账",
+          "href": "/projects/personal-finance/reconciliation/"
+        },
+        {
+          "text": "月度报数",
+          "href": "/projects/personal-finance/monthly-report/"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "p-personal-finance",
+          "text": "个人财务"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": "",
+      "card": {
+        "name": "个人财务",
+        "href": "/projects/personal-finance/",
+        "status": "常用",
+        "visibility": "private",
+        "github": null,
+        "tagline": "每月把账单收齐、对清楚，分清花掉的和还掉的，再报一次数。",
+        "links": [
+          {
+            "text": "收账单",
+            "href": "/projects/personal-finance/bill-collection/"
+          },
+          {
+            "text": "对账",
+            "href": "/projects/personal-finance/reconciliation/"
+          },
+          {
+            "text": "月度报数",
+            "href": "/projects/personal-finance/monthly-report/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "projects-home-47",
+      "shape": "card",
+      "section": "groups",
+      "title": "手机采集",
+      "scene": "单张项目卡片，1200×750 横放，画布就是卡片本身：白底、细浅绿描边、大圆角、很淡的阴影，四周只留很窄的白边，不画页面背景、别的卡片或组名。所有项目卡同一个版式、同一配色，风格照样张（白底、纯绿主色 #16a34a、深绿标题、深蓝灰正文、水彩插画）。\n①左上：项目名，大号粗体绿色字，画成链接样式（细下划线、末尾小 ↗）；紧右边是状态小标签：常用＝浅绿底深绿字，偶尔用＝白底浅绿描边、灰绿字，冻结＝浅灰底灰字。②右上角：公开项目画〔GitHub〕徽章（深绿底白字圆角，左边白色 GitHub 猫头标志）；私有项目画浅灰底深灰字的“私有”徽章，左边一把小锁；冻结项目不画徽章。③左边中间：深蓝灰常规字的一句话，最多两行。④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。每张卡的插画内容各不相同，画法统一。⑤冻结项目在一句话下方写明“停下原因：……”，再写“现在：……”；原因较长时允许自然折成两行，文字仍要可读，里面〔〕括起来的是链接。⑥最下面一行：灰绿小字“直达：”，后面最多 3 个浅绿底圆角小胶囊，每个是链接（绿色字、末尾小 ↗），一行排完。卡上的字以“字”为准，一字不差；不画连线。",
+      "portrait": "卡片不画竖版（拼页按组内张数排满每一行）。",
+      "text": "**〔手机采集〕**　常用　　私有\n装在安卓手机上的小 App，把使用记录、装机清单和定位存好，等电脑在家收走交给个人理解库。\n直达：〔采集〕　〔交给电脑〕　〔保活和自查〕",
+      "links": [
+        {
+          "text": "手机采集",
+          "href": "/projects/phone-collector/"
+        },
+        {
+          "text": "采集",
+          "href": "/projects/phone-collector/#g-collect"
+        },
+        {
+          "text": "交给电脑",
+          "href": "/projects/phone-collector/#g-handoff"
+        },
+        {
+          "text": "保活和自查",
+          "href": "/projects/phone-collector/#g-keepalive"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "p-phone-collector",
+          "text": "手机采集"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": "",
+      "card": {
+        "name": "手机采集",
+        "href": "/projects/phone-collector/",
+        "status": "常用",
+        "visibility": "private",
+        "github": null,
+        "tagline": "装在安卓手机上的小 App，把使用记录、装机清单和定位存好，等电脑在家收走交给个人理解库。",
+        "links": [
+          {
+            "text": "采集",
+            "href": "/projects/phone-collector/#g-collect"
+          },
+          {
+            "text": "交给电脑",
+            "href": "/projects/phone-collector/#g-handoff"
+          },
+          {
+            "text": "保活和自查",
+            "href": "/projects/phone-collector/#g-keepalive"
           }
         ]
       }
@@ -2092,7 +2086,7 @@
       "title": "本地视频制作",
       "scene": "单张项目卡片，1200×750 横放，画布就是卡片本身：白底、细浅绿描边、大圆角、很淡的阴影，四周只留很窄的白边，不画页面背景、别的卡片或组名。所有项目卡同一个版式、同一配色，风格照样张（白底、纯绿主色 #16a34a、深绿标题、深蓝灰正文、水彩插画）。\n①左上：项目名，大号粗体绿色字，画成链接样式（细下划线、末尾小 ↗）；紧右边是状态小标签：常用＝浅绿底深绿字，偶尔用＝白底浅绿描边、灰绿字，冻结＝浅灰底灰字。②右上角：公开项目画〔GitHub〕徽章（深绿底白字圆角，左边白色 GitHub 猫头标志）；私有项目画浅灰底深灰字的“私有”徽章，左边一把小锁；冻结项目不画徽章。③左边中间：深蓝灰常规字的一句话，最多两行。④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。每张卡的插画内容各不相同，画法统一。⑤冻结项目在一句话下方写明“停下原因：……”，再写“现在：……”；原因较长时允许自然折成两行，文字仍要可读，里面〔〕括起来的是链接。⑥最下面一行：灰绿小字“直达：”，后面最多 3 个浅绿底圆角小胶囊，每个是链接（绿色字、末尾小 ↗），一行排完。卡上的字以“字”为准，一字不差；不画连线。",
       "portrait": "卡片不画竖版（拼页按组内张数排满每一行）。",
-      "text": "**〔本地视频制作〕**　偶尔用　　〔GitHub〕\n把定好的文案和素材做成 4K 视频\n直达：〔配音和时间〕　〔画面〕　〔出片〕",
+      "text": "**〔本地视频制作〕**　偶尔用　　私有\n把定好的文案和素材做成 4K 视频\n直达：〔配音和时间〕　〔画面〕　〔出片〕",
       "links": [
         {
           "text": "本地视频制作",
@@ -2109,10 +2103,6 @@
         {
           "text": "出片",
           "href": "/projects/video-scaffold/#g-output"
-        },
-        {
-          "text": "GitHub",
-          "href": "https://github.com/wlyaaaaa/video-scaffold"
         }
       ],
       "anchors": [
@@ -2129,8 +2119,8 @@
         "name": "本地视频制作",
         "href": "/projects/video-scaffold/",
         "status": "偶尔用",
-        "visibility": "public",
-        "github": "https://github.com/wlyaaaaa/video-scaffold",
+        "visibility": "private",
+        "github": null,
         "tagline": "把定好的文案和素材做成 4K 视频",
         "links": [
           {
@@ -2359,6 +2349,96 @@
         "now": "现在：〔微信聊天读取〕",
         "stop_reason": "旧桥接方式已被“微信聊天读取”取代"
       }
+    },
+    {
+      "id": "projects-home-15",
+      "shape": "card",
+      "section": "frozen",
+      "title": "内存盘守护",
+      "scene": "单张项目卡片，1200×750 横放，画布就是卡片本身：白底、细浅绿描边、大圆角、很淡的阴影，四周只留很窄的白边，不画页面背景、别的卡片或组名。所有项目卡同一个版式、同一配色，风格照样张（白底、纯绿主色 #16a34a、深绿标题、深蓝灰正文、水彩插画）。\n①左上：项目名，大号粗体绿色字，画成链接样式（细下划线、末尾小 ↗）；紧右边是状态小标签：常用＝浅绿底深绿字，偶尔用＝白底浅绿描边、灰绿字，冻结＝浅灰底灰字。②右上角：公开项目画〔GitHub〕徽章（深绿底白字圆角，左边白色 GitHub 猫头标志）；私有项目画浅灰底深灰字的“私有”徽章，左边一把小锁；冻结项目不画徽章。③左边中间：深蓝灰常规字的一句话，最多两行。④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。每张卡的插画内容各不相同，画法统一。⑤冻结项目在一句话下方写明“停下原因：……”，再写“现在：……”；原因较长时允许自然折成两行，文字仍要可读，里面〔〕括起来的是链接。⑥最下面一行：灰绿小字“直达：”，后面最多 3 个浅绿底圆角小胶囊，每个是链接（绿色字、末尾小 ↗），一行排完。卡上的字以“字”为准，一字不差；不画连线。",
+      "portrait": "卡片不画竖版（拼页按组内张数排满每一行）。",
+      "text": "**〔内存盘守护〕**　冻结\n原来照看只放缓存的内存盘；现在已退役。\n停下原因：没有明显的实际提速收益；守护、体检、部署和测试已从现行源码删除\n现在：旧实现只留在 Git 历史里，不再照旧入口运行；Z 盘和缓存的当前状态未重新读取\n直达：〔为什么冻结〕",
+      "links": [
+        {
+          "text": "内存盘守护",
+          "href": "/projects/ramdisk-guardian/"
+        },
+        {
+          "text": "为什么冻结",
+          "href": "/projects/ramdisk-guardian/#ramdisk-guardian-01"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "p-ramdisk-guardian",
+          "text": "内存盘守护"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": "",
+      "card": {
+        "name": "内存盘守护",
+        "href": "/projects/ramdisk-guardian/",
+        "status": "冻结",
+        "visibility": "frozen",
+        "github": null,
+        "tagline": "原来照看只放缓存的内存盘；现在已退役。",
+        "links": [
+          {
+            "text": "为什么冻结",
+            "href": "/projects/ramdisk-guardian/#ramdisk-guardian-01"
+          }
+        ],
+        "stop_reason": "没有明显的实际提速收益；守护、体检、部署和测试已从现行源码删除",
+        "now": "现在：旧实现只留在 Git 历史里，不再照旧入口运行；Z 盘和缓存的当前状态未重新读取"
+      }
+    },
+    {
+      "id": "projects-home-24",
+      "shape": "card",
+      "section": "frozen",
+      "title": "双机剪贴板",
+      "scene": "单张项目卡片，1200×750 横放，画布就是卡片本身：白底、细浅绿描边、大圆角、很淡的阴影，四周只留很窄的白边，不画页面背景、别的卡片或组名。所有项目卡同一个版式、同一配色，风格照样张（白底、纯绿主色 #16a34a、深绿标题、深蓝灰正文、水彩插画）。\n①左上：项目名，大号粗体绿色字，画成链接样式（细下划线、末尾小 ↗）；紧右边是状态小标签：常用＝浅绿底深绿字，偶尔用＝白底浅绿描边、灰绿字，冻结＝浅灰底灰字。②右上角：公开项目画〔GitHub〕徽章（深绿底白字圆角，左边白色 GitHub 猫头标志）；私有项目画浅灰底深灰字的“私有”徽章，左边一把小锁；冻结项目不画徽章。③左边中间：深蓝灰常规字的一句话，最多两行。④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。每张卡的插画内容各不相同，画法统一。⑤冻结项目在一句话下方写明“停下原因：……”，再写“现在：……”；原因较长时允许自然折成两行，文字仍要可读，里面〔〕括起来的是链接。⑥最下面一行：灰绿小字“直达：”，后面最多 3 个浅绿底圆角小胶囊，每个是链接（绿色字、末尾小 ↗），一行排完。卡上的字以“字”为准，一字不差；不画连线。",
+      "portrait": "卡片不画竖版（拼页按组内张数排满每一行）。",
+      "text": "**〔双机剪贴板〕**　冻结\n原来让两台电脑互相粘贴文字、传文件；现在已冻结。\n停下原因：它依赖的 KDE Connect 已在两台电脑上卸载，项目没有剩余用途；仓库保留，已归档\n现在：两台电脑之间的文字剪贴板由电脑配置的三端文字同步承担，主机和副机之间走既有的 PCConfig Clip Peer，和手机无关，换手机不影响\n直达：〔为什么冻结〕",
+      "links": [
+        {
+          "text": "双机剪贴板",
+          "href": "/projects/meshclip-kit/"
+        },
+        {
+          "text": "为什么冻结",
+          "href": "/projects/meshclip-kit/#meshclip-kit-01"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "p-meshclip-kit",
+          "text": "双机剪贴板"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": "",
+      "card": {
+        "name": "双机剪贴板",
+        "href": "/projects/meshclip-kit/",
+        "status": "冻结",
+        "visibility": "frozen",
+        "github": null,
+        "tagline": "原来让两台电脑互相粘贴文字、传文件；现在已冻结。",
+        "links": [
+          {
+            "text": "为什么冻结",
+            "href": "/projects/meshclip-kit/#meshclip-kit-01"
+          }
+        ],
+        "stop_reason": "它依赖的 KDE Connect 已在两台电脑上卸载，项目没有剩余用途；仓库保留，已归档",
+        "now": "现在：两台电脑之间的文字剪贴板由电脑配置的三端文字同步承担，主机和副机之间走既有的 PCConfig Clip Peer，和手机无关，换手机不影响"
+      }
     }
   ],
   "registry": {
@@ -2414,9 +2494,8 @@
       {
         "id": "g-upkeep",
         "name": "让电脑顺手、状态看得见",
-        "line": "内存盘有程序照看，断网和卡顿查得清；电脑的状态抬眼就看到，闲下来换上屏保。",
+        "line": "断网和卡顿查得清；电脑的状态抬眼就看到，闲下来换上屏保。",
         "members": [
-          "/projects/ramdisk-guardian/",
           "/projects/proxyclean/",
           "/projects/timeaudit/",
           "/projects/pc-panel-hub/",
@@ -2425,7 +2504,6 @@
         ],
         "screen": "projects-home-14",
         "cards": [
-          "projects-home-15",
           "projects-home-16",
           "projects-home-17",
           "projects-home-18",
@@ -2436,17 +2514,15 @@
       {
         "id": "g-remote",
         "name": "人不在电脑前也能办事",
-        "line": "手机或笔记本上的 AI 能直接在这台电脑上办事，我也能远程看着画面操作；两台电脑共用剪贴板、互传文件。",
+        "line": "手机或笔记本上的 AI 能直接在这台电脑上办事，我也能远程看着画面操作。",
         "members": [
           "/projects/remote-control/",
-          "/projects/sunshine-remote-streaming/",
-          "/projects/meshclip-kit/"
+          "/projects/sunshine-remote-streaming/"
         ],
         "screen": "projects-home-21",
         "cards": [
           "projects-home-22",
-          "projects-home-23",
-          "projects-home-24"
+          "projects-home-23"
         ]
       },
       {
@@ -2456,12 +2532,16 @@
         "members": [
           "/projects/daily-preferences/",
           "/projects/personal-health/",
+          "/projects/personal-finance/",
+          "/projects/phone-collector/",
           "/projects/learning/"
         ],
         "screen": "projects-home-25",
         "cards": [
           "projects-home-26",
           "projects-home-27",
+          "projects-home-46",
+          "projects-home-47",
           "projects-home-28"
         ]
       },
@@ -2513,14 +2593,18 @@
           "/projects/openclaw/",
           "/projects/codex-remote/",
           "/projects/codex-agent-model-benchmark/",
-          "/projects/wechat-history-ai-bridge/"
+          "/projects/wechat-history-ai-bridge/",
+          "/projects/ramdisk-guardian/",
+          "/projects/meshclip-kit/"
         ],
         "screen": "projects-home-41",
         "cards": [
           "projects-home-42",
           "projects-home-43",
           "projects-home-44",
-          "projects-home-45"
+          "projects-home-45",
+          "projects-home-15",
+          "projects-home-24"
         ]
       }
     ],
@@ -2847,26 +2931,6 @@
         "text": "查和管"
       },
       {
-        "target": "/projects/ramdisk-guardian/",
-        "screen": "projects-home-15",
-        "text": "内存盘守护"
-      },
-      {
-        "target": "/projects/ramdisk-guardian/#g-upkeep",
-        "screen": "projects-home-15",
-        "text": "每 15 分钟的照看"
-      },
-      {
-        "target": "/projects/ramdisk-guardian/#g-release",
-        "screen": "projects-home-15",
-        "text": "自动腾内存"
-      },
-      {
-        "target": "/projects/ramdisk-guardian/#g-tools",
-        "screen": "projects-home-15",
-        "text": "查询、部署和维护"
-      },
-      {
         "target": "/projects/proxyclean/",
         "screen": "projects-home-16",
         "text": "代理上网修复"
@@ -2990,26 +3054,6 @@
         "target": "/projects/sunshine-remote-streaming/#g-check",
         "screen": "projects-home-23",
         "text": "体检和修复"
-      },
-      {
-        "target": "/projects/meshclip-kit/",
-        "screen": "projects-home-24",
-        "text": "双机剪贴板"
-      },
-      {
-        "target": "/projects/meshclip-kit/#g-share",
-        "screen": "projects-home-24",
-        "text": "同步和传输"
-      },
-      {
-        "target": "/projects/meshclip-kit/#g-link",
-        "screen": "projects-home-24",
-        "text": "连接和放行"
-      },
-      {
-        "target": "/projects/meshclip-kit/#g-recover",
-        "screen": "projects-home-24",
-        "text": "自动恢复"
       },
       {
         "target": "/projects/daily-preferences/",
@@ -3247,26 +3291,6 @@
         "text": "导出保护"
       },
       {
-        "target": "/projects/video-scaffold/",
-        "screen": "projects-home-40",
-        "text": "本地视频制作"
-      },
-      {
-        "target": "/projects/video-scaffold/#g-voice",
-        "screen": "projects-home-40",
-        "text": "配音和时间"
-      },
-      {
-        "target": "/projects/video-scaffold/#g-scene",
-        "screen": "projects-home-40",
-        "text": "画面"
-      },
-      {
-        "target": "/projects/video-scaffold/#g-output",
-        "screen": "projects-home-40",
-        "text": "出片"
-      },
-      {
         "target": "/projects/openclaw/",
         "screen": "projects-home-42",
         "text": "OpenClaw 网关"
@@ -3305,6 +3329,86 @@
         "target": "/projects/wechat-history-ai-bridge/#why-frozen",
         "screen": "projects-home-45",
         "text": "为什么冻结"
+      },
+      {
+        "target": "/projects/video-scaffold/",
+        "screen": "projects-home-40",
+        "text": "本地视频制作"
+      },
+      {
+        "target": "/projects/video-scaffold/#g-voice",
+        "screen": "projects-home-40",
+        "text": "配音和时间"
+      },
+      {
+        "target": "/projects/video-scaffold/#g-scene",
+        "screen": "projects-home-40",
+        "text": "画面"
+      },
+      {
+        "target": "/projects/video-scaffold/#g-output",
+        "screen": "projects-home-40",
+        "text": "出片"
+      },
+      {
+        "target": "/projects/ramdisk-guardian/",
+        "screen": "projects-home-15",
+        "text": "内存盘守护"
+      },
+      {
+        "target": "/projects/ramdisk-guardian/#ramdisk-guardian-01",
+        "screen": "projects-home-15",
+        "text": "为什么冻结"
+      },
+      {
+        "target": "/projects/meshclip-kit/",
+        "screen": "projects-home-24",
+        "text": "双机剪贴板"
+      },
+      {
+        "target": "/projects/meshclip-kit/#meshclip-kit-01",
+        "screen": "projects-home-24",
+        "text": "为什么冻结"
+      },
+      {
+        "target": "/projects/personal-finance/",
+        "screen": "projects-home-46",
+        "text": "个人财务"
+      },
+      {
+        "target": "/projects/personal-finance/bill-collection/",
+        "screen": "projects-home-46",
+        "text": "收账单"
+      },
+      {
+        "target": "/projects/personal-finance/reconciliation/",
+        "screen": "projects-home-46",
+        "text": "对账"
+      },
+      {
+        "target": "/projects/personal-finance/monthly-report/",
+        "screen": "projects-home-46",
+        "text": "月度报数"
+      },
+      {
+        "target": "/projects/phone-collector/",
+        "screen": "projects-home-47",
+        "text": "手机采集"
+      },
+      {
+        "target": "/projects/phone-collector/#g-collect",
+        "screen": "projects-home-47",
+        "text": "采集"
+      },
+      {
+        "target": "/projects/phone-collector/#g-handoff",
+        "screen": "projects-home-47",
+        "text": "交给电脑"
+      },
+      {
+        "target": "/projects/phone-collector/#g-keepalive",
+        "screen": "projects-home-47",
+        "text": "保活和自查"
       }
     ],
     "live": []

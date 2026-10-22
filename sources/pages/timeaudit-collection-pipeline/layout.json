@@ -448,7 +448,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- runtime（运行环境）hardening 与 ingest resilience 纳入 001cee0 的 182 项 + 11 个子测试完整通过结果（2026-08-31，之后未重新运行；当前源码有 332 个以 test_ 开头的测试函数，这次没有运行）。",
+        "text_ref": "runtime（运行环境）hardening与ingestresilience纳入001cee0的182项+11个子测试完整通过结果（2026-08-31，之后未重新运行；当前源码有345个以test",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -467,7 +467,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- runtime（运行环境）hardening 与 ingest resilience 纳入 001cee0 的 182 项 + 11 个子测试完整通过结果（2026-08-31，之后未重新运行；当前源码有 332 个以 test_ 开头的测试函数，这次没有运行）。",
+        "text_ref": "runtime（运行环境）hardening与ingestresilience纳入001cee0的182项+11个子测试完整通过结果（2026-08-31，之后未重新运行；当前源码有345个以test",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

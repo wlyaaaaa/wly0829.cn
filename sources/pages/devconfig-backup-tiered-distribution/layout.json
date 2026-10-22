@@ -248,7 +248,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 日期包及其附属清单作为一个成功代保留；current.json 是完整采集与验证的指针，latest.zip 只是兼容别名，不可凭修改时间挑包。当前成功代是 devconfig-20261009-231229-9de61253.zip（包名里的时间是电脑本地时区，即北京时间 10 月 10 日 12:12 生成）。",
+        "text_ref": "1日期包及其附属清单作为一个成功代保留；current.json是完整采集与验证的指针，latest.zip只是兼容别名，不可凭修改时间挑包。当前成功代是devconfig-20261020-2307",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -272,7 +272,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 日期包及其附属清单作为一个成功代保留；current.json 是完整采集与验证的指针，latest.zip 只是兼容别名，不可凭修改时间挑包。当前成功代是 devconfig-20261009-231229-9de61253.zip（包名里的时间是电脑本地时区，即北京时间 10 月 10 日 12:12 生成）。",
+        "text_ref": "1日期包及其附属清单作为一个成功代保留；current.json是完整采集与验证的指针，latest.zip只是兼容别名，不可凭修改时间挑包。当前成功代是devconfig-20261020-2307",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -488,7 +488,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 配置 Drive 任务 10 月 11 日 13:00—13:02 完成，本机记录写明是确认已有的 10 月 10 日包，不是新包上云；本轮没有联网重读云端，云上现存对象和包数之后未重新核对。PCConfig 的 docs/recovery/devconfig-backup-delivery-2026-09-18.md 记录的是 9 月 18 日配置包云端同代对象回读，属历史。",
+        "text_ref": "配置Drive任务10月19日13:00—13:03:49完成（package=verified_existing、drive=complete），本机记录对应当天12:07的新包；截至10月22日0",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -507,7 +507,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 配置 Drive 任务 10 月 11 日 13:00—13:02 完成，本机记录写明是确认已有的 10 月 10 日包，不是新包上云；本轮没有联网重读云端，云上现存对象和包数之后未重新核对。PCConfig 的 docs/recovery/devconfig-backup-delivery-2026-09-18.md 记录的是 9 月 18 日配置包云端同代对象回读，属历史。",
+        "text_ref": "配置Drive任务10月19日13:00—13:03:49完成（package=verified_existing、drive=complete），本机记录对应当天12:07的新包；截至10月22日0",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

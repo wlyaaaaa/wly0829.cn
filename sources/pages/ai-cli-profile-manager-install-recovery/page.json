@@ -15,7 +15,7 @@
       "id": "ai-cli-profile-manager-install-recovery-01",
       "section": "top",
       "title": "安装可回退，卸载也必须说清保留什么、删除什么",
-      "text": "# 安装可回退，卸载也必须说清保留什么、删除什么\n\n〔回到项目 → AI 工具配置管理〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nAI CLI Profile Manager · 功能说明\n\n安装和升级先在旁边验新版本，失败保留旧版；卸载时明确哪些个人配置与本机密钥保留，远端登录授权另行处理。\n\n**当前情况：**本机装的是 0.3.19，GitHub 上最新的正式发行仍是 9 月 22 日的 0.3.18；Codex 桌面版用的是另行登记的桥接发行 b47fea3ce81f7a67。升级、旧版回退与真实模型运行分别验收，不由安装成功包办。\n\n内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "text": "# 安装可回退，卸载也必须说清保留什么、删除什么\n\n〔回到项目 → AI 工具配置管理〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nAI CLI Profile Manager · 功能说明\n\n安装和升级先在旁边验新版本，失败保留旧版；卸载时明确哪些个人配置与本机密钥保留，远端登录授权另行处理。\n\n**当前情况：**本机装的是 0.3.19，GitHub 上最新的正式发行仍是 9 月 22 日的 0.3.18；Codex 桌面版的桥接发行另行登记：10 月 22 日读到配置选中的是 ee35736204370d9b（10 月 20 日 18:04 写入），只核到配置和程序文件存在；10 月 11 日核对一致的是此前的 b47fea3ce81f7a67。升级、旧版回退与真实模型运行分别验收，不由安装成功包办。旧 Qwen3.7 的一次性迁移脚本已经从源码删除，安装成功后改为直接清理身份对得上的旧模块。\n\n内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；本机模块版本、桌面桥选中状态和已删除的脚本按 10 月 22 日只读核对更新；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
       "links": [
         {
           "text": "回到项目 → AI 工具配置管理",
@@ -77,7 +77,7 @@
       "id": "ai-cli-profile-manager-install-recovery-04",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n0.3.18 正式发行（9 月 22 日）有完整验收；当前已装 0.3.19 尚无对应正式发行，桌面桥 b47fea3ce81f7a67 已登记，模型任务仍另验\n\n## 关键规则与设计选择\n\n1. 源码版本、发布包、当前用户模块和桌面内容寻址发行是不同对象；模块升级不会自动重建或切换正在工作的桌面发行。\n\n2. 旧 Qwen3.7 可验证对象移入 quarantine（可恢复隔离区），SecretRef 和 Key 不参与迁移。\n\n3. 普通卸载保留 Profile 和 DPAPI 密文，也不动密码中心里的厂商钥匙；--purge-user-data 才删除本工具数据，仍不代表远程 OAuth（账号授权协议） 撤销。两个已退役代理留下的旧资料不再由卸载程序当作现役功能管理。\n\n## 当前怎样实现\n\n- Install.ps1 从当前 PSModulePath 选择 CurrentUser 模块根，在临时候选中导入验证，再对同一父目录执行原子重命名。\n\n- Invoke-AiCliRetirementMigration.ps1 只移动 marker、路径、内容 hash（内容指纹） 与 state 都闭合的退役 Qwen3.7 对象，未知项在写前阻断。\n\n- UpdateService 识别实际启动入口和安装渠道；只读检查与指引不静默升级上游。\n\n- Uninstall.ps1 移除模块、shim（受保护入口垫片）、PATH 与受管 Profile 块；用户数据和上游产品默认保留。两个代理 9 月 29 日退役后，它只在模块已不可用、却发现旧代理状态文件时拒绝盲删，这是遗留的安全收口，不是代理管理入口。\n\n- 《AI CLI（命令行工具） Profile Manager 使用手册》讲产品安装、Profile、Doctor/Live、更新、卸载与排障；《Codex、Claude Code 与 Open Interpreter CLI（命令行工具） 中文手册》讲上游会话内模型、effort（思考等级）、权限、上下文、恢复和命令差异。当前部分用户手册段落仍写着旧的“configure 询问 Key”和 Toolkit 同步，以当前实现为准。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n0.3.18 正式发行（9 月 22 日）有完整验收；当前已装 0.3.19 尚无对应正式发行；桌面配置 10 月 20 日起选中 ee35736204370d9b，只核到配置和程序文件存在，七文件验真和实际加载未核对，模型任务仍另验\n\n## 关键规则与设计选择\n\n1. 源码版本、发布包、当前用户模块和桌面内容寻址发行是不同对象；模块升级不会自动重建或切换正在工作的桌面发行。\n\n2. 旧 Qwen3.7 对象当初只把可验证的移入 quarantine（可恢复隔离区），SecretRef 和 Key 不参与；这次一次性迁移已经做完，迁移脚本已从源码删除，现在安装成功后直接清理身份对得上的旧模块。\n\n3. 普通卸载保留 Profile 和 DPAPI 密文，也不动密码中心里的厂商钥匙；--purge-user-data 才删除本工具数据，仍不代表远程 OAuth（账号授权协议） 撤销。两个已退役代理留下的旧资料不再由卸载程序当作现役功能管理。\n\n## 当前怎样实现\n\n- Install.ps1 从当前 PSModulePath 选择 CurrentUser 模块根，在临时候选中导入验证，再对同一父目录执行原子重命名。\n\n- 原来的 Invoke-AiCliRetirementMigration.ps1 只移动 marker、路径、内容 hash（内容指纹） 与 state 都闭合的退役 Qwen3.7 对象，未知项在写前阻断。它是一次性迁移，已经从源码删除（变更记录写在尚未正式发行的“未发布/移除”段落），10 月 22 日 scripts 目录里已没有这个文件，不再是可用入口。\n\n- UpdateService 识别实际启动入口和安装渠道；只读检查与指引不静默升级上游。\n\n- Uninstall.ps1 移除模块、shim（受保护入口垫片）、PATH 与受管 Profile 块；用户数据和上游产品默认保留。两个代理 9 月 29 日退役后，它只在模块已不可用、却发现旧代理状态文件时拒绝盲删，这是遗留的安全收口，不是代理管理入口。\n\n- 《AI CLI（命令行工具） Profile Manager 使用手册》讲产品安装、Profile、Doctor/Live、更新、卸载与排障；《Codex、Claude Code 与 Open Interpreter CLI（命令行工具） 中文手册》讲上游会话内模型、effort（思考等级）、权限、上下文、恢复和命令差异。当前部分用户手册段落仍写着旧的“configure 询问 Key”和 Toolkit 同步，以当前实现为准。",
       "links": [],
       "anchors": [
         {
@@ -102,7 +102,7 @@
       "id": "ai-cli-profile-manager-install-recovery-05",
       "section": "tech",
       "title": "技术实现与依据（二）",
-      "text": "## 技术实现与依据（二）\n\n- 两本 PDF 是同版本 Markdown 的打印制品；只有源 hash（内容指纹）、文本抽取和逐页视觉复核闭合时才 current（当前状态），但它们仍不证明安装或 Live。10 月 11 日没有重新渲染或逐页核对，是否与当前 Markdown 完全一致未验证。\n\n- 0.3.18 已由原安装器交付并在 GitHub 正式发行；当前源码和本机模块为 0.3.19，还没有对应的正式发行。比对过的模块清单、ChildProcess.ps1 和 VendorCredential.ps1 与源码相同，但模块里的 ResolveDesktopEngine.ps1 仍是 9 月 23 日的旧副本，源码和现役桌面桥里的是更新版，所以不能说模块整包与源码逐字一致；真实桌面走的是桥里的新版。DryRun/WhatIf（只读预演）在任何写入前返回，未知参数拒绝；原来的 Toolkit 接线 9 月 28 日已退役。桌面启用、停用和设置同步使用各自显式入口。\n\n## 执行流程\n\n1. 从可信源码或已核对 Release 包启动安装。\n\n2. 只读预检退役对象和安装目录。\n\n3. 构建并导入临时候选。\n\n4. 原子移动旧版与候选，失败则恢复。\n\n5. 新开 PowerShell 并回读 aicli version/list/show/doctor/native/eject。\n\n6. 退出时选择普通卸载或显式 purge，并另外处理远程授权。",
+      "text": "## 技术实现与依据（二）\n\n- 两本 PDF 是同版本 Markdown 的打印制品；只有源 hash（内容指纹）、文本抽取和逐页视觉复核闭合时才 current（当前状态），但它们仍不证明安装或 Live。10 月 11 日没有重新渲染或逐页核对，是否与当前 Markdown 完全一致未验证。\n\n- 0.3.18 已由原安装器交付并在 GitHub 正式发行；当前源码和本机模块为 0.3.19，还没有对应的正式发行。10 月 11 日比对过的模块清单、ChildProcess.ps1 和 VendorCredential.ps1 与源码相同，但模块里的 ResolveDesktopEngine.ps1 仍是 9 月 23 日的旧副本，源码和当时启用的桌面桥里的是更新版，所以不能说模块整包与源码逐字一致；真实桌面走的是桥里的版本。10 月 22 日配置选中的桥已换成 ee35736204370d9b，它带的副本没有再比对。DryRun/WhatIf（只读预演）在任何写入前返回，未知参数拒绝；原来的 Toolkit 接线 9 月 28 日已退役。桌面启用、停用和设置同步使用各自显式入口。\n\n## 执行流程\n\n1. 从可信源码或已核对 Release 包启动安装。\n\n2. 只读预检安装目录。\n\n3. 构建并导入临时候选。\n\n4. 原子移动旧版与候选，失败则恢复；成功后清理身份对得上的旧模块（源码现行做法，取代已删除的一次性迁移脚本）。\n\n5. 新开 PowerShell 并回读 aicli version/list/show/doctor/native/eject。\n\n6. 退出时选择普通卸载或显式 purge，并另外处理远程授权。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -138,7 +138,7 @@
       "id": "ai-cli-profile-manager-install-recovery-08",
       "section": "tech",
       "title": "依据与来源（一）",
-      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- `scripts/Install.ps1`：候选验证与原子安装\n\n- `scripts/Invoke-AiCliRetirementMigration.ps1`：旧入口预检、可恢复移动与回滚\n\n- `scripts/Uninstall.ps1`：模块、shim（受保护入口垫片）、PATH 与数据边界\n\n- `docs/user/AI CLI Profile Manager 使用手册.md`：安装、Profile、验证、更新、卸载与排障事实源\n\n- `docs/user/Codex、Claude Code 与 Open Interpreter CLI 中文手册.md`：原生 CLI（命令行工具） 会话内命令与差异\n\n- `docs/compatibility/VERIFIED-COMPATIBILITY.md`：每条 Profile 的证据边界（文档日期 9 月 17 日）\n\n## 如何验证\n\n- 0.3.18 正式发行（GitHub 9 月 22 日 15:28）时完整 Pester 555/555、发行 smoke 与隔离安装/同版替换通过；旧32项退役、385项全量和 Junction（目录联接） 修复保留原日期。9 月 29 日的全量离线测试 470/470 只针对源码，不等于 0.3.19 正式发行或一次新安装。\n\n- 10 月 11 日零写入诊断读到本机模块 0.3.19、桌面桥 b47fea3ce81f7a67 已启用、安装状态 verified、七个文件全部一致。这次没有执行安装或切换。",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- `scripts/Install.ps1`：候选验证与原子安装\n\n- `scripts/Invoke-AiCliRetirementMigration.ps1`（已删除）：原来的旧 Qwen3.7 退役迁移，一次性做完后已从源码删除，10 月 22 日 scripts 目录里没有这个文件；现在由 Install.ps1 安装成功后直接清理身份对得上的旧模块\n\n- `scripts/Uninstall.ps1`：模块、shim（受保护入口垫片）、PATH 与数据边界\n\n- `docs/user/AI CLI Profile Manager 使用手册.md`：安装、Profile、验证、更新、卸载与排障事实源\n\n- `docs/user/Codex、Claude Code 与 Open Interpreter CLI 中文手册.md`：原生 CLI（命令行工具） 会话内命令与差异\n\n- `docs/compatibility/VERIFIED-COMPATIBILITY.md`：每条 Profile 的证据边界（文档日期 9 月 17 日）\n\n## 如何验证\n\n- 0.3.18 正式发行（GitHub 9 月 22 日 15:28）时完整 Pester 555/555、发行 smoke 与隔离安装/同版替换通过；旧32项退役、385项全量和 Junction（目录联接） 修复保留原日期。9 月 29 日的全量离线测试 470/470 只针对源码，不等于 0.3.19 正式发行或一次新安装。\n\n- 10 月 11 日零写入诊断读到本机模块 0.3.19、桌面桥 b47fea3ce81f7a67 已启用、安装状态 verified、七个文件全部一致。这次没有执行安装或切换。这是 10 月 11 日的历史结论；10 月 22 日配置选中的桥已是 ee35736204370d9b，还没有对应的七文件验真。",
       "links": [
         {
           "text": "上一个模块 本地模型",

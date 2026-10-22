@@ -13,14 +13,14 @@
         "size": "large",
         "row": "hero",
         "width": "55%",
-        "text_ref": "大标题：邮件、云盘和待办"
+        "text_ref": "邮件和云盘"
       },
       {
         "type": "prose",
         "row": "hero",
         "size": "large",
         "bold": true,
-        "text_ref": "一句话：用电脑上接好的那一个Google账号，读写Gmail、Google云盘和Go"
+        "text_ref": "用电脑上接好的那一个Google账号，读写Gmail和Google云盘；说一次要什么，AI自己搜、读正文、办完、再读回核对，不把一串搜索结果丢给我。"
       },
       {
         "type": "prose",
@@ -79,13 +79,13 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "大标题：邮件、云盘和待办"
+        "text_ref": "邮件和云盘"
       },
       {
         "type": "prose",
         "size": "large",
         "bold": true,
-        "text_ref": "一句话：用电脑上接好的那一个Google账号，读写Gmail、Google云盘和Go"
+        "text_ref": "用电脑上接好的那一个Google账号，读写Gmail和Google云盘；说一次要什么，AI自己搜、读正文、办完、再读回核对，不把一串搜索结果丢给我。"
       },
       {
         "type": "prose",
@@ -550,7 +550,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "邮件、云盘、待办的具体操作——例如找、读、发、回复、草稿，云盘上传、移动、分享，待办"
+        "text_ref": "邮件、云盘的具体操作——例如找、读、发、回复、草稿，云盘上传、移动、分享——由电脑配置与恢复里的调用程序提供，功能列在它的Google直连一组。这个技能自己管的是“怎么用得顺”："
       },
       {
         "type": "feature_card",
@@ -613,7 +613,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "邮件、云盘、待办的具体操作——例如找、读、发、回复、草稿，云盘上传、移动、分享，待办"
+        "text_ref": "邮件、云盘的具体操作——例如找、读、发、回复、草稿，云盘上传、移动、分享——由电脑配置与恢复里的调用程序提供，功能列在它的Google直连一组。这个技能自己管的是“怎么用得顺”："
       },
       {
         "type": "feature_card",
@@ -692,7 +692,7 @@
         "type": "points_card",
         "whole_block": true,
         "columns": 1,
-        "text_ref": "它不会做的事：邮件、文件、待办里写的内容只当资料，不当指令；发送、共享、删除要有明确"
+        "text_ref": "它不会做的事：邮件、文件里写的内容只当资料，不当指令；发送、共享、删除要有明确的对象和动作，做完读回，不重复发送、不盲目重试；只读时网络抖一下最多重试一次；账号、权限出错就如实说缺什么，不换账号，也不"
       }
     ],
     "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-google-workspace-direct\\page.json",
@@ -751,7 +751,7 @@
         "type": "points_card",
         "whole_block": true,
         "columns": 1,
-        "text_ref": "它不会做的事：邮件、文件、待办里写的内容只当资料，不当指令；发送、共享、删除要有明确"
+        "text_ref": "它不会做的事：邮件、文件里写的内容只当资料，不当指令；发送、共享、删除要有明确的对象和动作，做完读回，不重复发送、不盲目重试；只读时网络抖一下最多重试一次；账号、权限出错就如实说缺什么，不换账号，也不"
       }
     ],
     "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-google-workspace-direct\\page.json",

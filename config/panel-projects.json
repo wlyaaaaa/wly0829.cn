@@ -2607,7 +2607,7 @@
       },
       "source": {
         "repo": "wlyaaaaa/video-scaffold",
-        "visibility": "PUBLIC",
+        "visibility": "PRIVATE",
         "default_branch": "main",
         "local_root": "E:\\Projects\\Archives\\video-scaffold"
       },
@@ -3830,6 +3830,57 @@
           "all source commits, monthly updates, bill imports, rules, Skills, tests and runtime changes when there is no explicit owner refresh request",
           "all CURRENT.md, bill original, balance, debt, receivable and individual spending changes because those values are outside the public method page",
           "any source-side materiality claim or impact assessment because this project has no automatic website handoff"
+        ]
+      }
+    },
+    {
+      "id": "phone-collector",
+      "order": 39,
+      "title": "手机采集",
+      "enabled": true,
+      "presentation_mode": "curated_packaging",
+      "route": "/projects/phone-collector",
+      "content_format": "typeset",
+      "ai_refresh": {
+        "content_path": "sources/pages/phone-collector/page.json",
+        "semantic_revision": 1,
+        "scope": "Owner-selected method-only explanation of the Android collector: app-use events, installed-package snapshots and location categories; durable local files, computer handoff, wake and keepalive, honest gaps and failure recovery. Do not publish location points, usage records or installed-package payloads. This project participates in ordinary owner-requested targeted and full website refreshes; it is not manual_owner_only.",
+        "collectors": [
+          "Read only the current phone-collector source rules, product documentation, Kotlin implementation and synthetic tests to verify what is collected, written, resumed and reported; never read real phone records merely for the website.",
+          "Read the existing PCConfig phone collection and personal-understanding import contracts to verify computer handoff and data ownership; do not run a pull, install, wake, permission or import action merely for the website."
+        ],
+        "conditional_collectors": [],
+        "content_format": "typeset"
+      },
+      "source": {
+        "repo": "wlyaaaaa/phone-collector",
+        "visibility": "PRIVATE",
+        "public_identity": "private-android-phone-collector-method-source",
+        "locator_owner": "ignored-private-content-rules",
+        "method_dependencies": [
+          "wlyaaaaa/PCConfig (computer pull and phone bridge)",
+          "wlyaaaaa/daily-preferences (import and analysis)"
+        ],
+        "default_branch": "main"
+      },
+      "displayed_areas": [
+        "android_collection_categories_and_local_files",
+        "computer_handoff_and_data_ownership",
+        "periodic_wake_keepalive_and_self_checks",
+        "durable_checkpoint_and_failure_recovery",
+        "method_only_snapshot_without_location_usage_or_package_payloads"
+      ],
+      "impact_sources": [],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "A source-backed change makes the displayed collection categories, handoff, keepalive, durability, error handling, owner boundary or usable result materially wrong."
+        ],
+        "snapshot_only_when": [
+          "The verified source identity, implementation version or dated evidence changes while the displayed product meaning remains true."
+        ],
+        "ignore_when": [
+          "Private location, app-use or installed-package payloads change without a product capability or boundary change.",
+          "Formatting, refactors and tests leave all displayed product claims correct."
         ]
       }
     }
