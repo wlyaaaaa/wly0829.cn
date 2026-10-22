@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/personal-finance-monthly-report/page.json",
-  "sha256": "185e395a681a8a2524673c123f62ce4b2dbc5194877579b772f2a1672b863603",
-  "converted_at_beijing": "2026-10-22T08:32:33+08:00"
+  "sha256": "dc02b53ca97eeb945e6e42e6f1914f1f9f5624137b72ac641072e179afcc9957",
+  "converted_at_beijing": "2026-10-22T09:26:43+08:00"
  }
 }
 ---
@@ -313,7 +313,12 @@
   "id": "personal-finance-monthly-report-03",
   "section": "usage",
   "title": "从哪里开始",
-  "links": [],
+  "links": [
+   {
+    "text": "对账",
+    "href": "/projects/personal-finance/reconciliation/"
+   }
+  ],
   "anchors": [],
   "live": null,
   "screenshots": [],
@@ -786,6 +791,14 @@
    {
     "text": "上一个模块 对账",
     "href": "/projects/personal-finance/reconciliation/"
+   },
+   {
+    "text": "对账",
+    "href": "/projects/personal-finance/reconciliation/"
+   },
+   {
+    "text": "账单每月收一次",
+    "href": "/projects/personal-finance/bill-collection/"
    }
   ],
   "anchors": [],

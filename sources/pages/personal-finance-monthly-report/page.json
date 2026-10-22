@@ -62,7 +62,12 @@
       "section": "usage",
       "title": "从哪里开始",
       "text": "## 从哪里开始\n\n7 号月度更新时一起做；平时也可以随时报一个新数，比如“信用卡这期已经还了”。\n\n## 需要准备什么\n\n- 回信里的报数：资产合计和其中不能马上取的部分；信用卡、花呗、电商先用后付各自的全部欠款和下个月要还；在途资金；潜在未来资金\n- 个人理解库最近三个完整月的消费净额（见〔对账〕）\n- 有投资账户的话，在回信里附持仓截图：AI 据此算出持仓市值和杠杆倍数，写进现状，只陈述，不给买卖建议\n\n## 从开始到拿到结果\n\n1. **先核能核的**　账单上能确定的数 AI 先核，不让我重报。\n\n2. **算月均**　最近三个完整自然月的消费净额合计除以 3，币种分开。\n\n3. **算跑道和下月压力**　（能马上用 + 在途 − 全部欠款）÷ 月均消费；另看下个月要还的和手头能马上用的。商户储值和购物金不算能马上用的钱，信用额度和没到账的应收也不算。\n\n4. **交付与接续**　只改财务现状受影响的段落，记日期和出处；未知项写进“下一次补齐”。",
-      "links": [],
+      "links": [
+        {
+          "text": "对账",
+          "href": "/projects/personal-finance/reconciliation/"
+        }
+      ],
       "anchors": [],
       "live": null,
       "screenshots": [],
@@ -139,6 +144,14 @@
         {
           "text": "上一个模块 对账",
           "href": "/projects/personal-finance/reconciliation/"
+        },
+        {
+          "text": "对账",
+          "href": "/projects/personal-finance/reconciliation/"
+        },
+        {
+          "text": "账单每月收一次",
+          "href": "/projects/personal-finance/bill-collection/"
         }
       ],
       "anchors": [],

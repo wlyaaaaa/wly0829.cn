@@ -252,7 +252,7 @@
       },
       {
         "type": "flow",
-        "columns": 6,
+        "columns": 3,
         "columns_v": 1,
         "illustration": "top_inside",
         "connector": "arrow",

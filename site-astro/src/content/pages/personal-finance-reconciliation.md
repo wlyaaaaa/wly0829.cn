@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/personal-finance-reconciliation/page.json",
-  "sha256": "e8f8a81b7704b0a373553f7d4afdbfc3d215ddd85ccfe9384261e52ba921d69e",
-  "converted_at_beijing": "2026-10-22T08:32:33+08:00"
+  "sha256": "b8dbb87ad93c929ae491c47b0c66ae7c690f8c4efdfdaa893a843c00e838ef66",
+  "converted_at_beijing": "2026-10-22T09:26:42+08:00"
  }
 }
 ---
@@ -317,7 +317,12 @@
   "id": "personal-finance-reconciliation-03",
   "section": "usage",
   "title": "从哪里开始",
-  "links": [],
+  "links": [
+   {
+    "text": "账单每月收一次",
+    "href": "/projects/personal-finance/bill-collection/"
+   }
+  ],
   "anchors": [],
   "live": null,
   "screenshots": [],
@@ -788,6 +793,14 @@
    },
    {
     "text": "下一个模块 月度报数",
+    "href": "/projects/personal-finance/monthly-report/"
+   },
+   {
+    "text": "账单每月收一次",
+    "href": "/projects/personal-finance/bill-collection/"
+   },
+   {
+    "text": "月度报数",
     "href": "/projects/personal-finance/monthly-report/"
    }
   ],

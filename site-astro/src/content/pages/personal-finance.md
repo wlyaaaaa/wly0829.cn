@@ -388,7 +388,7 @@
  "source": {
   "page": "sources/pages/personal-finance/page.json",
   "sha256": "15bcb0d5abfc75c7076b3e5b99c51a6ad28e0e29bf78f979f5aba0ab457f961e",
-  "converted_at_beijing": "2026-10-22T08:32:33+08:00"
+  "converted_at_beijing": "2026-10-22T09:28:30+08:00"
  }
 }
 ---
@@ -823,7 +823,7 @@ AI 去邮箱、手机下载目录、电脑下载目录把文件取回，核对�
     },
     {
      "type": "flow",
-     "columns": 6,
+     "columns": 3,
      "columns_v": 1,
      "illustration": "top_inside",
      "connector": "arrow",

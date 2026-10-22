@@ -139,6 +139,14 @@
         {
           "text": "下一个模块 对账",
           "href": "/projects/personal-finance/reconciliation/"
+        },
+        {
+          "text": "对账",
+          "href": "/projects/personal-finance/reconciliation/"
+        },
+        {
+          "text": "月度报数",
+          "href": "/projects/personal-finance/monthly-report/"
         }
       ],
       "anchors": [],

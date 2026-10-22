@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/personal-finance-bill-collection/page.json",
-  "sha256": "79d47985ac579d67d269f7c50f223894b404484fe1cdfb665baef4c320775c31",
-  "converted_at_beijing": "2026-10-22T08:32:33+08:00"
+  "sha256": "fffdcbc5379b9070255c26820209f64554d34addb774b8b408efc931c218e2df",
+  "converted_at_beijing": "2026-10-22T09:26:41+08:00"
  }
 }
 ---
@@ -782,6 +782,14 @@
    {
     "text": "下一个模块 对账",
     "href": "/projects/personal-finance/reconciliation/"
+   },
+   {
+    "text": "对账",
+    "href": "/projects/personal-finance/reconciliation/"
+   },
+   {
+    "text": "月度报数",
+    "href": "/projects/personal-finance/monthly-report/"
    }
   ],
   "anchors": [],
