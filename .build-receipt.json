@@ -1,62 +1,61 @@
 {
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
-  "source_commit": "35d9c6a3bedfde6eadec1addf3134badd7d55c21",
-  "prepared_at_beijing": "2026-10-22T09:34:57.474712+08:00",
-  "seconds": 150.299,
+  "source_commit": "6f4b455610a42b3fb04f5710037ffa2487dd02d3",
+  "prepared_at_beijing": "2026-10-22T11:11:18.927652+08:00",
+  "seconds": 188.57,
   "steps": [
     {
       "name": "source",
-      "seconds": 4.895
+      "seconds": 3.218
     },
     {
       "name": "fingerprint",
-      "seconds": 0.785
+      "seconds": 1.039
     },
     {
       "name": "prepare",
-      "seconds": 18.549
+      "seconds": 22.458
     },
     {
       "name": "native_inputs",
-      "seconds": 5.362
+      "seconds": 2.442
     },
     {
       "name": "blocks",
-      "seconds": 14.246
+      "seconds": 17.685
     },
     {
       "name": "astro",
-      "seconds": 21.0
+      "seconds": 20.199
     },
     {
       "name": "assets",
-      "seconds": 3.902
+      "seconds": 4.984
     },
     {
       "name": "finish",
-      "seconds": 5.088
+      "seconds": 9.671
     },
     {
       "name": "finalize",
-      "seconds": 68.217
+      "seconds": 95.669
     },
     {
       "name": "public",
-      "seconds": 7.632
+      "seconds": 10.455
     },
     {
       "name": "inventory",
-      "seconds": 0.623
+      "seconds": 0.749
     }
   ],
   "rebuilt_pages": [
-    "/projects/personal-finance/",
-    "/projects/personal-finance/bill-collection/",
-    "/projects/personal-finance/monthly-report/",
-    "/projects/personal-finance/reconciliation/",
-    "/rules/claude-adapter/",
-    "/skills/browser-control-continuity/"
+    "/projects/proxyclean/",
+    "/projects/proxyclean/dead-port-and-route-cleanup/",
+    "/projects/proxyclean/ipv6-routing-control/",
+    "/projects/proxyclean/targeted-port-shutdown/",
+    "/search/"
   ],
   "html_files": 321,
   "files": [
@@ -13741,6 +13740,11 @@
       "sha256": "005ac26233551470f57ac1f0b65ecc0563dd221cee35aa3d396f57cbc156dd24"
     },
     {
+      "path": "assets/_fingerprinted/005ecff58d5a9fe61cfb8ef593a20e6374a4e41c601c4c1fe98e8841d0f94dea.png",
+      "bytes": 1507331,
+      "sha256": "005ecff58d5a9fe61cfb8ef593a20e6374a4e41c601c4c1fe98e8841d0f94dea"
+    },
+    {
       "path": "assets/_fingerprinted/00653ca40564cf51cc7009666f287b16fef0519070b64cdee9416a4842a9cdfc.png",
       "bytes": 29561,
       "sha256": "00653ca40564cf51cc7009666f287b16fef0519070b64cdee9416a4842a9cdfc"
@@ -23936,6 +23940,11 @@
       "sha256": "1e3144d67a091c69d1360ddd6044d6f164b02d44ec0bff1a927912787d764ec4"
     },
     {
+      "path": "assets/_fonts/devconfig-backup-ac48c9a31c9c.woff2",
+      "bytes": 194996,
+      "sha256": "f5bd81b192740cab05dc904018d1e5d84723d6510768f22e4556abc6687b464f"
+    },
+    {
       "path": "assets/_fonts/devconfig-backup-recovery-and-tasks-270681352623.woff2",
       "bytes": 184620,
       "sha256": "9b252367f9ccba12b50d78d7c809f6a0118fdb83befd387f606d4e8f2ea5a212"
@@ -24406,6 +24415,11 @@
       "sha256": "6615566341b4e9afbe1f8dd3356d7fe90c30039a4ca5271348ef2b5e266877a5"
     },
     {
+      "path": "assets/_fonts/pc-panel-hub-272b6a4ef944.woff2",
+      "bytes": 221124,
+      "sha256": "8579c1bb2a1efb67fb29a46762b22ea249d6cf8764fed38840813e9668f2bd13"
+    },
+    {
       "path": "assets/_fonts/pc-panel-hub-48b5c4a93d4c.woff2",
       "bytes": 219716,
       "sha256": "a77f25535988c345e60514c136def09bf18d376db66700f0ff79bb9c0d07dc10"
@@ -24451,6 +24465,11 @@
       "sha256": "3cf5ac9319e91f8a6b6133be6a654d0364a02b3476d035467e6c440c0eb612f9"
     },
     {
+      "path": "assets/_fonts/pc-panel-hub-installation-binding-migration-0af3b4c76e1f.woff2",
+      "bytes": 190292,
+      "sha256": "9490c946821615687a3cf166eaed2d2544e1763e51cff7be0b8fe70bd4f35376"
+    },
+    {
       "path": "assets/_fonts/pc-panel-hub-installation-binding-migration-6014de425191.woff2",
       "bytes": 188576,
       "sha256": "4f3b44238776cbeffd0e7f5f4800731807d012af1194124a4417193608f2ada7"
@@ -24484,6 +24503,11 @@
       "path": "assets/_fonts/pcconfig-40825eae9fdb.woff2",
       "bytes": 236116,
       "sha256": "c4d975d5627737c6a82d4a63bf719ec10be280a4fbb0abc78ed59598764826ec"
+    },
+    {
+      "path": "assets/_fonts/pcconfig-4541d61cfcbb.woff2",
+      "bytes": 240408,
+      "sha256": "4c9aba323c4bf790017a02917ead91a180383578b288e48faea5cb63cb906491"
     },
     {
       "path": "assets/_fonts/pcconfig-59c238ece53a.woff2",
@@ -24589,6 +24613,11 @@
       "path": "assets/_fonts/pcconfig-remote-computer-mcp-f77aad480ae3.woff2",
       "bytes": 204700,
       "sha256": "53cb4e86388acc2b537267c103511aba655f0fd59aa9e9ce3ade052620d161b3"
+    },
+    {
+      "path": "assets/_fonts/pcconfig-runtime-startup-12926fe2dd74.woff2",
+      "bytes": 204344,
+      "sha256": "90b9b524c908c9621c54eb4e2d21497b75a7dbebb55e2e55a9a77d6521ccfcd7"
     },
     {
       "path": "assets/_fonts/pcconfig-runtime-startup-40ea8d505114.woff2",
@@ -24911,6 +24940,11 @@
       "sha256": "9ffecea1332549e3788bebd12e51451d3668428a4f6461b1f16e8d688b39508f"
     },
     {
+      "path": "assets/_fonts/proxyclean-0a7def22ac3a.woff2",
+      "bytes": 179996,
+      "sha256": "33badfbb8307a31be60e8b4ee775e0d1f78bd1ef64ffc33b443c3349623a58c0"
+    },
+    {
       "path": "assets/_fonts/proxyclean-3ed3306e0e14.woff2",
       "bytes": 179680,
       "sha256": "6f08323bd1494c4fc997754d8fb18cc4033fde362fc758d20598633dcc1823c8"
@@ -24919,6 +24953,11 @@
       "path": "assets/_fonts/proxyclean-bca909b21b37.woff2",
       "bytes": 177068,
       "sha256": "f2b6ce251a58396ce3b0a119230978aea2c48b74609188a7435b997e9d6e0039"
+    },
+    {
+      "path": "assets/_fonts/proxyclean-dead-port-and-route-cleanup-1fcc9223a39c.woff2",
+      "bytes": 179824,
+      "sha256": "0444f25c93fc6326854e5fe66e7ccd75e95ecc6c762ecc2bf81fad39296655a2"
     },
     {
       "path": "assets/_fonts/proxyclean-dead-port-and-route-cleanup-30d9ac344f8f.woff2",
@@ -24936,14 +24975,29 @@
       "sha256": "74e8931084286e0ecfcb8a38208c22f8bb9fb757109a1928ec192e8d7f5640cb"
     },
     {
+      "path": "assets/_fonts/proxyclean-efb0e627a353.woff2",
+      "bytes": 180276,
+      "sha256": "264a704c9d7b5ada9c162ff2c36cad8efa0ae19a71e92621f2c213780ca60f0a"
+    },
+    {
       "path": "assets/_fonts/proxyclean-ipv6-routing-control-b14e9edc127a.woff2",
       "bytes": 165040,
       "sha256": "3beb16e0b599a67701fb4043477a7519af3b98850e9550cbc5eccc999cd17e19"
     },
     {
+      "path": "assets/_fonts/proxyclean-one-click-and-troubleshooting-boundaries-a71c860b3a5c.woff2",
+      "bytes": 191052,
+      "sha256": "a1818f02f4796afc3f8c510b2e28c71e27e81e422631a84f76d5fb908cec5d0d"
+    },
+    {
       "path": "assets/_fonts/proxyclean-one-click-and-troubleshooting-boundaries-cdcc2d0ef2ad.woff2",
       "bytes": 190156,
       "sha256": "f856ed322e425310bd39d598454e6ef499ef992b30d6c984774924db6e731e19"
+    },
+    {
+      "path": "assets/_fonts/proxyclean-targeted-port-shutdown-1dc75c7e03a9.woff2",
+      "bytes": 174504,
+      "sha256": "62b50a2eb090ccbcbba1161f962a5c33b9e534a6cd1ed48a3e84e189f6a39ae1"
     },
     {
       "path": "assets/_fonts/proxyclean-targeted-port-shutdown-2a7aa35be94b.woff2",
@@ -26031,6 +26085,11 @@
       "sha256": "435a39aa3746f056f7c0bd40470270c904c64d4d4f25a7127360c59f3ccc0451"
     },
     {
+      "path": "assets/_fonts/sunshine-remote-streaming-remote-power-and-repair-60e9a43d69df.woff2",
+      "bytes": 169076,
+      "sha256": "ff19596aacb8670fd64956721ff3ea8d44f16af18ca051606821869039c6a4d6"
+    },
+    {
       "path": "assets/_fonts/sunshine-remote-streaming-remote-power-and-repair-a0439c214578.woff2",
       "bytes": 167168,
       "sha256": "b53254d60b5aab75eee428aeb6d84ff944fd979105df907bda8f24fcba82d5d3"
@@ -26159,6 +26218,11 @@
       "path": "assets/_fonts/timeaudit-runtime-reliability-9b25e2dc527e.woff2",
       "bytes": 181452,
       "sha256": "143eddc1e1363387823824a87e6ae2e7f1ad69c0b3dcfb1d80a5e78fa6a5e9d0"
+    },
+    {
+      "path": "assets/_fonts/timeaudit-runtime-reliability-dd764ccd0bea.woff2",
+      "bytes": 183328,
+      "sha256": "60ae92052275e6aaa4450a23511a4382b7d3df98b5cf91f86a619b4f1e142234"
     },
     {
       "path": "assets/_fonts/timeaudit-usage-energy-97f52e5025cf.woff2",
@@ -27442,8 +27506,8 @@
     },
     {
       "path": "projects/devconfig-backup/index.html",
-      "bytes": 436221,
-      "sha256": "36568079dbc835b9fa3b8139bdef8378f4cfe73928199ae77005525be46987ef"
+      "bytes": 436621,
+      "sha256": "d2ab261c24827fb3585952f58d7d4981d3ddc6ee2983d43978e81199f0cb99aa"
     },
     {
       "path": "projects/devconfig-backup/recovery-and-tasks/index.html",
@@ -27822,13 +27886,13 @@
     },
     {
       "path": "projects/pc-panel-hub/index.html",
-      "bytes": 581383,
-      "sha256": "db49648d71bf81f7ffc5976ae2e38537b0269ffa0bbab3209e9a31102497928c"
+      "bytes": 581559,
+      "sha256": "525054785546969ad6385eec3f37ebc69b6d32faf8f54bc4eca1d94603a6c222"
     },
     {
       "path": "projects/pc-panel-hub/installation-binding-migration/index.html",
-      "bytes": 210041,
-      "sha256": "abda937a27d88def843da00580959e460a5a21811b2519cc3dc9072eae26237b"
+      "bytes": 211337,
+      "sha256": "1cd899d8ea9d06776da96c01af6164edfcedffe03d9b09fbb5da443a4bea2efd"
     },
     {
       "path": "projects/pc-panel-hub/power-recovery/index.html",
@@ -27867,8 +27931,8 @@
     },
     {
       "path": "projects/pcconfig/index.html",
-      "bytes": 935938,
-      "sha256": "1cfec4b9159173a84d2f3b010433d1cc037053740e5f2543c2a48f8b42584a0f"
+      "bytes": 939398,
+      "sha256": "17a87e01dd575c032ea73cbf0048953ee4d45b644fcff1be99c94c8702915519"
     },
     {
       "path": "projects/pcconfig/machine-facts/index.html",
@@ -27907,8 +27971,8 @@
     },
     {
       "path": "projects/pcconfig/runtime-startup/index.html",
-      "bytes": 217049,
-      "sha256": "609ad193b5e79014a61ab4636c8c12aa82b27d3c0c7cc140c7263059a342bf32"
+      "bytes": 218555,
+      "sha256": "fe10a662416ef781980d13e44ab070b324cb2d7a06cbc0d0fc2d873c7ac3ae5a"
     },
     {
       "path": "projects/pcconfig/secondary-laptop/index.html",
@@ -28112,8 +28176,8 @@
     },
     {
       "path": "projects/proxyclean/dead-port-and-route-cleanup/index.html",
-      "bytes": 171409,
-      "sha256": "6d90e56daf5779468444845d9145bf3ad77472684c260fef9565550a363883f3"
+      "bytes": 171439,
+      "sha256": "aac70c97f2d66b5c05e5051f745f8a1adc731918eb28ab6ca8e8d9b15205aef7"
     },
     {
       "path": "projects/proxyclean/dynamic-proxy-status/index.html",
@@ -28122,23 +28186,23 @@
     },
     {
       "path": "projects/proxyclean/index.html",
-      "bytes": 350026,
-      "sha256": "a08a6539d3afdafe404b5e835448461c9b0b00332a4334ea71c84a4006939ee1"
+      "bytes": 350235,
+      "sha256": "a68f0da650ec391de9e2886c2c4b880d05c0429d24d81b304accb802211e70da"
     },
     {
       "path": "projects/proxyclean/ipv6-routing-control/index.html",
-      "bytes": 172166,
-      "sha256": "3eab0e9c166d4f9bcc67d179b29fe4e3cb0be2a7c1c75172fa2effca6635f869"
+      "bytes": 172220,
+      "sha256": "f15f5d51423c65a863828be8d63439dd3f469dde30f8c44b0282f1b5645a6a79"
     },
     {
       "path": "projects/proxyclean/one-click-and-troubleshooting-boundaries/index.html",
-      "bytes": 179381,
-      "sha256": "bdad6cb37dfbf3ddb5d33794d19bba47921857461ac578ae236b0ba8be6a71af"
+      "bytes": 179783,
+      "sha256": "df0f508ec071daee24f9e85b30d0c99dee8f3acace23478b3e4e9e543b8282f1"
     },
     {
       "path": "projects/proxyclean/targeted-port-shutdown/index.html",
-      "bytes": 165959,
-      "sha256": "b0e4fd9026e587ea507df80aebaaddc6e81ec8132a238e9b4bd2b739ed32c07f"
+      "bytes": 165915,
+      "sha256": "ab46c356cfa9a5ed8b8f5119bd6efa1b13ceb16cb7db327a2a3052217bf4f90b"
     },
     {
       "path": "projects/proxyclean/wifi-rebind-and-recovery/index.html",
@@ -28252,8 +28316,8 @@
     },
     {
       "path": "projects/sunshine-remote-streaming/remote-power-and-repair/index.html",
-      "bytes": 157955,
-      "sha256": "3251947eb4cf9dba8d8c1e77adac5dcb5a5170b25e482c0ee8dbfa0d433d0629"
+      "bytes": 158243,
+      "sha256": "61d04241958a241012c4d1af9a499a0914696d7fcbbb4ea0d4c71178a82d7a32"
     },
     {
       "path": "projects/sunshine-remote-streaming/transport-ipv6-direct/index.html",
@@ -28307,8 +28371,8 @@
     },
     {
       "path": "projects/timeaudit/runtime-reliability/index.html",
-      "bytes": 171675,
-      "sha256": "0a29d6de2505ea3e96202bea0912fc46ac29db00d3866504c665e04c782b7373"
+      "bytes": 172699,
+      "sha256": "83e386eed2f98c4df05b6872e90c8386dd1925e06341ad7dee64082630fea7f4"
     },
     {
       "path": "projects/timeaudit/usage-energy/index.html",
@@ -28593,12 +28657,12 @@
     {
       "path": "release-identity.json",
       "bytes": 244,
-      "sha256": "70a7bba70d837f24f77199ee83f89233e7edd904c5e5d14d2a546cd492cd02e5"
+      "sha256": "ac46255ec5958c07a630fdec61fa7eb0272a46a7f5f5fed40c1948b5f8cbedb1"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 5356864,
-      "sha256": "f30e285897be40910b0a6f6d6142c8b26016f2ac1523b437ecf50972eb3f850c"
+      "bytes": 5367371,
+      "sha256": "7a8c1756b3ea88b3077eff322ab98da16e5887331941e3aa146a00f804531d0b"
     },
     {
       "path": "rescue/index.html",
@@ -28763,12 +28827,12 @@
     {
       "path": "search/index.html",
       "bytes": 68664,
-      "sha256": "32106d245626d774de0e32b5a95558f2ddb47c671db58b234a4ee256ff57d9d7"
+      "sha256": "ef7e44c04538ed84a8b377c3afea21b08152c28aad943906cd21a479a3a320e4"
     },
     {
       "path": "search-index.js",
-      "bytes": 1556642,
-      "sha256": "f4d02c621ff505b20363dbfe59d634b288b423188756458dbff7bd11bbf92f0a"
+      "bytes": 1556862,
+      "sha256": "1a69e493d97eeb102745e30c395b473001507ad9bb239a448d8b41105a6fb2d5"
     },
     {
       "path": "search-project-localocr.js",
@@ -28777,8 +28841,8 @@
     },
     {
       "path": "search-projects.js",
-      "bytes": 3611847,
-      "sha256": "823250b4e639cdcd98e9e0d996e53da29cad34e96b3ac731b23c1081ea9be1ad"
+      "bytes": 3613935,
+      "sha256": "d4693eca312b9aae0900936016664491eb817ef3b253713179e633e77c1ecc5b"
     },
     {
       "path": "sitemap.xml",
@@ -29213,5 +29277,5 @@
   ],
   "output": "E:\\Cache\\wly-site-build\\wt\\dist",
   "previous_oss_source": "published",
-  "previous_release_id": "25418ba20dbb420d51930d9f2eaf5019367fa7cccadc5a380d67a2bedb6eaea4"
+  "previous_release_id": "c77a7f6013f120d9f65022816ef9fae4088014067b3a3759eb536137ce30ab43"
 }
