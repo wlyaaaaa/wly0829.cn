@@ -268,6 +268,7 @@ def build(pages=None):
     prepare_changed = not complete or old.get('prepared') != prepared_fp or not (public / '_album/astro-runtime.json').is_file()
     prepare_changed = prepare_changed or any(not (dist / relative).is_file() for relative in snapshot['assets'] if relative not in retired and not (relative.startswith('_home-cockpit/cockpit-offline.') and not (SITE / 'sources/retained-home-cockpit/cockpit.html').is_file()))
     runtime = load('build_runtime', 'site-astro/tools/build_runtime.py')
+    preserved_home = runtime.accepted_home(dist, runtime.published_manifest()) if os.environ.get('SITE_ALLOW_HOME_BYTES') != '1' else None
     if prepare_changed:
         restore(snapshot); pin = astro_rules.generate(public); runtime.prepare(snapshot)
     else: pin = old['pin']
@@ -367,8 +368,8 @@ def build(pages=None):
         target = dist / 'cv/index.html'; target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="robots" content="noindex"><noscript><meta http-equiv="refresh" content="0;url=/"></noscript></head><body></body></html>\n', encoding='utf8')
     converted = {route: {'producer': 'astro'} for route, row in entries.items() if row['kind'] != 'frozen'}
-    if changed or prepare_changed or assets_changed:
-        runtime.finish(dist, snapshot, pin, converted, changed_routes={r for r in changed if entries[r]['kind'] != 'frozen'})
+    if changed or prepare_changed or assets_changed or (preserved_home is not None and (dist / 'index.html').read_bytes() != preserved_home):
+        runtime.finish(dist, snapshot, pin, converted, changed_routes={r for r in changed if entries[r]['kind'] != 'frozen'}, preserved_home=preserved_home)
     for relative, expected in snapshot['pages'].items():
         if entries[file_route(relative)]['kind'] != 'frozen' or (finalized_before and file_route(relative) not in changed): continue
         expected_body = runtime.transport.localize((SNAPSHOT / 'pages' / relative).read_bytes().decode('utf8'), snapshot)
@@ -382,6 +383,8 @@ def build(pages=None):
         '--source-commit', source_commit, cwd=ROOT)
     guard_unchanged_html(dist, entries, old.get('pages', {}), runtime.published_manifest(), before_refs)
     stage('finalize')
+    if preserved_home is not None and (dist / 'index.html').read_bytes() != preserved_home:
+        raise ValueError('资源收尾改变了已验收的首页字节，构建未通过')
     run('node', str(ROOT / 'scripts/verify-public-content.mjs'), '--dist', str(dist), '--incremental', cwd=ROOT)
     stage('public')
     files = [{'path': p.relative_to(dist).as_posix(), **proof(p)} for p in sorted(dist.rglob('*'))

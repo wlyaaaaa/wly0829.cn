@@ -12,7 +12,7 @@ const nativeRoutes = (await readdir(path.join(root, 'site-astro/src/pages'), { r
   .filter(name => name.endsWith('index.astro') && !name.includes('['))
   .map(name => '/' + name.replaceAll('\\', '/').slice(0, -11));
 const documentPath = route => path.join(root, 'dist', route === '/' ? 'index.html' : route.endsWith('.html') ? route.slice(1) : route.slice(1) + 'index.html');
-const documents = new Map(await Promise.all([...new Set([...snapshot.routes, ...nativeRoutes])].map(async route => [route, await readFile(documentPath(route), 'utf8')])));
+const documents = new Map(await Promise.all([...new Set([...snapshot.routes, ...nativeRoutes, ...sources.flatMap(page => [page.url, ...(page.old_urls || [])]).filter(Boolean)])].map(async route => [route, await readFile(documentPath(route), 'utf8')])));
 const decode = value => value?.replace(/&(?:amp|quot|apos|lt|gt|#39);/g, entity => ({'&amp;':'&','&quot;':'"','&apos;':"'",'&#39;':"'",'&lt;':'<','&gt;':'>'})[entity]);
 const meta = (html, name) => decode(html.match(new RegExp(`<meta\\b[^>]*\\b(?:name|property)="${name}"[^>]*\\bcontent="([^"]*)"`))?.[1]);
 function assertCurrentDocument(html, route) {

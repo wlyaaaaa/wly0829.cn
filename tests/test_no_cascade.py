@@ -1,5 +1,6 @@
 """A body/index update must not change unrelated resource or HTML bytes."""
 import importlib.util
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -17,6 +18,26 @@ retry = load('cascade_retry', 'scripts/prepare-resource-retry.py')
 build_runtime = load('cascade_runtime', 'site-astro/tools/build_runtime.py')
 
 class NoCascadeTests(unittest.TestCase):
+    def test_accepted_home_recovers_only_a_proven_album_reference(self):
+        with tempfile.TemporaryDirectory() as temp:
+            dist = Path(temp); album = dist/'_album/routes-abcd.json'
+            album.parent.mkdir(); album.write_bytes(b'{}')
+            approved = b'<link href="https://assets.invalid/releases/old/_album/routes-abcd.json">'
+            published = {'files': {'index.html': {'bytes': len(approved), 'sha256': hashlib.sha256(approved).hexdigest()}},
+                'oss': {'objects': {'_album/routes-abcd.json': {'url': 'https://assets.invalid/releases/old/_album/routes-abcd.json',
+                    'sha256': hashlib.sha256(b'{}').hexdigest()}}}}
+            with self.assertRaisesRegex(ValueError, '冷构建'):
+                build_runtime.accepted_home(dist, published)
+            home = dist/'index.html'; home.write_bytes(approved.replace(b'/old/', b'/new/'))
+            self.assertEqual(build_runtime.accepted_home(dist, published), approved)
+            self.assertIn(b'/new/', home.read_bytes())  # Reading never patches dist.
+            album.write_bytes(b'broken')
+            with self.assertRaisesRegex(ValueError, '依赖缺失或字节不符'):
+                build_runtime.accepted_home(dist, published)
+            home.write_bytes(approved + b'body changed')
+            with self.assertRaisesRegex(ValueError, '无法仅修复相册索引'):
+                build_runtime.accepted_home(dist, published)
+
     def test_search_loads_both_tables_before_the_existing_client(self):
         body = '<head><script>window.note="search-index.js"</script></head>\r\n<script src="/search-projects.js"></script><script type="module" data-src="/client.js"></script>'
         result = build_runtime.search_index_entry(body, {})
