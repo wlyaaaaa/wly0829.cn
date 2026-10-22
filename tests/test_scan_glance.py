@@ -9,6 +9,38 @@ ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location("scan_glance", ROOT / "site-astro/tools/scan_glance.py")
 scan = importlib.util.module_from_spec(SPEC); SPEC.loader.exec_module(scan)
 class ScanGlanceTests(unittest.TestCase):
+    def test_declared_local_meta_refresh_waits_for_destination_and_keeps_home_lock(self):
+        from playwright.sync_api import sync_playwright
+        with tempfile.TemporaryDirectory(prefix='meta-refresh-', dir=r'E:\Cache') as temp, sync_playwright() as pw:
+            root = Path(temp); (root/'alias').mkdir(); (root/'target').mkdir()
+            (root/'alias/index.html').write_text('<meta http-equiv="refresh" content="2; url=/target/">alias')
+            (root/'target/index.html').write_text('<main id="done">destination</main>')
+            server = scan.make_server(root, root/'out')
+            threading.Thread(target=server.serve_forever, daemon=True).start()
+            browser = pw.chromium.launch(executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe', headless=True)
+            try:
+                page = browser.new_page(); page.goto(server.base+'/alias/', wait_until='load')
+                evidence = scan.wait_meta_refresh(page, server.base)
+                self.assertEqual(page.locator('#done').inner_text(), 'destination')
+                self.assertEqual(evidence, [{'from': server.base+'/alias/', 'declared_target': server.base+'/target/',
+                    'declared_seconds': 2.0, 'to': server.base+'/target/'}])
+                for target, reason in [('/', '已排除的首页'), ('https://outside.invalid/', '非本机页面')]:
+                    fake = mock.Mock(url=server.base+'/alias/')
+                    fake.eval_on_selector_all.return_value = ['2; url='+target]
+                    with self.assertRaisesRegex(RuntimeError, reason): scan.wait_meta_refresh(fake, server.base)
+                    fake.wait_for_url.assert_not_called(); self.assertTrue(fake.route.called)
+                fake = mock.Mock(url=server.base+'/alias/'); fake.eval_on_selector_all.return_value = ['2; url=/target/']
+                fake.wait_for_url.side_effect = TimeoutError('destination timed out')
+                with self.assertRaisesRegex(TimeoutError, 'destination timed out'): scan.wait_meta_refresh(fake, server.base)
+                leave = dict(scan.finding('transport', 'aborted'), request_method='GET', request_failure='net::ERR_ABORTED',
+                    request_url=server.base+'/__proxy/oss/_v.gif?x-event=leave&x-p=%2Falias%2F')
+                other = dict(leave, request_url=leave['request_url'].replace('%2Falias%2F', '%2Ftarget%2F'))
+                row = {'navigation': evidence, 'failures': [leave, other, scan.finding('404', 'target failed')]}
+                scan.classify_alias_leaves(row)
+                self.assertEqual(row['navigation_diagnostics'], [leave]); self.assertEqual(row['failures'], [other, scan.finding('404', 'target failed')])
+            finally:
+                browser.close(); server.shutdown(); server.server_close(); server.upstream_pool.clear()
+
     def test_preview_status_forwards_query_and_headers(self):
         spec = importlib.util.spec_from_file_location("preview_site", ROOT / "tools/preview_site.py")
         preview = importlib.util.module_from_spec(spec); spec.loader.exec_module(preview)
@@ -211,6 +243,7 @@ class ScanGlanceTests(unittest.TestCase):
                 if category == "goto": pages[0].goto.side_effect = RuntimeError(message)
                 for page, failures in zip(pages, (first, second)):
                     page.url = "http://127.0.0.1/x/"
+                    page.eval_on_selector_all.return_value = []
                     page.evaluate.side_effect = lambda expr, *args, failures=failures: (0 if "scrollHeight" in expr else {"failures": failures, "hints": []})
                 with mock.patch("playwright.sync_api.sync_playwright", return_value=context), mock.patch.object(scan, "settle"), mock.patch("PIL.Image.open") as opened:
                     opened.return_value.__enter__.return_value.width = 1920; opened.return_value.__enter__.return_value.height = 1080

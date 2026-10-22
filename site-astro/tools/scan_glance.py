@@ -1,11 +1,11 @@
 """稳定画面扫描，包含横排卡片内容失衡；只读预览规则和用法见 docs/publish-and-scan.md。"""
-import argparse, functools, hashlib, http.server, importlib.util, json, os, subprocess, sys, tempfile, threading, time
+import argparse, functools, hashlib, http.server, importlib.util, json, os, re, subprocess, sys, tempfile, threading, time
 import urllib3
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from urllib.parse import quote, unquote, urlsplit
+from urllib.parse import parse_qs, quote, unquote, urljoin, urlsplit
 HERE = Path(__file__).resolve().parent
 UPSTREAMS = {"mcp": "https://mcp.wly0829.cn", "live": "https://live.wly0829.cn", "oss": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com"}
 VIEWPORTS = ((1920, 1080), (3840, 2160))
@@ -209,6 +209,39 @@ def settle(page, activity, pending, all_images=False):
     while pending or time.monotonic() - activity[0] < 1:
         if time.monotonic() > deadline: raise TimeoutError("网络未静默 1 秒")
         page.wait_for_timeout(100)
+def wait_meta_refresh(page, base, locked=True, evidence=None):
+    if evidence is None: evidence = []
+    for _ in range(4):
+        contents = page.eval_on_selector_all('meta[http-equiv]', "ms => ms.filter(m => m.httpEquiv.toLowerCase() === 'refresh').map(m => m.content)")
+        if not contents: return evidence
+        content = contents[0]
+        match = re.fullmatch(r'\s*(\d+(?:\.\d+)?)\s*;\s*url\s*=\s*(.*?)\s*', content, re.I)
+        if not match: raise RuntimeError('无法识别 meta refresh 声明：' + content)
+        target = urljoin(page.url, match[2].strip('"\''))
+        destination, origin = urlsplit(target), urlsplit(base)
+        if (destination.scheme, destination.netloc) != (origin.scheme, origin.netloc) or destination.path.startswith('/__proxy/'):
+            page.route(target, lambda request: request.abort())
+            raise RuntimeError('不跟随非本机页面的 meta refresh：' + target)
+        if locked and destination.path in ('/', '/index.html'):
+            page.route(target, lambda request: request.abort())
+            raise RuntimeError('meta refresh 指向已排除的首页')
+        before = page.url
+        evidence.append({'from': before, 'declared_target': target, 'declared_seconds': float(match[1])})
+        page.wait_for_url(target, wait_until='load', timeout=30000)
+        evidence[-1]['to'] = page.url
+    raise RuntimeError('meta refresh 跳转超过 4 层')
+
+
+def classify_alias_leaves(row):
+    sources = {urlsplit(nav['from']).path for nav in row.get('navigation', []) if nav.get('to') and nav['to'] != nav['from']}
+    for item in list(row['failures']):
+        parts = urlsplit(original_url(item.get('request_url', ''))); query = parse_qs(parts.query)
+        if (item.get('request_failure') == 'net::ERR_ABORTED' and item.get('request_method') == 'GET'
+                and parts.path == '/_v.gif' and query.get('x-event') == ['leave'] and query.get('x-p', [None])[0] in sources):
+            row.setdefault('navigation_diagnostics', []).append(item)
+            row['failures'].remove(item)
+
+
 def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_results=None):
     from playwright.sync_api import sync_playwright
     from PIL import Image
@@ -241,7 +274,8 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_res
                 def failed(req):
                     finished(req)
                     dest = row["live_unavailable"] if is_live(req.url) else row["failures"]
-                    dest.append(finding("读不到" if is_live(req.url) else "transport", f"{req.failure} {req.url}"))
+                    dest.append(dict(finding("读不到" if is_live(req.url) else "transport", f"{req.failure} {req.url}"),
+                        request_url=req.url, request_failure=req.failure, request_method=req.method))
                     url = original_url(req.url)
                     if resource_errors.get(url, {}).get("status", 0) < 400:
                         resource_errors[url] = {"kind": "transport" if any(code in (req.failure or "") for code in RETRY_NETWORK_ERRORS) else "request_error", "error": req.failure}
@@ -249,6 +283,9 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_res
                 stem = hashlib.sha256(route.encode()).hexdigest()[:12] + f"--{width}" + ("--retry" if attempt else "")
                 try:
                     page.goto(base + quote(route, safe="/"), wait_until="load", timeout=30000)
+                    row['navigation'] = []
+                    wait_meta_refresh(page, base, config.get('home_locked', True), row['navigation'])
+                    row['final_route'] = urlsplit(page.url).path
                     if config.get("home_locked", True) and urlsplit(page.url).path in ("/", "/index.html"): raise RuntimeError("路由跳到了已排除的首页")
                     page.evaluate("document.querySelectorAll('img[loading=lazy],img[data-ts-src]').forEach(i => {if(i.getClientRects().length && getComputedStyle(i).visibility !== 'hidden'){if(!i.getAttribute('src') && i.dataset.tsSrc)i.src=i.dataset.tsSrc;i.loading='eager';}})")
                     tick("load"); settle(page, activity, pending); tick("initial_settle")
@@ -257,6 +294,8 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_res
                         page.evaluate("(y)=>window.scrollTo({top:y,left:0,behavior:'instant'})", y)
                         page.wait_for_timeout(50); y += max(500, int(height * .8)); steps += 1
                     if steps == 1500: raise RuntimeError("滚动未覆盖整页")
+                    # 布局可能在步进中增长；真正到达当前页底，给页脚观察器渲染帧来激活懒图。
+                    page.evaluate("async () => {window.scrollTo({top:document.documentElement.scrollHeight,left:0,behavior:'instant'});await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));}")
                     settle(page, activity, pending, all_images=True)
                     page.evaluate("window.scrollTo({top:0,left:0,behavior:'instant'})"); settle(page, activity, pending, all_images=True)
                     page.evaluate(script + "\n;void 0;"); dom = page.evaluate("(config)=>window.scanGlance(config)", config)
@@ -269,6 +308,8 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_res
                 except Exception as error:
                     category = "transport" if ("load" not in row["seconds"] and any(code in str(error) for code in RETRY_NETWORK_ERRORS)) or retryable_transport(row) and any(t in str(error) for t in ("图片未完成", "网络未静默")) else "scan_error"
                     row["failures"].append(finding(category, str(error)))
+                row['final_route'] = urlsplit(page.url).path
+                classify_alias_leaves(row)
                 try:
                     if config.get("home_locked", True) and urlsplit(page.url).path in ("/", "/index.html"): raise RuntimeError("首页已排除，不自动截图")
                     shot = args.out / "screenshots" / (stem + ".png")
