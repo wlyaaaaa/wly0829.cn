@@ -15,7 +15,8 @@
     "owner_project": "personal-materials",
     "output": "json",
     "timeout": 20,
-    "verification": "materials.py:654,661-670 只读连接，3714-3735 仅SELECT计数；2026-10-11 核实并实跑，只输出计数和状态"
+    "verification": "materials.py:654,661-670 只读连接，3714-3735 仅SELECT计数；2026-10-11 核实并实跑，只输出计数和状态",
+    "observation_basis": "live_read"
   },
   "e-rules-inspect": {
     "argv": [
@@ -35,7 +36,8 @@
     "owner_project": "agents",
     "output": "json",
     "timeout": 30,
-    "verification": "正式活动规则核验入口，Inspect -Brief 只读；2026-10-11 本轮实跑 pass/e_rules_active_verified"
+    "verification": "正式活动规则核验入口，Inspect -Brief 只读；2026-10-11 本轮实跑 pass/e_rules_active_verified",
+    "observation_basis": "live_read"
   },
   "__usage_ledger__": {
     "path": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
@@ -1346,7 +1348,14 @@
     "owner_project": "sunshine-remote-streaming",
     "output": "json",
     "timeout": 8,
-    "verification": "2026-10-11 全文核实仅Path.read_text、正则、datetime、字典/集合统计和json输出；不导入产品入口，不写文件或库，-B禁字节码。正式日志[datetime]::Now本机时间；本轮明确UTC-5；实际按Python本机系统历史时区规则local.astimezone(+08:00)转换，未改系统时区，无新增依赖。源码旧/默认23:30与当前注册01:30-05:00支持北京12:30和14:30两个已核实日常窗口，排除4条已具名手工观察；按北京时间日期去重，逐日验证连续覆盖且所有保留记录都host-only/pass，未知时间窗口/畸形finish/缺日/失败则输出有限聚合缺口并非零退出，不输出原始日志。原截至10月10重取23天，当前10月11重取24天。 连续覆盖从固定真实起点2026-09-18校验；日志轮换丢掉旧开头会进入missing_days并非零退出，不将新起点的短范围冒充同口径。"
+    "verification": "2026-10-11 全文核实仅Path.read_text、正则、datetime、字典/集合统计和json输出；不导入产品入口，不写文件或库，-B禁字节码。正式日志[datetime]::Now本机时间；本轮明确UTC-5；实际按Python本机系统历史时区规则local.astimezone(+08:00)转换，未改系统时区，无新增依赖。源码旧/默认23:30与当前注册01:30-05:00支持北京12:30和14:30两个已核实日常窗口，排除4条已具名手工观察；按北京时间日期去重，逐日验证连续覆盖且所有保留记录都host-only/pass，未知时间窗口/畸形finish/缺日/失败则输出有限聚合缺口并非零退出，不输出原始日志。原截至10月10重取23天，当前10月11重取24天。 连续覆盖从固定真实起点2026-09-18校验；日志轮换丢掉旧开头会进入missing_days并非零退出，不将新起点的短范围冒充同口径。",
+    "source_observed_at_pointer": [
+      "last_time"
+    ],
+    "observation_basis": "coverage_end",
+    "source_coverage_end_pointer": [
+      "last_day"
+    ]
   },
   "document-materials-static-test-counts": {
     "argv": [

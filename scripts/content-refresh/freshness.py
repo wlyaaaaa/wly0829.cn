@@ -1,12 +1,16 @@
 """按需更新的时间依据、频率与原位闭环；不运行后台任务。"""
 from datetime import date, datetime, timedelta, timezone
+from html import unescape
+from html.parser import HTMLParser
 import json
+import hashlib
 from pathlib import Path
 import re
 
 BEIJING = timezone(timedelta(hours=8))
 BASE_POLICY = dict(current="every_request", semantic_review_days=28, historical="preserve")
 BASES = {"live_read", "snapshot_timestamp", "coverage_end", "unknown"}
+LIVE_METHODS = {"git_count", "file_count", "line_count", "regex_count", "page_count", "group_count", "feature_count", "sqlite_ro", "rules_inspect", "log_window"}
 
 
 def now():
@@ -52,27 +56,27 @@ def metadata(document, method, entry=None, checked_at=None):
             values[name] = stamp[:10] if name == "source_coverage_end" and stamp else stamp
         except (KeyError, IndexError, TypeError, ValueError):
             values[name] = None
-    basis = config.get("observation_basis", "unknown")
+    basis = config.get("observation_basis", "live_read" if method.get("kind") in LIVE_METHODS else "coverage_end" if method.get("kind") == "usage_ledger" else "unknown")
     if basis == "live_read":
         values["source_observed_at"] = checked_at
-    elif values["source_observed_at"]:
-        basis = "snapshot_timestamp"
-    elif values["source_coverage_end"]:
-        basis = "coverage_end"
-    else:
+    elif basis not in {"snapshot_timestamp", "coverage_end"} or not values["source_observed_at" if basis == "snapshot_timestamp" else "source_coverage_end"]:
         basis = "unknown"
+        values = dict(source_observed_at=None, source_coverage_end=None)
     return dict(checked_at=checked_at, observation_basis=basis, **values)
 
 
-def review_tasks(inventory, rows):
+def review_tasks(inventory, rows, targeted=()):
     tasks = [dict(id="review:" + i["id"], page=i["page"], field=i["field"], kind=i["kind"],
                   reason="需要实际人工核对并提供本轮依据", status="pending")
-             for i in inventory.get("items", []) if not i.get("historical")
+             for i in inventory.get("items", []) if not i.get("historical") and (not targeted or i["page"] in targeted)
              and (i.get("review_stamp") or i["kind"] == "status_line.state")]
-    tasks.extend(dict(id="semantic:" + r["id"], page=r["page"], kind="semantic", reason=r["cadence_reason"], status="pending")
-                 for r in rows if r.get("freshness_class") == "semantic" and r.get("refresh_due"))
-    tasks.extend(inventory.get("semantic_reviews", []))
     return tasks
+
+
+def semantic_due(inventory, rows=()):
+    pages = {t["page"] for t in inventory.get("semantic_reviews", [])}
+    pages.update(r["page"] for r in rows if r.get("freshness_class") == "semantic" and r.get("refresh_due"))
+    return dict(count=len(pages), pages=sorted(pages))
 
 
 def sync_registry(path, rows):
@@ -92,16 +96,50 @@ def sync_registry(path, rows):
         record["observed_at"] = row.get("source_observed_at")
         changed.append(record["id"])
     if changed:
-        path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
         actual = {r["id"]: r for r in json.loads(path.read_text(encoding="utf-8-sig"))["records"]}
         if any(actual[rid]["current_value"] != updates[rid]["new_value"] for rid in changed):
             raise ValueError("来源登记同步回读不一致")
     return dict(status="synced", records=changed)
 
 
-def close_run(root, result, report=None):
+class DisplayText(HTMLParser):
+    def __init__(self):
+        super().__init__(); self.parts, self.hidden = [], 0
+
+    def handle_starttag(self, tag, attrs):
+        if tag in {"script", "style"}: self.hidden += 1
+        elif tag in {"p", "div", "br", "li", "section", "h1", "h2", "h3"}: self.parts.append(" ")
+
+    def handle_endtag(self, tag):
+        if tag in {"script", "style"}: self.hidden = max(0, self.hidden - 1)
+        elif tag in {"p", "div", "li", "section"}: self.parts.append(" ")
+
+    def handle_data(self, data):
+        if not self.hidden: self.parts.append(data)
+
+
+def display_readback(root, dist, page, fragment):
+    md = root / "site-astro/src/content/pages" / (page + ".md")
+    text = md.read_text("utf-8-sig") if md.exists() else ""
+    route = json.loads(text.split("\n---\n", 1)[0][4:]).get("url", "/" + page + "/") if text.startswith("---\n") else "/" + page + "/"
+    target = Path(dist) / route.lstrip("/")
+    target = target / "index.html" if not target.suffix else target
+    parser = DisplayText(); parser.feed(target.read_text("utf-8-sig"))
+    normalize = lambda value: " ".join(unescape(value).split())
+    return "verified" if normalize(fragment) and normalize(fragment) in normalize("".join(parser.parts)) else "failed"
+
+
+def verified_field(root, proof):
+    from apply_edits import field_at, digest
+    parent, key = field_at(json.loads((root / proof["file"]).read_text("utf-8-sig")), proof["field"])
+    return proof.get("status") == "verified" and digest(parent[key]) == proof.get("sha256")
+
+
+def close_run(root, result, report=None, dist=None):
     from refresh import pages, page_value, comparable
     from apply_edits import same_value, field_at, digest
+    from authors import resolve_author
     root, report = Path(root), report or {}
     run_id = result.get("run_id")
     if not run_id or result.get("schema") != "content-refresh.result.v1":
@@ -110,19 +148,23 @@ def close_run(root, result, report=None):
         raise ValueError("应用回执与取数 run_id 不一致")
     catalog = {p["page"]: p for p in pages(root)}
     applied = {r["record_id"]: r for r in report.get("record_readback", []) if r.get("status") == "verified"}
+    markdown = {m["page"]: m for m in report.get("markdown_readback", [])}
     outcomes, synced = [], []
     for row in result["rows"]:
-        status, reason = "pending", row.get("reason", "")
+        status, reason, display = "pending", row.get("reason", ""), "not_checked"
         if row["status"] == "historical":
             status = "historical_preserved"
         elif row.get("freshness_class") == "semantic":
-            status = "manual_pending" if row.get("refresh_due") else "semantic_current"
+            status = "semantic_due" if row.get("refresh_due") else "semantic_current"
         else:
             try:
                 proof = applied.get(row["id"])
                 if row["status"] == "changed" and proof:
                     locator = proof["locator"]
-                    parent, key = field_at(catalog[row["page"]], locator["field"])
+                    if resolve_author(root, row["page"], locator.get("logical_field", locator["field"])) != {k: locator[k] for k in ("file", "field")}:
+                        raise ValueError("真实作者定位已变化")
+                    document = json.loads((root / locator["file"]).read_text("utf-8-sig")) if locator.get("file") else catalog[row["page"]]
+                    parent, key = field_at(document, locator["field"])
                     if digest(parent[key]) != proof["field_sha256"]:
                         raise ValueError("应用后字段又发生变化")
                     actual = parent[key][locator["start"]:locator["end"]]
@@ -130,26 +172,44 @@ def close_run(root, result, report=None):
                     actual, _ = page_value(row, catalog[row["page"]], root)
                 equal = lambda value: comparable(actual) == comparable(value) or same_value(str(actual), value)
                 if row["status"] == "changed":
-                    if row["id"] in applied and equal(row["new_value"]):
+                    fields = [f for f in report.get("field_readback", []) if row["id"] in f.get("record_ids", [])]
+                    md = markdown.get(row["page"], {})
+                    md_path = root / "site-astro/src/content/pages" / (row["page"] + ".md")
+                    verified = fields and all(verified_field(root, f) for f in fields)
+                    verified = verified and md.get("status") == "verified" and md_path.is_file() and hashlib.sha256(md_path.read_bytes()).hexdigest() == md.get("sha256")
+                    if row["id"] in applied and equal(row["new_value"]) and verified:
+                        if dist is not None:
+                            display = display_readback(root, dist, row["page"], proof.get("fragment", str(actual)))
+                            if display != "verified": raise ValueError("成品未找到新片段")
                         status = "applied_readback_verified"
                         synced.append(row)
                     else:
-                        reason = "变化项没有同轮成功应用及原位回读"
+                        reason = "变化项缺同轮字段、记录或 Markdown 成功回读"
                 elif row["status"] == "unchanged" and row.get("checked_at") and row.get("observation_basis") != "unknown" and equal(row["new_value"]):
                     status = "checked_unchanged"
                     synced.append(row)
                 elif row["status"] in {"unavailable", "domain_fact_task", "scope_pending"} and row.get("checked_at") and reason and equal(row["old_value"]):
                     status = "unknown_preserved"
-            except (KeyError, ValueError, IndexError, StopIteration) as exc:
+            except (OSError, KeyError, ValueError, IndexError, StopIteration) as exc:
+                if dist is not None and row["status"] == "changed": display = "failed"
                 reason = "原位回读失败：" + str(exc)
-        outcomes.append(dict(record_id=row["id"], status=status, reason=reason))
+        outcomes.append(dict(record_id=row["id"], status=status, reason=reason, display_readback=display))
     resolutions = {r.get("id"): r for r in report.get("manual_closures", [])
-                   if r.get("run_id") == run_id and r.get("checked_at") and r.get("evidence") and r.get("status") == "completed"}
+                   if r.get("id") and r.get("run_id") == run_id and valid_time(r.get("checked_at")) and r.get("evidence") and r.get("status") == "completed"}
     tasks = [dict(t, status="completed" if t["id"] in resolutions else "pending") for t in result.get("manual_tasks", [])]
     for outcome in outcomes:
-        if outcome["status"] == "manual_pending" and "semantic:" + outcome["record_id"] in resolutions:
+        if outcome["status"] == "semantic_due" and "semantic:" + next(r["page"] for r in result["rows"] if r["id"] == outcome["record_id"]) in resolutions:
             outcome["status"] = "manual_completed"
+    semantic = {rid[9:]: dict(checked_at=r["checked_at"], run_id=run_id, evidence=r["evidence"])
+                for rid, r in resolutions.items() if rid.startswith("semantic:") and rid[9:] in result.get("semantic_due", {}).get("pages", [])}
+    if semantic:
+        path = root / "sources/refresh/semantic-reviews.json"
+        data = json.loads(path.read_text("utf-8-sig")) if path.exists() else dict(schema="content-refresh.semantic-reviews.v1", pages={})
+        data["pages"].update(semantic)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     pending = [o for o in outcomes if o["status"] in {"pending", "manual_pending"}] + [t for t in tasks if t["status"] == "pending"]
     return dict(schema="content-refresh.closure.v1", run_id=run_id, checked_at=now(),
                 status="incomplete" if pending else "closed", rows=outcomes, manual_tasks=tasks,
+                semantic_due=result.get("semantic_due", dict(count=0, pages=[])),
                 registry_sync=sync_registry(result.get("registry_path") or root / "sources/refresh/registry.json", synced), pending=len(pending))

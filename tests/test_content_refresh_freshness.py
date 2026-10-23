@@ -11,9 +11,10 @@ from unittest.mock import patch
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts/content-refresh"
 sys.path.insert(0, str(SCRIPTS))
 import refresh
-from freshness import cadence, metadata, now, close_run, review_tasks
+from freshness import cadence, metadata, now, close_run, review_tasks, LIVE_METHODS
 from inventory import build_inventory, strict_findings
 from apply_edits import build_number_edits, apply_edits
+from test_content_refresh_edits import fake_converter, install_fake_converter
 
 
 class FreshnessTests(unittest.TestCase):
@@ -29,7 +30,7 @@ class FreshnessTests(unittest.TestCase):
         self.number = dict(id="n", page="demo", screen="top", label="调用数", source_location="合成快照",
                            as_of="2026-10-01", current_value=3, field="screens[0].text", page_pattern=r"调用 (\d+) 次",
                            automatic=True, scope_status="verified", retrieve=dict(kind="json", path="snapshot.json", pointer=["count"]),
-                           source_observed_at_pointer=["stamp"])
+                           observation_basis="snapshot_timestamp", source_observed_at_pointer=["stamp"])
         self.cutoff = dict(self.number, id="d", label="截至", current_value="2026-10-01", page_pattern=r"截至 (\d{4}-\d{2}-\d{2})", qualifies=["n"])
         self.registry = dict(schema="content-refresh.sources.v1", records=[self.number, self.cutoff], writing_points=[], retired_names=[])
         self.registry_path = self.root / "sources/refresh/registry.json"
@@ -44,13 +45,19 @@ class FreshnessTests(unittest.TestCase):
         result["registry_path"] = str(self.registry_path)
         return result
 
+    def apply(self, result):
+        return apply_edits(self.root, build_number_edits(self.root, result), converter=fake_converter)
+
     def test_time_basis_does_not_promote_a_snapshot_or_unknown_to_today(self):
         checked = "2026-10-23T10:00:00+08:00"
-        old = metadata({"meta": {"at": "2026-10-01T09:00:00+08:00"}}, dict(source_observed_at_pointer=["meta", "at"]), checked_at=checked)
+        old = metadata({"meta": {"at": "2026-10-01T09:00:00+08:00"}}, dict(observation_basis="snapshot_timestamp", source_observed_at_pointer=["meta", "at"]), checked_at=checked)
         self.assertEqual((old["checked_at"], old["source_observed_at"], old["observation_basis"]), (checked, "2026-10-01T09:00:00+08:00", "snapshot_timestamp"))
         self.assertIsNone(metadata({"count": 1}, {}, checked_at=checked)["source_observed_at"])
         self.assertEqual(metadata({}, {"observation_basis": "live_read"}, checked_at=checked)["source_observed_at"], checked)
         self.assertEqual(metadata({}, {"observation_basis": "unknown"}, {"observation_basis": "live_read"}, checked)["observation_basis"], "unknown")
+        for kind in LIVE_METHODS:
+            self.assertEqual(metadata(None, dict(kind=kind), checked_at=checked)["source_observed_at"], checked)
+        self.assertEqual(metadata({"source_observed_at": checked}, dict(kind="json"))["observation_basis"], "unknown")
 
     def test_cadence_every_request_semantic_28_days_target_change_and_history(self):
         today = date(2026, 10, 23)
@@ -74,11 +81,19 @@ class FreshnessTests(unittest.TestCase):
         self.assertIsNone(result["rows"][1]["new_value"])
         self.assertEqual(result["rows"][1]["old_value"], "2026-10-01")
         self.assertEqual(build_number_edits(self.root, result)["edits"], [])
+        self.page["screens"][0]["text"] = "调用 3 次；仓库 4 次"
+        self.write(self.path, self.page)
+        self.number.update(start=10, end=11)
+        with patch.object(refresh, "bounded") as source:
+            result = self.collect()
+            source.assert_not_called()
+        self.assertEqual((result["rows"][0]["status"], build_number_edits(self.root, result)["edits"]), ("unavailable", []))
 
     def test_strict_uses_collect_locator_and_classifies_retired_history(self):
         bad = dict(self.number, id="bad", page_pattern=r"不存在 (\d+)")
         historical = dict(bad, id="old", historical=True)
         inventory = build_inventory(self.root / "sources/pages", [bad, historical], {})
+        inventory["record_bindings"].append(dict(record_id="outside", status="binding_error", classification="current"))
         findings = strict_findings(inventory, [bad, historical], {})
         self.assertTrue(any("bad" in f["record_ids"] for f in findings))
         self.assertFalse(any("old" in f["record_ids"] for f in findings))
@@ -86,6 +101,7 @@ class FreshnessTests(unittest.TestCase):
 
     def test_cli_inventory_collect_apply_and_close_with_registry_readback(self):
         output = self.root / "run"
+        install_fake_converter(self.root)
         def run(script, *args, expected=0):
             proc = subprocess.run([sys.executable, "-B", "-X", "utf8", str(SCRIPTS / script), *map(str, args)], capture_output=True, text=True, encoding="utf-8")
             self.assertEqual(proc.returncode, expected, proc.stdout + proc.stderr)
@@ -104,12 +120,22 @@ class FreshnessTests(unittest.TestCase):
         self.assertEqual(registry["records"][0]["current_value"], 4)
         self.assertEqual(registry["records"][0]["source_observed_at"], "2026-10-18T09:00:00+08:00")
         self.assertIn("调用 4 次；截至 2026-10-18", self.path.read_text("utf-8"))
+        dist = self.root / "dist/demo"
+        dist.mkdir(parents=True)
+        (dist / "index.html").write_text("<p>调用 <b>4</b> 次；截至 2026-10-18</p>", encoding="utf-8")
+        run("refresh.py", "--root", self.root, "--close-run", output / "result.json", "--apply-report", report_path, "--dist", dist.parent)
+        self.assertTrue(all(r["display_readback"] == "verified" for r in json.loads((output / "closure.json").read_text("utf-8"))["rows"]))
+        (dist / "index.html").write_text("<p>调用 3 次；截至 2026-10-01</p><script>4</script>", encoding="utf-8")
+        run("refresh.py", "--root", self.root, "--close-run", output / "result.json", "--apply-report", report_path, "--dist", dist.parent, expected=2)
 
     def test_close_rejects_tamper_wrong_run_and_unapplied_changes(self):
         result = self.collect()
         self.assertEqual(close_run(self.root, result)["status"], "incomplete")
-        report = apply_edits(self.root, build_number_edits(self.root, result))
+        report = self.apply(result)
         self.assertEqual(close_run(self.root, result, report)["status"], "closed")
+        for key in ("field_readback", "record_readback", "markdown_readback"):
+            self.assertEqual(close_run(self.root, result, dict(report, **{key: []}))["status"], "incomplete")
+        self.assertTrue(all(r["display_readback"] == "not_checked" for r in close_run(self.root, result, report)["rows"]))
         with self.assertRaises(ValueError):
             close_run(self.root, result, dict(report, run_id="another"))
         self.path.write_text(self.path.read_text("utf-8").replace("调用 4", "调用 9"), encoding="utf-8")
@@ -117,12 +143,23 @@ class FreshnessTests(unittest.TestCase):
 
     def test_manual_state_review_and_semantic_due_require_actual_closure(self):
         result = self.collect()
-        report = apply_edits(self.root, build_number_edits(self.root, result))
+        report = self.apply(result)
         inventory = dict(items=[dict(id="state", page="demo", field="status_line.state", kind="status_line.state")])
         result["manual_tasks"] = review_tasks(inventory, [])
         self.assertEqual(close_run(self.root, result, report)["pending"], 1)
         report["manual_closures"] = [dict(id="review:state", run_id=result["run_id"], checked_at=now(), evidence="受控样例状态已核对", status="completed")]
         self.assertEqual(close_run(self.root, result, report)["status"], "closed")
+        result["semantic_due"] = dict(count=1, pages=["demo"])
+        report["manual_closures"].append(dict(id="semantic:demo", run_id="other", checked_at=now(), evidence="旧轮", status="completed"))
+        path = self.root / "sources/refresh/semantic-reviews.json"
+        self.assertFalse(path.exists())
+        close_run(self.root, result, report)
+        self.assertFalse(path.exists())
+        report["manual_closures"][-1]["run_id"] = result["run_id"]
+        close_run(self.root, result, report)
+        self.assertEqual(json.loads(path.read_text("utf-8"))["pages"]["demo"]["evidence"], "旧轮")
+        inventory["items"].append(dict(id="other", page="other", field="status_line.state", kind="status_line.state"))
+        self.assertEqual([t["page"] for t in review_tasks(inventory, [], {"demo"})], ["demo"])
 
     def test_unknown_and_unchanged_close_only_after_real_current_check(self):
         self.write(self.root / "snapshot.json", dict(count=3, stamp="2026-10-01T09:00:00+08:00"))

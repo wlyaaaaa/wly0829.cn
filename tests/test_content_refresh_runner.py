@@ -21,7 +21,7 @@ class RefreshTests(unittest.TestCase):
             {"id": "demo-01", "text": "2,020 次｜调用\n截至 2026 年 9 月 28 日"}]}), encoding="utf-8")
         self.record = {"id": "r", "page": "demo", "screen": "demo-01", "label": "调用数",
             "as_of": "2026-09-28", "current_value": 99, "category": "人工", "source_location": "只读来源", "scope_status": "verified",
-            "page_pattern": r"([\d,]+) 次", "automatic": True, "private": False,
+            "page_pattern": r"([\d,]+) 次", "automatic": True, "private": False, "observation_basis": "live_read",
             "retrieve": {"kind": "json", "path": "count.json", "pointer": ["count"]}}
 
     def run_collect(self, **kwargs):

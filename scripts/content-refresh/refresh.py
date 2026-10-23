@@ -21,8 +21,8 @@ from checks import audit_pages
 from inventory import build_inventory, write_inventory, strict_findings
 from engine.content import bound_json
 from validation import LEDGER, validate_entries, validate_method, registry_errors, positive
-from apply_edits import qualified_date_review
-from freshness import cadence, metadata, review_tasks, close_run, now
+from apply_edits import qualified_date_review, proven_offset
+from freshness import cadence, metadata, review_tasks, semantic_due, close_run, now
 
 ROOT = Path(__file__).resolve().parents[2]
 BEIJING = timezone(timedelta(hours=8))
@@ -351,14 +351,11 @@ def page_value(record, page, root):
         if not isinstance(text, (str, int, float)):
             raise ValueError("展示字段须定位字符串或标量")
         text = str(text)
-        if "start" in record:
-            start, end = record["start"], record["end"]
-            if type(start) is not int or type(end) is not int or not 0 <= start < end <= len(text):
-                raise ValueError("页面字符范围无效，保留旧日期/数值")
-            text = text[start:end]
-            return text, observed
-        if not record.get("page_pattern") and not record.get("page_number"):
-            return text, observed
+    if "start" in record or "end" in record:
+        start, end = proven_offset(text, record)
+        return text[start:end], observed
+    if field and not record.get("page_pattern") and not record.get("page_number"):
+        return text, observed
     if record.get("page_number"):
         number = next(n for n in page.get("registry", {}).get("numbers", [])
                       if n["id"] == record["page_number"])
@@ -390,6 +387,8 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
     validate_entries(entries)
     invalid = {e["record_id"]: "; ".join(e["errors"]) for e in registry_errors(registry["records"], entries)}
     catalog = {p["page"]: p for p in pages(root)}
+    semantic_path = root / "sources/refresh/semantic-reviews.json"
+    semantic_reviews = read_json(semantic_path).get("pages", {}) if semantic_path.exists() else {}
     rows, groups = [], {}
     for record in registry["records"]:
         row = dict(record, old_value=None, new_value=None, status="unavailable", reason="",
@@ -407,7 +406,7 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
         historical = (record.get("historical") or record.get("frozen") or page.get("kind") == "frozen"
                 or page.get("status") in {"frozen", "冻结", "已冻结", "historical", "历史"}
                 or screen.get("section") in {"history", "evolution", "timeline"})
-        row.update(cadence(record, registry.get("freshness_policy"), today, historical, record["page"] in targeted))
+        row.update(cadence(dict(record, semantic_checked_at=semantic_reviews.get(record["page"], {}).get("checked_at")), registry.get("freshness_policy"), today, historical, record["page"] in targeted))
         if row["freshness_class"] == "historical":
             row.update(status="historical", reason="历史事实或冻结项目，本轮不重取")
         elif row["freshness_class"] == "semantic":
@@ -510,7 +509,7 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
         finding["page_title"] = catalog.get(finding["page"].split("/")[0], {}).get("title", finding["page"])
     automatic = [r for r in rows if r.get("automatic") and not r.get("qualifies") and r["status"] != "historical" and r.get("manual_reason") != "source_broken"]
     return {"schema": "content-refresh.result.v1", "run_id": str(uuid4()), "observed_at": now(),
-            "manual_tasks": review_tasks({}, rows), "freshness_policy": registry.get("freshness_policy"),
+            "manual_tasks": review_tasks({}, rows, targeted), "semantic_due": semantic_due({}, rows), "freshness_policy": registry.get("freshness_policy"),
             "relative_time_risks": [f for f in audit["findings"] if re.search("相对|昨天|今天|目前", f.get("message", "") + f.get("excerpt", ""))],
             "baseline": registry.get("baseline"), "baseline_evidence": registry.get("baseline_evidence", "Unknown；登记基线"), "pages_checked": audit["pages_checked"],
             "numbers_checked": len(rows), "rows": rows, "findings": audit["findings"],
@@ -537,6 +536,7 @@ def task_text(result, registry):
         lines.append("")
     lines += ["## 来源口径与基线缺口", ""]
     lines += [f"- 人工闭环 {t['id']}：{t['page']}；{t['kind']}；{t['reason']}" for t in result.get("manual_tasks", [])]
+    lines += ["", "## 语义复核到期（独立列出，不阻断本轮事实闭环）", "", ", ".join(result.get("semantic_due", {}).get("pages", [])) or "无。"]
     lines += [f"- {r['page']} / {r['screen']}：{r['known_gap']}" for r in result["rows"] if r.get("known_gap")]
     for tier, title in TIERS:
         lines += ["", f"## {title}", ""]
@@ -595,6 +595,7 @@ def main():
     parser.add_argument("--targeted", help="本轮点名讲解核对的页面，逗号分隔；不缩小当前事实重取范围")
     parser.add_argument("--close-run", type=Path, help="核对本轮取数、应用与原位回读闭环")
     parser.add_argument("--apply-report", type=Path, help="同轮应用回执；人工闭环须附 manual_closures")
+    parser.add_argument("--dist", type=Path, help="成品目录；闭环时额外核对新片段实际显示")
     parser.add_argument("--no-report", action="store_true", help="只交机器清单和任务文件，不生成汇报网页")
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--total-seconds", type=float, default=300)
@@ -604,7 +605,7 @@ def main():
     args = parser.parse_args()
     if args.close_run:
         try:
-            result = close_run(args.root, read_json(args.close_run), read_json(args.apply_report) if args.apply_report else None)
+            result = close_run(args.root, read_json(args.close_run), read_json(args.apply_report) if args.apply_report else None, args.dist)
         except (OSError, ValueError, KeyError) as exc:
             print(json.dumps(dict(status="incomplete", reason=str(exc)), ensure_ascii=False))
             return 2
@@ -641,6 +642,10 @@ def main():
         inventory["items"] = [i for i in inventory["items"] if i["page"] in only]
         inventory["review_stamps"] = [i for i in inventory.get("review_stamps", []) if i["page"] in only]
         registry = dict(registry, records=[r for r in registry["records"] if r["page"] in only])
+        for key in ("record_bindings", "observation_basis_gaps", "offset_binding_gaps"):
+            inventory[key] = [i for i in inventory.get(key, []) if i["record_id"] in {r["id"] for r in registry["records"]}]
+        for key in ("observation_basis_gaps", "offset_binding_gaps"):
+            inventory["coverage"][key] = len(inventory[key])
         inventory["review_stamp_record_ids"] = sorted(set(inventory.get("review_stamp_record_ids", [])) & {r["id"] for r in registry["records"]})
     findings = strict_findings(inventory, registry["records"], entries) if args.strict else []
     inventory["strict_findings"] = findings
@@ -654,7 +659,7 @@ def main():
         print(json.dumps({"status": "insufficient_automatic_coverage", "coverage": inventory["coverage"]}, ensure_ascii=False))
         return 2
     if args.inventory:
-        print(json.dumps({"status": "inventoried", "output": str(output), "coverage": inventory["coverage"]}, ensure_ascii=False))
+        print(json.dumps({"status": "inventoried", "missing": 0, "observation_basis_gaps": inventory["coverage"].get("observation_basis_gaps", 0), "offset_binding_gaps": inventory["coverage"].get("offset_binding_gaps", 0), "output": str(output), "coverage": inventory["coverage"]}, ensure_ascii=False))
         return 0
     (output / "tmp").mkdir(exist_ok=True)
     for key in ("TEMP", "TMP", "TMPDIR"):
@@ -663,9 +668,10 @@ def main():
     command_deadline = command_started + args.total_seconds
     stamps = set(inventory.get("review_stamp_record_ids", []))
     registry = dict(registry, records=[r for r in registry["records"] if r["id"] not in stamps])
-    result = collect(args.root, registry, max(0, command_deadline - time.monotonic() - 5), args.item_seconds, entries=entries, workers=args.workers, entries_path=entries_path)
+    result = collect(args.root, registry, max(0, command_deadline - time.monotonic() - 5), args.item_seconds, entries=entries, workers=args.workers, entries_path=entries_path, targeted=targeted)
     result["registry_path"] = str((args.registry or args.root / "sources/refresh/registry.json").resolve())
-    result["manual_tasks"] = review_tasks(inventory, result["rows"])
+    result["manual_tasks"] = review_tasks(inventory, result["rows"], targeted)
+    result["semantic_due"] = semantic_due(inventory, result["rows"])
     from apply_edits import build_number_edits
     (output / "number-edits.json").write_text(json.dumps(build_number_edits(args.root, result), ensure_ascii=False, indent=2), encoding="utf-8")
     task = task_text(result, registry)

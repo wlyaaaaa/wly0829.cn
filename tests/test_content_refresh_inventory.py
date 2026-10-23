@@ -158,6 +158,18 @@ class InventoryTests(unittest.TestCase):
         self.assertEqual(len(groups), 2)
         self.assertEqual([len(re.findall(r"^- ", group, re.M)) for group in groups], [25, 3])
 
+    def test_semantic_review_uses_persisted_receipt_instead_of_page_date(self):
+        self.page["semantic_checked_at"] = "2099-01-01T00:00:00+08:00"
+        self.write_page("demo", self.page)
+        inventory = build_inventory(self.root / "sources/pages", [])
+        self.assertEqual(inventory["semantic_due"], {"count": 1, "pages": ["demo"]})
+        self.assertIn("不阻断本轮事实闭环", fact_tasks(inventory))
+        receipt = self.root / "sources/refresh/semantic-reviews.json"
+        receipt.parent.mkdir()
+        receipt.write_text(json.dumps({"schema": "content-refresh.semantic-reviews.v1", "pages": {
+            "demo": {"checked_at": "2099-01-01T00:00:00+08:00", "run_id": "fixture", "evidence": "合成核对"}}}), encoding="utf-8")
+        self.assertEqual(build_inventory(self.root / "sources/pages", [])["semantic_due"], {"count": 0, "pages": []})
+
 
 if __name__ == "__main__":
     unittest.main()

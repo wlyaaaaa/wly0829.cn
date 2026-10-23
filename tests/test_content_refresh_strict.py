@@ -96,19 +96,19 @@ class StrictTests(unittest.TestCase):
             self.page["parent"] = None if "做好了" in text else "owner"
             self.page["screens"][0]["text"] = text
             self.write_page()
-            inventory, findings = self.check([self.number])
+            inventory, findings = self.check([self.number] if "3 件" in text else [])
             self.assertEqual(findings, [])
             self.assertEqual(len(inventory["review_stamps"]), 1)
             self.assertEqual(inventory["review_stamps"][0]["qualifies_suggestion"], [])
         self.page["status_line"].update(as_of="2026-10-01", last={"label": "快照核对", "at": "2026-10-01"})
         self.page["parent"] = "owner"
         self.write_page()
-        inventory, findings = self.check([self.number])
+        inventory, findings = self.check([])
         self.assertEqual(findings, [])
         self.assertEqual({s["source_kind"] for s in inventory["review_stamps"]}, {"as_of", "status_line.as_of", "status_line.last"})
         self.assertEqual(inventory["coverage"]["required_items"], 0)
         dated = dict(self.cutoff, field="status_line.as_of", page_pattern=None)
-        self.assertTrue(any(i["kind"] == "status_line.as_of" for i in self.check([self.number, dated])[0]["items"]))
+        self.assertTrue(any(i["kind"] == "status_line.as_of" for i in self.check([dated])[0]["items"]))
 
     def test_overview_read_check_preserves_older_data_boundary(self):
         self.page["status_line"].update(as_of="2026-10-11", source="10月11日只读查看；旧10月3–9日调用数之后未重新核对")
@@ -226,6 +226,31 @@ class StrictTests(unittest.TestCase):
         entries["counts"]["read_only"] = False
         self.assertEqual(len(self.check([number, self.cutoff, last], entries)[1]), 2)
         self.assertEqual(len(self.check([number, self.cutoff, last], {})[1]), 2)
+
+    def test_observation_basis_gap_is_advisory_and_uses_entry_default(self):
+        entries = {"counts": {"argv": ["python", "status.py"], "cwd": ".", "read_only": True,
+                              "owner_project": "demo", "output": "json"}}
+        number = dict(self.number, retrieve={"kind": "entry", "entry": "counts"})
+        cutoff = dict(self.cutoff, observation_basis="live_read")
+        inventory, findings = self.check([number, cutoff], entries)
+        self.assertEqual(findings, [])
+        self.assertEqual(inventory["observation_basis_gaps"],
+                         [{"record_id": "count", "page": "demo", "reason": "观察依据未登记"}])
+        self.assertEqual(inventory["coverage"]["missing_items"], 0)
+        entries["counts"]["observation_basis"] = "live_read"
+        self.assertEqual(self.check([number, cutoff], entries)[0]["observation_basis_gaps"], [])
+        self.assertEqual(self.check([dict(number, observation_basis="unknown"), cutoff], entries)[0]["observation_basis_gaps"], [])
+
+    def test_offset_binding_gap_preserves_failure_without_blocking_strict(self):
+        from refresh import page_value
+        def read(record, *args):
+            if record["id"] == "count":
+                raise ValueError("字符偏移已漂移或无法证明，需改用唯一上下文重绑")
+            return page_value(record, *args)
+        with patch("refresh.page_value", side_effect=read):
+            inventory, findings = self.check([self.number, self.cutoff])
+        self.assertEqual((findings, inventory["coverage"]["missing_items"], inventory["coverage"]["automatic_ratio"]), ([], 0, 1.0))
+        self.assertEqual(inventory["offset_binding_gaps"][0]["status"], "binding_error")
 
 
 if __name__ == "__main__":
