@@ -7,7 +7,42 @@ import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts/content-refresh"))
-from apply_edits import apply_edits, build_number_edits
+from apply_edits import apply_edits as _apply_edits, build_number_edits, display_fragment
+from authors import affected_pages, resolve_author
+
+FAKE_CONVERTER = '''import json, os, re, sys
+from pathlib import Path
+def render(root, pages, output_dir=None):
+    root = Path(root)
+    output = Path(output_dir) if output_dir else root / "site-astro/src/content/pages"
+    output.mkdir(parents=True, exist_ok=True)
+    def expand(value):
+        if isinstance(value, dict): return {k: expand(v) for k, v in value.items()}
+        if isinstance(value, list): return [expand(v) for v in value]
+        if isinstance(value, str) and re.fullmatch(r"\\{\\{[^{}]+\\}\\}", value):
+            ref, *parts = value[2:-2].split(".")
+            path = "scripts/how-demo-data.json" if ref == "stories" else f"sources/pages/{ref}/page.json"
+            value = json.loads((root / path).read_text("utf-8-sig"))
+            for part in parts:
+                value = value[int(part)] if isinstance(value, list) else value[part]
+        return value
+    for name in pages:
+        data = json.loads((root / f"sources/pages/{name}/page.json").read_text("utf-8-sig"))
+        head = json.dumps({"url": data.get("url", f"/{name}/"), "source": {"converted_at_beijing": "fixture"}})
+        (output / (name + ".md")).write_text("---\\n" + head + "\\n---\\n" + json.dumps(expand(data), ensure_ascii=False), encoding="utf-8")
+'''
+exec(FAKE_CONVERTER, _fake := {})
+fake_converter = _fake["render"]
+
+
+def install_fake_converter(root):
+    script = Path(root) / "site-astro/tools/convert_page.py"
+    script.parent.mkdir(parents=True, exist_ok=True)
+    script.write_text(FAKE_CONVERTER + '\nrender(Path(__file__).resolve().parents[2], sys.argv[1:], os.environ.get("CONVERT_OUT_MD"))\n', encoding="utf-8")
+
+
+def apply_edits(root, payload, only=None, **kwargs):
+    return _apply_edits(root, payload, only, converter=kwargs.get("converter", fake_converter))
 
 
 class NumberEditsTests(unittest.TestCase):
@@ -15,6 +50,7 @@ class NumberEditsTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
+        install_fake_converter(self.root)
         self.path = self.root / "sources/pages/personal-materials/page.json"
         self.path.parent.mkdir(parents=True)
         # dated-refresh.md 的 165 / 58 / 15105 / 4 / 44 固定样本。
@@ -35,6 +71,7 @@ class NumberEditsTests(unittest.TestCase):
 
     def save(self):
         self.path.write_text(json.dumps(self.page, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        fake_converter(self.root, {"personal-materials"})
 
     def build(self):
         return build_number_edits(self.root, {"rows": self.rows})
@@ -112,7 +149,7 @@ class NumberEditsTests(unittest.TestCase):
         self.save()
         report = apply_edits(self.root, payload)
         self.assertEqual(len(report["skipped"]), len(payload["edits"]))
-        row = dict(self.rows[0], field="screens[0].text", start=0, end=3, old_value=165, new_value=166)
+        row = dict(self.rows[0], field="screens[0].text", start=0, end=3, current_value=165, old_value=165, new_value=166)
         row.pop("page_number")
         row["text"] = "165 份材料"
         payload = build_number_edits(self.root, {"rows": [row]})
@@ -127,7 +164,7 @@ class NumberEditsTests(unittest.TestCase):
         self.page["registry"]["numbers"] = [dict(id="n-0", text=anchor, as_of="2026-10-09", screens=["top"])]
         self.save()
         start = text.index(str(old))
-        row = dict(self.rows[0], field="screens[0].text", start=start, end=start + len(str(old)), old_value=old, new_value=new, status="changed")
+        row = dict(self.rows[0], field="screens[0].text", start=start, end=start + len(str(old)), current_value=old, old_value=old, new_value=new, status="changed")
         row.update(extra)
         return build_number_edits(self.root, {"rows": [row]})
 
@@ -213,6 +250,9 @@ class NumberEditsTests(unittest.TestCase):
                            page_pattern=r'别的材料(\d+)', page_number=None)
         self.assertFalse(payload['edits'])
         self.assertEqual(payload['skipped'][0]['reason'], 'scope_mismatch_or_unverified')
+        payload = self.one("材料3份，仓库4份，截至10月9日", "仓库4份", 4, 5, current_value=3)
+        self.assertFalse(payload["edits"])
+        self.assertEqual(payload["skipped"][0]["reason"], "字符偏移已漂移或无法证明，需改用唯一上下文重绑")
 
     def test_number_date_batch_is_atomic_for_drift_and_illegal_payload(self):
         for mode in ("body", "registry", "illegal"):
@@ -290,6 +330,70 @@ class NumberEditsTests(unittest.TestCase):
                 payload["edits"].append(dict(body[0], new_value="999"))
             self.assertTrue(apply_edits(self.root, payload)["skipped"])
             self.assertEqual(json.loads(self.path.read_text(encoding="utf-8"))["screens"], self.page["screens"])
+
+    def test_how_author_edits_keep_five_placeholders_and_render_new_values(self):
+        path = self.root / "sources/pages/how/page.json"
+        path.parent.mkdir(parents=True)
+        source = self.root / "scripts/how-demo-data.json"
+        source.parent.mkdir(parents=True)
+        source.write_text(json.dumps({"stories": [{"detail_screens": [{"text": f"材料有 {i} 份，截至10月9日"} for i in range(5)]}]}), encoding="utf-8")
+        page = {"page": "how", "screens": [{"id": str(i), "text": "{{stories.stories.0.detail_screens." + str(i) + ".text}}"} for i in range(5)]}
+        path.write_text(json.dumps(page), encoding="utf-8")
+        rows = [dict(self.rows[0], id=f"how-{i}", page="how", screen=str(i), page_number=None,
+            field=f"screens[{i}].text", page_pattern=r"材料有 (\d+) 份", old_value=i, new_value=i+10, status="changed") for i in range(5)]
+        result = dict(schema="content-refresh.result.v1", run_id="how", rows=rows)
+        payload = build_number_edits(self.root, result)
+        self.assertFalse(payload["skipped"])
+        self.assertEqual({e["file"] for e in payload["edits"]}, {"scripts/how-demo-data.json"})
+        report = apply_edits(self.root, payload)
+        self.assertFalse(report["skipped"])
+        self.assertEqual(json.loads(path.read_text("utf-8")), page)
+        self.assertEqual([r["text"] for r in json.loads(source.read_text("utf-8"))["stories"][0]["detail_screens"]],
+                         [f"材料有 {i+10} 份，截至10月11日" for i in range(5)])
+        self.assertIn("材料有 14 份", (self.root / "site-astro/src/content/pages/how.md").read_text("utf-8"))
+        self.assertEqual(len(report["record_readback"]), 5)
+        from freshness import close_run
+        self.assertEqual(close_run(self.root, result, report)["status"], "closed")
+        page["screens"][0]["text"] = page["screens"][1]["text"]
+        path.write_text(json.dumps(page), encoding="utf-8")
+        self.assertEqual(close_run(self.root, result, report)["status"], "incomplete")
+
+    def test_diverged_markdown_blocks_author_and_failed_conversion_blocks_readback(self):
+        payload = self.one("167 次调用，截至10月9日", "167 次调用", 167, 168)
+        fake_converter(self.root, {"personal-materials"})
+        md = self.root / "site-astro/src/content/pages/personal-materials.md"
+        md.write_text(md.read_text("utf-8") + "直接改过", encoding="utf-8")
+        before = self.path.read_bytes()
+        report = apply_edits(self.root, payload)
+        self.assertEqual({e["reason"] for e in report["skipped"]}, {"author_markdown_diverged"})
+        self.assertEqual(self.path.read_bytes(), before)
+        fake_converter(self.root, {"personal-materials"})
+        def stale(root, pages, output_dir=None):
+            if output_dir is not None: fake_converter(root, pages, output_dir)
+        report = apply_edits(self.root, payload, converter=stale)
+        self.assertEqual(report["applied"], 0)
+        self.assertEqual(report["markdown_readback"][0]["status"], "failed")
+        self.assertFalse(report["record_readback"])
+
+    def test_inline_placeholder_is_protected_and_dependencies_follow_layout_refs(self):
+        raw = "共有 {{scale.projects}} 页，调用 4 次；截至10月11日"
+        start = raw.index("4")
+        self.assertEqual(display_fragment(raw, start, start+1, "共有 40 页，调用 4 次；截至10月11日"), "共有 40 页，调用 4 次")
+        self.page["screens"][0]["text"] = "材料{{scale.n1}}份，截至10月9日"
+        self.save()
+        start = self.page["screens"][0]["text"].index("1")
+        row = dict(self.rows[0], page_number=None, field="screens[0].text", start=start, end=start+1,
+                   old_value=1, new_value=2, status="changed")
+        payload = build_number_edits(self.root, {"rows": [row]})
+        self.assertEqual(payload["skipped"][0]["reason"], "placeholder_computed_value")
+        forged = dict(schema="content-refresh.number-edits.v1", edits=[dict(page=row["page"],
+            file="sources/pages/personal-materials/page.json", field=row["field"], start=start, end=start+1, old_value="1", new_value="2")])
+        self.assertEqual(apply_edits(self.root, forged)["skipped"][0]["reason"], "placeholder_computed_value")
+        other = self.root / "sources/pages/dependent/page.json"
+        other.parent.mkdir(parents=True)
+        other.write_text('{"screens":[]}', encoding="utf-8")
+        (other.parent / "layout.json").write_text('{"x":"{{personal-materials.screens.top.text}}"}', encoding="utf-8")
+        self.assertEqual(affected_pages(self.root, ["sources/pages/personal-materials/page.json"]), {"personal-materials", "dependent"})
 
 
 if __name__ == "__main__":

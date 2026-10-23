@@ -7,7 +7,10 @@ from hashlib import sha256
 import json
 from pathlib import Path
 import re
+import subprocess
 import sys
+from copy import deepcopy
+from authors import PLACEHOLDER, affected_pages, convert_markdown, editable_range, markdown_checks, resolve_author
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[2]
@@ -33,6 +36,27 @@ def field_at(page, field):
 
 def digest(text):
     return sha256(text.encode("utf-8")).hexdigest()
+
+
+def display_fragment(text, start, end, bound_text=None):
+    placeholders = list(PLACEHOLDER.finditer(text))
+    if placeholders:
+        pieces, cursor = [], 0
+        for placeholder in placeholders:
+            pieces.extend([re.escape(text[cursor:placeholder.start()]), "(.*?)"])
+            cursor = placeholder.end()
+        match = re.fullmatch("".join(pieces) + re.escape(text[cursor:]), bound_text or "", re.S)
+        if not match:
+            raise ValueError("display_fragment_unresolved")
+        start, end = (position + sum(len(match[i + 1]) - len(p[0]) for i, p in enumerate(placeholders)
+                                    if p.end() <= position) for position in (start, end))
+        text = bound_text
+    marks = "\n。；;｜|"
+    a = max(text.rfind(mark, 0, start) for mark in marks) + 1
+    ends = [text.find(mark, end) for mark in marks]
+    fragment = text[a:min((i for i in ends if i >= 0), default=len(text))]
+    fragment = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", fragment)
+    return re.sub(r"^\s*[-#>]+\s*", "", re.sub(r"[`*_~]", "", fragment)).strip()
 
 
 def formatted(old, value):
@@ -86,6 +110,18 @@ def same_value(fragment, value):
             Decimal(str(value).replace(",", "")))
     except (ValueError, InvalidOperation):
         return False
+
+
+def proven_offset(text, record):
+    if "start" not in record and "end" not in record:
+        return None
+    start, end = record.get("start"), record.get("end")
+    tokens = r"(?<![\d.,])(?:" + DATETIME.pattern + "|" + CHINESE_DATE.pattern + r"|\d{4}-\d{2}-\d{2}|" + NUMBER.pattern + r")(?![\d.,])"
+    if (type(start) is not int or type(end) is not int
+            or not any(m.span() == (start, end) for m in re.finditer(tokens, text))
+            or not same_value(text[start:end], record.get("current_value"))):
+        raise ValueError("字符偏移已漂移或无法证明，需改用唯一上下文重绑")
+    return start, end
 
 
 def locate(text, row, number=False):
@@ -197,6 +233,14 @@ def qualified_date_review(page, row):
 
 def build_number_edits(root, result):
     root, pages, edits, skipped, manual_reviews = Path(root), {}, {}, [], []
+    authors = {}
+    def authored(slug, field):
+        target = resolve_author(root, slug, field)
+        filename = target["file"]
+        if filename not in authors:
+            authors[filename] = json.loads((root / filename).read_text("utf-8-sig"))
+        parent, key = field_at(authors[filename], target["field"])
+        return target, parent[key]
     accepted, positions = set(), {}
     links, owners, unpaired = defaultdict(set), defaultdict(set), defaultdict(list)
     for row in result["rows"]:
@@ -223,7 +267,12 @@ def build_number_edits(root, result):
         evidence_at = row.get("source_observed_at") or row.get("source_coverage_end")
         try:
             if slug not in pages:
-                pages[slug] = json.loads((root / "sources/pages" / slug / "page.json").read_text(encoding="utf-8-sig"))
+                pages[slug] = deepcopy(json.loads((root / "sources/pages" / slug / "page.json").read_text(encoding="utf-8-sig")))
+                for index, screen in enumerate(pages[slug].get("screens", [])):
+                    try:
+                        screen["text"] = authored(slug, f"screens[{index}].text")[1]
+                    except (ValueError, KeyError, IndexError):
+                        pass
             page = pages[slug]
             if row.get("requires_semantic_refresh"):
                 raise ValueError("scope_mismatch_or_unverified")
@@ -242,12 +291,16 @@ def build_number_edits(root, result):
             si = next((i for i, s in enumerate(page.get("screens", [])) if s["id"] == row.get("screen")), None)
             field = row.get("field", row.get("page_field")) or (
                 f"screens[{si}].text" if row.get("page_pattern") and si is not None else f"registry.numbers[{ni}].text")
+            author, text = authored(slug, field)
             parent, key = field_at(page, field)
+            parent[key] = text
             start, end = locate(parent[key], row, field.startswith("registry.numbers["))
-            positions[rid] = (field, start, end, parent[key][start:end])
+            editable_range(parent[key], start, end)
+            positions[rid] = (author["file"], author["field"], field, start, end, parent[key][start:end])
             whole_number(parent[key], start, end)
             if NUMBER.fullmatch(str(row["new_value"])) and not NUMBER.fullmatch(str(row["old_value"])):
                 raise ValueError("old_value_not_whole_number")
+            proven_offset(parent[key], row)
             if not same_value(parent[key][start:end], row["old_value"]):
                 raise ValueError("原位置的值与重取旧值不一致")
             if same_value(str(row["old_value"]), row["new_value"]) and any(
@@ -261,11 +314,12 @@ def build_number_edits(root, result):
 
             pending = []
             def add(target, a, b, value):
-                container, leaf = field_at(page, target)
-                old = container[leaf][a:b]
+                location, text = authored(slug, target)
+                editable_range(text, a, b)
+                old = text[a:b]
                 new = formatted(old, value)
                 if old != new:
-                    pending.append(dict(page=slug, file=f"sources/pages/{slug}/page.json", field=target,
+                    pending.append(dict(page=slug, **location, logical_field=target,
                         start=a, end=b, old_value=old, new_value=new,
                         observed_at=evidence_at, record_id=rid))
             number = numbers[ni] if ni is not None else None
@@ -306,14 +360,14 @@ def build_number_edits(root, result):
                         if linked:
                             add(target, *linked, row.get("source_coverage_end") or evidence_at)
             for edit in pending:
-                location = (slug, edit["field"], edit["start"], edit["end"])
+                location = (edit["file"], edit["field"], edit["start"], edit["end"])
                 for prior in owners[location]:
                     links[rid].add(prior)
                     links[prior].add(rid)
                 if location in edits and edits[location]["new_value"] != edit["new_value"]:
                     raise ValueError("同一位置有冲突的新值")
             for edit in pending:
-                location = (slug, edit["field"], edit["start"], edit["end"])
+                location = (edit["file"], edit["field"], edit["start"], edit["end"])
                 owners[location].add(rid)
                 edits[location] = edit
             accepted.add(rid)
@@ -321,13 +375,13 @@ def build_number_edits(root, result):
             skipped.append(dict(page=slug, record_id=rid, reason=str(exc)))
     grouped = defaultdict(list)
     for edit in edits.values():
-        grouped[(edit["page"], edit["field"])].append(edit)
+        grouped[(edit["file"], edit["field"])].append(edit)
     blocked = {r["id"] for r in result["rows"]} - accepted
-    for (slug, field), group in grouped.items():
+    for (filename, field), group in grouped.items():
         ordered = sorted(group, key=lambda e: e["start"])
         if any(a["end"] > b["start"] for a, b in zip(ordered, ordered[1:])):
             blocked.update(e["record_id"] for e in group)
-            skipped.extend(dict(page=slug, record_id=e["record_id"], reason="字符范围互相重叠") for e in group)
+            skipped.extend(dict(page=e["page"], record_id=e["record_id"], reason="字符范围互相重叠") for e in group)
     pending = list(blocked)
     while pending:
         for rid in links[pending.pop()] - blocked:
@@ -337,45 +391,57 @@ def build_number_edits(root, result):
     skipped.extend(dict(page=r["page"], record_id=r["id"], reason="as_of_link_required")
                    for r in result["rows"] if r["id"] in (blocked & accepted) - reported)
     valid = []
-    for (slug, field), group in grouped.items():
+    for (filename, field), group in grouped.items():
         group = [e for e in group if e["record_id"] not in blocked]
-        parent, key = field_at(pages[slug], field)
+        parent, key = field_at(authors[filename], field)
         before, after = parent[key], parent[key]
         for edit in sorted(group, key=lambda e: e["start"], reverse=True):
             after = after[:edit["start"]] + edit["new_value"] + after[edit["end"]:]
         for edit in group:
-            edit.update(field_before_sha256=digest(before), field_after_sha256=digest(after))
+            edit.update(field_before_sha256=digest(before), field_after_sha256=digest(after),
+                record_ids=sorted(owners[(filename, field, edit["start"], edit["end"])]))
         valid.extend(group)
     updates = []
     for row in result["rows"]:
         if row["id"] not in accepted - blocked:
             continue
-        field, start, end, fragment = positions[row["id"]]
-        relevant = [e for e in valid if e["page"] == row["page"] and e["field"] == field]
+        filename, field, logical_field, start, end, fragment = positions[row["id"]]
+        relevant = [e for e in valid if e["file"] == filename and e["field"] == field]
         shift = sum(len(e["new_value"]) - (e["end"] - e["start"]) for e in relevant if e["end"] <= start)
         replacement = next((e["new_value"] for e in relevant if e["start"] == start and e["end"] == end), fragment)
-        updates.append(dict(row, readback_locator=dict(field=field, start=start + shift, end=start + shift + len(replacement), expected=replacement)))
+        updates.append(dict(row, readback_locator=dict(file=filename, field=field, logical_field=logical_field,
+            start=start + shift, end=start + shift + len(replacement), expected=replacement)))
     return dict(schema="content-refresh.number-edits.v1", run_id=result.get("run_id"),
                 registry_path=result.get("registry_path"), edits=valid, skipped=skipped, manual_reviews=manual_reviews,
                 record_updates=updates)
 
 
-def apply_edits(root, payload, only=None):
+def apply_edits(root, payload, only=None, converter=None):
     if payload.get("schema") != "content-refresh.number-edits.v1":
         raise ValueError("改数单格式不支持")
-    root, grouped = Path(root), defaultdict(list)
-    report = dict(run_id=payload.get("run_id"), applied=0, already_applied=0, skipped=[], changed_files=[], field_readback=[], record_readback=[])
+    root, grouped, converter = Path(root), defaultdict(list), converter or convert_markdown
+    report = dict(run_id=payload.get("run_id"), applied=0, already_applied=0, skipped=[], changed_files=[],
+                  field_readback=[], record_readback=[], markdown_readback=[])
     for edit in payload["edits"]:
         if only and edit["page"] not in only:
             continue
         grouped[edit["file"]].append(edit)
+    dependencies = {filename: affected_pages(root, [filename]) for filename in grouped}
+    checked = markdown_checks(root, set().union(*dependencies.values()) if dependencies else set(), converter, missing_ok=True)
+    accepted_files, applied_by_page = set(), defaultdict(int)
     for filename, edits in grouped.items():
         try:
-            if any(filename != f"sources/pages/{e['page']}/page.json" or not re.fullmatch(r"[\w-]+", e["page"]) for e in edits):
-                raise ValueError("目标必须是指定页面的 page.json")
+            if not (re.fullmatch(r"sources/pages/[\w-]+/page\.json", filename) or filename == "scripts/how-demo-data.json"):
+                raise ValueError("目标必须是页面作者 JSON")
+            for edit in edits:
+                if resolve_author(root, edit["page"], edit.get("logical_field", edit["field"])) != dict(file=filename, field=edit["field"]):
+                    raise ValueError("author_locator_mismatch")
+            if any(not checked[page] for page in dependencies[filename]):
+                raise ValueError("author_markdown_diverged")
             path = root / filename
             raw = path.read_text(encoding="utf-8-sig")
             page, fields, changed, file_applied, file_already = json.loads(raw), defaultdict(list), False, 0, 0
+            file_counts = defaultdict(int)
             for edit in edits:
                 fields[edit["field"]].append(edit)
             for field, group in fields.items():
@@ -404,6 +470,7 @@ def apply_edits(root, payload, only=None):
                     elif old == new:
                         file_already += 1
                     else:
+                        editable_range(original, a, b)
                         whole_number(original, a, b)
                         parent[key] = parent[key][:a] + new + parent[key][b:]
                         number = re.fullmatch(r"registry\.numbers\[(\d+)\]\.text", field)
@@ -411,6 +478,7 @@ def apply_edits(root, payload, only=None):
                             page["registry"]["numbers"][int(number[1])]["source"] = (
                                 f"见来源记录 {edit['record_id']}，观察于 {edit['observed_at']}")
                         file_applied += 1
+                        file_counts[edit["page"]] += 1
                         changed = True
                     limit = a
                 if group[0].get("field_after_sha256") not in {None, digest(parent[key])}:
@@ -420,6 +488,8 @@ def apply_edits(root, payload, only=None):
                 rendered = json.dumps(page, ensure_ascii=False, indent=2) + "\n"
                 path.write_text(rendered, encoding="utf-8", newline="\r\n" if "\r\n" in path.read_bytes().decode("utf-8-sig") else "\n")
                 report["applied"] += file_applied
+                for page_name, count in file_counts.items():
+                    applied_by_page[page_name] += count
                 report["changed_files"].append(filename)
             actual = json.loads(path.read_text(encoding="utf-8-sig"))
             for field, group in fields.items():
@@ -428,25 +498,51 @@ def apply_edits(root, payload, only=None):
                 expected_hash = group[0].get("field_after_sha256")
                 if expected_hash and expected_hash != actual_hash:
                     raise ValueError("写入后字段原位回读哈希不一致")
-                report["field_readback"].append(dict(file=filename, field=field, sha256=actual_hash, status="verified"))
+                report["field_readback"].append(dict(file=filename, field=field, sha256=actual_hash, status="verified",
+                    record_ids=sorted({rid for e in group for rid in e.get("record_ids", [e.get("record_id")]) if rid})))
+            accepted_files.add(filename)
         except (OSError, KeyError, ValueError, IndexError, TypeError) as exc:
             report["skipped"].extend(dict(edit, reason=str(exc)) for edit in edits)
+    targets = set().union(*(dependencies[f] for f in accepted_files)) if accepted_files else set()
+    try:
+        if targets:
+            converter(root, targets)
+        readback = markdown_checks(root, targets, converter)
+    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
+        readback = {page: False for page in targets}
+    for page, verified in sorted(readback.items()):
+        md = root / f"site-astro/src/content/pages/{page}.md"
+        report["markdown_readback"].append(dict(page=page, status="verified" if verified else "failed",
+            sha256=sha256(md.read_bytes()).hexdigest() if md.is_file() else None))
+        if not verified:
+            report["applied"] -= applied_by_page[page]
+            report["skipped"].extend(dict(e, reason="markdown_readback_failed")
+                                     for edits in grouped.values() for e in edits if e["page"] == page)
     if payload.get("record_updates"):
-        from refresh import pages
         from freshness import sync_registry
-        catalog, successful = {p["page"]: p for p in pages(root)}, []
+        from refresh import bound_json
+        successful = []
         failed = {e.get("record_id") for e in report["skipped"]}
         for row in payload["record_updates"]:
             if row["id"] in failed or only and row["page"] not in only:
                 continue
             try:
                 locator = row["readback_locator"]
-                parent, key = field_at(catalog[row["page"]], locator["field"])
+                if readback.get(row["page"]) is not True:
+                    raise ValueError("markdown_readback_failed")
+                actual_author = resolve_author(root, row["page"], locator.get("logical_field", locator["field"]))
+                if actual_author != {k: locator[k] for k in ("file", "field")}:
+                    raise ValueError("author_locator_mismatch")
+                parent, key = field_at(json.loads((root / locator["file"]).read_text("utf-8-sig")), locator["field"])
                 actual = parent[key][locator["start"]:locator["end"]]
                 if row["id"] in failed or not same_value(str(actual), row["new_value"]):
                     raise ValueError("记录新值原位回读不一致")
+                logical = bound_json(root / f"sources/pages/{row['page']}/page.json", root=root,
+                    read=lambda path: Path(path).read_text("utf-8-sig"))
+                bound_parent, bound_key = field_at(logical, locator.get("logical_field", locator["field"]))
                 report["record_readback"].append(dict(record_id=row["id"], value=actual, locator=locator,
-                                                       field_sha256=digest(parent[key]), status="verified"))
+                    fragment=display_fragment(parent[key], locator["start"], locator["end"], bound_parent[bound_key]),
+                    field_sha256=digest(parent[key]), status="verified"))
                 successful.append(row)
             except (KeyError, ValueError, IndexError, StopIteration) as exc:
                 report["skipped"].append(dict(record_id=row["id"], reason=str(exc)))

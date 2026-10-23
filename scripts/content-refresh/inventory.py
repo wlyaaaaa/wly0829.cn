@@ -342,21 +342,31 @@ def build_inventory(pages_root, records, entries=None, policy=None, targeted=())
         except (KeyError, ValueError, IndexError, StopIteration, re.error) as exc:
             bindings.append(dict(record_id=record["id"], classification=classification, status="binding_error", reason=str(exc) or "页面定位不存在"))
     from freshness import cadence
+    review_path = Path(pages_root).parent / "refresh/semantic-reviews.json"
+    reviews = json.loads(review_path.read_text(encoding="utf-8-sig")).get("pages", {}) if review_path.exists() else {}
+    historical_ids = {b["record_id"] for b in bindings if b["classification"] == "historical"}
+    basis_gaps = [dict(record_id=r["id"], page=r["page"], reason="观察依据未登记") for r in records
+                  if r["id"] not in historical_ids and r.get("automatic")
+                  and r.get("retrieve", {}).get("kind") in {"json", "entry"}
+                  and r.get("observation_basis", (entries or {}).get(r["retrieve"].get("entry"), {}).get("observation_basis")) is None]
+    offset_gaps = [dict(b, page=next(r["page"] for r in records if r["id"] == b["record_id"])) for b in bindings
+                   if b["classification"] == "current" and b.get("reason") == "字符偏移已漂移或无法证明，需改用唯一上下文重绑"]
     semantic = []
     for slug, page in page_catalog.items():
         if page.get("kind") == "frozen" or page.get("status") in {"frozen", "冻结", "已冻结", "historical", "历史"}:
             continue
-        state = cadence(dict(freshness_class="semantic", semantic_checked_at=page.get("semantic_checked_at"), source_changed=page.get("source_changed")), policy, targeted=slug in targeted)
+        state = cadence(dict(freshness_class="semantic", semantic_checked_at=reviews.get(slug, {}).get("checked_at"), source_changed=page.get("source_changed")), policy, targeted=slug in targeted)
         if state["refresh_due"]:
             semantic.append(dict(id="semantic-page:" + slug, page=slug, kind="semantic", reason=state["cadence_reason"], status="pending"))
     return dict(schema="content-refresh.inventory.v1", observed_at=datetime.now(BEIJING).isoformat(timespec="seconds"),
-                semantic_reviews=semantic,
+                semantic_reviews=semantic, semantic_due=dict(count=len(semantic), pages=[s["page"] for s in semantic]),
+                targeted_pages=sorted(targeted), observation_basis_gaps=basis_gaps, offset_binding_gaps=offset_gaps,
                 record_bindings=bindings,
                 review_stamps=stamps, review_stamp_record_ids=sorted(stamp_ids),
                 located_record_ids=sorted(located_records),
                 historical_record_ids=sorted(r["id"] for r in records if r.get("historical") or r.get("frozen")
                                              or (r["page"], r["screen"]) in historical_pairs),
-                coverage=dict(pages_checked=len(paths), cutoff_occurrences=sum(cutoff_surfaces.values()),
+                coverage=dict(pages_checked=len(paths), observation_basis_gaps=len(basis_gaps), offset_binding_gaps=len(offset_gaps), cutoff_occurrences=sum(cutoff_surfaces.values()),
                     cutoff_pages=len(cutoff_pages), cutoff_surfaces=dict(cutoff_surfaces),
                     status_line_pages=len(status_pages), item_kinds=dict(Counter(i["kind"] for i in items))), items=items)
 
@@ -365,8 +375,9 @@ def strict_findings(inventory, records, entries=None, invalid_record_ids=()):
     """只检查清单和页面位置；从不读取来源，自动建议不构成登记。"""
     entries, by_id = entries or {}, {r["id"]: r for r in records}
     ids, invalid = set(by_id), set(invalid_record_ids)
-    binding_errors = [b for b in inventory.get("record_bindings", []) if b["status"] == "binding_error" and b["classification"] == "current"]
-    invalid.update(b["record_id"] for b in binding_errors)
+    binding_errors = [b for b in inventory.get("record_bindings", []) if b["record_id"] in by_id and b["status"] == "binding_error" and b["classification"] == "current"]
+    binding_ids = {b["record_id"] for b in binding_errors}
+    offset_ids = {b["record_id"] for b in inventory.get("offset_binding_gaps", [])}
     invalid.update(r["id"] for r in records if record_errors(r, entries, ids))
     for name, config in entries.items():
         try:
@@ -374,20 +385,27 @@ def strict_findings(inventory, records, entries=None, invalid_record_ids=()):
         except (ValueError, TypeError):
             invalid.update(r["id"] for r in records if r.get("retrieve", {}).get("entry") == name or
                            (name == LEDGER and r.get("retrieve", {}).get("kind") == "usage_ledger"))
+    source_invalid = set(invalid)
+    invalid.update(binding_ids)
     located = set(inventory.get("located_record_ids", [])) | {
         rid for i in inventory["items"] if i.get("surface") == "visible" and not i.get("historical")
         for rid in i.get("active_record_ids", [])}
 
     def mode(record, item, visiting=()):
         rid = record["id"]
-        if rid in invalid or rid in visiting or record.get("historical") or record.get("frozen"):
+        offset_gap = rid in offset_ids and rid not in source_invalid
+        if (rid in invalid and not offset_gap) or rid in visiting or record.get("historical") or record.get("frozen"):
             return None
         if record.get("qualifies"):
             refs = [by_id.get(ref) for ref in record["qualifies"]]
-            if any(not r or r["id"] not in located or r["page"] != item["page"] or r.get("qualifies") for r in refs):
+            if any(not r or (r["id"] not in located and r["id"] not in offset_ids) or r["page"] != item["page"] or r.get("qualifies") for r in refs):
                 return None
             modes = [mode(r, item, (*visiting, rid)) for r in refs]
+            if all(modes) and (offset_gap or "offset_binding_gap" in modes):
+                return "offset_binding_gap"
             return ("automatic" if all(m == "automatic" for m in modes) else "manual") if all(modes) else None
+        if offset_gap and (record.get("retrieve", {}).get("kind") == "manual" or record.get("automatic") and record.get("scope_status") == "verified"):
+            return "offset_binding_gap"
         if record.get("retrieve", {}).get("kind") == "manual":
             return "manual"
         return "automatic" if record.get("automatic") and record.get("scope_status") == "verified" else None
@@ -403,11 +421,14 @@ def strict_findings(inventory, records, entries=None, invalid_record_ids=()):
         if not any(modes):
             reason = ("展示位置未定位" if item["kind"] == "source_record" else
                       "截至日期缺有效 qualifies" if dated else "缺有效自动记录或合规 manual")
+            related = {ref for r in active for ref in r.get("qualifies") or [] if ref in binding_ids} if dated else set()
             findings.append({k: item.get(k) for k in ("page", "screen", "field", "line", "excerpt")}
-                            | {"reason": reason, "record_ids": item.get("record_ids", []),
+                            | {"reason": reason, "record_ids": sorted(set(item.get("record_ids", [])) | related),
                                "qualifies_suggestion": item.get("qualifies_suggestion", [])})
         item["automatic"] = bool(modes) and all(m == "automatic" for m in modes)
         item["strict_status"] = "automatic" if item["automatic"] else "manual" if any(modes) else "missing"
+        if "offset_binding_gap" in modes:
+            item["strict_status"] = "offset_binding_gap"
     reported = {rid for f in findings for rid in f.get("record_ids", [])}
     historical = set(inventory.get("historical_record_ids", [])) - located
     for error in registry_errors(records, entries):
@@ -420,17 +441,35 @@ def strict_findings(inventory, records, entries=None, invalid_record_ids=()):
                              reason="来源格式错误：" + "; ".join(error["errors"]), record_ids=[rid]))
     reported = {rid for f in findings for rid in f.get("record_ids", [])}
     for binding in binding_errors:
+        if binding["record_id"] in offset_ids and binding["record_id"] not in source_invalid:
+            continue
         if binding["record_id"] not in reported:
             record = by_id[binding["record_id"]]
+            field = record.get("field", record.get("page_field"))
+            existing = next((f for f in findings if field and not re.fullmatch(r"screens\[\d+\]\.text", field)
+                             and (f["page"], f["screen"], f["field"]) == (record["page"], record["screen"], field)), None)
+            if existing is not None:
+                existing["record_ids"].append(record["id"])
+                continue
             findings.append(dict(page=record["page"], screen=record["screen"], field=record.get("field", "source_registry." + record["id"]),
                                  line=1, excerpt=record.get("label", record["id"]), reason="原位绑定不可读：" + binding["reason"], record_ids=[record["id"]]))
+    unique = []
+    for finding in findings:
+        previous = [f for f in unique if set(f["record_ids"]) & set(finding["record_ids"])]
+        if not previous:
+            unique.append(finding)
+        else:
+            previous[0]["record_ids"] = sorted(set(finding["record_ids"]).union(*(f["record_ids"] for f in previous)))
+            for duplicate in previous[1:]:
+                unique.remove(duplicate)
+    findings = unique
     inventory["coverage"].update(strict_inventory_summary(inventory, findings))
     return findings
 
 
 def strict_inventory_summary(inventory, findings=()):
     active = [i for i in inventory["items"] if i.get("requires_refresh") and i.get("surface") == "visible"
-              and not i.get("historical") and i["kind"] != "status_line.state"]
+              and not i.get("historical") and i["kind"] != "status_line.state" and i.get("strict_status") != "offset_binding_gap"]
     automatic = sum(i.get("strict_status") == "automatic" for i in active)
     return dict(required_items=len(active), automatic_items=automatic,
                 manual_items=sum(i.get("strict_status") == "manual" for i in active),
@@ -440,17 +479,24 @@ def strict_inventory_summary(inventory, findings=()):
 
 
 def fact_tasks(inventory, group_size=25):
+    targeted = set(inventory.get("targeted_pages", []))
     groups = defaultdict(list)
     for item in inventory["items"]:
-        if item["requires_refresh"]:
+        if item["requires_refresh"] and not (targeted and item["kind"] == "status_line.state" and item["page"] not in targeted):
             groups[" + ".join(item["source_projects"])].append(item)
     lines = ["# 给 GPT 的分组事实任务单", "", f"清点时间：{inventory['observed_at']}（北京时间）。",
              "清点程序没有重取来源。每组交一个事实子代理；只读取登记的领域入口，公开口径按活动公开分级原文和页面规则。",
              "每项交回来源、观察时间、同口径新值或具名 Unknown；取不到保留原日期。历史/冻结项不自动激活。",
              "author/reference 的截至命中用于覆盖核对，不冒充新展示事实；私人来源登记的位置待复核项另列。", ""]
-    if inventory.get("review_stamps"):
+    if inventory.get("offset_binding_gaps"):
+        lines += [f"字符偏移待重绑：{len(inventory['offset_binding_gaps'])} 条（已单列缺口，不计严格盘点缺失；未证明可改数）。", ""]
+    stamps = [s for s in inventory.get("review_stamps", []) if not targeted or s["page"] in targeted]
+    if inventory.get("semantic_reviews"):
+        lines += ["## 语义复核到期（不阻断本轮事实闭环）", "",
+                  "、".join(s["page"] for s in inventory["semantic_reviews"]), ""]
+    if stamps:
         lines += ["## 核对戳（事实组更新，不机械取数）", "", "核对本页事实后更新日期；没有实际核对或证据不可用时保留原日期。", ""]
-        for stamp in inventory["review_stamps"]:
+        for stamp in stamps:
             lines.append(f"- {stamp['page']} / {stamp['screen']} / {stamp['field']}:{stamp.get('line', 1)}｜"
                          f"{stamp['excerpt']}｜原日期 {stamp['original_date'] or 'Unknown'}｜人工核对，不要求自动数字来源")
         lines.append("")

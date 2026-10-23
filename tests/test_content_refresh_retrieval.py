@@ -20,7 +20,7 @@ class RetrievalTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.entry = {"argv": [sys.executable, "status.py"], "cwd": ".", "read_only": True,
-                      "owner_project": "demo", "output": "json"}
+                      "owner_project": "demo", "output": "json", "observation_basis": "live_read"}
 
     def test_entry_whitelist_and_once_for_two_pointers(self):
         methods = [{"kind": "entry", "entry": "counts", "pointer": [key]} for key in ("a", "b")]
@@ -107,7 +107,10 @@ class RetrievalTests(unittest.TestCase):
                              [2, (end - timedelta(seconds=1)).isoformat(timespec="seconds")])
             self.assertEqual(read.call_count, 3)  # 两路水位各一次，账本仍只扫描一次。
             values = refresh.retrieve_batch(methods, self.root, {LEDGER: entry}, 10, include_metadata=True)
-            self.assertEqual(values[0], {"value": 2, "source_coverage_end": "2026-10-21"})
+            self.assertEqual({k: values[0][k] for k in ("value", "source_coverage_end")}, {"value": 2, "source_coverage_end": "2026-10-21"})
+            self.assertEqual(values[0]["observation_basis"], "coverage_end")
+            self.assertIsNone(values[0]["source_observed_at"])
+            self.assertIsNotNone(refresh.timestamp(values[0]["checked_at"]))
 
     def test_incomplete_ledger_cannot_refresh_numbers_dates_or_display_entry(self):
         now = datetime.now(refresh.BEIJING)
@@ -162,7 +165,7 @@ class RetrievalTests(unittest.TestCase):
         page_path.parent.mkdir(parents=True)
         page_path.write_text(json.dumps({"page": "demo", "screens": [{"id": "demo-01", "text": "3 件；截至 2026-10-01"}]}), encoding="utf-8")
         base = {"page": "demo", "screen": "demo-01", "label": "计数", "automatic": True,
-                "scope_status": "verified", "as_of": "2026-10-01", "source_location": "合成测试", "page_pattern": r"(3) 件"}
+                "scope_status": "verified", "as_of": "2026-10-01", "source_location": "合成测试", "observation_basis": "live_read", "page_pattern": r"(3) 件"}
         records = [dict(base, id=str(i), retrieve={"kind": "json", "path": str(i)}) for i in range(8)]
         date = dict(base, id="date", field="screens[0].text", page_pattern=r"截至 (2026-10-01)", qualifies=["0", "1"])
         lock, active, peak = threading.Lock(), 0, 0
@@ -198,7 +201,7 @@ class RetrievalTests(unittest.TestCase):
         path.write_text(json.dumps({"page": "demo", "screens": [{"id": "demo-01", "text": "3 件；截至 2026-10-01（库最近一次写入）"}]}), encoding="utf-8")
         number = {"id": "count", "page": "demo", "screen": "demo-01", "label": "计数", "automatic": True,
                   "scope_status": "verified", "as_of": "2026-10-01", "source_location": "合成测试",
-                  "page_pattern": r"(3) 件", "retrieve": {"kind": "json", "path": "count.json"}}
+                  "page_pattern": r"(3) 件", "observation_basis": "live_read", "retrieve": {"kind": "json", "path": "count.json"}}
         date = dict(number, id="date", field="screens[0].text", page_pattern=r"截至 (2026-10-01)", qualifies=["count"])
         with patch.object(refresh, "bounded", return_value="[4]"):
             result = refresh.collect(self.root, {"records": [number, date]})
@@ -237,7 +240,8 @@ class RetrievalTests(unittest.TestCase):
         self.assertEqual(edits["manual_reviews"], [])
         self.assertEqual(edits["edits"][0]["new_value"], "2026-10-08")
         self.assertEqual(len(edits["edits"]), 1)
-        self.assertFalse(apply_edits(self.root, edits)["skipped"])
+        from test_content_refresh_edits import fake_converter
+        self.assertFalse(apply_edits(self.root, edits, converter=fake_converter)["skipped"])
         self.assertIn("24 天；截至 2026-10-08", path.read_text("utf-8"))
         path.write_text(path.read_text("utf-8").replace("2026-10-08", "2026-10-01"), encoding="utf-8")
         result["rows"][0]["new_value"] = 25

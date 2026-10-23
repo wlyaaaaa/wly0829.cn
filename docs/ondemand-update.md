@@ -30,7 +30,8 @@
 | 实际变化页扫描 | `scan_glance.py` 默认 `published-diff` | 对照上一成功发布清单与最终 HTML，覆盖多轮构建累计变化，首页排除 |
 | 日期和状态盘点 | `refresh.py --inventory --strict --output <目录>` | 读取 `dated-inventory.json`、`fact-tasks.md` 与漏登记结果；盘点不等于取到新事实 |
 | 冻结页盘点与转换 | `frozen_inventory.py`、`frozen_to_pages.py --routes <文件> --report <目录>` | 只转换本次涉及的旧路由；核文字保留、模板警告与事实更新，已有作者页不随意覆盖 |
-| 来源清单、改数单和并发 | `entries.json` 白名单、`refresh.py --strict`、`number-edits.json`、`apply_edits.py` | 总取数 300 秒、至少 8 路按来源并发，同一入口一轮只运行一次；绑定覆盖、实取成功率与端到端耗时分别看本轮证据 |
+| 来源清单、改数单和并发 | `entries.json` 白名单、`refresh.py --strict`、`number-edits.json`、`apply_edits.py --report` | 总取数 300 秒、至少 8 路按来源并发，同一入口一轮只运行一次；核真实作者、分叉拦截及 `markdown_readback` |
+| 本轮事实闭环 | `refresh.py --close-run <result.json> --apply-report <应用回执.json> --dist dist` | 同 `run_id` 核字段、记录值、渲染输入及成品显示；结果写 `closure.json`，发布后另做公网回读 |
 
 同时核对上一成功清单继承、资源依赖是否连带变化、首页与冻结依赖字节、常驻工作树和缓存回执。工具可用不等于本轮来源覆盖完整或已经达到 90 分钟目标。
 
@@ -45,10 +46,10 @@
 | 0 | 常驻工作树切到最新 main；确认 `published.json`；规则换版就刷新规则作者源并提交（构建留到第 3 步之后） | GPT | 3 分钟 | 5 分钟 |
 | 1 | `refresh.py --strict` 按清单批量重取全部已登记来源，同时盘点 | GPT（程序跑） | 5 分钟 | 8 分钟 |
 | 2 | 每个涉及项目查提交、未提交改动、运行回执和非 Git 状态，交回语义变化、事实和出处；补齐取不到的项和人工项，事实核对完成的页更新核对戳 | GPT 按项目并行 | 15 分钟 | 20 分钟；到点交回，其余 Unknown 并保留旧日期 |
-| 3 | 看过 `number-edits.json`，填入同口径新值与截至日期，与下一步并行；提交后立刻在后台跑一次增量构建（规则换版的整站重建也在这里），第 4、5 步期间跑完 | GPT | 5 分钟 | 8 分钟（后台构建不计入） |
+| 3 | 看过 `number-edits.json`，用 `apply_edits.py --report` 填入同口径新值与截至日期并核渲染输入回读，与下一步并行；提交后立刻在后台跑一次增量构建（规则换版的整站重建也在这里），第 4、5 步期间跑完 | GPT | 5 分钟 | 8 分钟（后台构建不计入） |
 | 4 | 只改用途、能力、边界或状态有变化的屏；只改已有小节的文字，不增删小节、卡片或列表块，新内容并入已有小节；涉及的冻结页先转换，再改写 | Opus 按页或项目并行 | 20 分钟 | 30 分钟 |
 | 5 | 简短复核范围、日期去向与公开风险，抽读 2 页；每个写稿组均在隔离副本预跑 `apply_rewrites.py`、`refresh.py --inventory --strict`、`convert_page.py --check-all`，问题在派第 6 步前退回修好 | Claude | 8 分钟 | 12 分钟 |
-| 6 | 等第 3 步后的后台构建结束；合稿、`convert_page.py --check-all`、增量构建（只重建合稿页）、`scan_glance --pages published-diff` | GPT | 10 分钟 | 15 分钟 |
+| 6 | 等第 3 步后的后台构建结束；合稿、`convert_page.py --check-all`、增量构建（只重建合稿页）、`close-run --apply-report --dist`、`scan_glance --pages published-diff` | GPT | 10 分钟 | 15 分钟 |
 | 7 | 发布预演、资源上传、正式发布和公网回读；清理另跑，不计发布关键路径 | GPT | 8 分钟 | 12 分钟 |
 | 8 | 核对应关系，写大白话汇报 | 主持 | 5 分钟 | 8 分钟 |
 | | 合计 | | 约 80 分钟 | 90 分钟；各步上限不能全部用满 |
@@ -63,15 +64,17 @@
 
 截至日期使用 `qualifies` 明确指向它注明的数据记录，不另造一份日期来源。程序的同屏邻近数字建议由 GPT 核对后写入；建议本身不算登记。新截至日期取这些记录里最早的真实观察日期或覆盖末日；有一项 Unknown 只保留本组原日期，独立组分别处理。只读入口登记前核实不写东西，私人库只取计数和状态，不把条目原文输出给模型。
 
-改数绑定优先登记实际 `field` 与唯一、含具体含义的 `page_pattern`，完整捕获数字；已迁移的记录删除旧 `start/end`，避免改稿后字符偏移漂移。裸数字正则、旧值片段、失配或非唯一捕获仍拦下。数字与日期可跨字段通过 `qualifies` 配对，由日期记录独占截至编辑；共享同一日期的数字一起通过，独立配对不因同页其他失败项连坐，字段哈希在筛掉失败组后重算。覆盖末日不提供时分，不能拿取数时刻补成新的验证时间。
+改数绑定优先登记实际 `field` 与唯一、含具体含义的 `page_pattern`，完整捕获数字。已有 `start/end` 只有完整覆盖一个数字或日期 token，且捕获值与登记 `current_value` 通过 `same_value` 比较才可信；否则原因是“字符偏移已漂移或无法证明，需改用唯一上下文重绑”，collect 标 `unavailable`，不生成改数。不自动移动或修补这些登记偏移。裸数字正则、旧值片段、失配或非唯一捕获仍拦下。数字与日期可跨字段通过 `qualifies` 配对，由日期记录独占截至编辑；共享同一日期的数字一起通过，独立配对不因同页其他失败项连坐，字段哈希在筛掉失败组后重算。覆盖末日不提供时分，不能拿取数时刻补成新的验证时间。
 
 项目计数必须读取当前 enabled Registry 并排除 `parent` 模块；`project_scope=active_projects` 只接受 `kinds=["project"]`，不含冻结页。明确写“含冻结”的既有总量采用独立的 `registered_projects_including_frozen` 口径，不用在用项目数替换它。配置不可读时返回 Unknown，不回退到遍历页面凑数。来源为 `source_precision=estimated`、展示要求 `display_precision=exact` 的项保持待核，估算值不能覆盖精确值。
 
-`--strict` 是必须通过的门。分路施工先运行 `refresh.py --inventory --strict --only <页id,...>` 修自己的页，合入前再跑全站严格盘点和 `tests.test_refresh_registry_complete`。漏登记会列页、屏及原文片段并非零退出；全站漏登记须为零，当前非历史、非 state 展示项自动覆盖至少 85%，人工项不超过 15%。局部 `--only` 通过不能证明全站通过。
+`--strict` 是必须通过的门。分路施工先运行 `refresh.py --inventory --strict --only <页id,...>` 修自己的页，合入前再跑全站严格盘点和 `tests.test_refresh_registry_complete`。漏登记会列页、屏及原文片段并非零退出；同一定位根因及其关联截至合并为一条发现，`record_ids` 保留相关记录。全站漏登记须为零，当前非历史、非 state 展示项自动覆盖至少 85%，人工项不超过 15%。非历史自动 `json/entry` 缺观察依据时另列 `observation_basis_gaps` 数量和清单，理由为“观察依据未登记”；当前不计入 `missing`，不单独使 `--strict` 失败，取数时仍如实 Unknown。局部 `--only` 通过不能证明全站通过。
+
+无法证明的字符偏移在盘点的 `record_bindings` 中写 `binding_error`，并单列 `offset_binding_gaps` 数量和清单；当前暂不计入 `missing`，不使 `--strict` 非零退出。它仍是未通过的取数绑定，须改用唯一上下文重绑后才可恢复改数，不能因严格盘点退出 0 就当作安全应用。
 
 ### 事实新鲜度的执行频率
 
-以下频率是 Astra 已定的 AI 取法。下述新取数、应用与回读机制仍是待接通草稿，待机制接入后，下次按需更新执行；不是后台计时刷新，也不以本次盘点宣称全站事实已新。
+以下频率是 Astra 已定的 AI 取法。每次本人发起更新时，执行下述取数、应用与回读命令；不新增后台计时刷新，也不以一次盘点宣称全站事实已新。
 
 - **每次更新重取当前事实。** 全站登记的当前数量、容量、累计数、最近使用、运行及配置状态，以及表示现状的“截至”事实，每次都从对应当前来源重取；不等到超过某个天数才取，也不因 Git 未变或只点名一个项目而略过这批事实。
 - **每次核对点名项目。** 点名项目的讲解与人工状态判断每次核对。未点名且稳定的讲解，距最后一次真实语义核对满 28 天，在下次本人更新时列入语义复核；来源变化已影响用途、边界、统计口径或可用性时，本轮立即处理受影响内容。
@@ -105,15 +108,18 @@ git switch -C "refresh/$refreshStamp" origin/main
 ```powershell
 # 只盘点，不自动重取事实；写给 AI 接续用的两份清单。
 python -B -X utf8 scripts/content-refresh/refresh.py --inventory --strict --output <本次任务目录/盘点>
-# 日常：全站带日期数据按清单批量重取，总取数时限 300 秒。
-python -B -X utf8 scripts/content-refresh/refresh.py --strict --output <本次任务目录/取数> --total-seconds 300
+# 以下两条取数命令按本轮范围二选一，总取数时限 300 秒。
+# 点名更新：全站当前日期事实重取，人工核对和讲解范围只列点名页。
+python -B -X utf8 scripts/content-refresh/refresh.py --strict --no-report --targeted <点名页id,...> --output <本次任务目录/取数> --total-seconds 300
+# 全部更新不传 --targeted；取数范围仍是全站登记的当前事实。
+python -B -X utf8 scripts/content-refresh/refresh.py --strict --no-report --output <本次任务目录/取数> --total-seconds 300
 # 分路补登记：只检查本路页面；不替代全站严格检查。
 python -B -X utf8 scripts/content-refresh/refresh.py --inventory --strict --only <页id,...> --output <本次任务目录/本路盘点>
 # 这条命令只生成项目计划，不限制上面 refresh.py 的取数范围。
 npm run refresh:ai -- --project <Registry中的项目id>
 ```
 
-待机制接入后，下次按需更新执行：正式执行须有 `collect` 取数结果及唯一 `run_id`，后续改数单、应用与原位回读都绑定这一轮；`--inventory` 只证明盘点，不产生新事实。来源失败的记录仍留在本轮结果中，不能从待办里消失或拿上轮成功顶替。
+默认刷新命令即 `collect` 取数阶段，`result.json` 和改数单带唯一 `run_id`。后续 `apply_edits.py --report`、构建及 `refresh.py --close-run --apply-report --dist` 都使用这一轮输入与回执；`--inventory` 只证明盘点，不产生新事实。来源失败的记录仍留在本轮结果中，不能从待办里消失或拿上轮成功顶替。
 
 默认 `refresh.py --output` 会遍历完整来源表；`refresh:ai -- --project` 只生成计划，不会替它筛选来源。日常也批量重取全站已登记的当前日期事实，语义调查和写稿覆盖点名项目、实际受影响页，以及按上述周期到期应复核的稳定讲解。`--only` 用于分路登记和局部诊断，`--registry` 可读取保持原结构的独立来源表；这两种局部结果均不能冒充全站清单验收。没有已登记记录的展示项会使 `--strict` 失败，先补真实来源或合规人工取法，不伪造记录通过校验。
 
@@ -123,7 +129,9 @@ npm run refresh:ai -- --project <Registry中的项目id>
 
 入口 `argv` 为数组、不经过 shell，只运行 `entries.json` 中核实为只读的配置；SQLite 使用 `mode=ro` 且只允许单条 `select`。日志按登记匹配和时间窗读取，使用记录共用一份登记账本。默认总取数 300 秒、至少 8 路按来源并行，同一个 `entry` 一轮只运行一次供多条记录复用。时限耗尽的项交回 Unknown，不延长时限来凑齐结果。
 
-待机制接入后，下次按需更新执行：取数证据分开保存四种时间含义：`checked_at` 是本次实际读取时间；`source_observed_at` 是来源真实观察时间；`source_coverage_end` 是数据覆盖末日；`observation_basis` 说明依据是 `live_read`（本次现场读取）、`snapshot_timestamp`（快照自身时间）、`coverage_end`（覆盖末日）或 `unknown`（不明）。日期展示使用对应真实观察或覆盖时间，不把本次读旧快照的 `checked_at` 当成新观察时间；来源没有可靠时间时明确 Unknown。仍使用现有来源清单和本轮回执，不另建事实账本。
+取数证据分开保存四种时间含义：`checked_at` 是本次实际读取时间；`source_observed_at` 是来源真实观察时间；`source_coverage_end` 是数据覆盖末日；`observation_basis` 说明依据是 `live_read`（本次现场读取）、`snapshot_timestamp`（快照自身时间）、`coverage_end`（覆盖末日）或 `unknown`（不明）。日期展示使用对应真实观察或覆盖时间，不把本次读旧快照的 `checked_at` 当成新观察时间。仍使用现有来源清单和本轮回执，不另建事实账本。
+
+天然现场读取的 `git_count/file_count/line_count/regex_count/page_count/group_count/feature_count/sqlite_ro/rules_inspect/log_window` 默认 `live_read`，真实观察时间就是本次读取时间，显式声明可覆盖。`usage_ledger` 沿用覆盖末日。`json/entry` 按记录级优先于入口配置的声明处理，可通过 `source_observed_at_pointer` 或 `source_coverage_end_pointer` 读取返回 JSON 中的时间；没有声明时保留读到的 `new_value` 供核对，但状态是 `unavailable`，不生成改数，配对截至保留旧日期。
 
 `usage_ledger` 的七日用量取两路账本共同完成水位之前的 **7 个完整日**，按北京时间日界计数，不含正在进行的一天；截至日期为共同完成水位的前一天。两路水位必须存在、带时区并已完成初始化，不要求水位晚于当前时刻。取数观察时间和账本覆盖末日分别保存，配对的 `qualifies` 日期采用覆盖末日；水位不可用时数字及其截至仍为 Unknown。
 
@@ -137,7 +145,9 @@ npm run refresh:ai -- --project <Registry中的项目id>
 
 ## 3 分组调查事实
 
-第 2 步事实组同时处理 `dated-inventory.json` 单列的 `review_stamps`：只有实际完成该页事实核对后才更新核对戳，填本次事实核对日期；未涉及的页保留原戳。模块页的“项目事实核对截至”等整页核对戳不绑定取数来源，不计入 85% 自动覆盖分母，不能为它造无关提交数、配置数或 `judgment`。核对戳表示事实组本轮已核对该页，独立数字取不到仍保留原日期和 Unknown，历史证据仍保留当时日期；盘点程序读了页面文件不等于事实组已核对，程序不自动写今天。
+第 2 步事实组同时处理 `dated-inventory.json` 单列的 `review_stamps`：传了 `--targeted` 时，核对戳与 `status_line.state` 人工任务只列点名页；未传时列全部非历史页。只有实际完成该页事实核对后才更新核对戳，填本次事实核对日期；未涉及的页保留原戳。模块页的“项目事实核对截至”等整页核对戳不绑定取数来源，不计入 85% 自动覆盖分母，不能为它造无关提交数、配置数或 `judgment`。核对戳表示事实组本轮已核对该页，独立数字取不到仍保留原日期和 Unknown，历史证据仍保留当时日期；盘点程序读了页面文件不等于事实组已核对，程序不自动写今天。
+
+稳定讲解的到期清单以 `semantic_due` 数量和页名独立列在 `opus-task.md`、`fact-tasks.md` 及最终 `closure.json`，不并入事实闭环的人工 pending。真实语义复核时间读取 `sources/refresh/semantic-reviews.json`，不使用 page.json 里的 `semantic_checked_at`。没有真实记录的页为 `due_unknown`；实际复核完成后，在同轮应用回执的 `manual_closures` 中交 `id="semantic:<页id>"`、同一 `run_id`、`checked_at`、`evidence` 和 `status="completed"`，由 close-run 持久化该页的 `checked_at/run_id/evidence`。不预填日期，也不把事实闭环通过当作讲解已复核。
 
 按来源项目分组，每个涉及项目派一个 GPT，结合 `fact-tasks.md` 查 Git、未提交候选、运行回执和非 Git 状态，同时补自动取不到和人工项；任务单超过约 25 项可分组并行。每个事实代理派单都写明：**20 分钟内交回；单项超过 3 分钟取不到就标 Unknown、保留旧日期，接着做下一项；到点交回已取到的，其余同样标 Unknown。** 每项返回新值、统计口径、来源、观察时间，以及旧值是否被新证据推翻。带日期的展示数字、状态行、首屏数字卡、`source_note` 等必须逐项重取；功能变了而提交没变也要重取。
 
@@ -153,15 +163,17 @@ npm run refresh:ai -- --project <Registry中的项目id>
 
 常规编辑在仓库根的 `sources/pages/<页id>/page.json` 中进行，构图在相邻 `layout.json`，配图在 `sources/assets/_library/asset-map.jsonl`。不直接把成品 HTML 当作者源；若已有直接编辑的 Markdown，先按 [Astro 说明](../site-astro/README.md#内容文件怎么写) 统一作者输入，再恢复转换。将变化合进现有解释，没变的内容保持原样，不加更新日志或重复卡片，不用更短、更旧的稿子覆盖更完整的有效内容。
 
-GPT 先看取数生成的 `number-edits.json`：每项有页、字段、字符范围、旧值、新值、观察时间和记录 id；同口径数字和截至日期可机械填回原位。
+GPT 先看取数生成的 `number-edits.json`：每项有页、真实作者文件与字段、字符范围、旧值、新值、观察时间和记录 id；同口径数字和截至日期可机械填回原位。整段 `{{stories...}}` 或 `{{另一页...}}` 占位沿引用定位真实作者：how 演示内容写入 `scripts/how-demo-data.json`，引用的 page.json 占位保留原样。`scale/rules/group_counts/roster` 不可作为改数目标；行内占位之外的正文可改，编辑范围与任一 `{{...}}` 片段相交则以 `placeholder_computed_value` 跳过。
 
 ```powershell
-python -B -X utf8 scripts/content-refresh/apply_edits.py <本次任务目录/取数/number-edits.json>
+python -B -X utf8 scripts/content-refresh/apply_edits.py <本次任务目录/取数/number-edits.json> --report <本次任务目录/取数/apply-report.json>
 # 只应用一个分路拥有的页面。
-python -B -X utf8 scripts/content-refresh/apply_edits.py <改数单.json> --only <页id,...>
+python -B -X utf8 scripts/content-refresh/apply_edits.py <改数单.json> --only <页id,...> --report <分路应用回执.json>
 ```
 
-应用前核旧值仍在原位，不符就跳过并报告；重复运行不产生第二次差异。工具不写叙述，不判断产品含义是否改变。应用后按同一绑定原位回读数字、日期和相关状态；定位失败、应用跳过或回读不符仍是待闭环项，不能因取数成功就算已更新。GPT 对照事实判断改数后是否还影响用途、能力、边界或状态，受影响的解释交 Opus 改写，纯数据变化不让 Opus 重新调查事实。
+应用前核旧值仍在原位，并按构建依赖比较受影响页已入库 Markdown 与当前 JSON 的临时转换结果；只忽略 frontmatter 的 `source.converted_at_beijing`，其余 frontmatter 和正文逐字比较，Markdown 不存在时允许首次生成。存在作者分叉的页，全部改数以 `author_markdown_diverged` 跳过，不先写无法进入网页的 JSON。先按作者输入的归属修复分叉，再重新取数和应用，不直接覆盖独立改过的 Markdown。
+
+应用只写真实作者的 page.json 或 `scripts/how-demo-data.json`；重复运行不产生第二次差异。工具随后调用官方 `convert_page.py`，只重新生成受影响页，并在回执的 `markdown_readback` 中写每页 `verified/failed` 与 Markdown SHA-256。应用后还按同一绑定原位回读数字、日期和相关状态；定位失败、应用跳过、转换或回读不符仍是待闭环项，不能因取数成功就算已更新。工具不写叙述，不判断产品含义是否改变；GPT 对照事实判断改数后是否还影响用途、能力、边界或状态，受影响的解释交 Opus 改写，纯数据变化不让 Opus 重新调查事实。
 
 Opus 每页交一份 UTF-8 Markdown 稿，第一行是 `# <页id>`；只列本次需要改的段落。`## 屏：<屏id>` 下放该屏完整 `text`，包括原有 Markdown 标题；`## status_line` 下放 JSON 对象，仅合入列出的字段；`## old_urls` 下放 JSON 字符串数组，与已有路由去重合并。JSON 可用 `json` 代码块包裹，未改的段落省略。GPT 用 `apply_rewrites.py <稿目录>` 机械合稿，不再逐屏手工搬运。工具先校验整批稿、目标页、屏 id 和 JSON；任一不符，整批不写并非零退出。合稿保留未列字段与 LF/CRLF，重复运行不产生差异；`--root <仓库根>` 用于隔离验证。
 
@@ -218,8 +230,13 @@ python -B -X utf8 -m unittest discover -s tests -p "test_content_refresh_*.py"
 python -B -X utf8 -m unittest tests.test_refresh_registry_complete
 python -B -X utf8 site-astro/tools/convert_page.py --check-all
 npm run build
+python -B -X utf8 scripts/content-refresh/refresh.py --close-run <本次任务目录/取数/result.json> --apply-report <本次任务目录/取数/apply-report.json> --dist dist --output <本次任务目录/闭环>
 python -B -X utf8 site-astro/tools/scan_glance.py --dist dist --pages published-diff --out <本次扫描目录>
 ```
+
+close-run 变化项须同时有同一 `run_id` 应用回执中的字段回读、记录值原位回读、所属页 `markdown_readback` 三项 `verified`。`--dist` 按 Markdown frontmatter 的 `url`（缺省 `/<页id>/`）查成品 HTML，去标签、HTML 反转义和归一空白后，必须找到回读的新片段，才记 `display_readback=verified`；找不到仍为 pending。回执写入 `closure.json`，pending 使命令非零退出。核对戳、状态等人工任务须在同轮回执 `manual_closures` 提供任务 id、`run_id`、`checked_at`、`evidence` 和 `status="completed"`，不能用程序读过页面代替核对。
+
+未给 `--dist` 时，闭环会明确写 `display_readback=not_checked`；即使字段与渲染输入闭环为 `closed`，也只能说明事实已进入渲染输入，不能宣称成品已显示。正式更新使用上面带 `--dist` 的命令；成品显示通过之后，仍须完成扫描、发布和公网回读。
 
 严格盘点和完整性测试是构建前必须通过的门；新页漏登记会直接失败。工具验收另外实跑整表 `refresh.py --output <目录> --total-seconds 300`：取数不超过 300 秒，`result.json` 中自动项取到新值的比例至少 90%；`source_broken` 项单列，不计入这一比例。登记自动覆盖的 85% 与本次自动取到新值的 90% 是不同指标，不能相互代替。
 
@@ -277,7 +294,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发�
 
 演练在完善版上线后、常驻工作树热缓存下，从切到真实最新源码开始计时。点名 personal-materials、timeaudit 或 pcconfig、video-scaffold，覆盖私人聚合、机器状态与开发事实；全站日期数据批量重取，至少迁移一个涉及的冻结页，全部迁完时改为一次新版模块写稿。每步在 `rehearsal-timing.json` 写北京时间开始、结束、秒数、执行者和说明。整体请求到公网回读不超过 90 分钟，各步不越硬上限；严格零漏登记、自动覆盖至少 85%、整表取数不超过 300 秒且成功至少 90%、增量构建不超过 300 秒、变化页扫描不超过 5 分钟且零失败。核实成功前版继承、缓存原地复用、发布回执和前述源码／成品／公网对应关系后才宣称通过。一项失败就说明还差什么，只重跑失败部分并补一次全程计时。
 
-待机制接入后，下次按需更新执行：当前事实须按同一 `run_id` 完成 `collect` → `apply` → 原位回读，并逐项闭环为“已应用且回读一致”“已核对未变”或“Unknown＋保留旧值旧日期＋具体缺口”，才能宣称本轮事实处理完成。任一结果只有盘点、取数或改数单都不算闭环；历史项说明保留理由，不伪造新观察时间。全站新鲜的声明还须由本轮全站实际重取与回读支持。
+当前事实按同一 `run_id` 完成默认刷新命令的 `collect` → `apply_edits.py --report` → 构建 → `refresh.py --close-run --apply-report --dist`，逐项闭环为“已应用且字段、渲染输入与成品回读一致”“已核对未变”或“Unknown＋保留旧值旧日期＋具体缺口”，才能宣称本轮事实处理完成。任一结果只有盘点、取数或改数单都不算闭环；不带 `--dist` 的 closed 不支持“网页已显示”。历史项说明保留理由，不伪造新观察时间。`semantic_due` 单独说明哪些讲解仍待复核；全站新鲜的声明还须由本轮全站实际重取与回读支持。
 
 本次仍存在的来源、缓存或运行缺口按实际回执单列；不沿用已经完成的旧施工待办，也不把当前未验证项写成已通过。
 
