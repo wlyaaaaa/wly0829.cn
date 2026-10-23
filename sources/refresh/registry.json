@@ -13662,8 +13662,8 @@
       "page": "agents",
       "screen": "agents-05",
       "label": "Git跟踪文件行数",
-      "current_value": 47364,
-      "as_of": "2026-10-04",
+      "current_value": 100204,
+      "as_of": "2026-10-23",
       "category": "某个 JSON 字段",
       "source_location": "文件/行数取当前Git跟踪且文件存在的文本文件（含测试、文档、配置，不含二进制和未跟踪releases）；逐行包括空行、末尾无LF残行。测试数仅test-registry.json数组长度，不是通过数；提交数为main可达提交，不是分支或最近一个月。",
       "retrieve": {
@@ -13680,11 +13680,15 @@
       "private": false,
       "historical": false,
       "field": "screens[4].text",
-      "page_pattern": "仍是 \\d+ 月 \\d+ 日 \\d+:\\d+ 的 ([\\d,]+) 行（",
+      "page_pattern": "次提交（6 月 30 日起） · ([\\d,]+) 行（",
       "measurement_scope": "文件/行数取当前Git跟踪且文件存在的文本文件（含测试、文档、配置，不含二进制和未跟踪releases）；逐行包括空行、末尾无LF残行。测试数仅test-registry.json数组长度，不是通过数；提交数为main可达提交，不是分支或最近一个月。",
       "scope_status": "verified",
-      "observed_at": "2026-10-11T17:54:12+08:00",
-      "refreshed_value": 82348
+      "observed_at": "2026-10-23T09:19:47+08:00",
+      "refreshed_value": 82348,
+      "checked_at": "2026-10-23T09:19:47+08:00",
+      "source_observed_at": "2026-10-23T09:19:47+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read"
     },
     {
       "id": "agents-volume-tests",
@@ -13820,7 +13824,8 @@
       "qualifies": [
         "agents-volume-files",
         "agents-volume-tests",
-        "agents-volume-commits"
+        "agents-volume-commits",
+        "agents-volume-lines"
       ],
       "field": "screens[4].text",
       "page_pattern": "\\*\\*体量\\*\\*　(\\d+ 月 \\d+ 日 \\d+:\\d+) 重读",
