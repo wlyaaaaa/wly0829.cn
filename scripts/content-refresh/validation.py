@@ -76,6 +76,13 @@ def validate_method(method, entries):
 def record_errors(record, entries, ids):
     errors = []
     try:
+        if record.get("freshness_class", "current") not in {"current", "semantic", "historical"}:
+            raise ValueError("freshness_class 必须为 current/semantic/historical")
+        if record.get("observation_basis", "unknown") not in {"live_read", "snapshot_timestamp", "coverage_end", "unknown"}:
+            raise ValueError("observation_basis 不支持")
+        for name in ("source_observed_at_pointer", "source_coverage_end_pointer"):
+            if name in record and not isinstance(record[name], list):
+                raise ValueError(name + " 必须为 JSON 路径数组")
         if record.get("qualifies") is not None:
             refs = record["qualifies"]
             if not isinstance(refs, list) or not refs or not all(isinstance(v, str) and v in ids and v != record["id"] for v in refs):

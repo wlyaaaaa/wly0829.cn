@@ -14,6 +14,7 @@ import sqlite3
 import subprocess
 import sys
 import time
+from uuid import uuid4
 
 sys.dont_write_bytecode = True
 from checks import audit_pages
@@ -21,6 +22,7 @@ from inventory import build_inventory, write_inventory, strict_findings
 from engine.content import bound_json
 from validation import LEDGER, validate_entries, validate_method, registry_errors, positive
 from apply_edits import qualified_date_review
+from freshness import cadence, metadata, review_tasks, close_run, now
 
 ROOT = Path(__file__).resolve().parents[2]
 BEIJING = timezone(timedelta(hours=8))
@@ -247,6 +249,7 @@ def retrieve(method, root, entries=None, cache=None):
         value = read_json(resolve(method["path"], root)) if kind == "json" else json.loads(bounded([
             "pwsh", "-NoProfile", "-File", "E:/.agents/tools/Invoke-EAgentRulesRelease.ps1",
             "-Mode", "Inspect", "-Json"], 30))
+        cache.setdefault("documents", {})[json.dumps(method, sort_keys=True)] = value
         if kind == "rules_inspect" and (value.get("status") != "pass" or value.get("reason") != "e_rules_active_verified"):
             raise ValueError("活动规则未核验通过，不能把指针文字当作现行结果")
         for key in method.get("pointer", []):
@@ -304,7 +307,8 @@ def retrieve_batch(methods, root, entries, seconds, include_metadata=False):
         for method in methods:
             validate_method(method, entries)
         try:
-            return ledger_values(methods, entries[LEDGER], root, include_metadata)
+            values = ledger_values(methods, entries[LEDGER], root, include_metadata)
+            return [dict(v, **metadata(v, m, entries[LEDGER])) for v, m in zip(values, methods)] if include_metadata else values
         except Exception as exc:
             return [{"error": f"来源读取失败（{type(exc).__name__}）：{exc}"}] * len(methods)
     result = []
@@ -314,7 +318,12 @@ def retrieve_batch(methods, root, entries, seconds, include_metadata=False):
             key = json.dumps(method, sort_keys=True)
             if key not in method_cache:
                 method_cache[key] = retrieve(method, root, entries, cache)
-            result.append(method_cache[key])
+            value = method_cache[key]
+            if include_metadata:
+                entry = entries.get(method.get("entry"), {})
+                document = cache.get("entries", {}).get(method.get("entry")) if method["kind"] == "entry" else cache.get("documents", {}).get(key)
+                value = dict(value=value, **metadata(document, method, entry))
+            result.append(value)
         except Exception as exc:
             result.append({"error": f"来源读取失败（{type(exc).__name__}）：{exc}"})
     return result
@@ -336,8 +345,9 @@ def page_value(record, page, root):
     screen = next(s for s in page["screens"] if s["id"] == record["screen"])
     text = screen.get("text", "")
     visible_text = text
-    if record.get("field"):
-        text = field_value(page, record["field"])
+    field = record.get("field") or record.get("page_field")
+    if field:
+        text = field_value(page, field)
         if not isinstance(text, (str, int, float)):
             raise ValueError("展示字段须定位字符串或标量")
         text = str(text)
@@ -370,7 +380,7 @@ def page_value(record, page, root):
     return value, observed
 
 
-def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entries=None, workers=8, entries_path=None):
+def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entries=None, workers=8, entries_path=None, targeted=()):
     today = today or datetime.now(BEIJING).date()
     started = time.monotonic()
     # 留出 taskkill/进程等待（各最多5秒）及审计/落盘尾段；总时限不是额外清理预算。
@@ -382,7 +392,8 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
     catalog = {p["page"]: p for p in pages(root)}
     rows, groups = [], {}
     for record in registry["records"]:
-        row = dict(record, old_value=None, new_value=None, status="unavailable", reason="")
+        row = dict(record, old_value=None, new_value=None, status="unavailable", reason="",
+                   checked_at=None, source_observed_at=None, source_coverage_end=None, observation_basis="unknown")
         page = catalog.get(record["page"], {})
         row["page_title"] = page.get("title", record["page"])
         row["screen_title"] = next((s.get("title", record["screen"]) for s in page.get("screens", [])
@@ -393,10 +404,14 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
             row["page_error"] = str(exc) or "页面或数字登记不存在"
             row["page_date"] = record.get("as_of")
         screen = next((s for s in page.get("screens", []) if s["id"] == record["screen"]), {})
-        if (record.get("historical") or record.get("frozen") or page.get("kind") == "frozen"
+        historical = (record.get("historical") or record.get("frozen") or page.get("kind") == "frozen"
                 or page.get("status") in {"frozen", "冻结", "已冻结", "historical", "历史"}
-                or screen.get("section") in {"history", "evolution", "timeline"}):
+                or screen.get("section") in {"history", "evolution", "timeline"})
+        row.update(cadence(record, registry.get("freshness_policy"), today, historical, record["page"] in targeted))
+        if row["freshness_class"] == "historical":
             row.update(status="historical", reason="历史事实或冻结项目，本轮不重取")
+        elif row["freshness_class"] == "semantic":
+            row.update(status="manual_review" if row["refresh_due"] else "semantic_current", reason=row["cadence_reason"])
         elif record.get("qualifies") and record.get("date_semantics") != "coverage_end":
             row["reason"] = "等待被注明数字的观察日期"
         elif record["id"] in invalid:
@@ -416,18 +431,22 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
             key = ("entry:" + method["entry"] if method["kind"] == "entry" else
                    "usage_ledger" if method["kind"] == "usage_ledger" else json.dumps(method, sort_keys=True))
             groups.setdefault(key, []).append(row)
-        try:
-            row["overdue"] = row["status"] != "historical" and (today - date.fromisoformat(row["page_date"])).days > 7
-        except (TypeError, ValueError):
-            row["overdue"] = False
-            row["date_unknown"] = True
+        row["date_unknown"] = not bool(row.get("page_date"))
+        period = record.get("source_production_days")
+        if period and record.get("source_observed_at"):
+            row["source_cycle_due"] = (today - date.fromisoformat(record["source_observed_at"][:10])).days >= period
         rows.append(row)
 
     def run_group(selected):
         remaining = deadline - time.monotonic()
         if remaining <= 0:
             return [{"error": "总重取时限已到，跳过剩余来源"}] * len(selected), None
-        methods = [r["retrieve"] for r in selected]
+        methods = [dict(r["retrieve"], **{k: r[k] for k in ("observation_basis", "source_observed_at_pointer", "source_coverage_end_pointer") if k in r and (k != "observation_basis" or r[k] != "unknown")}) for r in selected]
+        for row, method in zip(selected, methods):
+            if row.get("observation_basis") == "unknown" and "observation_basis" in row:
+                original = next(r for r in registry["records"] if r["id"] == row["id"])
+                if "observation_basis" in original:
+                    method["observation_basis"] = original["observation_basis"]
         seconds = min(remaining, max([item_seconds] + [m.get("timeout", entries.get(LEDGER if m["kind"] == "usage_ledger" else m.get("entry", ""), {}).get("timeout", item_seconds)) for m in methods]))
         try:
             argv = [sys.executable, str(Path(__file__).resolve()), "--retrieve-batch", json.dumps(methods, ensure_ascii=False),
@@ -444,19 +463,28 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
         for future in as_completed(pending):
             values, observed = future.result()
             for row, value in zip(pending[future], values):
-                if isinstance(value, dict) and "source_coverage_end" in value and row["retrieve"]["kind"] == "usage_ledger":
-                    row["source_coverage_end"] = date.fromisoformat(value["source_coverage_end"]).isoformat()
+                row["checked_at"] = observed or now()
+                if isinstance(value, dict) and "value" in value:
+                    row.update({k: value.get(k) for k in ("checked_at", "source_observed_at", "source_coverage_end", "observation_basis")})
+                    if not row.get("checked_at"):
+                        row.update(metadata(value, row["retrieve"], entries.get(row["retrieve"].get("entry")), observed or now()))
                     value = value["value"]
+                elif value is not None and not isinstance(value, (dict, list)):
+                    original = next(r for r in registry["records"] if r["id"] == row["id"])
+                    row.update(metadata(None, dict(row["retrieve"], **{k: original[k] for k in ("observation_basis",) if k in original}),
+                                        entries.get(row["retrieve"].get("entry")), observed or now()))
                 if value is None or isinstance(value, (dict, list)):
                     row["reason"] = value.get("error", "来源未返回标量") if isinstance(value, dict) else "来源未返回标量"
                 else:
-                    row.update(new_value=value, source_observed_at=observed,
-                               status="unchanged" if comparable(row["old_value"]) == comparable(value) else "changed")
+                    row.update(new_value=value, status="unchanged" if comparable(row["old_value"]) == comparable(value) else "changed")
+                    if not row.get("source_observed_at") and not row.get("source_coverage_end"):
+                        row.update(status="unavailable", reason="Unknown：来源缺真实观察时间或覆盖末日；保留旧值旧日期")
     by_id = {r["id"]: r for r in rows}
     for row in rows:
         if row.get("qualifies") and row["status"] != "historical":
             qualified = [by_id.get(ref, {}) for ref in row["qualifies"]]
-            if row["id"] in invalid or row.get("page_error") or not all(r.get("status") in {"changed", "unchanged"} and r.get("source_observed_at") and r.get("page") == row["page"] and not r.get("qualifies") for r in qualified):
+            row["checked_at"] = now()
+            if row["id"] in invalid or row.get("page_error") or not all(r.get("status") in {"changed", "unchanged"} and (r.get("source_observed_at") or r.get("source_coverage_end")) and r.get("page") == row["page"] and not r.get("qualifies") for r in qualified):
                 row.update(new_value=None, status="unavailable", reason="被注明数字含 Unknown 或日期定位无效，保留旧截至日期")
             else:
                 coverage_end = row.get("date_semantics") == "coverage_end"
@@ -472,14 +500,18 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
                     value = min(r.get("source_coverage_end") or timestamp(r["source_observed_at"]).date().isoformat() for r in qualified)
                 review = None if coverage_end else qualified_date_review(catalog[row["page"]], row)
                 row.update(new_value=None if review else value, date_candidate=value, manual_review_reason=review,
-                           source_observed_at=min(r["source_observed_at"] for r in qualified), scope_status="verified",
+                           source_observed_at=min(r.get("source_observed_at") or r["source_coverage_end"] for r in qualified),
+                           source_coverage_end=value if coverage_end else None,
+                           observation_basis="coverage_end" if coverage_end else "snapshot_timestamp", scope_status="verified",
                            status="manual_review" if review else "unchanged" if row["old_value"] == value else "changed",
                            reason=review or ("登记来源的真实覆盖末日" if coverage_end else "被注明数字最早观察日期"))
     audit = audit_pages(root / "sources/pages", today, registry.get("retired_names", []))
     for finding in audit["findings"]:
         finding["page_title"] = catalog.get(finding["page"].split("/")[0], {}).get("title", finding["page"])
     automatic = [r for r in rows if r.get("automatic") and not r.get("qualifies") and r["status"] != "historical" and r.get("manual_reason") != "source_broken"]
-    return {"schema": "content-refresh.result.v1", "observed_at": datetime.now(BEIJING).isoformat(timespec="seconds"),
+    return {"schema": "content-refresh.result.v1", "run_id": str(uuid4()), "observed_at": now(),
+            "manual_tasks": review_tasks({}, rows), "freshness_policy": registry.get("freshness_policy"),
+            "relative_time_risks": [f for f in audit["findings"] if re.search("相对|昨天|今天|目前", f.get("message", "") + f.get("excerpt", ""))],
             "baseline": registry.get("baseline"), "baseline_evidence": registry.get("baseline_evidence", "Unknown；登记基线"), "pages_checked": audit["pages_checked"],
             "numbers_checked": len(rows), "rows": rows, "findings": audit["findings"],
             "retrieval_seconds": round(time.monotonic() - started, 3), "workers": max(8, workers),
@@ -498,12 +530,13 @@ def task_text(result, registry):
         ("已重取且变化", [r for r in result["rows"] if r["status"] == "changed"]),
         ("未取得新值（含领域入口事实任务）", [r for r in result["rows"] if r["status"] in ("unavailable", "domain_fact_task")]),
         ("口径待核，不计入变化", [r for r in result["rows"] if r.get("automatic") and r.get("scope_status") != "verified"]),
-        ("超过七天仍待处理", [r for r in result["rows"] if r["overdue"]])):
+        ("本轮应重取或复核", [r for r in result["rows"] if r["overdue"]])):
         lines += [f"## {title}", ""]
         lines += [f"- {r['page']} / {r['screen']}：{r['label']}；页面 {r['old_value']} → 重取 {r['new_value']}；"
                   f"原日期 {r.get('page_date')}；来源 {r['source_location']}；口径 {r.get('measurement_scope', '')}；{r['reason']}；{r.get('scope_reason', '')}" for r in selected] or ["无。"]
         lines.append("")
     lines += ["## 来源口径与基线缺口", ""]
+    lines += [f"- 人工闭环 {t['id']}：{t['page']}；{t['kind']}；{t['reason']}" for t in result.get("manual_tasks", [])]
     lines += [f"- {r['page']} / {r['screen']}：{r['known_gap']}" for r in result["rows"] if r.get("known_gap")]
     for tier, title in TIERS:
         lines += ["", f"## {title}", ""]
@@ -520,7 +553,7 @@ def report_content(result, task, task_path):
     blocks = [{"type": "metrics", "items": [{"value": v, "label": k} for k, v in (
         ("检查页面", result["pages_checked"]), ("登记数字", result["numbers_checked"]),
         ("重取后变化", len(changed)), ("未取得新值", len(missing)), ("写法命中", len(result["findings"])))]}]
-    for title, selected in (("同口径的真变化", changed), ("日期口径需人工核对，不自动替换", [r for r in result["rows"] if r["status"] == "manual_review"]), ("口径待核，不计入变化", pending), ("取不到哪些", missing), ("超过七天待处理", overdue)):
+    for title, selected in (("同口径的真变化", changed), ("日期口径需人工核对，不自动替换", [r for r in result["rows"] if r["status"] == "manual_review"]), ("口径待核，不计入变化", pending), ("取不到哪些", missing), ("本轮应重取或复核", overdue)):
         blocks += [{"type": "heading", "text": title}, {"type": "table", "columns":
             ["页 / 段", "数字含义", "页面旧数", "重取新数", "原日期", "来源与说明"], "rows":
             [[r["page_title"] + " / " + r["screen_title"] + "（" + r["screen"] + "）", r["label"], str(r["old_value"]) if r["old_value"] is not None else "未绑定正文数字",
@@ -559,6 +592,9 @@ def main():
     parser.add_argument("--inventory", action="store_true", help="只清点带日期/现状的作者输入，输出分组事实任务；不重取或生成网页")
     parser.add_argument("--strict", action="store_true", help="漏登记列出页/屏/原文并非零退出")
     parser.add_argument("--only", help="只检查逗号分隔的页")
+    parser.add_argument("--targeted", help="本轮点名讲解核对的页面，逗号分隔；不缩小当前事实重取范围")
+    parser.add_argument("--close-run", type=Path, help="核对本轮取数、应用与原位回读闭环")
+    parser.add_argument("--apply-report", type=Path, help="同轮应用回执；人工闭环须附 manual_closures")
     parser.add_argument("--no-report", action="store_true", help="只交机器清单和任务文件，不生成汇报网页")
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--total-seconds", type=float, default=300)
@@ -566,6 +602,17 @@ def main():
     parser.add_argument("--retrieve", help=argparse.SUPPRESS)
     parser.add_argument("--retrieve-batch", help=argparse.SUPPRESS)
     args = parser.parse_args()
+    if args.close_run:
+        try:
+            result = close_run(args.root, read_json(args.close_run), read_json(args.apply_report) if args.apply_report else None)
+        except (OSError, ValueError, KeyError) as exc:
+            print(json.dumps(dict(status="incomplete", reason=str(exc)), ensure_ascii=False))
+            return 2
+        destination = args.output or args.close_run.parent
+        destination.mkdir(parents=True, exist_ok=True)
+        (destination / "closure.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(json.dumps(result, ensure_ascii=False))
+        return 0 if result["status"] == "closed" else 2
     entries_path = args.entries or (args.registry.parent if args.registry else args.root / "sources/refresh") / "entries.json"
     entries = read_json(entries_path) if entries_path.exists() else {}
     if args.retrieve or args.retrieve_batch:
@@ -587,7 +634,8 @@ def main():
         parser.error("来源表格式不符，records 必须是数组")
     output = args.output or Path("E:/Cache/content-refresh") / datetime.now(BEIJING).strftime("%Y%m%d-%H%M%S-%f")
     output.mkdir(parents=True, exist_ok=True)
-    inventory = build_inventory(args.root / "sources/pages", registry["records"], entries)
+    targeted = set(args.targeted.split(",")) if args.targeted else set()
+    inventory = build_inventory(args.root / "sources/pages", registry["records"], entries, registry.get("freshness_policy"), targeted)
     only = set(args.only.split(",")) if args.only else None
     if only:
         inventory["items"] = [i for i in inventory["items"] if i["page"] in only]
@@ -616,6 +664,8 @@ def main():
     stamps = set(inventory.get("review_stamp_record_ids", []))
     registry = dict(registry, records=[r for r in registry["records"] if r["id"] not in stamps])
     result = collect(args.root, registry, max(0, command_deadline - time.monotonic() - 5), args.item_seconds, entries=entries, workers=args.workers, entries_path=entries_path)
+    result["registry_path"] = str((args.registry or args.root / "sources/refresh/registry.json").resolve())
+    result["manual_tasks"] = review_tasks(inventory, result["rows"])
     from apply_edits import build_number_edits
     (output / "number-edits.json").write_text(json.dumps(build_number_edits(args.root, result), ensure_ascii=False, indent=2), encoding="utf-8")
     task = task_text(result, registry)

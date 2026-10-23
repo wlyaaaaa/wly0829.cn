@@ -197,7 +197,7 @@ def qualified_date_review(page, row):
 
 def build_number_edits(root, result):
     root, pages, edits, skipped, manual_reviews = Path(root), {}, {}, [], []
-    accepted = set()
+    accepted, positions = set(), {}
     links, owners, unpaired = defaultdict(set), defaultdict(set), defaultdict(list)
     for row in result["rows"]:
         for ref in row.get("qualifies", []):
@@ -215,11 +215,12 @@ def build_number_edits(root, result):
                                   {"record_id": row["id"], "status": "需人工核对", "reason": row["manual_review_reason"]})
             continue
         if (row.get("status") not in {"changed", "unchanged"} or row.get("scope_status") != "verified"
-                or not row.get("source_observed_at") or row.get("historical") or row.get("frozen")
+                or not (row.get("source_observed_at") or row.get("source_coverage_end")) or row.get("historical") or row.get("frozen")
                 or row.get("dynamic")
                 or row.get("old_value") is None or row.get("new_value") is None):
             continue
         slug, rid = row["page"], row["id"]
+        evidence_at = row.get("source_observed_at") or row.get("source_coverage_end")
         try:
             if slug not in pages:
                 pages[slug] = json.loads((root / "sources/pages" / slug / "page.json").read_text(encoding="utf-8-sig"))
@@ -243,6 +244,7 @@ def build_number_edits(root, result):
                 f"screens[{si}].text" if row.get("page_pattern") and si is not None else f"registry.numbers[{ni}].text")
             parent, key = field_at(page, field)
             start, end = locate(parent[key], row, field.startswith("registry.numbers["))
+            positions[rid] = (field, start, end, parent[key][start:end])
             whole_number(parent[key], start, end)
             if NUMBER.fullmatch(str(row["new_value"])) and not NUMBER.fullmatch(str(row["old_value"])):
                 raise ValueError("old_value_not_whole_number")
@@ -265,12 +267,12 @@ def build_number_edits(root, result):
                 if old != new:
                     pending.append(dict(page=slug, file=f"sources/pages/{slug}/page.json", field=target,
                         start=a, end=b, old_value=old, new_value=new,
-                        observed_at=row["source_observed_at"], record_id=rid))
+                        observed_at=evidence_at, record_id=rid))
             number = numbers[ni] if ni is not None else None
             if field.startswith("screens[") and NUMBER.fullmatch(parent[key][start:end]):
                 linked = body_link(page, row, field, start, end, number, result["rows"])
                 if linked:
-                    add(field, *linked, row.get("source_coverage_end") or row["source_observed_at"])
+                    add(field, *linked, row.get("source_coverage_end") or evidence_at)
             value = row["new_value"]
             stamp = CHINESE_DATE.fullmatch(parent[key][start:end])
             if row.get("qualifies") and (DATETIME.fullmatch(parent[key][start:end]) or stamp and stamp[4]):
@@ -287,7 +289,7 @@ def build_number_edits(root, result):
                     raise ValueError("数字登记与正文口径不一致")
                 add(nf, a, b, row["new_value"])
                 if number.get("as_of"):
-                    add(f"registry.numbers[{ni}].as_of", 0, len(number["as_of"]), row.get("source_coverage_end") or row["source_observed_at"])
+                    add(f"registry.numbers[{ni}].as_of", 0, len(number["as_of"]), row.get("source_coverage_end") or evidence_at)
                 # 完整登记原话在其绑定屏唯一出现时，才同步正文；绝不按裸数字搜索。
                 screens = {row.get("screen"), *row.get("affected_screens", []), *number.get("screens", [])}
                 for index, screen in enumerate(page.get("screens", [])):
@@ -302,7 +304,7 @@ def build_number_edits(root, result):
                         linked = body_link(page, row, target, start, end, number, result["rows"])
                         add(target, start, end, row["new_value"])
                         if linked:
-                            add(target, *linked, row.get("source_coverage_end") or row["source_observed_at"])
+                            add(target, *linked, row.get("source_coverage_end") or evidence_at)
             for edit in pending:
                 location = (slug, edit["field"], edit["start"], edit["end"])
                 for prior in owners[location]:
@@ -344,14 +346,25 @@ def build_number_edits(root, result):
         for edit in group:
             edit.update(field_before_sha256=digest(before), field_after_sha256=digest(after))
         valid.extend(group)
-    return dict(schema="content-refresh.number-edits.v1", edits=valid, skipped=skipped, manual_reviews=manual_reviews)
+    updates = []
+    for row in result["rows"]:
+        if row["id"] not in accepted - blocked:
+            continue
+        field, start, end, fragment = positions[row["id"]]
+        relevant = [e for e in valid if e["page"] == row["page"] and e["field"] == field]
+        shift = sum(len(e["new_value"]) - (e["end"] - e["start"]) for e in relevant if e["end"] <= start)
+        replacement = next((e["new_value"] for e in relevant if e["start"] == start and e["end"] == end), fragment)
+        updates.append(dict(row, readback_locator=dict(field=field, start=start + shift, end=start + shift + len(replacement), expected=replacement)))
+    return dict(schema="content-refresh.number-edits.v1", run_id=result.get("run_id"),
+                registry_path=result.get("registry_path"), edits=valid, skipped=skipped, manual_reviews=manual_reviews,
+                record_updates=updates)
 
 
 def apply_edits(root, payload, only=None):
     if payload.get("schema") != "content-refresh.number-edits.v1":
         raise ValueError("改数单格式不支持")
     root, grouped = Path(root), defaultdict(list)
-    report = dict(applied=0, already_applied=0, skipped=[], changed_files=[])
+    report = dict(run_id=payload.get("run_id"), applied=0, already_applied=0, skipped=[], changed_files=[], field_readback=[], record_readback=[])
     for edit in payload["edits"]:
         if only and edit["page"] not in only:
             continue
@@ -408,8 +421,36 @@ def apply_edits(root, payload, only=None):
                 path.write_text(rendered, encoding="utf-8", newline="\r\n" if "\r\n" in path.read_bytes().decode("utf-8-sig") else "\n")
                 report["applied"] += file_applied
                 report["changed_files"].append(filename)
+            actual = json.loads(path.read_text(encoding="utf-8-sig"))
+            for field, group in fields.items():
+                parent, key = field_at(actual, field)
+                actual_hash = digest(parent[key])
+                expected_hash = group[0].get("field_after_sha256")
+                if expected_hash and expected_hash != actual_hash:
+                    raise ValueError("写入后字段原位回读哈希不一致")
+                report["field_readback"].append(dict(file=filename, field=field, sha256=actual_hash, status="verified"))
         except (OSError, KeyError, ValueError, IndexError, TypeError) as exc:
             report["skipped"].extend(dict(edit, reason=str(exc)) for edit in edits)
+    if payload.get("record_updates"):
+        from refresh import pages
+        from freshness import sync_registry
+        catalog, successful = {p["page"]: p for p in pages(root)}, []
+        failed = {e.get("record_id") for e in report["skipped"]}
+        for row in payload["record_updates"]:
+            if row["id"] in failed or only and row["page"] not in only:
+                continue
+            try:
+                locator = row["readback_locator"]
+                parent, key = field_at(catalog[row["page"]], locator["field"])
+                actual = parent[key][locator["start"]:locator["end"]]
+                if row["id"] in failed or not same_value(str(actual), row["new_value"]):
+                    raise ValueError("记录新值原位回读不一致")
+                report["record_readback"].append(dict(record_id=row["id"], value=actual, locator=locator,
+                                                       field_sha256=digest(parent[key]), status="verified"))
+                successful.append(row)
+            except (KeyError, ValueError, IndexError, StopIteration) as exc:
+                report["skipped"].append(dict(record_id=row["id"], reason=str(exc)))
+        report["registry_sync"] = sync_registry(payload.get("registry_path") or root / "sources/refresh/registry.json", successful)
     return report
 
 
@@ -418,9 +459,12 @@ def main(argv=None):
     parser.add_argument("edits", type=Path)
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--only", help="只处理逗号分隔的页面")
+    parser.add_argument("--report", type=Path, help="保存供同轮闭环核对使用的应用回执")
     args = parser.parse_args(argv)
     payload = json.loads(args.edits.read_text(encoding="utf-8-sig"))
     report = apply_edits(args.root, payload, set(args.only.split(",")) if args.only else None)
+    if args.report:
+        args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 1 if report["skipped"] else 0
 

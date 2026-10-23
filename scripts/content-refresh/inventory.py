@@ -106,11 +106,11 @@ def matches(record, item, page, text):
             and bool(re.search(pattern, parser.canon(item["excerpt"]))))
 
 
-def build_inventory(pages_root, records, entries=None):
+def build_inventory(pages_root, records, entries=None, policy=None, targeted=()):
     paths = sorted(Path(pages_root).glob("*/page.json"))
     items, cutoff_surfaces = [], Counter()
     status_pages, cutoff_pages, matched_private, historical_pairs, located_records = set(), set(), set(), set(), set()
-    by_page, source_aliases = defaultdict(list), {}
+    by_page, source_aliases, page_catalog = defaultdict(list), {}, {}
     ids = {r["id"] for r in records}
     valid_ids = {r["id"] for r in records if not record_errors(r, entries or {}, ids)}
     for record in records:
@@ -120,6 +120,7 @@ def build_inventory(pages_root, records, entries=None):
                 if path.parent.parent.name == "pages" and path.parents[2].name == "sources"
                 else json.loads(path.read_text(encoding="utf-8-sig")))
         slug = page.get("page", path.parent.name)
+        page_catalog[slug] = page
         if page.get("kind") in {"project", "frozen"}:
             source_aliases[re.sub(r"[-_.]", "", slug).lower()] = slug
         screens = page.get("screens", [])
@@ -328,7 +329,29 @@ def build_inventory(pages_root, records, entries=None):
     stamps = [i for i in items if i.get("review_stamp")]
     stamp_ids = {rid for i in stamps for rid in i["record_ids"]} - numeric_ids - {
         rid for i in items if i["requires_refresh"] and not i["historical"] for rid in i["record_ids"]}
+    from refresh import page_value
+    bindings = []
+    for record in records:
+        classification = "historical" if record.get("historical") or record.get("frozen") or (record["page"], record["screen"]) in historical_pairs else "review_stamp" if record["id"] in stamp_ids else "current"
+        try:
+            if record.get("dynamic"):
+                bindings.append(dict(record_id=record["id"], classification=classification, status="dynamic"))
+                continue
+            value, _ = page_value(record, page_catalog[record["page"]], Path(pages_root).parents[1])
+            bindings.append(dict(record_id=record["id"], classification=classification, status="readable", value=value))
+        except (KeyError, ValueError, IndexError, StopIteration, re.error) as exc:
+            bindings.append(dict(record_id=record["id"], classification=classification, status="binding_error", reason=str(exc) or "页面定位不存在"))
+    from freshness import cadence
+    semantic = []
+    for slug, page in page_catalog.items():
+        if page.get("kind") == "frozen" or page.get("status") in {"frozen", "冻结", "已冻结", "historical", "历史"}:
+            continue
+        state = cadence(dict(freshness_class="semantic", semantic_checked_at=page.get("semantic_checked_at"), source_changed=page.get("source_changed")), policy, targeted=slug in targeted)
+        if state["refresh_due"]:
+            semantic.append(dict(id="semantic-page:" + slug, page=slug, kind="semantic", reason=state["cadence_reason"], status="pending"))
     return dict(schema="content-refresh.inventory.v1", observed_at=datetime.now(BEIJING).isoformat(timespec="seconds"),
+                semantic_reviews=semantic,
+                record_bindings=bindings,
                 review_stamps=stamps, review_stamp_record_ids=sorted(stamp_ids),
                 located_record_ids=sorted(located_records),
                 historical_record_ids=sorted(r["id"] for r in records if r.get("historical") or r.get("frozen")
@@ -342,6 +365,8 @@ def strict_findings(inventory, records, entries=None, invalid_record_ids=()):
     """只检查清单和页面位置；从不读取来源，自动建议不构成登记。"""
     entries, by_id = entries or {}, {r["id"]: r for r in records}
     ids, invalid = set(by_id), set(invalid_record_ids)
+    binding_errors = [b for b in inventory.get("record_bindings", []) if b["status"] == "binding_error" and b["classification"] == "current"]
+    invalid.update(b["record_id"] for b in binding_errors)
     invalid.update(r["id"] for r in records if record_errors(r, entries, ids))
     for name, config in entries.items():
         try:
@@ -393,6 +418,12 @@ def strict_findings(inventory, records, entries=None, invalid_record_ids=()):
         findings.append(dict(page=record.get("page", ""), screen=record.get("screen", ""),
                              field="source_registry." + rid, line=1, excerpt=record.get("label", rid),
                              reason="来源格式错误：" + "; ".join(error["errors"]), record_ids=[rid]))
+    reported = {rid for f in findings for rid in f.get("record_ids", [])}
+    for binding in binding_errors:
+        if binding["record_id"] not in reported:
+            record = by_id[binding["record_id"]]
+            findings.append(dict(page=record["page"], screen=record["screen"], field=record.get("field", "source_registry." + record["id"]),
+                                 line=1, excerpt=record.get("label", record["id"]), reason="原位绑定不可读：" + binding["reason"], record_ids=[record["id"]]))
     inventory["coverage"].update(strict_inventory_summary(inventory, findings))
     return findings
 
