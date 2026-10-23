@@ -2115,7 +2115,7 @@
       "page": "video-scaffold",
       "screen": "video-scaffold-01",
       "label": "已推送主线静态测试定义数（未重跑）",
-      "current_value": 130,
+      "current_value": 333,
       "as_of": "2026-10-10",
       "category": "测试个数",
       "source_location": "E:\\Projects\\Archives\\video-scaffold；原清单grep def test口径，不代表执行通过",
@@ -2133,11 +2133,8 @@
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
       "refreshed_value": 130,
       "affected_screens": [
-        "video-scaffold-01",
-        "video-scaffold-06"
+        "video-scaffold-01"
       ],
-      "registry_number": "n-tests",
-      "original_value_index": 0,
       "page_pattern": "- \\*\\*([\\d,]+) 个\\*\\*｜测试定义（只计数",
       "measurement_scope": "读取 origin/main 固定提交的 git archive 内存快照；config 仅AST字面值，动画仅 scene_base.html case 唯一名称，tests/ 下 def test 定义数（不执行、不声称通过），非tests/ Python按LF行数；提交含合并提交。",
       "scope_status": "verified",
@@ -2214,7 +2211,7 @@
       "page": "video-scaffold",
       "screen": "video-scaffold-06",
       "label": "仓库提交总数",
-      "current_value": 58,
+      "current_value": 161,
       "as_of": "2026-10-10",
       "category": "git 提交数",
       "source_location": "E:\\Projects\\Archives\\video-scaffold",
@@ -2234,8 +2231,6 @@
       "affected_screens": [
         "video-scaffold-06"
       ],
-      "registry_number": "n-commits",
-      "original_value_index": 0,
       "page_pattern": "\\- \\*\\*([\\d,]+) 次\\*\\*｜提交[（，]",
       "measurement_scope": "读取 origin/main 固定提交的 git archive 内存快照；config 仅AST字面值，动画仅 scene_base.html case 唯一名称，tests/ 下 def test 定义数（不执行、不声称通过），非tests/ Python按LF行数；提交含合并提交。",
       "scope_status": "verified",
@@ -3776,7 +3771,7 @@
       "page": "sunshine-remote-streaming",
       "screen": "sunshine-remote-streaming-05",
       "label": "非空程序代码行数",
-      "current_value": 5653,
+      "current_value": 5794,
       "as_of": "2026-10-10",
       "category": "代码行数",
       "source_location": "E:\\Projects\\Tools\\sunshine-remote-streaming；Git跟踪非tests的.ps1/.psm1/.vbs，18文件，5657个非空字符串行",
@@ -3807,7 +3802,6 @@
         "sunshine-remote-streaming-05"
       ],
       "known_gap": "旧页面5653比已明确同范围实读5657少4行，原旧数形成原因尚未知；当前确定范围与计数方法已核实，不能为了与旧数相等而保留manual。末行LF不能解释：仅完整LF的非空行5652，而标准PowerShell和splitlines均计5657。",
-      "registry_number": "n-code-lines",
       "page_pattern": "\\*\\*([\\d,]+) 行\\*\\*｜程序",
       "field": "screens[4].text",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
@@ -3819,7 +3813,7 @@
       "page": "sunshine-remote-streaming",
       "screen": "sunshine-remote-streaming-05",
       "label": "仓库提交总数",
-      "current_value": 38,
+      "current_value": 45,
       "as_of": "2026-10-10",
       "category": "git 提交数",
       "source_location": "E:\\Projects\\Tools\\sunshine-remote-streaming",
@@ -3836,7 +3830,6 @@
       "affected_screens": [
         "sunshine-remote-streaming-05"
       ],
-      "registry_number": "n-commits",
       "page_pattern": "\\*\\*([\\d,]+) 次\\*\\*｜提交",
       "measurement_scope": "指定源仓库git rev-list --count HEAD：全部可达提交，含合并提交，不筛日期或路径，单位次。",
       "scope_status": "verified",
@@ -8007,7 +8000,7 @@
       "page": "timeaudit",
       "screen": "timeaudit-11",
       "label": "测试函数静态声明数",
-      "current_value": 332,
+      "current_value": 347,
       "as_of": "2026-10-11",
       "category": "只读自动统计",
       "source_location": "E:/Projects/Tools/TimeAudit",
@@ -8028,7 +8021,6 @@
       "affected_screens": [
         "timeaudit-11"
       ],
-      "registry_number": "n-code",
       "page_pattern": "\\*\\*([\\d,.]+) 个\\*\\*｜测试定义（只计数：源码里数的 def test_",
       "field": "screens[11].text",
       "measurement_scope": "跟踪.py中def test_字面出现次数，含方法；静态定义数，非测试发现/执行/通过数。",
@@ -8039,7 +8031,7 @@
       "page": "timeaudit",
       "screen": "timeaudit-11",
       "label": "仓库提交总数",
-      "current_value": 234,
+      "current_value": 255,
       "as_of": "2026-10-11",
       "category": "只读自动统计",
       "source_location": "E:/Projects/Tools/TimeAudit",
@@ -8056,7 +8048,6 @@
       "affected_screens": [
         "timeaudit-11"
       ],
-      "registry_number": "n-code",
       "page_pattern": "\\*\\*([\\d,.]+) 次\\*\\*｜提交（",
       "measurement_scope": "git rev-list --count HEAD全部可达提交，含合并，不筛日期路径，未提交候选不计。",
       "scope_status": "verified",
@@ -8249,8 +8240,8 @@
       "page": "remote-control",
       "screen": "remote-control-01",
       "label": "现存日志中的工具调用次数",
-      "current_value": 163,
-      "as_of": "2026-10-10",
+      "current_value": 87,
+      "as_of": "2026-10-23",
       "category": "人工",
       "source_location": "E:\\Data\\RemoteComputerMCP\\logs\\service*.log",
       "retrieve": {
@@ -8277,7 +8268,11 @@
       "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。",
       "scope_status": "verified",
       "known_gap": "当前39条窗口为北京时间10月10日23:32:24至11日16:35:12；旧10月8–9日163条已被轮换覆盖。内容Owner必须同步窗口文字和各分类，不能把39当历史累计或仅换总数。",
-      "requires_semantic_refresh": true
+      "requires_semantic_refresh": true,
+      "checked_at": "2026-10-23T10:19:44+08:00",
+      "source_coverage_end": "2026-10-23",
+      "observation_basis": "coverage_end",
+      "source_observed_at": null
     },
     {
       "id": "remote-control-n-call-split-0",
@@ -8342,8 +8337,8 @@
       "page": "remote-control",
       "screen": "remote-control-02",
       "label": "开工核对调用数",
-      "current_value": 25,
-      "as_of": "2026-10-10",
+      "current_value": 8,
+      "as_of": "2026-10-23",
       "category": "人工",
       "source_location": "E:\\Data\\RemoteComputerMCP\\logs\\service*.log",
       "retrieve": {
@@ -8369,7 +8364,11 @@
       "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。",
       "scope_status": "verified",
       "known_gap": "当前39条窗口为北京时间10月10日23:32:24至11日16:35:12；旧10月8–9日163条已被轮换覆盖。内容Owner必须同步窗口文字和各分类，不能把39当历史累计或仅换总数。",
-      "requires_semantic_refresh": true
+      "requires_semantic_refresh": true,
+      "checked_at": "2026-10-23T10:19:44+08:00",
+      "source_coverage_end": "2026-10-23",
+      "observation_basis": "coverage_end",
+      "source_observed_at": null
     },
     {
       "id": "remote-control-n-call-split-3",
@@ -8377,7 +8376,7 @@
       "screen": "remote-control-02",
       "label": "截图和读界面调用数",
       "current_value": 0,
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-23",
       "category": "人工",
       "source_location": "E:\\Data\\RemoteComputerMCP\\logs\\service*.log",
       "retrieve": {
@@ -8404,9 +8403,9 @@
       "scope_status": "verified",
       "known_gap": "当前39条窗口为北京时间10月10日23:32:24至11日16:35:12；旧10月8–9日163条已被轮换覆盖。内容Owner必须同步窗口文字和各分类，不能把39当历史累计或仅换总数。",
       "requires_semantic_refresh": true,
-      "checked_at": "2026-10-23T09:19:30+08:00",
+      "checked_at": "2026-10-23T10:19:44+08:00",
       "source_observed_at": null,
-      "source_coverage_end": "2026-10-22",
+      "source_coverage_end": "2026-10-23",
       "observation_basis": "coverage_end",
       "observed_at": null
     },
@@ -8415,8 +8414,8 @@
       "page": "remote-control",
       "screen": "remote-control-02",
       "label": "其他调用数",
-      "current_value": 14,
-      "as_of": "2026-10-10",
+      "current_value": 17,
+      "as_of": "2026-10-23",
       "category": "人工",
       "source_location": "E:\\Data\\RemoteComputerMCP\\logs\\service*.log",
       "retrieve": {
@@ -8442,7 +8441,11 @@
       "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。",
       "scope_status": "verified",
       "known_gap": "当前39条窗口为北京时间10月10日23:32:24至11日16:35:12；旧10月8–9日163条已被轮换覆盖。内容Owner必须同步窗口文字和各分类，不能把39当历史累计或仅换总数。",
-      "requires_semantic_refresh": true
+      "requires_semantic_refresh": true,
+      "checked_at": "2026-10-23T10:19:44+08:00",
+      "source_coverage_end": "2026-10-23",
+      "observation_basis": "coverage_end",
+      "source_observed_at": null
     },
     {
       "id": "remote-control-n-median-0",
@@ -8546,7 +8549,7 @@
       "page": "remote-control",
       "screen": "remote-control-05",
       "label": "涉及远程服务路径的提交数",
-      "current_value": 190,
+      "current_value": 381,
       "as_of": "2026-10-10",
       "category": "人工",
       "source_location": "E:\\PCConfig",
@@ -8566,7 +8569,6 @@
       "affected_screens": [
         "remote-control-05"
       ],
-      "registry_number": "n-commits",
       "page_pattern": "\\*\\*([\\d,]+) 次\\*\\*｜提交",
       "field": "screens[4].text",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
@@ -8752,7 +8754,7 @@
       "page": "personal-health",
       "screen": "personal-health-05",
       "label": "健康项目提交总数",
-      "current_value": 111,
+      "current_value": 155,
       "as_of": "2026-10-10",
       "category": "git 提交数",
       "source_location": "V:\\Personal\\Projects\\personal-health",
@@ -8769,11 +8771,10 @@
       "affected_screens": [
         "personal-health-05"
       ],
-      "registry_number": "n-commits",
-      "original_value_index": 0,
-      "page_pattern": "\\ \\*\\*([\\d,]+(?:\\.\\d+)?)\\ 次\\*\\*\\ ",
+      "page_pattern": "\\| \\*\\*[\\d,]+ 行\\*\\* \\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*([\\d,]+) 次\\*\\* \\|\\n\\|---\\|---\\|---\\|\\n\\| Python 正式代码",
       "measurement_scope": "指定源仓库git rev-list --count HEAD：全部可达提交，含合并提交，不筛日期或路径，单位次。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "field": "screens[4].text"
     },
     {
       "id": "daily-preferences-n-cards-0",
@@ -9280,7 +9281,7 @@
       "page": "daily-preferences",
       "screen": "daily-preferences-10",
       "label": "仓库提交总数",
-      "current_value": 205,
+      "current_value": 261,
       "as_of": "2026-10-08",
       "category": "只读计数",
       "source_location": "V:\\Personal\\Projects\\daily-preferences",
@@ -9297,7 +9298,6 @@
       "affected_screens": [
         "daily-preferences-10"
       ],
-      "registry_number": "n-commits",
       "page_pattern": "\\*\\*([\\d,]+) 次\\*\\*｜提交",
       "measurement_scope": "V:/Personal/Projects/daily-preferences 当前 HEAD 可达提交总数",
       "scope_status": "verified",
@@ -9516,7 +9516,7 @@
       "page": "personal-media",
       "screen": "personal-media-09",
       "label": "正式Python代码行数",
-      "current_value": 16433,
+      "current_value": 17255,
       "as_of": "2026-10-09",
       "category": "代码行数",
       "source_location": "V:\\Personal\\Projects\\personal-media",
@@ -9541,18 +9541,17 @@
       "affected_screens": [
         "personal-media-09"
       ],
-      "registry_number": "n-code-lines",
-      "original_value_index": 0,
-      "page_pattern": "\\*\\*([\\d,]+(?:\\.\\d+)?)\\ 行\\*\\*　Python\\ 正式代码（",
+      "page_pattern": "\\*\\*([\\d,]+) 行\\*\\*　Python 正式代码（",
       "measurement_scope": "仅Git跟踪文件；include=[\"**/*.py\"]；exclude=[\"test_*.py\", \"tests/**\"]。按LF计数，含空行/注释，末尾无LF残行不加1，复现页面source的wc -l。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "field": "screens[8].text"
     },
     {
       "id": "personal-media-n-tests-0",
       "page": "personal-media",
       "screen": "personal-media-09",
       "label": "自动测试函数个数",
-      "current_value": 453,
+      "current_value": 509,
       "as_of": "2026-10-09",
       "category": "人工",
       "source_location": "V:\\Personal\\Projects\\personal-media\\tests",
@@ -9574,8 +9573,6 @@
       "affected_screens": [
         "personal-media-09"
       ],
-      "registry_number": "n-tests",
-      "original_value_index": 0,
       "page_pattern": "\\*\\*([\\d,]+) 个\\*\\*　写好的自动测试",
       "field": "screens[8].text",
       "scope_status": "verified",
@@ -10686,8 +10683,8 @@
       "page": "remote-control",
       "screen": "remote-control-02",
       "label": "维护命令次数",
-      "current_value": 53,
-      "as_of": "2026-10-10",
+      "current_value": 0,
+      "as_of": "2026-10-23",
       "category": "人工",
       "source_location": "E:\\Data\\RemoteComputerMCP\\logs\\service*.log",
       "retrieve": {
@@ -10709,15 +10706,19 @@
       "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。",
       "scope_status": "verified",
       "known_gap": "当前39条窗口为北京时间10月10日23:32:24至11日16:35:12；旧10月8–9日163条已被轮换覆盖。内容Owner必须同步窗口文字和各分类，不能把39当历史累计或仅换总数。",
-      "requires_semantic_refresh": true
+      "requires_semantic_refresh": true,
+      "checked_at": "2026-10-23T10:19:44+08:00",
+      "source_coverage_end": "2026-10-23",
+      "observation_basis": "coverage_end",
+      "source_observed_at": null
     },
     {
       "id": "remote-control-text-0-323",
       "page": "remote-control",
       "screen": "remote-control-02",
       "label": "普通命令次数",
-      "current_value": 32,
-      "as_of": "2026-10-10",
+      "current_value": 62,
+      "as_of": "2026-10-23",
       "category": "人工",
       "source_location": "E:\\Data\\RemoteComputerMCP\\logs\\service*.log",
       "retrieve": {
@@ -10739,7 +10740,11 @@
       "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。",
       "scope_status": "verified",
       "known_gap": "当前39条窗口为北京时间10月10日23:32:24至11日16:35:12；旧10月8–9日163条已被轮换覆盖。内容Owner必须同步窗口文字和各分类，不能把39当历史累计或仅换总数。",
-      "requires_semantic_refresh": true
+      "requires_semantic_refresh": true,
+      "checked_at": "2026-10-23T10:19:44+08:00",
+      "source_coverage_end": "2026-10-23",
+      "observation_basis": "coverage_end",
+      "source_observed_at": null
     },
     {
       "id": "remote-control-text-0-324",
@@ -16756,7 +16761,7 @@
       "page": "video-scaffold",
       "screen": "video-scaffold-01",
       "label": "首屏数字截至日期",
-      "current_value": "10 月 11 日",
+      "current_value": "10 月 23 日 10:03",
       "as_of": "2026-10-11",
       "category": "截至日期",
       "field": "screens[0].text",
@@ -16766,9 +16771,10 @@
       "source_location": "E:/Projects/Archives/video-scaffold",
       "scope_status": "verified",
       "measurement_scope": "本页同屏数字观察时间的最早日期；任一Unknown保留旧截至",
-      "page_pattern": "（(\\d+ 月 \\d+ 日 \\d+:\\d+) 读）",
+      "page_pattern": "最后一次提交 [0-9a-f]{7,40} 算（(\\d+ 月 \\d+ 日 \\d+:\\d+) 读）",
       "qualifies": [
-        "video-scaffold-n-tests-0"
+        "video-scaffold-n-tests-0",
+        "video-scaffold-tests-last-commit-time"
       ]
     },
     {
@@ -16776,7 +16782,7 @@
       "page": "video-scaffold",
       "screen": "video-scaffold-01",
       "label": "上次项目更新",
-      "current_value": "2026-10-10 20:17",
+      "current_value": "2026-10-23 01:30",
       "as_of": "2026-10-11",
       "category": "项目修改记录",
       "field": "status_line.last.at",
@@ -16839,7 +16845,6 @@
       "scope_status": "verified",
       "measurement_scope": "本页同屏数字观察时间的最早日期；任一Unknown保留旧截至",
       "qualifies": [
-        "video-scaffold-status-last",
         "int3-video-scaffold-commits-fixed-window"
       ],
       "page_field": "status_line.as_of"
@@ -35891,13 +35896,13 @@
       "screen": "timeaudit-11",
       "label": "源码行数测试定义与提交数共同观察时间",
       "field": "screens[11].text",
-      "page_pattern": "以上三项 (\\d+ 月 \\d+ 日 \\d{2}:\\d{2}) 重取，代码行数没变",
+      "page_pattern": "以上三项 (\\d+ 月 \\d+ 日 \\d{2}:\\d{2}) 重取",
       "qualifies": [
         "timeaudit-n-code-0",
         "timeaudit-n-code-1",
         "timeaudit-n-code-2"
       ],
-      "current_value": "10 月 22 日 06:47",
+      "current_value": "10 月 23 日 10:06",
       "as_of": "2026-10-22",
       "automatic": true,
       "scope_status": "verified",
@@ -35994,11 +35999,11 @@
       "screen": "personal-media-09",
       "label": "自动测试定义静态清点日期",
       "field": "screens[8].text",
-      "page_pattern": "写好的自动测试（按 \\d{1,2} 月 \\d{1,2} 日的源码版本、(\\d{1,2} 月 \\d{1,2} 日)静态清点",
+      "page_pattern": "写好的自动测试（(\\d{1,2} 月 \\d{1,2} 日)静态清点",
       "qualifies": [
         "personal-media-n-tests-0"
       ],
-      "current_value": "10 月 22 日",
+      "current_value": "10 月 23 日",
       "as_of": "2026-10-22",
       "automatic": true,
       "scope_status": "verified",
@@ -37029,6 +37034,284 @@
       "category": "日期联动",
       "measurement_scope": "只注明依据行里计数入口返回的五项计数中最早的观察时刻；源码版本、同步日志和测试说明不随它推进。",
       "screen": "personal-materials-01"
+    },
+    {
+      "id": "video-scaffold-tests-last-commit-time",
+      "page": "video-scaffold",
+      "screen": "video-scaffold-01",
+      "label": "首屏测试定义数所按的最后一次提交时间",
+      "current_value": "10 月 23 日 01:30",
+      "as_of": "2026-10-23",
+      "category": "当前正文事实",
+      "source_location": "E:/Projects/Archives/video-scaffold",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "video-scaffold-published-metrics",
+        "pointer": [
+          "last_change"
+        ],
+        "timeout": 20
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "screens[0].text",
+      "page_pattern": "测试定义数按北京时间 (\\d+ 月 \\d+ 日 \\d+:\\d+) 最后一次提交",
+      "date_semantics": "event_time",
+      "date_precision": "datetime",
+      "measurement_scope": "origin/main 全部提交的提交时间（%cI）最大值转北京时间；是事件时间，不是读取时间。",
+      "scope_status": "verified",
+      "observation_basis": "live_read",
+      "requires_semantic_refresh": true,
+      "known_gap": "同句写着提交短号 1e664d6（北京时间 2026-10-23 10:03 git rev-parse --short origin/main）。入口 video-scaffold-published-metrics 只返回 40 位 source_ref，提交号不能登记成数字，按需更新改不了它；为免再出现“新时间/新数字＋旧提交号”，本条 requires_semantic_refresh=true，经日期联动把同句计数和读取时间一并挡住。要全自动二选一：入口加短号输出并另立文字核对；或把句中提交号删掉后撤销本标记。"
+    },
+    {
+      "id": "video-scaffold-n-tests-1",
+      "page": "video-scaffold",
+      "screen": "video-scaffold-06",
+      "label": "已推送主线静态测试定义数（第 6 屏，未重跑）",
+      "current_value": 333,
+      "as_of": "2026-10-23",
+      "category": "测试个数",
+      "source_location": "E:/Projects/Archives/video-scaffold",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "video-scaffold-published-metrics",
+        "pointer": [
+          "tests"
+        ],
+        "timeout": 20
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "screens[5].text",
+      "page_pattern": "- \\*\\*([\\d,]+) 个\\*\\*｜测试定义（只计数",
+      "measurement_scope": "读取 origin/main 固定提交的 git archive 内存快照；config 仅AST字面值，动画仅 scene_base.html case 唯一名称，tests/ 下 def test 定义数（不执行、不声称通过），非tests/ Python按LF行数；提交含合并提交。",
+      "scope_status": "verified",
+      "observation_basis": "live_read"
+    },
+    {
+      "id": "video-scaffold-commits-last-commit-time",
+      "page": "video-scaffold",
+      "screen": "video-scaffold-06",
+      "label": "提交计数窗口终点（最后一次提交时间）",
+      "current_value": "10 月 23 日 01:30",
+      "as_of": "2026-10-23",
+      "category": "当前正文事实",
+      "source_location": "E:/Projects/Archives/video-scaffold",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "video-scaffold-published-metrics",
+        "pointer": [
+          "last_change"
+        ],
+        "timeout": 20
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "screens[5].text",
+      "page_pattern": "–(\\d+ 月 \\d+ 日 \\d+:\\d+)，最后一次提交",
+      "date_semantics": "event_time",
+      "date_precision": "datetime",
+      "measurement_scope": "origin/main 全部提交的提交时间（%cI）最大值转北京时间；是事件时间，不是读取时间。",
+      "scope_status": "verified",
+      "observation_basis": "live_read",
+      "requires_semantic_refresh": true,
+      "known_gap": "同句写着提交短号 1e664d6（北京时间 2026-10-23 10:03 git rev-parse --short origin/main）。入口 video-scaffold-published-metrics 只返回 40 位 source_ref，提交号不能登记成数字，按需更新改不了它；为免再出现“新时间/新数字＋旧提交号”，本条 requires_semantic_refresh=true，经日期联动把同句计数和读取时间一并挡住。要全自动二选一：入口加短号输出并另立文字核对；或把句中提交号删掉后撤销本标记。"
+    },
+    {
+      "id": "video-scaffold-commits-count-asof",
+      "page": "video-scaffold",
+      "screen": "video-scaffold-06",
+      "label": "提交计数读取时间",
+      "field": "screens[5].text",
+      "page_pattern": "最后一次提交 [0-9a-f]{7,40}；(\\d+ 月 \\d+ 日 \\d+:\\d+) 数）",
+      "qualifies": [
+        "video-scaffold-n-commits-0",
+        "video-scaffold-commits-last-commit-time"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "仅注明所列记录最早观察日期；任一Unknown保留旧日期。",
+      "current_value": "10 月 23 日 10:03",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动"
+    },
+    {
+      "id": "video-scaffold-status-source-last-time",
+      "page": "video-scaffold",
+      "screen": "video-scaffold-01",
+      "label": "状态说明里的上次更新时间",
+      "current_value": "10 月 23 日 01:30",
+      "as_of": "2026-10-23",
+      "category": "当前正文事实",
+      "source_location": "E:/Projects/Archives/video-scaffold",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "video-scaffold-published-metrics",
+        "pointer": [
+          "last_change"
+        ],
+        "timeout": 20
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "status_line.source",
+      "page_pattern": "上次更新按北京时间 (\\d+ 月 \\d+ 日 \\d+:\\d+) 最后一次提交",
+      "date_semantics": "event_time",
+      "date_precision": "datetime",
+      "measurement_scope": "origin/main 全部提交的提交时间（%cI）最大值转北京时间；是事件时间，不是读取时间。",
+      "scope_status": "verified",
+      "observation_basis": "live_read",
+      "requires_semantic_refresh": true,
+      "known_gap": "同句写着提交短号 1e664d6（北京时间 2026-10-23 10:03 git rev-parse --short origin/main）。入口 video-scaffold-published-metrics 只返回 40 位 source_ref，提交号不能登记成数字，按需更新改不了它；为免再出现“新时间/新数字＋旧提交号”，本条 requires_semantic_refresh=true，经日期联动把同句计数和读取时间一并挡住。要全自动二选一：入口加短号输出并另立文字核对；或把句中提交号删掉后撤销本标记。"
+    },
+    {
+      "id": "video-scaffold-status-source-read-asof",
+      "page": "video-scaffold",
+      "screen": "video-scaffold-01",
+      "label": "状态说明里上次更新的读取时间",
+      "field": "status_line.source",
+      "page_pattern": "；(\\d+ 月 \\d+ 日 \\d+:\\d+) 读；",
+      "qualifies": [
+        "video-scaffold-status-last",
+        "video-scaffold-status-source-last-time"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "仅注明所列记录最早观察日期；任一Unknown保留旧日期。",
+      "current_value": "10 月 23 日 10:03",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动"
+    },
+    {
+      "id": "sunshine-remote-streaming-code-lines-asof",
+      "page": "sunshine-remote-streaming",
+      "screen": "sunshine-remote-streaming-05",
+      "label": "程序行数统计时间",
+      "field": "screens[4].text",
+      "page_pattern": "不含空行；(\\d+ 月 \\d+ 日 \\d+:\\d+) 统计）",
+      "qualifies": [
+        "sunshine-remote-streaming-n-code-lines-0"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "仅注明所列记录最早观察日期；任一Unknown保留旧日期。",
+      "current_value": "10 月 23 日 10:06",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动"
+    },
+    {
+      "id": "sunshine-remote-streaming-commits-asof",
+      "page": "sunshine-remote-streaming",
+      "screen": "sunshine-remote-streaming-05",
+      "label": "提交数读取时间",
+      "field": "screens[4].text",
+      "page_pattern": "提交（6 月 26 日起，(\\d+ 月 \\d+ 日 \\d+:\\d+) 数）",
+      "qualifies": [
+        "sunshine-remote-streaming-n-commits-0"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "仅注明所列记录最早观察日期；任一Unknown保留旧日期。",
+      "current_value": "10 月 23 日 10:06",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动"
+    },
+    {
+      "id": "personal-health-commits-asof",
+      "page": "personal-health",
+      "screen": "personal-health-05",
+      "label": "提交数读取时间",
+      "field": "screens[4].text",
+      "page_pattern": "提交，8 月 25 日起，(\\d+ 月 \\d+ 日 \\d+:\\d+) 数",
+      "qualifies": [
+        "personal-health-n-commits-0"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "仅注明所列记录最早观察日期；任一Unknown保留旧日期。",
+      "current_value": "10 月 23 日 10:06",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动"
+    },
+    {
+      "id": "daily-preferences-commits-asof",
+      "page": "daily-preferences",
+      "screen": "daily-preferences-10",
+      "label": "提交数读取时间",
+      "field": "screens[9].text",
+      "page_pattern": "提交（9 月 1 日起，(\\d+ 月 \\d+ 日 \\d+:\\d+) 数）",
+      "qualifies": [
+        "daily-preferences-n-commits-0"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "仅注明所列记录最早观察日期；任一Unknown保留旧日期。",
+      "current_value": "10 月 23 日 10:06",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动"
+    },
+    {
+      "id": "personal-media-code-lines-asof",
+      "page": "personal-media",
+      "screen": "personal-media-09",
+      "label": "正式代码行数清点日期",
+      "field": "screens[8].text",
+      "page_pattern": "Python 正式代码（(\\d{1,2} 月 \\d{1,2} 日)清点；",
+      "qualifies": [
+        "personal-media-n-code-lines-0"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "仅注明所列记录最早观察日期；任一Unknown保留旧日期。",
+      "current_value": "10 月 23 日",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动"
+    },
+    {
+      "id": "remote-control-commits-asof",
+      "page": "remote-control",
+      "screen": "remote-control-05",
+      "label": "远程路径提交数重数日期",
+      "field": "screens[4].text",
+      "page_pattern": "；(\\d+ 月 \\d+ 日)按 Git 路径历史重数",
+      "qualifies": [
+        "remote-control-n-commits-0"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "仅注明所列记录最早观察日期；任一Unknown保留旧日期。",
+      "current_value": "10 月 23 日",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动"
     }
   ],
   "freshness_policy": {

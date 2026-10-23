@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup-wechat-native-backup/page.json",
   "sha256": "b4107712cdc2c6f531f5c05ff853e445ce617cd2786a0f8a1957d3a6ffc9170a",
-  "converted_at_beijing": "2026-10-23T10:06:02+08:00"
+  "converted_at_beijing": "2026-10-23T10:23:38+08:00"
  }
 }
 ---
@@ -759,7 +759,7 @@ DevConfig Backup · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "4每周一11:00启动WeChatBackup-Drive-Weekly（10月19日周一那次因热备事务没收尾而失败；本轮没联网，之后的结果未核对）。",
+     "text_ref": "4每周一11:00启动WeChatBackup-Drive-Weekly（10月19日周一那次因热备事务没收尾而失败；",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -777,7 +777,7 @@ DevConfig Backup · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "4每周一11:00启动WeChatBackup-Drive-Weekly（10月19日周一那次因热备事务没收尾而失败；本轮没联网，之后的结果未核对）。",
+     "text_ref": "4每周一11:00启动WeChatBackup-Drive-Weekly（10月19日周一那次因热备事务没收尾而失败；",
      "columns": 1,
      "icons": "none",
      "illustration": "none",

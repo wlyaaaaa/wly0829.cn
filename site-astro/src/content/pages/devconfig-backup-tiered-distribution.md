@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup-tiered-distribution/page.json",
   "sha256": "467b22849a5015644283250ca8e2787dab5cd690d495a67def3bfdf83b3234cc",
-  "converted_at_beijing": "2026-10-23T10:06:02+08:00"
+  "converted_at_beijing": "2026-10-23T10:23:38+08:00"
  }
 }
 ---
@@ -1070,7 +1070,7 @@ DevConfig Backup · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "配置Drive任务10月19日13:00—13:03:49完成（package=verified_existing、drive=complete），本机记录对应当天12:07的新包；截至10月22日0",
+     "text_ref": "配置Drive任务10月19日13:00—13:03:49完成（package=verified_existing、drive=complete），本机记录对应当天12:07的新包；",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1087,7 +1087,7 @@ DevConfig Backup · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "配置Drive任务10月19日13:00—13:03:49完成（package=verified_existing、drive=complete），本机记录对应当天12:07的新包；截至10月22日0",
+     "text_ref": "配置Drive任务10月19日13:00—13:03:49完成（package=verified_existing、drive=complete），本机记录对应当天12:07的新包；",
      "columns": 1,
      "icons": "none",
      "illustration": "none"

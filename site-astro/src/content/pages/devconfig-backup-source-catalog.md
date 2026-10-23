@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup-source-catalog/page.json",
   "sha256": "38cecb106dce890f15e1916f868ed96228fa864f08ae9bdfd24e4bc574b140fa",
-  "converted_at_beijing": "2026-10-23T10:06:02+08:00"
+  "converted_at_beijing": "2026-10-23T10:23:38+08:00"
  }
 }
 ---
@@ -583,7 +583,7 @@ DevConfig Backup · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1当前本地/G成功包为devconfig-20261020-230752-4c4e7d61.zip，449,276,059字节（约428.5MiB），回执6,342个文件、原始1,394,006,55",
+     "text_ref": "1当前本地/G成功包为",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -605,7 +605,7 @@ DevConfig Backup · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1当前本地/G成功包为devconfig-20261020-230752-4c4e7d61.zip，449,276,059字节（约428.5MiB），回执6,342个文件、原始1,394,006,55",
+     "text_ref": "1当前本地/G成功包为",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
