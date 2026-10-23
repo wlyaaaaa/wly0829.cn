@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/steam-millennium-config-backup-allowlist-config-and-style-snapshot/page.json",
-  "sha256": "c79a19bada2f3aad051e87b98e35e546e8c4cef8ddcffa23942cfb6a61218aee",
-  "converted_at_beijing": "2026-10-11T19:07:12+08:00"
+  "sha256": "1a6ca1d67dc860da6494bf1dffb65dc209c49f154f54803a9662b2171b03657b",
+  "converted_at_beijing": "2026-10-23T13:22:41+08:00"
  }
 }
 ---
@@ -646,7 +646,7 @@ Steam Millennium 配置备份 · 功能说明
 
 - general.accentColor=#00ff00，millenniumUpdateChannel=stable；更新检查和 injectCSS/injectJavascript 开启，onMillenniumUpdate=2。三项通知开关均开启，network.proxy、proxyUsername、proxyPassword 均为空；不从数值枚举推断未验证的更新行为。
 
-- plugins.enabledPlugins 保存 3 个插件名；themes.activeTheme、conditions、themeColors 分别保存当前主题、选项和颜色。
+- 10 月 19 日 10:30 那一代备份里，plugins.enabledPlugins 保存 3 个插件名；themes.activeTheme、conditions、themeColors 分别保存当前主题、选项和颜色。
 
 ::screen{#steam-millennium-config-backup-allowlist-config-and-style-snapshot-06 section="tech"}
 

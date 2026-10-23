@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/steam-millennium-config-backup-plugin-manifest-and-install-state-tracking/page.json",
-  "sha256": "c825cd85032dec05dfa4c6bae658713dce791b68079847b4bf621e376eb41680",
-  "converted_at_beijing": "2026-10-20T08:56:34+08:00"
+  "sha256": "314dd5e6cc12186910c0f6e6e403880312e84da8c1b02130f927b68814d7193c",
+  "converted_at_beijing": "2026-10-23T13:22:41+08:00"
  }
 }
 ---
@@ -632,7 +632,7 @@ Steam Millennium 配置备份 · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-5 款清单；配置启用 3 款；Size on Disk、Easy SteamGrid 的本机新版本号尚未提交
+5 款清单；配置启用 3 款（按 10 月 19 日 10:30 那一代备份）；Size on Disk、Easy SteamGrid 的本机新版本号尚未提交
 
 ## 关键规则与设计选择
 

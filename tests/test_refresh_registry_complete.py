@@ -26,8 +26,8 @@ class RegistryCompletenessTests(unittest.TestCase):
         checks = binding_findings(ROOT, records)
         for kind in ("pattern", "digits", "mirror"):
             self.assertEqual(checks[kind], [], kind + "：\n" + "\n".join(f"{c['record_id']}：{c['reason']}" for c in checks[kind]))
-        # 截至日期连着人工项（永远推不动）：10 月 23 日清点为 24 条，只许减少
-        self.assertLessEqual(len(checks["manual_qualified"]), 24, "\n".join(f"{c['record_id']}：{c['reason']}" for c in checks["manual_qualified"]))
+        # 截至日期连着人工项（永远推不动）：10 月 23 日清点为 23 条，只许减少
+        self.assertLessEqual(len(checks["manual_qualified"]), 23, "\n".join(f"{c['record_id']}：{c['reason']}" for c in checks["manual_qualified"]))
         # 自动数字同句里没登记的观察时间：10 月 23 日清点为 25 处，只许减少；改到哪页就把那页的补上
         self.assertLessEqual(len(checks["observed"]), 25, "\n".join(f"{c['page']}：{c['excerpt']}" for c in checks["observed"]))
 

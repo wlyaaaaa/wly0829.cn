@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking/page.json",
-  "sha256": "f37d4a54d1f9ddf1ad7e7e7240c93f50d426084753af70368135f73e2bf9dc6f",
-  "converted_at_beijing": "2026-10-22T08:32:40+08:00"
+  "sha256": "4b2d4acff073698c4b8e5ece644e7720d6c6920e872f592aabfa702b5256a408",
+  "converted_at_beijing": "2026-10-23T13:22:41+08:00"
  }
 }
 ---
@@ -648,7 +648,7 @@ Steam Millennium 配置备份 · 功能说明
 
 - Adwaita 子目录保存 metadata.json、skin.json、theme.json；Zehn 保存 metadata.json、skin.json、options.json、waifus.json。
 
-- Adwaita 保存 17 个条件选择与 48 个颜色变量，包括 System 配色方案、Adwaita 字体、圆角与方形游戏图标选择；如 --adw-accent-bg-rgb=39, 168, 100。Zehn 保存 25 个条件选择与 14 个颜色变量，包括 Embed Size=640、Avatar Frame=no 等选项与各状态颜色。
+- 10 月 19 日 10:30 那一代备份的 config.json 里，Adwaita 保存 17 个条件选择与 48 个颜色变量，包括 System 配色方案、Adwaita 字体、圆角与方形游戏图标选择；如 --adw-accent-bg-rgb=39, 168, 100。同一份里 Zehn 保存 25 个条件选择与 14 个颜色变量，包括 Embed Size=640、Avatar Frame=no 等选项与各状态颜色。
 
 ## 执行流程
 

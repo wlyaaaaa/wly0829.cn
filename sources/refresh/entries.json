@@ -1221,7 +1221,10 @@
     "output": "json",
     "timeout": 20,
     "verification": "G默认Hot必经Assert-GMedia 1195-1201/1346后才publish 1369及complete 1110-1125；实际无ConfigPath，回执当前指针/closure一致；H回执明确状态。缓存快照，非本轮现场，详见round02 bitlocker-evidence。",
-    "observation_basis": "unknown"
+    "observation_basis": "snapshot_timestamp",
+    "source_observed_at_pointer": [
+      "snapshot_at"
+    ]
   },
   "b7-agents-module-source-metrics": {
     "argv": [
@@ -1759,5 +1762,25 @@
     "timeout": 20,
     "source_evidence": "只读手机App周期源码、电脑现行任务注册源码及Git提交时间，不连手机、不读取定位/使用/装机记录、不安装或运行采集。",
     "observation_basis": "live_read"
+  },
+  "b6-steam-config-snapshot": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,hashlib,pathlib\np=pathlib.Path(r'E:\\Projects\\Tools\\steam-millennium-config-backup')\nm=json.loads((p/'snapshot-manifest.json').read_text(encoding='utf-8-sig'))\nf=[x for x in m['files'] if x['path'].replace(chr(92),'/')=='config/config.json']\nassert len(f)==1,'清单里没有 config.json'\ndata=(p/'config/config.json').read_bytes()\nassert len(data)==f[0]['bytes'] and hashlib.sha256(data).hexdigest().lower()==f[0]['sha256'].lower(),'config.json 与本代清单不符'\nc=json.loads(data.decode('utf-8-sig'));t=c['themes']\nprint(json.dumps({'created_utc':m['created_utc'],'generation':m['generation'],'enabled_plugins':len(c['plugins']['enabledPlugins']),'active_themes':int(bool(t['activeTheme'])),'conditions':{k:len(v) for k,v in t['conditions'].items()},'theme_colors':{k:len(v) for k,v in t['themeColors'].items()}}))\n"
+    ],
+    "cwd": "E:\\Projects\\Tools\\steam-millennium-config-backup",
+    "read_only": true,
+    "owner_project": "steam-millennium-config-backup",
+    "output": "json",
+    "timeout": 25,
+    "source_evidence": "固定 argv 全文已检查；Python 只读 snapshot-manifest.json 和 config/config.json、算 SHA-256 和计数，不创建文件，不导入产品入口；输出只有备份时刻、代号和聚合数。",
+    "observation_basis": "snapshot_timestamp",
+    "source_observed_at_pointer": [
+      "created_utc"
+    ]
   }
 }

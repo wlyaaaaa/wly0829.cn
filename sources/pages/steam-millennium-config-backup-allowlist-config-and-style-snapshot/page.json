@@ -93,7 +93,7 @@
       "id": "steam-millennium-config-backup-allowlist-config-and-style-snapshot-05",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n配置已采集；本轮未做界面恢复\n\n## 关键规则与设计选择\n\n1. 核心JSON按受支持字段生成公开投影，恢复时只合并这些字段，保留目标网络和未知字段；不盲目复制整份配置。\n\n2. 保留核心选择和轻量 CSS，程序、缓存与账号状态不随配置走。\n\n3. quick.css 是样式定义；不存在“所有 Steam 窗口已验证生效”的推断。\n\n## 当前怎样实现\n\n- general.accentColor=#00ff00，millenniumUpdateChannel=stable；更新检查和 injectCSS/injectJavascript 开启，onMillenniumUpdate=2。三项通知开关均开启，network.proxy、proxyUsername、proxyPassword 均为空；不从数值枚举推断未验证的更新行为。\n\n- plugins.enabledPlugins 保存 3 个插件名；themes.activeTheme、conditions、themeColors 分别保存当前主题、选项和颜色。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n配置已采集；本轮未做界面恢复\n\n## 关键规则与设计选择\n\n1. 核心JSON按受支持字段生成公开投影，恢复时只合并这些字段，保留目标网络和未知字段；不盲目复制整份配置。\n\n2. 保留核心选择和轻量 CSS，程序、缓存与账号状态不随配置走。\n\n3. quick.css 是样式定义；不存在“所有 Steam 窗口已验证生效”的推断。\n\n## 当前怎样实现\n\n- general.accentColor=#00ff00，millenniumUpdateChannel=stable；更新检查和 injectCSS/injectJavascript 开启，onMillenniumUpdate=2。三项通知开关均开启，network.proxy、proxyUsername、proxyPassword 均为空；不从数值枚举推断未验证的更新行为。\n\n- 10 月 19 日 10:30 那一代备份里，plugins.enabledPlugins 保存 3 个插件名；themes.activeTheme、conditions、themeColors 分别保存当前主题、选项和颜色。",
       "links": [],
       "anchors": [
         {
