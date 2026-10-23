@@ -100,6 +100,10 @@ def formatted(old, value):
     number = Decimal(str(value).replace(",", ""))
     if not number.is_finite():
         raise ValueError("新值不是有限数字")
+    # 沿用页面原有的小数位：缩放后的整数不写成“749.0”，“1.80”也不因浮点变成“1.8”；新值更精确时照写。
+    places = len(old.split(".")[1]) if "." in old else 0
+    if -number.normalize().as_tuple().exponent <= places:
+        number = number.quantize(Decimal(1).scaleb(-places))
     return format(number, ",f" if "," in old else "f")
 
 
@@ -301,7 +305,13 @@ def build_number_edits(root, result):
             if NUMBER.fullmatch(str(row["new_value"])) and not NUMBER.fullmatch(str(row["old_value"])):
                 raise ValueError("old_value_not_whole_number")
             proven_offset(parent[key], row)
-            if not same_value(parent[key][start:end], row["old_value"]):
+            fragment = parent[key][start:end]
+            if (row["status"] == "unchanged" and not NUMBER.fullmatch(fragment)
+                    and fragment == str(row["old_value"]) == str(row["new_value"])):
+                # 状态文字原样重读：不改字，只让注明它的截至日期可以推进。
+                accepted.add(rid)
+                continue
+            if not same_value(fragment, row["old_value"]):
                 raise ValueError("原位置的值与重取旧值不一致")
             if same_value(str(row["old_value"]), row["new_value"]) and any(
                     r.get("date_semantics") == "coverage_end" and rid in r.get("qualifies", []) for r in result["rows"]):

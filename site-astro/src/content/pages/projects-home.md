@@ -30,7 +30,7 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "as_of": "2026-10-12 16:26",
+   "as_of": "2026-10-23 09:19",
    "manifest": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\manifest.json",
    "files": [
     "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\page.json",
@@ -246,7 +246,7 @@
      "id": "n-projects",
      "text": "37 个项目",
      "meaning": "网站上有项目页的项目（常用、偶尔用、冻结都算）",
-     "as_of": "2026-10-12 16:26",
+     "as_of": "2026-10-23 09:19",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01"
@@ -256,7 +256,7 @@
      "id": "n-common",
      "text": "常用 24 个",
      "meaning": "page.json 的 status 为“常用”",
-     "as_of": "2026-10-12 16:26",
+     "as_of": "2026-10-23 09:19",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01"
@@ -266,7 +266,7 @@
      "id": "n-occasional",
      "text": "偶尔用 7 个",
      "meaning": "page.json 的 status 为“偶尔用”",
-     "as_of": "2026-10-12 16:26",
+     "as_of": "2026-10-23 09:19",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01"
@@ -276,7 +276,7 @@
      "id": "n-frozen",
      "text": "冻结 6 个",
      "meaning": "page.json 的 status 为“冻结”（kind 为 frozen）",
-     "as_of": "2026-10-12 16:26",
+     "as_of": "2026-10-23 09:19",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01",
@@ -287,7 +287,7 @@
      "id": "n-public",
      "text": "公开 19 个",
      "meaning": "page.json 的 public 为 true（冻结的也算）",
-     "as_of": "2026-10-12 16:26",
+     "as_of": "2026-10-23 09:19",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01"
@@ -297,7 +297,7 @@
      "id": "n-private",
      "text": "私有 18 个",
      "meaning": "page.json 的 public 为 false",
-     "as_of": "2026-10-12 16:26",
+     "as_of": "2026-10-23 09:19",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01"
@@ -307,7 +307,7 @@
      "id": "n-group-sizes",
      "text": "让 AI 守规矩、用对工具 3 个项目、让 AI 管好秘密 2 个项目、让 AI 管好备份和恢复 4 个项目、让电脑顺手、状态看得见 5 个项目、人不在电脑前也能办事 2 个项目、让 AI 懂我 5 个项目、让 AI 读懂我的材料 5 个项目、让 AI 帮我写和做 5 个项目、冻结（AI 不再维护） 6 个项目",
      "meaning": "每组有几个项目；和实际显示的卡片数一致",
-     "as_of": "2026-10-12 16:26",
+     "as_of": "2026-10-23 09:19",
      "source": "registry.groups.cards 关联 screens.id，只统计显示的项目卡片",
      "screens": [
       "projects-home-01"
@@ -317,7 +317,7 @@
      "id": "n-in-use",
      "text": "31 个在用的项目",
      "meaning": "常用＋偶尔用（不含冻结）",
-     "as_of": "2026-10-12 16:26",
+     "as_of": "2026-10-23 09:19",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01"
@@ -327,7 +327,7 @@
      "id": "n-features",
      "text": "功能 1011 条（含冻结项目已停用的 99 条）",
      "meaning": "各项目页 registry.features 条数相加；所有登记状态都计入，冻结项目另计停用条数。",
-     "as_of": "2026-10-12 16:26",
+     "as_of": "2026-10-23 09:19",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01"
@@ -1083,8 +1083,8 @@
  },
  "source": {
   "page": "sources/pages/projects-home/page.json",
-  "sha256": "bde528f415e68422e2ef13e4b58f0ba758be4d641e1dba196539169ab3685076",
-  "converted_at_beijing": "2026-10-23T08:10:05+08:00"
+  "sha256": "9c90a74a9b86a5e1774bf5231f37af957a3c498719e7954a2150f9432cdc70d3",
+  "converted_at_beijing": "2026-10-23T09:59:34+08:00"
  }
 }
 ---
@@ -1414,7 +1414,7 @@
 
 功能 **1011 条**（各项目页“全部功能”相加，含冻结项目已停用的 99 条）
 
-截至北京时间 2026-10-12 16:26
+截至北京时间 2026-10-23 09:19
 
 **按本事分组**
 

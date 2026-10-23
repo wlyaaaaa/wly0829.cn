@@ -223,6 +223,30 @@ class NumberEditsTests(unittest.TestCase):
         closure = close_run(self.root, result, report)
         self.assertEqual({r["record_id"]: r["status"] for r in closure["rows"]}["date"], "applied_readback_verified")
 
+    def test_scaled_numbers_keep_the_page_decimal_places(self):
+        from apply_edits import formatted
+        self.assertEqual([formatted("740", 749.0), formatted("3,899", 3994.0), formatted("1.80", 1.8),
+                          formatted("58.4", 54.1), formatted("740", 749.5), formatted("7,559", 7760)],
+                         ["749", "3,994", "1.80", "54.1", "749.5", "7,760"])
+
+    def test_unchanged_status_text_lets_its_cutoff_advance(self):
+        self.page["screens"][0]["text"] = "截至 10 月 9 日，提醒还没正式发过"
+        self.save()
+        state = dict(self.rows[0], id="state", page_number=None, field="screens[0].text",
+                     page_pattern=r"，(提醒还没正式发过)", status="unchanged", old_value="提醒还没正式发过", new_value="提醒还没正式发过",
+                     checked_at="2026-10-11T16:03:00+08:00", observation_basis="live_read")
+        cutoff = dict(self.rows[-1], field="screens[0].text", page_pattern=r"截至 (\d+ 月 \d+ 日)", qualifies=["state"],
+                      old_value="10 月 9 日", new_value="2026-10-11")
+        result = dict(schema="content-refresh.result.v1", run_id="state", rows=[state, cutoff])
+        report = apply_edits(self.root, build_number_edits(self.root, result))
+        self.assertFalse(report["skipped"])
+        self.assertEqual(json.loads(self.path.read_text("utf-8"))["screens"][0]["text"], "截至 10 月 11 日，提醒还没正式发过")
+        from freshness import close_run
+        statuses = {r["record_id"]: r["status"] for r in close_run(self.root, result, report)["rows"]}
+        self.assertEqual(statuses, dict(state="checked_unchanged", date="applied_readback_verified"))
+        state.update(status="changed", new_value="提醒已发过")
+        self.assertFalse(build_number_edits(self.root, result)["edits"])
+
     def test_field_pattern_and_cross_field_qualified_coverage_date(self):
         self.page['screens'][0]['text'] = '当前材料有 165 份'
         self.page['status_line'] = {'as_of': '2026-10-09'}
