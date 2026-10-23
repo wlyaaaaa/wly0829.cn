@@ -323,7 +323,7 @@
      "text": "压缩后 428.8 MiB",
      "meaning": "本轮读取的最新配置包压缩后大小；这一代回执没有给出压缩前大小",
      "as_of": "2026-10-23",
-     "source": "10 月 23 日 09:56 只读核对的最新配置包：out/latest.zip.receipt.json 的 package_bytes，与零写入状态入口一致",
+     "source": "10 月 23 日 10:29 只读核对的最新配置包：out/latest.zip.receipt.json 的 package_bytes，与零写入状态入口一致",
      "screens": [
       "devconfig-backup-01"
      ]
@@ -610,8 +610,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
-  "sha256": "5c8a579865175d5aefaf3b91b3a53bdab6ba282385c2e9941d7bc789d78423ed",
-  "converted_at_beijing": "2026-10-23T10:06:02+08:00"
+  "sha256": "b4bacd9aaf7a671f6c463aea0ad75e4fd11a398cc18ce29ccc072a5373657adc",
+  "converted_at_beijing": "2026-10-23T10:34:59+08:00"
  }
 }
 ---
@@ -983,11 +983,11 @@
 重装系统或电脑坏了，最难重建的是各种开发软件和 AI 工具的设置，还有微信里的聊天记录。它每天把这两样复制出来、逐个文件核对，存到机箱里的 G 盘；配置每天、微信每周再传到 Google 云盘；外接盘那一份由电脑配置与恢复同步。全程是脚本，不用 AI 模型。
 
 - **70 个来源**　开发配置清单；Codex 的配置和记忆、Antigravity 和 OpenCode 的设置只有它在备
-- **154,404 个文件**　微信原始文件 43.5 GiB（10 月 22 日完成的 G 副本），每天拍快照复制一份到 G
+- **154,912 个文件**　微信原始文件 43.6 GiB（10 月 23 日完成的 G 副本），每天拍快照复制一份到 G
 - **6,344 个文件**　最新一个开发配置包，压缩后 428.8 MiB
 - **4 个自动任务**　配置每天存 G、每天上云；微信每天存 G、每周上云
 
-现在本机和 G 都是新的（10 月 23 日 09:56 只读核对，没有重跑，也没联网看云端）。配置：10 月 22 日 12:09 新包在本机做成、12:09 G 盘也到位，两边都核对过、没有文件警告。微信：前几天 19 日那次卡在“进行中”的 G 盘热备已经过去，10 月 22 日 10:14 新的一份完成，每个文件都核对过、删除也跟着原件走了，没有文件警告；10 月 23 日 09:30 开始的那次还在跑，跑完前当前仍是 10:14 这一份。外接 H 盘：最近已知是 10 月 21 日下午电脑配置与恢复那一轮冷备，配置和微信两项都完成了；整轮仍带警告，但警告来自别的项目，不是这两项。那一轮早于现在这两份，H 有没有跟上这次没有核对。云端这次没联网查，只看本机记录：配置 10 月 22 日 13:04 上云完成，微信 10 月 22 日 12:10 上云完成（传的是 10:14 那份 G 副本）；云上实际内容没有重读。19 日那次卡住时，微信上云和 H 冷备都跟着停过一天。以前也出过一次不同的问题：10 月 11 日配置采集因 Codex 的一个状态数据库没能限时做出一致副本而失败，当时没出新包，前一天的好包原样留着——失败不覆盖旧包就是这样起作用的。
+现在本机和 G 都是新的（10 月 23 日 10:28 只读核对，没有重跑，也没联网看云端）。配置：10 月 22 日 12:09 新包在本机做成、12:09 G 盘也到位，两边都核对过、没有文件警告。微信：前几天 19 日那次卡在“进行中”的 G 盘热备已经过去，10 月 23 日 10:16 新的一份完成，每个文件都核对过、删除也跟着原件走了，没有文件警告。外接 H 盘：最近已知是 10 月 21 日下午电脑配置与恢复那一轮冷备，配置和微信两项都完成了；整轮仍带警告，但警告来自别的项目，不是这两项。那一轮早于现在这两份，H 有没有跟上这次没有核对。云端这次没联网查，只看本机记录：配置 10 月 22 日 13:04 上云完成，微信最近一次是 10 月 22 日 12:10 上云完成，传的是上一份（22 日 10:14 那份），23 日 10:16 这一份还没有上云记录；云上实际内容没有重读。19 日那次卡住时，微信上云和 H 冷备都跟着停过一天。以前也出过一次不同的问题：10 月 11 日配置采集因 Codex 的一个状态数据库没能限时做出一致副本而失败，当时没出新包，前一天的好包原样留着——失败不覆盖旧包就是这样起作用的。
 
 截至 10 月 23 日
 
@@ -2716,7 +2716,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 
 **规模**　50 个受 Git 管的文件、约 6,000 行，其中 24 个是自检脚本；79 次提交（10 月 12 日 05:39 回读，源码没有新提交、没有未提交改动）。
 
-**截至 10 月 23 日 09:56 的状态**（只读回读，没重跑、没联网；状态入口 Backup-Status -NoDrive -Json 退出码 0、write_mode=zero_write，整体 receipts_current）　配置：本地/G 均为 current，当前包 devconfig-20261021-230914-6ea337d3.zip（北京时间 10 月 22 日 12:09:54 本机完成、12:09:58 G 完成，6,344 个文件、449,631,558 字节即 428.8 MiB，无文件警告；verification=producer_verified_not_rehashed_by_status，状态入口没有重算哈希）。本机上云记录 10 月 22 日 13:00–13:04:15 package=verified_existing、drive=complete。Drive：not_contacted，本轮没联网，配置和微信云上的实际内容都没有重读。微信：G 热备 10 月 22 日 10:14:14 完成，154,404 个文件、46,742,366,752 字节（43.5 GiB），collection complete、sha256_full_tree、source_follow_verified、无文件警告；19 日卡住的 backup_tree_transaction_pending 没有再出现。本机上云记录 10 月 22 日 11:00–12:10:58 drive=complete，上传来源是这份 G 热备（gate passed）。10 月 23 日 09:30 启动的热备，09:56 看时仍是 running。外接盘：本轮没有新读 PCConfig；10 月 22 日 06:47 读到的 core-recovery/cold-last.json 记 10 月 21 日 16:47:54 整轮 complete_with_warnings，20 个集合没有 blocked，devconfig 和 wechat 两项都是 complete；警告是密码中心那一项 H 落后 G、另有四个来源新鲜度 unknown，不是微信。那一轮早于现在这两份，H 是否已有新一代没有核对。应用恢复 not_tested。
+**截至 10 月 23 日 10:28 的状态**（只读回读，没重跑、没联网；状态入口 Backup-Status -NoDrive -Json 退出码 0、write_mode=zero_write，整体 receipts_current）　配置：本地/G 均为 current，当前包 devconfig-20261021-230914-6ea337d3.zip（北京时间 10 月 22 日 12:09:54 本机完成、12:09:58 G 完成，6,344 个文件、449,631,558 字节即 428.8 MiB，无文件警告；verification=producer_verified_not_rehashed_by_status，状态入口没有重算哈希）。本机上云记录 10 月 22 日 13:00–13:04:15 package=verified_existing、drive=complete。Drive：not_contacted，本轮没联网，配置和微信云上的实际内容都没有重读。微信：G 热备 10 月 23 日 10:16:05 完成，154,912 个文件、46,826,139,227 字节（43.6 GiB），collection complete、sha256_full_tree、source_follow_verified、无文件警告；19 日卡住的 backup_tree_transaction_pending 没有再出现。本机最近一次微信上云记录是 10 月 22 日 11:00–12:10:58 drive=complete，上传来源是上一代（22 日 10:14:14 那份 G 热备，gate passed）；23 日 10:16:05 这一代还没有上云记录。外接盘：本轮没有新读 PCConfig；10 月 22 日 06:47 读到的 core-recovery/cold-last.json 记 10 月 21 日 16:47:54 整轮 complete_with_warnings，20 个集合没有 blocked，devconfig 和 wechat 两项都是 complete；警告是密码中心那一项 H 落后 G、另有四个来源新鲜度 unknown，不是微信。那一轮早于现在这两份，H 是否已有新一代没有核对。应用恢复 not_tested。
 
 **10 月 20 日 07:41 回读到的历史状态**（整体 attention_required）　配置：本地/G 均为 current，当前包 devconfig-20261018-230702-098e60a2.zip（北京时间 10 月 19 日 12:07:21 完成，6,298 个文件、299,627,858 字节，7-Zip 自检通过，无文件警告；生产者已核对，状态入口没有重算哈希）。上云 10 月 19 日 13:00–13:03:49 package=verified_existing、drive=complete，这是本机生产回执，没联网重读云端。微信：verification=unknown，reason=backup_tree_transaction_pending——10 月 19 日 09:30 启动的 G 热备回执仍是 running，计划任务上次结果 125；当天 11:00 微信上云因同样原因失败。最近一份完成的 G 热备是 10 月 18 日 10:14（153,226 个文件、46,623,230,809 字节），事务没收尾前不能凭它说当前完整；微信云端最近成功是 10 月 12 日 12:18（148,878 个文件、46,034,606,676 字节）。外接盘：PCConfig 10 月 19 日 14:30:11 的冷备 status=blocked，reason=required_backup_freshness_not_ready:wechat，H 写入状态 unknown_no_complete_receipt；本轮没有改 PCConfig，也没有修复或重跑。
 

@@ -248,7 +248,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1日期包及其附属清单作为一个成功代保留；current.json是完整采集与验证的指针，latest.zip只是兼容别名，不可凭修改时间挑包。当前成功代是devconfig-20261020-2307",
+        "text_ref": "1日期包及其附属清单作为一个成功代保留；current.json是完整采集与验证的指针，latest.zip只是兼容别名，不可凭修改时间挑包。当前成功代是",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -272,7 +272,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1日期包及其附属清单作为一个成功代保留；current.json是完整采集与验证的指针，latest.zip只是兼容别名，不可凭修改时间挑包。当前成功代是devconfig-20261020-2307",
+        "text_ref": "1日期包及其附属清单作为一个成功代保留；current.json是完整采集与验证的指针，latest.zip只是兼容别名，不可凭修改时间挑包。当前成功代是",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
