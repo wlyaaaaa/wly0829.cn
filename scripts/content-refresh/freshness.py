@@ -50,8 +50,8 @@ def metadata(document, method, entry=None, checked_at=None):
                     value = value[int(key)] if isinstance(value, list) else value[key]
             else:
                 value = document.get(name) if isinstance(document, dict) else None
-                if value is None and isinstance(document, dict):
-                    value = document.get("metadata", {}).get(name)
+                if value is None and isinstance(document, dict) and isinstance(document.get("metadata"), dict):
+                    value = document["metadata"].get(name)
             stamp = valid_time(value)
             values[name] = stamp[:10] if name == "source_coverage_end" and stamp else stamp
         except (KeyError, IndexError, TypeError, ValueError):

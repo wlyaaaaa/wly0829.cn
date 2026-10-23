@@ -58,6 +58,8 @@ class FreshnessTests(unittest.TestCase):
         for kind in LIVE_METHODS:
             self.assertEqual(metadata(None, dict(kind=kind), checked_at=checked)["source_observed_at"], checked)
         self.assertEqual(metadata({"source_observed_at": checked}, dict(kind="json"))["observation_basis"], "unknown")
+        # 来源自己的业务字段也可能叫 metadata（例如健康导入计划的字段清单）。
+        self.assertEqual(metadata({"metadata": ["field"]}, {"observation_basis": "live_read"}, checked_at=checked)["source_observed_at"], checked)
 
     def test_cadence_every_request_semantic_28_days_target_change_and_history(self):
         today = date(2026, 10, 23)
