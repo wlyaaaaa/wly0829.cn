@@ -210,10 +210,10 @@
    "numbers": [
     {
      "id": "n-registered",
-     "text": "165 份",
+     "text": "166 份",
      "meaning": "精确登记的原件定位，全部核对过 SHA-256",
-     "as_of": "2026-10-12",
-     "source": "materials.py status（北京 10 月 11 日 16:35 只读）：materials=165、exact_registered_locator_rows=165",
+     "as_of": "2026-10-23",
+     "source": "见来源记录 personal-materials-n-registered-home，观察于 2026-10-23T10:25:47+08:00",
      "screens": [
       "personal-materials-01",
       "personal-materials-05",
@@ -540,8 +540,8 @@
  },
  "source": {
   "page": "sources/pages/personal-materials/page.json",
-  "sha256": "aae7e363b8689e020e3884a60d50c067f148fbeaa291bf728c7a0c8f32774847",
-  "converted_at_beijing": "2026-10-23T10:28:52+08:00"
+  "sha256": "39e55f51a4c4e819f679c8ba90e4353df4ec6011ddc4075b366053f6ff1316cf",
+  "converted_at_beijing": "2026-10-23T10:39:13+08:00"
  }
 }
 ---

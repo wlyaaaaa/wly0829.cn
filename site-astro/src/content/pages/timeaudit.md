@@ -428,10 +428,10 @@
    "numbers": [
     {
      "id": "n-hw-samples",
-     "text": "740 万条",
+     "text": "749 万条",
      "meaning": "fact_system_hardware 行数，每秒一条",
-     "as_of": "2026-10-22",
-     "source": "本轮只读来源记录 timeaudit-n-hw-samples-0，观察于 2026-10-22T08:06:37+08:00",
+     "as_of": "2026-10-23",
+     "source": "见来源记录 timeaudit-n-hw-samples-home，观察于 2026-10-23T10:25:50+08:00",
      "screens": [
       "timeaudit-01",
       "timeaudit-10"
@@ -710,8 +710,8 @@
  },
  "source": {
   "page": "sources/pages/timeaudit/page.json",
-  "sha256": "3080a5668c03f6d0b7d659368174b69166b35d82d259acb6b88e444e235c8ee1",
-  "converted_at_beijing": "2026-10-23T10:28:52+08:00"
+  "sha256": "8b8ad125da56257477de116e72965de3f4d55461d35b1cdfebdd5e11b3efe9da",
+  "converted_at_beijing": "2026-10-23T10:39:13+08:00"
  }
 }
 ---

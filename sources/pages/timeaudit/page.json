@@ -977,10 +977,10 @@
     "numbers": [
       {
         "id": "n-hw-samples",
-        "text": "740 万条",
+        "text": "749 万条",
         "meaning": "fact_system_hardware 行数，每秒一条",
-        "as_of": "2026-10-22",
-        "source": "本轮只读来源记录 timeaudit-n-hw-samples-0，观察于 2026-10-22T08:06:37+08:00",
+        "as_of": "2026-10-23",
+        "source": "见来源记录 timeaudit-n-hw-samples-home，观察于 2026-10-23T10:25:50+08:00",
         "screens": [
           "timeaudit-01",
           "timeaudit-10"

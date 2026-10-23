@@ -101,6 +101,15 @@ class FreshnessTests(unittest.TestCase):
         self.assertFalse(any("old" in f["record_ids"] for f in findings))
         self.assertEqual(next(b for b in inventory["record_bindings"] if b["record_id"] == "old")["classification"], "historical")
 
+    def test_page_number_shown_through_a_placeholder_counts_as_displayed(self):
+        self.page["registry"] = dict(numbers=[dict(id="n-x", text="3 次", as_of="2026-10-01")])
+        self.write(self.path, self.page)
+        record = dict(self.number, id="home", field="registry.numbers[0].text", page_pattern=r"^(\d+) 次$", private=True)
+        located = lambda: build_inventory(self.root / "sources/pages", [record], {})["located_record_ids"]
+        self.assertNotIn("home", located())
+        self.write(self.root / "sources/creative/home.json", dict(text="**{{demo.registry.numbers.n-x.text}}**"))
+        self.assertIn("home", located())
+
     def test_cli_inventory_collect_apply_and_close_with_registry_readback(self):
         output = self.root / "run"
         install_fake_converter(self.root)

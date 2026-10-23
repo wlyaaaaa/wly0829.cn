@@ -37506,6 +37506,112 @@
       "private": false,
       "source_location": "同页被注明数字记录",
       "category": "日期联动"
+    },
+    {
+      "id": "timeaudit-n-hw-samples-home",
+      "page": "timeaudit",
+      "screen": "timeaudit-01",
+      "label": "硬件逐秒记录（万条）（首页引用的页内数字）",
+      "current_value": 749,
+      "as_of": "2026-10-23",
+      "category": "只读自动统计",
+      "source_location": "Docker audit-postgres / time_audit / public.fact_system_hardware；全表精确SELECT count(*)，default_transaction_read_only=on，statement_timeout=8000",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "timeaudit-count-hardware",
+        "pointer": [
+          "value"
+        ],
+        "scale": 0.0001,
+        "digits": 0,
+        "timeout": 130
+      },
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "report_ref": "E:/Cache/Claude/Temp/6428793e/gpt-children/20261011-174134-web-bind-B2-f81fad6f/round-01/evidence/timeaudit-findings.md",
+      "affected_screens": [],
+      "page_pattern": "^([\\d,.]+) 万条$",
+      "field": "registry.numbers[0].text",
+      "measurement_scope": "public.fact_system_hardware 全留存行精确count(*)；除1万整数；超时未知，reltuples不替代。",
+      "scope_status": "verified",
+      "checked_at": "2026-10-23T10:25:50+08:00",
+      "source_observed_at": "2026-10-23T10:25:50+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-23T10:25:50+08:00"
+    },
+    {
+      "automatic": true,
+      "scope_status": "verified",
+      "historical": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "private": true,
+      "id": "timeaudit-asof-home-n-hw-samples",
+      "page": "timeaudit",
+      "screen": "timeaudit-01",
+      "label": "首页引用页内数字的截至日期",
+      "field": "registry.numbers[0].as_of",
+      "page_pattern": "^(\\d{4}-\\d{2}-\\d{2})$",
+      "qualifies": [
+        "timeaudit-n-hw-samples-home"
+      ],
+      "current_value": "2026-10-23",
+      "as_of": "2026-10-23",
+      "measurement_scope": "只注明首页 home-04 引用的这一条页内数字的观察日期。"
+    },
+    {
+      "id": "personal-materials-n-registered-home",
+      "page": "personal-materials",
+      "screen": "personal-materials-01",
+      "label": "已验证原件份数（首页引用的页内数字）",
+      "current_value": 166,
+      "as_of": "2026-10-23",
+      "category": "人工",
+      "source_location": "个人材料库状态入口、filename_entries及同步回执",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "materials-status",
+        "pointer": [
+          "materials"
+        ],
+        "timeout": 20
+      },
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
+      "affected_screens": [],
+      "page_pattern": "^([\\d,]+) 份$",
+      "field": "registry.numbers[0].text",
+      "scope_status": "verified",
+      "measurement_scope": "materials.py status 的 materials；SELECT count(*) FROM materials，精确登记行数，不计未登记候选。",
+      "checked_at": "2026-10-23T10:25:47+08:00",
+      "source_observed_at": "2026-10-23T10:25:47+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-23T10:25:47+08:00"
+    },
+    {
+      "automatic": true,
+      "scope_status": "verified",
+      "historical": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "private": true,
+      "id": "personal-materials-asof-home-n-registered",
+      "page": "personal-materials",
+      "screen": "personal-materials-01",
+      "label": "首页引用页内数字的截至日期",
+      "field": "registry.numbers[0].as_of",
+      "page_pattern": "^(\\d{4}-\\d{2}-\\d{2})$",
+      "qualifies": [
+        "personal-materials-n-registered-home"
+      ],
+      "current_value": "2026-10-23",
+      "as_of": "2026-10-23",
+      "measurement_scope": "只注明首页 home-04 引用的这一条页内数字的观察日期。"
     }
   ],
   "freshness_policy": {

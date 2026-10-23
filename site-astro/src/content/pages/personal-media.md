@@ -496,10 +496,10 @@
     },
     {
      "id": "n-catalog",
-     "text": "4366 件 · 近 99.0 GB",
-     "meaning": "目录库 media 表条数（图片 3486、视频 118、音频 762），大小按每件原件路径取文件大小相加＝98.63 GB（十进制），4366 件全部在位",
-     "as_of": "2026-10-12",
-     "source": "personal_media.py status / status --technical：PASS、catalog_rows=4366（北京 10 月 11 日 16:31—16:36 只读）；只读 SQL 按 media_type 分组，逐件 os.stat 求和 98,630,211,493 字节",
+     "text": "4481 件 · 近 106.0 GB",
+     "meaning": "目录库 media 表条数与在位原件大小合计（十进制 GB）；分类数见首屏",
+     "as_of": "2026-10-23",
+     "source": "见来源记录 personal-media-n-catalog-0/1，观察于 2026-10-23T10:25:20+08:00",
      "screens": [
       "personal-media-01"
      ]
@@ -878,8 +878,8 @@
  },
  "source": {
   "page": "sources/pages/personal-media/page.json",
-  "sha256": "d826bb31f26c41b10addaeaae2df4f2a2bc4f8e77f0adc2804d94f6fa4d95f4d",
-  "converted_at_beijing": "2026-10-23T10:23:39+08:00"
+  "sha256": "e8f1ede24ba6bd19bd33927c4e81e1eb136235c1de504cce08d04d64a780d1ce",
+  "converted_at_beijing": "2026-10-23T10:39:13+08:00"
  }
 }
 ---

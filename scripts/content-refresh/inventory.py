@@ -115,6 +115,8 @@ def build_inventory(pages_root, records, entries=None, policy=None, targeted=())
     valid_ids = {r["id"] for r in records if not record_errors(r, entries or {}, ids)}
     for record in records:
         by_page[record["page"]].append(record)
+    referenced = {found for folder in (Path(pages_root), Path(pages_root).parent / "creative") for source in sorted(folder.rglob("*.json"))
+                  for found in re.findall(r"\{\{([a-z0-9-]+)\.registry\.numbers\.([a-z0-9-]+)\.(text|as_of)\}\}", source.read_text("utf-8-sig"))}
     for path in paths:
         page = (bound_json(path, lambda p: p.read_text(encoding="utf-8-sig"), root=path.parents[3])
                 if path.parent.parent.name == "pages" and path.parents[2].name == "sources"
@@ -191,6 +193,9 @@ def build_inventory(pages_root, records, entries=None, policy=None, targeted=())
                 "reference" if field.startswith("registry.") else "author")
             found = re.match(r"screens\[(\d+)\]", field)
             screen = screens[int(found[1])] if found else first
+            numbered = re.fullmatch(r"registry\.numbers\[(\d+)\]\.(text|as_of)", field)
+            if numbered and (slug, page["registry"]["numbers"][int(numbered[1])].get("id"), numbered[2]) in referenced:
+                surface = "visible"  # 首页等处经 {{页.registry.numbers.编号.字段}} 直接显示这一条
             if surface == "visible" and (slug, screen.get("id")) not in historical_pairs:
                 probe = dict(page=slug, screen=screen.get("id", ""), field=field, start=0, end=len(text),
                              kind="first_screen_card", excerpt=text)
