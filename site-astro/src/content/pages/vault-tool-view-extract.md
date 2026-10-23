@@ -31,7 +31,7 @@
    "source": "源码按北京时间 14:00 前最后提交 b884ab61（10 月 1 日）核对；最近一次 AI 技能记录是 9 月 29 日，账本只统计到 10 月 10 日零点；只记技能名、不记结果，不能当使用证明；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）",
    "last": {
     "label": "最近 AI 技能记录",
-    "at": "2026-09-29 01:11"
+    "at": "2026-10-20 13:59"
    }
   },
   "based_on": {
@@ -41,8 +41,8 @@
  },
  "source": {
   "page": "sources/pages/vault-tool-view-extract/page.json",
-  "sha256": "aa2787914b2d83de2421ae0532fa87dfedb9e9c3a7e4b195b7ff00e16848d7ee",
-  "converted_at_beijing": "2026-10-20T07:45:08+08:00"
+  "sha256": "cb05ae0bc91e17994f6484dbe2a53951949a4480387c9a0bcccc5babb8f90bf2",
+  "converted_at_beijing": "2026-10-23T08:44:37+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 最近 AI 技能记录 9 月 29 日 01:11",
+       "text": "偶尔用 · 最近 AI 技能记录 10 月 20 日 13:59",
        "state": "ok"
       }
      ],
@@ -134,7 +134,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 最近 AI 技能记录 9 月 29 日 01:11",
+       "text": "偶尔用 · 最近 AI 技能记录 10 月 20 日 13:59",
        "state": "ok"
       }
      ],

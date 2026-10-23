@@ -49,7 +49,7 @@
     "at": "2026-10-20 16:21"
    },
    "facts": [],
-   "as_of": "2026-10-22",
+   "as_of": "2026-10-23",
    "source": "项目修改记录"
   },
   "public": true,
@@ -455,8 +455,8 @@
  },
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
-  "sha256": "c12eb96c78b7e5dd563b95e338f78364b7af1244445e12eb721bdd2d86979552",
-  "converted_at_beijing": "2026-10-22T08:32:41+08:00"
+  "sha256": "ef4813e222da194236d12bd050d9a31bca16718f58a94bd4b8ab2d041ced97f0",
+  "converted_at_beijing": "2026-10-23T08:44:37+08:00"
  }
 }
 ---
@@ -540,7 +540,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 项目修改记录",
+     "static_note": "截至 10 月 23 日 · 项目修改记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -615,7 +615,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 项目修改记录"
+     "static_note": "截至 10 月 23 日 · 项目修改记录"
     },
     {
      "type": "stat_card",

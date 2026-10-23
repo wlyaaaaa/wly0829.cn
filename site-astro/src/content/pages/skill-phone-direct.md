@@ -38,10 +38,10 @@
    "state": "在用",
    "last": {
     "label": "上次更新",
-    "at": "2026-10-21 21:13"
+    "at": "2026-10-23 07:58"
    },
    "facts": [],
-   "as_of": "2026-10-22",
+   "as_of": "2026-10-23",
    "source": "技能和电脑配置与恢复的提交记录；使用次数 Unknown（AI 使用小记录只记到 10 月 20 日，技能 10 月 21 日才建）"
   },
   "public": false,
@@ -147,8 +147,8 @@
  },
  "source": {
   "page": "sources/pages/skill-phone-direct/page.json",
-  "sha256": "97c8736ce46c1ef76df9ed54fea6212c2cfe4e4b95dd5e858d5510b177849cba",
-  "converted_at_beijing": "2026-10-23T00:17:11+08:00"
+  "sha256": "ae852ed30a5007c19a97606a6c42e6ac36dd5b1db819878a862d534d21275031",
+  "converted_at_beijing": "2026-10-23T08:44:36+08:00"
  }
 }
 ---
@@ -192,11 +192,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 10 月 21 日 21:13",
+       "text": "在用 · 上次更新 10 月 23 日 07:58",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 技能和电脑配置与恢复的提交记录；使用次数 Unknown（AI 使用小记录只记到 10 月 20 日，技能 10 月 21 日才建）",
+     "static_note": "截至 10 月 23 日 · 技能和电脑配置与恢复的提交记录；使用次数 Unknown（AI 使用小记录只记到 10 月 20 日，技能 10 月 21 日才建）",
      "row": "hero"
     },
     {
@@ -255,11 +255,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 10 月 21 日 21:13",
+       "text": "在用 · 上次更新 10 月 23 日 07:58",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 技能和电脑配置与恢复的提交记录；使用次数 Unknown（AI 使用小记录只记到 10 月 20 日，技能 10 月 21 日才建）"
+     "static_note": "截至 10 月 23 日 · 技能和电脑配置与恢复的提交记录；使用次数 Unknown（AI 使用小记录只记到 10 月 20 日，技能 10 月 21 日才建）"
     },
     {
      "type": "prose",

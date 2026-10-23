@@ -387,8 +387,8 @@
  },
  "source": {
   "page": "sources/pages/personal-finance/page.json",
-  "sha256": "15bcb0d5abfc75c7076b3e5b99c51a6ad28e0e29bf78f979f5aba0ab457f961e",
-  "converted_at_beijing": "2026-10-22T09:28:30+08:00"
+  "sha256": "62bd0276b4c1a140567dc1cd3f8fb28304f4ff3684d2f9769ebfc6e9c3f7ba3f",
+  "converted_at_beijing": "2026-10-23T08:44:35+08:00"
  }
 }
 ---
@@ -469,6 +469,11 @@
      "text_ref": "每月 1 次"
     },
     {
+     "type": "prose",
+     "align": "right",
+     "text_ref": "截至10月2"
+    },
+    {
      "type": "action_button",
      "align": "left",
      "columns": 2,
@@ -514,6 +519,11 @@
     },
     {
      "type": "prose",
+     "align": "right",
+     "text_ref": "截至10月2"
+    },
+    {
+     "type": "prose",
      "align": "left",
      "text_ref": "每个月我只做两件小事"
     },
@@ -556,6 +566,8 @@
 | **每月 1 次** | **5 类** | **3 个月** | **程序先查** |
 |---|---|---|---|
 | 6 号提醒导出，7 号我开口才更新；没有 AI 自动开工的定时任务 | 储蓄卡流水分成：本人操作、还款借贷、收入、退款、消费 | 月均消费取最近 3 个完整自然月，没过完的月不算 | 重复扣款由程序先列出疑似，AI 再逐条核对；真重复才提醒我 |
+
+截至 10 月 23 日
 
 〔花钱怎么核对 → 个人理解库〕　〔复制 AI 续作说明〕
 

@@ -472,7 +472,7 @@
      "id": "n-routes",
      "text": "21 条路线",
      "meaning": "随程序发布的公开路线模板数（data/providers 共 23 份，去掉 hidden=true 的 codex-custom-responses、codex-ollama 两份）；其中 2 条本机眼下用不上：claude-ollama、oi-ollama 的模型本机没装。claude-chatgpt-ccp、claude-chatgpt-cliproxy 9 月 29 日退役删掉",
-     "as_of": "2026-10-22",
+     "as_of": "2026-10-23",
      "source": "HEAD 6e689ef 的 data/providers/*.json 23 份，筛 hidden 不为 true 得 21；ollama list 现查只有 qwen3.6-35b、qwen3.8-27b 及去限制版，qwen3:8b、qwen3-coder:30b 仍没装",
      "screens": [
       "ai-cli-profile-manager-01",
@@ -484,7 +484,7 @@
      "id": "n-tools",
      "text": "5 种原版工具",
      "meaning": "21 条路线的 engine 去重：Codex、Claude Code、Qwen Code、OpenCode、Open Interpreter",
-     "as_of": "2026-10-22",
+     "as_of": "2026-10-23",
      "source": "同上",
      "screens": [
       "ai-cli-profile-manager-01"
@@ -494,7 +494,7 @@
      "id": "n-desktop-models",
      "text": "8 个模型",
      "meaning": "Codex 桌面版菜单里由它加入的模型：本机 4 + 云端 4；云端只有配好钥匙引用才出现",
-     "as_of": "2026-10-22",
+     "as_of": "2026-10-23",
      "source": "HEAD 6e689ef：data/local-model-set.json profiles 4 个 + data/desktop-cloud-model-set.json profiles 4 个",
      "screens": [
       "ai-cli-profile-manager-01",
@@ -503,10 +503,10 @@
     },
     {
      "id": "n-desktop-tasks",
-     "text": "131 个任务",
+     "text": "130 个任务",
      "meaning": "9 月 16 日–10 月 11 日 Codex 桌面版里用现役接入模型开的任务（含原生子代理会话），删掉的对话不算，是下限；9 月 29 日以后为 0",
-     "as_of": "2026-10-11",
-     "source": "E:\\Data\\AppData\\Codex\\sessions 与 archived_sessions 每个 .jsonl 首行 session_meta：originator=Codex Desktop 且 model_provider 为 aicli_glm_5_3_flash 61、aicli_glm_5_3 32、aicli_deepseek_flash 18、aicli_qwen38_max_paygo 14、aicli_desktop_local 6（另有已退役 aicli_google_antigravity 8 不计）；10 月 11 日 16:0x 重扫，数量未变，最后一个在 9 月 28 日 07:27",
+     "as_of": "2026-10-23",
+     "source": "见来源记录 ai-cli-profile-manager-n-desktop-tasks-0，观察于 2026-10-23T08:40:36+08:00",
      "screens": [
       "ai-cli-profile-manager-01",
       "ai-cli-profile-manager-03"
@@ -526,7 +526,7 @@
      "id": "n-code",
      "text": "38,960 行代码",
      "meaning": "Git 跟踪的 PowerShell、C#、Python、JS 共 125 个文件的非空行；不含文档、JSON 数据和 PDF",
-     "as_of": "2026-10-22",
+     "as_of": "2026-10-23",
      "source": "见来源记录 ai-cli-profile-manager-n-code-0，观察于 2026-10-22T06:47:36+08:00",
      "screens": [
       "ai-cli-profile-manager-01"
@@ -536,7 +536,7 @@
      "id": "n-test-lines",
      "text": "测试 15,947 行",
      "meaning": "tests/ 下代码文件的非空行",
-     "as_of": "2026-10-22",
+     "as_of": "2026-10-23",
      "source": "见来源记录 ai-cli-profile-manager-n-test-lines-0，观察于 2026-10-22T06:47:36+08:00",
      "screens": [
       "ai-cli-profile-manager-01"
@@ -802,8 +802,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
-  "sha256": "e346c0bf80ede67fe18c29adeca1d5eed15837316be85d3b7dac45127835e544",
-  "converted_at_beijing": "2026-10-22T08:32:26+08:00"
+  "sha256": "f21244fac3c37802ff37f3720e93507c7b9a0ab62738a87394db994e33fbafd7",
+  "converted_at_beijing": "2026-10-23T08:44:35+08:00"
  }
 }
 ---
@@ -1036,9 +1036,9 @@ AI 工具配置管理
 
 Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex 换用智谱 GLM、DeepSeek、阿里云千问和本机显卡上跑的 Qwen，Claude Code、OpenCode 这些也能接本机 Qwen：界面、历史和工具都还是原版的。每一种“工具＋模型＋服务”的组合叫一条路线；用哪条路线、请求发到哪家，启动前就写清楚；选的模型出错就报错，不悄悄换一个顶上。终端里敲 aicli 用，在 Codex 桌面版里直接出现在模型菜单。
 
-**21 条路线**｜5 种原版工具配云端和本机模型；其中 2 条连的本机模型没装，眼下用不上（截至 10 月 22 日）
+**21 条路线**｜5 种原版工具配云端和本机模型；其中 2 条连的本机模型没装，眼下用不上（截至 10 月 23 日）
 **8 个模型**｜加进 Codex 桌面版菜单：本机 4 个、云端 4 个
-**131 个任务**｜9 月 16 日以来在桌面版里用这些模型开的（至少）
+**130 个任务**｜9 月 16 日以来在桌面版里用这些模型开的（至少）
 **38,960 行代码**｜其中测试 15,947 行（10 月 22 日数）
 
 现在　升级观察（Codex 里按需启动的自动任务，平时停着）　本机模型服务　〔现在正不正常 → 驾驶舱〕

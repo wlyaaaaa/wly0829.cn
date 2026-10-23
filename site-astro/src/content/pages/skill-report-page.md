@@ -388,20 +388,20 @@
    "numbers": [
     {
      "id": "n-pages",
-     "text": "49 份",
+     "text": "62 份",
      "meaning": "汇报文件夹当前保留的 49 份 HTML、49 个不同标题；会清理旧页，不是累计生成数。",
-     "as_of": "2026-10-22",
-     "source": "本轮只读来源记录 skill-report-page-n-pages-0，观察于 2026-10-22T08:06:11+08:00",
+     "as_of": "2026-10-23",
+     "source": "见来源记录 skill-report-page-n-pages-0，观察于 2026-10-23T08:40:33+08:00",
      "screens": [
       "skill-report-page-01"
      ]
     },
     {
      "id": "n-cards",
-     "text": "137 张",
+     "text": "171 张",
      "meaning": "49 个标题各取最新一版，40 份带决策卡；只读 HTML 标记计数。",
-     "as_of": "2026-10-22",
-     "source": "本轮只读来源记录 skill-report-page-n-cards-0，观察于 2026-10-22T08:06:15+08:00",
+     "as_of": "2026-10-23",
+     "source": "见来源记录 skill-report-page-n-cards-0，观察于 2026-10-23T08:40:37+08:00",
      "screens": [
       "skill-report-page-01"
      ]
@@ -528,8 +528,8 @@
  },
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
-  "sha256": "b4cf375fc3ba342fcc4a0b4df0bbd061993e2b2fe782627d6cba6ffef30ce962",
-  "converted_at_beijing": "2026-10-22T08:32:39+08:00"
+  "sha256": "9e406fa539beef812f3e6af161b951bacf3d23965db398fb8626a20ede202c3c",
+  "converted_at_beijing": "2026-10-23T08:44:36+08:00"
  }
 }
 ---
@@ -629,7 +629,7 @@
      "illustration": "none",
      "icons": "none",
      "number_style": "stat",
-     "text_ref": "49份"
+     "text_ref": "62份"
     }
    ],
    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。三数字来自三个原 group，需数字样式而非普通组标题；八气泡包括原粘回答复括注，正文不添加词。；page-fixer-09（按审页意见）：三个数字组改用stat_card，原字与数字字号保留；八气泡横版两列，收紧两栏高差"
@@ -664,7 +664,7 @@
      "illustration": "none",
      "icons": "none",
      "number_style": "stat",
-     "text_ref": "49份"
+     "text_ref": "62份"
     },
     {
      "type": "prose",
@@ -754,13 +754,13 @@
 
 AI 只写内容文件（文字和数字），版式、配色、图表和检查都交给一条命令；平时页面用“清爽杂志”风格（白底纯绿，标题用宋体，靠细线分隔），10 月 13 日我定的。整份页面只存在我电脑上，不发到网上；有要我答的题时，题目、选项、为什么必须我答、不答的影响会登记到驾驶舱的“需要你”里，驾驶舱在网站上能看到，普通单选我可以直接在驾驶舱逐题选了答。
 
-**49 份**
-汇报文件夹里现在还留着的汇报页（49 个不同标题）；数的是现存的页，不是累计做过多少份
-截至 10 月 22 日
+**62 份**
+汇报文件夹里现在还留着的汇报页（62 个不同标题）；数的是现存的页，不是累计做过多少份
+截至 10 月 23 日
 
-**137 张**
-49 个标题各取最新一版，其中 40 份带决策卡
-截至 10 月 22 日
+**171 张**
+62 个标题各取最新一版，其中 50 份带决策卡
+截至 10 月 23 日
 
 **334 次**
 Claude 234 次、Codex 100 次运行生成命令

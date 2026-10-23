@@ -115,8 +115,8 @@
  },
  "source": {
   "page": "sources/pages/github-profile/page.json",
-  "sha256": "ee7163c81189dd77d4d91b85c1a129043f9152daf9bd844638779ecfba6f6246",
-  "converted_at_beijing": "2026-10-22T08:32:30+08:00"
+  "sha256": "528eef894df11e9a64e1fc0ee05cffd695a76d465fa3124d0f5ba3aebacc50ad",
+  "converted_at_beijing": "2026-10-23T08:44:35+08:00"
  }
 }
 ---
@@ -571,7 +571,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
     },
     {
      "type": "feature_card",
-     "text_ref": "740.0万秒",
+     "text_ref": "749.0万秒",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -626,7 +626,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 
 每秒记下硬件、程序和窗口，事后查为什么卡、时间花在哪。
 
-**740.0 万秒**　硬件记录（截至 10 月 22 日）
+**749.0 万秒**　硬件记录（截至 10 月 23 日）
 
 ::screen{#github-profile-06 section="projects"}
 

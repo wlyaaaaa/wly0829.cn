@@ -21,7 +21,7 @@
       "title": "开头",
       "scene": "横版画面：左上大标题毛笔艺术字“AI 工具配置管理”，下面一行一句话（绿色、比正文大一号），再下面介绍段。右上一幅水彩插画：一台显示器上开着一个终端窗口和一个 Codex 桌面版窗口，桌面版窗口里展开一个模型下拉菜单，菜单每一行是一个品牌小标志加一条浅灰短线（依次画 OpenAI、智谱 GLM、DeepSeek 小鲸鱼、通义千问、Ollama 小羊驼的标志，短线处不写字）；显示器旁边一个小保险箱，伸出一把绿色小钥匙，只连向其中一个窗口；机箱侧面的显卡亮着绿光。中间一排四张数字卡片（和标杆页开头的数字卡一样：上面小插画，大号绿色数字，下面一行小字）；小插画依次是：一排五个小工具图标、一个下拉菜单、一叠任务卡片、一摞代码纸。数字卡下面一条细长的圆角横条：最左写“现在”，接着是小字“升级观察”、紧跟一行更小的灰字注“（Codex 里按需启动的自动任务，平时停着）”，再是一个留空的浅色圆角小框（约横条宽度的 25%），再是小字“本机模型服务”和同样大小的空框，最右一个按钮〔现在正不正常 → 驾驶舱〕；两个空框里什么都不画，网页程序会往里填字。横条下面一行放两个白底细绿边的圆角按钮：〔在整套系统里的位置 → 怎么协作〕、〔GitHub〕（GitHub 按钮左边画 GitHub 的小猫标志）。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
       "portrait": "竖版：从上到下依次是大标题、一句话、介绍段、插画（缩成一整行宽）、四张数字卡改成两行两张、“现在”横条改成竖排三行（“现在”一行，“升级观察”加空框一行，“本机模型服务”加空框一行，空框占整行宽约 60%），驾驶舱按钮单独一行，最后两个按钮上下各一行。 那一排按钮里同样有〔复制 AI 续作说明〕。",
-      "text": "AI 工具配置管理\n\n选好模型，打开原版 AI 编程工具来用。\n\nCodex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex 换用智谱 GLM、DeepSeek、阿里云千问和本机显卡上跑的 Qwen，Claude Code、OpenCode 这些也能接本机 Qwen：界面、历史和工具都还是原版的。每一种“工具＋模型＋服务”的组合叫一条路线；用哪条路线、请求发到哪家，启动前就写清楚；选的模型出错就报错，不悄悄换一个顶上。终端里敲 aicli 用，在 Codex 桌面版里直接出现在模型菜单。\n\n**21 条路线**｜5 种原版工具配云端和本机模型；其中 2 条连的本机模型没装，眼下用不上（截至 10 月 22 日）\n**8 个模型**｜加进 Codex 桌面版菜单：本机 4 个、云端 4 个\n**131 个任务**｜9 月 16 日以来在桌面版里用这些模型开的（至少）\n**38,960 行代码**｜其中测试 15,947 行（10 月 22 日数）\n\n现在　升级观察（Codex 里按需启动的自动任务，平时停着）　本机模型服务　〔现在正不正常 → 驾驶舱〕\n\n〔在整套系统里的位置 → 怎么协作〕　〔GitHub〕　〔复制 AI 续作说明〕",
+      "text": "AI 工具配置管理\n\n选好模型，打开原版 AI 编程工具来用。\n\nCodex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex 换用智谱 GLM、DeepSeek、阿里云千问和本机显卡上跑的 Qwen，Claude Code、OpenCode 这些也能接本机 Qwen：界面、历史和工具都还是原版的。每一种“工具＋模型＋服务”的组合叫一条路线；用哪条路线、请求发到哪家，启动前就写清楚；选的模型出错就报错，不悄悄换一个顶上。终端里敲 aicli 用，在 Codex 桌面版里直接出现在模型菜单。\n\n**21 条路线**｜5 种原版工具配云端和本机模型；其中 2 条连的本机模型没装，眼下用不上（截至 10 月 23 日）\n**8 个模型**｜加进 Codex 桌面版菜单：本机 4 个、云端 4 个\n**130 个任务**｜9 月 16 日以来在桌面版里用这些模型开的（至少）\n**38,960 行代码**｜其中测试 15,947 行（10 月 22 日数）\n\n现在　升级观察（Codex 里按需启动的自动任务，平时停着）　本机模型服务　〔现在正不正常 → 驾驶舱〕\n\n〔在整套系统里的位置 → 怎么协作〕　〔GitHub〕　〔复制 AI 续作说明〕",
       "links": [
         {
           "text": "现在正不正常 → 驾驶舱",
@@ -1004,7 +1004,7 @@
         "id": "n-routes",
         "text": "21 条路线",
         "meaning": "随程序发布的公开路线模板数（data/providers 共 23 份，去掉 hidden=true 的 codex-custom-responses、codex-ollama 两份）；其中 2 条本机眼下用不上：claude-ollama、oi-ollama 的模型本机没装。claude-chatgpt-ccp、claude-chatgpt-cliproxy 9 月 29 日退役删掉",
-        "as_of": "2026-10-22",
+        "as_of": "2026-10-23",
         "source": "HEAD 6e689ef 的 data/providers/*.json 23 份，筛 hidden 不为 true 得 21；ollama list 现查只有 qwen3.6-35b、qwen3.8-27b 及去限制版，qwen3:8b、qwen3-coder:30b 仍没装",
         "screens": [
           "ai-cli-profile-manager-01",
@@ -1016,7 +1016,7 @@
         "id": "n-tools",
         "text": "5 种原版工具",
         "meaning": "21 条路线的 engine 去重：Codex、Claude Code、Qwen Code、OpenCode、Open Interpreter",
-        "as_of": "2026-10-22",
+        "as_of": "2026-10-23",
         "source": "同上",
         "screens": [
           "ai-cli-profile-manager-01"
@@ -1026,7 +1026,7 @@
         "id": "n-desktop-models",
         "text": "8 个模型",
         "meaning": "Codex 桌面版菜单里由它加入的模型：本机 4 + 云端 4；云端只有配好钥匙引用才出现",
-        "as_of": "2026-10-22",
+        "as_of": "2026-10-23",
         "source": "HEAD 6e689ef：data/local-model-set.json profiles 4 个 + data/desktop-cloud-model-set.json profiles 4 个",
         "screens": [
           "ai-cli-profile-manager-01",
@@ -1035,10 +1035,10 @@
       },
       {
         "id": "n-desktop-tasks",
-        "text": "131 个任务",
+        "text": "130 个任务",
         "meaning": "9 月 16 日–10 月 11 日 Codex 桌面版里用现役接入模型开的任务（含原生子代理会话），删掉的对话不算，是下限；9 月 29 日以后为 0",
-        "as_of": "2026-10-11",
-        "source": "E:\\Data\\AppData\\Codex\\sessions 与 archived_sessions 每个 .jsonl 首行 session_meta：originator=Codex Desktop 且 model_provider 为 aicli_glm_5_3_flash 61、aicli_glm_5_3 32、aicli_deepseek_flash 18、aicli_qwen38_max_paygo 14、aicli_desktop_local 6（另有已退役 aicli_google_antigravity 8 不计）；10 月 11 日 16:0x 重扫，数量未变，最后一个在 9 月 28 日 07:27",
+        "as_of": "2026-10-23",
+        "source": "见来源记录 ai-cli-profile-manager-n-desktop-tasks-0，观察于 2026-10-23T08:40:36+08:00",
         "screens": [
           "ai-cli-profile-manager-01",
           "ai-cli-profile-manager-03"
@@ -1058,7 +1058,7 @@
         "id": "n-code",
         "text": "38,960 行代码",
         "meaning": "Git 跟踪的 PowerShell、C#、Python、JS 共 125 个文件的非空行；不含文档、JSON 数据和 PDF",
-        "as_of": "2026-10-22",
+        "as_of": "2026-10-23",
         "source": "见来源记录 ai-cli-profile-manager-n-code-0，观察于 2026-10-22T06:47:36+08:00",
         "screens": [
           "ai-cli-profile-manager-01"
@@ -1068,7 +1068,7 @@
         "id": "n-test-lines",
         "text": "测试 15,947 行",
         "meaning": "tests/ 下代码文件的非空行",
-        "as_of": "2026-10-22",
+        "as_of": "2026-10-23",
         "source": "见来源记录 ai-cli-profile-manager-n-test-lines-0，观察于 2026-10-22T06:47:36+08:00",
         "screens": [
           "ai-cli-profile-manager-01"

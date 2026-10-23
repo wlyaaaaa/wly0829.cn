@@ -40,8 +40,8 @@
  },
  "source": {
   "page": "sources/pages/personal-materials-registered-lookup/page.json",
-  "sha256": "3ae758a39bc0c91c3100e3ef19a4e1203addee2d314d1659209a51ef4e1a41dd",
-  "converted_at_beijing": "2026-10-22T08:32:34+08:00"
+  "sha256": "d325769988ad312ec80a9cda39768e311402423f81a12ba4aae035e98d3ed249",
+  "converted_at_beijing": "2026-10-23T08:44:35+08:00"
  }
 }
 ---
@@ -704,7 +704,7 @@
 
 - 没有 verified 匹配时才查 open_state=unverified 的来源名、标题、原生 ID、版本字段、材料 search_text 与 material_text，并标为 unverified_source_evidence；即使没有 material_text，来源原生元数据仍可形成未验证候选。
 
-- material_text 只接收 native、ocr（光学字符识别）或 extracted 三类可重建文字；目前（10 月 22 日）32 份 native 完整文字，115 份 extracted、14 份 ocr 部分文字；10 月 11 日时还没有 ocr。它们可以帮助召回，但不能替代当前原件验真。
+- material_text 只接收 native、ocr（光学字符识别）或 extracted 三类可重建文字；目前（10 月 23 日）32 份 native 完整文字，115 份 extracted、14 份 ocr 部分文字；10 月 11 日时还没有 ocr。它们可以帮助召回，但不能替代当前原件验真。
 
 - 查询文本去除常见请求词，并结合完整短语、拉丁词和中文二元片段计算有界匹配分。
 
