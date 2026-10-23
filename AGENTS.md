@@ -95,6 +95,16 @@ See [Project expansion gate](docs/design/panel-content-contract.md#project-expan
   Owner source, including when the change came from a feature change rather
   than a commit. A figure that cannot be re-read stays with its old date and an
   explicit Unknown (owner, 2026-10-11 15:47).
+- The homepage is not locked (owner, 2026-10-23 07:58: “考虑到首页也有截止时间，解除首页锁定；任何人都可以按需更新”).
+  Its dated highlight numbers come from the owning project registrations and
+  are regenerated whenever any owner-requested update changes them; homepage
+  bytes may change in an ordinary build, and the homepage follows the same
+  scan, publication and read-back gates as every other changed page.
+- A rendered page counts as updated only when the change reached its actual
+  render input: `site-astro/src/content/pages/<page>.md` must equal the
+  conversion of the current author JSON. A directly edited Markdown that
+  diverges from later JSON changes is a defect to unify from the owning source,
+  never a reason to report JSON-only edits as published.
 - A frozen generator page that the current refresh would otherwise leave
   materially stale is rebuilt as a current typeset page in the same refresh,
   at the same quality bar as other pages; frozen pages untouched by the

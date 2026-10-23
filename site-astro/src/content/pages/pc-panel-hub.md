@@ -798,7 +798,7 @@
  "source": {
   "page": "sources/pages/pc-panel-hub/page.json",
   "sha256": "d2aabb05975cf34a02fcdb0bf4c937d60e4c553c16f68e5be98f17ee7694ade8",
-  "converted_at_beijing": "2026-10-22T08:32:32+08:00"
+  "converted_at_beijing": "2026-10-23T08:10:04+08:00"
  }
 }
 ---
@@ -4234,7 +4234,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
-   "source_phrase": "曲面屏硬件修复｜核对专用集线器和端口后才动硬件，实际修复需要时自动提权｜说不准",
+   "source_phrase": "曲面屏硬件修复｜核对专用集线器和端口后才动硬件，要管理员权限｜说不准",
    "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },

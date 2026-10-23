@@ -254,7 +254,7 @@
     },
     {
      "id": "n-common",
-     "text": "常用 23 个",
+     "text": "常用 24 个",
      "meaning": "page.json 的 status 为“常用”",
      "as_of": "2026-10-12 16:26",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
@@ -315,7 +315,7 @@
     },
     {
      "id": "n-in-use",
-     "text": "30 个在用的项目",
+     "text": "31 个在用的项目",
      "meaning": "常用＋偶尔用（不含冻结）",
      "as_of": "2026-10-12 16:26",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
@@ -1084,7 +1084,7 @@
  "source": {
   "page": "sources/pages/projects-home/page.json",
   "sha256": "bde528f415e68422e2ef13e4b58f0ba758be4d641e1dba196539169ab3685076",
-  "converted_at_beijing": "2026-10-22T08:32:35+08:00"
+  "converted_at_beijing": "2026-10-23T08:10:05+08:00"
  }
 }
 ---
@@ -1171,7 +1171,7 @@
      "align": "left",
      "size": "large",
      "weight": "bold",
-     "text_ref": "30 个在用的项目",
+     "text_ref": "31 个在用的项目",
      "row": "hero",
      "bold": true
     },
@@ -1273,7 +1273,7 @@
      "align": "left",
      "size": "large",
      "weight": "bold",
-     "text_ref": "30 个在用的项目",
+     "text_ref": "31 个在用的项目",
      "bold": true
     },
     {
@@ -1404,11 +1404,11 @@
 
 # 项目
 
-**30 个在用的项目，让 AI 真能替我办事：管电脑和备份、找照片视频和文件原件、读微信聊天、听录音、认图片里的字、守密码，替我拟消息、写正式文书；我不在电脑前，手机上的 AI 也能在这台电脑上动手。**
+**31 个在用的项目，让 AI 真能替我办事：管电脑和备份、找照片视频和文件原件、读微信聊天、听录音、认图片里的字、守密码，替我拟消息、写正式文书；我不在电脑前，手机上的 AI 也能在这台电脑上动手。**
 
 | 一共 | 常用 | 偶尔用 | 冻结 |
 |---|---|---|---|
-| **37 个** | **23 个** | **7 个** | **6 个** |
+| **37 个** | **24 个** | **7 个** | **6 个** |
 
 公开 **19 个** · 私有 **18 个**
 

@@ -788,7 +788,7 @@
  "source": {
   "page": "sources/pages/chinese-asr/page.json",
   "sha256": "35daf8edc1447b4f04312886e85189186573bd4e696d9e13ef3ba4edfbea88e1",
-  "converted_at_beijing": "2026-10-22T08:32:27+08:00"
+  "converted_at_beijing": "2026-10-23T08:10:04+08:00"
  }
 }
 ---
@@ -4116,7 +4116,13 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": "auto",
-     "statuses": [null, null, null, null, "off"],
+     "statuses": [
+      null,
+      null,
+      null,
+      null,
+      "off"
+     ],
      "text_ref": "找出要回听的地方"
     },
     {
@@ -4139,7 +4145,13 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": "auto",
-     "statuses": [null, null, null, null, "off"],
+     "statuses": [
+      null,
+      null,
+      null,
+      null,
+      "off"
+     ],
      "text_ref": "找出要回听的地方"
     },
     {

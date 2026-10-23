@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig-machine-facts/page.json",
-  "sha256": "1ae21c354d22ae66d448bb42597c028b8c0a09ad6ea4431dff92997c9a9b15ba",
-  "converted_at_beijing": "2026-10-20T19:34:00+08:00"
+  "sha256": "89ad276efbee0e9f35fecce2880bd91817ffae22e864874e12bf41bfacf5116f",
+  "converted_at_beijing": "2026-10-23T08:10:04+08:00"
  }
 }
 ---
@@ -600,7 +600,7 @@ PCConfig · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-路径、端口与项目配置查询在用：50 份 Registry、139 个配置键；配置键只保存当前导航值与来源；稳定投影发布器、开发存储健康器和 TimeAudit 增量消费者已于 2026-09-28 删除，没有发布替代的新版投影。
+路径、端口与项目配置查询在用：55 份 Registry、132 个配置键；配置键只保存当前导航值与来源；稳定投影发布器、开发存储健康器和 TimeAudit 增量消费者已于 2026-09-28 删除，没有发布替代的新版投影。
 
 ::screen{#pcconfig-machine-facts-06 section="tech"}
 
@@ -628,7 +628,7 @@ PCConfig · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. 机器配置值先回到项目、服务或任务的真实配置源，PCConfig 快照只负责导航。",
+     "text_ref": "1机器配置值先回到项目、服务或任务的真实配置源，PCConfig登记只负责导航。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -646,7 +646,7 @@ PCConfig · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. 机器配置值先回到项目、服务或任务的真实配置源，PCConfig 快照只负责导航。",
+     "text_ref": "1机器配置值先回到项目、服务或任务的真实配置源，PCConfig登记只负责导航。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -715,7 +715,7 @@ PCConfig · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- 49 份 Registry 分别保存机器、盘符、目录、路径负责方、项目配置键、运行时和恢复关系；每类都有数据结构和校验器。",
+     "text_ref": "50份Registry分别保存机器、盘符、目录用途、项目配置键、运行时和恢复关系；每类都有数据结构和校验器。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -733,7 +733,7 @@ PCConfig · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- 49 份 Registry 分别保存机器、盘符、目录、路径负责方、项目配置键、运行时和恢复关系；每类都有数据结构和校验器。",
+     "text_ref": "50份Registry分别保存机器、盘符、目录用途、项目配置键、运行时和恢复关系；每类都有数据结构和校验器。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -792,7 +792,7 @@ PCConfig · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- 运行时：10 月 11 日 16:34 现场核到 PowerShell 7.6.4、Windows PowerShell 5.1.26100.9549。9 月 11 日基线里的 Docker CLI 29.7.2、.NET SDK 10.0.303、Git 2.55.0、Go 1.26.5、Node.js 26.4.0、Ollama 0.33.1、Python 3.14.7、WSL 2.6.3.0 之后未用同一口径重新核对；需要精确版本时由对应软件的状态入口回读。",
+     "text_ref": "运行时：10月11日16:34现场核到PowerShell7.6.4、WindowsPowerShell5.1.26100.9549，10月12日复核相同。9月11日基线里的DockerCLI29.7",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -810,7 +810,7 @@ PCConfig · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- 运行时：10 月 11 日 16:34 现场核到 PowerShell 7.6.4、Windows PowerShell 5.1.26100.9549。9 月 11 日基线里的 Docker CLI 29.7.2、.NET SDK 10.0.303、Git 2.55.0、Go 1.26.5、Node.js 26.4.0、Ollama 0.33.1、Python 3.14.7、WSL 2.6.3.0 之后未用同一口径重新核对；需要精确版本时由对应软件的状态入口回读。",
+     "text_ref": "运行时：10月11日16:34现场核到PowerShell7.6.4、WindowsPowerShell5.1.26100.9549，10月12日复核相同。9月11日基线里的DockerCLI29.7",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -1216,7 +1216,7 @@ PCConfig · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 57 个登记目录及其用途边界",
+     "text_ref": "folders.json登记目录用途边界；不再维护重复的路径负责方投影",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1233,7 +1233,7 @@ PCConfig · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 57 个登记目录及其用途边界",
+     "text_ref": "folders.json登记目录用途边界；不再维护重复的路径负责方投影",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1261,9 +1261,9 @@ PCConfig · 功能说明
 
 - folders.json 登记目录用途边界；不再维护重复的路径负责方投影
 
-- GitHub 总索引的成功发现快照包含 47 个仓库导航条目；authoritative=false，不冒充实时完整仓库名单
+- GitHub 总索引的成功发现快照包含 46 个仓库导航条目；authoritative=false，不冒充实时完整仓库名单
 
-- project_restore_anchors.json 保存 24 个恢复锚点
+- project_restore_anchors.json 保存 25 个恢复锚点
 
 - project_config_keys.json 导航路径、端口、模型和数据源的当前值与真实来源
 
