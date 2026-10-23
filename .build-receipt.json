@@ -1,377 +1,60 @@
 {
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
-  "source_commit": "a997fef1144dc2111f846d571396c465fea76287",
-  "prepared_at_beijing": "2026-10-23T08:19:22.055391+08:00",
-  "seconds": 258.98,
+  "source_commit": "cc00c32c7ffe2404feed7b2f57691e6b07310ea2",
+  "prepared_at_beijing": "2026-10-23T09:28:44.667942+08:00",
+  "seconds": 81.689,
   "steps": [
     {
+      "name": "home_highlights",
+      "seconds": 0.174
+    },
+    {
       "name": "source",
-      "seconds": 18.44
+      "seconds": 1.804
     },
     {
       "name": "fingerprint",
-      "seconds": 1.164
+      "seconds": 1.016
     },
     {
       "name": "prepare",
-      "seconds": 19.439
+      "seconds": 2.504
     },
     {
       "name": "native_inputs",
-      "seconds": 6.748
+      "seconds": 1.654
     },
     {
       "name": "blocks",
-      "seconds": 3.671
+      "seconds": 0.647
     },
     {
       "name": "astro",
-      "seconds": 31.513
+      "seconds": 0.0
     },
     {
       "name": "assets",
-      "seconds": 13.559
+      "seconds": 3.885
     },
     {
       "name": "finish",
-      "seconds": 58.129
+      "seconds": 4.972
     },
     {
       "name": "finalize",
-      "seconds": 72.809
+      "seconds": 56.415
     },
     {
       "name": "public",
-      "seconds": 32.766
+      "seconds": 7.999
     },
     {
       "name": "inventory",
-      "seconds": 0.742
+      "seconds": 0.62
     }
   ],
-  "rebuilt_pages": [
-    "/",
-    "/404.html",
-    "/404/",
-    "/cockpit/",
-    "/cockpit/storage/",
-    "/cockpit/stutter/",
-    "/computer-access/",
-    "/cv/",
-    "/github-profile/",
-    "/how-this-site/",
-    "/how/",
-    "/mcp/",
-    "/projects/",
-    "/projects/agents/",
-    "/projects/agents/authorization-owner/",
-    "/projects/agents/capability-routing/",
-    "/projects/agents/context-evidence/",
-    "/projects/agents/protected-policy/",
-    "/projects/agents/rules-contracts/",
-    "/projects/agents/skills-plugins/",
-    "/projects/agents/working-tree-hot-mirror/",
-    "/projects/ai-cli-profile-manager/",
-    "/projects/ai-cli-profile-manager/background-openai-children/",
-    "/projects/ai-cli-profile-manager/doctor-validation/",
-    "/projects/ai-cli-profile-manager/engines-providers/",
-    "/projects/ai-cli-profile-manager/install-recovery/",
-    "/projects/ai-cli-profile-manager/local-proxies/",
-    "/projects/ai-cli-profile-manager/native-desktop-integration/",
-    "/projects/ai-cli-profile-manager/profiles-launch/",
-    "/projects/ai-cli-profile-manager/recoverable-runs/",
-    "/projects/ai-cli-profile-manager/secrets-isolation/",
-    "/projects/cacb/",
-    "/projects/cacb/blind-quality-review/",
-    "/projects/cacb/campaign-workspace/",
-    "/projects/cacb/deterministic-verification/",
-    "/projects/cacb/failure-reporting/",
-    "/projects/cacb/identity-evidence/",
-    "/projects/cacb/native-orchestration/",
-    "/projects/cacb/question-bank/",
-    "/projects/cacb/quota-cost-probes/",
-    "/projects/chinese-asr/",
-    "/projects/chinese-asr/audit-evidence/",
-    "/projects/chinese-asr/desktop-dictation/",
-    "/projects/chinese-asr/installation-recovery/",
-    "/projects/chinese-asr/known-text-alignment/",
-    "/projects/chinese-asr/long-batch/",
-    "/projects/chinese-asr/models-modes/",
-    "/projects/chinese-asr/runtime-privacy/",
-    "/projects/chinese-asr/speaker-attribution/",
-    "/projects/chinese-asr/task-routing/",
-    "/projects/codex-agent-model-benchmark/",
-    "/projects/codex-local-remote/",
-    "/projects/codex-memory/",
-    "/projects/codex-memory/claude-project-memory/",
-    "/projects/codex-memory/config-memory-whitelist-sync/",
-    "/projects/codex-memory/content-addressed-storage-cold-sync/",
-    "/projects/codex-memory/gemini-workspace-memory/",
-    "/projects/codex-memory/isolated-disaster-recovery/",
-    "/projects/codex-memory/openclaw-workspace-recovery/",
-    "/projects/codex-memory/vss-conversation-hot-backup/",
-    "/projects/codex-remote/",
-    "/projects/codex-remote/conversation-control/",
-    "/projects/codex-remote/installation-update-rollback/",
-    "/projects/codex-remote/models-approvals-context/",
-    "/projects/codex-remote/projects-files-input/",
-    "/projects/codex-remote/same-task-control/",
-    "/projects/codex-remote/security-public-access/",
-    "/projects/codex-remote/shared-realtime-architecture/",
-    "/projects/codex-remote/subagent-navigation/",
-    "/projects/codex-remote/versions-evidence/",
-    "/projects/daily-preferences/",
-    "/projects/daily-preferences/current-corrections/",
-    "/projects/daily-preferences/evidence-query/",
-    "/projects/daily-preferences/fact-verification/",
-    "/projects/daily-preferences/mobile-context-delivery/",
-    "/projects/daily-preferences/personal-understanding/",
-    "/projects/daily-preferences/recommendation-choice/",
-    "/projects/daily-preferences/source-coverage/",
-    "/projects/devconfig-backup/",
-    "/projects/devconfig-backup/recovery-and-tasks/",
-    "/projects/devconfig-backup/source-catalog/",
-    "/projects/devconfig-backup/tiered-distribution/",
-    "/projects/devconfig-backup/wechat-native-backup/",
-    "/projects/document-materials/",
-    "/projects/document-materials/current-matter-sources/",
-    "/projects/document-materials/editable-docx-pdf/",
-    "/projects/document-materials/page-audit-release/",
-    "/projects/document-materials/reality-readback-recovery/",
-    "/projects/document-materials/signature-delivery-version/",
-    "/projects/emerald-veil/",
-    "/projects/emerald-veil/native-bubbles-idle-overlay/",
-    "/projects/emerald-veil/reversibility-preimage-and-remote-compatibility/",
-    "/projects/emerald-veil/wallpaper-engine-coexistence-and-rain-experiment/",
-    "/projects/emerald-veil/windows-desktop-and-lockscreen-background/",
-    "/projects/github-index/",
-    "/projects/github-index/project-admission/",
-    "/projects/github-index/protected-major-actions/",
-    "/projects/github-index/publication-gate/",
-    "/projects/github-index/repository-ledger/",
-    "/projects/github-index/snapshot-recovery/",
-    "/projects/github-index/worktree-sync/",
-    "/projects/github-local-index/",
-    "/projects/learning/",
-    "/projects/learning/authoritative-research/",
-    "/projects/learning/dialogue-revision/",
-    "/projects/learning/human-control-simple/",
-    "/projects/learning/plain-language/",
-    "/projects/learning/questions-validation/",
-    "/projects/learning/route-checkpoint/",
-    "/projects/llm-backend-toolkit/",
-    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/",
-    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/",
-    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/",
-    "/projects/llm-backend-toolkit/data-factory-agent-execution/",
-    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/",
-    "/projects/llm-backend-toolkit/read-only-model-observer-gui/",
-    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/",
-    "/projects/localocr/",
-    "/projects/localocr/document-structure/",
-    "/projects/localocr/input-routing/",
-    "/projects/localocr/installation-recovery/",
-    "/projects/localocr/jobs-cache/",
-    "/projects/localocr/results-evidence/",
-    "/projects/localocr/runtime-resources/",
-    "/projects/meshclip-kit/",
-    "/projects/meshclip-kit/exact-peer-firewall-hardening/",
-    "/projects/meshclip-kit/kde-connect-pairing-sync/",
-    "/projects/meshclip-kit/silent-watchdog-and-session-lifecycle/",
-    "/projects/meshclip-kit/tailscale-peer-reachability/",
-    "/projects/openclaw-gateway/",
-    "/projects/openclaw-gateway/backup-restore/",
-    "/projects/openclaw-gateway/bootstrap-install/",
-    "/projects/openclaw-gateway/channel-handoff/",
-    "/projects/openclaw-gateway/codeg-bridge/",
-    "/projects/openclaw-gateway/gateway-runtime/",
-    "/projects/openclaw-gateway/managed-update/",
-    "/projects/openclaw-gateway/model-cost/",
-    "/projects/openclaw/",
-    "/projects/password-center/",
-    "/projects/pc-panel-hub/",
-    "/projects/pc-panel-hub/case-panel-rendering/",
-    "/projects/pc-panel-hub/hs2-overlay/",
-    "/projects/pc-panel-hub/installation-binding-migration/",
-    "/projects/pc-panel-hub/power-recovery/",
-    "/projects/pc-panel-hub/serial-transport/",
-    "/projects/pc-panel-hub/telemetry-trust/",
-    "/projects/pcconfig/",
-    "/projects/pcconfig/authorization-files/",
-    "/projects/pcconfig/drift-acceptance/",
-    "/projects/pcconfig/machine-facts/",
-    "/projects/pcconfig/memory-diagnostics/",
-    "/projects/pcconfig/owner-takeover/",
-    "/projects/pcconfig/protected-actions/",
-    "/projects/pcconfig/protected-data/",
-    "/projects/pcconfig/recovery-backup/",
-    "/projects/pcconfig/remote-computer-mcp/",
-    "/projects/pcconfig/runtime-startup/",
-    "/projects/pcconfig/secondary-laptop/",
-    "/projects/pcconfig/secrets-providers/",
-    "/projects/personal-expression/",
-    "/projects/personal-expression/corpus-extension-and-private-recovery/",
-    "/projects/personal-expression/explain-to-me/",
-    "/projects/personal-expression/feedback-consolidation-and-lessons-sync/",
-    "/projects/personal-expression/reply-as-me/",
-    "/projects/personal-finance/",
-    "/projects/personal-finance/bill-collection/",
-    "/projects/personal-finance/monthly-report/",
-    "/projects/personal-finance/reconciliation/",
-    "/projects/personal-formal-documents/",
-    "/projects/personal-health/",
-    "/projects/personal-health/current-evidence-route/",
-    "/projects/personal-health/evidence-three-state/",
-    "/projects/personal-health/health-owner-boundary/",
-    "/projects/personal-health/offline-decision-brief/",
-    "/projects/personal-health/protected-foreground-refresh/",
-    "/projects/personal-health/raw-preservation-resume/",
-    "/projects/personal-materials/",
-    "/projects/personal-materials/bounded-discovery/",
-    "/projects/personal-materials/exact-intake/",
-    "/projects/personal-materials/registered-lookup/",
-    "/projects/personal-materials/verified-open/",
-    "/projects/personal-media/",
-    "/projects/personal-media/classification/",
-    "/projects/personal-media/cloud-candidates/",
-    "/projects/personal-media/local-ingest/",
-    "/projects/personal-media/phone-preservation/",
-    "/projects/personal-media/phone-recovery/",
-    "/projects/personal-media/search-browse/",
-    "/projects/phone-collector/",
-    "/projects/proxyclean/",
-    "/projects/proxyclean/dead-port-and-route-cleanup/",
-    "/projects/proxyclean/dynamic-proxy-status/",
-    "/projects/proxyclean/ipv6-routing-control/",
-    "/projects/proxyclean/one-click-and-troubleshooting-boundaries/",
-    "/projects/proxyclean/targeted-port-shutdown/",
-    "/projects/proxyclean/wifi-rebind-and-recovery/",
-    "/projects/ramdisk-guardian/",
-    "/projects/ramdisk-guardian/drive-arrival-sensing-and-skeleton-healing/",
-    "/projects/ramdisk-guardian/host-memory-telemetry-and-silent-monitoring/",
-    "/projects/ramdisk-guardian/installation-and-application-recovery/",
-    "/projects/ramdisk-guardian/unaccounted-watchdog-and-driver-auto-release/",
-    "/projects/ramdisk-guardian/volatile-cache-contract-and-backup-retirement/",
-    "/projects/remote-control/",
-    "/projects/steam-millennium-config-backup/",
-    "/projects/steam-millennium-config-backup/allowlist-config-and-style-snapshot/",
-    "/projects/steam-millennium-config-backup/plugin-manifest-and-install-state-tracking/",
-    "/projects/steam-millennium-config-backup/scheduled-snapshot-guardian-and-clean-restore-boundary/",
-    "/projects/steam-millennium-config-backup/theme-options-palette-and-dual-baseline-tracking/",
-    "/projects/sunshine-remote-streaming/",
-    "/projects/sunshine-remote-streaming/bitrate-codec-strategy/",
-    "/projects/sunshine-remote-streaming/capture-failover/",
-    "/projects/sunshine-remote-streaming/remote-power-and-repair/",
-    "/projects/sunshine-remote-streaming/transport-ipv6-direct/",
-    "/projects/sunshine-remote-streaming/vdd-display-settings/",
-    "/projects/timeaudit/",
-    "/projects/timeaudit/backup-recovery/",
-    "/projects/timeaudit/clipboard-history/",
-    "/projects/timeaudit/collection-pipeline/",
-    "/projects/timeaudit/hardware-performance/",
-    "/projects/timeaudit/process-forensics/",
-    "/projects/timeaudit/runtime-reliability/",
-    "/projects/timeaudit/usage-energy/",
-    "/projects/typora-theme-pack/",
-    "/projects/typora-theme-pack/controlled-preview-and-visual-qa/",
-    "/projects/typora-theme-pack/multi-scenario-export-profiles/",
-    "/projects/typora-theme-pack/theme-installation-and-lifecycle/",
-    "/projects/typora-theme-pack/transactional-pdf-export-pipeline/",
-    "/projects/typora-theme-pack/verdant-mint-theme-system/",
-    "/projects/vault-tool/",
-    "/projects/vault-tool/ai-local-interface/",
-    "/projects/vault-tool/dual-password/",
-    "/projects/vault-tool/files-encryption/",
-    "/projects/vault-tool/image-carrier/",
-    "/projects/vault-tool/maintenance-recovery/",
-    "/projects/vault-tool/passwords-formats/",
-    "/projects/vault-tool/private-backup/",
-    "/projects/vault-tool/view-extract/",
-    "/projects/video-scaffold/",
-    "/projects/video-scaffold/delivery-verify/",
-    "/projects/video-scaffold/deterministic-render/",
-    "/projects/video-scaffold/preflight-preview/",
-    "/projects/video-scaffold/project-bootstrap/",
-    "/projects/video-scaffold/recovery-reuse/",
-    "/projects/video-scaffold/scene-authoring/",
-    "/projects/video-scaffold/voice-timing/",
-    "/projects/wechat-direct/",
-    "/projects/wechat-direct/account-source-identity/",
-    "/projects/wechat-direct/bounded-chat-context/",
-    "/projects/wechat-direct/moments-local-cache/",
-    "/projects/wechat-direct/named-chat-archive/",
-    "/projects/wechat-direct/preservation-verification/",
-    "/projects/wechat-direct/reply-media-relations/",
-    "/projects/wechat-history-ai-bridge/",
-    "/projects/wechat-history-ai-bridge/ai-consumer-contract-and-metadata-envelope/",
-    "/projects/wechat-history-ai-bridge/boot-guardian-and-multi-profile-watchdog/",
-    "/projects/wechat-history-ai-bridge/metadata-first-probe-and-boundary-verification/",
-    "/projects/wechat-history-ai-bridge/private-snapshot-integrity-and-consumer-handoff/",
-    "/projects/wechat-history-ai-bridge/public-safe-openapi-and-endpoint-governance/",
-    "/projects/wechatdirect/",
-    "/projects/wly0829-cn/",
-    "/projects/work-delivery-copilot/",
-    "/projects/work-delivery/",
-    "/projects/work-delivery/consistent-deliverables/",
-    "/projects/work-delivery/evidence-quality/",
-    "/projects/work-delivery/package-sources/",
-    "/projects/work-delivery/source-change-next-version/",
-    "/projects/work-delivery/value-state-recovery/",
-    "/rescue/",
-    "/rules/",
-    "/rules/authorization/",
-    "/rules/capabilities-runtime/",
-    "/rules/charter/",
-    "/rules/claude-adapter/",
-    "/rules/codex-adapter/",
-    "/rules/context-sources/",
-    "/rules/engineering-delivery/",
-    "/rules/execution-coordination/",
-    "/rules/privacy-data/",
-    "/rules/protected-actions/",
-    "/rules/rule-release/",
-    "/search/",
-    "/skills/",
-    "/skills/authorization-file-broker/",
-    "/skills/browser-control-continuity/",
-    "/skills/chinese-asr/",
-    "/skills/cloud-asset-channel/",
-    "/skills/cockpit/",
-    "/skills/control-plane-doctor/",
-    "/skills/daily-preferences/",
-    "/skills/document-materials/",
-    "/skills/documents/",
-    "/skills/explain-to-me/",
-    "/skills/file-intake-router/",
-    "/skills/google-workspace-direct/",
-    "/skills/learning/",
-    "/skills/llm-backend-toolkit/",
-    "/skills/local-secret-broker/",
-    "/skills/localocr/",
-    "/skills/md-to-pdf/",
-    "/skills/media-person-self/",
-    "/skills/mojibake-doctor/",
-    "/skills/native-economy-routing/",
-    "/skills/pdf-render-safe/",
-    "/skills/pdf/",
-    "/skills/personal-formal-documents/",
-    "/skills/personal-health/",
-    "/skills/personal-materials/",
-    "/skills/personal-media/",
-    "/skills/personal-panel-refresh/",
-    "/skills/phone-direct/",
-    "/skills/project-entry-gate/",
-    "/skills/reply-as-me/",
-    "/skills/report-page/",
-    "/skills/tailscale-safe-exposure/",
-    "/skills/timeaudit-diagnostics/",
-    "/skills/token-budget-advisor/",
-    "/skills/vault-workflow/",
-    "/skills/wechat-direct/",
-    "/skills/work-delivery/",
-    "/system/"
-  ],
+  "rebuilt_pages": [],
   "html_files": 321,
   "files": [
     {
@@ -9745,6 +9428,16 @@
       "sha256": "59ca497c6658d3c05ed51b9a4d43e7d5778332f3523c5cf4ab8ad98aec59390a"
     },
     {
+      "path": "_typeset/home-highlights/6ad382016131e362742a-home-highlights-h-2x.webp",
+      "bytes": 2506824,
+      "sha256": "6ad382016131e362742ae82004df139326a51e925a1a0bedaa3565d74c3d0bb3"
+    },
+    {
+      "path": "_typeset/home-highlights/7e669b1c762f006f5b02-home-highlights-v-2x.webp",
+      "bytes": 3036668,
+      "sha256": "7e669b1c762f006f5b021a35ddb13f97c00a3558d87eba6f3287abadfa9036c5"
+    },
+    {
       "path": "_typeset/home-highlights/8b67773eb07ea515abd6-home-highlights-h-2x.webp",
       "bytes": 2505470,
       "sha256": "8b67773eb07ea515abd6afea9b0f57f25fe97166b6201af863361e42a7bc5fe6"
@@ -18385,6 +18078,11 @@
       "sha256": "72d3703e13eee7cc7c6e6b8189457a3b50ae7475666f52662f0f0072228820cd"
     },
     {
+      "path": "assets/_fingerprinted/72e059c53a9df0fd8f5888ad29487781443cbab358cb587a0ff95ffe21f29603.png",
+      "bytes": 67344,
+      "sha256": "72e059c53a9df0fd8f5888ad29487781443cbab358cb587a0ff95ffe21f29603"
+    },
+    {
       "path": "assets/_fingerprinted/7325b9e57f098033488a800564b47516c17219cfb93bea119c8ecc8da5ec690e.png",
       "bytes": 110662,
       "sha256": "7325b9e57f098033488a800564b47516c17219cfb93bea119c8ecc8da5ec690e"
@@ -19653,6 +19351,11 @@
       "path": "assets/_fingerprinted/949552ca177a232ed3b44c1317063063492f68efc7701bcfbc62ea1a57e4816f.png",
       "bytes": 1221355,
       "sha256": "949552ca177a232ed3b44c1317063063492f68efc7701bcfbc62ea1a57e4816f"
+    },
+    {
+      "path": "assets/_fingerprinted/94afae5fe4801cba67319b31a0a7f76c0283deb8293fd209b42ca7e8d808f3b6.png",
+      "bytes": 96033,
+      "sha256": "94afae5fe4801cba67319b31a0a7f76c0283deb8293fd209b42ca7e8d808f3b6"
     },
     {
       "path": "assets/_fingerprinted/94f411ca3351bc5e50580664619090085a59a72a44a8c344eeaac2b126a0fb3c.png",
@@ -21955,6 +21658,11 @@
       "sha256": "cfe7140df17f0c98fc4921feb2ede921e71ad6a94dd6827030c7fb6ca5e14c71"
     },
     {
+      "path": "assets/_fingerprinted/d0673b4f3abfc76f5b209df1e24e4d1a2920267b184fb39632079b37ca3cdaf6.png",
+      "bytes": 77617,
+      "sha256": "d0673b4f3abfc76f5b209df1e24e4d1a2920267b184fb39632079b37ca3cdaf6"
+    },
+    {
       "path": "assets/_fingerprinted/d0b0a57d678f35a17e9698c49941132cbf281882c099231c303898c9a8f3cf1a.png",
       "bytes": 81744,
       "sha256": "d0b0a57d678f35a17e9698c49941132cbf281882c099231c303898c9a8f3cf1a"
@@ -24185,6 +23893,11 @@
       "sha256": "fb6a34d0180142ded96a7e8413098515534b47929b639cfabb0562b0e0fa1dbc"
     },
     {
+      "path": "assets/_fonts/daily-preferences-0067ece8528e.woff2",
+      "bytes": 248488,
+      "sha256": "5e5ecd735c63c1bd84fef493a13c935244461ee25339424c9971dd91166902e4"
+    },
+    {
       "path": "assets/_fonts/daily-preferences-0c62570c039e.woff2",
       "bytes": 243340,
       "sha256": "d7edde30bbc2a6aaa62b060d29f771b56a835599653652ef22b2bc7b5be074f7"
@@ -24915,6 +24628,11 @@
       "sha256": "e9cf2aa32ec8c24825e188a1705a80a9bcbf0bd7455e8c4995c153c333a3072c"
     },
     {
+      "path": "assets/_fonts/pcconfig-f9270ac8f44c.woff2",
+      "bytes": 241196,
+      "sha256": "3141144fac59488c7459898cfbe490ccd5a704839c080dc6e45dbac56427f9bc"
+    },
+    {
       "path": "assets/_fonts/pcconfig-machine-facts-405bdc2f9640.woff2",
       "bytes": 188160,
       "sha256": "56f78ad68e9a56fb6e590f5eaa432805afd5b827c63d3123c7372a02e6756c5a"
@@ -25308,6 +25026,11 @@
       "path": "assets/_fonts/proxyclean-0a7def22ac3a.woff2",
       "bytes": 179996,
       "sha256": "33badfbb8307a31be60e8b4ee775e0d1f78bd1ef64ffc33b443c3349623a58c0"
+    },
+    {
+      "path": "assets/_fonts/proxyclean-28a608d03526.woff2",
+      "bytes": 179596,
+      "sha256": "f614ac202942f216e0d43469f55e57b4d9998d141820e13cc4ab7f119c465e2b"
     },
     {
       "path": "assets/_fonts/proxyclean-3ed3306e0e14.woff2",
@@ -26900,6 +26623,11 @@
       "sha256": "9d0e2a2f083687c2f975806cfb9524699f1028d1a66792cbe27cc5037331aed6"
     },
     {
+      "path": "assets/_fonts/wechatdirect-dfe327b17d3c.woff2",
+      "bytes": 184296,
+      "sha256": "c2e05eb20b22060a394b379dcaef7c43b9e0b0ac655a67a8eec01888e2fe91cd"
+    },
+    {
       "path": "assets/_fonts/wechatdirect-f961eda1cc47.woff2",
       "bytes": 180524,
       "sha256": "3ea529af5f10ce00168738471b71f22c80e79085ab10bc10a4c5dbbf900f3634"
@@ -27422,12 +27150,12 @@
     {
       "path": "github-profile/index.html",
       "bytes": 69761,
-      "sha256": "5a8585b971dd458bf9421ad9752918f086556c4c895ea60149a2fed6cf07ea01"
+      "sha256": "684b8b3e5c46507dcbcb5f98336d9701b76198aaa6ca5a53dbb3bc7cc663339e"
     },
     {
       "path": "how/index.html",
       "bytes": 571132,
-      "sha256": "bac289d50ce29df3401a55d2e913122ee781f7207f6351e134180da6b2d31baa"
+      "sha256": "eafe1f0975edce24721378ced6871b88262849e41ed5a1c21a085d5204c5aca5"
     },
     {
       "path": "how-this-site/index.html",
@@ -27452,7 +27180,7 @@
     {
       "path": "index.html",
       "bytes": 399825,
-      "sha256": "768283628227886470d9e6ddb285c525e11e1e282efca2a5ce83ffaba9b80937"
+      "sha256": "5a7e9344e206295bc4ae38f80e35dade2680a09dac8e118262234b08b836b00b"
     },
     {
       "path": "mcp/index.html",
@@ -27502,12 +27230,12 @@
     {
       "path": "projects/agents/context-evidence/index.html",
       "bytes": 194182,
-      "sha256": "fd1003f371ab9bc28b18b8631f39356344cf05df9648647483a3d467f74b9719"
+      "sha256": "c788bdd1ba4f601b15b1c6eb734937725db04a653bbab19ef135752273a45120"
     },
     {
       "path": "projects/agents/index.html",
       "bytes": 655452,
-      "sha256": "8371a9afa2a275e12ac147276121857d4a2095f4d9bd76a85dc82d0076012508"
+      "sha256": "d0ac7cd8e6acc23eb718908cc7e333586f39c95c5e6f4bf29d19ba0891f7b0c1"
     },
     {
       "path": "projects/agents/protected-policy/index.html",
@@ -27557,7 +27285,7 @@
     {
       "path": "projects/ai-cli-profile-manager/index.html",
       "bytes": 612078,
-      "sha256": "49922d72e76f6ba79f4c52bb8ce5d6d8cd0c0fab1acaa511c6ae307017f39055"
+      "sha256": "c88e598790d6c779ab653c809e98a87c5c980775517352bcdb6083626440a3a4"
     },
     {
       "path": "projects/ai-cli-profile-manager/install-recovery/index.html",
@@ -27732,7 +27460,7 @@
     {
       "path": "projects/codex-memory/config-memory-whitelist-sync/index.html",
       "bytes": 166424,
-      "sha256": "b2d8794043990f629426e7b2de386ef06a11a22eb361b430580591900f3737d9"
+      "sha256": "6dc8acb27769e71444df378534bdabbdbbc10592a202c871f3843e9543f5a2c5"
     },
     {
       "path": "projects/codex-memory/content-addressed-storage-cold-sync/index.html",
@@ -27747,7 +27475,7 @@
     {
       "path": "projects/codex-memory/index.html",
       "bytes": 439455,
-      "sha256": "97ebd6e43a36a3aa9ae37c828bde349fa32d2ef087060696ca49f65db0754db4"
+      "sha256": "7a9dfa6941595c90eff703faed41a9a586810b15d52d97912036808c80ef8186"
     },
     {
       "path": "projects/codex-memory/isolated-disaster-recovery/index.html",
@@ -27841,8 +27569,8 @@
     },
     {
       "path": "projects/daily-preferences/index.html",
-      "bytes": 564213,
-      "sha256": "13c7fe7fddf973f9d9b70a5f714f6b196f3ad2177a0e3201cf54782a335d9dce"
+      "bytes": 549460,
+      "sha256": "0450ea79bd90271fd44300d74be6b3a7944bffcd1603b4c78037b539f77170f3"
     },
     {
       "path": "projects/daily-preferences/mobile-context-delivery/index.html",
@@ -27957,7 +27685,7 @@
     {
       "path": "projects/github-index/index.html",
       "bytes": 438116,
-      "sha256": "1bacd9766058267a54bed650e2e39b6800528a0fe35d2a2a6b37adb28ae923d7"
+      "sha256": "2a24ae41de73fc7c2d977ad37cdf56df22afb5ac613f9885fde77c484ee4e0b5"
     },
     {
       "path": "projects/github-index/project-admission/index.html",
@@ -27976,8 +27704,8 @@
     },
     {
       "path": "projects/github-index/repository-ledger/index.html",
-      "bytes": 185259,
-      "sha256": "3663f5d420f8a96275c394cf9c2a3f86700e89bbea7762b1f85de93d3a4a8dfc"
+      "bytes": 185255,
+      "sha256": "a4f84608e5a2b3b402ca97aca1f8a93977040162485d382b22deec71a468811c"
     },
     {
       "path": "projects/github-index/snapshot-recovery/index.html",
@@ -28007,7 +27735,7 @@
     {
       "path": "projects/index.html",
       "bytes": 451244,
-      "sha256": "378cc1204eb03240c53f44c7aabd41d46bbe58a78295e901b014b824b1cf1190"
+      "sha256": "2cb806716ecee503c09a8d17dcd8d0b98ef688584cbddb5c0e1324264a5ab562"
     },
     {
       "path": "projects/learning/assets/hero-cd2ff8de844666bc-mask.png",
@@ -28111,8 +27839,8 @@
     },
     {
       "path": "projects/localocr/index.html",
-      "bytes": 447655,
-      "sha256": "db546acfbb83ea0d29b6738ffc9a9ad4d0085c7738e0714df6186d32cedd5bc7"
+      "bytes": 447732,
+      "sha256": "693e553219193f1a5b526f4b855e253da6398af19aee381d4c3807ff0d203454"
     },
     {
       "path": "projects/localocr/input-routing/index.html",
@@ -28127,12 +27855,12 @@
     {
       "path": "projects/localocr/jobs-cache/index.html",
       "bytes": 147976,
-      "sha256": "c84c1a01705ff8054c5855d104c1124f112bac5eac66c1413c07b2e0b567003e"
+      "sha256": "8065b2e79a6dd2bf37f59d99cc00a895492f1487c2438a99793d944cca41a992"
     },
     {
       "path": "projects/localocr/results-evidence/index.html",
-      "bytes": 158129,
-      "sha256": "ebc9609f46e229d3ec4be23882acecdcc5d39c9b8e5db6855397917e16cee572"
+      "bytes": 158192,
+      "sha256": "bfc7463bd45bea9977d9aeac99d2700f21134d982bb79bfafb07df1244a238d0"
     },
     {
       "path": "projects/localocr/runtime-resources/index.html",
@@ -28292,7 +28020,7 @@
     {
       "path": "projects/pcconfig/authorization-files/index.html",
       "bytes": 182618,
-      "sha256": "4751f899196d2fe1d671407f37bd689c881361cfdc76c68af14b7337df9b115a"
+      "sha256": "f1f59923fd60cebd10e8d111904bb12c98ff56b0cf280138f43608437617b0aa"
     },
     {
       "path": "projects/pcconfig/drift-acceptance/index.html",
@@ -28301,13 +28029,13 @@
     },
     {
       "path": "projects/pcconfig/index.html",
-      "bytes": 948230,
-      "sha256": "a6f7c8f460f2555d7e0238ef49f491b585d290db0604f45cc9fbcee14a980efb"
+      "bytes": 968881,
+      "sha256": "5a865a6b666849c3ce0f4315efe11bcfd705690ed6ee2d4478c59d9ca6aa6a66"
     },
     {
       "path": "projects/pcconfig/machine-facts/index.html",
-      "bytes": 188813,
-      "sha256": "42c1a83628b3a6f3118db9c97c9690b547081de9248482205ddf2711bcee6a75"
+      "bytes": 190729,
+      "sha256": "9bd16a686731541cafe1cbcac902f9120d3335f09e6b3720d739d0ccc47dcd08"
     },
     {
       "path": "projects/pcconfig/memory-diagnostics/index.html",
@@ -28317,7 +28045,7 @@
     {
       "path": "projects/pcconfig/owner-takeover/index.html",
       "bytes": 168296,
-      "sha256": "f847b4f55f0d198cab41ce0df4bb13d055d5fa7aeaa98018c3b7fece5eedc986"
+      "sha256": "df6b5dcf8282679547955c06f8d042a3aff09d546cbca6c3e76a76ef179ab126"
     },
     {
       "path": "projects/pcconfig/protected-actions/index.html",
@@ -28352,7 +28080,7 @@
     {
       "path": "projects/pcconfig/secrets-providers/index.html",
       "bytes": 213599,
-      "sha256": "9c6ff36619e71b8ed2b721a90bf06df5df7bdf57dbf49d7a516a696f2ba938cf"
+      "sha256": "f32d125ef2374a2dc82dfe1ccb9bf8f6a878a453f1f3b3e87263a89c85e00354"
     },
     {
       "path": "projects/personal-expression/assets/hero-bef7abb6f09b51bf-mask.png",
@@ -28396,8 +28124,8 @@
     },
     {
       "path": "projects/personal-finance/index.html",
-      "bytes": 248114,
-      "sha256": "d33941cfd4a89d1d05d910369a9e0a6b2117181616b3352bd092b8fef01fe5d5"
+      "bytes": 248462,
+      "sha256": "07076a5728e8d1cca36b42b8a68d29a2672a5230bc89380aab167f6d6b259870"
     },
     {
       "path": "projects/personal-finance/monthly-report/index.html",
@@ -28421,8 +28149,8 @@
     },
     {
       "path": "projects/personal-formal-documents/index.html",
-      "bytes": 381301,
-      "sha256": "40e86bfe24aa8872f3d0a900561faa49117d24aa128ed087e0ac3667cc36e011"
+      "bytes": 381303,
+      "sha256": "762cc5c1d46b7bd540878ba9d91fad0ae33e56901f4a55e40fc39331d3f243d3"
     },
     {
       "path": "projects/personal-health/current-evidence-route/index.html",
@@ -28437,7 +28165,7 @@
     {
       "path": "projects/personal-health/health-owner-boundary/index.html",
       "bytes": 159270,
-      "sha256": "47e506bd3bda68e1ed9d862854df853ab968299c16b293b50ac1de936af102c1"
+      "sha256": "d46b3d78b98ec83fe540d0e5587e25b1f0675d1ae25ba0cf85d42529a9655e33"
     },
     {
       "path": "projects/personal-health/index.html",
@@ -28447,22 +28175,22 @@
     {
       "path": "projects/personal-health/offline-decision-brief/index.html",
       "bytes": 185430,
-      "sha256": "73301ad3d1df2c8242c19c40252facd9c686dbf3cebd4993303210ae9d8cb596"
+      "sha256": "1472084ee13aeeabe0ac4196b8123ad803bcb2fed5d253ef205541ad3c2b282f"
     },
     {
       "path": "projects/personal-health/protected-foreground-refresh/index.html",
       "bytes": 150096,
-      "sha256": "3677c5d6ee31cb8af6a48ec1e80d94f0dba442142e48756fdeb1534bf14cb830"
+      "sha256": "9eb6adb4fa30af8bdee92dca4c837590e28e10d4b630357ed971c454c232b040"
     },
     {
       "path": "projects/personal-health/raw-preservation-resume/index.html",
       "bytes": 178904,
-      "sha256": "910af3c6209d20926991e6aca1249d77ca6c2355c4ea97888b8275c3d123d7ad"
+      "sha256": "ede002135d95f92509bfc3d7d201f0249d27b7d3c43117348c66830d7d1967e4"
     },
     {
       "path": "projects/personal-materials/bounded-discovery/index.html",
-      "bytes": 181492,
-      "sha256": "628df7716032d36d5f2a57d91342220f4f01b5b1d3e51b92e5def17b040ade2e"
+      "bytes": 181493,
+      "sha256": "93bbc407470598a4f9b7cacd60cb2cd60f6878ace55df72b0edf5c05e12e1334"
     },
     {
       "path": "projects/personal-materials/exact-intake/index.html",
@@ -28472,12 +28200,12 @@
     {
       "path": "projects/personal-materials/index.html",
       "bytes": 393894,
-      "sha256": "c16c206ee47540f2c9809eeed8ad54744c41607d3b618dc820867dd3adb4d64f"
+      "sha256": "a3faa53730e7695c5592dd03fe52acb056de2a10a8ab7f814392a58a72c03093"
     },
     {
       "path": "projects/personal-materials/registered-lookup/index.html",
       "bytes": 185004,
-      "sha256": "0477ce1b58460c227ca4203cc70e6edfa9db39d153ae609e78ecea30d0325330"
+      "sha256": "f3b6b5d322b5d1b27dade30867cd96a1032b3e92c9c5e4dea4995a3c36ccf21c"
     },
     {
       "path": "projects/personal-materials/verified-open/index.html",
@@ -28497,12 +28225,12 @@
     {
       "path": "projects/personal-media/classification/index.html",
       "bytes": 177237,
-      "sha256": "90e4ab919a0d2f4fec230c95ee97bc9b59644a5ef290133d85b6d7c05b51524c"
+      "sha256": "cee88692cb6d87eb3e9e6644bc50e0a5d44011f197b53c3152bf993a8627bba4"
     },
     {
       "path": "projects/personal-media/cloud-candidates/index.html",
       "bytes": 186993,
-      "sha256": "8594c6641356a366a9bf6e1d1e486f9b76a96a06601f47af59e0d7683bf8ece1"
+      "sha256": "0b19c3b4d0d0e7449d045f4baf7cd9a3df5263d13dba5d3d7c06b50a945add01"
     },
     {
       "path": "projects/personal-media/index.html",
@@ -28512,27 +28240,27 @@
     {
       "path": "projects/personal-media/local-ingest/index.html",
       "bytes": 172012,
-      "sha256": "97946514161af917729f990e265cc57515ab929582e66b2c637d6f9d75a577b6"
+      "sha256": "6ae9f7d4bb4b3cc924d8da3a8b026717d157f5738c4f311da40f5eab6a528cc9"
     },
     {
       "path": "projects/personal-media/phone-preservation/index.html",
       "bytes": 196437,
-      "sha256": "2f20f5c0566f32ec3dabf43c3d75a0eec7115ebddca51dab2a5d8426ba4ef36b"
+      "sha256": "1e639d27f88a37cc0bb79c875ec4e8993fb6e09fc15b15e3a30f3a6de694dbf8"
     },
     {
       "path": "projects/personal-media/phone-recovery/index.html",
       "bytes": 168772,
-      "sha256": "fe548accc9fadbdd764f7e3323bc931d20f9ac4b72bba0126aefc56e8c8cf68c"
+      "sha256": "d49dc8ce08ad78473f37696b5fc37c442c22204b103236bccbd916ccacad1b17"
     },
     {
       "path": "projects/personal-media/search-browse/index.html",
       "bytes": 170397,
-      "sha256": "4c33dc4c70bf60fb84c52d3793100330c1cf86422f4346e202cd8b10c74b1dbb"
+      "sha256": "1d77e71067af9ba4ee46f87e6805ee413deccacdb9ba79b4892ebf1b38e0a999"
     },
     {
       "path": "projects/phone-collector/index.html",
       "bytes": 288415,
-      "sha256": "1e2b11bec3192563147b444058f0b426b0d91dd0ffbb08b810533847765a577c"
+      "sha256": "948334c370c57217e42280600f138c1c104e3366740e5c3c62a8a46c1f23119e"
     },
     {
       "path": "projects/proxyclean/assets/hero-13c8bb6217be4f89-mask.png",
@@ -28556,8 +28284,8 @@
     },
     {
       "path": "projects/proxyclean/index.html",
-      "bytes": 354232,
-      "sha256": "0c4f577730bf1e7f6f2f1f91799aae5123bf4cef500bc39ade153bcb1cb3d236"
+      "bytes": 354320,
+      "sha256": "eb38fb9ee5d7d09fefb458b23f7bcd91fbd6c6d543fff42f78953bd61eb4f134"
     },
     {
       "path": "projects/proxyclean/ipv6-routing-control/index.html",
@@ -28681,8 +28409,8 @@
     },
     {
       "path": "projects/sunshine-remote-streaming/index.html",
-      "bytes": 395896,
-      "sha256": "28e8c7d1a2368404fc159b873891d61768b4617d761a45b786b018d2b9f4b614"
+      "bytes": 395892,
+      "sha256": "2bc5e912abe0e1960f20bbef0a3c7a565caae069643dd368f68df8f3f0dc2be1"
     },
     {
       "path": "projects/sunshine-remote-streaming/remote-power-and-repair/index.html",
@@ -28712,12 +28440,12 @@
     {
       "path": "projects/timeaudit/backup-recovery/index.html",
       "bytes": 204289,
-      "sha256": "b6290879983f6d4f8bcc7eea65a5ff12ca52d1cf3b8bce34f4d1f83cf6ce8865"
+      "sha256": "c852b480eb260501e4c788c61efe468326827f4da00080d6437048ab57a0c4c7"
     },
     {
       "path": "projects/timeaudit/clipboard-history/index.html",
       "bytes": 195656,
-      "sha256": "7a091ff182003efedefb5a045fe1c7c19343b6740acc394b5c679a1fee96afa3"
+      "sha256": "00d2de254e0236556112d539be51a69e5304956d81c6ce6f47b592c8d4b9dc10"
     },
     {
       "path": "projects/timeaudit/collection-pipeline/index.html",
@@ -28732,7 +28460,7 @@
     {
       "path": "projects/timeaudit/index.html",
       "bytes": 624671,
-      "sha256": "33c7b9bff64236104c2119e8bb727b510dff9d911892290903dd2344da2b19c8"
+      "sha256": "49cea8ca714d5faf1b1957ad081d90c1eceece0c3d802283ae56d572e1af75b5"
     },
     {
       "path": "projects/timeaudit/process-forensics/index.html",
@@ -28767,7 +28495,7 @@
     {
       "path": "projects/typora-theme-pack/index.html",
       "bytes": 384341,
-      "sha256": "6a052193b9c00885921ce3b2c31220cc650c0f1753a59c7a264bb1bab73e62f8"
+      "sha256": "51982ae31eb2f61706bb809f34c40a81d135cb83319d34025acd187b181ae08f"
     },
     {
       "path": "projects/typora-theme-pack/multi-scenario-export-profiles/index.html",
@@ -28791,8 +28519,8 @@
     },
     {
       "path": "projects/vault-tool/ai-local-interface/index.html",
-      "bytes": 172195,
-      "sha256": "f471a1d3e94837e4d210e7eea1ae8292945563e71170cb99ebaac8d81dae5c86"
+      "bytes": 172197,
+      "sha256": "3dfff6bb4fe010ae5464753390adc36e1a38f7764f1bb0658869ddf47231ca86"
     },
     {
       "path": "projects/vault-tool/dual-password/index.html",
@@ -28812,7 +28540,7 @@
     {
       "path": "projects/vault-tool/index.html",
       "bytes": 409522,
-      "sha256": "547d682dfa704c278668a3cb67a810f2218fff939e15a06ce0dc528a2cbf10da"
+      "sha256": "f26e5cb73aceafc48ce22f00561bf169e7d42c1f9c5c335983966f8e203f057e"
     },
     {
       "path": "projects/vault-tool/maintenance-recovery/index.html",
@@ -28831,8 +28559,8 @@
     },
     {
       "path": "projects/vault-tool/view-extract/index.html",
-      "bytes": 157691,
-      "sha256": "62d546448845a0753e044ff7ee0eec33366bb45f273402c0006ad8fab11a1c44"
+      "bytes": 157693,
+      "sha256": "37b4ba870001d437168ed15295ce711915f5ce0d2f15ff4bd0a77b513629df13"
     },
     {
       "path": "projects/video-scaffold/assets/hero-36810b6767117f92-mask.png",
@@ -28971,13 +28699,13 @@
     },
     {
       "path": "projects/wechatdirect/index.html",
-      "bytes": 405899,
-      "sha256": "d37335520f7d635dd85e5c69757c6f072fc55c399d739202e9cf038cd3528b0a"
+      "bytes": 406783,
+      "sha256": "f14ea7cc56cde87ebadbc51e681ecf45f59ffff3f7fcfce51c315114be1fb151"
     },
     {
       "path": "projects/wly0829-cn/index.html",
-      "bytes": 521533,
-      "sha256": "0d415855dfc5cf1c03aa9f67aa2dd90580063024b6e97804bcfe504a9189a295"
+      "bytes": 521527,
+      "sha256": "0717fb72cfc28362414f6530effc6536dad38aa6d8ebe7b69eea1bf2174c3609"
     },
     {
       "path": "projects/work-delivery/consistent-deliverables/index.html",
@@ -29022,17 +28750,17 @@
     {
       "path": "projects/work-delivery-copilot/index.html",
       "bytes": 410104,
-      "sha256": "1681eb4f73ec26af8fe5780cdb2150b9e5cfd505a80b376b14ef41aa05207512"
+      "sha256": "f0d87a59ca0a44913ef670552a2f19f3ee84a2dbe2e8d7d8327de4b8891e0a44"
     },
     {
       "path": "release-identity.json",
       "bytes": 244,
-      "sha256": "00516457616a5e9964af000da46f7d38a944bb09b25f684c5aac1fde6639a675"
+      "sha256": "22c01621756a65f5e1199a1da920668fbde4ebf19d8d0e54daf9c42d2920a66e"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 5376365,
-      "sha256": "fbffac9dc29f048afd90756123f81d9511c77d24c981958403ea091598897d87"
+      "bytes": 5383481,
+      "sha256": "49668f90a0c296eec88fd9d7d848ce2847227ff570c5dc0db934864aabdcc60a"
     },
     {
       "path": "rescue/index.html",
@@ -29197,22 +28925,22 @@
     {
       "path": "search/index.html",
       "bytes": 68789,
-      "sha256": "26f9fe9835452c79570312268c8a62a2cd7d9832a7958bb954524ef2652adc79"
+      "sha256": "66c782b22458f43f6c75e2a29b0cd3225f6985de1bfc6174add4a88bf9cf5051"
     },
     {
       "path": "search-index.js",
-      "bytes": 1556869,
-      "sha256": "3a7a5a63066c81613fc66e8f577fca5d8619e33b3833cdf3e0fc57b6bf175ac0"
+      "bytes": 1557246,
+      "sha256": "a7cf74b3af2823a246509ccbe730a3ad9b7e4d1457686c91407d1022aabca185"
     },
     {
       "path": "search-project-localocr.js",
       "bytes": 138124,
-      "sha256": "0656a6e4348fb3f976d037ac7a44c15dbd487b3ab81280c68e7243ad02a2817f"
+      "sha256": "3f4cff270b42c90c43ab2191855059cf604e19813aef1a0ad2680c257417f1af"
     },
     {
       "path": "search-projects.js",
-      "bytes": 3613935,
-      "sha256": "d4693eca312b9aae0900936016664491eb817ef3b253713179e633e77c1ecc5b"
+      "bytes": 3619436,
+      "sha256": "fd3d9e099f0d7acf8c0bb4ff2ff85bf5a81982f903ae42b845baccc0d0e9a338"
     },
     {
       "path": "sitemap.xml",
@@ -29232,7 +28960,7 @@
     {
       "path": "skills/authorization-file-broker/index.html",
       "bytes": 184272,
-      "sha256": "eabf57eda0ea37990e4130c9f51724a52910c6eb63d8388152b54f6656bc8e12"
+      "sha256": "7f9de233693ca28ce9639672478d7e997b0722c48ca59333aaa90d8ef52fb961"
     },
     {
       "path": "skills/browser-control-continuity/assets/hero-12471ecdee0ed41f-mask.png",
@@ -29247,7 +28975,7 @@
     {
       "path": "skills/browser-control-continuity/index.html",
       "bytes": 264123,
-      "sha256": "2d02b7b019bb36159fa3711bbbe7c0f92509e094b40267e9baffffabafac73e4"
+      "sha256": "7f3932ed45cab08c433ed2f3fdace82c8db69af667ed8421756100a33f903e64"
     },
     {
       "path": "skills/chinese-asr/assets/hero-fb71da432eb4f536-mask.png",
@@ -29262,12 +28990,12 @@
     {
       "path": "skills/chinese-asr/index.html",
       "bytes": 213421,
-      "sha256": "6909abe1ffc1684cdfaef8c56f2760265978793cc8406c28227f99fc8ae291b0"
+      "sha256": "5519c375e39ccf3ec8d26e648312434771a1c3a4b3d9e086a44ec4b78b670844"
     },
     {
       "path": "skills/cloud-asset-channel/index.html",
       "bytes": 192396,
-      "sha256": "db77d65e1e4be31a8b6a13533e2d43259f2d99a966f0e1b773e94e052b6487a6"
+      "sha256": "22d6f0668faef1e9f4989c36d2bb671e13354b02e916d963713a8dc2ea66287d"
     },
     {
       "path": "skills/cockpit/index.html",
@@ -29292,7 +29020,7 @@
     {
       "path": "skills/daily-preferences/index.html",
       "bytes": 183599,
-      "sha256": "7ea39ebdae5053ebf3f16f23883ae1a9a928835ab08cbe4705d164d1e5d4c4cc"
+      "sha256": "0600fc5b18c43686a81adbfae53a64dfb492a10a504fd454da1c9c9ae02ea28f"
     },
     {
       "path": "skills/document-materials/index.html",
@@ -29317,7 +29045,7 @@
     {
       "path": "skills/explain-to-me/index.html",
       "bytes": 195564,
-      "sha256": "37158f96a8457b1013ba1e42ca24c47eec4b137f3f4209d27e109b62a30b2827"
+      "sha256": "4c8afca5b1423dd15ed081f419c1573d8a47735127867b2398f7d58bc65f981e"
     },
     {
       "path": "skills/file-intake-router/index.html",
@@ -29337,12 +29065,12 @@
     {
       "path": "skills/google-workspace-direct/index.html",
       "bytes": 216348,
-      "sha256": "adefcd8dda7b9885c4c6d32d2bbbc9a86cd29a2966898d1833bc13ab8c4ecc51"
+      "sha256": "c19d6660e3961cab3582882882b05ddcd740dc7ae8ce2ebbf45ffd6aaab83c8c"
     },
     {
       "path": "skills/index.html",
       "bytes": 253620,
-      "sha256": "ab54ab71d4d20604855a686f3ad91cfcf6a0ebdf1ca65a9dc0b961b04e738cec"
+      "sha256": "b5c143553812dafc446e3131aeb95e44289254d5412fd70fa39822e420e10161"
     },
     {
       "path": "skills/learning/assets/hero-11bd1a88127ff482-mask.png",
@@ -29357,7 +29085,7 @@
     {
       "path": "skills/learning/index.html",
       "bytes": 197345,
-      "sha256": "feb452c602abdb114dd351ac1768abca767bc4e8e5340f000cb11efa989177f0"
+      "sha256": "5bef11d2454a6967cefa2d03952c49d474bdd341242d0c102725e4c2a5677d7d"
     },
     {
       "path": "skills/llm-backend-toolkit/index.html",
@@ -29377,7 +29105,7 @@
     {
       "path": "skills/local-secret-broker/index.html",
       "bytes": 201116,
-      "sha256": "7e8f3f0042e141d8d8eebd349f1f11a5c5309cd395937b2d23bf506ca1bfd140"
+      "sha256": "3098cc0a99d5baaf7c41f25d0b1be60966c79684fb935a23da10be89a174d615"
     },
     {
       "path": "skills/localocr/assets/hero-4da6b84b9daff482-mask.png",
@@ -29392,7 +29120,7 @@
     {
       "path": "skills/localocr/index.html",
       "bytes": 210685,
-      "sha256": "807b5d1a80eb415a0fd1367574d5c7d40f7b95c7e31e5ed89f494f94e484c223"
+      "sha256": "1480bc8ca582923cab66bc230b5b19edc624342871c31e73516b9be64da21683"
     },
     {
       "path": "skills/md-to-pdf/assets/hero-d2d7e6fd84b5875a-mask.png",
@@ -29407,7 +29135,7 @@
     {
       "path": "skills/md-to-pdf/index.html",
       "bytes": 257992,
-      "sha256": "f6c8b46e2805d1e252b48ee3a2ec96210260bcc52b4cf5aff684a9c2b7c87d14"
+      "sha256": "4879f1aeec46bfe401a16caf7bb884a7dc1c6b96248b5171cb5e347b564a8b9b"
     },
     {
       "path": "skills/media-person-self/index.html",
@@ -29427,7 +29155,7 @@
     {
       "path": "skills/mojibake-doctor/index.html",
       "bytes": 210349,
-      "sha256": "23b6b2dbb25987317ccfa6818827537fd5e9b013efadf7642e9e7437feaa195e"
+      "sha256": "9daddae7a983ef42bb5f41486eb481fc19a72fce93eee49d334b157ab0b56714"
     },
     {
       "path": "skills/native-economy-routing/index.html",
@@ -29442,7 +29170,7 @@
     {
       "path": "skills/pdf-render-safe/index.html",
       "bytes": 212283,
-      "sha256": "f14045b0b3240fc11a33708c362e99ae756608b7cefc06c3ca6c27bed95ead6d"
+      "sha256": "102d5857b0464e226c81cd245ddf61010544808be282f1546fa5454be798453e"
     },
     {
       "path": "skills/personal-formal-documents/assets/hero-c5ce46b3e2b318bb-mask.png",
@@ -29457,7 +29185,7 @@
     {
       "path": "skills/personal-formal-documents/index.html",
       "bytes": 186517,
-      "sha256": "5d40771075f120587e82b8bade0b588e29bd4693196204c297aed1076b0a19d3"
+      "sha256": "0d5d0ef3c37d801bf6958f79150b9ba281b1efb107382d909fc7b1e0f455f694"
     },
     {
       "path": "skills/personal-health/assets/hero-06bc43bdf9ba1655-mask.png",
@@ -29471,8 +29199,8 @@
     },
     {
       "path": "skills/personal-health/index.html",
-      "bytes": 204322,
-      "sha256": "8cb9a95581fd97cec9d07918604c2d3a7a23de708e25d6e906260ec343d69d72"
+      "bytes": 204326,
+      "sha256": "9951fb5b1ea6605c2a3f6452197fbbf90b80072f109f43f793e802075407aa75"
     },
     {
       "path": "skills/personal-materials/assets/hero-b58b147d9dfbc3e7-mask.png",
@@ -29487,7 +29215,7 @@
     {
       "path": "skills/personal-materials/index.html",
       "bytes": 195578,
-      "sha256": "9546e7e1ee2a6faa71287ba61813601985be15c612b2c6577702270ef7938904"
+      "sha256": "b8a13eeb1608b4a65a073a040161324b35f1e0ed17b3aa00d5046dfe9f929dac"
     },
     {
       "path": "skills/personal-media/assets/hero-3a7f608bdab259e8-mask.png",
@@ -29502,7 +29230,7 @@
     {
       "path": "skills/personal-media/index.html",
       "bytes": 216077,
-      "sha256": "048d52d70f464601799884c5ace0caaf1b439ed963aa284cc632cfa4a25585b4"
+      "sha256": "b911f248ccbbf3322829dc7fd84fa49d066f70bcfb355afc7f84611ea0790296"
     },
     {
       "path": "skills/personal-panel-refresh/index.html",
@@ -29512,7 +29240,7 @@
     {
       "path": "skills/phone-direct/index.html",
       "bytes": 251716,
-      "sha256": "e39a5abd8e3318e8a8342edf8207a94b793618d4a29b0925361f0f21809aca80"
+      "sha256": "f1f7100cb1be5ac3e7142e26dbad6b992c47844118349e03857cb7e84947f575"
     },
     {
       "path": "skills/project-entry-gate/assets/hero-7b75959c93da2c84-mask.png",
@@ -29547,7 +29275,7 @@
     {
       "path": "skills/report-page/index.html",
       "bytes": 322670,
-      "sha256": "b8e536d9b93c5ac6c15ad4fd6577925e86dce2c04875b0c55e6d9f16fc184874"
+      "sha256": "17f3f9af3c67463ceef28ede6a8bbb5e5571d595e39502537c85a46ec37187a7"
     },
     {
       "path": "skills/tailscale-safe-exposure/assets/hero-7ea0c7e2981cf84c-mask.png",
@@ -29562,7 +29290,7 @@
     {
       "path": "skills/tailscale-safe-exposure/index.html",
       "bytes": 224188,
-      "sha256": "24edb5e017282d0a538fe720f4d0440f6a2b4065f43f573ecb1b3f1b9604843a"
+      "sha256": "9e7b22f383581480ade2f228d2afc5406be210f227ad5a9b4ce7265f1e69b8fd"
     },
     {
       "path": "skills/timeaudit-diagnostics/assets/hero-4dfec72a073cf16a-mask.png",
@@ -29577,7 +29305,7 @@
     {
       "path": "skills/timeaudit-diagnostics/index.html",
       "bytes": 202350,
-      "sha256": "ef229ddaab1731f0bc4efa958a48947376fb01a6d7015a44d96a2575687863ba"
+      "sha256": "4449166e293942c703fa58dbafca59c0027d1b7fd969b74814119c95f0955314"
     },
     {
       "path": "skills/token-budget-advisor/index.html",
@@ -29597,7 +29325,7 @@
     {
       "path": "skills/vault-workflow/index.html",
       "bytes": 198959,
-      "sha256": "802adcef877457437853ca1bc1ad80c89889448f208c1775b6237eb4bf1c5e6a"
+      "sha256": "99a15bb836f4991755d43a3b7f81faf5e2b543c008dba94de260c0e5c4d2799a"
     },
     {
       "path": "skills/wechat-direct/assets/hero-25775ad5737f01bd-mask.png",
@@ -29611,8 +29339,8 @@
     },
     {
       "path": "skills/wechat-direct/index.html",
-      "bytes": 171953,
-      "sha256": "3494da1858a8828e2380d3b6f16122af41dfa6fc1cb7b2b580a208dcf848e7d2"
+      "bytes": 171955,
+      "sha256": "0164191a33e4e8044875b7eeb5c96da92a8198e7f7d38a23179ca6a88be5d9df"
     },
     {
       "path": "skills/work-delivery/assets/hero-66a46571f42aae03-mask.png",
@@ -29627,7 +29355,7 @@
     {
       "path": "skills/work-delivery/index.html",
       "bytes": 197780,
-      "sha256": "596b0b6bf798e622ed30a5c42118a7e3c60694b2750bc272b31306a91a0aca24"
+      "sha256": "55d5844801218c60965e9a4a687bdfae6d0b76b1e961a0f947416340408bb42e"
     },
     {
       "path": "sogousiteverification.txt",
@@ -29647,5 +29375,5 @@
   ],
   "output": "E:\\Cache\\wly-site-build\\wt\\dist",
   "previous_oss_source": "published",
-  "previous_release_id": "37c7a5fcdd460de8b41cf7eeacf59788e7b4301ed11c76439fddede86924c458"
+  "previous_release_id": "3502a242890ba762e572d2c74104c480d31dc593e84b303e8c8ac47b9e0e6f77"
 }
