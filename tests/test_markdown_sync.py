@@ -75,9 +75,9 @@ class MarkdownSyncTests(unittest.TestCase):
         records = self.sync(self.previous)
         self.assertTrue(records['fixture']['direct'])
         self.assertIn('保留直接编辑', self.messages)
-        self.change_page('JSON must not overwrite manual work.')
-        records = self.sync(records)
-        self.assertTrue(records['fixture']['direct'])
+        self.change_page('JSON must not overwrite manual work, nor vanish silently.')
+        with self.assertRaisesRegex(ValueError, '到不了网页：fixture'):
+            self.sync(records)
         self.assertEqual(self.md.read_bytes(), manual)
         self.runner.assert_not_called()
 
@@ -102,11 +102,13 @@ class MarkdownSyncTests(unittest.TestCase):
         records = self.sync(self.previous)
         with patch.object(build, 'converted_markdown_matches', wraps=build.converted_markdown_matches) as check:
             records = self.sync(records); check.assert_not_called()
-            (self.source.parent / 'layout.json').write_text('[]', encoding='utf8')
-            records = self.sync(records); self.assertEqual(check.call_count, 1)
             script = self.site / 'tools/convert_page.py'; script.parent.mkdir(parents=True)
             script.write_text('# converter changed', encoding='utf8')
-            self.sync(records); self.assertEqual(check.call_count, 2)
+            records = self.sync(records); self.assertEqual(check.call_count, 1)
+            self.assertTrue(records['fixture']['direct']); self.assertIn('保留直接编辑', self.messages)
+            (self.source.parent / 'layout.json').write_text('[]', encoding='utf8')
+            with self.assertRaisesRegex(ValueError, '到不了网页：fixture'): self.sync(records)
+            self.assertEqual(check.call_count, 2)
         self.assertIn('Manual body.', self.md.read_text('utf8'))
 
 if __name__ == '__main__': unittest.main()

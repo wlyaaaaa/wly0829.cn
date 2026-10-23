@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location("scan_glance", ROOT / "site-astro/tools/scan_glance.py")
 scan = importlib.util.module_from_spec(SPEC); SPEC.loader.exec_module(scan)
 class ScanGlanceTests(unittest.TestCase):
-    def test_declared_local_meta_refresh_waits_for_destination_and_keeps_home_lock(self):
+    def test_declared_local_meta_refresh_waits_for_destination(self):
         from playwright.sync_api import sync_playwright
         with tempfile.TemporaryDirectory(prefix='meta-refresh-', dir=r'E:\Cache') as temp, sync_playwright() as pw:
             root = Path(temp); (root/'alias').mkdir(); (root/'target').mkdir()
@@ -24,7 +24,7 @@ class ScanGlanceTests(unittest.TestCase):
                 self.assertEqual(page.locator('#done').inner_text(), 'destination')
                 self.assertEqual(evidence, [{'from': server.base+'/alias/', 'declared_target': server.base+'/target/',
                     'declared_seconds': 2.0, 'to': server.base+'/target/'}])
-                for target, reason in [('/', '已排除的首页'), ('https://outside.invalid/', '非本机页面')]:
+                for target, reason in [('https://outside.invalid/', '非本机页面')]:
                     fake = mock.Mock(url=server.base+'/alias/')
                     fake.eval_on_selector_all.return_value = ['2; url='+target]
                     with self.assertRaisesRegex(RuntimeError, reason): scan.wait_meta_refresh(fake, server.base)
@@ -183,19 +183,19 @@ class ScanGlanceTests(unittest.TestCase):
                 self.assertEqual([f["selector"] for f in images], ["#broken"])
             finally:
                 browser.close()
-    def test_select_modes_and_home_lock(self):
+    def test_select_modes_include_home(self):
         with tempfile.TemporaryDirectory() as temp:
             dist = Path(temp); hashes = {"/": "a", "/x/": "b"}
-            self.assertEqual(scan.select_pages(dist, "changed", hashes, {}, False), ["/", "/x/"])
+            self.assertEqual(scan.select_pages(dist, "changed", hashes, {}), ["/", "/x/"])
             self.assertEqual(scan.select_pages(dist, "changed", hashes, {"/": "a"}), ["/x/"])
-            self.assertEqual(scan.select_pages(dist, "all", hashes, {}, True), ["/x/"])
-            self.assertEqual(scan.select_pages(dist, "/,x/index.html", hashes, {}, True), ["/x/"])
+            self.assertEqual(scan.select_pages(dist, "all", hashes | {"/cv/": "r", "/system/": "r"}, {}), ["/", "/x/"])
+            self.assertEqual(scan.select_pages(dist, "/,x/index.html", hashes, {}), ["/", "/x/"])
             with self.assertRaisesRegex(ValueError, "成品缺少页面"):
                 scan.select_pages(dist, "/missing/", hashes, {})
             published = {"files": {"index.html": {"sha256": "z"}, "x/index.html": {"sha256": "b"}}}
             with mock.patch.object(scan, "published_manifest", return_value=published):
-                self.assertEqual(scan.select_pages(dist, "published-diff", hashes, {}, True), [])
-                self.assertEqual(scan.select_pages(dist, "published-diff", hashes | {"/new/": "c"}, {}, True), ["/new/"])
+                self.assertEqual(scan.select_pages(dist, "published-diff", hashes, {}), ["/"])
+                self.assertEqual(scan.select_pages(dist, "published-diff", hashes | {"/new/": "c"}, {}), ["/", "/new/"])
             with mock.patch.object(scan, "published_manifest", return_value=None), mock.patch("builtins.print") as output:
                 self.assertEqual(scan.select_pages(dist, "published-diff", hashes, {"/": "a"}), ["/x/"])
                 self.assertIn("回退 changed", output.call_args.args[0])

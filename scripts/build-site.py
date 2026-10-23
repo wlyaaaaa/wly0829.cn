@@ -134,8 +134,6 @@ def guard_unchanged_html(dist, entries, previous_pages, published, previous_refs
                    '本地引用未变；需核对已发布正文或内联内容' if route in previous_refs else '没有旧 HTML；已发布 SHA 无法还原差异引用')
         print('连带变化：' + route + '，原因资源：' + details, flush=True)
         changed.append(route)
-    if '/' in changed and os.environ.get('SITE_ALLOW_HOME_BYTES') != '1':
-        raise ValueError('首页字节连带变化；一次性重试脚本迁移须设置 SITE_ALLOW_HOME_BYTES=1')
     return changed
 
 def markdown_frontmatter(path):
@@ -202,6 +200,24 @@ def converted_markdown_matches(converter, name, md):
     return actual_meta == expected_meta and actual_body == expected_body
 
 
+def direct_edit_blocked(old, author_fp):
+    """A direct Markdown edit followed by a later page.json change would silently hide the JSON change."""
+    return bool(old.get('author_fp')) and old['author_fp'] != author_fp
+
+def refresh_home_highlights():
+    """Redraw home-04 when its embedded transcript no longer matches the owning project numbers."""
+    highlights = load('build_home_highlights', 'scripts/prepare-home-highlights.py')
+    home = SITE / 'sources/retained-home-cockpit/home.html'
+    if highlights.transcript_current(home.read_text('utf8')): return False
+    print('首页亮点：嵌入的数字与所属项目登记不一致，自动重画 home-04', flush=True)
+    try:
+        highlights.regenerate(SITE / '.cache/home-highlights')
+    except Exception as error:
+        raise ValueError('首页亮点重画失败，构建停止，不沿用旧首页：' + str(error)[:300]) from error
+    if not highlights.transcript_current(home.read_text('utf8')):
+        raise ValueError('首页亮点重画后转写仍与当前数字不一致，构建停止')
+    return True
+
 def sync_markdown(previous):
     sys.path.insert(0, str(SITE / 'tools'))
     converter = load('build_converter', 'site-astro/tools/convert_page.py')
@@ -212,7 +228,7 @@ def sync_markdown(previous):
     converter_fp += json.dumps({k: v for k, v in os.environ.items() if k.startswith('CONVERT_')}, sort_keys=True)
     demo = Path(os.environ['CONVERT_STATUS_LINE_DEMO']) if os.environ.get('CONVERT_STATUS_LINE_DEMO') else None
     converter_fp += proof(demo)['sha256'] if demo and demo.is_file() else 'missing-demo'
-    records, pending = {}, []
+    records, pending, blocked = {}, [], []
     for name in converter.all_pages():
         md = SITE / 'src/content/pages' / (name + '.md')
         author = ROOT / 'sources/pages' / name
@@ -220,16 +236,21 @@ def sync_markdown(previous):
         dependencies = [ROOT / 'sources/pages' / ref for ref in refs if ref not in {'scale', 'roster', 'stories', 'rules'}]
         if 'scale' in refs: dependencies.append(ROOT / 'sources/pages')
         if 'group_counts' in refs: dependencies.append(ROOT / 'sources/pages/projects-home')
-        source_fp = fingerprint([author, *dependencies]) + converter_fp
+        author_fp = fingerprint([author, *dependencies]); source_fp = author_fp + converter_fp
         old = previous.get(name, {}); current = proof(md)['sha256'] if md.is_file() else None
         direct = bool(current and (old.get('direct') or (old.get('md_sha256') and current != old['md_sha256'])))
         unchanged = old.get('fingerprint') == source_fp and old.get('md_sha256') == current
         generated = direct and not unchanged and converted_markdown_matches(converter, name, md)
         if generated: direct = False
         if not md.is_file() or (old and old.get('fingerprint') != source_fp and not direct and not generated): pending.append(name)
+        elif direct and direct_edit_blocked(old, author_fp): blocked.append(name)
         elif direct:
             print(name + ': 保留直接编辑的 Markdown，不覆盖为 JSON 转换结果', flush=True)
-        records[name] = {'fingerprint': source_fp, 'direct': direct}
+        records[name] = {'fingerprint': source_fp, 'author_fp': author_fp, 'direct': direct}
+    if blocked:
+        raise ValueError('这些页的 Markdown 被直接编辑过，之后 page.json 又改了，JSON 的新改动到不了网页：'
+            + '、'.join(blocked) + '。须先统一作者输入：以 JSON 为准重新转换（tools/convert_page.py 页名），'
+            '或把 Markdown 里的新内容并回 page.json 后再转换')
     if pending: run(sys.executable, 'tools/convert_page.py', *pending)
     for name, row in records.items(): row['md_sha256'] = proof(SITE / 'src/content/pages' / (name + '.md'))['sha256']
     return records
@@ -242,6 +263,7 @@ def build(pages=None):
         nonlocal previous_stage
         now = time.monotonic(); seconds = round(now - previous_stage, 3); previous_stage = now
         steps.append({'name': name, 'seconds': seconds}); print(f'{name}: {seconds}s', flush=True)
+    home_redrawn = refresh_home_highlights(); stage('home_highlights')
     snapshot = read(SNAPSHOT / 'manifest.json'); dist = ROOT / 'dist'; public = SITE / 'public'
     retired = set(snapshot.get('retired_runtime_assets', []))
     finalized_before = (dist / 'release-manifest.json').is_file() and read(dist / 'release-manifest.json').get('finalized_dist', False)
@@ -251,6 +273,7 @@ def build(pages=None):
     complete = all((dist / route_file(route)).is_file() for route in snapshot['routes'])
     if pages and not complete: raise ValueError('--pages requires a complete dist; first run npm run build')
     requested = {normalize_route(value) for value in pages.split(',')} if pages else None
+    if requested and home_redrawn: requested.add('/')
     before = {file_route(p.relative_to(dist).as_posix()): proof(p) for p in dist.rglob('*.html')}
     before_refs = {file_route(p.relative_to(dist).as_posix()): html_references(p) for p in dist.rglob('*.html')}
     sources = sync_markdown(old.get('json_sources', {})); stage('source')
@@ -268,7 +291,6 @@ def build(pages=None):
     prepare_changed = not complete or old.get('prepared') != prepared_fp or not (public / '_album/astro-runtime.json').is_file()
     prepare_changed = prepare_changed or any(not (dist / relative).is_file() for relative in snapshot['assets'] if relative not in retired and not (relative.startswith('_home-cockpit/cockpit-offline.') and not (SITE / 'sources/retained-home-cockpit/cockpit.html').is_file()))
     runtime = load('build_runtime', 'site-astro/tools/build_runtime.py')
-    preserved_home = runtime.accepted_home(dist, runtime.published_manifest()) if os.environ.get('SITE_ALLOW_HOME_BYTES') != '1' else None
     if prepare_changed:
         restore(snapshot); pin = astro_rules.generate(public); runtime.prepare(snapshot)
     else: pin = old['pin']
@@ -368,8 +390,8 @@ def build(pages=None):
         target = dist / 'cv/index.html'; target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="robots" content="noindex"><noscript><meta http-equiv="refresh" content="0;url=/"></noscript></head><body></body></html>\n', encoding='utf8')
     converted = {route: {'producer': 'astro'} for route, row in entries.items() if row['kind'] != 'frozen'}
-    if changed or prepare_changed or assets_changed or (preserved_home is not None and (dist / 'index.html').read_bytes() != preserved_home):
-        runtime.finish(dist, snapshot, pin, converted, changed_routes={r for r in changed if entries[r]['kind'] != 'frozen'}, preserved_home=preserved_home)
+    if changed or prepare_changed or assets_changed:
+        runtime.finish(dist, snapshot, pin, converted, changed_routes={r for r in changed if entries[r]['kind'] != 'frozen'})
     for relative, expected in snapshot['pages'].items():
         if entries[file_route(relative)]['kind'] != 'frozen' or (finalized_before and file_route(relative) not in changed): continue
         expected_body = runtime.transport.localize((SNAPSHOT / 'pages' / relative).read_bytes().decode('utf8'), snapshot)
@@ -383,8 +405,6 @@ def build(pages=None):
         '--source-commit', source_commit, cwd=ROOT)
     guard_unchanged_html(dist, entries, old.get('pages', {}), runtime.published_manifest(), before_refs)
     stage('finalize')
-    if preserved_home is not None and (dist / 'index.html').read_bytes() != preserved_home:
-        raise ValueError('资源收尾改变了已验收的首页字节，构建未通过')
     run('node', str(ROOT / 'scripts/verify-public-content.mjs'), '--dist', str(dist), '--incremental', cwd=ROOT)
     stage('public')
     files = [{'path': p.relative_to(dist).as_posix(), **proof(p)} for p in sorted(dist.rglob('*'))

@@ -1,6 +1,6 @@
 # site-astro：内容页（区块照现在的网站，排版在浏览器里自动做）
 
-内容页每页一个内容文件 `src/content/pages/<页>.md`，通常由 `tools/convert_page.py` 从 `sources/pages/<页>/page.json`（和 `layout.json`）生成。直接编辑 Markdown 也会生效；构建记住这次编辑，后续 JSON 变化不会静默覆盖它，而会提示先统一作者输入。页头、页尾、目录条、翻页过渡、小鸟、落叶、水彩照现在网站。
+内容页每页一个内容文件 `src/content/pages/<页>.md`，通常由 `tools/convert_page.py` 从 `sources/pages/<页>/page.json`（和 `layout.json`）生成。直接编辑 Markdown 也会生效；构建记住这次编辑（每页另记作者目录及其依赖的指纹 `author_fp`），只有转换器自身变化时照旧保留它。之后若该页 `page.json`（或它引用的页、`layout.json`）又改了，构建直接停下并列出页名，因为 JSON 的新改动到不了网页：先统一作者输入——以 JSON 为准就运行 `python tools/convert_page.py <页>` 覆盖 Markdown，要留 Markdown 里的新内容就先把它并回 `page.json` 再转换，然后重新构建。页头、页尾、目录条、翻页过渡、小鸟、落叶、水彩照现在网站。
 
 ## 为什么这样做（第四轮）
 
@@ -18,7 +18,9 @@
 
 ## 首页、授权页和驾驶舱
 
-首页和授权页保留候选站原 HTML、原图和动效，由 Astro 静态路由输出：入口直接读 `sources/retained-home-cockpit/home.html`、`computer-access.html` 的已接受源码，附加样式和交互保持原样。普通构建不再复制到 `src/chrome/retained`，也不从旧站生成运行件或反向改写作者输入。
+首页和授权页保留候选站原 HTML、原图和动效，由 Astro 静态路由输出：入口直接读 `sources/retained-home-cockpit/home.html`、`computer-access.html` 的已接受源码，附加样式和交互保持原样。普通构建不再复制到 `src/chrome/retained`，也不从旧站生成运行件。
+
+首页按本人 10 月 23 日决定解除锁定：构建不再保留上一版首页字节，首页连带变化和其他页一样只打印“连带变化”，照常扫描和发布回读。首页亮点屏 `home-04` 的数字来自 `sources/creative/static-home/highlights-page.json` 绑定的各项目登记；每次构建在准备保留页之前，先用纯文本比较 `home.html` 里 home-04 的嵌入转写与当前 `expected_text(...)`，一致就跳过（不启动浏览器）；不一致就自动运行 `scripts/prepare-home-highlights.py` 的重画（暂存在 `.cache/home-highlights`），打印一行说明后继续，保留页指纹随之变化、首页重建；重画失败或重画后仍不一致则构建失败，不沿用旧首页。重画会改写入库的作者输入（`sources/retained-home-cockpit/home.html`、`dependencies.json`、`assets/` 新图、`sources/frozen-site/manifest.json`），和构建重新生成的 Markdown 一样，随后一并提交。
 
 驾驶舱是 Astro 原生页，不再读保留 HTML：入口 `src/pages/cockpit/index.astro`，外壳、页头、目录条、页尾和全站一样。
 

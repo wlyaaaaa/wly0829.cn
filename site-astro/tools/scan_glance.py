@@ -25,7 +25,7 @@ def published_manifest():
     path = retention.shared() / "published.json"
     return read_json(path)["manifest"] if path.is_file() else None
 
-def select_pages(dist, mode, hashes, previous, locked=False):
+def select_pages(dist, mode, hashes, previous):
     if mode == "published-diff":
         published = published_manifest()
         if published is None:
@@ -38,8 +38,8 @@ def select_pages(dist, mode, hashes, previous, locked=False):
     else: selected = [route_name(x.strip()) for x in mode.split(",") if x.strip()]
     missing = set(selected) - hashes.keys()
     if missing: raise ValueError(f"成品缺少页面：{sorted(missing)}")
-    # 这两个入口只跳转首页；首页锁定也覆盖它的直达别名。
-    return sorted(set(selected) - ({"/", "/cv/", "/system/"} if locked else set()))
+    # 这两个旧入口只跳转首页；首页本身照常扫描，不再重复扫跳转别名。
+    return sorted(set(selected) - {"/cv/", "/system/"})
 
 def successful_routes(selected, rows, unchanged=True):
     expected = {f"{w}x{h}" for w, h in VIEWPORTS}
@@ -209,7 +209,7 @@ def settle(page, activity, pending, all_images=False):
     while pending or time.monotonic() - activity[0] < 1:
         if time.monotonic() > deadline: raise TimeoutError("网络未静默 1 秒")
         page.wait_for_timeout(100)
-def wait_meta_refresh(page, base, locked=True, evidence=None):
+def wait_meta_refresh(page, base, evidence=None):
     if evidence is None: evidence = []
     for _ in range(4):
         contents = page.eval_on_selector_all('meta[http-equiv]', "ms => ms.filter(m => m.httpEquiv.toLowerCase() === 'refresh').map(m => m.content)")
@@ -222,9 +222,6 @@ def wait_meta_refresh(page, base, locked=True, evidence=None):
         if (destination.scheme, destination.netloc) != (origin.scheme, origin.netloc) or destination.path.startswith('/__proxy/'):
             page.route(target, lambda request: request.abort())
             raise RuntimeError('不跟随非本机页面的 meta refresh：' + target)
-        if locked and destination.path in ('/', '/index.html'):
-            page.route(target, lambda request: request.abort())
-            raise RuntimeError('meta refresh 指向已排除的首页')
         before = page.url
         evidence.append({'from': before, 'declared_target': target, 'declared_seconds': float(match[1])})
         page.wait_for_url(target, wait_until='load', timeout=30000)
@@ -284,9 +281,8 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_res
                 try:
                     page.goto(base + quote(route, safe="/"), wait_until="load", timeout=30000)
                     row['navigation'] = []
-                    wait_meta_refresh(page, base, config.get('home_locked', True), row['navigation'])
+                    wait_meta_refresh(page, base, row['navigation'])
                     row['final_route'] = urlsplit(page.url).path
-                    if config.get("home_locked", True) and urlsplit(page.url).path in ("/", "/index.html"): raise RuntimeError("路由跳到了已排除的首页")
                     page.evaluate("document.querySelectorAll('img[loading=lazy],img[data-ts-src]').forEach(i => {if(i.getClientRects().length && getComputedStyle(i).visibility !== 'hidden'){if(!i.getAttribute('src') && i.dataset.tsSrc)i.src=i.dataset.tsSrc;i.loading='eager';}})")
                     tick("load"); settle(page, activity, pending); tick("initial_settle")
                     y = 0; steps = 0
@@ -311,7 +307,6 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_res
                 row['final_route'] = urlsplit(page.url).path
                 classify_alias_leaves(row)
                 try:
-                    if config.get("home_locked", True) and urlsplit(page.url).path in ("/", "/index.html"): raise RuntimeError("首页已排除，不自动截图")
                     shot = args.out / "screenshots" / (stem + ".png")
                     page.screenshot(path=str(shot), full_page=True, timeout=30000); row["screenshot"] = str(shot)
                     tick("scroll_settle_dom_fullshot")
@@ -342,10 +337,9 @@ def main():
     previous = scan_baseline(read_json(result_path)) if result_path.exists() else {}
     dist_files = file_inventory(args.dist)
     hashes = {route_name(rel): digest for rel, digest in dist_files.items() if rel.endswith(".html")}
-    selected = select_pages(args.dist, args.pages, hashes, previous, config.get("home_locked", True))
+    selected = select_pages(args.dist, args.pages, hashes, previous)
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "link_check.py"), str(args.out / "links.json"), "--dist", str(args.dist), "--skip", ""], check=True, capture_output=True, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
     links = read_json(args.out / "links.json")["items"]
-    if config.get("home_locked", True): links = [item for item in links if route_name(item["page"]) != "/"]
     offline = [dict(finding("404", item["problem"], "a[href=" + json.dumps(item["href"]) + "]"), page=route_name(item["page"]), viewport="offline") for item in links if route_name(item["page"]) not in selected]
     rows = []
     with tempfile.TemporaryDirectory(prefix="runtime-", dir=args.out) as temp:
@@ -378,7 +372,7 @@ def main():
               "live_unavailable": [item for row in rows for item in row["live_unavailable"]],
               "html_sha256": {r: h for r, h in previous.items() if r in hashes and r not in selected} | {r: hashes[r] for r in complete}, "input_html_sha256": hashes,
               "dist_files_sha256": dist_files, "dist_files_unchanged": unchanged,
-              "home_locked": config.get("home_locked", True), "browser": args.chrome,
+              "browser": args.chrome,
               "proxy_stats": dict(server.proxy_stats), "proxy_requests": server.proxy_results, "proxy_disconnects": server.proxy_disconnects}
     result_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"seconds": result["seconds"], "scanned": len(rows), "counts": result["counts"], "result": str(result_path)}, ensure_ascii=False))
