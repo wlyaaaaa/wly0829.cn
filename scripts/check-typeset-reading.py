@@ -280,7 +280,7 @@ def main():
     args.pages=[name for name in args.pages or build['pages']
                 if name.strip('/').lower() not in ('','home','homepage','index','index.html')
                 and urlsplit(build['pages'][name]['url']).path not in ('','/','/index.html')]
-    if not args.pages:ap.error('Home is excluded; select at least one non-home reading page')
+    if not args.pages:ap.error('首页是保留 HTML，不是排版阅读页；请至少选一个非首页的阅读页')
     args.cache.mkdir(parents=True,exist_ok=True)
     for key in ['TEMP','TMP','TMPDIR']:os.environ[key]=str(args.cache.resolve())
     class Handler(SimpleHTTPRequestHandler):

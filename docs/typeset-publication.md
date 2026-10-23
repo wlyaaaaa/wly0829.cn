@@ -8,7 +8,7 @@
 |---|---|
 | `sources/pages/<id>/page.json`、相邻 `layout.json` | 正文和构图源，构图的文字引用须对应原文；转换方式见 Astro 说明 |
 | `site-astro/src/content/pages/` | Astro 读取的 Markdown 内容，须与所属源一致 |
-| `site-astro/sources/retained-home-cockpit/` | 已选首页与驾驶舱的保留 HTML、入口和依赖身份；首页不重新排版或自动检查 |
+| `site-astro/sources/retained-home-cockpit/` | 已选首页与授权页的保留 HTML、入口和依赖身份；首页不走排版阅读检查，但照常扫描，亮点屏 home-04 在数字过期时由构建自动重画 |
 | `dist/`、`release-manifest.json`、`.build-receipt.json` | 本代静态成品、文件身份与构建计时/变化页；缺回执时扫描与发布分别按实际文件哈希判断 |
 | `scripts/snapshot-typeset-inputs.py` | 保存既有排版输入及资源映射，供有明确需要的迁移和独立量测使用，不是发布入口 |
 
@@ -37,7 +37,7 @@ python -B -X utf8 scripts/run-typeset-checks.py --mode geometry `
 
 ## 独立阅读检查
 
-阅读入口只检查已有成品，不修改运行件、HTML 或 manifest；临时预览仅提供现成文件和不可用状态提示。`check-typeset-site.py` 适配器接受 `--dist`、已有 `--build-report`、`--out` 和可选 `--cache`，把其余阅读选项交给 `check-typeset-reading.py`。输出与缓存必须在 `dist` 外。首页 `/`、`/index.html` 及 home/homepage/index 别名在启动浏览器前排除，不能靠显式选页重新加入。
+阅读入口只检查已有成品，不修改运行件、HTML 或 manifest；临时预览仅提供现成文件和不可用状态提示。`check-typeset-site.py` 适配器接受 `--dist`、已有 `--build-report`、`--out` 和可选 `--cache`，把其余阅读选项交给 `check-typeset-reading.py`。输出与缓存必须在 `dist` 外。首页是保留 HTML、不是排版阅读页，所以 `/`、`/index.html` 及 home/homepage/index 别名在启动浏览器前排除，不能靠显式选页重新加入；首页的扫描由 `scan_glance.py` 负责。
 
 原阅读检查保留以下证据：
 

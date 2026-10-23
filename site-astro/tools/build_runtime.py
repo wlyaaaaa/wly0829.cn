@@ -292,32 +292,7 @@ def visitor_html(body):
     return body.replace('</body>', '<script data-site-visitors>' + script + '</script>\n<script data-footer-email-copy>' + email + '</script>\n' + menu + '</body>')
 
 
-def accepted_home(dist, published):
-    expected = published.get('files', {}).get('index.html')
-    if not expected: return None
-    path = Path(dist) / 'index.html'
-    if not path.is_file(): raise ValueError('首页字节锁需要已验收的完整构建制品；冷构建不能从 SHA 还原首页')
-    raw = path.read_bytes()
-    matches = lambda value: len(value) == expected['bytes'] and hashlib.sha256(value).hexdigest() == expected['sha256']
-    def checked(value):
-        for relative, row in published.get('oss', {}).get('objects', {}).items():
-            if not relative.startswith('_album/routes-') or row['url'].encode('utf8') not in value: continue
-            dependency = Path(dist) / relative
-            if not dependency.is_file() or hashlib.sha256(dependency.read_bytes()).hexdigest() != row['sha256']:
-                raise ValueError('已验收首页的相册索引依赖缺失或字节不符：' + relative)
-        return value
-    if matches(raw): return checked(raw)
-    refs = set(re.findall(rb'(?:https?://[^\s"<>]+)?/_album/routes-[a-f0-9]+\.json', raw))
-    for relative, row in published.get('oss', {}).get('objects', {}).items():
-        if not relative.startswith('_album/routes-'): continue
-        candidate = raw
-        for ref in refs: candidate = candidate.replace(ref, row['url'].encode('utf8'))
-        if not matches(candidate): continue
-        return checked(candidate)
-    raise ValueError('首页字节不符且无法仅修复相册索引地址；需要已验收的完整构建制品')
-
-
-def finish(dist, snapshot, pin, converted, changed_routes=None, preserved_home=None):
+def finish(dist, snapshot, pin, converted, changed_routes=None):
     dist = Path(dist); changed_routes = set(converted) if changed_routes is None else set(changed_routes)
     prior = read(dist / 'release-manifest.json') if (dist / 'release-manifest.json').is_file() else {}
     finalized = prior.get('finalized_dist', False)
@@ -360,7 +335,6 @@ def finish(dist, snapshot, pin, converted, changed_routes=None, preserved_home=N
     for path in dist.rglob('*.html'):
         body = path.read_bytes().decode('utf8'); updated = visitor_html(body)
         if updated != body: path.write_bytes(updated.encode('utf8'))
-    if preserved_home is not None: (dist / 'index.html').write_bytes(preserved_home)
     files = {p.relative_to(dist).as_posix(): {'bytes': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
              for p in dist.rglob('*') if p.is_file() and p.name not in {'.build-receipt.json', 'release-manifest.json', 'release-identity.json'}}
     manifest = {'schema': 'wly.hybrid-release.v1', 'files': files, 'routes': routes, 'search_budget_review': search_review,

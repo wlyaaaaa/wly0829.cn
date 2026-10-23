@@ -1,8 +1,7 @@
 """A body/index update must not change unrelated resource or HTML bytes."""
 import importlib.util
-import hashlib
+import html
 import json
-import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -18,25 +17,19 @@ retry = load('cascade_retry', 'scripts/prepare-resource-retry.py')
 build_runtime = load('cascade_runtime', 'site-astro/tools/build_runtime.py')
 
 class NoCascadeTests(unittest.TestCase):
-    def test_accepted_home_recovers_only_a_proven_album_reference(self):
-        with tempfile.TemporaryDirectory() as temp:
-            dist = Path(temp); album = dist/'_album/routes-abcd.json'
-            album.parent.mkdir(); album.write_bytes(b'{}')
-            approved = b'<link href="https://assets.invalid/releases/old/_album/routes-abcd.json">'
-            published = {'files': {'index.html': {'bytes': len(approved), 'sha256': hashlib.sha256(approved).hexdigest()}},
-                'oss': {'objects': {'_album/routes-abcd.json': {'url': 'https://assets.invalid/releases/old/_album/routes-abcd.json',
-                    'sha256': hashlib.sha256(b'{}').hexdigest()}}}}
-            with self.assertRaisesRegex(ValueError, '冷构建'):
-                build_runtime.accepted_home(dist, published)
-            home = dist/'index.html'; home.write_bytes(approved.replace(b'/old/', b'/new/'))
-            self.assertEqual(build_runtime.accepted_home(dist, published), approved)
-            self.assertIn(b'/new/', home.read_bytes())  # Reading never patches dist.
-            album.write_bytes(b'broken')
-            with self.assertRaisesRegex(ValueError, '依赖缺失或字节不符'):
-                build_runtime.accepted_home(dist, published)
-            home.write_bytes(approved + b'body changed')
-            with self.assertRaisesRegex(ValueError, '无法仅修复相册索引'):
-                build_runtime.accepted_home(dist, published)
+    def test_direct_markdown_edit_then_json_change_is_blocked(self):
+        self.assertFalse(build.direct_edit_blocked({}, 'a'))  # 旧记录无 author_fp：保持提示并补记
+        self.assertFalse(build.direct_edit_blocked({'author_fp': 'a'}, 'a'))  # 只有转换器变化
+        self.assertTrue(build.direct_edit_blocked({'author_fp': 'a'}, 'b'))
+
+    def test_home_transcript_comparison_is_plain_text(self):
+        highlights = load('cascade_highlights', 'scripts/prepare-home-highlights.py')
+        text = '数字截至 2026-10-22\n\n16,146 次识别 & 更多'
+        home = lambda body: '<div data-screen-transcript="home-04">' + body + '</div>'
+        expected = '\n'.join(highlights.expected_text(text))
+        self.assertTrue(highlights.transcript_matches(home(html.escape(expected).replace('\n', '\r\n')), text))
+        self.assertFalse(highlights.transcript_matches(home(html.escape('\n'.join(highlights.expected_text(text.replace('146', '074'))))), text))
+        self.assertFalse(highlights.transcript_matches('<div></div>', text))
 
     def test_search_loads_both_tables_before_the_existing_client(self):
         body = '<head><script>window.note="search-index.js"</script></head>\r\n<script src="/search-projects.js"></script><script type="module" data-src="/client.js"></script>'
@@ -113,15 +106,14 @@ class NoCascadeTests(unittest.TestCase):
                 self.assertIn(index, (outputs[number]/'oss/assets/client.js').read_text('utf8'))
                 self.assertEqual((outputs[0]/'github/index.html').read_bytes(), (outputs[number]/'github/index.html').read_bytes())
 
-    def test_guard_blocks_home_and_only_exact_override_allows_it(self):
+    def test_guard_reports_home_cascade_like_other_pages(self):
         with tempfile.TemporaryDirectory() as temp:
             dist = Path(temp); (dist/'index.html').write_text('<script src="/new.js"></script>', encoding='utf8')
             entries = {'/': {'fingerprint': 'same'}}; accepted = {'files': {'index.html': {'sha256': 'old'}}}
-            with patch.dict(os.environ, {'SITE_ALLOW_HOME_BYTES': '0'}), patch('builtins.print'):
-                with self.assertRaisesRegex(ValueError, 'SITE_ALLOW_HOME_BYTES=1'):
-                    build.guard_unchanged_html(dist, entries, {'/': 'same'}, accepted, {'/': {'/old.js'}})
-            with patch.dict(os.environ, {'SITE_ALLOW_HOME_BYTES': '1'}), patch('builtins.print'):
+            with patch('builtins.print') as output:
                 self.assertEqual(build.guard_unchanged_html(dist, entries, {'/': 'same'}, accepted, {'/': {'/old.js'}}), ['/'])
+                self.assertIn('连带变化：/', output.call_args.args[0])
                 self.assertEqual(build.guard_unchanged_html(dist, entries, {'/': 'changed'}, accepted, {}), [])
+        self.assertFalse(hasattr(build_runtime, 'accepted_home'))
 
 if __name__ == '__main__': unittest.main()

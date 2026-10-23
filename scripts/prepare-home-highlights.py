@@ -5,14 +5,23 @@ import json
 from pathlib import Path
 import re
 import sys
-from PIL import Image
+import html
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 sys.path.insert(0, str(ROOT/'src/typeset'))
 from engine.content import bound_json
-from engine.render import render_page
 from engine.parse import expected_text
+
+
+def transcript_matches(home_text, authored_text):
+    """Plain-text check: does home-04's embedded transcript equal expected_text() of these numbers?"""
+    match = re.search(r'data-screen-transcript="home-04">([\s\S]*?)</div>', home_text)
+    return bool(match) and html.unescape(match[1]).replace('\r\n', '\n') == '\n'.join(expected_text(authored_text))
+
+
+def transcript_current(home_text):
+    return transcript_matches(home_text, bound_json(ROOT/'sources/creative/static-home/highlights-page.json')['screens'][0]['text'])
 
 
 def save_text(path, text):
@@ -49,6 +58,8 @@ def prepare_fragment(text, data, scratch):
     if not any(s['id']=='home-04' for s in data.get('screens', [])):
         return text, {}, None
     from playwright.sync_api import sync_playwright
+    from PIL import Image
+    from engine.render import render_page
     scratch = Path(scratch); scratch.mkdir(parents=True, exist_ok=True)
     source = ROOT/'sources/creative/static-home/highlights-page.json'
     layout = ROOT/'sources/creative/static-home/highlights-layout.json'
@@ -91,7 +102,6 @@ def prepare_fragment(text, data, scratch):
             browser.close()
     picture = ''.join(f'<source media="(orientation:{"landscape" if o=="h" else "portrait"})" srcset="{model["layouts"][o]["viewer"]["src"]}">' for o in ('h','v'))
     transcript = '\n'.join(expected_text(authored['text']))
-    import html
     replacement = f'<section class="screen shape-screen" id="home-04" data-screen="home-04" data-section="highlights"><picture>{picture}<img src="{model["layouts"]["h"]["viewer"]["src"]}" loading="lazy" decoding="async" alt="" aria-describedby="home-04-equivalent-text"></picture><div class="overlays"></div><div class="screen-equivalent-text" id="home-04-equivalent-text" data-screen-transcript="home-04">{html.escape(transcript)}</div></section>'
     text, replaced = re.subn(r'<section\b[^>]*id="home-04"[^>]*>[\s\S]*?</section>', lambda m:replacement, text, count=1)
     if replaced != 1:

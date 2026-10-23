@@ -4,7 +4,7 @@
 
 ## 日常更新
 
-正文和构图的写作、转换方法见 [Astro 说明](../site-astro/README.md)。修改所属页面的源内容，不直接把已发布 HTML 当作新源。`page.json`、相邻 `layout.json` 与转换后的 Markdown 要表达同一内容；构图中的 `text_ref` 继续对应正文。首页已锁定，保留现有页面和素材字节，不参加自动扫描、阅读或 UI 检查。
+正文和构图的写作、转换方法见 [Astro 说明](../site-astro/README.md)。修改所属页面的源内容，不直接把已发布 HTML 当作新源。`page.json`、相邻 `layout.json` 与转换后的 Markdown 要表达同一内容；构图中的 `text_ref` 继续对应正文。首页已于 10 月 23 日解除锁定：它随依赖数据照常重建、扫描和发布回读，亮点屏数字过期时构建自动重画（重画改写的作者输入随后提交）；首页不是排版阅读页，不参加阅读检查。直接编辑过 Markdown 的页，之后再改 `page.json` 会被构建拦下，须先统一作者输入。
 
 日常构建使用主持已确定的常驻工作树 `E:\Cache\wly-site-build\wt`。每轮先核对未提交改动及正在使用同一 `dist` 的任务；有别人的改动或归属不明的文件时先交回主持，不能用切分支、重置或清理覆盖它们。确认源码工作区干净、上一轮写入者已经结束后，才从最新 `origin/main` 开始：
 
@@ -32,7 +32,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist dist --scan-result <�
 python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发布输出目录>
 ```
 
-扫描默认使用 `published-diff`，比较上一成功发布清单与最终 HTML 哈希，覆盖多轮构建累计的新增及变化路由，不依赖最后一次重建页。规则换版仍只扫这些变化页；只有外壳、排版引擎或共享脚本变化时另外使用 `--pages all`。缺少成功发布记录时工具提示回退 `changed`，按已有扫描记录比较页面哈希；此时核实真实成功前版和累计范围，不能把回退当作发布证据。指定路由可用逗号分隔的 `--pages /route-a/,/route-b/`；首页锁定时仍跳过 `/`。扫描覆盖大块空白、压叠、裁字、空图框、404 和点不动，结果及稳定后的截图留在扫描目录。动效由本人看，AI 不录屏或判断开场与动效。
+扫描默认使用 `published-diff`，比较上一成功发布清单与最终 HTML 哈希，覆盖多轮构建累计的新增及变化路由，不依赖最后一次重建页。规则换版仍只扫这些变化页；只有外壳、排版引擎或共享脚本变化时另外使用 `--pages all`。缺少成功发布记录时工具提示回退 `changed`，按已有扫描记录比较页面哈希；此时核实真实成功前版和累计范围，不能把回退当作发布证据。指定路由可用逗号分隔的 `--pages /route-a/,/route-b/`；首页 `/` 照常可选，只跳转首页的旧别名 `/cv/`、`/system/` 不重复扫描。扫描覆盖大块空白、压叠、裁字、空图框、404 和点不动，结果及稳定后的截图留在扫描目录。动效由本人看，AI 不录屏或判断开场与动效。
 
 正式发布沿用本机已配置的阿里云 CLI、OSS profile 和 `wly0829-publication` 短锁；不新增登录或凭据。发布器只上传变化资源和文档，先资源、后 HTML、最后成功记录；先以 HEAD 核资源大小和 MD5，再 GET 关键页和本次变化页核正文哈希。`--upload-only` 只上传并回读资源，不推 `site-dist`、不切换公网、不写成功指针。正式部署和公网回读全部通过后，才更新 Git 共享目录的 `wly-oss/published.json`。正式发布默认不清理旧对象，成功时 `status=published`、`oss_retention.status=deferred` 并退出 0。保留正式发布输出目录，在发布锁释放后用独立命令清理；清理残留只影响该命令的退出码，不改变已上线事实。OSS 退役与独立回执按[按需更新清单](ondemand-update.md#7-先上传资源再正式发布)和[发布与扫描](publish-and-scan.md)执行。`publish-receipt.json` 区分本地计划、上传、Pages 和公网回读，不能把 dry-run 或资源上传写成已经上线。
 
@@ -46,7 +46,7 @@ python -B -X utf8 scripts/check-typeset-site.py `
   --out <任务目录/reading.json> --pages <非首页的页名>
 ```
 
-检查保留阅读位置、反复转屏、页内目录、刷新与历史导航矩阵，以及实际 HTML/脚本响应和成品字节不变检查。直接使用 `check-typeset-reading.py` 时也会排除首页和首页别名；不会用旧运行件补丁重建成品。
+检查保留阅读位置、反复转屏、页内目录、刷新与历史导航矩阵，以及实际 HTML/脚本响应和成品字节不变检查。直接使用 `check-typeset-reading.py` 时也会排除首页和首页别名（首页是保留 HTML，不是排版阅读页）；不会用旧运行件补丁重建成品。
 
 `run-typeset-checks.py` 的独立几何与 QA 能力继续保留。几何模式需要已经提供 `/__typeset/measure` 的本机预览，普通静态 `dist` 不自动提供该接口；输入、量测和证据契约见 [源包与独立检查](typeset-publication.md)。这些检查按具体任务使用，不接回 CI、不暗中触发重建或发布。
 

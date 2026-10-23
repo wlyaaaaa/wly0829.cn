@@ -1,5 +1,4 @@
 {
-  "home_locked": true,
   "thresholds": {
     "row_blank_px": 200, "row_blank_fraction": 0.2, "screen_blank_viewport_fraction": 0.4,
     "imbalance_ratio": 1.8, "imbalance_px": 200,
