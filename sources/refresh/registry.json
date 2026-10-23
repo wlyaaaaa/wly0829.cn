@@ -4535,7 +4535,7 @@
         ],
         "operation": "value",
         "scale": 9.313225746154785e-10,
-        "digits": 0
+        "digits": 1
       },
       "automatic": true,
       "private": false,
@@ -5998,7 +5998,7 @@
       "page": "devconfig-backup",
       "screen": "devconfig-backup-01",
       "label": "微信热备文件数",
-      "current_value": 148592,
+      "current_value": 154404,
       "as_of": "2026-10-10",
       "category": "人工",
       "source_location": "G:\\80_Backup\\ControlPlane\\wechat-hot-last.json",
@@ -6082,7 +6082,7 @@
       "page": "devconfig-backup",
       "screen": "devconfig-backup-01",
       "label": "最新开发配置包文件数",
-      "current_value": 6270,
+      "current_value": 6344,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
       "source_location": "E:\\Projects\\Backups\\devconfig-backup\\out\\latest.zip.receipt.json",
@@ -6119,7 +6119,7 @@
       "page": "devconfig-backup",
       "screen": "devconfig-backup-01",
       "label": "最新配置包压缩大小（MiB）",
-      "current_value": 286,
+      "current_value": 428.8,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
       "source_location": "E:\\Projects\\Backups\\devconfig-backup\\out\\latest.zip.receipt.json；新页面以286MiB显示，299545722字节",
@@ -6131,7 +6131,7 @@
         ],
         "operation": "value",
         "scale": 9.5367431640625e-07,
-        "digits": 0
+        "digits": 1
       },
       "automatic": true,
       "private": false,
@@ -6153,42 +6153,6 @@
       "source_observed_at_pointer": [
         "completed_utc"
       ]
-    },
-    {
-      "id": "devconfig-backup-n-config-size-1",
-      "page": "devconfig-backup",
-      "screen": "devconfig-backup-01",
-      "label": "最新配置包压缩前大小（GiB）",
-      "current_value": 0.88,
-      "as_of": "2026-10-10",
-      "category": "人工",
-      "source_location": "E:\\Projects\\Backups\\devconfig-backup\\out\\latest.zip.manifest.json",
-      "retrieve": {
-        "kind": "json",
-        "path": "E:\\Projects\\Backups\\devconfig-backup\\out\\latest.zip.manifest.json",
-        "pointer": [
-          "bytes"
-        ],
-        "operation": "value",
-        "scale": 9.313225746154785e-10,
-        "digits": 2
-      },
-      "automatic": true,
-      "private": false,
-      "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
-      "refreshed_value": 0.88,
-      "refreshed_display": "941389373 字节",
-      "affected_screens": [
-        "devconfig-backup-01",
-        "devconfig-backup-03"
-      ],
-      "field": "registry.numbers[2].text",
-      "page_pattern": "压缩前 ([\\d,.]+) GiB",
-      "binding_verified_at": "2026-10-11T17:56:33+08:00",
-      "measurement_scope": "latest.zip.manifest.json.bytes为当前成功配置包压缩前有效载荷总字节数；以2^30换算GiB保留2位，不能用receipt.package_bytes替代。",
-      "scope_status": "verified",
-      "observation_basis": "unknown"
     },
     {
       "id": "devconfig-backup-n-tasks-0",
@@ -13400,7 +13364,7 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "截至 ([^\\n]+)",
-      "current_value": "10 月 22 日",
+      "current_value": "10 月 23 日",
       "binding_verified_at": "2026-10-11T17:56:33+08:00"
     },
     {
@@ -29029,7 +28993,7 @@
       "page": "devconfig-backup-source-catalog",
       "screen": "devconfig-backup-source-catalog-05",
       "label": "最新成功配置包压缩字节",
-      "current_value": 449276059,
+      "current_value": 449631558,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[4].text",
@@ -29060,7 +29024,7 @@
       "page": "devconfig-backup-source-catalog",
       "screen": "devconfig-backup-source-catalog-05",
       "label": "最新成功配置包压缩字节",
-      "current_value": 449276059,
+      "current_value": 449631558,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[4].text",
@@ -29091,7 +29055,7 @@
       "page": "devconfig-backup-source-catalog",
       "screen": "devconfig-backup-source-catalog-05",
       "label": "最新成功配置包文件数",
-      "current_value": 6342,
+      "current_value": 6344,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[4].text",
@@ -29122,7 +29086,7 @@
       "page": "devconfig-backup-source-catalog",
       "screen": "devconfig-backup-source-catalog-05",
       "label": "最新成功配置包文件数",
-      "current_value": 6342,
+      "current_value": 6344,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[4].text",
@@ -29146,42 +29110,14 @@
       "source_observed_at_pointer": [
         "completed_utc"
       ],
-      "page_pattern": "回执 (?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 个文件、原始"
-    },
-    {
-      "id": "b9-tools-devconfig-backup-source-catalog-anchor-046",
-      "page": "devconfig-backup-source-catalog",
-      "screen": "devconfig-backup-source-catalog-05",
-      "label": "最新成功配置包原始字节",
-      "current_value": 1394006552,
-      "as_of": "2026-10-11",
-      "category": "只读来源",
-      "field": "screens[4].text",
-      "source_project": "devconfig-backup",
-      "source_location": "E:/Projects/Backups/devconfig-backup/out/latest.zip.manifest.json",
-      "retrieve": {
-        "kind": "json",
-        "path": "E:/Projects/Backups/devconfig-backup/out/latest.zip.manifest.json",
-        "pointer": [
-          "bytes"
-        ],
-        "operation": "value"
-      },
-      "automatic": true,
-      "private": false,
-      "historical": false,
-      "measurement_scope": "payload-manifest.v1 bytes 原始文件总字节，不能用压缩包大小替代。",
-      "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
-      "observation_basis": "unknown",
-      "page_pattern": "回执 [0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)? 个文件、原始 (?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 字节"
+      "page_pattern": "回执 (?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 个文件，原始字节数"
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-047",
       "page": "devconfig-backup-source-catalog",
       "screen": "devconfig-backup-source-catalog-05",
       "label": "最新成功配置包压缩大小 MiB",
-      "current_value": 428.5,
+      "current_value": 428.8,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[4].text",
@@ -29195,7 +29131,7 @@
         ],
         "operation": "value",
         "scale": 9.5367431640625e-07,
-        "digits": 0
+        "digits": 1
       },
       "automatic": true,
       "private": false,
@@ -29214,7 +29150,7 @@
       "page": "devconfig-backup-tiered-distribution",
       "screen": "devconfig-backup-tiered-distribution-10",
       "label": "最新成功配置包压缩字节",
-      "current_value": 449276059,
+      "current_value": 449631558,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[9].text",
@@ -29245,7 +29181,7 @@
       "page": "devconfig-backup-tiered-distribution",
       "screen": "devconfig-backup-tiered-distribution-10",
       "label": "最新成功配置包文件数",
-      "current_value": 6342,
+      "current_value": 6344,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[9].text",
@@ -29306,7 +29242,7 @@
       "page": "devconfig-backup-tiered-distribution",
       "screen": "devconfig-backup-tiered-distribution-10",
       "label": "最新成功配置包压缩大小 MiB",
-      "current_value": 428.5,
+      "current_value": 428.8,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[9].text",
@@ -29320,7 +29256,7 @@
         ],
         "operation": "value",
         "scale": 9.5367431640625e-07,
-        "digits": 0
+        "digits": 1
       },
       "automatic": true,
       "private": false,
@@ -29692,7 +29628,7 @@
       "page": "devconfig-backup-wechat-native-backup",
       "screen": "devconfig-backup-wechat-native-backup-05",
       "label": "微信当前热备文件数",
-      "current_value": 154371,
+      "current_value": 154404,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[4].text",
@@ -29723,7 +29659,7 @@
       "page": "devconfig-backup-wechat-native-backup",
       "screen": "devconfig-backup-wechat-native-backup-11",
       "label": "微信当前热备文件数",
-      "current_value": 154371,
+      "current_value": 154404,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[10].text",
@@ -29754,7 +29690,7 @@
       "page": "devconfig-backup-wechat-native-backup",
       "screen": "devconfig-backup-wechat-native-backup-11",
       "label": "微信当前热备字节",
-      "current_value": 46691567251,
+      "current_value": 46742366752,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[10].text",
@@ -29785,7 +29721,7 @@
       "page": "devconfig-backup-wechat-native-backup",
       "screen": "devconfig-backup-wechat-native-backup-05",
       "label": "微信当前热备 GB",
-      "current_value": 46.69,
+      "current_value": 46.74,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[4].text",
@@ -29818,7 +29754,7 @@
       "page": "devconfig-backup-wechat-native-backup",
       "screen": "devconfig-backup-wechat-native-backup-05",
       "label": "微信当前热备 GB",
-      "current_value": 46.69,
+      "current_value": 46.74,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[4].text",
@@ -35103,7 +35039,7 @@
       "field": "screens[4].text",
       "page_pattern": "\\*\\*截至 (\\d+ 月 \\d+ 日 \\d{2}:\\d{2}) 的状态\\*\\*",
       "label": "当前任务回执状态的人工观察截至日期",
-      "current_value": "10 月 12 日 05:40",
+      "current_value": "10 月 23 日 09:56",
       "as_of": "2026-10-12",
       "qualifies": [
         "int3-devconfig-backup-current-status-review"
