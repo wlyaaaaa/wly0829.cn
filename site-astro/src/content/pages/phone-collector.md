@@ -386,8 +386,8 @@
  },
  "source": {
   "page": "sources/pages/phone-collector/page.json",
-  "sha256": "513cd6b58d97815c58b777b1d9b3dbddc56ed95da9d099ce3972e2e4dee3a971",
-  "converted_at_beijing": "2026-10-23T08:44:36+08:00"
+  "sha256": "6b67bae0962e2206fd8e59bb3e29705500dbb1c63ce58d91a627140f249d9fda",
+  "converted_at_beijing": "2026-10-23T09:22:16+08:00"
  }
 }
 ---
@@ -468,11 +468,6 @@
      "text_ref": "4 类"
     },
     {
-     "type": "prose",
-     "align": "right",
-     "text_ref": "截至10月22"
-    },
-    {
      "type": "action_button",
      "align": "left",
      "columns": 2,
@@ -518,11 +513,6 @@
     },
     {
      "type": "prose",
-     "align": "right",
-     "text_ref": "截至10月22"
-    },
-    {
-     "type": "prose",
      "align": "left",
      "text_ref": "手机上有几样东西只有手机自己拿得到"
     },
@@ -565,8 +555,6 @@
 | **4 类** | **15 分钟** | **30 分钟** | **40 个** |
 |---|---|---|---|
 | 系统使用事件、装机清单、定位，加上它自己的运行和被停记录 | 请系统每 15 分钟叫醒一次；实际什么时候叫由系统定，不保证准时 | 电脑在家每 30 分钟经无线调试收一次；不在家就先存在手机里 | 自动测试用例，全用合成数据；10 月 22 日只清点了数量，没有重跑 |
-
-截至 10 月 22 日
 
 〔原料交给谁 → 个人理解库〕　〔复制 AI 续作说明〕
 

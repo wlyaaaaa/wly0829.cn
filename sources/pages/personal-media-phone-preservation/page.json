@@ -182,7 +182,7 @@
       "id": "personal-media-phone-preservation-12",
       "section": "tech",
       "title": "依据与来源（一）",
-      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- phone_file_preserve_clear.py　手机捕获、项目原件复用、双盘回读、精确清理和回写\n\n- personal_media.py　非视觉整理、收尾与点名删除\n\n- test_phone_file_preserve_clear.py、test_phone_nonvisual.py、test_phone_legacy_closeout.py　来源边界、批量快照、回读、删除保护、非视觉流程与旧批收尾回归\n\n- AGENTS.md　可以拔线节点、手机占用边界、上云稳定期与小批量收尾\n\n- README.md　手机删除同步电脑、收尾任务和已有命令范围（10 月 21 日提交 7b6d61e 起写明：小米 15 Pro 已退役、不再新建采集，capture 对退役设备返回 retired_device_capture_disabled，既有小米 run 与回执只用于离线保全核验和整理）\n\n- USER_REQUIREMENTS.md §3.3–3.6　上次完整回写、移动/AI清空区分、未知不删、电脑原件与各层副本结果\n\n## 如何验证\n\n- 2026-09-05 旧回执有 55 项总测试、2 项真机跳过（历史记录）；最近一份本地验收回执是 9 月 24 日：186 项运行、2 项跳过、0 失败；源码现有 508 个测试函数（10 月 22 日静态计数，本次没有运行）。\n\n- 回归覆盖恢复包根、Android/系统边界和 .nomedia 排除。",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- phone_file_preserve_clear.py　手机捕获、项目原件复用、双盘回读、精确清理和回写\n\n- personal_media.py　非视觉整理、收尾与点名删除\n\n- test_phone_file_preserve_clear.py、test_phone_nonvisual.py、test_phone_legacy_closeout.py　来源边界、批量快照、回读、删除保护、非视觉流程与旧批收尾回归\n\n- AGENTS.md　可以拔线节点、手机占用边界、上云稳定期与小批量收尾\n\n- README.md　手机删除同步电脑、收尾任务和已有命令范围（10 月 21 日提交 7b6d61e 起写明：小米 15 Pro 已退役、不再新建采集，capture 对退役设备返回 retired_device_capture_disabled，既有小米 run 与回执只用于离线保全核验和整理）\n\n- USER_REQUIREMENTS.md §3.3–3.6　上次完整回写、移动/AI清空区分、未知不删、电脑原件与各层副本结果\n\n## 如何验证\n\n- 2026-09-05 旧回执有 55 项总测试、2 项真机跳过（历史记录）；最近一份本地验收回执是 9 月 24 日：186 项运行、2 项跳过、0 失败；源码现有 509 个测试函数（10 月 23 日静态计数，本次没有运行）。\n\n- 回归覆盖恢复包根、Android/系统边界和 .nomedia 排除。",
       "links": [],
       "anchors": [],
       "live": null,

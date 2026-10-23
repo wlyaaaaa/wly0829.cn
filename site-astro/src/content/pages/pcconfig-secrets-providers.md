@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig-secrets-providers/page.json",
-  "sha256": "748b45e796ff52a2799d1a2ca0f1ea773098ee5298668723f530a346c837824f",
-  "converted_at_beijing": "2026-10-22T08:32:33+08:00"
+  "sha256": "69c32df363e6944e41b6bcf231077eaddd04e8b0aab2b7ea961934b53a072e96",
+  "converted_at_beijing": "2026-10-23T09:22:15+08:00"
  }
 }
 ---
@@ -610,7 +610,7 @@ PCConfig · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-产品归 PasswordCenter（截止版本 968b9816，10 月 7 日），PCConfig 只拥有机器接线与安装（10 月 11 日安装批次 364、776 个文件，当时核对 11 个相关程序源码与安装字节一致；10 月 22 日 06:48 只读现役安装清单：批次 377、清单列 778 个文件，没重核字节）。Google 远端可用性本次为 Unknown。
+产品归 PasswordCenter（截止版本 968b9816，10 月 7 日），PCConfig 只拥有机器接线与安装（10 月 11 日安装批次 364、776 个文件，当时核对 11 个相关程序源码与安装字节一致；10 月 23 日 09:19 只读现役安装清单：批次 382、清单列 778 个文件，没重核字节）。Google 远端可用性本次为 Unknown。
 
 ::screen{#pcconfig-secrets-providers-06 section="tech"}
 

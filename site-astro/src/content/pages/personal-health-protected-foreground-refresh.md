@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/personal-health-protected-foreground-refresh/page.json",
-  "sha256": "43d927ba387c2b0b3d95c8eafb60a3bb12af84cb6536e8569aac0aac0eb985d7",
-  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
+  "sha256": "13cfc01212dd0b21b825f1b7ed48792b641c6cee60fc712be4b2ce34a3a13fef",
+  "converted_at_beijing": "2026-10-23T09:22:15+08:00"
  }
 }
 ---
@@ -943,7 +943,7 @@
 
 ## 如何验证
 
-- 全项目现有 192 个测试函数，参数展开后 213 个测试用例（10 月 11 日静态计数，本次没有运行）。
+- 全项目现有 191 个测试函数，参数展开后 215 个测试用例（10 月 23 日静态计数，本次没有运行）。
 
 - 9 月 14 日全套 140 项通过，是当时的历史记录，不代表今天又跑过。
 
