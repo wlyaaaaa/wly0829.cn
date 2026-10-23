@@ -535,7 +535,10 @@ def apply_edits(root, payload, only=None, converter=None):
                     raise ValueError("author_locator_mismatch")
                 parent, key = field_at(json.loads((root / locator["file"]).read_text("utf-8-sig")), locator["field"])
                 actual = parent[key][locator["start"]:locator["end"]]
-                if row["id"] in failed or not same_value(str(actual), row["new_value"]):
+                # 带时分的截至写入取数时刻，记录新值只有日期；原位回读核对实际写入的文字。
+                expected = locator.get("expected")
+                if row["id"] in failed or (actual != expected if expected is not None
+                                           else not same_value(str(actual), row["new_value"])):
                     raise ValueError("记录新值原位回读不一致")
                 logical = bound_json(root / f"sources/pages/{row['page']}/page.json", root=root,
                     read=lambda path: Path(path).read_text("utf-8-sig"))

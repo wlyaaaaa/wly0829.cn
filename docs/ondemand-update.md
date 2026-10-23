@@ -265,7 +265,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist dist --scan-result <sc
 python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发布输出目录>
 ```
 
-预演核上传计划中的变化 HTML 与扫描范围是否相符，`/search/` 等实际受影响页也计入。首页虽排除视觉扫描，发布器仍 GET 核关键页字节。变化数明显超出预期先查连带变化；预演传输时间按固定速率估算，不是网络实测，不包含 Pages 排队。
+预演核上传计划中的变化 HTML 与扫描范围是否相符，`/search/` 等实际受影响页也计入。首页变化时和其他页一样计入扫描，发布器另外 GET 核首页等关键页字节。变化数明显超出预期先查连带变化；预演传输时间按固定速率估算，不是网络实测，不包含 Pages 排队。
 
 `--upload-only` 在 OSS 上传新增或变化资源，并以 HEAD 核大小与 MD5；回执 `status=uploaded_only`。它不推 `site-dist`、不触发 Pages、不写 `published.json`。正式发布先完成资源证明，再正常推送 `site-dist`，从 `main` 触发 `pages.yml` 并传成品 `sha`，按返回网址取得该次 run id、等待成功，再 GET 首页、驾驶舱、`/computer-access/` 和全部变化 HTML，核 HTTP 200 与 SHA256。超时或失败保留回执，不写成功。
 

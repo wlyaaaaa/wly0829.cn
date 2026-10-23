@@ -210,6 +210,15 @@ class NumberEditsTests(unittest.TestCase):
         payload = self.one("167 次调用。\n截至10月9日", "167 次调用", 167, 168)
         self.assertFalse(payload["skipped"])
 
+    def test_timed_cutoff_reads_back_the_written_time(self):
+        self.page["screens"][0]["text"] = "，".join(self.labels) + "，截至 10 月 9 日 08:06"
+        self.save()
+        self.rows[-1].update(page_pattern=r"截至 (\d+ 月 \d+ 日 \d+:\d+)", old_value="10 月 9 日 08:06")
+        report = apply_edits(self.root, self.build())
+        self.assertFalse(report["skipped"])
+        self.assertIn("截至 10 月 11 日 16:03", json.loads(self.path.read_text("utf-8"))["screens"][0]["text"])
+        self.assertIn("date", {r["record_id"] for r in report["record_readback"]})
+
     def test_field_pattern_and_cross_field_qualified_coverage_date(self):
         self.page['screens'][0]['text'] = '当前材料有 165 份'
         self.page['status_line'] = {'as_of': '2026-10-09'}
