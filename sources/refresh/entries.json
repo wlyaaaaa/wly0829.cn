@@ -50,7 +50,11 @@
     "read_only": true,
     "owner_project": "codex-memory",
     "timeout": 30,
-    "verification": "ai_usage_ledger.py:27-28,244-258,325-333；只读文件，不运行emit；写入恢复与完整性另由源项目核实，不用mtime冒充使用时间"
+    "verification": "ai_usage_ledger.py:27-28,244-258,325-333；只读文件，不运行emit；写入恢复与完整性另由源项目核实，不用mtime冒充使用时间",
+    "observation_basis": "coverage_end",
+    "source_coverage_end_pointer": [
+      "source_coverage_end"
+    ]
   },
   "daily-preferences-view-sizes": {
     "argv": [
@@ -65,7 +69,8 @@
     "read_only": true,
     "owner_project": "daily-preferences",
     "output": "json",
-    "verification": "2026-10-11 源码核实：仅Path.stat/递归列文件并判断is_file；不打开正文、不mkdir、不写文件或库；CURRENT与PROFILE字节数及引用快照文件数已实取复现。"
+    "verification": "2026-10-11 源码核实：仅Path.stat/递归列文件并判断is_file；不打开正文、不mkdir、不写文件或库；CURRENT与PROFILE字节数及引用快照文件数已实取复现。",
+    "observation_basis": "live_read"
   },
   "personal-expression-counts": {
     "argv": [
@@ -80,7 +85,8 @@
     "read_only": true,
     "owner_project": "personal-expression",
     "output": "json",
-    "verification": "2026-10-11 核实固定代码：仅Path.read_text、JSON解析、正则和计数；不导入业务模块，不写文件，不调模型；只输出原则/案例/有效本人样本/AI稿对照的整数，不输出私人正文。"
+    "verification": "2026-10-11 核实固定代码：仅Path.read_text、JSON解析、正则和计数；不导入业务模块，不写文件，不调模型；只输出原则/案例/有效本人样本/AI稿对照的整数，不输出私人正文。",
+    "observation_basis": "live_read"
   },
   "personal-expression-usage-display": {
     "requires_usage_ledger": true,
@@ -97,7 +103,8 @@
     "owner_project": "personal-expression",
     "output": "json",
     "timeout": 30,
-    "verification": "2026-10-11 固定代码仅open只读账本、JSON解析、时间比较及聚合；不导入生产者，不调用emit，不写文件/库。只输出reply-as-me计数所对应的页面事实短句和两个表达技能最新时间；不输出行内容。U两路补采回执complete且水位均推进至2026-10-11零点后启用。"
+    "verification": "2026-10-11 固定代码仅open只读账本、JSON解析、时间比较及聚合；不导入生产者，不调用emit，不写文件/库。只输出reply-as-me计数所对应的页面事实短句和两个表达技能最新时间；不输出行内容。U两路补采回执complete且水位均推进至2026-10-11零点后启用。",
+    "observation_basis": "unknown"
   },
   "timeaudit-db-sizes": {
     "argv": [
@@ -122,7 +129,8 @@
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
-    "timeout": 12
+    "timeout": 12,
+    "observation_basis": "live_read"
   },
   "timeaudit-health": {
     "argv": [
@@ -135,7 +143,8 @@
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
-    "timeout": 15
+    "timeout": 15,
+    "observation_basis": "live_read"
   },
   "timeaudit-backup-retention": {
     "argv": [
@@ -148,7 +157,8 @@
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
-    "timeout": 8
+    "timeout": 8,
+    "observation_basis": "live_read"
   },
   "timeaudit-count-hardware": {
     "argv": [
@@ -174,7 +184,8 @@
     "owner_project": "timeaudit",
     "output": "json",
     "timeout": 130,
-    "verification": "2026-10-22 原8秒上限实跑确认为statement timeout；放宽后精确COUNT成功；default_transaction_read_only=on、lock_timeout=500保持，总取数时限仍约束入口。"
+    "verification": "2026-10-22 原8秒上限实跑确认为statement timeout；放宽后精确COUNT成功；default_transaction_read_only=on、lock_timeout=500保持，总取数时限仍约束入口。",
+    "observation_basis": "live_read"
   },
   "timeaudit-count-lifecycle": {
     "argv": [
@@ -200,7 +211,8 @@
     "owner_project": "timeaudit",
     "output": "json",
     "timeout": 130,
-    "verification": "2026-10-22 原8秒上限实跑确认为statement timeout；放宽后精确COUNT成功；default_transaction_read_only=on、lock_timeout=500保持，总取数时限仍约束入口。"
+    "verification": "2026-10-22 原8秒上限实跑确认为statement timeout；放宽后精确COUNT成功；default_transaction_read_only=on、lock_timeout=500保持，总取数时限仍约束入口。",
+    "observation_basis": "live_read"
   },
   "timeaudit-count-registry": {
     "argv": [
@@ -226,7 +238,8 @@
     "owner_project": "timeaudit",
     "output": "json",
     "timeout": 130,
-    "verification": "2026-10-22 原8秒上限实跑确认为statement timeout；放宽后精确COUNT成功；default_transaction_read_only=on、lock_timeout=500保持，总取数时限仍约束入口。"
+    "verification": "2026-10-22 原8秒上限实跑确认为statement timeout；放宽后精确COUNT成功；default_transaction_read_only=on、lock_timeout=500保持，总取数时限仍约束入口。",
+    "observation_basis": "live_read"
   },
   "timeaudit-count-context": {
     "argv": [
@@ -251,7 +264,8 @@
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
-    "timeout": 12
+    "timeout": 12,
+    "observation_basis": "live_read"
   },
   "timeaudit-count-app-usage": {
     "argv": [
@@ -276,7 +290,8 @@
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
-    "timeout": 12
+    "timeout": 12,
+    "observation_basis": "live_read"
   },
   "timeaudit-count-hourly": {
     "argv": [
@@ -301,7 +316,8 @@
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
-    "timeout": 12
+    "timeout": 12,
+    "observation_basis": "live_read"
   },
   "timeaudit-grafana-counts": {
     "argv": [
@@ -314,7 +330,8 @@
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
-    "timeout": 10
+    "timeout": 10,
+    "observation_basis": "live_read"
   },
   "timeaudit-snapshot-commits": {
     "argv": [
@@ -327,7 +344,8 @@
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
-    "timeout": 10
+    "timeout": 10,
+    "observation_basis": "live_read"
   },
   "timeaudit-overhead-20261010": {
     "argv": [
@@ -343,7 +361,12 @@
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
-    "timeout": 16
+    "timeout": 16,
+    "observation_basis": "coverage_end",
+    "source_coverage_end_pointer": [
+      "window",
+      "last_sample_utc"
+    ]
   },
   "pcconfig-statistics": {
     "argv": [
@@ -356,7 +379,8 @@
     "read_only": true,
     "owner_project": "pcconfig",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "pcconfig-volumes": {
     "argv": [
@@ -370,7 +394,8 @@
     "read_only": true,
     "owner_project": "pcconfig",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "ramdisk-image-size": {
     "argv": [
@@ -383,7 +408,8 @@
     "read_only": true,
     "owner_project": "ramdisk-guardian",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "pc-panel-task-count": {
     "argv": [
@@ -397,7 +423,8 @@
     "read_only": true,
     "owner_project": "pc-panel-hub",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "pcconfig-g-directory-bytes": {
     "argv": [
@@ -411,7 +438,8 @@
     "owner_project": "pcconfig",
     "output": "json",
     "timeout": 120,
-    "verification": "固定-B Python仅只读目录元数据与汇总；onerror明确重新抛出子目录读取错误，stat失败也失败返回，不把未读全当0或完整大小。"
+    "verification": "固定-B Python仅只读目录元数据与汇总；onerror明确重新抛出子目录读取错误，stat失败也失败返回，不把未读全当0或完整大小。",
+    "observation_basis": "live_read"
   },
   "ramdisk-health": {
     "argv": [
@@ -426,7 +454,8 @@
     "owner_project": "ramdisk-guardian",
     "output": "json",
     "timeout": 20,
-    "verification": "Get-RamdiskHealth及实际模块路径为zero_write；包装仅内存JSON转换并核对WriteMode、Task存在/Enabled、周期>0、Reasons不含guardian-periodic-trigger-missing；缺触发器时拒绝默认900秒。"
+    "verification": "Get-RamdiskHealth及实际模块路径为zero_write；包装仅内存JSON转换并核对WriteMode、Task存在/Enabled、周期>0、Reasons不含guardian-periodic-trigger-missing；缺触发器时拒绝默认900秒。",
+    "observation_basis": "unknown"
   },
   "ramdisk-log-cadence": {
     "argv": [
@@ -439,7 +468,8 @@
     "read_only": true,
     "owner_project": "ramdisk-guardian",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "unknown"
   },
   "remote-pages-task-counts": {
     "argv": [
@@ -453,7 +483,8 @@
     "read_only": true,
     "owner_project": "pcconfig",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "devconfig-source-counts": {
     "argv": [
@@ -467,7 +498,8 @@
     "read_only": true,
     "owner_project": "devconfig-backup",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "remote-current-log-window": {
     "argv": [
@@ -482,7 +514,11 @@
     "read_only": true,
     "owner_project": "remote-control",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "coverage_end",
+    "source_coverage_end_pointer": [
+      "last_utc"
+    ]
   },
   "remote-installed-tool-catalog": {
     "argv": [
@@ -497,7 +533,8 @@
     "read_only": true,
     "owner_project": "remote-control",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "remote-path-commit-count": {
     "argv": [
@@ -512,7 +549,8 @@
     "read_only": true,
     "owner_project": "remote-control",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "remote-registered-entry-count": {
     "argv": [
@@ -527,7 +565,8 @@
     "read_only": true,
     "owner_project": "remote-control",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "agents-decision-volumes-stats": {
     "argv": [
@@ -542,7 +581,8 @@
     "read_only": true,
     "owner_project": "agents",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "agents-shared-skill-source": {
     "argv": [
@@ -558,7 +598,8 @@
     "owner_project": "agents",
     "output": "json",
     "timeout": 20,
-    "verification": "只读声明清单与路径resolve；分别返回声明数、实际匹配数和缺失数，不因单个链接缺失丢掉其余计数，也不把声明数当全部安装成功。"
+    "verification": "只读声明清单与路径resolve；分别返回声明数、实际匹配数和缺失数，不因单个链接缺失丢掉其余计数，也不把声明数当全部安装成功。",
+    "observation_basis": "live_read"
   },
   "agents-inspect-stopwatch": {
     "argv": [
@@ -572,7 +613,8 @@
     "read_only": true,
     "owner_project": "agents",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "codex-memory-laptop-snapshot-history": {
     "argv": [
@@ -586,7 +628,8 @@
     "read_only": true,
     "owner_project": "codex-memory",
     "output": "json",
-    "timeout": 25
+    "timeout": 25,
+    "observation_basis": "live_read"
   },
   "report-pages-summary": {
     "argv": [
@@ -603,7 +646,8 @@
     "read_only": true,
     "owner_project": "report-page",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "b3-site-poll-config": {
     "argv": [
@@ -619,7 +663,8 @@
     "cwd": ".",
     "read_only": true,
     "owner_project": "wly0829-cn",
-    "output": "json"
+    "output": "json",
+    "observation_basis": "live_read"
   },
   "b3-site-main-git-status": {
     "argv": [
@@ -635,7 +680,8 @@
     "cwd": "V:/Personal/Projects/wly0829.cn",
     "read_only": true,
     "owner_project": "wly0829-cn",
-    "output": "json"
+    "output": "json",
+    "observation_basis": "live_read"
   },
   "learning-counts": {
     "argv": [
@@ -650,7 +696,8 @@
     "read_only": true,
     "owner_project": "learning",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "personal-media-original-bytes": {
     "argv": [
@@ -665,7 +712,8 @@
     "read_only": true,
     "owner_project": "personal-media",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "formal-commits-7d": {
     "argv": [
@@ -683,7 +731,8 @@
     "owner_project": "personal-formal-documents",
     "output": "json",
     "timeout": 20,
-    "verification": "git rev-list只读可达提交图，--no-optional-locks不持有可选写锁；仅JSON整数stdout，无提交消息或diff。"
+    "verification": "git rev-list只读可达提交图，--no-optional-locks不持有可选写锁；仅JSON整数stdout，无提交消息或diff。",
+    "observation_basis": "live_read"
   },
   "health-plan": {
     "argv": [
@@ -699,7 +748,8 @@
     "owner_project": "personal-health",
     "output": "json",
     "timeout": 20,
-    "verification": "main --plan跳过资料与凭据检查、write_failure_receipt=false，plan仅返回源代码定义与预算；不联网、不读manifest/brief/CURRENT、不写文件，-B禁pyc；实跑field_count=21。"
+    "verification": "main --plan跳过资料与凭据检查、write_failure_receipt=false，plan仅返回源代码定义与预算；不联网、不读manifest/brief/CURRENT、不写文件，-B禁pyc；实跑field_count=21。",
+    "observation_basis": "live_read"
   },
   "health-current-change-count": {
     "argv": [
@@ -718,7 +768,8 @@
     "owner_project": "personal-health",
     "output": "json",
     "timeout": 20,
-    "verification": "只读提交图按CURRENT.md路径计数，不读取CURRENT正文、提交消息、patch、报告或健康值；实跑73。"
+    "verification": "只读提交图按CURRENT.md路径计数，不读取CURRENT正文、提交消息、patch、报告或健康值；实跑73。",
+    "observation_basis": "live_read"
   },
   "health-refresh-status": {
     "argv": [
@@ -733,7 +784,11 @@
     "owner_project": "personal-health",
     "output": "json",
     "timeout": 20,
-    "verification": "固定命令仅Get-ScheduledTask/Get-Content与转换；读取计划Interval和pcconfig.health-refresh.v1聚合回执，不调用Run/Start/Set/Write或健康采集，不读原始健康数据；已实取P7D/completed。；已按stdout原字节验证原输出为GB18030，固定UTF-8避免替代字符，不修改宿主全局编码。"
+    "verification": "固定命令仅Get-ScheduledTask/Get-Content与转换；读取计划Interval和pcconfig.health-refresh.v1聚合回执，不调用Run/Start/Set/Write或健康采集，不读原始健康数据；已实取P7D/completed。；已按stdout原字节验证原输出为GB18030，固定UTF-8避免替代字符，不修改宿主全局编码。",
+    "observation_basis": "snapshot_timestamp",
+    "source_observed_at_pointer": [
+      "last"
+    ]
   },
   "materials-test-collection": {
     "argv": [
@@ -749,7 +804,8 @@
     "owner_project": "personal-materials",
     "output": "json",
     "timeout": 20,
-    "verification": "固定pytest collect-only，不执行fixture或test；禁自动插件/cacheprovider与-B；根目录仅计数。原材料测试顶层无写入，源文件集合/大小/mtime已核无变化。"
+    "verification": "固定pytest collect-only，不执行fixture或test；禁自动插件/cacheprovider与-B；根目录仅计数。原材料测试顶层无写入，源文件集合/大小/mtime已核无变化。",
+    "observation_basis": "live_read"
   },
   "personal-media-storage-topology": {
     "argv": [
@@ -764,7 +820,8 @@
     "read_only": true,
     "owner_project": "personal-media",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "media-person-self-usage-display": {
     "requires_usage_ledger": true,
@@ -781,7 +838,8 @@
     "owner_project": "media-person-self",
     "output": "json",
     "timeout": 30,
-    "verification": "固定标准库代码只读账本，过滤kind=skill/name=media-person-self与当前前7天时间，只输出整数与零次数显示，不输出原始行/cwd，不导入生产者、不写文件，-B禁pyc。"
+    "verification": "固定标准库代码只读账本，过滤kind=skill/name=media-person-self与当前前7天时间，只输出整数与零次数显示，不输出原始行/cwd，不导入生产者、不写文件，-B禁pyc。",
+    "observation_basis": "unknown"
   },
   "health-test-collection": {
     "argv": [
@@ -797,7 +855,8 @@
     "owner_project": "personal-health",
     "output": "json",
     "timeout": 20,
-    "verification": "11个tests文件与7个生产模块的模块顶层经AST核无文件/库写入；只collect、不执行fixture/setUp/test、禁插件/cache/-B；只输出计数与executed=false；实际213。"
+    "verification": "11个tests文件与7个生产模块的模块顶层经AST核无文件/库写入；只collect、不执行fixture/setUp/test、禁插件/cache/-B；只输出计数与executed=false；实际213。",
+    "observation_basis": "live_read"
   },
   "b5-typora-state": {
     "argv": [
@@ -812,7 +871,8 @@
     "read_only": true,
     "owner_project": "typora-theme-pack",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "localocr-jobs-summary": {
     "argv": [
@@ -827,7 +887,8 @@
     "read_only": true,
     "owner_project": "localocr",
     "output": "json",
-    "timeout": 180
+    "timeout": 180,
+    "observation_basis": "live_read"
   },
   "localocr-runtime-summary": {
     "argv": [
@@ -844,7 +905,8 @@
     "read_only": true,
     "owner_project": "localocr",
     "output": "json",
-    "timeout": 25
+    "timeout": 25,
+    "observation_basis": "live_read"
   },
   "chinese-asr-summary": {
     "argv": [
@@ -859,7 +921,8 @@
     "read_only": true,
     "owner_project": "chinese-asr",
     "output": "json",
-    "timeout": 30
+    "timeout": 30,
+    "observation_basis": "live_read"
   },
   "video-scaffold-published-metrics": {
     "argv": [
@@ -874,7 +937,8 @@
     "read_only": true,
     "owner_project": "video-scaffold",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "ai-cli-profile-config-counts": {
     "argv": [
@@ -889,7 +953,8 @@
     "read_only": true,
     "owner_project": "ai-cli-profile-manager",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "ai-cli-profile-ollama-status": {
     "argv": [
@@ -904,7 +969,8 @@
     "read_only": true,
     "owner_project": "ai-cli-profile-manager",
     "output": "json",
-    "timeout": 15
+    "timeout": 15,
+    "observation_basis": "live_read"
   },
   "vault-source-metrics": {
     "argv": [
@@ -919,7 +985,8 @@
     "read_only": true,
     "owner_project": "vault-tool",
     "output": "json",
-    "timeout": 10
+    "timeout": 10,
+    "observation_basis": "live_read"
   },
   "vault-key-ciphertext-revisions": {
     "argv": [
@@ -936,7 +1003,8 @@
     "read_only": true,
     "owner_project": "vault-tool",
     "output": "json",
-    "timeout": 15
+    "timeout": 15,
+    "observation_basis": "live_read"
   },
   "b6-proxyclean-last-commit": {
     "argv": [
@@ -952,7 +1020,8 @@
     "owner_project": "proxyclean",
     "output": "json",
     "timeout": 20,
-    "verification": "固定git log -1 --format=%cI只读HEAD提交者时间；北京时间转换仅在内存，Python -B不写字节码，git子进程CREATE_NO_WINDOW。"
+    "verification": "固定git log -1 --format=%cI只读HEAD提交者时间；北京时间转换仅在内存，Python -B不写字节码，git子进程CREATE_NO_WINDOW。",
+    "observation_basis": "live_read"
   },
   "password-center-readonly-summary": {
     "argv": [
@@ -967,7 +1036,8 @@
     "read_only": true,
     "owner_project": "password-center",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "live_read"
   },
   "github-index-readonly-counts": {
     "argv": [
@@ -983,7 +1053,8 @@
     "owner_project": "github-local-index",
     "output": "json",
     "timeout": 55,
-    "source_evidence": "仅 gh repo list GET 与正式 Inspect 读规则；所有子进程禁提示/更新/模块缓存，缓存上游ref用rev-list只读不fetch；输出只为聚合数。"
+    "source_evidence": "仅 gh repo list GET 与正式 Inspect 读规则；所有子进程禁提示/更新/模块缓存，缓存上游ref用rev-list只读不fetch；输出只为聚合数。",
+    "observation_basis": "live_read"
   },
   "github-admission-fixed-window": {
     "argv": [
@@ -998,7 +1069,8 @@
     "read_only": true,
     "owner_project": "github-local-index",
     "output": "json",
-    "timeout": 20
+    "timeout": 20,
+    "observation_basis": "unknown"
   },
   "b6-wechat-aggregate": {
     "argv": [
@@ -1013,7 +1085,8 @@
     "read_only": true,
     "owner_project": "wechatdirect",
     "output": "json",
-    "timeout": 30
+    "timeout": 30,
+    "observation_basis": "live_read"
   },
   "b6-wechat-source-constants": {
     "argv": [
@@ -1028,7 +1101,8 @@
     "read_only": true,
     "owner_project": "wechatdirect",
     "output": "json",
-    "timeout": 30
+    "timeout": 30,
+    "observation_basis": "live_read"
   },
   "b6-proxy-source-counts": {
     "argv": [
@@ -1043,7 +1117,8 @@
     "read_only": true,
     "owner_project": "proxyclean",
     "output": "json",
-    "timeout": 30
+    "timeout": 30,
+    "observation_basis": "live_read"
   },
   "b6-proxy-task-count": {
     "argv": [
@@ -1058,7 +1133,8 @@
     "read_only": true,
     "owner_project": "proxyclean",
     "output": "json",
-    "timeout": 40
+    "timeout": 40,
+    "observation_basis": "live_read"
   },
   "b6-work-deliverable-count": {
     "argv": [
@@ -1073,7 +1149,8 @@
     "read_only": true,
     "owner_project": "work-delivery-copilot",
     "output": "json",
-    "timeout": 30
+    "timeout": 30,
+    "observation_basis": "live_read"
   },
   "b6-proxy-pester-discovery": {
     "argv": [
@@ -1088,7 +1165,8 @@
     "read_only": true,
     "owner_project": "proxyclean",
     "output": "json",
-    "timeout": 40
+    "timeout": 40,
+    "observation_basis": "live_read"
   },
   "b6-steam-snapshot-aggregates": {
     "argv": [
@@ -1104,7 +1182,8 @@
     "owner_project": "steam-millennium-config-backup",
     "output": "json",
     "timeout": 25,
-    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。"
+    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。",
+    "observation_basis": "live_read"
   },
   "b6-mesh-config-aggregates": {
     "argv": [
@@ -1120,7 +1199,8 @@
     "owner_project": "meshclip-kit",
     "output": "json",
     "timeout": 25,
-    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。"
+    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。",
+    "observation_basis": "live_read"
   },
   "b6-mesh-doctor-aggregates": {
     "argv": [
@@ -1138,7 +1218,8 @@
     "timeout": 90,
     "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。 缓存写入更正：Python父包装在pwsh启动前只对子进程环境设置PSModuleAnalysisCachePath=NUL与POWERSHELL_UPDATECHECK=Off，不更改用户/机器环境；微软官方说明NUL禁用ModuleAnalysisCache落盘，兼容PowerShell 7及Windows PowerShell 5.1。固定原pwsh argv、CREATE_NO_WINDOW，stdout仅五个汇总计数，stderr不输出私人数据。",
     "read_only_reference": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables?view=powershell-7.5#psmoduleanalysiscachepath",
-    "read_only_reference_windows_powershell": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_windows_powershell_5.1#module-analysis-cache"
+    "read_only_reference_windows_powershell": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_windows_powershell_5.1#module-analysis-cache",
+    "observation_basis": "unknown"
   },
   "b6-emerald-config-aggregates": {
     "argv": [
@@ -1154,7 +1235,8 @@
     "owner_project": "emerald-veil",
     "output": "json",
     "timeout": 25,
-    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。"
+    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。",
+    "observation_basis": "live_read"
   },
   "b6-profile-route-count": {
     "argv": [
@@ -1170,7 +1252,8 @@
     "owner_project": "ai-cli-profile-manager",
     "output": "json",
     "timeout": 25,
-    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。"
+    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。",
+    "observation_basis": "live_read"
   },
   "b6-profile-timeaudit-count": {
     "argv": [
@@ -1186,7 +1269,8 @@
     "owner_project": "timeaudit",
     "output": "json",
     "timeout": 35,
-    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。"
+    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。",
+    "observation_basis": "live_read"
   },
   "usage-skill-current-7d": {
     "argv": [
@@ -1203,7 +1287,8 @@
     "read_only": true,
     "owner_project": "pcconfig",
     "output": "json",
-    "timeout": 210
+    "timeout": 210,
+    "observation_basis": "live_read"
   },
   "codex-memory-encrypted-snapshots": {
     "argv": [
@@ -1221,7 +1306,8 @@
     "owner_project": "codex-memory",
     "output": "json",
     "timeout": 20,
-    "verification": "G默认Hot必经Assert-GMedia 1195-1201/1346后才publish 1369及complete 1110-1125；实际无ConfigPath，回执当前指针/closure一致；H回执明确状态。缓存快照，非本轮现场，详见round02 bitlocker-evidence。"
+    "verification": "G默认Hot必经Assert-GMedia 1195-1201/1346后才publish 1369及complete 1110-1125；实际无ConfigPath，回执当前指针/closure一致；H回执明确状态。缓存快照，非本轮现场，详见round02 bitlocker-evidence。",
+    "observation_basis": "unknown"
   },
   "b7-agents-module-source-metrics": {
     "argv": [
@@ -1237,7 +1323,8 @@
     "owner_project": "agents",
     "output": "json",
     "timeout": 30,
-    "source_evidence": "已审阅固定argv全部代码：AST/Path仅解析读取；计划任务只用Get-ScheduledTask及Get-ScheduledTaskInfo，子进程无窗口，PowerShell模块缓存设NUL且关闭更新检查；只输出聚合数、任务状态与最后返回码。不导入或执行备份、分类程序，无写入/创建/删除/网络调用。"
+    "source_evidence": "已审阅固定argv全部代码：AST/Path仅解析读取；计划任务只用Get-ScheduledTask及Get-ScheduledTaskInfo，子进程无窗口，PowerShell模块缓存设NUL且关闭更新检查；只输出聚合数、任务状态与最后返回码。不导入或执行备份、分类程序，无写入/创建/删除/网络调用。",
+    "observation_basis": "live_read"
   },
   "b7-ai-backup-task-archive-status": {
     "argv": [
@@ -1253,7 +1340,8 @@
     "owner_project": "codex-memory",
     "output": "json",
     "timeout": 30,
-    "source_evidence": "已审阅固定argv全部代码：AST/Path仅解析读取；计划任务只用Get-ScheduledTask及Get-ScheduledTaskInfo，子进程无窗口，PowerShell模块缓存设NUL且关闭更新检查；只输出聚合数、任务状态与最后返回码。不导入或执行备份、分类程序，无写入/创建/删除/网络调用。"
+    "source_evidence": "已审阅固定argv全部代码：AST/Path仅解析读取；计划任务只用Get-ScheduledTask及Get-ScheduledTaskInfo，子进程无窗口，PowerShell模块缓存设NUL且关闭更新检查；只输出聚合数、任务状态与最后返回码。不导入或执行备份、分类程序，无写入/创建/删除/网络调用。",
+    "observation_basis": "live_read"
   },
   "b7-daily-preferences-technical-counts": {
     "argv": [
@@ -1269,7 +1357,12 @@
     "owner_project": "daily-preferences",
     "output": "json",
     "timeout": 40,
-    "verification": "2026-10-11 源码逐行核实：固定标准库入口仅 Path.stat/is_file、SQLite mode=ro&immutable=1 与 SELECT count/group by，前后拒绝非空 WAL、主库大小或mtime变化；不导入业务模块、不读原话或卡正文、不写文件/库、不联网。只输出技术规模计数。E:/PCConfig/docs/runtime/personal-data-access.md《什么算私人读取》明确“不用查：帮助、版本、只看结构或计数的技术状态…”；本入口仅用该计数例外，不能用于业务读取。 追加一行简单SELECT聚合：collector_usage_event现行记录的MAX(occurred_at_us)按北京时间取日期。collector_sources.py将原件time毫秒乘1000写occurred_at_us；phone_activity.py保留latest_source原生事件时间，该日期仅已存事件边界，不是连续/完整覆盖。"
+    "verification": "2026-10-11 源码逐行核实：固定标准库入口仅 Path.stat/is_file、SQLite mode=ro&immutable=1 与 SELECT count/group by，前后拒绝非空 WAL、主库大小或mtime变化；不导入业务模块、不读原话或卡正文、不写文件/库、不联网。只输出技术规模计数。E:/PCConfig/docs/runtime/personal-data-access.md《什么算私人读取》明确“不用查：帮助、版本、只看结构或计数的技术状态…”；本入口仅用该计数例外，不能用于业务读取。 追加一行简单SELECT聚合：collector_usage_event现行记录的MAX(occurred_at_us)按北京时间取日期。collector_sources.py将原件time毫秒乘1000写occurred_at_us；phone_activity.py保留latest_source原生事件时间，该日期仅已存事件边界，不是连续/完整覆盖。",
+    "observation_basis": "live_read",
+    "source_coverage_end_pointer": [
+      "collector_event_dates",
+      "last_stored_event_day"
+    ]
   },
   "b7-localocr-module-field-counts": {
     "argv": [
@@ -1285,7 +1378,8 @@
     "owner_project": "localocr",
     "output": "json",
     "timeout": 180,
-    "source_evidence": "固定 argv 的 16 行 Python 已逐行核对：仅 pathlib 读既有 jobs JSON、字典/计数/集合汇总，-B 禁写 pyc；不调用产品入口，不读取原件/输出正文，不打开数据库，不联网。stdout 只有聚合计数；路径与指纹仅用于筛选/内存去重，不输出。 追加1行将实际结构计数映射为同义展示文本：0为没有一条，正数为实际N条；不使用offset、不固定不变。"
+    "source_evidence": "固定 argv 的 16 行 Python 已逐行核对：仅 pathlib 读既有 jobs JSON、字典/计数/集合汇总，-B 禁写 pyc；不调用产品入口，不读取原件/输出正文，不打开数据库，不联网。stdout 只有聚合计数；路径与指纹仅用于筛选/内存去重，不输出。 追加1行将实际结构计数映射为同义展示文本：0为没有一条，正数为实际N条；不使用offset、不固定不变。",
+    "observation_basis": "live_read"
   },
   "b7-usage-ledger-complete-day": {
     "argv": [
@@ -1300,7 +1394,11 @@
     "owner_project": "codex-memory",
     "output": "json",
     "timeout": 10,
-    "verification": "jq 1.8.2真实已安装，直接调用二进制不经shim/shell；-s仅打开两state输入，filter仅校验固定北京午夜字符串、取较早端点、UTC日历减一天并输出单日期JSON；无write/in-place/output-file/include/module/network参数。Owner AI_USAGE_LEDGER.md与ai_usage_ledger.py控制流证明last_completed是fsync且invalid_lines=0后推进的排他事件扫描水位；最新两complete回执已核实end=2026-10-11T00:00+08，本次输出2026-10-10。已实测不同两端/跨年/非法边界拒绝。它仅已完成补采边界，不宣称全历史使用完整或写入链恢复。"
+    "verification": "jq 1.8.2真实已安装，直接调用二进制不经shim/shell；-s仅打开两state输入，filter仅校验固定北京午夜字符串、取较早端点、UTC日历减一天并输出单日期JSON；无write/in-place/output-file/include/module/network参数。Owner AI_USAGE_LEDGER.md与ai_usage_ledger.py控制流证明last_completed是fsync且invalid_lines=0后推进的排他事件扫描水位；最新两complete回执已核实end=2026-10-11T00:00+08，本次输出2026-10-10。已实测不同两端/跨年/非法边界拒绝。它仅已完成补采边界，不宣称全历史使用完整或写入链恢复。",
+    "observation_basis": "coverage_end",
+    "source_coverage_end_pointer": [
+      "complete_through_day"
+    ]
   },
   "b8-sunshine-config-preset": {
     "argv": [
@@ -1316,7 +1414,8 @@
     "owner_project": "sunshine-remote-streaming",
     "output": "json",
     "timeout": 8,
-    "verification": "2026-10-11 全文核对 argv：仅 pathlib.read_text、re.findall、assert 和 json/print；-B 禁止字节码写入，不导入产品入口；实取 preset=5，不输出其余配置内容。"
+    "verification": "2026-10-11 全文核对 argv：仅 pathlib.read_text、re.findall、assert 和 json/print；-B 禁止字节码写入，不导入产品入口；实取 preset=5，不输出其余配置内容。",
+    "observation_basis": "live_read"
   },
   "b8-sunshine-vdd-config": {
     "argv": [
@@ -1332,7 +1431,8 @@
     "owner_project": "sunshine-remote-streaming",
     "output": "json",
     "timeout": 8,
-    "verification": "2026-10-11 全文核对 argv：只用 ElementTree.parse 读 XML、find 首个 resolution、输出三个整数；无文件/数据库写入，不调用 Apply/Win32/产品入口，-B 禁止字节码；实取首项2880×1800@60。"
+    "verification": "2026-10-11 全文核对 argv：只用 ElementTree.parse 读 XML、find 首个 resolution、输出三个整数；无文件/数据库写入，不调用 Apply/Win32/产品入口，-B 禁止字节码；实取首项2880×1800@60。",
+    "observation_basis": "live_read"
   },
   "b8-sunshine-daily-check-coverage": {
     "argv": [
@@ -1371,7 +1471,8 @@
     "owner_project": "document-materials",
     "output": "json",
     "timeout": 20,
-    "verification": "2026-10-11 核实 tests/test_formal_documents.py 只有28个顶层测试函数；五处parametrize值都是字面量且无带params的fixture。固定代码只Path.read_text/AST/literal_eval与计数，不导入源码、不执行测试、不写库或文件；实际28函数/39参数展开定义。"
+    "verification": "2026-10-11 核实 tests/test_formal_documents.py 只有28个顶层测试函数；五处parametrize值都是字面量且无带params的fixture。固定代码只Path.read_text/AST/literal_eval与计数，不导入源码、不执行测试、不写库或文件；实际28函数/39参数展开定义。",
+    "observation_basis": "live_read"
   },
   "personal-media-local-cloud-counts": {
     "argv": [
@@ -1387,7 +1488,8 @@
     "owner_project": "personal-media",
     "output": "json",
     "timeout": 20,
-    "verification": "2026-10-11 核实cloud_status/current_cloud_desired/cloud_upload_holds/owner_pending_hashes/recorded_upload_holds/catalog_phone_recovery_selection只本地读取或纯计算，无写入和provider调用。源open_catalog先is_file再普通connect仍有创建间隙，故本入口固定替换为Path.resolve(strict=True)+SQLite URI mode=ro+user_version核验，所有来源连接均严格只读。personal_media/cloud_upload/media_access/storage_layout顶层AST逐项核实只有Path/frozenset/正则/ZoneInfo/datetime与uuid4等纯构造，无文件/库写入；-B禁pyc。仅输出聚合，不输出条目、路径、远端ID、错误正文。"
+    "verification": "2026-10-11 核实cloud_status/current_cloud_desired/cloud_upload_holds/owner_pending_hashes/recorded_upload_holds/catalog_phone_recovery_selection只本地读取或纯计算，无写入和provider调用。源open_catalog先is_file再普通connect仍有创建间隙，故本入口固定替换为Path.resolve(strict=True)+SQLite URI mode=ro+user_version核验，所有来源连接均严格只读。personal_media/cloud_upload/media_access/storage_layout顶层AST逐项核实只有Path/frozenset/正则/ZoneInfo/datetime与uuid4等纯构造，无文件/库写入；-B禁pyc。仅输出聚合，不输出条目、路径、远端ID、错误正文。",
+    "observation_basis": "live_read"
   },
   "personal-media-package-counts": {
     "argv": [
@@ -1403,7 +1505,8 @@
     "owner_project": "personal-media",
     "output": "json",
     "timeout": 20,
-    "verification": "2026-10-11 固定代码与personal_media.py recovery_sync --execute=false同口径：仅读现行计划、校验schema/唯一目标/源与G包存在及大小，并按登记包根计过时文件；根不可用即失败，不把空根当完整。没有调用复制、哈希、手机、写入或provider；仅输出计数与字节。"
+    "verification": "2026-10-11 固定代码与personal_media.py recovery_sync --execute=false同口径：仅读现行计划、校验schema/唯一目标/源与G包存在及大小，并按登记包根计过时文件；根不可用即失败，不把空根当完整。没有调用复制、哈希、手机、写入或provider；仅输出计数与字节。",
+    "observation_basis": "live_read"
   },
   "personal-media-closeout-counts": {
     "argv": [
@@ -1419,7 +1522,8 @@
     "owner_project": "personal-media",
     "output": "json",
     "timeout": 20,
-    "verification": "2026-10-11 固定代码只读PCConfig既有phone-closeout-status.json汇总；不会启动closeout或连接手机；只输出批次数/PASS/WAITING数与总体状态，未输出批次路径或回执正文。实际7/3/4/PASS。"
+    "verification": "2026-10-11 固定代码只读PCConfig既有phone-closeout-status.json汇总；不会启动closeout或连接手机；只输出批次数/PASS/WAITING数与总体状态，未输出批次路径或回执正文。实际7/3/4/PASS。",
+    "observation_basis": "unknown"
   },
   "personal-media-physical-selected-count": {
     "argv": [
@@ -1435,7 +1539,8 @@
     "owner_project": "personal-media",
     "output": "json",
     "timeout": 20,
-    "verification": "2026-10-11 固定代码只检查现行实体精选目录并递归数普通文件、以SQLite mode=ro数普通视频当前定位父目录不在E:/Videos平铺根的例外；不打开媒体、不hash、不复制，不输出定位值；目录不可用即失败。实际906与1。"
+    "verification": "2026-10-11 固定代码只检查现行实体精选目录并递归数普通文件、以SQLite mode=ro数普通视频当前定位父目录不在E:/Videos平铺根的例外；不打开媒体、不hash、不复制，不输出定位值；目录不可用即失败。实际906与1。",
+    "observation_basis": "live_read"
   },
   "health-source-registry-counts": {
     "argv": [
@@ -1451,7 +1556,8 @@
     "owner_project": "personal-health",
     "output": "json",
     "timeout": 20,
-    "verification": "2026-10-11 固定代码仅只读google_health_import.py源代码，AST取FIELDS与READONLY_SCOPES两个顶层tuple/list字面量长度；不导入业务、不读健康/凭据文件、不访问网络、不写入；实际39/9。"
+    "verification": "2026-10-11 固定代码仅只读google_health_import.py源代码，AST取FIELDS与READONLY_SCOPES两个顶层tuple/list字面量长度；不导入业务、不读健康/凭据文件、不访问网络、不写入；实际39/9。",
+    "observation_basis": "live_read"
   },
   "b9-devconfig-catalog-counts": {
     "argv": [
@@ -1467,7 +1573,8 @@
     "owner_project": "devconfig-backup",
     "output": "json",
     "timeout": 30,
-    "verification": "固定 Python 代码只有 pathlib 只读、JSON/正则/标准库解析与聚合；不导入生产入口、不写文件，-B 禁字节码。只输出计数/参数；新增 PowerShell 子进程禁模块分析缓存与更新检查、CREATE_NO_WINDOW，不运行测试或效果。"
+    "verification": "固定 Python 代码只有 pathlib 只读、JSON/正则/标准库解析与聚合；不导入生产入口、不写文件，-B 禁字节码。只输出计数/参数；新增 PowerShell 子进程禁模块分析缓存与更新检查、CREATE_NO_WINDOW，不运行测试或效果。",
+    "observation_basis": "live_read"
   },
   "b9-devconfig-date-package-counts": {
     "argv": [
@@ -1483,7 +1590,8 @@
     "owner_project": "devconfig-backup",
     "output": "json",
     "timeout": 30,
-    "verification": "固定 Python 代码只有 pathlib 只读、JSON/正则/标准库解析与聚合；不导入生产入口、不写文件，-B 禁字节码。只输出计数/参数；新增 PowerShell 子进程禁模块分析缓存与更新检查、CREATE_NO_WINDOW，不运行测试或效果。"
+    "verification": "固定 Python 代码只有 pathlib 只读、JSON/正则/标准库解析与聚合；不导入生产入口、不写文件，-B 禁字节码。只输出计数/参数；新增 PowerShell 子进程禁模块分析缓存与更新检查、CREATE_NO_WINDOW，不运行测试或效果。",
+    "observation_basis": "live_read"
   },
   "b9-emerald-source-params": {
     "argv": [
@@ -1499,7 +1607,8 @@
     "owner_project": "emerald-veil",
     "output": "json",
     "timeout": 30,
-    "verification": "固定 Python 代码只有 pathlib 只读、JSON/正则/标准库解析与聚合；不导入生产入口、不写文件，-B 禁字节码。只输出计数/参数；新增 PowerShell 子进程禁模块分析缓存与更新检查、CREATE_NO_WINDOW，不运行测试或效果。"
+    "verification": "固定 Python 代码只有 pathlib 只读、JSON/正则/标准库解析与聚合；不导入生产入口、不写文件，-B 禁字节码。只输出计数/参数；新增 PowerShell 子进程禁模块分析缓存与更新检查、CREATE_NO_WINDOW，不运行测试或效果。",
+    "observation_basis": "live_read"
   },
   "b9-mesh-pester-discovery": {
     "argv": [
@@ -1515,7 +1624,8 @@
     "owner_project": "meshclip-kit",
     "output": "json",
     "timeout": 35,
-    "verification": "已读源代码核实固定调用；Python -B、CREATE_NO_WINDOW，PowerShell子进程 PSModuleAnalysisCachePath=NUL/POWERSHELL_UPDATECHECK=Off。仅内存解析与计数，不导入生产写入口，不运行测试/启动/修复，不写文件或输出项目私密正文。"
+    "verification": "已读源代码核实固定调用；Python -B、CREATE_NO_WINDOW，PowerShell子进程 PSModuleAnalysisCachePath=NUL/POWERSHELL_UPDATECHECK=Off。仅内存解析与计数，不导入生产写入口，不运行测试/启动/修复，不写文件或输出项目私密正文。",
+    "observation_basis": "live_read"
   },
   "b9-proxy-test-subsets": {
     "argv": [
@@ -1531,7 +1641,8 @@
     "owner_project": "proxyclean",
     "output": "json",
     "timeout": 35,
-    "verification": "已读源代码核实固定调用；Python -B、CREATE_NO_WINDOW，PowerShell子进程 PSModuleAnalysisCachePath=NUL/POWERSHELL_UPDATECHECK=Off。仅内存解析与计数，不导入生产写入口，不运行测试/启动/修复，不写文件或输出项目私密正文。"
+    "verification": "已读源代码核实固定调用；Python -B、CREATE_NO_WINDOW，PowerShell子进程 PSModuleAnalysisCachePath=NUL/POWERSHELL_UPDATECHECK=Off。仅内存解析与计数，不导入生产写入口，不运行测试/启动/修复，不写文件或输出项目私密正文。",
+    "observation_basis": "live_read"
   },
   "b9-proxy-status-aggregates": {
     "argv": [
@@ -1547,7 +1658,8 @@
     "owner_project": "proxyclean",
     "output": "json",
     "timeout": 35,
-    "verification": "已读源代码核实固定调用；Python -B、CREATE_NO_WINDOW，PowerShell子进程 PSModuleAnalysisCachePath=NUL/POWERSHELL_UPDATECHECK=Off。仅内存解析与计数，不导入生产写入口，不运行测试/启动/修复，不写文件或输出项目私密正文。 子进程内显式UTF-8控制台/管道编码，避免中文字段导致主机默认编码解码失败；不改用户/机器配置。"
+    "verification": "已读源代码核实固定调用；Python -B、CREATE_NO_WINDOW，PowerShell子进程 PSModuleAnalysisCachePath=NUL/POWERSHELL_UPDATECHECK=Off。仅内存解析与计数，不导入生产写入口，不运行测试/启动/修复，不写文件或输出项目私密正文。 子进程内显式UTF-8控制台/管道编码，避免中文字段导致主机默认编码解码失败；不改用户/机器配置。",
+    "observation_basis": "live_read"
   },
   "b9-steam-history-aggregates": {
     "argv": [
@@ -1563,7 +1675,8 @@
     "owner_project": "steam-millennium-config-backup",
     "output": "json",
     "timeout": 35,
-    "verification": "已读源代码核实固定调用；Python -B、CREATE_NO_WINDOW，PowerShell子进程 PSModuleAnalysisCachePath=NUL/POWERSHELL_UPDATECHECK=Off。仅内存解析与计数，不导入生产写入口，不运行测试/启动/修复，不写文件或输出项目私密正文。"
+    "verification": "已读源代码核实固定调用；Python -B、CREATE_NO_WINDOW，PowerShell子进程 PSModuleAnalysisCachePath=NUL/POWERSHELL_UPDATECHECK=Off。仅内存解析与计数，不导入生产写入口，不运行测试/启动/修复，不写文件或输出项目私密正文。",
+    "observation_basis": "live_read"
   },
   "b9-github-owner-summary": {
     "argv": [
@@ -1579,7 +1692,8 @@
     "owner_project": "github-local-index",
     "output": "json",
     "timeout": 85,
-    "source_evidence": "Get-GitOwnerStatus.ps1:1242–1325 只读provider；:1328–1338 无-MigrateBaseline进入只读分支；:953 gh repo list GET；:776–780基线只读；Registry.psm1:467–501只读加载。固定argv无迁移/刷新/重大操作，禁自动更新、Git锁/提示/lazy fetch和PS模块缓存；仅输出summary及仓库聚合与本库cached ahead/behind/dirty计数，不输出身份、路径或正文。 修正：固定gh一次GET(nameWithOwner/visibility/defaultBranchRef)，标准库严格检查schema与limit后，stdin传入固定只读Invoke-GitOwnerProvider的RemoteReader；它复用同次来源观察，不再第二GET，不改变baseline/merge/status语义。PS子进程显式InputEncoding/OutputEncoding/OutputEncoding=UTF8。产品脚本仅dot-source定义（无MigrateBaseline），仅读基线/registry/本地元数据；失败只输出步骤、异常类型、退出码和稳定类别，无正文或身份。禁止重登录/改凭据/fetch，真实失败保留Unknown。"
+    "source_evidence": "Get-GitOwnerStatus.ps1:1242–1325 只读provider；:1328–1338 无-MigrateBaseline进入只读分支；:953 gh repo list GET；:776–780基线只读；Registry.psm1:467–501只读加载。固定argv无迁移/刷新/重大操作，禁自动更新、Git锁/提示/lazy fetch和PS模块缓存；仅输出summary及仓库聚合与本库cached ahead/behind/dirty计数，不输出身份、路径或正文。 修正：固定gh一次GET(nameWithOwner/visibility/defaultBranchRef)，标准库严格检查schema与limit后，stdin传入固定只读Invoke-GitOwnerProvider的RemoteReader；它复用同次来源观察，不再第二GET，不改变baseline/merge/status语义。PS子进程显式InputEncoding/OutputEncoding/OutputEncoding=UTF8。产品脚本仅dot-source定义（无MigrateBaseline），仅读基线/registry/本地元数据；失败只输出步骤、异常类型、退出码和稳定类别，无正文或身份。禁止重登录/改凭据/fetch，真实失败保留Unknown。",
+    "observation_basis": "live_read"
   },
   "b9-github-operation-count": {
     "argv": [
@@ -1595,7 +1709,8 @@
     "owner_project": "github-local-index",
     "output": "json",
     "timeout": 15,
-    "source_evidence": "仅Path.read_text与正则解析脚本第4–7行Operation ValidateSet和splitlines计行，绝不调用重大动作脚本。"
+    "source_evidence": "仅Path.read_text与正则解析脚本第4–7行Operation ValidateSet和splitlines计行，绝不调用重大动作脚本。",
+    "observation_basis": "live_read"
   },
   "b9-wechat-source-counts": {
     "argv": [
@@ -1611,7 +1726,8 @@
     "owner_project": "wechatdirect",
     "output": "json",
     "timeout": 20,
-    "source_evidence": "仅读取tests/test_*.py并ast.parse计FunctionDef/AsyncFunctionDef test_定义；无产品导入、测试执行、缓存/库/账号/聊天读取。"
+    "source_evidence": "仅读取tests/test_*.py并ast.parse计FunctionDef/AsyncFunctionDef test_定义；无产品导入、测试执行、缓存/库/账号/聊天读取。",
+    "observation_basis": "live_read"
   },
   "b9-wechat-account-archive-aggregate": {
     "argv": [
@@ -1627,7 +1743,8 @@
     "owner_project": "wechatdirect",
     "output": "json",
     "timeout": 25,
-    "source_evidence": "wechat_cli.py:50和:63仅AST读槽位/解释版本；:110–117来源路径选定语义，.wechatdirect.local.json现行config指向已有accounts.json。只解析槽位数和已登记exports下manifest的format/senderIdentityVersion，绝不打开messages.jsonl/context.md、源数据库、媒体、姓名或联系人正文。只输出聚合四数，未调用CLI产品或写文件。"
+    "source_evidence": "wechat_cli.py:50和:63仅AST读槽位/解释版本；:110–117来源路径选定语义，.wechatdirect.local.json现行config指向已有accounts.json。只解析槽位数和已登记exports下manifest的format/senderIdentityVersion，绝不打开messages.jsonl/context.md、源数据库、媒体、姓名或联系人正文。只输出聚合四数，未调用CLI产品或写文件。",
+    "observation_basis": "live_read"
   },
   "b9-work-source-counts": {
     "argv": [
@@ -1643,7 +1760,8 @@
     "owner_project": "work-delivery-copilot",
     "output": "json",
     "timeout": 20,
-    "source_evidence": "标准库ast/json/Path.read_text；不import或调用work_delivery。tests五个TestCase内test方法定义45；test_core.py:100–118 cases列表/subTest为14/5/9；batch schema:26–27 sources min/max2/5；batch.py:19 budget15；acceptance.py:362 limits1.25/1/0.75。仅源码合同与定义，不证明测试/速度/真实工作/数据库恢复通过。"
+    "source_evidence": "标准库ast/json/Path.read_text；不import或调用work_delivery。tests五个TestCase内test方法定义45；test_core.py:100–118 cases列表/subTest为14/5/9；batch schema:26–27 sources min/max2/5；batch.py:19 budget15；acceptance.py:362 limits1.25/1/0.75。仅源码合同与定义，不证明测试/速度/真实工作/数据库恢复通过。",
+    "observation_basis": "live_read"
   },
   "skills-new-usage-ledger-complete-until": {
     "argv": [
@@ -1658,7 +1776,8 @@
     "owner_project": "codex-memory",
     "output": "json",
     "timeout": 10,
-    "verification": "复用现有 b7-usage-ledger-complete-day 的 jq 只读两份 state 输入。要求两路 bootstrap_complete=true、午夜北京时区 last_completed，取较早的排他边界日期，不减一天；输出仅 complete_until_date。原稿截至 10 月 11 日、source 说明记到当天零点，不能用本轮读旧账本的观察日期推进。无写入、网络或业务模块执行。"
+    "verification": "复用现有 b7-usage-ledger-complete-day 的 jq 只读两份 state 输入。要求两路 bootstrap_complete=true、午夜北京时区 last_completed，取较早的排他边界日期，不减一天；输出仅 complete_until_date。原稿截至 10 月 11 日、source 说明记到当天零点，不能用本轮读旧账本的观察日期推进。无写入、网络或业务模块执行。",
+    "observation_basis": "unknown"
   },
   "r3-phone-direct-method-modified": {
     "argv": [
@@ -1674,7 +1793,8 @@
     "owner_project": "agents",
     "output": "json",
     "timeout": 20,
-    "source_evidence": "仅固定Git或gh api元数据、Skill方法常量或Get-ScheduledTask/Info读取；无提交标题、财务快照、账单、业务采集或写入；stdout仅给网站所需方法常量和状态。"
+    "source_evidence": "仅固定Git或gh api元数据、Skill方法常量或Get-ScheduledTask/Info读取；无提交标题、财务快照、账单、业务采集或写入；stdout仅给网站所需方法常量和状态。",
+    "observation_basis": "live_read"
   },
   "r3-finance-method-metadata": {
     "argv": [
@@ -1690,7 +1810,8 @@
     "owner_project": "personal-finance",
     "output": "json",
     "timeout": 30,
-    "source_evidence": "仅固定Git或gh api元数据、Skill方法常量或Get-ScheduledTask/Info读取；无提交标题、财务快照、账单、业务采集或写入；stdout仅给网站所需方法常量和状态。"
+    "source_evidence": "仅固定Git或gh api元数据、Skill方法常量或Get-ScheduledTask/Info读取；无提交标题、财务快照、账单、业务采集或写入；stdout仅给网站所需方法常量和状态。",
+    "observation_basis": "live_read"
   },
   "r3-finance-reminder-task-state": {
     "argv": [
@@ -1705,7 +1826,8 @@
     "owner_project": "pcconfig",
     "output": "json",
     "timeout": 20,
-    "source_evidence": "仅固定Git或gh api元数据、Skill方法常量或Get-ScheduledTask/Info读取；无提交标题、财务快照、账单、业务采集或写入；stdout仅给网站所需方法常量和状态。"
+    "source_evidence": "仅固定Git或gh api元数据、Skill方法常量或Get-ScheduledTask/Info读取；无提交标题、财务快照、账单、业务采集或写入；stdout仅给网站所需方法常量和状态。",
+    "observation_basis": "live_read"
   },
   "r3-phone-collector-method-metadata": {
     "argv": [
@@ -1721,6 +1843,7 @@
     "owner_project": "phone-collector",
     "output": "json",
     "timeout": 20,
-    "source_evidence": "只读手机App周期源码、电脑现行任务注册源码及Git提交时间，不连手机、不读取定位/使用/装机记录、不安装或运行采集。"
+    "source_evidence": "只读手机App周期源码、电脑现行任务注册源码及Git提交时间，不连手机、不读取定位/使用/装机记录、不安装或运行采集。",
+    "observation_basis": "live_read"
   }
 }

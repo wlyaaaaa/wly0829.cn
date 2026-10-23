@@ -2101,7 +2101,8 @@
       "page_pattern": "\\#\\ 全部功能（([\\d,]+(?:\\.\\d+)?)\\ 项）",
       "measurement_scope": "指定JSON逐键/数组索引取[\"registry\", \"features\"]；全部数组元素个数，无状态过滤。",
       "scope_status": "verified",
-      "field": "screens[7].text"
+      "field": "screens[7].text",
+      "observation_basis": "live_read"
     },
     {
       "id": "ai-cli-profile-manager-n-routes-0",
@@ -2222,7 +2223,8 @@
       "page_pattern": "本机\\s*([\\d,]+)\\s*个",
       "measurement_scope": "指定JSON逐键/数组索引取[\"profiles\"]；全部数组元素个数，无状态过滤。",
       "scope_status": "verified",
-      "field": "screens[0].text"
+      "field": "screens[0].text",
+      "observation_basis": "live_read"
     },
     {
       "id": "ai-cli-profile-manager-text-0-70",
@@ -2249,7 +2251,8 @@
       "page_pattern": "云端\\s*([\\d,]+)\\s*个",
       "measurement_scope": "指定JSON逐键/数组索引取[\"profiles\"]；全部数组元素个数，无状态过滤。",
       "scope_status": "verified",
-      "field": "screens[0].text"
+      "field": "screens[0].text",
+      "observation_basis": "live_read"
     },
     {
       "id": "ai-cli-profile-manager-n-desktop-tasks-0",
@@ -2530,7 +2533,8 @@
       "page_pattern": "- \\*\\*([\\d,.]+) GiB\\*\\*　退役前最后一轮巡查时 Z 盘只用了这么多",
       "measurement_scope": "指定JSON逐键/数组索引取[\"Metrics\", \"UsedGB\"]；字段原始单值。保留1位小数，五入。",
       "scope_status": "verified",
-      "field": "screens[0].text"
+      "field": "screens[0].text",
+      "observation_basis": "unknown"
     },
     {
       "id": "ramdisk-guardian-n-tests-0",
@@ -2590,7 +2594,8 @@
       "page_pattern": "Z 盘（([\\d,.]+) GiB）",
       "measurement_scope": "指定JSON逐键/数组索引取[\"Metrics\", \"TotalGB\"]；字段原始单值。",
       "scope_status": "verified",
-      "field": "screens[0].text"
+      "field": "screens[0].text",
+      "observation_basis": "unknown"
     },
     {
       "id": "ramdisk-guardian-text-0-81",
@@ -2869,7 +2874,11 @@
       "measurement_scope": "当前manifest.files数组长度，不读条目正文。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "^([\\d,]+) 个文件｜"
+      "page_pattern": "^([\\d,]+) 个文件｜",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "created_utc"
+      ]
     },
     {
       "id": "steam-millennium-config-backup-n-size-0",
@@ -3027,7 +3036,8 @@
       "measurement_scope": "当前快照配置enabledPlugins数组长度。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "平时开着其中 ([\\d,]+) 个"
+      "page_pattern": "平时开着其中 ([\\d,]+) 个",
+      "observation_basis": "unknown"
     },
     {
       "id": "steam-millennium-config-backup-n-enabled-1",
@@ -3058,7 +3068,8 @@
       "measurement_scope": "已存在themes.activeTheme非空时1，空时0；缺字段报Unknown。",
       "scope_status": "verified",
       "field": "registry.numbers[4].text",
-      "page_pattern": "、([\\d,]+) 套主题在用"
+      "page_pattern": "、([\\d,]+) 套主题在用",
+      "observation_basis": "unknown"
     },
     {
       "id": "steam-millennium-config-backup-n-code-0",
@@ -3371,7 +3382,11 @@
       "measurement_scope": "指定JSON逐键/数组索引取[\"Exposure\", \"SunshinePublicPorts\"]；全部数组元素个数，无状态过滤。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "binding_verified_at": "2026-10-11T17:56:33+08:00"
+      "binding_verified_at": "2026-10-11T17:56:33+08:00",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "ObservedUtc"
+      ]
     },
     {
       "id": "sunshine-remote-streaming-n-test-groups-0",
@@ -3578,7 +3593,8 @@
       "page_pattern": "Sunshine 里现在记着 ([\\d,]+) 个",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
       "measurement_scope": "sunshine_state.json.root.named_devices 的数组长度；仅取已配对记录数量，不输出客户端设备名、UUID、证书或密码字段。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "live_read"
     },
     {
       "id": "sunshine-remote-streaming-n-false-reports-0",
@@ -3955,7 +3971,8 @@
       "page_pattern": "\\*\\*自动任务人话目录\\*\\*　([\\d,]+) 条说明",
       "measurement_scope": "指定JSON逐键/数组索引取[\"entries\"]；全部数组元素个数，无状态过滤。",
       "scope_status": "verified",
-      "field": "screens[21].text"
+      "field": "screens[21].text",
+      "observation_basis": "live_read"
     },
     {
       "id": "pcconfig-n-tasks-enabled-0",
@@ -4243,7 +4260,11 @@
       "page_pattern": "- \\*\\*([\\d,.]+) GiB\\*\\*　加密系统镜像，",
       "measurement_scope": "指定JSON逐键/数组索引取[\"chain_bytes\"]；字段原始单值。原值乘9.313225746154785e-10换算页面单位。保留0位小数，五入。",
       "scope_status": "verified",
-      "field": "screens[0].text"
+      "field": "screens[0].text",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "observed_utc"
+      ]
     },
     {
       "id": "pcconfig-text-0",
@@ -4296,7 +4317,8 @@
       "scope_status": "verified",
       "scope_evidence": "git show 28f393b2:registries/pending_acceptance.json 后取 items 数组长度",
       "field": "screens[10].text",
-      "page_pattern": "清单里（\\d+ 月 \\d+ 日 \\d+:\\d+ 共登记 ([\\d,]+) 项"
+      "page_pattern": "清单里（\\d+ 月 \\d+ 日 \\d+:\\d+ 共登记 ([\\d,]+) 项",
+      "observation_basis": "live_read"
     },
     {
       "id": "pcconfig-n-disks-0",
@@ -4873,7 +4895,8 @@
       "measurement_scope": "指定JSON逐键/数组索引取[\"tests\"]；全部数组元素个数，无状态过滤。已从提交e2f19d4e复算tests数组长度=196，包括全部登记状态，不计excluded或maintenance。",
       "scope_status": "verified",
       "scope_evidence": "git show e2f19d4e174c3417be5482c71fed07c5ce2fdc46:tests/test-registry.json 后取 tests 数组长度",
-      "field": "screens[11].text"
+      "field": "screens[11].text",
+      "observation_basis": "live_read"
     },
     {
       "id": "pcconfig-n-tests-1",
@@ -5499,7 +5522,8 @@
       "page_pattern": "([\\d,]+(?:\\.\\d+)?)\\ 项｜测试无失败（",
       "scope_status": "verified",
       "measurement_scope": "WSL现役current验收acceptance.json ok=true/unit_exit_code=0，unit.log Ran/OK跳过计数；official_models直接目录数和du -sb按GiB四舍五入一位",
-      "field": "screens[0].text"
+      "field": "screens[0].text",
+      "observation_basis": "unknown"
     },
     {
       "id": "devconfig-backup-n-sources-0",
@@ -5597,7 +5621,11 @@
       "field": "screens[0].text",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
       "measurement_scope": "成功微信热备回执file_count单值；实际备份所选文件数，不等于聊天条数；不输出私人条目。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "devconfig-backup-n-wechat-files-1",
@@ -5634,7 +5662,11 @@
       "field": "screens[0].text",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
       "measurement_scope": "成功微信热备回执bytes单值；只读回执统计，不输出files条目、不打开微信数据库；大小以2^30换算GiB，保留1位小数。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "devconfig-backup-n-config-files-0",
@@ -5667,7 +5699,11 @@
       "measurement_scope": "指定JSON逐键/数组索引取[\"file_count\"]；字段原始单值。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "binding_verified_at": "2026-10-11T17:56:33+08:00"
+      "binding_verified_at": "2026-10-11T17:56:33+08:00",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "devconfig-backup-n-config-size-0",
@@ -5703,7 +5739,11 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "最新一个开发配置包，压缩后 ([\\d,.]+) MiB",
-      "binding_verified_at": "2026-10-11T17:56:33+08:00"
+      "binding_verified_at": "2026-10-11T17:56:33+08:00",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "devconfig-backup-n-config-size-1",
@@ -5738,7 +5778,8 @@
       "page_pattern": "压缩前 ([\\d,.]+) GiB",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
       "measurement_scope": "latest.zip.manifest.json.bytes为当前成功配置包压缩前有效载荷总字节数；以2^30换算GiB保留2位，不能用receipt.package_bytes替代。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "unknown"
     },
     {
       "id": "devconfig-backup-n-tasks-0",
@@ -9309,7 +9350,11 @@
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点清单所列逻辑文件length总和；十进制GB=字节/10^9，四舍五入到1位；不是源目录当前大小或去重对象库占盘量。",
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00"
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "codex-memory-n-conv-size-1",
@@ -9345,7 +9390,11 @@
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点成功收录的逻辑文件数；与同point manifest.file_count及files数组长度核对，不用当前源目录文件数代替。",
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00"
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "codex-memory-n-reuse-0",
@@ -11942,7 +11991,8 @@
       "measurement_scope": "生产screen.dataRefreshMs=1000ms/1000；TestRefreshDefaults与Hybrid刷新源码交叉核对，非像素实测。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "\\*\\*([\\d]+(?:\\.\\d+)?) 秒一刷"
+      "page_pattern": "\\*\\*([\\d]+(?:\\.\\d+)?) 秒一刷",
+      "observation_basis": "live_read"
     },
     {
       "id": "pc-panel-hub-frames-20260927",
@@ -12583,7 +12633,8 @@
       "measurement_scope": "文件/行数取当前Git跟踪且文件存在的全部类型（含测试、文档、配置，不含未跟踪releases）；逐行包括空行、末尾无LF残行。测试数仅test-registry.json数组长度，不是通过数；提交数为main可达提交，不是分支或最近一个月。",
       "scope_status": "verified",
       "observed_at": "2026-10-11T17:54:12+08:00",
-      "refreshed_value": 86
+      "refreshed_value": 86,
+      "observation_basis": "live_read"
     },
     {
       "id": "agents-volume-commits",
@@ -12635,7 +12686,8 @@
       "measurement_scope": "当前本页registry.groups数组长度；不是成员数，不使用旧生成脚本。",
       "scope_status": "verified",
       "observed_at": "2026-10-12T02:19:41+08:00",
-      "refreshed_value": 7
+      "refreshed_value": 7,
+      "observation_basis": "live_read"
     },
     {
       "id": "agents-cutoff-first",
@@ -12764,7 +12816,11 @@
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点清单所列逻辑文件length总和；十进制GB=字节/10^9，四舍五入到1位；不是源目录当前大小或去重对象库占盘量。",
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00"
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "codex-memory-n-conv-files-screen04",
@@ -12797,7 +12853,11 @@
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点成功收录的逻辑文件数；与同point manifest.file_count及files数组长度核对，不用当前源目录文件数代替。",
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00"
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "codex-memory-n-encrypted-disks-0",
@@ -12855,7 +12915,11 @@
       "observed_at": "2026-10-11T17:59:16+08:00",
       "source_observed_at": "2026-10-11T06:01:50.2889551Z",
       "field": "screens[1].text",
-      "page_pattern": "系统镜像带着它们，只留 ([\\d,]+) 天"
+      "page_pattern": "系统镜像带着它们，只留 ([\\d,]+) 天",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "observed_utc"
+      ]
     },
     {
       "id": "codex-memory-as-of-screen01",
@@ -14811,7 +14875,8 @@
       "scope_status": "verified",
       "measurement_scope": "同原页面口径：outputs objective-result audio.raw_sha256去重且排除测试前缀；dictation/runtime.log两种识别行elapsed_sec/seconds合算；models整目录文件大小/安装模型根目录数；cloud-jobs结果status=succeeded",
       "field": "screens[0].text",
-      "page_pattern": "\\*\\*([\\d.]+) 秒\\*\\*｜听写"
+      "page_pattern": "\\*\\*([\\d.]+) 秒\\*\\*｜听写",
+      "observation_basis": "unknown"
     },
     {
       "id": "chinese-asr-dictation-samples",
@@ -14836,7 +14901,8 @@
       "scope_status": "verified",
       "measurement_scope": "同原页面口径：outputs objective-result audio.raw_sha256去重且排除测试前缀；dictation/runtime.log两种识别行elapsed_sec/seconds合算；models整目录文件大小/安装模型根目录数；cloud-jobs结果status=succeeded",
       "field": "screens[0].text",
-      "page_pattern": "共 ([\\d,]+) 段）"
+      "page_pattern": "共 ([\\d,]+) 段）",
+      "observation_basis": "unknown"
     },
     {
       "id": "chinese-asr-models-count",
@@ -14911,7 +14977,8 @@
       "scope_status": "verified",
       "measurement_scope": "同原页面口径：outputs objective-result audio.raw_sha256去重且排除测试前缀；dictation/runtime.log两种识别行elapsed_sec/seconds合算；models整目录文件大小/安装模型根目录数；cloud-jobs结果status=succeeded",
       "field": "screens[0].text",
-      "page_pattern": "\\*\\*([\\d,]+) 次\\*\\*｜云端复核成功"
+      "page_pattern": "\\*\\*([\\d,]+) 次\\*\\*｜云端复核成功",
+      "observation_basis": "unknown"
     },
     {
       "id": "localocr-n-tests-skipped",
@@ -14936,7 +15003,8 @@
       "scope_status": "verified",
       "measurement_scope": "current的unit.log明确OK(skipped=N)，并核验acceptance.json ok=true及unit_exit_code=0",
       "field": "screens[0].text",
-      "page_pattern": "（([\\d,]+) 项按条件跳过）"
+      "page_pattern": "（([\\d,]+) 项按条件跳过）",
+      "observation_basis": "unknown"
     },
     {
       "id": "localocr-usage-last",
@@ -15214,7 +15282,8 @@
       "scope_status": "verified",
       "measurement_scope": "项目页面registry.features真实条数；技能链接文案与项目共用功能登记",
       "field": "screens[3].text",
-      "page_pattern": "六组共 ([\\d,]+) 项"
+      "page_pattern": "六组共 ([\\d,]+) 项",
+      "observation_basis": "live_read"
     },
     {
       "id": "ai-cli-profile-manager-n-tools-0",
@@ -16679,7 +16748,8 @@
       "field": "screens[0].text",
       "page_pattern": "\\*\\*([\\d]+)–\\d+ 份\\*\\*｜一个交付包只收我点名的资料",
       "scope_status": "verified",
-      "measurement_scope": "批量接口 schema sources.minItems；已与 batch.py _prepare 的 2 <= len <= 5 校验一致。"
+      "measurement_scope": "批量接口 schema sources.minItems；已与 batch.py _prepare 的 2 <= len <= 5 校验一致。",
+      "observation_basis": "live_read"
     },
     {
       "id": "work-delivery-copilot-n-sources-max",
@@ -16705,7 +16775,8 @@
       "field": "screens[0].text",
       "page_pattern": "\\*\\*\\d+–([\\d]+) 份\\*\\*｜一个交付包只收我点名的资料",
       "scope_status": "verified",
-      "measurement_scope": "批量接口 schema sources.maxItems；已与 batch.py _prepare 的 2 <= len <= 5 校验一致。"
+      "measurement_scope": "批量接口 schema sources.maxItems；已与 batch.py _prepare 的 2 <= len <= 5 校验一致。",
+      "observation_basis": "live_read"
     },
     {
       "id": "work-delivery-copilot-n-files-0",
@@ -17455,7 +17526,11 @@
       "source_location": "G盘Claude/current.json现存元数据['file_count']；不重新逐文件校验。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": false,
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b7-codex-memory-claude-project-memory-bytes",
@@ -17479,7 +17554,11 @@
       "source_location": "G盘Claude/current.json现存元数据['total_size_bytes']；不重新逐文件校验。",
       "source_project": "codex-memory",
       "private": true,
-      "historical": false
+      "historical": false,
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b7-codex-memory-gemini-workspace-memory-task-state",
@@ -17729,7 +17808,8 @@
       "historical": false,
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
       "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "observation_basis": "unknown"
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-g-bytes",
@@ -17758,7 +17838,8 @@
       "historical": false,
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
       "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "observation_basis": "unknown"
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-reuse-gb",
@@ -17829,7 +17910,8 @@
       "historical": false,
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
       "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "observation_basis": "unknown"
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-h-gb",
@@ -17858,7 +17940,8 @@
       "historical": false,
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
       "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "observation_basis": "unknown"
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-cold-coverage-percent",
@@ -17885,7 +17968,11 @@
       "historical": false,
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
       "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b7-codex-memory-isolated-disaster-recovery-g-file-count",
@@ -17914,7 +18001,8 @@
       "historical": false,
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
       "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "observation_basis": "unknown"
     },
     {
       "id": "b7-codex-memory-isolated-disaster-recovery-h-file-count",
@@ -17943,7 +18031,8 @@
       "historical": false,
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
       "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "observation_basis": "unknown"
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-g-file-count",
@@ -17972,7 +18061,8 @@
       "historical": false,
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
       "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "observation_basis": "unknown"
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-g-bytes",
@@ -18001,7 +18091,8 @@
       "historical": false,
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
       "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "observation_basis": "unknown"
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-reuse-gb",
@@ -18072,7 +18163,8 @@
       "historical": false,
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
       "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "observation_basis": "unknown"
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-h-gb",
@@ -18103,7 +18195,8 @@
       "historical": false,
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
       "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "observation_basis": "unknown"
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-hot-warning-count",
@@ -18131,7 +18224,11 @@
       "historical": false,
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
       "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b7-codex-memory-isolated-disaster-recovery-conversation-task-result",
@@ -19034,7 +19131,8 @@
           "collector_event_dates",
           "last_stored_event_day"
         ]
-      }
+      },
+      "observation_basis": "coverage_end"
     },
     {
       "id": "b7-personal-expression-explain-to-me-usage-collected-through",
@@ -19915,7 +20013,8 @@
       "historical": false,
       "page_pattern": "截至 \\d{1,2}\\s*月\\s*\\d{1,2}\\s*日，(三)个默认模型配置",
       "measurement_scope": "defaults 对象的登记键数；三表示3，仅证明默认配置数量。中文表述需Opus核对，不直接把三替成数字。；current_value保留页面实际表述'三'，其源值语义为3；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "live_read"
     },
     {
       "id": "b7-localocr-document-structure-config-use_table_recognition",
@@ -19942,7 +20041,8 @@
       "historical": false,
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
       "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "live_read"
     },
     {
       "id": "b7-localocr-document-structure-config-use_formula_recognition",
@@ -19969,7 +20069,8 @@
       "historical": false,
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
       "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "live_read"
     },
     {
       "id": "b7-localocr-document-structure-config-use_seal_recognition",
@@ -19996,7 +20097,8 @@
       "historical": false,
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
       "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "live_read"
     },
     {
       "id": "b7-localocr-document-structure-config-use_region_detection",
@@ -20023,7 +20125,8 @@
       "historical": false,
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
       "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "live_read"
     },
     {
       "id": "b7-localocr-document-structure-config-format_block_content",
@@ -20050,7 +20153,8 @@
       "historical": false,
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
       "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "live_read"
     },
     {
       "id": "b7-localocr-document-structure-config-use_chart_recognition",
@@ -20077,7 +20181,8 @@
       "historical": false,
       "page_pattern": "use_chart_recognition=(false)",
       "measurement_scope": "本页明确 use_chart_recognition=false；只读 pp-structure-v3 对应布尔值。；current_value保留页面实际表述'false'，其源值语义为False；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "live_read"
     },
     {
       "id": "b7-localocr-document-structure-config-profile-identity",
@@ -20103,7 +20208,8 @@
       "historical": false,
       "page_pattern": "- (pp-structure-v3) profile 使用",
       "measurement_scope": "同时读取 profiles[2].id 确认上述布尔选项属于本页 pp-structure-v3；模型顺序/身份变化时必须先核对来源身份和当前页面，不能把另一Profile选项当作结构配置。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "live_read"
     },
     {
       "id": "b7-agents-context-evidence-owner-decision-sections",
@@ -20331,7 +20437,8 @@
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "读取现役安装清单 install_epoch，只表示安装世代，不证明程序字节与源码一致或功能验收。",
-      "source_location": "读取现役安装清单 install_epoch，只表示安装世代，不证明程序字节与源码一致或功能验收。"
+      "source_location": "读取现役安装清单 install_epoch，只表示安装世代，不证明程序字节与源码一致或功能验收。",
+      "observation_basis": "live_read"
     },
     {
       "id": "pcconfig-owner-takeover-install-epoch",
@@ -20356,7 +20463,8 @@
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "读取现役安装清单 install_epoch，只表示安装世代，不证明程序字节与源码一致或功能验收。",
-      "source_location": "读取现役安装清单 install_epoch，只表示安装世代，不证明程序字节与源码一致或功能验收。"
+      "source_location": "读取现役安装清单 install_epoch，只表示安装世代，不证明程序字节与源码一致或功能验收。",
+      "observation_basis": "live_read"
     },
     {
       "id": "pcconfig-secrets-providers-install-epoch",
@@ -20381,7 +20489,8 @@
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "读取现役安装清单 install_epoch，只表示安装世代，不证明程序字节与源码一致或功能验收。",
-      "source_location": "读取现役安装清单 install_epoch，只表示安装世代，不证明程序字节与源码一致或功能验收。"
+      "source_location": "读取现役安装清单 install_epoch，只表示安装世代，不证明程序字节与源码一致或功能验收。",
+      "observation_basis": "live_read"
     },
     {
       "id": "pcconfig-authorization-files-install-file-count",
@@ -20406,7 +20515,8 @@
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "只数现役安装清单 files 数组；不把清单项数当真实文件逐项哈希验证。",
-      "source_location": "只数现役安装清单 files 数组；不把清单项数当真实文件逐项哈希验证。"
+      "source_location": "只数现役安装清单 files 数组；不把清单项数当真实文件逐项哈希验证。",
+      "observation_basis": "live_read"
     },
     {
       "id": "pcconfig-secrets-providers-install-file-count",
@@ -20431,7 +20541,8 @@
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "只数现役安装清单 files 数组；不把清单项数当真实文件逐项哈希验证。",
-      "source_location": "只数现役安装清单 files 数组；不把清单项数当真实文件逐项哈希验证。"
+      "source_location": "只数现役安装清单 files 数组；不把清单项数当真实文件逐项哈希验证。",
+      "observation_basis": "live_read"
     },
     {
       "id": "pcconfig-machine-facts-registry-file-count",
@@ -20480,7 +20591,8 @@
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "project_config_keys.json keys 数组长度，不输出键值。",
-      "source_location": "project_config_keys.json keys 数组长度，不输出键值。"
+      "source_location": "project_config_keys.json keys 数组长度，不输出键值。",
+      "observation_basis": "live_read"
     },
     {
       "id": "pcconfig-machine-facts-project-count",
@@ -20505,7 +20617,11 @@
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "总索引 repository-paths.json 的 entries 长度；authoritative=false，只数上次成功发现的本地仓库导航，不含无本地副本的远端仓库。",
-      "source_location": "GitHub 总索引 config/repository-paths.json；Git/GitHub 才是事实源，此处读取成功发现后的非权威导航快照。"
+      "source_location": "GitHub 总索引 config/repository-paths.json；Git/GitHub 才是事实源，此处读取成功发现后的非权威导航快照。",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "observed_at"
+      ]
     },
     {
       "id": "pcconfig-machine-facts-restore-anchor-count",
@@ -20530,7 +20646,8 @@
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "project_restore_anchors.json anchors 数组全量长度。",
-      "source_location": "project_restore_anchors.json anchors 数组全量长度。"
+      "source_location": "project_restore_anchors.json anchors 数组全量长度。",
+      "observation_basis": "live_read"
     },
     {
       "id": "ramdisk-guardian-installation-and-application-recovery-task-period",
@@ -26331,7 +26448,11 @@
       "historical": false,
       "measurement_scope": "最新成功回执 package_bytes 原始字节，不读包内容、不代表这次解包验收。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-042",
@@ -26359,7 +26480,11 @@
       "historical": false,
       "measurement_scope": "最新成功回执 package_bytes 原始字节，不读包内容、不代表这次解包验收。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-043",
@@ -26387,7 +26512,11 @@
       "historical": false,
       "measurement_scope": "最新成功回执 file_count；限当前包正文，不是旧历史恢复文件数。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-044",
@@ -26415,7 +26544,11 @@
       "historical": false,
       "measurement_scope": "最新成功回执 file_count；限当前包正文，不是旧历史恢复文件数。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-046",
@@ -26443,7 +26576,8 @@
       "historical": false,
       "measurement_scope": "payload-manifest.v1 bytes 原始文件总字节，不能用压缩包大小替代。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "unknown"
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-047",
@@ -26473,7 +26607,11 @@
       "historical": false,
       "measurement_scope": "package_bytes/2^20 四舍五入到整数 MiB。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-tiered-distribution-anchor-048",
@@ -26501,7 +26639,11 @@
       "historical": false,
       "measurement_scope": "最新成功回执 package_bytes 原始字节，不读包内容、不代表这次解包验收。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-tiered-distribution-anchor-049",
@@ -26529,7 +26671,11 @@
       "historical": false,
       "measurement_scope": "最新成功回执 file_count；限当前包正文，不是旧历史恢复文件数。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-tiered-distribution-anchor-050",
@@ -26557,7 +26703,8 @@
       "historical": false,
       "measurement_scope": "payload-manifest.v1 bytes 原始文件总字节，不能用压缩包大小替代。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "unknown"
     },
     {
       "id": "b9-tools-devconfig-backup-tiered-distribution-anchor-051",
@@ -26587,7 +26734,11 @@
       "historical": false,
       "measurement_scope": "package_bytes/2^20 四舍五入到整数 MiB。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-tiered-distribution-anchor-052",
@@ -26617,7 +26768,8 @@
       "historical": false,
       "measurement_scope": "manifest.bytes/2^30 保留两位小数。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "unknown"
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-053",
@@ -26841,7 +26993,11 @@
       "historical": false,
       "measurement_scope": "最近成功回执 sqlite_snapshots 数组个数；不是本次重跑完整性检查。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-tiered-distribution-anchor-061",
@@ -26897,7 +27053,11 @@
       "historical": false,
       "measurement_scope": "该成功回执 file_warnings 项数；本页面仅一条且类型为 source_disappeared，类型变化交语义 Owner。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-anchor-063",
@@ -26925,7 +27085,11 @@
       "historical": false,
       "measurement_scope": "wechat.hot-backup-receipt.v2 file_count，只取汇总不读取聊天正文。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-anchor-068",
@@ -26953,7 +27117,11 @@
       "historical": false,
       "measurement_scope": "wechat.hot-backup-receipt.v2 file_count，只取汇总不读取聊天正文。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-anchor-070",
@@ -26981,7 +27149,11 @@
       "historical": false,
       "measurement_scope": "v2 Hot 回执原始 bytes，不重哈希整库。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-anchor-071",
@@ -27011,7 +27183,11 @@
       "historical": false,
       "measurement_scope": "v2 Hot 回执 bytes/10^9 保留两位小数，此处 GB 不是 GiB。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-anchor-072",
@@ -27041,7 +27217,11 @@
       "historical": false,
       "measurement_scope": "v2 Hot 回执 bytes/10^9 保留两位小数，此处 GB 不是 GiB。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-emerald-veil-native-bubbles-idle-overlay-anchor-073",
@@ -28004,7 +28184,8 @@
       "historical": false,
       "measurement_scope": "enabledPlugins数组长度，不表示插件已经加载或功能已跑。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "unknown"
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-plugin-manifest-and-install-state-tracking-anchor-114",
@@ -28117,7 +28298,8 @@
       "historical": false,
       "measurement_scope": "enabledPlugins数组长度。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "unknown"
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-anchor-118",
@@ -28175,7 +28357,11 @@
       "historical": false,
       "measurement_scope": "当前snapshot-manifest files数组长度；不拿历史隔离采集20文件覆盖。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "created_utc"
+      ]
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-anchor-120",
@@ -28205,7 +28391,8 @@
       "historical": false,
       "measurement_scope": "对应主题已保存条件/颜色字典键数量，非安装组件或真实应用效果。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "unknown"
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-anchor-121",
@@ -28235,7 +28422,8 @@
       "historical": false,
       "measurement_scope": "对应主题已保存条件/颜色字典键数量，非安装组件或真实应用效果。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "unknown"
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-anchor-122",
@@ -28265,7 +28453,8 @@
       "historical": false,
       "measurement_scope": "对应主题已保存条件/颜色字典键数量，非安装组件或真实应用效果。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "unknown"
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-anchor-123",
@@ -28295,7 +28484,8 @@
       "historical": false,
       "measurement_scope": "对应主题已保存条件/颜色字典键数量，非安装组件或真实应用效果。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "unknown"
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-anchor-124",
@@ -28323,7 +28513,11 @@
       "historical": false,
       "measurement_scope": "当前清单所选20文件，不由未提交文件数推导。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "created_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-extra-112",
@@ -28407,7 +28601,11 @@
       "historical": false,
       "measurement_scope": "最近成功Drive回执file_count，不与Hot混计、不联网重新列对象。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-extra-115",
@@ -28435,7 +28633,11 @@
       "historical": false,
       "measurement_scope": "最近成功Drive回执bytes，不拿G Hot当前代替。",
       "scope_status": "verified",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\tools-notes.md",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "b9-tools-meshclip-kit-kde-connect-pairing-sync-extra-116",
@@ -30556,7 +30758,8 @@
       "private": false,
       "historical": false,
       "measurement_scope": "现行git-artifact-governance.v1对应数组长度；只机械数登记项，未验每项使用方、Owner/retention语义或本文完整截止。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "live_read"
     },
     {
       "id": "b9-github-index-worktree-sync-governance-repository_overrides-5",
@@ -30583,7 +30786,8 @@
       "private": false,
       "historical": false,
       "measurement_scope": "现行git-artifact-governance.v1对应数组长度；只机械数登记项，未验每项使用方、Owner/retention语义或本文完整截止。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "live_read"
     },
     {
       "id": "b9-github-index-worktree-sync-governance-retentions-5",
@@ -30610,7 +30814,8 @@
       "private": false,
       "historical": false,
       "measurement_scope": "现行git-artifact-governance.v1对应数组长度；只机械数登记项，未验每项使用方、Owner/retention语义或本文完整截止。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "observation_basis": "live_read"
     },
     {
       "id": "b9-github-index-repository-ledger-saved-baseline-count-4-134",
@@ -31052,7 +31257,11 @@
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点成功收录的逻辑文件数；与同point manifest.file_count及files数组长度核对，不用当前源目录文件数代替。",
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00"
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "int3-codex-memory-g-comparison-gb",
@@ -31087,7 +31296,11 @@
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点清单所列逻辑文件length总和；十进制GB=字节/10^9，四舍五入到1位；不是源目录当前大小或去重对象库占盘量。",
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00"
+      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "completed_utc"
+      ]
     },
     {
       "id": "int3-codex-memory-h-comparison-files",
@@ -31119,7 +31332,8 @@
       ],
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
       "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "observation_basis": "unknown"
     },
     {
       "id": "int3-codex-memory-h-comparison-gb",
@@ -31153,7 +31367,8 @@
       ],
       "observed_at": "2026-10-20T07:41:45.0677245+08:00",
       "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "observation_basis": "unknown"
     },
     {
       "id": "int3-codex-memory-g-no-file-warnings",
