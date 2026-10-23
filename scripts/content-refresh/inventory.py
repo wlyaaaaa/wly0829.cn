@@ -171,7 +171,7 @@ def build_inventory(pages_root, records, entries=None, policy=None, targeted=())
                 numeric_cutoff = bool(re.search(r"(?:数字|数量|计数|统计|总数)\s*截至", context))
                 direct = [r for r in active if r["id"] in valid_ids and r.get("automatic")
                           and r.get("scope_status") == "verified" and not r.get("qualifies")
-                          and re.fullmatch(DATE_POINT, str(r.get("current_value", "")))
+                          and re.fullmatch(DATE_POINT + r"(?:[ T]\d{1,2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:\d{2})?)?", str(r.get("current_value", "")))
                           and (r.get("page_pattern") or "start" in r or kind == "status_line.as_of")]
                 event = bool(EVENT_DATE.search(context) or re.search(r"读取截至.*已入库|截至.*已采到的部分", context))
                 direct = [r for r in direct if (event and not numeric_cutoff)

@@ -214,10 +214,14 @@ class NumberEditsTests(unittest.TestCase):
         self.page["screens"][0]["text"] = "，".join(self.labels) + "，截至 10 月 9 日 08:06"
         self.save()
         self.rows[-1].update(page_pattern=r"截至 (\d+ 月 \d+ 日 \d+:\d+)", old_value="10 月 9 日 08:06")
-        report = apply_edits(self.root, self.build())
+        result = dict(schema="content-refresh.result.v1", run_id="timed", rows=self.rows)
+        report = apply_edits(self.root, build_number_edits(self.root, result))
         self.assertFalse(report["skipped"])
         self.assertIn("截至 10 月 11 日 16:03", json.loads(self.path.read_text("utf-8"))["screens"][0]["text"])
         self.assertIn("date", {r["record_id"] for r in report["record_readback"]})
+        from freshness import close_run
+        closure = close_run(self.root, result, report)
+        self.assertEqual({r["record_id"]: r["status"] for r in closure["rows"]}["date"], "applied_readback_verified")
 
     def test_field_pattern_and_cross_field_qualified_coverage_date(self):
         self.page['screens'][0]['text'] = '当前材料有 165 份'

@@ -177,7 +177,9 @@ def close_run(root, result, report=None, dist=None):
                     md_path = root / "site-astro/src/content/pages" / (row["page"] + ".md")
                     verified = fields and all(verified_field(root, f) for f in fields)
                     verified = verified and md.get("status") == "verified" and md_path.is_file() and hashlib.sha256(md_path.read_bytes()).hexdigest() == md.get("sha256")
-                    if row["id"] in applied and equal(row["new_value"]) and verified:
+                    # 带时分的截至写的是取数时刻，记录新值只有日期；按应用时实际写入的文字核对。
+                    written = equal(row["new_value"]) or proof and actual == proof["locator"].get("expected")
+                    if row["id"] in applied and written and verified:
                         if dist is not None:
                             display = display_readback(root, dist, row["page"], proof.get("fragment", str(actual)))
                             if display != "verified": raise ValueError("成品未找到新片段")
