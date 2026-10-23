@@ -73,13 +73,16 @@
     // hidden 和 pagehide 可能连续触发；同页累计值只发一次，恢复后继续增加。
     if (lastLeave !== visibleMs) { lastLeave = visibleMs; send('leave', true); }
   };
-  const resume = () => { if (!document.hidden && visibleSince === null) visibleSince = performance.now(); };
+  const resume = () => {
+    if (!document.hidden && visibleSince === null) { visibleSince = performance.now(); send('resume'); }
+  };
   setTimeout(() => send('view'), 0);
   if (document.readyState === 'complete') setTimeout(() => send('perf'), 0);
   else addEventListener('load', () => setTimeout(() => send('perf'), 0), {once: true});
   document.addEventListener('visibilitychange', () => document.hidden ? leave() : resume());
   addEventListener('pagehide', leave);
   addEventListener('pageshow', event => { if (event.persisted) resume(); });
+  setInterval(() => { if (!document.hidden && visibleSince !== null) send('heartbeat'); }, 15000);
 })();</script>
 <script data-footer-email-copy>(() => {
   let notice, timer;
