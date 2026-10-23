@@ -234,6 +234,36 @@ class VisitorTests(unittest.TestCase):
         self.assertEqual(run.call_args.kwargs["timeout"], 25)
         sleep.assert_not_called()
 
+    def test_deep_read_shares_two_attempts_for_network_and_incomplete(self):
+        args = SimpleNamespace(aliyun="aliyun", profile="website-images", sls_project="oss-log-test",
+                               sls_logstore="oss-log-store", deep_read=True)
+        start = datetime(2026, 10, 12, 10, tzinfo=query.TZ)
+        end = start + timedelta(hours=1)
+        eof = subprocess.CompletedProcess([], 2, b"", b"request failed: EOF secret-value")
+        denied = subprocess.CompletedProcess([], 2, b"", b"AccessDenied secret-value")
+        complete = subprocess.CompletedProcess([], 0, b'{"meta":{"count":0,"progress":"Complete"},"data":[]}', b"")
+        incomplete = subprocess.CompletedProcess([], 0, b'{"meta":{"count":0,"progress":"Incomplete"},"data":[]}', b"")
+        cases = (("eof_success", [eof, complete], None),
+                 ("timeout_success", [subprocess.TimeoutExpired("aliyun", 25), complete], None),
+                 ("persistent_eof", [eof, eof], "连接中断"),
+                 ("access_denied", [denied], "鉴权失败"),
+                 ("incomplete_eof", [incomplete, eof], "连接中断"))
+        for name, results, error in cases:
+            with self.subTest(case=name), patch.object(query.socket, "getaddrinfo", return_value=[]), patch.object(query.subprocess, "run", side_effect=results) as run, patch.object(query.time, "sleep") as sleep:
+                if error:
+                    with self.assertRaisesRegex(RuntimeError, error) as raised:
+                        query.sls_logs(args, start, end)
+                    self.assertNotIn("secret-value", str(raised.exception))
+                else:
+                    self.assertEqual(query.sls_logs(args, start, end), [])
+                self.assertEqual(run.call_count, len(results))
+                self.assertEqual([call.args for call in sleep.call_args_list], [(1,)] * (len(results) - 1))
+                for call in run.call_args_list:
+                    body = json.loads(call.args[0][-1])
+                    self.assertEqual((body["from"], body["to"], body["offset"]),
+                                     (int(start.timestamp()), int(end.timestamp()), 0))
+                    self.assertEqual(call.kwargs["timeout"], 25)
+
     def test_sls_relay_preserves_oauth_and_retries_network_failures(self):
         relay = Mock(server_port=12345)
         failed = SimpleNamespace(returncode=2, stdout=b"", stderr=b"request failed: EOF")

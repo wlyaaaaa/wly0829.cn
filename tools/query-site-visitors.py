@@ -241,6 +241,12 @@ def cli_error(result):
     return "CLI 调用失败"
 
 
+class CloudCommandError(RuntimeError):
+    def __init__(self, category, message):
+        self.category = category
+        super().__init__(message)
+
+
 def cli_run(command, *, timeout=None, attempts=None):
     relay, env = None, None
     is_sls = command[1] == "sls"
@@ -267,7 +273,7 @@ def cli_run(command, *, timeout=None, attempts=None):
             if is_sls and category in ("连接超时", "DNS 解析失败", "连接中断") and attempt < attempts - 1:
                 time.sleep(attempt + 1)
                 continue
-            raise RuntimeError(f"阿里云命令失败（{category}，尝试 {attempt + 1} 次）；未输出可能含凭据的原始错误")
+            raise CloudCommandError(category, f"阿里云命令失败（{category}，尝试 {attempt + 1} 次）；未输出可能含凭据的原始错误")
     finally:
         if relay:
             relay.shutdown()
@@ -355,7 +361,13 @@ def sls_logs(args, start, end):
         attempts = 2 if deep_read else 3
         for attempt in range(attempts):
             # 深读一页最多两次 25 秒调用；不叠加 CLI 的三次网络重试。
-            page = json.loads(cli_run(command, timeout=25, attempts=1) if deep_read else cli_run(command))
+            try:
+                page = json.loads(cli_run(command, timeout=25, attempts=1) if deep_read else cli_run(command))
+            except CloudCommandError as error:
+                if not deep_read or error.category not in ("连接超时", "DNS 解析失败", "连接中断") or attempt == attempts - 1:
+                    raise
+                time.sleep(1)
+                continue
             if not isinstance(page, dict):
                 raise ValueError("Unknown SLS response schema")
             meta, data = page.get("meta", {}), page.get("data")
