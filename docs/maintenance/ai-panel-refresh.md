@@ -31,7 +31,7 @@ npm run refresh:ai -- --all
 
 直接编辑的 Markdown 也是实际构建输入，因此必须进入指纹，不能只校验 JSON。内容更新、转换与直接 Markdown 的冲突处理继续遵守 [Astro 作者源说明](../../site-astro/README.md)。新页或迁移完成后，同步维护 Registry 的真实入口；冻结与原生并存的项目不能漏掉仍上线的子页。
 
-全局表面的 `content_paths` 可以登记作者目录；计划和验证器展开为相同的实际文件清单：Rules 包含 `sources/rules` 与当前规则页面源，Skills 包含当前目录和详情源，System 指向已合并内容的保留首页。`/system/` 是去向页。首页可修改范围继续服从按需清单的首页锁定与明确例外，计划列出文件不代表获得编辑授权。
+全局表面的 `content_paths` 可以登记作者目录；计划和验证器展开为相同的实际文件清单：Rules 包含 `sources/rules` 与当前规则页面源，Skills 包含当前目录和详情源，System 指向已合并内容的保留首页。`/system/` 是去向页。首页不再锁定（本人 2026-10-23）：首页亮点的数字和日期绑定所属项目登记，任何本人发起的按需更新都会随构建自动重画并照常扫描、发布回读；首页其余内容仍只在其事实或用途变化时改。
 
 旧 React 正文、`app/panel-facts.generated.js` 及其专用快照生成、保留、验证脚本已退役。规则作者源使用现有 `prepare-astro-release.py refresh` 更新并由生产构建的 `astro_rules.py` 核对；不得以旧快照 PASS 代替当前作者源或活动规则验证。
 
