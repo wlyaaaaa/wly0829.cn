@@ -5,7 +5,7 @@
   "gen_requests": "gen-requests.jsonl",
   "gen_requests_sha256": "51c10c46a58e5f92a2ecc6ca391517fb69995c21c3fc12fa5f9bfa18332d18ec",
   "asset_map": "asset-map.jsonl",
-  "asset_map_sha256": "42d09e8545070b7e976926cfe1a92cd0df1d6dd3347d945f4e888fc1616b2a80",
+  "asset_map_sha256": "92ac8ec445b3448f5cad22c399404d386c7d865ccd56f77f7d7a2d099aa2f7dc",
   "summary": "summary.json",
   "requests_count": 714,
   "generation_required_count": 4,
@@ -23,5 +23,9 @@
     "new_title_count": 11,
     "illustration_count": 1,
     "reviewed_at_beijing": "2026-10-07T18:27:13.671605+08:00"
+  },
+  "asset_map_marker_resync": {
+    "resynced_at_beijing": "2026-10-23T09:00:00+08:00",
+    "scope": "只把映射指纹改到当前 asset-map.jsonl；10 月 21 日起的入库提交改了映射却没改指纹，引擎因此退回抠图 manifest。未改任何映射行。"
   }
 }

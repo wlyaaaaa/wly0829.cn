@@ -73,7 +73,7 @@ npm run dev -- --host 127.0.0.1 --port 4173
 常规维护改 JSON 作者源再转换（`python tools/convert_page.py <页>`）；若已直接改过 Markdown，先人工统一两份作者输入，再恢复自动转换：
 
 - 改字、数字、链接：改 `sources/pages/<页>/page.json` 里那一屏的 `text`、`links`。
-- 改图：改素材表 `sources/assets/_library/asset-map.jsonl` 里这一屏这个位置的行（转换时写进 `images`，路径相对 `sources/assets`）。
+- 改图：改素材表 `sources/assets/_library/asset-map.jsonl` 里这一屏这个位置的行（转换时写进 `images`，路径相对 `sources/assets`）。同一次提交把 `sources/assets/_library/REQUESTS-READY.json` 的 `asset_map_sha256` 改成新素材表的 SHA-256；两者对不上时排版引擎当素材库还没发布完，退回旧抠图清单，标题图和新插画都会找不到（`tests/test_asset_library_marker.py` 会拦）。
 - 改构图：改 `sources/pages/<页>/layout.json`：`h.blocks` 里每块的 `type`（区块名，见 `src/typeset/components`）、`row`（同一行的块写同一个名字）、`width`（这一栏占多宽）。手机构图不写时自动竖排。
 - 全新的页（只有 `page.json`、没有 `layout.json`）：转换器照样出内容文件，区块库按文字自动分块，电脑、手机两份都会排出来（毛笔标题、正文、编号步骤卡、列表、表格）；但没有插画、分组图标和左右分栏，要和现有页一样图文并排，得补素材表里的图、写 `layout.json`。
 - 改了地址的页：`page.json` 的 `url` 写现在的地址，旧地址列在 `old_urls`。旧地址出一句话的去向页（两秒后跳到现在的地址、不收录），站内链到旧地址的链接在排版时改指现在的地址。
