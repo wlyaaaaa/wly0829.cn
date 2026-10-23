@@ -250,6 +250,7 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_res
     with sync_playwright() as pw:
         browser = pw.chromium.launch_persistent_context(str(scratch / f"chrome-{worker}"), executable_path=args.chrome, headless=True, device_scale_factor=1, reduced_motion="reduce", service_workers="block")
         browser.set_default_timeout(30000)
+        browser.add_init_script("try { localStorage.setItem('wly-site-self', '1'); } catch {}")
         browser.route("**/*", lambda route: route.continue_() if route.request.method in ("GET", "HEAD", "OPTIONS") else route.abort())
         for route, width, height in jobs:
             attempts = []
