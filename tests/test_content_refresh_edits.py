@@ -275,6 +275,13 @@ class NumberEditsTests(unittest.TestCase):
         from freshness import close_run
         closure = close_run(self.root, result, report)
         self.assertEqual({r["record_id"]: r["status"] for r in closure["rows"]}["date"], "applied_readback_verified")
+        # 模式只捕获到日、写入时连带改时分：回读按写入的整段核
+        self.page["screens"][0]["text"] = "，".join(self.labels) + "，截至 10 月 9 日 08:06"
+        self.save()
+        self.rows[-1].update(page_pattern=r"截至 (\d+ 月 \d+ 日)", old_value="10 月 9 日")
+        report = apply_edits(self.root, build_number_edits(self.root, dict(result, rows=self.rows)))
+        self.assertFalse(report["skipped"])
+        self.assertIn("date", {r["record_id"] for r in report["record_readback"]})
 
     def test_scaled_numbers_keep_the_page_decimal_places(self):
         from apply_edits import formatted

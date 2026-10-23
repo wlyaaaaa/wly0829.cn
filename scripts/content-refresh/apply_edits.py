@@ -399,6 +399,7 @@ def build_number_edits(root, result):
                 for stamp in CHINESE_DATE.finditer(parent[key]):
                     if stamp.start() == start and end <= stamp.end():
                         end = stamp.end()
+                        positions[rid] = (*positions[rid][:4], end, parent[key][start:end])  # 模式只捕获到日、连带写时分时，回读按写入的整段核
 
             pending = []
             def add(target, a, b, value):
@@ -616,8 +617,8 @@ def apply_edits(root, payload, only=None, converter=None):
                 continue
             try:
                 locator = row["readback_locator"]
-                if readback.get(row["page"]) is not True:
-                    raise ValueError("markdown_readback_failed")
+                if row["page"] in targets and readback.get(row["page"]) is not True:
+                    raise ValueError("markdown_readback_failed")  # 本轮没写到文件的页不重转，只回读记录原位
                 actual_author = resolve_author(root, row["page"], locator.get("logical_field", locator["field"]))
                 if actual_author != {k: locator[k] for k in ("file", "field")}:
                     raise ValueError("author_locator_mismatch")
