@@ -423,7 +423,7 @@ def deep_visitors(events, since, locations, history):
             for row in session:
                 params = row["params"]
                 key = (params["id"] or row["identity"], params["p"].rstrip("/") or "/")
-                seconds = metric(params, "visible") if params["event"] == "leave" else None
+                seconds = metric(params, "visible") if params["event"] in ("leave", "resume", "heartbeat") else None
                 instances[key] = max(instances[key], seconds or 0)
             for (_, page), seconds in instances.items():
                 pages[page] += seconds
@@ -468,9 +468,11 @@ def visitor_metrics(events, history, start, end, networks=None, city=None, org=N
     for rows in groups.values():
         rows.sort(key=lambda r: r["time"])
         row, location = rows[0], locations[rows[0]["ip"]]
-        visible = [value for r in rows if r["params"]["event"] == "leave" and (value := metric(r["params"], "visible")) is not None]
-        seconds, method = (max(visible), "visible_beacon") if visible else (row.get("fallback_seconds"), "time_gap_estimate")
-        item = {"seconds": round(seconds, 2) if seconds is not None else None, "method": method if seconds is not None else "unknown"}
+        visible = [(r["time"], value) for r in rows if r["params"]["event"] in ("leave", "resume", "heartbeat") and (value := metric(r["params"], "visible")) is not None]
+        seconds, method = (max(value for _, value in visible), "visible_beacon") if visible else (row.get("fallback_seconds"), "time_gap_estimate")
+        reported = max((stamp for stamp, _ in visible), default=None)
+        item = {"seconds": round(seconds, 2) if seconds is not None else None, "method": method if seconds is not None else "unknown",
+                "last_report_at": reported.isoformat() if reported is not None else None}
         dwell[row["params"]["p"]].append(item)
         if row["params"]["v"]:
             visitor_dwell[row["params"]["v"]][row["params"]["p"]].append(item)
@@ -481,7 +483,8 @@ def visitor_metrics(events, history, start, end, networks=None, city=None, org=N
     def dwell_summary(items):
         known = [item["seconds"] for item in items if item["seconds"] is not None]
         return {"observed_seconds": round(sum(known), 2), "samples": len(known), "unknown_opens": len(items) - len(known),
-                "median_seconds": median(known) if known else None, "methods": dict(Counter(item["method"] for item in items))}
+                "median_seconds": median(known) if known else None, "methods": dict(Counter(item["method"] for item in items)),
+                "last_report_at": max((item["last_report_at"] for item in items if item["last_report_at"] is not None), default=None)}
     first = history.get("first_seen", {})
     returning = sum(first.get(visitor, "9999")[:10] < start.isoformat() for visitor in people)
     result = {"region_pageviews": dict(regions), "organization_pageviews": dict(organizations), "app_pageviews": dict(apps),
@@ -635,7 +638,7 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
             "notes": ["新/回头客依据本机已观察日志的首次日期，窗口内首次仅为首次观察，未证明绝对新客；苹果 Safari 与微信清存储会使回头客偏少。",
                       "入口按每个访客编号首次已观察到的标记归类，简历来的（/cv）单列；重复入口和回访不重复计人，直接访问/未标记不证明从未通过简历来过。",
                       "离线 IP 地区及 ASN 只是网络归属线索，不代表个人身份或雇主；App 来自 UA，可能漏识别或伪装。",
-                      "停留优先累计可见秒数，重复离开只取最大值；无离开信标时用相邻页时间差（最多 30 分钟），最后一页及丢失事件保持未知。",
+                      "停留是已收到的累计可见时长：离开、恢复前台和每 15 秒前台心跳按同一页面实例取最大值，再跨实例相加；隐藏时不计时、不发心跳。last_report_at 是最近合法可见时长信标的事件时间，不证明认真阅读或访问已结束；15 秒采样仍叠加 SLS 约 3 分钟延迟。没有合法可见时长信标时用相邻页时间差（最多 30 分钟），最后一页及丢失事件保持未知。",
                       "打开速度为 Navigation Timing 的 responseStart、domComplete、loadEventEnd 各减 startTime，即导航开始后的累计完成毫秒数；仅统计有字段的页面打开，按省份/运营商给中位数。",
                       "以访客编号为主：同一浏览器跨天只算一次；换设备、清存储会多算，共用浏览器会少算。",
                       "IP 是浏览器访问图片桶的替代口径：换网络可能多算，共用 IP 可能少算，缓存资源可能漏算。",
