@@ -248,7 +248,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1当前本地/G成功包为",
+        "text_ref": "1当前本地/G成功包",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -272,7 +272,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1当前本地/G成功包为",
+        "text_ref": "1当前本地/G成功包",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -292,7 +292,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- sources.psd1 声明采集与排除范围：HomeDirs 等目录 19 项、单文件 17 项、AppData 33 项、Scoop persist 1 项，共 70 个来源；必需来源 6 条，系统注册表导出 3 项，计划任务名字规则 11 条（10 月 11 日实际匹配 16 个任务，其中 8 个已停用）。",
+        "text_ref": "- sources.psd1 声明采集与排除范围：",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -312,7 +312,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- sources.psd1 声明采集与排除范围：HomeDirs 等目录 19 项、单文件 17 项、AppData 33 项、Scoop persist 1 项，共 70 个来源；必需来源 6 条，系统注册表导出 3 项，计划任务名字规则 11 条（10 月 11 日实际匹配 16 个任务，其中 8 个已停用）。",
+        "text_ref": "- sources.psd1 声明采集与排除范围：",
         "columns": 1,
         "icons": "none",
         "illustration": "none",

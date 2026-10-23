@@ -62,7 +62,7 @@ class NumberEditsTests(unittest.TestCase):
                 for i, text in enumerate(self.labels)]}}
         self.save()
         self.rows = [dict(id=f"r-{i}", page="personal-materials", screen="top", page_number=f"n-{i}",
-            old_value=value, new_value=value, status="unchanged", scope_status="verified",
+            old_value=value, new_value=value, status="unchanged", scope_status="verified", automatic=True,
             source_observed_at="2026-10-11T16:03:00+08:00") for i, value in enumerate(self.values)]
         self.rows.append(dict(id="date", page="personal-materials", screen="top", field="screens[0].text",
             page_pattern=r"截至 (\d+ 月 \d+ 日)", old_value="2026-10-09", new_value="2026-10-11",
@@ -203,12 +203,65 @@ class NumberEditsTests(unittest.TestCase):
         self.assertIn("10月12日", json.loads(self.path.read_text("utf-8"))["screens"][0]["text"])
 
     def test_missing_ambiguous_and_event_dates_keep_numbers(self):
-        for suffix in ("", "（10月9日）和（10月10日）", "，截至10月9日（最后一次运行）", "（成功3次），首次上线10月9日"):
+        for suffix in ("（10月9日）和（10月10日）", "，截至10月9日（最后一次运行）", "（成功3次），首次上线10月9日"):
             payload = self.one("167 次调用" + suffix, "167 次调用", 167, 168)
             self.assertFalse(payload["edits"])
             self.assertEqual(payload["skipped"][0]["reason"], "as_of_link_required")
         payload = self.one("167 次调用。\n截至10月9日", "167 次调用", 167, 168)
         self.assertFalse(payload["skipped"])
+
+    def test_undated_number_updates_only_when_its_field_carries_no_date(self):
+        payload = self.one("167 次调用", "167 次调用", 167, 168)
+        self.assertFalse(payload["skipped"])
+        self.assertFalse(apply_edits(self.root, payload)["skipped"])
+        self.assertEqual(json.loads(self.path.read_text("utf-8"))["screens"][0]["text"], "168 次调用")
+        # 同一段别的句子有“某日计数”、整屏有单独成行的“截至”或日期行，没配日期就换新会和那个日期错配
+        for text in ("167 次调用。另几项 10 月 9 日 08:06 计数", "167 次调用。\n别的说明。\n截至10月9日", "167 次调用。\n2026-10-09 06:48 只读聚合"):
+            payload = self.one(text, "167 次调用", 167, 168)
+            self.assertFalse(payload["edits"])
+            self.assertEqual(payload["skipped"][0]["reason"], "as_of_link_required")
+        # 带“那次、此前”的日期是历史，“X 起”是起算日；表格只看数字所在那一格
+        for text in ("167 次调用。此前 10 月 9 日 08:06 计数是 150", "167 次调用（8 月 30 日起）", "| 167 次调用 | 测试 10 月 9 日只清点了数量 |"):
+            payload = self.one(text, "167 次调用", 167, 168)
+            self.assertFalse(payload["skipped"], text)
+
+    def test_manual_number_blocks_only_its_own_line(self):
+        manual = dict(id="manual", page="personal-materials", screen="top", field="screens[0].text", page_pattern=r"(\d+) 份文件",
+                      automatic=False, status="unavailable", old_value=7, new_value=None)
+        for text, blocked in (("167 次调用\n7 份文件", False), ("167 次调用里有 7 份文件", True), ("| 167 次调用 | 7 份文件 |", False)):
+            self.one(text, "167 次调用", 167, 168)
+            row = dict(self.rows[0], field="screens[0].text", page_pattern=r"(\d+) 次调用", old_value=167, new_value=168, status="changed")
+            payload = build_number_edits(self.root, {"rows": [row, manual]})
+            reasons = {s["record_id"]: s["reason"] for s in payload["skipped"]}
+            self.assertEqual(reasons.get("r-0"), "as_of_link_required" if blocked else None, text)
+            self.assertEqual(bool(payload["edits"]), not blocked, text)
+
+    def test_versions_and_sibling_window_dates_update_together(self):
+        self.one("Ollama 0.40.4 服务", "Ollama 0.40.4", "0.40.4", "0.41.0")
+        row = dict(self.rows[0], field="screens[0].text", page_number=None, page_pattern=r"Ollama (\d+(?:\.\d+)+)", old_value="0.40.4", new_value="0.41.0", status="changed")
+        payload = build_number_edits(self.root, {"rows": [row]})
+        self.assertFalse(payload["skipped"])
+        self.assertEqual(payload["edits"][0]["new_value"], "0.41.0")
+        # 窗口起止各自登记、跟着同一来源换新：同句的调用数不因这两个日期被拦
+        text = "87 次调用（北京时间 10 月 21 日 15:59 至 10 月 23 日 10:08）"
+        self.one(text, "87 次调用", 87, 89)
+        rows = [dict(self.rows[0], field="screens[0].text", page_pattern=r"(\d+) 次调用", old_value=87, new_value=89, status="changed")]
+        for rid, pat, old, new in (("start", r"北京时间 (\d+ 月 \d+ 日 \d+:\d+) 至", "10 月 21 日 15:59", "2026-10-22T01:00:00Z"),
+                                   ("end", r"至 (\d+ 月 \d+ 日 \d+:\d+)）", "10 月 23 日 10:08", "2026-10-23T04:00:00Z")):
+            rows.append(dict(rows[0], id=rid, page_number=None, page_pattern=pat, old_value=old, new_value=new))
+        payload = build_number_edits(self.root, {"rows": rows})
+        self.assertFalse(payload["skipped"])
+        self.assertFalse(apply_edits(self.root, payload)["skipped"])
+        self.assertEqual(json.loads(self.path.read_text("utf-8"))["screens"][0]["text"], "89 次调用（北京时间 10 月 22 日 09:00 至 10 月 23 日 12:00）")
+
+    def test_value_text_accepts_same_state_and_blocks_a_changed_one(self):
+        self.one("表格识别已开启", "表格识别已开启", "已开启", "已开启")
+        row = dict(self.rows[0], field="screens[0].text", page_number=None, page_pattern=r"表格识别(已开启)", old_value="已开启",
+                   status="changed", value_text={"True": "已开启"})
+        for value, blocked in ((True, False), (False, True)):
+            payload = build_number_edits(self.root, {"rows": [dict(row, new_value=value)]})
+            self.assertEqual(bool(payload["skipped"]), blocked)
+            self.assertFalse(payload["edits"])
 
     def test_timed_cutoff_reads_back_the_written_time(self):
         self.page["screens"][0]["text"] = "，".join(self.labels) + "，截至 10 月 9 日 08:06"

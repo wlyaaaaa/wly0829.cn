@@ -545,8 +545,8 @@
  },
  "source": {
   "page": "sources/pages/personal-health/page.json",
-  "sha256": "0b08602e2befb0f3d3d2c9627c7a10a8436cafcdeb25a66884ea37b2151c6910",
-  "converted_at_beijing": "2026-10-23T10:28:52+08:00"
+  "sha256": "1f33c5aa8a7d725c1e2ed6d19dbd33ce8e64802d57ea5f73eafbf8494f0d2382",
+  "converted_at_beijing": "2026-10-23T14:54:22+08:00"
  }
 }
 ---
@@ -620,6 +620,11 @@
      "text_ref": "1 台"
     },
     {
+     "type": "prose",
+     "align": "right",
+     "text_ref": "设备和数据类型截至"
+    },
+    {
      "type": "action_button",
      "align": "left",
      "columns": 2,
@@ -667,6 +672,11 @@
      "illustration": "outside",
      "index": 0,
      "size": "large"
+    },
+    {
+     "type": "prose",
+     "align": "right",
+     "text_ref": "设备和数据类型截至"
     },
     {
      "type": "action_button",
@@ -810,6 +820,8 @@
 | **1 台** | **21 类** | **63 天** | **13 次** |
 |---|---|---|---|
 | Fitbit Air 手环，经 Google Health 接口读；手机管同步和运动 GPS | 设备数据每次全部补齐：睡眠、步数、心率、血氧…… | 完整覆盖 8 月 5 日（账号起点）到 10 月 6 日；有的日子没有记录 | 完整采集，分在 6 个更新日；最近一次是 10 月 7 日的每周自动刷新 |
+
+设备和数据类型截至 10 月 11 日；天数和采集次数是 10 月 11 日只读清点的
 
 〔在整套系统里的位置 → 怎么协作〕　〔复制 AI 续作说明〕
 

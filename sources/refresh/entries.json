@@ -605,7 +605,7 @@
       "-I",
       "-B",
       "-c",
-      "import subprocess,json,re,datetime\nr=subprocess.run([r\"E:\\Scoop\\shims\\gh.exe\",\"api\",\"repos/wlyaaaaa/codex-memory/commits?sha=backup%2Fsecondary-laptop&per_page=100\"],capture_output=True,text=True,encoding=\"utf-8\",timeout=20,check=True)\nrows=json.loads(r.stdout)\nif not isinstance(rows,list) or len(rows)>=100: raise ValueError(\"history_requires_pagination_review\")\npattern=re.compile(r\"^codex memory secondary-laptop snapshot \\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$\")\nbj=datetime.timezone(datetime.timedelta(hours=8))\nstart=datetime.datetime(2026,9,10,tzinfo=bj)\nend=datetime.datetime(2026,10,11,tzinfo=bj)\ncount=sum(bool(pattern.fullmatch(v[\"commit\"][\"message\"].splitlines()[0])) and start<=datetime.datetime.fromisoformat(v[\"commit\"][\"committer\"][\"date\"].replace(\"Z\",\"+00:00\"))<end for v in rows)\nprint(json.dumps({\"snapshots_in_page_date_range\":count,\"all_commits\":len(rows),\"latest_commit\":rows[0][\"sha\"]}))\n"
+      "import subprocess,json,re,datetime\nr=subprocess.run([r\"E:\\Scoop\\shims\\gh.exe\",\"api\",\"--paginate\",\"repos/wlyaaaaa/codex-memory/commits?sha=backup%2Fsecondary-laptop&per_page=100\",\"--jq\",'.[] | {m: (.commit.message | split(\"\\\\n\")[0]), d: .commit.committer.date, s: .sha} | @json'],capture_output=True,text=True,encoding=\"utf-8\",timeout=20,check=True)\nrows=[json.loads(line) for line in r.stdout.splitlines() if line.strip()]\nif not rows: raise ValueError(\"history_empty\")\npattern=re.compile(r\"^codex memory secondary-laptop snapshot \\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$\")\nbj=datetime.timezone(datetime.timedelta(hours=8))\nstart=datetime.datetime(2026,9,10,tzinfo=bj)\nend=datetime.datetime(2026,10,11,tzinfo=bj)\ncount=sum(bool(pattern.fullmatch(v[\"m\"])) and start<=datetime.datetime.fromisoformat(v[\"d\"].replace(\"Z\",\"+00:00\"))<end for v in rows)\nprint(json.dumps({\"snapshots_in_page_date_range\":count,\"all_commits\":len(rows),\"latest_commit\":rows[0][\"s\"]}))"
     ],
     "cwd": "E:\\Projects\\Backups\\codex-memory",
     "read_only": true,
@@ -1694,7 +1694,10 @@
     "output": "json",
     "timeout": 10,
     "verification": "复用现有 b7-usage-ledger-complete-day 的 jq 只读两份 state 输入。要求两路 bootstrap_complete=true、午夜北京时区 last_completed，取较早的排他边界日期，不减一天；输出仅 complete_until_date。原稿截至 10 月 11 日、source 说明记到当天零点，不能用本轮读旧账本的观察日期推进。无写入、网络或业务模块执行。",
-    "observation_basis": "unknown"
+    "observation_basis": "coverage_end",
+    "source_coverage_end_pointer": [
+      "complete_until_date"
+    ]
   },
   "r3-phone-direct-method-modified": {
     "argv": [

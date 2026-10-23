@@ -519,7 +519,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "2026-10-22重读当前配置：engines登记4个（fireredasr2-llm、qwen3-asr-1.7b、sensevoice、paraformer），profiles为baseline",
+        "text_ref": "2026-10-22重读当前配置：engines登记",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -538,7 +538,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "2026-10-22重读当前配置：engines登记4个（fireredasr2-llm、qwen3-asr-1.7b、sensevoice、paraformer），profiles为baseline",
+        "text_ref": "2026-10-22重读当前配置：engines登记",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

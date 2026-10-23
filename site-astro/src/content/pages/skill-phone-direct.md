@@ -147,8 +147,8 @@
  },
  "source": {
   "page": "sources/pages/skill-phone-direct/page.json",
-  "sha256": "ae852ed30a5007c19a97606a6c42e6ac36dd5b1db819878a862d534d21275031",
-  "converted_at_beijing": "2026-10-23T08:44:36+08:00"
+  "sha256": "e2897335387fe213030078e83c9cbeadb2f1a9c6812c95f4af92492777cf997b",
+  "converted_at_beijing": "2026-10-23T14:53:35+08:00"
  }
 }
 ---
@@ -1039,7 +1039,7 @@ AI：“电脑在家里的网络上找不到手机。你在外面的话，把手
 
 这里保留入口、子命令、输出、退出码、连接和核对的实现。
 
-**10 月 22 日核对**　技能 E:\.agents\skills\phone-direct\SKILL.md（.agents 0348800d，北京时间 10 月 21 日 21:13）；入口脚本 E:\PCConfig\tools\phone_direct.py（PCConfig 7df54f9b，同日 21:13），运行说明 docs/runtime/phone-direct.md，配置 registries/phone_direct.json；合成测试 tools/test_phone_direct.py 共 25 个测试函数，这次没有重跑。复用常驻无线 ADB 手机桥（tools/phone_bridge.py，计划任务 PCConfig Phone Bridge）的共用连接，没有为它新增服务、MCP 或计划任务。
+**10 月 22 日核对**　技能 E:\.agents\skills\phone-direct\SKILL.md（.agents 0348800d，北京时间 10 月 21 日 21:13）；入口脚本 E:\PCConfig\tools\phone_direct.py（PCConfig 7df54f9b，同日 21:13），运行说明 docs/runtime/phone-direct.md，配置 registries/phone_direct.json；合成测试 tools/test_phone_direct.py 共 25 个测试函数（10 月 22 日数），这次没有重跑。复用常驻无线 ADB 手机桥（tools/phone_bridge.py，计划任务 PCConfig Phone Bridge）的共用连接，没有为它新增服务、MCP 或计划任务。
 
 ## 入口和子命令
 

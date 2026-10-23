@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/work-delivery-value-state-recovery/page.json",
-  "sha256": "25a17e7955ecef1fa4b8c9aa78cd35d69a60575e2bfb54e47071e841d2a21aae",
-  "converted_at_beijing": "2026-10-12T00:29:49+08:00"
+  "sha256": "1b37e04374cbe061a3d2f84fbc93a6aefced0c2ef500f667e01d37dd162b10e2",
+  "converted_at_beijing": "2026-10-23T14:53:36+08:00"
  }
 }
 ---
@@ -623,7 +623,7 @@
 
 7. 首次建立交付包时，用户只做三类动作：明确选择资料、处理冲突/待确认、确认生成；不得重复录入已有事实。
 
-8. 同模型、同 Token 量与同质量下，初次构建总墙钟不得超过直接基线的 1.25 倍；完成第一次来源变化时累计人工时间不得高于直接基线，变更轮墙钟目标不超过直接重做的 0.75 倍（2026-10-11 读源码，门槛未变）。
+8. 同模型、同 Token 量与同质量下，初次构建总墙钟不得超过直接基线的 1.25 倍；完成第一次来源变化时累计人工时间不得高于直接基线，变更轮墙钟目标不超过直接重做的 0.75 倍（2026-10-11 读源码）。
 
 ::screen{#work-delivery-value-state-recovery-06 section="tech"}
 

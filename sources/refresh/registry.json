@@ -1571,7 +1571,8 @@
       "source_observed_at": "2026-10-23T10:25:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:25:25+08:00"
+      "observed_at": "2026-10-23T10:25:25+08:00",
+      "field": "screens[0].text"
     },
     {
       "id": "typora-theme-pack-n-styles-0",
@@ -1608,7 +1609,8 @@
       "source_observed_at": "2026-10-23T10:25:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:25:25+08:00"
+      "observed_at": "2026-10-23T10:25:25+08:00",
+      "field": "screens[0].text"
     },
     {
       "id": "typora-theme-pack-n-sample-pages-0",
@@ -1641,33 +1643,35 @@
       "page": "typora-theme-pack",
       "screen": "typora-theme-pack-01",
       "label": "自动测试个数",
-      "current_value": 21,
+      "current_value": 22,
       "as_of": "2026-10-10",
       "category": "人工",
       "source_location": "E:\\Projects\\Tools\\TyporaThemePack\\tests",
       "retrieve": {
-        "kind": "manual",
-        "instructions": "在隔离临时目录按项目 AGENTS.md 实跑 unittest 并审阅通过/跳过结果；21项是实际全部通过数，不用静态定义数冒充。"
+        "kind": "regex_count",
+        "path": "E:/Projects/Tools/TyporaThemePack/tests",
+        "include": [
+          "test_*.py"
+        ],
+        "pattern": "^\\s*def test",
+        "flags": "m"
       },
-      "automatic": false,
+      "automatic": true,
       "private": false,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
       "refreshed_value": 21,
       "affected_screens": [
-        "typora-theme-pack-01",
-        "typora-theme-pack-05",
-        "typora-theme-pack-07",
-        "typora-theme-pack-09",
-        "typora-theme-pack-10"
+        "typora-theme-pack-01"
       ],
       "registry_number": "n-tests",
       "original_value_index": 0,
-      "page_pattern": "([\\d,]+) 项｜自动测试；GitHub",
+      "page_pattern": "([\\d,]+) 项｜自动测试定义",
       "manual_reason": "judgment",
       "manual_route": "在隔离临时目录按项目 AGENTS.md 重跑 unittest 并审阅通过/跳过结果；21 项是实际全过结果，不能只数测试定义。",
-      "measurement_scope": "实际自动测试通过项数，须审阅运行结果。",
-      "scope_status": "verified"
+      "measurement_scope": "tests/test_*.py 里 def test 的定义数；只计数，不运行，不是通过数。",
+      "scope_status": "verified",
+      "field": "screens[0].text"
     },
     {
       "id": "typora-theme-pack-n-commits-0",
@@ -1701,7 +1705,8 @@
       "source_observed_at": "2026-10-23T10:25:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:25:25+08:00"
+      "observed_at": "2026-10-23T10:25:25+08:00",
+      "field": "screens[0].text"
     },
     {
       "id": "typora-theme-pack-n-code-lines-0",
@@ -7774,7 +7779,7 @@
       },
       "automatic": true,
       "private": true,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:/Cache/Claude/Temp/6428793e/gpt-children/20261011-174134-web-bind-B2-f81fad6f/round-01/evidence/timeaudit-findings.md",
       "refreshed_value": 1.71,
       "affected_screens": [
@@ -7912,7 +7917,7 @@
         "timeaudit-10"
       ],
       "field": "screens[10].text",
-      "page_pattern": "看），留 ([\\d,.]+) 天。",
+      "page_pattern": "备份文件夹，留 ([\\d,.]+) 天。",
       "measurement_scope": "backup_db.ps1 RetentionDays默认值；每日入口默认保留天数，非现存备份份数。",
       "scope_status": "verified",
       "checked_at": "2026-10-23T10:25:40+08:00",
@@ -8092,7 +8097,7 @@
       },
       "automatic": true,
       "private": true,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:/Cache/Claude/Temp/6428793e/gpt-children/20261011-174134-web-bind-B2-f81fad6f/round-01/evidence/timeaudit-findings.md",
       "refreshed_value": 0.18,
       "affected_screens": [
@@ -8130,7 +8135,7 @@
       },
       "automatic": true,
       "private": true,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:/Cache/Claude/Temp/6428793e/gpt-children/20261011-174134-web-bind-B2-f81fad6f/round-01/evidence/timeaudit-findings.md",
       "refreshed_value": 59,
       "affected_screens": [
@@ -8198,10 +8203,7 @@
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
       "refreshed_value": 23,
       "affected_screens": [
-        "remote-control-01",
-        "remote-control-02",
-        "remote-control-04",
-        "remote-control-08"
+        "remote-control-01"
       ],
       "registry_number": "n-tools",
       "page_pattern": "\\*\\*([\\d,]+) 个\\*\\*｜工具：",
@@ -8283,7 +8285,6 @@
       "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。",
       "scope_status": "verified",
       "known_gap": "当前39条窗口为北京时间10月10日23:32:24至11日16:35:12；旧10月8–9日163条已被轮换覆盖。内容Owner必须同步窗口文字和各分类，不能把39当历史累计或仅换总数。",
-      "requires_semantic_refresh": true,
       "checked_at": "2026-10-23T10:25:42+08:00",
       "source_coverage_end": "2026-10-23",
       "observation_basis": "coverage_end",
@@ -8379,7 +8380,6 @@
       "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。",
       "scope_status": "verified",
       "known_gap": "当前39条窗口为北京时间10月10日23:32:24至11日16:35:12；旧10月8–9日163条已被轮换覆盖。内容Owner必须同步窗口文字和各分类，不能把39当历史累计或仅换总数。",
-      "requires_semantic_refresh": true,
       "checked_at": "2026-10-23T10:25:42+08:00",
       "source_coverage_end": "2026-10-23",
       "observation_basis": "coverage_end",
@@ -8417,7 +8417,6 @@
       "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。",
       "scope_status": "verified",
       "known_gap": "当前39条窗口为北京时间10月10日23:32:24至11日16:35:12；旧10月8–9日163条已被轮换覆盖。内容Owner必须同步窗口文字和各分类，不能把39当历史累计或仅换总数。",
-      "requires_semantic_refresh": true,
       "checked_at": "2026-10-23T10:25:42+08:00",
       "source_observed_at": null,
       "source_coverage_end": "2026-10-23",
@@ -8455,7 +8454,6 @@
       "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。",
       "scope_status": "verified",
       "known_gap": "当前39条窗口为北京时间10月10日23:32:24至11日16:35:12；旧10月8–9日163条已被轮换覆盖。内容Owner必须同步窗口文字和各分类，不能把39当历史累计或仅换总数。",
-      "requires_semantic_refresh": true,
       "checked_at": "2026-10-23T10:25:42+08:00",
       "source_coverage_end": "2026-10-23",
       "observation_basis": "coverage_end",
@@ -9483,7 +9481,7 @@
         "personal-media-01"
       ],
       "original_value_index": 0,
-      "page_pattern": "\\ \\*\\*([\\d,]+(?:\\.\\d+)?)\\ 件\\*\\*\\ ",
+      "page_pattern": "块硬盘 \\+ 云端\\*\\* \\| \\*\\*([\\d,]+) 件\\*\\*",
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "当前电脑侧手机恢复计划的非空NDJSON行数；该文件没有header，每行一项，与手机实际回写成功数无关。",
@@ -9648,7 +9646,7 @@
         "personal-materials-07",
         "personal-materials-08"
       ],
-      "page_pattern": "\\| \\*\\*([\\d,]+) 份\\*\\* \\| \\*\\*[\\d,]+ 个来源\\*\\* \\| \\*\\*[\\d,]+ 条\\*\\* \\| \\*\\*[\\d,]+ 次，全部成功\\*\\* \\|\\n\\|---\\|---\\|---\\|---\\|\\n\\| 精确登记的原件",
+      "page_pattern": "\\| \\*\\*([\\d,]+) 份\\*\\* \\| \\*\\*[\\d,]+ 个来源\\*\\* \\| \\*\\*[\\d,]+ 条\\*\\* \\| \\*\\*[\\d,]+ 次成功\\*\\* \\|\\n\\|---\\|---\\|---\\|---\\|\\n\\| 精确登记的原件",
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "materials.py status 的 materials；SELECT count(*) FROM materials，精确登记行数，不计未登记候选。",
@@ -9685,7 +9683,7 @@
         "personal-materials-06",
         "personal-materials-07"
       ],
-      "page_pattern": "\\| \\*\\*[\\d,]+ 份\\*\\* \\| \\*\\*([\\d,]+) 个来源\\*\\* \\| \\*\\*[\\d,]+ 条\\*\\* \\| \\*\\*[\\d,]+ 次，全部成功\\*\\* \\|\\n\\|---\\|---\\|---\\|---\\|\\n\\| 精确登记的原件",
+      "page_pattern": "\\| \\*\\*[\\d,]+ 份\\*\\* \\| \\*\\*([\\d,]+) 个来源\\*\\* \\| \\*\\*[\\d,]+ 条\\*\\* \\| \\*\\*[\\d,]+ 次成功\\*\\* \\|\\n\\|---\\|---\\|---\\|---\\|\\n\\| 精确登记的原件",
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "materials.py status 的 sources；SELECT count(*) FROM sources，含四种登记来源。",
@@ -9719,7 +9717,7 @@
         "personal-materials-03",
         "personal-materials-06"
       ],
-      "page_pattern": "\\| \\*\\*[\\d,]+ 份\\*\\* \\| \\*\\*[\\d,]+ 个来源\\*\\* \\| \\*\\*([\\d,]+) 条\\*\\* \\| \\*\\*[\\d,]+ 次，全部成功\\*\\* \\|\\n\\|---\\|---\\|---\\|---\\|\\n\\| 精确登记的原件",
+      "page_pattern": "\\| \\*\\*[\\d,]+ 份\\*\\* \\| \\*\\*[\\d,]+ 个来源\\*\\* \\| \\*\\*([\\d,]+) 条\\*\\* \\| \\*\\*[\\d,]+ 次成功\\*\\* \\|\\n\\|---\\|---\\|---\\|---\\|\\n\\| 精确登记的原件",
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "filename_entries 全表行数，只查 COUNT，不输出 relative_path 或正文。",
@@ -9756,7 +9754,7 @@
       "affected_screens": [
         "personal-materials-01"
       ],
-      "page_pattern": "\\*\\*([\\d,]+) 次，全部成功\\*\\*",
+      "page_pattern": "\\*\\*([\\d,]+) 次成功\\*\\*",
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "现存 personal-replica 日志中 materials_sync_current 成功终态行数，含手动补跑，推迟/失败不计；本轮43个成功行，无其他 materials_sync_current 终态行。",
@@ -10743,7 +10741,6 @@
       "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。",
       "scope_status": "verified",
       "known_gap": "当前39条窗口为北京时间10月10日23:32:24至11日16:35:12；旧10月8–9日163条已被轮换覆盖。内容Owner必须同步窗口文字和各分类，不能把39当历史累计或仅换总数。",
-      "requires_semantic_refresh": true,
       "checked_at": "2026-10-23T10:25:42+08:00",
       "source_coverage_end": "2026-10-23",
       "observation_basis": "coverage_end",
@@ -10778,7 +10775,6 @@
       "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。",
       "scope_status": "verified",
       "known_gap": "当前39条窗口为北京时间10月10日23:32:24至11日16:35:12；旧10月8–9日163条已被轮换覆盖。内容Owner必须同步窗口文字和各分类，不能把39当历史累计或仅换总数。",
-      "requires_semantic_refresh": true,
       "checked_at": "2026-10-23T10:25:42+08:00",
       "source_coverage_end": "2026-10-23",
       "observation_basis": "coverage_end",
@@ -12417,7 +12413,7 @@
       "page": "daily-preferences",
       "screen": "daily-preferences-01",
       "label": "使用状态观察日期",
-      "current_value": "2026-10-10",
+      "current_value": "2026-10-11",
       "as_of": "2026-10-10",
       "category": "人工",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
@@ -12428,9 +12424,7 @@
       "scope_status": "verified",
       "measurement_scope": "注明同一状态条最后使用与两个固定已采时期调用数；不把10月5–9日采集水位换成本轮观察时刻，任一Unknown保留日期。",
       "qualifies": [
-        "daily-preferences-status-last",
-        "int3-daily-preferences-skill-fixed-window",
-        "int3-daily-preferences-command-fixed-window"
+        "daily-preferences-status-last"
       ]
     },
     {
@@ -13433,16 +13427,14 @@
       "historical": false,
       "source_location": "首屏四个数字实际记录",
       "qualifies": [
-        "remote-control-n-computers-0",
         "remote-control-n-tools-0",
-        "remote-control-n-entries-0",
-        "remote-control-n-calls-0"
+        "remote-control-n-entries-0"
       ],
       "measurement_scope": "仅注明真实运行电脑数、注册工具数、登记入口数、现存日志工具调用数；双机当前运行未复核则保持旧日期Unknown。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "数字卡片（截至 ([^）]+)）：",
-      "current_value": "10 月 10 日",
+      "page_pattern": "工具数、入口数截至 (\\d+ 月 \\d+ 日)；",
+      "current_value": "10 月 22 日",
       "binding_verified_at": "2026-10-11T17:56:33+08:00"
     },
     {
@@ -14679,7 +14671,7 @@
       "automatic": true,
       "private": false,
       "historical": false,
-      "page_pattern": "\\*\\*([\\d,]+)\\s*页\\*\\*",
+      "page_pattern": "\\*\\*([\\d,]+)\\s*页\\*\\*｜每屏",
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "sources/pages/*/page.json全部输入页，含404与去向页、首页另算；不等于公网路由数量。",
@@ -14917,14 +14909,12 @@
       "page": "learning",
       "screen": "learning-01",
       "field": "screens[0].text",
-      "page_pattern": "数字截至 (\\d+ 月 \\d+ 日)",
+      "page_pattern": "练习数截至 (\\d+ 月 \\d+ 日)",
       "qualifies": [
-        "int3-learning-file-types",
-        "int3-learning-local-forwarder",
         "learning-n-exercises-0"
       ],
       "label": "现行路线、讲义和练习数量截至日期",
-      "current_value": "10 月 10 日",
+      "current_value": "10 月 11 日",
       "as_of": "2026-10-10",
       "source_location": "同屏三个现行数量；9月28日终审306项为历史证据，不改历史日期",
       "historical": false,
@@ -15143,12 +15133,6 @@
       "as_of": "2026-10-10",
       "historical": true,
       "private": false,
-      "qualifies": [
-        "personal-formal-documents-card-types",
-        "personal-formal-documents-card-states",
-        "personal-formal-documents-card-content-sources",
-        "personal-formal-documents-n-tests-0"
-      ],
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "仅注明所列记录的实际观察日期；任何关联项Unknown保留旧日期。",
@@ -15225,18 +15209,16 @@
       "as_of": "2026-10-10",
       "historical": false,
       "private": false,
-      "page_pattern": "截至 (\\d+ 月 \\d+ 日)",
+      "page_pattern": "设备和数据类型截至 (\\d+ 月 \\d+ 日)；",
       "qualifies": [
         "personal-health-card-devices",
-        "personal-health-card-types",
-        "personal-health-n-days-0",
-        "personal-health-n-captures-0",
-        "personal-health-text-0"
+        "personal-health-card-types"
       ],
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "仅注明所列记录的实际观察日期；任何关联项Unknown保留旧日期。",
-      "category": "日期联动"
+      "category": "日期联动",
+      "current_value": "10 月 11 日"
     },
     {
       "id": "personal-health-last-run",
@@ -15942,7 +15924,7 @@
       "page": "typora-theme-pack",
       "screen": "typora-theme-pack-01",
       "label": "cards-as-of",
-      "current_value": "2026 年 10 月 10 日",
+      "current_value": "2026 年 10 月 11 日",
       "as_of": "2026-10-10",
       "category": "截至日期",
       "source_location": "E:/Projects/Tools/TyporaThemePack",
@@ -15958,7 +15940,7 @@
         "typora-theme-pack-n-tests-0",
         "typora-theme-pack-n-commits-0"
       ],
-      "page_pattern": "截至\\s*(\\d{4} 年 \\d{1,2} 月 \\d{1,2} 日)（北京时间；"
+      "page_pattern": "截至\\s*(\\d{4} 年 \\d{1,2} 月 \\d{1,2} 日)（北京时间）"
     },
     {
       "id": "skill-md-to-pdf-b5-last-use",
@@ -16657,7 +16639,9 @@
         "localocr-n-jobs-1",
         "localocr-n-auto-0",
         "localocr-n-auto-1",
-        "localocr-n-auto-2"
+        "localocr-n-auto-2",
+        "localocr-n-models-0",
+        "localocr-n-models-1"
       ],
       "checked_at": "2026-10-23T10:27:03+08:00",
       "source_observed_at": "2026-10-23T10:27:03+08:00",
@@ -16770,7 +16754,7 @@
       "source_location": "E:/Projects/Archives/video-scaffold",
       "scope_status": "verified",
       "measurement_scope": "本页同屏数字观察时间的最早日期；任一Unknown保留旧截至",
-      "page_pattern": "最后一次提交 [0-9a-f]{7,40} 算（(\\d+ 月 \\d+ 日 \\d+:\\d+) 读）",
+      "page_pattern": "最后一次提交算（(\\d+ 月 \\d+ 日 \\d+:\\d+) 读）",
       "qualifies": [
         "video-scaffold-n-tests-0",
         "video-scaffold-tests-last-commit-time"
@@ -17979,7 +17963,7 @@
       "scope_status": "verified",
       "measurement_scope": "已安装 SecretBroker.Ui.ps1 默认与设备恢复 $choices 四选一选项；账号 Google/Microsoft 合为 Account 一种，不数准备参数别名",
       "field": "screens[0].text",
-      "page_pattern": "1\\. ([\\d,]+) 种｜",
+      "page_pattern": "1\\. ([\\d,]+) 种｜本人验证方式",
       "retrieve": {
         "kind": "entry",
         "entry": "password-center-readonly-summary",
@@ -18029,7 +18013,7 @@
       "scope_status": "verified",
       "measurement_scope": "已安装 AuthorityHost secret_broker.json 中 secretref_targets 登记条目数；只输出长度，不输出凭据或目标条目",
       "field": "screens[0].text",
-      "page_pattern": "3\\. ([\\d,]+) 个｜",
+      "page_pattern": "3\\. ([\\d,]+) 个｜登记过的取用目标",
       "retrieve": {
         "kind": "entry",
         "entry": "password-center-readonly-summary",
@@ -18294,7 +18278,7 @@
       "scope_status": "verified",
       "measurement_scope": "总索引当前 HEAD 中相对本机已有 refs/remotes/origin/main 多出的提交数：git -C E:/GitHub总索引 rev-list --count refs/remotes/origin/main..HEAD。不 fetch、不写 Git；上游引用是本机缓存，不表示本轮重新核对了 GitHub 远端。",
       "field": "screens[0].text",
-      "page_pattern": "按本机缓存差 ([\\d,]+)/[\\d,]+",
+      "page_pattern": "本机还没推上去的提交有 ([\\d,]+) 个",
       "retrieve": {
         "kind": "entry",
         "entry": "github-index-readonly-counts",
@@ -18790,7 +18774,7 @@
       "private": false,
       "historical": false,
       "field": "screens[0].text",
-      "page_pattern": "\\*\\*([\\d,]+)K\\*\\*",
+      "page_pattern": "\\*\\*([\\d,]+)K\\*\\*｜雨林黑猫",
       "measurement_scope": "只读当前源默认配置/壁纸元数据；target_count是代码最多选择一个屏的策略，不把源快照冒充本机展示验收。",
       "scope_status": "verified",
       "checked_at": "2026-10-23T10:26:06+08:00",
@@ -18927,7 +18911,7 @@
       "current_value": "E280",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "page_pattern": "当前 (E\\d+)（",
+      "page_pattern": "当前 (E\\d+)，完整发布集合",
       "retrieve": {
         "kind": "entry",
         "entry": "e-rules-inspect",
@@ -18956,7 +18940,7 @@
       "current_value": 14,
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "page_pattern": "完整发布集合(?:仍是)? (\\d+) 个文件",
+      "page_pattern": "完整发布集合是 (\\d+) 个文件",
       "retrieve": {
         "kind": "rules_inspect",
         "pointer": [
@@ -19001,7 +18985,6 @@
       "source_project": "agents",
       "private": false,
       "historical": false,
-      "requires_semantic_refresh": true,
       "known_gap": "存在声明项缺发现链接，需发布者同时改写全量一致断言；仅换数字不足以说明当前状态。",
       "checked_at": "2026-10-23T10:25:56+08:00",
       "source_observed_at": "2026-10-23T10:25:56+08:00",
@@ -19071,7 +19054,7 @@
       "current_value": 31,
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "page_pattern": "下 ([\\d,]+) 个都在，都是指向清单来源的目录链接",
+      "page_pattern": "下有 ([\\d,]+) 个是指向清单来源的目录链接",
       "retrieve": {
         "kind": "entry",
         "entry": "agents-shared-skill-source",
@@ -19086,7 +19069,6 @@
       "source_project": "agents",
       "private": false,
       "historical": false,
-      "requires_semantic_refresh": true,
       "known_gap": "存在声明项缺发现链接，需发布者同时改写全量一致断言；仅换数字不足以说明当前状态。",
       "checked_at": "2026-10-23T10:25:56+08:00",
       "source_observed_at": "2026-10-23T10:25:56+08:00",
@@ -19117,7 +19099,6 @@
       "source_project": "agents",
       "private": false,
       "historical": false,
-      "requires_semantic_refresh": true,
       "known_gap": "存在声明项缺发现链接，需发布者同时改写全量一致断言；仅换数字不足以说明当前状态。",
       "checked_at": "2026-10-23T10:25:56+08:00",
       "source_observed_at": "2026-10-23T10:25:56+08:00",
@@ -19133,7 +19114,7 @@
       "current_value": 31,
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "page_pattern": "发现目录[^\\n]*?下 ([\\d,]+) 个都在",
+      "page_pattern": "发现目录[^\\n]*?下有 ([\\d,]+) 个是指向清单来源的目录链接",
       "retrieve": {
         "kind": "file_count",
         "path": "C:/Users/10979/.agents/skills",
@@ -19521,7 +19502,7 @@
       "current_value": "Disabled",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "page_pattern": "再读：台式机任务仍是 (Disabled)",
+      "page_pattern": "再读：台式机任务是 (Disabled)",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -20158,9 +20139,6 @@
       "current_value": "2026-10-11 14:00",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "qualifies": [
-        "b7-codex-memory-config-memory-whitelist-sync-desktop-task-state"
-      ],
       "automatic": false,
       "scope_status": "verified",
       "measurement_scope": "此句明确保存2026-10-12远端59快照+1初始化的固定历史窗口；10月22日69次总提交的口径不同，不能更新历史日期。",
@@ -20643,7 +20621,7 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "source_instances全表行数",
-      "page_pattern": "只读聚合（来源 [^）]+）：([\\d,]+) 个来源实例",
+      "page_pattern": "只读聚合（[^）]+）：([\\d,]+) 个来源实例",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-daily-preferences-technical-counts",
@@ -20673,7 +20651,7 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "source_instances.logical_source去重数",
-      "page_pattern": "只读聚合（来源 [^）]+）：[\\d,]+ 个来源实例、([\\d,]+) 类登记",
+      "page_pattern": "只读聚合（[^）]+）：[\\d,]+ 个来源实例、([\\d,]+) 类登记",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-daily-preferences-technical-counts",
@@ -20703,7 +20681,7 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "records.is_current=1连接source_instances后logical_source去重数",
-      "page_pattern": "只读聚合（来源 [^）]+）：[\\d,]+ 个来源实例、[\\d,]+ 类登记、([\\d,]+) 类有现行记录",
+      "page_pattern": "只读聚合（[^）]+）：[\\d,]+ 个来源实例、[\\d,]+ 类登记、([\\d,]+) 类有现行记录",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-daily-preferences-technical-counts",
@@ -20823,7 +20801,7 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "records.is_current=1且record_type=steam_game_played的分类行数；不自动等于唯一游戏数",
-      "page_pattern": "按类别为 ([\\d,]+) /",
+      "page_pattern": "Steam 记录里已玩游戏 ([\\d,]+) 条",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-daily-preferences-technical-counts",
@@ -22171,7 +22149,10 @@
       "page_pattern": "截至 \\d{1,2}\\s*月\\s*\\d{1,2}\\s*日，(三)个默认模型配置",
       "measurement_scope": "defaults 对象的登记键数；三表示3，仅证明默认配置数量。中文表述需Opus核对，不直接把三替成数字。；current_value保留页面实际表述'三'，其源值语义为3；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
       "scope_status": "verified",
-      "observation_basis": "live_read"
+      "observation_basis": "live_read",
+      "value_text": {
+        "3": "三"
+      }
     },
     {
       "id": "b7-localocr-document-structure-config-use_table_recognition",
@@ -22199,7 +22180,10 @@
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
       "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
       "scope_status": "verified",
-      "observation_basis": "live_read"
+      "observation_basis": "live_read",
+      "value_text": {
+        "True": "已开启"
+      }
     },
     {
       "id": "b7-localocr-document-structure-config-use_formula_recognition",
@@ -22227,7 +22211,10 @@
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
       "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
       "scope_status": "verified",
-      "observation_basis": "live_read"
+      "observation_basis": "live_read",
+      "value_text": {
+        "True": "已开启"
+      }
     },
     {
       "id": "b7-localocr-document-structure-config-use_seal_recognition",
@@ -22255,7 +22242,10 @@
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
       "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
       "scope_status": "verified",
-      "observation_basis": "live_read"
+      "observation_basis": "live_read",
+      "value_text": {
+        "True": "已开启"
+      }
     },
     {
       "id": "b7-localocr-document-structure-config-use_region_detection",
@@ -22283,7 +22273,10 @@
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
       "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
       "scope_status": "verified",
-      "observation_basis": "live_read"
+      "observation_basis": "live_read",
+      "value_text": {
+        "True": "已开启"
+      }
     },
     {
       "id": "b7-localocr-document-structure-config-format_block_content",
@@ -22311,7 +22304,10 @@
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
       "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
       "scope_status": "verified",
-      "observation_basis": "live_read"
+      "observation_basis": "live_read",
+      "value_text": {
+        "True": "已开启"
+      }
     },
     {
       "id": "b7-localocr-document-structure-config-use_chart_recognition",
@@ -22339,7 +22335,10 @@
       "page_pattern": "use_chart_recognition=(false)",
       "measurement_scope": "本页明确 use_chart_recognition=false；只读 pp-structure-v3 对应布尔值。；current_value保留页面实际表述'false'，其源值语义为False；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
       "scope_status": "verified",
-      "observation_basis": "live_read"
+      "observation_basis": "live_read",
+      "value_text": {
+        "False": "false"
+      }
     },
     {
       "id": "b7-localocr-document-structure-config-profile-identity",
@@ -29131,7 +29130,7 @@
       "source_observed_at_pointer": [
         "completed_utc"
       ],
-      "page_pattern": "当前本地/G 成功包为 [^，\\n]+，(?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 字节",
+      "page_pattern": "当前本地/G 成功包 ([0-9]+(?:,[0-9]{3})*) 字节",
       "checked_at": "2026-10-23T10:26:21+08:00",
       "source_observed_at": "2026-10-22T04:09:51.103453+00:00",
       "source_coverage_end": null,
@@ -29201,7 +29200,7 @@
       "source_observed_at_pointer": [
         "completed_utc"
       ],
-      "page_pattern": "回执 (?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 个文件，原始字节数",
+      "page_pattern": "回执 ([0-9]+(?:,[0-9]{3})*) 个文件，北京时间",
       "checked_at": "2026-10-23T10:26:21+08:00",
       "source_observed_at": "2026-10-22T04:09:51.103453+00:00",
       "source_coverage_end": null,
@@ -29238,7 +29237,7 @@
       "source_observed_at_pointer": [
         "completed_utc"
       ],
-      "page_pattern": "当前本地/G 成功包为 [^，\\n]+，[0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)? 字节（约 (?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) MiB）",
+      "page_pattern": "当前本地/G 成功包 [0-9,]+ 字节（约 ([0-9]+(?:\\.[0-9]+)?) MiB）",
       "checked_at": "2026-10-23T10:26:21+08:00",
       "source_observed_at": "2026-10-22T04:09:51.103453+00:00",
       "source_coverage_end": null,
@@ -29273,7 +29272,7 @@
       "source_observed_at_pointer": [
         "completed_utc"
       ],
-      "page_pattern": "整体 receipts_current，本地/G 同为 [^，\\n]+，(?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 字节",
+      "page_pattern": "读最新成功回执：(?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 字节",
       "checked_at": "2026-10-23T10:26:21+08:00",
       "source_observed_at": "2026-10-22T04:09:51.103453+00:00",
       "source_coverage_end": null,
@@ -29308,7 +29307,7 @@
       "source_observed_at_pointer": [
         "completed_utc"
       ],
-      "page_pattern": "整体 receipts_current，[^\\n]*?回执记 (?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 个文件，无文件警告",
+      "page_pattern": "读最新成功回执：[^\\n]*?回执记 (?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 个文件",
       "checked_at": "2026-10-23T10:26:21+08:00",
       "source_observed_at": "2026-10-22T04:09:51.103453+00:00",
       "source_coverage_end": null,
@@ -29375,7 +29374,7 @@
       "source_observed_at_pointer": [
         "completed_utc"
       ],
-      "page_pattern": "整体 receipts_current，[^\\n]*?，[0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)? 字节（约 (?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) MiB）",
+      "page_pattern": "读最新成功回执：[0-9,]+ 字节（约 (?<![0-9.,])([0-9]+(?:\\.[0-9]+)?)(?![0-9.,]) MiB）",
       "checked_at": "2026-10-23T10:26:21+08:00",
       "source_observed_at": "2026-10-22T04:09:51.103453+00:00",
       "source_coverage_end": null,
@@ -31154,7 +31153,7 @@
       "source_observed_at_pointer": [
         "created_utc"
       ],
-      "page_pattern": "当前代号 [^（\\n]+（[^）\\n]+）共 (?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 个文件、核对通过",
+      "page_pattern": "当前这一代（[^）\\n]+）共 (\\d+) 个文件、核对通过",
       "checked_at": "2026-10-23T10:26:23+08:00",
       "source_observed_at": "2026-10-19T02:30:01.490669+00:00",
       "source_coverage_end": null,
@@ -32673,7 +32672,7 @@
       "historical": false,
       "measurement_scope": "只读E:/Projects/Tools/WeChatDirect/tests/test_*.py全部AST FunctionDef/AsyncFunctionDef test_方法/函数定义，含未执行定义，不含subTest展开；不是历史PASS数；仅数字机械观察，不证明全文语义或旁边旧现场日期已重核；原完整核对截至另有judgment记录。",
       "scope_status": "verified",
-      "page_pattern": "最后提交 [0-9]{4}-[0-9]{2}-[0-9]{2}，共 ([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?) 个测试函数",
+      "page_pattern": "当前源码共 ([0-9]+(?:,[0-9]{3})*) 个测试函数",
       "checked_at": "2026-10-23T10:26:24+08:00",
       "source_observed_at": "2026-10-23T10:26:24+08:00",
       "source_coverage_end": null,
@@ -34054,10 +34053,10 @@
       },
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "measurement_scope": "kind=skill,name=daily-preferences；2026-10-05起至已采2026-10-09北京日的固定范围；与旧滚动7天不同，新id保留当前口径。",
-      "page_pattern": "技能调用已记 ([\\d,]+) 次",
+      "page_pattern": "技能调用记了 ([\\d,]+) 次",
       "manual_reason": "judgment",
       "manual_route": "只读正式AI使用账本元数据，固定筛kind和name；按当前页面注明的开始时刻及已补采结束边界筛ts聚合，逐个宿主核对水位，不使用滚动7天，不把未补采期算零，不输出原记录、cwd或提示正文。 本条kind=skill,name=daily-preferences；2026-10-05起至已采2026-10-09北京日的固定范围。"
     },
@@ -34077,7 +34076,7 @@
       },
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "measurement_scope": "kind=command且个人理解库正式CLI；2026-10-05起至已采2026-10-09北京日的固定范围；与旧滚动7天不同，新id保留当前口径。",
       "page_pattern": "命令行调用另记 ([\\d,]+) 次",
@@ -34501,33 +34500,6 @@
       "measurement_scope": "结论统计截止仅关联同句完整统计组；过滤口径未找回则本条manual Unknown，保留原14:00。"
     },
     {
-      "id": "int3-projects-home-visible-asof",
-      "page": "projects-home",
-      "screen": "projects-home-01",
-      "field": "screens[0].text",
-      "page_pattern": "截至北京时间 (\\d{4}-\\d{2}-\\d{2} \\d+:\\d+)",
-      "label": "同句真实数据截止",
-      "current_value": "2026-10-11 16:26",
-      "as_of": "2026-10-11",
-      "category": "截至日期",
-      "source_location": "所列具名来源的同句数据观察边界",
-      "qualifies": [
-        "projects-home-n-projects-0",
-        "projects-home-n-common-0",
-        "projects-home-n-occasional-0",
-        "projects-home-n-frozen-0",
-        "projects-home-n-public-0",
-        "projects-home-n-private-0",
-        "projects-home-n-in-use-0",
-        "projects-home-n-features-0"
-      ],
-      "automatic": true,
-      "private": false,
-      "historical": false,
-      "scope_status": "verified",
-      "measurement_scope": "可见截止说明同屏项目、可见性和功能总规模，复用已核实页面计数来源，不把表头纯标签当数字。"
-    },
-    {
       "id": "int3-agents-inspect-calls-historical-window",
       "page": "agents",
       "screen": "agents-01",
@@ -34601,7 +34573,7 @@
       "page": "personal-media",
       "screen": "personal-media-01",
       "field": "screens[0].text",
-      "page_pattern": "10 月 7 日最近一次真正放回手机的是 ([\\d,]+) 件",
+      "page_pattern": "10 月 7 日那次真正放回手机的是 ([\\d,]+) 件",
       "label": "10月7日手机实际放回件数",
       "current_value": 2377,
       "as_of": "2026-10-07",
@@ -34624,7 +34596,7 @@
       "page": "personal-materials",
       "screen": "personal-materials-01",
       "field": "screens[0].text",
-      "page_pattern": "手动补跑 ([\\d,]+) 次",
+      "page_pattern": "数过手动补跑是 ([\\d,]+) 次",
       "label": "手动补跑同步次数",
       "current_value": 8,
       "as_of": "2026-10-10",
@@ -34636,7 +34608,7 @@
       },
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "measurement_scope": "8是截至10月10日的手动补跑子集，不与42全部成功同步轮数复用同一个id。",
       "manual_reason": "judgment",
@@ -35565,7 +35537,9 @@
         "r3-phone-collector-phone-period",
         "r3-phone-collector-pc-pull-period",
         "r3-phone-collector-static-test-definitions",
-        "r3-phone-collector-data-groups"
+        "r3-phone-collector-data-groups",
+        "r3-phone-collector-phone-period-description",
+        "r3-phone-collector-pc-pull-period-description"
       ],
       "page_pattern": "截至 (\\d+ 月 \\d+ 日)",
       "checked_at": "2026-10-23T09:21:05+08:00",
@@ -36022,8 +35996,9 @@
       "screen": "codex-memory-config-memory-whitelist-sync-05",
       "label": "笔记本云分支远端与本机提交计数观察时间",
       "field": "screens[4].text",
-      "page_pattern": "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}) 再读：台式机任务仍是 Disabled；这条分支远端全部提交",
+      "page_pattern": "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}) 再读：台式机任务是 [A-Za-z]+；这条分支远端全部提交",
       "qualifies": [
+        "b7-codex-memory-config-memory-whitelist-sync-desktop-task-state",
         "b7-codex-memory-config-memory-whitelist-sync-laptop-window-commits",
         "b7-codex-memory-config-memory-whitelist-sync-laptop-cached-commits"
       ],
@@ -36049,22 +36024,22 @@
       "screen": "daily-preferences-current-corrections-05",
       "label": "原话存储状态聚合观察时间",
       "field": "screens[4].text",
-      "page_pattern": "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}) 只读聚合：本人原话共",
+      "page_pattern": "只读聚合（本库数据截至 (\\d{4}-\\d{2}-\\d{2})）：本人原话共",
       "qualifies": [
         "b7-daily-preferences-current-corrections-statements-all",
         "b7-daily-preferences-current-corrections-statements-current",
         "b7-daily-preferences-current-corrections-statements-historical"
       ],
-      "current_value": "2026-10-23 09:20",
-      "as_of": "2026-10-23",
+      "current_value": "2026-10-21",
+      "as_of": "2026-10-21",
       "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "注明同句本人原话总条数、current条数与historical条数的只读聚合观察时间，不注明后文10月11日或9月24日历史聚合。",
+      "measurement_scope": "同句数字所读本库数据的覆盖末日（北京时间日期）；按需更新时跟着这些数字一起推进，不写读取时刻。",
       "historical": false,
       "private": false,
       "source_location": "同页被注明数字记录",
       "category": "日期联动",
-      "date_precision": "datetime",
+      "date_precision": "date",
       "checked_at": "2026-10-23T09:21:05+08:00",
       "source_observed_at": "2026-10-23T09:20:03+08:00",
       "source_coverage_end": null,
@@ -36077,23 +36052,23 @@
       "screen": "daily-preferences-personal-understanding-05",
       "label": "现行与非现行认识卡聚合观察时间",
       "field": "screens[4].text",
-      "page_pattern": "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}) 只读聚合：现行认识卡",
+      "page_pattern": "只读聚合（本库数据截至 (\\d{4}-\\d{2}-\\d{2})）：现行认识卡",
       "qualifies": [
         "b7-daily-preferences-personal-understanding-cards-current",
         "b7-daily-preferences-personal-understanding-cards-historical",
         "b7-daily-preferences-personal-understanding-cards-noncurrent",
         "b7-daily-preferences-personal-understanding-cards-stale"
       ],
-      "current_value": "2026-10-23 09:20",
-      "as_of": "2026-10-23",
+      "current_value": "2026-10-21",
+      "as_of": "2026-10-21",
       "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "注明同句现行卡、非现行卡版本及其中historical/stale两类版本数，不注明后文10月11日或9月8日历史聚合。",
+      "measurement_scope": "同句数字所读本库数据的覆盖末日（北京时间日期）；按需更新时跟着这些数字一起推进，不写读取时刻。",
       "historical": false,
       "private": false,
       "source_location": "同页被注明数字记录",
       "category": "日期联动",
-      "date_precision": "datetime",
+      "date_precision": "date",
       "checked_at": "2026-10-23T09:21:05+08:00",
       "source_observed_at": "2026-10-23T09:20:03+08:00",
       "source_coverage_end": null,
@@ -37073,7 +37048,6 @@
       "measurement_scope": "origin/main 全部提交的提交时间（%cI）最大值转北京时间；是事件时间，不是读取时间。",
       "scope_status": "verified",
       "observation_basis": "live_read",
-      "requires_semantic_refresh": true,
       "known_gap": "同句写着提交短号 1e664d6（北京时间 2026-10-23 10:03 git rev-parse --short origin/main）。入口 video-scaffold-published-metrics 只返回 40 位 source_ref，提交号不能登记成数字，按需更新改不了它；为免再出现“新时间/新数字＋旧提交号”，本条 requires_semantic_refresh=true，经日期联动把同句计数和读取时间一并挡住。要全自动二选一：入口加短号输出并另立文字核对；或把句中提交号删掉后撤销本标记。"
     },
     {
@@ -37127,13 +37101,12 @@
       "private": false,
       "historical": false,
       "field": "screens[5].text",
-      "page_pattern": "–(\\d+ 月 \\d+ 日 \\d+:\\d+)，最后一次提交",
+      "page_pattern": "–(\\d+ 月 \\d+ 日 \\d+:\\d+) 最后一次提交；",
       "date_semantics": "event_time",
       "date_precision": "datetime",
       "measurement_scope": "origin/main 全部提交的提交时间（%cI）最大值转北京时间；是事件时间，不是读取时间。",
       "scope_status": "verified",
       "observation_basis": "live_read",
-      "requires_semantic_refresh": true,
       "known_gap": "同句写着提交短号 1e664d6（北京时间 2026-10-23 10:03 git rev-parse --short origin/main）。入口 video-scaffold-published-metrics 只返回 40 位 source_ref，提交号不能登记成数字，按需更新改不了它；为免再出现“新时间/新数字＋旧提交号”，本条 requires_semantic_refresh=true，经日期联动把同句计数和读取时间一并挡住。要全自动二选一：入口加短号输出并另立文字核对；或把句中提交号删掉后撤销本标记。"
     },
     {
@@ -37142,7 +37115,7 @@
       "screen": "video-scaffold-06",
       "label": "提交计数读取时间",
       "field": "screens[5].text",
-      "page_pattern": "最后一次提交 [0-9a-f]{7,40}；(\\d+ 月 \\d+ 日 \\d+:\\d+) 数）",
+      "page_pattern": "最后一次提交；(\\d+ 月 \\d+ 日 \\d+:\\d+) 数）",
       "qualifies": [
         "video-scaffold-n-commits-0",
         "video-scaffold-commits-last-commit-time"
@@ -37184,7 +37157,6 @@
       "measurement_scope": "origin/main 全部提交的提交时间（%cI）最大值转北京时间；是事件时间，不是读取时间。",
       "scope_status": "verified",
       "observation_basis": "live_read",
-      "requires_semantic_refresh": true,
       "known_gap": "同句写着提交短号 1e664d6（北京时间 2026-10-23 10:03 git rev-parse --short origin/main）。入口 video-scaffold-published-metrics 只返回 40 位 source_ref，提交号不能登记成数字，按需更新改不了它；为免再出现“新时间/新数字＋旧提交号”，本条 requires_semantic_refresh=true，经日期联动把同句计数和读取时间一并挡住。要全自动二选一：入口加短号输出并另立文字核对；或把句中提交号删掉后撤销本标记。"
     },
     {
@@ -37193,7 +37165,7 @@
       "screen": "video-scaffold-01",
       "label": "状态说明里上次更新的读取时间",
       "field": "status_line.source",
-      "page_pattern": "；(\\d+ 月 \\d+ 日 \\d+:\\d+) 读；",
+      "page_pattern": "；(\\d+ 月 \\d+ 日 \\d+:\\d+) 只读，没有出片",
       "qualifies": [
         "video-scaffold-status-last",
         "video-scaffold-status-source-last-time"
@@ -37752,8 +37724,8 @@
       "screen": "timeaudit-10",
       "label": "最近一次完成的每日备份开始时间（连同完成时间和本地、云端结果）",
       "field": "screens[10].text",
-      "page_pattern": "最近一次完成的备份是 (\\d+ 月 \\d+ 日 \\d{2}:\\d{2}) 开始",
-      "current_value": "10 月 22 日 11:40",
+      "page_pattern": "；(\\d+ 月 \\d+ 日)那次备份 \\d+:\\d+ 开始",
+      "current_value": "10 月 22 日",
       "as_of": "2026-10-23",
       "category": "人工",
       "source_location": "E:/Projects/Tools/TimeAudit/log/backup-history.jsonl 最后一条 timeaudit.backup-run.v1（started_at、completed_at、local_snapshot_status、cloud_sync_status）；log/backup.log 每次运行覆盖，正在运行时没有 daily-backup-receipt",
@@ -37762,7 +37734,7 @@
       },
       "automatic": false,
       "private": true,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "measurement_scope": "事件时间：最近一次 completed_at 非空的运行，started_at/completed_at 换北京时间到分钟；本地取 local_snapshot_status，云端取 cloud_sync_status（Grafana 看板 git 推送）。不是观察时间。",
       "manual_reason": "judgment",
@@ -38732,6 +38704,2223 @@
       "observation_basis": "snapshot_timestamp",
       "source_coverage_end": null,
       "date_precision": "datetime"
+    },
+    {
+      "id": "password-center-observed-at-s10-1",
+      "page": "password-center",
+      "screen": "password-center-10",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[9].text",
+      "page_pattern": "(\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 只读",
+      "qualifies": [
+        "password-center-n-sets-g-0",
+        "password-center-n-sets-h-0"
+      ],
+      "current_value": "10 月 22 日 06:47",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "steam-millennium-config-backup-observed-at-s05-1",
+      "page": "steam-millennium-config-backup",
+      "screen": "steam-millennium-config-backup-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "失效的兼容入口，(\\d+ 月 \\d+ 日)重数",
+      "qualifies": [
+        "steam-millennium-config-backup-n-code-0",
+        "steam-millennium-config-backup-text-0-101",
+        "steam-millennium-config-backup-text-0-311",
+        "steam-millennium-config-backup-n-code-1",
+        "steam-millennium-config-backup-text-0"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "sunshine-remote-streaming-observed-at-s04-1",
+      "page": "sunshine-remote-streaming",
+      "screen": "sunshine-remote-streaming-04",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[3].text",
+      "page_pattern": "\\ 个（(\\d+ 月 \\d+ 日)读",
+      "qualifies": [
+        "sunshine-remote-streaming-n-clients-0"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "wechatdirect-observed-at-s01-1",
+      "page": "wechatdirect",
+      "screen": "wechatdirect-01",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[0].text",
+      "page_pattern": "\\ Python（(\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 数",
+      "qualifies": [
+        "wechatdirect-n-tests-0",
+        "wechatdirect-n-lines-0",
+        "wechatdirect-n-reading-runs-0",
+        "wechatdirect-n-reading-runs-1"
+      ],
+      "current_value": "10 月 22 日 06:47",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "personal-materials-observed-at-s06-1",
+      "page": "personal-materials",
+      "screen": "personal-materials-06",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[5].text",
+      "page_pattern": "函数展开参数后；(\\d+ 月 \\d+ 日)静态数",
+      "qualifies": [
+        "personal-materials-n-tests-0"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "daily-preferences-source-coverage-observed-at-s23-1",
+      "page": "daily-preferences-source-coverage",
+      "screen": "daily-preferences-source-coverage-23",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[22].text",
+      "page_pattern": "只读聚合（本库数据截至 (\\d{4}-\\d{2}-\\d{2})）：",
+      "qualifies": [
+        "b7-daily-preferences-source-coverage-source-instances",
+        "b7-daily-preferences-source-coverage-registered-categories",
+        "b7-daily-preferences-source-coverage-current-categories"
+      ],
+      "current_value": "2026-10-21",
+      "as_of": "2026-10-21",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "同句数字所读本库数据的覆盖末日（北京时间日期）；按需更新时跟着这些数字一起推进，不写读取时刻。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "daily-preferences-evidence-query-observed-at-s06-1",
+      "page": "daily-preferences-evidence-query",
+      "screen": "daily-preferences-evidence-query-06",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[5].text",
+      "page_pattern": "登记的逻辑来源（本库数据截至 (\\d{4}-\\d{2}-\\d{2})，只读为",
+      "qualifies": [
+        "b7-daily-preferences-evidence-query-registered-categories",
+        "b7-daily-preferences-evidence-query-current-categories",
+        "b7-daily-preferences-evidence-query-source-instances"
+      ],
+      "current_value": "2026-10-21",
+      "as_of": "2026-10-21",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "同句数字所读本库数据的覆盖末日（北京时间日期）；按需更新时跟着这些数字一起推进，不写读取时刻。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-expression-explain-to-me-observed-at-s05-1",
+      "page": "personal-expression-explain-to-me",
+      "screen": "personal-expression-explain-to-me-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})\\ 只读",
+      "qualifies": [
+        "b7-personal-expression-explain-to-me-explain-principles",
+        "b7-personal-expression-explain-to-me-understanding-principles",
+        "b7-personal-expression-explain-to-me-explain-cases"
+      ],
+      "current_value": "2026-10-22 06:48",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "personal-expression-feedback-consolidation-and-lessons-sync-observed-at-s06-1",
+      "page": "personal-expression-feedback-consolidation-and-lessons-sync",
+      "screen": "personal-expression-feedback-consolidation-and-lessons-sync-06",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[5].text",
+      "page_pattern": "\\ 条（(\\d+ 月 \\d+ 日)数",
+      "qualifies": [
+        "b7-personal-expression-feedback-consolidation-and-lessons-sync-reply-samples"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-expression-corpus-extension-and-private-recovery-observed-at-s05-1",
+      "page": "personal-expression-corpus-extension-and-private-recovery",
+      "screen": "personal-expression-corpus-extension-and-private-recovery-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "\\ 条样本（(\\d+ 月 \\d+ 日)数",
+      "qualifies": [
+        "b7-personal-expression-corpus-extension-and-private-recovery-reply-samples"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "chinese-asr-models-modes-observed-at-s12-1",
+      "page": "chinese-asr-models-modes",
+      "screen": "chinese-asr-models-modes-12",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[11].text",
+      "page_pattern": "\\-\\ (\\d{4}-\\d{2}-\\d{2})\\ 重读",
+      "qualifies": [
+        "b7-chinese-asr-models-modes-046"
+      ],
+      "current_value": "2026-10-22",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "pcconfig-authorization-files-observed-at-s15-1",
+      "page": "pcconfig-authorization-files",
+      "screen": "pcconfig-authorization-files-15",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[14].text",
+      "page_pattern": "(\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 只读",
+      "qualifies": [
+        "pcconfig-authorization-files-install-file-count"
+      ],
+      "current_value": "10 月 22 日 06:48",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "timeaudit-backup-recovery-observed-at-s05-1",
+      "page": "timeaudit-backup-recovery",
+      "screen": "timeaudit-backup-recovery-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "(\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 健康入口读",
+      "qualifies": [
+        "timeaudit-backup-recovery-b8-archive-count-tech"
+      ],
+      "current_value": "10 月 22 日 06:47",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "personal-materials-bounded-discovery-observed-at-s01-1",
+      "page": "personal-materials-bounded-discovery",
+      "screen": "personal-materials-bounded-discovery-01",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[0].text",
+      "page_pattern": "\\ 条（(\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 计数",
+      "qualifies": [
+        "personal-materials-bounded-discovery-b9-003"
+      ],
+      "current_value": "10 月 23 日 10:25",
+      "as_of": "2026-10-23",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "personal-materials-exact-intake-observed-at-s08-1",
+      "page": "personal-materials-exact-intake",
+      "screen": "personal-materials-exact-intake-08",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[7].text",
+      "page_pattern": "(\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 读",
+      "qualifies": [
+        "personal-materials-exact-intake-b9-049",
+        "personal-materials-exact-intake-b9-maintenance-event-at",
+        "personal-materials-exact-intake-b9-049-boundary-repeat"
+      ],
+      "current_value": "10 月 22 日 06:47",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "personal-materials-registered-lookup-observed-at-s01-1",
+      "page": "personal-materials-registered-lookup",
+      "screen": "personal-materials-registered-lookup-01",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[0].text",
+      "page_pattern": "份有可搜的文字（(\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 计数",
+      "qualifies": [
+        "personal-materials-registered-lookup-b9-050",
+        "personal-materials-registered-lookup-b9-055",
+        "personal-materials-registered-lookup-b9-058"
+      ],
+      "current_value": "10 月 22 日 06:47",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "personal-materials-registered-lookup-observed-at-s03-2",
+      "page": "personal-materials-registered-lookup",
+      "screen": "personal-materials-registered-lookup-03",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[2].text",
+      "page_pattern": "来源和版本对上（(\\d+ 月 \\d+ 日)数",
+      "qualifies": [
+        "personal-materials-registered-lookup-b9-051",
+        "personal-materials-registered-lookup-b9-059",
+        "personal-materials-registered-lookup-b9-063",
+        "personal-materials-registered-lookup-b9-065",
+        "personal-materials-registered-lookup-b9-061"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-materials-registered-lookup-observed-at-s05-3",
+      "page": "personal-materials-registered-lookup",
+      "screen": "personal-materials-registered-lookup-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "\\*\\*(\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 计数",
+      "qualifies": [
+        "personal-materials-registered-lookup-b9-052",
+        "personal-materials-registered-lookup-b9-056",
+        "personal-materials-registered-lookup-b9-060",
+        "personal-materials-registered-lookup-b9-062",
+        "personal-materials-registered-lookup-b9-074"
+      ],
+      "current_value": "10 月 22 日 06:47",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "personal-materials-verified-open-observed-at-s01-1",
+      "page": "personal-materials-verified-open",
+      "screen": "personal-materials-verified-open-01",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[0].text",
+      "page_pattern": "均为“已核验”（(\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 计数",
+      "qualifies": [
+        "personal-materials-verified-open-b9-075"
+      ],
+      "current_value": "10 月 22 日 06:47",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "personal-materials-verified-open-observed-at-s05-2",
+      "page": "personal-materials-verified-open",
+      "screen": "personal-materials-verified-open-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "\\*\\*(\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 计数",
+      "qualifies": [
+        "personal-materials-verified-open-b9-076"
+      ],
+      "current_value": "10 月 22 日 06:47",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "personal-media-classification-observed-at-s01-1",
+      "page": "personal-media-classification",
+      "screen": "personal-media-classification-01",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[0].text",
+      "page_pattern": "（(\\d+ 月 \\d+ 日)只读",
+      "qualifies": [
+        "personal-media-classification-b9-083",
+        "personal-media-classification-b9-085",
+        "personal-media-classification-b9-087",
+        "personal-media-classification-b9-088",
+        "personal-media-classification-b9-089",
+        "personal-media-classification-b9-090"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-media-classification-observed-at-s05-2",
+      "page": "personal-media-classification",
+      "screen": "personal-media-classification-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "\\*\\*(\\d+ 月 \\d+ 日)只读",
+      "qualifies": [
+        "personal-media-classification-b9-084",
+        "personal-media-classification-b9-086"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-media-search-browse-observed-at-s01-1",
+      "page": "personal-media-search-browse",
+      "screen": "personal-media-search-browse-01",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[0].text",
+      "page_pattern": "\\ GB（(\\d+ 月 \\d+ 日)只读",
+      "qualifies": [
+        "personal-media-search-browse-b9-097",
+        "personal-media-search-browse-b9-099",
+        "personal-media-search-browse-b9-103",
+        "personal-media-search-browse-b9-106",
+        "personal-media-search-browse-b9-108",
+        "personal-media-search-browse-b9-110"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-media-search-browse-observed-at-s05-2",
+      "page": "personal-media-search-browse",
+      "screen": "personal-media-search-browse-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "\\*\\*(\\d+ 月 \\d+ 日)只读",
+      "qualifies": [
+        "personal-media-search-browse-b9-104"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-media-cloud-candidates-observed-at-s01-1",
+      "page": "personal-media-cloud-candidates",
+      "screen": "personal-media-cloud-candidates-01",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[0].text",
+      "page_pattern": "天稳定期里等待（(\\d+ 月 \\d+ 日)查看",
+      "qualifies": [
+        "personal-media-cloud-candidates-b9-115",
+        "personal-media-cloud-candidates-b9-118",
+        "personal-media-cloud-candidates-b9-120",
+        "personal-media-cloud-candidates-b9-122",
+        "personal-media-cloud-candidates-b9-126",
+        "personal-media-cloud-candidates-b9-116",
+        "personal-media-cloud-candidates-b9-128",
+        "personal-media-cloud-candidates-b9-129"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-media-cloud-candidates-observed-at-s05-2",
+      "page": "personal-media-cloud-candidates",
+      "screen": "personal-media-cloud-candidates-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "\\*\\*(\\d+ 月 \\d+ 日)查看",
+      "qualifies": [
+        "personal-media-cloud-candidates-b9-117",
+        "personal-media-cloud-candidates-b9-119",
+        "personal-media-cloud-candidates-b9-121",
+        "personal-media-cloud-candidates-b9-123",
+        "personal-media-cloud-candidates-b9-124",
+        "personal-media-cloud-candidates-b9-127"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-media-cloud-candidates-observed-at-s05-3",
+      "page": "personal-media-cloud-candidates",
+      "screen": "personal-media-cloud-candidates-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "以下是\\ (\\d+ 月 \\d+ 日)查看",
+      "qualifies": [
+        "personal-media-cloud-candidates-b9-131",
+        "personal-media-cloud-candidates-b9-132"
+      ],
+      "current_value": "10 月 11 日",
+      "as_of": "2026-10-11",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-media-phone-recovery-observed-at-s01-1",
+      "page": "personal-media-phone-recovery",
+      "screen": "personal-media-phone-recovery-01",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[0].text",
+      "page_pattern": "缺、没有过时项（(\\d+ 月 \\d+ 日)只读",
+      "qualifies": [
+        "personal-media-phone-recovery-b9-136",
+        "personal-media-phone-recovery-b9-139"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-media-phone-recovery-observed-at-s05-2",
+      "page": "personal-media-phone-recovery",
+      "screen": "personal-media-phone-recovery-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "\\*\\*(\\d+ 月 \\d+ 日)只读",
+      "qualifies": [
+        "personal-media-phone-recovery-b9-137",
+        "personal-media-phone-recovery-b9-141",
+        "personal-media-phone-recovery-b9-134",
+        "personal-media-phone-recovery-b9-135",
+        "personal-media-phone-recovery-b9-142",
+        "personal-media-phone-recovery-b9-143",
+        "personal-media-phone-recovery-b9-145"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-media-phone-recovery-observed-at-s11-3",
+      "page": "personal-media-phone-recovery",
+      "screen": "personal-media-phone-recovery-11",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[10].text",
+      "page_pattern": "\\-\\ (\\d+ 月 \\d+ 日)只读",
+      "qualifies": [
+        "personal-media-phone-recovery-b9-138",
+        "personal-media-phone-recovery-b9-144",
+        "personal-media-phone-recovery-b9-146"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "learning-human-control-simple-observed-at-s09-1",
+      "page": "learning-human-control-simple",
+      "screen": "learning-human-control-simple-09",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[8].text",
+      "page_pattern": "组配套练习代码（(\\d+ 月 \\d+ 日)静态计数",
+      "qualifies": [
+        "learning-human-control-simple-b9-153"
+      ],
+      "current_value": "10 月 11 日",
+      "as_of": "2026-10-11",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "learning-questions-validation-observed-at-s09-1",
+      "page": "learning-questions-validation",
+      "screen": "learning-questions-validation-09",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[8].text",
+      "page_pattern": "\\ 个测试函数（(\\d+ 月 \\d+ 日)静态计数",
+      "qualifies": [
+        "learning-questions-validation-b9-154",
+        "learning-questions-validation-b9-155",
+        "learning-questions-validation-b9-156"
+      ],
+      "current_value": "10 月 11 日",
+      "as_of": "2026-10-11",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "document-materials-current-matter-sources-observed-at-s10-1",
+      "page": "document-materials-current-matter-sources",
+      "screen": "document-materials-current-matter-sources-10",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[9].text",
+      "page_pattern": "\\ 个用例，(\\d+ 月 \\d+ 日)静态计数",
+      "qualifies": [
+        "document-materials-current-matter-sources-b9-189",
+        "document-materials-current-matter-sources-b9-190"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "document-materials-editable-docx-pdf-observed-at-s10-1",
+      "page": "document-materials-editable-docx-pdf",
+      "screen": "document-materials-editable-docx-pdf-10",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[9].text",
+      "page_pattern": "\\ 个用例，(\\d+ 月 \\d+ 日)静态计数",
+      "qualifies": [
+        "document-materials-editable-docx-pdf-b9-191",
+        "document-materials-editable-docx-pdf-b9-192"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "document-materials-signature-delivery-version-observed-at-s12-1",
+      "page": "document-materials-signature-delivery-version",
+      "screen": "document-materials-signature-delivery-version-12",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[11].text",
+      "page_pattern": "\\ 个用例（(\\d+ 月 \\d+ 日)静态计数",
+      "qualifies": [
+        "document-materials-signature-delivery-version-b9-193",
+        "document-materials-signature-delivery-version-b9-194"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "proxyclean-dead-port-and-route-cleanup-observed-at-s10-1",
+      "page": "proxyclean-dead-port-and-route-cleanup",
+      "screen": "proxyclean-dead-port-and-route-cleanup-10",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[9].text",
+      "page_pattern": "用例（北京时间\\ (\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 只静态数",
+      "qualifies": [
+        "b9-tools-proxyclean-dead-port-and-route-cleanup-anchor-107",
+        "b9-tools-proxyclean-dead-port-and-route-cleanup-anchor-108"
+      ],
+      "current_value": "10 月 22 日 06:47",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "proxyclean-dynamic-proxy-status-observed-at-s09-1",
+      "page": "proxyclean-dynamic-proxy-status",
+      "screen": "proxyclean-dynamic-proxy-status-09",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[8].text",
+      "page_pattern": "用例（北京时间\\ (\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 只静态数",
+      "qualifies": [
+        "b9-tools-proxyclean-dynamic-proxy-status-anchor-109"
+      ],
+      "current_value": "10 月 22 日 06:47",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "proxyclean-dynamic-proxy-status-observed-at-s09-2",
+      "page": "proxyclean-dynamic-proxy-status",
+      "screen": "proxyclean-dynamic-proxy-status-09",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[8].text",
+      "page_pattern": "\\-\\ 北京时间\\ (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})\\ 的一次只读",
+      "qualifies": [
+        "b9-tools-proxyclean-dynamic-proxy-status-extra-119",
+        "b9-tools-proxyclean-dynamic-proxy-status-extra-120",
+        "b9-tools-proxyclean-dynamic-proxy-status-extra-121",
+        "b9-tools-proxyclean-dynamic-proxy-status-extra-122"
+      ],
+      "current_value": "2026-10-22 06:48",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "github-index-project-admission-observed-at-s01-1",
+      "page": "github-index-project-admission",
+      "screen": "github-index-project-admission-01",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[0].text",
+      "page_pattern": "(\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 再只读",
+      "qualifies": [
+        "b9-github-index-project-admission-ahead_count-0-219"
+      ],
+      "current_value": "10 月 22 日 06:48",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "github-index-project-admission-observed-at-s02-2",
+      "page": "github-index-project-admission",
+      "screen": "github-index-project-admission-02",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[1].text",
+      "page_pattern": "\\ 个提交（(\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 的读",
+      "qualifies": [
+        "b9-github-index-project-admission-ahead_count-1-296"
+      ],
+      "current_value": "10 月 22 日 06:48",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "github-index-worktree-sync-observed-at-s01-1",
+      "page": "github-index-worktree-sync",
+      "screen": "github-index-worktree-sync-01",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[0].text",
+      "page_pattern": "(\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 再只读",
+      "qualifies": [
+        "b9-github-index-worktree-sync-ahead_count-0-261"
+      ],
+      "current_value": "10 月 22 日 06:48",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "wechat-direct-bounded-chat-context-observed-at-s05-1",
+      "page": "wechat-direct-bounded-chat-context",
+      "screen": "wechat-direct-bounded-chat-context-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "\\ 个测试函数（(\\d{4}-\\d{2}-\\d{2})\\ 重数",
+      "qualifies": [
+        "b9-wechat-direct-bounded-chat-context-test_definition_count-4-97"
+      ],
+      "current_value": "2026-10-22",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "wechat-direct-moments-local-cache-observed-at-s04-1",
+      "page": "wechat-direct-moments-local-cache",
+      "screen": "wechat-direct-moments-local-cache-04",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[3].text",
+      "page_pattern": "\\ 个测试函数，(\\d{4}-\\d{2}-\\d{2})\\ 重数",
+      "qualifies": [
+        "b9-wechat-direct-moments-local-cache-test_definition_count-3-94"
+      ],
+      "current_value": "2026-10-22",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "wechat-direct-named-chat-archive-observed-at-s05-1",
+      "page": "wechat-direct-named-chat-archive",
+      "screen": "wechat-direct-named-chat-archive-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "\\ 个测试函数，(\\d{4}-\\d{2}-\\d{2})\\ 重数",
+      "qualifies": [
+        "b9-wechat-direct-named-chat-archive-test_definition_count-4-116"
+      ],
+      "current_value": "2026-10-22",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "wechat-direct-preservation-verification-observed-at-s04-1",
+      "page": "wechat-direct-preservation-verification",
+      "screen": "wechat-direct-preservation-verification-04",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[3].text",
+      "page_pattern": "\\ 个测试函数，(\\d{4}-\\d{2}-\\d{2})\\ 重数",
+      "qualifies": [
+        "b9-wechat-direct-preservation-verification-test_definition_count-3-111"
+      ],
+      "current_value": "2026-10-22",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "wechat-direct-reply-media-relations-observed-at-s04-1",
+      "page": "wechat-direct-reply-media-relations",
+      "screen": "wechat-direct-reply-media-relations-04",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[3].text",
+      "page_pattern": "\\ 个测试函数（(\\d{4}-\\d{2}-\\d{2})\\ 重数",
+      "qualifies": [
+        "b9-wechat-direct-reply-media-relations-test_definition_count-3-80"
+      ],
+      "current_value": "2026-10-22",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "wechat-direct-named-chat-archive-observed-at-s06-2",
+      "page": "wechat-direct-named-chat-archive",
+      "screen": "wechat-direct-named-chat-archive-06",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[5].text",
+      "page_pattern": "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})\\ 清点",
+      "qualifies": [
+        "b9-wechat-direct-named-chat-archive-archive_count-5-309",
+        "b9-wechat-direct-named-chat-archive-current_sender_identity_archive_count-5-316",
+        "b9-wechat-direct-named-chat-archive-noncurrent_sender_identity_archive_count-5-332"
+      ],
+      "current_value": "2026-10-11 16:32",
+      "as_of": "2026-10-11",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "work-delivery-evidence-quality-observed-at-s10-1",
+      "page": "work-delivery-evidence-quality",
+      "screen": "work-delivery-evidence-quality-10",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[9].text",
+      "page_pattern": "(\\d{4}-\\d{2}-\\d{2})\\ 核对",
+      "qualifies": [
+        "b9-work-delivery-evidence-quality-test_definition_count-9-357"
+      ],
+      "current_value": "2026-10-11",
+      "as_of": "2026-10-11",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "work-delivery-value-state-recovery-observed-at-s05-1",
+      "page": "work-delivery-value-state-recovery",
+      "screen": "work-delivery-value-state-recovery-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "(\\d{4}-\\d{2}-\\d{2})\\ 核对",
+      "qualifies": [
+        "b9-work-delivery-value-state-recovery-test_definition_count-4-117"
+      ],
+      "current_value": "2026-10-11",
+      "as_of": "2026-10-11",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "work-delivery-value-state-recovery-observed-at-s12-2",
+      "page": "work-delivery-value-state-recovery",
+      "screen": "work-delivery-value-state-recovery-12",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[11].text",
+      "page_pattern": "el与失败恢复（(\\d{4}-\\d{2}-\\d{2})\\ 计数",
+      "qualifies": [
+        "b9-work-delivery-value-state-recovery-test_definition_count-11-163"
+      ],
+      "current_value": "2026-10-11",
+      "as_of": "2026-10-11",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "work-delivery-source-change-next-version-observed-at-s10-1",
+      "page": "work-delivery-source-change-next-version",
+      "screen": "work-delivery-source-change-next-version-10",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[9].text",
+      "page_pattern": "裸日期）。这是\\ (\\d{4}-\\d{2}-\\d{2})\\ 读",
+      "qualifies": [
+        "b9-work-delivery-source-change-next-version-rebind_case_count-9-317",
+        "b9-work-delivery-source-change-next-version-rebind_allowed_count-9-328",
+        "b9-work-delivery-source-change-next-version-rebind_rejected_count-9-354"
+      ],
+      "current_value": "2026-10-11",
+      "as_of": "2026-10-11",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "work-delivery-value-state-recovery-observed-at-s05-3",
+      "page": "work-delivery-value-state-recovery",
+      "screen": "work-delivery-value-state-recovery-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "\\ 倍（(\\d{4}-\\d{2}-\\d{2})\\ 读",
+      "qualifies": [
+        "b9-work-delivery-value-state-recovery-first_round_wall_clock_ratio_max-4-976",
+        "b9-work-delivery-value-state-recovery-update_round_wall_clock_ratio_max-4-1024"
+      ],
+      "current_value": "2026-10-11",
+      "as_of": "2026-10-11",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "github-index-worktree-sync-observed-at-s06-2",
+      "page": "github-index-worktree-sync",
+      "screen": "github-index-worktree-sync-06",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[5].text",
+      "page_pattern": "\\ 个（(\\d+ 月 \\d+ 日 \\d+:\\d+)\\ 数",
+      "qualifies": [
+        "b9-github-index-worktree-sync-governance-entries-5",
+        "b9-github-index-worktree-sync-governance-repository_overrides-5",
+        "b9-github-index-worktree-sync-governance-retentions-5"
+      ],
+      "current_value": "10 月 22 日 06:48",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "personal-health-evidence-three-state-observed-at-s04-1",
+      "page": "personal-health-evidence-three-state",
+      "screen": "personal-health-evidence-three-state-04",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[3].text",
+      "page_pattern": "用例（(\\d+ 月 \\d+ 日)静态计数",
+      "qualifies": [
+        "personal-health-evidence-three-state-b9-157",
+        "personal-health-evidence-three-state-b9-158"
+      ],
+      "current_value": "10 月 11 日",
+      "as_of": "2026-10-11",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "skill-phone-direct-observed-at-s05-1",
+      "page": "skill-phone-direct",
+      "screen": "skill-phone-direct-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "个测试函数（(\\d+ 月 \\d+ 日)数）",
+      "qualifies": [
+        "r3-skill-phone-direct-static-test-definitions"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "sunshine-remote-streaming-observed-at-s05-2",
+      "page": "sunshine-remote-streaming",
+      "screen": "sunshine-remote-streaming-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "不含空行，(\\d+ 月 \\d+ 日)统计",
+      "qualifies": [
+        "sunshine-remote-streaming-n-test-lines-0"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-expression-reply-as-me-observed-at-s05-1",
+      "page": "personal-expression-reply-as-me",
+      "screen": "personal-expression-reply-as-me-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}) 只读统计：本人样本",
+      "qualifies": [
+        "b7-personal-expression-reply-as-me-reply-samples",
+        "b7-personal-expression-reply-as-me-reply-contrasts"
+      ],
+      "current_value": "2026-10-22 06:47",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "devconfig-backup-source-catalog-observed-at-s05-1",
+      "page": "devconfig-backup-source-catalog",
+      "screen": "devconfig-backup-source-catalog-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "当前成功代是 (\\d+ 月 \\d+ 日 \\d+:\\d+) 的",
+      "qualifies": [
+        "b9-tools-devconfig-backup-source-catalog-anchor-041",
+        "b9-tools-devconfig-backup-source-catalog-anchor-043"
+      ],
+      "current_value": "10 月 22 日 12:09",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句快照数字是哪一份（来源回执的完成时刻，北京时间）；快照不变它就不变。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "snapshot_timestamp",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "devconfig-backup-source-catalog-observed-at-s05-2",
+      "page": "devconfig-backup-source-catalog",
+      "screen": "devconfig-backup-source-catalog-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "北京时间 (\\d+ 月 \\d+ 日 \\d+:\\d+) 生成",
+      "qualifies": [
+        "b9-tools-devconfig-backup-source-catalog-anchor-042",
+        "b9-tools-devconfig-backup-source-catalog-anchor-044",
+        "b9-tools-devconfig-backup-source-catalog-anchor-047"
+      ],
+      "current_value": "10 月 22 日 12:09",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句快照数字是哪一份（来源回执的完成时刻，北京时间）；快照不变它就不变。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "snapshot_timestamp",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "devconfig-backup-wechat-native-backup-observed-at-s05-1",
+      "page": "devconfig-backup-wechat-native-backup",
+      "screen": "devconfig-backup-wechat-native-backup-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "当前 G 回执是 (\\d+ 月 \\d+ 日 \\d+:\\d+:\\d+) 完成",
+      "qualifies": [
+        "b9-tools-devconfig-backup-wechat-native-backup-anchor-063",
+        "b9-tools-devconfig-backup-wechat-native-backup-anchor-071"
+      ],
+      "current_value": "10 月 23 日 10:16:05",
+      "as_of": "2026-10-23",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句快照数字是哪一份（来源回执的完成时刻，北京时间）；快照不变它就不变。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "snapshot_timestamp",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "devconfig-backup-wechat-native-backup-observed-at-s11-2",
+      "page": "devconfig-backup-wechat-native-backup",
+      "screen": "devconfig-backup-wechat-native-backup-11",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[10].text",
+      "page_pattern": "G 微信热备 (\\d+ 月 \\d+ 日 \\d+:\\d+:\\d+) 完成",
+      "qualifies": [
+        "b9-tools-devconfig-backup-wechat-native-backup-anchor-068",
+        "b9-tools-devconfig-backup-wechat-native-backup-anchor-070"
+      ],
+      "current_value": "10 月 23 日 10:16:05",
+      "as_of": "2026-10-23",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句快照数字是哪一份（来源回执的完成时刻，北京时间）；快照不变它就不变。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "snapshot_timestamp",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "devconfig-backup-wechat-native-backup-observed-at-s05-3",
+      "page": "devconfig-backup-wechat-native-backup",
+      "screen": "devconfig-backup-wechat-native-backup-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "1\\. (\\d+ 月 \\d+ 日) G 盘这一代",
+      "qualifies": [
+        "b9-tools-devconfig-backup-wechat-native-backup-anchor-072"
+      ],
+      "current_value": "10 月 23 日",
+      "as_of": "2026-10-23",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句快照数字是哪一份（来源回执的完成时刻，北京时间）；快照不变它就不变。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "snapshot_timestamp",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "proxyclean-one-click-and-troubleshooting-boundaries-observed-at-s11-1",
+      "page": "proxyclean-one-click-and-troubleshooting-boundaries",
+      "screen": "proxyclean-one-click-and-troubleshooting-boundaries-11",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[10].text",
+      "page_pattern": "个用例（北京时间 (\\d+ 月 \\d+ 日 \\d+:\\d+)，没有运行",
+      "qualifies": [
+        "b9-tools-proxyclean-one-click-and-troubleshooting-boundaries-anchor-110"
+      ],
+      "current_value": "10 月 22 日 06:47",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "proxyclean-targeted-port-shutdown-observed-at-s10-1",
+      "page": "proxyclean-targeted-port-shutdown",
+      "screen": "proxyclean-targeted-port-shutdown-10",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[9].text",
+      "page_pattern": "关闭回归 [\\d,]+ 个（北京时间 (\\d+ 月 \\d+ 日 \\d+:\\d+) 只静态数出",
+      "qualifies": [
+        "b9-tools-proxyclean-targeted-port-shutdown-anchor-111",
+        "b9-tools-proxyclean-targeted-port-shutdown-anchor-112",
+        "b9-tools-proxyclean-targeted-port-shutdown-extra-117",
+        "b9-tools-proxyclean-targeted-port-shutdown-extra-118"
+      ],
+      "current_value": "10 月 22 日 06:47",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-observed-at-s09-1",
+      "page": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary",
+      "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-09",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[8].text",
+      "page_pattern": "当前这一代（北京时间 (\\d+ 月 \\d+ 日 \\d+:\\d+) 创建）",
+      "qualifies": [
+        "b9-tools-steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-anchor-119"
+      ],
+      "current_value": "10 月 19 日 10:30",
+      "as_of": "2026-10-19",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句快照数字是哪一份（来源回执的完成时刻，北京时间）；快照不变它就不变。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "snapshot_timestamp",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "github-index-publication-gate-observed-at-s12-1",
+      "page": "github-index-publication-gate",
+      "screen": "github-index-publication-gate-12",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[11].text",
+      "page_pattern": "(\\d+ 月 \\d+ 日 \\d+:\\d+) 只读再数，本地相对本机缓存的 origin",
+      "qualifies": [
+        "b9-github-index-publication-gate-ahead_count-11-196"
+      ],
+      "current_value": "10 月 22 日 06:48",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "work-delivery-value-state-recovery-observed-at-s05-4",
+      "page": "work-delivery-value-state-recovery",
+      "screen": "work-delivery-value-state-recovery-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "(\\d{4}-\\d{2}-\\d{2}) 读源码时共有",
+      "qualifies": [
+        "b9-work-delivery-value-state-recovery-test_definition_count-4-303"
+      ],
+      "current_value": "2026-10-11",
+      "as_of": "2026-10-11",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-media-search-browse-observed-at-s05-3",
+      "page": "personal-media-search-browse",
+      "screen": "personal-media-search-browse-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "现行图片 [\\d,]+ 张（(\\d+ 月 \\d+ 日)）",
+      "qualifies": [
+        "personal-media-search-browse-b9-098"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "personal-media-search-browse-observed-at-s12-4",
+      "page": "personal-media-search-browse",
+      "screen": "personal-media-search-browse-12",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[11].text",
+      "page_pattern": "全文索引（[\\d,]+ 行，(\\d+ 月 \\d+ 日)）",
+      "qualifies": [
+        "personal-media-search-browse-b9-105"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "ai-cli-profile-manager-native-desktop-integration-observed-at-s04-1",
+      "page": "ai-cli-profile-manager-native-desktop-integration",
+      "screen": "ai-cli-profile-manager-native-desktop-integration-04",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[3].text",
+      "page_pattern": "(\\d+ 月 \\d+ 日)本机 releases 目录现存",
+      "qualifies": [
+        "b7-ai-cli-profile-manager-native-desktop-integration-050"
+      ],
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "daily-preferences-fact-verification-observed-at-s05-1",
+      "page": "daily-preferences-fact-verification",
+      "screen": "daily-preferences-fact-verification-05",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[4].text",
+      "page_pattern": "本库数据截至 (\\d{4}-\\d{2}-\\d{2})，现行信用卡记录",
+      "qualifies": [
+        "b7-daily-preferences-fact-verification-credit-charges",
+        "b7-daily-preferences-fact-verification-credit-refunds",
+        "b7-daily-preferences-fact-verification-credit-transfers",
+        "b7-daily-preferences-fact-verification-credit-summaries"
+      ],
+      "current_value": "2026-10-21",
+      "as_of": "2026-10-21",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "同句数字所读本库数据的覆盖末日（北京时间日期）；按需更新时跟着这些数字一起推进，不写读取时刻。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "daily-preferences-recommendation-choice-observed-at-s13-1",
+      "page": "daily-preferences-recommendation-choice",
+      "screen": "daily-preferences-recommendation-choice-13",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[12].text",
+      "page_pattern": "本库数据截至 (\\d{4}-\\d{2}-\\d{2})，Steam 记录里已玩游戏",
+      "qualifies": [
+        "b7-daily-preferences-recommendation-choice-steam-played-game"
+      ],
+      "current_value": "2026-10-21",
+      "as_of": "2026-10-21",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "同句数字所读本库数据的覆盖末日（北京时间日期）；按需更新时跟着这些数字一起推进，不写读取时刻。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "date"
+    },
+    {
+      "id": "pcconfig-observed-at-s06-2",
+      "page": "pcconfig",
+      "screen": "pcconfig-06",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[5].text",
+      "page_pattern": "\\*\\*C 盘\\*\\* [^，\\n]*?，(\\d+ 月 \\d+ 日 \\d+:\\d+) 已用",
+      "qualifies": [
+        "pcconfig-n-disks-0"
+      ],
+      "current_value": "10 月 12 日 04:38",
+      "as_of": "2026-10-12",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "pcconfig-observed-at-s06-3",
+      "page": "pcconfig",
+      "screen": "pcconfig-06",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[5].text",
+      "page_pattern": "\\*\\*E 盘\\*\\* [^，\\n]*?，(\\d+ 月 \\d+ 日 \\d+:\\d+) 已用",
+      "qualifies": [
+        "pcconfig-n-disks-2"
+      ],
+      "current_value": "10 月 12 日 04:38",
+      "as_of": "2026-10-12",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "pcconfig-observed-at-s06-4",
+      "page": "pcconfig",
+      "screen": "pcconfig-06",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[5].text",
+      "page_pattern": "\\*\\*D 盘\\*\\* [^，\\n]*?，(\\d+ 月 \\d+ 日 \\d+:\\d+) 已用",
+      "qualifies": [
+        "pcconfig-n-disks-4"
+      ],
+      "current_value": "10 月 12 日 04:38",
+      "as_of": "2026-10-12",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "pcconfig-observed-at-s06-5",
+      "page": "pcconfig",
+      "screen": "pcconfig-06",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[5].text",
+      "page_pattern": "\\*\\*G 盘\\*\\* [^，\\n]*?，(\\d+ 月 \\d+ 日 \\d+:\\d+) 已用",
+      "qualifies": [
+        "pcconfig-n-disks-5"
+      ],
+      "current_value": "10 月 12 日 04:38",
+      "as_of": "2026-10-12",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "id": "pcconfig-observed-at-s07-6",
+      "page": "pcconfig",
+      "screen": "pcconfig-07",
+      "label": "注明同句数字的观察时间",
+      "field": "screens[6].text",
+      "page_pattern": "\\*\\*H 盘\\*\\* [^，\\n]*?，(\\d+ 月 \\d+ 日 \\d+:\\d+) 已用",
+      "qualifies": [
+        "pcconfig-n-disks-7"
+      ],
+      "current_value": "10 月 12 日 04:38",
+      "as_of": "2026-10-12",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句现场读数的观察时间（北京时间）；按需更新时跟着这些数字一起推进。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read",
+      "source_coverage_end": null,
+      "date_precision": "datetime"
+    },
+    {
+      "page": "typora-theme-pack",
+      "screen": "typora-theme-pack-05",
+      "category": "代码行数",
+      "source_location": "E:\\Projects\\Tools\\TyporaThemePack；wc -l 同口径，含空行",
+      "private": false,
+      "field": "screens[4].text",
+      "id": "typora-theme-pack-n-tests-1",
+      "automatic": true,
+      "historical": false,
+      "scope_status": "verified",
+      "label": "test-definitions-table",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "E:/Projects/Tools/TyporaThemePack/tests",
+        "include": [
+          "test_*.py"
+        ],
+        "pattern": "^\\s*def test",
+        "flags": "m"
+      },
+      "page_pattern": "\\| 测试 \\| 1 个 Python，([\\d,]+) 项 \\|",
+      "current_value": 22,
+      "measurement_scope": "tests/test_*.py 里 def test 的定义数；只计数，不运行，不是通过数。"
+    },
+    {
+      "page": "remote-control",
+      "screen": "remote-control-01",
+      "category": "人工",
+      "source_location": "E:\\Data\\RemoteComputerMCP\\logs\\service*.log",
+      "private": true,
+      "field": "screens[0].text",
+      "id": "remote-control-calls-window-start-s1",
+      "automatic": true,
+      "historical": false,
+      "scope_status": "verified",
+      "label": "calls-window-start",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "remote-current-log-window",
+        "pointer": [
+          "first_utc"
+        ],
+        "timeout": 20
+      },
+      "date_semantics": "event_time",
+      "page_pattern": "北京时间 (\\d+ 月 \\d+ 日 \\d+:\\d+) 至 \\d+ 月 \\d+ 日 \\d+:\\d+；日志只留",
+      "current_value": "10 月 21 日 15:59",
+      "measurement_scope": "当前 service*.log 里 rpc=tools/call 元数据 received_utc 的最小值换北京时间到分钟；是调用数所数窗口的起点，不是读取时间。"
+    },
+    {
+      "page": "remote-control",
+      "screen": "remote-control-01",
+      "category": "人工",
+      "source_location": "E:\\Data\\RemoteComputerMCP\\logs\\service*.log",
+      "private": true,
+      "field": "screens[0].text",
+      "id": "remote-control-calls-window-end-s1",
+      "automatic": true,
+      "historical": false,
+      "scope_status": "verified",
+      "label": "calls-window-end",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "remote-current-log-window",
+        "pointer": [
+          "last_utc"
+        ],
+        "timeout": 20
+      },
+      "date_semantics": "event_time",
+      "page_pattern": "北京时间 \\d+ 月 \\d+ 日 \\d+:\\d+ 至 (\\d+ 月 \\d+ 日 \\d+:\\d+)；日志只留",
+      "current_value": "10 月 23 日 10:08",
+      "measurement_scope": "当前 service*.log 里 rpc=tools/call 元数据 received_utc 的最大值换北京时间到分钟；是调用数所数窗口的终点，不是读取时间。"
+    },
+    {
+      "page": "remote-control",
+      "screen": "remote-control-02",
+      "category": "人工",
+      "source_location": "E:\\Data\\RemoteComputerMCP\\logs\\service*.log",
+      "private": true,
+      "field": "screens[1].text",
+      "id": "remote-control-calls-window-start-s2",
+      "automatic": true,
+      "historical": false,
+      "scope_status": "verified",
+      "label": "calls-window-start",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "remote-current-log-window",
+        "pointer": [
+          "first_utc"
+        ],
+        "timeout": 20
+      },
+      "date_semantics": "event_time",
+      "page_pattern": "北京时间 (\\d+ 月 \\d+ 日 \\d+:\\d+) 至 \\d+ 月 \\d+ 日 \\d+:\\d+），主机收到",
+      "current_value": "10 月 21 日 15:59",
+      "measurement_scope": "当前 service*.log 里 rpc=tools/call 元数据 received_utc 的最小值换北京时间到分钟；是调用数所数窗口的起点，不是读取时间。"
+    },
+    {
+      "page": "remote-control",
+      "screen": "remote-control-02",
+      "category": "人工",
+      "source_location": "E:\\Data\\RemoteComputerMCP\\logs\\service*.log",
+      "private": true,
+      "field": "screens[1].text",
+      "id": "remote-control-calls-window-end-s2",
+      "automatic": true,
+      "historical": false,
+      "scope_status": "verified",
+      "label": "calls-window-end",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "remote-current-log-window",
+        "pointer": [
+          "last_utc"
+        ],
+        "timeout": 20
+      },
+      "date_semantics": "event_time",
+      "page_pattern": "北京时间 \\d+ 月 \\d+ 日 \\d+:\\d+ 至 (\\d+ 月 \\d+ 日 \\d+:\\d+)），主机收到",
+      "current_value": "10 月 23 日 10:08",
+      "measurement_scope": "当前 service*.log 里 rpc=tools/call 元数据 received_utc 的最大值换北京时间到分钟；是调用数所数窗口的终点，不是读取时间。"
+    },
+    {
+      "page": "remote-control",
+      "screen": "remote-control-02",
+      "category": "人工",
+      "source_location": "E:\\Data\\RemoteComputerMCP\\logs\\service*.log",
+      "private": true,
+      "field": "screens[1].text",
+      "id": "remote-control-n-calls-1",
+      "automatic": true,
+      "historical": false,
+      "scope_status": "verified",
+      "label": "calls-total-screen2",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "remote-current-log-window",
+        "pointer": [
+          "calls"
+        ],
+        "timeout": 20
+      },
+      "page_pattern": "主机收到 ([\\d,]+) 次工具调用",
+      "current_value": 87,
+      "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。"
+    },
+    {
+      "page": "remote-control",
+      "screen": "remote-control-02",
+      "category": "人工",
+      "source_location": "E:\\Data\\RemoteComputerMCP\\logs\\service*.log",
+      "private": true,
+      "field": "screens[1].text",
+      "id": "remote-control-n-median-1",
+      "automatic": true,
+      "historical": false,
+      "scope_status": "verified",
+      "label": "median-seconds-current",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "remote-current-log-window",
+        "pointer": [
+          "median_seconds"
+        ],
+        "timeout": 20,
+        "digits": 2
+      },
+      "page_pattern": "一半在约 ([\\d.]+) 秒内",
+      "current_value": 4.52,
+      "measurement_scope": "只数当前service*.log里rpc=tools/call元数据，按完整相同行去重；所有分类与中位数使用同一现存窗口。desktop仅Snapshot/Screenshot，other为排除MaintenancePowerShell/PowerShell/ComputerContext/Snapshot/Screenshot余项；中位数服务端elapsed_ms/1000、不含模型与网络。"
+    },
+    {
+      "page": "codex-memory-claude-project-memory",
+      "screen": "codex-memory-claude-project-memory-05",
+      "field": "screens[4].text",
+      "source_location": "G盘Claude/current.json现存元数据['file_count']；不重新逐文件校验。",
+      "private": true,
+      "id": "b7-codex-memory-claude-project-memory-snapshot-time",
+      "automatic": true,
+      "historical": false,
+      "scope_status": "verified",
+      "label": "current-snapshot-completed",
+      "retrieve": {
+        "kind": "json",
+        "path": "G:/80_Backup/ControlPlane/AIMemory/Claude/current.json",
+        "pointer": [
+          "completed_utc"
+        ]
+      },
+      "date_semantics": "event_time",
+      "page_pattern": "current 都指向 (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}) 保存点",
+      "current_value": "2026-09-28 10:36:52",
+      "measurement_scope": "G 盘 Claude current.json 的 completed_utc 换北京时间到秒；是这份保存点完成的事件时间，不是读取时间。",
+      "observation_basis": "live_read"
+    },
+    {
+      "page": "devconfig-backup-tiered-distribution",
+      "screen": "devconfig-backup-tiered-distribution-10",
+      "category": "只读来源",
+      "field": "screens[9].text",
+      "source_location": "E:/Projects/Backups/devconfig-backup/out/latest.zip.receipt.json",
+      "private": false,
+      "id": "devconfig-backup-tiered-distribution-receipt-read-asof",
+      "automatic": true,
+      "historical": false,
+      "scope_status": "verified",
+      "label": "receipt-read-at",
+      "page_pattern": "北京时间 (\\d+ 月 \\d+ 日 \\d+:\\d+) 读最新成功回执",
+      "current_value": "10 月 23 日 10:28",
+      "qualifies": [
+        "b9-tools-devconfig-backup-tiered-distribution-anchor-048",
+        "b9-tools-devconfig-backup-tiered-distribution-anchor-049",
+        "b9-tools-devconfig-backup-tiered-distribution-anchor-051"
+      ],
+      "measurement_scope": "同句回执字节、文件数的读取时刻（北京时间）；按需更新时跟着这些数字一起推进。"
+    },
+    {
+      "page": "ai-cli-profile-manager",
+      "screen": "ai-cli-profile-manager-10",
+      "category": "人工",
+      "source_location": "本机ollama -v",
+      "private": false,
+      "field": "screens[9].text",
+      "id": "ai-cli-profile-manager-ollama-version-asof",
+      "automatic": true,
+      "historical": false,
+      "scope_status": "verified",
+      "label": "ollama-version-read-at",
+      "page_pattern": "Ollama \\d+(?:\\.\\d+)+（(\\d+ 月 \\d+ 日)读到的版本",
+      "current_value": "10 月 22 日",
+      "qualifies": [
+        "ai-cli-profile-manager-text-0-369"
+      ],
+      "measurement_scope": "同句 Ollama 版本的读取日期（北京时间）；按需更新时跟着版本一起推进。"
+    },
+    {
+      "id": "int3-projects-home-visible-asof",
+      "page": "projects-home",
+      "screen": "projects-home-01",
+      "field": "screens[0].text",
+      "page_pattern": "截至北京时间 (\\d{4}-\\d{2}-\\d{2} \\d+:\\d+)",
+      "label": "同句真实数据截止",
+      "current_value": "2026-10-11 16:26",
+      "as_of": "2026-10-11",
+      "category": "截至日期",
+      "source_location": "所列具名来源的同句数据观察边界",
+      "qualifies": [
+        "projects-home-n-projects-0",
+        "projects-home-n-common-0",
+        "projects-home-n-occasional-0",
+        "projects-home-n-frozen-0",
+        "projects-home-n-public-0",
+        "projects-home-n-private-0",
+        "projects-home-n-in-use-0",
+        "projects-home-n-features-0"
+      ],
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "可见截止说明同屏项目、可见性和功能总规模，复用已核实页面计数来源，不把表头纯标签当数字。",
+      "known_gap": "正文这处是 {{projects-home.based_on.as_of}} 占位，构建时由 projects-home-as-of 那条写的 based_on.as_of 渲染；本条只登记可见位置，改数时不改正文。"
+    },
+    {
+      "page": "github-local-index",
+      "screen": "github-local-index-01",
+      "category": "自动",
+      "source_location": "现有github-index-readonly-counts与github-admission-fixed-window入口；本轮实际取数见round-01/evidence/refresh/result.json，现场主线比较另见round-01/evidence/github-owner-status.json。",
+      "private": false,
+      "field": "screens[0].text",
+      "id": "b6-github-local-index-unpushed-asof",
+      "label": "unpushed-read-at",
+      "automatic": true,
+      "historical": false,
+      "scope_status": "verified",
+      "page_pattern": "按本机缓存数，截至 (\\d+ 月 \\d+ 日)本机还没推上去的提交",
+      "current_value": "10 月 22 日",
+      "qualifies": [
+        "b6-github-local-index-unpushed-count"
+      ],
+      "measurement_scope": "同句未推送提交数的读取日期（北京时间）；按需更新时跟着这个数一起推进。"
+    },
+    {
+      "page": "remote-control",
+      "category": "人工",
+      "source_location": "E:\\PCConfig\\tools\\remote-computer-mcp",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "remote-installed-tool-catalog",
+        "pointer": [
+          "tool_count"
+        ],
+        "timeout": 20
+      },
+      "automatic": true,
+      "private": false,
+      "measurement_scope": "已安装上游20个tool注册+源server.py的ComputerContext/ReadDocument+启用maintenance.py的MaintenancePowerShell；去重名称计23。不输出工具参数或私人资料，不冒充本次两台实时tools/list实测。",
+      "scope_status": "verified",
+      "id": "remote-control-n-tools-s2",
+      "historical": false,
+      "screen": "remote-control-02",
+      "field": "screens[1].text",
+      "label": "tools-mirror-usage",
+      "page_pattern": "〔([\\d,]+) 个工具全部列在",
+      "current_value": 23
+    },
+    {
+      "page": "remote-control",
+      "category": "人工",
+      "source_location": "E:\\PCConfig\\tools\\remote-computer-mcp",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "remote-installed-tool-catalog",
+        "pointer": [
+          "tool_count"
+        ],
+        "timeout": 20
+      },
+      "automatic": true,
+      "private": false,
+      "measurement_scope": "已安装上游20个tool注册+源server.py的ComputerContext/ReadDocument+启用maintenance.py的MaintenancePowerShell；去重名称计23。不输出工具参数或私人资料，不冒充本次两台实时tools/list实测。",
+      "scope_status": "verified",
+      "id": "remote-control-n-tools-s4",
+      "historical": false,
+      "screen": "remote-control-04",
+      "field": "screens[3].text",
+      "label": "tools-mirror-tech",
+      "page_pattern": "：([\\d,]+) 个工具里 \\d+ 个来自开源的 Windows-MCP",
+      "current_value": 23
+    },
+    {
+      "page": "typora-theme-pack",
+      "category": "人工",
+      "source_location": "E:\\Projects\\Tools\\TyporaThemePack\\tests",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "E:/Projects/Tools/TyporaThemePack/tests",
+        "include": [
+          "test_*.py"
+        ],
+        "pattern": "^\\s*def test",
+        "flags": "m"
+      },
+      "automatic": true,
+      "private": false,
+      "measurement_scope": "tests/test_*.py 里 def test 的定义数；只计数，不运行，不是通过数。",
+      "scope_status": "verified",
+      "id": "typora-theme-pack-n-tests-2",
+      "historical": false,
+      "screen": "typora-theme-pack-09",
+      "field": "screens[8].text",
+      "label": "test-definitions-features",
+      "page_pattern": "自动测试｜([\\d,]+) 项测试查导出保护",
+      "current_value": 22
     }
   ],
   "freshness_policy": {

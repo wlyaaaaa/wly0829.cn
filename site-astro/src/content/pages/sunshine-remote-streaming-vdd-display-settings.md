@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-vdd-display-settings/page.json",
-  "sha256": "eabdc81df3d547c58cd8f2b5a42ec41eae5844e7c79e156f9dff2ca38065c164",
-  "converted_at_beijing": "2026-10-11T19:04:26+08:00"
+  "sha256": "f00a095b0c7a183755c756db3b9994c6335be9e5c8f7ad3d4d15c8f2b5d7c714",
+  "converted_at_beijing": "2026-10-23T14:53:35+08:00"
  }
 }
 ---
@@ -624,7 +624,7 @@ Sunshine 远程串流 · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-现存驱动配置（vdd_settings.xml）：首项 2880×1800@60、HDRPlus 关闭。实际模式、缩放与 Windows HDR 截止前没有新的回读；9 月 18 日隔离测试回执保留，本轮未重跑
+现存驱动配置（vdd_settings.xml）：首项 2880×1800@60、HDRPlus 关闭。实际模式、缩放与 Windows HDR 没有新的回读；9 月 18 日隔离测试回执保留，本轮未重跑
 
 ## 关键规则与设计选择
 

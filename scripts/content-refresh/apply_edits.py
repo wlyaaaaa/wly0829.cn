@@ -17,8 +17,28 @@ ROOT = Path(__file__).resolve().parents[2]
 NUMBER = re.compile(r"-?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?")
 CHINESE_DATE = re.compile(r"(?:(\d{4})\s*年\s*)?(\d{1,2})\s*月\s*(\d{1,2})\s*日(?:\s+(\d{1,2}):(\d{2})(:\d{2})?)?")
 DATETIME = re.compile(r"\d{4}-\d{2}-\d{2}([ T])\d{2}:\d{2}(:\d{2})?(\.\d+)?(Z|[+-]\d{2}:?\d{2})?")
+TEMPLATE = re.compile(r"\{\{[^{}\n]+\}\}")  # 页面里 {{页.字段}} 这类占位，构建时渲染
+VERSION = re.compile(r"\d+(?:\.\d+){2,}")  # 0.40.4 这类版本号整串比较，不拆成数字
 EVENT_DATE = re.compile(r"(?:最近(?:一次)?|最后(?:一次)?|上(?:一)?次)\s*(?:写入|使用|运行|同步|采集|访问|更新)|(?:数据|记录|账本)\s*(?:记到|覆盖到)|数据水位")
+# 数字所在那一段里有“截至”或“某日计数／读／核对”，或整屏有单独成行的“截至 X”“X 核对”，没配日期的数字就不能单独换新
+FIELD_DATED = re.compile(r"截至|截止|观察于|采样于|(?:" + DATETIME.pattern + "|" + CHINESE_DATE.pattern + r"|\d{4}-\d{2}-\d{2})"
+                         r"[^。；;\n]{0,12}?(?:计数|重数|数出|数|重读|读取|读|核对|查看|核查|复查|再查|统计|观察|清点|取数|盘点|看)")
+LINE_CUTOFF = re.compile(r"^\s*[-*#>]*\s*(?:\*\*)?\s*(?:截至|截止|数据截至|观察于|采样于)|^\s*(?:" + DATETIME.pattern + "|" + CHINESE_DATE.pattern
+                         + r"|\d{4}-\d{2}-\d{2})[^。；;\n]{0,14}$", re.M)
+PAST = re.compile(r"(?:那次|当时|此前|之前|原先|历史|旧页|曾|上次)[^。；;\n]{0,6}$")
 BEIJING = timezone(timedelta(hours=8))
+ANY_DATE = re.compile(DATETIME.pattern + "|" + CHINESE_DATE.pattern + r"|\d{4}-\d{2}-\d{2}")
+
+
+def dated(paragraph):
+    """这段里有没有管着当前值的观察说法；前面带“那次、当时、此前”的是历史，不算。"""
+    return any(not PAST.search(paragraph[max(0, m.start() - 12):m.start()]) for m in FIELD_DATED.finditer(paragraph))
+
+
+def live_dates(sentence, pattern):
+    """句里会和当前值错配的日期：“X 起／以来”是起算日，前面带“那次、此前”的是历史，都不算。"""
+    return any(not re.match(r"\s*(?:起|以来)", sentence[m.end():]) and not PAST.search(sentence[max(0, m.start() - 12):m.start()])
+               for m in pattern.finditer(sentence))
 
 
 def field_at(page, field):
@@ -93,6 +113,10 @@ def formatted(old, value):
         values = iter(([new.year] if chinese[1] else []) + [new.month, new.day])
         return re.sub(r"\d+", lambda m: str(next(values)).zfill(len(m[0]))
                       if m[0].startswith("0") else str(next(values)), old)
+    if VERSION.fullmatch(old):
+        if not VERSION.fullmatch(str(value)):
+            raise ValueError("新值不是版本号")
+        return str(value)
     if not NUMBER.fullmatch(old):
         raise ValueError("old_value_not_whole_number")
     if isinstance(value, str) and not NUMBER.fullmatch(value):
@@ -146,6 +170,8 @@ def locate(text, row, number=False):
 
 def whole_number(text, start, end):
     fragment = text[start:end]
+    if VERSION.fullmatch(fragment) and not re.search(r"[\d.]$", text[:start]) and not re.match(r"[\d.]", text[end:]):
+        return
     if re.fullmatch(r"-?[\d,.]+", fragment) and (not NUMBER.fullmatch(fragment)
             or re.search(r"\d[.,]?$", text[:start]) or re.match(r"(?:\d|[.,]\d)", text[end:])):
         raise ValueError("old_value_not_whole_number")
@@ -174,6 +200,17 @@ def body_link(page, row, field, start, end, number, rows):
             proven = True
     if not proven:
         raise ValueError("scope_mismatch_or_unverified")
+    qualified_ids = {ref for r in rows for ref in r.get("qualifies", [])}
+    for other in rows:  # 同屏另一条未配对的自动日期（窗口起止、最后提交时间）和本数同组换新，不算会错配的旧日期
+        if (other is not row and other.get("automatic") and not other.get("qualifies") and other["id"] not in qualified_ids
+                and other.get("page") == row.get("page") and other.get("field", other.get("page_field")) == field and other.get("page_pattern")
+                and other.get("status") in {"changed", "unchanged"}):
+            try:
+                x, y = locate(parent[key], other)
+            except (ValueError, IndexError, re.error):
+                continue
+            if ANY_DATE.fullmatch(text[x:y]):
+                text = text[:x] + "#" * (y - x) + text[y:]
     paired = [r for r in rows if row["id"] in r.get("qualifies", [])]
     if paired:
         if any(r.get("new_value") is None or r.get("status") not in {"changed", "unchanged"}
@@ -195,7 +232,7 @@ def body_link(page, row, field, start, end, number, rows):
             qualified.add((a, b))
             spans.extend(m for m in sentences if m.start() <= a < b <= m.end())
     candidates = {}
-    pattern = re.compile(DATETIME.pattern + "|" + CHINESE_DATE.pattern + r"|\d{4}-\d{2}-\d{2}")
+    pattern = ANY_DATE
     for sentence in spans:
         if EVENT_DATE.search(sentence[0]):
             continue
@@ -206,9 +243,36 @@ def body_link(page, row, field, start, end, number, rows):
             bracketed = re.search(r"[（(]\s*(?:北京时间\s*)?$", prefix) and re.match(r"\s*[）)]", suffix)
             if safe or bracketed or any(a <= x < y <= b for x, y in qualified):
                 candidates[(a, b)] = stamp[0]
+    a, b = text.rfind("\n", 0, start) + 1, (text.find("\n", end) + 1 or len(text) + 1) - 1
+    near = [m[0] for m in spans]
+    if text[a:b].lstrip().startswith("|"):  # 表格一行里各格互不相干，只看数字所在那一格
+        a, b = text.rfind("|", a, start) + 1, (text.find("|", end, b) + 1 or b + 1) - 1
+        near = [text[a:b]]
+    for other in rows:  # 同一行（表格是同一格）里有本轮不取数的人工数字，换新会和它的口径或时点错配
+        if (not other.get("automatic") and other.get("status") != "historical" and other.get("page") == row.get("page")
+                and other.get("field", other.get("page_field")) == field
+                and (other.get("page_pattern") or isinstance(other.get("start"), int))):
+            try:
+                x, y = locate(text, other)
+            except (ValueError, IndexError, re.error):
+                continue
+            if a <= x < y <= b:
+                raise ValueError("as_of_link_required")
+    if not candidates and not any(live_dates(s, pattern) for s in near) and not dated(text[a:b]) and not LINE_CUTOFF.search(text):
+        return None  # 句里、所在段和整屏都没有管它的观察时间或“截至”：当前值本身不带日期，换新值不会和哪个日期错配
     if len(candidates) != 1:
         raise ValueError("as_of_link_required")
     return next(iter(candidates))
+
+
+def placeholder(page, row):
+    """模式的捕获组换成 {{…}} 占位后在作者稿里唯一命中：这处日期是构建时渲染的引用。"""
+    try:
+        parent, key = field_at(page, row["field"])
+        pattern = re.sub(r"\((?!\?)(?:[^()\\]|\\.)*\)", lambda m: r"(\{\{[^{}\n]+\}\})", row["page_pattern"], count=1)
+        return len(re.findall(pattern, parent[key], re.M)) == 1
+    except (KeyError, IndexError, TypeError, ValueError, re.error):
+        return False
 
 
 def qualified_date_review(page, row):
@@ -245,14 +309,15 @@ def build_number_edits(root, result):
             authors[filename] = json.loads((root / filename).read_text("utf-8-sig"))
         parent, key = field_at(authors[filename], target["field"])
         return target, parent[key]
-    accepted, positions = set(), {}
+    accepted, positions, rendered = set(), {}, set()
     links, owners, unpaired = defaultdict(set), defaultdict(set), defaultdict(list)
     for row in result["rows"]:
         for ref in row.get("qualifies", []):
             links[row["id"]].add(ref)
             links[ref].add(row["id"])
     for row in result["rows"]:
-        if row["id"] not in links and row.get("status") != "historical" and not row.get("dynamic"):
+        # 同屏原子组只收本轮自动取数的记录；人工和领域任务项本轮不更新，不连坐同屏数字，同一行的由 body_link 拦
+        if row["id"] not in links and row.get("automatic") and row.get("status") != "historical" and not row.get("dynamic"):
             unpaired[(row["page"], row.get("screen"), row.get("field", "").split(".")[0])].append(row["id"])
     for group in unpaired.values():
         for rid in group:
@@ -261,6 +326,9 @@ def build_number_edits(root, result):
         if row.get("manual_review_reason"):
             manual_reviews.append({k: row.get(k) for k in ("page", "field", "old_value", "date_candidate", "source_observed_at")} |
                                   {"record_id": row["id"], "status": "需人工核对", "reason": row["manual_review_reason"]})
+            continue
+        if row.get("dynamic") and row.get("status") in {"changed", "unchanged"} and row.get("scope_status") == "verified":
+            rendered.add(row["id"])  # 动态值在构建时按同一页面登记渲染，不改正文；只让注明它的截至日期能推进
             continue
         if (row.get("status") not in {"changed", "unchanged"} or row.get("scope_status") != "verified"
                 or not (row.get("source_observed_at") or row.get("source_coverage_end")) or row.get("historical") or row.get("frozen")
@@ -283,11 +351,14 @@ def build_number_edits(root, result):
             if row.get("source_precision") == "estimated" and row.get("display_precision") == "exact":
                 raise ValueError("estimated_source_cannot_replace_exact")
             review = qualified_date_review(page, row) if row.get("qualifies") and row.get("date_semantics") != "coverage_end" else None
+            if review and placeholder(page, row):
+                rendered.add(rid)  # 可见日期在作者稿里是 {{页.字段}} 占位，由所引字段那条日期记录写，这里不改正文
+                continue
             if review:
                 manual_reviews.append(dict(page=slug, record_id=rid, field=row.get("field"), old_value=row["old_value"],
                     date_candidate=row["new_value"], source_observed_at=row["source_observed_at"], status="需人工核对", reason=review))
                 continue
-            if row.get("qualifies") and not set(row["qualifies"]) <= accepted:
+            if row.get("qualifies") and not set(row["qualifies"]) <= accepted | rendered:
                 raise ValueError("as_of_link_required")
             numbers = page.get("registry", {}).get("numbers", [])
             nid = row.get("page_number") or row.get("registry_number")
@@ -302,6 +373,13 @@ def build_number_edits(root, result):
             editable_range(parent[key], start, end)
             positions[rid] = (author["file"], author["field"], field, start, end, parent[key][start:end])
             whole_number(parent[key], start, end)
+            shown = row.get("value_text", {}).get(str(row["new_value"]))
+            if shown is not None:  # 页面用文字写来源值（已开启、三）：按对照表一致就是原样重读，变了要改写句子
+                proven_offset(parent[key], row)
+                if not parent[key][start:end] == str(row["old_value"]) == shown:
+                    raise ValueError("文字写法与来源值对不上，需改写句子")
+                accepted.add(rid)
+                continue
             if NUMBER.fullmatch(str(row["new_value"])) and not NUMBER.fullmatch(str(row["old_value"])):
                 raise ValueError("old_value_not_whole_number")
             proven_offset(parent[key], row)
@@ -333,7 +411,7 @@ def build_number_edits(root, result):
                         start=a, end=b, old_value=old, new_value=new,
                         observed_at=evidence_at, record_id=rid))
             number = numbers[ni] if ni is not None else None
-            if field.startswith("screens[") and NUMBER.fullmatch(parent[key][start:end]):
+            if field.startswith("screens[") and (NUMBER.fullmatch(parent[key][start:end]) or VERSION.fullmatch(parent[key][start:end])):
                 linked = body_link(page, row, field, start, end, number, result["rows"])
                 if linked:
                     add(field, *linked, row.get("source_coverage_end") or evidence_at)
@@ -386,7 +464,7 @@ def build_number_edits(root, result):
     grouped = defaultdict(list)
     for edit in edits.values():
         grouped[(edit["file"], edit["field"])].append(edit)
-    blocked = {r["id"] for r in result["rows"]} - accepted
+    blocked = {r["id"] for r in result["rows"]} - accepted - rendered
     for (filename, field), group in grouped.items():
         ordered = sorted(group, key=lambda e: e["start"])
         if any(a["end"] > b["start"] for a, b in zip(ordered, ordered[1:])):

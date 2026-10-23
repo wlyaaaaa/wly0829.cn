@@ -24,7 +24,7 @@
       },
       {
         "type": "section_heading",
-        "text_ref": "截至10月10",
+        "text_ref": "工具数、入口数截至",
         "align": "left",
         "size": "medium"
       },
@@ -92,7 +92,7 @@
       },
       {
         "type": "section_heading",
-        "text_ref": "截至10月10",
+        "text_ref": "工具数、入口数截至",
         "align": "left",
         "size": "medium"
       },
@@ -191,7 +191,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "最近真用了多少：10月8日07:09至9日01:25，主机收到163次工具调用（",
+        "text_ref": "最近真用了多少：主机现存日志里",
         "variant": "stacked",
         "width": "100%",
         "chart_type": "stacked",
@@ -252,7 +252,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "最近真用了多少：10月8日07:09至9日01:25，主机收到163次工具调用（",
+        "text_ref": "最近真用了多少：主机现存日志里",
         "variant": "stacked",
         "chart_type": "stacked",
         "labels_layout": "rows"

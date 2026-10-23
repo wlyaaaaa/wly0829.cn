@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/chinese-asr-models-modes/page.json",
-  "sha256": "5a536230ba56851aeefda141a602625517068a1d296bbd67e27d17ea8fcb9c74",
-  "converted_at_beijing": "2026-10-22T08:32:27+08:00"
+  "sha256": "ac70e82d913836cafbc8f616e7c2f0e880464e3946af19ae2cf387bc97e6c252",
+  "converted_at_beijing": "2026-10-23T14:54:22+08:00"
  }
 }
 ---
@@ -1195,7 +1195,7 @@ Registry（登记清单） 现登记 4 个识别引擎、2 套 profiles（baseli
     },
     {
      "type": "bullet_list",
-     "text_ref": "2026-10-22重读当前配置：engines登记4个（fireredasr2-llm、qwen3-asr-1.7b、sensevoice、paraformer），profiles为baseline",
+     "text_ref": "2026-10-22重读当前配置：engines登记",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1212,7 +1212,7 @@ Registry（登记清单） 现登记 4 个识别引擎、2 套 profiles（baseli
     },
     {
      "type": "bullet_list",
-     "text_ref": "2026-10-22重读当前配置：engines登记4个（fireredasr2-llm、qwen3-asr-1.7b、sensevoice、paraformer），profiles为baseline",
+     "text_ref": "2026-10-22重读当前配置：engines登记",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1236,7 +1236,7 @@ Registry（登记清单） 现登记 4 个识别引擎、2 套 profiles（baseli
 
 ## 依据与来源（二）
 
-- 2026-10-22 重读当前配置：engines 登记 4 个（fireredasr2-llm、qwen3-asr-1.7b、sensevoice、paraformer），profiles 为 baseline、high_quality 两套，cloud_review 只剩两款 Qwen Audio 3.1。32df3b9（10 月 20 日 16:27）删掉了 fun-asr-nano、whisper-large-v3 占位、llm_arbitration 和 3.0 旧云模型，相关测试一并删改；10 月 11 日读到的“登记 6 个、直接转写闭集 5 个”是删除前的旧配置。之后 9343a8e、ed8d64f、325b0c4（10 月 21 日 13:00—13:12）只把测试输出、隐藏入口报错、FireRed 进出和云结果固定为 UTF-8，没有改默认模型（本轮只读源码，未执行测试）。
+- 2026-10-22 重读当前配置：engines 登记 4 个；10 月 22 日那时登记的是 fireredasr2-llm、qwen3-asr-1.7b、sensevoice、paraformer，profiles 为 baseline、high_quality 两套，cloud_review 只剩两款 Qwen Audio 3.1。32df3b9（10 月 20 日 16:27）删掉了 fun-asr-nano、whisper-large-v3 占位、llm_arbitration 和 3.0 旧云模型，相关测试一并删改；10 月 11 日读到的“登记 6 个、直接转写闭集 5 个”是删除前的旧配置。之后 9343a8e、ed8d64f、325b0c4（10 月 21 日 13:00—13:12）只把测试输出、隐藏入口报错、FireRed 进出和云结果固定为 UTF-8，没有改默认模型（本轮只读源码，未执行测试）。
 
 - config、pipeline、Qwen identity、FireRed worker 等单元回归包含在 2026-08-31 的 345 项通过结果中；之后各次全量运行保留各自日期，不合并成新的全量通过。
 

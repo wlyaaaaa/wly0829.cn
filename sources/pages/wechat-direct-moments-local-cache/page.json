@@ -77,7 +77,7 @@
       "id": "wechat-direct-moments-local-cache-04",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n显式账号、自身身份、缓存发布者、未命中下一步和快照替换均有合成回归（当前源码 v0.2.3，最后提交 2026-10-20，共定义 225 个测试函数，2026-10-22 重数，本轮没有运行）；未读取真实朋友圈正文\n\n## 关键规则与设计选择\n\n1. 朋友圈命令必须显式指定 primary 或 secondary，命令本身不会默认读两个号。我自然地问、没说哪个号时，是 AI 分别发出主号、副号两次明确请求，并标注各自结果；指定的号没配置就报错，不拿另一个号代读。\n\n2. self 使用来源账号作者身份承诺，不从昵称或头像推断；朋友圈作者只严格去掉末尾“_加四位十六进制”的存储后缀，计算承诺和实际读取共用同一条规则。\n\n3. 发布者目录组合联系人、未登记联系人和当前缓存，不建立持久人物索引。\n\n4. sync-moments 保存当前缓存快照，缓存已淘汰条目会从新快照移除。\n\n5. target_not_in_current_local_cache 只触发一次同账号手动打开后重试。\n\n## 当前怎样实现\n\n- _resolve_moments_subject 强制显式账号，并组合 source-proven self、完整联系人目录和当前缓存发布者。\n\n- list_moments 对指定人会扫描完整当前缓存后再应用 limit，避免目标在后部时被错误截断。\n\n- moments 返回 target_cached / target_not_in_current_local_cache / account_cache_read。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n显式账号、自身身份、缓存发布者、未命中下一步和快照替换均有合成回归（当前源码共定义 225 个测试函数，2026-10-22 重数，本轮没有运行；那时版本 v0.2.3、最后提交 2026-10-20）；未读取真实朋友圈正文\n\n## 关键规则与设计选择\n\n1. 朋友圈命令必须显式指定 primary 或 secondary，命令本身不会默认读两个号。我自然地问、没说哪个号时，是 AI 分别发出主号、副号两次明确请求，并标注各自结果；指定的号没配置就报错，不拿另一个号代读。\n\n2. self 使用来源账号作者身份承诺，不从昵称或头像推断；朋友圈作者只严格去掉末尾“_加四位十六进制”的存储后缀，计算承诺和实际读取共用同一条规则。\n\n3. 发布者目录组合联系人、未登记联系人和当前缓存，不建立持久人物索引。\n\n4. sync-moments 保存当前缓存快照，缓存已淘汰条目会从新快照移除。\n\n5. target_not_in_current_local_cache 只触发一次同账号手动打开后重试。\n\n## 当前怎样实现\n\n- _resolve_moments_subject 强制显式账号，并组合 source-proven self、完整联系人目录和当前缓存发布者。\n\n- list_moments 对指定人会扫描完整当前缓存后再应用 limit，避免目标在后部时被错误截断。\n\n- moments 返回 target_cached / target_not_in_current_local_cache / account_cache_read。",
       "links": [],
       "anchors": [
         {

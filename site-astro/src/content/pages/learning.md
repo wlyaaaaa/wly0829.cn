@@ -504,8 +504,8 @@
  },
  "source": {
   "page": "sources/pages/learning/page.json",
-  "sha256": "594ad94188a1c182e2b45048af17885262d30b433bbf413479201382af4faed7",
-  "converted_at_beijing": "2026-10-11T19:07:13+08:00"
+  "sha256": "d5a3b2af08be072426ce9ae0a0ca0b10c56c864efe7223b0c6999d5d9e6e61bb",
+  "converted_at_beijing": "2026-10-23T14:54:22+08:00"
  }
 }
 ---
@@ -579,7 +579,7 @@
      "type": "prose",
      "align": "right",
      "size": "small",
-     "text_ref": "数字截至"
+     "text_ref": "练习数截至"
     },
     {
      "type": "action_button",
@@ -618,16 +618,16 @@
     },
     {
      "type": "prose",
-     "align": "right",
-     "size": "small",
-     "text_ref": "数字截至"
-    },
-    {
-     "type": "prose",
      "text_ref": "AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Opus 5.5）排路线、"
     },
     {
      "type": "illustration"
+    },
+    {
+     "type": "prose",
+     "align": "right",
+     "size": "small",
+     "text_ref": "练习数截至"
     },
     {
      "type": "action_button",
@@ -755,7 +755,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
 **13 组练习**｜Python 和 Java 的练习代码
 **306 项测试**｜练习的离线测试，9 月 28 日开课前终审时全部通过
 
-数字截至 10 月 11 日
+练习数截至 10 月 11 日
 
 〔看电脑和项目状态 → 驾驶舱〕
 

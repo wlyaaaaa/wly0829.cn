@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/agents-skills-plugins/page.json",
-  "sha256": "2f18f8e99e9bd6db939814c89d292bb2a03912b568dd37ce7ff265cada0cde5b",
-  "converted_at_beijing": "2026-10-23T12:57:22+08:00"
+  "sha256": "47866cd6b4614117df454dcf29d1bb6659a978f2ae6d24ce3b5679a8bb50795e",
+  "converted_at_beijing": "2026-10-23T14:53:33+08:00"
  }
 }
 ---
@@ -622,7 +622,7 @@
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-10 月 22 日 07:31 检查：`config/personal-skill-supply.json` 中 31 个 install=true（个人 Skill 29 个、插件自带 Skill 2 个，后两个是 md-to-pdf 和 pdf-render-safe，来自同一个受管插件包）；发现目录 `C:\Users\<用户名>\.agents\skills` 下 31 个都在，都是指向清单来源的目录链接，登记和能被找到的数对上了。外部接入的 Word、PDF 两个能力不在这份清单里，不混进同一个分母。这只是路径观察，不是快速校验、新会话发现或真实使用通过。历史：10 月 22 日早上 06:46—06:51 只读枚举时是 30 个，差的是新加的 personal-finance：源文件在、发现目录里没有链接；之后补上了这个链接，07:31 验收通过。10 月 12 日 04:33 是 29 个 install=true（个人 27、插件 2），29/29 链接指向清单来源且 SKILL.md 存在。
+10 月 22 日 07:31 检查：`config/personal-skill-supply.json` 中 31 个 install=true（个人 Skill 29 个、插件自带 Skill 2 个）；发现目录 `C:\Users\<用户名>\.agents\skills` 下有 31 个是指向清单来源的目录链接，两数相等就是登记的都能被找到。插件自带的两个此前 10 月 22 日那时是 md-to-pdf 和 pdf-render-safe，来自同一个受管插件包。外部接入的 Word、PDF 两个能力不在这份清单里，不混进同一个分母。这只是路径观察，不是快速校验、新会话发现或真实使用通过。历史：10 月 22 日早上 06:46—06:51 只读枚举时是 30 个，差的是新加的 personal-finance：源文件在、发现目录里没有链接；之后补上了这个链接，07:31 验收通过。10 月 12 日 04:33 是 29 个 install=true（个人 27、插件 2），29/29 链接指向清单来源且 SKILL.md 存在。
 
 ## 关键规则与设计选择
 

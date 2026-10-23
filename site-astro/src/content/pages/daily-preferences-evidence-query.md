@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/daily-preferences-evidence-query/page.json",
-  "sha256": "78a54dc343764f64c7207f9bc1a57f2a1f2829a8a3e2aa5b84bc6bcbdf17a780",
-  "converted_at_beijing": "2026-10-23T09:07:59+08:00"
+  "sha256": "60dcca827f5593ae92e527cdb705139ea2c0a9ebade60543a025ae23dc320eca",
+  "converted_at_beijing": "2026-10-23T14:53:33+08:00"
  }
 }
 ---
@@ -720,7 +720,7 @@
 
 13. 真实订单权重高于长 AI 文本；Steam 累计游玩时长只保留为事实，不参与偏好评分。当前免费游戏在其他条件相同时只低 0.5 分。
 
-14. profile/evidence的source_discovery可见实际登记的逻辑来源（2026-10-22 06:48 只读为 35 类，其中 34 类有现行记录，163 个来源实例；10 月 11 日是 34 类、33 类、160 个）、本次检索范围和后续读取入口；有相关认识时不同时扫描全部原文，未匹配认识时仍能发现原文候选。
+14. profile/evidence的source_discovery可见实际登记的逻辑来源（本库数据截至 2026-10-21，只读为 35 类，其中 34 类有现行记录，163 个来源实例；10 月 11 日是 34 类、33 类、160 个）、本次检索范围和后续读取入口；有相关认识时不同时扫描全部原文，未匹配认识时仍能发现原文候选。
 
 15. facts可在明确逻辑来源/平台/实例时无关键词分页浏览；长正文默认标preview_not_full，--full或original才给完整内容，不能把预览当全文已读。
 

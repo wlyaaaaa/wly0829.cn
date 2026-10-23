@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup-tiered-distribution/page.json",
-  "sha256": "07b2abe6f6b538b7c4be3a1c7d809b1820d29b9d4f0f49b6bf23830cb33aec0b",
-  "converted_at_beijing": "2026-10-23T10:34:59+08:00"
+  "sha256": "9a55863376bfb77688e17780b4cd65fb5911f50eb2f7d1b53fe00a8a6ecc0d68",
+  "converted_at_beijing": "2026-10-23T14:53:34+08:00"
  }
 }
 ---
@@ -1037,7 +1037,7 @@ DevConfig Backup · 功能说明
 
 - 9 月 18 日来源回归与收尾证据包含 H 职责隔离和分层发布验证；网页本轮不重跑这些源码脚本。
 
-- 北京时间 10 月 11 日 13:33 的零写入状态：当天 12:06—12:25 的配置采集失败（读取 home/.codex/state_5.sqlite 数据库副本超时），没有发布新包。本地/G 同为 devconfig-20261009-231229-9de61253.zip，299,791,772 字节（约 286.0 MiB），回执记 6,270 个文件、原始 942,360,581 字节（约 0.88 GiB），整包 SHA-256=de16cef7554bc0b62d9911b2c0599f6ae71f02f4691dd63576f999531b18da75，带 1 条 source_disappeared（文件在扫描后消失）警告，是一份 Codex 临时执行记录。这些是生产者已验的回执，状态入口没有重新解包或重哈希。北京时间 10 月 23 日 10:28 的零写入状态：整体 receipts_current，本地/G 同为 devconfig-20261021-230914-6ea337d3.zip（10 月 22 日 12:09:54 本机、12:09:58 G 完成），449,631,558 字节（约 428.8 MiB），回执记 6,344 个文件，无文件警告；这一代的整包 SHA-256 这里不列，不能借用上面旧包的哈希。9 月 18 日旧包 devconfig-20260917-223044-15f482e1.zip、2,918,700,657 字节与 SHA-256=23175b58deb25089f07637380a99f449ead3f699cffcb83deb1bbae9255cc42c 仅是旧时点证据。
+- 北京时间 10 月 11 日 13:33 的零写入状态：当天 12:06—12:25 的配置采集失败（读取 home/.codex/state_5.sqlite 数据库副本超时），没有发布新包。本地/G 同为 devconfig-20261009-231229-9de61253.zip，299,791,772 字节（约 286.0 MiB），回执记 6,270 个文件、原始 942,360,581 字节（约 0.88 GiB），整包 SHA-256=de16cef7554bc0b62d9911b2c0599f6ae71f02f4691dd63576f999531b18da75，带 1 条 source_disappeared（文件在扫描后消失）警告，是一份 Codex 临时执行记录。这些是生产者已验的回执，状态入口没有重新解包或重哈希。北京时间 10 月 23 日 10:28 读最新成功回执：449,631,558 字节（约 428.8 MiB），回执记 6,344 个文件；整包 SHA-256 这里不列，不能借用上面旧包的哈希。此前 10 月 23 日那时的零写入状态是整体 receipts_current，本地/G 同为 devconfig-20261021-230914-6ea337d3.zip（10 月 22 日 12:09:54 本机、12:09:58 G 完成），无文件警告。9 月 18 日旧包 devconfig-20260917-223044-15f482e1.zip、2,918,700,657 字节与 SHA-256=23175b58deb25089f07637380a99f449ead3f699cffcb83deb1bbae9255cc42c 仅是旧时点证据。
 
 ::screen{#devconfig-backup-tiered-distribution-11 section="tech"}
 

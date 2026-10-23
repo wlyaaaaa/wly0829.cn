@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/codex-memory-claude-project-memory/page.json",
-  "sha256": "2eda8f0ea6774a75eb200adaa10efae2ec90e45014e8ae59ee04eab79b26003f",
-  "converted_at_beijing": "2026-10-12T06:00:52+08:00"
+  "sha256": "d7b0106a9ccb8136bb378d69b3f19093ea3c3526b0dea5ded3d7f79c1586062f",
+  "converted_at_beijing": "2026-10-23T14:53:33+08:00"
  }
 }
 ---
@@ -622,7 +622,7 @@ Claude 的项目笔记和完整聊天不是一回事。以前单独备份它，�
 
 这里保留退役事实、旧材料现状和旧实现的历史说明。
 
-已退役：`Claude Memory Backup` 任务 2026-09-28 23:10（北京时间）停用，当前为 Disabled；Claude 设置 `autoMemoryEnabled=false`（16:37 观察）。旧材料：G、H 两盘的 current 都指向 2026-09-28 10:36:52 保存点，21 个文件、35,680 字节，各有 5 个快照目录（16:35 只读元数据观察，未重新逐文件校验）。
+已退役：`Claude Memory Backup` 任务 2026-09-28 23:10（北京时间）停用；当前为 Disabled；Claude 设置 `autoMemoryEnabled=false`（16:37 观察）。旧材料：G、H 两盘的 current 都指向 2026-09-28 10:36:52 保存点，21 个文件、35,680 字节；两盘各有 5 个快照目录（只读元数据，未逐文件校验）。
 
 ## 关键规则与设计选择
 

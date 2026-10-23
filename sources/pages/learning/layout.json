@@ -43,7 +43,7 @@
         "type": "prose",
         "align": "right",
         "size": "small",
-        "text_ref": "数字截至"
+        "text_ref": "练习数截至"
       },
       {
         "type": "action_button",
@@ -102,7 +102,7 @@
         "type": "prose",
         "align": "right",
         "size": "small",
-        "text_ref": "数字截至"
+        "text_ref": "练习数截至"
       },
       {
         "type": "action_button",

@@ -40,8 +40,8 @@
  },
  "source": {
   "page": "sources/pages/personal-materials-registered-lookup/page.json",
-  "sha256": "2cf48ce089114b24c41eb91954d15f57eda1bcc5f91f729a777199b061407585",
-  "converted_at_beijing": "2026-10-23T12:57:23+08:00"
+  "sha256": "db4d3db83fb0fcafaa16c2a81907bdd73d67debbcb7be3f7857481ed29469624",
+  "converted_at_beijing": "2026-10-23T14:53:35+08:00"
  }
 }
 ---
@@ -619,7 +619,7 @@
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-**10 月 22 日 06:47 计数**　只返回计数的 status 入口正常：55 个来源、166 条精确登记、4 条关系、161 份有绑定文字（按不同 material_key 去重；search_texts 绑定行数这次也是 161）；保存的打开状态 166 条都是 verified，这只是已保存的状态，不是本次逐件重算或打开过。10 月 11 日上午同一入口曾返回 materials_database_not_initialized，之后未复现，原因没有调查。
+**10 月 22 日 06:47 计数**　只返回计数的 status 入口正常：55 个来源、166 条精确登记、4 条关系、161 份有绑定文字（按不同 material_key 去重）；保存的打开状态 166 条都是 verified，这只是已保存的状态，不是本次逐件重算或打开过。10 月 11 日上午同一入口曾返回 materials_database_not_initialized，之后未复现，原因没有调查。
 
 **历史测试记录**　2026-09-07 有 66 项合成回归与 Ruff 通过，9 月 28 日有 106 项通过，都是当时的回执，不覆盖后来新增的门牌和撤登记。当前测试文件 74 个测试函数、收集到 123 个用例（10 月 23 日 12:38 只收集计数，没有运行）。
 

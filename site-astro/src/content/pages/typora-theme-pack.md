@@ -275,27 +275,22 @@
     },
     {
      "id": "n-tests",
-     "text": "21 项",
-     "meaning": "tests/test_project.py 的测试定义数",
-     "as_of": "2026-10-11",
-     "source": "def test_ 计数 21；最近能回读的运行是 2026-09-29 01:51 GitHub Actions 21 项通过",
+     "text": "22 项",
+     "meaning": "tests/test_*.py 的测试定义数（只计数，不是通过数）",
+     "as_of": "2026-10-23",
+     "source": "def test 计数 22（10 月 23 日只读计数）；此前 2026-09-29 01:51 GitHub Actions 那次 21 项通过",
      "screens": [
-      "typora-theme-pack-01",
-      "typora-theme-pack-05",
-      "typora-theme-pack-07",
-      "typora-theme-pack-09",
-      "typora-theme-pack-10"
+      "typora-theme-pack-01"
      ]
     },
     {
      "id": "n-commits",
-     "text": "6 次",
-     "meaning": "仓库全部提交数，首次 71b2e24（8 月 12 日 07:04），最后 f30ac9c（9 月 29 日 01:36）",
-     "as_of": "2026-10-12",
-     "source": "git rev-list --count HEAD=6，HEAD 仍是 f30ac9c（10 月 11 日现查）",
+     "text": "7 次",
+     "meaning": "仓库全部提交数（git rev-list --count HEAD，含合并提交）",
+     "as_of": "2026-10-22",
+     "source": "git rev-list --count HEAD=7（10 月 22 日 06:47 重读）",
      "screens": [
-      "typora-theme-pack-01",
-      "typora-theme-pack-10"
+      "typora-theme-pack-01"
      ]
     },
     {
@@ -455,8 +450,8 @@
  },
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
-  "sha256": "ef4813e222da194236d12bd050d9a31bca16718f58a94bd4b8ab2d041ced97f0",
-  "converted_at_beijing": "2026-10-23T08:44:37+08:00"
+  "sha256": "cef02f5d0e42b3b02469085116de2411a412d27ba7e45ed52c7a07aad1451370",
+  "converted_at_beijing": "2026-10-23T14:53:36+08:00"
  }
 }
 ---
@@ -760,10 +755,10 @@
 
 1 套｜编辑主题，Typora 现在用的就是它（已核对 Typora 设置）
 3 种｜PDF 样式：原版、个人、公司，同一份文稿选一种导一份
-21 项｜自动测试；GitHub 每次推送自动跑，9 月 29 日那次 21 项全过；10 月 20 日又加了 1 项（源码现有 22 项），当天 16:55 推送后那次也通过
-7 次｜提交；最近一次在 10 月 20 日，导出 PDF 不再依赖只给预览图用的 Pillow，并约定改了主题当场重装、核对
+22 项｜自动测试定义（源码里数的，不是通过数）；GitHub 每次推送自动跑，此前 9 月 29 日那次 21 项全过，10 月 20 日加了 1 项后当天 16:55 推送那次也通过
+7 次｜提交；其中 10 月 20 日那次让导出 PDF 不再依赖只给预览图用的 Pillow，并约定改了主题当场重装、核对
 
-截至 2026 年 10 月 11 日（北京时间；提交数和最近一次提交 10 月 22 日 06:47 重读）
+截至 2026 年 10 月 11 日（北京时间）
 
 〔在整套系统里的位置 → 怎么协作〕　〔GitHub〕　〔复制 AI 续作说明〕
 
@@ -2058,7 +2053,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
 - 生成一个看着像 PDF 的假文件
 - 生成 0 页的 PDF
 - 转换器报错退出
-当时是 20 项测试；9 月 29 日 GitHub 自动测试跑了现在的 21 项，全过，之后没再跑。
+当时是 20 项测试；9 月 29 日 GitHub 自动测试跑了那时的 21 项，全过。
 
 ::screen{#typora-theme-pack-08 section="highlights"}
 
@@ -2811,7 +2806,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
 **配置和维护**
 14. 记下用哪个转换器｜转换器路径记进本机配置，不进 Git；按命令参数、环境变量、本机配置的顺序找｜说不准
 15. 效果预览｜用公开样例生成软件概念图、代码块检查图、三种样式的页面图和拼图｜在用
-16. 自动测试｜21 项测试查导出保护、文件名后缀、只露一个主题、代码块样式等；GitHub 每次推送自动跑，最近一次 9 月 29 日全过｜在用
+16. 自动测试｜22 项测试查导出保护、文件名后缀、只露一个主题、代码块样式等；GitHub 每次推送自动跑，最近一次 9 月 29 日全过｜在用
 
 ::screen{#typora-theme-pack-10 section="history"}
 

@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/codex-memory-openclaw-workspace-recovery/page.json",
-  "sha256": "3c048cc7f47c71485b92ba602d2c55a7d3af817d6bf40bbd45ba6c0130367da6",
-  "converted_at_beijing": "2026-10-11T18:59:06+08:00"
+  "sha256": "b5a6ebca10f888cd0d22feb7e9aac09e3b37df2e5dbe7ca6df342026f8dcf1e0",
+  "converted_at_beijing": "2026-10-23T14:53:33+08:00"
  }
 }
 ---
@@ -622,7 +622,7 @@ OpenClaw 的日常设置和工作区，与官方归档保存的应用状态是�
 
 这里保留退役事实、旧材料现状和旧实现的说明。
 
-已退役：`OpenClaw Memory Backup` 任务 2026-09-26 起为 Disabled；2026-09-28 开发配置备份不再选择 OpenClaw。旧材料：G、H 两盘各有 2 个旧目录，较新的一份为 186 个文件、2,840,710 字节，生成于 2026-09-01 11:20:14（北京时间）（16:35 只读元数据观察，没有重新逐文件校验）。
+已退役：`OpenClaw Memory Backup` 任务 2026-09-26 起停用；当前为 Disabled；2026-09-28 开发配置备份不再选择 OpenClaw。旧材料：G、H 两盘各有 2 个旧目录。较新的一份为 186 个文件、2,840,710 字节，生成于 2026-09-01 11:20:14（北京时间）；只读元数据，没有逐文件校验。
 
 ## 关键规则与设计选择
 

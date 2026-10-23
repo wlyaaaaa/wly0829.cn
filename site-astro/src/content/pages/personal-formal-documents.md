@@ -423,8 +423,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "47ba59e944647f676f851072bc01e6475af85511453559e45bda4410d2784f3c",
-  "converted_at_beijing": "2026-10-23T08:44:35+08:00"
+  "sha256": "b3fbafded7327934135b3402bd25fc11a97eef14670f90230646134c6eac6540",
+  "converted_at_beijing": "2026-10-23T14:54:22+08:00"
  }
 }
 ---
@@ -495,11 +495,6 @@
      "icons": "auto"
     },
     {
-     "type": "notice",
-     "text_ref": "截至10月11",
-     "tone": "yellow"
-    },
-    {
      "type": "prose",
      "text_ref": "把合同",
      "size": "large"
@@ -519,6 +514,11 @@
      "target_height": 220,
      "target_width": 281,
      "align": "center"
+    },
+    {
+     "type": "notice",
+     "text_ref": "10月11日核对时",
+     "tone": "yellow"
     },
     {
      "type": "action_button",
@@ -568,11 +568,6 @@
      "portrait_columns": 1
     },
     {
-     "type": "notice",
-     "text_ref": "截至10月11",
-     "tone": "yellow"
-    },
-    {
      "type": "prose",
      "text_ref": "把合同",
      "size": "large"
@@ -584,6 +579,11 @@
     {
      "type": "illustration",
      "index": 0
+    },
+    {
+     "type": "notice",
+     "text_ref": "10月11日核对时",
+     "tone": "yellow"
     },
     {
      "type": "action_button",
@@ -715,7 +715,7 @@
 **1 份内容**｜同时出 Word 和 PDF，生成后逐字读回核对
 **39 个测试**｜只用虚构内容；10 月 11 日核对了数量，这次没有重跑
 
-截至 10 月 11 日：做好了，还没找到在真实的合同或通知上用过的记录，所以下面的功能都标“待验收”。
+10 月 11 日核对时：做好了，还没找到在真实的合同或通知上用过的记录，所以下面的功能都标“待验收”。
 
 〔在整套系统里的位置 → 怎么协作〕　〔怎么跟 AI 说 → 技能页〕　〔复制 AI 续作说明〕
 

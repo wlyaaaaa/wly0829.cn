@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary/page.json",
-  "sha256": "36f9483240360478b396d6b091813eadc94594498a93e1656c6ccf48f231e033",
-  "converted_at_beijing": "2026-10-20T08:56:34+08:00"
+  "sha256": "3fdeb1593cd1dcac0e24c753ef9e5fdfdda6df63cc149f7f213b274da0b18181",
+  "converted_at_beijing": "2026-10-23T14:53:35+08:00"
  }
 }
 ---
@@ -979,7 +979,7 @@ runtime/snapshot-state.json / README.md / tests/
 
 - 9 月 8 日原有 19 项断言全部通过；重试参数的两项检查属于源码断言，不是实际失败重试演练。9 月 18 日已发布的洁净源码实跑 55 项 Python 测试和 11 项 Windows 检查全部通过；现在源码里共有 63 个测试定义，本轮没有重跑。
 
-- 2026-10-20 早上（7:34—7:43 之间）零写入 Status：status=healthy，但它的范围只是本地快照、任务和 G 热备（health_scope=local_snapshot_task_and_hot_replica）。当前代号 20261019T023001Z-942cbd851a1f（北京时间 10 月 19 日 10:30 创建）共 20 个文件、核对通过、和现在的设置比无变化；G 回读同代通过，保留 4 代；H 冷备 cold_replica=stale_or_invalid：H 上能回读且自身完整，但还是 20260928T023001Z 那一代，冷备尝试回执仍是 9 月 18 日，所以不能说三处同代。任务 enabled、上次结果 0，最近成功 10 月 19 日 10:30，下一次 10 月 26 日 10:30。没有再次触发真实采集，也没有手动复制到 H。历史：10 月 11 日 13:32 那次 E/G/H 三处回读的是 9 月 28 日同一代。
+- 2026-10-20 早上（7:34—7:43 之间）零写入 Status：status=healthy，但它的范围只是本地快照、任务和 G 热备（health_scope=local_snapshot_task_and_hot_replica）。当前这一代（北京时间 10 月 19 日 10:30 创建）共 20 个文件、核对通过；G 回读同代通过，保留 4 代；H 冷备 cold_replica=stale_or_invalid：H 上能回读且自身完整，但还是 20260928T023001Z 那一代，冷备尝试回执仍是 9 月 18 日，所以不能说三处同代。任务 enabled、上次结果 0，最近成功 10 月 19 日 10:30，下一次 10 月 26 日 10:30。没有再次触发真实采集，也没有手动复制到 H。历史：10 月 11 日 13:32 那次 E/G/H 三处回读的是 9 月 28 日同一代。
 
 - 9月8日20文件隔离采集与回填字节一致，19 JSON解析成功，3个虚构已安装资源/私有设置保留；本次未做真实Steam恢复。
 
