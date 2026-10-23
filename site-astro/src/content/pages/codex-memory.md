@@ -593,8 +593,8 @@
  },
  "source": {
   "page": "sources/pages/codex-memory/page.json",
-  "sha256": "717a53f541b4b3bc982df6816d5d0f4477368177b49ba56ca69bda8bb27d6b9b",
-  "converted_at_beijing": "2026-10-23T13:23:52+08:00"
+  "sha256": "46f75bffa832c6337eb77c1aac546842eb01e82a9097af9cd4f08b587a4f62d6",
+  "converted_at_beijing": "2026-10-23T14:59:55+08:00"
  }
 }
 ---
@@ -2601,7 +2601,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
 6. **写清单、封口**　清单记下每个文件对应哪个指纹；清单本身再算一个指纹封口，然后把引用到的内容逐个重算核对
 7. **换“最新”**　全部对上才把“最新”指向这一份；再删掉卷影和比这两份更早的点，写回执
 
-**14:30 外接盘**（电脑配置与恢复的同步任务）把 G 上的两份复制到 H，在 H 上整份重算 SHA-256，清单和封口都和 G 一样，才把 H 的“最新”换过去，再删 H 上 G 已经不要的旧点。H 回执里的 point_id、readback_verified 说的是 H 上实际那一份；当天 G 的点有被杀毒软件拦下的对象、H 又没有完整旧点时，才从 G 已核对的清单另造一个健康子集点（独立的 manifest／closure，G 原点不改），回执标 partial_coverage=true、verification_scope=selected_files_excluding_file_warnings，并给出来源、保存、省略的文件数和 coverage_percent；完整对象恢复后再发布完整点。14:30 同步之前，H 的最新点会比 G 早一天，这是正常节奏。10 月 22 日 06:50 读指针和回执：G、H current 同为 20261021T041925Z-37027d1b，11,322 个文件、34,124,573,977 字节。G 10 月 21 日 12:25:20 完成，complete、readback_verified=true、警告 0，hot_retention_limit=2、retained=2；H 指针 15:12:20 发布、冷备 15:23:15 完成，complete、readback_verified=true、verification_scope=all_manifest_files、partial_coverage=false、覆盖 100%、警告 0、保留点 2。两边同一代，各自与自己的回执一致。同一次 G 回执里 Codex、Claude 两路 usage_ledger 都是 complete、退出码 0，分别追加 6,142 和 62,670 条。本轮没有重新散列全部对象，也没有演练恢复。此前 10 月 20 日 07:41 读到两边不同代：G 是 20261019T041859Z-67f337b0（11,108 个文件、39,488,518,338 字节），H 停在 20261018T041859Z-5abb3a50（11,093 个文件、39,461,693,231 字节），H 没发布 19 日的点，原因没查清；10 月 12 日核对时两边曾同为 20261011T043524Z-0dc21e1e（10,491 个文件）。
+**14:30 外接盘**（电脑配置与恢复的同步任务）把 G 上的两份复制到 H，在 H 上整份重算 SHA-256，清单和封口都和 G 一样，才把 H 的“最新”换过去，再删 H 上 G 已经不要的旧点。H 回执里的 point_id、readback_verified 说的是 H 上实际那一份；当天 G 的点有被杀毒软件拦下的对象、H 又没有完整旧点时，才从 G 已核对的清单另造一个健康子集点（独立的 manifest／closure，G 原点不改），回执标 partial_coverage=true、verification_scope=selected_files_excluding_file_warnings，并给出来源、保存、省略的文件数和 coverage_percent；完整对象恢复后再发布完整点。14:30 同步之前，H 的最新点会比 G 早一天，这是正常节奏。10 月 22 日 06:50 读指针和回执：那时 G、H current 同为 20261021T041925Z-37027d1b，11,322 个文件、34,124,573,977 字节。G 10 月 21 日 12:25:20 完成，complete、readback_verified=true、警告 0，hot_retention_limit=2、retained=2；H 指针 15:12:20 发布、冷备 15:23:15 完成，complete、readback_verified=true、verification_scope=all_manifest_files、partial_coverage=false、覆盖 100%、警告 0、保留点 2。那时两边同一代，各自与自己的回执一致。同一次 G 回执里 Codex、Claude 两路 usage_ledger 都是 complete、退出码 0，分别追加 6,142 和 62,670 条。本轮没有重新散列全部对象，也没有演练恢复。此前 10 月 20 日 07:41 读到两边不同代：G 是 20261019T041859Z-67f337b0（11,108 个文件、39,488,518,338 字节），H 停在 20261018T041859Z-5abb3a50（11,093 个文件、39,461,693,231 字节），H 没发布 19 日的点，原因没查清；10 月 12 日核对时两边曾同为 20261011T043524Z-0dc21e1e（10,491 个文件）。
 
 ::screen{#codex-memory-08 section="tech"}
 

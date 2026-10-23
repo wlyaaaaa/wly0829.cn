@@ -13811,7 +13811,9 @@
         "agents-n-release-files",
         "agents-n-release-rules",
         "agents-n-release-entries",
-        "agents-n-release-catalogs"
+        "agents-n-release-catalogs",
+        "agents-n-declared-skills-0",
+        "agents-n-plugin-skills-0"
       ],
       "field": "screens[0].text",
       "page_pattern": "数字截至 (\\d+ 月 \\d+ 日)",
@@ -34633,7 +34635,7 @@
       },
       "automatic": true,
       "private": true,
-      "historical": false,
+      "historical": true,
       "affected_screens": [
         "personal-materials-06"
       ],
@@ -34666,7 +34668,7 @@
       },
       "automatic": true,
       "private": true,
-      "historical": false,
+      "historical": true,
       "affected_screens": [
         "personal-materials-06"
       ],
@@ -34714,8 +34716,8 @@
       "qualifies": [
         "personal-materials-n-sources-0",
         "personal-materials-n-registered-0",
-        "int3-materials-relations",
-        "int3-materials-search-texts"
+        "personal-materials-source-line-relations",
+        "personal-materials-source-line-search-texts"
       ],
       "automatic": true,
       "private": false,
@@ -40921,6 +40923,50 @@
       "label": "test-definitions-features",
       "page_pattern": "自动测试｜([\\d,]+) 项测试查导出保护",
       "current_value": 22
+    },
+    {
+      "page": "agents",
+      "screen": "agents-01",
+      "category": "文件个数",
+      "source_location": "E:/.agents/config/personal-skill-supply.json 的 kind=personal 且 install=true 技能对象",
+      "private": false,
+      "field": "screens[0].text",
+      "id": "agents-n-declared-skills-0",
+      "automatic": true,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "agents-shared-skill-source",
+        "pointer": [
+          "declared_skills"
+        ]
+      },
+      "page_pattern": "清单里一共登记 ([\\d,]+) 个，都要能被 AI 找到",
+      "current_value": 31,
+      "measurement_scope": "清单install=true声明总数，不代表路径全部匹配。",
+      "label": "n-declared-skills-0"
+    },
+    {
+      "page": "agents",
+      "screen": "agents-01",
+      "category": "文件个数",
+      "source_location": "E:/.agents/config/personal-skill-supply.json 的 kind=personal 且 install=true 技能对象",
+      "private": false,
+      "field": "screens[0].text",
+      "id": "agents-n-plugin-skills-0",
+      "automatic": true,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "E:/.agents/config/personal-skill-supply.json",
+        "pattern": "\\{(?=[^{}]*\"kind\"\\s*:\\s*\"plugin\")(?=[^{}]*\"install\"\\s*:\\s*true)[^{}]*\\}"
+      },
+      "page_pattern": "加上一个插件包带的 ([\\d,]+) 个技能",
+      "current_value": 2,
+      "measurement_scope": "personal-skill-supply.json每个独立扁平skill对象内同时kind=plugin与install=true，跨换行且字段顺序无关的正则计数；不以维护根目录数量代替。",
+      "label": "n-plugin-skills-0"
     }
   ],
   "freshness_policy": {
