@@ -78,6 +78,19 @@ class RefreshTests(unittest.TestCase):
         self.assertEqual(refresh.retrieve(method, self.root), 1)
         (self.root / "count.json").write_text('{"count": 25}', encoding="utf-8")
         self.assertEqual(refresh.retrieve(self.record["retrieve"], self.root), 25)
+    def test_count_where_counts_list_items_not_every_same_named_field(self):
+        (self.root / "list.json").write_text(json.dumps({"status": "passed", "items": [
+            {"status": "passed"}, {"status": "pending"}, {"status": "passed", "log": [{"status": "passed"}]}]}), encoding="utf-8")
+        method = {"kind": "json", "path": "list.json", "pointer": ["items"], "operation": "count_where", "where": {"status": "passed"}}
+        self.assertEqual(refresh.retrieve(method, self.root), 2)
+    def test_a_real_count_falling_to_zero_is_held_back_but_small_counts_may_reach_zero(self):
+        (self.root / "count.json").write_text('{"count": 0}', encoding="utf-8")
+        row = self.run_collect()
+        self.assertEqual((row["status"], row["new_value"], row["page_date"]), ("unavailable", None, "2026-09-28"))
+        self.assertIn("不能自动写成 0", row["reason"])
+        page = self.root / "sources/pages/demo/page.json"
+        page.write_text(page.read_text(encoding="utf-8").replace("2,020", "2"), encoding="utf-8")
+        self.assertEqual((self.run_collect()["status"], self.run_collect()["new_value"]), ("changed", 0))
     def test_report_large_utf8_details_use_complete_task_file_and_keep_failures(self):
         registry = self.root / "sources/refresh/registry.json"
         registry.parent.mkdir(parents=True)

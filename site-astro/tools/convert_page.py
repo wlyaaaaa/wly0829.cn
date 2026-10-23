@@ -954,12 +954,16 @@ if __name__ == "__main__":
         names = all_pages()
     failed = []
     for n in names:
+        seen = len(UNMATCHED)
         try:
             k = convert(n, check_only=check_only)
         except SystemExit:
             raise
         except Exception as e:  # 批量时一页失败不拦其它页，最后列出来
             failed.append((n, str(e))); print(n, "校验失败" if check_only else "转换失败", str(e)); continue
+        if UNMATCHED[seen:]:  # 认不出的那一块会被前一块带走、版面悄悄变样：算失败，改 layout.json 的 text_ref 截成新原文的共同开头
+            failed.append((n, "构图 text_ref 在源里找不到：" + "；".join(UNMATCHED[seen:])))
+            print(n, "校验失败" if check_only else "转换失败", "构图 text_ref 在源里找不到"); continue
         print(n, "校验完成" if check_only else "转换完成", k, "屏")
     for g in GATE_LOG:
         print("  规则同版公共绑定：", json.dumps(g, ensure_ascii=False))

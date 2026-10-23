@@ -26,7 +26,9 @@
 
 | 项目 | 当前入口 | 本轮核对什么 |
 |---|---|---|
-| 转换与版面预检 | `convert_page.py --check-all`，只校验、不写作者源 | 图位、转换契约、横排卡片文字失衡及页内标题目录；报错须在构建前处理 |
+| 转换与版面预检 | `convert_page.py --check-all`，只校验、不写作者源 | 图位、转换契约、横排卡片文字失衡、页内标题目录及构图引文认不出；报错须在构建前处理 |
+| 登记自检 | `refresh.py --inventory --strict` 内含 `binding_checks` | 绑定唯一命中、小数位、页内数字表镜像；同句未登记观察时间列入 `fact-tasks.md` |
+| 改数单审计 | `audit_edits.py <取数目录>/number-edits.json` | 逐处旧值→新值，标出小数位变化、日期倒退、时分精度变化、跳变过半和非数字非日期，核过再应用 |
 | 实际变化页扫描 | `scan_glance.py` 默认 `published-diff` | 对照上一成功发布清单与最终 HTML，覆盖多轮构建累计变化，含首页 |
 | 日期和状态盘点 | `refresh.py --inventory --strict --output <目录>` | 读取 `dated-inventory.json`、`fact-tasks.md` 与漏登记结果；盘点不等于取到新事实 |
 | 冻结页盘点与转换 | `frozen_inventory.py`、`frozen_to_pages.py --routes <文件> --report <目录>` | 只转换本次涉及的旧路由；核文字保留、模板警告与事实更新，已有作者页不随意覆盖 |
@@ -81,6 +83,25 @@
 - **历史证据保留日期。** 某次测试、故障、发布、恢复和历史阶段数字不按年龄重取。重新读到旧回执，只能证明读到了它；没有真实重验就不能把日期改成今天。被当作当前现状使用的旧快照须按当前事实处理。
 
 沿用既有冻结与明确点名范围边界。稳定讲解的 28 天复核线不降低当前事实每次重取的要求，不更改上面的日常用时目标。相对时间以绝对日期为主：“昨天”“刚刚”“目前已运行几天”等会随阅读时间失真的说法，改为具体日期和已证实的区间。
+
+### 写当前事实句的规范
+
+目标是下一轮按需更新不靠人工救就能写对：句子里每个会变的值都有登记、都能被同一轮取数推进，不会变的部分对任何新值都成立。写稿、改稿、子代理补事实都照这里写；括号里是拦它的自动检查，没写检查的靠写稿和复核遵守。
+
+- **会变的值逐个登记，观察时间跟着数字走。** 当前数、容量、状态、最近一次事件各有记录；同句的“10 月 23 日 10:25 读／计数／再看”另建日期联动记录，`qualifies` 指向同句数字，不另写第二个不登记的时间。（严格盘点漏登记；`binding_checks` 的 `observed` 列出自动数字同句里没登记的观察时间，`tests.test_refresh_registry_complete` 给它设上限，只许减少，改到哪页就把那页补上。）
+- **观察时间、事件时间、覆盖末日分开写。** 观察时间是这次读来源的时刻，北京时间到分钟；“最近一次完成在 10 月 22 日 13:52”是事件本身，不当截至；账本类写到覆盖末日。入口不按日期截的累计数写“起点＋计数时刻”（“8 月 18 日起……（10 月 23 日 11:52 数）”），不写会停在旧日子的区间末日。
+- **统计窗口写“截至日＋长度”。** 状态行 `as_of` 已注明截至日，`source` 里写“到截至日为止的 7 个完整北京时间自然日”，不重复写起止日期或补采水位时刻。
+- **只对一个值成立的解释写成带日期的历史。** “10 月 23 日查明当时那 1 处差异是……”可以留着；不写“这 1 处差异是……”去跟一个下轮会变的数。进行中的状态写“最近一次完成的……”，不写“还在跑”。
+- **自动维护的句子不放入口不返回的东西。** 短提交号、包名、版本号只有入口原样返回时才写进自动句；否则另起一句带日期的历史说明。
+- **页内数字表只给真正显示的数。** `registry.numbers` 被首页等处 `{{页.registry.numbers.编号.text/as_of}}` 引用时，用直接绑定 `registry.numbers[i].text` 的记录，日期联动绑 `.as_of`；不再给记录挂 `registry_number` 镜像。镜像与正文不同会让应用必然失败、连带截至日期推不动。（盘点把被占位引用的字段算作展示位置；`binding_checks` 的 `mirror`。）
+- **小数位跟页面一致。** 页面写“599.0”就登记 `retrieve.digits=1`，不靠格式化补“.0”。（`binding_checks` 的 `digits`。）
+- **绑定只认一处。** `page_pattern` 在当前作者字段里恰好命中一处，捕获完整数字或日期；含 `{{…}}` 的字段按展开后的文字核对。新写的模式带两个以上连续汉字或一个英文词的上下文，同屏以后再出现同样写法也不会认错。项目退役或冻结时，在同一次改动里把它的现状记录改成 `historical`。（`binding_checks` 的 `pattern` 查唯一命中；上下文长短由合入校验和复核把关。）
+- **计数按条目，不按整文件字符串。** JSON 清单分类计数用 `{"kind": "json", "pointer": [...], "operation": "count_where", "where": {...}}`；入口认不出来源格式要报错，不能数成 0。（旧值不小于 5、来源返回 0 时取数记 `unavailable`，不自动写 0。）
+- **构图引文取块开头几个字。** `layout.json` 的 `text_ref` 截成新原文的共同开头，不停在数字、提交号或包名中间；只差数字时转换自动认出，其余认不出就转换失败，不再悄悄把这一块并进上一块。（`convert_page.py` 及 `--check-all`。）
+
+`binding_checks` 的 `pattern`、`digits`、`mirror` 并入 `refresh.py --inventory --strict` 和整表取数前的严格检查，任一非空就非零退出；`observed` 写进 `dated-inventory.json` 的 `binding_checks` 和 `fact-tasks.md`，交给改到这页的事实组。
+
+以下几类机制还不能自动处理，每轮由事实组人工核对并在汇报里列出：项目总览等动态占位页的截至日期（`dynamic` 记录跳过）；现场计数旁写了覆盖末日的聚合卡；布尔或中文显示值（“已开启”“三”）；带 `requires_semantic_refresh` 的记录即使值没变也拦下；时间区间；TimeAudit“最近一次完成的备份”这类只在运行历史里的事件。
 
 ## 0 准备常驻工作树
 
@@ -166,6 +187,8 @@ npm run refresh:ai -- --project <Registry中的项目id>
 GPT 先看取数生成的 `number-edits.json`：每项有页、真实作者文件与字段、字符范围、旧值、新值、观察时间和记录 id；同口径数字和截至日期可机械填回原位。整段 `{{stories...}}` 或 `{{另一页...}}` 占位沿引用定位真实作者：how 演示内容写入 `scripts/how-demo-data.json`，引用的 page.json 占位保留原样。`scale/rules/group_counts/roster` 不可作为改数目标；行内占位之外的正文可改，编辑范围与任一 `{{...}}` 片段相交则以 `placeholder_computed_value` 跳过。
 
 ```powershell
+# 先审：带“!!”的逐项对照来源核过，确属来源或口径问题的不应用，交事实组。
+python -B -X utf8 scripts/content-refresh/audit_edits.py <本次任务目录/取数/number-edits.json>
 python -B -X utf8 scripts/content-refresh/apply_edits.py <本次任务目录/取数/number-edits.json> --report <本次任务目录/取数/apply-report.json>
 # 只应用一个分路拥有的页面。
 python -B -X utf8 scripts/content-refresh/apply_edits.py <改数单.json> --only <页id,...> --report <分路应用回执.json>

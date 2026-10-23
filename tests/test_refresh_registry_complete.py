@@ -7,6 +7,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts/content-refresh"))
 from inventory import build_inventory, strict_findings
+from binding_checks import binding_findings
 
 
 class RegistryCompletenessTests(unittest.TestCase):
@@ -19,6 +20,14 @@ class RegistryCompletenessTests(unittest.TestCase):
         lines = [f"{i['page']} / {i['screen']} / {i['excerpt']}：{i['reason']}" for i in findings]
         self.assertEqual(len(findings), 0, f"{len(findings)} 项漏登记：\n" + "\n".join(lines))
         self.assertGreaterEqual(inventory["coverage"]["automatic_ratio"], .85, "自动取数覆盖低于85%")
+
+    def test_every_binding_will_apply_next_round(self):
+        records = json.loads((ROOT / "sources/refresh/registry.json").read_text("utf-8-sig"))["records"]
+        checks = binding_findings(ROOT, records)
+        for kind in ("pattern", "digits", "mirror"):
+            self.assertEqual(checks[kind], [], kind + "：\n" + "\n".join(f"{c['record_id']}：{c['reason']}" for c in checks[kind]))
+        # 自动数字同句里没登记的观察时间：10 月 23 日清点为 25 处，只许减少；改到哪页就把那页的补上
+        self.assertLessEqual(len(checks["observed"]), 25, "\n".join(f"{c['page']}：{c['excerpt']}" for c in checks["observed"]))
 
 
 if __name__ == "__main__":

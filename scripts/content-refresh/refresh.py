@@ -19,6 +19,7 @@ from uuid import uuid4
 sys.dont_write_bytecode = True
 from checks import audit_pages
 from inventory import build_inventory, write_inventory, strict_findings
+from binding_checks import binding_findings
 from engine.content import bound_json
 from validation import LEDGER, validate_entries, validate_method, registry_errors, positive
 from apply_edits import qualified_date_review, proven_offset
@@ -256,6 +257,8 @@ def retrieve(method, root, entries=None, cache=None):
             value = value[key]
         if method.get("operation") == "length":
             value = len(value)
+        elif method.get("operation") == "count_where":  # 按数组条目的字段数，不用整文件正则：别处同名同值会多数
+            value = sum(isinstance(item, dict) and all(item.get(k) == v for k, v in method["where"].items()) for item in value)
     elif kind == "regex_count":
         files = matching_files(method, root)
         if not files:
@@ -476,6 +479,9 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
                     row["reason"] = value.get("error", "来源未返回标量") if isinstance(value, dict) else "来源未返回标量"
                 else:
                     row.update(new_value=value, status="unchanged" if comparable(row["old_value"]) == comparable(value) else "changed")
+                    if comparable(value) == 0 and isinstance(comparable(row["old_value"]), Decimal) and comparable(row["old_value"]) >= 5:
+                        # 看板换格式后入口数出 0 这类：先修入口或核口径，不能自动把页面写成 0
+                        row.update(new_value=None, status="unavailable", reason="来源返回 0、旧值不小于 5：先核对来源格式或统计口径，不能自动写成 0")
                     if not row.get("source_observed_at") and not row.get("source_coverage_end"):
                         row.update(status="unavailable", reason="Unknown：来源缺真实观察时间或覆盖末日；保留旧值旧日期")
     by_id = {r["id"]: r for r in rows}
@@ -649,11 +655,18 @@ def main():
         inventory["review_stamp_record_ids"] = sorted(set(inventory.get("review_stamp_record_ids", [])) & {r["id"] for r in registry["records"]})
     findings = strict_findings(inventory, registry["records"], entries) if args.strict else []
     inventory["strict_findings"] = findings
+    # 绑定认不出、小数位不符、镜像与正文不同：下次应用必然失败或写错，严格盘点一起拦下；同句未登记的观察时间先列清单
+    checks = binding_findings(args.root, registry["records"])
+    inventory["binding_checks"] = checks
+    inventory["coverage"]["observation_date_gaps"] = len(checks["observed"])
+    blocking = [dict(c, kind=k) for k in ("pattern", "digits", "mirror") for c in checks[k]] if args.strict else []
     write_inventory(output, inventory)
-    if findings:
+    if findings or blocking:
         for finding in findings:
             print(f"{finding['page']} / {finding['screen']} / {finding['field']}：{finding['excerpt']}；{finding['reason']}")
-        print(json.dumps({"status": "incomplete", "missing": len(findings), "output": str(output)}, ensure_ascii=False))
+        for c in blocking:
+            print(f"{c['page']} / {c['field']} / {c['record_id']}：{c['reason']}")
+        print(json.dumps({"status": "incomplete", "missing": len(findings), "binding_errors": len(blocking), "output": str(output)}, ensure_ascii=False))
         return 2
     if args.strict and not only and inventory["coverage"].get("required_items") and inventory["coverage"]["automatic_ratio"] < .85:
         print(json.dumps({"status": "insufficient_automatic_coverage", "coverage": inventory["coverage"]}, ensure_ascii=False))

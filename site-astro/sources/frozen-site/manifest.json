@@ -18653,6 +18653,16 @@
       "bytes": 2505084,
       "sha256": "81cd01d94af1b3f1777beafbbb305756199c98c88d32c2c31a8289ab119b5945",
       "source_path": "site-astro/sources/retained-home-cockpit/assets/81cd01d94af1b3f1777beafbbb305756199c98c88d32c2c31a8289ab119b5945.webp"
+    },
+    "_typeset/home-highlights/3e07f256ca771ac2114d-home-highlights-v-2x.webp": {
+      "bytes": 3039278,
+      "sha256": "3e07f256ca771ac2114d27029cbd13543e7e838176a7c9809b7b8f37c87dea48",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/3e07f256ca771ac2114d27029cbd13543e7e838176a7c9809b7b8f37c87dea48.webp"
+    },
+    "_typeset/home-highlights/4b97cf28d8f9d897a420-home-highlights-h-2x.webp": {
+      "bytes": 2506794,
+      "sha256": "4b97cf28d8f9d897a4209e2f463082ded7d8add4af6f2218662a1a5602ea3ed1",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/4b97cf28d8f9d897a4209e2f463082ded7d8add4af6f2218662a1a5602ea3ed1.webp"
     }
   },
   "inherited_assets": {

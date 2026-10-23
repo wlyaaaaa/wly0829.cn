@@ -68,6 +68,9 @@ def validate_method(method, entries):
             positive(method["days"], "log_window.days")
         if method.get("operation", "count") not in {"count", "last_time"}:
             raise ValueError("log_window.operation 只能 count/last_time")
+    if kind == "json" and method.get("operation") == "count_where" and not (
+            isinstance(method.get("where"), dict) and method["where"]):
+        raise ValueError("json.count_where 缺 where 条件")
     if kind == "usage_ledger":
         if LEDGER not in entries or not method.get("key") or method.get("operation") not in {"count_7d", "last_time"}:
             raise ValueError("usage_ledger 缺账本登记、key 或合法 operation")

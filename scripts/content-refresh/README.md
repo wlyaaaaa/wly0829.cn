@@ -161,6 +161,15 @@ python -m unittest discover -s tests -p 'test_content_refresh_*.py'
 GPT 先核对同一统计口径，数值改变会改变叙述含义时交 Opus；程序只生成和应用数字、日期或日期时间。
 同一字段按字符位置从后往前替换，旧值、字段快照或口径不一致就跳过报告；重复执行相同改数单不会产生第二次差异。
 `page_number` 绑定的数字登记、登记日期及唯一完整原话同步，不按裸数字搜索其他句子。
+`audit_edits.py <number-edits.json>` 只读改数单，逐处列旧值→新值，并标出小数位变化、日期倒退、
+时分精度变化、跳变过半和非数字非日期，核过再应用。
+
+`binding_checks.py` 是严格盘点里的登记自检，只读作者文件、不读来源：`pattern` 是自动记录的
+`page_pattern` 不恰好命中一处（含 `{{…}}` 的字段按展开后文字核），`digits` 是 `retrieve.digits`
+与页面小数位不同，`mirror` 是挂 `registry_number` 的页内数字表数值已与正文不同；三类任一非空，
+`--strict` 非零退出。`observed` 列出自动数字同句里没登记的观察时间，写进盘点和 `fact-tasks.md`，
+完整性测试给它设只许减少的上限。取数时旧值不小于 5 而来源返回 0，记 `unavailable`、不生成改数；
+JSON 清单分类计数用 `operation: "count_where"` 加 `where` 条件按条目字段数。
 
 `authors.py` 是生成和应用改数单共同使用的真实作者定位入口。普通字段指向本页
 `sources/pages/<页id>/page.json`；整个字段恰为 `{{stories...}}` 或 `{{另一页...}}`

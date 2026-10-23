@@ -158,7 +158,6 @@
       "affected_screens": [
         "agents-01"
       ],
-      "registry_number": "n-switches",
       "original_value_index": 0,
       "page_pattern": "^- \\*\\*([\\d,]+) 次\\*\\*　8 月 30 日起，规则发布和回退",
       "measurement_scope": "正式 Inspect 通过后取 pointer.pointer_revision；Activate首个值1，此后Activate和Rollback各加1；不是E版本号，也不是核验调用数。",
@@ -848,7 +847,6 @@
       "affected_screens": [
         "password-center-10"
       ],
-      "registry_number": "n-sets-g",
       "original_value_index": 0,
       "page_pattern": "G、H 上各有 ([\\d,]+) 份完整、不含明文的恢复副本",
       "scope_status": "verified",
@@ -880,7 +878,6 @@
       "affected_screens": [
         "password-center-10"
       ],
-      "registry_number": "n-sets-h",
       "original_value_index": 0,
       "page_pattern": "G、H 上各有 ([\\d,]+) 份完整、不含明文的恢复副本",
       "scope_status": "verified",
@@ -1806,7 +1803,6 @@
       "affected_screens": [
         "typora-theme-pack-05"
       ],
-      "registry_number": "n-code-lines",
       "original_value_index": 2,
       "page_pattern": "\\| 工具 \\|[^\\n]*\\| ([\\d,]+)、[\\d,]+、[\\d,]+ \\|",
       "measurement_scope": "仅Git跟踪文件；include=[\"tools/**/*.py\", \"tools/*.py\"]；exclude=[]。逐行计数，含空行/注释及末尾无LF残行。",
@@ -2669,7 +2665,7 @@
       },
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
       "refreshed_value": 7312,
       "affected_screens": [
@@ -2678,7 +2674,7 @@
       "registry_number": "n-runs",
       "original_value_index": 0,
       "page_pattern": "\\-\\ \\*\\*([\\d,]+(?:\\.\\d+)?)\\ 轮\\*\\*　巡查：",
-      "measurement_scope": "当前存在的真实文件；include=[\"guardian.log\", \"guardian.log.1\"]；exclude=[]。正则^.*--- guardian run.*$，flags=m；以指定标记记录为项，不以日志总行数代替。",
+      "measurement_scope": "项目 10 月 20 日退役，页面已改为退役说明，旧现状数不再出现在正文，也不再重取。当前存在的真实文件；include=[\"guardian.log\", \"guardian.log.1\"]；exclude=[]。正则^.*--- guardian run.*$，flags=m；以指定标记记录为项，不以日志总行数代替。",
       "scope_status": "verified",
       "field": "screens[0].text"
     },
@@ -2806,11 +2802,11 @@
       },
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
       "refreshed_value": 12,
       "page_pattern": "Z 盘（([\\d,.]+) GiB）",
-      "measurement_scope": "指定JSON逐键/数组索引取[\"Metrics\", \"TotalGB\"]；字段原始单值。",
+      "measurement_scope": "项目 10 月 20 日退役，页面已改为退役说明，旧现状数不再出现在正文，也不再重取。指定JSON逐键/数组索引取[\"Metrics\", \"TotalGB\"]；字段原始单值。",
       "scope_status": "verified",
       "field": "screens[0].text",
       "observation_basis": "unknown"
@@ -3128,7 +3124,6 @@
       "affected_screens": [
         "steam-millennium-config-backup-01"
       ],
-      "registry_number": "n-size",
       "original_value_index": 0,
       "page_pattern": "一共 ([\\d,]+(?:\\.\\d+)?) KB",
       "measurement_scope": "manifest.files[].bytes求和，/1024 四舍五入到整数 KB。",
@@ -3375,7 +3370,6 @@
       "affected_screens": [
         "steam-millennium-config-backup-05"
       ],
-      "registry_number": "n-code",
       "original_value_index": 1,
       "page_pattern": "\\ 个共\\ ([\\d,]+(?:\\.\\d+)?)\\ 行",
       "measurement_scope": "仅Git跟踪文件；include=[\"tools/Invoke-MillenniumBackup.ps1\", \"tools/Manage-MillenniumTask.ps1\", \"tools/Show-MillenniumBackupStatus.ps1\", \"tools/snapshot-millennium-config.ps1\"]；exclude=[]。逐行计数，含空行/注释及末尾无LF残行。Invoke/Manage/Show/snapshot精确四入口，不含7行register转接。",
@@ -3542,7 +3536,6 @@
       "affected_screens": [
         "steam-millennium-config-backup-10"
       ],
-      "registry_number": "n-commits",
       "original_value_index": 0,
       "page_pattern": "现在\\*\\*｜\\s*([\\d,]+)\\s*个提交",
       "measurement_scope": "指定源仓库git rev-list --count HEAD：全部可达提交，含合并提交，不筛日期或路径，单位次。",
@@ -3764,7 +3757,6 @@
       "affected_screens": [
         "sunshine-remote-streaming-05"
       ],
-      "registry_number": "n-test-lines",
       "page_pattern": "\\*\\*([\\d,]+) 行\\*\\*｜测试",
       "measurement_scope": "仅Git跟踪文件；include=[\"tests/**/*.ps1\", \"tests/*.ps1\", \"tests/**/*.psm1\", \"tests/*.psm1\", \"tests/**/*.vbs\", \"tests/*.vbs\"]；exclude=[]。逐行排除空字符串，保留纯空白行与末尾非空残行，复现页面source的Measure-Object -Line。",
       "scope_status": "verified",
@@ -4166,7 +4158,6 @@
         "meshclip-kit-03",
         "meshclip-kit-08"
       ],
-      "registry_number": "n-checks",
       "original_value_index": 1,
       "page_pattern": "查，([\\d,]+) 项通过",
       "measurement_scope": "源doctor -AsJson每次只读自检的聚合结果；不证明双机文字/文件验收，失败和未知分列。",
@@ -4536,10 +4527,10 @@
       "page": "pcconfig",
       "screen": "pcconfig-01",
       "label": "系统镜像链大小（GiB）",
-      "current_value": 431,
-      "as_of": "2026-10-10",
+      "current_value": 706.2,
+      "as_of": "2026-10-22",
       "category": "某个 JSON 字段",
-      "source_location": "E:\\Cache\\PCConfig\\SystemImage\\last-run.json chain_bytes；第15屏仍留9月28日403GiB快照",
+      "source_location": "E:/Cache/PCConfig/SystemImage/last-run.json chain_bytes=758329942208（同一回执native.completed_utc=2026-10-22T05:52:33Z即北京时间10月22日13:52，status=complete，native_exit_code=0，restore_tested=false，last_full_utc仍为2026-10-21T05:47:17Z）；北京时间10月23日10:25由collect-r3读取，11:48复读未变",
       "retrieve": {
         "kind": "json",
         "path": "E:\\Cache\\PCConfig\\SystemImage\\last-run.json",
@@ -4554,14 +4545,13 @@
       "private": false,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
-      "refreshed_value": 444,
+      "refreshed_value": 706.2,
       "affected_screens": [
         "pcconfig-01"
       ],
-      "registry_number": "n-image-chain",
       "original_value_index": 0,
       "page_pattern": "- \\*\\*([\\d,.]+) GiB\\*\\*　加密系统镜像，",
-      "measurement_scope": "指定JSON逐键/数组索引取[\"chain_bytes\"]；字段原始单值。原值乘9.313225746154785e-10换算页面单位。保留0位小数，五入。",
+      "measurement_scope": "指定JSON取[\"chain_bytes\"]原始单值，乘9.313225746154785e-10换算GiB，保留1位小数四舍五入；对应完成事件取同一回执native.completed_utc，不从observed_utc或读取时刻改写完成时刻。",
       "scope_status": "verified",
       "field": "screens[0].text",
       "observation_basis": "snapshot_timestamp",
@@ -4595,10 +4585,10 @@
       "page": "pcconfig",
       "screen": "pcconfig-11",
       "label": "待验收清单全部条目数",
-      "current_value": 91,
-      "as_of": "2026-09-28",
+      "current_value": 405,
+      "as_of": "2026-10-23",
       "category": "某个 JSON 字段",
-      "source_location": "registries/pending_acceptance.json（提交 28f393b2 之后）",
+      "source_location": "E:/PCConfig/registries/pending_acceptance.json items数组长度；北京时间10月23日10:25由collect-r3读取（当时为PCConfig提交0a35a4a7，文件updated_china_time=2026-10-23 10:20），11:48复读当前提交d76edd10仍405",
       "retrieve": {
         "kind": "json",
         "path": "E:\\PCConfig\\registries\\pending_acceptance.json",
@@ -4611,12 +4601,12 @@
       "private": false,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
-      "refreshed_value": null,
+      "refreshed_value": 405,
       "affected_screens": [
         "pcconfig-11",
         "pcconfig-20"
       ],
-      "measurement_scope": "指定JSON逐键/数组索引取[\"items\"]；全部数组元素个数，无状态过滤。已从提交28f393b2复算items数组长度=43，包括全部登记状态，不计excluded或maintenance。",
+      "measurement_scope": "items全部数组元素个数，无状态过滤；同句五类按items[].status分：passed=已验过、superseded=已被取代、ended=已结束、pending=还在等、on_hold=暂缓，五类之和等于总数。该映射已用提交4403ded6（97项=39/28/2/23/5）复核。",
       "scope_status": "verified",
       "scope_evidence": "git show 28f393b2:registries/pending_acceptance.json 后取 items 数组长度",
       "field": "screens[10].text",
@@ -4640,7 +4630,7 @@
           "size_bytes"
         ],
         "scale": 9.313225746154785e-10,
-        "digits": 0
+        "digits": 1
       },
       "automatic": true,
       "private": false,
@@ -4714,7 +4704,7 @@
           "size_bytes"
         ],
         "scale": 9.313225746154785e-10,
-        "digits": 0
+        "digits": 1
       },
       "automatic": true,
       "private": false,
@@ -4788,7 +4778,7 @@
           "size_bytes"
         ],
         "scale": 9.313225746154785e-10,
-        "digits": 0
+        "digits": 1
       },
       "automatic": true,
       "private": false,
@@ -4828,7 +4818,7 @@
           "size_bytes"
         ],
         "scale": 9.313225746154785e-10,
-        "digits": 0
+        "digits": 1
       },
       "automatic": true,
       "private": false,
@@ -4902,7 +4892,7 @@
           "size_bytes"
         ],
         "scale": 9.313225746154785e-10,
-        "digits": 0
+        "digits": 1
       },
       "automatic": true,
       "private": false,
@@ -4976,7 +4966,7 @@
           "size_bytes"
         ],
         "scale": 9.313225746154785e-10,
-        "digits": 0
+        "digits": 1
       },
       "automatic": true,
       "private": false,
@@ -5925,7 +5915,6 @@
         "localocr-11",
         "localocr-12"
       ],
-      "registry_number": "n-tests",
       "original_value_index": 0,
       "page_pattern": "([\\d,]+(?:\\.\\d+)?)\\ 项｜测试无失败（",
       "scope_status": "verified",
@@ -6034,7 +6023,6 @@
         "devconfig-backup-07",
         "devconfig-backup-10"
       ],
-      "registry_number": "n-wechat-files",
       "page_pattern": "\\*\\*([\\d,]+) 个文件\\*\\*　微信原始文件",
       "field": "screens[0].text",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
@@ -6075,7 +6063,6 @@
         "devconfig-backup-07",
         "devconfig-backup-10"
       ],
-      "registry_number": "n-wechat-files",
       "page_pattern": "微信原始文件 ([\\d,.]+) GiB",
       "field": "screens[0].text",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
@@ -6116,7 +6103,6 @@
         "devconfig-backup-01",
         "devconfig-backup-03"
       ],
-      "registry_number": "n-config-files",
       "page_pattern": "\\*\\*([\\d,]+) 个文件\\*\\*　最新一个开发配置包",
       "measurement_scope": "指定JSON逐键/数组索引取[\"file_count\"]；字段原始单值。",
       "scope_status": "verified",
@@ -6423,7 +6409,6 @@
       "affected_screens": [
         "wechatdirect-01"
       ],
-      "registry_number": "n-reading-runs",
       "original_value_index": 0,
       "page_pattern": "\\-\\ \\*\\*([\\d,]+(?:\\.\\d+)?)\\ 段\\*\\*｜聊天替理解库读过，共\\ ",
       "measurement_scope": "现存 window.json 数，与原页面 888 段口径一致，包含 826 完成、62 未完成且零消息窗口；不把它改成仅完成窗口数。",
@@ -6460,7 +6445,6 @@
       "affected_screens": [
         "wechatdirect-01"
       ],
-      "registry_number": "n-reading-runs",
       "original_value_index": 1,
       "page_pattern": "\\ 段\\*\\*｜聊天替理解库读过，共\\ ([\\d,]+(?:\\.\\d+)?)\\ 条消息（",
       "field": "screens[0].text",
@@ -6575,7 +6559,6 @@
       "affected_screens": [
         "wechatdirect-01"
       ],
-      "registry_number": "n-tests",
       "original_value_index": 0,
       "page_pattern": "\\-\\ \\*\\*([\\d,]+(?:\\.\\d+)?)\\ 个\\*\\*｜自动测试，",
       "measurement_scope": "仅Git跟踪文件；include=[\"tests/**/*.py\", \"tests/*.py\"]；exclude=[]。正则^\\s*(?:async\\s+)?def test，flags=m；静态测试函数，不执行测试、不声称通过，fixture无test函数不计。",
@@ -7614,7 +7597,7 @@
       "current_value": 6,
       "as_of": "2026-10-10",
       "category": "只读自动统计",
-      "source_location": "E:/Projects/Tools/TimeAudit/grafana_dashboards/*.json；递归panels，不计row；uid分离主看板和website-computer-status公开小看板",
+      "source_location": "E:/Projects/Tools/TimeAudit/grafana_dashboards/*.json（10 月 16 日起的新格式数 elements 里 kind=Panel 的图，旧格式递归 panels、不计 row）；公开状态小看板在 grafana_provisioning/dashboards/website-computer-status*.json",
       "retrieve": {
         "kind": "entry",
         "entry": "timeaudit-grafana-counts",
@@ -7648,9 +7631,9 @@
       "screen": "timeaudit-01",
       "label": "主看板图表总数",
       "current_value": 80,
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-23",
       "category": "只读自动统计",
-      "source_location": "E:/Projects/Tools/TimeAudit/grafana_dashboards/*.json；递归panels，不计row；uid分离主看板和website-computer-status公开小看板",
+      "source_location": "E:/Projects/Tools/TimeAudit/grafana_dashboards/*.json（10 月 16 日起的新格式数 elements 里 kind=Panel 的图，旧格式递归 panels、不计 row）；公开状态小看板在 grafana_provisioning/dashboards/website-computer-status*.json",
       "retrieve": {
         "kind": "entry",
         "entry": "timeaudit-grafana-counts",
@@ -7668,7 +7651,6 @@
         "timeaudit-03",
         "timeaudit-14"
       ],
-      "registry_number": "n-panels",
       "page_pattern": "张看板 · ([\\d,.]+) 个图\\*\\*｜本机 Grafana",
       "field": "screens[0].text",
       "measurement_scope": "主看板panels递归计数，含折叠行子图，不计row分组，不混入3张公开小看板。",
@@ -7799,7 +7781,6 @@
         "timeaudit-10",
         "timeaudit-13"
       ],
-      "registry_number": "n-activity",
       "page_pattern": "\\| 每 3 秒一次的逐程序明细 \\| ([\\d,.]+) 亿条",
       "field": "screens[10].text",
       "measurement_scope": "fact_process_activity分区树叶分区pg_class.reltuples非负值合计/1亿，两位；统计估算，非精确count。",
@@ -7878,8 +7859,8 @@
       "page": "timeaudit",
       "screen": "timeaudit-10",
       "label": "数据库备份大小（GiB）",
-      "current_value": 4.7,
-      "as_of": "2026-10-11",
+      "current_value": 5.3,
+      "as_of": "2026-10-23",
       "category": "只读自动统计",
       "source_location": "E:/Projects/Tools/TimeAudit/timeaudit_health.py → G:/80_Backup/TimeAudit/postgresql/time_audit_*.dump文件元数据",
       "retrieve": {
@@ -7901,7 +7882,6 @@
       "affected_screens": [
         "timeaudit-10"
       ],
-      "registry_number": "n-backup",
       "page_pattern": "最近一份约 ([\\d,.]+) GiB（",
       "field": "screens[10].text",
       "measurement_scope": "health对最新time_audit_*.dump的stat.st_size/2^20返回MiB，再/1024一位GiB；不读取归档内容，不复算hash，不是恢复演练。",
@@ -7947,7 +7927,7 @@
       "screen": "timeaudit-10",
       "label": "现存备份份数",
       "current_value": 14,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "只读自动统计",
       "source_location": "E:/Projects/Tools/TimeAudit/timeaudit_health.py → G:/80_Backup/TimeAudit/postgresql/time_audit_*.dump文件元数据",
       "retrieve": {
@@ -7967,7 +7947,6 @@
       "affected_screens": [
         "timeaudit-10"
       ],
-      "registry_number": "n-backup",
       "page_pattern": "再看：现有 ([\\d,.]+) 份完整备份",
       "field": "screens[10].text",
       "measurement_scope": "G:/80_Backup/TimeAudit/postgresql下time_audit_*.dump份数，不计partial，未逐档复核。",
@@ -8157,7 +8136,6 @@
       "affected_screens": [
         "timeaudit-11"
       ],
-      "registry_number": "n-overhead",
       "page_pattern": "内存最多 ([\\d,.]+) MiB（10 月 10 日 02:17–05:17 这段",
       "field": "screens[11].text",
       "measurement_scope": "同固定三小时窗口主程序工作集峰MiB整数；非全栈/长期峰值。",
@@ -8299,7 +8277,6 @@
         "remote-control-01",
         "remote-control-02"
       ],
-      "registry_number": "n-calls",
       "page_pattern": "\\*\\*([\\d,]+) 次\\*\\*｜主机收到的工具调用",
       "field": "screens[0].text",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
@@ -8396,7 +8373,6 @@
       "affected_screens": [
         "remote-control-02"
       ],
-      "registry_number": "n-call-split",
       "page_pattern": "开工核对 ([\\d,]+)（每次开工",
       "field": "screens[1].text",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
@@ -8435,7 +8411,6 @@
       "affected_screens": [
         "remote-control-02"
       ],
-      "registry_number": "n-call-split",
       "page_pattern": "截图和读界面 ([\\d,]+) · 开工核对",
       "field": "screens[1].text",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
@@ -8474,7 +8449,6 @@
       "affected_screens": [
         "remote-control-02"
       ],
-      "registry_number": "n-call-split",
       "page_pattern": "· 其他 ([\\d,]+)\\n主机处理",
       "field": "screens[1].text",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
@@ -8543,7 +8517,6 @@
       "affected_screens": [
         "remote-control-05"
       ],
-      "registry_number": "n-code",
       "page_pattern": "\\*\\*约 ([\\d,.]+) 万行\\*\\*｜程序",
       "unit": "万行",
       "field": "screens[4].text",
@@ -8575,7 +8548,6 @@
       "affected_screens": [
         "remote-control-05"
       ],
-      "registry_number": "n-tests",
       "page_pattern": "\\*\\*([\\d,]+) 行\\*\\*｜自动测试",
       "field": "screens[4].text",
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
@@ -9044,7 +9016,7 @@
         "sql": "SELECT count(*) FROM records WHERE is_current=1",
         "scale": 0.0001,
         "round_to": 1,
-        "digits": 0
+        "digits": 1
       },
       "automatic": true,
       "private": true,
@@ -9245,7 +9217,6 @@
       "affected_screens": [
         "daily-preferences-10"
       ],
-      "registry_number": "n-frozen",
       "original_value_index": 0,
       "page_pattern": "\\*\\*([\\d,]+) 个\\*\\*｜冻结的引用副本文件",
       "measurement_scope": "引用快照目录下递归全部文件数，只列文件，不读取文件正文",
@@ -9511,7 +9482,6 @@
       "affected_screens": [
         "personal-media-01"
       ],
-      "registry_number": "n-phone-picks",
       "original_value_index": 0,
       "page_pattern": "\\ \\*\\*([\\d,]+(?:\\.\\d+)?)\\ 件\\*\\*\\ ",
       "field": "screens[0].text",
@@ -9923,7 +9893,6 @@
       "affected_screens": [
         "personal-materials-06"
       ],
-      "registry_number": "n-code-lines",
       "original_value_index": 0,
       "page_pattern": "\\*\\*([\\d,]+) 行\\*\\*｜Python，就一个文件",
       "measurement_scope": "Git 跟踪的单文件 materials.py，Python splitlines 计所有文本行，含注释和空行，本轮4242。",
@@ -9961,7 +9930,6 @@
       "affected_screens": [
         "personal-materials-06"
       ],
-      "registry_number": "n-tests",
       "original_value_index": 0,
       "page_pattern": "\\*\\*([\\d,]+) 个\\*\\*｜测试用例定义",
       "field": "screens[5].text",
@@ -10109,7 +10077,6 @@
         "codex-memory-08",
         "codex-memory-09"
       ],
-      "registry_number": "n-conv-size",
       "original_value_index": 0,
       "page_pattern": "^- \\*\\*([\\d,]+(?:\\.\\d+)?) GB\\*\\*　Codex 完整对话，",
       "field": "screens[0].text",
@@ -10149,7 +10116,6 @@
         "codex-memory-08",
         "codex-memory-09"
       ],
-      "registry_number": "n-conv-size",
       "original_value_index": 1,
       "page_pattern": "^- \\*\\*[\\d.]+ GB\\*\\*　Codex 完整对话，([\\d,]+) 个文件（",
       "field": "screens[0].text",
@@ -10439,7 +10405,7 @@
       "current_value": 3,
       "as_of": "2026-10-10",
       "category": "只读自动统计",
-      "source_location": "E:/Projects/Tools/TimeAudit/grafana_dashboards/*.json；递归panels，不计row；uid分离主看板和website-computer-status公开小看板",
+      "source_location": "E:/Projects/Tools/TimeAudit/grafana_dashboards/*.json（10 月 16 日起的新格式数 elements 里 kind=Panel 的图，旧格式递归 panels、不计 row）；公开状态小看板在 grafana_provisioning/dashboards/website-computer-status*.json",
       "retrieve": {
         "kind": "entry",
         "entry": "timeaudit-grafana-counts",
@@ -10452,7 +10418,7 @@
       "historical": false,
       "report_ref": "E:/Cache/Claude/Temp/6428793e/gpt-children/20261011-174134-web-bind-B2-f81fad6f/round-01/evidence/timeaudit-findings.md",
       "refreshed_value": 3,
-      "page_pattern": "加 ([\\d,.]+) 张公开状态小看板",
+      "page_pattern": "；另 ([\\d,.]+) 张公开状态小看板本来就以配置文件",
       "field": "screens[8].text",
       "measurement_scope": "导出JSON uid以website-computer-status开头的公开小看板份数。",
       "scope_status": "verified"
@@ -10885,7 +10851,7 @@
         ],
         "scale": 0.0009765625,
         "round_to": 1,
-        "digits": 0
+        "digits": 1
       },
       "automatic": true,
       "private": true,
@@ -13000,9 +12966,9 @@
     },
     {
       "id": "timeaudit-cutoff-main",
-      "label": "首屏仍沿用旧值的主看板张数及图表数截止日期",
-      "current_value": "10 月 12 日",
-      "page_pattern": "^截至 (\\d+ 月 \\d+ 日)（复制次数本轮已重读；",
+      "label": "首屏主看板张数及图表数读取时间",
+      "current_value": "10 月 23 日 11:54",
+      "page_pattern": "看板和图的数量在 (\\d+ 月 \\d+ 日 \\d{2}:\\d{2}) 按仓库",
       "qualifies": [
         "timeaudit-n-panels-0",
         "timeaudit-n-panels-1"
@@ -13010,17 +12976,16 @@
       "page": "timeaudit",
       "screen": "timeaudit-01",
       "field": "screens[0].text",
-      "as_of": "2026-10-12",
-      "category": "数字观察日期",
-      "source_location": "E:/Cache/Claude/Temp/6428793e/wt-B2/sources/pages/timeaudit/page.json screens[0].text；由qualifies注明数字的重取结果衍生",
+      "as_of": "2026-10-23",
+      "category": "日期联动",
+      "source_location": "同页被注明数字记录",
       "automatic": true,
       "private": false,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "本句10月12日仅注明仍保留旧数的主看板张数和图表数。复制次数本轮已重读；硬件、程序启动退出已于10月22日08:06—08:07做同口径精确计数，各按括号说明，不受这句旧截止覆盖。任一主看板数未取得同口径新值则保旧日期。",
+      "measurement_scope": "仅注明首屏主看板张数和图表数的读取时刻；复制次数、硬件记录、程序启动和退出各有本句里自己的时刻，不受它覆盖。任一主看板数未取得同口径新值则保留原时刻。",
       "report_ref": "E:/Cache/Claude/Temp/6428793e/gpt-children/20261011-174134-web-bind-B2-f81fad6f/round-01/evidence/timeaudit-findings.md",
-      "refreshed_value": null,
-      "known_gap": "本轮看板来源返回0，但未通过内容Owner的同口径语义审查；既有主看板数保留10月12日旧值、当前Unknown。automatic表示有既有自动读取办法，不表示新0已验收，不据此修改页面或推进日期。"
+      "refreshed_value": null
     },
     {
       "id": "timeaudit-cutoff-clip",
@@ -13168,8 +13133,8 @@
       "page": "pcconfig",
       "screen": "pcconfig-01",
       "label": "本屏数字截至",
-      "current_value": "10 月 22 日 06:47",
-      "as_of": "2026-10-22",
+      "current_value": "10 月 23 日 10:25",
+      "as_of": "2026-10-23",
       "category": "只读取数",
       "source_location": "见retrieve与pc-findings.md",
       "automatic": true,
@@ -13179,7 +13144,7 @@
       "affected_screens": [
         "pcconfig-01"
       ],
-      "measurement_scope": "只说明qualifies数字；任一Unknown保留旧日期。",
+      "measurement_scope": "首屏“数字截至”指镜像回执的读取时刻（北京时间，精确到分钟）；同句另写自动任务扫描与外接盘回执各自时间。回执完成时刻是事件时间，不当截至。任一被注明数字Unknown保留旧值。",
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "截至 ([\\d]+ 月 [\\d]+ 日 \\d+:\\d+)；",
@@ -13962,7 +13927,6 @@
       "affected_screens": [
         "codex-memory-04"
       ],
-      "registry_number": "n-conv-size",
       "original_value_index": 0,
       "page_pattern": "^- \\*\\*多大\\*\\*　[\\d,]+ 个文件，([\\d.]+) GB",
       "field": "screens[3].text",
@@ -13999,7 +13963,6 @@
       "affected_screens": [
         "codex-memory-04"
       ],
-      "registry_number": "n-conv-size",
       "original_value_index": 1,
       "page_pattern": "^- \\*\\*多大\\*\\*　([\\d,]+) 个文件，[\\d.]+ GB",
       "field": "screens[3].text",
@@ -14156,8 +14119,8 @@
       "page": "skill-cockpit",
       "screen": "skill-cockpit-01",
       "label": "上次使用",
-      "current_value": "2026-10-09 13:02",
-      "as_of": "2026-10-09",
+      "current_value": "2026-10-21 21:13",
+      "as_of": "2026-10-21",
       "category": "日志",
       "historical": false,
       "private": true,
@@ -14186,15 +14149,12 @@
       "page": "skill-cockpit",
       "screen": "skill-cockpit-01",
       "label": "使用记录截至日期",
-      "current_value": "2026-10-11",
+      "current_value": "2026-10-21",
       "as_of": "2026-10-09",
       "category": "截至日期",
       "historical": false,
       "private": true,
       "field": "status_line.as_of",
-      "page_field": "status_line.as_of",
-      "start": 0,
-      "end": 10,
       "qualifies": [
         "skill-cockpit-status-last"
       ],
@@ -16282,8 +16242,8 @@
       "page": "chinese-asr",
       "screen": "chinese-asr-01",
       "label": "不同录音下限",
-      "current_value": 434,
-      "as_of": "2026-10-11",
+      "current_value": 699,
+      "as_of": "2026-10-23",
       "category": "自动",
       "source_location": "E:/Projects/Tools/ChineseASR",
       "retrieve": {
@@ -16298,9 +16258,9 @@
       "private": true,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "同原页面口径：outputs objective-result audio.raw_sha256去重且排除测试前缀；dictation/runtime.log两种识别行elapsed_sec/seconds合算；models整目录文件大小/安装模型根目录数；cloud-jobs结果status=succeeded",
+      "measurement_scope": "同原页面口径：outputs objective-result audio.raw_sha256去重且排除测试前缀；dictation/runtime.log两种识别行elapsed_sec/seconds合算；models整目录文件大小/安装模型根目录数；cloud-jobs结果status=succeeded。页面写“8 月 18 日起……（N 月 N 日 HH:MM 数）”，不写区间末日：入口不按日期截，计数随新结果增长，计数时刻由同句日期记录注明。",
       "field": "screens[0].text",
-      "page_pattern": "\\*\\*([\\d,]+) 段\\*\\*｜8 月"
+      "page_pattern": "\\*\\*([\\d,]+) 段\\*\\*｜8 月 18 日起转成文字"
     },
     {
       "id": "chinese-asr-dictation-median",
@@ -21197,15 +21157,15 @@
       "screen": "personal-expression-explain-to-me-08",
       "field": "screens[7].text",
       "label": "usage-collected-through",
-      "current_value": "10 月 9 日",
+      "current_value": "10 月 21 日",
       "as_of": "2026-10-11",
       "category": "截至日期",
-      "source_location": "AI 使用账本 explain-to-me 全历史34、分宿主23/11、2026-10-04 14:00以来固定窗10及最后调用时间；沿 E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 固定kind=skill,name=explain-to-me聚合，并核 U补采/写入恢复回执。累计数和固定窗不可用滚动7天替换。",
+      "source_location": "AI 使用账本 explain-to-me 全历史53、分宿主 Codex 36/Claude 17、2026-10-04 14:00以来固定窗29及最后调用 10-20 14:36（均为两路水位 2026-10-22 00:00 前，水位后 0 条）；沿 E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 固定kind=skill,name=explain-to-me聚合，并核 state-codex/state-claude 水位。累计数和固定窗不可用滚动7天替换。",
       "automatic": true,
       "private": false,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "共同完成补采的包容北京日：两个last_completed的较早排他午夜端点减一个日历日；源Owner仅在账本fsync且invalid_lines=0后推进水位。当前两宿主都完成10/10整日扫描，不代表10/11当日完整，不宣称全历史无缺口。本句与总数/分宿主/固定窗口/未补采说明的叙述需Opus同页审核，不能只改裸日期。",
+      "measurement_scope": "共同完成补采的包容北京日：两个last_completed的较早排他午夜端点减一个日历日；源Owner仅在账本fsync且invalid_lines=0后推进水位。2026-10-23 11:48 读到两宿主 last_completed 均为 2026-10-22T00:00:00+08:00，即都完成 10/21 整日扫描，不代表 10/22 完整，不宣称全历史无缺口。本句与总数/分宿主/固定窗口/未补采说明的叙述需同页审核，不能只改裸日期。",
       "page_pattern": "AI 使用记录（截至 (\\d+ 月 \\d+ 日)已采到的部分）",
       "retrieve": {
         "kind": "entry",
@@ -21214,7 +21174,10 @@
           "complete_through_day"
         ]
       },
-      "date_semantics": "coverage_end"
+      "date_semantics": "coverage_end",
+      "qualifies": [
+        "b7-personal-expression-explain-to-me-usage-all-time"
+      ]
     },
     {
       "id": "b7-personal-expression-reply-as-me-usage-collected-through",
@@ -21222,15 +21185,15 @@
       "screen": "personal-expression-reply-as-me-10",
       "field": "screens[9].text",
       "label": "usage-collected-through",
-      "current_value": "10 月 9 日",
+      "current_value": "10 月 21 日",
       "as_of": "2026-10-11",
       "category": "截至日期",
-      "source_location": "AI 使用账本 reply-as-me 全历史10、分宿主5/5、2026-10-04 14:00以来固定窗0及最后调用时间；沿 E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 固定kind=skill,name=reply-as-me聚合，并核 U补采/写入恢复回执。0不代表没用；累计数和固定窗不可用滚动7天替换。",
+      "source_location": "AI 使用账本 reply-as-me 全历史13、分宿主 Codex 6/Claude 7、2026-10-04 14:00以来固定窗3及最后调用 10-20 14:34（均为两路水位 2026-10-22 00:00 前，水位后 0 条）；沿 E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 固定kind=skill,name=reply-as-me聚合，并核 state-codex/state-claude 水位。记录少不代表没用；累计数和固定窗不可用滚动7天替换。",
       "automatic": true,
       "private": false,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "共同完成补采的包容北京日：两个last_completed的较早排他午夜端点减一个日历日；源Owner仅在账本fsync且invalid_lines=0后推进水位。当前两宿主都完成10/10整日扫描，不代表10/11当日完整，不宣称全历史无缺口。本句与总数/分宿主/固定窗口/未补采说明的叙述需Opus同页审核，不能只改裸日期。",
+      "measurement_scope": "共同完成补采的包容北京日：两个last_completed的较早排他午夜端点减一个日历日；源Owner仅在账本fsync且invalid_lines=0后推进水位。2026-10-23 11:48 读到两宿主 last_completed 均为 2026-10-22T00:00:00+08:00，即都完成 10/21 整日扫描，不代表 10/22 完整，不宣称全历史无缺口。本句与总数/分宿主/固定窗口/未补采说明的叙述需同页审核，不能只改裸日期。",
       "page_pattern": "AI 使用记录（截至 (\\d+ 月 \\d+ 日)已采到的部分）",
       "retrieve": {
         "kind": "entry",
@@ -21239,7 +21202,10 @@
           "complete_through_day"
         ]
       },
-      "date_semantics": "coverage_end"
+      "date_semantics": "coverage_end",
+      "qualifies": [
+        "b7-personal-expression-reply-as-me-usage-all-time"
+      ]
     },
     {
       "id": "b7-localocr-jobs-cache-027",
@@ -23888,7 +23854,7 @@
       "label": "精确登记原件数",
       "field": "screens[4].text",
       "current_value": 166,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -23905,11 +23871,11 @@
       "measurement_scope": "materials.status的materials行数",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "计数\\*\\*\\s+([0-9]+(?:,[0-9]{3})*)\\s*条精确登记",
-      "checked_at": "2026-10-23T10:25:47+08:00",
-      "source_observed_at": "2026-10-23T10:25:47+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:25:47+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-018",
@@ -23948,7 +23914,7 @@
       "label": "登记来源数",
       "field": "screens[4].text",
       "current_value": 55,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -23965,11 +23931,11 @@
       "measurement_scope": "materials.status的sources行数",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "条精确登记（保存状态均为 verified）、\\s*([0-9]+(?:,[0-9]{3})*)\\s*个来源",
-      "checked_at": "2026-10-23T10:25:47+08:00",
-      "source_observed_at": "2026-10-23T10:25:47+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:25:47+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-020",
@@ -24006,7 +23972,7 @@
       "label": "有绑定文字的材料数",
       "field": "screens[4].text",
       "current_value": 161,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24021,11 +23987,11 @@
       "measurement_scope": "material_text去重material_key计数，当前44份；不把多种文字行数当材料份数",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "条关系、\\s*([0-9]+(?:,[0-9]{3})*)\\s*份有绑定文字",
-      "checked_at": "2026-10-23T10:26:16+08:00",
-      "source_observed_at": "2026-10-23T10:26:16+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:16+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-022",
@@ -24062,7 +24028,7 @@
       "label": "无绑定文字的登记数",
       "field": "screens[4].text",
       "current_value": 5,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24077,11 +24043,11 @@
       "measurement_scope": "material_text无行的materials计数",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "份 ocr）、\\s*([0-9]+(?:,[0-9]{3})*)\\s*份没有文字",
-      "checked_at": "2026-10-23T10:26:16+08:00",
-      "source_observed_at": "2026-10-23T10:26:16+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:16+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-024",
@@ -24120,7 +24086,7 @@
       "label": "来源原生关系数",
       "field": "screens[4].text",
       "current_value": 4,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24137,11 +24103,11 @@
       "measurement_scope": "material_relations全表行数",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "([0-9]+(?:,[0-9]{3})*)\\s*条关系、[0-9,]+\\s*份有绑定文字",
-      "checked_at": "2026-10-23T10:25:47+08:00",
-      "source_observed_at": "2026-10-23T10:25:47+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:25:47+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-026",
@@ -24149,8 +24115,8 @@
       "screen": "personal-materials-exact-intake-05",
       "label": "文件名清单数",
       "field": "screens[4].text",
-      "current_value": 28942,
-      "as_of": "2026-10-11",
+      "current_value": 29896,
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24164,7 +24130,11 @@
       "scope_status": "verified",
       "measurement_scope": "filename_entries全表行数",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "文件名清单\\s+([0-9]+(?:,[0-9]{3})*)\\s*条"
+      "page_pattern": "文件名清单\\s+([0-9]+(?:,[0-9]{3})*)\\s*条",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "observed_at": "2026-10-23T11:51:43+08:00",
+      "observation_basis": "live_read"
     },
     {
       "id": "personal-materials-exact-intake-b9-027",
@@ -24173,7 +24143,7 @@
       "label": "普通目录来源数",
       "field": "screens[4].text",
       "current_value": 35,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24188,11 +24158,11 @@
       "measurement_scope": "sources中filesystem-directory行数",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "([0-9]+(?:,[0-9]{3})*)\\s*个普通目录",
-      "checked_at": "2026-10-23T10:26:15+08:00",
-      "source_observed_at": "2026-10-23T10:26:15+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:15+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-028",
@@ -24201,7 +24171,7 @@
       "label": "文件名清单来源数",
       "field": "screens[4].text",
       "current_value": 5,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24216,11 +24186,11 @@
       "measurement_scope": "sources中filename-index-directory行数",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "([0-9]+(?:,[0-9]{3})*)\\s*个文件名清单目录",
-      "checked_at": "2026-10-23T10:26:15+08:00",
-      "source_observed_at": "2026-10-23T10:26:15+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:15+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-029",
@@ -24229,7 +24199,7 @@
       "label": "交接目录来源数",
       "field": "screens[4].text",
       "current_value": 10,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24244,11 +24214,11 @@
       "measurement_scope": "sources中consumer-handoff-directory行数",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "([0-9]+(?:,[0-9]{3})*)\\s*个交接目录",
-      "checked_at": "2026-10-23T10:26:16+08:00",
-      "source_observed_at": "2026-10-23T10:26:16+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:16+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-030",
@@ -24257,7 +24227,7 @@
       "label": "单文件来源数",
       "field": "screens[4].text",
       "current_value": 5,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24272,11 +24242,11 @@
       "measurement_scope": "sources中single-file行数",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "([0-9]+(?:,[0-9]{3})*)\\s*个单文件",
-      "checked_at": "2026-10-23T10:26:16+08:00",
-      "source_observed_at": "2026-10-23T10:26:16+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:16+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-031",
@@ -24285,7 +24255,7 @@
       "label": "原件自带完整文字数",
       "field": "screens[4].text",
       "current_value": 32,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24300,11 +24270,11 @@
       "measurement_scope": "material_text native/complete行数",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "去重；\\s*([0-9]+(?:,[0-9]{3})*)\\s*份 native/complete 原件自带完整文字",
-      "checked_at": "2026-10-23T10:26:16+08:00",
-      "source_observed_at": "2026-10-23T10:26:16+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:16+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-032",
@@ -24313,7 +24283,7 @@
       "label": "提取的部分文字数",
       "field": "screens[4].text",
       "current_value": 115,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24328,11 +24298,11 @@
       "measurement_scope": "material_text extracted/partial行数",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "份 partial：\\s*([0-9]+(?:,[0-9]{3})*)\\s*份 extracted",
-      "checked_at": "2026-10-23T10:26:16+08:00",
-      "source_observed_at": "2026-10-23T10:26:16+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:16+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-033",
@@ -24427,7 +24397,7 @@
       "label": "登记原件大小字节",
       "field": "screens[4].text",
       "current_value": 1218148290,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24442,11 +24412,11 @@
       "measurement_scope": "登记byte_size合计，不重算原件",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "登记原件大小合计\\s+([0-9]+(?:,[0-9]{3})*)\\s*字节",
-      "checked_at": "2026-10-23T10:26:17+08:00",
-      "source_observed_at": "2026-10-23T10:26:17+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:17+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-037",
@@ -24608,7 +24578,7 @@
       "label": "PDF材料类型数",
       "field": "screens[4].text",
       "current_value": 74,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24623,11 +24593,11 @@
       "measurement_scope": "按登记mime_type分类计数，不以文件扩展名代替MIME；当前JSON为9而.json扩展名只有8",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "按类型：PDF\\s+([0-9]+(?:,[0-9]{3})*)\\s*、",
-      "checked_at": "2026-10-23T10:26:17+08:00",
-      "source_observed_at": "2026-10-23T10:26:17+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:17+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-043",
@@ -24636,7 +24606,7 @@
       "label": "网页材料类型数",
       "field": "screens[4].text",
       "current_value": 20,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24651,11 +24621,11 @@
       "measurement_scope": "按登记mime_type分类计数，不以文件扩展名代替MIME；当前JSON为9而.json扩展名只有8",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "网页\\s+([0-9]+(?:,[0-9]{3})*)\\s*、",
-      "checked_at": "2026-10-23T10:26:17+08:00",
-      "source_observed_at": "2026-10-23T10:26:17+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:17+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-044",
@@ -24664,7 +24634,7 @@
       "label": "Markdown材料类型数",
       "field": "screens[4].text",
       "current_value": 17,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24679,11 +24649,11 @@
       "measurement_scope": "按登记mime_type分类计数，不以文件扩展名代替MIME；当前JSON为9而.json扩展名只有8",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "Markdown\\s+([0-9]+(?:,[0-9]{3})*)\\s*、",
-      "checked_at": "2026-10-23T10:26:17+08:00",
-      "source_observed_at": "2026-10-23T10:26:17+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:17+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-045",
@@ -24692,7 +24662,7 @@
       "label": "Word材料类型数",
       "field": "screens[4].text",
       "current_value": 18,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24707,11 +24677,11 @@
       "measurement_scope": "按登记mime_type分类计数，不以文件扩展名代替MIME；当前JSON为9而.json扩展名只有8",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "Word\\s+([0-9]+(?:,[0-9]{3})*)\\s*、",
-      "checked_at": "2026-10-23T10:26:17+08:00",
-      "source_observed_at": "2026-10-23T10:26:17+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:17+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-046",
@@ -24720,7 +24690,7 @@
       "label": "表格材料类型数",
       "field": "screens[4].text",
       "current_value": 11,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24735,11 +24705,11 @@
       "measurement_scope": "按登记mime_type分类计数，不以文件扩展名代替MIME；当前JSON为9而.json扩展名只有8",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "表格\\s+([0-9]+(?:,[0-9]{3})*)\\s*、",
-      "checked_at": "2026-10-23T10:26:17+08:00",
-      "source_observed_at": "2026-10-23T10:26:17+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:17+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-047",
@@ -24748,7 +24718,7 @@
       "label": "JSON材料类型数",
       "field": "screens[4].text",
       "current_value": 9,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24763,11 +24733,11 @@
       "measurement_scope": "按登记mime_type分类计数，不以文件扩展名代替MIME；当前JSON为9而.json扩展名只有8",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "JSON\\s+([0-9]+(?:,[0-9]{3})*)\\s*、其他",
-      "checked_at": "2026-10-23T10:26:17+08:00",
-      "source_observed_at": "2026-10-23T10:26:17+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:17+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-048",
@@ -24776,7 +24746,7 @@
       "label": "其他材料类型数",
       "field": "screens[4].text",
       "current_value": 17,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "当前正文事实",
       "source_location": "E:/PersonalData/材料库/materials.sqlite3",
       "retrieve": {
@@ -24791,11 +24761,11 @@
       "measurement_scope": "按上述六种MIME类别之外（含NULL）计数",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
       "page_pattern": "其他\\s+([0-9]+(?:,[0-9]{3})*)\\s*。status",
-      "checked_at": "2026-10-23T10:26:18+08:00",
-      "source_observed_at": "2026-10-23T10:26:18+08:00",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:18+08:00"
+      "observed_at": "2026-10-23T11:51:43+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-049",
@@ -32335,7 +32305,7 @@
       "field": "screens[4].text",
       "label": "身份基线数",
       "current_value": 48,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "同口径只读数值",
       "source_project": "github-local-index",
       "source_location": "Get-GitOwnerStatus.ps1:1242–1325 只读provider；:1328–1338 无-MigrateBaseline进入只读分支；:953 gh repo list GET；:776–780基线只读；Registry.psm1:467–501只读加载。固定argv无迁移/刷新/重大操作，禁自动更新、Git锁/提示/lazy fetch和PS模块缓存；仅输出summary及仓库聚合与本库cached ahead/behind/dirty计数，不输出身份、路径或正文。",
@@ -32365,7 +32335,7 @@
       "field": "screens[4].text",
       "label": "现场身份数",
       "current_value": 48,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "同口径只读数值",
       "source_project": "github-local-index",
       "source_location": "Get-GitOwnerStatus.ps1:1242–1325 只读provider；:1328–1338 无-MigrateBaseline进入只读分支；:953 gh repo list GET；:776–780基线只读；Registry.psm1:467–501只读加载。固定argv无迁移/刷新/重大操作，禁自动更新、Git锁/提示/lazy fetch和PS模块缓存；仅输出summary及仓库聚合与本库cached ahead/behind/dirty计数，不输出身份、路径或正文。",
@@ -32394,8 +32364,8 @@
       "screen": "github-index-snapshot-recovery-05",
       "field": "screens[4].text",
       "label": "身份差异数",
-      "current_value": 0,
-      "as_of": "2026-10-11",
+      "current_value": 1,
+      "as_of": "2026-10-23",
       "category": "同口径只读数值",
       "source_project": "github-local-index",
       "source_location": "Get-GitOwnerStatus.ps1:1242–1325 只读provider；:1328–1338 无-MigrateBaseline进入只读分支；:953 gh repo list GET；:776–780基线只读；Registry.psm1:467–501只读加载。固定argv无迁移/刷新/重大操作，禁自动更新、Git锁/提示/lazy fetch和PS模块缓存；仅输出summary及仓库聚合与本库cached ahead/behind/dirty计数，不输出身份、路径或正文。",
@@ -32411,7 +32381,11 @@
       "historical": false,
       "measurement_scope": "固定wlyaaaaa全部现场GitHub仓库GET（limit1000，达到上限失败），公开/私有分组；Get-GitOwnerStatus正常零写分支校验execution_status/zero_write/no-fetch，其summary为真实稳定身份比较，不用未登记数冒充delta或issue；仅数字机械观察，不证明全文语义或旁边旧现场日期已重核；原完整核对截至另有judgment记录。",
       "scope_status": "verified",
-      "page_pattern": "身份状态为基线 [0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?／现场 [0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?、差异 ([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)、问题"
+      "page_pattern": "身份状态为基线 [0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?／现场 [0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?、差异 ([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)、问题",
+      "checked_at": "2026-10-23T10:26:30+08:00",
+      "source_observed_at": "2026-10-23T10:26:30+08:00",
+      "observed_at": "2026-10-23T10:26:30+08:00",
+      "observation_basis": "live_read"
     },
     {
       "id": "b9-github-index-snapshot-recovery-issue_count-4-141",
@@ -32420,7 +32394,7 @@
       "field": "screens[4].text",
       "label": "身份问题数",
       "current_value": 0,
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-23",
       "category": "同口径只读数值",
       "source_project": "github-local-index",
       "source_location": "Get-GitOwnerStatus.ps1:1242–1325 只读provider；:1328–1338 无-MigrateBaseline进入只读分支；:953 gh repo list GET；:776–780基线只读；Registry.psm1:467–501只读加载。固定argv无迁移/刷新/重大操作，禁自动更新、Git锁/提示/lazy fetch和PS模块缓存；仅输出summary及仓库聚合与本库cached ahead/behind/dirty计数，不输出身份、路径或正文。",
@@ -34180,9 +34154,9 @@
       ],
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
-      "measurement_scope": "仅注明同句巡查轮数、超过15.5分钟的间隔处数和最长间隔，不关联源码体量或别屏现役健康。",
+      "measurement_scope": "项目 10 月 20 日退役，页面已改为退役说明，旧现状数不再出现在正文，也不再重取。仅注明同句巡查轮数、超过15.5分钟的间隔处数和最长间隔，不关联源码体量或别屏现役健康。",
       "page_pattern": "算，截至 (\\d+ 月 \\d+ 日 \\d+:\\d+) 的"
     },
     {
@@ -34372,7 +34346,6 @@
       "affected_screens": [
         "codex-memory-04"
       ],
-      "registry_number": "n-conv-size",
       "original_value_index": 1,
       "page_pattern": "G 10 月 21 日 12:25 存好（([\\d,]+) 个文件、",
       "field": "screens[3].text",
@@ -34411,7 +34384,6 @@
       "affected_screens": [
         "codex-memory-04"
       ],
-      "registry_number": "n-conv-size",
       "original_value_index": 0,
       "page_pattern": "G 10 月 21 日 12:25 存好（[\\d,]+ 个文件、([\\d.]+) GB）",
       "field": "screens[3].text",
@@ -34860,13 +34832,11 @@
       "field": "status_line.as_of",
       "page_pattern": "^(\\d{4}-\\d{2}-\\d{2})$",
       "label": "状态条具名数据核对日期",
-      "current_value": "2026-10-11",
+      "current_value": "2026-10-12",
       "as_of": "2026-10-11",
       "category": "截至日期",
       "source_location": "同状态条source说明的实际同页计数来源",
       "qualifies": [
-        "pcconfig-n-image-chain-0",
-        "pcconfig-text-0-163",
         "r3-pcconfig-full-task-classification-boundary"
       ],
       "automatic": true,
@@ -35012,7 +34982,7 @@
     {
       "page": "skill-pdf",
       "screen": "skill-pdf-01",
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-21",
       "historical": false,
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
       "scope_status": "verified",
@@ -35020,7 +34990,7 @@
       "report_ref": "Opus 两页新版定稿；2026-10-12 本轮只读聚合回读",
       "id": "skill-pdf-new-20261012-last-use",
       "label": "上次记录到技能调用",
-      "current_value": "2026-10-09 12:57",
+      "current_value": "2026-10-21 16:14",
       "category": "技能使用记录",
       "field": "status_line.last.at",
       "private": true,
@@ -35030,12 +35000,12 @@
         "key": "pdf",
         "operation": "last_time"
       },
-      "measurement_scope": "kind=skill，name 精确匹配 pdf；每行一次调用，last_time 取最大 ts，count_7d 按观察时刻前 7×24 小时的已记录调用。本稿快照明确 2026-10-04 23:52 至 2026-10-11 00:00；本轮复核固定窗口与滚动窗口结果一致。两路 last_completed 均为 2026-10-11T00:00:00+08:00，之后未补采；调用不证明完成。"
+      "measurement_scope": "kind=skill，name 精确匹配 pdf；每行一次调用。按 refresh.py ledger_values 实现：以两路 state 的较早 last_completed（排他午夜边界）为终点，last_time 取终点前最大 ts，count_7d 取终点前 7×24 小时（即 7 个完整北京自然日）的已记录调用，不是按观察时刻滚动。2026-10-23 11:48 读两路 last_completed 均为 2026-10-22T00:00:00+08:00，窗口 10 月 15 日 00:00—10 月 22 日 00:00；之后未补采；调用不证明完成。"
     },
     {
       "page": "skill-pdf",
       "screen": "skill-pdf-01",
-      "as_of": "2026-10-11",
+      "as_of": "2026-10-21",
       "historical": false,
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
       "scope_status": "verified",
@@ -35054,7 +35024,7 @@
         "key": "pdf",
         "operation": "count_7d"
       },
-      "measurement_scope": "kind=skill，name 精确匹配 pdf；每行一次调用，last_time 取最大 ts，count_7d 按观察时刻前 7×24 小时的已记录调用。本稿快照明确 2026-10-04 23:52 至 2026-10-11 00:00；本轮复核固定窗口与滚动窗口结果一致。两路 last_completed 均为 2026-10-11T00:00:00+08:00，之后未补采；调用不证明完成。",
+      "measurement_scope": "kind=skill，name 精确匹配 pdf；每行一次调用。按 refresh.py ledger_values 实现：以两路 state 的较早 last_completed（排他午夜边界）为终点，last_time 取终点前最大 ts，count_7d 取终点前 7×24 小时（即 7 个完整北京自然日）的已记录调用，不是按观察时刻滚动。2026-10-23 11:48 读两路 last_completed 均为 2026-10-22T00:00:00+08:00，窗口 10 月 15 日 00:00—10 月 22 日 00:00；之后未补采；调用不证明完成。",
       "checked_at": "2026-10-23T10:25:59+08:00",
       "source_observed_at": null,
       "source_coverage_end": "2026-10-21",
@@ -35067,11 +35037,9 @@
       "historical": false,
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
       "scope_status": "verified",
-      "observed_at": "2026-10-12T02:18:41+08:00",
-      "report_ref": "Opus 两页新版定稿；2026-10-12 本轮只读聚合回读",
       "id": "skill-pdf-new-20261012-status-as-of",
       "label": "状态行的使用记录快照日期",
-      "current_value": "2026-10-11",
+      "current_value": "2026-10-21",
       "category": "截至日期",
       "field": "status_line.as_of",
       "private": true,
@@ -35080,15 +35048,7 @@
         "skill-pdf-new-20261012-last-use",
         "skill-pdf-new-20261012-uses-7d"
       ],
-      "measurement_scope": "同页 last-use、uses-7d 均成功后，读两路 last_completed 的较早排他边界日期；不把读取旧账本的观察日当成补采完成日。本稿 source 明确记到 2026-10-11 零点，后续刷新需同步该 source 的统计窗口。",
-      "date_semantics": "coverage_end",
-      "retrieve": {
-        "kind": "entry",
-        "entry": "skills-new-usage-ledger-complete-until",
-        "pointer": [
-          "complete_until_date"
-        ]
-      }
+      "measurement_scope": "日期联动：取同页 last-use、uses-7d 的覆盖末日（两路补采共同完成的最后一个整天，北京时间）；任一 Unknown 保留旧日期。状态行 source 不另写起止日期。"
     },
     {
       "page": "skill-pdf",
@@ -35120,8 +35080,8 @@
       "screen": "pcconfig-01",
       "field": "screens[0].text",
       "label": "最近镜像、外接盘备份完成事件及告警判读",
-      "current_value": "镜像 10 月 11 日 14:01 做完；同步到外接盘 10 月 11 日 18:39 做完，但带告警：AI 使用账本这轮没补采上、开发配置日备上次报错，另有几个文件中途消失或被杀毒软件移走。",
-      "as_of": "2026-10-12",
+      "current_value": "镜像 10 月 22 日 13:52 做完（回执写完成、退出码 0；没做还原测试）；同步到外接盘这次没重读，仍按 10 月 11 日 18:39 那次：做完了，但带告警：AI 使用账本这轮没补采上、开发配置日备上次报错，另有几个文件中途消失或被杀毒软件移走。",
+      "as_of": "2026-10-23",
       "category": "生产回执综合判读",
       "source_location": "E:/Cache/PCConfig/SystemImage/last-run.json native.completed_utc/status/backup_completed/native_exit_code；C:/Users/10979/AppData/Local/PCConfig/core-recovery/cold-last.json 与 H:/90_人工保留区/RecoveryKit/CORE_RECOVERY/cold-last.json 的 completed_utc/status/cold_result/results/warnings/file_warnings；本轮 pcconfig.md 第2.1—2.3条04:31—04:36:53只读核对",
       "retrieve": {
@@ -35134,7 +35094,7 @@
       "page_pattern": "\\*\\*最近一次\\*\\*　(镜像 [\\d]+ 月 [\\d]+ 日 \\d+:\\d+ 做完（[^\\n]+)",
       "manual_reason": "judgment",
       "manual_route": "GPT只读两类具名生产回执及必要上游任务结果，按北京时间分别核对完成事件；区分AI使用账本补采失败、开发配置日备报错和文件告警的实际原因，交Claude/Opus核对整句语义。不从回执观察时刻改写备份完成时刻，不以成功的独立账本倒推自然备份中的补采成功。",
-      "measurement_scope": "首屏最近一次整句的综合判读；本轮镜像完成于10月11日14:01:50，冷备完成于10月11日18:39:26且complete_with_warnings。生产回执已核对，未重散列全部载荷、未补跑备份、未验证整机还原。",
+      "measurement_scope": "首屏最近一次整句：镜像部分按E:/Cache/PCConfig/SystemImage/last-run.json native.completed_utc=2026-10-22T05:52:33Z（北京时间10月22日13:52）、status=complete、native_exit_code=0、restore_tested=false；外接盘部分本轮没重读，句中已写明仍按10月11日18:39回执。",
       "scope_status": "verified",
       "report_ref": "E:/Cache/Claude/Temp/6428793e/deltas/rehearsal2/pcconfig.md"
     },
@@ -35208,7 +35168,6 @@
         "personal-materials-03",
         "personal-materials-06"
       ],
-      "registry_number": "n-filenames",
       "original_value_index": 0,
       "page_pattern": "登记过的文件夹（蓝湖产品资料那一个除外）、微信收到的文件和下载文件夹的(文件名，每天更新)",
       "field": "screens[0].text",
@@ -35952,14 +35911,13 @@
       "page_pattern": "到 (\\d+ 月 \\d+ 日 \\d{2}:\\d{2}) 累计 [\\d,.]+ 次",
       "qualifies": [
         "timeaudit-n-clip-0",
-        "timeaudit-n-clip-first-screen",
         "timeaudit-text-0"
       ],
-      "current_value": "2026-10-23",
+      "current_value": "10 月 23 日 10:25",
       "as_of": "2026-10-22",
       "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "注明本段当前复制事件累计数、不同内容份数及首屏同口径复制事件显示位，不注明8月31日历史累计数。",
+      "measurement_scope": "注明本段当前复制事件累计数、不同内容份数，不注明 8 月 31 日历史累计数；首屏复制数由 timeaudit-asof-first-clip-count 单独注明。",
       "historical": false,
       "private": true,
       "source_location": "同页被注明数字记录",
@@ -36010,7 +35968,7 @@
       "qualifies": [
         "timeaudit-n-backup-0"
       ],
-      "current_value": "10 月 22 日 06:47",
+      "current_value": "10 月 23 日 10:25",
       "as_of": "2026-10-22",
       "automatic": true,
       "scope_status": "verified",
@@ -37612,6 +37570,568 @@
       "current_value": "2026-10-23",
       "as_of": "2026-10-23",
       "measurement_scope": "只注明首页 home-04 引用的这一条页内数字的观察日期。"
+    },
+    {
+      "id": "chinese-asr-n-transcribed-home",
+      "page": "chinese-asr",
+      "screen": "chinese-asr-01",
+      "label": "不同录音下限（首页引用的页内数字）",
+      "current_value": 699,
+      "as_of": "2026-10-23",
+      "category": "自动",
+      "source_location": "E:/Projects/Tools/ChineseASR",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "chinese-asr-summary",
+        "pointer": [
+          "transcribed"
+        ],
+        "timeout": 30
+      },
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "affected_screens": [],
+      "page_pattern": "^([\\d,]+) 段$",
+      "field": "registry.numbers[0].text",
+      "measurement_scope": "与 chinese-asr-transcribed 同口径：outputs 下 objective-result 的 audio.raw_sha256 去重并排除测试/验收前缀；下限。页面写“8 月 18 日起……（N 月 N 日 HH:MM 数）”，不写区间末日：入口不按日期截，计数随新结果增长，计数时刻由同句日期记录注明。首页经 {{chinese-asr.registry.numbers.n-transcribed.text/as_of}} 显示。",
+      "scope_status": "verified"
+    },
+    {
+      "id": "chinese-asr-asof-home-n-transcribed",
+      "page": "chinese-asr",
+      "screen": "chinese-asr-01",
+      "label": "首页引用页内数字的截至日期",
+      "field": "registry.numbers[0].as_of",
+      "page_pattern": "^(\\d{4}-\\d{2}-\\d{2})$",
+      "qualifies": [
+        "chinese-asr-n-transcribed-home"
+      ],
+      "current_value": "2026-10-23",
+      "as_of": "2026-10-23",
+      "category": "日期联动",
+      "source_location": "同页被注明数字记录",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "只注明首页引用的 n-transcribed 这一条页内数字的观察日期；任一Unknown保留旧日期。"
+    },
+    {
+      "id": "chinese-asr-transcribed-counted-at",
+      "page": "chinese-asr",
+      "screen": "chinese-asr-01",
+      "label": "不同录音下限的计数时间",
+      "field": "screens[0].text",
+      "page_pattern": "至少；(\\d+ 月 \\d+ 日 \\d{2}:\\d{2}) 数）",
+      "qualifies": [
+        "chinese-asr-transcribed"
+      ],
+      "current_value": "10 月 23 日 11:52",
+      "as_of": "2026-10-23",
+      "category": "日期联动",
+      "source_location": "同页被注明数字记录",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "只注明紧邻的不同录音下限的观察时间；不代表区间末日（区间末日按结果文件写入时间另核）；任一Unknown保留旧时间。"
+    },
+    {
+      "id": "pcconfig-n-pending-passed",
+      "page": "pcconfig",
+      "screen": "pcconfig-11",
+      "label": "待验收清单已验过条目数",
+      "current_value": 278,
+      "as_of": "2026-10-23",
+      "category": "只读计数",
+      "source_location": "E:/PCConfig/registries/pending_acceptance.json 中 status=passed 的条目",
+      "retrieve": {
+        "kind": "json",
+        "path": "E:/PCConfig/registries/pending_acceptance.json",
+        "pointer": [
+          "items"
+        ],
+        "operation": "count_where",
+        "where": {
+          "status": "passed"
+        }
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "affected_screens": [
+        "pcconfig-11"
+      ],
+      "measurement_scope": "items 数组里 status=passed 的条目数（按条目字段数，不整文件数字符串）；五类之和等于同句总数。",
+      "scope_status": "verified",
+      "field": "screens[10].text",
+      "page_pattern": "已验过 ([\\d,]+)、已被取代",
+      "observation_basis": "live_read"
+    },
+    {
+      "id": "pcconfig-n-pending-superseded",
+      "page": "pcconfig",
+      "screen": "pcconfig-11",
+      "label": "待验收清单已被取代条目数",
+      "current_value": 60,
+      "as_of": "2026-10-23",
+      "category": "只读计数",
+      "source_location": "E:/PCConfig/registries/pending_acceptance.json 中 status=superseded 的条目",
+      "retrieve": {
+        "kind": "json",
+        "path": "E:/PCConfig/registries/pending_acceptance.json",
+        "pointer": [
+          "items"
+        ],
+        "operation": "count_where",
+        "where": {
+          "status": "superseded"
+        }
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "affected_screens": [
+        "pcconfig-11"
+      ],
+      "measurement_scope": "items 数组里 status=superseded 的条目数（按条目字段数，不整文件数字符串）；五类之和等于同句总数。",
+      "scope_status": "verified",
+      "field": "screens[10].text",
+      "page_pattern": "已被取代 ([\\d,]+)、已结束",
+      "observation_basis": "live_read"
+    },
+    {
+      "id": "pcconfig-n-pending-ended",
+      "page": "pcconfig",
+      "screen": "pcconfig-11",
+      "label": "待验收清单已结束条目数",
+      "current_value": 17,
+      "as_of": "2026-10-23",
+      "category": "只读计数",
+      "source_location": "E:/PCConfig/registries/pending_acceptance.json 中 status=ended 的条目",
+      "retrieve": {
+        "kind": "json",
+        "path": "E:/PCConfig/registries/pending_acceptance.json",
+        "pointer": [
+          "items"
+        ],
+        "operation": "count_where",
+        "where": {
+          "status": "ended"
+        }
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "affected_screens": [
+        "pcconfig-11"
+      ],
+      "measurement_scope": "items 数组里 status=ended 的条目数（按条目字段数，不整文件数字符串）；五类之和等于同句总数。",
+      "scope_status": "verified",
+      "field": "screens[10].text",
+      "page_pattern": "已结束 ([\\d,]+)、还在等的",
+      "observation_basis": "live_read"
+    },
+    {
+      "id": "pcconfig-n-pending-pending",
+      "page": "pcconfig",
+      "screen": "pcconfig-11",
+      "label": "待验收清单还在等条目数",
+      "current_value": 39,
+      "as_of": "2026-10-23",
+      "category": "只读计数",
+      "source_location": "E:/PCConfig/registries/pending_acceptance.json 中 status=pending 的条目",
+      "retrieve": {
+        "kind": "json",
+        "path": "E:/PCConfig/registries/pending_acceptance.json",
+        "pointer": [
+          "items"
+        ],
+        "operation": "count_where",
+        "where": {
+          "status": "pending"
+        }
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "affected_screens": [
+        "pcconfig-11"
+      ],
+      "measurement_scope": "items 数组里 status=pending 的条目数（按条目字段数，不整文件数字符串）；五类之和等于同句总数。",
+      "scope_status": "verified",
+      "field": "screens[10].text",
+      "page_pattern": "还在等的 ([\\d,]+)、暂缓",
+      "observation_basis": "live_read"
+    },
+    {
+      "id": "pcconfig-n-pending-on-hold",
+      "page": "pcconfig",
+      "screen": "pcconfig-11",
+      "label": "待验收清单暂缓条目数",
+      "current_value": 11,
+      "as_of": "2026-10-23",
+      "category": "只读计数",
+      "source_location": "E:/PCConfig/registries/pending_acceptance.json 中 status=on_hold 的条目",
+      "retrieve": {
+        "kind": "json",
+        "path": "E:/PCConfig/registries/pending_acceptance.json",
+        "pointer": [
+          "items"
+        ],
+        "operation": "count_where",
+        "where": {
+          "status": "on_hold"
+        }
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "affected_screens": [
+        "pcconfig-11"
+      ],
+      "measurement_scope": "items 数组里 status=on_hold 的条目数（按条目字段数，不整文件数字符串）；五类之和等于同句总数。",
+      "scope_status": "verified",
+      "field": "screens[10].text",
+      "page_pattern": "暂缓 ([\\d,]+)），驾驶舱",
+      "observation_basis": "live_read"
+    },
+    {
+      "id": "pcconfig-asof-pending-list",
+      "page": "pcconfig",
+      "screen": "pcconfig-11",
+      "label": "待验收清单计数截至时间",
+      "field": "screens[10].text",
+      "page_pattern": "清单里（(\\d+ 月 \\d+ 日 \\d+:\\d+) 共登记",
+      "qualifies": [
+        "pcconfig-n-pending-0",
+        "pcconfig-n-pending-passed",
+        "pcconfig-n-pending-superseded",
+        "pcconfig-n-pending-ended",
+        "pcconfig-n-pending-pending",
+        "pcconfig-n-pending-on-hold"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只注明同句总数与五类计数；全部取得同口径新值后才推进，任一Unknown保留旧时间。",
+      "current_value": "10 月 23 日 10:25",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "observation_basis": "live_read"
+    },
+    {
+      "id": "timeaudit-asof-first-clip-count",
+      "page": "timeaudit",
+      "screen": "timeaudit-01",
+      "label": "首屏复制次数读取时间",
+      "field": "screens[0].text",
+      "page_pattern": "复制次数在 (\\d+ 月 \\d+ 日 \\d{2}:\\d{2}) 重读；",
+      "qualifies": [
+        "timeaudit-n-clip-first-screen"
+      ],
+      "current_value": "10 月 23 日 10:25",
+      "as_of": "2026-10-23",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "仅注明首屏“记下的复制”次数（events 全表精确行数）的读取时刻，不注明第 6 屏数字。",
+      "historical": false,
+      "private": true,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动"
+    },
+    {
+      "id": "timeaudit-asof-backup-archive-count",
+      "page": "timeaudit",
+      "screen": "timeaudit-10",
+      "label": "现存完整备份份数观察时间",
+      "field": "screens[10].text",
+      "page_pattern": "- (\\d+ 月 \\d+ 日 \\d{2}:\\d{2}) 再看：现有 [\\d,.]+ 份完整备份",
+      "qualifies": [
+        "timeaudit-n-backup-2"
+      ],
+      "current_value": "10 月 23 日 10:25",
+      "as_of": "2026-10-23",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "仅注明这行现存完整备份份数，不注明后面 10 月 12 日 05:40 看到的 12 份历史数。",
+      "historical": false,
+      "private": true,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动"
+    },
+    {
+      "id": "timeaudit-latest-backup-run",
+      "page": "timeaudit",
+      "screen": "timeaudit-10",
+      "label": "最近一次完成的每日备份开始时间（连同完成时间和本地、云端结果）",
+      "field": "screens[10].text",
+      "page_pattern": "最近一次完成的备份是 (\\d+ 月 \\d+ 日 \\d{2}:\\d{2}) 开始",
+      "current_value": "10 月 22 日 11:40",
+      "as_of": "2026-10-23",
+      "category": "人工",
+      "source_location": "E:/Projects/Tools/TimeAudit/log/backup-history.jsonl 最后一条 timeaudit.backup-run.v1（started_at、completed_at、local_snapshot_status、cloud_sync_status）；log/backup.log 每次运行覆盖，正在运行时没有 daily-backup-receipt",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "automatic": false,
+      "private": true,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "事件时间：最近一次 completed_at 非空的运行，started_at/completed_at 换北京时间到分钟；本地取 local_snapshot_status，云端取 cloud_sync_status（Grafana 看板 git 推送）。不是观察时间。",
+      "manual_reason": "judgment",
+      "manual_route": "只读 backup-history.jsonl 最后一条，开始、完成时刻和两端结果须与同句“最近一份约 X GiB”一并改；若 backup-last-run.json 为 running，不把进行中的那次写成最近一次。",
+      "known_gap": "北京时间 2026-10-23 11:51 读：最后一条 started_at 2026-10-21T22:40:01-05:00、completed_at 23:04:03-05:00（北京 10 月 22 日 11:40—12:04），local complete、cloud complete；当时 10 月 23 日 11:40 那次正在进行。"
+    },
+    {
+      "page": "personal-materials-exact-intake",
+      "screen": "personal-materials-exact-intake-05",
+      "field": "screens[4].text",
+      "as_of": "2026-10-23",
+      "category": "当前正文事实",
+      "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "scope_status": "verified",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-23T11:51:43+08:00",
+      "id": "personal-materials-exact-intake-partial-text",
+      "label": "部分文字数",
+      "current_value": 129,
+      "retrieve": {
+        "kind": "sqlite_ro",
+        "path": "E:/PersonalData/材料库/materials.sqlite3",
+        "sql": "select count(*) from material_text where coverage_state='partial'"
+      },
+      "page_pattern": "原件自带完整文字，\\s*([0-9]+(?:,[0-9]{3})*)\\s*份 partial",
+      "measurement_scope": "material_text 中 coverage_state=partial 的行数；2026-10-23 11:51 同次读取按不同 material_key 去重也是 129，与 extracted/partial 115、ocr/partial 14 合计一致。"
+    },
+    {
+      "page": "personal-materials-exact-intake",
+      "screen": "personal-materials-exact-intake-05",
+      "field": "screens[4].text",
+      "as_of": "2026-10-23",
+      "category": "当前正文事实",
+      "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "scope_status": "verified",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-23T11:51:43+08:00",
+      "id": "personal-materials-exact-intake-ocr-partial",
+      "label": "扫描认字的部分文字数",
+      "current_value": 14,
+      "retrieve": {
+        "kind": "sqlite_ro",
+        "path": "E:/PersonalData/材料库/materials.sqlite3",
+        "sql": "select count(*) from material_text where text_kind='ocr' and coverage_state='partial'"
+      },
+      "page_pattern": "份 extracted、\\s*([0-9]+(?:,[0-9]{3})*)\\s*份 ocr）",
+      "measurement_scope": "material_text 中 text_kind=ocr 且 coverage_state=partial 的行数，与 personal-materials-registered-lookup-ocr-partial 同口径。"
+    },
+    {
+      "id": "personal-materials-exact-intake-count-as-of",
+      "page": "personal-materials-exact-intake",
+      "screen": "personal-materials-exact-intake-05",
+      "field": "screens[4].text",
+      "label": "技术依据计数截至时间",
+      "page_pattern": "\\*\\*(\\d+ 月 \\d+ 日 \\d+:\\d+) 计数\\*\\*",
+      "qualifies": [
+        "personal-materials-exact-intake-b9-017",
+        "personal-materials-exact-intake-b9-019",
+        "personal-materials-exact-intake-b9-021",
+        "personal-materials-exact-intake-b9-023",
+        "personal-materials-exact-intake-b9-025",
+        "personal-materials-exact-intake-b9-026",
+        "personal-materials-exact-intake-b9-027",
+        "personal-materials-exact-intake-b9-028",
+        "personal-materials-exact-intake-b9-029",
+        "personal-materials-exact-intake-b9-030",
+        "personal-materials-exact-intake-b9-031",
+        "personal-materials-exact-intake-b9-032",
+        "personal-materials-exact-intake-b9-036",
+        "personal-materials-exact-intake-b9-042",
+        "personal-materials-exact-intake-b9-043",
+        "personal-materials-exact-intake-b9-044",
+        "personal-materials-exact-intake-b9-045",
+        "personal-materials-exact-intake-b9-046",
+        "personal-materials-exact-intake-b9-047",
+        "personal-materials-exact-intake-b9-048",
+        "personal-materials-exact-intake-partial-text",
+        "personal-materials-exact-intake-ocr-partial"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只注明同段当前计数；所有关联数字取得同口径新值后才能推进，任一Unknown保留旧时间。不含同段自带日期的 10 月 11 日历史句。",
+      "current_value": "10 月 23 日 11:51",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T11:51:43+08:00"
+    },
+    {
+      "id": "github-index-snapshot-recovery-identity-as-of",
+      "page": "github-index-snapshot-recovery",
+      "screen": "github-index-snapshot-recovery-05",
+      "field": "screens[4].text",
+      "label": "身份状态截至时间",
+      "page_pattern": "历史；(\\d+ 月 \\d+ 日 \\d+:\\d+) 身份状态为基线",
+      "qualifies": [
+        "b9-github-index-snapshot-recovery-baseline_repositories-4-124",
+        "b9-github-index-snapshot-recovery-observed_repositories-4-130",
+        "b9-github-index-snapshot-recovery-delta_count-4-136",
+        "b9-github-index-snapshot-recovery-issue_count-4-141"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只注明紧邻的基线/现场/差异/问题四个数；四个都取得同次新值才推进，任一Unknown保留旧时间；括号内 10 月 11 日 16:32 历史值不受此记录约束。差异非 0 时解释句须另行核对，不能只换时间。",
+      "current_value": "10 月 23 日 10:26",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T10:26:30+08:00",
+      "source_observed_at": "2026-10-23T10:26:30+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T10:26:30+08:00"
+    },
+    {
+      "id": "personal-materials-exact-intake-full-text-current",
+      "page": "personal-materials-exact-intake",
+      "screen": "personal-materials-exact-intake-01",
+      "label": "有完整可搜文字的份数（当前情况）",
+      "field": "screens[0].text",
+      "current_value": 32,
+      "as_of": "2026-10-23",
+      "category": "当前正文事实",
+      "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
+      "retrieve": {
+        "kind": "sqlite_ro",
+        "path": "E:/PersonalData/材料库/materials.sqlite3",
+        "sql": "select count(*) from material_text where text_kind='native' and coverage_state='complete'"
+      },
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "material_text native/complete行数",
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "份有可搜文字（([0-9]+) 份完整、",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-23T11:51:43+08:00"
+    },
+    {
+      "page": "personal-materials-exact-intake",
+      "screen": "personal-materials-exact-intake-01",
+      "field": "screens[0].text",
+      "as_of": "2026-10-23",
+      "category": "当前正文事实",
+      "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "scope_status": "verified",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-23T11:51:43+08:00",
+      "id": "personal-materials-exact-intake-partial-text-current",
+      "label": "只有部分可搜文字的份数（当前情况）",
+      "current_value": 129,
+      "retrieve": {
+        "kind": "sqlite_ro",
+        "path": "E:/PersonalData/材料库/materials.sqlite3",
+        "sql": "select count(*) from material_text where coverage_state='partial'"
+      },
+      "page_pattern": "份完整、([0-9]+) 份部分）",
+      "measurement_scope": "material_text 中 coverage_state=partial 的行数；2026-10-23 11:51 同次读取按不同 material_key 去重也是 129，与 extracted/partial 115、ocr/partial 14 合计一致。"
+    },
+    {
+      "id": "personal-materials-exact-intake-current-count-as-of",
+      "page": "personal-materials-exact-intake",
+      "screen": "personal-materials-exact-intake-01",
+      "field": "screens[0].text",
+      "label": "当前情况计数时间",
+      "page_pattern": "合计约 [0-9.]+ GB（(\\d+ 月 \\d+ 日 \\d+:\\d+) 计数）",
+      "qualifies": [
+        "personal-materials-exact-intake-b9-016",
+        "personal-materials-exact-intake-b9-018",
+        "personal-materials-exact-intake-b9-020",
+        "personal-materials-exact-intake-b9-022",
+        "personal-materials-exact-intake-b9-024",
+        "personal-materials-exact-intake-b9-035",
+        "personal-materials-exact-intake-full-text-current",
+        "personal-materials-exact-intake-partial-text-current"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只注明首屏“当前情况”里的登记、来源、关系、有文字（完整/部分）、没有文字和原件合计这几项计数；全部取得同次新值才推进，任一 Unknown 保留旧时间。",
+      "current_value": "10 月 23 日 11:51",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T11:51:43+08:00"
+    },
+    {
+      "id": "personal-materials-exact-intake-status-source-count-as-of",
+      "page": "personal-materials-exact-intake",
+      "screen": "personal-materials-exact-intake-01",
+      "field": "status_line.source",
+      "label": "状态行计数时间",
+      "page_pattern": "^(\\d+ 月 \\d+ 日 \\d+:\\d+) 计数与只读汇总",
+      "qualifies": [
+        "personal-materials-exact-intake-b9-016",
+        "personal-materials-exact-intake-b9-018",
+        "personal-materials-exact-intake-b9-020",
+        "personal-materials-exact-intake-b9-022",
+        "personal-materials-exact-intake-b9-024",
+        "personal-materials-exact-intake-b9-035",
+        "personal-materials-exact-intake-full-text-current",
+        "personal-materials-exact-intake-partial-text-current"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只注明首屏“当前情况”里的登记、来源、关系、有文字（完整/部分）、没有文字和原件合计这几项计数；全部取得同次新值才推进，任一 Unknown 保留旧时间。",
+      "current_value": "10 月 23 日 11:51",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T11:51:43+08:00"
     }
   ],
   "freshness_policy": {

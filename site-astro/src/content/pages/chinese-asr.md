@@ -458,10 +458,10 @@
    "numbers": [
     {
      "id": "n-transcribed",
-     "text": "435 段",
-     "meaning": "8 月 18 日–10 月 10 日转成文字的不同录音，按原音 SHA-256 去重，去掉测试和验收目录；下限",
-     "as_of": "2026-10-11",
-     "source": "E:\\Projects\\Tools\\ChineseASR\\outputs 下 *objective-result.json 的 audio.raw_sha256 去重（不含 a4-demo、acceptance、quality-acceptance 目录；449 个文件→435 段；最晚一份结果文件写入于北京 10 月 10 日 17:34；北京 10 月 11 日 16:12 只读复核，与 GPT 15:55 结果一致；按同口径重算 9 月 28 日前为 375 段）",
+     "text": "699 段",
+     "meaning": "8 月 18 日起转成文字的不同录音，按原音 SHA-256 去重，去掉测试和验收目录；下限",
+     "as_of": "2026-10-23",
+     "source": "E:\\Projects\\Tools\\ChineseASR\\outputs 下 *objective-result.json 的 audio.raw_sha256 去重（不含 a4-demo、acceptance、quality-acceptance、smoke、cloud-jobs 等测试和验收目录；736 个文件→699 段；最早一份结果文件写入于北京 8 月 18 日 16:11，最晚 10 月 22 日 23:54；北京 10 月 23 日 11:52 只读复核；按同口径重算 9 月 28 日前为 375 段、10 月 11 日前为 435 段）",
      "screens": [
       "chinese-asr-01"
      ]
@@ -787,8 +787,8 @@
  },
  "source": {
   "page": "sources/pages/chinese-asr/page.json",
-  "sha256": "35daf8edc1447b4f04312886e85189186573bd4e696d9e13ef3ba4edfbea88e1",
-  "converted_at_beijing": "2026-10-23T08:10:04+08:00"
+  "sha256": "ae7852a5a44bd06de31c474d17c907514cf8f03282fcb8b011c402972225d772",
+  "converted_at_beijing": "2026-10-23T12:22:40+08:00"
  }
 }
 ---
@@ -875,7 +875,7 @@
      "columns": 4,
      "columns_v": 2,
      "icons": "auto",
-     "text_ref": "513段8月18日–10月21日"
+     "text_ref": "699段8月18日起"
     },
     {
      "type": "action_button",
@@ -910,7 +910,7 @@
      "columns": 4,
      "columns_v": 2,
      "icons": "auto",
-     "text_ref": "513段8月18日–10月21日"
+     "text_ref": "699段8月18日起"
     },
     {
      "type": "prose",
@@ -1040,7 +1040,7 @@
 
 在自己电脑上把中文录音转成文字，还会指出哪里可能错：默认每段录音让两个不同的模型各听一遍（Qwen3-ASR-1.7B 主听、SenseVoiceSmall 对照），对不上的地方标出时间点。重要录音可以点名走高质量路线，另给回听网页。按 Win+H 也能口述，把文字打进当前输入框。各种录音走哪条路见〔选哪条路〕。
 
-**513 段**｜8 月 18 日–10 月 21 日转成文字的不同录音（至少；10 月 22 日数）
+**699 段**｜8 月 18 日起转成文字的不同录音（至少；10 月 23 日 11:52 数）
 **0.45 秒**｜听写识别一段的中位用时（9 月 6 日–10 月 4 日，共 445 段）
 **8 个模型**｜都在本机跑，共 26.5 GiB
 **57 次**｜云端复核成功（8 月 1 日起，含点名上云；截至 10 月 22 日）

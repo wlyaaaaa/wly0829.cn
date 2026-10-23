@@ -31,4 +31,13 @@ class TextLayoutPreflightTests(unittest.TestCase):
         screen.update(text='### 改了 MCP、Hook 或技能之后怎么验收', anchors=[{'id': 'p-check', 'text': '改了 MCP 之后怎么验收'}])
         self.assertEqual(convert.check_text_layout({}, screen, []), [])
 
+    def test_layout_text_ref_differing_only_in_digits_heals_but_other_drift_is_reported(self):
+        screen = {'id': 'fixture-01', 'text': '**699 段**｜8 月 18 日起转成文字的不同录音' + chr(10) * 2 + '正文'}
+        meta = {'layout': {'h': {'blocks': [{'type': 'prose', 'text_ref': '435段8月18日'}, {'type': 'prose', 'text_ref': '435段8月18日–10月10日'}]}}}
+        convert.HEALED.clear(); convert.UNMATCHED.clear()
+        self.addCleanup(convert.HEALED.clear); self.addCleanup(convert.UNMATCHED.clear)
+        convert.heal_text_refs(screen, meta)
+        self.assertEqual(meta['layout']['h']['blocks'][0]['text_ref'], '699段8月18日')
+        self.assertEqual(convert.UNMATCHED, ['fixture-01 h：435段8月18日–10月10日'])  # 主流程据此判这一页转换失败
+
 if __name__ == '__main__': unittest.main()

@@ -496,6 +496,11 @@ def fact_tasks(inventory, group_size=25):
     if inventory.get("offset_binding_gaps"):
         lines += [f"字符偏移待重绑：{len(inventory['offset_binding_gaps'])} 条（已单列缺口，不计严格盘点缺失；未证明可改数）。", ""]
     stamps = [s for s in inventory.get("review_stamps", []) if not targeted or s["page"] in targeted]
+    observed = [c for c in inventory.get("binding_checks", {}).get("observed", []) if not targeted or c["page"] in targeted]
+    if observed:
+        lines += ["## 同句观察时间未登记（改到这页时一起补）", "",
+                  "数字会自动推进、旁边的观察时间不会；补日期联动记录（qualifies 同句数字），或把句子改成不另写时间。", ""]
+        lines += [f"- {c['page']} / {c['field']}｜{c['excerpt']}" for c in observed] + [""]
     if inventory.get("semantic_reviews"):
         lines += ["## 语义复核到期（不阻断本轮事实闭环）", "",
                   "、".join(s["page"] for s in inventory["semantic_reviews"]), ""]
