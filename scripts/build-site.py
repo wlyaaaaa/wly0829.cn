@@ -257,13 +257,16 @@ def sync_markdown(previous):
 
 def build(pages=None):
     started = time.monotonic(); previous_stage = started; steps = []
+    # Redraw before reading source cleanliness: a redraw rewrites tracked author inputs,
+    # so an uncommitted redraw must leave the build source Unknown instead of HEAD.
+    home_redrawn = refresh_home_highlights()
     source_clean = not subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=all'], cwd=ROOT)
     source_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() if source_clean else 'Unknown'
     def stage(name):
         nonlocal previous_stage
         now = time.monotonic(); seconds = round(now - previous_stage, 3); previous_stage = now
         steps.append({'name': name, 'seconds': seconds}); print(f'{name}: {seconds}s', flush=True)
-    home_redrawn = refresh_home_highlights(); stage('home_highlights')
+    stage('home_highlights')
     snapshot = read(SNAPSHOT / 'manifest.json'); dist = ROOT / 'dist'; public = SITE / 'public'
     retired = set(snapshot.get('retired_runtime_assets', []))
     finalized_before = (dist / 'release-manifest.json').is_file() and read(dist / 'release-manifest.json').get('finalized_dist', False)
