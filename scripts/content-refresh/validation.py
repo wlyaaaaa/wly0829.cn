@@ -72,7 +72,10 @@ def validate_method(method, entries):
             isinstance(method.get("where"), dict) and method["where"]):
         raise ValueError("json.count_where 缺 where 条件")
     if kind == "usage_ledger":
-        if LEDGER not in entries or not method.get("key") or method.get("operation") not in {"count_7d", "last_time"}:
+        keys = method.get("keys")
+        if keys is not None and not (isinstance(keys, list) and keys and all(isinstance(k, str) and k for k in keys)):
+            raise ValueError("usage_ledger.keys 必须是非空字符串数组")
+        if LEDGER not in entries or not (method.get("key") or keys) or method.get("operation") not in {"count_7d", "last_time"}:
             raise ValueError("usage_ledger 缺账本登记、key 或合法 operation")
 
 

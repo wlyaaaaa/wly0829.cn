@@ -34,13 +34,13 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-10 23:39"
+    "at": "2026-10-21 21:14"
    },
    "facts": [
-    "近 7 天 AI 用了 743 次"
+    "近 7 天 AI 用了 198 次"
    ],
-   "as_of": "2026-10-11",
-   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
+   "as_of": "2026-10-21",
+   "source": "AI 使用小记录（到截至日为止的 7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
   },
   "based_on": {
    "commit": "8244785b97b2e5cecdb62e2a0d933467e57eb66b",
@@ -144,8 +144,8 @@
  },
  "source": {
   "page": "sources/pages/skill-project-entry-gate/page.json",
-  "sha256": "fa42b9954e7d773604e1560dbbb18dd8cfe81ac2200976197294ac0cea506b1d",
-  "converted_at_beijing": "2026-10-20T07:45:06+08:00"
+  "sha256": "fc276d6bc90576b164f0e305c25015b7c1d2321b68c543e1177b3809fcea074a",
+  "converted_at_beijing": "2026-10-23T12:57:23+08:00"
  }
 }
 ---
@@ -188,15 +188,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 10 日 23:39",
+       "text": "常用 · 上次使用 10 月 21 日 21:14",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 743 次",
+       "text": "近 7 天 AI 用了 198 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）",
+     "static_note": "截至 10 月 21 日 · AI 使用小记录（到截至日为止的 7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -254,15 +254,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 10 日 23:39",
+       "text": "常用 · 上次使用 10 月 21 日 21:14",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 743 次",
+       "text": "近 7 天 AI 用了 198 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）；本轮用量 Unknown（账本未覆盖完整观察期，保留原值和日期）"
+     "static_note": "截至 10 月 21 日 · AI 使用小记录（到截至日为止的 7 个完整北京时间自然日）；之后尚未补采，仍为 Unknown。次数和最近时间只表示已记录的 AI 调用，不证明业务效果。"
     },
     {
      "type": "prose",

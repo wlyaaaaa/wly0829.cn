@@ -1115,12 +1115,13 @@
       "source_location": "E:/Projects/Tools/TimeAudit；audit-postgres/time_audit public.fact_system_hardware 精确硬件采样条数，沿原页面以万计数取整，不表示连续运行时长",
       "retrieve": {
         "kind": "entry",
-        "entry": "b6-profile-timeaudit-count",
+        "entry": "timeaudit-count-hardware",
         "pointer": [
-          "hardware_samples"
+          "value"
         ],
         "scale": 0.0001,
-        "round_to": 1
+        "digits": 1,
+        "timeout": 130
       },
       "automatic": true,
       "private": true,
@@ -5920,7 +5921,10 @@
       "scope_status": "verified",
       "measurement_scope": "WSL现役current验收acceptance.json ok=true/unit_exit_code=0，unit.log Ran/OK跳过计数；official_models直接目录数和du -sb按GiB四舍五入一位",
       "field": "screens[0].text",
-      "observation_basis": "unknown"
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "accepted_at"
+      ]
     },
     {
       "id": "devconfig-backup-n-sources-0",
@@ -12438,7 +12442,7 @@
       "page": "personal-expression",
       "screen": "personal-expression-01",
       "label": "最近使用时间",
-      "current_value": "2026-10-08 22:26",
+      "current_value": "2026-10-20 14:36",
       "as_of": "2026-10-10",
       "category": "使用账本",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
@@ -12447,14 +12451,17 @@
       "historical": false,
       "field": "status_line.last.at",
       "scope_status": "verified",
-      "measurement_scope": "个人表达两个方向explain-to-me/reply-as-me已记录技能调用的最新时间；不是只取讲解方向，也不把命令计数叠加",
+      "measurement_scope": "两个表达技能（explain-to-me、reply-as-me）里最近一次调用，按补采共同完成水位之前的记录。",
       "retrieve": {
-        "kind": "entry",
-        "entry": "personal-expression-usage-display",
-        "pointer": [
-          "personal_expression_last"
+        "kind": "usage_ledger",
+        "keys": [
+          "explain-to-me",
+          "reply-as-me"
         ],
-        "timeout": 30
+        "operation": "last_time",
+        "filter": {
+          "kind": "skill"
+        }
       }
     },
     {
@@ -12462,13 +12469,13 @@
       "page": "personal-expression",
       "screen": "personal-expression-01",
       "label": "近7天AI使用次数",
-      "current_value": "近 7 天 AI 用“讲给我听”16 次",
+      "current_value": 5,
       "as_of": "2026-10-10",
       "category": "使用账本",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
       "automatic": true,
       "private": true,
-      "historical": true,
+      "historical": false,
       "field": "status_line.facts[0]",
       "scope_status": "verified",
       "measurement_scope": "kind=skill、name=explain-to-me；截至两路共同完成水位前一日的7个完整日内已记录调用次数（北京时间），不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
@@ -12476,9 +12483,11 @@
         "kind": "usage_ledger",
         "key": "explain-to-me",
         "operation": "count_7d",
-        "timeout": 30
+        "filter": {
+          "kind": "skill"
+        }
       },
-      "page_pattern": "近 7 天 AI 用“讲给我听”([\\d,]+) 次",
+      "page_pattern": "^近 7 天 AI 用“讲给我听” ([\\d,]+) 次$",
       "known_gap": "旧滚动7天讲解技能口径已撤出当前状态条；当前10次属于10月4日14:00以来的已采集固定时期；保留原观察值、原日期及原取数口径，不以当前现场数覆盖。"
     },
     {
@@ -12486,7 +12495,7 @@
       "page": "personal-expression",
       "screen": "personal-expression-01",
       "label": "使用状态观察日期",
-      "current_value": "2026-10-10",
+      "current_value": "2026-10-21",
       "as_of": "2026-10-10",
       "category": "人工",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
@@ -12498,8 +12507,8 @@
       "measurement_scope": "同条最后使用与10月4日14:00以来已采截至10月9日的两技能计数；不与旧滚动7天混算，任一Unknown保留日期。",
       "qualifies": [
         "personal-expression-status-last",
-        "int3-personal-expression-explain-fixed-window",
-        "int3-personal-expression-reply-fixed-window"
+        "personal-expression-status-facts-0",
+        "personal-expression-status-facts-1"
       ]
     },
     {
@@ -12689,7 +12698,7 @@
       "page": "skill-reply-as-me",
       "screen": "skill-reply-as-me-01",
       "label": "近7天AI使用次数",
-      "current_value": "近 7 天没用过",
+      "current_value": 2,
       "as_of": "2026-10-11",
       "category": "使用账本",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
@@ -12698,22 +12707,23 @@
       "historical": false,
       "field": "status_line.facts[0]",
       "scope_status": "verified",
-      "measurement_scope": "reply-as-me近7天已记录技能次数的既有短句展示，零次保留“近7天没用过”，有记录返回带次数短句；仅陈述账本记录，未证明真实使用不存在",
+      "measurement_scope": "账本 kind=skill、name=reply-as-me；补采共同完成水位前 7 个完整北京自然日的调用次数。",
       "retrieve": {
-        "kind": "entry",
-        "entry": "personal-expression-usage-display",
-        "pointer": [
-          "reply_fact"
-        ],
-        "timeout": 30
-      }
+        "kind": "usage_ledger",
+        "key": "reply-as-me",
+        "operation": "count_7d",
+        "filter": {
+          "kind": "skill"
+        }
+      },
+      "page_pattern": "^近 7 天 AI 用了 ([\\d,]+) 次$"
     },
     {
       "id": "skill-reply-as-me-status-as-of",
       "page": "skill-reply-as-me",
       "screen": "skill-reply-as-me-01",
       "label": "使用状态观察日期",
-      "current_value": "2026-10-11",
+      "current_value": "2026-10-21",
       "as_of": "2026-10-11",
       "category": "人工",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
@@ -14199,25 +14209,24 @@
       "page": "skill-project-entry-gate",
       "screen": "skill-project-entry-gate-01",
       "label": "近7天技能使用次数",
-      "current_value": 342,
+      "current_value": 198,
       "as_of": "2026-10-09",
       "category": "日志",
       "historical": false,
       "private": true,
       "field": "status_line.facts[0]",
-      "page_field": "status_line.facts[0]",
       "page_pattern": "近 7 天 AI 用了 ([\\d,]+) 次",
       "retrieve": {
-        "kind": "entry",
-        "entry": "usage-skill-current-7d",
-        "pointer": [
-          "project_entry_gate_count_7d"
-        ],
-        "timeout": 210
+        "kind": "usage_ledger",
+        "key": "project-entry-gate",
+        "operation": "count_7d",
+        "filter": {
+          "kind": "skill"
+        }
       },
       "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "滚动当前时刻前7天：完整日账本+今日当前源日志，按稳定id去重；两端scan零坏行，stdout仅计数，不改自然日统计口径。",
+      "measurement_scope": "账本 kind=skill、name=project-entry-gate；补采共同完成水位前 7 个完整北京自然日的调用次数。",
       "refreshed_value": null,
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
       "known_gap": "账本正常按完整自然日结算；last/累计是最新已完成快照，非当日直播。滚动7天两项另补今日源日志；覆盖证据见round02 ledger-evidence。"
@@ -14227,7 +14236,7 @@
       "page": "skill-project-entry-gate",
       "screen": "skill-project-entry-gate-01",
       "label": "使用记录截至日期",
-      "current_value": "2026-10-11",
+      "current_value": "2026-10-21",
       "as_of": "2026-10-09",
       "category": "截至日期",
       "historical": false,
@@ -14281,25 +14290,24 @@
       "page": "skill-report-page",
       "screen": "skill-report-page-01",
       "label": "近7天技能使用次数",
-      "current_value": 46,
+      "current_value": 56,
       "as_of": "2026-10-09",
       "category": "日志",
       "historical": false,
       "private": true,
       "field": "status_line.facts[0]",
-      "page_field": "status_line.facts[0]",
       "page_pattern": "近 7 天 AI 用了 ([\\d,]+) 次",
       "retrieve": {
-        "kind": "entry",
-        "entry": "usage-skill-current-7d",
-        "pointer": [
-          "report_page_count_7d"
-        ],
-        "timeout": 210
+        "kind": "usage_ledger",
+        "key": "report-page",
+        "operation": "count_7d",
+        "filter": {
+          "kind": "skill"
+        }
       },
       "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "滚动当前时刻前7天：完整日账本+今日当前源日志，按稳定id去重；两端scan零坏行，stdout仅计数，不改自然日统计口径。",
+      "measurement_scope": "账本 kind=skill、name=report-page；补采共同完成水位前 7 个完整北京自然日的调用次数。",
       "refreshed_value": null,
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
       "known_gap": "账本正常按完整自然日结算；last/累计是最新已完成快照，非当日直播。滚动7天两项另补今日源日志；覆盖证据见round02 ledger-evidence。"
@@ -14309,7 +14317,7 @@
       "page": "skill-report-page",
       "screen": "skill-report-page-01",
       "label": "使用记录截至日期",
-      "current_value": "2026-10-11",
+      "current_value": "2026-10-21",
       "as_of": "2026-10-09",
       "category": "截至日期",
       "historical": false,
@@ -15568,16 +15576,19 @@
       "historical": false,
       "private": false,
       "retrieve": {
-        "kind": "entry",
-        "entry": "media-person-self-usage-display",
-        "pointer": [
-          "fact"
-        ]
+        "kind": "usage_ledger",
+        "key": "media-person-self",
+        "operation": "count_7d",
+        "filter": {
+          "kind": "skill"
+        }
       },
       "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "同kind/name的当前前7天技能调用数；0沿用原文“近 7 天没用过”，正数给完整事实字符串，原文不存在数字字符不能伪造数字位置。",
-      "category": "来源登记"
+      "measurement_scope": "账本 kind=skill、name=media-person-self；补采共同完成水位前 7 个完整北京自然日的调用次数；0 次也写数字，便于下轮直接推进。",
+      "category": "来源登记",
+      "page_pattern": "^近 7 天 AI 用了 ([\\d,]+) 次$",
+      "current_value": 0
     },
     {
       "id": "skill-media-person-self-status-asof",
@@ -15596,7 +15607,8 @@
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "由明确被注明记录的最早观察日期推进；任何关联项Unknown保留旧日期。",
-      "category": "日期联动"
+      "category": "日期联动",
+      "current_value": "2026-10-21"
     },
     {
       "id": "skill-personal-materials-last-use",
@@ -16267,7 +16279,7 @@
       "page": "chinese-asr",
       "screen": "chinese-asr-01",
       "label": "听写中位识别耗时（秒）",
-      "current_value": 0.45,
+      "current_value": 0.43,
       "as_of": "2026-10-11",
       "category": "自动",
       "source_location": "E:/Projects/Tools/ChineseASR",
@@ -16286,14 +16298,14 @@
       "measurement_scope": "同原页面口径：outputs objective-result audio.raw_sha256去重且排除测试前缀；dictation/runtime.log两种识别行elapsed_sec/seconds合算；models整目录文件大小/安装模型根目录数；cloud-jobs结果status=succeeded",
       "field": "screens[0].text",
       "page_pattern": "\\*\\*([\\d.]+) 秒\\*\\*｜听写",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read"
     },
     {
       "id": "chinese-asr-dictation-samples",
       "page": "chinese-asr",
       "screen": "chinese-asr-01",
       "label": "听写延时样本段数",
-      "current_value": 445,
+      "current_value": 500,
       "as_of": "2026-10-11",
       "category": "自动",
       "source_location": "E:/Projects/Tools/ChineseASR",
@@ -16311,8 +16323,8 @@
       "scope_status": "verified",
       "measurement_scope": "同原页面口径：outputs objective-result audio.raw_sha256去重且排除测试前缀；dictation/runtime.log两种识别行elapsed_sec/seconds合算；models整目录文件大小/安装模型根目录数；cloud-jobs结果status=succeeded",
       "field": "screens[0].text",
-      "page_pattern": "共 ([\\d,]+) 段）",
-      "observation_basis": "unknown"
+      "page_pattern": "日志里现有的 ([\\d,]+) 段",
+      "observation_basis": "live_read"
     },
     {
       "id": "chinese-asr-models-count",
@@ -16379,7 +16391,7 @@
       "page": "chinese-asr",
       "screen": "chinese-asr-01",
       "label": "云端复核成功次数",
-      "current_value": 54,
+      "current_value": 68,
       "as_of": "2026-10-11",
       "category": "自动",
       "source_location": "E:/Projects/Tools/ChineseASR",
@@ -16398,7 +16410,7 @@
       "measurement_scope": "同原页面口径：outputs objective-result audio.raw_sha256去重且排除测试前缀；dictation/runtime.log两种识别行elapsed_sec/seconds合算；models整目录文件大小/安装模型根目录数；cloud-jobs结果status=succeeded",
       "field": "screens[0].text",
       "page_pattern": "\\*\\*([\\d,]+) 次\\*\\*｜云端复核成功",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read"
     },
     {
       "id": "localocr-n-tests-skipped",
@@ -16424,7 +16436,10 @@
       "measurement_scope": "current的unit.log明确OK(skipped=N)，并核验acceptance.json ok=true及unit_exit_code=0",
       "field": "screens[0].text",
       "page_pattern": "（([\\d,]+) 项按条件跳过）",
-      "observation_basis": "unknown"
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "accepted_at"
+      ]
     },
     {
       "id": "localocr-usage-last",
@@ -16709,7 +16724,7 @@
       "page": "chinese-asr",
       "screen": "chinese-asr-01",
       "label": "首屏数字截至日期",
-      "current_value": "10 月 10 日",
+      "current_value": "10 月 23 日 12:38",
       "as_of": "2026-10-11",
       "category": "自动",
       "source_location": "E:/Projects/Tools/ChineseASR/outputs/cloud-jobs/*.result.json；仅按成功回执聚合",
@@ -16719,7 +16734,7 @@
       "scope_status": "verified",
       "measurement_scope": "只注明所指数字，以所有被注明数值成功观察的最早日期更新；Unknown保留旧日期",
       "field": "screens[0].text",
-      "page_pattern": "截至 (\\d+ 月 \\d+ 日)",
+      "page_pattern": "上云；(\\d+ 月 \\d+ 日 \\d+:\\d+) 数）",
       "qualifies": [
         "chinese-asr-cloud-success"
       ]
@@ -18229,18 +18244,14 @@
       "source_location": "AI usage ledger kind=command 且 name 精确等于 Get-ProjectAdmission.ps1；北京时间2026-09-16 00:00≤ts<2026-10-09 00:00。不作滚动七天次数，不按命令片段或技能次数代替。",
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
-      "measurement_scope": "AI usage ledger kind=command 且 name 精确等于 Get-ProjectAdmission.ps1；北京时间2026-09-16 00:00≤ts<2026-10-09 00:00。不作滚动七天次数，不按命令片段或技能次数代替。",
+      "measurement_scope": "9 月 16 日—10 月 9 日固定窗口里 AI 调用身份同步的次数，窗口已结束，属历史统计。",
       "field": "screens[0].text",
       "page_pattern": "\\*\\*([\\d,]+) 次\\*\\*｜AI 用它查一个仓库的身份和同步",
       "retrieve": {
-        "kind": "entry",
-        "entry": "github-admission-fixed-window",
-        "pointer": [
-          "count"
-        ],
-        "timeout": 20
+        "kind": "manual",
+        "instructions": "固定窗口历史统计，不重取"
       }
     },
     {
@@ -20121,11 +20132,9 @@
       "page": "agents-skills-plugins",
       "screen": "agents-skills-plugins-05",
       "label": "数据截至日期关联它注明的真实计数",
-      "current_value": "2026-10-11 14:00",
+      "current_value": "10 月 22 日 07:31",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "start": 47,
-      "end": 63,
       "qualifies": [
         "b7-agents-skills-plugins-installed-count",
         "b7-agents-skills-plugins-personal-installed-count",
@@ -20142,7 +20151,8 @@
       "private": false,
       "historical": false,
       "date_precision": "datetime",
-      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。"
+      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。",
+      "page_pattern": "^(\\d+ 月 \\d+ 日 \\d+:\\d+) 检查：`config"
     },
     {
       "id": "b7-codex-memory-config-memory-whitelist-sync-as_of-item-95",
@@ -23734,7 +23744,7 @@
       "scope_status": "verified",
       "measurement_scope": "当前tests/test_materials.py测试函数定义计数，不执行",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "当前测试文件\\s+([0-9]+(?:,[0-9]{3})*)\\s*个测试函数",
+      "page_pattern": "当前测试文件 ([\\d,]+) 个测试函数、收集到",
       "checked_at": "2026-10-23T10:26:16+08:00",
       "source_observed_at": "2026-10-23T10:26:16+08:00",
       "source_coverage_end": null,
@@ -23747,9 +23757,7 @@
       "screen": "personal-materials-bounded-discovery-05",
       "label": "材料测试用例收集数",
       "field": "screens[4].text",
-      "start": 423,
-      "end": 426,
-      "current_value": 110,
+      "current_value": 123,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -23764,8 +23772,9 @@
       "private": true,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "measurement_scope": "pytest 只收集不运行的用例数（参数展开后）。",
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "个测试函数、收集到 ([\\d,]+) 个用例"
     },
     {
       "id": "personal-materials-bounded-discovery-b9-009",
@@ -24445,7 +24454,7 @@
       "scope_status": "verified",
       "measurement_scope": "当前tests/test_materials.py测试函数定义计数，不执行",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "当前测试文件\\s+([0-9]+(?:,[0-9]{3})*)\\s*个测试函数",
+      "page_pattern": "当前测试文件 ([\\d,]+) 个测试函数、收集到",
       "checked_at": "2026-10-23T10:26:16+08:00",
       "source_observed_at": "2026-10-23T10:26:16+08:00",
       "source_coverage_end": null,
@@ -24479,7 +24488,7 @@
       "scope_status": "verified",
       "measurement_scope": "当前tests/test_materials.py测试函数定义计数，不执行",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "tests/test_materials\\.py[^\\n]*?（\\s*([0-9]+(?:,[0-9]{3})*)\\s*个测试函数",
+      "page_pattern": "当前测试文件 ([\\d,]+) 个测试函数、收集到",
       "checked_at": "2026-10-23T10:26:16+08:00",
       "source_observed_at": "2026-10-23T10:26:16+08:00",
       "source_coverage_end": null,
@@ -24492,9 +24501,7 @@
       "screen": "personal-materials-exact-intake-05",
       "label": "材料测试用例收集数",
       "field": "screens[4].text",
-      "start": 440,
-      "end": 443,
-      "current_value": 110,
+      "current_value": 123,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -24509,8 +24516,9 @@
       "private": true,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "measurement_scope": "pytest 只收集不运行的用例数（参数展开后）。",
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "个测试函数、收集到 ([\\d,]+) 个用例"
     },
     {
       "id": "personal-materials-exact-intake-b9-040",
@@ -24518,9 +24526,7 @@
       "screen": "personal-materials-exact-intake-15",
       "label": "材料测试用例收集数",
       "field": "screens[14].text",
-      "start": 381,
-      "end": 384,
-      "current_value": 110,
+      "current_value": 123,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -24535,8 +24541,9 @@
       "private": true,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "measurement_scope": "pytest 只收集不运行的用例数（参数展开后）。",
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "个测试函数、收集到 ([\\d,]+) 个用例"
     },
     {
       "id": "personal-materials-exact-intake-b9-041",
@@ -25374,7 +25381,7 @@
       "scope_status": "verified",
       "measurement_scope": "当前tests/test_materials.py测试函数定义计数，不执行",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "当前测试文件有\\s+([0-9]+(?:,[0-9]{3})*)\\s*个测试函数",
+      "page_pattern": "当前测试文件 ([\\d,]+) 个测试函数、收集到",
       "checked_at": "2026-10-23T10:26:16+08:00",
       "source_observed_at": "2026-10-23T10:26:16+08:00",
       "source_coverage_end": null,
@@ -25408,7 +25415,7 @@
       "scope_status": "verified",
       "measurement_scope": "当前tests/test_materials.py测试函数定义计数，不执行",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "tests/test_materials\\.py`?[^\\n]*?（\\s*([0-9]+(?:,[0-9]{3})*)\\s*个测试函数",
+      "page_pattern": "当前测试文件 ([\\d,]+) 个测试函数、收集到",
       "checked_at": "2026-10-23T10:26:16+08:00",
       "source_observed_at": "2026-10-23T10:26:16+08:00",
       "source_coverage_end": null,
@@ -25421,9 +25428,7 @@
       "screen": "personal-materials-registered-lookup-05",
       "label": "材料测试用例收集数",
       "field": "screens[4].text",
-      "start": 331,
-      "end": 334,
-      "current_value": 110,
+      "current_value": 123,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -25438,8 +25443,9 @@
       "private": true,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "measurement_scope": "pytest 只收集不运行的用例数（参数展开后）。",
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "个测试函数、收集到 ([\\d,]+) 个用例"
     },
     {
       "id": "personal-materials-registered-lookup-b9-072",
@@ -25447,9 +25453,7 @@
       "screen": "personal-materials-registered-lookup-11",
       "label": "材料测试用例收集数",
       "field": "screens[10].text",
-      "start": 245,
-      "end": 248,
-      "current_value": 110,
+      "current_value": 123,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -25464,8 +25468,9 @@
       "private": true,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "measurement_scope": "pytest 只收集不运行的用例数（参数展开后）。",
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "个测试函数、收集到 ([\\d,]+) 个用例"
     },
     {
       "id": "personal-materials-registered-lookup-b9-073",
@@ -25615,7 +25620,7 @@
       "scope_status": "verified",
       "measurement_scope": "当前tests/test_materials.py测试函数定义计数，不执行",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "当前测试文件\\s+([0-9]+(?:,[0-9]{3})*)\\s*个测试函数",
+      "page_pattern": "当前测试文件 ([\\d,]+) 个测试函数、收集到",
       "checked_at": "2026-10-23T10:26:16+08:00",
       "source_observed_at": "2026-10-23T10:26:16+08:00",
       "source_coverage_end": null,
@@ -25649,7 +25654,7 @@
       "scope_status": "verified",
       "measurement_scope": "当前tests/test_materials.py测试函数定义计数，不执行",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "tests/test_materials\\.py[^\\n]*?（\\s*([0-9]+(?:,[0-9]{3})*)\\s*个测试函数",
+      "page_pattern": "当前测试文件 ([\\d,]+) 个测试函数、收集到",
       "checked_at": "2026-10-23T10:26:16+08:00",
       "source_observed_at": "2026-10-23T10:26:16+08:00",
       "source_coverage_end": null,
@@ -25662,9 +25667,7 @@
       "screen": "personal-materials-verified-open-05",
       "label": "材料测试用例收集数",
       "field": "screens[4].text",
-      "start": 286,
-      "end": 289,
-      "current_value": 110,
+      "current_value": 123,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -25679,8 +25682,9 @@
       "private": true,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "measurement_scope": "pytest 只收集不运行的用例数（参数展开后）。",
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "个测试函数、收集到 ([\\d,]+) 个用例"
     },
     {
       "id": "personal-materials-verified-open-b9-080",
@@ -25688,9 +25692,7 @@
       "screen": "personal-materials-verified-open-13",
       "label": "材料测试用例收集数",
       "field": "screens[12].text",
-      "start": 270,
-      "end": 273,
-      "current_value": 110,
+      "current_value": 123,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -25705,8 +25707,9 @@
       "private": true,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "measurement_scope": "pytest 只收集不运行的用例数（参数展开后）。",
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "个测试函数、收集到 ([\\d,]+) 个用例"
     },
     {
       "id": "personal-media-classification-b9-082",
@@ -26607,9 +26610,7 @@
       "screen": "personal-media-search-browse-01",
       "label": "全部现存原件大小GB",
       "field": "screens[0].text",
-      "start": 223,
-      "end": 227,
-      "current_value": 98.6,
+      "current_value": 106.0,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "E:/Media/_manifests/personal-media-current/catalog.sqlite3；canonical原件目录",
@@ -26627,7 +26628,8 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "现存authority_locator逐件stat大小求和/10^9取1位；缺项或非文件即失败，不hash",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "原件合计约 ([\\d.]+) GB（"
     },
     {
       "id": "personal-media-search-browse-b9-113",
@@ -27108,8 +27110,6 @@
       "screen": "personal-media-cloud-candidates-01",
       "label": "issue_total",
       "field": "screens[0].text",
-      "start": 388,
-      "end": 389,
       "current_value": 0,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
@@ -27126,7 +27126,8 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "本地现行期望/已同步记录/稳定期状态的对应聚合，不联网、不证明今日云端真实状态",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "暂停合计 ([\\d,]+) 件"
     },
     {
       "id": "personal-media-cloud-candidates-b9-131",
@@ -27592,7 +27593,7 @@
       "screen": "personal-media-phone-preservation-01",
       "label": "最近收尾汇总 batches",
       "field": "screens[0].text",
-      "current_value": 11,
+      "current_value": 15,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "E:/Data/PCConfig/PersonalMedia/phone-closeout-status.json",
@@ -27609,7 +27610,11 @@
       "scope_status": "verified",
       "measurement_scope": "既有最近收尾回执的批次状态计数；本轮不执行任务或连手机",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "整体通过：(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+个批次里"
+      "page_pattern": "整体通过：(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+个批次里",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "finished_at"
+      ]
     },
     {
       "id": "personal-media-phone-preservation-b9-148",
@@ -27634,7 +27639,11 @@
       "scope_status": "verified",
       "measurement_scope": "既有最近收尾回执的批次状态计数；本轮不执行任务或连手机",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "个批次里\\s+(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+个已收尾"
+      "page_pattern": "个批次里\\s+(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+个已收尾",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "finished_at"
+      ]
     },
     {
       "id": "personal-media-phone-preservation-b9-149",
@@ -27642,7 +27651,7 @@
       "screen": "personal-media-phone-preservation-01",
       "label": "最近收尾汇总 waiting",
       "field": "screens[0].text",
-      "current_value": 7,
+      "current_value": 11,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "E:/Data/PCConfig/PersonalMedia/phone-closeout-status.json",
@@ -27659,7 +27668,11 @@
       "scope_status": "verified",
       "measurement_scope": "既有最近收尾回执的批次状态计数；本轮不执行任务或连手机",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "个已收尾、(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+个还在等"
+      "page_pattern": "个已收尾、(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+个还在等",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "finished_at"
+      ]
     },
     {
       "id": "personal-media-phone-preservation-b9-150",
@@ -27667,7 +27680,7 @@
       "screen": "personal-media-phone-preservation-05",
       "label": "最近收尾汇总 batches",
       "field": "screens[4].text",
-      "current_value": 11,
+      "current_value": 15,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "E:/Data/PCConfig/PersonalMedia/phone-closeout-status.json",
@@ -27684,7 +27697,11 @@
       "scope_status": "verified",
       "measurement_scope": "既有最近收尾回执的批次状态计数；本轮不执行任务或连手机",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "最新一轮[^\\n。]*?结束、PASS，(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+批 ="
+      "page_pattern": "最新一轮[^\\n。]*?结束、PASS，(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+批 =",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "finished_at"
+      ]
     },
     {
       "id": "personal-media-phone-preservation-b9-151",
@@ -27709,7 +27726,11 @@
       "scope_status": "verified",
       "measurement_scope": "既有最近收尾回执的批次状态计数；本轮不执行任务或连手机",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "最新一轮[^\\n。]*?结束、PASS，(?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?\\s+批 =\\s+(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+批 PASS"
+      "page_pattern": "最新一轮[^\\n。]*?结束、PASS，(?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?\\s+批 =\\s+(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+批 PASS",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "finished_at"
+      ]
     },
     {
       "id": "personal-media-phone-preservation-b9-152",
@@ -27717,7 +27738,7 @@
       "screen": "personal-media-phone-preservation-05",
       "label": "最近收尾汇总 waiting",
       "field": "screens[4].text",
-      "current_value": 7,
+      "current_value": 11,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "E:/Data/PCConfig/PersonalMedia/phone-closeout-status.json",
@@ -27734,7 +27755,11 @@
       "scope_status": "verified",
       "measurement_scope": "既有最近收尾回执的批次状态计数；本轮不执行任务或连手机",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "最新一轮[^\\n。]*?批 PASS \\+\\s+(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+批 WAITING"
+      "page_pattern": "最新一轮[^\\n。]*?批 PASS \\+\\s+(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+批 WAITING",
+      "observation_basis": "snapshot_timestamp",
+      "source_observed_at_pointer": [
+        "finished_at"
+      ]
     },
     {
       "id": "learning-human-control-simple-b9-153",
@@ -34092,52 +34117,6 @@
       "manual_route": "只读正式AI使用账本元数据，固定筛kind和name；按当前页面注明的开始时刻及已补采结束边界筛ts聚合，逐个宿主核对水位，不使用滚动7天，不把未补采期算零，不输出原记录、cwd或提示正文。 本条kind=command且个人理解库正式CLI；2026-10-05起至已采2026-10-09北京日的固定范围。"
     },
     {
-      "id": "int3-personal-expression-explain-fixed-window",
-      "page": "personal-expression",
-      "screen": "personal-expression-01",
-      "field": "status_line.facts[0]",
-      "label": "已补采固定时期调用次数",
-      "current_value": 10,
-      "as_of": "2026-10-11",
-      "category": "人工",
-      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 和 state-codex.json/state-claude.json",
-      "retrieve": {
-        "kind": "manual",
-        "instructions": "只读正式AI使用账本元数据，固定筛kind和name；按当前页面注明的开始时刻及已补采结束边界筛ts聚合，逐个宿主核对水位，不使用滚动7天，不把未补采期算零，不输出原记录、cwd或提示正文。 本条kind=skill,name=explain-to-me；2026-10-04T14:00+08:00以来，已采至2026-10-09。"
-      },
-      "automatic": false,
-      "private": false,
-      "historical": false,
-      "scope_status": "verified",
-      "measurement_scope": "kind=skill,name=explain-to-me；2026-10-04T14:00+08:00以来，已采至2026-10-09；与旧滚动7天不同，新id保留当前口径。",
-      "page_pattern": "“讲给我听”技能已记 ([\\d,]+) 次",
-      "manual_reason": "judgment",
-      "manual_route": "只读正式AI使用账本元数据，固定筛kind和name；按当前页面注明的开始时刻及已补采结束边界筛ts聚合，逐个宿主核对水位，不使用滚动7天，不把未补采期算零，不输出原记录、cwd或提示正文。 本条kind=skill,name=explain-to-me；2026-10-04T14:00+08:00以来，已采至2026-10-09。"
-    },
-    {
-      "id": "int3-personal-expression-reply-fixed-window",
-      "page": "personal-expression",
-      "screen": "personal-expression-01",
-      "field": "status_line.facts[1]",
-      "label": "已补采固定时期调用次数",
-      "current_value": 0,
-      "as_of": "2026-10-11",
-      "category": "人工",
-      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 和 state-codex.json/state-claude.json",
-      "retrieve": {
-        "kind": "manual",
-        "instructions": "只读正式AI使用账本元数据，固定筛kind和name；按当前页面注明的开始时刻及已补采结束边界筛ts聚合，逐个宿主核对水位，不使用滚动7天，不把未补采期算零，不输出原记录、cwd或提示正文。 本条kind=skill,name=reply-as-me；2026-10-04T14:00+08:00以来，已采至2026-10-09。"
-      },
-      "automatic": false,
-      "private": false,
-      "historical": false,
-      "scope_status": "verified",
-      "measurement_scope": "kind=skill,name=reply-as-me；2026-10-04T14:00+08:00以来，已采至2026-10-09；与旧滚动7天不同，新id保留当前口径。",
-      "page_pattern": "“替我拟消息”技能已记 ([\\d,]+) 次",
-      "manual_reason": "judgment",
-      "manual_route": "只读正式AI使用账本元数据，固定筛kind和name；按当前页面注明的开始时刻及已补采结束边界筛ts聚合，逐个宿主核对水位，不使用滚动7天，不把未补采期算零，不输出原记录、cwd或提示正文。 本条kind=skill,name=reply-as-me；2026-10-04T14:00+08:00以来，已采至2026-10-09。"
-    },
-    {
       "id": "int3-ramdisk-cadence-asof",
       "page": "ramdisk-guardian",
       "screen": "ramdisk-guardian-04",
@@ -38122,6 +38101,365 @@
       "scope_status": "verified",
       "measurement_scope": "只注明首屏“当前情况”里的登记、来源、关系、有文字（完整/部分）、没有文字和原件合计这几项计数；全部取得同次新值才推进，任一 Unknown 保留旧时间。",
       "current_value": "10 月 23 日 11:51",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T11:51:43+08:00"
+    },
+    {
+      "id": "personal-expression-status-facts-1",
+      "page": "personal-expression",
+      "screen": "personal-expression-01",
+      "label": "近 7 天“替我拟消息”调用次数",
+      "current_value": 2,
+      "as_of": "2026-10-10",
+      "category": "使用账本",
+      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "status_line.facts[1]",
+      "scope_status": "verified",
+      "measurement_scope": "kind=skill、name=explain-to-me；截至两路共同完成水位前一日的7个完整日内已记录调用次数（北京时间），不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
+      "retrieve": {
+        "kind": "usage_ledger",
+        "key": "reply-as-me",
+        "operation": "count_7d",
+        "filter": {
+          "kind": "skill"
+        }
+      },
+      "page_pattern": "^近 7 天 AI 用“替我拟消息” ([\\d,]+) 次$",
+      "known_gap": "旧滚动7天讲解技能口径已撤出当前状态条；当前10次属于10月4日14:00以来的已采集固定时期；保留原观察值、原日期及原取数口径，不以当前现场数覆盖。"
+    },
+    {
+      "id": "localocr-tests-accepted-at",
+      "page": "localocr",
+      "screen": "localocr-01",
+      "label": "现役版本验收时刻",
+      "current_value": "10 月 16 日 12:29",
+      "as_of": "2026-10-22",
+      "category": "自动",
+      "source_location": "E:/Projects/Tools/LocalOCR/_server/jobs；WSL /root/localocr-runtimes/current/acceptance 及 /root/.paddlex/official_models，只读聚合",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "注明测试数、跳过数来自哪次现役版本验收（验收开始时刻，北京时间）；换版重验时一起推进。",
+      "field": "screens[0].text",
+      "page_pattern": "现役版本 (\\d+ 月 \\d+ 日 \\d+:\\d+) 验收",
+      "qualifies": [
+        "localocr-n-tests-0",
+        "localocr-n-tests-skipped"
+      ],
+      "checked_at": "2026-10-23T10:27:03+08:00",
+      "source_observed_at": "2026-10-23T10:27:03+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T10:27:03+08:00"
+    },
+    {
+      "id": "chinese-asr-dictation-computed-at",
+      "page": "chinese-asr",
+      "screen": "chinese-asr-01",
+      "label": "听写中位用时的计算时刻",
+      "current_value": "10 月 23 日 12:38",
+      "as_of": "2026-10-11",
+      "category": "自动",
+      "source_location": "E:/Projects/Tools/ChineseASR/outputs/cloud-jobs/*.result.json；仅按成功回执聚合",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "注明听写中位用时和段数的计算时刻；按当时日志里现有的全部识别行算，不是固定窗口。",
+      "field": "screens[0].text",
+      "page_pattern": "段，(\\d+ 月 \\d+ 日 \\d+:\\d+) 算）",
+      "qualifies": [
+        "chinese-asr-dictation-median",
+        "chinese-asr-dictation-samples"
+      ]
+    },
+    {
+      "id": "personal-media-phone-preservation-closeout-current-at",
+      "page": "personal-media-phone-preservation",
+      "screen": "personal-media-phone-preservation-01",
+      "label": "最近一轮收尾结束时刻",
+      "field": "screens[0].text",
+      "page_pattern": "最近一轮 (\\d+ 月 \\d+ 日 \\d+:\\d+) 结束、整体通过",
+      "qualifies": [
+        "personal-media-phone-preservation-b9-147",
+        "personal-media-phone-preservation-b9-148",
+        "personal-media-phone-preservation-b9-149"
+      ],
+      "current_value": "10 月 23 日 07:15",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句批次数来自哪一轮收尾（状态文件 finished_utc，北京时间到分钟）；入口在收尾状态不是 PASS 时报错，句里的“整体通过/PASS”不会和新数错配。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T09:21:05+08:00",
+      "source_observed_at": "2026-10-23T09:20:00+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T09:20:00+08:00"
+    },
+    {
+      "id": "personal-media-phone-preservation-closeout-detail-at",
+      "page": "personal-media-phone-preservation",
+      "screen": "personal-media-phone-preservation-05",
+      "label": "最近一轮收尾结束时刻",
+      "field": "screens[4].text",
+      "page_pattern": "最新一轮 (\\d+ 月 \\d+ 日 \\d+:\\d+) 结束、PASS",
+      "qualifies": [
+        "personal-media-phone-preservation-b9-150",
+        "personal-media-phone-preservation-b9-151",
+        "personal-media-phone-preservation-b9-152"
+      ],
+      "current_value": "10 月 23 日 07:15",
+      "as_of": "2026-10-22",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句批次数来自哪一轮收尾（状态文件 finished_utc，北京时间到分钟）；入口在收尾状态不是 PASS 时报错，句里的“整体通过/PASS”不会和新数错配。",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T09:21:05+08:00",
+      "source_observed_at": "2026-10-23T09:20:00+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T09:20:00+08:00"
+    },
+    {
+      "id": "personal-materials-bounded-discovery-b9-007-counted-at",
+      "page": "personal-materials-bounded-discovery",
+      "screen": "personal-materials-bounded-discovery-05",
+      "field": "screens[4].text",
+      "label": "测试用例收集时刻",
+      "page_pattern": "个用例[（，](\\d+ 月 \\d+ 日 \\d+:\\d+) 只收集计数",
+      "qualifies": [
+        "personal-materials-bounded-discovery-b9-006",
+        "personal-materials-bounded-discovery-b9-007"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句测试函数数（数 def test_）和用例数（只收集不运行）的计数时刻。",
+      "current_value": "10 月 23 日 12:38",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T11:51:43+08:00"
+    },
+    {
+      "id": "personal-materials-exact-intake-b9-039-counted-at",
+      "page": "personal-materials-exact-intake",
+      "screen": "personal-materials-exact-intake-05",
+      "field": "screens[4].text",
+      "label": "测试用例收集时刻",
+      "page_pattern": "个用例[（，](\\d+ 月 \\d+ 日 \\d+:\\d+) 只收集计数",
+      "qualifies": [
+        "personal-materials-exact-intake-b9-037",
+        "personal-materials-exact-intake-b9-039"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句测试函数数（数 def test_）和用例数（只收集不运行）的计数时刻。",
+      "current_value": "10 月 23 日 12:38",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T11:51:43+08:00"
+    },
+    {
+      "id": "personal-materials-exact-intake-b9-040-counted-at",
+      "page": "personal-materials-exact-intake",
+      "screen": "personal-materials-exact-intake-15",
+      "field": "screens[14].text",
+      "label": "测试用例收集时刻",
+      "page_pattern": "个用例[（，](\\d+ 月 \\d+ 日 \\d+:\\d+) 只收集计数",
+      "qualifies": [
+        "personal-materials-exact-intake-b9-038",
+        "personal-materials-exact-intake-b9-040"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句测试函数数（数 def test_）和用例数（只收集不运行）的计数时刻。",
+      "current_value": "10 月 23 日 12:38",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T11:51:43+08:00"
+    },
+    {
+      "id": "personal-materials-registered-lookup-b9-071-counted-at",
+      "page": "personal-materials-registered-lookup",
+      "screen": "personal-materials-registered-lookup-05",
+      "field": "screens[4].text",
+      "label": "测试用例收集时刻",
+      "page_pattern": "个用例[（，](\\d+ 月 \\d+ 日 \\d+:\\d+) 只收集计数",
+      "qualifies": [
+        "personal-materials-registered-lookup-b9-069",
+        "personal-materials-registered-lookup-b9-071"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句测试函数数（数 def test_）和用例数（只收集不运行）的计数时刻。",
+      "current_value": "10 月 23 日 12:38",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T11:51:43+08:00"
+    },
+    {
+      "id": "personal-materials-registered-lookup-b9-072-counted-at",
+      "page": "personal-materials-registered-lookup",
+      "screen": "personal-materials-registered-lookup-11",
+      "field": "screens[10].text",
+      "label": "测试用例收集时刻",
+      "page_pattern": "个用例[（，](\\d+ 月 \\d+ 日 \\d+:\\d+) 只收集计数",
+      "qualifies": [
+        "personal-materials-registered-lookup-b9-070",
+        "personal-materials-registered-lookup-b9-072"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句测试函数数（数 def test_）和用例数（只收集不运行）的计数时刻。",
+      "current_value": "10 月 23 日 12:38",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T11:51:43+08:00"
+    },
+    {
+      "id": "personal-materials-verified-open-b9-079-counted-at",
+      "page": "personal-materials-verified-open",
+      "screen": "personal-materials-verified-open-05",
+      "field": "screens[4].text",
+      "label": "测试用例收集时刻",
+      "page_pattern": "个用例[（，](\\d+ 月 \\d+ 日 \\d+:\\d+) 只收集计数",
+      "qualifies": [
+        "personal-materials-verified-open-b9-077",
+        "personal-materials-verified-open-b9-079"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句测试函数数（数 def test_）和用例数（只收集不运行）的计数时刻。",
+      "current_value": "10 月 23 日 12:38",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T11:51:43+08:00"
+    },
+    {
+      "id": "personal-materials-verified-open-b9-080-counted-at",
+      "page": "personal-materials-verified-open",
+      "screen": "personal-materials-verified-open-13",
+      "field": "screens[12].text",
+      "label": "测试用例收集时刻",
+      "page_pattern": "个用例[（，](\\d+ 月 \\d+ 日 \\d+:\\d+) 只收集计数",
+      "qualifies": [
+        "personal-materials-verified-open-b9-078",
+        "personal-materials-verified-open-b9-080"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句测试函数数（数 def test_）和用例数（只收集不运行）的计数时刻。",
+      "current_value": "10 月 23 日 12:38",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T11:51:43+08:00"
+    },
+    {
+      "id": "personal-media-search-browse-bytes-read-at",
+      "page": "personal-media-search-browse",
+      "screen": "personal-media-search-browse-01",
+      "field": "screens[0].text",
+      "label": "原件合计的读取日期",
+      "page_pattern": "GB（(\\d+ 月 \\d+ 日)只读取数）",
+      "qualifies": [
+        "personal-media-search-browse-b9-112"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句原件合计大小的读取日期。",
+      "current_value": "10 月 22 日",
+      "as_of": "2026-10-23",
+      "historical": false,
+      "private": false,
+      "source_location": "同页被注明数字记录",
+      "category": "日期联动",
+      "checked_at": "2026-10-23T11:51:43+08:00",
+      "source_observed_at": "2026-10-23T11:51:43+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-23T11:51:43+08:00"
+    },
+    {
+      "id": "personal-media-cloud-candidates-issues-read-at",
+      "page": "personal-media-cloud-candidates",
+      "screen": "personal-media-cloud-candidates-01",
+      "field": "screens[0].text",
+      "label": "异常合计的查看时刻",
+      "page_pattern": "暂停合计 [\\d,]+ 件（(\\d+ 月 \\d+ 日 \\d+:\\d+) 查看本地记录）",
+      "qualifies": [
+        "personal-media-cloud-candidates-b9-130"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "注明同句失败、未知、暂停合计数的查看时刻。",
+      "current_value": "10 月 23 日 12:38",
       "as_of": "2026-10-23",
       "historical": false,
       "private": false,

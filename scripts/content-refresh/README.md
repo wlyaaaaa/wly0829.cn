@@ -168,7 +168,9 @@ GPT 先核对同一统计口径，数值改变会改变叙述含义时交 Opus�
 `page_pattern` 不恰好命中一处（含 `{{…}}` 的字段按展开后文字核），`digits` 是 `retrieve.digits`
 与页面小数位不同，`mirror` 是挂 `registry_number` 的页内数字表数值已与正文不同；三类任一非空，
 `--strict` 非零退出。`observed` 列出自动数字同句里没登记的观察时间，写进盘点和 `fact-tasks.md`，
-完整性测试给它设只许减少的上限。取数时旧值不小于 5 而来源返回 0，记 `unavailable`、不生成改数；
+完整性测试给它设只许减少的上限；`manual_qualified` 列出 `qualifies` 连着人工项、因而永远推不动的
+截至日期，同样设只许减少的上限。`usage_ledger` 可用 `keys` 把几个技能合起来算（次数相加、最近一次取最晚）。
+取数时旧值不小于 5 而来源返回 0，记 `unavailable`、不生成改数；
 JSON 清单分类计数用 `operation: "count_where"` 加 `where` 条件按条目字段数。
 
 `authors.py` 是生成和应用改数单共同使用的真实作者定位入口。普通字段指向本页

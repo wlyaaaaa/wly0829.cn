@@ -50,7 +50,14 @@ def binding_findings(root, records):
     mirror：挂着 registry_number 的页内数字表数值已和正文不同（应用时必定失败、连带截至日期推不动）；
     observed：自动数字同句里有没登记的观察时间（数字会变、时间不会，下次就成了错配）。"""
     root, cache = Path(root), {}
-    out = {"pattern": [], "digits": [], "mirror": [], "observed": []}
+    out = {"pattern": [], "digits": [], "mirror": [], "observed": [], "manual_qualified": []}
+    by_id = {r["id"]: r for r in records}
+    for r in records:  # 截至日期连着人工项：人工项不会自动取到新值，这个日期就永远推不动
+        manual = [q for q in r.get("qualifies") or [] if not r.get("historical") and (
+            not by_id.get(q, {}).get("automatic") or (by_id.get(q, {}).get("retrieve") or {}).get("kind") == "manual")]
+        if manual:
+            out["manual_qualified"].append(dict(record_id=r["id"], page=r["page"], field=r.get("field"),
+                reason="截至日期连着人工项 " + "、".join(manual) + "：拆成自动项和人工项各自的日期，或把人工项改成自动取数"))
     pages = {}
     spans = {}
     for r in records:

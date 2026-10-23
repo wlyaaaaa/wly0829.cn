@@ -156,7 +156,8 @@ def ledger_values(methods, entry, root, include_metadata=False):
     for i, method in enumerate(methods):
         filters = dict(entry.get("filter", {}), **method.get("filter", {}))
         group = groups.setdefault(json.dumps(filters, sort_keys=True), (filters, {}))
-        group[1].setdefault(method["key"], []).append(i)
+        for key in method.get("keys") or [method["key"]]:  # keys：几个技能合起来算（次数相加、最近一次取最晚）
+            group[1].setdefault(key, []).append(i)
     with path.open(encoding="utf-8-sig") as stream:
         if entry.get("format", "jsonl") == "json":
             records = pointer_value(json.load(stream), entry)

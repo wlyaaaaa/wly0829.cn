@@ -100,7 +100,10 @@
 - **计数按条目，不按整文件字符串。** JSON 清单分类计数用 `{"kind": "json", "pointer": [...], "operation": "count_where", "where": {...}}`；入口认不出来源格式要报错，不能数成 0。（旧值不小于 5、来源返回 0 时取数记 `unavailable`，不自动写 0。）
 - **构图引文取块开头几个字。** `layout.json` 的 `text_ref` 截成新原文的共同开头，不停在数字、提交号或包名中间；只差数字时转换自动认出，其余认不出就转换失败，不再悄悄把这一块并进上一块。（`convert_page.py` 及 `--check-all`。）
 
-`binding_checks` 的 `pattern`、`digits`、`mirror` 并入 `refresh.py --inventory --strict` 和整表取数前的严格检查，任一非空就非零退出；`observed` 写进 `dated-inventory.json` 的 `binding_checks` 和 `fact-tasks.md`，交给改到这页的事实组。
+- **截至日期不连人工项。** 日期联动记录的 `qualifies` 只指向自动记录；连着人工项的日期永远推不动，要拆成自动项和人工项各自的日期，或把人工项改成自动取数。（`binding_checks` 的 `manual_qualified`，测试设只许减少的上限。）
+- **取数入口要跟着来源格式和账本节奏走。** 回执、状态文件类入口输出回执自带的完成时间，记录用 `snapshot_timestamp` 加 `source_observed_at_pointer`；用量一律用 `usage_ledger`（按补采覆盖到的 7 个完整日，几个技能合计用 `keys`），不写“现在往前 7 天”或要求账本补到今天零点的入口；同一张大表一轮只数一次，别的页复用同一入口。句子里写着“整体通过”这类状态词时，入口在状态不符时报错，宁可整句保留旧日期，也不让新数配旧状态。
+
+`binding_checks` 的 `pattern`、`digits`、`mirror` 并入 `refresh.py --inventory --strict` 和整表取数前的严格检查，任一非空就非零退出；`observed`、`manual_qualified` 写进 `dated-inventory.json` 的 `binding_checks`，`observed` 另写进 `fact-tasks.md`，交给改到这页的事实组。
 
 以下几类机制还不能自动处理，每轮由事实组人工核对并在汇报里列出：项目总览等动态占位页的截至日期（`dynamic` 记录跳过）；现场计数旁写了覆盖末日的聚合卡；布尔或中文显示值（“已开启”“三”）；带 `requires_semantic_refresh` 的记录即使值没变也拦下；时间区间；TimeAudit“最近一次完成的备份”这类只在运行历史里的事件。
 

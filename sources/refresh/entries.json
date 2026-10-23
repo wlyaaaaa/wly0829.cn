@@ -88,24 +88,6 @@
     "verification": "2026-10-11 核实固定代码：仅Path.read_text、JSON解析、正则和计数；不导入业务模块，不写文件，不调模型；只输出原则/案例/有效本人样本/AI稿对照的整数，不输出私人正文。",
     "observation_basis": "live_read"
   },
-  "personal-expression-usage-display": {
-    "requires_usage_ledger": true,
-    "argv": [
-      "python",
-      "-B",
-      "-X",
-      "utf8",
-      "-c",
-      "import json\nfrom pathlib import Path\nfrom datetime import datetime,timedelta,timezone\nnow=datetime.now(timezone(timedelta(hours=8)));count=0;last=None\nwith Path('E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl').open(encoding='utf-8-sig') as stream:\n for line in stream:\n  row=json.loads(line)\n  if row.get('kind')!='skill' or row.get('name') not in ('explain-to-me','reply-as-me'):continue\n  used=datetime.fromisoformat(row['ts'])\n  if used>now:continue\n  if last is None or used>last:last=used\n  if row['name']=='reply-as-me' and now-timedelta(days=7)<=used:count+=1\nprint(json.dumps({'reply_fact':'近 7 天没用过' if count==0 else f'近 7 天 AI 用了 {count} 次','personal_expression_last':last.isoformat(timespec='seconds') if last else None},ensure_ascii=False))"
-    ],
-    "cwd": "V:/Personal/Projects/personal-expression",
-    "read_only": true,
-    "owner_project": "personal-expression",
-    "output": "json",
-    "timeout": 30,
-    "verification": "2026-10-11 固定代码仅open只读账本、JSON解析、时间比较及聚合；不导入生产者，不调用emit，不写文件/库。只输出reply-as-me计数所对应的页面事实短句和两个表达技能最新时间；不输出行内容。U两路补采回执complete且水位均推进至2026-10-11零点后启用。",
-    "observation_basis": "unknown"
-  },
   "timeaudit-db-sizes": {
     "argv": [
       "C:/Program Files/Docker/Docker/resources/bin/docker.exe",
@@ -298,7 +280,7 @@
       "C:/Program Files/Docker/Docker/resources/bin/docker.exe",
       "exec",
       "-e",
-      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=8000 -c lock_timeout=500",
+      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=60000 -c lock_timeout=500",
       "audit-postgres",
       "psql",
       "-X",
@@ -316,8 +298,9 @@
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
-    "timeout": 12,
-    "observation_basis": "live_read"
+    "timeout": 70,
+    "observation_basis": "live_read",
+    "verification": "2026-10-23 取数并发时 8 秒语句上限两轮都被卡掉（单独跑 4 秒）；放宽到 60 秒，只读与 lock_timeout=500 不变。"
   },
   "timeaudit-grafana-counts": {
     "argv": [
@@ -797,7 +780,7 @@
       "-X",
       "utf8",
       "-c",
-      "import os,io,json,contextlib;os.environ['PYTEST_DISABLE_PLUGIN_AUTOLOAD']='1';import pytest\nclass Count: pytest_collection_finish=lambda self,session:setattr(self,'tests',len(session.items))\nwith contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):code=pytest.main(['--collect-only','-q','-p','no:cacheprovider','tests'],plugins=[p:=Count()])\nif code:raise SystemExit(int(code))\nprint(json.dumps({'tests':p.tests,'executed':False}))"
+      "import os,io,json,contextlib;os.environ['PYTEST_DISABLE_PLUGIN_AUTOLOAD']='1';import pytest\nclass Count: pytest_collection_finish=lambda self,session:(setattr(self,'tests',len(session.items)),setattr(self,'functions',len({i.nodeid.split('[')[0] for i in session.items})))\nwith contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):code=pytest.main(['--collect-only','-q','-p','no:cacheprovider','tests'],plugins=[p:=Count()])\nif code:raise SystemExit(int(code))\nprint(json.dumps({'tests':p.tests,'functions':p.functions,'executed':False}))"
     ],
     "cwd": "V:/Personal/Projects/personal-materials",
     "read_only": true,
@@ -822,24 +805,6 @@
     "output": "json",
     "timeout": 20,
     "observation_basis": "live_read"
-  },
-  "media-person-self-usage-display": {
-    "requires_usage_ledger": true,
-    "argv": [
-      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
-      "-B",
-      "-X",
-      "utf8",
-      "-c",
-      "import json\nfrom pathlib import Path\nfrom datetime import datetime,timedelta,timezone\nnow=datetime.now(timezone(timedelta(hours=8)));cutoff=now-timedelta(days=7)\nwith Path(r\"E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl\").open(encoding=\"utf-8-sig\") as f:\n n=sum(1 for e in map(json.loads,f) if e.get(\"kind\")==\"skill\" and e.get(\"name\")==\"media-person-self\" and cutoff<=datetime.fromisoformat(e[\"ts\"].replace(\"Z\",\"+00:00\"))<=now)\nprint(json.dumps({\"fact\":\"近 7 天没用过\" if n==0 else \"近 7 天 AI 用了 \"+str(n)+\" 次\",\"count_7d\":n},ensure_ascii=False))"
-    ],
-    "cwd": "E:/Data/PCConfig/AiUsageLedger",
-    "read_only": true,
-    "owner_project": "media-person-self",
-    "output": "json",
-    "timeout": 30,
-    "verification": "固定标准库代码只读账本，过滤kind=skill/name=media-person-self与当前前7天时间，只输出整数与零次数显示，不输出原始行/cwd，不导入生产者、不写文件，-B禁pyc。",
-    "observation_basis": "unknown"
   },
   "health-test-collection": {
     "argv": [
@@ -899,7 +864,7 @@
       "python3",
       "-B",
       "-c",
-      "import json,re,subprocess; from pathlib import Path; r=Path('/root/localocr-runtimes/current/acceptance');d=json.loads((r/'acceptance.json').read_text());t=(r/'unit.log').read_text();n=re.search(r'Ran (\\d+) tests',t);s=re.search(r'OK \\(skipped=(\\d+)\\)',t);assert d['ok'] is True and d['unit_exit_code']==0 and n and s\nm=Path('/root/.paddlex/official_models');b=int(subprocess.check_output(['du','-sb',str(m)],text=True).split()[0])\nprint(json.dumps({'model_count':sum(p.is_dir() for p in m.iterdir()),'model_gib':round(b/1024**3,1),'tests':int(n[1]),'skipped':int(s[1])}))\n"
+      "import json,re,subprocess; from pathlib import Path; r=Path('/root/localocr-runtimes/current/acceptance');d=json.loads((r/'acceptance.json').read_text());t=(r/'unit.log').read_text();n=re.search(r'Ran (\\d+) tests',t);s=re.search(r'OK \\(skipped=(\\d+)\\)',t);assert d['ok'] is True and d['unit_exit_code']==0 and n and s\nm=Path('/root/.paddlex/official_models');b=int(subprocess.check_output(['du','-sb',str(m)],text=True).split()[0])\nprint(json.dumps({'model_count':sum(p.is_dir() for p in m.iterdir()),'model_gib':round(b/1024**3,1),'tests':int(n[1]),'skipped':int(s[1]),'accepted_at':__import__('datetime').datetime.fromtimestamp(d['started_unix'],__import__('datetime').timezone.utc).isoformat()}))\n"
     ],
     "cwd": "E:/Projects/Tools/LocalOCR",
     "read_only": true,
@@ -1030,7 +995,7 @@
       "-X",
       "utf8",
       "-c",
-      "import ast,hashlib,json,re\nfrom pathlib import Path\nload=lambda p:json.loads(Path(p).read_text(encoding='utf-8-sig'))\nmachine=load('E:/PCConfig/registries/password_center_machine.json')\nconfig=load('E:/PCConfig/registries/password_center_program_maintenance.json')\nruntime=load('C:/ProgramData/PCConfig/AuthorityHost/registries/secret_broker.json')\napproved=config['approved_record']; assert approved['approved'] is True and approved['status']=='approved'\ntargets={x['role']:x for x in config['resolved_targets']['targets']}\ndef complete_count(role):\n root=Path(targets[role]['selected_vault_path'])/'sets'; assert root.is_dir()\n manifests=[load(x/'manifest.json') for x in root.iterdir() if x.is_dir()]\n assert all(m['schema']=='pcconfig.password-center-recovery-set.v1' and m['complete'] is True and m['plaintext_included'] is False for m in manifests)\n return len(manifests)\npackage=Path(targets['g']['release_store_root'])/approved['manifest_sha256']; assert package.is_dir()\nassert hashlib.sha256((package/'package-manifest.json').read_bytes()).hexdigest()==approved['manifest_sha256']\nchoices=re.findall(r\"(?m)^\\s*\\$choices=@\\((.*)$\",Path('C:/ProgramData/PCConfig/AuthorityHost/tools/SecretBroker.Ui.ps1').read_text(encoding='utf-8-sig'))\nassert choices\nfactors=[re.findall(r\"@\\('([^']+)'\",line) for line in choices]; assert all(x==factors[0] for x in factors)\ntree=ast.parse(Path('C:/ProgramData/PCConfig/AuthorityHost/tools/personal_access_duration.py').read_text(encoding='utf-8-sig'))\nlimits={n.targets[0].id:ast.literal_eval(n.value) for n in tree.body if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name) and n.targets[0].id in {'MIN_MINUTES','MAX_MINUTES'}}\nprint(json.dumps({'factor_count':len(factors[0]),'recovery_sites':int(bool(machine['broker']['runtime']['private_git_remote']))+sum(role in targets for role in ['g','h']),'target_count':len(runtime['secretref_targets']),'min_hours':limits['MIN_MINUTES']/60,'max_hours':limits['MAX_MINUTES']/60,'g_sets':complete_count('g'),'h_sets':complete_count('h'),'package_files':sum(p.is_file() for p in package.rglob('*'))},ensure_ascii=True))"
+      "import ast,hashlib,json,re\nfrom pathlib import Path\nload=lambda p:json.loads(Path(p).read_text(encoding='utf-8-sig'))\nmachine=load('E:/PCConfig/registries/password_center_machine.json')\nconfig=load('E:/PCConfig/registries/password_center_program_maintenance.json')\nruntime=load('C:/ProgramData/PCConfig/AuthorityHost/registries/secret_broker.json')\napproved=config['approved_record']; assert approved['approved'] is True and approved['status']=='approved'\ntargets={x['role']:x for x in config['resolved_targets']['targets']}\ndef complete_count(role):\n root=Path(targets[role]['selected_vault_path'])/'sets'; assert root.is_dir()\n manifests=[load(x/'manifest.json') for x in root.iterdir() if x.is_dir()]\n assert all(m['schema']=='pcconfig.password-center-recovery-set.v1' and m['complete'] is True and m['plaintext_included'] is False for m in manifests)\n return len(manifests)\npackage=Path(approved['package_root']) if approved.get('package_root') else Path(targets['g']['release_store_root'])/approved['manifest_sha256']; assert package.is_dir()\nassert hashlib.sha256((package/'package-manifest.json').read_bytes()).hexdigest()==approved['manifest_sha256']\nchoices=re.findall(r\"(?m)^\\s*\\$choices=@\\((.*)$\",Path('C:/ProgramData/PCConfig/AuthorityHost/tools/SecretBroker.Ui.ps1').read_text(encoding='utf-8-sig'))\nassert choices\nfactors=[re.findall(r\"@\\('([^']+)'\",line) for line in choices]; assert all(x==factors[0] for x in factors)\ntree=ast.parse(Path('C:/ProgramData/PCConfig/AuthorityHost/tools/personal_access_duration.py').read_text(encoding='utf-8-sig'))\nlimits={n.targets[0].id:ast.literal_eval(n.value) for n in tree.body if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name) and n.targets[0].id in {'MIN_MINUTES','MAX_MINUTES'}}\nprint(json.dumps({'factor_count':len(factors[0]),'recovery_sites':int(bool(machine['broker']['runtime']['private_git_remote']))+sum(role in targets for role in ['g','h']),'target_count':len(runtime['secretref_targets']),'min_hours':limits['MIN_MINUTES']/60,'max_hours':limits['MAX_MINUTES']/60,'g_sets':complete_count('g'),'h_sets':complete_count('h'),'package_files':sum(p.is_file() for p in package.rglob('*'))},ensure_ascii=True))"
     ],
     "cwd": "E:/PCConfig",
     "read_only": true,
@@ -1055,22 +1020,6 @@
     "timeout": 55,
     "source_evidence": "仅 gh repo list GET 与正式 Inspect 读规则；所有子进程禁提示/更新/模块缓存，缓存上游ref用rev-list只读不fetch；输出只为聚合数。",
     "observation_basis": "live_read"
-  },
-  "github-admission-fixed-window": {
-    "argv": [
-      "python",
-      "-B",
-      "-X",
-      "utf8",
-      "-c",
-      "import json\nfrom datetime import datetime,timezone,timedelta\nfrom pathlib import Path\nzone=timezone(timedelta(hours=8)); after=datetime(2026,9,16,tzinfo=zone); until=datetime(2026,10,9,tzinfo=zone); count=0\nwith Path('E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl').open(encoding='utf-8') as stream:\n for line in stream:\n  row=json.loads(line)\n  if row.get('kind')=='command' and row.get('name')=='Get-ProjectAdmission.ps1' and after<=datetime.fromisoformat(row['ts'])<until: count+=1\nprint(json.dumps({'count':count}))"
-    ],
-    "cwd": "E:/GitHub总索引",
-    "read_only": true,
-    "owner_project": "github-local-index",
-    "output": "json",
-    "timeout": 20,
-    "observation_basis": "unknown"
   },
   "b6-wechat-aggregate": {
     "argv": [
@@ -1255,41 +1204,6 @@
     "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。",
     "observation_basis": "live_read"
   },
-  "b6-profile-timeaudit-count": {
-    "argv": [
-      "python",
-      "-B",
-      "-X",
-      "utf8",
-      "-c",
-      "import json,subprocess\ncmd=['docker','exec','-e','PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=20000 -c lock_timeout=500','audit-postgres','psql','-X','-U','leyang','-d','time_audit','-At','-v','ON_ERROR_STOP=1','-c',\"SELECT json_build_object('hardware_samples',count(*)) FROM public.fact_system_hardware;\"]\nr=subprocess.run(cmd,capture_output=True,text=True,encoding='utf-8',timeout=30,creationflags=0x08000000,check=True)\nprint(json.dumps(json.loads(r.stdout)))\n"
-    ],
-    "cwd": "E:\\Projects\\Tools\\TimeAudit",
-    "read_only": true,
-    "owner_project": "timeaudit",
-    "output": "json",
-    "timeout": 35,
-    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。",
-    "observation_basis": "live_read"
-  },
-  "usage-skill-current-7d": {
-    "argv": [
-      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
-      "-I",
-      "-S",
-      "-B",
-      "-X",
-      "utf8",
-      "-c",
-      "import sys,json,datetime\nfrom pathlib import Path\nfrom concurrent.futures import ThreadPoolExecutor\nsys.path.insert(0,'E:/Projects/Backups/codex-memory/tools');import ai_usage_ledger as mod\nnow=datetime.datetime.now(mod.BJ)\ncutoff=now-datetime.timedelta(days=7)\nmidnight=now.replace(hour=0,minute=0,second=0,microsecond=0)\nledger=Path('E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl')\nstates=[json.loads(ledger.with_name('state-'+ai+'.json').read_text(encoding='utf-8')) for ai in ('codex','claude')]\nassert all(s.get('bootstrap_complete') is True and mod.timestamp(s.get('last_completed'))==midnight for s in states),'ledger_watermark_not_today_midnight'\nnames={'project-entry-gate','report-page'}\nselected={row['id']:row['name'] for row in (json.loads(line) for line in ledger.open(encoding='utf-8-sig'))\n          if row.get('kind')=='skill' and row.get('name') in names\n          and cutoff<=mod.timestamp(row['ts'])<now}\ndef scan_current(pair):\n    events,stats=mod.scan(pair[0],Path(pair[1]),midnight,now)\n    if stats.get('invalid_lines',0): raise RuntimeError('current_source_partial')\n    return [(e['id'],e['name']) for e in events if e['kind']=='skill' and e['name'] in names]\npairs=[('codex','E:/Data/AppData/Codex'),('claude','C:/Users/10979/.claude')]\nwith ThreadPoolExecutor(max_workers=2) as pool:\n    for part in pool.map(scan_current,pairs):\n        selected.update(part)\nprint(json.dumps({'project_entry_gate_count_7d':sum(v=='project-entry-gate' for v in selected.values()),'report_page_count_7d':sum(v=='report-page' for v in selected.values())}))"
-    ],
-    "cwd": "E:/Projects/Backups/codex-memory/tools",
-    "read_only": true,
-    "owner_project": "pcconfig",
-    "output": "json",
-    "timeout": 210,
-    "observation_basis": "live_read"
-  },
   "codex-memory-encrypted-snapshots": {
     "argv": [
       "python",
@@ -1299,7 +1213,7 @@
       "-X",
       "utf8",
       "-c",
-      "import json;from pathlib import Path\nG=json.loads(Path('G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json').read_text(encoding='utf-8-sig'));H=json.loads(Path('E:/Data/PCConfig/SecretBroker/h-cold-backup-receipt.json').read_text(encoding='utf-8-sig'));b=H['H_bitlocker'];assert G['status']=='complete' and 'includes_configuration' not in G and G['capture_semantics']=='vss_crash_consistent' and H['status']=='complete' and b['volume_status']=='FullyEncrypted' and b['protection_status']=='On' and b['encryption_percentage']==100,'encrypted_snapshot_unavailable'\nprint(json.dumps({'count':2,'G_snapshot_at':G.get('completed_at_utc',G.get('completed_utc')),'H_snapshot_at':H['completed_utc']}))"
+      "import json;from pathlib import Path\nG=json.loads(Path('G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json').read_text(encoding='utf-8-sig'));H=json.loads(Path('E:/Data/PCConfig/SecretBroker/h-cold-backup-receipt.json').read_text(encoding='utf-8-sig'));b=H['H_bitlocker'];assert G['status']=='complete' and 'includes_configuration' not in G and G['capture_semantics']=='vss_crash_consistent' and H['status']=='complete' and b['volume_status']=='FullyEncrypted' and b['protection_status']=='On' and b['encryption_percentage']==100,'encrypted_snapshot_unavailable'\nprint(json.dumps({'count':2,'G_snapshot_at':G.get('completed_at_utc',G.get('completed_utc')),'H_snapshot_at':H['completed_utc'],'snapshot_at':min(G.get('completed_at_utc',G.get('completed_utc')),H['completed_utc'])}))"
     ],
     "cwd": "E:/Projects/Backups/codex-memory/tools",
     "read_only": true,
@@ -1333,7 +1247,7 @@
       "-X",
       "utf8",
       "-c",
-      "import json,os,subprocess\nfrom pathlib import Path\nenv=dict(os.environ,PSModuleAnalysisCachePath='NUL',POWERSHELL_UPDATECHECK='Off')\ncmd=\"$ErrorActionPreference='Stop'; $names=@('Claude Memory Backup','Gemini Memory Backup','OpenClaw Memory Backup','Codex Memory Backup','CodexConversationBackup-Hot-Daily'); $o=@{LastTaskResult=@{}}; foreach($n in $names){$t=Get-ScheduledTask -TaskName $n -ErrorAction Stop; $i=Get-ScheduledTaskInfo -TaskName $n -ErrorAction Stop; $o[$n]=[string]$t.State; $o.LastTaskResult[$n]=[int64]$i.LastTaskResult}; $o|ConvertTo-Json -Compress\"\np=subprocess.run(['pwsh','-NoProfile','-NonInteractive','-Command',cmd],env=env,capture_output=True,text=True,encoding='utf-8',timeout=20,creationflags=subprocess.CREATE_NO_WINDOW,check=True)\ndata={'tasks':json.loads(p.stdout)}\nfor disk,base in [('g',Path('G:/80_Backup/ControlPlane/AIMemory')),('h',Path('H:/80_自动备份区/ControlPlane/AIMemory'))]:\n data[disk]={name:sum(p.is_dir() for p in (base/name).iterdir()) for name in ('Claude','Gemini','OpenClaw')}\n root=base/'CodexConversations'; mode='hot' if disk=='g' else 'cold'; pointer=json.loads((root/'current.json').read_text(encoding='utf-8-sig')); receipt=json.loads((root/f'receipts/{mode}-last.json').read_text(encoding='utf-8-sig'))\n assert receipt['schema']=='codex.conversation-backup.receipt.v1' and receipt['status']=='complete' and receipt['readback_verified'] is True and pointer['point_id']==receipt['point_id'] and (mode=='cold' or pointer['closure_sha256']==receipt['closure_sha256']) and not receipt.get('partial_coverage',False) and receipt.get('verification_scope','all_manifest_files')=='all_manifest_files' and not receipt['file_warnings'], 'current_receipt_scope_mismatch'\n data[disk]['receipt']={k:receipt[k] for k in ('file_count','total_size_bytes','reused_object_bytes','new_object_bytes') if k in receipt}\nprint(json.dumps(data))\n"
+      "import json,os,subprocess\nfrom pathlib import Path\nenv=dict(os.environ,PSModuleAnalysisCachePath='NUL',POWERSHELL_UPDATECHECK='Off')\ncmd=\"$ErrorActionPreference='Stop'; $names=@('Claude Memory Backup','Gemini Memory Backup','OpenClaw Memory Backup','Codex Memory Backup','CodexConversationBackup-Hot-Daily'); $o=@{LastTaskResult=@{}}; foreach($n in $names){$t=Get-ScheduledTask -TaskName $n -ErrorAction Stop; $i=Get-ScheduledTaskInfo -TaskName $n -ErrorAction Stop; $o[$n]=[string]$t.State; $o.LastTaskResult[$n]=[int64]$i.LastTaskResult}; $o|ConvertTo-Json -Compress\"\np=subprocess.run(['pwsh','-NoProfile','-NonInteractive','-Command',cmd],env=env,capture_output=True,text=True,encoding='utf-8',timeout=20,creationflags=subprocess.CREATE_NO_WINDOW,check=True)\ndata={'tasks':json.loads(p.stdout)}\nfor disk,base in [('g',Path('G:/80_Backup/ControlPlane/AIMemory')),('h',Path('H:/80_自动备份区/ControlPlane/AIMemory'))]:\n data[disk]={name:sum(p.is_dir() for p in (base/name).iterdir()) for name in ('Claude','Gemini','OpenClaw')}\n root=base/'CodexConversations'; mode='hot' if disk=='g' else 'cold'; pointer=json.loads((root/'current.json').read_text(encoding='utf-8-sig')); receipt=json.loads((root/f'receipts/{mode}-last.json').read_text(encoding='utf-8-sig'))\n assert receipt['schema']=='codex.conversation-backup.receipt.v1' and receipt['status']=='complete' and receipt['readback_verified'] is True and pointer['point_id']==receipt['point_id'] and (mode=='cold' or pointer['closure_sha256']==receipt['closure_sha256']) and not receipt.get('partial_coverage',False) and receipt.get('verification_scope','all_manifest_files')=='all_manifest_files' and not receipt['file_warnings'], 'current_receipt_scope_mismatch'\n data[disk]['receipt']={k:receipt[k] for k in ('file_count','total_size_bytes','reused_object_bytes','new_object_bytes','completed_utc','point_id') if k in receipt}\nprint(json.dumps(data))\n"
     ],
     "cwd": "E:/Projects/Backups/codex-memory",
     "read_only": true,
@@ -1515,7 +1429,7 @@
       "-X",
       "utf8",
       "-c",
-      "import json\nfrom pathlib import Path\nd=json.loads(Path('E:/Data/PCConfig/PersonalMedia/phone-closeout-status.json').read_text(encoding='utf-8-sig'))\nassert d['status'] in ('PASS','FAIL','SKIPPED')\nb=d['batches'];print(json.dumps({'batches':len(b),'passed':sum(v.get('status')=='PASS' for v in b),'waiting':sum(v.get('status')=='WAITING' for v in b),'status':d['status']}))"
+      "import json\nfrom pathlib import Path\nd=json.loads(Path('E:/Data/PCConfig/PersonalMedia/phone-closeout-status.json').read_text(encoding='utf-8-sig'))\nassert d['status']=='PASS','closeout_not_pass: 页面句子写的是整体通过，先改写再取数'\nb=d['batches'];print(json.dumps({'batches':len(b),'passed':sum(v.get('status')=='PASS' for v in b),'waiting':sum(v.get('status')=='WAITING' for v in b),'status':d['status'],'finished_at':d['finished_utc']}))"
     ],
     "cwd": "V:/Personal/Projects/personal-media",
     "read_only": true,
