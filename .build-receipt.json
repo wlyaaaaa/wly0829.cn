@@ -1,93 +1,62 @@
 {
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
-  "source_commit": "bd153793bacc9c078f611a4fc3264a89aa8a9938",
-  "prepared_at_beijing": "2026-10-23T10:52:06.479912+08:00",
-  "seconds": 329.046,
+  "source_commit": "23c4e3625413a040d909ca1e3c56d0c685823bf9",
+  "prepared_at_beijing": "2026-10-26T14:10:43.681902+08:00",
+  "seconds": 209.884,
   "steps": [
     {
       "name": "home_highlights",
-      "seconds": 0.348
+      "seconds": 0.256
     },
     {
       "name": "source",
-      "seconds": 28.167
+      "seconds": 21.788
     },
     {
       "name": "fingerprint",
-      "seconds": 1.725
+      "seconds": 1.181
     },
     {
       "name": "prepare",
-      "seconds": 20.685
+      "seconds": 21.961
     },
     {
       "name": "native_inputs",
-      "seconds": 6.355
+      "seconds": 5.941
     },
     {
       "name": "blocks",
-      "seconds": 96.31
+      "seconds": 14.251
     },
     {
       "name": "astro",
-      "seconds": 26.288
+      "seconds": 22.11
     },
     {
       "name": "assets",
-      "seconds": 6.425
+      "seconds": 4.706
     },
     {
       "name": "finish",
-      "seconds": 39.845
+      "seconds": 32.427
     },
     {
       "name": "finalize",
-      "seconds": 92.997
+      "seconds": 75.372
     },
     {
       "name": "public",
-      "seconds": 9.08
+      "seconds": 9.27
     },
     {
       "name": "inventory",
-      "seconds": 0.82
+      "seconds": 0.621
     }
   ],
   "rebuilt_pages": [
-    "/",
-    "/projects/",
-    "/projects/agents/",
-    "/projects/agents/context-evidence/",
-    "/projects/codex-memory/config-memory-whitelist-sync/",
-    "/projects/daily-preferences/",
-    "/projects/daily-preferences/current-corrections/",
-    "/projects/daily-preferences/personal-understanding/",
-    "/projects/devconfig-backup/",
-    "/projects/devconfig-backup/source-catalog/",
-    "/projects/devconfig-backup/tiered-distribution/",
-    "/projects/devconfig-backup/wechat-native-backup/",
-    "/projects/github-index/repository-ledger/",
-    "/projects/localocr/",
-    "/projects/localocr/document-structure/",
-    "/projects/localocr/jobs-cache/",
-    "/projects/localocr/results-evidence/",
+    "/projects/github-index/protected-major-actions/",
     "/projects/pcconfig/",
-    "/projects/pcconfig/authorization-files/",
-    "/projects/pcconfig/owner-takeover/",
-    "/projects/pcconfig/secrets-providers/",
-    "/projects/personal-finance/",
-    "/projects/personal-health/",
-    "/projects/personal-materials/",
-    "/projects/personal-materials/bounded-discovery/",
-    "/projects/personal-media/",
-    "/projects/remote-control/",
-    "/projects/sunshine-remote-streaming/",
-    "/projects/timeaudit/",
-    "/projects/timeaudit/backup-recovery/",
-    "/projects/timeaudit/clipboard-history/",
-    "/projects/video-scaffold/",
-    "/projects/wly0829-cn/",
     "/search/"
   ],
   "html_files": 321,
@@ -3194,8 +3163,8 @@
     },
     {
       "path": "_living/timeaudit/astro/shared-config.json",
-      "bytes": 18484,
-      "sha256": "903f98ce1dd71c6f1c912d34ea86f8044c0585a828c4360949d88ac0c493b132"
+      "bytes": 18497,
+      "sha256": "370daeb200fe6d598b84f7b17cf712bc4b8f5f4c0efb0b4399be7c0744325a6d"
     },
     {
       "path": "_living/timeaudit/bird-first-only.a07df7515cfd/config.json",
@@ -3249,8 +3218,8 @@
     },
     {
       "path": "_living/video-scaffold/astro/shared-config.json",
-      "bytes": 15949,
-      "sha256": "8558cb64574e67eb770aa59aa335378b5248ae523231980271a97a3457add870"
+      "bytes": 16029,
+      "sha256": "c26dddfd45f97c955adcb3d90d1d8c233c38425ab554bb6f5b2e73e60add0b24"
     },
     {
       "path": "_living/video-scaffold/bird-first-only.03f16afd8139/config.json",
@@ -3344,8 +3313,8 @@
     },
     {
       "path": "_living/wly0829-cn/astro/shared-config.json",
-      "bytes": 1831,
-      "sha256": "3965c3f0f4af4f3889f3fc3a2ae66e6a735f4b292af086e9a3f3eb76c056464c"
+      "bytes": 1371,
+      "sha256": "a7727e243734f0119e8596e3de3a32a9d4499be8b28b7f2b6c5a8385ba12a65e"
     },
     {
       "path": "_living/wly0829-cn/bird-source.1602469644a4/config.json",
@@ -24718,6 +24687,11 @@
       "sha256": "9f711ea52137bb49ddfa268b021c75f76164ab2b033e87941711a46a98a4b6ab"
     },
     {
+      "path": "assets/_fonts/pcconfig-5f000420f1c1.woff2",
+      "bytes": 241904,
+      "sha256": "315ef6955d8e20c1a196e00f65b7c4cb104b233012dc0fa53a2f379533a8d6f1"
+    },
+    {
       "path": "assets/_fonts/pcconfig-6ef91571cc98.woff2",
       "bytes": 239380,
       "sha256": "d932b61c858964268703182075b280d265d4cbda0be0882d23b7578e813cc8a1"
@@ -27824,8 +27798,8 @@
     },
     {
       "path": "projects/github-index/protected-major-actions/index.html",
-      "bytes": 227268,
-      "sha256": "1de18edb7aa5d6b475d4406a2a961b38073d598d649e28b5da0d5150cec733f3"
+      "bytes": 227216,
+      "sha256": "c360338b8565d3a618ab7a96234699999a82e498c098b65641a33e9fa7b4e1dc"
     },
     {
       "path": "projects/github-index/publication-gate/index.html",
@@ -28159,8 +28133,8 @@
     },
     {
       "path": "projects/pcconfig/index.html",
-      "bytes": 968881,
-      "sha256": "5c695f1d5b011e552b0c8b7d7efe0702b81b19d44a712db4cf58ec76e1daf254"
+      "bytes": 968871,
+      "sha256": "f4777169f65e8a36f35171941823f7081b2a543f9b231758a57cb30dbe543156"
     },
     {
       "path": "projects/pcconfig/machine-facts/index.html",
@@ -28885,12 +28859,12 @@
     {
       "path": "release-identity.json",
       "bytes": 244,
-      "sha256": "a7a3ec0eba73ff1a124fa0495943a994f6299c0517056b0504628338d5774cf2"
+      "sha256": "00424cc6bdb2b129fefceb98b5a24aa1b344b32d8b966004a5b5f6faeeeca1da"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 5401836,
-      "sha256": "297bc2c5ac5ec91e0dda877e92ea191c39fcbdb6d277b5a3c00affade3446b49"
+      "bytes": 5402566,
+      "sha256": "eb9e626c84a697d9468c5ecd82782810da842456553e718fa0accfb8c75adff4"
     },
     {
       "path": "rescue/index.html",
@@ -29055,7 +29029,7 @@
     {
       "path": "search/index.html",
       "bytes": 68789,
-      "sha256": "277fdff61677f65920b2ccae3af2590f1233c48413b3b2f5cee9f0f7ca3f6ef3"
+      "sha256": "4512fe18e71c1a890f1dd95dea8d5f855d6c78da98108078528787b0705447d8"
     },
     {
       "path": "search-index.js",
@@ -29069,8 +29043,8 @@
     },
     {
       "path": "search-projects.js",
-      "bytes": 3620996,
-      "sha256": "2e8de8c5a4541e31eaaaaf67d4c88027264427b4422466a3178b8610174277f6"
+      "bytes": 3621017,
+      "sha256": "f31ebfae51c51347d4a82cac3b18155ef46b1c9a70dbc5c161384c45b5d83c72"
     },
     {
       "path": "sitemap.xml",
@@ -29505,5 +29479,5 @@
   ],
   "output": "E:\\Cache\\wly-site-build\\wt\\dist",
   "previous_oss_source": "published",
-  "previous_release_id": "3f9b3526a83f1f4cc230b573f4377b0de5c2926de06a47ff43a8c3902f5e5977"
+  "previous_release_id": "a1051dc147a8c84c53f9f84320cb597d04740e00f0fa2261f6569cf8a783c7da"
 }
