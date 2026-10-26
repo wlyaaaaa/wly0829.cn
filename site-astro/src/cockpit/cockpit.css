@@ -427,6 +427,8 @@
 .cp-viewer-line.is-owner { background: #e9f6ee; color: var(--cp-title); font-weight: 700; }
 .cp-viewer-note { padding: 1px 10px; border-radius: 999px; border: 1px solid var(--cp-line); background: #fff; color: var(--cp-ink); }
 .cp-own { display: inline-block; margin-left: 8px; padding: 0 7px; border-radius: 999px; border: 1px solid #c9d6e2; background: #f3f7fb; color: var(--cp-neutral); font-size: 12px; font-weight: 700; line-height: 1.6; vertical-align: 1px; white-space: nowrap; }
+.cp-late { display: inline-block; margin-left: 8px; padding: 0 7px; border-radius: 999px; border: 1px solid #ecd59a; background: #fff8e6; color: #9a6a00; font-size: 12px; font-weight: 700; line-height: 1.6; vertical-align: 1px; white-space: nowrap; }
+.cp-you-chips .cp-late { margin-left: 0; font-size: 12.5px; line-height: 1.5; }
 .cp-own[data-pub] { cursor: pointer; outline: none; }
 .cp-own[data-pub]:focus { white-space: normal; }
 .cp-own[data-pub]:focus::after { content: " · " attr(data-pub); font-weight: 400; }
