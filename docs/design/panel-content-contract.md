@@ -374,6 +374,14 @@ document. Code paths are interpreted from the repository root.
 - Respect reduced-motion preferences and keep page content independently
   scrollable above the background.
 
+### 日常维护取舍
+
+本网站日常取舍先保证好用、按需更新速度和页面效果，再考虑节省费用；不因省费用把日常维护转交本人。新增付费仍须在已有授权范围内。
+
+### 页面首屏／看板式次序
+
+本网站每页首屏先放当前状态，再展开说明；首屏采用看板式的信息次序。
+
 ## Public-content gate
 
 - Never track credential values: passwords, private keys, access tokens,

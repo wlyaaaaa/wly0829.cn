@@ -24,7 +24,7 @@ It remains mandatory project rules; code paths are interpreted from the reposito
 
 ## Product boundary
 
-See [Product boundary](docs/design/panel-content-contract.md#product-boundary).
+See [Product boundary](docs/design/panel-content-contract.md#product-boundary). For layout, navigation, and cockpit interactions, read [Layout and interaction](docs/design/layout-and-interaction.md).
 
 ## Public-content gate
 
