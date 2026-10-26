@@ -10,21 +10,45 @@ const endpoints = (local ? boot.local : boot.endpoints) || [];
 let view = normalize(boot.snapshot);
 let offline = false, busy = null;
 let asked = 0, shown = 0;
+// 本人设备钥匙：只存在这台浏览器的 localStorage；读写不了就当公开版。notice 是页头的一句短提示（配对结果、授权失效）
+const KEY = 'wly-cockpit-device', TOKEN = /^[A-Za-z0-9_-]{43}$/;
+const PAIR_URL = 'https://mcp.wly0829.cn/computer-access/api/cockpit-device/pair';
+const store = { get() { try { const t = localStorage.getItem(KEY); return TOKEN.test(t || '') ? t : null; } catch { return null; } },
+  set(t) { try { localStorage.setItem(KEY, t); return true; } catch { return false; } }, drop() { try { localStorage.removeItem(KEY); } catch { /* 无存储 */ } } };
+let notice = '';
+const say = (text) => { notice = text; paint(); setTimeout(() => { if (notice === text) { notice = ''; paint(); } }, 15000); };
 // phase：还没收到过任何一次读取结果时是 snapshot（首帧那份构建时的数），之后是 live；读不到另由 offline 说明
-const ctx = () => ({ now: new Date(), offline, phase: shown ? 'live' : 'snapshot', projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen });
+const ctx = () => ({ now: new Date(), offline, notice, phase: shown ? 'live' : 'snapshot', projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen });
 
 async function read(wake) {
+  const token = store.get();
   for (const base of endpoints) {
     const url = new URL(base, location.href);
     if (wake) url.searchParams.set('refresh', '1');
     try {
-      const r = await fetch(url, { cache: 'no-store', credentials: 'omit', signal: AbortSignal.timeout(12000) });
+      const r = await fetch(url, { cache: 'no-store', credentials: 'omit', headers: token ? { 'X-Cockpit-Device': token } : {}, signal: AbortSignal.timeout(12000) });
       if (!r.ok) continue;
       const v = normalize(await r.json());
-      if (v.ok) return v;
+      if (!v.ok) continue;
+      // 钥匙不认识或已撤销：删掉本地钥匙；登记表暂时读不了（unavailable）不删
+      if (token && v.viewer?.device_state === 'invalid') { store.drop(); say('这台设备的授权已失效'); }
+      return v;
     } catch { /* 换下一个地址 */ }
   }
   return null;
+}
+
+// 配对：AI 在这台设备上打开 /cockpit/#pair=<一次性配对码>；先去掉地址里的码，再换成长期钥匙
+async function pair() {
+  if (!location.hash.startsWith('#pair=')) return;
+  const m = /^#pair=([A-Za-z0-9_-]{43})$/.exec(location.hash);
+  history.replaceState(null, '', location.pathname + location.search);
+  if (m) try {
+    const r = await fetch(PAIR_URL, { method: 'POST', credentials: 'omit', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: m[1] }), signal: AbortSignal.timeout(12000) });
+    const j = r.ok ? await r.json() : null;
+    if (j?.status === 'pass' && TOKEN.test(j.token || '') && store.set(j.token)) return say('这台设备已设为本人设备，私人事项会直接显示');
+  } catch { /* 按失败提示 */ }
+  say('配对链接无效或已过期，请让 AI 重新发一个');
 }
 
 function paint() {
@@ -133,6 +157,6 @@ document.addEventListener('click', async (e) => {
 const feedRiver = () => { if (view.automation.items.length) window.todayRiver?.setSnapshot(riverSnapshot(view), true); };
 if (window.todayRiver?.ready) feedRiver(); else document.addEventListener('today-river-ready', feedRiver, { once: true });
 
-load();
+pair().finally(() => load());
 setInterval(() => { if (!document.hidden && !busy) load(); }, 60000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden && !busy) load(); });

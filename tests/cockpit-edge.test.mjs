@@ -19,7 +19,7 @@ test('cockpit edge recompresses decoded JSON and respects gzip negotiation', asy
       assert.equal(response.headers.get('Content-Encoding'), zipped ? 'gzip' : null);
       assert.equal((zipped ? gunzipSync(bytes) : bytes).toString(), payload);
       if (zipped) assert.ok(bytes.length < Buffer.byteLength(payload) / 2);
-      assert.equal(response.headers.get('Vary'), 'Origin, Accept-Encoding');
+      assert.equal(response.headers.get('Vary'), 'Origin, Accept-Encoding, X-Cockpit-Device');
       assert.equal(response.headers.get('Access-Control-Allow-Origin'), 'https://wly0829.cn');
       assert.match(response.headers.get('Cache-Control'), /no-store/);
       assert.equal(forwarded, 'https://mcp.wly0829.cn/computer-access/api/status?view=cockpit&refresh=1');
@@ -50,5 +50,27 @@ test('cockpit edge recompresses decoded JSON and respects gzip negotiation', asy
       const bufferChunks = await onRequest({ request: new Request('https://live.wly0829.cn/computer-access/state', { headers: { 'Accept-Encoding': 'gzip' } }) });
       assert.equal(gunzipSync(Buffer.from(await bufferChunks.arrayBuffer())).toString(), payload);
     } finally { globalThis.CompressionStream = originalCompression; }
+  } finally { globalThis.fetch = original; }
+});
+
+test('cockpit edge forwards only a well-formed device key and allows it in preflight', async () => {
+  const original = globalThis.fetch, seen = [], key = 'A'.repeat(21) + '-_' + 'b9'.repeat(10);
+  globalThis.fetch = async (url, init) => { seen.push(new Headers(init.headers).get('X-Cockpit-Device')); return new Response('{"schema":"pcconfig.cockpit-view.v1"}', { headers: { 'Content-Type': 'application/json' } }); };
+  try {
+    const pre = await onRequest({ request: new Request('https://live.wly0829.cn/computer-access/state?view=cockpit', { method: 'OPTIONS', headers: { Origin: 'https://wly0829.cn', 'Access-Control-Request-Headers': 'x-cockpit-device' } }) });
+    assert.equal(pre.status, 204);
+    assert.match(pre.headers.get('Access-Control-Allow-Headers'), /X-Cockpit-Device/);
+    assert.equal(seen.length, 0);
+    for (const value of [key, key + 'x', 'short', key.slice(0, 42) + '=', '']) {
+      const headers = { Origin: 'https://wly0829.cn' };
+      if (value) headers['X-Cockpit-Device'] = value;
+      const response = await onRequest({ request: new Request('https://live.wly0829.cn/computer-access/state?view=cockpit', { headers }) });
+      assert.equal(response.status, 200);
+      assert.match(response.headers.get('Cache-Control'), /no-store/);
+      assert.match(response.headers.get('Vary'), /X-Cockpit-Device/);
+      // 钥匙不回显在任何响应头里
+      assert.ok(![...response.headers.values()].some((h) => value && h.includes(value)));
+    }
+    assert.deepEqual(seen, [key, null, null, null, null]);
   } finally { globalThis.fetch = original; }
 });

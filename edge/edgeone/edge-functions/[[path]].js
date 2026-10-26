@@ -2,7 +2,7 @@ const statusPath = '/computer-access/state';
 const origins = new Set(['https://wly0829.cn', 'https://www.wly0829.cn']);
 export default async function onRequest({ request }) {
   const url = new URL(request.url), origin = request.headers.get('Origin');
-  const headers = new Headers({ 'Cache-Control': 'no-store, max-age=0', Pragma: 'no-cache', Expires: '0', Vary: 'Origin, Accept-Encoding', 'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS' });
+  const headers = new Headers({ 'Cache-Control': 'no-store, max-age=0', Pragma: 'no-cache', Expires: '0', Vary: 'Origin, Accept-Encoding, X-Cockpit-Device', 'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS', 'Access-Control-Allow-Headers': 'X-Cockpit-Device' });
   if (origins.has(origin)) {
     headers.set('Access-Control-Allow-Origin', origin);
     headers.set('Access-Control-Allow-Credentials', 'true');
@@ -16,8 +16,11 @@ export default async function onRequest({ request }) {
     const query = new URLSearchParams();
     if (url.searchParams.get('view') === 'cockpit') query.set('view', 'cockpit');
     if (url.searchParams.get('refresh') === '1') query.set('refresh', '1');
+    // 本人设备钥匙：只认固定格式，原样交给上游判断本人版/公开版；这里不记录、不回显
+    const upstreamHeaders = { Accept: 'application/json', 'Cache-Control': 'no-cache' }, device = request.headers.get('X-Cockpit-Device');
+    if (device && /^[A-Za-z0-9_-]{43}$/.test(device)) upstreamHeaders['X-Cockpit-Device'] = device;
     const upstream = await fetch('https://mcp.wly0829.cn/computer-access/api/status' + (String(query) ? '?' + query : ''), {
-      headers: { Accept: 'application/json', 'Cache-Control': 'no-cache' }, signal: controller.signal
+      headers: upstreamHeaders, signal: controller.signal
     });
     let body = await upstream.text();
     headers.set('Content-Type', upstream.headers.get('Content-Type') || 'application/json');
