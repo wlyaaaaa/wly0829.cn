@@ -103,6 +103,9 @@ export function normalize(raw) {
     must_know: (() => { const m = v.must_know; if (!m || typeof m !== 'object') return null; return { state: ['ok', 'empty', 'unavailable'].includes(m.state) ? m.state : 'unavailable', text: typeof m.text === 'string' ? m.text : '', observed_at: m.observed_at || null, items: list(m.items), archived: list(m.archived_items) }; })(),
     // 网站上次成功发布的回执（website_release）：{state: success|unavailable, published_at, version, verified, text}；只证明上次成功那次
     website_release: v.website_release && typeof v.website_release === 'object' ? v.website_release : null,
+    // 本人版 / 公开版：viewer 说这次拿到的是哪一版；private_count 是只在本人设备上显示的事项数。行上的 owner_only、placeholder、owner_detail 随行原样带着
+    viewer: (() => { const w = v.viewer; if (!w || typeof w !== 'object') return null; return { kind: w.kind === 'owner' ? 'owner' : 'public', device_state: ['ok', 'none', 'invalid', 'unavailable'].includes(w.device_state) ? w.device_state : 'none', device_name: typeof w.device_name === 'string' ? w.device_name : null }; })(),
+    private_count: Number.isInteger(v.private_count) && v.private_count >= 0 ? v.private_count : null,
   };
 }
 

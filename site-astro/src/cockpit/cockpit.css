@@ -419,3 +419,27 @@
   .cp-sec-line > .cp-dot { flex: none; }
   .cp-sec-line b { color: var(--cp-title); margin-left: 6px; }
 }
+
+/* 本人版 / 公开版：页头一行小字；“仅你可见”标签；“具体：…”单行省略，悬停看全、点一下（获得焦点）展开；公开版私人占位行灰着 */
+.cp-viewer { margin: 6px 0 0; display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 13px; line-height: 1.5; color: var(--cp-soft); }
+.cp-viewer:empty { display: none; }
+.cp-viewer-line { padding: 1px 10px; border-radius: 999px; background: #f1f3f2; }
+.cp-viewer-line.is-owner { background: #e9f6ee; color: var(--cp-title); font-weight: 700; }
+.cp-viewer-note { padding: 1px 10px; border-radius: 999px; border: 1px solid var(--cp-line); background: #fff; color: var(--cp-ink); }
+.cp-own { display: inline-block; margin-left: 8px; padding: 0 7px; border-radius: 999px; border: 1px solid #c9d6e2; background: #f3f7fb; color: var(--cp-neutral); font-size: 12px; font-weight: 700; line-height: 1.6; vertical-align: 1px; white-space: nowrap; }
+.cp-own[data-pub] { cursor: pointer; outline: none; }
+.cp-own[data-pub]:focus { white-space: normal; }
+.cp-own[data-pub]:focus::after { content: " · " attr(data-pub); font-weight: 400; }
+.cp-detail { display: block; min-width: 0; margin: 2px 0 0; font-size: 13px; line-height: 1.5; color: var(--cp-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; outline: none; }
+.cp-detail:focus, .cp-detail:focus-visible { white-space: normal; overflow-wrap: anywhere; color: var(--cp-ink); }
+.cp-ask-title + .cp-detail { margin-top: 4px; font-size: 14px; }
+.cp-gov-acts .cp-detail { flex-basis: 100%; }
+.cp-wait li .cp-detail { grid-column: 1; }
+.cp-wait li .cp-detail + small { grid-column: 2; grid-row: 1 / span 2; }
+.cp-know-text .cp-detail { font-size: 12.5px; }
+:is(.cp-ailist, .cp-list, .cp-gov-acts) .is-private > span:first-child, .cp-know-list .is-private .cp-know-text, .cp-ask.is-private .cp-ask-title, .cp-you-list .is-private .cp-you-title { color: var(--cp-gray); font-weight: 400; }
+.cp-ask.is-private { border-color: #e3e7e5; border-left-color: #cfd6d2; background: #f8f9f8; box-shadow: none; }
+.cp-ask.is-private .cp-actions { margin-top: 8px; }
+@media (max-width: 767.98px) {
+  .cp-wait li .cp-detail + small { grid-column: auto; grid-row: auto; }
+}

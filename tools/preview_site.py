@@ -4,11 +4,13 @@ from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from io import BytesIO
 from pathlib import Path
+import re
 from runpy import run_path
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1] / 'dist'
 PREFIX = run_path(str(ROOT.parent / 'scripts/same-origin-runtime.py'))['PREFIX']
+DEVICE = re.compile(r'[A-Za-z0-9_-]{43}')
 TEXT = {'.html', '.css', '.js', '.mjs', '.json', '.svg', '.webmanifest'}
 
 
@@ -32,8 +34,11 @@ class Preview(SimpleHTTPRequestHandler):
         if self.path.split('?')[0] != '/__status': return super().do_GET()
         try:
             query = '?' + self.path.split('?', 1)[1] if '?' in self.path else ''
-            request = Request('https://live.wly0829.cn/computer-access/state' + query,
-                              headers={'Origin': 'https://wly0829.cn', 'Referer': 'https://wly0829.cn/', 'User-Agent': 'wly-local-preview'})
+            headers = {'Origin': 'https://wly0829.cn', 'Referer': 'https://wly0829.cn/', 'User-Agent': 'wly-local-preview'}
+            # 本人设备钥匙只按固定格式原样转发，不记录
+            device = self.headers.get('X-Cockpit-Device') or ''
+            if DEVICE.fullmatch(device): headers['X-Cockpit-Device'] = device
+            request = Request('https://live.wly0829.cn/computer-access/state' + query, headers=headers)
             with urlopen(request, timeout=15) as response: body = response.read()
             self.send_response(200); self.send_header('Content-Type', 'application/json; charset=utf-8')
             self.send_header('Cache-Control', 'no-store'); self.send_header('Content-Length', str(len(body)))
