@@ -16,6 +16,7 @@ const https = (s) => { try { const u = new URL(s); return u.protocol === 'https:
 // 公开版的私人行只剩占位标题，灰着、不出详情和按钮；本人版的私人行挂“仅你可见”，有“具体”就在标题下多一行（单行省略，悬停或点一下看全）
 export const PRIVATE_TITLE = '私人事项（只在本人设备上显示）';
 const isPh = (x) => x?.placeholder === true;
+const PH_HINT = '私人事项，详情只在本人设备上显示';
 // 占位行的标题可能是 AI 另写的一句公开说法，照行里的 title 显示；本人版行带 public_title 时，标签悬停或点一下显示“公网显示为：…”
 const ownTag = (x) => {
   if (x?.owner_only !== true || isPh(x)) return '';
@@ -28,7 +29,7 @@ const detail = (x) => {
 };
 // 列表里的一行：标题 + 标签 + 具体 + 原来的小字；占位行只出标题
 const rowText = (x, title, small = '') => (isPh(x)
-  ? `<span>${esc(x.title || PRIVATE_TITLE)}</span>`
+  ? `<span title="${PH_HINT}">${esc(x.title || PRIVATE_TITLE)}</span>`
   : `<span>${esc(title)}${ownTag(x)}</span>${detail(x)}${small ? `<small>${small}</small>` : ''}`);
 const phCls = (x) => (isPh(x) ? ' is-private' : '');
 export function viewerLine(v, ctx = {}) {
@@ -215,7 +216,7 @@ export const PICK_FIRST = '先在上面选一项，才能复制答复';
 export const COPY_HINT = '按钮只复制一句话，贴到任意 AI 对话发送即可';
 function askCard(x, r, ctx) {
   const id = x.copy_ai_id || x.id;
-  if (isPh(x)) return `<article class="cp-ask is-private" id="${esc(todoId(x))}"><h3 class="cp-ask-title">${dot('unavailable')}<span>${esc(x.title || PRIVATE_TITLE)}</span></h3>`
+  if (isPh(x)) return `<article class="cp-ask is-private" id="${esc(todoId(x))}"><h3 class="cp-ask-title" title="${PH_HINT}">${dot('unavailable')}<span>${esc(x.title || PRIVATE_TITLE)}</span></h3>`
     + `<div class="cp-actions">${copyBtn(id, '复制条目编号给 AI')}</div></article>`;
   const ref = `（驾驶舱条目 ${id}）`, name = `「${r.head}」`;
   const qs = questionsOf(x, r);

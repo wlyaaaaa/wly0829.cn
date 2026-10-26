@@ -48,10 +48,10 @@ test('公开版：占位行灰显只剩标题和编号按钮，页头标注件�
   const card = /<article class="cp-ask is-private" id="todo-n1">.*?<\/article>/.exec(need)?.[0] || '';
   assert.ok(card.includes(PRIVATE_TITLE) && card.includes('data-copy-ai="n1"'));
   assert.doesNotMatch(card, /data-copy-answer|data-copy-text|cp-quiz|cp-chip|去办/);
-  assert.ok(need.includes(`<li class="is-wait is-private"><span>${PRIVATE_TITLE}</span></li>`));
-  assert.ok(need.includes(`<li class="is-private"><span>${PRIVATE_TITLE}</span></li>`));
+  assert.ok(need.includes(`<li class="is-wait is-private"><span title="私人事项，详情只在本人设备上显示">${PRIVATE_TITLE}</span></li>`));
+  assert.ok(need.includes(`<li class="is-private"><span title="私人事项，详情只在本人设备上显示">${PRIVATE_TITLE}</span></li>`));
   // 占位行的公开说法不一定是默认占位字，照行里的 title 显示
-  assert.ok(need.includes('<li class="is-private"><span>周一上午打一个电话</span></li>'));
+  assert.ok(need.includes('<li class="is-private"><span title="私人事项，详情只在本人设备上显示">周一上午打一个电话</span></li>'));
   assert.doesNotMatch(need, /仅你可见|cp-detail|不该出现|还没核对过|等你方便时/);
   // 你得知道的占位行照样占一条，计数不变
   const ov = REGIONS.overview(v, { ...ctx, ov: { stale: () => false, lamp: () => '' } });
