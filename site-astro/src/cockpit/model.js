@@ -67,6 +67,7 @@ export function normalize(raw) {
     collectors: obj(v.collectors),
     verdict: { severity: obj(v.verdict).severity || 'gray', state: st(obj(v.verdict).state), observed_at: obj(v.verdict).observed_at || null },
     counts: { need_you: 0, ai_following: 0, deferred: 0, history: 0, tasks_failed_today: 0, backup_problems: 0, ...obj(v.counts) },
+    // need_you 行原样透传，过了原定时间时带 overdue_since、overdue_days、overdue_text（标题旁小标签用 overdue_text）
     need_you: list(v.need_you), ai_following: list(v.ai_following), deferred: list(v.deferred),
     scheduled: list(v.scheduled), access_summary: obj(v.access_summary), summary: { ...obj(v.summary), text: obj(v.summary).text || obj(v.verdict).text || '' },
     ai_overdue: Array.isArray(v.ai_overdue) ? list(v.ai_overdue) : null,

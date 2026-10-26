@@ -27,6 +27,11 @@ const detail = (x) => {
   const d = !isPh(x) && typeof x?.owner_detail === 'string' ? x.owner_detail.trim().slice(0, 200) : '';
   return d ? `<span class="cp-detail" tabindex="0" title="${esc(d)}">具体：${esc(d)}</span>` : '';
 };
+// 本人的事过了原定时间（后端 need_you 行的 overdue_text：“今天已过原定时间”“过了原定时间 N 天”）：标题旁一个琥珀色小标签；公开版占位行也显示，它只是天数
+const lateTag = (x) => {
+  const t = typeof x?.overdue_text === 'string' ? x.overdue_text.trim().slice(0, 40) : '';
+  return t ? `<span class="cp-late">${esc(t)}</span>` : '';
+};
 // 列表里的一行：标题 + 标签 + 具体 + 原来的小字；占位行只出标题
 const rowText = (x, title, small = '') => (isPh(x)
   ? `<span title="${PH_HINT}">${esc(x.title || PRIVATE_TITLE)}</span>`
@@ -216,7 +221,7 @@ export const PICK_FIRST = '先在上面选一项，才能复制答复';
 export const COPY_HINT = '按钮只复制一句话，贴到任意 AI 对话发送即可';
 function askCard(x, r, ctx) {
   const id = x.copy_ai_id || x.id;
-  if (isPh(x)) return `<article class="cp-ask is-private" id="${esc(todoId(x))}"><h3 class="cp-ask-title" title="${PH_HINT}">${dot('unavailable')}<span>${esc(x.title || PRIVATE_TITLE)}</span></h3>`
+  if (isPh(x)) return `<article class="cp-ask is-private" id="${esc(todoId(x))}"><h3 class="cp-ask-title" title="${PH_HINT}">${dot('unavailable')}<span>${esc(x.title || PRIVATE_TITLE)}${lateTag(x)}</span></h3>`
     + `<div class="cp-actions">${copyBtn(id, '复制条目编号给 AI')}</div></article>`;
   const ref = `（驾驶舱条目 ${id}）`, name = `「${r.head}」`;
   const qs = questionsOf(x, r);
@@ -237,7 +242,7 @@ function askCard(x, r, ctx) {
     ? `<button type="button" class="cp-btn cp-btn-main" data-copy-answer data-ref="${esc(ref)}" data-name="${esc(name)}" aria-describedby="${esc(todoId(x))}-hint" data-disabled-reason="${PICK_FIRST}" disabled>复制我的答复</button>`
     : ACTION_KINDS.includes(x.ask_kind) ? copyText(`${ref}${name}我已经做完了，请核实后关掉这条`, '我做完了', ' cp-btn-main') : '';
   return `<article class="cp-ask${r.red ? ' is-urgent' : ''}" id="${esc(todoId(x))}">`
-    + `<h3 class="cp-ask-title">${dot(r.scheduled ? 'neutral' : r.red ? 'red' : 'attention')}<span>${esc(r.head)}${ownTag(x)}</span></h3>` + detail(x)
+    + `<h3 class="cp-ask-title">${dot(r.scheduled ? 'neutral' : r.red ? 'red' : 'attention')}<span>${esc(r.head)}${ownTag(x)}${lateTag(x)}</span></h3>` + detail(x)
     + (typeof x.report_title === 'string' && x.report_title && x.report_title !== r.head ? `<p class="cp-report-title">汇报页：${esc(x.report_title)}</p>` : '')
     + (doList ? `<div class="cp-ask-do"><p class="cp-ask-k">要做什么</p>${doList}</div>` : '') + quiz
     + (info.length ? `<p class="cp-ask-info">${info.join('<i aria-hidden="true"> · </i>')}</p>` : '')
@@ -710,7 +715,7 @@ const overview = (v, ctx) => {
   const kinds = items.map((i) => i.x.ask_kind);
   const verb = kinds.length && kinds.every((k) => DECIDE.includes(k)) ? '要你拍板' : kinds.length && kinds.every((k) => ACTION_KINDS.includes(k)) ? '要你动手' : '要你处理';
   const tag = !n ? '' : urgent ? `<span class="cp-you-tag is-urgent">${urgent === n ? (n === 1 ? '急' : '都急') : `${urgent} 件急`}</span>` : '<span class="cp-you-tag">都不急</span>';
-  const list = items.slice(0, 3).map(({ x, r }) => `<li${isPh(x) ? ' class="is-private"' : ''}><a href="#${esc(todoId(x))}">${dot(isPh(x) ? 'unavailable' : r.red ? 'red' : 'attention')}<span class="cp-you-title">${esc(r.head)}${ownTag(x)}</span><span class="cp-you-chips">${chips(r)}</span></a></li>`).join('');
+  const list = items.slice(0, 3).map(({ x, r }) => `<li${isPh(x) ? ' class="is-private"' : ''}><a href="#${esc(todoId(x))}">${dot(isPh(x) ? 'unavailable' : r.red ? 'red' : 'attention')}<span class="cp-you-title">${esc(r.head)}${ownTag(x)}</span><span class="cp-you-chips">${lateTag(x)}${chips(r)}</span></a></li>`).join('');
   const summary = !off && read && typeof v.summary.text === 'string' ? v.summary.text : '';
   // 后端一句话的第一段是“要你做 N 件（……）”时才拿来当标题，否则仍用自己数的件数；急不急的标签照样挂
   const parts = summary.split(/\s*·\s*/), lead = n && /^要你做/.test(parts[0]) ? parts[0] : '';
