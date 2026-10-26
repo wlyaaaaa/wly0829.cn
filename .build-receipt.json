@@ -1,62 +1,61 @@
 {
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
-  "source_commit": "23c4e3625413a040d909ca1e3c56d0c685823bf9",
-  "prepared_at_beijing": "2026-10-26T14:10:43.681902+08:00",
-  "seconds": 209.884,
+  "source_commit": "3757db5a3dc6e222f427489684f98c5ac2c5aa67",
+  "prepared_at_beijing": "2026-10-26T15:52:47.564580+08:00",
+  "seconds": 199.749,
   "steps": [
     {
       "name": "home_highlights",
-      "seconds": 0.256
+      "seconds": 0.206
     },
     {
       "name": "source",
-      "seconds": 21.788
+      "seconds": 19.182
     },
     {
       "name": "fingerprint",
-      "seconds": 1.181
+      "seconds": 1.113
     },
     {
       "name": "prepare",
-      "seconds": 21.961
+      "seconds": 20.903
     },
     {
       "name": "native_inputs",
-      "seconds": 5.941
+      "seconds": 5.872
     },
     {
       "name": "blocks",
-      "seconds": 14.251
+      "seconds": 10.658
     },
     {
       "name": "astro",
-      "seconds": 22.11
+      "seconds": 27.864
     },
     {
       "name": "assets",
-      "seconds": 4.706
+      "seconds": 4.738
     },
     {
       "name": "finish",
-      "seconds": 32.427
+      "seconds": 32.373
     },
     {
       "name": "finalize",
-      "seconds": 75.372
+      "seconds": 68.433
     },
     {
       "name": "public",
-      "seconds": 9.27
+      "seconds": 7.782
     },
     {
       "name": "inventory",
-      "seconds": 0.621
+      "seconds": 0.627
     }
   ],
   "rebuilt_pages": [
     "/projects/github-index/protected-major-actions/",
-    "/projects/pcconfig/",
     "/search/"
   ],
   "html_files": 321,
@@ -1743,8 +1742,8 @@
     },
     {
       "path": "_living/pcconfig/astro/shared-config.json",
-      "bytes": 25590,
-      "sha256": "2a4733c4b6135c569c769748aedad5157539bec6f979ac6659c2fd6574ded16a"
+      "bytes": 25589,
+      "sha256": "42bd9d68a61703360606f8651fbaa8a77318b4f25f339a8f3ddbd4a18ed36d56"
     },
     {
       "path": "_living/pcconfig/bird-first-only.24313bded135/config.json",
@@ -24242,6 +24241,11 @@
       "sha256": "c3aa033865003eb6c3c3186266c60e24e4ac0809f7d7b2c314d60c133bb28fb4"
     },
     {
+      "path": "assets/_fonts/github-index-protected-major-actions-b98192bc0b82.woff2",
+      "bytes": 188492,
+      "sha256": "ec1c0ade7c5f59bfc43f607673d9f7958e9ddbdf9af08446b702ba41d4454e1e"
+    },
+    {
       "path": "assets/_fonts/github-index-publication-gate-3371c07c3390.woff2",
       "bytes": 172680,
       "sha256": "2ba5464ddb8948a8082b7c4e58509739b7120f63b7d2ab5350cae8c465d3d619"
@@ -27798,8 +27802,8 @@
     },
     {
       "path": "projects/github-index/protected-major-actions/index.html",
-      "bytes": 227216,
-      "sha256": "c360338b8565d3a618ab7a96234699999a82e498c098b65641a33e9fa7b4e1dc"
+      "bytes": 227368,
+      "sha256": "1c134234854be98dfb1e7f34696295ccbb1fab21d97dad4baf5e92959c727ae1"
     },
     {
       "path": "projects/github-index/publication-gate/index.html",
@@ -28859,12 +28863,12 @@
     {
       "path": "release-identity.json",
       "bytes": 244,
-      "sha256": "00424cc6bdb2b129fefceb98b5a24aa1b344b32d8b966004a5b5f6faeeeca1da"
+      "sha256": "591ba3081b0470930ec6e18f8a4d241420bfa9217ba078ea4204c94096397ce6"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 5402566,
-      "sha256": "eb9e626c84a697d9468c5ecd82782810da842456553e718fa0accfb8c75adff4"
+      "bytes": 5403381,
+      "sha256": "0bb4bf1c803c298718bc940a7b7bed09c3af3244e26182eae81a3f12d2e31313"
     },
     {
       "path": "rescue/index.html",
@@ -29029,7 +29033,7 @@
     {
       "path": "search/index.html",
       "bytes": 68789,
-      "sha256": "4512fe18e71c1a890f1dd95dea8d5f855d6c78da98108078528787b0705447d8"
+      "sha256": "388946c449e8f4a8d08b00310958e9e1be52ad785523d441ea4bcba23fa8afb5"
     },
     {
       "path": "search-index.js",
@@ -29043,8 +29047,8 @@
     },
     {
       "path": "search-projects.js",
-      "bytes": 3621017,
-      "sha256": "f31ebfae51c51347d4a82cac3b18155ef46b1c9a70dbc5c161384c45b5d83c72"
+      "bytes": 3621093,
+      "sha256": "5405213a889acb81616178d41877421c1e570e05e620b3ca852ef83919fef0cb"
     },
     {
       "path": "sitemap.xml",
@@ -29479,5 +29483,5 @@
   ],
   "output": "E:\\Cache\\wly-site-build\\wt\\dist",
   "previous_oss_source": "published",
-  "previous_release_id": "a1051dc147a8c84c53f9f84320cb597d04740e00f0fa2261f6569cf8a783c7da"
+  "previous_release_id": "0663c72cd39afcbe5cd942c40fe84480b3ce8d6d3f95238b604d324f0c261bdc"
 }

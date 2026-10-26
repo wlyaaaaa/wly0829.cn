@@ -390,8 +390,8 @@
       "sha256": "00ef7e6a0cdf9a41f25f5c432ceeb3cd145fbc2e695ef1faca9c0cfe36fec1de"
     },
     "projects/github-index/protected-major-actions/index.html": {
-      "bytes": 227216,
-      "sha256": "c360338b8565d3a618ab7a96234699999a82e498c098b65641a33e9fa7b4e1dc"
+      "bytes": 227368,
+      "sha256": "1c134234854be98dfb1e7f34696295ccbb1fab21d97dad4baf5e92959c727ae1"
     },
     "projects/github-index/publication-gate/index.html": {
       "bytes": 177432,
@@ -1135,7 +1135,7 @@
     },
     "search/index.html": {
       "bytes": 68789,
-      "sha256": "4512fe18e71c1a890f1dd95dea8d5f855d6c78da98108078528787b0705447d8"
+      "sha256": "388946c449e8f4a8d08b00310958e9e1be52ad785523d441ea4bcba23fa8afb5"
     },
     "sitemap.xml": {
       "bytes": 23425,
@@ -1637,12 +1637,12 @@
       "status": "warning"
     },
     "search-projects.js": {
-      "gzip_bytes": 1073078,
+      "gzip_bytes": 1073087,
       "review_bytes": 1097625.6,
       "status": "within_threshold"
     }
   },
-  "release_id": "0663c72cd39afcbe5cd942c40fe84480b3ce8d6d3f95238b604d324f0c261bdc",
+  "release_id": "375c719a65ba0b687ad391f2751d457eddd835fe23c617fc2463f484b5f97de7",
   "baseline_production_commit": "2872547b5925b782419ec7bf5cb0f162c1b53c3e",
   "rules_pin": {
     "schema": "wly.astro-rules-pin.v1",
@@ -3842,34 +3842,34 @@
     "/cockpit/storage/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/": {
+    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
       "producer": "astro"
     },
     "/cockpit/stutter/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
-      "producer": "astro"
-    },
-    "/404.html": {
-      "producer": "astro"
-    },
     "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
       "producer": "astro"
     },
     "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
+    "/404.html": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/": {
       "producer": "astro"
     },
     "/cv/": {
@@ -4441,12 +4441,12 @@
     "html_files": 321
   },
   "previous_oss_source": "published",
-  "previous_release_id": "a1051dc147a8c84c53f9f84320cb597d04740e00f0fa2261f6569cf8a783c7da",
+  "previous_release_id": "0663c72cd39afcbe5cd942c40fe84480b3ce8d6d3f95238b604d324f0c261bdc",
   "oss": {
     "schema": "wly.oss-assets.v1",
     "asset_base_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com",
-    "prefix": "releases/40a769ec8d070b93637f548e1c8f157f86665aa6f21db882543b63a92fb7e00e",
-    "source_release_id": "2e1f28d1921eb080cf95330c5e8009034afb70d63dcd8e4b87fa3775a78a8e21",
+    "prefix": "releases/d4a3e85b3ea86eb06c3f86f5958b808249c400ee8cbbf5d2967cb54ff143dabd",
+    "source_release_id": "31d17183f274fbf1c23e16ef46b526b201b3d8635f7e00623ac5a616fd6f670b",
     "objects": {
       "_album/album-1a72f07ce279b5d3fdf8.css": {
         "bytes": 4721,
@@ -8457,14 +8457,14 @@
         "byte_preserved": false
       },
       "_living/pcconfig/astro/shared-config.json": {
-        "bytes": 25590,
-        "sha256": "2a4733c4b6135c569c769748aedad5157539bec6f979ac6659c2fd6574ded16a",
-        "key": "releases/f6c10457a31485a77193e48de3b01fdf1d3af8f3ddb3bb8d1b92c46d1b8c3160/_living/pcconfig/astro/shared-config.json",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/f6c10457a31485a77193e48de3b01fdf1d3af8f3ddb3bb8d1b92c46d1b8c3160/_living/pcconfig/astro/shared-config.json",
+        "bytes": 25589,
+        "sha256": "42bd9d68a61703360606f8651fbaa8a77318b4f25f339a8f3ddbd4a18ed36d56",
+        "key": "releases/3345518f2400f45d8a11c18446c7325357c6448faa9ab89ce3e759aa713d102d/_living/pcconfig/astro/shared-config.json",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/3345518f2400f45d8a11c18446c7325357c6448faa9ab89ce3e759aa713d102d/_living/pcconfig/astro/shared-config.json",
         "content_type": "application/json",
         "source": {
-          "bytes": 25042,
-          "sha256": "a72d0a0b83bfdce0d1ebf729651057becb06e6736c953d55597458a9ad74dfeb"
+          "bytes": 25041,
+          "sha256": "3c7e5ffc274c764180179c5b9fb9bc6fd175079e6cadc8a2433b7e195172d25b"
         },
         "byte_preserved": false
       },
@@ -62456,6 +62456,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/github-index-protected-major-actions-b98192bc0b82.woff2": {
+        "bytes": 188492,
+        "sha256": "ec1c0ade7c5f59bfc43f607673d9f7958e9ddbdf9af08446b702ba41d4454e1e",
+        "key": "releases/98f8484814d5629443892ea52c9fa9e026c047d563a9bdf558739de86b791558/assets/_fonts/github-index-protected-major-actions-b98192bc0b82.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/98f8484814d5629443892ea52c9fa9e026c047d563a9bdf558739de86b791558/assets/_fonts/github-index-protected-major-actions-b98192bc0b82.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 188492,
+          "sha256": "ec1c0ade7c5f59bfc43f607673d9f7958e9ddbdf9af08446b702ba41d4454e1e"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/github-index-publication-gate-3371c07c3390.woff2": {
         "bytes": 172680,
         "sha256": "2ba5464ddb8948a8082b7c4e58509739b7120f63b7d2ab5350cae8c465d3d619",
@@ -70569,14 +70581,14 @@
         "byte_preserved": true
       },
       "search-projects.js": {
-        "bytes": 3621017,
-        "sha256": "f31ebfae51c51347d4a82cac3b18155ef46b1c9a70dbc5c161384c45b5d83c72",
-        "key": "releases/dd1be441ad07726407c40dccb33a18148b8e4a64366da93c0a9da0104936bb34/search-projects.js",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/dd1be441ad07726407c40dccb33a18148b8e4a64366da93c0a9da0104936bb34/search-projects.js",
+        "bytes": 3621093,
+        "sha256": "5405213a889acb81616178d41877421c1e570e05e620b3ca852ef83919fef0cb",
+        "key": "releases/3d2d9d017cb8f5efef302dd6d45367e048814b5dd2c73b47f305e208c3b83dbc/search-projects.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/3d2d9d017cb8f5efef302dd6d45367e048814b5dd2c73b47f305e208c3b83dbc/search-projects.js",
         "content_type": "application/javascript",
         "source": {
-          "bytes": 3621017,
-          "sha256": "f31ebfae51c51347d4a82cac3b18155ef46b1c9a70dbc5c161384c45b5d83c72"
+          "bytes": 3621093,
+          "sha256": "5405213a889acb81616178d41877421c1e570e05e620b3ca852ef83919fef0cb"
         },
         "byte_preserved": true
       },
@@ -71868,7 +71880,6 @@
       "releases/2a2146a1b5a1e8b3b83075b2088bb20b1c0e5c13a6a5602954999aeccb118962/assets/_fingerprinted/3ebe279ad82b00b00171bcb8d99c1102647e65e0a5790514daf434ce2b9f4c27.png",
       "releases/2a2ae59bfbcc087e9290fcb44cec56db327206ed8d2b942e1b72a6f0fe25de50/assets/home-03-h-2880-501ab33ed9e2.avif",
       "releases/2a3607b8de110c5601d75dcaf7220337bb6b3bdeb8ec0ebf67e55b52a4a27c92/_living/rule-rule-release/bird-source.090eab335861/config.json",
-      "releases/2a4d425e57d3911519e8c9b800bb4417fd027069283c75599a295fc0bec33ac7/assets/_fonts/github-index-protected-major-actions-3577e9312b63.woff2",
       "releases/2a6bdfb7c19f3dd607bcdc86fce2470cd8e34b5bb1cf3a1608569efa542791c6/_typeset/runtime/motion-487f68a008d3b379ea70.js",
       "releases/2a7eb96c2d8b877a5554feb8bf3ae7f88d4df1d3df525eed0952132276586e51/assets/_fingerprinted/db4bcc87a28cb3a6ad6c5c4513e5c3c0347a2bd04abcae0b4ab7e7bebe9971c6.png",
       "releases/2a88dd09a83015fa2aec9ab3ec6910a4269100fd78d45757fbea49257bc74d28/_typeset/runtime/legacy-header-3a63645d710620807c1d.css",
@@ -72200,6 +72211,7 @@
       "releases/3cf4ba70da1fa016d8a2176acfe892a9d12211664e5eaec41c4cab550a30efc5/projects/video-scaffold/assets/hero-36810b6767117f92-mask.png",
       "releases/3d0d28be4336569f18d411d62eb546e30e3f06de876bc29246c125afee3937cb/assets/_fingerprinted/09d1e4825e3cb9cb4d24e0276c09373046cb9c26bf4e35c38905d4a4e73a6761.png",
       "releases/3d2bf8c01c51cd7c65423d0b018aac48ee889ff9699d6960fbbef0d539be6b1a/assets/_fingerprinted/fc217eba9d5f0c3a207f2953ea3bc8065e02899839f14a0f1011a40d859edfc0.png",
+      "releases/3d2d9d017cb8f5efef302dd6d45367e048814b5dd2c73b47f305e208c3b83dbc/search-projects.js",
       "releases/3d31bf5b99ca39a21ae99017fae6aa87a539ca2f57fd8e848bb6b6cb872f72a1/assets/_fingerprinted/58657ce9e3941c26b8a33c7179061ee71ec3bbefc00f47d70c9e95735a667df5.png",
       "releases/3d3956a45c3dbf3c5c83beafb244f95ab345020aafa6d6975017e678f0b87b37/_typeset/skill-control-plane-doctor/9a5968c2a29b1e12f1d6-skill-control-plane-doctor-01-v.webp",
       "releases/3d411f692ce6de6aa8bce7aa93216d824d86b720ff4400d10c2eb7c90d6a270d/assets/_fingerprinted/1b86c3cbd3b26e8d7689b03ecba00fb36883ff08d70eaadab792706ca84099f4.png",
@@ -73829,6 +73841,7 @@
       "releases/98dfa80d0c26f2cd2edd6189fe43f4c93f5fc9d4d29ffd66973314228b3c939e/_living/live-dom.js",
       "releases/98e3a35d15db8118c0cd270c769b83b4f13ab700e00c9e8cf7448bdbe4d4c713/assets/_fingerprinted/1766f0993c19002b64a929ec87e163cbbefb504d69d82dbb9a5b277d9873b152.png",
       "releases/98f145ffc6e4c772b94a8bcc0a5275db67047391a7a414f87b2794951011f579/_runtime/697f25dd20946efbadc4/b2-typeset-79d3708dca946797.js",
+      "releases/98f8484814d5629443892ea52c9fa9e026c047d563a9bdf558739de86b791558/assets/_fonts/github-index-protected-major-actions-b98192bc0b82.woff2",
       "releases/990014019dd5bf5614bb39a17a4c060a86b7f1fb43e0c504ef3aad6cb4ba551a/projects/chinese-asr/assets/hero-5e55f7d0a162319f.mp4",
       "releases/991585880c9bfd5d84282f0ff9d01c630658f7f4c7cce33346623be58dcc9fd7/assets/_fonts/sunshine-remote-streaming-1ba1f882d0d1.woff2",
       "releases/993dfda6bf5b2b39e7a354a14b48158aae5b48963b41c513a70236919d08bd7b/_typeset/runtime/live-sans-part-6d-04ea2891133b23e29cad.woff2",
@@ -75085,7 +75098,6 @@
       "releases/dd05209d32f8f7a598c4e5ab3b0926284b33485e2846a7584a2b09298fc708b8/_shared/home-comic/a554b08e4d2a2e262568/assets/v-b-p5red.png",
       "releases/dd06f46d3968723fea946cd7c526535e251388ee55e64d047f2c1163fde58c14/_typeset/runtime/live-sans-page-cf13958b2ad141312a2e.woff2",
       "releases/dd07dfa98a6c7fe427e96e8c541c7fadc676cb1a40d2b9b745a6743803bad3a7/assets/_fingerprinted/438b65a30cd78dcaea7572f3eea14049f5a243cfb8e027b78e76614cc728ea82.webp",
-      "releases/dd1be441ad07726407c40dccb33a18148b8e4a64366da93c0a9da0104936bb34/search-projects.js",
       "releases/dd2a9a90193b066c40743ca216c264cf0b3f7b5c87ebf5eeb470b811c9a34bf3/_shared/nav-4e6127dc90-248526a20f49.avif",
       "releases/dd570b37b88841e19c6ecfd94b606a1c26cf4fd1949233782ffebdaeab025fc4/_shared/home-comic/a554b08e4d2a2e262568/assets/h-b-p4docs-2-lines-1.png",
       "releases/dd654c473ec97d23c2136d00406b1fb81d9dc44806a7e44d9e1a1fc6b4aa3799/assets/_fingerprinted/5b02a342193f801d75431924afa1fa5d66e05694af53e8a014fa833a73b770ed.webp",
@@ -75693,5 +75705,5 @@
   },
   "prepared_at_beijing": "Unknown",
   "finalized_dist": true,
-  "source_commit": "23c4e3625413a040d909ca1e3c56d0c685823bf9"
+  "source_commit": "3757db5a3dc6e222f427489684f98c5ac2c5aa67"
 }
