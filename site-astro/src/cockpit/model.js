@@ -65,7 +65,7 @@ export function normalize(raw) {
     served_at: v.served_at || null,
     collected_at: v.collected_at || null,
     collectors: obj(v.collectors),
-    verdict: { severity: obj(v.verdict).severity || 'gray', state: st(obj(v.verdict).state), observed_at: obj(v.verdict).observed_at || null },
+    verdict: { severity: obj(v.verdict).severity || 'gray', state: st(obj(v.verdict).state), observed_at: obj(v.verdict).observed_at || null, color: obj(v.verdict).color },
     counts: { need_you: 0, ai_following: 0, deferred: 0, history: 0, tasks_failed_today: 0, backup_problems: 0, ...obj(v.counts) },
     // need_you 行原样透传，过了原定时间时带 overdue_since、overdue_days、overdue_text（标题旁小标签用 overdue_text）
     need_you: list(v.need_you), ai_following: list(v.ai_following), deferred: list(v.deferred),
@@ -100,7 +100,7 @@ export function normalize(raw) {
     // 健康分、扣分原因、6 个信号、各分区的灯都由后端 overview 给（O6 裁定），前端不算
     overview: v.overview && typeof v.overview === 'object' ? v.overview : null,
     // 下面两块是后端 10 月 12 日加的；字段不在就是 null，页面不出这一块，照旧数据显示
-    // “你得知道”（must_know）：{state: ok|empty|unavailable, text, items[{id, kind: repairing|recovered|report, text, at, exit_when}], archived_items}
+    // “你得知道”（must_know）：items 保留 kind=ai_decision 的 14 天决定回执，其余沿用普通消息。
     must_know: (() => { const m = v.must_know; if (!m || typeof m !== 'object') return null; return { state: ['ok', 'empty', 'unavailable'].includes(m.state) ? m.state : 'unavailable', text: typeof m.text === 'string' ? m.text : '', observed_at: m.observed_at || null, items: list(m.items), archived: list(m.archived_items) }; })(),
     // 网站上次成功发布的回执（website_release）：{state: success|unavailable, published_at, version, verified, text}；只证明上次成功那次
     website_release: v.website_release && typeof v.website_release === 'object' ? v.website_release : null,

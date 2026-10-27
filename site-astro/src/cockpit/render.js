@@ -681,9 +681,9 @@ function score(v, ctx, off) {
     + `<p class="cp-score-note">这个分数主要看电脑和 AI 的活，不等于你要做几件事；你要做的看上面第一行。</p></div></details>`;
 }
 // “你得知道”（后端 must_know，字段在才出这一块）：AI 在修、影响你用电脑的毛病；刚恢复、刚办好的事；你没回又该知道的汇报。
-// 最多 5 条（手机 3 条）；满 3 天收起的放在折叠里；0 条一行“没有要你知道的新事”；来源读不到时照实说读不到，不说没新事
+// 普通消息最多 5 条，AI 决定保留后端给出的全部行；收起时间由各类消息的后端规则决定。
 export const knowId = (k) => 'know-' + String(k.id || '').replace(/[^\w-]/g, '');
-const KNOW_TAG = { repairing: ['AI 在修', 'neutral'], recovered: ['已恢复', 'ok'], report: ['汇报', 'neutral'] };
+const KNOW_TAG = { repairing: ['AI 在修', 'neutral'], recovered: ['已恢复', 'ok'], report: ['汇报', 'neutral'], ai_decision: ['AI 已定', 'neutral'] };
 function knowBlock(v, ctx) {
   const m = v.must_know;
   if (!m) return '';
@@ -694,11 +694,13 @@ function knowBlock(v, ctx) {
     const [tag, st] = KNOW_TAG[k.kind] || ['你得知道', 'neutral'];
     const small = [k.at ? when(k.at, ctx.now) : '', !isPh(k) && typeof k.exit_when === 'string' ? k.exit_when : ''].filter(Boolean);
     const text = isPh(k) ? k.title || PRIVATE_TITLE : k.text;
-    return `<li id="${esc(knowId(k))}" class="is-${esc(k.kind || 'other')}${phCls(k)}"><span class="cp-know-tag is-${light(st)}">${tag}</span><span class="cp-know-text">${esc(text)}${ownTag(k)}${detail(k)}${small.length ? `<small>${small.map(esc).join(' · ')}</small>` : ''}</span></li>`;
+    const revise = k.kind === 'ai_decision' ? copyText(`条目编号 ${k.id}；我不同意这条 AI 决定，请按我的补充修改。${isPh(k) ? '' : `当前决定：${k.text}`}`, '复制给 AI', ' cp-btn-quiet') : '';
+    return `<li id="${esc(knowId(k))}" class="is-${esc(k.kind || 'other')}${phCls(k)}"><span class="cp-know-tag is-${light(st)}">${tag}</span><span class="cp-know-text">${esc(text)}${ownTag(k)}${detail(k)}${small.length ? `<small>${small.map(esc).join(' · ')}</small>` : ''}${revise}</span></li>`;
   };
   const folded = old.length ? `<details class="cp-know-old"><summary>最近收起的 ${old.length} 条</summary><ul class="cp-know-list">${old.map(row).join('')}</ul></details>` : '';
   if (!all.length) return `<div class="cp-know is-empty"><p>${dot('ok')}${esc(m.text || '没有要你知道的新事')}</p>${folded}</div>`;
-  const list = all.slice(0, 5);
+  let ordinary = 0;
+  const list = all.filter((k) => k.kind === 'ai_decision' || ordinary++ < 5);
   return `<div class="cp-know"><p class="cp-know-k">你得知道</p><ul class="cp-know-list">${list.map(row).join('')}</ul>`
     + (list.length > 2 ? `<details class="cp-know-more is-phone" id="know-more"><summary><span class="is-shut">还有 ${list.length - 2} 条，点开看</span><span class="is-open">收起</span></summary></details>` : '') + folded + `</div>`;
 }
@@ -725,7 +727,7 @@ const overview = (v, ctx) => {
   const you = !read && !v.need_you.length
     ? `<div class="cp-you is-off">${snap}<p class="cp-you-n">要你做的事还没读到</p><p class="cp-you-sub">${notRead(v.served_at, ctx.now)}</p></div>`
     : !n
-      ? `<div class="cp-you is-none">${snap}<p class="cp-you-n">${dot('ok')}现在没有要你做的事</p>${rest}</div>`
+      ? `<div class="cp-you is-none">${snap}<p class="cp-you-n">${dot(COLOR_STATE[v.summary.color] || COLOR_STATE[v.verdict.color] || 'ok')}现在没有要你做的事</p>${rest}</div>`
       : `<div class="cp-you${urgent ? ' is-urgent' : ''}">${snap}<p class="cp-you-n">${lead ? esc(lead) + tag : `${verb} <b>${n}</b> 件事${tag}`}</p>${access}`
         + `<ol class="cp-you-list">${list}</ol>` + rest
         + `<p class="cp-you-sub">${n > 3 ? `<a href="#need-you">还有 ${n - 3} 件 ↓</a> · ` : ''}<a href="#need-you">去处理 ↓</a>${!read && v.served_at ? ` · 这是 ${esc(when(v.served_at, ctx.now))} 读到的` : ''}</p></div>`;

@@ -72,3 +72,19 @@ test('没有 viewer / private_count 的旧数据：什么都不加，和原来�
   // 页头提示（配对结果）在任何一版都显示
   assert.equal(viewerLine(old, { notice: '示例提示' }), '<span class="cp-viewer-note">示例提示</span>');
 });
+
+test('AI 已定逐行显示全部决定并可复制修改，普通消息仍限五条', () => {
+  const decisions = Array.from({ length: 9 }, (_, i) => ({ id: `decision-${i}`, kind: 'ai_decision', text: `示例决定 ${i}：结束；理由：现状已恢复`, at: now.toISOString(), exit_when: '决定满 14 天后收起' }));
+  const reports = Array.from({ length: 6 }, (_, i) => ({ id: `report-${i}`, kind: 'report', text: `示例汇报 ${i}` }));
+  const v = normalize(base({ must_know: { state: 'ok', items: [...reports, ...decisions] }, verdict: { state: 'attention', color: 'yellow' }, summary: { text: '满 14 天待 AI 定 1 件' } }));
+  const html = REGIONS.overview(v, { ...ctx, ov: { stale: () => false, lamp: () => '' } });
+  assert.equal((html.match(/class="is-ai_decision"/g) || []).length, 9);
+  assert.equal((html.match(/class="is-report"/g) || []).length, 5);
+  assert.equal((html.match(/>复制给 AI<\/button>/g) || []).length, 9);
+  assert.match(html, /条目编号 decision-8；我不同意这条 AI 决定/);
+  assert.match(html, /<span class="cp-dot is-yellow"[^>]*><\/span>现在没有要你做的事/);
+  const hidden = normalize(base({ must_know: { state: 'ok', items: [{ ...ph('private-ai'), kind: 'ai_decision', text: null }] } }));
+  const publicHtml = REGIONS.overview(hidden, { ...ctx, ov: { stale: () => false, lamp: () => '' } });
+  assert.match(publicHtml, /条目编号 private-ai；我不同意/);
+  assert.doesNotMatch(publicHtml, /当前决定：/);
+});
