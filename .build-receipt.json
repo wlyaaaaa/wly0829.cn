@@ -1,62 +1,62 @@
 {
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
-  "source_commit": "Unknown",
-  "prepared_at_beijing": "2026-10-27T00:14:33.159895+08:00",
-  "seconds": 189.924,
+  "source_commit": "a61b279f25f3f86287c348a8e2712fb58cbcda30",
+  "prepared_at_beijing": "2026-10-27T22:49:56.979172+08:00",
+  "seconds": 263.97,
   "steps": [
     {
       "name": "home_highlights",
-      "seconds": 0.193
+      "seconds": 0.718
     },
     {
       "name": "source",
-      "seconds": 18.018
+      "seconds": 32.37
     },
     {
       "name": "fingerprint",
-      "seconds": 1.22
+      "seconds": 29.553
     },
     {
       "name": "prepare",
-      "seconds": 19.45
+      "seconds": 13.562
     },
     {
       "name": "native_inputs",
-      "seconds": 5.946
+      "seconds": 1.758
     },
     {
       "name": "blocks",
-      "seconds": 1.893
+      "seconds": 1.272
     },
     {
       "name": "astro",
-      "seconds": 9.082
+      "seconds": 11.181
     },
     {
       "name": "assets",
-      "seconds": 4.282
+      "seconds": 34.369
     },
     {
       "name": "finish",
-      "seconds": 31.302
+      "seconds": 20.942
     },
     {
       "name": "finalize",
-      "seconds": 64.215
+      "seconds": 89.236
     },
     {
       "name": "public",
-      "seconds": 33.666
+      "seconds": 27.661
     },
     {
       "name": "inventory",
-      "seconds": 0.657
+      "seconds": 1.348
     }
   ],
   "rebuilt_pages": [
     "/cockpit/",
-    "/cockpit/storage/"
+    "/search/"
   ],
   "html_files": 321,
   "files": [
@@ -404,6 +404,11 @@
       "path": "_astro/index.astro_astro_type_script_index_0_lang.CXt9SXeN.js",
       "bytes": 48876,
       "sha256": "d4340bbc45b41ae1a6c5bef79abae25fc1575a72b2911ebd2604c66bed73043a"
+    },
+    {
+      "path": "_astro/index.astro_astro_type_script_index_0_lang.D9CZk-uk.js",
+      "bytes": 66864,
+      "sha256": "db94ff28b8be67bbf7adbed635112bed8d7b2b0a1d17e387a0613d45e285c289"
     },
     {
       "path": "_astro/index.astro_astro_type_script_index_0_lang.DSOEJaKo.js",
@@ -27207,8 +27212,8 @@
     },
     {
       "path": "cockpit/index.html",
-      "bytes": 696622,
-      "sha256": "a4cd395a11d98243d4ec68bc8b3c7cce23ee63b81a2e629bdff938a979d8c4ce"
+      "bytes": 705290,
+      "sha256": "82db20b6193cb3b9ce0eb77e50474321f444e5a8eb9c330af7b3de7f5c29d416"
     },
     {
       "path": "cockpit/storage/index.html",
@@ -28882,13 +28887,13 @@
     },
     {
       "path": "release-identity.json",
-      "bytes": 211,
-      "sha256": "8e524e06043354c86aceefd7926f32bbed3e0bb09c8a964f2fb9cdf890a94f3a"
+      "bytes": 244,
+      "sha256": "930185488c0fc8b97ef19cce24790869e8c7c808718cf196601fc98a20f73ea8"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 5406320,
-      "sha256": "a1dfcdf4f1522714f366bfbaf019543a211bffea43cf0d57ca61facc0474e806"
+      "bytes": 5407169,
+      "sha256": "7b061241f3e2f4079ebd5657f6c2e10fc255b42280d1e00a62608ad2a0b083bc"
     },
     {
       "path": "rescue/index.html",
@@ -29053,22 +29058,22 @@
     {
       "path": "search/index.html",
       "bytes": 68789,
-      "sha256": "388946c449e8f4a8d08b00310958e9e1be52ad785523d441ea4bcba23fa8afb5"
+      "sha256": "b96ef1f4b8a23ad52c5226a113667a5e0370dc5874e5f95885514a7a0a905878"
     },
     {
       "path": "search-index.js",
-      "bytes": 1557675,
-      "sha256": "277b29ffe0cebe845f18fbb49c02241035fbe5aee3df4efe0645477bfac298a5"
+      "bytes": 1160992,
+      "sha256": "116f8816a7d08b2800112670c2ece3992787d4caa26763151d379689c1921855"
     },
     {
       "path": "search-project-localocr.js",
-      "bytes": 138124,
-      "sha256": "49ebfbaea998fab228b2dcbcfabb5cc654dbc6c65578e48b8ab21cbee18b0b41"
+      "bytes": 38233,
+      "sha256": "b8218be495427e949896475137558d98d17873c51ff5ee8a865e3de12eadb35b"
     },
     {
       "path": "search-projects.js",
-      "bytes": 3621093,
-      "sha256": "5405213a889acb81616178d41877421c1e570e05e620b3ca852ef83919fef0cb"
+      "bytes": 1083411,
+      "sha256": "4605b4ca468e8df5619a8440d7f51567010c72f76f60ffc2049a4aed1fef6cc5"
     },
     {
       "path": "sitemap.xml",
@@ -29501,7 +29506,7 @@
       "sha256": "61e1128d2bbe70c1227d9c14a2ba25bf2b572947e9767cfff08e8de68c476739"
     }
   ],
-  "output": "E:\\Cache\\wly-site-build\\wt\\dist",
+  "output": "E:\\Cache\\Claude\\Temp\\4321632c\\gpt-children\\20261027-221245-cockpit-age-ai-decides-7b136233\\publish-wt\\dist",
   "previous_oss_source": "published",
-  "previous_release_id": "54df001333ad5eb2db1c424b5c8de18a5b59828794d6b08a09cb602ca7926695"
+  "previous_release_id": "de40bd507347400fc58e142ec08ddfb9d3fe2598ccc3d867ba87bc36b4855e8f"
 }
