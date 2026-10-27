@@ -88,3 +88,13 @@ test('AI 已定逐行显示全部决定并可复制修改，普通消息仍限�
   assert.match(publicHtml, /条目编号 private-ai；我不同意/);
   assert.doesNotMatch(publicHtml, /当前决定：/);
 });
+
+test('满 14 天未定事项留在 AI 区，显示 AI 决定提醒和具体说明', () => {
+  const due = { id: 'ai-due', title: '示例技术事项', awaiting_ai_decision: true, age_days: 14, overdue_text: '限期已到，待 AI 重新定' };
+  const late = { id: 'ai-late', title: '示例稍晚事项', age_days: 3, overdue_since: now.toISOString(), overdue_days: 1 };
+  const v = normalize(base({ ai_following: [due, late], ai_overdue: [due, late] }));
+  const html = REGIONS['need-you'](v, ctx);
+  assert.match(html, /满 14 天待 AI 定 1 件 · 1 件过了约定日子/);
+  assert.match(html, /限期已到，待 AI 重新定/);
+  assert.match(html, /由 AI 直接定，你不用逐条选/);
+});

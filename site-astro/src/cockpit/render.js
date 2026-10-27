@@ -269,7 +269,7 @@ function aiBlock(v, ctx) {
     const overdue = late.map((x) => {
       const at = x.overdue_since ? monthDay(x.overdue_since) : '';
       const d = Number(x.overdue_days);
-      const why = at ? `原定 ${at}${d >= 1 ? `，已过 ${d} 天` : '，刚过不到 1 天'}` : '没写哪天该有结果，等 AI 定下期限';
+      const why = x.awaiting_ai_decision ? x.overdue_text || '满 14 天待 AI 定' : at ? `原定 ${at}${d >= 1 ? `，已过 ${d} 天` : '，刚过不到 1 天'}` : '没写哪天该有结果，等 AI 定下期限';
       const age = x.registration_unknown ? '登记时间不明，按满 14 天处理' : Number.isFinite(x.age_days) ? (x.age_days >= 1 ? `已跟 ${x.age_days} 天` : '今天登记') : '';
       return `<li${isPh(x) ? ' class="is-private"' : ''}>${rowText(x, clean(x.title) || x.project, esc([why, age, x.latest_progress || stuckWhy(x.stuck_reason)].filter(Boolean).join(' · ')))}</li>`;
     }).join('');
@@ -278,8 +278,10 @@ function aiBlock(v, ctx) {
     const rest = v.ai_following.filter((x) => !lateIds.has(x.id));
     const restList = rest.length ? `<details class="cp-more" id="ai-rest"><summary>其余 ${rest.length} 件还没到约定日子，你不用动手</summary><ul class="cp-ailist">${rest.map((x) => `<li${isPh(x) ? ' class="is-private"' : ''}>${rowText(x, clean(x.title) || x.project, x.last_checked_at ? esc(checkedAgo(x.last_checked_at, now)) : '')}</li>`).join('')}</ul></details>` : '';
     const n = v.counts.ai_following || v.ai_following.length;
-    return `<div class="cp-ai" id="ai"><h3 class="cp-sub">AI 在跟 ${n} 件${v.ai_overdue.length ? `<span class="cp-ai-parts">其中 ${v.ai_overdue.length} 件过了约定日子</span>` : ''}</h3>`
-      + (overdue ? `<p class="cp-ai-cap">${dot('neutral')}过了自己定的日子还没结果（跟得最久的在前）</p><ul class="cp-ailist">${overdue}</ul>` : '')
+    const pending = late.filter((x) => x.awaiting_ai_decision).length;
+    const parts = [pending ? `满 14 天待 AI 定 ${pending} 件` : '', late.length > pending ? `${late.length - pending} 件过了约定日子` : ''].filter(Boolean).join(' · ');
+    return `<div class="cp-ai" id="ai"><h3 class="cp-sub">AI 在跟 ${n} 件${parts ? `<span class="cp-ai-parts">其中 ${parts}</span>` : ''}</h3>`
+      + (overdue ? `<p class="cp-ai-cap">${dot(pending ? 'attention' : 'neutral')}${pending ? '满 14 天的技术事项由 AI 直接定，你不用逐条选' : '过了自己定的日子还没结果'}（跟得最久的在前）</p><ul class="cp-ailist">${overdue}</ul>` : '')
       + restList + govRun(v, ctx) + aiWork(v, ctx) + `</div>`;
   }
   const rows = v.ai_following.map((x) => {
