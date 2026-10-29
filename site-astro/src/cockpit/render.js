@@ -49,7 +49,7 @@ export const itemAttr = (x) => { const ids = [...new Set([x?.id, x?.copy_ai_id].
 export function viewerLine(v, ctx = {}) {
   const n = v.private_count, w = v.viewer;
   const note = ctx.notice ? `<span class="cp-viewer-note">${esc(ctx.notice)}</span>` : '';
-  const line = w?.kind === 'owner' ? `本人设备 · 全部显示${n > 0 ? `（其中 ${n} 件公网看不到）` : ''}`
+  const line = w?.kind === 'owner' ? `你的设备 · 全部显示${n > 0 ? `（其中 ${n} 件公网看不到）` : ''}`
     : n > 0 ? `公开版 · ${n} 件私人事项只在本人设备上显示` : '';
   return note + (line ? `<span class="cp-viewer-line${w?.kind === 'owner' ? ' is-owner' : ''}">${line}</span>` : '');
 }
@@ -261,7 +261,7 @@ function ownerCard(x, r, ctx) {
     + `<h3 class="cp-ask-title">${dot(r.scheduled ? 'neutral' : r.red ? 'red' : 'attention')}<span>${esc(r.head)}${ownTag(x)}${lateTag(x)}</span></h3>` + detail(x)
     + (conf.length ? `<dl class="cp-own-conf">${conf.map(([k, val]) => `<div><dt>${k}</dt><dd>${esc(val)}</dd></div>`).join('')}</dl>` : '')
     + (s2 ? `<p class="cp-own-s">${s2}</p>` : '') + s3
-    + ownerBox(x, ctx, { card: true, extra: go }) + `</article>`;
+    + ownerBox(x, ctx, { card: true, extra: go, minor: isQuestion(x) }) + `</article>`;
 }
 // “AI 在等你回”卡（card_type=ai_wait，后端给了对话名、做到哪这些新字段时）：
 // 「河南案卡重排」那个对话 · 17:42 问的／它做到哪／要你定／选项（AI 建议那项是主按钮，旁边写点了会怎样）／不回会怎样／你定就行、我没看懂。
@@ -278,7 +278,7 @@ function waitCard(x, ctx) {
     + (src ? `<p class="cp-wait-src">${esc(src)}</p>` : '')
     + (typeof x.progress === 'string' && x.progress.trim() ? `<p class="cp-own-s"><b>它做到哪</b>${esc(plain(x.progress.trim()))}</p>` : '')
     + `<h3 class="cp-ask-title"><span class="cp-own-k">要你定</span><span>${esc(clean(x.title))}${ownTag(x)}${lateTag(x)}</span></h3>` + detail(x)
-    + (acts ? ownerBox(x, ctx, { card: true, noExec: true, mid: cons }) : list + cons) + `</article>`;
+    + (acts ? ownerBox(x, ctx, { card: true, noExec: true, mid: cons, minor: true }) : list + cons) + `</article>`;
 }
 function askCard(x, r, ctx) {
   if (isPh(x)) return `<article class="cp-ask is-private" id="${esc(todoId(x))}"${itemAttr(x)}><h3 class="cp-ask-title" title="${PH_HINT}">${dot('unavailable')}<span>${esc(x.title || PRIVATE_TITLE)}${lateTag(x)}</span></h3></article>`;
@@ -898,6 +898,16 @@ const topSentence = (v) => {
   const parts = String(v.verdict.text || v.summary.text || '').trim().split(/\s*·\s*/);
   return plain(parts.length > 1 ? (/^(要你|现在没有要你)/.test(parts[0]) ? parts[0] : '') : parts[0]);
 };
+// 公开版：顶上那句的件数含私人事项、下面又只露出一部分时，那句下面一行“另 N 件是私人事项，只在你的设备上显示”。
+// N = 后端给的要你做的总件数 − 下面露出来的卡（占位行也算露出来）；几处总件数对不上、没有 private_count 或 N 比它还大，算不准就不写
+const hiddenPrivate = (v) => {
+  if (v.viewer?.kind !== 'public' && !v.need_you.some(isPh)) return 0;
+  const totals = [v.overview?.owner_count, v.verdict?.need_you].filter(Number.isInteger);
+  if (!totals.length || totals.some((t) => t !== totals[0]) || !Number.isInteger(v.private_count)) return 0;
+  const shown = v.need_you.filter((x) => !['ai', 'know'].includes(x.ask_kind)).length;
+  const n = totals[0] - shown;
+  return n > 0 && n <= v.private_count ? n : 0;
+};
 const overview = (v, ctx) => {
   if (!ctx.ov) return '';
   const off = ctx.ov.stale(v.overview, ctx.now.getTime());
@@ -914,8 +924,10 @@ const overview = (v, ctx) => {
   const head = said ? esc(said) : n ? `${verb} <b>${n}</b> 件事` : '现在没有要你做的事';
   // 本人设备：顶上一两行提示（点的处理写不回、通知没发出去、调度在排队），块末尾“你最近处理的（30 天）›”；后端没给就都不出
   const sub = !read && v.served_at ? `<p class="cp-you-sub">这是 ${esc(when(v.served_at, ctx.now))} 读到的</p>` : '';
+  const hid = hiddenPrivate(v);
+  const priv = hid ? `<p class="cp-you-sub cp-you-private">另 ${hid} 件是私人事项，只在你的设备上显示</p>` : '';
   return `<div class="cp-you${urgent ? ' is-urgent' : ''}${n ? '' : ' is-none'}${said ? ' is-said' : ''}">${snap}<p class="cp-you-n">${n ? '' : dot(COLOR_STATE[v.summary.color] || COLOR_STATE[v.verdict.color] || 'ok')}${head}${tag}</p>`
-    + ownerWarn(v) + sub + recentBlock(v, ctx) + `</div>`;
+    + priv + ownerWarn(v) + sub + recentBlock(v, ctx) + `</div>`;
 };
 // 首屏下半：三格（电脑 / 自动任务 / 备份）和健康分小字
 const overviewTri = (v, ctx) => {

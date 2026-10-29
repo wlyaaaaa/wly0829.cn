@@ -107,7 +107,8 @@ function receipt(s, ctx) {
 
 // 一条的按钮区。o.card：要你处理的大卡片（“交给：Claude ▾”在按钮行上）；行只在有一点就交给 AI 的按钮时放在按钮行，否则放进写字的框里。
 // o.only：这一区块允许的动作；o.mid：选项和按钮行之间插的一句（如“不回会怎样”）；o.noExec：答案送回原对话，不选交给谁；
-// o.extra：按钮行末尾的链接（如“去办 →”）；o.label：按钮文字改写（如 AI 已定那条的“回一句话”写成“不同意，改一下”）
+// o.extra：按钮行末尾的链接（如“去办 →”）；o.label：按钮文字改写（如 AI 已定那条的“回一句话”写成“不同意，改一下”）；
+// o.minor：问题卡和“AI 在等你回”卡，“晚点提醒”“这件不做了”降成按钮行下面一行小字链接（同样能点、同样能撤回），不跟选项抢眼
 export function ownerBox(x, ctx, o = {}) {
   const acts = actsOf(x, o.only);
   const status = ownerStatus(x, ctx.now);
@@ -154,10 +155,14 @@ export function ownerBox(x, ctx, o = {}) {
     has('unclear') ? btn(label.unclear, `data-act="unclear"${dis}`) : '',
     one ? btn('补一句', `data-add aria-expanded="${u.open === 'add'}"${dis}`) : '',
     has('note') && !one ? btn(label.note, `data-act="note" aria-expanded="${u.open === 'note'}"${dis}`) : '',
-    has('snooze') ? btn(label.snooze, `data-act="snooze" aria-expanded="${u.open === 'snooze'}"${dis}`) : '',
+    has('snooze') && !o.minor ? btn(label.snooze, `data-act="snooze" aria-expanded="${u.open === 'snooze'}"${dis}`) : '',
     has('redo') ? btn(label.redo, `data-act="redo" aria-expanded="${u.open === 'redo'}"${dis}`) : '',
-    has('dismiss') ? btn(label.dismiss, `data-act="dismiss"${dis}`, ' cp-btn-quiet') : '',
+    has('dismiss') && !o.minor ? btn(label.dismiss, `data-act="dismiss"${dis}`, ' cp-btn-quiet') : '',
   ].filter(Boolean);
+  const minor = o.minor ? [
+    has('snooze') ? btn(label.snooze, `data-act="snooze" aria-expanded="${u.open === 'snooze'}"${dis}`, ' cp-oa-link') : '',
+    has('dismiss') ? btn(label.dismiss, `data-act="dismiss"${dis}`, ' cp-oa-link') : '',
+  ].filter(Boolean) : [];
   const hint = qs.length > 1 && !ready ? `<p class="cp-oa-hint">每道题都选一个，才能交</p>` : '';
   // 回一句话 / 不对，重做：一个输入框（最多 500 字，都必须写）+ 交给 AI
   const text = u.open === 'note' || u.open === 'redo'
@@ -169,7 +174,7 @@ export function ownerBox(x, ctx, o = {}) {
       + `<label class="cp-oa-date"><span>选一天</span><input type="date" data-snooze-date min="${todayBJ(ctx.now)}"${dis}></label></div>` : '';
   const err = s?.phase === 'error' ? `<p class="cp-oa-err" role="alert">${esc(s.error)}${s.refresh ? btn('刷新', 'data-oa-refresh') : ''}</p>` : '';
   const undone = s?.phase === 'undone' ? `<p class="cp-oa-note" role="status">${esc(s.message || '已撤回')}</p>` : '';
-  return status + open + quiz + (o.mid || '') + hint + `<div class="cp-oa-bar"${busy ? ' aria-busy="true"' : ''}>${bar.join('')}${o.extra || ''}${showExec ? execBtn(exec) : ''}</div>` + text + snooze + err + undone + `</div>`;
+  return status + open + quiz + (o.mid || '') + hint + `<div class="cp-oa-bar"${busy ? ' aria-busy="true"' : ''}>${bar.join('')}${o.extra || ''}${showExec ? execBtn(exec) : ''}</div>` + (minor.length ? `<p class="cp-oa-minor">${minor.join('')}</p>` : '') + text + snooze + err + undone + `</div>`;
 }
 
 // “你最近处理的（30 天）›”（后端 owner_recent）：默认收起；每行一句人话、交给谁、状态；还能撤回的带“撤回”

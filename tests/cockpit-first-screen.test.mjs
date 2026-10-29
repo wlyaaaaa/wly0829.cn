@@ -161,3 +161,47 @@ test('二级页“AI 的账本”：在跟的、晚了的、AI 已定、等条�
   assert.doesNotMatch(pub, /<button/);
   assert.match(pub, /<p class="cp-snap">/);
 });
+
+test('问题卡和“AI 在等你回”卡：“晚点提醒”“这件不做了”降成按钮行下面一行小字链接；动手卡、确认卡照旧在按钮行', () => {
+  const v = normalize(base({ need_you: [
+    wait(),
+    { id: 'q2', card_type: 'question', title: '示例拍板', ask_kind: 'decision', options: ['甲', '乙'], owner_actions: ['answer', 'snooze', 'dismiss', 'delegate', 'unclear'] },
+    { id: 't2', card_type: 'task', title: '示例动手', ask_kind: 'action', owner_actions: ['done', 'snooze', 'dismiss'] },
+    { id: 'c2', card_type: 'confirm', title: '示例确认', ask_kind: 'action', confirmation_kind: 'message', owner_actions: ['confirm', 'snooze', 'dismiss'] },
+  ] }));
+  const html = REGIONS['need-you'](v, ctx(acts()));
+  const box = (id) => new RegExp(`<div class="cp-oa is-card" data-oa="${id}"[^>]*>.*?(?=<\/article>)`).exec(html)?.[0] || '';
+  for (const id of ['aw-1', 'q2']) {
+    const b = box(id), bar = /<div class="cp-oa-bar">.*?<\/div>/.exec(b)?.[0] || '';
+    assert.match(bar, /data-act="delegate">你定就行<.*data-act="unclear">我没看懂</);
+    assert.doesNotMatch(bar, /晚点提醒|这件不做了/);
+    assert.match(b, /<p class="cp-oa-minor"><button type="button" class="cp-btn cp-oa-link" data-act="snooze" aria-expanded="false">晚点提醒<\/button><button type="button" class="cp-btn cp-oa-link" data-act="dismiss">这件不做了<\/button><\/p>/);
+  }
+  for (const id of ['t2', 'c2']) {
+    const b = box(id);
+    assert.match(/<div class="cp-oa-bar">.*?<\/div>/.exec(b)?.[0] || '', /晚点提醒.*这件不做了/);
+    assert.doesNotMatch(b, /cp-oa-minor|cp-oa-link/);
+  }
+  // 点了“晚点提醒”：时间选项照常在下面展开
+  const open = REGIONS['need-you'](v, ctx(acts({}, { 'q2': { open: 'snooze' } })));
+  assert.match(open, /data-act="snooze" aria-expanded="true">晚点提醒<\/button>.*<div class="cp-oa-panel cp-oa-snooze">/);
+});
+
+test('顶上标签对本人说“你”；公开版那句的件数比下面露出来的多时，下面一行“另 N 件是私人事项”，算不准就不写', () => {
+  const own = normalize(base({ viewer: { kind: 'owner', device_state: 'ok' }, private_count: 2, need_you: [wait()] }));
+  assert.match(REGIONS.viewer(own, ctx(acts())), /你的设备 · 全部显示（其中 2 件公网看不到）/);
+  const ph = { id: 'p1', title: '有一个 AI 对话在等你回复', placeholder: true, owner_only: true, ask_kind: 'cooperate' };
+  const pub = (extra) => normalize(base({ viewer: { kind: 'public' }, private_count: 18, need_you: [ph],
+    verdict: { text: '要你回 AI 2 个问题、办 1 件事（手机上点一下就行）', need_you: 3 }, overview: { owner_count: 3, owner_urgent: 0 }, ...extra }));
+  const line = (v) => /<p class="cp-you-sub cp-you-private">([^<]+)<\/p>/.exec(REGIONS.overview(v, ctx()))?.[1] || '';
+  assert.equal(line(pub()), '另 2 件是私人事项，只在你的设备上显示');
+  // 访客看的标注不变
+  assert.match(REGIONS.viewer(pub(), ctx()), /公开版 · 18 件私人事项只在本人设备上显示/);
+  // 算不准：总件数两处对不上、没有 private_count、差的比私人件数还多、露出来的已经够数，都不写
+  assert.equal(line(pub({ overview: { owner_count: 2, owner_urgent: 0 } })), '');
+  assert.equal(line(pub({ private_count: undefined })), '');
+  assert.equal(line(pub({ private_count: 1 })), '');
+  assert.equal(line(pub({ verdict: { text: '要你做 1 件', need_you: 1 }, overview: { owner_count: 1, owner_urgent: 0 } })), '');
+  // 本人版不写这一行
+  assert.equal(line(normalize(base({ viewer: { kind: 'owner' }, private_count: 18, need_you: [wait()], verdict: { need_you: 3 }, overview: { owner_count: 3 } }))), '');
+});

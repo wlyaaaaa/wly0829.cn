@@ -62,7 +62,7 @@ class CockpitOwnerDeviceTests(unittest.TestCase):
         self.assertEqual(hash_, '')
         self.assertEqual(posts, [(json.dumps({'code': CODE}, separators=(',', ':')), 'application/json')])
         self.assertIn('这台设备已设为本人设备，私人事项会直接显示', text)
-        self.assertIn('本人设备 · 全部显示（其中 1 件公网看不到）', text)
+        self.assertIn('你的设备 · 全部显示（其中 1 件公网看不到）', text)
         self.assertTrue(sent and all(s == TOKEN for s in sent), sent)
 
     def test_pair_failure_keeps_public_view(self):

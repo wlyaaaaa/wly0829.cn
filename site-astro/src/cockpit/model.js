@@ -93,7 +93,9 @@ export function normalize(raw) {
     served_at: v.served_at || null,
     collected_at: v.collected_at || null,
     collectors: obj(v.collectors),
-    verdict: { severity: obj(v.verdict).severity || 'gray', state: st(obj(v.verdict).state), observed_at: obj(v.verdict).observed_at || null, color: obj(v.verdict).color, text: text(obj(v.verdict).text, 200) },
+    verdict: { severity: obj(v.verdict).severity || 'gray', state: st(obj(v.verdict).state), observed_at: obj(v.verdict).observed_at || null, color: obj(v.verdict).color, text: text(obj(v.verdict).text, 200),
+      // 要你做的总件数（公开版也含私人事项），顶上那句下面“另 N 件是私人事项”用它核对
+      need_you: Number.isInteger(obj(v.verdict).need_you) ? obj(v.verdict).need_you : null },
     counts: { need_you: 0, ai_following: 0, deferred: 0, history: 0, tasks_failed_today: 0, backup_problems: 0, ...obj(v.counts) },
     // need_you 行原样透传，过了原定时间时带 overdue_since、overdue_days、overdue_text（标题旁小标签用 overdue_text）
     need_you: list(v.need_you), ai_following: list(v.ai_following), deferred: list(v.deferred),

@@ -19,7 +19,7 @@ test('本人版：页头小字、仅你可见标签和一行“具体”', () =>
   }));
   assert.deepEqual(v.viewer, { kind: 'owner', device_state: 'ok', device_name: '示例设备' });
   assert.equal(v.private_count, 2);
-  assert.equal(viewerLine(v), '<span class="cp-viewer-line is-owner">本人设备 · 全部显示（其中 2 件公网看不到）</span>');
+  assert.equal(viewerLine(v), '<span class="cp-viewer-line is-owner">你的设备 · 全部显示（其中 2 件公网看不到）</span>');
   const need = REGIONS['need-you'](v, ctx) + REGIONS.home(v, ctx) + REGIONS.ledger(v, ctx);
   assert.equal((need.match(/class="cp-own">仅你可见/g) || []).length, 3);
   assert.match(need, /<span class="cp-detail" tabindex="0" title="示例平台 10月20日 回复说还要补一份示例材料">具体：示例平台/);
@@ -32,7 +32,7 @@ test('本人版：页头小字、仅你可见标签和一行“具体”', () =>
   const pub = REGIONS['need-you'](normalize(base({ need_you: [{ id: 'n3', title: '示例私事 D', ask_kind: 'do', owner_only: true, public_title: '周一上午打一个电话' }] })), ctx);
   assert.match(pub, /<span class="cp-own" tabindex="0" title="公网显示为：周一上午打一个电话" data-pub="公网显示为：周一上午打一个电话">仅你可见<\/span>/);
   // 0 件私事时仍标本人设备，不加括号
-  assert.equal(viewerLine(normalize(base({ viewer: { kind: 'owner', device_state: 'ok' }, private_count: 0 }))), '<span class="cp-viewer-line is-owner">本人设备 · 全部显示</span>');
+  assert.equal(viewerLine(normalize(base({ viewer: { kind: 'owner', device_state: 'ok' }, private_count: 0 }))), '<span class="cp-viewer-line is-owner">你的设备 · 全部显示</span>');
 });
 
 test('公开版：占位行灰显只剩标题，一个按钮都没有，页头标注件数', () => {
@@ -59,7 +59,7 @@ test('公开版：占位行灰显只剩标题，一个按钮都没有，页头�
   const ov = REGIONS.home(v, { ...ctx, ov: { stale: () => false, lamp: () => '' } });
   assert.match(ov, /<li id="know-k1" class="is-report is-private" data-items="k1">.*私人事项（只在本人设备上显示）/);
   // 公开版不会露出“本人设备”
-  assert.doesNotMatch(page(v, ctx), /本人设备 · 全部显示/);
+  assert.doesNotMatch(page(v, ctx), /你的设备 · 全部显示/);
 });
 
 test('没有 viewer / private_count 的旧数据：什么都不加，和原来一样', () => {
