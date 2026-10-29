@@ -1,12 +1,14 @@
 // 驾驶舱各块的 HTML。构建时用最近一份快照画出首帧，浏览器拿到新数据后用同一组函数原地换掉每块里面的内容。
 // 每块外框（[data-cp] 所在的元素）始终在，数据没到只换字，不出空框、不换版式。
 import { hm, dateHm, when, ago, light, dedupeCards, isToday, govState } from './model.js';
-import { hasActs, actsOf, actCls, ownerBox, recentBlock, ownerWarn, questionsFor } from './actions.js';
+import { actCls, ownerBox, recentBlock, ownerWarn, questionsFor, actionToast } from './actions.js';
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 // 图片地址由页面传入（构建时 Vite 给的带指纹地址）；没传时按素材原名
 const src = (ctx, name) => ctx?.img?.[name] || '/assets/cockpit/' + name;
 const anchor = (id) => `<span class="cp-anchor" id="${esc(id)}"></span>`;
+// 沿用全站标题条的叶子、标题与笔刷结构；传入的正文已经转义，只有本站构造的件数加粗标签例外。
+const blockHead = (title, cls = '', extra = '', headingClass = '') => `<div class="cp-block-heading c-title-strip ${cls}" data-layout="inline" data-brush-position="below_whole_row"><div class="hub-strip-text"><div class="hub-strip-heading-group"><div class="hub-strip-heading-line"><span class="hub-leaf hub-leaf-l" aria-hidden="true"></span><h2 class="hub-heading ${headingClass}">${title}</h2></div></div>${extra ? `<div class="cp-heading-meta">${extra}</div>` : ''}</div><span class="hub-brush" aria-hidden="true"></span></div>`;
 const dot = (state) => `<span class="cp-dot is-${light(state)}" aria-hidden="true"></span>`;
 const notRead = (at, now) => `还没读到${at ? `（上次 ${esc(when(at, now))}）` : ''}`;
 // 在哪办：手机上能办 / 得在电脑前办（本人看不懂“借电脑 MCP”）
@@ -92,7 +94,7 @@ export function card(c, now, off = false) {
   const lines = items.filter((t) => !(c.text || '').includes(Number(t.value_gb).toFixed(1))).map((t) => LINE[t.reason](t));
   const trig = off ? '' : lines.length ? `<p class="cp-reason">触发的是：${esc(lines.join('；'))}</p>` : typeof c.trigger_text === 'string' && c.trigger_text ? `<p class="cp-reason">触发的是：${esc(c.trigger_text)}</p>` : '';
   const details = Array.isArray(c.details) ? c.details.filter((d) => d && (d.title || d.text)) : [];
-  return `<article class="cp-card is-${light(state)}${off ? ' is-off' : ''}"><h3>${dot(state)}${esc(c.title)}</h3><p>${text}</p>` + trig
+  return `<article class="cp-card is-${light(state)} ct-card${off ? ' is-off' : ''}"><h3>${dot(state)}${esc(c.title)}</h3><p>${text}</p>` + trig
     + (details.length ? `<details class="cp-more"><summary>查看具体缺口</summary><ul class="cp-list">${details.map((d) => `<li><span>${esc(d.title)}</span>${d.text ? `<small>${esc(d.text)}</small>` : ''}</li>`).join('')}</ul></details>` : '')
     + (c.criteria_text ? `<p class="cp-criteria">判断标准：${esc(c.criteria_text)}</p>` : '')
     + time + `</article>`;
@@ -125,6 +127,7 @@ export function factCards(cards, now, off = false) {
 }
 // 停了 3 天以上、已收进“这几块数据停了”那一句的卡（后端 stale_summary.ids），各区不再单独列
 const staleIds = (v) => new Set(v.stale_summary?.ids || []);
+const oldTodayCards = (v, now) => v.sections.today.filter((c) => c.id !== 'today_changes' && !isToday(c.observed_at, now));
 
 
 // 安全和授权：只显示，点了去授权页对应卡片办理（锚点和 O3 对齐）；数据来源和判定不变，首屏只放这一处
@@ -222,16 +225,18 @@ export function readTodo(x, now) {
   return { head: label && !x.headline ? `${label}：${head}` : head, body: rest, steps, options, minutes, path, where, mobile, dueText, done, hasDue: Number.isFinite(dueAt), overdue: left < 0, urgent, red };
 }
 // “你现在 N 件”：件数优先用后端 overview.owner_count / owner_urgent（P1），没有就数“要你做的事”清单
-export function ownerNow(v, now) {
+export function ownerNow(v, now, ctx = {}) {
   const ov = v.overview || {};
   // 后端给了 ask_kind 时，不把明确写着“AI 的事”的算进来；急不急也以后端为准。
   // （以前只认 do / decide，后端实际给的是 decision，首屏标题因此一条都没列出来）
   const all = v.need_you.map((x) => ({ x, r: readTodo(x, now) }));
-  const items = all.filter((i) => !['ai', 'know'].includes(i.x.ask_kind));
-  if (Number.isFinite(ov.owner_urgent)) items.forEach((i) => { i.r.urgent = i.x.urgent === true; });
-  const n = Number.isFinite(ov.owner_count) ? ov.owner_count : items.length;
-  const urgent = Number.isFinite(ov.owner_urgent) ? ov.owner_urgent : items.filter((i) => i.r.urgent).length;
-  return { n, urgent, items, all };
+  const own = all.filter((i) => !['ai', 'know'].includes(i.x.ask_kind));
+  if (Number.isFinite(ov.owner_urgent)) own.forEach((i) => { i.r.urgent = i.x.urgent === true; });
+  const hidden = own.filter((i) => actCls(i.x, { ...ctx, viewer: v.viewer }));
+  const items = own.filter((i) => !hidden.includes(i));
+  const n = Number.isFinite(ov.owner_count) ? Math.max(0, ov.owner_count - hidden.length) : items.length;
+  const urgent = Number.isFinite(ov.owner_urgent) ? Math.max(0, ov.owner_urgent - hidden.filter((i) => i.r.urgent).length) : items.filter((i) => i.r.urgent).length;
+  return { n, urgent, items, all, hidden: hidden.length };
 }
 const checkedAgo = (v, now) => { const t = Date.parse(v || ''); if (!Number.isFinite(t)) return ''; const h = Math.floor((now.getTime() - t) / 36e5); return h < 1 ? '1 小时内核对过' : h < 48 ? `${h} 小时前核对` : `${Math.floor(h / 24)} 天前核对`; };
 const todoId = (x) => 'todo-' + String(x.id || '').replace(/[^\w-]/g, '');
@@ -244,17 +249,21 @@ const questionsOf = (x, r) => {
   } : null)).filter((q) => q && q.options.length) : [];
   return qs.length ? qs : r.options.length ? [{ id: 'q1', text: '', note: false, options: r.options.map((o) => o.text) }] : [];
 };
-const ACTION_KINDS = ['action', 'cooperate', 'do'];
 const DECIDE = ['decide', 'decision', 'choose'];
 const isBlank = (s) => !s || /^\s*(待补|待补充|暂无|无)(说明)?[。\s]*$/.test(String(s));
-// 本人设备上的卡（条目带 owner_actions）：固定三句——做什么；为什么是你、不做（不回）会怎样；怎么办、大概多久。下面是按钮（只按 owner_actions 画）。
-// 本人说过“长了看着头疼短了看着谜语”：没有的那句就不写，不另编；登记时间、问过几次、电脑上的路径这些小字不上这张卡
+// 各类卡共用精简首行：标题、原因、按钮；步骤、后果和确认内容完整保存在“怎么办”里。
 const CONFIRM = { message: '发消息', publish: '对外发布', payment: '花钱', delete_unique: '删除唯一的数据' };
 // 确认卡写清发给谁、发什么、花多少或删什么（后端 confirmation 对象）
 const CONFIRM_KEYS = [['to', '发给'], ['content', '发什么'], ['amount', '花多少'], ['target', '删什么']];
 const isQuestion = (x) => ['question', 'ai_wait'].includes(x.card_type) || (!x.card_type && DECIDE.includes(x.ask_kind));
 const whereOf = (r) => (r.mobile ? MOBILE[r.mobile.kind] : r.where === 'phone' ? '手机上能办' : r.where === 'pc' ? '得在电脑前办' : '');
 const dueOf = (r) => (r.dueText ? `<span class="${r.urgent ? 'is-urgent' : ''}">${r.overdue ? '已过期限 ' + esc(r.dueText) : esc(r.dueText) + (r.hasDue ? ' 前' : '')}</span>` : '');
+// 选项只是说明；选择和确认都由本人复制到对话里表达，不在网页提交答案。
+const optionsText = (x, r) => {
+  let qs = questionsFor(x);
+  if (!qs.length && r) qs = questionsOf(x, r).map((q) => ({ ...q, options: q.options.map((text) => ({ text })) }));
+  return qs.map((q) => `<div class="cp-q">${q.text ? `<p class="cp-q-k">${esc(q.text)}</p>` : ''}<ul class="cp-oa-opts is-text">${q.options.map((o) => `<li><b>${esc(o.text)}${o.rec ? ' · AI 建议（只是说明，不能点）' : ''}</b>${o.detail ? `<span class="cp-oa-detail">${esc(o.detail)}</span>` : ''}</li>`).join('')}</ul></div>`).join('');
+};
 function ownerCard(x, r, ctx) {
   const kind = CONFIRM[x.confirmation_kind] || (x.card_type === 'confirm' ? '要你点头' : '');
   const conf = x.confirmation && typeof x.confirmation === 'object' ? CONFIRM_KEYS.filter(([k]) => typeof x.confirmation[k] === 'string' && x.confirmation[k].trim()).map(([k, l]) => [l, x.confirmation[k].trim()]) : [];
@@ -269,25 +278,30 @@ function ownerCard(x, r, ctx) {
     + (r.done ? `<p class="cp-own-done">${esc(r.done)}</p>` : '');
   const href = https(x.action?.href || x.href);
   const go = href ? `<a class="cp-btn" href="${esc(href)}" target="_blank" rel="noopener noreferrer">去办 →</a>` : '';
-  const og = openGroup(x, ctx.viewer);
-  return `<article class="cp-ask is-own${r.red ? ' is-urgent' : ''}${kind ? ' is-confirm' : ''}${actCls(x, ctx)}" id="${esc(todoId(x))}"${itemAttr(x)}>`
-    + (og && !og.includes('is-phone') ? cardHead(typeof x.conversation_title === 'string' && x.conversation_title.trim() ? `「${x.conversation_title.trim()}」那个对话` : '', og) : '')
-    + (kind ? `<p class="cp-own-kind">要你确认 · ${kind}</p>` : '')
-    + `<h3 class="cp-ask-title">${dot(r.scheduled ? 'neutral' : r.red ? 'red' : 'attention')}<span>${esc(r.head)}${ownTag(x)}${lateTag(x)}</span></h3>` + detail(x)
+  const og = openGroup(x, ctx.viewer), waiting = x.card_type === 'ai_wait';
+  const late = (r.overdue || String(x.overdue_text || '').trim()) && !r.urgent ? '过了原定时间，但不急' : '';
+  const brief = [why, late].filter(Boolean).join(' · ');
+  const source = waiting ? [x.conversation_title ? `「${x.conversation_title}」那个对话` : '', x.asked_at ? `${when(x.asked_at, ctx.now)} 问的` : ''].filter(Boolean).join(' · ') : '';
+  const meta = [x.at ? '登记于 ' + when(x.at, ctx.now) : '', Number.isFinite(x.asked_count) ? `问过你 ${x.asked_count} 次` : '', x.last_checked_at ? '最后核对 ' + when(x.last_checked_at, ctx.now) : '', x.project ? '项目：' + x.project : ''].filter(Boolean);
+  return `<article class="cp-ask is-own${r.red ? ' is-urgent' : ''}${kind ? ' is-confirm' : ''} ct-card${actCls(x, ctx)}" id="${esc(todoId(x))}"${itemAttr(x)}>`
+    + `<div class="cp-ask-main"><h3 class="cp-ask-title">${dot(r.scheduled ? 'neutral' : r.red ? 'red' : 'attention')}<span>${esc(r.head)}${ownTag(x)}</span></h3>${brief ? `<p class="cp-ask-why">${esc(brief)}</p>` : ''}</div>`
+    + ownerBox(x, ctx, { card: true, extra: go + og })
+    + `<details class="cp-ask-details" id="${esc(todoId(x))}-details"><summary>怎么办${r.steps.length ? `（${r.steps.length} 步）` : ''} ›</summary>`
+    + (source ? `<p class="cp-wait-src">${esc(source)}</p>` : '')
+    + (waiting && typeof x.progress === 'string' && x.progress.trim() ? `<p class="cp-own-s"><b>它做到哪</b>${esc(plain(x.progress))}</p>` : '')
+    + (kind ? `<p class="cp-own-kind">要你确认 · ${kind}</p>` : '') + detail(x) + lateTag(x)
     + (conf.length ? `<dl class="cp-own-conf">${conf.map(([k, val]) => `<div><dt>${k}</dt><dd>${esc(val)}</dd></div>`).join('')}</dl>` : '')
-    + (s2 ? `<p class="cp-own-s">${s2}</p>` : '') + s3
-    + ownerBox(x, ctx, { card: true, extra: go, minor: isQuestion(x) }) + cardTail(og) + `</article>`;
+    + optionsText(x, r) + (s2 ? `<p class="cp-own-s">${s2}</p>` : '') + s3
+    + (meta.length ? `<p class="cp-meta">${meta.map(esc).join(' · ')}</p>` : '') + `</details></article>`;
 }
-// “AI 在等你回”卡（card_type=ai_wait，后端给了对话名、做到哪这些新字段时）：
-// 「河南案卡重排」那个对话 · 17:42 问的／它做到哪／要你定／选项（AI 建议那项是主按钮，旁边写点了会怎样）／不回会怎样／你定就行、我没看懂。
-// 只有一道题时点选项就直接交（照常可撤回）；答案送回原来那个对话，所以不选交给谁。旧卡没有这些新字段时照第二步的样子
 // ---- 卡上的“打开”组（后端条目和“AI 正在跑”行上的 open；没有这个字段就一个都不画）----
 // 打开对话：这台就是对话所在的那台电脑（viewer.device_machine 等于 open.conversation.machine），直接链到 claude:// 或 codex://，
 // Chrome 第一次会问一次要不要打开；不是这台（另一台电脑、手机）就“在主驾驶上打开”，让那台电脑打开（POST open）。
 // 看汇报：网页里右侧抽屉（client.js），汇报页放进不同源的沙箱里。打开登记的文件夹、文件：让主驾驶打开。
-// 这些都不改条目状态、不撤回，所以单独一个函数，不进 ownerBox
+// 这些都不改条目状态、不撤回；作为 ownerBox 的 extra 和复制放在同一行。
 const APP_LINK = /^(?:claude|codex):\/\/[\w./?=&%:-]+$/;
 export function openGroup(x, viewer) {
+  if (viewer?.kind !== 'owner') return '';
   const o = x?.open;
   if (!o || typeof o !== 'object' || Array.isArray(o) || typeof x.id !== 'string' || !x.id) return '';
   const cap = new Set(viewer?.capabilities || []), phone = viewer?.device_kind === 'phone', me = viewer?.device_machine || '';
@@ -297,64 +311,26 @@ export function openGroup(x, viewer) {
   // 只有 open.report 为 true 的才有“看汇报”（在这台设备的抽屉里看）；有了它，“在主驾驶上打开汇报页”就不再重复列
   const drawer = o.report === true && cap.has('report');
   const there = c && typeof c.machine === 'string' && c.machine.trim() ? c.machine.trim() : '主驾驶';
-  const remote = (t, label) => `<button type="button" class="cp-open-b" data-open-item="${esc(x.id)}" data-open-target="${esc(t.key)}">${esc(label)}</button>`;
+  const remote = (t, label) => `<button type="button" class="cp-open-b ct-inline-action" data-open-item="${esc(x.id)}" data-open-target="${esc(t.key)}">${esc(label)}</button>`;
   const bits = [];
   if (c) {
     const url = typeof c.url === 'string' && APP_LINK.test(c.url) ? c.url : '';
     const conv = targets.find(isConv);
-    if (!phone && url && me && c.machine === me) bits.push(`<a class="cp-open-a" href="${esc(url)}">打开对话 ↗</a>`);
+    if (!phone && url && me && c.machine === me) bits.push(`<a class="cp-open-a ct-inline-action" href="${esc(url)}">打开对话 ↗</a>`);
     else if (cap.has('open') && conv) bits.push(remote(conv, `在${there}上打开对话`));
   }
-  if (drawer) bits.push(`<button type="button" class="cp-open-b" data-report="${esc(x.id)}">看汇报</button>`);
+  if (drawer) bits.push(`<button type="button" class="cp-open-b ct-inline-action" data-report="${esc(x.id)}">看汇报</button>`);
   if (cap.has('open')) for (const t of targets.filter((t) => !isConv(t) && !(drawer && t.key === 'report'))) bits.push(remote(t, (me === '主驾驶' ? '' : '在主驾驶上') + t.label.trim().slice(0, 40)));
   return bits.length ? `<span class="cp-open${phone ? ' is-phone' : ''}" role="group" aria-label="打开">${bits.join('')}</span>` : '';
 }
-// 卡头一行：对话名和时间，右端“打开”组；没有“打开”组时照第三步只写那一行字。手机上“打开”组放到卡的最后（cardTail），卡头照旧
-const cardHead = (src, og) => (og && !og.includes('is-phone') ? `<div class="cp-card-head">${src ? `<p class="cp-wait-src">${esc(src)}</p>` : ''}${og}</div>` : src ? `<p class="cp-wait-src">${esc(src)}</p>` : '');
-const cardTail = (og) => (og.includes('is-phone') ? `<p class="cp-open-tail">${og}</p>` : '');
-const isNewWait = (x) => x?.card_type === 'ai_wait' && !!(x.conversation_title || x.progress || x.asked_at || (vagueWait(x) && x.open));
-function waitCard(x, ctx) {
-  const at = x.asked_at ? when(x.asked_at, ctx.now) : '';
-  // 后端没给对话名的：照实说没写是哪个对话（钩子以后会补上），不让人以为是哪个都行
-  const src = x.conversation_title ? `「${x.conversation_title}」那个对话${at ? ` · ${at} 问的` : ''}` : vagueWait(x) ? (at ? `${at} 问的` : '') : `一个 AI 对话（没写是哪个）${at ? ` · ${at} 问的` : ''}`;
-  const cons = isBlank(x.consequence) ? '' : `<p class="cp-own-s"><b>不回会怎样</b>${esc(plain(String(x.consequence).trim()))}</p>`;
-  const acts = hasActs(x);
-  // 没有按钮（公开版、旧数据）：选项照样列出来，只是字
-  const list = acts ? '' : questionsFor(x).map((q) => `<ul class="cp-oa-opts is-text">${q.options.map((o) => `<li><b>${esc(o.text)}${o.rec ? ' · AI 建议' : ''}</b>${o.detail ? `<span class="cp-oa-detail">${esc(o.detail)}</span>` : ''}</li>`).join('')}</ul>`).join('');
-  return `<article class="cp-ask is-own is-wait${actCls(x, ctx)}" id="${esc(todoId(x))}"${itemAttr(x)}>`
-    + cardHead(src, openGroup(x, ctx.viewer))
-    + (typeof x.progress === 'string' && x.progress.trim() ? `<p class="cp-own-s"><b>它做到哪</b>${esc(plain(x.progress.trim()))}</p>` : '')
-    + `<h3 class="cp-ask-title">${vagueWait(x) ? '' : '<span class="cp-own-k">要你定</span>'}<span>${esc(waitTitle(x))}${ownTag(x)}${lateTag(x)}</span></h3>` + detail(x)
-    + (acts ? ownerBox(x, ctx, { card: true, noExec: true, mid: cons, minor: true }) : list + cons) + cardTail(openGroup(x, ctx.viewer)) + `</article>`;
-}
 function askCard(x, r, ctx) {
-  if (isPh(x)) return `<article class="cp-ask is-private" id="${esc(todoId(x))}"${itemAttr(x)}><h3 class="cp-ask-title" title="${PH_HINT}">${dot('unavailable')}<span>${esc(x.title || PRIVATE_TITLE)}${lateTag(x)}</span></h3></article>`;
-  if (isNewWait(x)) return waitCard(x, ctx);
-  if (hasActs(x)) return ownerCard(x, r, ctx);
-  // 没有按钮的卡（公开版、旧数据）：只写字，一个按钮都没有；选项照样列出来
-  const qs = questionsOf(x, r);
-  const doList = r.steps.length ? `<ol class="cp-steps">${r.steps.map((s) => `<li>${esc(s)}</li>`).join('')}</ol>` : r.body ? `<p class="cp-ask-body">${esc(r.body)}</p>` : '';
-  const quiz = qs.length ? `<div class="cp-quiz">${qs.map((q, i) => `<div class="cp-q"><p class="cp-q-k">${qs.length > 1 || q.text ? `<b>第 ${i + 1} 题</b>${esc(q.text)}` : '可选的'}</p>`
-      + `<ul class="cp-opts-text">${q.options.map((o) => `<li>${esc(o)}</li>`).join('')}</ul></div>`).join('')}</div>` : '';
-  const info = [dueOf(r), [whereOf(r), r.minutes].filter(Boolean).map(esc).join('，')].filter(Boolean);
-  const facts = [['为什么要你', x.why_you], ['不做会怎样', x.consequence || x.action?.consequence]].filter(([, val]) => !isBlank(val));
-  const href = https(x.action?.href || x.href);
-  const meta = [x.at ? '登记于 ' + when(x.at, ctx.now) : '', Number.isFinite(x.asked_count) ? `问过你 ${x.asked_count} 次` : '', x.last_checked_at ? `最后核对 ${when(x.last_checked_at, ctx.now)}` : '', x.project ? '项目：' + x.project : ''].filter(Boolean);
-  return `<article class="cp-ask${r.red ? ' is-urgent' : ''}" id="${esc(todoId(x))}"${itemAttr(x)}>`
-    + `<h3 class="cp-ask-title">${dot(r.scheduled ? 'neutral' : r.red ? 'red' : 'attention')}<span>${esc(r.head)}${ownTag(x)}${lateTag(x)}</span></h3>` + detail(x)
-    + (doList ? `<div class="cp-ask-do"><p class="cp-ask-k">要做什么</p>${doList}${r.done ? `<p class="cp-own-done">${esc(r.done)}</p>` : ''}</div>` : '') + quiz
-    + (info.length ? `<p class="cp-ask-info">${info.join('<i aria-hidden="true"> · </i>')}</p>` : '')
-    + (facts.length ? `<dl class="cp-facts-dl">${facts.map(([k, val]) => `<div><dt>${k}</dt><dd>${esc(plain(val))}</dd></div>`).join('')}</dl>` : '')
-    + (r.path || (typeof x.report_title === 'string' && x.report_title) ? `<p class="cp-path">详细说明在电脑上</p>` : '')
-    + (href ? `<p class="cp-go-line"><a href="${esc(href)}" target="_blank" rel="noopener noreferrer">去办 →</a></p>` : '')
-    + (meta.length ? `<p class="cp-meta">${meta.map(esc).join(' · ')}</p>` : '') + `</article>`;
+  if (isPh(x)) return `<article class="cp-ask is-private ct-card" id="${esc(todoId(x))}"${itemAttr(x)}><div class="cp-ask-main"><h3 class="cp-ask-title" title="${PH_HINT}">${dot('unavailable')}<span>${esc(x.title || PRIVATE_TITLE)}</span></h3><p class="cp-ask-why">${PH_HINT}</p></div></article>`;
+  return ownerCard(x, r, ctx);
 }
-
-
 // 后端偶尔给的是内部代号（如 checkpoint_overdue）：认得的换成人话，认不得的不显示
 const STUCK_CODES = { checkpoint_overdue: '已超过约定的检查时间，还没收到进展', no_progress_7d: '已超过 7 天没有进展记录' };
 const stuckWhy = (s) => (!s ? '' : /^[a-z][a-z0-9_]*$/.test(s) ? STUCK_CODES[s] || '' : s);
-// AI 在跟（二级页“AI 的账本”）：本人不用管。晚了的一行一条（跟得最久的在前），其余收起；只能“回一句话”。
+// AI 在跟（二级页“AI 的账本”）：晚了的一行一条（跟得最久的在前），其余收起，每条可复制。
 // 写给本人看的话：“满 14 天待 AI 定”→“跟了 16 天还没结果，AI 这周要么定期限修好，要么结束”；还没写清要办什么的空条目不给本人看
 const bare = (x) => { const t = clean(x.title); return !isPh(x) && (!t || t === x.project || /还没写清要办什么/.test(t)); };
 // 还在跟、AI 已经定了怎么办的（后端 decision_summary：“{标题}：在 11 月 5 日前处理好；{技术依据}”）：写“AI 定了：在 11 月 5 日前处理好”，依据收进“技术细节”
@@ -375,7 +351,7 @@ const decLine = (x, pre) => {
 };
 function aiFollowing(v, ctx) {
   const now = ctx.now;
-  const row = (x, small) => `<li${liCls(x, ctx)}${itemAttr(x)}>${rowText(x, plain(clean(x.title) || x.project), esc(small))}${decLine(x, 'decl')}${ownerBox(x, ctx, { only: ['note'] })}</li>`;
+  const row = (x, small) => `<li${liCls(x, ctx)}${itemAttr(x)}>${rowText(x, plain(clean(x.title) || x.project), esc(small))}${decLine(x, 'decl')}${ownerBox(x, ctx)}</li>`;
   if (v.ai_overdue) {
     const ageOf = (x) => (x.registration_unknown ? 14 : Number.isFinite(x.age_days) ? x.age_days : -1);
     const late = [...v.ai_overdue].filter((x) => !bare(x)).sort((a, b) => ageOf(b) - ageOf(a));
@@ -402,7 +378,7 @@ function aiFollowing(v, ctx) {
     return { x, title: passed ? title.replace(/[；;]\s*下一个检查点[^；;]*$/, '') : title, why, state, h };
   });
   if (!rows.length) return `<p class="cp-line" id="ai">${dot('ok')}AI 现在手上没有自己的活。</p>`;
-  const line = (r) => `<li class="is-${r.state}${phCls(r.x)}${actCls(r.x, ctx)}"${itemAttr(r.x)}>${rowText(r.x, plain(r.title), [r.why, r.h?.task ? `由“${r.h.task}”在办` : '', r.h?.next_run_at ? '下次 ' + dateHm(r.h.next_run_at) : '', r.x.last_checked_at ? checkedAgo(r.x.last_checked_at, now) : '还没核对过'].filter(Boolean).map(esc).join(' · '))}${ownerBox(r.x, ctx, { only: ['note'] })}</li>`;
+  const line = (r) => `<li class="is-${r.state}${phCls(r.x)}${actCls(r.x, ctx)}"${itemAttr(r.x)}>${rowText(r.x, plain(r.title), [r.why, r.h?.task ? `由“${r.h.task}”在办` : '', r.h?.next_run_at ? '下次 ' + dateHm(r.h.next_run_at) : '', r.x.last_checked_at ? checkedAgo(r.x.last_checked_at, now) : '还没核对过'].filter(Boolean).map(esc).join(' · '))}${ownerBox(r.x, ctx)}</li>`;
   const stuck = rows.filter((r) => r.state === 'stuck'), rest = rows.filter((r) => r.state !== 'stuck');
   return `<div class="cp-ai" id="ai">${stuck.length ? `<p class="cp-ai-cap">${dot('neutral')}AI 自己有 ${stuck.length} 件超过约定的检查时间，在补（不用你管）</p><ul class="cp-ailist">${stuck.map(line).join('')}</ul>` : ''}`
     + (rest.length ? `<details class="cp-more" id="ai-rest"><summary>其余 ${rest.length} 件还没到约定日子</summary><ul class="cp-ailist">${rest.map(line).join('')}</ul></details>` : '') + `</div>`;
@@ -423,9 +399,9 @@ function govRun(v, ctx) {
   const nums = [['修好', c.fixed], ['关掉', c.closed], ['转暂缓', c.deferred], ['还在跟', c.following], ['待你办', c.need_you]].filter(([, n]) => nOf(n) != null);
   const at = r.started_at || r.ended_at, next = r.next_run_at || g.next_run_at;
   const head = `上次 AI 体检${at ? `（${dateHm(at)}）` : ''}记录：` + (nums.length ? '当时' + nums.map(([k, n]) => `${k} ${n}`).join('、') + ' 件' : esc(r.summary || '跑完了'));
-  const sub = (key, label, items, note) => (items.length ? `<details class="cp-more cp-gov-more" id="${key}"><summary>${label} ${items.length} 件</summary><ul class="cp-ailist">${items.map((x) => `<li${isPh(x) ? ' class="is-private"' : ''}>${rowText(x, x.title, x[note] ? esc(x[note]) : '')}</li>`).join('')}</ul></details>` : '');
+  const sub = (key, label, items, note) => (items.length ? `<details class="cp-more cp-gov-more" id="${key}"><summary>${label} ${items.length} 件</summary><ul class="cp-ailist">${items.map((x) => `<li${liCls(x, ctx)}>${rowText(x, x.title, x[note] ? esc(x[note]) : '')}${ownerBox(x, ctx)}</li>`).join('')}</ul></details>` : '');
   return `<div class="cp-gov"><p class="cp-gov-line">${dot('neutral')}<span class="cp-gov-text">${head}${next ? ` · 下次 ${esc(dateHm(next))}` : ''}</span></p>`
-    + (acts.length ? `<details class="cp-more cp-gov-more" id="gov-actions"><summary>当时留下的说明 ${acts.length} 条</summary><p>这是上次体检的记录；现在要办的事以上面的当前待办为准。</p><ul class="cp-gov-acts">${acts.map((x) => isPh(x) ? `<li class="is-private">${rowText(x)}</li>` : `<li>${rowText(x, plain(x.title))}</li>`).join('')}</ul></details>` : '')
+    + (acts.length ? `<details class="cp-more cp-gov-more" id="gov-actions"><summary>当时留下的说明 ${acts.length} 条</summary><p>这是上次体检的记录；现在要办的事以上面的当前待办为准。</p><ul class="cp-gov-acts">${acts.map((x) => `<li${liCls(x, ctx)}>${rowText(x, plain(x.title))}${ownerBox(x, ctx)}</li>`).join('')}</ul></details>` : '')
     + sub('gov-closed', '那次自动关掉', closed, 'evidence') + sub('gov-deferred', '那次新转暂缓', deferred, 'reason') + `</div>`;
 }
 // 项目后台进展（ai_work）：已接入的后台任务、留下没合并的分支；后端没给这块就不出
@@ -460,16 +436,13 @@ function qRow(x, r, ctx, kind, open) {
   const title = kind === 'wait' ? waitTitle(x) : r.head;
   const src = !vagueWait(x) && typeof x.conversation_title === 'string' && x.conversation_title.trim() ? `「${x.conversation_title.trim()}」` : '';
   const at = kind === 'wait' && x.asked_at ? `${when(x.asked_at, ctx.now)} 问的` : r.dueText ? (r.overdue ? '已过期限 ' + r.dueText : r.dueText + (r.hasDue ? ' 前' : '')) : '';
-  const qs = kind === 'wait' && !actCls(x, ctx) && hasActs(x, ['answer']) ? questionsFor(x) : [];
-  const rec = qs.length === 1 ? qs[0].options.find((o) => o.rec) : null;
-  const pick = rec ? `<button type="button" class="cp-btn cp-q-pick" data-q-pick="${esc(x.id)}" data-val="${esc(JSON.stringify(rec.value))}">${esc(rec.text)} · AI 建议</button>` : '';
   return `<div class="cp-q-row is-${kind}${r.red ? ' is-urgent' : ''}" data-q-open="${esc(x.id)}" role="button" tabindex="0" aria-expanded="${open}">`
     + `<span class="cp-q-tag is-${kind}">${Q_TAG[kind]}</span>`
     + `<span class="cp-q-text">${src ? `<b class="cp-q-src">${esc(src)}</b>` : ''}<span class="cp-q-title">${esc(title)}</span></span>`
-    + (at ? `<small class="cp-q-at${r.red ? ' is-urgent' : ''}">${esc(at)}</small>` : '') + pick + `</div>`;
+    + (at ? `<small class="cp-q-at${r.red ? ' is-urgent' : ''}">${esc(at)}</small>` : '') + `</div>`;
 }
 export function needCards(v, ctx) {
-  const { all, n } = ownerNow(v, ctx.now);
+  const { all, n } = ownerNow(v, ctx.now, ctx);
   if (!all.length) return v.ok ? '' : `<p class="cp-empty">${dot('unavailable')}${notRead(v.served_at, ctx.now)}</p>`;
   const cx = { ...ctx, viewer: v.viewer };
   const order = NEED_GROUPS.flatMap(([k]) => all.filter((i) => groupOf(i.x) === k)).filter((i) => !isPh(i.x) && typeof i.x.id === 'string' && i.x.id);
@@ -477,13 +450,13 @@ export function needCards(v, ctx) {
   const want = ctx.act?.ui?.get(Q_KEY)?.open;
   const openId = typeof want === 'string' && (want === '' || order.some((i) => i.x.id === want)) ? want : order[0]?.x.id || '';
   // 能收成一行的超过两件才给“一行一件 / 全部展开”（只有一两件、或都是私人占位行时没得切）
-  const head = `<div class="cp-q-head"><h2 class="cp-q-n">要你做 <b>${n}</b> 件</h2>` + (order.length > 2
-    ? `<span class="cp-q-modes" role="group" aria-label="怎么排"><button type="button" class="cp-q-mode" data-q-mode="rows" aria-pressed="false">一行一件</button><button type="button" class="cp-q-mode" data-q-mode="all" aria-pressed="false">全部展开</button></span>` : '') + `</div>`;
+  const modes = order.length > 2 ? `<span class="cp-q-modes" role="group" aria-label="怎么排"><button type="button" class="cp-q-mode" data-q-mode="rows" aria-pressed="false">一行一件</button><button type="button" class="cp-q-mode" data-q-mode="all" aria-pressed="false">全部展开</button></span>` : '';
+  const head = blockHead(`要你做 <b>${n}</b> 件`, 'cp-q-head', modes, 'cp-q-n');
   const wrap = (i, k) => {
     const x = i.x, card = askCard(x, i.r, cx);
     if (!order.includes(i)) return `<div class="cp-q is-open">${card}</div>`;
     // 能收成一行的只有一两件：都展开（电脑上并排），不收成一行一件
-    const open = x.id === openId || order.length <= 2;
+    const open = ctx.act?.ui?.get(Q_KEY)?.mode !== 'rows' || x.id === openId || order.length <= 2;
     return `<div class="cp-q${open ? ' is-open' : ''}${actCls(x, ctx)}" data-q="${esc(x.id)}">${qRow(x, i.r, ctx, k, open)}${card}</div>`;
   };
   const few = all.length <= 2 ? `<span class="cp-q-few${all.length === 1 ? ' is-one' : ''}" hidden></span>` : '';
@@ -539,7 +512,8 @@ const LAPTOP = { online: ['在线', 'ok'], offline: ['离线（要用它时得�
 export function backup(v, ctx) {
   const off = !!ctx.offline, stale = staleIds(v);
   const cards = dedupeCards(v.sections.backup_cloud).filter((c) => !stale.has(c.id)).map((c) => (c.id === 'drive_upload' ? { ...c, text: knownFirst(c.text) } : c));
-  return anchor('backups') + (cards.length ? factCards(cards, ctx.now, off) : `<div class="cp-grid">${card({ title: '备份', state: 'unavailable', text: '' }, ctx.now, off)}</div>`);
+  const sig = sigOf(v.overview, 'backup'), issue = !off && sig.level !== 'ok' ? whyOf(v.overview, 'backup_cloud')[0] : '';
+  return anchor('backups') + (issue ? `<p class="cp-line cp-backup-current">${esc(issue)}</p>` : '') + (cards.length ? factCards(cards, ctx.now, off) : `<div class="cp-grid">${card({ title: '备份', state: 'unavailable', text: '' }, ctx.now, off)}</div>`);
 }
 
 // 先说读到了什么，再说哪点还不知道：句子以“……还不知道。”开头时挪到最后（Google Drive 上传卡）
@@ -604,7 +578,7 @@ function codeCard(v, ctx) {
   })() : '';
   const y = c.daily.length > 1 ? c.daily[c.daily.length - 2] : null;
   const yline = y && Number.isFinite(y.commits) && (early(ctx) || !n) ? `<p class="cp-cap cp-yesterday">昨天（${esc(monthDay(y.date))}）共 ${esc(y.commits)} 个提交</p>` : '';
-  return `<article class="cp-feature cp-code"><h3>今天代码变化</h3>${head}${yline}${trend}${top}<p class="cp-time">提交不等于已经上线${c.observed_at ? ` · ${esc(when(c.observed_at, ctx.now))} 读到` : ''}</p></article>`;
+  return `<article class="cp-feature cp-code ct-card"><h3>今天代码变化</h3>${head}${yline}${trend}${top}<p class="cp-time">提交不等于已经上线${c.observed_at ? ` · ${esc(when(c.observed_at, ctx.now))} 读到` : ''}</p></article>`;
 }
 
 // 两张常驻卡之二：你对 AI 说的话（9 类）。9 类计数没到时，退回纠正总数和近 7 天，不出空格、不写“未统计”
@@ -628,7 +602,7 @@ function wordsCard(v, ctx) {
     const none = WORDS9.every((k) => count(cats, k) === 0);
     const prev = days.filter((d) => d.date && d.date < (oc.date || '')).pop();
     const yline = prev && (early(ctx) || none) ? `<p class="cp-cap cp-yesterday">昨天（${esc(monthDay(prev.date))}）：${WORDS9.map((k) => `${k} ${count(prev.by_category, k)}`).join('、')}</p>` : '';
-    return `<article class="cp-feature cp-words"><h3>你对 AI 说的话（按 9 类）</h3><p class="cp-cap">${none ? (oc.complete === false && oc.observed_at ? `今天截至 ${esc(hm(oc.observed_at))}，还没跟 AI 说话（0 条）` : '今天还没跟 AI 说话（0 条）') : `大数字是${asof}，小字是近 7 天；一条话含几类就各算一次`}</p>${gap}${yline}<ol class="cp-words9">${cells}</ol></article>`;
+    return `<article class="cp-feature cp-words ct-card"><h3>你对 AI 说的话（按 9 类）</h3><p class="cp-cap">${none ? (oc.complete === false && oc.observed_at ? `今天截至 ${esc(hm(oc.observed_at))}，还没跟 AI 说话（0 条）` : '今天还没跟 AI 说话（0 条）') : `大数字是${asof}，小字是近 7 天；一条话含几类就各算一次`}</p>${gap}${yline}<ol class="cp-words9">${cells}</ol></article>`;
   }
   const hist = Array.isArray(oc.history) ? oc.history.filter((d) => d && d.date) : [];
   const known = hist.filter((d) => Number.isFinite(d.total));
@@ -637,7 +611,7 @@ function wordsCard(v, ctx) {
     ? `<div class="cp-big"><b>${esc(last.total)}</b><span>次纠正 AI<br>${last.today ? '今天' : `最近有数的一天（${esc(short(last.date))}）`}</span></div>`
     : `<div class="cp-big"><b class="is-none">—</b><span>纠正次数还没读到</span></div>`;
   const trend = hist.length ? `<p class="cp-cap">近 ${hist.length} 天每天纠正几次（— 表示没统计到）</p>` + bars(hist.map((d, i) => ({ label: short(d.date), n: Number.isFinite(d.total) ? d.total : null, now: i === hist.length - 1 })), ' 次') : '';
-  return `<article class="cp-feature cp-words"><h3>你纠正 AI 的次数</h3>${head}${trend}<p class="cp-time">以后按 9 类分开显示：禁令、纠正、授权、要求、建议、偏好、事实、询问、好奇</p></article>`;
+  return `<article class="cp-feature cp-words ct-card"><h3>你纠正 AI 的次数</h3>${head}${trend}<p class="cp-time">以后按 9 类分开显示：禁令、纠正、授权、要求、建议、偏好、事实、询问、好奇</p></article>`;
 }
 
 // 电脑后台今天做的事：一行总数 + 按北京时间的时间线（备份、系统镜像、出错、重启、卡住、验收）
@@ -671,7 +645,7 @@ function activityBlock(v, ctx) {
   const names = a.errors.length ? `<p class="cp-cap cp-errnames">出过错的：${a.errors.map((e) => `${esc(e.name || '没写名字的任务')}（${esc(hm(e.at))}${e.owner === 'other' ? '，别的软件自带' : ''}${e.recovered === true ? '，后来已恢复' : e.recovered === false ? '，还没恢复' : ''}）`).join('、')}${known ? '。' : '；后来恢复没有，看上面自动任务清单里的“今天出过错的”。'}</p>` : '';
   const items = mergeAcceptance(a.timeline).map((x) => `<li class="is-${light(x.level === 'act' ? 'red' : x.level === 'watch' ? 'attention' : x.level === 'ok' ? 'ok' : 'unavailable')}"><time>${esc(hm(x.at))}</time><i class="cp-tl-dot" aria-hidden="true"></i><span class="cp-tl-kind">${esc(KIND[x.kind] || '其他')}</span><span>${esc(x.text)}</span></li>`).join('');
   const acc = typeof s.acceptance_text === 'string' && s.acceptance_text.trim() ? `<p class="cp-cap cp-acceptance">${esc(s.acceptance_text.trim())}</p>` : '';
-  return `<article class="cp-feature cp-activity"><h3>电脑后台今天做的事</h3><p class="cp-big-line">${esc(line)}</p>${acc}${names}${yline}`
+  return `<article class="cp-feature cp-activity ct-card"><h3>电脑后台今天做的事</h3><p class="cp-big-line">${esc(line)}</p>${acc}${names}${yline}`
     + (items ? `<ol class="cp-timeline">${items}</ol>` : `<p class="cp-line">${dot('ok')}今天还没有备份、出错、重启这类事。</p>`)
     + (a.observed_at ? `<p class="cp-time">${esc(when(a.observed_at, ctx.now))} 读到</p>` : '') + `</article>`;
 }
@@ -688,7 +662,7 @@ function powerBlock(v, ctx) {
   const cells = kwh == null && p.peak_watts == null
     ? `${cell(boot, '小时', up == null ? '这次开机到现在' : '今天开机')}<li class="cp-stat-note"><span>用电和最高功率还没读到，接上后显示在这里</span></li>`
     : `${cell(boot, '小时', '今天开机')}${cell(kwh == null ? null : '约 ' + kwh, '度', '今天用电')}${cell(p.peak_watts, '瓦', '今天最高功率')}`;
-  return `<article class="cp-feature cp-power"><h3>电脑今天的用电和开机</h3>`
+  return `<article class="cp-feature cp-power ct-card"><h3>电脑今天的用电和开机</h3>`
     + `<ul class="cp-stats3">${cells}</ul>${yline}`
     + `<p class="cp-src">${esc(p.source_note || '估算 · 来自电脑自己的实时记录（TimeAudit 项目采集，图表后台 Grafana 里能看）')}</p>`
     + (p.observed_at ? `<p class="cp-time">${p.state === 'attention' ? `这次没读到，上面是 ${esc(when(p.observed_at, ctx.now))} 读到的` : `${esc(when(p.observed_at, ctx.now))} 读到`}</p>` : '') + `</article>`;
@@ -730,7 +704,7 @@ function powerLine(v) {
 }
 export function todayBlock(v, ctx) {
   const stale = staleIds(v);
-  const cards = dedupeCards(v.sections.today.filter((c) => c.id !== 'today_changes' && !stale.has(c.id)));
+  const cards = dedupeCards(v.sections.today.filter((c) => c.id !== 'today_changes' && !stale.has(c.id) && isToday(c.observed_at, ctx.now)));
   // 同一处没读到的合成一行
   const gapRows = new Map();
   for (const g of v.source_gaps) { const e = gapRows.get(g.title); gapRows.set(g.title, e ? { ...e, n: e.n + 1 } : { g, n: 1 }); }
@@ -825,8 +799,8 @@ function triCells(v, ctx, off) {
   ];
 }
 function tri(cells) {
-  const cell = (c) => `<li class="cp-tri-cell is-${light(c.state)}" data-signal="${c.id}"><a href="#${c.id === 'tasks' ? 'tasks' : c.id === 'backup' ? 'backups' : 'computer'}">`
-    + `<span class="cp-tri-label">${c.label}</span><b class="cp-tri-status">${dot(c.state)}${esc(c.status)}</b><b class="cp-tri-short">${esc(c.short)}</b>`
+  const cell = (c) => `<li class="cp-tri-cell is-${light(c.state)}" data-signal="${c.id}"><a class="hub-stat-field ct-card" href="#${c.id === 'tasks' ? 'tasks' : c.id === 'backup' ? 'backups' : 'computer'}">`
+    + `<span class="cp-tri-label">${c.label}</span><b class="cp-tri-status">${dot(c.state)}${esc(c.status)}</b>`
     + `<span class="cp-tri-who">${c.who.split(' · ').map((w) => `<span>${esc(w)}</span>`).join('<i aria-hidden="true"> · </i>')}</span>`
     + (c.why ? `<span class="cp-tri-why">${esc(c.why)}</span>` : '') + (c.note ? `<span class="cp-tri-note">${esc(c.note)}</span>` : '') + `</a></li>`;
   return `<ul class="cp-tri">${cells.map(cell).join('')}</ul>`;
@@ -836,16 +810,16 @@ const GROUP = { need_you: '你的事', ai_following: '交给 AI 的事' };
 function score(v, ctx, off) {
   const ov = v.overview;
   const at = ov?.as_of ? hm(ov.as_of) : '';
-  if (off || !Number.isFinite(ov?.score)) return `<p class="cp-score is-off">电脑健康分：读不到${at ? `（上次 ${at}）` : ''}</p>`;
+  if (off || !Number.isFinite(ov?.score)) return `<p class="cp-score is-off">整体健康分：读不到${at ? `（上次 ${at}）` : ''}</p>`;
   const reasons = Array.isArray(ov.reasons) ? ov.reasons : [];
   const groups = {};
   for (const r of reasons) (groups[GROUP[r.section] || '电脑和自动任务'] ||= []).push(r);
   const line = (r) => `<li>${esc(r.text)}${Number.isFinite(r.delta) && r.delta ? ` <b>${r.delta > 0 ? '+' : '−'}${Math.abs(r.delta)}</b>` : ''}</li>`;
   const rules = Array.isArray(ov.rules) ? ov.rules.map((r) => (typeof r === 'string' ? { text: r } : r)) : [];
-  return `<details class="cp-score" id="score"><summary><span>电脑健康 <b>${Math.round(ov.score)}</b>/100</span><span>${at} 读到</span><span class="cp-score-why">为什么是 ${Math.round(ov.score)} 分</span></summary>`
+  return `<details class="cp-score hub-stat-field ct-card" id="score"><summary>${blockHead('整体健康分', 'cp-score-title')}<span class="cp-score-number hub-field-number-line"><b class="cp-score-value hub-field-value">${Math.round(ov.score)}</b><small>/100</small></span><progress class="cp-score-meter" max="100" value="${Math.max(0, Math.min(100, ov.score))}" aria-label="整体健康分"></progress><span class="cp-score-why hub-field-body">算上你的事、AI 的事、电脑和自动任务${at ? `<small>${at} 读到</small>` : ''}</span></summary>`
     + `<div class="cp-score-body">${reasons.length ? Object.entries(groups).map(([k, list]) => `<div><h4>${k}</h4><ul>${list.map(line).join('')}</ul></div>`).join('') : '<p>没有扣分的地方。</p>'}`
     + (rules.length ? `<div class="cp-score-rules"><h4>分数怎么算</h4><ul>${rules.map((r) => `<li>${esc(r.text)}</li>`).join('')}</ul></div>` : '')
-    + `<p class="cp-score-note">这个分数主要看电脑和 AI 的活，不等于你要做几件事；你要做的看上面第一行。</p></div></details>`;
+    + `<p class="cp-score-note">算上你的事、AI 的事、电脑和自动任务；要你做的件数看上面第一行。</p></div></details>`;
 }
 // “你得知道”（后端 must_know，字段在才出这一块）：AI 在修、影响你用电脑的毛病；刚恢复、刚办好的事；你没回又该知道的汇报。
 // 本人 10 月 29 日：长了头疼、短了像谜语，最多 5 行。所以：
@@ -855,7 +829,7 @@ function score(v, ctx, off) {
 // - “AI 在修”、其他真正影响本人的事排在前面；合完还超过 5 行，第 5 行起折成“其余 N 条”。
 // 每个折叠都带固定 id，每分钟换字时 client.js 按 id 保持展开。
 export const knowId = (k) => 'know-' + String(k.id || '').replace(/[^\w-]/g, '');
-const KNOW_TAG = { repairing: ['AI 在修', 'neutral'], recovered: ['已恢复', 'ok'], report: ['汇报', 'neutral'], ai_decision: ['AI 已定', 'neutral'], just_completed: ['刚做完', 'ok'] };
+const KNOW_TAG = { repairing: ['在修', 'neutral'], recovered: ['已恢复', 'ok'], report: ['结果', 'neutral'], new_feature: ['新功能', 'ok'], feature: ['新功能', 'ok'], ai_decision: ['AI 已定', 'neutral'], just_completed: ['结果', 'ok'], done: ['结果', 'ok'] };
 // 排在前面的先后：AI 在修 → 其他影响本人的事（后端以后加的新种类也算这一档） → 汇报；合起来的两行放最后
 const KNOW_RANK = { repairing: 0, report: 2 };
 export const KNOW_MAX = 5;
@@ -888,25 +862,29 @@ function knowBlock(v, ctx) {
   const all = m.items.filter(ok).filter(mine), old = m.archived.filter(ok).filter(mine);
   const tagOf = (kind) => { const [tag, st] = KNOW_TAG[kind] || ['你得知道', 'neutral']; return `<span class="cp-know-tag is-${light(st)}">${tag}</span>`; };
   // 刚做完的（后端 kind=just_completed，带 executor）：小字写“几点 · Claude 做完”
-  const smallOf = (k) => [k.at ? when(k.at, ctx.now) + (k.kind === 'just_completed' && VENDOR[k.executor] ? ` · ${VENDOR[k.executor]} 做完` : '') : '', !isPh(k) && typeof k.exit_when === 'string' ? k.exit_when : ''].filter(Boolean);
+  const smallOf = (k) => [k.at && !String(k.text || '').includes(when(k.at, ctx.now)) ? when(k.at, ctx.now) + (k.kind === 'just_completed' && VENDOR[k.executor] ? ` · ${VENDOR[k.executor]} 做完` : '') : '', !isPh(k) && typeof k.exit_when === 'string' ? k.exit_when : ''].filter(Boolean);
   // 一条照原样的行；汇报只露第一句，其余点开看
   const row = (k) => {
     const small = smallOf(k);
     const tail = small.length ? `<small>${small.map(esc).join(' · ')}</small>` : '';
+    const progress = typeof k.progress === 'string' ? k.progress : k.progress?.text || k.latest_progress || '';
+    const next = typeof k.next_step === 'string' ? k.next_step : '', nextAt = k.next_at || k.next_check_at || k.next_run_at || k.handler?.next_run_at;
+    const updates = isPh(k) ? '' : (progress && !String(k.text || '').includes(progress) ? `<span class="cp-know-progress">进展：${esc(plain(progress))}</span>` : '')
+      + (next || nextAt ? `<span class="cp-know-next">下一步：${esc(plain(next))}${nextAt && !next.includes(when(nextAt, ctx.now)) ? `${next ? ' · ' : ''}${esc(dateHm(nextAt))}` : ''}</span>` : '');
     if (k.kind === 'report' && !isPh(k)) {
-      const [head, rest] = firstSentence(k);
-      if (rest) return `<li id="${esc(knowId(k))}" class="is-report${phCls(k)}${actCls(k, ctx)}"${itemAttr(k)}>${tagOf('report')}<details class="cp-know-fold" id="${esc(knowId(k))}-open"><summary>${esc(plain(head))}${ownTag(k)}</summary><div class="cp-know-sub"><p>${esc(plain(rest))}</p>${detail(k)}${tail}</div></details>${ownerBox(k, ctx)}</li>`;
+      const [head, rest] = /旧临时目录回收/.test(k.title || k.text || '') ? ['旧临时目录回收情况，展开看明细', k.text] : firstSentence(k);
+      if (rest) return `<li id="${esc(knowId(k))}" class="is-report${phCls(k)}${actCls(k, ctx)}"${itemAttr(k)}>${tagOf('report')}<details class="cp-know-fold" id="${esc(knowId(k))}-open"><summary>${esc(plain(head))}${ownTag(k)}</summary><div class="cp-know-sub"><p>${esc(plain(rest))}</p>${detail(k)}${tail}</div></details>${updates}${ownerBox(k, ctx, { only: ['ack'] })}</li>`;
     }
     // 标签已经写了“刚做完”，正文开头同样的“刚做完：”不再重复
     const text = isPh(k) ? k.title || PRIVATE_TITLE : k.kind === 'just_completed' ? plain(k.text).replace(/^\s*刚做完[：:]\s*/, '') : plain(k.text);
-    return `<li id="${esc(knowId(k))}" class="is-${esc(k.kind || 'other')}${phCls(k)}${actCls(k, ctx)}"${itemAttr(k)}>${tagOf(k.kind)}<span class="cp-know-text">${esc(text)}${ownTag(k)}${detail(k)}${tail}</span>${ownerBox(k, ctx)}</li>`;
+    return `<li id="${esc(knowId(k))}" class="is-${esc(k.kind || 'other')}${phCls(k)}${actCls(k, ctx)}"${itemAttr(k)}>${tagOf(k.kind)}<span class="cp-know-text">${esc(text)}${ownTag(k)}${detail(k)}${tail}${updates}</span>${ownerBox(k, ctx, { only: ['ack'] })}</li>`;
   };
   const rows = all.map((k, i) => ({ k, i, r: KNOW_RANK[k.kind] ?? 1 })).sort((a, b) => a.r - b.r || a.i - b.i).map(({ k }) => row(k));
   const folded = old.length ? `<details class="cp-know-old" id="know-old"><summary>最近收起的 ${old.length} 条</summary><ul class="cp-know-list">${old.map(row).join('')}</ul></details>` : '';
   if (!rows.length) return `<div class="cp-know is-empty"><p>${dot('ok')}${esc(m.text || '没有要你知道的新事')}</p>${folded}</div>`;
   // 最多 5 行：超过时露前 4 行，第 5 行是“其余 N 条”
   const shown = rows.length > KNOW_MAX ? rows.slice(0, KNOW_MAX - 1) : rows, more = rows.slice(shown.length);
-  return `<div class="cp-know"><p class="cp-know-k">你得知道</p><ul class="cp-know-list">${shown.join('')}</ul>`
+  return `<div class="cp-know">${blockHead('你得知道', 'cp-know-k')}<ul class="cp-know-list">${shown.join('')}</ul>`
     + (more.length ? `<details class="cp-know-rest" id="know-rest"><summary>其余 ${more.length} 条</summary><ul class="cp-know-list">${more.join('')}</ul></details>` : '') + folded + `</div>`;
 }
 // 几条“××已恢复”合一行（同一项恢复过几次算一项，留最近那次），放在自动任务区开头
@@ -938,7 +916,7 @@ function decisionsBlock(v, ctx) {
   return `<p class="cp-know-note">这些是 AI 自己能定的技术事，你不用逐条看。</p><ul class="cp-know-sub cp-know-decs" id="know-decisions">${list.map(item).join('')}</ul>`;
 }
 
-// “AI 正在干活”（后端 ai_running，字段在才出这一块）：首屏只写件数和真要你出手的卡住行（额度用完、登录失效，带“改给另一家”），其余点开看。
+// “AI 正在干活”（后端 ai_running，字段在才出这一块）：首屏写件数和真要你出手的卡住行，其余点开看，每行可复制。
 // 状态带颜色和符号，色盲也分得清；“停了，没做完”（半路停下超过半小时）“看不出在干嘛”多半已经结束，不算在干活、也不算卡住（可用性审查）。
 // 公开版（行带 placeholder，或这次拿到的是公开版）只写两句：几个在干活（卡在哪类），再按型号数一数；不列在做什么。
 export const RUN_LOOK = {
@@ -989,17 +967,20 @@ function runRowOf(r, ctx, viewer, waits = []) {
   else if (reply) { main = `最近回复：${reply.text}`; from = 'reply'; }
   else main = waiting ? '在等你回话' : '还没写进展';
   const step = from === 'doing' && r.step_index ? `第 ${r.step_index} 步${r.step_total ? `/共 ${r.step_total} 步` : ''}` : from === 'reply' && reply.at ? `${reply.approx ? '约 ' : ''}${when(reply.at, ctx.now)} 回的` : '';
-  const moved = ago(r.progress?.at || r.last_activity_at, ctx.now);
+  const moved = ago(r.last_activity_at || r.progress?.at, ctx.now);
   const second = [from !== 'progress' && from !== 'card' && r.progress ? r.progress.text : '', modelOf(r),
-    (/它叫了 \d+ 个助手(?:，\d+ 个在干活)?/.exec(helperText(r.detail)) || [])[0] || (r.helpers > 0 ? `它叫了 ${r.helpers} 个助手` : ''), moved ? `${moved}还在动` : ''].filter(Boolean);
+    (/它叫了 \d+ 个助手(?:，\d+ 个在干活)?/.exec(helperText(r.detail)) || [])[0] || (r.helpers > 0 ? `它叫了 ${r.helpers} 个助手` : ''), moved ? `${moved}${r.last_activity_at ? '还在动' : '更新进展'}` : ''].filter(Boolean);
   const said = r.status_text && !/判断不了|没正常结束/.test(r.status_text) ? r.status_text : word;
-  // 这一区只画“改给另一家”，而且只在卡住（额度、登录、网络）的行上
-  const box = ['quota_exhausted', 'login_failed', 'network_retry'].includes(r.status) ? ownerBox(r, ctx, { only: ['switch'] }) : '';
+  // 屏幕只保留路径的用途；复制仍使用源条目里的完整原文。
+  // 引号用等价十六进制写法，避免资源校验器把正则字符类当成 JS 字符串。
+  const visible = (s) => String(s || '').replace(/[A-Za-z]:[\\/][^\s，。；！？<>（）()\x22\x27]+/g, '电脑上的文件');
+  main = visible(main);
+  const box = ownerBox(r.copy_source || r, ctx, { extra: openGroup(r, viewer) });
   // 在干活、在等你回话的行主行已经说清了，状态那几个字只留给读屏；对上卡的，主行点一下跳到那张卡
   const mainHtml = w ? `<a class="cp-run-doing cp-run-goto" href="#${esc(encodeURIComponent(w.id))}">${esc(main)}</a>` : `<span class="cp-run-doing${from ? '' : ' is-empty'}">${esc(main)}</span>`;
   return `<li class="cp-run-row is-${r.status} is-live${actCls(r, ctx)}"${itemAttr(r)}><span class="cp-run-st is-${color}"><i aria-hidden="true">${mark}</i><span class="cp-run-word">${esc(said)}</span></span>`
     + mainHtml + (step ? `<small class="cp-run-step">${esc(step)}</small>` : '')
-    + `<small class="cp-run-meta">${r.title ? `<span class="cp-run-name">${esc(r.title)}</span>` : ''}${second.map(esc).join(' · ')}</small>${openGroup(r, viewer)}${box}</li>`;
+    + `<small class="cp-run-meta">${r.title ? `<span class="cp-run-name">${esc(visible(r.title))}</span>` : ''}${second.map((s) => esc(visible(s))).join(' · ')}</small>${box}</li>`;
 }
 function runBlock(v, ctx) {
   const a = v.ai_running;
@@ -1007,22 +988,21 @@ function runBlock(v, ctx) {
   const pub = a.rows.some((r) => r.placeholder) || v.viewer?.kind === 'public';
   const at = a.observed_at ? `<span class="cp-run-at">${ctx.offline ? '读不到电脑，这是 ' : ''}${esc(when(a.observed_at, ctx.now))} 读到的</span>` : '';
   const off = ctx.offline ? ' is-off' : '';
-  // 末尾一行小字：停了没做完的（半路停下超过半小时）、早就停了的（满 3 小时）
-  const gone = [a.stopped_count > 0 && !a.rows.some((r) => r.status === 'stopped') ? `${a.stopped_count} 件停了，没做完` : '', a.stale_count > 0 ? `${a.stale_count} 件早就停了` : ''].filter(Boolean);
-  const stale = !pub && gone.length ? `<p class="cp-run-stale">另有 ${gone.join('、')}</p>` : '';
-  if (!a.count && !a.rows.length) return `<div class="cp-run is-empty${off}" id="ai-running"><p class="cp-run-none"><span class="cp-run-k">AI 正在干活</span><span>${esc(a.unread ? 'AI 干活情况暂时读不全' : '现在没有 AI 在干活')}</span>${at}</p>${stale}</div>`;
+  const gone = [...(a.stale_rows || []), ...(a.stopped_rows || [])].filter((r) => !a.rows.some((x) => x.id === r.id));
+  const stale = !pub && gone.length ? `<details class="cp-run-stale" id="run-stale"><summary>另有 ${gone.length} 件已经停了</summary><ul class="cp-run-list">${gone.map((r) => runRowOf(r, ctx, v.viewer)).join('')}</ul></details>` : '';
+  if (!a.count && !a.rows.length) return `<div class="cp-run is-empty${off}" id="ai-running">${blockHead(esc(a.unread ? 'AI 干活情况暂时读不全' : '现在没有 AI 在干活'), 'cp-run-head cp-run-none', at, 'cp-run-sum')}${stale}</div>`;
   const active = a.rows.filter((r) => !DONE_LIKE.includes(r.status));
   if (pub) {
     const kinds = [['quota_exhausted', '额度'], ['login_failed', '登录']].map(([s, w]) => [w, a.rows.filter((r) => r.status === s).length]).filter(([, c]) => c);
     const head = `AI 在干活：${activeOf(a)} 个${kinds.length ? `（${kinds.map(([w, c]) => `${w} ${c} 个`).join('、')}卡住）` : ''}`;
     const models = active.length ? `<p class="cp-run-models">${esc(modelCounts(active))}</p>` : '';
-    return `<div class="cp-run is-public${off}" id="ai-running"><p class="cp-run-head"><span class="cp-run-k">AI 正在干活</span><span class="cp-run-sum">${esc(head)}</span>${at}</p>${models}</div>`;
+    return `<div class="cp-run is-public${off}" id="ai-running">${blockHead(esc(head.replace('AI 在干活：', 'AI 正在干活：')), 'cp-run-head', at, 'cp-run-sum')}${models}</div>`;
   }
   const sorted = a.rows.map((r, i) => ({ r, i })).sort((x, y) => RUN_ORDER.indexOf(x.r.status) - RUN_ORDER.indexOf(y.r.status) || x.i - y.i).map(({ r }) => r);
   const stuck = sorted.filter((r) => OWNER_STUCK.includes(r.status)), rest = sorted.filter((r) => !stuck.includes(r));
   const waits = v.need_you.filter((x) => x.card_type === 'ai_wait' && !isPh(x) && x.id);
   const runRow = (r) => runRowOf(r, ctx, v.viewer, waits);
-  return `<div class="cp-run${off}" id="ai-running"><p class="cp-run-head"><span class="cp-run-k">AI 正在干活</span><span class="cp-run-sum">${esc(runLine(a))}</span>${at}</p>`
+  return `<div class="cp-run${off}" id="ai-running">${blockHead(esc(runLine(a).replace('AI 在干活：', 'AI 正在干活：')), 'cp-run-head', at, 'cp-run-sum')}`
     + (stuck.length ? `<ul class="cp-run-list is-stuck">${stuck.map(runRow).join('')}</ul>` : '')
     + (rest.length ? `<details class="cp-run-all" id="run-all"><summary>${stuck.length ? `其余 ${rest.length} 个` : `看是哪 ${rest.length} 个`}</summary><ul class="cp-run-list">${rest.map(runRow).join('')}</ul></details>` : '')
     + stale + `</div>`;
@@ -1047,27 +1027,26 @@ const hiddenPrivate = (v) => {
   return n > 0 && n <= v.private_count ? n : 0;
 };
 // 标签页标题“(N) 驾驶舱”和图标红点用的件数：和顶上那块的“要你做 N 件”同一个数
-export const needCount = (v, now) => ownerNow(v, now).n;
+export const needCount = (v, now, ctx) => ownerNow(v, now, ctx).n;
 const overview = (v, ctx) => {
   if (!ctx.ov) return '';
   const off = ctx.ov.stale(v.overview, ctx.now.getTime());
-  const { n, urgent, items } = ownerNow(v, ctx.now);
+  const { n, urgent, items, hidden } = ownerNow(v, ctx.now, ctx);
   const read = v.ok && !ctx.offline;
   // 页面刚打开、还没读到新数据时，首帧是构建网页那会儿的数：写明是几点的，整体灰着（样式在 cockpit.css 的 .cp-snap）
   // 构建时还不知道哪天被打开，这里总带日期（“10月12日 07:32”），过了零点也不会说错
   const snap = ctx.phase === 'snapshot' ? `<p class="cp-snap">${dot('unavailable')}这是 ${esc(v.served_at ? dateHm(v.served_at) : '早些时候')} 的数，不是现在的<span class="cp-snap-reading">，正在读最新…</span></p>` : '';
   if (!read && !v.need_you.length) return `<div class="cp-you is-off">${snap}<p class="cp-you-n">要你做的事还没读到</p><p class="cp-you-sub">${notRead(v.served_at, ctx.now)}</p></div>`;
-  const kinds = items.map((i) => i.x.ask_kind);
-  const verb = kinds.length && kinds.every((k) => DECIDE.includes(k)) ? '要你拍板' : kinds.length && kinds.every((k) => ACTION_KINDS.includes(k)) ? '要你动手' : '要你处理';
-  const tag = !n ? '' : urgent ? `<span class="cp-you-tag is-urgent">${urgent === n ? (n === 1 ? '急' : '都急') : `${urgent} 件急`}</span>` : '<span class="cp-you-tag">都不急</span>';
-  const said = read ? topSentence(v) : '';
-  const head = said ? `<span class="cp-you-said">${esc(said)}</span>` : n ? `${verb} <b>${n}</b> 件事` : '现在没有要你做的事';
+  const late = items.some((i) => i.r.overdue || String(i.x.overdue_text || '').trim());
+  const tag = !n ? '' : urgent ? `<span class="cp-you-tag is-urgent">${urgent === n ? (n === 1 ? '急' : '都急') : `${urgent} 件急`}</span>` : `<span class="cp-you-tag">${late ? '过了原定时间，但不急' : '都不急'}</span>`;
+  const said = read && !hidden ? topSentence(v) : '';
+  const head = said ? `<span class="cp-you-said">${esc(said)}</span>` : n ? `要你做 <b>${n}</b> 件` : '现在没有要你做的事';
   // 本人设备：顶上一两行提示（点的处理写不回、通知没发出去、调度在排队），块末尾“你最近处理的（30 天）›”；后端没给就都不出
   const sub = !read && v.served_at ? `<p class="cp-you-sub">这是 ${esc(when(v.served_at, ctx.now))} 读到的</p>` : '';
   const hid = hiddenPrivate(v);
   const priv = hid ? `<p class="cp-you-sub cp-you-private">另 ${hid} 件是私人事项，只在你的设备上显示</p>` : '';
   return `<div class="cp-you${urgent ? ' is-urgent' : ''}${n ? '' : ' is-none'}${said ? ' is-said' : ''}">${snap}<p class="cp-you-n">${n ? '' : dot(COLOR_STATE[v.summary.color] || COLOR_STATE[v.verdict.color] || 'ok')}${head}${tag}</p>`
-    + priv + ownerWarn(v) + sub + recentBlock(v, ctx) + `</div>`;
+    + priv + ownerWarn(v, ctx) + sub + recentBlock(v, ctx) + `</div>`;
 };
 // 首屏下半：三格（电脑 / 自动任务 / 备份）和健康分小字
 const overviewTri = (v, ctx) => {
@@ -1085,10 +1064,12 @@ export function lines(v, ctx) {
   const mine = mineOf(v), n = mine.length + v.scheduled.length;
   const wait = n ? `<details class="cp-fold cp-mine" id="mine-wait"><summary>你放着 ${n} 件不急的事</summary><ul class="cp-list cp-wait">${mine.map((x) => waitRow(x, ctx)).join('')}${v.scheduled.map((x) => schedRow(x, ctx)).join('')}</ul></details>` : '';
   const st = v.stale_summary;
-  const cards = st ? ['computer', 'remote', 'backup_cloud', 'today'].flatMap((k) => v.sections[k]).filter((c) => st.ids.includes(c.id)) : [];
-  const stale = !st ? '' : cards.length
-    ? `<details class="cp-fold cp-stale-fold" id="stale-cards"><summary>${dot('unavailable')}${esc(st.text)}</summary><ul class="cp-facts is-stale">${cards.map((c) => `<li class="cp-fact" tabindex="0" title="${esc(c.text || '')}">${dot('unavailable')}<b>${esc(c.title)}</b><span>${c.observed_at ? `最后一次是 ${esc(when(c.observed_at, ctx.now))}` : '一直没读到'}</span></li>`).join('')}</ul></details>`
-    : `<p class="cp-line">${dot('unavailable')}${esc(st.text)}</p>`;
+  const cards = dedupeCards([...(st ? ['computer', 'remote', 'backup_cloud', 'today'].flatMap((k) => v.sections[k]).filter((c) => st.ids.includes(c.id)) : []), ...oldTodayCards(v, ctx.now)]);
+  const extra = cards.filter((c) => !st?.ids.includes(c.id)).length;
+  const staleText = st?.text ? st.text + (extra ? `；另 ${extra} 块今天还没读到新数据` : '') : `这 ${cards.length} 块数据今天还没读到新的`;
+  const stale = cards.length
+    ? `<details class="cp-fold cp-stale-fold" id="stale-cards"><summary>${dot('unavailable')}${esc(staleText)}</summary><ul class="cp-facts is-stale">${cards.map((c) => `<li class="cp-fact" tabindex="0" title="${esc(c.text || '')}">${dot('unavailable')}<b>${esc(c.title)}</b><span>${c.observed_at ? `最后一次是 ${esc(when(c.observed_at, ctx.now))}${st?.ids.includes(c.id) || SOURCE_STOPPED.test(c.text || '') ? '，数据停了' : '，今天还没读到新的'}` : '还没读到'}</span></li>`).join('')}</ul></details>`
+    : st ? `<p class="cp-line">${dot('unavailable')}${esc(st.text)}</p>` : '';
   return `<div class="cp-lines"><a class="cp-go" href="/cockpit/ai/">${esc(ledgerText(v))}</a>${wait}${stale}</div>`;
 }
 // 首屏中间：AI 正在干活 → 你得知道 → 几行入口
@@ -1113,7 +1094,7 @@ const lampOf = (key) => (v, ctx) => {
 // 二级页电脑版（宽度 ≥1200）的表格。窄屏照旧是上面的列表；两样都画，cockpit.css 按宽度只显示一样（表格行不带 data-items，通知跳转找列表那行）。
 // 筛选（全部 / 晚了 / 没晚、输入几个字）和勾选记在 client.js 的 act.ui（下面两个键），重画时照样画出来
 export const LF_KEY = '\u0000ledger-filter', LB_KEY = '\u0000ledger-batch';
-const cellNote = (x, ctx, label) => (isPh(x) ? '' : ownerBox(x, ctx, { only: ['note'], ...(label ? { label } : {}) }));
+const cellNote = (x, ctx) => (isPh(x) ? '' : ownerBox(x, ctx));
 function followTable(v, ctx) {
   const now = ctx.now;
   const lateList = v.ai_overdue ? [...v.ai_overdue] : v.ai_following.filter((x) => x.stuck === true);
@@ -1125,7 +1106,7 @@ function followTable(v, ctx) {
   const f = ctx.act?.ui?.get(LF_KEY) || {}, show = ['late', 'ok'].includes(f.show) ? f.show : 'all', q = String(f.q || '').trim().toLowerCase();
   const nLate = rows.filter((r) => r.late).length;
   // 一行都不能回话（公开版、后端没给按钮）时不留最后那一列
-  const anyAct = rows.some(({ x }) => !isPh(x) && hasActs(x, ['note']));
+  const anyAct = ctx.viewer?.kind === 'owner' && rows.some(({ x }) => !isPh(x));
   const tr = ({ x, late }) => {
     const title = isPh(x) ? x.title || PRIVATE_TITLE : plain(clean(x.title) || x.project || '');
     const d = Number(x.overdue_days), days = x.registration_unknown ? 14 : Number.isFinite(x.age_days) ? x.age_days : null;
@@ -1152,23 +1133,17 @@ function followTable(v, ctx) {
 function decisionsTable(v, ctx) {
   const list = (v.must_know?.items || []).filter((k) => k.kind === 'ai_decision' && (isPh(k) || (typeof k.text === 'string' && k.text)));
   if (!list.length) return '';
-  const batch = (v.viewer?.capabilities || []).includes('batch');
-  const ackable = batch ? list.filter((k) => !isPh(k) && actsOf(k).includes('ack') && !actCls(k, ctx) && ctx.act?.state?.get(k.id)?.phase !== 'sending') : [];
-  const sel = new Set((ctx.act?.ui?.get(LB_KEY)?.sel || []).filter((id) => ackable.some((k) => k.id === id)));
-  const anyAct = list.some((k) => !isPh(k) && hasActs(k));
+  const anyAct = ctx.viewer?.kind === 'owner' && list.some((k) => !isPh(k));
   const tr = (k) => {
-    if (isPh(k)) return `<tr class="is-private">${batch ? '<td class="cp-lt-pick"></td>' : ''}<td class="cp-lt-what" colspan="4"><span title="${PH_HINT}">${esc(k.title || PRIVATE_TITLE)}</span></td>${anyAct ? '<td class="cp-lt-act"></td>' : ''}</tr>`;
-    const d = splitDecision(k), can = ackable.includes(k);
+    if (isPh(k)) return `<tr class="is-private"><td class="cp-lt-what" colspan="4"><span title="${PH_HINT}">${esc(k.title || PRIVATE_TITLE)}</span></td>${anyAct ? '<td class="cp-lt-act"></td>' : ''}</tr>`;
+    const d = splitDecision(k);
     const basis = d?.basis ? (CODE.test(d.basis) ? `<details class="cp-tech" id="dect-${esc(knowId(k))}"><summary>技术细节</summary><p>${esc(d.basis)}</p></details>` : esc(plain(d.basis))) : '';
-    return `<tr class="is-ai_decision${actCls(k, ctx)}">${batch ? `<td class="cp-lt-pick">${can ? `<input type="checkbox" data-lb="${esc(k.id)}"${sel.has(k.id) ? ' checked' : ''} aria-label="选这条">` : ''}</td>` : ''}`
+    return `<tr class="is-ai_decision${actCls(k, ctx)}">`
       + `<td class="cp-lt-what"><span class="cp-lt-title">${esc(d ? d.topic : k.text)}${ownTag(k)}</span>${detail(k)}</td><td class="cp-lt-dec">${d ? esc(d.decision) : ''}</td>`
       + `<td class="cp-lt-why">${basis}</td><td class="cp-lt-at">${k.at ? esc(when(k.at, ctx.now)) : ''}</td>`
       + (anyAct ? `<td class="cp-lt-act">${ownerBox(k, ctx, { label: { note: '不同意，改一下' } })}</td>` : '') + `</tr>`;
   };
-  const n = sel.size || ackable.length;
-  const bar = batch && ackable.length ? `<div class="cp-lt-bar"><label class="cp-lt-all"><input type="checkbox" data-lb-all${sel.size === ackable.length ? ' checked' : ''}> 全选</label>`
-    + `<button type="button" class="cp-btn cp-btn-main" data-lb-ack>${sel.size ? `选中的 ${n} 件都知道了` : `全部知道了（${n} 件）`}</button><small class="cp-lt-count">一次交上去，每件照样能撤回</small></div>` : '';
-  return `<div class="cp-lt" id="ai-decided-table">${bar}<table class="cp-ltable is-dec"><thead><tr>${batch ? '<th class="cp-lt-pick"><span class="cp-vh">勾选</span></th>' : ''}<th class="cp-lt-what">事项</th><th class="cp-lt-dec">定了什么</th><th class="cp-lt-why">原因</th><th class="cp-lt-at">时间</th>${anyAct ? '<th class="cp-lt-act"><span class="cp-vh">知道了、不同意</span></th>' : ''}</tr></thead><tbody>${list.map(tr).join('')}</tbody></table></div>`;
+  return `<div class="cp-lt" id="ai-decided-table"><table class="cp-ltable is-dec"><thead><tr><th class="cp-lt-what">事项</th><th class="cp-lt-dec">定了什么</th><th class="cp-lt-why">原因</th><th class="cp-lt-at">时间</th>${anyAct ? '<th class="cp-lt-act"><span class="cp-vh">处理和复制</span></th>' : ''}</tr></thead><tbody>${list.map(tr).join('')}</tbody></table></div>`;
 }
 // 二级页“AI 的账本”（/cockpit/ai/）：AI 在跟、晚了的、它自己定了的、等条件的、每周体检和项目后台。都不用本人管，想看时点进来
 export function ledger(v, ctx) {
@@ -1195,52 +1170,49 @@ export function meta(v, ctx) {
 }
 // 今天几号（北京时间，跨过零点浏览器里会自动换）
 const todayDate = (v, ctx) => new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', month: 'long', day: 'numeric', weekday: 'long' }).format(ctx.now).replace(/(\d+)月(\d+)日/, '$1 月 $2 日 ') + ' · 北京时间 0 点起';
-export const REGIONS = { overview, 'overview-tri': overviewTri, 'need-you': needCards, home, tasks: tasksSum, security, computer, backup, projects, today: todayBlock, 'today-date': todayDate, viewer: viewerLine, meta, ledger,
-  ...Object.fromEntries(Object.entries(LAMPS).map(([id, key]) => ['lamp-' + id, lampOf(key)])) };
+export const REGIONS = Object.fromEntries(Object.entries({ overview, 'overview-tri': overviewTri, 'need-you': needCards, home, tasks: tasksSum, security, computer, backup, projects, today: todayBlock, 'today-date': todayDate, viewer: viewerLine, meta, ledger,
+  'action-toast': (_v, ctx) => actionToast(ctx), ...Object.fromEntries(Object.entries(LAMPS).map(([id, key]) => ['lamp-' + id, lampOf(key)])) }).map(([key, render]) => [key, (v, ctx = {}) => render(v, { ...ctx, viewer: v.viewer })]));
 
 // 整页：外框固定，内容由上面各函数填。首屏只放本人的事（本人 18:51：太谜语人、还不好用）：
 // 顶上一句 → 要你做／要你回的卡 → AI 正在干活 → 你得知道 → AI 的账本 › / 你放着 N 件不急的事 › / 停了的数据 → 三格；事实区在下面，正常的只占一行
 export function page(v, ctx) {
-  const r = (k) => `<div class="cp-body" data-cp="${k}">${REGIONS[k](v, ctx)}</div>`;
-  const sec = (id, title, w, h, sub, body) => `<section class="cp-section" id="${id}"><div class="cp-head"><h2><img src="${src(ctx, title[0])}" alt="${title[1]}" width="${w}" height="${h}" loading="eager"></h2><span class="cp-lamp" data-cp="lamp-${id}">${REGIONS['lamp-' + id](v, ctx)}</span>${id === 'today' ? `<span class="cp-date" data-cp="today-date">${todayDate(v, ctx)}</span>` : ''}<p>${sub}</p></div>${body}</section>`;
-  return `<section class="cp-section cp-hero" id="top">
-  <div class="cp-topbar">
-  <div class="cp-hero-copy">
-    <h1><img src="${src(ctx, 'cockpit-01-title-01.png')}" alt="驾驶舱" width="483" height="198" loading="eager"><span class="cp-h1-text" aria-hidden="true">驾驶舱</span></h1>
-    <p class="cp-lead">最上面是要你做的事；AI 自己的活收在“AI 的账本”。每分钟从电脑读一次，时间都是北京时间；右下角 ↻ 立刻重读。</p>
-    <p class="cp-viewer" data-cp="viewer" role="status">${viewerLine(v, ctx)}</p>
-  </div>
-  <figure class="cp-hero-art"${ctx?.birdConfig ? ` data-living-config="${ctx.birdConfig}"` : ''}><img src="${src(ctx, 'cockpit-01-illustration-01.png')}" alt="" width="866" height="326" loading="eager" crossorigin="anonymous"></figure>
-  <div class="cp-overview" data-cp="overview">${overview(v, ctx)}</div>
-  <div class="cp-tools"><p class="cp-meta" data-cp="meta" role="status">${meta(v, ctx)}</p>`
-    + `<button type="button" class="cp-tool" data-cp-reload title="立刻重读电脑" aria-label="立刻重读电脑">↻</button>`
-    + `<details class="cp-help" id="cp-help"><summary class="cp-tool" title="这页怎么用" aria-label="这页怎么用">?</summary><div class="cp-help-pop">`
-    + `<p><b>这页怎么用</b></p><p>左边是要你做的事，一行一件，点一行展开那一件；右边是 AI 在干的活、你得知道的事和电脑状态，往下是各项明细。</p>`
-    + `<p>AI 自己的活收在“AI 的账本”。每分钟从电脑读一次（页面在后台时每 3 分钟一次），时间都是北京时间；右上角 ↻ 立刻重读。</p>`
-    + `<p><b>键盘</b></p><dl class="cp-keys"><dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>下一件、上一件</dd><dt><kbd>1</kbd>—<kbd>9</kbd></dt><dd>直接打开第几件</dd>`
-    + `<dt><kbd>Enter</kbd></dt><dd>按 AI 建议回答（能撤回）</dd><dt><kbd>o</kbd></dt><dd>打开那个对话</dd><dt><kbd>n</kbd></dt><dd>回一句话 / 补一句</dd>`
-    + `<dt><kbd>s</kbd></dt><dd>晚点提醒</dd><dt><kbd>u</kbd></dt><dd>撤回刚才那下</dd><dt><kbd>?</kbd></dt><dd>打开、关上这个说明</dd></dl></div></details></div>
-  </div>
-  <div class="cp-need" id="need-you" data-cp="need-you">${needCards(v, ctx)}</div>
-  <aside class="cp-rail" aria-label="AI 在干的活和电脑状态">
-  <div class="cp-home" data-cp="home">${home(v, ctx)}</div>
-  <div class="cp-status">
-  <div class="cp-overview-tri" data-cp="overview-tri">${overviewTri(v, ctx)}</div>
-  <div class="cp-security-wrap"><h2 class="cp-security-title"><img src="${src(ctx, 'cockpit-07-title-01.png')}" alt="安全和授权" width="719" height="180" loading="eager"></h2><div class="cp-security" data-cp="security">${security(v, ctx)}</div></div>
-  </div>
-  </aside>
-</section>
-<div class="cp-facts-wall">
-${sec('tasks', ['cockpit-05-title-01.png', '自动任务'], 588, 192, '电脑自己在做的事，有没有按时做、做成没有。', r('tasks') + '<details class="cp-fold cp-river-fold" id="river"><summary>看今天的河：每条船是一个自动任务，点开看它在做什么、怎么停</summary><div class="cp-river" data-today-river aria-label="今天的河"></div></details>')}
-${sec('computer', ['cockpit-02-title-01.png', '电脑'], 317, 184, '这台电脑现在累不累、还剩多少地方；人不在电脑前能不能连上它。', r('computer'))}
-${sec('today', ['cockpit-09-title-01.png', '今天的动态'], 675, 220, '今天有什么变化：代码、你对 AI 说的话、今天发生的事。', r('today'))}
-${sec('backup', ['cockpit-06-title-01.png', '备份和云端'], 716, 199, '东西有没有按时备份、云端的钱够不够。', r('backup'))}
-${sec('projects', ['cockpit-08-title-01.png', '项目'], 369, 222, '每个在用的项目现在怎么样、有没有等你的事。点名字进项目页。', r('projects'))}
-</div>`;
+  ctx = { ...ctx, viewer: v.viewer };
+  const r = (k) => '<div class="cp-body" data-cp="' + k + '">' + REGIONS[k](v, ctx) + '</div>';
+  const sec = (id, title, sub, body) => '<section class="cp-section" id="' + id + '">'
+    + blockHead('<span class="cp-section-title">' + esc(title) + '</span>', 'cp-head',
+      '<span class="cp-lamp" data-cp="lamp-' + id + '">' + REGIONS['lamp-' + id](v, ctx) + '</span>'
+      + (id === 'today' ? '<span class="cp-date" data-cp="today-date">' + todayDate(v, ctx) + '</span>' : '') + '<p>' + sub + '</p>')
+    + body + '</section>';
+  const help = '<details class="cp-help" id="cp-help"><summary class="cp-tool ct-inline-action" title="这页怎么用" aria-label="这页怎么用">?</summary><div class="cp-help-pop">'
+    + '<p><b>这页怎么用</b></p><p>最上面是要你做的事；下面是你得知道和 AI 在干的活，再往下是各项明细。每条可复制给 AI，选项和确认内容也会一起带过去。</p>'
+    + '<p>AI 自己的活收在“AI 的账本”。每分钟从电脑读一次（页面在后台时每 3 分钟一次），时间都是北京时间；↻ 立刻重读。</p>'
+    + '<p><b>键盘</b></p><dl class="cp-keys"><dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>下一件、上一件</dd><dt><kbd>1</kbd>—<kbd>9</kbd></dt><dd>直接打开第几件</dd>'
+    + '<dt><kbd>o</kbd></dt><dd>打开那个对话</dd><dt><kbd>s</kbd></dt><dd>晚点提醒</dd><dt><kbd>u</kbd></dt><dd>撤回刚才那下</dd><dt><kbd>?</kbd></dt><dd>打开、关上这个说明</dd></dl></div></details>';
+  return '<div class="cp-action-toast" data-cp="action-toast">' + actionToast(ctx) + '</div>'
+    + '<section class="cp-dashboard c-text" id="top"><aside class="cp-sidebar">'
+    + '<div class="cp-intro cp-hero-copy"><h1 class="cp-main-title"><img src="' + src(ctx, 'cockpit-01-title-01.png') + '" alt="" width="483" height="198" loading="eager"><span class="cp-h1-text">驾驶舱</span></h1>'
+    + '<div class="cp-tools"><p class="cp-meta" data-cp="meta" role="status">' + meta(v, ctx) + '</p>'
+    + '<button type="button" class="cp-tool ct-inline-action" data-cp-reload title="立刻重读电脑" aria-label="立刻重读电脑">↻</button>' + help + '</div>'
+    + '<p class="cp-viewer" data-cp="viewer" role="status">' + viewerLine(v, ctx) + '</p>'
+    + '<div class="cp-overview" data-cp="overview">' + overview(v, ctx) + '</div></div>'
+    + '<div class="cp-status c-hub-stats">' + blockHead('状态一览', 'cp-mobile-status-heading')
+    + '<div class="cp-overview-tri" data-cp="overview-tri">' + overviewTri(v, ctx) + '</div>'
+    + '<div class="cp-security-wrap hub-stat-field ct-card"><h2 class="cp-security-title">安全和授权</h2><div class="cp-security" data-cp="security">' + security(v, ctx) + '</div></div></div>'
+    + '<figure class="cp-hero-art"' + (ctx.birdConfig ? ' data-living-config="' + ctx.birdConfig + '"' : '') + '><img src="' + src(ctx, 'cockpit-01-illustration-01.png') + '" alt="" width="866" height="326" loading="eager" crossorigin="anonymous"></figure></aside>'
+    + '<div class="cp-workspace c-text"><div class="cp-need" id="need-you" data-cp="need-you">' + needCards(v, ctx) + '</div>'
+    + '<div class="cp-home" data-cp="home">' + home(v, ctx) + '</div><div class="cp-facts-wall">'
+    + sec('tasks', '自动任务', '电脑自己在做的事，有没有按时做、做成没有。', r('tasks') + '<details class="cp-fold cp-river-fold" id="river"><summary>看今天的河：每条船是一个自动任务，点开看它在做什么、怎么停</summary><div class="cp-river" data-today-river aria-label="今天的河"></div></details>')
+    + sec('computer', '电脑', '这台电脑现在累不累、还剩多少地方；人不在电脑前能不能连上它。', r('computer'))
+    + sec('today', '今天的动态', '今天有什么变化：代码、你对 AI 说的话、今天发生的事。', r('today'))
+    + sec('backup', '备份和云端', '东西有没有按时备份、云端的钱够不够。', r('backup'))
+    + sec('projects', '项目', '每个在用的项目现在怎么样、有没有等你的事。点名字进项目页。', r('projects'))
+    + '</div></div></section>';
 }
+
 // 二级页整页（/cockpit/ai/）
 export function ledgerPage(v, ctx) {
-  return `<section class="cp-section cp-ledger" id="top"><p class="cp-back"><a href="/cockpit/">← 回驾驶舱</a></p><h1 class="cp-ledger-h1">AI 的账本</h1>`
+  ctx = { ...ctx, viewer: v.viewer };
+  return `<section class="cp-section cp-ledger c-text" id="top"><p class="cp-back"><a href="/cockpit/">← 回驾驶舱</a></p><h1 class="cp-ledger-h1">AI 的账本</h1>`
     + `<p class="cp-lead">AI 自己手上的活：在跟的、晚了的、它自己定了的、每周体检。都不用你管，想看时进来看看。</p>`
-    + `<p class="cp-viewer" data-cp="viewer" role="status">${viewerLine(v, ctx)}</p><div class="cp-body" data-cp="ledger">${ledger(v, ctx)}</div></section>`;
+    + `<p class="cp-viewer" data-cp="viewer" role="status">${viewerLine(v, ctx)}</p><div class="cp-action-toast" data-cp="action-toast">${actionToast(ctx)}</div><div class="cp-body" data-cp="ledger">${ledger(v, ctx)}</div></section>`;
 }

@@ -33,7 +33,7 @@ test('首屏只露件数和卡住要你看的（额度、登录）；其余收�
   const html = REGIONS.home(v, ctx);
   // 卡住要你看的只算额度和登录；停了没做完、看不出在干嘛的不算在干活
   // 标题的数和列出来的行对得上：5 个在干活（含 2 个卡住）+ 另 1 件停了没做完、2 件看不出在干嘛 = 卡住 2 行 + 其余 6 行
-  assert.match(html, /<span class="cp-run-sum">AI 在干活：5 个（2 个卡住要你看），另 1 件停了没做完、2 件看不出在干嘛<\/span><span class="cp-run-at">15:39 读到的<\/span>/);
+  assert.match(html, /class="hub-heading cp-run-sum">AI 正在干活：5 个（2 个卡住要你看），另 1 件停了没做完、2 件看不出在干嘛<\/h2>[^]*?class="cp-run-at">15:39 读到的<\/span>/);
   const stuck = /<ul class="cp-run-list is-stuck">(.*?)<\/ul>/.exec(html)?.[1] || '';
   assert.deepEqual([...stuck.matchAll(/<li class="cp-run-row is-([a-z_]+) /g)].map((m) => m[1]), ['quota_exhausted', 'login_failed']);
   const rest = /<details class="cp-run-all" id="run-all"><summary>其余 6 个<\/summary><ul class="cp-run-list">(.*?)<\/ul><\/details>/.exec(html)?.[1] || '';
@@ -53,7 +53,7 @@ test('首屏只露件数和卡住要你看的（额度、登录）；其余收�
   assert.ok(h2.indexOf('id="ai-running"') < h2.indexOf('class="cp-know"') && h2.indexOf('class="cp-know"') < h2.indexOf('class="cp-lines"'));
   assert.doesNotMatch(REGIONS.overview(v2, ctx), /AI 在跑|cp-you-ai/);
   // 没有卡住的：只写件数，点开看是哪几个
-  assert.match(h2, /AI 在干活：1 个<\/span>.*<summary>看是哪 1 个<\/summary>/);
+  assert.match(h2, /AI 正在干活：1 个<\/h2>.*<summary>看是哪 1 个<\/summary>/);
 });
 
 test('件数那一句：一个都没有写“现在没有 AI 在干活”；读不全照实说', () => {
@@ -61,7 +61,7 @@ test('件数那一句：一个都没有写“现在没有 AI 在干活”；读�
   assert.equal(runLine({ count: 0, stuck_count: 0, rows: [] }), '现在没有 AI 在干活');
   assert.equal(runLine({ count: 0, stuck_count: 0, rows: [], unread: true }), 'AI 干活情况读不全');
   const none = REGIONS.home(normalize(base({ need_you: [todo], ai_running: { count: 0, stuck_count: 0, summary: '', observed_at: at, rows: [] } })), ctx);
-  assert.match(none, /<div class="cp-run is-empty" id="ai-running"><p class="cp-run-none"><span class="cp-run-k">AI 正在干活<\/span><span>现在没有 AI 在干活<\/span>/);
+  assert.match(none, /class="cp-run is-empty"[^]*?class="hub-heading cp-run-sum">现在没有 AI 在干活<\/h2>/);
   assert.doesNotMatch(none, /cp-run-list/);
   // 帮手说明换成人话
   assert.equal(helperText('刚刚还在动，+9 个帮手：4 个在跑、5 个判断不了'), '刚刚还在动，它叫了 9 个助手，4 个在干活');
@@ -74,29 +74,31 @@ test('公开版：只写两句（几个在干活、卡在额度还是登录；�
     pub('quota_exhausted', 'GPT Sol', 'gpt'), pub('login_failed', 'GPT Sol', 'gpt'), pub('running', 'GPT Sol', 'gpt'), pub('unknown', '', 'gpt')];
   const block = running(rows, { summary: 'AI 在跑 9 个，3 个卡住了，另有 2 件早就停了', stale_count: 2 });
   const html = REGIONS.home(normalize(base({ viewer: { kind: 'public', device_state: 'none' }, ai_running: block })), ctx);
-  assert.match(html, /<div class="cp-run is-public" id="ai-running"><p class="cp-run-head"><span class="cp-run-k">AI 正在干活<\/span><span class="cp-run-sum">AI 在干活：8 个（额度 1 个、登录 1 个卡住）<\/span><span class="cp-run-at">15:39 读到的<\/span><\/p><p class="cp-run-models">Claude Opus 5.5 5 个 · GPT Sol 3 个<\/p><\/div>/);
+  assert.match(html, /class="cp-run is-public"[^]*?class="hub-heading cp-run-sum">AI 正在干活：8 个（额度 1 个、登录 1 个卡住）<\/h2>[^]*?class="cp-run-at">15:39 读到的<\/span>/);
+  assert.match(html, /<p class="cp-run-models">Claude Opus 5.5 5 个 · GPT Sol 3 个<\/p>/);
   assert.doesNotMatch(html, /一件 AI 活|cp-run-list|cp-run-row|早就停了|个帮手|个助手|<button/);
   // 只凭行上的 placeholder 也认（没有 viewer 字段时）；网络重连、停了没做完不算卡住要你看
   const two = REGIONS.home(normalize(base({ ai_running: running([pub('network_retry', 'GPT Sol', 'gpt'), pub('network_retry', 'GPT Sol', 'gpt'), pub('stopped', 'Claude Opus 5.5')]) })), ctx);
-  assert.match(two, /<span class="cp-run-sum">AI 在干活：2 个<\/span>/);
+  assert.match(two, /class="hub-heading cp-run-sum">AI 正在干活：2 个<\/h2>/);
   assert.match(two, /<p class="cp-run-models">GPT Sol 2 个<\/p>/);
   // 读不到电脑时淡下去，写明是几点读到的
   const off = REGIONS.home(normalize(base({ ai_running: running([pub('running', 'GPT Sol', 'gpt')]) })), { ...ctx, offline: true });
   assert.match(off, /<div class="cp-run is-public is-off" id="ai-running">.*读不到电脑，这是 15:39 读到的/);
 });
 
-test('本人版：早就停了的另起一行小字；帮手说明只写一次', () => {
+test('本人版：只有早停数量而没有明细时不出空话；帮手说明只写一次', () => {
   const longHelp = '刚刚还在动，+9 个帮手：4 个在跑、2 个额度用完（GPT Sol，最长 37 分钟没动静）、3 个判断不了';
   const block = running([row('running', { helpers: 9, detail: longHelp }), row('waiting_owner', { helpers: 1 })], { summary: 'AI 在跑 2 个，另有 3 件早就停了', stale_count: 3 });
   const html = REGIONS.home(normalize(base({ viewer: { kind: 'owner', device_state: 'ok' }, ai_running: block })), ctx);
-  assert.match(html, /<span class="cp-run-sum">AI 在干活：2 个<\/span>/);
-  assert.match(html, /<\/details><p class="cp-run-stale">另有 3 件早就停了<\/p><\/div>/);
+  assert.match(html, /class="hub-heading cp-run-sum">AI 正在干活：2 个<\/h2>/);
+  assert.doesNotMatch(html, /cp-run-stale|早就停了/);
   assert.equal((html.match(/个助手/g) || []).length, 2);
   assert.match(html, /Claude Opus 5.5 · 它叫了 9 个助手，4 个在干活 · [^<]*还在动<\/small>/);
   assert.match(html, /<span class="cp-run-doing is-empty">在等你回话<\/span><small class="cp-run-meta"><span class="cp-run-name">示例活 waiting_owner<\/span>Claude Opus 5.5 · 它叫了 1 个助手 · /);
   // 没有在干活的、但有早就停了的：一行“现在没有 AI 在干活”，下面小字
   const none = REGIONS.home(normalize(base({ ai_running: { count: 0, stuck_count: 0, stale_count: 2, summary: '现在没有 AI 在跑，另有 2 件早就停了', observed_at: at, gaps: [], rows: [] } })), ctx);
-  assert.match(none, /<span>现在没有 AI 在干活<\/span><span class="cp-run-at">15:39 读到的<\/span><\/p><p class="cp-run-stale">另有 2 件早就停了<\/p>/);
+  assert.match(none, /class="hub-heading cp-run-sum">现在没有 AI 在干活<\/h2>[^]*?class="cp-run-at">15:39 读到的<\/span>/);
+  assert.doesNotMatch(none, /cp-run-stale|早就停了/);
   // 公开版这一句不出；没有 stale_count 字段时什么都不加
   const pubNone = REGIONS.home(normalize(base({ viewer: { kind: 'public', device_state: 'none' }, ai_running: { count: 0, stuck_count: 0, stale_count: 2, summary: '', observed_at: at, gaps: [], rows: [] } })), ctx);
   assert.doesNotMatch(pubNone, /早就停了/);
@@ -104,7 +106,7 @@ test('本人版：早就停了的另起一行小字；帮手说明只写一次',
   // 这次读不全：不说成“没有 AI 在干活”
   const unread = normalize(base({ ai_running: { count: 0, stuck_count: 0, stale_count: 0, summary: 'AI 运行情况暂时读不全', observed_at: null, gaps: ['codex_sqlite_unavailable'], rows: [] } }));
   const uh = REGIONS.home(unread, ctx);
-  assert.match(uh, /<span>AI 干活情况暂时读不全<\/span>/);
+  assert.match(uh, /class="hub-heading cp-run-sum">AI 干活情况暂时读不全<\/h2>/);
   assert.doesNotMatch(uh, /没有 AI 在干活|codex_sqlite/);
 });
 
@@ -147,7 +149,7 @@ test('你得知道超过 5 行：露前 4 行（AI 在修和影响你的事在�
     { id: 'fix1', kind: 'repairing', text: '示例在修' },
   ];
   const html = REGIONS.home(normalize(base({ must_know: { state: 'ok', items } })), ctx);
-  const main = /<p class="cp-know-k">你得知道<\/p><ul class="cp-know-list">(.*?)<\/ul><details class="cp-know-rest"/.exec(html)?.[1] || '';
+  const main = /<ul class="cp-know-list">(.*?)<\/ul><details class="cp-know-rest"/.exec(html)?.[1] || '';
   assert.deepEqual([...main.matchAll(/<li id="(know-\w+)"/g)].map((m) => m[1]), ['know-fix1', 'know-x1', 'know-r0', 'know-r1']);
   assert.match(html, /<details class="cp-know-rest" id="know-rest"><summary>其余 3 条<\/summary><ul class="cp-know-list"><li id="know-r2"/);
   assert.doesNotMatch(html, /know-rec1|know-dec1/);

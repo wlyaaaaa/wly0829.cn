@@ -1,8 +1,10 @@
 // 驾驶舱浏览器端：页面一打开就是构建时那份快照画好的最终版式；这里只负责读新数据、原地换字。
 // 每分钟读一次（页面在后台时不读）；刷新按钮叫醒电脑重读，等三个采集器都完成再换。
 import { normalize, riverSnapshot, freshAfter } from './model.js';
-import { REGIONS, Q_KEY, LF_KEY, LB_KEY, needCount } from './render.js';
-import { AI_ACTIONS, leftText } from './actions.js';
+import { REGIONS, Q_KEY, LF_KEY, needCount } from './render.js';
+import { ACTIONS } from './actions.js';
+import { copyToClipboard } from './clipboard.js';
+import { createActionController } from './action-state.js';
 
 const boot = JSON.parse(document.getElementById('cockpit-boot')?.textContent || '{}');
 // 本机预览走预览脚本的转发入口，线上走 live（边缘）再退到 mcp
@@ -18,11 +20,11 @@ const PAIR_URL = 'https://mcp.wly0829.cn/computer-access/api/cockpit-device/pair
 const store = { get() { try { const t = localStorage.getItem(KEY); return TOKEN.test(t || '') ? t : null; } catch { return null; } },
   set(t) { try { localStorage.setItem(KEY, t); return true; } catch { return false; } }, drop() { try { localStorage.removeItem(KEY); } catch { /* 无存储 */ } } };
 let notice = '';
-const say = (text) => { notice = text; paint(); setTimeout(() => { if (notice === text) { notice = ''; paint(); } }, 15000); };
+const say = (text, ms = 15000) => { notice = text; paint(); setTimeout(() => { if (notice === text) { notice = ''; paint(); } }, ms); };
 // phase：还没收到过任何一次读取结果时是 snapshot（首帧那份构建时的数），之后是 live；读不到另由 offline 说明
-// act：本人设备上点过的处理（state：正在交 / 交出去了 / 出错 / 撤回中；ui：还没交的选择、写的话、交给谁；recent：最近处理里撤回过的）
+// act：本人设备上点过的收起、提醒、撤回，以及未选择的提醒日期。
 const act = { state: new Map(), ui: new Map(), recent: new Map() };
-const ctx = () => ({ now: new Date(), offline, notice, phase: shown ? 'live' : 'snapshot', paired: !!store.get(), projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen, act });
+const ctx = () => ({ now: new Date(), viewer: view.viewer, offline, notice, phase: shown ? 'live' : 'snapshot', paired: !!store.get(), projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen, act });
 
 async function read(wake) {
   const token = store.get();
@@ -64,7 +66,7 @@ function paint() {
     if (!c.ov && /^(overview|lamp-)/.test(node.dataset.cp)) continue;
     const html = fn(view, c);
     if (node.innerHTML !== html) {
-      // 展开着的折叠保持展开（选了的答案、写的话在 act.ui 里，重画时照样画出来）；正在按的按钮、正在写的框换字后仍有焦点
+      // 展开着的折叠保持展开；按钮和筛选框换字后仍有焦点
       const open = [...node.querySelectorAll('details[open]')].map((d) => d.id).filter(Boolean);
       const focus = document.activeElement && node.contains(document.activeElement) ? focusKey(document.activeElement) : null;
       const finding = document.activeElement?.matches?.('[data-lfilter]') && node.contains(document.activeElement);
@@ -75,6 +77,7 @@ function paint() {
     }
   }
   syncWide();
+  syncCopy();
   syncTab();
   floatLater();
   const river = window.todayRiver;
@@ -84,9 +87,9 @@ function paint() {
   if (wanted && shown && !reveal(true) && !offline) { if (onLedger(wanted)) location.replace('/cockpit/ai/#' + encodeURIComponent(wanted)); wanted = ''; }
 }
 
-// ---- 本人设备上的按钮（条目带 owner_actions 才有；见 actions.js）----
+// ---- 本人设备上的收起、提醒与复制（见 actions.js）----
 // 点了就交给电脑：POST /computer-access/api/cockpit/actions，带本人设备钥匙；每次点击一个新的幂等键，网络重试用同一个。
-// 交出去以后卡片变灰，回执的话 + “撤回”倒数；撤回期过了写“已交给 Claude（HH:MM）”。出错照接口的中文说明写，条目变了给“刷新”。
+// 收起和提醒立即隐藏卡片；失败恢复，顶部短回执支持请求回来之前撤回。
 const ACTIONS_URL = 'https://mcp.wly0829.cn/computer-access/api/cockpit/actions';
 const ALNUM = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 const newKey = () => { const a = new Uint8Array(24); crypto.getRandomValues(a); return [...a].map((b) => ALNUM[b % 62]).join(''); };
@@ -108,133 +111,62 @@ async function post(url, body) {
 const CJK = /[一-鿿]/;
 const failText = (res) => (res.status === 429 ? '点得太快了，稍后再试' : res.status === 0 ? '连不上电脑，没交出去，稍后再点一次'
   : typeof res.j?.message === 'string' && CJK.test(res.j.message) ? res.j.message : '没交出去，稍后再试');
-async function submit(box, action, extra = {}) {
-  const id = box.dataset.oa;
-  if (act.state.get(id)?.phase === 'sending') return; // 防连点
-  const u = uiOf(id);
-  const body = { item_id: id, action, ...extra, idempotency_key: newKey() };
-  // “AI 在等你回”的卡（data-noexec）：答案送回原来那个对话，不选交给谁
-  if (AI_ACTIONS.includes(action) && !body.executor && !('noexec' in box.dataset)) body.executor = u.executor === 'gpt' ? 'gpt' : 'claude';
-  if (box.dataset.ver) try { body.item_version = JSON.parse(box.dataset.ver); } catch { /* 没有版本就不带 */ }
-  // 晚点提醒记下选的是哪天，撤回期过了写“好，明早 9 点再提醒你。”
-  const base = { action, executor: body.executor, until: body.until };
-  act.state.set(id, { phase: 'sending', ...base });
-  paint();
-  const res = await post(ACTIONS_URL, body);
-  if (res.ok && typeof res.j?.id === 'string') { act.state.set(id, { phase: 'done', ...base, receipt: res.j }); act.ui.delete(id); }
-  else act.state.set(id, { phase: 'error', ...base, error: failText(res), refresh: res.status === 409 && res.j?.error === 'cockpit_item_changed' });
-  paint();
+const actionController = createActionController({ act, post, url: ACTIONS_URL, newKey, paint, load,
+  retired: () => say('这个按钮已经取消，请刷新页面') });
+const undo = actionController.undo;
+function submit(box, action, extra = {}) {
+  if (view.viewer?.kind !== 'owner' || !ACTIONS.includes(action)) return;
+  let version;
+  if (box.dataset.ver) try { version = JSON.parse(box.dataset.ver); } catch { /* 旧条目没有版本 */ }
+  return actionController.submit({ id: box.dataset.oa, title: box.dataset.title || '', sourceTitle: box.dataset.sourceTitle || '', version }, action, extra);
 }
-async function undo(actId, itemId) {
-  const s = itemId ? act.state.get(itemId) : null;
-  if (s) { if (s.phase === 'undoing') return; act.state.set(itemId, { ...s, phase: 'undoing', undoError: '' }); } else { if (act.recent.get(actId) === 'undoing') return; act.recent.set(actId, 'undoing'); }
-  paint();
-  const res = await post(`${ACTIONS_URL}/${encodeURIComponent(actId)}/undo`, {});
-  if (res.ok) {
-    act.recent.set(actId, 'undone');
-    for (const [k, v] of act.state) if (v.receipt?.id === actId) act.state.set(k, { phase: 'undone', message: typeof res.j?.message === 'string' && CJK.test(res.j.message) ? res.j.message : '已撤回' });
-    setTimeout(() => { let changed = false; for (const [k, v] of act.state) if (v.phase === 'undone') { act.state.delete(k); changed = true; } if (changed) paint(); }, 6000);
-    load();
-  } else if (s) act.state.set(itemId, { ...s, phase: 'done', undoError: failText(res) });
-  else act.recent.delete(actId);
-  paint();
+let copied = '', copyTimer = null;
+function syncCopy() {
+  for (const b of document.querySelectorAll('[data-copy]')) {
+    const label = b.querySelector('[data-copy-caption]');
+    if (label) label.textContent = b.dataset.copy === copied ? '已复制' : b.dataset.copyLabel || '复制给 AI';
+  }
 }
-// 同一条在页面上可能画了两处（账本页的表格和列表），只认看得见的那处
-const shown1 = (sel) => { const all = [...document.querySelectorAll(sel)]; return all.find((n) => n.getClientRects().length) || all[0] || null; };
-document.addEventListener('click', (e) => {
-  const el = e.target instanceof Element ? e.target.closest('[data-act],[data-send],[data-snooze],[data-exec],[data-undo],[data-oa-refresh],[data-recent-undo],[data-pick],[data-add],.cp-oa-q .cp-opt') : null;
+document.addEventListener('click', async (e) => {
+  const el = e.target instanceof Element ? e.target.closest('[data-copy],[data-act],[data-snooze],[data-undo],[data-oa-refresh],[data-recent-undo]') : null;
   if (!el || el.disabled) return;
+  if ('copy' in el.dataset) {
+    if (!await copyToClipboard(el.dataset.copy)) return say('没复制上，再点一次');
+    copied = el.dataset.copy;
+    clearTimeout(copyTimer);
+    say('已复制，粘到对话里就行', 6000);
+    syncCopy();
+    copyTimer = setTimeout(() => { copied = ''; syncCopy(); }, 2000);
+    return;
+  }
   if (el.dataset.recentUndo) return void undo(el.dataset.recentUndo, null);
+  if ('undo' in el.dataset) return void undo(el.dataset.undo, el.dataset.undoItem || el.closest('[data-oa]')?.dataset.oa);
   const box = el.closest('[data-oa]');
   if (!box) return;
   const id = box.dataset.oa, u = uiOf(id);
-  // 只有一道题：点选项就直接交（照常可撤回）；“补一句”写的话跟着一起交
-  if ('pick' in el.dataset) {
-    const qid = el.closest('[data-qid]')?.dataset.qid || 'choice', text = (u.answers?.[qid]?.text || '').trim();
-    return void submit(box, 'answer', { answers: { [qid]: { value: JSON.parse(el.dataset.val), ...(text ? { text } : {}) } } });
-  }
-  if ('add' in el.dataset) {
-    u.open = u.open === 'add' ? '' : 'add';
-    paint();
-    if (u.open === 'add') shown1(`[data-oa="${CSS.escape(id)}"] [data-qnote]`)?.focus();
-    return;
-  }
-  if (el.matches('.cp-oa-q .cp-opt')) {
-    // 单选，再点一次取消；“我的说明”留着
-    const qid = el.closest('[data-qid]').dataset.qid, cur = u.answers?.[qid] || {};
-    const again = 'value' in cur && JSON.stringify(cur.value) === el.dataset.val;
-    const next = { ...cur };
-    if (again) delete next.value; else next.value = JSON.parse(el.dataset.val);
-    u.answers = { ...u.answers, [qid]: next };
-    return void paint();
-  }
-  if ('exec' in el.dataset) { u.executor = u.executor === 'gpt' ? 'claude' : 'gpt'; return void paint(); }
-  if (el.dataset.undo !== undefined) return void undo(el.dataset.undo, id);
   if ('oaRefresh' in el.dataset) { act.state.delete(id); paint(); return void load(); }
   if (el.dataset.snooze) return void submit(box, 'snooze', { until: el.dataset.snooze });
-  if (el.dataset.send) {
-    const a = el.dataset.send;
-    if (a === 'answer') {
-      const answers = Object.fromEntries(Object.entries(u.answers || {}).filter(([, x]) => 'value' in x).map(([q, x]) => [q, { value: x.value, ...(x.text?.trim() ? { text: x.text.trim() } : {}) }]));
-      return void submit(box, 'answer', { answers });
-    }
-    const text = (u.text || '').trim();
-    if (text) submit(box, a, { text });
-    return;
-  }
-  const a = el.dataset.act;
-  if (a === 'note' || a === 'redo' || a === 'snooze') {
-    // 回一句话 / 不对，重做 / 晚点提醒：展开或收起下面的框；两个写字的框共用一份草稿
-    u.open = u.open === a ? '' : a;
-    paint();
-    if (u.open === 'note' || u.open === 'redo') shown1(`[data-oa="${CSS.escape(id)}"] [data-text]`)?.focus();
-    return;
-  }
-  if (a === 'switch') return void submit(box, 'switch', { executor: el.dataset.to === 'gpt' ? 'gpt' : 'claude' });
-  submit(box, a); // 看见了、知道了、我办好了、这件不做了、确认、你定就行、我没看懂：直接交，不加二次确认（误点靠撤回）
+  if (el.dataset.act === 'snooze') { u.open = u.open === 'snooze' ? '' : 'snooze'; return void paint(); }
+  if (el.dataset.act === 'ack') submit(box, 'ack');
 });
-document.addEventListener('input', (e) => {
-  const el = e.target instanceof Element ? e.target : null;
-  const box = el?.closest('[data-oa]');
-  if (!box) return;
-  const u = uiOf(box.dataset.oa);
-  if ('text' in el.dataset) {
-    u.text = el.value;
-    const send = box.querySelector('[data-send]:not([data-send="answer"])');
-    if (send) send.disabled = !el.value.trim();
-  } else if ('qnote' in el.dataset) {
-    const qid = el.closest('[data-qid]').dataset.qid;
-    u.answers = { ...u.answers, [qid]: { ...u.answers?.[qid], text: el.value } };
-  }
-});
-// 选一天：选好（不早于今天）就交，传 YYYY-MM-DD
+// 选一天：选好（不早于今天）就交，传 YYYY-MM-DD。
 document.addEventListener('change', (e) => {
   const el = e.target instanceof Element ? e.target : null;
   if (!el?.matches('[data-snooze-date]')) return;
   const box = el.closest('[data-oa]');
   if (box && /^\d{4}-\d{2}-\d{2}$/.test(el.value) && el.value >= (el.min || '')) submit(box, 'snooze', { until: el.value });
 });
-// 换字时把焦点放回同一个按钮或输入框
-const FOCUS = ['act', 'send', 'exec', 'snooze', 'snoozeDate', 'undo', 'text', 'qnote', 'val', 'add', 'oaRefresh'];
+const FOCUS = ['act', 'snooze', 'snoozeDate', 'undo', 'oaRefresh', 'copy'];
 function focusKey(el) {
   const box = el.closest('[data-oa]');
   const k = box && FOCUS.find((x) => x in el.dataset);
-  return k ? [box.dataset.oa, el.closest('[data-qid]')?.dataset.qid || '', k, el.dataset[k]].join('\u0001') : null;
+  return k ? [box.dataset.oa, k, el.dataset[k]].join('\u0001') : null;
 }
 function refocus(node, key) {
-  const all = [...node.querySelectorAll('[data-oa] button, [data-oa] input, [data-oa] textarea')].filter((x) => focusKey(x) === key);
+  const all = [...node.querySelectorAll('[data-oa] button, [data-oa] input')].filter((x) => focusKey(x) === key);
   const el = all.find((x) => x.getClientRects().length) || all[0];
-  if (!el || el.disabled) return;
-  el.focus({ preventScroll: true });
-  if (el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && el.type === 'text')) el.setSelectionRange(el.value.length, el.value.length);
+  if (el && !el.disabled) el.focus({ preventScroll: true });
 }
-// 撤回倒数每秒走一格；有一条到点了，整块重画成“已交给 ……”
-setInterval(() => {
-  const now = new Date();
-  let due = false;
-  for (const el of document.querySelectorAll('[data-left]')) { const t = leftText(el.dataset.left, now); if (t) el.textContent = t; else due = true; }
-  if (due) paint();
-}, 1000);
 
 // 几次读取可能同时在路上（页面刚打开那次、每分钟那次、刷新按钮那次），回来的先后不一定。
 // 只认比已显示那次更晚发出的：晚到的旧失败不能把新结果说成“连不上”，晚到的旧数据也不能盖掉新数据。
@@ -245,7 +177,10 @@ async function load(wake = false) {
   const v = await read(wake);
   if (turn < shown) return v;
   shown = turn;
-  if (v) { view = v; offline = false; } else offline = true;
+  if (v) {
+    actionController.reconcile([v.need_you, v.ai_following, v.ai_overdue || [], v.deferred, v.must_know?.items || [], v.ai_running?.rows || []].flat().map((x) => x.id), v);
+    view = v; offline = false;
+  } else offline = true;
   paint();
   return v;
 }
@@ -296,7 +231,7 @@ function reveal(final) {
   let target = findItem(wanted);
   if (!target) return false;
   const q = target.closest('.cp-q[data-q]:not(.is-open)');
-  if (q) { act.ui.set(Q_KEY, { open: q.dataset.q }); paint(); target = findItem(wanted) || target; }
+  if (q) { act.ui.set(Q_KEY, { ...act.ui.get(Q_KEY), open: q.dataset.q }); paint(); target = findItem(wanted) || target; }
   if (final) wanted = '';
   for (let p = target.parentElement; p; p = p.parentElement) if (p.tagName === 'DETAILS') p.open = true;
   target.scrollIntoView({ block: 'start' });
@@ -307,29 +242,30 @@ function reveal(final) {
   return true;
 }
 // ---- 电脑版（宽度 ≥1200）----
-// 左栏队列“一行一件 / 全部展开”记在这台浏览器；没选过时 1700 宽以上全部展开（两列），以下一行一件。
-// 点一行展开那一件（同时只展开一件，记在 act.ui）；行上的“AI 建议”直接交那个选项（和卡里点一样，可撤回），同时展开那件好看到回执和撤回。
+// 队列默认全部展开；“一行一件 / 全部展开”记在这台浏览器。
+// 点一行展开那一件（记在 act.ui）；选项和 AI 建议始终只是说明。
 const QMODE = 'wly-cockpit-qmode';
 const qmode = { get() { try { const m = localStorage.getItem(QMODE); return m === 'rows' || m === 'all' ? m : ''; } catch { return ''; } },
   set(m) { try { localStorage.setItem(QMODE, m); } catch { /* 无存储：这次照样换，下次回到默认 */ } } };
 let qpick = '';
+act.ui.set(Q_KEY, { mode: qmode.get() || 'all' });
 const WIDE = matchMedia('(min-width: 1700px)');
-let runTouched = false; // 1700 宽以上“AI 正在干活”默认全列；自己收起过就不再替你展开
+let runTouched = false; // 少量运行行默认展开；自己收起过就不再替你展开
 function syncWide() {
   const need = document.getElementById('need-you');
   if (need) {
     const m = qmode.get() || qpick;
-    if (m) need.dataset.qmode = m; else delete need.dataset.qmode;
-    const eff = m || (WIDE.matches ? 'all' : 'rows');
+    need.dataset.qmode = m || 'all';
+    const eff = m || 'all';
     for (const b of need.querySelectorAll('[data-q-mode]')) b.setAttribute('aria-pressed', String(b.dataset.qMode === eff));
     // 键盘移到的那件画一圈绿边（只有一两件时都展开着，绿边只给当前那件）
     if ('kbd' in need.dataset) { const cur = curQ(); for (const q of need.querySelectorAll('.cp-q[data-q]')) q.classList.toggle('is-kbd', q === cur); }
   }
-  if (WIDE.matches && !runTouched) document.getElementById('run-all')?.setAttribute('open', '');
+  if (!runTouched && (WIDE.matches || (view.ai_running?.rows.length || 0) <= 4)) document.getElementById('run-all')?.setAttribute('open', '');
 }
 WIDE.addEventListener('change', syncWide);
 const openQ = (id) => {
-  act.ui.set(Q_KEY, { open: id });
+  act.ui.set(Q_KEY, { ...act.ui.get(Q_KEY), open: id });
   paint();
   document.querySelector(`.cp-q[data-q="${CSS.escape(id)}"]`)?.scrollIntoView({ block: 'nearest' });
 };
@@ -396,24 +332,17 @@ async function showReport(btn) {
   } catch { note.textContent = '汇报页没取到，稍后再试'; }
 }
 document.addEventListener('click', (e) => {
-  const el = e.target instanceof Element ? e.target.closest('[data-q-mode],[data-q-pick],[data-q-open],[data-cp-reload],[data-open-item],[data-report],[data-drawer-close],#run-all > summary') : null;
+  const el = e.target instanceof Element ? e.target.closest('[data-q-mode],[data-q-open],[data-cp-reload],[data-open-item],[data-report],[data-drawer-close],#run-all > summary') : null;
   if (!el) return;
   if (el.matches('#run-all > summary')) { runTouched = true; return; }
-  if (el.dataset.qMode) { qpick = el.dataset.qMode; qmode.set(qpick); return void syncWide(); }
-  if (el.dataset.qPick) {
-    const id = el.dataset.qPick;
-    const pick = [...document.querySelectorAll(`[data-oa="${CSS.escape(id)}"] [data-pick]`)].find((b) => b.dataset.val === el.dataset.val);
-    act.ui.set(Q_KEY, { open: id });
-    if (pick) pick.click(); else paint();
-    return;
-  }
+  if (el.dataset.qMode) { qpick = el.dataset.qMode; qmode.set(qpick); act.ui.set(Q_KEY, { ...act.ui.get(Q_KEY), mode: qpick }); return void paint(); }
   if (el.dataset.qOpen !== undefined) return void openQ(el.dataset.qOpen);
   if ('cpReload' in el.dataset) return void reloadNow(el);
   if (el.dataset.openItem) return void openThere(el);
   if (el.dataset.report) return void showReport(el);
   if ('drawerClose' in el.dataset) closeDrawer();
 });
-// ---- 键盘（电脑版）：j/k 下一件上一件、1—9 第几件、Enter 按 AI 建议回答、o 打开对话、n 回一句话、s 晚点提醒、u 撤回、? 说明 ----
+// ---- 键盘（电脑版）：j/k 下一件上一件、1—9 第几件、o 打开对话、s 晚点提醒、u 撤回、? 说明 ----
 // 正在写字（输入框、文本框）时一个都不接；按住 Ctrl、Alt、⌘ 的组合键也不接。都是点页面上同一个按钮，照样能撤回
 const DESK = matchMedia('(min-width: 1200px)');
 const typing = (el) => !!el?.closest?.('input, textarea, select, [contenteditable=""], [contenteditable="true"]');
@@ -441,19 +370,11 @@ function shortcut(e, el) {
   if (k === 'j' || k === 'k') { e.preventDefault(); kbdGo(ids[Math.max(0, Math.min(ids.length - 1, i < 0 ? 0 : i + (k === 'j' ? 1 : -1)))]); return true; }
   if (/^[1-9]$/.test(k)) { if (ids[+k - 1]) { e.preventDefault(); kbdGo(ids[+k - 1]); } return true; }
   if (!cur) return false;
-  if (k === 'Enter') {
-    // 焦点在别的按钮、链接上时 Enter 照常按那个；在空白处或这一件的行上才按 AI 建议
-    if (el && el !== document.body && !el.matches(`.cp-q-row[data-q-open="${CSS.escape(cur.dataset.q)}"]`)) return false;
-    const b = live(cur, '.cp-ask [data-pick].cp-btn-main');
-    e.preventDefault();
-    if (b) b.click(); else say('这件没有 AI 建议，点选项回答');
-    return true;
-  }
-  const map = { o: '.cp-open-a, .cp-open-b', n: '[data-act="note"], [data-add]', s: '[data-act="snooze"]', u: '[data-undo]' };
+  const map = { o: '.cp-open-a, .cp-open-b', s: '[data-act="snooze"]', u: '[data-undo]' };
   if (!map[k]) return false;
   const b = live(cur, map[k]) || (k === 'u' ? live(document, '[data-undo]') : null);
   e.preventDefault();
-  if (b) b.click(); else say({ o: '这件没有能打开的对话', n: '这件不能回话', s: '这件不能晚点提醒', u: '现在没有能撤回的' }[k]);
+  if (b) b.click(); else say({ o: '这件没有能打开的对话', s: '这件不能晚点提醒', u: '现在没有能撤回的' }[k]);
   return true;
 }
 document.addEventListener('keydown', (e) => {
@@ -463,67 +384,19 @@ document.addEventListener('keydown', (e) => {
   if (DESK.matches && !e.ctrlKey && !e.metaKey && !e.altKey && !typing(el) && !(e.key === 'Enter' && el?.matches('.cp-q-row:not([aria-expanded="true"])')) && shortcut(e, el)) return;
   // 队列的行：Enter / 空格展开
   if ((e.key === 'Enter' || e.key === ' ') && el?.matches('.cp-q-row')) { e.preventDefault(); return openQ(el.dataset.qOpen); }
-  // 写字的框里 Ctrl+Enter 交出去（回一句话、不对重做的“交给 AI”；多道题的“交给 AI”）
-  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && el?.matches('[data-oa] [data-text], [data-oa] [data-qnote]')) {
-    const box = el.closest('[data-oa]');
-    const send = 'text' in el.dataset ? box.querySelector('[data-send]:not([data-send="answer"])') : box.querySelector('[data-send="answer"]');
-    if (send && !send.disabled) { e.preventDefault(); send.click(); }
-  }
+
 });
 
-// ---- 账本页电脑版表格：筛选（全部 / 晚了 / 没晚、输入几个字）；AI 自己定了的勾选后一次“知道了”（后端给了 batch 才有）----
+// ---- 账本页电脑版表格：筛选（全部 / 晚了 / 没晚、输入几个字）----
 const lf = () => act.ui.get(LF_KEY) || {};
 document.addEventListener('click', (e) => {
-  const el = e.target instanceof Element ? e.target.closest('[data-lshow],[data-lb-ack]') : null;
-  if (!el || el.disabled) return;
-  if (el.dataset.lshow) { act.ui.set(LF_KEY, { ...lf(), show: el.dataset.lshow }); return void paint(); }
-  batchAck();
+  const el = e.target instanceof Element ? e.target.closest('[data-lshow]') : null;
+  if (el?.dataset.lshow) { act.ui.set(LF_KEY, { ...lf(), show: el.dataset.lshow }); paint(); }
 });
 document.addEventListener('input', (e) => {
   const el = e.target instanceof Element ? e.target : null;
   if (el?.matches('[data-lfilter]')) { act.ui.set(LF_KEY, { ...lf(), q: el.value }); paint(); }
 });
-document.addEventListener('change', (e) => {
-  const el = e.target instanceof Element ? e.target : null;
-  if (!el?.matches('[data-lb], [data-lb-all]')) return;
-  const all = [...document.querySelectorAll('#ai-decided-table [data-lb]')].map((b) => b.dataset.lb);
-  const sel = new Set(act.ui.get(LB_KEY)?.sel || []);
-  if ('lbAll' in el.dataset) { sel.clear(); if (el.checked) all.forEach((id) => sel.add(id)); } else if (el.checked) sel.add(el.dataset.lb); else sel.delete(el.dataset.lb);
-  act.ui.set(LB_KEY, { sel: [...sel] });
-  paint();
-});
-// 一次交多件（POST …/cockpit/actions/batch {actions:[…]}，限频算一次）；每件各自的回执、撤回和出错照单件的样子画
-async function batchAck() {
-  const all = [...document.querySelectorAll('#ai-decided-table [data-lb]')].map((b) => b.dataset.lb);
-  const pick = act.ui.get(LB_KEY)?.sel || [];
-  const ids = pick.length ? pick.filter((id) => all.includes(id)) : all;
-  if (!ids.length) return;
-  const actions = ids.map((id) => {
-    const box = document.querySelector(`#ai-decided-table [data-oa="${CSS.escape(id)}"]`);
-    const body = { item_id: id, action: 'ack', idempotency_key: newKey() };
-    if (box?.dataset.ver) try { body.item_version = JSON.parse(box.dataset.ver); } catch { /* 没有版本就不带 */ }
-    return body;
-  });
-  for (const id of ids) act.state.set(id, { phase: 'sending', action: 'ack' });
-  act.ui.delete(LB_KEY);
-  paint();
-  for (let k = 0; k < actions.length; k += 30) {
-    const part = actions.slice(k, k + 30);
-    const res = await post(ACTIONS_URL + '/batch', { actions: part });
-    const list = Array.isArray(res.j?.results) ? res.j.results : [];
-    for (const a of part) {
-      const r = list.find((x) => x?.item_id === a.item_id) || null;
-      const code = Number(r?.http_status) || 0;
-      const fine = res.ok && r && r.status !== 'error' && (!code || code < 400) && typeof r.id === 'string';
-      if (fine) act.state.set(a.item_id, { phase: 'done', action: 'ack', receipt: r });
-      else {
-        const why = r && typeof r.message === 'string' && CJK.test(r.message) ? r.message : code === 429 ? '点得太快了，稍后再试' : res.ok ? '这件没交上，稍后再点一次' : failText(res);
-        act.state.set(a.item_id, { phase: 'error', action: 'ack', error: why, refresh: (code === 409 && r?.error === 'cockpit_item_changed') || (res.status === 409 && res.j?.error === 'cockpit_item_changed') });
-      }
-    }
-    paint();
-  }
-}
 
 // ---- 标签页：“(N) 驾驶舱”，有要你做的事时图标加红点 ----
 const baseTitle = document.title.replace(/^\(\d+\)\s*/, '');
@@ -531,7 +404,7 @@ const icon = document.querySelector('link[rel~="icon"]');
 const iconWas = icon ? { href: icon.href, type: icon.type } : null;
 let dotOn = false, dotHref = '';
 function syncTab() {
-  const n = needCount(view, new Date());
+  const n = needCount(view, new Date(), ctx());
   const t = (n ? `(${n}) ` : '') + baseTitle;
   if (document.title !== t) document.title = t;
   if (!icon || n > 0 === dotOn) return;

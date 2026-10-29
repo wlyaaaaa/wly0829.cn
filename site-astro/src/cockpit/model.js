@@ -82,7 +82,7 @@ const replyOf = (r) => {
 };
 function aiRunning(raw) {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
-  const rows = list(raw.rows).map((r) => ({
+  const convert = (items) => list(items).map((r) => ({
     id: text(r.id, 120), status: RUN_STATUSES.includes(r.status) ? r.status : 'unknown', status_text: text(r.status_text, 20),
     vendor: ['claude', 'gpt'].includes(r.vendor) ? r.vendor : '', model: text(r.model, 60), model_text: text(r.model_text, 40), effort: text(r.effort, 20), kind: text(r.kind, 40),
     title: text(r.title, 120), started_at: r.started_at || null, last_activity_at: r.last_activity_at || null, detail: text(r.detail, 300), helpers: nat(r.helpers) || 0,
@@ -95,15 +95,16 @@ function aiRunning(raw) {
     // 电脑版“打开”组（后端 open：conversation / report / targets，见 render.js 的 openGroup）；没给就没有
     ...(r.open && typeof r.open === 'object' && !Array.isArray(r.open) ? { open: r.open } : {}),
     // 本人设备才有：能点的按钮（卡住的行有“改给另一家”）、条目版本、现在是哪家在做，以及交出去以后的状态
-    ...ownerFields(r), ...(['claude', 'gpt'].includes(r.executor) ? { executor: r.executor } : {}),
+    ...ownerFields(r), ...(['claude', 'gpt'].includes(r.executor) ? { executor: r.executor } : {}), copy_source: r,
   }));
+  const rows = convert(raw.rows);
   const stuck = rows.filter((r) => RUN_STUCK.includes(r.status)).length;
   const count = nat(raw.count) ?? rows.length;
   // stale_count：早就停了、不算在跑的件数（后端没给就是 0）；
   // unread：后端说这次读不全（observed_at 为空且有缺口）又没有行，不能说成“没有 AI 在跑”
   // stopped_count：半路停下超过半小时、还没满 3 小时的（记为“停了，没做完”，满 3 小时并进 stale_count）；后端没给就数行
   return { count, stuck_count: nat(raw.stuck_count) ?? stuck, stale_count: nat(raw.stale_count) || 0, stopped_count: nat(raw.stopped_count) ?? rows.filter((r) => r.status === 'stopped').length,
-    summary: text(raw.summary, 80), observed_at: raw.observed_at || null, rows,
+    summary: text(raw.summary, 80), observed_at: raw.observed_at || null, rows, stale_rows: convert(raw.stale_rows), stopped_rows: convert(raw.stopped_rows),
     unread: !count && !rows.length && !raw.observed_at && Array.isArray(raw.gaps) && raw.gaps.length > 0 };
 }
 
