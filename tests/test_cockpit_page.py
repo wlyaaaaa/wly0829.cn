@@ -195,6 +195,15 @@ class CockpitPageTests(unittest.TestCase):
                     size = 42 if width == 390 else 44
                     for position in ('top', 'middle', 'bottom'):
                         page.evaluate("(p)=>scrollTo({top:p==='top'?0:p==='middle'?document.documentElement.scrollHeight*.5:document.documentElement.scrollHeight,behavior:'instant'})", position)
+                        if width >= 1200 and position == 'top':
+                            # 电脑版：顶栏的 ↻ 看得见时右下角那个藏起来（滚出去才出现），这时点顶栏的
+                            page.wait_for_function("getComputedStyle(document.querySelector('.cockpit-refresh-wrap')).visibility==='hidden'")
+                            reads = server.status_reads
+                            page.locator('[data-cp-reload]').click()
+                            page.wait_for_function("document.querySelector('.cp-meta-note')?.textContent.startsWith('已更新')")
+                            self.assertGreater(server.status_reads, reads)
+                            continue
+                        page.wait_for_function("getComputedStyle(document.querySelector('.cockpit-refresh-wrap')).visibility==='visible'")
                         button = page.locator('[data-cockpit-refresh]')
                         self.assertEqual(button.count(), 1)
                         rect = button.bounding_box()

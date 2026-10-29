@@ -1,7 +1,7 @@
 // 驾驶舱浏览器端：页面一打开就是构建时那份快照画好的最终版式；这里只负责读新数据、原地换字。
 // 每分钟读一次（页面在后台时不读）；刷新按钮叫醒电脑重读，等三个采集器都完成再换。
 import { normalize, riverSnapshot, freshAfter } from './model.js';
-import { REGIONS, Q_KEY } from './render.js';
+import { REGIONS, Q_KEY, LF_KEY, LB_KEY, needCount } from './render.js';
 import { AI_ACTIONS, leftText } from './actions.js';
 
 const boot = JSON.parse(document.getElementById('cockpit-boot')?.textContent || '{}');
@@ -67,12 +67,16 @@ function paint() {
       // 展开着的折叠保持展开（选了的答案、写的话在 act.ui 里，重画时照样画出来）；正在按的按钮、正在写的框换字后仍有焦点
       const open = [...node.querySelectorAll('details[open]')].map((d) => d.id).filter(Boolean);
       const focus = document.activeElement && node.contains(document.activeElement) ? focusKey(document.activeElement) : null;
+      const finding = document.activeElement?.matches?.('[data-lfilter]') && node.contains(document.activeElement);
       node.innerHTML = html;
       open.forEach((id) => node.querySelector('#' + CSS.escape(id))?.setAttribute('open', ''));
       if (focus) refocus(node, focus);
+      if (finding) { const f = node.querySelector('[data-lfilter]'); f?.focus({ preventScroll: true }); f?.setSelectionRange(f.value.length, f.value.length); }
     }
   }
   syncWide();
+  syncTab();
+  floatLater();
   const river = window.todayRiver;
   if (river?.ready && view.automation.items.length) river.setSnapshot(riverSnapshot(view), false);
   // 读到新数据后还找不到的：是 AI 自己的活（AI 在跟、AI 已定、AI 等条件的）就去“AI 的账本”那一页找；
@@ -135,6 +139,8 @@ async function undo(actId, itemId) {
   else act.recent.delete(actId);
   paint();
 }
+// 同一条在页面上可能画了两处（账本页的表格和列表），只认看得见的那处
+const shown1 = (sel) => { const all = [...document.querySelectorAll(sel)]; return all.find((n) => n.getClientRects().length) || all[0] || null; };
 document.addEventListener('click', (e) => {
   const el = e.target instanceof Element ? e.target.closest('[data-act],[data-send],[data-snooze],[data-exec],[data-undo],[data-oa-refresh],[data-recent-undo],[data-pick],[data-add],.cp-oa-q .cp-opt') : null;
   if (!el || el.disabled) return;
@@ -150,7 +156,7 @@ document.addEventListener('click', (e) => {
   if ('add' in el.dataset) {
     u.open = u.open === 'add' ? '' : 'add';
     paint();
-    if (u.open === 'add') document.querySelector(`[data-oa="${CSS.escape(id)}"] [data-qnote]`)?.focus();
+    if (u.open === 'add') shown1(`[data-oa="${CSS.escape(id)}"] [data-qnote]`)?.focus();
     return;
   }
   if (el.matches('.cp-oa-q .cp-opt')) {
@@ -181,7 +187,7 @@ document.addEventListener('click', (e) => {
     // 回一句话 / 不对，重做 / 晚点提醒：展开或收起下面的框；两个写字的框共用一份草稿
     u.open = u.open === a ? '' : a;
     paint();
-    if (u.open === 'note' || u.open === 'redo') document.querySelector(`[data-oa="${CSS.escape(id)}"] [data-text]`)?.focus();
+    if (u.open === 'note' || u.open === 'redo') shown1(`[data-oa="${CSS.escape(id)}"] [data-text]`)?.focus();
     return;
   }
   if (a === 'switch') return void submit(box, 'switch', { executor: el.dataset.to === 'gpt' ? 'gpt' : 'claude' });
@@ -216,7 +222,8 @@ function focusKey(el) {
   return k ? [box.dataset.oa, el.closest('[data-qid]')?.dataset.qid || '', k, el.dataset[k]].join('\u0001') : null;
 }
 function refocus(node, key) {
-  const el = [...node.querySelectorAll('[data-oa] button, [data-oa] input, [data-oa] textarea')].find((x) => focusKey(x) === key);
+  const all = [...node.querySelectorAll('[data-oa] button, [data-oa] input, [data-oa] textarea')].filter((x) => focusKey(x) === key);
+  const el = all.find((x) => x.getClientRects().length) || all[0];
   if (!el || el.disabled) return;
   el.focus({ preventScroll: true });
   if (el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && el.type === 'text')) el.setSelectionRange(el.value.length, el.value.length);
@@ -231,8 +238,10 @@ setInterval(() => {
 
 // 几次读取可能同时在路上（页面刚打开那次、每分钟那次、刷新按钮那次），回来的先后不一定。
 // 只认比已显示那次更晚发出的：晚到的旧失败不能把新结果说成“连不上”，晚到的旧数据也不能盖掉新数据。
+let lastLoad = 0;
 async function load(wake = false) {
   const turn = ++asked;
+  lastLoad = Date.now();
   const v = await read(wake);
   if (turn < shown) return v;
   shown = turn;
@@ -279,7 +288,8 @@ function findItem(id) {
   if (!id || id.startsWith('pair=')) return null;
   const own = document.getElementById(id);
   if (own) return own.matches('[data-items], #ai-running') || /^(todo|know)-/.test(id) ? own : null;
-  return [...document.querySelectorAll('[data-items]')].find((n) => n.dataset.items.split(' ').includes(id)) || null;
+  const all = [...document.querySelectorAll('[data-items]')].filter((n) => n.dataset.items.split(' ').includes(id));
+  return all.find((n) => n.getClientRects().length) || all[0] || null;
 }
 // final：已经是读到新数据后的那一版，找到就不再惦记；首帧（构建时的旧数）上先跳一次，读到新数据换字后再对准一次
 function reveal(final) {
@@ -401,9 +411,51 @@ document.addEventListener('click', (e) => {
   if (el.dataset.report) return void showReport(el);
   if ('drawerClose' in el.dataset) closeDrawer();
 });
+// ---- 键盘（电脑版）：j/k 下一件上一件、1—9 第几件、Enter 按 AI 建议回答、o 打开对话、n 回一句话、s 晚点提醒、u 撤回、? 说明 ----
+// 正在写字（输入框、文本框）时一个都不接；按住 Ctrl、Alt、⌘ 的组合键也不接。都是点页面上同一个按钮，照样能撤回
+const DESK = matchMedia('(min-width: 1200px)');
+const typing = (el) => !!el?.closest?.('input, textarea, select, [contenteditable=""], [contenteditable="true"]');
+const qIds = () => [...document.querySelectorAll('#need-you .cp-q[data-q]')].map((n) => n.dataset.q);
+const curQ = () => document.querySelector('#need-you .cp-q.is-open[data-q]');
+const live = (root, sel) => [...root.querySelectorAll(sel)].find((b) => b.getClientRects().length && !b.disabled) || null;
+function kbdGo(id) {
+  const need = document.getElementById('need-you');
+  need.dataset.kbd = '';
+  openQ(id);
+  const q = document.querySelector(`#need-you .cp-q[data-q="${CSS.escape(id)}"]`);
+  const row = q?.querySelector('.cp-q-row');
+  if (row?.getClientRects().length) row.focus({ preventScroll: true });
+  q?.scrollIntoView({ block: 'nearest' });
+}
+function shortcut(e, el) {
+  const k = e.key;
+  if (k === '?') { const h = document.getElementById('cp-help'); if (h) { e.preventDefault(); h.open = !h.open; } return true; }
+  const ids = qIds();
+  if (!ids.length) return false;
+  const cur = curQ(), i = cur ? ids.indexOf(cur.dataset.q) : -1;
+  if (k === 'j' || k === 'k') { e.preventDefault(); kbdGo(ids[Math.max(0, Math.min(ids.length - 1, i < 0 ? 0 : i + (k === 'j' ? 1 : -1)))]); return true; }
+  if (/^[1-9]$/.test(k)) { if (ids[+k - 1]) { e.preventDefault(); kbdGo(ids[+k - 1]); } return true; }
+  if (!cur) return false;
+  if (k === 'Enter') {
+    // 焦点在别的按钮、链接上时 Enter 照常按那个；在空白处或这一件的行上才按 AI 建议
+    if (el && el !== document.body && !el.matches(`.cp-q-row[data-q-open="${CSS.escape(cur.dataset.q)}"]`)) return false;
+    const b = live(cur, '.cp-ask [data-pick].cp-btn-main');
+    e.preventDefault();
+    if (b) b.click(); else say('这件没有 AI 建议，点选项回答');
+    return true;
+  }
+  const map = { o: '.cp-open-a, .cp-open-b', n: '[data-act="note"], [data-add]', s: '[data-act="snooze"]', u: '[data-undo]' };
+  if (!map[k]) return false;
+  const b = live(cur, map[k]) || (k === 'u' ? live(document, '[data-undo]') : null);
+  e.preventDefault();
+  if (b) b.click(); else say({ o: '这件没有能打开的对话', n: '这件不能回话', s: '这件不能晚点提醒', u: '现在没有能撤回的' }[k]);
+  return true;
+}
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && drawer && !drawer.hidden) { e.preventDefault(); return closeDrawer(); }
   const el = e.target instanceof Element ? e.target : null;
+  if (e.key === 'Escape' && document.getElementById('cp-help')?.open) { document.getElementById('cp-help').open = false; return; }
+  if (DESK.matches && !e.ctrlKey && !e.metaKey && !e.altKey && !typing(el) && !(e.key === 'Enter' && el?.matches('.cp-q-row:not([aria-expanded="true"])')) && shortcut(e, el)) return;
   // 队列的行：Enter / 空格展开
   if ((e.key === 'Enter' || e.key === ' ') && el?.matches('.cp-q-row')) { e.preventDefault(); return openQ(el.dataset.qOpen); }
   // 写字的框里 Ctrl+Enter 交出去（回一句话、不对重做的“交给 AI”；多道题的“交给 AI”）
@@ -414,11 +466,105 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// ---- 账本页电脑版表格：筛选（全部 / 晚了 / 没晚、输入几个字）；AI 自己定了的勾选后一次“知道了”（后端给了 batch 才有）----
+const lf = () => act.ui.get(LF_KEY) || {};
+document.addEventListener('click', (e) => {
+  const el = e.target instanceof Element ? e.target.closest('[data-lshow],[data-lb-ack]') : null;
+  if (!el || el.disabled) return;
+  if (el.dataset.lshow) { act.ui.set(LF_KEY, { ...lf(), show: el.dataset.lshow }); return void paint(); }
+  batchAck();
+});
+document.addEventListener('input', (e) => {
+  const el = e.target instanceof Element ? e.target : null;
+  if (el?.matches('[data-lfilter]')) { act.ui.set(LF_KEY, { ...lf(), q: el.value }); paint(); }
+});
+document.addEventListener('change', (e) => {
+  const el = e.target instanceof Element ? e.target : null;
+  if (!el?.matches('[data-lb], [data-lb-all]')) return;
+  const all = [...document.querySelectorAll('#ai-decided-table [data-lb]')].map((b) => b.dataset.lb);
+  const sel = new Set(act.ui.get(LB_KEY)?.sel || []);
+  if ('lbAll' in el.dataset) { sel.clear(); if (el.checked) all.forEach((id) => sel.add(id)); } else if (el.checked) sel.add(el.dataset.lb); else sel.delete(el.dataset.lb);
+  act.ui.set(LB_KEY, { sel: [...sel] });
+  paint();
+});
+// 一次交多件（POST …/cockpit/actions/batch {actions:[…]}，限频算一次）；每件各自的回执、撤回和出错照单件的样子画
+async function batchAck() {
+  const all = [...document.querySelectorAll('#ai-decided-table [data-lb]')].map((b) => b.dataset.lb);
+  const pick = act.ui.get(LB_KEY)?.sel || [];
+  const ids = pick.length ? pick.filter((id) => all.includes(id)) : all;
+  if (!ids.length) return;
+  const actions = ids.map((id) => {
+    const box = document.querySelector(`#ai-decided-table [data-oa="${CSS.escape(id)}"]`);
+    const body = { item_id: id, action: 'ack', idempotency_key: newKey() };
+    if (box?.dataset.ver) try { body.item_version = JSON.parse(box.dataset.ver); } catch { /* 没有版本就不带 */ }
+    return body;
+  });
+  for (const id of ids) act.state.set(id, { phase: 'sending', action: 'ack' });
+  act.ui.delete(LB_KEY);
+  paint();
+  const res = await post(ACTIONS_URL + '/batch', { actions });
+  const list = Array.isArray(res.j) ? res.j : Array.isArray(res.j?.results) ? res.j.results : Array.isArray(res.j?.actions) ? res.j.actions : [];
+  ids.forEach((id, i) => {
+    const r = list.find((x) => x?.item_id === id) || (list.length === ids.length ? list[i] : null);
+    if (res.ok && r && typeof r.id === 'string') act.state.set(id, { phase: 'done', action: 'ack', receipt: r });
+    else act.state.set(id, { phase: 'error', action: 'ack', error: typeof r?.message === 'string' && CJK.test(r.message) ? r.message : res.ok ? '这件没交上，稍后再点一次' : failText(res), refresh: r?.error === 'cockpit_item_changed' || (res.status === 409 && res.j?.error === 'cockpit_item_changed') });
+  });
+  paint();
+}
+
+// ---- 标签页：“(N) 驾驶舱”，有要你做的事时图标加红点 ----
+const baseTitle = document.title.replace(/^\(\d+\)\s*/, '');
+const icon = document.querySelector('link[rel~="icon"]');
+const iconWas = icon ? { href: icon.href, type: icon.type } : null;
+let dotOn = false, dotHref = '';
+function syncTab() {
+  const n = needCount(view, new Date());
+  const t = (n ? `(${n}) ` : '') + baseTitle;
+  if (document.title !== t) document.title = t;
+  if (!icon || n > 0 === dotOn) return;
+  dotOn = n > 0;
+  if (!dotOn) { icon.type = iconWas.type; icon.href = iconWas.href; return; }
+  if (dotHref) { icon.type = 'image/png'; icon.href = dotHref; return; }
+  // 原图标在另一个网址（发布后放在图床）时要它允许跨站读；读不到就画一个绿底圆标加红点
+  const draw = (img) => {
+    try {
+      const c = document.createElement('canvas');
+      c.width = c.height = 64;
+      const g = c.getContext('2d');
+      if (img) g.drawImage(img, 0, 0, 64, 64);
+      else { g.beginPath(); g.arc(30, 34, 26, 0, Math.PI * 2); g.fillStyle = '#1d7a45'; g.fill(); }
+      g.beginPath(); g.arc(47, 17, 15, 0, Math.PI * 2); g.fillStyle = '#d93025'; g.fill(); g.lineWidth = 4; g.strokeStyle = '#fff'; g.stroke();
+      dotHref = c.toDataURL('image/png');
+    } catch { if (img) return draw(null); return; }
+    if (dotOn) { icon.type = 'image/png'; icon.href = dotHref; }
+  };
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => draw(img);
+  img.onerror = () => draw(null);
+  img.src = iconWas.href;
+}
+
+// 右下角 ↻：电脑版顶栏的 ↻ 看得见时藏起来，滚出去才出现（窄屏顶栏没有 ↻，一直在）
+// 看得见＝它在视口里、而且没被页头之类盖住（取它正中那一点，落在它身上才算）
+const topReload = document.querySelector('[data-cp-reload]'), floatWrap = document.querySelector('.cockpit-refresh-wrap');
+let floatRaf = 0;
+function checkFloat() {
+  floatRaf = 0;
+  if (!topReload || !floatWrap) return;
+  const r = topReload.getBoundingClientRect();
+  const seen = r.width > 0 && r.bottom > 0 && r.top < innerHeight && topReload.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2));
+  floatWrap.classList.toggle('is-top-visible', seen);
+}
+const floatLater = () => { if (!floatRaf) floatRaf = requestAnimationFrame(checkFloat); };
+if (topReload && floatWrap) { addEventListener('scroll', floatLater, { passive: true }); addEventListener('resize', floatLater); checkFloat(); }
+
 window.addEventListener('hashchange', () => { wanted = hashId(); if (!reveal(shown > 0)) openTo(wanted); });
 wanted = hashId();
 syncWide();
 if (!reveal(false)) openTo(wanted);
 
 pair().finally(() => load());
-setInterval(() => { if (!document.hidden && !busy) load(); }, 60000);
+// 页面在前台每分钟读一次；在后台（切到别的标签页）每 3 分钟读一次，标签页上的“(N) 驾驶舱”和图标红点照样跟着变
+setInterval(() => { if (!busy && (!document.hidden || Date.now() - lastLoad >= 175000)) load(); }, 60000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden && !busy) load(); });

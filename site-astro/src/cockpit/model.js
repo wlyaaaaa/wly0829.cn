@@ -72,6 +72,14 @@ const progressOf = (r) => {
   const t = text(p.text ?? p.summary, 160);
   return t ? { text: t, at: p.at || p.observed_at || p.updated_at || null } : null;
 };
+// 它最近一条回复的第一句（后端 latest_reply：一句话 + 时间；也收字符串 + latest_reply_at）
+const replyOf = (r) => {
+  const p = r.latest_reply;
+  if (typeof p === 'string') return text(p) ? { text: text(p, 160), at: r.latest_reply_at || null } : null;
+  if (!p || typeof p !== 'object' || Array.isArray(p)) return null;
+  const t = text(p.text ?? p.summary, 160);
+  return t ? { text: t, at: p.at || p.replied_at || p.observed_at || null } : null;
+};
 function aiRunning(raw) {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
   const rows = list(raw.rows).map((r) => ({
@@ -79,8 +87,9 @@ function aiRunning(raw) {
     vendor: ['claude', 'gpt'].includes(r.vendor) ? r.vendor : '', model: text(r.model, 60), model_text: text(r.model_text, 40), effort: text(r.effort, 20), kind: text(r.kind, 40),
     title: text(r.title, 120), started_at: r.started_at || null, last_activity_at: r.last_activity_at || null, detail: text(r.detail, 300), helpers: nat(r.helpers) || 0,
     // 本人版才有：它现在在做哪一步（doing，一句话；step_index / step_total 第几步、共几步）和最近一次进展（progress：一句话 + 时间）。
-    // 对话标题是开头定的、后来会过时，GPT 任务名常是给 AI 看的，所以有这两样时主行写它们，标题降成灰色小标签（render.js 的 runRow）
-    doing: text(r.doing, 140), step_index: nat(r.step_index), step_total: nat(r.step_total), progress: progressOf(r),
+    // 对话标题是开头定的、后来会过时，GPT 任务名常是给 AI 看的：主行永远不用标题（本人：“驾驶舱肯定不能取标题”），
+    // 依次用 doing → progress → latest_reply（它最近一条回复的第一句）→“还没写进展”，标题只做灰色小标签（render.js 的 runRow）
+    doing: text(r.doing, 140), step_index: nat(r.step_index), step_total: nat(r.step_total), progress: progressOf(r), latest_reply: replyOf(r),
     // 公开版的行：后端把标题换成“一件 AI 活”、不给 detail，并标 placeholder
     placeholder: r.placeholder === true,
     // 电脑版“打开”组（后端 open：conversation / report / targets，见 render.js 的 openGroup）；没给就没有

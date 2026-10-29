@@ -893,6 +893,9 @@ ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
   .cp-rail .cp-run-row { position: relative; }
   .cp-rail .cp-run-row:has(> .cp-open) { padding-right: 96px; }
   .cp-rail .cp-run-row > .cp-open { position: absolute; top: 7px; right: 0; margin: 0; }
+  /* 别的电脑上是“在主驾驶上打开对话”（字多）：不压在主行上，另起一行 */
+  .cp-rail .cp-run-row:has(> .cp-open .cp-open-b) { padding-right: 0; }
+  .cp-rail .cp-run-row > .cp-open:has(.cp-open-b) { position: static; display: flex; margin: 4px 0 0; }
   .cp-rail .cp-go, .cp-rail .cp-lines > details > summary { padding: 8px 12px; font-size: 14px; }
   /* 状态：四灯两行两格，健康分在下面 */
   .cp-status { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
@@ -913,7 +916,8 @@ ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
   /* 要你做的只有一两件（或一件都没有）：左栏用不满，右栏铺开成一整行三栏，不留大片空白 */
   .cp-hero:has(.cp-q-few), .cp-hero:has(.cp-need:empty) { grid-template-areas: "bar bar" "need need" "rail rail"; }
   .cp-hero:has(.cp-q-few) .cp-rail, .cp-hero:has(.cp-need:empty) .cp-rail { position: static; max-height: none; overflow: visible; padding: 0;
-    grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-areas: "run know status" "go know status" "mine know stale"; align-items: start; column-gap: 20px; }
+    grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-areas: "run know status" "go know status" "mine know status" "stale know status" ". know status";
+    grid-template-rows: auto auto auto auto 1fr; align-items: start; column-gap: 20px; }
   :is(.cp-hero:has(.cp-q-few), .cp-hero:has(.cp-need:empty)) .cp-rail .cp-run { grid-area: run; }
   :is(.cp-hero:has(.cp-q-few), .cp-hero:has(.cp-need:empty)) .cp-rail .cp-go { grid-area: go; }
   :is(.cp-hero:has(.cp-q-few), .cp-hero:has(.cp-need:empty)) .cp-rail .cp-know { grid-area: know; }
@@ -949,5 +953,107 @@ ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
 @media (min-width: 1700px) {
   .cp-need[data-qmode="rows"] .cp-q:not(.is-open) > .cp-ask { display: none; }
   .cp-need[data-qmode="rows"] .cp-q:not(.is-open) > .cp-q-row { display: flex; }
-  .cp-need:not([data-qmode="rows"]) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* 两列全部展开：按列往下排（多栏），卡片高矮不一也不留大空 */
+  .cp-need:not([data-qmode="rows"]) { display: block; columns: 2; column-gap: 16px; }
+  .cp-need:not([data-qmode="rows"]) > .cp-q-head { column-span: all; margin-bottom: 8px; }
+  .cp-need:not([data-qmode="rows"]) .cp-q { break-inside: avoid; margin-bottom: 10px; }
+}
+
+/* ===== 第四步铺开：真实数据对上、在等你回话的行、账本页表格、事实区多栏、键盘、右下角 ↻ ===== */
+/* 顶上那句：没有要你做的事时圆点和那句话在同一行（那句长了也不把圆点单独挤在上面） */
+.cp-you.is-none .cp-you-said { flex: 1 1 0; min-width: 0; }
+/* 卡上的完成说明（后端 completion_text：“做完上面几步就行，剩下 AI 收尾。”） */
+.cp-own-done { margin: 6px 0 0; font-size: 14px; line-height: 1.55; color: var(--cp-soft); }
+/* 没读到的来源会让下面哪些数不全（source_gaps[].impact）；今天核对了几件（acceptance_text） */
+.cp-gap-impact { display: block; margin: 1px 0 0 18px; font-size: 13px; line-height: 1.5; color: var(--cp-soft); }
+.cp-activity .cp-acceptance { margin: 2px 0 6px; font-size: 14.5px; color: var(--cp-ink); }
+/* AI 在跟那行“AI 定了：……”，依据收在“技术细节” */
+.cp-ai-dec { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; margin: 2px 0 0; font-size: 13.5px; line-height: 1.5; color: #2463a8; }
+/* “AI 正在跑”：主行永远不是标题；在等你回话的主行已经写了，状态几个字只给读屏；对上卡的点一下跳到那张卡 */
+.cp-run-row.is-live.is-waiting_owner .cp-run-word { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.cp-run-row.is-live.is-waiting_owner .cp-run-st { margin-right: 4px; }
+.cp-run-doing.is-empty { font-weight: 400; color: var(--cp-soft); }
+a.cp-run-goto { color: var(--cp-ink) !important; text-decoration: underline; text-decoration-color: #b9cfe6; text-underline-offset: 3px; }
+a.cp-run-goto:hover { color: #2463a8 !important; }
+/* 账本页电脑版表格、左侧小目录；事实区外框：窄屏都“不存在” */
+.cp-lt, .cp-ledger-toc { display: none; }
+.cp-vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.cp-facts-wall { display: contents; }
+.cp-facts-wall > .cp-section:first-child { border-top: 1px solid #edf5ef; }
+/* 右下角 ↻：电脑版顶栏的 ↻ 看得见时藏起来（client.js 加 is-top-visible），滚出去才出现 */
+.cockpit-refresh-wrap { transition: opacity .15s, visibility .15s; }
+.cockpit-refresh-wrap.is-top-visible { opacity: 0; visibility: hidden; pointer-events: none; }
+kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid #cfdcd3; border-bottom-width: 2px; border-radius: 5px; background: #f7faf8; font: 600 12px/1.6 ui-monospace, Consolas, monospace; text-align: center; color: var(--cp-ink); }
+
+@media (min-width: 1200px) {
+  /* 键盘移到的那件：一圈绿边；“?”里的快捷键两列 */
+  .cp-need[data-kbd] .cp-q.is-open > .cp-ask { box-shadow: 0 0 0 2px #2e9d5b; }
+  .cp-keys { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 4px 0 6px; }
+  .cp-keys dt { white-space: nowrap; }
+  .cp-keys dd { margin: 0; }
+  .cp-help-pop { width: 360px; }
+  /* 事实区：两栏，1700 以上三栏，按列往下排；“自动任务”带“今天的河”，占整行。栏里原来的两列小表改一列 */
+  .cp-facts-wall { display: block; columns: 2; column-gap: 40px; }
+  .cp-facts-wall > .cp-section { break-inside: avoid; }
+  .cp-facts-wall > #tasks { column-span: all; }
+  .cp-facts-wall :is(.cp-facts, .cp-proj-list, .cp-folds) { grid-template-columns: minmax(0, 1fr); }
+
+  /* 账本页：AI 在跟、AI 自己定了换成表格（列表收起）；体检和项目后台两张卡并排 */
+  .cp-ledger-sec:has(> .cp-lt) > :not(h2, .cp-lt) { display: none; }
+  .cp-lt { display: block; }
+  .cp-lt-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 0 0 10px; }
+  .cp-lt-bar .cp-q-modes { display: inline-flex; padding: 2px; border: 1px solid var(--cp-line); border-radius: 999px; background: #fff; }
+  .cp-lt-bar .cp-q-mode { font: inherit; font-size: 13px; padding: 2px 12px; border: 0; border-radius: 999px; background: none; color: var(--cp-soft); cursor: pointer; }
+  .cp-lt-bar .cp-q-mode[aria-pressed="true"] { background: #e9f6ee; color: var(--cp-title); font-weight: 700; }
+  .cp-lt-find { box-sizing: border-box; width: 260px; font: inherit; font-size: 14px; padding: 5px 14px; border: 1px solid var(--cp-line); border-radius: 999px; background: #fff; }
+  .cp-lt-find:focus-visible, .cp-lt-bar .cp-q-mode:focus-visible { outline: 2px solid #2e9d5b; outline-offset: 1px; }
+  .cp-lt-count { font-size: 13px; color: var(--cp-soft); }
+  .cp-lt-all { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; }
+  .cp-ltable { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 14.5px; line-height: 1.5; background: #fff; }
+  .cp-ltable :is(th, td) { overflow-wrap: anywhere; }
+  .cp-ltable th.cp-lt-what { width: 40%; }
+  .cp-ltable th.cp-lt-due { width: 104px; }
+  .cp-ltable th.cp-lt-lag { width: 132px; }
+  .cp-ltable th.cp-lt-act { width: 112px; }
+  .cp-ltable.is-dec th.cp-lt-what { width: 30%; }
+  .cp-ltable.is-dec th.cp-lt-dec { width: 172px; }
+  .cp-ltable.is-dec th.cp-lt-at { width: 140px; }
+  .cp-ltable.is-dec th.cp-lt-act { width: 200px; }
+  .cp-ltable th.cp-lt-pick { width: 34px; }
+  .cp-ltable th { position: sticky; top: 108px; z-index: 2; padding: 7px 12px; border-bottom: 1px solid #d9e7de; background: #f5faf6; text-align: left; font-size: 13px; font-weight: 700; color: var(--cp-soft); white-space: nowrap; }
+  .cp-ltable td { padding: 8px 12px; border-bottom: 1px solid #edf3ef; vertical-align: top; }
+  .cp-ltable tbody tr:hover { background: #f8fcf9; }
+  .cp-ltable tr.is-private { color: var(--cp-soft); }
+  .cp-ltable tr.is-acted > td:not(.cp-lt-act) { opacity: .55; }
+  .cp-lt-title { font-weight: 700; color: var(--cp-ink); }
+  .cp-ltable .cp-detail { display: block; }
+  td:is(.cp-lt-due, .cp-lt-lag, .cp-lt-at) { white-space: nowrap; }
+  .cp-lt-late { font-weight: 700; color: #9a5b00; }
+  .cp-lt-none { color: var(--cp-soft); }
+  .cp-lt-prog small { display: block; font-size: 12.5px; color: var(--cp-soft); }
+  td.cp-lt-dec { font-weight: 700; color: #2463a8; }
+  .cp-lt-why { font-size: 13.5px; color: var(--cp-soft); }
+  .cp-lt-pick { padding-right: 0 !important; }
+  .cp-lt-pick input, .cp-lt-all input { width: 16px; height: 16px; accent-color: #2e9d5b; }
+  td.cp-lt-act { text-align: right; overflow: visible; }
+  .cp-lt-act .cp-oa { margin: 0; justify-content: flex-end; }
+  /* 正在写“回一句话”：框往左展开，不撑宽这一列 */
+  .cp-lt-act .cp-oa:has(textarea) { position: relative; z-index: 3; width: 360px; margin-left: -248px; padding: 8px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fff; box-shadow: 0 8px 24px rgba(21, 68, 35, .12); text-align: left; }
+  .cp-ltable.is-dec .cp-lt-act .cp-oa:has(textarea) { margin-left: -160px; }
+  .cp-lt-act .cp-btn { min-height: 30px; padding: 2px 12px; font-size: 13.5px; }
+  /* AI 在跟：“回一句话”只在悬停这一行、键盘移到这一行或正在写时出现 */
+  #ai-following-table tbody tr:not(:hover, :focus-within) .cp-lt-act .cp-oa:not(:has(textarea, .cp-oa-done, .cp-oa-err)) { visibility: hidden; }
+  #ai-health { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; align-items: start; }
+  #ai-health > h2 { grid-column: 1 / -1; }
+  #ai-health > :is(.cp-gov, .cp-aiwork) { margin: 0; padding: 12px 16px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fff; }
+}
+@media (min-width: 1700px) {
+  .cp-facts-wall { columns: 3; }
+  /* 账本页：放宽，左边一列小目录（固定） */
+  main:has(> .cp-page.cp-ledger-page) { max-width: min(1680px, calc(100vw - 48px)); }
+  .cp-ledger .cp-body[data-cp="ledger"] { display: grid; grid-template-columns: 168px minmax(0, 1fr); column-gap: 32px; }
+  .cp-ledger .cp-body[data-cp="ledger"] > * { grid-column: 2; min-width: 0; }
+  .cp-ledger-toc { display: flex; flex-direction: column; gap: 2px; grid-column: 1 !important; grid-row: 1 / span 12; align-self: start; position: sticky; top: 132px; margin-top: 12px; padding: 4px 0 4px 12px; border-left: 3px solid #d6ebdc; }
+  .cp-ledger-toc a { padding: 4px 0; font-size: 14.5px; color: var(--cp-title); text-decoration: none; }
+  .cp-ledger-toc a:hover { text-decoration: underline; text-underline-offset: 3px; }
 }

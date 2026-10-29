@@ -73,7 +73,8 @@ test('卡片上的字：在哪办写“手机上能办 / 得在电脑前办”�
   assert.match(own, /得在电脑前办，约 3 分钟<\/span><span class="cp-own-path">详细说明在电脑上<\/span>/);
   assert.doesNotMatch(own, /MCP|E:\\|办完后/);
   assert.equal(plain('要你做 1 件（都能在手机上办，其中 1 件借电脑 MCP）'), '要你做 1 件（都能在手机上办，其中 1 件得借电脑办）');
-  assert.equal(plain('按本人方便时；本人设备'), '按你方便时；本人设备');
+  // 别的字不在显示路径换（后端契约）：“确认是你本人”不能变成“确认是你你”
+  assert.equal(plain('下次弹出“确认是你本人”的窗口；本人设备'), '下次弹出“确认是你本人”的窗口；本人设备');
 });
 
 test('看见了、知道了：卡收起只留标题和回执；“这件不做了”等按钮文字照定好的', () => {
@@ -87,7 +88,7 @@ test('看见了、知道了：卡收起只留标题和回执；“这件不做�
 test('首屏：顶上那一句用后端 verdict.text；旧格式只取“要你……”那一段，AI 的事不上来', () => {
   const todo = { id: 'n1', title: '示例', ask_kind: 'action' };
   const v = normalize(base({ need_you: [todo], verdict: { color: 'yellow', text: '要你回 AI 1 个问题（手机上点一下就行）' } }));
-  assert.match(REGIONS.overview(v, ctx()), /<div class="cp-you is-said"><p class="cp-you-n">要你回 AI 1 个问题（手机上点一下就行）<span class="cp-you-tag">都不急<\/span><\/p>/);
+  assert.match(REGIONS.overview(v, ctx()), /<div class="cp-you is-said"><p class="cp-you-n"><span class="cp-you-said">要你回 AI 1 个问题（手机上点一下就行）<\/span><span class="cp-you-tag">都不急<\/span><\/p>/);
   const old = normalize(base({ need_you: [todo], verdict: { text: '要你做 1 件（都能在手机上办，其中 1 件借电脑 MCP） · AI 在跟 63 件（其中 17 件过期） · 你暂缓 7 件' } }));
   const oh = REGIONS.overview(old, ctx());
   assert.match(oh, />要你做 1 件（都能在手机上办，其中 1 件得借电脑办）</);
@@ -158,7 +159,8 @@ test('二级页“AI 的账本”：在跟的、晚了的、AI 已定、等条�
   assert.match(own, /data-act="note"[^>]*>回一句话</);
   assert.doesNotMatch(own, /问 AI|data-copy/);
   const pub = ledgerPage(normalize(base({ ai_following: [{ id: 'a1', title: '示例 AI 在跟' }], must_know: { state: 'ok', items: [{ id: 'd1', kind: 'ai_decision', text: '示例事：结束；示例原因。' }] } })), { ...ctx(), phase: 'snapshot' });
-  assert.doesNotMatch(pub, /<button/);
+  // 公开版只有看哪些的切换（全部 / 晚了 / 没晚），没有处理按钮
+  assert.doesNotMatch(pub.replace(/<span class="cp-q-modes"[^]*?<\/span>/g, ''), /<button/);
   assert.match(pub, /<p class="cp-snap">/);
 });
 

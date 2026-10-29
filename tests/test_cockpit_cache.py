@@ -248,7 +248,8 @@ class CockpitRetentionTests(unittest.TestCase):
         self.server.respond((503, {'status': 'error'}, 1.5), (200, h.view('最新并发测试处理器'), 0))
         self.load(h.view('构建时虚构处理器', observed=h.ago(hours=2)))
         reads = self.server.status_reads
-        self.page.click('[data-cockpit-refresh]')
+        # 电脑版顶栏的 ↻ 看得见时右下角那个藏着（滚出去才出现）；这里只测两次读取的先后，直接按它
+        self.page.evaluate("document.querySelector('[data-cockpit-refresh]').click()")
         self.page.wait_for_function("document.querySelector('[data-cockpit-refresh-note]').textContent.startsWith('已更新')", timeout=10000)
         self.page.wait_for_timeout(2000)
         self.assertGreater(self.server.status_reads, reads)

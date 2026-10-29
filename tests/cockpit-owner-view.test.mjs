@@ -6,6 +6,8 @@ import { REGIONS, page, viewerLine, PRIVATE_TITLE } from '../site-astro/src/cock
 
 const now = new Date();
 const base = (extra = {}) => ({ schema: 'pcconfig.cockpit-view.v1', served_at: now.toISOString(), ...extra });
+// 二级页电脑版的表格和窄屏列表两样都画（cockpit.css 按宽度只显示一样）；数行数时只看列表
+const listOnly = (h) => h.replace(/<div class="cp-lt" id="[^"]+">[^]*?<\/table>(?:<p class="cp-lt-empty" hidden>[^<]*<\/p>)?<\/div>/g, '');
 const ctx = { now, offline: false, phase: 'live', projectUrls: {}, img: {} };
 const ph = (id, extra = {}) => ({ id, ask_kind: 'do', state: 'pending', owner_only: true, placeholder: true, title: PRIVATE_TITLE, steps: [], ...extra });
 
@@ -21,7 +23,7 @@ test('本人版：页头小字、仅你可见标签和一行“具体”', () =>
   assert.deepEqual(v.viewer, { kind: 'owner', device_state: 'ok', device_name: '示例设备', device_kind: null, device_machine: null, capabilities: [] });
   assert.equal(v.private_count, 2);
   assert.equal(viewerLine(v), '<span class="cp-viewer-line is-owner">你的设备 · 全部显示（其中 2 件公网看不到）</span>');
-  const need = REGIONS['need-you'](v, ctx) + REGIONS.home(v, ctx) + REGIONS.ledger(v, ctx);
+  const need = REGIONS['need-you'](v, ctx) + REGIONS.home(v, ctx) + listOnly(REGIONS.ledger(v, ctx));
   assert.equal((need.match(/class="cp-own">仅你可见/g) || []).length, 3);
   assert.match(need, /<span class="cp-detail" tabindex="0" title="示例平台 10月20日 回复说还要补一份示例材料">具体：示例平台/);
   assert.match(need, /具体：上次进展 10月25日/);
@@ -45,7 +47,7 @@ test('公开版：占位行灰显只剩标题，一个按钮都没有，页头�
     must_know: { state: 'ok', items: [{ id: 'k1', kind: 'report', placeholder: true, owner_only: true, title: PRIVATE_TITLE, text: null }] },
   }));
   assert.equal(viewerLine(v), '<span class="cp-viewer-line">公开版 · 3 件私人事项只在本人设备上显示</span>');
-  const need = REGIONS['need-you'](v, ctx) + REGIONS.home(v, ctx) + REGIONS.ledger(v, ctx);
+  const need = REGIONS['need-you'](v, ctx) + REGIONS.home(v, ctx) + listOnly(REGIONS.ledger(v, ctx));
   const card = /<article class="cp-ask is-private" id="todo-n1" data-items="n1">.*?<\/article>/.exec(need)?.[0] || '';
   assert.ok(card.includes(PRIVATE_TITLE));
   // 公开版一个按钮都没有（原来的复制按钮也去掉了）
@@ -81,7 +83,7 @@ test('AI 已定去“AI 的账本”逐条看，不同意的点“不同意，�
   const reports = Array.from({ length: 6 }, (_, i) => ({ id: `report-${i}`, kind: 'report', text: `示例汇报 ${i}` }));
   const v = normalize(base({ must_know: { state: 'ok', items: [...reports, ...decisions] }, verdict: { state: 'attention', color: 'yellow' } }));
   const c = { ...ctx, ov: { stale: () => false, lamp: () => '' } };
-  const home = REGIONS.home(v, c), led = REGIONS.ledger(v, c);
+  const home = REGIONS.home(v, c), led = listOnly(REGIONS.ledger(v, c));
   assert.equal((led.match(/class="is-ai_decision"/g) || []).length, 9);
   assert.doesNotMatch(home, /is-ai_decision|AI 自己定了/);
   assert.match(led, /AI 定了：不再跟进，这条结束<\/span><span class="cp-know-dec-why">原因：现状已恢复<\/span>/);
@@ -94,7 +96,7 @@ test('AI 已定去“AI 的账本”逐条看，不同意的点“不同意，�
   assert.match(REGIONS.overview(v, c), /<span class="cp-dot is-yellow"[^>]*><\/span>现在没有要你做的事/);
   // 本人设备上 AI 已定那条的“回一句话”写成“不同意，改一下”
   const own = normalize(base({ must_know: { state: 'ok', items: [{ ...decisions[0], owner_actions: ['note', 'ack'] }] } }));
-  assert.match(REGIONS.ledger(own, c), /data-act="ack"[^>]*>知道了<\/button><button type="button" class="cp-btn" data-act="note" aria-expanded="false">不同意，改一下<\/button>/);
+  assert.match(listOnly(REGIONS.ledger(own, c)), /data-act="ack"[^>]*>知道了<\/button><button type="button" class="cp-btn" data-act="note" aria-expanded="false">不同意，改一下<\/button>/);
   const hidden = normalize(base({ must_know: { state: 'ok', items: [{ ...ph('private-ai'), kind: 'ai_decision', text: null }] } }));
   const publicHtml = REGIONS.ledger(hidden, c);
   assert.match(publicHtml, /<li id="know-private-ai" class="is-ai_decision is-private" data-items="private-ai"><span class="cp-know-dec-topic">私人事项（只在本人设备上显示）<\/span><\/li>/);

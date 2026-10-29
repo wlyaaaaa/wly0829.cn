@@ -220,7 +220,7 @@ const assert = require('node:assert/strict');
     sections: { ...base0.sections, backup_cloud: [{ id: 'backup_h', title: 'H盘备份', state: 'attention', text: '上次没有跑完', details: [{ title: '测试分类', text: '测试缺口' }] }] } });
   const front = R.REGIONS.overview(improved, ctx), todos = R.needCards(improved, ctx), led = R.ledger(improved, ctx), home = R.REGIONS.home(improved, ctx);
   // 顶上只留“要你……”那一句；AI 在跟、暂缓去下面的入口；不出 MCP
-  assert.match(front, /要你做 2 件<span class="cp-you-tag">都不急<\/span>/);
+  assert.match(front, /要你做 2 件<\/span><span class="cp-you-tag">都不急<\/span>/);
   assert.doesNotMatch(front, /AI 在跟|暂缓|MCP|future-review/);
   assert.match(R.REGIONS.overview({ ...improved, need_you: [], overview: ov({ owner_count: 0 }), summary: { text: 'AI 在跟 3 件 · 你暂缓 1 件' } }, ctx), /现在没有要你做的事/);
   const compact = normalize({ ...base0, access_summary: improved.access_summary, verdict: { text: '要你做 2 件，都能在手机上办（其中 1 件借电脑 MCP） · AI 在跟 44 件（其中 23 件过期，12 件已跟满 14 天） · 你暂缓 6 件' } });
