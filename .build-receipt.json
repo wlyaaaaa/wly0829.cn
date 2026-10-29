@@ -2,63 +2,64 @@
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
   "source_commit": "Unknown",
-  "prepared_at_beijing": "2026-10-29T18:14:25.737690+08:00",
-  "seconds": 323.769,
+  "prepared_at_beijing": "2026-10-30T01:57:38.874375+08:00",
+  "seconds": 106.985,
   "steps": [
     {
       "name": "home_highlights",
-      "seconds": 0.274
+      "seconds": 0.171
     },
     {
       "name": "source",
-      "seconds": 5.884
+      "seconds": 1.756
     },
     {
       "name": "fingerprint",
-      "seconds": 1.816
+      "seconds": 0.865
     },
     {
       "name": "prepare",
-      "seconds": 30.192
+      "seconds": 1.972
     },
     {
       "name": "native_inputs",
-      "seconds": 9.314
+      "seconds": 1.369
     },
     {
       "name": "blocks",
-      "seconds": 4.368
+      "seconds": 0.649
     },
     {
       "name": "astro",
-      "seconds": 48.15
+      "seconds": 16.215
     },
     {
       "name": "assets",
-      "seconds": 8.672
+      "seconds": 3.855
     },
     {
       "name": "finish",
-      "seconds": 50.422
+      "seconds": 5.446
     },
     {
       "name": "finalize",
-      "seconds": 145.711
+      "seconds": 64.107
     },
     {
       "name": "public",
-      "seconds": 17.974
+      "seconds": 9.905
     },
     {
       "name": "inventory",
-      "seconds": 0.991
+      "seconds": 0.675
     }
   ],
   "rebuilt_pages": [
     "/cockpit/",
+    "/cockpit/ai/",
     "/cockpit/storage/"
   ],
-  "html_files": 321,
+  "html_files": 322,
   "files": [
     {
       "path": "404/index.html",
@@ -144,6 +145,11 @@
       "path": "_album/routes-cd1c30d61f61762463fd.json",
       "bytes": 64061,
       "sha256": "e26a065fc0cb73625e3eeae33e278ac9e6ee836b23d43c130ce94ec903bccd5c"
+    },
+    {
+      "path": "_album/routes-ce8eadb13f1d461c162c.json",
+      "bytes": 58516,
+      "sha256": "1b845e24eca63def5b41478df315c7c9a8f2718cabb14519bbe33f68155c6c8d"
     },
     {
       "path": "_album/routes-ed8a4cb08c93ee516db1.json",
@@ -291,6 +297,16 @@
       "sha256": "ecd5b4a27c7d83185a351f85a61bb9fe4622db5ba2bd4c73a3fa39dae5f4ad87"
     },
     {
+      "path": "_astro/cockpit.3zpn1mgU.css",
+      "bytes": 67775,
+      "sha256": "51ddceeee12c9b4ed5b26b629da6afe5b89ca23cd84f94357da601da64b669bd"
+    },
+    {
+      "path": "_astro/cockpit.8mQzz-VU.css",
+      "bytes": 67887,
+      "sha256": "1865eca1c7fd31599ad3b4ffd142948b35be92c177202cefe06c8704daccb08c"
+    },
+    {
       "path": "_astro/cockpit.BSMroGFE.css",
       "bytes": 25683,
       "sha256": "a27932d5c293bf5f958adf390cc045a630799df02bfa4254ddffd223330de7a1"
@@ -376,6 +392,11 @@
       "sha256": "d8c339a18c43058dee77efbc59d54cbd7bda03621e0b442baf6075417c340677"
     },
     {
+      "path": "_astro/index.astro_astro_type_script_index_0_lang.BWDDmgF8.js",
+      "bytes": 180,
+      "sha256": "712582da065776f3f7b8383a89b4eb405728ee710549bdfd361b356a086faa1a"
+    },
+    {
       "path": "_astro/index.astro_astro_type_script_index_0_lang.BxabkcGP.js",
       "bytes": 64353,
       "sha256": "081f93778958dec43cb5d0c4a2c694c2bc618eac20f12ccf391b5f6c984c41f5"
@@ -394,6 +415,11 @@
       "path": "_astro/index.astro_astro_type_script_index_0_lang.CbjDvVqQ.js",
       "bytes": 69472,
       "sha256": "bc6896f8c67a96136d7137f235adf380eb4ea5c2141a6e401a2d232331e3522a"
+    },
+    {
+      "path": "_astro/index.astro_astro_type_script_index_0_lang.CcbpDSwU.js",
+      "bytes": 180,
+      "sha256": "712582da065776f3f7b8383a89b4eb405728ee710549bdfd361b356a086faa1a"
     },
     {
       "path": "_astro/index.astro_astro_type_script_index_0_lang.CIAKFdJN.js",
@@ -499,6 +525,11 @@
       "path": "_astro/page-interactions.BE1IanXr.js",
       "bytes": 11919,
       "sha256": "dbc14d4aa4149ac92af788dab1c3475630a16be4de9e48cace80d627bc1faeae"
+    },
+    {
+      "path": "_astro/refresh-button.otp3rqq_.js",
+      "bytes": 120054,
+      "sha256": "c262282b94ed7587a1902f65ee2d4dd698b8897d11cdf46f9fc1de66e9762060"
     },
     {
       "path": "_astro/river.B-PGv6l7.webp",
@@ -27111,6 +27142,11 @@
       "sha256": "df478787a83412e9211fa82a88dfd43016943ec03010b87e22f731af45da2cc3"
     },
     {
+      "path": "cockpit/ai/index.html",
+      "bytes": 715323,
+      "sha256": "3b8f166cff125c54e331aeff14b81a5da4d7d9216747d344c6b05c88cfae033e"
+    },
+    {
       "path": "cockpit/assets/b2-controls-f2afbded2566.css",
       "bytes": 1742,
       "sha256": "f2afbded2566e7dff956ccddd1667610dd11e589ad36be70e256cc80b9abd5e6"
@@ -27217,13 +27253,13 @@
     },
     {
       "path": "cockpit/index.html",
-      "bytes": 288842,
-      "sha256": "18a9fd64b7cfa476af35af5da5584042d77da1d3bf428201c9317ec5a52f2ca2"
+      "bytes": 792463,
+      "sha256": "f4ca3d7baed64d54ced7dfb32dc8f4a8c8b4460dc4f48f937da68c0421dd4c25"
     },
     {
       "path": "cockpit/storage/index.html",
       "bytes": 52156,
-      "sha256": "045e745e7ae228c830699445de5441d887b399db0397c9ac0b45f08194f11d65"
+      "sha256": "4eaa32ecbf29685d5dd861c1b4e975adec694773a6087ad1ea43e762983eb63d"
     },
     {
       "path": "cockpit/stutter/assets/site-live-runtime-0fe059c637ff196ccc5d.js",
@@ -28893,12 +28929,12 @@
     {
       "path": "release-identity.json",
       "bytes": 211,
-      "sha256": "c946ca3c26760f1e54f724dfaa556277311071b2d1d07f32dd4d14846922067f"
+      "sha256": "1d8eae9c453f02206ccdf7e691aea269811bc6e416c5645aabd9730812a80dec"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 5407806,
-      "sha256": "e4b8afa732b052763fab49500d163b9dd40a38abb900af4ef2b766188ea2f547"
+      "bytes": 5412857,
+      "sha256": "24d527aac78c5c54810ec321af313675394a7a812faf3e93f17ff06810f850ee"
     },
     {
       "path": "rescue/index.html",
@@ -29082,8 +29118,8 @@
     },
     {
       "path": "sitemap.xml",
-      "bytes": 23425,
-      "sha256": "22e90c4db68a74459042caa140567de79f554f5c3ada9f867bcf772eaf71ca4a"
+      "bytes": 23477,
+      "sha256": "c00330edc59d5cb96897a55aa031551093a6b940d01d5b91c6fce0bf1759d7fb"
     },
     {
       "path": "skills/authorization-file-broker/assets/hero-6237da16056a24a7-mask.png",
@@ -29513,5 +29549,5 @@
   ],
   "output": "E:\\Cache\\wly-site-build\\wt\\dist",
   "previous_oss_source": "published",
-  "previous_release_id": "c564a1a4b02953bb8838ec22018a9ca406b92564cfa7c8b77097411012dc7b83"
+  "previous_release_id": "d5730fd7219a1daf63485d2c05900e9d6f87496374e378b8975043a78ab8985b"
 }
