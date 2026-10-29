@@ -22,8 +22,9 @@ test('没有 owner_actions（公开版、旧数据）：一个本人按钮都不
   const html = page(v, ctx(acts()));
   assert.doesNotMatch(html, BUTTONS);
   assert.doesNotMatch(html, /owner-recent|你最近处理的|写不回|通知没发出去/);
-  // 原来的复制按钮照旧在（只复制文字，不发请求）
-  assert.match(REGIONS['need-you'](v, ctx()), /data-copy-text/);
+  // 原来的复制按钮也去掉了（第三步）：没有 owner_actions 就一个按钮都没有
+  assert.doesNotMatch(html, /<button[^>]*(data-copy|data-act|data-pick)/);
+  assert.doesNotMatch(REGIONS['need-you'](v, ctx()), /<button|data-copy/);
   // owner_actions 是空数组也不画
   const empty = normalize(base({ need_you: [{ ...plain, owner_actions: [] }] }));
   assert.equal(REGIONS['need-you'](empty, ctx()), REGIONS['need-you'](normalize(base({ need_you: [plain] })), ctx()));
@@ -43,14 +44,16 @@ test('按钮只按 owner_actions 画，文字照定好的，不多加', () => {
   const v = normalize(base({ need_you: [card('n-x', ['done', 'note'], { why_you: '只有你能碰到电脑', consequence: '今晚的备份会跳过一次', steps: ['把备份盘插回去'], minutes: 2, mobile_method: { kind: 'in_person' } })] }));
   const html = REGIONS['need-you'](v, ctx(acts()));
   assert.match(html, /<b>为什么是你<\/b>只有你能碰到电脑。<b>不做会怎样<\/b>今晚的备份会跳过一次。/);
-  assert.match(html, /<b>怎么办<\/b>把备份盘插回去。<span class="cp-own-how">要到电脑前，约 2 分钟<\/span>/);
+  assert.match(html, /<b>怎么办<\/b>把备份盘插回去。<span class="cp-own-how">得在电脑前办，约 2 分钟<\/span>/);
   // 会交给 AI 的卡片带“交给：Claude ▾”；点过改成 GPT 就写 GPT
   assert.match(html, /data-exec[^>]*>交给：Claude ▾</);
   assert.match(REGIONS['need-you'](v, ctx(acts({}, { 'n-x': { executor: 'gpt' } }))), /data-exec[^>]*>交给：GPT ▾</);
 });
 
 test('答题：questions 用每题 id，options 是单题 choice；字符串选项以原字符串为值，对象选项用 value；每题都选了才能交', () => {
-  assert.deepEqual(questionsFor({ options: ['先上', '一起上'] }), [{ id: 'choice', text: '', options: [{ value: '先上', text: '先上' }, { value: '一起上', text: '一起上' }] }]);
+  assert.deepEqual(questionsFor({ options: ['先上', '一起上'] }), [{ id: 'choice', text: '', options: [{ value: '先上', text: '先上', detail: '', rec: false }, { value: '一起上', text: '一起上', detail: '', rec: false }] }]);
+  // AI 建议最多一个：后面再标的不算
+  assert.deepEqual(questionsFor({ options: [{ value: 'A', text: '甲', recommended: true, detail: ' 点了会怎样 ' }, { value: 'B', text: '乙', recommended: true }] })[0].options.map((o) => [o.rec, o.detail]), [[true, '点了会怎样'], [false, '']]);
   const x = card('q1', ['answer', 'note'], { ask_kind: 'decision', questions: [{ id: 'K1', text: '推哪些', options: [{ value: 'A', text: '只推三种' }, { value: 2, label: '都推' }] }, { id: 'K2', text: '夜里', options: ['照常推'] }] });
   assert.deepEqual(questionsFor(x).map((q) => [q.id, q.options.map((o) => o.value)]), [['K1', ['A', 2]], ['K2', ['照常推']]]);
   const one = REGIONS['need-you'](normalize(base({ need_you: [x] })), ctx(acts({}, { q1: { answers: { K1: { value: 'A' } } } })));
@@ -64,7 +67,7 @@ test('答题：questions 用每题 id，options 是单题 choice；字符串选�
   assert.match(both, /data-qnote[^>]*value="示例说明"/);
 });
 
-test('交出去以后：卡片变灰，回执的话 + 撤回 + 倒数；撤回期过了写“已交给 Claude（HH:MM）”；24 小时的写到几点前', () => {
+test('交出去以后：卡片变灰，回执的话 + 撤回 + 倒数；撤回期过了写点完会怎样；24 小时的写到几点前', () => {
   const x = card('n1', ['done', 'note']);
   const v = normalize(base({ need_you: [x] }));
   const receipt = { id: 'act-000', status: 'waiting_undo', created_at: '2026-10-29T18:39:50+08:00', apply_at: '2026-10-29T18:40:20+08:00', undo_until: '2026-10-29T18:40:20+08:00', message: '已记录，30 秒内可以撤回' };
@@ -72,8 +75,18 @@ test('交出去以后：卡片变灰，回执的话 + 撤回 + 倒数；撤回�
   assert.match(done, /class="cp-ask is-own is-acted"/);
   assert.match(done, /已记录，30 秒内可以撤回<\/span><button type="button" class="cp-btn cp-oa-undo" data-undo="act-000">撤回<\/button><span class="cp-oa-left" data-left="[^"]+">还剩 20 秒</);
   assert.doesNotMatch(done, /data-act=/);
-  const later = { ...ctx(acts({ n1: { phase: 'done', action: 'done', executor: 'gpt', receipt } })), now: new Date('2026-10-29T18:41:00+08:00') };
-  assert.match(REGIONS['need-you'](v, later), /已交给 GPT（18:40）/);
+  const later = (action, extra = {}) => REGIONS['need-you'](v, { ...ctx(acts({ n1: { phase: 'done', action, executor: 'gpt', receipt, ...extra } })), now: new Date('2026-10-29T18:41:00+08:00') });
+  assert.match(later('done'), /<span class="cp-oa-msg">已记下。AI 会去核实，没问题这张卡就消失。<\/span>/);
+  assert.match(later('note'), /已交给 GPT（18:40），办完会通知你。/);
+  assert.match(later('dismiss'), /已移走，AI 记下你不做了。/);
+  assert.match(later('snooze', { until: 'tomorrow_9' }), /好，明早 9 点再提醒你。/);
+  assert.match(later('snooze', { until: '2026-11-03' }), /好，11 月 3 日 9 点再提醒你。/);
+  assert.match(later('delegate'), /好，AI 按它的建议办；以后这类事它自己定。/);
+  assert.match(later('unclear'), /AI 正在换个说法重写这张卡，写好会更新在这里。/);
+  // 答案送回原对话（没选交给谁）
+  assert.match(later('answer', { executor: undefined }), /已送回原来那个对话（18:40），AI 接着做，做完会通知你。/);
+  // 撤回期里回执的 message 优先
+  assert.match(REGIONS['need-you'](v, ctx(acts({ n1: { phase: 'done', action: 'delegate', receipt } }))), /已记录，30 秒内可以撤回/);
   assert.equal(leftText('2026-10-30T18:40:00+08:00', now), '明天 18:40 前可撤回');
   assert.equal(leftText('2026-10-29T23:10:00+08:00', now), '今天 23:10 前可撤回');
   assert.equal(leftText('2026-10-29T18:45:30+08:00', now), '还剩 5 分 30 秒');
@@ -84,7 +97,7 @@ test('出错：写接口的中文说明；条目变了给“刷新”；按钮�
   const v = normalize(base({ need_you: [card('n1', ['done'])] }));
   const html = REGIONS['need-you'](v, ctx(acts({ n1: { phase: 'error', action: 'done', error: '这条刚更新过，请刷新后再点', refresh: true } })));
   assert.match(html, /<p class="cp-oa-err" role="alert">这条刚更新过，请刷新后再点<button[^>]*data-oa-refresh>刷新<\/button><\/p>/);
-  assert.match(html, /data-act="done">办好了</);
+  assert.match(html, /data-act="done">我办好了</);
   const sending = REGIONS['need-you'](v, ctx(acts({ n1: { phase: 'sending', action: 'done' } })));
   assert.match(sending, /data-act="done" disabled>/);
 });
@@ -94,13 +107,13 @@ test('刷新后照显示后端记下的状态：已交给 Claude（HH:MM）、AI
     { id: 'a1', title: '示例已交', handed_to_ai: { executor: 'claude', at: '2026-10-29T18:20:00+08:00' }, owner_actions: ['note'] },
     { id: 'a2', title: '示例核实', verifying: true, handed_to_ai: { executor: 'gpt', at: '2026-10-29T18:00:00+08:00' }, owner_actions: ['note'] },
   ], deferred: [{ id: 'ai-wait-1', title: '示例看见', action_owner: 'user', seen_at: '2026-10-29T17:55:00+08:00', owner_actions: ['note', 'seen'] }] }));
-  const html = REGIONS['need-you'](v, ctx(acts()));
+  const html = REGIONS.ledger(v, ctx(acts())) + REGIONS.home(v, ctx(acts()));
   assert.match(html, /<p class="cp-oa-status">已交给 Claude（18:20）<\/p>/);
   assert.match(html, /<p class="cp-oa-status">AI 核实中<\/p>/);
   assert.match(html, /<p class="cp-oa-status">你 17:55 点了看见了<\/p>/);
   // 行里只有“回一句话”时，“交给：Claude ▾”放在展开的框里，不占按钮行
   assert.doesNotMatch(html, /cp-oa-bar[^>]*>[^]*?data-exec[^]*?<\/div>\s*<\/div>\s*<\/li>/);
-  const open = REGIONS['need-you'](v, ctx(acts({}, { a1: { open: 'note', text: '示例一句话' } })));
+  const open = REGIONS.ledger(v, ctx(acts({}, { a1: { open: 'note', text: '示例一句话' } })));
   assert.match(open, /<textarea[^>]*data-text[^>]*maxlength="500"[^>]*>示例一句话<\/textarea><div class="cp-oa-row"><button type="button" class="cp-oa-exec" data-exec[^>]*>交给：Claude ▾<\/button><button type="button" class="cp-btn cp-btn-main" data-send="note">交给 AI<\/button>/);
 });
 
@@ -113,7 +126,9 @@ test('晚点提醒四个选择；AI 正在跑卡住的行“改给另一家”�
   const snooze = REGIONS['need-you'](v, ctx(acts({}, { n1: { open: 'snooze' } })));
   assert.deepEqual([...snooze.matchAll(/data-snooze="(\w+)"[^>]*>([^<]+)</g)].map((m) => [m[1], m[2]]), [['tomorrow_9', '明早 9 点'], ['three_days', '3 天后'], ['next_monday_9', '下周一 9 点']]);
   assert.match(snooze, /<span>选一天<\/span><input type="date" data-snooze-date min="2026-10-29">/);
-  const top = REGIONS.overview(v, ctx(acts()));
+  const top = REGIONS.home(v, ctx(acts()));
+  // “AI 正在干活”只画“改给另一家”，不画“回一句话”
+  assert.doesNotMatch(/id="ai-running".*?<\/div><div class="cp-know"/.exec(top)?.[0] || 'x', /data-act="note"/);
   assert.match(top, /data-oa="r1" data-ver="&quot;v-r1&quot;"><div class="cp-oa-bar"><button type="button" class="cp-btn" data-act="switch" data-to="claude">改给 Claude</);
   assert.match(top, /data-act="switch" data-to="gpt">改给 GPT</);
   assert.match(top, /data-act="redo" aria-expanded="false">不对，重做</);

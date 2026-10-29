@@ -34,9 +34,8 @@ test('有 overdue_text：要你动手、要你拍板、本人版私事和公开�
   assert.ok(need.includes('<span class="cp-own">仅你可见</span><span class="cp-late">过了原定时间 5 天</span></span></h3>'));
   assert.ok(need.includes(`${PRIVATE_TITLE}<span class="cp-late">过了原定时间 8 天</span></span></h3>`));
   assert.equal((need.match(/class="cp-late"/g) || []).length, 4);
-  // 首屏“你现在 N 件”清单：标签放在小标签行，不被两行省略吃掉
-  const ov = REGIONS.overview(v, ovCtx);
-  assert.match(ov, /<span class="cp-you-chips"><span class="cp-late">过了原定时间 3 天<\/span>/);
+  // 首屏顶上只有一句话，不再重复列标题；标签只在卡片上
+  assert.doesNotMatch(REGIONS.overview(v, ovCtx), /cp-late/);
 });
 
 test('标签文字会转义，过长截断', () => {

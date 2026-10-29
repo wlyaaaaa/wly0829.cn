@@ -194,13 +194,16 @@ class CockpitRetentionTests(unittest.TestCase):
             bad = self.page.locator('[data-cp="backup"] .cp-card.is-yellow')
             self.assertEqual(bad.count(), 1)
             self.assertIn('备份目标没接上', bad.inner_text())
-            self.assertEqual(bad.locator('[data-copy-ai="bad_backup"]').count(), 1)
+            # 第三步：卡上不再有“交给 AI 处理”的复制按钮
+            self.assertEqual(bad.locator('button, [data-copy-ai]').count(), 0)
             self.assertIn('正常备份', self.text('backup'))
             problem = self.page.locator('[data-cp="projects"] .cp-proj')
             self.assertEqual(problem.count(), 1)
-            self.assertIn('问题项目', problem.inner_text())
-            self.assertIn('上次运行失败', problem.inner_text())
-            chips = self.page.locator('[data-cp="projects"] .cp-chips').inner_text()
+            # 第三步：AI 在查的项目收进一行“N 个项目有小毛病，AI 在查”，点开才看是哪个
+            self.assertIn('1 个项目有小毛病，AI 在查', self.page.locator('#proj-ai > summary').inner_text())
+            self.assertIn('问题项目', problem.text_content())
+            self.assertIn('上次运行失败', problem.text_content())
+            chips = self.page.locator('[data-cp="projects"] .cp-chips').text_content()
             self.assertIn('正常项目', chips)
             self.assertIn('待验收项目', chips)
         # 后端明说要你出手（owner_action: do）时，这一格才是红色，写“要你看一眼”
@@ -287,10 +290,13 @@ class CockpitRetentionTests(unittest.TestCase):
         self.assertIn(self.when(t1) + ' 读到', self.text('computer'))
         # 其他页“看驾驶舱”的落点 /cockpit/#<项目>：锚点在，跳过去不改内容
         self.assertEqual(self.page.locator('#fixture-project').count(), 1)
+        # 正常的项目收在“正常运行的 N 个”里：跳过来时把它打开（只多一个 open），别的不变
+        shut = lambda r: {k: v.replace(' open=""', '') for k, v in r.items()}
         before = self.regions()
         self.page.evaluate("location.hash='#fixture-project';window.dispatchEvent(new Event('hashchange'))")
         self.page.wait_for_timeout(200)
-        self.assertEqual(self.regions(), before)
+        self.assertEqual(shut(self.regions()), shut(before))
+        self.assertTrue(self.page.locator('#fixture-project').is_visible())
         # 之后读不到、重画：读到的时间还是当时那次，不被改成重画的时间
         self.page.wait_for_timeout(1100)
         self.refresh(503)

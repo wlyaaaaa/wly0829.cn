@@ -1,7 +1,7 @@
 // 驾驶舱浏览器端：页面一打开就是构建时那份快照画好的最终版式；这里只负责读新数据、原地换字。
 // 每分钟读一次（页面在后台时不读）；刷新按钮叫醒电脑重读，等三个采集器都完成再换。
 import { normalize, riverSnapshot, freshAfter } from './model.js';
-import { REGIONS, PICK_FIRST, COPY_HINT, aiPrompt, promptIds } from './render.js';
+import { REGIONS } from './render.js';
 import { AI_ACTIONS, leftText } from './actions.js';
 
 const boot = JSON.parse(document.getElementById('cockpit-boot')?.textContent || '{}');
@@ -64,62 +64,20 @@ function paint() {
     if (!c.ov && /^(overview|lamp-)/.test(node.dataset.cp)) continue;
     const html = fn(view, c);
     if (node.innerHTML !== html) {
-      // 展开着的“AI 在核对”保持展开；卡片上已经选的答案和写的补充，换字时原样留着；正在按的按钮、正在写的框换字后仍有焦点
+      // 展开着的折叠保持展开（选了的答案、写的话在 act.ui 里，重画时照样画出来）；正在按的按钮、正在写的框换字后仍有焦点
       const open = [...node.querySelectorAll('details[open]')].map((d) => d.id).filter(Boolean);
-      const answers = saveAnswers(node);
       const focus = document.activeElement && node.contains(document.activeElement) ? focusKey(document.activeElement) : null;
       node.innerHTML = html;
       open.forEach((id) => node.querySelector('#' + CSS.escape(id))?.setAttribute('open', ''));
-      restoreAnswers(node, answers);
       if (focus) refocus(node, focus);
     }
   }
   const river = window.todayRiver;
   if (river?.ready && view.automation.items.length) river.setSnapshot(riverSnapshot(view), false);
-  // 读到新数据后还找不到的（条目已经办完关掉了），不再惦记，免得过一会儿突然跳走
-  if (wanted && shown && !reveal(true) && !offline) wanted = '';
+  // 读到新数据后还找不到的：是 AI 自己的活（AI 在跟、AI 已定、AI 等条件的）就去“AI 的账本”那一页找；
+  // 别的（条目已经办完关掉了）不再惦记，免得过一会儿突然跳走
+  if (wanted && shown && !reveal(true) && !offline) { if (onLedger(wanted)) location.replace('/cockpit/ai/#' + encodeURIComponent(wanted)); wanted = ''; }
 }
-
-// 卡片上的题：单选，再点一次取消；至少选了一题，“复制我的答复”才能点
-const qKey = (q) => (q.closest('.cp-ask')?.id || '') + '/' + q.dataset.q;
-function saveAnswers(node) {
-  return [...node.querySelectorAll('.cp-q')].map((q) => ({ key: qKey(q), opt: q.querySelector('.cp-opt[aria-pressed="true"]')?.dataset.opt, note: q.querySelector('[data-note]')?.value || '' })).filter((a) => a.opt || a.note);
-}
-function restoreAnswers(node, answers) {
-  for (const a of answers) {
-    const q = [...node.querySelectorAll('.cp-q')].find((x) => qKey(x) === a.key);
-    if (!q) continue;
-    q.querySelectorAll('.cp-opt').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.opt === a.opt)));
-    const n = q.querySelector('[data-note]'); if (n) n.value = a.note;
-  }
-  node.querySelectorAll('.cp-ask').forEach(syncAnswer);
-}
-function syncAnswer(card) {
-  const b = card.querySelector('[data-copy-answer]');
-  if (!b) return;
-  b.disabled = !card.querySelector('.cp-opt[aria-pressed="true"]');
-  const hint = card.querySelector('.cp-hint');
-  if (hint) hint.textContent = b.disabled ? PICK_FIRST : COPY_HINT;
-}
-function answerText(card, b) {
-  const qs = [...card.querySelectorAll('.cp-q')];
-  const parts = qs.map((q) => {
-    const opt = q.querySelector('.cp-opt[aria-pressed="true"]')?.dataset.opt;
-    if (!opt) return '';
-    const head = qs.length > 1 || q.dataset.qtext ? `第${q.dataset.qn}题${q.dataset.qtext ? ' ' + q.dataset.qtext : ''}→` : '';
-    return head + opt;
-  }).filter(Boolean);
-  const notes = qs.map((q) => q.querySelector('[data-note]')?.value.trim()).filter(Boolean);
-  return `${b.dataset.ref}关于${b.dataset.name}，我的答复：${parts.join('；')}${notes.length ? `；补充：${notes.join('；')}` : ''}`;
-}
-document.addEventListener('click', (e) => {
-  const o = e.target instanceof Element ? e.target.closest('.cp-q .cp-opt') : null;
-  if (!o) return;
-  const on = o.getAttribute('aria-pressed') !== 'true';
-  o.closest('.cp-q').querySelectorAll('.cp-opt').forEach((b) => b.setAttribute('aria-pressed', 'false'));
-  o.setAttribute('aria-pressed', String(on));
-  syncAnswer(o.closest('.cp-ask'));
-});
 
 // ---- 本人设备上的按钮（条目带 owner_actions 才有；见 actions.js）----
 // 点了就交给电脑：POST /computer-access/api/cockpit/actions，带本人设备钥匙；每次点击一个新的幂等键，网络重试用同一个。
@@ -150,13 +108,16 @@ async function submit(box, action, extra = {}) {
   if (act.state.get(id)?.phase === 'sending') return; // 防连点
   const u = uiOf(id);
   const body = { item_id: id, action, ...extra, idempotency_key: newKey() };
-  if (AI_ACTIONS.includes(action) && !body.executor) body.executor = u.executor === 'gpt' ? 'gpt' : 'claude';
+  // “AI 在等你回”的卡（data-noexec）：答案送回原来那个对话，不选交给谁
+  if (AI_ACTIONS.includes(action) && !body.executor && !('noexec' in box.dataset)) body.executor = u.executor === 'gpt' ? 'gpt' : 'claude';
   if (box.dataset.ver) try { body.item_version = JSON.parse(box.dataset.ver); } catch { /* 没有版本就不带 */ }
-  act.state.set(id, { phase: 'sending', action, executor: body.executor });
+  // 晚点提醒记下选的是哪天，撤回期过了写“好，明早 9 点再提醒你。”
+  const base = { action, executor: body.executor, until: body.until };
+  act.state.set(id, { phase: 'sending', ...base });
   paint();
   const res = await post(ACTIONS_URL, body);
-  if (res.ok && typeof res.j?.id === 'string') { act.state.set(id, { phase: 'done', action, executor: body.executor, receipt: res.j }); act.ui.delete(id); }
-  else act.state.set(id, { phase: 'error', action, executor: body.executor, error: failText(res), refresh: res.status === 409 && res.j?.error === 'cockpit_item_changed' });
+  if (res.ok && typeof res.j?.id === 'string') { act.state.set(id, { phase: 'done', ...base, receipt: res.j }); act.ui.delete(id); }
+  else act.state.set(id, { phase: 'error', ...base, error: failText(res), refresh: res.status === 409 && res.j?.error === 'cockpit_item_changed' });
   paint();
 }
 async function undo(actId, itemId) {
@@ -174,12 +135,23 @@ async function undo(actId, itemId) {
   paint();
 }
 document.addEventListener('click', (e) => {
-  const el = e.target instanceof Element ? e.target.closest('[data-act],[data-send],[data-snooze],[data-exec],[data-undo],[data-oa-refresh],[data-recent-undo],.cp-oa-q .cp-opt') : null;
+  const el = e.target instanceof Element ? e.target.closest('[data-act],[data-send],[data-snooze],[data-exec],[data-undo],[data-oa-refresh],[data-recent-undo],[data-pick],[data-add],.cp-oa-q .cp-opt') : null;
   if (!el || el.disabled) return;
   if (el.dataset.recentUndo) return void undo(el.dataset.recentUndo, null);
   const box = el.closest('[data-oa]');
   if (!box) return;
   const id = box.dataset.oa, u = uiOf(id);
+  // 只有一道题：点选项就直接交（照常可撤回）；“补一句”写的话跟着一起交
+  if ('pick' in el.dataset) {
+    const qid = el.closest('[data-qid]')?.dataset.qid || 'choice', text = (u.answers?.[qid]?.text || '').trim();
+    return void submit(box, 'answer', { answers: { [qid]: { value: JSON.parse(el.dataset.val), ...(text ? { text } : {}) } } });
+  }
+  if ('add' in el.dataset) {
+    u.open = u.open === 'add' ? '' : 'add';
+    paint();
+    if (u.open === 'add') document.querySelector(`[data-oa="${CSS.escape(id)}"] [data-qnote]`)?.focus();
+    return;
+  }
   if (el.matches('.cp-oa-q .cp-opt')) {
     // 单选，再点一次取消；“我的说明”留着
     const qid = el.closest('[data-qid]').dataset.qid, cur = u.answers?.[qid] || {};
@@ -212,7 +184,7 @@ document.addEventListener('click', (e) => {
     return;
   }
   if (a === 'switch') return void submit(box, 'switch', { executor: el.dataset.to === 'gpt' ? 'gpt' : 'claude' });
-  submit(box, a); // 看见了、知道了、办好了、不用了、确认：直接交，不加二次确认（误点靠撤回）
+  submit(box, a); // 看见了、知道了、我办好了、这件不做了、确认、你定就行、我没看懂：直接交，不加二次确认（误点靠撤回）
 });
 document.addEventListener('input', (e) => {
   const el = e.target instanceof Element ? e.target : null;
@@ -236,7 +208,7 @@ document.addEventListener('change', (e) => {
   if (box && /^\d{4}-\d{2}-\d{2}$/.test(el.value) && el.value >= (el.min || '')) submit(box, 'snooze', { until: el.value });
 });
 // 换字时把焦点放回同一个按钮或输入框
-const FOCUS = ['act', 'send', 'exec', 'snooze', 'snoozeDate', 'undo', 'text', 'qnote', 'val', 'oaRefresh'];
+const FOCUS = ['act', 'send', 'exec', 'snooze', 'snoozeDate', 'undo', 'text', 'qnote', 'val', 'add', 'oaRefresh'];
 function focusKey(el) {
   const box = el.closest('[data-oa]');
   const k = box && FOCUS.find((x) => x in el.dataset);
@@ -284,18 +256,6 @@ async function refresh() {
 }
 window.CockpitData = { refresh, get view() { return view; } };
 
-// 复制给 AI：只给条目编号；提示词由 render.js 的 aiPrompt 生成——让 AI 用电脑 MCP 或在本机读驾驶舱待办登记和来源登记，
-// 不去公开状态接口找细节（那里已不带 AI 侧自由文本），不写本机路径、不内嵌正文
-document.addEventListener('click', async (e) => {
-  const b = e.target instanceof Element ? e.target.closest('[data-copy-ai],[data-copy-ai-all],[data-copy-text],[data-copy-answer]') : null;
-  if (!b || b.disabled) return;
-  // “复制我的答复 / 我做完了 / 不做了 / 问 AI”：只把一段话放进剪贴板，不发任何请求
-  const ids = b.hasAttribute('data-copy-ai-all') ? promptIds(view.need_you) : [b.dataset.copyAi];
-  const text = b.hasAttribute('data-copy-answer') ? answerText(b.closest('.cp-ask'), b) : b.hasAttribute('data-copy-text') ? b.dataset.copyText : aiPrompt(ids);
-  try { await navigator.clipboard.writeText(text); b.dataset.done = '已复制，去 AI 对话粘贴发送'; } catch { b.dataset.done = '复制不了，请手动选中'; }
-  setTimeout(() => delete b.dataset.done, 2500);
-});
-
 // 河：脚本就绪就先喂构建时的快照，不让它先显示“读不到”再换
 const feedRiver = () => { if (view.automation.items.length) window.todayRiver?.setSnapshot(riverSnapshot(view), true); };
 if (window.todayRiver?.ready) feedRiver(); else document.addEventListener('today-river-ready', feedRiver, { once: true });
@@ -304,7 +264,16 @@ if (window.todayRiver?.ready) feedRiver(); else document.addEventListener('today
 // 认两种写法：页面元素自己的 id（如 todo-…、know-…、ai-running），或条目原编号（每条的 data-items 里）。
 // 首帧是构建时的旧数，新条目要等第一次读到新数据才画出来，所以没找到时记着，每次换字后再找一次。
 const hashId = () => { try { return decodeURIComponent(location.hash.slice(1)).trim(); } catch { return ''; } };
-// 分区落点（#need-you、#tasks、项目名等）照浏览器原样跳，不高亮；只认条目
+// 分区落点（#need-you、#tasks、项目名等）照浏览器原样跳，不高亮；只认条目。落点在收起的折叠里（如“正常运行的 N 个”里的项目名）时先打开折叠再跳
+function openTo(id) {
+  const el = id && !id.startsWith('pair=') ? document.getElementById(id) : null;
+  if (!el || !el.closest('details:not([open])')) return;
+  for (let p = el.parentElement; p; p = p.parentElement) if (p.tagName === 'DETAILS') p.open = true;
+  el.scrollIntoView({ block: 'start' });
+}
+// AI 自己的活（AI 在跟、过了日子的、AI 已定、AI 等条件的）在二级页“AI 的账本”上
+const onLedger = (id) => location.pathname === '/cockpit/' && [...view.ai_following, ...(view.ai_overdue || []), ...view.deferred.filter((x) => x.action_owner && x.action_owner !== 'user'),
+  ...(view.must_know?.items || []).filter((k) => k.kind === 'ai_decision')].some((x) => x.id === id || x.copy_ai_id === id);
 function findItem(id) {
   if (!id || id.startsWith('pair=')) return null;
   const own = document.getElementById(id);
@@ -324,9 +293,9 @@ function reveal(final) {
   setTimeout(() => target.classList.remove('cp-hit'), 4000);
   return true;
 }
-window.addEventListener('hashchange', () => { wanted = hashId(); reveal(shown > 0); });
+window.addEventListener('hashchange', () => { wanted = hashId(); if (!reveal(shown > 0)) openTo(wanted); });
 wanted = hashId();
-reveal(false);
+if (!reveal(false)) openTo(wanted);
 
 pair().finally(() => load());
 setInterval(() => { if (!document.hidden && !busy) load(); }, 60000);

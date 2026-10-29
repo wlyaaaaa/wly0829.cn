@@ -33,6 +33,7 @@ class CockpitItemAnchorTests(unittest.TestCase):
         server.default = (200, new, 0)
         # 首帧只有旧数据：通知里的新条目要等读到新数据才出现
         server.pages['/cockpit/'] = h.document(old)
+        server.pages['/cockpit/ai/'] = h.ledger_document(old)
         try:
             with sync_playwright() as pw:
                 browser = pw.chromium.launch(executable_path=h.CHROME, headless=True)
@@ -41,12 +42,16 @@ class CockpitItemAnchorTests(unittest.TestCase):
                 page = context.new_page()
                 errors = []
                 page.on('pageerror', lambda e: errors.append(str(e)))
-                # 1 折在“AI 自己定了 N 件”里的一条：打开折叠、滚到、高亮
+                # 1 AI 自己定了的一条（第三步起在二级页“AI 的账本”）：驾驶舱读到数据后认出是 AI 的活，转到 /cockpit/ai/#<编号>，滚到、高亮
                 page.goto(server.origin + '/cockpit/#dec-2', wait_until='domcontentloaded')
-                page.wait_for_function("() => !document.querySelector('.cp-snap')", timeout=15000)
-                page.wait_for_function("() => document.querySelector('.cp-hit')", timeout=5000)
+                page.wait_for_url('**/cockpit/ai/#dec-2', timeout=15000)
+                page.wait_for_function("() => document.querySelector('.cp-hit')", timeout=15000)
                 self.assertEqual(page.evaluate(STATE, 'dec-2'), {'hit': True, 'inView': True, 'closedAbove': False})
-                self.assertTrue(page.evaluate("document.getElementById('know-decisions-open').open"))
+                # 1b 收在“其余 N 个”里的一行：打开折叠再高亮
+                page.goto('about:blank')
+                page.goto(server.origin + '/cockpit/#run-1', wait_until='domcontentloaded')
+                page.wait_for_function("() => document.querySelector('.cp-run-row.cp-hit')", timeout=15000)
+                self.assertEqual(page.evaluate(STATE, 'run-1'), {'hit': True, 'inView': True, 'closedAbove': False})
                 # 2 只在新数据里的待办：读到后找到那张卡
                 page.goto('about:blank')
                 page.goto(server.origin + '/cockpit/#pending-new', wait_until='domcontentloaded')

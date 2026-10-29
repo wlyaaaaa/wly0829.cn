@@ -59,6 +59,8 @@ class CockpitPageTests(unittest.TestCase):
                     page = context.new_page()
                     page.goto(server.origin + '/cockpit/', wait_until='domcontentloaded')
                     page.wait_for_function('window.CockpitData')
+                    # 第三步：今天的四张卡各收成一行，先打开用电那一行
+                    page.evaluate("document.getElementById('today-power').open = true")
                     card = page.locator('.cp-power')
                     card.scroll_into_view_if_needed()
                     self.assertEqual(card.locator('small').all_text_contents(), ['小时', '度', '瓦'])
@@ -107,15 +109,19 @@ class CockpitPageTests(unittest.TestCase):
                     self.assertIn('件事', page.locator('.cp-you-n').inner_text())
                     self.assertEqual(page.locator('.cp-ask').count(), 5)
                     first = page.locator('.cp-ask').first.inner_text()
-                    self.assertIn('前办', first)
+                    self.assertRegex(first, r'\d{2}:\d{2} 前')
                     for filler in ('期限未登记', '待补', '未统计'):
                         self.assertNotIn(filler, page.locator('.cp-page').inner_text())
                     # 6 个分区标题图和首屏两张标题图都加载出来
                     page.wait_for_function("[...document.querySelectorAll('.cp-page h1 img,.cp-page h2 img')].every(e=>e.complete&&e.naturalWidth>0)", timeout=30000)
-                    self.assertEqual(page.locator('.cp-section .cp-head h2 img').count(), 6)
+                    # 第三步：“要我处理的事”不再单独一区，卡片紧接在首屏那一句下面；事实区 5 个分区
+                    self.assertEqual(page.locator('.cp-section .cp-head h2 img').count(), 5)
                     # 曲线不内嵌实时图；页面没有横向滚动
                     self.assertEqual(page.locator('iframe').count(), 0)
                     self.assertFalse(page.evaluate('document.documentElement.scrollWidth>innerWidth'))
+                    # 今天的四张卡各收成一行（今天代码：N 个提交……），点开看全
+                    self.assertIn('今天代码：2 个提交', page.locator('#today-code > summary').inner_text())
+                    page.evaluate("for (const id of ['today-code', 'today-words', 'today-activity', 'today-power']) document.getElementById(id).open = true")
                     self.assertIn('提交不等于已经上线', page.locator('.cp-code').inner_text())
                     self.assertIn('今天 3 项备份完成', page.locator('.cp-activity').inner_text())
                     # 原“学习方法：学习记录尚未读到”一行已随 ff4e8595 整页重做删除，页面不再有学习一栏。
@@ -133,8 +139,8 @@ class CockpitPageTests(unittest.TestCase):
                     page.evaluate('todayRiver.seek(12)')
                     page.screenshot(path=str(OUT / f'cockpit-{width}.png'), full_page=True)
 
-                    # 套餐流量卡的三种情况：读到了、没读到、只有很久以前那次；首屏件数不跟着乱
-                    traffic = page.locator('[data-cp="computer"] .cp-card').filter(has_text='套餐流量')
+                    # 套餐流量的三种情况：读到了（一行，比别的读数旧时写上几点读到）、没读到、只有很久以前那次（一行先说几点读到的，点开是那时的值）；首屏件数不跟着乱
+                    traffic = page.locator('[data-cp="computer"] .cp-fact').filter(has_text='套餐流量')
                     for mode, card in [('ok', {'text': '套餐已用 20 / 100 GB，剩余 80 GB', 'state': 'ok', 'observed_at': h.ago(hours=3)}),
                                        ('none', {'text': '', 'state': 'unavailable'}),
                                        ('stale', {'text': '套餐缓存已用 20 / 100 GB，剩余 80 GB', 'state': 'unavailable', 'observed_at': h.ago(hours=25)})]:
@@ -144,7 +150,7 @@ class CockpitPageTests(unittest.TestCase):
                             return b
                         state['value'] = body
                         page.evaluate('CockpitData.refresh()')
-                        page.wait_for_function("(m)=>{const c=[...document.querySelectorAll('[data-cp=computer] .cp-card')].find(x=>x.textContent.includes('套餐流量'));return c&&c.classList.contains(m)}", arg='is-green' if mode == 'ok' else 'is-gray')
+                        page.wait_for_function("(m)=>{const c=[...document.querySelectorAll('[data-cp=computer] .cp-fact')].find(x=>x.textContent.includes('套餐流量'));return c&&c.classList.contains('is-fold')===(m!=='ok')&&!!c.querySelector(m==='ok'?'.cp-dot.is-green':'.cp-dot.is-gray')}", arg=mode)
                         text = traffic.inner_text()
                         if mode == 'ok':
                             self.assertIn(card['text'], text)
@@ -152,37 +158,34 @@ class CockpitPageTests(unittest.TestCase):
                         elif mode == 'none':
                             self.assertIn('还没读到', text)
                         else:
-                            self.assertIn(card['text'], text)
                             self.assertIn('这是 ' + when(card['observed_at']) + ' 读到的，之后 25 小时没读到新的', text)
+                            self.assertNotIn(card['text'], text)
+                            traffic.locator('summary').click()
+                            self.assertIn(card['text'], traffic.inner_text())
                         self.assertEqual(page.locator('.cp-ask').count(), 5)
                         self.assertEqual(page.locator('.cp-you-n b').inner_text(), '5')
                     state['value'] = fixture
 
-                    # 正在作答的卡片：选了的答案、写的补充、展开的“其余几件”，刷新 5 次都原样留着，滚动位置不动
-                    # （原测试的页内授权办理面板已随整页重做删除，安全和授权改为链到授权页办理；同样的“刷新不丢正在填的东西”落在这里。）
+                    # 公开版（没有本人设备钥匙）：选择题只列选项文字，一个按钮都没有；展开的折叠刷新 5 次都原样留着，滚动位置不动
+                    # （本人设备上答题、选了的答案和写的话刷新后留着，见 test_cockpit_owner_actions.py）
                     quiz = page.locator('.cp-ask#todo-need-q')
                     quiz.scroll_into_view_if_needed()
-                    self.assertTrue(quiz.locator('[data-copy-answer]').is_disabled())
-                    self.assertEqual(quiz.locator('.cp-hint').inner_text(), '先在上面选一项，才能复制答复')
-                    self.assertEqual(quiz.locator('[data-copy-answer]').get_attribute('aria-describedby'), 'todo-need-q-hint')
-                    quiz.get_by_role('button', name='乙方案', exact=True).click()
-                    self.assertEqual(quiz.locator('.cp-hint').inner_text(), '按钮只复制一句话，贴到任意 AI 对话发送即可')
-                    quiz.locator('[data-note]').fill('虚构补充说明')
-                    page.locator('#ai-rest > summary').click()
+                    self.assertEqual(quiz.locator('button').count(), 0)
+                    self.assertEqual(page.locator('.cp-page button').evaluate_all("bs => bs.filter(b => !b.closest('#today-river')).length"), 0)
+                    self.assertIn('甲方案', quiz.inner_text())
+                    # 上面套餐流量最后那次点开的折叠，换回正常数据后先重读一次，让页面高度定下来再量
+                    self.assertTrue(page.evaluate('CockpitData.refresh()')['fresh'])
+                    page.locator('#run-all > summary, #mine-wait > summary, #proj-calm > summary').first.click()
+                    opened = page.evaluate("[...document.querySelectorAll('details[open]')].map(d => d.id).filter(Boolean)")
+                    self.assertTrue(opened)
                     before = page.evaluate('scrollY')
                     for _ in range(5):
                         reads = server.status_reads
                         self.assertTrue(page.evaluate('CockpitData.refresh()')['fresh'])
                         self.assertGreater(server.status_reads, reads)
                     self.assertIn('问过你', page.locator('.cp-ask#todo-need-q').inner_text())
-                    self.assertEqual(quiz.get_by_role('button', name='乙方案', exact=True).get_attribute('aria-pressed'), 'true')
-                    self.assertEqual(quiz.get_by_role('button', name='甲方案', exact=True).get_attribute('aria-pressed'), 'false')
-                    self.assertEqual(quiz.locator('[data-note]').input_value(), '虚构补充说明')
-                    self.assertFalse(quiz.locator('[data-copy-answer]').is_disabled())
-                    self.assertTrue(page.evaluate("document.querySelector('#ai-rest').open"))
+                    self.assertEqual(page.evaluate("[...document.querySelectorAll('details[open]')].map(d => d.id).filter(Boolean)"), opened)
                     self.assertEqual(page.evaluate('scrollY'), before)
-                    # 按钮只复制一句话，不发请求
-                    quiz.get_by_role('button', name='问 AI', exact=True).click()
                     page.screenshot(path=str(OUT / f'answer-{width}.png'))
 
                     # 右下角刷新按钮：顶部、中间、底部都只有一个、固定在视口里、点得到，点了真去读

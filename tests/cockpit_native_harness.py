@@ -22,6 +22,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site-astro'
 COCKPIT = SITE / 'src' / 'cockpit'
 ASTRO = SITE / 'src' / 'pages' / 'cockpit' / 'index.astro'
+LEDGER_ASTRO = SITE / 'src' / 'pages' / 'cockpit' / 'ai' / 'index.astro'
+BUILD_DATA = COCKPIT / 'build-data.js'
 CHROME = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
 SCHEMA = 'pcconfig.cockpit-view.v1'
 
@@ -47,9 +49,9 @@ def ago(**kw) -> str:
 
 
 def astro_parts() -> dict:
-    """从 index.astro 原文取：本机读取地址、刷新按钮外框、页面里加载的两份浏览器脚本。"""
+    """从 index.astro 和 build-data.js 原文取：本机读取地址、刷新按钮外框、页面里加载的两份浏览器脚本。"""
     text = ASTRO.read_text('utf8')
-    local = re.search(r"local:\s*\[([^\]]*)\]", text)
+    local = re.search(r"LOCAL\s*=\s*\[([^\]]*)\]", BUILD_DATA.read_text('utf8'))
     wrap = re.search(r'<div class="cockpit-refresh-wrap">.*?</div>', text, re.S)
     if not local or not wrap:
         raise AssertionError('index.astro 里找不到本机读取地址或刷新按钮外框；驾驶舱结构变了，先更新测试底座')
@@ -94,6 +96,38 @@ def document(snapshot: dict, project_urls: dict | None = None) -> bytes:
 <script type="application/json" id="cockpit-boot">{boot}</script>
 <script type="module" src="/_overview/overview-screen.js"></script>
 <script type="module" src="/scripts/today-river.js"></script>
+<script type="module">import '/src/cockpit/client.js'; import '/src/cockpit/refresh-button.js';</script>
+</body></html>"""
+    return html.encode('utf8')
+
+
+LEDGER_RENDER = r"""
+const [base] = process.argv.slice(1);
+let input = '';
+process.stdin.on('data', (d) => input += d).on('end', async () => {
+  const { normalize } = await import(base + 'model.js');
+  const { ledgerPage } = await import(base + 'render.js');
+  process.stdout.write(ledgerPage(normalize(JSON.parse(input)), { now: new Date(), offline: false, phase: 'snapshot' }));
+});
+"""
+
+
+def ledger_document(snapshot: dict) -> bytes:
+    """二级页“AI 的账本”（/cockpit/ai/）：和 ai/index.astro 构建时同一组函数画首帧，同一份 client.js 换字。"""
+    text = LEDGER_ASTRO.read_text('utf8')
+    for need in ("import '../../../cockpit/client.js';", 'id="cockpit-boot"', 'ledgerPage('):
+        if need not in text:
+            raise AssertionError('ai/index.astro 不再包含 ' + need + '；先更新测试底座')
+    parts = astro_parts()
+    frame = subprocess.run(['node', '-e', LEDGER_RENDER, COCKPIT.as_uri() + '/'], input=json.dumps(snapshot), capture_output=True, text=True, encoding='utf8', check=True).stdout
+    safe = lambda o: json.dumps(o, ensure_ascii=False).replace('<', '\\u003c')
+    boot = safe({'endpoints': ['https://live.invalid/state?view=cockpit'], 'local': parts['local'], 'snapshot': snapshot, 'projectUrls': {}, 'img': {}})
+    html = f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 的账本测试页</title>
+<link rel="stylesheet" href="/src/cockpit/cockpit.css"><link rel="stylesheet" href="/src/cockpit/refresh-button.css">
+<style>html,body{{margin:0}}main{{max-width:1440px;margin:0 auto;padding:0 16px;box-sizing:border-box}}</style>
+</head><body><main><div class="cp-page cp-ledger-page">{frame}</div>{parts['refresh_wrap']}</main>
+<script type="application/json" id="cockpit-boot">{boot}</script>
 <script type="module">import '/src/cockpit/client.js'; import '/src/cockpit/refresh-button.js';</script>
 </body></html>"""
     return html.encode('utf8')

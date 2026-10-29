@@ -1,0 +1,29 @@
+---
+// 驾驶舱二级页“AI 的账本”：AI 自己手上的活（在跟的、晚了的、它自己定了的、等条件的、每周体检和项目后台）。
+// 本人 10 月 29 日：首屏只放本人的事；这些都不用本人管，从首屏“AI 手上还有 N 件自己的活 ›”点进来。
+// 首帧和驾驶舱一样用构建时的数（公开版），浏览器里 client.js 读新数据原地换字；本人设备上带按钮（只有“回一句话”）。
+import Site from '../../../layouts/Site.astro';
+import { normalize } from '../../../cockpit/model.js';
+import { ledgerPage } from '../../../cockpit/render.js';
+import { ENDPOINTS, LOCAL, latest, safe } from '../../../cockpit/build-data.js';
+import '../../../cockpit/cockpit.css';
+import '../../../cockpit/refresh-button.css';
+
+const snapshot = await latest();
+const html = ledgerPage(normalize(snapshot), { now: new Date(), offline: false, phase: 'snapshot' });
+const boot = safe({ endpoints: ENDPOINTS, local: LOCAL, snapshot, projectUrls: {}, img: {} });
+---
+<Site title="AI 的账本" kind="cockpit" url="/cockpit/ai/" page="cockpit-ai" toc={[]}>
+  <div class="cp-page cp-ledger-page"><Fragment set:html={html} /></div>
+  <div class="cockpit-refresh-wrap">
+    <button type="button" class="cockpit-refresh" data-cockpit-refresh aria-label="刷新" title="立刻重读电脑">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
+    </button>
+    <span class="cockpit-refresh-note" data-cockpit-refresh-note role="status" hidden></span>
+  </div>
+  <script is:inline id="cockpit-boot" type="application/json" set:html={boot}></script>
+</Site>
+<script>
+  import '../../../cockpit/client.js';
+  import '../../../cockpit/refresh-button.js';
+</script>

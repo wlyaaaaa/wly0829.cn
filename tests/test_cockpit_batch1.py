@@ -41,13 +41,11 @@ const assert = require('node:assert/strict');
   const ctx = { now, offline: false, projectUrls: {}, img: {}, ov: OV };
   const v = normalize(base0);
 
-  // 1 开头：后端给的是 decision，标题照样列出来；动词按种类说；点标题跳到那张卡
+  // 1 开头：后端给的是 decision，动词按种类说；第三步起顶上只一句话，卡片紧接在下面，不再列标题、不再写三格各一句
   let o = R.REGIONS.overview(v, ctx);
   assert.match(o, /要你拍板 <b>1<\/b> 件事/);
-  assert.match(o, /<a href="#todo-pending-trip">.*虚构旅行去哪 · 对照/);
-  assert.match(o, /约 3 分钟.*要在电脑上办/);
-  // 结论后半句：三格各一句；写着交给 AI 的用中性色
-  assert.match(o, /其余都有人管：电脑内存\/系统资源偏高、自动任务今天 1 个出错还没恢复，AI 在管；备份都按时。/);
+  assert.doesNotMatch(o, /<ol|cp-you-rest|todo-pending-trip/);
+  o = R.REGIONS['overview-tri'](v, ctx);
   // 2 自动任务只数没恢复的，已恢复的写在灰色小字；已恢复的反复出错不再挂着，仍失败的才挂
   assert.match(o, /今天 1 个出错还没恢复/);
   assert.match(o, /今天出过错、已恢复 1 个/);
@@ -61,15 +59,15 @@ const assert = require('node:assert/strict');
   assert.match(R.REGIONS['lamp-computer'](v, ctx), /is-neutral.*AI 在管/);
   assert.doesNotMatch(R.REGIONS['lamp-computer'](v, ctx), /要处理/);
   assert.match(R.REGIONS['lamp-need-you'](v, ctx), /留意/);
-  // 4 超过 3 件只列 3 个，写还有 N 件
+  // 4 件数照后端 owner_count
   const many = normalize({ ...base0, overview: ov({ owner_count: 5 }), need_you: [1, 2, 3, 4, 5].map((i) => ({ id: 't' + i, title: '虚构事 ' + i, ask_kind: 'do' })) });
   o = R.REGIONS.overview(many, ctx);
-  assert.equal((o.match(/<li><a href="#todo-t/g) || []).length, 3);
-  assert.match(o, /还有 2 件 ↓/);
   assert.match(o, /要你动手 <b>5<\/b> 件事/);
-  // 5 0 件：写“现在没有要你做的事”加三格各一句
-  o = R.REGIONS.overview(normalize({ ...base0, overview: ov({ owner_count: 0 }), need_you: [] }), ctx);
-  assert.match(o, /现在没有要你做的事<\/p><p class="cp-you-rest">电脑内存\/系统资源偏高、自动任务今天 1 个出错还没恢复，AI 在管；备份都按时。/);
+  assert.equal((R.REGIONS['need-you'](many, ctx).match(/<article class="cp-ask/g) || []).length, 5);
+  // 5 0 件：写“现在没有要你做的事”，卡片那一块整块不出
+  const none = normalize({ ...base0, overview: ov({ owner_count: 0 }), need_you: [] });
+  assert.match(R.REGIONS.overview(none, ctx), /现在没有要你做的事<\/p><\/div>$/);
+  assert.equal(R.REGIONS['need-you'](none, ctx), '');
   // 6 首帧是构建时的数：写明几点、正在读最新
   o = R.REGIONS.overview(v, { ...ctx, phase: 'snapshot' });
   assert.match(o, /class="cp-snap".*这是 10月12日 14:59 的数，不是现在的<span class="cp-snap-reading">，正在读最新…/);
@@ -97,25 +95,25 @@ const assert = require('node:assert/strict');
   assert.match(own('do'), /cp-card is-yellow/);
   // 9 每周体检：不写“这周已跑过”，写到了哪一步
   assert.equal(govState(v, now).state, 'running');
-  assert.match(R.needYou(v, ctx), /每周 AI 体检：10月12日 12:58 开始，正在跑（还没收到跑完的回执）/);
+  assert.match(R.ledger(v, ctx), /每周 AI 体检：10月12日 12:58 开始，正在跑（还没收到跑完的回执）/);
   const river = riverSnapshot(v, now);
   assert.equal(river.automation.items.find((t) => t.id === 'gov').plain.status_note, '10月12日 12:58 开始，正在跑（还没收到跑完的回执）');
   assert.doesNotMatch(JSON.stringify(river), /这周已跑过/);
   // 10 “你得知道”（后端 must_know）：字段不在不出；empty 一行；unavailable 照实说读不到；最多 5 行、已恢复合一行，收起的折叠；远程卡按 must_know_id 跳过去
-  assert.doesNotMatch(R.REGIONS.overview(v, ctx), /cp-know/);
-  assert.match(R.REGIONS.overview(normalize({ ...base0, must_know: { state: 'empty', text: '没有要你知道的新事', items: [], archived_items: [] } }), ctx), /没有要你知道的新事/);
-  const mkUn = R.REGIONS.overview(normalize({ ...base0, must_know: { state: 'unavailable', text: '', items: [], archived_items: [] } }), ctx);
+  assert.doesNotMatch(R.REGIONS.home(v, ctx), /cp-know/);
+  assert.match(R.REGIONS.home(normalize({ ...base0, must_know: { state: 'empty', text: '没有要你知道的新事', items: [], archived_items: [] } }), ctx), /没有要你知道的新事/);
+  const mkUn = R.REGIONS.home(normalize({ ...base0, must_know: { state: 'unavailable', text: '', items: [], archived_items: [] } }), ctx);
   assert.match(mkUn, /你得知道：这会儿读不到.*不代表没有新事/);
   assert.doesNotMatch(mkUn, /没有要你知道的新事/);
   const items = [{ id: 'pending-net', kind: 'repairing', text: '虚构两台电脑网络偶尔断开。AI 在跟进，你不用操作。', at: '2026-10-12T14:00:00+08:00', exit_when: 'AI 核实解决后转为已恢复，3 天后收起' },
     ...[1, 2, 3, 4, 5].map((i) => ({ id: 'r' + i, kind: 'recovered', text: '虚构功能 ' + i + ' 已恢复，AI 已核对最近一次成功。', at: '2026-10-12T13:00:00+08:00' }))];
   const vk = normalize({ ...base0, must_know: { state: 'ok', text: '', items, archived_items: [{ id: 'old1', kind: 'report', text: '虚构旧汇报' }] },
     sections: { ...base0.sections, remote: [{ id: 'remote', title: '远程连接', text: '此刻能连上；间歇断开还在查。', state: 'ok', color: 'ok', observed_at: at, must_know_id: 'pending-net' }] } });
-  o = R.REGIONS.overview(vk, ctx);
-  // 本人 10 月 29 日：几条“已恢复”合成一行（点开看是哪几项），AI 在修照常单独一条、排最前
-  assert.equal((o.match(/<li id="know-(pending-net|recovered)"/g) || []).length, 2);
+  o = R.REGIONS.home(vk, ctx);
+  // 本人 10 月 29 日：几条“已恢复”合成一行（点开看是哪几项），挪到自动任务区开头；AI 在修照常单独一条
+  assert.equal((o.match(/<li id="know-(pending-net|recovered)"/g) || []).length, 1);
   assert.match(o, /AI 在修.*虚构两台电脑网络偶尔断开.*AI 核实解决后转为已恢复/);
-  assert.match(o, /已恢复.*后台 5 项功能中断过，现在都恢复了.*虚构功能 1<.*虚构功能 5</);
+  assert.match(R.REGIONS.tasks(vk, ctx), /后台 5 项功能中断过，现在都恢复了.*虚构功能 1<.*虚构功能 5</);
   assert.match(o, /最近收起的 1 条/);
   const remote = R.computer(vk, ctx);
   assert.match(remote, /此刻能连上；间歇断开还在查/);
@@ -134,7 +132,7 @@ const assert = require('node:assert/strict');
       { id: 'proxy_traffic', title: '本机代理流量', text: '今天 30 GB。', state: 'attention', color: 'neutral', observed_at: at, trigger_items: [{ reason: 'program_hour_upload', name: '虚构程序', value_gb: 3, threshold_gb: 2 }] }],
       today: [{ id: 'learning', title: '学习进度', text: '虚构课程 2/28', state: 'attention', color: 'unavailable', observed_at: at }] },
     automation: { ...base0.automation, items: [...base0.automation.items, { id: 'sw', name: '虚构软件维护', state: 'failed', color: 'neutral', ai_handling: 'AI 在管：虚构软件正在使用，本次更新暂缓' }] } });
-  o = R.REGIONS.overview(colored, ctx);
+  o = R.REGIONS['overview-tri'](colored, ctx);
   assert.match(o, /cp-tri-cell is-neutral" data-signal="computer">.*AI 在管<\/span>.*虚构内存偏高在盯/);
   assert.match(o, /今天 1 个出错还没恢复/);
   assert.match(o, /今天出过错、已恢复 2 个/);
@@ -145,15 +143,17 @@ const assert = require('node:assert/strict');
   assert.match(pcc, /cp-card is-neutral">.*内存\/系统资源.*AI 在管：虚构内存在盯/);
   assert.match(pcc, /触发的是：虚构程序 1 小时上传 3\.0GB，超过 2GB/);
   assert.match(R.todayBlock(colored, ctx), /cp-card is-gray">.*学习进度.*数据源停了/);
-  const ask = R.needYou(colored, ctx);
+  const ask = R.needCards(colored, ctx);
   assert.match(ask, /cp-ask" id="todo-pending-trip" data-items="pending-trip">.*cp-dot is-yellow/);
-  assert.match(ask, /汇报页：虚构汇报页标题/);
+  // 汇报页标题、电脑上的路径不上卡片，只写“详细说明在电脑上”
+  assert.match(ask, /详细说明在电脑上/);
+  assert.doesNotMatch(ask, /汇报页：/);
   assert.match(ask, /最后核对 14:45/);
   const rv = riverSnapshot(colored, now).automation.items.find((t) => t.id === 'sw');
   assert.equal(rv.color, 'neutral');
   assert.match(rv.ai_handling, /暂缓/);
   // 体检 phase：跑完写后端结果句；正在跑写几点开始
-  const gv = (g) => R.needYou(normalize({ ...base0, governance: { ...base0.governance, ...g } }), ctx);
+  const gv = (g) => R.ledger(normalize({ ...base0, governance: { ...base0.governance, ...g } }), ctx);
   assert.match(gv({ phase: 'completed', status_note: '跑完：修好8、关掉0、还在跟21、转暂缓6、要你2', last_run: { started_at: '2026-10-12T12:58:00+08:00', ended_at: '2026-10-12T14:53:00+08:00' } }), /每周 AI 体检：跑完：修好8、关掉0、还在跟21、转暂缓6、要你2（10月12日 14:53）/);
   assert.match(gv({ phase: 'running', last_run: { started_at: '2026-10-12T12:58:00+08:00' } }), /每周 AI 体检：10月12日 12:58 开始，正在跑/);
   // 首页小屏读 color
@@ -218,52 +218,46 @@ const assert = require('node:assert/strict');
     counts: { ai_following: 3 }, ai_overdue: [{ id: 'ai-old', title: '虚构超期的事', overdue_since: '2026-10-10', overdue_days: 2, age_days: 4, reason: 'original_deadline_overdue', stuck_reason: 'original_deadline_overdue' }, { id: 'ai-undated', title: '虚构无日期的事', reason: 'undated_wake_condition', stuck_reason: 'undated_wake_condition' }],
     deferred: [{ id: 'owner-wait', title: '虚构本人暂缓', action_owner: 'user' }],
     sections: { ...base0.sections, backup_cloud: [{ id: 'backup_h', title: 'H盘备份', state: 'attention', text: '上次没有跑完', details: [{ title: '测试分类', text: '测试缺口' }] }] } });
-  const front = R.REGIONS.overview(improved, ctx), todos = R.needYou(improved, ctx);
-  assert.match(front, /要你做 2 件<span class="cp-you-tag">都不急<\/span>/);assert.match(front, /都能在手机上办（其中 1 件借电脑 MCP）/);
-  assert.match(front, /AI 在跟 3 件（其中 1 件过期）/); assert.doesNotMatch(front, /future-review/);
-  assert.match(R.REGIONS.overview({ ...improved, need_you: [], overview: ov({ owner_count: 0 }), summary: { text: 'AI 在跟 3 件' } }, ctx), /AI 在跟 3 件/);
+  const front = R.REGIONS.overview(improved, ctx), todos = R.needCards(improved, ctx), led = R.ledger(improved, ctx), home = R.REGIONS.home(improved, ctx);
+  // 顶上只留“要你……”那一句；AI 在跟、暂缓去下面的入口；不出 MCP
+  assert.match(front, /要你做 2 件<span class="cp-you-tag">都不急<\/span>/);
+  assert.doesNotMatch(front, /AI 在跟|暂缓|MCP|future-review/);
+  assert.match(R.REGIONS.overview({ ...improved, need_you: [], overview: ov({ owner_count: 0 }), summary: { text: 'AI 在跟 3 件 · 你暂缓 1 件' } }, ctx), /现在没有要你做的事/);
   const compact = normalize({ ...base0, access_summary: improved.access_summary, verdict: { text: '要你做 2 件，都能在手机上办（其中 1 件借电脑 MCP） · AI 在跟 44 件（其中 23 件过期，12 件已跟满 14 天） · 你暂缓 6 件' } });
   const compactFront = R.REGIONS.overview(compact, ctx);
-  assert.match(compactFront, /AI 在跟 44 件（其中 23 件过期，12 件已跟满 14 天） · 你暂缓 6 件/); assert.doesNotMatch(compactFront, /<p class="cp-you-sub">都能在手机上办/); assert.equal((compactFront.match(/都能在手机上办（其中 1 件借电脑 MCP）/g) || []).length, 1);
+  assert.match(compactFront, />要你做 2 件，都能在手机上办（其中 1 件得借电脑办）</); assert.doesNotMatch(compactFront, /AI 在跟|MCP/);
   assert.deepEqual(normalize({ ...base0, summary: { text: '已有总结', state: 'ok' }, verdict: compact.summary }).summary, { text: '已有总结', state: 'ok' });
-  assert.match(todos, /排在 10 月 21 日：虚构未来事项/);
+  assert.match(home, /虚构未来事项<\/span><small>排在 10 月 21 日<\/small>/);
   assert.match(todos, /href="https:\/\/example.invalid\/find"[^>]*>去办 →/);
   assert.match(todos, /约 2 分钟/); assert.match(todos, /会错过提醒/);
-  assert.match(todos, /手机借电脑 MCP 办/); assert.match(todos, /data-copy-text="请用电脑 MCP 读取条目 fixture-review/);
-  assert.match(todos, /原定 10 月 10 日，已过 2 天/);
+  assert.match(todos, /手机上能办/); assert.doesNotMatch(todos, /MCP|data-copy/);
+  assert.match(led, /原定 10 月 10 日，晚了 2 天/);
   // 没过期的不藏：收在“其余 N 件”里，总数和清单对得上
-  assert.match(todos, /<details class="cp-more" id="ai-rest"><summary>其余 1 件还没到约定日子，你不用动手<\/summary><ul class="cp-ailist"><li data-items="[^"]+"><span>虚构期限内的事/);
-  assert.match(todos, /AI 在跟 3 件<span class="cp-ai-parts">其中 2 件过了约定日子/);
-  assert.match(todos, /没写哪天该有结果，等 AI 定下期限/); assert.doesNotMatch(todos, /original_deadline_overdue|undated_wake_condition|唤醒条件/);
+  assert.match(led, /<details class="cp-more" id="ai-rest"><summary>其余 1 件还没到它自己定的日子<\/summary><ul class="cp-ailist"><li data-items="[^"]+"><span>虚构期限内的事/);
+  assert.match(led, /AI 自己有 2 件晚了，在补（不用你管）/);
+  assert.match(led, /没写哪天该有结果，AI 在补上期限/); assert.doesNotMatch(led, /original_deadline_overdue|undated_wake_condition|唤醒条件/);
   // 当天刚过期、当天登记：不写“已过 0 天”“已跟 0 天”；跟得最久的排最前（登记不明按 14 天）
-  const late = R.needYou(normalize({ ...base0, need_you: [], ai_following: [], counts: { ai_following: 3 }, ai_overdue: [
+  const late = R.ledger(normalize({ ...base0, need_you: [], ai_following: [], counts: { ai_following: 3 }, ai_overdue: [
     { id: 'n0', title: '虚构今天到期', overdue_since: '2026-10-12T09:30:00+08:00', overdue_days: 0, age_days: 0 },
     { id: 'n9', title: '虚构跟了九天', overdue_since: '2026-10-05', overdue_days: 7, age_days: 9 },
     { id: 'nu', title: '虚构登记不明', overdue_since: '2026-10-11', overdue_days: 1, registration_unknown: true }] }), ctx);
-  assert.doesNotMatch(late, /已过 0 天|已跟 0 天/); assert.match(late, /原定 10 月 12 日，刚过不到 1 天 · 今天登记/);
+  assert.doesNotMatch(late, /已过 0 天|已跟 0 天|晚了 0 天/); assert.match(late, /原定 10 月 12 日，刚过不到 1 天/);
   assert.ok(late.indexOf('虚构登记不明') < late.indexOf('虚构跟了九天') && late.indexOf('虚构跟了九天') < late.indexOf('虚构今天到期'));
   // 排期标题自带日期时不重复
-  const dup = R.needYou(normalize({ ...base0, need_you: [], scheduled: [{ id: 's1', title: '10月21日（周三）：虚构复盘', scheduled_for: '2026-10-21' }, { id: 's2', title: '11/6 虚构快照', scheduled_for: '2026-11-06' }] }), ctx);
-  assert.match(dup, /<summary>排在 10 月 21 日：虚构复盘<\/summary>/); assert.match(dup, /<summary>排在 11 月 6 日：虚构快照<\/summary>/);
-  // 复制给 AI：按编号让 AI 读本机驾驶舱待办登记和来源登记；不去公开接口找 ai_hint，不写本机路径
-  const ap = R.aiPrompt(['pending-a', 'pending-b']);
-  assert.match(ap, /^驾驶舱条目 pending-a、pending-b：/); assert.match(ap, /电脑 MCP/); assert.match(ap, /驾驶舱待办登记和来源登记/);
-  assert.match(ap, /不从公开状态接口读取/);
-  // 要到电脑前的事（后端 mobile_method.kind=in_person）：首屏和卡片都写“要到电脑前”，不写手机能办；问 AI 用后端提示；全部交给 AI 照样带它的编号
+  const dup = R.REGIONS.home(normalize({ ...base0, need_you: [], scheduled: [{ id: 's1', title: '10月21日（周三）：虚构复盘', scheduled_for: '2026-10-21' }, { id: 's2', title: '11/6 虚构快照', scheduled_for: '2026-11-06' }] }), ctx);
+  assert.match(dup, /<span>虚构复盘<\/span><small>排在 10 月 21 日<\/small>/); assert.match(dup, /<span>虚构快照<\/span><small>排在 11 月 6 日<\/small>/);
+  // 复制给 AI 的按钮第三步全部去掉（本人设备上直接点；公开版一个按钮都没有）
+  assert.equal(R.aiPrompt, undefined); assert.equal(R.promptIds, undefined);
+  // 要到电脑前的事（后端 mobile_method.kind=in_person）：卡片写“得在电脑前办”，不写手机能办
   const pcItem = { id: 'pending-at-pc', title: '虚构插拔硬盘', ask_kind: 'action', where: 'pc', mobile_method: { kind: 'in_person', label: '要到电脑前', copy_prompt: '虚构后端提示：这一步必须本人到电脑前' } };
   const atPc = normalize({ ...base0, overview: ov({ owner_count: 1 }), need_you: [pcItem], verdict: { text: '要你做 1 件（1 件要到电脑前） · AI 在跟 2 件' }, access_summary: { direct: 0, mcp: 0, in_person: 1, text: '1 件要到电脑前' } });
-  const atPcFront = R.REGIONS.overview(atPc, ctx), atPcTodos = R.needYou(atPc, ctx);
-  assert.match(atPcFront, /要你做 1 件（1 件要到电脑前）/); assert.match(atPcFront, /<span class="cp-chip is-pc">要到电脑前<\/span>/); assert.doesNotMatch(atPcFront, /手机能办|手机借电脑|都能在手机上办/);
-  assert.match(atPcTodos, /要到电脑前/); assert.doesNotMatch(atPcTodos, /手机上就能办|复制给手机上的 AI/);
-  assert.match(atPcTodos, /data-copy-text="虚构后端提示：这一步必须本人到电脑前">问 AI/);
-  assert.deepEqual(R.promptIds(atPc.need_you), ['pending-at-pc']);
-  // 14 天决定卡按每题原条目编号交给 AI，普通卡用自己的编号
-  assert.deepEqual(R.promptIds(improved.need_you), ['fixture-review', 'old-ai']);
-  assert.doesNotMatch(ap, /ai_hint|\/computer-access|api\/status|[A-Za-z]:\\|registries\/|\.json/);
-  assert.match(R.needYou(normalize({ ...base0, need_you: [{ id: 'plain-ask', title: '虚构普通事', ask_kind: 'action' }] }), ctx), /data-copy-text="驾驶舱条目 plain-ask「虚构普通事」：请用电脑 MCP/);
-  assert.match(todos, /data-q="old-ai"[^>]*data-qtext="（条目 old-ai）虚构旧事/); assert.match(todos, /A 让 AI 限期根治/); assert.match(todos, /B 不修了/); assert.match(todos, /C 你来处理/);
+  const atPcFront = R.REGIONS.overview(atPc, ctx), atPcTodos = R.needCards(atPc, ctx);
+  assert.match(atPcFront, /要你做 1 件（1 件要到电脑前）/); assert.doesNotMatch(atPcFront, /手机能办|手机借电脑|都能在手机上办|AI 在跟/);
+  assert.match(atPcTodos, /得在电脑前办/); assert.doesNotMatch(atPcTodos, /手机上能办|复制给手机上的 AI|问 AI|data-copy/);
+  // 公开版的题只列字
+  assert.match(todos, /<b>第 1 题<\/b>虚构旧事，已跟15天，没有进展记录<\/p><ul class="cp-opts-text"><li>A 让 AI 限期根治/); assert.match(todos, /B 不修了/); assert.match(todos, /C 你来处理/);
   const backup = R.backup(improved, ctx); assert.match(backup, /<details[^>]*><summary>查看具体缺口/); assert.match(backup, /测试分类/);
-  assert.doesNotMatch(R.needYou(normalize({ schema: SCHEMA, need_you: [{ title: '虚构无效链接', action: { href: 'javascript:alert(1)' } }] }), ctx), /href="javascript:/);
+  assert.doesNotMatch(R.needCards(normalize({ schema: SCHEMA, need_you: [{ title: '虚构无效链接', action: { href: 'javascript:alert(1)' } }] }), ctx), /href="javascript:/);
   const lean = normalize({ schema: SCHEMA, summary: improved.summary, access_summary: improved.access_summary,
     scheduled: improved.scheduled, ai_overdue: improved.ai_overdue, need_you: improved.need_you });
   assert.equal(lean.need_you[0].action.href, action.href); assert.equal(lean.need_you[0].mobile_method.copy_prompt, mobile.copy_prompt);
@@ -282,14 +276,16 @@ class CockpitBatch1Test(unittest.TestCase):
         r = subprocess.run(['node', '-e', SCRIPT, COCKPIT, OVERVIEW], text=True, capture_output=True, encoding='utf8')
         self.assertEqual(r.returncode, 0, r.stderr + r.stdout)
 
-    def test_copy_prompt_reads_local_registries(self):
-        # 普通卡片和“全部交给 AI”都走 render.js 的 aiPrompt；不再让 AI 去公开接口的 ai_hint 找细节
+    def test_no_copy_buttons_left(self):
+        # 第三步：复制给 AI 的按钮全部去掉（本人设备上直接点，公开版一个按钮都没有）；浏览器端不再有复制和旧答题的代码
         client = (ROOT / 'site-astro' / 'src' / 'cockpit' / 'client.js').read_text(encoding='utf-8')
-        self.assertIn("aiPrompt, promptIds } from './render.js'", client)
-        self.assertIn("promptIds(view.need_you)", client)
-        self.assertIn(': aiPrompt(ids);', client)
+        render = (ROOT / 'site-astro' / 'src' / 'cockpit' / 'render.js').read_text(encoding='utf-8')
+        for text in (client, render):
+            self.assertNotIn('data-copy', text)
+            self.assertNotIn('clipboard', text)
+            self.assertNotIn('aiPrompt', text)
         self.assertNotIn('api/status', client)
-        self.assertNotIn('ai_hint', client.split('// 复制给 AI')[1])
+        self.assertNotIn('ai_hint', client)
 
     def test_river_notice_does_not_repeat_state_word(self):
         river = (ROOT / 'scripts' / 'today-river.js').read_text(encoding='utf-8')

@@ -1,10 +1,10 @@
 ---
 // 驾驶舱：Astro 原生页（O6 裁定的 b 做法），外壳、页头、目录条、页尾和全站一样。
-// 首帧用构建时读到的最近一份数据画好最终版式；读不到就用仓库里的上一份（src/cockpit/snapshot.json），都标明读取时间。
+// 首帧用构建时读到的最近一份数据画好最终版式；读不到就用仓库里的上一份（src/cockpit/snapshot.json，见 build-data.js），都标明读取时间。
 // 浏览器里 src/cockpit/client.js 读新数据、原地换字，不换版式。
 import Site from '../../layouts/Site.astro';
 import { pathToFileURL } from 'node:url';
-import fallback from '../../cockpit/snapshot.json';
+import { ENDPOINTS, LOCAL, latest, safe } from '../../cockpit/build-data.js';
 import { normalize } from '../../cockpit/model.js';
 import { page } from '../../cockpit/render.js';
 import '../../cockpit/cockpit.css';
@@ -15,19 +15,6 @@ import birdConfig from '../../cockpit/hero.config.json?url&no-inline';
 import livingEngine from '../../chrome/living-engine.json';
 import motionRuntime from '../../../public/_living/quality-runtime/manifest.json';
 
-// 两个入口都返回精简视图；格式不符时换下一个，最后用仓库快照。
-const ENDPOINTS = ['https://live.wly0829.cn/computer-access/state?view=cockpit', 'https://mcp.wly0829.cn/computer-access/api/status?view=cockpit'];
-async function latest() {
-  for (const url of ENDPOINTS) {
-    try {
-      const r = await fetch(url, { headers: { Origin: 'https://wly0829.cn' }, signal: AbortSignal.timeout(8000) });
-      if (!r.ok) continue;
-      const v = await r.json();
-      if (normalize(v).ok) return v;
-    } catch { /* 用下一个，最后用仓库里的上一份 */ }
-  }
-  return fallback;
-}
 const snapshot = await latest();
 const view = normalize(snapshot);
 
@@ -76,8 +63,7 @@ const jsAt = (engineRt?.tail || '').indexOf('<script data-living-runtime'), jsEn
 const livingTags = engineUrl(livingCss + (jsEnd < 0 ? '' : engineRt.tail.slice(jsAt, jsEnd + 9)));
 // phase: 'snapshot'：首帧是构建时的数，页面上写明是几点的、整体灰着，浏览器读到新数据再换（读不到时写“读不到（最后 HH:MM 读到）”）
 const html = page(view, { now: new Date(), offline: false, phase: 'snapshot', projectUrls, img, ov, birdConfig });
-const safe = (o: unknown) => JSON.stringify(o).replace(/</g, '\\u003c');
-const boot = safe({ endpoints: ENDPOINTS, local: ['/__status?view=cockpit'], snapshot, projectUrls, img });
+const boot = safe({ endpoints: ENDPOINTS, local: LOCAL, snapshot, projectUrls, img });
 ---
 <Site title="驾驶舱" kind="cockpit" url="/cockpit/" page="cockpit" toc={toc}>
   <script is:inline type="application/json" id="toc-label-data" set:html={safe(tocLabels)}></script>

@@ -93,7 +93,7 @@ export function normalize(raw) {
     served_at: v.served_at || null,
     collected_at: v.collected_at || null,
     collectors: obj(v.collectors),
-    verdict: { severity: obj(v.verdict).severity || 'gray', state: st(obj(v.verdict).state), observed_at: obj(v.verdict).observed_at || null, color: obj(v.verdict).color },
+    verdict: { severity: obj(v.verdict).severity || 'gray', state: st(obj(v.verdict).state), observed_at: obj(v.verdict).observed_at || null, color: obj(v.verdict).color, text: text(obj(v.verdict).text, 200) },
     counts: { need_you: 0, ai_following: 0, deferred: 0, history: 0, tasks_failed_today: 0, backup_problems: 0, ...obj(v.counts) },
     // need_you 行原样透传，过了原定时间时带 overdue_since、overdue_days、overdue_text（标题旁小标签用 overdue_text）
     need_you: list(v.need_you), ai_following: list(v.ai_following), deferred: list(v.deferred),
@@ -144,6 +144,9 @@ export function normalize(raw) {
     notification_status: text(v.notification_status ?? obj(v.cockpit).notification_status, 20),
     notification_message: text(v.notification_message ?? obj(v.cockpit).notification_message, 80),
     owner_dispatch_notice: text(v.owner_dispatch_notice ?? obj(v.cockpit).owner_dispatch_notice, 120),
+    // 第三步（10 月 29 日）后端加的两句：AI 自己手上的活一句话（点进二级页“AI 的账本”）、停了 3 天以上的数据卡收成一句（ids 是收进去的卡）
+    ai_ledger_summary: (() => { const l = obj(v.ai_ledger_summary); return text(l.text, 120) ? { text: text(l.text, 120), open: nat(l.open), late: nat(l.late) } : null; })(),
+    stale_summary: (() => { const s = obj(v.stale_summary); return text(s.text, 120) ? { text: text(s.text, 120), ids: Array.isArray(s.ids) ? s.ids.filter((x) => typeof x === 'string') : [] } : null; })(),
   };
 }
 

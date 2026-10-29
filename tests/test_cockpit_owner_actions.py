@@ -31,6 +31,10 @@ def owner_view():
         card('n-answer', ['answer'], ask_kind='decision', options=['先上', '一起上']),
         card('n-note', ['note']),
         card('n-snooze', ['snooze']),
+        # “AI 在等你回”的新卡：答案送回原对话，不带交给谁
+        card('n-wait', ['answer', 'delegate', 'unclear'], card_type='ai_wait', ask_kind='decision', conversation_title='示例对话', progress='示例做到一半',
+             options=[{'value': 'A', 'text': '甲', 'recommended': True}, {'value': 'B', 'text': '乙'}]),
+        card('n-unclear', ['unclear', 'done']),
     ], ai_running={'count': 1, 'stuck_count': 1, 'observed_at': h.ago(seconds=10), 'rows': [
         {'id': 'run-1', 'status': 'quota_exhausted', 'vendor': 'gpt', 'executor': 'gpt', 'title': '示例卡住的活', 'owner_actions': ['switch'], 'item_version': 'v-run'}]})
 
@@ -102,7 +106,7 @@ class CockpitOwnerActionsTests(unittest.TestCase):
 
                 # 撤回期过了：写“已交给 Claude（HH:MM）”
                 page.click(box('n-short') + ' [data-act="done"]')
-                page.wait_for_function(f"() => /已交给 Claude（\\d\\d:\\d\\d）/.test(document.querySelector('{box('n-short')}').innerText)", timeout=6000)
+                page.wait_for_function(f"() => document.querySelector('{box('n-short')}').innerText.includes('已记下。AI 会去核实，没问题这张卡就消失。') && !document.querySelector('{box('n-short')} [data-undo]')", timeout=6000)
 
                 # 网络断了一次：重试用同一个幂等键
                 page.click(box('n-retry') + ' [data-act="done"]')
@@ -135,14 +139,25 @@ class CockpitOwnerActionsTests(unittest.TestCase):
                 page.wait_for_selector(box('n-gpt') + ' [data-undo]')
                 self.assertEqual(last()['executor'], 'gpt')
 
-                # 单题选项：题号 choice，值是原字符串，我的说明一起交
-                self.assertTrue(page.is_disabled(box('n-answer') + ' [data-send="answer"]'))
-                page.click(box('n-answer') + ' .cp-opt >> nth=1')
+                # 只有一道题：点选项就直接交（题号 choice，值是原字符串）；先点“补一句”写的话一起交；没有“交给 AI”这一步
+                self.assertEqual(page.locator(box('n-answer') + ' [data-send="answer"]').count(), 0)
+                self.assertEqual(page.locator(box('n-answer') + ' [data-qnote]').count(), 0)
+                page.click(box('n-answer') + ' [data-add]')
                 page.fill(box('n-answer') + ' [data-qnote]', '示例说明')
-                page.click(box('n-answer') + ' [data-send="answer"]')
+                page.click(box('n-answer') + ' [data-pick] >> nth=1')
                 page.wait_for_selector(box('n-answer') + ' [data-undo]')
                 self.assertEqual(last()['answers'], {'choice': {'value': '一起上', 'text': '示例说明'}})
-                self.assertEqual(last()['action'], 'answer')
+                self.assertEqual((last()['action'], last()['executor']), ('answer', 'claude'))
+
+                # “AI 在等你回”的卡：没有“交给：Claude ▾”；你定就行直接交、不带 executor（答案送回原对话）；我没看懂直接交
+                self.assertEqual(page.locator(box('n-wait') + ' [data-exec]').count(), 0)
+                self.assertEqual(page.inner_text(box('n-wait') + ' .cp-btn-main'), '甲 · AI 建议')
+                page.click(box('n-wait') + ' [data-act="delegate"]')
+                page.wait_for_selector(box('n-wait') + ' [data-undo]')
+                self.assertEqual((last()['action'], 'executor' in last(), last()['item_version']), ('delegate', False, 'v-n-wait'))
+                page.click(box('n-unclear') + ' [data-act="unclear"]')
+                page.wait_for_selector(box('n-unclear') + ' [data-undo]')
+                self.assertEqual((last()['action'], last()['executor']), ('unclear', 'claude'))
 
                 # 回一句话：没写不能交，写了交 text
                 page.click(box('n-note') + ' [data-act="note"]')
@@ -188,7 +203,9 @@ class CockpitOwnerActionsTests(unittest.TestCase):
                 page.wait_for_timeout(300)
                 self.assertEqual(page.locator('[data-oa], .cp-oa-warn, #owner-recent').count(), 0)
                 texts = page.locator('#top button, #need-you button').all_inner_texts()
-                self.assertFalse(set(texts) & {'看见了', '知道了', '办好了', '不用了', '晚点提醒', '确认', '不对，重做', '回一句话', '撤回'})
+                self.assertFalse(set(texts) & {'看见了', '知道了', '我办好了', '这件不做了', '晚点提醒', '确认', '不对，重做', '回一句话', '撤回', '你定就行', '我没看懂'})
+                # 第三步：公开版一个按钮都没有（今天的河里的船是河自己的，不算）
+                self.assertEqual(page.evaluate("[...document.querySelectorAll('.cp-page button')].filter(b => !b.closest('#today-river')).length"), 0)
                 context.close()
                 browser.close()
         finally:

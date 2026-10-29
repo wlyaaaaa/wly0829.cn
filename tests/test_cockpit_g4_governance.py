@@ -21,36 +21,36 @@ const assert = require('node:assert/strict');
     auto_closed: [{ id: 'c1', title: '视频那条', evidence: '本人 06:05 在对话里选了 C' }],
     newly_deferred: [{ id: 'd1', title: '换键盘', reason: '14 天没回应' }], next_run_at: '2026-10-19T13:00:00+08:00' };
   const v = normalize({ schema: 'pcconfig.cockpit-view.v1', ai_following: ai, deferred, governance: { next_run_at: last_run.next_run_at, last_run } });
-  const html = R.needYou(v, ctx);
+  // 第三步：体检和 AI 在跟、AI 等条件的去二级页“AI 的账本”；你暂缓的在首屏“你放着 N 件不急的事”
+  const html = R.ledger(v, ctx) + R.REGIONS.home(v, ctx);
+  assert.equal(R.needCards(v, ctx), '');
   assert.match(html, /上次 AI 体检（10月12日 13:00）记录：当时修好 5、关掉 3、转暂缓 2、还在跟 12、待你办 1 件 · 下次 10月19日 13:00/);
-  assert.match(html, /问 AI 详情/);
+  assert.doesNotMatch(html, /问 AI|data-copy/);
   const actions = html.match(/<details class="cp-more cp-gov-more" id="gov-actions"><summary>当时留下的说明 3 条<\/summary>.*?<\/details>/)?.[0];
   assert.ok(actions, '历史说明默认折叠，不带 open');
   assert.doesNotMatch(html, /data-copy-ai="act-|（在上面）/);
-  assert.equal((actions.match(/问 AI 这条记录/g) || []).length, 3, '历史说明最多 3 条');
+  assert.equal((actions.match(/<li>/g) || []).length, 3, '历史说明最多 3 条');
   assert.doesNotMatch(actions, /行动 4/);
   assert.match(actions, /这是上次体检的记录；现在要办的事以上面的当前待办为准。/);
-  assert.match(actions, /data-copy-text="[^"]*10月12日 13:00 那一轮[^"]*governance\.last_run[^"]*体检回执[^"]*行动 1[^"]*先核对现在是否仍需处理/);
-  assert.match(html, /现在没有要你动手的事。/);
   assert.match(html, /cp-gov-line"><span class="cp-dot is-neutral"/);
   assert.match(html, /<details class="cp-more cp-gov-more" id="gov-closed"><summary>那次自动关掉 1 件<\/summary>.*视频那条.*本人 06:05/);
   assert.match(html, /id="gov-deferred"><summary>那次新转暂缓 1 件/);
-  assert.match(html, /暂缓 · 你有空时可以做（1 件，不急）/);
-  assert.match(html, /为什么暂缓：14 天没回应，你可能不想做，想做时说一声<\/small>/);
-  assert.match(html, /AI 在跟（1 件，等条件）/); assert.doesNotMatch(html, /暂缓 · AI/);
+  assert.match(html, /你放着 1 件不急的事/);
+  assert.match(html, /<small>14 天没回应，你可能不想做，想做时说一声<\/small>/);
+  assert.match(html, /<h2>AI 等条件再做的<\/h2>.*等显卡驱动/); assert.doesNotMatch(html, /暂缓 · AI|为什么暂缓/);
   // 没有交给 AI 的事时体检行照样出
-  assert.match(R.needYou(normalize({ schema: 'pcconfig.cockpit-view.v1', governance: { last_run } }), ctx), /现在没有交给 AI 的事。<\/p><div class="cp-gov">/);
+  assert.match(R.ledger(normalize({ schema: 'pcconfig.cockpit-view.v1', governance: { last_run } }), ctx), /AI 现在手上没有自己的活。<\/p>.*<div class="cp-gov">/);
   // 后端没给 last_run / counts：不出体检行，其余照旧
   for (const governance of [{ next_run_at: last_run.next_run_at }, { last_run: { summary: 'x' } }, undefined]) {
-    const old = R.needYou(normalize({ schema: 'pcconfig.cockpit-view.v1', ai_following: ai, deferred: [{ title: '换键盘', action_owner: 'user' }], governance }), ctx);
+    const old = R.ledger(normalize({ schema: 'pcconfig.cockpit-view.v1', ai_following: ai, deferred: [{ title: '换键盘', action_owner: 'user' }], governance }), ctx);
     assert.doesNotMatch(old, /cp-gov|这周 AI 体检|为什么暂缓/);
-    assert.match(old, /交给 AI 的事：1 件/);
+    assert.match(old, /其余 1 件还没到约定日子/);
   }
   // 精简视图：暂缓原因透传
   const lean = normalize({ schema: 'pcconfig.cockpit-view.v1', deferred: [{ id: 'p1', title: '换键盘', reason: '14 天没回应' }] });
   assert.equal(lean.deferred[0].reason, '14 天没回应');
   // 后台任务只描述已接入项目：未知不能算零，下限不能说成精确数量。
-  const work = (items) => R.needYou(normalize({ schema: 'pcconfig.cockpit-view.v1', ai_following: ai, ai_work: { items } }), ctx);
+  const work = (items) => R.ledger(normalize({ schema: 'pcconfig.cockpit-view.v1', ai_following: ai, ai_work: { items } }), ctx);
   const row = (n, extra = {}) => ({ project: '甲', running_tasks: n, running_automations: n, ...extra });
   const unknown = ['部分项目的 AI 后台任务状态暂时读不到', '部分项目的自动任务状态暂时读不到'];
   const zero = ['已接入的 AI 后台任务当前未运行', '已登记项目没有正在运行的自动任务'];

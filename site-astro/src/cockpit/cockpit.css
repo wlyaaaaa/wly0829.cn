@@ -26,7 +26,7 @@
 
 /* 第一屏（场景 1）：左边标题和“你现在 N 件事”，右边插画；下面一行三格（电脑 / 自动任务 / 备份），再下面分数小字和安全授权。
    总览块用 display: contents，让三行直接排进第一屏的网格；浏览器换字时外框不变 */
-.cp-hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-areas: "title art" "you art" "run run" "know know" "tri tri" "score score" "sec sec"; gap: 12px 28px; align-items: start; padding-top: 14px; }
+.cp-hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-areas: "title art" "you art" "need need" "home home" "tri tri" "score score" "sec sec"; gap: 12px 28px; align-items: start; padding-top: 14px; }
 .cp-hero-copy { grid-area: title; }
 .cp-hero h1 { margin: 0; line-height: 0; }
 .cp-hero h1 img { height: 76px; width: auto; }
@@ -36,7 +36,7 @@
 .cp-hero-art > img { display: block; width: 100%; height: auto; max-height: 330px; object-fit: contain; }
 .cp-page .living-bird img { max-width: none; } /* 小鸟图集按帧裁切，不能被全页 img 的 max-width: 100% 压扁 */
 .cp-lead { margin: 8px 0 0; color: var(--cp-soft); font-size: 15px; }
-.cp-overview { display: contents; }
+.cp-overview, .cp-overview-tri { display: contents; }
 .cp-security-wrap { grid-area: sec; }
 
 /* ① 你现在 N 件事 */
@@ -235,7 +235,7 @@
 @media (max-width: 767.98px) {
   .cp-page { padding: 4px 14px 32px; font-size: 15px; }
   /* 手机第一屏只放三行：书法标题换成文字，插画和说明收起，“你现在 N 件”和三格状态都在第一屏 */
-  .cp-hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "you" "run" "know" "tri" "score" "sec"; gap: 10px; padding-top: 6px; }
+  .cp-hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "you" "need" "home" "tri" "score" "sec"; gap: 10px; padding-top: 6px; }
   .cp-hero-art, .cp-lead, .cp-hero h1 img { display: none; }
   .cp-hero h1 { line-height: 1.3; }
   .cp-h1-text { display: inline; font-size: 22px; font-weight: 800; color: var(--cp-title); letter-spacing: .12em; }
@@ -301,10 +301,10 @@
 .cp-ask-info i { font-style: normal; color: #b6c4bb; }
 .cp-ask-info .is-urgent { color: var(--cp-red); font-weight: 700; }
 /* 为什么要你 / 不做会怎样：次要信息，并排小字 */
-.cp-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 4px 20px; margin: 8px 0 0; font-size: 13.5px; color: var(--cp-soft); }
-.cp-facts dt { display: inline; font-weight: 700; color: var(--cp-soft); }
-.cp-facts dt::after { content: "："; }
-.cp-facts dd { display: inline; margin: 0; overflow-wrap: anywhere; }
+.cp-facts-dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 4px 20px; margin: 8px 0 0; font-size: 13.5px; color: var(--cp-soft); }
+.cp-facts-dl dt { display: inline; font-weight: 700; color: var(--cp-soft); }
+.cp-facts-dl dt::after { content: "："; }
+.cp-facts-dl dd { display: inline; margin: 0; overflow-wrap: anywhere; }
 .cp-path { margin: 6px 0 0; font-size: 12px; color: #8a9790; overflow-wrap: anywhere; }
 .cp-ask .cp-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 8px; margin-top: 12px; }
 .cp-btn.cp-btn-main { padding: 6px 18px; background: var(--cp-green); border-color: var(--cp-green); color: #fff; font-weight: 700; }
@@ -357,7 +357,7 @@
 .cp-you.is-none .cp-you-rest { margin-top: 8px !important; }
 /* 首帧是构建时的旧数：写明几点的，下面的数字和灯一起灰着，读到新数据就换掉（client.js 换字时这一行消失） */
 .cp-snap { margin: 0 0 8px !important; padding: 4px 10px; border-radius: 8px; background: #f1f3f2; color: var(--cp-soft); font-size: 13.5px; font-weight: 700; }
-.cp-page:has(.cp-snap) :is(.cp-you-n, .cp-you-list, .cp-you-rest, .cp-run, .cp-know, .cp-tri, .cp-score, .cp-security, .cp-body, .cp-lamp, .cp-river) { filter: grayscale(1); opacity: .6; }
+.cp-page:has(.cp-snap) :is(.cp-you-n, .cp-need, .cp-run, .cp-know, .cp-lines, .cp-tri, .cp-score, .cp-security, .cp-body, .cp-lamp, .cp-river) { filter: grayscale(1); opacity: .6; }
 /* 你得知道（字段到了才出） */
 .cp-know { grid-area: know; padding: 10px 16px; border: 1px solid #d5e0ea; border-radius: 14px; background: #fbfcfe; }
 .cp-know p { margin: 0; }
@@ -456,7 +456,7 @@ ul.cp-know-sub > li { display: grid; grid-template-columns: minmax(0, 1fr); gap:
 
 @media (max-width: 767.98px) {
   /* 手机首屏（方案第六节）：结论句 + 最多 3 个待办 → 你得知道 2—3 行 → 电脑 / 自动任务 / 备份三小块一行 → 安全和授权一行；健康分不上首屏 */
-  .cp-hero { grid-template-areas: "title" "you" "run" "know" "tri" "sec" "score"; }
+  .cp-hero { grid-template-areas: "title" "you" "need" "home" "tri" "sec" "score"; }
   .cp-score { display: none; }
   .cp-you-rest { font-size: 13.5px; }
   .cp-tri-status, .cp-tri-who, .cp-tri-note { display: none; }
@@ -594,3 +594,148 @@ ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
   .cp-own-s { font-size: 15px; }
   .cp-oa-row { justify-content: flex-start; }
 }
+
+/* ===== 第三步（本人 10 月 29 日 18:42—18:51：太谜语人、还不好用）：首屏只放本人的事 =====
+   顶上一句 → 要你做／要你回的卡（AI 在等你回话、要你确认、要你动手、要你拍板）→ AI 正在干活（只露件数和卡住要你看的）
+   → 你得知道（最多 5 行）→ 几行入口（AI 的账本 ›、你放着 N 件不急的事 ›、停了的数据）→ 三格；事实区在下面，正常的只占一行 */
+.cp-need { grid-area: need; min-width: 0; scroll-margin-top: 120px; }
+.cp-need:empty { display: none; }
+.cp-home { grid-area: home; min-width: 0; display: grid; gap: 10px; }
+/* .cp-run、.cp-know 原来直接排在首屏网格里，带着 grid-area；放进 .cp-home 后清掉，免得多出隐式列 */
+.cp-home > * { grid-area: auto; min-width: 0; }
+.cp-need-k { margin: 14px 0 8px; font-size: 15px; letter-spacing: .04em; }
+.cp-need > .cp-need-k:first-of-type { margin-top: 0; }
+@media (min-width: 1100px) { .cp-need .cp-todos { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; } }
+/* 顶上那一句：后端写的整句话，字比原来的“要你做 N 件”小一号 */
+.cp-you.is-said .cp-you-n { font-size: 24px; line-height: 1.35; }
+.cp-you { padding: 14px 20px 12px; }
+/* “AI 在等你回”卡：哪个对话、几点问的 → 它做到哪 → 要你定 → 选项（AI 建议那项是主按钮）→ 不回会怎样 → 你定就行、我没看懂 */
+.cp-ask.is-wait { border-color: #c9d9ea; border-left-color: #2463a8; }
+.cp-wait-src { margin: 0 0 4px; font-size: 13px; color: #3f5f7a; font-weight: 700; overflow-wrap: anywhere; }
+.cp-ask.is-wait .cp-own-s:first-of-type { margin-top: 0; }
+.cp-own-k { display: inline-block; margin-right: 8px; padding: 0 7px; border-radius: 6px; background: #e8f0f8; color: #2463a8; font-size: 12.5px; line-height: 1.7; vertical-align: 2px; }
+.cp-ask.is-wait .cp-ask-title { margin-top: 8px; display: block; }
+.cp-oa-opts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.cp-oa-opts > li { display: grid; gap: 2px; justify-items: start; min-width: 0; }
+.cp-oa-detail { font-size: 13.5px; color: var(--cp-soft); padding-left: 4px; overflow-wrap: anywhere; }
+.cp-oa-opts.is-text { margin-top: 8px; }
+.cp-oa-opts.is-text > li { padding: 4px 10px; border-left: 3px solid var(--cp-line); }
+.cp-oa-opts.is-text b { font-size: 15px; }
+.cp-oa .cp-own-s { margin: 0 0 10px; }
+/* 公开版（没有按钮）的卡：选项只列字 */
+.cp-q-k { margin: 0 0 4px; font-size: 14px; color: var(--cp-soft); }
+.cp-q-k b { margin-right: 6px; color: var(--cp-title); }
+.cp-opts-text { margin: 0; padding-left: 1.3em; font-size: 15px; }
+.cp-go-line { margin: 8px 0 0; font-size: 14.5px; font-weight: 700; }
+/* 看见了、知道了：卡和行收起，只留标题和回执 */
+.cp-ask.is-folded > :not(h3, .cp-oa), .cp-ask.is-folded .cp-detail, li.is-folded .cp-detail, li.is-folded small { display: none; }
+
+/* 首屏几行入口：一行字加 ›，点了进二级页或展开 */
+.cp-lines { display: grid; gap: 6px; }
+.cp-go, .cp-lines > details > summary { display: flex; align-items: center; gap: 6px; padding: 9px 14px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fff; font-size: 15px; font-weight: 700; color: var(--cp-ink) !important; text-decoration: none; cursor: pointer; list-style: none; overflow-wrap: anywhere; }
+.cp-lines > details > summary::-webkit-details-marker { display: none; }
+.cp-go::after, .cp-lines > details > summary::after { content: "›"; margin-left: auto; padding-left: 8px; font-size: 18px; color: var(--cp-title); transition: transform .15s; }
+.cp-lines > details[open] > summary::after { transform: rotate(90deg); }
+.cp-go:hover, .cp-lines > details > summary:hover { border-color: #9ddcae; background: #f6fcf8; }
+.cp-go:focus-visible, .cp-lines summary:focus-visible, .cp-fold > summary:focus-visible { outline: 2px solid #9ddcae; outline-offset: 2px; }
+.cp-lines > details > .cp-list, .cp-lines > details > .cp-facts { margin: 6px 4px 4px; padding: 6px 12px; border-left: 3px solid var(--cp-line); }
+.cp-stale-fold > summary { color: var(--cp-soft) !important; font-weight: 600 !important; }
+
+/* 收起的一行（正常运行的项目、今天四张卡、今天的河、已恢复的几项、没读到的几处） */
+.cp-fold { margin: 8px 0 0; min-width: 0; }
+.cp-fold > summary { cursor: pointer; list-style: none; padding: 7px 12px; border: 1px solid var(--cp-line); border-radius: 10px; background: #fbfefc; font-size: 15px; font-weight: 600; color: var(--cp-ink); overflow-wrap: anywhere; }
+.cp-fold > summary::-webkit-details-marker { display: none; }
+.cp-fold > summary::after { content: "›"; display: inline-block; margin-left: 8px; font-weight: 700; color: var(--cp-title); transition: transform .15s; }
+.cp-fold[open] > summary::after { transform: rotate(90deg); }
+.cp-fold > summary:hover { border-color: #9ddcae; }
+.cp-fold-body { margin-top: 8px; }
+.cp-folds { display: grid; gap: 0; }
+@media (min-width: 1100px) { .cp-folds { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 14px; align-items: start; } .cp-folds > .cp-fold[open] { grid-column: 1 / -1; } }
+.cp-river-fold .cp-river { margin-top: 10px; }
+
+/* 正常的事实卡只占一行：灯、名字、一句话（放不下就省略，点一下或悬停看全） */
+.cp-facts { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 0; }
+.cp-fact { display: grid; grid-template-columns: auto auto minmax(0, 1fr); align-items: baseline; gap: 0 8px; padding: 6px 2px; border-bottom: 1px dashed #e1efe5; font-size: 15px; outline: none; }
+.cp-fact:last-child { border-bottom: 0; }
+.cp-fact .cp-dot { margin-right: 0; }
+.cp-fact b { font-weight: 700; white-space: nowrap; }
+.cp-fact span:last-child { min-width: 0; color: var(--cp-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cp-fact:focus span:last-child, .cp-fact:hover span:last-child { white-space: normal; overflow-wrap: anywhere; color: var(--cp-ink); }
+@media (min-width: 1100px) { .cp-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 28px; } }
+.cp-grid + .cp-facts { margin-top: 10px; }
+.cp-charts { font-size: 14px; color: var(--cp-soft); overflow-wrap: anywhere; }
+.cp-charts i { font-style: normal; color: #b6c4bb; }
+
+/* 项目：有状况的一行一个，正常的收起 */
+.cp-proj-list { list-style: none; margin: 0; padding: 0; display: grid; }
+.cp-proj-list > li.cp-proj { display: grid; grid-template-columns: auto auto minmax(0, 1fr); align-items: baseline; gap: 2px 8px; padding: 7px 2px; border: 0; border-bottom: 1px dashed #e1efe5; border-radius: 0; background: none; box-shadow: none; font-size: 15px; }
+.cp-proj-list > li.cp-proj:last-child { border-bottom: 0; }
+.cp-proj-list .cp-dot { margin-right: 0; }
+.cp-proj-list b a { color: var(--cp-ink); }
+.cp-proj-list span { color: var(--cp-soft); overflow-wrap: anywhere; }
+.cp-proj-list small { grid-column: 3; font-size: 13px; color: var(--cp-soft); overflow-wrap: anywhere; }
+@media (min-width: 1100px) { .cp-proj-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 28px; } }
+
+/* AI 正在干活：首屏只露件数和卡住要你看的；其余点开 */
+.cp-run-list.is-stuck { margin-top: 6px; }
+.cp-run-list.is-stuck .cp-run-row { padding: 8px 10px; border: 1px solid #efc3bd; border-radius: 10px; background: #fffaf8; }
+.cp-run-list.is-stuck .cp-run-row + .cp-run-row { margin-top: 6px; }
+.cp-run-all { margin-top: 4px; }
+.cp-run-all > summary { display: inline-block; cursor: pointer; list-style: none; padding: 2px 0; font-size: 14px; font-weight: 700; color: var(--cp-title); }
+.cp-run-all > summary::-webkit-details-marker { display: none; }
+.cp-run-all > summary::after { content: "›"; display: inline-block; margin-left: 6px; transition: transform .15s; }
+.cp-run-all[open] > summary::after { transform: rotate(90deg); }
+/* 自动任务区开头一行和已恢复的几项 */
+.cp-tasks-line { margin: 0 0 4px; font-size: 15px; overflow-wrap: anywhere; }
+.cp-recovered ul.cp-know-sub { margin-top: 8px; }
+
+/* 二级页“AI 的账本” */
+.cp-ledger { padding-top: 10px; }
+.cp-back { margin: 0 0 6px; font-size: 14.5px; }
+.cp-ledger-h1 { margin: 0; font-size: clamp(26px, 4vw, 34px); line-height: 1.3; color: var(--cp-title); }
+.cp-ledger-sum { margin: 12px 0 0; padding: 10px 14px; border: 1px solid #d5e0ea; border-radius: 12px; background: #fbfcfe; font-size: 16px; font-weight: 700; }
+.cp-ledger-sec { margin-top: 22px; scroll-margin-top: 120px; }
+.cp-ledger-sec > h2 { margin: 0 0 8px; font-size: 19px; color: var(--cp-title); }
+.cp-ledger-sec .cp-ai { margin-top: 0; }
+.cp-ledger .cp-snap { margin-top: 10px !important; }
+.cp-page:has(.cp-snap) .cp-ledger-sec { filter: grayscale(1); opacity: .6; }
+.cp-tech { font-size: 12.5px; color: var(--cp-soft); }
+.cp-tech > summary { cursor: pointer; }
+.cp-tech p { margin: 2px 0 0; overflow-wrap: anywhere; }
+.cp-ledger-page .cp-know-decs .cp-oa .cp-btn { min-height: 36px; padding: 3px 14px; font-size: 14px; }
+
+@media (max-width: 767.98px) {
+  .cp-you.is-said .cp-you-n { font-size: 19px; }
+  .cp-you { padding: 10px 12px 8px; }
+  .cp-need-k { margin: 10px 0 6px; }
+  .cp-todos { gap: 10px; }
+  .cp-ask { padding: 12px; }
+  .cp-ask-title { font-size: 16px; }
+  .cp-own-s { margin-top: 6px; }
+  .cp-go, .cp-lines > details > summary { padding: 8px 12px; font-size: 14.5px; }
+  .cp-fact { font-size: 14.5px; }
+  /* 事实区的分区标题：手机上图小一号，说明句不出（标题已说清是哪块） */
+  .cp-section:not(.cp-hero) { padding-top: 18px; }
+  .cp-head { margin-bottom: 6px; gap: 10px; }
+  .cp-head h2 img { height: 34px; }
+  .cp-head p { display: none; }
+  .cp-proj-list small { grid-column: 1 / -1; }
+}
+/* 收成一行、点开是原来那张卡的事实（AI 在管、数据停了、读不到） */
+.cp-fact.is-fold { display: block; padding: 0; }
+.cp-fact.is-fold > details > summary { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; align-items: baseline; gap: 0 8px; padding: 6px 2px; cursor: pointer; list-style: none; }
+.cp-fact.is-fold > details > summary::-webkit-details-marker { display: none; }
+.cp-fact.is-fold > details > summary::after { content: "›"; font-weight: 700; color: var(--cp-title); transition: transform .15s; }
+.cp-fact.is-fold > details[open] > summary::after { transform: rotate(90deg); }
+.cp-fact.is-fold > details > summary span { min-width: 0; color: var(--cp-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cp-fact.is-fold > details > .cp-card { margin: 2px 0 8px; }
+.cp-fold .cp-proj-list { margin-top: 6px; }
+/* AI 的账本里每行只有“回一句话”：按钮放在这一行右边、小一号，不另占一行；展开写字或交出去以后占整行 */
+.cp-ailist > li:has(> .cp-oa) { grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; }
+.cp-ailist > li > :not(.cp-oa) { grid-column: 1; }
+.cp-ailist > li > .cp-oa { grid-column: 2; grid-row: 1 / span 3; margin-top: 0; align-self: center; }
+.cp-ailist > li > .cp-oa:has(.cp-oa-panel, .cp-oa-done, .cp-oa-err, .cp-oa-note) { grid-column: 1 / -1; grid-row: auto; margin-top: 6px; }
+.cp-ailist .cp-oa .cp-btn { min-height: 34px; padding: 2px 12px; font-size: 13.5px; }
+@media (max-width: 767.98px) { .cp-ailist .cp-oa .cp-btn { min-height: 36px; padding: 2px 10px; } }
+.cp-charts a.cp-chart { color: var(--cp-title) !important; text-decoration: underline; }
+.cp-facts-at { margin: 2px 0 0; }
