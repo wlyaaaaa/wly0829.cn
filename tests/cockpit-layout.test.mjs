@@ -34,6 +34,11 @@ test('即时收起隐藏整条，运行行的打开与复制共用按钮行', ()
 });
 
 test('全站组件：共享卡片、叶子毛笔标题、按钮与数字格，保留完整阅读和图标', () => {
+  const base = readFileSync(new URL('../src/typeset/style/base.css', import.meta.url), 'utf8');
+  for (const name of ['title', 'text', 'accent', 'line', 'muted']) {
+    const value = new RegExp(`--${name}:\\s*([^;]+)`).exec(base)?.[1].trim();
+    assert.ok(css.includes(`--${name}: ${value};`), name);
+  }
   for (const name of ['comp-text/cards', 'comp-hub/headings', 'comp-hub/link_stats', 'comp-text/buttons']) {
     assert.ok(css.includes(`@import "../../../src/typeset/components/${name}.css"`));
     const shared = readFileSync(new URL(`../src/typeset/components/${name}.css`, import.meta.url), 'utf8');

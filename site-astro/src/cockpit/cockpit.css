@@ -1072,7 +1072,7 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 /* 驾驶舱只负责响应排位；卡片、标题和按钮直接使用全站组件。变量沿用 src/typeset/style/base.css。 */
 .cp-page {
   --title: #0a7232; --text: #2e4675; --accent: #0a7a33; --link: rgb(9, 145, 54); --line: #bfe8cc;
-  --cardbg: #fbfefc; --soft: #edfbf3; --muted: #73859a; --surface: #fff;
+  --cardbg: #fbfefc; --soft: #edfbf3; --muted: #7d8783; --surface: #fff;
   --card-bg: linear-gradient(165deg, #f2fbf5 0%, #fbfefc 55%, #f7fcf9 100%);
   --card-shadow: 0 3px 12px rgba(40,140,80,.08); --radius: 16px;
   --fs-body: 15px; --fs-name: 22px; --fs-num: 42px; --lh: 1.6; --gap: 12px; --gap-card: 12px;
