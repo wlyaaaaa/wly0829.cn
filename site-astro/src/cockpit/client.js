@@ -9,6 +9,7 @@ const local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
 const endpoints = (local ? boot.local : boot.endpoints) || [];
 let view = normalize(boot.snapshot);
 let offline = false, busy = null;
+let wanted = ''; // 地址里 # 后面要找的那一条（见下面 reveal）
 let asked = 0, shown = 0;
 // 本人设备钥匙：只存在这台浏览器的 localStorage；读写不了就当公开版。notice 是页头的一句短提示（配对结果、授权失效）
 const KEY = 'wly-cockpit-device', TOKEN = /^[A-Za-z0-9_-]{43}$/;
@@ -70,6 +71,8 @@ function paint() {
   }
   const river = window.todayRiver;
   if (river?.ready && view.automation.items.length) river.setSnapshot(riverSnapshot(view), false);
+  // 读到新数据后还找不到的（条目已经办完关掉了），不再惦记，免得过一会儿突然跳走
+  if (wanted && shown && !reveal(true) && !offline) wanted = '';
 }
 
 // 卡片上的题：单选，再点一次取消；至少选了一题，“复制我的答复”才能点
@@ -157,17 +160,33 @@ document.addEventListener('click', async (e) => {
 const feedRiver = () => { if (view.automation.items.length) window.todayRiver?.setSnapshot(riverSnapshot(view), true); };
 if (window.todayRiver?.ready) feedRiver(); else document.addEventListener('today-river-ready', feedRiver, { once: true });
 
-// 从别处跳到“你得知道”里折起来的一条（如远程卡的“间歇断开的情况看这里”）：先把外面的折叠打开，再滚过去
-function reveal() {
-  const id = decodeURIComponent(location.hash.slice(1));
-  const target = id && !id.startsWith('pair=') ? document.getElementById(id) : null;
-  if (!target) return;
-  let opened = false;
-  for (let p = target.parentElement; p; p = p.parentElement) if (p.tagName === 'DETAILS' && !p.open) { p.open = true; opened = true; }
-  if (opened) target.scrollIntoView({ block: 'start' });
+// 打开 /cockpit/#<条目编号>（手机通知、远程卡的“间歇断开的情况看这里”等）：找到那一条，先打开外面的折叠，滚过去并高亮几秒。
+// 认两种写法：页面元素自己的 id（如 todo-…、know-…、ai-running），或条目原编号（每条的 data-items 里）。
+// 首帧是构建时的旧数，新条目要等第一次读到新数据才画出来，所以没找到时记着，每次换字后再找一次。
+const hashId = () => { try { return decodeURIComponent(location.hash.slice(1)).trim(); } catch { return ''; } };
+// 分区落点（#need-you、#tasks、项目名等）照浏览器原样跳，不高亮；只认条目
+function findItem(id) {
+  if (!id || id.startsWith('pair=')) return null;
+  const own = document.getElementById(id);
+  if (own) return own.matches('[data-items], #ai-running') || /^(todo|know)-/.test(id) ? own : null;
+  return [...document.querySelectorAll('[data-items]')].find((n) => n.dataset.items.split(' ').includes(id)) || null;
 }
-window.addEventListener('hashchange', reveal);
-reveal();
+// final：已经是读到新数据后的那一版，找到就不再惦记；首帧（构建时的旧数）上先跳一次，读到新数据换字后再对准一次
+function reveal(final) {
+  const target = findItem(wanted);
+  if (!target) return false;
+  if (final) wanted = '';
+  for (let p = target.parentElement; p; p = p.parentElement) if (p.tagName === 'DETAILS') p.open = true;
+  target.scrollIntoView({ block: 'start' });
+  target.classList.remove('cp-hit');
+  void target.offsetWidth; // 同一条再点一次也重新闪
+  target.classList.add('cp-hit');
+  setTimeout(() => target.classList.remove('cp-hit'), 4000);
+  return true;
+}
+window.addEventListener('hashchange', () => { wanted = hashId(); reveal(shown > 0); });
+wanted = hashId();
+reveal(false);
 
 pair().finally(() => load());
 setInterval(() => { if (!document.hidden && !busy) load(); }, 60000);

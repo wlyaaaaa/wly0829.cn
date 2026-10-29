@@ -32,10 +32,10 @@ test('每行：状态（颜色 + 符号 + 字）+ 标题，第二行“型号 ·
   const v = normalize(base({ need_you: [todo], ai_running: running(rows, { summary: '示例：AI 在跑 8 个，3 个卡住' }) }));
   assert.equal(v.ai_running.rows.find((r) => r.id === 'run-mystery_state').status, 'unknown');
   const html = REGIONS.overview(v, ctx);
-  const order = [...html.matchAll(/<li class="cp-run-row is-([a-z_]+)">/g)].map((m) => m[1]);
+  const order = [...html.matchAll(/<li class="cp-run-row is-([a-z_]+)" data-items="run-\w+">/g)].map((m) => m[1]);
   assert.deepEqual(order, ['login_failed', 'quota_exhausted', 'network_retry', 'waiting_owner', 'stopped', 'unknown', 'unknown', 'running']);
   // 颜色和符号：在跑绿●、网络在重连黄◐、额度用完红○、登录失效红○、等你回蓝◆、停了灰■、判断不了灰？
-  const look = Object.fromEntries([...html.matchAll(/<li class="cp-run-row is-([a-z_]+)"><span class="cp-run-st is-(\w+)"><i aria-hidden="true">(.)<\/i>([^<]+)<\/span>/g)].map((m) => [m[1], [m[2], m[3], m[4]]]));
+  const look = Object.fromEntries([...html.matchAll(/<li class="cp-run-row is-([a-z_]+)" data-items="run-\w+"><span class="cp-run-st is-(\w+)"><i aria-hidden="true">(.)<\/i>([^<]+)<\/span>/g)].map((m) => [m[1], [m[2], m[3], m[4]]]));
   assert.deepEqual(look, { login_failed: ['red', '○', '登录失效'], quota_exhausted: ['red', '○', '额度用完'], network_retry: ['yellow', '◐', '网络在重连'],
     waiting_owner: ['blue', '◆', '等你回'], stopped: ['gray', '■', '停了，没正常结束'], unknown: ['gray', '？', '判断不了'], running: ['green', '●', '在跑'] });
   assert.equal(Object.keys(RUN_LOOK).length, 7);
@@ -85,10 +85,10 @@ test('你得知道收拢：16 行合成 4 行，AI 在修排最前；已恢复�
   const v = normalize(base({ must_know: { state: 'ok', items: [...recovered, ...decisions, report, repairing], archived_items: [] } }));
   const html = REGIONS.overview(v, ctx);
   const top = [...html.matchAll(/<ul class="cp-know-list">(.*)<\/ul><\/div>/g)][0]?.[1] || '';
-  const rows = [...top.matchAll(/<li id="(know-[\w:-]+)" class="([^"]+)">(?:<span class="cp-know-tag[^>]*>[^<]*<\/span>)/g)].map((m) => m[1]);
+  const rows = [...top.matchAll(/<li id="(know-[\w:-]+)" class="([^"]+)"(?: data-items="[^"]*")?>(?:<span class="cp-know-tag[^>]*>[^<]*<\/span>)/g)].map((m) => m[1]);
   assert.deepEqual(rows, ['know-pending-net', 'know-task-resultgov', 'know-recovered', 'know-decisions']);
   assert.doesNotMatch(html, /cp-know-rest/);
-  assert.match(html, /<summary>后台 5 项功能中断过，现在都恢复了<\/summary><ul class="cp-know-sub"><li id="know-recoveredt0"><span>示例费用<\/span><small>10月24日 12:00 确认恢复<\/small>/);
+  assert.match(html, /<summary>后台 5 项功能中断过，现在都恢复了<\/summary><ul class="cp-know-sub"><li id="know-recoveredt0" data-items="recovered:t0"><span>示例费用<\/span><small>10月24日 12:00 确认恢复<\/small>/);
   assert.match(html, /<summary>AI 自己定了 9 件技术问题<\/summary>/);
   assert.match(html, /<span class="cp-know-dec-topic">示例备份盘同步与恢复验收<\/span><span class="cp-know-dec-what">AI 定：限期到 10月31日 18:30<\/span><span class="cp-know-dec-why">依据：周治理：示例组 warning\/example_code，其它组完成<\/span>/);
   assert.match(html, /<span class="cp-know-dec-topic">示例故障由 AI 根治：示例驱动，减少卡顿<\/span><span class="cp-know-dec-what">AI 定：限期到 11月5日 21:00<\/span>/);
@@ -101,7 +101,7 @@ test('你得知道收拢：16 行合成 4 行，AI 在修排最前；已恢复�
   assert.deepEqual(firstSentence({ text: '短句，后面' }), ['短句，后面', '']);
   // 只有一条已恢复时不合并，照原样一行
   const one = REGIONS.overview(normalize(base({ must_know: { state: 'ok', items: [recovered[0]] } })), ctx);
-  assert.match(one, /<li id="know-recoveredt0" class="is-recovered"><span class="cp-know-tag is-green">已恢复<\/span><span class="cp-know-text">示例费用已恢复/);
+  assert.match(one, /<li id="know-recoveredt0" class="is-recovered" data-items="recovered:t0"><span class="cp-know-tag is-green">已恢复<\/span><span class="cp-know-text">示例费用已恢复/);
   // 同一项恢复过两次算一项
   const twice = REGIONS.overview(normalize(base({ must_know: { state: 'ok', items: [recovered[3], { ...recovered[3], id: 'recovered:again', at: '2026-10-28T12:00:00+08:00' }, recovered[4]] } })), ctx);
   assert.match(twice, /后台 2 项功能中断过，现在都恢复了.*示例内存记录（中断过 2 次）<\/span><small>10月28日 12:00 确认恢复/);
@@ -120,4 +120,17 @@ test('合完还超过 5 行：露前 4 行（AI 在修和影响你的事在前�
   assert.deepEqual([...main.matchAll(/<li id="(know-\w+)"/g)].map((m) => m[1]), ['know-fix1', 'know-x1', 'know-r0', 'know-r1']);
   assert.match(html, /<details class="cp-know-rest" id="know-rest"><summary>其余 3 条<\/summary><ul class="cp-know-list"><li id="know-r2"/);
   assert.match(html, /id="know-rest">.*后台 2 项功能中断过.*AI 自己定了 1 件技术问题/);
+});
+
+test('每个条目都带自己的编号（data-items），手机通知打开 /cockpit/#<条目编号> 时找得到', () => {
+  const v = normalize(base({
+    need_you: [{ id: 'n-1', copy_ai_id: 'pub-n-1', title: '示例待办：做一下', ask_kind: 'do' }],
+    ai_following: [{ id: 'a-1', title: '示例 AI 在跟的事' }], deferred: [{ id: 'w-1', title: '示例暂缓', action_owner: 'user' }],
+    must_know: { state: 'ok', items: [{ id: 'rec:1', kind: 'recovered', text: '示例甲已恢复。' }, { id: 'rec:2', kind: 'recovered', text: '示例甲已恢复。' }, { id: 'k-1', kind: 'repairing', text: '示例在修' }] },
+    ai_running: running([row('running')]),
+  }));
+  const html = REGIONS['need-you'](v, ctx) + REGIONS.overview(v, ctx);
+  for (const ids of ['n-1 pub-n-1', 'a-1', 'w-1', 'rec:1 rec:2', 'k-1', 'run-running']) assert.ok(html.includes(`data-items="${ids}"`), ids);
+  // 总览里那三条只是跳到卡片的链接，不带编号，免得先找到它
+  assert.doesNotMatch(/<ol class="cp-you-list">.*?<\/ol>/.exec(html)?.[0] || '', /data-items/);
 });

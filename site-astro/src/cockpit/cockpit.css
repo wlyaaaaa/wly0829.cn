@@ -425,6 +425,11 @@ ul.cp-know-sub > li { display: grid; grid-template-columns: minmax(0, 1fr); gap:
 .cp-run-meta { display: block; font-size: 12.5px; line-height: 1.5; color: var(--cp-soft); }
 /* 电脑宽度：两列排，一屏看完；卡住的仍在最前 */
 @media (min-width: 1100px) { .cp-run-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 28px; } .cp-run-row:nth-child(2) { border-top: 0; } }
+/* 从手机通知或链接打开 /cockpit/#<条目编号>：那一条描一圈琥珀色，几秒后淡掉（client.js 加、去 cp-hit） */
+.cp-hit { outline: 3px solid #e2b33c !important; outline-offset: 3px; border-radius: 10px; scroll-margin-top: 130px; animation: cp-hit 4s ease-out forwards; }
+@keyframes cp-hit { 0%, 70% { outline-color: #e2b33c; } 100% { outline-color: transparent; } }
+@media (prefers-reduced-motion: reduce) { .cp-hit { animation: none; } }
+[data-items] { scroll-margin-top: 130px; }
 /* 总览句里那一段“AI 在跑 N 个（M 个卡住）” */
 .cp-you-ai { align-self: center; font-size: 16px; font-weight: 700; line-height: 1.4; color: var(--cp-ink) !important; text-decoration: none; padding: 2px 12px; border-radius: 999px; border: 1px solid var(--cp-line); background: #fff; white-space: nowrap; }
 .cp-you-ai:hover { border-color: #9ddcae; }

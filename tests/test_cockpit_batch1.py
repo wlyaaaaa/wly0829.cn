@@ -146,7 +146,7 @@ const assert = require('node:assert/strict');
   assert.match(pcc, /触发的是：虚构程序 1 小时上传 3\.0GB，超过 2GB/);
   assert.match(R.todayBlock(colored, ctx), /cp-card is-gray">.*学习进度.*数据源停了/);
   const ask = R.needYou(colored, ctx);
-  assert.match(ask, /cp-ask" id="todo-pending-trip">.*cp-dot is-yellow/);
+  assert.match(ask, /cp-ask" id="todo-pending-trip" data-items="pending-trip">.*cp-dot is-yellow/);
   assert.match(ask, /汇报页：虚构汇报页标题/);
   assert.match(ask, /最后核对 14:45/);
   const rv = riverSnapshot(colored, now).automation.items.find((t) => t.id === 'sw');
@@ -232,7 +232,7 @@ const assert = require('node:assert/strict');
   assert.match(todos, /手机借电脑 MCP 办/); assert.match(todos, /data-copy-text="请用电脑 MCP 读取条目 fixture-review/);
   assert.match(todos, /原定 10 月 10 日，已过 2 天/);
   // 没过期的不藏：收在“其余 N 件”里，总数和清单对得上
-  assert.match(todos, /<details class="cp-more" id="ai-rest"><summary>其余 1 件还没到约定日子，你不用动手<\/summary><ul class="cp-ailist"><li><span>虚构期限内的事/);
+  assert.match(todos, /<details class="cp-more" id="ai-rest"><summary>其余 1 件还没到约定日子，你不用动手<\/summary><ul class="cp-ailist"><li data-items="[^"]+"><span>虚构期限内的事/);
   assert.match(todos, /AI 在跟 3 件<span class="cp-ai-parts">其中 2 件过了约定日子/);
   assert.match(todos, /没写哪天该有结果，等 AI 定下期限/); assert.doesNotMatch(todos, /original_deadline_overdue|undated_wake_condition|唤醒条件/);
   // 当天刚过期、当天登记：不写“已过 0 天”“已跟 0 天”；跟得最久的排最前（登记不明按 14 天）

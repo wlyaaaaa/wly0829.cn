@@ -45,17 +45,17 @@ test('公开版：占位行灰显只剩标题和编号按钮，页头标注件�
   }));
   assert.equal(viewerLine(v), '<span class="cp-viewer-line">公开版 · 3 件私人事项只在本人设备上显示</span>');
   const need = REGIONS['need-you'](v, ctx);
-  const card = /<article class="cp-ask is-private" id="todo-n1">.*?<\/article>/.exec(need)?.[0] || '';
+  const card = /<article class="cp-ask is-private" id="todo-n1" data-items="n1">.*?<\/article>/.exec(need)?.[0] || '';
   assert.ok(card.includes(PRIVATE_TITLE) && card.includes('data-copy-ai="n1"'));
   assert.doesNotMatch(card, /data-copy-answer|data-copy-text|cp-quiz|cp-chip|去办/);
-  assert.ok(need.includes(`<li class="is-wait is-private"><span title="私人事项，详情只在本人设备上显示">${PRIVATE_TITLE}</span></li>`));
-  assert.ok(need.includes(`<li class="is-private"><span title="私人事项，详情只在本人设备上显示">${PRIVATE_TITLE}</span></li>`));
+  assert.ok(need.includes(`<li class="is-wait is-private" data-items="a1"><span title="私人事项，详情只在本人设备上显示">${PRIVATE_TITLE}</span></li>`));
+  assert.ok(need.includes(`<li class="is-private" data-items="d1"><span title="私人事项，详情只在本人设备上显示">${PRIVATE_TITLE}</span></li>`));
   // 占位行的公开说法不一定是默认占位字，照行里的 title 显示
-  assert.ok(need.includes('<li class="is-private"><span title="私人事项，详情只在本人设备上显示">周一上午打一个电话</span></li>'));
+  assert.ok(need.includes('<li class="is-private" data-items="d2"><span title="私人事项，详情只在本人设备上显示">周一上午打一个电话</span></li>'));
   assert.doesNotMatch(need, /仅你可见|cp-detail|不该出现|还没核对过|等你方便时/);
   // 你得知道的占位行照样占一条，计数不变
   const ov = REGIONS.overview(v, { ...ctx, ov: { stale: () => false, lamp: () => '' } });
-  assert.match(ov, /<li id="know-k1" class="is-report is-private">.*私人事项（只在本人设备上显示）/);
+  assert.match(ov, /<li id="know-k1" class="is-report is-private" data-items="k1">.*私人事项（只在本人设备上显示）/);
   // 公开版不会露出“本人设备”
   assert.doesNotMatch(page(v, ctx), /本人设备 · 全部显示/);
 });
