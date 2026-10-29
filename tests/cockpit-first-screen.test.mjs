@@ -55,7 +55,7 @@ test('四类卡统一精简；确认详情、步骤数和完成说明保留', ()
   assert.match(html, /<dt>发给<\/dt><dd>示例收件人<\/dd><\/div><div><dt>发什么<\/dt><dd>示例内容<\/dd>/);
   assert.match(html, /做完即可/);
   assert.doesNotMatch(html, /data-pick|data-q-pick|data-lb/);
-  assert.equal(REGIONS['need-you'](normalize(base({ need_you: [] })), ctx()), '');
+  assert.equal(REGIONS['need-you'](normalize(base({ need_you: [] })), ctx()), '<span class="cp-anchor" id="pending"></span>');
 });
 
 test('路径留给复制，屏幕写办事位置和详细说明；中文不会被全局误改', () => {

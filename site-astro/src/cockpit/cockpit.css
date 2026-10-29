@@ -602,7 +602,7 @@ ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
    顶上一句 → 要你做／要你回的卡（AI 在等你回话、要你确认、要你动手、要你拍板）→ AI 正在干活（只露件数和卡住要你看的）
    → 你得知道（最多 5 行）→ 几行入口（AI 的账本 ›、你放着 N 件不急的事 ›、停了的数据）→ 三格；事实区在下面，正常的只占一行 */
 .cp-need { grid-area: need; min-width: 0; scroll-margin-top: 120px; }
-.cp-need:empty { display: none; }
+.cp-need:empty, .cp-need:has(> .cp-anchor:only-child) { display: none; }
 .cp-home { grid-area: home; min-width: 0; display: grid; gap: 10px; }
 /* .cp-run、.cp-know 原来直接排在首屏网格里，带着 grid-area；放进 .cp-home 后清掉，免得多出隐式列 */
 .cp-home > * { grid-area: auto; min-width: 0; }
@@ -1109,7 +1109,7 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 .cp-home { grid-area: home; display: grid; gap: 16px; min-width: 0; container-type: inline-size; }
 .cp-facts-wall { display: grid; grid-area: facts; grid-template-columns: minmax(0, 1fr); gap: 0; min-width: 0; margin: 0; }
 .cp-workspace > .cp-need, .cp-home > :is(.cp-run, .cp-know), .cp-facts-wall > .cp-section { padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--card-shadow); }
-.cp-workspace > .cp-need:empty { display: none; }
+.cp-workspace > .cp-need:empty, .cp-workspace > .cp-need:has(> .cp-anchor:only-child) { display: none; }
 .cp-facts-wall > .cp-section { min-width: 0; margin-bottom: 16px; }
 .cp-block-heading { display: block; position: relative; min-height: 0; padding: 0 0 12px; margin: 0 0 12px; }
 .cp-block-heading .hub-strip-text { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; }

@@ -63,11 +63,11 @@ test('你得知道完整显示进展、下一步和时间；只给知道了与�
 
 test('空待办保留刷新挂载点；有事和读不到时仍提供内容', () => {
   const empty = view({ need_you: [] });
-  assert.equal(REGIONS['need-you'](empty, ctx), '');
-  assert.match(page(empty, ctx), /<div class="cp-need" id="need-you" data-cp="need-you"><\/div>/);
+  assert.equal(REGIONS['need-you'](empty, ctx), '<span class="cp-anchor" id="pending"></span>');
+  assert.match(page(empty, ctx), /<div class="cp-need" id="need-you" data-cp="need-you"><span class="cp-anchor" id="pending"><\/span><\/div>/);
   const item = { id: 'later', title: '示例后来出现的事', owner_actions: ['snooze'] };
   assert.match(REGIONS['need-you'](view({ need_you: [item] }), ctx), /示例后来出现的事/);
-  assert.equal(REGIONS['need-you'](view({ need_you: [item] }), { ...ctx, act: { state: new Map([['later', { action: 'snooze', phase: 'done' }]]) } }), '');
+  assert.equal(REGIONS['need-you'](view({ need_you: [item] }), { ...ctx, act: { state: new Map([['later', { action: 'snooze', phase: 'done' }]]) } }), '<span class="cp-anchor" id="pending"></span>');
   assert.match(REGIONS['need-you'](normalize({}), ctx), /还没读到/);
 });
 
@@ -158,3 +158,4 @@ test('侧栏和工作区使用全站组件，同时保留全部动态分区与�
   }
   for (const id of ['top', 'need-you', 'pending', 'ai-running', 'tasks', 'computer', 'today', 'backup', 'backups', 'projects']) assert.ok(html.includes('id="' + id + '"'), id);
 });
+

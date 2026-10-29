@@ -38,7 +38,7 @@ test('状态格保留安全标题并按整词换行，空待办挂载点隐藏',
   assert.doesNotMatch(css, /\.cp-security-title[^{}]*\{[^}]*display:\s*none\s*!important/);
   assert.match(rules('.cp-status .cp-tri-status'), /overflow-wrap:\s*normal/);
   assert.match(rules('.cp-status .cp-status-word'), /display:\s*inline-block;\s*white-space:\s*nowrap/);
-  assert.match(rules('.cp-workspace > .cp-need:empty'), /display:\s*none/);
+  assert.match(rules('.cp-workspace > .cp-need:empty, .cp-workspace > .cp-need:has(> .cp-anchor:only-child)'), /display:\s*none/);
 });
 
 test('全站组件：共享卡片、叶子毛笔标题、按钮与数字格，保留完整阅读和图标', () => {

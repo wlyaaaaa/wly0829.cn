@@ -23,7 +23,7 @@ const assert = require('node:assert/strict');
   const v = normalize({ schema: 'pcconfig.cockpit-view.v1', ai_following: ai, deferred, governance: { next_run_at: last_run.next_run_at, last_run } });
   // 第三步：体检和 AI 在跟、AI 等条件的去二级页“AI 的账本”；你暂缓的在首屏“你放着 N 件不急的事”
   const html = R.ledger(v, ctx) + R.REGIONS.home(v, ctx);
-  assert.equal(R.needCards(v, ctx), '');
+  assert.equal(R.needCards(v, ctx), '<span class="cp-anchor" id="pending"></span>');
   assert.match(html, /上次 AI 体检（10月12日 13:00）记录：当时修好 5、关掉 3、转暂缓 2、还在跟 12、待你办 1 件 · 下次 10月19日 13:00/);
   assert.doesNotMatch(html, /问 AI|data-copy/);
   const actions = html.match(/<details class="cp-more cp-gov-more" id="gov-actions"><summary>当时留下的说明 3 条<\/summary>.*?<\/details>/)?.[0];

@@ -444,7 +444,8 @@ function qRow(x, r, ctx, kind, open) {
 export function needCards(v, ctx) {
   const { all, n } = ownerNow(v, ctx.now, ctx);
   const cx = { ...ctx, viewer: v.viewer };
-  if (!all.some((i) => !actCls(i.x, cx))) return v.ok ? '' : `<p class="cp-empty">${dot('unavailable')}${notRead(v.served_at, ctx.now)}</p>`;
+  // 别的页面链到 #pending，没事可做时也留着这个位置标记（整块仍按 cockpit.css 收起）
+  if (!all.some((i) => !actCls(i.x, cx))) return anchor('pending') + (v.ok ? '' : `<p class="cp-empty">${dot('unavailable')}${notRead(v.served_at, ctx.now)}</p>`);
   const order = NEED_GROUPS.flatMap(([k]) => all.filter((i) => groupOf(i.x) === k)).filter((i) => !isPh(i.x) && typeof i.x.id === 'string' && i.x.id);
   // 展开哪件：点过的那件；还没点过（或那件已经办完不在了）就是第一件；点了“收起”是一件都不展开
   const want = ctx.act?.ui?.get(Q_KEY)?.open;
