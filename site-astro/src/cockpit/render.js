@@ -764,31 +764,57 @@ function knowBlock(v, ctx) {
     + (more.length ? `<details class="cp-know-rest" id="know-rest"><summary>其余 ${more.length} 条</summary><ul class="cp-know-list">${more.join('')}</ul></details>` : '') + folded + `</div>`;
 }
 
-// “AI 正在跑”（后端 ai_running，字段在才出这一块）：每件此刻在跑的 AI 活一行，写清状态、哪家哪个型号、在干什么。
-// 状态带颜色和符号，色盲也分得清；卡住的排前面。公开版后端已把标题换成“一件 AI 活”、不给 detail，这里照显示，不另造文字。
+// “AI 正在跑”（后端 ai_running，字段在才出这一块）：本人版每件在跑的 AI 活一行，写清状态、哪家哪个型号、在干什么。
+// 状态带颜色和符号，色盲也分得清；卡住的排前面（顺序和后端一样：额度、登录、网络、停了、等你回、在跑、判断不了）。
+// 公开版（行带 placeholder，或这次拿到的是公开版）只写两句：几个在跑、几个卡住（卡在哪类），再按型号数一数；不列在做什么。
 export const RUN_LOOK = {
   login_failed: ['登录失效', 'red', '○'], quota_exhausted: ['额度用完', 'red', '○'], network_retry: ['网络在重连', 'yellow', '◐'],
   waiting_owner: ['等你回', 'blue', '◆'], stopped: ['停了，没正常结束', 'gray', '■'], unknown: ['判断不了', 'gray', '？'], running: ['在跑', 'green', '●'],
 };
-const RUN_ORDER = Object.keys(RUN_LOOK);
+const RUN_ORDER = ['quota_exhausted', 'login_failed', 'network_retry', 'stopped', 'waiting_owner', 'running', 'unknown'];
 const VENDOR = { claude: 'Claude', gpt: 'GPT' };
-// 顶栏那一段：“AI 在跑 6 个（1 个卡住）”；一个都没有时“没有 AI 在跑”
-export const runLine = (a) => (a.count ? `AI 在跑 ${a.count} 个${a.stuck_count ? `（${a.stuck_count} 个卡住）` : ''}` : '没有 AI 在跑');
+const modelOf = (r) => r.model_text || VENDOR[r.vendor] || '型号没记下';
+// 顶栏那一段：“AI 在跑 6 个（1 个卡住）”；一个都没有时“没有 AI 在跑”；这次读不全时照实说
+export const runLine = (a) => (a.count ? `AI 在跑 ${a.count} 个${a.stuck_count ? `（${a.stuck_count} 个卡住）` : ''}` : a.unread ? 'AI 运行情况读不全' : '没有 AI 在跑');
+// 后端 summary 末尾可能带“，另有 N 件早就停了”：这句本人版单独放在块末尾，公开版不显示
+const runSummary = (a) => a.summary.replace(/[，,]\s*另有\s*\d+\s*件早就停了[。]?$/, '');
+// 卡在哪类：“网络、额度、登录各 1 个”“网络 2 个、额度 1 个”
+const STUCK_WORD = [['network_retry', '网络'], ['quota_exhausted', '额度'], ['login_failed', '登录'], ['stopped', '停了']];
+function stuckKinds(rows) {
+  const n = STUCK_WORD.map(([s, w]) => [w, rows.filter((r) => r.status === s).length]).filter(([, c]) => c);
+  if (!n.length) return '';
+  return n.length > 1 && n.every(([, c]) => c === n[0][1]) ? `${n.map(([w]) => w).join('、')}各 ${n[0][1]} 个` : n.map(([w, c]) => `${w} ${c} 个`).join('、');
+}
+// 按型号数：“Claude Opus 5.5 5 个 · GPT Sol 3 个 · GPT 1 个”（多的在前）
+function modelCounts(rows) {
+  const m = new Map();
+  for (const r of rows) m.set(modelOf(r), (m.get(modelOf(r)) || 0) + 1);
+  return [...m.entries()].sort((x, y) => y[1] - x[1]).map(([k, c]) => `${k} ${c} 个`).join(' · ');
+}
 function runBlock(v, ctx) {
   const a = v.ai_running;
   if (!a) return '';
+  const pub = a.rows.some((r) => r.placeholder) || v.viewer?.kind === 'public';
   const at = a.observed_at ? `<span class="cp-run-at">${ctx.offline ? '读不到电脑，这是 ' : ''}${esc(when(a.observed_at, ctx.now))} 读到的</span>` : '';
   const off = ctx.offline ? ' is-off' : '';
-  if (!a.count && !a.rows.length) return `<div class="cp-run is-empty${off}" id="ai-running"><p class="cp-run-none"><span class="cp-run-k">AI 正在跑</span><span>现在没有 AI 在跑</span>${at}</p></div>`;
+  const stale = !pub && a.stale_count > 0 ? `<p class="cp-run-stale">另有 ${a.stale_count} 件早就停了</p>` : '';
+  if (!a.count && !a.rows.length) return `<div class="cp-run is-empty${off}" id="ai-running"><p class="cp-run-none"><span class="cp-run-k">AI 正在跑</span><span>${esc(runSummary(a) || (a.unread ? 'AI 运行情况暂时读不全' : '现在没有 AI 在跑'))}</span>${at}</p>${stale}</div>`;
+  if (pub) {
+    const first = runSummary(a) || `AI 在跑 ${a.count} 个${a.stuck_count ? `，${a.stuck_count} 个卡住了` : ''}`;
+    const kinds = stuckKinds(a.rows);
+    const head = kinds && a.stuck_count && !/[（(]/.test(first) ? `${first}（${kinds}）` : first;
+    const models = a.rows.length ? `<p class="cp-run-models">${esc(modelCounts(a.rows))}</p>` : '';
+    return `<div class="cp-run is-public${off}" id="ai-running"><p class="cp-run-head"><span class="cp-run-k">AI 正在跑</span><span class="cp-run-sum">${esc(head)}</span>${at}</p>${models}</div>`;
+  }
   const rows = a.rows.map((r, i) => ({ r, i })).sort((x, y) => RUN_ORDER.indexOf(x.r.status) - RUN_ORDER.indexOf(y.r.status) || x.i - y.i).map(({ r }) => {
     const [word, color, mark] = RUN_LOOK[r.status];
-    const model = r.model_text || VENDOR[r.vendor] || '';
-    const meta = [model, r.detail, r.helpers > 0 ? `+${r.helpers} 个帮手` : ''].filter(Boolean);
+    // 后端会把帮手说明并进 detail（“+9 个帮手：4 个在跑、5 个判断不了”），已有就不再另写“+N 个帮手”
+    const meta = [modelOf(r), r.detail, r.helpers > 0 && !/个帮手/.test(r.detail) ? `+${r.helpers} 个帮手` : ''].filter(Boolean);
     return `<li class="cp-run-row is-${r.status}"${itemAttr(r)}><span class="cp-run-st is-${color}"><i aria-hidden="true">${mark}</i>${esc(r.status_text || word)}</span>`
       + `<span class="cp-run-title">${esc(r.title || '一件 AI 活')}</span>${meta.length ? `<small class="cp-run-meta">${meta.map(esc).join(' · ')}</small>` : ''}</li>`;
   }).join('');
-  return `<div class="cp-run${off}" id="ai-running"><p class="cp-run-head"><span class="cp-run-k">AI 正在跑</span><span class="cp-run-sum">${esc(a.summary || runLine(a))}</span>${at}</p>`
-    + (rows ? `<ul class="cp-run-list">${rows}</ul>` : '') + `</div>`;
+  return `<div class="cp-run${off}" id="ai-running"><p class="cp-run-head"><span class="cp-run-k">AI 正在跑</span><span class="cp-run-sum">${esc(runSummary(a) || runLine(a))}</span>${at}</p>`
+    + (rows ? `<ul class="cp-run-list">${rows}</ul>` : '') + stale + `</div>`;
 }
 const overview = (v, ctx) => {
   if (!ctx.ov) return '';

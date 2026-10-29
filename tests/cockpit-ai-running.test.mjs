@@ -13,7 +13,7 @@ const todo = { id: 'n1', title: '示例选择题：选一个做法', ask_kind: '
 
 const row = (status, extra = {}) => ({ id: 'run-' + status, status, vendor: 'claude', model: 'claude-opus-5-5', model_text: 'Claude Opus 5.5', effort: 'high', kind: 'conversation',
   title: '示例活 ' + status, started_at: '2026-10-29T15:00:00+08:00', last_activity_at: at, detail: '示例说明 ' + status, helpers: 0, ...extra });
-const running = (rows, extra = {}) => ({ count: rows.length, stuck_count: rows.filter((r) => ['network_retry', 'quota_exhausted', 'login_failed'].includes(r.status)).length,
+const running = (rows, extra = {}) => ({ count: rows.length, stuck_count: rows.filter((r) => ['network_retry', 'quota_exhausted', 'login_failed', 'stopped'].includes(r.status)).length,
   summary: '', observed_at: at, gaps: ['示例缺口'], rows, ...extra });
 
 test('没有 ai_running 字段：这块不出、总览句不加，也不报错', () => {
@@ -33,7 +33,8 @@ test('每行：状态（颜色 + 符号 + 字）+ 标题，第二行“型号 ·
   assert.equal(v.ai_running.rows.find((r) => r.id === 'run-mystery_state').status, 'unknown');
   const html = REGIONS.overview(v, ctx);
   const order = [...html.matchAll(/<li class="cp-run-row is-([a-z_]+)" data-items="run-\w+">/g)].map((m) => m[1]);
-  assert.deepEqual(order, ['login_failed', 'quota_exhausted', 'network_retry', 'waiting_owner', 'stopped', 'unknown', 'unknown', 'running']);
+  // 顺序和后端一样：额度、登录、网络、停了、等你回、在跑、判断不了
+  assert.deepEqual(order, ['quota_exhausted', 'login_failed', 'network_retry', 'stopped', 'waiting_owner', 'running', 'unknown', 'unknown']);
   // 颜色和符号：在跑绿●、网络在重连黄◐、额度用完红○、登录失效红○、等你回蓝◆、停了灰■、判断不了灰？
   const look = Object.fromEntries([...html.matchAll(/<li class="cp-run-row is-([a-z_]+)" data-items="run-\w+"><span class="cp-run-st is-(\w+)"><i aria-hidden="true">(.)<\/i>([^<]+)<\/span>/g)].map((m) => [m[1], [m[2], m[3], m[4]]]));
   assert.deepEqual(look, { login_failed: ['red', '○', '登录失效'], quota_exhausted: ['red', '○', '额度用完'], network_retry: ['yellow', '◐', '网络在重连'],
@@ -63,13 +64,48 @@ test('总览句加“AI 在跑 N 个（M 个卡住）”，M 为 0 不写括号�
   assert.match(none, />没有 AI 在跑<\/a>/);
 });
 
-test('公开版：后端已把标题换成“一件 AI 活”、不给一句话，照显示，不另造文字', () => {
-  const pub = { id: 'p1', status: 'running', vendor: 'claude', model_text: 'Claude Opus 5.5', title: '一件 AI 活', helpers: 0 };
-  const html = REGIONS.overview(normalize(base({ viewer: { kind: 'public', device_state: 'none' }, ai_running: running([pub]) })), ctx);
-  assert.match(html, /<span class="cp-run-title">一件 AI 活<\/span><small class="cp-run-meta">Claude Opus 5.5<\/small><\/li>/);
+test('公开版：只写两句（几个在跑、卡在哪类；按型号数），不列在做什么，也不写早就停了的', () => {
+  const pub = (status, model_text, vendor = 'claude') => ({ id: 'p-' + status + model_text, status, vendor, model_text, title: '一件 AI 活', placeholder: true, helpers: 3 });
+  const rows = [...Array.from({ length: 4 }, () => pub('running', 'Claude Opus 5.5')), pub('network_retry', 'Claude Opus 5.5'),
+    pub('quota_exhausted', 'GPT Sol', 'gpt'), pub('login_failed', 'GPT Sol', 'gpt'), pub('running', 'GPT Sol', 'gpt'), pub('unknown', '', 'gpt')];
+  const block = running(rows, { summary: 'AI 在跑 9 个，3 个卡住了，另有 2 件早就停了', stale_count: 2 });
+  const html = REGIONS.overview(normalize(base({ viewer: { kind: 'public', device_state: 'none' }, ai_running: block })), ctx);
+  assert.match(html, /<div class="cp-run is-public" id="ai-running"><p class="cp-run-head"><span class="cp-run-k">AI 正在跑<\/span><span class="cp-run-sum">AI 在跑 9 个，3 个卡住了（网络、额度、登录各 1 个）<\/span><span class="cp-run-at">15:39 读到的<\/span><\/p><p class="cp-run-models">Claude Opus 5.5 5 个 · GPT Sol 3 个 · GPT 1 个<\/p><\/div>/);
+  assert.doesNotMatch(html, /一件 AI 活|cp-run-list|cp-run-row|早就停了|个帮手/);
+  // 只凭行上的 placeholder 也认（没有 viewer 字段时）；卡的种类不一样多时分别写
+  const two = REGIONS.overview(normalize(base({ ai_running: running([pub('network_retry', 'GPT Sol', 'gpt'), pub('network_retry', 'GPT Sol', 'gpt'), pub('stopped', 'Claude Opus 5.5')], { summary: '' }) })), ctx);
+  assert.match(two, /<span class="cp-run-sum">AI 在跑 3 个，3 个卡住了（网络 2 个、停了 1 个）<\/span>/);
+  assert.match(two, /<p class="cp-run-models">GPT Sol 2 个 · Claude Opus 5.5 1 个<\/p>/);
+  // 后端 summary 自己带了括号就不再加
+  const own = REGIONS.overview(normalize(base({ ai_running: running([pub('quota_exhausted', 'GPT Sol', 'gpt')], { summary: 'AI 在跑 1 个，1 个卡住了（额度）' }) })), ctx);
+  assert.match(own, /<span class="cp-run-sum">AI 在跑 1 个，1 个卡住了（额度）<\/span>/);
   // 读不到电脑时淡下去，写明是几点读到的
-  const off = REGIONS.overview(normalize(base({ ai_running: running([pub]) })), { ...ctx, offline: true });
-  assert.match(off, /<div class="cp-run is-off" id="ai-running">.*读不到电脑，这是 15:39 读到的/);
+  const off = REGIONS.overview(normalize(base({ ai_running: running([pub('running', 'GPT Sol', 'gpt')]) })), { ...ctx, offline: true });
+  assert.match(off, /<div class="cp-run is-public is-off" id="ai-running">.*读不到电脑，这是 15:39 读到的/);
+});
+
+test('本人版：早就停了的另起一行小字；后端已把帮手并进说明时不再重复写', () => {
+  const longHelp = '刚刚还在动，+9 个帮手：4 个在跑、2 个额度用完（GPT Sol，最长 37 分钟没动静；Claude Opus 5.5，12 分钟没动静）、3 个判断不了';
+  const block = running([row('running', { helpers: 9, detail: longHelp }), row('waiting_owner', { helpers: 1 })], { summary: 'AI 在跑 2 个，另有 3 件早就停了', stale_count: 3 });
+  const html = REGIONS.overview(normalize(base({ viewer: { kind: 'owner', device_state: 'ok' }, ai_running: block })), ctx);
+  assert.match(html, /<span class="cp-run-sum">AI 在跑 2 个<\/span>/);
+  assert.match(html, /<\/ul><p class="cp-run-stale">另有 3 件早就停了<\/p><\/div>/);
+  assert.equal((html.match(/个帮手/g) || []).length, 2);
+  assert.match(html, /Claude Opus 5.5 · 刚刚还在动，\+9 个帮手：4 个在跑/);
+  assert.match(html, /Claude Opus 5.5 · 示例说明 waiting_owner · \+1 个帮手<\/small>/);
+  // 没有在跑的、但有早就停了的：一行“现在没有 AI 在跑”，下面小字
+  const none = REGIONS.overview(normalize(base({ ai_running: { count: 0, stuck_count: 0, stale_count: 2, summary: '现在没有 AI 在跑，另有 2 件早就停了', observed_at: at, gaps: [], rows: [] } })), ctx);
+  assert.match(none, /<span>现在没有 AI 在跑<\/span><span class="cp-run-at">15:39 读到的<\/span><\/p><p class="cp-run-stale">另有 2 件早就停了<\/p>/);
+  // 公开版这一句不出；没有 stale_count 字段时什么都不加
+  const pubNone = REGIONS.overview(normalize(base({ viewer: { kind: 'public', device_state: 'none' }, ai_running: { count: 0, stuck_count: 0, stale_count: 2, summary: '现在没有 AI 在跑，另有 2 件早就停了', observed_at: at, gaps: [], rows: [] } })), ctx);
+  assert.doesNotMatch(pubNone, /早就停了/);
+  assert.doesNotMatch(REGIONS.overview(normalize(base({ ai_running: running([row('running')]) })), ctx), /cp-run-stale/);
+  // 这次读不全：不说成“没有 AI 在跑”
+  const unread = normalize(base({ ai_running: { count: 0, stuck_count: 0, stale_count: 0, summary: 'AI 运行情况暂时读不全', observed_at: null, gaps: ['codex_sqlite_unavailable'], rows: [] } }));
+  const uh = REGIONS.overview(unread, ctx);
+  assert.match(uh, /<span>AI 运行情况暂时读不全<\/span>/);
+  assert.match(uh, />AI 运行情况读不全<\/a>/);
+  assert.doesNotMatch(uh, /没有 AI 在跑|codex_sqlite/);
 });
 
 test('你得知道收拢：16 行合成 4 行，AI 在修排最前；已恢复、AI 已定各一行，汇报只露第一句', () => {

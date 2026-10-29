@@ -56,9 +56,9 @@ const STATES = new Set(['ok', 'attention', 'red', 'unavailable', 'reading']);
 const st = (v) => (STATES.has(v) ? v : 'unavailable');
 
 // “AI 正在跑”（后端 cockpit.ai_running）：每件此刻在跑的 AI 活一行。认不得的状态一律当“判断不了”；
-// 卡住 = 网络在重连、额度用完、登录失效（后端给了 stuck_count 就以它为准）
+// 卡住 = 网络在重连、额度用完、登录失效、停了（和后端 stuck_count 同一口径；后端给了就以它为准）
 export const RUN_STATUSES = ['running', 'network_retry', 'quota_exhausted', 'login_failed', 'waiting_owner', 'stopped', 'unknown'];
-export const RUN_STUCK = ['network_retry', 'quota_exhausted', 'login_failed'];
+export const RUN_STUCK = ['network_retry', 'quota_exhausted', 'login_failed', 'stopped'];
 const text = (x, max = 200) => (typeof x === 'string' ? x.trim().slice(0, max) : '');
 const nat = (x) => (Number.isInteger(x) && x >= 0 ? x : null);
 function aiRunning(raw) {
@@ -66,10 +66,16 @@ function aiRunning(raw) {
   const rows = list(raw.rows).map((r) => ({
     id: text(r.id, 120), status: RUN_STATUSES.includes(r.status) ? r.status : 'unknown', status_text: text(r.status_text, 20),
     vendor: ['claude', 'gpt'].includes(r.vendor) ? r.vendor : '', model: text(r.model, 60), model_text: text(r.model_text, 40), effort: text(r.effort, 20), kind: text(r.kind, 40),
-    title: text(r.title, 120), started_at: r.started_at || null, last_activity_at: r.last_activity_at || null, detail: text(r.detail, 160), helpers: nat(r.helpers) || 0,
+    title: text(r.title, 120), started_at: r.started_at || null, last_activity_at: r.last_activity_at || null, detail: text(r.detail, 300), helpers: nat(r.helpers) || 0,
+    // 公开版的行：后端把标题换成“一件 AI 活”、不给 detail，并标 placeholder
+    placeholder: r.placeholder === true,
   }));
   const stuck = rows.filter((r) => RUN_STUCK.includes(r.status)).length;
-  return { count: nat(raw.count) ?? rows.length, stuck_count: nat(raw.stuck_count) ?? stuck, summary: text(raw.summary, 80), observed_at: raw.observed_at || null, rows };
+  const count = nat(raw.count) ?? rows.length;
+  // stale_count：早就停了、不算在跑的件数（后端没给就是 0）；
+  // unread：后端说这次读不全（observed_at 为空且有缺口）又没有行，不能说成“没有 AI 在跑”
+  return { count, stuck_count: nat(raw.stuck_count) ?? stuck, stale_count: nat(raw.stale_count) || 0, summary: text(raw.summary, 80), observed_at: raw.observed_at || null, rows,
+    unread: !count && !rows.length && !raw.observed_at && Array.isArray(raw.gaps) && raw.gaps.length > 0 };
 }
 
 // 缺什么都补成空，版式只看结构，不看数据到没到
