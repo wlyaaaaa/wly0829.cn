@@ -33,6 +33,14 @@ test('即时收起隐藏整条，运行行的打开与复制共用按钮行', ()
   assert.match(rules('.cp-run-row .cp-oa-bar'), /display:\s*flex;\s*flex-wrap:\s*wrap/);
 });
 
+test('状态格保留安全标题并按整词换行，空待办挂载点隐藏', () => {
+  assert.match(rules('.cp-status .cp-security-title'), /display:\s*block/);
+  assert.doesNotMatch(css, /\.cp-security-title[^{}]*\{[^}]*display:\s*none\s*!important/);
+  assert.match(rules('.cp-status .cp-tri-status'), /overflow-wrap:\s*normal/);
+  assert.match(rules('.cp-status .cp-status-word'), /display:\s*inline-block;\s*white-space:\s*nowrap/);
+  assert.match(rules('.cp-workspace > .cp-need:empty'), /display:\s*none/);
+});
+
 test('全站组件：共享卡片、叶子毛笔标题、按钮与数字格，保留完整阅读和图标', () => {
   const base = readFileSync(new URL('../src/typeset/style/base.css', import.meta.url), 'utf8');
   for (const name of ['title', 'text', 'accent', 'line', 'muted']) {

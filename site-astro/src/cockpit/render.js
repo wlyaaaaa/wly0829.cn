@@ -31,8 +31,8 @@ const ownTag = (x) => {
   const pub = typeof x.public_title === 'string' && x.public_title.trim() ? '公网显示为：' + x.public_title.trim() : '';
   return pub ? `<span class="cp-own" tabindex="0" title="${esc(pub)}" data-pub="${esc(pub)}">仅你可见</span>` : '<span class="cp-own">仅你可见</span>';
 };
-const detail = (x) => {
-  const d = !isPh(x) && typeof x?.owner_detail === 'string' ? x.owner_detail.trim().slice(0, 200) : '';
+const detail = (x, limit = 200) => {
+  const d = !isPh(x) && typeof x?.owner_detail === 'string' ? x.owner_detail.trim().slice(0, limit) : '';
   return d ? `<span class="cp-detail" tabindex="0" title="${esc(d)}">${/^[一-鿿A-Za-z]{1,6}[：:]/.test(d) ? '' : '具体：'}${esc(d)}</span>` : '';
 };
 // 本人的事过了原定时间（后端 need_you 行的 overdue_text：“今天已过原定时间”“过了原定时间 N 天”）：标题旁一个琥珀色小标签；公开版占位行也显示，它只是天数
@@ -443,8 +443,8 @@ function qRow(x, r, ctx, kind, open) {
 }
 export function needCards(v, ctx) {
   const { all, n } = ownerNow(v, ctx.now, ctx);
-  if (!all.length) return v.ok ? '' : `<p class="cp-empty">${dot('unavailable')}${notRead(v.served_at, ctx.now)}</p>`;
   const cx = { ...ctx, viewer: v.viewer };
+  if (!all.some((i) => !actCls(i.x, cx))) return v.ok ? '' : `<p class="cp-empty">${dot('unavailable')}${notRead(v.served_at, ctx.now)}</p>`;
   const order = NEED_GROUPS.flatMap(([k]) => all.filter((i) => groupOf(i.x) === k)).filter((i) => !isPh(i.x) && typeof i.x.id === 'string' && i.x.id);
   // 展开哪件：点过的那件；还没点过（或那件已经办完不在了）就是第一件；点了“收起”是一件都不展开
   const want = ctx.act?.ui?.get(Q_KEY)?.open;
@@ -798,9 +798,12 @@ function triCells(v, ctx, off) {
     make('backup', '备份', bk.level, bk, bkStatus, '你不用管', '都按时', bkMore),
   ];
 }
+// 状态小格按中文整词换行；空格和标点仍参与浏览器的正常断行。
+const statusSegmenter = typeof Intl.Segmenter === 'function' ? new Intl.Segmenter('zh-CN', { granularity: 'word' }) : null;
+const statusText = (text) => statusSegmenter ? [...statusSegmenter.segment(text)].map(({ segment, isWordLike }) => isWordLike ? `<span class="cp-status-word">${esc(segment)}</span>` : esc(segment)).join('') : esc(text);
 function tri(cells) {
   const cell = (c) => `<li class="cp-tri-cell is-${light(c.state)}" data-signal="${c.id}"><a class="hub-stat-field ct-card" href="#${c.id === 'tasks' ? 'tasks' : c.id === 'backup' ? 'backups' : 'computer'}">`
-    + `<span class="cp-tri-label">${c.label}</span><b class="cp-tri-status">${dot(c.state)}${esc(c.status)}</b>`
+    + `<span class="cp-tri-label">${c.label}</span><b class="cp-tri-status">${dot(c.state)}${statusText(c.status)}</b>`
     + `<span class="cp-tri-who">${c.who.split(' · ').map((w) => `<span>${esc(w)}</span>`).join('<i aria-hidden="true"> · </i>')}</span>`
     + (c.why ? `<span class="cp-tri-why">${esc(c.why)}</span>` : '') + (c.note ? `<span class="cp-tri-note">${esc(c.note)}</span>` : '') + `</a></li>`;
   return `<ul class="cp-tri">${cells.map(cell).join('')}</ul>`;
@@ -869,15 +872,27 @@ function knowBlock(v, ctx) {
     const tail = small.length ? `<small>${small.map(esc).join(' · ')}</small>` : '';
     const progress = typeof k.progress === 'string' ? k.progress : k.progress?.text || k.latest_progress || '';
     const next = typeof k.next_step === 'string' ? k.next_step : '', nextAt = k.next_at || k.next_check_at || k.next_run_at || k.handler?.next_run_at;
-    const updates = isPh(k) ? '' : (progress && !String(k.text || '').includes(progress) ? `<span class="cp-know-progress">进展：${esc(plain(progress))}</span>` : '')
-      + (next || nextAt ? `<span class="cp-know-next">下一步：${esc(plain(next))}${nextAt && !next.includes(when(nextAt, ctx.now)) ? `${next ? ' · ' : ''}${esc(dateHm(nextAt))}` : ''}</span>` : '');
+    // 后台可在“具体”与独立字段里带同一句；只补正文尚未出现的内容，不改原始复制数据。
+    const key = (s) => plain(s).replace(/(^|[。；;\n])\s*(?:具体|进展|下一步)[：:]\s*/g, '$1').replace(/[\s：:，,。；;]/g, '');
+    const shown = [k.text || ''], has = (s) => !!key(s) && shown.some((t) => key(t).includes(key(s)));
+    const detailRest = [progress, next, nextAt && dateHm(nextAt), nextAt && when(nextAt, ctx.now)].filter(Boolean)
+      .reduce((rest, s) => key(s) ? rest.split(key(s)).join('') : rest, key(k.owner_detail));
+    const extra = has(k.owner_detail) || !detailRest ? '' : detail(k, Infinity);
+    if (extra) shown.push(k.owner_detail);
+    const progressText = has(progress) ? '' : progress;
+    if (progressText) shown.push(progressText);
+    const nextText = has(next) ? '' : next;
+    if (nextText) shown.push(nextText);
+    const nextTime = nextAt && !has(dateHm(nextAt)) && !has(when(nextAt, ctx.now)) ? dateHm(nextAt) : '';
+    const updates = isPh(k) ? '' : (progressText ? `<span class="cp-know-progress">${/^(?:进展)[：:]/.test(progressText) ? '' : '进展：'}${esc(plain(progressText))}</span>` : '')
+      + (nextText || nextTime ? `<span class="cp-know-next">${!nextText || /^下一步[：:]/.test(nextText) ? '' : '下一步：'}${esc(plain(nextText))}${nextTime ? `${nextText ? ' · ' : ''}${esc(nextTime)}` : ''}</span>` : '');
     if (k.kind === 'report' && !isPh(k)) {
       const [head, rest] = /旧临时目录回收/.test(k.title || k.text || '') ? ['旧临时目录回收情况，展开看明细', k.text] : firstSentence(k);
-      if (rest) return `<li id="${esc(knowId(k))}" class="is-report${phCls(k)}${actCls(k, ctx)}"${itemAttr(k)}>${tagOf('report')}<details class="cp-know-fold" id="${esc(knowId(k))}-open"><summary>${esc(plain(head))}${ownTag(k)}</summary><div class="cp-know-sub"><p>${esc(plain(rest))}</p>${detail(k)}${tail}</div></details>${updates}${ownerBox(k, ctx, { only: ['ack'] })}</li>`;
+      if (rest) return `<li id="${esc(knowId(k))}" class="is-report${phCls(k)}${actCls(k, ctx)}"${itemAttr(k)}>${tagOf('report')}<details class="cp-know-fold" id="${esc(knowId(k))}-open"><summary>${esc(plain(head))}${ownTag(k)}</summary><div class="cp-know-sub"><p>${esc(plain(rest))}</p>${extra}${tail}</div></details>${updates}${ownerBox(k, ctx, { only: ['ack'] })}</li>`;
     }
     // 标签已经写了“刚做完”，正文开头同样的“刚做完：”不再重复
     const text = isPh(k) ? k.title || PRIVATE_TITLE : k.kind === 'just_completed' ? plain(k.text).replace(/^\s*刚做完[：:]\s*/, '') : plain(k.text);
-    return `<li id="${esc(knowId(k))}" class="is-${esc(k.kind || 'other')}${phCls(k)}${actCls(k, ctx)}"${itemAttr(k)}>${tagOf(k.kind)}<span class="cp-know-text">${esc(text)}${ownTag(k)}${detail(k)}${tail}${updates}</span>${ownerBox(k, ctx, { only: ['ack'] })}</li>`;
+    return `<li id="${esc(knowId(k))}" class="is-${esc(k.kind || 'other')}${phCls(k)}${actCls(k, ctx)}"${itemAttr(k)}>${tagOf(k.kind)}<span class="cp-know-text">${esc(text)}${ownTag(k)}${extra}${tail}${updates}</span>${ownerBox(k, ctx, { only: ['ack'] })}</li>`;
   };
   const rows = all.map((k, i) => ({ k, i, r: KNOW_RANK[k.kind] ?? 1 })).sort((a, b) => a.r - b.r || a.i - b.i).map(({ k }) => row(k));
   const folded = old.length ? `<details class="cp-know-old" id="know-old"><summary>最近收起的 ${old.length} 条</summary><ul class="cp-know-list">${old.map(row).join('')}</ul></details>` : '';

@@ -61,6 +61,49 @@ test('你得知道完整显示进展、下一步和时间；只给知道了与�
   assert.doesNotMatch(pub, /data-copy|data-act/);
 });
 
+test('空待办保留刷新挂载点；有事和读不到时仍提供内容', () => {
+  const empty = view({ need_you: [] });
+  assert.equal(REGIONS['need-you'](empty, ctx), '');
+  assert.match(page(empty, ctx), /<div class="cp-need" id="need-you" data-cp="need-you"><\/div>/);
+  const item = { id: 'later', title: '示例后来出现的事', owner_actions: ['snooze'] };
+  assert.match(REGIONS['need-you'](view({ need_you: [item] }), ctx), /示例后来出现的事/);
+  assert.equal(REGIONS['need-you'](view({ need_you: [item] }), { ...ctx, act: { state: new Map([['later', { action: 'snooze', phase: 'done' }]]) } }), '');
+  assert.match(REGIONS['need-you'](normalize({}), ctx), /还没读到/);
+});
+
+test('你得知道的正文、具体、进展与下一步重复时每句只显示一次，不丢补充和时间', () => {
+  const progress = '已排除示例配置问题，继续检查连接记录。', next = '对照下一次断开的记录。';
+  const count = (text, part) => text.split(part).length - 1;
+  for (const kind of ['repairing', 'report', 'new_feature', 'just_completed']) {
+    const item = { id: 'dedup', kind, text: '示例连接仍在核对，完整结论稍后给出。', owner_detail: `进展：${progress}下一步：${next}`,
+      progress: { text: progress }, next_step: next, next_at: '2026-10-30T11:30:00+08:00' };
+    const html = REGIONS.home(view({ must_know: { state: 'ok', items: [item] } }), ctx), text = visible(html);
+    assert.equal(count(text, progress), 1, kind + ' progress');
+    assert.equal(count(text, next), 1, kind + ' next');
+    for (const label of ['进展：', '下一步：']) assert.equal(count(text, label), 1, kind + ' ' + label);
+    assert.match(text, /10月30日 11:30/);
+    const inBody = { ...item, text: `示例连接正在核对。进展：${progress}下一步：${next}10月30日 11:30`, owner_detail: `进展：${progress}`, progress: '进展：' + progress };
+    const bodyHtml = REGIONS.home(view({ must_know: { state: 'ok', items: [inBody] } }), ctx), bodyText = visible(bodyHtml);
+    for (const part of [progress, next, '10月30日 11:30']) assert.equal(count(bodyText, part), 1, kind + ' ' + part);
+  }
+  const long = '示例连接记录需要逐项核对，'.repeat(22) + '末尾结论要完整保留。';
+  const full = REGIONS.home(view({ must_know: { state: 'ok', items: [{ id: 'long', kind: 'repairing', text: '示例主句。',
+    owner_detail: '进展：' + long, latest_progress: long, next_step: next }] } }), ctx);
+  assert.equal(count(visible(full), long), 1);
+  assert.match(visible(full), /下一步：对照下一次断开的记录。/);
+  const unique = REGIONS.home(view({ must_know: { state: 'ok', items: [{ id: 'unique', kind: 'repairing', text: '示例主句。',
+    owner_detail: '独有的补充信息。', progress, next_step: next }] } }), ctx);
+  for (const part of ['独有的补充信息。', progress, next]) assert.equal(count(visible(unique), part), 1);
+});
+
+test('状态格按整词标记且保留原始文字和转义', () => {
+  const v = view({ overview: { signals: [{ id: 'backup', level: 'watch' }], reasons: [{ section: 'backup_cloud', text: '开发配置备份失败 <示例>', delta: -10 }] } });
+  const html = REGIONS['overview-tri'](v, ctx);
+  assert.match(html, /<span class="cp-status-word">失败<\/span>/);
+  assert.match(visible(html), /开发配置备份失败 &lt;示例&gt;/);
+  assert.doesNotMatch(html, /<示例>/);
+});
+
 test('旧临时目录回收一行说明，原数字和路径保存在详情及复制', () => {
   const text = '旧临时目录回收：示例清了 12 项，保留 3 项；明细在 E:\\示例\\回收.json。';
   const html = REGIONS.home(view({ must_know: { state: 'ok', items: [{ id: 'cleanup', kind: 'report', text }] } }), ctx);
@@ -77,12 +120,12 @@ test('整体健康分说明四个维度；备份失败第一行与顶部状态�
   assert.match(html, /cp-score-value hub-field-value">54<\/b><small>\/100/);
   assert.match(html, /<progress class="cp-score-meter" max="100" value="54"/);
   assert.match(html, /算上你的事、AI 的事、电脑和自动任务/);
-  assert.match(html, /cp-tri-status">[^]*?示例开发配置备份失败/);
+  assert.match(visible(html), /示例开发配置备份失败/);
   assert.match(backup, /id="backups"><\/span><p class="cp-line cp-backup-current">示例开发配置备份失败/);
   assert.doesNotMatch(REGIONS['overview-tri'](view(), ctx), /<progress/);
   const normal = REGIONS['overview-tri'](view({ overview: { signals: [{ id: 'computer', level: 'ok' }, { id: 'backup', level: 'ok' }] } }), ctx);
   assert.doesNotMatch(normal, /cp-tri-short/);
-  assert.match(normal, /cp-tri-status">[^]*?正常<\/b>/);
+  assert.match(normal, /cp-tri-status">[^]*?<span class="cp-status-word">正常<\/span><\/b>/);
 });
 
 test('跨日旧动态集中归位；读不到与数据停了分开，只显示一次同一时间', () => {

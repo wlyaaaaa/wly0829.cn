@@ -483,7 +483,7 @@ ul.cp-know-sub > li { display: grid; grid-template-columns: minmax(0, 1fr); gap:
   .cp-know-sub { padding: 6px 10px; }
   .cp-know-text { font-size: 14px; }
   .cp-security-wrap { margin-top: 0; padding: 0; border: 0; background: none; }
-  .cp-security-title, .cp-sec-item { display: none !important; }
+  .cp-sec-item { display: none !important; }
   .cp-security { display: block; }
   .cp-sec-line { display: flex; align-items: center; gap: 0; padding: 8px 12px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fff; font-size: 13px; line-height: 1.45; color: var(--cp-ink) !important; text-decoration: none; }
   .cp-sec-line > span:not(.cp-dot) { flex: 1; min-width: 0; }
@@ -1109,6 +1109,7 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 .cp-home { grid-area: home; display: grid; gap: 16px; min-width: 0; container-type: inline-size; }
 .cp-facts-wall { display: grid; grid-area: facts; grid-template-columns: minmax(0, 1fr); gap: 0; min-width: 0; margin: 0; }
 .cp-workspace > .cp-need, .cp-home > :is(.cp-run, .cp-know), .cp-facts-wall > .cp-section { padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--card-shadow); }
+.cp-workspace > .cp-need:empty { display: none; }
 .cp-facts-wall > .cp-section { min-width: 0; margin-bottom: 16px; }
 .cp-block-heading { display: block; position: relative; min-height: 0; padding: 0 0 12px; margin: 0 0 12px; }
 .cp-block-heading .hub-strip-text { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; }
@@ -1153,7 +1154,8 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 .cp-status .cp-tri-cell { order: 1; min-width: 0; }
 .cp-page .cp-status .cp-tri-cell a { min-height: 90px; padding: 12px; border: 2px solid var(--line); background: var(--card-bg); }
 .cp-status .cp-tri-label { font-size: 13px; color: var(--text); }
-.cp-status .cp-tri-status { font-size: 16px; color: var(--text); }
+.cp-status .cp-tri-status { font-size: 16px; color: var(--text); overflow-wrap: normal; }
+.cp-status .cp-status-word { display: inline-block; white-space: nowrap; }
 .cp-page .cp-tri-status .cp-dot { display: inline-block; }
 .cp-status :is(.cp-tri-short, .cp-tri-who, .cp-tri-why, .cp-tri-note) { display: none; }
 .cp-status > .cp-security-wrap { grid-area: auto; grid-column: auto; display: block; order: 2; margin: 0; padding: 12px; min-width: 0; border: 2px solid var(--line); }
