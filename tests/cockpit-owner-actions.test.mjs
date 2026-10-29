@@ -172,6 +172,40 @@ test('重读先确认后端消失再重现才清本地收起，等待写回时�
   assert.equal(r.a.state.has('n1'), false);
 });
 
+test('提醒迁入不急事项后可见，到期回来不沿用旧隐藏且可以再次提醒', async () => {
+  const r = rig(() => ok());
+  await r.submit({ id: 'n1', title: '示例事项' }, 'snooze', { until: 'tomorrow_9' });
+  r.reconcile(['n1'], { need_you: [card], deferred: [card] });
+  assert.equal(actCls(card, ctx(r.a)), ' is-hidden-action');
+  r.reconcile(['n1'], { need_you: [], deferred: [card] });
+  assert.equal(r.a.state.get('n1').movedToDeferred, true);
+  assert.equal(actCls(card, ctx(r.a)), '');
+  assert.match(actionToast(ctx(r.a)), /好，明早 9 点再提醒你.*data-undo="receipt-1" data-undo-item="n1"/);
+  r.reconcile(['n1'], { need_you: [card], deferred: [] });
+  assert.equal(actCls(card, ctx(r.a)), '');
+  await r.submit({ id: 'n1', title: '示例事项' }, 'snooze', { until: 'three_days' });
+  assert.equal(r.calls.length, 2);
+  assert.equal(r.calls[1][1].until, 'three_days');
+  assert.equal(actCls(card, ctx(r.a)), ' is-hidden-action');
+});
+
+test('提醒迁移后短回执仍能撤回，异步写回失败也仍恢复错误', async () => {
+  const r = rig(() => ok());
+  await r.submit({ id: 'n1', title: '示例事项' }, 'snooze', { until: 'tomorrow_9' });
+  r.reconcile(['n1'], { need_you: [], deferred: [card] });
+  await r.undo('receipt-1', 'n1');
+  assert.deepEqual(r.calls[1], ['/fake/actions/receipt-1/undo', {}]);
+  assert.equal(r.a.state.get('n1').phase, 'undone');
+  assert.match(actionToast(ctx(r.a)), /已撤回「示例事项」/);
+  await r.submit({ id: 'n1', title: '示例事项' }, 'snooze', { until: 'three_days' });
+  r.reconcile(['n1'], { need_you: [], deferred: [card] });
+  assert.equal(r.a.state.get('n1').movedToDeferred, true);
+  r.reconcile(['n1'], { need_you: [], deferred: [card], owner_recent: [{ id: 'receipt-1', error_message: '示例提醒写回失败' }] });
+  assert.equal(r.a.state.get('n1').phase, 'error');
+  assert.equal(actCls(card, ctx(r.a)), '');
+  assert.match(ownerBox(card, ctx(r.a)), /没存上，再点一次：示例提醒写回失败/);
+});
+
 test('最近记录用人话，error_message原样展示，即使状态错误地说applied也不装成功', () => {
   const html = recentBlock({ owner_recent: [
     { id: 'r1', action: 'ack', status: 'applied', title: '示例甲', can_undo: true },

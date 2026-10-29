@@ -14,7 +14,7 @@ const uiOf = (ctx, x) => ctx?.act?.ui?.get(x.id) || {};
 export const actCls = (x, ctx) => {
   if (ctx.viewer?.kind !== 'owner') return '';
   const s = stOf(ctx, x);
-  return s && ACTIONS.includes(s.action) && ['sending', 'done', 'undoing'].includes(s.phase) && !s.undoRequested ? ' is-hidden-action' : '';
+  return s && ACTIONS.includes(s.action) && ['sending', 'done', 'undoing'].includes(s.phase) && !s.undoRequested && !(s.action === 'snooze' && s.movedToDeferred) ? ' is-hidden-action' : '';
 };
 
 // 选项是普通说明；保留每项解释和第一条 AI 建议，独立于 owner_actions。

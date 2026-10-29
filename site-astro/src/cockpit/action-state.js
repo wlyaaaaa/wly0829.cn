@@ -32,7 +32,9 @@ export function createActionController({ act, post, url, newKey, paint, load, re
     paint();
   }
   async function submit(item, action, extra = {}) {
-    if (!ACTIONS.includes(action) || !item.id || ['sending', 'undoing', 'done'].includes(act.state.get(item.id)?.phase)) return;
+    const previous = act.state.get(item.id);
+    const settledSnooze = previous?.action === 'snooze' && previous.movedToDeferred;
+    if (!ACTIONS.includes(action) || !item.id || ['sending', 'undoing'].includes(previous?.phase) || (previous?.phase === 'done' && !settledSnooze)) return;
     const body = { item_id: item.id, action, idempotency_key: newKey() };
     if (action === 'snooze') body.until = extra.until;
     if (item.version !== undefined) body.item_version = item.version;
@@ -54,6 +56,8 @@ export function createActionController({ act, post, url, newKey, paint, load, re
   }
   function reconcile(ids, snapshot = {}) {
     const current = new Set(ids);
+    const needYou = new Set((Array.isArray(snapshot.need_you) ? snapshot.need_you : []).map((x) => x.id));
+    const deferred = new Set((Array.isArray(snapshot.deferred) ? snapshot.deferred : []).map((x) => x.id));
     const receipts = Array.isArray(snapshot.owner_recent) ? snapshot.owner_recent : [];
     const failedItems = Array.isArray(snapshot.owner_actions_worker?.failed_items) ? snapshot.owner_actions_worker.failed_items : [];
     for (const [id, s] of act.state) if (s.phase === 'done') {
@@ -63,7 +67,9 @@ export function createActionController({ act, post, url, newKey, paint, load, re
       const worker = failedItems.find((r) => r && r.title === s.sourceTitle && r.action === s.action && fresh(r.at) && typeof r.message === 'string' && r.message);
       const reason = receipt?.error_message || worker?.message;
       if (reason) { act.state.set(id, { ...s, phase: 'error', undoRequested: false, error: actionError({ status: 500, j: { message: reason } }), toastUntil: 0 }); continue; }
-      if (!current.has(id)) s.observedGone = true;
+      // 提醒已经移入不急事项：保留短回执供撤回，但不再沿用待办上的隐藏状态。
+      if (s.action === 'snooze' && !needYou.has(id) && deferred.has(id)) { s.movedToDeferred = true; s.observedGone = false; }
+      else if (!current.has(id)) s.observedGone = true;
       else if (s.observedGone) act.state.delete(id);
     }
   }
