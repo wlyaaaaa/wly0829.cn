@@ -220,9 +220,9 @@ def sls_address():
                 return addresses[0]
         except (OSError, ValueError):
             if attempt == 2:
-                raise RuntimeError("无法解析 SLS 服务地址（DNS 查询失败）；未将连接失败当作零访客") from None
+                raise CloudCommandError("DNS 解析失败", "无法解析 SLS 服务地址；未将连接失败当作零访客") from None
             time.sleep(attempt + 1)
-    raise RuntimeError("无法解析 SLS 服务地址；未将连接失败当作零访客")
+    raise CloudCommandError("DNS 解析失败", "无法解析 SLS 服务地址；未将连接失败当作零访客")
 
 
 def cli_error(result):
@@ -250,20 +250,27 @@ class CloudCommandError(RuntimeError):
 def cli_run(command, *, timeout=None, attempts=None):
     relay, env = None, None
     is_sls = command[1] == "sls"
-    if is_sls and any(address[4][0].startswith(("198.18.", "198.19."))
-                                  for address in socket.getaddrinfo("cn-shanghai.log.aliyuncs.com", 443)):
-        address = sls_address()
-        relay = ThreadingHTTPServer(("127.0.0.1", 0), SlsTunnel)
-        relay.sls_address = address
-        Thread(target=relay.serve_forever, daemon=True).start()
-        # OAuth refresh must keep its normal path; this relay accepts SLS only.
-        env = {**os.environ, "NO_PROXY": "oauth.aliyun.com,oauth.alibabacloud.com,signin.aliyun.com,signin.alibabacloud.com",
-               "HTTPS_PROXY": f"http://127.0.0.1:{relay.server_port}"}
+    prepared = False
     try:
         attempts = attempts if attempts is not None else (3 if is_sls else 1)
         for attempt in range(attempts):
             try:
+                if is_sls and not prepared:
+                    if any(address[4][0].startswith(("198.18.", "198.19."))
+                           for address in socket.getaddrinfo("cn-shanghai.log.aliyuncs.com", 443)):
+                        address = sls_address()
+                        relay = ThreadingHTTPServer(("127.0.0.1", 0), SlsTunnel)
+                        relay.sls_address = address
+                        Thread(target=relay.serve_forever, daemon=True).start()
+                        # OAuth refresh must keep its normal path; this relay accepts SLS only.
+                        env = {**os.environ, "NO_PROXY": "oauth.aliyun.com,oauth.alibabacloud.com,signin.aliyun.com,signin.alibabacloud.com",
+                               "HTTPS_PROXY": f"http://127.0.0.1:{relay.server_port}"}
+                    prepared = True
                 result = subprocess.run(command, capture_output=True, timeout=timeout if timeout is not None else (60 if is_sls else 180), env=env)
+            except socket.gaierror:
+                category = "DNS 解析失败"
+            except CloudCommandError as error:
+                category = error.category
             except subprocess.TimeoutExpired:
                 category = "连接超时"
             else:
@@ -733,7 +740,21 @@ def main():
             output["deep_read"]["checked_at"] = checked_at.isoformat()
         print(json.dumps(output["deep_read"] if args.deep_read else output, ensure_ascii=False, indent=2, default=lambda value: value.isoformat()))
     except (OSError, ValueError, RuntimeError, struct.error, subprocess.TimeoutExpired) as error:
-        print(json.dumps({"status": "error", "reason": str(error)}, ensure_ascii=False))
+        if isinstance(error, CloudCommandError):
+            code = {"连接超时": "query_connection_timeout", "DNS 解析失败": "query_dns_failed",
+                    "连接中断": "query_connection_interrupted", "代理拒绝": "query_proxy_refused",
+                    "鉴权失败": "query_auth_failed", "请求参数无效": "query_invalid_request",
+                    "CLI 初始化失败": "query_cli_init_failed"}.get(error.category, "query_cli_failed")
+        elif isinstance(error, OSError):
+            code = "query_io_error"
+        elif str(error) == "SLS 查询未完成；未将部分日志当作完整结果":
+            code = "query_incomplete"
+        elif str(error) in ("Unknown SLS response schema", "Incomplete SLS page", "Invalid SLS access-log schema"):
+            code = "query_invalid_response"
+        else:
+            code = "query_failed"
+        print(json.dumps({"status": "error", "error_code": code,
+                          "reason": "网站访客查询失败；未将失败当作零访客"}, ensure_ascii=False))
         return 1
     return 0
 if __name__ == "__main__":

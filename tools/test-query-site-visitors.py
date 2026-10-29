@@ -264,6 +264,53 @@ class VisitorTests(unittest.TestCase):
                                      (int(start.timestamp()), int(end.timestamp()), 0))
                     self.assertEqual(call.kwargs["timeout"], 25)
 
+    def test_deep_read_dns_setup_uses_shared_attempt_budget(self):
+        args = SimpleNamespace(aliyun="aliyun", profile="website-images", sls_project="oss-log-test",
+                               sls_logstore="oss-log-store", deep_read=True)
+        start = datetime(2026, 10, 12, 10, tzinfo=query.TZ)
+        complete = subprocess.CompletedProcess([], 0, b'{"meta":{"count":0,"progress":"Complete"},"data":[]}', b"")
+        failure = query.socket.gaierror("secret-value")
+        for responses, succeeds in (([failure, []], True), ([failure, failure], False)):
+            with self.subTest(succeeds=succeeds), patch.object(query.socket, "getaddrinfo", side_effect=responses) as dns, patch.object(query.subprocess, "run", return_value=complete) as run, patch.object(query.time, "sleep") as sleep:
+                if succeeds:
+                    self.assertEqual(query.sls_logs(args, start, start + timedelta(hours=1)), [])
+                    body = json.loads(run.call_args.args[0][-1])
+                    self.assertEqual((body["from"], body["to"], body["offset"]),
+                                     (int(start.timestamp()), int((start + timedelta(hours=1)).timestamp()), 0))
+                    self.assertEqual(run.call_args.kwargs["timeout"], 25)
+                else:
+                    with self.assertRaises(query.CloudCommandError) as raised:
+                        query.sls_logs(args, start, start + timedelta(hours=1))
+                    self.assertEqual(raised.exception.category, "DNS 解析失败")
+                    self.assertNotIn("secret-value", str(raised.exception))
+                self.assertEqual(dns.call_count, 2)
+                self.assertEqual(run.call_count, int(succeeds))
+                self.assertEqual([call.args for call in sleep.call_args_list], [(1,)])
+
+    def test_dns_failure_classification_and_normal_retry_budget(self):
+        good = subprocess.CompletedProcess([], 0, b"{}", b"")
+        with patch.object(query.socket, "getaddrinfo", side_effect=[query.socket.gaierror("secret-value"), query.socket.gaierror("secret-value"), []]) as dns, patch.object(query.subprocess, "run", return_value=good) as run, patch.object(query.time, "sleep") as sleep:
+            self.assertEqual(query.cli_run(["aliyun", "sls", "GetLogsV2"]), "{}")
+        self.assertEqual(dns.call_count, 3)
+        run.assert_called_once()
+        self.assertEqual([call.args for call in sleep.call_args_list], [(1,), (2,)])
+        query.sls_address.cache_clear()
+        with patch.object(query, "urlopen", side_effect=OSError("secret-value")), patch.object(query.time, "sleep"):
+            with self.assertRaises(query.CloudCommandError) as raised:
+                query.sls_address()
+        self.assertEqual(raised.exception.category, "DNS 解析失败")
+        self.assertNotIn("secret-value", str(raised.exception))
+        relay = Mock(server_port=12345)
+        with patch.object(query.socket, "getaddrinfo", return_value=[(0, 0, 0, "", ("198.18.0.1", 443))]), patch.object(query, "sls_address", side_effect=[raised.exception, "203.0.113.1"]) as resolve, patch.object(query, "ThreadingHTTPServer", return_value=relay), patch.object(query, "Thread"), patch.object(query.subprocess, "run", return_value=good), patch.object(query.time, "sleep") as sleep:
+            self.assertEqual(query.cli_run(["aliyun", "sls", "GetLogsV2"]), "{}")
+        self.assertEqual(resolve.call_count, 2)
+        sleep.assert_called_once_with(1)
+        relay.shutdown.assert_called_once()
+        relay.server_close.assert_called_once()
+        with patch.object(query.socket, "getaddrinfo") as dns, patch.object(query.subprocess, "run", return_value=good):
+            self.assertEqual(query.cli_run(["aliyun", "oss", "ls"]), "{}")
+        dns.assert_not_called()
+
     def test_sls_relay_preserves_oauth_and_retries_network_failures(self):
         relay = Mock(server_port=12345)
         failed = SimpleNamespace(returncode=2, stdout=b"", stderr=b"request failed: EOF")
@@ -296,6 +343,23 @@ class VisitorTests(unittest.TestCase):
         result = json.loads(output.call_args.args[0])
         self.assertEqual(result["status"], "error")
         self.assertNotIn("total", result)
+
+    def test_main_failure_codes_are_fixed_and_never_echo_errors(self):
+        categories = {"连接超时": "query_connection_timeout", "DNS 解析失败": "query_dns_failed",
+                      "连接中断": "query_connection_interrupted", "代理拒绝": "query_proxy_refused",
+                      "鉴权失败": "query_auth_failed", "请求参数无效": "query_invalid_request",
+                      "CLI 初始化失败": "query_cli_init_failed", "CLI 调用失败": "query_cli_failed"}
+        cases = [(query.CloudCommandError(category, "secret-value"), code) for category, code in categories.items()]
+        cases += [(RuntimeError("SLS 查询未完成；未将部分日志当作完整结果"), "query_incomplete"),
+                  (ValueError("Unknown SLS response schema"), "query_invalid_response"),
+                  (OSError("secret-value"), "query_io_error"), (RuntimeError("secret-value"), "query_failed")]
+        for error, code in cases:
+            with self.subTest(code=code), patch.object(sys, "argv", [query.__file__, "--deep-read", "--since", "2026-10-12T10:00:00+08:00"]), patch.object(query, "sync_cloud", side_effect=error), patch("builtins.print") as output:
+                self.assertEqual(query.main(), 1)
+                result = json.loads(output.call_args.args[0])
+                self.assertEqual((result["status"], result["error_code"]), ("error", code))
+                self.assertNotIn("secret-value", output.call_args.args[0])
+                self.assertNotIn("visitors", result)
 
     def test_leave_dedup_speed_apps_cohorts_possible_sources_and_no_ips(self):
         location = {"province": "广东省", "city": "深圳市", "operator": "电信", "organization": "AS123 Example Network"}
