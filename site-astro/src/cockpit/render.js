@@ -312,7 +312,8 @@ const cardTail = (og) => (og.includes('is-phone') ? `<p class="cp-open-tail">${o
 const isNewWait = (x) => x?.card_type === 'ai_wait' && !!(x.conversation_title || x.progress || x.asked_at || (vagueWait(x) && x.open));
 function waitCard(x, ctx) {
   const at = x.asked_at ? when(x.asked_at, ctx.now) : '';
-  const src = x.conversation_title ? `「${x.conversation_title}」那个对话${at ? ` · ${at} 问的` : ''}` : at ? `${at} 问的` : '';
+  // 后端没给对话名的：照实说没写是哪个对话（钩子以后会补上），不让人以为是哪个都行
+  const src = x.conversation_title ? `「${x.conversation_title}」那个对话${at ? ` · ${at} 问的` : ''}` : vagueWait(x) ? (at ? `${at} 问的` : '') : `一个 AI 对话（没写是哪个）${at ? ` · ${at} 问的` : ''}`;
   const cons = isBlank(x.consequence) ? '' : `<p class="cp-own-s"><b>不回会怎样</b>${esc(plain(String(x.consequence).trim()))}</p>`;
   const acts = hasActs(x);
   // 没有按钮（公开版、旧数据）：选项照样列出来，只是字
@@ -478,7 +479,8 @@ export function needCards(v, ctx) {
   const wrap = (i, k) => {
     const x = i.x, card = askCard(x, i.r, cx);
     if (!order.includes(i)) return `<div class="cp-q is-open">${card}</div>`;
-    const open = x.id === openId;
+    // 能收成一行的只有一两件：都展开（电脑上并排），不收成一行一件
+    const open = x.id === openId || order.length <= 2;
     return `<div class="cp-q${open ? ' is-open' : ''}${actCls(x, ctx)}" data-q="${esc(x.id)}">${qRow(x, i.r, ctx, k, open)}${card}</div>`;
   };
   const few = all.length <= 2 ? '<span class="cp-q-few" hidden></span>' : '';

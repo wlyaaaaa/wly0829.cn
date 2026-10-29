@@ -239,3 +239,11 @@ test('看过截图后的四处：“具体：”不和“进展：”叠；AI �
   assert.doesNotMatch(need, /有一个 AI 对话在等你回复/);
   assert.match(REGIONS['need-you'](v(old()), ctx(acts())), /有个对话在等你回话，但它没写问题/);
 });
+
+test('线上真数据自查：要你做的只有一两件时都展开；等你回卡没写是哪个对话时照实说', () => {
+  const two = REGIONS['need-you'](normalize(base({ need_you: [wait('w1', { conversation_title: null }), { id: 't1', card_type: 'task', title: '示例动手', ask_kind: 'action', owner_actions: ['done'] }] })), ctx(acts()));
+  assert.equal((two.match(/<div class="cp-q is-open[^"]*" data-q=/g) || []).length, 2);
+  assert.match(two, /<p class="cp-wait-src">一个 AI 对话（没写是哪个） · [^<]+ 问的<\/p>/);
+  // 三件以上照旧只展开一件
+  assert.equal((REGIONS['need-you'](normalize(base({ need_you: queue() })), ctx(acts())).match(/<div class="cp-q is-open[^"]*" data-q=/g) || []).length, 1);
+});

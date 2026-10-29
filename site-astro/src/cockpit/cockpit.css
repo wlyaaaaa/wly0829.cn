@@ -990,7 +990,7 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 
 @media (min-width: 1200px) {
   /* 键盘移到的那件：一圈绿边；“?”里的快捷键两列 */
-  .cp-need[data-kbd] .cp-q.is-open > .cp-ask { box-shadow: 0 0 0 2px #2e9d5b; }
+  .cp-need[data-kbd] .cp-q.is-kbd > .cp-ask { box-shadow: 0 0 0 2px #2e9d5b; }
   .cp-keys { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 4px 0 6px; }
   .cp-keys dt { white-space: nowrap; }
   .cp-keys dd { margin: 0; }
@@ -1059,4 +1059,20 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
   .cp-ledger-toc { display: flex; flex-direction: column; gap: 2px; grid-column: 1 !important; grid-row: 1 / span 12; align-self: start; position: sticky; top: 132px; margin-top: 12px; padding: 4px 0 4px 12px; border-left: 3px solid #d6ebdc; }
   .cp-ledger-toc a { padding: 4px 0; font-size: 14.5px; color: var(--cp-title); text-decoration: none; }
   .cp-ledger-toc a:hover { text-decoration: underline; text-underline-offset: 3px; }
+}
+
+/* ===== 线上真数据自查（10 月 30 日）===== */
+/* 你得知道：每条下面四个大按钮叠五遍太长。“知道了”留成按钮，“我没看懂 · 回一句话”写成同一行的小字链接，“交给：Claude ▾”缩成小字；照样能点、能撤回 */
+.cp-know .cp-oa-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; }
+.cp-know .cp-oa-bar > .cp-btn { min-height: 30px; padding: 2px 14px; font-size: 13.5px; }
+.cp-know .cp-oa-bar > :is([data-act="unclear"], [data-act="note"], [data-act="seen"]) { min-height: 30px; padding: 2px 0; border: 0; border-radius: 0; background: none; font-size: 13.5px; color: var(--cp-title); text-decoration: underline; text-decoration-color: #b9dcc5; text-underline-offset: 3px; }
+.cp-know .cp-oa-bar > :is([data-act="unclear"], [data-act="note"], [data-act="seen"]):hover { background: none; color: var(--cp-ink); }
+.cp-know .cp-oa-exec { min-height: 30px; padding: 0 2px; border: 0; background: none; font-size: 12.5px; color: var(--cp-soft); }
+@media (max-width: 767.98px) {
+  .cp-know .cp-oa .cp-btn, .cp-know .cp-oa-exec { min-height: 34px; }
+}
+@media (min-width: 1200px) {
+  /* 要你做的只有一两件：两件都展开、并排（一件就占满），不收成一行一件 */
+  .cp-need:has(> .cp-q-few) { display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); columns: auto; gap: 12px 16px; align-items: start; }
+  .cp-need:has(> .cp-q-few) .cp-q { margin: 0; }
 }

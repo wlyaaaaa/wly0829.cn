@@ -322,6 +322,8 @@ function syncWide() {
     if (m) need.dataset.qmode = m; else delete need.dataset.qmode;
     const eff = m || (WIDE.matches ? 'all' : 'rows');
     for (const b of need.querySelectorAll('[data-q-mode]')) b.setAttribute('aria-pressed', String(b.dataset.qMode === eff));
+    // 键盘移到的那件画一圈绿边（只有一两件时都展开着，绿边只给当前那件）
+    if ('kbd' in need.dataset) { const cur = curQ(); for (const q of need.querySelectorAll('.cp-q[data-q]')) q.classList.toggle('is-kbd', q === cur); }
   }
   if (WIDE.matches && !runTouched) document.getElementById('run-all')?.setAttribute('open', '');
 }
@@ -416,11 +418,14 @@ document.addEventListener('click', (e) => {
 const DESK = matchMedia('(min-width: 1200px)');
 const typing = (el) => !!el?.closest?.('input, textarea, select, [contenteditable=""], [contenteditable="true"]');
 const qIds = () => [...document.querySelectorAll('#need-you .cp-q[data-q]')].map((n) => n.dataset.q);
-const curQ = () => document.querySelector('#need-you .cp-q.is-open[data-q]');
+// 键盘当前在哪一件：j/k、数字移过去的那件；没移过就是展开着的第一件（只有一两件时都展开着）
+let kbdId = '';
+const curQ = () => (kbdId && document.querySelector(`#need-you .cp-q[data-q="${CSS.escape(kbdId)}"]`)) || document.querySelector('#need-you .cp-q.is-open[data-q]');
 const live = (root, sel) => [...root.querySelectorAll(sel)].find((b) => b.getClientRects().length && !b.disabled) || null;
 function kbdGo(id) {
   const need = document.getElementById('need-you');
   need.dataset.kbd = '';
+  kbdId = id;
   openQ(id);
   const q = document.querySelector(`#need-you .cp-q[data-q="${CSS.escape(id)}"]`);
   const row = q?.querySelector('.cp-q-row');
