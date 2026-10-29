@@ -655,14 +655,14 @@ ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
 @media (min-width: 1100px) { .cp-folds { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 14px; align-items: start; } .cp-folds > .cp-fold[open] { grid-column: 1 / -1; } }
 .cp-river-fold .cp-river { margin-top: 10px; }
 
-/* 正常的事实卡只占一行：灯、名字、一句话（放不下就省略，点一下或悬停看全） */
+/* 正常的事实不画成卡，只写一行：灯、名字、一句话；句子长了照样折行，整句看得到，不省略 */
 .cp-facts { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 0; }
 .cp-fact { display: grid; grid-template-columns: auto auto minmax(0, 1fr); align-items: baseline; gap: 0 8px; padding: 6px 2px; border-bottom: 1px dashed #e1efe5; font-size: 15px; outline: none; }
 .cp-fact:last-child { border-bottom: 0; }
 .cp-fact .cp-dot { margin-right: 0; }
 .cp-fact b { font-weight: 700; white-space: nowrap; }
-.cp-fact span:last-child { min-width: 0; color: var(--cp-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cp-fact:focus span:last-child, .cp-fact:hover span:last-child { white-space: normal; overflow-wrap: anywhere; color: var(--cp-ink); }
+.cp-fact span:last-child { min-width: 0; color: var(--cp-soft); overflow-wrap: anywhere; }
+.cp-fact:focus span:last-child, .cp-fact:hover span:last-child { color: var(--cp-ink); }
 @media (min-width: 1100px) { .cp-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 28px; } }
 .cp-grid + .cp-facts { margin-top: 10px; }
 .cp-charts { font-size: 14px; color: var(--cp-soft); overflow-wrap: anywhere; }
@@ -729,7 +729,7 @@ ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
 .cp-fact.is-fold > details > summary::-webkit-details-marker { display: none; }
 .cp-fact.is-fold > details > summary::after { content: "›"; font-weight: 700; color: var(--cp-title); transition: transform .15s; }
 .cp-fact.is-fold > details[open] > summary::after { transform: rotate(90deg); }
-.cp-fact.is-fold > details > summary span { min-width: 0; color: var(--cp-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cp-fact.is-fold > details > summary span { min-width: 0; color: var(--cp-soft); overflow-wrap: anywhere; }
 .cp-fact.is-fold > details > .cp-card { margin: 2px 0 8px; }
 .cp-fold .cp-proj-list { margin-top: 6px; }
 /* AI 的账本里每行只有“回一句话”：按钮放在这一行右边、小一号，不另占一行；展开写字或交出去以后占整行 */
