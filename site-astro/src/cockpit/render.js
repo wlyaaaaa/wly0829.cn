@@ -47,12 +47,15 @@ const phCls = (x) => (isPh(x) ? ' is-private' : '');
 const liCls = (x, ctx) => { const c = ((isPh(x) ? 'is-private' : '') + actCls(x, ctx)).trim(); return c ? ` class="${c}"` : ''; };
 // 每个条目带上自己的编号（data-items），手机通知打开 /cockpit/#<条目编号> 时 client.js 按它找到这一条、滚过去并高亮
 export const itemAttr = (x) => { const ids = [...new Set([x?.id, x?.copy_ai_id].filter((s) => typeof s === 'string' && s.trim()).map((s) => s.trim()))]; return ids.length ? ` data-items="${esc(ids.join(' '))}"` : ''; };
+// 配对过的设备（ctx.paired）首帧还是构建时那份公开的数：先写“你的设备”，免得以为配对掉了
+const pairedWaiting = (v, ctx) => v.viewer?.kind !== 'owner' && ctx.paired === true && ctx.phase === 'snapshot';
+const PAIRED_WAIT = '正在读你的完整版，私人事项稍后出来';
 export function viewerLine(v, ctx = {}) {
-  const n = v.private_count, w = v.viewer;
+  const n = v.private_count, w = v.viewer, waiting = pairedWaiting(v, ctx);
   const note = ctx.notice ? `<span class="cp-viewer-note">${esc(ctx.notice)}</span>` : '';
   const line = w?.kind === 'owner' ? `你的设备 · 全部显示${n > 0 ? `（其中 ${n} 件公网看不到）` : ''}`
-    : n > 0 ? `公开版 · ${n} 件私人事项只在本人设备上显示` : '';
-  return note + (line ? `<span class="cp-viewer-line${w?.kind === 'owner' ? ' is-owner' : ''}">${line}</span>` : '');
+    : waiting ? `你的设备 · ${PAIRED_WAIT}` : n > 0 ? `公开版 · ${n} 件私人事项只在本人设备上显示` : '';
+  return note + (line ? `<span class="cp-viewer-line${w?.kind === 'owner' || waiting ? ' is-owner' : ''}">${line}</span>` : '');
 }
 
 // 卡片颜色只看“要不要你出手”：后端给了 owner_action（do / know / none）或 owner_action_needed 就按它；
@@ -1182,11 +1185,11 @@ export function ledger(v, ctx) {
 }
 // 电脑版顶栏右端：哪台设备、几点读到（窄屏不出，那里看标题下的小字）；配对结果、授权失效这类提示也写在这里
 export function meta(v, ctx) {
-  const w = v.viewer, owner = w?.kind === 'owner', n = v.private_count;
-  const who = owner ? w.device_machine || '你的设备' : w ? '公开版' : '';
+  const w = v.viewer, owner = w?.kind === 'owner', n = v.private_count, waiting = pairedWaiting(v, ctx);
+  const who = owner ? w.device_machine || '你的设备' : waiting ? '你的设备' : w ? '公开版' : '';
   const at = ctx.offline ? `读不到电脑${v.served_at ? `（最后 ${when(v.served_at, ctx.now)}）` : ''}` : !v.served_at ? '还没读到'
     : ctx.phase === 'snapshot' ? `${dateHm(v.served_at)} 的数` : `${when(v.served_at, ctx.now)} 读到`;
-  const sub = owner ? (n > 0 ? `全部显示，其中 ${n} 件公网看不到` : '全部显示') : n > 0 ? `${n} 件私人事项只在本人设备上显示` : '';
+  const sub = owner ? (n > 0 ? `全部显示，其中 ${n} 件公网看不到` : '全部显示') : waiting ? PAIRED_WAIT : n > 0 ? `${n} 件私人事项只在本人设备上显示` : '';
   return (ctx.notice ? `<span class="cp-meta-note">${esc(ctx.notice)}</span>` : '')
     + `<span class="cp-meta-at">${esc([who, at].filter(Boolean).join(' · '))}</span>` + (sub ? `<span class="cp-meta-sub">${esc(sub)}</span>` : '');
 }

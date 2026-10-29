@@ -47,6 +47,9 @@ test('公开版：占位行灰显只剩标题，一个按钮都没有，页头�
     must_know: { state: 'ok', items: [{ id: 'k1', kind: 'report', placeholder: true, owner_only: true, title: PRIVATE_TITLE, text: null }] },
   }));
   assert.equal(viewerLine(v), '<span class="cp-viewer-line">公开版 · 3 件私人事项只在本人设备上显示</span>');
+  // 配对过的设备首帧还是公开的旧数：先写“你的设备”；读回来仍是公开版（钥匙失效）就照实写公开版
+  assert.equal(viewerLine(v, { paired: true, phase: 'snapshot' }), '<span class="cp-viewer-line is-owner">你的设备 · 正在读你的完整版，私人事项稍后出来</span>');
+  assert.equal(viewerLine(v, { paired: true, phase: 'live' }), '<span class="cp-viewer-line">公开版 · 3 件私人事项只在本人设备上显示</span>');
   const need = REGIONS['need-you'](v, ctx) + REGIONS.home(v, ctx) + listOnly(REGIONS.ledger(v, ctx));
   const card = /<article class="cp-ask is-private" id="todo-n1" data-items="n1">.*?<\/article>/.exec(need)?.[0] || '';
   assert.ok(card.includes(PRIVATE_TITLE));

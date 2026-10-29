@@ -103,6 +103,7 @@ test('整页：顶栏（标题、那句话、哪台设备几点读到、↻、?�
   assert.deepEqual([...pos].sort((a, b) => a - b), pos);
   assert.match(REGIONS.meta(v, ctx(acts())), /<span class="cp-meta-at">副驾驶 · 21:39 读到<\/span><span class="cp-meta-sub">全部显示，其中 2 件公网看不到<\/span>/);
   assert.match(REGIONS.meta(normalize(base({ viewer: { kind: 'public' }, private_count: 18 })), ctx()), /公开版 · 21:39 读到.*18 件私人事项只在本人设备上显示/);
+  assert.match(REGIONS.meta(normalize(base({ viewer: { kind: 'public' }, private_count: 18 })), ctx(undefined, { paired: true, phase: 'snapshot' })), /<span class="cp-meta-at">你的设备 · .+ 的数<\/span><span class="cp-meta-sub">正在读你的完整版，私人事项稍后出来<\/span>/);
   assert.match(REGIONS.meta(v, ctx(acts(), { offline: true })), /副驾驶 · 读不到电脑（最后 21:39）/);
 });
 

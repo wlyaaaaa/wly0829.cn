@@ -22,7 +22,7 @@ const say = (text) => { notice = text; paint(); setTimeout(() => { if (notice ==
 // phase：还没收到过任何一次读取结果时是 snapshot（首帧那份构建时的数），之后是 live；读不到另由 offline 说明
 // act：本人设备上点过的处理（state：正在交 / 交出去了 / 出错 / 撤回中；ui：还没交的选择、写的话、交给谁；recent：最近处理里撤回过的）
 const act = { state: new Map(), ui: new Map(), recent: new Map() };
-const ctx = () => ({ now: new Date(), offline, notice, phase: shown ? 'live' : 'snapshot', projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen, act });
+const ctx = () => ({ now: new Date(), offline, notice, phase: shown ? 'live' : 'snapshot', paired: !!store.get(), projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen, act });
 
 async function read(wake) {
   const token = store.get();
