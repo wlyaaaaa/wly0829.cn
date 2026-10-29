@@ -459,8 +459,10 @@ ul.cp-know-sub > li { display: grid; grid-template-columns: minmax(0, 1fr); gap:
   .cp-hero { grid-template-areas: "title" "you" "need" "home" "tri" "sec" "score"; }
   .cp-score { display: none; }
   .cp-you-rest { font-size: 13.5px; }
-  .cp-tri-status, .cp-tri-who, .cp-tri-note { display: none; }
-  .cp-tri-short { display: block; font-size: 15px; line-height: 1.3; }
+  .cp-tri-who, .cp-tri-note { display: none; }
+  /* 那一句（电脑资源需要留意、今天 4 个出错还没恢复）手机上也写，不然不知道 AI 在管什么；下面小字“AI 在管 / 要你看” */
+  .cp-tri-status { display: block; font-size: 14px; line-height: 1.35; overflow-wrap: anywhere; }
+  .cp-tri-short { display: block; font-size: 12.5px; line-height: 1.3; }
   .cp-tri-cell.is-neutral .cp-tri-short { color: #4f6b84; }
   .cp-tri-cell.is-red .cp-tri-short { color: var(--cp-red); }
   .cp-tri-cell.is-yellow .cp-tri-short { color: #9a7409; }
@@ -755,6 +757,7 @@ ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
 /* 卡头一行：对话名和时间，右端“打开”组（后端 open 字段才有；手机上只有“在主驾驶上打开”，放成一行小字） */
 .cp-card-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; margin: 0 0 4px; }
 .cp-card-head > .cp-wait-src { margin: 0; }
+.cp-card-head > .cp-open { margin-left: auto; }
 .cp-open { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .cp-open-a, .cp-open-b { font: inherit; font-size: 13px; line-height: 1.5; padding: 1px 10px; border: 1px solid #c9d9ea; border-radius: 999px; background: #fff; color: #2463a8 !important; text-decoration: none; cursor: pointer; white-space: nowrap; }
 .cp-open-a:hover, .cp-open-b:hover { background: #f1f6fc; }

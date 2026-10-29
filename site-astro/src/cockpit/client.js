@@ -356,7 +356,7 @@ async function openThere(btn) {
   note.setAttribute('role', 'status');
   note.textContent = msg;
   btn.closest('.cp-open')?.after(note);
-  setTimeout(() => note.remove(), 5000);
+  setTimeout(() => note.remove(), msg.length > 12 ? 9000 : 5000);
 }
 // 看汇报：取回汇报页的 HTML，放进右侧抽屉（窄屏全屏）的沙箱 iframe（allow-scripts，不给同源，汇报页的脚本读不到设备钥匙）；Esc 关闭，回到原来的位置
 let drawer = null, drawerFrom = null;
@@ -502,14 +502,22 @@ async function batchAck() {
   for (const id of ids) act.state.set(id, { phase: 'sending', action: 'ack' });
   act.ui.delete(LB_KEY);
   paint();
-  const res = await post(ACTIONS_URL + '/batch', { actions });
-  const list = Array.isArray(res.j) ? res.j : Array.isArray(res.j?.results) ? res.j.results : Array.isArray(res.j?.actions) ? res.j.actions : [];
-  ids.forEach((id, i) => {
-    const r = list.find((x) => x?.item_id === id) || (list.length === ids.length ? list[i] : null);
-    if (res.ok && r && typeof r.id === 'string') act.state.set(id, { phase: 'done', action: 'ack', receipt: r });
-    else act.state.set(id, { phase: 'error', action: 'ack', error: typeof r?.message === 'string' && CJK.test(r.message) ? r.message : res.ok ? '这件没交上，稍后再点一次' : failText(res), refresh: r?.error === 'cockpit_item_changed' || (res.status === 409 && res.j?.error === 'cockpit_item_changed') });
-  });
-  paint();
+  for (let k = 0; k < actions.length; k += 30) {
+    const part = actions.slice(k, k + 30);
+    const res = await post(ACTIONS_URL + '/batch', { actions: part });
+    const list = Array.isArray(res.j?.results) ? res.j.results : [];
+    for (const a of part) {
+      const r = list.find((x) => x?.item_id === a.item_id) || null;
+      const code = Number(r?.http_status) || 0;
+      const fine = res.ok && r && r.status !== 'error' && (!code || code < 400) && typeof r.id === 'string';
+      if (fine) act.state.set(a.item_id, { phase: 'done', action: 'ack', receipt: r });
+      else {
+        const why = r && typeof r.message === 'string' && CJK.test(r.message) ? r.message : code === 429 ? '点得太快了，稍后再试' : res.ok ? '这件没交上，稍后再点一次' : failText(res);
+        act.state.set(a.item_id, { phase: 'error', action: 'ack', error: why, refresh: (code === 409 && r?.error === 'cockpit_item_changed') || (res.status === 409 && res.j?.error === 'cockpit_item_changed') });
+      }
+    }
+    paint();
+  }
 }
 
 // ---- 标签页：“(N) 驾驶舱”，有要你做的事时图标加红点 ----

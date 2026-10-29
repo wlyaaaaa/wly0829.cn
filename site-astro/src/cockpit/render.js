@@ -31,7 +31,7 @@ const ownTag = (x) => {
 };
 const detail = (x) => {
   const d = !isPh(x) && typeof x?.owner_detail === 'string' ? x.owner_detail.trim().slice(0, 200) : '';
-  return d ? `<span class="cp-detail" tabindex="0" title="${esc(d)}">具体：${esc(d)}</span>` : '';
+  return d ? `<span class="cp-detail" tabindex="0" title="${esc(d)}">${/^[一-鿿A-Za-z]{1,6}[：:]/.test(d) ? '' : '具体：'}${esc(d)}</span>` : '';
 };
 // 本人的事过了原定时间（后端 need_you 行的 overdue_text：“今天已过原定时间”“过了原定时间 N 天”）：标题旁一个琥珀色小标签；公开版占位行也显示，它只是天数
 const lateTag = (x) => {
@@ -153,8 +153,16 @@ export function security(v, ctx) {
 const CIRCLED = /[①②③④⑤⑥⑦⑧⑨]/;
 const BJ = (s) => { const m = /(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/.exec(s || ''); return m ? Date.parse(`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:00+08:00`) : NaN; };
 const clean = (t) => String(t || '').replace(/\s*做完点“复制给 AI”说一声。?/g, '').replace(/\s*(最后核对：[^。]*。?|尚未核对。?)/g, '').trim();
+// 没写问题的旧“AI 在等你回”卡（标题只有“有一个 AI 对话在等你回复”）：有对话名写“「对话名」那个对话在等你回话”，没有就照实说它没写问题。
+// 钩子以后会把问题写全，这里只是旧卡的兜底；“打开对话”照 open 字段画
+export const vagueWait = (x) => x?.card_type === 'ai_wait' && !isPh(x) && (!clean(x.title) || /^有一?个\s*(AI\s*)?对话在等你回(复|话)[。！]?$/.test(clean(x.title)));
+export const waitTitle = (x) => {
+  if (!vagueWait(x)) return clean(x.title);
+  const c = x.open?.conversation, name = [c?.title, x.conversation_title].find((s) => typeof s === 'string' && s.trim());
+  return name ? `「${name.trim()}」那个对话在等你回话` : '有个对话在等你回话，但它没写问题';
+};
 export function readTodo(x, now) {
-  let t = clean(x.title || x.next_step);
+  let t = vagueWait(x) ? waitTitle(x) : clean(x.title || x.next_step);
   let path = '';
   t = t.replace(/\s*汇报在电脑上：[^（]*（路径\s*([^）]+)）。?/, (_, p) => { path = p.trim(); return ''; }).replace(/\s*（路径\s*([^）]+)）/, (_, p) => { path ||= p.trim(); return ''; }).trim();
   const mins = x.minutes ?? x.action?.estimated_minutes;
@@ -281,8 +289,10 @@ export function openGroup(x, viewer) {
   if (!o || typeof o !== 'object' || Array.isArray(o) || typeof x.id !== 'string' || !x.id) return '';
   const cap = new Set(viewer?.capabilities || []), phone = viewer?.device_kind === 'phone', me = viewer?.device_machine || '';
   const c = o.conversation && typeof o.conversation === 'object' ? o.conversation : null;
-  const targets = (Array.isArray(o.targets) ? o.targets : []).filter((t) => t && typeof t.key === 'string' && t.key && typeof t.label === 'string' && t.label.trim()).slice(0, 6);
-  const isConv = (t) => /^conversation/.test(t.key);
+  const targets = (Array.isArray(o.targets) ? o.targets : []).filter((t) => t && typeof t.key === 'string' && /^(conversation|report|path:[0-4])$/.test(t.key) && typeof t.label === 'string' && t.label.trim()).slice(0, 7);
+  const isConv = (t) => t.key === 'conversation';
+  // 只有 open.report 为 true 的才有“看汇报”（在这台设备的抽屉里看）；有了它，“在主驾驶上打开汇报页”就不再重复列
+  const drawer = o.report === true && cap.has('report');
   const there = c && typeof c.machine === 'string' && c.machine.trim() ? c.machine.trim() : '主驾驶';
   const remote = (t, label) => `<button type="button" class="cp-open-b" data-open-item="${esc(x.id)}" data-open-target="${esc(t.key)}">${esc(label)}</button>`;
   const bits = [];
@@ -292,14 +302,14 @@ export function openGroup(x, viewer) {
     if (!phone && url && me && c.machine === me) bits.push(`<a class="cp-open-a" href="${esc(url)}">打开对话 ↗</a>`);
     else if (cap.has('open') && conv) bits.push(remote(conv, `在${there}上打开对话`));
   }
-  if (o.report === true && cap.has('report')) bits.push(`<button type="button" class="cp-open-b" data-report="${esc(x.id)}">看汇报</button>`);
-  if (cap.has('open')) for (const t of targets.filter((t) => !isConv(t))) bits.push(remote(t, (me === '主驾驶' ? '' : '在主驾驶上') + t.label.trim().slice(0, 40)));
+  if (drawer) bits.push(`<button type="button" class="cp-open-b" data-report="${esc(x.id)}">看汇报</button>`);
+  if (cap.has('open')) for (const t of targets.filter((t) => !isConv(t) && !(drawer && t.key === 'report'))) bits.push(remote(t, (me === '主驾驶' ? '' : '在主驾驶上') + t.label.trim().slice(0, 40)));
   return bits.length ? `<span class="cp-open${phone ? ' is-phone' : ''}" role="group" aria-label="打开">${bits.join('')}</span>` : '';
 }
 // 卡头一行：对话名和时间，右端“打开”组；没有“打开”组时照第三步只写那一行字。手机上“打开”组放到卡的最后（cardTail），卡头照旧
 const cardHead = (src, og) => (og && !og.includes('is-phone') ? `<div class="cp-card-head">${src ? `<p class="cp-wait-src">${esc(src)}</p>` : ''}${og}</div>` : src ? `<p class="cp-wait-src">${esc(src)}</p>` : '');
 const cardTail = (og) => (og.includes('is-phone') ? `<p class="cp-open-tail">${og}</p>` : '');
-const isNewWait = (x) => x?.card_type === 'ai_wait' && !!(x.conversation_title || x.progress || x.asked_at);
+const isNewWait = (x) => x?.card_type === 'ai_wait' && !!(x.conversation_title || x.progress || x.asked_at || (vagueWait(x) && x.open));
 function waitCard(x, ctx) {
   const at = x.asked_at ? when(x.asked_at, ctx.now) : '';
   const src = x.conversation_title ? `「${x.conversation_title}」那个对话${at ? ` · ${at} 问的` : ''}` : at ? `${at} 问的` : '';
@@ -310,7 +320,7 @@ function waitCard(x, ctx) {
   return `<article class="cp-ask is-own is-wait${actCls(x, ctx)}" id="${esc(todoId(x))}"${itemAttr(x)}>`
     + cardHead(src, openGroup(x, ctx.viewer))
     + (typeof x.progress === 'string' && x.progress.trim() ? `<p class="cp-own-s"><b>它做到哪</b>${esc(plain(x.progress.trim()))}</p>` : '')
-    + `<h3 class="cp-ask-title"><span class="cp-own-k">要你定</span><span>${esc(clean(x.title))}${ownTag(x)}${lateTag(x)}</span></h3>` + detail(x)
+    + `<h3 class="cp-ask-title">${vagueWait(x) ? '' : '<span class="cp-own-k">要你定</span>'}<span>${esc(waitTitle(x))}${ownTag(x)}${lateTag(x)}</span></h3>` + detail(x)
     + (acts ? ownerBox(x, ctx, { card: true, noExec: true, mid: cons, minor: true }) : list + cons) + cardTail(openGroup(x, ctx.viewer)) + `</article>`;
 }
 function askCard(x, r, ctx) {
@@ -443,8 +453,8 @@ const NEED_GROUPS = [['wait', 'AI 在等你回话'], ['confirm', '要你确认']
 export const Q_KEY = '\u0000queue';
 const Q_TAG = { wait: '等你回', confirm: '要你确认', do: '要你动手', decide: '要你拍板' };
 function qRow(x, r, ctx, kind, open) {
-  const title = kind === 'wait' ? clean(x.title) : r.head;
-  const src = typeof x.conversation_title === 'string' && x.conversation_title.trim() ? `「${x.conversation_title.trim()}」` : '';
+  const title = kind === 'wait' ? waitTitle(x) : r.head;
+  const src = !vagueWait(x) && typeof x.conversation_title === 'string' && x.conversation_title.trim() ? `「${x.conversation_title.trim()}」` : '';
   const at = kind === 'wait' && x.asked_at ? `${when(x.asked_at, ctx.now)} 问的` : r.dueText ? (r.overdue ? '已过期限 ' + r.dueText : r.dueText + (r.hasDue ? ' 前' : '')) : '';
   const qs = kind === 'wait' && !actCls(x, ctx) && hasActs(x, ['answer']) ? questionsFor(x) : [];
   const rec = qs.length === 1 ? qs[0].options.find((o) => o.rec) : null;
@@ -937,7 +947,9 @@ const activeOf = (a) => (a.rows.length && a.rows.length >= a.count ? a.rows.filt
 // 首屏那一句：“AI 在干活：8 个（1 个卡住要你看）”；一个都没有时“现在没有 AI 在干活”；这次读不全时照实说
 export const runLine = (a) => {
   const n = activeOf(a), k = a.rows.filter((r) => OWNER_STUCK.includes(r.status)).length;
-  return n || k ? `AI 在干活：${n} 个${k ? `（${k} 个卡住要你看）` : ''}` : a.unread ? 'AI 干活情况读不全' : '现在没有 AI 在干活';
+  const s = a.rows.filter((r) => r.status === 'stopped').length, u = a.rows.filter((r) => r.status === 'unknown').length;
+  const more = s || u ? `，另 ${[s ? `${s} 件停了没做完` : '', u ? `${u} 件看不出在干嘛` : ''].filter(Boolean).join('、')}` : '';
+  return n || k ? `AI 在干活：${n} 个${k ? `（${k} 个卡住要你看）` : ''}${more}` : a.unread ? 'AI 干活情况读不全' : `现在没有 AI 在干活${more}`;
 };
 // 帮手说明换成人话：“+9 个帮手：4 个在跑、5 个判断不了” → “它叫了 9 个助手，4 个在干活”
 export const helperText = (s) => String(s || '').replace(/(^|[，,；;]\s*)\+(\d+)\s*个帮手(?:[：:]([^；;]*))?/, (_m, pre, n, rest) => { const run = /(\d+)\s*个在跑/.exec(rest || ''); return `${pre}它叫了 ${n} 个助手${run ? `，${run[1]} 个在干活` : ''}`; });
@@ -969,7 +981,7 @@ function runRowOf(r, ctx, viewer, waits = []) {
   else if (r.progress) { main = r.progress.text; from = 'progress'; }
   else if (reply) { main = `最近回复：${reply.text}`; from = 'reply'; }
   else main = waiting ? '在等你回话' : '还没写进展';
-  const step = from === 'doing' && r.step_index ? `第 ${r.step_index} 步${r.step_total ? `/共 ${r.step_total} 步` : ''}` : from === 'reply' && reply.at ? `${when(reply.at, ctx.now)} 回的` : '';
+  const step = from === 'doing' && r.step_index ? `第 ${r.step_index} 步${r.step_total ? `/共 ${r.step_total} 步` : ''}` : from === 'reply' && reply.at ? `${reply.approx ? '约 ' : ''}${when(reply.at, ctx.now)} 回的` : '';
   const moved = ago(r.progress?.at || r.last_activity_at, ctx.now);
   const second = [from !== 'progress' && from !== 'card' && r.progress ? r.progress.text : '', modelOf(r),
     (/它叫了 \d+ 个助手(?:，\d+ 个在干活)?/.exec(helperText(r.detail)) || [])[0] || (r.helpers > 0 ? `它叫了 ${r.helpers} 个助手` : ''), moved ? `${moved}还在动` : ''].filter(Boolean);

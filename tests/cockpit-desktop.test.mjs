@@ -55,17 +55,25 @@ test('队列只有一两件：不给“一行一件 / 全部展开”，带一�
 
 test('“打开”组：没有 open 字段一个都不画；这台就是对话所在的电脑直接链到 claude://；别的电脑和手机是“在主驾驶上打开”；看汇报、打开文件夹看接口能不能用', () => {
   const x = { id: 'w1', open: { conversation: { app: 'claude', title: '示例', url: 'claude://code/continue?session=local_demo', machine: '主驾驶' }, report: true,
-    targets: [{ key: 'conversation', label: '打开对话' }, { key: 'folder', label: '打开文件夹「示例」' }] } };
+    targets: [{ key: 'conversation', label: '打开对话' }, { key: 'report', label: '打开汇报页' }, { key: 'path:0', label: '打开文件夹「示例」' }, { key: 'path:1', label: '打开文件「示例.md」' }, { key: 'folder', label: '认不得的 key' }] } };
   const viewer = (machine, kind = 'pc', capabilities = ['open', 'report']) => normalize(base({ viewer: { kind: 'owner', device_kind: kind, device_machine: machine, capabilities } })).viewer;
   assert.equal(openGroup({ id: 'w1' }, viewer('主驾驶')), '');
   const here = openGroup(x, viewer('主驾驶'));
   assert.match(here, /<a class="cp-open-a" href="claude:\/\/code\/continue\?session=local_demo">打开对话 ↗<\/a>/);
   assert.match(here, /data-report="w1">看汇报</);
-  assert.match(here, /data-open-item="w1" data-open-target="folder">打开文件夹「示例」</);
+  assert.match(here, /data-open-item="w1" data-open-target="path:0">打开文件夹「示例」</);
+  assert.match(here, /data-open-target="path:1">打开文件「示例.md」</);
+  // 认得的 key 只有 conversation、report、path:0—path:4；有“看汇报”时不再列“打开汇报页”
+  assert.doesNotMatch(here, /认不得的 key|打开汇报页/);
+  // 不知道是哪台电脑（后端给空字符串）：当别的电脑，“在主驾驶上打开”
+  assert.match(openGroup(x, viewer('')), /data-open-target="conversation">在主驾驶上打开对话</);
+  // 没有“看汇报”能力时，“打开汇报页”照样能让主驾驶打开；open.report 不是 true 就没有“看汇报”
+  assert.match(openGroup(x, viewer('副驾驶', 'pc', ['open'])), /data-open-target="report">在主驾驶上打开汇报页</);
+  assert.doesNotMatch(openGroup({ ...x, open: { ...x.open, report: false } }, viewer('主驾驶')), /data-report=/);
   const there = openGroup(x, viewer('副驾驶'));
   assert.doesNotMatch(there, /claude:\/\//);
   assert.match(there, /data-open-target="conversation">在主驾驶上打开对话</);
-  assert.match(there, /data-open-target="folder">在主驾驶上打开文件夹「示例」</);
+  assert.match(there, /data-open-target="path:0">在主驾驶上打开文件夹「示例」</);
   assert.match(openGroup(x, viewer(null, 'phone')), /<span class="cp-open is-phone"/);
   // 接口不能用就不画对应的按钮；地址不是 claude:// / codex:// 的不当链接
   assert.equal(openGroup(x, viewer('副驾驶', 'pc', [])), '');
@@ -106,6 +114,7 @@ test('“AI 正在跑”的行主行永远不用标题：doing →进展 →最�
     { id: 'r3', status: 'running', vendor: 'gpt', model_text: 'GPT Sol', title: '只有标题的活' },
     { id: 'r6', status: 'running', vendor: 'claude', model_text: 'Claude Opus 5.5', title: '示例会话名', latest_reply: { text: '表格已经改成三列了', at: '2026-10-29T21:30:00+08:00' } },
     { id: 'r7', status: 'running', vendor: 'claude', model_text: 'Claude Opus 5.5', title: '示例会话名 2', latest_reply: '我先去核对一下', latest_reply_at: '2026-10-29T21:10:00+08:00' },
+    { id: 'r8', status: 'running', vendor: 'gpt', model_text: 'GPT Sol', title: '示例任务名', latest_reply: { text: '对完了 40 个', at: '2026-10-29T21:20:00+08:00', time_source: 'file_mtime' } },
   ]), ctx(acts()));
   const row = (id) => new RegExp(`<li class="cp-run-row[^"]*"[^>]*data-items="${id}">(.*?)</li>`).exec(html)?.[1] || '';
   assert.match(row('r1'), /<span class="cp-run-doing">正在做：改左栏队列的样式<\/span><small class="cp-run-step">第 3 步\/共 8 步<\/small><small class="cp-run-meta"><span class="cp-run-name">示例旧标题<\/span>队列的行已经画好 · Claude Opus 5.5 · 4 分钟前还在动<\/small>/);
@@ -113,6 +122,8 @@ test('“AI 正在跑”的行主行永远不用标题：doing →进展 →最�
   assert.match(row('r3'), /<span class="cp-run-doing is-empty">还没写进展<\/span><small class="cp-run-meta"><span class="cp-run-name">只有标题的活<\/span>GPT Sol<\/small>/);
   assert.match(row('r6'), /<span class="cp-run-doing">最近回复：表格已经改成三列了<\/span><small class="cp-run-step">21:30 回的<\/small><small class="cp-run-meta"><span class="cp-run-name">示例会话名<\/span>Claude Opus 5.5<\/small>/);
   assert.match(row('r7'), /最近回复：我先去核对一下<\/span><small class="cp-run-step">[^<]+回的<\/small>/);
+  // 时间是文件修改时间（time_source=file_mtime）时前面加“约”
+  assert.match(row('r8'), /最近回复：对完了 40 个<\/span><small class="cp-run-step">约 21:20 回的<\/small><small class="cp-run-meta"><span class="cp-run-name">示例任务名<\/span>/);
   assert.doesNotMatch(html, /cp-run-title/);
   // 在等你回话：对上“AI 在等你回”卡（同一个对话名或对话链接）就写卡上的问题，点一下跳到那张卡；对不上用进展那句
   const w = (extra) => ({ id: 'aw1', card_type: 'ai_wait', conversation_title: '示例对话甲', title: '用方案甲还是乙？', ask_kind: 'decision', ...extra });
@@ -201,4 +212,30 @@ test('事实区包在一个外框里（电脑版两栏 / 三栏，窄屏不变�
   const html = page(normalize(base({})), ctx(acts()));
   assert.match(html, /<div class="cp-facts-wall">\s*<section class="cp-section" id="tasks">/);
   assert.match(html, /id="projects">.*<\/section>\s*<\/div>$/s);
+});
+
+test('看过截图后的四处：“具体：”不和“进展：”叠；AI 正在干活的数和列出来的行对得上；没写问题的旧等你回卡写清哪个对话；手机三小块也写那一句', () => {
+  // 1) 正文已经以“进展：”这类标签开头时不再加“具体：”
+  const k = normalize(base({ must_know: { state: 'ok', items: [{ id: 'k1', kind: 'repairing', text: '示例在修', owner_detail: '进展：示例进展' }, { id: 'k2', kind: 'report', text: '示例汇报', owner_detail: '示例平台 10 月回复了' }] } }));
+  const home = REGIONS.home(k, ctx(acts()));
+  assert.match(home, /title="进展：示例进展">进展：示例进展<\/span>/);
+  assert.doesNotMatch(home, /具体：进展：/);
+  assert.match(home, />具体：示例平台 10 月回复了<\/span>/);
+  // 2) 卡住 1 + 在干活 2 + 停了 1 + 看不出 1：标题“AI 在干活：3 个（1 个卡住要你看），另 1 件停了没做完、1 件看不出在干嘛”，“其余 4 个”= 真列出来的 4 行
+  const rows = [{ id: 'q', status: 'quota_exhausted' }, { id: 'a', status: 'running' }, { id: 'b', status: 'waiting_owner' }, { id: 'c', status: 'stopped' }, { id: 'd', status: 'unknown' }];
+  const run = REGIONS.home(normalize(base({ ai_running: { count: 3, observed_at: at, rows } })), ctx(acts()));
+  assert.match(run, /AI 在干活：3 个（1 个卡住要你看），另 1 件停了没做完、1 件看不出在干嘛<\/span>/);
+  const rest = /<summary>其余 (\d+) 个<\/summary><ul class="cp-run-list">(.*?)<\/ul>/.exec(run);
+  assert.equal(Number(rest[1]), (rest[2].match(/<li class="cp-run-row/g) || []).length);
+  assert.equal(Number(rest[1]), 4);
+  // 3) 没写问题的旧卡：有对话名写“「对话名」那个对话在等你回话”并给“打开对话”；没有对话名照实说没写问题
+  const old = (extra = {}) => ({ id: 'aw-old', card_type: 'ai_wait', title: '有一个 AI 对话在等你回复', ask_kind: 'cooperate', owner_actions: ['note', 'seen'], ...extra });
+  const withConv = old({ open: { conversation: { app: 'claude', title: '示例对话甲', url: 'claude://code/continue?session=local_old', machine: '主驾驶' }, targets: [{ key: 'conversation', label: '打开对话' }] } });
+  const v = (x) => normalize(base({ viewer: { kind: 'owner', device_kind: 'pc', device_machine: '副驾驶', capabilities: ['open', 'report', 'batch'] }, need_you: [x, wait('w2'), wait('w3')] }));
+  const need = REGIONS['need-you'](v(withConv), ctx(acts()));
+  assert.match(need, /<span class="cp-q-title">「示例对话甲」那个对话在等你回话<\/span>/);
+  assert.match(need, /<h3 class="cp-ask-title"><span>「示例对话甲」那个对话在等你回话/);
+  assert.match(need, /data-open-item="aw-old" data-open-target="conversation">在主驾驶上打开对话</);
+  assert.doesNotMatch(need, /有一个 AI 对话在等你回复/);
+  assert.match(REGIONS['need-you'](v(old()), ctx(acts())), /有个对话在等你回话，但它没写问题/);
 });

@@ -72,13 +72,13 @@ const progressOf = (r) => {
   const t = text(p.text ?? p.summary, 160);
   return t ? { text: t, at: p.at || p.observed_at || p.updated_at || null } : null;
 };
-// 它最近一条回复的第一句（后端 latest_reply：一句话 + 时间；也收字符串 + latest_reply_at）
+// 它最近一条回复的第一句（后端 latest_reply = {text, at, time_source}；time_source 是 file_mtime 时那个时间是文件修改时间，只是大约；也收字符串 + latest_reply_at）
 const replyOf = (r) => {
   const p = r.latest_reply;
-  if (typeof p === 'string') return text(p) ? { text: text(p, 160), at: r.latest_reply_at || null } : null;
+  if (typeof p === 'string') return text(p) ? { text: text(p, 160), at: r.latest_reply_at || null, approx: false } : null;
   if (!p || typeof p !== 'object' || Array.isArray(p)) return null;
   const t = text(p.text ?? p.summary, 160);
-  return t ? { text: t, at: p.at || p.replied_at || p.observed_at || null } : null;
+  return t ? { text: t, at: p.at || p.replied_at || p.observed_at || null, approx: p.time_source === 'file_mtime' } : null;
 };
 function aiRunning(raw) {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;

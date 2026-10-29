@@ -32,7 +32,8 @@ test('首屏只露件数和卡住要你看的（额度、登录）；其余收�
   assert.equal(v.ai_running.rows.find((r) => r.id === 'run-mystery_state').status, 'unknown');
   const html = REGIONS.home(v, ctx);
   // 卡住要你看的只算额度和登录；停了没做完、看不出在干嘛的不算在干活
-  assert.match(html, /<span class="cp-run-sum">AI 在干活：5 个（2 个卡住要你看）<\/span><span class="cp-run-at">15:39 读到的<\/span>/);
+  // 标题的数和列出来的行对得上：5 个在干活（含 2 个卡住）+ 另 1 件停了没做完、2 件看不出在干嘛 = 卡住 2 行 + 其余 6 行
+  assert.match(html, /<span class="cp-run-sum">AI 在干活：5 个（2 个卡住要你看），另 1 件停了没做完、2 件看不出在干嘛<\/span><span class="cp-run-at">15:39 读到的<\/span>/);
   const stuck = /<ul class="cp-run-list is-stuck">(.*?)<\/ul>/.exec(html)?.[1] || '';
   assert.deepEqual([...stuck.matchAll(/<li class="cp-run-row is-([a-z_]+) /g)].map((m) => m[1]), ['quota_exhausted', 'login_failed']);
   const rest = /<details class="cp-run-all" id="run-all"><summary>其余 6 个<\/summary><ul class="cp-run-list">(.*?)<\/ul><\/details>/.exec(html)?.[1] || '';
