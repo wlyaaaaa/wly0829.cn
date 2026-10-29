@@ -75,6 +75,8 @@ class CockpitOwnerActionsTests(unittest.TestCase):
                 h.isolate(context)
                 context.route(ACTIONS + '**', fulfil)
                 context.add_init_script(f"try{{localStorage.setItem('wly-cockpit-device',{json.dumps(TOKEN)})}}catch{{}}")
+                # 默认窗口 1280 宽是电脑版：队列一行一件时只有展开的那件露出按钮；这里测卡上的按钮，全部展开
+                context.add_init_script("try{localStorage.setItem('wly-cockpit-qmode','all')}catch{}")
                 page = context.new_page()
                 page.on('pageerror', lambda e: errors.append(str(e)))
                 page.goto(server.origin + '/cockpit/', wait_until='domcontentloaded')
@@ -204,8 +206,8 @@ class CockpitOwnerActionsTests(unittest.TestCase):
                 self.assertEqual(page.locator('[data-oa], .cp-oa-warn, #owner-recent').count(), 0)
                 texts = page.locator('#top button, #need-you button').all_inner_texts()
                 self.assertFalse(set(texts) & {'看见了', '知道了', '我办好了', '这件不做了', '晚点提醒', '确认', '不对，重做', '回一句话', '撤回', '你定就行', '我没看懂'})
-                # 第三步：公开版一个按钮都没有（今天的河里的船是河自己的，不算）
-                self.assertEqual(page.evaluate("[...document.querySelectorAll('.cp-page button')].filter(b => !b.closest('#today-river')).length"), 0)
+                # 第三步：公开版一个能办事的按钮都没有（今天的河里的船是河自己的；电脑版顶栏的 ↻ 和队列的“一行一件 / 全部展开”只管看，不算）
+                self.assertEqual(page.evaluate("[...document.querySelectorAll('.cp-page button')].filter(b => !b.closest('#today-river, .cp-tools, .cp-q-modes')).length"), 0)
                 context.close()
                 browser.close()
         finally:

@@ -40,7 +40,7 @@ test('旧的“AI 在等你回”卡（没有对话名、做到哪这些新字�
   const old = { id: 'aw-0', card_type: 'ai_wait', title: '有一个 AI 对话在等你回复', ask_kind: 'cooperate', owner_actions: ['note', 'seen', 'snooze', 'dismiss'] };
   const html = REGIONS['need-you'](normalize(base({ need_you: [old] })), ctx(acts()));
   assert.match(html, /<article class="cp-ask is-own" id="todo-aw-0"/);
-  assert.doesNotMatch(html, /is-wait|cp-wait-src|它做到哪/);
+  assert.doesNotMatch(/<article.*<\/article>/.exec(html)[0], /is-wait|cp-wait-src|它做到哪/);
   assert.match(html, /data-act="seen">看见了</);
   // 公开版（没有 owner_actions）：新卡也只写字，选项列成字，一个按钮都没有
   const pub = REGIONS['need-you'](normalize(base({ need_you: [wait({ owner_actions: undefined })] })), ctx());

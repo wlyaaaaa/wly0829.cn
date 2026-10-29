@@ -96,6 +96,8 @@ class CockpitPageTests(unittest.TestCase):
                     server.pages['/cockpit/'] = h.document(fixture(), {'虚构正常项目': '/projects/fixture-project/'})
                     context = browser.new_context(viewport={'width': width, 'height': 915 if width == 390 else 1000}, timezone_id='Asia/Shanghai')
                     h.isolate(context)
+                    # 1440 宽是电脑版：队列一行一件时只露展开的那件；这里看每张卡的内容，全部展开（电脑版的排法见 cockpit-desktop.test.mjs）
+                    context.add_init_script("try{localStorage.setItem('wly-cockpit-qmode','all')}catch{}")
                     page = context.new_page()
                     page.on('pageerror', lambda error: errors.append(str(error)))
                     page.goto(server.origin + '/cockpit/', wait_until='domcontentloaded')
@@ -171,7 +173,8 @@ class CockpitPageTests(unittest.TestCase):
                     quiz = page.locator('.cp-ask#todo-need-q')
                     quiz.scroll_into_view_if_needed()
                     self.assertEqual(quiz.locator('button').count(), 0)
-                    self.assertEqual(page.locator('.cp-page button').evaluate_all("bs => bs.filter(b => !b.closest('#today-river')).length"), 0)
+                    # 电脑版顶栏的 ↻ 和队列的“一行一件 / 全部展开”只管看，不算
+                    self.assertEqual(page.locator('.cp-page button').evaluate_all("bs => bs.filter(b => !b.closest('#today-river, .cp-tools, .cp-q-modes')).length"), 0)
                     self.assertIn('甲方案', quiz.inner_text())
                     # 上面套餐流量最后那次点开的折叠，换回正常数据后先重读一次，让页面高度定下来再量
                     self.assertTrue(page.evaluate('CockpitData.refresh()')['fresh'])

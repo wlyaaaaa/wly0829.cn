@@ -17,7 +17,8 @@ test('本人版：页头小字、仅你可见标签和一行“具体”', () =>
     ai_following: [{ id: 'a1', title: '示例私事 B：等对方回复', owner_only: true, owner_detail: '上次进展 10月25日' }],
     deferred: [{ id: 'd1', title: '示例私事 C', action_owner: 'user', owner_only: true, owner_detail: 'x'.repeat(260) }],
   }));
-  assert.deepEqual(v.viewer, { kind: 'owner', device_state: 'ok', device_name: '示例设备' });
+  // 第四步加的设备种类、哪台电脑、能用的接口：后端没给就是空
+  assert.deepEqual(v.viewer, { kind: 'owner', device_state: 'ok', device_name: '示例设备', device_kind: null, device_machine: null, capabilities: [] });
   assert.equal(v.private_count, 2);
   assert.equal(viewerLine(v), '<span class="cp-viewer-line is-owner">你的设备 · 全部显示（其中 2 件公网看不到）</span>');
   const need = REGIONS['need-you'](v, ctx) + REGIONS.home(v, ctx) + REGIONS.ledger(v, ctx);

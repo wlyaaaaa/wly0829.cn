@@ -1,7 +1,7 @@
 // 驾驶舱浏览器端：页面一打开就是构建时那份快照画好的最终版式；这里只负责读新数据、原地换字。
 // 每分钟读一次（页面在后台时不读）；刷新按钮叫醒电脑重读，等三个采集器都完成再换。
 import { normalize, riverSnapshot, freshAfter } from './model.js';
-import { REGIONS } from './render.js';
+import { REGIONS, Q_KEY } from './render.js';
 import { AI_ACTIONS, leftText } from './actions.js';
 
 const boot = JSON.parse(document.getElementById('cockpit-boot')?.textContent || '{}');
@@ -72,6 +72,7 @@ function paint() {
       if (focus) refocus(node, focus);
     }
   }
+  syncWide();
   const river = window.todayRiver;
   if (river?.ready && view.automation.items.length) river.setSnapshot(riverSnapshot(view), false);
   // 读到新数据后还找不到的：是 AI 自己的活（AI 在跟、AI 已定、AI 等条件的）就去“AI 的账本”那一页找；
@@ -282,8 +283,10 @@ function findItem(id) {
 }
 // final：已经是读到新数据后的那一版，找到就不再惦记；首帧（构建时的旧数）上先跳一次，读到新数据换字后再对准一次
 function reveal(final) {
-  const target = findItem(wanted);
+  let target = findItem(wanted);
   if (!target) return false;
+  const q = target.closest('.cp-q[data-q]:not(.is-open)');
+  if (q) { act.ui.set(Q_KEY, { open: q.dataset.q }); paint(); target = findItem(wanted) || target; }
   if (final) wanted = '';
   for (let p = target.parentElement; p; p = p.parentElement) if (p.tagName === 'DETAILS') p.open = true;
   target.scrollIntoView({ block: 'start' });
@@ -293,8 +296,127 @@ function reveal(final) {
   setTimeout(() => target.classList.remove('cp-hit'), 4000);
   return true;
 }
+// ---- 电脑版（宽度 ≥1200）----
+// 左栏队列“一行一件 / 全部展开”记在这台浏览器；没选过时 1700 宽以上全部展开（两列），以下一行一件。
+// 点一行展开那一件（同时只展开一件，记在 act.ui）；行上的“AI 建议”直接交那个选项（和卡里点一样，可撤回），同时展开那件好看到回执和撤回。
+const QMODE = 'wly-cockpit-qmode';
+const qmode = { get() { try { const m = localStorage.getItem(QMODE); return m === 'rows' || m === 'all' ? m : ''; } catch { return ''; } },
+  set(m) { try { localStorage.setItem(QMODE, m); } catch { /* 无存储：这次照样换，下次回到默认 */ } } };
+let qpick = '';
+const WIDE = matchMedia('(min-width: 1700px)');
+let runTouched = false; // 1700 宽以上“AI 正在干活”默认全列；自己收起过就不再替你展开
+function syncWide() {
+  const need = document.getElementById('need-you');
+  if (need) {
+    const m = qmode.get() || qpick;
+    if (m) need.dataset.qmode = m; else delete need.dataset.qmode;
+    const eff = m || (WIDE.matches ? 'all' : 'rows');
+    for (const b of need.querySelectorAll('[data-q-mode]')) b.setAttribute('aria-pressed', String(b.dataset.qMode === eff));
+  }
+  if (WIDE.matches && !runTouched) document.getElementById('run-all')?.setAttribute('open', '');
+}
+WIDE.addEventListener('change', syncWide);
+const openQ = (id) => {
+  act.ui.set(Q_KEY, { open: id });
+  paint();
+  document.querySelector(`.cp-q[data-q="${CSS.escape(id)}"]`)?.scrollIntoView({ block: 'nearest' });
+};
+// 顶栏 ↻：和右下角的刷新按钮一样叫醒电脑重读，结果写在顶栏右端
+let reloading = false;
+async function reloadNow(btn) {
+  if (reloading) return;
+  reloading = true;
+  btn.setAttribute('aria-busy', 'true');
+  try {
+    const r = await refresh();
+    say(r?.fresh ? '已更新' : '电脑没回应，现在显示的是之前读到的数据');
+  } catch { say('电脑没回应，现在显示的是之前读到的数据'); } finally { reloading = false; btn.setAttribute('aria-busy', 'false'); }
+}
+// 卡上的“打开”组（后端 open 字段才有，见 render.js 的 openGroup）：在主驾驶上打开、看汇报；都只带条目编号和哪一项，路径由电脑从登记里取
+const OPEN_URL = 'https://mcp.wly0829.cn/computer-access/api/cockpit/open';
+const REPORT_URL = 'https://mcp.wly0829.cn/computer-access/api/cockpit/report/';
+async function openThere(btn) {
+  if (btn.disabled) return;
+  btn.disabled = true;
+  const res = await post(OPEN_URL, { item_id: btn.dataset.openItem, target: btn.dataset.openTarget });
+  btn.disabled = false;
+  const msg = res.ok ? (typeof res.j?.message === 'string' && CJK.test(res.j.message) ? res.j.message : '已在主驾驶上打开') : failText(res).replace('没交出去', '没打开');
+  const note = document.createElement('span');
+  note.className = 'cp-open-msg' + (res.ok ? '' : ' is-err');
+  note.setAttribute('role', 'status');
+  note.textContent = msg;
+  btn.closest('.cp-open')?.after(note);
+  setTimeout(() => note.remove(), 5000);
+}
+// 看汇报：取回汇报页的 HTML，放进右侧抽屉（窄屏全屏）的沙箱 iframe（allow-scripts，不给同源，汇报页的脚本读不到设备钥匙）；Esc 关闭，回到原来的位置
+let drawer = null, drawerFrom = null;
+function closeDrawer() {
+  if (!drawer || drawer.hidden) return;
+  drawer.hidden = true;
+  drawer.querySelector('iframe').srcdoc = '';
+  document.documentElement.classList.remove('cp-drawer-open');
+  drawerFrom?.focus({ preventScroll: true });
+}
+async function showReport(btn) {
+  if (!drawer) {
+    drawer = document.createElement('div');
+    drawer.className = 'cp-drawer';
+    drawer.hidden = true;
+    drawer.setAttribute('role', 'dialog');
+    drawer.setAttribute('aria-modal', 'true');
+    drawer.setAttribute('aria-label', '汇报页');
+    drawer.innerHTML = '<div class="cp-drawer-bar"><b>汇报页</b><span class="cp-drawer-note" role="status"></span><button type="button" class="cp-drawer-close" data-drawer-close>关闭（Esc）</button></div><iframe sandbox="allow-scripts" title="汇报页" referrerpolicy="no-referrer"></iframe>';
+    document.body.append(drawer);
+  }
+  drawerFrom = btn;
+  const note = drawer.querySelector('.cp-drawer-note'), frame = drawer.querySelector('iframe');
+  note.textContent = '正在取汇报页…';
+  frame.srcdoc = '';
+  drawer.hidden = false;
+  document.documentElement.classList.add('cp-drawer-open');
+  drawer.querySelector('[data-drawer-close]').focus({ preventScroll: true });
+  const token = store.get();
+  try {
+    const r = await fetch(REPORT_URL + encodeURIComponent(btn.dataset.report), { cache: 'no-store', credentials: 'omit', headers: token ? { 'X-Cockpit-Device': token } : {}, signal: AbortSignal.timeout(15000) });
+    if (!r.ok) throw new Error(String(r.status));
+    frame.srcdoc = await r.text();
+    note.textContent = '';
+  } catch { note.textContent = '汇报页没取到，稍后再试'; }
+}
+document.addEventListener('click', (e) => {
+  const el = e.target instanceof Element ? e.target.closest('[data-q-mode],[data-q-pick],[data-q-open],[data-cp-reload],[data-open-item],[data-report],[data-drawer-close],#run-all > summary') : null;
+  if (!el) return;
+  if (el.matches('#run-all > summary')) { runTouched = true; return; }
+  if (el.dataset.qMode) { qpick = el.dataset.qMode; qmode.set(qpick); return void syncWide(); }
+  if (el.dataset.qPick) {
+    const id = el.dataset.qPick;
+    const pick = [...document.querySelectorAll(`[data-oa="${CSS.escape(id)}"] [data-pick]`)].find((b) => b.dataset.val === el.dataset.val);
+    act.ui.set(Q_KEY, { open: id });
+    if (pick) pick.click(); else paint();
+    return;
+  }
+  if (el.dataset.qOpen !== undefined) return void openQ(el.dataset.qOpen);
+  if ('cpReload' in el.dataset) return void reloadNow(el);
+  if (el.dataset.openItem) return void openThere(el);
+  if (el.dataset.report) return void showReport(el);
+  if ('drawerClose' in el.dataset) closeDrawer();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && drawer && !drawer.hidden) { e.preventDefault(); return closeDrawer(); }
+  const el = e.target instanceof Element ? e.target : null;
+  // 队列的行：Enter / 空格展开
+  if ((e.key === 'Enter' || e.key === ' ') && el?.matches('.cp-q-row')) { e.preventDefault(); return openQ(el.dataset.qOpen); }
+  // 写字的框里 Ctrl+Enter 交出去（回一句话、不对重做的“交给 AI”；多道题的“交给 AI”）
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && el?.matches('[data-oa] [data-text], [data-oa] [data-qnote]')) {
+    const box = el.closest('[data-oa]');
+    const send = 'text' in el.dataset ? box.querySelector('[data-send]:not([data-send="answer"])') : box.querySelector('[data-send="answer"]');
+    if (send && !send.disabled) { e.preventDefault(); send.click(); }
+  }
+});
+
 window.addEventListener('hashchange', () => { wanted = hashId(); if (!reveal(shown > 0)) openTo(wanted); });
 wanted = hashId();
+syncWide();
 if (!reveal(false)) openTo(wanted);
 
 pair().finally(() => load());

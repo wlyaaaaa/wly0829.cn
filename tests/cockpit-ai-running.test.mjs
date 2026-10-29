@@ -31,7 +31,7 @@ test('首屏只露件数和卡住要你看的（额度、登录）；其余收�
   const v = normalize(base({ need_you: [todo], ai_running: running(rows, { summary: '示例：AI 在跑 8 个，3 个卡住' }) }));
   assert.equal(v.ai_running.rows.find((r) => r.id === 'run-mystery_state').status, 'unknown');
   const html = REGIONS.home(v, ctx);
-  // 卡住要你看的只算额度和登录；中途断了、看不出在干嘛的不算在干活
+  // 卡住要你看的只算额度和登录；停了没做完、看不出在干嘛的不算在干活
   assert.match(html, /<span class="cp-run-sum">AI 在干活：5 个（2 个卡住要你看）<\/span><span class="cp-run-at">15:39 读到的<\/span>/);
   const stuck = /<ul class="cp-run-list is-stuck">(.*?)<\/ul>/.exec(html)?.[1] || '';
   assert.deepEqual([...stuck.matchAll(/<li class="cp-run-row is-([a-z_]+)"/g)].map((m) => m[1]), ['quota_exhausted', 'login_failed']);
@@ -39,7 +39,7 @@ test('首屏只露件数和卡住要你看的（额度、登录）；其余收�
   assert.deepEqual([...rest.matchAll(/<li class="cp-run-row is-([a-z_]+)"/g)].map((m) => m[1]), ['network_retry', 'stopped', 'waiting_owner', 'running', 'unknown', 'unknown']);
   const look = Object.fromEntries([...html.matchAll(/<li class="cp-run-row is-([a-z_]+)" data-items="run-\w+"><span class="cp-run-st is-(\w+)"><i aria-hidden="true">(.)<\/i>([^<]+)<\/span>/g)].map((m) => [m[1], [m[2], m[3], m[4]]]));
   assert.deepEqual(look, { login_failed: ['red', '○', '登录失效'], quota_exhausted: ['red', '○', '额度用完'], network_retry: ['yellow', '◐', '网络在重连'],
-    waiting_owner: ['blue', '◆', '在等你回话'], stopped: ['gray', '■', '中途断了，不用你管'], unknown: ['gray', '？', '看不出在干嘛（多半已经结束）'], running: ['green', '●', '在干活'] });
+    waiting_owner: ['blue', '◆', '在等你回话'], stopped: ['gray', '■', '停了，没做完'], unknown: ['gray', '？', '看不出在干嘛（多半已经结束）'], running: ['green', '●', '在干活'] });
   assert.equal(Object.keys(RUN_LOOK).length, 7);
   assert.match(html, /<span class="cp-run-title">示例活 running<\/span><small class="cp-run-meta">Claude Opus 5.5 · 示例说明 running · 它叫了 2 个助手<\/small>/);
   // 没给型号显示名时退回“GPT”；不出型号代号和字段名
@@ -74,7 +74,7 @@ test('公开版：只写两句（几个在干活、卡在额度还是登录；�
   const html = REGIONS.home(normalize(base({ viewer: { kind: 'public', device_state: 'none' }, ai_running: block })), ctx);
   assert.match(html, /<div class="cp-run is-public" id="ai-running"><p class="cp-run-head"><span class="cp-run-k">AI 正在干活<\/span><span class="cp-run-sum">AI 在干活：8 个（额度 1 个、登录 1 个卡住）<\/span><span class="cp-run-at">15:39 读到的<\/span><\/p><p class="cp-run-models">Claude Opus 5.5 5 个 · GPT Sol 3 个<\/p><\/div>/);
   assert.doesNotMatch(html, /一件 AI 活|cp-run-list|cp-run-row|早就停了|个帮手|个助手|<button/);
-  // 只凭行上的 placeholder 也认（没有 viewer 字段时）；网络重连、中途断了不算卡住要你看
+  // 只凭行上的 placeholder 也认（没有 viewer 字段时）；网络重连、停了没做完不算卡住要你看
   const two = REGIONS.home(normalize(base({ ai_running: running([pub('network_retry', 'GPT Sol', 'gpt'), pub('network_retry', 'GPT Sol', 'gpt'), pub('stopped', 'Claude Opus 5.5')]) })), ctx);
   assert.match(two, /<span class="cp-run-sum">AI 在干活：2 个<\/span>/);
   assert.match(two, /<p class="cp-run-models">GPT Sol 2 个<\/p>/);

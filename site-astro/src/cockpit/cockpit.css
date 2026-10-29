@@ -746,3 +746,208 @@ ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
 .cp-oa .cp-btn.cp-oa-link:hover { background: none; color: var(--cp-title); }
 .cp-oa .cp-btn.cp-oa-link[aria-expanded="true"] { color: var(--cp-title); font-weight: 700; }
 .cp-you-private { margin: 4px 0 0; }
+
+/* ===== 第四步：电脑版（本人 10 月 29 日 20:36：电脑版驾驶舱也很重要）=====
+   宽度 ≥1200 才换：顶栏一行（标题、顶上那句、急不急、哪台设备几点读到、↻、?）→ 左栏“要你做 N 件”队列（一行一件、展开一件）
+   → 右栏固定（AI 正在干活 → AI 手上 N 件 → 你得知道 → 状态），下面全宽事实区。768—1199 和手机照第三步，下面这几条只是让新加的外框在窄屏上“不存在” */
+.cp-topbar, .cp-rail, .cp-q, .cp-status { display: contents; }
+.cp-tools, .cp-q-head, .cp-q-row { display: none; }
+/* 卡头一行：对话名和时间，右端“打开”组（后端 open 字段才有；手机上只有“在主驾驶上打开”，放成一行小字） */
+.cp-card-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; margin: 0 0 4px; }
+.cp-card-head > .cp-wait-src { margin: 0; }
+.cp-open { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.cp-open-a, .cp-open-b { font: inherit; font-size: 13px; line-height: 1.5; padding: 1px 10px; border: 1px solid #c9d9ea; border-radius: 999px; background: #fff; color: #2463a8 !important; text-decoration: none; cursor: pointer; white-space: nowrap; }
+.cp-open-a:hover, .cp-open-b:hover { background: #f1f6fc; }
+.cp-open-a:focus-visible, .cp-open-b:focus-visible { outline: 2px solid #2463a8; outline-offset: 2px; }
+.cp-open-b:disabled { opacity: .55; cursor: progress; }
+.cp-open.is-phone .cp-open-b { padding: 0; border: 0; background: none; color: var(--cp-soft) !important; text-decoration: underline; text-underline-offset: 3px; }
+.cp-open-msg { margin-left: 8px; font-size: 13px; color: var(--cp-title); }
+.cp-open-msg.is-err { color: var(--cp-red); }
+.cp-run-row .cp-open { margin-top: 4px; }
+.cp-open-tail { margin: 10px 0 0; font-size: 13px; }
+/* “AI 正在跑”的行有 doing / progress 时：主行“正在做：……”（第几步小字），第二行进展那句 · 型号 · 多久前还在动，对话名、任务名是灰色小标签 */
+.cp-run-doing { font-size: 15px; font-weight: 600; color: var(--cp-ink); }
+.cp-run-row.is-live.is-running .cp-run-word { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.cp-run-row.is-live.is-running .cp-run-st { margin-right: 4px; }
+.cp-run-step { margin-left: 8px; font-size: 12.5px; color: var(--cp-soft); white-space: nowrap; }
+.cp-run-name { display: inline-block; max-width: 14em; margin-right: 8px; padding: 0 7px; border-radius: 5px; background: #f1f3f2; color: var(--cp-soft); font-size: 12px; line-height: 1.7; vertical-align: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* 看汇报：电脑上右侧半屏抽屉，窄屏全屏 */
+.cp-drawer { position: fixed; z-index: 120; top: 0; right: 0; bottom: 0; width: min(50vw, 960px); display: flex; flex-direction: column; background: #fff; border-left: 1px solid var(--cp-line, #dfe8e2); box-shadow: -12px 0 40px rgba(21, 68, 35, .16); }
+.cp-drawer[hidden] { display: none; }
+.cp-drawer-bar { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--cp-line, #dfe8e2); font-size: 15px; }
+.cp-drawer-note { flex: 1; font-size: 13px; color: var(--cp-soft, #5b6b62); }
+.cp-drawer-close { font: inherit; font-size: 14px; padding: 4px 14px; border: 1px solid #bfe8cc; border-radius: 999px; background: #fff; cursor: pointer; }
+.cp-drawer iframe { flex: 1; width: 100%; border: 0; }
+@media (max-width: 1199.98px) { .cp-drawer { width: 100vw; border-left: 0; } }
+
+@media (min-width: 1200px) {
+  .cp-hero { --cp-rail-w: 360px; grid-template-columns: minmax(0, 1fr) var(--cp-rail-w); grid-template-areas: "bar bar" "need rail"; gap: 16px 24px; padding-top: 6px; }
+  /* 顶栏一行：毛笔标题 · 顶上那句（急不急）· 哪台设备几点读到 · ↻ · ?；“这页怎么用”收进 ? */
+  .cp-topbar { grid-area: bar; display: flex; align-items: center; gap: 20px; min-width: 0; }
+  .cp-topbar > .cp-hero-copy { order: 1; flex: none; }
+  .cp-topbar .cp-you { order: 2; flex: 1 1 auto; min-width: 0; }
+  .cp-topbar > .cp-tools { order: 3; }
+  .cp-topbar > .cp-hero-art { order: 4; display: none; }
+  .cp-hero h1 img { height: 52px; }
+  .cp-hero-copy > .cp-lead, .cp-hero-copy > .cp-viewer { display: none; }
+  .cp-you { padding: 10px 18px; border-radius: 14px; box-shadow: none; }
+  .cp-you-n, .cp-you.is-said .cp-you-n { font-size: 21px; line-height: 1.35; gap: 4px 10px; }
+  .cp-you-n b { font-size: 34px; }
+  .cp-you-tag { font-size: 13.5px; padding: 1px 10px; }
+  .cp-you .cp-snap { margin: 0 0 4px !important; padding: 2px 8px; font-size: 12.5px; }
+  /* 顶上那句和“你最近处理的 ›”放得下就同一行 */
+  .cp-you { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 18px; }
+  .cp-you > * { flex: 1 1 100%; min-width: 0; }
+  .cp-you > .cp-you-n { flex: 1 1 auto; width: auto; }
+  .cp-you > .cp-recent:not([open]) { flex: 0 0 auto; margin: 0; padding: 0; border: 0; }
+  .cp-you .cp-recent, .cp-you .cp-you-sub, .cp-you .cp-oa-warn { margin-top: 4px; font-size: 13px; }
+  .cp-you .cp-recent > summary { font-size: 13px; }
+  .cp-tools { display: flex; flex: none; align-items: center; gap: 8px; }
+  .cp-meta { margin: 0 4px 0 0; display: grid; justify-items: end; gap: 1px; font-size: 12.5px; line-height: 1.45; color: var(--cp-soft); text-align: right; }
+  .cp-meta-at { font-size: 13.5px; font-weight: 700; color: var(--cp-ink); white-space: nowrap; }
+  .cp-meta-note { color: var(--cp-title); font-weight: 700; }
+  .cp-tool { box-sizing: border-box; width: 36px; height: 36px; display: grid; place-items: center; padding: 0; border: 1px solid #cfe6d7; border-radius: 50%; background: #fff; color: var(--cp-title); font: inherit; font-size: 18px; font-weight: 700; line-height: 1; cursor: pointer; list-style: none; }
+  .cp-tool::-webkit-details-marker { display: none; }
+  .cp-tool:hover { background: #f1faf4; }
+  .cp-tool:focus-visible { outline: 2px solid #2e9d5b; outline-offset: 2px; }
+  .cp-tool[aria-busy="true"] { opacity: .5; cursor: progress; }
+  .cp-help { position: relative; }
+  .cp-help[open] > .cp-tool { background: var(--cp-green); border-color: var(--cp-green); color: #fff; }
+  .cp-help-pop { position: absolute; right: 0; top: 44px; z-index: 30; width: 340px; padding: 10px 16px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fff; box-shadow: 0 12px 32px rgba(21, 68, 35, .14); font-size: 14px; line-height: 1.6; }
+  .cp-help-pop p { margin: 4px 0; }
+
+  /* 左栏：“要你做 N 件”队列 */
+  .cp-need { grid-area: need; position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; align-content: start; align-items: start; }
+  .cp-need > .cp-anchor { position: absolute; top: 0; }
+  .cp-need > .cp-todos { display: contents; }
+  .cp-need-k { display: none; }
+  .cp-need .cp-q { display: block; min-width: 0; }
+  .cp-q-head { display: flex; grid-column: 1 / -1; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
+  .cp-q-n { margin: 0; font-size: 17px; color: var(--cp-title); letter-spacing: .02em; }
+  .cp-q-n b { font-size: 22px; font-variant-numeric: tabular-nums; }
+  .cp-q-modes { display: inline-flex; padding: 2px; border: 1px solid var(--cp-line); border-radius: 999px; background: #fff; }
+  .cp-q-mode { font: inherit; font-size: 13px; padding: 2px 12px; border: 0; border-radius: 999px; background: none; color: var(--cp-soft); cursor: pointer; }
+  .cp-q-mode[aria-pressed="true"] { background: #e9f6ee; color: var(--cp-title); font-weight: 700; }
+  .cp-q-mode:focus-visible { outline: 2px solid #2e9d5b; outline-offset: 1px; }
+  /* 一行：类型 · 对话名 · 问题（放不下省略） · 几点问的 · [AI 建议] */
+  .cp-q-row { align-items: center; gap: 10px; min-height: 42px; box-sizing: border-box; padding: 5px 10px 5px 10px; border: 1px solid var(--cp-line); border-left: 4px solid #e2c36c; border-radius: 12px; background: #fff; cursor: pointer; }
+  .cp-q-row:hover { background: #f6fcf8; border-color: #9ddcae; }
+  .cp-q-row:focus-visible { outline: 2px solid #2e9d5b; outline-offset: 2px; }
+  .cp-q-tag { flex: none; padding: 0 8px; border-radius: 6px; font-size: 12.5px; font-weight: 700; line-height: 1.8; background: #fbf1d4; color: #7a5600; }
+  .cp-q-tag.is-wait { background: #e8f0f8; color: #2463a8; }
+  .cp-q-tag.is-confirm { background: #fbe4df; color: var(--cp-red); }
+  .cp-q-text { flex: 1 1 auto; min-width: 0; display: flex; align-items: baseline; gap: 8px; overflow: hidden; white-space: nowrap; }
+  .cp-q-src { flex: none; max-width: 40%; overflow: hidden; text-overflow: ellipsis; font-size: 13.5px; color: #3f5f7a; }
+  .cp-q-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 15.5px; font-weight: 700; color: var(--cp-ink); }
+  .cp-q-at { flex: none; font-size: 12.5px; color: var(--cp-soft); white-space: nowrap; }
+  .cp-q-at.is-urgent { color: var(--cp-red); font-weight: 700; }
+  .cp-btn.cp-q-pick { flex: none; max-width: 16em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 3px 12px; font-size: 13px; font-weight: 700; background: var(--cp-green); border-color: var(--cp-green); color: #fff; }
+  .cp-btn.cp-q-pick:hover { filter: brightness(1.05); background: var(--cp-green); }
+  .cp-q.is-acted > .cp-q-row { opacity: .6; }
+  .cp-q-row.is-wait { border-left-color: #2463a8; }
+  .cp-q-row:is(.is-confirm, .is-urgent) { border-left-color: var(--cp-red); }
+
+  /* 展开的卡：紧凑一些（等你回的卡约 240—260 高）；选项里 AI 建议实心、点了会怎样写在同一行；次要动作一行小字 */
+  .cp-q > .cp-ask { padding: 12px 18px; }
+  .cp-q > .cp-ask .cp-ask-title { font-size: 17px; }
+  .cp-q > .cp-ask .cp-own-s { margin: 4px 0 0; font-size: 14.5px; line-height: 1.55; }
+  .cp-q > .cp-ask.is-wait .cp-ask-title { margin-top: 6px; }
+  .cp-q .cp-oa { margin-top: 8px; }
+  .cp-q .cp-oa-quiz { margin: 0; }
+  .cp-q .cp-oa-q { margin: 0; }
+  .cp-q .cp-oa-opts { gap: 6px; }
+  .cp-q .cp-oa-opts > li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+  .cp-q .cp-oa .cp-btn { min-height: 32px; padding: 3px 14px; font-size: 14px; }
+  .cp-q .cp-oa-detail { padding: 0; font-size: 13px; }
+  .cp-q .cp-oa > .cp-own-s { margin: 8px 0 0; font-size: 13.5px; color: var(--cp-soft); }
+  .cp-q .cp-oa > .cp-own-s b { color: var(--cp-soft); }
+  .cp-q .cp-oa:has(> .cp-oa-minor) { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 12px; }
+  .cp-q .cp-oa:has(> .cp-oa-minor) > * { flex: 1 1 100%; min-width: 0; }
+  .cp-q .cp-oa:has(> .cp-oa-minor) > :is(.cp-oa-bar, .cp-oa-minor) { flex: 0 1 auto; margin-top: 8px; }
+  .cp-q .cp-oa-bar > :is([data-act="delegate"], [data-act="unclear"], [data-add]),
+  .cp-q .cp-oa .cp-btn.cp-oa-link { min-height: 0; padding: 2px 0; border: 0; border-radius: 0; background: none; font-size: 13.5px; color: var(--cp-title); text-decoration: underline; text-decoration-color: #b9dcc5; text-underline-offset: 3px; }
+  .cp-q .cp-oa .cp-btn.cp-oa-link { color: var(--cp-soft); text-decoration-color: #d3ddd7; }
+  .cp-q .cp-oa-bar > :is([data-act="delegate"], [data-act="unclear"], [data-add]):hover, .cp-q .cp-oa .cp-btn.cp-oa-link:hover { background: none; color: var(--cp-ink); }
+  .cp-q .cp-oa-bar > :is([data-act="delegate"], [data-act="unclear"], [data-add]) + :is([data-act="delegate"], [data-act="unclear"], [data-add])::before,
+  .cp-q .cp-oa-minor > .cp-oa-link + .cp-oa-link::before { content: "·"; display: inline-block; margin-right: 10px; color: #b6c4bb; text-decoration: none; }
+  .cp-q .cp-oa-bar { gap: 6px 10px; }
+  .cp-q .cp-oa-minor { gap: 4px 10px; margin: 0; }
+  .cp-q .cp-oa-minor::before { content: "|"; align-self: center; margin-right: 2px; color: #cfd8d2; }
+  .cp-q .cp-oa-panel { flex-basis: 100%; }
+
+  /* 右栏固定（sticky，自己滚）：AI 正在干活 → AI 手上 N 件 → 你得知道 → 状态（电脑、自动任务、备份、安全四灯，健康分）→ 停了的数据 → 你放着 N 件 */
+  .cp-rail { grid-area: rail; align-self: start; position: sticky; top: 120px; max-height: calc(100vh - 132px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin;
+    display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; align-content: start; padding: 0 4px 6px 0; }
+  .cp-rail > .cp-home, .cp-rail .cp-lines { display: contents; }
+  .cp-rail > *, .cp-rail .cp-home > *, .cp-rail .cp-lines > * { grid-area: auto; min-width: 0; margin: 0; }
+  .cp-rail .cp-run { order: 10; }
+  .cp-rail .cp-go { order: 20; }
+  .cp-rail .cp-know { order: 30; }
+  .cp-rail > .cp-status { order: 40; }
+  .cp-rail .cp-lines > :is(.cp-stale-fold, .cp-line) { order: 60; }
+  .cp-rail .cp-lines > .cp-mine { order: 70; }
+  .cp-rail :is(.cp-run-list, .cp-know-list) { grid-template-columns: minmax(0, 1fr); }
+  .cp-rail .cp-run-row:nth-child(2) { border-top: 1px solid #edf3ef; }
+  /* 右栏的“其余 N 个”：在干活、等你回话的排前面，停了没做完、看不出在干嘛的排最后 */
+  .cp-rail .cp-run-all .cp-run-row:is(.is-stopped, .is-unknown) { order: 1; }
+  .cp-rail .cp-run-row { position: relative; }
+  .cp-rail .cp-run-row:has(> .cp-open) { padding-right: 96px; }
+  .cp-rail .cp-run-row > .cp-open { position: absolute; top: 7px; right: 0; margin: 0; }
+  .cp-rail .cp-go, .cp-rail .cp-lines > details > summary { padding: 8px 12px; font-size: 14px; }
+  /* 状态：四灯两行两格，健康分在下面 */
+  .cp-status { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .cp-status > .cp-overview-tri, .cp-status .cp-tri { display: contents; }
+  .cp-status .cp-tri-cell { order: 1; min-width: 0; }
+  .cp-status > .cp-security-wrap { order: 2; grid-area: auto; grid-column: auto; min-width: 0; margin: 0; }
+  .cp-status .cp-score { order: 3; grid-area: auto; grid-column: 1 / -1; padding: 0 4px; }
+  .cp-status .cp-tri-cell a { padding: 8px 12px; border-radius: 12px; }
+  .cp-status .cp-tri-status { font-size: 15.5px; }
+  .cp-status .cp-tri-who { font-size: 12.5px; }
+  .cp-status :is(.cp-tri-why, .cp-tri-note) { display: none; }
+  .cp-status > .cp-security-wrap { display: block; padding: 8px 12px; border-left: 5px solid var(--cp-green); border-radius: 12px; }
+  .cp-status :is(.cp-security-title, .cp-sec-item) { display: none; }
+  .cp-status .cp-security { display: block; }
+  .cp-status .cp-security::before { content: "安全和授权"; display: block; font-size: 13px; color: var(--cp-soft); }
+  .cp-status .cp-sec-line { display: block; padding: 0; border: 0; background: none; font-size: 13px; line-height: 1.45; color: var(--cp-ink) !important; text-decoration: none; }
+  .cp-status .cp-sec-line > :is(.cp-dot, b) { display: none; }
+  /* 要你做的只有一两件（或一件都没有）：左栏用不满，右栏铺开成一整行三栏，不留大片空白 */
+  .cp-hero:has(.cp-q-few), .cp-hero:has(.cp-need:empty) { grid-template-areas: "bar bar" "need need" "rail rail"; }
+  .cp-hero:has(.cp-q-few) .cp-rail, .cp-hero:has(.cp-need:empty) .cp-rail { position: static; max-height: none; overflow: visible; padding: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-areas: "run know status" "go know status" "mine know stale"; align-items: start; column-gap: 20px; }
+  :is(.cp-hero:has(.cp-q-few), .cp-hero:has(.cp-need:empty)) .cp-rail .cp-run { grid-area: run; }
+  :is(.cp-hero:has(.cp-q-few), .cp-hero:has(.cp-need:empty)) .cp-rail .cp-go { grid-area: go; }
+  :is(.cp-hero:has(.cp-q-few), .cp-hero:has(.cp-need:empty)) .cp-rail .cp-know { grid-area: know; }
+  :is(.cp-hero:has(.cp-q-few), .cp-hero:has(.cp-need:empty)) .cp-rail > .cp-status { grid-area: status; }
+  :is(.cp-hero:has(.cp-q-few), .cp-hero:has(.cp-need:empty)) .cp-rail .cp-lines > :is(.cp-stale-fold, .cp-line) { grid-area: stale; }
+  :is(.cp-hero:has(.cp-q-few), .cp-hero:has(.cp-need:empty)) .cp-rail .cp-lines > .cp-mine { grid-area: mine; }
+}
+/* 1200—1439：顶栏挤一些，标题图和那句话小一号，“全部显示”这行小字不出（公开版那句私人件数照出） */
+@media (min-width: 1200px) and (max-width: 1439.98px) {
+  .cp-hero h1 img { height: 42px; }
+  .cp-topbar { gap: 14px; }
+  .cp-you { padding: 8px 14px; }
+  .cp-you-n, .cp-you.is-said .cp-you-n { font-size: 19px; }
+  .cp-meta:has(.cp-meta-at) .cp-meta-sub { display: none; }
+  .cp-page:has(.cp-viewer-line:not(.is-owner)) .cp-meta .cp-meta-sub { display: block; }
+}
+/* 插画：1600 宽以上缩进顶栏右端，高 100；1200—1599 不出 */
+@media (min-width: 1600px) {
+  .cp-hero { --cp-rail-w: 420px; }
+  .cp-topbar > .cp-hero-art { display: block; flex: none; width: auto; height: 100px; margin: -6px 0; }
+  .cp-topbar > .cp-hero-art > img { width: auto; height: 100px; max-height: none; }
+}
+@media (min-width: 1700px) {
+  .cp-hero { --cp-rail-w: 460px; }
+  /* 全站正文最宽 1392；驾驶舱在宽屏上放宽，不浪费两边 */
+  main:has(> .cp-page .cp-topbar) { max-width: min(1840px, calc(100vw - 48px)); }
+}
+/* 队列怎么排：没选过时 1200—1699 一行一件、1700 以上全部展开（两列）；选过就照选的（client.js 写在 #need-you 的 data-qmode） */
+@media (min-width: 1200px) and (max-width: 1699.98px) {
+  .cp-need:not([data-qmode="all"]) .cp-q:not(.is-open) > .cp-ask { display: none; }
+  .cp-need:not([data-qmode="all"]) .cp-q:not(.is-open) > .cp-q-row { display: flex; }
+}
+@media (min-width: 1700px) {
+  .cp-need[data-qmode="rows"] .cp-q:not(.is-open) > .cp-ask { display: none; }
+  .cp-need[data-qmode="rows"] .cp-q:not(.is-open) > .cp-q-row { display: flex; }
+  .cp-need:not([data-qmode="rows"]) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

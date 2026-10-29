@@ -58,20 +58,33 @@ const st = (v) => (STATES.has(v) ? v : 'unavailable');
 // “AI 正在跑”（后端 cockpit.ai_running）：每件此刻在跑的 AI 活一行。认不得的状态一律当“判断不了”；
 // 卡住 = 网络在重连、额度用完、登录失效、停了（和后端 stuck_count 同一口径；后端给了就以它为准）
 export const RUN_STATUSES = ['running', 'network_retry', 'quota_exhausted', 'login_failed', 'waiting_owner', 'stopped', 'unknown'];
-export const RUN_STUCK = ['network_retry', 'quota_exhausted', 'login_failed', 'stopped'];
+// 卡住：只算额度用完、登录失效、网络在重连（10 月 29 日起后端也这么算；半路停下的记为“停了，没做完”，不算卡住）
+export const RUN_STUCK = ['network_retry', 'quota_exhausted', 'login_failed'];
 const text = (x, max = 200) => (typeof x === 'string' ? x.trim().slice(0, max) : '');
 const nat = (x) => (Number.isInteger(x) && x >= 0 ? x : null);
 // 本人设备上条目带的按钮和状态（后端 owner_actions、item_version、handed_to_ai、verifying、seen_at）；其他列表的行原样透传，这里给重新拼过的行用
 const OWNER_FIELDS = ['owner_actions', 'item_version', 'handed_to_ai', 'verifying', 'seen_at'];
 const ownerFields = (r) => Object.fromEntries(OWNER_FIELDS.filter((k) => r[k] !== undefined && r[k] !== null).map((k) => [k, r[k]]));
+const progressOf = (r) => {
+  const p = r.progress;
+  if (typeof p === 'string') return text(p) ? { text: text(p, 160), at: r.progress_at || null } : null;
+  if (!p || typeof p !== 'object' || Array.isArray(p)) return null;
+  const t = text(p.text ?? p.summary, 160);
+  return t ? { text: t, at: p.at || p.observed_at || p.updated_at || null } : null;
+};
 function aiRunning(raw) {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
   const rows = list(raw.rows).map((r) => ({
     id: text(r.id, 120), status: RUN_STATUSES.includes(r.status) ? r.status : 'unknown', status_text: text(r.status_text, 20),
     vendor: ['claude', 'gpt'].includes(r.vendor) ? r.vendor : '', model: text(r.model, 60), model_text: text(r.model_text, 40), effort: text(r.effort, 20), kind: text(r.kind, 40),
     title: text(r.title, 120), started_at: r.started_at || null, last_activity_at: r.last_activity_at || null, detail: text(r.detail, 300), helpers: nat(r.helpers) || 0,
+    // 本人版才有：它现在在做哪一步（doing，一句话；step_index / step_total 第几步、共几步）和最近一次进展（progress：一句话 + 时间）。
+    // 对话标题是开头定的、后来会过时，GPT 任务名常是给 AI 看的，所以有这两样时主行写它们，标题降成灰色小标签（render.js 的 runRow）
+    doing: text(r.doing, 140), step_index: nat(r.step_index), step_total: nat(r.step_total), progress: progressOf(r),
     // 公开版的行：后端把标题换成“一件 AI 活”、不给 detail，并标 placeholder
     placeholder: r.placeholder === true,
+    // 电脑版“打开”组（后端 open：conversation / report / targets，见 render.js 的 openGroup）；没给就没有
+    ...(r.open && typeof r.open === 'object' && !Array.isArray(r.open) ? { open: r.open } : {}),
     // 本人设备才有：能点的按钮（卡住的行有“改给另一家”）、条目版本、现在是哪家在做，以及交出去以后的状态
     ...ownerFields(r), ...(['claude', 'gpt'].includes(r.executor) ? { executor: r.executor } : {}),
   }));
@@ -79,7 +92,9 @@ function aiRunning(raw) {
   const count = nat(raw.count) ?? rows.length;
   // stale_count：早就停了、不算在跑的件数（后端没给就是 0）；
   // unread：后端说这次读不全（observed_at 为空且有缺口）又没有行，不能说成“没有 AI 在跑”
-  return { count, stuck_count: nat(raw.stuck_count) ?? stuck, stale_count: nat(raw.stale_count) || 0, summary: text(raw.summary, 80), observed_at: raw.observed_at || null, rows,
+  // stopped_count：半路停下超过半小时、还没满 3 小时的（记为“停了，没做完”，满 3 小时并进 stale_count）；后端没给就数行
+  return { count, stuck_count: nat(raw.stuck_count) ?? stuck, stale_count: nat(raw.stale_count) || 0, stopped_count: nat(raw.stopped_count) ?? rows.filter((r) => r.status === 'stopped').length,
+    summary: text(raw.summary, 80), observed_at: raw.observed_at || null, rows,
     unread: !count && !rows.length && !raw.observed_at && Array.isArray(raw.gaps) && raw.gaps.length > 0 };
 }
 
@@ -137,7 +152,10 @@ export function normalize(raw) {
     // 网站上次成功发布的回执（website_release）：{state: success|unavailable, published_at, version, verified, text}；只证明上次成功那次
     website_release: v.website_release && typeof v.website_release === 'object' ? v.website_release : null,
     // 本人版 / 公开版：viewer 说这次拿到的是哪一版；private_count 是只在本人设备上显示的事项数。行上的 owner_only、placeholder、owner_detail 随行原样带着
-    viewer: (() => { const w = v.viewer; if (!w || typeof w !== 'object') return null; return { kind: w.kind === 'owner' ? 'owner' : 'public', device_state: ['ok', 'none', 'invalid', 'unavailable'].includes(w.device_state) ? w.device_state : 'none', device_name: typeof w.device_name === 'string' ? w.device_name : null }; })(),
+    viewer: (() => { const w = v.viewer; if (!w || typeof w !== 'object') return null; return { kind: w.kind === 'owner' ? 'owner' : 'public', device_state: ['ok', 'none', 'invalid', 'unavailable'].includes(w.device_state) ? w.device_state : 'none', device_name: typeof w.device_name === 'string' ? w.device_name : null,
+      // 电脑版：这台是电脑还是手机、是哪台电脑（主驾驶 / 副驾驶），以及打开、看汇报、一次交多件这几个接口能不能用
+      device_kind: ['pc', 'phone'].includes(w.device_kind) ? w.device_kind : null, device_machine: text(w.device_machine, 20) || null,
+      capabilities: (Array.isArray(w.capabilities) ? w.capabilities : []).filter((c) => ['open', 'report', 'batch'].includes(c)) }; })(),
     private_count: Number.isInteger(v.private_count) && v.private_count >= 0 ? v.private_count : null,
     // 本人设备才有（公开版不带）：近 30 天你点过的处理（精简视图是顶层 owner_recent，全量在 cockpit 下）、写回工作器状态；
     // 通知发没发出去（notification_status=failed 时写 notification_message）、调度排队提示（owner_dispatch_notice，后端下一单加）。没有就是空，不占位
