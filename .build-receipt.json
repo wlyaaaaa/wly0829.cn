@@ -2,62 +2,61 @@
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
   "source_commit": "Unknown",
-  "prepared_at_beijing": "2026-10-30T01:57:38.874375+08:00",
-  "seconds": 106.985,
+  "prepared_at_beijing": "2026-10-30T02:13:05.427500+08:00",
+  "seconds": 105.93,
   "steps": [
     {
       "name": "home_highlights",
-      "seconds": 0.171
+      "seconds": 0.187
     },
     {
       "name": "source",
-      "seconds": 1.756
+      "seconds": 2.74
     },
     {
       "name": "fingerprint",
-      "seconds": 0.865
+      "seconds": 1.125
     },
     {
       "name": "prepare",
-      "seconds": 1.972
+      "seconds": 2.532
     },
     {
       "name": "native_inputs",
-      "seconds": 1.369
+      "seconds": 1.653
     },
     {
       "name": "blocks",
-      "seconds": 0.649
+      "seconds": 0.773
     },
     {
       "name": "astro",
-      "seconds": 16.215
+      "seconds": 9.753
     },
     {
       "name": "assets",
-      "seconds": 3.855
+      "seconds": 4.18
     },
     {
       "name": "finish",
-      "seconds": 5.446
+      "seconds": 5.614
     },
     {
       "name": "finalize",
-      "seconds": 64.107
+      "seconds": 66.527
     },
     {
       "name": "public",
-      "seconds": 9.905
+      "seconds": 10.183
     },
     {
       "name": "inventory",
-      "seconds": 0.675
+      "seconds": 0.664
     }
   ],
   "rebuilt_pages": [
     "/cockpit/",
-    "/cockpit/ai/",
-    "/cockpit/storage/"
+    "/cockpit/ai/"
   ],
   "html_files": 322,
   "files": [
@@ -412,6 +411,11 @@
       "sha256": "3fab443550207616ebcdee5b7a79c652de6b16c87566eb2f08ba3454e0b8bb49"
     },
     {
+      "path": "_astro/index.astro_astro_type_script_index_0_lang.C_NpAMLX.js",
+      "bytes": 180,
+      "sha256": "200b1ce7f5d96df609eb6b7e98aaf0d4ef66904dab71f89770d40ab11335b28c"
+    },
+    {
       "path": "_astro/index.astro_astro_type_script_index_0_lang.CbjDvVqQ.js",
       "bytes": 69472,
       "sha256": "bc6896f8c67a96136d7137f235adf380eb4ea5c2141a6e401a2d232331e3522a"
@@ -460,6 +464,11 @@
       "path": "_astro/index.astro_astro_type_script_index_0_lang.ndFMvVeM.js",
       "bytes": 64802,
       "sha256": "95f58cdb5f752f6488b01fe653a8ce0ce67c63e2abd860ebc5d8541d0092ee27"
+    },
+    {
+      "path": "_astro/index.astro_astro_type_script_index_0_lang.vlL908CB.js",
+      "bytes": 180,
+      "sha256": "200b1ce7f5d96df609eb6b7e98aaf0d4ef66904dab71f89770d40ab11335b28c"
     },
     {
       "path": "_astro/index.astro_astro_type_script_index_0_lang.ZEaooG7N.js",
@@ -525,6 +534,11 @@
       "path": "_astro/page-interactions.BE1IanXr.js",
       "bytes": 11919,
       "sha256": "dbc14d4aa4149ac92af788dab1c3475630a16be4de9e48cace80d627bc1faeae"
+    },
+    {
+      "path": "_astro/refresh-button.DiwdIqDo.js",
+      "bytes": 120272,
+      "sha256": "6636b0b65418560edbfe602a21d47750ad3927bab4ce88d52ad331e05a7319e7"
     },
     {
       "path": "_astro/refresh-button.otp3rqq_.js",
@@ -27143,8 +27157,8 @@
     },
     {
       "path": "cockpit/ai/index.html",
-      "bytes": 715323,
-      "sha256": "3b8f166cff125c54e331aeff14b81a5da4d7d9216747d344c6b05c88cfae033e"
+      "bytes": 715672,
+      "sha256": "95ba84965920a9d70e3db28be5376b8bd33fd6fbe69b828dd69d03922ea860c6"
     },
     {
       "path": "cockpit/assets/b2-controls-f2afbded2566.css",
@@ -27253,8 +27267,8 @@
     },
     {
       "path": "cockpit/index.html",
-      "bytes": 792463,
-      "sha256": "f4ca3d7baed64d54ced7dfb32dc8f4a8c8b4460dc4f48f937da68c0421dd4c25"
+      "bytes": 792784,
+      "sha256": "51119ca70c389b11aff1e5597b3b8f84096dffe6922911141984f9ccda184a06"
     },
     {
       "path": "cockpit/storage/index.html",
@@ -28929,12 +28943,12 @@
     {
       "path": "release-identity.json",
       "bytes": 211,
-      "sha256": "1d8eae9c453f02206ccdf7e691aea269811bc6e416c5645aabd9730812a80dec"
+      "sha256": "886cd4e4028a74875241d57b720a667269a294107afb1b3b216849192f696dd3"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 5412857,
-      "sha256": "24d527aac78c5c54810ec321af313675394a7a812faf3e93f17ff06810f850ee"
+      "bytes": 5415288,
+      "sha256": "cb0951780ab7c3bfcd6e191a7000cbd12e9229a60385be9beb8ac3483755de3b"
     },
     {
       "path": "rescue/index.html",
@@ -29549,5 +29563,5 @@
   ],
   "output": "E:\\Cache\\wly-site-build\\wt\\dist",
   "previous_oss_source": "published",
-  "previous_release_id": "d5730fd7219a1daf63485d2c05900e9d6f87496374e378b8975043a78ab8985b"
+  "previous_release_id": "ff954e54d4bc716571bd10d28ea4f631bf881c8229c19cfe17fbccd7938d3ada"
 }
