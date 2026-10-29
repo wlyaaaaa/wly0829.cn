@@ -47,7 +47,8 @@ test('队列：点过哪件展开哪件（act.ui）；那件办完不在了回�
 test('队列只有一两件：不给“一行一件 / 全部展开”，带一个记号让右栏铺开；私人占位行没有行，卡照旧', () => {
   const ph = { id: 'p1', title: '有一个 AI 对话在等你回复', placeholder: true, owner_only: true, ask_kind: 'cooperate' };
   const html = REGIONS['need-you'](normalize(base({ viewer: { kind: 'public' }, need_you: [ph] })), ctx());
-  assert.match(html, /<span class="cp-q-few" hidden><\/span>/);
+  // 只有一件时带 is-one：电脑上那一张占满整行
+  assert.match(html, /<span class="cp-q-few is-one" hidden><\/span>/);
   assert.doesNotMatch(html, /<button|cp-q-row/);
   assert.match(html, /<div class="cp-q is-open"><article class="cp-ask is-private" id="todo-p1"/);
   assert.doesNotMatch(REGIONS['need-you'](normalize(base({ need_you: queue() })), ctx(acts())), /cp-q-few/);
@@ -187,7 +188,7 @@ test('账本页电脑版表格：AI 在跟（晚了的在前、AI 定了一行�
   assert.match(decT, /<button type="button" class="cp-btn cp-btn-main" data-lb-ack>全部知道了（2 件）<\/button>/);
   assert.equal((decT.match(/data-lb="/g) || []).length, 2);
   assert.match(decT, /<td class="cp-lt-dec">不再跟进，这条结束<\/td><td class="cp-lt-why">示例原因d1<\/td>/);
-  assert.match(decT, />不同意<\/button>/);
+  assert.match(decT, />不同意，改一下<\/button>/);
   const picked = REGIONS.ledger(mk({ kind: 'owner', capabilities: ['batch'] }), ctx(acts({}, { [LB_KEY]: { sel: ['d2'] } })));
   assert.match(picked, /data-lb="d2" checked/);
   assert.match(picked, />选中的 1 件都知道了</);
@@ -246,4 +247,12 @@ test('线上真数据自查：要你做的只有一两件时都展开；等你�
   assert.match(two, /<p class="cp-wait-src">一个 AI 对话（没写是哪个） · [^<]+ 问的<\/p>/);
   // 三件以上照旧只展开一件
   assert.equal((REGIONS['need-you'](normalize(base({ need_you: queue() })), ctx(acts())).match(/<div class="cp-q is-open[^"]*" data-q=/g) || []).length, 1);
+});
+
+test('线上真数据第二轮：“刚做完”有自己的标签、不重复“刚做完：”、写谁做完的；账本 AI 已定写“不同意，改一下”', () => {
+  const k = { id: 'dispatch-result:job-1', kind: 'just_completed', executor: 'claude', title: '示例验收', text: '刚做完：示例验收活', at: '2026-10-29T21:30:00+08:00', owner_actions: ['note', 'redo', 'ack', 'unclear'] };
+  const home = REGIONS.home(normalize(base({ must_know: { state: 'ok', items: [k] } })), ctx(acts()));
+  assert.match(home, /<span class="cp-know-tag is-green">刚做完<\/span><span class="cp-know-text">示例验收活/);
+  assert.doesNotMatch(home, /刚做完：示例/);
+  assert.match(home, /21:30 · Claude 做完/);
 });

@@ -483,7 +483,7 @@ export function needCards(v, ctx) {
     const open = x.id === openId || order.length <= 2;
     return `<div class="cp-q${open ? ' is-open' : ''}${actCls(x, ctx)}" data-q="${esc(x.id)}">${qRow(x, i.r, ctx, k, open)}${card}</div>`;
   };
-  const few = all.length <= 2 ? '<span class="cp-q-few" hidden></span>' : '';
+  const few = all.length <= 2 ? `<span class="cp-q-few${all.length === 1 ? ' is-one' : ''}" hidden></span>` : '';
   return anchor('pending') + head + few + NEED_GROUPS.map(([k, title]) => {
     const list = all.filter((i) => groupOf(i.x) === k);
     return list.length ? `<h3 class="cp-sub cp-need-k">${title}</h3><div class="cp-todos">${list.map((i) => wrap(i, k)).join('')}</div>` : '';
@@ -852,7 +852,7 @@ function score(v, ctx, off) {
 // - “AI 在修”、其他真正影响本人的事排在前面；合完还超过 5 行，第 5 行起折成“其余 N 条”。
 // 每个折叠都带固定 id，每分钟换字时 client.js 按 id 保持展开。
 export const knowId = (k) => 'know-' + String(k.id || '').replace(/[^\w-]/g, '');
-const KNOW_TAG = { repairing: ['AI 在修', 'neutral'], recovered: ['已恢复', 'ok'], report: ['汇报', 'neutral'], ai_decision: ['AI 已定', 'neutral'] };
+const KNOW_TAG = { repairing: ['AI 在修', 'neutral'], recovered: ['已恢复', 'ok'], report: ['汇报', 'neutral'], ai_decision: ['AI 已定', 'neutral'], just_completed: ['刚做完', 'ok'] };
 // 排在前面的先后：AI 在修 → 其他影响本人的事（后端以后加的新种类也算这一档） → 汇报；合起来的两行放最后
 const KNOW_RANK = { repairing: 0, report: 2 };
 export const KNOW_MAX = 5;
@@ -884,7 +884,8 @@ function knowBlock(v, ctx) {
   const mine = (k) => k.kind !== 'recovered' && k.kind !== 'ai_decision';
   const all = m.items.filter(ok).filter(mine), old = m.archived.filter(ok).filter(mine);
   const tagOf = (kind) => { const [tag, st] = KNOW_TAG[kind] || ['你得知道', 'neutral']; return `<span class="cp-know-tag is-${light(st)}">${tag}</span>`; };
-  const smallOf = (k) => [k.at ? when(k.at, ctx.now) : '', !isPh(k) && typeof k.exit_when === 'string' ? k.exit_when : ''].filter(Boolean);
+  // 刚做完的（后端 kind=just_completed，带 executor）：小字写“几点 · Claude 做完”
+  const smallOf = (k) => [k.at ? when(k.at, ctx.now) + (k.kind === 'just_completed' && VENDOR[k.executor] ? ` · ${VENDOR[k.executor]} 做完` : '') : '', !isPh(k) && typeof k.exit_when === 'string' ? k.exit_when : ''].filter(Boolean);
   // 一条照原样的行；汇报只露第一句，其余点开看
   const row = (k) => {
     const small = smallOf(k);
@@ -893,7 +894,8 @@ function knowBlock(v, ctx) {
       const [head, rest] = firstSentence(k);
       if (rest) return `<li id="${esc(knowId(k))}" class="is-report${phCls(k)}${actCls(k, ctx)}"${itemAttr(k)}>${tagOf('report')}<details class="cp-know-fold" id="${esc(knowId(k))}-open"><summary>${esc(plain(head))}${ownTag(k)}</summary><div class="cp-know-sub"><p>${esc(plain(rest))}</p>${detail(k)}${tail}</div></details>${ownerBox(k, ctx)}</li>`;
     }
-    const text = isPh(k) ? k.title || PRIVATE_TITLE : plain(k.text);
+    // 标签已经写了“刚做完”，正文开头同样的“刚做完：”不再重复
+    const text = isPh(k) ? k.title || PRIVATE_TITLE : k.kind === 'just_completed' ? plain(k.text).replace(/^\s*刚做完[：:]\s*/, '') : plain(k.text);
     return `<li id="${esc(knowId(k))}" class="is-${esc(k.kind || 'other')}${phCls(k)}${actCls(k, ctx)}"${itemAttr(k)}>${tagOf(k.kind)}<span class="cp-know-text">${esc(text)}${ownTag(k)}${detail(k)}${tail}</span>${ownerBox(k, ctx)}</li>`;
   };
   const rows = all.map((k, i) => ({ k, i, r: KNOW_RANK[k.kind] ?? 1 })).sort((a, b) => a.r - b.r || a.i - b.i).map(({ k }) => row(k));
@@ -1158,7 +1160,7 @@ function decisionsTable(v, ctx) {
     return `<tr class="is-ai_decision${actCls(k, ctx)}">${batch ? `<td class="cp-lt-pick">${can ? `<input type="checkbox" data-lb="${esc(k.id)}"${sel.has(k.id) ? ' checked' : ''} aria-label="选这条">` : ''}</td>` : ''}`
       + `<td class="cp-lt-what"><span class="cp-lt-title">${esc(d ? d.topic : k.text)}${ownTag(k)}</span>${detail(k)}</td><td class="cp-lt-dec">${d ? esc(d.decision) : ''}</td>`
       + `<td class="cp-lt-why">${basis}</td><td class="cp-lt-at">${k.at ? esc(when(k.at, ctx.now)) : ''}</td>`
-      + (anyAct ? `<td class="cp-lt-act">${ownerBox(k, ctx, { label: { note: '不同意' } })}</td>` : '') + `</tr>`;
+      + (anyAct ? `<td class="cp-lt-act">${ownerBox(k, ctx, { label: { note: '不同意，改一下' } })}</td>` : '') + `</tr>`;
   };
   const n = sel.size || ackable.length;
   const bar = batch && ackable.length ? `<div class="cp-lt-bar"><label class="cp-lt-all"><input type="checkbox" data-lb-all${sel.size === ackable.length ? ' checked' : ''}> 全选</label>`
