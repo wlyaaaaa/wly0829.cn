@@ -683,28 +683,110 @@ function score(v, ctx, off) {
     + `<p class="cp-score-note">这个分数主要看电脑和 AI 的活，不等于你要做几件事；你要做的看上面第一行。</p></div></details>`;
 }
 // “你得知道”（后端 must_know，字段在才出这一块）：AI 在修、影响你用电脑的毛病；刚恢复、刚办好的事；你没回又该知道的汇报。
-// 普通消息最多 5 条，AI 决定保留后端给出的全部行；收起时间由各类消息的后端规则决定。
+// 本人 10 月 29 日：长了头疼、短了像谜语，最多 5 行。所以：
+// - 几条“××已恢复”合成一行“后台 N 项功能中断过，现在都恢复了”，点开看是哪几项；
+// - “AI 已定”是 AI 自己的技术决定，本人不用逐条知道：合成一行“AI 自己定了 N 件技术问题”，点开才看全部（每条仍能复制给 AI 改）；
+// - 汇报只露第一句，后面的数字收进展开里；
+// - “AI 在修”、其他真正影响本人的事排在前面；合完还超过 5 行，第 5 行起折成“其余 N 条”。
+// 每个折叠都带固定 id，每分钟换字时 client.js 按 id 保持展开。
 export const knowId = (k) => 'know-' + String(k.id || '').replace(/[^\w-]/g, '');
 const KNOW_TAG = { repairing: ['AI 在修', 'neutral'], recovered: ['已恢复', 'ok'], report: ['汇报', 'neutral'], ai_decision: ['AI 已定', 'neutral'] };
+// 排在前面的先后：AI 在修 → 其他影响本人的事（后端以后加的新种类也算这一档） → 汇报；合起来的两行放最后
+const KNOW_RANK = { repairing: 0, report: 2 };
+export const KNOW_MAX = 5;
+// 第一句：到第一个逗号、句号、分号为止（前面至少 6 个字，免得只剩“每周体检”四个字）；后端给了 headline 就用它
+export function firstSentence(k) {
+  const s = String(k?.text || '').trim();
+  if (typeof k?.headline === 'string' && k.headline.trim() && s.startsWith(k.headline.trim())) return [k.headline.trim(), s.slice(k.headline.trim().length).replace(/^[，。；！？\s]+/, '')];
+  const m = /^(.{6,}?)[，。；！？]/.exec(s);
+  const tail = m ? s.slice(m[0].length).trim() : '';
+  return tail ? [m[1], tail] : [s.replace(/[。\s]+$/, ''), ''];
+}
+// “××已恢复，AI 已核对最近一次成功。”里的“××”
+const recoveredName = (k) => (isPh(k) ? k.title || PRIVATE_TITLE : ((/^(.+?)已恢复/.exec(k.text || '') || [])[1] || String(k.text || '').replace(/[。\s]+$/, '')).trim());
+// AI 决定的原句是“事项：结束；依据”或“事项：限期到 2026-10-31 18:30（北京时间）；依据”，拆成事项、决定、依据三段；拆不出就整句照登
+const DECISION_RE = /^([^]*?)[：:]\s*(结束|限期到\s*\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}(?:\s*（北京时间）)?)\s*(?:[；;]\s*([^]*))?$/;
+function splitDecision(k) {
+  const m = DECISION_RE.exec(String(k.text || '').trim());
+  if (!m || !m[1].trim()) return null;
+  const due = m[2] === '结束' ? '' : (k.decision_due_at && dateHm(k.decision_due_at)) || dateHm(m[2].replace(/^限期到\s*/, '').replace(/\s*（北京时间）$/, '').replace(/\s+/, 'T') + ':00+08:00');
+  return { topic: m[1].trim(), decision: m[2] === '结束' ? '不再跟进，这条结束' : `限期到 ${due}`, basis: (m[3] || '').trim().replace(/[。\s]+$/, '') };
+}
 function knowBlock(v, ctx) {
   const m = v.must_know;
   if (!m) return '';
   if (m.state === 'unavailable') return `<div class="cp-know is-empty"><p>${dot('unavailable')}你得知道：这会儿读不到${m.observed_at ? `（最后 ${esc(when(m.observed_at, ctx.now))} 读到）` : ''}，不代表没有新事</p></div>`;
   const ok = (k) => isPh(k) || (typeof k.text === 'string' && k.text);
   const all = m.items.filter(ok), old = m.archived.filter(ok);
+  const tagOf = (kind) => { const [tag, st] = KNOW_TAG[kind] || ['你得知道', 'neutral']; return `<span class="cp-know-tag is-${light(st)}">${tag}</span>`; };
+  const smallOf = (k) => [k.at ? when(k.at, ctx.now) : '', !isPh(k) && typeof k.exit_when === 'string' ? k.exit_when : ''].filter(Boolean);
+  const revise = (k) => (k.kind === 'ai_decision' ? copyText(`条目编号 ${k.id}；我不同意这条 AI 决定，请按我的补充修改。${isPh(k) ? '' : `当前决定：${k.text}`}`, '复制给 AI', ' cp-btn-quiet') : '');
+  // 一条照原样的行；汇报只露第一句，其余点开看
   const row = (k) => {
-    const [tag, st] = KNOW_TAG[k.kind] || ['你得知道', 'neutral'];
-    const small = [k.at ? when(k.at, ctx.now) : '', !isPh(k) && typeof k.exit_when === 'string' ? k.exit_when : ''].filter(Boolean);
+    const small = smallOf(k);
+    const tail = small.length ? `<small>${small.map(esc).join(' · ')}</small>` : '';
+    if (k.kind === 'report' && !isPh(k)) {
+      const [head, rest] = firstSentence(k);
+      if (rest) return `<li id="${esc(knowId(k))}" class="is-report${phCls(k)}">${tagOf('report')}<details class="cp-know-fold" id="${esc(knowId(k))}-open"><summary>${esc(head)}${ownTag(k)}</summary><div class="cp-know-sub"><p>${esc(rest)}</p>${detail(k)}${tail}</div></details></li>`;
+    }
     const text = isPh(k) ? k.title || PRIVATE_TITLE : k.text;
-    const revise = k.kind === 'ai_decision' ? copyText(`条目编号 ${k.id}；我不同意这条 AI 决定，请按我的补充修改。${isPh(k) ? '' : `当前决定：${k.text}`}`, '复制给 AI', ' cp-btn-quiet') : '';
-    return `<li id="${esc(knowId(k))}" class="is-${esc(k.kind || 'other')}${phCls(k)}"><span class="cp-know-tag is-${light(st)}">${tag}</span><span class="cp-know-text">${esc(text)}${ownTag(k)}${detail(k)}${small.length ? `<small>${small.map(esc).join(' · ')}</small>` : ''}${revise}</span></li>`;
+    return `<li id="${esc(knowId(k))}" class="is-${esc(k.kind || 'other')}${phCls(k)}">${tagOf(k.kind)}<span class="cp-know-text">${esc(text)}${ownTag(k)}${detail(k)}${tail}${revise(k)}</span></li>`;
   };
-  const folded = old.length ? `<details class="cp-know-old"><summary>最近收起的 ${old.length} 条</summary><ul class="cp-know-list">${old.map(row).join('')}</ul></details>` : '';
-  if (!all.length) return `<div class="cp-know is-empty"><p>${dot('ok')}${esc(m.text || '没有要你知道的新事')}</p>${folded}</div>`;
-  let ordinary = 0;
-  const list = all.filter((k) => k.kind === 'ai_decision' || ordinary++ < 5);
-  return `<div class="cp-know"><p class="cp-know-k">你得知道</p><ul class="cp-know-list">${list.map(row).join('')}</ul>`
-    + (list.length > 2 ? `<details class="cp-know-more is-phone" id="know-more"><summary><span class="is-shut">还有 ${list.length - 2} 条，点开看</span><span class="is-open">收起</span></summary></details>` : '') + folded + `</div>`;
+  // 几条“已恢复”合一行（同一项恢复过几次算一项，留最近那次）
+  const recovered = all.filter((k) => k.kind === 'recovered');
+  const byName = new Map();
+  for (const k of recovered) { const n = recoveredName(k), seen = byName.get(n); byName.set(n, { k, times: (seen?.times || 0) + 1, at: !seen || Date.parse(k.at || '') > Date.parse(seen.at || '') ? k.at : seen.at }); }
+  const recoveredRow = () => `<li id="know-recovered" class="is-recovered is-group">${tagOf('recovered')}<details class="cp-know-fold" id="know-recovered-open"><summary>后台 ${byName.size} 项功能中断过，现在都恢复了</summary>`
+    + `<ul class="cp-know-sub">${[...byName.entries()].map(([name, { k, times, at }]) => `<li id="${esc(knowId(k))}"${isPh(k) ? ' class="is-private"' : ''}><span>${esc(name)}${times > 1 ? `（中断过 ${times} 次）` : ''}</span>${at ? `<small>${esc(when(at, ctx.now))} 确认恢复</small>` : ''}</li>`).join('')}</ul>`
+    + `<p class="cp-know-note">AI 都核对过最近一次成功；确认恢复满 3 天后自动收起。</p></details></li>`;
+  // AI 已定合一行，点开逐条：事项、AI 定了什么、依据（依据里多是技术细节，小字放在下面）
+  const decisions = all.filter((k) => k.kind === 'ai_decision');
+  const decisionItem = (k) => {
+    if (isPh(k)) return `<li id="${esc(knowId(k))}" class="is-ai_decision is-private"><span class="cp-know-dec-topic">${esc(k.title || PRIVATE_TITLE)}</span>${revise(k)}</li>`;
+    const d = splitDecision(k);
+    const when1 = k.at ? `<small>${esc(when(k.at, ctx.now))} 定</small>` : '';
+    return `<li id="${esc(knowId(k))}" class="is-ai_decision">` + (d
+      ? `<span class="cp-know-dec-topic">${esc(d.topic)}${ownTag(k)}</span><span class="cp-know-dec-what">AI 定：${esc(d.decision)}</span>${d.basis ? `<span class="cp-know-dec-why">依据：${esc(d.basis)}</span>` : ''}`
+      : `<span class="cp-know-dec-topic">${esc(k.text)}${ownTag(k)}</span>`) + detail(k) + when1 + revise(k) + `</li>`;
+  };
+  const decisionRow = () => `<li id="know-decisions" class="is-ai_decisions is-group">${tagOf('ai_decision')}<details class="cp-know-fold" id="know-decisions-open"><summary>AI 自己定了 ${decisions.length} 件技术问题</summary>`
+    + `<p class="cp-know-note">这些是 AI 自己能定的技术事，你不用逐条看；哪条不同意，点那条的“复制给 AI”说一声就改。</p><ul class="cp-know-sub cp-know-decs">${decisions.map(decisionItem).join('')}</ul></details></li>`;
+  const singles = all.filter((k) => k.kind !== 'recovered' && k.kind !== 'ai_decision')
+    .map((k, i) => ({ k, i, r: KNOW_RANK[k.kind] ?? 1 })).sort((a, b) => a.r - b.r || a.i - b.i).map(({ k }) => row(k));
+  const rows = [...singles, ...(recovered.length > 1 ? [recoveredRow()] : recovered.map(row)), ...(decisions.length ? [decisionRow()] : [])];
+  const folded = old.length ? `<details class="cp-know-old" id="know-old"><summary>最近收起的 ${old.length} 条</summary><ul class="cp-know-list">${old.map(row).join('')}</ul></details>` : '';
+  if (!rows.length) return `<div class="cp-know is-empty"><p>${dot('ok')}${esc(m.text || '没有要你知道的新事')}</p>${folded}</div>`;
+  // 最多 5 行：超过时露前 4 行，第 5 行是“其余 N 条”
+  const shown = rows.length > KNOW_MAX ? rows.slice(0, KNOW_MAX - 1) : rows, more = rows.slice(shown.length);
+  return `<div class="cp-know"><p class="cp-know-k">你得知道</p><ul class="cp-know-list">${shown.join('')}</ul>`
+    + (more.length ? `<details class="cp-know-rest" id="know-rest"><summary>其余 ${more.length} 条</summary><ul class="cp-know-list">${more.join('')}</ul></details>` : '') + folded + `</div>`;
+}
+
+// “AI 正在跑”（后端 ai_running，字段在才出这一块）：每件此刻在跑的 AI 活一行，写清状态、哪家哪个型号、在干什么。
+// 状态带颜色和符号，色盲也分得清；卡住的排前面。公开版后端已把标题换成“一件 AI 活”、不给 detail，这里照显示，不另造文字。
+export const RUN_LOOK = {
+  login_failed: ['登录失效', 'red', '○'], quota_exhausted: ['额度用完', 'red', '○'], network_retry: ['网络在重连', 'yellow', '◐'],
+  waiting_owner: ['等你回', 'blue', '◆'], stopped: ['停了，没正常结束', 'gray', '■'], unknown: ['判断不了', 'gray', '？'], running: ['在跑', 'green', '●'],
+};
+const RUN_ORDER = Object.keys(RUN_LOOK);
+const VENDOR = { claude: 'Claude', gpt: 'GPT' };
+// 顶栏那一段：“AI 在跑 6 个（1 个卡住）”；一个都没有时“没有 AI 在跑”
+export const runLine = (a) => (a.count ? `AI 在跑 ${a.count} 个${a.stuck_count ? `（${a.stuck_count} 个卡住）` : ''}` : '没有 AI 在跑');
+function runBlock(v, ctx) {
+  const a = v.ai_running;
+  if (!a) return '';
+  const at = a.observed_at ? `<span class="cp-run-at">${ctx.offline ? '读不到电脑，这是 ' : ''}${esc(when(a.observed_at, ctx.now))} 读到的</span>` : '';
+  const off = ctx.offline ? ' is-off' : '';
+  if (!a.count && !a.rows.length) return `<div class="cp-run is-empty${off}" id="ai-running"><p class="cp-run-none"><span class="cp-run-k">AI 正在跑</span><span>现在没有 AI 在跑</span>${at}</p></div>`;
+  const rows = a.rows.map((r, i) => ({ r, i })).sort((x, y) => RUN_ORDER.indexOf(x.r.status) - RUN_ORDER.indexOf(y.r.status) || x.i - y.i).map(({ r }) => {
+    const [word, color, mark] = RUN_LOOK[r.status];
+    const model = r.model_text || VENDOR[r.vendor] || '';
+    const meta = [model, r.detail, r.helpers > 0 ? `+${r.helpers} 个帮手` : ''].filter(Boolean);
+    return `<li class="cp-run-row is-${r.status}"><span class="cp-run-st is-${color}"><i aria-hidden="true">${mark}</i>${esc(r.status_text || word)}</span>`
+      + `<span class="cp-run-title">${esc(r.title || '一件 AI 活')}</span>${meta.length ? `<small class="cp-run-meta">${meta.map(esc).join(' · ')}</small>` : ''}</li>`;
+  }).join('');
+  return `<div class="cp-run${off}" id="ai-running"><p class="cp-run-head"><span class="cp-run-k">AI 正在跑</span><span class="cp-run-sum">${esc(a.summary || runLine(a))}</span>${at}</p>`
+    + (rows ? `<ul class="cp-run-list">${rows}</ul>` : '') + `</div>`;
 }
 const overview = (v, ctx) => {
   if (!ctx.ov) return '';
@@ -726,14 +808,18 @@ const overview = (v, ctx) => {
   const restText = summary ? (lead ? parts.slice(1).join(' · ') : n ? parts.filter((s) => !/^要你做/.test(s)).join(' · ') : summary) : restLine(cells, n, off || !read, at);
   const rest = restText ? `<p class="cp-you-rest">${esc(restText)}</p>` : '';
   const access = v.access_summary.text && !lead.includes(v.access_summary.text) ? `<p class="cp-you-sub">${esc(v.access_summary.text)}</p>` : '';
+  // 总览句加一段“AI 在跑 N 个（M 个卡住）”（后端给了 ai_running 才加），点了跳到下面“AI 正在跑”
+  const ai = v.ai_running;
+  const aiSeg = ai ? `<a class="cp-you-ai${ai.stuck_count ? ' is-stuck' : ''}" href="#ai-running">${esc(runLine(ai))}</a>` : '';
   const you = !read && !v.need_you.length
     ? `<div class="cp-you is-off">${snap}<p class="cp-you-n">要你做的事还没读到</p><p class="cp-you-sub">${notRead(v.served_at, ctx.now)}</p></div>`
     : !n
-      ? `<div class="cp-you is-none">${snap}<p class="cp-you-n">${dot(COLOR_STATE[v.summary.color] || COLOR_STATE[v.verdict.color] || 'ok')}现在没有要你做的事</p>${rest}</div>`
-      : `<div class="cp-you${urgent ? ' is-urgent' : ''}">${snap}<p class="cp-you-n">${lead ? esc(lead) + tag : `${verb} <b>${n}</b> 件事${tag}`}</p>${access}`
+      ? `<div class="cp-you is-none">${snap}<p class="cp-you-n">${dot(COLOR_STATE[v.summary.color] || COLOR_STATE[v.verdict.color] || 'ok')}现在没有要你做的事${aiSeg}</p>${rest}</div>`
+      : `<div class="cp-you${urgent ? ' is-urgent' : ''}">${snap}<p class="cp-you-n">${lead ? esc(lead) + tag : `${verb} <b>${n}</b> 件事${tag}`}${aiSeg}</p>${access}`
         + `<ol class="cp-you-list">${list}</ol>` + rest
         + `<p class="cp-you-sub">${n > 3 ? `<a href="#need-you">还有 ${n - 3} 件 ↓</a> · ` : ''}<a href="#need-you">去处理 ↓</a>${!read && v.served_at ? ` · 这是 ${esc(when(v.served_at, ctx.now))} 读到的` : ''}</p></div>`;
-  return you + knowBlock(v, ctx) + tri(cells) + score(v, ctx, off);
+  // 顺序照本人看过的样子：需要你 → AI 正在跑 → 你得知道 → 三格
+  return you + runBlock(v, ctx) + knowBlock(v, ctx) + tri(cells) + score(v, ctx, off);
 };
 const LAMPS = { 'need-you': 'need_you', tasks: 'automation', computer: 'computer', backup: 'backup_cloud', projects: 'projects', today: 'today' };
 // 分区标题旁的灯也只看要不要你出手：没有要你做的，“要处理”换成中性色“AI 在管”；项目区有等你动手的项目才保留红黄

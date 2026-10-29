@@ -101,20 +101,21 @@ const assert = require('node:assert/strict');
   const river = riverSnapshot(v, now);
   assert.equal(river.automation.items.find((t) => t.id === 'gov').plain.status_note, '10月12日 12:58 开始，正在跑（还没收到跑完的回执）');
   assert.doesNotMatch(JSON.stringify(river), /这周已跑过/);
-  // 10 “你得知道”（后端 must_know）：字段不在不出；empty 一行；unavailable 照实说读不到；有条目最多 5 条，收起的折叠；远程卡按 must_know_id 跳过去
+  // 10 “你得知道”（后端 must_know）：字段不在不出；empty 一行；unavailable 照实说读不到；最多 5 行、已恢复合一行，收起的折叠；远程卡按 must_know_id 跳过去
   assert.doesNotMatch(R.REGIONS.overview(v, ctx), /cp-know/);
   assert.match(R.REGIONS.overview(normalize({ ...base0, must_know: { state: 'empty', text: '没有要你知道的新事', items: [], archived_items: [] } }), ctx), /没有要你知道的新事/);
   const mkUn = R.REGIONS.overview(normalize({ ...base0, must_know: { state: 'unavailable', text: '', items: [], archived_items: [] } }), ctx);
   assert.match(mkUn, /你得知道：这会儿读不到.*不代表没有新事/);
   assert.doesNotMatch(mkUn, /没有要你知道的新事/);
   const items = [{ id: 'pending-net', kind: 'repairing', text: '虚构两台电脑网络偶尔断开。AI 在跟进，你不用操作。', at: '2026-10-12T14:00:00+08:00', exit_when: 'AI 核实解决后转为已恢复，3 天后收起' },
-    ...[1, 2, 3, 4, 5].map((i) => ({ id: 'r' + i, kind: 'recovered', text: '虚构已恢复 ' + i, at: '2026-10-12T13:00:00+08:00' }))];
+    ...[1, 2, 3, 4, 5].map((i) => ({ id: 'r' + i, kind: 'recovered', text: '虚构功能 ' + i + ' 已恢复，AI 已核对最近一次成功。', at: '2026-10-12T13:00:00+08:00' }))];
   const vk = normalize({ ...base0, must_know: { state: 'ok', text: '', items, archived_items: [{ id: 'old1', kind: 'report', text: '虚构旧汇报' }] },
     sections: { ...base0.sections, remote: [{ id: 'remote', title: '远程连接', text: '此刻能连上；间歇断开还在查。', state: 'ok', color: 'ok', observed_at: at, must_know_id: 'pending-net' }] } });
   o = R.REGIONS.overview(vk, ctx);
-  assert.equal((o.match(/<li id="know-(pending|r)/g) || []).length, 5);
+  // 本人 10 月 29 日：几条“已恢复”合成一行（点开看是哪几项），AI 在修照常单独一条、排最前
+  assert.equal((o.match(/<li id="know-(pending-net|recovered)"/g) || []).length, 2);
   assert.match(o, /AI 在修.*虚构两台电脑网络偶尔断开.*AI 核实解决后转为已恢复/);
-  assert.match(o, /已恢复.*虚构已恢复 1/);
+  assert.match(o, /已恢复.*后台 5 项功能中断过，现在都恢复了.*虚构功能 1<.*虚构功能 5</);
   assert.match(o, /最近收起的 1 条/);
   const remote = R.computer(vk, ctx);
   assert.match(remote, /此刻能连上；间歇断开还在查/);

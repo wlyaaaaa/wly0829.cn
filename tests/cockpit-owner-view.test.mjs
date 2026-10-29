@@ -73,13 +73,18 @@ test('没有 viewer / private_count 的旧数据：什么都不加，和原来�
   assert.equal(viewerLine(old, { notice: '示例提示' }), '<span class="cp-viewer-note">示例提示</span>');
 });
 
-test('AI 已定逐行显示全部决定并可复制修改，普通消息仍限五条', () => {
+test('AI 已定合成一行，点开逐条可复制修改；你得知道最多 5 行，多的折成“其余 N 条”', () => {
   const decisions = Array.from({ length: 9 }, (_, i) => ({ id: `decision-${i}`, kind: 'ai_decision', text: `示例决定 ${i}：结束；理由：现状已恢复`, at: now.toISOString(), exit_when: '决定满 14 天后收起' }));
   const reports = Array.from({ length: 6 }, (_, i) => ({ id: `report-${i}`, kind: 'report', text: `示例汇报 ${i}` }));
   const v = normalize(base({ must_know: { state: 'ok', items: [...reports, ...decisions] }, verdict: { state: 'attention', color: 'yellow' }, summary: { text: '满 14 天待 AI 定 1 件' } }));
   const html = REGIONS.overview(v, { ...ctx, ov: { stale: () => false, lamp: () => '' } });
   assert.equal((html.match(/class="is-ai_decision"/g) || []).length, 9);
-  assert.equal((html.match(/class="is-report"/g) || []).length, 5);
+  assert.match(html, /<summary>AI 自己定了 9 件技术问题<\/summary>/);
+  // 6 条汇报 + 1 行 AI 已定 = 7 行：露前 4 行，其余 3 条折起来（汇报一条不丢）
+  assert.equal((html.match(/class="is-report"/g) || []).length, 6);
+  const main = /<ul class="cp-know-list">(.*?)<\/ul><details class="cp-know-rest"/.exec(html)?.[1] || '';
+  assert.equal((main.match(/<li id="know-report-/g) || []).length, 4);
+  assert.match(html, /<details class="cp-know-rest" id="know-rest"><summary>其余 3 条<\/summary>/);
   assert.equal((html.match(/>复制给 AI<\/button>/g) || []).length, 9);
   assert.match(html, /条目编号 decision-8；我不同意这条 AI 决定/);
   assert.match(html, /<span class="cp-dot is-yellow"[^>]*><\/span>现在没有要你做的事/);

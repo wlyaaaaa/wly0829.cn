@@ -26,7 +26,7 @@
 
 /* 第一屏（场景 1）：左边标题和“你现在 N 件事”，右边插画；下面一行三格（电脑 / 自动任务 / 备份），再下面分数小字和安全授权。
    总览块用 display: contents，让三行直接排进第一屏的网格；浏览器换字时外框不变 */
-.cp-hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-areas: "title art" "you art" "know know" "tri tri" "score score" "sec sec"; gap: 12px 28px; align-items: start; padding-top: 14px; }
+.cp-hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-areas: "title art" "you art" "run run" "know know" "tri tri" "score score" "sec sec"; gap: 12px 28px; align-items: start; padding-top: 14px; }
 .cp-hero-copy { grid-area: title; }
 .cp-hero h1 { margin: 0; line-height: 0; }
 .cp-hero h1 img { height: 76px; width: auto; }
@@ -235,7 +235,7 @@
 @media (max-width: 767.98px) {
   .cp-page { padding: 4px 14px 32px; font-size: 15px; }
   /* 手机第一屏只放三行：书法标题换成文字，插画和说明收起，“你现在 N 件”和三格状态都在第一屏 */
-  .cp-hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "you" "tri" "score" "sec"; gap: 10px; padding-top: 6px; }
+  .cp-hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "you" "run" "know" "tri" "score" "sec"; gap: 10px; padding-top: 6px; }
   .cp-hero-art, .cp-lead, .cp-hero h1 img { display: none; }
   .cp-hero h1 { line-height: 1.3; }
   .cp-h1-text { display: inline; font-size: 22px; font-weight: 800; color: var(--cp-title); letter-spacing: .12em; }
@@ -357,7 +357,7 @@
 .cp-you.is-none .cp-you-rest { margin-top: 8px !important; }
 /* 首帧是构建时的旧数：写明几点的，下面的数字和灯一起灰着，读到新数据就换掉（client.js 换字时这一行消失） */
 .cp-snap { margin: 0 0 8px !important; padding: 4px 10px; border-radius: 8px; background: #f1f3f2; color: var(--cp-soft); font-size: 13.5px; font-weight: 700; }
-.cp-page:has(.cp-snap) :is(.cp-you-n, .cp-you-list, .cp-you-rest, .cp-know, .cp-tri, .cp-score, .cp-security, .cp-body, .cp-lamp, .cp-river) { filter: grayscale(1); opacity: .6; }
+.cp-page:has(.cp-snap) :is(.cp-you-n, .cp-you-list, .cp-you-rest, .cp-run, .cp-know, .cp-tri, .cp-score, .cp-security, .cp-body, .cp-lamp, .cp-river) { filter: grayscale(1); opacity: .6; }
 /* 你得知道（字段到了才出） */
 .cp-know { grid-area: know; padding: 10px 16px; border: 1px solid #d5e0ea; border-radius: 14px; background: #fbfcfe; }
 .cp-know p { margin: 0; }
@@ -370,11 +370,65 @@
 .cp-know-tag.is-green { border-color: #bfe8cc; color: var(--cp-title); }
 .cp-know-text { font-size: 15px; overflow-wrap: anywhere; }
 .cp-know-text small { display: block; font-size: 12.5px; color: var(--cp-soft); }
-.cp-know-more { font-size: 13px; color: var(--cp-soft); }
-.cp-know-more summary { cursor: pointer; color: var(--cp-title); font-weight: 600; padding: 2px 0; }
-.cp-know-more .is-open, .cp-know-more[open] .is-shut { display: none; }
-.cp-know-more[open] .is-open { display: inline; }
-.cp-know-more.is-phone { display: none; }
+/* 你得知道的折叠（合起来的“已恢复”“AI 已定”、汇报的后半句、“其余 N 条”）：一行字加 ›，点开 › 转向下；键盘 Tab 到这一行按回车或空格开合 */
+.cp-know-fold > summary, .cp-know-rest > summary { list-style: none; cursor: pointer; border-radius: 6px; }
+.cp-know-fold > summary::-webkit-details-marker, .cp-know-rest > summary::-webkit-details-marker { display: none; }
+.cp-know-fold > summary::after, .cp-know-rest > summary::after { content: "›"; display: inline-block; margin-left: 6px; font-weight: 700; color: var(--cp-title); transition: transform .15s; }
+.cp-know-fold[open] > summary::after, .cp-know-rest[open] > summary::after { transform: rotate(90deg); }
+.cp-know-fold > summary:focus-visible, .cp-know-rest > summary:focus-visible { outline: 2px solid #9ddcae; outline-offset: 2px; }
+.cp-know-fold { min-width: 0; font-size: 15px; overflow-wrap: anywhere; }
+.cp-know-fold > summary:hover, .cp-know-rest > summary:hover { color: var(--cp-title); }
+.cp-know-sub { margin: 6px 0 2px; padding: 8px 12px; border-left: 3px solid #d5e0ea; border-radius: 0 8px 8px 0; background: #fff; font-size: 14px; }
+.cp-know-sub p { margin: 0 0 2px; }
+ul.cp-know-sub { list-style: none; display: grid; gap: 6px; }
+ul.cp-know-sub > li { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1px; align-items: start; min-width: 0; padding: 0; scroll-margin-top: 130px; }
+.cp-know-sub small, .cp-know-dec-why { display: block; font-size: 12.5px; color: var(--cp-soft); }
+.cp-know-note { margin: 6px 0 0 !important; font-size: 12.5px; color: var(--cp-soft); }
+.cp-know-decs > li + li { padding-top: 6px; border-top: 1px dashed #e1e8ee; }
+.cp-know-dec-topic { font-weight: 700; }
+.cp-know-dec-what { font-size: 13.5px; color: #3f5f7a; }
+.cp-know-decs .cp-btn { justify-self: start; margin-top: 2px; font-size: 13px; padding: 1px 12px; }
+.cp-know-rest { margin-top: 4px; }
+.cp-know-rest > summary { display: inline-block; padding: 2px 0; font-size: 14px; font-weight: 700; color: #4f6b84; }
+/* 打开的合并行占满两列，展开的清单不挤在半边 */
+.cp-know-list > li:has(> .cp-know-fold[open]) { grid-column: 1 / -1; }
+
+/* AI 正在跑（字段到了才出）：放在“需要你”和“你得知道”之间。状态 = 颜色 + 符号 + 字，色盲也分得清：
+   在跑绿●、网络在重连黄◐、额度用完和登录失效红○、等你回蓝◆、停了灰■、判断不了灰？ */
+.cp-run { grid-area: run; padding: 10px 16px; border: 1px solid var(--cp-line); border-radius: 14px; background: #fff; min-width: 0; scroll-margin-top: 130px; }
+.cp-run p { margin: 0; }
+.cp-run-head, .cp-run-none { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; }
+.cp-run-k { font-size: 13px; font-weight: 700; color: var(--cp-title); letter-spacing: .08em; }
+.cp-run-sum { font-size: 15px; font-weight: 700; color: var(--cp-ink); }
+.cp-run-at { font-size: 12.5px; color: var(--cp-soft); }
+.cp-run-none { font-size: 14px; color: var(--cp-soft); }
+.cp-run.is-empty { padding: 6px 14px; }
+.cp-run.is-off { background: #f8f9f8; }
+.cp-run.is-off .cp-run-list { opacity: .7; }
+.cp-run-list { list-style: none; margin: 4px 0 0; padding: 0; display: grid; }
+.cp-run-row { min-width: 0; padding: 6px 0; border-top: 1px solid #edf3ef; overflow-wrap: anywhere; }
+.cp-run-row:first-child { border-top: 0; }
+.cp-run-st { margin-right: 10px; font-weight: 700; white-space: nowrap; }
+/* 符号用同一套画法，不靠各家字体里大小不一的 ●◐○◆■（字仍在 <i> 里，样式读不到时照样能看） */
+.cp-run-st i { display: inline-block; box-sizing: border-box; width: .72em; height: .72em; margin: 0 .38em 0 .1em; vertical-align: -.02em; overflow: hidden; text-indent: 2em; white-space: nowrap; font-style: normal; border: 2px solid currentColor; border-radius: 50%; }
+.cp-run-row.is-running .cp-run-st i { background: currentColor; }
+.cp-run-row.is-network_retry .cp-run-st i { background: linear-gradient(90deg, currentColor 50%, transparent 50%); }
+.cp-run-row.is-waiting_owner .cp-run-st i { width: .62em; height: .62em; margin-inline: .15em .43em; border-radius: 1px; background: currentColor; transform: rotate(45deg); }
+.cp-run-row.is-stopped .cp-run-st i { border-radius: 2px; background: currentColor; }
+.cp-run-row.is-unknown .cp-run-st i { width: auto; height: auto; margin: 0 .3em 0 0; border: 0; border-radius: 0; overflow: visible; text-indent: 0; vertical-align: 0; }
+.cp-run-st.is-green { color: var(--cp-title); }
+.cp-run-st.is-yellow { color: #9a6a00; }
+.cp-run-st.is-red { color: var(--cp-red); }
+.cp-run-st.is-blue { color: #2463a8; }
+.cp-run-st.is-gray { color: var(--cp-soft); }
+.cp-run-title { font-size: 15px; }
+.cp-run-meta { display: block; font-size: 12.5px; line-height: 1.5; color: var(--cp-soft); }
+/* 电脑宽度：两列排，一屏看完；卡住的仍在最前 */
+@media (min-width: 1100px) { .cp-run-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 28px; } .cp-run-row:nth-child(2) { border-top: 0; } }
+/* 总览句里那一段“AI 在跑 N 个（M 个卡住）” */
+.cp-you-ai { align-self: center; font-size: 16px; font-weight: 700; line-height: 1.4; color: var(--cp-ink) !important; text-decoration: none; padding: 2px 12px; border-radius: 999px; border: 1px solid var(--cp-line); background: #fff; white-space: nowrap; }
+.cp-you-ai:hover { border-color: #9ddcae; }
+.cp-you-ai.is-stuck { border-color: #ecd59a; background: #fff8e6; color: #7a5600 !important; }
 /* 电脑宽度：你得知道排两列，三格状态仍在第一屏 */
 @media (min-width: 1100px) { .cp-know-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 28px; } }
 /* 安全和授权：手机上压成一行，电脑宽度不出 */
@@ -393,7 +447,7 @@
 
 @media (max-width: 767.98px) {
   /* 手机首屏（方案第六节）：结论句 + 最多 3 个待办 → 你得知道 2—3 行 → 电脑 / 自动任务 / 备份三小块一行 → 安全和授权一行；健康分不上首屏 */
-  .cp-hero { grid-template-areas: "title" "you" "know" "tri" "sec" "score"; }
+  .cp-hero { grid-template-areas: "title" "you" "run" "know" "tri" "sec" "score"; }
   .cp-score { display: none; }
   .cp-you-rest { font-size: 13.5px; }
   .cp-tri-status, .cp-tri-who, .cp-tri-note { display: none; }
@@ -404,12 +458,17 @@
   .cp-tri-cell.is-gray .cp-tri-short { color: var(--cp-soft); }
   .cp-tri-cell.is-gray .cp-tri-who { display: block; font-size: 11.5px; } /* 读不到时写上次几点读到 */
   .cp-know { padding: 8px 12px; }
-  /* 手机：你得知道先显示 2 条、每条一句话，多的点“还有 N 条，点开看”就地展开 */
-  .cp-know > .cp-know-list > li:nth-child(n+3) { display: none; }
-  .cp-know:has(.cp-know-more[open]) > .cp-know-list > li, .cp-know > .cp-know-list > li:target { display: grid; }
+  .cp-run { padding: 8px 12px; }
+  .cp-run-title { font-size: 14.5px; }
+  .cp-run-st { margin-right: 8px; }
+  /* 手机：标签和读到时间一行，一句话总结占下一整行 */
+  .cp-run-sum { order: 2; flex-basis: 100%; font-size: 14.5px; }
+  .cp-you-ai { font-size: 14px; padding: 1px 10px; white-space: normal; }
+  /* 手机：你得知道最多 5 行，每行一句话（时间、收起条件这类小字不出；点开合并行才看明细） */
   .cp-know-text small { display: none; }
   .cp-know .cp-know-old { display: none; }
-  .cp-know-more.is-phone { display: block; }
+  .cp-know-fold, .cp-know-sub { font-size: 14px; }
+  .cp-know-sub { padding: 6px 10px; }
   .cp-know-text { font-size: 14px; }
   .cp-security-wrap { margin-top: 0; padding: 0; border: 0; background: none; }
   .cp-security-title, .cp-sec-item { display: none !important; }

@@ -157,6 +157,18 @@ document.addEventListener('click', async (e) => {
 const feedRiver = () => { if (view.automation.items.length) window.todayRiver?.setSnapshot(riverSnapshot(view), true); };
 if (window.todayRiver?.ready) feedRiver(); else document.addEventListener('today-river-ready', feedRiver, { once: true });
 
+// 从别处跳到“你得知道”里折起来的一条（如远程卡的“间歇断开的情况看这里”）：先把外面的折叠打开，再滚过去
+function reveal() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  const target = id && !id.startsWith('pair=') ? document.getElementById(id) : null;
+  if (!target) return;
+  let opened = false;
+  for (let p = target.parentElement; p; p = p.parentElement) if (p.tagName === 'DETAILS' && !p.open) { p.open = true; opened = true; }
+  if (opened) target.scrollIntoView({ block: 'start' });
+}
+window.addEventListener('hashchange', reveal);
+reveal();
+
 pair().finally(() => load());
 setInterval(() => { if (!document.hidden && !busy) load(); }, 60000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden && !busy) load(); });

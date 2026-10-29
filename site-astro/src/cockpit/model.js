@@ -55,6 +55,23 @@ const obj = (v) => (v && typeof v === 'object' && !Array.isArray(v) ? v : {});
 const STATES = new Set(['ok', 'attention', 'red', 'unavailable', 'reading']);
 const st = (v) => (STATES.has(v) ? v : 'unavailable');
 
+// “AI 正在跑”（后端 cockpit.ai_running）：每件此刻在跑的 AI 活一行。认不得的状态一律当“判断不了”；
+// 卡住 = 网络在重连、额度用完、登录失效（后端给了 stuck_count 就以它为准）
+export const RUN_STATUSES = ['running', 'network_retry', 'quota_exhausted', 'login_failed', 'waiting_owner', 'stopped', 'unknown'];
+export const RUN_STUCK = ['network_retry', 'quota_exhausted', 'login_failed'];
+const text = (x, max = 200) => (typeof x === 'string' ? x.trim().slice(0, max) : '');
+const nat = (x) => (Number.isInteger(x) && x >= 0 ? x : null);
+function aiRunning(raw) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const rows = list(raw.rows).map((r) => ({
+    id: text(r.id, 120), status: RUN_STATUSES.includes(r.status) ? r.status : 'unknown', status_text: text(r.status_text, 20),
+    vendor: ['claude', 'gpt'].includes(r.vendor) ? r.vendor : '', model: text(r.model, 60), model_text: text(r.model_text, 40), effort: text(r.effort, 20), kind: text(r.kind, 40),
+    title: text(r.title, 120), started_at: r.started_at || null, last_activity_at: r.last_activity_at || null, detail: text(r.detail, 160), helpers: nat(r.helpers) || 0,
+  }));
+  const stuck = rows.filter((r) => RUN_STUCK.includes(r.status)).length;
+  return { count: nat(raw.count) ?? rows.length, stuck_count: nat(raw.stuck_count) ?? stuck, summary: text(raw.summary, 80), observed_at: raw.observed_at || null, rows };
+}
+
 // 缺什么都补成空，版式只看结构，不看数据到没到
 export function normalize(raw) {
   const v = obj(raw);
@@ -102,6 +119,8 @@ export function normalize(raw) {
     // 下面两块是后端 10 月 12 日加的；字段不在就是 null，页面不出这一块，照旧数据显示
     // “你得知道”（must_know）：items 保留 kind=ai_decision 的 14 天决定回执，其余沿用普通消息。
     must_know: (() => { const m = v.must_know; if (!m || typeof m !== 'object') return null; return { state: ['ok', 'empty', 'unavailable'].includes(m.state) ? m.state : 'unavailable', text: typeof m.text === 'string' ? m.text : '', observed_at: m.observed_at || null, items: list(m.items), archived: list(m.archived_items) }; })(),
+    // “AI 正在跑”（后端 10 月 29 日起加的 ai_running）：字段不在就是 null，页面不出这一块；gaps 前端不显示
+    ai_running: aiRunning(v.ai_running),
     // 网站上次成功发布的回执（website_release）：{state: success|unavailable, published_at, version, verified, text}；只证明上次成功那次
     website_release: v.website_release && typeof v.website_release === 'object' ? v.website_release : null,
     // 本人版 / 公开版：viewer 说这次拿到的是哪一版；private_count 是只在本人设备上显示的事项数。行上的 owner_only、placeholder、owner_detail 随行原样带着
