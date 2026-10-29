@@ -513,3 +513,84 @@ ul.cp-know-sub > li { display: grid; grid-template-columns: minmax(0, 1fr); gap:
 @media (max-width: 767.98px) {
   .cp-wait li .cp-detail + small { grid-column: auto; grid-row: auto; }
 }
+
+/* 本人设备上的按钮（条目带 owner_actions 才出，公开版没有）：手机 390 宽优先，按钮够大好点；1280 宽一行排开 */
+.cp-oa { min-width: 0; margin-top: 8px; }
+.cp-oa-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.cp-oa .cp-btn { min-height: 38px; padding: 5px 16px; font-size: 15px; line-height: 1.4; box-sizing: border-box; }
+.cp-oa .cp-btn:disabled { cursor: not-allowed; opacity: .55; }
+.cp-oa .cp-btn[aria-expanded="true"] { background: #e9f6ee; border-color: #9ddcae; }
+.cp-oa a.cp-btn { display: inline-flex; align-items: center; text-decoration: none; }
+.cp-oa-exec { min-height: 38px; padding: 4px 10px; font: inherit; font-size: 14px; border: 1px dashed #c9d6e2; border-radius: 999px; background: #f6f9fc; color: #3f5f7a; cursor: pointer; white-space: nowrap; }
+.cp-oa-exec:hover { background: #eef4fa; }
+.cp-oa :is(.cp-btn, .cp-oa-exec):focus-visible, .cp-recent > summary:focus-visible { outline: 2px solid #9ddcae; outline-offset: 2px; }
+/* 答题：每题一排选项、一个“我的说明”小框 */
+.cp-oa-quiz { display: grid; gap: 12px; margin: 4px 0 10px; }
+.cp-oa-q { margin: 0; padding: 0; border: 0; min-width: 0; }
+.cp-oa-q legend { padding: 0; margin: 0 0 6px; font-size: 15px; overflow-wrap: anywhere; }
+.cp-oa-q legend b { margin-right: 6px; color: var(--cp-title); }
+.cp-oa-q .cp-opt { white-space: normal; text-align: left; overflow-wrap: anywhere; }
+.cp-oa-hint { margin: 0 0 6px; font-size: 12.5px; color: var(--cp-soft); }
+/* 回一句话 / 不对，重做：一个框 + 交给 AI；晚点提醒：四个选择 */
+.cp-oa-panel { display: grid; gap: 8px; margin-top: 8px; padding: 10px 12px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fbfefc; }
+.cp-oa-text { width: 100%; box-sizing: border-box; min-height: 4.6em; padding: 8px 10px; font: inherit; font-size: 15px; line-height: 1.5; border: 1px solid #cfe0d5; border-radius: 8px; background: #fff; resize: vertical; }
+.cp-oa-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
+.cp-oa-snooze { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.cp-oa-date { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; color: var(--cp-ink); }
+.cp-oa-date input { min-height: 38px; box-sizing: border-box; padding: 4px 8px; font: inherit; font-size: 15px; border: 1px solid #bfe8cc; border-radius: 8px; background: #fff; }
+/* 交出去以后：卡片灰着，回执、撤回和倒数照常亮着 */
+.cp-oa-done { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: 0; font-size: 15px; }
+.cp-oa-msg { font-weight: 700; color: var(--cp-ink); overflow-wrap: anywhere; }
+.cp-oa-left { font-size: 13.5px; color: var(--cp-soft); font-variant-numeric: tabular-nums; }
+.cp-btn.cp-oa-undo { min-height: 38px; padding: 4px 18px; border-color: #c9a33a; color: #7a5600; background: #fff8e6; font-weight: 700; }
+.cp-btn.cp-oa-undo:hover { background: #fff2d1; }
+.cp-oa-err { margin: 8px 0 0 !important; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 14px; color: var(--cp-red); overflow-wrap: anywhere; }
+.cp-oa-note { margin: 6px 0 0 !important; font-size: 13px; color: var(--cp-soft); }
+.cp-oa-status { margin: 6px 0 0 !important; font-size: 13.5px; font-weight: 700; color: #3f5f7a; }
+:is(.cp-ask, li).is-acted > :not(.cp-oa) { opacity: .5; }
+.cp-ask.is-acted { border-color: #e3e7e5; border-left-color: #cfd6d2; background: #f6f7f6; box-shadow: none; }
+li.is-acted { background: #f6f7f6; border-radius: 8px; }
+/* 本人设备上的卡：固定三句（做什么；为什么是你、不做会怎样；怎么办、大概多久） */
+.cp-ask.is-own .cp-oa { margin-top: 12px; }
+.cp-own-s { margin: 8px 0 0; font-size: 15.5px; line-height: 1.6; overflow-wrap: anywhere; }
+.cp-own-s b { display: inline-block; margin-right: 6px; padding: 0 7px; border-radius: 6px; background: #eef8f1; color: var(--cp-title); font-size: 12.5px; line-height: 1.7; vertical-align: 1px; }
+.cp-own-s b:not(:first-child) { margin-left: 4px; }
+.cp-own-how { color: var(--cp-soft); }
+.cp-own-how .is-urgent { color: var(--cp-red); font-weight: 700; }
+.cp-own-path { display: block; font-size: 12.5px; color: #8a9790; }
+.cp-ask.is-own .cp-steps { margin-top: 4px; font-size: 15px; }
+.cp-own-kind { display: inline-block; margin: 0 0 6px; padding: 1px 10px; border-radius: 999px; background: #fbe4df; color: var(--cp-red); font-size: 13px; font-weight: 700; }
+.cp-ask.is-confirm { border-color: #efc3bd; border-left-color: var(--cp-red); }
+.cp-own-conf { display: grid; gap: 4px; margin: 8px 0 0; padding: 8px 12px; border-radius: 10px; background: #fffaf8; border: 1px solid #f3d5cf; font-size: 15px; }
+.cp-own-conf div { display: grid; grid-template-columns: 4.5em minmax(0, 1fr); gap: 8px; }
+.cp-own-conf dt { font-weight: 700; color: var(--cp-red); }
+.cp-own-conf dd { margin: 0; overflow-wrap: anywhere; }
+/* 行里的按钮（AI 在跟、你得知道、AI 正在跑、暂缓）：跟在这一行的字下面 */
+.cp-know-list li > :is(.cp-oa, .cp-oa-status) { grid-column: 2; }
+.cp-know-list li:has(> .cp-oa) { row-gap: 0; align-content: start; }
+ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
+.cp-wait li > :is(.cp-oa, .cp-oa-status) { grid-column: 1 / -1; }
+.cp-know-list .cp-oa, .cp-run-row .cp-oa, .cp-ailist .cp-oa, .cp-wait .cp-oa { margin-top: 6px; }
+:is(.cp-know-list, .cp-run-list, .cp-ailist, .cp-wait) .cp-oa .cp-btn { min-height: 36px; padding: 3px 14px; font-size: 14px; }
+/* 顶上的提示（点的处理写不回、通知没发出去、调度在排队） */
+.cp-oa-warn { margin: 6px 0 0 !important; padding: 4px 10px; border-radius: 8px; border: 1px solid #ecd59a; background: #fff8e6; color: #7a5600; font-size: 14px; font-weight: 700; overflow-wrap: anywhere; }
+/* 你最近处理的（30 天）›：默认收起 */
+.cp-recent { margin-top: 8px; padding-top: 6px; border-top: 1px dashed #dceade; }
+.cp-recent > summary { display: inline-block; list-style: none; cursor: pointer; padding: 2px 0; font-size: 14.5px; font-weight: 700; color: var(--cp-title); border-radius: 6px; }
+.cp-recent > summary::-webkit-details-marker { display: none; }
+.cp-recent > summary::after { content: "›"; display: inline-block; margin-left: 6px; transition: transform .15s; }
+.cp-recent[open] > summary::after { transform: rotate(90deg); }
+.cp-recent-list { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 2px; }
+.cp-recent-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; padding: 6px 0; border-bottom: 1px dashed #e1efe5; font-size: 14px; }
+.cp-recent-list li:last-child { border-bottom: 0; }
+.cp-recent-text { flex: 1 1 16em; min-width: 0; overflow-wrap: anywhere; }
+.cp-recent-text time { margin-right: 6px; color: var(--cp-soft); font-variant-numeric: tabular-nums; }
+.cp-recent-st { font-size: 13px; color: var(--cp-soft); white-space: nowrap; }
+.cp-recent-list li.is-rejected .cp-recent-st { color: var(--cp-red); white-space: normal; }
+.cp-recent-list .cp-oa-undo { min-height: 34px; padding: 2px 14px; font-size: 14px; }
+@media (max-width: 767.98px) {
+  .cp-oa .cp-btn, .cp-oa-exec, .cp-btn.cp-oa-undo { min-height: 42px; }
+  :is(.cp-know-list, .cp-run-list, .cp-ailist, .cp-wait) .cp-oa .cp-btn { min-height: 40px; }
+  .cp-own-s { font-size: 15px; }
+  .cp-oa-row { justify-content: flex-start; }
+}

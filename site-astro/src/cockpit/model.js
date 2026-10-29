@@ -61,6 +61,9 @@ export const RUN_STATUSES = ['running', 'network_retry', 'quota_exhausted', 'log
 export const RUN_STUCK = ['network_retry', 'quota_exhausted', 'login_failed', 'stopped'];
 const text = (x, max = 200) => (typeof x === 'string' ? x.trim().slice(0, max) : '');
 const nat = (x) => (Number.isInteger(x) && x >= 0 ? x : null);
+// 本人设备上条目带的按钮和状态（后端 owner_actions、item_version、handed_to_ai、verifying、seen_at）；其他列表的行原样透传，这里给重新拼过的行用
+const OWNER_FIELDS = ['owner_actions', 'item_version', 'handed_to_ai', 'verifying', 'seen_at'];
+const ownerFields = (r) => Object.fromEntries(OWNER_FIELDS.filter((k) => r[k] !== undefined && r[k] !== null).map((k) => [k, r[k]]));
 function aiRunning(raw) {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
   const rows = list(raw.rows).map((r) => ({
@@ -69,6 +72,8 @@ function aiRunning(raw) {
     title: text(r.title, 120), started_at: r.started_at || null, last_activity_at: r.last_activity_at || null, detail: text(r.detail, 300), helpers: nat(r.helpers) || 0,
     // 公开版的行：后端把标题换成“一件 AI 活”、不给 detail，并标 placeholder
     placeholder: r.placeholder === true,
+    // 本人设备才有：能点的按钮（卡住的行有“改给另一家”）、条目版本、现在是哪家在做，以及交出去以后的状态
+    ...ownerFields(r), ...(['claude', 'gpt'].includes(r.executor) ? { executor: r.executor } : {}),
   }));
   const stuck = rows.filter((r) => RUN_STUCK.includes(r.status)).length;
   const count = nat(raw.count) ?? rows.length;
@@ -132,6 +137,13 @@ export function normalize(raw) {
     // 本人版 / 公开版：viewer 说这次拿到的是哪一版；private_count 是只在本人设备上显示的事项数。行上的 owner_only、placeholder、owner_detail 随行原样带着
     viewer: (() => { const w = v.viewer; if (!w || typeof w !== 'object') return null; return { kind: w.kind === 'owner' ? 'owner' : 'public', device_state: ['ok', 'none', 'invalid', 'unavailable'].includes(w.device_state) ? w.device_state : 'none', device_name: typeof w.device_name === 'string' ? w.device_name : null }; })(),
     private_count: Number.isInteger(v.private_count) && v.private_count >= 0 ? v.private_count : null,
+    // 本人设备才有（公开版不带）：近 30 天你点过的处理（精简视图是顶层 owner_recent，全量在 cockpit 下）、写回工作器状态；
+    // 通知发没发出去（notification_status=failed 时写 notification_message）、调度排队提示（owner_dispatch_notice，后端下一单加）。没有就是空，不占位
+    owner_recent: (() => { const r = v.owner_recent ?? obj(v.cockpit).owner_recent; return Array.isArray(r) ? list(r).filter((x) => typeof x.id === 'string') : null; })(),
+    owner_actions_worker: (() => { const w = v.owner_actions_worker ?? obj(v.cockpit).owner_actions_worker; return w && typeof w === 'object' && !Array.isArray(w) ? w : null; })(),
+    notification_status: text(v.notification_status ?? obj(v.cockpit).notification_status, 20),
+    notification_message: text(v.notification_message ?? obj(v.cockpit).notification_message, 80),
+    owner_dispatch_notice: text(v.owner_dispatch_notice ?? obj(v.cockpit).owner_dispatch_notice, 120),
   };
 }
 

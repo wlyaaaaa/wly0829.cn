@@ -2,6 +2,7 @@
 // 每分钟读一次（页面在后台时不读）；刷新按钮叫醒电脑重读，等三个采集器都完成再换。
 import { normalize, riverSnapshot, freshAfter } from './model.js';
 import { REGIONS, PICK_FIRST, COPY_HINT, aiPrompt, promptIds } from './render.js';
+import { AI_ACTIONS, leftText } from './actions.js';
 
 const boot = JSON.parse(document.getElementById('cockpit-boot')?.textContent || '{}');
 // 本机预览走预览脚本的转发入口，线上走 live（边缘）再退到 mcp
@@ -19,7 +20,9 @@ const store = { get() { try { const t = localStorage.getItem(KEY); return TOKEN.
 let notice = '';
 const say = (text) => { notice = text; paint(); setTimeout(() => { if (notice === text) { notice = ''; paint(); } }, 15000); };
 // phase：还没收到过任何一次读取结果时是 snapshot（首帧那份构建时的数），之后是 live；读不到另由 offline 说明
-const ctx = () => ({ now: new Date(), offline, notice, phase: shown ? 'live' : 'snapshot', projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen });
+// act：本人设备上点过的处理（state：正在交 / 交出去了 / 出错 / 撤回中；ui：还没交的选择、写的话、交给谁；recent：最近处理里撤回过的）
+const act = { state: new Map(), ui: new Map(), recent: new Map() };
+const ctx = () => ({ now: new Date(), offline, notice, phase: shown ? 'live' : 'snapshot', projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen, act });
 
 async function read(wake) {
   const token = store.get();
@@ -61,12 +64,14 @@ function paint() {
     if (!c.ov && /^(overview|lamp-)/.test(node.dataset.cp)) continue;
     const html = fn(view, c);
     if (node.innerHTML !== html) {
-      // 展开着的“AI 在核对”保持展开；卡片上已经选的答案和写的补充，换字时原样留着
+      // 展开着的“AI 在核对”保持展开；卡片上已经选的答案和写的补充，换字时原样留着；正在按的按钮、正在写的框换字后仍有焦点
       const open = [...node.querySelectorAll('details[open]')].map((d) => d.id).filter(Boolean);
       const answers = saveAnswers(node);
+      const focus = document.activeElement && node.contains(document.activeElement) ? focusKey(document.activeElement) : null;
       node.innerHTML = html;
       open.forEach((id) => node.querySelector('#' + CSS.escape(id))?.setAttribute('open', ''));
       restoreAnswers(node, answers);
+      if (focus) refocus(node, focus);
     }
   }
   const river = window.todayRiver;
@@ -115,6 +120,141 @@ document.addEventListener('click', (e) => {
   o.setAttribute('aria-pressed', String(on));
   syncAnswer(o.closest('.cp-ask'));
 });
+
+// ---- 本人设备上的按钮（条目带 owner_actions 才有；见 actions.js）----
+// 点了就交给电脑：POST /computer-access/api/cockpit/actions，带本人设备钥匙；每次点击一个新的幂等键，网络重试用同一个。
+// 交出去以后卡片变灰，回执的话 + “撤回”倒数；撤回期过了写“已交给 Claude（HH:MM）”。出错照接口的中文说明写，条目变了给“刷新”。
+const ACTIONS_URL = 'https://mcp.wly0829.cn/computer-access/api/cockpit/actions';
+const ALNUM = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const newKey = () => { const a = new Uint8Array(24); crypto.getRandomValues(a); return [...a].map((b) => ALNUM[b % 62]).join(''); };
+const uiOf = (id) => { if (!act.ui.has(id)) act.ui.set(id, {}); return act.ui.get(id); };
+async function post(url, body) {
+  const token = store.get();
+  const init = { method: 'POST', credentials: 'omit', cache: 'no-store', headers: { 'Content-Type': 'application/json', ...(token ? { 'X-Cockpit-Device': token } : {}) }, body: JSON.stringify(body) };
+  // 只在连不上（没拿到任何回应）时重试，最多 3 次，正文（含幂等键）不变；拿到回应就按回应办
+  for (let i = 0; i < 3; i++) {
+    try {
+      const r = await fetch(url, { ...init, signal: AbortSignal.timeout(12000) });
+      let j = null;
+      try { j = await r.json(); } catch { /* 没有正文 */ }
+      return { status: r.status, ok: r.ok, j: j && typeof j === 'object' ? j : null };
+    } catch { if (i < 2) await new Promise((r) => setTimeout(r, 800 * (i + 1))); }
+  }
+  return { status: 0, ok: false, j: null };
+}
+const CJK = /[一-鿿]/;
+const failText = (res) => (res.status === 429 ? '点得太快了，稍后再试' : res.status === 0 ? '连不上电脑，没交出去，稍后再点一次'
+  : typeof res.j?.message === 'string' && CJK.test(res.j.message) ? res.j.message : '没交出去，稍后再试');
+async function submit(box, action, extra = {}) {
+  const id = box.dataset.oa;
+  if (act.state.get(id)?.phase === 'sending') return; // 防连点
+  const u = uiOf(id);
+  const body = { item_id: id, action, ...extra, idempotency_key: newKey() };
+  if (AI_ACTIONS.includes(action) && !body.executor) body.executor = u.executor === 'gpt' ? 'gpt' : 'claude';
+  if (box.dataset.ver) try { body.item_version = JSON.parse(box.dataset.ver); } catch { /* 没有版本就不带 */ }
+  act.state.set(id, { phase: 'sending', action, executor: body.executor });
+  paint();
+  const res = await post(ACTIONS_URL, body);
+  if (res.ok && typeof res.j?.id === 'string') { act.state.set(id, { phase: 'done', action, executor: body.executor, receipt: res.j }); act.ui.delete(id); }
+  else act.state.set(id, { phase: 'error', action, executor: body.executor, error: failText(res), refresh: res.status === 409 && res.j?.error === 'cockpit_item_changed' });
+  paint();
+}
+async function undo(actId, itemId) {
+  const s = itemId ? act.state.get(itemId) : null;
+  if (s) { if (s.phase === 'undoing') return; act.state.set(itemId, { ...s, phase: 'undoing', undoError: '' }); } else { if (act.recent.get(actId) === 'undoing') return; act.recent.set(actId, 'undoing'); }
+  paint();
+  const res = await post(`${ACTIONS_URL}/${encodeURIComponent(actId)}/undo`, {});
+  if (res.ok) {
+    act.recent.set(actId, 'undone');
+    for (const [k, v] of act.state) if (v.receipt?.id === actId) act.state.set(k, { phase: 'undone', message: typeof res.j?.message === 'string' && CJK.test(res.j.message) ? res.j.message : '已撤回' });
+    setTimeout(() => { let changed = false; for (const [k, v] of act.state) if (v.phase === 'undone') { act.state.delete(k); changed = true; } if (changed) paint(); }, 6000);
+    load();
+  } else if (s) act.state.set(itemId, { ...s, phase: 'done', undoError: failText(res) });
+  else act.recent.delete(actId);
+  paint();
+}
+document.addEventListener('click', (e) => {
+  const el = e.target instanceof Element ? e.target.closest('[data-act],[data-send],[data-snooze],[data-exec],[data-undo],[data-oa-refresh],[data-recent-undo],.cp-oa-q .cp-opt') : null;
+  if (!el || el.disabled) return;
+  if (el.dataset.recentUndo) return void undo(el.dataset.recentUndo, null);
+  const box = el.closest('[data-oa]');
+  if (!box) return;
+  const id = box.dataset.oa, u = uiOf(id);
+  if (el.matches('.cp-oa-q .cp-opt')) {
+    // 单选，再点一次取消；“我的说明”留着
+    const qid = el.closest('[data-qid]').dataset.qid, cur = u.answers?.[qid] || {};
+    const again = 'value' in cur && JSON.stringify(cur.value) === el.dataset.val;
+    const next = { ...cur };
+    if (again) delete next.value; else next.value = JSON.parse(el.dataset.val);
+    u.answers = { ...u.answers, [qid]: next };
+    return void paint();
+  }
+  if ('exec' in el.dataset) { u.executor = u.executor === 'gpt' ? 'claude' : 'gpt'; return void paint(); }
+  if (el.dataset.undo !== undefined) return void undo(el.dataset.undo, id);
+  if ('oaRefresh' in el.dataset) { act.state.delete(id); paint(); return void load(); }
+  if (el.dataset.snooze) return void submit(box, 'snooze', { until: el.dataset.snooze });
+  if (el.dataset.send) {
+    const a = el.dataset.send;
+    if (a === 'answer') {
+      const answers = Object.fromEntries(Object.entries(u.answers || {}).filter(([, x]) => 'value' in x).map(([q, x]) => [q, { value: x.value, ...(x.text?.trim() ? { text: x.text.trim() } : {}) }]));
+      return void submit(box, 'answer', { answers });
+    }
+    const text = (u.text || '').trim();
+    if (text) submit(box, a, { text });
+    return;
+  }
+  const a = el.dataset.act;
+  if (a === 'note' || a === 'redo' || a === 'snooze') {
+    // 回一句话 / 不对，重做 / 晚点提醒：展开或收起下面的框；两个写字的框共用一份草稿
+    u.open = u.open === a ? '' : a;
+    paint();
+    if (u.open === 'note' || u.open === 'redo') document.querySelector(`[data-oa="${CSS.escape(id)}"] [data-text]`)?.focus();
+    return;
+  }
+  if (a === 'switch') return void submit(box, 'switch', { executor: el.dataset.to === 'gpt' ? 'gpt' : 'claude' });
+  submit(box, a); // 看见了、知道了、办好了、不用了、确认：直接交，不加二次确认（误点靠撤回）
+});
+document.addEventListener('input', (e) => {
+  const el = e.target instanceof Element ? e.target : null;
+  const box = el?.closest('[data-oa]');
+  if (!box) return;
+  const u = uiOf(box.dataset.oa);
+  if ('text' in el.dataset) {
+    u.text = el.value;
+    const send = box.querySelector('[data-send]:not([data-send="answer"])');
+    if (send) send.disabled = !el.value.trim();
+  } else if ('qnote' in el.dataset) {
+    const qid = el.closest('[data-qid]').dataset.qid;
+    u.answers = { ...u.answers, [qid]: { ...u.answers?.[qid], text: el.value } };
+  }
+});
+// 选一天：选好（不早于今天）就交，传 YYYY-MM-DD
+document.addEventListener('change', (e) => {
+  const el = e.target instanceof Element ? e.target : null;
+  if (!el?.matches('[data-snooze-date]')) return;
+  const box = el.closest('[data-oa]');
+  if (box && /^\d{4}-\d{2}-\d{2}$/.test(el.value) && el.value >= (el.min || '')) submit(box, 'snooze', { until: el.value });
+});
+// 换字时把焦点放回同一个按钮或输入框
+const FOCUS = ['act', 'send', 'exec', 'snooze', 'snoozeDate', 'undo', 'text', 'qnote', 'val', 'oaRefresh'];
+function focusKey(el) {
+  const box = el.closest('[data-oa]');
+  const k = box && FOCUS.find((x) => x in el.dataset);
+  return k ? [box.dataset.oa, el.closest('[data-qid]')?.dataset.qid || '', k, el.dataset[k]].join('\u0001') : null;
+}
+function refocus(node, key) {
+  const el = [...node.querySelectorAll('[data-oa] button, [data-oa] input, [data-oa] textarea')].find((x) => focusKey(x) === key);
+  if (!el || el.disabled) return;
+  el.focus({ preventScroll: true });
+  if (el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && el.type === 'text')) el.setSelectionRange(el.value.length, el.value.length);
+}
+// 撤回倒数每秒走一格；有一条到点了，整块重画成“已交给 ……”
+setInterval(() => {
+  const now = new Date();
+  let due = false;
+  for (const el of document.querySelectorAll('[data-left]')) { const t = leftText(el.dataset.left, now); if (t) el.textContent = t; else due = true; }
+  if (due) paint();
+}, 1000);
 
 // 几次读取可能同时在路上（页面刚打开那次、每分钟那次、刷新按钮那次），回来的先后不一定。
 // 只认比已显示那次更晚发出的：晚到的旧失败不能把新结果说成“连不上”，晚到的旧数据也不能盖掉新数据。
