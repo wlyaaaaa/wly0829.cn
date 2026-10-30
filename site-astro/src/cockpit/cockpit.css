@@ -1185,11 +1185,11 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 }
 
 /* ---- 电脑健康分：最大的两三项扣分直接露在大数字下面，点开每行写谁在管、修好能回到几分，点哪行跳到那块（本人 10-30 批准第 1 项） ---- */
-.cp-score-top { display: block; font-size: 13.5px; line-height: 1.6; color: var(--text); }
+.cp-score-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 14px; font-size: 13.5px; line-height: 1.6; color: var(--text); }
 .cp-score-top b { font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
-.cp-score-top i { font-style: normal; color: var(--muted); }
+.cp-score-top i { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } /* 分隔点只给读屏，换行时不在行尾吊一个点 */
 .cp-score-hit { white-space: nowrap; }
-.cp-score-more { font-weight: 800; color: var(--link); }
+.cp-score-more { margin-left: -10px; font-weight: 800; color: var(--link); }
 .cp-score[open] .cp-score-more { display: inline-block; transform: rotate(90deg); }
 .cp-page .cp-score-body { display: block; margin-top: 10px; padding: 10px; }
 .cp-score-rows { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
@@ -1211,3 +1211,18 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 .cp-page .cp-status .cp-tri-cell.is-neutral .cp-tri-who { color: #3f6b91; }
 .cp-page .cp-status .cp-tri-cell.is-yellow .cp-tri-who { color: #9a7409; }
 .cp-page .cp-status .cp-tri-cell.is-red .cp-tri-who { color: var(--cp-red); }
+
+/* ---- 手机和窄屏：标题下面三行状态条，插画挪到页尾；电脑版左栏不变（本人 10-30 批准第 3 项） ---- */
+.cp-strip { display: none; }
+.cp-page:has(.cp-snap) .cp-strip { filter: grayscale(1); opacity: .6; }
+@media (max-width: 1199.98px) {
+  .cp-dashboard { grid-template-areas: "intro" "need" "home" "status" "facts" "art"; }
+  .cp-strip:has(.cp-strip-row) { grid-column: 1 / -1; display: grid; margin: 4px 0 0; padding: 2px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card-bg); box-shadow: var(--card-shadow); }
+  .cp-page .cp-strip-row { display: flex; align-items: center; gap: 9px; min-height: 46px; margin: 0; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 15px; line-height: 1.45; font-weight: 700; color: var(--text); text-decoration: none; }
+  .cp-strip-row:last-child { border-bottom: 0; }
+  .cp-strip-row > span:not(.cp-dot) { flex: 1; min-width: 0; }
+  .cp-strip-row > .cp-dot { margin: 0; }
+  a.cp-strip-row::after { content: "›"; flex: none; font-size: 18px; font-weight: 800; color: var(--link); }
+  .cp-intro:has(.cp-strip-row) .cp-you.is-none .cp-you-n { display: none; }
+  .cp-dashboard > .cp-sidebar > .cp-hero-art, .cp-hero-art { margin-top: 4px; }
+}

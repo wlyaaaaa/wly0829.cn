@@ -74,3 +74,22 @@ test('状态四格的样式：第二行不再藏起来，AI 在管的点比读�
   assert.match(tail, /\.cp-page \.cp-status \.cp-tri-who \{ display: block;/);
   assert.match(tail, /\.cp-page \.cp-dot\.is-neutral \{ background: #3f6b91; \}/);
 });
+
+test('手机三行状态条：要你做几件、AI 干活卡没卡住、电脑几分扣在哪，点哪行跳到哪块；电脑版不显示，插画挪到页尾', async () => {
+  const need = [{ id: 'n1', card_type: 'task', title: '示例要你动手', ask_kind: 'action' }];
+  const running = { count: 2, stuck_count: 0, observed_at: at, rows: [{ id: 'r1', status: 'running', title: '示例对话甲' }, { id: 'r2', status: 'running', title: '示例对话乙' }] };
+  const rows = (h) => [...h.matchAll(/<(a|p) class="cp-strip-row"(?: href="#([^"]+)")?>([^]*?)<\/\1>/g)].map((m) => [m[2] || '', textOnly(m[3])]);
+  assert.deepEqual(rows(REGIONS.strip(view({ need_you: need, ai_running: running }), ctx())), [
+    ['need-you', '要你做 1 件，不急'], ['ai-running', 'AI 在干活 2 个，没卡住'], ['status', '电脑 46 分：备份 3 项失败，AI 在修']]);
+  const stuck = { ...running, stuck_count: 1, rows: [{ id: 'r1', status: 'login_failed', stuck: true }, running.rows[1]] };
+  assert.deepEqual(rows(REGIONS.strip(view({ ai_running: stuck, overview: overview({ score: 100, reasons: [] }) }), ctx())), [
+    ['', '现在没有要你做的事'], ['ai-running', 'AI 在干活 2 个，1 个卡住，要你看'], ['status', '电脑 100 分：一切正常']]);
+  assert.match(REGIONS.strip(view(), ctx({ ov: { stale: () => true, lamp: () => '' } })), /href="#status"><span class="cp-dot is-gray"[^>]*><\/span><span>电脑：读不到（上次 11:59）<\/span>/);
+  const html = page(view({ need_you: need }), ctx());
+  assert.ok(html.indexOf('data-cp="strip"') > html.indexOf('data-cp="overview"') && html.indexOf('data-cp="strip"') < html.indexOf('id="status"'));
+  const { readFileSync } = await import('node:fs');
+  const css = readFileSync(new URL('../site-astro/src/cockpit/cockpit.css', import.meta.url), 'utf8');
+  const tail = css.slice(css.lastIndexOf('本人 10-30 批准第 3 项'));
+  assert.match(tail, /^[^]*?\.cp-strip \{ display: none; \}\n[^]*?@media \(max-width: 1199\.98px\)/);
+  assert.match(tail, /grid-template-areas: "intro" "need" "home" "status" "facts" "art";/);
+});

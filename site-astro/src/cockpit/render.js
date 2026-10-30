@@ -1167,6 +1167,35 @@ const overviewTri = (v, ctx) => {
   const off = ctx.ov.stale(v.overview, ctx.now.getTime());
   return tri(triCells(v, ctx, off)) + score(v, ctx, off);
 };
+// 手机和窄屏标题下面的三行状态条（本人 10-30 批准第 3 项）：要你做几件、AI 干活卡没卡住、电脑几分扣在哪，点哪行跳到哪块。
+// 电脑版左栏已经有这些，cockpit.css 在 ≥1200 时不显示
+export function strip(v, ctx) {
+  if (!ctx.ov) return '';
+  const row = (href, state, text) => (href ? `<a class="cp-strip-row" href="#${href}">` : '<p class="cp-strip-row">') + `${dot(state)}<span>${esc(text)}</span>` + (href ? '</a>' : '</p>');
+  const rows = [];
+  // ① 要你做：和顶上“要你做 N 件”、标签页标题同一个数
+  if (v.ok || v.need_you.length) {
+    const { n, urgent } = ownerNow(v, ctx.now, ctx);
+    rows.push(n ? row('need-you', urgent ? 'red' : 'attention', `要你做 ${n} 件${urgent ? (urgent === n ? '，急' : `，${urgent} 件急`) : '，不急'}`) : row('', 'ok', '现在没有要你做的事'));
+  }
+  // ② AI 在干活：在干活的件数，卡住几个、要不要你看
+  const a = v.ai_running;
+  if (a) {
+    const k = Number.isInteger(a.stuck_count) ? a.stuck_count : a.rows.filter((r) => r.stuck).length;
+    const m = Math.min(k, a.rows.filter((r) => r.stuck && OWNER_STUCK.includes(r.status)).length);
+    rows.push(!a.count && !a.rows.length ? row('ai-running', 'ok', a.unread ? 'AI 干活情况暂时读不全' : '现在没有 AI 在干活')
+      : row('ai-running', m ? 'red' : k ? 'neutral' : 'ok', `AI 在干活 ${activeOf(a)} 个，${k ? `${k} 个卡住${m ? (m === k ? '，要你看' : `，${m} 个要你看`) : '，AI 在管'}` : '没卡住'}`));
+  }
+  // ③ 电脑健康分：几分、最大的那项扣分、谁在管
+  const ov = v.overview, off = ctx.ov.stale(ov, ctx.now.getTime());
+  if (off || !Number.isFinite(ov?.score)) rows.push(row('status', 'unavailable', `电脑：读不到${ov?.as_of ? `（上次 ${hm(ov.as_of)}）` : ''}`));
+  else {
+    const g = scoreGroups(ov)[0];
+    const st = !g ? 'ok' : g.who === WHO_TEXT.neutral ? 'neutral' : g.who ? 'attention' : 'neutral';
+    rows.push(row('status', st, `电脑 ${Math.round(ov.score)} 分：${g ? `${g.label}${g.who ? `，${g.who === WHO_TEXT.neutral ? 'AI 在修' : g.who}` : ''}` : '一切正常'}`));
+  }
+  return rows.join('');
+}
 // “AI 的账本”那一行：后端 ai_ledger_summary.text；没给时按 AI 在跟和过期的件数写
 const ledgerText = (v) => v.ai_ledger_summary?.text || (() => {
   const n = v.counts.ai_following || v.ai_following.length, late = (v.ai_overdue || []).length;
@@ -1288,7 +1317,7 @@ export function meta(v, ctx) {
 }
 // 今天几号（北京时间，跨过零点浏览器里会自动换）
 const todayDate = (v, ctx) => new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', month: 'long', day: 'numeric', weekday: 'long' }).format(ctx.now).replace(/(\d+)月(\d+)日/, '$1 月 $2 日 ') + ' · 北京时间 0 点起';
-export const REGIONS = Object.fromEntries(Object.entries({ overview, 'overview-tri': overviewTri, 'need-you': needCards, home, tasks: tasksSum, security, computer, backup, projects, today: todayBlock, 'today-date': todayDate, viewer: viewerLine, meta, ledger,
+export const REGIONS = Object.fromEntries(Object.entries({ overview, strip, 'overview-tri': overviewTri, 'need-you': needCards, home, tasks: tasksSum, security, computer, backup, projects, today: todayBlock, 'today-date': todayDate, viewer: viewerLine, meta, ledger,
   'action-toast': (_v, ctx) => actionToast(ctx), ...Object.fromEntries(Object.entries(LAMPS).map(([id, key]) => ['lamp-' + id, lampOf(key)])) }).map(([key, render]) => [key, (v, ctx = {}) => render(v, { ...ctx, viewer: v.viewer })]));
 
 // 整页：外框固定，内容由上面各函数填。首屏只放本人的事（本人 18:51：太谜语人、还不好用）：
@@ -1312,8 +1341,8 @@ export function page(v, ctx) {
     + '<div class="cp-tools"><p class="cp-meta" data-cp="meta" role="status">' + meta(v, ctx) + '</p>'
     + '<button type="button" class="cp-tool ct-inline-action" data-cp-reload title="立刻重读电脑" aria-label="立刻重读电脑">↻</button>' + help + '</div>'
     + '<p class="cp-viewer" data-cp="viewer" role="status">' + viewerLine(v, ctx) + '</p>'
-    + '<div class="cp-overview" data-cp="overview">' + overview(v, ctx) + '</div></div>'
-    + '<div class="cp-status c-hub-stats">' + blockHead('状态一览', 'cp-mobile-status-heading')
+    + '<div class="cp-overview" data-cp="overview">' + overview(v, ctx) + '</div><nav class="cp-strip" data-cp="strip" aria-label="现在的情况">' + strip(v, ctx) + '</nav></div>'
+    + '<div class="cp-status c-hub-stats" id="status">' + blockHead('状态一览', 'cp-mobile-status-heading')
     + '<div class="cp-overview-tri" data-cp="overview-tri">' + overviewTri(v, ctx) + '</div>'
     + '<div class="cp-security-wrap hub-stat-field ct-card"><h2 class="cp-security-title">安全和授权</h2><div class="cp-security" data-cp="security">' + security(v, ctx) + '</div></div></div>'
     + '<figure class="cp-hero-art"' + (ctx.birdConfig ? ' data-living-config="' + ctx.birdConfig + '"' : '') + '><img src="' + src(ctx, 'cockpit-01-illustration-01.png') + '" alt="" width="866" height="326" loading="eager" crossorigin="anonymous"></figure></aside>'
