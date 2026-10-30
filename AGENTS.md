@@ -16,6 +16,8 @@ personal AI collaboration workspace; public presentation is secondary.
 
 停留表示已收到的累计可见时长：离开/隐藏、恢复前台即时上报及每 15 秒前台心跳，在同一页面实例内只取合法累计秒数最大值，再跨实例相加；隐藏时不计时、不发心跳，恢复/心跳不增加 PV。last_report_at 是最新合法可见时长信标的真实事件时间（无则 null），不能证明认真阅读或访问已结束；15 秒采样仍叠加原有 SLS 约 3 分钟延迟。没有合法可见时长信标时用相邻页面时间差后备（最多 30 分钟），最后一页保持未知。打开速度为 Navigation Timing 从导航开始到首字节、DOM 完成和 load 完成的毫秒数，只汇总已收到的字段。图片桶日志另统计 GPTBot、ClaudeBot、PerplexityBot、Bytespider、Amazonbot、meta-externalagent、Google-Extended 等声称的 UA 次数与日期，注明“只是下限，看不到只抓网页的爬虫”。
 
+本人要看完整日志时，一次讲清实际覆盖的日志来源、时间、IP 的地区与网络归属、页面或接口动作及结果、本地与 AI 测试和机器请求的已知标记、错误和缺口；不只轮流报访客数量再等本人追问 IP、时间和做了什么，访客信标也不能冒充全部后端日志。这类查询在对话里直接解释，不专门做汇报页，本人当次要求时除外。
+
 普通访客查询默认单列“简历来的（/cv）”（`entry.cv`），按首次已标记入口去重，包含人数、首次时间、城市、看过的页和停留；`/cv` 自动跳到首页，跳转本身不计阅读停留。
 
 Before changing the website's product, page copy, styling, interactions,
