@@ -19,6 +19,7 @@ personal AI collaboration workspace; public presentation is secondary.
 本人要看完整日志时，一次讲清实际覆盖的日志来源、时间、IP 的地区与网络归属、页面或接口动作及结果、本地与 AI 测试和机器请求的已知标记、错误和缺口；不只轮流报访客数量再等本人追问 IP、时间和做了什么，访客信标也不能冒充全部后端日志。这类查询在对话里直接解释，不专门做汇报页，本人当次要求时除外。
 
 普通访客查询默认单列“简历来的（/cv）”（`entry.cv`），按首次已标记入口去重，包含人数、首次时间、城市、看过的页和停留；`/cv` 自动跳到首页，跳转本身不计阅读停留。
+本人问“简历链接有没有人点开”时，在仓库根运行 `python -B -X utf8 tools/query-site-visitors.py --cv --days 30`，逐次列出北京时间、可能的 IP 地区与机构网络、后续页面和停留；零记录不证明零来访，日志延迟和身份推断限制同上。
 
 Before changing the website's product, page copy, styling, interactions,
 navigation, project selection, content generation or public publication, or tools

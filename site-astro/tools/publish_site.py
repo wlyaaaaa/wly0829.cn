@@ -2,6 +2,7 @@
 import argparse
 import base64
 import hashlib
+import html
 import importlib.util
 import json
 import shutil
@@ -20,6 +21,38 @@ ORIGIN = 'https://wly0829.cn'
 REPO = 'repos/wlyaaaaa/wly0829.cn'
 CLI = r'E:\Tools\aliyun-cli\aliyun.exe'
 LOCK = r'E:\.agents\tools\Invoke-ShortLock.ps1'
+WORD_CONFIG = ROOT / 'config/public-word-gate.json'
+
+def scan_public_words(dist):
+    """Check every published HTML, search script and rule-source text before any upload."""
+    if not dist.is_dir():
+        raise ValueError('Dist directory does not exist: ' + str(dist))
+    config = json.loads(WORD_CONFIG.read_text('utf-8'))
+    words = config['words']
+    exceptions = config.get('exceptions', [])
+    hits = []
+    for path in sorted(dist.rglob('*')):
+        if not path.is_file():
+            continue
+        rel = path.relative_to(dist).as_posix()
+        if not (path.suffix == '.html' or (path.suffix == '.js' and path.name.startswith('search-'))
+                or 'rule-sources' in path.parts):
+            continue
+        body = html.unescape(path.read_text('utf-8')) if path.suffix == '.html' else path.read_text('utf-8')
+        for line_no, line in enumerate(body.splitlines(), 1):
+            for word in words:
+                pos = 0
+                while (pos := line.find(word, pos)) >= 0:
+                    before, after = line[max(0, pos-12):pos], line[pos+len(word):pos+len(word)+12]
+                    if not any(row['file'] == rel and row['word'] == word and row.get('reason')
+                               and (snippet := row['text']) in line
+                               and any(start <= pos < start + len(snippet)
+                                       for start in range(len(line)) if line.startswith(snippet, start))
+                               for row in exceptions):
+                        hits.append({'file': rel, 'line': line_no, 'column': pos+1,
+                                     'word': word, 'context': before + '【' + word + '】' + after})
+                    pos += len(word)
+    return hits
 
 def load(name):
     spec = importlib.util.spec_from_file_location(name, ROOT/'scripts'/(name+'.py'))
@@ -194,6 +227,10 @@ def publish(args):
             receipt['steps_seconds'][name] = round(time.monotonic()-before, 3)
 
     try:
+        hits = step('public_word_gate', lambda: scan_public_words(args.dist))
+        (output/'word-check.json').write_text(json.dumps({'hits': hits}, ensure_ascii=False, indent=2), 'utf-8')
+        if hits:
+            raise ValueError(f'Public word gate blocked {len(hits)} occurrence(s); see {output / "word-check.json"}')
         source = oss.read(args.dist/oss.MANIFEST)
         if not source.get('finalized_dist'):
             raise ValueError('Run prepare-oss-release.py finalize-dist --dist '+str(args.dist)+' then scan that final dist')
@@ -382,6 +419,8 @@ if __name__ == '__main__':
     operation.add_argument('--dist', type=Path)
     operation.add_argument('--retention-only', type=Path, metavar='PUBLICATION_OUTPUT',
                            help='collect old objects separately using a successful publication output directory')
+    operation.add_argument('--word-check-only', type=Path, metavar='DIST',
+                           help='read-only sensitive-word check of a completed dist')
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--upload-only', action='store_true', help='upload and read back OSS assets, then stop before site-dist and Pages')
     parser.add_argument('--scan-result', type=Path)
@@ -394,6 +433,10 @@ if __name__ == '__main__':
     parser.add_argument('--skip-retention', action='store_true', help='compatibility flag: publication always defers cloud cleanup to a separate command')
     parser.add_argument('--lock-holder', default='codex:publish:'+ROOT.parent.name)
     options = parser.parse_args()
+    if options.word_check_only:
+        hits = scan_public_words(options.word_check_only)
+        print(json.dumps({'status': 'blocked' if hits else 'pass', 'hits': hits}, ensure_ascii=False, indent=2))
+        raise SystemExit(bool(hits))
     result = collect_after_publication(options) if options.retention_only else publish(options)
     print(json.dumps({key: value for key, value in result.items() if key not in ('planned_assets', 'planned_documents', 'head', 'get')}, ensure_ascii=False))
     raise SystemExit(result.get('exit_code', 0))
