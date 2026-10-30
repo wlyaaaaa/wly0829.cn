@@ -159,6 +159,18 @@ def refresh():
     return pin
 
 
+def prune_rule_sources(root, pin):
+    """Remove obsolete content-addressed rule copies from one output tree."""
+    directory = Path(root)/'_typeset/rule-sources'
+    if not directory.is_dir(): return False
+    current = {row['public_source_sha256'] + '.md' for row in pin['documents'].values()}
+    removed = False
+    for path in directory.iterdir():
+        if path.is_file() and re.fullmatch(r'[0-9a-f]{64}\.md', path.name) and path.name not in current:
+            path.unlink(); removed = True
+    return removed
+
+
 def generate(public):
     """Build only from the frozen author source; never inject machine state."""
     source = ROOT/'sources/rules'; pin = json.loads((source/'release.json').read_text('utf8'))
@@ -174,6 +186,7 @@ def generate(public):
         target = Path(public)/row['src'].lstrip('/'); target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(body)
         if row['relative_path'].startswith('templates/'):
             alias = Path(public)/'rule-sources'/row['relative_path']; alias.parent.mkdir(parents=True, exist_ok=True); alias.write_bytes(body)
+    prune_rule_sources(public, pin)
     return {**pin, 'documents': {key: {k: v for k, v in row.items() if k != 'html'} for key, row in pin['documents'].items()}}
 
 
