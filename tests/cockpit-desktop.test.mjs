@@ -101,7 +101,7 @@ test('整页：侧栏保留标题、设备时间、刷新帮助与状态；工�
   const v = normalize(base({ viewer: { kind: 'owner', device_state: 'ok', device_kind: 'pc', device_machine: '副驾驶' }, private_count: 2, need_you: queue() }));
   const html = page(v, ctx(acts()));
   const order = ['data-cp="action-toast"', '<section class="cp-dashboard c-text" id="top"><aside class="cp-sidebar">', 'class="cp-intro cp-hero-copy"', '<div class="cp-tools">',
-    'data-cp="meta"', 'data-cp-reload', 'id="cp-help"', 'data-cp="viewer"', 'data-cp="overview"', '<div class="cp-status c-hub-stats">', 'data-cp="overview-tri"', 'data-cp="security"',
+    'data-cp="meta"', 'data-cp-reload', 'id="cp-help"', 'data-cp="viewer"', 'data-cp="overview"', 'data-cp="strip"', '<div class="cp-status c-hub-stats" id="status">', 'data-cp="overview-tri"', 'data-cp="security"',
     '<figure class="cp-hero-art"', '</aside>', '<div class="cp-workspace c-text">', '<div class="cp-need" id="need-you"', 'data-cp="home"', '<div class="cp-facts-wall">'];
   const pos = order.map((t) => html.indexOf(t));
   assert.ok(pos.every((p) => p >= 0), JSON.stringify(pos));

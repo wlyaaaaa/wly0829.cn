@@ -108,16 +108,18 @@ class CockpitPageTests(unittest.TestCase):
 
                     # 首屏：你现在 5 件事；5 张事项卡；期限照后端给的写，不出占位话
                     self.assertEqual(page.locator('.cp-you-n b').inner_text(), '5')
-                    self.assertIn('件事', page.locator('.cp-you-n').inner_text())
+                    self.assertIn('件', page.locator('.cp-you-n').inner_text())  # 10-29 起顶上写“要你做 N 件”
                     self.assertEqual(page.locator('.cp-ask').count(), 5)
-                    first = page.locator('.cp-ask').first.inner_text()
+                    # 期限写在默认收起的“怎么办”里（8c1ff578 起首层只露标题、原因和按钮），按全文比
+                    first = page.locator('.cp-ask').first.text_content()
                     self.assertRegex(first, r'\d{2}:\d{2} 前')
                     for filler in ('期限未登记', '待补', '未统计'):
                         self.assertNotIn(filler, page.locator('.cp-page').inner_text())
                     # 6 个分区标题图和首屏两张标题图都加载出来
                     page.wait_for_function("[...document.querySelectorAll('.cp-page h1 img,.cp-page h2 img')].every(e=>e.complete&&e.naturalWidth>0)", timeout=30000)
                     # 第三步：“要我处理的事”不再单独一区，卡片紧接在首屏那一句下面；事实区 5 个分区
-                    self.assertEqual(page.locator('.cp-section .cp-head h2 img').count(), 5)
+                    # 分区标题沿用全站的叶子和毛笔下划线标题条（不再是标题图）
+                    self.assertEqual(page.locator('.cp-section .cp-head h2 .cp-section-title').all_inner_texts(), ['自动任务', '电脑', '今天的动态', '备份和云端', '项目'])
                     # 曲线不内嵌实时图；页面没有横向滚动
                     self.assertEqual(page.locator('iframe').count(), 0)
                     self.assertFalse(page.evaluate('document.documentElement.scrollWidth>innerWidth'))
@@ -175,7 +177,7 @@ class CockpitPageTests(unittest.TestCase):
                     self.assertEqual(quiz.locator('button').count(), 0)
                     # 电脑版顶栏的 ↻ 和队列的“一行一件 / 全部展开”只管看，不算
                     self.assertEqual(page.locator('.cp-page button').evaluate_all("bs => bs.filter(b => !b.closest('#today-river, .cp-tools, .cp-q-modes')).length"), 0)
-                    self.assertIn('甲方案', quiz.inner_text())
+                    self.assertIn('甲方案', quiz.text_content())  # 选项在默认收起的“怎么办”里
                     # 上面套餐流量最后那次点开的折叠，换回正常数据后先重读一次，让页面高度定下来再量
                     self.assertTrue(page.evaluate('CockpitData.refresh()')['fresh'])
                     page.locator('#run-all > summary, #mine-wait > summary, #proj-calm > summary').first.click()
@@ -186,7 +188,7 @@ class CockpitPageTests(unittest.TestCase):
                         reads = server.status_reads
                         self.assertTrue(page.evaluate('CockpitData.refresh()')['fresh'])
                         self.assertGreater(server.status_reads, reads)
-                    self.assertIn('问过你', page.locator('.cp-ask#todo-need-q').inner_text())
+                    self.assertIn('问过你', page.locator('.cp-ask#todo-need-q').text_content())
                     self.assertEqual(page.evaluate("[...document.querySelectorAll('details[open]')].map(d => d.id).filter(Boolean)"), opened)
                     self.assertEqual(page.evaluate('scrollY'), before)
                     page.screenshot(path=str(OUT / f'answer-{width}.png'))
@@ -195,12 +197,17 @@ class CockpitPageTests(unittest.TestCase):
                     size = 42 if width == 390 else 44
                     for position in ('top', 'middle', 'bottom'):
                         page.evaluate("(p)=>scrollTo({top:p==='top'?0:p==='middle'?document.documentElement.scrollHeight*.5:document.documentElement.scrollHeight,behavior:'instant'})", position)
-                        if width >= 1200 and position == 'top':
-                            # 电脑版：顶栏的 ↻ 看得见时右下角那个藏起来（滚出去才出现），这时点顶栏的
+                        page.wait_for_timeout(150)
+                        top_seen = page.evaluate("()=>{const t=document.querySelector('[data-cp-reload]');const r=t.getBoundingClientRect();return r.width>0&&r.bottom>0&&r.top<innerHeight&&t.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}")
+                        # 电脑版左栏吸顶，顶栏的 ↻ 一直看得见，右下角那个就一直藏着
+                        if top_seen:
+                            # 顶栏的 ↻ 看得见时右下角那个藏起来（滚出去才出现），这时点顶栏的；手机顶上也有这个 ↻（client.js 的 checkFloat 按看不看得见判断，不分宽窄）
                             page.wait_for_function("getComputedStyle(document.querySelector('.cockpit-refresh-wrap')).visibility==='hidden'")
                             reads = server.status_reads
                             page.locator('[data-cp-reload]').click()
                             page.wait_for_function("document.querySelector('.cp-meta-note')?.textContent.startsWith('已更新')")
+                            # 上一次的“已更新”还挂着时，要等这次读完（↻ 不再忙）再往下，免得下一步的重读被这次合并掉
+                            page.wait_for_function("document.querySelector('[data-cp-reload]').getAttribute('aria-busy')==='false'")
                             self.assertGreater(server.status_reads, reads)
                             continue
                         page.wait_for_function("getComputedStyle(document.querySelector('.cockpit-refresh-wrap')).visibility==='visible'")
@@ -240,7 +247,7 @@ class CockpitPageTests(unittest.TestCase):
                     # 重新加载 5 次：每次都画出首帧并且河里有船
                     for _ in range(5):
                         page.reload(wait_until='domcontentloaded')
-                        page.locator('.cp-you-n').filter(has_text='件事').wait_for(timeout=60000)
+                        page.locator('.cp-you-n').filter(has_text='要你做').wait_for(timeout=60000)
                         page.wait_for_function('window.todayRiver?.model?.tasks.length>0', timeout=60000)
                         self.assertGreater(page.locator('#today-river .boat').count(), 0)
                     results.append({'width': width, 'answers_preserved': True, 'overflow': False, 'refreshes': 5, 'reloads_with_boats': 5, 'titles_loaded': 6, 'iframes': 0})

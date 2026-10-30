@@ -103,13 +103,15 @@ function aiRunning(raw) {
   }));
   const rows = convert(raw.rows);
   const stuck = rows.filter((r) => r.stuck).length;
+  // unread：这次读不全，不能说成“没有 AI 在跑”，也不能写 0 个。后端刚重启、AI 会话还没读完时 count 等件数都是 null、observed_at 也是 null
+  // （不一定带 gaps）；旧格式是 observed_at 为空且 gaps 非空。读完后才给整数，旧快照有整数时照旧显示原数和原时间
+  const unread = !raw.observed_at && (nat(raw.count) === null || (!raw.count && !rows.length && Array.isArray(raw.gaps) && raw.gaps.length > 0));
   const count = nat(raw.count) ?? rows.length;
-  // stale_count：早就停了、不算在跑的件数（后端没给就是 0）；
-  // unread：后端说这次读不全（observed_at 为空且有缺口）又没有行，不能说成“没有 AI 在跑”
-  // stopped_count：半路停下超过半小时、还没满 3 小时的（记为“停了，没做完”，满 3 小时并进 stale_count）；后端没给就数行
-  return { count, stuck_count: nat(raw.stuck_count) ?? stuck, stale_count: nat(raw.stale_count) || 0, stopped_count: nat(raw.stopped_count) ?? rows.filter((r) => r.status === 'stopped').length,
-    summary: text(raw.summary, 80), observed_at: raw.observed_at || null, rows, stale_rows: convert(raw.stale_rows), stopped_rows: convert(raw.stopped_rows),
-    unread: !count && !rows.length && !raw.observed_at && Array.isArray(raw.gaps) && raw.gaps.length > 0 };
+  // stale_count：早就停了、不算在跑的件数；读不全时是 null（不当 0 用），读全了后端没给才算 0
+  // stopped_count：半路停下超过半小时、还没满 3 小时的（记为“停了，没做完”，满 3 小时并进 stale_count）；后端没给就数行，读不全时也是 null
+  return { count, stuck_count: nat(raw.stuck_count) ?? (unread ? null : stuck), stale_count: nat(raw.stale_count) ?? (unread ? null : 0),
+    stopped_count: nat(raw.stopped_count) ?? (unread ? null : rows.filter((r) => r.status === 'stopped').length),
+    summary: text(raw.summary, 80), observed_at: raw.observed_at || null, rows, stale_rows: convert(raw.stale_rows), stopped_rows: convert(raw.stopped_rows), unread };
 }
 
 // 缺什么都补成空，版式只看结构，不看数据到没到

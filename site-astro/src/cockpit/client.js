@@ -5,6 +5,7 @@ import { REGIONS, Q_KEY, LF_KEY, needCount } from './render.js';
 import { ACTIONS } from './actions.js';
 import { copyToClipboard } from './clipboard.js';
 import { createActionController } from './action-state.js';
+import { SEEN_PAGES, SEEN_DWELL_MS, seenKey, trackedIds, parseSeen, serializeSeen, compare, newCss } from './seen.js';
 
 const boot = JSON.parse(document.getElementById('cockpit-boot')?.textContent || '{}');
 // 本机预览走预览脚本的转发入口，线上走 live（边缘）再退到 mcp
@@ -24,7 +25,60 @@ const say = (text, ms = 15000) => { notice = text; paint(); setTimeout(() => { i
 // phase：还没收到过任何一次读取结果时是 snapshot（首帧那份构建时的数），之后是 live；读不到另由 offline 说明
 // act：本人设备上点过的收起、提醒、撤回，以及未选择的提醒日期。
 const act = { state: new Map(), ui: new Map(), recent: new Map() };
-const ctx = () => ({ now: new Date(), viewer: view.viewer, offline, notice, phase: shown ? 'live' : 'snapshot', paired: !!store.get(), projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen, act });
+const ctx = () => ({ now: new Date(), viewer: view.viewer, offline, notice, phase: shown ? 'live' : 'snapshot', paired: !!store.get(), projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen, act, since: seen.since() });
+
+// ---- 新出现的标“新”（seen.js）：只存条目编号和时间。第一次打开不标；读到新数据后才和上次比（首帧是构建时的旧数，不拿它比）。
+// 新的卡和行左边一个小绿点“新”，进视野停留一会儿（SEEN_DWELL_MS）或页面关掉／切走就算看过，下次不再标
+const seen = (() => {
+  const page = SEEN_PAGES[location.pathname];
+  const key = page && seenKey(page);
+  const load = () => { try { return parseSeen(localStorage.getItem(key)); } catch { return null; } };
+  const save = (ids) => { try { localStorage.setItem(key, serializeSeen(Date.now(), ids)); } catch { /* 无存储：这次照样标，下次当第一次 */ } };
+  const prev = key ? load() : null; // 这次打开时读到的上一次，整个会话都和它比
+  const looked = new Set(); // 这次已经看过的
+  let ids = [], cmp = { fresh: [], closed: 0 }, ready = false, saved = false;
+  let style = null, io = null;
+  const timers = new Map();
+  const marked = () => cmp.fresh.filter((id) => !looked.has(id));
+  function sync() {
+    if (!key || !shown || offline) return;
+    ids = trackedIds(view, page);
+    ready = true;
+    if (!prev) { if (!saved) { save(ids); saved = true; } return; }
+    cmp = compare(prev, ids);
+    const css = newCss(marked());
+    if (!style) { style = document.createElement('style'); style.id = 'cp-new-style'; document.head.append(style); }
+    if (style.textContent !== css) style.textContent = css;
+  }
+  // 进视野停留 SEEN_DWELL_MS 才算看过；每次换字后重新挂
+  function watch() {
+    io?.disconnect(); timers.forEach(clearTimeout); timers.clear();
+    const left = new Set(marked());
+    if (!left.size || typeof IntersectionObserver !== 'function') return;
+    io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) { clearTimeout(timers.get(e.target)); timers.delete(e.target); continue; }
+        if (timers.has(e.target)) continue;
+        timers.set(e.target, setTimeout(() => {
+          timers.delete(e.target);
+          const mine = String(e.target.dataset.items || e.target.dataset.ids || '').split(' ').filter((id) => left.has(id));
+          if (!mine.length) return;
+          mine.forEach((id) => looked.add(id));
+          style.textContent = newCss(marked());
+        }, SEEN_DWELL_MS));
+      }
+    }, { threshold: 0.6 });
+    for (const n of document.querySelectorAll('[data-items], .cp-ltable tr[data-ids]')) {
+      const own = String(n.dataset.items || n.dataset.ids || '').split(' ');
+      if (own.some((id) => left.has(id)) && n.getClientRects().length) io.observe(n);
+    }
+  }
+  // 关页、切走：这次的条目都算看过，存下来
+  const leave = () => { if (key && ready) save(ids); };
+  addEventListener('pagehide', leave);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) leave(); });
+  return { sync, watch: () => { if (prev && ready) watch(); }, since: () => (prev && ready ? { at: prev.at, fresh: cmp.fresh.length, closed: cmp.closed } : null) };
+})();
 
 async function read(wake) {
   const token = store.get();
@@ -58,6 +112,7 @@ async function pair() {
 }
 
 function paint() {
+  seen.sync();
   const c = ctx();
   for (const node of document.querySelectorAll('[data-cp]')) {
     const fn = REGIONS[node.dataset.cp];
@@ -80,6 +135,7 @@ function paint() {
   syncCopy();
   syncTab();
   floatLater();
+  seen.watch();
   const river = window.todayRiver;
   if (river?.ready && view.automation.items.length) river.setSnapshot(riverSnapshot(view), false);
   // 读到新数据后还找不到的：是 AI 自己的活（AI 在跟、AI 已定、AI 等条件的）就去“AI 的账本”那一页找；

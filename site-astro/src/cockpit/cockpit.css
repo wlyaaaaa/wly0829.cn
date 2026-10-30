@@ -1183,3 +1183,53 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
   .cp-workspace > .cp-need, .cp-home > :is(.cp-run, .cp-know), .cp-facts-wall > .cp-section { padding: 12px; }
   .cp-status .cp-tri-status { font-size: 15px; }
 }
+
+/* ---- 电脑健康分：最大的两三项扣分直接露在大数字下面，点开每行写谁在管、修好能回到几分，点哪行跳到那块（本人 10-30 批准第 1 项） ---- */
+.cp-score-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 14px; font-size: 13.5px; line-height: 1.6; color: var(--text); }
+.cp-score-top b { font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
+.cp-score-top i { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } /* 分隔点只给读屏，换行时不在行尾吊一个点 */
+.cp-score-hit { white-space: nowrap; }
+.cp-score-more { margin-left: -10px; font-weight: 800; color: var(--link); }
+.cp-score[open] .cp-score-more { display: inline-block; transform: rotate(90deg); }
+.cp-page .cp-score-body { display: block; margin-top: 10px; padding: 10px; }
+.cp-score-rows { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.cp-page .cp-score-go { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--text); text-decoration: none; }
+.cp-page .cp-score-go:hover, .cp-page .cp-score-go:focus-visible { border-color: var(--link); }
+.cp-score-what { font-size: 13.5px; font-weight: 700; }
+.cp-score-what small { display: block; font-size: 12px; font-weight: 400; color: var(--muted); }
+.cp-page .cp-score-go > b { color: var(--text); font-variant-numeric: tabular-nums; }
+.cp-score-fix { grid-column: 1 / -1; font-size: 12px; color: var(--muted); }
+.cp-score-all { margin: 8px 2px 0; font-size: 13px; font-weight: 700; color: var(--title); }
+.cp-page .cp-score-rules { margin-top: 8px; font-size: 12.5px; color: var(--muted); }
+.cp-score-rules > summary { display: inline; cursor: pointer; color: var(--title); }
+.cp-score-rules ul { margin: 6px 0 0; padding-left: 1.1em; }
+
+/* ---- 状态四格第二行小字写“要不要你管”；“AI 在管”的点加深，和“读不到”的浅灰点分开（本人 10-30 批准第 2 项） ---- */
+.cp-page .cp-dot.is-neutral { background: #3f6b91; }
+.cp-page .cp-status .cp-tri-who { display: block; margin-top: 4px; font-size: 12.5px; font-weight: 600; line-height: 1.4; color: var(--muted); }
+.cp-page .cp-status .cp-tri-who span { display: inline; }
+.cp-page .cp-status .cp-tri-cell.is-neutral .cp-tri-who { color: #3f6b91; }
+.cp-page .cp-status .cp-tri-cell.is-yellow .cp-tri-who { color: #9a7409; }
+.cp-page .cp-status .cp-tri-cell.is-red .cp-tri-who { color: var(--cp-red); }
+
+/* ---- 手机和窄屏：标题下面三行状态条，插画挪到页尾；电脑版左栏不变（本人 10-30 批准第 3 项） ---- */
+.cp-strip { display: none; }
+.cp-page:has(.cp-snap) .cp-strip { filter: grayscale(1); opacity: .6; }
+@media (max-width: 1199.98px) {
+  .cp-dashboard { grid-template-areas: "intro" "need" "home" "status" "facts" "art"; }
+  .cp-strip:has(.cp-strip-row) { grid-column: 1 / -1; display: grid; margin: 4px 0 0; padding: 2px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card-bg); box-shadow: var(--card-shadow); }
+  .cp-page .cp-strip-row { display: flex; align-items: center; gap: 9px; min-height: 46px; margin: 0; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 15px; line-height: 1.45; font-weight: 700; color: var(--text); text-decoration: none; }
+  .cp-strip-row:last-child { border-bottom: 0; }
+  .cp-strip-row > span:not(.cp-dot) { flex: 1; min-width: 0; }
+  .cp-strip-row > .cp-dot { margin: 0; }
+  a.cp-strip-row::after { content: "›"; flex: none; font-size: 18px; font-weight: 800; color: var(--link); }
+  .cp-intro:has(.cp-strip-row) .cp-you.is-none .cp-you-n { display: none; }
+  .cp-dashboard > .cp-sidebar > .cp-hero-art, .cp-hero-art { margin-top: 4px; }
+}
+
+/* ---- 新出现的标“新”：顶上一句小字“你上次 HH:MM 来过……”（本人 10-30 批准第 4 项；小绿点的样式由 seen.js 按编号生成） ---- */
+.cp-page .cp-since { margin: 4px 0 0; font-size: 12.5px; line-height: 1.5; font-weight: 400; color: var(--muted); }
+.cp-page .cp-since::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: #2f9e5a; vertical-align: 1px; }
+
+/* ---- 账本页：不单列的条目照样计数，列表末尾一行写明（顺带：件数对齐） ---- */
+.cp-page :is(.cp-ai-more, .cp-lt-more) { margin: 8px 0 0; font-size: 12.5px; color: var(--muted); }
