@@ -6,12 +6,16 @@ const css = readFileSync(new URL('../site-astro/src/cockpit/cockpit.css', import
 const rules = (selector) => [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
   .filter((m) => m[1].trim() === selector).map((m) => m[2]).join(';');
 
-test('定稿布局：左侧吸顶总览、右侧内容；手机按指定顺序单列', () => {
-  assert.match(rules('.cp-dashboard'), /grid-template-columns:\s*370px minmax\(0, 1fr\)/);
-  assert.match(rules('.cp-dashboard'), /grid-template-areas:\s*"sidebar workspace"/);
-  assert.match(rules('.cp-sidebar'), /position:\s*sticky;\s*top:\s*120px/);
-  assert.match(rules('.cp-sidebar, .cp-workspace'), /display:\s*contents/);
-  assert.match(rules('.cp-dashboard'), /"intro" "art" "need" "home" "status" "facts"/);
+test('定稿布局：电脑版单栏（横幅 → 五格 → 其余各块，本人 10-30 选定 A 版）；手机和窄屏按指定顺序单列，插画在页尾', () => {
+  assert.doesNotMatch(css, /cp-sidebar|"sidebar workspace"/);
+  assert.doesNotMatch(rules('.cp-dashboard') + rules('.cp-banner'), /position:\s*sticky/);
+  assert.match(rules('.cp-banner, .cp-workspace'), /display:\s*contents/);
+  assert.match(rules('.cp-dashboard'), /"intro" "need" "home" "status" "facts" "art"/);
+  // 电脑版：横幅两栏（标题和总述 | 插画），五格一排，下面按页面先后排
+  assert.match(rules('.cp-dashboard'), /grid-template-areas:\s*none/);
+  assert.match(rules('.cp-banner'), /display:\s*grid;\s*grid-template-columns:\s*minmax\(340px, 1fr\) minmax\(0, 1\.6fr\);\s*grid-template-areas:\s*"intro art"/);
+  assert.match(rules('.cp-status'), /grid-template-columns:\s*repeat\(5, minmax\(0, 1fr\)\)/);
+  assert.match(rules('.cp-status'), /grid-template-columns:\s*repeat\(6, minmax\(0, 1fr\)\)/);
   assert.match(rules('.cp-facts-wall'), /grid-template-columns:\s*minmax\(0, 1fr\)/);
   assert.doesNotMatch(rules('.cp-facts-wall'), /columns:\s*[23]/);
 });
@@ -33,9 +37,11 @@ test('即时收起隐藏整条，运行行的打开与复制共用按钮行', ()
   assert.match(rules('.cp-run-row .cp-oa-bar'), /display:\s*flex;\s*flex-wrap:\s*wrap/);
 });
 
-test('状态格保留安全标题并按整词换行，空待办挂载点隐藏', () => {
-  assert.match(rules('.cp-status .cp-security-title'), /display:\s*block/);
-  assert.doesNotMatch(css, /\.cp-security-title[^{}]*\{[^}]*display:\s*none\s*!important/);
+test('五格同一个样子（安全和授权那格和电脑、自动任务、备份一样，右下 ›），按整词换行；空待办挂载点隐藏', () => {
+  assert.doesNotMatch(css, /cp-security-|cp-sec-item|cp-sec-line/);
+  assert.match(rules('.cp-status > .cp-sec-cell'), /display:\s*contents/);
+  assert.match(rules('.cp-page .cp-status .cp-tri-cell > a::after'), /content:\s*"›"/);
+  assert.match(rules('.cp-page .cp-status .cp-score'), /border:\s*2px solid var\(--line\)/);
   assert.match(rules('.cp-status .cp-tri-status'), /overflow-wrap:\s*normal/);
   assert.match(rules('.cp-status .cp-status-word'), /display:\s*inline-block;\s*white-space:\s*nowrap/);
   assert.match(rules('.cp-workspace > .cp-need:empty, .cp-workspace > .cp-need:has(> .cp-anchor:only-child)'), /display:\s*none/);

@@ -42,7 +42,6 @@
 .cp-page .living-bird img { max-width: none; } /* 小鸟图集按帧裁切，不能被全页 img 的 max-width: 100% 压扁 */
 .cp-lead { margin: 8px 0 0; color: var(--cp-soft); font-size: 15px; }
 .cp-overview, .cp-overview-tri { display: contents; }
-.cp-security-wrap { grid-area: sec; }
 
 /* ① 你现在 N 件事 */
 .cp-you { grid-area: you; padding: 18px 22px 14px; border: 1px solid var(--cp-line); border-radius: 18px; background: linear-gradient(160deg, #f4fbf6 0%, #fff 70%); box-shadow: 0 6px 22px rgba(21, 68, 35, .07); min-width: 0; }
@@ -102,20 +101,6 @@
 .cp-score-note { grid-column: 1 / -1; margin: 0; }
 .cp-head .cp-lamp { align-self: center; margin-bottom: 4px; }
 .cp-date { align-self: center; margin-bottom: 4px; font-size: 18px; font-weight: 800; color: var(--cp-title); }
-.cp-security-wrap { grid-column: 1 / -1; display: flex; align-items: center; gap: 18px; margin-top: 14px; padding: 10px 16px; border: 1px solid var(--cp-line); border-radius: 14px; background: #fff; }
-.cp-security-title { margin: 0; line-height: 0; flex: none; }
-.cp-security-title img { height: 46px; width: auto; }
-.cp-security { flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-.cp-sec-item { display: grid; grid-template-columns: 52px 1fr; grid-template-rows: auto auto auto auto; column-gap: 8px; align-items: center; padding: 6px 10px; border-radius: 10px; text-decoration: none; color: var(--cp-ink) !important; }
-.cp-sec-item:hover { background: #f4fcf6; }
-.cp-sec-item img, .cp-sec-pc { grid-row: 1 / 5; width: 52px; height: auto; }
-.cp-sec-pc { height: 32px; border: 2px solid #8ab79a; border-radius: 4px; position: relative; background: #fff; }
-.cp-sec-pc::after { content: ""; position: absolute; left: 50%; bottom: -8px; width: 18px; height: 4px; margin-left: -9px; background: #8ab79a; border-radius: 2px; }
-.cp-sec-label { font-size: 13px; color: var(--cp-soft); }
-.cp-sec-word { font-weight: 700; }
-.cp-sec-word .cp-dot { width: 9px; height: 9px; margin-right: 6px; }
-.cp-sec-sub { font-size: 13px; color: var(--cp-soft); min-height: 1.4em; }
-.cp-sec-go { font-size: 12px; color: var(--cp-title); }
 
 /* 灯 */
 .cp-dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; flex: none; background: var(--cp-gray); }
@@ -215,7 +200,7 @@
 .cp-frozen { color: var(--cp-soft); font-size: 14px; }
 
 /* 今天的河：先按河图比例留好位置，河脚本画进来时不推挤下面 */
-.cp-river { margin-top: 12px; min-height: calc(min(100%, 1392px) / 1.722); }
+.cp-river { margin-top: 12px; }
 
 /* W3：手机宽度下河清单的分组标题和折叠行。
    分组标题第一行“圆点 组名 数字 展开”，组名整段不折，“展开”不拆；说明挪到第二行占满宽度。
@@ -234,8 +219,6 @@
 @media (max-width: 1100px) {
   .cp-hero { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
   .cp-tri-status { font-size: 18px; }
-  .cp-security-wrap { flex-direction: column; align-items: stretch; }
-  .cp-security { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 767.98px) {
   .cp-page { padding: 4px 14px 32px; font-size: 15px; }
@@ -263,7 +246,6 @@
   .cp-ask-title { font-size: 16.5px; }
   .cp-steps, .cp-ask-body { font-size: 15px; }
   .cp-wait li { grid-template-columns: 1fr; gap: 2px; }
-  .cp-security { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
   .cp-features { grid-template-columns: 1fr; }
   /* 窄屏用电卡按行排：数值和单位有整行空间，不挤到相邻统计格。 */
   .cp-power .cp-stats3 { grid-template-columns: 1fr; }
@@ -272,12 +254,8 @@
   .cp-power .cp-stats3 small { display: inline-block; white-space: nowrap; }
   .cp-power .cp-stats3 li.cp-stat-note { grid-column: auto; }
   .cp-big b { font-size: 44px; }
-  .cp-sec-item { grid-template-columns: 40px 1fr; padding: 6px 4px; }
-  .cp-sec-item img, .cp-sec-pc { width: 40px; }
-  .cp-security-title img { height: 38px; }
   .cp-grid > * { flex-basis: 100%; }
   .cp-head h2 img { height: 48px; }
-  .cp-river { min-height: 0; }
 }
 
 /* “要我处理的事”卡片（场景 2、5）：标题一句话，正文、步骤或选项，小字放登记时间和路径；按钮只复制文字 */
@@ -363,7 +341,7 @@
 .cp-you.is-none .cp-you-rest { margin-top: 8px !important; }
 /* 首帧是构建时的旧数：写明几点的，下面的数字和灯一起灰着，读到新数据就换掉（client.js 换字时这一行消失） */
 .cp-snap { margin: 0 0 8px !important; padding: 4px 10px; border-radius: 8px; background: #f1f3f2; color: var(--cp-soft); font-size: 13.5px; font-weight: 700; }
-.cp-page:has(.cp-snap) :is(.cp-you-n, .cp-need, .cp-run, .cp-know, .cp-lines, .cp-tri, .cp-score, .cp-security, .cp-body, .cp-lamp, .cp-river) { filter: grayscale(1); opacity: .6; }
+.cp-page:has(.cp-snap) :is(.cp-you-n, .cp-need, .cp-run, .cp-know, .cp-lines, .cp-tri-cell, .cp-score, .cp-body, .cp-lamp, .cp-river) { filter: grayscale(1); opacity: .6; }
 /* 你得知道（字段到了才出） */
 .cp-know { grid-area: know; padding: 10px 16px; border: 1px solid #d5e0ea; border-radius: 14px; background: #fbfcfe; }
 .cp-know p { margin: 0; }
@@ -442,8 +420,6 @@ ul.cp-know-sub > li { display: grid; grid-template-columns: minmax(0, 1fr); gap:
 .cp-you-ai { align-self: center; font-size: 16px; font-weight: 700; line-height: 1.4; color: var(--cp-ink) !important; text-decoration: none; padding: 2px 12px; border-radius: 999px; border: 1px solid var(--cp-line); background: #fff; white-space: nowrap; }
 .cp-you-ai:hover { border-color: #9ddcae; }
 .cp-you-ai.is-stuck { border-color: #ecd59a; background: #fff8e6; color: #7a5600 !important; }
-/* 安全和授权：手机上压成一行，电脑宽度不出 */
-.cp-sec-line { display: none; }
 /* 网站上次发布一行（字段到了才出） */
 .cp-release { display: flex; align-items: baseline; gap: 0; margin: 0 0 12px; padding: 8px 14px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fbfefc; font-size: 15px; overflow-wrap: anywhere; }
 .cp-release.is-bad { border-color: #ecdcae; background: #fffdf6; }
@@ -483,13 +459,6 @@ ul.cp-know-sub > li { display: grid; grid-template-columns: minmax(0, 1fr); gap:
   .cp-know-fold, .cp-know-sub { font-size: 14px; }
   .cp-know-sub { padding: 6px 10px; }
   .cp-know-text { font-size: 14px; }
-  .cp-security-wrap { margin-top: 0; padding: 0; border: 0; background: none; }
-  .cp-sec-item { display: none !important; }
-  .cp-security { display: block; }
-  .cp-sec-line { display: flex; align-items: center; gap: 0; padding: 8px 12px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fff; font-size: 13px; line-height: 1.45; color: var(--cp-ink) !important; text-decoration: none; }
-  .cp-sec-line > span:not(.cp-dot) { flex: 1; min-width: 0; }
-  .cp-sec-line > .cp-dot { flex: none; }
-  .cp-sec-line b { color: var(--cp-title); margin-left: 6px; }
 }
 
 /* 本人版 / 公开版：页头一行小字；“仅你可见”标签；“具体：…”单行省略，悬停看全、点一下（获得焦点）展开；公开版私人占位行灰着 */
@@ -865,22 +834,6 @@ ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
   /* 右栏的“其余 N 个”：在干活、等你回话的排前面，停了没做完、看不出在干嘛的排最后 */
   .cp-rail .cp-run-all .cp-run-row:is(.is-stopped, .is-unknown) { order: 1; }
   .cp-rail .cp-go, .cp-rail .cp-lines > details > summary { padding: 8px 12px; font-size: 14px; }
-  /* 状态：四灯两行两格，健康分在下面 */
-  .cp-status { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .cp-status > .cp-overview-tri, .cp-status .cp-tri { display: contents; }
-  .cp-status .cp-tri-cell { order: 1; min-width: 0; }
-  .cp-status > .cp-security-wrap { order: 2; grid-area: auto; grid-column: auto; min-width: 0; margin: 0; }
-  .cp-status .cp-score { order: 3; grid-area: auto; grid-column: 1 / -1; padding: 0 4px; }
-  .cp-status .cp-tri-cell a { padding: 8px 12px; border-radius: 12px; }
-  .cp-status .cp-tri-status { font-size: 15.5px; }
-  .cp-status .cp-tri-who { font-size: 12.5px; }
-  .cp-status :is(.cp-tri-why, .cp-tri-note) { display: none; }
-  .cp-status > .cp-security-wrap { display: block; padding: 8px 12px; border-left: 5px solid var(--cp-green); border-radius: 12px; }
-  .cp-status :is(.cp-security-title, .cp-sec-item) { display: none; }
-  .cp-status .cp-security { display: block; }
-  .cp-status .cp-security::before { content: "安全和授权"; display: block; font-size: 13px; color: var(--cp-soft); }
-  .cp-status .cp-sec-line { display: block; padding: 0; border: 0; background: none; font-size: 13px; line-height: 1.45; color: var(--cp-ink) !important; text-decoration: none; }
-  .cp-status .cp-sec-line > :is(.cp-dot, b) { display: none; }
 }
 /* 1200—1439：顶栏挤一些，标题图和那句话小一号，“全部显示”这行小字不出（公开版那句私人件数照出） */
 @media (min-width: 1200px) and (max-width: 1439.98px) {
@@ -1039,8 +992,8 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
   --cp-ink: var(--text); --cp-soft: var(--muted); --cp-title: var(--title); --cp-line: var(--line); --cp-card: var(--cardbg);
 }
 .cp-page .c-text { font-family: inherit; }
-.cp-dashboard { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "intro" "art" "need" "home" "status" "facts"; gap: 16px; min-width: 0; }
-.cp-sidebar, .cp-workspace { display: contents; }
+.cp-dashboard { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "intro" "need" "home" "status" "facts" "art"; gap: 16px; min-width: 0; }
+.cp-banner, .cp-workspace { display: contents; }
 .cp-intro { grid-area: intro; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px 12px; min-width: 0; }
 .cp-main-title { margin: 0; line-height: 0; min-width: 0; }
 .cp-main-title img { display: block; width: auto; height: 82px; max-width: 100%; object-fit: contain; }
@@ -1118,13 +1071,8 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 .cp-status .cp-status-word { display: inline-block; white-space: nowrap; }
 .cp-page .cp-tri-status .cp-dot { display: inline-block; }
 .cp-status :is(.cp-tri-short, .cp-tri-who, .cp-tri-why, .cp-tri-note) { display: none; }
-.cp-status > .cp-security-wrap { grid-area: auto; grid-column: auto; display: block; order: 2; margin: 0; padding: 12px; min-width: 0; border: 2px solid var(--line); }
-.cp-status .cp-security-title { display: block; margin: 0 0 5px; font-size: 13px; line-height: 1.4; font-weight: 400; color: var(--text); }
-.cp-status .cp-security { display: block; }
-.cp-status .cp-security::before { content: none; }
-.cp-status .cp-sec-item { display: none; }
-.cp-status .cp-sec-line { display: block; padding: 0; border: 0; background: none; font-size: 12px; color: var(--text) !important; text-decoration: none; }
-.cp-status .cp-sec-line > b { display: none; }
+.cp-status > .cp-sec-cell { display: contents; }
+.cp-status .cp-tri-sec > .cp-tri-cell { order: 2; }
 .cp-status .cp-score { grid-area: auto; grid-column: 1 / -1; order: 3; display: block; padding: 14px 16px; margin: 0; }
 .cp-score summary { display: grid; width: 100%; gap: 8px; }
 .cp-score-title { font-size: 16px; font-weight: 800; color: var(--title); }
@@ -1145,20 +1093,25 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 @keyframes cp-toast-out { 0%, 90% { opacity: 1; } 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .cp-action-toast > p { animation: none; } }
 @media (min-width: 1200px) {
-  .cp-dashboard { grid-template-columns: 370px minmax(0, 1fr); grid-template-areas: "sidebar workspace"; gap: 24px; align-items: start; }
-  .cp-sidebar { grid-area: sidebar; display: grid; position: sticky; top: 120px; max-height: calc(100vh - 136px); overflow: auto; scrollbar-width: thin; gap: 16px; padding: 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--card-shadow); }
-  .cp-workspace { grid-area: workspace; display: grid; gap: 18px; min-width: 0; }
-  .cp-sidebar > :is(.cp-intro, .cp-status, .cp-hero-art), .cp-workspace > :is(.cp-need, .cp-home, .cp-facts-wall) { grid-area: auto; }
-  .cp-intro { grid-template-columns: minmax(0, 1fr); }
+  /* 电脑版单栏（本人 10-30 选定 A 版）：横幅（标题、读取时间、总述 | 插画和小鸟）→ 五格 → 要你做 → AI 正在干活 → 你得知道 → 事实区。
+     按页面里的先后自动排行，没有要你做的事时那一块不占行 */
+  .cp-dashboard { grid-template-areas: none; gap: 18px; }
+  .cp-dashboard > :is(.cp-banner, .cp-status), .cp-workspace > :is(.cp-need, .cp-home, .cp-facts-wall) { grid-area: auto; }
+  .cp-banner { display: grid; grid-template-columns: minmax(340px, 1fr) minmax(0, 1.6fr); grid-template-areas: "intro art"; align-items: center; gap: 12px 32px; min-width: 0; }
+  .cp-banner > .cp-intro { grid-area: intro; grid-template-columns: minmax(0, 1fr); align-content: center; }
+  .cp-banner > .cp-hero-art { grid-area: art; width: 100%; max-width: 920px; margin: 0; justify-self: end; }
   .cp-tools { justify-content: flex-start; }
-  .cp-meta { text-align: left; flex: 1; }
+  .cp-meta { justify-items: start; text-align: left; }
   .cp-intro .cp-you-n, .cp-intro .cp-you.is-said .cp-you-n { font-size: 19px; }
   .cp-main-title img { height: 108px; }
-  .cp-sidebar .cp-hero-art { width: 100%; margin: 0; }
   .cp-mobile-status-heading { display: none; }
-  .cp-score-title { padding: 0; margin: 0; }
-  .cp-score-title :is(.hub-leaf, .hub-brush) { display: none; }
-  .cp-score-title .hub-heading { font-size: 16px; }
+  /* 五格一排，同高同样式；健康分点开的说明浮在格子下面，不把这一排撑高 */
+  .cp-status { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+  .cp-status .cp-score { position: relative; grid-column: auto; }
+  .cp-status .cp-score-why > .cp-score-scope-s { display: none; }
+  .cp-status .cp-score-why:not(:has(small)) { display: none; }
+  .cp-status .cp-score[open] .cp-score-why::after { content: none; }
+  .cp-page .cp-status .cp-score[open] > .cp-score-body { position: absolute; z-index: 40; top: calc(100% + 6px); right: 0; width: min(440px, 80vw); max-height: 70vh; overflow: auto; margin: 0; padding: 12px; border: 2px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: 0 12px 32px rgba(21, 68, 35, .14); }
   .cp-page .cp-ask { grid-template-columns: minmax(0, 1fr) auto; }
   .cp-ask > .cp-oa { grid-column: 2; grid-row: 1; }
   .cp-run-row { grid-template-columns: 16px minmax(0, 1fr) auto; }
@@ -1222,7 +1175,7 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
   .cp-strip-row > .cp-dot { margin: 0; }
   a.cp-strip-row::after { content: "›"; flex: none; font-size: 18px; font-weight: 800; color: var(--link); }
   .cp-intro:has(.cp-strip-row) .cp-you.is-none .cp-you-n { display: none; }
-  .cp-dashboard > .cp-sidebar > .cp-hero-art, .cp-hero-art { margin-top: 4px; }
+  .cp-hero-art { margin-top: 4px; }
 }
 
 /* ---- 新出现的标“新”：顶上一句小字“你上次 HH:MM 来过……”（本人 10-30 批准第 4 项；小绿点的样式由 seen.js 按编号生成） ---- */
@@ -1231,3 +1184,37 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 
 /* ---- 账本页：不单列的条目照样计数，列表末尾一行写明（顺带：件数对齐） ---- */
 .cp-page :is(.cp-ai-more, .cp-lt-more) { margin: 8px 0 0; font-size: 12.5px; color: var(--muted); }
+
+/* ---- 五格（电脑、自动任务、备份、安全和授权、健康分）同一个样子：小标题、圆点 + 状态词、一行小字，能点的右下一个 ›（本人 10-30 选定 A 版） ---- */
+.cp-page .cp-status .cp-tri-cell > a { position: relative; box-sizing: border-box; height: 100%; padding: 12px 28px 12px 14px; }
+.cp-page .cp-status .cp-tri-cell > a::after { content: "›"; position: absolute; right: 12px; bottom: 10px; font-size: 18px; font-weight: 800; line-height: 1; color: var(--link); }
+.cp-page .cp-status .cp-tri-cell > a:hover { border-color: var(--link); }
+.cp-page .cp-status .cp-tri-status { font-weight: 800; color: var(--title); }
+.cp-page .cp-status .cp-tri-cell.is-gray .cp-tri-status { color: var(--muted); }
+.cp-page .cp-status .cp-score { box-sizing: border-box; min-width: 0; padding: 12px 14px; border: 2px solid var(--line); border-radius: var(--radius); background: var(--card-bg); box-shadow: var(--card-shadow); }
+.cp-page .cp-status .cp-score summary { gap: 4px; }
+.cp-page .cp-status .cp-score-title { padding: 0; margin: 0; }
+.cp-page .cp-status .cp-score-title :is(.hub-leaf, .hub-brush) { display: none; }
+.cp-page .cp-status .cp-score-title .hub-heading { font-size: 13px; font-weight: 400; line-height: 1.4; color: var(--text); }
+.cp-page .cp-status .cp-score-value { font-size: 36px; line-height: 1.1; }
+.cp-page .cp-status .cp-score-number > small { font-size: 18px; }
+.cp-score-scope { display: none; margin: 0 0 8px; font-size: 12px; color: var(--muted); }
+@media (min-width: 1200px) { .cp-score-scope { display: block; } }
+/* 768—1199：五格折成两行（三格 + 两格），样式不变 */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .cp-status { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .cp-status .cp-tri-cell { grid-column: span 2; }
+  .cp-status .cp-tri-sec > .cp-tri-cell, .cp-status .cp-score { grid-column: span 3; }
+}
+
+/* ---- AI 正在干活：停了没做完、看不出在干嘛这类行，状态词写在主行开头同一行，左边那一列只放符号，任何宽度都不叠字 ---- */
+.cp-run-doing > .cp-run-word { margin-right: .6em; font-weight: 700; }
+.cp-run-word.is-green { color: var(--cp-title); }
+.cp-run-word.is-yellow { color: #9a6a00; }
+.cp-run-word.is-red { color: var(--cp-red); }
+.cp-run-word.is-blue { color: #2463a8; }
+.cp-run-word.is-gray { color: var(--cp-soft); }
+
+/* ---- 今天的河默认展开：构建时有任务就按河图的比例先留出画面的位置（脚本还没画、画面还没显示时都占着，看不见），河画进来时不推挤下面 ---- */
+.cp-river.is-expected:empty { min-height: 520px; }
+#today-river.cp-river.is-expected #scroller[hidden] { display: block !important; visibility: hidden; }

@@ -41,9 +41,11 @@ test('首屏露件数和卡住的行（件数以后端 stuck_count 为准，额�
   assert.deepEqual([...stuck.matchAll(/<li class="cp-run-row is-([a-z_]+) /g)].map((m) => m[1]), ['quota_exhausted', 'login_failed', 'network_retry']);
   const rest = /<details class="cp-run-all" id="run-all"><summary>其余 5 个<\/summary><ul class="cp-run-list">(.*?)<\/ul><\/details>/.exec(html)?.[1] || '';
   assert.deepEqual([...rest.matchAll(/<li class="cp-run-row is-([a-z_]+) /g)].map((m) => m[1]), ['stopped', 'waiting_owner', 'running', 'unknown', 'unknown']);
-  const look = Object.fromEntries([...html.matchAll(/<li class="cp-run-row is-([a-z_]+) is-live" data-items="run-\w+"><span class="cp-run-st is-(\w+)"><i aria-hidden="true">(.)<\/i><span class="cp-run-word">([^<]+)<\/span><\/span>/g)].map((m) => [m[1], [m[2], m[3], m[4]]]));
-  assert.deepEqual(look, { login_failed: ['red', '○', '登录失效'], quota_exhausted: ['red', '○', '额度用完'], network_retry: ['yellow', '◐', '网络在重连'],
-    waiting_owner: ['blue', '◆', '在等你回话'], stopped: ['gray', '■', '停了，没做完'], unknown: ['gray', '？', '看不出在干嘛（多半已经结束）'], running: ['green', '●', '在干活'] });
+  // 符号在左边那一列；在干活、在等你回话的状态词只给读屏（跟在符号后面），别的状态词写在主行开头（本人 10-30：停了没做完的字不再盖到主行上）
+  const look = Object.fromEntries([...html.matchAll(/<li class="cp-run-row is-([a-z_]+) is-live" data-items="run-\w+"><span class="cp-run-st is-(\w+)"><i aria-hidden="true">(.)<\/i>(?:<span class="cp-run-word">([^<]+)<\/span>)?<\/span><span class="cp-run-doing[^"]*">(?:<span class="cp-run-word is-(\w+)">([^<]+)<\/span>)?/g)]
+    .map((m) => [m[1], [m[2], m[3], m[4] || m[6], m[4] ? 'sr' : m[5] === m[2] ? 'main' : 'wrong']]));
+  assert.deepEqual(look, { login_failed: ['red', '○', '登录失效', 'main'], quota_exhausted: ['red', '○', '额度用完', 'main'], network_retry: ['yellow', '◐', '网络在重连', 'main'],
+    waiting_owner: ['blue', '◆', '在等你回话', 'sr'], stopped: ['gray', '■', '停了，没做完', 'main'], unknown: ['gray', '？', '看不出在干嘛（多半已经结束）', 'main'], running: ['green', '●', '在干活', 'sr'] });
   assert.equal(Object.keys(RUN_LOOK).length, 11);
   // 主行永远不用标题（本人：“驾驶舱肯定不能取标题”）：没有 doing、进展、最近回复时写“还没写进展”，标题只做灰色小标签
   assert.match(html, /<span class="cp-run-doing is-empty">还没写进展<\/span><small class="cp-run-meta"><span class="cp-run-name">示例活 running<\/span>Claude Opus 5.5 · 它叫了 2 个助手 · [^<]*还在动<\/small>/);

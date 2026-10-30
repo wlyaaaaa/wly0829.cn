@@ -19,7 +19,26 @@ let asked = 0, shown = 0;
 const KEY = 'wly-cockpit-device', TOKEN = /^[A-Za-z0-9_-]{43}$/;
 const PAIR_URL = 'https://mcp.wly0829.cn/computer-access/api/cockpit-device/pair';
 const store = { get() { try { const t = localStorage.getItem(KEY); return TOKEN.test(t || '') ? t : null; } catch { return null; } },
-  set(t) { try { localStorage.setItem(KEY, t); return true; } catch { return false; } }, drop() { try { localStorage.removeItem(KEY); } catch { /* 无存储 */ } } };
+  set(t) { try { localStorage.setItem(KEY, t); return true; } catch { return false; } }, drop() { try { localStorage.removeItem(KEY); localStorage.removeItem(HOME_KEY); } catch { /* 无存储 */ } } };
+// 主驾驶那台电脑本机直读（PCConfig 状态服务，约 0.4 秒；live 常常握手失败、mcp 要 2.5—3 秒）。只有这台浏览器配对过、
+// 上一次读到的本人版说它就是主驾驶（viewer.device_machine）时才记下、下次多发这一路；公开访客、手机、副驾驶都不发，
+// 免得别的设备弹“访问本地网络”的授权框。本机预览本来就走 LOCAL 入口，不另加
+const HOME_KEY = 'wly-cockpit-home', HOME_URL = 'http://127.0.0.1:18793/computer-access/api/status?view=cockpit';
+const home = { on() { try { return localStorage.getItem(HOME_KEY) === '1'; } catch { return false; } },
+  mark(yes) { try { if (yes) localStorage.setItem(HOME_KEY, '1'); else localStorage.removeItem(HOME_KEY); } catch { /* 无存储：下次照旧两路 */ } } };
+const isHome = (v) => v?.viewer?.kind === 'owner' && v.viewer.device_kind !== 'phone' && v.viewer.device_machine === '主驾驶';
+// 浏览器的“访问本地网络”权限：点过不允许（denied）就再也不发；还没问过（prompt）每次打开页面只发一次，那一路不跟着别的路取消，
+// 授权框留着等本人点；本机服务没开、连不上时歇 10 分钟再试，不每分钟在控制台留一条连不上
+let homeAsked = false, homeRest = 0;
+async function homeWay() {
+  let state = 'granted';
+  for (const name of ['loopback-network', 'local-network-access']) {
+    try { state = (await navigator.permissions.query({ name })).state; break; } catch { /* 这个浏览器不认这个名字 */ }
+  }
+  if (state === 'denied' || Date.now() < homeRest || state === 'prompt' && homeAsked) return null;
+  if (state === 'prompt') homeAsked = true;
+  return state;
+}
 let notice = '';
 const say = (text, ms = 15000) => { notice = text; paint(); setTimeout(() => { if (notice === text) { notice = ''; paint(); } }, ms); };
 // phase：还没收到过任何一次读取结果时是 snapshot（首帧那份构建时的数），之后是 live；读不到另由 offline 说明
@@ -80,22 +99,41 @@ const seen = (() => {
   return { sync, watch: () => { if (prev && ready) watch(); }, since: () => (prev && ready ? { at: prev.at, fresh: cmp.fresh.length, closed: cmp.closed } : null) };
 })();
 
+// 几个入口同时发出，第一个拿到有效驾驶舱视图的就用，其余的当场取消；总共最多等 12 秒。
+// （本人 10-30 嫌刷新要 10—15 秒：live 入口常常握手失败，以前按顺序试，要干等它 12 秒才换 mcp）
+// 主驾驶上再加本机直读那一路（见上面 home）；它失败（服务没开、浏览器不让访问本地网络、跨域不通）就静默放弃，不影响另外两路
 async function read(wake) {
   const token = store.get();
-  for (const base of endpoints) {
-    const url = new URL(base, location.href);
+  const way = !local && token && home.on() ? await homeWay() : null;
+  const bases = way ? [...endpoints, HOME_URL] : endpoints;
+  const stop = new AbortController();
+  const timer = setTimeout(() => stop.abort(), 12000);
+  const one = async (base) => {
+    const url = new URL(base, location.href), mine = base === HOME_URL;
     if (wake) url.searchParams.set('refresh', '1');
+    const signal = mine && way === 'prompt' ? AbortSignal.timeout(60000) : stop.signal;
     try {
-      const r = await fetch(url, { cache: 'no-store', credentials: 'omit', headers: token ? { 'X-Cockpit-Device': token } : {}, signal: AbortSignal.timeout(12000) });
-      if (!r.ok) continue;
+      const r = await fetch(url, { cache: 'no-store', credentials: 'omit', headers: token ? { 'X-Cockpit-Device': token } : {}, signal });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
       const v = normalize(await r.json());
-      if (!v.ok) continue;
-      // 钥匙不认识或已撤销：删掉本地钥匙；登记表暂时读不了（unavailable）不删
-      if (token && v.viewer?.device_state === 'invalid') { store.drop(); say('这台设备的授权已失效'); }
+      if (!v.ok) throw new Error('不是驾驶舱视图');
+      // 本机那一路只认本人版主驾驶：回来的不是（钥匙对不上、登记表读不了）就当没读到，交给另外两路定，不拿它删钥匙
+      if (mine && !isHome(v)) throw new Error('本机回的不是本人版');
       return v;
-    } catch { /* 换下一个地址 */ }
-  }
-  return null;
+    } catch (e) {
+      if (mine && !signal.aborted) homeRest = Date.now() + 600000;
+      throw e;
+    }
+  };
+  // 12 秒到了就算没读到，不等还挂着授权框的本机那一路
+  const late = new Promise((_, no) => stop.signal.addEventListener('abort', () => no(new Error('12 秒没读到')), { once: true }));
+  try {
+    const v = await Promise.race([Promise.any(bases.map(one)), late]);
+    // 钥匙不认识或已撤销：删掉本地钥匙；登记表暂时读不了（unavailable）不删
+    if (token && v.viewer?.device_state === 'invalid') { store.drop(); say('这台设备的授权已失效'); }
+    else if (!local && token && v.viewer?.device_state !== 'unavailable') home.mark(isHome(v));
+    return v;
+  } catch { return null; /* 都没读到（或 12 秒到了） */ } finally { clearTimeout(timer); stop.abort(); }
 }
 
 // 配对：AI 在这台设备上打开 /cockpit/#pair=<一次性配对码>；先去掉地址里的码，再换成长期钥匙
@@ -387,9 +425,14 @@ async function showReport(btn) {
   } catch { note.textContent = '汇报页没取到，稍后再试'; }
 }
 document.addEventListener('click', (e) => {
-  const el = e.target instanceof Element ? e.target.closest('[data-q-mode],[data-q-open],[data-cp-reload],[data-open-item],[data-report],[data-drawer-close],#run-all > summary') : null;
+  // 电脑版健康分说明是浮层：点浮层外面任何地方都收起（窄屏是原地展开，不管）
+  const sc = document.getElementById('score');
+  if (sc?.open && matchMedia('(min-width: 1200px)').matches && e.target instanceof Node && !sc.contains(e.target)) sc.open = false;
+  const el = e.target instanceof Element ? e.target.closest('[data-q-mode],[data-q-open],[data-cp-reload],[data-open-item],[data-report],[data-drawer-close],#run-all > summary,#score .cp-score-go') : null;
   if (!el) return;
   if (el.matches('#run-all > summary')) { runTouched = true; return; }
+  // 健康分点开的说明在电脑版浮在五格下面：点其中一行跳过去时顺手收起，不留在顶上挡着
+  if (el.matches('#score .cp-score-go')) { document.getElementById('score').open = false; return; }
   if (el.dataset.qMode) { qpick = el.dataset.qMode; qmode.set(qpick); act.ui.set(Q_KEY, { ...act.ui.get(Q_KEY), mode: qpick }); return void paint(); }
   if (el.dataset.qOpen !== undefined) return void openQ(el.dataset.qOpen);
   if ('cpReload' in el.dataset) return void reloadNow(el);
@@ -436,6 +479,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && drawer && !drawer.hidden) { e.preventDefault(); return closeDrawer(); }
   const el = e.target instanceof Element ? e.target : null;
   if (e.key === 'Escape' && document.getElementById('cp-help')?.open) { document.getElementById('cp-help').open = false; return; }
+  if (e.key === 'Escape' && document.getElementById('score')?.open) { document.getElementById('score').open = false; return; }
   if (DESK.matches && !e.ctrlKey && !e.metaKey && !e.altKey && !typing(el) && !(e.key === 'Enter' && el?.matches('.cp-q-row:not([aria-expanded="true"])')) && shortcut(e, el)) return;
   // 队列的行：Enter / 空格展开
   if ((e.key === 'Enter' || e.key === ' ') && el?.matches('.cp-q-row')) { e.preventDefault(); return openQ(el.dataset.qOpen); }

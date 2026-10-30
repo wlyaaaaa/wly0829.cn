@@ -102,9 +102,9 @@ class CockpitPageTests(unittest.TestCase):
                     page.on('pageerror', lambda error: errors.append(str(error)))
                     page.goto(server.origin + '/cockpit/', wait_until='domcontentloaded')
                     page.wait_for_function('window.CockpitData')
-                    sec = lambda: page.locator('.cp-sec-item').nth(3).locator('.cp-sec-word').inner_text().strip()
+                    sec = lambda: page.locator('.cp-tri-cell[data-signal=security] .cp-tri-status').inner_text().strip()
                     when = lambda v: page.evaluate("(v)=>import('/src/cockpit/model.js').then(m=>m.when(v))", v)
-                    page.wait_for_function("document.querySelectorAll('.cp-sec-item')[3]?.querySelector('.cp-sec-word')?.textContent.trim()==='能'")
+                    page.wait_for_function("document.querySelector('.cp-tri-cell[data-signal=security] .cp-tri-status')?.textContent.trim()==='都正常'")
 
                     # 首屏：你现在 5 件事；5 张事项卡；期限照后端给的写，不出占位话
                     self.assertEqual(page.locator('.cp-you-n b').inner_text(), '5')
@@ -219,7 +219,7 @@ class CockpitPageTests(unittest.TestCase):
                     # 接口回的不是驾驶舱视图（旧全量里没有 cockpit 块）：当成这次没读到，保留上次读到的事项并写明时间
                     state['value'] = {'status': 'ok', 'observed_at_unix': 1}
                     page.evaluate('CockpitData.refresh()')
-                    page.wait_for_function("document.querySelectorAll('.cp-sec-item')[3]?.querySelector('.cp-sec-word')?.textContent.trim()==='连不上'")
+                    page.wait_for_function("document.querySelector('.cp-tri-cell[data-signal=security] .cp-tri-status')?.textContent.trim()==='连不上电脑'")
                     self.assertEqual(page.locator('.cp-ask').count(), 5)
                     self.assertRegex(page.locator('.cp-you-sub').inner_text(), r'这是 .+ 读到的')
                     # 读到的结论已经过期（总览 as_of 早于后端给的期限）：各分区的灯和首屏三格都写“读不到”
@@ -228,10 +228,10 @@ class CockpitPageTests(unittest.TestCase):
                     stale['overview'] = {**stale['overview'], 'as_of': old}
                     state['value'] = stale
                     page.evaluate('CockpitData.refresh()')
-                    page.wait_for_function("document.querySelectorAll('.cp-sec-item')[3]?.querySelector('.cp-sec-word')?.textContent.trim()==='能'")
+                    page.wait_for_function("document.querySelector('.cp-tri-cell[data-signal=security] .cp-tri-status')?.textContent.trim()==='都正常'")
                     page.wait_for_function("[...document.querySelectorAll('.cp-lamp')].every(e=>e.textContent.includes('读不到'))")
-                    self.assertEqual(page.locator('.cp-tri-cell.is-gray').count(), 3)
-                    self.assertIn('上次 ', page.locator('.cp-tri').inner_text())
+                    self.assertEqual(page.locator('[data-cp=overview-tri] .cp-tri-cell.is-gray').count(), 3)
+                    self.assertIn('上次 ', page.locator('[data-cp=overview-tri] .cp-tri').inner_text())
                     state['value'] = fixture
 
                     # 重新加载 5 次：每次都画出首帧并且河里有船

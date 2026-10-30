@@ -1,4 +1,4 @@
-// 驾驶舱第四步：电脑版（宽度 ≥1200）首屏。顶栏一行、左栏“要你做 N 件”队列（一行一件、展开一件）、右栏固定、卡上的“打开”组。
+// 驾驶舱电脑版（宽度 ≥1200）首屏：单栏（本人 10-30 选定 A 版）——横幅、五格、“要你做 N 件”队列（一行一件、展开一件）、卡上的“打开”组。
 // 窄屏不变由样式保证（新加的外框窄屏上 display: contents / none），这里测画出来的结构和规则。全部数据虚构
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -97,12 +97,13 @@ test('等你回卡的打开组与复制统一在按钮行，说明收进怎么�
   assert.doesNotMatch(old, /cp-card-head|cp-open/);
 });
 
-test('整页：侧栏保留标题、设备时间、刷新帮助与状态；工作区依次展示待办、消息与事实', () => {
+test('整页单栏：横幅放标题、设备时间、刷新帮助、总述和插画；下面五格；再依次展示待办、消息与事实', () => {
   const v = normalize(base({ viewer: { kind: 'owner', device_state: 'ok', device_kind: 'pc', device_machine: '副驾驶' }, private_count: 2, need_you: queue() }));
   const html = page(v, ctx(acts()));
-  const order = ['data-cp="action-toast"', '<section class="cp-dashboard c-text" id="top"><aside class="cp-sidebar">', 'class="cp-intro cp-hero-copy"', '<div class="cp-tools">',
-    'data-cp="meta"', 'data-cp-reload', 'id="cp-help"', 'data-cp="viewer"', 'data-cp="overview"', 'data-cp="strip"', '<div class="cp-status c-hub-stats" id="status">', 'data-cp="overview-tri"', 'data-cp="security"',
-    '<figure class="cp-hero-art"', '</aside>', '<div class="cp-workspace c-text">', '<div class="cp-need" id="need-you"', 'data-cp="home"', '<div class="cp-facts-wall">'];
+  const order = ['data-cp="action-toast"', '<section class="cp-dashboard c-text" id="top"><div class="cp-banner">', 'class="cp-intro cp-hero-copy"', '<div class="cp-tools">',
+    'data-cp="meta"', 'data-cp-reload', 'id="cp-help"', 'data-cp="viewer"', 'data-cp="overview"', 'data-cp="strip"', '<figure class="cp-hero-art"',
+    '<div class="cp-status c-hub-stats" id="status">', 'data-cp="overview-tri"', 'data-cp="security"', '<div class="cp-workspace c-text">', '<div class="cp-need" id="need-you"', 'data-cp="home"', '<div class="cp-facts-wall">',
+    'id="tasks"', '<details class="cp-fold cp-river-fold" id="river" open>', 'id="computer"', 'id="today"', 'id="backup"', 'id="projects"'];
   const pos = order.map((t) => html.indexOf(t));
   assert.ok(pos.every((p) => p >= 0), JSON.stringify(pos));
   assert.deepEqual([...pos].sort((a, b) => a - b), pos);
@@ -159,9 +160,10 @@ test('后端 10 月 29 日起的字段：完成说明读 completion_text（不�
   assert.doesNotMatch(need, /AI 核对示例条件满足后关掉/);
   assert.match(REGIONS.overview(v, ctx(acts())), /<span class="cp-you-said">要你动手 1 件。<\/span>/);
   assert.doesNotMatch(REGIONS.overview(v, ctx(acts())), /还有 8 件事/);
-  // 没有要你做的事：圆点和那句话包在一起，不单独换行
+  // 没有要你做的事：总述不写“现在没有要你动手或回话的事”（本人 10-30：多余），后面几句也不上来
   const none = normalize(base({ verdict: { text: '现在没有要你动手或回话的事。还有 8 件事等合适时候再办。', need_you: 0, color: 'yellow' } }));
-  assert.match(REGIONS.overview(none, ctx(acts())), /<div class="cp-you is-none is-said">.*<span class="cp-you-said">现在没有要你动手或回话的事。<\/span>/);
+  assert.match(REGIONS.overview(none, ctx(acts())), /^<div class="cp-you is-none is-said">/);
+  assert.doesNotMatch(REGIONS.overview(none, ctx(acts())), /现在没有要你|还有 8 件事|cp-you-n/);
   const t = REGIONS.today(normalize(base({ source_gaps: [{ title: '示例来源', since: at, impact: '下面“今天代码”的数可能少算' }],
     today_activity: { state: 'ok', observed_at: at, summary: { tasks_run: 3, tasks_failed: 0, acceptance_text: 'AI 今天核对了 25 件事，22 件确认办完、已关掉。' }, timeline: [{ at, text: '示例' }] } })), ctx(acts()));
   assert.match(t, /示例来源.*<small class="cp-gap-impact">下面“今天代码”的数可能少算<\/small>/);

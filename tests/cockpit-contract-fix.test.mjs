@@ -33,7 +33,8 @@ test('AI 正在干活：排队、等你确认、等你解锁资料算还在办�
   assert.deepEqual(v.ai_running.rows.map((r) => r.stuck), [false, false, false, false, false]);
   const html = REGIONS.home(v, ctx);
   assert.match(html, /AI 正在干活：5 个<\/h2>/);
-  for (const s of ['在排队', '等你确认', '等你解锁个人资料']) assert.match(html, new RegExp(`<span class="cp-run-word">${s}</span>`));
+  // 这几种状态词写在主行开头（左边那一列只放符号，不叠字）
+  for (const s of ['在排队', '等你确认', '等你解锁个人资料']) assert.match(html, new RegExp(`<span class="cp-run-doing[^"]*"><span class="cp-run-word is-[a-z]+">${s}</span>`));
   assert.doesNotMatch(html, /多半已经结束|看不出在干嘛/);
   // 后端 stuck_count 说 1 个卡住（行上看不出来也照它）
   assert.equal(runLine({ count: 2, stuck_count: 1, rows: [] }), 'AI 在干活：2 个（1 个卡住）');

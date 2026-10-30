@@ -41,7 +41,8 @@ test('要你做的过去期限与急不急分开；乐观隐藏让卡、顶栏�
   for (const phase of ['sending', 'done']) {
     const cx = { ...ctx, act: { state: new Map([['n', { action: 'ack', phase }]]) } };
     assert.equal(needCount(v, now, cx), 0);
-    assert.match(REGIONS.overview(v, cx), /现在没有要你做的事/);
+    // 没有要你做的事时总述不写那句话（本人 10-30：多余）
+    assert.doesNotMatch(REGIONS.overview(v, cx), /现在没有要你|cp-you-n/);
   }
   for (const phase of ['error', 'undone']) assert.equal(needCount(v, now, { ...ctx, act: { state: new Map([['n', { action: 'ack', phase }]]) } }), 1);
   const future = view({ need_you: [{ ...item, due_at: '2026-11-02T09:00:00+08:00' }] });
@@ -152,13 +153,17 @@ test('跨日旧动态集中归位；读不到与数据停了分开，只显示�
   assert.doesNotMatch(home, /已核实来源|来源检查通过/);
 });
 
-test('侧栏和工作区使用全站组件，同时保留全部动态分区与锚点', () => {
+test('横幅、五格和工作区使用全站组件，同时保留全部动态分区与锚点', () => {
   const v = view({ need_you: [{ id: 'n', title: '示例待办' }], ai_running: { count: 1, rows: [{ id: 'r', status: 'running' }] },
     must_know: { state: 'ok', items: [{ id: 'k', kind: 'report', text: '示例结果' }] }, overview: { score: 54 } });
-  const html = page(v, ctx), sidebar = /<aside class="cp-sidebar">([^]*?)<\/aside>/.exec(html)?.[1] || '';
-  assert.match(html, /<section class="cp-dashboard c-text" id="top">/);
-  for (const cls of ['cp-intro cp-hero-copy', 'cp-status c-hub-stats', 'cp-mobile-status-heading', 'cp-hero-art']) assert.ok(sidebar.includes(cls), cls);
-  assert.doesNotMatch(sidebar, /data-cp="need-you"|data-cp="home"/);
+  const html = page(v, ctx);
+  const banner = /<div class="cp-banner">([^]*?)<div class="cp-status c-hub-stats"/.exec(html)?.[1] || '';
+  const status = /<div class="cp-status c-hub-stats" id="status">([^]*?)<div class="cp-workspace c-text">/.exec(html)?.[1] || '';
+  assert.match(html, /<section class="cp-dashboard c-text" id="top"><div class="cp-banner">/);
+  assert.doesNotMatch(html, /cp-sidebar|<aside/);
+  for (const cls of ['cp-intro cp-hero-copy', 'data-cp="overview"', 'data-cp="strip"', 'cp-hero-art']) assert.ok(banner.includes(cls), cls);
+  for (const cls of ['cp-mobile-status-heading', 'data-cp="overview-tri"', 'data-cp="security"', 'data-signal="security"', 'cp-score hub-stat-field ct-card']) assert.ok(status.includes(cls), cls);
+  assert.doesNotMatch(banner + status, /data-cp="need-you"|data-cp="home"/);
   assert.match(html, /<div class="cp-workspace c-text"><div class="cp-need"/);
   assert.match(html, /cp-ask is-own ct-card/);
   assert.match(html, /cp-score hub-stat-field ct-card/);

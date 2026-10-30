@@ -133,29 +133,21 @@ const staleIds = (v) => new Set(v.stale_summary?.ids || []);
 const oldTodayCards = (v, now) => v.sections.today.filter((c) => c.id !== 'today_changes' && !isToday(c.observed_at, now));
 
 
-// 安全和授权：只显示，点了去授权页对应卡片办理（锚点和 O3 对齐）；数据来源和判定不变，首屏只放这一处
+// 安全和授权：和电脑 / 自动任务 / 备份三格同一个样子（小标题、圆点 + 状态词、一行灰色小字、右下 ›），整格链到授权页（本人 10-30 选定 A 版）。
+// 状态词只看要不要你留意：无限制授权开着用注意色；资料锁着不算异常；首帧（构建时的数）和读不到电脑时不拿旧状态冒充现在。
+// 小字先写资料解锁到几点；数据来源和判定不变，公开版拿到的也是这几样
 export function security(v, ctx) {
-  const s = v.security, pd = s.personal_data.state, un = s.unrestricted.state, win = s.windows.state;
+  const s = v.security, pd = s.personal_data.state, un = s.unrestricted.state;
   const off = ctx.offline || !v.ok;
   const unread = off || ctx.phase === 'snapshot';
   const lastRead = s.observed_at ? '上次 ' + when(s.observed_at, ctx.now) + ' 读到' : '还没读到过';
-  const missing = ['没读到', lastRead, 'gray'];
-  const rows = [
-    ['cockpit-07-icon-01.png', '个人资料', unread ? missing : pd === 'unlocked' ? ['已解锁', s.personal_data.expires_at ? '到 ' + dateHm(s.personal_data.expires_at) : '', 'ok'] : pd === 'locked' ? ['锁着', '要用时再解锁', 'gray'] : ['没读到', '', 'gray'], '/computer-access/#personal-data'],
-    ['cockpit-07-icon-02.png', '无限制授权', unread ? missing : un === 'active' ? ['开着', s.unrestricted.expires_at ? '到 ' + dateHm(s.unrestricted.expires_at) : '', 'attention'] : un === 'inactive' ? ['正常关着', '', 'gray'] : ['没读到', '', 'gray'], '/computer-access/#unrestricted'],
-    ['cockpit-07-icon-03.png', 'Windows', unread ? missing : win === 'locked' ? ['已锁屏', '', 'ok'] : win === 'unlocked' ? ['未锁屏', '', 'ok'] : ['没读到', '', 'gray'], '/computer-access/#windows'],
-    // 这里只说“连不连得上”；电脑好不好看上面“电脑”那一格
-    ['', '能不能连上电脑', off ? ['连不上', s.observed_at ? '上次 ' + when(s.observed_at, ctx.now) : '', 'gray'] : ['能', s.computer.uptime_hours != null ? `开机 ${s.computer.uptime_hours} 小时` : '', 'ok'], '/computer-access/'],
-  ];
-  // 手机上四项压成一行（电脑宽度照旧四格）
-  const words = unread ? [`资料、授权和锁屏状态没读到（${lastRead}）`] : [pd === 'unlocked' ? `资料已解锁${s.personal_data.expires_at ? '到 ' + dateHm(s.personal_data.expires_at) : ''}` : pd === 'locked' ? '资料锁着' : '资料没读到',
-    un === 'active' ? `无限制授权开着${s.unrestricted.expires_at ? '到 ' + dateHm(s.unrestricted.expires_at) : ''}` : un === 'inactive' ? '无限制授权关' : '无限制授权没读到',
-    win === 'locked' ? '已锁屏' : win === 'unlocked' ? '未锁屏' : '锁屏没读到'];
-  words.push(off ? `连不上电脑${s.observed_at ? '（最后 ' + when(s.observed_at, ctx.now) + '）' : ''}` : '能连上');
-  const line = `<a class="cp-sec-line" href="/computer-access/">${dot(unread ? 'unavailable' : un === 'active' ? 'attention' : 'ok')}<span>${words.map(esc).join(' · ')}</span><b aria-hidden="true">▸</b></a>`;
-  return line + rows.map(([icon, label, [word, sub, state], href]) => `<a class="cp-sec-item" href="${href}">`
-    + (icon ? `<img src="${src(ctx, icon)}" alt="" width="58" height="35" loading="eager">` : `<span class="cp-sec-pc" aria-hidden="true"></span>`)
-    + `<span class="cp-sec-label">${label}</span><span class="cp-sec-word">${dot(state)}${esc(word)}</span><span class="cp-sec-sub">${esc(sub)}</span><span class="cp-sec-go">${href === '/computer-access/' ? '看连接状态 →' : '去授权页办理 →'}</span></a>`).join('');
+  const pdAt = s.personal_data.expires_at, unAt = s.unrestricted.expires_at;
+  const [word, state] = off ? ['连不上电脑', 'unavailable'] : unread ? ['没读到', 'unavailable']
+    : un === 'active' ? ['无限制授权开着', 'attention'] : un === 'inactive' && ['unlocked', 'locked'].includes(pd) ? ['都正常', 'ok'] : ['没读到', 'unavailable'];
+  const sub = unread ? lastRead : pd === 'unlocked' ? (pdAt ? `资料解锁到 ${dateHm(pdAt)}` : '资料已解锁')
+    : un === 'active' && unAt ? `开到 ${dateHm(unAt)}` : pd === 'locked' ? '资料锁着' : '资料状态没读到';
+  return `<ul class="cp-tri cp-tri-sec"><li class="cp-tri-cell is-${light(state)}" data-signal="security"><a class="hub-stat-field ct-card" href="/computer-access/">`
+    + `<span class="cp-tri-label">安全和授权</span><b class="cp-tri-status">${dot(state)}${statusText(word)}</b><span class="cp-tri-who"><span>${esc(sub)}</span></span></a></li></ul>`;
 }
 
 // ---- “要你做的事”怎么读：后端按需问字段（P2）有就用；没有就从现有标题里拆，拆不出就照原句显示 ----
@@ -928,8 +920,9 @@ function score(v, ctx, off) {
   const late = lagAt(ov.as_of, v);
   return `<details class="cp-score hub-stat-field ct-card" id="score"><summary>${blockHead('电脑健康分', 'cp-score-title')}<span class="cp-score-number hub-field-number-line"><b class="cp-score-value hub-field-value">${now}</b><small>/100</small></span><progress class="cp-score-meter" max="100" value="${Math.max(0, Math.min(100, ov.score))}" aria-label="电脑健康分"></progress>`
     + `<span class="cp-score-top">${groups.length ? top + (groups.length > 3 ? `<i aria-hidden="true"> · </i>另 ${groups.length - 3} 项` : '') : '没有扣分的地方'}<span class="cp-score-more" aria-hidden="true"> ›</span></span>`
-    + `<span class="cp-score-why hub-field-body">${SCORE_SCOPE}${late ? `<small>${esc(late)}</small>` : ''}</span></summary>`
-    + `<div class="cp-score-body">${groups.length ? `<ul class="cp-score-rows">${groups.map(row).join('')}</ul>${groups.length > 1 ? `<p class="cp-score-all">全部修好是 ${back(total)} 分。</p>` : ''}` : '<p>没有扣分的地方。</p>'}`
+    + `<span class="cp-score-why hub-field-body"><span class="cp-score-scope-s">${SCORE_SCOPE}</span>${late ? `<small>${esc(late)}</small>` : ''}</span></summary>`
+    // 电脑版五格一排时计算范围那句收进点开的说明里（cockpit.css 按宽度只显示一处）
+    + `<div class="cp-score-body"><p class="cp-score-scope">${SCORE_SCOPE}</p>${groups.length ? `<ul class="cp-score-rows">${groups.map(row).join('')}</ul>${groups.length > 1 ? `<p class="cp-score-all">全部修好是 ${back(total)} 分。</p>` : ''}` : '<p>没有扣分的地方。</p>'}`
     + (rules.length ? `<details class="cp-score-rules" id="score-rules"><summary>分数怎么算（${rules.length} 条）</summary><ul>${rules.map((r) => `<li>${esc(r.text)}</li>`).join('')}</ul></details>` : '')
     + `</div></details>`;
 }
@@ -1110,9 +1103,12 @@ function runRowOf(r, ctx, viewer, waits = []) {
   const visible = (s) => String(s || '').replace(/[A-Za-z]:[\\/][^\s，。；！？<>（）()\x22\x27]+/g, '电脑上的文件');
   main = visible(main);
   const box = ownerBox(r.copy_source || r, ctx, { extra: openGroup(r, viewer) });
-  // 在干活、在等你回话的行主行已经说清了，状态那几个字只留给读屏；对上卡的，主行点一下跳到那张卡
-  const mainHtml = w ? `<a class="cp-run-doing cp-run-goto" href="#${esc(encodeURIComponent(w.id))}">${esc(main)}</a>` : `<span class="cp-run-doing${from ? '' : ' is-empty'}">${esc(main)}</span>`;
-  return `<li class="cp-run-row is-${r.status} is-live${actCls(r, ctx)}"${itemAttr(r)}><span class="cp-run-st is-${color}"><i aria-hidden="true">${mark}</i><span class="cp-run-word">${esc(said)}</span></span>`
+  // 在干活、在等你回话的行主行已经说清了，状态那几个字只留给读屏；对上卡的，主行点一下跳到那张卡。
+  // 别的状态（停了没做完、看不出在干嘛……）状态词写在主行开头、同一行接着往下排：左边那一列只放符号，任何宽度都不和主行叠在一起
+  const quiet = r.status === 'running' || waiting;
+  const wordHtml = `<span class="cp-run-word${quiet ? '' : ` is-${color}`}">${esc(said)}</span>`;
+  const mainHtml = w ? `<a class="cp-run-doing cp-run-goto" href="#${esc(encodeURIComponent(w.id))}">${esc(main)}</a>` : `<span class="cp-run-doing${from ? '' : ' is-empty'}">${quiet ? '' : wordHtml}${esc(main)}</span>`;
+  return `<li class="cp-run-row is-${r.status} is-live${actCls(r, ctx)}"${itemAttr(r)}><span class="cp-run-st is-${color}"><i aria-hidden="true">${mark}</i>${quiet ? wordHtml : ''}</span>`
     + mainHtml + (step ? `<small class="cp-run-step">${esc(step)}</small>` : '')
     + `<small class="cp-run-meta">${r.title ? `<span class="cp-run-name">${esc(visible(r.title))}</span>` : ''}${second.map((s) => esc(visible(s))).join(' · ')}</small>${box}</li>`;
 }
@@ -1172,13 +1168,15 @@ const overview = (v, ctx) => {
   if (!read && !v.need_you.length) return `<div class="cp-you is-off">${snap}<p class="cp-you-n">要你做的事还没读到</p><p class="cp-you-sub">${notRead(v.served_at, ctx.now)}</p></div>`;
   const late = items.some((i) => i.r.overdue || String(i.x.overdue_text || '').trim());
   const tag = !n ? '' : urgent ? `<span class="cp-you-tag is-urgent">${urgent === n ? (n === 1 ? '急' : '都急') : `${urgent} 件急`}</span>` : `<span class="cp-you-tag">${late ? '过了原定时间，但不急' : n === 1 ? '不急' : '都不急'}</span>`;
+  // 没有要你做的事时不写“现在没有要你做的事 / 现在没有要你动手或回话的事”（本人 10-30：多余）；有事照旧写“要你做 N 件”和急不急
   const said = read && !hidden ? topSentence(v) : '';
-  const head = said ? `<span class="cp-you-said">${esc(said)}</span>` : n ? `要你做 <b>${n}</b> 件` : '现在没有要你做的事';
+  const quiet = !n && (!said || /^(现在)?没有要你/.test(said));
+  const head = quiet ? '' : said ? `<span class="cp-you-said">${esc(said)}</span>` : `要你做 <b>${n}</b> 件`;
   // 本人设备：顶上一两行提示（点的处理写不回、通知没发出去、调度在排队），块末尾“你最近处理的（30 天）›”；后端没给就都不出
   const sub = !read && v.served_at ? `<p class="cp-you-sub">这是 ${esc(when(v.served_at, ctx.now))} 读到的</p>` : '';
   const hid = hiddenPrivate(v);
   const priv = hid ? `<p class="cp-you-sub cp-you-private">另 ${hid} 件是私人事项，只在你的设备上显示</p>` : '';
-  return `<div class="cp-you${urgent ? ' is-urgent' : ''}${n ? '' : ' is-none'}${said ? ' is-said' : ''}">${snap}<p class="cp-you-n">${n ? '' : dot(COLOR_STATE[v.summary.color] || COLOR_STATE[v.verdict.color] || 'ok')}${head}${tag}</p>`
+  return `<div class="cp-you${urgent ? ' is-urgent' : ''}${n ? '' : ' is-none'}${said ? ' is-said' : ''}">${snap}${quiet ? '' : `<p class="cp-you-n">${n ? '' : dot(COLOR_STATE[v.summary.color] || COLOR_STATE[v.verdict.color] || 'ok')}${head}${tag}</p>`}`
     + priv + sinceLine(ctx) + ownerWarn(v, ctx) + sub + recentBlock(v, ctx) + `</div>`;
 };
 // “你上次 23:10 来过，之后新冒出 2 件、AI 关掉 4 件”（本人 10-30 批准第 4 项）：ctx.since 由 client.js 按这台浏览器存的编号算，第一次打开、没有变化都不写
@@ -1377,8 +1375,9 @@ export const REGIONS = Object.fromEntries(Object.entries({ overview, strip, 'ove
 // 各区标题下原来的说明句（本人 10-30 批准第 5 项：天天看的人用不上）收进“这页怎么用”（?）里
 const SECTIONS = [['tasks', '自动任务', '电脑自己在做的事，有没有按时做、做成没有。'], ['computer', '电脑', '这台电脑现在累不累、还剩多少地方；人不在电脑前能不能连上它。'],
   ['today', '今天的动态', '今天有什么变化：代码、你对 AI 说的话、今天发生的事。'], ['backup', '备份和云端', '东西有没有按时备份、云端的钱够不够。'], ['projects', '项目', '每个在用的项目现在怎么样、有没有等你的事。点名字进项目页。']];
-// 整页：外框固定，内容由上面各函数填。首屏只放本人的事（本人 18:51：太谜语人、还不好用）：
-// 顶上一句 → 要你做／要你回的卡 → AI 正在干活 → 你得知道 → AI 的账本 › / 你放着 N 件不急的事 › / 停了的数据 → 三格；事实区在下面，正常的只占一行
+// 整页：外框固定，内容由上面各函数填。电脑版单栏（本人 10-30 选定 A 版）：横幅（标题、读取时间、总述 | 插画和小鸟）→ 五格（电脑、自动任务、备份、安全和授权、健康分）
+// → 要你做 → AI 正在干活 → 你得知道和几行入口 → 自动任务（今天的河默认展开）→ 电脑 → 今天的动态 → 备份和云端 → 项目；事实区正常的只占一行。
+// 手机和窄屏照旧：标题总述、三行状态条、要你做、AI 正在干活、你得知道、状态一览、其余各块，插画放页尾（cockpit.css 排位）
 export function page(v, ctx) {
   ctx = { ...ctx, viewer: v.viewer };
   const r = (k) => '<div class="cp-body" data-cp="' + k + '">' + REGIONS[k](v, ctx) + '</div>';
@@ -1395,19 +1394,21 @@ export function page(v, ctx) {
     + '<p><b>下面各块</b></p><dl class="cp-keys cp-help-secs">' + SECTIONS.map(([, title, sub]) => '<dt>' + esc(title) + '</dt><dd>' + esc(sub) + '</dd>').join('') + '</dl>'
     + '<p>分区标题旁只在要你看或读不到时挂标签；几点读到只在顶上写一次，某块比它旧 15 分钟以上才另写。</p></div></details>';
   return '<div class="cp-action-toast" data-cp="action-toast">' + actionToast(ctx) + '</div>'
-    + '<section class="cp-dashboard c-text" id="top"><aside class="cp-sidebar">'
+    + '<section class="cp-dashboard c-text" id="top"><div class="cp-banner">'
     + '<div class="cp-intro cp-hero-copy"><h1 class="cp-main-title"><img src="' + src(ctx, 'cockpit-01-title-01.png') + '" alt="" width="483" height="198" loading="eager"><span class="cp-h1-text">驾驶舱</span></h1>'
     + '<div class="cp-tools"><p class="cp-meta" data-cp="meta" role="status">' + meta(v, ctx) + '</p>'
     + '<button type="button" class="cp-tool ct-inline-action" data-cp-reload title="立刻重读电脑" aria-label="立刻重读电脑">↻</button>' + help + '</div>'
     + '<p class="cp-viewer" data-cp="viewer" role="status">' + viewerLine(v, ctx) + '</p>'
     + '<div class="cp-overview" data-cp="overview">' + overview(v, ctx) + '</div><nav class="cp-strip" data-cp="strip" aria-label="现在的情况">' + strip(v, ctx) + '</nav></div>'
+    + '<figure class="cp-hero-art"' + (ctx.birdConfig ? ' data-living-config="' + ctx.birdConfig + '"' : '') + '><img src="' + src(ctx, 'cockpit-01-illustration-01.png') + '" alt="" width="866" height="326" loading="eager" crossorigin="anonymous"></figure></div>'
+    // 五格：电脑 / 自动任务 / 备份（overview-tri 的前三格）、安全和授权（security）、健康分（overview-tri 的最后一块）；外框 display: contents，五格直接排进同一个网格
     + '<div class="cp-status c-hub-stats" id="status">' + blockHead('状态一览', 'cp-mobile-status-heading')
     + '<div class="cp-overview-tri" data-cp="overview-tri">' + overviewTri(v, ctx) + '</div>'
-    + '<div class="cp-security-wrap hub-stat-field ct-card"><h2 class="cp-security-title">安全和授权</h2><div class="cp-security" data-cp="security">' + security(v, ctx) + '</div></div></div>'
-    + '<figure class="cp-hero-art"' + (ctx.birdConfig ? ' data-living-config="' + ctx.birdConfig + '"' : '') + '><img src="' + src(ctx, 'cockpit-01-illustration-01.png') + '" alt="" width="866" height="326" loading="eager" crossorigin="anonymous"></figure></aside>'
+    + '<div class="cp-sec-cell" data-cp="security">' + security(v, ctx) + '</div></div>'
     + '<div class="cp-workspace c-text"><div class="cp-need" id="need-you" data-cp="need-you">' + needCards(v, ctx) + '</div>'
     + '<div class="cp-home" data-cp="home">' + home(v, ctx) + '</div><div class="cp-facts-wall">'
-    + sec('tasks', '自动任务', '', r('tasks') + '<details class="cp-fold cp-river-fold" id="river"><summary>看今天的河：每条船是一个自动任务，点开看它在做什么、怎么停</summary><div class="cp-river" data-today-river aria-label="今天的河"></div></details>')
+    // 今天的河默认展开（本人 10-30）；构建时有任务就先按河图比例占好位置（cockpit.css 的 .cp-river.is-expected），河画进来时不推挤下面
+    + sec('tasks', '自动任务', '', r('tasks') + '<details class="cp-fold cp-river-fold" id="river" open><summary>今天的河：每条船是一个自动任务，点开看它在做什么、怎么停</summary><div class="cp-river' + (v.automation.items.length ? ' is-expected' : '') + '" data-today-river aria-label="今天的河"></div></details>')
     + sec('computer', '电脑', '', r('computer'))
     + sec('today', '今天的动态', '', r('today'))
     + sec('backup', '备份和云端', '', r('backup'))

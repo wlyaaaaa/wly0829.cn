@@ -97,7 +97,8 @@ test('AI 已定去“AI 的账本”逐条看，每条可复制；你得知道�
   assert.equal((main.match(/<li id="know-report-/g) || []).length, 4);
   assert.match(home, /<details class="cp-know-rest" id="know-rest"><summary>其余 2 条<\/summary>/);
   assert.doesNotMatch(home + led, /复制给 AI|data-copy/);
-  assert.match(REGIONS.overview(v, c), /<span class="cp-dot is-yellow"[^>]*><\/span>现在没有要你做的事/);
+  // 没有要你做的事时总述不写“现在没有要你做的事”（本人 10-30：多余）
+  assert.doesNotMatch(REGIONS.overview(v, c), /现在没有要你|cp-you-n/);
   // 本人设备上 AI 已定那条的“回一句话”写成“不同意，改一下”
   const own = normalize(base({ viewer: { kind: 'owner' }, must_know: { state: 'ok', items: [{ ...decisions[0], owner_actions: ['note', 'ack'] }] } }));
   assert.match(listOnly(REGIONS.ledger(own, c)), /data-act="ack"[^>]*>知道了<\/button>/);

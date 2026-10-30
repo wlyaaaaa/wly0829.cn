@@ -35,8 +35,11 @@ import '../../../cockpit/cockpit.css';
   async function load() {
     button.disabled = true;
     try {
+      // 几个入口同时发出，第一个拿到有效采样的就用，其余的当场取消；总共最多等 12 秒（和驾驶舱 client.js 的 read 一样）
+      const stop = new AbortController(), timer = setTimeout(() => stop.abort(), 12000);
+      const one = async (url) => { const r = await fetch(url, {cache:'no-store', credentials:'omit', signal:stop.signal}); if (!r.ok) throw new Error('HTTP ' + r.status); const d = (await r.json()).storage_pressure; if (d?.schema === 'pcconfig.ai-storage-pressure.v1' && Array.isArray(d.categories) && d.categories.length) return d; throw new Error('没有采样'); };
       let data;
-      for (const url of endpoints) { try { const r = await fetch(url, {cache:'no-store', credentials:'omit', signal:AbortSignal.timeout(12000)}); if (!r.ok) continue; const d = (await r.json()).storage_pressure; if (d?.schema === 'pcconfig.ai-storage-pressure.v1' && Array.isArray(d.categories) && d.categories.length) { data = d; break; } } catch {} }
+      try { data = await Promise.any(endpoints.map(one)); } catch {} finally { clearTimeout(timer); stop.abort(); }
       if (!data) throw new Error('unavailable');
       // 采样多久算过期：照返回的 max_age_seconds（后端现在是 14 小时），没给才按 2 小时
       const maxAge = Number(data.max_age_seconds) > 0 ? Number(data.max_age_seconds) * 1000 : 7200000;

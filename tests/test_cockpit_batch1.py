@@ -65,9 +65,9 @@ const assert = require('node:assert/strict');
   o = R.REGIONS.overview(many, ctx);
   assert.match(o, /要你做 <b>5<\/b> 件/);
   assert.equal((R.REGIONS['need-you'](many, ctx).match(/<article class="cp-ask/g) || []).length, 5);
-  // 5 0 件：写“现在没有要你做的事”，卡片那一块整块不出
+  // 5 0 件：总述不写“现在没有要你做的事”（本人 10-30：多余），卡片那一块整块不出
   const none = normalize({ ...base0, overview: ov({ owner_count: 0 }), need_you: [] });
-  assert.match(R.REGIONS.overview(none, ctx), /现在没有要你做的事<\/p><\/div>$/);
+  assert.doesNotMatch(R.REGIONS.overview(none, ctx), /现在没有要你|cp-you-n/);
   // 没事时只留 #pending 位置标记（09bcab11），不出卡片
   assert.equal(R.REGIONS['need-you'](none, ctx), '<span class="cp-anchor" id="pending"></span>');
   // 6 首帧是构建时的数：写明几点、正在读最新
@@ -163,26 +163,26 @@ const assert = require('node:assert/strict');
   const sm = OV.html(ov({ signals: [{ id: 'computer', level: 'act', color: 'neutral' }, { id: 'today_tasks', level: 'act', value: 1, recovered_today: 1, color: 'neutral' }, { id: 'backup', level: 'ok', value: 0, color: 'ok' }] }), { size: 'small', now: now.getTime() });
   assert.match(sm, /ov-sig is-neutral" data-signal="computer">.*?AI 在管/);
   assert.match(sm, /data-signal="today_tasks">.*?1<small>个没恢复<\/small>.*?AI 在管/);
-  // 12 安全和授权：手机那一行
-  assert.match(R.security(v, ctx), /cp-sec-line.*资料已解锁到 10月13日 13:37 · 无限制授权关 · 未锁屏 · 能连上/);
+  // 12 安全和授权：和电脑、自动任务、备份同一个样子的一格，整格链到授权页；小字先写资料解锁到几点
+  const cell = (html) => ({ word: (/<b class="cp-tri-status">([^]*?)<\/b>/.exec(html)?.[1] || '').replace(/<[^>]+>/g, ''), dot: /cp-tri-status"><span class="cp-dot is-(\w+)"/.exec(html)?.[1], sub: /<span class="cp-tri-who"><span>([^<]*)<\/span>/.exec(html)?.[1] });
+  assert.match(R.security(v, ctx), /^<ul class="cp-tri cp-tri-sec"><li class="cp-tri-cell is-green" data-signal="security"><a class="hub-stat-field ct-card" href="\/computer-access\/"><span class="cp-tri-label">安全和授权<\/span>/);
+  assert.deepEqual(cell(R.security(v, ctx)), { word: '都正常', dot: 'green', sub: '资料解锁到 10月13日 13:37' });
+  const sec = (s) => R.security({ ...v, security: { ...v.security, ...s } }, ctx);
+  assert.deepEqual(cell(sec({ personal_data: { state: 'locked' } })), { word: '都正常', dot: 'green', sub: '资料锁着' });
+  assert.deepEqual(cell(sec({ personal_data: { state: 'locked' }, unrestricted: { state: 'active', expires_at: at } })), { word: '无限制授权开着', dot: 'yellow', sub: '开到 10月12日 14:59' });
+  assert.deepEqual(cell(sec({ unrestricted: { state: 'active', expires_at: at } })), { word: '无限制授权开着', dot: 'yellow', sub: '资料解锁到 10月13日 13:37' });
+  assert.deepEqual(cell(sec({ unrestricted: { state: 'unknown' } })), { word: '没读到', dot: 'gray', sub: '资料解锁到 10月13日 13:37' });
   // 12b 离线、首帧及读取失败都不能把旧安全状态当现在；恢复不改写原 view
   const securityBefore = JSON.stringify(v), liveSecurity = R.security(v, ctx);
   const priorStates = [v, { ...v, security: { ...v.security, personal_data: { state: 'locked' }, unrestricted: { state: 'active', expires_at: at }, windows: { state: 'locked' } } }];
   for (const [stateCtx, ok] of [[{ ...ctx, offline: true }, true], [{ ...ctx, phase: 'snapshot' }, true], [ctx, false]]) {
     for (const prior of priorStates) for (const observedAt of [at, null]) {
       const view = { ...prior, ok, security: { ...prior.security, observed_at: observedAt } }, before = JSON.stringify(view);
-      const html = R.security(view, stateCtx), mobile = html.split('</a>')[0];
-      const desktop = [...html.matchAll(/<a class="cp-sec-item"[^]*?<\/a>/g)].map((m) => m[0]);
+      const html = R.security(view, stateCtx);
       const lastRead = observedAt ? '上次 14:59 读到' : '还没读到过';
-      assert.equal(desktop.length, 4);
-      for (const item of desktop.slice(0, 3)) {
-        assert.match(item, /cp-sec-word"><span class="cp-dot is-gray"[^>]*><\/span>没读到<\/span>/);
-        assert.ok(item.includes(`<span class="cp-sec-sub">${lastRead}</span>`));
-      }
-      assert.match(mobile, /cp-dot is-gray/);
-      assert.ok(mobile.includes(`资料、授权和锁屏状态没读到（${lastRead}）`));
-      assert.doesNotMatch(mobile + desktop.slice(0, 3).join(''), /已解锁|锁着|开着|正常关着|已锁屏|未锁屏/);
-      assert.ok(desktop[3].includes(stateCtx.offline || !ok ? '连不上' : '>能</span>'));
+      // 读不到电脑写“连不上电脑”，首帧（构建时的数）写“没读到”，都灰着、小字写上次几点读到，不拿旧状态冒充现在
+      assert.deepEqual(cell(html), { word: stateCtx.offline || !ok ? '连不上电脑' : '没读到', dot: 'gray', sub: lastRead });
+      assert.doesNotMatch(html, /已解锁|解锁到|锁着|开着|都正常/);
       assert.equal(JSON.stringify(view), before);
       assert.equal(R.security({ ...view, ok: true }, ctx), R.security({ ...prior, security: { ...prior.security, observed_at: observedAt } }, ctx));
     }
@@ -225,7 +225,7 @@ const assert = require('node:assert/strict');
   // 顶上只留“要你……”那一句；AI 在跟、暂缓去下面的入口；不出 MCP
   assert.match(front, /要你做 2 件<\/span><span class="cp-you-tag">都不急<\/span>/);
   assert.doesNotMatch(front, /AI 在跟|暂缓|MCP|future-review/);
-  assert.match(R.REGIONS.overview({ ...improved, need_you: [], overview: ov({ owner_count: 0 }), summary: { text: 'AI 在跟 3 件 · 你暂缓 1 件' } }, ctx), /现在没有要你做的事/);
+  assert.doesNotMatch(R.REGIONS.overview({ ...improved, need_you: [], overview: ov({ owner_count: 0 }), summary: { text: 'AI 在跟 3 件 · 你暂缓 1 件' } }, ctx), /现在没有要你|AI 在跟|暂缓/);
   const compact = normalize({ ...base0, access_summary: improved.access_summary, verdict: { text: '要你做 2 件，都能在手机上办（其中 1 件借电脑 MCP） · AI 在跟 44 件（其中 23 件过期，12 件已跟满 14 天） · 你暂缓 6 件' } });
   const compactFront = R.REGIONS.overview(compact, ctx);
   assert.match(compactFront, />要你做 2 件，都能在手机上办（其中 1 件得借电脑办）</); assert.doesNotMatch(compactFront, /AI 在跟|MCP/);

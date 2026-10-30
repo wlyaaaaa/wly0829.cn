@@ -51,7 +51,7 @@ test('健康分：大数字下面直接写最大的几项扣分，点开每行�
 test('健康分：读到时间和页面时间一样时不另写，旧 15 分钟以上才写几点读到', () => {
   assert.doesNotMatch(REGIONS['overview-tri'](view(), ctx()), /cp-score-why[^]*?读到/);
   const old = REGIONS['overview-tri'](view({ overview: overview({ as_of: '2026-10-30T11:30:00+08:00' }) }), ctx());
-  assert.match(old, /<span class="cp-score-why hub-field-body">[^<]*<small>10月30日 11:30 读到<\/small>/);
+  assert.match(old, /<span class="cp-score-why hub-field-body"><span class="cp-score-scope-s">[^<]*<\/span><small>10月30日 11:30 读到<\/small>/);
 });
 
 test('状态四格：第二行小字写要不要你管；AI 在管的点用加深的蓝灰，和读不到的灰点分开', () => {
