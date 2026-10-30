@@ -18,7 +18,7 @@ PART_BOUNDARIES = {
     'charter': ['### 三、怎样做事', '### 五、我的个人资料', '### 八、项目与维护'],
     'rule-authorization': ['## 子代理和项目规则不扩大授权', '## 受信任的 AI'],
     'rule-capabilities-runtime': ['## 常用入口', '## 浏览器', '## 汇报、网站和自动运行的东西', '## 安装位置、配置和本机约定'],
-    'rule-claude-adapter': ['## 派子代理：Claude 的不同处', '- **从包装器进入。**', 'Steer 的长消息可用',
+    'rule-claude-adapter': ['## 派子代理：Claude 的不同处', '- **从包装器进入。**', '命令参数按需查',
                             '- **要在新会话里验收的**', '## Hook 和个人资料状态', '## 受信任 AI 的其他能力'],
     'rule-codex-adapter': ['## 派子代理：Codex 的不同处'],
     'rule-context-sources': ['## 三档维护', '### 一样东西只存一处'],
