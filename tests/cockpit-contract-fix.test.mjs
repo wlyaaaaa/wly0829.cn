@@ -103,7 +103,10 @@ test('AI 账本：日期优先 AI 新定的期限、不是今年带年份、没�
   assert.match(list, /没写哪天该有结果，AI 在补上期限/);
   assert.doesNotMatch(html, /original_deadline_overdue|undated_wake_condition|ai_decision_due/);
   // 其余的分开说：有日子的“还没到日子”、没日子的“没定日子”；“说明还不全”的占位标题不列
-  assert.match(html, /<summary>其余 6 件：2 件还没到日子、4 件没定日子<\/summary>/);
+  // 件数和筛选按钮、总句同一个数：不单列的照样计数，列表末尾写“另有 N 件没单列”
+  assert.match(html, /<summary>其余 7 件：2 件还没到日子、5 件没定日子<\/summary>/);
+  assert.match(html, /<p class="cp-ai-more">另有 3 件没单列（2 件同类私人事项，合在上面同名那行；1 件说明还没写全，AI 会补上）<\/p>/);
+  assert.match(html, /<p class="cp-lt-more">另有 3 件没单列/);
   assert.doesNotMatch(html, /说明还不全/);
   // 进展是字符串时，复制内容不能把字符串自带的 .at 方法当成时间写进去
   assert.doesNotMatch(html, /native code/);

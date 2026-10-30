@@ -175,3 +175,17 @@ test('新出现的标“新”：只存编号和时间；第一次打开不标�
   assert.equal(seen.newCss([]), '');
   assert.match(REGIONS.ledger(normalize({ schema: 'pcconfig.cockpit-view.v1', served_at: at, viewer: { kind: 'owner' }, ai_following: [{ id: 'f1', title: '示例跟进' }] }), ctx()), /<tr class="is-ok"[^>]*data-ids="f1"/);
 });
+
+test('账本件数对齐：筛选按钮和总句同一个数，合并的同类私人事项、说明还没写全的照样计数并在末尾写明', () => {
+  const ph = (id) => ({ id, title: '一件私人 AI 活', placeholder: true });
+  const following = [{ id: 'a', title: '示例甲', overdue_days: 2, overdue_since: '2026-10-28T10:00:00+08:00' }, { id: 'b', title: '说明还不全' }, ph('p1'), ph('p2'), ph('p3'), { id: 'c', title: '示例丙' }];
+  const v = normalize({ schema: 'pcconfig.cockpit-view.v1', served_at: at, viewer: { kind: 'public' }, ai_following: following, ai_overdue: [following[0]],
+    counts: { ai_following: 6 }, ai_ledger_summary: { text: 'AI 待处理还有 6 件事，1 件比它自己定的日子晚了（不用你管）。', open: 6, late: 1 } });
+  const html = REGIONS.ledger(v, ctx());
+  assert.match(html, /data-lshow="all" aria-pressed="true">全部 6<[^]*?data-lshow="late" aria-pressed="false">晚了 1<[^]*?data-lshow="ok" aria-pressed="false">没晚 5</);
+  assert.match(html, /AI 待处理还有 6 件事/);
+  assert.match(html, /<p class="cp-lt-more">另有 3 件没单列（2 件同类私人事项，合在上面同名那行；1 件说明还没写全，AI 会补上）<\/p>/);
+  assert.match(html, /<summary>其余 5 件/);
+  // 首页那行和账本页总句同一句
+  assert.match(REGIONS.home(v, ctx()), /<a class="cp-go" href="\/cockpit\/ai\/">AI 待处理还有 6 件事/);
+});
