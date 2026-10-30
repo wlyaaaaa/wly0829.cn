@@ -809,7 +809,8 @@ function backupIssue(ov) {
   const bk = sigOf(ov, 'backup'), why = whyOf(ov, 'backup_cloud');
   const n = Number.isFinite(Number(bk.value)) && Number(bk.value) > 0 ? Number(bk.value) : why.length;
   if (n <= 1) return why[0] || (n ? '1 项要留意' : '');
-  const name = (why[0] || '').replace(/(的?备份)?(失败|过期|需要留意|要留意)$/, '').trim();
+  // 只留第一项的名字：“开发配置备份超过 72 小时没成功”→“开发配置”
+  const name = ((/^(.+?)(?:的?备份|失败|过期|超过|需要留意|要留意)/.exec(why[0] || '') || [])[1] || '').trim();
   return `${n} 项备份${why.length && why.every((t) => /失败$/.test(t)) ? '失败' : '要留意'}${name ? `（${name}等）` : ''}`;
 }
 // 首屏三格的内容：每格 {state, status, who, why, note, short, brief}
