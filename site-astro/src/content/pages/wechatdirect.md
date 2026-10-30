@@ -681,7 +681,7 @@
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
   "sha256": "6e917ff15d5da1b9fe101e7584ac6fd3b947e38abced8d9b91751d4b04970a88",
-  "converted_at_beijing": "2026-10-30T14:00:59+08:00"
+  "converted_at_beijing": "2026-10-30T14:08:09+08:00"
  }
 }
 ---
@@ -2387,7 +2387,7 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "- **3 个**｜依赖\n- **15 个**｜命令\n- **43 次**｜公开提交（8 月 30 日起，10 月 30 日 11:06 数）",
+     "text_ref": "3个依赖15个命令43次公开提交（8月30日起，10月30日11:06数）",
      "columns": 1,
      "columns_v": 1,
      "icons": "none",
@@ -2444,7 +2444,7 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "- **3 个**｜依赖\n- **15 个**｜命令\n- **43 次**｜公开提交（8 月 30 日起，10 月 30 日 11:06 数）",
+     "text_ref": "3个依赖15个命令43次公开提交（8月30日起，10月30日11:06数）",
      "columns": 1,
      "columns_v": 1,
      "icons": "none"
