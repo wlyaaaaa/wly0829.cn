@@ -24,17 +24,12 @@
   "kind": "project",
   "title": "替本人拟消息",
   "url": "/projects/personal-expression/reply-as-me/",
-  "parent": "personal-expression",
-  "status_line": {
-   "state": "在用",
-   "as_of": "2026-10-11",
-   "source": "来源仓库 cde9496（北京 10/21 15:36；按对象/关系选参考 9/26 上线）；没有真实拟稿或发送，历史测试保留 9/22 原日期"
-  }
+  "parent": "personal-expression"
  },
  "source": {
   "page": "sources/pages/personal-expression-reply-as-me/page.json",
-  "sha256": "08261cb4e6c4e1182b6e1926b2505faa5826af8161e8667c81a5e249c36f9a01",
-  "converted_at_beijing": "2026-10-30T14:00:57+08:00"
+  "sha256": "5030b94ab39ed316f677a89a243a42f660b070b51e94d3377002c6347a6357d2",
+  "converted_at_beijing": "2026-10-31T04:34:16+08:00"
  }
 }
 ---
@@ -76,18 +71,6 @@
      "row_fit_illustration": true
     },
     {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "在用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 cde9496（北京 10/21 15:36；按对象/关系选参考 9/26 上线）；没有真实拟稿或发送，历史测试保留 9/22 原日期",
-     "row": "top"
-    },
-    {
      "type": "action_button",
      "text_ref": "〔回到项目 → 个人表达〕　〔复制 AI 续作说明〕",
      "row": "top",
@@ -121,17 +104,6 @@
      "text_ref": "替本人拟消息",
      "align": "left",
      "size": "large"
-    },
-    {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "在用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 cde9496（北京 10/21 15:36；按对象/关系选参考 9/26 上线）；没有真实拟稿或发送，历史测试保留 9/22 原日期"
     },
     {
      "type": "action_button",
@@ -174,7 +146,7 @@
 
 〔回到项目 → 个人表达〕　〔复制 AI 续作说明〕
 
-个人表达与沟通支持 · 功能说明
+个人表达与沟通支持 · 功能说明 · 已存档：10 月 31 日起项目不再维护，下面是存档前的样子
 
 把已经想好的意思变成合适的消息，减少反复修改措辞的负担，同时保留原意。
 

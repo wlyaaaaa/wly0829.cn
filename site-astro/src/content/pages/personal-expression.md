@@ -1,9 +1,9 @@
 ---
 {
  "title": "个人表达",
- "kind": "project",
+ "kind": "frozen",
  "url": "/projects/personal-expression/",
- "tagline": "把事讲到我听懂，也照我的意思帮我拟消息。",
+ "tagline": "原来把事讲到我听懂、照我的意思帮我拟消息；10 月 31 日起存档。",
  "toc": [
   {
    "id": "top",
@@ -33,24 +33,11 @@
  "page": {
   "schema": "site-b1.page.v1",
   "page": "personal-expression",
-  "kind": "project",
+  "kind": "frozen",
   "title": "个人表达",
   "url": "/projects/personal-expression/",
-  "tagline": "把事讲到我听懂，也照我的意思帮我拟消息。",
-  "status": "常用",
-  "status_line": {
-   "state": "在用",
-   "last": {
-    "label": "上次使用",
-    "at": "2026-10-10 12:33"
-   },
-   "facts": [
-    "“讲给我听”技能已记 10 次",
-    "“替我拟消息”技能已记 0 次"
-   ],
-   "as_of": "2026-10-11",
-   "source": "AI 使用记录记到 10 月 9 日（10 日、11 日未补采）"
-  },
+  "tagline": "原来把事讲到我听懂、照我的意思帮我拟消息；10 月 31 日起存档。",
+  "status": "冻结",
   "public": false,
   "repo_url": null,
   "capability": "把话讲明白、把消息写自然",
@@ -570,8 +557,8 @@
  },
  "source": {
   "page": "sources/pages/personal-expression/page.json",
-  "sha256": "e713082e72cd7f71107235928854425ed3eeb1a659e5b49ccc0cf827ba2d034f",
-  "converted_at_beijing": "2026-10-30T14:00:57+08:00"
+  "sha256": "47990d6343161be5b6cd883b29c3ad8fc44ed2ebbafb7ac472bd3ab8181081b9",
+  "converted_at_beijing": "2026-10-31T04:24:58+08:00"
  }
 }
 ---
@@ -587,6 +574,22 @@
   "scene": "横版：左上毛笔艺术字大标题，下面介绍段（四五行，两个粗体小标题嵌在段里）。右上一幅水彩插画：左边一个对话气泡，里面一团乱线从左往右慢慢理成一条平直的绿线；中间一本翻开的小册子，夹着几枚绿色书签；右边一支钢笔搁在一张便签上，便签上方悬着三个空白的小标签牌，其中一个是亮绿色。插画里不画任何字。介绍下面一张浅绿底的横向引语卡片放“真实的一次”那段（左边一个小对话气泡图标，我的原话用引号、字稍大）。再下面一排四张数字卡（和标杆页第一屏一样：上面小插画，大号绿色数字，下面一两行小字；插画依次是：翻开的小册子、一叠对话气泡、两枚并排的小徽章、一个打着钩的小程序窗口）。最下面左边一个按钮〔在整套系统里的位置 → 怎么协作〕。私有仓库，不放 GitHub 按钮；这个项目没有自动任务，不画“现在”横条。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
   "portrait": "竖版：标题和介绍在上；插画缩小放在介绍下面；“真实的一次”引语卡片占一整行；四张数字卡一行一张（第三张字多，卡片高一些）；按钮单独一行。 那一排按钮里同样有〔复制 AI 续作说明〕。",
   "links": [
+   {
+    "text": "约法 L25",
+    "href": "/rules/charter/#L25"
+   },
+   {
+    "text": "约法 L1–L6",
+    "href": "/rules/charter/#L1"
+   },
+   {
+    "text": "个人理解库",
+    "href": "/projects/daily-preferences/"
+   },
+   {
+    "text": "替我拟消息",
+    "href": "/skills/reply-as-me/"
+   },
    {
     "text": "在整套系统里的位置 → 怎么协作",
     "href": "/how/#personal-expression"
@@ -611,26 +614,17 @@
      "size": "large",
      "text_ref": "个人表达",
      "row": "hero",
-     "width": "57%"
+     "width": "57%",
+     "row_fit_illustration": true
     },
     {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "在用 · 上次使用 10 月 10 日 12:33",
-       "state": "ok"
-      },
-      {
-       "text": "“讲给我听”技能已记 10 次",
-       "state": "fact"
-      },
-      {
-       "text": "“替我拟消息”技能已记 0 次",
-       "state": "fact"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · AI 使用记录记到 10 月 9 日（10 日、11 日未补采）",
+     "type": "tag",
+     "text_ref": "已存档 · 存档的项目，AI 不再维护（约法 L25）",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "存档说明：10 月 31 日起这个项目存档、不再维护，内容已",
      "row": "hero"
     },
     {
@@ -646,16 +640,16 @@
      "text_ref": ""
     },
     {
+     "type": "quote",
+     "text_ref": "真实的一次（9月27日）：AI报告“理解库手机日报里的‘假应用’问题彻底修好了”，接着列了一串核"
+    },
+    {
      "type": "stat_card",
      "columns": 4,
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": "auto",
      "text_ref": "11 条原则 · 6 条读懂我的话"
-    },
-    {
-     "type": "quote",
-     "text_ref": "真实的一次（9月27日）：AI报告“理解库手机日报里的‘假应用’问题彻底修好了”，接着列了一串核"
     },
     {
      "type": "prose",
@@ -677,31 +671,12 @@
      "text_ref": "个人表达"
     },
     {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "在用 · 上次使用 10 月 10 日 12:33",
-       "state": "ok"
-      },
-      {
-       "text": "“讲给我听”技能已记 10 次",
-       "state": "fact"
-      },
-      {
-       "text": "“替我拟消息”技能已记 0 次",
-       "state": "fact"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · AI 使用记录记到 10 月 9 日（10 日、11 日未补采）"
+     "type": "tag",
+     "text_ref": "已存档 · 存档的项目，AI 不再维护（约法 L25）"
     },
     {
-     "type": "stat_card",
-     "columns": 1,
-     "columns_v": 1,
-     "illustration": "top_inside",
-     "icons": "auto",
-     "text_ref": "11 条原则 · 6 条读懂我的话"
+     "type": "prose",
+     "text_ref": "存档说明：10 月 31 日起这个项目存档、不再维护，内容已"
     },
     {
      "type": "prose",
@@ -715,6 +690,14 @@
     {
      "type": "quote",
      "text_ref": "真实的一次（9月27日）：AI报告“理解库手机日报里的‘假应用’问题彻底修好了”，接着列了一串核"
+    },
+    {
+     "type": "stat_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "top_inside",
+     "icons": "auto",
+     "text_ref": "11 条原则 · 6 条读懂我的话"
     },
     {
      "type": "prose",
@@ -837,6 +820,10 @@
 ```
 
 # 个人表达
+
+已存档 · 存档的项目，AI 不再维护（约法 L25）
+
+存档说明：10 月 31 日起这个项目存档、不再维护，内容已经归位：通用的说话规矩并入〔约法 L1–L6〕，只关于我的说话习惯进〔个人理解库〕；“讲给我听”技能已删除，〔替我拟消息〕技能照常在用。下面是存档前的样子。
 
 AI 跟我说话、替我给别人写消息，都照这里的手册和样本来。**讲给我听**：AI 向我汇报、解释、请我拍板时照手册讲；我说没听懂，就从我原来的问题重讲。**替我拟消息**：我定好要说什么，AI 先看这条发给谁、我们什么关系，参考我平时对这类人怎么说，写成一条自然的消息，发不发我定。我指出哪句难懂、哪句别扭，当场改好，教训写回这里，下次换哪个 AI 都用得上。
 

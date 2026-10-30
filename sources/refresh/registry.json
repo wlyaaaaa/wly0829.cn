@@ -31,7 +31,8 @@
     "llm-backend-toolkit",
     "native-economy-routing",
     "personal-panel-refresh",
-    "token-budget-advisor"
+    "token-budget-advisor",
+    "explain-to-me"
   ],
   "input_reports": [
     {
@@ -12657,86 +12658,6 @@
       "observed_at": "2026-10-24"
     },
     {
-      "id": "skill-explain-to-me-status-last",
-      "page": "skill-explain-to-me",
-      "screen": "skill-explain-to-me-01",
-      "label": "最近使用时间",
-      "current_value": "2026-10-24T09:37:26+08:00",
-      "as_of": "2026-10-11",
-      "category": "使用账本",
-      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
-      "automatic": true,
-      "private": true,
-      "historical": false,
-      "field": "status_line.last.at",
-      "scope_status": "verified",
-      "measurement_scope": "kind=skill、name=explain-to-me；共同完成水位之前最后已记录调用时间；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
-      "retrieve": {
-        "kind": "usage_ledger",
-        "key": "explain-to-me",
-        "operation": "last_time",
-        "timeout": 30
-      },
-      "checked_at": "2026-10-30T11:07:00+08:00",
-      "source_observed_at": null,
-      "source_coverage_end": "2026-10-24",
-      "observation_basis": "coverage_end",
-      "observed_at": null
-    },
-    {
-      "id": "skill-explain-to-me-status-facts-0",
-      "page": "skill-explain-to-me",
-      "screen": "skill-explain-to-me-01",
-      "label": "近7天AI使用次数",
-      "current_value": 5,
-      "as_of": "2026-10-11",
-      "category": "使用账本",
-      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
-      "automatic": true,
-      "private": true,
-      "historical": false,
-      "field": "status_line.facts[0]",
-      "scope_status": "verified",
-      "measurement_scope": "usage_ledger.count_7d实际筛选共同完成日界前7日；本轮coverage_end=2026-10-24，对应北京时间[2026-10-18 00:00,2026-10-25 00:00)。显示日期必须与本轮覆盖同步，不用旧as_of猜窗口。",
-      "retrieve": {
-        "kind": "usage_ledger",
-        "key": "explain-to-me",
-        "operation": "count_7d",
-        "timeout": 30
-      },
-      "page_pattern": "^\\d+ 月 \\d+[—–]\\d+ 日 AI 用了 ([\\d,]+) 次$",
-      "checked_at": "2026-10-30T11:07:00+08:00",
-      "source_observed_at": null,
-      "source_coverage_end": "2026-10-24",
-      "observation_basis": "coverage_end",
-      "observed_at": null
-    },
-    {
-      "id": "skill-explain-to-me-status-as-of",
-      "page": "skill-explain-to-me",
-      "screen": "skill-explain-to-me-01",
-      "label": "使用状态观察日期",
-      "current_value": "2026-10-24",
-      "as_of": "2026-10-11",
-      "category": "人工",
-      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
-      "automatic": true,
-      "private": false,
-      "historical": false,
-      "field": "status_line.as_of",
-      "scope_status": "verified",
-      "measurement_scope": "只注明同一状态条的最后使用时间和近7天次数；一项Unknown就保留旧截至",
-      "qualifies": [
-        "skill-explain-to-me-status-last",
-        "skill-explain-to-me-status-facts-0"
-      ],
-      "checked_at": "2026-10-30T11:07:51+08:00",
-      "source_observed_at": "2026-10-24",
-      "source_coverage_end": null,
-      "observation_basis": "snapshot_timestamp",
-      "observed_at": "2026-10-24"
-    },
-    {
       "id": "skill-reply-as-me-status-last",
       "page": "skill-reply-as-me",
       "screen": "skill-reply-as-me-01",
@@ -21086,92 +21007,6 @@
       "observed_at": "2026-10-30T11:07:26+08:00"
     },
     {
-      "id": "b7-personal-expression-explain-to-me-explain-principles",
-      "page": "personal-expression-explain-to-me",
-      "screen": "personal-expression-explain-to-me-05",
-      "field": "screens[4].text",
-      "label": "explain-principles",
-      "current_value": 11,
-      "as_of": "2026-10-11",
-      "category": "只读技术计数",
-      "source_location": "E:/PersonalData/个人表达；已登记固定计数入口personal-expression-counts",
-      "automatic": true,
-      "private": false,
-      "historical": false,
-      "scope_status": "verified",
-      "measurement_scope": "说明指南一节数字标题的讲解原则数；不证明讲解效果",
-      "page_pattern": "现有 ([\\d,]+) 条讲解原则",
-      "retrieve": {
-        "kind": "entry",
-        "entry": "personal-expression-counts",
-        "pointer": [
-          "principles"
-        ]
-      },
-      "checked_at": "2026-10-30T11:06:55+08:00",
-      "source_observed_at": "2026-10-30T11:06:55+08:00",
-      "source_coverage_end": null,
-      "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:55+08:00"
-    },
-    {
-      "id": "b7-personal-expression-explain-to-me-understanding-principles",
-      "page": "personal-expression-explain-to-me",
-      "screen": "personal-expression-explain-to-me-05",
-      "field": "screens[4].text",
-      "label": "understanding-principles",
-      "current_value": 6,
-      "as_of": "2026-10-11",
-      "category": "只读技术计数",
-      "source_location": "E:/PersonalData/个人表达；已登记固定计数入口personal-expression-counts",
-      "automatic": true,
-      "private": false,
-      "historical": false,
-      "scope_status": "verified",
-      "measurement_scope": "说明指南二节固定条目标题计数；不证明理解效果",
-      "page_pattern": "、([\\d,]+) 条读懂原话的规则",
-      "retrieve": {
-        "kind": "entry",
-        "entry": "personal-expression-counts",
-        "pointer": [
-          "understanding"
-        ]
-      },
-      "checked_at": "2026-10-30T11:06:55+08:00",
-      "source_observed_at": "2026-10-30T11:06:55+08:00",
-      "source_coverage_end": null,
-      "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:55+08:00"
-    },
-    {
-      "id": "b7-personal-expression-explain-to-me-explain-cases",
-      "page": "personal-expression-explain-to-me",
-      "screen": "personal-expression-explain-to-me-05",
-      "field": "screens[4].text",
-      "label": "explain-cases",
-      "current_value": 78,
-      "as_of": "2026-10-30",
-      "category": "只读技术计数",
-      "source_location": "E:/PersonalData/个人表达/explain-to-me.md；只输出日期案例标题计数",
-      "automatic": true,
-      "private": false,
-      "historical": false,
-      "scope_status": "verified",
-      "measurement_scope": "说明指南全文件日期案例标题数；已核唯一日期标题属于案例区，实取55；不是认可或讲解成功次数",
-      "page_pattern": "、([\\d,]+) 个案例",
-      "retrieve": {
-        "kind": "regex_count",
-        "path": "E:/PersonalData/个人表达/explain-to-me.md",
-        "pattern": "^- (?:\\*\\*)?(?:2026-)?\\d{2}-\\d{2}",
-        "flags": "m"
-      },
-      "checked_at": "2026-10-30T11:07:07+08:00",
-      "source_observed_at": "2026-10-30T11:07:07+08:00",
-      "source_coverage_end": null,
-      "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:07+08:00"
-    },
-    {
       "id": "b7-personal-expression-reply-as-me-reply-samples",
       "page": "personal-expression-reply-as-me",
       "screen": "personal-expression-reply-as-me-05",
@@ -21288,34 +21123,6 @@
       "observed_at": "2026-10-30T11:06:55+08:00"
     },
     {
-      "id": "b7-personal-expression-explain-to-me-usage-all-time",
-      "page": "personal-expression-explain-to-me",
-      "screen": "personal-expression-explain-to-me-08",
-      "field": "screens[7].text",
-      "label": "usage-all-time",
-      "current_value": 63,
-      "as_of": "2026-10-30",
-      "category": "只读技术计数",
-      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；正式账本白名单format=jsonl,key_field=name,filter.kind=skill",
-      "automatic": true,
-      "private": false,
-      "historical": false,
-      "scope_status": "verified",
-      "measurement_scope": "沿正式 __usage_ledger__ 的 JSONL、name 键和 kind=skill 口径，每个匹配元数据行计一次；全历史累计，不能代替2026-10-04 14:00以来固定窗口或滚动7天。2026-10-11 对932119个非空JSON对象行逐行比对正则与JSON字段判断完全一致。只输出计数，不输出记录正文、cwd或其他元数据。",
-      "page_pattern": "explain\\-to\\-me 技能共 ([\\d,]+) 次调用记录",
-      "retrieve": {
-        "kind": "regex_count",
-        "path": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
-        "pattern": "^(?=.*\"kind\"\\s*:\\s*\"skill\")(?=.*\"name\"\\s*:\\s*\"explain\\-to\\-me\").*$",
-        "flags": "m"
-      },
-      "checked_at": "2026-10-30T11:07:12+08:00",
-      "source_observed_at": "2026-10-30T11:07:12+08:00",
-      "source_coverage_end": null,
-      "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:12+08:00"
-    },
-    {
       "id": "b7-personal-expression-reply-as-me-usage-all-time",
       "page": "personal-expression-reply-as-me",
       "screen": "personal-expression-reply-as-me-10",
@@ -21393,36 +21200,6 @@
       "page_pattern": "这是读取截至 (\\d+ 月 \\d+ 日)已入库的原件",
       "scope_status": "verified",
       "measurement_scope": "10 月 11 日只读时 Collector 已入库原件的最后日期；现行日期由 b7-daily-preferences-evidence-query-collector-stored-through 绑定 10 月 22 日那句。"
-    },
-    {
-      "id": "b7-personal-expression-explain-to-me-usage-collected-through",
-      "page": "personal-expression-explain-to-me",
-      "screen": "personal-expression-explain-to-me-08",
-      "field": "screens[7].text",
-      "label": "usage-collected-through",
-      "current_value": "2026-10-24",
-      "as_of": "2026-10-24",
-      "category": "截至日期",
-      "source_location": "AI 使用账本 explain-to-me 全历史34、分宿主23/11、2026-10-04 14:00以来固定窗10及最后调用时间；沿 E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 固定kind=skill,name=explain-to-me聚合，并核 U补采/写入恢复回执。累计数和固定窗不可用滚动7天替换。",
-      "automatic": true,
-      "private": false,
-      "historical": false,
-      "scope_status": "verified",
-      "measurement_scope": "共同完成补采的包容北京日：两个last_completed的较早排他午夜端点减一个日历日；源Owner仅在账本fsync且invalid_lines=0后推进水位。当前两宿主都完成10/10整日扫描，不代表10/11当日完整，不宣称全历史无缺口。本句与总数/分宿主/固定窗口/未补采说明的叙述需Opus同页审核，不能只改裸日期。",
-      "page_pattern": "AI 使用记录（截至 (\\d+ 月 \\d+ 日)已采到的部分）",
-      "retrieve": {
-        "kind": "entry",
-        "entry": "b7-usage-ledger-complete-day",
-        "pointer": [
-          "complete_through_day"
-        ]
-      },
-      "date_semantics": "coverage_end",
-      "source_coverage_end": "2026-10-24",
-      "observation_basis": "coverage_end",
-      "checked_at": "2026-10-30T11:07:10+08:00",
-      "source_observed_at": null,
-      "observed_at": null
     },
     {
       "id": "b7-personal-expression-reply-as-me-usage-collected-through",
@@ -28079,102 +27856,6 @@
       "source_coverage_end": null,
       "observation_basis": "live_read",
       "observed_at": "2026-10-30T11:06:10+08:00"
-    },
-    {
-      "id": "learning-questions-validation-b9-154",
-      "page": "learning-questions-validation",
-      "screen": "learning-questions-validation-09",
-      "label": "练习代码目录组数",
-      "field": "screens[8].text",
-      "current_value": 13,
-      "as_of": "2026-10-11",
-      "category": "当前正文事实",
-      "source_location": "V:/Personal/Projects/career-development/练习/代码",
-      "retrieve": {
-        "kind": "entry",
-        "entry": "learning-counts",
-        "pointer": [
-          "exercises"
-        ]
-      },
-      "automatic": true,
-      "private": true,
-      "historical": false,
-      "scope_status": "verified",
-      "measurement_scope": "根目录现有一级练习目录组数，只取个数",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "配套练习现有 ([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?) 组代码",
-      "checked_at": "2026-10-30T11:06:10+08:00",
-      "source_observed_at": "2026-10-30T11:06:10+08:00",
-      "source_coverage_end": null,
-      "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:10+08:00"
-    },
-    {
-      "id": "learning-questions-validation-b9-155",
-      "page": "learning-questions-validation",
-      "screen": "learning-questions-validation-09",
-      "label": "Python测试文件数",
-      "field": "screens[8].text",
-      "current_value": 10,
-      "as_of": "2026-10-11",
-      "category": "当前正文事实",
-      "source_location": "V:/Personal/Projects/career-development/练习/代码",
-      "retrieve": {
-        "kind": "file_count",
-        "path": "V:/Personal/Projects/career-development/练习/代码",
-        "include": [
-          "**/test*.py"
-        ],
-        "exclude": [],
-        "tracked": false
-      },
-      "automatic": true,
-      "private": true,
-      "historical": false,
-      "scope_status": "verified",
-      "measurement_scope": "现有递归test*.py文件数，只取个数",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "组代码、([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?) 个 Python 测试文件",
-      "checked_at": "2026-10-30T11:07:19+08:00",
-      "source_observed_at": "2026-10-30T11:07:19+08:00",
-      "source_coverage_end": null,
-      "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:19+08:00"
-    },
-    {
-      "id": "learning-questions-validation-b9-156",
-      "page": "learning-questions-validation",
-      "screen": "learning-questions-validation-09",
-      "label": "Python测试函数定义数",
-      "field": "screens[8].text",
-      "current_value": 146,
-      "as_of": "2026-10-11",
-      "category": "当前正文事实",
-      "source_location": "V:/Personal/Projects/career-development/练习/代码",
-      "retrieve": {
-        "kind": "regex_count",
-        "path": "V:/Personal/Projects/career-development/练习/代码",
-        "include": [
-          "**/test*.py"
-        ],
-        "exclude": [],
-        "tracked": false,
-        "pattern": "^\\s*def test_",
-        "flags": "m"
-      },
-      "automatic": true,
-      "private": true,
-      "historical": false,
-      "scope_status": "verified",
-      "measurement_scope": "现有10个test*.py内def test_计数，不执行",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "Python 测试文件、([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?) 个测试函数",
-      "checked_at": "2026-10-30T11:07:19+08:00",
-      "source_observed_at": "2026-10-30T11:07:19+08:00",
-      "source_coverage_end": null,
-      "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:19+08:00"
     },
     {
       "id": "personal-health-evidence-three-state-b9-157",

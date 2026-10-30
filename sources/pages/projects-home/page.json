@@ -1448,7 +1448,7 @@
       "title": "学习方法",
       "scene": "单张项目卡片，1200×750 横放，画布就是卡片本身：白底、细浅绿描边、大圆角、很淡的阴影，四周只留很窄的白边，不画页面背景、别的卡片或组名。所有项目卡同一个版式、同一配色，风格照样张（白底、纯绿主色 #16a34a、深绿标题、深蓝灰正文、水彩插画）。\n①左上：项目名，大号粗体绿色字，画成链接样式（细下划线、末尾小 ↗）；紧右边是状态小标签：常用＝浅绿底深绿字，偶尔用＝白底浅绿描边、灰绿字，冻结＝浅灰底灰字。②右上角：公开项目画〔GitHub〕徽章（深绿底白字圆角，左边白色 GitHub 猫头标志）；私有项目画浅灰底深灰字的“私有”徽章，左边一把小锁；冻结项目不画徽章。③左边中间：深蓝灰常规字的一句话，最多两行。④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。每张卡的插画内容各不相同，画法统一。⑤冻结项目在一句话下方写明“停下原因：……”，再写“现在：……”；原因较长时允许自然折成两行，文字仍要可读，里面〔〕括起来的是链接。⑥最下面一行：灰绿小字“直达：”，后面最多 3 个浅绿底圆角小胶囊，每个是链接（绿色字、末尾小 ↗），一行排完。卡上的字以“字”为准，一字不差；不画连线。",
       "portrait": "卡片不画竖版（拼页按组内张数排满每一行）。",
-      "text": "**〔学习方法〕**　常用　　私有\n让 AI 当老师，按一条路线把 AI 应用学明白。\n直达：〔排课和备课〕　〔上课和练习〕　〔反馈和纠错〕",
+      "text": "**〔学习方法〕**　常用　　私有\n让 AI 当老师，按一条排好的路线教我、记进度、断了能接上。\n直达：〔排课和备课〕　〔上课和练习〕　〔反馈和纠错〕",
       "links": [
         {
           "text": "学习方法",
@@ -1483,7 +1483,7 @@
         "status": "常用",
         "visibility": "private",
         "github": null,
-        "tagline": "让 AI 当老师，按一条路线把 AI 应用学明白。",
+        "tagline": "让 AI 当老师，按一条排好的路线教我、记进度、断了能接上。",
         "links": [
           {
             "text": "排课和备课",
@@ -1838,65 +1838,6 @@
       "screenshots": [],
       "chain": "",
       "reuse": ""
-    },
-    {
-      "id": "projects-home-36",
-      "shape": "card",
-      "section": "groups",
-      "title": "个人表达",
-      "scene": "单张项目卡片，1200×750 横放，画布就是卡片本身：白底、细浅绿描边、大圆角、很淡的阴影，四周只留很窄的白边，不画页面背景、别的卡片或组名。所有项目卡同一个版式、同一配色，风格照样张（白底、纯绿主色 #16a34a、深绿标题、深蓝灰正文、水彩插画）。\n①左上：项目名，大号粗体绿色字，画成链接样式（细下划线、末尾小 ↗）；紧右边是状态小标签：常用＝浅绿底深绿字，偶尔用＝白底浅绿描边、灰绿字，冻结＝浅灰底灰字。②右上角：公开项目画〔GitHub〕徽章（深绿底白字圆角，左边白色 GitHub 猫头标志）；私有项目画浅灰底深灰字的“私有”徽章，左边一把小锁；冻结项目不画徽章。③左边中间：深蓝灰常规字的一句话，最多两行。④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。每张卡的插画内容各不相同，画法统一。⑤冻结项目在一句话下方写明“停下原因：……”，再写“现在：……”；原因较长时允许自然折成两行，文字仍要可读，里面〔〕括起来的是链接。⑥最下面一行：灰绿小字“直达：”，后面最多 3 个浅绿底圆角小胶囊，每个是链接（绿色字、末尾小 ↗），一行排完。卡上的字以“字”为准，一字不差；不画连线。",
-      "portrait": "卡片不画竖版（拼页按组内张数排满每一行）。",
-      "text": "**〔个人表达〕**　常用　　私有\n把事讲到我听懂，也照我的意思帮我拟消息。\n直达：〔讲给我听〕　〔替我拟消息〕　〔记住纠正〕",
-      "links": [
-        {
-          "text": "个人表达",
-          "href": "/projects/personal-expression/"
-        },
-        {
-          "text": "讲给我听",
-          "href": "/projects/personal-expression/#g-explain"
-        },
-        {
-          "text": "替我拟消息",
-          "href": "/projects/personal-expression/#g-reply"
-        },
-        {
-          "text": "记住纠正",
-          "href": "/projects/personal-expression/#g-learn"
-        }
-      ],
-      "anchors": [
-        {
-          "id": "p-personal-expression",
-          "text": "个人表达"
-        }
-      ],
-      "live": [],
-      "screenshots": [],
-      "chain": "",
-      "reuse": "",
-      "card": {
-        "name": "个人表达",
-        "href": "/projects/personal-expression/",
-        "status": "常用",
-        "visibility": "private",
-        "github": null,
-        "tagline": "把事讲到我听懂，也照我的意思帮我拟消息。",
-        "links": [
-          {
-            "text": "讲给我听",
-            "href": "/projects/personal-expression/#g-explain"
-          },
-          {
-            "text": "替我拟消息",
-            "href": "/projects/personal-expression/#g-reply"
-          },
-          {
-            "text": "记住纠正",
-            "href": "/projects/personal-expression/#g-learn"
-          }
-        ]
-      }
     },
     {
       "id": "projects-home-37",
@@ -2439,6 +2380,51 @@
         "stop_reason": "它依赖的 KDE Connect 已在两台电脑上卸载，项目没有剩余用途；仓库保留，已归档",
         "now": "现在：两台电脑之间的文字剪贴板由电脑配置的三端文字同步承担，主机和副机之间走既有的 PCConfig Clip Peer，和手机无关，换手机不影响"
       }
+    },
+    {
+      "id": "projects-home-36",
+      "shape": "card",
+      "section": "frozen",
+      "title": "个人表达",
+      "scene": "单张项目卡片，1200×750 横放，画布就是卡片本身：白底、细浅绿描边、大圆角、很淡的阴影，四周只留很窄的白边，不画页面背景、别的卡片或组名。所有项目卡同一个版式、同一配色，风格照样张（白底、纯绿主色 #16a34a、深绿标题、深蓝灰正文、水彩插画）。\n①左上：项目名，大号粗体绿色字，画成链接样式（细下划线、末尾小 ↗）；紧右边是状态小标签：常用＝浅绿底深绿字，偶尔用＝白底浅绿描边、灰绿字，冻结＝浅灰底灰字。②右上角：公开项目画〔GitHub〕徽章（深绿底白字圆角，左边白色 GitHub 猫头标志）；私有项目画浅灰底深灰字的“私有”徽章，左边一把小锁；冻结项目不画徽章。③左边中间：深蓝灰常规字的一句话，最多两行。④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。每张卡的插画内容各不相同，画法统一。⑤冻结项目在一句话下方写明“停下原因：……”，再写“现在：……”；原因较长时允许自然折成两行，文字仍要可读，里面〔〕括起来的是链接。⑥最下面一行：灰绿小字“直达：”，后面最多 3 个浅绿底圆角小胶囊，每个是链接（绿色字、末尾小 ↗），一行排完。卡上的字以“字”为准，一字不差；不画连线。",
+      "portrait": "卡片不画竖版（拼页按组内张数排满每一行）。",
+      "text": "**〔个人表达〕**　冻结\n原来把事讲到我听懂、照我的意思帮我拟消息；10 月 31 日起存档。\n停下原因：10 月 31 日存档：内容已经归位，项目不再维护\n现在：通用说话规矩在约法 L1–L6，只关于我的说话习惯在个人理解库；“讲给我听”技能已删除，“替我拟消息”技能照常在用\n直达：〔为什么存档〕",
+      "links": [
+        {
+          "text": "个人表达",
+          "href": "/projects/personal-expression/"
+        },
+        {
+          "text": "为什么存档",
+          "href": "/projects/personal-expression/#personal-expression-01"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "p-personal-expression",
+          "text": "个人表达"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": "",
+      "card": {
+        "name": "个人表达",
+        "href": "/projects/personal-expression/",
+        "status": "冻结",
+        "visibility": "frozen",
+        "github": null,
+        "tagline": "原来把事讲到我听懂、照我的意思帮我拟消息；10 月 31 日起存档。",
+        "links": [
+          {
+            "text": "为什么存档",
+            "href": "/projects/personal-expression/#personal-expression-01"
+          }
+        ],
+        "stop_reason": "10 月 31 日存档：内容已经归位，项目不再维护",
+        "now": "现在：通用说话规矩在约法 L1–L6，只关于我的说话习惯在个人理解库；“讲给我听”技能已删除，“替我拟消息”技能照常在用"
+      }
     }
   ],
   "registry": {
@@ -2570,7 +2556,6 @@
         "name": "让 AI 帮我写和做",
         "line": "把事讲明白、照我的意思拟消息，写正式文书和工作文件，给文稿排版、出 PDF，做成视频。",
         "members": [
-          "/projects/personal-expression/",
           "/projects/personal-formal-documents/",
           "/projects/work-delivery-copilot/",
           "/projects/typora-theme-pack/",
@@ -2578,7 +2563,6 @@
         ],
         "screen": "projects-home-35",
         "cards": [
-          "projects-home-36",
           "projects-home-37",
           "projects-home-38",
           "projects-home-39",
@@ -2595,7 +2579,8 @@
           "/projects/codex-agent-model-benchmark/",
           "/projects/wechat-history-ai-bridge/",
           "/projects/ramdisk-guardian/",
-          "/projects/meshclip-kit/"
+          "/projects/meshclip-kit/",
+          "/projects/personal-expression/"
         ],
         "screen": "projects-home-41",
         "cards": [
@@ -2604,7 +2589,8 @@
           "projects-home-44",
           "projects-home-45",
           "projects-home-15",
-          "projects-home-24"
+          "projects-home-24",
+          "projects-home-36"
         ]
       }
     ],

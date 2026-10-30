@@ -74,7 +74,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "这一步怎样帮助学习",
+        "text_ref": "这一步在项目里管什么",
         "columns": 3,
         "last_full_width": false,
         "icon_position": "header_left",
@@ -98,7 +98,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "这一步怎样帮助学习",
+        "text_ref": "这一步在项目里管什么",
         "columns": 1,
         "icon_position": "header_left",
         "header_icon": [
@@ -384,7 +384,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 形成性反馈总体效应、异质性和信息内容影响",
+        "text_ref": "- 讲义索引记下每篇交付和反馈的摘要、日期、已成立处和待补处；要改口时据此找到原说法。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -403,7 +403,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 形成性反馈总体效应、异质性和信息内容影响",
+        "text_ref": "- 讲义索引记下每篇交付和反馈的摘要、日期、已成立处和待补处；要改口时据此找到原说法。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

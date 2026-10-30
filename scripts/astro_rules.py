@@ -67,6 +67,7 @@ def public_parts(body, page, screens):
 
 def public_body(raw, relative):
     body = contract.public_markdown(raw.decode('utf-8-sig'), relative, apply_omissions=False, preserve_literals=True)
+    body = contract.omit_public_topics(body, relative)
     return re.sub(r'\[([^\]]+)\]\(([^)]+)\)', lambda m: m[0] if m[2].startswith(('https://', 'http://', '/rules/', '/rule-sources/', '/source-tools/')) else m[1] + '（`' + m[2] + '`）', body)
 
 def render(body):

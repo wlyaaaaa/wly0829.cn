@@ -17,14 +17,14 @@
       },
       {
         "type": "prose",
-        "text_ref": "让 AI 当老师，按一条路线把 AI 应用学明白。",
+        "text_ref": "让 AI 当老师，按一条排好的路线教我、记进度、断了能接上。",
         "size": "large",
         "bold": true,
         "row": "hero"
       },
       {
         "type": "prose",
-        "text_ref": "AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Opus 5.5）排路线、",
+        "text_ref": "AI 当老师，按一条排好的路线教我。Claude（Opus 5.5）排路线、",
         "row": "hero"
       },
       {
@@ -78,13 +78,13 @@
       },
       {
         "type": "prose",
-        "text_ref": "让 AI 当老师，按一条路线把 AI 应用学明白。",
+        "text_ref": "让 AI 当老师，按一条排好的路线教我、记进度、断了能接上。",
         "size": "large",
         "bold": true
       },
       {
         "type": "prose",
-        "text_ref": "AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Opus 5.5）排路线、"
+        "text_ref": "AI 当老师，按一条排好的路线教我。Claude（Opus 5.5）排路线、"
       },
       {
         "type": "illustration"
@@ -153,7 +153,7 @@
         "type": "content_card",
         "columns": 1,
         "illustration": "right_inside",
-        "text_ref": "Java 每日一页",
+        "text_ref": "每日一页",
         "row": "balanced-notes",
         "width": "50%"
       },
@@ -210,7 +210,7 @@
         "type": "content_card",
         "columns": 1,
         "illustration": "left_inside",
-        "text_ref": "Java 每日一页"
+        "text_ref": "每日一页"
       },
       {
         "type": "content_card",
@@ -261,7 +261,7 @@
         "columns": 3,
         "layout": "dialogue_cards",
         "illustration": "none",
-        "text_ref": "问法"
+        "text_ref": "环节"
       },
       {
         "type": "content_card",
@@ -272,12 +272,12 @@
         "type": "content_card",
         "columns": 1,
         "illustration": "bottom_inside",
-        "text_ref": "讲机制时先落到能动手的一层"
+        "text_ref": "例子先落到能动手的一层"
       },
       {
         "type": "prose",
         "size": "small",
-        "text_ref": "五次请求"
+        "text_ref": "课上真跑过的例子"
       }
     ],
     "notes": "左上标题/导语，右上本机显卡。中部两列表格的3条数据行必须转3张横排对话卡（每卡上问法浅绿、下模型回答气泡），不是普通表格；第2卡小对勾、第3卡三个不同大小气泡。下方左学习清单卡右接口说明/窗口与JSON来回箭头插画。右卡插画实际在说明下方。末尾灰字。table 的 dialogue_cards 是构图需求，当前族未实现该字段，必须请求。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：首行横版标题58%/插画40%；手机显卡插画按整行宽完整比例呈现。素材自身残框另交素材处理。",
@@ -317,7 +317,7 @@
         "columns": 1,
         "layout": "dialogue_cards",
         "illustration": "none",
-        "text_ref": "问法"
+        "text_ref": "环节"
       },
       {
         "type": "content_card",
@@ -326,12 +326,12 @@
       },
       {
         "type": "prose",
-        "text_ref": "讲机制时先落到能动手的一层"
+        "text_ref": "例子先落到能动手的一层"
       },
       {
         "type": "prose",
         "size": "small",
-        "text_ref": "五次请求"
+        "text_ref": "课上真跑过的例子"
       }
     ],
     "notes": "第1张标题、导语、整宽显卡/代码/JSON插画、3张对话卡单列；第2张学习清单卡、接口说明、原件说明。续图原件说明无插画，不能额外补一幅；对话卡第二张保留对勾。合看 v/v2，不重复标题。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：首行横版标题58%/插画40%；手机显卡插画按整行宽完整比例呈现。素材自身残框另交素材处理。",
@@ -405,7 +405,7 @@
         "type": "content_card",
         "columns": 1,
         "illustration": "left_inside",
-        "text_ref": "课上调模型连不上",
+        "text_ref": "练习调云端接口连不上",
         "row": "trouble-1",
         "width": "50%"
       }
@@ -471,7 +471,7 @@
         "type": "content_card",
         "columns": 1,
         "illustration": "left_inside",
-        "text_ref": "课上调模型连不上"
+        "text_ref": "练习调云端接口连不上"
       }
     ],
     "notes": "标题、整宽书本/电脑插画、一个4步大卡、4张小卡。大卡四步纵排细线连接，小卡插画在左。章标题全屏宽居中。enclosure 字段是构图需求，现组件需确认。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n本轮回读组件现已支持connector=line，采用细纵线与节点；此前不支持line的备注已过时。",
@@ -500,7 +500,7 @@
       {
         "type": "prose",
         "row": "hero",
-        "text_ref": "除了课上用的转发口"
+        "text_ref": "除了练习用的本机转发口"
       },
       {
         "type": "illustration",
@@ -556,7 +556,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "除了课上用的转发口"
+        "text_ref": "除了练习用的本机转发口"
       },
       {
         "type": "table",
@@ -583,7 +583,7 @@
         "type": "content_card",
         "columns": 1,
         "illustration": "none",
-        "text_ref": "课上真调云端模型"
+        "text_ref": "练习调云端接口"
       }
     ],
     "notes": "v为标题/导语及7条文件名-职责对应行，左文件名加小图标、右完整职责；原 portrait 明确保持两字段配对，不为分栏本身重画。v2仅3张说明卡顺排，叶子在角部，不搬到v、不补另一标题。新版职责变长可增高，绝不缩字。paired_rows 是原图构图意图；若普通 table 竖版会额外重复表头，需比较。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
@@ -729,7 +729,7 @@
         "portrait_columns": 1,
         "illustration": "top_inside",
         "icons": "auto",
-        "text_ref": "第一课已在"
+        "text_ref": "挑例子"
       },
       {
         "type": "notice",
@@ -774,7 +774,7 @@
         "portrait_columns": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "第一课已在"
+        "text_ref": "挑例子"
       },
       {
         "type": "notice",
@@ -867,7 +867,7 @@
       },
       {
         "type": "content_card",
-        "text_ref": "4. 真调云端模型，密钥不进课程",
+        "text_ref": "4. 练习调云端接口，密钥不进课程",
         "columns": 1,
         "columns_v": 1,
         "illustration": "none",

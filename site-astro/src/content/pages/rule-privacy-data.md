@@ -36,7 +36,7 @@
    "activated_at": "2026-10-30T04:20:33.726689+08:00",
    "file": "sources/rules/docs/contracts/agents.privacy-data.md",
    "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
-   "public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2"
+   "public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：一只手把验证卡轻轻贴到小木柜的绿色挂锁上，挂锁“咔”地弹开，旁边的小沙漏翻转、细沙开始往下流；中间五级石台阶从 L1 到 L5 依次微微亮一下，L4 台阶上的小保险箱始终关着；下面 G、H 两块硬盘之间一道细绿光从左流到右，H 盘旁小木箱上的日历牌翻过一页；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -274,7 +274,7 @@
    "merged": [],
    "dropped": [],
    "unsure": [
-    "分级表 L3、L4 的举例里有“没公开的纠纷材料”“亲密信息”两处字眼。它们是给所有公开内容分级用的泛指类别，不透露本人任何纠纷或私人关系，我按原文保留（原文屏和人话要点都照写）。旧稿（E184 时的 content\\rules\\privacy-data.json）把它们改成了“未公开的私人事务”“私生活信息”；我没照旧稿，理由是本人 9 月 28 日定“公开范围只按约法 L20 和分级表，不另立、不收紧”，且决定记录第 730 行说这个专题没有要删的字样。若 Claude 认为要删，删法是：原文屏删“没公开的纠纷材料、”和“或亲密”，最后一屏加一句说明，notes.dropped 改写。",
+    "分级表 L3 的举例原有一处涉及私人领域的字眼；本人 10 月 31 日定公开页不出现这类内容，原文屏按规则原文省略机制（scripts/rule_original_contract.py 的 TOPIC_OMISSIONS）略去，人话要点同步删去，活动规则本身不改。",
     "原文里唯一的 Markdown 链接 [用户授权](agents.authorization.md)（第 37 行）画成〔用户授权〕，链到 /rules/authorization/，看得见的字没变；按派活方的决定算一字不改。",
     "“开多久”：E190 原文改成“当前默认时长读密码中心的 duration_policy.default_minutes，不把程序出厂的 8 小时当成当前设置”，和 9 月 28 日读到的 24 小时不再矛盾；要点照新原文写，实例便签照旧写 24 小时（没有重新读密码中心）。",
     "开头一屏底部入口〔现在的资料状态 → 授权与状态〕链到 /computer-access/（第 2 批才做，没带锚点）。个人资料的锁开着还是关着、开到几点，最自然的家在“授权与状态”页；那页要不要显示资料状态、锚点叫什么，由第 2 批定。若嫌多余，整条横条删掉即可。已写进 batch2.md。",
@@ -291,8 +291,8 @@
  },
  "source": {
   "page": "sources/pages/rule-privacy-data/page.json",
-  "sha256": "fe8e9119329e6fe1a123b93ff39566e8fa6ef73bae11b1f295a74693a69e8070",
-  "converted_at_beijing": "2026-10-30T13:04:18+08:00"
+  "sha256": "aba43dca856963130ea7286ed4f569ae9a2806269a2a232c04fb2ddf24e403a5",
+  "converted_at_beijing": "2026-10-31T04:18:37+08:00"
  }
 }
 ---
@@ -2447,7 +2447,7 @@
 |---|---|---|
 | L1 | 非个人、虚构、匿名的内容，或本人已经主动公开、再公开也不加伤害的普通事实 | 不受个人数据的公开限制 |
 | L2 | 本人的普通资料：姓名、年龄、生日、性别、普通照片、城市、教育和工作经历、兴趣、普通公开账号、本人指定的公开联系方式；姓名、生日和履历放在一起仍是 L2 | 不设限，不能只因为是个人资料就审查、打码、删改、缩减、反复确认或保守过滤 |
-| L3 | 有正面证据表明公开后可能招来诈骗、信用或名誉或关系受损、持续骚扰、精准追踪的内容，如私人联系方式、精确住址、详细个人财务、没公开的纠纷材料、可预测的行踪；别人没公开的资料至少 L3 | 可以进入敏感性判断，但不自动拦下 |
+| L3 | 有正面证据表明公开后可能招来诈骗、信用或名誉或关系受损、持续骚扰、精准追踪的内容，如私人联系方式、精确住址、详细个人财务、可预测的行踪；别人没公开的资料至少 L3 | 可以进入敏感性判断，但不自动拦下 |
 | L4 | 可能造成严重人身、财产、身份或重大隐私伤害的内容，如身份证件、银行卡或账户、生物识别、实时精确位置、完整的健康或亲密信息、原始私人聊天，以及能用的密码、令牌、私钥、OAuth 私密内容、恢复码、Cookie；秘密和凭据至少 L4 | 能用的秘密明文不得公开；其他 L4 只按上级授权和领域边界发布必要的非秘密结果 |
 | L5 | 大规模多人数据、机构关键数据，或可能影响国家安全、公共利益、系统运行的重要数据；本人单条的自身数据一般不算 | 按对应的上级规则处理 |
 
@@ -2716,7 +2716,7 @@
    "file": "docs/contracts/agents.privacy-data.md",
    "release": "E325",
    "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
-   "public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
+   "public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
    "from": null,
    "to": "- **入口。**",
    "start": 0,
@@ -2747,7 +2747,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-07",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
+  "source_public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-07"
  },
  "layout": {
@@ -2757,7 +2757,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版，一字不改"
+     "text_ref": "原文·E325版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -2791,7 +2791,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版，一字不改"
+     "text_ref": "原文·E325版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -2873,7 +2873,7 @@
 }
 ```
 
-原文 · E325 版，一字不改
+原文 · E325 版，略去个别私人领域字句
 
 # 个人资料与数据处理
 
@@ -2904,7 +2904,7 @@ owner: `E:\.agents`
    "file": "docs/contracts/agents.privacy-data.md",
    "release": "E325",
    "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
-   "public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
+   "public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
    "from": "- **入口。**",
    "to": "## 公开个人数据分级表",
    "start": 1707,
@@ -2922,7 +2922,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-08",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
+  "source_public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-08"
  },
  "layout": {
@@ -3047,11 +3047,11 @@ owner: `E:\.agents`
    "file": "docs/contracts/agents.privacy-data.md",
    "release": "E325",
    "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
-   "public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
+   "public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
    "from": "## 公开个人数据分级表",
    "to": "## 私人仓库收口",
    "start": 3400,
-   "end": 4595,
+   "end": 4586,
    "approved_omissions": []
   },
   "title": "原文（三）：公开个人数据分级表",
@@ -3070,7 +3070,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-09",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
+  "source_public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-09"
  },
  "layout": {
@@ -3217,7 +3217,7 @@ owner: `E:\.agents`
 |---|---|---|
 | L1 | 非个人、虚构、匿名，或本人已经主动公开、再公开一次也不增加伤害的普通事实。 | 不受个人数据公开限制。 |
 | L2 | 本人的普通资料：姓名、年龄、生日、性别、普通照片、城市、教育和工作经历、兴趣、普通公开账号或本人指定的公开联系方式。姓名、生日和普通履历放在一起仍是 L2。 | 不设限：不能只因为是个人资料就审查、脱敏、删改、缩减、反复确认或保守过滤。 |
-| L3 | 有正面证据表明公开后可能造成诈骗、信用或名誉或关系损害、持续骚扰或精准追踪的内容，如私人联系方式、精确住址、详细个人财务、没公开的纠纷材料、可预测的行踪。别人没公开的资料至少 L3。 | 可以进入敏感性判断，但不自动拦下。 |
+| L3 | 有正面证据表明公开后可能造成诈骗、信用或名誉或关系损害、持续骚扰或精准追踪的内容，如私人联系方式、精确住址、详细个人财务、可预测的行踪。别人没公开的资料至少 L3。 | 可以进入敏感性判断，但不自动拦下。 |
 | L4 | 可能造成严重人身、财产、身份或重大隐私伤害的内容，如身份证件、银行卡或账户、生物识别、实时精确位置、完整的健康或亲密信息、原始私人聊天、能用的密码、令牌、私钥、OAuth 私密内容、恢复码、Cookie。秘密和凭据至少 L4。 | 能用的秘密明文不得公开；其他 L4 只按上级授权和领域边界发布必要的非秘密结果。 |
 | L5 | 大规模多人数据、机构关键数据，或可能影响国家安全、公共利益、系统运行的重要数据。本人单条自身数据一般不适用。 | 按对应的上级规则处理。 |
 
@@ -3235,11 +3235,11 @@ owner: `E:\.agents`
    "file": "docs/contracts/agents.privacy-data.md",
    "release": "E325",
    "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
-   "public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
+   "public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
    "from": "## 私人仓库收口",
    "to": null,
-   "start": 4595,
-   "end": 5247,
+   "start": 4586,
+   "end": 5238,
    "approved_omissions": []
   },
   "title": "原文（四）：私人仓库收口、备份跟着原件走",
@@ -3253,7 +3253,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-10",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
+  "source_public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-10"
  },
  "layout": {

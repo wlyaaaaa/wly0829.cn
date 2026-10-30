@@ -24,17 +24,12 @@
   "kind": "project",
   "title": "反馈怎样留到下次",
   "url": "/projects/personal-expression/feedback-consolidation-and-lessons-sync/",
-  "parent": "personal-expression",
-  "status_line": {
-   "state": "在用",
-   "as_of": "2026-10-11",
-   "source": "来源仓库 cde9496（北京 10/21 15:36）的反馈流程；9/29、10/3 有真实指南入库，6 项虚构回归保留 9/22 原日期"
-  }
+  "parent": "personal-expression"
  },
  "source": {
   "page": "sources/pages/personal-expression-feedback-consolidation-and-lessons-sync/page.json",
-  "sha256": "e41e5ea9be39d8d5c6d2d8d45ef926b554344b7a500001f99c0f450cd2d80225",
-  "converted_at_beijing": "2026-10-22T08:32:33+08:00"
+  "sha256": "4bde6f1c32990a616dbd2bb9238b42842d18767b2f51af22e987df2d0d990815",
+  "converted_at_beijing": "2026-10-31T04:34:16+08:00"
  }
 }
 ---
@@ -76,18 +71,6 @@
      "row_fit_illustration": true
     },
     {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "在用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 cde9496（北京 10/21 15:36）的反馈流程；9/29、10/3 有真实指南入库，6 项虚构回归保留 9/22 原日期",
-     "row": "top"
-    },
-    {
      "type": "action_button",
      "text_ref": "〔回到项目 → 个人表达〕　〔复制 AI 续作说明〕",
      "row": "top",
@@ -121,17 +104,6 @@
      "text_ref": "反馈怎样留到下次",
      "align": "left",
      "size": "large"
-    },
-    {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "在用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 cde9496（北京 10/21 15:36）的反馈流程；9/29、10/3 有真实指南入库，6 项虚构回归保留 9/22 原日期"
     },
     {
      "type": "action_button",
@@ -174,7 +146,7 @@
 
 〔回到项目 → 个人表达〕　〔复制 AI 续作说明〕
 
-个人表达与沟通支持 · 功能说明
+个人表达与沟通支持 · 功能说明 · 已存档：10 月 31 日起项目不再维护，下面是存档前的样子
 
 让明确而有价值的表达纠正能够在以后读取资料时用上，减少反复解释同一问题。
 

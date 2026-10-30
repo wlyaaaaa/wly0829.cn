@@ -124,7 +124,6 @@
      "screen": "skills-home-03",
      "members": [
       "/skills/daily-preferences/",
-      "/skills/explain-to-me/",
       "/skills/report-page/",
       "/skills/reply-as-me/"
      ]
@@ -182,8 +181,8 @@
      "id": "n-skills",
      "text": "29 个技能",
      "meaning": "网站上有技能页的技能数",
-     "as_of": "2026-10-22",
-     "source": "本仓库 sources/pages/*/page.json 的 kind=skill 实取 29 个；含新增 Word 文档和 PDF 读写和表单，两页为 Codex 自带插件；去向页不计入。与受管共享技能安装数分开。",
+     "as_of": "2026-10-31",
+     "source": "本仓库 sources/pages/*/page.json 的 kind=skill 实取 29 个；含新增 Word 文档和 PDF 读写和表单，两页为 Codex 自带插件；去向页不计入。与受管共享技能安装数分开。；10 月 31 日讲给我听（explain-to-me）随个人表达存档删除，改为去向页，现为 29 个。",
      "screens": [
       "skills-home-01"
      ]
@@ -200,10 +199,10 @@
     },
     {
      "id": "n-entry",
-     "text": "18 个",
+     "text": "17 个",
      "meaning": "是某个项目入口的技能数（卡上带“属于”标签）",
-     "as_of": "2026-10-10",
-     "source": "本页卡片带“属于”的个数；新增的看驾驶舱不是项目入口（驾驶舱是网站自己的页），仍为 18",
+     "as_of": "2026-10-31",
+     "source": "本页卡片带“属于”的个数；10 月 31 日个人表达存档，讲给我听删除、替我拟消息不再标“属于”，现为 17",
      "screens": [
       "skills-home-01"
      ]
@@ -251,20 +250,6 @@
      "direction": "入口",
      "flow": "技能“记得我是谁”是项目“个人理解库”的入口",
      "source": "b1\\skill-daily-preferences\\page.json 的 abilities 屏链接"
-    },
-    {
-     "id": "r-explain-to-me-entry",
-     "with": "personal-expression",
-     "direction": "入口",
-     "flow": "技能“讲给我听”是项目“个人表达”的入口",
-     "source": "b1\\skill-explain-to-me\\page.json 的 abilities 屏链接"
-    },
-    {
-     "id": "r-reply-as-me-entry",
-     "with": "personal-expression",
-     "direction": "入口",
-     "flow": "技能“替我拟消息”是项目“个人表达”的入口",
-     "source": "b1\\skill-reply-as-me\\page.json 的 abilities 屏链接"
     },
     {
      "id": "r-learning-entry",
@@ -435,16 +420,6 @@
      "text": "属于：个人理解库"
     },
     {
-     "target": "/skills/explain-to-me/",
-     "screen": "skills-home-03",
-     "text": "讲给我听"
-    },
-    {
-     "target": "/projects/personal-expression/",
-     "screen": "skills-home-03",
-     "text": "属于：个人表达"
-    },
-    {
      "target": "/skills/report-page/",
      "screen": "skills-home-03",
      "text": "汇报网页"
@@ -599,8 +574,8 @@
  },
  "source": {
   "page": "sources/pages/skills-home/page.json",
-  "sha256": "27b651c33cae8cafdd403967b6118f0677441ad61c84e964f341cfd9f0228627",
-  "converted_at_beijing": "2026-10-30T13:04:19+08:00"
+  "sha256": "16797568ee61516e1771d44a0ea08009417c66e542435e0a3711ae6f7e8f1104",
+  "converted_at_beijing": "2026-10-31T04:31:33+08:00"
  }
 }
 ---
@@ -684,7 +659,7 @@
      "connector": "none",
      "row": "summary",
      "width": "48%",
-     "text_ref": "30个技能",
+     "text_ref": "29 个技能",
      "row_equal_height": true
     },
     {
@@ -759,7 +734,7 @@
       "_library/hires-icons/打勾清单.png"
      ],
      "connector": "none",
-     "text_ref": "30个技能"
+     "text_ref": "29 个技能"
     },
     {
      "type": "content_card",
@@ -898,9 +873,9 @@
 
 **怎么用**：直接跟 AI 说要办的事，AI 自己挑用哪个技能，不用记名字。
 
-**30 个技能**　截至 10 月 30 日，按用途分 7 组。
+**29 个技能**　截至 10 月 31 日，按用途分 7 组。
 
-卡片右下角带“属于：项目名”的 19 个，是某个项目的入口：它能做的事全列在那个项目页，技能页只讲怎么跟 AI 说、例子和边界。
+卡片右下角带“属于：项目名”的 17 个，是某个项目的入口：它能做的事全列在那个项目页，技能页只讲怎么跟 AI 说、例子和边界。
 
 技能怎么写、怎么装到 Codex 和 Claude，在“AI 规则与技能基座”项目里讲。〔技能怎么装到各个 AI → 基座〕
 
@@ -1448,14 +1423,6 @@
     "href": "/projects/daily-preferences/"
    },
    {
-    "text": "讲给我听",
-    "href": "/skills/explain-to-me/"
-   },
-   {
-    "text": "属于：个人表达",
-    "href": "/projects/personal-expression/"
-   },
-   {
     "text": "汇报网页",
     "href": "/skills/report-page/"
    },
@@ -1504,10 +1471,6 @@
    {
     "id": "skill-daily-preferences",
     "text": "记得我是谁"
-   },
-   {
-    "id": "skill-explain-to-me",
-    "text": "讲给我听"
    },
    {
     "id": "skill-report-page",
@@ -1838,9 +1801,8 @@
 **了解我、跟我说清楚**　AI 怎么记住我、怎么跟我讲、怎么替我写。
 
 - 〔记得我是谁〕带着对我的了解回答，说错了一纠正就改。　〔属于：个人理解库〕
-- 〔讲给我听〕AI 向我说明时照同一本手册讲，讲到我一遍就懂。　〔属于：个人表达〕
 - 〔汇报网页〕汇报、裁定和长回答做成网页，点选就能答复；别的回答合适时也能用。
-- 〔替我拟消息〕意思我定，AI 看发给谁、什么关系，写得自然。　〔属于：个人表达〕
+- 〔替我拟消息〕意思我定，AI 看发给谁、什么关系，写得自然。
 
 **学习、工作和生活**　学东西、办工作上的事、写正式文书、问健康，各按一套固定做法办。
 

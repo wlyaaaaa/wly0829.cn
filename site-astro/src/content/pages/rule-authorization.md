@@ -36,7 +36,7 @@
    "activated_at": "2026-10-30T04:20:33.726689+08:00",
    "file": "sources/rules/docs/contracts/agents.authorization.md",
    "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af",
-   "public_sha256": "7d8b62328ce1f8bef36a01bf5acfc4877a0db878c3082eb7299d69335ece66eb"
+   "public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小路起点的 AI 助手抱着文件轻快走几步，“直接做”木牌旁的草叶轻轻摇；栅栏门前的信封、硬币和小木箱静静排着，门边的人影抬手，栅栏门缓缓打开一条缝又合上；木桩上的绿色通行证随风轻摆；小桌上的沙漏翻转一次、细沙往下流，旁边的金色钥匙闪一下光；右上角两扇小窗户里亮起柔和的光，中间的绿色盾牌徽章轻轻呼吸；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -237,8 +237,8 @@
  },
  "source": {
   "page": "sources/pages/rule-authorization/page.json",
-  "sha256": "1ba6ccb76a7150e0c27b2894ca5ee15f20e6b8f897468968ba776b72c7b49e10",
-  "converted_at_beijing": "2026-10-30T13:04:18+08:00"
+  "sha256": "2e8346ff2f41509e619fa97f32ff2a56446c6df940bb8b4891762b9b6079d312",
+  "converted_at_beijing": "2026-10-31T04:18:38+08:00"
  }
 }
 ---
@@ -1557,11 +1557,11 @@
    "file": "docs/contracts/agents.authorization.md",
    "release": "E325",
    "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af",
-   "public_sha256": "7d8b62328ce1f8bef36a01bf5acfc4877a0db878c3082eb7299d69335ece66eb",
+   "public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
    "from": null,
    "to": "## 子代理和项目规则不扩大授权",
    "start": 0,
-   "end": 3230,
+   "end": 3195,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -1584,7 +1584,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-05",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "7d8b62328ce1f8bef36a01bf5acfc4877a0db878c3082eb7299d69335ece66eb",
+  "source_public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
   "source_rule_part": "rule-authorization/rule-authorization-05"
  },
  "layout": {
@@ -1592,7 +1592,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版，一字不改"
+     "text_ref": "原文·E325版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -1627,7 +1627,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版，一字不改"
+     "text_ref": "原文·E325版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -1721,7 +1721,7 @@
 }
 ```
 
-原文 · E325 版，一字不改
+原文 · E325 版，略去个别私人领域字句
 
 # 用户授权
 
@@ -1759,7 +1759,7 @@ owner: `E:\.agents`
 以下是 **AI 取法，可改**：
 
 - 这条长期授权只省掉“为协议问本人”这一步，不扩大事情本身的授权；上传、发布、登录、安装等动作仍须在原有授权范围内。
-- 付费订阅、自动续费、付款、借贷仍按约法 L15；案件里的调解、和解、撤诉、放弃请求仍按诉讼规则（默认不同意诉前调解）；约法 L17 的重大动作仍按[重大动作与本人验证](/rules/protected-actions/)。不因为页面把这些动作写成“协议”就直接同意。Cookie 弹窗沿用现有默认处理，不为它问本人。
+- 付费订阅、自动续费、付款、借贷仍按约法 L15；约法 L17 的重大动作仍按[重大动作与本人验证](/rules/protected-actions/)。不因为页面把这些动作写成“协议”就直接同意。Cookie 弹窗沿用现有默认处理，不为它问本人。
 - 派 GPT 做网站操作时，初次派单和续作都附上这条长期授权的现行结论及源消息 UUID，不附原句，并说清已授权的具体事情、网站或账号、涉及的内容；只附协议授权不能代替业务授权。共用包装器自动附上协议授权，主持补齐本次业务范围。
 - GPT 若仍说工具要求“当场确认”，按下面“根会话代确认的执行办法”由根会话代本人确认，不再问本人。GPT 对照当前工具的确认文档区分协议同意与同时发生的其他动作，不沿用旧工具的笼统说法。
 
@@ -1783,11 +1783,11 @@ owner: `E:\.agents`
    "file": "docs/contracts/agents.authorization.md",
    "release": "E325",
    "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af",
-   "public_sha256": "7d8b62328ce1f8bef36a01bf5acfc4877a0db878c3082eb7299d69335ece66eb",
+   "public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
    "from": "## 子代理和项目规则不扩大授权",
    "to": "## 受信任的 AI",
-   "start": 3230,
-   "end": 4536,
+   "start": 3195,
+   "end": 4501,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1818,7 +1818,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-06",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "7d8b62328ce1f8bef36a01bf5acfc4877a0db878c3082eb7299d69335ece66eb",
+  "source_public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
   "source_rule_part": "rule-authorization/rule-authorization-06"
  },
  "layout": {
@@ -1968,11 +1968,11 @@ owner: `E:\.agents`
    "file": "docs/contracts/agents.authorization.md",
    "release": "E325",
    "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af",
-   "public_sha256": "7d8b62328ce1f8bef36a01bf5acfc4877a0db878c3082eb7299d69335ece66eb",
+   "public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
    "from": "## 受信任的 AI",
    "to": null,
-   "start": 4536,
-   "end": 5201,
+   "start": 4501,
+   "end": 5166,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -1991,7 +1991,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-07",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "7d8b62328ce1f8bef36a01bf5acfc4877a0db878c3082eb7299d69335ece66eb",
+  "source_public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
   "source_rule_part": "rule-authorization/rule-authorization-07"
  },
  "layout": {

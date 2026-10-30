@@ -24,17 +24,12 @@
   "kind": "project",
   "title": "补充参考与私有恢复",
   "url": "/projects/personal-expression/corpus-extension-and-private-recovery/",
-  "parent": "personal-expression",
-  "status_line": {
-   "state": "在用",
-   "as_of": "2026-10-11",
-   "source": "来源仓库 cde9496（北京 10/21 15:36）；10/21 补入 33 条本人样本（共 78 条），10/20 起快照比较也报出整份不见的现役文件；没有换机或还原，历史测试保留 9/22 原日期"
-  }
+  "parent": "personal-expression"
  },
  "source": {
   "page": "sources/pages/personal-expression-corpus-extension-and-private-recovery/page.json",
-  "sha256": "240a02d7e5f51c1245959c10a85b3fa88248cbf6584cfc2a5e40ec767889bca5",
-  "converted_at_beijing": "2026-10-22T08:32:33+08:00"
+  "sha256": "af99ab0c753a0123e411982e8c5402da31f87f793a313fe1cf847d8f49c680d6",
+  "converted_at_beijing": "2026-10-31T04:34:16+08:00"
  }
 }
 ---
@@ -76,18 +71,6 @@
      "row_fit_illustration": true
     },
     {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "在用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 cde9496（北京 10/21 15:36）；10/21 补入 33 条本人样本（共 78 条），10/20 起快照比较也报出整份不见的现役文件；没有换机或还原，历史测试保留 9/22 原日期",
-     "row": "top"
-    },
-    {
      "type": "action_button",
      "text_ref": "〔回到项目 → 个人表达〕　〔复制 AI 续作说明〕",
      "row": "top",
@@ -121,17 +104,6 @@
      "text_ref": "补充参考与私有恢复",
      "align": "left",
      "size": "large"
-    },
-    {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "在用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 cde9496（北京 10/21 15:36）；10/21 补入 33 条本人样本（共 78 条），10/20 起快照比较也报出整份不见的现役文件；没有换机或还原，历史测试保留 9/22 原日期"
     },
     {
      "type": "action_button",
@@ -174,7 +146,7 @@
 
 〔回到项目 → 个人表达〕　〔复制 AI 续作说明〕
 
-个人表达与沟通支持 · 功能说明
+个人表达与沟通支持 · 功能说明 · 已存档：10 月 31 日起项目不再维护，下面是存档前的样子
 
 参考资料可以随真实需求继续生长，已经保存的教训也有明确的版本来源和恢复方法。
 
