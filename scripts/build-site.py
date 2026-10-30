@@ -153,7 +153,7 @@ def retained_inputs(name, snapshot):
     paths = [html, SITE / 'src/retained-page.ts',
         SITE / 'src/pages' / ('index.astro' if name == 'home' else name + '/index.astro')]
     if name == 'computer-access':
-        paths += [SITE / 'src/styles/access-fixes.css', SITE / 'src/scripts/access-bird.js',
+        paths += [SITE / 'src/styles/access-fixes.css', SITE / 'src/scripts/access-bird.js', SITE / 'src/chrome/living-engine.json',
             ROOT / 'app/computer-access-model.js', ROOT / 'scripts/b2-live-runtime.js',
             ROOT / 'scripts/update-live-release.py', ROOT / 'scripts/prepare-cockpit-cache.py',
             SITE / 'tools/computer_access_native.py']

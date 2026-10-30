@@ -45,6 +45,13 @@ for old, new in TIMING_PATCHES:
     if fixed.count(old) != 1:
         sys.exit("找不到唯一的普通页计时保护入口：" + old)
     fixed = fixed.replace(old, new)
+# 只有首页插画跟着昼夜变（首页用自己的动画，不走这个引擎）；其他页的插画一律按白天正午画：
+# 天色不调、灯和屏幕夜里不加亮、小鸟不睡（本人 2026-10-31）。setHour 调试入口照旧能看别的时刻。
+# 仓库源码 src/runtime/living/src/living.js 的 hzHour 不改：那份源码也是首页包的来源。
+OLD_HOUR = 'function Mt(){const e=new Date(Date.now()+288e5);return e.getUTCHours()+e.getUTCMinutes()/60+e.getUTCSeconds()/3600}'
+if fixed.count(OLD_HOUR) != 1:
+    sys.exit("找不到唯一的北京时间钟点入口")
+fixed = fixed.replace(OLD_HOUR, 'function Mt(){return 12}')
 # 读页小鸟只改停靠点的 DOM 适配；飞行、精灵图、停留节奏和旧页分支原样保留。
 bird_src = os.path.join(ENG, "bird.fffa187360")
 bird = open(os.path.join(bird_src, "bird.js"), encoding="utf-8").read()

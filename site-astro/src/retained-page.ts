@@ -7,7 +7,7 @@ import motionRuntime from '../public/_living/quality-runtime/manifest.json';
 import typesetStyles from './styles/typeset-page.css?raw';
 import accessFixes from './styles/access-fixes.css?raw';
 import accessBird from './scripts/access-bird.js?raw';
-import accessLedger from '../sources/retained-home-cockpit/dependencies.json';
+import livingEngine from './chrome/living-engine.json';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
@@ -15,16 +15,14 @@ import { resolve } from 'node:path';
 export function retainedPage(page: 'home' | 'computer-access') {
   const activate = (document: string) => document.replace('</head>', '<script src="/_live/site-live-runtime.js" defer></script></head>')
     .replace(/<script\b[^>]*\bdata-src="[^"]*b2-(?:typeset|live)-[^"/]+\.js"[^>]*>/g, tag => tag.replace(/\sdata-album-runtime\b/g, '').replace('data-src=', 'src='));
-  // 授权页首屏小鸟用旧动效引擎同一份 LivingBird 资源；目录名从引擎里读，不写死。
+  // 授权页插画和别的内容页一样用修正版引擎（固定白天，只有首页跟昼夜变）；首屏小鸟用同一份 LivingBird 资源，目录名从引擎里读，不写死。
   const accessBirdTag = () => {
-    const engine = access.match(/\/_living\/_engine\/(living\.[0-9a-f]+\.js)/)![1];
-    const row = (accessLedger as Record<string, any>)['_living/_engine/' + engine];
-    const folder = readFileSync(resolve(process.cwd(), '..', row.source_path), 'utf8').match(/\b[\w$]+="(bird\.[a-f0-9]+\/)"/)?.[1];
+    const folder = readFileSync(resolve(process.cwd(), 'public/_living/_engine', livingEngine.fixed), 'utf8').match(/\b[\w$]+="(bird\.[a-f0-9]+\/)"/)?.[1];
     if (!folder) throw new Error('授权页小鸟资源目录未登记');
     const data = JSON.stringify({ script: `/_living/_engine/${folder}bird.js`, atlas: `/_living/_engine/${folder}bird-atlas.webp` }).replace(/"/g, '&quot;');
     return `<script data-access-bird data-bird="${data}">${accessBird}</script>`;
   };
-  if (page === 'computer-access') return activate(access).replace('</head>', `<link rel="stylesheet" href="/_interactions/anchor-offset.css"><style data-access-fixes>${accessFixes}</style></head>`)
+  if (page === 'computer-access') return activate(access).replace(`/_living/_engine/${livingEngine.deployed}`, `/_living/_engine/${livingEngine.fixed}`).replace('</head>', `<link rel="stylesheet" href="/_interactions/anchor-offset.css"><style data-access-fixes>${accessFixes}</style></head>`)
     // 第 2 步三项真正互斥：“同时办理”开着时点单项，先关掉同时办理再选该项；只动“选哪项”的界面状态，提交和办理流程不变。
     .replace('</body>', `<script data-access-exclusive>document.addEventListener('click',e=>{const b=e.target instanceof Element&&e.target.closest('button[data-b2-action^="purpose-"]');if(!b)return;const c=document.querySelector('button[data-b2-action="combined"][data-selected="true"]');if(c&&!c.disabled)c.click();},true);</script></body>`)
     .replace('</body>', '<script src="/_interactions/anchor-offset.js" defer></script></body>')
