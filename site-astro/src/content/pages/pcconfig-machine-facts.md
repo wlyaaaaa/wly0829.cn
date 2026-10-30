@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig-machine-facts/page.json",
-  "sha256": "89ad276efbee0e9f35fecce2880bd91817ffae22e864874e12bf41bfacf5116f",
-  "converted_at_beijing": "2026-10-23T08:10:04+08:00"
+  "sha256": "d30fd67f21eb0f6b0066561b8d5ec6abad2d3d0357465e496d615d3fc1f8a325",
+  "converted_at_beijing": "2026-10-30T14:00:57+08:00"
  }
 }
 ---
@@ -600,7 +600,7 @@ PCConfig · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-路径、端口与项目配置查询在用：55 份 Registry、132 个配置键；配置键只保存当前导航值与来源；稳定投影发布器、开发存储健康器和 TimeAudit 增量消费者已于 2026-09-28 删除，没有发布替代的新版投影。
+路径、端口与项目配置查询在用：61 份 Registry、138 个配置键；配置键只保存当前导航值与来源；稳定投影发布器、开发存储健康器和 TimeAudit 增量消费者已于 2026-09-28 删除，没有发布替代的新版投影。
 
 ::screen{#pcconfig-machine-facts-06 section="tech"}
 

@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-native-desktop-integration/page.json",
-  "sha256": "cf1de169ef0fb84c46bb9f16a1db336ad240ec9f53d2817a52e7b779d6041cd3",
-  "converted_at_beijing": "2026-10-30T13:04:15+08:00"
+  "sha256": "ec8308b0460544a8abaf69e81a603951808709c8449041f9aeccb3e7caa261d3",
+  "converted_at_beijing": "2026-10-30T14:00:56+08:00"
  }
 }
 ---
@@ -584,7 +584,7 @@ AI CLI Profile Manager · 功能说明
 
 - 官方debug models与实际模型目录一起提供完整指令、上下文、工具和模型身份；CODEX_CLI_PATH使用PCConfig登记的内容寻址发行，而不是另造聊天执行器。10 月 28 日起，桌面启动前的组织策略预检原样交给原生引擎处理，这一步不加载本工具的模型；之后常驻的桥服务再把官方动态目录与已配置的本工具模型完整合并。为了启动快，若暂存的引擎文件与一份已验证的官方来源逐个 SHA-256 一致，可以沿用那份来源的引擎版本，不一致就不沿用。
 
-- 桌面发行由GetDesktopModelPlan.ps1、GetDesktopProviderToken.ps1、ResolveDesktopEngine.ps1及bridge目录内AiCli.CodexDesktopBridge.deps.json、AiCli.CodexDesktopBridge.dll、AiCli.CodexDesktopBridge.exe、AiCli.CodexDesktopBridge.runtimeconfig.json七文件组成。此前读到的登记账本是 36 个版本（本轮没有重数）。源码在新桥启用成功后会清理能认出的旧发布，只留当前版、上一版和不能安全清理的目录，10 月 22 日本机 releases 目录现存 4 个；这是留存目录数，不是登记数，也不是累计构建数。10 月 30 日 11:11—11:15 只读桌面配置 desktop/state.json：接入 enabled，受管程序的发布目录是 a97016bff2f2576e，这份配置最后写于北京时间 10 月 28 日 11:55（updatedUtc 03:55:24Z）。启用登记已证实；当前开着的桌面进程是否已经换用它、七个文件的大小和 SHA-256 是否与登记一致、它带的原生引擎版本，本轮都没核对，目前无法证实。10 月 22 日读到的选中版本 ee35736204370d9b（配置写于 10 月 20 日 18:04）已被替换，当时也只核到配置和 exe 存在。10 月 11 日核对一致的是 10 月 3 日登记的 b47fea3ce81f7a67（桥里的原生 Codex 引擎为 0.162.0-alpha.17.2，npm 上的 Codex CLI 另为 0.160.0），那次结论只属于它。b25709497bb4d290、562b29bf4a6ac0af、3b7600a 只属各自历史。
+- 桌面发行由GetDesktopModelPlan.ps1、GetDesktopProviderToken.ps1、ResolveDesktopEngine.ps1及bridge目录内AiCli.CodexDesktopBridge.deps.json、AiCli.CodexDesktopBridge.dll、AiCli.CodexDesktopBridge.exe、AiCli.CodexDesktopBridge.runtimeconfig.json七文件组成。此前读到的登记账本是 36 个版本（本轮没有重数）。源码在新桥启用成功后会清理能认出的旧发布，只留当前版、上一版和不能安全清理的目录，10 月 30 日 11:06 本机 releases 目录现存 3 个；这是留存目录数，不是登记数，也不是累计构建数。10 月 30 日 11:11—11:15 只读桌面配置 desktop/state.json：接入 enabled，受管程序的发布目录是 a97016bff2f2576e，这份配置最后写于北京时间 10 月 28 日 11:55（updatedUtc 03:55:24Z）。启用登记已证实；当前开着的桌面进程是否已经换用它、七个文件的大小和 SHA-256 是否与登记一致、它带的原生引擎版本，本轮都没核对，目前无法证实。10 月 22 日读到的选中版本 ee35736204370d9b（配置写于 10 月 20 日 18:04）已被替换，当时也只核到配置和 exe 存在。10 月 11 日核对一致的是 10 月 3 日登记的 b47fea3ce81f7a67（桥里的原生 Codex 引擎为 0.162.0-alpha.17.2，npm 上的 Codex CLI 另为 0.160.0），那次结论只属于它。b25709497bb4d290、562b29bf4a6ac0af、3b7600a 只属各自历史。
 
 - 四种本地模型共用既有Broker（显卡协调器）与256K配置；GLM、Qwen、DeepSeek仍保留不同Provider/协议身份。旧配置不会悄悄指向另一模型，跨Provider创建新任务。10 月 2 日起，非 OpenAI 的受管模型会关闭厂商不支持的 token-budget 和 history-notes 功能，保留所选模型原来在 90% 时压缩的设置。
 

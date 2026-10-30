@@ -376,10 +376,10 @@
    "numbers": [
     {
      "id": "n-jobs",
-     "text": "11,491 次识别",
-     "meaning": "7 月 8 日–10 月 11 日 14:00 的识别次数；共 14,976 份材料、16,157 页。任务登记里完成的识别，去掉项目自带样例、冒烟测试和 8 月 18 日开发时的空白测试图；材料按原件指纹去重；页数累加；命中缓存不新增记录",
+     "text": "11,491 份现存完成清单",
+     "meaning": "当前仍有必需输出的completed作业清单数；缺输出的旧缓存会退出，不能当作全历史识别累计",
      "as_of": "2026-10-30",
-     "source": "见来源记录 localocr-n-jobs-0，观察于 2026-10-30T11:07:28+08:00",
+     "source": "同轮collect localocr-n-jobs-0；2026-10-30T11:07:28+08:00只读缓存清单聚合，未运行OCR",
      "screens": [
       "localocr-01"
      ]
@@ -632,8 +632,8 @@
  },
  "source": {
   "page": "sources/pages/localocr/page.json",
-  "sha256": "846486da5cb7b1bbbeb02ceef87752383811530c51a5e9cd3c06cef385a63bb2",
-  "converted_at_beijing": "2026-10-30T13:04:16+08:00"
+  "sha256": "db8527b24c7340d0aa3045bc815d5a851a73e31de6a97f75b7211a9a4a47689d",
+  "converted_at_beijing": "2026-10-30T14:00:57+08:00"
  }
 }
 ---

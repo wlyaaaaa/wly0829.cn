@@ -35,7 +35,7 @@
         "columns": 4,
         "columns_v": 2,
         "icons": "auto",
-        "text_ref": "435段8月18日–10月10日"
+        "text_ref": "**912 段**｜8 月 18 日起"
       },
       {
         "type": "live_strip",
@@ -85,7 +85,7 @@
         "columns": 4,
         "columns_v": 2,
         "icons": "auto",
-        "text_ref": "435段8月18日–10月10日"
+        "text_ref": "**912 段**｜8 月 18 日起"
       },
       {
         "type": "live_strip",
@@ -1038,7 +1038,17 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "录音转文字","statuses": [null, null, null, null, null, null, "off", null]
+        "text_ref": "录音转文字",
+        "statuses": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "off",
+          null
+        ]
       }
     ],
     "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：和标杆页“全部功能”同一种卡片，但组名不单独占一列：每组先一行毛笔小标题（组名），下面该组的功能卡片按本组张数排满每一行：听写第 1–9 项排成 3+3+3；录音转文字第 10–17 项排成 4+4；行内卡片等高等距，不留空卡位；每张卡片左边一个小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（绿＝在用，黄＝待验收，灰＝没用过，浅灰＝说不准）。“｜”只是功能名和那句话的分隔，不画。三张图上下拼成一整段：画风、字号层级、组名和状态点统一；两列、三列、四列行按张数调整卡宽，每排等高等距、铺满画布，上下边都不画边框；这是第一张：顶上有标题（毛笔艺术字加绿色笔刷线）和图例，图例下一行小字说明两种状态的判定。图例四个圆点分别画成绿、黄、灰、浅灰。各卡状态：1 绿；2 绿；3 黄；4 绿；5 绿；6 绿；7 浅灰；8 浅灰；9 浅灰；10 绿；11 浅灰；12 绿；13 绿；14 绿；15 浅灰；16 浅灰；17 绿。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
@@ -1080,7 +1090,17 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "录音转文字","statuses": [null, null, null, null, null, null, "off", null]
+        "text_ref": "录音转文字",
+        "statuses": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "off",
+          null
+        ]
       }
     ],
     "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：同样的字，卡片改成一行一张，组名小标题照旧在每组上方；圆点仍在卡片右上角。三张竖图同样上下拼成一段。第一张顶上保留标题、图例和说明。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
@@ -1101,7 +1121,13 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "statuses": [null, null, null, null, "off"],
+        "statuses": [
+          null,
+          null,
+          null,
+          null,
+          "off"
+        ],
         "text_ref": "找出要回听的地方"
       },
       {
@@ -1130,7 +1156,13 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "statuses": [null, null, null, null, "off"],
+        "statuses": [
+          null,
+          null,
+          null,
+          null,
+          "off"
+        ],
         "text_ref": "找出要回听的地方"
       },
       {

@@ -1157,7 +1157,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "51个",
+        "text_ref": "**64 个**｜冻结的引用副本文件",
         "align": "left",
         "size": "medium",
         "columns": 4,
@@ -1204,7 +1204,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "51个",
+        "text_ref": "**64 个**｜冻结的引用副本文件",
         "align": "left",
         "size": "medium",
         "columns": 2,

@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/timeaudit-collection-pipeline/page.json",
-  "sha256": "a4e07af2a4b0ff2464429349b7b82f982efac82e5d997f9891e6b1ff012f1478",
-  "converted_at_beijing": "2026-10-22T08:32:41+08:00"
+  "sha256": "6a27b1b572e33dd51f2c12dc51f9c11aed47121832d94313075babb9e8be50c6",
+  "converted_at_beijing": "2026-10-30T14:00:59+08:00"
  }
 }
 ---
@@ -1001,7 +1001,7 @@ TimeAudit · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "runtime（运行环境）hardening与ingestresilience纳入001cee0的182项+11个子测试完整通过结果（2026-08-31，之后未重新运行；当前源码有345个以test",
+     "text_ref": "runtime（运行环境）hardening与ingestresilience纳入001cee0的182项+11个子测试完整通过结果（2026-08-31，之后未重新运行；当前源码有356个以test",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1018,7 +1018,7 @@ TimeAudit · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "runtime（运行环境）hardening与ingestresilience纳入001cee0的182项+11个子测试完整通过结果（2026-08-31，之后未重新运行；当前源码有345个以test",
+     "text_ref": "runtime（运行环境）hardening与ingestresilience纳入001cee0的182项+11个子测试完整通过结果（2026-08-31，之后未重新运行；当前源码有356个以test",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1044,7 +1044,7 @@ TimeAudit · 功能说明
 
 ## 如何验证
 
-- runtime（运行环境）hardening 与 ingest resilience 纳入 001cee0 的 182 项 + 11 个子测试完整通过结果（2026-08-31，之后未重新运行；当前源码有 345 个以 test_ 开头的测试函数，这次没有运行）。
+- runtime（运行环境）hardening 与 ingest resilience 纳入 001cee0 的 182 项 + 11 个子测试完整通过结果（2026-08-31，之后未重新运行；当前源码有 356 个以 test_ 开头的测试函数，这次没有运行）。
 
 - 2026-10-12 05:36 只读汇总 05:21:10—05:36:10（15 分钟）：900 条硬件样本（900 个不同秒）、单一采集实例、0 条快速样本，最大间隔 1.033 秒；状态区间覆盖 899 秒、未覆盖 1 秒，采集空档 0、跨状态重叠 0。10 月 11 日 23:54 汇总的 22:00—23:00 为 3600 条、最大间隔 1.069 秒，16:33 汇总的 13:00—14:00 曾有 95 秒明确采集空档，均保留为历史。
 

@@ -42,7 +42,7 @@
    },
    "facts": [],
    "as_of": "2026-10-30",
-   "source": "技能和电脑配置与恢复的提交记录；使用次数 Unknown（AI 使用小记录只记到 10 月 20 日，技能 10 月 21 日才建）"
+   "source": "状态分类沿用既有说明，本轮只重读调用记录。“上次更新”2026-10-28 02:08来自本轮2026-10-30只读的技能与电脑配置已发布提交元数据，是源码更新事件，不是使用事件。使用次数本轮未取得同口径新记录，使用统计的窗口起点和覆盖末日均为Unknown；不再沿用“账本只记到10月20日、技能10月21日才建”作为当前结论。"
   },
   "public": false,
   "repo_url": null,
@@ -147,8 +147,8 @@
  },
  "source": {
   "page": "sources/pages/skill-phone-direct/page.json",
-  "sha256": "9b6a5bb0653e95d619040608be5ba656bc5c736129a40d26bfc449dcdd971867",
-  "converted_at_beijing": "2026-10-30T13:04:19+08:00"
+  "sha256": "89818077eb8daf9711ec194c8ceb9713aa1c39510d782c1fd20d45fe653ea361",
+  "converted_at_beijing": "2026-10-30T14:00:59+08:00"
  }
 }
 ---
@@ -196,7 +196,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · 技能和电脑配置与恢复的提交记录；使用次数 Unknown（AI 使用小记录只记到 10 月 20 日，技能 10 月 21 日才建）",
+     "static_note": "截至 10 月 30 日 · 状态分类沿用既有说明，本轮只重读调用记录。“上次更新”2026-10-28 02:08来自本轮2026-10-30只读的技能与电脑配置已发布提交元数据，是源码更新事件，不是使用事件。使用次数本轮未取得同口径新记录，使用统计的窗口起点和覆盖末日均为Unknown；不再沿用“账本只记到10月20日、技能10月21日才建”作为当前结论。",
      "row": "hero"
     },
     {
@@ -259,7 +259,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · 技能和电脑配置与恢复的提交记录；使用次数 Unknown（AI 使用小记录只记到 10 月 20 日，技能 10 月 21 日才建）"
+     "static_note": "截至 10 月 30 日 · 状态分类沿用既有说明，本轮只重读调用记录。“上次更新”2026-10-28 02:08来自本轮2026-10-30只读的技能与电脑配置已发布提交元数据，是源码更新事件，不是使用事件。使用次数本轮未取得同口径新记录，使用统计的窗口起点和覆盖末日均为Unknown；不再沿用“账本只记到10月20日、技能10月21日才建”作为当前结论。"
     },
     {
      "type": "prose",
@@ -1041,7 +1041,7 @@ AI：“电脑在家里的网络上找不到手机。你在外面的话，把手
 
 这里保留入口、子命令、输出、退出码、连接和核对的实现。
 
-**10 月 22 日核对**　技能 E:\.agents\skills\phone-direct\SKILL.md（.agents 0348800d，北京时间 10 月 21 日 21:13）；入口脚本 E:\PCConfig\tools\phone_direct.py（PCConfig 7df54f9b，同日 21:13），运行说明 docs/runtime/phone-direct.md，配置 registries/phone_direct.json；合成测试 tools/test_phone_direct.py 共 25 个测试函数，这次没有重跑。复用常驻无线 ADB 手机桥（tools/phone_bridge.py，计划任务 PCConfig Phone Bridge）的共用连接，没有为它新增服务、MCP 或计划任务。
+**10 月 22 日核对**　技能 E:\.agents\skills\phone-direct\SKILL.md（.agents 0348800d，北京时间 10 月 21 日 21:13）；入口脚本 E:\PCConfig\tools\phone_direct.py（PCConfig 7df54f9b，同日 21:13），运行说明 docs/runtime/phone-direct.md，配置 registries/phone_direct.json；合成测试 tools/test_phone_direct.py 共 29 个测试函数，这次没有重跑。复用常驻无线 ADB 手机桥（tools/phone_bridge.py，计划任务 PCConfig Phone Bridge）的共用连接，没有为它新增服务、MCP 或计划任务。
 
 ## 入口和子命令
 

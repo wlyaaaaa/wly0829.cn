@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/chinese-asr-audit-evidence/page.json",
-  "sha256": "12606c33b6a6fea782071c032874fb132dbff350e62b774c0f1772d773c41b6f",
-  "converted_at_beijing": "2026-10-22T08:32:27+08:00"
+  "sha256": "ce13b4b1be954f656ebcca7762637ee3bb967f058f8069955f230e14c8d85fdd",
+  "converted_at_beijing": "2026-10-30T14:00:56+08:00"
  }
 }
 ---
@@ -1310,7 +1310,7 @@ ChineseASR · 功能说明
 
 - audit、risk rules、audio outcome、result writer 和 metadata（元数据） 单元测试包含在2026-08-31 的 345 项通过结果中；之后另有 9 月 17 日运行 482 项（1 跳过）、9 月 24 日运行 495 项（1 跳过）、9 月 29 日运行 531 项（20 跳过）的具名历史记录，各自保留日期，不合并成一次新的全量通过。
 
-- strict writer 与 benchmark 测试覆盖成品文件名、两路 raw、review 投影、静音出字、空文本、partial coverage、回执损坏、模型失败和 truth 对齐。10 月 11 日的繁简改动新增 4 个测试定义（test_text_normalizer 2 个、test_audit 2 个，另改 1 个旧测试预期）；当前共 564 个测试定义，这只是静态计数，本轮没有执行。
+- strict writer 与 benchmark 测试覆盖成品文件名、两路 raw、review 投影、静音出字、空文本、partial coverage、回执损坏、模型失败和 truth 对齐。10 月 11 日的繁简改动新增 4 个测试定义（test_text_normalizer 2 个、test_audit 2 个，另改 1 个旧测试预期）；当前共 572 个测试定义，这只是静态计数，本轮没有执行。
 
 - test_arbitration.py 与 test_config.py 覆盖默认关闭、Ollama 主模型 qwen-main-v1:latest、fallback（后备路线） qwen3.6-27b-256k:latest、结构化请求、`uncertain_only`、`keep_alive=0`、有效 JSON 解析和无效响应回退；本轮没有调用真实 Ollama 模型。
 
