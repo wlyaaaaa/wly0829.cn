@@ -151,6 +151,8 @@ python tools/rule_article_check.py <现在网站构建目录> rules.json        
 
 区块库排好的实时位（`[data-hot="live"][data-href=<键>]`）由 `src/scripts/live-dom.js` 填（排版时复制到 `/_living/live-dom.js`）：借现在网站运行件对外的 `SiteLiveRuntime.readStatus / parse` 取数（授权与状态、连接电脑两页借 `SiteB2`），一分钟一次，切回页面时立刻读。读不到时照驾驶舱的做法：页面上只说一次“暂时读不到电脑，保留最后一次读到的状态（北京时间）”，实时位显示上次读到的值、整体变淡；从没读到过就安静占位，不出“读不到”；读到后自动恢复。上次读到的值只在真正读到时存（浏览器本地 `site-live-dom:v1:<页>`）。实时位放在哪一屏都一样填，挪到首屏标题下的状态行也不用改脚本。
 
+`SiteLiveRuntime.readStatus`（源文件 `scripts/site-live-runtime.js`，首页、卡顿页、各项目页和授权页共用）同时问 `live.wly0829.cn` 和 `mcp.wly0829.cn` 两个入口，先拿到有效、没过期数据的那路就用，其余当场取消；一轮最多等 8 秒（本机预览只走 `/__status`，16 秒），整轮失败照旧最多再试两次，4xx 不重试。授权页在 wly0829.cn 上读状态也走它；解锁、授权、锁定等提交请求仍只发给 `mcp.wly0829.cn`。授权页办理区的按钮在还没读到状态、读不到电脑或本机预览时整组是灰的，原因写在第 2 步那行后面（验证按钮的原因写在它下面那行），按钮上同时带 `title` 和 `data-disabled-reason`。
+
 ## 唯一构建入口与回执
 
 在仓库根运行 `npm run build`。内部只有 `scripts/build-site.py` 一条链，输出完整 `dist`；`site-astro` 的 npm 命令只转发到根入口。`npm run dev -- --host 127.0.0.1 --port 4321` 先走同一构建，再用 `tools/preview_site.py` 预览同一目录，包含冻结页和三个关键页。

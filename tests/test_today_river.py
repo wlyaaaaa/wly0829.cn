@@ -68,8 +68,8 @@ vm.runInNewContext(fs.readFileSync('scripts/site-live-runtime.js','utf8'),sandbo
 (async()=>{const read=sandbox.module.exports.readStatus;
  await read(undefined,false,false);timeout=false;await read(undefined,false,false);expired=true;
  assert.equal((await read(undefined,false,false)).automation.state,'unavailable');await read(undefined,false,true);await read(undefined,false,false);
- assert.deepEqual(requests.map(x=>x.includes('live.wly')?'live':x.includes('mcp.wly')?'mcp':x),['live','mcp','mcp','mcp','live','/__status','live']);
- const signal=AbortSignal.abort();await assert.rejects(read(signal,false,false));assert.equal(requests.length,7);process.stdout.write(JSON.stringify({mock:true,timeout_path:true,requests}));
+ assert.deepEqual(requests.map(x=>x.includes('live.wly')?'live':x.includes('mcp.wly')?'mcp':x),['live','mcp','live','mcp','live','mcp','/__status','live','mcp']);
+ const signal=AbortSignal.abort();await assert.rejects(read(signal,false,false));assert.equal(requests.length,9);process.stdout.write(JSON.stringify({mock:true,timeout_path:true,requests}));
 })().catch(error=>{console.error(error);process.exitCode=1;});
 """
     readback=subprocess.run(['node','-'],input=reader,text=True,capture_output=True,check=True,cwd=ROOT)

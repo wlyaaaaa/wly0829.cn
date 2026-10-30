@@ -498,7 +498,7 @@
 #computer-access-02.o3-ready input.b2-slot { width: auto !important; height: 46px !important; box-sizing: border-box; padding: 0 14px; border: 2px solid #b9dcc6; border-radius: 10px; background: #fff; font-size: 18px !important; color: #1d3b2a; letter-spacing: .08em; }
 #computer-access-02.o3-ready input.b2-slot:focus { outline: none; border-color: #1f8a4c; box-shadow: 0 0 0 3px #cdeed8; }
 #computer-access-02 .o3-why2 { grid-column: 1 / 9; grid-row: 12; margin: 4px 0 0 42px; font-size: 14px; color: #8a6a1c; min-height: 1.4em; }
-#computer-access-02 .o3-why2:not(:empty)::before { content: "●"; margin-right: 6px; color: #e0a400; font-size: 10px; vertical-align: 2px; }
+#computer-access-02 .o3-wait { flex: 0 1 auto; min-width: 0; font-style: normal; font-size: 14px; line-height: 1.5; color: #8a6a1c; } #computer-access-02 .o3-wait:empty { display: none; } #computer-access-02 .o3-why2:not(:empty)::before { content: "●"; margin-right: 6px; color: #e0a400; font-size: 10px; vertical-align: 2px; }
 #computer-access-02.o3-ready [data-b2-slot="ca-form"] { grid-column: 9 / 13; grid-row: 2 / 7; align-self: start; width: auto !important; margin-top: 14px; }
 #computer-access-02 .o3-tips { grid-column: 9 / 13; grid-row: 7 / 13; align-self: start; margin: 0; padding: 18px 20px; border-radius: 16px; border: 1.5px solid #cfe9d8; background: #f6fcf8; color: #2e4675; }
 #computer-access-02 .o3-tips h3 { display: block; position: static; margin: 0 0 10px; font-size: 18px; line-height: 1.4; color: #0a7232; }
@@ -834,10 +834,10 @@ Windows
       title.style.backgroundSize = (W / w * 100) + '% ' + (H / h * 100) + '%';
       title.style.backgroundPosition = (x / (W - w) * 100) + '% ' + (y / (H - h) * 100) + '%';
     }
-    const why = make('p', 'o3-why2'); why.setAttribute('role', 'status');
+    const why = make('p', 'o3-why2'); why.setAttribute('role', 'status'); why.id = 'o3-why2';
     screen.prepend(title,
       make('p', 'o3-step o3-s1', '<b>1</b><span>在上面的卡片里点“解锁”“开启”或“延长”，这一块就打开。</span>'),
-      make('p', 'o3-step o3-s2', '<b>2</b><span>选这次办哪一项：</span>'),
+      make('p', 'o3-step o3-s2', '<b>2</b><span>选这次办哪一项：</span><em class="o3-wait" id="o3-wait" role="status"></em>'),
       make('p', 'o3-note o3-n2', '两项一起办就点“同时办理”：验证一次，两项分别办、分别计时。'),
       make('p', 'o3-step o3-s3', '<b>3</b><span>填时长，0.5 到 72 小时都行，或直接点常用时长：</span>'),
       make('p', 'o3-note o3-n3', '还有效的，在原截止时间上加；没开或已经到期的，从这次办成时起算。办完总共剩余不能超过 72 小时。'),
@@ -846,21 +846,37 @@ Windows
       make('div', 'o3-tips', '<h3>三件要知道的事</h3><ul><li>验证码直接交给这台电脑核对，不经过网站的服务器。</li><li>切到验证器 App 再回来，不会取消这次办理。</li><li>输错太多次会冷却：页面写清几点以后能再试，已经开着的授权不受影响；冷却完要我自己重新输、点提交，不会自动重试。</li></ul>'));
     screen.classList.add('o3-ready');
   }
-  // 验证按钮变灰时写明原因（只读页面已显示的状态，不改启用条件）
+  // 按钮变灰时写明原因（只读页面已显示的状态，不改启用条件）：验证按钮的原因写在它下面那行；
+  // 办哪一项、时长和“设为以后默认”这些按钮的原因写在第 2 步那行后面。按钮上同时带 title、data-disabled-reason 和 aria-describedby。
   let pending = false;
+  function mark(el, reason, note) {
+    if (!Object.hasOwn(el.dataset, 'baseTitle')) el.dataset.baseTitle = el.getAttribute('title') || '';
+    const title = reason ? (el.dataset.baseTitle ? el.dataset.baseTitle + '：' : '') + reason : el.dataset.baseTitle;
+    if (el.getAttribute('title') !== title) el.setAttribute('title', title);
+    if (reason) {
+      if (el.dataset.disabledReason !== reason) el.dataset.disabledReason = reason;
+      if (note && el.getAttribute('aria-describedby') !== note.id) el.setAttribute('aria-describedby', note.id);
+    } else {
+      if (el.dataset.disabledReason) delete el.dataset.disabledReason;
+      if (note && el.getAttribute('aria-describedby') === note.id) el.removeAttribute('aria-describedby');
+    }
+  }
   function explain() {
     pending = false;
     const b = screen.querySelector('button[data-b2-action="submit"]'), why = screen.querySelector('.o3-why2');
     if (!b || !why) return;
-    if (!Object.hasOwn(b.dataset, 'baseTitle')) b.dataset.baseTitle = b.getAttribute('title') || '';
     const phase = document.body.dataset.b2StatusPhase || 'loading';
     const code = screen.querySelector('[data-b2-slot="ca-form-code"]')?.value || '';
     const general = window.O3AccessReason ? window.O3AccessReason(phase === 'ready' ? '' : phase, '') : '';
     const reason = !b.disabled ? '' : general || (!/^\d{6}$/.test(code) ? '先输入 6 位动态验证码' : '');
-    const title = reason ? (b.dataset.baseTitle ? b.dataset.baseTitle + '：' : '') + reason : b.dataset.baseTitle;
-    if (b.getAttribute('title') !== title) b.setAttribute('title', title);
-    if (reason) { if (b.dataset.disabledReason !== reason) b.dataset.disabledReason = reason; } else if (b.dataset.disabledReason) delete b.dataset.disabledReason;
+    mark(b, reason, why);
     if (why.textContent !== reason) why.textContent = reason;
+    // 读到状态前（或读不到、本机预览）这些按钮整组是灰的；读到后只有正在办理时才灰
+    const wait = screen.querySelector('.o3-wait');
+    const choices = [...screen.querySelectorAll('button[data-b2-action]:not([data-b2-action="submit"])')];
+    const choiceReason = choices.some(x => x.disabled) ? general || '正在办理，等这次办完再选' : '';
+    for (const x of choices) mark(x, x.disabled ? choiceReason : '', wait);
+    if (wait && wait.textContent !== choiceReason) wait.textContent = choiceReason;
   }
   const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(explain); } };
   const start = () => { if (screen.querySelector('[data-b2-action="submit"]') && screen.querySelector('[data-b2-slot="ca-form-code"]')) build(); schedule(); };

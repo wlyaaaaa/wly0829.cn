@@ -2,33 +2,24 @@
 const unknown={text:'暂时读不到',state:'unknown'};
 const readTimeoutMs=8000;
 const statusEndpoints=['https://live.wly0829.cn/computer-access/state','https://mcp.wly0829.cn/computer-access/api/status'];
-const endpointPreferenceKey='site-live-endpoint:v1',endpointPreferenceMs=600000;
-let successfulEndpoint=null;
-function preferredEndpoint(){
- try{const saved=JSON.parse(sessionStorage.getItem(endpointPreferenceKey));if(statusEndpoints.includes(saved?.url)&&Number.isFinite(saved.at)&&saved.at<=Date.now()&&Date.now()-saved.at<endpointPreferenceMs)return saved.url;}catch{}
- return null;
+// Ask every entrance at once; the first valid answer wins and the others are cancelled (same as the cockpit read()).
+// One round still ends after timeoutMs; when all fail, the last entrance's error is thrown so the retry rules stay the same.
+async function raceStatus(urls,read,signal,timeoutMs=readTimeoutMs){
+ if(signal?.aborted)throw signal.reason;
+ const controller=new AbortController(),abort=()=>controller.abort(),timer=setTimeout(abort,timeoutMs);
+ signal?.addEventListener('abort',abort,{once:true});
+ try{return await Promise.any(urls.map(url=>read(url,controller.signal)));}
+ catch(error){if(signal?.aborted)throw signal.reason??error;throw error?.errors?.at(-1)??error;}
+ finally{clearTimeout(timer);controller.abort();signal?.removeEventListener('abort',abort);}
 }
 async function readStatus(signal,refresh=false,local=['localhost','127.0.0.1','::1','[::1]'].includes(location.hostname)){
- return retryStatus(async()=>{
-  let failure;
-  const preferred=successfulEndpoint||preferredEndpoint();
-  const endpoints=local?['/__status']:preferred?[preferred,...statusEndpoints.filter(url=>url!==preferred)]:statusEndpoints;
-  for(const url of endpoints){
-   if(signal?.aborted)throw signal.reason;
-   // The local proxy can try both upstreams within one browser request.
-   const controller=new AbortController(),abort=()=>controller.abort(),timer=setTimeout(abort,local?readTimeoutMs*2:readTimeoutMs);
-   signal?.addEventListener('abort',abort,{once:true});
-   try{
-    const response=await fetch(url+(refresh?'?refresh=1':''),{credentials:'include',cache:'no-store',signal:controller.signal});
-    if(!response.ok){const error=Error('HTTP_'+response.status);error.httpStatus=response.status;throw error;}
-    const next=await response.json();if(!freshStatus(next))throw Error('expired_snapshot');
-    if(!local){successfulEndpoint=url;try{sessionStorage.setItem(endpointPreferenceKey,JSON.stringify({url,at:Date.now()}));}catch{}}
-    return next;
-   }catch(error){failure=error;if(signal?.aborted)throw error;}
-   finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);}
-  }
-  throw failure;
- },signal);
+ // The local proxy can try both upstreams within one browser request, so it gets twice the budget.
+ return retryStatus(()=>raceStatus(local?['/__status']:statusEndpoints,async(url,abort)=>{
+  const response=await fetch(url+(refresh?'?refresh=1':''),{credentials:'include',cache:'no-store',signal:abort});
+  if(!response.ok){const error=Error('HTTP_'+response.status);error.httpStatus=response.status;throw error;}
+  const next=await response.json();if(!freshStatus(next))throw Error('expired_snapshot');
+  return next;
+ },signal,local?readTimeoutMs*2:readTimeoutMs),signal);
 }
 async function retryStatus(read,signal){
  for(let attempt=0;;attempt++)try{return await read();}catch(error){
@@ -102,7 +93,7 @@ function cacheKey(page,slot){return `site-live:v1:${page}:${slot}`;}
 function readLast(storage,page,slot,project,now=Date.now()){try{const c=JSON.parse(storage.getItem(cacheKey(page,slot)));return c&&c.project===project&&typeof c.result?.text==='string'&&c.result.state!=='unknown'&&Number.isFinite(c.at)&&c.at<=now+60000?c:null;}catch{return null;}}
 function readCache(storage,page,slot,project,now=Date.now()){const c=readLast(storage,page,slot,project,now);return c&&now-c.at<86400000?c:null;}
 function offlineResult(c,now=Date.now()){return c?{text:'读不到电脑 · 当时：'+c.result.text+' · 上次读到 '+formatTime(new Date(c.at).toISOString(),now)+(now-c.at>=86400000?'（已超过24小时）':'')+' · 当前状态未知',state:'offline',cached:true,readAt:c.at/1000}: {text:'读不到电脑 · 还没读到过',state:'offline',cached:false};}
-const helpers={parse,fitCloud,unifyBannerFonts,readCache,readLast,offlineResult,cacheKey,formatTime,connectionText,freshStatus,readTimeoutMs,retryStatus,readStatus};
+const helpers={parse,fitCloud,unifyBannerFonts,readCache,readLast,offlineResult,cacheKey,formatTime,connectionText,freshStatus,readTimeoutMs,retryStatus,readStatus,raceStatus};
 if(typeof module!=='undefined'&&module.exports){module.exports=helpers;return;}
 window.SiteLiveRuntime=helpers;
 window.dispatchEvent?.(new Event('site-live-ready'));
