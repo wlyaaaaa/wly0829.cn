@@ -1234,7 +1234,7 @@ export function lines(v, ctx) {
   // 每样写清谁在管；挂满 3 天的不再在首屏列，收在“AI 的账本”的“停了的数据”里（本人 10-30 批准第 5 项；页面兜底，根治在后端）
   const more = hidden.length ? `<a class="cp-stale-more" href="/cockpit/ai/#stale-data">另 ${hidden.length} 样停了 3 天以上，在 AI 的账本里 ›</a>` : '';
   const stale = shown.length
-    ? `<details class="cp-fold cp-stale-fold" id="stale-cards"><summary>${dot('unavailable')}${esc(`这些数据没再更新：${shown.map((c) => `${c.title}（${staleWho(c, v, ctx.now)}）`).join('；')}`)}</summary><ul class="cp-facts is-stale">${shown.map(staleRow).join('')}</ul>${more ? `<p class="cp-line">${more}</p>` : ''}</details>`
+    ? `<details class="cp-fold cp-stale-fold" id="stale-cards"><summary>${dot('unavailable')}${esc(`这些数据没再更新：${shown.map((c) => `${c.title}（${staleWho(c, v, ctx.now)}）`).join('；')}${hidden.length ? `；另 ${hidden.length} 样停了 ${STALE_DAYS} 天以上，在 AI 的账本里` : ''}`)}</summary><ul class="cp-facts is-stale">${shown.map(staleRow).join('')}</ul>${more ? `<p class="cp-line">${more}</p>` : ''}</details>`
     : more ? `<p class="cp-line cp-stale-line">${dot('unavailable')}${more}</p>` : '';
   return `<div class="cp-lines"><a class="cp-go" href="/cockpit/ai/">${esc(ledgerText(v))}</a>${wait}${stale}</div>`;
 }

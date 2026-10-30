@@ -189,3 +189,9 @@ test('账本件数对齐：筛选按钮和总句同一个数，合并的同类�
   // 首页那行和账本页总句同一句
   assert.match(REGIONS.home(v, ctx()), /<a class="cp-go" href="\/cockpit\/ai\/">AI 待处理还有 6 件事/);
 });
+
+test('停了的数据：收起来的满 3 天的件数也写在折叠的那一句里，不藏', () => {
+  const card = (id, title, d) => ({ id, title, text: `${title}数据停了。`, state: 'unavailable', observed_at: d });
+  const v = view({ stale_summary: { text: '示例', ids: ['a', 'b'] }, sections: { computer: [card('a', '示例甲', '2026-10-29T19:14:00+08:00'), card('b', '示例乙', '2026-10-20T10:00:00+08:00')] } });
+  assert.match(textOnly(REGIONS.home(v, ctx())), /这些数据没再更新：示例甲（10\/29 起读不到）；另 1 样停了 3 天以上，在 AI 的账本里/);
+});
