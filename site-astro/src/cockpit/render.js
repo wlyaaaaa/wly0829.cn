@@ -98,7 +98,7 @@ export function card(c, now, off = false, pageAt = '', t = null) {
   const trig = off ? '' : lines.length ? `<p class="cp-reason">触发的是：${esc(lines.join('；'))}</p>` : typeof c.trigger_text === 'string' && c.trigger_text ? `<p class="cp-reason">触发的是：${esc(c.trigger_text)}</p>` : '';
   const details = Array.isArray(c.details) ? c.details.filter((d) => d && (d.title || d.text)) : [];
   // 网格卡：要你出手的（黄、红）原句照旧摊开；其余有没说全的才收进“详情 ›”
-  const open = !off && ['attention', 'red'].includes(state);
+  const open = !off && !t?.fold && ['attention', 'red'].includes(state);
   const body = !t ? `<p>${text}</p>` : `<p class="cp-big">${t.big}</p>${t.bar || ''}${t.sub ? `<p class="cp-sub">${t.sub}</p>` : ''}`
     + (open ? `<p>${text}</p>` : t.more === false && !(missing && c.text) ? '' : `<details class="cp-tile-more"><summary>详情</summary><p>${text}</p></details>`) + (t.go || '');
   return `<article class="cp-card is-${light(state)} ct-card${off ? ' is-off' : ''}${t ? ' cp-tile' : ''}"${t?.id ? ` id="${t.id}"` : ''}><h3>${dot(state)}${esc(c.title)}</h3>${body}` + trig
@@ -569,21 +569,45 @@ const tileOf = (c, now, off, pageAt, extra = {}) => {
 };
 const GIB = (n) => (Number.isFinite(n) && n >= 0 ? `${+(n / 2 ** 30).toFixed(1)} GiB` : '');
 const sizeOf = (x) => (!x ? '' : x.complete === true && Number.isFinite(x.bytes) ? GIB(x.bytes) : GIB(x.partial_bytes) && '至少 ' + GIB(x.partial_bytes));
-// AI 临时文件：存储采样里的合计（ai_cache_total），没量全写“至少”；只是“还没量全”不算出事，别的类别超预算算 AI 在管；整卡链到存储页
+// 存储采样（storage_pressure）：有类别、采样没过期才算读到；过期的算“数据停了”
+const storageOf = (v, now) => {
+  const sp = v.storage_pressure || {}, cats = (Array.isArray(sp.categories) ? sp.categories : []).filter((x) => x && typeof x === 'object');
+  const age = now.getTime() - Date.parse(sp.observed_at || ''), fresh = age <= (Number(sp.max_age_seconds) > 0 ? sp.max_age_seconds * 1000 : 72e5);
+  return { sp, cats, of: (id) => cats.find((x) => x.id === id), fresh };
+};
+const GO_STORAGE = (word) => `<a class="cp-tile-go" href="/cockpit/storage/">${word} ›</a>`;
+// AI 临时文件：存储采样里的合计（ai_cache_total），没量全写“至少”；颜色只看这一项自己的 alert：空或“还没量全”都算正常，
+// 超预算、一周增长超线才写“要留意”和是哪种；别的类别归“存储占用与增长”那张卡。整卡链到存储页
+const AI_ALERT = { budget: '超过预算', weekly_growth: '一周增长超过提醒线' };
 function aiCacheTile(v, now, off, pageAt) {
-  const sp = v.storage_pressure || {}, cats = Array.isArray(sp.categories) ? sp.categories : [], of = (id) => cats.find((x) => x?.id === id);
-  const all = of('ai_cache_total'), size = sizeOf(all), age = now.getTime() - Date.parse(sp.observed_at || '');
-  const real = cats.some((x) => x?.alert && x.alert !== 'measurement_incomplete');
-  const state = !size ? 'unavailable' : !(age <= (Number(sp.max_age_seconds) > 0 ? sp.max_age_seconds * 1000 : 72e5)) ? 'stale' : sp.state !== 'ok' && real ? 'neutral' : 'ok';
-  const c = { id: 'ai_cache_total', title: 'AI 临时文件', state, observed_at: sp.observed_at || null, ai_handling: '有存储类别超预算，AI 在处理', text: '' };
+  const { sp, of, fresh } = storageOf(v, now), all = of('ai_cache_total'), size = sizeOf(all);
+  const state = !size ? 'unavailable' : !fresh ? 'stale' : AI_ALERT[all.alert] ? 'attention' : 'ok';
+  const c = { id: 'ai_cache_total', title: 'AI 临时文件', state, observed_at: sp.observed_at || null, text: AI_ALERT[all?.alert] ? `要留意：${AI_ALERT[all.alert]}` : '' };
   const sub = [GIB(all?.budget_bytes) && '预算 ' + GIB(all.budget_bytes), sizeOf(of('claude_temp')) && 'Claude ' + sizeOf(of('claude_temp')), sizeOf(of('codex_temp')) && 'Codex ' + sizeOf(of('codex_temp'))].filter(Boolean).join(' · ');
-  const go = '<a class="cp-tile-go" href="/cockpit/storage/">存储占用与增长 ›</a>';
-  return card(c, now, off, pageAt, state === 'unavailable' ? { big: '读不到', sub: '存储采样还没读到', more: false, go } : { big: esc(size), sub: esc(sub), more: false, go });
+  return card(c, now, off, pageAt, state === 'unavailable' ? { big: '读不到', sub: '存储采样还没读到', more: false, go: GO_STORAGE('明细') } : { big: esc(size), sub: esc(sub), more: false, go: GO_STORAGE('明细') });
+}
+// 存储占用与增长：整体存储状况，按 storage_pressure.state 上色（只有“还没量全”、没有超预算和增长超线的类别时算正常）；大字是超预算的类别数，小字是哪几类和一周增长超线的盘（类别名照后端 label，去掉“X 盘当前用户”前缀）
+const SP_STATE = { ok: 'ok', warn: 'attention', attention: 'attention', red: 'red', critical: 'red', error: 'red' };
+function storageTile(v, now, off, pageAt) {
+  const { sp, cats, fresh } = storageOf(v, now), by = (a) => cats.filter((x) => x.alert === a).map((x) => String(x.label || x.id || ''));
+  const over = by('budget'), grow = by('weekly_growth'), disks = grow.map((l) => (/^([A-Z])\s*盘/.exec(l) || [])[1]);
+  const growText = !grow.length ? '' : disks.every(Boolean) ? `${disks.join('、')} 盘一周增长偏快` : `${grow.join('、')}一周增长偏快`;
+  const state = !cats.length ? 'unavailable' : !fresh ? 'stale' : !over.length && !grow.length ? 'ok' : SP_STATE[sp.state] || 'attention';
+  const c = { id: 'storage_pressure', title: '存储占用与增长', state, observed_at: sp.observed_at || null, text: [over.length && `超过预算：${over.join('、')}`, grow.length && `一周增长超过提醒线：${grow.join('、')}`].filter(Boolean).join('；') };
+  const big = !cats.length ? '读不到' : over.length ? `${over.length} 类超预算` : grow.length ? `${grow.length} 类增长偏快` : '正常';
+  const sub = !cats.length ? '存储采样还没读到' : [over.map((l) => l.replace(/^[A-Z]\s*盘(当前用户)?\s*/, '')).join('、'), growText].filter(Boolean).join('；');
+  return card(c, now, off, pageAt, { big: esc(big), sub: esc(sub), fold: true, more: false, go: GO_STORAGE('各类别和近一周变化') });
 }
 const linkCard = (href, title, sub, cls = '') => `<a class="cp-link-card ct-card${cls}" href="${esc(href)}" target="_blank" rel="noopener"><b>${esc(title)}</b><small>${esc(sub)}</small><span class="cp-link-arrow" aria-hidden="true">↗</span></a>`;
+// 9 张数据卡排成 3×3，按组一排：电脑本身、存储、网络；某张因为数据断了没出就留空位，不拉宽别的卡
 export function computer(v, ctx) {
   const g = v.grafana, off = !!ctx.offline, stale = staleIds(v), now = ctx.now, at = v.served_at;
-  const cards = dedupeCards(v.sections.computer).filter((c) => !stale.has(c.id));
+  const cards = dedupeCards(v.sections.computer).filter((c) => !stale.has(c.id)), byId = (id) => cards.find((c) => c.id === id);
+  const tile = (c, extra) => (c ? tileOf(c, now, off, at, extra) : '');
+  // 流量：本机代理今天的量做大字；套餐流量读到了（没停）才在小字后面接“套餐已用 x/y GB”
+  const proxy = byId('proxy_traffic'), plan = byId('traffic');
+  const planUsed = plan && !['unavailable', 'reading'].includes(plan.state) ? (/已用\s*(\d+(?:\.\d+)?\s*\/\s*\d+(?:\.\d+)?\s*[KMGT]i?B)/.exec(plan.text || '') || [])[1] : '';
+  const traffic = proxy ? tile({ ...proxy, title: '流量' }, { sub: planUsed ? esc('套餐已用 ' + planUsed.replace(/\s*\/\s*/, '/')) : '' }) : tile(plan && { ...plan, title: '流量' });
   // “你得知道”里有正在修的网络问题时，后端在远程卡上给 must_know_id（文字是“此刻能连上；间歇断开还在查”），点了跳到“你得知道”那一条
   const remoteCards = dedupeCards(v.sections.remote).filter((c) => !stale.has(c.id));
   const remote = (remoteCards.length ? remoteCards : [{ title: '远程连接', state: 'unavailable', text: '' }]).map((c, i) => tileOf({ kind: 'remote', ...c }, now, off, at,
@@ -591,7 +615,12 @@ export function computer(v, ctx) {
   // 副机在线不在线看 laptop.connection；laptop.state 是副机自动任务的健康，不能当连接
   const lap = LAPTOP[v.laptop.connection];
   const laptop = lap ? card({ title: '笔记本（副机）', state: lap[1], text: '' }, now, off, at, { big: lap[0], sub: lap[2], more: false }) : '';
-  const tiles = [...cards.map((c) => tileOf(c, now, off, at)), aiCacheTile(v, now, off, at), ...remote, laptop].filter(Boolean);
+  const known = ['computer_health', 'system_resources', 'disk_space', 'temp_reclaim', 'proxy_traffic', 'traffic'];
+  const rest = [...cards.filter((c) => !known.includes(c.id)).map((c) => tile(c)), ...remote.slice(1)];
+  const rows = [[tile(byId('computer_health')), tile(byId('system_resources')), tile(byId('disk_space'))],
+    [aiCacheTile(v, now, off, at), tile(byId('temp_reclaim')), storageTile(v, now, off, at)], [traffic, remote[0], laptop],
+    ...Array.from({ length: Math.ceil(rest.length / 3) }, (_, i) => rest.slice(i * 3, i * 3 + 3))];
+  const pad = (row) => [0, 1, 2].map((i) => row[i] || '<div class="cp-tile-gap" aria-hidden="true"></div>').join('');
   const t = cards.map((c) => Date.parse(c.observed_at || '')).filter(Number.isFinite);
   const offAt = off ? `<p class="cp-time cp-facts-at">读不到${t.length ? `（最后 ${esc(when(new Date(Math.max(...t)).toISOString(), now))} 读到）` : ''}</p>` : '';
   const charts = g.links.filter((l) => l.id !== 'overview');
@@ -599,7 +628,7 @@ export function computer(v, ctx) {
   // 读不到电脑时图表网页也打不开：链接卡先收起，只留一行说明
   const chartsRow = off ? `<p class="cp-line cp-off-note" id="grafana">${dot('unavailable')}读不到电脑，图表链接先收起，读到后再出来。</p>`
     : `<div class="cp-pc-links" id="grafana">${links.length ? links.join('') : `<p class="cp-line cp-charts">${dot('unavailable')}图表网页现在打不开${g.checked_at ? `（上次检查 ${esc(when(g.checked_at, now))}）` : ''}</p>`}</div>`;
-  return `<div class="cp-pc-grid">${tiles.join('')}</div>` + offAt + chartsRow;
+  return `<div class="cp-pc-grid">${rows.filter((r) => r.some(Boolean)).map(pad).join('')}</div>` + offAt + chartsRow;
 }
 
 const LAPTOP = { online: ['在线', 'ok', ''], offline: ['离线', 'attention', '要用它时得先开机连网'] };
