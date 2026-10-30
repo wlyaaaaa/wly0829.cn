@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E280",
-   "commit": "9e6c296def23c918a78334b02c597da68efd0233",
-   "ruleset_sha256": "33c65cb3c6152825d5fb89b7be9688f534ab9ebe6ffa1841358b315b98b0b87f",
-   "activated_at": "2026-10-22T08:43:25.661700+08:00",
+   "release": "E325",
+   "commit": "5fbf6a12ea23093e7b91748db9abd6866d27f9b4",
+   "ruleset_sha256": "5f011f73cb5a4901f93151328d70eea6c9b9ff6d03ff596c26d7a18700a1f893",
+   "activated_at": "2026-10-30T04:20:33.726689+08:00",
    "file": "sources/rules/docs/contracts/agents.capabilities-runtime.md",
-   "sha256": "1d284002b92a55f95e8a1149a7afaef99601c9ea04ced56f7f67cfa65785ae34",
-   "public_sha256": "823a55995324ca3cb37c54452e15275588e49f4e8accff16199ea767959b517f"
+   "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
+   "public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小 AI 助手抬手从洞洞板上取下放大镜看了看又挂回去，洞洞板上的 Chrome、Gmail、Google 云盘三个标志轻轻晃动；脚边贴着“E:”的绿色储物箱里几片绿叶慢慢舒展；右下笔记本电脑屏幕上的看板里，三个小圆点状态灯依次轻轻呼吸（绿、绿、黄）；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，三块小牌子上的字保持不动、不变形。",
   "registry": {
@@ -396,8 +396,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "3dc828b73093347b6e48f800ccab07404107cbd6c9dcb3ae126da58d6ef2890d",
-  "converted_at_beijing": "2026-10-22T09:10:17+08:00"
+  "sha256": "8f7d81f06168694c4d607660a8b429a7c9b3c55f4f462f222e58ef2102734d70",
+  "converted_at_beijing": "2026-10-30T11:19:18+08:00"
  }
 }
 ---
@@ -2917,9 +2917,9 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E280",
-   "sha256": "1d284002b92a55f95e8a1149a7afaef99601c9ea04ced56f7f67cfa65785ae34",
-   "public_sha256": "823a55995324ca3cb37c54452e15275588e49f4e8accff16199ea767959b517f",
+   "release": "E325",
+   "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
+   "public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
    "from": null,
    "to": "## 常用入口",
    "start": 0,
@@ -2942,7 +2942,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-11",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "823a55995324ca3cb37c54452e15275588e49f4e8accff16199ea767959b517f",
+  "source_public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-11"
  },
  "layout": {
@@ -2950,7 +2950,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E280版"
+     "text_ref": "原文·E325版"
     },
     {
      "type": "chapter_title",
@@ -2991,7 +2991,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E280版"
+     "text_ref": "原文·E325版"
     },
     {
      "type": "chapter_title",
@@ -3084,7 +3084,7 @@
 }
 ```
 
-原文 · E280 版
+原文 · E325 版
 
 # 能力与运行方式
 
@@ -3112,13 +3112,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E280",
-   "sha256": "1d284002b92a55f95e8a1149a7afaef99601c9ea04ced56f7f67cfa65785ae34",
-   "public_sha256": "823a55995324ca3cb37c54452e15275588e49f4e8accff16199ea767959b517f",
+   "release": "E325",
+   "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
+   "public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
    "from": "## 常用入口",
    "to": "## 浏览器",
    "start": 1440,
-   "end": 5594,
+   "end": 4026,
    "approved_omissions": []
   },
   "title": "原文（二）：常用入口",
@@ -3132,7 +3132,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-12",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "823a55995324ca3cb37c54452e15275588e49f4e8accff16199ea767959b517f",
+  "source_public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-12"
  },
  "layout": {
@@ -3140,7 +3140,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -3168,7 +3168,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -3214,42 +3214,30 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E280 版 · 续
+原文 · E325 版 · 续
 
 ## 常用入口
 
 - **本机小工具。** 问本机已有的小工具、以前用过的工具、图片超分或本机现成做法时，先查唯一清单 `E:\Tools\LocalToolbox\catalog.json`；按用途检索用 `E:\Tools\LocalToolbox\Find-LocalTool.ps1 -Query '<用途>' -Json`。工具列表、型号和哈希只在那份清单里。
 - **快速计算机清理文件。** 直达 PCConfig 的 `E:\PCConfig\docs\runtime\ai-cache-sweep.md`“快速计算机清理文件”流程：先执行已核实的明显无用项并清本批回收实体、回读实际空间，疑难对象和基座源码修复并行；复用已有证据，不反复整盘扫描，不把全量引擎修好当作普通项清理的前置。
 - **内存快满时自动处理。** AI 不等本人，按 PCConfig 的 `E:\PCConfig\registries\memory_guard.json` 登记的失控优先、安全回收与急救规则自动处理；有失控增长者时只处理增长者，清单及规则外的对象不动。AI 自己的任务若是占用大户，先停自己的。触发阈值、安全边界和分类只读 PCConfig 登记，不在全局规则复制；AI 安装会常驻后台的软件时，同时在该登记给它分类。
-- **生成图片和设计画面。** 图片默认用本人指定的 Codex 内置图片生成能力。它背后是独立的生图模型，出图好坏看生图模型和提示，不看由哪个文字模型去调用：Codex 的任何对话直接调用；Claude 写好提示，经包装器派 Luna 照提示调用并落盘（图像任务的 Generation 方式，见 `docs/claude-gpt-child-traffic.md`）。不为生图派 Astra，也不因为没有 Astra 授权就改派别的型号。按量收费的 API 密钥回退只在本人明确要时用。当前选用的生图模型记在模型清单，不把能力排名写成永久结论。
-  - **能做什么。** 只用文字生成；以参考图为基准，延续它的风格、构图或角色；精准局部替换（换背景、去掉或改动某一处、透明底）；整套图保持一致；一次出几版拿来比对。
-  - **用在哪。** 不限网页：界面设计和风格、插画、配图、封面、横幅、头像、图标和标志的设计，PPT 的整页设计、配图和底图，视频的风格参考、分镜、关键帧和封面，以及直接当成品的图（海报、带字的说明图）。
-  - **怎么做。** 设计类先出几版，本人定了风格再照图写代码；素材类由 AI 出几版比对后自己选。定下的图当基准，之后都拿它当参考出图，保持整套一致；只有局部不对时用精准替换只改那一块，不整张重画；精准替换会把整张轻微重绘，要求没改的部分一个像素都不动时，把改好的那块贴回原图。成品复制进项目目录，按版本命名、不覆盖旧图，并核对文件真的存下了；审定的图冻结，以后只重做内容变了的部分。
-  - **谁画、谁复核。** 要派出去生图时交 Luna（Codex 主对话可以自己直接调），档位见模型清单。复核按需，不是每张都要：成批的图交 Sol，很重要的交 Claude；只有几张图时不为复核另派子代理，主持的对话自己看。复核时图里的字逐字和原文核对，错了只修那一块；像不像拿整张图和参考并排比，先看第一眼像不像，再看细节。
-  - **哪些仍用代码。** Claude 不自己用代码画这类画面；数据图表、流程图、进度条这类数字和文字要准确的，以及会变的内容（实时数据、计数、日期、状态），仍用代码画，或由代码填进图里留的空白；固定不变的艺术字和文字可以直接画进图里。
-  - 个人网站另按项目已定的单层分工：Luna 画、Sol 审，不合格交 Claude 定；这只管网站，不外推为其他项目的默认（出处：`docs/owner-decisions/2026-09.md`“网站：设计稿逐项审定、单层分工、留锚点、不重复介绍”）。
+- **生成图片和设计画面。** 任何项目里的静态画面默认用生图（Codex 自带生图；Claude 写好提示派 Luna 调用）：照片感画面、插画、封面、图标和标志、带固定文字的图、精准抠图、透明底和精准局部替换都算；网页、PPT、视频的设计也先生图定样子，再照图写代码。画面里用代码的只有四类：动效，会变的内容（计数、日期、状态、实时数据），数据图表，原件证据的摆放和打码；证据类东西（截图、聊天记录、单据、证件和当证据用的实拍）永不生图，生成图里的字逐字和原文核对，怎么派、怎么验收和管版本见 `image-generation` 技能。
 - **个人领域直达。** 健康、本人诉讼和微信分别直达 `personal-health`、`personal-litigation`、`wechat-direct`；只有原件位置不明、要跨已允许的位置查找或原来的定位失效时，才用 `personal-materials` 找到、打开并核对原件；精确录音和扫描件分别交给 `chinese-asr`、`localocr`。照片视频只在本人明确要求时做成独立的有界任务。没有独立领域项目时，直接用当前对话的事实和会改变答案的最少原件回答。不恢复中央个人数据库、统一事件图、跨领域画像、后台同步、总技能或默认的全景上下文。
 - **Google。** 现行入口是 `google-workspace-direct`：仅通过固定 PCConfig OAuth/provider 处理 Gmail 和 Google Drive，各自按能力验收，具体操作见该技能；日历保持冻结，Google Tasks 不再接入（要本人做、要本人选的事登记进驾驶舱）。本人明确要写入时，也只调用这个入口已有的精确操作；不落库、不自动同步、不换账号，也不悄悄改走别的接入、连接器、浏览器或 rclone。入口没接好、账号失效或能力不够时如实说不可用或有限，不造第二 provider；写入、分享、发送和邀请要有对应能力和授权，删除、公开分享、发送和邀请还须绑定精确外部动作授权。Google Admin、支付和 Photos 不属于该入口。配置和凭据文件存在不说明账号、读取或写入现在可用。
 
 ## 云端素材通道
 
-任何项目中，同一文件预计被 AI 读两次以上，或同一批文件的处理流量明显超过文件本身时，按 `cloud-asset-channel` 技能核对通道与读者。明确指定素材上云一次，本机保留同版，不扫描目录。GPT 云读采用 Codex 云端任务与结论收件箱：提交按当前登录账号的环境名称解析，不绑定环境 ID；等候只查任务列表，结论由云端直接 POST 到自有收件箱，本机只取文字 JSON，不用 cloud status/diff 下载整份图像任务详情。本机 Codex 仍不能直接接收 HTTPS 图片。Claude 本机复核每张图一次读完、一次答完；画图仍在本机。
+同一文件预计被 AI 读两次以上，或同批处理流量明显超过文件本身时，按 cloud-asset-channel 技能（`E:/.agents/skills/cloud-asset-channel/SKILL.md`）核对通道与读者，明确指定素材，不扫描目录。本机 Codex 不能直接接收 HTTPS 图片；Claude 本机复核每张图一次读完、一次答完，画图仍在本机。
 
 Codex 云端读者先放着，按偶用处理、不维护。换账号后新账号没建云端环境，暂不可用，不提交云端任务；旧账号曾接通的读者及其模型回执不证明当前账号可用。云端审图校准也未通过，尚未启用，网站图终审由 Claude Opus 完成。以后真要用时再核对当前账号环境与命令接通状态；环境网页设置、建环境和换账号由本人做，AI 只用命令提交、查询和取结论，不操作电脑界面或网页。
 
-不主动安排命令接线或模型升级；以后实际启用审图仍须通过校准，命令接通和型号核对不算审图校准通过。
+不主动安排命令接线或模型升级；以后启用审图须先通过校准，命令接通和型号核对不能代替。环境解析、逐块全覆盖证据、一次写收件箱和清理协议只在读者说明（`E:/.agents/docs/cloud-asset-channel-reader.md`）维护，上传目标和登记表读 cloud-asset-channel.json（`E:/.agents/config/cloud-asset-channel.json`），不在规则复制协议参数。
 
-云端从原图切原尺寸小块，逐块看，结论附每块坐标与 SHA256；没有裁片证据、未全覆盖或未逐块查看的回执无效。收件箱只接受已登记的 64 位随机任务令牌的一次 POST JSON，最多 64KB；登记对象以原 ETag 原子替换成结论，用后按状态清理，旧在途请求不能在删除后重新写入。R2 公网入口无凭据不能写入，收件箱未登记令牌返回 404。原图与裁片都在云端读取，裁片不从本机传。
+有用的版本不设时间过期；被替换旧版、落选候选和确定没用的云副本按状态清理，有其他在用引用的不删。素材按 SHA-256 内容指纹命名、同内容去重，保留首次上传的扩展名；给 AI 用前核对本机指纹，变化就传新版，按技能维护唯一登记。密码、密钥、恢复码、身份证件和银行卡照片不进桶；公开范围按[个人资料与数据处理](/rules/privacy-data/#公开个人数据分级表)。上传用 Wrangler 既有网页授权，不创建 API 令牌、不经手密钥原文。
 
-通道配置的上传目标是 R2 桶 `wly-ai-assets`，网址前缀 `https://ai.wly0829.cn/`；目标和授权未接通时不报上传可用。对象按 SHA-256 内容指纹命名，首次上传保留原扩展名，同内容去重。给 AI 用之前核对本机指纹；变化就是新版本，上传后把旧引用标为“已被替换”，保证给 AI 的与本机一致。路径、指纹、大小、网址、用途、状态、上传时间、最后使用时间只登记在工具配置指定的单一登记表。
+总存储接近免费 10GB 时提醒本人去 Cloudflare 查看付款或充值，写入根会话能读的结果和汇报；10GB 不是硬上限，不拒绝上传。每个文件理想上只上传、下载各一次，以任务所用内容版本大小之和为标尺，具体记账、实测和告警按技能，不用未观测的失败重试冒充零。
 
-不设时间过期。有用就留，仍在用或以后按需更新还要用的版本一直留；被替换的旧版、落选候选和确定没用的云副本按状态清理，有其他在用引用的不删。密码、密钥、恢复码、身份证件和银行卡照片不进桶；公开范围仍按[个人资料与数据处理](/rules/privacy-data/#公开个人数据分级表)。上传用 Wrangler 既有的网页授权，不创建 API 令牌、不经手密钥原文。
-
-总存储接近免费 10GB 时提醒本人去 Cloudflare 查看付款或充值，提醒写入根会话能读的结果和汇报；10GB 不是硬上限，不拒绝上传。标尺是每个文件理想上只上传一次、下载一次：本机出的候选图下载一次、上传云端一次，一张最多 2 份流量，之后审几轮都不再经过本机。每个任务登记本机实际上传和下载的文件正文，另列网络实测开销；以任务所用各文件内容版本大小之和为标尺，目标比值不超过 2，超过 2.5 告警，未观测的失败重试不冒充零。
-
-不上云的本机处理也要省流量：看图前完成文字、材料和裁片准备，看图会话只发送一次全部必读图片，图后直接给结论，不再带图调用工具、续问或重试；结果由宿主写入。批量任务复用同一个原生进程，各任务仍用独立线程，避免每次冷启动约 28MB 的重复下载；池、流量计数和停止入口归当前任务，不另装长期服务。图片采用原像素无损压缩，逐一核对尺寸、模式和解码像素，不删图、不缩放或降质量。本机图像会话的流量护栏只读 `config/claude-gpt-child-traffic.json` 的 AI 默认值（不是本人禁令）；实测是连接采样，不能保证逐字节卡线。避免同一文件反复下载、上传，不以降低质量或拉长任务时间换取流量数字。具体入口与已核实的适用范围见 `docs/claude-gpt-child-traffic.md`。
-
-具体命令、出错处理和收尾见 `cloud-asset-channel` 技能，规范源是 `E:\.agents\skills\cloud-asset-channel\SKILL.md`；协议细节见 `docs/cloud-asset-channel-reader.md`。
+本机图像任务的一次载图、原像素无损、进程复用、流量计数和停止入口统一见本机图像任务说明（`E:/.agents/docs/claude-gpt-child-traffic.md`）及其配置；不以降低质量或拉长任务时间换流量数字，不另装长期服务。
 
 ::screen{#rule-capabilities-runtime-13 section="original"}
 
@@ -3261,13 +3249,13 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E280",
-   "sha256": "1d284002b92a55f95e8a1149a7afaef99601c9ea04ced56f7f67cfa65785ae34",
-   "public_sha256": "823a55995324ca3cb37c54452e15275588e49f4e8accff16199ea767959b517f",
+   "release": "E325",
+   "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
+   "public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
    "from": "## 浏览器",
    "to": "## 汇报、网站和自动运行的东西",
-   "start": 5594,
-   "end": 7277,
+   "start": 4026,
+   "end": 6063,
    "approved_omissions": []
   },
   "title": "原文（三）：浏览器",
@@ -3286,7 +3274,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-13",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "823a55995324ca3cb37c54452e15275588e49f4e8accff16199ea767959b517f",
+  "source_public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-13"
  },
  "layout": {
@@ -3294,7 +3282,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -3320,7 +3308,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -3394,15 +3382,17 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
 }
 ```
 
-原文 · E280 版 · 续
+原文 · E325 版 · 续
 
 ## 浏览器
 
-浏览器默认用本人正在用的外部 Chrome（约法 L29）：访问网站、看网页、用本人账号登录，一律用 Chrome 插件在本人已开着的 Chrome 里、自己新开的后台标签页中操作。本人当轮明确点名别的浏览器时听本人的。不用工具自带的默认浏览器、应用内浏览器（含 Claude 内置浏览器、Codex 应用内浏览器）、无头浏览器、任务临时配置或别的浏览器家族去访问网站，也不把它们当成本人的默认。Claude 根和子代理的网页任务一律派 GPT 用 Codex Chrome 插件在本人 Chrome 后台标签页里做；Claude 内置浏览器只用于本机文件和本机回环地址（`127.0.0.1`、`localhost`、`[::1]`）的本地预览，Claude in Chrome 扩展仍由 Hook 拦截并保留本人当轮明确点名放行的例外，具体见[Claude 适配](/rules/claude-adapter/#宿主接线)的“浏览器”。控制会话断了、运行环境要恢复时按 `browser-control-continuity` 修本人 Chrome 这条路，保留本人已打开的页面；这不改变网站上动作、账号和内容的授权。
+浏览器默认用本人正在用的外部 Chrome（约法 L29）：访问网站、看网页、用本人账号登录，一律用 Chrome 插件在本人已开着的 Chrome 里、自己新开的后台标签页中操作。本人当轮明确点名别的浏览器时听本人的。不用工具自带的默认浏览器、应用内浏览器（含 Claude 内置浏览器、Codex 应用内浏览器）、无头浏览器、任务临时配置或别的浏览器家族去访问网站，也不把它们当成本人的默认。Claude 根和子代理的网页任务一律派 GPT 用 Codex Chrome 插件在本人 Chrome 后台标签页里做；Claude 内置浏览器只用于本机文件和本机回环地址（`127.0.0.1`、`localhost`、`[::1]`）的本地预览，Claude in Chrome 扩展仍由 Hook 拦截并保留本人当轮明确点名放行的例外，具体见[Claude 适配](/rules/claude-adapter/#宿主接线)的“浏览器”。Codex 桌面版的主对话和原生子代理也一样，网页任务用共用包装器派 GPT 去做，不调桌面自带的浏览器工具，具体见[Codex 适配](/rules/codex-adapter/#入口和新消息)的“浏览器”。控制会话断了、运行环境要恢复时按 `browser-control-continuity` 修本人 Chrome 这条路，保留本人已打开的页面；这不改变网站上动作、账号和内容的授权。
 
 在本人 Chrome 里干活全程放在后台，不把 Chrome 调到前台打扰本人：跳转和点击放在自己新开的后台标签页里做，本人已开的标签页只读（本人点名要用的除外）；会新开标签页的链接或按钮不直接点，先取出地址在自己的后台标签页里打开；不主动调用显示浏览器的能力，本人要看着时除外（出处：`docs/owner-decisions/2026-10.md`“AI 操作 Chrome 弹到前台要根治”）。
 
 点击后页面没变化，先截图看实际画面里的弹窗或遮罩；仍没变化就停下这一步、交回卡点，不重复点击。
+
+网站、平台和软件要求同意协议，按[用户授权·同意协议的执行办法](/rules/authorization/#同意协议的执行办法)直接办理，包含“上传、发布、登录、安装或继续即同意”的提示。派单和续作附上长期授权的现行结论及源消息 UUID，不附原句；子代理的工具要本人确认时，由派它的根会话按[根会话代确认的执行办法](/rules/authorization/#根会话代确认的执行办法)代本人确认已授权的动作，区分同意条款与付款、对外传输等动作；工具不认代确认的真实限制按该节交回，不绕过。
 
 Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时，按 `browser-control-continuity` 修这条路一次；仍不通就停下需要网页的那一步，把卡在哪一层、实际报错和已做到哪里交回根会话，由根会话决定或告诉本人；不需要网页的其余已授权工作照常继续。不自动改用无头浏览器、任务临时配置、应用内或内置浏览器、别的浏览器家族或远程浏览器访问同一网站，子代理也不自己决定换。页面已打开但正文超时、要登录或要验证，是页面结果，不是换浏览器的理由，照实交回。
 
@@ -3422,13 +3412,13 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E280",
-   "sha256": "1d284002b92a55f95e8a1149a7afaef99601c9ea04ced56f7f67cfa65785ae34",
-   "public_sha256": "823a55995324ca3cb37c54452e15275588e49f4e8accff16199ea767959b517f",
+   "release": "E325",
+   "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
+   "public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
    "from": "## 汇报、网站和自动运行的东西",
    "to": "## 安装位置、配置和本机约定",
-   "start": 7277,
-   "end": 8587,
+   "start": 6063,
+   "end": 8703,
    "approved_omissions": []
   },
   "title": "原文（四）：汇报、网站和自动运行；软件更新和兼容",
@@ -3442,7 +3432,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-14",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "823a55995324ca3cb37c54452e15275588e49f4e8accff16199ea767959b517f",
+  "source_public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-14"
  },
  "layout": {
@@ -3450,7 +3440,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -3470,7 +3460,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -3540,15 +3530,20 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
 }
 ```
 
-原文 · E280 版 · 续
+原文 · E325 版 · 续
 
 ## 汇报、网站和自动运行的东西
 
 - **汇报网页**：什么时候用、做成什么样见约法 L26。各模型的提问、推荐、说明框及生成、存放、到期清理，统一按 `report-page` 技能；需要长期留下的结论写进对应项目的记录，不靠网页保存。
 - **网站**（约法 L27）：本人说“更新网站”时，按 `V:\Personal\Projects\wly0829.cn` 的 AGENTS.md 更新一次。不建自动定时更新。
 - **自动运行的东西**（约法 L28）：计划任务、看门狗和其他自动运行的东西，要在网站看板上看得见：在做什么、上次和下次什么时候运行、有没有出错、怎么停、停了会影响什么。新增或修改自动运行的东西时，把这些状态写进看板能读的状态文件或登记（按 PCConfig 的现行做法）；看板怎么显示另行建设，不为此在本机另开窗口。后台命令不弹黑窗口。
+- **定时任务的结论写进驾驶舱**：Codex 和 Claude 的定时任务每跑一轮，都用 PCConfig 的结论回执命令写一句人话结论（正常、要你看或出错），写法见 PCConfig `docs/runtime/codex-automation-receipt.md`；分段做的每段都写、以最后一次为准，卡住或出错当场就写。驾驶舱在这个任务那一行显示结论；结论有变化、又是本人用得上的，同时进“要你知道”，出错的只在那一行显示、由 AI 接手；要本人做或选的照旧登记“需要你”。任务自己没写时，Claude 的钩子用它最后的收尾回顾补一份并标黄。回执不会自己推到本人面前；本人在对话里等的结果，还要送回那个对话（Claude 的做法和兜底见[Claude 适配](/rules/claude-adapter/#宿主接线)“定时任务的结果送回等结果的对话”）。
+- **本人没回的对话默认没看见**：本人没回复、AI 也没说做完的对话，算本人没看见；要本人知道、做或选的，都用人话写进驾驶舱：出了什么事、要本人做什么、不做会怎样，不用代号，不让人猜。本人在那个对话里回了才算看见。Claude 桌面版收尾时带了待答问题，由钩子自动登记，10 分钟没回才显示，本人一回复就关掉；收尾不带待答问题，就表示没有等本人的事。Codex 有要本人定或做的事时，在最后一条回复的最后一行写“【等你】<一句人话>”，由钩子同样登记和关闭。AI 自己还要接着做的，登记“AI 在跟”，不留没人知道的半截。
+
+- **问本人之前先自查**：只影响技术做法、排版细节或能撤回的小事，AI 按自己的建议直接做，回复里写一句“我定了：……，不同意说一声”，不问；能自己查到的事实先查；本人授权范围内、能撤回的下一步直接做；已经按建议做好、只差本人点头的，直接报告结果。真要本人定的（影响本人的需求或产品，或者要发消息、对外发布、花钱、删唯一的数据），问题要离开那段对话也看得懂：在做什么事、做到哪了、要本人定什么、每个选择会怎样、AI 的建议；Claude 收尾按钮第一个放建议，每个按钮的话写清点了会怎样（钩子会把对话名、做到哪、问题和按钮原样做成驾驶舱卡）。给本人看的卡和问题不用行话、文件路径和英文代号；派 GPT 时派单的「任务」一栏也会原样显示在驾驶舱“AI 正在跑”，同样写成本人一眼看懂的一句话（做什么、为了什么），不写内部代号、文件名、占位时间，不用“本人”这类 AI 之间的称呼。
+- **本人不用知道的技术问题不上驾驶舱**：不影响本人在用的功能、本人的需求和资料的技术问题（例如 AI 自己的临时文件、已经改正的内部出错），不写进“要你知道”“需要你”和给本人看的结论；用 `Set-OwnerItem.ps1 -Who ai` 登记成 AI 事项，写清核实办法和检查点，由 PCConfig 的新故障自动接手派 GPT 排查修好。AI 查清后判断明确影响本人的需求和在用的功能、又不是小改动的（例如本人的资料丢了、在用的功能坏了要大改），才用人话告诉本人；要本人亲自做或选的照旧进“需要你”。
 - **要本人做、要本人选、可能漏看的事**：根会话在回复本人的同时，用 `pwsh -NoProfile -File E:\PCConfig\tools\Set-OwnerItem.ps1 -Mode Add` 登记到驾驶舱“需要你”，填写 `-PassCriteria` 完成条件；可机核的方法用 `-AiHint` 写入条目的 `ai_hint`。Claude、Codex 用同一命令；子代理不登记，交根会话决定。
-  周治理或任何 AI 核实完成条件后，用同一命令 `-Mode Close -Id <条目id> -Result passed -Note <核实证据>` 关闭；本人说做完，也先查对应条目并核实后关闭。只有 AI 能关闭，网页不提供删除。
+  周治理或任何 AI 核实完成条件后，用同一命令 `-Mode Close -Id <条目id> -Result passed -Note <核实证据>` 关闭；本人说做完，也先查对应条目并核实后关闭。本人在配对过的设备上可以直接在卡片上处理，动作进收件箱，由 AI 照办或核实后关闭；公开版只能看。
 
 ## 软件更新和兼容
 
@@ -3567,13 +3562,13 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E280",
-   "sha256": "1d284002b92a55f95e8a1149a7afaef99601c9ea04ced56f7f67cfa65785ae34",
-   "public_sha256": "823a55995324ca3cb37c54452e15275588e49f4e8accff16199ea767959b517f",
+   "release": "E325",
+   "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
+   "public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
    "from": "## 安装位置、配置和本机约定",
    "to": null,
-   "start": 8587,
-   "end": 10087,
+   "start": 8703,
+   "end": 10203,
    "approved_omissions": []
   },
   "title": "原文（五）：安装位置、配置和本机约定",
@@ -3592,7 +3587,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-15",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "823a55995324ca3cb37c54452e15275588e49f4e8accff16199ea767959b517f",
+  "source_public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-15"
  },
  "layout": {
@@ -3600,7 +3595,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -3620,7 +3615,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -3666,7 +3661,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
 }
 ```
 
-原文 · E280 版 · 续
+原文 · E325 版 · 续
 
 ## 安装位置、配置和本机约定
 

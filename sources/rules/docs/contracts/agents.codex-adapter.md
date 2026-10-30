@@ -2,19 +2,19 @@
 
 owner: `E:\.agents`
 
-只在当前动作用到 Codex 特有机制时读。这里只补充 Codex 的不同处；共同原则在其他专题里，不在这里另立一套。
+只在用到 Codex 特有机制时读；共同原则见其他专题。
 
 ## 入口和新消息
 
 Codex home 里的 `AGENTS.md` 只是入口，规则从核验过的活动版本读。真实的新消息和自动续作、上下文压缩、工具消息分开看；Hook 会把个人资料状态带进来，Hook 缺失或投递不明时，资料状态按不明处理，并先用 `StatusPersonalEnvironment` 重读。锁着或不明时不取用私人资料；根会话问到本人自己的事，第一步先请本人验证解锁，通过后再查资料、派子代理和作答，不给降级回答；纯技术工作照常。调用 MCP 不改变本机 Codex 原来的任务入口。新消息、Hook、子代理的真实身份和执行结果从本机现役入口核实，不从标题、模型自述或别的宿主遗留的环境借身份。
 
-SessionStart 的 startup/compact/resume 从原话分类生成现行禁令和授权短表，与派活、提问前的 PreToolUse 使用共同决定投影；原生子代理压缩跳过 SessionStart 的接续按[长任务接续](/rules/context-sources/#长任务接续)读原任务状态。
+SessionStart 的 startup/compact/resume 按[长任务接续](/rules/context-sources/#长任务接续)执行，不注入决定短表或要求表；原生子代理压缩跳过 SessionStart 时，也按该节读原任务状态。
 
 根会话压缩后的只读复核按[共用复核规则](/rules/context-sources/#压缩后的后台复核)执行。此项已授权自动任务使用共用 GPT 后台包装器，并保留真实 Codex 父会话号；不受普通派发的“原生满槽才转包装器”条件限制，不扩大其他任务的调用范围。程序换窗是否触发与原生压缩分开核验，具体入口见运维说明（`E:/.agents/docs/operations/context-hooks.md`）。
 
 Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false`、`use_memories=false`；需要留下的内容统一按[共享经验的落点](/rules/context-sources/#共享经验的落点)处理，Codex 工具的已核实教训归本专题。
 
-**浏览器**：访问网站用 `agent.browsers.get("chrome")`，不用 `getDefault()`、`getForUrl()` 或 `iab` 让运行时代选；应用内浏览器只用于本机文件、本地预览或本人当轮点名时。本机渲染范围与插件不通时的处理按[浏览器规则](/rules/capabilities-runtime/#浏览器)执行。
+**浏览器**：Codex 桌面版的主对话和它用原生机制派的子代理，访问网站、看网页、用本人登录状态，都不调用桌面自带的浏览器工具（Chrome 插件、电脑操作插件的 `cua_repl`、应用内浏览器），一律和 Claude 一样，用共用包装器（`#原生容量不足时转用共用包装器`）派 GPT 子代理去做：带 `-ParentHarness Codex` 和当前真实父任务完整编号，型号和档位按 `config/model-roster.json` 的浏览器场景；这类网页任务不受“原生满槽才转包装器”的限制，派单按“派活松紧怎么定”写目标、已知事实、底线和完成标准，页面或入口只作参考，不叫子代理改用 `cua_repl`。包装器派出的子代理用 `agent.browsers.get("chrome")` 在本人 Chrome 自己新开的后台标签页里操作，不用 `getDefault()`、`getForUrl()` 或 `iab` 让运行时代选。应用内浏览器只用于本机文件、本地预览或本人当轮点名时。本机渲染范围与子代理连不上时的处理按[浏览器规则](/rules/capabilities-runtime/#浏览器)执行。这是可由本人当场改的默认。
 
 ## 读取聊天结果
 
@@ -24,6 +24,11 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
 
 在 `functions.exec` 内解析返回的 JSON，只输出本次所需字段或消息，并对输出设总字数上限；更多内容按游标或明确选择续取，不直接 `text` 整个结果或把原始大数组回灌上下文。调用参数以当前工具能力为准；必须完整阅读的规则或原文仍要分段取齐。
 
+## 定时任务和收尾
+
+- Codex 定时任务每跑一轮，同样用结论回执命令把一句人话结论写进驾驶舱，见[能力与运行方式](/rules/capabilities-runtime/#汇报网站和自动运行的东西)“定时任务的结论写进驾驶舱”。
+- Codex 没有结构化的收尾工具：本轮有要本人定或做的事时，最后一条回复的最后一行写“【等你】<一句人话>”，钩子据此登记驾驶舱、本人回复后关闭；没有等本人的事就不写这一行。
+
 ## 无限制授权
 
 本人要给当前 Codex 对话开无限制授权时，直接运行 PCConfig 安装好的 `Invoke-OwnerTakeover.ps1 -Operation Open`，不先派模型判断。`HostTaskId` 只传当前宿主真实的线程 ID，不借历史任务、MCP 连接或别的对话。Open 会生成这次的配对和请求编号，用 Windows 现有的提权能力，弹出独立窗口让本人只填时长；回执里应有 `grant_type=unrestricted`。本人验证完成后，由 Hook 自动回读并使用这份授权（`CheckHost`）；模型不手动串 `Configure/Prepare/Activate/Status/Check`，也不反复打开窗口。必要的子代理沿用同一请求和原截止；本地命令带同一组三个接管环境值，不改用户级或机器级环境变量。回执丢了先查原请求，不自动重弹窗口或重新验证。入口真的报错时才去定向诊断。
@@ -31,7 +36,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
 ## 派子代理：Codex 的不同处
 
 共同原则见[分工与并行施工](/rules/execution-coordination/)，可派范围见 `config/model-roster.json`。
-原生子代理和包装器子任务统一按[子代理原则](/rules/execution-coordination/#派子代理的原则)：根负责出处，子代理不查、不报无出处，只按派单交付；核验由根或包装器完成，子代理按需读给定版本的专题。
+原生子代理和包装器子任务统一按[子代理原则](/rules/execution-coordination/#派子代理的原则)及[派活松紧怎么定](/rules/execution-coordination/#派活松紧怎么定)交付；核验由根或包装器完成，子代理按需读给定版本的专题。
 
 原生 GPT 的 `reasoning_effort` 按共同原则第 4 条和模型清单 `routing.effort_rule` 填写；其他厂商沿用各自设置。型号换代按[新型号怎么调研](/rules/execution-coordination/#新型号怎么调研)重评。
 
@@ -52,9 +57,9 @@ $child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
 & $child -Mode Resume -RunDir '<同一结果目录>' -PromptFile '<续作.md绝对路径>'
 ```
 
-执行器监测和接续状态与 Claude 共用，新版后台订阅在周期到点时内部续等；旧轮终态后 Resume 在原线程接入。Start 默认启动后返回，需要等候时显式加 `-Wait`；旧 `-NoWait` 仍可用。Watch 可加 `-WakeOnEach` 在任一任务结束时叫醒，回执只列剩余任务；Resume 保留原默认等候。派活单和 M1 的具体用法见派发说明（`E:/.agents/docs/claude-gpt-child-dispatch.md`）。
+执行器监测、订阅、接续状态和参数用法只见派发说明（`E:/.agents/docs/claude-gpt-child-dispatch.md`），与 Claude 共用。
 
-上例的 `-ContinueOnQuota` 只在同额度根会话仍能正常调用时启用。派活字段和验收统一见派发说明（`E:/.agents/docs/claude-gpt-child-dispatch.md`），出处、方案和成本估算可选；修改代码用任务专用工作树，只读用 `-WorkDir '<已有目录>'`。Extend、`-AllowOverBudget`、`-Correction` 带 `-Reason`。
+上例的 `-ContinueOnQuota` 只在同额度根会话仍能正常调用时启用。派活字段、预算和验收只见派发说明；修改仓库用任务专用工作树，只读用 `-WorkDir '<已有目录>'`。
 
 ## 新消息里的状态
 

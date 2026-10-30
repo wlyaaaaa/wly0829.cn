@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E280",
-   "commit": "9e6c296def23c918a78334b02c597da68efd0233",
-   "ruleset_sha256": "33c65cb3c6152825d5fb89b7be9688f534ab9ebe6ffa1841358b315b98b0b87f",
-   "activated_at": "2026-10-22T08:43:25.661700+08:00",
+   "release": "E325",
+   "commit": "5fbf6a12ea23093e7b91748db9abd6866d27f9b4",
+   "ruleset_sha256": "5f011f73cb5a4901f93151328d70eea6c9b9ff6d03ff596c26d7a18700a1f893",
+   "activated_at": "2026-10-30T04:20:33.726689+08:00",
    "file": "sources/rules/docs/contracts/agents.rule-release.md",
-   "sha256": "1eb0a037a37ff6efd85a2663c2b11f029fcd0cf532932167a96534f2fea65d57",
-   "public_sha256": "1eb0a037a37ff6efd85a2663c2b11f029fcd0cf532932167a96534f2fea65d57"
+   "sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
+   "public_sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：玻璃柜里书架上标着 E187 的那本书轻轻发出一圈淡绿的光，路标上“当前”那块木牌微微晃动后稳稳指向它；一只手伸过来想推开玻璃柜门，黄铜锁扣上的“SYSTEM”小铜牌闪一下，门纹丝不动，手缩回；地上两只印着 Claude 和 OpenAI 标志的小信封轻轻翻开又合上；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，书脊和牌子上的字保持不动、不变形。",
   "registry": {
@@ -152,8 +152,8 @@
  },
  "source": {
   "page": "sources/pages/rule-rule-release/page.json",
-  "sha256": "f02badaf4aa014afed1ac1373fbb4f386df56fced5554ef4df4654753e6d7fd3",
-  "converted_at_beijing": "2026-10-22T09:10:17+08:00"
+  "sha256": "3dd438b3e9ca0502ba7a60138f8490c8bbec0f714bd04dacf9c20e48578f2d1d",
+  "converted_at_beijing": "2026-10-30T11:19:19+08:00"
  }
 }
 ---
@@ -1290,9 +1290,9 @@ E186　E187　当前　上一版　SYSTEM
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.rule-release.md",
-   "release": "E280",
-   "sha256": "1eb0a037a37ff6efd85a2663c2b11f029fcd0cf532932167a96534f2fea65d57",
-   "public_sha256": "1eb0a037a37ff6efd85a2663c2b11f029fcd0cf532932167a96534f2fea65d57",
+   "release": "E325",
+   "sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
+   "public_sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
    "from": null,
    "to": "## 发布和回退",
    "start": 0,
@@ -1310,7 +1310,7 @@ E186　E187　当前　上一版　SYSTEM
   "reuse": "",
   "source_excerpt_id": "rule-rule-release/rule-rule-release-05",
   "source_logical_id": "rule_release_contract",
-  "source_public_sha256": "1eb0a037a37ff6efd85a2663c2b11f029fcd0cf532932167a96534f2fea65d57",
+  "source_public_sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
   "source_rule_part": "rule-rule-release/rule-rule-release-05"
  },
  "layout": {
@@ -1320,7 +1320,7 @@ E186　E187　当前　上一版　SYSTEM
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E280版，一字不改"
+     "text_ref": "原文·E325版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1350,7 +1350,7 @@ E186　E187　当前　上一版　SYSTEM
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E280版，一字不改"
+     "text_ref": "原文·E325版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1443,7 +1443,7 @@ E186　E187　当前　上一版　SYSTEM
 }
 ```
 
-原文 · E280 版，一字不改
+原文 · E325 版，一字不改
 
 # 规则发布与恢复
 
@@ -1473,13 +1473,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.rule-release.md",
-   "release": "E280",
-   "sha256": "1eb0a037a37ff6efd85a2663c2b11f029fcd0cf532932167a96534f2fea65d57",
-   "public_sha256": "1eb0a037a37ff6efd85a2663c2b11f029fcd0cf532932167a96534f2fea65d57",
+   "release": "E325",
+   "sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
+   "public_sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
    "from": "## 发布和回退",
    "to": null,
    "start": 799,
-   "end": 2500,
+   "end": 2688,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1493,7 +1493,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-rule-release/rule-rule-release-06",
   "source_logical_id": "rule_release_contract",
-  "source_public_sha256": "1eb0a037a37ff6efd85a2663c2b11f029fcd0cf532932167a96534f2fea65d57",
+  "source_public_sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
   "source_rule_part": "rule-rule-release/rule-rule-release-06"
  },
  "layout": {
@@ -1502,7 +1502,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -1525,7 +1525,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -1595,13 +1595,13 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E280 版 · 续
+原文 · E325 版 · 续
 
 ## 发布和回退
 
 - **一次发布一批。** 同一件事的相关修改合在一起测试、一次发布；已经造成实际错误的修复不为凑批等待。发布前跑完相关测试，定向提交，推送到默认分支并回读远端。
 - **只用一个发布入口。** 发布用 `Invoke-EAgentRulesRelease.ps1 -Mode Activate`，回退用 `-Mode Rollback`。发布器从选定的提交取文件，生成这一版的集合和校验值，切换“当前”和“上一版”，再回读核对。只检查真正参与发布的文件有没有未提交的改动，不因为无关项目或技能的改动停下，也不把别人没做完的修改混进来。
-- **限制句按意思判断。** 发布门对改变措辞、缩短、挪位置或改成指向同版仍有效的同一规则做一次 Sol medium 语义比对，限制的对象、范围、条件和强度都不变就自动放行，不请本人同意；判定为改写的旧句和目标版本证据写入发布回执及版本记录。真正放宽、删除限制，或改动 `AGENTS.md` 的“我的 AI 约法”一节，仍须通过发布入口的 `-OwnerApproval <源消息UUID>` 参数核对本人的同意；比对不可用或拿不准时按意思变了处理。
+- **限制句按意思判断。** 发布门对改变措辞、缩短、挪位置或改成指向同版仍有效的同一规则做一次 Sol medium 语义比对，限制的对象、范围、条件和强度都不变就自动放行，不请本人同意；判定为改写的旧句和目标版本证据写入发布回执及版本记录。真正放宽、删除限制，或改动 `AGENTS.md` 的“我的 AI 约法”一节，要用发布入口的 `-OwnerApproval <源消息UUID>` 指向本人原话（可以列几条）。原话里本人在谈改规则（说到规则、约法或约法条号，例如“L14 必要时可改”），就是明确同意改规则，直接放行；否则发布门做一次 Sol medium 比对，确认每处改动都符合原话里本人真正想要的结果就放行，不另外问本人。规则写本意、不照抄字面：补全本意显然包含的同类对象和说法可以放行；违背原话方向、放宽到本意没涉及的对象，或只是 AI 自己提的、本人没反对的，不放行。比对不可用或拿不准时，按要本人同意处理。
 - **并发。** 发布器会核对当前指针的校验值；如果别的任务刚发布过，先重读并把它的结果并进来，不覆盖。新的发布必须包含当前在用的那次提交。不为发布新建队列、后台服务或全局施工平台。
 - **失败和回退。** 发布失败时恢复原来的指针和入口，旧版本照常可用。指针缺失但 `releases` 下仍有 `E*` 目录时，报 `e_rules_current_pointer_missing`；按现存目录的 `release.json` 重建指针后再核验。成功后只留“当前”和“上一版”两份可重建的目录，历史由私有 Git 保存。回退把正文、目录和入口模板一起恢复到上一版；不改写历史代号，也不重建同一个代号来冒充回退。
 - **入口模板随版本部署。** `templates/codex-home/AGENTS.md` 写到 Codex home 的 `AGENTS.md`；`templates/claude-home/CLAUDE.md` 写到当前用户的 `~/.claude/CLAUDE.md`，这样 Claude 在任何项目里都先经这个入口核验活动版本。约法有变化时，在发布汇报里提醒本人启动一次笔记本的按需巡检；由笔记本从主机当前活动规则同步约法段，主机不反向写笔记本，连不上时保留笔记本现有规则。

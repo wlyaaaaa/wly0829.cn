@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E280",
-   "commit": "9e6c296def23c918a78334b02c597da68efd0233",
-   "ruleset_sha256": "33c65cb3c6152825d5fb89b7be9688f534ab9ebe6ffa1841358b315b98b0b87f",
-   "activated_at": "2026-10-22T08:43:25.661700+08:00",
+   "release": "E325",
+   "commit": "5fbf6a12ea23093e7b91748db9abd6866d27f9b4",
+   "ruleset_sha256": "5f011f73cb5a4901f93151328d70eea6c9b9ff6d03ff596c26d7a18700a1f893",
+   "activated_at": "2026-10-30T04:20:33.726689+08:00",
    "file": "sources/rules/docs/contracts/agents.privacy-data.md",
-   "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
-   "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5"
+   "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
+   "public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：一只手把验证卡轻轻贴到小木柜的绿色挂锁上，挂锁“咔”地弹开，旁边的小沙漏翻转、细沙开始往下流；中间五级石台阶从 L1 到 L5 依次微微亮一下，L4 台阶上的小保险箱始终关着；下面 G、H 两块硬盘之间一道细绿光从左流到右，H 盘旁小木箱上的日历牌翻过一页；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -291,8 +291,8 @@
  },
  "source": {
   "page": "sources/pages/rule-privacy-data/page.json",
-  "sha256": "965387d8bdb197c5648b596719e96eac3c7fc89fffdc6fbbb07a3296b9ea77b2",
-  "converted_at_beijing": "2026-10-22T09:10:17+08:00"
+  "sha256": "19bb6da3279c883e0ba257906b6c981f4eb47f55e042a7c4ef6f2de97d85e1f3",
+  "converted_at_beijing": "2026-10-30T11:19:19+08:00"
  }
 }
 ---
@@ -2713,13 +2713,13 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E280",
-   "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
-   "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+   "release": "E325",
+   "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
+   "public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
    "from": null,
    "to": "- **入口。**",
    "start": 0,
-   "end": 1622,
+   "end": 1707,
    "approved_omissions": []
   },
   "title": "原文（一）：开头和个人资料的锁和解锁",
@@ -2746,7 +2746,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-07",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+  "source_public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-07"
  },
  "layout": {
@@ -2756,7 +2756,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E280版，一字不改"
+     "text_ref": "原文·E325版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2790,7 +2790,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E280版，一字不改"
+     "text_ref": "原文·E325版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2872,7 +2872,7 @@
 }
 ```
 
-原文 · E280 版，一字不改
+原文 · E325 版，一字不改
 
 # 个人资料与数据处理
 
@@ -2884,6 +2884,7 @@ owner: `E:\.agents`
 
 - **只有一份状态。** 本人资料只有一份解锁状态和截止时间，由 PasswordCenter 的 SecretBroker 管理；本机、图形界面、所有 AI 和已认证的电脑 MCP 共用它。每条真实的新消息开始时，从 Hook（Codex、Claude）或 `ComputerContext`（电脑 MCP）读当前状态；状态缺失、过期或不明时，不取用私人资料，需要资料时按下面的解锁顺序办理。MCP 连上了、文件能读或磁盘加密了，都不等于资料已解锁。
 - **什么时候需要解锁。** 问的是本人自己的情况（身体、心理、生活、学习求职、感情等），就算需要；回答要用到本人的偏好、履历、通信、健康、财务、私人关系或以前的个人经历时也需要。拿不准按需要处理。不依赖本人情况的通用讲解、代码、天气和项目实施、PCConfig 配置、性能排查、规则维护照常做，不需要。不先读私人库、索引或摘要来判断要不要解锁，也不按关键词自动弹验证窗口；普通技术事实不因为属于本人就升级保护。
+- **公开内容和定时任务。** 读取公开网页内容不受资料锁限制；需要本人私人资料时仍先解锁，不借公开网页绕锁。定时任务不提前续期，真正需要资料且已到期时再请本人解锁。
 - **怎么解锁。** 判断资料需求和发起解锁只由根会话做；根会话在派活前判断，需要就先解锁再派。解锁是第一步，先于检索、派子代理和作答：需要资料就直接走现有解锁入口，请本人验证一次（本机四选一，手机用现有验证器），不先派别的模型批准，也不验证两次。验证真正通过、资料能读之后，再查资料、派活并完整处理原来的问题；锁着时不给降级回答。
 - **时长。** 当前默认时长读密码中心的 `duration_policy.default_minutes`，不把程序出厂的 8 小时当成当前设置；本人可填 0.5～72 小时，可以有小数。改这一次不改默认；改默认不影响已开的这一次。电脑重启、到期或本人明确锁定，这一次就结束；重开窗口、新消息、子代理、换模型和续作都不延长它。
 - **取消只结束这一次。** 本人取消、拒绝或超时，只结束这一次验证：锁着的还锁着，已开的照样有效；不连带锁别的，也不自动重试或换个入口重来。本人之后明确再要，才重新办。
@@ -2900,13 +2901,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E280",
-   "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
-   "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+   "release": "E325",
+   "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
+   "public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
    "from": "- **入口。**",
    "to": "## 公开个人数据分级表",
-   "start": 1622,
-   "end": 3202,
+   "start": 1707,
+   "end": 3400,
    "approved_omissions": []
   },
   "title": "原文（二）：入口、可信位置和原样保存",
@@ -2920,7 +2921,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-08",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+  "source_public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-08"
  },
  "layout": {
@@ -2930,7 +2931,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -2964,7 +2965,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -3022,7 +3023,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E280 版 · 续
+原文 · E325 版 · 续
 
 - **入口。** 查状态、业务检查和锁定分别是密码中心的 `StatusPersonalEnvironment`、`CheckPersonalDataAccess`、`LockPersonalEnvironment`，经已安装的 `C:\ProgramData\PCConfig\AuthorityHost\tools\Invoke-SecretBroker.ps1` 调用。状态未知时先用 `StatusPersonalEnvironment` 重读。`VerifyPersonalEnvironment` 在已有资料期内复用原截止；需要验证时不传 `-AuthorityFactor`，由本人选四选一验证。命令同步等验证终态，窗口首次可见起最长等 5 分钟；模型用宿主后台命令运行，外层超时至少 360 秒，等终态后回读状态，不能把命令启动当验证成功。取消、拒绝和超时按上面的取消规则处理。本人明确要解锁或续期时用 `EnrollPersonalPrivacyWaiver`，用法见 `local-secret-broker` 技能。资料检查直接读共享状态，不需要对话号、消息号或宿主对话记录；只读检查也不消费无限制授权。本人说“锁定个人资料”“冻结个人资料”就走锁定；“冻结项目”“冻结设计”不是资料操作。Hook、技能和电脑 MCP 只读这份状态，不另建权限记录。
 
@@ -3030,7 +3031,7 @@ owner: `E:\.agents`
 
 - **可信位置。** 本机、工作区、BitLocker 保护的本地硬盘和 U 盘，以及本人自己账号下默认私有的空间（例如 Google Drive、Notion、私有 GitHub、Dropbox、OneDrive）都是可信位置，不因为联网或在云上就降级。账号归属不明、共享范围不明或可见性有冲突时，按“不明”处理，不靠推定越过证据；确定公开的目标另按公开分级办。
 - **原样保存**（约法 L19）：在可信位置里读取、编辑、复制、备份、恢复或输出时，`.env`、令牌、密码、私钥、OAuth 文件按任务需要原样保留，不遮盖、删除、截断或换成占位符。手机号这类私人联系方式在本机和私有仓库里也照原样记，不打码；只有要公开时才按公开分级判断。可信不等于可以写入，写入授权另看。
-- **本机安全就这几样**（约法 L14）：BitLocker、开机和 Windows 登录密码、密码中心（SecretBroker）和本人明确选用的加密技能。本机当前用户、文件、进程、软件和私人账号空间默认可信；本人的远程访问工具（如 ToDesk、Sunshine/Moonlight、Windows 远程桌面）和跨设备同步工具（如 KDE Connect、小米妙享、手机连接）连着的设备也可信，经它们查看、串流或同步密码是正常用法。不为想象中的本地攻击者加遮盖、防截屏、防同步、定时清理、身份层、审计链或安全流程；误删、损坏、失败和回滚按正确性和可恢复性处理，“安全”不是加流程或逃避验收的理由。本人明确要求的具体安全任务，或外部平台对这次动作真实提出的条件除外。
+- **安全就这几样**（约法 L14）：保护只有个人资料的解锁加密（约法 L18）、密码中心（SecretBroker），以及 BitLocker、开机和 Windows 登录（锁屏）密码这类正常的系统安全和本人明确选用的加密技能，这些照旧。本机当前用户、文件、进程、软件和私人账号空间默认可信，副驾驶笔记本和本人的手机同样可信，上一条列的私人云端（私有 GitHub、Google Drive 等）同样可信；本人的远程访问工具（如 ToDesk、Sunshine/Moonlight、Windows 远程桌面）和跨设备同步工具（如 KDE Connect、小米妙享、手机连接）连着的设备也可信，经它们查看、串流或同步密码是正常用法。本机和这些私人云端都不得为想象中的攻击者另加遮盖、防截屏、防同步、定时清理、身份层、审计链、额外加密或安全流程；误删、损坏、失败和回滚按正确性和可恢复性处理，“安全”不是加流程或逃避验收的理由。本人明确要求的具体安全任务，或外部平台对这次动作真实提出的条件除外。
 - **秘密放哪里。** 密码、令牌、密钥和 SecretRef 只放在密码中心、SecretBroker 或加密技能里，不写进规则、聊天或普通配置。私密内容和凭据不上网搜索，只用脱敏的关键词。`local-secret-broker` 管 SecretRef；`wlyaaaaa/Key` 仓库和 Vault（VAULT03、vault-tool）走 `vault-workflow`，普通文件加解密走 `authorization-file-broker`。BitLocker 恢复密钥的专用本机全量查看，是批量显示秘密明文的唯一例外；结果不进模型、聊天、标准输出、JSON、剪贴板或文件。
 
 ::screen{#rule-privacy-data-09 section="original"}
@@ -3043,13 +3044,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E280",
-   "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
-   "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+   "release": "E325",
+   "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
+   "public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
    "from": "## 公开个人数据分级表",
    "to": "## 私人仓库收口",
-   "start": 3202,
-   "end": 4397,
+   "start": 3400,
+   "end": 4595,
    "approved_omissions": []
   },
   "title": "原文（三）：公开个人数据分级表",
@@ -3068,7 +3069,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-09",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+  "source_public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-09"
  },
  "layout": {
@@ -3078,7 +3079,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -3135,7 +3136,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -3205,7 +3206,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E280 版 · 续
+原文 · E325 版 · 续
 
 ## 公开个人数据分级表
 
@@ -3231,13 +3232,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E280",
-   "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
-   "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+   "release": "E325",
+   "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
+   "public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
    "from": "## 私人仓库收口",
    "to": null,
-   "start": 4397,
-   "end": 5049,
+   "start": 4595,
+   "end": 5247,
    "approved_omissions": []
   },
   "title": "原文（四）：私人仓库收口、备份跟着原件走",
@@ -3251,7 +3252,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-10",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+  "source_public_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-10"
  },
  "layout": {
@@ -3261,7 +3262,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -3305,7 +3306,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E280版·续"
+     "text_ref": "原文·E325版·续"
     },
     {
      "type": "source_text_card",
@@ -3387,7 +3388,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E280 版 · 续
+原文 · E325 版 · 续
 
 ## 私人仓库收口
 
