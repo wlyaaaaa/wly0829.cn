@@ -56,10 +56,14 @@ const STATES = new Set(['ok', 'attention', 'red', 'unavailable', 'reading']);
 const st = (v) => (STATES.has(v) ? v : 'unavailable');
 
 // “AI 正在跑”（后端 cockpit.ai_running）：每件此刻在跑的 AI 活一行。认不得的状态一律当“判断不了”；
-// 卡住 = 网络在重连、额度用完、登录失效、停了（和后端 stuck_count 同一口径；后端给了就以它为准）
-export const RUN_STATUSES = ['running', 'network_retry', 'quota_exhausted', 'login_failed', 'waiting_owner', 'stopped', 'unknown'];
-// 卡住：只算额度用完、登录失效、网络在重连（10 月 29 日起后端也这么算；半路停下的记为“停了，没做完”，不算卡住）
+// queued 在排队、waiting_confirm 等你确认、waiting_data 等你解锁个人资料都算还在办；failed 中途断了和 stopped 一样不算在干活
+export const RUN_STATUSES = ['running', 'network_retry', 'quota_exhausted', 'login_failed', 'waiting_owner', 'queued', 'waiting_confirm', 'waiting_data', 'stopped', 'failed', 'unknown'];
+// 卡住（合同 C:23，和后端 public_dashboard_ai_running 同一口径）：额度用完、登录失效、网络在重连；
+// 调度来源（source_kind=cockpit_dispatch）的自动网络重连不算卡住，等登录（blocked_on_login）、叫停没停下（stop_pending）算。
+// 行上有后端算好的 stuck 就用它；件数以后端 stuck_count 为准，render.js 也只读这里的 r.stuck
 export const RUN_STUCK = ['network_retry', 'quota_exhausted', 'login_failed'];
+export const rowStuck = (r) => (typeof r.stuck === 'boolean' ? r.stuck
+  : (RUN_STUCK.includes(r.status) && !(r.source_kind === 'cockpit_dispatch' && r.status === 'network_retry')) || r.blocked_on_login === true || r.stop_pending === true);
 const text = (x, max = 200) => (typeof x === 'string' ? x.trim().slice(0, max) : '');
 const nat = (x) => (Number.isInteger(x) && x >= 0 ? x : null);
 // 本人设备上条目带的按钮和状态（后端 owner_actions、item_version、handed_to_ai、verifying、seen_at）；其他列表的行原样透传，这里给重新拼过的行用
@@ -83,7 +87,7 @@ const replyOf = (r) => {
 function aiRunning(raw) {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
   const convert = (items) => list(items).map((r) => ({
-    id: text(r.id, 120), status: RUN_STATUSES.includes(r.status) ? r.status : 'unknown', status_text: text(r.status_text, 20),
+    id: text(r.id, 120), status: RUN_STATUSES.includes(r.status) ? r.status : 'unknown', status_text: text(r.status_text, 20), stuck: rowStuck(r),
     vendor: ['claude', 'gpt'].includes(r.vendor) ? r.vendor : '', model: text(r.model, 60), model_text: text(r.model_text, 40), effort: text(r.effort, 20), kind: text(r.kind, 40),
     title: text(r.title, 120), started_at: r.started_at || null, last_activity_at: r.last_activity_at || null, detail: text(r.detail, 300), helpers: nat(r.helpers) || 0,
     // 本人版才有：它现在在做哪一步（doing，一句话；step_index / step_total 第几步、共几步）和最近一次进展（progress：一句话 + 时间）。
@@ -94,11 +98,11 @@ function aiRunning(raw) {
     placeholder: r.placeholder === true,
     // 电脑版“打开”组（后端 open：conversation / report / targets，见 render.js 的 openGroup）；没给就没有
     ...(r.open && typeof r.open === 'object' && !Array.isArray(r.open) ? { open: r.open } : {}),
-    // 本人设备才有：能点的按钮（卡住的行有“改给另一家”）、条目版本、现在是哪家在做，以及交出去以后的状态
+    // 本人设备才有：能点的按钮（只认“知道了”“晚点提醒”）、条目版本、现在是哪家在做，以及交出去以后的状态
     ...ownerFields(r), ...(['claude', 'gpt'].includes(r.executor) ? { executor: r.executor } : {}), copy_source: r,
   }));
   const rows = convert(raw.rows);
-  const stuck = rows.filter((r) => RUN_STUCK.includes(r.status)).length;
+  const stuck = rows.filter((r) => r.stuck).length;
   const count = nat(raw.count) ?? rows.length;
   // stale_count：早就停了、不算在跑的件数（后端没给就是 0）；
   // unread：后端说这次读不全（observed_at 为空且有缺口）又没有行，不能说成“没有 AI 在跑”
@@ -144,7 +148,7 @@ export function normalize(raw) {
     ai_work: { state: st(obj(v.ai_work).state), observed_at: obj(v.ai_work).observed_at || null, items: list(obj(v.ai_work).items) }, governance: obj(v.governance),
     // 电脑后台今天做的事、今天的用电和开机（PCConfig 给；读不到时块照样在）
     today_activity: (() => { const a = obj(v.today_activity); return { state: st(a.state), observed_at: a.observed_at || null, summary: obj(a.summary), timeline: list(a.timeline), errors: list(a.errors), yesterday: a.yesterday && typeof a.yesterday === 'object' ? a.yesterday : null }; })(),
-    // 电脑健康的原因（hardware.health.pc_health）和副机在不在线（remote_network）：精简视图暂时没带，没有就不显示这两句
+    // 副机在不在线读 laptop.connection（online / offline / unknown）；laptop.state 是副机自动任务的健康，不是连接
     pc_health: obj(v.pc_health), laptop: obj(v.laptop),
     power_today: (() => { const p = obj(v.power_today); return { state: st(p.state), observed_at: p.observed_at || null, uptime_hours: Number.isFinite(p.uptime_hours) ? p.uptime_hours : null, energy_kwh: Number.isFinite(p.energy_kwh) ? p.energy_kwh : null, peak_watts: Number.isFinite(p.peak_watts) ? p.peak_watts : null, source: typeof p.source === 'string' ? p.source : '', source_note: typeof p.source_note === 'string' ? p.source_note : '', yesterday: p.yesterday && typeof p.yesterday === 'object' ? p.yesterday : null }; })(),
     // 今天代码变化（大数字 + 近 7 天）；字段由 PCConfig 精简视图 changes 给

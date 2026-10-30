@@ -323,7 +323,8 @@
 .cp-ai { margin-top: 22px; }
 .cp-ai .cp-sub { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
 .cp-ai-parts { font-size: 14px; font-weight: 600; color: var(--cp-soft); }
-.cp-ai-cap { margin: 0 0 4px; font-size: 14px; font-weight: 700; color: #9a7409; }
+.cp-ai-cap { margin: 0 0 4px; font-size: 14px; font-weight: 700; color: var(--cp-neutral); } /* AI 自己晚了、不用你管：中性色，黄红只留给要你出手的 */
+.cp-ph-more { display: block; color: var(--cp-soft); font-size: 12.5px; }
 .cp-ailist { list-style: none; margin: 6px 0; padding: 0; }
 .cp-ailist li { display: grid; gap: 1px; padding: 7px 0; border-bottom: 1px dashed #e1efe5; overflow-wrap: anywhere; }
 .cp-ailist li:last-child { border-bottom: 0; }
@@ -524,20 +525,10 @@ ul.cp-know-sub > li { display: grid; grid-template-columns: minmax(0, 1fr); gap:
 .cp-oa .cp-btn:disabled { cursor: not-allowed; opacity: .55; }
 .cp-oa .cp-btn[aria-expanded="true"] { background: #e9f6ee; border-color: #9ddcae; }
 .cp-oa a.cp-btn { display: inline-flex; align-items: center; text-decoration: none; }
-.cp-oa-exec { min-height: 38px; padding: 4px 10px; font: inherit; font-size: 14px; border: 1px dashed #c9d6e2; border-radius: 999px; background: #f6f9fc; color: #3f5f7a; cursor: pointer; white-space: nowrap; }
-.cp-oa-exec:hover { background: #eef4fa; }
-.cp-oa :is(.cp-btn, .cp-oa-exec):focus-visible, .cp-recent > summary:focus-visible { outline: 2px solid #9ddcae; outline-offset: 2px; }
+.cp-oa .cp-btn:focus-visible, .cp-recent > summary:focus-visible { outline: 2px solid #9ddcae; outline-offset: 2px; }
 /* 答题：每题一排选项、一个“我的说明”小框 */
-.cp-oa-quiz { display: grid; gap: 12px; margin: 4px 0 10px; }
-.cp-oa-q { margin: 0; padding: 0; border: 0; min-width: 0; }
-.cp-oa-q legend { padding: 0; margin: 0 0 6px; font-size: 15px; overflow-wrap: anywhere; }
-.cp-oa-q legend b { margin-right: 6px; color: var(--cp-title); }
-.cp-oa-q .cp-opt { white-space: normal; text-align: left; overflow-wrap: anywhere; }
-.cp-oa-hint { margin: 0 0 6px; font-size: 12.5px; color: var(--cp-soft); }
-/* 回一句话 / 不对，重做：一个框 + 交给 AI；晚点提醒：四个选择 */
+/* 晚点提醒：几个选择 + 选一天 */
 .cp-oa-panel { display: grid; gap: 8px; margin-top: 8px; padding: 10px 12px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fbfefc; }
-.cp-oa-text { width: 100%; box-sizing: border-box; min-height: 4.6em; padding: 8px 10px; font: inherit; font-size: 15px; line-height: 1.5; border: 1px solid #cfe0d5; border-radius: 8px; background: #fff; resize: vertical; }
-.cp-oa-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
 .cp-oa-snooze { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .cp-oa-date { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; color: var(--cp-ink); }
 .cp-oa-date input { min-height: 38px; box-sizing: border-box; padding: 4px 8px; font: inherit; font-size: 15px; border: 1px solid #bfe8cc; border-radius: 8px; background: #fff; }
@@ -592,10 +583,9 @@ ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
 .cp-recent-list li.is-rejected .cp-recent-st { color: var(--cp-red); white-space: normal; }
 .cp-recent-list .cp-oa-undo { min-height: 34px; padding: 2px 14px; font-size: 14px; }
 @media (max-width: 767.98px) {
-  .cp-oa .cp-btn, .cp-oa-exec, .cp-btn.cp-oa-undo { min-height: 42px; }
+  .cp-oa .cp-btn, .cp-btn.cp-oa-undo { min-height: 42px; }
   :is(.cp-know-list, .cp-run-list, .cp-ailist, .cp-wait) .cp-oa .cp-btn { min-height: 40px; }
   .cp-own-s { font-size: 15px; }
-  .cp-oa-row { justify-content: flex-start; }
 }
 
 /* ===== 第三步（本人 10 月 29 日 18:42—18:51：太谜语人、还不好用）：首屏只放本人的事 =====
@@ -746,10 +736,6 @@ ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
 .cp-facts-at { margin: 2px 0 0; }
 
 /* 问题卡和“AI 在等你回”卡：“晚点提醒”“这件不做了”降成按钮行下面一行小字链接，不跟选项抢眼（同样能点、能撤回） */
-.cp-oa-minor { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 8px 0 0; font-size: 13.5px; }
-.cp-oa .cp-btn.cp-oa-link { min-height: 32px; padding: 2px 0; border: 0; border-radius: 0; background: none; color: var(--cp-soft); font-size: 13.5px; text-decoration: underline; text-decoration-color: #c9d6cd; text-underline-offset: 3px; }
-.cp-oa .cp-btn.cp-oa-link:hover { background: none; color: var(--cp-title); }
-.cp-oa .cp-btn.cp-oa-link[aria-expanded="true"] { color: var(--cp-title); font-weight: 700; }
 .cp-you-private { margin: 4px 0 0; }
 
 /* ===== 第四步：电脑版（本人 10 月 29 日 20:36：电脑版驾驶舱也很重要）=====
@@ -859,26 +845,13 @@ ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
   .cp-q > .cp-ask .cp-own-s { margin: 4px 0 0; font-size: 14.5px; line-height: 1.55; }
   .cp-q > .cp-ask.is-wait .cp-ask-title { margin-top: 6px; }
   .cp-q .cp-oa { margin-top: 8px; }
-  .cp-q .cp-oa-quiz { margin: 0; }
-  .cp-q .cp-oa-q { margin: 0; }
   .cp-q .cp-oa-opts { gap: 6px; }
   .cp-q .cp-oa-opts > li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
   .cp-q .cp-oa .cp-btn { min-height: 32px; padding: 3px 14px; font-size: 14px; }
   .cp-q .cp-oa-detail { padding: 0; font-size: 13px; }
   .cp-q .cp-oa > .cp-own-s { margin: 8px 0 0; font-size: 13.5px; color: var(--cp-soft); }
   .cp-q .cp-oa > .cp-own-s b { color: var(--cp-soft); }
-  .cp-q .cp-oa:has(> .cp-oa-minor) { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 12px; }
-  .cp-q .cp-oa:has(> .cp-oa-minor) > * { flex: 1 1 100%; min-width: 0; }
-  .cp-q .cp-oa:has(> .cp-oa-minor) > :is(.cp-oa-bar, .cp-oa-minor) { flex: 0 1 auto; margin-top: 8px; }
-  .cp-q .cp-oa-bar > :is([data-act="delegate"], [data-act="unclear"], [data-add]),
-  .cp-q .cp-oa .cp-btn.cp-oa-link { min-height: 0; padding: 2px 0; border: 0; border-radius: 0; background: none; font-size: 13.5px; color: var(--cp-title); text-decoration: underline; text-decoration-color: #b9dcc5; text-underline-offset: 3px; }
-  .cp-q .cp-oa .cp-btn.cp-oa-link { color: var(--cp-soft); text-decoration-color: #d3ddd7; }
-  .cp-q .cp-oa-bar > :is([data-act="delegate"], [data-act="unclear"], [data-add]):hover, .cp-q .cp-oa .cp-btn.cp-oa-link:hover { background: none; color: var(--cp-ink); }
-  .cp-q .cp-oa-bar > :is([data-act="delegate"], [data-act="unclear"], [data-add]) + :is([data-act="delegate"], [data-act="unclear"], [data-add])::before,
-  .cp-q .cp-oa-minor > .cp-oa-link + .cp-oa-link::before { content: "·"; display: inline-block; margin-right: 10px; color: #b6c4bb; text-decoration: none; }
   .cp-q .cp-oa-bar { gap: 6px 10px; }
-  .cp-q .cp-oa-minor { gap: 4px 10px; margin: 0; }
-  .cp-q .cp-oa-minor::before { content: "|"; align-self: center; margin-right: 2px; color: #cfd8d2; }
   .cp-q .cp-oa-panel { flex-basis: 100%; }
 
   /* 每种待办件数都用同一版式：上面整行待办，下面宽栏消息、窄栏状态。 */
@@ -985,7 +958,6 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
   .cp-lt-find { box-sizing: border-box; width: 260px; font: inherit; font-size: 14px; padding: 5px 14px; border: 1px solid var(--cp-line); border-radius: 999px; background: #fff; }
   .cp-lt-find:focus-visible, .cp-lt-bar .cp-q-mode:focus-visible { outline: 2px solid #2e9d5b; outline-offset: 1px; }
   .cp-lt-count { font-size: 13px; color: var(--cp-soft); }
-  .cp-lt-all { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; }
   .cp-ltable { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 14.5px; line-height: 1.5; background: #fff; }
   .cp-ltable :is(th, td) { overflow-wrap: anywhere; }
   .cp-ltable th.cp-lt-what { width: 40%; }
@@ -996,7 +968,6 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
   .cp-ltable.is-dec th.cp-lt-dec { width: 172px; }
   .cp-ltable.is-dec th.cp-lt-at { width: 140px; }
   .cp-ltable.is-dec th.cp-lt-act { width: 240px; }
-  .cp-ltable th.cp-lt-pick { width: 34px; }
   .cp-ltable th { padding: 7px 12px; border-bottom: 1px solid #d9e7de; background: #f5faf6; text-align: left; font-size: 13px; font-weight: 700; color: var(--cp-soft); white-space: nowrap; }
   .cp-ltable td { padding: 8px 12px; border-bottom: 1px solid #edf3ef; vertical-align: top; }
   .cp-ltable tbody tr:hover { background: #f8fcf9; }
@@ -1005,18 +976,14 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
   .cp-lt-title { font-weight: 700; color: var(--cp-ink); }
   .cp-ltable .cp-detail { display: block; }
   td:is(.cp-lt-due, .cp-lt-lag, .cp-lt-at) { white-space: nowrap; }
-  .cp-lt-late { font-weight: 700; color: #9a5b00; }
+  .cp-lt-late { font-weight: 700; color: var(--cp-neutral); }
+  .cp-lt-due small { display: block; color: var(--cp-soft); font-size: 12px; }
   .cp-lt-none { color: var(--cp-soft); }
   .cp-lt-prog small { display: block; font-size: 12.5px; color: var(--cp-soft); }
   td.cp-lt-dec { font-weight: 700; color: #2463a8; }
   .cp-lt-why { font-size: 13.5px; color: var(--cp-soft); }
-  .cp-lt-pick { padding-right: 0 !important; }
-  .cp-lt-pick input, .cp-lt-all input { width: 16px; height: 16px; accent-color: #2e9d5b; }
   td.cp-lt-act { text-align: right; overflow: visible; }
   .cp-lt-act .cp-oa { margin: 0; justify-content: flex-end; }
-  /* 正在写“回一句话”：框往左展开，不撑宽这一列 */
-  .cp-lt-act .cp-oa:has(textarea) { position: relative; z-index: 3; width: 360px; margin-left: -248px; padding: 8px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fff; box-shadow: 0 8px 24px rgba(21, 68, 35, .12); text-align: left; }
-  .cp-ltable.is-dec .cp-lt-act .cp-oa:has(textarea) { margin-left: -160px; }
   .cp-lt-act .cp-btn { min-height: 30px; padding: 2px 12px; font-size: 13.5px; }
   #ai-health { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; align-items: start; }
   #ai-health > h2 { grid-column: 1 / -1; }
@@ -1033,23 +1000,18 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 }
 
 /* ===== 线上真数据自查（10 月 30 日）===== */
-/* 你得知道：每条下面四个大按钮叠五遍太长。“知道了”留成按钮，“我没看懂 · 回一句话”写成同一行的小字链接，“交给：Claude ▾”缩成小字；照样能点、能撤回 */
+/* 你得知道：每条下面的“知道了”和“复制给 AI”收小一号 */
 .cp-know .cp-oa-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; }
 .cp-know .cp-oa-bar > .cp-btn { min-height: 30px; padding: 2px 14px; font-size: 13.5px; }
-.cp-know .cp-oa-bar > :is([data-act="unclear"], [data-act="note"], [data-act="seen"], [data-act="redo"]) { min-height: 30px; padding: 2px 0; border: 0; border-radius: 0; background: none; font-size: 13.5px; color: var(--cp-title); text-decoration: underline; text-decoration-color: #b9dcc5; text-underline-offset: 3px; }
-.cp-know .cp-oa-bar > :is([data-act="unclear"], [data-act="note"], [data-act="seen"], [data-act="redo"]):hover { background: none; color: var(--cp-ink); }
-.cp-know .cp-oa-exec { min-height: 30px; padding: 0 2px; border: 0; background: none; font-size: 12.5px; color: var(--cp-soft); }
 @media (max-width: 767.98px) {
-  .cp-know .cp-oa .cp-btn, .cp-know .cp-oa-exec { min-height: 34px; }
+  .cp-know .cp-oa .cp-btn { min-height: 34px; }
 }
 @media (min-width: 1200px) { .cp-need:has(> .cp-q-few.is-one) { columns: auto; } }
 
-/* 账本表格里的按钮：“知道了”留成按钮，其余写成小字链接，交给谁缩成小字（原来一格里五个按钮叠三行） */
+/* 账本表格里的按钮收小一号 */
 @media (min-width: 1200px) {
   .cp-ltable .cp-oa-bar { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 2px 12px; }
   .cp-ltable .cp-oa-bar > .cp-btn { min-height: 28px; padding: 1px 12px; font-size: 13px; }
-  .cp-ltable .cp-oa-bar > :is([data-act="unclear"], [data-act="note"], [data-act="redo"], [data-act="seen"]) { min-height: 26px; padding: 0; border: 0; border-radius: 0; background: none; font-size: 13px; color: var(--cp-title); text-decoration: underline; text-decoration-color: #b9dcc5; text-underline-offset: 3px; }
-  .cp-ltable .cp-oa-exec { min-height: 26px; padding: 0; border: 0; background: none; font-size: 12px; color: var(--cp-soft); }
 }
 
 /* “AI 正在跑”第二行：对话名、任务名的灰色小标签单独一行，进展那句接在下面，不挤在标签旁边一字一行 */

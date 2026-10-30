@@ -103,7 +103,8 @@ test('不急事项写明何时再做；停了的数据只在集中入口展示',
     scheduled: [{ id: 's1', title: '示例导出', scheduled_text: '约 11 月 20 日' }],
     sections: { computer: [{ id: 'traffic', title: '示例流量', text: '示例', state: 'unavailable', observed_at: '2026-10-20T10:00:00+08:00' }] } }));
   const html = REGIONS.home(v, ctx());
-  assert.match(html, /你放着 2 件不急的事/);
+  // 两类分开写：等条件再办的、已经排好日子的
+  assert.match(html, /你放着 2 件（等条件 1 · 排好日子 1）/);
   assert.match(html, /下次电脑卡住时再做/);
   assert.match(html, /排在约 11 月 20 日/);
   assert.match(html, /最后一次是 10月20日 10:00，数据停了/);
@@ -130,7 +131,7 @@ test('事实卡分层不变；AI账本每条可复制，公开版不泄漏本人
 test('公开版总件数包含未展示私事时解释差额；本人设备标注完整显示', () => {
   const v = own({ private_count: 2, need_you: [wait()] });
   assert.match(REGIONS.viewer(v, ctx()), /你的设备 · 全部显示（其中 2 件公网看不到）/);
-  const pub = normalize(base({ viewer: { kind: 'public' }, private_count: 18, need_you: [{ id: 'p1', title: '示例占位', placeholder: true, ask_kind: 'cooperate' }], verdict: { need_you: 3 }, overview: { owner_count: 3, owner_urgent: 0 } }));
+  const pub = normalize(base({ viewer: { kind: 'public' }, private_count: 18, need_you: [{ id: 'p1', title: '示例占位', placeholder: true, ask_kind: 'cooperate' }], verdict: { need_you: 3 }, overview: { owner_count: 3, owner_urgent: false, owner_urgent_count: 0 } }));
   assert.match(REGIONS.overview(pub, ctx()), /另 2 件是私人事项，只在你的设备上显示/);
   pub.overview.owner_count = 2;
   assert.doesNotMatch(REGIONS.overview(pub, ctx()), /另 \d+ 件是私人事项/);

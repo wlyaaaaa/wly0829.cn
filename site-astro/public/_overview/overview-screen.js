@@ -55,10 +55,11 @@ function signal(s, off) {
 function todoHead(ov, off, at) {
   const todo = (ov?.signals || []).find((x) => x?.id === 'todo') || {};
   const n = off ? NaN : Number.isFinite(ov?.owner_count) ? ov.owner_count : Number(todo.value);
-  const urgent = Number.isFinite(ov?.owner_urgent) ? ov.owner_urgent : null;
-  const sub = !Number.isFinite(n) ? (Number.isFinite(at) ? `电脑那边没读到（上次 ${hm(at)}）` : '还没读到') : n === 0 ? '现在没有要你做的事' : urgent == null ? '去驾驶舱看是哪几件' : urgent ? `其中 ${urgent} 件急` : '都不急';
+  // 急的件数是 owner_urgent_count（数字）；owner_urgent 是真假，不能当件数
+  const urgent = Number.isInteger(ov?.owner_urgent_count) ? ov.owner_urgent_count : null;
+  const sub = !Number.isFinite(n) ? (Number.isFinite(at) ? `电脑那边没读到（上次 ${hm(at)}）` : '还没读到') : n === 0 ? '现在没有要你做的事' : urgent == null ? '去驾驶舱看是哪几件' : urgent ? `其中 ${urgent} 件急` : n === 1 ? '不急' : '都不急';
   const color = !Number.isFinite(n) ? 'gray' : urgent ? 'red' : n ? 'yellow' : 'green';
-  const score = !off && Number.isFinite(ov?.score) ? `电脑健康 ${Math.round(ov.score)}/100 · ${hm(at)} 读到` : '';
+  const score = !off && Number.isFinite(ov?.score) ? `电脑健康分 ${Math.round(ov.score)}/100 · ${hm(at)} 读到` : '';
   return `<div class="ov-head ov-todo is-${color}"><div class="ov-todo-n">${Number.isFinite(n) ? `<b>${n}</b><span>件<br>你待办</span>` : '<span>你待办</span>'}</div>`
     + `<div class="ov-verdict"><p class="ov-word">${esc(sub)}</p>${score ? `<p class="ov-asof">${esc(score)}</p>` : ''}</div></div>`;
 }

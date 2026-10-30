@@ -112,16 +112,23 @@ test('旧临时目录回收一行说明，原数字和路径保存在详情及�
   assert.ok(copyOf(html).includes(text));
 });
 
-test('整体健康分说明四个维度；备份失败第一行与顶部状态格为同一条', () => {
+test('电脑健康分写清只算电脑、自动任务和备份；备份失败第一行与顶部状态格为同一条', () => {
   const v = view({ overview: { score: 54, as_of: at, signals: [{ id: 'backup', level: 'watch', value: 1 }], reasons: [{ section: 'backup_cloud', text: '示例开发配置备份失败', delta: -10 }] },
     sections: { backup_cloud: [{ id: 'g', title: 'G盘备份', text: '示例正常', state: 'ok', observed_at: at }] } });
   const html = REGIONS['overview-tri'](v, ctx), backup = REGIONS.backup(v, ctx);
-  assert.match(html, /cp-score-title[^]*?>整体健康分<\/h2>/);
+  assert.match(html, /cp-score-title[^]*?>电脑健康分<\/h2>/);
   assert.match(html, /cp-score-value hub-field-value">54<\/b><small>\/100/);
   assert.match(html, /<progress class="cp-score-meter" max="100" value="54"/);
-  assert.match(html, /算上你的事、AI 的事、电脑和自动任务/);
+  // 后端规则：你的事、AI 的事不扣电脑健康分；不能再写“算上你的事、AI 的事”
+  assert.match(html, /只算电脑、自动任务和备份；你的事、AI 的事不扣分/);
+  assert.doesNotMatch(html, /算上你的事|整体健康分/);
   assert.match(visible(html), /示例开发配置备份失败/);
   assert.match(backup, /id="backups"><\/span><p class="cp-line cp-backup-current">示例开发配置备份失败/);
+  // 扣了 3 项备份：状态格第一行和备份区开头都写真实件数，不只写第一项
+  const three = view({ overview: { score: 46, as_of: at, signals: [{ id: 'backup', level: 'act', value: 3, color: 'neutral' }],
+    reasons: ['开发配置备份失败', '电脑使用与性能记录失败', '电脑配置与恢复失败'].map((text) => ({ section: 'backup_cloud', text, delta: -10 })) } });
+  assert.match(visible(/data-signal="backup"[^]*?<b class="cp-tri-status">([^]*?)<\/b>/.exec(REGIONS['overview-tri'](three, ctx))?.[1] || ''), /^3 项备份失败（开发配置等）$/);
+  assert.match(REGIONS.backup(three, ctx), /cp-backup-current">3 项备份失败（开发配置等）<\/p>/);
   assert.doesNotMatch(REGIONS['overview-tri'](view(), ctx), /<progress/);
   const normal = REGIONS['overview-tri'](view({ overview: { signals: [{ id: 'computer', level: 'ok' }, { id: 'backup', level: 'ok' }] } }), ctx);
   assert.doesNotMatch(normal, /cp-tri-short/);
