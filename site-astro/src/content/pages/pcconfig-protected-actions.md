@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig-protected-actions/page.json",
-  "sha256": "fb9e2a3574e4d955ac0536d65d7d2e3a2c1edfce60b11c7a3900cf469bddfe9b",
-  "converted_at_beijing": "2026-10-11T19:04:25+08:00"
+  "sha256": "ce976bbf85b182877ea354b33dd94fd8226ab4bd21d9bfa7c546d5e04c125b42",
+  "converted_at_beijing": "2026-10-31T07:45:42+08:00"
  }
 }
 ---
@@ -706,7 +706,7 @@ PCConfig · 功能说明
 
 删除 GitHub 仓库
 
-开着有效无限制授权就不再弹验证，否则验证一次，资料是否解锁不影响这一条。删除或转移前先确认本地有全部分支，缺的先拉下来，再把只在 GitHub 网页上的 issue、发布包列给我看；删除本身由 GitHub 总索引执行，不会触发任何锁盘。
+开着有效无限制授权就不再弹验证，否则验证一次，资料是否解锁不影响这一条。删除或转移前先确认本地有全部分支，缺的先拉下来，再把只在 GitHub 网页上的 issue、发布包列给我看；删除本身由规则库里“改项目前先核对”技能自带的大动作入口执行，不会触发任何锁盘。
 
 清理生成文件或一份本地副本
 

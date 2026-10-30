@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig-machine-facts/page.json",
-  "sha256": "d30fd67f21eb0f6b0066561b8d5ec6abad2d3d0357465e496d615d3fc1f8a325",
-  "converted_at_beijing": "2026-10-30T14:00:57+08:00"
+  "sha256": "785287f4ec9368a7e665ae111e68b5625ca0b50fb8babf3056fffab6d7503fd2",
+  "converted_at_beijing": "2026-10-31T07:45:42+08:00"
  }
 }
 ---
@@ -752,7 +752,7 @@ PCConfig · 功能说明
 
 - 50 份 Registry 分别保存机器、盘符、目录用途、项目配置键、运行时和恢复关系；每类都有数据结构和校验器。
 
-- 目录用途统一登记在 folders.json，重复的 path_owners.json 投影已退役；仓库导航取 GitHub 总索引的成功发现快照，projects.json 只保留非仓库的机器侧附加事实；project_restore_anchors.json 保存恢复与迁移关系。旧的项目路径依赖汇总及其生成器已退役，现在按明确的键或锚点查询影响。
+- 目录用途统一登记在 folders.json，重复的 path_owners.json 投影已退役；仓库导航登记在本仓库的 repository-paths.json（最近一次成功发现的快照，发现新仓库用 Update-RepositoryPaths.ps1 更新），projects.json 只保留非仓库的机器侧附加事实；project_restore_anchors.json 保存恢复与迁移关系。旧的项目路径依赖汇总及其生成器已退役，现在按明确的键或锚点查询影响。
 
 - 项目配置导航包含 139 个键，直接保存 current_value、真实来源及核验命令；不再保存 snapshot 字段或总代次。project_cards.json 仍保留现役 v3 夜间项目自检命令清单，用途是执行已有只读检查，不再另存仓库路径清单。
 
@@ -1261,7 +1261,7 @@ PCConfig · 功能说明
 
 - folders.json 登记目录用途边界；不再维护重复的路径负责方投影
 
-- GitHub 总索引的成功发现快照包含 46 个仓库导航条目；authoritative=false，不冒充实时完整仓库名单
+- repository-paths.json 是 10 月 27 日那次成功发现的快照，包含 46 个仓库导航条目；authoritative=false，不冒充实时完整仓库名单
 
 - project_restore_anchors.json 保存 25 个恢复锚点
 

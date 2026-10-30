@@ -569,7 +569,7 @@
      "with": "pcconfig",
      "direction": "被登记",
      "flow": "电脑配置与恢复登记它的安装位置、Python 3.14 与 3.11 两条运行环境和换机恢复步骤；登录后双开两个微信，正好对应主号、副号",
-     "source": "PCConfig registries/project_restore_anchors.json；GitHub 总索引 config/repository-paths.json（仓库导航快照）；计划任务 WeChat AutoStart"
+     "source": "PCConfig registries/project_restore_anchors.json；PCConfig registries/repository-paths.json（仓库导航快照）；计划任务 WeChat AutoStart"
     },
     {
      "id": "r-backup",
@@ -680,8 +680,8 @@
  },
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
-  "sha256": "da445bdda1c72026ed8d40f8de886b83f32c26c7b151d40a9a8c0f82571b57cc",
-  "converted_at_beijing": "2026-10-30T15:09:46+08:00"
+  "sha256": "09b241e54a3ecb47035e1c1bcd7a87fe4d6c07faa2a85e2f2af1474eda32ef63",
+  "converted_at_beijing": "2026-10-31T07:45:44+08:00"
  }
 }
 ---

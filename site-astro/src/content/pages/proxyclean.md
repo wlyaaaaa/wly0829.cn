@@ -375,7 +375,7 @@
      "with": "pcconfig",
      "direction": "被登记",
      "flow": "恢复锚点登记入口、验证命令和恢复记录路径；换电脑只从 Git 恢复程序，不带恢复记录和旧代理值",
-     "source": "PCConfig registries/project_restore_anchors.json（ProxyClean）；GitHub 总索引 config/repository-paths.json（仓库导航快照）"
+     "source": "PCConfig registries/project_restore_anchors.json（ProxyClean）；PCConfig registries/repository-paths.json（仓库导航快照）"
     },
     {
      "id": "r-tailscale-entries",
@@ -421,10 +421,10 @@
     },
     {
      "id": "r-github-index",
-     "with": "github-local-index",
+     "with": "pcconfig",
      "direction": "被登记",
      "flow": "公开仓库的路径和可见性登记",
-     "source": "E:\\GitHub总索引\\config\\repository-paths.json 第 196–197 行"
+     "source": "PCConfig registries/repository-paths.json、website-projects.json"
     }
    ],
    "highlights": [
@@ -475,8 +475,8 @@
  },
  "source": {
   "page": "sources/pages/proxyclean/page.json",
-  "sha256": "b45c1ebf895f36df656884e9d337ff031f308ec3b94be682c6e760b91e24e7a4",
-  "converted_at_beijing": "2026-10-30T15:12:31+08:00"
+  "sha256": "c8647f71897bf41482936652fbc07797156ce90d353d1813a15a346e98880748",
+  "converted_at_beijing": "2026-10-31T07:45:43+08:00"
  }
 }
 ---

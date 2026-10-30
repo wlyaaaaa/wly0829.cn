@@ -15,7 +15,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "技能名project-entry-gate·GitHub项目总索引的入口"
+        "text_ref": "技能名project-entry-gate·AI规则与技能基座里的技能"
       },
       {
         "type": "points_card",
@@ -75,7 +75,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "技能名project-entry-gate·GitHub项目总索引的入口"
+        "text_ref": "技能名project-entry-gate·AI规则与技能基座里的技能"
       },
       {
         "type": "points_card",
@@ -151,7 +151,7 @@
         "connector": "ribbon",
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "1用总索引的入口查wlyaaaaa/.agents；默认不联网，GitHub那边用上次记下的情况"
+        "text_ref": "1用当时总索引的入口（现在已搬进这个技能）查wlyaaaaa/.agents；默认不联网，GitHub那边用上次记下的情况"
       },
       {
         "type": "dialogue",
@@ -218,7 +218,7 @@
         "connector": "ribbon",
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "1用总索引的入口查wlyaaaaa/.agents；默认不联网，GitHub那边用上次记下的情况"
+        "text_ref": "1用当时总索引的入口（现在已搬进这个技能）查wlyaaaaa/.agents；默认不联网，GitHub那边用上次记下的情况"
       },
       {
         "type": "dialogue",
@@ -262,7 +262,7 @@
       {
         "type": "notice",
         "link_style": "button",
-        "text_ref": "这个技能能做的事，就是GitHub项目总索引的“认仓库、查同步、找配套说明、公开前核对”那几组功"
+        "text_ref": "这个技能能做的事：认仓库、查同步、找配套说明、公开前核对"
       },
       {
         "type": "points_card",
@@ -299,7 +299,7 @@
       {
         "type": "notice",
         "link_style": "button",
-        "text_ref": "这个技能能做的事，就是GitHub项目总索引的“认仓库、查同步、找配套说明、公开前核对”那几组功"
+        "text_ref": "这个技能能做的事：认仓库、查同步、找配套说明、公开前核对"
       },
       {
         "type": "points_card",
@@ -351,7 +351,7 @@
       {
         "type": "table",
         "portrait_mode": "rows",
-        "text_ref": "这些事找谁删库、改名、改公开范围、转移仓库总索引的仓库大动作入口；哪些要我验证见重大动作与本人验",
+        "text_ref": "这些事找谁哪些事要我点头用户授权",
         "row": "limits"
       },
       {
@@ -397,7 +397,7 @@
       {
         "type": "table",
         "portrait_mode": "rows",
-        "text_ref": "这些事找谁删库、改名、改公开范围、转移仓库总索引的仓库大动作入口；哪些要我验证见重大动作与本人验"
+        "text_ref": "这些事找谁哪些事要我点头用户授权"
       },
       {
         "type": "points_card",

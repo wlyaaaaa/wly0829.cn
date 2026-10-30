@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup-recovery-and-tasks/page.json",
-  "sha256": "830ae99f21c3f2c80b6e34c24350f2fe4abf98cdecd09b014c16a46542d4bd71",
-  "converted_at_beijing": "2026-10-22T07:02:30+08:00"
+  "sha256": "3ac1d56390500c7428d3983b6154b9721d9adbe7b0364af5a4f15c411021d229",
+  "converted_at_beijing": "2026-10-31T07:45:41+08:00"
  }
 }
 ---
@@ -725,7 +725,7 @@ DevConfig Backup · 功能说明
 
 ## 执行流程
 
-1. 先准备 Git 与 DevConfig 源码，再按 Git 总索引和目标机器找到 PCConfig 的实际位置（原机是 E:\PCConfig），取得获准的恢复指南；暂时缺这份资料只暂停依赖它的机器配置、任务与 H 冷备步骤。
+1. 先准备 Git 与 DevConfig 源码，再按目标机器找到 PCConfig 的实际位置（原机是 E:\PCConfig），取得获准的恢复指南；暂时缺这份资料只暂停依赖它的机器配置、任务与 H 冷备步骤。
 
 2. 选择带对应 .sha256、.receipt.json、.manifest.json 的成功日期包；运行 Restore-DevConfig 默认只读核验（它读回执和清单、自算包哈希），不再依赖原电脑 state/latest.sha256，散失附属文件的旧包不能冒充完整恢复集。回执里有警告文件时，先决定是否另选旧一代。
 

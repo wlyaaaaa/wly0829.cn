@@ -902,9 +902,9 @@
     },
     {
      "id": "r-github-index",
-     "with": "github-local-index",
+     "with": "agents",
      "direction": "交给",
-     "flow": "GitHub 删库、转移、改公开前由密码中心做一次本人验证",
+     "flow": "GitHub 删库、转移、改公开前（经“改项目前先核对”技能的大动作入口）由密码中心做一次本人验证",
      "source": "pcconfig.secret-broker.md §4.5 末段"
     },
     {
@@ -1066,8 +1066,8 @@
  },
  "source": {
   "page": "sources/pages/password-center/page.json",
-  "sha256": "7be9400616275ca8494a5faee947fe15c14b8348a29a75c96fb293ce242497bd",
-  "converted_at_beijing": "2026-10-30T14:00:57+08:00"
+  "sha256": "ee4614a902f9b3e558f5a9d21e2b078d1a41e06cb1b47528e7f23e2fabeb4791",
+  "converted_at_beijing": "2026-10-31T07:45:42+08:00"
  }
 }
 ---

@@ -45,7 +45,7 @@
   "based_on": {
    "commit": "8244785b97b2e5cecdb62e2a0d933467e57eb66b",
    "commit_time": "2026-10-02T01:01:18+08:00",
-   "file": "E:\\.agents\\skills\\project-entry-gate\\SKILL.md；GitHub总索引 56ceea70f4a128955676d828ac45c4a29054bde3 的 tools\\Get-ProjectAdmission.ps1、Get-ProjectPrivateCompanion.ps1"
+   "file": "E:\\.agents\\skills\\project-entry-gate\\SKILL.md 与同目录 scripts\\Get-ProjectAdmission.ps1、Get-ProjectPrivateCompanion.ps1、Invoke-ProtectedGitHubMajorAction.ps1（cf513c33 搬入）"
   },
   "video_prompt": "",
   "registry": {
@@ -64,10 +64,10 @@
    "relations": [
     {
      "id": "r-index",
-     "with": "github-local-index",
+     "with": "pcconfig",
      "direction": "拿来",
-     "flow": "调用总索引的 Get-ProjectAdmission.ps1（仓库身份、公开性、分支、工作目录、同步）和 Get-ProjectPrivateCompanion.ps1（私有配套说明）",
-     "source": "SKILL.md 第 12–23 行（提交 8244785）"
+     "flow": "查询和大动作脚本在技能自己的 scripts 里；本机仓库在哪、私人配套库名单读电脑配置与恢复的登记，缺登记时用它的更新工具补",
+     "source": "SKILL.md Admission facts、Local registrations 两节（cf513c33）"
     },
     {
      "id": "r-pcconfig",
@@ -85,21 +85,6 @@
     }
    ],
    "mentions": [
-    {
-     "target": "/projects/github-local-index/",
-     "screen": "skill-project-entry-gate-01",
-     "text": "GitHub 项目总索引"
-    },
-    {
-     "target": "/projects/github-local-index/#features",
-     "screen": "skill-project-entry-gate-03",
-     "text": "去看全部功能"
-    },
-    {
-     "target": "/projects/github-local-index/#g-major",
-     "screen": "skill-project-entry-gate-04",
-     "text": "仓库大动作入口"
-    },
     {
      "target": "/rules/protected-actions/",
      "screen": "skill-project-entry-gate-04",
@@ -124,6 +109,11 @@
      "target": "/projects/agents/#f-doctor",
      "screen": "skill-project-entry-gate-04",
      "text": "只读体检脚本"
+    },
+    {
+     "target": "/projects/agents/",
+     "screen": "skill-project-entry-gate-01",
+     "text": "AI 规则与技能基座"
     }
    ]
   },
@@ -144,8 +134,8 @@
  },
  "source": {
   "page": "sources/pages/skill-project-entry-gate/page.json",
-  "sha256": "1e55487779e92a56ee6f96eb37880654864e0a0eed360cb55e202a42a9f02175",
-  "converted_at_beijing": "2026-10-30T14:00:59+08:00"
+  "sha256": "32686d333523fb88d3f34cc287a0ad13cea69876538a17a5aec55a3f96e25c8a",
+  "converted_at_beijing": "2026-10-31T07:46:06+08:00"
  }
 }
 ---
@@ -162,8 +152,8 @@
   "portrait": "竖版：标题和技能名一行；“它做什么”；插画缩成一行；对话气泡一行一个；浅绿小字和灰色小字在最后。",
   "links": [
    {
-    "text": "GitHub 项目总索引",
-    "href": "/projects/github-local-index/"
+    "text": "AI 规则与技能基座",
+    "href": "/projects/agents/"
    }
   ],
   "anchors": [],
@@ -209,7 +199,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "技能名project-entry-gate·GitHub项目总索引的入口"
+     "text_ref": "技能名project-entry-gate·AI规则与技能基座里的技能"
     },
     {
      "type": "points_card",
@@ -266,7 +256,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "技能名project-entry-gate·GitHub项目总索引的入口"
+     "text_ref": "技能名project-entry-gate·AI规则与技能基座里的技能"
     },
     {
      "type": "points_card",
@@ -347,10 +337,10 @@
 
 改项目前先核对
 
-技能名 project-entry-gate · 〔GitHub 项目总索引〕的入口
+技能名 project-entry-gate · 〔AI 规则与技能基座〕里的技能
 
 **它做什么**
-要改、要推送、要公开一个代码项目，而“是哪个仓库、公开还是私有、本机和 GitHub 同步没有、有没有别的工作目录”这些事可能改变做法时，AI 先用总索引的入口把事实查清，再动手；收尾时把这次真正改过的每个仓库再查一遍。有的仓库在总索引里登记了私有的配套说明，维护时按登记找出来，只读这次用得着的；本机没有指针，不等于没有。
+要改、要推送、要公开一个代码项目，而“是哪个仓库、公开还是私有、本机和 GitHub 同步没有、有没有别的工作目录”这些事可能改变做法时，AI 先用这个技能自带的查询把事实查清，再动手；收尾时把这次真正改过的每个仓库再查一遍。有的公开仓库在电脑配置与恢复里登记了私有的配套说明，维护时按登记找出来，只读这次用得着的；本机没有指针，不等于没有。
 
 平常改一个已经认准的项目、改动随时能撤回，AI 看一眼 git status、照项目自己的规矩办就够，不走这一套。
 
@@ -413,7 +403,7 @@
      "connector": "ribbon",
      "illustration": "left_inside",
      "icons": "auto",
-     "text_ref": "1用总索引的入口查wlyaaaaa/.agents；默认不联网，GitHub那边用上次记下的情况"
+     "text_ref": "1用当时总索引的入口（现在已搬进这个技能）查wlyaaaaa/.agents；默认不联网，GitHub那边用上次记下的情况"
     },
     {
      "type": "dialogue",
@@ -468,7 +458,7 @@
      "connector": "ribbon",
      "illustration": "left_inside",
      "icons": "auto",
-     "text_ref": "1用总索引的入口查wlyaaaaa/.agents；默认不联网，GitHub那边用上次记下的情况"
+     "text_ref": "1用当时总索引的入口（现在已搬进这个技能）查wlyaaaaa/.agents；默认不联网，GitHub那边用上次记下的情况"
     },
     {
      "type": "dialogue",
@@ -580,7 +570,7 @@
 我：“要在 .agents 里改点东西，先看看这个仓库现在什么情况。”
 
 **AI 做了什么**
-1. 用总索引的入口查 wlyaaaaa/.agents；默认不联网，GitHub 那边用上次记下的情况，远端分支也不刷新。
+1. 用当时总索引的入口（现在已搬进这个技能）查 wlyaaaaa/.agents；默认不联网，GitHub 那边用上次记下的情况，远端分支也不刷新。
 2. 读到：私有；默认分支 main；本机只有 E:\.agents 这一个工作目录，main 和 GitHub 上的 main 一致；目录里有 1 个 Git 还没管的新文件。
 3. 另外两个本地分支：archive/lockdown-review-notes-20260926 有 1 个提交不在 main 里；codex/threebase-continue-20260927 已经全部并进 main，可以收掉。
 4. 结论是“注意”，建议的提交方式是“先收拾干净，或只挑自己的文件提交”。这个结论只是事实，不是推送许可。
@@ -605,12 +595,7 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
   "title": "能做的事",
   "scene": "横版画面：上方一条横跨整屏的浅绿底圆角横幅，写能做的事那一句，右端一个白底细绿边按钮（〔去看全部功能〕）。下方一张大卡片“用这个技能时，AI 守的规矩”，八条短句两列排，每条前一个小水彩图标（一个小门、一张写着“证据”的纸、一个问号、一朵云和一条虚线、一串三个仓库小方块、一本夹着书签的登记簿、一把锁、一个保险箱）。",
   "portrait": "竖版：横幅和按钮在上（按钮单独一行）；八条规矩一行一条。",
-  "links": [
-   {
-    "text": "去看全部功能",
-    "href": "/projects/github-local-index/#features"
-   }
-  ],
+  "links": [],
   "anchors": [],
   "live": [],
   "screenshots": [],
@@ -629,7 +614,7 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
     {
      "type": "notice",
      "link_style": "button",
-     "text_ref": "这个技能能做的事，就是GitHub项目总索引的“认仓库、查同步、找配套说明、公开前核对”那几组功"
+     "text_ref": "这个技能能做的事：认仓库、查同步、找配套说明、公开前核对"
     },
     {
      "type": "points_card",
@@ -654,7 +639,7 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
     {
      "type": "notice",
      "link_style": "button",
-     "text_ref": "这个技能能做的事，就是GitHub项目总索引的“认仓库、查同步、找配套说明、公开前核对”那几组功"
+     "text_ref": "这个技能能做的事：认仓库、查同步、找配套说明、公开前核对"
     },
     {
      "type": "points_card",
@@ -813,7 +798,7 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
 
 能做的事
 
-这个技能能做的事，就是 GitHub 项目总索引的“认仓库、查同步、找配套说明、公开前核对”那几组功能。〔去看全部功能〕
+这个技能能做的事：认仓库、查同步、找配套说明、公开前核对，以及删库、改名、改公开这类仓库大动作的执行入口。这些原来是 GitHub 项目总索引的功能，10 月 31 日总索引冻结时搬进了这个技能。
 
 **用这个技能时，AI 守的规矩**
 - 只在事实会改变做法时才查：目标不清、有好几个工作目录、恢复或迁移、合并分支、推送、公开。
@@ -821,7 +806,8 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
 - Git 没读出来算“不知道”，不算“对不上”；不为这个去改远端地址、放宽 Git 的信任设置。
 - 默认用本机记录、不联网；要最新情况才联网：只问 GitHub 的公开性，或连远端分支一起刷新；准备公开时两样都要。
 - 收尾把这次真正改过的每个仓库都查一遍，经链接改到的配套说明仓库也算；有没提交的改动不等于有人正在写，先看是谁的；提交照常挑文件、推送、读回默认分支。
-- 配套说明按总索引的登记找，只读用得着的；仓库改公开前，先查它登记的私有去处，还没对上具体文件也要查。
+- 本机找不到登记的仓库时，用电脑配置与恢复的更新工具重新登记一次（新仓库默认不上网站），不猜目录，也不为此加定时刷新。
+- 配套说明按电脑配置与恢复里的登记找，只读用得着的；仓库改公开前，先查它登记的私有去处，还没对上具体文件也要查。
 - 只有换电脑、计划任务、端口、本机数据、备份恢复、开机启动、运行环境、快捷方式、共享目录这类要看电脑实际情况的事，才去查电脑配置；看到一个本机路径不算。
 - 放加密文件的 wlyaaaaa/Key 仓库，克隆前先认清放到哪里：只能放进授权的私有位置，里面只有加密包和能公开的说明，不能把解密后的内容、密码和密钥文件带进去。
 
@@ -836,13 +822,6 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
   "scene": "横版画面：左上标题。左边约三分之一宽一张卡片“管”，一段字；右边约三分之二宽一张两列表格“不管，交给谁”，右列的名字画成链接；表格下面一张卡片“不做”。每块左上一个小水彩图标（一个打钩的小门、一个指路牌、一个禁止小标）。",
   "portrait": "竖版：“管”卡片在上；表格改成小卡片一行一张（粗体写“这些事”，下面写找谁）；“不做”在最后。",
   "links": [
-   {
-    "text": "仓库大动作入口",
-    "href": "/projects/github-local-index/#g-major",
-    "locator_text": {
-     "h": "总索引的【仓库大动作入口】；"
-    }
-   },
    {
     "text": "重大动作与本人验证",
     "href": "/rules/protected-actions/",
@@ -924,7 +903,7 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
     {
      "type": "table",
      "portrait_mode": "rows",
-     "text_ref": "这些事找谁删库、改名、改公开范围、转移仓库总索引的仓库大动作入口；哪些要我验证见重大动作与本人验",
+     "text_ref": "这些事找谁哪些事要我点头用户授权",
      "row": "limits"
     },
     {
@@ -959,7 +938,7 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
     {
      "type": "table",
      "portrait_mode": "rows",
-     "text_ref": "这些事找谁删库、改名、改公开范围、转移仓库总索引的仓库大动作入口；哪些要我验证见重大动作与本人验"
+     "text_ref": "这些事找谁哪些事要我点头用户授权"
     },
     {
      "type": "points_card",
@@ -1011,16 +990,15 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
 边界
 
 **管**
-进一个代码项目时，认准是哪个仓库、公开还是私有、本机和 GitHub 同步没有、有几个工作目录和分支；推送、公开前把这些再核一次；找出仓库登记过的私有配套说明、按需读，改公开前查它登记的私有去处；收尾时查每个改过的仓库。
+进一个代码项目时，认准是哪个仓库、公开还是私有、本机和 GitHub 同步没有、有几个工作目录和分支；推送、公开前把这些再核一次；找出仓库登记过的私有配套说明、按需读，改公开前查它登记的私有去处；收尾时查每个改过的仓库；删库、改名、改公开范围、转移仓库用技能自带的大动作入口执行，删库和转移先预演，哪些要我验证见〔重大动作与本人验证〕。
 
 **不管，交给谁**
 | 这些事 | 找谁 |
 |---|---|
-| 删库、改名、改公开范围、转移仓库 | 总索引的〔仓库大动作入口〕；哪些要我验证见〔重大动作与本人验证〕 |
 | 哪些事要我点头 | 〔用户授权〕 |
 | 配套说明怎么读、怎么改、怎么收尾 | 〔工程与交付〕 |
 | 电脑上的计划任务、端口、备份恢复 | 〔电脑配置与恢复〕 |
-| 技能装没装、三个基座的登记坏没坏 | 基座的〔只读体检脚本〕；它说明不了技能好不好用 |
+| 技能装没装、两个基座的登记坏没坏 | 基座的〔只读体检脚本〕；它说明不了技能好不好用 |
 
 **不做**
 - 不给每一次小改动加一道“准入”手续。

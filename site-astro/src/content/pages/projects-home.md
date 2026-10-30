@@ -78,7 +78,7 @@
     {
      "id": "g-rules",
      "name": "让 AI 守规矩、用对工具",
-     "line": "不同的 AI 读同一版规矩，能换用别家和本机的模型，也认得每个代码仓库。",
+     "line": "不同的 AI 读同一版规矩，能换用别家和本机的模型。",
      "members": [
       "/projects/agents/",
       "/projects/ai-cli-profile-manager/"
@@ -1083,8 +1083,8 @@
  },
  "source": {
   "page": "sources/pages/projects-home/page.json",
-  "sha256": "099b20b4dfc9aedf09542d02ba8da1a875a29e0d72b46185190e44e5422e2b42",
-  "converted_at_beijing": "2026-10-31T06:48:10+08:00"
+  "sha256": "29258d51eb479aa0468c4d4ea8706c8f1e10aa84ecb007531231043516edfbb6",
+  "converted_at_beijing": "2026-10-31T07:45:43+08:00"
  }
 }
 ---
@@ -1540,7 +1540,7 @@
 
 ## 让 AI 守规矩、用对工具
 
-不同的 AI 读同一版规矩，能换用别家和本机的模型，也认得每个代码仓库。
+不同的 AI 读同一版规矩，能换用别家和本机的模型。
 
 ::screen{#projects-home-03 section="groups"}
 
