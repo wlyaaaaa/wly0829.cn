@@ -1183,7 +1183,7 @@ export function strip(v, ctx) {
   if (a) {
     const k = Number.isInteger(a.stuck_count) ? a.stuck_count : a.rows.filter((r) => r.stuck).length;
     const m = Math.min(k, a.rows.filter((r) => r.stuck && OWNER_STUCK.includes(r.status)).length);
-    rows.push(!a.count && !a.rows.length ? row('ai-running', 'ok', a.unread ? 'AI 干活情况暂时读不全' : '现在没有 AI 在干活')
+    rows.push(!a.count && !a.rows.length ? row('ai-running', a.unread ? 'unavailable' : 'ok', a.unread ? 'AI 干活情况暂时读不全' : '现在没有 AI 在干活')
       : row('ai-running', m ? 'red' : k ? 'neutral' : 'ok', `AI 在干活 ${activeOf(a)} 个，${k ? `${k} 个卡住${m ? (m === k ? '，要你看' : `，${m} 个要你看`) : '，AI 在管'}` : '没卡住'}`));
   }
   // ③ 电脑健康分：几分、最大的那项扣分、谁在管

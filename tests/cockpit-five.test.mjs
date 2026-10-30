@@ -93,3 +93,22 @@ test('手机三行状态条：要你做几件、AI 干活卡没卡住、电脑�
   assert.match(tail, /^[^]*?\.cp-strip \{ display: none; \}\n[^]*?@media \(max-width: 1199\.98px\)/);
   assert.match(tail, /grid-template-areas: "intro" "need" "home" "status" "facts" "art";/);
 });
+
+test('AI 正在干活读不全：count、observed_at 都是 null、没带 gaps、没有行时写“读不全”，三行状态条也不写 0 个；旧快照有整数照旧', () => {
+  const raw = { count: null, stopped_count: null, stale_count: null, stale_unknown_count: null, stuck_count: null, observed_at: null, summary: 'AI运行情况暂时读不全', rows: [] };
+  const v = view({ ai_running: raw });
+  assert.equal(v.ai_running.unread, true);
+  assert.equal(v.ai_running.stale_count, null);
+  assert.equal(v.ai_running.stuck_count, null);
+  assert.equal(v.ai_running.stopped_count, null);
+  assert.match(REGIONS.home(v, ctx()), /<h2 class="hub-heading[^"]*">AI 干活情况暂时读不全<\/h2>/);
+  assert.doesNotMatch(REGIONS.home(v, ctx()), /现在没有 AI 在干活/);
+  const s = REGIONS.strip(v, ctx());
+  assert.match(s, /href="#ai-running"><span class="cp-dot is-gray"[^>]*><\/span><span>AI 干活情况暂时读不全<\/span>/);
+  assert.doesNotMatch(s, /AI 在干活 0 个/);
+  // 旧快照：有整数、有时间，照旧写原数
+  const old = view({ ai_running: { count: 0, stale_count: 2, stuck_count: 0, observed_at: at, rows: [] } });
+  assert.equal(old.ai_running.unread, false);
+  assert.equal(old.ai_running.stale_count, 2);
+  assert.match(REGIONS.home(old, ctx()), /现在没有 AI 在干活/);
+});
