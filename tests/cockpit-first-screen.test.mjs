@@ -134,7 +134,7 @@ test('公开版总件数包含未展示私事时解释差额；本人设备标�
   const v = own({ private_count: 2, need_you: [wait()] });
   assert.match(REGIONS.viewer(v, ctx()), /你的设备 · 全部显示（其中 2 件公网看不到）/);
   const pub = normalize(base({ viewer: { kind: 'public' }, private_count: 18, need_you: [{ id: 'p1', title: '示例占位', placeholder: true, ask_kind: 'cooperate' }], verdict: { need_you: 3 }, overview: { owner_count: 3, owner_urgent: false, owner_urgent_count: 0 } }));
-  assert.match(REGIONS.overview(pub, ctx()), /另 2 件是私人事项，只在你的设备上显示/);
+  assert.match(REGIONS.overview(pub, ctx()), /另 2 件是私人事项：在本人设备上能看到每件要做什么、为什么找本人、怎么办/);
   pub.overview.owner_count = 2;
   assert.doesNotMatch(REGIONS.overview(pub, ctx()), /另 \d+ 件是私人事项/);
 });

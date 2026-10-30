@@ -73,7 +73,7 @@ test('件数那一句：一个都没有写“现在没有 AI 在干活”；读�
   assert.equal(helperText('+3 个帮手'), '它叫了 3 个助手');
 });
 
-test('公开版：只写两句（几个在干活、卡在额度还是登录；按型号数），不列在做什么，也不写早就停了的', () => {
+test('公开版：写几个在干活、按型号数，再一句本人设备上还能看到什么；不列在做什么，也不写早就停了的', () => {
   const pub = (status, model_text, vendor = 'claude') => ({ id: 'p-' + status + model_text, status, vendor, model_text, title: '一件 AI 活', placeholder: true, helpers: 3 });
   const rows = [...Array.from({ length: 4 }, () => pub('running', 'Claude Opus 5.5')), pub('network_retry', 'Claude Opus 5.5'),
     pub('quota_exhausted', 'GPT Sol', 'gpt'), pub('login_failed', 'GPT Sol', 'gpt'), pub('running', 'GPT Sol', 'gpt'), pub('unknown', '', 'gpt')];
@@ -81,7 +81,7 @@ test('公开版：只写两句（几个在干活、卡在额度还是登录；�
   const html = REGIONS.home(normalize(base({ viewer: { kind: 'public', device_state: 'none' }, ai_running: block })), ctx);
   assert.match(html, /class="cp-run is-public"[^]*?class="hub-heading cp-run-sum">AI 正在干活：8 个（3 个卡住，2 个要你看）<\/h2>/);
   assert.doesNotMatch(html, /class="cp-run-at"/);
-  assert.match(html, /<p class="cp-run-models">Claude Opus 5.5 5 个 · GPT Sol 3 个<\/p>/);
+  assert.match(html, /<p class="cp-run-models">Claude Opus 5.5 5 个 · GPT Sol 3 个<\/p><p class="cp-run-private">在本人设备上，每个都单独一行：这件活此刻在做什么、做到哪一步、是不是在等人回话，还能直接打开那个对话，或复制给 AI 接着办。<\/p>/);
   assert.doesNotMatch(html, /一件 AI 活|cp-run-list|cp-run-row|早就停了|个帮手|个助手|<button/);
   // 只凭行上的 placeholder 也认（没有 viewer 字段时）；网络在重连算卡住（后端 stuck_count）但不写要你看，停了没做完不算卡住
   const two = REGIONS.home(normalize(base({ ai_running: running([pub('network_retry', 'GPT Sol', 'gpt'), pub('network_retry', 'GPT Sol', 'gpt'), pub('stopped', 'Claude Opus 5.5')]) })), ctx);

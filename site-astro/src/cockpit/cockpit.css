@@ -409,6 +409,7 @@ ul.cp-know-sub > li { display: grid; grid-template-columns: minmax(0, 1fr); gap:
 .cp-run-meta { display: block; font-size: 12.5px; line-height: 1.5; color: var(--cp-soft); }
 /* 公开版第二句（按型号数）和本人版末尾“另有 N 件早就停了” */
 .cp-run-models { margin-top: 2px !important; font-size: 14px; color: var(--cp-ink); overflow-wrap: anywhere; }
+.cp-run-private { margin-top: 2px !important; font-size: 13px; color: var(--cp-soft); }
 .cp-run-stale { margin-top: 4px !important; padding-top: 4px; border-top: 1px solid #edf3ef; font-size: 12.5px; color: var(--cp-soft); }
 .cp-run.is-empty .cp-run-stale { border-top: 0; padding-top: 0; margin-top: 0 !important; }
 /* 从手机通知或链接打开 /cockpit/#<条目编号>：那一条描一圈琥珀色，几秒后淡掉（client.js 加、去 cp-hit） */

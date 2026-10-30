@@ -26,6 +26,8 @@ const https = (s) => { try { const u = new URL(s); return u.protocol === 'https:
 export const PRIVATE_TITLE = '私人事项（只在本人设备上显示）';
 const isPh = (x) => x?.placeholder === true;
 const PH_HINT = '私人事项，详情只在本人设备上显示';
+// 公开版的私人待办卡：说清本人设备上多看到什么，不只写“看不到”（本人 2026-10-31）
+const PH_TODO = '私人事项：本人设备上能看到要做什么、为什么找本人、怎么办';
 // 占位行的标题可能是 AI 另写的一句公开说法，照行里的 title 显示；本人版行带 public_title 时，标签悬停或点一下显示“公网显示为：…”
 const ownTag = (x) => {
   if (x?.owner_only !== true || isPh(x)) return '';
@@ -328,7 +330,7 @@ export function openGroup(x, viewer) {
   return bits.length ? `<span class="cp-open${phone ? ' is-phone' : ''}" role="group" aria-label="打开">${bits.join('')}</span>` : '';
 }
 function askCard(x, r, ctx) {
-  if (isPh(x)) return `<article class="cp-ask is-private ct-card" id="${esc(todoId(x))}"${itemAttr(x)}><div class="cp-ask-main"><h3 class="cp-ask-title" title="${PH_HINT}">${dot('unavailable')}<span>${esc(x.title || PRIVATE_TITLE)}</span></h3><p class="cp-ask-why">${PH_HINT}</p></div></article>`;
+  if (isPh(x)) return `<article class="cp-ask is-private ct-card" id="${esc(todoId(x))}"${itemAttr(x)}><div class="cp-ask-main"><h3 class="cp-ask-title" title="${PH_HINT}">${dot('unavailable')}<span>${esc(x.title || PRIVATE_TITLE)}</span></h3><p class="cp-ask-why">${PH_TODO}</p></div></article>`;
   return ownerCard(x, r, ctx);
 }
 // 后端偶尔给的是内部代号（如 checkpoint_overdue）：认得的换成人话，认不得的不显示
@@ -1199,7 +1201,9 @@ function runBlock(v, ctx) {
   if (pub) {
     const head = `AI 在干活：${activeOf(a)} 个${stuckOf(a)}`;
     const models = active.length ? `<p class="cp-run-models">${esc(modelCounts(active))}</p>` : '';
-    return `<div class="cp-run is-public${off}" id="ai-running">${blockHead(esc(head.replace('AI 在干活：', 'AI 正在干活：')), 'cp-run-head', at, 'cp-run-sum')}${models}</div>`;
+    // 公开版只露件数，下面说清本人设备上还能看到什么，免得像什么都没写（本人 2026-10-31）
+    const more = active.length ? '<p class="cp-run-private">在本人设备上，每个都单独一行：这件活此刻在做什么、做到哪一步、是不是在等人回话，还能直接打开那个对话，或复制给 AI 接着办。</p>' : '';
+    return `<div class="cp-run is-public${off}" id="ai-running">${blockHead(esc(head.replace('AI 在干活：', 'AI 正在干活：')), 'cp-run-head', at, 'cp-run-sum')}${models}${more}</div>`;
   }
   const sorted = a.rows.map((r, i) => ({ r, i })).sort((x, y) => RUN_ORDER.indexOf(x.r.status) - RUN_ORDER.indexOf(y.r.status) || x.i - y.i).map(({ r }) => r);
   const stuck = sorted.filter((r) => r.stuck), rest = sorted.filter((r) => !stuck.includes(r));
@@ -1219,7 +1223,7 @@ const topSentence = (v) => {
   const m = /^(.+?[。！？])\s*\S/.exec(one);
   return plain(m ? m[1] : one);
 };
-// 公开版：顶上那句的件数含私人事项、下面又只露出一部分时，那句下面一行“另 N 件是私人事项，只在你的设备上显示”。
+// 公开版：顶上那句的件数含私人事项、下面又只露出一部分时，那句下面一行“另 N 件是私人事项：在本人设备上能看到……”。
 // N = 后端给的要你做的总件数 − 下面露出来的卡（占位行也算露出来）；几处总件数对不上、没有 private_count 或 N 比它还大，算不准就不写
 const hiddenPrivate = (v) => {
   if (v.viewer?.kind !== 'public' && !v.need_you.some(isPh)) return 0;
@@ -1249,7 +1253,7 @@ const overview = (v, ctx) => {
   // 本人设备：顶上一两行提示（点的处理写不回、通知没发出去、调度在排队），块末尾“你最近处理的（30 天）›”；后端没给就都不出
   const sub = !read && v.served_at ? `<p class="cp-you-sub">这是 ${esc(when(v.served_at, ctx.now))} 读到的</p>` : '';
   const hid = hiddenPrivate(v);
-  const priv = hid ? `<p class="cp-you-sub cp-you-private">另 ${hid} 件是私人事项，只在你的设备上显示</p>` : '';
+  const priv = hid ? `<p class="cp-you-sub cp-you-private">另 ${hid} 件是私人事项：在本人设备上能看到每件要做什么、为什么找本人、怎么办</p>` : '';
   return `<div class="cp-you${urgent ? ' is-urgent' : ''}${n ? '' : ' is-none'}${said ? ' is-said' : ''}">${snap}${quiet ? '' : `<p class="cp-you-n">${n ? '' : dot(COLOR_STATE[v.summary.color] || COLOR_STATE[v.verdict.color] || 'ok')}${head}${tag}</p>`}`
     + priv + sinceLine(ctx) + ownerWarn(v, ctx) + sub + recentBlock(v, ctx) + `</div>`;
 };
@@ -1463,6 +1467,8 @@ export function page(v, ctx) {
   const help = '<details class="cp-help" id="cp-help"><summary class="cp-tool ct-inline-action" title="这页怎么用" aria-label="这页怎么用">?</summary><div class="cp-help-pop">'
     + '<p><b>这页怎么用</b></p><p>最上面是要你做的事；下面是你得知道和 AI 在干的活，再往下是各项明细。每条可复制给 AI，选项和确认内容也会一起带过去。</p>'
     + '<p>AI 自己的活收在“AI 的账本”。每分钟从电脑读一次（页面在后台时每 3 分钟一次），时间都是北京时间；↻ 立刻重读。</p>'
+    + '<p><b>公开版和本人设备</b></p><p>别人打开看到的是公开版：私人事项只写件数或“私人事项”，AI 正在干的活只写个数，也没有按钮。'
+    + '配对过的本人设备上能看到私人事项的原文和要做什么、为什么、怎么办，AI 每件活此刻做到哪一步并能直接打开那个对话，今天的河里私人任务的名字和结论；每条后面还有“复制给 AI”“知道了”“晚点提醒”。</p>'
     + '<p><b>键盘</b></p><dl class="cp-keys"><dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>下一件、上一件</dd><dt><kbd>1</kbd>—<kbd>9</kbd></dt><dd>直接打开第几件</dd>'
     + '<dt><kbd>o</kbd></dt><dd>打开那个对话</dd><dt><kbd>s</kbd></dt><dd>晚点提醒</dd><dt><kbd>u</kbd></dt><dd>撤回刚才那下</dd><dt><kbd>?</kbd></dt><dd>打开、关上这个说明</dd></dl>'
     + '<p><b>下面各块</b></p><dl class="cp-keys cp-help-secs">' + SECTIONS.map(([, title, sub]) => '<dt>' + esc(title) + '</dt><dd>' + esc(sub) + '</dd>').join('') + '</dl>'
