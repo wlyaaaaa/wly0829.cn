@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta name="referrer" content="strict-origin-when-cross-origin"><meta charset="utf-8"><meta name="robots" content="noindex"><noscript><meta http-equiv="refresh" content="0;url=/"></noscript></head><body><script data-site-visitors>(() => {
   const endpoint = 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/_v.gif';
   const randomId = () => globalThis.crypto?.randomUUID?.() || Date.now().toString(36) + Math.random().toString(36).slice(2);
-  let visitor = '', self = false, entry = '';
+  let visitor = '', self = false, entry = '', cvSession = '';
   const entryRedirect = /^\/cv\/?$/.test(location.pathname);
   const query = new URLSearchParams(location.search);
   try {
@@ -13,24 +13,26 @@
       visitor = randomId();
       localStorage.setItem('wly-site-visitor', visitor);
     }
-    if (entryRedirect && !localStorage.getItem('wly-site-entry')) {
-      entry = 'cv';
-      localStorage.setItem('wly-site-entry', entry);
-      sessionStorage.setItem('wly-site-entry-pending', entry);
-    } else if (location.pathname === '/') {
-      entry = sessionStorage.getItem('wly-site-entry-pending') || '';
-      sessionStorage.removeItem('wly-site-entry-pending');
+    if (entryRedirect) sessionStorage.setItem('wly-site-cv-session', randomId());
+    else if (Date.now() - Number(sessionStorage.getItem('wly-site-cv-last') || 0) > 30 * 60 * 1000) {
+      sessionStorage.removeItem('wly-site-cv-session');
     }
+    cvSession = sessionStorage.getItem('wly-site-cv-session') || '';
+    entry = cvSession ? 'cv' : '';
+    if (cvSession) sessionStorage.setItem('wly-site-cv-last', String(Date.now()));
   } catch { visitor = ''; }
   self = query.get('self') === '1' || (query.get('self') !== '0' && self);
   const pageId = randomId();
   let visibleMs = 0, visibleSince = document.hidden ? null : performance.now(), lastLeave = -1;
   const send = (event, leaving = false) => {
     try {
+      if (cvSession && Date.now() - Number(sessionStorage.getItem('wly-site-cv-last') || 0) > 30 * 60 * 1000) {
+        sessionStorage.removeItem('wly-site-cv-session'); cvSession = ''; entry = '';
+      } else if (cvSession && !document.hidden) sessionStorage.setItem('wly-site-cv-last', String(Date.now()));
       // 来源分布只需域名和路径，避免把来源网址中的凭据查询串写入日志。
       const ref = document.referrer ? new URL(document.referrer) : null;
       const params = new URLSearchParams({
-        'x-v': visitor, 'x-p': location.pathname, 'x-entry': entry,
+        'x-v': visitor, 'x-p': location.pathname, 'x-entry': entry, 'x-cv-session': cvSession,
         'x-ref': ref ? ref.origin + ref.pathname : '',
         'x-self': self ? '1' : '0', 'x-monitor': query.get('monitor') === '1' ? '1' : '0',
         'x-r': randomId(), 'x-ms': String(Math.round(performance.now())),
