@@ -37,7 +37,7 @@ PLAN = 'oss-plan.json'
 # the sitemap to OSS would change crawler behavior; CNAME/.nojekyll are Pages
 # controls. Search ownership TXT must also remain at the site's root.
 # The release manifest remains the existing online recovery entry.
-HOST_CONTROLS = {MANIFEST, 'CNAME', '.nojekyll', 'robots.txt', 'sitemap.xml', 'sogousiteverification.txt'}
+HOST_CONTROLS = {MANIFEST, 'CNAME', '.nojekyll', 'robots.txt', 'sitemap.xml', 'sogousiteverification.txt', 'favicon.ico', 'apple-touch-icon.png'}
 TEXT_ASSETS = {'.js', '.mjs', '.css', '.svg', '.json', '.webmanifest'}
 STRINGS = re.compile(r'(?P<quote>["\'`])(?P<value>(?:\\.|(?!(?P=quote)).)*)(?P=quote)', re.S)
 TAG = re.compile(r'<[^>]+>', re.S)

@@ -391,6 +391,7 @@ def build(pages=None):
         source = ROOT / 'public' / name
         if not source.is_file(): raise ValueError('Missing registered verification file: ' + name)
         assets_changed = copy_changed(source, dist / name) or assets_changed
+    assets_changed = astro_rules.prune_rule_sources(dist, pin) or assets_changed
     stage('assets')
     if '/cv/' in changed:
         target = dist / 'cv/index.html'; target.parent.mkdir(parents=True, exist_ok=True)

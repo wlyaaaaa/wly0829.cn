@@ -1,4 +1,5 @@
 """Current frozen rule sources and the retained source-boundary behavior."""
+import hashlib
 import shutil
 from pathlib import Path
 import sys
@@ -19,15 +20,37 @@ class NativeRuleSources(unittest.TestCase):
             source = root / 'sources/rules'
             shutil.copytree(ROOT / 'sources/rules', source)
             public = root / 'public'
+            directory = public / '_typeset/rule-sources'
+            directory.mkdir(parents=True)
+            stale = directory / (hashlib.sha256(b'old rule').hexdigest() + '.md')
+            stale.write_bytes(b'old rule')
+            unrelated = directory / 'notes.md'
+            unrelated.write_text('keep', encoding='utf8')
+            outside = public / 'elsewhere' / stale.name
+            outside.parent.mkdir(); outside.write_bytes(b'keep')
             self.assertFalse((root / '.publish').exists())
             with mock.patch.object(astro_rules, 'ROOT', root):
                 pin = astro_rules.generate(public)
+            self.assertFalse(stale.exists())
+            self.assertTrue(unrelated.exists())
+            self.assertTrue(outside.exists())
             self.assertTrue(pin['documents'])
             for row in pin['documents'].values():
                 expected = (source / row['relative_path']).read_bytes()
                 self.assertEqual((public / row['src'].lstrip('/')).read_bytes(), expected)
                 if row['relative_path'].startswith('templates/'):
                     self.assertEqual((public / 'rule-sources' / row['relative_path']).read_bytes(), expected)
+
+            dist = root / 'dist'
+            dist_directory = dist / '_typeset/rule-sources'
+            shutil.copytree(directory, dist_directory)
+            stale_dist = dist_directory / stale.name
+            stale_dist.write_bytes(b'old rule')
+            self.assertTrue(astro_rules.prune_rule_sources(dist, pin))
+            self.assertFalse(stale_dist.exists())
+            self.assertTrue((dist_directory / unrelated.name).exists())
+            for row in pin['documents'].values():
+                self.assertTrue((dist / row['src'].lstrip('/')).exists())
 
 
 class SourceExcerptBoundaries(unittest.TestCase):

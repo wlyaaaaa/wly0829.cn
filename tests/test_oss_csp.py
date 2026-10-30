@@ -205,7 +205,7 @@ class OssCspTests(unittest.TestCase):
         oss.verify_manifest(manifest);objects=manifest['oss']['objects'];base=manifest['oss']['asset_base_url']
         script=next(rel for rel in objects if rel.startswith('_typeset/runtime/b2-access-model-') and rel.endswith('.js'))
         style=next(rel for rel in objects if rel.startswith('_typeset/runtime/toc-consistency-') and rel.endswith('.css'))
-        image='assets/site-icon-32e6a619839d.svg';selected={rel:objects[rel]for rel in (script,style,image)}
+        image=next(rel for rel in objects if rel.startswith('assets/site-icon-') and rel.endswith('.svg'));selected={rel:objects[rel]for rel in (script,style,image)}
         text=('<!doctype html><head><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\' '+base+'; style-src \'self\' '+base+'; img-src \'self\' '+base+'; object-src \'none\'">'
               '<link rel="icon" href="/'+image+'"><link rel="stylesheet" href="/'+style+'"><script type="module" src="/'+script+'"></script></head><img src="/'+image+'">')
         legacy=oss.Rewriter(selected,base,manifest['oss']['prefix'],network.ORIGIN,version=3)
@@ -275,7 +275,7 @@ class OssCspTests(unittest.TestCase):
         objects = manifest['oss']['objects']
         script = next(rel for rel in objects if rel.startswith('_typeset/runtime/b2-access-model-') and rel.endswith('.js'))
         style = next(rel for rel in objects if rel.startswith('_typeset/runtime/toc-consistency-') and rel.endswith('.css'))
-        image = 'assets/site-icon-32e6a619839d.svg'
+        image = next(rel for rel in objects if rel.startswith('assets/site-icon-') and rel.endswith('.svg'))
         selected = {rel:objects[rel] for rel in (script,style,image)}
         text = ('<!doctype html><meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\'; style-src \'self\'; img-src \'self\'; object-src \'none\'">'
                 '<link rel="icon" href="/'+image+'"><link rel="stylesheet" href="/'+style+'"><script type="module" src="/'+script+'"></script><img src="/'+image+'">')
