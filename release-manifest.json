@@ -18,16 +18,16 @@
       "sha256": "df478787a83412e9211fa82a88dfd43016943ec03010b87e22f731af45da2cc3"
     },
     "cockpit/ai/index.html": {
-      "bytes": 761845,
-      "sha256": "2db4a01fa05ec18631a477e037f851292c5e8119645d3f54fc92fe01be09f8e3"
+      "bytes": 787701,
+      "sha256": "ee60722b43112999940f41d908a1ea22764bc032ea79ddaab943985ecffb616d"
     },
     "cockpit/index.html": {
-      "bytes": 836080,
-      "sha256": "39befb0e5a92d3459f306289aeb29c1ca2b93c25cabd246929df81d72b8f815f"
+      "bytes": 859597,
+      "sha256": "96d3377724c1ac834b79706f9a9c606d71a7adada7b24e84b9ecfd7209cd6fd0"
     },
     "cockpit/storage/index.html": {
       "bytes": 52614,
-      "sha256": "320b9bff4861213e744204e5f1bed22d3ad796d99f670f8468b9fdcd7c8815dd"
+      "sha256": "e811731ed6d93e1a11f32f6b16964c2e05cbf90bf54ea04e52652e79825cd464"
     },
     "cockpit/stutter/index.html": {
       "bytes": 18208,
@@ -1647,7 +1647,7 @@
       "status": "warning"
     }
   },
-  "release_id": "734c908c28db9eca28b0b8edf81afdef7620e69fe3ac4cf3cf3f7fa0c431e1d6",
+  "release_id": "36efe349536c375bdaa78cc61975954b640d852fcd27e2732a4bb53d6ae22843",
   "baseline_production_commit": "2872547b5925b782419ec7bf5cb0f162c1b53c3e",
   "rules_pin": {
     "schema": "wly.astro-rules-pin.v1",
@@ -3850,34 +3850,34 @@
     "/cockpit/ai/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
-      "producer": "astro"
-    },
-    "/404.html": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
+    "/projects/llm-backend-toolkit/": {
       "producer": "astro"
     },
     "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/": {
+    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
       "producer": "astro"
     },
     "/cockpit/stutter/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
+      "producer": "astro"
+    },
+    "/404.html": {
       "producer": "astro"
     },
     "/cv/": {
@@ -4450,12 +4450,12 @@
     "html_files": 322
   },
   "previous_oss_source": "published",
-  "previous_release_id": "c498d6490b1543c7226129a038d2f96c5def8de87637198feb6338e4e5f24b35",
+  "previous_release_id": "734c908c28db9eca28b0b8edf81afdef7620e69fe3ac4cf3cf3f7fa0c431e1d6",
   "oss": {
     "schema": "wly.oss-assets.v1",
     "asset_base_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com",
-    "prefix": "releases/359c9b1fd50b4a0f1e67754a87ebe206eca3accb741477936599d4cc8a74df71",
-    "source_release_id": "f69af0901098e5472460dbd26eea66118d63edac74cdbdd046fb594b39bf0778",
+    "prefix": "releases/9cbb4a2dda36de2a6a1c435a6d8bcd7de70e6647d8e568b11a7d42031d7f3e89",
+    "source_release_id": "850c1961db9301d4ce45958b660b80192415f98d8d9713c7e0e8cae52e22fed7",
     "objects": {
       "_album/album-1a72f07ce279b5d3fdf8.css": {
         "bytes": 4721,
@@ -5129,6 +5129,18 @@
         },
         "byte_preserved": true
       },
+      "_astro/cockpit.zFDGlaxV.css": {
+        "bytes": 110333,
+        "sha256": "0dcc18b8e9e7ff2c580b0f70441b05b3677ce9eb384cf52865ef0f791614f78c",
+        "key": "releases/ba257e7e5029f2ff1827379b5869724297653501639fc4573c2fb54f5afbc656/_astro/cockpit.zFDGlaxV.css",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/ba257e7e5029f2ff1827379b5869724297653501639fc4573c2fb54f5afbc656/_astro/cockpit.zFDGlaxV.css",
+        "content_type": "text/css",
+        "source": {
+          "bytes": 110059,
+          "sha256": "cecf927981016ab2ee58cbef0db67f5ab2918baa21b664e160ed2fba238b6a28"
+        },
+        "byte_preserved": false
+      },
       "_astro/hero.config.BTv-Ae_b.json": {
         "bytes": 6791,
         "sha256": "1783db5d19b4958ec4255964d03700aa106d9256bc3393ab31dbdf1db977d50f",
@@ -5429,6 +5441,18 @@
         },
         "byte_preserved": true
       },
+      "_astro/index.astro_astro_type_script_index_0_lang.COypj2gU.js": {
+        "bytes": 180,
+        "sha256": "d1671caec9f9e3b81791834c62721ee8deae02c0bd2b1a796ffcf5938259fba8",
+        "key": "releases/b3fece5747d01adf63957b384598825dc28ac65cf43b24339680619a8aa8e3ec/_astro/index.astro_astro_type_script_index_0_lang.COypj2gU.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/b3fece5747d01adf63957b384598825dc28ac65cf43b24339680619a8aa8e3ec/_astro/index.astro_astro_type_script_index_0_lang.COypj2gU.js",
+        "content_type": "application/javascript",
+        "source": {
+          "bytes": 37,
+          "sha256": "1f8224348aa8a1f8e5151da7a21c487ef5b068161743e22bcfeb49f363d180cb"
+        },
+        "byte_preserved": false
+      },
       "_astro/index.astro_astro_type_script_index_0_lang.CTWM3Xxk.js": {
         "bytes": 48820,
         "sha256": "2bd7f01b73d9582c28ded023b825cb5260900617daf5e2ee6b6ae99508ad0293",
@@ -5498,6 +5522,18 @@
         "source": {
           "bytes": 37,
           "sha256": "0aa6425645db4d323db388eb1ad15541f2d070fef0d6b71936b08aec0530f8d4"
+        },
+        "byte_preserved": false
+      },
+      "_astro/index.astro_astro_type_script_index_0_lang.DPDyft3P.js": {
+        "bytes": 180,
+        "sha256": "d1671caec9f9e3b81791834c62721ee8deae02c0bd2b1a796ffcf5938259fba8",
+        "key": "releases/2b9780eaa2ee1775edc605723b7ccf13b7f7c86e3aab8dbf423b74e23b9ca124/_astro/index.astro_astro_type_script_index_0_lang.DPDyft3P.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2b9780eaa2ee1775edc605723b7ccf13b7f7c86e3aab8dbf423b74e23b9ca124/_astro/index.astro_astro_type_script_index_0_lang.DPDyft3P.js",
+        "content_type": "application/javascript",
+        "source": {
+          "bytes": 37,
+          "sha256": "1f8224348aa8a1f8e5151da7a21c487ef5b068161743e22bcfeb49f363d180cb"
         },
         "byte_preserved": false
       },
@@ -5774,6 +5810,18 @@
         "source": {
           "bytes": 117321,
           "sha256": "b87100166f901ec8a47e873c7c2a081975b932ebe44ab89eb57e0e318a6b9cef"
+        },
+        "byte_preserved": true
+      },
+      "_astro/refresh-button.Bw1ks3YM.js": {
+        "bytes": 129911,
+        "sha256": "5767177ba796bd031fd3ab79d1d86cfd0342fcce35979d4caff15125d7cf9fab",
+        "key": "releases/96a66ad074e12a344f6df637ce0e58bfaba5eb896efe2f89e48550fe96e129a1/_astro/refresh-button.Bw1ks3YM.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/96a66ad074e12a344f6df637ce0e58bfaba5eb896efe2f89e48550fe96e129a1/_astro/refresh-button.Bw1ks3YM.js",
+        "content_type": "application/javascript",
+        "source": {
+          "bytes": 129911,
+          "sha256": "5767177ba796bd031fd3ab79d1d86cfd0342fcce35979d4caff15125d7cf9fab"
         },
         "byte_preserved": true
       },
@@ -78112,7 +78160,6 @@
       "releases/240e6699a0535d3f673b14567293d6afdfad515cd2841cf0a609c6f522b51f94/_typeset/runtime/motion-c5586ab08f603db55ae0.css",
       "releases/24174d210a13fae44c11b72ab4d3957e4efdc7fbd2f287a2a6fd81e79fbb49b9/_living/_textures/1c4bb76136b7f82b4d4d8c2ccf104bddb82d7fe9502ae68c6dbac061bd2e9b96.webp",
       "releases/242bf4f34eaf430e9e36a7e0b650839216f246b813b0b94e854fd0ff5129fa9e/assets/_fingerprinted/8cf32a5f6b6fc24c9066222e8496c0d157f437a7ba442a2f73d7880dcd9dfc76.png",
-      "releases/24472d5e3c87832c15eca867d4d16b4cc9c43e8b2eb310a6e55c8b240ec23d0e/_astro/cockpit.B9R9rNfY.css",
       "releases/244cc06c32e0e765b0cf84d2e1b79ff41fa73798a422de12b74c16578e60b173/_living/codex-local-remote/bird-source.7a72713f65c6/config.json",
       "releases/245792220b71675e2fa6fec475e17042322c29ee5a906a20bcb9c8cac72bb504/_typeset/runtime/app-6d7a817d7b317cd927b8.js",
       "releases/245b25309324fcbd561d154cc18e4772863ec1c475a1d2bcc19be4ab65f9bcce/_typeset/runtime/live-sans-part-8a-cf49ef3b2dd1739d5fe0.woff2",
@@ -78237,6 +78284,7 @@
       "releases/2b57974cbfc7575b11b92567612873a5f7e96647ecc7acd21821611dde7a47b2/_shared/nav-7dadc2c869cd.webp",
       "releases/2b58018d027a926201c3d29ee546ded8651145544ab09116d1ed34df13d63841/assets/_fingerprinted/8d3c0c0e6d63e4c8b78e94fecd2ab885162bb69385ae67c51439481eaddbd7aa.png",
       "releases/2b5e8857bc3a003c9a2e37e67b88e64fe9b49fb06bb1228ed26684911939220e/assets/_fingerprinted/6fd02bf5fc8107232e9c547de9f7e96e9d57a6f7ab0f02d02d3b060d33810a66.jpg",
+      "releases/2b9780eaa2ee1775edc605723b7ccf13b7f7c86e3aab8dbf423b74e23b9ca124/_astro/index.astro_astro_type_script_index_0_lang.DPDyft3P.js",
       "releases/2ba3c7d00932fefbb716ec768190413606b8e2c7c3816188f7400b8445dceea8/assets/_fingerprinted/692017aef9f557bb841ef171d4d11c34c404713d11444748b2d7c152ad2e7efa.json",
       "releases/2bacccc3bd07161f660e45c37f540dd5558e5401f46e65244db0911209b1cc0a/_shared/home-comic/a554b08e4d2a2e262568/assets/v-b-p4docs-0-lines-3.png",
       "releases/2bb04e42d2374ec699d622771c18e12be466a640e77106719bae59d3eb13342d/assets/_fonts/pc-panel-hub-power-recovery-65cc7b5ef54a.woff2",
@@ -79310,7 +79358,6 @@
       "releases/65f1f1de6b60b47ac1467ea93e78967786992e30cb38ce72e00f8e41e83c566b/assets/_fingerprinted/89f7a1763a6eae246705b08a612b3ac656647bb2e424bc084fa534e5f83e5239.webp",
       "releases/65f57ec30f076a0d4ef48f33f827089938828bf4eb0704f457118b530fdfd97f/assets/_fingerprinted/2e578ba34ae8e4ab74430f8f6e1966ac608d62b3d8b062bc79faf1fb4306b7b9.png",
       "releases/66064691df39a12e8f052c9236fc97255214b48a72dbde182e3620d589f8c00b/_shared/nav-ac5fa6b95f-08a097a10f03.avif",
-      "releases/661386b2b2254f257a7292e1f0a696a44ee5ab0830670b462856263d442a2431/_astro/index.astro_astro_type_script_index_0_lang.DWnTnRTC.js",
       "releases/6614b4be84a13f1f419c01e37b7ac4b3771e55b08417cf89f571e9f57cb50053/_typeset/runtime/live-sans-page-8f714e7e065649766388.woff2",
       "releases/6617f3c2564ec94da7f2b72e57be0cab3ec9aa4042f7e0a888053e8d1b761fc8/assets/_fingerprinted/0b9bec40b1b442eefea2356a5d139755ac6fd4626835aa83102f132ba89a8c5f.png",
       "releases/6619dc4b1539d8053e5d77b193a7c054d01a0b10ab8e8d7a219eebaa8dd72285/assets/_fingerprinted/becdb3c31a5f3e87bef3af613532cdfad27641ef70604a15ae44facfd5804fcb.webp",
@@ -80151,7 +80198,6 @@
       "releases/959d87986ecb9ecfe55bb3d615e125faff52e635a220ad521dbc2fa8454059f8/assets/_fingerprinted/27d6af29308e39543ddb377f792b97fa79309f5606d7d1a6d9a8f95f2362c90a.png",
       "releases/95ab48da0694e1e5760fd0417082f055f3e626ee0083a9fd6f585853c30c56f6/assets/_fingerprinted/45c39c22d8a849b7c0bd4263684240e1276588963a0ede871f2ffd6ff3a9ff55.png",
       "releases/95b06b6e31b6b609e55541630c3d26c76960c96c855436752d5c7d538da29875/assets/_fingerprinted/72f96c58dacdce31d0380dc12cda9a6d9e71eed359e2ccbee72f867550e10ed9.png",
-      "releases/95c08b8d967e769482d15f464facb7cc0351123708e8b586d166c156968e1d21/_astro/index.astro_astro_type_script_index_0_lang.Bguc4UCE.js",
       "releases/95d0583502997403e67b9be8e67a441b3906df0408706e4e75dbb8650a52ba5f/_shared/nav-25f5ce57a1-457e93625cc5.webp",
       "releases/95d404d4547a991a0ff983afb3a0e42c0e228147c7d8749ce182dde1acfc3f13/_shared/nav-b948ca92cd17.avif",
       "releases/95daee315d53717c76390bdef478527ecedd50ae9f2f0dc04dd40dfb26f78dc1/_shared/nav-d320a7a8e10d.webp",
@@ -80168,6 +80214,7 @@
       "releases/969c41882c8896d8fac04d86ce749dae5c82b3cf00b24d7f39bb4ea927ea53c5/_typeset/runtime/live-sans-part-80-fd13c2c68c47c5fc349f.woff2",
       "releases/969ca43d46f211462b1dc881588476027f6eea03a18936a08273d5c2b77576a5/_typeset/runtime/live-sans-part-5e-675e68109f86b860fef3.woff2",
       "releases/969db032035b509180eda8ae740a67928964ea8e2e0746c34802956b7eabfae5/assets/_fingerprinted/609a206bc95c619953487da969288846e4f13f1490083a08a45e7b9792c75550.png",
+      "releases/96a66ad074e12a344f6df637ce0e58bfaba5eb896efe2f89e48550fe96e129a1/_astro/refresh-button.Bw1ks3YM.js",
       "releases/96c4e6f65dec9bcd71dbb9c6dec25ccb2b1529f8290caa2fe85bc691f01e5577/assets/_fingerprinted/470bc170dd3ec532df88e63b4b9970b9168787658ad6aaa7c64db991f41d164d.png",
       "releases/96cd67a1bb0f64e9ec61db9ffea39cd79c151391cb87b86b6dcd2f8b97e0ff27/_living/ramdisk-guardian/bird-source.ec76c049c91f/config.json",
       "releases/96ce677dd1f801566d387029c6d5988bbaa45aabac2ed2e47dd9092b21d498f9/assets/_fingerprinted/38fd8bb05906f2217b92c0f28e3143f25c125fcd158a8078c93f9d687ef4a67c.webp",
@@ -80695,6 +80742,7 @@
       "releases/b3c88886fcae2ba493ea15f48767ff9319b33e0e474b0f182a33e988df994caa/assets/_fingerprinted/b6bb5606ff04437a7a32a1afce04189883bab97d88301f4d299e9cc188f1f7d1.png",
       "releases/b3ceefefdce08dbf1e5724c7f6ba35f2de5e7a85201ae3260cc074b9493aa4b6/_typeset/runtime/live-sans-part-d0-421c29798ced9808889c.woff2",
       "releases/b3ef152895fdfa0050276672cb3161a27ca8e53fd9ee22716667c7528e481832/assets/_fingerprinted/1afa39f78c5df06cc1bd1ff3c53e72083c169183dc35bba96d95eb3f69a5823a.json",
+      "releases/b3fece5747d01adf63957b384598825dc28ac65cf43b24339680619a8aa8e3ec/_astro/index.astro_astro_type_script_index_0_lang.COypj2gU.js",
       "releases/b40d0d81e3d80fb7eee8f99e6835b18f0c268988e6410006191727dab8c85599/_typeset/runtime/b2-live-53db74e91ba1fb8aaa52.css",
       "releases/b40e0a47ada91a5506434ad4fd571f4076c607711b71b4c4dfd62b74520753e0/_shared/nav-203c08e0d4-6291ce838be9.webp",
       "releases/b42b51f5d787f0487047c75297302a1e6959ad411fa206b5152581cea6ca55f7/assets/_fingerprinted/38c53317d59d7bfe282703cf6b6d2c068adff81e353045047ade0780044b4378.png",
@@ -80799,6 +80847,7 @@
       "releases/b9f834efcdface70f300d880de0c3b3c7aa2edbe35dbca50f42d875742fb9636/_shared/nav-unify-standard/nav-unify-label-74-cc4284472c.webp",
       "releases/ba0b734176172173f145bb4f302443d07ce6e588379000725d6973db62205482/_shared/nav-ba55b824f91a.avif",
       "releases/ba0e4d126c8d83426e7d34870981f57c9a2521a1ea8f910ae263596567cd2394/_typeset/runtime/live-sans-part-b6-4327ba0774838eb3a3aa.woff2",
+      "releases/ba257e7e5029f2ff1827379b5869724297653501639fc4573c2fb54f5afbc656/_astro/cockpit.zFDGlaxV.css",
       "releases/ba2ee1eca39f5dbdcc0c07d4d0dc0d265e40b43f3421111e85ca25211cec08fc/_shared/nav-bdeaa8d446e8.avif",
       "releases/ba47c8bcbd05cde4696f1b72fa8a39103e5cc52dd656abe8efed8593b94cb482/assets/_fingerprinted/a7b8917c6567212dc729ba65aa4ce31b59234784e8a5641e26c7946a8e9bba2d.png",
       "releases/ba4eaa7eadbddf0e95d94669ba7c4bd8ff590e164ee1bd394a2169593aa6505f/_shared/home-comic/295cd8bc1e8a248d5bbb/assets/h-b-p4docs-0-lines-0.png",
