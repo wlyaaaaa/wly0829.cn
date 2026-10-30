@@ -933,8 +933,11 @@ function triCells(v, ctx, off) {
   const bk = sigOf(ov, 'backup'), bkWhy = whyOf(ov, 'backup_cloud');
   const bkStatus = bk.level === 'ok' ? '都按时备份了' : backupIssue(ov) || bk.word || '读不到';
   const bkMore = bkWhy.length > 1 ? `另有 ${bkWhy.length - 1} 项：${bkWhy.slice(1).join('、')}` : Number.isFinite(bk.value) && bk.level !== 'ok' ? `共 ${bk.value} 项不正常` : '';
+  // 这次开机了多久（本人 10-31 找不到它：五格首屏上要一眼看到）；连不上电脑时 make 不画 note
+  const upH = v.security?.computer?.uptime_hours;
+  const upNote = Number.isFinite(upH) && upH >= 0 ? `这次开机 ${upH >= 24 ? `${Math.floor(upH / 24)} 天 ${Math.round(upH % 24)} 小时` : `${Math.round(upH * 10) / 10} 小时`}` : '';
   return [
-    make('computer', '电脑', pcLevel, pc, pcStatus, '不用你管', '正常', pcDetail),
+    make('computer', '电脑', pcLevel, pc, pcStatus, '不用你管', '正常', pcDetail, upNote),
     // 现在没有仍失败的、也没有当前反复出错的：这一格就是正常（绿），不因后端 color=neutral 写成“今天都正常，AI 在管”
     make('tasks', '自动任务', tkLevel, nErr === 0 && !repeat.length ? { ...tk, color: 'ok' } : tk, tkStatus, '不用你管', '都正常', tkWhy, tkNote),
     make('backup', '备份', bk.level, bk, bkStatus, '不用你管', '都按时', bkMore),
