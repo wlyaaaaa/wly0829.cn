@@ -702,6 +702,13 @@
         "width": "40%"
       },
       {
+        "type": "feature_card",
+        "columns": 1,
+        "icons": "none",
+        "text_ref": "整页截图",
+        "row": "checks"
+      },
+      {
         "type": "prose",
         "text_ref": "实测（9月28日）：演示页生成加6次浏览器自检1分46秒；再存2张整页截图，共3分54秒"
       },

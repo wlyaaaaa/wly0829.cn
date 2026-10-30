@@ -529,7 +529,7 @@
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
   "sha256": "3336052eff43b29772d030bd309142710c0abf9eacbb906ae2c994431c611de2",
-  "converted_at_beijing": "2026-10-30T14:00:59+08:00"
+  "converted_at_beijing": "2026-10-30T16:51:14+08:00"
  }
 }
 ---
@@ -2078,6 +2078,13 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
      "text_ref": "自检拦下这些",
      "row": "checks",
      "width": "40%"
+    },
+    {
+     "type": "feature_card",
+     "columns": 1,
+     "icons": "none",
+     "text_ref": "整页截图",
+     "row": "checks"
     },
     {
      "type": "prose",
