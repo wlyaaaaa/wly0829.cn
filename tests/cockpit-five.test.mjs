@@ -112,3 +112,24 @@ test('AI 正在干活读不全：count、observed_at 都是 null、没带 gaps�
   assert.equal(old.ai_running.stale_count, 2);
   assert.match(REGIONS.home(old, ctx()), /现在没有 AI 在干活/);
 });
+
+test('收掉重复的字：分区说明句进“?”、正常和 AI 在管不挂标签、结果满 2 天收起、今天的动态不重复任务数', () => {
+  const v = view({ must_know: { state: 'ok', items: [
+    { id: 'k-old', kind: 'report', text: '示例旧结果，三天前的', at: '2026-10-27T10:00:00+08:00' },
+    { id: 'k-new', kind: 'report', text: '示例新结果，今天的', at: '2026-10-30T10:00:00+08:00' },
+    { id: 'k-fix', kind: 'repairing', text: '示例在修，三天前开始', at: '2026-10-27T10:00:00+08:00' }] },
+    today_activity: { summary: { tasks_run: 46, backups_done: 2 }, timeline: [{ at, kind: 'backup', text: '示例备份完成', level: 'ok' }] } });
+  const html = page(v, ctx({ ov: { stale: () => false, lamp: (s) => `<span class="ov-sec">${s?.word || ''}</span>` } }));
+  assert.doesNotMatch(html, /<p>电脑自己在做的事，有没有按时做、做成没有。<\/p>/);
+  assert.match(html, /<dl class="cp-keys cp-help-secs"><dt>自动任务<\/dt><dd>电脑自己在做的事/);
+  assert.doesNotMatch(html, /ov-sec is-neutral|>AI 在管<\/span>/);
+  const know = REGIONS.home(v, ctx());
+  const top = know.slice(0, know.indexOf('id="know-old"'));
+  assert.match(top, /示例新结果/);
+  assert.match(top, /示例在修/);
+  assert.doesNotMatch(top, /示例旧结果/);
+  assert.match(know, /<summary>最近收起的 1 条<\/summary><p class="cp-know-note">结果满 2 天自动收到这里。<\/p>[^]*?示例旧结果/);
+  const today = REGIONS.today(v, ctx());
+  assert.match(today, /<summary>电脑后台今天做的事：完成 2 项备份，记了 1 件事<\/summary>/);
+  assert.doesNotMatch(today, /跑了 46 个任务/);
+});

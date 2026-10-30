@@ -34,7 +34,9 @@ test('首屏露件数和卡住的行（件数以后端 stuck_count 为准，额�
   const html = REGIONS.home(v, ctx);
   // 卡住 3 个（网络在重连、额度、登录），其中额度和登录要你看；停了没做完、看不出在干嘛的不算在干活
   // 标题的数和列出来的行对得上：5 个在干活（含 3 个卡住）+ 另 1 件停了没做完、2 件看不出在干嘛 = 卡住 3 行 + 其余 5 行
-  assert.match(html, /class="hub-heading cp-run-sum">AI 正在干活：5 个（3 个卡住，2 个要你看），另 1 件停了没做完、2 件看不出在干嘛<\/h2>[^]*?class="cp-run-at">15:39 读到的<\/span>/);
+  assert.match(html, /class="hub-heading cp-run-sum">AI 正在干活：5 个（3 个卡住，2 个要你看），另 1 件停了没做完、2 件看不出在干嘛<\/h2>/);
+  // 本人 10-30 批准第 5 项：读到时间和页面顶上一样时不另写
+  assert.doesNotMatch(html, /class="cp-run-at"/);
   const stuck = /<ul class="cp-run-list is-stuck">(.*?)<\/ul>/.exec(html)?.[1] || '';
   assert.deepEqual([...stuck.matchAll(/<li class="cp-run-row is-([a-z_]+) /g)].map((m) => m[1]), ['quota_exhausted', 'login_failed', 'network_retry']);
   const rest = /<details class="cp-run-all" id="run-all"><summary>其余 5 个<\/summary><ul class="cp-run-list">(.*?)<\/ul><\/details>/.exec(html)?.[1] || '';
@@ -75,7 +77,8 @@ test('公开版：只写两句（几个在干活、卡在额度还是登录；�
     pub('quota_exhausted', 'GPT Sol', 'gpt'), pub('login_failed', 'GPT Sol', 'gpt'), pub('running', 'GPT Sol', 'gpt'), pub('unknown', '', 'gpt')];
   const block = running(rows, { summary: 'AI 在跑 9 个，3 个卡住了，另有 2 件早就停了', stale_count: 2 });
   const html = REGIONS.home(normalize(base({ viewer: { kind: 'public', device_state: 'none' }, ai_running: block })), ctx);
-  assert.match(html, /class="cp-run is-public"[^]*?class="hub-heading cp-run-sum">AI 正在干活：8 个（3 个卡住，2 个要你看）<\/h2>[^]*?class="cp-run-at">15:39 读到的<\/span>/);
+  assert.match(html, /class="cp-run is-public"[^]*?class="hub-heading cp-run-sum">AI 正在干活：8 个（3 个卡住，2 个要你看）<\/h2>/);
+  assert.doesNotMatch(html, /class="cp-run-at"/);
   assert.match(html, /<p class="cp-run-models">Claude Opus 5.5 5 个 · GPT Sol 3 个<\/p>/);
   assert.doesNotMatch(html, /一件 AI 活|cp-run-list|cp-run-row|早就停了|个帮手|个助手|<button/);
   // 只凭行上的 placeholder 也认（没有 viewer 字段时）；网络在重连算卡住（后端 stuck_count）但不写要你看，停了没做完不算卡住
@@ -98,7 +101,7 @@ test('本人版：只有早停数量而没有明细时不出空话；帮手说�
   assert.match(html, /<span class="cp-run-doing is-empty">在等你回话<\/span><small class="cp-run-meta"><span class="cp-run-name">示例活 waiting_owner<\/span>Claude Opus 5.5 · 它叫了 1 个助手 · /);
   // 没有在干活的、但有早就停了的：一行“现在没有 AI 在干活”，下面小字
   const none = REGIONS.home(normalize(base({ ai_running: { count: 0, stuck_count: 0, stale_count: 2, summary: '现在没有 AI 在跑，另有 2 件早就停了', observed_at: at, gaps: [], rows: [] } })), ctx);
-  assert.match(none, /class="hub-heading cp-run-sum">现在没有 AI 在干活<\/h2>[^]*?class="cp-run-at">15:39 读到的<\/span>/);
+  assert.match(none, /class="hub-heading cp-run-sum">现在没有 AI 在干活<\/h2>/);
   assert.doesNotMatch(none, /cp-run-stale|早就停了/);
   // 公开版这一句不出；没有 stale_count 字段时什么都不加
   const pubNone = REGIONS.home(normalize(base({ viewer: { kind: 'public', device_state: 'none' }, ai_running: { count: 0, stuck_count: 0, stale_count: 2, summary: '', observed_at: at, gaps: [], rows: [] } })), ctx);

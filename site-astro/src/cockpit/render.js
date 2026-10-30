@@ -79,14 +79,15 @@ export function cardState(c) {
 }
 // 一张事实卡：标题、一句话、判断标准、读到的时间；没读到时写清上次读到是几点。
 // off = 这会儿整个读不到电脑：卡片变淡、灯灰，写“读不到（最后 HH:MM 读到）”，不再亮着上次的绿灯
-export function card(c, now, off = false) {
+export function card(c, now, off = false, pageAt = '') {
+  const lag = (x) => !pageAt || !!lagAt(x, { served_at: pageAt });
   const missing = c.state === 'unavailable' || c.state === 'reading';
   const gap = ago(c.observed_at, now).replace(/^刚刚$/, '').replace(/前$/, '');
   const state = off ? 'unavailable' : cardState(c);
   const text = c.text ? esc(c.text) + (missing && c.observed_at ? `<span class="cp-stale">（这是 ${esc(when(c.observed_at, now))} 读到的，之后${gap ? ' ' + esc(gap) : ''}没读到新的）</span>` : '') : notRead(c.observed_at, now);
   const time = off ? (missing ? '' : `<p class="cp-time cp-off-note">读不到${c.observed_at ? `（最后 ${esc(when(c.observed_at, now))} 读到）` : ''}</p>`)
     : state === 'stale' ? `<p class="cp-time">数据源停了，上面是最后一次记录，不是你的事${c.observed_at ? ` · ${esc(when(c.observed_at, now))} 读到` : ''}</p>`
-    : !missing && c.observed_at ? `<p class="cp-time">${state === 'neutral' ? esc(typeof c.ai_handling === 'string' && c.ai_handling ? c.ai_handling.replace(/[。\s]+$/, '') : 'AI 在管，不用你动手') + ' · ' : ''}${esc(when(c.observed_at, now))} 读到</p>` : '';
+    : !missing && c.observed_at && (state === 'neutral' || lag(c.observed_at)) ? `<p class="cp-time">${state === 'neutral' ? esc(typeof c.ai_handling === 'string' && c.ai_handling ? c.ai_handling.replace(/[。\s]+$/, '') : 'AI 在管，不用你动手') + (lag(c.observed_at) ? ' · ' : '') : ''}${lag(c.observed_at) ? esc(when(c.observed_at, now)) + ' 读到' : ''}</p>` : '';
   // 后端给出“具体是哪条线触发的”（trigger_items：单个程序 1 小时上传超过 2GB，或近 1 小时合计超过登记线）就写出来；
   // 卡片正文已经写了程序名的不重复；没给就不猜
   const LINE = { program_hour_upload: (t) => `${t.name || '某个程序'} 1 小时上传 ${Number(t.value_gb).toFixed(1)}GB，超过 ${t.threshold_gb}GB`, proxy_hour_total: (t) => `近 1 小时合计 ${Number(t.value_gb).toFixed(1)}GB，超过 ${t.threshold_gb}GB` };
@@ -105,14 +106,15 @@ export const factLine = (c, attrs = '', note = '') => `<li class="cp-fact"${attr
 // 一组事实卡：正常的收成一行一条，其余（要留意、AI 在管、读不到）照原样整张卡
 // 要你出手的（红、黄）照样整张卡；正常的一行；AI 在管、数据停了、读不到的也一行，点开就是原来那张卡（原因、缺口、读到时间都在里面）
 const FOLD_STATES = ['neutral', 'stale', 'unavailable', 'reading'];
-const foldFact = (c, now, off) => {
+const foldFact = (c, now, off, pageAt = '') => {
   const st = off ? 'unavailable' : cardState(c), missing = c.state === 'unavailable' || c.state === 'reading';
   // 读不到的那一行先说是几点读到的（点开才是那时的值），不把旧值当现在的写在外面
   const gap = c.observed_at ? ago(c.observed_at, now).replace(/^刚刚$/, '').replace(/前$/, '') : '';
   const say = missing ? (c.observed_at ? `这是 ${when(c.observed_at, now)} 读到的，之后${gap ? ' ' + gap : ''}没读到新的` : '还没读到') : factText(c) || (st === 'neutral' ? 'AI 在管' : '没读到');
-  return `<li class="cp-fact is-fold"><details><summary>${dot(st)}<b>${esc(c.title)}</b><span>${esc(say)}</span></summary>${card(c, now, off)}</details></li>`;
+  return `<li class="cp-fact is-fold"><details><summary>${dot(st)}<b>${esc(c.title)}</b><span>${esc(say)}</span></summary>${card(c, now, off, pageAt)}</details></li>`;
 };
-export function factCards(cards, now, off = false) {
+// pageAt：页面顶上那次读取的时间（v.served_at）；给了就只在比它旧 15 分钟以上时写几点读到（本人 10-30 批准第 5 项），没给照旧每组写一次
+export function factCards(cards, now, off = false, pageAt = '') {
   const st = (c) => (off ? 'unavailable' : cardState(c));
   const big = cards.filter((c) => !off && !['ok', ...FOLD_STATES].includes(st(c)));
   const lines = cards.filter((c) => !big.includes(c));
@@ -121,9 +123,9 @@ export function factCards(cards, now, off = false) {
   const last = t.length ? new Date(Math.max(...t)).toISOString() : '';
   // 比这一组最新的读数旧 15 分钟以上的那一行，自己写上几点读到的
   const note = (c) => { const x = Date.parse(c.observed_at || ''); return Number.isFinite(x) && Date.parse(last) - x > 9e5 ? `（${when(c.observed_at, now)} 读到）` : ''; };
-  const atLine = last ? `<p class="cp-time cp-facts-at">${off ? `读不到（最后 ${esc(when(last, now))} 读到）` : `${esc(when(last, now))} 读到`}</p>` : '';
-  return (big.length ? `<div class="cp-grid">${big.map((c) => card(c, now, off)).join('')}</div>` : '')
-    + (lines.length ? `<ul class="cp-facts">${lines.map((c) => (st(c) === 'ok' ? factLine(c, '', note(c)) : foldFact(c, now, off))).join('')}</ul>${atLine}` : '');
+  const atLine = last && (off || !pageAt || lagAt(last, { served_at: pageAt })) ? `<p class="cp-time cp-facts-at">${off ? `读不到（最后 ${esc(when(last, now))} 读到）` : `${esc(when(last, now))} 读到`}</p>` : '';
+  return (big.length ? `<div class="cp-grid">${big.map((c) => card(c, now, off, pageAt)).join('')}</div>` : '')
+    + (lines.length ? `<ul class="cp-facts">${lines.map((c) => (st(c) === 'ok' ? factLine(c, '', note(c)) : foldFact(c, now, off, pageAt))).join('')}</ul>${atLine}` : '');
 }
 // 停了 3 天以上、已收进“这几块数据停了”那一句的卡（后端 stale_summary.ids），各区不再单独列
 const staleIds = (v) => new Set(v.stale_summary?.ids || []);
@@ -550,7 +552,7 @@ export function computer(v, ctx) {
   // 读不到电脑时图表网页也打不开：链接先收起，只留一行说明
   const chartsRow = off ? `<p class="cp-line cp-off-note">${dot('unavailable')}读不到电脑，图表链接先收起，读到后再出来。</p>`
     : `<p class="cp-line cp-charts" id="grafana">${links.length ? `24 小时曲线（新标签页打开）：${links.join('<i aria-hidden="true"> · </i>')}` : `${dot('unavailable')}图表网页现在打不开${g.checked_at ? `（上次检查 ${esc(when(g.checked_at, ctx.now))}）` : ''}`}</p>`;
-  return factCards(cards, ctx.now, off) + remote + `<p class="cp-line"><a href="/cockpit/storage/">存储占用与增长：各类别容量和近一周变化 ›</a></p>` + chartsRow;
+  return factCards(cards, ctx.now, off, v.served_at) + remote + `<p class="cp-line"><a href="/cockpit/storage/">存储占用与增长：各类别容量和近一周变化 ›</a></p>` + chartsRow;
 }
 
 const LAPTOP = { online: ['在线', 'ok'], offline: ['离线（要用它时得先开机连网）', 'attention'] };
@@ -559,7 +561,7 @@ export function backup(v, ctx) {
   const off = !!ctx.offline, stale = staleIds(v);
   const cards = dedupeCards(v.sections.backup_cloud).filter((c) => !stale.has(c.id)).map((c) => (c.id === 'drive_upload' ? { ...c, text: knownFirst(c.text) } : c));
   const sig = sigOf(v.overview, 'backup'), issue = !off && sig.level !== 'ok' ? backupIssue(v.overview) : '';
-  return anchor('backups') + (issue ? `<p class="cp-line cp-backup-current">${esc(issue)}</p>` : '') + (cards.length ? factCards(cards, ctx.now, off) : `<div class="cp-grid">${card({ title: '备份', state: 'unavailable', text: '' }, ctx.now, off)}</div>`);
+  return anchor('backups') + (issue ? `<p class="cp-line cp-backup-current">${esc(issue)}</p>` : '') + (cards.length ? factCards(cards, ctx.now, off, v.served_at) : `<div class="cp-grid">${card({ title: '备份', state: 'unavailable', text: '' }, ctx.now, off)}</div>`);
 }
 
 // 先说读到了什么，再说哪点还不知道：句子以“……还不知道。”开头时挪到最后（Google Drive 上传卡）
@@ -691,7 +693,10 @@ function activityBlock(v, ctx) {
   const names = a.errors.length ? `<p class="cp-cap cp-errnames">出过错的：${a.errors.map((e) => `${esc(e.name || '没写名字的任务')}（${esc(hm(e.at))}${e.owner === 'other' ? '，别的软件自带' : ''}${e.recovered === true ? '，后来已恢复' : e.recovered === false ? '，还没恢复' : ''}）`).join('、')}${known ? '。' : '；后来恢复没有，看上面自动任务清单里的“今天出过错的”。'}</p>` : '';
   const items = mergeAcceptance(a.timeline).map((x) => `<li class="is-${light(x.level === 'act' ? 'red' : x.level === 'watch' ? 'attention' : x.level === 'ok' ? 'ok' : 'unavailable')}"><time>${esc(hm(x.at))}</time><i class="cp-tl-dot" aria-hidden="true"></i><span class="cp-tl-kind">${esc(KIND[x.kind] || '其他')}</span><span>${esc(x.text)}</span></li>`).join('');
   const acc = typeof s.acceptance_text === 'string' && s.acceptance_text.trim() ? `<p class="cp-cap cp-acceptance">${esc(s.acceptance_text.trim())}</p>` : '';
-  return `<article class="cp-feature cp-activity ct-card"><h3>电脑后台今天做的事</h3><p class="cp-big-line">${esc(line)}</p>${acc}${names}${yline}`
+  // 任务数在自动任务区开头已经有了，这里只留备份和镜像（本人 10-30 批准第 5 项）
+  const done = [Number.isFinite(s.backups_done) ? `完成 ${s.backups_done} 项备份` : '', Number.isFinite(s.images_done) && s.images_done ? `${s.images_done} 次系统镜像` : ''].filter(Boolean).join('、');
+  void line;
+  return `<article class="cp-feature cp-activity ct-card"><h3>电脑后台今天做的事</h3>${done ? `<p class="cp-big-line">今天${esc(done)}</p>` : ''}${acc}${names}${yline}`
     + (items ? `<ol class="cp-timeline">${items}</ol>` : `<p class="cp-line">${dot('ok')}今天还没有备份、出错、重启这类事。</p>`)
     + (a.observed_at ? `<p class="cp-time">${esc(when(a.observed_at, ctx.now))} 读到</p>` : '') + `</article>`;
 }
@@ -743,8 +748,10 @@ function activityLine(v, ctx) {
     s = { tasks_run: v.automation.items.length ? ran.length : null, tasks_failed: v.automation.items.length ? ran.filter((t) => t.state === 'failed').length : null };
   }
   if (!Number.isFinite(s.tasks_run)) return '电脑后台今天做的事：还没读到';
-  const errs = todayErrors(v), bad = errs ? errs.owner + errs.other : s.tasks_failed;
-  return `电脑后台今天跑了 ${s.tasks_run} 个任务${Number.isFinite(bad) ? `，${bad} 个出过错` : ''}${Number.isFinite(s.backups_done) ? `，完成 ${s.backups_done} 项备份` : ''}`;
+  // 跑了几个任务、几个出错在自动任务区开头已经写了（本人 10-30 批准第 5 项），这里只说备份和别的记录
+  const n = v.today_activity.timeline.length;
+  const bits = [Number.isFinite(s.backups_done) ? `完成 ${s.backups_done} 项备份` : '', n ? `记了 ${n} 件事` : ''].filter(Boolean);
+  return `电脑后台今天做的事${bits.length ? '：' + bits.join('，') : ''}`;
 }
 function powerLine(v) {
   const p = v.power_today, up = p.uptime_hours ?? v.security.computer.uptime_hours, kwh = p.energy_kwh;
@@ -759,7 +766,7 @@ export function todayBlock(v, ctx) {
   const gaps = gapRows.size ? foldLine('today-gaps', `这次有 ${gapRows.size} 处没读到，相关的数可能不全`, `<ul class="cp-list">${[...gapRows.values()].map(({ g, n }) => `<li>${dot('attention')}${esc(g.title)}${n > 1 ? `（${n} 处）` : ''}${g.since ? `<span class="cp-meta">（${esc(when(g.since, ctx.now))} 起）</span>` : ''}${typeof g.impact === 'string' && g.impact.trim() ? `<small class="cp-gap-impact">${esc(g.impact.trim())}</small>` : ''}</li>`).join('')}</ul>`) : '';
   return releaseLine(v, ctx) + `<div class="cp-folds">${foldLine('today-code', esc(codeLine(v)), codeCard(v, ctx))}${foldLine('today-words', esc(wordsLine(v)), wordsCard(v, ctx))}`
     + `${foldLine('today-activity', esc(activityLine(v, ctx)), activityBlock(v, ctx))}${foldLine('today-power', esc(powerLine(v)), powerBlock(v, ctx))}</div>`
-    + (cards.length ? factCards(cards, ctx.now, !!ctx.offline) : '') + gaps;
+    + (cards.length ? factCards(cards, ctx.now, !!ctx.offline, v.served_at) : '') + gaps;
 }
 // 自动任务区开头一行：今天跑了几个、自己装的任务几个出过错（几个已好、几个 AI 在修）；
 // “后台 N 项功能中断过，现在都恢复了”从“你得知道”挪到这里（可用性审查）。今天的河收在下面的折叠里
@@ -954,7 +961,10 @@ function knowBlock(v, ctx) {
   const ok = (k) => isPh(k) || (typeof k.text === 'string' && k.text);
   // 已恢复的挪到自动任务区，AI 自己定了的挪到“AI 的账本”；这里只留真跟你有关的
   const mine = (k) => k.kind !== 'recovered' && k.kind !== 'ai_decision';
-  const all = m.items.filter(ok).filter(mine), old = m.archived.filter(ok).filter(mine);
+  // 结果类（标签“结果”）超过 2 天自动放进“最近收起”：后端该关没关时的页面兜底（本人 10-30 批准第 5 项；根治在后端）
+  const RESULT = ['report', 'just_completed', 'done'];
+  const aged = (k) => RESULT.includes(k.kind) && Number.isFinite(Date.parse(k.at || '')) && ctx.now.getTime() - Date.parse(k.at) > 48 * 36e5;
+  const all = m.items.filter(ok).filter(mine).filter((k) => !aged(k)), old = [...m.items.filter(ok).filter(mine).filter(aged), ...m.archived.filter(ok).filter(mine)];
   const tagOf = (kind) => { const [tag, st] = KNOW_TAG[kind] || ['你得知道', 'neutral']; return `<span class="cp-know-tag is-${light(st)}">${tag}</span>`; };
   // 刚做完的（后端 kind=just_completed，带 executor）：小字写“几点 · Claude 做完”
   const smallOf = (k) => [k.at && !String(k.text || '').includes(when(k.at, ctx.now)) ? when(k.at, ctx.now) + (k.kind === 'just_completed' && VENDOR[k.executor] ? ` · ${VENDOR[k.executor]} 做完` : '') : '', !isPh(k) && typeof k.exit_when === 'string' ? k.exit_when : ''].filter(Boolean);
@@ -987,7 +997,7 @@ function knowBlock(v, ctx) {
     return `<li id="${esc(knowId(k))}" class="is-${esc(k.kind || 'other')}${phCls(k)}${actCls(k, ctx)}"${itemAttr(k)}>${tagOf(k.kind)}<span class="cp-know-text">${esc(text)}${ownTag(k)}${extra}${tail}${updates}</span>${ownerBox(k, ctx, { only: ['ack'] })}</li>`;
   };
   const rows = all.map((k, i) => ({ k, i, r: KNOW_RANK[k.kind] ?? 1 })).sort((a, b) => a.r - b.r || a.i - b.i).map(({ k }) => row(k));
-  const folded = old.length ? `<details class="cp-know-old" id="know-old"><summary>最近收起的 ${old.length} 条</summary><ul class="cp-know-list">${old.map(row).join('')}</ul></details>` : '';
+  const folded = old.length ? `<details class="cp-know-old" id="know-old"><summary>最近收起的 ${old.length} 条</summary><p class="cp-know-note">结果满 2 天自动收到这里。</p><ul class="cp-know-list">${old.map(row).join('')}</ul></details>` : '';
   if (!rows.length) return `<div class="cp-know is-empty"><p>${dot('ok')}${esc(m.text || '没有要你知道的新事')}</p>${folded}</div>`;
   // 最多 5 行：超过时露前 4 行，第 5 行是“其余 N 条”
   const shown = rows.length > KNOW_MAX ? rows.slice(0, KNOW_MAX - 1) : rows, more = rows.slice(shown.length);
@@ -1100,7 +1110,7 @@ function runBlock(v, ctx) {
   const a = v.ai_running;
   if (!a) return '';
   const pub = a.rows.some((r) => r.placeholder) || v.viewer?.kind === 'public';
-  const at = a.observed_at ? `<span class="cp-run-at">${ctx.offline ? '读不到电脑，这是 ' : ''}${esc(when(a.observed_at, ctx.now))} 读到的</span>` : '';
+  const at = a.observed_at && (ctx.offline || lagAt(a.observed_at, v)) ? `<span class="cp-run-at">${ctx.offline ? '读不到电脑，这是 ' : ''}${esc(when(a.observed_at, ctx.now))} 读到的</span>` : '';
   const off = ctx.offline ? ' is-off' : '';
   const gone = [...(a.stale_rows || []), ...(a.stopped_rows || [])].filter((r) => !a.rows.some((x) => x.id === r.id));
   const stale = !pub && gone.length ? `<details class="cp-run-stale" id="run-stale"><summary>另有 ${gone.length} 件已经停了</summary><ul class="cp-run-list">${gone.map((r) => runRowOf(r, ctx, v.viewer)).join('')}</ul></details>` : '';
@@ -1207,14 +1217,37 @@ export function lines(v, ctx) {
   // 两类分开说：等条件再办的（暂缓里你的）、已经排好日子的
   const kinds = [mine.length ? `等条件 ${mine.length}` : '', v.scheduled.length ? `排好日子 ${v.scheduled.length}` : ''].filter(Boolean).join(' · ');
   const wait = n ? `<details class="cp-fold cp-mine" id="mine-wait"><summary>你放着 ${n} 件（${kinds}）</summary><ul class="cp-list cp-wait">${mine.map((x) => waitRow(x, ctx)).join('')}${v.scheduled.map((x) => schedRow(x, ctx)).join('')}</ul></details>` : '';
-  const st = v.stale_summary;
-  const cards = dedupeCards([...(st ? ['computer', 'remote', 'backup_cloud', 'today'].flatMap((k) => v.sections[k]).filter((c) => st.ids.includes(c.id)) : []), ...oldTodayCards(v, ctx.now)]);
-  const extra = cards.filter((c) => !st?.ids.includes(c.id)).length;
-  const staleText = st?.text ? st.text + (extra ? `；另 ${extra} 块今天还没读到新数据` : '') : `这 ${cards.length} 块数据今天还没读到新的`;
-  const stale = cards.length
-    ? `<details class="cp-fold cp-stale-fold" id="stale-cards"><summary>${dot('unavailable')}${esc(staleText)}</summary><ul class="cp-facts is-stale">${cards.map((c) => `<li class="cp-fact" tabindex="0" title="${esc(c.text || '')}">${dot('unavailable')}<b>${esc(c.title)}</b><span>${c.observed_at ? `最后一次是 ${esc(when(c.observed_at, ctx.now))}${st?.ids.includes(c.id) || SOURCE_STOPPED.test(c.text || '') ? '，数据停了' : '，今天还没读到新的'}` : '还没读到'}</span></li>`).join('')}</ul></details>`
-    : st ? `<p class="cp-line">${dot('unavailable')}${esc(st.text)}</p>` : '';
+  const { shown, hidden } = staleCards(v, ctx.now);
+  const staleRow = (c) => `<li class="cp-fact" tabindex="0" title="${esc(c.text || '')}">${dot('unavailable')}<b>${esc(c.title)}</b><span>${esc(staleWho(c, v, ctx.now))}${c.observed_at ? `（最后一次 ${esc(when(c.observed_at, ctx.now))}）` : ''}</span></li>`;
+  // 每样写清谁在管；挂满 3 天的不再在首屏列，收在“AI 的账本”的“停了的数据”里（本人 10-30 批准第 5 项；页面兜底，根治在后端）
+  const more = hidden.length ? `<a class="cp-stale-more" href="/cockpit/ai/#stale-data">另 ${hidden.length} 样停了 3 天以上，在 AI 的账本里 ›</a>` : '';
+  const stale = shown.length
+    ? `<details class="cp-fold cp-stale-fold" id="stale-cards"><summary>${dot('unavailable')}${esc(`这些数据没再更新：${shown.map((c) => `${c.title}（${staleWho(c, v, ctx.now)}）`).join('；')}`)}</summary><ul class="cp-facts is-stale">${shown.map(staleRow).join('')}</ul>${more ? `<p class="cp-line">${more}</p>` : ''}</details>`
+    : more ? `<p class="cp-line cp-stale-line">${dot('unavailable')}${more}</p>` : '';
   return `<div class="cp-lines"><a class="cp-go" href="/cockpit/ai/">${esc(ledgerText(v))}</a>${wait}${stale}</div>`;
+}
+// 停了的数据（后端 stale_summary.ids 的卡，加上今天的动态里不是今天读到的卡）：每样写清谁在管；最后一次读到满 3 天的不再在首屏列
+const STALE_DAYS = 3;
+function staleCards(v, now) {
+  const st = v.stale_summary;
+  const cards = dedupeCards([...(st ? ['computer', 'remote', 'backup_cloud', 'today'].flatMap((k) => v.sections[k]).filter((c) => st.ids.includes(c.id)) : []), ...oldTodayCards(v, now)]);
+  const old = (c) => { const t = Date.parse(c.observed_at || ''); return Number.isFinite(t) && now.getTime() - t >= STALE_DAYS * 864e5; };
+  return { all: cards, shown: cards.filter((c) => !old(c)), hidden: cards.filter(old) };
+}
+// 谁在管：没有新记录的（学习进度这类，不代表出了毛病）写“N 天没有新记录”；采集停了的写“M/D 起读不到”，后端给了 ai_handling 就照写，没给写“AI 在查”
+const staleWho = (c, v, now) => {
+  const t = Date.parse(c.observed_at || ''), days = Number.isFinite(t) ? Math.floor((now.getTime() - t) / 864e5) : null;
+  if (/没有新记录|不代表你没有/.test(c.text || '')) return days != null ? `${days ? `${days} 天` : '今天'}没有新记录` : '没有新记录';
+  if (!v.stale_summary?.ids.includes(c.id) && !SOURCE_STOPPED.test(c.text || '')) return '今天还没读到新的';
+  const md = Number.isFinite(t) ? new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Shanghai', month: 'numeric', day: 'numeric' }).format(new Date(t)) : '';
+  const who = typeof c.ai_handling === 'string' && c.ai_handling.trim() ? c.ai_handling.trim().replace(/[。\s]+$/, '') : 'AI 在查';
+  return `${md ? `${md} 起` : ''}读不到，${who}`;
+};
+// 二级页“停了的数据”：首屏收起的（满 3 天）和还在首屏的都列，停了的数据不会被藏起来
+function staleLedger(v, ctx) {
+  const { all, hidden } = staleCards(v, ctx.now);
+  if (!all.length) return '';
+  return `<p class="cp-know-note">首屏只列停了不满 ${STALE_DAYS} 天的；满 ${STALE_DAYS} 天的（${hidden.length} 样）只在这里。</p><ul class="cp-facts is-stale">${all.map((c) => `<li class="cp-fact" title="${esc(c.text || '')}">${dot('unavailable')}<b>${esc(c.title)}</b><span>${esc(staleWho(c, v, ctx.now))}${c.observed_at ? `（最后一次 ${esc(when(c.observed_at, ctx.now))}）` : ''}</span></li>`).join('')}</ul>`;
 }
 // 首屏中间：AI 正在干活 → 你得知道 → 几行入口
 const home = (v, ctx) => runBlock(v, ctx) + knowBlock(v, ctx) + lines(v, ctx);
@@ -1226,14 +1259,16 @@ const lampOf = (key) => (v, ctx) => {
   const off = ctx.ov.stale(v.overview, ctx.now.getTime()), sec = v.overview?.sections?.[key];
   if (!off && sec && COLOR_STATE[sec.color]) {
     const st = COLOR_STATE[sec.color];
-    if (st === 'neutral') return `<span class="ov-sec is-neutral"><i class="ov-lamp" aria-hidden="true"></i>AI 在管</span>`;
+    // 本人 10-30 批准第 5 项：五个一模一样的“AI 在管”等于没写；正常、AI 在管都不挂，只在要你看、读不到时挂
+    if (st === 'neutral' || st === 'ok') return '';
     if (st === 'unavailable') return ctx.ov.lamp(null, true);
-    return ctx.ov.lamp({ ...sec, level: st === 'red' ? 'act' : st === 'attention' ? 'watch' : 'ok', word: st === 'ok' ? '正常' : key === 'need_you' ? '要你处理' : sec.word }, false);
+    return ctx.ov.lamp({ ...sec, level: st === 'red' ? 'act' : 'watch', word: key === 'need_you' ? '要你处理' : '要你看' }, false);
   }
-  if (off || !sec || key === 'need_you' || !['act', 'watch'].includes(sec.level)) return ctx.ov.lamp(sec, off);
+  if (off || !sec) return ctx.ov.lamp(sec, true);
+  if (key === 'need_you' || !['act', 'watch'].includes(sec.level)) return ['act', 'watch'].includes(sec.level) ? ctx.ov.lamp(sec, false) : '';
   const st = key === 'projects' && v.projects.items.some((p) => p.waiting_user > 0) ? LV[sec.level] : ownerState(sec.level, sec);
-  if (st === 'neutral') return `<span class="ov-sec is-neutral"><i class="ov-lamp" aria-hidden="true"></i>AI 在管</span>`;
-  return ctx.ov.lamp({ ...sec, level: st === 'red' ? 'act' : 'watch' }, false);
+  if (st === 'neutral' || st === 'ok') return '';
+  return ctx.ov.lamp({ ...sec, level: st === 'red' ? 'act' : 'watch', word: '要你看' }, false);
 };
 // 二级页电脑版（宽度 ≥1200）的表格。窄屏照旧是上面的列表；两样都画，cockpit.css 按宽度只显示一样（表格行不带 data-items，通知跳转找列表那行）。
 // 筛选（全部 / 晚了 / 没晚、输入几个字）和勾选记在 client.js 的 act.ui（下面两个键），重画时照样画出来
@@ -1297,13 +1332,15 @@ export function ledger(v, ctx) {
     // 读过之后又读不到电脑：照样列着上次的数，但写明是几点的，不让旧数看起来像实时
     : ctx.offline ? `<p class="cp-snap">${dot('unavailable')}读不到电脑，这是 ${esc(v.served_at ? when(v.served_at, ctx.now) : '早些时候')} 的数</p>` : '';
   // 1700 宽以上左边一列小目录
-  const toc = [['ai-following', 'AI 在跟'], ['ai-decided', 'AI 自己定了的'], theirs.length ? ['ai-wait', 'AI 等条件再做的'] : null, health ? ['ai-health', '体检和项目后台'] : null].filter(Boolean);
+  const stale = staleLedger(v, ctx);
+  const toc = [['ai-following', 'AI 在跟'], ['ai-decided', 'AI 自己定了的'], theirs.length ? ['ai-wait', 'AI 等条件再做的'] : null, health ? ['ai-health', '体检和项目后台'] : null, stale ? ['stale-data', '停了的数据'] : null].filter(Boolean);
   return `<nav class="cp-ledger-toc" aria-label="这页有什么">${toc.map(([id, t]) => `<a href="#${id}">${t}</a>`).join('')}</nav>`
     + snap + `<p class="cp-ledger-sum">${dot('neutral')}${esc(ledgerText(v))}</p>`
     + `<section class="cp-ledger-sec" id="ai-following"><h2>AI 在跟</h2>${aiFollowing(v, ctx)}${followTable(v, ctx)}</section>`
     + `<section class="cp-ledger-sec" id="ai-decided"><h2>AI 自己定了的</h2>${decisionsBlock(v, ctx)}${decisionsTable(v, ctx)}</section>`
     + (theirs.length ? `<section class="cp-ledger-sec" id="ai-wait"><h2>AI 等条件再做的</h2><ul class="cp-list cp-wait">${theirs.map((x) => waitRow(x, ctx, [])).join('')}</ul></section>` : '')
-    + (health ? `<section class="cp-ledger-sec" id="ai-health"><h2>每周体检和项目后台</h2>${health}</section>` : '');
+    + (health ? `<section class="cp-ledger-sec" id="ai-health"><h2>每周体检和项目后台</h2>${health}</section>` : '')
+    + (stale ? `<section class="cp-ledger-sec" id="stale-data"><h2>停了的数据</h2>${stale}</section>` : '');
 }
 // 电脑版顶栏右端：哪台设备、几点读到（窄屏不出，那里看标题下的小字）；配对结果、授权失效这类提示也写在这里
 export function meta(v, ctx) {
@@ -1320,6 +1357,9 @@ const todayDate = (v, ctx) => new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia
 export const REGIONS = Object.fromEntries(Object.entries({ overview, strip, 'overview-tri': overviewTri, 'need-you': needCards, home, tasks: tasksSum, security, computer, backup, projects, today: todayBlock, 'today-date': todayDate, viewer: viewerLine, meta, ledger,
   'action-toast': (_v, ctx) => actionToast(ctx), ...Object.fromEntries(Object.entries(LAMPS).map(([id, key]) => ['lamp-' + id, lampOf(key)])) }).map(([key, render]) => [key, (v, ctx = {}) => render(v, { ...ctx, viewer: v.viewer })]));
 
+// 各区标题下原来的说明句（本人 10-30 批准第 5 项：天天看的人用不上）收进“这页怎么用”（?）里
+const SECTIONS = [['tasks', '自动任务', '电脑自己在做的事，有没有按时做、做成没有。'], ['computer', '电脑', '这台电脑现在累不累、还剩多少地方；人不在电脑前能不能连上它。'],
+  ['today', '今天的动态', '今天有什么变化：代码、你对 AI 说的话、今天发生的事。'], ['backup', '备份和云端', '东西有没有按时备份、云端的钱够不够。'], ['projects', '项目', '每个在用的项目现在怎么样、有没有等你的事。点名字进项目页。']];
 // 整页：外框固定，内容由上面各函数填。首屏只放本人的事（本人 18:51：太谜语人、还不好用）：
 // 顶上一句 → 要你做／要你回的卡 → AI 正在干活 → 你得知道 → AI 的账本 › / 你放着 N 件不急的事 › / 停了的数据 → 三格；事实区在下面，正常的只占一行
 export function page(v, ctx) {
@@ -1328,13 +1368,15 @@ export function page(v, ctx) {
   const sec = (id, title, sub, body) => '<section class="cp-section" id="' + id + '">'
     + blockHead('<span class="cp-section-title">' + esc(title) + '</span>', 'cp-head',
       '<span class="cp-lamp" data-cp="lamp-' + id + '">' + REGIONS['lamp-' + id](v, ctx) + '</span>'
-      + (id === 'today' ? '<span class="cp-date" data-cp="today-date">' + todayDate(v, ctx) + '</span>' : '') + '<p>' + sub + '</p>')
+      + (id === 'today' ? '<span class="cp-date" data-cp="today-date">' + todayDate(v, ctx) + '</span>' : ''))
     + body + '</section>';
   const help = '<details class="cp-help" id="cp-help"><summary class="cp-tool ct-inline-action" title="这页怎么用" aria-label="这页怎么用">?</summary><div class="cp-help-pop">'
     + '<p><b>这页怎么用</b></p><p>最上面是要你做的事；下面是你得知道和 AI 在干的活，再往下是各项明细。每条可复制给 AI，选项和确认内容也会一起带过去。</p>'
     + '<p>AI 自己的活收在“AI 的账本”。每分钟从电脑读一次（页面在后台时每 3 分钟一次），时间都是北京时间；↻ 立刻重读。</p>'
     + '<p><b>键盘</b></p><dl class="cp-keys"><dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>下一件、上一件</dd><dt><kbd>1</kbd>—<kbd>9</kbd></dt><dd>直接打开第几件</dd>'
-    + '<dt><kbd>o</kbd></dt><dd>打开那个对话</dd><dt><kbd>s</kbd></dt><dd>晚点提醒</dd><dt><kbd>u</kbd></dt><dd>撤回刚才那下</dd><dt><kbd>?</kbd></dt><dd>打开、关上这个说明</dd></dl></div></details>';
+    + '<dt><kbd>o</kbd></dt><dd>打开那个对话</dd><dt><kbd>s</kbd></dt><dd>晚点提醒</dd><dt><kbd>u</kbd></dt><dd>撤回刚才那下</dd><dt><kbd>?</kbd></dt><dd>打开、关上这个说明</dd></dl>'
+    + '<p><b>下面各块</b></p><dl class="cp-keys cp-help-secs">' + SECTIONS.map(([, title, sub]) => '<dt>' + esc(title) + '</dt><dd>' + esc(sub) + '</dd>').join('') + '</dl>'
+    + '<p>分区标题旁只在要你看或读不到时挂标签；几点读到只在顶上写一次，某块比它旧 15 分钟以上才另写。</p></div></details>';
   return '<div class="cp-action-toast" data-cp="action-toast">' + actionToast(ctx) + '</div>'
     + '<section class="cp-dashboard c-text" id="top"><aside class="cp-sidebar">'
     + '<div class="cp-intro cp-hero-copy"><h1 class="cp-main-title"><img src="' + src(ctx, 'cockpit-01-title-01.png') + '" alt="" width="483" height="198" loading="eager"><span class="cp-h1-text">驾驶舱</span></h1>'
@@ -1348,11 +1390,11 @@ export function page(v, ctx) {
     + '<figure class="cp-hero-art"' + (ctx.birdConfig ? ' data-living-config="' + ctx.birdConfig + '"' : '') + '><img src="' + src(ctx, 'cockpit-01-illustration-01.png') + '" alt="" width="866" height="326" loading="eager" crossorigin="anonymous"></figure></aside>'
     + '<div class="cp-workspace c-text"><div class="cp-need" id="need-you" data-cp="need-you">' + needCards(v, ctx) + '</div>'
     + '<div class="cp-home" data-cp="home">' + home(v, ctx) + '</div><div class="cp-facts-wall">'
-    + sec('tasks', '自动任务', '电脑自己在做的事，有没有按时做、做成没有。', r('tasks') + '<details class="cp-fold cp-river-fold" id="river"><summary>看今天的河：每条船是一个自动任务，点开看它在做什么、怎么停</summary><div class="cp-river" data-today-river aria-label="今天的河"></div></details>')
-    + sec('computer', '电脑', '这台电脑现在累不累、还剩多少地方；人不在电脑前能不能连上它。', r('computer'))
-    + sec('today', '今天的动态', '今天有什么变化：代码、你对 AI 说的话、今天发生的事。', r('today'))
-    + sec('backup', '备份和云端', '东西有没有按时备份、云端的钱够不够。', r('backup'))
-    + sec('projects', '项目', '每个在用的项目现在怎么样、有没有等你的事。点名字进项目页。', r('projects'))
+    + sec('tasks', '自动任务', '', r('tasks') + '<details class="cp-fold cp-river-fold" id="river"><summary>看今天的河：每条船是一个自动任务，点开看它在做什么、怎么停</summary><div class="cp-river" data-today-river aria-label="今天的河"></div></details>')
+    + sec('computer', '电脑', '', r('computer'))
+    + sec('today', '今天的动态', '', r('today'))
+    + sec('backup', '备份和云端', '', r('backup'))
+    + sec('projects', '项目', '', r('projects'))
     + '</div></div></section>';
 }
 
