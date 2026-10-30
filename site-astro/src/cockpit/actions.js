@@ -60,7 +60,7 @@ export function copyText(x) {
   const confirmations = typeof conf === 'string' ? [conf] : conf && typeof conf === 'object'
     ? [['to', '发给'], ['content', '发什么'], ['amount', '花多少'], ['target', '删什么']].map(([k, l]) => textOf(conf[k]) ? `${l}：${textOf(conf[k])}` : '').filter(Boolean) : [];
   if (confirmations.length) add('要我确认的', '\n' + confirmations.join('\n'));
-  const times = [['登记', x.registered_at || x.created_at || x.asked_at], ['开始', x.started_at], ['截止', x.due_at], ['更新', x.updated_at || x.observed_at || x.at], ['最近活动', x.last_activity_at], ['进展', x.progress?.at || x.progress_at], ['最近回复', x.latest_reply?.at || x.latest_reply_at]].filter(([, v]) => v).map(([l, v]) => `${l} ${dateHm(v) || v}`);
+  const times = [['登记', x.registered_at || x.created_at || x.asked_at], ['开始', x.started_at], ['截止', x.due_at], ['更新', x.updated_at || x.observed_at || x.at], ['最近活动', x.last_activity_at], ['进展', (typeof x.progress === 'object' && x.progress?.at) || x.progress_at], ['最近回复', (typeof x.latest_reply === 'object' && x.latest_reply?.at) || x.latest_reply_at]].filter(([, v]) => v).map(([l, v]) => `${l} ${dateHm(v) || v}`);
   add('时间', times.join('；'));
   // 电脑路径保留在复制内容中，方便 AI 直接找到原件。
   add('路径', first(x.path, x.report_path, x.action?.path));
@@ -118,7 +118,11 @@ export function ownerWarn(v, ctx) {
   if (usable.length) {
     usable.slice(0, 2).forEach((x) => bits.push(`你 ${hm(x.created_at || x.at)} 点的「${first(x.title, x.item_title)}」没存上：${first(x.error_message, x.reason, x.message, x.error)}`));
     if (failed.length > 2) bits[bits.length - 1] += `；等 ${failed.length} 条`;
-  } else if (worker?.state === 'error') bits.push('你点的处理暂时写不回，电脑在重试');
+  } else if (['error', 'retrying'].includes(worker?.state)) {
+    // 照后端 owner_actions_worker.message 写：永久失败（事项已变、设备撤销后没恢复）不会重试，不能一律说“电脑在重试”
+    const msg = first(worker.message);
+    bits.push(msg || (worker.state === 'retrying' ? '你点的处理暂时写不回，电脑在重试' : `你点的处理有 ${failed.length || 1} 条没存上`));
+  }
   if (v.notification_status === 'failed') bits.push(v.notification_message || '通知没发出去');
   if (v.owner_dispatch_notice) bits.push(v.owner_dispatch_notice);
   return bits.map((b) => `<p class="cp-oa-warn" role="status">${esc(b)}</p>`).join('');

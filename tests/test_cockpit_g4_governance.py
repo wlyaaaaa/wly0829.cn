@@ -35,7 +35,7 @@ const assert = require('node:assert/strict');
   assert.match(html, /cp-gov-line"><span class="cp-dot is-neutral"/);
   assert.match(html, /<details class="cp-more cp-gov-more" id="gov-closed"><summary>那次自动关掉 1 件<\/summary>.*视频那条.*本人 06:05/);
   assert.match(html, /id="gov-deferred"><summary>那次新转暂缓 1 件/);
-  assert.match(html, /你放着 1 件不急的事/);
+  assert.match(html, /你放着 1 件（等条件 1）/);
   assert.match(html, /<small>14 天没回应，你可能不想做，想做时说一声<\/small>/);
   assert.match(html, /<h2>AI 等条件再做的<\/h2>.*等显卡驱动/); assert.doesNotMatch(html, /暂缓 · AI|为什么暂缓/);
   // 没有交给 AI 的事时体检行照样出

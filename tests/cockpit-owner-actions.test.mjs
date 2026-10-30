@@ -222,5 +222,11 @@ test('写回失败提示前两条的时间标题原因，多条给总数，旧�
   assert.match(html, /你 18:39 点的「甲」没存上：示例原因/);
   assert.match(html, /你 18:39 点的「乙」没存上：示例原因；等 3 条/);
   assert.doesNotMatch(html, /「丙」/);
-  assert.match(ownerWarn({ owner_actions_worker: { state: 'error', failed_items: [{}] } }, ctx()), /你点的处理暂时写不回，电脑在重试/);
+  // 没有可用明细时照后端 message 写；永久失败不说“电脑在重试”，只有 retrying 才说
+  assert.match(ownerWarn({ owner_actions_worker: { state: 'error', failed_items: [{}], message: '设备已撤销，但有动作没能恢复登记，需 AI 核对。' } }, ctx()), /设备已撤销，但有动作没能恢复登记，需 AI 核对。/);
+  const noMsg = ownerWarn({ owner_actions_worker: { state: 'error', failed_items: [{}] } }, ctx());
+  assert.match(noMsg, /你点的处理有 1 条没存上/);
+  assert.doesNotMatch(noMsg, /电脑在重试/);
+  assert.match(ownerWarn({ owner_actions_worker: { state: 'retrying', failed_items: [] } }, ctx()), /你点的处理暂时写不回，电脑在重试/);
+  assert.equal(ownerWarn({ owner_actions_worker: { state: 'ready', failed_items: [] } }, ctx()), '');
 });

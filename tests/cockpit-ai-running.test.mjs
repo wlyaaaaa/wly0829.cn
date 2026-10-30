@@ -13,7 +13,8 @@ const todo = { id: 'n1', title: '示例选择题：选一个做法', ask_kind: '
 
 const row = (status, extra = {}) => ({ id: 'run-' + status, status, vendor: 'claude', model: 'claude-opus-5-5', model_text: 'Claude Opus 5.5', effort: 'high', kind: 'conversation',
   title: '示例活 ' + status, started_at: '2026-10-29T15:00:00+08:00', last_activity_at: at, detail: '示例说明 ' + status, helpers: 0, ...extra });
-const running = (rows, extra = {}) => ({ count: rows.length, stuck_count: rows.filter((r) => ['network_retry', 'quota_exhausted', 'login_failed', 'stopped'].includes(r.status)).length,
+// stuck_count 和后端同一口径：网络在重连、额度用完、登录失效（停了没做完不算）
+const running = (rows, extra = {}) => ({ count: rows.length, stuck_count: rows.filter((r) => ['network_retry', 'quota_exhausted', 'login_failed'].includes(r.status)).length,
   summary: '', observed_at: at, gaps: ['示例缺口'], rows, ...extra });
 
 test('没有 ai_running 字段：这块不出，也不报错', () => {
@@ -25,23 +26,23 @@ test('没有 ai_running 字段：这块不出，也不报错', () => {
   }
 });
 
-test('首屏只露件数和卡住要你看的（额度、登录）；其余收进“其余 N 个”；状态是颜色 + 符号 + 人话', () => {
+test('首屏露件数和卡住的行（件数以后端 stuck_count 为准，额度、登录写“要你看”）；其余收进“其余 N 个”；状态是颜色 + 符号 + 人话', () => {
   const rows = [row('running', { helpers: 2 }), row('unknown', { vendor: 'gpt', model_text: '', title: '示例 Codex 对话' }), row('waiting_owner'), row('stopped'),
     row('network_retry'), row('quota_exhausted', { vendor: 'gpt', model_text: 'GPT Sol', status_text: '额度用完' }), row('login_failed'), row('mystery_state')];
   const v = normalize(base({ need_you: [todo], ai_running: running(rows, { summary: '示例：AI 在跑 8 个，3 个卡住' }) }));
   assert.equal(v.ai_running.rows.find((r) => r.id === 'run-mystery_state').status, 'unknown');
   const html = REGIONS.home(v, ctx);
-  // 卡住要你看的只算额度和登录；停了没做完、看不出在干嘛的不算在干活
-  // 标题的数和列出来的行对得上：5 个在干活（含 2 个卡住）+ 另 1 件停了没做完、2 件看不出在干嘛 = 卡住 2 行 + 其余 6 行
-  assert.match(html, /class="hub-heading cp-run-sum">AI 正在干活：5 个（2 个卡住要你看），另 1 件停了没做完、2 件看不出在干嘛<\/h2>[^]*?class="cp-run-at">15:39 读到的<\/span>/);
+  // 卡住 3 个（网络在重连、额度、登录），其中额度和登录要你看；停了没做完、看不出在干嘛的不算在干活
+  // 标题的数和列出来的行对得上：5 个在干活（含 3 个卡住）+ 另 1 件停了没做完、2 件看不出在干嘛 = 卡住 3 行 + 其余 5 行
+  assert.match(html, /class="hub-heading cp-run-sum">AI 正在干活：5 个（3 个卡住，2 个要你看），另 1 件停了没做完、2 件看不出在干嘛<\/h2>[^]*?class="cp-run-at">15:39 读到的<\/span>/);
   const stuck = /<ul class="cp-run-list is-stuck">(.*?)<\/ul>/.exec(html)?.[1] || '';
-  assert.deepEqual([...stuck.matchAll(/<li class="cp-run-row is-([a-z_]+) /g)].map((m) => m[1]), ['quota_exhausted', 'login_failed']);
-  const rest = /<details class="cp-run-all" id="run-all"><summary>其余 6 个<\/summary><ul class="cp-run-list">(.*?)<\/ul><\/details>/.exec(html)?.[1] || '';
-  assert.deepEqual([...rest.matchAll(/<li class="cp-run-row is-([a-z_]+) /g)].map((m) => m[1]), ['network_retry', 'stopped', 'waiting_owner', 'running', 'unknown', 'unknown']);
+  assert.deepEqual([...stuck.matchAll(/<li class="cp-run-row is-([a-z_]+) /g)].map((m) => m[1]), ['quota_exhausted', 'login_failed', 'network_retry']);
+  const rest = /<details class="cp-run-all" id="run-all"><summary>其余 5 个<\/summary><ul class="cp-run-list">(.*?)<\/ul><\/details>/.exec(html)?.[1] || '';
+  assert.deepEqual([...rest.matchAll(/<li class="cp-run-row is-([a-z_]+) /g)].map((m) => m[1]), ['stopped', 'waiting_owner', 'running', 'unknown', 'unknown']);
   const look = Object.fromEntries([...html.matchAll(/<li class="cp-run-row is-([a-z_]+) is-live" data-items="run-\w+"><span class="cp-run-st is-(\w+)"><i aria-hidden="true">(.)<\/i><span class="cp-run-word">([^<]+)<\/span><\/span>/g)].map((m) => [m[1], [m[2], m[3], m[4]]]));
   assert.deepEqual(look, { login_failed: ['red', '○', '登录失效'], quota_exhausted: ['red', '○', '额度用完'], network_retry: ['yellow', '◐', '网络在重连'],
     waiting_owner: ['blue', '◆', '在等你回话'], stopped: ['gray', '■', '停了，没做完'], unknown: ['gray', '？', '看不出在干嘛（多半已经结束）'], running: ['green', '●', '在干活'] });
-  assert.equal(Object.keys(RUN_LOOK).length, 7);
+  assert.equal(Object.keys(RUN_LOOK).length, 11);
   // 主行永远不用标题（本人：“驾驶舱肯定不能取标题”）：没有 doing、进展、最近回复时写“还没写进展”，标题只做灰色小标签
   assert.match(html, /<span class="cp-run-doing is-empty">还没写进展<\/span><small class="cp-run-meta"><span class="cp-run-name">示例活 running<\/span>Claude Opus 5.5 · 它叫了 2 个助手 · [^<]*还在动<\/small>/);
   // 没给型号显示名时退回“GPT”；不出型号代号和字段名
@@ -74,12 +75,12 @@ test('公开版：只写两句（几个在干活、卡在额度还是登录；�
     pub('quota_exhausted', 'GPT Sol', 'gpt'), pub('login_failed', 'GPT Sol', 'gpt'), pub('running', 'GPT Sol', 'gpt'), pub('unknown', '', 'gpt')];
   const block = running(rows, { summary: 'AI 在跑 9 个，3 个卡住了，另有 2 件早就停了', stale_count: 2 });
   const html = REGIONS.home(normalize(base({ viewer: { kind: 'public', device_state: 'none' }, ai_running: block })), ctx);
-  assert.match(html, /class="cp-run is-public"[^]*?class="hub-heading cp-run-sum">AI 正在干活：8 个（额度 1 个、登录 1 个卡住）<\/h2>[^]*?class="cp-run-at">15:39 读到的<\/span>/);
+  assert.match(html, /class="cp-run is-public"[^]*?class="hub-heading cp-run-sum">AI 正在干活：8 个（3 个卡住，2 个要你看）<\/h2>[^]*?class="cp-run-at">15:39 读到的<\/span>/);
   assert.match(html, /<p class="cp-run-models">Claude Opus 5.5 5 个 · GPT Sol 3 个<\/p>/);
   assert.doesNotMatch(html, /一件 AI 活|cp-run-list|cp-run-row|早就停了|个帮手|个助手|<button/);
-  // 只凭行上的 placeholder 也认（没有 viewer 字段时）；网络重连、停了没做完不算卡住要你看
+  // 只凭行上的 placeholder 也认（没有 viewer 字段时）；网络在重连算卡住（后端 stuck_count）但不写要你看，停了没做完不算卡住
   const two = REGIONS.home(normalize(base({ ai_running: running([pub('network_retry', 'GPT Sol', 'gpt'), pub('network_retry', 'GPT Sol', 'gpt'), pub('stopped', 'Claude Opus 5.5')]) })), ctx);
-  assert.match(two, /class="hub-heading cp-run-sum">AI 正在干活：2 个<\/h2>/);
+  assert.match(two, /class="hub-heading cp-run-sum">AI 正在干活：2 个（2 个卡住）<\/h2>/);
   assert.match(two, /<p class="cp-run-models">GPT Sol 2 个<\/p>/);
   // 读不到电脑时淡下去，写明是几点读到的
   const off = REGIONS.home(normalize(base({ ai_running: running([pub('running', 'GPT Sol', 'gpt')]) })), { ...ctx, offline: true });
