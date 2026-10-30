@@ -1087,7 +1087,8 @@
       "checked_at": "2026-10-30T11:07:28+08:00",
       "source_observed_at": "2026-10-30T11:07:28+08:00",
       "source_coverage_end": null,
-      "observation_basis": "live_read"
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:07:28+08:00"
     },
     {
       "id": "github-profile-n-timeaudit-seconds-0",
@@ -1164,7 +1165,7 @@
       "page": "rules-home",
       "screen": "rules-home-01",
       "label": "约法条数",
-      "current_value": 30,
+      "current_value": "30",
       "as_of": "2026-09-28",
       "category": "人工",
       "source_location": "E187 AGENTS.md 第 15–71 行逐条数出，与约法页 n-clauses 同一口径",
@@ -1183,14 +1184,19 @@
         "rules-home-01"
       ],
       "manual_reason": "judgment",
-      "manual_route": "先运行正式 E 活动规则 Inspect，只有通过才读取回执指定的同版 AGENTS.md 和 rules-catalog.json；按约法 L 标题数、约法三级分组标题数、除 agents_root_rules 外的 primary 主题清单逐项核对，排除兼容别名和入口模板。无法核验活动版时保留原日期并回报 Unknown，不读候选源码代替。"
+      "manual_route": "先运行正式 E 活动规则 Inspect，只有通过才读取回执指定的同版 AGENTS.md 和 rules-catalog.json；按约法 L 标题数、约法三级分组标题数、除 agents_root_rules 外的 primary 主题清单逐项核对，排除兼容别名和入口模板。无法核验活动版时保留原日期并回报 Unknown，不读候选源码代替。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T15:43:59.031903+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T15:43:59.031903+08:00"
     },
     {
       "id": "rules-home-n-groups-0",
       "page": "rules-home",
       "screen": "rules-home-01",
       "label": "约法分组数",
-      "current_value": 10,
+      "current_value": "10",
       "as_of": "2026-09-28",
       "category": "人工",
       "source_location": "E187 AGENTS.md 第 13–69 行的 10 个 ### 标题；组名取自约法页第 1 屏链接，脚本断言 10 个",
@@ -1209,14 +1215,19 @@
         "rules-home-01"
       ],
       "manual_reason": "judgment",
-      "manual_route": "先运行正式 E 活动规则 Inspect，只有通过才读取回执指定的同版 AGENTS.md 和 rules-catalog.json；按约法 L 标题数、约法三级分组标题数、除 agents_root_rules 外的 primary 主题清单逐项核对，排除兼容别名和入口模板。无法核验活动版时保留原日期并回报 Unknown，不读候选源码代替。"
+      "manual_route": "先运行正式 E 活动规则 Inspect，只有通过才读取回执指定的同版 AGENTS.md 和 rules-catalog.json；按约法 L 标题数、约法三级分组标题数、除 agents_root_rules 外的 primary 主题清单逐项核对，排除兼容别名和入口模板。无法核验活动版时保留原日期并回报 Unknown，不读候选源码代替。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T15:43:59.031903+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T15:43:59.031903+08:00"
     },
     {
       "id": "rules-home-n-topics-0",
       "page": "rules-home",
       "screen": "rules-home-01",
       "label": "规则专题数",
-      "current_value": 10,
+      "current_value": "10",
       "as_of": "2026-09-28",
       "category": "人工",
       "source_location": "E187 rules-catalog.json 共 11 个文档，除 AGENTS.md 外 10 个；与 AGENTS.md 第 85–96 行“细则在哪里”表 10 行、b1 下 10 个 rule-* 目录一致",
@@ -1236,7 +1247,12 @@
         "rules-home-02"
       ],
       "manual_reason": "judgment",
-      "manual_route": "先运行正式 E 活动规则 Inspect，只有通过才读取回执指定的同版 AGENTS.md 和 rules-catalog.json；按约法 L 标题数、约法三级分组标题数、除 agents_root_rules 外的 primary 主题清单逐项核对，排除兼容别名和入口模板。无法核验活动版时保留原日期并回报 Unknown，不读候选源码代替。"
+      "manual_route": "先运行正式 E 活动规则 Inspect，只有通过才读取回执指定的同版 AGENTS.md 和 rules-catalog.json；按约法 L 标题数、约法三级分组标题数、除 agents_root_rules 外的 primary 主题清单逐项核对，排除兼容别名和入口模板。无法核验活动版时保留原日期并回报 Unknown，不读候选源码代替。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T15:43:59.031903+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T15:43:59.031903+08:00"
     },
     {
       "id": "proxyclean-n-layers-0",
@@ -4174,7 +4190,7 @@
       "page": "pcconfig",
       "screen": "pcconfig-01",
       "label": "PCConfig现行筛选范围自动任务数",
-      "current_value": 140,
+      "current_value": "145",
       "as_of": "2026-10-22",
       "category": "某个 JSON 字段",
       "source_location": "E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json -IncludeRuntime；2026-10-22 10:43:46管理员完整只读现场，非registries/tasks.json恢复投影",
@@ -4199,14 +4215,19 @@
       "scope_status": "verified",
       "manual_reason": "needs_admin_rescan",
       "manual_route": "PCConfig Owner只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json -IncludeRuntime，入口需要时自动提权；核对observer_elevated=true和task_visibility_complete=true，读取现行筛选范围总数与enabled状态；分类再对照task_purpose_catalog.json的source=windows及owner_project，SoftLanding系统临时项只作现场观察、不作稳定登记。取不到完整观察时保留旧值旧日期并标Unknown；不从tasks.json旧恢复投影替代现场，不写登记、不运行任务。",
-      "field": "screens[0].text"
+      "field": "screens[0].text",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:14:17.791629+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:14:17.791629+08:00"
     },
     {
       "id": "pcconfig-n-catalog-0",
       "page": "pcconfig",
       "screen": "pcconfig-22",
       "label": "自动任务人话说明条数",
-      "current_value": 165,
+      "current_value": "172",
       "as_of": "2026-10-22",
       "category": "某个 JSON 字段",
       "source_location": "E:\\PCConfig\\registries\\task_purpose_catalog.json",
@@ -4238,14 +4259,18 @@
         "operation": "length"
       },
       "manual_reason": "judgment",
-      "manual_route": "同一行的「计划任务 138 个」「另 27 个不是计划任务」及 8/5/3/2/1 分项没有登记取数，只推进总数和读目录日期会让总数与分项对不上；补登记分项或由写稿人改句后，恢复 suspended_retrieve 自动取数。"
+      "manual_route": "同一行的「计划任务 138 个」「另 27 个不是计划任务」及 8/5/3/2/1 分项没有登记取数，只推进总数和读目录日期会让总数与分项对不上；补登记分项或由写稿人改句后，恢复 suspended_retrieve 自动取数。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:14:17.791629+08:00",
+      "source_coverage_end": null,
+      "observed_at": "2026-10-30T11:14:17.791629+08:00"
     },
     {
       "id": "pcconfig-n-tasks-enabled-0",
       "page": "pcconfig",
       "screen": "pcconfig-11",
       "label": "已启用任务数",
-      "current_value": 99,
+      "current_value": "106",
       "as_of": "2026-10-22",
       "category": "人工",
       "source_location": "E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json -IncludeRuntime；2026-10-22 10:43:46管理员完整只读现场，非registries/tasks.json恢复投影",
@@ -4269,14 +4294,19 @@
       "manual_route": "PCConfig Owner只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json -IncludeRuntime，入口需要时自动提权；核对observer_elevated=true和task_visibility_complete=true，读取现行筛选范围总数与enabled状态；分类再对照task_purpose_catalog.json的source=windows及owner_project，SoftLanding系统临时项只作现场观察、不作稳定登记。取不到完整观察时保留旧值旧日期并标Unknown；不从tasks.json旧恢复投影替代现场，不写登记、不运行任务。",
       "scope_status": "verified",
       "measurement_scope": "上述完整现场140项中enabled=true为99项，含1项SoftLanding临时任务。",
-      "field": "screens[10].text"
+      "field": "screens[10].text",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:14:17.791629+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:14:17.791629+08:00"
     },
     {
       "id": "pcconfig-n-tasks-enabled-1",
       "page": "pcconfig",
       "screen": "pcconfig-11",
       "label": "已停用任务数",
-      "current_value": 41,
+      "current_value": "39",
       "as_of": "2026-10-22",
       "category": "人工",
       "source_location": "E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json -IncludeRuntime；2026-10-22 10:43:46管理员完整只读现场，非registries/tasks.json恢复投影",
@@ -4300,7 +4330,12 @@
       "manual_route": "PCConfig Owner只读运行 E:/PCConfig/tools/scan_tasks.ps1 -NoWrite -Json -IncludeRuntime，入口需要时自动提权；核对observer_elevated=true和task_visibility_complete=true，读取现行筛选范围总数与enabled状态；分类再对照task_purpose_catalog.json的source=windows及owner_project，SoftLanding系统临时项只作现场观察、不作稳定登记。取不到完整观察时保留旧值旧日期并标Unknown；不从tasks.json旧恢复投影替代现场，不写登记、不运行任务。",
       "scope_status": "verified",
       "measurement_scope": "上述完整现场140项中enabled=false为41项，含1项SoftLanding临时任务。",
-      "field": "screens[10].text"
+      "field": "screens[10].text",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:14:17.791629+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:14:17.791629+08:00"
     },
     {
       "id": "pcconfig-n-tasks-split-0",
@@ -5912,7 +5947,10 @@
       "measurement_scope": "WSL现役current验收acceptance.json ok=true/unit_exit_code=0，unit.log Ran/OK跳过计数；official_models直接目录数和du -sb按GiB四舍五入一位；现役speed-20261026-0400验收started_unix=1792958749.0147943，elapsed_sec=138.553320646286，10月30日仅重读旧回执、未重跑。",
       "field": "screens[0].text",
       "observation_basis": "snapshot_timestamp",
-      "source_observed_at": "2026-10-26T04:05:49+08:00"
+      "source_observed_at": "2026-10-26T04:05:49+08:00",
+      "checked_at": "2026-10-30T15:35:58.069750+08:00",
+      "source_coverage_end": null,
+      "observed_at": "2026-10-26T04:05:49+08:00"
     },
     {
       "id": "devconfig-backup-n-sources-0",
@@ -6984,7 +7022,7 @@
       "page": "projects-home",
       "screen": "projects-home-01",
       "label": "所有项目登记功能条数",
-      "current_value": 1011,
+      "current_value": 1012,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
       "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
@@ -7004,11 +7042,11 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "功能 \\*\\*([\\d,]+) 条\\*\\*",
-      "checked_at": "2026-10-23T10:25:36+08:00",
-      "source_observed_at": "2026-10-23T10:25:36+08:00",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T16:03:19.304841+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:25:36+08:00"
+      "observed_at": "2026-10-30T16:03:19.304841+08:00"
     },
     {
       "id": "projects-home-n-group-sizes-0",
@@ -7396,33 +7434,6 @@
       "source_coverage_end": null,
       "observation_basis": "live_read",
       "observed_at": "2026-10-30T11:06:23+08:00"
-    },
-    {
-      "id": "projects-home-text-0-220",
-      "page": "projects-home",
-      "screen": "projects-home-01",
-      "label": "登记为待验收的功能条数",
-      "current_value": 116,
-      "as_of": "2026-10-10",
-      "category": "某个 JSON 字段",
-      "source_location": "各项目registry.features[].status；本底值只写在备注，首屏不单列",
-      "retrieve": {
-        "kind": "feature_count",
-        "status": "待验收"
-      },
-      "automatic": true,
-      "private": false,
-      "historical": false,
-      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-projects-home\\content-refresh-projects-home.md",
-      "refreshed_value": 114,
-      "dynamic": true,
-      "measurement_scope": "给定网页根project/frozen页registry.features条目筛status=待验收；不含技能/规则页。",
-      "scope_status": "verified",
-      "checked_at": "2026-10-23T10:25:38+08:00",
-      "source_observed_at": "2026-10-23T10:25:38+08:00",
-      "source_coverage_end": null,
-      "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:25:38+08:00"
     },
     {
       "id": "projects-home-text-0-221",
@@ -10368,7 +10379,12 @@
       "manual_reason": "judgment",
       "manual_route": "沿用已审定9月28日退役决定与既有来源记录，逐项数Codex设置和记忆、Claude记忆、Antigravity设置和知识三种独立备份，共3套；这是页面对既定退役范围的分组数，不是本轮又退役3套，不新查被冻结旧项目、不声称10/20重验其运行。",
       "scope_status": "verified",
-      "measurement_scope": "既定2026-09-28退役范围在当前首屏的分组数；保留原日期，不涉及新退役或重新运行。"
+      "measurement_scope": "既定2026-09-28退役范围在当前首屏的分组数；保留原日期，不涉及新退役或重新运行。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:21+08:00"
     },
     {
       "id": "codex-memory-n-keep-0",
@@ -10400,8 +10416,11 @@
       "manual_route": "只读hot-last.json的hot_retention_limit并核对源码DesktopHotRetentionKeep，读取G/H当前cold-payload/points目录数量；把数值2人工对上正文“两份”。恢复点警告或延期清理可能使实际目录数超过策略数，不把目录数冒充策略。若框架增加明确中文数字展示转换，再将本条改为json自动来源。",
       "scope_status": "verified",
       "measurement_scope": "现行保留策略2；正文“两”是数值2的中文展示。G/H实际目录数仅作本轮交叉核对，不替代策略字段。",
-      "observed_at": "2026-10-11T17:59:16+08:00",
-      "source_observed_at": "2026-10-11T04:55:31.1854772+00:00"
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read"
     },
     {
       "id": "steam-millennium-config-backup-text-0-311",
@@ -12023,7 +12042,8 @@
       "checked_at": "2026-10-30T11:07:28+08:00",
       "source_observed_at": "2026-10-30T11:07:28+08:00",
       "source_coverage_end": null,
-      "observation_basis": "live_read"
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:07:28+08:00"
     },
     {
       "id": "codex-memory-n-restore-test-1",
@@ -12420,7 +12440,7 @@
       "page": "daily-preferences",
       "screen": "daily-preferences-01",
       "label": "最近使用时间",
-      "current_value": "2026-10-24 02:15",
+      "current_value": "2026-10-24T02:15:33+08:00",
       "as_of": "2026-10-24",
       "category": "使用账本",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
@@ -12438,7 +12458,9 @@
       },
       "source_coverage_end": "2026-10-24",
       "observation_basis": "coverage_end",
-      "checked_at": "2026-10-30T11:07:00+08:00"
+      "checked_at": "2026-10-30T11:07:00+08:00",
+      "source_observed_at": null,
+      "observed_at": null
     },
     {
       "id": "daily-preferences-status-facts-0",
@@ -13138,7 +13160,7 @@
       "page": "pc-panel-hub",
       "screen": "pc-panel-hub-01",
       "label": "曲面屏内容类别数",
-      "current_value": 6,
+      "current_value": "6",
       "as_of": "2026-10-11",
       "category": "只读取数",
       "source_location": "见retrieve与pc-findings.md",
@@ -13158,7 +13180,12 @@
       "field": "screens[0].text",
       "page_pattern": "\\*\\*([\\d]+) 类",
       "manual_reason": "judgment",
-      "manual_route": "核对源AGENTS.md、HS2 App.xaml.cs各实际SourceCoordinator与GlanceSource；人工按产品六类归类，不数OverlayKind枚举。"
+      "manual_route": "核对源AGENTS.md、HS2 App.xaml.cs各实际SourceCoordinator与GlanceSource；人工按产品六类归类，不数OverlayKind枚举。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30"
     },
     {
       "id": "pc-panel-hub-task-count",
@@ -14120,7 +14147,7 @@
       "page": "codex-memory",
       "screen": "codex-memory-01",
       "label": "本屏实际数字的截至日期",
-      "current_value": "10 月 22 日 06:50",
+      "current_value": "10 月 30 日 11:21",
       "as_of": "2026-10-22",
       "category": "派生日期",
       "source_location": "qualifies所指数字的真实观察日期",
@@ -14136,7 +14163,12 @@
       "measurement_scope": "只由关联实际数字全部取得同口径新值时，取最早观察日期；其中任一Unknown就保留旧日期。历史试恢复、退役、清理和旧定时观察不混入现行截至日期。",
       "field": "screens[0].text",
       "page_pattern": "^(\\d+ 月 \\d+ 日 \\d+:\\d+) 核对$",
-      "date_precision": "datetime"
+      "date_precision": "datetime",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:21+08:00"
     },
     {
       "id": "codex-memory-as-of-screen02",
@@ -14168,7 +14200,7 @@
       "page": "codex-memory",
       "screen": "codex-memory-04",
       "label": "本屏实际数字的截至日期",
-      "current_value": "10 月 22 日 06:50",
+      "current_value": "10 月 30 日 11:21",
       "as_of": "2026-10-22",
       "category": "派生日期",
       "source_location": "qualifies所指数字的真实观察日期",
@@ -14188,7 +14220,12 @@
       "measurement_scope": "只由关联实际数字全部取得同口径新值时，取最早观察日期；其中任一Unknown就保留旧日期。历史试恢复、退役、清理和旧定时观察不混入现行截至日期。",
       "field": "screens[3].text",
       "page_pattern": "^(\\d+ 月 \\d+ 日 \\d+:\\d+) 核对$",
-      "date_precision": "datetime"
+      "date_precision": "datetime",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:21+08:00"
     },
     {
       "id": "skill-cockpit-status-last",
@@ -14230,15 +14267,13 @@
       "page": "skill-cockpit",
       "screen": "skill-cockpit-01",
       "label": "使用记录截至日期",
-      "current_value": "2026-10-11",
+      "current_value": "2026-10-20",
       "as_of": "2026-10-09",
       "category": "截至日期",
       "historical": false,
       "private": true,
       "field": "status_line.as_of",
       "page_field": "status_line.as_of",
-      "start": 0,
-      "end": 10,
       "qualifies": [
         "skill-cockpit-status-last"
       ],
@@ -14246,7 +14281,8 @@
       "scope_status": "verified",
       "measurement_scope": "只注明同页 status_line 的使用次数（若有）和最后使用时间；任一来源 Unknown 时不推进这句截至。",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
-      "refreshed_value": null
+      "refreshed_value": null,
+      "page_pattern": "^(\\d{4}-\\d{2}-\\d{2})$"
     },
     {
       "id": "skill-project-entry-gate-status-last",
@@ -14837,7 +14873,7 @@
       "page": "wly0829-cn",
       "screen": "wly0829-cn-01",
       "label": "小改从定稿到上线目标（分钟）",
-      "current_value": 45,
+      "current_value": "90",
       "as_of": "2026-10-11",
       "category": "某个 JSON 字段",
       "source_location": "E:/Cache/Claude/Temp/6428793e/deltas/ondemand-speed-ruling.md 第1、3节及 docs/ondemand-update.md 第41行和日常耗时表；本轮 wly0829-cn.md 第4条04:32读取裁定、04:34核对文档",
@@ -14853,7 +14889,12 @@
       "scope_status": "verified",
       "measurement_scope": "当前AI技术裁定的日常更新目标，起点为提出请求、终点为公网回读；仅数字变化目标60分钟，全部更新或新增项目目标4小时。与旧小改定稿至上线45分钟不是同一口径，目标不代表实测达标。",
       "manual_reason": "judgment",
-      "manual_route": "Claude按ondemand-speed-ruling.md及本人17:14—17:17原话核对当前目标，由Opus同步首屏、how-this-site目标和日常/全部更新范围；GPT不能只把45替成90宣称口径一致。"
+      "manual_route": "Claude按ondemand-speed-ruling.md及本人17:14—17:17原话核对当前目标，由Opus同步首屏、how-this-site目标和日常/全部更新范围；GPT不能只把45替成90宣称口径一致。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T16:03:19.304841+08:00"
     },
     {
       "id": "wly0829-cn-main-last",
@@ -16541,7 +16582,10 @@
       "field": "screens[0].text",
       "page_pattern": "（([\\d,]+) 项按条件跳过）",
       "observation_basis": "snapshot_timestamp",
-      "source_observed_at": "2026-10-26T04:05:49+08:00"
+      "source_observed_at": "2026-10-26T04:05:49+08:00",
+      "checked_at": "2026-10-30T15:35:58.069750+08:00",
+      "source_coverage_end": null,
+      "observed_at": "2026-10-26T04:05:49+08:00"
     },
     {
       "id": "localocr-usage-last",
@@ -18195,7 +18239,7 @@
       "page": "password-center",
       "screen": "password-center-01",
       "label": "登记取用目标数",
-      "current_value": 5,
+      "current_value": 11,
       "as_of": "2026-10-11",
       "category": "自动",
       "source_location": "已安装 AuthorityHost secret_broker.json 中 secretref_targets 登记条目数；只输出长度，不输出凭据或目标条目",
@@ -18213,7 +18257,12 @@
           "target_count"
         ],
         "timeout": 20
-      }
+      },
+      "checked_at": "2026-10-30T11:06:11+08:00",
+      "source_observed_at": "2026-10-30T11:06:11+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:06:11+08:00"
     },
     {
       "id": "b6-password-center-duration-min",
@@ -18829,7 +18878,7 @@
       "page": "steam-millennium-config-backup",
       "screen": "steam-millennium-config-backup-01",
       "label": "截至日期注明这些同口径数字",
-      "current_value": null,
+      "current_value": "2026 年 10 月 30 日 11:11",
       "as_of": "2026-10-11",
       "category": "截至日期",
       "source_location": "同屏数字来源",
@@ -18847,7 +18896,12 @@
         "steam-millennium-config-backup-n-enabled-0"
       ],
       "measurement_scope": "同屏明确被截至日期注明的数字；全取得才按最早观察日期更新；Unknown 保留旧日期。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:11:45.866785+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:11:45.866785+08:00"
     },
     {
       "id": "meshclip-kit-as-of-01",
@@ -19028,7 +19082,12 @@
         "github-profile-n-ocr-runs-1"
       ],
       "measurement_scope": "同屏明确被截至日期注明的数字；全取得才按最早观察日期更新；Unknown 保留旧日期。",
-      "scope_status": "verified"
+      "scope_status": "verified",
+      "checked_at": "2026-10-30T11:07:51+08:00",
+      "source_observed_at": "2026-10-30T11:07:28+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:07:28+08:00"
     },
     {
       "id": "github-profile-as-of-05",
@@ -19790,7 +19849,7 @@
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
       "label": "G当前生产回执文件数",
-      "current_value": "11,322",
+      "current_value": "12,973",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
       "page_pattern": "当前同为[^\\n；。]*?[，（]([\\d,]+) 个文件",
@@ -19810,17 +19869,19 @@
       "source_project": "codex-memory",
       "private": true,
       "historical": false,
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-g-bytes",
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
       "label": "G当前生产回执总字节数",
-      "current_value": "39,488,518,338",
+      "current_value": "36,503,940,586",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
       "page_pattern": "当前同为[^\\n；。]*?个文件、([\\d,]+) 字节",
@@ -19840,10 +19901,12 @@
       "source_project": "codex-memory",
       "private": true,
       "historical": false,
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-reuse-gb",
@@ -19892,7 +19955,7 @@
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
       "label": "H当前生产回执文件数",
-      "current_value": "11,322",
+      "current_value": "12,973",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
       "page_pattern": "当前同为[^\\n；。]*?[，（]([\\d,]+) 个文件",
@@ -19912,17 +19975,19 @@
       "source_project": "codex-memory",
       "private": true,
       "historical": false,
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-h-gb",
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
       "label": "H当前生产回执总字节数（沿用旧绑定id）",
-      "current_value": "39,461,693,231",
+      "current_value": "36,503,940,586",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
       "page_pattern": "当前同为[^\\n；。]*?个文件、([\\d,]+) 字节",
@@ -19942,10 +20007,12 @@
       "source_project": "codex-memory",
       "private": true,
       "historical": false,
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-cold-coverage-percent",
@@ -19985,7 +20052,7 @@
       "page": "codex-memory-isolated-disaster-recovery",
       "screen": "codex-memory-isolated-disaster-recovery-05",
       "label": "G当前生产回执文件数",
-      "current_value": "11,322",
+      "current_value": "12,973",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
       "page_pattern": "当前同为[^\\n；。]*?[，（]([\\d,]+) 个文件",
@@ -20005,17 +20072,19 @@
       "source_project": "codex-memory",
       "private": true,
       "historical": false,
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null
     },
     {
       "id": "b7-codex-memory-isolated-disaster-recovery-h-file-count",
       "page": "codex-memory-isolated-disaster-recovery",
       "screen": "codex-memory-isolated-disaster-recovery-05",
       "label": "H当前生产回执文件数",
-      "current_value": "11,322",
+      "current_value": "12,973",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
       "page_pattern": "当前同为[^\\n；。]*?[，（]([\\d,]+) 个文件",
@@ -20035,17 +20104,19 @@
       "source_project": "codex-memory",
       "private": true,
       "historical": false,
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-g-file-count",
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-05",
       "label": "G当前生产回执文件数",
-      "current_value": "11,322",
+      "current_value": "12,973",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
       "page_pattern": "当前同为[^\\n；。]*?[，（]([\\d,]+) 个文件",
@@ -20065,17 +20136,19 @@
       "source_project": "codex-memory",
       "private": true,
       "historical": false,
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-g-bytes",
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-05",
       "label": "G当前生产回执总字节数",
-      "current_value": "39,488,518,338",
+      "current_value": "36,503,940,586",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
       "page_pattern": "当前同为[^\\n；。]*?个文件、([\\d,]+) 字节",
@@ -20095,10 +20168,12 @@
       "source_project": "codex-memory",
       "private": true,
       "historical": false,
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-reuse-gb",
@@ -20147,7 +20222,7 @@
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-05",
       "label": "H当前生产回执文件数",
-      "current_value": "11,322",
+      "current_value": "12,973",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
       "page_pattern": "当前同为[^\\n；。]*?[，（]([\\d,]+) 个文件",
@@ -20167,17 +20242,19 @@
       "source_project": "codex-memory",
       "private": true,
       "historical": false,
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-h-gb",
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-05",
       "label": "H当前生产回执总量GB",
-      "current_value": "39.5",
+      "current_value": "36.5",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
       "page_pattern": "当前同为[^\\n；。]*?字节（([\\d.]+) GB）",
@@ -20199,10 +20276,12 @@
       "source_project": "codex-memory",
       "private": true,
       "historical": false,
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-hot-warning-count",
@@ -20264,18 +20343,14 @@
       "page": "agents-skills-plugins",
       "screen": "agents-skills-plugins-05",
       "label": "数据截至日期关联它注明的真实计数",
-      "current_value": "2026-10-11 14:00",
+      "current_value": "10 月 30 日 11:07",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "start": 47,
-      "end": 63,
       "qualifies": [
         "b7-agents-skills-plugins-installed-count",
         "b7-agents-skills-plugins-personal-installed-count",
         "b7-agents-skills-plugins-plugin-installed-count",
-        "b7-agents-skills-plugins-resolved-link-count",
-        "b7-agents-skills-plugins-declared-link-count",
-        "b7-agents-skills-plugins-skill-document-count"
+        "b7-agents-skills-plugins-declared-link-count"
       ],
       "automatic": true,
       "scope_status": "verified",
@@ -20285,7 +20360,13 @@
       "private": false,
       "historical": false,
       "date_precision": "datetime",
-      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。"
+      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。",
+      "page_pattern": "(\\d{1,2} 月 \\d{1,2} 日 \\d{2}:\\d{2}) 重读：",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:07+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:07+08:00"
     },
     {
       "id": "b7-codex-memory-config-memory-whitelist-sync-as_of-item-95",
@@ -20314,7 +20395,7 @@
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-01",
       "label": "数据截至日期关联它注明的真实计数",
-      "current_value": "2026-10-22 06:50",
+      "current_value": "2026-10-30 11:21",
       "as_of": "2026-10-22",
       "field": "screens[0].text",
       "qualifies": [
@@ -20333,14 +20414,19 @@
       "historical": false,
       "date_precision": "datetime",
       "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。",
-      "page_pattern": "\\*\\*当前情况：\\*\\*(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}) 核对，G、H 是同一个"
+      "page_pattern": "\\*\\*当前情况：\\*\\*(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}) 核对，G、H 是同一个",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:21+08:00"
     },
     {
       "id": "b7-codex-memory-content-addressed-storage-cold-sync-as_of-item-99",
       "page": "codex-memory-content-addressed-storage-cold-sync",
       "screen": "codex-memory-content-addressed-storage-cold-sync-05",
       "label": "数据截至日期关联它注明的真实计数",
-      "current_value": "2026-10-22 06:50",
+      "current_value": "2026-10-30 11:21",
       "as_of": "2026-10-22",
       "field": "screens[4].text",
       "qualifies": [
@@ -20359,17 +20445,20 @@
       "historical": false,
       "date_precision": "datetime",
       "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。",
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
-      "page_pattern": "截至 (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})："
+      "page_pattern": "截至 (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})：",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read"
     },
     {
       "id": "b7-codex-memory-isolated-disaster-recovery-as_of-item-105",
       "page": "codex-memory-isolated-disaster-recovery",
       "screen": "codex-memory-isolated-disaster-recovery-05",
       "label": "数据截至日期关联它注明的真实计数",
-      "current_value": "2026-10-20 07:41",
+      "current_value": "2026-10-30 11:21",
       "as_of": "2026-10-20",
       "field": "screens[4].text",
       "qualifies": [
@@ -20386,16 +20475,19 @@
       "date_precision": "datetime",
       "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。",
       "page_pattern": "截至 (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})：",
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json"
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
+      "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read"
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-as_of-item-110",
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-01",
       "label": "数据截至日期关联它注明的真实计数",
-      "current_value": "2026-10-22 06:50",
+      "current_value": "2026-10-30 11:21",
       "as_of": "2026-10-22",
       "field": "screens[0].text",
       "qualifies": [
@@ -20414,14 +20506,19 @@
       "historical": false,
       "date_precision": "datetime",
       "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。",
-      "page_pattern": "\\*\\*当前情况：\\*\\*每天北京时间 12:15 自动运行。(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}) 核对：G 盘当前恢复点"
+      "page_pattern": "\\*\\*当前情况：\\*\\*每天北京时间 12:15 自动运行。(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}) 核对：G 盘当前恢复点",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:21+08:00"
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-as_of-item-111",
       "page": "codex-memory-vss-conversation-hot-backup",
       "screen": "codex-memory-vss-conversation-hot-backup-05",
       "label": "数据截至日期关联它注明的真实计数",
-      "current_value": "2026-10-22 06:50",
+      "current_value": "2026-10-30 11:21",
       "as_of": "2026-10-22",
       "field": "screens[4].text",
       "qualifies": [
@@ -20440,10 +20537,13 @@
       "historical": false,
       "date_precision": "datetime",
       "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。",
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
-      "page_pattern": "截至 (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})："
+      "page_pattern": "截至 (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})：",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read"
     },
     {
       "id": "b7-daily-preferences-current-corrections-statements-all",
@@ -23253,7 +23353,7 @@
       "screen": "timeaudit-backup-recovery-14",
       "field": "screens[13].text",
       "label": "当前源码 test_ 测试函数定义数（含类方法，未执行）",
-      "current_value": "356",
+      "current_value": 356,
       "category": "只读数字",
       "source_location": "当前 Git 跟踪且存在的全部 .py 文件，正则逐项计以 test_ 开头的函数定义，含类方法；只数定义，不代表发现数、运行数或通过数。",
       "retrieve": {
@@ -23269,7 +23369,12 @@
       },
       "automatic": true,
       "page_pattern": "当前源码有\\s*([\\d,]+)\\s*个以 test_ 开头的测试函数",
-      "measurement_scope": "当前 Git 跟踪且存在的全部 .py 文件，正则逐项计以 test_ 开头的函数定义，含类方法；只数定义，不代表发现数、运行数或通过数。"
+      "measurement_scope": "当前 Git 跟踪且存在的全部 .py 文件，正则逐项计以 test_ 开头的函数定义，含类方法；只数定义，不代表发现数、运行数或通过数。",
+      "checked_at": "2026-10-30T11:07:14+08:00",
+      "source_observed_at": "2026-10-30T11:07:14+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:07:14+08:00"
     },
     {
       "as_of": "2026-10-30",
@@ -23301,7 +23406,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "observation_basis": "live_read",
       "checked_at": "2026-10-30T11:07:14+08:00",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "source_coverage_end": null
     },
     {
       "as_of": "2026-10-30",
@@ -23333,7 +23439,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "observation_basis": "live_read",
       "checked_at": "2026-10-30T11:07:14+08:00",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "source_coverage_end": null
     },
     {
       "as_of": "2026-10-30",
@@ -23365,7 +23472,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "observation_basis": "live_read",
       "checked_at": "2026-10-30T11:07:14+08:00",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "source_coverage_end": null
     },
     {
       "as_of": "2026-10-30",
@@ -23397,7 +23505,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "observation_basis": "live_read",
       "checked_at": "2026-10-30T11:07:14+08:00",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "source_coverage_end": null
     },
     {
       "as_of": "2026-10-11",
@@ -23753,9 +23862,9 @@
       "measurement_scope": "共享usage_ledger严格筛kind=skill且name=vault-workflow，取ts最大值；来源原串2026-09-29T01:11:24.206+08:00，取数器以北京时间ISO秒精度返回2026-09-29T01:11:24+08:00，apply_edits按页面旧值分钟精度格式化为2026-09-29 01:11，值不变；只证明技能调用记录，不证明功能成功或真实私人库使用。",
       "known_gap": "共享账本按完整昨日补采；根代理北京时间20:00:59实跑已核只读verify-ledger-recovery.ps1，两份current receipts complete/hot_status complete，watermarks均2026-10-11零点，G副本hash_equal=true；当天无新事件属合同正常范围。最近技能记录为9月29日，不能冒充最近一次真实功能成功。",
       "source_verification": "本子代理流式只读932119行，无JSON坏行；kind=skill,name=vault-workflow匹配7行，最后ts=2026-09-29T01:11:24.206+08:00。根代理已读U路正式report并于20:00:59实跑verify-ledger-recovery.ps1，exit0，两份current receipt完整及G副本哈希一致；自然旧Hot失败是历史，不改写。",
-      "checked_at": "2026-10-23T08:41:08+08:00",
+      "checked_at": "2026-10-30T11:07:00+08:00",
       "source_observed_at": null,
-      "source_coverage_end": "2026-10-21",
+      "source_coverage_end": "2026-10-24",
       "observation_basis": "coverage_end",
       "observed_at": null
     },
@@ -23787,9 +23896,9 @@
       "measurement_scope": "共享usage_ledger严格筛kind=skill且name=vault-workflow，取ts最大值；来源原串2026-09-29T01:11:24.206+08:00，取数器以北京时间ISO秒精度返回2026-09-29T01:11:24+08:00，apply_edits按页面旧值分钟精度格式化为2026-09-29 01:11，值不变；只证明技能调用记录，不证明功能成功或真实私人库使用。",
       "known_gap": "共享账本按完整昨日补采；根代理北京时间20:00:59实跑已核只读verify-ledger-recovery.ps1，两份current receipts complete/hot_status complete，watermarks均2026-10-11零点，G副本hash_equal=true；当天无新事件属合同正常范围。最近技能记录为9月29日，不能冒充最近一次真实功能成功。",
       "source_verification": "本子代理流式只读932119行，无JSON坏行；kind=skill,name=vault-workflow匹配7行，最后ts=2026-09-29T01:11:24.206+08:00。根代理已读U路正式report并于20:00:59实跑verify-ledger-recovery.ps1，exit0，两份current receipt完整及G副本哈希一致；自然旧Hot失败是历史，不改写。",
-      "checked_at": "2026-10-23T08:41:08+08:00",
+      "checked_at": "2026-10-30T11:07:00+08:00",
       "source_observed_at": null,
-      "source_coverage_end": "2026-10-21",
+      "source_coverage_end": "2026-10-24",
       "observation_basis": "coverage_end",
       "observed_at": null
     },
@@ -23945,7 +24054,7 @@
       "screen": "personal-materials-bounded-discovery-05",
       "label": "材料测试用例收集数",
       "field": "screens[4].text",
-      "current_value": "123",
+      "current_value": 123,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -23962,7 +24071,12 @@
       "scope_status": "verified",
       "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "参数展开\\s+([\\d,]+)\\s+个用例"
+      "page_pattern": "参数展开\\s+([\\d,]+)\\s+个用例",
+      "checked_at": "2026-10-30T11:06:36+08:00",
+      "source_observed_at": "2026-10-30T11:06:36+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:06:36+08:00"
     },
     {
       "id": "personal-materials-bounded-discovery-b9-009",
@@ -24690,7 +24804,7 @@
       "screen": "personal-materials-exact-intake-05",
       "label": "材料测试用例收集数",
       "field": "screens[4].text",
-      "current_value": "123",
+      "current_value": 123,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -24707,7 +24821,12 @@
       "scope_status": "verified",
       "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义"
+      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义",
+      "checked_at": "2026-10-30T11:06:36+08:00",
+      "source_observed_at": "2026-10-30T11:06:36+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:06:36+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-040",
@@ -24715,7 +24834,7 @@
       "screen": "personal-materials-exact-intake-15",
       "label": "材料测试用例收集数",
       "field": "screens[14].text",
-      "current_value": "123",
+      "current_value": 123,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -24732,7 +24851,12 @@
       "scope_status": "verified",
       "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义"
+      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义",
+      "checked_at": "2026-10-30T11:06:36+08:00",
+      "source_observed_at": "2026-10-30T11:06:36+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:06:36+08:00"
     },
     {
       "id": "personal-materials-exact-intake-b9-041",
@@ -25617,7 +25741,7 @@
       "screen": "personal-materials-registered-lookup-05",
       "label": "材料测试用例收集数",
       "field": "screens[4].text",
-      "current_value": "123",
+      "current_value": 123,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -25634,7 +25758,12 @@
       "scope_status": "verified",
       "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "参数展开\\s+([\\d,]+)\\s+个用例"
+      "page_pattern": "参数展开\\s+([\\d,]+)\\s+个用例",
+      "checked_at": "2026-10-30T11:06:36+08:00",
+      "source_observed_at": "2026-10-30T11:06:36+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:06:36+08:00"
     },
     {
       "id": "personal-materials-registered-lookup-b9-072",
@@ -25642,7 +25771,7 @@
       "screen": "personal-materials-registered-lookup-11",
       "label": "材料测试用例收集数",
       "field": "screens[10].text",
-      "current_value": "123",
+      "current_value": 123,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -25659,7 +25788,12 @@
       "scope_status": "verified",
       "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义"
+      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义",
+      "checked_at": "2026-10-30T11:06:36+08:00",
+      "source_observed_at": "2026-10-30T11:06:36+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:06:36+08:00"
     },
     {
       "id": "personal-materials-registered-lookup-b9-073",
@@ -25856,7 +25990,7 @@
       "screen": "personal-materials-verified-open-05",
       "label": "材料测试用例收集数",
       "field": "screens[4].text",
-      "current_value": "123",
+      "current_value": 123,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -25873,7 +26007,12 @@
       "scope_status": "verified",
       "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义"
+      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义",
+      "checked_at": "2026-10-30T11:06:36+08:00",
+      "source_observed_at": "2026-10-30T11:06:36+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:06:36+08:00"
     },
     {
       "id": "personal-materials-verified-open-b9-080",
@@ -25881,7 +26020,7 @@
       "screen": "personal-materials-verified-open-13",
       "label": "材料测试用例收集数",
       "field": "screens[12].text",
-      "current_value": "123",
+      "current_value": 123,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -25898,7 +26037,12 @@
       "scope_status": "verified",
       "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义"
+      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义",
+      "checked_at": "2026-10-30T11:06:36+08:00",
+      "source_observed_at": "2026-10-30T11:06:36+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:06:36+08:00"
     },
     {
       "id": "personal-media-classification-b9-082",
@@ -26425,7 +26569,7 @@
       "source_observed_at": "2026-10-30T11:06:10+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:25:20+08:00"
+      "observed_at": "2026-10-30T11:06:10+08:00"
     },
     {
       "id": "personal-media-search-browse-b9-099",
@@ -26679,7 +26823,7 @@
       "source_observed_at": "2026-10-30T11:06:11+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:25:23+08:00"
+      "observed_at": "2026-10-30T11:06:11+08:00"
     },
     {
       "id": "personal-media-search-browse-b9-108",
@@ -26735,7 +26879,7 @@
       "source_observed_at": "2026-10-30T11:07:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-23T10:26:19+08:00"
+      "observed_at": "2026-10-30T11:07:18+08:00"
     },
     {
       "id": "personal-media-search-browse-b9-110",
@@ -26799,7 +26943,7 @@
       "screen": "personal-media-search-browse-01",
       "label": "全部现存原件大小GB",
       "field": "screens[0].text",
-      "current_value": "106",
+      "current_value": 106.0,
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "E:/Media/_manifests/personal-media-current/catalog.sqlite3；canonical原件目录",
@@ -26818,7 +26962,12 @@
       "scope_status": "verified",
       "measurement_scope": "当前catalog原件逐件stat求和，以十进制GB四舍五入到整数；与主卡同口径，页面约数不声称0.1GB精度。",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "登记的原件合计约\\s+([\\d,.]+)\\s+GB"
+      "page_pattern": "登记的原件合计约\\s+([\\d,.]+)\\s+GB",
+      "checked_at": "2026-10-30T11:06:34+08:00",
+      "source_observed_at": "2026-10-30T11:06:34+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:06:34+08:00"
     },
     {
       "id": "personal-media-search-browse-b9-113",
@@ -29266,7 +29415,7 @@
       "page": "devconfig-backup-source-catalog",
       "screen": "devconfig-backup-source-catalog-05",
       "label": "最新成功配置包压缩字节",
-      "current_value": 449631558,
+      "current_value": 455582743,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[4].text",
@@ -29291,10 +29440,10 @@
         "completed_utc"
       ],
       "page_pattern": "当前本地/G 成功包为 [^，\\n]+，(?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 字节",
-      "checked_at": "2026-10-23T10:26:21+08:00",
-      "source_observed_at": "2026-10-22T04:09:51.103453+00:00",
+      "checked_at": "2026-10-30T11:07:21+08:00",
+      "source_observed_at": "2026-10-27T04:08:56.069760+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-22T04:09:51.103453+00:00"
+      "observed_at": "2026-10-27T04:08:56.069760+00:00"
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-043",
@@ -29336,7 +29485,7 @@
       "page": "devconfig-backup-source-catalog",
       "screen": "devconfig-backup-source-catalog-05",
       "label": "最新成功配置包文件数",
-      "current_value": 6344,
+      "current_value": 6364,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[4].text",
@@ -29361,17 +29510,17 @@
         "completed_utc"
       ],
       "page_pattern": "回执 (?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 个文件，原始字节数",
-      "checked_at": "2026-10-23T10:26:21+08:00",
-      "source_observed_at": "2026-10-22T04:09:51.103453+00:00",
+      "checked_at": "2026-10-30T11:07:21+08:00",
+      "source_observed_at": "2026-10-27T04:08:56.069760+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-22T04:09:51.103453+00:00"
+      "observed_at": "2026-10-27T04:08:56.069760+00:00"
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-047",
       "page": "devconfig-backup-source-catalog",
       "screen": "devconfig-backup-source-catalog-05",
       "label": "最新成功配置包压缩大小 MiB",
-      "current_value": 428.8,
+      "current_value": 434.5,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[4].text",
@@ -29398,10 +29547,10 @@
         "completed_utc"
       ],
       "page_pattern": "当前本地/G 成功包为 [^，\\n]+，[0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)? 字节（约 (?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) MiB）",
-      "checked_at": "2026-10-23T10:26:21+08:00",
-      "source_observed_at": "2026-10-22T04:09:51.103453+00:00",
+      "checked_at": "2026-10-30T11:07:21+08:00",
+      "source_observed_at": "2026-10-27T04:08:56.069760+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-22T04:09:51.103453+00:00"
+      "observed_at": "2026-10-27T04:08:56.069760+00:00"
     },
     {
       "id": "b9-tools-devconfig-backup-tiered-distribution-anchor-048",
@@ -29884,7 +30033,7 @@
       "page": "devconfig-backup-wechat-native-backup",
       "screen": "devconfig-backup-wechat-native-backup-05",
       "label": "微信当前热备文件数",
-      "current_value": 154912,
+      "current_value": 156448,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[4].text",
@@ -29908,14 +30057,18 @@
       "source_observed_at_pointer": [
         "completed_utc"
       ],
-      "page_pattern": "当前 G 回执是 [^，\\n]+，(?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 文件"
+      "page_pattern": "当前 G 回执是 [^，\\n]+，(?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 文件",
+      "checked_at": "2026-10-30T11:07:21+08:00",
+      "source_observed_at": "2026-10-30T02:10:50.807158+00:00",
+      "source_coverage_end": null,
+      "observed_at": "2026-10-30T02:10:50.807158+00:00"
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-anchor-068",
       "page": "devconfig-backup-wechat-native-backup",
       "screen": "devconfig-backup-wechat-native-backup-11",
       "label": "微信当前热备文件数",
-      "current_value": 154912,
+      "current_value": 156448,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[10].text",
@@ -29939,14 +30092,18 @@
       "source_observed_at_pointer": [
         "completed_utc"
       ],
-      "page_pattern": "G 微信热备 [^，\\n]+ 完成，(?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 文件"
+      "page_pattern": "G 微信热备 [^，\\n]+ 完成，(?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 文件",
+      "checked_at": "2026-10-30T11:07:21+08:00",
+      "source_observed_at": "2026-10-30T02:10:50.807158+00:00",
+      "source_coverage_end": null,
+      "observed_at": "2026-10-30T02:10:50.807158+00:00"
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-anchor-070",
       "page": "devconfig-backup-wechat-native-backup",
       "screen": "devconfig-backup-wechat-native-backup-11",
       "label": "微信当前热备字节",
-      "current_value": 46826139227,
+      "current_value": 48064272633,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[10].text",
@@ -29970,14 +30127,18 @@
       "source_observed_at_pointer": [
         "completed_utc"
       ],
-      "page_pattern": "G 微信热备 [^\\n]*?完成，[0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)? 文件、(?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 字节"
+      "page_pattern": "G 微信热备 [^\\n]*?完成，[0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)? 文件、(?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) 字节",
+      "checked_at": "2026-10-30T11:07:22+08:00",
+      "source_observed_at": "2026-10-30T02:10:50.807158+00:00",
+      "source_coverage_end": null,
+      "observed_at": "2026-10-30T02:10:50.807158+00:00"
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-anchor-071",
       "page": "devconfig-backup-wechat-native-backup",
       "screen": "devconfig-backup-wechat-native-backup-05",
       "label": "微信当前热备 GB",
-      "current_value": 46.83,
+      "current_value": 48.06,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[4].text",
@@ -30003,14 +30164,18 @@
       "source_observed_at_pointer": [
         "completed_utc"
       ],
-      "page_pattern": "当前 G 回执是 [^，\\n]+，[0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)? 文件、(?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) GB"
+      "page_pattern": "当前 G 回执是 [^，\\n]+，[0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)? 文件、(?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) GB",
+      "checked_at": "2026-10-30T11:07:22+08:00",
+      "source_observed_at": "2026-10-30T02:10:50.807158+00:00",
+      "source_coverage_end": null,
+      "observed_at": "2026-10-30T02:10:50.807158+00:00"
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-anchor-072",
       "page": "devconfig-backup-wechat-native-backup",
       "screen": "devconfig-backup-wechat-native-backup-05",
       "label": "微信当前热备 GB",
-      "current_value": 46.83,
+      "current_value": 48.06,
       "as_of": "2026-10-11",
       "category": "只读来源",
       "field": "screens[4].text",
@@ -30036,7 +30201,11 @@
       "source_observed_at_pointer": [
         "completed_utc"
       ],
-      "page_pattern": "G 盘这一代约 (?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) GB"
+      "page_pattern": "G 盘这一代约 (?<![0-9.,])([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)(?![0-9.,]) GB",
+      "checked_at": "2026-10-30T11:07:22+08:00",
+      "source_observed_at": "2026-10-30T02:10:50.807158+00:00",
+      "source_coverage_end": null,
+      "observed_at": "2026-10-30T02:10:50.807158+00:00"
     },
     {
       "id": "b9-tools-emerald-veil-native-bubbles-idle-overlay-anchor-073",
@@ -34569,7 +34738,7 @@
       "page": "codex-memory",
       "screen": "codex-memory-04",
       "label": "H当前生产回执文件数",
-      "current_value": "11,093",
+      "current_value": "12,973",
       "as_of": "2026-10-20",
       "field": "screens[3].text",
       "page_pattern": "多大\\*\\*　([\\d,]+) 个文件，[\\d.]+ GB（G、H",
@@ -34592,17 +34761,19 @@
       "affected_screens": [
         "codex-memory-04"
       ],
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null
     },
     {
       "id": "int3-codex-memory-h-comparison-gb",
       "page": "codex-memory",
       "screen": "codex-memory-04",
       "label": "H当前生产回执总量GB",
-      "current_value": "39.5",
+      "current_value": "36.5",
       "as_of": "2026-10-20",
       "field": "screens[3].text",
       "page_pattern": "多大\\*\\*　[\\d,]+ 个文件，([\\d.]+) GB（G、H",
@@ -34627,10 +34798,12 @@
       "affected_screens": [
         "codex-memory-04"
       ],
-      "observed_at": "2026-10-20T07:41:45.0677245+08:00",
-      "source_observed_at": "2026-10-20T07:41:45.0677245+08:00",
+      "observed_at": "2026-10-30T11:21+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\460945d5\\gpt-children\\20261020-073102-site-ondemand-update-87898f70\\round-01\\evidence\\scope-tools.json",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_coverage_end": null
     },
     {
       "id": "int3-codex-memory-g-no-file-warnings",
@@ -34653,7 +34826,12 @@
       "scope_status": "verified",
       "measurement_scope": "同句G恢复点无警告状态，字符展示需要人工关联，不能拿源文件总数证明。",
       "manual_reason": "judgment",
-      "manual_route": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 本条把file_warnings空人工核对为正文“没有被挡的文件”；当前重取器没有数值0到这句话的展示转换。"
+      "manual_route": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 本条把file_warnings空人工核对为正文“没有被挡的文件”；当前重取器没有数值0到这句话的展示转换。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:21+08:00"
     },
     {
       "id": "int3-codex-memory-h-full-coverage",
@@ -34662,7 +34840,7 @@
       "field": "screens[5].text",
       "page_pattern": "H 那份(整份读回、一个不少)",
       "label": "H当前恢复点完整覆盖",
-      "current_value": "也是完整的",
+      "current_value": "整份读回、一个不少",
       "as_of": "2026-10-11",
       "category": "人工",
       "source_location": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 本条人工核对为正文“也是完整的”；当前重取器没有多条件布尔值到这句话的展示转换。",
@@ -34676,7 +34854,12 @@
       "scope_status": "verified",
       "measurement_scope": "同句H实际点的完整覆盖状态，由point/回读/覆盖/警告共同证明，不以G当前点替代H。",
       "manual_reason": "judgment",
-      "manual_route": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 本条人工核对为正文“也是完整的”；当前重取器没有多条件布尔值到这句话的展示转换。"
+      "manual_route": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 本条人工核对为正文“也是完整的”；当前重取器没有多条件布尔值到这句话的展示转换。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:21+08:00"
     },
     {
       "id": "int3-codex-memory-warning-status-asof",
@@ -34685,7 +34868,7 @@
       "field": "screens[5].text",
       "page_pattern": "起；(\\d+ 月 \\d+ 日 \\d+:\\d+) 核对",
       "label": "同句真实数据截止",
-      "current_value": "10 月 11 日 14:00",
+      "current_value": "10 月 30 日 11:21",
       "as_of": "2026-10-11",
       "category": "截至日期",
       "source_location": "所列具名来源的同句数据观察边界",
@@ -34697,7 +34880,12 @@
       "private": false,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "只注明同句当前G无警告及H完整覆盖两个状态，不把原10月1日功能事件日期更新为今日。"
+      "measurement_scope": "只注明同句当前G无警告及H完整覆盖两个状态，不把原10月1日功能事件日期更新为今日。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:21+08:00"
     },
     {
       "id": "int3-codex-memory-current-points-state",
@@ -34706,7 +34894,7 @@
       "field": "screens[6].text",
       "page_pattern": "(G、H current 同为 [^\\n]+?警告 0、保留点 \\d+)",
       "label": "G/H当前点的完整技术快照",
-      "current_value": "G current=20261011T043524Z-0dc21e1e（12:55:31 发布，警告 0）；H current=20261010T041724Z-1a59672a（10 月 10 日 15:11:25 发布、15:23:30 冷备完成，readback_verified=true、verification_scope=all_manifest_files、覆盖 100%）",
+      "current_value": "G、H current 同为 20261029T043532Z-e301260d，12,973 个文件、36,503,940,586 字节。G 10 月 29 日 12:58:07 完成，complete、readback_verified=true、警告 0，hot_retention_limit=2、retained=2；H 冷备 15:58:19 完成，complete、readback_verified=true、verification_scope=all_manifest_files、partial_coverage=false、覆盖 100%、警告 0、保留点 2",
       "as_of": "2026-10-11",
       "category": "人工",
       "source_location": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 对上正文两current id、完成/发布时间、G警告0、H readback_verified=true、all_manifest_files与覆盖100%；现有b7入口只返回计数字段，不含这整组状态，因此须人工逐项核对，缺一项回报Unknown保留14:00旧观察。",
@@ -34720,7 +34908,12 @@
       "scope_status": "verified",
       "measurement_scope": "这组可见技术快照属于同一次G/H点核对；覆盖日期关联这组真实来源，不挂仅有总件数的无关记录。",
       "manual_reason": "judgment",
-      "manual_route": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 对上正文两current id、完成/发布时间、G警告0、H readback_verified=true、all_manifest_files与覆盖100%；现有b7入口只返回计数字段，不含这整组状态，因此须人工逐项核对，缺一项回报Unknown保留14:00旧观察。"
+      "manual_route": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 对上正文两current id、完成/发布时间、G警告0、H readback_verified=true、all_manifest_files与覆盖100%；现有b7入口只返回计数字段，不含这整组状态，因此须人工逐项核对，缺一项回报Unknown保留14:00旧观察。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:21+08:00"
     },
     {
       "id": "int3-codex-memory-current-points-asof",
@@ -34729,7 +34922,7 @@
       "field": "screens[6].text",
       "page_pattern": "(\\d+ 月 \\d+ 日 \\d+:\\d+) 读指针和回执",
       "label": "同句真实数据截止",
-      "current_value": "10 月 11 日 14:00",
+      "current_value": "10 月 30 日 11:21",
       "as_of": "2026-10-11",
       "category": "截至日期",
       "source_location": "所列具名来源的同句数据观察边界",
@@ -34740,7 +34933,12 @@
       "private": false,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "只注明同句G/H当前点身份、警告、回读覆盖与各事件时间的技术快照，事件时间由各自原回执核对。"
+      "measurement_scope": "只注明同句G/H当前点身份、警告、回读覆盖与各事件时间的技术快照，事件时间由各自原回执核对。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:21+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:21+08:00"
     },
     {
       "id": "int3-localocr-objective-summary",
@@ -35013,7 +35211,12 @@
       "private": false,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "同首屏已定位的镜像链与备份层数核对边界；镜像10月10日完成和任务10月7日登记保留各自事件日期，不由状态条观察日期改写。"
+      "measurement_scope": "同首屏已定位的镜像链与备份层数核对边界；镜像10月10日完成和任务10月7日登记保留各自事件日期，不由状态条观察日期改写。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:14:17.791629+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:14:17.791629+08:00"
     },
     {
       "id": "int3-materials-status-asof",
@@ -35136,11 +35339,11 @@
       "historical": false,
       "source_location": "本轮宿主实际提供的 OpenAI 文件插件 documents 26.1009.11318；原稿版本观察日 2026-10-10",
       "scope_status": "verified",
-      "observed_at": "2026-10-12T02:18:41+08:00",
+      "observed_at": "2026-10-30",
       "report_ref": "Opus 两页新版定稿；2026-10-12 本轮只读聚合回读",
       "id": "skill-documents-new-20261012-plugin-snapshot",
       "label": "已接入插件及版本观察说明",
-      "current_value": "Codex 自带插件，10 月 10 日的版本",
+      "current_value": "Codex 自带插件，10 月 30 日核对本机可用的是 26.1020.11618 版",
       "category": "人工",
       "field": "status_line.facts[1]",
       "private": false,
@@ -35151,7 +35354,11 @@
       },
       "manual_reason": "judgment",
       "manual_route": "读取本轮宿主技能发现路径和对应 SKILL.md，核对插件身份与实际 bundle 版本；版本观察日与当前调用次数分开，变化交语义写稿者更新，不从目录修改时间猜发布日期。",
-      "measurement_scope": "原稿写明的插件版本观察；本轮发现路径实际为 26.1009.11318，未运行文档/PDF业务验收，不代表全部功能已验证。"
+      "measurement_scope": "原稿写明的插件版本观察；本轮发现路径实际为 26.1009.11318，未运行文档/PDF业务验收，不代表全部功能已验证。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30",
+      "source_coverage_end": null,
+      "observation_basis": "live_read"
     },
     {
       "page": "skill-pdf",
@@ -35245,11 +35452,11 @@
       "historical": false,
       "source_location": "本轮宿主实际提供的 OpenAI 文件插件 pdf 26.1009.11318；原稿版本观察日 2026-10-10",
       "scope_status": "verified",
-      "observed_at": "2026-10-12T02:18:41+08:00",
+      "observed_at": "2026-10-30",
       "report_ref": "Opus 两页新版定稿；2026-10-12 本轮只读聚合回读",
       "id": "skill-pdf-new-20261012-plugin-snapshot",
       "label": "已接入插件及版本观察说明",
-      "current_value": "Codex 自带插件，10 月 10 日的版本",
+      "current_value": "Codex 自带插件，10 月 30 日核对本机可用的是 26.1020.11618 版",
       "category": "人工",
       "field": "status_line.facts[1]",
       "private": false,
@@ -35260,7 +35467,11 @@
       },
       "manual_reason": "judgment",
       "manual_route": "读取本轮宿主技能发现路径和对应 SKILL.md，核对插件身份与实际 bundle 版本；版本观察日与当前调用次数分开，变化交语义写稿者更新，不从目录修改时间猜发布日期。",
-      "measurement_scope": "原稿写明的插件版本观察；本轮发现路径实际为 26.1009.11318，未运行文档/PDF业务验收，不代表全部功能已验证。"
+      "measurement_scope": "原稿写明的插件版本观察；本轮发现路径实际为 26.1009.11318，未运行文档/PDF业务验收，不代表全部功能已验证。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30",
+      "source_coverage_end": null,
+      "observation_basis": "live_read"
     },
     {
       "id": "rh2-pcconfig-overview-latest-backup-receipts",
@@ -35268,7 +35479,7 @@
       "screen": "pcconfig-01",
       "field": "screens[0].text",
       "label": "最近镜像、外接盘备份完成事件及告警判读",
-      "current_value": "镜像 10 月 11 日 14:01 做完；同步到外接盘 10 月 11 日 18:39 做完，但带告警：AI 使用账本这轮没补采上、开发配置日备上次报错，另有几个文件中途消失或被杀毒软件移走。",
+      "current_value": "镜像 10 月 29 日 13:59 做完（回执写完成、退出码 0；没做还原测试）；同步到外接盘 10 月 29 日 18:06 那轮没有全部做完：微信、照片视频、Codex 记忆、系统镜像等各自完成，开发配置因为 G 上的来源太旧、个人资料因为副本目录没准备好，这两类被拦下没同步，整轮只算部分完成。",
       "as_of": "2026-10-12",
       "category": "生产回执综合判读",
       "source_location": "E:/Cache/PCConfig/SystemImage/last-run.json native.completed_utc/status/backup_completed/native_exit_code；C:/Users/10979/AppData/Local/PCConfig/core-recovery/cold-last.json 与 H:/90_人工保留区/RecoveryKit/CORE_RECOVERY/cold-last.json 的 completed_utc/status/cold_result/results/warnings/file_warnings；本轮 pcconfig.md 第2.1—2.3条04:31—04:36:53只读核对",
@@ -35284,7 +35495,12 @@
       "manual_route": "GPT只读两类具名生产回执及必要上游任务结果，按北京时间分别核对完成事件；区分AI使用账本补采失败、开发配置日备报错和文件告警的实际原因，交Claude/Opus核对整句语义。不从回执观察时刻改写备份完成时刻，不以成功的独立账本倒推自然备份中的补采成功。",
       "measurement_scope": "首屏最近一次整句的综合判读；本轮镜像完成于10月11日14:01:50，冷备完成于10月11日18:39:26且complete_with_warnings。生产回执已核对，未重散列全部载荷、未补跑备份、未验证整机还原。",
       "scope_status": "verified",
-      "report_ref": "E:/Cache/Claude/Temp/6428793e/deltas/rehearsal2/pcconfig.md"
+      "report_ref": "E:/Cache/Claude/Temp/6428793e/deltas/rehearsal2/pcconfig.md",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:14:17.791629+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:14:17.791629+08:00"
     },
     {
       "id": "int3-devconfig-backup-current-status-review",
@@ -35308,7 +35524,12 @@
       "measurement_scope": "2026-10-30 11:11零写入状态入口整体attention_required；当前状态和10月23日、10月12日历史段分开，不把旧代成功当今日生产恢复。",
       "report_ref": "E:/Cache/Claude/Temp/6428793e/deltas/rehearsal3/devconfig-backup.md",
       "private": true,
-      "historical": false
+      "historical": false,
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:11:47.118152+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:11:47.118152+08:00"
     },
     {
       "id": "int3-devconfig-backup-current-status-as-of",
@@ -35317,7 +35538,7 @@
       "field": "screens[4].text",
       "page_pattern": "\\*\\*截至 (\\d+ 月 \\d+ 日 \\d{2}:\\d{2}) 的状态\\*\\*",
       "label": "当前任务回执状态的人工观察截至日期",
-      "current_value": "10 月 23 日 10:28",
+      "current_value": "10 月 30 日 11:11",
       "as_of": "2026-10-12",
       "qualifies": [
         "int3-devconfig-backup-current-status-review"
@@ -35331,7 +35552,12 @@
       "source_project": "devconfig-backup",
       "measurement_scope": "仅指本轮只读回读观察时点，不改变旧备份生成时刻；云端未联网重查的缺口保留。",
       "date_precision": "datetime",
-      "date_review_route": "人工重读对应回执和事实单后才更新完整日期时刻。"
+      "date_review_route": "人工重读对应回执和事实单后才更新完整日期时刻。",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:11:47.118152+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:11:47.118152+08:00"
     },
     {
       "id": "r3-personal-materials-filename-description",
@@ -35648,7 +35874,12 @@
       "manual_route": "PCConfig Owner只读复用完整扫描并核对当前用途目录及SoftLanding排除规则；不运行业务任务、不写任务登记。",
       "private": false,
       "historical": false,
-      "report_ref": "E:/Documents/Codex/2026-10-21/10-22-09-59-c417a025-e280/outputs/pcconfig-task-counts.json"
+      "report_ref": "E:/Documents/Codex/2026-10-21/10-22-09-59-c417a025-e280/outputs/pcconfig-task-counts.json",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:14:17.791629+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:14:17.791629+08:00"
     },
     {
       "id": "r3-phone-collector-phone-period",
@@ -36032,7 +36263,7 @@
       "qualifies": [
         "pcconfig-n-catalog-0"
       ],
-      "current_value": "10 月 22 日",
+      "current_value": "10 月 30 日",
       "as_of": "2026-10-22",
       "automatic": true,
       "scope_status": "verified",
@@ -36040,7 +36271,12 @@
       "historical": false,
       "private": false,
       "source_location": "同页被注明数字记录",
-      "category": "日期联动"
+      "category": "日期联动",
+      "checked_at": "2026-10-30T16:03:19.304841+08:00",
+      "source_observed_at": "2026-10-30T11:14:17.791629+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read",
+      "observed_at": "2026-10-30T11:14:17.791629+08:00"
     },
     {
       "id": "pcconfig-asof-g-five-directories",
