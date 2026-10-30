@@ -190,7 +190,8 @@ class CockpitRetentionTests(unittest.TestCase):
             self.assertEqual(cell.locator('.cp-tri-status').text_content().strip(), '问题备份：备份目标没接上')
             # 颜色只看要不要你出手：后端没说要你做、这一格写着交给 AI 时是中性色“AI 在管”，不是红色
             self.assertIn('is-neutral', cell.get_attribute('class'))
-            self.assertIn('AI 在管', cell.text_content())
+            # 第二行小字回答要不要你管（10-30 批准第 2 项）
+            self.assertEqual(cell.locator('.cp-tri-who').inner_text().strip(), 'AI 在修，不用你管')
             bad = self.page.locator('[data-cp="backup"] .cp-card.is-yellow')
             self.assertEqual(bad.count(), 1)
             self.assertIn('备份目标没接上', bad.inner_text())

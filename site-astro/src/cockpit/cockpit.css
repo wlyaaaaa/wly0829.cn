@@ -1203,3 +1203,11 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 .cp-page .cp-score-rules { margin-top: 8px; font-size: 12.5px; color: var(--muted); }
 .cp-score-rules > summary { display: inline; cursor: pointer; color: var(--title); }
 .cp-score-rules ul { margin: 6px 0 0; padding-left: 1.1em; }
+
+/* ---- 状态四格第二行小字写“要不要你管”；“AI 在管”的点加深，和“读不到”的浅灰点分开（本人 10-30 批准第 2 项） ---- */
+.cp-page .cp-dot.is-neutral { background: #3f6b91; }
+.cp-page .cp-status .cp-tri-who { display: block; margin-top: 4px; font-size: 12.5px; font-weight: 600; line-height: 1.4; color: var(--muted); }
+.cp-page .cp-status .cp-tri-who span { display: inline; }
+.cp-page .cp-status .cp-tri-cell.is-neutral .cp-tri-who { color: #3f6b91; }
+.cp-page .cp-status .cp-tri-cell.is-yellow .cp-tri-who { color: #9a7409; }
+.cp-page .cp-status .cp-tri-cell.is-red .cp-tri-who { color: var(--cp-red); }

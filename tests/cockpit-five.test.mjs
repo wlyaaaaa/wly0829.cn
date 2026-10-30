@@ -53,3 +53,24 @@ test('健康分：读到时间和页面时间一样时不另写，旧 15 分钟�
   const old = REGIONS['overview-tri'](view({ overview: overview({ as_of: '2026-10-30T11:30:00+08:00' }) }), ctx());
   assert.match(old, /<span class="cp-score-why hub-field-body">[^<]*<small>10月30日 11:30 读到<\/small>/);
 });
+
+test('状态四格：第二行小字写要不要你管；AI 在管的点用加深的蓝灰，和读不到的灰点分开', () => {
+  const html = REGIONS['overview-tri'](view(), ctx());
+  const who = (id) => textOnly(new RegExp(`data-signal="${id}"[^]*?<span class="cp-tri-who">([^]*?)</span></span>`).exec(html)?.[1] || '');
+  assert.equal(who('backup'), 'AI 在修，不用你管');
+  assert.equal(who('tasks'), 'AI 在修，不用你管');
+  assert.equal(who('computer'), '不用你管');
+  assert.match(html, /data-signal="backup"[^]*?<b class="cp-tri-status"><span class="cp-dot is-neutral"/);
+  const mine = REGIONS['overview-tri'](view({ overview: overview({ signals: [{ id: 'computer', level: 'ok' }, { id: 'today_tasks', level: 'ok', value: 0 }, { id: 'backup', level: 'act', value: 1, owner_action: 'do' }] }) }), ctx());
+  assert.match(mine, /data-signal="backup"[^]*?<span class="cp-tri-who"><span>要你看<\/span>/);
+  const off = REGIONS['overview-tri'](view(), ctx({ ov: { stale: () => true, lamp: () => '' } }));
+  assert.match(off, /data-signal="backup"[^]*?cp-dot is-gray[^]*?<span class="cp-tri-who"><span>上次 11:59 读到<\/span>/);
+});
+
+test('状态四格的样式：第二行不再藏起来，AI 在管的点比读不到的灰点深', async () => {
+  const { readFileSync } = await import('node:fs');
+  const css = readFileSync(new URL('../site-astro/src/cockpit/cockpit.css', import.meta.url), 'utf8');
+  const tail = css.slice(css.lastIndexOf('本人 10-30 批准第 2 项'));
+  assert.match(tail, /\.cp-page \.cp-status \.cp-tri-who \{ display: block;/);
+  assert.match(tail, /\.cp-page \.cp-dot\.is-neutral \{ background: #3f6b91; \}/);
+});

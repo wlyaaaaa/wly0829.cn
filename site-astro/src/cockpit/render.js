@@ -818,9 +818,9 @@ function triCells(v, ctx, off) {
   const ov = v.overview;
   const make = (id, label, level, sig, status, okWho, okShort, why, note = '') => {
     const state = off ? 'unavailable' : ownerState(level, sig, sig?.handler_text || '交给 AI');
-    const aiSays = typeof sig?.ai_handling === 'string' && sig.ai_handling ? sig.ai_handling.replace(/^AI\s*在管[：:]\s*/, '').replace(/[。\s]+$/, '') : '';
-    const who = state === 'ok' ? okWho : state === 'neutral' ? (aiSays && aiSays !== 'AI 在管' ? `AI 在管 · ${aiSays}` : sig?.handler_text && AI_HANDLES.test(sig.handler_text) ? sig.handler_text : 'AI 在管 · 不用你动手')
-      : state === 'unavailable' ? (ov?.as_of ? `上次 ${hm(ov.as_of)} 读到` : '还没读到') : (sig?.handler_text || '要你看一眼 ↓');
+    // 第二行小字只回答“要不要你管”（本人 10-30 批准第 2 项）：AI 在管写“AI 在修，不用你管”，要你出手写“要你看”
+    const who = state === 'ok' ? okWho : state === 'neutral' ? WHO_TEXT.neutral
+      : state === 'unavailable' ? (ov?.as_of ? `上次 ${hm(ov.as_of)} 读到` : '还没读到') : WHO_TEXT[state] || '要你看';
     return { id, label, state, status: off ? '读不到' : status, who, why: off ? '' : why, note: off ? '' : note, short: SHORT[state] || okShort, brief: status.startsWith(label) ? status : label + status };
   };
   // 电脑：处理器（只看温度）和内存/系统资源分开说，哪张卡亮了就说哪张，原因用后端卡片原文
@@ -849,10 +849,10 @@ function triCells(v, ctx, off) {
   const bkStatus = bk.level === 'ok' ? '都按时备份了' : backupIssue(ov) || bk.word || '读不到';
   const bkMore = bkWhy.length > 1 ? `另有 ${bkWhy.length - 1} 项：${bkWhy.slice(1).join('、')}` : Number.isFinite(bk.value) && bk.level !== 'ok' ? `共 ${bk.value} 项不正常` : '';
   return [
-    make('computer', '电脑', pcLevel, pc, pcStatus, '你不用管', '正常', pcDetail),
+    make('computer', '电脑', pcLevel, pc, pcStatus, '不用你管', '正常', pcDetail),
     // 现在没有仍失败的、也没有当前反复出错的：这一格就是正常（绿），不因后端 color=neutral 写成“今天都正常，AI 在管”
-    make('tasks', '自动任务', tkLevel, nErr === 0 && !repeat.length ? { ...tk, color: 'ok' } : tk, tkStatus, '电脑自己按时跑', '都正常', tkWhy, tkNote),
-    make('backup', '备份', bk.level, bk, bkStatus, '你不用管', '都按时', bkMore),
+    make('tasks', '自动任务', tkLevel, nErr === 0 && !repeat.length ? { ...tk, color: 'ok' } : tk, tkStatus, '不用你管', '都正常', tkWhy, tkNote),
+    make('backup', '备份', bk.level, bk, bkStatus, '不用你管', '都按时', bkMore),
   ];
 }
 // 状态小格按中文整词换行；空格和标点仍参与浏览器的正常断行。
