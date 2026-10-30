@@ -555,7 +555,7 @@ def fill_dialogue_rows(page, sp, s, bl):
         DIALOGUE_ROWS.append(f"{page}：{n} 条 {c} 列 → 每排 {b['row_counts']}")
 
 
-STATUS_STATE = {"在用": "ok", "常用": "ok", "偶尔用": "ok", "待验收": "waiting", "待实施": "waiting", "已停用": "disabled", "已冻结": "disabled"}
+STATUS_STATE = {"在用": "ok", "常用": "ok", "偶尔用": "ok", "待验收": "waiting", "待实施": "waiting", "已停用": "disabled", "已冻结": "disabled", "已存档": "disabled"}
 
 
 def status_items(sl):

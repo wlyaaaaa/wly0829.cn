@@ -5,7 +5,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "先有可修改的大纲，再决定下一步学什么",
+        "text_ref": "路线与断点：大纲怎么排，断了从哪接上",
         "align": "left",
         "size": "large",
         "row": "top",
@@ -40,7 +40,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "先有可修改的大纲，再决定下一步学什么",
+        "text_ref": "路线与断点：大纲怎么排，断了从哪接上",
         "align": "left",
         "size": "large"
       },
@@ -74,7 +74,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "这一步怎样帮助学习",
+        "text_ref": "这一部分做什么",
         "columns": 3,
         "last_full_width": false,
         "icon_position": "header_left",
@@ -98,7 +98,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "这一步怎样帮助学习",
+        "text_ref": "这一部分做什么",
         "columns": 1,
         "icon_position": "header_left",
         "header_icon": [
@@ -182,7 +182,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **系统核对并处理**　先画完整可修改路线；讲义、练习和题单可提前备草稿，下课后按反馈定稿下一课；反馈推翻前提时只重排受影响部分。",
+        "text_ref": "1. **AI 排路线并备稿**　先排出完整、可修改的路线；讲义、练习和题单可以提前备草稿，下课后按反馈定稿下一课；反馈推翻前提时只重排受影响的部分。",
         "row": "start",
         "columns": 1,
         "icons": "none",
@@ -214,7 +214,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **系统核对并处理**　先画完整可修改路线；讲义、练习和题单可提前备草稿，下课后按反馈定稿下一课；反馈推翻前提时只重排受影响部分。",
+        "text_ref": "1. **AI 排路线并备稿**　先排出完整、可修改的路线；讲义、练习和题单可以提前备草稿，下课后按反馈定稿下一课；反馈推翻前提时只重排受影响的部分。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -234,7 +234,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 先形成唯一现行、完整而可修改的大纲与主题目标安排；AI 负责专业覆盖和依赖判断，不让本人先审懂整套技术路线。",
+        "text_ref": "1. 先有一份唯一现行、完整而可修改的大纲和主题安排；该覆盖什么、先后怎么排由 AI 判断，不要我先把整套技术路线审一遍。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -254,7 +254,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 先形成唯一现行、完整而可修改的大纲与主题目标安排；AI 负责专业覆盖和依赖判断，不让本人先审懂整套技术路线。",
+        "text_ref": "1. 先有一份唯一现行、完整而可修改的大纲和主题安排；该覆盖什么、先后怎么排由 AI 判断，不要我先把整套技术路线审一遍。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -274,7 +274,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 断点靠文档分工，不是独立的断点数据库或自动排课接口：学习路线管顺序和深度，当前状态管当前节点与唯一下一步，讲义索引管真实交付和反馈摘要，网页同名 JSON 管唯一现行讲义，抽问题单管提取和复习。新对话先读当前状态，不从旧计划重来。",
+        "text_ref": "- 断点靠几份文件分工记，不是单独的断点数据库或自动排课程序：学习路线管顺序和深度，当前状态管现在到哪一步和唯一下一步，讲义索引管真实交付和反馈摘要，网页同名 JSON 管唯一现行讲义，抽问题单管抽问和复习。新对话先读当前状态，不从旧计划重来。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -294,7 +294,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 断点靠文档分工，不是独立的断点数据库或自动排课接口：学习路线管顺序和深度，当前状态管当前节点与唯一下一步，讲义索引管真实交付和反馈摘要，网页同名 JSON 管唯一现行讲义，抽问题单管提取和复习。新对话先读当前状态，不从旧计划重来。",
+        "text_ref": "- 断点靠几份文件分工记，不是单独的断点数据库或自动排课程序：学习路线管顺序和深度，当前状态管现在到哪一步和唯一下一步，讲义索引管真实交付和反馈摘要，网页同名 JSON 管唯一现行讲义，抽问题单管抽问和复习。新对话先读当前状态，不从旧计划重来。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -314,7 +314,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "2. 结合三类材料形成完整、可修改的阶段大纲",
+        "text_ref": "2. 结合目标、现有材料和我的反馈，排出完整、可修改的阶段大纲",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -334,7 +334,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "2. 结合三类材料形成完整、可修改的阶段大纲",
+        "text_ref": "2. 结合目标、现有材料和我的反馈，排出完整、可修改的阶段大纲",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -424,7 +424,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- **目标、依赖或停止标准不足**：保持当前断点和 Unknown，可备草稿但不交付下一篇。",
+        "text_ref": "- **目标、依赖或停止标准不清楚**：保持当前断点，不知道的写明“未知”；可以备草稿，但不交付下一篇。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -443,7 +443,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- **目标、依赖或停止标准不足**：保持当前断点和 Unknown，可备草稿但不交付下一篇。",
+        "text_ref": "- **目标、依赖或停止标准不清楚**：保持当前断点，不知道的写明“未知”；可以备草稿，但不交付下一篇。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -462,7 +462,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 人类控制、可检查与可覆盖的AI协作设计",
+        "text_ref": "- 项目规则（10 月 7 日版本）：大纲、草稿与定稿、断点文件分工和老师分工的规定",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -481,7 +481,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 人类控制、可检查与可覆盖的AI协作设计",
+        "text_ref": "- 项目规则（10 月 7 日版本）：大纲、草稿与定稿、断点文件分工和老师分工的规定",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

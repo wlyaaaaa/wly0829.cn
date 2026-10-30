@@ -60,7 +60,7 @@
    },
    {
     "type": "prose",
-    "text_ref": "技能名reply-as-me·个人表达项目的入口"
+    "text_ref": "技能名reply-as-me·原属个人表达项目"
    },
    {
     "type": "points_card",
@@ -169,7 +169,7 @@
    },
    {
     "type": "prose",
-    "text_ref": "技能名reply-as-me·个人表达项目的入口"
+    "text_ref": "技能名reply-as-me·原属个人表达项目"
    },
    {
     "type": "points_card",
@@ -475,7 +475,7 @@
     "type": "notice",
     "tone": "green",
     "inline_button": "去看全部功能",
-    "text_ref": "这个技能能做的事，就是个人表达项目里“替我拟消息”和“记住纠正”两组功能。去看全"
+    "text_ref": "这个技能能做的事，就是原来个人表达项目"
    },
    {
     "type": "prose",
@@ -563,7 +563,7 @@
     "type": "notice",
     "tone": "green",
     "inline_button": "去看全部功能",
-    "text_ref": "这个技能能做的事，就是个人表达项目里“替我拟消息”和“记住纠正”两组功能。去看全"
+    "text_ref": "这个技能能做的事，就是原来个人表达项目"
    },
    {
     "type": "prose",

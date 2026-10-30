@@ -5,7 +5,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "不计分的课堂抽问帮我记牢；只有需要证据时才做最小验证",
+        "text_ref": "问答检验：不计分的抽问和题单，必要时才做小实验",
         "align": "left",
         "size": "large",
         "row": "top",
@@ -40,7 +40,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "不计分的课堂抽问帮我记牢；只有需要证据时才做最小验证",
+        "text_ref": "问答检验：不计分的抽问和题单，必要时才做小实验",
         "align": "left",
         "size": "large"
       },
@@ -74,7 +74,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "这一步怎样帮助学习",
+        "text_ref": "这一部分做什么",
         "columns": 3,
         "last_full_width": false,
         "icon_position": "header_left",
@@ -98,7 +98,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "这一步怎样帮助学习",
+        "text_ref": "这一部分做什么",
         "columns": 1,
         "icon_position": "header_left",
         "header_icon": [
@@ -182,7 +182,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **先讲足必要前提**　初学或关键背景缺失时，先用完整样例解释，不让人猜没教过的事实；正式课每节讲完，移开讲义用自己的话答一个问题。",
+        "text_ref": "1. **先讲足前提**　关键背景还没讲过时，先用完整的例子讲清，不出没讲过的题；正式课每节讲完，我移开讲义用自己的话答一个问题。",
         "row": "start",
         "columns": 1,
         "icons": "none",
@@ -214,7 +214,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **先讲足必要前提**　初学或关键背景缺失时，先用完整样例解释，不让人猜没教过的事实；正式课每节讲完，移开讲义用自己的话答一个问题。",
+        "text_ref": "1. **先讲足前提**　关键背景还没讲过时，先用完整的例子讲清，不出没讲过的题；正式课每节讲完，我移开讲义用自己的话答一个问题。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -234,7 +234,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 题目不计分、不强制提交；约 10 分钟是每课的安排和负担边界，不是答题限时。",
+        "text_ref": "1. 题目不计分、不强制提交；约 10 分钟是每课开头抽问的时长安排，不是答题限时。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -254,7 +254,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 题目不计分、不强制提交；约 10 分钟是每课的安排和负担边界，不是答题限时。",
+        "text_ref": "1. 题目不计分、不强制提交；约 10 分钟是每课开头抽问的时长安排，不是答题限时。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -274,7 +274,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 题单只记出处、为什么重要、最近一次提取日期、独立答出还是靠提示、卡在哪里、下次大约哪天；不记分数，不形成打卡或监督档案。",
+        "text_ref": "- 题单只记：题目出处、为什么重要、最近一次答的日期、独立答出还是靠提示、卡在哪里、下次大约哪天；不记分数，不做打卡或监督记录。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -294,7 +294,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 题单只记出处、为什么重要、最近一次提取日期、独立答出还是靠提示、卡在哪里、下次大约哪天；不记分数，不形成打卡或监督档案。",
+        "text_ref": "- 题单只记：题目出处、为什么重要、最近一次答的日期、独立答出还是靠提示、卡在哪里、下次大约哪天；不记分数，不做打卡或监督记录。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -346,7 +346,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- AI 自问自答不构成提取练习，人必须有真实思考机会。",
+        "text_ref": "- AI 自问自答不算数，必须是我自己真的想过、答过。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -365,7 +365,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- AI 自问自答不构成提取练习，人必须有真实思考机会。",
+        "text_ref": "- AI 自问自答不算数，必须是我自己真的想过、答过。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -384,7 +384,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 课堂提取练习的系统综述",
+        "text_ref": "- 项目规则（10 月 7 日版本）：一节一答、开头抽问、题单记什么和怎样验证的规定",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -403,7 +403,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 课堂提取练习的系统综述",
+        "text_ref": "- 项目规则（10 月 7 日版本）：一节一答、开头抽问、题单记什么和怎样验证的规定",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

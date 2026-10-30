@@ -551,24 +551,24 @@
       "purpose": "直接做和要同意的事、长期授权、无限制授权、受信任的 AI",
       "primary": true,
       "slug": "authorization",
-      "public_source_sha256": "7d8b62328ce1f8bef36a01bf5acfc4877a0db878c3082eb7299d69335ece66eb",
-      "public_source_bytes": 13013,
-      "src": "/_typeset/rule-sources/7d8b62328ce1f8bef36a01bf5acfc4877a0db878c3082eb7299d69335ece66eb.md",
-      "prose_sha256": "bcfe217d8c92e28a9bf29800ce6a4d72df57d5d125fc7abf7d8db2cb2eb9e693",
-      "search_text_sha256": "e117ec030d42f1126758ee8b1caef8b6547bede15c9f7214ebaba528d87dd349",
+      "public_source_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
+      "public_source_bytes": 12908,
+      "src": "/_typeset/rule-sources/1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6.md",
+      "prose_sha256": "765eb6734c58d1e58ba814e07b6223bf3c581ea79ceb5966201af69853dccf21",
+      "search_text_sha256": "ba57720db8e45bea2080384bc298c618c09b9e2b9e71e1ed81c192aa193dbd82",
       "page": "rule-authorization",
       "route": "/rules/authorization/",
       "parts": [
         {
           "id": "rule-authorization/rule-authorization-05",
-          "label": "原文 · E325 版，一字不改",
-          "markdown_sha256": "c015b449462414a14fc66c9047feec0e4f9d141e237e6511bf57663a6a9f8827",
-          "prose_sha256": "3e5288e15d8c0c5d06974a7847d8ad62441ec26e2262fd13d0b2b98c688eb6e5",
+          "label": "原文 · E325 版，略去个别私人领域字句",
+          "markdown_sha256": "5aec80d70d73835f958577d6a43773b7f24629a159501acc74d6ea5acc45db54",
+          "prose_sha256": "25f728e9eddec6e6d7fee8c7e5316bf16f6e9f4b95702e1d6ad2589b00e87aca",
           "selection": {
             "from": null,
             "to": "## 子代理和项目规则不扩大授权",
             "start": 0,
-            "end": 3230,
+            "end": 3195,
             "approved_omissions": []
           }
         },
@@ -580,8 +580,8 @@
           "selection": {
             "from": "## 子代理和项目规则不扩大授权",
             "to": "## 受信任的 AI",
-            "start": 3230,
-            "end": 4536,
+            "start": 3195,
+            "end": 4501,
             "approved_omissions": []
           }
         },
@@ -593,8 +593,8 @@
           "selection": {
             "from": "## 受信任的 AI",
             "to": null,
-            "start": 4536,
-            "end": 5201,
+            "start": 4501,
+            "end": 5166,
             "approved_omissions": []
           }
         }
@@ -609,11 +609,11 @@
       "purpose": "选工具和技能、领域入口、浏览器、软件更新、安装位置、汇报网页、网站和自动运行",
       "primary": true,
       "slug": "capabilities-runtime",
-      "public_source_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
-      "public_source_bytes": 24804,
-      "src": "/_typeset/rule-sources/bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144.md",
-      "prose_sha256": "098520401b6bc412955a2b10970a4268fb746cea4da20dba8c568c0c94a08f8d",
-      "search_text_sha256": "1b930b519a810ecb7cadaa7425cc0a1b8d4806f0d41e4a58e27463fa9556a0f0",
+      "public_source_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
+      "public_source_bytes": 24765,
+      "src": "/_typeset/rule-sources/8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5.md",
+      "prose_sha256": "653eec0c8daaf6e838ef53a9ef3e387f22ba9855acea3c930c418fedf5008480",
+      "search_text_sha256": "7ae6f507b0039b26729490160cf991fab456ccad10a488b819bf82a11de34a2f",
       "page": "rule-capabilities-runtime",
       "route": "/rules/capabilities-runtime/",
       "parts": [
@@ -633,13 +633,13 @@
         {
           "id": "rule-capabilities-runtime/rule-capabilities-runtime-12",
           "label": "原文 · E325 版 · 续",
-          "markdown_sha256": "4cda12cd17bd9d5f6732bdcfd092d20a59efd0f2b90b3fb35be51884eef6ad5d",
-          "prose_sha256": "702f4d0c9b8cd86c749e66b2af7ac186765051e2de8e9506c1bc105c0bfd0be8",
+          "markdown_sha256": "1f8631beef171715b2584e8a88718c061ac7560d914fb8a73ad8d41b78113ca1",
+          "prose_sha256": "06968d519e1b292a5546a6e5c3c6ddeea9fcf65d8150b612a3f375161a8d784e",
           "selection": {
             "from": "## 常用入口",
             "to": "## 浏览器",
             "start": 1440,
-            "end": 4026,
+            "end": 3999,
             "approved_omissions": []
           }
         },
@@ -651,8 +651,8 @@
           "selection": {
             "from": "## 浏览器",
             "to": "## 汇报、网站和自动运行的东西",
-            "start": 4026,
-            "end": 6063,
+            "start": 3999,
+            "end": 6036,
             "approved_omissions": []
           }
         },
@@ -664,8 +664,8 @@
           "selection": {
             "from": "## 汇报、网站和自动运行的东西",
             "to": "## 安装位置、配置和本机约定",
-            "start": 6063,
-            "end": 8703,
+            "start": 6036,
+            "end": 8676,
             "approved_omissions": []
           }
         },
@@ -677,8 +677,8 @@
           "selection": {
             "from": "## 安装位置、配置和本机约定",
             "to": null,
-            "start": 8703,
-            "end": 10203,
+            "start": 8676,
+            "end": 10176,
             "approved_omissions": []
           }
         }
@@ -1052,17 +1052,17 @@
       "purpose": "资料锁和解锁、可信位置、公开分级、私人仓库、备份跟随删除",
       "primary": true,
       "slug": "privacy-data",
-      "public_source_sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2",
-      "public_source_bytes": 12843,
-      "src": "/_typeset/rule-sources/7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2.md",
-      "prose_sha256": "d61ec08e7fa11ec80fbbcc250e2d1691d44cf3d1c38b4145707b9282f7a43b27",
-      "search_text_sha256": "31ebf58ee662facae4b7d9bcad5b6ff71c714dc01bbb491dc76f8ce411c3c77f",
+      "public_source_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
+      "public_source_bytes": 12816,
+      "src": "/_typeset/rule-sources/d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d.md",
+      "prose_sha256": "63636e8cec3c89317a9808ddf0374541d839e722d01136248cab44af6dac8b03",
+      "search_text_sha256": "57a06f9aaeadf743a6622a330a408335e3a1051eea2fe479f6eadabecc86962a",
       "page": "rule-privacy-data",
       "route": "/rules/privacy-data/",
       "parts": [
         {
           "id": "rule-privacy-data/rule-privacy-data-07",
-          "label": "原文 · E325 版，一字不改",
+          "label": "原文 · E325 版，略去个别私人领域字句",
           "markdown_sha256": "863dc65ee22feca349bd910d0c7c1bbc2b2b04bfb9fc1b58c54754136fd9d798",
           "prose_sha256": "361ca8eb07ebd8a742d32d428fa5d724210a2aa79280a27ed12fe45286eca557",
           "selection": {
@@ -1089,13 +1089,13 @@
         {
           "id": "rule-privacy-data/rule-privacy-data-09",
           "label": "原文 · E325 版 · 续",
-          "markdown_sha256": "2a746b503364a18ce066ac2499da85a7a9110052e4fd5f282aab13c0d158d50f",
-          "prose_sha256": "9dff9bf62bddc09c3f43477a7d8dcce819e80af3d2517e8fe5ba760717773247",
+          "markdown_sha256": "d28e899d7ac5ffb347daadb6dd5dce3be5160f3a5cb40ec2002e4be85f38628c",
+          "prose_sha256": "8ea98b0f3c71f947d04ad381f681d7b3099cc4d6b6f3f4ea08508693ccb3e1da",
           "selection": {
             "from": "## 公开个人数据分级表",
             "to": "## 私人仓库收口",
             "start": 3400,
-            "end": 4595,
+            "end": 4586,
             "approved_omissions": []
           }
         },
@@ -1107,8 +1107,8 @@
           "selection": {
             "from": "## 私人仓库收口",
             "to": null,
-            "start": 4595,
-            "end": 5247,
+            "start": 4586,
+            "end": 5238,
             "approved_omissions": []
           }
         }
@@ -1215,12 +1215,12 @@
       "sha256": "dbfbcb43d47a971561c356e24bf6c3ac8151cca2016de628a11c182ca1d83c47"
     },
     "docs/contracts/agents.authorization.md": {
-      "bytes": 13013,
-      "sha256": "7d8b62328ce1f8bef36a01bf5acfc4877a0db878c3082eb7299d69335ece66eb"
+      "bytes": 12908,
+      "sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6"
     },
     "docs/contracts/agents.capabilities-runtime.md": {
-      "bytes": 24804,
-      "sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144"
+      "bytes": 24765,
+      "sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5"
     },
     "docs/contracts/agents.claude-adapter.md": {
       "bytes": 25353,
@@ -1243,8 +1243,8 @@
       "sha256": "cdaddf9ceac99e58731c2228e17e2e64b188ea3376030f34c8b7d6be4aa588cc"
     },
     "docs/contracts/agents.privacy-data.md": {
-      "bytes": 12843,
-      "sha256": "7d2d995546f5d4b11e32f7e3865607eb494eb8ed14081437c3eeb3ef27ce75f2"
+      "bytes": 12816,
+      "sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d"
     },
     "docs/contracts/agents.protected-actions.md": {
       "bytes": 5650,

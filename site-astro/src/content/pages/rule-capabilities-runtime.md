@@ -36,7 +36,7 @@
    "activated_at": "2026-10-30T04:20:33.726689+08:00",
    "file": "sources/rules/docs/contracts/agents.capabilities-runtime.md",
    "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
-   "public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144"
+   "public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小 AI 助手抬手从洞洞板上取下放大镜看了看又挂回去，洞洞板上的 Chrome、Gmail、Google 云盘三个标志轻轻晃动；脚边贴着“E:”的绿色储物箱里几片绿叶慢慢舒展；右下笔记本电脑屏幕上的看板里，三个小圆点状态灯依次轻轻呼吸（绿、绿、黄）；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，三块小牌子上的字保持不动、不变形。",
   "registry": {
@@ -396,8 +396,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "e13a3fe272b1f89011c3833d688d5dd684974d4de200bdfab8159bd77c931450",
-  "converted_at_beijing": "2026-10-30T13:04:18+08:00"
+  "sha256": "646f0bfc01ff855c9ca54738c891bf5cae3caf3c23f46caee9a63ef2b1cc65b7",
+  "converted_at_beijing": "2026-10-31T04:18:20+08:00"
  }
 }
 ---
@@ -2927,7 +2927,7 @@
    "file": "docs/contracts/agents.capabilities-runtime.md",
    "release": "E325",
    "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
-   "public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
+   "public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
    "from": null,
    "to": "## 常用入口",
    "start": 0,
@@ -2950,7 +2950,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-11",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
+  "source_public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-11"
  },
  "layout": {
@@ -3122,11 +3122,11 @@ owner: `E:\.agents`
    "file": "docs/contracts/agents.capabilities-runtime.md",
    "release": "E325",
    "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
-   "public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
+   "public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
    "from": "## 常用入口",
    "to": "## 浏览器",
    "start": 1440,
-   "end": 4026,
+   "end": 3999,
    "approved_omissions": []
   },
   "title": "原文（二）：常用入口",
@@ -3140,7 +3140,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-12",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
+  "source_public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-12"
  },
  "layout": {
@@ -3230,7 +3230,7 @@ owner: `E:\.agents`
 - **快速计算机清理文件。** 直达 PCConfig 的 `E:\PCConfig\docs\runtime\ai-cache-sweep.md`“快速计算机清理文件”流程：先执行已核实的明显无用项并清本批回收实体、回读实际空间，疑难对象和基座源码修复并行；复用已有证据，不反复整盘扫描，不把全量引擎修好当作普通项清理的前置。
 - **内存快满时自动处理。** AI 不等本人，按 PCConfig 的 `E:\PCConfig\registries\memory_guard.json` 登记的失控优先、安全回收与急救规则自动处理；有失控增长者时只处理增长者，清单及规则外的对象不动。AI 自己的任务若是占用大户，先停自己的。触发阈值、安全边界和分类只读 PCConfig 登记，不在全局规则复制；AI 安装会常驻后台的软件时，同时在该登记给它分类。
 - **生成图片和设计画面。** 任何项目里的静态画面默认用生图（Codex 自带生图；Claude 写好提示派 Luna 调用）：照片感画面、插画、封面、图标和标志、带固定文字的图、精准抠图、透明底和精准局部替换都算；网页、PPT、视频的设计也先生图定样子，再照图写代码。画面里用代码的只有四类：动效，会变的内容（计数、日期、状态、实时数据），数据图表，原件证据的摆放和打码；证据类东西（截图、聊天记录、单据、证件和当证据用的实拍）永不生图，生成图里的字逐字和原文核对，怎么派、怎么验收和管版本见 `image-generation` 技能。
-- **个人领域直达。** 健康、本人诉讼和微信分别直达 `personal-health`、`personal-litigation`、`wechat-direct`；只有原件位置不明、要跨已允许的位置查找或原来的定位失效时，才用 `personal-materials` 找到、打开并核对原件；精确录音和扫描件分别交给 `chinese-asr`、`localocr`。照片视频只在本人明确要求时做成独立的有界任务。没有独立领域项目时，直接用当前对话的事实和会改变答案的最少原件回答。不恢复中央个人数据库、统一事件图、跨领域画像、后台同步、总技能或默认的全景上下文。
+- **个人领域直达。** 健康和微信分别直达 `personal-health`、`wechat-direct`；只有原件位置不明、要跨已允许的位置查找或原来的定位失效时，才用 `personal-materials` 找到、打开并核对原件；精确录音和扫描件分别交给 `chinese-asr`、`localocr`。照片视频只在本人明确要求时做成独立的有界任务。没有独立领域项目时，直接用当前对话的事实和会改变答案的最少原件回答。不恢复中央个人数据库、统一事件图、跨领域画像、后台同步、总技能或默认的全景上下文。
 - **Google。** 现行入口是 `google-workspace-direct`：仅通过固定 PCConfig OAuth/provider 处理 Gmail 和 Google Drive，各自按能力验收，具体操作见该技能；日历保持冻结，Google Tasks 不再接入（要本人做、要本人选的事登记进驾驶舱）。本人明确要写入时，也只调用这个入口已有的精确操作；不落库、不自动同步、不换账号，也不悄悄改走别的接入、连接器、浏览器或 rclone。入口没接好、账号失效或能力不够时如实说不可用或有限，不造第二 provider；写入、分享、发送和邀请要有对应能力和授权，删除、公开分享、发送和邀请还须绑定精确外部动作授权。Google Admin、支付和 Photos 不属于该入口。配置和凭据文件存在不说明账号、读取或写入现在可用。
 
 ## 云端素材通道
@@ -3259,11 +3259,11 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "file": "docs/contracts/agents.capabilities-runtime.md",
    "release": "E325",
    "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
-   "public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
+   "public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
    "from": "## 浏览器",
    "to": "## 汇报、网站和自动运行的东西",
-   "start": 4026,
-   "end": 6063,
+   "start": 3999,
+   "end": 6036,
    "approved_omissions": []
   },
   "title": "原文（三）：浏览器",
@@ -3282,7 +3282,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-13",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
+  "source_public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-13"
  },
  "layout": {
@@ -3422,11 +3422,11 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
    "file": "docs/contracts/agents.capabilities-runtime.md",
    "release": "E325",
    "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
-   "public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
+   "public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
    "from": "## 汇报、网站和自动运行的东西",
    "to": "## 安装位置、配置和本机约定",
-   "start": 6063,
-   "end": 8703,
+   "start": 6036,
+   "end": 8676,
    "approved_omissions": []
   },
   "title": "原文（四）：汇报、网站和自动运行；软件更新和兼容",
@@ -3440,7 +3440,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-14",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
+  "source_public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-14"
  },
  "layout": {
@@ -3572,11 +3572,11 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
    "file": "docs/contracts/agents.capabilities-runtime.md",
    "release": "E325",
    "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
-   "public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
+   "public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
    "from": "## 安装位置、配置和本机约定",
    "to": null,
-   "start": 8703,
-   "end": 10203,
+   "start": 8676,
+   "end": 10176,
    "approved_omissions": []
   },
   "title": "原文（五）：安装位置、配置和本机约定",
@@ -3595,7 +3595,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-15",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "bdbcd90d1f4e00875755d28cf43edbeaadea5ede4462f6080cc0e62e59b23144",
+  "source_public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-15"
  },
  "layout": {

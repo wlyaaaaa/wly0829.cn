@@ -202,7 +202,6 @@
      "name": "让 AI 帮我写和做",
      "line": "把事讲明白、照我的意思拟消息，写正式文书和工作文件，给文稿排版、出 PDF，做成视频。",
      "members": [
-      "/projects/personal-expression/",
       "/projects/personal-formal-documents/",
       "/projects/work-delivery-copilot/",
       "/projects/typora-theme-pack/",
@@ -210,7 +209,6 @@
      ],
      "screen": "projects-home-35",
      "cards": [
-      "projects-home-36",
       "projects-home-37",
       "projects-home-38",
       "projects-home-39",
@@ -227,7 +225,8 @@
       "/projects/codex-agent-model-benchmark/",
       "/projects/wechat-history-ai-bridge/",
       "/projects/ramdisk-guardian/",
-      "/projects/meshclip-kit/"
+      "/projects/meshclip-kit/",
+      "/projects/personal-expression/"
      ],
      "screen": "projects-home-41",
      "cards": [
@@ -236,7 +235,8 @@
       "projects-home-44",
       "projects-home-45",
       "projects-home-15",
-      "projects-home-24"
+      "projects-home-24",
+      "projects-home-36"
      ]
     }
    ],
@@ -254,7 +254,7 @@
     },
     {
      "id": "n-common",
-     "text": "常用 24 个",
+     "text": "常用 23 个",
      "meaning": "page.json 的 status 为“常用”",
      "as_of": "2026-10-30 11:06",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
@@ -274,7 +274,7 @@
     },
     {
      "id": "n-frozen",
-     "text": "冻结 6 个",
+     "text": "冻结 7 个",
      "meaning": "page.json 的 status 为“冻结”（kind 为 frozen）",
      "as_of": "2026-10-30 11:06",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
@@ -305,7 +305,7 @@
     },
     {
      "id": "n-group-sizes",
-     "text": "让 AI 守规矩、用对工具 3 个项目、让 AI 管好秘密 2 个项目、让 AI 管好备份和恢复 4 个项目、让电脑顺手、状态看得见 5 个项目、人不在电脑前也能办事 2 个项目、让 AI 懂我 5 个项目、让 AI 读懂我的材料 5 个项目、让 AI 帮我写和做 5 个项目、冻结（AI 不再维护） 6 个项目",
+     "text": "让 AI 守规矩、用对工具 3 个项目、让 AI 管好秘密 2 个项目、让 AI 管好备份和恢复 4 个项目、让电脑顺手、状态看得见 5 个项目、人不在电脑前也能办事 2 个项目、让 AI 懂我 5 个项目、让 AI 读懂我的材料 5 个项目、让 AI 帮我写和做 4 个项目、冻结（AI 不再维护） 7 个项目",
      "meaning": "每组有几个项目；和实际显示的卡片数一致",
      "as_of": "2026-10-30 11:06",
      "source": "registry.groups.cards 关联 screens.id，只统计显示的项目卡片",
@@ -315,7 +315,7 @@
     },
     {
      "id": "n-in-use",
-     "text": "31 个在用的项目",
+     "text": "30 个在用的项目",
      "meaning": "常用＋偶尔用（不含冻结）",
      "as_of": "2026-10-30 11:06",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
@@ -325,7 +325,7 @@
     },
     {
      "id": "n-features",
-     "text": "功能 1012 条（含冻结项目已停用的 99 条）",
+     "text": "功能 1012 条（含冻结项目已停用的 119 条）",
      "meaning": "各项目页 registry.features 条数相加；所有登记状态都计入，冻结项目另计停用条数。",
      "as_of": "2026-10-30 11:06",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
@@ -1083,8 +1083,8 @@
  },
  "source": {
   "page": "sources/pages/projects-home/page.json",
-  "sha256": "7df71291cd367142ab85e46b8da36f18405b11ba0aa72e67db10130fba23407e",
-  "converted_at_beijing": "2026-10-30T14:00:58+08:00"
+  "sha256": "bfd388161dd62d0f216a3dce575a1c6f13a048b347268dded7ed0e96b7677b88",
+  "converted_at_beijing": "2026-10-31T04:24:58+08:00"
  }
 }
 ---
@@ -1171,7 +1171,7 @@
      "align": "left",
      "size": "large",
      "weight": "bold",
-     "text_ref": "31 个在用的项目",
+     "text_ref": "30 个在用的项目",
      "row": "hero",
      "bold": true
     },
@@ -1273,7 +1273,7 @@
      "align": "left",
      "size": "large",
      "weight": "bold",
-     "text_ref": "31 个在用的项目",
+     "text_ref": "30 个在用的项目",
      "bold": true
     },
     {
@@ -1404,21 +1404,21 @@
 
 # 项目
 
-**31 个在用的项目，让 AI 真能替我办事：管电脑和备份、找照片视频和文件原件、读微信聊天、听录音、认图片里的字、守密码，替我拟消息、写正式文书；我不在电脑前，手机上的 AI 也能在这台电脑上动手。**
+**30 个在用的项目，让 AI 真能替我办事：管电脑和备份、找照片视频和文件原件、读微信聊天、听录音、认图片里的字、守密码，替我拟消息、写正式文书；我不在电脑前，手机上的 AI 也能在这台电脑上动手。**
 
 | 一共 | 常用 | 偶尔用 | 冻结 |
 |---|---|---|---|
-| **37 个** | **24 个** | **7 个** | **6 个** |
+| **37 个** | **23 个** | **7 个** | **7 个** |
 
 公开 **19 个** · 私有 **18 个**
 
-功能 **1012 条**（各项目页“全部功能”相加，含冻结项目已停用的 99 条）
+功能 **1012 条**（各项目页“全部功能”相加，含冻结项目已停用的 119 条）
 
 截至北京时间 2026-10-30 11:06
 
 **按本事分组**
 
-〔让 AI 守规矩、用对工具〕3 个项目　〔让 AI 管好秘密〕2 个项目　〔让 AI 管好备份和恢复〕4 个项目　〔让电脑顺手、状态看得见〕5 个项目　〔人不在电脑前也能办事〕2 个项目　〔让 AI 懂我〕5 个项目　〔让 AI 读懂我的材料〕5 个项目　〔让 AI 帮我写和做〕5 个项目　〔冻结（AI 不再维护）〕6 个项目
+〔让 AI 守规矩、用对工具〕3 个项目　〔让 AI 管好秘密〕2 个项目　〔让 AI 管好备份和恢复〕4 个项目　〔让电脑顺手、状态看得见〕5 个项目　〔人不在电脑前也能办事〕2 个项目　〔让 AI 懂我〕5 个项目　〔让 AI 读懂我的材料〕5 个项目　〔让 AI 帮我写和做〕4 个项目　〔冻结（AI 不再维护）〕7 个项目
 
 点项目名进项目页；点“直达”后面的组名，直接跳到那个项目的这组功能。
 
@@ -5304,7 +5304,7 @@
    "status": "常用",
    "visibility": "private",
    "github": null,
-   "tagline": "让 AI 当老师，按一条路线把 AI 应用学明白。",
+   "tagline": "让 AI 当老师，按一条排好的路线教我、记进度、断了能接上。",
    "links": [
     {
      "text": "排课和备课",
@@ -5413,7 +5413,7 @@
 ```
 
 **〔学习方法〕**　常用　　私有
-让 AI 当老师，按一条路线把 AI 应用学明白。
+让 AI 当老师，按一条排好的路线教我、记进度、断了能接上。
 直达：〔排课和备课〕　〔上课和练习〕　〔反馈和纠错〕
 
 ::screen{#projects-home-29 section="groups"}
@@ -6440,163 +6440,6 @@
 ## 让 AI 帮我写和做
 
 把事讲明白、照我的意思拟消息，写正式文书和工作文件，给文稿排版、出 PDF，做成视频。
-
-::screen{#projects-home-36 section="groups"}
-
-```typeset
-{
- "screen": {
-  "id": "projects-home-36",
-  "shape": "card",
-  "section": "groups",
-  "title": "个人表达",
-  "scene": "单张项目卡片，1200×750 横放，画布就是卡片本身：白底、细浅绿描边、大圆角、很淡的阴影，四周只留很窄的白边，不画页面背景、别的卡片或组名。所有项目卡同一个版式、同一配色，风格照样张（白底、纯绿主色 #16a34a、深绿标题、深蓝灰正文、水彩插画）。\n①左上：项目名，大号粗体绿色字，画成链接样式（细下划线、末尾小 ↗）；紧右边是状态小标签：常用＝浅绿底深绿字，偶尔用＝白底浅绿描边、灰绿字，冻结＝浅灰底灰字。②右上角：公开项目画〔GitHub〕徽章（深绿底白字圆角，左边白色 GitHub 猫头标志）；私有项目画浅灰底深灰字的“私有”徽章，左边一把小锁；冻结项目不画徽章。③左边中间：深蓝灰常规字的一句话，最多两行。④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。每张卡的插画内容各不相同，画法统一。⑤冻结项目在一句话下方写明“停下原因：……”，再写“现在：……”；原因较长时允许自然折成两行，文字仍要可读，里面〔〕括起来的是链接。⑥最下面一行：灰绿小字“直达：”，后面最多 3 个浅绿底圆角小胶囊，每个是链接（绿色字、末尾小 ↗），一行排完。卡上的字以“字”为准，一字不差；不画连线。",
-  "portrait": "卡片不画竖版（拼页按组内张数排满每一行）。",
-  "links": [
-   {
-    "text": "个人表达",
-    "href": "/projects/personal-expression/"
-   },
-   {
-    "text": "讲给我听",
-    "href": "/projects/personal-expression/#g-explain"
-   },
-   {
-    "text": "替我拟消息",
-    "href": "/projects/personal-expression/#g-reply"
-   },
-   {
-    "text": "记住纠正",
-    "href": "/projects/personal-expression/#g-learn"
-   }
-  ],
-  "anchors": [
-   {
-    "id": "p-personal-expression",
-    "text": "个人表达"
-   }
-  ],
-  "live": [],
-  "screenshots": [],
-  "chain": "",
-  "reuse": "",
-  "card": {
-   "name": "个人表达",
-   "href": "/projects/personal-expression/",
-   "status": "常用",
-   "visibility": "private",
-   "github": null,
-   "tagline": "把事讲到我听懂，也照我的意思帮我拟消息。",
-   "links": [
-    {
-     "text": "讲给我听",
-     "href": "/projects/personal-expression/#g-explain"
-    },
-    {
-     "text": "替我拟消息",
-     "href": "/projects/personal-expression/#g-reply"
-    },
-    {
-     "text": "记住纠正",
-     "href": "/projects/personal-expression/#g-learn"
-    }
-   ]
-  }
- },
- "layout": {
-  "h": {
-   "source_kind": "original_image",
-   "source_size": [
-    1586,
-    992
-   ],
-   "source_sha256": "c2da6a5d12108d5c7dfff92e58d5ff5c4e5e67826616410fd5967e3de624f1f3",
-   "shape": "card",
-   "blocks": [
-    {
-     "type": "project_tile",
-     "text_ref": "个人表达",
-     "align": "left",
-     "illustration": "right_inside",
-     "connector": "none",
-     "icons": "none",
-     "size": "medium",
-     "title_style": "sans_bold",
-     "title_position": "top_left",
-     "status_position": "after_title",
-     "badge_position": "top_right",
-     "tagline_position": "left_inside_below_title",
-     "footer_position": "bottom_left",
-     "link_layout": "one_row",
-     "show_badge": true,
-     "frozen": false,
-     "source_regions": {
-      "title": "upper_left",
-      "tagline": "middle_left",
-      "illustration": "upper_right",
-      "retirement": null
-     }
-    }
-   ],
-   "portrait_required": true,
-   "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
-  },
-  "v": {
-   "source_kind": "mobile_reflow_from_horizontal",
-   "source_size": [
-    1586,
-    992
-   ],
-   "source_sha256": "c2da6a5d12108d5c7dfff92e58d5ff5c4e5e67826616410fd5967e3de624f1f3",
-   "shape": "card",
-   "blocks": [
-    {
-     "type": "project_tile",
-     "text_ref": "个人表达",
-     "align": "left",
-     "illustration": "right_inside",
-     "connector": "none",
-     "icons": "none",
-     "size": "medium",
-     "title_style": "sans_bold",
-     "title_position": "top_left",
-     "status_position": "after_title",
-     "footer_position": "bottom_left",
-     "link_layout": "auto",
-     "show_badge": true,
-     "frozen": false
-    }
-   ],
-   "portrait_required": true,
-   "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
-  }
- },
- "images": [
-  {
-   "role": "illustration",
-   "slot_ordinal": 1,
-   "orientations": [
-    "h"
-   ],
-   "asset": "_library/round3/clean-assets/png/48-main-personal-expression-clean.png",
-   "fallback": false,
-   "semantic_status": "matched_existing_objects",
-   "key": "main-personal-expression",
-   "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
-   "sha256": "bd2a55824d3c0d660ba3ec66f21d697f621eaa21cb14c7fc62a0c8f0eec1ca44",
-   "status": "ready",
-   "original_elements": [
-    "钢笔、便签、信封"
-   ],
-   "hidden": false
-  }
- ]
-}
-```
-
-**〔个人表达〕**　常用　　私有
-把事讲到我听懂，也照我的意思帮我拟消息。
-直达：〔讲给我听〕　〔替我拟消息〕　〔记住纠正〕
 
 ::screen{#projects-home-37 section="groups"}
 
@@ -8243,3 +8086,153 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
 停下原因：它依赖的 KDE Connect 已在两台电脑上卸载，项目没有剩余用途；仓库保留，已归档
 现在：两台电脑之间的文字剪贴板由电脑配置的三端文字同步承担，主机和副机之间走既有的 PCConfig Clip Peer，和手机无关，换手机不影响
 直达：〔为什么冻结〕
+
+::screen{#projects-home-36 section="frozen"}
+
+```typeset
+{
+ "screen": {
+  "id": "projects-home-36",
+  "shape": "card",
+  "section": "frozen",
+  "title": "个人表达",
+  "scene": "单张项目卡片，1200×750 横放，画布就是卡片本身：白底、细浅绿描边、大圆角、很淡的阴影，四周只留很窄的白边，不画页面背景、别的卡片或组名。所有项目卡同一个版式、同一配色，风格照样张（白底、纯绿主色 #16a34a、深绿标题、深蓝灰正文、水彩插画）。\n①左上：项目名，大号粗体绿色字，画成链接样式（细下划线、末尾小 ↗）；紧右边是状态小标签：常用＝浅绿底深绿字，偶尔用＝白底浅绿描边、灰绿字，冻结＝浅灰底灰字。②右上角：公开项目画〔GitHub〕徽章（深绿底白字圆角，左边白色 GitHub 猫头标志）；私有项目画浅灰底深灰字的“私有”徽章，左边一把小锁；冻结项目不画徽章。③左边中间：深蓝灰常规字的一句话，最多两行。④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。每张卡的插画内容各不相同，画法统一。⑤冻结项目在一句话下方写明“停下原因：……”，再写“现在：……”；原因较长时允许自然折成两行，文字仍要可读，里面〔〕括起来的是链接。⑥最下面一行：灰绿小字“直达：”，后面最多 3 个浅绿底圆角小胶囊，每个是链接（绿色字、末尾小 ↗），一行排完。卡上的字以“字”为准，一字不差；不画连线。",
+  "portrait": "卡片不画竖版（拼页按组内张数排满每一行）。",
+  "links": [
+   {
+    "text": "个人表达",
+    "href": "/projects/personal-expression/"
+   },
+   {
+    "text": "为什么存档",
+    "href": "/projects/personal-expression/#personal-expression-01"
+   }
+  ],
+  "anchors": [
+   {
+    "id": "p-personal-expression",
+    "text": "个人表达"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": "",
+  "card": {
+   "name": "个人表达",
+   "href": "/projects/personal-expression/",
+   "status": "冻结",
+   "visibility": "frozen",
+   "github": null,
+   "tagline": "原来把事讲到我听懂、照我的意思帮我拟消息；10 月 31 日起存档。",
+   "links": [
+    {
+     "text": "为什么存档",
+     "href": "/projects/personal-expression/#personal-expression-01"
+    }
+   ],
+   "stop_reason": "10 月 31 日存档：内容已经归位，项目不再维护",
+   "now": "现在：通用说话规矩在约法 L1–L6，只关于我的说话习惯在个人理解库；“讲给我听”技能已删除，“替我拟消息”技能照常在用"
+  }
+ },
+ "layout": {
+  "h": {
+   "source_kind": "original_image",
+   "source_size": [
+    1586,
+    992
+   ],
+   "source_sha256": "c2da6a5d12108d5c7dfff92e58d5ff5c4e5e67826616410fd5967e3de624f1f3",
+   "shape": "card",
+   "blocks": [
+    {
+     "type": "project_tile",
+     "text_ref": "个人表达",
+     "align": "left",
+     "illustration": "right_inside",
+     "connector": "none",
+     "icons": "none",
+     "size": "medium",
+     "title_style": "sans_bold",
+     "title_position": "top_left",
+     "status_position": "after_title",
+     "badge_position": "top_right",
+     "tagline_position": "left_inside_below_title",
+     "footer_position": "bottom_left",
+     "link_layout": "one_row",
+     "show_badge": false,
+     "frozen": true,
+     "source_regions": {
+      "title": "upper_left",
+      "tagline": "middle_left",
+      "illustration": "upper_right"
+     },
+     "link_fill_width": false,
+     "separator_before_footer": true,
+     "retirement_inline_link_style": "underlined_inline"
+    }
+   ],
+   "portrait_required": true,
+   "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
+  },
+  "v": {
+   "source_kind": "mobile_reflow_from_horizontal",
+   "source_size": [
+    1586,
+    992
+   ],
+   "source_sha256": "c2da6a5d12108d5c7dfff92e58d5ff5c4e5e67826616410fd5967e3de624f1f3",
+   "shape": "card",
+   "blocks": [
+    {
+     "type": "project_tile",
+     "text_ref": "个人表达",
+     "align": "left",
+     "illustration": "right_inside",
+     "connector": "none",
+     "icons": "none",
+     "size": "medium",
+     "title_style": "sans_bold",
+     "title_position": "top_left",
+     "status_position": "after_title",
+     "footer_position": "bottom_left",
+     "link_layout": "auto",
+     "show_badge": false,
+     "frozen": true,
+     "link_fill_width": false,
+     "separator_before_footer": true,
+     "retirement_inline_link_style": "underlined_inline"
+    }
+   ],
+   "portrait_required": true,
+   "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
+  }
+ },
+ "images": [
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/48-main-personal-expression-clean.png",
+   "fallback": false,
+   "semantic_status": "matched_existing_objects",
+   "key": "main-personal-expression",
+   "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
+   "sha256": "bd2a55824d3c0d660ba3ec66f21d697f621eaa21cb14c7fc62a0c8f0eec1ca44",
+   "status": "ready",
+   "original_elements": [
+    "钢笔、便签、信封"
+   ],
+   "hidden": false
+  }
+ ]
+}
+```
+
+**〔个人表达〕**　冻结
+原来把事讲到我听懂、照我的意思帮我拟消息；10 月 31 日起存档。
+停下原因：10 月 31 日存档：内容已经归位，项目不再维护
+现在：通用说话规矩在约法 L1–L6，只关于我的说话习惯在个人理解库；“讲给我听”技能已删除，“替我拟消息”技能照常在用
+直达：〔为什么存档〕

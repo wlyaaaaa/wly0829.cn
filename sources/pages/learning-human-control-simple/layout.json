@@ -74,7 +74,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "这一步怎样帮助学习",
+        "text_ref": "这一步在项目里管什么",
         "columns": 3,
         "last_full_width": false,
         "icon_position": "header_left",
@@ -98,7 +98,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "这一步怎样帮助学习",
+        "text_ref": "这一步在项目里管什么",
         "columns": 1,
         "icon_position": "header_left",
         "header_icon": [
@@ -384,7 +384,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 自主支持对自主感、胜任感和内在动机的系统综述与元分析",
+        "text_ref": "- 分工写在规则里（10 月 7 日版本）：技术判断归 AI 老师；我的经历、目标、花钱、授权和对外动作归我。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -403,7 +403,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 自主支持对自主感、胜任感和内在动机的系统综述与元分析",
+        "text_ref": "- 分工写在规则里（10 月 7 日版本）：技术判断归 AI 老师；我的经历、目标、花钱、授权和对外动作归我。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

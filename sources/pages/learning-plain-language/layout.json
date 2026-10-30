@@ -5,7 +5,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "怎样把专业资料讲明白，而不是删掉细节",
+        "text_ref": "讲义：先写完整，定稿成网页，只留一份",
         "align": "left",
         "size": "large",
         "row": "top",
@@ -40,7 +40,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "怎样把专业资料讲明白，而不是删掉细节",
+        "text_ref": "讲义：先写完整，定稿成网页，只留一份",
         "align": "left",
         "size": "large"
       },
@@ -74,7 +74,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "这一步怎样帮助学习",
+        "text_ref": "这一部分做什么",
         "columns": 3,
         "last_full_width": false,
         "icon_position": "header_left",
@@ -98,7 +98,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "这一步怎样帮助学习",
+        "text_ref": "这一部分做什么",
         "columns": 1,
         "icon_position": "header_left",
         "header_icon": [
@@ -135,7 +135,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **系统核对并处理**　先核对来源、旧单元和反例，再从现实问题、结论和例子讲到术语、取舍与必要技术细节；草稿可以先写，上课前定稿成网页。",
+        "text_ref": "1. **AI 核对并写稿**　先核对来源、已经交过的讲义和反例，再写草稿：从现实问题、结论和例子讲起，再补术语、取舍和必要的技术细节；上课前定稿成网页。",
         "row": "start",
         "columns": 1,
         "icons": "none",
@@ -167,7 +167,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **系统核对并处理**　先核对来源、旧单元和反例，再从现实问题、结论和例子讲到术语、取舍与必要技术细节；草稿可以先写，上课前定稿成网页。",
+        "text_ref": "1. **AI 核对并写稿**　先核对来源、已经交过的讲义和反例，再写草稿：从现实问题、结论和例子讲起，再补术语、取舍和必要的技术细节；上课前定稿成网页。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -187,7 +187,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 先给一句可行动的结论，再补理解它所需的最少背景。",
+        "text_ref": "1. 每节先写一句结论，再补读懂它需要的背景。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -207,7 +207,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 先给一句可行动的结论，再补理解它所需的最少背景。",
+        "text_ref": "1. 每节先写一句结论，再补读懂它需要的背景。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -227,7 +227,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 读完一节，人移开讲义用语音或文字自己答；老师不抢答，保留正确部分，只纠正最影响结论的一处。对话里已经讲清的段落不用再读，学过的核心能解释就可跳过。3—5 分钟、30—60 秒是参考负担，不是计时考试。",
+        "text_ref": "- 我读完一节，移开讲义用语音或文字自己答；老师不抢答，保留对的部分，只纠正最影响结论的一处。对话里已经讲清的段落可以不读，我已经能讲出来的部分可以跳过。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -247,7 +247,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 读完一节，人移开讲义用语音或文字自己答；老师不抢答，保留正确部分，只纠正最影响结论的一处。对话里已经讲清的段落不用再读，学过的核心能解释就可跳过。3—5 分钟、30—60 秒是参考负担，不是计时考试。",
+        "text_ref": "- 我读完一节，移开讲义用语音或文字自己答；老师不抢答，保留对的部分，只纠正最影响结论的一处。对话里已经讲清的段落可以不读，我已经能讲出来的部分可以跳过。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -267,7 +267,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "3. 写清现实问题和一句结论。",
+        "text_ref": "3. 写清这篇要解决的现实问题和一句结论。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -287,7 +287,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "3. 写清现实问题和一句结论。",
+        "text_ref": "3. 写清这篇要解决的现实问题和一句结论。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -377,7 +377,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 自我解释平均效应与适用条件",
+        "text_ref": "- 项目规则（10 月 7 日版本）：讲义写法、定稿和唯一现行稿的规定",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -396,7 +396,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 自我解释平均效应与适用条件",
+        "text_ref": "- 项目规则（10 月 7 日版本）：讲义写法、定稿和唯一现行稿的规定",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

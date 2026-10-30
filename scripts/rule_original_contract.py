@@ -64,6 +64,25 @@ OMISSIONS = {
     'docs/contracts/agents.privacy-data.md': ['`wlyaaaaa/Key` 仓库和 '],
 }
 
+# Public-site topic omissions (owner, 2026-10-31): litigation, mediation and
+# dispute wording never reaches public rule originals. Applied by the native
+# rules snapshot (astro_rules.public_body) on top of the verified active text;
+# the active rules themselves are unchanged. A phrase that no longer occurs is
+# skipped; the publication word gate still catches any new wording.
+TOPIC_OMISSIONS = {
+    'docs/contracts/agents.authorization.md': ['案件里的调解、和解、撤诉、放弃请求仍按诉讼规则（默认不同意诉前调解）；'],
+    'docs/contracts/agents.capabilities-runtime.md': ['、本人诉讼', '、`personal-litigation`'],
+    'docs/contracts/agents.privacy-data.md': ['没公开的纠纷材料、'],
+}
+
+
+def omit_public_topics(text, relative):
+    for phrase in TOPIC_OMISSIONS.get(relative, []):
+        if text.count(phrase) > 1:
+            raise ValueError('Topic omission is ambiguous: ' + relative)
+        text = text.replace(phrase, '', 1)
+    return text
+
 # These boundaries come from the pre-refresh approved page ranges. A new
 # independent source chapter does not enter a range merely to satisfy a digest.
 RANGES = {

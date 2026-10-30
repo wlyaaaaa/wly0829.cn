@@ -81,9 +81,9 @@
      "text": "个人正式文书"
     },
     {
-     "target": "/skills/explain-to-me/",
+     "target": "/rules/charter/#L1",
      "screen": "skill-reply-as-me-04",
-     "text": "讲给我听"
+     "text": "约法 L1–L6"
     }
    ]
   },
@@ -103,8 +103,8 @@
  },
  "source": {
   "page": "sources/pages/skill-reply-as-me/page.json",
-  "sha256": "62f0b2a96cf93cc3dc040c3f02e8c634f9152c46e4d3b7fbcc8eb8e859e8b678",
-  "converted_at_beijing": "2026-10-30T14:00:59+08:00"
+  "sha256": "e530bc7fec23115a3806730f6d94bfbed295b0ba656bf28df212962dd5d62a58",
+  "converted_at_beijing": "2026-10-31T04:31:33+08:00"
  }
 }
 ---
@@ -206,7 +206,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "技能名reply-as-me·个人表达项目的入口"
+     "text_ref": "技能名reply-as-me·原属个人表达项目"
     },
     {
      "type": "points_card",
@@ -331,7 +331,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "技能名reply-as-me·个人表达项目的入口"
+     "text_ref": "技能名reply-as-me·原属个人表达项目"
     },
     {
      "type": "points_card",
@@ -425,7 +425,7 @@
 
 # 替我拟消息
 
-技能名 reply-as-me · 〔个人表达〕项目的入口
+技能名 reply-as-me · 原属〔个人表达〕项目（10 月 31 日已存档），现在是单独的技能
 
 **它做什么**
 我已经想好要说什么，AI 先看这条发给谁、我们什么关系，参考我平时对这类人怎么说，写成一条自然、合适、不别扭的消息。可以比我以前说得好，不追求像我。它不替我定说什么，也不替我发。
@@ -784,7 +784,7 @@
      "type": "notice",
      "tone": "green",
      "inline_button": "去看全部功能",
-     "text_ref": "这个技能能做的事，就是个人表达项目里“替我拟消息”和“记住纠正”两组功能。去看全"
+     "text_ref": "这个技能能做的事，就是原来个人表达项目"
     },
     {
      "type": "prose",
@@ -866,7 +866,7 @@
      "type": "notice",
      "tone": "green",
      "inline_button": "去看全部功能",
-     "text_ref": "这个技能能做的事，就是个人表达项目里“替我拟消息”和“记住纠正”两组功能。去看全"
+     "text_ref": "这个技能能做的事，就是原来个人表达项目"
     },
     {
      "type": "prose",
@@ -950,7 +950,7 @@
 
 ## 能做的事
 
-这个技能能做的事，就是个人表达项目里“替我拟消息”和“记住纠正”两组功能。〔去看全部功能〕
+这个技能能做的事，就是原来个人表达项目（已存档）里“替我拟消息”和“记住纠正”两组功能。〔去看全部功能〕
 
 拟稿的五步和规矩（先看关系、没样本照写、意思不变、不搬旧事、拿不准就问）见〔从意思到一条消息〕。
 
@@ -982,8 +982,8 @@
     "href": "/skills/personal-formal-documents/"
    },
    {
-    "text": "讲给我听",
-    "href": "/skills/explain-to-me/"
+    "text": "约法 L1–L6",
+    "href": "/rules/charter/#L1"
    }
   ],
   "anchors": [],
@@ -1245,7 +1245,7 @@
 | 读微信聊天、取聊天里的图片和表情 | 〔微信直读〕 |
 | 我的背景、经历和偏好 | 〔个人理解库〕 |
 | 合同、协议、通知这类正式文书的正文 | 〔个人正式文书〕 |
-| AI 向我解释事情 | 〔讲给我听〕 |
+| AI 向我解释事情 | 〔约法 L1–L6〕的说话规矩 |
 
 **不做**
 - 不发送。

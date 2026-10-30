@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/personal-materials-bounded-discovery/page.json",
-  "sha256": "3d9622069ad00c459de012277b252407168c09e7c36df17900d3aed5cadba38c",
-  "converted_at_beijing": "2026-10-30T11:16:50+08:00"
+  "sha256": "56c77c4cc14345120c3fb30eae85bad234afbba70c79fa97ec5325c8fbe3f31e",
+  "converted_at_beijing": "2026-10-31T04:18:20+08:00"
  }
 }
 ---
@@ -623,7 +623,7 @@
 
 ## 当前怎样实现
 
-- 登记为 filesystem-directory 的非媒体来源（排除已经退役的媒体来源身份）现在有 35 个；10 月 20 日（提交 9b8e35c）起，其中只有蓝湖产品资料（learning-lizhen-reference）保留现场扫描，其余都走文件名清单。
+- 登记为 filesystem-directory 的非媒体来源（排除已经退役的媒体来源身份）现在有 35 个；10 月 20 日（提交 9b8e35c）起，其中只有蓝湖产品资料那一个文件夹保留现场扫描，其余都走文件名清单。
 
 - 文件名清单支线覆盖登记为 filename-index-directory 的 5 个来源（微信收到的文件和下载文件夹）和上面除蓝湖外的 filesystem-directory 来源，清单存在第五张表 filename_entries；每天的维护（sync-current / refresh-filenames）刷新它，每个来源最多 10 万文件、60 秒，这是维护额度，不是查找额度。
 
@@ -688,7 +688,7 @@
 
 ## 技术实现与依据（二）
 
-- 10 月 20 日（提交 9b8e35c）起，discover 不再给普通目录做相关性排序、挑子集或探测各根第一层（旧做法：每根最多看第一层 400 条名称，至多选 8 个来源平分额度）。除 ON_DEMAND_DIRECTORY_SOURCE_KEYS 里的 learning-lizhen-reference（利真蓝湖产品资料与入门手册）外，filesystem-directory 与 filename-index-directory 来源一律查 filename_entries 清单；显式来源提示只缩小范围。文件匹配只比对来源名称和相对路径，scope_description 里的举例词不当作整目录命中。
+- 10 月 20 日（提交 9b8e35c）起，discover 不再给普通目录做相关性排序、挑子集或探测各根第一层（旧做法：每根最多看第一层 400 条名称，至多选 8 个来源平分额度）。除 ON_DEMAND_DIRECTORY_SOURCE_KEYS 里登记的那一个产品资料文件夹外，filesystem-directory 与 filename-index-directory 来源一律查 filename_entries 清单；显式来源提示只缩小范围。文件匹配只比对来源名称和相对路径，scope_description 里的举例词不当作整目录命中。
 
 - find 在已登记元数据没有严格匹配时（即使已有模糊候选）也自动只读查询范围内全部清单，不现场扫目录；这时蓝湖来源以 live_scan_requires_discover 列入未搜索，要现场查须明确走 discover。
 

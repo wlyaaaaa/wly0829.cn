@@ -16,6 +16,16 @@
         "width": "57%"
       },
       {
+        "type": "tag",
+        "text_ref": "已存档 · 存档的项目，AI 不再维护（约法 L25）",
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "存档说明：10 月 31 日起这个项目存档、不再维护，内容已",
+        "row": "hero"
+      },
+      {
         "type": "prose",
         "text_ref": "AI跟我说话、替我给别人写消息，都照这里的手册和样本来。讲给我听：AI向我汇报、解释、请我拍板时",
         "row": "hero"
@@ -69,6 +79,14 @@
         "align": "center",
         "size": "large",
         "text_ref": "个人表达"
+      },
+      {
+        "type": "tag",
+        "text_ref": "已存档 · 存档的项目，AI 不再维护（约法 L25）"
+      },
+      {
+        "type": "prose",
+        "text_ref": "存档说明：10 月 31 日起这个项目存档、不再维护，内容已"
       },
       {
         "type": "prose",
