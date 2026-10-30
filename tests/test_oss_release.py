@@ -270,6 +270,28 @@ class OssReleaseTests(unittest.TestCase):
         self.assertEqual((output/'oss/search-index.js').read_bytes(), (self.source/'search-index.js').read_bytes())
         oss.verify_local(output)
 
+    def test_root_icons_stay_on_pages_while_svg_uses_oss(self):
+        icons = {'favicon.ico': b'ICO fixture\x00\xff', 'apple-touch-icon.png': b'PNG fixture\x00\xff'}
+        for name, raw in {**icons, 'favicon.svg': b'<svg xmlns="http://www.w3.org/2000/svg"/>'}.items():
+            (self.source/name).write_bytes(raw)
+        page = self.source/'index.html'
+        page.write_bytes(b'<link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" href="/apple-touch-icon.png">'+page.read_bytes())
+        manifest = oss.read(self.source/oss.MANIFEST)
+        manifest['files'] = {rel: row for rel, row in oss.inventory(self.source).items() if rel != oss.MANIFEST}
+        manifest['release_id'] = oss.hashlib.sha256(json.dumps(manifest['files'], sort_keys=True).encode()).hexdigest()
+        oss.write(self.source/oss.MANIFEST, manifest)
+        output, plan = self.prepare()
+        published = oss.read(output/'github'/oss.MANIFEST)
+        for name, raw in icons.items():
+            with self.subTest(name=name):
+                self.assertIn(name, plan['github_files']); self.assertIn(name, published['files'])
+                self.assertNotIn(name, plan['objects']); self.assertNotIn(name, published['oss']['objects'])
+                self.assertEqual((output/'github'/name).read_bytes(), raw)
+                self.assertFalse((output/'oss'/name).exists())
+        self.assertIn('favicon.svg', plan['objects'])
+        self.assertIn('href="/apple-touch-icon.png"', (output/'github/index.html').read_text())
+        oss.verify_local(output)
+
     def test_unrecorded_source_or_target_change_is_rejected(self):
         output, _ = self.prepare()
         p = output/'oss/projects/demo/assets/hero.mp4'

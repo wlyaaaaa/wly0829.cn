@@ -17,16 +17,16 @@
   },
   "pages": {
     "home": {
-      "sha256": "f6b8683078b4ad2453ee3efacfbab02017be59dac75b380e4bb7d00ae6d740b0",
-      "bytes": 248726
+      "bytes": 248818,
+      "sha256": "25825800407f04cd08190ced54717071662646cdc59965ca800d8d3deac5e7ca"
     },
     "cockpit": {
       "sha256": "27f3f2b9c72a7a8482f3d2f74dff96d99574a4adfcbe81924e56ea5f82698b92",
       "bytes": 165196
     },
     "computer-access": {
-      "sha256": "f064d2da401e8b6c2944972b8834b5ddbea9cd92065d89a1b9afcd234fff1d81",
-      "bytes": 181761
+      "bytes": 181820,
+      "sha256": "a04d59198dd1b1820d1b53d8e27086996059124ed361fefce68577e6f1b17cf2"
     }
   },
   "bundled": {
@@ -166,10 +166,6 @@
     "assets/home-chrome-af778052fdc0.css": {
       "sha256": "af778052fdc0353300b9932c3869c0994d126eab4076cc86946decda8ac68d86",
       "bytes": 435
-    },
-    "assets/site-icon-32e6a619839d.svg": {
-      "sha256": "32e6a619839da4e83085f630f70659294a2907967f18e12d3406b41ec393137a",
-      "bytes": 236
     },
     "assets/b2-live-ea1619d1ff64.css": {
       "sha256": "ea1619d1ff642d2966dffaa97e83872121930e545d3d889569cba9150e24eda0",
@@ -2858,10 +2854,6 @@
     "_typeset/runtime/app-c7ea357566aa882de1c8.js": {
       "sha256": "c7ea357566aa882de1c87c18b616eb934dc7dce529a2bcd2a81ffd636052dbbb",
       "bytes": 134324
-    },
-    "cockpit/assets/site-icon-32e6a619839d.svg": {
-      "sha256": "32e6a619839da4e83085f630f70659294a2907967f18e12d3406b41ec393137a",
-      "bytes": 236
     },
     "_typeset/runtime/b2-live-de2248fb01b179cab600.css": {
       "sha256": "de2248fb01b179cab600a020889f07f6733ecb59eed37ee19ccfbb3fe77ab510",
@@ -5730,6 +5722,14 @@
     "_home-cockpit/home-firstpaint-0b782a9294e7c3dd8279.js": {
       "sha256": "0b782a9294e7c3dd82799f0c9a7bd48c170de393dbf92afc70727f83c866f171",
       "bytes": 75869
+    },
+    "assets/site-icon-e4d6e7d2c4cf.svg": {
+      "bytes": 10677,
+      "sha256": "e4d6e7d2c4cff609a09eef3ed7b2fe672af77041dc2fdc4863de8c635cb02f87"
+    },
+    "cockpit/assets/site-icon-e4d6e7d2c4cf.svg": {
+      "bytes": 10677,
+      "sha256": "e4d6e7d2c4cff609a09eef3ed7b2fe672af77041dc2fdc4863de8c635cb02f87"
     }
   },
   "count": 1401,
