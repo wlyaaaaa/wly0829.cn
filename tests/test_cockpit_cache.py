@@ -124,7 +124,7 @@ class CockpitRetentionTests(unittest.TestCase):
         self.assertIn(self.when(build['served_at']) + ' 读到', self.text('computer'))
         before = self.storage()
 
-        t_a = h.ago(minutes=3)
+        t_a = h.ago(minutes=2)  # 在总览 180 秒时限内，安全和授权那格才算读到
         self.assertTrue(self.refresh(200, h.view('测试处理器 A', observed=t_a))['fresh'])
         self.wait_link('都正常')
         self.assertIn('测试处理器 A', self.text('computer'))
@@ -286,7 +286,7 @@ class CockpitRetentionTests(unittest.TestCase):
     def test_anchor_navigation_and_repaint_do_not_change_success_time(self):
         urls = {'虚构正常项目': '/projects/fixture-project/'}
         self.load(h.view(observed=h.ago(hours=2)), project_urls=urls)
-        t1 = h.ago(minutes=3)
+        t1 = h.ago(minutes=2)  # 在总览 180 秒时限内，安全和授权那格才算读到
         self.refresh(200, h.view(observed=t1))
         self.wait_link('都正常')
         self.assertIn(self.when(t1) + ' 读到', self.text('meta'))  # 10-30 批准第 5 项：几点读到只在顶上写一次

@@ -139,7 +139,10 @@ const oldTodayCards = (v, now) => v.sections.today.filter((c) => c.id !== 'today
 export function security(v, ctx) {
   const s = v.security, pd = s.personal_data.state, un = s.unrestricted.state;
   const off = ctx.offline || !v.ok;
-  const unread = off || ctx.phase === 'snapshot';
+  // 自己的读取时间超过总览同一个时限（没给按 15 分钟）就算没读到，不拿旧状态报平安；和总览缺不缺无关
+  const seenAt = Date.parse(s.observed_at || ''), limit = Number(v.overview?.stale_after_seconds) || 900;
+  const old = Number.isFinite(seenAt) && ctx.now.getTime() - seenAt > limit * 1000;
+  const unread = off || ctx.phase === 'snapshot' || old;
   const lastRead = s.observed_at ? '上次 ' + when(s.observed_at, ctx.now) + ' 读到' : '还没读到过';
   const pdAt = s.personal_data.expires_at, unAt = s.unrestricted.expires_at;
   const [word, state] = off ? ['连不上电脑', 'unavailable'] : unread ? ['没读到', 'unavailable']
