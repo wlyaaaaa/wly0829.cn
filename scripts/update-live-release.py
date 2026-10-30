@@ -16,6 +16,26 @@ HERE = Path(__file__).resolve().parent
 LIVE_START = "(function(){'use strict';\nconst unknown={text:'暂时读不到',state:'unknown'};"
 
 
+def patch_status_reader(text: str) -> str:
+    original = text
+    text = text.replace('\r\n', '\n').replace('\r', '\n')
+    if LIVE_START not in text:
+        return original
+    # Retained pages can specialize the reader's display hooks and IIFE ending.
+    # Only replace transport; never consume a neighboring minified closure.
+    current = (HERE / 'site-live-runtime.js').read_text('utf8')
+    reader_start = text.index(LIVE_START)
+    if 'async function retryStatus(' not in text[reader_start:]:
+        # Older readers have no shared transport API. Upgrade just their own IIFE.
+        export = text.index('window.SiteStatus={parse,refresh,history,resetLayout:resetOfflineLayout};', reader_start)
+        end = text.index('})()', export) + len('})()')
+        return text[:reader_start] + current.rstrip().removesuffix(';') + text[end:]
+    first, last = 'const readTimeoutMs=', 'async function retryStatus('
+    start = text.index(first, reader_start); end = text.index(last, start)
+    transport = current[current.index(first):current.index(last)]
+    return text[:start] + transport + text[end:]
+
+
 def patch_shared_runtime(text: str) -> str:
     original = text
     text = text.replace('\r\n', '\n').replace('\r', '\n')

@@ -17,46 +17,21 @@ export default async function onRequest({ request }) {
     if (url.searchParams.get('view') === 'cockpit') query.set('view', 'cockpit');
     if (url.searchParams.get('refresh') === '1') query.set('refresh', '1');
     // 本人设备钥匙：只认固定格式，原样交给上游判断本人版/公开版；这里不记录、不回显
-    const upstreamHeaders = { Accept: 'application/json', 'Cache-Control': 'no-cache' }, device = request.headers.get('X-Cockpit-Device');
+    // Keep the representation unambiguous across fetch runtimes: no decode/re-encode in JS.
+    const upstreamHeaders = { Accept: 'application/json', 'Accept-Encoding': 'identity', 'Cache-Control': 'no-cache' }, device = request.headers.get('X-Cockpit-Device');
     if (device && /^[A-Za-z0-9_-]{43}$/.test(device)) upstreamHeaders['X-Cockpit-Device'] = device;
     const upstream = await fetch('https://mcp.wly0829.cn/computer-access/api/status' + (String(query) ? '?' + query : ''), {
       headers: upstreamHeaders, signal: controller.signal
     });
-    let body = await upstream.text();
     headers.set('Content-Type', upstream.headers.get('Content-Type') || 'application/json');
-    const gzip = (request.headers.get('Accept-Encoding') || '').split(',').some((part) => {
-      const [coding, ...params] = part.trim().toLowerCase().split(';');
-      return coding === 'gzip' && !params.some((param) => /^\s*q\s*=\s*0(?:\.0*)?\s*$/.test(param));
-    });
-    if (gzip) {
-      // fetch 已解压上游正文；重新压缩，不沿用上游的 Content-Encoding。
-      let phase = 'constructor';
-      try {
-        const stream = new CompressionStream('gzip'), writer = stream.writable.getWriter(), reader = stream.readable.getReader();
-        phase = 'stream';
-        const reading = (async () => {
-          const chunks = []; let length = 0;
-          for (;;) {
-            const { done, value } = await reader.read(); if (done) break;
-            const chunk = ArrayBuffer.isView(value) ? new Uint8Array(value.buffer, value.byteOffset, value.byteLength) : new Uint8Array(value);
-            chunks.push(chunk); length += chunk.byteLength;
-          }
-          const result = new Uint8Array(length); let offset = 0;
-          for (const chunk of chunks) { result.set(chunk, offset); offset += chunk.byteLength; }
-          return result;
-        })();
-        const writing = (async () => { await writer.write(new TextEncoder().encode(body)); await writer.close(); })();
-        [body] = await Promise.all([reading, writing]);
-        headers.set('Content-Encoding', 'gzip');
-      } catch (error) {
-        // 压缩运行时故障不能丢掉已取得的状态；回执保留失败而不伪报 gzip。
-        headers.set('X-Compression-Result', 'identity');
-        headers.set('X-Compression-Phase', phase);
-        headers.set('X-Compression-Error', encodeURIComponent(String(error?.message || error).slice(0, 120)));
-      }
+    if (request.method === 'HEAD') {
+      await upstream.body?.cancel();
+      return new Response(null, { status: upstream.status, headers });
     }
-    return new Response(request.method === 'HEAD' ? null : body, { status: upstream.status, headers });
+    // Return at headers; the platform streams with backpressure, without buffering the JSON.
+    // Do not copy Content-Encoding/Length: fetch may have decoded the upstream body.
+    return new Response(upstream.body, { status: upstream.status, headers });
   } catch {
     return new Response('Upstream unavailable', { status: 504, headers });
-  } finally { clearTimeout(timer); }
+  } finally { clearTimeout(timer); } // The deadline bounds headers, not the returned body stream.
 }

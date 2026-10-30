@@ -109,6 +109,7 @@ def adapt_runtime_assets():
     pending = set().union(*(refs(p.read_text(encoding="utf-8")) for p in inputs))
     seen, sources = set(), {}
     river_patch = run_path(str(root.parent / "scripts/prepare-today-river.py"))["patch_runtime"]
+    status_patch = run_path(str(root.parent / "scripts/update-live-release.py"))["patch_status_reader"]
     while pending:
         url = pending.pop()
         if url in seen:
@@ -118,6 +119,7 @@ def adapt_runtime_assets():
         if not path.is_file():
             continue
         source = path.read_text(encoding="utf-8")
+        source = status_patch(source)
         if "window.comicLive =" in source:
             source = source.replace("const SPEED = 2.5;", "const SPEED = 1;")
         if "/* Relay only the existing cockpit automation read to todayRiver. */" in source:
