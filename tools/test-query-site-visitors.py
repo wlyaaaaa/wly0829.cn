@@ -209,22 +209,34 @@ class VisitorTests(unittest.TestCase):
         rows = [self.sls_row(), {**self.sls_row(), "request_uri": "/_v.gif?x-v=plain&x-p=/"}]
         page = {"meta": {"count": len(rows), "progress": "Complete"}, "data": rows}
         base = f"__topic__:oss_access_log AND bucket:{query.SOURCE}"
-        for deep_read in (None, False, True):
-            if deep_read is not None:
-                args.deep_read = deep_read
-            with self.subTest(deep_read=deep_read), patch.object(query, "cli_run", return_value=json.dumps(page)) as cloud:
+        for deep_read, cv in ((None, None), (False, False), (True, False), (False, True)):
+            args.deep_read, args.cv = deep_read, cv
+            with self.subTest(deep_read=deep_read, cv=cv), patch.object(query, "cli_run", return_value=json.dumps(page)) as cloud:
                 records = query.sls_logs(args, start, end)
             self.assertEqual([record["path"] for record in records], ["/_v.gif", "/_v.gif"])
-            expected = base + ' AND (request_uri: "/_v.gif" OR request_uri: "%2F_v.gif")' if deep_read else base
+            expected = base + " | SELECT * WHERE regexp_like(request_uri, '(?i)x-cv-session(?:=|%3d)[A-Za-z0-9-]+|x-event(?:=|%3d)entry') LIMIT 10000" if cv else base + ' AND (request_uri: "/_v.gif" OR request_uri: "%2F_v.gif")' if deep_read else base
             self.assertEqual(json.loads(cloud.call_args.args[0][-1]),
                 {"from": int(start.timestamp()), "to": int(end.timestamp()), "query": expected,
-                 "line": 100, "offset": 0, "reverse": False})
+                 "line": 10000 if cv else 100, "offset": 0, "reverse": False})
             cloud.assert_called_once()
             self.assertEqual(cloud.call_args.kwargs, {"timeout": 25, "attempts": 1} if deep_read else {})
+        args.deep_read = True
         with patch.object(query, "cli_run", return_value=json.dumps({"meta": {"count": 0, "progress": "Incomplete"}, "data": []})) as cloud, patch.object(query.time, "sleep"):
             with self.assertRaises(RuntimeError):
                 query.sls_logs(args, start, end)
         self.assertEqual(cloud.call_count, 2)
+
+    def test_sls_cv_legacy_entry_rechecks_all_beacons(self):
+        args = SimpleNamespace(aliyun="aliyun", profile="website-images", sls_project="oss-log-test", sls_logstore="oss-log-store", cv=True)
+        start = datetime(2026, 10, 12, 10, tzinfo=query.TZ)
+        entry = {**self.sls_row(), "request_uri": "/_v.gif?x-v=old&x-p=/cv&x-event=entry"}
+        followup = {**self.sls_row(), "request_id": "followup", "request_uri": "/_v.gif?x-v=old&x-p=/next"}
+        def page(rows):
+            return json.dumps({"meta": {"count": len(rows), "progress": "Complete"}, "data": rows})
+        with patch.object(query, "cli_run", side_effect=[page([entry]), page([entry, followup])]) as cloud:
+            records = query.sls_logs(args, start, start + timedelta(hours=1))
+        self.assertEqual([r["params"]["p"] for r in records], ["/cv", "/next"])
+        self.assertIn('request_uri: "/_v.gif"', json.loads(cloud.call_args_list[-1].args[0][-1])["query"])
 
     def test_deep_read_cli_timeout_does_not_stack_network_retries(self):
         with patch.object(query.socket, "getaddrinfo", return_value=[]), patch.object(query.subprocess, "run", side_effect=subprocess.TimeoutExpired("aliyun", 25)) as run, patch.object(query.time, "sleep") as sleep:
@@ -461,6 +473,7 @@ class VisitorTests(unittest.TestCase):
         rows += log(v="self", extra={**first, "x-self": "1", "x-event": "entry"})
         network = Mock(return_value={"province": "上海市", "city": "上海市", "operator": "电信", "organization": "AS123"})
         visits = self.analyze([rows], networks=network, cv_only=True)["cv"]["visits"]
+        self.assertEqual(self.analyze([rows + log(v="other", p="/unrelated/")], networks=network, cv_only=True)["cv"]["visits"], visits)
         self.assertEqual(len(visits), 2)
         self.assertEqual(visits[0]["first_at"], "2026-10-12T10:00:00+08:00")
         self.assertEqual((visits[0]["possible_region"], visits[0]["possible_network"]), ("上海市/上海市", "AS123"))

@@ -349,13 +349,17 @@ def sync_logs(args, start, end):
     return paths, {"listed_objects": len(listed), "objects": len(paths), "downloaded": downloaded, "reused": len(paths) - downloaded}
 
 
-def sls_logs(args, start, end):
+def sls_logs(args, start, end, legacy_fallback=False):
     if not args.sls_project:
         raise ValueError("SLS 项目未配置；请指定 --sls-project")
-    records, offset, page_size = [], 0, 100
+    cv_query = getattr(args, "cv", False) and not legacy_fallback
+    records, offset, page_size = [], 0, 10000 if cv_query else 100
     search = f"__topic__:oss_access_log AND bucket:{SOURCE}"
     deep_read = getattr(args, "deep_read", False)
-    if deep_read:
+    if cv_query:
+        # 所有现代 /cv 信标都有非空访问编号；旧版入口信标用于触发完整回查。
+        search += " | SELECT * WHERE regexp_like(request_uri, '(?i)x-cv-session(?:=|%3d)[A-Za-z0-9-]+|x-event(?:=|%3d)entry') LIMIT 10000"
+    elif deep_read or legacy_fallback:
         search += ' AND (request_uri: "/_v.gif" OR request_uri: "%2F_v.gif")'
     while True:
         body = {"from": int(start.timestamp()), "to": int(end.timestamp()),
@@ -389,7 +393,12 @@ def sls_logs(args, start, end):
         if int(meta.get("count", -1)) != len(data) or len(data) > page_size:
             raise ValueError("Incomplete SLS page")
         records.extend(parse_sls_row(row) for row in data)
+        if cv_query and len(data) == page_size:
+            raise RuntimeError("SLS 简历查询达到单次上限；未将截断日志当作完整结果")
         if len(data) < page_size:
+            if cv_query and any(row["params"]["event"] == "entry" and row["params"]["p"].rstrip("/") == "/cv"
+                                and not row["params"]["cv-session"] for row in records):
+                return sls_logs(args, start, end, legacy_fallback=True)
             return records
         offset += len(data)
 
