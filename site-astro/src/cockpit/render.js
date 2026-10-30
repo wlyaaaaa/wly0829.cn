@@ -865,19 +865,56 @@ function tri(cells) {
     + (c.why ? `<span class="cp-tri-why">${esc(c.why)}</span>` : '') + (c.note ? `<span class="cp-tri-note">${esc(c.note)}</span>` : '') + `</a></li>`;
   return `<ul class="cp-tri">${cells.map(cell).join('')}</ul>`;
 }
-// 电脑健康分（和首页小屏同名）：后端只按电脑、自动任务和备份扣分，你的事、AI 的事不扣分；扣分逐条列出，规则原样列出
+// 电脑健康分（和首页小屏同名）：后端只按电脑、自动任务和备份扣分，你的事、AI 的事不扣分。
+// 大数字下面直接写最大的两三项扣分（“备份 3 项失败 −30 · 自动任务 2 个没恢复 −16 ›”）；点开每行写谁在管、修好能回到几分，点哪行跳到页面下面那块
 const SCORE_SCOPE = '只算电脑、自动任务和备份；你的事、AI 的事不扣分';
+// 后端 overview.reasons[].section → 页面上的那块；“今天你的自动任务……”挂在 today 下，实际在自动任务区
+const SEC_ANCHOR = { backup_cloud: 'backup', automation: 'tasks', computer: 'computer', remote: 'computer', projects: 'projects', today: 'today' };
+const anchorOf = (r) => (r.section === 'today' && /任务/.test(r.text) ? 'tasks' : SEC_ANCHOR[r.section] || 'status');
+// 谁在管：后端 overview.sections[区].color / owner_action 说了算（和状态格同一套），AI 在管写“AI 在修，不用你管”
+const WHO_TEXT = { neutral: 'AI 在修，不用你管', attention: '要你看', red: '要你看' };
+const whoOfSec = (ov, sec) => { const s = ov?.sections?.[sec]; return s ? WHO_TEXT[ownerState(s.level, s)] || '' : ''; };
+const backupName = (t) => String(t || '').replace(/(的?备份)?(失败|过期|需要留意|要留意)$|(的?备份)?超过.*$/, '').trim();
+// 扣分合并成几行：备份几项合成一行（“备份 3 项失败”），“自动任务尚未确认恢复 2 个”写成“自动任务 2 个没恢复”，其余照后端原句
+export function scoreGroups(ov) {
+  const list = (Array.isArray(ov?.reasons) ? ov.reasons : []).filter((r) => r && typeof r.text === 'string' && r.text.trim() && Number.isFinite(r.delta) && r.delta < 0);
+  const groups = [];
+  for (const r of list) {
+    const key = r.section === 'backup_cloud' ? 'backup_cloud' : `${r.section}\u0001${r.text}`;
+    const g = groups.find((x) => x.key === key);
+    if (g) { g.items.push(r); g.delta += r.delta; } else groups.push({ key, section: r.section, anchor: anchorOf(r), items: [r], delta: r.delta });
+  }
+  for (const g of groups) {
+    const n = g.items.length, t = g.items[0].text.trim().replace(/[。\s]+$/, '');
+    const late = /尚未确认恢复\s*(\d+)\s*个/.exec(t);
+    g.label = g.key === 'backup_cloud' && n > 1 ? `备份 ${n} 项${g.items.every((r) => /失败$/.test(r.text.trim())) ? '失败' : '要留意'}`
+      : late ? `自动任务 ${late[1]} 个没恢复` : t;
+    g.names = g.key === 'backup_cloud' && n > 1 ? g.items.map((r) => backupName(r.text)).filter(Boolean) : [];
+    g.who = whoOfSec(ov, g.section);
+  }
+  return groups.sort((a, b) => a.delta - b.delta);
+}
+const minus = (d) => `−${Math.abs(Math.round(d))}`;
+// 某块比页面时间旧 15 分钟以上才单独写几点读到（顶上已经写过一次）
+export const lagAt = (at, v) => { const a = Date.parse(at || ''), p = Date.parse(v?.served_at || ''); return Number.isFinite(a) && Number.isFinite(p) && p - a >= 15 * 60e3 ? `${dateHm(at)} 读到` : ''; };
 function score(v, ctx, off) {
   const ov = v.overview;
   const at = ov?.as_of ? hm(ov.as_of) : '';
   if (off || !Number.isFinite(ov?.score)) return `<p class="cp-score is-off">电脑健康分：读不到${at ? `（上次 ${at}）` : ''}</p>`;
-  const reasons = Array.isArray(ov.reasons) ? ov.reasons : [];
-  const line = (r) => `<li>${esc(r.text)}${Number.isFinite(r.delta) && r.delta ? ` <b>${r.delta > 0 ? '+' : '−'}${Math.abs(r.delta)}</b>` : ''}</li>`;
-  const rules = Array.isArray(ov.rules) ? ov.rules.map((r) => (typeof r === 'string' ? { text: r } : r)) : [];
-  return `<details class="cp-score hub-stat-field ct-card" id="score"><summary>${blockHead('电脑健康分', 'cp-score-title')}<span class="cp-score-number hub-field-number-line"><b class="cp-score-value hub-field-value">${Math.round(ov.score)}</b><small>/100</small></span><progress class="cp-score-meter" max="100" value="${Math.max(0, Math.min(100, ov.score))}" aria-label="电脑健康分"></progress><span class="cp-score-why hub-field-body">${SCORE_SCOPE}${at ? `<small>${at} 读到</small>` : ''}</span></summary>`
-    + `<div class="cp-score-body">${reasons.length ? `<div><h4>扣分的地方</h4><ul>${reasons.map(line).join('')}</ul></div>` : '<p>没有扣分的地方。</p>'}`
-    + (rules.length ? `<div class="cp-score-rules"><h4>分数怎么算</h4><ul>${rules.map((r) => `<li>${esc(r.text)}</li>`).join('')}</ul></div>` : '')
-    + `<p class="cp-score-note">${SCORE_SCOPE}；要你做的件数看上面第一行。</p></div></details>`;
+  const groups = scoreGroups(ov), now = Math.round(ov.score);
+  const top = groups.slice(0, 3).map((g) => `<span class="cp-score-hit">${esc(g.label)} <b>${minus(g.delta)}</b></span>`).join('<i aria-hidden="true"> · </i>');
+  const back = (d) => Math.min(100, now - Math.round(d));
+  const row = (g) => `<li><a class="cp-score-go" href="#${g.anchor}"><span class="cp-score-what">${esc(g.label)}${g.names.length ? `<small>${esc(g.names.join('、'))}</small>` : ''}</span><b>${minus(g.delta)}</b>`
+    + `<small class="cp-score-fix">${esc([g.who, `修好能回到 ${back(g.delta)} 分`].filter(Boolean).join(' · '))}</small></a></li>`;
+  const total = groups.reduce((s, g) => s + g.delta, 0);
+  const rules = Array.isArray(ov.rules) ? ov.rules.map((r) => (typeof r === 'string' ? { text: r } : r)).filter((r) => r?.text) : [];
+  const late = lagAt(ov.as_of, v);
+  return `<details class="cp-score hub-stat-field ct-card" id="score"><summary>${blockHead('电脑健康分', 'cp-score-title')}<span class="cp-score-number hub-field-number-line"><b class="cp-score-value hub-field-value">${now}</b><small>/100</small></span><progress class="cp-score-meter" max="100" value="${Math.max(0, Math.min(100, ov.score))}" aria-label="电脑健康分"></progress>`
+    + `<span class="cp-score-top">${groups.length ? top + (groups.length > 3 ? `<i aria-hidden="true"> · </i>另 ${groups.length - 3} 项` : '') : '没有扣分的地方'}<span class="cp-score-more" aria-hidden="true"> ›</span></span>`
+    + `<span class="cp-score-why hub-field-body">${SCORE_SCOPE}${late ? `<small>${esc(late)}</small>` : ''}</span></summary>`
+    + `<div class="cp-score-body">${groups.length ? `<ul class="cp-score-rows">${groups.map(row).join('')}</ul>${groups.length > 1 ? `<p class="cp-score-all">全部修好是 ${back(total)} 分。</p>` : ''}` : '<p>没有扣分的地方。</p>'}`
+    + (rules.length ? `<details class="cp-score-rules" id="score-rules"><summary>分数怎么算（${rules.length} 条）</summary><ul>${rules.map((r) => `<li>${esc(r.text)}</li>`).join('')}</ul></details>` : '')
+    + `</div></details>`;
 }
 // “你得知道”（后端 must_know，字段在才出这一块）：AI 在修、影响你用电脑的毛病；刚恢复、刚办好的事；你没回又该知道的汇报。
 // 本人 10 月 29 日：长了头疼、短了像谜语，最多 5 行。所以：
