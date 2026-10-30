@@ -2,7 +2,7 @@
 {
  "title": "GitHub 个人主页",
  "kind": "github-profile",
- "url": "",
+ "url": "/github-profile/",
  "tagline": "兴趣为主：我在折腾、也在用的开源小项目。",
  "toc": [
   {
@@ -19,7 +19,7 @@
   "page": "github-profile",
   "kind": "github-profile",
   "title": "GitHub 个人主页",
-  "url": "",
+  "url": "/github-profile/",
   "tagline": "兴趣为主：我在折腾、也在用的开源小项目。",
   "status": "",
   "public": true,
@@ -46,10 +46,10 @@
     },
     {
      "id": "n-ocr-runs",
-     "text": "16,074 次 · 16,157 页",
-     "meaning": "真实识别次数和页数（7 月 8 日–10 月 11 日 16:10）",
-     "as_of": "2026-10-11",
-     "source": "localocr 页第 1 屏和登记 n-jobs（10 月 11 日本轮重取，数未变）",
+     "text": "现存 11,491 次 · 10,991 份材料",
+     "meaning": "现存、已完成且所需输出齐全的识别记录下限；涉及材料按原件source_sha256去重。缺输出的旧记录会退役，因此不是全历史累计，材料数不是页数。",
+     "as_of": "2026-10-30T11:07:28+08:00",
+     "source": "同轮collect localocr-n-jobs-0/1；2026-10-30T11:07:28+08:00现存完成任务只读聚合，entry=localocr-jobs-summary，pointer=jobs/materials；未运行OCR。",
      "screens": [
       "github-profile-04"
      ]
@@ -115,8 +115,8 @@
  },
  "source": {
   "page": "sources/pages/github-profile/page.json",
-  "sha256": "56bea02ba0172c07ac0f4e4b5342d2fd1a52e948900a8a9344bed50866ed6683",
-  "converted_at_beijing": "2026-10-30T11:16:49+08:00"
+  "sha256": "ff261035de29e24403e34694b5d807067c593314ac6ebb1bb834af56c360df7a",
+  "converted_at_beijing": "2026-10-30T15:45:21+08:00"
  }
 }
 ---
@@ -468,7 +468,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
     },
     {
      "type": "feature_card",
-     "text_ref": "16,074次",
+     "text_ref": "现存 11,491 次",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -523,7 +523,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 
 在本机显卡上把图片、扫描件里的字读准，没把握的地方标出来。
 
-**16,074 次**　识别 16,157 页（截至 10 月 11 日）
+**现存 11,491 次**　识别记录，涉及 10,991 份材料（截至 10 月 30 日 11:07，只读清点；输出已不存在的旧记录会被清掉，因此只是现存有效记录的下限，不是全部历史累计；材料数按原件指纹去重，不是页数）
 
 ::screen{#github-profile-05 section="projects"}
 

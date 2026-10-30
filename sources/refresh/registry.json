@@ -1059,16 +1059,20 @@
       "id": "github-profile-n-ocr-runs-0",
       "page": "github-profile",
       "screen": "github-profile-04",
-      "label": "项目页结果的个人主页引用：真实识别次数和页数",
-      "current_value": 16074,
-      "as_of": "2026-09-28",
+      "label": "个人主页引用：现存有效识别记录下限",
+      "current_value": 11491,
+      "as_of": "2026-10-30",
       "category": "人工",
-      "source_location": "E:/Projects/Tools/LocalOCR/_server/jobs；完成任务排除样例、冒烟与空白测试后的识别次数",
+      "source_location": "E:\\Projects\\Tools\\LocalOCR\\_server\\jobs",
       "retrieve": {
-        "kind": "manual",
-        "instructions": "等 owning 项目页本轮内容定稿后同步同口径数字；本轮清单明确保留原日期。"
+        "kind": "entry",
+        "entry": "localocr-jobs-summary",
+        "pointer": [
+          "jobs"
+        ],
+        "timeout": 180
       },
-      "automatic": false,
+      "automatic": true,
       "private": true,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-jia\\content-refresh-jia.md",
@@ -1077,11 +1081,13 @@
         "github-profile-04"
       ],
       "field": "screens[3].text",
-      "page_pattern": "\\*\\*([\\d,]+) 次\\*\\*",
-      "manual_reason": "judgment",
-      "manual_route": "到LocalOCR _server/jobs只读完成态状态与页数；按原真实任务排除样例/冒烟/空白测试。旧过滤程序未在源仓库，须由LocalOCR Owner确认排除口径后提供固定聚合入口；不得直接数文件、读识别正文或从本站page.json取事实。",
-      "measurement_scope": "保持原真实OCR任务与页数统计边界；当前筛选尚不能独立复现。",
-      "scope_status": "needs_owner_review"
+      "page_pattern": "\\*\\*现存 ([\\d,]+) 次\\*\\*",
+      "measurement_scope": "完成态且排除项目样例、inputs、smoke、media-empty-acceptance/blank.png；材料按source_sha256去重；页数为result.pages长度之和；auto按result.route.requested_engine，快模型为ppocrv6-medium；不读原件、不输出正文",
+      "scope_status": "verified",
+      "checked_at": "2026-10-30T11:07:28+08:00",
+      "source_observed_at": "2026-10-30T11:07:28+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read"
     },
     {
       "id": "github-profile-n-timeaudit-seconds-0",
@@ -11989,16 +11995,20 @@
       "id": "github-profile-n-ocr-runs-1",
       "page": "github-profile",
       "screen": "github-profile-04",
-      "label": "个人主页旧OCR页数引用",
-      "current_value": 16157,
-      "as_of": "2026-09-28",
+      "label": "个人主页引用：现存完成记录涉及材料数",
+      "current_value": 10991,
+      "as_of": "2026-10-30",
       "category": "人工",
-      "source_location": "E:/Projects/Tools/LocalOCR/_server/jobs；同一批完成真实任务的结果页数",
+      "source_location": "E:\\Projects\\Tools\\LocalOCR\\_server\\jobs",
       "retrieve": {
-        "kind": "manual",
-        "instructions": "等localocr owning页定稿后同步页数；本轮保留原日期。"
+        "kind": "entry",
+        "entry": "localocr-jobs-summary",
+        "pointer": [
+          "materials"
+        ],
+        "timeout": 180
       },
-      "automatic": false,
+      "automatic": true,
       "private": true,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-jia\\content-refresh-jia.md",
@@ -12007,11 +12017,13 @@
         "github-profile-04"
       ],
       "field": "screens[3].text",
-      "page_pattern": "识别 ([\\d,]+) 页",
-      "manual_reason": "judgment",
-      "manual_route": "到LocalOCR _server/jobs只读完成态状态与页数；按原真实任务排除样例/冒烟/空白测试。旧过滤程序未在源仓库，须由LocalOCR Owner确认排除口径后提供固定聚合入口；不得直接数文件、读识别正文或从本站page.json取事实。",
-      "measurement_scope": "保持原真实OCR任务与页数统计边界；当前筛选尚不能独立复现。",
-      "scope_status": "needs_owner_review"
+      "page_pattern": "涉及 ([\\d,]+) 份材料",
+      "measurement_scope": "完成态且排除项目样例、inputs、smoke、media-empty-acceptance/blank.png；材料按source_sha256去重；页数为result.pages长度之和；auto按result.route.requested_engine，快模型为ppocrv6-medium；不读原件、不输出正文",
+      "scope_status": "verified",
+      "checked_at": "2026-10-30T11:07:28+08:00",
+      "source_observed_at": "2026-10-30T11:07:28+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read"
     },
     {
       "id": "codex-memory-n-restore-test-1",
@@ -12187,7 +12199,7 @@
       "screen": "personal-materials-01",
       "label": "登记数量截至日期",
       "field": "screens[0].text",
-      "page_pattern": "登记数量是 (\\d+ 月 \\d+ 日 \\d+:\\d+) 计数入口",
+      "page_pattern": "^(\\d+ 月 \\d+ 日 \\d+:\\d+) 计数入口正常返回",
       "qualifies": [
         "personal-materials-n-registered-0",
         "personal-materials-n-sources-0",
@@ -12463,7 +12475,7 @@
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "field": "status_line.as_of",
       "scope_status": "verified",
       "measurement_scope": "注明同一状态条最后使用与两个固定已采时期调用数；不把10月5–9日采集水位换成本轮观察时刻，任一Unknown保留日期。",
@@ -12532,7 +12544,7 @@
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "field": "status_line.as_of",
       "scope_status": "verified",
       "measurement_scope": "同条最后使用与10月4日14:00以来已采截至10月9日的两技能计数；不与旧滚动7天混算，任一Unknown保留日期。",
@@ -16992,7 +17004,7 @@
       "category": "截至日期",
       "field": "status_line.as_of",
       "private": false,
-      "historical": false,
+      "historical": true,
       "automatic": true,
       "source_location": "E:/Projects/Archives/video-scaffold",
       "scope_status": "verified",
@@ -19002,8 +19014,8 @@
       "page": "github-profile",
       "screen": "github-profile-04",
       "label": "截至日期注明这些同口径数字",
-      "current_value": null,
-      "as_of": "2026-10-11",
+      "current_value": "10 月 30 日 11:07",
+      "as_of": "2026-10-30",
       "category": "截至日期",
       "source_location": "同屏数字来源",
       "automatic": true,
@@ -23933,9 +23945,7 @@
       "screen": "personal-materials-bounded-discovery-05",
       "label": "材料测试用例收集数",
       "field": "screens[4].text",
-      "start": 423,
-      "end": 426,
-      "current_value": 110,
+      "current_value": "123",
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -23951,7 +23961,8 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "参数展开\\s+([\\d,]+)\\s+个用例"
     },
     {
       "id": "personal-materials-bounded-discovery-b9-009",
@@ -24679,9 +24690,7 @@
       "screen": "personal-materials-exact-intake-05",
       "label": "材料测试用例收集数",
       "field": "screens[4].text",
-      "start": 440,
-      "end": 443,
-      "current_value": 110,
+      "current_value": "123",
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -24697,7 +24706,8 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义"
     },
     {
       "id": "personal-materials-exact-intake-b9-040",
@@ -24705,9 +24715,7 @@
       "screen": "personal-materials-exact-intake-15",
       "label": "材料测试用例收集数",
       "field": "screens[14].text",
-      "start": 381,
-      "end": 384,
-      "current_value": 110,
+      "current_value": "123",
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -24723,7 +24731,8 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义"
     },
     {
       "id": "personal-materials-exact-intake-b9-041",
@@ -25608,9 +25617,7 @@
       "screen": "personal-materials-registered-lookup-05",
       "label": "材料测试用例收集数",
       "field": "screens[4].text",
-      "start": 331,
-      "end": 334,
-      "current_value": 110,
+      "current_value": "123",
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -25626,7 +25633,8 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "参数展开\\s+([\\d,]+)\\s+个用例"
     },
     {
       "id": "personal-materials-registered-lookup-b9-072",
@@ -25634,9 +25642,7 @@
       "screen": "personal-materials-registered-lookup-11",
       "label": "材料测试用例收集数",
       "field": "screens[10].text",
-      "start": 245,
-      "end": 248,
-      "current_value": 110,
+      "current_value": "123",
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -25652,7 +25658,8 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义"
     },
     {
       "id": "personal-materials-registered-lookup-b9-073",
@@ -25849,9 +25856,7 @@
       "screen": "personal-materials-verified-open-05",
       "label": "材料测试用例收集数",
       "field": "screens[4].text",
-      "start": 286,
-      "end": 289,
-      "current_value": 110,
+      "current_value": "123",
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -25867,7 +25872,8 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义"
     },
     {
       "id": "personal-materials-verified-open-b9-080",
@@ -25875,9 +25881,7 @@
       "screen": "personal-materials-verified-open-13",
       "label": "材料测试用例收集数",
       "field": "screens[12].text",
-      "start": 270,
-      "end": 273,
-      "current_value": 110,
+      "current_value": "123",
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "V:/Personal/Projects/personal-materials；E:/PersonalData/材料库/materials.sqlite3",
@@ -25893,7 +25897,8 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "已核实collect-only测试收集数，不执行fixture或测试",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "测试函数、([\\d,]+)\\s*个用例定义"
     },
     {
       "id": "personal-media-classification-b9-082",
@@ -26794,9 +26799,7 @@
       "screen": "personal-media-search-browse-01",
       "label": "全部现存原件大小GB",
       "field": "screens[0].text",
-      "start": 223,
-      "end": 227,
-      "current_value": 98.6,
+      "current_value": "106",
       "as_of": "2026-10-11",
       "category": "当前正文事实",
       "source_location": "E:/Media/_manifests/personal-media-current/catalog.sqlite3；canonical原件目录",
@@ -26807,14 +26810,15 @@
           "original_bytes"
         ],
         "scale": 1e-09,
-        "digits": 1
+        "round_to": 1
       },
       "automatic": true,
       "private": true,
       "historical": false,
       "scope_status": "verified",
-      "measurement_scope": "现存authority_locator逐件stat大小求和/10^9取1位；缺项或非文件即失败，不hash",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+      "measurement_scope": "当前catalog原件逐件stat求和，以十进制GB四舍五入到整数；与主卡同口径，页面约数不声称0.1GB精度。",
+      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
+      "page_pattern": "登记的原件合计约\\s+([\\d,.]+)\\s+GB"
     },
     {
       "id": "personal-media-search-browse-b9-113",
@@ -27288,32 +27292,6 @@
       "source_coverage_end": null,
       "observation_basis": "live_read",
       "observed_at": "2026-10-30T11:07:22+08:00"
-    },
-    {
-      "id": "personal-media-cloud-candidates-b9-130",
-      "page": "personal-media-cloud-candidates",
-      "screen": "personal-media-cloud-candidates-01",
-      "label": "issue_total",
-      "field": "screens[0].text",
-      "start": 388,
-      "end": 389,
-      "current_value": 0,
-      "as_of": "2026-10-11",
-      "category": "当前正文事实",
-      "source_location": "V:/Personal/Projects/personal-media/personal_media.py cloud_status；本地catalog/计划/审批记录",
-      "retrieve": {
-        "kind": "entry",
-        "entry": "personal-media-local-cloud-counts",
-        "pointer": [
-          "issue_total"
-        ]
-      },
-      "automatic": true,
-      "private": true,
-      "historical": false,
-      "scope_status": "verified",
-      "measurement_scope": "本地现行期望/已同步记录/稳定期状态的对应聚合，不联网、不证明今日云端真实状态",
-      "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
     },
     {
       "id": "personal-media-cloud-candidates-b9-131",
@@ -34245,7 +34223,7 @@
       },
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "measurement_scope": "kind=skill,name=daily-preferences；2026-10-05起至已采2026-10-09北京日的固定范围；与旧滚动7天不同，新id保留当前口径。",
       "page_pattern": "技能调用已记 ([\\d,]+) 次",
@@ -34268,7 +34246,7 @@
       },
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "measurement_scope": "kind=command且个人理解库正式CLI；2026-10-05起至已采2026-10-09北京日的固定范围；与旧滚动7天不同，新id保留当前口径。",
       "page_pattern": "命令行调用另记 ([\\d,]+) 次",
@@ -34291,7 +34269,7 @@
       },
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "measurement_scope": "kind=skill,name=explain-to-me；2026-10-04T14:00+08:00以来，已采至2026-10-09；与旧滚动7天不同，新id保留当前口径。",
       "page_pattern": "“讲给我听”技能已记 ([\\d,]+) 次",
@@ -34314,7 +34292,7 @@
       },
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "measurement_scope": "kind=skill,name=reply-as-me；2026-10-04T14:00+08:00以来，已采至2026-10-09；与旧滚动7天不同，新id保留当前口径。",
       "page_pattern": "“替我拟消息”技能已记 ([\\d,]+) 次",
@@ -34874,7 +34852,7 @@
       },
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "measurement_scope": "69是固定截点前七天的提交次数；已有自动入口只有读取当下的滚动七天，口径不同。",
       "manual_reason": "judgment",
@@ -34943,7 +34921,7 @@
       },
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "measurement_scope": "8是截至10月10日的手动补跑子集，不与42全部成功同步轮数复用同一个id。",
       "manual_reason": "judgment",
@@ -44646,8 +44624,7 @@
         "personal-media-cloud-candidates-b9-122",
         "personal-media-cloud-candidates-b9-126",
         "personal-media-cloud-candidates-b9-128",
-        "personal-media-cloud-candidates-b9-129",
-        "personal-media-cloud-candidates-b9-130"
+        "personal-media-cloud-candidates-b9-129"
       ],
       "page_pattern": "等待（(\\d+ 月 \\d+ 日 \\d{2}:\\d{2}) 只读本地记录）",
       "automatic": true,

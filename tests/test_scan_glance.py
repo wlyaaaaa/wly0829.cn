@@ -49,16 +49,20 @@ class ScanGlanceTests(unittest.TestCase):
             with self.subTest(query=query):
                 handler = object.__new__(preview.Preview)
                 handler.path = "/__status" + query; handler.wfile = io.BytesIO()
+                handler.headers = {}; handler.command = "GET"
                 handler.send_response = mock.Mock(); handler.send_header = mock.Mock(); handler.end_headers = mock.Mock()
-                upstream = mock.MagicMock(); upstream.__enter__.return_value.read.return_value = body
-                with mock.patch.object(preview, "urlopen", return_value=upstream) as opened:
+                upstream = mock.MagicMock(); response = upstream.__enter__.return_value
+                response.status = 200; response.headers = {}; response.read.return_value = body
+                with mock.patch.object(preview.STATUS_OPENER, "open", return_value=upstream) as opened:
                     handler.do_GET()
+                opened.assert_called_once()
                 request = opened.call_args.args[0]
-                self.assertEqual(request.full_url, "https://live.wly0829.cn/computer-access/state" + query)
+                self.assertEqual(request.full_url, "https://mcp.wly0829.cn/computer-access/api/status" + query)
                 self.assertEqual(request.get_header("User-agent"), "wly-local-preview")
                 self.assertEqual(request.get_header("Origin"), "https://wly0829.cn")
                 self.assertEqual(request.get_header("Referer"), "https://wly0829.cn/")
-                self.assertEqual(opened.call_args.kwargs, {"timeout": 15})
+                self.assertEqual(request.get_header("Accept-encoding"), "gzip")
+                self.assertEqual(opened.call_args.kwargs, {"timeout": 6})
                 handler.send_response.assert_called_once_with(200)
                 self.assertEqual(handler.wfile.getvalue(), body)
     def test_horizontal_content_imbalance_uses_pcconfig_12_text(self):
