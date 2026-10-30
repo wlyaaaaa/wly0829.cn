@@ -449,6 +449,40 @@ class VisitorTests(unittest.TestCase):
         self.assertEqual(again["entry"]["cv"]["unique_visitors"], 1)
         self.assertEqual(self.analyze([])["entry"]["cv"]["unique_visitors"], 0)
 
+    def test_cv_visits_are_separate_and_include_pages_network_and_unknown_dwell(self):
+        first = {"x-cv-session": "visit-one", "x-entry": "cv"}
+        second = {"x-cv-session": "visit-two", "x-entry": "cv"}
+        rows = log("12/Oct/2026:10:00:00 +0800", p="/cv/", extra={**first, "x-event": "entry"})
+        rows += log("12/Oct/2026:10:00:01 +0800", extra={**first, "x-id": "home"})
+        rows += log("12/Oct/2026:10:00:21 +0800", extra={**first, "x-id": "home", "x-event": "leave", "x-visible": "20"})
+        rows += log("12/Oct/2026:10:00:22 +0800", p="/projects/demo/", extra={**first, "x-id": "detail"})
+        rows += log("12/Oct/2026:11:00:00 +0800", p="/cv/", extra={**second, "x-event": "entry"})
+        rows += log("12/Oct/2026:11:00:01 +0800", extra={**second, "x-id": "home-two"})
+        rows += log(v="self", extra={**first, "x-self": "1", "x-event": "entry"})
+        network = Mock(return_value={"province": "上海市", "city": "上海市", "operator": "电信", "organization": "AS123"})
+        visits = self.analyze([rows], networks=network, cv_only=True)["cv"]["visits"]
+        self.assertEqual(len(visits), 2)
+        self.assertEqual(visits[0]["first_at"], "2026-10-12T10:00:00+08:00")
+        self.assertEqual((visits[0]["possible_region"], visits[0]["possible_network"]), ("上海市/上海市", "AS123"))
+        self.assertEqual(visits[0]["pages"]["/"]["observed_seconds"], 20)
+        self.assertEqual(visits[0]["pages"]["/projects/demo/"]["unknown_opens"], 1)
+        self.assertNotIn("/cv/", visits[0]["pages"])
+        legacy = self.analyze([log("12/Oct/2026:09:00:00 +0800", v="old", p="/cv/", extra={"x-event": "entry"})
+                               + log("12/Oct/2026:09:01:00 +0800", v="old", p="/old/")], cv_only=True)["cv"]["visits"]
+        self.assertEqual(legacy[0]["first_at_kind"], "legacy_entry_inferred_30m")
+        self.assertIn("/old/", legacy[0]["pages"])
+
+    def test_cv_cli_local_logs(self):
+        (self.root / "cv.log").write_text(log(p="/cv/", extra={"x-event": "entry", "x-cv-session": "visit"})
+                                          + log(p="/", extra={"x-cv-session": "visit"}), "utf-8")
+        done = subprocess.run([sys.executable, "-B", "-X", "utf8", str(Path(__file__).with_name("query-site-visitors.py")),
+                               "--cv", "--start", "2026-10-12", "--end", "2026-10-12", "--logs-dir", str(self.root),
+                               "--cache-dir", str(self.root / "cache")], capture_output=True, text=True, encoding="utf-8")
+        self.assertEqual(done.returncode, 0, done.stderr)
+        output = json.loads(done.stdout)
+        self.assertEqual(output["cv"]["count"], 1)
+        self.assertEqual(output["cv"]["visits"][0]["pages"]["/"]["unknown_opens"], 1)
+
     def test_deep_read_thresholds_sessions_watermark_exclusions_and_no_ips(self):
         rows = ""
         for visitor, page, seconds, minute, extra, ua in (("project", "/projects/demo/", 120, "02", {}, UA), ("project", "/projects/demo/", 120, "03", {}, UA),

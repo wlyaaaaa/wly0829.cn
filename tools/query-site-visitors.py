@@ -139,7 +139,7 @@ def parse_uri(uri):
     parsed = urlsplit(uri)
     query = parse_qs(parsed.query, keep_blank_values=True)
     params = {name: query.get("x-" + name, query.get(name, [""]))[0]
-              for name in ("v", "p", "ref", "self", "monitor", "event", "id", "visible", "ttfb", "dom", "load", "first", "entry")}
+              for name in ("v", "p", "ref", "self", "monitor", "event", "id", "visible", "ttfb", "dom", "load", "first", "entry", "cv-session")}
     params["p"] = urlsplit(params["p"]).path or "未知页面"
     params["ref"] = urlsplit(params["ref"]).hostname or "直接访问/未知"
     return unquote(parsed.path), params
@@ -455,7 +455,7 @@ def deep_visitors(events, since, locations, history):
     return {"checked_at": datetime.now(TZ).isoformat(), "visitors": list(qualified.values())}
 
 
-def visitor_metrics(events, history, start, end, networks=None, city=None, org=None, deep_since=None):
+def visitor_metrics(events, history, start, end, networks=None, city=None, org=None, deep_since=None, cv_only=False):
     locations = {ip: {"province": "未知", "city": "未知", "operator": "未知", "organization": "未知机构网络"} for ip in {r["ip"] for r in events}}
     if networks:
         try:
@@ -524,6 +524,51 @@ def visitor_metrics(events, history, start, end, networks=None, city=None, org=N
                                  **result["visitor_dwell"].get(visitor, {"pages": {}, "total": dwell_summary([])})})
         group["unique_visitors"] += 1
     result["entry"] = entries
+    if cv_only:
+        sessions = defaultdict(list)
+        for row in events:
+            marker = row["params"]["cv-session"]
+            if marker:
+                sessions[(row["params"]["v"], marker)].append(row)
+        # 旧版只给首次 /cv 入口和首页标记；后续页面仅可按同一编号的 30 分钟活动窗口推测。
+        legacy = defaultdict(list)
+        for row in events:
+            if row["params"]["v"] and not row["params"]["cv-session"]:
+                legacy[row["params"]["v"]].append(row)
+        for visitor, rows in legacy.items():
+            current = None
+            for row in sorted(rows, key=lambda item: item["time"]):
+                if row["params"]["event"] == "entry" and row["params"]["p"].rstrip("/") == "/cv":
+                    current = (visitor, "legacy:" + row["time"].isoformat())
+                elif current and (row["time"] - sessions[current][-1]["time"]).total_seconds() > 1800:
+                    current = None
+                if current:
+                    sessions[current].append(row)
+        visits = []
+        for (visitor, marker), rows in sessions.items():
+            rows.sort(key=lambda row: row["time"])
+            opened = defaultdict(list)
+            views = [row for row in rows if row["params"]["event"] in ("", "view")]
+            for index, view in enumerate(views):
+                instance = [row for row in rows if row["params"]["id"] == view["params"]["id"]
+                            and row["params"]["p"] == view["params"]["p"]]
+                visible = [value for row in instance if row["params"]["event"] in ("leave", "resume", "heartbeat")
+                           and (value := metric(row["params"], "visible")) is not None]
+                gap = (views[index + 1]["time"] - view["time"]).total_seconds() if index + 1 < len(views) else None
+                seconds = max(visible) if visible else gap if gap is not None and 0 <= gap <= 1800 else None
+                opened[view["params"]["p"]].append({"seconds": round(seconds, 2) if seconds is not None else None,
+                    "method": "visible_beacon" if visible else "time_gap_estimate" if seconds is not None else "unknown",
+                    "last_report_at": max((row["time"].isoformat() for row in instance if row["params"]["event"] in ("leave", "resume", "heartbeat")
+                                           and metric(row["params"], "visible") is not None), default=None)})
+            first_row = next((row for row in rows if row["params"]["event"] == "entry"), rows[0])
+            network = locations[first_row["ip"]]
+            visits.append({"visitor": visitor, "session": marker, "first_at": first_row["time"].isoformat(),
+                "first_at_kind": "legacy_entry_inferred_30m" if marker.startswith("legacy:") else "entry" if first_row["params"]["event"] == "entry" else "first_observed",
+                "possible_region": network["province"] + "/" + network["city"],
+                "possible_network": network["organization"], "possible_operator": network["operator"],
+                "pages": {page: dwell_summary(items) for page, items in opened.items()}})
+        result["cv"] = {"visits": sorted(visits, key=lambda row: row["first_at"]), "count": len(visits),
+            "note": "地区和机构只是可能的网络归属，不能确认访客身份；没有合法停留信标且没有下一页时停留未知。旧信标缺访问编号，只能从入口起按同一浏览器编号的 30 分钟活动窗口推测，旧版重复点击 /cv 可能漏记。"}
     if city:
         matches = []
         for visitor, rows in people.items():
@@ -539,7 +584,7 @@ def visitor_metrics(events, history, start, end, networks=None, city=None, org=N
     return result
 
 
-def analyze(paths, start, end, include_self=False, include_monitor=False, extra_records=(), file_range=None, networks=None, history=None, city=None, org=None, deep_since=None):
+def analyze(paths, start, end, include_self=False, include_monitor=False, extra_records=(), file_range=None, networks=None, history=None, city=None, org=None, deep_since=None, cv_only=False):
     records, seen, malformed, duplicates = list(extra_records), set(), 0, 0
     for path in paths:
         opener = gzip.open if path.suffix == ".gz" else open
@@ -643,7 +688,7 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
     output_daily = [{"date": day, "unique_visitors": len(row["visitors"]), "unique_ips": len(row["ips"]),
                      "pageviews": row["pv"], "log_lines": row["log_lines"],
                      "coverage": "observed_partial" if row["log_lines"] else "no_logs"} for day, row in daily.items()]
-    enhancements = visitor_metrics(events, history, start, end, networks, city, org, deep_since)
+    enhancements = visitor_metrics(events, history, start, end, networks, city, org, deep_since, cv_only)
     enhancements["ai_crawler_lower_bound"] = {"by_ua": {name: {"requests": len(values), "dates": dict(Counter(values))} for name, values in ai_requests.items()},
                                                "note": "只是下限，看不到只抓网页的爬虫；UA 声称身份不代表经过身份验证。"}
     return {**enhancements, "timezone": "Asia/Shanghai", "start": start.isoformat(), "end": end.isoformat(), "daily": output_daily,
@@ -668,6 +713,7 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
 def main():
     parser = argparse.ArgumentParser(description="按北京时间查询网站访客（输出 JSON）")
     parser.add_argument("--deep-read", action="store_true", help="查询新达标的深读访客；30 分钟空闲切访问，只用可见信标")
+    parser.add_argument("--cv", action="store_true", help="逐次查询 /cv 入口访问及后续页面")
     parser.add_argument("--since", type=datetime.fromisoformat, help="深读检查起点 ISO 时间（必须带时区）")
     parser.add_argument("--json", action="store_true", help="显式选择 JSON（默认已经是 JSON）")
     parser.add_argument("--days", type=int)
@@ -688,7 +734,7 @@ def main():
     parser.add_argument("--include-self", action="store_true")
     parser.add_argument("--include-monitor", action="store_true")
     args = parser.parse_args()
-    if bool(args.deep_read) != bool(args.since) or (args.deep_read and (args.since.tzinfo is None or args.start or args.end or args.month or args.around or args.days is not None or args.include_self or args.include_monitor)):
+    if bool(args.deep_read) != bool(args.since) or (args.deep_read and (args.since.tzinfo is None or args.start or args.end or args.month or args.around or args.days is not None or args.include_self or args.include_monitor or args.cv)):
         parser.error("--deep-read 与带时区的 --since 配对使用，不能指定日期窗口或包含本人/巡检")
     if bool(args.start) != bool(args.end) or (args.start and args.days is not None) or (args.days is not None and args.days < 1):
         parser.error("同时指定 --start 和 --end，或使用正数 --days")
@@ -727,7 +773,7 @@ def main():
             networks = None if args.logs_dir and not cached else OfflineNetworks(args.cache_dir, download=not args.logs_dir)
         except NETWORK_ERRORS as error:
             networks, database_state = None, network_failure(error)
-        output = analyze(paths, start, end, args.include_self, args.include_monitor, records, file_range, networks, history, args.city, args.org, args.since)
+        output = analyze(paths, start, end, args.include_self, args.include_monitor, records, file_range, networks, history, args.city, args.org, args.since, args.cv)
         output["offline_network_databases"] = networks.metadata if networks else database_state
         if not args.logs_dir:
             args.cache_dir.mkdir(parents=True, exist_ok=True)
@@ -738,7 +784,9 @@ def main():
         output["sync"] = sync
         if args.deep_read:
             output["deep_read"]["checked_at"] = checked_at.isoformat()
-        print(json.dumps(output["deep_read"] if args.deep_read else output, ensure_ascii=False, indent=2, default=lambda value: value.isoformat()))
+        selected = output["deep_read"] if args.deep_read else {"start": output["start"], "end": output["end"],
+                    "cv": output["cv"], "log_coverage": output["log_coverage"], "sync": output["sync"]} if args.cv else output
+        print(json.dumps(selected, ensure_ascii=False, indent=2, default=lambda value: value.isoformat()))
     except (OSError, ValueError, RuntimeError, struct.error, subprocess.TimeoutExpired) as error:
         if isinstance(error, CloudCommandError):
             code = {"连接超时": "query_connection_timeout", "DNS 解析失败": "query_dns_failed",
