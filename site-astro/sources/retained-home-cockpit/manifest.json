@@ -17,8 +17,8 @@
   },
   "pages": {
     "home": {
-      "bytes": 248818,
-      "sha256": "25825800407f04cd08190ced54717071662646cdc59965ca800d8d3deac5e7ca"
+      "bytes": 248812,
+      "sha256": "7c78509c96ffc018f7f67b88a1fe87330ee963cdf74c146f7a19484660ac72ec"
     },
     "cockpit": {
       "sha256": "27f3f2b9c72a7a8482f3d2f74dff96d99574a4adfcbe81924e56ea5f82698b92",
