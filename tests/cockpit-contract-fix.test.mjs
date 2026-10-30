@@ -16,9 +16,9 @@ const css = readFileSync(new URL('../site-astro/src/cockpit/cockpit.css', import
 test('副机在不在线读 laptop.connection，不读自动任务健康的 laptop.state', () => {
   const remote = { remote: [{ id: 'r', title: '远程连接', text: '能连上', state: 'ok', observed_at: at }] };
   const on = REGIONS.computer(normalize(base({ sections: remote, laptop: { state: 'attention', connection: 'online' } })), ctx);
-  assert.match(on, /<b>笔记本（副机）<\/b><span>在线<\/span>/);
+  assert.match(on, /笔记本（副机）<\/h3><p class="cp-big">在线<\/p>/);
   const off = REGIONS.computer(normalize(base({ sections: remote, laptop: { state: 'ok', connection: 'offline' } })), ctx);
-  assert.match(off, /笔记本（副机）<\/b><span>离线/);
+  assert.match(off, /笔记本（副机）<\/h3><p class="cp-big">离线<\/p><p class="cp-sub">要用它时得先开机连网/);
   // 只有 state（旧读法）不能当连接：不写在线也不写离线
   assert.doesNotMatch(REGIONS.computer(normalize(base({ sections: remote, laptop: { state: 'online' } })), ctx), /笔记本（副机）/);
 });

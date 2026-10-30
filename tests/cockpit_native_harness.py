@@ -147,7 +147,7 @@ def view(processor='测试处理器 A', observed=None, **extra) -> dict:
                      'computer': {'online': True, 'uptime_hours': 2}, 'observed_at': observed, 'state': 'ok'},
         'automation': {'state': 'ok', 'observed_at': observed, 'groups': [], 'items': [task]},
         'sections': {
-            'computer': [{'id': 'computer_health', 'title': '处理器', 'text': processor + '：12%，40℃', 'state': 'ok', 'observed_at': observed}],
+            'computer': [{'id': 'computer_health', 'title': processor, 'text': processor + '：12%，40℃', 'state': 'ok', 'observed_at': observed}],
             'remote': [{'id': 'remote', 'title': '远程连接', 'text': '虚构远程连接在线', 'state': 'ok', 'observed_at': observed}],
             'backup_cloud': [{'id': 'fixture_backup', 'title': '虚构测试备份', 'text': '虚构备份都在期限内', 'state': 'ok', 'observed_at': observed}],
             'today': [],

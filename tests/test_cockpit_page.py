@@ -4,6 +4,7 @@
 “学习方法”一行）已不存在。下面按现行页面验证同样的意思；随产品删除的检查在对应位置注明去向。
 """
 from datetime import datetime, timedelta, timezone
+import re
 import importlib.util
 import itertools
 import json
@@ -143,8 +144,8 @@ class CockpitPageTests(unittest.TestCase):
                     page.evaluate('todayRiver.seek(12)')
                     page.screenshot(path=str(OUT / f'cockpit-{width}.png'), full_page=True)
 
-                    # 套餐流量的三种情况：读到了（一行，比别的读数旧时写上几点读到）、没读到、只有很久以前那次（一行先说几点读到的，点开是那时的值）；首屏件数不跟着乱
-                    traffic = page.locator('[data-cp="computer"] .cp-fact').filter(has_text='套餐流量')
+                    # 套餐流量的三种情况：读到了（网格卡大数字，比别的读数旧时写上几点读到）、没读到、只有很久以前那次（卡上先说几点读到的，点“详情”是那时的值）；首屏件数不跟着乱
+                    traffic = page.locator('[data-cp="computer"] .cp-tile').filter(has=page.locator('h3', has_text=re.compile('^流量$')))  # 没有本机代理卡时，套餐流量就是“流量”那张
                     for mode, card in [('ok', {'text': '套餐已用 20 / 100 GB，剩余 80 GB', 'state': 'ok', 'observed_at': h.ago(hours=3)}),
                                        ('none', {'text': '', 'state': 'unavailable'}),
                                        ('stale', {'text': '套餐缓存已用 20 / 100 GB，剩余 80 GB', 'state': 'unavailable', 'observed_at': h.ago(hours=25)})]:
@@ -154,10 +155,11 @@ class CockpitPageTests(unittest.TestCase):
                             return b
                         state['value'] = body
                         page.evaluate('CockpitData.refresh()')
-                        page.wait_for_function("(m)=>{const c=[...document.querySelectorAll('[data-cp=computer] .cp-fact')].find(x=>x.textContent.includes('套餐流量'));return c&&c.classList.contains('is-fold')===(m!=='ok')&&!!c.querySelector(m==='ok'?'.cp-dot.is-green':'.cp-dot.is-gray')}", arg=mode)
+                        page.wait_for_function("(m)=>{const c=[...document.querySelectorAll('[data-cp=computer] .cp-tile')].find(x=>x.querySelector('h3')?.textContent.trim()==='流量');return c&&!!c.querySelector(m==='ok'?'.cp-dot.is-green':'.cp-dot.is-gray')}", arg=mode)
                         text = traffic.inner_text()
                         if mode == 'ok':
-                            self.assertIn(card['text'], text)
+                            self.assertIn('80 GB', traffic.locator('.cp-big').inner_text())
+                            self.assertIn('套餐已用 20/100 GB', text)
                             self.assertIn(when(card['observed_at']) + ' 读到', text)
                         elif mode == 'none':
                             self.assertIn('还没读到', text)

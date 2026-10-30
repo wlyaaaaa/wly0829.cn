@@ -152,6 +152,8 @@ export function normalize(raw) {
     today_activity: (() => { const a = obj(v.today_activity); return { state: st(a.state), observed_at: a.observed_at || null, summary: obj(a.summary), timeline: list(a.timeline), errors: list(a.errors), yesterday: a.yesterday && typeof a.yesterday === 'object' ? a.yesterday : null }; })(),
     // 副机在不在线读 laptop.connection（online / offline / unknown）；laptop.state 是副机自动任务的健康，不是连接
     pc_health: obj(v.pc_health), laptop: obj(v.laptop),
+    // 存储占用采样（驾驶舱电脑区“AI 临时文件”卡用合计那一项；明细在 /cockpit/storage/）
+    storage_pressure: obj(v.storage_pressure),
     power_today: (() => { const p = obj(v.power_today); return { state: st(p.state), observed_at: p.observed_at || null, uptime_hours: Number.isFinite(p.uptime_hours) ? p.uptime_hours : null, energy_kwh: Number.isFinite(p.energy_kwh) ? p.energy_kwh : null, peak_watts: Number.isFinite(p.peak_watts) ? p.peak_watts : null, source: typeof p.source === 'string' ? p.source : '', source_note: typeof p.source_note === 'string' ? p.source_note : '', yesterday: p.yesterday && typeof p.yesterday === 'object' ? p.yesterday : null }; })(),
     // 今天代码变化（大数字 + 近 7 天）；字段由 PCConfig 精简视图 changes 给
     changes: (() => { const c = obj(v.changes), t = obj(c.today); return { state: st(c.state), observed_at: c.observed_at || null,

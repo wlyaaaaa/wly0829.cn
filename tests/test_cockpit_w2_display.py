@@ -38,9 +38,9 @@ const assert = require('node:assert/strict');
   const pc = R.computer(v, ctx);
   // 本人 10-12：内存引起的黄不能挂在处理器上；前端不再从 pc_health 自己挑触发项，用后端 system_resources 卡的原文
   assert.doesNotMatch(pc, /原因：|cp-reason|cp-plan|非分页池/);
-  // 第三步：正常的读数只占一行
-  assert.match(pc, /<li class="cp-fact" tabindex="0" title="电脑读数：处理器 24%，52℃"><span class="cp-dot is-green" aria-hidden="true"><\/span><b>处理器<\/b><span>电脑读数：处理器 24%，52℃<\/span><\/li>/);
-  assert.match(pc, /cp-card is-yellow ct-card"><h3>.*?内存\/系统资源<\/h3><p>系统内核内存 8.5 GB，偏高；可分页内核内存 6.8 GB，偏高<\/p>/);
+  // 电脑区网格卡（10-31 A 版）：大数字从原句里取，温度在旁边，下面细进度条
+  assert.match(pc, /<article class="cp-card is-green ct-card cp-tile"><h3><span class="cp-dot is-green" aria-hidden="true"><\/span>处理器<\/h3><p class="cp-big">24% <small>52℃<\/small><\/p><p class="cp-meter"><progress max="100" value="24"/);
+  assert.match(pc, /cp-card is-yellow ct-card cp-tile"><h3>.*?内存\/系统资源<\/h3><p class="cp-big">要留意<\/p><p>系统内核内存 8.5 GB，偏高；可分页内核内存 6.8 GB，偏高<\/p>/);
   // 首屏：总览给 ok 但资源卡亮黄时不能显示成全好；说的是资源，不是处理器
   const ov = { stale: () => false, lamp: () => '' };
   const top = R.page({ ...v, overview: { as_of: '2026-10-12T00:29:00+08:00', score: 90, signals: [{ id: 'computer', level: 'ok' }], reasons: [] } }, { ...ctx, ov });
@@ -58,7 +58,7 @@ const assert = require('node:assert/strict');
   assert.match(cell[2], /系统内核内存 8.5 GB，偏高/);
   assert.doesNotMatch(cell[2], /处理器偏热|处理器 24%/);
   assert.match(pc, /这是 10月10日 14:18 读到的，之后 34 小时没读到新的/);
-  assert.match(pc, /笔记本（副机）<\/b><span>在线/);
+  assert.match(pc, /笔记本（副机）<\/h3><p class="cp-big">在线<\/p>/);
   assert.match(R.backup(v, ctx), /上传器：18:47 读到时没在传。现在有没有在上传还不知道。/);
   const today = R.todayBlock(v, ctx);
   assert.equal((today.match(/验收/g) || []).length, 1, '验收只剩一行');
