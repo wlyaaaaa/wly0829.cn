@@ -109,6 +109,7 @@ const tail = rt ? withoutTocRuntime(rt.tail).replace(`/_living/_engine/${livingE
   {moved && <meta http-equiv="refresh" content={`2; url=${moved}`} />}
   {(moved || noindex) && <meta name="robots" content="noindex" />}
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <script is:inline defer src={blocks?.loader || '/_living/living-mount.js'}></script>
   {chrome.css.map((href) => <link rel="stylesheet" href={href} />)}
   <Fragment set:html={head} />
