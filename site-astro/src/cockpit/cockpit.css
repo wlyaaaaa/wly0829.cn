@@ -961,7 +961,7 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
   .cp-ltable { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 14.5px; line-height: 1.5; background: #fff; }
   .cp-ltable :is(th, td) { overflow-wrap: anywhere; }
   .cp-ltable th.cp-lt-what { width: 40%; }
-  .cp-ltable th.cp-lt-due { width: 104px; }
+  .cp-ltable th.cp-lt-due { width: 150px; }
   .cp-ltable th.cp-lt-lag { width: 132px; }
   .cp-ltable th.cp-lt-act { width: 112px; }
   .cp-ltable.is-dec th.cp-lt-what { width: 30%; }
@@ -975,7 +975,8 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
   .cp-ltable tr.is-acted > td:not(.cp-lt-act) { opacity: .55; }
   .cp-lt-title { font-weight: 700; color: var(--cp-ink); }
   .cp-ltable .cp-detail { display: block; }
-  td:is(.cp-lt-due, .cp-lt-lag, .cp-lt-at) { white-space: nowrap; }
+  /* 跨年的日子带年份（“2027 年 9 月 6 日”）：列宽够放一行，再长就在本列里换行，不压到“晚几天” */
+  td:is(.cp-lt-lag, .cp-lt-at) { white-space: nowrap; }
   .cp-lt-late { font-weight: 700; color: var(--cp-neutral); }
   .cp-lt-due small { display: block; color: var(--cp-soft); font-size: 12px; }
   .cp-lt-none { color: var(--cp-soft); }
