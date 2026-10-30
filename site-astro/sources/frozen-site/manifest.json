@@ -808,25 +808,50 @@
       "bytes": 169991,
       "source_path": "site-astro/sources/frozen-site/assets/assets/home-05-h-1920-87260d18007b.avif"
     },
+    "assets/home-05-h-1920-b028753b0231.avif": {
+      "bytes": 168101,
+      "sha256": "b028753b02311f18501216b883a88e8ec41a02bc8eae0a0c836823913e88bfd1",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/b028753b02311f18501216b883a88e8ec41a02bc8eae0a0c836823913e88bfd1.avif"
+    },
     "assets/home-05-h-2880-8cd5def42e31.avif": {
       "sha256": "8cd5def42e31b7dcb8e09ecae3d06cc13e450f8a1025220f47de78cc1e2274db",
       "bytes": 266203,
       "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/assets/home-05-h-2880-8cd5def42e31.avif"
+    },
+    "assets/home-05-h-2880-dab8c4423e90.avif": {
+      "bytes": 266678,
+      "sha256": "dab8c4423e90129bd50772dbad369d4f5f93cb28ea3533bfe2576bf7359a737a",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/dab8c4423e90129bd50772dbad369d4f5f93cb28ea3533bfe2576bf7359a737a.avif"
     },
     "assets/home-05-h-fallback640-7db1c381a5e4.webp": {
       "sha256": "7db1c381a5e4b1feb890c8aee426a7031628dcc436f5c28f0e603958cb7b7b47",
       "bytes": 56362,
       "source_path": "site-astro/sources/frozen-site/assets/assets/home-05-h-fallback640-7db1c381a5e4.webp"
     },
+    "assets/home-05-h-fallback640-ff394ff1f7e5.webp": {
+      "bytes": 54544,
+      "sha256": "ff394ff1f7e51fde1c5f08b6f7f20aa43b754b6093a285a6f87a09a108a61e6b",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/ff394ff1f7e51fde1c5f08b6f7f20aa43b754b6093a285a6f87a09a108a61e6b.webp"
+    },
     "assets/home-05-v-1280-9b765b56f5d2.avif": {
       "sha256": "9b765b56f5d22b84bf09faea9eccfbdbd4e95bf29449b525bdacfc99039de703",
       "bytes": 151358,
       "source_path": "site-astro/sources/frozen-site/assets/assets/home-05-v-1280-9b765b56f5d2.avif"
     },
+    "assets/home-05-v-1280-b52c51bdbf3a.avif": {
+      "bytes": 151109,
+      "sha256": "b52c51bdbf3a17797f62735bf40b452adb8d0693eb7e54477170b70660ba8b4e",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/b52c51bdbf3a17797f62735bf40b452adb8d0693eb7e54477170b70660ba8b4e.avif"
+    },
     "assets/home-05-v-fallback640-5eb954b97482.webp": {
       "sha256": "5eb954b974829b5876daee6ca81a387835854af1fc61585a14d840899be45db4",
       "bytes": 99874,
       "source_path": "site-astro/sources/frozen-site/assets/assets/home-05-v-fallback640-5eb954b97482.webp"
+    },
+    "assets/home-05-v-fallback640-4e561924af49.webp": {
+      "bytes": 96366,
+      "sha256": "4e561924af496d784157e475ea92ebb43965b6ec53025b5f1f8eb5f8fd65d4c4",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/4e561924af496d784157e475ea92ebb43965b6ec53025b5f1f8eb5f8fd65d4c4.webp"
     },
     "assets/home-chrome-af778052fdc0.css": {
       "sha256": "af778052fdc0353300b9932c3869c0994d126eab4076cc86946decda8ac68d86",
