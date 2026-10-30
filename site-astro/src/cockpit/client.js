@@ -134,7 +134,6 @@ function paint() {
   syncWide();
   syncCopy();
   syncTab();
-  floatLater();
   seen.watch();
   const river = window.todayRiver;
   if (river?.ready && view.automation.items.length) river.setSnapshot(riverSnapshot(view), false);
@@ -486,20 +485,6 @@ function syncTab() {
   img.onerror = () => draw(null);
   img.src = iconWas.href;
 }
-
-// 右下角 ↻：电脑版顶栏的 ↻ 看得见时藏起来，滚出去才出现（窄屏顶栏没有 ↻，一直在）
-// 看得见＝它在视口里、而且没被页头之类盖住（取它正中那一点，落在它身上才算）
-const topReload = document.querySelector('[data-cp-reload]'), floatWrap = document.querySelector('.cockpit-refresh-wrap');
-let floatRaf = 0;
-function checkFloat() {
-  floatRaf = 0;
-  if (!topReload || !floatWrap) return;
-  const r = topReload.getBoundingClientRect();
-  const seen = r.width > 0 && r.bottom > 0 && r.top < innerHeight && topReload.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2));
-  floatWrap.classList.toggle('is-top-visible', seen);
-}
-const floatLater = () => { if (!floatRaf) floatRaf = requestAnimationFrame(checkFloat); };
-if (topReload && floatWrap) { addEventListener('scroll', floatLater, { passive: true }); addEventListener('resize', floatLater); checkFloat(); }
 
 window.addEventListener('hashchange', () => { wanted = hashId(); if (!reveal(shown > 0)) openTo(wanted); });
 wanted = hashId();

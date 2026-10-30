@@ -930,9 +930,6 @@ a.cp-run-goto:hover { color: #2463a8 !important; }
 .cp-vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .cp-facts-wall { display: contents; }
 .cp-facts-wall > .cp-section:first-child { border-top: 1px solid #edf5ef; }
-/* 右下角 ↻：电脑版顶栏的 ↻ 看得见时藏起来（client.js 加 is-top-visible），滚出去才出现 */
-.cockpit-refresh-wrap { transition: opacity .15s, visibility .15s; }
-.cockpit-refresh-wrap.is-top-visible { opacity: 0; visibility: hidden; pointer-events: none; }
 kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid #cfdcd3; border-bottom-width: 2px; border-radius: 5px; background: #f7faf8; font: 600 12px/1.6 ui-monospace, Consolas, monospace; text-align: center; color: var(--cp-ink); }
 
 @media (min-width: 1200px) {

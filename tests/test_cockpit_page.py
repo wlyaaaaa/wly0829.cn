@@ -193,24 +193,14 @@ class CockpitPageTests(unittest.TestCase):
                     self.assertEqual(page.evaluate('scrollY'), before)
                     page.screenshot(path=str(OUT / f'answer-{width}.png'))
 
-                    # 右下角刷新按钮：顶部、中间、底部都只有一个、固定在视口里、点得到，点了真去读
+                    # 右下角刷新按钮：顶部、中间、底部都常驻，只有一个、固定在视口里、点得到，点了真去读；
+                    # 顶栏另有 ↻ 看得见时也不收（电脑版左栏吸顶，收了就一直看不到）
                     size = 42 if width == 390 else 44
                     for position in ('top', 'middle', 'bottom'):
                         page.evaluate("(p)=>scrollTo({top:p==='top'?0:p==='middle'?document.documentElement.scrollHeight*.5:document.documentElement.scrollHeight,behavior:'instant'})", position)
                         page.wait_for_timeout(150)
-                        top_seen = page.evaluate("()=>{const t=document.querySelector('[data-cp-reload]');const r=t.getBoundingClientRect();return r.width>0&&r.bottom>0&&r.top<innerHeight&&t.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}")
-                        # 电脑版左栏吸顶，顶栏的 ↻ 一直看得见，右下角那个就一直藏着
-                        if top_seen:
-                            # 顶栏的 ↻ 看得见时右下角那个藏起来（滚出去才出现），这时点顶栏的；手机顶上也有这个 ↻（client.js 的 checkFloat 按看不看得见判断，不分宽窄）
-                            page.wait_for_function("getComputedStyle(document.querySelector('.cockpit-refresh-wrap')).visibility==='hidden'")
-                            reads = server.status_reads
-                            page.locator('[data-cp-reload]').click()
-                            page.wait_for_function("document.querySelector('.cp-meta-note')?.textContent.startsWith('已更新')")
-                            # 上一次的“已更新”还挂着时，要等这次读完（↻ 不再忙）再往下，免得下一步的重读被这次合并掉
-                            page.wait_for_function("document.querySelector('[data-cp-reload]').getAttribute('aria-busy')==='false'")
-                            self.assertGreater(server.status_reads, reads)
-                            continue
-                        page.wait_for_function("getComputedStyle(document.querySelector('.cockpit-refresh-wrap')).visibility==='visible'")
+                        wrap_style = page.locator('.cockpit-refresh-wrap').evaluate('e=>{const s=getComputedStyle(e);return [s.visibility,s.opacity,s.pointerEvents,s.display]}')
+                        self.assertEqual(wrap_style, ['visible', '1', 'auto', 'flex'])
                         button = page.locator('[data-cockpit-refresh]')
                         self.assertEqual(button.count(), 1)
                         rect = button.bounding_box()
