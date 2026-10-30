@@ -109,7 +109,7 @@ test('不急事项写明何时再做；停了的数据只在集中入口展示',
   assert.match(html, /排在约 11 月 20 日/);
   // 停了满 3 天：首屏只留一行入口，账本页照旧可见（本人 10-30 批准第 5 项）
   assert.match(html, /另 1 样停了 3 天以上，在 AI 的账本里 ›/);
-  assert.match(REGIONS.ledger(v, ctx()), /示例流量<\/b><span>10\/20 起读不到，AI 在查/);
+  assert.match(REGIONS.ledger(v, ctx()), /示例流量<\/b><span>10\/20 起读不到（最后一次/);
   assert.doesNotMatch(html, /示例AI等待|等到这个时候再办/);
   assert.doesNotMatch(REGIONS.computer(v, ctx()), /示例流量/);
   assert.match(REGIONS.ledger(v, ctx()), /示例AI等待/);

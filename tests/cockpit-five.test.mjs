@@ -133,3 +133,13 @@ test('收掉重复的字：分区说明句进“?”、正常和 AI 在管不挂
   assert.match(today, /<summary>电脑后台今天做的事：完成 2 项备份，记了 1 件事<\/summary>/);
   assert.doesNotMatch(today, /跑了 46 个任务/);
 });
+
+test('停了的数据：后端没给处理方只写事实；给了 ai_handling 或 handler 在处理才写谁在管', () => {
+  const card = (extra) => ({ id: 'traffic', title: '示例流量', text: '示例流量数据停在 10 月 29 日。', state: 'unavailable', observed_at: '2026-10-29T19:14:00+08:00', ...extra });
+  const home = (c) => textOnly(REGIONS.home(view({ stale_summary: { text: '示例流量停了', ids: ['traffic'] }, sections: { computer: [c] } }), ctx()));
+  assert.match(home(card()), /示例流量（10\/29 起读不到）/);
+  assert.doesNotMatch(home(card()), /AI 在查/);
+  assert.match(home(card({ ai_handling: 'AI 在修采集。' })), /示例流量（10\/29 起读不到，AI 在修采集）/);
+  assert.match(home(card({ handler: { kind: 'running' } })), /示例流量（10\/29 起读不到，AI 在处理）/);
+  assert.doesNotMatch(home(card({ handler: { kind: 'scheduled' } })), /AI 在处理/);
+});

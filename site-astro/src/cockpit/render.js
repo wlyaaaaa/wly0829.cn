@@ -1234,14 +1234,17 @@ function staleCards(v, now) {
   const old = (c) => { const t = Date.parse(c.observed_at || ''); return Number.isFinite(t) && now.getTime() - t >= STALE_DAYS * 864e5; };
   return { all: cards, shown: cards.filter((c) => !old(c)), hidden: cards.filter(old) };
 }
-// 谁在管：没有新记录的（学习进度这类，不代表出了毛病）写“N 天没有新记录”；采集停了的写“M/D 起读不到”，后端给了 ai_handling 就照写，没给写“AI 在查”
+// 谁在管：没有新记录的（学习进度这类，不代表出了毛病）写“N 天没有新记录”；采集停了的写“M/D 起读不到”。
+// 后端在卡上给了处理方（ai_handling 一句话，或 handler.kind=running 真在处理）才写谁在管；没给就只写事实，不替后端说“AI 在查”
+const handlerOf = (c) => (typeof c.ai_handling === 'string' && c.ai_handling.trim() ? c.ai_handling.trim().replace(/[。\s]+$/, '')
+  : c.handler?.kind === 'running' ? 'AI 在处理' : '');
 const staleWho = (c, v, now) => {
   const t = Date.parse(c.observed_at || ''), days = Number.isFinite(t) ? Math.floor((now.getTime() - t) / 864e5) : null;
   if (/没有新记录|不代表你没有/.test(c.text || '')) return days != null ? `${days ? `${days} 天` : '今天'}没有新记录` : '没有新记录';
   if (!v.stale_summary?.ids.includes(c.id) && !SOURCE_STOPPED.test(c.text || '')) return '今天还没读到新的';
   const md = Number.isFinite(t) ? new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Shanghai', month: 'numeric', day: 'numeric' }).format(new Date(t)) : '';
-  const who = typeof c.ai_handling === 'string' && c.ai_handling.trim() ? c.ai_handling.trim().replace(/[。\s]+$/, '') : 'AI 在查';
-  return `${md ? `${md} 起` : ''}读不到，${who}`;
+  const who = handlerOf(c);
+  return `${md ? `${md} 起` : ''}读不到${who ? `，${who}` : ''}`;
 };
 // 二级页“停了的数据”：首屏收起的（满 3 天）和还在首屏的都列，停了的数据不会被藏起来
 function staleLedger(v, ctx) {

@@ -144,7 +144,9 @@ test('跨日旧动态集中归位；读不到与数据停了分开，只显示�
   // 本人 10-30 批准第 5 项：每样写清谁在管；停了满 3 天的不在首屏列，收在 AI 的账本“停了的数据”里
   assert.doesNotMatch(home, /示例旧进度/);
   assert.match(home, /另 1 样停了 3 天以上，在 AI 的账本里 ›/);
-  assert.match(REGIONS.ledger(v, ctx), /示例旧进度<\/b><span>10\/20 起读不到，AI 在查（最后一次 10月20日 10:00）/);
+  assert.match(REGIONS.ledger(v, ctx), /示例旧进度<\/b><span>10\/20 起读不到（最后一次 10月20日 10:00）/);
+  // 后端没给处理方就只写事实，不替后端说“AI 在查”
+  assert.doesNotMatch(REGIONS.ledger(v, ctx), /AI 在查/);
   assert.match(home, /示例未知来源<\/b><span>今天还没读到新的<\/span>/);
   assert.equal((visible(home).match(/10月20日 10:00/g) || []).length, 0);
   assert.doesNotMatch(home, /已核实来源|来源检查通过/);
