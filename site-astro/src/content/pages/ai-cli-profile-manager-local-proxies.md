@@ -28,13 +28,13 @@
   "status_line": {
    "state": "常用",
    "as_of": "2026-10-11",
-   "source": "父项目总览状态“常用”；本地模型部分按 10 月 11 日 14:00 前的源码（10 月 8 日提交）和当天只读 Ollama 查询核对，两个 ChatGPT→Claude 代理 9 月 29 日退役、Toolkit 接线 9 月 28 日退役，未发生成请求"
+   "source": "父项目总览状态“常用”；本地模型部分按 10 月 11 日 14:00 前的源码（10 月 8 日提交）和当天只读 Ollama 查询核对，两个 ChatGPT→Claude 代理 9 月 29 日退役、Toolkit 接线 9 月 28 日退役，未发生成请求。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
   }
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-local-proxies/page.json",
-  "sha256": "f2eb6f6a907b790892f3712bde98a25466a35736106a55bef5c6a0becb7b5131",
-  "converted_at_beijing": "2026-10-11T18:50:42+08:00"
+  "sha256": "c19032c6d6178f4a19b19bd5defd17e441025c441d11e3c468c3355d86a4d9fc",
+  "converted_at_beijing": "2026-10-30T15:12:30+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 父项目总览状态“常用”；本地模型部分按 10 月 11 日 14:00 前的源码（10 月 8 日提交）和当天只读 Ollama 查询核对，两个 ChatGPT→Claude 代理 9 月 29 日退役、Toolkit 接线 9 月 28 日退役，未发生成请求",
+     "static_note": "截至 10 月 11 日 · 父项目总览状态“常用”；本地模型部分按 10 月 11 日 14:00 前的源码（10 月 8 日提交）和当天只读 Ollama 查询核对，两个 ChatGPT→Claude 代理 9 月 29 日退役、Toolkit 接线 9 月 28 日退役，未发生成请求。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 父项目总览状态“常用”；本地模型部分按 10 月 11 日 14:00 前的源码（10 月 8 日提交）和当天只读 Ollama 查询核对，两个 ChatGPT→Claude 代理 9 月 29 日退役、Toolkit 接线 9 月 28 日退役，未发生成请求"
+     "static_note": "截至 10 月 11 日 · 父项目总览状态“常用”；本地模型部分按 10 月 11 日 14:00 前的源码（10 月 8 日提交）和当天只读 Ollama 查询核对，两个 ChatGPT→Claude 代理 9 月 29 日退役、Toolkit 接线 9 月 28 日退役，未发生成请求。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
     },
     {
      "type": "action_button",

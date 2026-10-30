@@ -28,7 +28,7 @@
   "status_line": {
    "state": "偶尔用",
    "as_of": "2026-10-11",
-   "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未重装或恢复"
+   "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未重装或恢复。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
   },
   "based_on": {
    "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/typora-theme-pack-theme-installation-and-lifecycle/page.json",
-  "sha256": "4b18c623cc33e9c9d22e43f5d131562344740fdf8bad88da03a4ba6adf47744f",
-  "converted_at_beijing": "2026-10-11T19:04:26+08:00"
+  "sha256": "4bb4dbdd94b8ef45bbd0e31a332203ad3e843896085cdb9cb6cc86c267cb98f7",
+  "converted_at_beijing": "2026-10-30T15:12:32+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未重装或恢复",
+     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未重装或恢复。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未重装或恢复"
+     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未重装或恢复。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
     },
     {
      "type": "action_button",

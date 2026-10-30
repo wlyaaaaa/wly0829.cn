@@ -28,7 +28,7 @@
   "status_line": {
    "state": "偶尔用",
    "as_of": "2026-10-11",
-   "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未运行测试或导出"
+   "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未运行测试或导出。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
   },
   "based_on": {
    "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/typora-theme-pack-transactional-pdf-export-pipeline/page.json",
-  "sha256": "b1c652d8523f7841cbd0fb5bdbadffa5e2c21e1b3bc75df4efd0556d77b66824",
-  "converted_at_beijing": "2026-10-11T19:04:26+08:00"
+  "sha256": "e81a71d4c51276940b55cc305315569a5a73965eb4090c8689ad05900b3673b6",
+  "converted_at_beijing": "2026-10-30T15:12:32+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未运行测试或导出",
+     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未运行测试或导出。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未运行测试或导出"
+     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未运行测试或导出。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
     },
     {
      "type": "action_button",

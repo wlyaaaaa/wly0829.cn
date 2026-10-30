@@ -28,7 +28,7 @@
   "status_line": {
    "state": "偶尔用",
    "as_of": "2026-10-11",
-   "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未渲染、未看图"
+   "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未渲染、未看图。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
   },
   "based_on": {
    "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/typora-theme-pack-controlled-preview-and-visual-qa/page.json",
-  "sha256": "7612e7cffc15b8280a3e58182875b14861803d2ee536b5ee2d01ce4af6cc7418",
-  "converted_at_beijing": "2026-10-11T19:04:26+08:00"
+  "sha256": "d00a8efd4c96a9020ed5db3aa30f63c2f12065a0de7accaa189116e40e2f715c",
+  "converted_at_beijing": "2026-10-30T15:12:32+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未渲染、未看图",
+     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未渲染、未看图。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未渲染、未看图"
+     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未渲染、未看图。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
     },
     {
      "type": "action_button",

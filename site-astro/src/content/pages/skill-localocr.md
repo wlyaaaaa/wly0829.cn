@@ -122,7 +122,7 @@
  "source": {
   "page": "sources/pages/skill-localocr/page.json",
   "sha256": "bcea23e7c4b39f6ff1fb25440cbb868984a5ea4c3aa96dc69febe02e13236a92",
-  "converted_at_beijing": "2026-10-30T14:00:58+08:00"
+  "converted_at_beijing": "2026-10-30T15:14:45+08:00"
  }
 }
 ---

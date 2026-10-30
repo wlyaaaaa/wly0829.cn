@@ -16,7 +16,7 @@
       "近 7 天 AI 点名用了 4 次"
     ],
     "as_of": "2026-10-24",
-    "source": "识别服务日志；AI 使用记录"
+    "source": "识别服务日志；AI 使用记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
   },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/LocalOCR",

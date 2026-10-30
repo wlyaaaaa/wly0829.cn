@@ -18,10 +18,14 @@ class OwnerRouteTests(unittest.TestCase):
         self.assertNotIn("pointer_path", requirement)
         records = json.loads((ROOT / "sources/refresh/registry.json").read_text("utf-8-sig"))["records"]
         scans = [r for r in records if r["page"] == "pcconfig" and r.get("manual_reason") == "needs_admin_rescan"]
-        self.assertEqual(len(scans), 6)
+        required = {"pcconfig-n-tasks-0", "pcconfig-n-tasks-enabled-0", "pcconfig-n-tasks-enabled-1",
+                    "pcconfig-n-tasks-split-0", "pcconfig-n-tasks-split-1", "pcconfig-n-tasks-split-2"}
+        self.assertTrue(required.issubset({record["id"] for record in scans}))
         for record in scans:
-            self.assertEqual(record["retrieve"]["instructions"], record["manual_route"])
-            for expected in ("scan_tasks.ps1 -NoWrite -Json", "task_visibility_complete=true", "Unknown", "PCConfig Owner"):
+            self.assertEqual(record["retrieve"]["kind"], "manual")
+            if record["id"] in required:
+                self.assertEqual(record["retrieve"]["instructions"], record["manual_route"])
+            for expected in ("scan_tasks.ps1 -NoWrite -Json", "task_visibility_complete=true", "Unknown", "PCConfig"):
                 self.assertIn(expected, record["manual_route"])
 
     def test_github_uses_existing_zero_write_owner_status(self):

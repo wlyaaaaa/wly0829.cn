@@ -28,13 +28,13 @@
   "status_line": {
    "state": "常用",
    "as_of": "2026-10-11",
-   "source": "ChineseASR 公开仓库 main（1bd5a04）的模型登记、直接转写守卫与本机模型目录，于 10 月 11 日按 14:00 前状态只读核对；本轮未运行任何模型。"
+   "source": "ChineseASR 公开仓库 main（1bd5a04）的模型登记、直接转写守卫与本机模型目录，于 10 月 11 日按 14:00 前状态只读核对；本轮未运行任何模型。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
   }
  },
  "source": {
   "page": "sources/pages/chinese-asr-models-modes/page.json",
-  "sha256": "5a536230ba56851aeefda141a602625517068a1d296bbd67e27d17ea8fcb9c74",
-  "converted_at_beijing": "2026-10-22T08:32:27+08:00"
+  "sha256": "e6dbcd2dfb8ce26300f1bfeff9863100fd199e13156de10da271ebab76aae726",
+  "converted_at_beijing": "2026-10-30T15:12:31+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的模型登记、直接转写守卫与本机模型目录，于 10 月 11 日按 14:00 前状态只读核对；本轮未运行任何模型。",
+     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的模型登记、直接转写守卫与本机模型目录，于 10 月 11 日按 14:00 前状态只读核对；本轮未运行任何模型。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的模型登记、直接转写守卫与本机模型目录，于 10 月 11 日按 14:00 前状态只读核对；本轮未运行任何模型。"
+     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的模型登记、直接转写守卫与本机模型目录，于 10 月 11 日按 14:00 前状态只读核对；本轮未运行任何模型。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
     },
     {
      "type": "action_button",

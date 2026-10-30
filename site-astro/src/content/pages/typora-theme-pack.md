@@ -50,7 +50,7 @@
    },
    "facts": [],
    "as_of": "2026-10-30",
-   "source": "项目修改记录"
+   "source": "项目修改记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
   },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/typora-theme-pack",
@@ -455,8 +455,8 @@
  },
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
-  "sha256": "5b3e95957632ae6ef936bdc5f03b2b064f9943d879eddb24b4c272c8d97f1747",
-  "converted_at_beijing": "2026-10-30T11:16:52+08:00"
+  "sha256": "0463d9ce1a304e33fbe8b2aed73464e1739cb10c14d4dad3cd6e09b134c4ead7",
+  "converted_at_beijing": "2026-10-30T15:12:32+08:00"
  }
 }
 ---
@@ -540,7 +540,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · 项目修改记录",
+     "static_note": "截至 10 月 30 日 · 项目修改记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -615,7 +615,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · 项目修改记录"
+     "static_note": "截至 10 月 30 日 · 项目修改记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
     },
     {
      "type": "stat_card",

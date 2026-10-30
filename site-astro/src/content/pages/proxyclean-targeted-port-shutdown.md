@@ -28,13 +28,13 @@
   "status_line": {
    "state": "常用",
    "as_of": "2026-10-11",
-   "source": "按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）逐项核对；没有实关客户端"
+   "source": "按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）逐项核对；没有实关客户端。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
   }
  },
  "source": {
   "page": "sources/pages/proxyclean-targeted-port-shutdown/page.json",
-  "sha256": "0f5cc7c97bf1097679c2b3f31250c7da5a25911daae85d9a1aa1af746526581a",
-  "converted_at_beijing": "2026-10-30T14:00:58+08:00"
+  "sha256": "5ae5f5b4e6c19daecae3def13db2173f1e74adcb75d796f51fae253c1be7a704",
+  "converted_at_beijing": "2026-10-30T15:12:31+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）逐项核对；没有实关客户端",
+     "static_note": "截至 10 月 11 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）逐项核对；没有实关客户端。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
      "row": "top"
     },
     {
@@ -130,7 +130,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）逐项核对；没有实关客户端"
+     "static_note": "截至 10 月 11 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）逐项核对；没有实关客户端。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
     },
     {
      "type": "action_button",

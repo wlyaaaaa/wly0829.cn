@@ -28,13 +28,13 @@
   "status_line": {
    "state": "常用",
    "as_of": "2026-10-11",
-   "source": "ChineseASR 公开仓库 main（1bd5a04，北京 10 月 11 日 00:52）按当天 14:00 前状态只读核对，听写运行状态取 10 月 11 日 13:38 记录；历史测试保留各自日期。"
+   "source": "ChineseASR 公开仓库 main（1bd5a04，北京 10 月 11 日 00:52）按当天 14:00 前状态只读核对，听写运行状态取 10 月 11 日 13:38 记录；历史测试保留各自日期。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
   }
  },
  "source": {
   "page": "sources/pages/chinese-asr-desktop-dictation/page.json",
-  "sha256": "ca9bbf920feaee2fc3fcf30ecb24787433e5b634f0af32f82bf0c79ef54ed243",
-  "converted_at_beijing": "2026-10-11T18:50:42+08:00"
+  "sha256": "089e963f467a52c88f76c0ecf6b64f15b69b9b2a12a9c96d34b63c165045d5cc",
+  "converted_at_beijing": "2026-10-30T15:12:30+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04，北京 10 月 11 日 00:52）按当天 14:00 前状态只读核对，听写运行状态取 10 月 11 日 13:38 记录；历史测试保留各自日期。",
+     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04，北京 10 月 11 日 00:52）按当天 14:00 前状态只读核对，听写运行状态取 10 月 11 日 13:38 记录；历史测试保留各自日期。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04，北京 10 月 11 日 00:52）按当天 14:00 前状态只读核对，听写运行状态取 10 月 11 日 13:38 记录；历史测试保留各自日期。"
+     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04，北京 10 月 11 日 00:52）按当天 14:00 前状态只读核对，听写运行状态取 10 月 11 日 13:38 记录；历史测试保留各自日期。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
     },
     {
      "type": "action_button",

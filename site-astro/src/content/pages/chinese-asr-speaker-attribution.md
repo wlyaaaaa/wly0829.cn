@@ -28,13 +28,13 @@
   "status_line": {
    "state": "常用",
    "as_of": "2026-10-11",
-   "source": "ChineseASR 公开仓库 main（1bd5a04）的说话人分段、本人声音线索规则与配置，于 10 月 11 日按 14:00 前状态只读核对；未读取私人声纹档案或录音。"
+   "source": "ChineseASR 公开仓库 main（1bd5a04）的说话人分段、本人声音线索规则与配置，于 10 月 11 日按 14:00 前状态只读核对；未读取私人声纹档案或录音。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
   }
  },
  "source": {
   "page": "sources/pages/chinese-asr-speaker-attribution/page.json",
-  "sha256": "cab6e4115757b7d664300ecc50e4585e9ed0d40e89a9afd8efc29ebd43e35c4e",
-  "converted_at_beijing": "2026-10-11T18:50:42+08:00"
+  "sha256": "a1451bcbcb4d699285e8724a5512ebb20c0d9e4814bde11a2925524a4202642c",
+  "converted_at_beijing": "2026-10-30T15:12:31+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的说话人分段、本人声音线索规则与配置，于 10 月 11 日按 14:00 前状态只读核对；未读取私人声纹档案或录音。",
+     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的说话人分段、本人声音线索规则与配置，于 10 月 11 日按 14:00 前状态只读核对；未读取私人声纹档案或录音。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的说话人分段、本人声音线索规则与配置，于 10 月 11 日按 14:00 前状态只读核对；未读取私人声纹档案或录音。"
+     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的说话人分段、本人声音线索规则与配置，于 10 月 11 日按 14:00 前状态只读核对；未读取私人声纹档案或录音。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
     },
     {
      "type": "action_button",

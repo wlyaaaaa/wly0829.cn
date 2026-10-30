@@ -28,13 +28,13 @@
   "status_line": {
    "state": "常用",
    "as_of": "2026-10-11",
-   "source": "ChineseASR 公开仓库 main（1bd5a04）的对齐合同、配置与固定对齐模型文件，于 10 月 11 日按 14:00 前状态只读核对，语义未变；本轮未调用对齐。"
+   "source": "ChineseASR 公开仓库 main（1bd5a04）的对齐合同、配置与固定对齐模型文件，于 10 月 11 日按 14:00 前状态只读核对，语义未变；本轮未调用对齐。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
   }
  },
  "source": {
   "page": "sources/pages/chinese-asr-known-text-alignment/page.json",
-  "sha256": "cd5cad89e0f4c8c1a7b7c4c24d61a9f881531ce83aaf9dc5fb556efa06c70ca9",
-  "converted_at_beijing": "2026-10-11T18:50:42+08:00"
+  "sha256": "a3e60e2fa9ec8f6daeeb5a9225765951e07654757c222f8ae8c5f3bd0a0c1509",
+  "converted_at_beijing": "2026-10-30T15:12:30+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的对齐合同、配置与固定对齐模型文件，于 10 月 11 日按 14:00 前状态只读核对，语义未变；本轮未调用对齐。",
+     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的对齐合同、配置与固定对齐模型文件，于 10 月 11 日按 14:00 前状态只读核对，语义未变；本轮未调用对齐。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的对齐合同、配置与固定对齐模型文件，于 10 月 11 日按 14:00 前状态只读核对，语义未变；本轮未调用对齐。"
+     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的对齐合同、配置与固定对齐模型文件，于 10 月 11 日按 14:00 前状态只读核对，语义未变；本轮未调用对齐。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
     },
     {
      "type": "action_button",

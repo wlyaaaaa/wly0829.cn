@@ -54,7 +54,7 @@
     "近 7 天 AI 点名用了 4 次"
    ],
    "as_of": "2026-10-24",
-   "source": "识别服务日志；AI 使用记录"
+   "source": "识别服务日志；AI 使用记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
   },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/LocalOCR",
@@ -632,8 +632,8 @@
  },
  "source": {
   "page": "sources/pages/localocr/page.json",
-  "sha256": "43d9747993a22c9d406f08a5828fe3d7989d5c799a717f918f2ae31ca4159577",
-  "converted_at_beijing": "2026-10-30T14:14:02+08:00"
+  "sha256": "13bd62ea402ebb265455ea0f39551b2e5e0f320ead3ace80b7c0c5ba47ef3382",
+  "converted_at_beijing": "2026-10-30T15:12:31+08:00"
  }
 }
 ---
@@ -692,7 +692,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 24 日 · 识别服务日志；AI 使用记录",
+     "static_note": "截至 10 月 24 日 · 识别服务日志；AI 使用记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
      "row": "hero"
     },
     {
@@ -749,7 +749,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 24 日 · 识别服务日志；AI 使用记录"
+     "static_note": "截至 10 月 24 日 · 识别服务日志；AI 使用记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
     },
     {
      "type": "stat_card",

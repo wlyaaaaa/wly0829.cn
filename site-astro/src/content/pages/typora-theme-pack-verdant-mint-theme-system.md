@@ -28,7 +28,7 @@
   "status_line": {
    "state": "偶尔用",
    "as_of": "2026-10-11",
-   "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未操作 Typora 窗口"
+   "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未操作 Typora 窗口。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
   },
   "based_on": {
    "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/typora-theme-pack-verdant-mint-theme-system/page.json",
-  "sha256": "8c217b80456f92d70949619b22feb529e25f715f12b9ef44b06d5a0a404484be",
-  "converted_at_beijing": "2026-10-11T19:04:26+08:00"
+  "sha256": "95bbc85f0f83baa932bdfa4f91edadefd5102d76f1a7a38ee5e58a356b42b64f",
+  "converted_at_beijing": "2026-10-30T15:12:32+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未操作 Typora 窗口",
+     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未操作 Typora 窗口。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未操作 Typora 窗口"
+     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未操作 Typora 窗口。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
     },
     {
      "type": "action_button",
