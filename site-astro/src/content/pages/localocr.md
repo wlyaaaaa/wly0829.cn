@@ -376,10 +376,10 @@
    "numbers": [
     {
      "id": "n-jobs",
-     "text": "11,491 份现存完成清单",
-     "meaning": "当前仍有必需输出的completed作业清单数；缺输出的旧缓存会退出，不能当作全历史识别累计",
+     "text": "现存 11,491 次识别记录",
+     "meaning": "只数当前还留着、且所需输出齐全的已完成识别记录；缺输出的旧缓存会退出，因此不是历史累计",
      "as_of": "2026-10-30",
-     "source": "同轮collect localocr-n-jobs-0；2026-10-30T11:07:28+08:00只读缓存清单聚合，未运行OCR",
+     "source": "同轮collect localocr-n-jobs-0；2026-10-30T11:07:28+08:00只读现存识别记录聚合，未运行OCR",
      "screens": [
       "localocr-01"
      ]
@@ -632,8 +632,8 @@
  },
  "source": {
   "page": "sources/pages/localocr/page.json",
-  "sha256": "db8527b24c7340d0aa3045bc815d5a851a73e31de6a97f75b7211a9a4a47689d",
-  "converted_at_beijing": "2026-10-30T14:00:57+08:00"
+  "sha256": "43d9747993a22c9d406f08a5828fe3d7989d5c799a717f918f2ae31ca4159577",
+  "converted_at_beijing": "2026-10-30T14:14:02+08:00"
  }
 }
 ---
