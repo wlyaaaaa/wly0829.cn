@@ -7,11 +7,11 @@
   "parent": "steam-millennium-config-backup",
   "status_line": {
     "state": "偶尔用",
-    "as_of": "2026-10-11",
-    "source": "源仓库 10 月 1 日的最新提交（10 月 20 日回读远端无新提交，本机另有 7 个未提交的清单文件），加上北京时间 10 月 20 日 7:34—7:43 之间的零写入状态核对",
+    "as_of": "2026-10-30",
+    "source": "源仓库 10 月 20 日的最新提交（10 月 30 日回读远端无新提交，本机另有 7 个未提交的清单文件），加上北京时间 10 月 30 日 11:06 的 E/G/H 三处清单与文件指纹核对和 11:11 的零写入状态核对",
     "last": {
       "label": "快照核对",
-      "at": "2026-10-11 13:32"
+      "at": "2026-10-30 11:11"
     }
   },
   "screens": [
@@ -19,7 +19,7 @@
       "id": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-01",
       "section": "top",
       "title": "每周采集、可见管理与可回滚恢复",
-      "text": "# 每周采集、可见管理与可回滚恢复\n\n〔回到项目 → Steam 外观备份〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nSteam Millennium 配置备份 · 功能说明\n\n平时让原任务每周留存配置，需要时请 AI 查状态或看驾驶舱，就能知道最近成功、独立副本和下一次检查。出问题先看恢复计划，确认后仅回填支持的设置；冲突不覆盖，中断可以按原记录处理。\n\n当前情况：最近一次成功是北京时间 10 月 5 日 10:30（内容没变，只重新核验），下一次计划在 10 月 12 日 10:30；已有恢复计划、回滚和中断处理。文件完成不代表 Steam 界面已经恢复。\n\n项目快照核对于 2026-10-11 13:32（北京时间，只读核对）；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "text": "# 每周采集、可见管理与可回滚恢复\n\n〔回到项目 → Steam 外观备份〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nSteam Millennium 配置备份 · 功能说明\n\n平时让原任务每周留存配置，需要时请 AI 查状态或看驾驶舱，就能知道最近成功、独立副本和下一次检查。出问题先看恢复计划，确认后仅回填支持的设置；冲突不覆盖，中断可以按原记录处理。\n\n当前情况：最近一次成功是北京时间 10 月 26 日 10:35，存出新的一代（20 个文件、无告警），同时复制到 G 盘核对通过；10 月 30 日核对 E、G、H 三处是同一代，零写入状态检查为“正常”。下一次触发时间这次没有回读计划任务，不按日历推算。已有恢复计划、回滚和中断处理。文件完成不代表 Steam 界面已经恢复。\n\n项目快照核对于 2026-10-30 11:11（北京时间，只读核对）；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
       "links": [
         {
           "text": "回到项目 → Steam 外观备份",
@@ -154,7 +154,7 @@
       "id": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-09",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\ntools/Invoke-MillenniumBackup.ps1 / tools/millennium_backup.py\n真实采集、状态、恢复与失败处理；杀毒拦截告警的判定在 tools/backup_file_warnings.py。原 tools/snapshot-millennium-config.ps1 保留为兼容转交。\n\ntools/Manage-MillenniumTask.ps1\n安装、自查周任务及任务参数；原 register 脚本保留为兼容转交。\n\ntools/snapshot-millennium-config-hidden.vbs\n隐藏调用与退出码传递。\n\nruntime/snapshot-state.json / README.md / tests/\n现行清单、绑定成功状态、操作指南与隔离回归；9月8日19项仅是历史。\n\n## 如何验证\n\n- 9 月 8 日原有 19 项断言全部通过；重试参数的两项检查属于源码断言，不是实际失败重试演练。9 月 18 日已发布的洁净源码实跑 55 项 Python 测试和 11 项 Windows 检查全部通过；现在源码里共有 63 个测试定义，本轮没有重跑。\n\n- 2026-10-20 早上（7:34—7:43 之间）零写入 Status：status=healthy，但它的范围只是本地快照、任务和 G 热备（health_scope=local_snapshot_task_and_hot_replica）。当前代号 20261019T023001Z-942cbd851a1f（北京时间 10 月 19 日 10:30 创建）共 20 个文件、核对通过、和现在的设置比无变化；G 回读同代通过，保留 4 代；H 冷备 cold_replica=stale_or_invalid：H 上能回读且自身完整，但还是 20260928T023001Z 那一代，冷备尝试回执仍是 9 月 18 日，所以不能说三处同代。任务 enabled、上次结果 0，最近成功 10 月 19 日 10:30，下一次 10 月 26 日 10:30。没有再次触发真实采集，也没有手动复制到 H。历史：10 月 11 日 13:32 那次 E/G/H 三处回读的是 9 月 28 日同一代。\n\n- 9月8日20文件隔离采集与回填字节一致，19 JSON解析成功，3个虚构已安装资源/私有设置保留；本次未做真实Steam恢复。\n\n## 与其他模块的关系\n\n负责前三类配置的定期留存和恢复操作；Steam、Millennium 及插件主题各自负责实际运行。",
+      "text": "## 依据与来源\n\n## 真实入口\n\ntools/Invoke-MillenniumBackup.ps1 / tools/millennium_backup.py\n真实采集、状态、恢复与失败处理；杀毒拦截告警的判定在 tools/backup_file_warnings.py。原 tools/snapshot-millennium-config.ps1 保留为兼容转交。\n\ntools/Manage-MillenniumTask.ps1\n安装、自查周任务及任务参数；原 register 脚本保留为兼容转交。\n\ntools/snapshot-millennium-config-hidden.vbs\n隐藏调用与退出码传递。\n\nruntime/snapshot-state.json / README.md / tests/\n现行清单、绑定成功状态、操作指南与隔离回归；9月8日19项仅是历史。\n\n## 如何验证\n\n- 9 月 8 日原有 19 项断言全部通过；重试参数的两项检查属于源码断言，不是实际失败重试演练。9 月 18 日已发布的洁净源码实跑 55 项 Python 测试和 11 项 Windows 检查全部通过；现在源码里共有 63 个测试定义，本轮没有重跑。\n\n- 2026-10-30 11:11 零写入 Status：status=healthy。当前代号 20261026T023554Z-30c33dbf7922（北京时间 10 月 26 日 10:35 创建）共 20 个文件、核对通过，运行回执 complete、current_data_copied=true、无文件告警；G 回读同代通过，保留 4 代，G 副本 10 月 26 日 10:35:57 完成。11:06 另按同一份清单逐个核对 E、G、H 三处每个文件的字节数和 SHA-256，三处同代、20 个文件全部对上。这次没有回读计划任务的下一次触发时间，也没有触发真实采集、打开 Steam 或装回任何文件。\n\n- 历史：2026-10-20 早上（7:34—7:43 之间）的零写入 Status 当时为 healthy，但范围只到本地快照、任务和 G 热备；当时当前代是 10 月 19 日 10:30 那一代，H 冷备 cold_replica=stale_or_invalid，还停在 20260928T023001Z 那一代，所以当时不能说三处同代。10 月 11 日 13:32 那次 E/G/H 三处回读的是 9 月 28 日同一代。\n\n- 9月8日20文件隔离采集与回填字节一致，19 JSON解析成功，3个虚构已安装资源/私有设置保留；本次未做真实Steam恢复。\n\n## 与其他模块的关系\n\n负责前三类配置的定期留存和恢复操作；Steam、Millennium 及插件主题各自负责实际运行。",
       "links": [
         {
           "text": "上一个模块 主题选项与配色",

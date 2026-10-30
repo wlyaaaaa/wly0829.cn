@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/pc-panel-hub-power-recovery/page.json",
-  "sha256": "3be5bf5941ab8d67fa03d92500a603134588c67e82b50ca020784989ef203aee",
-  "converted_at_beijing": "2026-10-11T19:04:25+08:00"
+  "sha256": "4ee504d112f29c4162bbb844d9b4c414ef29336996f2b3f6240b7a5e7b3ea13c",
+  "converted_at_beijing": "2026-10-30T13:04:17+08:00"
  }
 }
 ---
@@ -791,7 +791,7 @@ PC Panel Hub · 功能说明
 
 - 计划任务由既有 wscript 无窗口父适配器启动长期 PowerShell watchdog。StartSideScreenWatchdog-Hidden.vbs 使用 shell.Run(command, 0, True) 同步等待，非 0 退出经 WScript.Sleep 30000 后再启动、0 退出结束；替代 watchdog 仍先走原有旧 sender 退出与独占串口检查。
 
-- StopSideScreenStack.ps1 对 metrics agent 停止错误如实传播，并等待目标 PID 退出与配置里的 127.0.0.1:18766 可独占绑定；30 秒内没停干净就推迟重建，原 watchdog 继续运行，不静默报告完成。
+- StopSideScreenStack.ps1 对 metrics agent 停止错误如实传播，并等待目标 PID 退出与配置里的 127.0.0.1:18766 可独占绑定；30 秒内没停干净就推迟重建，原 watchdog 继续运行，不静默报告完成。10 月 24 日起端口是否空出只以本机独占绑定能否成功为准，不再在停止时限里查询整张 TCP 连接表（那一步经 CIM 提供程序，耗时没有上限）；进程是否已退出改用 .NET 自带的进程接口判断，不再在运行时编译一段 C# 代码（8614f30、9bf4f2e）。停止诊断记录载入策略、找进程和核对退出各花多久，用来定位总停止超时。这些只改停止和核对方式，不增加任何硬件写入或设备操作。
 
 - StopSideScreenStack.ps1 带 -IncludeWatchdog 时也结束精确的本项目隐藏 VBS 入口，避免人工停止在 30 秒后被接回；普通退出保持最终结束，不把任务计划程序的 RestartOnFailure 当作唯一兜底。
 
@@ -941,7 +941,7 @@ PC Panel Hub · 功能说明
 
 - HS2ActiveRecoveryPolicy.ps1 仅在 MTT 参与活动桌面时用窄 PnP 查询核对唯一 DISPLAY\MTT1337\* 和 ROOT\DISPLAY\* 后端，并逐项读取 IsPresent、ProblemCode 与 HardwareIds=Root\MttVDD；HS2 桌面身份和既有 USB 绑定分别核验。
 
-- 指标端点归属与旧进程退出分别核对，不用进程名称或端口存在冒充健康；重复流退出或心跳停滞进入 30 秒有界冷却，先证明旧 COM 占用已释放；重启失败作为回执留在长驻 Owner 中，不让异常直接把任务退成 Ready。
+- 指标端点归属与旧进程退出分别核对，不用进程名称或端口存在冒充健康：端点回 ok 之外，监听该端口的必须正好一个进程，且就是本安装目录里那份 metrics_agent.py；从已删除的工作树或别的副本跑起来的同名采集器即使 HTTP 回 ok 也不当成本栈已就绪，既不复用也不强杀，只记警告（c23c87c）；重复流退出或心跳停滞进入 30 秒有界冷却，先证明旧 COM 占用已释放；重启失败作为回执留在长驻 Owner 中，不让异常直接把任务退成 Ready。
 
 ## 执行流程
 

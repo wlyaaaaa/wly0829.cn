@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-capture-failover/page.json",
-  "sha256": "944d055c1f2d17a4929d17f52a0600b320de11bbcab12674a4bff7071b42a805",
-  "converted_at_beijing": "2026-10-22T08:32:40+08:00"
+  "sha256": "bfee42232367b63011277d64ac99f709b82e64f6c69b501feab6be75af0de93e",
+  "converted_at_beijing": "2026-10-30T13:04:19+08:00"
  }
 }
 ---
@@ -169,7 +169,7 @@ Sunshine 远程串流 · 功能说明
 
 目标体验仍很直白：在家用物理屏，主屏确实离线时才让 VDD 兜底，主屏回来后把普通窗口拉回；现在已经有实现和测试，但还不能把这段目标场景说成真机成功。
 
-**当前情况：**10 月 22 日 07:22 守护的记录（runtime/worker-health.json）：捕获模式在虚拟屏上，这一轮决定“留在虚拟屏”，Sunshine 配置要抓的那块屏在线，没有报任何阻断原因，这一轮要搬和搬失败的窗口都是 0，记着 3 个已搬到虚拟屏的窗口。但现在跑着的守护是 10 月 20 日 22:16 启动的，它的脚本指纹和当前源码不一致：10 月 21—22 日源码里的两处收紧（搬窗来源、启动器日志）还没加载，要等它下次自然启动。10 月 11 日 13:33 体检报过的“阻塞”（配置要抓的屏在当时活动的屏里找不到对应的一个，守护在等串流空闲）已不是现状。这次没有主动做体检、查显示或真实串流，显卡安全闸也没重新判断。手机画面与真实主屏故障转移仍未验收；普通联网串流 10 月 8 日有本人实用结果。
+**当前情况：**10 月 30 日 11:10 守护的记录（runtime/worker-health.json）：捕获模式在虚拟屏上，这一轮决定“留在虚拟屏”，Sunshine 配置要抓的那块屏在线，没有报任何阻断原因，这一轮要搬和搬失败的窗口都是 0，记录里没有已搬到虚拟屏的窗口。现在跑着的守护是 10 月 26 日 10:30 启动的，它报出的四个程序文件指纹和当前源码逐个相同：10 月 21—25 日源码里的改动（搬窗来源收紧、启动器日志、心跳发布和换屏判断分开）都已加载，10 月 22 日写的“修复尚未加载”已经过时。10 月 11 日 13:33 体检报过的“阻塞”（配置要抓的屏在当时活动的屏里找不到对应的一个，守护在等串流空闲）已不是现状。这次没有主动做体检、查显示或真实串流，显卡安全闸也没重新判断。手机画面与真实主屏故障转移仍未验收；普通联网串流 10 月 8 日有本人实用结果。
 
 具体测试保留各自日期，页面不实时探测运行状态。
 
@@ -392,7 +392,7 @@ Sunshine 远程串流 · 功能说明
 
 ## 正常时
 
-代码已覆盖应当保持主屏、何时尝试虚拟屏与如何计划窗口回迁；真实手机画面和拔线前后对照仍未验收。往虚拟屏搬窗时，新源码只认当前证明在线的主屏区域或上次记下的主屏区域；两样都没有，就不再计划新搬窗、原有搬窗记录照样保留，捕获照样在虚拟屏，不是停止捕获。这条还没被运行中的守护加载。
+代码已覆盖应当保持主屏、何时尝试虚拟屏与如何计划窗口回迁；真实手机画面和拔线前后对照仍未验收。往虚拟屏搬窗时，新源码只认当前证明在线的主屏区域或上次记下的主屏区域；两样都没有，就不再计划新搬窗、原有搬窗记录照样保留，捕获照样在虚拟屏，不是停止捕获。10 月 26 日起运行的守护已加载这条。
 
 ## 发现问题时
 
@@ -530,7 +530,7 @@ Sunshine 远程串流 · 功能说明
 
 1. **先读主机现场**　守护器辨认物理主屏、专用虚拟屏和当前有没有人在串流；主屏正常时优先显示它，并拉回误入虚拟屏的普通窗口。
 
-2. **满足条件才兜底**　主屏稳定离线、近期显卡安静、串流明确空闲、窗口记录完好后，才记下窗口位置并切到唯一的专用虚拟屏；“从哪搬窗”只认证明过的主屏区域，没有就只切捕获、不新搬窗（这条在当前源码里，运行中的守护还没加载）。
+2. **满足条件才兜底**　主屏稳定离线、近期显卡安静、串流明确空闲、窗口记录完好后，才记下窗口位置并切到唯一的专用虚拟屏；“从哪搬窗”只认证明过的主屏区域，没有就只切捕获、不新搬窗（10 月 26 日起运行的守护已加载这条）。
 
 3. **主屏恢复后再读回**　条件允许时尝试把窗口和捕获目标拉回主屏；实际窗口位置与手机画面还要分别检查。
 
@@ -625,7 +625,7 @@ Sunshine 远程串流 · 功能说明
 ## 技术实现与依据（一）
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
-10 月 22 日 07:22:22 守护回执（runtime/worker-health.json，ObservedUtc 2026-10-21T23:22:22Z）：Mode/CaptureKind=Vdd、Action=StayVdd、ConfiguredTargetOnline=true、BlockedReason=null、ClientAcceptance=unknown，MigratedWindowCount=3、AppliedWindowActionCount=0、FailedWindowActionCount=0；进程 ProcessStartUtc 2026-10-20T14:16:43Z（北京时间 10 月 20 日 22:16）。运行中的 WorkerSha256=2EA6698BE075C349CBA9C3082E881C18C4505F4957620518ABDC4A521B65B7A2，当前源码 Invoke-SunshineCaptureFailover.ps1 的 SHA-256=967F366D968985071F457AC7A170D870AAA264A62F4386E8E71F4A464D6A2072，两者不一致：c09364f（10 月 22 日 06:39）和 6cfbfde（10 月 21 日 06:38）尚未加载，本轮没有重启或部署。10 月 20 日 07:38:27 那份回执曾是四个组件与当时源码一致，留作历史。本轮没有跑零写入体检。历史：10 月 11 日 13:33 零写入体检曾是 blocked（capture-output-offline-or-ambiguous），当时会话 Active（0 个 TCP、3 个 UDP 串流端点）、动作为“等待串流空闲”。客户端画面 Unknown（未验证），真实切换和手机验收仍未完成
+10 月 22 日 07:22:22 守护回执（历史）：当时运行中的 WorkerSha256=2EA6698B… 与当时源码 967F366D… 不一致，c09364f（10 月 22 日 06:39）和 6cfbfde（10 月 21 日 06:38）尚未加载；10 月 20 日 07:38:27 那份回执四个组件与当时源码一致。现在：10 月 30 日 11:10:14 读到的守护回执（runtime/worker-health.json）：Mode/CaptureKind=Vdd、Action=StayVdd、ConfiguredTargetOnline=true、BlockedReason=null、ClientAcceptance=unknown，MigratedWindowCount=0、AppliedWindowActionCount=0、FailedWindowActionCount=0；进程 ProcessStartUtc 2026-10-26T02:30:32Z（北京时间 10 月 26 日 10:30）。回执里四个 ComponentSha256（Invoke-SunshineCaptureFailover.ps1、sunshine-capture-failover.psm1、sunshine-safety.psm1、sunshine-headless-config.psm1）与当前源码逐项相等，c09364f、6cfbfde 和 8de3dcf（健康回执发布与捕获周期失败分开）都已加载；这是守护自然重启后加载的，本轮没有重启或部署。本轮没有跑零写入体检。历史：10 月 11 日 13:33 零写入体检曾是 blocked（capture-output-offline-or-ambiguous），当时会话 Active（0 个 TCP、3 个 UDP 串流端点）、动作为“等待串流空闲”。客户端画面 Unknown（未验证），真实切换和手机验收仍未完成
 
 ## 关键规则与设计选择
 
@@ -710,13 +710,13 @@ Sunshine 远程串流 · 功能说明
 
 - 状态文件损坏时（空、全零、非对象、格式或时间坏）停在 capture-state-invalid；持久记录用候选文件刷新、原子替换并回读，保留一份有效的 .previous 作恢复点。
 
-- Install-SunshineCaptureFailoverTask.ps1 将其注册为当前交互用户登录时触发的 Highest（最高权限）任务，配合 VBS（Visual Basic 脚本）启动器无窗运行并监视父进程。6cfbfde 起 Invoke-SunshineCaptureFailover-Hidden.vbs 写正式日志 runtime/capture-launcher.log（UTF-16，约 1 MB 轮转），分开记 start、worker_exit 和 launcher_error，启动异常返回 1；已在跑的旧实例要下次自然启动才加载，这份日志也不能倒推查清它出现前的历史故障（docs/operations.md）。
+- Install-SunshineCaptureFailoverTask.ps1 将其注册为当前交互用户登录时触发的 Highest（最高权限）任务，配合 VBS（Visual Basic 脚本）启动器无窗运行并监视父进程。6cfbfde 起 Invoke-SunshineCaptureFailover-Hidden.vbs 写正式日志 runtime/capture-launcher.log（UTF-16，约 1 MB 轮转），分开记 start、worker_exit 和 launcher_error，启动异常返回 1；这份日志不能倒推查清它出现前的历史故障（docs/operations.md）。
 
 - Set-SunshineHeadlessConfig.ps1 提供独立的人工应急固定 VDD 路径：默认预览、显式 Apply 才写，只改受管配置键，保留原文件备份，同样要过显卡、会话、唯一 VDD 身份和 CAS 这几关，不冒充已重载或已显示。
 
 - tests/Test-SunshineCaptureFailover.ps1 现定义 72 个测试（9 月 18 日有回执时是 67 个，后来新增 3 个损坏状态场景等），覆盖已建模的身份、去抖、会话、窗口与故障分支。
 
-- 会话检测 Active/Idle/Unknown 三态，端口随 Sunshine 当前 base-port 解析；缺监听、失败或进程身份不符为 Unknown（未验证）。短写操作共用互斥，runtime（运行环境）/worker-health.json 绑定 PID、创建时间、源码 SHA 和上次完整循环，旧心跳不能续成健康。
+- 会话检测 Active/Idle/Unknown 三态，端口随 Sunshine 当前 base-port 解析；缺监听、失败或进程身份不符为 Unknown（未验证）。短写操作共用互斥，runtime（运行环境）/worker-health.json 绑定 PID、创建时间、源码 SHA 和上次完整循环，旧心跳不能续成健康。健康回执写失败单独记为 health-publication-failure：不清除已经累计的串流空闲时间，也不把成功的捕获结果改成阻断；真正的捕获周期失败仍记 cycle-transient-failure 并清除空闲计时；写不出回执时不更新成功心跳，持续失败会在体检里显示过期（8de3dcf）。体检读这份回执时允许守护同时整份原子替换它，两边不再互相卡住（174286d）。
 
 ## 执行流程
 
@@ -783,7 +783,7 @@ Sunshine 远程串流 · 功能说明
 
 ## 技术实现与依据（三）
 
-3. 若物理主屏离线，启动 15 秒缺失计时器；计时满、串流明确空闲、近期显卡安静且状态记录有效后，记录主屏普通窗口几何位置，将 output_name 原子替换为 VDD GUID 并迁移窗口。迁移来源只取已证明的物理 WorkArea 或 LastPhysicalWorkArea，两者都没有时只保留迁移 journal、不计划新搬窗（c09364f，运行中的守护尚未加载）。
+3. 若物理主屏离线，启动 15 秒缺失计时器；计时满、串流明确空闲、近期显卡安静且状态记录有效后，记录主屏普通窗口几何位置，将 output_name 原子替换为 VDD GUID 并迁移窗口。迁移来源只取已证明的物理 WorkArea 或 LastPhysicalWorkArea，两者都没有时只保留迁移 journal、不计划新搬窗（c09364f，10 月 26 日起运行的守护已加载）。
 
 4. 主屏重新被证明健康并通过去抖后，守护程序只对符合身份与区域门的普通窗口执行拉回，再恢复物理捕获目标；实际结果需逐窗口与配置回读。
 
@@ -947,11 +947,11 @@ Sunshine 远程串流 · 功能说明
 
 - **检测到多于一个同名 VDD 或存在未知虚拟驱动**　拒绝推断目标，执行失败关闭，保持当前配置不动并记录错误日志。
 
-- **配置要抓的屏在活动屏里找不到唯一对应**　体检报 blocked（capture-output-offline-or-ambiguous），守护等待串流空闲后再处理；这只说明配置和当前活动屏对不上，不等于虚拟屏坏了，也不推断手机一定黑屏。10 月 11 日就是这种情况；10 月 20 日早上和 10 月 22 日 07:22 守护的回执里都没有这一阻塞。
+- **配置要抓的屏在活动屏里找不到唯一对应**　体检报 blocked（capture-output-offline-or-ambiguous），守护等待串流空闲后再处理；这只说明配置和当前活动屏对不上，不等于虚拟屏坏了，也不推断手机一定黑屏。10 月 11 日就是这种情况；10 月 20 日早上、10 月 22 日 07:22 和 10 月 30 日 11:10 守护的回执里都没有这一阻塞。
 
 - **近 15 分钟内有 BugCheck、显示内核错误或匹配的 WER 图形故障**　保持 BlockedByGpuStability，不切捕获或往虚拟屏搬窗；只有空闲且证明来自 VDD、目标是健康物理主屏的普通窗口单向回迁可独立处理。单独一次 Kernel-Power 41（非正常关机）只记诊断，不挡整次开机；WER 按类型参数和报告编号去重，虚拟驱动自检报告不算显卡崩溃；事件查询本身出错仍挡。
 
-- **要往虚拟屏搬窗，却证明不了主屏区域**　当前源码不计划新搬窗、保留已有迁移记录，捕获切换照常判断；不用虚拟屏区域冒充来源。运行中的守护尚未加载此修复。
+- **要往虚拟屏搬窗，却证明不了主屏区域**　当前源码不计划新搬窗、保留已有迁移记录，捕获切换照常判断；不用虚拟屏区域冒充来源。10 月 26 日起运行的守护已加载此修复。
 
 - **窗口恢复记录损坏**　停在 capture-state-invalid，不自动切换、不用空白记录覆盖；核对有效的上一份记录和当前现场后再恢复。
 
@@ -1026,7 +1026,9 @@ Sunshine 远程串流 · 功能说明
 
 - **人工无头写入前 VDD 身份或原配置变化**　拒绝覆盖；若已写入，仅在当前仍匹配本轮结果且 GPU、会话、身份门允许时回滚，未恢复项单独报告。工具本身不自动重启 Sunshine，也不把备份冒充恢复成功。
 
-- **隐藏启动器起不来**　新版把 launcher_error 记进 runtime/capture-launcher.log（UTF-16、约 1 MB 轮转）并返回 1，不再悄悄失败；正在跑的旧实例要等下次自然启动才换成新版，日志也只从新版开始有。
+- **隐藏启动器起不来**　新版把 launcher_error 记进 runtime/capture-launcher.log（UTF-16、约 1 MB 轮转）并返回 1，不再悄悄失败；日志只从新版开始有。
+
+- **健康回执写不出去**　单独记 health-publication-failure，不清除已累计的空闲时间，也不把这一轮成功的捕获结果改成失败；成功心跳不更新，持续写不出去时体检和驾驶舱看到的是心跳过期，不会把守护当成正常。
 
 ::screen{#sunshine-remote-streaming-capture-failover-09 section="tech"}
 
@@ -1124,13 +1126,13 @@ Sunshine 远程串流 · 功能说明
 
 - 9 月 18 日 14:07 有原始回执：当时 67/67 通过（涵盖设备快照、GUID 绑定、去抖、CAS 写入、BugCheck/WER/GPU 事件门和窗口计划）；现定义 72 个，本轮没有运行。它们是合成分支，不是物理串流。
 
-- 10 月 22 日 07:22:22 守护回执：ConfiguredTargetOnline=true、BlockedReason=null、Action=StayVdd、ClientAcceptance=unknown；它是守护自己的周期记录，不是体检，也不看客户端画面。10 月 20 日 07:38:27 回执结论相同，留作历史。历史：10 月 11 日 13:33 截止前体检：blocked，配置要抓的屏不在线或认不唯一（ConfiguredTargetOnline=false），捕获模式和待切目标都是虚拟屏；体检按配置的输出编号在活动屏里严格匹配，它没有看客户端画面，也不能证明虚拟屏驱动坏了。客户端画面和输入未知。
+- 10 月 30 日 11:10:14 守护回执：ConfiguredTargetOnline=true、BlockedReason=null、Action=StayVdd、ClientAcceptance=unknown；它是守护自己的周期记录，不是体检，也不看客户端画面。10 月 20 日 07:38:27、10 月 22 日 07:22:22 回执结论相同，留作历史。历史：10 月 11 日 13:33 截止前体检：blocked，配置要抓的屏不在线或认不唯一（ConfiguredTargetOnline=false），捕获模式和待切目标都是虚拟屏；体检按配置的输出编号在活动屏里严格匹配，它没有看客户端画面，也不能证明虚拟屏驱动坏了。客户端画面和输入未知。
 
 - 历史记录：2026年9月4日曾发现 output_name 与活动输出不匹配，并被当次 GPU 稳定门阻断；9 月 18 日那次开机又因显卡故障记录停止切换。这些是带日期的旧情况，现在的显卡门只看近 15 分钟，10 月 11 日显卡这关是放行的。
 
 - 窗口恢复状态 9 月 14 日的记录（Mode=Vdd、PendingTargetKind=Physical）保留为历史；10 月 11 日 13:33 体检时为 Mode=Vdd、PendingTargetKind=Vdd；10 月 20 日 07:35:51 更新的状态仍为 Mode=Vdd。状态里记的上次目标不能代替配置里当前要抓的屏，状态新鲜也不证明捕获选择或窗口迁移已通过。
 
-- 系统计划任务 SunshineCaptureFailover-Interactive 随 10 月 10 日 11:06 登录启动并常驻；10 月 11 日 13:33 体检时守护心跳新鲜、源码一致；10 月 20 日 07:38 守护回执的四个组件 SHA-256 当时与源码一致；10 月 22 日 07:22 读到运行中的守护（10 月 20 日 22:16 启动）脚本指纹 2EA6698B… 与当前源码 967F366D… 不一致，c09364f、6cfbfde 两项修复还没加载。
+- 系统计划任务 SunshineCaptureFailover-Interactive 随 10 月 10 日 11:06 登录启动并常驻；10 月 11 日 13:33 体检时守护心跳新鲜、源码一致；10 月 20 日 07:38 守护回执的四个组件 SHA-256 当时与源码一致；10 月 22 日 07:22 读到当时运行中的守护（10 月 20 日 22:16 启动）脚本指纹 2EA6698B… 与当时源码 967F366D… 不一致，那时 c09364f、6cfbfde 两项修复还没加载；10 月 30 日 11:10 读到的守护 10 月 26 日 10:30 启动，四个组件 SHA-256 与当前源码逐项相等，这两项和 8de3dcf 都已加载。
 
 ## 与其他模块的关系
 

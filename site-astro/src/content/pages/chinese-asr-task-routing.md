@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/chinese-asr-task-routing/page.json",
-  "sha256": "430e65ae7b7af07478373211f566733965a46d0c6902cb792f272904ec221f05",
-  "converted_at_beijing": "2026-10-11T18:50:42+08:00"
+  "sha256": "308e7b5f9c3b1764ea9c790b49bfa00c9ead1b40ade95bf0f860cc8a5243a5a4",
+  "converted_at_beijing": "2026-10-30T13:04:15+08:00"
  }
 }
 ---
@@ -1069,7 +1069,7 @@ ChineseASR · 功能说明
 
 ## 出问题时（二）
 
-- **worker 超期、取消或租约丢失**：结束任务进程树并记录终态，保留可安全恢复的任务证据。
+- **worker 超期、取消或租约丢失**：结束任务进程树并记录终态，保留可安全恢复的任务证据。worker 自己先退出（不论退出码）后，显卡服务按设计回收租约，之后查不到租约（lease_not_found）算正常回收，不再盖掉真实错因：命令行保留 worker 的 stdout/stderr，服务失败记录保留 returncode、stdout_tail、stderr_tail，失败提示带退出码和报错末行，asr-smart.ps1 直接显示，能说出音频解码失败这类实际原因；只有运行中真丢租约才停掉 worker 并报租约丢失（10 月 28 日 8b6980c；本轮只读源码，未执行）。
 
 - **服务端口被其他程序占用**：明确报告身份冲突，不结束未知进程也不抢端口。
 

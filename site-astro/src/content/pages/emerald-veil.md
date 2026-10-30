@@ -634,8 +634,8 @@
  },
  "source": {
   "page": "sources/pages/emerald-veil/page.json",
-  "sha256": "c6b5b2794ef5be0ed09328d97c4c743b01a7466e64d89a4ed8a1de2dfb167470",
-  "converted_at_beijing": "2026-10-11T18:56:44+08:00"
+  "sha256": "5581b7ca3e9ed04f1fb183279d8a526ce0f9b6b6f235fa73ca9f61bffe817c83",
+  "converted_at_beijing": "2026-10-30T13:04:16+08:00"
  }
 }
 ---
@@ -2236,7 +2236,7 @@
 
 **生命周期回执**（10 月 8 日 861a2d2 起）：只有一份 %LOCALAPPDATA%\EmeraldVeil\last-result.json，格式 emerald-veil.result.v1，字段 state（success／stopped／failed）、result、reason_zh、observed_at（北京时间）、process_id；先写 .tmp 再整份替换，写失败不影响常驻程序。启动写“屏保常驻程序已启动”，正常退出写“屏保常驻程序已退出”，未处理异常和 --status 证实常驻程序不在时写 failed。强制终止、断电写不了，只能靠之后的 live status 发现；已经接住的画面错误照旧在 --status 里看。代码：src/EmeraldVeil.Core/ResidentResult.cs、src/EmeraldVeil.App/App.xaml.cs；说明：docs/product-design.md“Source install and removal”。
 
-**这次网页核对的现状**（10 月 11 日 13:32–13:37，只读）：安装 Verify 返回 0.1.39.0、常驻程序 healthy、已开启、快捷键可用；原生泡泡 Verify 返回已开启、360 秒、Windows 自动屏保关、不锁屏、Radius 1130000000；本机回执为 success（10 月 10 日 11:11 启动）。壁纸脚本 Set-WindowsBackground.ps1 -Action Verify 这次在读各屏路径（MonitorPaths）时返回 COM E_FAIL，没能逐屏回读桌面和锁屏，所以这次壁纸和锁屏的在用状态是 Unknown，说不清是脚本问题还是这次的显示环境；之前的选图和装好的记录不因此作废。这次没有触发泡泡、快捷键或锁屏，没看真实画面；装着的程序和源码目录里旧 publish 产物字节不同、没有重新构建，源码和安装版是否一致这次没验。
+**这次网页核对的现状**（10 月 11 日 13:32–13:37，只读）：安装 Verify 返回 0.1.39.0、常驻程序 healthy、已开启、快捷键可用；原生泡泡 Verify 返回已开启、360 秒、Windows 自动屏保关、不锁屏、Radius 1130000000；本机回执为 success（10 月 10 日 11:11 启动）。壁纸脚本 Set-WindowsBackground.ps1 -Action Verify 这次在读各屏路径（MonitorPaths）时返回 COM E_FAIL，没能逐屏回读桌面和锁屏，所以这次壁纸和锁屏的在用状态是 Unknown，说不清是脚本问题还是这次的显示环境；之前的选图和装好的记录不因此作废。这次没有触发泡泡、快捷键或锁屏，没看真实画面；装着的程序和源码目录里旧 publish 产物字节不同、没有重新构建，源码和安装版是否一致这次没验。10 月 30 日 11:10 又只读看了一次：常驻进程在，10 月 26 日 10:34 启动；本机回执是 10 月 26 日 10:34 的 success（屏保常驻程序已启动）；源码 10 月 23 日以来没有新提交。这次只看进程和回执，没有重跑安装 Verify、泡泡 Verify 或壁纸 Verify，也没看泡泡画面、试快捷键或锁屏；上面壁纸回读的 COM E_FAIL 仍是 10 月 11 日那次的结果，不算这次的失败。
 
 ::screen{#emerald-veil-07 section="tech"}
 

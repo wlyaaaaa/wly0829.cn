@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/proxyclean-dead-port-and-route-cleanup/page.json",
-  "sha256": "b1b2a5e40af2f8995555f195345d77848158430d4fee575ec1ee629ab39c82cd",
-  "converted_at_beijing": "2026-10-22T08:32:35+08:00"
+  "sha256": "857fc5ee0fca32800058f0e9c18d6cdfabd9aef4e4d2235cbc6358b2123ad1e3",
+  "converted_at_beijing": "2026-10-30T13:04:17+08:00"
  }
 }
 ---
@@ -713,7 +713,7 @@ ProxyClean · 功能说明
 
 - Test-PCPhysicalRoute 在删除前与删除后共同检查 HardwareInterface=true；信息未知不充当物理路由证据。
 
-- ProxyClean.Operations.ps1 在效果前把原值和步骤存进当前用户 DPAPI（Windows 自带的按账户加密）保护的 last-operation.dpapi，用主文件与 .previous 两个位置轮流保存：保留最近一份有效记录，把新记录写进另一份，强制落盘并读回核对后才算保存成功，所以不会覆盖唯一的恢复文件；旧版单文件记录也能读，兼容 EFS 加密目录。临写比较原值，写后回读，失败逆序恢复。外来修改保留为 recovery_required 并阻止新配置写入；只处理当前轮可撤销对象，文件不是跨设备恢复包。
+- ProxyClean.Operations.ps1 在效果前把原值和步骤写进本机 %LOCALAPPDATA%\ProxyClean\last-operation.json（UTF-8 JSON，原样保存恢复值，不另加密，靠当前 Windows 账户的文件权限），用主文件与 .previous 两个位置轮流保存：保留最近一份有效记录，把新记录写进另一份，强制落盘并读回核对后才退役旧槽，所以不会覆盖唯一的恢复文件；兼容 EFS 加密目录。预览不创建记录。以前用 DPAPI（Windows 自带的按账户加密）保护的 last-operation.dpapi 及其 .previous 仍能读来恢复，单纯读取不迁移格式；下次保存时先完整写好并回读 JSON 双槽，再退役旧槽。临写比较原值，写后回读，失败逆序恢复。外来修改保留为 recovery_required 并阻止新配置写入；只处理当前轮可撤销对象，文件不是跨设备恢复包。
 
 ## 执行流程
 

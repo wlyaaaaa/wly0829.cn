@@ -324,14 +324,15 @@
       "E:/Projects/Tools/TimeAudit/.venv/Scripts/python.exe",
       "-B",
       "-c",
-      "import json\nfrom pathlib import Path\nroot=Path(r\"E:/Projects/Tools/TimeAudit/grafana_dashboards\")\ndef count(panels):\n    return sum((0 if p.get(\"type\")==\"row\" else 1)+count(p.get(\"panels\",[])) for p in panels)\nitems=[json.loads(p.read_text(encoding=\"utf-8-sig\")) for p in root.glob(\"*.json\")]\nassert items and len({g[\"uid\"] for g in items})==len(items)\nmain=[g for g in items if not g[\"uid\"].startswith(\"website-computer-status\")]\npublic=[g for g in items if g[\"uid\"].startswith(\"website-computer-status\")]\nprint(json.dumps({\"main_dashboards\":len(main),\"main_panels\":sum(count(g.get(\"panels\",[])) for g in main),\"public_dashboards\":len(public)},separators=(\",\",\":\")))"
+      "import json\nfrom pathlib import Path\nroot=Path(r\"E:/Projects/Tools/TimeAudit/grafana_dashboards\")\npublic_root=root.parent/\"grafana_provisioning\"/\"dashboards\"\ndef count_legacy(panels):\n    return sum((0 if p.get(\"type\")==\"row\" else 1)+count_legacy(p.get(\"panels\",[])) for p in panels)\ndef count(dashboard):\n    if \"elements\" in dashboard:\n        elements=dashboard[\"elements\"]\n        assert isinstance(elements,dict) and all(isinstance(p,dict) and p.get(\"kind\") in {\"Panel\",\"LibraryPanel\"} for p in elements.values()),\"v2_element_kind_changed\"\n        return len(elements)\n    return count_legacy(dashboard.get(\"panels\",[]))\nitems=[json.loads(p.read_text(encoding=\"utf-8-sig\")) for p in root.glob(\"*.json\")]\npublic=[json.loads(p.read_text(encoding=\"utf-8-sig\")) for p in public_root.glob(\"website-computer-status*.json\")]\nassert items and len({g[\"uid\"] for g in items})==len(items)\nassert public and len({g[\"uid\"] for g in public})==len(public)\nmain=[g for g in items if not g[\"uid\"].startswith(\"website-computer-status\")]\nprint(json.dumps({\"main_dashboards\":len(main),\"main_panels\":sum(count(g) for g in main),\"public_dashboards\":len(public)},separators=(\",\",\":\")))"
     ],
     "cwd": "E:/Projects/Tools/TimeAudit",
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
     "timeout": 10,
-    "observation_basis": "live_read"
+    "observation_basis": "live_read",
+    "source_evidence": "只读当前grafana_dashboards/*.json；V2 elements按Panel/LibraryPanel计数，旧panels递归跳过row；公开小看板从grafana_provisioning/dashboards/website-computer-status*.json独立读取。标准库JSON/Path，不执行Grafana查询、不导入业务、不写文件，只输出6/80/3聚合。"
   },
   "timeaudit-snapshot-commits": {
     "argv": [
@@ -564,22 +565,6 @@
     "cwd": "E:\\PCConfig",
     "read_only": true,
     "owner_project": "remote-control",
-    "output": "json",
-    "timeout": 20,
-    "observation_basis": "live_read"
-  },
-  "agents-decision-volumes-stats": {
-    "argv": [
-      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
-      "-B",
-      "-X",
-      "utf8",
-      "-c",
-      "import sys,json,re,hashlib;from pathlib import Path;sys.path.insert(0,'E:/.agents/tools');import owner_decision_store as s;r=Path('E:/.agents');before=(r/'docs/owner-decisions/order.json').read_bytes();v=s._verify(r);b=s.read_decision_bytes(r);t=b.decode('utf-8-sig');n=len(re.findall(r'^## ',t,re.M));c=len(re.sub(r'\\s','',t));assert v['status']=='pass' and v['sections']==n and before==(r/'docs/owner-decisions/order.json').read_bytes(),'decision_snapshot_changed_or_invalid';print(json.dumps({'sections':n,'nonspace_chars':c,'wan_rounded':int(c/10000+0.5),'volumes':v['volumes'],'sha256':hashlib.sha256(b).hexdigest()},ensure_ascii=False))"
-    ],
-    "cwd": "E:/.agents",
-    "read_only": true,
-    "owner_project": "agents",
     "output": "json",
     "timeout": 20,
     "observation_basis": "live_read"

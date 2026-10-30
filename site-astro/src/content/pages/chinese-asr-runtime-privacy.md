@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/chinese-asr-runtime-privacy/page.json",
-  "sha256": "fb4574077dd3fb6ddc7100a4237843a354d2b935c4e672e63607c37d6029e2f4",
-  "converted_at_beijing": "2026-10-22T08:32:27+08:00"
+  "sha256": "8e76f923ce61bc27fd66ae333b9c5831ef4d1b7ecd608c1aef09d6237c3862d2",
+  "converted_at_beijing": "2026-10-30T13:04:15+08:00"
  }
 }
 ---
@@ -763,7 +763,7 @@ ChineseASR · 功能说明
 
 - 项目流水线只准备 HTTP 请求体或 WebSocket 帧，用 SecretRefRequestPath 把精确请求交给密码中心的 vendor_api_worker 发送，PCConfig 管它的安装路径和固定哈希；原来不持钥的兼容入口 qwen_audio3_broker_worker.py（9 月 28 日迁移，49b7d76）10 月 20 日已删除。续作保留 intent、unclaimed、provider 与 checkpoint：已成功的 operation 不重发；结果不明（previous_outcome_unknown）不自动另开作业，只有明确允许后在原请求加 retry_uncertain=true，且请求体、模型和音频摘要必须一致；批量补跑先 dry-run，按原音哈希、用途和声道复用已有成功。
 
-- transcript_readback.py 同时检索已保留本地 job（任务记录） 与完成态云结果，核对 schema（数据结构）、purpose、成功状态、原音哈希、每块范围和输出字节；完整云块只形成 chunk 时间粒度，quality 保持 unknown（未验证），不因更新日期更近就优先。
+- transcript_readback.py 按原音 SHA-256 只读检索三处：已保留本地 job（任务记录）、完成态云结果，以及 jobs 快照所属 outputs/batch 下的 batch-item.json（文件夹批量结果，10 月 29 日 512f443 补上）。云结果核对 schema（数据结构）、purpose、成功状态、原音哈希、每块范围和输出字节；完整云块只形成 chunk 时间粒度，quality 保持 unknown（未验证）。批量稿逐个核对正文引用、objective 结果、raw 结果的大小与 SHA-256 和原音身份，才回传 artifact.transcript 稿件路径、原质量和覆盖：quality.review 保留 needs_review，quality.audit 保留 conflict，不因读到了稿就把质量改好。几处都有时沿原优先规则选一份，不因更新日期更近就优先，其余列在 lookup_scope.alternatives；只有稿件、没有可回读时间段时返回 gap / timestamps_unavailable，不当作没转写；jobs 快照读不了也继续查它的批量目录，快照缺口照实留在 lookup_scope。本轮只读源码，没有执行回读。
 
 ::screen{#chinese-asr-runtime-privacy-07 section="tech"}
 
@@ -1134,6 +1134,8 @@ ChineseASR · 功能说明
 - **同类 GPU 租约占用或 Ollama 活跃请求/会话冲突**：受影响任务保持 blocked 或等待；OCR（光学字符识别） 与 ASR（自动语音识别） 的允许共存不被当成冲突，也不绕过租约。
 
 - **云网络、超时、限流或 5xx**：保留已成功块与本地证据，只记这一次失败；先区分未发出、明确失败和结果不明，结果不明不自动另开作业，只有明确允许后才在原请求上重试。
+
+- **按原音指纹回读已有稿时校验不过或缺时间**：大小或 SHA-256 对不上的稿不回传，只记进拒收原因；有稿但没有可回读时间段时返回 gap / timestamps_unavailable 并给出稿件路径和原质量，不当作没转写，也不为此重转或上传；jobs 快照读不了时继续查批量目录，并留下快照缺口。
 
 - **免费期已过或被手动暂停**：不自动上传，结果里写明“免费期已到期，云端未跑”或暂停原因；手动暂停只有本人说恢复才解除，点名上云照常可用。
 

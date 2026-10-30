@@ -1575,7 +1575,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "常用命令如下，路径和会话号换成本次真实值；修改仓库用-NewWorktree-RepoPath，只读任务可换成-WorkDir'<已有目录>",
+        "text_ref": "派活单和预算。",
         "whole_block": true,
         "columns": 1,
         "body_columns": 1
@@ -1636,7 +1636,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "Steer的长消息可用-PromptFile替换-Message，不同时传；消息里有中文引号“”时一律用-PromptFile，PowerS",
+        "text_ref": "命令参数按需查",
         "whole_block": true,
         "columns": 1,
         "body_columns": 1
@@ -1674,7 +1674,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "Steer的长消息可用-PromptFile替换-Message，不同时传；消息里有中文引号“”时一律用-PromptFile，PowerS",
+        "text_ref": "命令参数按需查",
         "whole_block": true,
         "columns": 1
       }

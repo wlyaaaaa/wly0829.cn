@@ -292,7 +292,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 分层诊断默认不写日志，Docker只读有界尾部且要求事件本身属于当前运行，文件mtime不替旧事件续期。出口比较只给匿名相同出口分组，不公开出口地址；同出口不证明同一客户端，HTTP成功也不证明绕过TUN。",
+        "text_ref": "- 分层诊断默认不写日志",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -312,7 +312,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 分层诊断默认不写日志，Docker只读有界尾部且要求事件本身属于当前运行，文件mtime不替旧事件续期。出口比较只给匿名相同出口分组，不公开出口地址；同出口不证明同一客户端，HTTP成功也不证明绕过TUN。",
+        "text_ref": "- 分层诊断默认不写日志",
         "columns": 1,
         "icons": "none",
         "illustration": "none",

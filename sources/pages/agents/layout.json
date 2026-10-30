@@ -39,7 +39,7 @@
           "proto:a01-ic3",
           "proto:a01-ic4"
         ],
-        "text_ref": "189次"
+        "text_ref": "234 次"
       },
       {
         "type": "live_strip",
@@ -88,7 +88,7 @@
           "proto:a01-ic3",
           "proto:a01-ic4"
         ],
-        "text_ref": "189次"
+        "text_ref": "234 次"
       },
       {
         "type": "live_strip",
@@ -717,7 +717,7 @@
       },
       {
         "type": "content_card",
-        "text_ref": "决定原话",
+        "text_ref": "原话存档",
         "columns": 2,
         "columns_v": 1,
         "illustration": "left_inside",
@@ -761,7 +761,7 @@
       },
       {
         "type": "content_card",
-        "text_ref": "决定原话",
+        "text_ref": "原话存档",
         "columns": 2,
         "columns_v": 1,
         "illustration": "left_inside",

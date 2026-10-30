@@ -1382,7 +1382,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "140个",
+        "text_ref": "145 个",
         "chart_type": "donut",
         "width": "100%",
         "number_first": true,
@@ -1446,7 +1446,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "140个",
+        "text_ref": "145 个",
         "chart_type": "donut",
         "number_first": true,
         "center_node": 0
@@ -2742,8 +2742,8 @@
           "16": 3,
           "75": 3,
           "76": 3,
-        "74": 3
-      },
+          "74": 3
+        },
         "status_text": "dot_only"
       }
     ],
@@ -2804,8 +2804,8 @@
         ],
         "group_heading": "brush",
         "item_spans": {
-        "74": 3
-      },
+          "74": 3
+        },
         "status_text": "dot_only"
       }
     ],

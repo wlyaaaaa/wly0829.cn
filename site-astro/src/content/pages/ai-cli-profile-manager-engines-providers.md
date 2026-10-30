@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-engines-providers/page.json",
-  "sha256": "728081a94d993cb339f317e9617fe6a7437ec97f5de6372daabe4b5c8a6363a0",
-  "converted_at_beijing": "2026-10-11T18:50:42+08:00"
+  "sha256": "6c68577e066c396c3b1d70e1075829e59be2280b41af234b745b7c97c9a32125",
+  "converted_at_beijing": "2026-10-30T13:04:15+08:00"
  }
 }
 ---
@@ -584,9 +584,9 @@ AI CLI Profile Manager · 功能说明
 
 1. Codex、Claude Code、Open Interpreter 的协议和权限不同，不能只换模型名。
 
-2. Qwen Code / OpenCode 当前公开本地路线是 machine-only（仅程序化运行）。
+2. Qwen Code / OpenCode 当前公开本地路线是 machine-only（仅程序化运行）。10 月 28 日起，这类非 Codex 的程序化运行默认用完全访问（danger-full-access）直接在本机正常执行、网络照常；只有调用方明确选只读（read-only）或仅工作区可写（workspace-write）时，才套一层禁网的外层沙箱。Codex 自己的程序化运行仍是原来的完全访问；临时目录、期限、预算和清理照旧。
 
-3. Open Interpreter 只支持当前 Rust 0.0.21+ 世代；旧 Python 0.4.x 会由 Doctor 识别并拒绝，云端 Key 还会从它的 Shell（命令执行环境）工具环境中排除。
+3. Open Interpreter 只支持当前 Rust 0.0.21+ 世代；旧 Python 0.4.x 会由 Doctor 识别并拒绝，云端 Key 还会从它的 Shell（命令执行环境）工具环境中排除。10 月 28 日起允许显式传入上游本身支持的权限参数，不存在或与启动计划冲突的参数仍会被拒绝。
 
 4. DeepSeek Flash当前使用支持图像的deepseek-flash稳定ID；V4 Pro只保留独立CLI（命令行工具） Profile。GLM-5.3与Flash、Qwen0902和四个本地模型各自绑定准确目录，不把品牌名当身份。
 
@@ -594,9 +594,11 @@ AI CLI Profile Manager · 功能说明
 
 - data/providers 现有 23 份 Manifest（配置清单），其中 codex-custom-responses、codex-ollama 两份是内部模板不公开，以下 21 个是当前可选入口。配置状态、源码实现、安装、实际进程、Live（真实调用）和恢复证据分别判断；9 月 18 日读到的 25 份、23 个公开入口是退役两条代理之前的数量。
 
-- Codex第三方入口绑定Responses（响应式模型协议）、Provider、精确模型目录和数据去向，冲突或fallback（后备路线）在计划生成前拒绝。DeepSeek Flash使用官方稳定ID；它随上游更新，不以网页中的V4.1标签人为冻结服务版本。
+- Codex第三方入口绑定Responses（响应式模型协议）、Provider、精确模型目录和数据去向，冲突或fallback（后备路线）在计划生成前拒绝。DeepSeek Flash使用官方稳定ID；它随上游更新，不以网页中的V4.1标签人为冻结服务版本。厂商本来就会自动升级的默认别名照样用别名，不额外钉成带日期的版本；精确模板和自定义配置档各自的身份边界不变。
 
-- 同一家换型号：用自定义 ID 加 --model 另存一个配置档已经实现，仍用这家的厂商钥匙；模型目录只管显示和容量信息，不是取钥匙的白名单。启动参数里的 --model/-m 虽然下层 Codex 适配器已能处理，但上层启动计划对三家厂商仍是“型号固定”，公共入口会拒绝；新型号的真实账号调用还没验证，容量和能力也不猜。
+- 需要 Key 的入口一律引用密码中心：厂商只要在密码中心登记并写明官方接口主机，就能写成 passwordcenter:厂商名，不再限定为 Qwen、GLM、DeepSeek 三家，也不再为其他路线在本机另存密文。
+
+- 同一家换型号：用自定义 ID 加 --model 另存一个配置档已经实现，仍用这家的厂商钥匙；模型目录只管显示和容量信息，不是取钥匙的白名单。启动参数里的 --model/-m 虽然下层 Codex 适配器已能处理，但上层启动计划对三家云端厂商仍是“型号固定”，公共入口会拒绝；已退役的型号 ID 也照旧直接拒绝。新型号的真实账号调用还没验证，容量和能力也不猜。
 
 - ContextManagement.ps1的Get-AiCliThirdPartyContinuityPolicy只覆盖第三方codex/claude/opencode；codex+openai、claude+anthropic及其他引擎返回null。Add-AiCliThirdPartyContinuityPolicy实际把aicli.third-party-continuity.v1附到LaunchPlan.continuityPolicy和notes：mode=loss-aware、manualCompaction=defer-until-window-pressure、oneMilestonePerSession=true，提示会话聚焦内聚里程碑、等窗口压力再考虑手动压缩。它没有自动写checkpoint（续作检查点）或运行压缩的执行器。10 月 2 日起，受管桌面 Provider 会关闭厂商不支持的 token_budget 和 history-notes 功能，保留原有客户端压缩。
 
@@ -884,15 +886,15 @@ AI CLI Profile Manager · 功能说明
 
 ## 技术实现与依据（五）
 
-- opencode-ollama-main｜OpenCode、qwen3.8-27b:256k、受管Broker（代理服务）；machine-only，262144上下文、32768输出。配置同步不等于当前路线已经完成真实任务。
+- opencode-ollama-main｜OpenCode、qwen3.8-27b:256k、受管Broker（代理服务）；machine-only，262144上下文、32768输出。配置同步不等于当前路线已经完成真实任务。程序化运行默认在本机直接执行，明确选只读或仅工作区可写时才进禁网沙箱。
 
 - opencode-ollama-qwen3-8-27b｜同一27B的明确兼容Profile，machine-only，窗口与主入口一致；历史pure配置不升级为新的Live。
 
-- 已退出当前模板的codex-deepseek、claude-deepseek、oi-deepseek不再列为可选入口；旧V4 Flash及旧Qwen泛名不自动迁移为一次已验证的新身份。OpenClaw现在只导入codex-deepseek-flash。Gemini 路线 9 月 27 日删除，本项目已没有 Gemini 模型入口。
+- 已退出当前模板的codex-deepseek、claude-deepseek、oi-deepseek不再列为可选入口；旧V4 Flash及旧Qwen泛名不自动迁移为一次已验证的新身份。OpenClaw 导入入口已退役、脚本已从源码删除。Gemini 路线 9 月 27 日删除，本项目已没有 Gemini 模型入口。
 
 ## 执行流程
 
-1. 从21个公开Profile按引擎、模型、数据去向和证据日期选择；三家厂商配置的是密码中心引用，只有其他需要的第三方入口才配置SecretRef。
+1. 从21个公开Profile按引擎、模型、数据去向和证据日期选择；凡需要 Key 的入口都配置密码中心里已登记厂商的引用，不录 Key、不写本机密文。
 
 2. 生成精确模型目录与启动计划，检查模型、Provider、有效effort（思考等级）；官方OpenAI/Anthropic原生路线不附第三方压缩策略。
 

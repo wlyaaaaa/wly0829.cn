@@ -28,13 +28,13 @@
   "status_line": {
    "state": "在用",
    "as_of": "2026-10-11",
-   "source": "来源仓库 507fc613（北京 10/19 23:19）的手机日志收取说明与 b334b3aa（北京 10/8 00:23）；10/11 16:32–16:45 只读 status 和聚合；10/22 06:47–06:48 另读来源实例、类别数与 Collector 计数，Tasks 停采与储蓄卡接入按来源 4717320（北京 10/22 07:22） 代码核对；本次没有连接手机、下载、导入或读消息正文，历史验收保留原日期"
+   "source": "来源刷新、覆盖封顶、按需来源、Collector 定位、手机增量与逐来源回执按来源仓库 a8d65a7（v0.19.6，北京 10/29 06:37）10/30 只读核对；手机日志收取说明来自 507fc613（北京 10/19 23:19）与 b334b3aa（北京 10/8 00:23）；10/11 16:32–16:45 只读 status 和聚合；10/22 06:47–06:48 另读来源实例、类别数与 Collector 计数，Tasks 停采与储蓄卡接入按来源 4717320（北京 10/22 07:22） 代码核对；本次没有连接手机、下载、导入、登录或读消息正文，历史验收保留原日期"
   }
  },
  "source": {
   "page": "sources/pages/daily-preferences-source-coverage/page.json",
-  "sha256": "f7e08954f4e384bc941ba9be60a14c288c15bea2d73adb5a94e1fac9868c2e4e",
-  "converted_at_beijing": "2026-10-22T08:32:29+08:00"
+  "sha256": "e8900be1d87c0ef43504dac4caf8a28c71751c876a747ce99b67ede58b5a01f3",
+  "converted_at_beijing": "2026-10-30T13:04:15+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 507fc613（北京 10/19 23:19）的手机日志收取说明与 b334b3aa（北京 10/8 00:23）；10/11 16:32–16:45 只读 status 和聚合；10/22 06:47–06:48 另读来源实例、类别数与 Collector 计数，Tasks 停采与储蓄卡接入按来源 4717320（北京 10/22 07:22） 代码核对；本次没有连接手机、下载、导入或读消息正文，历史验收保留原日期",
+     "static_note": "截至 10 月 11 日 · 来源刷新、覆盖封顶、按需来源、Collector 定位、手机增量与逐来源回执按来源仓库 a8d65a7（v0.19.6，北京 10/29 06:37）10/30 只读核对；手机日志收取说明来自 507fc613（北京 10/19 23:19）与 b334b3aa（北京 10/8 00:23）；10/11 16:32–16:45 只读 status 和聚合；10/22 06:47–06:48 另读来源实例、类别数与 Collector 计数，Tasks 停采与储蓄卡接入按来源 4717320（北京 10/22 07:22） 代码核对；本次没有连接手机、下载、导入、登录或读消息正文，历史验收保留原日期",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 507fc613（北京 10/19 23:19）的手机日志收取说明与 b334b3aa（北京 10/8 00:23）；10/11 16:32–16:45 只读 status 和聚合；10/22 06:47–06:48 另读来源实例、类别数与 Collector 计数，Tasks 停采与储蓄卡接入按来源 4717320（北京 10/22 07:22） 代码核对；本次没有连接手机、下载、导入或读消息正文，历史验收保留原日期"
+     "static_note": "截至 10 月 11 日 · 来源刷新、覆盖封顶、按需来源、Collector 定位、手机增量与逐来源回执按来源仓库 a8d65a7（v0.19.6，北京 10/29 06:37）10/30 只读核对；手机日志收取说明来自 507fc613（北京 10/19 23:19）与 b334b3aa（北京 10/8 00:23）；10/11 16:32–16:45 只读 status 和聚合；10/22 06:47–06:48 另读来源实例、类别数与 Collector 计数，Tasks 停采与储蓄卡接入按来源 4717320（北京 10/22 07:22） 代码核对；本次没有连接手机、下载、导入、登录或读消息正文，历史验收保留原日期"
     },
     {
      "type": "action_button",
@@ -782,9 +782,9 @@
 
 10. 本机 Chrome 记录进入 browser_activity；同一 Takeout 包中的 Google Play 记录进入 google_play_activity，两类来源各自保留身份和覆盖。
 
-11. Steam 直接读取本机多账号观察并按 AppID 合并；只输出匿名账号 ref，不读 token、Cookie、密码或 license cache，历史取得方式继续 Unknown（未验证）。
+11. Steam 直接读取本机多账号观察并按 AppID 合并；保留账号观察边、SteamID、userdata_id、普通 AccountName 和原始 LastOwner，既有匿名 ref 继续兼容；不读 token、Cookie、密码或 license cache，历史取得方式继续 Unknown（未验证）。
 
-12. 哔哩哔哩复用用户当前已登录 Chrome，取得播放、收藏、稍后看、点赞、投币与追番/追剧；账号以稳定匿名 ref 绑定，账号变化不会静默混入旧来源。
+12. 哔哩哔哩复用用户当前已登录 Chrome，取得播放、收藏、稍后看、点赞、投币与追番/追剧；快照保留原账号编号（account_mid），既有匿名 ref 只作兼容；账号变化不会静默混入旧来源。
 
 13. 收藏、稍后再看与追番/追剧只有同账号、Schema（数据结构）/range 一致、分页完整、计数一致且成员键无重复时，缺失成员才退出 current（当前状态）；播放、点赞、投币仍是窗口流。
 
@@ -857,7 +857,7 @@
 
 18. YouTube 与 Google Maps 早已由本人明确排除：旧归档可用只是历史定位事实，不再作为待接入来源或当前偏好证据。
 
-19. Keep复用现有Chrome，Gmail复用既有Google连接（Google Tasks 10 月 21 日起停采，旧记录和原件解析保留）；招行储蓄卡流水以银行 PDF 或 CSV 导入，Gmail 里招行“每日信用管家”邮件派生信用卡交易和额度观察；只能下载到手机的人工快照（微信支付账单、滴滴导出）由 AI 按 phone-direct 从手机 Download 取回（pull --delete-after-verify，核对两端 SHA-256 后才删手机副本）；手机 Collector 原件、GPS/事件日志和桌面软件/TimeAudit各保留原件、来源身份、覆盖与缺口。手机日志现在由电脑在家经无线 adb 收到本地投递区，理解库读本地原件；不在家时手机先存着，回家后补收（来源 507fc613，北京 10 月 19 日 23:19 起）。云盘上原来经 FolderSync 同步的手机日志目录已停更，只作历史副本；同处另外 7 组媒体/文档目录仍归各自项目，不为理解库启用，也不能拿旧云副本复活已退出的内容。本次没有连接手机，家里无线收取这条链路此刻是否正常没有亲测。采集成功、导入完成、阅读范围和有用认识是四个不同结果。
+19. Keep复用现有Chrome，Gmail复用既有Google连接（Google Tasks 10 月 21 日起停采，旧记录和原件解析保留）；招行储蓄卡流水以银行 PDF 或 CSV 导入，Gmail 里招行“每日信用管家”邮件派生信用卡交易和额度观察；只能下载到手机的人工快照（微信支付账单、滴滴导出）由 AI 按 phone-direct 从手机 Download 取回（pull --delete-after-verify，核对两端 SHA-256 后才删手机副本）；手机 Collector 原件、GPS/事件日志和桌面软件/TimeAudit各保留原件、来源身份、覆盖与缺口。Collector 自己记下的定位 CSV 作为单独的来源（phone.collector.gps）按原始定位时间导入，与 GPSLogger 定位并列，查旧 GPS 来源时一并带上，不借写入时间冒充定位时间。手机日志现在由电脑在家经无线 adb 收到本地投递区，理解库读本地原件；不在家时手机先存着，回家后补收（来源 507fc613，北京 10 月 19 日 23:19 起）。云盘上原来经 FolderSync 同步的手机日志目录已停更，只作历史副本；同处另外 7 组媒体/文档目录仍归各自项目，不为理解库启用，也不能拿旧云副本复活已退出的内容。本次没有连接手机，家里无线收取这条链路此刻是否正常没有亲测。采集成功、导入完成、阅读范围和有用认识是四个不同结果。
 
 20. 手机 AppUsage 已退役：旧原件和记录仍留（库里现有 109,118 条 AppUsage 记录），停止新导出不算静默缺口。它所有时期的时长、排名和次数都不可信；仍能查原值、应用是否出现过，以及独立的安装清单。
 
@@ -1007,7 +1007,7 @@
 
 34. 文本按 UTF-8-sig、UTF-16、GB18030 顺序读取；Excel serial 按中国本地时间解释，文件名中的 YYYYMMDD-YYYYMMDD 或 YYYY年M月只在解析成功后补业务覆盖。
 
-35. 最近导入健康与来源已取得状态分开，failed/partial 不会被 acquired_verified 文案掩盖。
+35. 最近导入健康与来源已取得状态分开，failed/partial 不会被 acquired_verified 文案掩盖。refresh-sources 每个来源采集、导入完成和一次视图渲染后，原子写出 `<来源ID>.json` 回执，stderr 立即输出 source_completed 事件；结果带各来源采集与导入耗时、整轮 UTC 起止和总秒数。
 
 36. 接入返回的 counts 含 records、new、updated、duplicate、artifacts 与 artifact_duplicates，另有 exact_links、retired_invalid_records、retired_missing_records 和 invalidated_snapshots；这些数字说明处理和失效，不说明推荐质量。
 
@@ -1084,15 +1084,15 @@
 
 - ingest/refresh 的 changed_records、retired_record_ids、newly_stale_card_keys 指出本轮影响；profile --pending-review 返回待复核旧详述。AI 重新判断、显式回写并回读，程序不自动恢复 stale 卡。
 
-- daily_preferences.py 的 refresh 在一次明确对话中串联 Chrome、Steam 与本次浏览器生成的哔哩哔哩快照；返回 conversation_on_demand 且 background_started=false。
+- daily_preferences.py 的 refresh 在一次明确对话中串联 Chrome、Steam 与本次浏览器生成的哔哩哔哩快照；返回 conversation_on_demand 且 background_started=false。没给本次 B站采集结果时返回 needs_live_collection 并跳过 B站，不自动重放磁盘上的旧快照。
 
 - live_increment.py 只采集 Chrome History/Bookmarks 与非秘密 Steam 本机元数据，返回内存记录，不调度、不持久化项目数据库。
 
-- bilibili_browser_collect.mjs 通过现有标签页 CDP 调用平台 API，分页保存六类行为流；source_snapshots.py 再把浏览器快照、Takeout、航空和铁路材料转成统一记录。
+- bilibili_browser_collect.mjs 由采集器在后台新开 B站账号接口的 JSON 页，分页保存六类行为流，结束时关闭该页；不再借普通历史页，避免页面持续加载卡住 CDP。source_snapshots.py 再把浏览器快照、Takeout、航空和铁路材料转成统一记录。
 
 - collector_sources.py 读取 Collector 目录的 JSONL/JSON，把 events、runs、packages 三路分别导入（逻辑来源 phone_usage_events、phone_collector_runs 与 mobile_apps 清单快照）；exits/tools/sms 与 status/state/config 只保全不导入。同日日志增量去重，坏尾忽略、中间坏行记 gap；覆盖只按 completedThrough 计算。
 
-- phone_source_collect.py 读取电脑本地投递区的手机原件：在家经无线 adb 收取，出门期间先存在手机上；读取时校验内容并保留不可变版本，失败照实返回。
+- phone_source_collect.py 读取电脑本地投递区的手机原件：在家经无线 adb 收取，出门期间先存在手机上；读取时校验内容并保留不可变版本，失败照实返回。手机原件按各自解析器版本判断是否已导入，同字节、同解析器的原件直接复用已有结果和缺口，不再整份重扫旧历史；短信、通话仍扫描所有内容不同的备份，备份时间能确定且不同时从新到旧处理（通话还要能认出备份设备），与同设备类别更新备份逐字相同的元素不再解析；应用清单同字节、同备份时间的导出不重放。
 
 - B 站 current（当前状态） set 先验证账号、Schema（数据结构）、range、分页、计数和成员唯一性；条件完整才局部退役本次缺失成员并让依赖推定 stale，历史与原件不删除。
 
@@ -1165,9 +1165,9 @@
 
 - collect_paths 对显式错误扩展名整体失败；目录只筛支持类型，Didi 再筛当前真实网约车订单导出。
 
-- coverage 只接纳成功解析文件的声明范围；incremental 保留旧覆盖和未解决 gap。
+- coverage 只接纳成功解析文件的声明范围；incremental 保留旧覆盖和未解决 gap。可用覆盖再按材料自己的观察时间封顶：每个包取生成/导出时间与首次导入完成时间中最早的一个，来源截止取其中最晚的包，原来声明的范围另存为 requested_coverage；重新导入同字节材料不会推进观察时间。recent-activity 的新鲜度同样按这个封顶后的覆盖判断。
 
-- status 返回每个来源的覆盖起止、快照时间、gap、材料、推荐 mode、重叠建议和 latest_import。
+- status 返回每个来源的覆盖起止、快照时间、gap、材料、推荐 mode、重叠建议和 latest_import。来源节奏里 Chrome、B站、Steam、电脑软件清单、京东、美团、饿了么标为 on_demand：超过参考间隔记 reference_overdue，只单列为“按需来源（用时才采，不算静默）”；只有非按需来源超期才是 silent。
 
 - 2026-10-11 时 status 的 missing_logical_sources 为空；excluded_logical_sources 列出 5 类（拼多多订单、银行流水、菜鸟物流、YouTube、Google Maps），逐项给 availability 与公开安全证据摘要。按当前代码（fe0a7ce），排除名单 USER_DECLINED_LOGICAL_SOURCES 是拼多多订单、菜鸟物流、YouTube、Google Maps 和 10 月 21 日停采的 Google Tasks，银行流水改由 debit_card（bank_transactions）接入；这次没有重跑 status。10 月 11 日 source_review 汇总：待整合 0、按真实较窄范围处理过 195、排除 102；手机事件和采集运行不逐条凑成“待读材料”。parser 列表不冒充来源全集。
 
@@ -1234,7 +1234,7 @@
 
 - 接入完成覆盖重算、关联重建和失效推定标记后先提交数据库，再写 CURRENT.md；结果带 views_refreshed 等字段，但 write_current 失败不会撤销已提交记录，Python 也不会自动生成替代推定或推荐。
 
-- 特定支付方式先用 scrub_payment_method 掩码邮箱、独立 7–19 位数字和括号内末四位；信用卡正文与 Didi 搜索文本使用 scrub_sensitive。普通商品和偏好语义不因此泛化。
+- 可信本地库原样保存支付、信用卡和行程里的普通邮箱、长数字和支付方式末四位，原来的 scrub_payment_method / scrub_sensitive 窄掩码已经拆掉；既有历史数据不回填。交给模型、聊天、标准输出和普通日志的内容仍过滤真实密码、令牌、私钥和 OAuth 秘密。普通商品和偏好语义不因此泛化。
 
 - 偏好增量完成判断由 Skill/AI 读取 ingest、status、current（当前状态） 快照与自然问题证据后给出；它必须明确列出语义变化或无变化，不能把技术接入状态改名成偏好结论。
 
@@ -1521,9 +1521,9 @@
 
 ## 边界
 
-- 不后台启动新的全来源同步；普通问答不擅自刷新或导入。
+- 不后台启动新的全来源同步；普通问答不擅自刷新或导入。按需来源（Chrome、B站、Steam、电脑软件清单、京东、美团、饿了么）用到才采，超过参考间隔不算静默、不催。
 
-- 材料保全、refresh 或 ingest 成功不等于认识增量完成。
+- 材料保全、refresh 或 ingest 成功不等于认识增量完成；刚刷新过也不等于旧材料覆盖到了今天。
 
 - Google Play/航空无新人工包保留旧截止；既有rail_history快照可重解析，车票、改签和退票由AI按需读Gmail中的12306邮件，不把邮件覆盖当成全部铁路历史，网易云个人播放次数未知。
 
@@ -1604,7 +1604,7 @@
 
 ## 出问题时（二）
 
-- 窄索引清洗不是全局匿名化。
+- 窄索引清洗不是全局匿名化。现在连这层窄索引掩码也已拆掉，可信本地库原样保存普通邮箱、长数字和支付方式末四位；交给模型和日志的内容仍过滤真实密码、令牌、私钥和 OAuth 秘密。
 
 ## 失败与恢复
 
@@ -1616,7 +1616,7 @@
 
 - **Collector 采集运行只完成了一部分**：只把 completedThrough 之前、扣掉已确认缺口的部分算覆盖；部分日只报已观察到的部分，不叠加 AppUsage 补数。原件核验未完成时暂缓新的采集运行导入，完整重试后再开放覆盖。
 
-- **手机本地原件缺失或内容核验失败**：核对电脑本地投递区与实际收取范围；未收取的说明缺口，内容不一致时不冒充已核实原件，失败照实返回。
+- **手机本地原件缺失或内容核验失败**：核对电脑本地投递区与实际收取范围；未收取的说明缺口，内容不一致时不冒充已核实原件，失败照实返回。短信备份有截断、坏尾时只严格恢复能确认的部分并留下缺口；不同备份之间互相补齐，不因为最新一份少了条目就当旧记录不存在。
 
 - **显式文件扩展名不属于 profile**：在数据库连接和任何写入前整体拒绝；合法文件与错误文件混合也不部分执行。
 
@@ -1691,7 +1691,7 @@
 
 - **source_id 换 provider 或 logical source**：返回 source identity conflict，保留原身份。
 
-- **同一旧 artifact 重新成为权威**：若旧观察已不是 current（当前状态） 就重新解析并激活对应历史版本；连续 no_change 不清空 seen keys。
+- **同一旧 artifact 重新成为权威**：若旧观察已不是 current（当前状态） 就重新解析并激活对应历史版本；连续 no_change 不清空 seen keys。重新导入同字节旧材料不推进来源的观察时间和覆盖截止。
 
 - **材料已经保存或 ingest 返回 completed，但尚未判断偏好语义**：保持增量未完成；继续核对覆盖/缺口，判断新增、增强、减弱或未知，重建有充分证据的快照并做普通问题回验，或明确证明语义无变化。
 
@@ -1700,6 +1700,8 @@
 - **Steam 本地库已接入但历史取得方式不可验证**：保留 steam_historical_acquisition_method_unverified；可继续用实际游玩形成行为证据，但不声称直购、礼物、激活码、限免或家庭共享。
 
 - **哔哩哔哩登录失效或某条行为流失败**：登录失效时请用户在同一 Chrome 完成验证码/扫码；单流失败返回 partial 与精确 gap，其他来源和成功流继续。
+
+- **饿了么登录失效**：按本人授权由 AI 在现有 Chrome 和手机桥上发一次验证码、读码、填写登录，验证码和短信正文不落盘、不进日志；遇到人机验证或发码失败就停下照实报。2026-10-21 和 10-29 北京时间两次真机登录（后一次是人工分步流程，用真实指针点击，登上后导入了增量）有带日期的记录；10 月 29 日新加的一键登录函数目前只在模拟页面上验证过，真实表单和“确认后一分钟内登上”还要等下次登录自然失效时实测。登录恢复不等于已经采集、导入或更新认识。
 
 - **收藏、稍后再看或追番/追剧 current（当前状态） set 不完整**：缺失成员不退役；账号、Schema（数据结构）、range、分页、计数和成员唯一性全部成立后才允许局部退出 current（当前状态），且不反推不喜欢。
 
@@ -1928,9 +1930,11 @@
 
 ## 依据与来源（二）
 
-- **connected_source_refresh.py / source_snapshot_state.py / mobile_sources.py**：按点名来源连接、保留不可变原件与当前集合边界；手机未知格式和时间单位保留partial。
+- **connected_source_refresh.py / source_snapshot_state.py / mobile_sources.py**：按点名来源连接、保留不可变原件与当前集合边界；手机未知格式和时间单位保留partial。Collector 定位按原始定位时间和来源身份导入；refresh-sources 逐来源写完成回执与耗时。
 
 - **google_sources.py / gmail_sources.py / keep_sources.py / device_sources.py / mobility.py**：分别处理Google、Keep、设备来源和GPS区域级读取；采集、导入、阅读、认识整合状态分别报告。
+
+- **recent_activity.py**：近况新鲜度按材料观察时间封顶后的来源覆盖判断，按需来源单列、不算静默。
 
 - **daily-preferences.ps1**：实现 PATH→LocalAppData→bundled runtime（运行环境） 的稳定 Windows 入口和明确失败。
 
@@ -1938,7 +1942,9 @@
 
 - **tests/test_refresh_increment.py**：覆盖重复 refresh、局部失败、账号变化、人工来源保持与来源 occurrence。
 
-- **docs/connected-source-refresh.md**：手机 Collector 输入、覆盖、暂缓导入与排除包的说明。
+- **docs/connected-source-refresh.md**：手机 Collector 输入、覆盖、暂缓导入与排除包的说明；饿了么验证码登录的授权边界、步骤与真机/模拟页面验证记录。
+
+- **docs/phone-event-sources.md**：按号码与北京时间查通话、只读备份诊断和截断备份的严格部分恢复。
 
 - **CURRENT_ACCEPTANCE.md**：AppUsage 退役与不可信范围；其中“三项当前缺口”的旧文字尚未同步，以代码和 status 为准。
 

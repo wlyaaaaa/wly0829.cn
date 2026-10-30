@@ -28,7 +28,7 @@
   "status_line": {
    "state": "常用",
    "as_of": "2026-10-12",
-   "source": "源码为 10 月 20 日 01:12 的提交 fde01bd（含 00:58 加入的 Docker 停止自愈 6dea0bf 与 00:08 的读取超时修复 5cb3ea9），10 月 20 日 07:41 只读核对；07:35 三条心跳新鲜；10 月 12 日 05:36 完整健康检查正常；未注入故障、未运行测试"
+   "source": "源码为 10 月 29 日 14:24 的合并 91b7ba0（含 14:06 的个人活动读取分阶段诊断 f62b807；10 月 30 日回读，与远端一致）；Docker 停止自愈 6dea0bf 与读取超时修复 5cb3ea9 为 10 月 20 日加入；10 月 20 日 07:35 三条心跳新鲜；10 月 12 日 05:36 完整健康检查正常；未注入故障、未运行测试"
   },
   "based_on": {
    "commit": "c5ca4eeb9574e72baa0dc22eb317687f7322185c",
@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/timeaudit-runtime-reliability/page.json",
-  "sha256": "e666383947a0e3e47ee358a772b08c0ab7ae7f19c2ad5557f53daf44c4af8477",
-  "converted_at_beijing": "2026-10-22T08:32:41+08:00"
+  "sha256": "b9d9d8d0708ce5df3cdff3ca7e44d1a79ae9d4891831d542f68d5be59b78d779",
+  "converted_at_beijing": "2026-10-30T13:04:19+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 源码为 10 月 20 日 01:12 的提交 fde01bd（含 00:58 加入的 Docker 停止自愈 6dea0bf 与 00:08 的读取超时修复 5cb3ea9），10 月 20 日 07:41 只读核对；07:35 三条心跳新鲜；10 月 12 日 05:36 完整健康检查正常；未注入故障、未运行测试",
+     "static_note": "截至 10 月 12 日 · 源码为 10 月 29 日 14:24 的合并 91b7ba0（含 14:06 的个人活动读取分阶段诊断 f62b807；10 月 30 日回读，与远端一致）；Docker 停止自愈 6dea0bf 与读取超时修复 5cb3ea9 为 10 月 20 日加入；10 月 20 日 07:35 三条心跳新鲜；10 月 12 日 05:36 完整健康检查正常；未注入故障、未运行测试",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 源码为 10 月 20 日 01:12 的提交 fde01bd（含 00:58 加入的 Docker 停止自愈 6dea0bf 与 00:08 的读取超时修复 5cb3ea9），10 月 20 日 07:41 只读核对；07:35 三条心跳新鲜；10 月 12 日 05:36 完整健康检查正常；未注入故障、未运行测试"
+     "static_note": "截至 10 月 12 日 · 源码为 10 月 29 日 14:24 的合并 91b7ba0（含 14:06 的个人活动读取分阶段诊断 f62b807；10 月 30 日回读，与远端一致）；Docker 停止自愈 6dea0bf 与读取超时修复 5cb3ea9 为 10 月 20 日加入；10 月 20 日 07:35 三条心跳新鲜；10 月 12 日 05:36 完整健康检查正常；未注入故障、未运行测试"
     },
     {
      "type": "action_button",
@@ -648,7 +648,7 @@ TimeAudit 大盘停止更新时，在已接入本机诊断的 AI 对话中说明
 
 - runtime_health.py 原子写 heartbeat，并提供路径识别与有界退避辅助。
 
-- telemetry_watchdog.ps1 每分钟串行检查，先看 Docker、数据库和 Grafana 依赖，再看 main.py、LHM 18085、AHK 与 audit-ingester；全局 mutex（互斥锁）阻止恢复重叠。Docker Desktop 整个退出时只调用现有的自动启动任务 TimeAudit_AutoStart，任务正在启动就不重复。Desktop 还在、引擎接口却不可用时，只有 `docker desktop status --format json` 成功返回且 Status=stopped，才开始计 600 秒（10 分钟）的确认窗；探测失败、超时、格式不对或其他状态都会清零重算，两次观测间隔超过 3 分钟也重算。确认窗和“已尝试”标记存在 `log/docker_engine_recovery.json`，这份回执读不出就暂缓恢复。连续确认满 10 分钟后，先记下这次尝试，再执行一次官方 `desktop restart --timeout 110`，总时限 120 秒；重启成功或接口随后恢复，就不结束任何进程。重启失败、接口仍不可用、且新一轮状态探测仍明确为 stopped，才只结束可执行路径在 Docker 安装目录里的 Docker Desktop.exe、com.docker.backend.exe、com.docker.build.exe、docker-desktop.exe，再调用现有自动启动任务；自动启动任务正在运行或不存在时暂缓。同一次未解决的故障不重复重启或兜底，接口恢复健康才清掉标记（提交 6dea0bf，北京时间 10 月 20 日 00:58 提交、01:05 合入 main）。停掉的 Postgres/Grafana 容器可以启动、不重建数据；Grafana 有 120 秒启动宽限，15 秒复核仍失败才只重启 Grafana。Docker 引擎探测限时 8 秒。另外，个人活动读取遇到 Docker 子进程超过 25 秒，直接报 `docker_unavailable`（Docker 不可用），不再把时间段拆小反复重试；只有数据库语句超时（`query_timeout`）或输出过大才缩小时间段（提交 5cb3ea9，北京时间 10 月 20 日 00:08）。
+- telemetry_watchdog.ps1 每分钟串行检查，先看 Docker、数据库和 Grafana 依赖，再看 main.py、LHM 18085、AHK 与 audit-ingester；全局 mutex（互斥锁）阻止恢复重叠。Docker Desktop 整个退出时只调用现有的自动启动任务 TimeAudit_AutoStart，任务正在启动就不重复。Desktop 还在、引擎接口却不可用时，只有 `docker desktop status --format json` 成功返回且 Status=stopped，才开始计 600 秒（10 分钟）的确认窗；探测失败、超时、格式不对或其他状态都会清零重算，两次观测间隔超过 3 分钟也重算。确认窗和“已尝试”标记存在 `log/docker_engine_recovery.json`，这份回执读不出就暂缓恢复。连续确认满 10 分钟后，先记下这次尝试，再执行一次官方 `desktop restart --timeout 110`，总时限 120 秒；重启成功或接口随后恢复，就不结束任何进程。重启失败、接口仍不可用、且新一轮状态探测仍明确为 stopped，才只结束可执行路径在 Docker 安装目录里的 Docker Desktop.exe、com.docker.backend.exe、com.docker.build.exe、docker-desktop.exe，再调用现有自动启动任务；自动启动任务正在运行或不存在时暂缓。同一次未解决的故障不重复重启或兜底，接口恢复健康才清掉标记（提交 6dea0bf，北京时间 10 月 20 日 00:58 提交、01:05 合入 main）。停掉的 Postgres/Grafana 容器可以启动、不重建数据；Grafana 有 120 秒启动宽限，15 秒复核仍失败才只重启 Grafana。Docker 引擎探测限时 8 秒。另外，个人活动读取遇到 Docker 子进程超过 25 秒，直接报 `docker_unavailable`（Docker 不可用），不再把时间段拆小反复重试；只有数据库语句超时（`query_timeout`）或输出过大才缩小时间段（提交 5cb3ea9，北京时间 10 月 20 日 00:08）。10 月 29 日起（提交 f62b807），个人活动读取的每条只读语句锁等待从 1 秒放宽到 5 秒；仍失败时保留原原因码，另附分阶段诊断：卡在 `docker_exec`、`connection`、`lock_wait`、`execute_sql` 还是 `serialization`，异常类型，以及经凭据清理、最多 1200 字的消息；psql 非零退出再带 SQLSTATE、退出码、查询窗口和查询类别，不回传原始行或 SQL 上下文。没取到的数据不当作空集，也不因此重启采集器。
 
 - 主采集心跳 90 秒算陈旧，睡醒后宽限 45 秒，启动宽限 180 秒，自动启动等待 240 秒；入库心跳阈值 45 秒、辅助进程 15 秒。LHM 独立任务拥有运行实例，hardware worker 只读，看门狗经 15 秒宽限、20 秒启动等待、端点 3 秒超时和精确项目路径过滤恢复端点。
 
@@ -937,6 +937,7 @@ TimeAudit 大盘停止更新时，在已接入本机诊断的 AI 对话中说明
 | 计划任务环境不全 | 使用绝对解释器、工作目录与 PATH bootstrap。 |
 | Docker 状态探测超时或读不出 | 记“引擎状态未知，下轮重试”，并把 10 分钟确认窗清零；超时本身不触发重启。 |
 | Docker 明确停止满 10 分钟 | 先记下尝试，再执行一次限时 120 秒的官方重启；仍停止才结束 Docker 安装目录里的四类进程并调用原有开机任务；同一次故障不再试，接口恢复后才允许下次。 |
+| 个人活动读取等锁超过 5 秒或查询失败 | 交回原因码和卡住的阶段；没读到的时段不当空记录，不重启采集器。 |
 
 ::screen{#timeaudit-runtime-reliability-10 section="tech"}
 

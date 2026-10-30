@@ -301,7 +301,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "9. original 先核制品 SHA，再按类型处理，不按扩展名一概而论：Gemini 的 JSON/HTML 重新定位原包、核对原内容后返回原文；ChatGPT 核消息 content hash（内容指纹）；手机 AppUsage/短信/GPS、Collector、已支持的 Google 与 TimeAudit 等有对应解析器的类型会重新解析并核原生身份与内容；PDF 从同字节制品重新抽取并做既有窄掩码，因此不是逐字原文；只有其余不支持的类型才标 verified_artifact_cached_excerpt。",
+        "text_ref": "9. original 先核制品 SHA，再按类型处理，不按扩展名一概而论：Gemini 的 JSON/HTML 重新定位原包、核对原内容后返回原文；ChatGPT 核消息 content hash（内容指纹）；手机 AppUsage/短信/GPS、Collector、已支持的 Google 与 TimeAudit 等有对应解析器的类型会重新解析并核原生身份与内容；PDF 从同字节制品重新抽取文字（原来的窄掩码已拆掉，抽出的是制品里的原值，但仍是抽取文本、不等于版式原件）；只有其余不支持的类型才标 verified_artifact_cached_excerpt。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -321,7 +321,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "9. original 先核制品 SHA，再按类型处理，不按扩展名一概而论：Gemini 的 JSON/HTML 重新定位原包、核对原内容后返回原文；ChatGPT 核消息 content hash（内容指纹）；手机 AppUsage/短信/GPS、Collector、已支持的 Google 与 TimeAudit 等有对应解析器的类型会重新解析并核原生身份与内容；PDF 从同字节制品重新抽取并做既有窄掩码，因此不是逐字原文；只有其余不支持的类型才标 verified_artifact_cached_excerpt。",
+        "text_ref": "9. original 先核制品 SHA，再按类型处理，不按扩展名一概而论：Gemini 的 JSON/HTML 重新定位原包、核对原内容后返回原文；ChatGPT 核消息 content hash（内容指纹）；手机 AppUsage/短信/GPS、Collector、已支持的 Google 与 TimeAudit 等有对应解析器的类型会重新解析并核原生身份与内容；PDF 从同字节制品重新抽取文字（原来的窄掩码已拆掉，抽出的是制品里的原值，但仍是抽取文本、不等于版式原件）；只有其余不支持的类型才标 verified_artifact_cached_excerpt。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",

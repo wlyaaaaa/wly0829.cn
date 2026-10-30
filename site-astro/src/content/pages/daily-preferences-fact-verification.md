@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/daily-preferences-fact-verification/page.json",
-  "sha256": "e1eb976575552aeaf83c1a56176dc55e03e5582218bd13e9539e95986c2cf35f",
-  "converted_at_beijing": "2026-10-22T08:32:28+08:00"
+  "sha256": "85d53a572c13dc8b3f5ef9adb8a69b00f507f881ecc433c872b85da37b7cda1f",
+  "converted_at_beijing": "2026-10-30T13:04:15+08:00"
  }
 }
 ---
@@ -677,7 +677,7 @@
     },
     {
      "type": "numbered_steps",
-     "text_ref": "9. original 先核制品 SHA，再按类型处理，不按扩展名一概而论：Gemini 的 JSON/HTML 重新定位原包、核对原内容后返回原文；ChatGPT 核消息 content hash（内容指纹）；手机 AppUsage/短信/GPS、Collector、已支持的 Google 与 TimeAudit 等有对应解析器的类型会重新解析并核原生身份与内容；PDF 从同字节制品重新抽取并做既有窄掩码，因此不是逐字原文；只有其余不支持的类型才标 verified_artifact_cached_excerpt。",
+     "text_ref": "9. original 先核制品 SHA，再按类型处理，不按扩展名一概而论：Gemini 的 JSON/HTML 重新定位原包、核对原内容后返回原文；ChatGPT 核消息 content hash（内容指纹）；手机 AppUsage/短信/GPS、Collector、已支持的 Google 与 TimeAudit 等有对应解析器的类型会重新解析并核原生身份与内容；PDF 从同字节制品重新抽取文字（原来的窄掩码已拆掉，抽出的是制品里的原值，但仍是抽取文本、不等于版式原件）；只有其余不支持的类型才标 verified_artifact_cached_excerpt。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -695,7 +695,7 @@
     },
     {
      "type": "numbered_steps",
-     "text_ref": "9. original 先核制品 SHA，再按类型处理，不按扩展名一概而论：Gemini 的 JSON/HTML 重新定位原包、核对原内容后返回原文；ChatGPT 核消息 content hash（内容指纹）；手机 AppUsage/短信/GPS、Collector、已支持的 Google 与 TimeAudit 等有对应解析器的类型会重新解析并核原生身份与内容；PDF 从同字节制品重新抽取并做既有窄掩码，因此不是逐字原文；只有其余不支持的类型才标 verified_artifact_cached_excerpt。",
+     "text_ref": "9. original 先核制品 SHA，再按类型处理，不按扩展名一概而论：Gemini 的 JSON/HTML 重新定位原包、核对原内容后返回原文；ChatGPT 核消息 content hash（内容指纹）；手机 AppUsage/短信/GPS、Collector、已支持的 Google 与 TimeAudit 等有对应解析器的类型会重新解析并核原生身份与内容；PDF 从同字节制品重新抽取文字（原来的窄掩码已拆掉，抽出的是制品里的原值，但仍是抽取文本、不等于版式原件）；只有其余不支持的类型才标 verified_artifact_cached_excerpt。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -710,7 +710,7 @@
 
 ## 技术实现与依据（二）
 
-9. original 先核制品 SHA，再按类型处理，不按扩展名一概而论：Gemini 的 JSON/HTML 重新定位原包、核对原内容后返回原文；ChatGPT 核消息 content hash（内容指纹）；手机 AppUsage/短信/GPS、Collector、已支持的 Google 与 TimeAudit 等有对应解析器的类型会重新解析并核原生身份与内容；PDF 从同字节制品重新抽取并做既有窄掩码，因此不是逐字原文；只有其余不支持的类型才标 verified_artifact_cached_excerpt。
+9. original 先核制品 SHA，再按类型处理，不按扩展名一概而论：Gemini 的 JSON/HTML 重新定位原包、核对原内容后返回原文；ChatGPT 核消息 content hash（内容指纹）；手机 AppUsage/短信/GPS、Collector、已支持的 Google 与 TimeAudit 等有对应解析器的类型会重新解析并核原生身份与内容；PDF 从同字节制品重新抽取文字（原来的窄掩码已拆掉，抽出的是制品里的原值，但仍是抽取文本、不等于版式原件）；只有其余不支持的类型才标 verified_artifact_cached_excerpt。
 
 10. spending 按任意半开日期区间、按日或按月汇总已知花费：as-of 只限制事件日期，不恢复旧数据库知识；购买归属净额与期间支付/退款流分开；预付、外币、候选关联、拆分支付、内部搬款/还款本金与未知范围分别保留；未付款的订单和支付不计入（2026-10-07 起）。储蓄卡流水（2026-10-21 起）分本人操作、还款借贷、收入、退款、消费五类，只有消费和退款进入花费，本人操作与还款借贷保留流水但不进消费合计；储蓄卡和钱包按明确渠道关联：组合付款（储蓄卡加余额）按渠道对上，多店合并付款按同一钱包、同一时刻和金额合计对上，关闭付款的成功退款照样扣除，退回后重转逐笔保留，不按同日同额去重。这种关联只在查询时投影，不改写订单或原流水；`spending --details` 会列出关联依据和仍有歧义的候选。“部分退款关联未知”不阻断已有依据的净额；它只汇总事实，不承担财务规划。
 

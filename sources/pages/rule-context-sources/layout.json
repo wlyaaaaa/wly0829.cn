@@ -17,7 +17,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "遇到一件事该去哪查；哪些项目冻结不碰、哪些只修报错；长任务停了怎么接着做；本人的决定和纠正记在哪。",
+        "text_ref": "遇到一件事该去哪查；哪些项目冻结不碰、哪些只修报错；长任务停了怎么接着做；本人的原话和以后要遵守的做法各记在哪。",
         "bold": true,
         "row": "hero"
       },
@@ -138,7 +138,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "遇到一件事该去哪查；哪些项目冻结不碰、哪些只修报错；长任务停了怎么接着做；本人的决定和纠正记在哪。",
+        "text_ref": "遇到一件事该去哪查；哪些项目冻结不碰、哪些只修报错；长任务停了怎么接着做；本人的原话和以后要遵守的做法各记在哪。",
         "bold": true
       },
       {
@@ -767,7 +767,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "决定原话只存一处",
+        "text_ref": "旧决定月卷只作历史，原话只存一处",
         "columns": 1,
         "whole_block": true,
         "illustration": "left_inside",
@@ -840,7 +840,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "决定原话只存一处",
+        "text_ref": "旧决定月卷只作历史，原话只存一处",
         "columns": 1,
         "whole_block": true,
         "illustration": "none",
@@ -1035,7 +1035,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "内容写到哪里怎么跟本人说话经skills/explain-to-me按个人表达项目的流程维护；新增时先查同类并合并，保留",
+        "text_ref": "内容写到哪里",
         "whole_block": true,
         "columns": 1,
         "illustration": "none",

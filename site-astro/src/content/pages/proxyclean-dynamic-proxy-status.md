@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/proxyclean-dynamic-proxy-status/page.json",
-  "sha256": "daef9a89257f7b2381b263c9619b8386baeefa673672395e2ee7efc64eaf272f",
-  "converted_at_beijing": "2026-10-22T08:32:35+08:00"
+  "sha256": "86dc8a6d3c9437193d0ab45843c94e7517d5738fc60875ae8c8d67d8bd324a20",
+  "converted_at_beijing": "2026-10-30T13:04:18+08:00"
  }
 }
 ---
@@ -634,11 +634,13 @@ Docker 保存了独立本地代理，或设置已改但运行记录仍沿用旧�
 
 3. 支持 -Json 参数，便于将网络拓扑与代理状态对接给自动化运维工具或上层脚本。
 
-4. 默认不探出口：只有显式加 -ProbeExit 且没加 -SkipExitProbe 时，才请求 ipify（返回公网 IP 的公共服务）比较默认路径和 WinINET 发布端口的出口，结果只给匿名的“相同出口”分组；不测延迟，也不证明端到端稳定性。
+4. 默认不探出口：只有显式加 -ProbeExit 且没加 -SkipExitProbe 时，才请求 ipify（返回公网 IP 的公共服务）比较默认路径和 WinINET 发布端口的出口；本机结果给出每条路径观测到的出口 IP 和“出口组”，组号相同只表示这次出口相同；不测延迟，也不证明端到端稳定性。
 
 ## 当前怎样实现
 
 - 本地端口不再用单条正则提取：先交给 Get-ProxyEndpoints 按分号和协议映射、URI、1-65535 范围、IP 地址族与是否回环逐项解析，再取已解析本地端口的唯一集合；监听按地址族和回环/通配判断，只有 IPv6 通配而 IPv4 双栈情况不明时保留“未知”。
+
+- 本机状态输出（界面详情、复制诊断和命令行 JSON）保留代理端点的普通主机、端口和 IP，远程代理也照实写出地址；只去掉网址里的用户名密码，并把 token、api_key、password 这类查询参数换成 <credentials>。JSON 用 credentials_filtered 标明“已过滤凭据”，不再标成整体脱敏。
 
 - Get-PCDockerSnapshot 检查 %APPDATA%\Docker\settings-store.json 中的 OverrideProxyHTTP 等覆盖项。
 
@@ -672,7 +674,7 @@ Docker 保存了独立本地代理，或设置已改但运行记录仍沿用旧�
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- 分层诊断默认不写日志，Docker只读有界尾部且要求事件本身属于当前运行，文件mtime不替旧事件续期。出口比较只给匿名相同出口分组，不公开出口地址；同出口不证明同一客户端，HTTP成功也不证明绕过TUN。",
+     "text_ref": "- 分层诊断默认不写日志",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -690,7 +692,7 @@ Docker 保存了独立本地代理，或设置已改但运行记录仍沿用旧�
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- 分层诊断默认不写日志，Docker只读有界尾部且要求事件本身属于当前运行，文件mtime不替旧事件续期。出口比较只给匿名相同出口分组，不公开出口地址；同出口不证明同一客户端，HTTP成功也不证明绕过TUN。",
+     "text_ref": "- 分层诊断默认不写日志",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -705,7 +707,7 @@ Docker 保存了独立本地代理，或设置已改但运行记录仍沿用旧�
 
 ## 技术实现与依据（二）
 
-- 分层诊断默认不写日志，Docker只读有界尾部且要求事件本身属于当前运行，文件mtime不替旧事件续期。出口比较只给匿名相同出口分组，不公开出口地址；同出口不证明同一客户端，HTTP成功也不证明绕过TUN。
+- 分层诊断默认不写日志，Docker只读有界尾部且要求事件本身属于当前运行，文件mtime不替旧事件续期。出口比较在本机结果里显示出口 IP 和分组，本站不公开任何出口地址；同出口不证明同一客户端，HTTP成功也不证明绕过TUN。
 
 ## 执行流程
 

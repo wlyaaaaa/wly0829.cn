@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/github-index-repository-ledger/page.json",
-  "sha256": "114cc0330c6dd29bb9fc102ae815ce8c0e959fb468d177b4f8570d39732155c9",
-  "converted_at_beijing": "2026-10-30T11:16:49+08:00"
+  "sha256": "cb4bd5a2a18abe28fa4da83ef955fe11a2afca42cb36228948ec422f5bcec4ca",
+  "converted_at_beijing": "2026-10-30T13:04:16+08:00"
  }
 }
 ---
@@ -169,7 +169,7 @@ GitHub 总索引 · 功能说明
 
 把散落在不同磁盘、公开与私有仓库中的身份事实收成一张可审计的总账：程序读一份受控导航，我看一页私有看板；对外展示时按事实有没有用、具体值有没有风险决定放明细还是放计数，不因“私有”标签整类隐藏。
 
-**当前情况：**10 月 30 日 11:07 零写只读检查：GitHub 上共 48 个仓库（20 公开、28 私有），保存的身份基线也是 48 个，差异 0 个，问题 0 个。10 月 11 日那次（13:32 记录、16:32 复核）还是现场 47 个、基线 45 个、多出 2 个“待复核”；之后的完整刷新已把基线推进到 48。这不证明 48 个仓库都有本地副本，也不证明每个分支已同步、每个项目能运行。
+**当前情况：**10 月 30 日 11:07 零写只读检查：GitHub 上共 48 个仓库（20 公开、28 私有），保存的身份基线也是 48 个，差异 0 个，问题 0 个。10 月 11 日那次（13:32 记录、16:32 复核）还是现场 47 个、基线 45 个、多出 2 个“待复核”；之后的完整刷新已把基线推进到 48。10 月 23 日那次还有 1 个差异；10 月 27 日修好了读取 GitHub 仓库清单时没读到结尾的缺陷、完整刷新把基线推进到当天那一版，这次再查差异为 0。这不证明 48 个仓库都有本地副本，也不证明每个分支已同步、每个项目能运行。
 
 项目事实核对截至 2026-10-11 14:00（北京时间）；14:00 后的现场读数单独注明时间；页面不实时探测运行状态。
 
@@ -584,7 +584,7 @@ GitHub 总索引 · 功能说明
 
 - 统一受控导航 `config/repository-paths.json`（schema `github-local-index.repository-registry.v1`）保存仓库到本机副本的候选路径，9 月 28 日保存时为 45 项（21 公开／24 私有）；用前仍回读真实 `.git` origin，一致才算这个仓库的本机副本。
 
-- owner-baseline-store.v3 把完整 identity snapshot 与 nullable（可为空） local-root snapshot 分开；current（当前状态）、previous、hash（内容指纹） 和 receipt（执行回执） 原子读写。当前基线保存于 9 月 28 日 01:41，上一版为 9 月 27 日 20:50，history_gap=false。
+- owner-baseline-store.v3 把完整 identity snapshot 与 nullable（可为空） local-root snapshot 分开；current（当前状态）、previous、hash（内容指纹） 和 receipt（执行回执） 原子读写。当前基线保存于 10 月 27 日 14:19（48 个仓库），上一版为 10 月 21 日 20:54（48 个），history_gap=false；9 月 28 日 01:41 那版（45 个）已是更早的历史。统一导航最近一次保存于 10 月 27 日 14:21，为 46 项（即在本机有副本的仓库）。
 
 - Refresh-GitHubLocalIndex.ps1先验证既有v3基线是否为missing或current（当前状态）；invalid在任何写入前拒绝。正常full refresh取完全部观察后，先写统一导航和单页看板（逐个文件替换），再调用Invoke-RefreshGitOwnerBaselineAdvance推进基线；推进时重新读一次Owner inventory，并在推进前、迁移和回读之间复用它。这三步不是一个跨文件的整体事务。
 

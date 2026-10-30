@@ -15,7 +15,7 @@
       "id": "github-index-protected-major-actions-01",
       "section": "top",
       "title": "重大 Git/GitHub 变更保护与人类确认边界",
-      "text": "# 重大 Git/GitHub 变更保护与人类确认边界\n\n〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕\n\nGitHub 总索引 · 功能说明\n\n仓库改名、改公开范围、删库或转移等重大变化，先绑住唯一目标、把能保全的内容保全好，再只执行这一项并回读。只有删库、转移、改成公开和新建公开库这四类需要本人验证；普通提交与正常推送照常走普通 Git。\n\n**当前情况：**9 月 27 日改写成一个直接调用的入口，支持 10 种固定操作；9 月 29 日又给删库和转移加上“先预演、再正式执行”。改写后还没有实际使用记录，功能待验收；9 月 1 日建私有仓库的真实结果属于旧版本。\n\n项目事实核对截至 2026-10-11 14:00（北京时间）；14:00 后的现场读数单独注明时间；页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "text": "# 重大 Git/GitHub 变更保护与人类确认边界\n\n〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕\n\nGitHub 总索引 · 功能说明\n\n仓库改名、改公开范围、删库或转移等重大变化，先绑住唯一目标、把能保全的内容保全好，再只执行这一项并回读。只有删库、转移和把非公开仓库改成公开这三类需要本人验证；新建公开仓库不再另做身份验证，但仍要本人明确同意、参数写准、建完回读；普通提交与正常推送照常走普通 Git。\n\n**当前情况：**9 月 27 日改写成一个直接调用的入口，支持 10 种固定操作；9 月 29 日又给删库和转移加上“先预演、再正式执行”；10 月 27 日起新建公开仓库不再要本人验证（提交 b3b38c2）。改写后还没有实际使用记录，功能待验收；9 月 1 日建私有仓库的真实结果属于旧版本。\n\n项目事实核对截至 2026-10-11 14:00（北京时间）；14:00 后的现场读数单独注明时间；页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
       "links": [
         {
           "text": "回到项目 → GitHub 项目总索引",
@@ -36,7 +36,7 @@
       "id": "github-index-protected-major-actions-02",
       "section": "usage",
       "title": "这项功能怎样使用",
-      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n仓库改名、改变公开范围或删历史会影响别人看到什么、还能找回什么；目标错一个字就可能改错仓库。系统只对这一项真实变化做判断，只有删库、转移、改成公开、新建公开库才请本人验证，不把每次普通提交都叫来本人验证。\n\n## 举个实际例子\n\n比如我说“把仓库改名，但公开性和默认分支都别动”。系统先固定旧名称、仓库唯一 ID、可见性、默认分支，并确认新名称没有冲突；改名不属于要本人验证的四类，所以直接只执行改名。做完立即从新名称回读同一仓库 ID，并确认可见性和默认分支原样不动。任何目标漂移都会停下，而不是顺手改 owner 或其他设置。\n\n## 最后我会得到什么\n\n拿到明确的变更目标、执行前后状态以及是否还需本人验证；删库或转移前，我还会先看到一份损失清单：哪些 Git 内容已经保全、哪些网页内容只列了名字、哪些根本不在备份里。执行后从仓库现场核对；结果暂时不明时先查仓库，不重复发起可能已经发生的重大动作。",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n仓库改名、改变公开范围或删历史会影响别人看到什么、还能找回什么；目标错一个字就可能改错仓库。系统只对这一项真实变化做判断，只有删库、转移、把非公开仓库改成公开这三类才请本人验证，不把每次普通提交都叫来本人验证。新建公开仓库不另做身份验证，但它会让新东西对外可见，所以仍要我明确说要建、建成公开，AI 不会自己决定建公开库。\n\n## 举个实际例子\n\n比如我说“把仓库改名，但公开性和默认分支都别动”。系统先固定旧名称、仓库唯一 ID、可见性、默认分支，并确认新名称没有冲突；改名不属于要本人验证的三类，所以直接只执行改名。做完立即从新名称回读同一仓库 ID，并确认可见性和默认分支原样不动。任何目标漂移都会停下，而不是顺手改 owner 或其他设置。\n\n## 最后我会得到什么\n\n拿到明确的变更目标、执行前后状态以及是否还需本人验证；删库或转移前，我还会先看到一份损失清单：哪些 Git 内容已经保全、哪些网页内容只列了名字、哪些根本不在备份里。执行后从仓库现场核对；结果暂时不明时先查仓库，不重复发起可能已经发生的重大动作。",
       "links": [],
       "anchors": [
         {
@@ -73,7 +73,7 @@
       "id": "github-index-protected-major-actions-04",
       "section": "usage",
       "title": "从哪里开始",
-      "text": "## 从哪里开始\n\n在已接入总索引的 AI 对话中明确提出仓库改名、公开性或历史等重大 Git/GitHub 变更，并写清唯一目标。\n\n## 需要准备什么\n\n- 当前仓库和预期新状态\n\n- 哪些设置必须保持\n\n- 可用的恢复或确认方式\n\n## 从开始到拿到结果\n\n1. **固定具体变化**　AI 记录旧仓库身份、目标值和不允许改变的设置，先查现场是否吻合；删库或转移先预演，把保全结果和损失范围讲给我。\n\n2. **按条件取得确认**　只有删库、转移、改成公开、新建公开库查无限制授权，没有就请我验证一次；其他重大动作和普通提交、推送不附加这一步。\n\n3. **只执行并核对一次**　回读同一仓库、目标状态和未改变项；结果丢失时先查现场，不重复发起可能已完成的动作。",
+      "text": "## 从哪里开始\n\n在已接入总索引的 AI 对话中明确提出仓库改名、公开性或历史等重大 Git/GitHub 变更，并写清唯一目标。\n\n## 需要准备什么\n\n- 当前仓库和预期新状态\n\n- 哪些设置必须保持\n\n- 可用的恢复或确认方式\n\n## 从开始到拿到结果\n\n1. **固定具体变化**　AI 记录旧仓库身份、目标值和不允许改变的设置，先查现场是否吻合；删库或转移先预演，把保全结果和损失范围讲给我。\n\n2. **按条件取得确认**　只有删库、转移、非公开改公开这三类查无限制授权，没有就请我验证一次；新建公开仓库不查授权、不弹验证，但必须是我明确要求的那一个；其他重大动作和普通提交、推送不附加这一步。\n\n3. **只执行并核对一次**　回读同一仓库、目标状态和未改变项；结果丢失时先查现场，不重复发起可能已完成的动作。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -85,7 +85,7 @@
       "id": "github-index-protected-major-actions-05",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n当前保护语义以实际执行时核验的现行活动规则为准；现行入口 9 月 27 日重写（b7fb62f），9 月 29 日加入删库/转移先预演（e2ccb371）。重写后没有实际使用记录，生产端到端验证为 Unknown；旧版本的验收只作历史\n\n## 关键规则与设计选择\n\n1. 普通本地读取、可逆编辑、定向提交和已授权正常推送不自动升级为重大动作。\n\n2. 固定 10 种操作：git-local 4 种（delete-local-ref、delete-remote-ref、force-update-local-ref、replace-remote-url），github-api 6 种（create-repository、rename-repository、set-visibility、set-default-branch、delete-repository、transfer-repository）；不开放任意 shell 或 API。\n\n3. create-repository 可在当前账号下建空的 PRIVATE（私有） 或 PUBLIC（公开） 仓库；配置 origin、首次 normal push、默认分支收口和索引登记随后由普通 Git 分别完成，建库不等于项目已经发布。\n\n4. 每种动作使用自己的精确参数、preimage 和 read-back（正式回读）；改名不能顺带改 owner/visibility/default branch（分支），替换 remote（远端仓库） URL 不能变成任意 Git 命令。\n\n5. 是否需要本人验证按 GitHub 四类规则：删库、转移、非公开改公开、新建公开库需要有效的无限制授权，没有就本人验证一次；个人资料已解锁不能替代这次专门验证。\n\n6. Passkey（通行密钥）、TOTP（动态验证码）、Recovery（恢复码）、Account（账号验证）是四类因子；Google 和 Microsoft 只是 Account 类别的不同 Provider（提供方）。\n\n7. 改名、改默认分支、改成私有、新建私有、更换本人账号下的远端地址，以及内容已被保留的 ref 删除/改写，不请本人验证，也不查无限制授权、资料期或密码中心；内容保全失败就直接停，不改成“请本人验证后继续”。这只是程序分支，调用前合格的 AI 仍按活动规则判断真实后果。\n\n8. 已证层：当前源码和用隔离 Git、模拟 GitHub 与验证服务的测试定义存在；9 月 27 日重写后没有实际使用记录。旧的 C 盘第 79 代、E126/E131 和来源 bfc9f3f 只作历史，不证明现在的 10 类动作。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n当前保护语义以实际执行时核验的现行活动规则为准；现行入口 9 月 27 日重写（b7fb62f），9 月 29 日加入删库/转移先预演（e2ccb371），10 月 27 日去掉新建公开仓库的本人验证（b3b38c2）。重写后没有实际使用记录，生产端到端验证为 Unknown；旧版本的验收只作历史\n\n## 关键规则与设计选择\n\n1. 普通本地读取、可逆编辑、定向提交和已授权正常推送不自动升级为重大动作。\n\n2. 固定 10 种操作：git-local 4 种（delete-local-ref、delete-remote-ref、force-update-local-ref、replace-remote-url），github-api 6 种（create-repository、rename-repository、set-visibility、set-default-branch、delete-repository、transfer-repository）；不开放任意 shell 或 API。\n\n3. create-repository 可在当前账号下建空的 PRIVATE（私有） 或 PUBLIC（公开） 仓库；配置 origin、首次 normal push、默认分支收口和索引登记随后由普通 Git 分别完成，建库不等于项目已经发布。\n\n4. 每种动作使用自己的精确参数、preimage 和 read-back（正式回读）；改名不能顺带改 owner/visibility/default branch（分支），替换 remote（远端仓库） URL 不能变成任意 Git 命令。\n\n5. 是否需要本人验证按 GitHub 三类规则：删库、转移、非公开改公开需要有效的无限制授权，没有就本人验证一次；个人资料已解锁不能替代这次专门验证。新建公开仓库自 10 月 27 日起不另做身份验证，但仍须本人明确同意，并核对精确参数、仓库身份和执行后结果；“不验证”不等于 AI 可以自己决定建公开库。\n\n6. Passkey（通行密钥）、TOTP（动态验证码）、Recovery（恢复码）、Account（账号验证）是四类因子；Google 和 Microsoft 只是 Account 类别的不同 Provider（提供方）。\n\n7. 改名、改默认分支、改成私有、新建私有或公开仓库、更换本人账号下的远端地址，以及内容已被保留的 ref 删除/改写，不请本人验证，也不查无限制授权、资料期或密码中心；内容保全失败就直接停，不改成“请本人验证后继续”。这只是程序分支，调用前合格的 AI 仍按活动规则判断真实后果。\n\n8. 已证层：当前源码和用隔离 Git、模拟 GitHub 与验证服务的测试定义存在；9 月 27 日重写后没有实际使用记录。旧的 C 盘第 79 代、E126/E131 和来源 bfc9f3f 只作历史，不证明现在的 10 类动作。",
       "links": [],
       "anchors": [
         {
@@ -110,7 +110,7 @@
       "id": "github-index-protected-major-actions-06",
       "section": "tech",
       "title": "技术实现与依据（二）",
-      "text": "## 技术实现与依据（二）\n\n## 当前怎样实现\n\n- **旧的提案/能力票据链已退役（2026-09-27）。**原来 Prepare 冻结提案、AuthorizeMajorAction 授权、30 秒单次 Consume 后执行，并绑定签名、nonce（一次性随机凭据）和执行器哈希；现在脚本里没有这些步骤。\n\n- 现行入口 Invoke-ProtectedGitHubMajorAction.ps1（896 行，最低 PowerShell 7.5，结果 schema `github-local-index.protected-major-action-result.v2`）只收 Operation、Repository、RepoPath、ArgumentsPath，以及可选的 DryRun 和验证方式，一次调用 Invoke-GitHubAction。\n\n- 需要本人验证的分支调用已安装的 OwnerTakeover Check 和 SecretBroker VerifyAuthority，核对回执里的 highest_authority_verified 与 human_factor_performed，执行前再重读一次实际目标。\n\n- 验证方式选 Auto 时不传 AuthorityFactor，由现役密码中心在四类方式里选一种；Runtime 身份不能顶替重大动作的本人验证；已有有效的无限制授权就不重复弹出。\n\n- 进程用 ArgumentList 直接启动、不弹窗，Git 和 gh 入口固定；Git 前缀禁用 hooks，但保留调用者现有的有效 Git 凭据，清除的是 GIT_DIR、GIT_COMMON_DIR、GIT_WORK_TREE、GIT_OBJECT_DIRECTORY、GIT_ALTERNATE_OBJECT_DIRECTORIES、GH_HOST 等指定环境覆盖。\n\n- create-repository 绑定 expected_absent、expected_local_branch、expected_head_oid 和 clean 工作树；PUBLIC（公开） 走重大动作验证和首次公开授权，PRIVATE（私有） 不验证。\n\n- rename-repository 冻结旧/新 slug、同一 id/node_id、visibility（公开或私有属性） 和 default branch（分支）；新 slug 必须 absent，回读必须确认 identity 与除名称外的字段不变。\n\n- ref 删除（本地或远端）和本地强制更新前，先证实原提交另有本地或 GitHub 的分支/标签保留；reflog、不可达对象、只在远端跟踪缓存里的提交都不算保留点；正在检出的分支不删、不强改。",
+      "text": "## 技术实现与依据（二）\n\n## 当前怎样实现\n\n- **旧的提案/能力票据链已退役（2026-09-27）。**原来 Prepare 冻结提案、AuthorizeMajorAction 授权、30 秒单次 Consume 后执行，并绑定签名、nonce（一次性随机凭据）和执行器哈希；现在脚本里没有这些步骤。\n\n- 现行入口 Invoke-ProtectedGitHubMajorAction.ps1（894 行，最低 PowerShell 7.5，结果 schema `github-local-index.protected-major-action-result.v2`）只收 Operation、Repository、RepoPath、ArgumentsPath，以及可选的 DryRun 和验证方式，一次调用 Invoke-GitHubAction。\n\n- 需要本人验证的分支调用已安装的 OwnerTakeover Check 和 SecretBroker VerifyAuthority，核对回执里的 highest_authority_verified 与 human_factor_performed，执行前再重读一次实际目标。\n\n- 验证方式选 Auto 时不传 AuthorityFactor，由现役密码中心在四类方式里选一种；Runtime 身份不能顶替重大动作的本人验证；已有有效的无限制授权就不重复弹出。\n\n- 进程用 ArgumentList 直接启动、不弹窗，Git 和 gh 入口固定；Git 前缀禁用 hooks，但保留调用者现有的有效 Git 凭据，清除的是 GIT_DIR、GIT_COMMON_DIR、GIT_WORK_TREE、GIT_OBJECT_DIRECTORY、GIT_ALTERNATE_OBJECT_DIRECTORIES、GH_HOST 等指定环境覆盖。\n\n- create-repository 绑定 expected_absent、expected_local_branch、expected_head_oid 和 clean 工作树；PUBLIC（公开） 和 PRIVATE（私有） 都不走本人验证分支，建公开库的前提是本人明确同意，首次公开发布内容仍按活动规则单独判断。\n\n- rename-repository 冻结旧/新 slug、同一 id/node_id、visibility（公开或私有属性） 和 default branch（分支）；新 slug 必须 absent，回读必须确认 identity 与除名称外的字段不变。\n\n- ref 删除（本地或远端）和本地强制更新前，先证实原提交另有本地或 GitHub 的分支/标签保留；reflog、不可达对象、只在远端跟踪缓存里的提交都不算保留点；正在检出的分支不删、不强改。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -134,7 +134,7 @@
       "id": "github-index-protected-major-actions-08",
       "section": "tech",
       "title": "技术实现与依据（四）",
-      "text": "## 技术实现与依据（四）\n\n3. 删库或转移先带 DryRun 运行同一命令：补全 Git 对象、建保全 refs、列出网页独有内容，由 AI 把目标、保全结果、只列了清单的内容、没枚举的类别和损失范围讲给本人\n\n4. 属于四类的动作：有有效的无限制授权就继续，否则本人验证一次；取消、拒绝或超时就结束本次，不盲目重试\n\n5. 去掉 DryRun 正式调用：重新读现场，核对实际目标和保全 refs；内容或去向变了就重新预演；授权到期就停\n\n6. 固定 Git 参数或固定 GitHub 接口只执行一次；返回失败或响应丢失仍先从本地/GitHub 现场回读\n\n7. read-back（正式回读） 比较操作自己的目标字段：ref OID、remote（远端仓库） URL、repo identity/visibility/name/default branch（分支）/existence/owner；只有 executed_verified 才算已证实，read_back_failed 或 effect_failed_state_unknown 如实保留“可能已改变”，不自动重试；转移是异步的，没证实就不报完成\n\n8. create 之后另做 origin、normal push、default-branch convergence 与索引登记；其他动作成功后也只报告精确字段变化，项目发布/恢复继续由对应 Owner 完成",
+      "text": "## 技术实现与依据（四）\n\n3. 删库或转移先带 DryRun 运行同一命令：补全 Git 对象、建保全 refs、列出网页独有内容，由 AI 把目标、保全结果、只列了清单的内容、没枚举的类别和损失范围讲给本人\n\n4. 属于三类的动作（删库、转移、非公开改公开）：有有效的无限制授权就继续，否则本人验证一次；取消、拒绝或超时就结束本次，不盲目重试\n\n5. 去掉 DryRun 正式调用：重新读现场，核对实际目标和保全 refs；内容或去向变了就重新预演；授权到期就停\n\n6. 固定 Git 参数或固定 GitHub 接口只执行一次；返回失败或响应丢失仍先从本地/GitHub 现场回读\n\n7. read-back（正式回读） 比较操作自己的目标字段：ref OID、remote（远端仓库） URL、repo identity/visibility/name/default branch（分支）/existence/owner；只有 executed_verified 才算已证实，read_back_failed 或 effect_failed_state_unknown 如实保留“可能已改变”，不自动重试；转移是异步的，没证实就不报完成\n\n8. create 之后另做 origin、normal push、default-branch convergence 与索引登记；其他动作成功后也只报告精确字段变化，项目发布/恢复继续由对应 Owner 完成",
       "links": [],
       "anchors": [],
       "live": null,
@@ -146,7 +146,7 @@
       "id": "github-index-protected-major-actions-09",
       "section": "tech",
       "title": "名词和入口（一）",
-      "text": "## 名词和入口（一）\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Major action（重大动作） | 会删除、转移、公开、重命名或改变仓库关键身份和恢复路径的 GitHub 现实操作。 |\n| Typed effect（类型化动作） | 十个固定操作之一，使用封闭字段、固定参数、固定接口与回读合同；不是通用 shell 或 GitHub API 通道。 |\n| Proposal（动作提案，已退役） | 旧路线里 Prepare 冻结的短时候选；2026-09-27 起不再使用。 |\n| Single-use capability（单次执行能力，已退役） | 旧路线的 30 秒单次执行票据；现在没有票据，每次正式执行前直接重读现场。 |\n| DryRun（预演） | 删库/转移前必做的同命令预演：不查授权、不弹验证、不改 GitHub，但会拉取、补全 Git 对象并建保全 refs，所以不是严格零写。 |\n| Human factor（人类因子） | Passkey、TOTP、Recovery、Account 四类已登记证明中的任一类；只有四类 GitHub 动作在没有无限制授权时需要。 |\n| Semantic decision（语义判断） | 调用前由合格 AI 结合真实目标、范围、影响和可恢复性判断；程序的普通分支不查密码中心，不等于取消这层判断。 |\n| Preservation ref（保全引用） | 删库/转移前把远端最新提交保存在 `refs/backup/github-major-action/…` 下；只保 Git 内容。 |",
+      "text": "## 名词和入口（一）\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Major action（重大动作） | 会删除、转移、公开、重命名或改变仓库关键身份和恢复路径的 GitHub 现实操作。 |\n| Typed effect（类型化动作） | 十个固定操作之一，使用封闭字段、固定参数、固定接口与回读合同；不是通用 shell 或 GitHub API 通道。 |\n| Proposal（动作提案，已退役） | 旧路线里 Prepare 冻结的短时候选；2026-09-27 起不再使用。 |\n| Single-use capability（单次执行能力，已退役） | 旧路线的 30 秒单次执行票据；现在没有票据，每次正式执行前直接重读现场。 |\n| DryRun（预演） | 删库/转移前必做的同命令预演：不查授权、不弹验证、不改 GitHub，但会拉取、补全 Git 对象并建保全 refs，所以不是严格零写。 |\n| Human factor（人类因子） | Passkey、TOTP、Recovery、Account 四类已登记证明中的任一类；只有删库、转移、非公开改公开这三类 GitHub 动作在没有无限制授权时需要。 |\n| Semantic decision（语义判断） | 调用前由合格 AI 结合真实目标、范围、影响和可恢复性判断；程序的普通分支不查密码中心，不等于取消这层判断。 |\n| Preservation ref（保全引用） | 删库/转移前把远端最新提交保存在 `refs/backup/github-major-action/…` 下；只保 Git 内容。 |",
       "links": [],
       "anchors": [],
       "live": null,
@@ -158,7 +158,7 @@
       "id": "github-index-protected-major-actions-10",
       "section": "tech",
       "title": "名词和入口（二）",
-      "text": "## 名词和入口（二）\n\n| 名词 | 意思 |\n| --- | --- |\n| Preimage（变更前状态） | 动作前真实仓库身份、可见性、默认分支或远端配置，用于判断漂移和恢复。 |\n| Read-back（正式回读） | 动作之后从 GitHub Owner 现场重新读取最终状态；命令返回成功不能替代它。 |\n\n## 专业定义\n\n建空仓库、删库、转移、改名、改可见性、换默认分支或远端、删改 ref，都必须绑住精确目标并事后回读；只有四类动作请本人验证，普通 Git 不因此层层弹确认。",
+      "text": "## 名词和入口（二）\n\n| 名词 | 意思 |\n| --- | --- |\n| Preimage（变更前状态） | 动作前真实仓库身份、可见性、默认分支或远端配置，用于判断漂移和恢复。 |\n| Read-back（正式回读） | 动作之后从 GitHub Owner 现场重新读取最终状态；命令返回成功不能替代它。 |\n\n## 专业定义\n\n建空仓库、删库、转移、改名、改可见性、换默认分支或远端、删改 ref，都必须绑住精确目标并事后回读；只有删库、转移、非公开改公开这三类动作请本人验证；新建公开仓库不另做验证但须本人明确同意；普通 Git 不因此层层弹确认。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -206,7 +206,7 @@
       "id": "github-index-protected-major-actions-14",
       "section": "tech",
       "title": "依据与来源（一）",
-      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- Git/GitHub 重大动作合同 `docs/contracts/git.protected-major-actions.md`（一次调用、先预演、内容保全和回读）\n\n- 现行入口 `tools/Invoke-ProtectedGitHubMajorAction.ps1`；按四类规则决定是否本人验证\n\n- 解析 current（当前状态） E 保护合同路径的当前指针；正文路径由 Inspect 返回\n\n- GitHub 总索引的项目重大动作边界和公开安全规则\n\n## 如何验证\n\n- 2026-08-29 历史提交 6afc858 修复五因子与机械 human_required（需要人类验证）旧语义，并 normal push（正常推送）到当时的公开 main；这是旧版本历史。\n\n- 2026-08-31 Test-ProtectedGitHubMajorAction.ps1 当时通过，测的是旧适配器；9 月 27 日重写后，不能拿它证明现行实现。\n\n- 当前测试 `tests/Test-ProtectedGitHubMajorAction.ps1` 的静态断言覆盖 10 类参数、删库/转移先预演、ref 保留点和 force-with-lease 等，用隔离 Git 和模拟的 GitHub/验证服务，不碰真实仓库；10 月 11 日只读了定义，没有运行。\n\n- 历史 Test-ControlPlaneContracts.ps1、git diff --check 和 staged public-content hook（钩子） 通过；这些是旧层历史，提交前 Hook 已于 2026-09-27 退役。",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- Git/GitHub 重大动作合同 `docs/contracts/git.protected-major-actions.md`（一次调用、先预演、内容保全和回读）\n\n- 现行入口 `tools/Invoke-ProtectedGitHubMajorAction.ps1`；按三类规则决定是否本人验证（10 月 27 日起新建公开仓库不在其中）\n\n- 解析 current（当前状态） E 保护合同路径的当前指针；正文路径由 Inspect 返回\n\n- GitHub 总索引的项目重大动作边界和公开安全规则\n\n## 如何验证\n\n- 2026-08-29 历史提交 6afc858 修复五因子与机械 human_required（需要人类验证）旧语义，并 normal push（正常推送）到当时的公开 main；这是旧版本历史。\n\n- 2026-08-31 Test-ProtectedGitHubMajorAction.ps1 当时通过，测的是旧适配器；9 月 27 日重写后，不能拿它证明现行实现。\n\n- 当前测试 `tests/Test-ProtectedGitHubMajorAction.ps1` 的静态断言覆盖 10 类参数、删库/转移先预演、ref 保留点和 force-with-lease 等，用隔离 Git 和模拟的 GitHub/验证服务，不碰真实仓库；10 月 11 日只读了定义，没有运行。\n\n- 历史 Test-ControlPlaneContracts.ps1、git diff --check 和 staged public-content hook（钩子） 通过；这些是旧层历史，提交前 Hook 已于 2026-09-27 退役。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -218,7 +218,7 @@
       "id": "github-index-protected-major-actions-15",
       "section": "tech",
       "title": "依据与来源（二）",
-      "text": "## 依据与来源（二）\n\n- 2026-08-29 当时的 GitHub API 与 ls-remote 对 refs/heads/main 回读均精确等于 6afc858d418714664a757a4950f65de8a9d3578d；它只是一条历史验收。\n\n- 2026-09-01 用旧版本真实创建过一个空 PRIVATE（私有） 仓库，9 月 2 日回读了元数据；这是旧版本结果，不外推为重写后已经用过。\n\n- 2026 年 10 月 11 日的历史观察：当时活动规则为 E257，保护合同 SHA-256=5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa；当时 Git 代码 e792eda。实际执行时核验现行活动规则。规则身份不证明 10 类动作、四类验证或验证服务的端到端成功；9 月 9 日 E126/E131 的哈希只作历史。\n\n## 与其他模块的关系\n\n它在 Publication Gate 已证明目标、内容和授权之后，单独处理少数高影响 GitHub 动作；Admission（仓库准入检查） 提供现场身份，Snapshot 只记录索引快照，二者都不能替代调用前的真实后果判断和正式回读。",
+      "text": "## 依据与来源（二）\n\n- 2026-08-29 当时的 GitHub API 与 ls-remote 对 refs/heads/main 回读均精确等于 6afc858d418714664a757a4950f65de8a9d3578d；它只是一条历史验收。\n\n- 2026-09-01 用旧版本真实创建过一个空 PRIVATE（私有） 仓库，9 月 2 日回读了元数据；这是旧版本结果，不外推为重写后已经用过。\n\n- 2026 年 10 月 11 日的历史观察：当时活动规则为 E257，保护合同 SHA-256=5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa；当时 Git 代码 e792eda。实际执行时核验现行活动规则。规则身份不证明 10 类动作、当时的四类验证（现为三类）或验证服务的端到端成功；9 月 9 日 E126/E131 的哈希只作历史。\n\n## 与其他模块的关系\n\n它在 Publication Gate 已证明目标、内容和授权之后，单独处理少数高影响 GitHub 动作；Admission（仓库准入检查） 提供现场身份，Snapshot 只记录索引快照，二者都不能替代调用前的真实后果判断和正式回读。",
       "links": [
         {
           "text": "上一个模块 公开发布",
