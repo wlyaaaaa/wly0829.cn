@@ -2,19 +2,28 @@
 const unknown={text:'暂时读不到',state:'unknown'};
 const readTimeoutMs=8000;
 const statusEndpoints=['https://live.wly0829.cn/computer-access/state','https://mcp.wly0829.cn/computer-access/api/status'];
+const endpointPreferenceKey='site-live-endpoint:v1',endpointPreferenceMs=600000;
 let successfulEndpoint=null;
+function preferredEndpoint(){
+ try{const saved=JSON.parse(sessionStorage.getItem(endpointPreferenceKey));if(statusEndpoints.includes(saved?.url)&&Number.isFinite(saved.at)&&saved.at<=Date.now()&&Date.now()-saved.at<endpointPreferenceMs)return saved.url;}catch{}
+ return null;
+}
 async function readStatus(signal,refresh=false,local=['localhost','127.0.0.1','::1','[::1]'].includes(location.hostname)){
  return retryStatus(async()=>{
   let failure;
-  const endpoints=local?['/__status']:successfulEndpoint?[successfulEndpoint,...statusEndpoints.filter(url=>url!==successfulEndpoint)]:statusEndpoints;
+  const preferred=successfulEndpoint||preferredEndpoint();
+  const endpoints=local?['/__status']:preferred?[preferred,...statusEndpoints.filter(url=>url!==preferred)]:statusEndpoints;
   for(const url of endpoints){
    if(signal?.aborted)throw signal.reason;
-   const controller=new AbortController(),abort=()=>controller.abort(),timer=setTimeout(abort,readTimeoutMs);
+   // The local proxy can try both upstreams within one browser request.
+   const controller=new AbortController(),abort=()=>controller.abort(),timer=setTimeout(abort,local?readTimeoutMs*2:readTimeoutMs);
    signal?.addEventListener('abort',abort,{once:true});
    try{
     const response=await fetch(url+(refresh?'?refresh=1':''),{credentials:'include',cache:'no-store',signal:controller.signal});
     if(!response.ok){const error=Error('HTTP_'+response.status);error.httpStatus=response.status;throw error;}
-    const next=await response.json();if(!freshStatus(next))throw Error('expired_snapshot');if(!local)successfulEndpoint=url;return next;
+    const next=await response.json();if(!freshStatus(next))throw Error('expired_snapshot');
+    if(!local){successfulEndpoint=url;try{sessionStorage.setItem(endpointPreferenceKey,JSON.stringify({url,at:Date.now()}));}catch{}}
+    return next;
    }catch(error){failure=error;if(signal?.aborted)throw error;}
    finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);}
   }

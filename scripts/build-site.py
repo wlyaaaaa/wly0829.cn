@@ -285,7 +285,8 @@ def build(pages=None):
         ROOT / 'sources/rules', ROOT / 'sources/assets', ROOT / 'src/typeset',
         SITE / 'tools/build_runtime.py', SITE / 'tools/pack_living.py', SITE / 'tools/adapt_motion.py',
         SITE / 'tools/cockpit_stutter.py', ROOT / 'scripts/astro_rules.py', ROOT / 'scripts/album-runtime.js',
-        ROOT / 'scripts/album-runtime.css', ROOT / 'scripts/same-origin-runtime.py', ROOT / 'scripts/site-live-runtime.js']
+        ROOT / 'scripts/album-runtime.css', ROOT / 'scripts/same-origin-runtime.py', ROOT / 'scripts/site-live-runtime.js',
+        ROOT / 'scripts/update-live-release.py']
     preparation += [ROOT / row['source_path'] for row in snapshot['assets'].values() if 'source_path' in row]
     stutter_inputs = [ROOT / 'scripts' / name for name in ['prepare-stutter-page.py', 'stutter-page-copy.json', 'stutter-page.html', 'stutter-page.js', 'stutter-page.css', 'site-live-runtime.js']]
     preparation += stutter_inputs
@@ -307,7 +308,8 @@ def build(pages=None):
     wrapper_paths = [p for p in (SITE / 'src').rglob('*') if p.is_file()
         and 'content' not in p.relative_to(SITE / 'src').parts and p.parent.name not in {'runtime', 'retained'}
         and p.name != 'retained-page.ts' and 'cockpit' not in p.relative_to(SITE / 'src').parts]
-    wrapper_fp = fingerprint(wrapper_paths + [SITE / 'astro.config.mjs', SITE / 'package-lock.json'])
+    wrapper_fp = fingerprint(wrapper_paths + [SITE / 'astro.config.mjs', SITE / 'package-lock.json',
+        public / '_living/quality-runtime/manifest.json'])
     entries = {}; render_fps = {}; fixed = {}
     for path in (SITE / 'src/pages').rglob('*.astro'):
         rel = path.relative_to(SITE / 'src/pages').as_posix()
