@@ -446,14 +446,16 @@
         "tagline_position": "left_inside_below_title",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
-        "show_badge": true,
-        "frozen": false,
+        "show_badge": false,
+        "frozen": true,
         "source_regions": {
           "title": "upper_left",
           "tagline": "middle_left",
-          "illustration": "upper_right",
-          "retirement": null
-        }
+          "illustration": "upper_right"
+        },
+        "link_fill_width": false,
+        "separator_before_footer": true,
+        "retirement_inline_link_style": "underlined_inline"
       }
     ],
     "portrait_required": true,
@@ -484,8 +486,11 @@
         "status_position": "after_title",
         "footer_position": "bottom_left",
         "link_layout": "auto",
-        "show_badge": true,
-        "frozen": false
+        "show_badge": false,
+        "frozen": true,
+        "link_fill_width": false,
+        "separator_before_footer": true,
+        "retirement_inline_link_style": "underlined_inline"
       }
     ],
     "portrait_required": true,

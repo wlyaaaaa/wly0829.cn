@@ -24,17 +24,12 @@
   "kind": "project",
   "title": "Refresh（刷新）、看板与导航写入和中断恢复",
   "url": "/projects/github-index/snapshot-recovery/",
-  "parent": "github-local-index",
-  "status_line": {
-   "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "GitHub 总索引源码（提交 e792eda，10 月 7 日）与 git.refresh-consistency 合同；八文档公开代际已于 9 月 26 日（提交 bfa2e7f）退役，现在是私有单页看板加统一导航逐个文件替换。"
-  }
+  "parent": "github-local-index"
  },
  "source": {
   "page": "sources/pages/github-index-snapshot-recovery/page.json",
-  "sha256": "8aa85597329e4aca7a37bc67a32078a4e49b2f9004a31d154e7db2fdb3e03601",
-  "converted_at_beijing": "2026-10-22T08:32:30+08:00"
+  "sha256": "7d4ba64eebe231c24f0b05d2b4c778fb4648487117eecfa44b26f871e86d2b5f",
+  "converted_at_beijing": "2026-10-31T06:46:47+08:00"
  }
 }
 ---
@@ -76,18 +71,6 @@
      "row_fit_illustration": true
     },
     {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "常用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · GitHub 总索引源码（提交 e792eda，10 月 7 日）与 git.refresh-consistency 合同；八文档公开代际已于 9 月 26 日（提交 bfa2e7f）退役，现在是私有单页看板加统一导航逐个文件替换。",
-     "row": "top"
-    },
-    {
      "type": "action_button",
      "text_ref": "〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕",
      "row": "top",
@@ -116,17 +99,6 @@
      "text_ref": "Refresh（刷新）、看板与导航写入和中断恢复",
      "align": "left",
      "size": "large"
-    },
-    {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "常用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · GitHub 总索引源码（提交 e792eda，10 月 7 日）与 git.refresh-consistency 合同；八文档公开代际已于 9 月 26 日（提交 bfa2e7f）退役，现在是私有单页看板加统一导航逐个文件替换。"
     },
     {
      "type": "action_button",
@@ -165,7 +137,7 @@
 
 〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕
 
-GitHub 总索引 · 功能说明
+GitHub 总索引 · 功能说明 · 已冻结：10 月 31 日起项目不再维护。这项功能现在：总表不再更新，也就用不着恢复了。下面是冻结前的样子。
 
 完整更新总索引的私有看板和统一导航：两份文件逐个用写好的完整内容替换，中途失败会如实说哪一份已换、哪一份没换；需要旧版时从 Git 历史恢复。
 

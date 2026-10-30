@@ -1562,9 +1562,9 @@
       },
       {
         "id": "r-github-index",
-        "with": "github-local-index",
+        "with": "agents",
         "direction": "交给",
-        "flow": "GitHub 删库、转移、改公开前由密码中心做一次本人验证",
+        "flow": "GitHub 删库、转移、改公开前（经“改项目前先核对”技能的大动作入口）由密码中心做一次本人验证",
         "source": "pcconfig.secret-broker.md §4.5 末段"
       },
       {

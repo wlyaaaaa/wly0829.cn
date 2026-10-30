@@ -316,10 +316,10 @@
     },
     {
      "id": "r-project-entry-gate-entry",
-     "with": "github-local-index",
+     "with": "agents",
      "direction": "入口",
-     "flow": "技能“改项目前先核对”是项目“GitHub 项目总索引”的入口",
-     "source": "b1\\skill-project-entry-gate\\page.json 的 abilities 屏链接"
+     "flow": "技能“改项目前先核对”是 AI 规则与技能基座自己的技能（10 月 31 日总索引冻结时，查询和大动作入口搬进了这个技能）",
+     "source": "E:\\.agents\\skills\\project-entry-gate\\SKILL.md（cf513c33）"
     }
    ],
    "highlights": [],
@@ -530,11 +530,6 @@
      "text": "改项目前先核对"
     },
     {
-     "target": "/projects/github-index/",
-     "screen": "skills-home-04",
-     "text": "属于：GitHub 项目总索引"
-    },
-    {
      "target": "/skills/cockpit/",
      "screen": "skills-home-04",
      "text": "看驾驶舱"
@@ -574,8 +569,8 @@
  },
  "source": {
   "page": "sources/pages/skills-home/page.json",
-  "sha256": "16797568ee61516e1771d44a0ea08009417c66e542435e0a3711ae6f7e8f1104",
-  "converted_at_beijing": "2026-10-31T04:31:33+08:00"
+  "sha256": "e63fd2de89916a6bee1a8abc3fcc38dbc7af75c938cce02dc3f22083112a4457",
+  "converted_at_beijing": "2026-10-31T07:46:06+08:00"
  }
 }
 ---
@@ -1879,10 +1874,6 @@
     "href": "/skills/project-entry-gate/"
    },
    {
-    "text": "属于：GitHub 项目总索引",
-    "href": "/projects/github-index/"
-   },
-   {
     "text": "从手机取东西",
     "href": "/skills/phone-direct/"
    }
@@ -2024,7 +2015,7 @@
      "illustration": "left_inside",
      "icons": "auto",
      "connector": "none",
-     "text_ref": "〔改项目前先核对〕动代码之前，先认准仓库、查清同步。　〔属于：GitHub 项目总索引〕",
+     "text_ref": "〔改项目前先核对〕动代码之前，先认准仓库、查清同步。",
      "icon_map": {
       "密码和本人验证": "_library/icons/保险箱.png",
       "加密文件": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
@@ -2127,7 +2118,7 @@
      "illustration": "left_inside",
      "icons": "auto",
      "connector": "none",
-     "text_ref": "〔改项目前先核对〕动代码之前，先认准仓库、查清同步。　〔属于：GitHub 项目总索引〕",
+     "text_ref": "〔改项目前先核对〕动代码之前，先认准仓库、查清同步。",
      "icon_map": {
       "密码和本人验证": "_library/icons/保险箱.png",
       "加密文件": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
@@ -2372,4 +2363,4 @@
 
 **维护代码**　改代码之前，先把仓库的事实核对清楚再动手。
 
-- 〔改项目前先核对〕动代码之前，先认准仓库、查清同步。　〔属于：GitHub 项目总索引〕
+- 〔改项目前先核对〕动代码之前，先认准仓库、查清同步。

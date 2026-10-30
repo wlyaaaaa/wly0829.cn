@@ -400,9 +400,9 @@
      "id": "f-openclaw-import",
      "group": "g-keys",
      "name": "从 OpenClaw 导入",
-     "what": "把 OpenClaw 里存过的 DeepSeek 配置导进来，默认只预览；只是整理旧环境用的，新配置直接用密码中心里的厂商钥匙",
-     "how": "运行 Import-FromOpenClaw.ps1",
-     "status": "说不准",
+     "what": "原来把 OpenClaw 里存过的 DeepSeek 配置导进来；OpenClaw 已冻结，10 月 22 日这个导入脚本已从源码删除，新配置直接用密码中心里的厂商钥匙",
+     "how": "已退役，没有入口",
+     "status": "已停用",
      "screen": "ai-cli-profile-manager-16",
      "source": "手册 3.5 节（303-329 行）；OpenClaw 已冻结"
     },
@@ -802,8 +802,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
-  "sha256": "3239a563e49e19c631f06f3fabee4f5010cf0205eb4777ece723a2c9715ab1c9",
-  "converted_at_beijing": "2026-10-30T13:04:14+08:00"
+  "sha256": "25d0933d85656803ebcd2910b509f1212283197781282b093cd70a799740e86f",
+  "converted_at_beijing": "2026-10-31T07:45:41+08:00"
  }
 }
 ---
@@ -5114,7 +5114,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 29. 按厂商取钥匙｜Qwen、GLM、DeepSeek 各一把放在密码中心，其他需要钥匙的厂商在密码中心登记后也一样，用的那一刻才交给这一个程序；配了引用不算钥匙能用
 30. 旧本机密文迁移｜以前用 Windows 按当前用户加密存在本机的钥匙不再新写，只在迁移期照旧读取；迁移命令先预览，值相同才改成密码中心引用，旧密文保留待清理
 31. ChatGPT 双转接｜经两个第三方转接程序让 Claude Code 用 ChatGPT 订阅，装上后从没完成登录。9 月 29 日退役（本人定的）：现在没有要接 ChatGPT 的需要，将来要接也不参考这份代码；路线和代码已删
-32. 从 OpenClaw 导入｜把 OpenClaw 里存过的 DeepSeek 配置导进来，默认只预览；只是整理旧环境用的，新配置直接用密码中心里的厂商钥匙
+32. 从 OpenClaw 导入｜原来把 OpenClaw 里存过的 DeepSeek 配置导进来；OpenClaw 已冻结，10 月 22 日这个导入脚本已从源码删除，新配置直接用密码中心里的厂商钥匙
 
 **长对话**
 33. 压缩前先记下｜别家模型上下文用到 90% 自动压缩；压缩前把目标和改动写进项目，压缩后重读规则和改动；没见过的模型不猜窗口

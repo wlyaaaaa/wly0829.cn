@@ -524,8 +524,8 @@
      "id": "r-pcconfig-registry",
      "with": "pcconfig",
      "direction": "被登记",
-     "flow": "电脑配置的恢复锚点和配置项登记可用命令与恢复关系，源码路径导航取 GitHub 总索引；改动影响查询仍能查到它",
-     "source": "PCConfig registries/project_restore_anchors.json（Vault）、project_config_keys.json（vault_tool）；GitHub 总索引 config/repository-paths.json（仓库导航快照）"
+     "flow": "电脑配置的恢复锚点和配置项登记可用命令与恢复关系，源码路径导航登记在电脑配置；改动影响查询仍能查到它",
+     "source": "PCConfig registries/project_restore_anchors.json（Vault）、project_config_keys.json（vault_tool）；PCConfig registries/repository-paths.json（仓库导航快照）"
     },
     {
      "id": "r-github-cli",
@@ -602,8 +602,8 @@
  },
  "source": {
   "page": "sources/pages/vault-tool/page.json",
-  "sha256": "aacfcad1ed803a577441755e5dda84a1000d2d24d540b8ad576d35a812069cf6",
-  "converted_at_beijing": "2026-10-30T15:12:32+08:00"
+  "sha256": "41c9e81570e514922399cfe0916478e7185f20e5f35cd38194c9cd77998b84b0",
+  "converted_at_beijing": "2026-10-31T07:45:43+08:00"
  }
 }
 ---

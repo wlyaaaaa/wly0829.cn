@@ -565,7 +565,7 @@
         "illustration": "left_inside",
         "icons": "auto",
         "connector": "none",
-        "text_ref": "〔改项目前先核对〕动代码之前，先认准仓库、查清同步。　〔属于：GitHub 项目总索引〕",
+        "text_ref": "〔改项目前先核对〕动代码之前，先认准仓库、查清同步。",
         "icon_map": {
           "密码和本人验证": "_library/icons/保险箱.png",
           "加密文件": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
@@ -671,7 +671,7 @@
         "illustration": "left_inside",
         "icons": "auto",
         "connector": "none",
-        "text_ref": "〔改项目前先核对〕动代码之前，先认准仓库、查清同步。　〔属于：GitHub 项目总索引〕",
+        "text_ref": "〔改项目前先核对〕动代码之前，先认准仓库、查清同步。",
         "icon_map": {
           "密码和本人验证": "_library/icons/保险箱.png",
           "加密文件": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",

@@ -78,17 +78,15 @@
     {
      "id": "g-rules",
      "name": "让 AI 守规矩、用对工具",
-     "line": "不同的 AI 读同一版规矩，能换用别家和本机的模型，也认得每个代码仓库。",
+     "line": "不同的 AI 读同一版规矩，能换用别家和本机的模型。",
      "members": [
       "/projects/agents/",
-      "/projects/ai-cli-profile-manager/",
-      "/projects/github-index/"
+      "/projects/ai-cli-profile-manager/"
      ],
      "screen": "projects-home-02",
      "cards": [
       "projects-home-03",
-      "projects-home-04",
-      "projects-home-05"
+      "projects-home-04"
      ]
     },
     {
@@ -226,7 +224,8 @@
       "/projects/wechat-history-ai-bridge/",
       "/projects/ramdisk-guardian/",
       "/projects/meshclip-kit/",
-      "/projects/personal-expression/"
+      "/projects/personal-expression/",
+      "/projects/github-index/"
      ],
      "screen": "projects-home-41",
      "cards": [
@@ -236,7 +235,8 @@
       "projects-home-45",
       "projects-home-15",
       "projects-home-24",
-      "projects-home-36"
+      "projects-home-36",
+      "projects-home-05"
      ]
     }
    ],
@@ -254,7 +254,7 @@
     },
     {
      "id": "n-common",
-     "text": "常用 23 个",
+     "text": "常用 22 个",
      "meaning": "page.json 的 status 为“常用”",
      "as_of": "2026-10-30 11:06",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
@@ -274,7 +274,7 @@
     },
     {
      "id": "n-frozen",
-     "text": "冻结 7 个",
+     "text": "冻结 8 个",
      "meaning": "page.json 的 status 为“冻结”（kind 为 frozen）",
      "as_of": "2026-10-30 11:06",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
@@ -305,7 +305,7 @@
     },
     {
      "id": "n-group-sizes",
-     "text": "让 AI 守规矩、用对工具 3 个项目、让 AI 管好秘密 2 个项目、让 AI 管好备份和恢复 4 个项目、让电脑顺手、状态看得见 5 个项目、人不在电脑前也能办事 2 个项目、让 AI 懂我 5 个项目、让 AI 读懂我的材料 5 个项目、让 AI 帮我写和做 4 个项目、冻结（AI 不再维护） 7 个项目",
+     "text": "让 AI 守规矩、用对工具 2 个项目、让 AI 管好秘密 2 个项目、让 AI 管好备份和恢复 4 个项目、让电脑顺手、状态看得见 5 个项目、人不在电脑前也能办事 2 个项目、让 AI 懂我 5 个项目、让 AI 读懂我的材料 5 个项目、让 AI 帮我写和做 4 个项目、冻结（AI 不再维护） 8 个项目",
      "meaning": "每组有几个项目；和实际显示的卡片数一致",
      "as_of": "2026-10-30 11:06",
      "source": "registry.groups.cards 关联 screens.id，只统计显示的项目卡片",
@@ -315,7 +315,7 @@
     },
     {
      "id": "n-in-use",
-     "text": "30 个在用的项目",
+     "text": "29 个在用的项目",
      "meaning": "常用＋偶尔用（不含冻结）",
      "as_of": "2026-10-30 11:06",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
@@ -325,7 +325,7 @@
     },
     {
      "id": "n-features",
-     "text": "功能 1012 条（含冻结项目已停用的 119 条）",
+     "text": "功能 1012 条（含冻结项目已停用的 151 条）",
      "meaning": "各项目页 registry.features 条数相加；所有登记状态都计入，冻结项目另计停用条数。",
      "as_of": "2026-10-30 11:06",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
@@ -1083,8 +1083,8 @@
  },
  "source": {
   "page": "sources/pages/projects-home/page.json",
-  "sha256": "bfd388161dd62d0f216a3dce575a1c6f13a048b347268dded7ed0e96b7677b88",
-  "converted_at_beijing": "2026-10-31T04:24:58+08:00"
+  "sha256": "29258d51eb479aa0468c4d4ea8706c8f1e10aa84ecb007531231043516edfbb6",
+  "converted_at_beijing": "2026-10-31T07:45:43+08:00"
  }
 }
 ---
@@ -1171,7 +1171,7 @@
      "align": "left",
      "size": "large",
      "weight": "bold",
-     "text_ref": "30 个在用的项目",
+     "text_ref": "29 个在用的项目",
      "row": "hero",
      "bold": true
     },
@@ -1273,7 +1273,7 @@
      "align": "left",
      "size": "large",
      "weight": "bold",
-     "text_ref": "30 个在用的项目",
+     "text_ref": "29 个在用的项目",
      "bold": true
     },
     {
@@ -1404,21 +1404,21 @@
 
 # 项目
 
-**30 个在用的项目，让 AI 真能替我办事：管电脑和备份、找照片视频和文件原件、读微信聊天、听录音、认图片里的字、守密码，替我拟消息、写正式文书；我不在电脑前，手机上的 AI 也能在这台电脑上动手。**
+**29 个在用的项目，让 AI 真能替我办事：管电脑和备份、找照片视频和文件原件、读微信聊天、听录音、认图片里的字、守密码，替我拟消息、写正式文书；我不在电脑前，手机上的 AI 也能在这台电脑上动手。**
 
 | 一共 | 常用 | 偶尔用 | 冻结 |
 |---|---|---|---|
-| **37 个** | **23 个** | **7 个** | **7 个** |
+| **37 个** | **22 个** | **7 个** | **8 个** |
 
 公开 **19 个** · 私有 **18 个**
 
-功能 **1012 条**（各项目页“全部功能”相加，含冻结项目已停用的 119 条）
+功能 **1012 条**（各项目页“全部功能”相加，含冻结项目已停用的 151 条）
 
 截至北京时间 2026-10-30 11:06
 
 **按本事分组**
 
-〔让 AI 守规矩、用对工具〕3 个项目　〔让 AI 管好秘密〕2 个项目　〔让 AI 管好备份和恢复〕4 个项目　〔让电脑顺手、状态看得见〕5 个项目　〔人不在电脑前也能办事〕2 个项目　〔让 AI 懂我〕5 个项目　〔让 AI 读懂我的材料〕5 个项目　〔让 AI 帮我写和做〕4 个项目　〔冻结（AI 不再维护）〕7 个项目
+〔让 AI 守规矩、用对工具〕2 个项目　〔让 AI 管好秘密〕2 个项目　〔让 AI 管好备份和恢复〕4 个项目　〔让电脑顺手、状态看得见〕5 个项目　〔人不在电脑前也能办事〕2 个项目　〔让 AI 懂我〕5 个项目　〔让 AI 读懂我的材料〕5 个项目　〔让 AI 帮我写和做〕4 个项目　〔冻结（AI 不再维护）〕8 个项目
 
 点项目名进项目页；点“直达”后面的组名，直接跳到那个项目的这组功能。
 
@@ -1540,7 +1540,7 @@
 
 ## 让 AI 守规矩、用对工具
 
-不同的 AI 读同一版规矩，能换用别家和本机的模型，也认得每个代码仓库。
+不同的 AI 读同一版规矩，能换用别家和本机的模型。
 
 ::screen{#projects-home-03 section="groups"}
 
@@ -1859,163 +1859,6 @@
 **〔AI 工具配置管理〕**　常用　　〔GitHub〕
 选好模型，打开原版 AI 编程工具来用。
 直达：〔启动和路线〕　〔Codex 桌面版〕　〔本机模型〕
-
-::screen{#projects-home-05 section="groups"}
-
-```typeset
-{
- "screen": {
-  "id": "projects-home-05",
-  "shape": "card",
-  "section": "groups",
-  "title": "GitHub 项目总索引",
-  "scene": "单张项目卡片，1200×750 横放，画布就是卡片本身：白底、细浅绿描边、大圆角、很淡的阴影，四周只留很窄的白边，不画页面背景、别的卡片或组名。所有项目卡同一个版式、同一配色，风格照样张（白底、纯绿主色 #16a34a、深绿标题、深蓝灰正文、水彩插画）。\n①左上：项目名，大号粗体绿色字，画成链接样式（细下划线、末尾小 ↗）；紧右边是状态小标签：常用＝浅绿底深绿字，偶尔用＝白底浅绿描边、灰绿字，冻结＝浅灰底灰字。②右上角：公开项目画〔GitHub〕徽章（深绿底白字圆角，左边白色 GitHub 猫头标志）；私有项目画浅灰底深灰字的“私有”徽章，左边一把小锁；冻结项目不画徽章。③左边中间：深蓝灰常规字的一句话，最多两行。④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。每张卡的插画内容各不相同，画法统一。⑤冻结项目在一句话下方写明“停下原因：……”，再写“现在：……”；原因较长时允许自然折成两行，文字仍要可读，里面〔〕括起来的是链接。⑥最下面一行：灰绿小字“直达：”，后面最多 3 个浅绿底圆角小胶囊，每个是链接（绿色字、末尾小 ↗），一行排完。卡上的字以“字”为准，一字不差；不画连线。",
-  "portrait": "卡片不画竖版（拼页按组内张数排满每一行）。",
-  "links": [
-   {
-    "text": "GitHub 项目总索引",
-    "href": "/projects/github-index/"
-   },
-   {
-    "text": "找到和认准仓库",
-    "href": "/projects/github-index/#g-find"
-   },
-   {
-    "text": "查同步",
-    "href": "/projects/github-index/#g-sync"
-   },
-   {
-    "text": "公开和分享之前",
-    "href": "/projects/github-index/#g-publish"
-   }
-  ],
-  "anchors": [
-   {
-    "id": "p-github-local-index",
-    "text": "GitHub 项目总索引"
-   }
-  ],
-  "live": [],
-  "screenshots": [],
-  "chain": "",
-  "reuse": "",
-  "card": {
-   "name": "GitHub 项目总索引",
-   "href": "/projects/github-index/",
-   "status": "常用",
-   "visibility": "private",
-   "github": null,
-   "tagline": "找全代码仓库，查清副本和同步情况。",
-   "links": [
-    {
-     "text": "找到和认准仓库",
-     "href": "/projects/github-index/#g-find"
-    },
-    {
-     "text": "查同步",
-     "href": "/projects/github-index/#g-sync"
-    },
-    {
-     "text": "公开和分享之前",
-     "href": "/projects/github-index/#g-publish"
-    }
-   ]
-  }
- },
- "layout": {
-  "h": {
-   "source_kind": "original_image",
-   "source_size": [
-    1586,
-    992
-   ],
-   "source_sha256": "41285e9cf7db38068d41704ee15c848be4eab0f3f6f9a137f4f53efc555b54d3",
-   "shape": "card",
-   "blocks": [
-    {
-     "type": "project_tile",
-     "text_ref": "GitHub 项目总索引",
-     "align": "left",
-     "illustration": "right_inside",
-     "connector": "none",
-     "icons": "none",
-     "size": "medium",
-     "title_style": "sans_bold",
-     "title_position": "top_left",
-     "status_position": "after_title",
-     "badge_position": "top_right",
-     "tagline_position": "left_inside_below_title",
-     "footer_position": "bottom_left",
-     "link_layout": "one_row",
-     "show_badge": true,
-     "frozen": false,
-     "source_regions": {
-      "title": "upper_left",
-      "tagline": "middle_left",
-      "illustration": "upper_right",
-      "retirement": null
-     }
-    }
-   ],
-   "portrait_required": true,
-   "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
-  },
-  "v": {
-   "source_kind": "mobile_reflow_from_horizontal",
-   "source_size": [
-    1586,
-    992
-   ],
-   "source_sha256": "41285e9cf7db38068d41704ee15c848be4eab0f3f6f9a137f4f53efc555b54d3",
-   "shape": "card",
-   "blocks": [
-    {
-     "type": "project_tile",
-     "text_ref": "GitHub 项目总索引",
-     "align": "left",
-     "illustration": "right_inside",
-     "connector": "none",
-     "icons": "none",
-     "size": "medium",
-     "title_style": "sans_bold",
-     "title_position": "top_left",
-     "status_position": "after_title",
-     "footer_position": "bottom_left",
-     "link_layout": "auto",
-     "show_badge": true,
-     "frozen": false
-    }
-   ],
-   "portrait_required": true,
-   "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
-  }
- },
- "images": [
-  {
-   "role": "illustration",
-   "slot_ordinal": 1,
-   "orientations": [
-    "h"
-   ],
-   "asset": "_library/illustrations/main-github-local-index.png",
-   "fallback": false,
-   "semantic_status": "automatically_accepted_per_b2bc0efe",
-   "key": "main-github-local-index",
-   "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
-   "sha256": "e365b0208f0e75f40c63f79598210e3b0bc529f83a26a6bcdfb133606b8e5f80",
-   "status": "ready",
-   "original_elements": [
-    "摊开的账本、文件夹、放大镜"
-   ],
-   "hidden": false
-  }
- ]
-}
-```
-
-**〔GitHub 项目总索引〕**　常用　　私有
-找全代码仓库，查清副本和同步情况。
-直达：〔找到和认准仓库〕　〔查同步〕　〔公开和分享之前〕
 
 ::screen{#projects-home-06 section="groups"}
 
@@ -7233,8 +7076,8 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
      "href": "/projects/openclaw/#why-frozen"
     }
    ],
-   "now": "现在：电脑上的 Claude、Codex 桌面版，人在外面用〔远程电脑串流〕连回去",
-   "stop_reason": "OpenClaw 的 agents 本身不好用，因而停用"
+   "now": "现在：在电脑前直接用 Claude 和 Codex；人在外面就用〔远程电脑串流〕连回电脑。",
+   "stop_reason": "它里面的 AI 助手本身不好用，比不上直接用电脑上的 Claude 和 Codex。"
   }
  },
  "layout": {
@@ -7333,8 +7176,8 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
 
 **〔OpenClaw 网关〕**　冻结
 用手机聊天软件给家里电脑上的 AI 派活
-停下原因：OpenClaw 的 agents 本身不好用，因而停用
-现在：电脑上的 Claude、Codex 桌面版，人在外面用〔远程电脑串流〕连回去
+停下原因：它里面的 AI 助手本身不好用，比不上直接用电脑上的 Claude 和 Codex。
+现在：在电脑前直接用 Claude 和 Codex；人在外面就用〔远程电脑串流〕连回电脑。
 直达：〔为什么冻结〕
 
 ::screen{#projects-home-43 section="frozen"}
@@ -7385,8 +7228,8 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
      "href": "/projects/codex-remote/#why-frozen"
     }
    ],
-   "now": "现在：〔远程电脑串流〕把整个桌面连到手机上，Codex 原样用",
-   "stop_reason": "手机浏览器入口被远程桌面替代"
+   "now": "现在：用〔远程电脑串流〕把电脑桌面连到手机上。",
+   "stop_reason": "它只能在手机浏览器里管 Codex 这一个程序；〔远程电脑串流〕能把整个电脑桌面搬到手机上，Codex 照样能用，别的也都能操作。"
   }
  },
  "layout": {
@@ -7485,8 +7328,8 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
 
 **〔Codex 远程〕**　冻结
 用手机浏览器接着管电脑上正在跑的 Codex 任务
-停下原因：手机浏览器入口被远程桌面替代
-现在：〔远程电脑串流〕把整个桌面连到手机上，Codex 原样用
+停下原因：它只能在手机浏览器里管 Codex 这一个程序；〔远程电脑串流〕能把整个电脑桌面搬到手机上，Codex 照样能用，别的也都能操作。
+现在：用〔远程电脑串流〕把电脑桌面连到手机上。
 直达：〔为什么冻结〕
 
 ::screen{#projects-home-44 section="frozen"}
@@ -7533,8 +7376,8 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
      "href": "/projects/codex-agent-model-benchmark/#why-frozen"
     }
    ],
-   "now": "现在：不单独评测，能力只看厂商公布与 AA 等权威评测",
-   "stop_reason": "单独做模型评测耗额度，现有题目和本人判断也评不准，平时使用更能看出能力"
+   "now": "现在：选哪个 AI，看厂商公布的成绩和权威评测机构的排名。",
+   "stop_reason": "每测一次都要花不少 AI 额度，自己出的题也测不准谁更强；日常用下来，哪个好用反而一清二楚。"
   }
  },
  "layout": {
@@ -7633,8 +7476,8 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
 
 **〔AI 模型评测〕**　冻结
 让几种 AI 答同一套编程题，比谁真能干
-停下原因：单独做模型评测耗额度，现有题目和本人判断也评不准，平时使用更能看出能力
-现在：不单独评测，能力只看厂商公布与 AA 等权威评测
+停下原因：每测一次都要花不少 AI 额度，自己出的题也测不准谁更强；日常用下来，哪个好用反而一清二楚。
+现在：选哪个 AI，看厂商公布的成绩和权威评测机构的排名。
 直达：〔为什么冻结〕
 
 ::screen{#projects-home-45 section="frozen"}
@@ -7833,8 +7676,8 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
      "href": "/projects/ramdisk-guardian/#ramdisk-guardian-01"
     }
    ],
-   "stop_reason": "没有明显的实际提速收益；守护、体检、部署和测试已从现行源码删除",
-   "now": "现在：旧实现只留在 Git 历史里，不再照旧入口运行；Z 盘和缓存的当前状态未重新读取"
+   "stop_reason": "原本想把缓存放进内存让电脑变快，实际用下来速度没有明显提升。",
+   "now": "现在：内存盘已经撤掉，缓存和临时文件照常放在电脑的 E 盘上。"
   }
  },
  "layout": {
@@ -7933,8 +7776,8 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
 
 **〔内存盘守护〕**　冻结
 原来照看只放缓存的内存盘；现在已退役。
-停下原因：没有明显的实际提速收益；守护、体检、部署和测试已从现行源码删除
-现在：旧实现只留在 Git 历史里，不再照旧入口运行；Z 盘和缓存的当前状态未重新读取
+停下原因：原本想把缓存放进内存让电脑变快，实际用下来速度没有明显提升。
+现在：内存盘已经撤掉，缓存和临时文件照常放在电脑的 E 盘上。
 直达：〔为什么冻结〕
 
 ::screen{#projects-home-24 section="frozen"}
@@ -7956,6 +7799,10 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
    {
     "text": "为什么冻结",
     "href": "/projects/meshclip-kit/#meshclip-kit-01"
+   },
+   {
+    "text": "电脑配置与恢复",
+    "href": "/projects/pcconfig/"
    }
   ],
   "anchors": [
@@ -7981,8 +7828,8 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
      "href": "/projects/meshclip-kit/#meshclip-kit-01"
     }
    ],
-   "stop_reason": "它依赖的 KDE Connect 已在两台电脑上卸载，项目没有剩余用途；仓库保留，已归档",
-   "now": "现在：两台电脑之间的文字剪贴板由电脑配置的三端文字同步承担，主机和副机之间走既有的 PCConfig Clip Peer，和手机无关，换手机不影响"
+   "stop_reason": "它靠一个叫 KDE Connect 的软件在两台电脑之间传东西，这个软件已经卸了。",
+   "now": "现在：两台电脑之间复制粘贴，由〔电脑配置与恢复〕里的同步功能负责。"
   }
  },
  "layout": {
@@ -8083,8 +7930,8 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
 
 **〔双机剪贴板〕**　冻结
 原来让两台电脑互相粘贴文字、传文件；现在已冻结。
-停下原因：它依赖的 KDE Connect 已在两台电脑上卸载，项目没有剩余用途；仓库保留，已归档
-现在：两台电脑之间的文字剪贴板由电脑配置的三端文字同步承担，主机和副机之间走既有的 PCConfig Clip Peer，和手机无关，换手机不影响
+停下原因：它靠一个叫 KDE Connect 的软件在两台电脑之间传东西，这个软件已经卸了。
+现在：两台电脑之间复制粘贴，由〔电脑配置与恢复〕里的同步功能负责。
 直达：〔为什么冻结〕
 
 ::screen{#projects-home-36 section="frozen"}
@@ -8106,6 +7953,14 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
    {
     "text": "为什么存档",
     "href": "/projects/personal-expression/#personal-expression-01"
+   },
+   {
+    "text": "约法",
+    "href": "/rules/charter/"
+   },
+   {
+    "text": "个人理解库",
+    "href": "/projects/daily-preferences/"
    }
   ],
   "anchors": [
@@ -8131,8 +7986,8 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
      "href": "/projects/personal-expression/#personal-expression-01"
     }
    ],
-   "stop_reason": "10 月 31 日存档：内容已经归位，项目不再维护",
-   "now": "现在：通用说话规矩在约法 L1–L6，只关于我的说话习惯在个人理解库；“讲给我听”技能已删除，“替我拟消息”技能照常在用"
+   "stop_reason": "单独整理成一套，AI 平时不会专门去翻，记得越多越乱；直接写进 AI 每次都会读的〔约法〕和〔个人理解库〕，AI 才会真的照着做。",
+   "now": "现在：AI 跟我说话的规矩写在〔约法〕里，我的说话习惯记在〔个人理解库〕里；“替我拟消息”照常在用。"
   }
  },
  "layout": {
@@ -8233,6 +8088,160 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
 
 **〔个人表达〕**　冻结
 原来把事讲到我听懂、照我的意思帮我拟消息；10 月 31 日起存档。
-停下原因：10 月 31 日存档：内容已经归位，项目不再维护
-现在：通用说话规矩在约法 L1–L6，只关于我的说话习惯在个人理解库；“讲给我听”技能已删除，“替我拟消息”技能照常在用
+停下原因：单独整理成一套，AI 平时不会专门去翻，记得越多越乱；直接写进 AI 每次都会读的〔约法〕和〔个人理解库〕，AI 才会真的照着做。
+现在：AI 跟我说话的规矩写在〔约法〕里，我的说话习惯记在〔个人理解库〕里；“替我拟消息”照常在用。
 直达：〔为什么存档〕
+
+::screen{#projects-home-05 section="frozen"}
+
+```typeset
+{
+ "screen": {
+  "id": "projects-home-05",
+  "shape": "card",
+  "section": "frozen",
+  "title": "GitHub 项目总索引",
+  "scene": "单张项目卡片，1200×750 横放，画布就是卡片本身：白底、细浅绿描边、大圆角、很淡的阴影，四周只留很窄的白边，不画页面背景、别的卡片或组名。所有项目卡同一个版式、同一配色，风格照样张（白底、纯绿主色 #16a34a、深绿标题、深蓝灰正文、水彩插画）。\n①左上：项目名，大号粗体绿色字，画成链接样式（细下划线、末尾小 ↗）；紧右边是状态小标签：常用＝浅绿底深绿字，偶尔用＝白底浅绿描边、灰绿字，冻结＝浅灰底灰字。②右上角：公开项目画〔GitHub〕徽章（深绿底白字圆角，左边白色 GitHub 猫头标志）；私有项目画浅灰底深灰字的“私有”徽章，左边一把小锁；冻结项目不画徽章。③左边中间：深蓝灰常规字的一句话，最多两行。④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。每张卡的插画内容各不相同，画法统一。⑤冻结项目在一句话下方写明“停下原因：……”，再写“现在：……”；原因较长时允许自然折成两行，文字仍要可读，里面〔〕括起来的是链接。⑥最下面一行：灰绿小字“直达：”，后面最多 3 个浅绿底圆角小胶囊，每个是链接（绿色字、末尾小 ↗），一行排完。卡上的字以“字”为准，一字不差；不画连线。",
+  "portrait": "卡片不画竖版（拼页按组内张数排满每一行）。",
+  "links": [
+   {
+    "text": "GitHub 项目总索引",
+    "href": "/projects/github-index/"
+   },
+   {
+    "text": "为什么冻结",
+    "href": "/projects/github-index/#github-local-index-01"
+   },
+   {
+    "text": "电脑配置与恢复",
+    "href": "/projects/pcconfig/"
+   }
+  ],
+  "anchors": [
+   {
+    "id": "p-github-local-index",
+    "text": "GitHub 项目总索引"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": "",
+  "card": {
+   "name": "GitHub 项目总索引",
+   "href": "/projects/github-index/",
+   "status": "冻结",
+   "visibility": "frozen",
+   "github": null,
+   "tagline": "原来记下我所有的代码仓库放在哪、同步了没有；10 月 31 日起冻结。",
+   "links": [
+    {
+     "text": "为什么冻结",
+     "href": "/projects/github-index/#github-local-index-01"
+    }
+   ],
+   "stop_reason": "它要定时把所有仓库的情况抄一遍，可这些信息 AI 干活时当场一查就有，还比表上抄的新，专门维护这张表费事又容易过时。",
+   "now": "现在：每个项目放在电脑哪个文件夹、哪些项目放上这个网站，记在〔电脑配置与恢复〕里；删库、把私有仓库改成公开之前，照旧要我确认。"
+  }
+ },
+ "layout": {
+  "h": {
+   "source_kind": "original_image",
+   "source_size": [
+    1586,
+    992
+   ],
+   "source_sha256": "41285e9cf7db38068d41704ee15c848be4eab0f3f6f9a137f4f53efc555b54d3",
+   "shape": "card",
+   "blocks": [
+    {
+     "type": "project_tile",
+     "text_ref": "GitHub 项目总索引",
+     "align": "left",
+     "illustration": "right_inside",
+     "connector": "none",
+     "icons": "none",
+     "size": "medium",
+     "title_style": "sans_bold",
+     "title_position": "top_left",
+     "status_position": "after_title",
+     "badge_position": "top_right",
+     "tagline_position": "left_inside_below_title",
+     "footer_position": "bottom_left",
+     "link_layout": "one_row",
+     "show_badge": false,
+     "frozen": true,
+     "source_regions": {
+      "title": "upper_left",
+      "tagline": "middle_left",
+      "illustration": "upper_right"
+     },
+     "link_fill_width": false,
+     "separator_before_footer": true,
+     "retirement_inline_link_style": "underlined_inline"
+    }
+   ],
+   "portrait_required": true,
+   "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
+  },
+  "v": {
+   "source_kind": "mobile_reflow_from_horizontal",
+   "source_size": [
+    1586,
+    992
+   ],
+   "source_sha256": "41285e9cf7db38068d41704ee15c848be4eab0f3f6f9a137f4f53efc555b54d3",
+   "shape": "card",
+   "blocks": [
+    {
+     "type": "project_tile",
+     "text_ref": "GitHub 项目总索引",
+     "align": "left",
+     "illustration": "right_inside",
+     "connector": "none",
+     "icons": "none",
+     "size": "medium",
+     "title_style": "sans_bold",
+     "title_position": "top_left",
+     "status_position": "after_title",
+     "footer_position": "bottom_left",
+     "link_layout": "auto",
+     "show_badge": false,
+     "frozen": true,
+     "link_fill_width": false,
+     "separator_before_footer": true,
+     "retirement_inline_link_style": "underlined_inline"
+    }
+   ],
+   "portrait_required": true,
+   "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
+  }
+ },
+ "images": [
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/illustrations/main-github-local-index.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "main-github-local-index",
+   "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
+   "sha256": "e365b0208f0e75f40c63f79598210e3b0bc529f83a26a6bcdfb133606b8e5f80",
+   "status": "ready",
+   "original_elements": [
+    "摊开的账本、文件夹、放大镜"
+   ],
+   "hidden": false
+  }
+ ]
+}
+```
+
+**〔GitHub 项目总索引〕**　冻结
+原来记下我所有的代码仓库放在哪、同步了没有；10 月 31 日起冻结。
+停下原因：它要定时把所有仓库的情况抄一遍，可这些信息 AI 干活时当场一查就有，还比表上抄的新，专门维护这张表费事又容易过时。
+现在：每个项目放在电脑哪个文件夹、哪些项目放上这个网站，记在〔电脑配置与恢复〕里；删库、把私有仓库改成公开之前，照旧要我确认。
+直达：〔为什么冻结〕

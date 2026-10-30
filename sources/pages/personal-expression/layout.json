@@ -22,7 +22,17 @@
       },
       {
         "type": "prose",
-        "text_ref": "存档说明：10 月 31 日起这个项目存档、不再维护，内容已",
+        "text_ref": "停下原因：单独整理成一套",
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "现在：AI跟我说话的规矩写在",
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "下面是存档前的样子。",
         "row": "hero"
       },
       {
@@ -86,7 +96,15 @@
       },
       {
         "type": "prose",
-        "text_ref": "存档说明：10 月 31 日起这个项目存档、不再维护，内容已"
+        "text_ref": "停下原因：单独整理成一套"
+      },
+      {
+        "type": "prose",
+        "text_ref": "现在：AI跟我说话的规矩写在"
+      },
+      {
+        "type": "prose",
+        "text_ref": "下面是存档前的样子。"
       },
       {
         "type": "prose",
