@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/personal-media-cloud-candidates/page.json",
-  "sha256": "5b00ee8dfd008816c1597db0d0961dba3a53ae0828999e7a09a95f7a890fd3b7",
-  "converted_at_beijing": "2026-10-23T09:22:15+08:00"
+  "sha256": "c65b050e6bbe306f0119bacd254157981b9309ef8c05757b097eaa6e24fe9936",
+  "converted_at_beijing": "2026-10-30T11:16:50+08:00"
  }
 }
 ---
@@ -1190,7 +1190,7 @@
     },
     {
      "type": "bullet_list",
-     "text_ref": "源码现有509个测试函数（10月23日静态计数，本次没有运行）；云状态导入有测试定义，未在本次运行。",
+     "text_ref": "源码现有520个测试函数（10月30日静态计数，本次没有运行）；云状态导入有测试定义，未在本次运行。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1207,7 +1207,7 @@
     },
     {
      "type": "bullet_list",
-     "text_ref": "源码现有509个测试函数（10月23日静态计数，本次没有运行）；云状态导入有测试定义，未在本次运行。",
+     "text_ref": "源码现有520个测试函数（10月30日静态计数，本次没有运行）；云状态导入有测试定义，未在本次运行。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1231,7 +1231,7 @@
 
 ## 依据与来源（二）
 
-- 源码现有 509 个测试函数（10 月 23 日静态计数，本次没有运行）；云状态导入有测试定义，未在本次运行。
+- 源码现有 520 个测试函数（10 月 30 日静态计数，本次没有运行）；云状态导入有测试定义，未在本次运行。
 
 - 旧候选 header 的 upload=0 只约束本地生成命令；不会覆盖当前 cloud_object/cloud_membership 的真实云端状态。
 

@@ -34,12 +34,12 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-20 14:25"
+    "at": "2026-10-24 12:59"
    },
    "facts": [
-    "近 7 天 AI 用了 7 次"
+    "近 7 天 AI 用了 9 次"
    ],
-   "as_of": "2026-10-21",
+   "as_of": "2026-10-24",
    "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "based_on": {
@@ -94,8 +94,8 @@
  },
  "source": {
   "page": "sources/pages/skill-learning/page.json",
-  "sha256": "53fc52bfe45dc61698be6489fe1f892c7f5f8452d4b8853e866634b9c5a65775",
-  "converted_at_beijing": "2026-10-23T08:44:36+08:00"
+  "sha256": "df4ca3ac4370794ca931a931e6d6d8734c7247055734e52f1daa813e735d3da5",
+  "converted_at_beijing": "2026-10-30T11:16:51+08:00"
  }
 }
 ---
@@ -141,15 +141,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 20 日 14:25",
+       "text": "偶尔用 · 上次使用 10 月 24 日 12:59",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 7 次",
+       "text": "近 7 天 AI 用了 9 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 21 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 24 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -232,15 +232,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 20 日 14:25",
+       "text": "偶尔用 · 上次使用 10 月 24 日 12:59",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 7 次",
+       "text": "近 7 天 AI 用了 9 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 21 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 24 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

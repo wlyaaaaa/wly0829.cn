@@ -115,8 +115,8 @@
  },
  "source": {
   "page": "sources/pages/github-profile/page.json",
-  "sha256": "f00435ccd1cfe8da0bb5aa2dc3b6dd0c1cbd743a37568f73ed436fc972b8e466",
-  "converted_at_beijing": "2026-10-23T09:22:15+08:00"
+  "sha256": "56bea02ba0172c07ac0f4e4b5342d2fd1a52e948900a8a9344bed50866ed6683",
+  "converted_at_beijing": "2026-10-30T11:16:49+08:00"
  }
 }
 ---
@@ -729,7 +729,7 @@ AI 工具配置管理
 
 选好模型，打开原版 Codex、Claude Code；请求发到哪家，启动前写清。
 
-**21 条**　模型路线（截至 10 月 23 日）
+**21 条**　模型路线（截至 10 月 30 日）
 
 ::screen{#github-profile-07 section="projects"}
 

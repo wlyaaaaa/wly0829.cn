@@ -840,8 +840,8 @@
  },
  "source": {
   "page": "sources/pages/remote-control/page.json",
-  "sha256": "65ab41818e8a29b054c4cf6c62cf216758a30265ce9fd4029eb2dbb169b95fa4",
-  "converted_at_beijing": "2026-10-23T10:19:56+08:00"
+  "sha256": "53be5fcfcbee3aa52f91eea6affc4e14a08fcefa0deef158f35f7276b3d6ecba",
+  "converted_at_beijing": "2026-10-30T11:16:51+08:00"
  }
 }
 ---
@@ -2196,7 +2196,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
 大数字卡：
 **约 1.2 万行**｜程序（Python、PowerShell，远程服务和副机部署，不含同住一处的驾驶舱看板接口）；按 10 月 10 日统计，这次没重数
 **8,693 行**｜自动测试，47 个测试文件；按 10 月 10 日统计，这次没重数
-**381 次**｜提交（9 月 9 日起，同样两处加 4 份远程登记；10 月 23 日按 Git 路径历史重数）
+**520 次**｜提交（9 月 9 日起，同样两处加 4 份远程登记；10 月 30 日按 Git 路径历史重数）
 
 ::screen{#remote-control-06 section="tech"}
 

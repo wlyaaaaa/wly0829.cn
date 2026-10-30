@@ -41,12 +41,12 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-20 14:53"
+    "at": "2026-10-23 20:00"
    },
    "facts": [
-    "近 7 天改进了 9 次"
+    "近 7 天改进了 8 次"
    ],
-   "as_of": "2026-10-21",
+   "as_of": "2026-10-24",
    "source": "AI 使用记录；项目修改记录"
   },
   "public": false,
@@ -423,8 +423,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "47ba59e944647f676f851072bc01e6475af85511453559e45bda4410d2784f3c",
-  "converted_at_beijing": "2026-10-23T08:44:35+08:00"
+  "sha256": "8ba395a9352f7d1a09d8e781172f5c1bfea29e9ad0f24301efc4f5f9ef225fc3",
+  "converted_at_beijing": "2026-10-30T11:16:50+08:00"
  }
 }
 ---
@@ -475,15 +475,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 20 日 14:53",
+       "text": "偶尔用 · 上次使用 10 月 23 日 20:00",
        "state": "ok"
       },
       {
-       "text": "近 7 天改进了 9 次",
+       "text": "近 7 天改进了 8 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 21 日 · AI 使用记录；项目修改记录",
+     "static_note": "截至 10 月 24 日 · AI 使用记录；项目修改记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -549,15 +549,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 20 日 14:53",
+       "text": "偶尔用 · 上次使用 10 月 23 日 20:00",
        "state": "ok"
       },
       {
-       "text": "近 7 天改进了 9 次",
+       "text": "近 7 天改进了 8 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 21 日 · AI 使用记录；项目修改记录"
+     "static_note": "截至 10 月 24 日 · AI 使用记录；项目修改记录"
     },
     {
      "type": "stat_card",

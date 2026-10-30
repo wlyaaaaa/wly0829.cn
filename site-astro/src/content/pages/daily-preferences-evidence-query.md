@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/daily-preferences-evidence-query/page.json",
-  "sha256": "78a54dc343764f64c7207f9bc1a57f2a1f2829a8a3e2aa5b84bc6bcbdf17a780",
-  "converted_at_beijing": "2026-10-23T09:07:59+08:00"
+  "sha256": "f21489bb387febb2fbe8828929a2eac010f1b66059a1b27b04e5ec0db6e294ae",
+  "converted_at_beijing": "2026-10-30T11:16:49+08:00"
  }
 }
 ---
@@ -631,7 +631,7 @@
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-2026-10-11 只读：正常 activity 入口已返回 phone.collector.events，9 月 28 日到 10 月 6 日九个完整北京日 trusted=true，9 月 27 日和 10 月 7 日两天是部分日、trusted=false；这是读取截至 10 月 7 日已入库的原件，本次没有新采集。device-inventory 选 10 月 7 日 07:31 的 Collector 清单，803 个包。2026-10-22 06:48 只读：Collector 已存使用事件的最后原生事件日期为 10 月 21 日（北京时间）；这是已存原件的时期，不证明之后持续或每天完整覆盖，这次没有重跑 activity 的逐日 trusted 判断，也没有重选 device-inventory 清单。旧 9 月 8 日 190266 记录/48 卡只是历史聚合；旧 AppUsage 时长在所有时期都不可信。
+2026-10-11 只读：正常 activity 入口已返回 phone.collector.events，9 月 28 日到 10 月 6 日九个完整北京日 trusted=true，9 月 27 日和 10 月 7 日两天是部分日、trusted=false；这是读取截至 10 月 7 日已入库的原件，本次没有新采集。device-inventory 选 10 月 7 日 07:31 的 Collector 清单，803 个包。2026-10-22 06:48 只读：Collector 已存使用事件的最后原生事件日期为 10 月 29 日（北京时间）；这是已存原件的时期，不证明之后持续或每天完整覆盖，这次没有重跑 activity 的逐日 trusted 判断，也没有重选 device-inventory 清单。旧 9 月 8 日 190266 记录/48 卡只是历史聚合；旧 AppUsage 时长在所有时期都不可信。
 
 ## 关键规则与设计选择
 

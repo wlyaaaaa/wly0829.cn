@@ -34,12 +34,12 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-21 11:06"
+    "at": "2026-10-22 06:07"
    },
    "facts": [
-    "近 7 天 AI 用了 11 次"
+    "近 7 天 AI 用了 13 次"
    ],
-   "as_of": "2026-10-21",
+   "as_of": "2026-10-24",
    "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
@@ -111,8 +111,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-health/page.json",
-  "sha256": "7ca1e36ef33da091f1daff14a16b864e5316d4c030cfc50bc02d934749f05348",
-  "converted_at_beijing": "2026-10-23T08:44:36+08:00"
+  "sha256": "6ecb0401786b3db02a89be597c50659ad8a5a0e27de7c31710e1c82e975d8030",
+  "converted_at_beijing": "2026-10-30T11:16:51+08:00"
  }
 }
 ---
@@ -158,15 +158,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 21 日 11:06",
+       "text": "常用 · 上次使用 10 月 22 日 06:07",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 11 次",
+       "text": "近 7 天 AI 用了 13 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 21 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 24 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -230,15 +230,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 21 日 11:06",
+       "text": "常用 · 上次使用 10 月 22 日 06:07",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 11 次",
+       "text": "近 7 天 AI 用了 13 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 21 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 24 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",
