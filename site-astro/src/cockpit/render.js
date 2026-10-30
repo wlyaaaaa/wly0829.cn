@@ -2,6 +2,7 @@
 // 每块外框（[data-cp] 所在的元素）始终在，数据没到只换字，不出空框、不换版式。
 import { hm, dateHm, when, ago, light, dedupeCards, isToday, govState } from './model.js';
 import { actCls, ownerBox, recentBlock, ownerWarn, questionsFor, actionToast } from './actions.js';
+import { sinceText } from './seen.js';
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 // 图片地址由页面传入（构建时 Vite 给的带指纹地址）；没传时按素材原名
@@ -1169,8 +1170,10 @@ const overview = (v, ctx) => {
   const hid = hiddenPrivate(v);
   const priv = hid ? `<p class="cp-you-sub cp-you-private">另 ${hid} 件是私人事项，只在你的设备上显示</p>` : '';
   return `<div class="cp-you${urgent ? ' is-urgent' : ''}${n ? '' : ' is-none'}${said ? ' is-said' : ''}">${snap}<p class="cp-you-n">${n ? '' : dot(COLOR_STATE[v.summary.color] || COLOR_STATE[v.verdict.color] || 'ok')}${head}${tag}</p>`
-    + priv + ownerWarn(v, ctx) + sub + recentBlock(v, ctx) + `</div>`;
+    + priv + sinceLine(ctx) + ownerWarn(v, ctx) + sub + recentBlock(v, ctx) + `</div>`;
 };
+// “你上次 23:10 来过，之后新冒出 2 件、AI 关掉 4 件”（本人 10-30 批准第 4 项）：ctx.since 由 client.js 按这台浏览器存的编号算，第一次打开、没有变化都不写
+const sinceLine = (ctx) => { const t = sinceText(ctx.since, ctx.now); return t ? `<p class="cp-since">${esc(t)}</p>` : ''; };
 // 首屏下半：三格（电脑 / 自动任务 / 备份）和健康分小字
 const overviewTri = (v, ctx) => {
   if (!ctx.ov) return '';
@@ -1277,6 +1280,8 @@ const lampOf = (key) => (v, ctx) => {
 // 筛选（全部 / 晚了 / 没晚、输入几个字）和勾选记在 client.js 的 act.ui（下面两个键），重画时照样画出来
 export const LF_KEY = '\u0000ledger-filter', LB_KEY = '\u0000ledger-batch';
 const cellNote = (x, ctx) => (isPh(x) ? '' : ledgerBox(x, ctx));
+// 表格行的编号只给“新”标记用（seen.js 的 newCss），不叫 data-items，免得通知跳转找到看不见的那处
+const rowIds = (x) => (typeof x?.id === 'string' && x.id.trim() ? ` data-ids="${esc(x.id.trim())}"` : '');
 function followTable(v, ctx) {
   const now = ctx.now;
   const lateList = v.ai_overdue ? [...v.ai_overdue] : v.ai_following.filter((x) => x.stuck === true);
@@ -1299,7 +1304,7 @@ function followTable(v, ctx) {
     const checked = isPh(x) ? '' : x.last_checked_at ? checkedAgo(x.last_checked_at, now) : '';
     const hay = [title, x.project, prog, x.decision_summary].filter(Boolean).join(' ').toLowerCase();
     const hide = (show === 'late' && !late) || (show === 'ok' && late) || (q && !hay.includes(q));
-    return `<tr class="${late ? 'is-late' : 'is-ok'}${phCls(x)}${actCls(x, ctx)}"${hide ? ' hidden' : ''}>`
+    return `<tr class="${late ? 'is-late' : 'is-ok'}${phCls(x)}${actCls(x, ctx)}"${rowIds(x)}${hide ? ' hidden' : ''}>`
       + `<td class="cp-lt-what">${isPh(x) ? `<span title="${PH_HINT}">${esc(title)}</span>${moreText(more)}` : `<span class="cp-lt-title">${esc(title)}${ownTag(x)}</span>${prog && String(x.owner_detail || '').includes(prog) ? '' : detail(x)}${decLine(x, 'dect')}`}</td>`
       + `<td class="cp-lt-due">${due ? `${esc(due.text)}${due.old ? `<small>${esc(due.old)}</small>` : ''}` : '—'}</td><td class="cp-lt-lag">${lag ? `<span class="cp-lt-late">${esc(lag)}</span>` : `<span class="cp-lt-none">${fine ? '没晚' : '—'}</span>`}</td>`
       + `<td class="cp-lt-prog">${prog ? `<span>${esc(prog)}</span>` : ''}${checked ? `<small>${esc(checked)}</small>` : ''}</td>`
@@ -1318,10 +1323,10 @@ function decisionsTable(v, ctx) {
   if (!list.length) return '';
   const anyAct = ctx.viewer?.kind === 'owner' && list.some((k) => !isPh(k));
   const tr = (k) => {
-    if (isPh(k)) return `<tr class="is-private"><td class="cp-lt-what" colspan="4"><span title="${PH_HINT}">${esc(k.title || PRIVATE_TITLE)}</span></td>${anyAct ? '<td class="cp-lt-act"></td>' : ''}</tr>`;
+    if (isPh(k)) return `<tr class="is-private"${rowIds(k)}><td class="cp-lt-what" colspan="4"><span title="${PH_HINT}">${esc(k.title || PRIVATE_TITLE)}</span></td>${anyAct ? '<td class="cp-lt-act"></td>' : ''}</tr>`;
     const d = splitDecision(k);
     const basis = d?.basis ? (CODE.test(d.basis) ? `<details class="cp-tech" id="dect-${esc(knowId(k))}"><summary>技术细节</summary><p>${esc(d.basis)}</p></details>` : esc(plain(d.basis))) : '';
-    return `<tr class="is-ai_decision${actCls(k, ctx)}">`
+    return `<tr class="is-ai_decision${actCls(k, ctx)}"${rowIds(k)}>`
       + `<td class="cp-lt-what"><span class="cp-lt-title">${esc(d ? d.topic : k.text)}${ownTag(k)}</span>${detail(k)}</td><td class="cp-lt-dec">${d ? esc(d.decision) : ''}</td>`
       + `<td class="cp-lt-why">${basis}</td><td class="cp-lt-at">${k.at ? esc(when(k.at, ctx.now)) : ''}</td>`
       + (anyAct ? `<td class="cp-lt-act">${ledgerBox(k, ctx)}</td>` : '') + `</tr>`;
@@ -1338,7 +1343,7 @@ export function ledger(v, ctx) {
   const stale = staleLedger(v, ctx);
   const toc = [['ai-following', 'AI 在跟'], ['ai-decided', 'AI 自己定了的'], theirs.length ? ['ai-wait', 'AI 等条件再做的'] : null, health ? ['ai-health', '体检和项目后台'] : null, stale ? ['stale-data', '停了的数据'] : null].filter(Boolean);
   return `<nav class="cp-ledger-toc" aria-label="这页有什么">${toc.map(([id, t]) => `<a href="#${id}">${t}</a>`).join('')}</nav>`
-    + snap + `<p class="cp-ledger-sum">${dot('neutral')}${esc(ledgerText(v))}</p>`
+    + snap + `<p class="cp-ledger-sum">${dot('neutral')}${esc(ledgerText(v))}</p>` + sinceLine(ctx)
     + `<section class="cp-ledger-sec" id="ai-following"><h2>AI 在跟</h2>${aiFollowing(v, ctx)}${followTable(v, ctx)}</section>`
     + `<section class="cp-ledger-sec" id="ai-decided"><h2>AI 自己定了的</h2>${decisionsBlock(v, ctx)}${decisionsTable(v, ctx)}</section>`
     + (theirs.length ? `<section class="cp-ledger-sec" id="ai-wait"><h2>AI 等条件再做的</h2><ul class="cp-list cp-wait">${theirs.map((x) => waitRow(x, ctx, [])).join('')}</ul></section>` : '')

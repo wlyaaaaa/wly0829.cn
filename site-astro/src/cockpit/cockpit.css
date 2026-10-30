@@ -1226,3 +1226,7 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
   .cp-intro:has(.cp-strip-row) .cp-you.is-none .cp-you-n { display: none; }
   .cp-dashboard > .cp-sidebar > .cp-hero-art, .cp-hero-art { margin-top: 4px; }
 }
+
+/* ---- 新出现的标“新”：顶上一句小字“你上次 HH:MM 来过……”（本人 10-30 批准第 4 项；小绿点的样式由 seen.js 按编号生成） ---- */
+.cp-page .cp-since { margin: 4px 0 0; font-size: 12.5px; line-height: 1.5; font-weight: 400; color: var(--muted); }
+.cp-page .cp-since::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: #2f9e5a; vertical-align: 1px; }

@@ -143,3 +143,35 @@ test('停了的数据：后端没给处理方只写事实；给了 ai_handling �
   assert.match(home(card({ handler: { kind: 'running' } })), /示例流量（10\/29 起读不到，AI 在处理）/);
   assert.doesNotMatch(home(card({ handler: { kind: 'scheduled' } })), /AI 在处理/);
 });
+
+test('新出现的标“新”：只存编号和时间；第一次打开不标；新冒出、AI 关掉按上次比；顶上一句小字', async () => {
+  const seen = await import('../site-astro/src/cockpit/seen.js');
+  const v = view({ need_you: [{ id: 'n1', title: '示例甲' }, { id: 'n2', title: '示例乙' }], must_know: { state: 'ok', items: [{ id: 'k1', kind: 'report', text: '示例结果' }, { id: 'd1', kind: 'ai_decision', text: '示例：结束' }] },
+    ai_following: [{ id: 'f1', title: '示例跟进' }], ai_running: { count: 1, observed_at: at, rows: [{ id: 'r1', status: 'running' }] } });
+  assert.deepEqual(seen.trackedIds(v, 'home'), ['n1', 'n2', 'k1']);
+  assert.deepEqual(seen.trackedIds(v, 'ledger'), ['f1', 'd1']);
+  // 存的只有编号和时间，没有标题正文
+  const raw = seen.serializeSeen(1000, ['n1', 'k1']);
+  assert.deepEqual(JSON.parse(raw), { v: 1, at: 1000, ids: ['n1', 'k1'] });
+  assert.doesNotMatch(raw, /示例/);
+  assert.equal(seen.parseSeen('坏数据'), null);
+  // 第一次打开（没存过）不标
+  assert.deepEqual(seen.compare(null, ['n1']), { fresh: [], closed: 0 });
+  const prev = seen.parseSeen(seen.serializeSeen(Date.parse('2026-10-29T23:10:00+08:00'), ['n1', 'old1', 'old2']));
+  const c = seen.compare(prev, seen.trackedIds(v, 'home'));
+  assert.deepEqual(c, { fresh: ['n2', 'k1'], closed: 2 });
+  assert.equal(seen.sinceText({ at: prev.at, fresh: 2, closed: 2 }, now), '你上次 10月29日 23:10 来过，之后新冒出 2 件、AI 关掉 2 件');
+  assert.equal(seen.sinceText({ at: Date.parse('2026-10-30T09:05:00+08:00'), fresh: 1, closed: 0 }, now), '你上次 09:05 来过，之后新冒出 1 件');
+  assert.equal(seen.sinceText({ at: prev.at, fresh: 0, closed: 0 }, now), '');
+  // 页面上：ctx.since 有变化才写那一句
+  assert.match(REGIONS.overview(v, ctx({ since: { at: prev.at, fresh: 2, closed: 2 } })), /<p class="cp-since">你上次 10月29日 23:10 来过，之后新冒出 2 件、AI 关掉 2 件<\/p>/);
+  assert.doesNotMatch(REGIONS.overview(v, ctx()), /cp-since/);
+  assert.match(REGIONS.ledger(v, ctx({ since: { at: prev.at, fresh: 1, closed: 0 } })), /<p class="cp-since">你上次 10月29日 23:10 来过，之后新冒出 1 件<\/p>/);
+  // 小绿点：按编号生成样式（行和卡都认 data-items，账本表格行认 data-ids），没有新的就是空
+  const css = seen.newCss(['n2', 'a"b']);
+  assert.match(css, /\[data-items~="n2"\]/);
+  assert.match(css, /\[data-ids~="a\\"b"\]/);
+  assert.match(css, /content: "新"/);
+  assert.equal(seen.newCss([]), '');
+  assert.match(REGIONS.ledger(normalize({ schema: 'pcconfig.cockpit-view.v1', served_at: at, viewer: { kind: 'owner' }, ai_following: [{ id: 'f1', title: '示例跟进' }] }), ctx()), /<tr class="is-ok"[^>]*data-ids="f1"/);
+});
