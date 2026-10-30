@@ -2,64 +2,60 @@
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
   "source_commit": "Unknown",
-  "prepared_at_beijing": "2026-10-30T16:55:46.654970+08:00",
-  "seconds": 180.572,
+  "prepared_at_beijing": "2026-10-30T17:37:16.166290+08:00",
+  "seconds": 149.795,
   "steps": [
     {
       "name": "home_highlights",
-      "seconds": 0.17
+      "seconds": 0.128
     },
     {
       "name": "source",
-      "seconds": 3.384
+      "seconds": 3.268
     },
     {
       "name": "fingerprint",
-      "seconds": 0.946
+      "seconds": 0.874
     },
     {
       "name": "prepare",
-      "seconds": 20.382
+      "seconds": 10.575
     },
     {
       "name": "native_inputs",
-      "seconds": 6.824
+      "seconds": 4.99
     },
     {
       "name": "blocks",
-      "seconds": 13.079
+      "seconds": 9.209
     },
     {
       "name": "astro",
-      "seconds": 24.972
+      "seconds": 22.794
     },
     {
       "name": "assets",
-      "seconds": 4.627
+      "seconds": 4.139
     },
     {
       "name": "finish",
-      "seconds": 8.745
+      "seconds": 5.51
     },
     {
       "name": "finalize",
-      "seconds": 86.769
+      "seconds": 77.567
     },
     {
       "name": "public",
-      "seconds": 10.008
+      "seconds": 10.027
     },
     {
       "name": "inventory",
-      "seconds": 0.664
+      "seconds": 0.715
     }
   ],
   "rebuilt_pages": [
-    "/cockpit/",
-    "/cockpit/ai/",
-    "/cockpit/storage/",
-    "/rules/execution-coordination/",
-    "/skills/browser-control-continuity/",
+    "/search/",
     "/skills/report-page/"
   ],
   "html_files": 322,
@@ -31507,12 +31503,12 @@
     {
       "path": "release-identity.json",
       "bytes": 211,
-      "sha256": "86a7b90bf183dd3a4aac1846783e6bb7f1763c18fe29ffe60dde9ed09e7bee0d"
+      "sha256": "b2e01ec7360e32bff87abc6d13d69e6d264c22107aa25c3ba113f0b9570d5cdd"
     },
     {
       "path": "release-manifest.json",
       "bytes": 5846413,
-      "sha256": "5eb4681ac20041a2ed0f35a41ea3629cc1d9b162f91751d59b4217446ee6ad02"
+      "sha256": "b73a5b043168e35f9ec7177be8cfbd72bc1fcbda64bc6a0ea57b2d72d0ba87e8"
     },
     {
       "path": "rescue/index.html",
@@ -31677,12 +31673,12 @@
     {
       "path": "search/index.html",
       "bytes": 68789,
-      "sha256": "a4a52691acf71b0e7f9a2c1ca9c7e9bd37c6afb165d5fd30a8503e800d312c8b"
+      "sha256": "f63073e63e4dbbda27c53d3085443c1e4fe67ea0e4511403a43eca2ec3ad0f85"
     },
     {
       "path": "search-index.js",
-      "bytes": 1633455,
-      "sha256": "035dbc31ba2e1217c1434ac4d0f9fc00884f7517cb650f6e73085171e7badf06"
+      "bytes": 1633489,
+      "sha256": "109c58462806decb47241bb7eb24ab09c4dc3aa3a6ccc804f8acfee493190203"
     },
     {
       "path": "search-project-localocr.js",
@@ -32026,8 +32022,8 @@
     },
     {
       "path": "skills/report-page/index.html",
-      "bytes": 327162,
-      "sha256": "b51add0c9dd5937f5afc3d4ce5a352298b1063e12d72ff58a351d72060cbecd4"
+      "bytes": 327306,
+      "sha256": "5443b6c0ab6e11b40743da859f560dfa7a501b78b9361dddc7a229c9b6bb8d47"
     },
     {
       "path": "skills/tailscale-safe-exposure/assets/hero-7ea0c7e2981cf84c-mask.png",
@@ -32127,5 +32123,5 @@
   ],
   "output": "E:\\Cache\\wly-site-build\\wt\\dist",
   "previous_oss_source": "published",
-  "previous_release_id": "c5308d4aa03da209982092e456b8e536d1ced2e42be91236f6cd681192d52045"
+  "previous_release_id": "c498d6490b1543c7226129a038d2f96c5def8de87637198feb6338e4e5f24b35"
 }
