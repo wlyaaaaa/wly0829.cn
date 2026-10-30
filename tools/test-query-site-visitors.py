@@ -337,6 +337,21 @@ class VisitorTests(unittest.TestCase):
             self.assertIn(category, str(error.exception))
             self.assertNotIn("secret-value", str(error.exception))
 
+    def test_invalid_grant_is_auth_failure_without_retry_or_raw_error(self):
+        for marker in (b"invalid_grant", b"invalid grant"):
+            failed = subprocess.CompletedProcess([], 1, b"", b"init openapi client failed: OAuth refresh " + marker + b" secret-value")
+            with self.subTest(marker=marker), patch.object(query.socket, "getaddrinfo", return_value=[]), patch.object(query.subprocess, "run", return_value=failed) as run, patch.object(query.time, "sleep") as sleep:
+                with self.assertRaises(query.CloudCommandError) as raised:
+                    query.cli_run(["aliyun", "sls", "GetLogsV2"])
+                self.assertEqual(raised.exception.category, "鉴权失败")
+                run.assert_called_once(); sleep.assert_not_called()
+            with patch.object(sys, "argv", [query.__file__, "--deep-read", "--since", "2026-10-12T10:00:00+08:00"]), patch.object(query, "sync_cloud", side_effect=raised.exception), patch("builtins.print") as output:
+                self.assertEqual(query.main(), 1)
+            result = json.loads(output.call_args.args[0])
+            self.assertEqual((result["status"], result["error_code"]), ("error", "query_auth_failed"))
+            self.assertNotIn("secret-value", output.call_args.args[0])
+            self.assertNotIn("visitors", result)
+
     def test_cloud_failure_is_error_and_not_zero_visitors(self):
         with patch.object(sys, "argv", [query.__file__, "--start", "2026-10-12", "--end", "2026-10-12"]), patch.object(query, "sync_cloud", side_effect=RuntimeError("SLS unavailable")), patch("builtins.print") as output:
             self.assertEqual(query.main(), 1)

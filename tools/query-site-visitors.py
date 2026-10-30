@@ -232,7 +232,7 @@ def cli_error(result):
         ("DNS 解析失败", ("no such host", "name resolution")),
         ("连接中断", ("eof", "connection reset", "connection refused", "tls handshake")),
         ("代理拒绝", ("proxyconnect",)),
-        ("鉴权失败", ("forbidden", "unauthorized", "accessdenied", "invalidaccesskey", "signature", "credential")),
+        ("鉴权失败", ("forbidden", "unauthorized", "accessdenied", "invalidaccesskey", "signature", "credential", "invalid_grant", "invalid grant")),
         ("请求参数无效", ("invalidparameter", "badrequest", "invalid argument")),
         ("CLI 初始化失败", ("init openapi client failed",)),
     ):
