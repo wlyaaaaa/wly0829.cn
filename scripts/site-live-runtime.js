@@ -1,7 +1,7 @@
 (function(){'use strict';
 const unknown={text:'暂时读不到',state:'unknown'};
 const readTimeoutMs=8000;
-const statusEndpoints=['https://mcp.wly0829.cn/computer-access/api/status','https://live.wly0829.cn/computer-access/state'];
+const statusEndpoints=['https://live.wly0829.cn/computer-access/state','https://mcp.wly0829.cn/computer-access/api/status'];
 const endpointPreferenceKey='site-live-endpoint:v1',endpointPreferenceMs=600000;
 let successfulEndpoint=null;
 function preferredEndpoint(){
