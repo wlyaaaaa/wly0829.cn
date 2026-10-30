@@ -56,10 +56,10 @@ See [Project expansion gate](docs/design/panel-content-contract.md#project-expan
   Deterministic scripts may collect facts and verify contracts, but never write
   narrative content or decide materiality.
 - Website content, design, writing and independent acceptance use the active
-  native economy-routing policy. The owner removed the website-specific
-  Astra-only/model-effort floor on 2026-09-22. Preserve the user's selected root
-  model; choose whether to delegate and the child model/effort from the actual
-  remaining difficulty, quality needs, independent-review value and total cost.
+  native economy-routing policy, with no website-specific model or effort
+  floor. Preserve the user's selected root model; choose whether to delegate
+  and the child model/effort from the actual remaining difficulty, quality
+  needs, independent-review value and total cost.
   Registry records this routing policy rather than a permanent website model.
   A null semantic_model/semantic_reasoning_effort means selection by the AI
   executor under that policy, never a literal provider/model name. Record the
