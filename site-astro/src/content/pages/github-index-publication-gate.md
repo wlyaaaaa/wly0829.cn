@@ -24,17 +24,12 @@
   "kind": "project",
   "title": "Transport（Git 传输）、公开内容与授权三重门",
   "url": "/projects/github-index/publication-gate/",
-  "parent": "github-local-index",
-  "status_line": {
-   "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "GitHub 总索引源码（提交 e792eda，10 月 7 日）推送放行矩阵与 PublicExposurePolicy，提交前密钥 Hook 已于 9 月 27 日删除；授权按已核验的活动规则 E257。"
-  }
+  "parent": "github-local-index"
  },
  "source": {
   "page": "sources/pages/github-index-publication-gate/page.json",
-  "sha256": "4ce7a52ee8b86bf1ff1196685855162084adcb4accd737257ba7a9675d9ec51b",
-  "converted_at_beijing": "2026-10-22T08:32:30+08:00"
+  "sha256": "22f535431884fee7c56fecef29458ea9149b069c98fe643b88f5690f916cc426",
+  "converted_at_beijing": "2026-10-31T06:46:48+08:00"
  }
 }
 ---
@@ -76,18 +71,6 @@
      "row_fit_illustration": true
     },
     {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "常用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · GitHub 总索引源码（提交 e792eda，10 月 7 日）推送放行矩阵与 PublicExposurePolicy，提交前密钥 Hook 已于 9 月 27 日删除；授权按已核验的活动规则 E257。",
-     "row": "top"
-    },
-    {
      "type": "action_button",
      "text_ref": "〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕",
      "row": "top",
@@ -116,17 +99,6 @@
      "text_ref": "Transport（Git 传输）、公开内容与授权三重门",
      "align": "left",
      "size": "large"
-    },
-    {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "常用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · GitHub 总索引源码（提交 e792eda，10 月 7 日）推送放行矩阵与 PublicExposurePolicy，提交前密钥 Hook 已于 9 月 27 日删除；授权按已核验的活动规则 E257。"
     },
     {
      "type": "action_button",
@@ -165,7 +137,7 @@
 
 〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕
 
-GitHub 总索引 · 功能说明
+GitHub 总索引 · 功能说明 · 已冻结：10 月 31 日起项目不再维护。这项功能现在：推送前的检查照旧每次都做，写进了 AI 平时守的规矩。下面是冻结前的样子。
 
 既防止把私钥、令牌或私人正文错推到公开仓库，也避免因为目标是 PRIVATE（私有）就胡乱改写恢复所需的精确内容。判断始终落在这次真实候选上，不拿“仓库是公开/私有”一个标签替代内容检查。
 

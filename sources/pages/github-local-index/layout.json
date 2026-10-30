@@ -12,10 +12,30 @@
         "width": "55%"
       },
       {
+        "type": "tag",
+        "text_ref": "已冻结 · 冻结的项目，AI 不主动看、不维护（约法 L24）",
+        "row": "hero"
+      },
+      {
         "type": "prose",
-        "text_ref": "找全代码仓库，查清副本和同步情况。",
+        "text_ref": "原来记下我所有的代码仓库放在哪、同步了没有；10 月 31 日起冻结。",
         "size": "large",
         "bold": true,
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "停下原因：它要定时把所有仓库的情况抄一遍",
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "现在：每个项目放在电脑哪个文件夹",
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "GitHub上的仓库和电脑里的文件夹都留着",
         "row": "hero"
       },
       {
@@ -38,11 +58,6 @@
       {
         "type": "prose",
         "text_ref": "截至10月11日。本机工作目录"
-      },
-      {
-        "type": "live_strip",
-        "text_ref": "现在基座体检各项目和GitHub同步没有",
-        "frame_mode": "plain"
       },
       {
         "type": "action_button",
@@ -95,10 +110,26 @@
         "size": "large"
       },
       {
+        "type": "tag",
+        "text_ref": "已冻结 · 冻结的项目，AI 不主动看、不维护（约法 L24）"
+      },
+      {
         "type": "prose",
-        "text_ref": "找全代码仓库，查清副本和同步情况。",
+        "text_ref": "原来记下我所有的代码仓库放在哪、同步了没有；10 月 31 日起冻结。",
         "size": "large",
         "bold": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "停下原因：它要定时把所有仓库的情况抄一遍"
+      },
+      {
+        "type": "prose",
+        "text_ref": "现在：每个项目放在电脑哪个文件夹"
+      },
+      {
+        "type": "prose",
+        "text_ref": "GitHub上的仓库和电脑里的文件夹都留着"
       },
       {
         "type": "prose",
@@ -117,11 +148,6 @@
       {
         "type": "prose",
         "text_ref": "截至10月11日。本机工作目录"
-      },
-      {
-        "type": "live_strip",
-        "text_ref": "现在基座体检各项目和GitHub同步没有",
-        "frame_mode": "plain"
       },
       {
         "type": "action_button",

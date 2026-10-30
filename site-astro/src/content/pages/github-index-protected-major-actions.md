@@ -24,17 +24,12 @@
   "kind": "project",
   "title": "重大 Git/GitHub 变更保护与人类确认边界",
   "url": "/projects/github-index/protected-major-actions/",
-  "parent": "github-local-index",
-  "status_line": {
-   "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "GitHub 总索引源码（入口 9 月 27 日重写 b7fb62f、9 月 29 日加入先预演 e2ccb371，当前 HEAD e792eda）与已核验活动规则 E257 的保护合同；重写后无实际使用记录，待验收。"
-  }
+  "parent": "github-local-index"
  },
  "source": {
   "page": "sources/pages/github-index-protected-major-actions/page.json",
-  "sha256": "d773d8bcf995a597e96cc76e1643685914e4bd1838cc231ca5346d08c4ae9fe0",
-  "converted_at_beijing": "2026-10-30T13:04:16+08:00"
+  "sha256": "67eddf7416fa40463caf6b3c4ac527a972a548e9edab4606a22cdb1f225409ba",
+  "converted_at_beijing": "2026-10-31T06:46:48+08:00"
  }
 }
 ---
@@ -76,18 +71,6 @@
      "row_fit_illustration": true
     },
     {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "常用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · GitHub 总索引源码（入口 9 月 27 日重写 b7fb62f、9 月 29 日加入先预演 e2ccb371，当前 HEAD e792eda）与已核验活动规则 E257 的保护合同；重写后无实际使用记录，待验收。",
-     "row": "top"
-    },
-    {
      "type": "action_button",
      "text_ref": "〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕",
      "row": "top",
@@ -116,17 +99,6 @@
      "text_ref": "重大 Git/GitHub 变更保护与人类确认边界",
      "align": "left",
      "size": "large"
-    },
-    {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "常用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · GitHub 总索引源码（入口 9 月 27 日重写 b7fb62f、9 月 29 日加入先预演 e2ccb371，当前 HEAD e792eda）与已核验活动规则 E257 的保护合同；重写后无实际使用记录，待验收。"
     },
     {
      "type": "action_button",
@@ -165,7 +137,7 @@
 
 〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕
 
-GitHub 总索引 · 功能说明
+GitHub 总索引 · 功能说明 · 已冻结：10 月 31 日起项目不再维护。这项功能现在：删库、把私有仓库改成公开之前，照旧要我确认。下面是冻结前的样子。
 
 仓库改名、改公开范围、删库或转移等重大变化，先绑住唯一目标、把能保全的内容保全好，再只执行这一项并回读。只有删库、转移和把非公开仓库改成公开这三类需要本人验证；新建公开仓库不再另做身份验证，但仍要本人明确同意、参数写准、建完回读；普通提交与正常推送照常走普通 Git。
 

@@ -24,17 +24,12 @@
   "kind": "project",
   "title": "Worktree（工作树）、分支同步与默认分支收敛",
   "url": "/projects/github-index/worktree-sync/",
-  "parent": "github-local-index",
-  "status_line": {
-   "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "GitHub 总索引源码（提交 e792eda，10 月 7 日）现行工作树同步合同与登记，以及 10 月 11 日 16:34 对总索引自身唯一工作树的只读检查。"
-  }
+  "parent": "github-local-index"
  },
  "source": {
   "page": "sources/pages/github-index-worktree-sync/page.json",
-  "sha256": "b93c7ca5816791bd2de168d60e1800208af48d1b58fc575729b3f96231696df1",
-  "converted_at_beijing": "2026-10-22T08:32:30+08:00"
+  "sha256": "a27a36ad220b98253ab67b9d91644ffe4e4041d5be9574478495f618426df5a0",
+  "converted_at_beijing": "2026-10-31T06:46:48+08:00"
  }
 }
 ---
@@ -76,18 +71,6 @@
      "row_fit_illustration": true
     },
     {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "常用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · GitHub 总索引源码（提交 e792eda，10 月 7 日）现行工作树同步合同与登记，以及 10 月 11 日 16:34 对总索引自身唯一工作树的只读检查。",
-     "row": "top"
-    },
-    {
      "type": "action_button",
      "text_ref": "〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕",
      "row": "top",
@@ -116,17 +99,6 @@
      "text_ref": "Worktree（工作树）、分支同步与默认分支收敛",
      "align": "left",
      "size": "large"
-    },
-    {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "常用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · GitHub 总索引源码（提交 e792eda，10 月 7 日）现行工作树同步合同与登记，以及 10 月 11 日 16:34 对总索引自身唯一工作树的只读检查。"
     },
     {
      "type": "action_button",
@@ -165,7 +137,7 @@
 
 〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕
 
-GitHub 总索引 · 功能说明
+GitHub 总索引 · 功能说明 · 已冻结：10 月 31 日起项目不再维护。这项功能现在：改完的东西传没传到 GitHub，AI 收尾时当场就查得到。下面是冻结前的样子。
 
 防止“当前分支已 push（推送）”掩盖另一个工作树的未提交修改、独有提交或没有进入 main（默认主分支）的 feature（功能分支）历史。
 

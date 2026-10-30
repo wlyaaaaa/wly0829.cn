@@ -24,17 +24,12 @@
   "kind": "project",
   "title": "单仓库 Admission（入场检查）与精确目标判断",
   "url": "/projects/github-index/project-admission/",
-  "parent": "github-local-index",
-  "status_line": {
-   "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "GitHub 总索引源码（提交 e792eda，10 月 7 日）现行准入合同，以及 10 月 11 日 16:34 对总索引自身的只读元数据检查。"
-  }
+  "parent": "github-local-index"
  },
  "source": {
   "page": "sources/pages/github-index-project-admission/page.json",
-  "sha256": "4a4376c5617b062e6d5de2d1802a8c6928cb16e0b853467628785266e895fdad",
-  "converted_at_beijing": "2026-10-22T08:32:30+08:00"
+  "sha256": "e191d75e9ba786d88991d2d98f2893d9a7c692c404e894f6080b1979b179ec87",
+  "converted_at_beijing": "2026-10-31T06:46:48+08:00"
  }
 }
 ---
@@ -76,18 +71,6 @@
      "row_fit_illustration": true
     },
     {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "常用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · GitHub 总索引源码（提交 e792eda，10 月 7 日）现行准入合同，以及 10 月 11 日 16:34 对总索引自身的只读元数据检查。",
-     "row": "top"
-    },
-    {
      "type": "action_button",
      "text_ref": "〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕",
      "row": "top",
@@ -116,17 +99,6 @@
      "text_ref": "单仓库 Admission（入场检查）与精确目标判断",
      "align": "left",
      "size": "large"
-    },
-    {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "常用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · GitHub 总索引源码（提交 e792eda，10 月 7 日）现行准入合同，以及 10 月 11 日 16:34 对总索引自身的只读元数据检查。"
     },
     {
      "type": "action_button",
@@ -165,7 +137,7 @@
 
 〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕
 
-GitHub 总索引 · 功能说明
+GitHub 总索引 · 功能说明 · 已冻结：10 月 31 日起项目不再维护。这项功能现在：AI 动手前当场就认得出是哪个仓库。下面是冻结前的样子。
 
 在真正改文件或推送前确认“我站在正确的仓库、正确的工作树和正确的远端前”，并把继续、警告和阻断原因说清。
 

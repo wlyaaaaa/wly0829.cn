@@ -24,17 +24,12 @@
   "kind": "project",
   "title": "仓库身份总账与 Owner（责任源）状态",
   "url": "/projects/github-index/repository-ledger/",
-  "parent": "github-local-index",
-  "status_line": {
-   "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "GitHub 总索引源码（提交 e792eda，10 月 7 日）和 10 月 11 日 13:32 记录、16:32 复核的零写身份状态；推送里程碑和旧项目来源分页已退役。"
-  }
+  "parent": "github-local-index"
  },
  "source": {
   "page": "sources/pages/github-index-repository-ledger/page.json",
-  "sha256": "cb4bd5a2a18abe28fa4da83ef955fe11a2afca42cb36228948ec422f5bcec4ca",
-  "converted_at_beijing": "2026-10-30T13:04:16+08:00"
+  "sha256": "9dceb0e5210096595579b12cc6da4eab1d134e4d19848a5b533e23c5033b6dab",
+  "converted_at_beijing": "2026-10-31T06:46:47+08:00"
  }
 }
 ---
@@ -76,18 +71,6 @@
      "row_fit_illustration": true
     },
     {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "常用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · GitHub 总索引源码（提交 e792eda，10 月 7 日）和 10 月 11 日 13:32 记录、16:32 复核的零写身份状态；推送里程碑和旧项目来源分页已退役。",
-     "row": "top"
-    },
-    {
      "type": "action_button",
      "text_ref": "〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕",
      "row": "top",
@@ -116,17 +99,6 @@
      "text_ref": "仓库身份总账与 Owner（责任源）状态",
      "align": "left",
      "size": "large"
-    },
-    {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "常用",
-       "state": "ok"
-      }
-     ],
-     "static_note": "截至 10 月 11 日 · GitHub 总索引源码（提交 e792eda，10 月 7 日）和 10 月 11 日 13:32 记录、16:32 复核的零写身份状态；推送里程碑和旧项目来源分页已退役。"
     },
     {
      "type": "action_button",
@@ -165,7 +137,7 @@
 
 〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕
 
-GitHub 总索引 · 功能说明
+GitHub 总索引 · 功能说明 · 已冻结：10 月 31 日起项目不再维护。这项功能现在：仓库的情况 AI 干活时当场就查得到，这张总账不再维护。下面是冻结前的样子。
 
 把散落在不同磁盘、公开与私有仓库中的身份事实收成一张可审计的总账：程序读一份受控导航，我看一页私有看板；对外展示时按事实有没有用、具体值有没有风险决定放明细还是放计数，不因“私有”标签整类隐藏。
 
