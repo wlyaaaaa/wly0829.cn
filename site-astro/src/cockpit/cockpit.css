@@ -1218,3 +1218,85 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 /* ---- 今天的河默认展开：构建时有任务就按河图的比例先留出画面的位置（脚本还没画、画面还没显示时都占着，看不见），河画进来时不推挤下面 ---- */
 .cp-river.is-expected:empty { min-height: 520px; }
 #today-river.cp-river.is-expected #scroller[hidden] { display: block !important; visibility: hidden; }
+
+/* ---- 电脑分区：约 12 张同样子的卡（本人 10-31 选定 A 版网格）：左上圆点加卡名，大号数字或状态词，一行灰色短说明，有去处的右下 › 或 ↗。
+   数据卡宽屏一行 3 张、768—1199 一行 2 张、手机一行 1 张；最后一排落单时拉宽补齐，不留空格。Grafana 链接卡在最后一排，矮一些 ---- */
+.cp-pc-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.cp-page .cp-pc-grid > .cp-tile { position: relative; display: flex; flex-direction: column; margin: 0; padding: 14px 16px 12px; }
+.cp-page .cp-tile h3 { display: flex; align-items: center; margin: 0 0 4px; font-size: 15px; line-height: 1.4; }
+.cp-page .cp-tile p { margin: 0; }
+.cp-page .cp-tile .cp-big { font-size: 32px; line-height: 1.25; font-weight: 800; color: var(--title); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.cp-page .cp-tile .cp-big small { margin-left: 8px; font-size: 17px; font-weight: 400; color: var(--muted); }
+.cp-page .cp-tile.is-neutral .cp-big { color: #3f5f7a; }
+.cp-page .cp-tile.is-gray .cp-big { color: var(--muted); }
+.cp-page .cp-tile.is-yellow .cp-big { color: #8a6400; }
+.cp-page .cp-tile.is-red .cp-big { color: var(--cp-red); }
+.cp-page .cp-tile .cp-sub { margin-top: 4px; font-size: 13.5px; line-height: 1.5; color: var(--muted); overflow-wrap: anywhere; }
+.cp-page .cp-tile > p:not([class]) { margin-top: 6px; font-size: 14px; }
+.cp-page .cp-tile .cp-time, .cp-page .cp-tile .cp-reason { margin-top: 6px; font-size: 12.5px; }
+.cp-tile .cp-meter { display: flex; align-items: center; gap: 8px; margin-top: 8px !important; }
+.cp-meter progress { flex: 1; min-width: 0; height: 7px; border: 0; border-radius: 99px; overflow: hidden; appearance: none; background: var(--soft); }
+.cp-meter progress::-webkit-progress-bar { background: var(--soft); }
+.cp-meter progress::-webkit-progress-value { background: var(--accent); border-radius: 99px; }
+.cp-meter progress::-moz-progress-bar { background: var(--accent); }
+.cp-meter small { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.cp-page .cp-tile .cp-net { margin-left: 2px; font-weight: 700; color: var(--link); }
+.cp-tile-more { order: 8; margin-top: auto; padding-top: 6px; font-size: 13px; }
+.cp-tile-more > summary { width: max-content; margin-left: auto; list-style: none; cursor: pointer; font-weight: 700; color: var(--link); }
+.cp-tile-more > summary::-webkit-details-marker { display: none; }
+.cp-tile-more > summary::after { content: " ›"; }
+.cp-tile-more[open] > summary::after { content: " ‹"; }
+.cp-page .cp-tile-more > p { margin-top: 6px; font-size: 13px; line-height: 1.6; color: var(--text); }
+.cp-page .cp-tile-go { order: 9; align-self: flex-end; margin-top: auto; padding-top: 6px; font-size: 13px; font-weight: 700; color: var(--link); text-decoration: none; }
+.cp-tile-go::before { content: ""; position: absolute; inset: 0; border-radius: inherit; } /* 整卡可点 */
+.cp-page .cp-tile:has(.cp-tile-go):hover { border-color: var(--link); }
+.cp-page .cp-pc-grid + .cp-facts-at { margin: 8px 0 0; }
+.cp-pc-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.cp-pc-links > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+.cp-page .cp-link-card { position: relative; display: grid; align-content: start; gap: 2px; min-width: 0; padding: 12px 34px 12px 16px; color: var(--text) !important; text-decoration: none; }
+.cp-link-card > b { font-size: 15px; line-height: 1.4; color: var(--title); }
+.cp-link-card > small { font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+.cp-link-card > .cp-link-arrow { position: absolute; right: 14px; bottom: 10px; font-size: 16px; font-weight: 800; line-height: 1; color: var(--link); }
+.cp-page .cp-link-card:hover, .cp-page .cp-link-card:focus-visible { border-color: var(--link); }
+.cp-pc-links > .cp-charts { grid-column: 1 / -1; margin: 0; }
+@media (min-width: 768px) {
+  .cp-pc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cp-pc-grid > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .cp-pc-links { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .cp-pc-links > :last-child:nth-child(odd) { grid-column: auto; }
+}
+@media (min-width: 1200px) {
+  .cp-pc-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .cp-pc-grid > :last-child:nth-child(odd) { grid-column: auto; }
+  .cp-pc-grid > :nth-last-child(2):nth-child(3n+1) { grid-column: span 2; }
+  .cp-pc-grid > :last-child:nth-child(3n+1) { grid-column: 1 / -1; }
+  .cp-pc-links { gap: 14px; margin-top: 14px; }
+}
+@media (max-width: 767.98px) {
+  .cp-page .cp-tile .cp-big { font-size: 28px; }
+  .cp-page .cp-link-card { padding: 10px 28px 10px 12px; }
+  .cp-link-card > .cp-link-arrow { right: 10px; }
+}
+
+/* ---- 横幅左边那一组（本人 10-31：大小不协调）：读取时间两行、↻ ?、“你上次…来过”和“你最近处理的（30 天）›”同一套 13px 字；
+   ↻ ? 看着 28px、点击区域 44px，和第一行字垂直居中对齐；各行左边对齐书法标题的字（标题图左边留白约占图高的 30/198） ---- */
+.cp-intro { --cp-title-h: 82px; --cp-title-pad: calc(var(--cp-title-h) * 30 / 198); }
+.cp-main-title img { height: var(--cp-title-h); }
+.cp-intro .cp-you { padding-inline-start: var(--cp-title-pad); }
+.cp-page .cp-meta, .cp-page .cp-meta-sub, .cp-page .cp-since, .cp-page .cp-intro .cp-you-sub { font-size: 13px; line-height: 20px; }
+.cp-page .cp-intro .cp-recent > summary { padding: 0; font-size: 13px; line-height: 20px; font-weight: 600; }
+.cp-page .cp-intro .cp-recent { margin-top: 2px; padding-top: 0; border-top: 0; }
+.cp-tools { align-items: flex-start; }
+.cp-page .cp-tools > :is([data-cp-reload], .cp-help) { margin-top: -4px; } /* 28px 的钮和第一行 20px 的字居中对齐 */
+.cp-page .cp-tool { position: relative; width: 28px; min-width: 28px; height: 28px; min-height: 28px; margin: 0; border-width: 1.5px; border-radius: 8px; font-size: 15px; line-height: 1; }
+.cp-page .cp-tool::before { content: ""; position: absolute; inset: -8px; } /* 点击区域 44px */
+.cp-help-pop { top: 32px; }
+@media (min-width: 1200px) {
+  .cp-intro { --cp-title-h: 108px; }
+  .cp-banner .cp-tools { padding-inline-start: var(--cp-title-pad); gap: 8px; }
+  .cp-banner .cp-meta { margin-right: 6px; }
+}
+@media (max-width: 767.98px) {
+  .cp-intro { --cp-title-h: 70px; }
+  .cp-page .cp-meta { font-size: 12.5px; }
+}

@@ -118,7 +118,8 @@ const assert = require('node:assert/strict');
   assert.match(R.REGIONS.tasks(vk, ctx), /后台 5 项功能中断过，现在都恢复了.*虚构功能 1<.*虚构功能 5</);
   assert.match(o, /最近收起的 1 条/);
   const remote = R.computer(vk, ctx);
-  assert.match(remote, /此刻能连上；间歇断开还在查/);
+  // 电脑区网格卡（10-31 A 版）：大字状态词，小字收成一短行，链接照旧跳“你得知道”那条
+  assert.match(remote, /id="remote">.*能连上<\/p><p class="cp-sub">间歇断开还在查 · <a class="cp-net"/);
   assert.match(remote, /href="#know-pending-net"/);
   // 11 网站上次成功发布（后端 website_release）：字段不在不出；成功一行用后端的话；读不到灰着
   assert.doesNotMatch(today, /cp-release/);
@@ -143,7 +144,7 @@ const assert = require('node:assert/strict');
   assert.match(R.REGIONS['lamp-need-you'](colored, ctx), /is-yellow.*要你处理/);
   assert.equal(R.REGIONS['lamp-computer'](colored, ctx), '');
   const pcc = R.computer(colored, ctx);
-  assert.match(pcc, /cp-card is-neutral ct-card">.*内存\/系统资源.*AI 在管：虚构内存在盯/);
+  assert.match(pcc, /cp-card is-neutral ct-card cp-tile">.*内存\/系统资源.*AI 在管：虚构内存在盯/);
   assert.match(pcc, /触发的是：虚构程序 1 小时上传 3\.0GB，超过 2GB/);
   assert.match(R.todayBlock(colored, ctx), /cp-card is-gray ct-card">.*学习进度.*数据源停了/);
   const ask = R.needCards(colored, ctx);

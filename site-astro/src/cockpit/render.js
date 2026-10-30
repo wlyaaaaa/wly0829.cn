@@ -80,13 +80,14 @@ export function cardState(c) {
 }
 // 一张事实卡：标题、一句话、判断标准、读到的时间；没读到时写清上次读到是几点。
 // off = 这会儿整个读不到电脑：卡片变淡、灯灰，写“读不到（最后 HH:MM 读到）”，不再亮着上次的绿灯
-export function card(c, now, off = false, pageAt = '') {
+// t（电脑区网格卡）：{ big, sub, bar, go, more } 都是排好的 HTML；给了就先写大数字、短说明，原句收进“详情 ›”（要你出手的照旧摊开），读不到电脑时不各写时间
+export function card(c, now, off = false, pageAt = '', t = null) {
   const lag = (x) => !pageAt || !!lagAt(x, { served_at: pageAt });
   const missing = c.state === 'unavailable' || c.state === 'reading';
   const gap = ago(c.observed_at, now).replace(/^刚刚$/, '').replace(/前$/, '');
   const state = off ? 'unavailable' : cardState(c);
   const text = c.text ? esc(c.text) + (missing && c.observed_at ? `<span class="cp-stale">（这是 ${esc(when(c.observed_at, now))} 读到的，之后${gap ? ' ' + esc(gap) : ''}没读到新的）</span>` : '') : notRead(c.observed_at, now);
-  const time = off ? (missing ? '' : `<p class="cp-time cp-off-note">读不到${c.observed_at ? `（最后 ${esc(when(c.observed_at, now))} 读到）` : ''}</p>`)
+  const time = off && t ? '' : off ? (missing ? '' : `<p class="cp-time cp-off-note">读不到${c.observed_at ? `（最后 ${esc(when(c.observed_at, now))} 读到）` : ''}</p>`)
     : state === 'stale' ? `<p class="cp-time">数据源停了，上面是最后一次记录，不是你的事${c.observed_at ? ` · ${esc(when(c.observed_at, now))} 读到` : ''}</p>`
     : !missing && c.observed_at && (state === 'neutral' || lag(c.observed_at)) ? `<p class="cp-time">${state === 'neutral' ? esc(typeof c.ai_handling === 'string' && c.ai_handling ? c.ai_handling.replace(/[。\s]+$/, '') : 'AI 在管，不用你动手') + (lag(c.observed_at) ? ' · ' : '') : ''}${lag(c.observed_at) ? esc(when(c.observed_at, now)) + ' 读到' : ''}</p>` : '';
   // 后端给出“具体是哪条线触发的”（trigger_items：单个程序 1 小时上传超过 2GB，或近 1 小时合计超过登记线）就写出来；
@@ -96,7 +97,11 @@ export function card(c, now, off = false, pageAt = '') {
   const lines = items.filter((t) => !(c.text || '').includes(Number(t.value_gb).toFixed(1))).map((t) => LINE[t.reason](t));
   const trig = off ? '' : lines.length ? `<p class="cp-reason">触发的是：${esc(lines.join('；'))}</p>` : typeof c.trigger_text === 'string' && c.trigger_text ? `<p class="cp-reason">触发的是：${esc(c.trigger_text)}</p>` : '';
   const details = Array.isArray(c.details) ? c.details.filter((d) => d && (d.title || d.text)) : [];
-  return `<article class="cp-card is-${light(state)} ct-card${off ? ' is-off' : ''}"><h3>${dot(state)}${esc(c.title)}</h3><p>${text}</p>` + trig
+  // 网格卡：要你出手的（黄、红）原句照旧摊开；其余有没说全的才收进“详情 ›”
+  const open = !off && ['attention', 'red'].includes(state);
+  const body = !t ? `<p>${text}</p>` : `<p class="cp-big">${t.big}</p>${t.bar || ''}${t.sub ? `<p class="cp-sub">${t.sub}</p>` : ''}`
+    + (open ? `<p>${text}</p>` : t.more === false && !(missing && c.text) ? '' : `<details class="cp-tile-more"><summary>详情</summary><p>${text}</p></details>`) + (t.go || '');
+  return `<article class="cp-card is-${light(state)} ct-card${off ? ' is-off' : ''}${t ? ' cp-tile' : ''}"${t?.id ? ` id="${t.id}"` : ''}><h3>${dot(state)}${esc(c.title)}</h3>${body}` + trig
     + (details.length ? `<details class="cp-more"><summary>查看具体缺口</summary><ul class="cp-list">${details.map((d) => `<li><span>${esc(d.title)}</span>${d.text ? `<small>${esc(d.text)}</small>` : ''}</li>`).join('')}</ul></details>` : '')
     + (c.criteria_text ? `<p class="cp-criteria">判断标准：${esc(c.criteria_text)}</p>` : '')
     + time + `</article>`;
@@ -538,29 +543,66 @@ function schedRow(x, ctx) {
   return `<li${liCls(x, ctx)}${itemAttr(x)}>${rowText(x, head, at ? esc(`排在${/^约/.test(at) ? '' : ' '}${at}`) : '')}${ownerBox(x, ctx)}</li>`;
 }
 
-// 电脑：正常的读数各占一行，要留意的整张卡；远程连接正常时也是一行；图表链接一行
+// 电脑：约 12 张同样子的卡（本人 10-31 选定 A 版网格）：数据卡宽屏一行 3 张，最后一排是 Grafana 三张链接卡。
+// 大数字只从现有原句里取，取不到就写状态词、原句照旧写在下面，不编数字；长句收进卡内“详情 ›”
+const WORD = { green: '正常', neutral: 'AI 在管', yellow: '要留意', red: '要你看', gray: '读不到' };
+const SIZE = String.raw`(\d+(?:\.\d+)?\s*[KMGT]i?B)`;
+const pick = (s, re) => (re.exec(s || '') || [])[1] || '';
+const bigOf = (n, aside = '') => esc(n) + (aside ? ` <small>${esc(aside)}</small>` : '');
+// 细进度条：处理器画占用，磁盘、套餐画“已用”（旁边写明已用多少）
+const meter = (p, label, said = false) => `<p class="cp-meter"><progress max="100" value="${Math.round(Math.max(0, Math.min(100, p)))}" aria-label="${esc(label)}"></progress>${said ? `<small>${esc(label)}</small>` : ''}</p>`;
+const TILE = {
+  computer_health: (t) => { const p = pick(t, /(\d+(?:\.\d+)?)\s*%/); return p && { big: bigOf(p + '%', pick(t, /(-?\d+(?:\.\d+)?\s*℃)/)), bar: meter(+p, `处理器占用 ${p}%`), more: false }; },
+  system_resources: (t, st) => st === 'ok' && /^[^。；]*正常。?$/.test(t) && { big: '正常', more: false },
+  disk_space: (t) => { const m = new RegExp(`([A-Z])\\s*盘还剩\\s*${SIZE}\\s*[（(]\\s*(\\d+(?:\\.\\d+)?)%`).exec(t); return m && { big: esc(m[2]), sub: esc(`${m[1]} 盘还剩 ${m[3]}%`), bar: meter(100 - m[3], `已用 ${Math.round(100 - m[3])}%`, true), more: false }; },
+  proxy_traffic: (t) => { const d = pick(t, new RegExp(`今天(?:上网)?\\s*${SIZE}`)), h = pick(t, new RegExp(`近\\s*60\\s*分钟\\s*${SIZE}`)); return d && { big: esc(d), sub: esc(['今天上网', h && `近 60 分钟 ${h}`, pick(t, /(没超提醒线|超过提醒线)/)].filter(Boolean).join(' · ')) }; },
+  traffic: (t) => { const m = /已用\s*(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)\s*([KMGT]i?B)/.exec(t), left = pick(t, new RegExp(`剩余?\\s*${SIZE}`)); return m && left && { big: bigOf(left, '剩余'), sub: esc(`套餐已用 ${m[1]}/${m[2]} ${m[3]}`), bar: meter(m[1] / m[2] * 100, `已用 ${Math.round(m[1] / m[2] * 100)}%`, true) }; },
+  temp_reclaim: (t) => { const n = pick(t, new RegExp(`约\\s*${SIZE}`)), m = /^(今天|昨天)?\s*(\d{1,2}:\d{2})\s*把\s*(\d+)\s*个/.exec(t); return n && { big: esc(n), sub: m ? esc(`${m[1] || ''} ${m[2]} 放进回收站 ${m[3]} 个`.trim()) : '' }; },
+  remote: (t) => { const [a, ...rest] = t.replace(/[。.\s]+$/, '').split(/[；;]/), w = ['能连上', '连不上', '在线', '离线'].find((x) => a.includes(x)); return w && a.length <= 8 && { big: w, sub: esc(rest.map((x) => x.trim()).filter(Boolean).join(' · ')), more: false }; },
+};
+const tileOf = (c, now, off, pageAt, extra = {}) => {
+  const st = off ? 'unavailable' : cardState(c), missing = c.state === 'unavailable' || c.state === 'reading';
+  const gap = c.observed_at ? ago(c.observed_at, now).replace(/^刚刚$/, '').replace(/前$/, '') : '';
+  const t = missing ? { big: '读不到', sub: esc(c.observed_at ? `这是 ${when(c.observed_at, now)} 读到的，之后${gap ? ' ' + gap : ''}没读到新的` : '还没读到'), more: false }
+    : (TILE[c.id] || TILE[c.kind] || (() => null))(String(c.text || ''), cardState(c)) || { big: esc(WORD[light(st)]), sub: ['attention', 'red'].includes(st) ? '' : esc(factText(c)), more: false };
+  return card(c, now, off, pageAt, { ...t, ...extra, sub: [t.sub, extra.sub].filter(Boolean).join(' · ') });
+};
+const GIB = (n) => (Number.isFinite(n) && n >= 0 ? `${+(n / 2 ** 30).toFixed(1)} GiB` : '');
+const sizeOf = (x) => (!x ? '' : x.complete === true && Number.isFinite(x.bytes) ? GIB(x.bytes) : GIB(x.partial_bytes) && '至少 ' + GIB(x.partial_bytes));
+// AI 临时文件：存储采样里的合计（ai_cache_total），没量全写“至少”；只是“还没量全”不算出事，别的类别超预算算 AI 在管；整卡链到存储页
+function aiCacheTile(v, now, off, pageAt) {
+  const sp = v.storage_pressure || {}, cats = Array.isArray(sp.categories) ? sp.categories : [], of = (id) => cats.find((x) => x?.id === id);
+  const all = of('ai_cache_total'), size = sizeOf(all), age = now.getTime() - Date.parse(sp.observed_at || '');
+  const real = cats.some((x) => x?.alert && x.alert !== 'measurement_incomplete');
+  const state = !size ? 'unavailable' : !(age <= (Number(sp.max_age_seconds) > 0 ? sp.max_age_seconds * 1000 : 72e5)) ? 'stale' : sp.state !== 'ok' && real ? 'neutral' : 'ok';
+  const c = { id: 'ai_cache_total', title: 'AI 临时文件', state, observed_at: sp.observed_at || null, ai_handling: '有存储类别超预算，AI 在处理', text: '' };
+  const sub = [GIB(all?.budget_bytes) && '预算 ' + GIB(all.budget_bytes), sizeOf(of('claude_temp')) && 'Claude ' + sizeOf(of('claude_temp')), sizeOf(of('codex_temp')) && 'Codex ' + sizeOf(of('codex_temp'))].filter(Boolean).join(' · ');
+  const go = '<a class="cp-tile-go" href="/cockpit/storage/">存储占用与增长 ›</a>';
+  return card(c, now, off, pageAt, state === 'unavailable' ? { big: '读不到', sub: '存储采样还没读到', more: false, go } : { big: esc(size), sub: esc(sub), more: false, go });
+}
+const linkCard = (href, title, sub, cls = '') => `<a class="cp-link-card ct-card${cls}" href="${esc(href)}" target="_blank" rel="noopener"><b>${esc(title)}</b><small>${esc(sub)}</small><span class="cp-link-arrow" aria-hidden="true">↗</span></a>`;
 export function computer(v, ctx) {
-  const g = v.grafana, off = !!ctx.offline, stale = staleIds(v);
+  const g = v.grafana, off = !!ctx.offline, stale = staleIds(v), now = ctx.now, at = v.served_at;
   const cards = dedupeCards(v.sections.computer).filter((c) => !stale.has(c.id));
-  // 副机在线不在线看 laptop.connection；laptop.state 是副机自动任务的健康，不能当连接
-  const lap = LAPTOP[v.laptop.connection];
   // “你得知道”里有正在修的网络问题时，后端在远程卡上给 must_know_id（文字是“此刻能连上；间歇断开还在查”），点了跳到“你得知道”那一条
   const remoteCards = dedupeCards(v.sections.remote).filter((c) => !stale.has(c.id));
-  const net = !off && remoteCards.find((c) => c.must_know_id);
-  const remoteOk = !off && !net && remoteCards.length > 0 && remoteCards.every((c) => cardState(c) === 'ok');
-  const remote = remoteOk
-    ? `<ul class="cp-facts">${remoteCards.map((c, i) => factLine(c, i ? '' : ' id="remote"')).join('')}${lap ? `<li class="cp-fact">${dot(lap[1])}<b>笔记本（副机）</b><span>${lap[0]}</span></li>` : ''}</ul>`
-    : `<div class="cp-grid">${(remoteCards.map((c) => card(c, ctx.now, off)).join('') || card({ title: '远程连接', state: 'unavailable', text: '' }, ctx.now, off)).replace('<article ', '<article id="remote" ')
-      .replace(/<\/p>/, (m) => m + (net ? `<p class="cp-net"><a href="#${esc(knowId({ id: net.must_know_id }))}">间歇断开的情况看这里 →</a></p>` : '') + (lap && !off ? `<p class="cp-laptop">${dot(lap[1])}笔记本（副机）：${lap[0]}</p>` : ''))}</div>`;
+  const remote = (remoteCards.length ? remoteCards : [{ title: '远程连接', state: 'unavailable', text: '' }]).map((c, i) => tileOf({ kind: 'remote', ...c }, now, off, at,
+    { id: i ? '' : 'remote', sub: !off && c.must_know_id ? `<a class="cp-net" href="#${esc(knowId({ id: c.must_know_id }))}">看这里 →</a>` : '' }));
+  // 副机在线不在线看 laptop.connection；laptop.state 是副机自动任务的健康，不能当连接
+  const lap = LAPTOP[v.laptop.connection];
+  const laptop = lap ? card({ title: '笔记本（副机）', state: lap[1], text: '' }, now, off, at, { big: lap[0], sub: lap[2], more: false }) : '';
+  const tiles = [...cards.map((c) => tileOf(c, now, off, at)), aiCacheTile(v, now, off, at), ...remote, laptop].filter(Boolean);
+  const t = cards.map((c) => Date.parse(c.observed_at || '')).filter(Number.isFinite);
+  const offAt = off ? `<p class="cp-time cp-facts-at">读不到${t.length ? `（最后 ${esc(when(new Date(Math.max(...t)).toISOString(), now))} 读到）` : ''}</p>` : '';
   const charts = g.links.filter((l) => l.id !== 'overview');
-  const links = [...charts.map((l) => `<a class="cp-chart" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`), g.url ? `<a class="cp-chart cp-login" href="${esc(new URL('login', g.url).href)}" target="_blank" rel="noopener">图表后台登录</a>` : ''].filter(Boolean);
-  // 读不到电脑时图表网页也打不开：链接先收起，只留一行说明
-  const chartsRow = off ? `<p class="cp-line cp-off-note">${dot('unavailable')}读不到电脑，图表链接先收起，读到后再出来。</p>`
-    : `<p class="cp-line cp-charts" id="grafana">${links.length ? `24 小时曲线（新标签页打开）：${links.join('<i aria-hidden="true"> · </i>')}` : `${dot('unavailable')}图表网页现在打不开${g.checked_at ? `（上次检查 ${esc(when(g.checked_at, ctx.now))}）` : ''}`}</p>`;
-  return factCards(cards, ctx.now, off, v.served_at) + remote + `<p class="cp-line"><a href="/cockpit/storage/">存储占用与增长：各类别容量和近一周变化 ›</a></p>` + chartsRow;
+  const links = [...charts.map((l) => linkCard(l.url, l.label, '24 小时曲线', ' cp-chart')), g.url ? linkCard(new URL('login', g.url).href, '图表后台登录', '登录后看全部图表', ' cp-chart cp-login') : ''].filter(Boolean);
+  // 读不到电脑时图表网页也打不开：链接卡先收起，只留一行说明
+  const chartsRow = off ? `<p class="cp-line cp-off-note" id="grafana">${dot('unavailable')}读不到电脑，图表链接先收起，读到后再出来。</p>`
+    : `<div class="cp-pc-links" id="grafana">${links.length ? links.join('') : `<p class="cp-line cp-charts">${dot('unavailable')}图表网页现在打不开${g.checked_at ? `（上次检查 ${esc(when(g.checked_at, now))}）` : ''}</p>`}</div>`;
+  return `<div class="cp-pc-grid">${tiles.join('')}</div>` + offAt + chartsRow;
 }
 
-const LAPTOP = { online: ['在线', 'ok'], offline: ['离线（要用它时得先开机连网）', 'attention'] };
+const LAPTOP = { online: ['在线', 'ok', ''], offline: ['离线', 'attention', '要用它时得先开机连网'] };
 
 export function backup(v, ctx) {
   const off = !!ctx.offline, stale = staleIds(v);
