@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E330",
-   "commit": "94918eaac0162fe12bec169ed84fdf84a46a95c7",
-   "ruleset_sha256": "de4d19a0a420353675970b199668fb809a618b180468773ce75d769635f9701d",
-   "activated_at": "2026-10-31T07:00:38.527815+08:00",
+   "release": "E331",
+   "commit": "985a1c35a97768f86014870625702364d994b55d",
+   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
+   "activated_at": "2026-10-31T07:37:25.088872+08:00",
    "file": "sources/rules/docs/contracts/agents.authorization.md",
    "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af",
    "public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6"
@@ -237,8 +237,8 @@
  },
  "source": {
   "page": "sources/pages/rule-authorization/page.json",
-  "sha256": "01b39d35d29a7b648c1d78172041f8ae9c21f8af7e6f53586e8466ef26c86d52",
-  "converted_at_beijing": "2026-10-31T07:22:36+08:00"
+  "sha256": "4da70bff3b532ce270dfa09a951dfb3e07d59d84e2b70665acbadb0a4e58751a",
+  "converted_at_beijing": "2026-10-31T08:33:35+08:00"
  }
 }
 ---
@@ -1555,7 +1555,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E330",
+   "release": "E331",
    "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af",
    "public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
    "from": null,
@@ -1592,7 +1592,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版，略去个别私人领域字句"
+     "text_ref": "原文·E331版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -1627,7 +1627,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版，略去个别私人领域字句"
+     "text_ref": "原文·E331版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -1721,7 +1721,7 @@
 }
 ```
 
-原文 · E330 版，略去个别私人领域字句
+原文 · E331 版，略去个别私人领域字句
 
 # 用户授权
 
@@ -1781,7 +1781,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E330",
+   "release": "E331",
    "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af",
    "public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
    "from": "## 子代理和项目规则不扩大授权",
@@ -1826,7 +1826,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -1859,7 +1859,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -1936,7 +1936,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E330 版 · 续
+原文 · E331 版 · 续
 
 ## 子代理和项目规则不扩大授权
 
@@ -1966,7 +1966,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E330",
+   "release": "E331",
    "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af",
    "public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
    "from": "## 受信任的 AI",
@@ -1999,7 +1999,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -2036,7 +2036,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -2089,7 +2089,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E330 版 · 续
+原文 · E331 版 · 续
 
 ## 受信任的 AI
 

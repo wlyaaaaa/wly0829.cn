@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E330",
-   "commit": "94918eaac0162fe12bec169ed84fdf84a46a95c7",
-   "ruleset_sha256": "de4d19a0a420353675970b199668fb809a618b180468773ce75d769635f9701d",
-   "activated_at": "2026-10-31T07:00:38.527815+08:00",
+   "release": "E331",
+   "commit": "985a1c35a97768f86014870625702364d994b55d",
+   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
+   "activated_at": "2026-10-31T07:37:25.088872+08:00",
    "file": "sources/rules/docs/contracts/agents.execution-coordination.md",
    "sha256": "c088ca2323c42d4b9ce8b9284145298dd439a6e7f9a79e14bc661897b3995cd6",
    "public_sha256": "1d5991c0dace4ac2bc7d6018584eab613f44e18414a615d948418906eb828def"
@@ -205,8 +205,8 @@
  },
  "source": {
   "page": "sources/pages/rule-execution-coordination/page.json",
-  "sha256": "db25f135c5b8fe294de6fc79451654f1cde08a434f481912c6ee9f388a71b0bf",
-  "converted_at_beijing": "2026-10-31T07:22:36+08:00"
+  "sha256": "9a16aca14a3b4384a426da23e17e5093cf70ea888d251147d54faccaf6d71172",
+  "converted_at_beijing": "2026-10-31T08:33:36+08:00"
  }
 }
 ---
@@ -1450,7 +1450,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.execution-coordination.md",
-   "release": "E330",
+   "release": "E331",
    "sha256": "c088ca2323c42d4b9ce8b9284145298dd439a6e7f9a79e14bc661897b3995cd6",
    "public_sha256": "1d5991c0dace4ac2bc7d6018584eab613f44e18414a615d948418906eb828def",
    "from": null,
@@ -1488,7 +1488,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E330版，一字不改"
+     "text_ref": "原文·E331版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1512,7 +1512,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E330版，一字不改"
+     "text_ref": "原文·E331版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1588,7 +1588,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
 }
 ```
 
-原文 · E330 版，一字不改
+原文 · E331 版，一字不改
 
 # 分工与并行施工
 
@@ -1657,7 +1657,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.execution-coordination.md",
-   "release": "E330",
+   "release": "E331",
    "sha256": "c088ca2323c42d4b9ce8b9284145298dd439a6e7f9a79e14bc661897b3995cd6",
    "public_sha256": "1d5991c0dace4ac2bc7d6018584eab613f44e18414a615d948418906eb828def",
    "from": "## 改动与花费成比例",
@@ -1711,7 +1711,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -1785,7 +1785,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -1883,7 +1883,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
 }
 ```
 
-原文 · E330 版 · 续
+原文 · E331 版 · 续
 
 ## 改动与花费成比例
 

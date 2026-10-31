@@ -5,7 +5,7 @@
   "gen_requests": "gen-requests.jsonl",
   "gen_requests_sha256": "51c10c46a58e5f92a2ecc6ca391517fb69995c21c3fc12fa5f9bfa18332d18ec",
   "asset_map": "asset-map.jsonl",
-  "asset_map_sha256": "92ac8ec445b3448f5cad22c399404d386c7d865ccd56f77f7d7a2d099aa2f7dc",
+  "asset_map_sha256": "b0c0b6b956569dd148cb19e0d637c85c66bad3691d793c3ab84c8af0483fba62",
   "summary": "summary.json",
   "requests_count": 714,
   "generation_required_count": 4,
@@ -27,5 +27,9 @@
   "asset_map_marker_resync": {
     "resynced_at_beijing": "2026-10-23T09:00:00+08:00",
     "scope": "只把映射指纹改到当前 asset-map.jsonl；10 月 21 日起的入库提交改了映射却没改指纹，引擎因此退回抠图 manifest。未改任何映射行。"
+  },
+  "how_03_title_v2": {
+    "changed_at_beijing": "2026-10-31",
+    "scope": "how-03 标题图换成 how/how-03-title-02.png（两个底座怎么配合），映射指纹随之更新；未改其他映射行；同日加入生图、代理与网络两张技能页的素材映射（全部复用已有素材）"
   }
 }

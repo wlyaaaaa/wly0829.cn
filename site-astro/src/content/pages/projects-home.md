@@ -254,7 +254,7 @@
     },
     {
      "id": "n-common",
-     "text": "常用 22 个",
+     "text": "常用 23 个",
      "meaning": "page.json 的 status 为“常用”",
      "as_of": "2026-10-30 11:06",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
@@ -264,7 +264,7 @@
     },
     {
      "id": "n-occasional",
-     "text": "偶尔用 7 个",
+     "text": "偶尔用 6 个",
      "meaning": "page.json 的 status 为“偶尔用”",
      "as_of": "2026-10-30 11:06",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
@@ -1083,8 +1083,8 @@
  },
  "source": {
   "page": "sources/pages/projects-home/page.json",
-  "sha256": "80e364bcd61c78618bbac35b9855e1488e7b4373410bdf10376f8438563b6e64",
-  "converted_at_beijing": "2026-10-31T08:01:18+08:00"
+  "sha256": "c75492a54a013fca2ed0194d8177d5414037c591b929aa16918b8358e3b690d0",
+  "converted_at_beijing": "2026-10-31T09:22:21+08:00"
  }
 }
 ---
@@ -1408,7 +1408,7 @@
 
 | 一共 | 常用 | 偶尔用 | 冻结 |
 |---|---|---|---|
-| **37 个** | **22 个** | **7 个** | **8 个** |
+| **37 个** | **23 个** | **6 个** | **8 个** |
 
 公开 **19 个** · 私有 **18 个**
 
@@ -6326,7 +6326,7 @@
   "card": {
    "name": "个人正式文书",
    "href": "/projects/personal-formal-documents/",
-   "status": "偶尔用",
+   "status": "常用",
    "visibility": "private",
    "github": null,
    "tagline": "把合同、协议、通知做成能核对、能签的正式文件。",
@@ -6437,7 +6437,7 @@
 }
 ```
 
-**〔个人正式文书〕**　偶尔用　　私有
+**〔个人正式文书〕**　常用　　私有
 把合同、协议、通知做成能核对、能签的正式文件。
 直达：〔写文书〕　〔检查和签名〕　〔交出去以后〕
 

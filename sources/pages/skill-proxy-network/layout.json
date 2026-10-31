@@ -1,0 +1,353 @@
+[
+  {
+    "screen": "skill-proxy-network-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "代理与网络",
+        "align": "center",
+        "size": "large",
+        "row": "hero",
+        "width": "50%",
+        "row_fit_illustration": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "技能名",
+        "row": "hero"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "它做什么",
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我的两台电脑",
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "碰到断网、网",
+        "row": "hero"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不用点名",
+        "row": "hero"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "怎么跟 AI 说",
+        "columns": 2,
+        "split_paras": true,
+        "illustration": "none",
+        "row": "hero",
+        "width": "50%"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "row": "hero",
+        "align": "center"
+      }
+    ],
+    "notes": "照手机直取技能页第 1 屏：左栏标题、技能名、它做什么两段、不用点名；右栏六句说法，下面放插画。插画复用素材库，已看过图。"
+  },
+  {
+    "screen": "skill-proxy-network-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "代理与网络",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "技能名"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "它做什么"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我的两台电脑"
+      },
+      {
+        "type": "prose",
+        "text_ref": "碰到断网、网"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "size": "banner"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "怎么跟 AI 说",
+        "columns": 1,
+        "split_paras": true,
+        "illustration": "none"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不用点名"
+      }
+    ],
+    "notes": "照手机直取技能页第 1 屏：左栏标题、技能名、它做什么两段、不用点名；右栏六句说法，下面放插画。插画复用素材库，已看过图。"
+  },
+  {
+    "screen": "skill-proxy-network-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整例子",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：",
+        "sides": [
+          "right"
+        ],
+        "illustration": "none"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "AI 做了什么",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI 交回",
+        "sides": [
+          "left"
+        ],
+        "illustration": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时"
+      },
+      {
+        "type": "table",
+        "text_ref": "碰到的情况"
+      }
+    ],
+    "notes": "照手机直取技能页第 2 屏。"
+  },
+  {
+    "screen": "skill-proxy-network-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整例子",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：",
+        "sides": [
+          "right"
+        ],
+        "illustration": "none"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "AI 做了什么",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI 交回",
+        "sides": [
+          "left"
+        ],
+        "illustration": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时"
+      },
+      {
+        "type": "table",
+        "text_ref": "碰到的情况"
+      }
+    ],
+    "notes": "照手机直取技能页第 2 屏。"
+  },
+  {
+    "screen": "skill-proxy-network-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "能做的事",
+        "size": "large",
+        "align": "center"
+      },
+      {
+        "type": "notice",
+        "text_ref": "它管两台电脑"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "六件事"
+      },
+      {
+        "type": "table",
+        "text_ref": "事"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "用这个技能时",
+        "columns": 1,
+        "item_cards": true,
+        "inner_columns": 2,
+        "icons": "auto",
+        "illustration": "left_inside"
+      }
+    ],
+    "notes": "照手机直取技能页第 3 屏。"
+  },
+  {
+    "screen": "skill-proxy-network-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "能做的事",
+        "size": "large",
+        "align": "center"
+      },
+      {
+        "type": "notice",
+        "text_ref": "它管两台电脑"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "六件事"
+      },
+      {
+        "type": "table",
+        "text_ref": "事"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "用这个技能时",
+        "columns": 1,
+        "item_cards": true,
+        "inner_columns": 1,
+        "icons": "auto",
+        "illustration": "left_inside"
+      }
+    ],
+    "notes": "照手机直取技能页第 3 屏。"
+  },
+  {
+    "screen": "skill-proxy-network-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "管",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          0
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "table",
+        "text_ref": "这些事"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "不做",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/禁止文件.png"
+        ]
+      }
+    ],
+    "notes": "照手机直取技能页第 4 屏。"
+  },
+  {
+    "screen": "skill-proxy-network-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "管",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          0
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "table",
+        "text_ref": "这些事"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "不做",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/禁止文件.png"
+        ]
+      }
+    ],
+    "notes": "照手机直取技能页第 4 屏。"
+  }
+]

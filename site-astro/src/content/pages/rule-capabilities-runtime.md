@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E330",
-   "commit": "94918eaac0162fe12bec169ed84fdf84a46a95c7",
-   "ruleset_sha256": "de4d19a0a420353675970b199668fb809a618b180468773ce75d769635f9701d",
-   "activated_at": "2026-10-31T07:00:38.527815+08:00",
+   "release": "E331",
+   "commit": "985a1c35a97768f86014870625702364d994b55d",
+   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
+   "activated_at": "2026-10-31T07:37:25.088872+08:00",
    "file": "sources/rules/docs/contracts/agents.capabilities-runtime.md",
    "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
    "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da"
@@ -396,8 +396,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "b1a4cd48883880a91cbee870f7198150900a6b45d90f204728c9ee1a5b68900b",
-  "converted_at_beijing": "2026-10-31T07:22:36+08:00"
+  "sha256": "e8361afb1c1c5dc1b46e4e2fc3159a8c28aba224e2d8a31a60287decb1aef34c",
+  "converted_at_beijing": "2026-10-31T08:33:35+08:00"
  }
 }
 ---
@@ -2925,7 +2925,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E330",
+   "release": "E331",
    "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
    "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
    "from": null,
@@ -2958,7 +2958,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版"
+     "text_ref": "原文·E331版"
     },
     {
      "type": "chapter_title",
@@ -2999,7 +2999,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版"
+     "text_ref": "原文·E331版"
     },
     {
      "type": "chapter_title",
@@ -3092,7 +3092,7 @@
 }
 ```
 
-原文 · E330 版
+原文 · E331 版
 
 # 能力与运行方式
 
@@ -3120,7 +3120,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E330",
+   "release": "E331",
    "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
    "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
    "from": "## 常用入口",
@@ -3148,7 +3148,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3176,7 +3176,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3222,7 +3222,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E330 版 · 续
+原文 · E331 版 · 续
 
 ## 常用入口
 
@@ -3257,7 +3257,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E330",
+   "release": "E331",
    "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
    "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
    "from": "## 浏览器",
@@ -3290,7 +3290,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3316,7 +3316,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3390,7 +3390,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
 }
 ```
 
-原文 · E330 版 · 续
+原文 · E331 版 · 续
 
 ## 浏览器
 
@@ -3422,7 +3422,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E330",
+   "release": "E331",
    "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
    "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
    "from": "## 汇报、网站和自动运行的东西",
@@ -3450,7 +3450,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3470,7 +3470,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3540,7 +3540,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
 }
 ```
 
-原文 · E330 版 · 续
+原文 · E331 版 · 续
 
 ## 汇报、网站和自动运行的东西
 
@@ -3575,7 +3575,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E330",
+   "release": "E331",
    "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
    "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
    "from": "## 安装位置、配置和本机约定",
@@ -3608,7 +3608,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3628,7 +3628,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3674,7 +3674,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
 }
 ```
 
-原文 · E330 版 · 续
+原文 · E331 版 · 续
 
 ## 安装位置、配置和本机约定
 

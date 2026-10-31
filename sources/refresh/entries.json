@@ -1844,5 +1844,39 @@
     "timeout": 20,
     "observation_basis": "snapshot_timestamp",
     "verification": "完整可见性只读入口；sudo 配置为 inline；失败时保留旧值旧日期"
+  },
+  "r4-image-generation-method-modified": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import subprocess,json,datetime\ns=subprocess.check_output([\"git\",\"-C\",\"E:/.agents\",\"log\",\"-1\",\"--format=%cI\",\"--\",\"skills/image-generation\"],text=True).strip()\nassert s,\"skill_commit_time_missing\"\nd=datetime.datetime.fromisoformat(s).astimezone(datetime.timezone(datetime.timedelta(hours=8)))\nprint(json.dumps({\"last_update\":d.strftime(\"%Y-%m-%d %H:%M\")}))"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "agents",
+    "output": "json",
+    "timeout": 20,
+    "source_evidence": "仅固定Git或gh api元数据、Skill方法常量或Get-ScheduledTask/Info读取；无提交标题、财务快照、账单、业务采集或写入；stdout仅给网站所需方法常量和状态。",
+    "observation_basis": "live_read"
+  },
+  "r4-proxy-network-method-modified": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import subprocess,json,datetime\ns=subprocess.check_output([\"git\",\"-C\",\"E:/.agents\",\"log\",\"-1\",\"--format=%cI\",\"--\",\"skills/proxy-network\"],text=True).strip()\nassert s,\"skill_commit_time_missing\"\nd=datetime.datetime.fromisoformat(s).astimezone(datetime.timezone(datetime.timedelta(hours=8)))\nprint(json.dumps({\"last_update\":d.strftime(\"%Y-%m-%d %H:%M\")}))"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "agents",
+    "output": "json",
+    "timeout": 20,
+    "source_evidence": "仅固定Git或gh api元数据、Skill方法常量或Get-ScheduledTask/Info读取；无提交标题、财务快照、账单、业务采集或写入；stdout仅给网站所需方法常量和状态。",
+    "observation_basis": "live_read"
   }
 }

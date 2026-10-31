@@ -36,9 +36,9 @@
   "title": "个人正式文书",
   "url": "/projects/personal-formal-documents/",
   "tagline": "把合同、协议、通知做成能核对、能签的正式文件。",
-  "status": "偶尔用",
+  "status": "常用",
   "status_line": {
-   "state": "偶尔用",
+   "state": "常用",
    "last": {
     "label": "上次使用",
     "at": "2026-10-23 20:00"
@@ -423,8 +423,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "8ba395a9352f7d1a09d8e781172f5c1bfea29e9ad0f24301efc4f5f9ef225fc3",
-  "converted_at_beijing": "2026-10-30T11:16:50+08:00"
+  "sha256": "c5ebd157d8c56fbe98115c39653ae6f8acd3291504e2e54e5c6117df6e903542",
+  "converted_at_beijing": "2026-10-31T08:33:23+08:00"
  }
 }
 ---
@@ -475,7 +475,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 23 日 20:00",
+       "text": "常用 · 上次使用 10 月 23 日 20:00",
        "state": "ok"
       },
       {
@@ -549,7 +549,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 23 日 20:00",
+       "text": "常用 · 上次使用 10 月 23 日 20:00",
        "state": "ok"
       },
       {

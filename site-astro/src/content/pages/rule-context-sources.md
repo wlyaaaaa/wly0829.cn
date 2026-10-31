@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E330",
-   "commit": "94918eaac0162fe12bec169ed84fdf84a46a95c7",
-   "ruleset_sha256": "de4d19a0a420353675970b199668fb809a618b180468773ce75d769635f9701d",
-   "activated_at": "2026-10-31T07:00:38.527815+08:00",
+   "release": "E331",
+   "commit": "985a1c35a97768f86014870625702364d994b55d",
+   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
+   "activated_at": "2026-10-31T07:37:25.088872+08:00",
    "file": "sources/rules/docs/contracts/agents.context-sources.md",
    "sha256": "6f9ecadfa0079f844e8e90a19715675acf569f483042af5b515d131fd18497c8",
    "public_sha256": "8fab647f710d95ff2d829139f9a6ae9b47be3af10527f36869ed9977846ff9d3"
@@ -159,6 +159,13 @@
      "direction": "交给",
      "flow": "第三方 AI 命令行工具的长任务由 AICLI 和具体项目负责接续，不交给个人技能。",
      "source": "E187 原文第 60 行；E:\\Projects\\Tools\\ai-cli-profile-manager\\README.md 第 1 行（AICLI 是 AI 命令行启动与配置工具）"
+    },
+    {
+     "id": "r-explain",
+     "with": "personal-expression",
+     "direction": "交给",
+     "flow": "怎么跟本人说话的教训，经 explain-to-me 技能按个人表达项目的流程维护。",
+     "source": "E187 原文第 74 行；manifest 里 personal-expression 的 skills 含 explain-to-me"
     },
     {
      "id": "r-weekly",
@@ -339,6 +346,11 @@
      "text": "查重复段落"
     },
     {
+     "target": "/skills/explain-to-me/",
+     "screen": "rule-context-sources-07",
+     "text": "explain-to-me"
+    },
+    {
      "target": "/rules/claude-adapter/",
      "screen": "rule-context-sources-07",
      "text": "Claude 适配"
@@ -398,8 +410,8 @@
  },
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
-  "sha256": "9f3fcfd01ae2e851d400dc696e4eb5afd299a294c5f194b4bb317067820e6aca",
-  "converted_at_beijing": "2026-10-31T07:40:39+08:00"
+  "sha256": "5bef407787dd8be3d4b306b7d35e1e77cd71fa92e7afed0ca1a288cd0b07d943",
+  "converted_at_beijing": "2026-10-31T08:33:36+08:00"
  }
 }
 ---
@@ -432,6 +444,10 @@
     "href": "/projects/agents/"
    },
    {
+    "text": "GitHub 项目总索引",
+    "href": "/projects/github-local-index/"
+   },
+   {
     "text": "电脑配置与恢复",
     "href": "/projects/pcconfig/"
    },
@@ -458,6 +474,10 @@
    {
     "text": "纠正和经验记在哪",
     "href": "/rules/context-sources/#p-lessons"
+   },
+   {
+    "text": "三个基座怎么配合 → 怎么协作",
+    "href": "/how/#bases"
    }
   ],
   "anchors": [],
@@ -570,7 +590,7 @@
     },
     {
      "type": "notice",
-     "text_ref": "两个基座与具体项目如何分工"
+     "text_ref": "三个基座之间谁把什么交给谁"
     }
    ],
    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。；QA04 修复：按审查第5条把跳转按钮改3列2行，保留原按钮全称和原字序。第4条路牌标签是定稿文字，不直接删去；图内定位缺口另提组件请求。\nmain-closer 2026-10-03T20:29:23+08:00：保全部图内原标签，以现有document_mock绑定唯一完整底图和final-label-geometry实测安全框；取消前置重复主体图，图解改整宽以满足长路径/小牌字高。SHA 04f59cba42618413fec0975b0425b266e64ec9443ad24d3c458cfbd0d28aaf65。此为AI排版补充，列new-looks待验收。",
@@ -619,7 +639,7 @@
     },
     {
      "type": "notice",
-     "text_ref": "两个基座与具体项目如何分工"
+     "text_ref": "三个基座之间谁把什么交给谁"
     }
    ],
    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。\nmain-closer 2026-10-03T20:29:23+08:00：保全部图内原标签，以现有document_mock绑定唯一完整底图和final-label-geometry实测安全框；取消前置重复主体图，图解改整宽以满足长路径/小牌字高。SHA 04f59cba42618413fec0975b0425b266e64ec9443ad24d3c458cfbd0d28aaf65。此为AI排版补充，列new-looks待验收。\nmain-closer 2026-10-03T20:36:28+08:00：实际文字Range超出真实安全牌框，竖版撤下坐标绑定，恢复原合法保字＋composition incomplete；不把单靠固定.tb框的旧机器pass当通过。safe DOM证据 main-closer/family-label-dom.json；横版实测安全绑定保留。\nmain-closer5 2026-10-04T07:00:58.635971+08:00：按Claude本轮裁定，手机首屏采用插画上、文字下；复用01-h既有无字插画，整幅100%宽等比缩放，不裁物件。原五/九标签改既有prose顺排于文字区，全部原字、motion及其它屏保全；不再请求插画牌面净区，也不更改任何素材ready。"
@@ -680,7 +700,7 @@
 这是 Codex 和 Claude 共用的规则，管四件事：一是查一件事实该找哪个仓库，按需要一步步读，不乱翻也不瞎猜；二是哪些项目冻结、AI 不主动碰，其余项目分“日用”“偶用”两档维护；三是上下文被压缩或换人接手后，长任务怎么接着做；四是本人的原话、以后要遵守的做法和本人自己的事实各只记一处，记在别的 AI 找得到的地方。它是约法〔L24 冻结的项目〕〔L25 三档维护〕和〔L30 决定写在找得到的地方〕的细则；授权、施工和执行结果不归这里管，各有专题。
 
 **先认几个词**
-- **两个基座**：现行规则与技能在〔AI 规则与技能基座〕（E:\.agents），机器与仓库位置登记在〔电脑配置与恢复〕（E:\PCConfig）；GitHub 总索引已存档。
+- **三个基座**：整套系统最底下的三个仓库：〔AI 规则与技能基座〕（E:\.agents）、〔GitHub 项目总索引〕（E:\GitHub总索引）、〔电脑配置与恢复〕（E:\PCConfig）。
 - **冻结**：本人定了 AI 不主动看、不维护的项目；三档维护里叫“存档”。
 - **原话存档**：Codex 和 Claude 的钩子把本人每条消息原样自动存下的地方；它不进对话上下文，要核对当时怎么说的，才按那条消息的编号（源消息 UUID）去查。以前按月分卷的《本人的决定原话》（E:\.agents\docs\owner-decisions\）现在只作历史，不再新增，也不当规则读。
 - **副本**：同一段规则、事实或原话，在另一个文件里又抄了一遍。
@@ -689,9 +709,9 @@
 
 跳到：〔事实找谁〕〔冻结的项目〕〔三档维护〕〔长任务接续〕〔一样东西只存一处〕〔纠正和经验记在哪〕
 
-E:\.agents　E:\PCConfig　冻结　接续点
+E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
 
-两个基座与具体项目如何分工：见下方〔事实找谁〕。
+三个基座之间谁把什么交给谁：〔三个基座怎么配合 → 怎么协作〕
 
 ::screen{#rule-context-sources-02 section="points"}
 
@@ -707,6 +727,10 @@ E:\.agents　E:\PCConfig　冻结　接续点
    {
     "text": "AI 规则与技能基座",
     "href": "/projects/agents/"
+   },
+   {
+    "text": "GitHub 项目总索引",
+    "href": "/projects/github-local-index/"
    },
    {
     "text": "电脑配置与恢复",
@@ -751,7 +775,7 @@ E:\.agents　E:\PCConfig　冻结　接续点
     },
     {
      "type": "points_card",
-     "text_ref": "两个基座和具体项目",
+     "text_ref": "四个家，各管各的事实",
      "columns": 1,
      "whole_block": true,
      "illustration": "left_inside",
@@ -775,7 +799,7 @@ E:\.agents　E:\PCConfig　冻结　接续点
     },
     {
      "type": "points_card",
-     "text_ref": "基座治理：修问题，不补跑备份",
+     "text_ref": "基座的日常治理：修问题，不补跑备份",
      "columns": 1,
      "whole_block": true,
      "illustration": "left_inside",
@@ -798,7 +822,7 @@ E:\.agents　E:\PCConfig　冻结　接续点
     },
     {
      "type": "points_card",
-     "text_ref": "两个基座和具体项目",
+     "text_ref": "四个家，各管各的事实",
      "columns": 1,
      "whole_block": true,
      "illustration": "left_inside",
@@ -822,7 +846,7 @@ E:\.agents　E:\PCConfig　冻结　接续点
     },
     {
      "type": "points_card",
-     "text_ref": "基座治理：修问题，不补跑备份",
+     "text_ref": "基座的日常治理：修问题，不补跑备份",
      "columns": 1,
      "whole_block": true,
      "illustration": "left_inside",
@@ -913,19 +937,24 @@ E:\.agents　E:\PCConfig　冻结　接续点
 
 ## 人话要点 · 事实找谁
 
-### 两个基座和具体项目
-- **〔AI 规则与技能基座〕**（E:\.agents）：AI 的行为规则、授权、能力路由、规则发布、技能和跨项目协作；Git 推送前检查、私人配套库查询和 GitHub 重大动作的执行入口在 `project-entry-gate` 技能。
-- **〔电脑配置与恢复〕**（E:\PCConfig）：机器路径、端口、计划任务、运行环境、迁移、备份和恢复；本机仓库位置、网站展示项目与私人配套库的登记也在其 `registries/`。
-- **具体项目**：业务、领域数据、兼容、启动、测试、部署和生成区。
-- 仓库的公开状态、远端、分支和同步事实，用 `git`、`gh` 现场查；推送、公开、删库等动作前按 `project-entry-gate` 检查。
+### 四个家，各管各的事实
+- **〔AI 规则与技能基座〕**（E:\.agents）：AI 的行为规则、授权、该用哪个能力、规则发布、本人的技能和插件、项目之间怎么协作。
+- **〔GitHub 项目总索引〕**（E:\GitHub总索引）：仓库是哪个、公开还是私有、远端、分支和工作副本、同步、恢复和发布。它只报事实；能公开到什么程度、能不能做，按 E:\.agents 的规则判断，它不自己另定等级。
+- **〔电脑配置与恢复〕**（E:\PCConfig）：机器上的路径、端口、计划任务、运行环境、数据从哪来、迁移、备份和恢复。
+- **具体项目**：业务是什么意思、领域数据、兼容、怎么启动、测试、部署，以及程序自动生成的文件。
+- 例：想知道某个仓库公开还是私有，查 GitHub 项目总索引的仓库登记（9 月 28 日 01:40 那次登记着 45 个仓库）；想知道某个计划任务停没停，查电脑配置与恢复的计划任务登记。
 
 ### 按需要一步步读
-- 普通项目先读目录链上的规则和自己的状态；只在机器事实会影响决定时查 PCConfig，只在规则、能力或授权会影响决定时读对应专题。
-- 不知道就说不知道，不拿别处资料猜。
+- 看到一个绝对路径，不等于要把三个基座全扫一遍。
+- 普通项目先读从它所在文件夹一路往上的规则，和它自己的状态。
+- 只有 Git 上的事实会改变决定时，才问 GitHub 项目总索引；只有机器上的事实会改变决定时，才问电脑配置与恢复；只有规则、能力或授权会改变决定时，才读 E:\.agents 里对应的专题。
+- 不知道就说不知道，不拿别处的资料去猜。
 
-### 基座治理：修问题，不补跑备份
-- 两个基座平时找有事实依据的问题并修好；计划任务机制正常时，只核对是否按时跑、回执是否正确，不为刷新成功时间额外跑备份。
-- 证实的机制缺陷在原项目修复并局部验证；本人暂停的任务保持暂停。
+### 基座的日常治理：修问题，不补跑备份
+- 三个基座平时要做的，是发现并修好有事实依据的问题，不是去补跑备份。
+- 计划任务机制正常时，只看它有没有按时跑、回执对不对（〔约法 L21〕）；不为了刷新“上次成功”的时间、让报表变绿，去额外跑一次备份。
+- 已经证实的机制缺陷，在原项目里修好，再做对应的局部验证。
+- 本人暂停的任务，保持暂停。
 
 ::screen{#rule-context-sources-03 section="points"}
 
@@ -2121,6 +2150,10 @@ E:\.agents　E:\PCConfig　冻结　接续点
   "portrait": "竖版 9:16：本屏没有别的装饰；四张卡片从上到下一张一条、整宽，顺序：当轮就记、决定原话只存一处、什么写到哪（表格改成一行一条：“内容”粗体在上，“写到哪里”在下）、每周一次查漏。字和横版完全一样。",
   "links": [
    {
+    "text": "explain-to-me",
+    "href": "/skills/explain-to-me/"
+   },
+   {
     "text": "Claude 适配",
     "href": "/rules/claude-adapter/"
    },
@@ -2131,10 +2164,6 @@ E:\.agents　E:\PCConfig　冻结　接续点
    {
     "text": "每周基座体检",
     "href": "/projects/agents/#f-weekly"
-   },
-   {
-    "text": "约法 L1–L6",
-    "href": "/rules/charter/#L1"
    }
   ],
   "anchors": [
@@ -2404,7 +2433,7 @@ E:\.agents　E:\PCConfig　冻结　接续点
 ### 什么写到哪
 | 内容 | 写到哪里 |
 |---|---|
-| 怎么跟本人说话 | 通用说话规矩见〔约法 L1–L6〕；只和本人有关的进个人理解库；某个技能或项目的写法进对应技能或项目。新增时先查同类并合并，写清适用范围，保留源消息 UUID |
+| 怎么跟本人说话 | 经〔explain-to-me〕技能，按个人表达项目的流程维护；新增前先查同类并合并，写清本人要的结果和适用范围，保留源消息 UUID 以便按需查原文 |
 | Claude 或 Codex 自己工具的坑 | 〔Claude 适配〕或〔Codex 适配〕专题 |
 | 某个项目的事 | 这个项目的 AGENTS.md 或相关文档 |
 | 本人的原话 | 原话存档，钩子自动存，AI 不手抄 |
@@ -2412,7 +2441,7 @@ E:\.agents　E:\PCConfig　冻结　接续点
 | 拿不准放哪里 | 先写进最接近的那份规则，发布规则时再挪；以后要遵守的做法不放待办 |
 
 ### 每周一次查漏
-- 两基座治理长期每周跑一次，没有结束日期；具体做什么以 Codex 自动任务的定义为准。
+- 三基座治理长期每周跑一次，没有结束日期；具体做什么以 Codex 自动任务的定义为准。
 - 按规则，每周治理由 GPT 执行（换一家模型来看），扫这一周的原话存档：找出本人说了以后要遵守、规则里却没有的，规则写得比原话宽或放错了层的，以及反复出问题、根因还没修掉的地方，交对应会话处理；同时删掉已经到期的条目，把两边记忆区又冒出来的内容挪进共享文件，把又抄了原话的现行文档改成现在的做法加出处，再扫一遍三个基座和各日用项目（冻结的不扫）里跨文件重复的段落，长期文档里写死、已经或快要过时的数也改成指向能查到它的地方。
 - 取用私人内容仍按当时的个人资料状态；合并同类时保留原话语境，不把 AI 的猜测写成本人的决定。
 - 网站不另设每周复核；网站那个暂停着的手动更新入口，只在本人启动时才跑，不算在定时更新。
@@ -2428,7 +2457,7 @@ E:\.agents　E:\PCConfig　冻结　接续点
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E330",
+   "release": "E331",
    "sha256": "6f9ecadfa0079f844e8e90a19715675acf569f483042af5b515d131fd18497c8",
    "public_sha256": "8fab647f710d95ff2d829139f9a6ae9b47be3af10527f36869ed9977846ff9d3",
    "from": null,
@@ -2456,7 +2485,7 @@ E:\.agents　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版，一字不改"
+     "text_ref": "原文·E331版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2490,7 +2519,7 @@ E:\.agents　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版，一字不改"
+     "text_ref": "原文·E331版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2568,7 +2597,7 @@ E:\.agents　E:\PCConfig　冻结　接续点
 }
 ```
 
-原文 · E330 版，一字不改
+原文 · E331 版，一字不改
 
 # 事实来源与任务上下文
 
@@ -2623,7 +2652,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E330",
+   "release": "E331",
    "sha256": "6f9ecadfa0079f844e8e90a19715675acf569f483042af5b515d131fd18497c8",
    "public_sha256": "8fab647f710d95ff2d829139f9a6ae9b47be3af10527f36869ed9977846ff9d3",
    "from": "## 三档维护",
@@ -2651,7 +2680,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -2682,7 +2711,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -2749,7 +2778,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E330 版 · 续
+原文 · E331 版 · 续
 
 ## 三档维护
 
@@ -2806,7 +2835,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E330",
+   "release": "E331",
    "sha256": "6f9ecadfa0079f844e8e90a19715675acf569f483042af5b515d131fd18497c8",
    "public_sha256": "8fab647f710d95ff2d829139f9a6ae9b47be3af10527f36869ed9977846ff9d3",
    "from": "### 一样东西只存一处",
@@ -2851,7 +2880,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -2877,7 +2906,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E330版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -2895,7 +2924,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
 }
 ```
 
-原文 · E330 版 · 续
+原文 · E331 版 · 续
 
 ### 一样东西只存一处
 

@@ -1823,8 +1823,8 @@
  },
  "source": {
   "page": "sources/pages/how/page.json",
-  "sha256": "7dd4b6684d22dd50bb8230bebe07444945ad47ee2a9a8ac0caebdacf4692b92c",
-  "converted_at_beijing": "2026-10-31T07:52:15+08:00"
+  "sha256": "9834b418b784f1c680c4d348d22cfb0e3787795e44f1acb1c2746ea0a5c3e49f",
+  "converted_at_beijing": "2026-10-31T08:33:22+08:00"
  }
 }
 ---
@@ -2174,10 +2174,6 @@
     "href": "/projects/pcconfig/"
    },
    {
-    "text": "GitHub 项目总索引",
-    "href": "/projects/github-local-index/"
-   },
-   {
     "text": "密码中心",
     "href": "/projects/password-center/"
    },
@@ -2188,10 +2184,6 @@
    {
     "text": "个人理解库",
     "href": "/projects/daily-preferences/"
-   },
-   {
-    "text": "个人表达",
-    "href": "/projects/personal-expression/"
    },
    {
     "text": "个人健康",
@@ -2268,10 +2260,6 @@
    {
     "text": "电脑使用与性能记录",
     "href": "/projects/timeaudit/"
-   },
-   {
-    "text": "内存盘守护",
-    "href": "/projects/ramdisk-guardian/"
    },
    {
     "text": "屏保与壁纸",
@@ -3028,21 +3016,21 @@
 
 **中间 · 我、手机和两家 AI**　我　手机　Claude（Claude Opus 5.5）　GPT（在 Codex 里：GPT-6.1 Sol、GPT-6 Luna、GPT-6 Astra）
 
-**两个底座 · 所有项目都靠它们**　〔AI 规则与技能基座〕　〔电脑配置与恢复〕　〔GitHub 项目总索引〕（已冻结）
+**两个底座 · 所有项目都靠它们**　〔AI 规则与技能基座〕　〔电脑配置与恢复〕
 **安全 · 密码和加密文件**　〔密码中心〕　〔本地加密库〕
-**了解我 · 让 AI 知道我是谁、要什么**　〔个人理解库〕　〔个人表达〕（已存档）　〔个人健康〕　〔学习方法〕
+**了解我 · 让 AI 知道我是谁、要什么**　〔个人理解库〕　〔个人健康〕　〔学习方法〕
 **我的资料 · 照片、文件和微信**　〔照片视频录音管理〕　〔个人材料查找〕　〔微信聊天读取〕
 **看和听 · 把录音和图片变成文字**　〔中文语音转写〕　〔本地文字识别〕
 **做成品 · 视频、文书和工作材料**　〔本地视频制作〕　〔个人正式文书〕　〔工作支持与交付〕　〔Typora 薄荷主题〕
 **备份 · AI 记录、开发和游戏配置**　〔AI 备份〕　〔开发配置备份〕　〔Steam 外观备份〕
 **远程 · 人不在电脑前也能用**　〔电脑远程控制〕　〔远程电脑串流〕　〔代理上网修复〕
-**电脑日常 · 让这台电脑顺手**　〔双屏信息中心〕　〔电脑使用与性能记录〕　〔内存盘守护〕（已冻结）　〔屏保与壁纸〕　〔AI 工具配置管理〕
+**电脑日常 · 让这台电脑顺手**　〔双屏信息中心〕　〔电脑使用与性能记录〕　〔屏保与壁纸〕　〔AI 工具配置管理〕
 
 **外面 · 云端、网站和第二台电脑**　Google 云端　GitHub　网站：驾驶舱、授权与状态　副机（第二台笔记本）
 
 **两个底座给所有项目的**：规则和技能 · 路径、端口、自动任务和显卡排队 · 备份同步到外接 H 盘 · 仓库在哪
 
-没列在这里的：已经冻结的 5 个项目（AI 模型评测、Codex 远程、OpenClaw 网关、微信记录交给 AI、双机剪贴板），见〔项目首页〕。
+没列在这里的：已经冻结的 8 个项目（OpenClaw 网关、Codex 远程、AI 模型评测、微信记录交给 AI、内存盘守护、双机剪贴板、个人表达、GitHub 项目总索引），见〔项目首页〕。
 
 ::screen{#how-05 section="ai-roles"}
 
@@ -3841,7 +3829,7 @@
 **② 到家：Claude 接手拆活**
 谁做：到家后，家里电脑上的 Claude Opus 5.5 接手这份任务说明，当主对话。
 传什么：我 → Claude，“照那份任务说明做”（文字）；Claude → 子代理，一份份任务文件；子代理 → Claude，报告和产物放在哪（文件）。
-怎么分：机械的调用交 GPT-6 Luna，核字幕交 GPT-6.1 Sol，旁白由 Claude 自己写，每份结果 Claude 都核一遍。
+怎么分：机械的调用交 GPT-6.1 Sol（medium 档），核字幕也交 Sol（ultra 档），旁白由 Claude 自己写，每份结果 Claude 都核一遍。
 
 **③ 收素材、挑镜头**
 谁做：我把手机插上电脑，〔照片视频录音管理〕收进媒体库；Claude 挑。
@@ -5549,14 +5537,14 @@
     "h",
     "v"
    ],
-   "asset": "how/how-03-title-01.png",
+   "asset": "how/how-03-title-02.png",
    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\b2-surgery\\b2-how-03-v.png",
    "fallback": false,
    "title_exact_match": true,
    "text_verified": true,
-   "key": "title-4153dd5e12e634b4affb",
-   "title_text": "三个底座怎么配合",
-   "sha256": "61cf504f26a4aca414fa556f791e0c0a8d65e99b202920324aca7b01b9482df1",
+   "key": "title-14c7b174c35b0c108acf",
+   "title_text": "两个底座怎么配合",
+   "sha256": "fb77e7b6a5372642fc8cb05f85a0579547e09950d660ed2c906906da30d50818",
    "status": "ready",
    "source_box": [
     7,
@@ -5950,7 +5938,7 @@
 
 **〔个人材料查找〕**　拿：照片视频录音管理交来的文档登记（文件）。给：AI 和个人正式文书，原件在哪、第几页（文字）；本地文字识别没有文字层的 PDF（文件），读回的字对回页码。只登记位置，不复制原件。
 
-**〔微信聊天读取〕**　拿：电脑上主号、副号的微信数据库，只读。给：中文语音转写，语音转成的 WAV（文件）；个人理解库、个人表达，点名那一段的消息（文字）。
+**〔微信聊天读取〕**　拿：电脑上主号、副号的微信数据库，只读。给：中文语音转写，语音转成的 WAV（文件）；个人理解库，点名那一段的消息和按会话更新时读的新消息（文字）。“替我拟消息”现在是单独的技能，参考的口吻取自个人理解库整理好的那份。
 
 ::screen{#how-07 section="projects"}
 
