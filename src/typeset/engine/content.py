@@ -28,7 +28,13 @@ def bound_json(path, read=None, root=None):
     if 'group_counts' in names:
         directory = pages.get('projects-home') or json.loads(read(root/'sources/pages/projects-home/page.json'))
         visible = {s['id'] for s in directory['screens'] if s.get('shape') == 'card' and not s.get('hidden', False)}
-        values['group_counts'] = {g['id']: sum(sid in visible for sid in g['cards']) for g in directory['registry']['groups']}
+        def group_count(group):
+            if 'cards' in group:
+                return sum(sid in visible for sid in group['cards'])
+            # 冻结组不手工列成员，由项目页状态派生（site_consistency.project_directory），这里按同一口径计数
+            every = pages if 'scale' in names else {p.parent.name: json.loads(read(p)) for p in sorted((root/'sources/pages').glob('*/page.json'))}
+            return sum(p.get('status') == '冻结' for p in every.values() if p.get('kind') in ('project', 'frozen') and 'parent' not in p)
+        values['group_counts'] = {g['id']: group_count(g) for g in directory['registry']['groups']}
     def replace(match):
         value = values
         for key in (match[1] or match[2]).split('.'):
