@@ -23,7 +23,9 @@ HASH_CACHE = None
 BUILD_LOG = None
 VERIFICATION_FILES = ('baidu_verify_codeva-DRgaQnAmTK.html', 'sogousiteverification.txt')
 sys.path.insert(0, str(ROOT / 'scripts'))
+sys.path.insert(0, str(SITE / 'tools'))
 import astro_rules
+from render_cache import markdown_render_sha
 
 def load(name, relative):
     spec = importlib.util.spec_from_file_location(name, ROOT / relative)
@@ -308,7 +310,7 @@ def build(pages=None):
     stage('native_inputs')
     frozen_urls = sorted(p['url'] for p in checks['frozen_projects'])
     engine_fp = fingerprint([ROOT / 'src/typeset', ROOT / 'sources/assets', SITE / 'tools/render_blocks.py',
-        SITE / 'tools/site_consistency.py']) + hashlib.sha256(json.dumps(frozen_urls).encode()).hexdigest()
+        SITE / 'tools/render_cache.py', SITE / 'tools/site_consistency.py']) + hashlib.sha256(json.dumps(frozen_urls).encode()).hexdigest()
     wrapper_paths = [p for p in (SITE / 'src').rglob('*') if p.is_file()
         and 'content' not in p.relative_to(SITE / 'src').parts and p.parent.name not in {'runtime', 'retained'}
         and p.name != 'retained-page.ts' and 'cockpit' not in p.relative_to(SITE / 'src').parts]
@@ -327,7 +329,7 @@ def build(pages=None):
         render_inputs = [md, runtime_path]
         living_config = read(runtime_path).get('living_config') if runtime_path.is_file() else None
         if living_config: render_inputs.append(public / living_config.lstrip('/'))
-        render_fps[name] = fingerprint(render_inputs) + engine_fp
+        render_fps[name] = markdown_render_sha(md) + fingerprint(render_inputs[1:]) + engine_fp
         for route in [fm.get('url') or '/' + name + '/', *(fm.get('old_urls') or [])]:
             route = normalize_route(route)
             if route in {'/', '/cockpit/', '/computer-access/'}: continue
@@ -359,7 +361,7 @@ def build(pages=None):
         or not (SITE / 'src/content/rendered' / (name + '.json')).is_file()]
     if render_names: run(sys.executable, 'tools/render_blocks.py', *render_names)
     for name in names:
-        if read(SITE / 'src/content/rendered' / (name + '.json')).get('source_md_sha256') != proof(SITE / 'src/content/pages' / (name + '.md'))['sha256']:
+        if read(SITE / 'src/content/rendered' / (name + '.json')).get('render_md_sha256') != markdown_render_sha(SITE / 'src/content/pages' / (name + '.md')):
             raise ValueError('Rendered Markdown changed: ' + name)
     stage('blocks')
     astro_routes = {route for route in changed if entries[route]['kind'] in {'native', 'retained'}}

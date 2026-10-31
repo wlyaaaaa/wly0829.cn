@@ -161,6 +161,7 @@ class AstroReleaseTests(unittest.TestCase):
         self.assertEqual(article['article_label'], '约法 · L18–L23 · E251')
         self.assertEqual(article['points'], ['L18']); self.assertNotIn('id="L18"', article['article'])
         self.assertEqual(rendered['source_md_sha256'], renderer.sha(path))
+        self.assertEqual(rendered['render_md_sha256'], renderer.markdown_render_sha(path))
         self.assertEqual(rendered['render_version'], renderer.RENDER_VERSION)
 
     def test_missing_render_job_exits_nonzero_without_overwriting_old_result(self):
