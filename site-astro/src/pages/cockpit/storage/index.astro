@@ -13,7 +13,7 @@ import '../../../cockpit/storage.css';
     <p id="storage-status" role="status">正在读取电脑的存储采样。</p>
     <div class="storage-key" aria-label="容量条图例"><span><i class="storage-dot is-known"></i>用途已知</span><span><i class="storage-dot is-unknown"></i>还说不清</span><span><i class="storage-dot is-free"></i>空闲</span></div>
     <div id="storage-volumes" class="storage-volumes" aria-label="各块磁盘的占用与增长"><p class="storage-empty">尚未读到磁盘采样，读到后显示 C、D、E、G、H 盘。</p></div>
-    <p class="storage-notes">“还说不清”是磁盘已用减去用途已知的部分，其中可能有尚未测全的类别。近一周对比 6—8 天前的同口径采样；样本不足会写明。容量按十进制 GB、TB 显示，时间为北京时间。</p>
+    <p class="storage-notes">“还说不清”是尚未归类的占用，是否能清理要另判断。V 盘是 E 盘上的 Dev Drive 虚拟盘，已计入 E 盘。文件夹按文件大小、磁盘按已分配空间统计，两者会有差额；近一周需 6—8 天前的同口径采样。容量按十进制 GB、TB，时间为北京时间。</p>
     <details class="storage-all-categories">
       <summary>查看各类文件的占用与清理规则</summary>
       <p class="storage-notes">这里保留全部分类；合计与分项可能重叠，请按上面的逐盘账本看总量。</p>

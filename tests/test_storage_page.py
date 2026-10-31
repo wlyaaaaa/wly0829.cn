@@ -32,12 +32,12 @@ def fixture(partial=False):
     for drive in 'CDEGH':
         volumes.append(dict(drive=drive, state='partial' if partial else 'ok', observed_at=stamp,
             total_bytes=1_000_000_000_000, used_bytes=500_000_000_000, classified_bytes=120_000_000_000,
-            unclassified_bytes=380_000_000_000, classification_complete=not partial,
+            unclassified_bytes=380_000_000_000, classification_complete=not partial, classified_lower_bound=partial,
             weekly_growth_bytes=None if partial else -5_000_000_000, baseline_at=None if partial else baseline,
             top_complete=not partial, top_observed_at=stamp,
             top_directories=[dict(label=label, bytes=(5-i)*10_000_000_000, complete=not partial, path='X:\\fictional\\hidden')
                              for i, label in enumerate(['缓存', '项目', '个人资料（受保护）', '应用', '其他目录'])],
-            categories=[dict(id='fixture_cache', label='虚构临时文件', bytes=120_000_000_000, complete=True)]))
+            categories=[dict(id='fixture_cache', label='虚构临时文件', bytes=120_000_000_000, complete=True)], notes_zh=['不应逐盘重复的说明']))
     return dict(storage_pressure=dict(schema='pcconfig.ai-storage-pressure.v1', observed_at=stamp, max_age_seconds=50400,
         volumes=volumes, categories=[dict(label='虚构临时文件', bytes=120_000_000_000, complete=True,
             partial_bytes=None, weekly_growth_bytes=None if partial else -5_000_000_000, baseline_at=None if partial else baseline,
@@ -57,23 +57,44 @@ class StoragePageTests(unittest.TestCase):
         html = document().decode('utf8').replace('<title>', links + '<title>')
         html = html.replace('<body>', '<body>' + (chrome / 'header.html').read_text('utf8'))
         server = h.StatusServer()
-        server.default = (200, fixture(), 0)
+        data = fixture(partial=True)
+        data['storage_pressure']['volumes'][2]['top_directories'][:1] = [dict(label='尚未测量', bytes=0, complete=False), dict(label='确认为空', bytes=0, complete=True)]
+        server.default = (200, data, 0)
         server.pages['/cockpit/storage/'] = html.encode('utf8')
         try:
             with sync_playwright() as pw:
                 browser = pw.chromium.launch(executable_path=h.CHROME, headless=True)
                 for width in (390, 1440):
+                    server.default = (200, data, 0)
                     context = browser.new_context(viewport=dict(width=width, height=1000))
                     h.isolate(context)
                     page = context.new_page()
                     page.goto(server.origin + '/cockpit/storage/', wait_until='networkidle')
                     page.wait_for_selector('[data-drive="E"] .storage-meter')
+                    card = page.locator('[data-drive="E"]')
+                    self.assertEqual(page.locator('body').inner_text().count('部分数据仍在测量，标 ≥ 的是下界'), 1)
+                    self.assertIn('≥ 120 GB', card.locator('.storage-fact').nth(0).inner_text())
+                    self.assertIn('≤ 380 GB', card.locator('.storage-fact').nth(1).inner_text())
+                    self.assertRegex(card.locator('.storage-meter').get_attribute('aria-label'), '用途已知 至少 120 GB，还说不清 至多 380 GB')
+                    self.assertEqual(card.locator('.storage-categories summary').inner_text(), '分类明细（1 项）')
+                    self.assertEqual(card.locator('.storage-top-list li').count(), 5)
+                    self.assertIn('确认为空\n0 GB', card.inner_text())
+                    self.assertNotRegex(card.inner_text(), '尚未测量|≥ 0 GB|不应逐盘重复的说明|文件夹采样始于|磁盘用量采样于')
                     for drive in ('E', 'G'):
                         page.locator(f'[data-drive="{drive}"]').evaluate('e=>scrollTo(0,e.offsetTop+160)')
                         self.assertEqual(page.locator('#site-header').evaluate('e=>getComputedStyle(e).position'), 'sticky')
                         for header in page.locator('.storage-heading,.storage-disk-head').all():
                             self.assertEqual(header.evaluate('e=>getComputedStyle(e).position'), 'static')
                         self.assertTrue(page.evaluate("Boolean(document.elementFromPoint(30,20)?.closest('#site-header'))"))
+                    server.default = (200, fixture(), 0)
+                    page.locator('#storage-refresh').click()
+                    page.wait_for_function("!document.getElementById('storage-status').textContent.includes('部分数据仍在测量')")
+                    self.assertNotIn('≥', card.locator('.storage-fact').nth(0).inner_text())
+                    self.assertIn('最大的 5 个文件夹', card.inner_text())
+                    for snapshot in (dict(storage_pressure={**fixture()['storage_pressure'], 'volumes': [fixture()['storage_pressure']['volumes'][0]] * 5}), data):
+                        server.default = (200, snapshot, 0)
+                        page.locator('#storage-refresh').click()
+                        page.wait_for_function("document.getElementById('storage-status').textContent.includes('部分数据仍在测量')")
                     context.close()
                 browser.close()
             self.assertFalse(server.writes())
@@ -106,7 +127,7 @@ class StoragePageTests(unittest.TestCase):
                     self.assertIn('−5 GB', card.locator('.storage-fact').nth(2).inner_text())
                     self.assertEqual(card.locator('.storage-top-list li').count(), 5)
                     self.assertIn('个人资料（受保护）', card.inner_text())
-                    self.assertIn('Dev Drive', card.inner_text())
+                    self.assertEqual(page.locator('body').inner_text().count('Dev Drive'), 1)
                     summary = card.locator('.storage-categories summary')
                     summary.focus()
                     page.keyboard.press('Enter')
@@ -143,8 +164,8 @@ class StoragePageTests(unittest.TestCase):
                 card = page.locator('[data-drive="C"]')
                 self.assertIn('历史采样', card.inner_text())
                 self.assertIn('样本不足', card.inner_text())
-                self.assertIn('含尚未测全的分类', card.inner_text())
-                self.assertIn('测量不完整', card.inner_text())
+                self.assertIn('最多还有这些待归类', card.inner_text())
+                self.assertIn('部分数据仍在测量', page.locator('#storage-status').inner_text())
                 self.assertIn('≥ 50 GB', card.inner_text())
                 self.assertNotIn('最大的 5 个文件夹', card.inner_text())
                 server.default = (502, {}, 0)

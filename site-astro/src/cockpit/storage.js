@@ -18,32 +18,27 @@ export function renderVolumes(data = {}, fresh = true) {
     const classified = available && valid(v.classified_bytes) ? Math.min(v.classified_bytes, v.used_bytes) : null;
     const unclassified = classified === null ? null : v.used_bytes - classified;
     const complete = v.classification_complete === true;
+    const lowerBound = classified !== null && v.classified_lower_bound === true;
+    const uncertain = classified !== null && !complete;
     const categories = (Array.isArray(v.categories) ? v.categories : []).filter(row => row && typeof row.label === 'string' && valid(row.bytes));
-    const folders = (Array.isArray(v.top_directories) ? v.top_directories : []).filter(row => row && typeof row.label === 'string' && valid(row.bytes)).slice(0,5);
+    const folders = (Array.isArray(v.top_directories) ? v.top_directories : []).filter(row => row && typeof row.label === 'string' && valid(row.bytes) && !(row.complete === false && row.bytes === 0)).slice(0,5);
     const topComplete = v.top_complete === true;
     const growth = available && typeof v.weekly_growth_bytes === 'number' && Number.isFinite(v.weekly_growth_bytes) && Number.isFinite(Date.parse(v.baseline_at));
     const tag = !fresh ? '历史采样' : !available ? '未读到' : !complete || !topComplete ? '测量不完整' : '已测完';
-    const meter = classified === null ? '' : `<div class="storage-meter" role="img" aria-label="${esc(`用途已知 ${size(classified)}，还说不清 ${size(unclassified)}，空闲 ${size(v.total_bytes-v.used_bytes)}`)}"><span class="is-known" style="width:${classified/v.total_bytes*100}%"></span><span class="is-unknown" style="width:${unclassified/v.total_bytes*100}%"></span></div>`;
+    const meter = classified === null ? '' : `<div class="storage-meter" role="img" aria-label="${esc(`用途已知 ${lowerBound ? '至少 ' : ''}${size(classified)}，还说不清 ${uncertain ? '至多 ' : ''}${size(unclassified)}，空闲 ${size(v.total_bytes-v.used_bytes)}`)}"><span class="is-known" style="width:${classified/v.total_bytes*100}%"></span><span class="is-unknown" style="width:${unclassified/v.total_bytes*100}%"></span></div>`;
     const details = categories.length ? `<ul class="storage-category-list">${categories.map(row => `<li><span>${esc(row.label)}${row.complete === false ? '（已测部分）' : ''}</span><b>${row.complete === false ? '≥ ' : ''}${esc(size(row.bytes))}</b></li>`).join('')}</ul>` : '<p class="storage-empty">暂未确认分类，这部分仍计入“还说不清”。</p>';
     const folderList = folders.length ? `<ol class="storage-top-list">${folders.map(row => `<li><span>${esc(row.label)}</span><b>${row.complete === false ? '≥ ' : ''}${esc(size(row.bytes))}</b></li>`).join('')}</ol>` : '<p class="storage-empty">还没有文件夹的完整读数，等待后台继续测量。</p>';
-    const notes = (Array.isArray(v.notes_zh) ? v.notes_zh : []).filter(note => typeof note === 'string' && note.trim());
-    if (drive === 'E' && !notes.some(note => note.includes('Dev Drive'))) notes.push('V 盘是 E 盘上的 Dev Drive 虚拟盘，已计入 E 盘，不再相加。');
     return `<article class="storage-disk${available ? '' : ' is-unavailable'}${fresh ? '' : ' is-historical'}" data-drive="${drive}">
       <header class="storage-disk-head"><h2>${drive} 盘</h2><span class="storage-tag">${tag}</span></header>
       <p class="storage-used"><strong>${available ? esc(size(v.used_bytes)) : '未读到'}</strong><span>${available ? `已用 / ${esc(size(v.total_bytes))} 总容量` : '还不能判断已用与总容量'}</span></p>
       ${meter}
       <dl class="storage-facts">
-        <div class="storage-fact"><dt>用途已知</dt><dd>${esc(size(classified))}<small>${classified !== null && !complete ? '已确认的部分' : '按分类去重合计'}</small></dd></div>
-        <div class="storage-fact is-unexplained"><dt>还说不清的占用</dt><dd>${esc(size(unclassified))}<small>${classified !== null && !complete ? '含尚未测全的分类' : '已用减去用途已知'}</small></dd></div>
+        <div class="storage-fact"><dt>用途已知</dt><dd>${lowerBound ? '≥ ' : ''}${esc(size(classified))}<small>${lowerBound ? '已测下界' : classified !== null && !complete ? '已确认的部分' : '按分类去重合计'}</small></dd></div>
+        <div class="storage-fact is-unexplained"><dt>还说不清的占用</dt><dd>${uncertain ? '≤ ' : ''}${esc(size(unclassified))}<small>${uncertain ? '最多还有这些待归类' : '已用减去用途已知'}</small></dd></div>
         <div class="storage-fact"><dt>近一周</dt><dd>${growth ? esc(difference(v.weekly_growth_bytes)) : available ? '样本不足' : '未读到'}<small>${growth ? `对比 ${esc(shortTime(v.baseline_at))}` : available ? '需要 6—8 天前的采样' : '等待读取磁盘采样'}</small></dd></div>
       </dl>
-      <details class="storage-categories"><summary>用途已知的分类${categories.length ? `（${categories.length} 项）` : ''}</summary>${details}</details>
-      <section class="storage-top"><h3>${topComplete ? '最大的 5 个文件夹' : '当前已测的大文件夹'}</h3>${folderList}
-        ${topComplete ? '' : '<p class="storage-note">测量不完整：这里只列当前已测的最大 5 项，标“≥”的是已测下界；全盘测完前，名次还可能变。</p>'}
-        ${v.top_observed_at ? `<p class="storage-note">文件夹采样始于 ${esc(shortTime(v.top_observed_at))}</p>` : ''}
-      </section>
-      ${notes.map(note => `<p class="storage-note">${esc(note)}</p>`).join('')}
-      ${v.observed_at && v.observed_at !== data.observed_at ? `<p class="storage-note">磁盘用量采样于 ${esc(shortTime(v.observed_at))}</p>` : ''}
+      <details class="storage-categories"><summary>分类明细（${categories.length} 项）</summary>${details}</details>
+      <section class="storage-top"><h3>${topComplete ? '最大的 5 个文件夹' : '当前已测的大文件夹'}</h3>${folderList}</section>
     </article>`;
   }).join('');
 }
@@ -74,7 +69,10 @@ if (typeof document !== 'undefined') {
       if (!data) throw new Error('unavailable');
       const maxAge = Number(data.max_age_seconds) > 0 ? Number(data.max_age_seconds) * 1000 : 14*3600000;
       const age = Date.now() - Date.parse(data.observed_at), fresh = Number.isFinite(age) && age >= -60000 && age <= maxAge;
+      const reported = Array.isArray(data.volumes) ? data.volumes : [];
+      const incomplete = DRIVES.some(drive => !reported.some(v => v && String(v.drive).replace(':','').toUpperCase() === drive && v.classification_complete === true && v.top_complete === true));
       note.textContent = fresh ? `采样于 ${time(data.observed_at)}；显示采样时的状态。` : `采样已过期或时间无法确认（${time(data.observed_at)}），下面仅作历史参考。`;
+      if (incomplete) note.textContent += ' 部分数据仍在测量，标 ≥ 的是下界。';
       volumes.innerHTML = renderVolumes(data, fresh);
       rows.innerHTML = renderCategories(data, fresh);
     } catch {
