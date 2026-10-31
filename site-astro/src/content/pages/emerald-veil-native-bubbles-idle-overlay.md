@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/emerald-veil-native-bubbles-idle-overlay/page.json",
   "sha256": "10e43acb0b6d7f3a2522ad9a5ea9861df7198bfd633c89e939cbaeff2d91ed5b",
-  "converted_at_beijing": "2026-10-11T19:07:10+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:11+08:00"
  }
 }
 ---
@@ -564,7 +564,8 @@ Emerald Veil · 功能说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -665,7 +666,8 @@ Emerald Veil · 功能说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -913,7 +915,8 @@ Emerald Veil · 功能说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

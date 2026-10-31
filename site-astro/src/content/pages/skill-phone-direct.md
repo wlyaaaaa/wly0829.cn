@@ -148,7 +148,7 @@
  "source": {
   "page": "sources/pages/skill-phone-direct/page.json",
   "sha256": "9ec75693da5fa602378ad1b1cc39690058eb5a9927e8becaa04c3162c6c4ec6b",
-  "converted_at_beijing": "2026-10-31T09:28:11+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:22+08:00"
  }
 }
 ---
@@ -1030,7 +1030,8 @@ AI：“电脑在家里的网络上找不到手机。你在外面的话，把手
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {},
  "images": []

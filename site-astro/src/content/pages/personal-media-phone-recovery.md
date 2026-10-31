@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-media-phone-recovery/page.json",
   "sha256": "9035606876baddc6862cf2014300f8c75fe6bd1b2eae047067e58ab173c055ce",
-  "converted_at_beijing": "2026-10-31T09:28:10+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:17+08:00"
  }
 }
 ---
@@ -61,7 +61,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -547,7 +548,8 @@ G 盘、计划或选定原件不可用时停止恢复同步，保留已有恢复
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -857,7 +859,8 @@ G 盘、计划或选定原件不可用时停止恢复同步，保留已有恢复
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -1036,7 +1039,8 @@ G 盘、计划或选定原件不可用时停止恢复同步，保留已有恢复
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

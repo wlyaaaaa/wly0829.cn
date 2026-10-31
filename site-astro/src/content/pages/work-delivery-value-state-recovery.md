@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/work-delivery-value-state-recovery/page.json",
   "sha256": "25a17e7955ecef1fa4b8c9aa78cd35d69a60575e2bfb54e47071e841d2a21aae",
-  "converted_at_beijing": "2026-10-12T00:29:49+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:25+08:00"
  }
 }
 ---
@@ -547,7 +547,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -638,7 +639,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -784,7 +786,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -1013,7 +1016,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -1088,7 +1092,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

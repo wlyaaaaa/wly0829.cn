@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/agents-rules-contracts/page.json",
   "sha256": "4680688ead1f6dfc2ea0f25f65d5888f3cd9983d604e28a7242ad558586fc438",
-  "converted_at_beijing": "2026-10-31T07:45:41+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:08+08:00"
  }
 }
 ---
@@ -558,7 +558,8 @@ AI 不会拿上个月的报告当今天的现场，也不会跑到错误仓库�
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

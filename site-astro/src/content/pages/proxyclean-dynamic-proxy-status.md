@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/proxyclean-dynamic-proxy-status/page.json",
   "sha256": "fa7f2948ab229b82e48b4dab355b82fd6287342cd6f09265a1e99b17cdd21313",
-  "converted_at_beijing": "2026-10-30T15:12:31+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:18+08:00"
  }
 }
 ---
@@ -898,7 +898,8 @@ Docker 保存了独立本地代理，或设置已改但运行记录仍沿用旧�
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

@@ -29,7 +29,7 @@
  "source": {
   "page": "sources/pages/github-index-protected-major-actions/page.json",
   "sha256": "67eddf7416fa40463caf6b3c4ac527a972a548e9edab4606a22cdb1f225409ba",
-  "converted_at_beijing": "2026-10-31T06:46:48+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:12+08:00"
  }
 }
 ---
@@ -56,7 +56,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -523,7 +524,8 @@ GitHub 总索引 · 功能说明 · 已冻结：10 月 31 日起项目不再维�
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -614,7 +616,8 @@ GitHub 总索引 · 功能说明 · 已冻结：10 月 31 日起项目不再维�
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -691,7 +694,8 @@ GitHub 总索引 · 功能说明 · 已冻结：10 月 31 日起项目不再维�
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -963,7 +967,8 @@ GitHub 总索引 · 功能说明 · 已冻结：10 月 31 日起项目不再维�
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

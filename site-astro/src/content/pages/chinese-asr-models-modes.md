@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/chinese-asr-models-modes/page.json",
   "sha256": "e6dbcd2dfb8ce26300f1bfeff9863100fd199e13156de10da271ebab76aae726",
-  "converted_at_beijing": "2026-10-30T15:12:31+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:09+08:00"
  }
 }
 ---
@@ -1182,7 +1182,8 @@ Registry（登记清单） 现登记 4 个识别引擎、2 套 profiles（baseli
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

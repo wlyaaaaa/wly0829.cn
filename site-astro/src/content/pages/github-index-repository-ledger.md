@@ -29,7 +29,7 @@
  "source": {
   "page": "sources/pages/github-index-repository-ledger/page.json",
   "sha256": "dfe7fc3db55ce1e7e51261085b20922ea9676f932f3a43606fe00716351ccb0b",
-  "converted_at_beijing": "2026-10-31T09:28:09+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:12+08:00"
  }
 }
 ---
@@ -658,7 +658,8 @@ GitHub 总索引 · 功能说明 · 已冻结：10 月 31 日起项目不再维�
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

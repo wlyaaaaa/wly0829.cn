@@ -685,7 +685,7 @@
  "source": {
   "page": "sources/pages/video-scaffold/page.json",
   "sha256": "ae571cc90f413cc020b3fed52aa686eca80cbafe614a5fd3f13fba0e6bc8c4f7",
-  "converted_at_beijing": "2026-10-30T14:00:59+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:24+08:00"
  }
 }
 ---
@@ -2338,7 +2338,8 @@ docfilm：底板是生图做的空镜，截图、打码框、录音在镜头单�
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -2963,7 +2964,8 @@ docfilm：底板是生图做的空镜，截图、打码框、录音在镜头单�
   "live": [],
   "screenshots": [],
   "chain": "video-scaffold-features",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

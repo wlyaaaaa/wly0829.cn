@@ -180,6 +180,9 @@ def body_link(page, row, field, start, end, number, rows):
                or r.get("date_semantics") != "coverage_end" and qualified_date_review(page, r) for r in paired):
             raise ValueError("as_of_link_required")
         return None  # 显式日期记录独占截至编辑，支持跨字段配对。
+    if row.get("derive_as_of"):
+        # 登记声明由构建在本屏显示观察日期；正文中其他事实的日期不能拿来改。
+        return None
     sentences = list(re.finditer(r"[^\n。；;！!？?]+", text))
     own = next(i for i, m in enumerate(sentences) if m.start() <= start < m.end())
     spans = [sentences[own]]
@@ -253,6 +256,13 @@ def build_number_edits(root, result):
         for ref in row.get("qualifies", []):
             links[row["id"]].add(ref)
             links[ref].add(row["id"])
+    derived = defaultdict(list)
+    for row in result["rows"]:
+        if row.get("derive_as_of"):
+            derived[(row["page"], row["screen"])].append(row["id"])
+    for group in derived.values():
+        for rid in group:
+            links[rid].update(set(group) - {rid})
     # 只绑定显式 qualifies 和同一编辑位置；同屏不同句的数字不共享日期保护。
     for row in sorted(result["rows"], key=lambda r: bool(r.get("qualifies"))):
         if row.get("manual_review_reason"):
@@ -526,7 +536,9 @@ def apply_edits(root, payload, only=None, converter=None):
             accepted_files.add(filename)
         except (OSError, KeyError, ValueError, IndexError, TypeError) as exc:
             report["skipped"].extend(dict(edit, reason=str(exc)) for edit in edits)
-    targets = set().union(*(dependencies[f] for f in accepted_files)) if accepted_files else set()
+    derived_pages = {r["page"] for r in payload.get("record_updates", [])
+                     if r.get("derive_as_of") and (not only or r["page"] in only)}
+    targets = (set().union(*(dependencies[f] for f in accepted_files)) if accepted_files else set()) | derived_pages
     try:
         if targets:
             converter(root, targets)
@@ -573,6 +585,22 @@ def apply_edits(root, payload, only=None, converter=None):
             except (KeyError, ValueError, IndexError, StopIteration) as exc:
                 report["skipped"].append(dict(record_id=row["id"], reason=str(exc)))
         report["registry_sync"] = sync_registry(payload.get("registry_path") or root / "sources/refresh/registry.json", successful)
+        # 日期取登记的真实观察时间；同步后重转受影响页，最终 Markdown 才是同一批新数与新日期。
+        dated = {r["page"] for r in successful if r.get("derive_as_of")}
+        if dated:
+            try:
+                converter(root, dated)
+                final = markdown_checks(root, dated, converter)
+            except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
+                final = {page: False for page in dated}
+            for item in report["markdown_readback"]:
+                if item["page"] in dated:
+                    item["status"] = "verified" if final.get(item["page"]) else "failed"
+                    md = root / f"site-astro/src/content/pages/{item['page']}.md"
+                    item["sha256"] = sha256(md.read_bytes()).hexdigest() if md.is_file() else None
+            for page in dated - {p for p, ok in final.items() if ok}:
+                report["skipped"].extend(dict(record_id=r["id"], page=page, reason="derived_as_of_markdown_readback_failed")
+                                         for r in successful if r["page"] == page)
     return report
 
 

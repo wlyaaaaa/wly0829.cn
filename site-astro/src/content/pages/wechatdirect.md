@@ -681,7 +681,7 @@
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
   "sha256": "b20f541944e1e3379dab6b2fc6302b0f95495a11eb7dbc2ce56e3ff2abcc7654",
-  "converted_at_beijing": "2026-10-31T09:28:12+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:25+08:00"
  }
 }
 ---
@@ -1636,7 +1636,8 @@
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -2354,7 +2355,8 @@
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

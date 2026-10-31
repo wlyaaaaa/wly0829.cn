@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/proxyclean-one-click-and-troubleshooting-boundaries/page.json",
   "sha256": "f4709e38975d79b1177eaf1f086e957420e22a2e8c3cd802cc5c3434c1e312ad",
-  "converted_at_beijing": "2026-10-30T15:12:31+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:19+08:00"
  }
 }
 ---
@@ -1035,7 +1035,8 @@ ProxyClean · 功能说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

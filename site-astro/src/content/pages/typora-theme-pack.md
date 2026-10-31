@@ -456,7 +456,7 @@
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
   "sha256": "f07030d010ec31a34cc491d68b8197e7c26de58bf72ca018f02656fcf1db608d",
-  "converted_at_beijing": "2026-10-31T09:28:12+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:23+08:00"
  }
 }
 ---
@@ -1424,7 +1424,8 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

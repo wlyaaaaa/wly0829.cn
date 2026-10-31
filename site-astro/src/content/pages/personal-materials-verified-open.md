@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-materials-verified-open/page.json",
   "sha256": "dacd955ad6e9cac5abf66c43180223c0f06f7f0cef69200b44a409a6d0d1782c",
-  "converted_at_beijing": "2026-10-22T08:32:34+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:17+08:00"
  }
 }
 ---
@@ -61,7 +61,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -547,7 +548,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -1174,7 +1176,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

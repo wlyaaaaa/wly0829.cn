@@ -29,7 +29,7 @@
  "source": {
   "page": "sources/pages/personal-expression-reply-as-me/page.json",
   "sha256": "57d279cba62b00a819c48ec7990fccc32a232b9131712e6d31f222a416d5aa75",
-  "converted_at_beijing": "2026-10-31T09:28:09+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:16+08:00"
  }
 }
 ---
@@ -539,7 +539,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

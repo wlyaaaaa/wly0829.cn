@@ -373,7 +373,7 @@
  "source": {
   "page": "sources/pages/work-delivery-copilot/page.json",
   "sha256": "b71117d91a2f02f18970af64d3026b6db8d4a1e28df48aa90483396d73b0d25b",
-  "converted_at_beijing": "2026-10-30T15:09:46+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:25+08:00"
  }
 }
 ---
@@ -2257,7 +2257,8 @@
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

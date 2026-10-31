@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-health-raw-preservation-resume/page.json",
   "sha256": "2b4326453d0c36a5c562c4dee8261b05d089ee243a225fb225d4b20e61906919",
-  "converted_at_beijing": "2026-10-31T09:28:10+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:16+08:00"
  }
 }
 ---
@@ -61,7 +61,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -547,7 +548,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

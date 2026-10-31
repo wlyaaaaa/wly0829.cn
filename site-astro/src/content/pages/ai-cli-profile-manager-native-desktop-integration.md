@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-native-desktop-integration/page.json",
   "sha256": "18320e500351deb9e715dfc8f0887b4466e1db9b2a8e77b6d64aac6562c9ef81",
-  "converted_at_beijing": "2026-10-30T15:12:30+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:08+08:00"
  }
 }
 ---
@@ -508,7 +508,8 @@ AI CLI Profile Manager · 功能说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

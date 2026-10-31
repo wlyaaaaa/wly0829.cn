@@ -424,7 +424,7 @@
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
   "sha256": "6f71e1e8d8db7f2055400c4452b6a7b6a236ac2f38f389092f23c0bf5f401463",
-  "converted_at_beijing": "2026-10-31T09:28:10+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:16+08:00"
  }
 }
 ---
@@ -1616,7 +1616,8 @@
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

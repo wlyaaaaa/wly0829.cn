@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/agents-skills-plugins/page.json",
   "sha256": "dad04149b6e952d20778848781a4c062e59b0cdc2d4413b63304ff8e865ab5d9",
-  "converted_at_beijing": "2026-10-31T08:33:22+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:08+08:00"
  }
 }
 ---
@@ -556,7 +556,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

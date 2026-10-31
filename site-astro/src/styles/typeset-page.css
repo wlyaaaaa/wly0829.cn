@@ -3,6 +3,7 @@
    区块本身的样式在 public/assets/_typeset/typeset.css（由 tools/render_blocks.py 从 src/typeset 原样生成）。 */
 .paper.ts-page { max-width: 1392px; width: calc(100% - 48px); margin-inline: auto; padding: 0; }
 .ts-screen { position: relative; display: block; margin: 0 0 16px; background: #fff; }
+.ts-screen > .status-asof { margin: 0; padding: 2px 3.6% 10px; font-size: .9rem; line-height: 1.4; color: #5d7266; }
 .ts-o { position: relative; overflow: hidden; --tz: var(--tz-h, .8325); height: calc(var(--ch) * var(--tz)); }
 .ts-v { display: none; --tz: var(--tz-v, .4145); }
 .ts-canvas { width: 1672px; transform: scale(var(--tz)); transform-origin: 0 0; }

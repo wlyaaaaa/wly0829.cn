@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-health-protected-foreground-refresh/page.json",
   "sha256": "0ad872ee9686ab3bba631642616244152570f02390744b697dce88774dc085ff",
-  "converted_at_beijing": "2026-10-31T09:28:10+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:16+08:00"
  }
 }
 ---
@@ -547,7 +547,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

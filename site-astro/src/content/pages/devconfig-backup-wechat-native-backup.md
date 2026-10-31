@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup-wechat-native-backup/page.json",
   "sha256": "b9e10e16e193fe5cc495760c6f54db3a989771383f353eccb7361ae747525aae",
-  "converted_at_beijing": "2026-10-30T13:04:16+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:11+08:00"
  }
 }
 ---
@@ -568,7 +568,8 @@ DevConfig Backup · 功能说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -1070,7 +1071,8 @@ DevConfig Backup · 功能说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

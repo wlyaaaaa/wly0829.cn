@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/proxyclean-dead-port-and-route-cleanup/page.json",
   "sha256": "34603eabddae1bd168d019b4f139bb73cfaf86d48907ef852936438940753cb8",
-  "converted_at_beijing": "2026-10-30T15:12:31+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:18+08:00"
  }
 }
 ---
@@ -970,7 +970,8 @@ ProxyClean · 功能说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/timeaudit-runtime-reliability/page.json",
   "sha256": "8c47c3576f509bb8fe94a60160bf14e5aeabe5c30f1c6b99e8f8fac56c8b53ff",
-  "converted_at_beijing": "2026-10-30T14:00:59+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:23+08:00"
  }
 }
 ---
@@ -952,7 +952,8 @@ TimeAudit 大盘停止更新时，在已接入本机诊断的 AI 对话中说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

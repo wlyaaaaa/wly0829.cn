@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-health-offline-decision-brief/page.json",
   "sha256": "fffc1522288639c03fb1c412abe09acd0caa7f52a47f51552c44bc660c3fdb3c",
-  "converted_at_beijing": "2026-10-31T09:28:10+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:16+08:00"
  }
 }
 ---
@@ -1091,7 +1091,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

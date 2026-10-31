@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/daily-preferences-source-coverage/page.json",
   "sha256": "ccc7a587ce0fb4aae153b12443e3b856e430c8fdf83153f1e43f5a77a9e2e0e9",
-  "converted_at_beijing": "2026-10-30T14:00:57+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:11+08:00"
  }
 }
 ---
@@ -1963,7 +1963,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

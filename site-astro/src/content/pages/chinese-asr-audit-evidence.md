@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/chinese-asr-audit-evidence/page.json",
   "sha256": "499d92145a26e9bb56fd2fa76522b62900b931d2dcc96b58796acfcd2a6f5b26",
-  "converted_at_beijing": "2026-10-30T15:12:30+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:09+08:00"
  }
 }
 ---
@@ -1250,7 +1250,8 @@ ChineseASR · 功能说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

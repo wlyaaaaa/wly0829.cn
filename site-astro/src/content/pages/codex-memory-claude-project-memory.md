@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/codex-memory-claude-project-memory/page.json",
   "sha256": "2eda8f0ea6774a75eb200adaa10efae2ec90e45014e8ae59ee04eab79b26003f",
-  "converted_at_beijing": "2026-10-12T06:00:52+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:10+08:00"
  }
 }
 ---
@@ -556,7 +556,8 @@ Claude 的项目笔记和完整聊天不是一回事。以前单独备份它，�
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 9 月 28 日"
  },
  "layout": {
   "h": {
