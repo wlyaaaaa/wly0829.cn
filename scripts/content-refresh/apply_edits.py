@@ -460,7 +460,10 @@ def apply_edits(root, payload, only=None, converter=None):
             continue
         grouped[edit["file"]].append(edit)
     dependencies = {filename: affected_pages(root, [filename]) for filename in grouped}
-    checked = markdown_checks(root, set().union(*dependencies.values()) if dependencies else set(), converter, missing_ok=True)
+    record_pages = {r["page"] for r in payload.get("record_updates", [])
+                    if not only or r["page"] in only}
+    dependency_pages = set().union(*dependencies.values()) if dependencies else set()
+    checked = markdown_checks(root, dependency_pages | record_pages, converter, missing_ok=True)
     accepted_files, applied_by_page = set(), defaultdict(int)
     for filename, edits in grouped.items():
         try:
@@ -536,9 +539,9 @@ def apply_edits(root, payload, only=None, converter=None):
             accepted_files.add(filename)
         except (OSError, KeyError, ValueError, IndexError, TypeError) as exc:
             report["skipped"].extend(dict(edit, reason=str(exc)) for edit in edits)
-    derived_pages = {r["page"] for r in payload.get("record_updates", [])
-                     if r.get("derive_as_of") and (not only or r["page"] in only)}
-    targets = (set().union(*(dependencies[f] for f in accepted_files)) if accepted_files else set()) | derived_pages
+    # 未改数的记录也须有本轮 Markdown 回读；原页若已偏离作者输入，不覆盖它。
+    targets = ((set().union(*(dependencies[f] for f in accepted_files)) if accepted_files else set())
+               | {page for page in record_pages if checked[page]})
     try:
         if targets:
             converter(root, targets)
@@ -584,10 +587,14 @@ def apply_edits(root, payload, only=None, converter=None):
                 successful.append(row)
             except (KeyError, ValueError, IndexError, StopIteration) as exc:
                 report["skipped"].append(dict(record_id=row["id"], reason=str(exc)))
-        report["registry_sync"] = sync_registry(payload.get("registry_path") or root / "sources/refresh/registry.json", successful)
+        registry_path = Path(payload.get("registry_path") or root / "sources/refresh/registry.json")
+        registry_before = registry_path.read_bytes() if registry_path.is_file() else None
+        report["registry_sync"] = sync_registry(registry_path, successful)
         # 日期取登记的真实观察时间；同步后重转受影响页，最终 Markdown 才是同一批新数与新日期。
         dated = {r["page"] for r in successful if r.get("derive_as_of")}
         if dated:
+            markdown_before = {page: (root / f"site-astro/src/content/pages/{page}.md").read_bytes()
+                               for page in dated}
             try:
                 converter(root, dated)
                 final = markdown_checks(root, dated, converter)
@@ -598,7 +605,22 @@ def apply_edits(root, payload, only=None, converter=None):
                     item["status"] = "verified" if final.get(item["page"]) else "failed"
                     md = root / f"site-astro/src/content/pages/{item['page']}.md"
                     item["sha256"] = sha256(md.read_bytes()).hexdigest() if md.is_file() else None
-            for page in dated - {p for p, ok in final.items() if ok}:
+            failed_dated = dated - {p for p, ok in final.items() if ok}
+            if failed_dated and registry_before is not None:
+                original = {r["id"]: r for r in json.loads(registry_before)["records"]}
+                current = json.loads(registry_path.read_text("utf-8-sig"))
+                failed_ids = {r["id"] for r in successful if r["page"] in failed_dated}
+                current["records"] = [original.get(r["id"], r) if r["id"] in failed_ids else r
+                                      for r in current["records"]]
+                registry_path.write_text(json.dumps(current, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                report["registry_sync"]["records"] = [rid for rid in report["registry_sync"]["records"]
+                                                       if rid not in failed_ids]
+                for page in failed_dated:
+                    (root / f"site-astro/src/content/pages/{page}.md").write_bytes(markdown_before[page])
+                    for item in report["markdown_readback"]:
+                        if item["page"] == page:
+                            item["sha256"] = sha256(markdown_before[page]).hexdigest()
+            for page in failed_dated:
                 report["skipped"].extend(dict(record_id=r["id"], page=page, reason="derived_as_of_markdown_readback_failed")
                                          for r in successful if r["page"] == page)
     return report
