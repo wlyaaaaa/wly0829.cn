@@ -30,17 +30,17 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E331",
-   "commit": "985a1c35a97768f86014870625702364d994b55d",
-   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
-   "activated_at": "2026-10-31T07:37:25.088872+08:00",
+   "release": "E337",
+   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
+   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
+   "activated_at": "2026-10-31T15:26:59.057612+08:00",
    "file": "sources/rules/docs/contracts/agents.execution-coordination.md",
-   "sha256": "c088ca2323c42d4b9ce8b9284145298dd439a6e7f9a79e14bc661897b3995cd6",
-   "public_sha256": "1d5991c0dace4ac2bc7d6018584eab613f44e18414a615d948418906eb828def"
+   "sha256": "8879200696b1400f2914018c92596a4705e23065c86d08c429c02b1e6d23c89f",
+   "public_sha256": "0c26a77c1d1c3ed60b4fe5bb73581a6e35efdf1912725e3366dd4e542e657e70"
   },
   "explanation_based_on": {
-   "release": "E331",
-   "sha256": "c088ca2323c42d4b9ce8b9284145298dd439a6e7f9a79e14bc661897b3995cd6"
+   "release": "E337",
+   "sha256": "8879200696b1400f2914018c92596a4705e23065c86d08c429c02b1e6d23c89f"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：左边小绿树的三根细绿丝带轻轻飘动，丝带上各有一张小任务卡顺着滑到三张小书桌上，桌前的小 AI 助手接过卡片低头写几笔；右边三张工作台上的蓝图各自被添上几条绿色线条；墙上挂钩里的黄铜钥匙被一只手取下、沙漏翻转一次、钥匙又挂回原处；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -209,8 +209,8 @@
  },
  "source": {
   "page": "sources/pages/rule-execution-coordination/page.json",
-  "sha256": "c0dc2f8395a426f8f7a64779f4b268f18843b8a857d998c7d875409b114c9bc6",
-  "converted_at_beijing": "2026-10-31T11:19:47+08:00"
+  "sha256": "739edbffc857bd6692ba8a3c0f1ddd4ffc64ed6271a2c1e6b47ae8a18bd1f99f",
+  "converted_at_beijing": "2026-10-31T15:43:20+08:00"
  }
 }
 ---
@@ -1460,9 +1460,9 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.execution-coordination.md",
-   "release": "E331",
-   "sha256": "c088ca2323c42d4b9ce8b9284145298dd439a6e7f9a79e14bc661897b3995cd6",
-   "public_sha256": "1d5991c0dace4ac2bc7d6018584eab613f44e18414a615d948418906eb828def",
+   "release": "E337",
+   "sha256": "8879200696b1400f2914018c92596a4705e23065c86d08c429c02b1e6d23c89f",
+   "public_sha256": "0c26a77c1d1c3ed60b4fe5bb73581a6e35efdf1912725e3366dd4e542e657e70",
    "from": null,
    "to": "## 改动与花费成比例",
    "start": 0,
@@ -1489,7 +1489,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
   "reuse": "",
   "source_excerpt_id": "rule-execution-coordination/rule-execution-coordination-06",
   "source_logical_id": "execution_coordination_contract",
-  "source_public_sha256": "1d5991c0dace4ac2bc7d6018584eab613f44e18414a615d948418906eb828def",
+  "source_public_sha256": "0c26a77c1d1c3ed60b4fe5bb73581a6e35efdf1912725e3366dd4e542e657e70",
   "source_rule_part": "rule-execution-coordination/rule-execution-coordination-06"
  },
  "layout": {
@@ -1498,7 +1498,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E331版，一字不改"
+     "text_ref": "原文·E337版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1522,7 +1522,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E331版，一字不改"
+     "text_ref": "原文·E337版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1598,7 +1598,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
 }
 ```
 
-原文 · E331 版，一字不改
+原文 · E337 版，一字不改
 
 # 分工与并行施工
 
@@ -1667,13 +1667,13 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.execution-coordination.md",
-   "release": "E331",
-   "sha256": "c088ca2323c42d4b9ce8b9284145298dd439a6e7f9a79e14bc661897b3995cd6",
-   "public_sha256": "1d5991c0dace4ac2bc7d6018584eab613f44e18414a615d948418906eb828def",
+   "release": "E337",
+   "sha256": "8879200696b1400f2914018c92596a4705e23065c86d08c429c02b1e6d23c89f",
+   "public_sha256": "0c26a77c1d1c3ed60b4fe5bb73581a6e35efdf1912725e3366dd4e542e657e70",
    "from": "## 改动与花费成比例",
    "to": null,
    "start": 4914,
-   "end": 12156,
+   "end": 12225,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1712,7 +1712,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
   "reuse": "",
   "source_excerpt_id": "rule-execution-coordination/rule-execution-coordination-07",
   "source_logical_id": "execution_coordination_contract",
-  "source_public_sha256": "1d5991c0dace4ac2bc7d6018584eab613f44e18414a615d948418906eb828def",
+  "source_public_sha256": "0c26a77c1d1c3ed60b4fe5bb73581a6e35efdf1912725e3366dd4e542e657e70",
   "source_rule_part": "rule-execution-coordination/rule-execution-coordination-07"
  },
  "layout": {
@@ -1721,7 +1721,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -1795,7 +1795,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -1893,7 +1893,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## 改动与花费成比例
 
@@ -1968,7 +1968,7 @@ Claude 因自身硬限制做不了本人已授权事项的某一步时（例如�
 3. **和现在的选择比。** 同一类活的相关评测上，新型号或新档位不低于现在的选择、耗时不更长，就可以换上；能胜任之上的分数只换来多等、多花。要惊艳的活看成品质量和审美类的评测（例如成品两两盲评、网页设计的人类偏好榜），不只看编程分。
 4. **第三方评测和社区反馈。** 只采用有方法、有样本的评测；每条写来源、日期、样本多大、可能的偏差；厂商公布的评测数据可以作暂定依据，没有数据的宣传说法只当线索。互相矛盾时写明怎么判断，推断标明是推断。
 5. **落地和记录。** 完整数据连同出处和查询日期写进 `docs/research/` 下带日期的调研记录；模型清单只写选择和起决定作用的几个数，注明查询日期。模型路由（哪类活派哪个型号、用什么档位）按数据直接更新；授权、预算这类本人定过的事要变先问本人（约法 L23）；都写清依据和怎么撤回。新型号的实际派出核对列进待验收清单。
-6. **各项目的型号逐行过。** 各项目按本人授权或同意用的型号只登记在模型清单 `project_models`，项目规则里只写谁做什么、授权和出处。新型号出来时按同样的数据逐行判断该不该换、换成哪个，由 AI 定好最优解；把要换的各行连同授权、预算的变化合成一个问题，问本人一次是否执行：在当前对话里问，同时用驾驶舱的正式入口登记“要你选”，每行写现在用哪个、建议换成哪个和一句理由，并附一句全局路由已经改了什么、怎么撤回。本人同意的行改清单，并按该行 `also_in` 和项目里搜旧型号名一起改掉；不同意的照旧。本人答复前各项目照旧用清单里的型号；清单里的型号用不了时，相关的活停下如实说明缺口，不自行换用。技能和自动任务里写的具体型号随全局路由一起改。每周治理顺带扫各项目规则里写死的型号，扫到的收进清单（做法见 PCConfig 每周体检手册第 6 步）。
+6. **各项目的型号逐行过。** 各项目按本人授权或同意用的型号只登记在模型清单 `project_models`，项目规则里只写谁做什么、授权和出处。新型号出来时按同样的数据逐行判断该不该换、换成哪个，由 AI 定好最优解；把要换的各行连同授权、预算的变化合成一个问题，问本人一次是否执行：在当前对话里问，同时用驾驶舱的正式入口登记“要你选”，每行写现在用哪个、建议换成哪个和一句理由，并附一句全局路由已经改了什么、怎么撤回。本人同意的行改清单，并按该行 `also_in` 和项目里搜旧型号名一起改掉；不同意的照旧。本人答复前各项目照旧用清单里的型号；清单里的型号用不了时，相关的活停下如实说明缺口，不自行换用。技能和自动任务里写的具体型号随全局路由一起改。每周治理顺带扫各项目规则里写死的型号，扫到的收进清单（做法见 PCConfig 每周体检手册 `E:\PCConfig\docs\runtime\weekly-governance-runbook.md`“核对网站与源头，复核暂缓条件”一节）。
 7. **换代时顺带拆脚手架。** 看各道钩子和检查最近的命中记录，换代后没有收益的，连规则句子和检查代码一起拆。
 
 改分工的快做法：

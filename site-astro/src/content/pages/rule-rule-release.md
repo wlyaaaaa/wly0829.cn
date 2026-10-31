@@ -30,17 +30,17 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E331",
-   "commit": "985a1c35a97768f86014870625702364d994b55d",
-   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
-   "activated_at": "2026-10-31T07:37:25.088872+08:00",
+   "release": "E337",
+   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
+   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
+   "activated_at": "2026-10-31T15:26:59.057612+08:00",
    "file": "sources/rules/docs/contracts/agents.rule-release.md",
-   "sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
-   "public_sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b"
+   "sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494",
+   "public_sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494"
   },
   "explanation_based_on": {
-   "release": "E331",
-   "sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b"
+   "release": "E337",
+   "sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：玻璃柜里书架上标着 E187 的那本书轻轻发出一圈淡绿的光，路标上“当前”那块木牌微微晃动后稳稳指向它；一只手伸过来想推开玻璃柜门，黄铜锁扣上的“SYSTEM”小铜牌闪一下，门纹丝不动，手缩回；地上两只印着 Claude 和 OpenAI 标志的小信封轻轻翻开又合上；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，书脊和牌子上的字保持不动、不变形。",
   "registry": {
@@ -156,8 +156,8 @@
  },
  "source": {
   "page": "sources/pages/rule-rule-release/page.json",
-  "sha256": "b6c329e3696f2f5695ec770cba8e08151c9e9dd4b1e4fb726895cfb2d7884d6c",
-  "converted_at_beijing": "2026-10-31T11:19:48+08:00"
+  "sha256": "d00328b5cecb63658ae3ff04da0bb0f8aa349843e0cf36f0bd683ee7cb17e465",
+  "converted_at_beijing": "2026-10-31T15:43:20+08:00"
  }
 }
 ---
@@ -483,14 +483,14 @@
 
 **哪一版规则算数、AI 怎么读；改了怎么发布成新的一版，改坏了怎么退回，怎么防止被随手改掉。**
 
-这个专题管的是规则本身的“版本”：所有 AI 开工时读的，只能是正式发布、核对过的那一版；规则要能改、有历史、改坏了能一键退回，又不能谁打开文件管理器就改掉。平时 AI 开工只跑一次核验，只有维护、发布或回退规则时才读这一页。
+这个专题管的是规则本身的“版本”：所有 AI 开工时读的，只能是正式发布、核对过的那一版；规则要能改、有历史、改坏了能一键退回，又不能谁打开文件管理器就改掉。平时约法随 AI 的入口一起加载，开工不用另跑核验；只有维护、发布或回退规则时才读这一页。
 
 **先认几个词**
 - **活动规则**：当前生效的那一版规则，所有 AI 开工时读的就是它。
 - **代号**：每一版的编号，E 加数字，例如 E187。
 - **内容指纹**：原文叫“校验值”，文件改一个字就对不上。
 - **指针**：一个小文件，记着“当前”和“上一版”各是哪一版。
-- **入口**：Claude 和 Codex 家目录里的那份说明，只写“先核验、再读”；它的底稿叫入口模板。
+- **入口**：Claude 和 Codex 家目录里的那份说明，发布时写进这一版的约法和导航；它的底稿叫入口模板。
 - **回读**：推送或写入以后再读一遍，确认真的到位了。
 - **SYSTEM 保护**：文件归 Windows 的 SYSTEM 账户，本人账户和管理员都只能读。
 
@@ -721,7 +721,7 @@ E186　E187　当前　上一版　SYSTEM
 
 ### 这一页什么时候读
 - 只在维护、发布或回退规则时读这一页。
-- 平时读规则只用核验入口，不跑发布流程。
+- 平时约法随入口加载，专题按入口里写的这一版的完整路径去读，不跑发布流程。
 - 本人要的效果：规则能改、有历史，改坏了能一键退回；而且不能随便打开文件管理器就被改掉。
 
 ### 哪一版算数
@@ -734,7 +734,9 @@ E186　E187　当前　上一版　SYSTEM
 - 例（9 月 28 日核对时）：E187 这一版是 11 份规则、2 份入口模板，加 1 张由登记表生成、记着这一版有哪些文件的规则目录表，共 14 个文件；专题文件夹里的 README.md 没登记，就不在里面。
 
 ### 怎么读
-- AI 用核验入口 Invoke-EAgentRulesRelease.ps1 -Mode Inspect 核对在用的是哪一版、每个文件的内容指纹对不对；别的程序要读规则，用 -Mode Resolve 拿到同一版、核对过的规则文件位置。
+- 约法和导航已经随两家 AI 的用户级入口加载，AI 开工不用自己跑核验，也不用另读约法；专题按导航里写的这一版的完整路径去读。
+- 开对话时由 Hook 用核验入口 Invoke-EAgentRulesRelease.ps1 -Mode Inspect 核对在用的是哪一版、每个文件的内容指纹对不对，再把这台电脑上的入口和这一版应有的入口逐字比对：一致只回一行，不一致就提醒先读这一版的总规则；入口缺了，按仓库里那个指路桩给的核验命令兜底。
+- 别的程序要读规则，用 -Mode Resolve 拿到同一版、核对过的规则文件位置。
 - 核验结果只列真实能读到的规则路径。
 - 核验通过只说明文件没被改过，不说明 AI 读懂了，也不说明什么都能做；读多少，按当时判断需要。
 - 规则仓库里的 AGENTS.md 只是待审的源稿，不能因为“目录离得更近”就盖过在用的规则。
@@ -1257,8 +1259,8 @@ E186　E187　当前　上一版　SYSTEM
 ```
 
 ### 入口跟着版本走
-- 每次发布，把 templates/codex-home/AGENTS.md 写到 Codex 家目录的 AGENTS.md，把 templates/claude-home/CLAUDE.md 写到当前用户的 ~/.claude/CLAUDE.md。
-- 这样 Claude 不管在哪个项目里干活，都先经这个入口核验在用的版本。
+- 每次发布，发布器先把两份入口模板里的版本号和占位处换成这一版的代号和总规则全文（约法和导航），指向这一版文件的链接改成发布目录里的完整路径；再把渲染好的 templates/codex-home/AGENTS.md 写到 Codex 家目录的 AGENTS.md，把 templates/claude-home/CLAUDE.md 写到当前用户的 ~/.claude/CLAUDE.md。
+- 这样 Claude 和 Codex 不管在哪个项目里干活，开对话时就带着这一版的约法。版本记录、内容指纹和核验都按写好以后的样子算；回退时把上一版的入口原样恢复。
 - 例（9 月 28 日核对时）：这台电脑上两份入口和 E187 的入口模板内容指纹一致。
 - 约法有变化时，发布汇报里要提醒本人去笔记本（平时用来远控主机、主机坏了时顶上的那台）上启动一次〔按需巡检〕：它平时暂停，需要时手动开一次。
 - 由笔记本自己从主机（本人的主力台式机）的活动规则同步约法那一段；主机不反向写笔记本；连不上时，笔记本保留现有规则。
@@ -1294,13 +1296,13 @@ E186　E187　当前　上一版　SYSTEM
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.rule-release.md",
-   "release": "E331",
-   "sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
-   "public_sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
+   "release": "E337",
+   "sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494",
+   "public_sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494",
    "from": null,
    "to": "## 发布和回退",
    "start": 0,
-   "end": 799,
+   "end": 953,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -1314,7 +1316,7 @@ E186　E187　当前　上一版　SYSTEM
   "reuse": "",
   "source_excerpt_id": "rule-rule-release/rule-rule-release-05",
   "source_logical_id": "rule_release_contract",
-  "source_public_sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
+  "source_public_sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494",
   "source_rule_part": "rule-rule-release/rule-rule-release-05"
  },
  "layout": {
@@ -1324,7 +1326,7 @@ E186　E187　当前　上一版　SYSTEM
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版，一字不改"
+     "text_ref": "原文·E337版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1354,7 +1356,7 @@ E186　E187　当前　上一版　SYSTEM
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版，一字不改"
+     "text_ref": "原文·E337版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1447,13 +1449,13 @@ E186　E187　当前　上一版　SYSTEM
 }
 ```
 
-原文 · E331 版，一字不改
+原文 · E337 版，一字不改
 
 # 规则发布与恢复
 
 owner: `E:\.agents`
 
-只在维护、发布或回退规则时读。平时读规则只用核验入口，不跑发布流程。本人要的是：规则能改、有历史、改坏了能一键退回，而且不能随便打开文件管理器就被改掉。
+只在维护、发布或回退规则时读。平时约法随宿主入口加载，专题按当版绝对路径读取，不跑发布流程。本人要的是：规则能改、有历史、改坏了能一键退回，而且不能随便打开文件管理器就被改掉。
 
 ## 什么算活动规则
 
@@ -1463,7 +1465,7 @@ owner: `E:\.agents`
 
 ## 读规则
 
-`tools/Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json` 核对当前在用的版本和每个文件的校验值；`-Mode Resolve` 给现有的读取方提供同一个已核对的引用。返回的 `required_rule_paths` 只列真实可读的规则路径。核对通过只说明文件没被改过，不代表已经读懂或可以做所有动作；读多少由当前判断需要决定。
+约法和导航已随两家用户级入口加载，模型不用在开场手动运行核验或另读约法；专题按导航中的当版绝对路径读取。开场 Hook 用 `tools/Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json` 核对当前版本及文件校验值，并将该宿主入口与本版入口产物逐字节比较；一致只给一行核验回执，不再注入正文或路径 JSON，不一致则提醒先读本版 `AGENTS.md` 的绝对路径。入口缺失时按仓库指路桩的核验命令兜底。`-Mode Resolve` 给现有读取方提供同一个已核对的引用；`required_rule_paths` 只列真实可读路径。核对通过只说明文件没被改过，不代表已经读懂或可以做所有动作；读多少由当前判断需要决定。
 
 规则源仓库里的 `AGENTS.md` 只是待审材料，不能靠“目录更近”盖过活动规则。仓库根的 `CLAUDE.md` 是一个短的指路桩：Claude Code 在项目没有 `CLAUDE.md` 时会把 `AGENTS.md` 当项目规则加载，这个桩防止候选源码因此生效；它只指向用户级入口，并在用户级入口缺失时给出核验命令，不再复制一份完整入口。读取失败只影响依赖缺失内容的决定，不触发锁资料或其他保护。
 
@@ -1477,13 +1479,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.rule-release.md",
-   "release": "E331",
-   "sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
-   "public_sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
+   "release": "E337",
+   "sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494",
+   "public_sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494",
    "from": "## 发布和回退",
    "to": null,
-   "start": 799,
-   "end": 2688,
+   "start": 953,
+   "end": 3045,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1497,7 +1499,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-rule-release/rule-rule-release-06",
   "source_logical_id": "rule_release_contract",
-  "source_public_sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
+  "source_public_sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494",
   "source_rule_part": "rule-rule-release/rule-rule-release-06"
  },
  "layout": {
@@ -1506,7 +1508,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -1529,7 +1531,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -1599,7 +1601,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## 发布和回退
 
@@ -1608,7 +1610,7 @@ owner: `E:\.agents`
 - **限制句按意思判断。** 发布门对改变措辞、缩短、挪位置或改成指向同版仍有效的同一规则做一次 Sol medium 语义比对，限制的对象、范围、条件和强度都不变就自动放行，不请本人同意；判定为改写的旧句和目标版本证据写入发布回执及版本记录。真正放宽、删除限制，或改动 `AGENTS.md` 的“我的 AI 约法”一节，要用发布入口的 `-OwnerApproval <源消息UUID>` 指向本人原话（可以列几条）。原话里本人在谈改规则（说到规则、约法或约法条号，例如“L14 必要时可改”），就是明确同意改规则，直接放行；否则发布门做一次 Sol medium 比对，确认每处改动都符合原话里本人真正想要的结果就放行，不另外问本人。规则写本意、不照抄字面：补全本意显然包含的同类对象和说法可以放行；违背原话方向、放宽到本意没涉及的对象，或只是 AI 自己提的、本人没反对的，不放行。比对不可用或拿不准时，按要本人同意处理。
 - **并发。** 发布器会核对当前指针的校验值；如果别的任务刚发布过，先重读并把它的结果并进来，不覆盖。新的发布必须包含当前在用的那次提交。不为发布新建队列、后台服务或全局施工平台。
 - **失败和回退。** 发布失败时恢复原来的指针和入口，旧版本照常可用。指针缺失但 `releases` 下仍有 `E*` 目录时，报 `e_rules_current_pointer_missing`；按现存目录的 `release.json` 重建指针后再核验。成功后只留“当前”和“上一版”两份可重建的目录，历史由私有 Git 保存。回退把正文、目录和入口模板一起恢复到上一版；不改写历史代号，也不重建同一个代号来冒充回退。
-- **入口模板随版本部署。** `templates/codex-home/AGENTS.md` 写到 Codex home 的 `AGENTS.md`；`templates/claude-home/CLAUDE.md` 写到当前用户的 `~/.claude/CLAUDE.md`，这样 Claude 在任何项目里都先经这个入口核验活动版本。约法有变化时，在发布汇报里提醒本人启动一次笔记本的按需巡检；由笔记本从主机当前活动规则同步约法段，主机不反向写笔记本，连不上时保留笔记本现有规则。
+- **入口模板随版本部署。** 发布器将两份模板中的版本号和根规则占位符替换为本版代号与 `AGENTS.md` 全文（约法和导航），本版文件的相对链接改为发布目录下的绝对路径，锚点保留；非本版文件沿用源码绝对路径。渲染后的 `templates/codex-home/AGENTS.md` 写到发布器配置的 Codex home 的 `AGENTS.md`；渲染后的 `templates/claude-home/CLAUDE.md` 写到 `~/.claude/CLAUDE.md`，根会话和加载用户级入口的子代理直接带上约法。Hook 核对时优先用 `CODEX_HOME` 定位 Codex home，未设置时用 `~/.codex`。release 记录、校验值和核验覆盖渲染后的字节，回退逐字节恢复上一版入口；无占位符的旧模板保持原样。约法有变化时，在发布汇报里提醒本人启动一次笔记本的按需巡检；由笔记本从主机当前活动规则同步约法段，主机不反向写笔记本，连不上时保留笔记本现有规则。
 - **防随手改。** 活动规则目录、指针和两个入口保留现有 SYSTEM 保护；发布器按需提权，完成后恢复保护并回读，不换成只有文件只读属性。发布不调用本人的秘密或本人验证，也不新增授权体系。
 
 ## 验证

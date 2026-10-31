@@ -30,16 +30,16 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E331",
-   "commit": "985a1c35a97768f86014870625702364d994b55d",
-   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
-   "activated_at": "2026-10-31T07:37:25.088872+08:00",
+   "release": "E337",
+   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
+   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
+   "activated_at": "2026-10-31T15:26:59.057612+08:00",
    "file": "sources/rules/docs/contracts/agents.protected-actions.md",
    "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73",
    "public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3"
   },
   "explanation_based_on": {
-   "release": "E331",
+   "release": "E337",
    "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：推小推车的小 AI 助手走到白绿木栏杆前停下；岗亭里戴眼镜的小 AI 助手抬头看一眼单子、点点头；桌上四选一托盘里的黄铜钥匙轻轻亮一下，手机屏幕上的六个圆点依次亮起又熄灭；木栏杆缓缓抬起一半又落回原位；远处 GitHub 小木屋的烟囱冒出一缕淡绿的烟；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子和纸条上的字保持不动、不变形，手机屏幕上不出现数字。",
@@ -258,8 +258,8 @@
  },
  "source": {
   "page": "sources/pages/rule-protected-actions/page.json",
-  "sha256": "a9346fc184132b7d7aa0ae98d3b3410df87f7d9019b1c3b0d3a76d3b4eb1711e",
-  "converted_at_beijing": "2026-10-31T11:19:48+08:00"
+  "sha256": "d3296d1ca205589320e5a42846e273c35f8994972b439c19ea894f59c3982930",
+  "converted_at_beijing": "2026-10-31T15:43:20+08:00"
  }
 }
 ---
@@ -540,7 +540,7 @@
 
 删库　把关　四选一　通行密钥　手机验证码　恢复码
 
-现在开没开无限制授权、个人资料解没解锁：〔现在的授权状态 → 授权与状态〕。网页原文来源快照为 E331（北京时间 10 月 31 日 07:37 起生效），本页讲解与同版专题对应；当前生效版本以 AI 开工时核验的活动入口为准。
+现在开没开无限制授权、个人资料解没解锁：〔现在的授权状态 → 授权与状态〕。网页原文来源快照为 E337（北京时间 10 月 31 日 15:26 起生效），本页讲解与同版专题对应；当前生效版本以 AI 开工时核验的活动入口为准。
 
 ::screen{#rule-protected-actions-09 section="points"}
 
@@ -2687,7 +2687,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.protected-actions.md",
-   "release": "E331",
+   "release": "E337",
    "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73",
    "public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3",
    "from": null,
@@ -2730,7 +2730,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版，一字不改"
+     "text_ref": "原文·E337版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2773,7 +2773,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版，一字不改"
+     "text_ref": "原文·E337版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2873,7 +2873,7 @@
 }
 ```
 
-原文 · E331 版，一字不改
+原文 · E337 版，一字不改
 
 # 重大动作与本人验证
 
@@ -2917,7 +2917,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.protected-actions.md",
-   "release": "E331",
+   "release": "E337",
    "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73",
    "public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3",
    "from": "## GitHub 重大动作",
@@ -2947,7 +2947,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -2987,7 +2987,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -3093,7 +3093,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## GitHub 重大动作
 

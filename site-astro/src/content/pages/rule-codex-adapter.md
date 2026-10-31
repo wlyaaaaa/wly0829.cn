@@ -30,17 +30,17 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E331",
-   "commit": "985a1c35a97768f86014870625702364d994b55d",
-   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
-   "activated_at": "2026-10-31T07:37:25.088872+08:00",
+   "release": "E337",
+   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
+   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
+   "activated_at": "2026-10-31T15:26:59.057612+08:00",
    "file": "sources/rules/docs/contracts/agents.codex-adapter.md",
-   "sha256": "d982f5455f63fc61c9a3fd433cab1b24c38de2b25716a4d43fd53c706377dbe7",
-   "public_sha256": "ae67a463e28ac81948d3462fb90cec9ecce6087913efe01ce564109af7bfd580"
+   "sha256": "eb8dcd12c81eabc16914c45b0e8c9dc1b1c763dc0611ba72c5141fbf66498c8e",
+   "public_sha256": "d792fd44742ffd27a853372a11a6da1631cb63fe54cd7983ce765f1a3bafacb7"
   },
   "explanation_based_on": {
-   "release": "E331",
-   "sha256": "d982f5455f63fc61c9a3fd433cab1b24c38de2b25716a4d43fd53c706377dbe7"
+   "release": "E337",
+   "sha256": "eb8dcd12c81eabc16914c45b0e8c9dc1b1c763dc0611ba72c5141fbf66498c8e"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：笔记本电脑屏幕上的终端光标轻轻闪烁；上方写着“Hook”的小铃铛轻轻摇一下，垂着的两张小纸条（锁、钥匙图标）随之晃动；左边“AGENTS.md”木牌指向远处厚书的细绿箭头上，一个小光点从木牌流向书本；右边两个小 AI 助手举着的牌子微微上下晃；右下“codex-root”工牌后的细绿线从下往上依次点亮几个小方块，最后亮到电脑；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，四块牌子上的字保持不动、不变形。",
   "registry": {
@@ -230,8 +230,8 @@
  },
  "source": {
   "page": "sources/pages/rule-codex-adapter/page.json",
-  "sha256": "41ea235086ed04ba3745eae6f5e9f557e7d9516263e932b2db7bd717fa35d78f",
-  "converted_at_beijing": "2026-10-31T11:19:47+08:00"
+  "sha256": "22d0ca5a347c9ba6b6081e95b5a14e0acd8e402a8b7b40d210cd412fba0fe2bd",
+  "converted_at_beijing": "2026-10-31T15:43:19+08:00"
  }
 }
 ---
@@ -561,6 +561,10 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
    {
     "text": "能力与运行方式",
     "href": "/rules/capabilities-runtime/#p-browser"
+   },
+   {
+    "text": "事实来源与任务上下文",
+    "href": "/rules/context-sources/#p-handoff"
    }
   ],
   "anchors": [
@@ -719,13 +723,13 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
 ## 人话要点 · 入口和无限制授权
 
 ### 入口和新消息
-- Codex 自己目录里的 AGENTS.md 只是指路：叫 AI 先核验当前生效的规则版本，再从那一版读规则。
+- Codex 自己目录里的 AGENTS.md 由发布程序写进当前生效这一版的完整约法和导航，开对话就带着；专题按里面写的这一版的完整路径去读。开对话时的 Hook 只核对入口和生效版本：一致只回一句，不一致就提醒先读这一版的总规则，不再把约法全文塞进来。
 - 本人真发来的新消息，和自动续作、上下文压缩、工具返回的消息分开看；后三种不算新消息。
 - 个人资料状态由 Hook 带进来；缺失或投递不明时先用 StatusPersonalEnvironment 重读。根会话需要本人资料而锁着或不明时，第一步请本人验证，之后再查资料、派活和完整作答；子代理不自己验证，只交回实际缺口。纯技术工作照常。
-- 通过 MCP（外接工具接口）调用时，本机 Codex 原来的任务入口不变。新开对话、上下文压缩后和恢复时，Hook 都会从本人原话的分类里生成一张“现在有效的禁令和授权”短表带进来，所以新开的对话也能拿回当前有效的决定；派活和提问前用同一份决定投影。普通的每条回复不会自动去读决定。原生子代理压缩后没有这个接续事件时，读原任务状态。
-- 技术上这是 SessionStart 的 startup、compact、resume 三种事件生成禁令和授权短表，派活、提问前的 PreToolUse 用共同决定投影。
+- 通过 MCP（外接工具接口）调用时，本机 Codex 原来的任务入口不变。新开对话、上下文压缩后和恢复时，按〔事实来源与任务上下文〕的长任务接续接上原来的任务状态，不往对话里塞决定短表或要求表；原生子代理压缩后没有这个接续事件时，也照那一节读原任务状态。
+- 技术上这是 SessionStart 的 startup、compact、resume 三种事件；Hook 找 Codex 家目录时先看 CODEX_HOME，没设才用 ~/.codex。
 - 新消息、Hook、子代理的真实身份和执行结果，都在本机正在用的入口核实；不凭标题、模型自称或别的 AI 留下的环境借身份。
-- 上网站时，Codex 要明确点名用本人的 Chrome（`agent.browsers.get("chrome")`），不用 `getDefault()`、`getForUrl()` 或应用内浏览器（`iab`）让运行时替它挑；应用内浏览器只用来看本机文件、本地预览，或本人这一轮点名要用时。后台标签页怎么开、Chrome 插件不通时修一次再交回、只有本机渲染自检能用无头，这些共同流程见〔能力与运行方式〕专题的浏览器一节。
+- 上网站时，Codex 的主对话和它的原生子代理都不调桌面自带的浏览器工具，一律像 Claude 一样经共用包装器派 GPT 子代理去做，不用等原生名额满；派出的子代理要明确点名用本人的 Chrome（`agent.browsers.get("chrome")`），不用 `getDefault()`、`getForUrl()` 或应用内浏览器（`iab`）让运行时替它挑；应用内浏览器只用来看本机文件、本地预览，或本人这一轮点名要用时。后台标签页怎么开、Chrome 插件不通时修一次再交回、只有本机渲染自检能用无头，这些共同流程见〔能力与运行方式〕专题的浏览器一节。
 - Codex 的自动记忆关着：memories、generate_memories、use_memories 三个开关都是 false。当轮要留下的经验按〔共享经验的落点〕写；Codex 工具本身已核实的教训写进本专题。
 
 ### 无限制授权
@@ -775,6 +779,10 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
    {
     "text": "替我拟消息",
     "href": "/skills/reply-as-me/"
+   },
+   {
+    "text": "用户授权",
+    "href": "/rules/authorization/#p-standing"
    }
   ],
   "anchors": [
@@ -1025,6 +1033,8 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
 
 普通派活时，桌面子代理名额真满了，才自动改用现成的 GPT 包装器接能做的活；登录、参数、网络这类故障先修真原因，不当成满了。唯一例外是主对话上下文压缩后自动做的那次只读复核：它是已授权的自动任务，直接用共用的 GPT 后台包装器，记真实的 Codex 父会话号，不用等名额满，也不因此让别的任务这样调用（完整流程见〔事实来源与任务上下文〕的“压缩后的后台复核”）。它仍是当前主对话管的后台任务，不另开顶层对话；型号、权限和任务范围不放宽。包装器记的是 Codex 当前任务的完整编号，不借 Claude 的会话号；接着做时接回原来那一份，不重开一份。新版包装器一次后台订阅后内部续等；Start 默认返回，要等加 -Wait；Watch 可在任一任务结束时叫醒，Resume 沿用原线程。派活单写清范围、授权、代码与测试上限、时限和验收方式；子任务要以本人身份和真人说话（客服、商家、卖家、房东、平台人工、微信联系人）或替本人拟要发出的消息时，派活单必须写一行“和真人说话按 reply-as-me”（即〔替我拟消息〕的规矩）；出处、方案和成本估算等栏可选，不因缺栏拒派；扩时和预算纠错写理由，验收后 Status -Ack。原生子代理和包装器子任务都一样：规则由根会话或包装器核验，子代理按需读给定版本的专题；出处由根会话负责，子代理不查出处、不报“无出处”，只按派单交付。等候、额度和停止的共同办法见〔分工与并行施工〕。
 
+Codex 的主对话、原生子代理和包装器子任务碰到已授权的步骤要管理员权限时，都直接静默提权做完（做法见〔用户授权〕的“申请管理员权限”），不停下、不交回主对话；派活时不用另写这一条。
+
 ### 主对话是 GPT 时
 - 桌面子代理有空位时，用 spawn_agent，按任务选 GPT-6 Luna、GPT-6.1 Sol 或 GPT-6 Astra，显式写 model 和 reasoning_effort：现在模型清单里，GPT-6.1 Sol 只读、步骤简单、代码上限为 0 的小单，以及给定材料的摘录对齐和调用链已定的机械流程填 medium，施工、要判断的分析和难活填 ultra（不用 high）；GPT-6 Luna 只照写好的提示生图、落盘，填 low，它以前的 max 等档位不再作为派单依据；Sol、Astra 原来派 xhigh 的改填 ultra；派完核对实际启动值。
 - 跨型号、跨档位时不带或只带有限历史；只有参数相同、完整历史确有用时才全带。
@@ -1246,13 +1256,13 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.codex-adapter.md",
-   "release": "E331",
-   "sha256": "d982f5455f63fc61c9a3fd433cab1b24c38de2b25716a4d43fd53c706377dbe7",
-   "public_sha256": "ae67a463e28ac81948d3462fb90cec9ecce6087913efe01ce564109af7bfd580",
+   "release": "E337",
+   "sha256": "eb8dcd12c81eabc16914c45b0e8c9dc1b1c763dc0611ba72c5141fbf66498c8e",
+   "public_sha256": "d792fd44742ffd27a853372a11a6da1631cb63fe54cd7983ce765f1a3bafacb7",
    "from": null,
    "to": "## 派子代理：Codex 的不同处",
    "start": 0,
-   "end": 2395,
+   "end": 2477,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -1275,7 +1285,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
   "reuse": "",
   "source_excerpt_id": "rule-codex-adapter/rule-codex-adapter-05",
   "source_logical_id": "codex_adapter_contract",
-  "source_public_sha256": "ae67a463e28ac81948d3462fb90cec9ecce6087913efe01ce564109af7bfd580",
+  "source_public_sha256": "d792fd44742ffd27a853372a11a6da1631cb63fe54cd7983ce765f1a3bafacb7",
   "source_rule_part": "rule-codex-adapter/rule-codex-adapter-05"
  },
  "layout": {
@@ -1285,7 +1295,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版，一字不改"
+     "text_ref": "原文·E337版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1310,7 +1320,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版，一字不改"
+     "text_ref": "原文·E337版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1401,7 +1411,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
 }
 ```
 
-原文 · E331 版，一字不改
+原文 · E337 版，一字不改
 
 # Codex 适配
 
@@ -1411,7 +1421,7 @@ owner: `E:\.agents`
 
 ## 入口和新消息
 
-Codex home 里的 `AGENTS.md` 只是入口，规则从核验过的活动版本读。真实的新消息和自动续作、上下文压缩、工具消息分开看；Hook 会把个人资料状态带进来，Hook 缺失或投递不明时，资料状态按不明处理，并先用 `StatusPersonalEnvironment` 重读。锁着或不明时不取用私人资料；根会话问到本人自己的事，第一步先请本人验证解锁，通过后再查资料、派子代理和作答，不给降级回答；纯技术工作照常。调用 MCP 不改变本机 Codex 原来的任务入口。新消息、Hook、子代理的真实身份和执行结果从本机现役入口核实，不从标题、模型自述或别的宿主遗留的环境借身份。
+Codex home 里的 `AGENTS.md` 由发布器写入活动版本的完整约法和导航，加载入口时就已在上下文中；专题按文中当版的绝对路径读取。Hook 定位 Codex home 时优先用 `CODEX_HOME`，未设置时用 `~/.codex`。开场 Hook 只核对入口和活动版本，一致只给短回执，不一致按提醒先读本版根规则，不再注入约法全文。真实的新消息和自动续作、上下文压缩、工具消息分开看；Hook 会把个人资料状态带进来，Hook 缺失或投递不明时资料状态按不明处理；不明或锁着时怎么办按[个人资料的锁和解锁](/rules/privacy-data/#个人资料的锁和解锁)。调用 MCP 不改变本机 Codex 原来的任务入口。新消息、Hook、子代理的真实身份和执行结果从本机现役入口核实，不从标题、模型自述或别的宿主遗留的环境借身份。
 
 SessionStart 的 startup/compact/resume 按[长任务接续](/rules/context-sources/#长任务接续)执行，不注入决定短表或要求表；原生子代理压缩跳过 SessionStart 时，也按该节读原任务状态。
 
@@ -1448,13 +1458,13 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.codex-adapter.md",
-   "release": "E331",
-   "sha256": "d982f5455f63fc61c9a3fd433cab1b24c38de2b25716a4d43fd53c706377dbe7",
-   "public_sha256": "ae67a463e28ac81948d3462fb90cec9ecce6087913efe01ce564109af7bfd580",
+   "release": "E337",
+   "sha256": "eb8dcd12c81eabc16914c45b0e8c9dc1b1c763dc0611ba72c5141fbf66498c8e",
+   "public_sha256": "d792fd44742ffd27a853372a11a6da1631cb63fe54cd7983ce765f1a3bafacb7",
    "from": "## 派子代理：Codex 的不同处",
    "to": null,
-   "start": 2395,
-   "end": 5574,
+   "start": 2477,
+   "end": 5925,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1481,7 +1491,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
   "reuse": "",
   "source_excerpt_id": "rule-codex-adapter/rule-codex-adapter-06",
   "source_logical_id": "codex_adapter_contract",
-  "source_public_sha256": "ae67a463e28ac81948d3462fb90cec9ecce6087913efe01ce564109af7bfd580",
+  "source_public_sha256": "d792fd44742ffd27a853372a11a6da1631cb63fe54cd7983ce765f1a3bafacb7",
   "source_rule_part": "rule-codex-adapter/rule-codex-adapter-06"
  },
  "layout": {
@@ -1491,7 +1501,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -1518,7 +1528,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -1636,14 +1646,16 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## 派子代理：Codex 的不同处
 
 共同原则见[分工与并行施工](/rules/execution-coordination/)，可派范围见 `config/model-roster.json`。
 原生子代理和包装器子任务统一按[子代理原则](/rules/execution-coordination/#派子代理的原则)及[派活松紧怎么定](/rules/execution-coordination/#派活松紧怎么定)交付；核验由根或包装器完成，子代理按需读给定版本的专题。
 
-原生 GPT 的 `reasoning_effort` 按共同原则第 4 条和模型清单 `routing.effort_rule` 填写；其他厂商沿用各自设置。型号换代按[新型号怎么调研](/rules/execution-coordination/#新型号怎么调研)重评。
+Codex 根会话、原生子代理和包装器子任务遇到已授权步骤要管理员时，同样直接按[长期授权](/rules/authorization/#长期授权)“申请管理员权限”静默提权（首选 `sudo pwsh -NoProfile -NonInteractive ...`），不停下、不交回根会话；派活提示不必另写这条。
+
+原生 GPT 的 `reasoning_effort` 按[派子代理的原则](/rules/execution-coordination/#派子代理的原则)“每次显式写型号和档位”一条和模型清单 `routing.effort_rule` 填写；其他厂商沿用各自设置。型号换代按[新型号怎么调研](/rules/execution-coordination/#新型号怎么调研)重评。
 
 - **主对话是 GPT 时**：容量够用时优先用原生子代理（`spawn_agent`），按模型清单 `routing` 的场景表和难度分级（GPT 那一列）选型号和档位，可派型号、档位和适用范围见 `hosts.codex.root_openai`；表里写“交 Claude”的活怎么办见 `routing.vendor_rule`。显式传 `model` 和 `reasoning_effort`，派完核对实际启动值。跨型号或跨档位时 `fork_turns` 用 `none` 或有限轮数；只有身份参数相同、完整历史确实有用时才用 `all`。
 - **主对话是其他公司的模型时**：可派型号见模型清单对应宿主的范围，不派 Astra。容量够用时优先调用宿主工具 `openai_child`，显式填写 `agent_type`、`model`、`reasoning_effort`、`task_name`、`message`，不传 `fork_turns`；续聊走同一入口，子代理回话走 `openai_parent`，查看、等待和停止走 `openai_child_control`。子代理要再分工时，回原父任务安排。约法 L23 里“实际调用按我给这个对话或项目的授权”说的是 Claude 调用 Codex，不给 Codex 自己派 GPT 子代理另加一次授权要求。入口因容量以外的原因不可用时，主对话继续能做的部分，说清实际缺口，不悄悄换模型，也不借别的通道绕过真实限制；容量不足按下面的例外办理。
@@ -1670,7 +1682,7 @@ $child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
 
 ## 新消息里的状态
 
-Hook 每条真实新消息和子代理启动带来共享资料、本人接管及可核实的型号和档位；未知如实写，子代理启动不借父记录。根状态未知用 `StatusPersonalEnvironment` 回读；个人资料的判断、解锁和缺口交回按[资料锁](/rules/privacy-data/#个人资料的锁和解锁)与共同原则第 7 条，纯技术工作继续。
+Hook 每条真实新消息和子代理启动带来共享资料、本人接管及可核实的型号和档位；未知如实写，子代理启动不借父记录。根状态未知用 `StatusPersonalEnvironment` 回读；个人资料的判断、解锁和缺口交回按[资料锁](/rules/privacy-data/#个人资料的锁和解锁)与[派子代理的原则](/rules/execution-coordination/#派子代理的原则)“根核验规则和判断资料需求”一条，纯技术工作继续。
 
 Stop 与 Claude 共用版本、明确 Report 目标集合、验收和资料缺口检查；首次拦截按真实原因补解锁或验收，同轮第二次只提示。边界核验失败只放行受影响检查并留诊断码。Hook 不选型号、档位或是否委派，不加派发许可、不按关键词弹验证。具体接线见状态钩子（`E:/.agents/docs/operations/context-hooks.md#个人资料先解锁与结束兜底`）。
 

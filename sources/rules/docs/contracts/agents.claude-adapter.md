@@ -41,7 +41,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
 - **提醒本人授权 Astra。** 无授权而任务属于 `routing.vendor_rule` 的提醒场景时，规划阶段提醒一次（约法 L23），说明优势和未授权替代，不为提醒查询或估算本人账号额度；本人答复注明对话或项目后按范围派。等待时做独立部分，派活时仍无答复就用替代，交付说明；同一活不重提，本人说不用则本对话不再提醒。
 - **默认分工和选型。** 按模型清单 `routing` 和[共同选型原则](/rules/execution-coordination/#派子代理的原则)，每次显式传 `-Model`、`-Effort`；档位及旧值映射只见清单。GPT 涉及本人价值、偏好和理解的内容单列后由 Claude 把关。Astra 可再派 Sol、Luna，范围和授权仍沿用父任务。
 - **从包装器进入。** 使用 `E:\.agents\tools\Invoke-ClaudeGptChild.ps1`，`-ParentHarness` 默认 `Claude`。Start、Resume 走私有 AppServer（后台服务）；Start 默认独立执行，Resume 沿用已存方式。确需桌面身份可传 `-Detached:$false`，或只把凭据动作交根。运行中纠偏用同轮 Steer。不直接调用 `codex exec`、Codex 的 `openai_child` 或专用判断角色。共用容量和接续见[分工与并行施工](/rules/execution-coordination/#原生容量不足与原线程接续)；`-ParentHarness Codex` 只供[Codex 的已授权转用](/rules/codex-adapter/#原生容量不足时转用共用包装器)，不搬用 Claude 的型号许可。
-- **资料与权限。** Codex 子任务按正常 Codex 配置和当前授权工作，不复制 Claude 对话授权值，不另加沙箱或审批覆盖。独立执行者没有桌面祖先身份：真正依赖密码中心桌面身份的凭据步骤交回根会话，其余已授权步骤照常完成；不另行登录、转交秘密或改身份核验来补。资料需求、共享资料期和缺口交回按共同原则第 7 条。
+- **资料与权限。** Codex 子任务按正常 Codex 配置和当前授权工作，不复制 Claude 对话授权值，不另加沙箱或审批覆盖。独立执行者没有桌面祖先身份：真正依赖密码中心桌面身份的凭据步骤交回根会话，其余已授权步骤照常完成；不另行登录、转交秘密或改身份核验来补。资料需求、共享资料期和缺口交回按[派子代理的原则](/rules/execution-coordination/#派子代理的原则)“根核验规则和判断资料需求”一条。
 - **派活单和预算。** 字段、模板、预算、参数和验收只见派发说明（`E:/.agents/docs/claude-gpt-child-dispatch.md`）；修改仓库用任务专用工作树。
 - **和真人说话。** 子任务要以本人身份和真人对话（客服、商家、卖家、房东、平台人工、微信联系人）或替本人拟要发出的消息时，派单必须写一行“和真人说话按 reply-as-me”；包装器在派单出现客服、商家、卖家、房东、人工、聊天等字样又没写这一行时自动补上，只是兜底。
 - **交代和交付。** 子任务是非交互的：技术做法自己定，不能自己定的需求或取舍写进最终汇报，由根会话整理；先做完不依赖该决定的工作，不在无人回答的地方等提问。交付简短结论、必要证据和汇报路径，除任务明确要求网页外，不做可视化，也不打开窗口。任务范围内的核对、验收或操作需要管理员时，直接按[用户授权的静默提权做法](/rules/authorization/#长期授权)执行。会影响其他会话的决定写到对应项目文件；仅在同改一处、发生事故或确需协调时发消息，不用中途进度刷屏。
@@ -61,7 +61,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
 - **档位子代理**：规范源是 `templates/claude-home/agents/`，`~/.claude/agents` 是指向它的目录链接。
 - **记忆**：Claude 账号聊天记忆已关闭，Claude Code 的关闭配置为 `~/.claude/settings.json` 中的 `autoMemoryEnabled=false`；需要留下的内容统一按[共享经验的落点](/rules/context-sources/#共享经验的落点)处理，Claude 工具的已核实教训归本专题。
 - **MCP**：用户级配置在 `%USERPROFILE%\.claude.json`（`claude mcp add -s user`）。Google 业务按[能力与运行方式](/rules/capabilities-runtime/#常用入口)，走 PCConfig 的 `google-workspace` stdio 入口，不接 claude.ai 的云连接器。电脑 MCP 只认目标机登记过的客户端；Claude 的 OAuth 回调固定为 `http://localhost:<端口>/callback`，不能复用 Codex 的 `127.0.0.1` 客户端，要在目标机登记独立的 Claude 客户端和固定回调端口。主机上的 Claude 直接用本机工具，不连本机的电脑 MCP。
-- **浏览器**：Claude 根和子代理访问网站、看网页、查网页资料或使用本人登录状态，一律派 GPT（AppServer）用 Codex Chrome 插件在本人 Chrome 自己新开的后台标签页里做，Exec 不接这类任务。Claude 桌面版内置浏览器（`mcp__Claude_Browser__*`）只用于本机文件和本机回环地址（`127.0.0.1`、`localhost`、`[::1]`）的本地预览，不用于任何网站；`preview_start` 按 name 启动时只允许 `.claude/launch.json` 中的本地开发服务器。Claude in Chrome 扩展继续由 Hook 拦截，本人当轮明确点名时放行的例外保留。GPT 的 Chrome 通道不通时按[浏览器规则](/rules/capabilities-runtime/#浏览器)和 `browser-control-continuity` 无窗口修一次；仍不通就停下网页步骤、交回卡点，不由 Claude 内置浏览器或无头浏览器代做。选型与 Astra 授权照常；这是可由本人当场改的默认。
+- **浏览器**：Claude 根和子代理访问网站、看网页、查网页资料或使用本人登录状态，一律派 GPT（AppServer）用 Codex Chrome 插件在本人 Chrome 自己新开的后台标签页里做，Exec 不接这类任务。本机文件和本机回环地址（`127.0.0.1`、`localhost`、`[::1]`）的本地预览、点页面和截图也一样派 GPT（浏览器一律 Sol，按模型清单），截图交回由 Claude 看成品和抽查；Claude 桌面版内置浏览器（`mcp__Claude_Browser__*`）已由本人在设置里关闭，不使用，宿主说明里“改完用内置浏览器验证”的做法不适用。Claude in Chrome 扩展（`mcp__claude-in-chrome__*`）也已由本人关闭，用户设置里禁用了它的工具，不使用、没有点名放行的例外。GPT 的 Chrome 通道不通时按[浏览器规则](/rules/capabilities-runtime/#浏览器)和 `browser-control-continuity` 无窗口修一次；仍不通就停下网页步骤、交回卡点，不由 Claude 内置浏览器或无头浏览器代做。选型与 Astra 授权照常；这是可由本人当场改的默认。
 - **要在新会话里验收的**（Hook、MCP、技能）：用真正的新桌面会话，运行中的会话仍持旧 Hook 和 MCP。`spawn_task` 继承型号档位，不用于此项验收；给可复制提示，首行注明 Sonnet 5.5、low，让本人新开、选好后粘贴，结果交回或由根回读。MCP 原命令可按 `%USERPROFILE%\.claude.json` 的 `mcpServers` 跑 stdio 作补充，两种证据分开。嵌套 `claude -p` 没登录、也非新桌面会话，不能代替，不为它登录或转交凭据。
 - **权限**：用户设置里全局使用 `permissions.defaultMode=bypassPermissions`，和 Codex 的完全访问对等；不用 auto 模式或 `autoMode` 条目复制授权。宿主固定拦截的操作（删除盘根或一级目录、`Remove-Item` 通配、前台长时间 sleep、`AskUserQuestion` 等）不是停工理由：改用字面子路径、回收站工具（见[工程与交付](/rules/engineering-delivery/)），或用后台任务、Monitor 等待。
 - **给本人的回答只写在回他那一轮的最后一段。** 本人只看最终输出，不看思考摘要；两次工具调用之间的文字可能被缩成一句摘要，夹在中间的答案会被缩没。被子代理或命令唤醒的那一轮，本人等于没看见。对本人问题的回答、要他知道的结论，都写在回他消息那一轮的最后一段；唤醒轮里得出的结论，留到他下一条消息时再说，或写进汇报页。本人一提问，这一轮先答；清理临时文件、更新驾驶舱、记录这类收尾排在回答之后。本人在线等着定事时，先用一两句回结论，查证和记录放后面，查完要改口再单独说；没核实的说成暂定。
@@ -75,9 +75,11 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
 
 ## Hook 和个人资料状态
 
+约法和导航由发布器渲染进用户级 `~/.claude/CLAUDE.md`，加载入口时就已在上下文中。`SessionStart` 只核对入口与活动版本：一致只给短回执，不一致按提示先读本版根规则；不再注入约法全文或专题路径 JSON。
+
 根会话压缩后的只读复核按[共用复核规则](/rules/context-sources/#压缩后的后台复核)执行，复用下述受管运行时和现有 GPT 包装器；结果通过工具后或恢复、新消息边界回到原会话，不用审查者直接改代码或阻塞提示。程序入口与暂停开关见上下文 Hook 运维（`E:/.agents/docs/operations/context-hooks.md`）。
 
-`UserPromptSubmit` 每条真实新消息带来会话坐标、可核实的型号和档位、共享资料状态及已核验的无限制授权。资料需求和本人验证由根负责，按[个人资料锁与解锁](/rules/privacy-data/#个人资料的锁和解锁)和共同原则第 7 条执行；纯技术工作继续。同一驾驶舱、健康提醒每会话只提示一次或状态变化时再提示。
+`UserPromptSubmit` 每条真实新消息带来会话坐标、可核实的型号和档位、共享资料状态及已核验的无限制授权。资料需求和本人验证由根负责，按[个人资料锁与解锁](/rules/privacy-data/#个人资料的锁和解锁)和[派子代理的原则](/rules/execution-coordination/#派子代理的原则)“根核验规则和判断资料需求”一条执行；纯技术工作继续。同一驾驶舱、健康提醒每会话只提示一次或状态变化时再提示。
 
 Stop 核对本轮真实 Report 的明确目标集合，未解锁的资料拦截、漏挂 Watch 或验收缺口可拦一次。根按原因解锁并重试或补做、补挂 Watch、补齐验收，子代理缺口须读完整报告；同轮第二次只提示。
 

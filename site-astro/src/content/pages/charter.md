@@ -38,17 +38,17 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E331",
-   "commit": "985a1c35a97768f86014870625702364d994b55d",
-   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
-   "activated_at": "2026-10-31T07:37:25.088872+08:00",
+   "release": "E337",
+   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
+   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
+   "activated_at": "2026-10-31T15:26:59.057612+08:00",
    "file": "sources/rules/AGENTS.md",
-   "sha256": "e3f69696a8156e3c1f663cdfca978d5567e880c3a094f0af5d430694b6e3e8a0",
-   "public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf"
+   "sha256": "3acbf716dcec51ecded669574240b9d8c25ffbc72c1d12529b691d7cda9690d9",
+   "public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996"
   },
   "explanation_based_on": {
-   "release": "E331",
-   "sha256": "e3f69696a8156e3c1f663cdfca978d5567e880c3a094f0af5d430694b6e3e8a0"
+   "release": "E337",
+   "sha256": "3acbf716dcec51ecded669574240b9d8c25ffbc72c1d12529b691d7cda9690d9"
   },
   "video_prompt": "5–8 秒无缝循环，白底水彩风，和开头一屏的插画一致：书桌上那本摊开的精装厚书，书页被一阵微风轻轻掀起一两页又落回原处；绿色丝带书签微微摆动；书页上浅绿色的细横线从左到右依次淡淡亮起一遍，像有人一行行读过去；书上方 Claude 和 OpenAI 两个小徽章轻轻上下浮动；几片水彩绿叶从右上角慢慢飘落。镜头固定，不出现任何文字。",
   "registry": {
@@ -169,8 +169,8 @@
  },
  "source": {
   "page": "sources/pages/charter/page.json",
-  "sha256": "09eec94ede5ff63dc6e08da0cb6aaf26ea687bdacba1787a85773832b708aa7d",
-  "converted_at_beijing": "2026-10-31T11:19:42+08:00"
+  "sha256": "4759762d71a969dc64b0499a7bd1af68494ef3cfef9899d7dc2eaf8a316684f3",
+  "converted_at_beijing": "2026-10-31T15:43:19+08:00"
  }
 }
 ---
@@ -479,7 +479,7 @@
 - 〔九、汇报、网站和我的电脑〕 L26–L29
 - 〔十、关于规则本身〕 L30
 
-当前生效版本以 AI 开工时核验的活动入口为准；网页原文来源快照为 E331（北京时间 10 月 31 日 07:37 起生效）。（更早的一次记录：2026 年 10 月 12 日 19:12 正式核验通过的是当时的活动规则 E268，属于历史。）按 L26，简单的完成回执和短状态直接在对话里说，不专门做网页，也不为做网页把一句话扩成汇报；我明确要网页时照做。AI 每次开工或接着做之前，先核对现在生效的是哪一版，只读这一版；草稿和旧版不算数。〔规则怎么发布和核对 → AI 规则与技能基座〕
+当前生效版本以 AI 开工时核验的活动入口为准；网页原文来源快照为 E337（北京时间 10 月 31 日 15:26 起生效）。（更早的一次记录：2026 年 10 月 12 日 19:12 正式核验通过的是当时的活动规则 E268，属于历史。）按 L26，简单的完成回执和短状态直接在对话里说，不专门做网页，也不为做网页把一句话扩成汇报；我明确要网页时照做。约法和导航随 AI 的入口一起加载，开工不用另跑核对；开对话时由程序核对入口和生效版本是否一致，不一致就提醒 AI 先读这一版。草稿和旧版不算数。〔规则怎么发布和核对 → AI 规则与技能基座〕
 
 ::screen{#charter-02 section="talk"}
 
@@ -491,9 +491,9 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E331",
-   "sha256": "e3f69696a8156e3c1f663cdfca978d5567e880c3a094f0af5d430694b6e3e8a0",
-   "public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
+   "release": "E337",
+   "sha256": "3acbf716dcec51ecded669574240b9d8c25ffbc72c1d12529b691d7cda9690d9",
+   "public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
    "from": null,
    "to": "### 三、怎样做事",
    "start": 0,
@@ -574,7 +574,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-02",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
+  "source_public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
   "source_rule_part": "charter/charter-02"
  },
  "layout": {
@@ -659,7 +659,7 @@
 }
 ```
 
-约法 · L1–L10 · E331
+约法 · L1–L10 · E337
 
 # 我的 AI 约法与工作约定
 
@@ -699,9 +699,9 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E331",
-   "sha256": "e3f69696a8156e3c1f663cdfca978d5567e880c3a094f0af5d430694b6e3e8a0",
-   "public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
+   "release": "E337",
+   "sha256": "3acbf716dcec51ecded669574240b9d8c25ffbc72c1d12529b691d7cda9690d9",
+   "public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
    "from": "### 三、怎样做事",
    "to": "### 五、我的个人资料",
    "start": 2003,
@@ -765,7 +765,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-03",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
+  "source_public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
   "source_rule_part": "charter/charter-03"
  },
  "layout": {
@@ -890,7 +890,7 @@
 }
 ```
 
-约法 · L11–L17 · E331
+约法 · L11–L17 · E337
 
 ### 三、怎样做事
 
@@ -915,9 +915,9 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E331",
-   "sha256": "e3f69696a8156e3c1f663cdfca978d5567e880c3a094f0af5d430694b6e3e8a0",
-   "public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
+   "release": "E337",
+   "sha256": "3acbf716dcec51ecded669574240b9d8c25ffbc72c1d12529b691d7cda9690d9",
+   "public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
    "from": "### 五、我的个人资料",
    "to": "### 八、项目与维护",
    "start": 3445,
@@ -977,7 +977,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-04",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
+  "source_public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
   "source_rule_part": "charter/charter-04"
  },
  "layout": {
@@ -1139,7 +1139,7 @@
 }
 ```
 
-约法 · L18–L23 · E331
+约法 · L18–L23 · E337
 
 ### 五、我的个人资料
 
@@ -1172,13 +1172,13 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E331",
-   "sha256": "e3f69696a8156e3c1f663cdfca978d5567e880c3a094f0af5d430694b6e3e8a0",
-   "public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
+   "release": "E337",
+   "sha256": "3acbf716dcec51ecded669574240b9d8c25ffbc72c1d12529b691d7cda9690d9",
+   "public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
    "from": "### 八、项目与维护",
    "to": null,
    "start": 5506,
-   "end": 8456,
+   "end": 8704,
    "approved_omissions": []
   },
   "title": "项目、汇报网站和电脑、规则本身（L24–L30）",
@@ -1238,7 +1238,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-05",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
+  "source_public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
   "source_rule_part": "charter/charter-05"
  },
  "layout": {
@@ -1381,7 +1381,7 @@
 }
 ```
 
-约法 · L24–L30 · E331
+约法 · L24–L30 · E337
 
 ### 八、项目与维护
 
@@ -1401,13 +1401,14 @@
 
 ## 每次都要做的几件事
 
-1. **活动规则。** 开始、续作或压缩恢复时按宿主入口核验，只读返回的活动路径；入口不可用时按入口办法继续普通工作，源码和旧快照不代替活动规则。
+1. **活动规则。** 约法和导航随宿主的用户级入口加载，专题按文中当版的绝对路径读，不用另跑核验命令或重读约法；开场提示入口与活动版本不一致，或入口缺失时，按提示或入口兜底办法办；源码和旧快照不代替活动规则。
 2. **资料状态。** 真实新消息先读 Hook 或 `ComputerContext` 的资料状态；自动续作、压缩和工具消息不算。锁着或不明时不取私人资料；问本人自己的事由根会话先请验证，解锁后再查资料、派活和作答，不给降级回答；纯技术工作照常。子代理缺资料交回、不自己验证，见[个人资料与数据处理](/rules/privacy-data/)。
 3. **事实与经验。** 按[事实找谁](/rules/context-sources/#事实找谁)取证；[一样东西只存一处](/rules/context-sources/#一样东西只存一处)，经验按[共享经验的落点](/rules/context-sources/#共享经验的落点)保存（L30）。
 4. **技术默认。** 命令、编码、临时目录和时间见[日常技术默认](/rules/engineering-delivery/#日常技术默认)。
 5. **先给本人看样子，再做。** 本人会看到、会用到的东西，以及要给 AI 加的新规矩、新程序，动手前先在回他那条消息的最后，用一两句话或一张图告诉他：他会看到什么、按了会怎样（规矩和程序就说对他有什么变化）。他提了修改，就把改好的样子再给他看一遍；没有要改的了才开工，开工后不再报。他看不到的活（修报错、后台代码、处理数据）AI 自己做，按重要程度复核。本人不在时只做他看过样子的活和看不到的活。细则见[工程与交付](/rules/engineering-delivery/#目标优先于实现)。
 6. **卡住了换一类办法，别空耗时间。** 同一个小目标用同一类办法两次没成，先查实际发生了什么，再换一类办法，不换着参数重试；派出去的活按产出、不按忙不忙查进度，时间推后就告诉本人。细则见[分工与并行施工·卡住了怎么办](/rules/execution-coordination/#卡住了怎么办)。
 7. **开新事先说用处和哪天收。** 本人让 AI 开做视频、建新工具这类和学习求职无关、要占几天的新事时，AI 先用一句话说它对本人有什么用、大概几天、哪天收；本人说做就做，不拦、不劝。定下的收尾日写进这件事自己的现行文件；过了收尾日本人还让接着做，提一句已过收尾日，本人说继续就继续。修报错、维护已有的东西不算新事。
+8. **要管理员就直接提权，不停下。** 已授权的核对、验收或操作要管理员才能看全、做完时，根会话和子代理都直接静默提权（首选 `sudo pwsh -NoProfile -NonInteractive ...`），不把“权限不够”记成未知、不交回根会话、不专门问本人；两条提权路径真的失败才如实报告。做法见[用户授权·长期授权](/rules/authorization/#长期授权)“申请管理员权限”。
 
 ## 细则在哪里
 
@@ -1426,4 +1427,4 @@
 | [Claude 适配](/rules/claude-adapter/) | Claude 特有机制 |
 | [规则发布与恢复](/rules/rule-release/) | 维护、发布、回退规则 |
 
-可派模型清单在 `config/model-roster.json`，只作参考，不当门禁。
+可派模型清单在 `E:\.agents\config\model-roster.json`，只作参考，不当门禁。

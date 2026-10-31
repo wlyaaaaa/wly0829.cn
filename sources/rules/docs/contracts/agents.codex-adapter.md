@@ -6,7 +6,7 @@ owner: `E:\.agents`
 
 ## 入口和新消息
 
-Codex home 里的 `AGENTS.md` 只是入口，规则从核验过的活动版本读。真实的新消息和自动续作、上下文压缩、工具消息分开看；Hook 会把个人资料状态带进来，Hook 缺失或投递不明时，资料状态按不明处理，并先用 `StatusPersonalEnvironment` 重读。锁着或不明时不取用私人资料；根会话问到本人自己的事，第一步先请本人验证解锁，通过后再查资料、派子代理和作答，不给降级回答；纯技术工作照常。调用 MCP 不改变本机 Codex 原来的任务入口。新消息、Hook、子代理的真实身份和执行结果从本机现役入口核实，不从标题、模型自述或别的宿主遗留的环境借身份。
+Codex home 里的 `AGENTS.md` 由发布器写入活动版本的完整约法和导航，加载入口时就已在上下文中；专题按文中当版的绝对路径读取。Hook 定位 Codex home 时优先用 `CODEX_HOME`，未设置时用 `~/.codex`。开场 Hook 只核对入口和活动版本，一致只给短回执，不一致按提醒先读本版根规则，不再注入约法全文。真实的新消息和自动续作、上下文压缩、工具消息分开看；Hook 会把个人资料状态带进来，Hook 缺失或投递不明时资料状态按不明处理；不明或锁着时怎么办按[个人资料的锁和解锁](/rules/privacy-data/#个人资料的锁和解锁)。调用 MCP 不改变本机 Codex 原来的任务入口。新消息、Hook、子代理的真实身份和执行结果从本机现役入口核实，不从标题、模型自述或别的宿主遗留的环境借身份。
 
 SessionStart 的 startup/compact/resume 按[长任务接续](/rules/context-sources/#长任务接续)执行，不注入决定短表或要求表；原生子代理压缩跳过 SessionStart 时，也按该节读原任务状态。
 
@@ -38,7 +38,9 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
 共同原则见[分工与并行施工](/rules/execution-coordination/)，可派范围见 `config/model-roster.json`。
 原生子代理和包装器子任务统一按[子代理原则](/rules/execution-coordination/#派子代理的原则)及[派活松紧怎么定](/rules/execution-coordination/#派活松紧怎么定)交付；核验由根或包装器完成，子代理按需读给定版本的专题。
 
-原生 GPT 的 `reasoning_effort` 按共同原则第 4 条和模型清单 `routing.effort_rule` 填写；其他厂商沿用各自设置。型号换代按[新型号怎么调研](/rules/execution-coordination/#新型号怎么调研)重评。
+Codex 根会话、原生子代理和包装器子任务遇到已授权步骤要管理员时，同样直接按[长期授权](/rules/authorization/#长期授权)“申请管理员权限”静默提权（首选 `sudo pwsh -NoProfile -NonInteractive ...`），不停下、不交回根会话；派活提示不必另写这条。
+
+原生 GPT 的 `reasoning_effort` 按[派子代理的原则](/rules/execution-coordination/#派子代理的原则)“每次显式写型号和档位”一条和模型清单 `routing.effort_rule` 填写；其他厂商沿用各自设置。型号换代按[新型号怎么调研](/rules/execution-coordination/#新型号怎么调研)重评。
 
 - **主对话是 GPT 时**：容量够用时优先用原生子代理（`spawn_agent`），按模型清单 `routing` 的场景表和难度分级（GPT 那一列）选型号和档位，可派型号、档位和适用范围见 `hosts.codex.root_openai`；表里写“交 Claude”的活怎么办见 `routing.vendor_rule`。显式传 `model` 和 `reasoning_effort`，派完核对实际启动值。跨型号或跨档位时 `fork_turns` 用 `none` 或有限轮数；只有身份参数相同、完整历史确实有用时才用 `all`。
 - **主对话是其他公司的模型时**：可派型号见模型清单对应宿主的范围，不派 Astra。容量够用时优先调用宿主工具 `openai_child`，显式填写 `agent_type`、`model`、`reasoning_effort`、`task_name`、`message`，不传 `fork_turns`；续聊走同一入口，子代理回话走 `openai_parent`，查看、等待和停止走 `openai_child_control`。子代理要再分工时，回原父任务安排。约法 L23 里“实际调用按我给这个对话或项目的授权”说的是 Claude 调用 Codex，不给 Codex 自己派 GPT 子代理另加一次授权要求。入口因容量以外的原因不可用时，主对话继续能做的部分，说清实际缺口，不悄悄换模型，也不借别的通道绕过真实限制；容量不足按下面的例外办理。
@@ -65,7 +67,7 @@ $child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
 
 ## 新消息里的状态
 
-Hook 每条真实新消息和子代理启动带来共享资料、本人接管及可核实的型号和档位；未知如实写，子代理启动不借父记录。根状态未知用 `StatusPersonalEnvironment` 回读；个人资料的判断、解锁和缺口交回按[资料锁](/rules/privacy-data/#个人资料的锁和解锁)与共同原则第 7 条，纯技术工作继续。
+Hook 每条真实新消息和子代理启动带来共享资料、本人接管及可核实的型号和档位；未知如实写，子代理启动不借父记录。根状态未知用 `StatusPersonalEnvironment` 回读；个人资料的判断、解锁和缺口交回按[资料锁](/rules/privacy-data/#个人资料的锁和解锁)与[派子代理的原则](/rules/execution-coordination/#派子代理的原则)“根核验规则和判断资料需求”一条，纯技术工作继续。
 
 Stop 与 Claude 共用版本、明确 Report 目标集合、验收和资料缺口检查；首次拦截按真实原因补解锁或验收，同轮第二次只提示。边界核验失败只放行受影响检查并留诊断码。Hook 不选型号、档位或是否委派，不加派发许可、不按关键词弹验证。具体接线见状态钩子（`E:/.agents/docs/operations/context-hooks.md#个人资料先解锁与结束兜底`）。
 

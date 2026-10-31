@@ -30,17 +30,17 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E331",
-   "commit": "985a1c35a97768f86014870625702364d994b55d",
-   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
-   "activated_at": "2026-10-31T07:37:25.088872+08:00",
+   "release": "E337",
+   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
+   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
+   "activated_at": "2026-10-31T15:26:59.057612+08:00",
    "file": "sources/rules/docs/contracts/agents.authorization.md",
-   "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af",
-   "public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6"
+   "sha256": "860d3b5e8eec0a2e1f8b891cb7ed8032f24c2db7bac54552dd172c862cdb9694",
+   "public_sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501"
   },
   "explanation_based_on": {
-   "release": "E331",
-   "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af"
+   "release": "E337",
+   "sha256": "860d3b5e8eec0a2e1f8b891cb7ed8032f24c2db7bac54552dd172c862cdb9694"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小路起点的 AI 助手抱着文件轻快走几步，“直接做”木牌旁的草叶轻轻摇；栅栏门前的信封、硬币和小木箱静静排着，门边的人影抬手，栅栏门缓缓打开一条缝又合上；木桩上的绿色通行证随风轻摆；小桌上的沙漏翻转一次、细沙往下流，旁边的金色钥匙闪一下光；右上角两扇小窗户里亮起柔和的光，中间的绿色盾牌徽章轻轻呼吸；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -241,8 +241,8 @@
  },
  "source": {
   "page": "sources/pages/rule-authorization/page.json",
-  "sha256": "ddff93ca2b88231a7087a3a004c1e2ff2c5b0d5b4996734c3bdbb2e915a48116",
-  "converted_at_beijing": "2026-10-31T11:19:47+08:00"
+  "sha256": "a6a4df83bee4c75aa5cf0d44cbe550e51ff646efd88aaba58d0042f86cfe4be4",
+  "converted_at_beijing": "2026-10-31T15:43:19+08:00"
  }
 }
 ---
@@ -535,7 +535,7 @@
 **哪些事 AI 直接做、哪些要本人点头；说过一次就一直算数的授权有哪些；限时的“无限制授权”怎么开。**
 
 **一句话答案**
-- **直接做**：本人给的范围内，本机普通、能撤回的读取、编辑、测试和验证；本人长期授权过的五项（Git 收尾、申请管理员权限、选型号和档位、Claude 派 Sol、Terra 和 Luna、在用的目标继续收尾），以及办事时的两项确认授权（直接同意网站和软件的协议、子代理要确认时由主对话代确认），也不用再问。
+- **直接做**：本人给的范围内，本机普通、能撤回的读取、编辑、测试和验证；本人长期授权过的五项（Git 收尾、申请管理员权限、选型号和档位、Claude 派 GPT、在用的目标继续收尾），以及办事时的两项确认授权（直接同意网站和软件的协议、子代理要确认时由主对话代确认），也不用再问。
 - **先要本人明确同意**：发消息、对外发布、花钱、删除只有一份的数据、撤不回的迁移、项目第一次公开发布。同意过的，也不自动扩到第一次新建的目标、别的账号或新的公开地方。
 - **重大的事另有一关**：例如删库、查看密码明文、把私人资料发到外面，动手前先把关、看要不要请本人验证，见〔重大动作与本人验证〕。
 
@@ -815,6 +815,10 @@
    {
     "text": "分工与并行施工",
     "href": "/rules/execution-coordination/"
+   },
+   {
+    "text": "约法 L23",
+    "href": "/rules/charter/#L23"
    }
   ],
   "anchors": [
@@ -1024,7 +1028,7 @@
 - **Git 收尾**：授权在仓库里干活，就包括验证后只提交这次相关的改动、正常推送（细则见〔工程与交付〕）。新建本人 GitHub 私有仓库、把远端改成本人 GitHub 账号下的仓库、核对过不丢提交的历史改写（含强制推送），也都属于这项普通收尾；可能丢提交的强制推送不在里面。
 - **申请管理员权限**：已授权的核对、验收或操作要管理员才能看全、做完时，主对话和子代理都直接静默提权，不把“权限不够、读不全”记成不知道，也不留给主对话；首选系统自带的 sudo，用不了再用后台的 UAC 提权方式，结果写明是否已提权。两条路都真失败才如实报告；确实要本人在场点 UAC 的那一步，写明“需要本人在场提权”，交回主对话安排，而不是整件事停下来等。只有本人、上级规则或适用的项目规则明确说不提权时才不提；要密码中心受信任身份的操作不提权运行。提权只让命令拿到 Windows 的权限，不产生、也不扩大或缩小做事的授权；改权限设置、撤回快照、重大的事仍按各自的规矩办。
 - **选型号和思考档位**：AI 按质量和总花费自己选，质量需要时可以比主对话或派它的 AI 用更强的型号、更高的档位，不逐次问（见〔分工与并行施工〕）；本人这次明确限定的型号、档位、预算或厂商优先。
-- **Claude 派 Sol、Terra 和 Luna**：GPT-6.1 Sol、GPT-6.1 Terra、GPT-6 Luna 不用本人另外授权就可以直接派；GPT-6 Astra 仍按本人给当前对话或项目的授权。派出去的只做交给它的任务。
+- **Claude 派 GPT**：哪些型号不用另外授权就能派、哪个要本人授权，都按〔约法 L23〕，这里不另写：现在是 GPT-6.1 Sol、GPT-6.1 Terra、GPT-6 Luna 不用本人另外授权就可以直接派，GPT-6 Astra 仍按本人给当前对话或项目的授权。派出去的只做交给它的任务。
 - **在用的目标继续收尾**：本人授权前就已登记、现在仍在用的仓库、网站和发布目标，验证、发布、部署、读回核对和同步默认接着做；本人说只留本地或不发布时除外。上面三种 GitHub 普通收尾同样直接做；其余第一次新建的外部目标、新公开或部署目标、花钱、可能丢提交的强推等例外，见上一屏“先要本人明确同意”。
 - **同意网站、平台和软件的协议**：Claude、GPT 和它们派出的子代理替本人办已经授权的事时，网站、平台或软件要求同意的用户协议、服务条款、使用规范、隐私政策，包括上传、发布、登录、安装页面上“继续即同意”这类提示，直接同意，不再为协议问本人（本人 2026-10-28 定）。这只省掉“为协议问一句”，不扩大事情本身的授权：付费订阅、自动续费、付款借贷仍按〔约法 L15〕，重大的事仍按〔重大动作与本人验证〕，页面把它们写成“协议”也不直接同意。
 - **子代理要本人确认时，由主对话代确认**：派出的 GPT 等子代理因为工具要求本人确认（包括“当场确认”）停下时，只要这一步本人已经授权过，就由派它的主对话当场代本人确认、让它接着做，不再拿来问本人；不限于协议，也不限于某个网站（本人 2026-10-29 定）。代确认只替本人说“确认”，不扩大授权：〔约法 L15〕那几类本人还没对这件具体事同意的、〔约法 L17〕重大的事，仍照原规则找本人；工具规定必须本人亲手做的步骤（改密码、绕过浏览器安全警告、付款交易这类）交本人办。子代理的工具不认代确认时，只交回这一步和具体限制，其余已授权的活照做，不换工具绕过，也不让本人重复给授权。
@@ -1559,13 +1563,13 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E331",
-   "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af",
-   "public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
+   "release": "E337",
+   "sha256": "860d3b5e8eec0a2e1f8b891cb7ed8032f24c2db7bac54552dd172c862cdb9694",
+   "public_sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501",
    "from": null,
    "to": "## 子代理和项目规则不扩大授权",
    "start": 0,
-   "end": 3195,
+   "end": 3134,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -1588,7 +1592,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-05",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
+  "source_public_sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501",
   "source_rule_part": "rule-authorization/rule-authorization-05"
  },
  "layout": {
@@ -1596,7 +1600,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版，略去个别私人领域字句"
+     "text_ref": "原文·E337版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -1631,7 +1635,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版，略去个别私人领域字句"
+     "text_ref": "原文·E337版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -1725,7 +1729,7 @@
 }
 ```
 
-原文 · E331 版，略去个别私人领域字句
+原文 · E337 版，略去个别私人领域字句
 
 # 用户授权
 
@@ -1752,8 +1756,8 @@ owner: `E:\.agents`
 - **同意网站、平台和软件协议**：本人长期授权 Claude、GPT 及它们派出的子代理，在替本人完成已授权的事情时，直接同意网站、平台、软件要求的用户协议、服务条款、使用规范、隐私政策，包括上传、发布、登录、安装页面上“继续即同意”等提示，不再为同意协议问本人（本人 2026-10-28 18:09，源 3577e088）。
 - **申请管理员权限**：已授权的核对、验收或操作要管理员才能看全、做完时，主持和子代理都直接静默提权执行，不把“权限不够、读不全”记成未知，不用推断补位，也不留给根会话。首选系统 sudo 内联模式：`sudo pwsh -NoProfile -NonInteractive -File <脚本> <参数>`（或 `-Command`），直接接回输出和退出码；sudo 不存在、被关或不是内联模式时，用 `Start-Process pwsh -Verb RunAs -Wait -PassThru -WindowStyle Hidden`，管理员进程先设 `[Console]::OutputEncoding` 为 UTF-8，输出写 UTF-8 文件再读回并传回退出码，结果写明是否已提权（如 `observer_elevated`）。两条路径真的失败才如实报告；UAC 需要本人在场时明确写“需要本人在场提权”，由根会话安排，不交半成品。各电脑的 UAC 和 sudo 设置以 PCConfig 登记为准，不因此修改系统设置。只有本人、上级规则或适用项目规则明确说不提权时才不用；需要密码中心受信任身份的操作不提权运行。提权不推迟已授权工作，不专门请本人决定普通提权步骤；权限/ACL 改动、撤回快照和重大动作等仍按各自专题办理。提权只给 Windows 权限，不产生、扩大或缩小动作授权（出处：决定文档“需要管理员视角才能核实时默认静默提权，不把读不全记成未知”）。
 - **选型号和思考档位**：AI 按质量和总花费自己选；质量需要时可以用比根会话或父代理更强的型号或更高的档位，不逐次问（见[分工与并行施工](/rules/execution-coordination/)和模型清单）。本人这次明确限定的型号、档位、预算或厂商优先。
-- **Claude 派 Sol、Terra 和 Luna**：Claude 不用本人对对话或项目另行授权，就可以派 GPT 的 Sol、Terra 和 Luna（约法 L23）；派 Astra 仍按本人给这个对话或项目的授权。派出的 Codex 按自己真实的身份和有效授权，只做交给它的任务。
-- **子代理要本人确认时由根会话代确认**：派出的 GPT 等子代理因为工具要求本人确认（含“当场确认”）而停下时，凡是本人已经授权过的事，由派它的根会话当场代本人确认、让它接着做，不再拿来问本人；不限于协议，也不限于某个网站（本人 2026-10-29 20:27—20:32，源 84f941d1、c26bbdf8）。做法见下面“根会话代确认的执行办法”。
+- **Claude 派 GPT**：哪些型号不用另行授权就能派、哪个要本人给对话或项目授权、派出的 Codex 能做什么，都按约法 L23，这里不另写。
+- **子代理要本人确认时由根会话代确认**：派出的 GPT 等子代理因为工具要求本人确认（含“当场确认”）而停下时，凡是本人已经授权过的事，由派它的根会话当场代本人确认、让它接着做，不再拿来问本人；不限于协议，也不限于某个网站（本人 2026-10-29 20:27—20:32，源 dee43ef4、84f941d1、c26bbdf8）。做法见下面“根会话代确认的执行办法”。
 - **已经在用的目标继续收尾**：本人授权之前就已登记、现在仍在用的目标（仓库、网站、已登记的发布目标），验证、发布、部署、回读和同步默认继续，本人说只留本地或不发布时除外。新建本人 GitHub 私有仓库、把远端改成本人 GitHub 账号下的仓库、核对过不丢提交的历史改写（含强制推送），按普通 Git 收尾直接做。除此以外，第一次新建或选择新的外部目标、新的公开或部署目标、花钱、不可恢复的迁移、可能丢提交的强制推送、改信任根（受信任 AI 的登记或本人验证依据）或授权边界，仍要本人明确同意。
 
 授权已经覆盖、目标和前提都成立时，直接调用一次真实的工具，不要先猜平台会拒绝而自己停下。工具真的拒绝、要求再验证、不可用或报错，就按真实结果处理和报告，不伪造成功，也不盲目重试。
@@ -1785,13 +1789,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E331",
-   "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af",
-   "public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
+   "release": "E337",
+   "sha256": "860d3b5e8eec0a2e1f8b891cb7ed8032f24c2db7bac54552dd172c862cdb9694",
+   "public_sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501",
    "from": "## 子代理和项目规则不扩大授权",
    "to": "## 受信任的 AI",
-   "start": 3195,
-   "end": 4501,
+   "start": 3134,
+   "end": 4440,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1822,7 +1826,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-06",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
+  "source_public_sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501",
   "source_rule_part": "rule-authorization/rule-authorization-06"
  },
  "layout": {
@@ -1830,7 +1834,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -1863,7 +1867,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -1940,7 +1944,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## 子代理和项目规则不扩大授权
 
@@ -1970,13 +1974,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E331",
-   "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af",
-   "public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
+   "release": "E337",
+   "sha256": "860d3b5e8eec0a2e1f8b891cb7ed8032f24c2db7bac54552dd172c862cdb9694",
+   "public_sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501",
    "from": "## 受信任的 AI",
    "to": null,
-   "start": 4501,
-   "end": 5166,
+   "start": 4440,
+   "end": 5105,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -1995,7 +1999,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-07",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6",
+  "source_public_sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501",
   "source_rule_part": "rule-authorization/rule-authorization-07"
  },
  "layout": {
@@ -2003,7 +2007,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -2040,7 +2044,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -2093,7 +2097,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## 受信任的 AI
 

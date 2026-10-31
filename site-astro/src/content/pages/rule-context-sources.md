@@ -30,17 +30,17 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E331",
-   "commit": "985a1c35a97768f86014870625702364d994b55d",
-   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
-   "activated_at": "2026-10-31T07:37:25.088872+08:00",
+   "release": "E337",
+   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
+   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
+   "activated_at": "2026-10-31T15:26:59.057612+08:00",
    "file": "sources/rules/docs/contracts/agents.context-sources.md",
-   "sha256": "6f9ecadfa0079f844e8e90a19715675acf569f483042af5b515d131fd18497c8",
-   "public_sha256": "8fab647f710d95ff2d829139f9a6ae9b47be3af10527f36869ed9977846ff9d3"
+   "sha256": "ea79c44cc07cfb03751ee485d7cb755ff617bd62e868a68c806fc2d084ae5642",
+   "public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221"
   },
   "explanation_based_on": {
-   "release": "E331",
-   "sha256": "6f9ecadfa0079f844e8e90a19715675acf569f483042af5b515d131fd18497c8"
+   "release": "E337",
+   "sha256": "ea79c44cc07cfb03751ee485d7cb755ff617bd62e868a68c806fc2d084ae5642"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：林间小路上几片叶子缓缓飘落；三座小木屋的窗子依次亮起暖光又暗下；路口三叉指路牌的三只箭头轮流微微发亮；路边贴着雪花封条的小木箱上，霜花轻轻闪一下；摊开的厚书被风翻过两页，绿色书签始终夹在原处、尾巴轻轻摆动；背景淡水彩纸纹缓慢流动。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -439,8 +439,8 @@
  },
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
-  "sha256": "4d9f638c1b2470348f848948856769f79932c5dffb132c7ee2fa7c3cd72a1fab",
-  "converted_at_beijing": "2026-10-31T11:19:47+08:00"
+  "sha256": "4ecbf147ae54e025ae7be9bfd4cb79c88ef8772ced9de0e1ba886138ab4bcac3",
+  "converted_at_beijing": "2026-10-31T15:44:08+08:00"
  }
 }
 ---
@@ -1159,6 +1159,10 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
    {
     "text": "驾驶舱",
     "href": "/cockpit/"
+   },
+   {
+    "text": "内存盘守护",
+    "href": "/projects/ramdisk-guardian/"
    }
   ],
   "anchors": [
@@ -1395,7 +1399,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
 - 要认出和排除冻结项目时，只读最少的身份和状态信息。
 
 ### 冻结名单
-- 〔Codex 远程〕、〔CACB 模型评测〕（整个项目）、〔微信历史桥 WeFlowBridge〕、〔OpenClaw 网关〕和它的备份仓库、两台电脑的剪贴板同步 MeshClip Kit（停用留档，原来在偶用名单里）、已经退役留档的 Gemini 记忆备份和 Claude 记忆备份，以及〔个人表达〕（怎么跟本人说话的规矩已经分别归进约法、个人理解库和各个技能，原始样本另外留着）和〔GitHub 项目总索引〕（仓库事实改成现查，本机仓库位置登记并进电脑配置与恢复，删库改公开的核对并进〔改项目前先核对〕技能）；冻结名单和仓库标识见本页的活动规则公开副本。
+- 〔Codex 远程〕、〔CACB 模型评测〕（整个项目）、〔微信历史桥 WeFlowBridge〕、〔OpenClaw 网关〕和它的备份仓库、两台电脑的剪贴板同步 MeshClip Kit（停用留档，原来在偶用名单里）、已经退役留档的 Gemini 记忆备份和 Claude 记忆备份，以及〔个人表达〕（怎么跟本人说话的规矩已经分别归进约法、个人理解库和各个技能，原始样本另外留着）、〔GitHub 项目总索引〕（仓库事实改成现查，本机仓库位置登记并进电脑配置与恢复，删库改公开的核对并进〔改项目前先核对〕技能），以及〔内存盘守护〕（内存盘已经撤掉，缓存和临时文件改放 E 盘）；冻结名单和仓库标识见本页的活动规则公开副本。
 - 名单只在这一处维护，本人新增或更正时改这里；别的基座都来这里读，不另存第二份。仓库名比对不分大小写。
 - 冻结一个项目要说清真实的理由：为什么不值得再单独维护（被什么替代了、依赖没了、AI 现查就能做到、单独维护反而添乱、实际没人用），以及它原来的用处现在由谁承担。“已存档”“内容已归位”“不再维护”只说了结果，不算理由；说不清就问本人。网站项目总页上冻结卡片的“停下原因”也照这个写。
 - 例：〔驾驶舱〕读这份名单，冻结的项目只标“冻结”，不去读它的仓库。
@@ -1673,7 +1677,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
 
 ### 表外还有两件按偶用对待的
 - `aicli run` 命令保留，按偶用处理、不主动维护；真要用时坏了再修。
-- Codex 云端读者也先放着，偶用、不维护：换账号后新账号没建云端环境，现在不可用，不提交云端任务；具体状态见“能力与运行方式”里的云端素材通道。
+- Codex 云端读者也按偶用处理、不维护；现在能不能用，见“能力与运行方式”里的云端素材通道。
 - 这两件是规则正文另外写明的维护说明，不在下面这张表里，也不计进上面的 10 项。
 
 ### 谁在读这张表
@@ -2198,7 +2202,8 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
 - 由工具从唯一来源生成、并核对过一致的，不算副本：例如规则发布快照、装到用户目录的入口文件、网站生成的说明页。
 - 给本人看的内容，不再在仓库 README 或另一份长指南里手写维护。
 - 过时的历史报告和设计稿不改写，没人再用就移出工作区。
-- 跨文件查重有专门的〔查重复段落〕工具，查出来的逐组判断，再把副本收成一处。
+- 跨文件查重有专门的〔查重复段落〕工具，查出来的逐组判断，再把副本收成一处；项目里由程序生成并核对过的副本和带日期的记录，在项目根的例外清单里声明一次，以后不再算副本。
+- 跨文件引用写链接加章节名或条目名，不写“第几条”，免得重新编号后悄悄指错；指不到的链接和章节，用专门的引用检查工具查。
 
 ::screen{#rule-context-sources-07 section="points"}
 
@@ -2519,13 +2524,13 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E331",
-   "sha256": "6f9ecadfa0079f844e8e90a19715675acf569f483042af5b515d131fd18497c8",
-   "public_sha256": "8fab647f710d95ff2d829139f9a6ae9b47be3af10527f36869ed9977846ff9d3",
+   "release": "E337",
+   "sha256": "ea79c44cc07cfb03751ee485d7cb755ff617bd62e868a68c806fc2d084ae5642",
+   "public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
    "from": null,
    "to": "## 三档维护",
    "start": 0,
-   "end": 2147,
+   "end": 2198,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -2539,7 +2544,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-08",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "8fab647f710d95ff2d829139f9a6ae9b47be3af10527f36869ed9977846ff9d3",
+  "source_public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
   "source_rule_part": "rule-context-sources/rule-context-sources-08"
  },
  "layout": {
@@ -2547,7 +2552,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版，一字不改"
+     "text_ref": "原文·E337版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2581,7 +2586,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版，一字不改"
+     "text_ref": "原文·E337版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2659,7 +2664,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
 }
 ```
 
-原文 · E331 版，一字不改
+原文 · E337 版，一字不改
 
 # 事实来源与任务上下文
 
@@ -2701,6 +2706,7 @@ owner: `E:\.agents`
 | MeshClip Kit 两机剪贴板（停用留档） | `meshclip-kit` |
 | 个人表达库（内容已归位，原始样本留在 `E:\PersonalData\个人表达\`） | `personal-expression` |
 | GitHub 总索引（有用的数据和程序已并进 PCConfig 和 `.agents`） | `github-local-index` |
+| 内存盘守护（内存盘已撤掉，缓存和临时文件放 E 盘） | `RamdiskGuardian` |
 
 冻结管的是 AI 维护范围，和路径、运行、恢复或备份状态是两回事：PCConfig 里写着在用、还有依赖、目录还在或 Git 能正常同步，都不说明可以维护；放在备份仓库或 `Archives` 目录里也不单独说明已冻结。冻结不删资料：冻结项目的数据照常留在备份里，也照常被机器的备份覆盖，不因冻结而删除或停止备份；停用的只是冻结项目自己的计划任务。本人新增或更正名单时改这里，其他基座引用这里，不另存第二份名单。
 
@@ -2714,13 +2720,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E331",
-   "sha256": "6f9ecadfa0079f844e8e90a19715675acf569f483042af5b515d131fd18497c8",
-   "public_sha256": "8fab647f710d95ff2d829139f9a6ae9b47be3af10527f36869ed9977846ff9d3",
+   "release": "E337",
+   "sha256": "ea79c44cc07cfb03751ee485d7cb755ff617bd62e868a68c806fc2d084ae5642",
+   "public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
    "from": "## 三档维护",
    "to": "### 一样东西只存一处",
-   "start": 2147,
-   "end": 4589,
+   "start": 2198,
+   "end": 4617,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -2734,7 +2740,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-09",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "8fab647f710d95ff2d829139f9a6ae9b47be3af10527f36869ed9977846ff9d3",
+  "source_public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
   "source_rule_part": "rule-context-sources/rule-context-sources-09"
  },
  "layout": {
@@ -2742,7 +2748,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -2773,7 +2779,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -2840,7 +2846,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## 三档维护
 
@@ -2852,7 +2858,7 @@ owner: `E:\.agents`
 
 新项目默认是日用，本人另说的除外。
 
-`aicli run` 保留，按偶用处理，不主动维护；真要用时坏了再修。Codex 云端读者也先放着，偶用、不维护；换账号后新账号没建云端环境，暂不可用，具体状态见[云端素材通道](/rules/capabilities-runtime/#云端素材通道)。
+`aicli run` 保留，按偶用处理，不主动维护；真要用时坏了再修。Codex 云端读者也按偶用处理，现在的状态见[云端素材通道](/rules/capabilities-runtime/#云端素材通道)。
 
 | 档位 | 项目 |
 |---|---|
@@ -2897,13 +2903,13 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E331",
-   "sha256": "6f9ecadfa0079f844e8e90a19715675acf569f483042af5b515d131fd18497c8",
-   "public_sha256": "8fab647f710d95ff2d829139f9a6ae9b47be3af10527f36869ed9977846ff9d3",
+   "release": "E337",
+   "sha256": "ea79c44cc07cfb03751ee485d7cb755ff617bd62e868a68c806fc2d084ae5642",
+   "public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
    "from": "### 一样东西只存一处",
    "to": null,
-   "start": 4589,
-   "end": 7600,
+   "start": 4617,
+   "end": 7835,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -2934,7 +2940,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-10",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "8fab647f710d95ff2d829139f9a6ae9b47be3af10527f36869ed9977846ff9d3",
+  "source_public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
   "source_rule_part": "rule-context-sources/rule-context-sources-10"
  },
  "layout": {
@@ -2942,7 +2948,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -2968,7 +2974,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -2986,11 +2992,11 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ### 一样东西只存一处
 
-规则、事实、决定和本人原话各只存一处，就是上面“事实找谁”分给它的家；本人原话存原话存档，本人以后要遵守的做法存规则，本人自己的事实存理解库明示。别处用到时，写一句现行结论并指向那一处（路径、章节或编号），不整段抄。会变的数（版本、数量、剩余空间、“第几行”、部署或运行状态）的家是能查到它的命令、配置或系统本身：说明、规则、手册这类长期文档写去哪查，非写不可就注明是哪天看到的；带日期的决定记录、汇报、计划和评测保留当时的值，不回头改。发现副本时，先把副本里更新或多出来的内容并回它的家，再把副本改成指针。由工具从唯一来源生成、并核对一致的副本（例如规则发布快照、装到用户目录的入口文件、网站生成的说明页面）不算副本。急救步骤的来源在 PCConfig，网站照它生成，并保证电脑离线时仍能在网站读到急救页；给本人看的内容不再在仓库 README 或另一份长指南里手写维护。过时的历史报告和设计稿不改写，没人再用就移出工作区。跨文件查重用 [Find-DuplicateContent.ps1](/source-tools/Find-DuplicateContent.ps1)，结果逐组判断后再收副本。
+规则、事实、决定和本人原话各只存一处，就是上面“事实找谁”分给它的家；本人原话存原话存档，本人以后要遵守的做法存规则，本人自己的事实存理解库明示。别处用到时，写一句现行结论并指向那一处（路径、章节或编号），不整段抄。会变的数（版本、数量、剩余空间、“第几行”、部署或运行状态）的家是能查到它的命令、配置或系统本身：说明、规则、手册这类长期文档写去哪查，非写不可就注明是哪天看到的；带日期的决定记录、汇报、计划和评测保留当时的值，不回头改。发现副本时，先把副本里更新或多出来的内容并回它的家，再把副本改成指针。由工具从唯一来源生成、并核对一致的副本（例如规则发布快照、装到用户目录的入口文件、网站生成的说明页面）不算副本。急救步骤的来源在 PCConfig，网站照它生成，并保证电脑离线时仍能在网站读到急救页；给本人看的内容不再在仓库 README 或另一份长指南里手写维护。过时的历史报告和设计稿不改写，没人再用就移出工作区。跨文件引用写链接加章节名或条目名，不写“第几条”，重新编号时才不会悄悄指错。跨文件查重用 [Find-DuplicateContent.ps1](/source-tools/Find-DuplicateContent.ps1)，结果逐组判断后再收副本；项目里由程序生成并核对的副本和带日期的记录，在项目根 `.duplicate-content-exceptions.json` 的 `non_copies` 声明一次，不再算副本。指不到的链接和章节用 Test-DocReferences.ps1（`E:/.agents/tools/Test-DocReferences.ps1`） 查。
 
 把几处现行结论合成一段的汇总（例如理解库核心画像、当前处境卡、驾驶舱条目标题、项目首页）也算引用：每条带“截至哪天”并指向家；案件阶段、计划、用药、金额这类会变的状态只写意义和指向，不写成现在时。改了家的任务负责找出直接引用它的汇总，在同一任务里更新；做不到的由下次全量更新的收尾核对补上。能用程序查的交给程序（例如理解库 `card-lint` 的 h、i 类），查出来就算待处理，不能只列出来不算数。
 

@@ -30,17 +30,17 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E331",
-   "commit": "985a1c35a97768f86014870625702364d994b55d",
-   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
-   "activated_at": "2026-10-31T07:37:25.088872+08:00",
+   "release": "E337",
+   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
+   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
+   "activated_at": "2026-10-31T15:26:59.057612+08:00",
    "file": "sources/rules/docs/contracts/agents.capabilities-runtime.md",
-   "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
-   "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da"
+   "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c",
+   "public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9"
   },
   "explanation_based_on": {
-   "release": "E331",
-   "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2"
+   "release": "E337",
+   "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小 AI 助手抬手从洞洞板上取下放大镜看了看又挂回去，洞洞板上的 Chrome、Gmail、Google 云盘三个标志轻轻晃动；脚边贴着“E:”的绿色储物箱里几片绿叶慢慢舒展；右下笔记本电脑屏幕上的看板里，三个小圆点状态灯依次轻轻呼吸（绿、绿、黄）；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，三块小牌子上的字保持不动、不变形。",
   "registry": {
@@ -405,8 +405,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "a278ec429731b66ea1851365bdd95e4a235bdd6ef6f9e9f0ec1a6fde7181ec62",
-  "converted_at_beijing": "2026-10-31T11:19:47+08:00"
+  "sha256": "6aa64d5f10285caebf10ec9736975e3e2de9c527b5904b789ea967cec3a39254",
+  "converted_at_beijing": "2026-10-31T15:43:19+08:00"
  }
 }
 ---
@@ -1722,8 +1722,8 @@
 - 云上用文件的内容指纹作名字（64 位 SHA-256）；同样的内容只存一份，公开范围按公开分级表判断。
 - 设计上，AI 在云里用命令处理素材，结论写回自己的收件箱；本机只取回几 KB 的文字。云端审图尚未通过校准，网站图终审交 Claude Opus。
 - 每次给 AI 用之前，先核对本机文件的指纹：变了就传新版，旧的标“已被替换”，保证 AI 读的和本机一样。
-- 现在要分四层看：① 素材通道本身（R2 存放、指纹核对、查账清理）照常可用；② 旧账号曾接通云端命令读者，那时它自报 GPT-5.6 Sol，但这只是旧账号的记录；③ 换账号后，新账号没建云端环境，命令读者现在不可用，不提交云端任务；它按偶用处理、不维护，也不主动安排接线或升级型号；④ 云端审图校准仍没通过，以后真要启用审图还得先过校准，命令接通、型号核对都不算校准通过。
-- 以后真要用云端读者，再核对当前账号的环境和命令接通状态；建环境、网页设置和换账号由本人做，AI 只用命令提交、查询和取结论。
+- 现在要分四层看：① 素材通道本身（R2 存放、指纹核对、查账清理）照常可用；② 旧账号曾接通云端命令读者，那时它自报 GPT-5.6 Sol，但这只是旧账号的记录；③ 命令读者按偶用处理、不维护，也不主动安排接线或升级型号；它现在能不能用、用前怎么核对、谁来建环境，只记在云端素材技能里（那里写的是：截至 10 月 20 日，换账号后的新账号没建云端环境，不能用，不提交云端任务；真要用时以它的探测结果为准）；④ 云端审图校准仍没通过，以后真要启用审图还得先过校准，命令接通、型号核对都不算校准通过。
+- 照那个技能的写法，建环境、网页设置和换账号由本人做，AI 只用命令提交、查询和取结论。
 - Claude 自己的复核不走云：在本机每张图一次读完、一次答完。画图仍在本机。
 - 具体怎么传、怎么查账和清理，见〔省流量的云端素材〕技能。
 
@@ -2002,7 +2002,7 @@
 - 访问网站、看网页、用本人账号登录，一律用 Chrome 插件，在本人已经开着的那个 Chrome（〔约法 L29〕）里、AI 自己新开的后台标签页中做。本人这一轮明确点名别的浏览器时，听本人的。
 - 只是查公开资料、只读的，先用 AI 自带的网页搜索和读页面，不开 Chrome；Chrome 留给要用本人登录状态、或者网页搜索读不到的页面（做法见〔browser-control-continuity〕）。
 - 全程放在后台，不把 Chrome 调到前台打扰本人：本人已经开着的标签页只读（本人点名要用的除外）；会新开标签页的链接或按钮不直接点，先取出地址，在自己的后台标签页里打开；本人要看着时才把浏览器显示出来。一个任务连同它派出的子任务，同时最多开着 10 个自己新开的标签页，读完及时关；每轮结束前把自己开的全部关掉，只留下等本人登录的那一页，并报“新开几个、关了几个、留了几个”。
-- 不用工具自带的默认浏览器、应用内浏览器（包括 Claude 内置浏览器、Codex 应用内浏览器）、无头浏览器、任务临时配置或别家浏览器去访问网站，也不把它们当成本人的默认。Claude 的网页任务一律派 GPT 用 Codex 的 Chrome 插件做；Claude 内置浏览器只用来预览本机文件和本机地址（127.0.0.1、localhost）上的页面。Codex 桌面版的主对话和它的原生子代理也一样，网页任务用共用包装器派 GPT 子代理去做，明确选本人的 Chrome，不调桌面自带的浏览器工具；这类网页任务不用等原生名额满。
+- 不用工具自带的默认浏览器、应用内浏览器（包括 Claude 内置浏览器、Codex 应用内浏览器）、无头浏览器、任务临时配置或别家浏览器去访问网站，也不把它们当成本人的默认。Claude 的网页任务一律派 GPT 用 Codex 的 Chrome 插件做；预览本机文件和本机地址（127.0.0.1、localhost）上的页面也派 GPT 做。Claude 内置浏览器和 Claude 的 Chrome 扩展都已由本人关闭，不用。Codex 桌面版的主对话和它的原生子代理也一样，网页任务用共用包装器派 GPT 子代理去做，明确选本人的 Chrome，不调桌面自带的浏览器工具；这类网页任务不用等原生名额满。
 - 网站、平台和软件要求同意用户协议、隐私政策（包括“继续即同意”），在已授权的事情里直接同意；子代理的工具要本人确认时，由派它的主对话按本人已有的授权代确认，付款、对外传输这类动作另算（见〔用户授权〕）。工具不认代确认的，只交回这一步，不绕过。
 - 点了以后页面没变化：先截图看实际画面上有没有弹窗或遮罩挡着；还是没变化，就停下这一步、交回卡在哪，不反复点。登录、发码、提交这类关键按钮，用按坐标的真实指针点击，点完看页面或网络请求确认生效。
 - 取文件不点网页上的“下载”按钮：本机 Chrome 的下载会被迅雷接走、弹出窗口等人点，没人点就卡住。AI 在自己新开、没点过下载的后台标签页里直接取文件内容存盘（可以成批取），不用登录的公开文件用命令行下载；本人的迅雷设置不动。具体做法见〔browser-control-continuity〕的“取文件”。
@@ -2945,9 +2945,9 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E331",
-   "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
-   "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
+   "release": "E337",
+   "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c",
+   "public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
    "from": null,
    "to": "## 常用入口",
    "start": 0,
@@ -2970,7 +2970,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-11",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
+  "source_public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-11"
  },
  "layout": {
@@ -2978,7 +2978,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版"
+     "text_ref": "原文·E337版"
     },
     {
      "type": "chapter_title",
@@ -3019,7 +3019,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版"
+     "text_ref": "原文·E337版"
     },
     {
      "type": "chapter_title",
@@ -3112,7 +3112,7 @@
 }
 ```
 
-原文 · E331 版
+原文 · E337 版
 
 # 能力与运行方式
 
@@ -3140,13 +3140,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E331",
-   "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
-   "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
+   "release": "E337",
+   "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c",
+   "public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
    "from": "## 常用入口",
    "to": "## 浏览器",
    "start": 1440,
-   "end": 3999,
+   "end": 3922,
    "approved_omissions": []
   },
   "title": "原文（二）：常用入口",
@@ -3160,7 +3160,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-12",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
+  "source_public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-12"
  },
  "layout": {
@@ -3168,7 +3168,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -3196,7 +3196,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -3242,7 +3242,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## 常用入口
 
@@ -3257,7 +3257,7 @@ owner: `E:\.agents`
 
 同一文件预计被 AI 读两次以上，或同批处理流量明显超过文件本身时，按 cloud-asset-channel 技能（`E:/.agents/skills/cloud-asset-channel/SKILL.md`）核对通道与读者，明确指定素材，不扫描目录。本机 Codex 不能直接接收 HTTPS 图片；Claude 本机复核每张图一次读完、一次答完，画图仍在本机。
 
-Codex 云端读者先放着，按偶用处理、不维护。换账号后新账号没建云端环境，暂不可用，不提交云端任务；旧账号曾接通的读者及其模型回执不证明当前账号可用。云端审图校准也未通过，尚未启用，网站图终审由 Claude Opus 完成。以后真要用时再核对当前账号环境与命令接通状态；环境网页设置、建环境和换账号由本人做，AI 只用命令提交、查询和取结论，不操作电脑界面或网页。
+Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎么核对、谁来建环境，只记在 `cloud-asset-channel` 技能里。云端审图校准未通过，尚未启用，网站图终审由 Claude Opus 完成。
 
 不主动安排命令接线或模型升级；以后启用审图须先通过校准，命令接通和型号核对不能代替。环境解析、逐块全覆盖证据、一次写收件箱和清理协议只在读者说明（`E:/.agents/docs/cloud-asset-channel-reader.md`）维护，上传目标和登记表读 cloud-asset-channel.json（`E:/.agents/config/cloud-asset-channel.json`），不在规则复制协议参数。
 
@@ -3277,13 +3277,13 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E331",
-   "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
-   "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
+   "release": "E337",
+   "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c",
+   "public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
    "from": "## 浏览器",
    "to": "## 汇报、网站和自动运行的东西",
-   "start": 3999,
-   "end": 6251,
+   "start": 3922,
+   "end": 6142,
    "approved_omissions": []
   },
   "title": "原文（三）：浏览器",
@@ -3302,7 +3302,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-13",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
+  "source_public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-13"
  },
  "layout": {
@@ -3310,7 +3310,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -3336,7 +3336,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -3410,11 +3410,11 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## 浏览器
 
-浏览器默认用本人正在用的外部 Chrome（约法 L29）：访问网站、看网页、用本人账号登录，一律用 Chrome 插件在本人已开着的 Chrome 里、自己新开的后台标签页中操作。本人当轮明确点名别的浏览器时听本人的。不用工具自带的默认浏览器、应用内浏览器（含 Claude 内置浏览器、Codex 应用内浏览器）、无头浏览器、任务临时配置或别的浏览器家族去访问网站，也不把它们当成本人的默认。Claude 根和子代理的网页任务一律派 GPT 用 Codex Chrome 插件在本人 Chrome 后台标签页里做；Claude 内置浏览器只用于本机文件和本机回环地址（`127.0.0.1`、`localhost`、`[::1]`）的本地预览，Claude in Chrome 扩展仍由 Hook 拦截并保留本人当轮明确点名放行的例外，具体见[Claude 适配](/rules/claude-adapter/#宿主接线)的“浏览器”。Codex 桌面版的主对话和原生子代理也一样，网页任务用共用包装器派 GPT 去做，不调桌面自带的浏览器工具，具体见[Codex 适配](/rules/codex-adapter/#入口和新消息)的“浏览器”。控制会话断了、运行环境要恢复时按 `browser-control-continuity` 修本人 Chrome 这条路，保留本人已打开的页面；这不改变网站上动作、账号和内容的授权。
+浏览器默认用本人正在用的外部 Chrome（约法 L29）：访问网站、看网页、用本人账号登录，一律用 Chrome 插件在本人已开着的 Chrome 里、自己新开的后台标签页中操作。本人当轮明确点名别的浏览器时听本人的。不用工具自带的默认浏览器、应用内浏览器（含 Claude 内置浏览器、Codex 应用内浏览器）、无头浏览器、任务临时配置或别的浏览器家族去访问网站，也不把它们当成本人的默认。Claude 根和子代理的网页任务一律派 GPT 用 Codex Chrome 插件在本人 Chrome 后台标签页里做；本机文件和本机回环地址的本地预览也派 GPT 做，Claude 内置浏览器已由本人关闭、不使用，Claude in Chrome 扩展也已由本人关闭、不使用，具体见[Claude 适配](/rules/claude-adapter/#宿主接线)的“浏览器”。Codex 桌面版的主对话和原生子代理也一样，网页任务用共用包装器派 GPT 去做，不调桌面自带的浏览器工具，具体见[Codex 适配](/rules/codex-adapter/#入口和新消息)的“浏览器”。控制会话断了、运行环境要恢复时按 `browser-control-continuity` 修本人 Chrome 这条路，保留本人已打开的页面；这不改变网站上动作、账号和内容的授权。
 
 在本人 Chrome 里干活全程放在后台，不把 Chrome 调到前台打扰本人：跳转和点击放在自己新开的后台标签页里做，本人已开的标签页只读（本人点名要用的除外）；会新开标签页的链接或按钮不直接点，先取出地址在自己的后台标签页里打开；不主动调用显示浏览器的能力，本人要看着时除外（出处：`docs/owner-decisions/2026-10.md`“AI 操作 Chrome 弹到前台要根治”）。
 
@@ -3442,13 +3442,13 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E331",
-   "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
-   "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
+   "release": "E337",
+   "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c",
+   "public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
    "from": "## 汇报、网站和自动运行的东西",
    "to": "## 安装位置、配置和本机约定",
-   "start": 6251,
-   "end": 9598,
+   "start": 6142,
+   "end": 9489,
    "approved_omissions": []
   },
   "title": "原文（四）：汇报、网站和自动运行；软件更新和兼容",
@@ -3462,7 +3462,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-14",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
+  "source_public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-14"
  },
  "layout": {
@@ -3470,7 +3470,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -3490,7 +3490,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -3560,7 +3560,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## 汇报、网站和自动运行的东西
 
@@ -3595,13 +3595,13 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E331",
-   "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
-   "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
+   "release": "E337",
+   "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c",
+   "public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
    "from": "## 安装位置、配置和本机约定",
    "to": null,
-   "start": 9598,
-   "end": 11089,
+   "start": 9489,
+   "end": 10980,
    "approved_omissions": []
   },
   "title": "原文（五）：安装位置、配置和本机约定",
@@ -3620,7 +3620,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-15",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
+  "source_public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-15"
  },
  "layout": {
@@ -3628,7 +3628,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -3648,7 +3648,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -3694,7 +3694,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## 安装位置、配置和本机约定
 

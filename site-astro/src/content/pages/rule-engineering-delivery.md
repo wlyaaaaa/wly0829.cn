@@ -30,17 +30,17 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E331",
-   "commit": "985a1c35a97768f86014870625702364d994b55d",
-   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
-   "activated_at": "2026-10-31T07:37:25.088872+08:00",
+   "release": "E337",
+   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
+   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
+   "activated_at": "2026-10-31T15:26:59.057612+08:00",
    "file": "sources/rules/docs/contracts/agents.engineering-delivery.md",
-   "sha256": "d03a41432438f46c9a2a7aafea6849747e85bd3427d9308c19bbb0c58f604178",
-   "public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3"
+   "sha256": "bc1567117e8417fba0ec67d6d3ec5ff3c0109ec5a97f718c2556f1682dcc8e6e",
+   "public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4"
   },
   "explanation_based_on": {
-   "release": "E331",
-   "sha256": "d03a41432438f46c9a2a7aafea6849747e85bd3427d9308c19bbb0c58f604178"
+   "release": "E337",
+   "sha256": "bc1567117e8417fba0ec67d6d3ec5ff3c0109ec5a97f718c2556f1682dcc8e6e"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：弯弯小路上，一支小箭从画面外飞来轻轻插进草靶的靶心；小木桌上的放大镜慢慢移过那张纸，纸上的绿勾随之亮一下；几张揉皱的纸和两片落叶打着旋落进浅绿色小回收桶；小路尽头几根细枝条缓缓长长、汇进粗树干，树干顶上的小云轻轻起伏，GitHub 章鱼猫标志保持不动；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，四块小木牌上的字保持不动、不变形。",
   "registry": {
@@ -263,8 +263,8 @@
  },
  "source": {
   "page": "sources/pages/rule-engineering-delivery/page.json",
-  "sha256": "57404a2b4169ef6c7c223d06cdc00e7bd1980b360d40b208249dbead17ac78cb",
-  "converted_at_beijing": "2026-10-31T11:19:47+08:00"
+  "sha256": "690dc6a51d966a9ab5ccf7df4d9075be795f037ac4fbd41289f2e3ad00c19ed1",
+  "converted_at_beijing": "2026-10-31T15:43:20+08:00"
  }
 }
 ---
@@ -1841,13 +1841,13 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E331",
-   "sha256": "d03a41432438f46c9a2a7aafea6849747e85bd3427d9308c19bbb0c58f604178",
-   "public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
+   "release": "E337",
+   "sha256": "bc1567117e8417fba0ec67d6d3ec5ff3c0109ec5a97f718c2556f1682dcc8e6e",
+   "public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
    "from": null,
    "to": "## 验证",
    "start": 0,
-   "end": 7454,
+   "end": 7490,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -1870,7 +1870,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-06",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
+  "source_public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-06"
  },
  "layout": {
@@ -1878,7 +1878,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E331版，一字不改",
+     "text_ref": "原文·E337版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -1918,7 +1918,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E331版，一字不改",
+     "text_ref": "原文·E337版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -2039,7 +2039,7 @@
 }
 ```
 
-原文 · E331 版，一字不改
+原文 · E337 版，一字不改
 
 # 工程与交付
 
@@ -2055,7 +2055,7 @@ owner: `E:\.agents`
 - **做不到就当场说。** 本人问“可行吗、能保证吗”时，没有把握保质保量，就当场说“我做不到”或“这条路不行”；本人的建议可以否掉，不当成必须照做的前提。
 - **完成时间只认第一次说的。** 告诉过本人的完成时间，第二次往后推时，如实说明是做法不行还是偶发问题，并请本人在换做法、缩范围、停手里选一个；不依赖这个决定的活照常做，不空等。估计 12 小时以上的任务用 `tools/Set-LongTask.ps1` 登记，承诺时间、延期次数、检查点和空转由程序记和提醒，规则里不写操作细节。
 - **给本人看、给本人用的东西，做完先自己当本人用一遍。** 网页、驾驶舱、汇报页样式，主持在真实页面上按本人的屏幕宽度亲自看，把每个按钮按一遍；测试和自动扫描通过代替不了这一步。不比现在差才交，不建议本人接受更差的版本。做完直接上线，不另搭预览地址、不设上线审批：网站只有本人一个人看，坏了一步退回。本人指出一处毛病，先把整页同类查全，一次改完再给他看，不一处一处补。
-- **先给本人看样子，再做。** 做什么、做成什么样、值不值，这类判断 AI 常有本人一眼就看出的扯淡，复核子代理也补不了（它们只认技术和证据）；等做完再看，时间和钱已经没了，报得多本人又烦。所以本人会看到、会用到的东西（新功能、新交互、改版、改他的用法），以及要给 AI 加的新规矩、新程序，动手前在回他那条消息的最后，用一两句大白话或一张图告诉他：他会看到什么、按了会怎样、大概多久；规矩和程序就说对他有什么变化。要写具体的样子，例如“你按‘知道了’，卡片先显示‘可以撤回’”，不写“优化卡片交互”。他提了修改，就把改好的样子再给他看一遍；没有要改的了才开工，开工后不再报，做完给他看结果。他自己说了要做成什么样的，照做；他举的例子不算。他看不到、不用他判断的活（修报错、后台代码、处理数据），AI 自己定、不报，按重要程度复核（见[分工与并行施工](/rules/execution-coordination/#派子代理的原则)第 5 条），不无限复核。本人不在时，只做他看过样子的活和他看不到的活；中途冒出新东西，只准备好那一两句话或那张图放着、不开工，他回来后的第一条回复先说这段时间做了什么、哪条等他看。
+- **先给本人看样子，再做。** 做什么、做成什么样、值不值，这类判断 AI 常有本人一眼就看出的扯淡，复核子代理也补不了（它们只认技术和证据）；等做完再看，时间和钱已经没了，报得多本人又烦。所以本人会看到、会用到的东西（新功能、新交互、改版、改他的用法），以及要给 AI 加的新规矩、新程序，动手前在回他那条消息的最后，用一两句大白话或一张图告诉他：他会看到什么、按了会怎样、大概多久；规矩和程序就说对他有什么变化。要写具体的样子，例如“你按‘知道了’，卡片先显示‘可以撤回’”，不写“优化卡片交互”。他提了修改，就把改好的样子再给他看一遍；没有要改的了才开工，开工后不再报，做完给他看结果。他自己说了要做成什么样的，照做；他举的例子不算。他看不到、不用他判断的活（修报错、后台代码、处理数据），AI 自己定、不报，按重要程度复核（见[分工与并行施工](/rules/execution-coordination/#派子代理的原则)“复核按本次改动的风险定深浅”一条），不无限复核。本人不在时，只做他看过样子的活和他看不到的活；中途冒出新东西，只准备好那一两句话或那张图放着、不开工，他回来后的第一条回复先说这段时间做了什么、哪条等他看。
 - **改共用的东西先查全用处。** 改多处共用的样式、组件或函数前，先列出所有用到的地方，改完逐一看过。
 - **给本人看的数字和告警要能追到来源。** 页面和汇报里的数字、告警，交付或上线前逐个能追到来源并抽核；核不了的不显示，或写明没核过。
 - **长任务开工前先说清。** 估计 12 小时以上的任务，开工前用几句人话写清做完长什么样、用了哪些现成工具、估时依据和分段，然后直接做。
@@ -2108,7 +2108,7 @@ owner: `E:\.agents`
 - **写不写规则与出处由根负责。** 根会话按[共享经验的落点](/rules/context-sources/#共享经验的落点)判断写不写进规则、写进哪一层，规格、派单中分清本人要求与 AI 补充。出处是原话存档里的源消息 UUID，旧的也可以是决定月卷。临时汇报页不算存档。压缩、交接或续作按[长任务接续](/rules/context-sources/#长任务接续)，用到哪条再读哪条原文；不把原话清单派给子代理，不要求子代理查出处或报警。
 - **AI 稿可改并单列。** 项目文档分开标“本人定”和“AI 推断”：本人定的有原话出处，AI 补全、判断及 L9 默认同意的 AI 建议属于后者，可以改，改了单列。设计、方案、规格和草稿即使本人点过同意也是衍生稿，不倒写成本人要求或禁令；未定内容的补全照下条标“AI 补充”。
 - **没定的地方放手做。** 按本人口味和整体风格补齐，标“AI 补充”，下次汇报单列，本人可以推翻；要本人定的明确请本人选。看不见的实现（代码结构、工具、流程）AI 自己定。
-- **按清单验收。** 先做完整样板，本人看过再批量（见[分工与并行施工](/rules/execution-coordination/)第 10 条）；交付前按下文“验证”在真实使用处看整体。根会话核对本人要求和选项，子代理只按派单范围验收，不查出处；没做到和没照做的如实列出，主持拍板，成批返工先找共性根因。
+- **按清单验收。** 先做完整样板，本人看过再批量（见[分工与并行施工](/rules/execution-coordination/#派子代理的原则)“接力做一样成品，要有一个人对整体负责”一条）；交付前按下文“验证”在真实使用处看整体。根会话核对本人要求和选项，子代理只按派单范围验收，不查出处；没做到和没照做的如实列出，主持拍板，成批返工先找共性根因。
 
 ## 依赖出问题要修好
 
@@ -2127,13 +2127,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E331",
-   "sha256": "d03a41432438f46c9a2a7aafea6849747e85bd3427d9308c19bbb0c58f604178",
-   "public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
+   "release": "E337",
+   "sha256": "bc1567117e8417fba0ec67d6d3ec5ff3c0109ec5a97f718c2556f1682dcc8e6e",
+   "public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
    "from": "## 验证",
    "to": "## 下载、临时文件和清理",
-   "start": 7454,
-   "end": 9497,
+   "start": 7490,
+   "end": 9545,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -2156,7 +2156,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-07",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
+  "source_public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-07"
  },
  "layout": {
@@ -2164,7 +2164,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E331版·续",
+     "text_ref": "原文·E337版·续",
      "align": "left",
      "size": "small"
     },
@@ -2211,7 +2211,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E331版·续",
+     "text_ref": "原文·E337版·续",
      "align": "left",
      "size": "small"
     },
@@ -2303,7 +2303,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## 验证
 
@@ -2317,7 +2317,7 @@ owner: `E:\.agents`
 - **看得见的成品在用的地方验整体。** 网页、文档、图、视频这类本人看得见的成品，放进它真正被用的地方先看整体，再看细节：网页在真实浏览器里按常用屏幕从上到下看比例和版式，图放进要用的位置看大小。动画、加载先后这类跟时机有关的问题，本机快网速下的测试常常测不出：先从做法上排除（例如显示过的图不再藏，播不播开场在页面第一次显示之前就定），再在慢网速、慢电脑、首次打开的条件下逐帧录屏检查，并把录屏放进验收页给本人看；只在本机快网速下通过不算通过。半成品早给本人看，不闷头做完再一起返工。
 - **要惊艳的成品，验完再想一次怎么更好**（约法 L22）。验收、质量检查和复核只查做没做到已定的要求，不会主动去找更好的做法；要惊艳的成品在样板定稿前和交付前各做一次头脑风暴，只问“从良好到惊艳还差什么”。样板阶段是主要机会：这时改方向最便宜，可以做小范围的并列版本，按实际效果选。交付前看整件成品，找一到三处最值得的提升。由主持的 AI 以本人的眼光看，可以请别家模型给几条独立想法，最后由主持的挑。交付写明：哪里还能明显更好、怎么改、要花多少、建议不建议这轮做；没有实质提升就直说“已经够好”。便宜又见效的当场做；和本人禁令冲突的先问本人；和要求、建议、已选选项冲突而判断更好的，按上文“没照做的写法”直接做并单列；明显加大成本的做成候选给本人挑，或放下一版。一轮就停，不变成反复返工。能用就行的活（报错修复、格式转换、照已定风格的重复填充这类）不做这一步，但照样要做对、做稳。
 - **测试测结构和意思。** 规则和文档的测试检查真实字段、来源、引用和关键意思，不逐字锁句子、文件数量或固定编号。
-- **复核**按[分工与并行施工](/rules/execution-coordination/#派子代理的原则)第 5 条办理。
+- **复核**按[分工与并行施工](/rules/execution-coordination/#派子代理的原则)“复核按本次改动的风险定深浅”一条办理。
 - **说清证据的时间和范围。** 版本、数量和运行状态的结论要分得清是以前成立还是现在成立；新证据推翻旧结论时，标明旧结论已过时。会改变当前决定的动态事实，向对应来源现场回读。`tools/Invoke-ControlPlaneDoctor.ps1` 是按需检查，不是每个任务的后台关卡。
 
 ## 仓库和过程材料
@@ -2336,13 +2336,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E331",
-   "sha256": "d03a41432438f46c9a2a7aafea6849747e85bd3427d9308c19bbb0c58f604178",
-   "public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
+   "release": "E337",
+   "sha256": "bc1567117e8417fba0ec67d6d3ec5ff3c0109ec5a97f718c2556f1682dcc8e6e",
+   "public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
    "from": "## 下载、临时文件和清理",
    "to": "## Git 收尾",
-   "start": 9497,
-   "end": 10556,
+   "start": 9545,
+   "end": 10604,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -2361,7 +2361,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-08",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
+  "source_public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-08"
  },
  "layout": {
@@ -2369,7 +2369,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E331版·续",
+     "text_ref": "原文·E337版·续",
      "align": "left",
      "size": "small"
     },
@@ -2410,7 +2410,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E331版·续",
+     "text_ref": "原文·E337版·续",
      "align": "left",
      "size": "small"
     },
@@ -2490,7 +2490,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## 下载、临时文件和清理
 
@@ -2513,13 +2513,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E331",
-   "sha256": "d03a41432438f46c9a2a7aafea6849747e85bd3427d9308c19bbb0c58f604178",
-   "public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
+   "release": "E337",
+   "sha256": "bc1567117e8417fba0ec67d6d3ec5ff3c0109ec5a97f718c2556f1682dcc8e6e",
+   "public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
    "from": "## Git 收尾",
    "to": null,
-   "start": 10556,
-   "end": 12356,
+   "start": 10604,
+   "end": 12404,
    "approved_omissions": []
   },
   "title": "原文（四）",
@@ -2546,7 +2546,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-09",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
+  "source_public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-09"
  },
  "layout": {
@@ -2554,7 +2554,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E331版·续",
+     "text_ref": "原文·E337版·续",
      "align": "left",
      "size": "small"
     },
@@ -2598,7 +2598,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E331版·续",
+     "text_ref": "原文·E337版·续",
      "align": "left",
      "size": "small"
     },
@@ -2690,7 +2690,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## Git 收尾
 

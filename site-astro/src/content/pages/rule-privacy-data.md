@@ -30,16 +30,16 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E331",
-   "commit": "985a1c35a97768f86014870625702364d994b55d",
-   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
-   "activated_at": "2026-10-31T07:37:25.088872+08:00",
+   "release": "E337",
+   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
+   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
+   "activated_at": "2026-10-31T15:26:59.057612+08:00",
    "file": "sources/rules/docs/contracts/agents.privacy-data.md",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
    "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669"
   },
   "explanation_based_on": {
-   "release": "E331",
+   "release": "E337",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：一只手把验证卡轻轻贴到小木柜的绿色挂锁上，挂锁“咔”地弹开，旁边的小沙漏翻转、细沙开始往下流；中间五级石台阶从 L1 到 L5 依次微微亮一下，L4 台阶上的小保险箱始终关着；下面 G、H 两块硬盘之间一道细绿光从左流到右，H 盘旁小木箱上的日历牌翻过一页；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
@@ -300,8 +300,8 @@
  },
  "source": {
   "page": "sources/pages/rule-privacy-data/page.json",
-  "sha256": "cf64542241e8311730d20c78c6cfdc390336fee75df40c72bb736b51cd990236",
-  "converted_at_beijing": "2026-10-31T11:19:47+08:00"
+  "sha256": "a127a29d596599c32eb29f7961a1ebd2fb682a75b8d5df888745a21d41cc833e",
+  "converted_at_beijing": "2026-10-31T15:43:20+08:00"
  }
 }
 ---
@@ -2727,7 +2727,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E331",
+   "release": "E337",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
    "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
    "from": null,
@@ -2770,7 +2770,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版，略去个别私人领域字句"
+     "text_ref": "原文·E337版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -2804,7 +2804,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版，略去个别私人领域字句"
+     "text_ref": "原文·E337版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -2886,7 +2886,7 @@
 }
 ```
 
-原文 · E331 版，略去个别私人领域字句
+原文 · E337 版，略去个别私人领域字句
 
 # 个人资料与数据处理
 
@@ -2915,7 +2915,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E331",
+   "release": "E337",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
    "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
    "from": "- **入口。**",
@@ -2945,7 +2945,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -2979,7 +2979,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -3037,7 +3037,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 - **入口。** 查状态、业务检查和锁定分别是密码中心的 `StatusPersonalEnvironment`、`CheckPersonalDataAccess`、`LockPersonalEnvironment`，经已安装的 `C:\ProgramData\PCConfig\AuthorityHost\tools\Invoke-SecretBroker.ps1` 调用。状态未知时先用 `StatusPersonalEnvironment` 重读。`VerifyPersonalEnvironment` 在已有资料期内复用原截止；需要验证时不传 `-AuthorityFactor`，由本人选四选一验证。命令同步等验证终态，窗口首次可见起最长等 5 分钟；模型用宿主后台命令运行，外层超时至少 360 秒，等终态后回读状态，不能把命令启动当验证成功。取消、拒绝和超时按上面的取消规则处理。本人明确要解锁或续期时用 `EnrollPersonalPrivacyWaiver`，用法见 `local-secret-broker` 技能。资料检查直接读共享状态，不需要对话号、消息号或宿主对话记录；只读检查也不消费无限制授权。本人说“锁定个人资料”“冻结个人资料”就走锁定；“冻结项目”“冻结设计”不是资料操作。Hook、技能和电脑 MCP 只读这份状态，不另建权限记录。
 
@@ -3058,7 +3058,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E331",
+   "release": "E337",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
    "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
    "from": "## 公开个人数据分级表",
@@ -3093,7 +3093,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -3150,7 +3150,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -3220,7 +3220,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## 公开个人数据分级表
 
@@ -3246,7 +3246,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E331",
+   "release": "E337",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
    "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
    "from": "## 私人仓库收口",
@@ -3276,7 +3276,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -3320,7 +3320,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E331版·续"
+     "text_ref": "原文·E337版·续"
     },
     {
      "type": "source_text_card",
@@ -3402,7 +3402,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E331 版 · 续
+原文 · E337 版 · 续
 
 ## 私人仓库收口
 
