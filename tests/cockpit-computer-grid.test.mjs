@@ -98,3 +98,24 @@ test('排法和横幅那一组写在 CSS 里：≥768 三张等宽不拉宽，�
   assert.match(css, /\.cp-page \.cp-tool \{ position: relative; width: 28px;[^}]*\}\s*\.cp-page \.cp-tool::before \{ content: ""; position: absolute; inset: -8px; \}/);
   assert.match(css, /--cp-title-pad: calc\(var\(--cp-title-h\) \* 30 \/ 198\)/);
 });
+
+test('远程卡进了“没再更新”也照样占格写原句；正在跑的卡写“正在跑”，不写读不到（本人 10-31 18:03）', () => {
+  const v = view({ stale_summary: { text: '这些数据没再更新：远程连接', ids: ['remote', 'temp_reclaim'] } });
+  v.sections.remote[0] = { ...v.sections.remote[0], text: '远程连接在线；串流运行中；网络正常', state: 'stale', must_know_id: undefined };
+  const i = v.sections.computer.findIndex((c) => c.id === 'temp_reclaim');
+  v.sections.computer[i] = { ...v.sections.computer[i], state: 'reading', color: 'unavailable', text: '回收站清理这一轮还在运行，虚构结果要等执行回执写完；电脑配置负责。' };
+  const h = computer(v, ctx), grid = cells(h);
+  assert.equal(grid.filter((x) => x !== '空').length >= 9, true);
+  assert.deepEqual(grid.find((x) => x[0] === '远程连接')?.[1], '在线');
+  assert.deepEqual(grid.find((x) => x[0] === '旧临时目录回收')?.slice(1), ['正在跑', 'neutral']);
+  assert.doesNotMatch(h, /还没读到/);
+});
+
+test('一张卡什么都没给（没内容、没原因、没时间）时说清后台没写原因，不写“还没读到”', () => {
+  const v = view();
+  v.sections.remote = [];
+  const h = computer(v, ctx);
+  assert.deepEqual(cells(h).find((x) => x[0] === '远程连接')?.[1], '读不到');
+  assert.match(h, /这次没读到，后台也没写原因/);
+  assert.doesNotMatch(h, /还没读到/);
+});

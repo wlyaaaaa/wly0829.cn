@@ -12,6 +12,10 @@ const anchor = (id) => `<span class="cp-anchor" id="${esc(id)}"></span>`;
 const blockHead = (title, cls = '', extra = '', headingClass = '') => `<div class="cp-block-heading c-title-strip ${cls}" data-layout="inline" data-brush-position="below_whole_row"><div class="hub-strip-text"><div class="hub-strip-heading-group"><div class="hub-strip-heading-line"><span class="hub-leaf hub-leaf-l" aria-hidden="true"></span><h2 class="hub-heading ${headingClass}">${title}</h2></div></div>${extra ? `<div class="cp-heading-meta">${extra}</div>` : ''}</div><span class="hub-brush" aria-hidden="true"></span></div>`;
 const dot = (state) => `<span class="cp-dot is-${light(state)}" aria-hidden="true"></span>`;
 const notRead = (at, now) => `还没读到${at ? `（上次 ${esc(when(at, now))}）` : ''}`;
+// 状态是“正在读/正在跑”、自己写了在做什么的卡（例如旧临时目录回收这一轮还在跑）：写“正在跑”和原句，不当成读不到（本人 10-31 18:03）
+const running = (c) => c.state === 'reading' && !!c.text && !/没读到|读不全|暂时读不到/.test(c.text);
+const firstOf = (s) => String(s || '').split(/[；;。]/)[0].trim();
+const NO_REASON = '这次没读到，后台也没写原因';
 // 在哪办：手机上能办 / 得在电脑前办（本人看不懂“借电脑 MCP”）
 const MOBILE = { direct: '手机上能办', computer_mcp: '手机上能办', in_person: '得在电脑前办' };
 // 页面兜底的词表：只换旧后端留下的“借电脑 MCP”。别的字原样显示——后端契约（10 月 29 日）：标题、进展、原因和原话的行话由登记校验和源头改写解决，
@@ -85,10 +89,10 @@ export function cardState(c) {
 // t（电脑区网格卡）：{ big, sub, bar, go, more } 都是排好的 HTML；给了就先写大数字、短说明，原句收进“详情 ›”（要你出手的照旧摊开），读不到电脑时不各写时间
 export function card(c, now, off = false, pageAt = '', t = null) {
   const lag = (x) => !pageAt || !!lagAt(x, { served_at: pageAt });
-  const missing = c.state === 'unavailable' || c.state === 'reading';
+  const missing = (c.state === 'unavailable' || c.state === 'reading') && !running(c);
   const gap = ago(c.observed_at, now).replace(/^刚刚$/, '').replace(/前$/, '');
-  const state = off ? 'unavailable' : cardState(c);
-  const text = c.text ? esc(c.text) + (missing && c.observed_at ? `<span class="cp-stale">（这是 ${esc(when(c.observed_at, now))} 读到的，之后${gap ? ' ' + esc(gap) : ''}没读到新的）</span>` : '') : notRead(c.observed_at, now);
+  const state = off ? 'unavailable' : running(c) ? 'neutral' : cardState(c);
+  const text = c.text ? esc(c.text) + (missing && c.observed_at ? `<span class="cp-stale">（这是 ${esc(when(c.observed_at, now))} 读到的，之后${gap ? ' ' + esc(gap) : ''}没读到新的）</span>` : '') : c.missing_reason ? esc(c.missing_reason) : c.observed_at ? notRead(c.observed_at, now) : NO_REASON;
   const time = off && t ? '' : off ? (missing ? '' : `<p class="cp-time cp-off-note">读不到${c.observed_at ? `（最后 ${esc(when(c.observed_at, now))} 读到）` : ''}</p>`)
     : state === 'stale' ? `<p class="cp-time">数据源停了，上面是最后一次记录，不是你的事${c.observed_at ? ` · ${esc(when(c.observed_at, now))} 读到` : ''}</p>`
     // 大字已经写了“AI 在管”的网格卡（t.who === false），下面不再重复写一遍
@@ -116,10 +120,10 @@ export const factLine = (c, attrs = '', note = '') => `<li class="cp-fact"${attr
 // 要你出手的（红、黄）照样整张卡；正常的一行；AI 在管、数据停了、读不到的也一行，点开就是原来那张卡（原因、缺口、读到时间都在里面）
 const FOLD_STATES = ['neutral', 'stale', 'unavailable', 'reading'];
 const foldFact = (c, now, off, pageAt = '') => {
-  const st = off ? 'unavailable' : cardState(c), missing = c.state === 'unavailable' || c.state === 'reading';
+  const st = off ? 'unavailable' : running(c) ? 'neutral' : cardState(c), missing = (c.state === 'unavailable' || c.state === 'reading') && !running(c);
   // 读不到的那一行先说是几点读到的（点开才是那时的值），不把旧值当现在的写在外面
   const gap = c.observed_at ? ago(c.observed_at, now).replace(/^刚刚$/, '').replace(/前$/, '') : '';
-  const say = missing ? (c.observed_at ? `这是 ${when(c.observed_at, now)} 读到的，之后${gap ? ' ' + gap : ''}没读到新的` : '还没读到') : factText(c) || (st === 'neutral' ? 'AI 在管' : '没读到');
+  const say = running(c) ? '正在跑：' + firstOf(c.text) : missing ? (c.observed_at ? `这是 ${when(c.observed_at, now)} 读到的，之后${gap ? ' ' + gap : ''}没读到新的` : c.missing_reason || NO_REASON) : factText(c) || (st === 'neutral' ? 'AI 在管' : '没读到');
   return `<li class="cp-fact is-fold"><details><summary>${dot(st)}<b>${esc(c.title)}</b><span>${esc(say)}</span></summary>${card(c, now, off, pageAt)}</details></li>`;
 };
 // pageAt：页面顶上那次读取的时间（v.served_at）；给了就只在比它旧 15 分钟以上时写几点读到（本人 10-30 批准第 5 项），没给照旧每组写一次
@@ -564,11 +568,12 @@ const TILE = {
   remote: (t) => { const [a, ...rest] = t.replace(/[。.\s]+$/, '').split(/[；;]/), w = ['能连上', '连不上', '在线', '离线'].find((x) => a.includes(x)); return w && a.length <= 8 && { big: w, sub: esc(rest.map((x) => x.trim()).filter(Boolean).join(' · ')), more: false }; },
 };
 const tileOf = (c, now, off, pageAt, extra = {}) => {
-  const st = off ? 'unavailable' : cardState(c), missing = c.state === 'unavailable' || c.state === 'reading';
+  const st = off ? 'unavailable' : running(c) ? 'neutral' : cardState(c), missing = (c.state === 'unavailable' || c.state === 'reading') && !running(c);
   const gap = c.observed_at ? ago(c.observed_at, now).replace(/^刚刚$/, '').replace(/前$/, '') : '';
   // 后端给了 missing_reason（是什么没读到、为什么、谁在管）就照写，不只写“还没读到”（本人 10-31 12:54：不知道何意）
   const why = typeof c.missing_reason === 'string' ? c.missing_reason.trim() : '';
-  const t = missing ? { big: '读不到', sub: esc([why, c.observed_at ? `这是 ${when(c.observed_at, now)} 读到的，之后${gap ? ' ' + gap : ''}没读到新的` : why ? '' : '还没读到'].filter(Boolean).join('；')), more: false }
+  const t = missing ? { big: '读不到', sub: esc([why, c.observed_at ? `这是 ${when(c.observed_at, now)} 读到的，之后${gap ? ' ' + gap : ''}没读到新的` : why ? '' : NO_REASON].filter(Boolean).join('；')), more: false }
+    : running(c) ? { big: '正在跑', sub: esc(firstOf(c.text)), who: false }
     : (TILE[c.id] || TILE[c.kind] || (() => null))(String(c.text || ''), cardState(c)) || { big: esc(WORD[light(st)]), sub: ['attention', 'red'].includes(st) ? '' : esc(factText(c)), more: false, who: false };
   return card(c, now, off, pageAt, { ...t, ...extra, sub: [t.sub, extra.sub].filter(Boolean).join(' · ') });
 };
@@ -617,14 +622,15 @@ const linkCard = (href, title, sub, cls = '') => `<a class="cp-link-card ct-card
 // 9 张数据卡排成 3×3，按组一排：电脑本身、存储、网络；某张因为数据断了没出就留空位，不拉宽别的卡
 export function computer(v, ctx) {
   const g = v.grafana, off = !!ctx.offline, stale = staleIds(v), now = ctx.now, at = v.served_at;
-  const cards = dedupeCards(v.sections.computer).filter((c) => !stale.has(c.id)), byId = (id) => cards.find((c) => c.id === id);
+  // 九宫格里固定那几格（含远程）即使进了“这些数据没再更新”也照样占格，写最后读到的内容和时间，不换成空白占位（本人 10-31 18:03：远程卡被写成“读不到 还没读到”）
+  const all = dedupeCards(v.sections.computer), cards = all.filter((c) => !stale.has(c.id)), byId = (id) => all.find((c) => c.id === id);
   const tile = (c, extra) => (c ? tileOf(c, now, off, at, extra) : '');
   // 流量：本机代理今天的量做大字；套餐流量读到了（没停）才在小字后面接“套餐已用 x/y GB”
-  const proxy = byId('proxy_traffic'), plan = byId('traffic');
+  const proxy = cards.find((c) => c.id === 'proxy_traffic'), plan = cards.find((c) => c.id === 'traffic');
   const planUsed = plan && !['unavailable', 'reading'].includes(plan.state) ? (/已用\s*(\d+(?:\.\d+)?\s*\/\s*\d+(?:\.\d+)?\s*[KMGT]i?B)/.exec(plan.text || '') || [])[1] : '';
   const traffic = proxy ? tile({ ...proxy, title: '流量' }, { sub: planUsed ? esc('套餐已用 ' + planUsed.replace(/\s*\/\s*/, '/')) : '' }) : tile(plan && { ...plan, title: '流量' });
   // “你得知道”里有正在修的网络问题时，后端在远程卡上给 must_know_id（文字是“此刻能连上；间歇断开还在查”），点了跳到“你得知道”那一条
-  const remoteCards = dedupeCards(v.sections.remote).filter((c) => !stale.has(c.id));
+  const remoteCards = dedupeCards(v.sections.remote);
   const remote = (remoteCards.length ? remoteCards : [{ title: '远程连接', state: 'unavailable', text: '' }]).map((c, i) => tileOf({ kind: 'remote', ...c }, now, off, at,
     { id: i ? '' : 'remote', sub: !off && c.must_know_id ? `<a class="cp-net" href="#${esc(knowId({ id: c.must_know_id }))}">看这里 →</a>` : '' }));
   // 副机在线不在线看 laptop.connection；laptop.state 是副机自动任务的健康，不能当连接
@@ -705,7 +711,8 @@ function diskTile(v, own, now, off, pageAt) {
 }
 export function backup(v, ctx) {
   const off = !!ctx.offline, stale = staleIds(v), now = ctx.now, at = v.served_at;
-  const cards = dedupeCards(v.sections.backup_cloud).filter((c) => !stale.has(c.id)).map((c) => (c.id === 'drive_upload' ? { ...c, text: knownFirst(c.text) } : c));
+  // 六张卡是固定的格子：进了“这些数据没再更新”也照样占格写最后读到的内容，不让格子消失
+  const cards = dedupeCards(v.sections.backup_cloud).map((c) => (c.id === 'drive_upload' ? { ...c, text: knownFirst(c.text) } : c));
   const sig = sigOf(v.overview, 'backup'), issue = !off && sig.level !== 'ok' ? backupIssue(v.overview) : '';
   const rank = (c) => (BACKUP_ORDER.includes(c.id) ? BACKUP_ORDER.indexOf(c.id) : BACKUP_ORDER.length);
   const own = cards.find((c) => c.id === 'backups'), inv = pick(own?.text, /副本清单从(.+?)起没读到/);
