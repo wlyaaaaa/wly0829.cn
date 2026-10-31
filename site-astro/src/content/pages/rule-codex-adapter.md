@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E325",
-   "commit": "5fbf6a12ea23093e7b91748db9abd6866d27f9b4",
-   "ruleset_sha256": "5f011f73cb5a4901f93151328d70eea6c9b9ff6d03ff596c26d7a18700a1f893",
-   "activated_at": "2026-10-30T04:20:33.726689+08:00",
+   "release": "E330",
+   "commit": "94918eaac0162fe12bec169ed84fdf84a46a95c7",
+   "ruleset_sha256": "de4d19a0a420353675970b199668fb809a618b180468773ce75d769635f9701d",
+   "activated_at": "2026-10-31T07:00:38.527815+08:00",
    "file": "sources/rules/docs/contracts/agents.codex-adapter.md",
-   "sha256": "b589feef9523e30b8abb84ad47e65e3a2ba89dc70f354978e5decde449398798",
-   "public_sha256": "ab81c7fb5710d9fd9dd64d070844d139af0567617984713361231fa1c38faa06"
+   "sha256": "d982f5455f63fc61c9a3fd433cab1b24c38de2b25716a4d43fd53c706377dbe7",
+   "public_sha256": "ae67a463e28ac81948d3462fb90cec9ecce6087913efe01ce564109af7bfd580"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：笔记本电脑屏幕上的终端光标轻轻闪烁；上方写着“Hook”的小铃铛轻轻摇一下，垂着的两张小纸条（锁、钥匙图标）随之晃动；左边“AGENTS.md”木牌指向远处厚书的细绿箭头上，一个小光点从木牌流向书本；右边两个小 AI 助手举着的牌子微微上下晃；右下“codex-root”工牌后的细绿线从下往上依次点亮几个小方块，最后亮到电脑；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，四块牌子上的字保持不动、不变形。",
   "registry": {
@@ -221,8 +221,8 @@
  },
  "source": {
   "page": "sources/pages/rule-codex-adapter/page.json",
-  "sha256": "c1676231f39ba6eb9b64cac5b558cc8881123d1c066e4bc0f65f234c49e5e6f0",
-  "converted_at_beijing": "2026-10-30T13:04:18+08:00"
+  "sha256": "5ccd5645f4ed6a44208702d19f2224787362639973b9c1975d339d6c1b8073e0",
+  "converted_at_beijing": "2026-10-31T07:22:36+08:00"
  }
 }
 ---
@@ -1232,9 +1232,9 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.codex-adapter.md",
-   "release": "E325",
-   "sha256": "b589feef9523e30b8abb84ad47e65e3a2ba89dc70f354978e5decde449398798",
-   "public_sha256": "ab81c7fb5710d9fd9dd64d070844d139af0567617984713361231fa1c38faa06",
+   "release": "E330",
+   "sha256": "d982f5455f63fc61c9a3fd433cab1b24c38de2b25716a4d43fd53c706377dbe7",
+   "public_sha256": "ae67a463e28ac81948d3462fb90cec9ecce6087913efe01ce564109af7bfd580",
    "from": null,
    "to": "## 派子代理：Codex 的不同处",
    "start": 0,
@@ -1261,7 +1261,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
   "reuse": "",
   "source_excerpt_id": "rule-codex-adapter/rule-codex-adapter-05",
   "source_logical_id": "codex_adapter_contract",
-  "source_public_sha256": "ab81c7fb5710d9fd9dd64d070844d139af0567617984713361231fa1c38faa06",
+  "source_public_sha256": "ae67a463e28ac81948d3462fb90cec9ecce6087913efe01ce564109af7bfd580",
   "source_rule_part": "rule-codex-adapter/rule-codex-adapter-05"
  },
  "layout": {
@@ -1271,7 +1271,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版，一字不改"
+     "text_ref": "原文·E330版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1296,7 +1296,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版，一字不改"
+     "text_ref": "原文·E330版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1387,7 +1387,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
 }
 ```
 
-原文 · E325 版，一字不改
+原文 · E330 版，一字不改
 
 # Codex 适配
 
@@ -1434,13 +1434,13 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.codex-adapter.md",
-   "release": "E325",
-   "sha256": "b589feef9523e30b8abb84ad47e65e3a2ba89dc70f354978e5decde449398798",
-   "public_sha256": "ab81c7fb5710d9fd9dd64d070844d139af0567617984713361231fa1c38faa06",
+   "release": "E330",
+   "sha256": "d982f5455f63fc61c9a3fd433cab1b24c38de2b25716a4d43fd53c706377dbe7",
+   "public_sha256": "ae67a463e28ac81948d3462fb90cec9ecce6087913efe01ce564109af7bfd580",
    "from": "## 派子代理：Codex 的不同处",
    "to": null,
    "start": 2395,
-   "end": 5394,
+   "end": 5574,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1467,7 +1467,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
   "reuse": "",
   "source_excerpt_id": "rule-codex-adapter/rule-codex-adapter-06",
   "source_logical_id": "codex_adapter_contract",
-  "source_public_sha256": "ab81c7fb5710d9fd9dd64d070844d139af0567617984713361231fa1c38faa06",
+  "source_public_sha256": "ae67a463e28ac81948d3462fb90cec9ecce6087913efe01ce564109af7bfd580",
   "source_rule_part": "rule-codex-adapter/rule-codex-adapter-06"
  },
  "layout": {
@@ -1477,7 +1477,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E330版·续"
     },
     {
      "type": "source_text_card",
@@ -1504,7 +1504,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E330版·续"
     },
     {
      "type": "source_text_card",
@@ -1622,7 +1622,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
 }
 ```
 
-原文 · E325 版 · 续
+原文 · E330 版 · 续
 
 ## 派子代理：Codex 的不同处
 
@@ -1635,6 +1635,8 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
 - **主对话是其他公司的模型时**：可派型号见模型清单对应宿主的范围，不派 Astra。容量够用时优先调用宿主工具 `openai_child`，显式填写 `agent_type`、`model`、`reasoning_effort`、`task_name`、`message`，不传 `fork_turns`；续聊走同一入口，子代理回话走 `openai_parent`，查看、等待和停止走 `openai_child_control`。子代理要再分工时，回原父任务安排。约法 L23 里“实际调用按我给这个对话或项目的授权”说的是 Claude 调用 Codex，不给 Codex 自己派 GPT 子代理另加一次授权要求。入口因容量以外的原因不可用时，主对话继续能做的部分，说清实际缺口，不悄悄换模型，也不借别的通道绕过真实限制；容量不足按下面的例外办理。
 - **重大动作前的把关**：型号、最低档位和职责统一见[重大动作与本人验证](/rules/protected-actions/#重大动作前的把关)。确实需要另派时，用当前宿主的普通子代理入口明确填写符合要求的型号和思考档位；主对话为其他公司的模型时仍从上面的可派范围选择，不凭把关职责扩大可派型号。独立复核按分工原则另行安排。
 - AICLI 配置和其他后端任务不是桌面原生子代理，不用来代替因鉴权、参数、上下文或真实能力限制而失败的 `openai_child`。仅宿主原生容量不足时，按下面的已授权例外转用共用包装器；其他失败按真实原因修好后继续，不随意换型号或通道。
+- **和真人说话**：子任务要以本人身份和真人对话（客服、商家、卖家、房东、平台人工、微信联系人）或替本人拟要发出的消息时，派单必须写一行“和真人说话按 reply-as-me”。
+- **“联系某个对话”是发给已开着的那个对话**：本人说联系、交给、转给某个对话（或“合适的对话”），是把事发给那个已有对话或线程，不新开；确实找不到是哪个时再问本人一句。
 - 新开有独立成果和责任的顶层对话时，工具可见就调用一次 `create_thread`，不预判失败、不要求本人重说；工具报错或拿不到可追踪的编号就停下说明，不盲目重试。原生槽满时的后台子任务仍由当前根对话管理，不用 `create_thread` 建顶层替身。
 
 ### 原生容量不足时转用共用包装器

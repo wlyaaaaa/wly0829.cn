@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E325",
-   "commit": "5fbf6a12ea23093e7b91748db9abd6866d27f9b4",
-   "ruleset_sha256": "5f011f73cb5a4901f93151328d70eea6c9b9ff6d03ff596c26d7a18700a1f893",
-   "activated_at": "2026-10-30T04:20:33.726689+08:00",
+   "release": "E330",
+   "commit": "94918eaac0162fe12bec169ed84fdf84a46a95c7",
+   "ruleset_sha256": "de4d19a0a420353675970b199668fb809a618b180468773ce75d769635f9701d",
+   "activated_at": "2026-10-31T07:00:38.527815+08:00",
    "file": "sources/rules/docs/contracts/agents.privacy-data.md",
-   "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
-   "public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d"
+   "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
+   "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：一只手把验证卡轻轻贴到小木柜的绿色挂锁上，挂锁“咔”地弹开，旁边的小沙漏翻转、细沙开始往下流；中间五级石台阶从 L1 到 L5 依次微微亮一下，L4 台阶上的小保险箱始终关着；下面 G、H 两块硬盘之间一道细绿光从左流到右，H 盘旁小木箱上的日历牌翻过一页；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -291,8 +291,8 @@
  },
  "source": {
   "page": "sources/pages/rule-privacy-data/page.json",
-  "sha256": "aba43dca856963130ea7286ed4f569ae9a2806269a2a232c04fb2ddf24e403a5",
-  "converted_at_beijing": "2026-10-31T04:18:37+08:00"
+  "sha256": "f3416e8c293f7240f4915ce915e3c85775fb3c6c187b1fd200a630894cf38077",
+  "converted_at_beijing": "2026-10-31T07:40:22+08:00"
  }
 }
 ---
@@ -2688,11 +2688,11 @@
 ## 人话要点 · 私人仓库收口、备份跟着原件走
 
 ### 私人仓库收口
-- GitHub 总索引确认是私有、又有写入授权的仓库，远端默认分支要完整同步该入库的内容；不因为私密就打码，也不悄悄漏传。
+- 用 `gh` 现查确认为私有、又有写入授权的仓库，远端默认分支要完整同步该入库的内容；不因为私密就打码，也不悄悄漏传。
 - 可以不入库的只有五类：明文秘密或 SecretRef；能重建的缓存和生成物；活数据库和频繁变动的大文件；受格式、加密或许可限制的内容；本人说只留本地的内容。不入库要说明原因。
 - 不完整的副本不能叫完整备份，也不等于整盘镜像。
 - 公开仓库里的私密东西，挪到对应的私人配套仓库。
-- 实例：GitHub 总索引给公开项目登记的私人配套仓库是私有的 `public-project-private-backup`（9 月 28 日查“中文语音转写”的登记）。
+- 实例：公开项目的私人配套仓库按 PCConfig 当前登记现查，不把旧索引快照当成现状。
 
 ### 备份跟着原件走
 - 这是〔约法 L21〕的细则：G 盘受管备份跟着各自登记的来源，H 盘受管备份跟着 G 盘；新增、修改、删除都同步，不再“只加不删”。
@@ -2714,9 +2714,9 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E325",
-   "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
-   "public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
+   "release": "E330",
+   "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
+   "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
    "from": null,
    "to": "- **入口。**",
    "start": 0,
@@ -2747,7 +2747,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-07",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
+  "source_public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-07"
  },
  "layout": {
@@ -2757,7 +2757,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版，略去个别私人领域字句"
+     "text_ref": "原文·E330版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -2791,7 +2791,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版，略去个别私人领域字句"
+     "text_ref": "原文·E330版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -2873,7 +2873,7 @@
 }
 ```
 
-原文 · E325 版，略去个别私人领域字句
+原文 · E330 版，略去个别私人领域字句
 
 # 个人资料与数据处理
 
@@ -2902,9 +2902,9 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E325",
-   "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
-   "public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
+   "release": "E330",
+   "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
+   "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
    "from": "- **入口。**",
    "to": "## 公开个人数据分级表",
    "start": 1707,
@@ -2922,7 +2922,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-08",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
+  "source_public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-08"
  },
  "layout": {
@@ -2932,7 +2932,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E330版·续"
     },
     {
      "type": "source_text_card",
@@ -2966,7 +2966,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E330版·续"
     },
     {
      "type": "source_text_card",
@@ -3024,7 +3024,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E325 版 · 续
+原文 · E330 版 · 续
 
 - **入口。** 查状态、业务检查和锁定分别是密码中心的 `StatusPersonalEnvironment`、`CheckPersonalDataAccess`、`LockPersonalEnvironment`，经已安装的 `C:\ProgramData\PCConfig\AuthorityHost\tools\Invoke-SecretBroker.ps1` 调用。状态未知时先用 `StatusPersonalEnvironment` 重读。`VerifyPersonalEnvironment` 在已有资料期内复用原截止；需要验证时不传 `-AuthorityFactor`，由本人选四选一验证。命令同步等验证终态，窗口首次可见起最长等 5 分钟；模型用宿主后台命令运行，外层超时至少 360 秒，等终态后回读状态，不能把命令启动当验证成功。取消、拒绝和超时按上面的取消规则处理。本人明确要解锁或续期时用 `EnrollPersonalPrivacyWaiver`，用法见 `local-secret-broker` 技能。资料检查直接读共享状态，不需要对话号、消息号或宿主对话记录；只读检查也不消费无限制授权。本人说“锁定个人资料”“冻结个人资料”就走锁定；“冻结项目”“冻结设计”不是资料操作。Hook、技能和电脑 MCP 只读这份状态，不另建权限记录。
 
@@ -3045,9 +3045,9 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E325",
-   "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
-   "public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
+   "release": "E330",
+   "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
+   "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
    "from": "## 公开个人数据分级表",
    "to": "## 私人仓库收口",
    "start": 3400,
@@ -3070,7 +3070,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-09",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
+  "source_public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-09"
  },
  "layout": {
@@ -3080,7 +3080,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E330版·续"
     },
     {
      "type": "source_text_card",
@@ -3137,7 +3137,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E330版·续"
     },
     {
      "type": "source_text_card",
@@ -3207,7 +3207,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E325 版 · 续
+原文 · E330 版 · 续
 
 ## 公开个人数据分级表
 
@@ -3233,13 +3233,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E325",
-   "sha256": "bf9fda8774b1f76cd3c51ab52d6262e21c21de0363e9dfe8f12e8c1a4b68a1b0",
-   "public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
+   "release": "E330",
+   "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
+   "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
    "from": "## 私人仓库收口",
    "to": null,
    "start": 4586,
-   "end": 5238,
+   "end": 5243,
    "approved_omissions": []
   },
   "title": "原文（四）：私人仓库收口、备份跟着原件走",
@@ -3253,7 +3253,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-10",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "d4e1a6d5bdfbaaf3607e994c25e24abcb6b3384dd8df511d2e7e7d4ed6c0091d",
+  "source_public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-10"
  },
  "layout": {
@@ -3263,7 +3263,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E330版·续"
     },
     {
      "type": "source_text_card",
@@ -3307,7 +3307,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E330版·续"
     },
     {
      "type": "source_text_card",
@@ -3389,11 +3389,11 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E325 版 · 续
+原文 · E330 版 · 续
 
 ## 私人仓库收口
 
-GitHub 总索引确认是私有、并且有写入授权的仓库，远端默认分支要完整同步应当入库的内容，不因为私密就脱敏或悄悄漏传。只有明文秘密或 SecretRef、能重建的缓存和生成物、活数据库和高频大文件、格式或加密或许可限制，以及本人说只留本地的内容可以不入库，并说明原因；不完整的副本不能叫完整备份，也不等于整盘镜像。
+确认是私有（`gh` 现查或推送前检查）、并且有写入授权的仓库，远端默认分支要完整同步应当入库的内容，不因为私密就脱敏或悄悄漏传。只有明文秘密或 SecretRef、能重建的缓存和生成物、活数据库和高频大文件、格式或加密或许可限制，以及本人说只留本地的内容可以不入库，并说明原因；不完整的副本不能叫完整备份，也不等于整盘镜像。
 
 公开仓库里的私密东西挪到对应的私人配套仓库。
 
