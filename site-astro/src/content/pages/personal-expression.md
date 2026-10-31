@@ -72,7 +72,7 @@
      "name": "照手册讲",
      "what": "AI 向我汇报、解释、请我拍板时，先照手册组织：先说有什么用，再讲结论和依据",
      "how": "不用点名，AI 向我说明时需要就读；也可以说“按讲给我听的规矩重新整理”",
-     "status": "在用",
+     "status": "已停用",
      "screen": "personal-expression-09",
      "source": "explain-to-me SKILL.md:8,18；E187 AGENTS.md:79；使用记录 explain-to-me 33 次、expression.py explain 11 次（ledger/usage-events.jsonl，9 月 15–27 日）"
     },
@@ -82,7 +82,7 @@
      "name": "没听懂就重讲",
      "what": "我说“没听懂”“我问的是……”，回到我原来的问题，把人、事、判断和背景讲清，换眼前的例子",
      "how": "直接说“没听懂，从我原来的问题重讲”",
-     "status": "在用",
+     "status": "已停用",
      "screen": "personal-expression-09",
      "source": "explain-to-me SKILL.md:20；讲解手册第 1 条原则；README.md:7"
     },
@@ -92,7 +92,7 @@
      "name": "读懂我的话",
      "what": "“用户”多半是我、同音字直接还原、问 AI 的事不等于做过、粘贴进来的 AI 原文不是我的话、几个固定说法，共 6 条",
      "how": "不用说，AI 读手册时一并读到",
-     "status": "在用",
+     "status": "已停用",
      "screen": "personal-expression-09",
      "source": "data-backup/explain-to-me.md 第 53-63 行“二、读懂本人的话”；提交 152c8bc、fb082dc"
     },
@@ -102,7 +102,7 @@
      "name": "只问具体的",
      "what": "要问我之前先查记过的；只问具体事实或真实取舍，不让我挑抽象的讲法",
      "how": "不用说",
-     "status": "在用",
+     "status": "已停用",
      "screen": "personal-expression-09",
      "source": "explain-to-me SKILL.md:20；讲解手册第 3 条原则；提交 67aaf04"
     },
@@ -112,7 +112,7 @@
      "name": "状态差时换讲法",
      "what": "我状态很差时，按我事先确认过的默认做法说话",
      "how": "不用说，AI 看出来就照做",
-     "status": "说不准",
+     "status": "已停用",
      "screen": "personal-expression-09",
      "source": "explain-to-me SKILL.md:18；讲解手册小节“默认：本人状态很差时”；提交 ee53b63、b796d69、31988a2。用了不一定留痕，记录里查不到，所以说不准"
     },
@@ -122,7 +122,7 @@
      "name": "拟消息",
      "what": "意思定好后写成自然的消息：意思、事实、分寸不变，不加承诺，不发送；对不上样本就说明参考有限",
      "how": "说“帮我按平时的口吻回这条，意思是……”",
-     "status": "在用",
+     "status": "已停用",
      "screen": "personal-expression-09",
      "source": "README.md:8；reply-as-me SKILL.md:8,25,32；expression.py:201；使用记录 reply-as-me 22 次（9 月 15–27 日）"
     },
@@ -132,7 +132,7 @@
      "name": "看关系选说法",
      "what": "先按发给谁、什么关系挑我的样本，场合只排序；关系不同的不借口吻",
      "how": "告诉 AI 发给谁、有多熟；AI 用 scenes 看现有标签，再用 reply --relationship 取",
-     "status": "说不准",
+     "status": "已停用",
      "screen": "personal-expression-09",
      "source": "9 月 28 日资料解锁后复查：翻遍 Codex、Claude 全部对话记录，上线后 reply --relationship 真正返回结果的只有 3 次，都在开发和验收这个功能的对话里（9 月 26 日 18:09–18:24 两个 Codex 子任务、9 月 28 日 01:08 个人项目对话），没找到真实拟稿里的运行；AI 也可能复用读过的样本不留痕，所以说不准。按关系挑样本的程序只在 expression.py reply 里跑；使用记录里唯一一次 reply 在 9 月 26 日 00:29，早于这条上线（4ec6140，03:47），之后没有 reply 记录；AI 也可能直接读样本文件，不留痕，所以说不准。README.md:24；expression.py:155-173；reply-as-me SKILL.md:18；决定 FY18（9 月 26 日）；提交 4ec6140；使用记录 expression.py reply 1 次、scenes 1 次"
     },
@@ -142,7 +142,7 @@
      "name": "参考我评过的 AI 稿",
      "what": "我评过的 AI 稿分认可、勉强接受、否定三档，否定的写原因；动笔前先看原因",
      "how": "不用说，取样本时一起带出；我评一份 AI 稿，它就记进对照",
-     "status": "说不准",
+     "status": "已停用",
      "screen": "personal-expression-09",
      "source": "9 月 28 日资料解锁后复查对话记录，AI 稿对照随 reply 返回的几次都在开发和验收对话里，没找到真实拟稿中的使用。上线（ea1a395 9 月 26 日 01:28、fcb938e 04:37）后使用记录里没有 reply 调用，也可能直接读文件不留痕，所以说不准。expression.py:46-78,194-198；reply-as-me SKILL.md:30；reply-contrasts.jsonl 5 份（快照 fb082dc）；提交 ea1a395、fcb938e"
     },
@@ -152,7 +152,7 @@
      "name": "带上图片和表情",
      "what": "聊天里有图片、表情、动图时，带上看过的描述、谁发的、前后几条、是动图还是静图",
      "how": "从微信聊天里拟回复时，AI 顺带把图片表情交过来",
-     "status": "待验收",
+     "status": "已停用",
      "screen": "personal-expression-09",
      "source": "README.md:34“尚未完成真实微信动画用于拟回复的验收”；AGENTS.md:19；reply-guide.md 小节“调用方带来的图片、表情和动画”"
     },
@@ -162,7 +162,7 @@
      "name": "核对样本出处",
      "what": "要核对某条样本时，显示原消息编号和校验码（哈希）；平时藏起来",
      "how": "说“这条样本出自哪，给我核对一下”；AI 加 --with-locators",
-     "status": "说不准",
+     "status": "已停用",
      "screen": "personal-expression-09",
      "source": "README.md:32；expression.py:139-145,192-193；测试 test_locators_are_opt_in_without_mutating_source。命令名记录里分不出带没带这个参数"
     },
@@ -172,7 +172,7 @@
      "name": "记住纠正",
      "what": "当场改好，写回对应的资料，校验、回读、存快照；不用我说“保存”",
      "how": "直接指出哪句难懂、哪句别扭",
-     "status": "在用",
+     "status": "已停用",
      "screen": "personal-expression-10",
      "source": "docs/feedback-workflow.md:9-16；README.md:40；62 次提交里多数是写回教训；使用记录 expression.py validate 15 次"
     },
@@ -182,7 +182,7 @@
      "name": "加的时候就合并",
      "what": "新教训先找同类，并进同一条，保留我的原话和适用范围",
      "how": "不用说",
-     "status": "在用",
+     "status": "已停用",
      "screen": "personal-expression-10",
      "source": "explain-to-me SKILL.md:26；reply-as-me SKILL.md:36；决定 ZS20；提交 45fd1ca（9 月 28 日 01:03，按我认可的对照合并一次）"
     },
@@ -192,7 +192,7 @@
      "name": "回扫漏收的反馈",
      "what": "更新我的个人资料时，只读回扫最近几天我说过的话，按信号找出没记下的反馈，合并后回读",
      "how": "说“做一次个人增量”，AI 顺带回扫",
-     "status": "在用",
+     "status": "已停用",
      "screen": "personal-expression-10",
      "source": "docs/feedback-workflow.md:17；AGENTS.md:14；9 月 26 日首次回扫（提交 152c8bc）；9 月 28 日补 ChatGPT 导出 3 条（提交 fb082dc）"
     },
@@ -202,7 +202,7 @@
      "name": "复核各项目的改动",
      "what": "更新我的个人资料时，看上次以来所有对话对表达库的改动：有没有把原意压窄或放宽、放错方向、重复，或把对人的评价写进来；小问题直接补",
      "how": "说“做一次个人增量”，AI 顺带复核",
-     "status": "没用过",
+     "status": "已停用",
      "screen": "personal-expression-10",
      "source": "docs/feedback-workflow.md:25；AGENTS.md:13；决定“表达库多个项目都能改”（9 月 28 日 01:12 起）。9 月 28 日解锁后复查：这之后唯一一次个人增量（当天 17:33 补 ChatGPT 导出反馈，个人项目对话 e427ea43）只跑了校验和提交，没有查看 data-backup 的提交历史"
     },
@@ -212,7 +212,7 @@
      "name": "大合并交给独立核对",
      "what": "要重排多条时先写方案，派没参与的 AI 逐条核对我的原话一处不丢，再写回；不请我逐条对照",
      "how": "不用说，个人增量时由 AI 自己判断要不要做",
-     "status": "没用过",
+     "status": "已停用",
      "screen": "personal-expression-10",
      "source": "docs/feedback-workflow.md:26；决定 FZ12（9 月 28 日）。每做一次都会留下提交和审查记录；FZ12 之后的 3 次提交都是小改，没找到"
     },
@@ -222,7 +222,7 @@
      "name": "从微信补我的说法",
      "what": "按眼前的用途，从最近或历史微信里挑值得留的我的话，带出处加进样本",
      "how": "说“给这个场合找找我以前怎么说的”",
-     "status": "在用",
+     "status": "已停用",
      "screen": "personal-expression-10",
      "source": "9 月 8 日建库时从微信精选本人原话（提交 decdb21）；9 月 26 日处理真实任务时又从微信补进 4 条带出处的样本（提交 cc0fb25）。README 里写的“别的 AI 在后续任务中主动做完整条链”仍待验证，写进审计。README.md:48-54（已做：能力和流程；待验证：别的 AI 在真实任务里主动做完整条链）；docs/feedback-workflow.md:28-34；底稿状态待验收"
     },
@@ -232,7 +232,7 @@
      "name": "锁着就不读",
      "what": "每条读取命令（连校验在内）先查个人资料锁，没放行就一行不读",
      "how": "不用说；锁着时 AI 会请我验证",
-     "status": "在用",
+     "status": "已停用",
      "screen": "personal-expression-10",
      "source": "expression.py:275-311；测试 test_all_private_commands_stop_before_reading_including_validate；E:\\PCConfig\\docs\\runtime\\personal-data-access.md 调用点表"
     },
@@ -242,7 +242,7 @@
      "name": "校验资料",
      "what": "查每条样本的出处、编号、对象和关系齐不齐，再对照私有快照（见亮点 3）",
      "how": "改完资料 AI 自己跑",
-     "status": "在用",
+     "status": "已停用",
      "screen": "personal-expression-10",
      "source": "expression.py:204-211,243-272,320-321；使用记录 validate 15 次（9 月 25–27 日）；对照快照这一半 480faa8（9 月 28 日 01:12）上线后，9 月 28 日 17:33 在个人项目对话 e427ea43 补 ChatGPT 导出反馈时真实跑过：先报 backup_pending，同步后 in_sync，随后提交 fb082dc"
     },
@@ -252,7 +252,7 @@
      "name": "私有仓库快照",
      "what": "资料变了，收尾时把四份资料存进私有 GitHub 仓库，留下每一版",
      "how": "不用说，正常收尾时一起做",
-     "status": "在用",
+     "status": "已停用",
      "screen": "personal-expression-10",
      "source": "README.md:56-58；AGENTS.md:21；改过 data-backup 的提交 49 次"
     },
@@ -262,7 +262,7 @@
      "name": "找回旧版",
      "what": "从 Git 历史里取出要的那一版快照，先读出来核对，再还原到资料目录",
      "how": "说要找回哪一版",
-     "status": "说不准",
+     "status": "已停用",
      "screen": "personal-expression-10",
      "source": "README.md:60-65（--data-root data-backup）；AGENTS.md:21；找回不一定留痕，记录里没找到"
     }
@@ -561,8 +561,8 @@
  },
  "source": {
   "page": "sources/pages/personal-expression/page.json",
-  "sha256": "81b94e122f513f96f483dc080b38027d32877b4feac03e69475f51afbd568f09",
-  "converted_at_beijing": "2026-10-31T08:03:52+08:00"
+  "sha256": "9f28d2bc24deaade1acf9813d3eb3d111798bf995a034f3abb9a39fa78777729",
+  "converted_at_beijing": "2026-10-31T09:22:56+08:00"
  }
 }
 ---

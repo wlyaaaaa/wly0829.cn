@@ -76,7 +76,7 @@
      "name": "文字同步",
      "what": "在一台复制文字，另一台直接粘贴；在线、尽力同步；9 月 29 日 01:25 两个方向实测通过",
      "how": "这台复制，那台粘贴",
-     "status": "在用",
+     "status": "已停用",
      "screen": "meshclip-kit-07",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\docs\\PRODUCT.md:19,32-35；修复对话：9/29 01:25 主机、副机互发剪贴板真实测试通过（没走验收向导，主机没有 acceptance 目录）"
     },
@@ -86,7 +86,7 @@
      "name": "文件互传",
      "what": "在两台之间发文件，收进对方“下载”文件夹",
      "how": "在任务栏的 KDE Connect 里选文件发过去",
-     "status": "说不准",
+     "status": "已停用",
      "screen": "meshclip-kit-07",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\docs\\PRODUCT.md:20；只有 8/15 两端插件目录变动和 9/18 电脑使用记录里打开过 KDE Connect 窗口，分不出是不是真用"
     },
@@ -96,7 +96,7 @@
      "name": "安卓平板",
      "what": "平板连上同一张私有网络后一起同步剪贴板和文件",
      "how": "还没做",
-     "status": "待实施",
+     "status": "已停用",
      "screen": "meshclip-kit-07",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\docs\\ANDROID.md:1-17；README.md:3"
     },
@@ -106,7 +106,7 @@
      "name": "跨网连接",
      "what": "不在同一个网络，经 Tailscale 私有网络互通；无人值守，没登录也在线",
      "how": "自动，不用管",
-     "status": "在用",
+     "status": "已停用",
      "screen": "meshclip-kit-07",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\docs\\WINDOWS.md:14-16；9/28 21:53 自检 Tailscale 在线、无人值守、ping 通对面"
     },
@@ -116,7 +116,7 @@
      "name": "只认那一台",
      "what": "每台两条入站规则只放对面；配对要两边人确认",
      "how": "安装时配好，之后不用管",
-     "status": "在用",
+     "status": "已停用",
      "screen": "meshclip-kit-07",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\SECURITY.md:27-47；两台防火墙组 MeshClip Kit 各 2 条规则启用；自检 Exact-peer firewall PASS"
     },
@@ -126,7 +126,7 @@
      "name": "收紧宽泛规则",
      "what": "发现放得太宽的 KDE Connect 旧规则，先预览，确认后停用并记下，能还原",
      "how": "让 AI 配置对端时按提示确认",
-     "status": "在用",
+     "status": "已停用",
      "screen": "meshclip-kit-07",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\docs\\WINDOWS.md:54-65；主机 %LOCALAPPDATA%\\MeshClipKit\\user-state.json disabledBroadFirewallRules 2 条"
     },
@@ -136,7 +136,7 @@
      "name": "登录自动启动",
      "what": "登录后 KDE Connect 和看门狗各自启动；只在主机上，副机按需手动打开",
      "how": "自动",
-     "status": "在用",
+     "status": "已停用",
      "screen": "meshclip-kit-07",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\docs\\WINDOWS.md:23-27；主机开机启动文件夹两个快捷方式；9/27 21:24 重启后托盘程序在跑"
     },
@@ -146,7 +146,7 @@
      "name": "自动拉起",
      "what": "看门狗每 60 秒看托盘程序在不在，不在就拉起来；只在主机上",
      "how": "自动；要停用控制中心暂停",
-     "status": "在用",
+     "status": "已停用",
      "screen": "meshclip-kit-07",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\scripts\\watch-kdeconnect.ps1:5-72；9/27 21:26 拉起托盘程序（心跳 restartCount=1）"
     },
@@ -156,7 +156,7 @@
      "name": "看门狗的看门狗",
      "what": "计划任务每 2 分钟看看门狗在不在；只在主机上",
      "how": "自动",
-     "status": "在用",
+     "status": "已停用",
      "screen": "meshclip-kit-07",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\scripts\\MeshClip.Common.psm1:10-13,1035；任务 \\MeshClip Kit\\KDE Connect Watchdog 9/28 21:43 运行结果 0"
     },
@@ -166,7 +166,7 @@
      "name": "控制中心",
      "what": "看守护开没开、上次心跳、下次检查、有没有做了一半的操作",
      "how": "双击仓库根目录的 MeshClip控制中心.vbs",
-     "status": "说不准",
+     "status": "已停用",
      "screen": "meshclip-kit-08",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\scripts\\control-center.ps1；打开不留记录；副机版本没有它"
     },
@@ -176,7 +176,7 @@
      "name": "暂停自动拉起",
      "what": "暂停一小时、暂停直到恢复、恢复守护；不关正在跑的 KDE Connect",
      "how": "控制中心里点按钮",
-     "status": "没用过",
+     "status": "已停用",
      "screen": "meshclip-kit-08",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\scripts\\MeshClip.Transaction.ps1:285-296；会写 watchdog-control.json，两台都没有"
     },
@@ -186,7 +186,7 @@
      "name": "自检",
      "what": "22 项分层检查，不打印地址和设备编号；副机按需模式下 KDE Connect 关着也算正常；严格模式把提醒也算不过",
      "how": "跟 AI 说查一下，或控制中心点“完整诊断”",
-     "status": "在用",
+     "status": "已停用",
      "screen": "meshclip-kit-08",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\scripts\\doctor.ps1；旧网站 9/18 刷新时调用过（wly0829.cn\\.panel-refresh\\source-evidence\\collector-meshclip-kit.json）；提交 61fa792 删掉“包含密码”提醒、加按需模式判断；9/29 03:42 主机实跑 22 项 21 PASS 1 WARN"
     },
@@ -196,7 +196,7 @@
      "name": "双机验收向导",
      "what": "生成 100 条测试字串和测试文件，收到后比内容指纹；只认人实测",
      "how": "控制中心点“双机验收向导”，或让 AI 带着做",
-     "status": "没用过",
+     "status": "已停用",
      "screen": "meshclip-kit-08",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\scripts\\acceptance.ps1:22-49；Prepare 必建 %LOCALAPPDATA%\\MeshClipKit\\acceptance，两台都没有"
     },
@@ -206,7 +206,7 @@
      "name": "一键安装",
      "what": "装官方包、开无人值守、建登录启动、看门狗和计划任务",
      "how": "让 AI 在新电脑上装",
-     "status": "在用",
+     "status": "已停用",
      "screen": "meshclip-kit-08",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\scripts\\install-windows.ps1；两台 8/11 装过（本地状态文件）"
     },
@@ -216,7 +216,7 @@
      "name": "副机按需部署",
      "what": "先核对提交号；装两个官方包，保留配对和放行规则，只删项目建的登录启动，不装看门狗，记成按需模式",
      "how": "让 AI 在副机上先预览再部署",
-     "status": "在用",
+     "status": "已停用",
      "screen": "meshclip-kit-08",
      "source": "scripts/deploy-on-demand.ps1（提交 61fa792）；修复对话：副机已部署为按需开关"
     },
@@ -226,7 +226,7 @@
      "name": "指定对端",
      "what": "把对面写进 KDE Connect 设置，建两条只认它的规则",
      "how": "让 AI 配置，配对由我在两边点",
-     "status": "在用",
+     "status": "已停用",
      "screen": "meshclip-kit-08",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\scripts\\configure-peer.ps1；两台 customDevices 各 1 项"
     },
@@ -236,7 +236,7 @@
      "name": "中断恢复",
      "what": "装到一半断了，先看预览再倒着撤回；别的程序改过的不动",
      "how": "跟 AI 说装到一半断了",
-     "status": "说不准",
+     "status": "已停用",
      "screen": "meshclip-kit-08",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\docs\\RECOVERY-AND-CONTROL.md:9-18；9/18 才加，之后两台都没再装或配置过，从没出现待恢复"
     },
@@ -246,7 +246,7 @@
      "name": "卸载还原",
      "what": "撤掉项目加的规则、快捷方式和计划任务；可选还原停用的旧规则和无人值守",
      "how": "让 AI 卸载，先预览再加 -Apply",
-     "status": "说不准",
+     "status": "已停用",
      "screen": "meshclip-kit-08",
      "source": "V:\\Personal\\Projects\\meshclip-kit\\scripts\\uninstall.ps1:1-150；没有用过的记录"
     }
@@ -506,8 +506,8 @@
  },
  "source": {
   "page": "sources/pages/meshclip-kit/page.json",
-  "sha256": "c5b2ba2f775a66bcff53897c0c436d59f02daea502df8c5343b4fd92f9cf86a6",
-  "converted_at_beijing": "2026-10-31T08:03:52+08:00"
+  "sha256": "d964b52e820a6fe4517694ccaa0d04dea6ebf58a53a44fed0096c7a310bf08fb",
+  "converted_at_beijing": "2026-10-31T09:22:56+08:00"
  }
 }
 ---

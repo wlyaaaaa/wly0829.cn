@@ -429,7 +429,7 @@
         "name": "找仓库在哪",
         "what": "说项目名，AI 查到它的 GitHub 仓库和本机文件夹；45 个都登记着",
         "how": "AI 进项目时自己查总表和导航登记",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-08",
         "source": "E:\\GitHub总索引\\config\\repository-paths.json；看板第 11–13 行；使用记录 Get-ProjectAdmission.ps1 160 次（9 月 16–28 日）"
       },
@@ -439,7 +439,7 @@
         "name": "认准是哪个仓库",
         "what": "回读文件夹里的 .git，确认连着的仓库和登记一致，不凭目录名猜",
         "how": "单仓库查询 Get-ProjectAdmission 自动做",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-08",
         "source": "docs/contracts/git.project-admission.md“权威输入”；tools/Get-ProjectAdmission.ps1；使用记录 160 次"
       },
@@ -449,7 +449,7 @@
         "name": "查公开还是私有",
         "what": "总表记着上次看到的；要准，就联网问 GitHub 当下的",
         "how": "问 AI 这个仓库现在公不公开；联网那档用 -LiveMetadata",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-08",
         "source": "repository-paths.json visibility 字段；git.project-admission.md“核心机制”"
       },
@@ -459,7 +459,7 @@
         "name": "标出冻结的项目",
         "what": "名单从生效的规则读；11 个冻结的只核对身份和位置",
         "how": "刷新时自动标",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-08",
         "source": "E257 agents.context-sources.md 当前冻结名单 11 个；git.refresh-consistency.md 冻结项目核对边界；9 月 28 日旧看板当时为 9 个“已冻结”"
       },
@@ -469,7 +469,7 @@
         "name": "按需联网核对",
         "what": "三档：只问 GitHub 的信息、再拉最新远端分支、发布前两样都要新鲜",
         "how": "单仓库查询加 -LiveMetadata、-RefreshRefs 或 -ForPublication",
-        "status": "说不准",
+        "status": "已停用",
         "screen": "github-local-index-08",
         "source": "git.project-admission.md“核心机制”；使用记录只有命令名没有参数，分不出用了哪档"
       },
@@ -479,7 +479,7 @@
         "name": "查全部工作目录",
         "what": "同一个仓库的所有工作目录和分支一起查：没提交的、没推送的、领先落后几个",
         "how": "单仓库查询默认就查全部",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-08",
         "source": "docs/contracts/git.worktree-sync.md“核心机制”；看板 75 个路径"
       },
@@ -489,7 +489,7 @@
         "name": "找出没进主线的提交",
         "what": "每条分支都和 GitHub 上的默认分支比，写明主线缺几个提交",
         "how": "单仓库查询和总表刷新都会算",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-08",
         "source": "git.worktree-sync.md；看板 PCConfig 行“默认分支缺少 9 个提交”；提交 4088380"
       },
@@ -499,7 +499,7 @@
         "name": "分出能收的残留",
         "what": "内容已进主线的临时分支和目录标成残留，确认没人在用再收",
         "how": "看板“Git 下一步”一列",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-08",
         "source": "git.worktree-sync.md“retirement candidate，不自动删除”；看板 10 个仍需处理"
       },
@@ -509,7 +509,7 @@
         "name": "有专门用途的分支不误报",
         "what": "3 条专门分支、1 个冻结仓库的历史、1 个回滚用的目录登记在案，不算没合的活",
         "how": "登记在 config/git-artifact-governance.json",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-08",
         "source": "config/git-artifact-governance.json entries 3、repository_overrides 1、retentions 1"
       },
@@ -519,7 +519,7 @@
         "name": "只看这次的目标",
         "what": "一个仓库开着好几个目录时，只让这次要推的那个参与判断，别的照样列出",
         "how": "单仓库查询加 -TargetWorktree 或 -TargetRef",
-        "status": "说不准",
+        "status": "已停用",
         "screen": "github-local-index-08",
         "source": "git.project-admission.md；使用记录没有参数"
       },
@@ -529,7 +529,7 @@
         "name": "敏感文件提示",
         "what": "公开仓库的目录里出现 .env、私钥、secrets 文件夹这类文件，查询直接判“挡住”；日志、数据库文件列出来请 AI 复看",
         "how": "单仓库查询对公开仓库自动做",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-09",
         "source": "tools/PublicExposurePolicy.psd1；Get-ProjectAdmission 输出 public_exposure_conflict、public_exposure_review_candidates"
       },
@@ -539,7 +539,7 @@
         "name": "推送放行规则",
         "what": "一张表写清什么情况能推、什么情况先停",
         "how": "AI 推送前读 05_规则与模板/推送放行与否决规则.md",
-        "status": "说不准",
+        "status": "已停用",
         "screen": "github-local-index-09",
         "source": "05_规则与模板/推送放行与否决规则.md；读没读不留记录"
       },
@@ -549,7 +549,7 @@
         "name": "找到私有配套说明",
         "what": "公开项目的内部说明放在一个私有仓库里，AI 维护时按登记找到；现在登记了 3 个项目",
         "how": "AI 进项目时经技能 project-entry-gate 查",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-09",
         "source": "docs/private-companion-discovery.md；使用记录 Get-ProjectPrivateCompanion.ps1 212 次；catalog.json 3 个 source"
       },
@@ -559,7 +559,7 @@
         "name": "刷新总表",
         "what": "重新扫描，看板页和仓库清单一起重写，每个文件整份替换",
         "how": "仓库新建、搬家、改名、删库后，AI 跑 Refresh-GitHubLocalIndex.ps1",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-09",
         "source": "git.refresh-consistency.md；刷新日志 9 月 10 次；使用记录 Update-GitHubIndex 12 次、Refresh 10 次"
       },
@@ -569,7 +569,7 @@
         "name": "检查总表对不对",
         "what": "拿现场重新生成一份来比，报出差在哪；不改、不提交",
         "how": "AI 跑 Test-GitHubLocalIndexConsistency.ps1",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-09",
         "source": "git.refresh-consistency.md“CheckOnly”；使用记录 15 次（9 月 20–27 日）"
       },
@@ -579,7 +579,7 @@
         "name": "给别的基座的状态摘要",
         "what": "别的基座（例如体检）来问“Git 这块现在怎样”时，它不改任何文件，只回答“当前、要复核、被挡住、不知道”四种之一",
         "how": "Get-GitOwnerStatus.ps1 -Json",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-09",
         "source": "git.refresh-consistency.md“输出与失败”；使用记录 9 月 27 日单独调用 2 次；刷新时 Refresh-GitHubLocalIndex.ps1 第 89 行也载入它推进基线"
       },
@@ -589,7 +589,7 @@
         "name": "新仓库放哪",
         "what": "新的个人仓库放 V:\\Personal\\Projects，临时工作目录放 V:\\Personal\\Worktrees，Z 盘不放仓库",
         "how": "AI 新建或 clone 时照做",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-09",
         "source": "AGENTS.md 第 17 行"
       },
@@ -599,7 +599,7 @@
         "name": "网站项目登记",
         "what": "哪些项目上网站、叫什么：30 个公开介绍、4 个冻结的只放静态页、12 个不上（其中 1 条是改名前留下的旧名）；新仓库默认不上",
         "how": "改 config/website-projects.json",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-09",
         "source": "config/website-projects.json；docs/contracts/git.website-projects.md；tests/Test-WebsiteProjects.ps1 第 18–19 行"
       },
@@ -609,7 +609,7 @@
         "name": "项目数字",
         "what": "给驾驶舱算每个项目 7 天提交数、最后一次提交、没合的分支、和 GitHub 同步没有；不联网",
         "how": "电脑配置与恢复的看板接口每次打开时调用",
-        "status": "在用",
+        "status": "已停用",
         "screen": "github-local-index-09",
         "source": "tools/collect_dashboard_facts.py；PCConfig public_dashboard_projects.py；看板接口 29 个项目 in_sync"
       },
@@ -619,7 +619,7 @@
         "name": "新建仓库",
         "what": "只在我的账号下建空仓库，先核对同名仓库确实不存在",
         "how": "Invoke-ProtectedGitHubMajorAction.ps1 -Operation create-repository",
-        "status": "待验收",
+        "status": "已停用",
         "screen": "github-local-index-10",
         "source": "docs/contracts/git.protected-major-actions.md 参数表；9 月 27 日 20:24 重写后无调用记录"
       },
@@ -629,7 +629,7 @@
         "name": "仓库改名",
         "what": "核对旧名、公开范围、默认分支，确认新名没被占，改完读回",
         "how": "-Operation rename-repository",
-        "status": "待验收",
+        "status": "已停用",
         "screen": "github-local-index-10",
         "source": "同上"
       },
@@ -639,7 +639,7 @@
         "name": "改公开范围",
         "what": "核对当前是公开还是私有再改，改完读回",
         "how": "-Operation set-visibility",
-        "status": "待验收",
+        "status": "已停用",
         "screen": "github-local-index-10",
         "source": "同上"
       },
@@ -649,7 +649,7 @@
         "name": "改默认分支",
         "what": "核对当前默认分支再改，改完读回",
         "how": "-Operation set-default-branch",
-        "status": "待验收",
+        "status": "已停用",
         "screen": "github-local-index-10",
         "source": "同上"
       },
@@ -659,7 +659,7 @@
         "name": "删库和转移",
         "what": "固定先预演：把所有分支、标签拉到本地各留一个备份记号，列出 issue、发布包等只在网页上的东西，拿给我看过再正式删或转移",
         "how": "先加 -DryRun 预演并呈现给本人，再去掉 -DryRun 正式调用 -Operation delete-repository 或 transfer-repository",
-        "status": "待验收",
+        "status": "已停用",
         "screen": "github-local-index-10",
         "source": "git.protected-major-actions.md“内容保全和回读”；同上；提交 e2ccb37（9 月 29 日 01:15，删库和转移固定先预演再呈现）"
       },
@@ -669,7 +669,7 @@
         "name": "删分支、挪分支",
         "what": "删分支，或把分支挪到别的提交：原来的提交还在别的分支或标签里留着才动；删 GitHub 上的分支时，如果这期间有人推了新提交就不删",
         "how": "-Operation delete-local-ref、delete-remote-ref 或 force-update-local-ref",
-        "status": "待验收",
+        "status": "已停用",
         "screen": "github-local-index-10",
         "source": "git.protected-major-actions.md 第一张表和“内容保全和回读”"
       },
@@ -679,7 +679,7 @@
         "name": "换远端地址",
         "what": "新地址必须是我登录的 GitHub 账号下、声明的那个仓库",
         "how": "-Operation replace-remote-url",
-        "status": "待验收",
+        "status": "已停用",
         "screen": "github-local-index-10",
         "source": "git.protected-major-actions.md 第一张表"
       },
@@ -689,7 +689,7 @@
         "name": "先预演",
         "what": "同一条命令加上预演：检查目标、生成网页内容清单，不改 GitHub；删库和转移必须先走这一步",
         "how": "加 -DryRun",
-        "status": "待验收",
+        "status": "已停用",
         "screen": "github-local-index-10",
         "source": "git.protected-major-actions.md“一次调用”；提交 e2ccb37"
       },
