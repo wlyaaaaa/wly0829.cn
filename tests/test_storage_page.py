@@ -116,6 +116,7 @@ class StoragePageTests(unittest.TestCase):
                 page.wait_for_function("document.getElementById('storage-status').textContent.includes('在线数据不可用')")
                 self.assertEqual(page.locator('.storage-disk.is-unavailable').count(), 5)
                 self.assertNotIn('500 GB', page.locator('#storage-volumes').inner_text())
+                self.assertIn('等待读取磁盘采样', page.locator('[data-drive="C"]').inner_text())
                 self.assertFalse(page.locator('#storage-refresh').is_disabled())
                 context.close()
                 browser.close()

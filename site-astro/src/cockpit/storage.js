@@ -35,7 +35,7 @@ export function renderVolumes(data = {}, fresh = true) {
       <dl class="storage-facts">
         <div class="storage-fact"><dt>用途已知</dt><dd>${esc(size(classified))}<small>${classified !== null && !complete ? '已确认的部分' : '按分类去重合计'}</small></dd></div>
         <div class="storage-fact is-unexplained"><dt>还说不清的占用</dt><dd>${esc(size(unclassified))}<small>${classified !== null && !complete ? '含尚未测全的分类' : '已用减去用途已知'}</small></dd></div>
-        <div class="storage-fact"><dt>近一周</dt><dd>${growth ? esc(difference(v.weekly_growth_bytes)) : '样本不足'}<small>${growth ? `对比 ${esc(shortTime(v.baseline_at))}` : '需要 6—8 天前的采样'}</small></dd></div>
+        <div class="storage-fact"><dt>近一周</dt><dd>${growth ? esc(difference(v.weekly_growth_bytes)) : available ? '样本不足' : '未读到'}<small>${growth ? `对比 ${esc(shortTime(v.baseline_at))}` : available ? '需要 6—8 天前的采样' : '等待读取磁盘采样'}</small></dd></div>
       </dl>
       <details class="storage-categories"><summary>用途已知的分类${categories.length ? `（${categories.length} 项）` : ''}</summary>${details}</details>
       <section class="storage-top"><h3>${topComplete ? '最大的 5 个文件夹' : '当前已测的大文件夹'}</h3>${folderList}
