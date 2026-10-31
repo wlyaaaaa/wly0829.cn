@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/timeaudit-collection-pipeline/page.json",
   "sha256": "6a27b1b572e33dd51f2c12dc51f9c11aed47121832d94313075babb9e8be50c6",
-  "converted_at_beijing": "2026-10-31T12:46:23+08:00"
+  "converted_at_beijing": "2026-10-31T13:58:52+08:00"
  }
 }
 ---
@@ -989,7 +989,7 @@ TimeAudit · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {

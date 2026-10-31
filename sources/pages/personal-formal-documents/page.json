@@ -10,12 +10,12 @@
     "state": "常用",
     "last": {
       "label": "上次使用",
-      "at": "2026-10-23 20:00"
+      "at": "2026-10-26 20:24"
     },
     "facts": [
       "近 7 天改进了 9 次"
     ],
-    "as_of": "2026-10-24",
+    "as_of": "2026-10-26",
     "source": "AI 使用记录；项目修改记录"
   },
   "public": false,
@@ -495,7 +495,7 @@
         "id": "n-lines",
         "text": "1,859 行",
         "meaning": "src/legal_filing_kit/formal_documents.py 的行数（不含空行，含注释；含空行共 2,013 行），不限定文书种类",
-        "as_of": "2026-10-22",
+        "as_of": "2026-10-31",
         "source": "见来源记录 personal-formal-documents-n-lines-0，观察于 2026-10-22T06:47:52+08:00",
         "screens": [
           "personal-formal-documents-06",
@@ -506,7 +506,7 @@
         "id": "n-audit-lines",
         "text": "1,437 行",
         "meaning": "共用检查模块 audit.py 的行数（不含空行）",
-        "as_of": "2026-10-22",
+        "as_of": "2026-10-31",
         "source": "见来源记录 personal-formal-documents-n-audit-lines-0，观察于 2026-10-22T06:47:52+08:00",
         "screens": [
           "personal-formal-documents-06"

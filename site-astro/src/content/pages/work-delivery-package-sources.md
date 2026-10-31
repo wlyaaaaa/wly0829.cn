@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/work-delivery-package-sources/page.json",
   "sha256": "264e41908d093a1eeefab0a63417dac8569343b9360d9342e9b9d9ae593e3d53",
-  "converted_at_beijing": "2026-10-31T12:46:25+08:00"
+  "converted_at_beijing": "2026-10-31T13:58:52+08:00"
  }
 }
 ---
@@ -62,7 +62,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -311,7 +311,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -418,7 +418,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -555,7 +555,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -649,7 +649,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -719,7 +719,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -797,7 +797,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -862,7 +862,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -1028,7 +1028,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {

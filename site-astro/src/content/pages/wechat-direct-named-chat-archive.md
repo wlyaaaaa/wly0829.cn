@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/wechat-direct-named-chat-archive/page.json",
   "sha256": "abba672097421cee7989bbbcf13b12cd0193f899a84cfefb78feb6ed2e851a4b",
-  "converted_at_beijing": "2026-10-31T12:46:25+08:00"
+  "converted_at_beijing": "2026-10-31T13:58:52+08:00"
  }
 }
 ---
@@ -552,7 +552,7 @@ WeChatDirect · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -646,7 +646,7 @@ WeChatDirect · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {

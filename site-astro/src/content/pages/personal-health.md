@@ -372,10 +372,10 @@
     },
     {
      "id": "n-code",
-     "text": "8,591 行",
+     "text": "9,039 行",
      "meaning": "7 个 google_health_*.py 行数之和，含空行（splitlines）；不含空行 7976",
-     "as_of": "2026-10-11",
-     "source": "提交 848501a 的 7 个 google_health_*.py 只读行数统计",
+     "as_of": "2026-10-31",
+     "source": "见来源记录 personal-health-n-code-0，观察于 2026-10-31T13:55:53+08:00",
      "screens": [
       "personal-health-05"
      ]
@@ -545,8 +545,8 @@
  },
  "source": {
   "page": "sources/pages/personal-health/page.json",
-  "sha256": "6ff04d9daa043a7fde3a90115df1f720dadd9a1211e68cdbaba1da2a10bd1c7d",
-  "converted_at_beijing": "2026-10-31T09:28:10+08:00"
+  "sha256": "8a6c9f2fd3db8277be3bb50450aa4af9f830ac78ea3cc2ed4ad30d86c6629c3e",
+  "converted_at_beijing": "2026-10-31T13:58:50+08:00"
  }
 }
 ---
@@ -1621,7 +1621,8 @@
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -1652,7 +1653,7 @@
       "_library/hires-icons/打勾清单.png",
       "_library/hires-icons-r2/版本循环文件.png"
      ],
-     "text_ref": "8,591"
+     "text_ref": "9"
     }
    ],
    "notes": "真实原图：左约65%区域先标题再六卡2列3行，图标内左；右约34%三张数字卡从屏顶到屏底纵排，数字左、图标内右、说明在数字下。此处标题不整屏宽，照原图左对齐。当前基础行结构无法让右数字栏跨标题及六卡高度，需要复合左右容器或跨行能力；草案记录目的，不得伪称已复现。right_inside 原图必需，API未列该变体。",
@@ -1685,7 +1686,7 @@
       "_library/hires-icons/打勾清单.png",
       "_library/hires-icons-r2/版本循环文件.png"
      ],
-     "text_ref": "8,591"
+     "text_ref": "9"
     }
    ],
    "notes": "六卡从上到下单列、插画内左；三张数字卡在下单列，数字左、插画内右、正文在数字下。无连线。right_inside 需组件支持。",
@@ -1869,9 +1870,9 @@
 **不另起一套。**
 不建数据库、诊断引擎，也不做持续的后台同步：手环每 7 天的定时刷新跑完就停，不常驻；我的背景从个人理解库取，讲给我听时照约法的说话规矩。
 
-| **8,591 行** | **254 个** | **185 次** |
+| **9,039 行** | **254 个** | **185 次** |
 |---|---|---|
-| Python 正式代码，7 个程序 | 自动测试用例（209 个测试函数展开后），用合成数据，不碰真实记录；10 月 31 日只清点了数量，没有重跑 | 提交，8 月 25 日起，10 月 31 日 09:26 数 |
+| Python 正式代码，7 个程序 | 自动测试用例（209 个测试函数展开后），用合成数据，不碰真实记录；10 月 31 日只清点了数量，没有重跑 | 提交，8 月 25 日起，10 月 31 日 13:55 数 |
 
 ::screen{#personal-health-06 section="highlights"}
 

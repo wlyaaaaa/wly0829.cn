@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/personal-health-evidence-three-state/page.json",
-  "sha256": "5a3a90b43f8cb4768fbc1e7176c0c9bb7153f77391d06063886d02324ffafa42",
-  "converted_at_beijing": "2026-10-31T12:46:16+08:00"
+  "sha256": "894eb40ca157f0ade235decf5f20755650faaaff8e9add8a7ec7352b6b83bde4",
+  "converted_at_beijing": "2026-10-31T13:58:51+08:00"
  }
 }
 ---
@@ -453,7 +453,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -511,7 +512,7 @@
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-**10 月 11 日核对**　字段级可用／部分／不可用、真实零与没记录的区分仍在源码；新增按默认最近 14 天或我指定的日期段各自判断，以及库存“没记录”只代表本次网络窗口。全项目现有 192 个测试函数、参数展开 213 个用例（静态计数，本次没有运行）。医学正常性不属于这套状态。
+**10 月 11 日核对**　字段级可用／部分／不可用、真实零与没记录的区分仍在源码；新增按默认最近 14 天或我指定的日期段各自判断，以及库存“没记录”只代表本次网络窗口。全项目现有 209 个测试函数、参数展开 254 个用例（静态计数，本次没有运行）。医学正常性不属于这套状态。
 
 ## 关键规则与设计选择
 
@@ -788,7 +789,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -846,7 +847,7 @@
 
 - google_health_brief.py　字段质量、可用／不可用、真实零、窗口与下游使用规则
 
-- tests/test_google_health_brief.py　空字段、真实零、格式错误、混合来源与三态回归（现有 42 个测试函数）
+- tests/test_google_health_brief.py　空字段、真实零、格式错误、混合来源与三态回归（现有 46 个测试函数）
 
 - AGENTS.md　未测／未见／阴性区分、未知保留和低健康焦虑边界
 

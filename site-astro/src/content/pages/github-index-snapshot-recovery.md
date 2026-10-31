@@ -29,7 +29,7 @@
  "source": {
   "page": "sources/pages/github-index-snapshot-recovery/page.json",
   "sha256": "7d4ba64eebe231c24f0b05d2b4c778fb4648487117eecfa44b26f871e86d2b5f",
-  "converted_at_beijing": "2026-10-31T12:46:12+08:00"
+  "converted_at_beijing": "2026-10-31T13:58:50+08:00"
  }
 }
 ---
@@ -522,7 +522,7 @@ GitHub 总索引 · 功能说明 · 已冻结：10 月 31 日起项目不再维�
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {

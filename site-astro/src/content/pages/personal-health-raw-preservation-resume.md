@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/personal-health-raw-preservation-resume/page.json",
-  "sha256": "2b4326453d0c36a5c562c4dee8261b05d089ee243a225fb225d4b20e61906919",
-  "converted_at_beijing": "2026-10-31T12:46:16+08:00"
+  "sha256": "a3930ef4d511f501ea21305e0f1bbb450d780956999b2d02a30621f79650d912",
+  "converted_at_beijing": "2026-10-31T13:58:51+08:00"
  }
 }
 ---
@@ -62,7 +62,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -168,7 +168,7 @@
 
 个人健康证据与安全决策 · 功能说明
 
-日常更新不用反复下载多年的完整记录：首次建立历史，此后仍覆盖全部 21 类字段，只补上次未完整的中国日及之后。中途失败沿同一清单继续，原件可回读，不误选另一批文件。
+日常更新不用反复下载多年的完整记录：首次建立历史，此后仍覆盖全部 22 类字段，只补上次未完整的中国日及之后。中途失败沿同一清单继续，原件可回读，不误选另一批文件。
 
 **当前情况：**真实采集已经在跑：已保存 16 份采集清单，其中 13 份完成，分布在 6 个更新日，最近一次 10 月 7 日；完整日期范围 8 月 5 日—10 月 6 日，共 63 天（范围长度不代表每天都有记录）。另外 3 份停在“进行中”的是留存的旧状态，不代表还有 3 个进程在跑。以上是 10 月 11 日只读清点的数，本次没有联网导入。
 
@@ -549,7 +549,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -627,7 +627,7 @@
 
 ## 当前怎样实现
 
-- 字段 registry（登记清单）登记 39 类 API 类型；默认 Fitbit Air 采集从中选择 google-wearables 来源家族的 21 类兼容设备字段，用 9 个只读权限，另取 profile 以确定历史起点，有可用运动标识时保全 TCX。
+- 字段 registry（登记清单）登记 39 类 API 类型；默认 Fitbit Air 采集从中选择 google-wearables 来源家族的 22 类兼容设备字段，用 9 个只读权限，另取 profile 以确定历史起点，有可用运动标识时保全 TCX。
 
 - 日常活动接口：steps、distance、active-minutes、active-zone-minutes、sedentary-period、total-calories；运动与体能接口：exercise、swim-lengths-data、vo2-max、daily-vo2-max、run-vo2-max。
 
@@ -1087,7 +1087,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -1151,7 +1152,7 @@
 
 - tests/test_google_health_history.py　固定指针、历史分段、日期与完整性合成验证
 
-- tests/test_google_health_import.py　import、分页、预算、锁、哈希、查询、交接与续跑回归（现有 67 个测试函数）
+- tests/test_google_health_import.py　import、分页、预算、锁、哈希、查询、交接与续跑回归（现有 64 个测试函数）
 
 - tests/test_folder_door_paths.py　门牌路径下保持同一次运行身份
 

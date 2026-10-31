@@ -29,7 +29,7 @@
  "source": {
   "page": "sources/pages/personal-expression-feedback-consolidation-and-lessons-sync/page.json",
   "sha256": "4bde6f1c32990a616dbd2bb9238b42842d18767b2f51af22e987df2d0d990815",
-  "converted_at_beijing": "2026-10-31T12:46:16+08:00"
+  "converted_at_beijing": "2026-10-31T13:58:50+08:00"
  }
 }
 ---
@@ -637,7 +637,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {

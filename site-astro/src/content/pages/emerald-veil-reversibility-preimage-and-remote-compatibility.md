@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/emerald-veil-reversibility-preimage-and-remote-compatibility/page.json",
   "sha256": "6df3b19be8ed640cf32fbcd7be9cae4a29dc144e6e319704128b0372685254ac",
-  "converted_at_beijing": "2026-10-31T12:46:11+08:00"
+  "converted_at_beijing": "2026-10-31T13:58:49+08:00"
  }
 }
 ---
@@ -565,7 +565,7 @@ Emerald Veil · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -667,7 +667,7 @@ Emerald Veil · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {

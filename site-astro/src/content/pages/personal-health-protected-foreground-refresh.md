@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/personal-health-protected-foreground-refresh/page.json",
-  "sha256": "0ad872ee9686ab3bba631642616244152570f02390744b697dce88774dc085ff",
-  "converted_at_beijing": "2026-10-31T12:46:16+08:00"
+  "sha256": "2f7dbbc7f3dc055d59058dba3975b86074b853a2ce3eef39a6c09fd32c1e028e",
+  "converted_at_beijing": "2026-10-31T13:58:51+08:00"
  }
 }
 ---
@@ -548,7 +548,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -878,7 +878,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -940,7 +941,7 @@
 
 - tests/test_google_health_enroll.py　授权、只读权限、凭据传输和存储回归（现有 14 个测试函数）
 
-- tests/test_google_health_refresh.py　入口、续跑例外、离线优先、重新绑定、输出、超时和进程树回归（现有 21 个测试函数）
+- tests/test_google_health_refresh.py　入口、续跑例外、离线优先、重新绑定、输出、超时和进程树回归（现有 22 个测试函数）
 
 ## 如何验证
 

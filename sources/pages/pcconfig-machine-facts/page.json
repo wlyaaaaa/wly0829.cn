@@ -85,7 +85,7 @@
       "id": "pcconfig-machine-facts-05",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n路径、端口与项目配置查询在用：61 份 Registry、138 个配置键；配置键只保存当前导航值与来源；稳定投影发布器、开发存储健康器和 TimeAudit 增量消费者已于 2026-09-28 删除，没有发布替代的新版投影。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n路径、端口与项目配置查询在用：64 份 Registry、135 个配置键；配置键只保存当前导航值与来源；稳定投影发布器、开发存储健康器和 TimeAudit 增量消费者已于 2026-09-28 删除，没有发布替代的新版投影。",
       "links": [],
       "anchors": [
         {
@@ -206,7 +206,7 @@
       "id": "pcconfig-machine-facts-14",
       "section": "tech",
       "title": "依据与来源（一）",
-      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- folders.json 登记目录用途边界；不再维护重复的路径负责方投影\n\n- repository-paths.json 是 10 月 27 日那次成功发现的快照，包含 46 个仓库导航条目；authoritative=false，不冒充实时完整仓库名单\n\n- project_restore_anchors.json 保存 25 个恢复锚点\n\n- project_config_keys.json 导航路径、端口、模型和数据源的当前值与真实来源\n\n- 机器生成 Registry/报告的 allowlist、续作检查点与 current 边界\n\n- 路径与项目配置导航合同（docs/contracts/pcconfig.path-project-config.md）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- folders.json 登记目录用途边界；不再维护重复的路径负责方投影\n\n- repository-paths.json 是 10 月 27 日那次成功发现的快照，包含 46 个仓库导航条目；authoritative=false，不冒充实时完整仓库名单\n\n- project_restore_anchors.json 保存 24 个恢复锚点\n\n- project_config_keys.json 导航路径、端口、模型和数据源的当前值与真实来源\n\n- 机器生成 Registry/报告的 allowlist、续作检查点与 current 边界\n\n- 路径与项目配置导航合同（docs/contracts/pcconfig.path-project-config.md）",
       "links": [
         {
           "text": "下一个模块 内存故障取证",

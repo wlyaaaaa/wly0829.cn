@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary/page.json",
   "sha256": "ebaccee8996221a8a19a13d0744c93672cbf8ca182a975c39f64bcff05e1cc17",
-  "converted_at_beijing": "2026-10-31T12:46:22+08:00"
+  "converted_at_beijing": "2026-10-31T13:58:51+08:00"
  }
 }
 ---
@@ -567,7 +567,7 @@ Steam Millennium 配置备份 · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {

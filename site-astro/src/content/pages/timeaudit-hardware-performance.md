@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/timeaudit-hardware-performance/page.json",
   "sha256": "b28e53a5235d9a4fcc443602f13a53822bfb858c3fa8d3da6187237bb640e9ff",
-  "converted_at_beijing": "2026-10-31T12:46:23+08:00"
+  "converted_at_beijing": "2026-10-31T13:58:52+08:00"
  }
 }
 ---
@@ -1290,7 +1290,7 @@ e5459ce 起拒收 NVML 坏值并已换代；10 月 11 日 22:00—23:00 共 3600
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {

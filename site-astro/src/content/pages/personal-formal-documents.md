@@ -41,12 +41,12 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-23 20:00"
+    "at": "2026-10-26 20:24"
    },
    "facts": [
     "近 7 天改进了 9 次"
    ],
-   "as_of": "2026-10-24",
+   "as_of": "2026-10-26",
    "source": "AI 使用记录；项目修改记录"
   },
   "public": false,
@@ -271,7 +271,7 @@
      "id": "n-lines",
      "text": "1,859 行",
      "meaning": "src/legal_filing_kit/formal_documents.py 的行数（不含空行，含注释；含空行共 2,013 行），不限定文书种类",
-     "as_of": "2026-10-22",
+     "as_of": "2026-10-31",
      "source": "见来源记录 personal-formal-documents-n-lines-0，观察于 2026-10-22T06:47:52+08:00",
      "screens": [
       "personal-formal-documents-06",
@@ -282,7 +282,7 @@
      "id": "n-audit-lines",
      "text": "1,437 行",
      "meaning": "共用检查模块 audit.py 的行数（不含空行）",
-     "as_of": "2026-10-22",
+     "as_of": "2026-10-31",
      "source": "见来源记录 personal-formal-documents-n-audit-lines-0，观察于 2026-10-22T06:47:52+08:00",
      "screens": [
       "personal-formal-documents-06"
@@ -423,8 +423,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "6f71e1e8d8db7f2055400c4452b6a7b6a236ac2f38f389092f23c0bf5f401463",
-  "converted_at_beijing": "2026-10-31T12:46:16+08:00"
+  "sha256": "356d81b6d344a5f85ed7b3bd66ebd5a216b8cfd2d716885421236b94228dcf8e",
+  "converted_at_beijing": "2026-10-31T13:58:50+08:00"
  }
 }
 ---
@@ -475,7 +475,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 23 日 20:00",
+       "text": "常用 · 上次使用 10 月 26 日 20:24",
        "state": "ok"
       },
       {
@@ -483,7 +483,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 24 日 · AI 使用记录；项目修改记录",
+     "static_note": "截至 10 月 26 日 · AI 使用记录；项目修改记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -549,7 +549,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 23 日 20:00",
+       "text": "常用 · 上次使用 10 月 26 日 20:24",
        "state": "ok"
       },
       {
@@ -557,7 +557,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 24 日 · AI 使用记录；项目修改记录"
+     "static_note": "截至 10 月 26 日 · AI 使用记录；项目修改记录"
     },
     {
      "type": "stat_card",
@@ -1617,7 +1617,7 @@
   "screenshots": [],
   "chain": "",
   "reuse": "",
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {

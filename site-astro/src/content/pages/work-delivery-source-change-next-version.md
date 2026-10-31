@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/work-delivery-source-change-next-version/page.json",
   "sha256": "322354c591ea3dab45e4c58ec257d83a2657b6da5204561b368eee5143d7a2c6",
-  "converted_at_beijing": "2026-10-31T12:46:25+08:00"
+  "converted_at_beijing": "2026-10-31T13:58:52+08:00"
  }
 }
 ---
@@ -952,7 +952,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {

@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/document-materials-editable-docx-pdf/page.json",
   "sha256": "e17c56ab69fa2043a4653b5104c8c02192ccd047ff4017c84509137b3829e49c",
-  "converted_at_beijing": "2026-10-31T12:46:11+08:00"
+  "converted_at_beijing": "2026-10-31T13:58:49+08:00"
  }
 }
 ---
@@ -913,7 +913,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {

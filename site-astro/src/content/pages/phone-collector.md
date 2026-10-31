@@ -386,8 +386,8 @@
  },
  "source": {
   "page": "sources/pages/phone-collector/page.json",
-  "sha256": "b93a47986c36c3114b698d5bb76faab4ed834e011c4f31606fb8b78707913b83",
-  "converted_at_beijing": "2026-10-31T09:28:10+08:00"
+  "sha256": "3ed34c8be58069800e86547b5c38aa151245e1df51cef8f4361922bbfb8d1c12",
+  "converted_at_beijing": "2026-10-31T13:58:51+08:00"
  }
 }
 ---
@@ -807,7 +807,8 @@
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -1059,7 +1060,7 @@
 **版本和证据分四层**
 - 源码：build.gradle.kts 里 versionName 0.1.13（versionCode 14），提交 4092595（北京时间 10 月 30 日）
 - 手机上实际装的版本：这次没连手机，没核过
-- 测试：42 个 @Test 是 10 月 30 日对源码的静态计数（10 月 22 日是 40 个），这一轮没有运行
+- 测试：49 个 @Test 是 10 月 30 日对源码的静态计数（10 月 22 日是 40 个），这一轮没有运行
 - 真机观察：换机时定下的 72 小时拔线观察和跨夜定位口径写在 PCConfig 换机清单里，没找到通过回执，不当作已验收
 
 ::screen{#phone-collector-05 section="tech"}

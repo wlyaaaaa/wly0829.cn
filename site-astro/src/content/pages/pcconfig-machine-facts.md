@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig-machine-facts/page.json",
-  "sha256": "785287f4ec9368a7e665ae111e68b5625ca0b50fb8babf3056fffab6d7503fd2",
-  "converted_at_beijing": "2026-10-31T12:46:15+08:00"
+  "sha256": "07800e773e6cc0d2cafb7e0cd9db595329c8e2715a477c663d27478e316b0fd3",
+  "converted_at_beijing": "2026-10-31T13:58:50+08:00"
  }
 }
 ---
@@ -561,7 +561,7 @@ PCConfig · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -601,7 +601,7 @@ PCConfig · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-路径、端口与项目配置查询在用：61 份 Registry、138 个配置键；配置键只保存当前导航值与来源；稳定投影发布器、开发存储健康器和 TimeAudit 增量消费者已于 2026-09-28 删除，没有发布替代的新版投影。
+路径、端口与项目配置查询在用：64 份 Registry、135 个配置键；配置键只保存当前导航值与来源；稳定投影发布器、开发存储健康器和 TimeAudit 增量消费者已于 2026-09-28 删除，没有发布替代的新版投影。
 
 ::screen{#pcconfig-machine-facts-06 section="tech"}
 
@@ -1265,7 +1265,7 @@ PCConfig · 功能说明
 
 - repository-paths.json 是 10 月 27 日那次成功发现的快照，包含 46 个仓库导航条目；authoritative=false，不冒充实时完整仓库名单
 
-- project_restore_anchors.json 保存 25 个恢复锚点
+- project_restore_anchors.json 保存 24 个恢复锚点
 
 - project_config_keys.json 导航路径、端口、模型和数据源的当前值与真实来源
 

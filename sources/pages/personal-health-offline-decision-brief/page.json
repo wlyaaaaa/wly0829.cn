@@ -182,7 +182,7 @@
       "id": "personal-health-offline-decision-brief-12",
       "section": "tech",
       "title": "依据与来源（一）",
-      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- google_health_capture.py　有界成功交接、离线验证、回执重签重验、简报保存与指针清理\n\n- google_health_brief.py　字段解析、窗口、质量门、仅库存区、库存计数范围和下游规则\n\n- google_health_history.py　扁平历史段身份、连续日期、完整日上界与清单哈希核对\n\n- tests/test_google_health_incremental.py　跨采集历史、旧未完整日替代与离线无重计合成验证\n\n- google_health_import.py · query_manifest / summarize_manifest　精确字段日期查询、独立读取预算、记录／摘要／缺口与零 API 耗时\n\n- tests/test_google_health_capture.py　离线无凭据／网络、错误交接和安全重试回归（现有 7 个测试函数）\n\n- tests/test_google_health_brief.py　来源、哈希、覆盖、字段三态、仅库存区与命令行回归（现有 42 个测试函数）\n\n- tests/test_google_health_import.py · offline query tests　按日期过滤、跨午夜睡眠、重复记录、缺页和预算截断的合成用例",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- google_health_capture.py　有界成功交接、离线验证、回执重签重验、简报保存与指针清理\n\n- google_health_brief.py　字段解析、窗口、质量门、仅库存区、库存计数范围和下游规则\n\n- google_health_history.py　扁平历史段身份、连续日期、完整日上界与清单哈希核对\n\n- tests/test_google_health_incremental.py　跨采集历史、旧未完整日替代与离线无重计合成验证\n\n- google_health_import.py · query_manifest / summarize_manifest　精确字段日期查询、独立读取预算、记录／摘要／缺口与零 API 耗时\n\n- tests/test_google_health_capture.py　离线无凭据／网络、错误交接和安全重试回归（现有 7 个测试函数）\n\n- tests/test_google_health_brief.py　来源、哈希、覆盖、字段三态、仅库存区与命令行回归（现有 46 个测试函数）\n\n- tests/test_google_health_import.py · offline query tests　按日期过滤、跨午夜睡眠、重复记录、缺页和预算截断的合成用例",
       "links": [],
       "anchors": [],
       "live": null,

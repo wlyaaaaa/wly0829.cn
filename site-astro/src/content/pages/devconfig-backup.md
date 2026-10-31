@@ -611,7 +611,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
   "sha256": "07885fea3d482a251ff702ca2a28a186ce0399541160ea4063d01018e566c7c5",
-  "converted_at_beijing": "2026-10-31T12:46:11+08:00"
+  "converted_at_beijing": "2026-10-31T13:58:49+08:00"
  }
 }
 ---
@@ -1365,7 +1365,7 @@
   "screenshots": [],
   "chain": "",
   "reuse": "",
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {

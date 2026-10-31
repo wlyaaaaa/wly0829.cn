@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/personal-health-offline-decision-brief/page.json",
-  "sha256": "fffc1522288639c03fb1c412abe09acd0caa7f52a47f51552c44bc660c3fdb3c",
-  "converted_at_beijing": "2026-10-31T12:46:16+08:00"
+  "sha256": "e6f3bbe7d23a85d4da93b836989f5f4660b952dc3f9b017cf2d053768760a03e",
+  "converted_at_beijing": "2026-10-31T13:58:51+08:00"
  }
 }
 ---
@@ -1092,7 +1092,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -1160,7 +1160,7 @@
 
 - tests/test_google_health_capture.py　离线无凭据／网络、错误交接和安全重试回归（现有 7 个测试函数）
 
-- tests/test_google_health_brief.py　来源、哈希、覆盖、字段三态、仅库存区与命令行回归（现有 42 个测试函数）
+- tests/test_google_health_brief.py　来源、哈希、覆盖、字段三态、仅库存区与命令行回归（现有 46 个测试函数）
 
 - tests/test_google_health_import.py · offline query tests　按日期过滤、跨午夜睡眠、重复记录、缺页和预算截断的合成用例
 

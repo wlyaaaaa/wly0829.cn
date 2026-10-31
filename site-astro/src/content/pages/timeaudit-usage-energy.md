@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/timeaudit-usage-energy/page.json",
   "sha256": "f47e99638d2deb4e185a0ceb056354bfd973fe66a5d2ddccbc1dac0ce1ee52a5",
-  "converted_at_beijing": "2026-10-31T12:46:23+08:00"
+  "converted_at_beijing": "2026-10-31T13:58:52+08:00"
  }
 }
 ---
@@ -1049,7 +1049,7 @@ TimeAudit · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {

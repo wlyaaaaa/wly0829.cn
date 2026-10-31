@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-bitrate-codec-strategy/page.json",
   "sha256": "f2f7c5722c502b081e87644cee85e1e0c5eb3fa4e003dff91a297d114e4d094a",
-  "converted_at_beijing": "2026-10-31T12:46:22+08:00"
+  "converted_at_beijing": "2026-10-31T13:58:52+08:00"
  }
 }
 ---
@@ -559,7 +559,7 @@ Sunshine 远程串流 · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {

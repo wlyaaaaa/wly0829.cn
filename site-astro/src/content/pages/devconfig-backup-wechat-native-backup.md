@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup-wechat-native-backup/page.json",
-  "sha256": "b9e10e16e193fe5cc495760c6f54db3a989771383f353eccb7361ae747525aae",
-  "converted_at_beijing": "2026-10-31T12:46:11+08:00"
+  "sha256": "340a65c6d7300c9d73b061e1334c54317d36faf663e6f70c767a1eca7ac035ac",
+  "converted_at_beijing": "2026-10-31T13:58:49+08:00"
  }
 }
 ---
@@ -569,7 +569,7 @@ DevConfig Backup · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -586,7 +586,7 @@ DevConfig Backup · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "110月30日G盘这一代约48.06GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。",
+     "text_ref": "110月30日G盘这一代约48.09GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -608,7 +608,7 @@ DevConfig Backup · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "110月30日G盘这一代约48.06GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。",
+     "text_ref": "110月30日G盘这一代约48.09GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -635,11 +635,11 @@ DevConfig Backup · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-当前 G 回执是 10 月 30 日 10:10:50 完成，156,448 文件、48.06 GB，producer_verified_manifest_bound、VSS 时点、无文件警告；同日 11:00 开始的上云读数时仍 running，云端本轮未联网；PCConfig 10 月 29 日那一轮 H 冷备微信项 complete（156,156 文件），早于这一代；客户端恢复未验（10 月 30 日 11:11 回读）
+当前 G 回执是 10 月 30 日 10:10:50 完成，156,794 文件、48.09 GB，producer_verified_manifest_bound、VSS 时点、无文件警告；同日 11:00 开始的上云读数时仍 running，云端本轮未联网；PCConfig 10 月 29 日那一轮 H 冷备微信项 complete（156,156 文件），早于这一代；客户端恢复未验（10 月 30 日 11:11 回读）
 
 ### 关键规则与设计选择
 
-1. 10 月 30 日 G 盘这一代约 48.06 GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。
+1. 10 月 30 日 G 盘这一代约 48.09 GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。
 
 2. G 盘先建立独立候选再校验切换，旧成功代保留；可复用的硬链接只来自已验备份，不能把活动原件硬链接进去。个别文件有警告时保留它的旧文件或登记的旧一代，可恢复的前代可以多于一份。
 
@@ -1072,7 +1072,7 @@ DevConfig Backup · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 10 月 31 日"
  },
  "layout": {
   "h": {
@@ -1128,7 +1128,7 @@ DevConfig Backup · 功能说明
 
 - 9 月 18 日历史 Hot 为 145,307 文件、45,218,959,121 字节，当时 PCConfig 对 G/H 全量验真并修复 53 个同大小/时间的冷备差异；9 月 22 日 145,473 文件、45,413,770,744 字节，9 月 24 日 145,544 文件、45,422,871,529 字节，9 月 28 日 146,300 文件、45,603,489,818 字节，都保留原日期。北京时间 10 月 11 日 09:30—11:02 的自然运行在 G 盘生成 148,592 文件、45,972,129,496 字节的一代，生产者报告 VSS 与全树验真、无警告。H 盘（历史）：10 月 12 日 05:40 回读 PCConfig 10 月 11 日 18:39:26 的冷备记录，H 微信完成 148,592 文件、45,972,129,496 字节，sha256_full_tree 全树核对，修复 16 个文件，0 文件警告，清单哈希与 G 当前回执一致；这是冷备生产者当时的验真，本轮只读取、没有重算。热维护和冷备两份回执引用同一个恢复上下文编号；整次冷备结果为 complete_with_warnings，警告来自其他集合，微信集合本身是 complete。
 
-- 10 月 30 日 11:11 的 Backup-Status -NoDrive -Json（零写入，退出码 0）：整体 attention_required，原因在配置包过期，微信这一层是 current。G 微信热备 10 月 30 日 10:10:50 完成，156,448 文件、48,064,272,633 字节，verification=producer_verified_manifest_bound、capture_consistency=vss_crash_consistent、无文件警告；这是生产者的验真，本轮只读取、没有重新散列原文件。10 月 30 日 11:00 开始的微信上云在读状态时仍是 running，不能写成已完成，也不是失败；Drive 本轮 not_contacted，没有联网重读云端。PCConfig 正式默认的 core-recovery/cold-last.json 记 10 月 29 日 14:30—18:06 那一轮整体 partial（配置项因来源过旧被挡），wechat 集合 complete，156,156 文件、48,037,548,152 字节，sha256_full_tree；那是早于 30 日 G 这一份的另一代，G 的新数字和日期不能借给 H，旧的单项冷备回执也不能覆盖这份最新总批次。
+- 10 月 30 日 11:11 的 Backup-Status -NoDrive -Json（零写入，退出码 0）：整体 attention_required，原因在配置包过期，微信这一层是 current。G 微信热备 10 月 30 日 10:10:50 完成，156,794 文件、48,092,736,872 字节，verification=producer_verified_manifest_bound、capture_consistency=vss_crash_consistent、无文件警告；这是生产者的验真，本轮只读取、没有重新散列原文件。10 月 30 日 11:00 开始的微信上云在读状态时仍是 running，不能写成已完成，也不是失败；Drive 本轮 not_contacted，没有联网重读云端。PCConfig 正式默认的 core-recovery/cold-last.json 记 10 月 29 日 14:30—18:06 那一轮整体 partial（配置项因来源过旧被挡），wechat 集合 complete，156,156 文件、48,037,548,152 字节，sha256_full_tree；那是早于 30 日 G 这一份的另一代，G 的新数字和日期不能借给 H，旧的单项冷备回执也不能覆盖这份最新总批次。
 
 - 历史：10 月 23 日 10:28 的 Backup-Status -NoDrive -Json（零写入，退出码 0）：整体 receipts_current。10 月 23 日 10:16:05 那次 G 微信热备完成，154,912 文件、46,826,139,227 字节，collection complete、sha256_full_tree、source_follow_verified、无文件警告；这是生产者的验真，本轮只读取、没有重算。本机最近一次微信上云记录是 10 月 22 日 11:00—12:10:58 drive=complete，上传来源是上一代（22 日 10:14:14 那份 G 热备，gate passed）；23 日 10:16:05 这一代还没有上云记录；Drive 本轮 not_contacted，没有联网重读云端。PCConfig 冷备本轮没有新读：10 月 22 日 06:47 读到的 core-recovery/cold-last.json 记 10 月 21 日 16:47:54 那一轮整体 complete_with_warnings、20 个集合没有 blocked，wechat 集合 complete，警告来自密码中心那一项 H 落后 G 和四个来源新鲜度 unknown；那一轮早于现在这一代。
 
