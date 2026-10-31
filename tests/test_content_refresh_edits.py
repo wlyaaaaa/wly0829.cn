@@ -198,6 +198,96 @@ class NumberEditsTests(unittest.TestCase):
         self.assertIn("数字截至 2026 年 10 月 11 日", (self.root / "site-astro/src/content/pages/personal-materials.md").read_text("utf-8"))
         self.assertEqual(close_run(self.root, result, report)["status"], "closed")
 
+    def test_unchanged_record_without_edit_gets_markdown_readback(self):
+        registry = self.root / "sources/refresh/registry.json"
+        registry.parent.mkdir(parents=True, exist_ok=True)
+        registry.write_text(json.dumps({"records": [{"id": "plain", "current_value": 165,
+            "observed_at": "2026-10-09T16:03:00+08:00"}]}), encoding="utf-8")
+        row = dict(id="plain", page="personal-materials", new_value=165, status="unchanged",
+            checked_at="2026-10-11T16:03:00+08:00", source_observed_at="2026-10-11T16:03:00+08:00",
+            observation_basis="live_read", readback_locator={"file": "sources/pages/personal-materials/page.json",
+                "field": "registry.numbers[0].text", "start": 0, "end": 3, "expected": "165"})
+        payload = {"schema": "content-refresh.number-edits.v1", "edits": [], "record_updates": [row]}
+        report = apply_edits(self.root, payload)
+        self.assertFalse(report["skipped"])
+        self.assertEqual(report["markdown_readback"][0]["status"], "verified")
+        self.assertEqual(report["registry_sync"]["records"], ["plain"])
+        self.assertEqual(json.loads(registry.read_text("utf-8"))["records"][0]["observed_at"],
+                         "2026-10-11T16:03:00+08:00")
+
+    def test_unchanged_record_does_not_overwrite_diverged_markdown(self):
+        md = self.root / "site-astro/src/content/pages/personal-materials.md"
+        md.write_text(md.read_text("utf-8") + "\n手工改动", encoding="utf-8")
+        before = md.read_bytes()
+        row = dict(id="plain", page="personal-materials", new_value=165, status="unchanged",
+            readback_locator={"file": "sources/pages/personal-materials/page.json",
+                "field": "registry.numbers[0].text", "start": 0, "end": 3, "expected": "165"})
+        report = apply_edits(self.root, {"schema": "content-refresh.number-edits.v1",
+                                         "edits": [], "record_updates": [row]})
+        self.assertEqual(report["skipped"][0]["reason"], "markdown_readback_failed")
+        self.assertEqual(md.read_bytes(), before)
+
+    def test_two_unchanged_derived_screens_advance_after_readback(self):
+        self.page["screens"] = [{"id": "top", "text": "**10 份材料**"},
+                                {"id": "second", "text": "**5 次检查**"}]
+        self.page["registry"]["numbers"] = []
+        self.save()
+        registry = self.root / "sources/refresh/registry.json"
+        registry.parent.mkdir(parents=True, exist_ok=True)
+        rows = [dict(id=rid, page="personal-materials", screen=sid, new_value=value,
+                     status="unchanged", derive_as_of=True,
+                     checked_at="2026-10-11T16:03:00+08:00",
+                     source_observed_at="2026-10-11T16:03:00+08:00", observation_basis="live_read",
+                     readback_locator={"file": "sources/pages/personal-materials/page.json",
+                         "field": f"screens[{index}].text", "start": 2, "end": 2 + len(str(value)),
+                         "expected": str(value)})
+                for index, (rid, sid, value) in enumerate((("one", "top", 10), ("two", "second", 5)))]
+        registry.write_text(json.dumps({"records": [dict(row, current_value=row["new_value"],
+            observed_at="2026-10-09T16:03:00+08:00") for row in rows]}), encoding="utf-8")
+
+        def dated_converter(root, pages, output_dir=None):
+            fake_converter(root, pages, output_dir)
+            out = Path(output_dir) if output_dir else root / "site-astro/src/content/pages"
+            records = json.loads(registry.read_text("utf-8"))["records"]
+            md = out / "personal-materials.md"
+            text = md.read_text("utf-8")
+            for record in records:
+                day = record["observed_at"][:10]
+                year, month, date = map(int, day.split("-"))
+                text += (f"\n::screen{{#{record['screen']}}}\n\n```typeset\n" +
+                         json.dumps({"screen": {"id": record["screen"],
+                             "derived_as_of": f"数字截至 {year} 年 {month} 月 {date} 日"}}, ensure_ascii=False) +
+                         "\n```\n")
+            md.write_text(text, encoding="utf-8")
+
+        dated_converter(self.root, {"personal-materials"})
+        md = self.root / "site-astro/src/content/pages/personal-materials.md"
+        self.assertEqual(md.read_text("utf-8").count("数字截至 2026 年 10 月 9 日"), 2)
+        report = apply_edits(self.root, {"schema": "content-refresh.number-edits.v1",
+                                         "edits": [], "record_updates": rows}, converter=dated_converter)
+        self.assertFalse(report["skipped"])
+        self.assertEqual(md.read_text("utf-8").count("数字截至 2026 年 10 月 11 日"), 2)
+        self.assertEqual(set(report["registry_sync"]["records"]), {"one", "two"})
+        data = json.loads(registry.read_text("utf-8"))
+        for record in data["records"]:
+            record["observed_at"] = "2026-10-09T16:03:00+08:00"
+        registry.write_text(json.dumps(data), encoding="utf-8")
+        dated_converter(self.root, {"personal-materials"})
+        before = md.read_bytes()
+
+        def final_failure(root, pages, output_dir=None):
+            if output_dir is None and "2026-10-11" in registry.read_text("utf-8"):
+                raise RuntimeError("最终日期转换失败")
+            dated_converter(root, pages, output_dir)
+
+        report = apply_edits(self.root, {"schema": "content-refresh.number-edits.v1",
+                                         "edits": [], "record_updates": rows}, converter=final_failure)
+        self.assertEqual({r["record_id"] for r in report["skipped"]}, {"one", "two"})
+        self.assertFalse(report["registry_sync"]["records"])
+        self.assertEqual(md.read_bytes(), before)
+        self.assertTrue(all(r["observed_at"].startswith("2026-10-09") for r in
+                            json.loads(registry.read_text("utf-8"))["records"]))
+
     def test_event_cutoffs_require_manual_review_and_numbers_keep_their_date(self):
         for meaning in ("库最近一次写入", "上次使用", "最后一次运行", "账本覆盖到此日"):
             self.page["screens"][0]["text"] = "，".join(self.labels) + f"，截至 10 月 9 日（{meaning}）"
