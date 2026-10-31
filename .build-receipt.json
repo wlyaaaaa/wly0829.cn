@@ -1,341 +1,68 @@
 {
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
-  "source_commit": "c48e1e77a4b7acb3c1f6551e045d38a9cc1841c4",
-  "prepared_at_beijing": "2026-10-31T10:04:19.197320+08:00",
-  "seconds": 2022.432,
+  "source_commit": "a2a95c73f9dc681ad381db3c0bafc3d2ba60758a",
+  "prepared_at_beijing": "2026-10-31T11:12:22.501292+08:00",
+  "seconds": 165.772,
   "steps": [
     {
       "name": "home_highlights",
-      "seconds": 0.214
+      "seconds": 0.319
     },
     {
       "name": "source",
-      "seconds": 13.567
+      "seconds": 16.428
     },
     {
       "name": "fingerprint",
-      "seconds": 0.49
+      "seconds": 0.522
     },
     {
       "name": "prepare",
-      "seconds": 6.335
+      "seconds": 6.537
     },
     {
       "name": "native_inputs",
-      "seconds": 1.375
+      "seconds": 1.233
     },
     {
       "name": "blocks",
-      "seconds": 1869.141
+      "seconds": 28.9
     },
     {
       "name": "astro",
-      "seconds": 13.957
+      "seconds": 11.864
     },
     {
       "name": "assets",
-      "seconds": 2.352
+      "seconds": 2.659
     },
     {
       "name": "finish",
-      "seconds": 13.013
+      "seconds": 9.391
     },
     {
       "name": "finalize",
-      "seconds": 80.083
+      "seconds": 80.721
     },
     {
       "name": "public",
-      "seconds": 21.633
+      "seconds": 6.935
     },
     {
       "name": "inventory",
-      "seconds": 0.273
+      "seconds": 0.263
     }
   ],
   "rebuilt_pages": [
-    "/",
-    "/404.html",
-    "/404/",
-    "/cockpit/",
-    "/cockpit/ai/",
-    "/cockpit/storage/",
-    "/cv/",
-    "/github-profile/",
-    "/how-this-site/",
-    "/how/",
-    "/mcp/",
-    "/projects/",
-    "/projects/agents/",
-    "/projects/agents/authorization-owner/",
-    "/projects/agents/capability-routing/",
-    "/projects/agents/context-evidence/",
-    "/projects/agents/protected-policy/",
-    "/projects/agents/rules-contracts/",
-    "/projects/agents/skills-plugins/",
-    "/projects/agents/working-tree-hot-mirror/",
-    "/projects/ai-cli-profile-manager/",
-    "/projects/ai-cli-profile-manager/background-openai-children/",
-    "/projects/ai-cli-profile-manager/doctor-validation/",
-    "/projects/ai-cli-profile-manager/engines-providers/",
-    "/projects/ai-cli-profile-manager/install-recovery/",
-    "/projects/ai-cli-profile-manager/local-proxies/",
-    "/projects/ai-cli-profile-manager/native-desktop-integration/",
-    "/projects/ai-cli-profile-manager/profiles-launch/",
-    "/projects/ai-cli-profile-manager/recoverable-runs/",
-    "/projects/ai-cli-profile-manager/secrets-isolation/",
-    "/projects/chinese-asr/",
-    "/projects/chinese-asr/audit-evidence/",
-    "/projects/chinese-asr/desktop-dictation/",
-    "/projects/chinese-asr/installation-recovery/",
-    "/projects/chinese-asr/known-text-alignment/",
-    "/projects/chinese-asr/long-batch/",
-    "/projects/chinese-asr/models-modes/",
-    "/projects/chinese-asr/runtime-privacy/",
-    "/projects/chinese-asr/speaker-attribution/",
-    "/projects/chinese-asr/task-routing/",
-    "/projects/codex-agent-model-benchmark/",
-    "/projects/codex-local-remote/",
-    "/projects/codex-memory/",
-    "/projects/codex-memory/claude-project-memory/",
-    "/projects/codex-memory/config-memory-whitelist-sync/",
-    "/projects/codex-memory/content-addressed-storage-cold-sync/",
-    "/projects/codex-memory/gemini-workspace-memory/",
-    "/projects/codex-memory/isolated-disaster-recovery/",
-    "/projects/codex-memory/openclaw-workspace-recovery/",
-    "/projects/codex-memory/vss-conversation-hot-backup/",
-    "/projects/codex-remote/",
-    "/projects/daily-preferences/",
-    "/projects/daily-preferences/current-corrections/",
-    "/projects/daily-preferences/evidence-query/",
-    "/projects/daily-preferences/fact-verification/",
-    "/projects/daily-preferences/mobile-context-delivery/",
-    "/projects/daily-preferences/personal-understanding/",
-    "/projects/daily-preferences/recommendation-choice/",
-    "/projects/daily-preferences/source-coverage/",
-    "/projects/devconfig-backup/",
-    "/projects/devconfig-backup/recovery-and-tasks/",
-    "/projects/devconfig-backup/source-catalog/",
-    "/projects/devconfig-backup/tiered-distribution/",
-    "/projects/devconfig-backup/wechat-native-backup/",
-    "/projects/document-materials/",
-    "/projects/document-materials/current-matter-sources/",
-    "/projects/document-materials/editable-docx-pdf/",
-    "/projects/document-materials/page-audit-release/",
-    "/projects/document-materials/reality-readback-recovery/",
-    "/projects/document-materials/signature-delivery-version/",
-    "/projects/emerald-veil/",
-    "/projects/emerald-veil/native-bubbles-idle-overlay/",
-    "/projects/emerald-veil/reversibility-preimage-and-remote-compatibility/",
-    "/projects/emerald-veil/wallpaper-engine-coexistence-and-rain-experiment/",
-    "/projects/emerald-veil/windows-desktop-and-lockscreen-background/",
-    "/projects/github-index/",
-    "/projects/github-index/project-admission/",
-    "/projects/github-index/protected-major-actions/",
-    "/projects/github-index/publication-gate/",
-    "/projects/github-index/repository-ledger/",
-    "/projects/github-index/snapshot-recovery/",
-    "/projects/github-index/worktree-sync/",
-    "/projects/github-local-index/",
-    "/projects/learning/",
-    "/projects/learning/authoritative-research/",
-    "/projects/learning/dialogue-revision/",
-    "/projects/learning/human-control-simple/",
-    "/projects/learning/plain-language/",
-    "/projects/learning/questions-validation/",
-    "/projects/learning/route-checkpoint/",
-    "/projects/localocr/",
-    "/projects/localocr/document-structure/",
-    "/projects/localocr/input-routing/",
-    "/projects/localocr/installation-recovery/",
-    "/projects/localocr/jobs-cache/",
-    "/projects/localocr/results-evidence/",
-    "/projects/localocr/runtime-resources/",
-    "/projects/meshclip-kit/",
-    "/projects/meshclip-kit/exact-peer-firewall-hardening/",
-    "/projects/meshclip-kit/kde-connect-pairing-sync/",
-    "/projects/meshclip-kit/silent-watchdog-and-session-lifecycle/",
-    "/projects/meshclip-kit/tailscale-peer-reachability/",
-    "/projects/openclaw/",
-    "/projects/password-center/",
-    "/projects/pc-panel-hub/",
-    "/projects/pc-panel-hub/case-panel-rendering/",
-    "/projects/pc-panel-hub/hs2-overlay/",
-    "/projects/pc-panel-hub/installation-binding-migration/",
-    "/projects/pc-panel-hub/power-recovery/",
-    "/projects/pc-panel-hub/serial-transport/",
-    "/projects/pc-panel-hub/telemetry-trust/",
-    "/projects/pcconfig/",
-    "/projects/pcconfig/authorization-files/",
-    "/projects/pcconfig/drift-acceptance/",
-    "/projects/pcconfig/machine-facts/",
-    "/projects/pcconfig/memory-diagnostics/",
-    "/projects/pcconfig/owner-takeover/",
-    "/projects/pcconfig/protected-actions/",
-    "/projects/pcconfig/protected-data/",
-    "/projects/pcconfig/recovery-backup/",
-    "/projects/pcconfig/remote-computer-mcp/",
-    "/projects/pcconfig/runtime-startup/",
-    "/projects/pcconfig/secondary-laptop/",
-    "/projects/pcconfig/secrets-providers/",
-    "/projects/personal-expression/",
-    "/projects/personal-expression/corpus-extension-and-private-recovery/",
-    "/projects/personal-expression/explain-to-me/",
-    "/projects/personal-expression/feedback-consolidation-and-lessons-sync/",
-    "/projects/personal-expression/reply-as-me/",
-    "/projects/personal-finance/",
-    "/projects/personal-finance/bill-collection/",
-    "/projects/personal-finance/monthly-report/",
-    "/projects/personal-finance/reconciliation/",
-    "/projects/personal-formal-documents/",
-    "/projects/personal-health/",
-    "/projects/personal-health/current-evidence-route/",
-    "/projects/personal-health/evidence-three-state/",
-    "/projects/personal-health/health-owner-boundary/",
-    "/projects/personal-health/offline-decision-brief/",
-    "/projects/personal-health/protected-foreground-refresh/",
-    "/projects/personal-health/raw-preservation-resume/",
-    "/projects/personal-materials/",
-    "/projects/personal-materials/bounded-discovery/",
-    "/projects/personal-materials/exact-intake/",
-    "/projects/personal-materials/registered-lookup/",
-    "/projects/personal-materials/verified-open/",
-    "/projects/personal-media/",
-    "/projects/personal-media/classification/",
-    "/projects/personal-media/cloud-candidates/",
-    "/projects/personal-media/local-ingest/",
-    "/projects/personal-media/phone-preservation/",
-    "/projects/personal-media/phone-recovery/",
-    "/projects/personal-media/search-browse/",
-    "/projects/phone-collector/",
-    "/projects/proxyclean/",
-    "/projects/proxyclean/dead-port-and-route-cleanup/",
-    "/projects/proxyclean/dynamic-proxy-status/",
-    "/projects/proxyclean/ipv6-routing-control/",
-    "/projects/proxyclean/one-click-and-troubleshooting-boundaries/",
-    "/projects/proxyclean/targeted-port-shutdown/",
-    "/projects/proxyclean/wifi-rebind-and-recovery/",
-    "/projects/ramdisk-guardian/",
-    "/projects/ramdisk-guardian/drive-arrival-sensing-and-skeleton-healing/",
-    "/projects/ramdisk-guardian/host-memory-telemetry-and-silent-monitoring/",
-    "/projects/ramdisk-guardian/installation-and-application-recovery/",
-    "/projects/ramdisk-guardian/unaccounted-watchdog-and-driver-auto-release/",
-    "/projects/ramdisk-guardian/volatile-cache-contract-and-backup-retirement/",
-    "/projects/remote-control/",
-    "/projects/steam-millennium-config-backup/",
-    "/projects/steam-millennium-config-backup/allowlist-config-and-style-snapshot/",
-    "/projects/steam-millennium-config-backup/plugin-manifest-and-install-state-tracking/",
-    "/projects/steam-millennium-config-backup/scheduled-snapshot-guardian-and-clean-restore-boundary/",
-    "/projects/steam-millennium-config-backup/theme-options-palette-and-dual-baseline-tracking/",
-    "/projects/sunshine-remote-streaming/",
-    "/projects/sunshine-remote-streaming/bitrate-codec-strategy/",
-    "/projects/sunshine-remote-streaming/capture-failover/",
-    "/projects/sunshine-remote-streaming/remote-power-and-repair/",
-    "/projects/sunshine-remote-streaming/transport-ipv6-direct/",
-    "/projects/sunshine-remote-streaming/vdd-display-settings/",
-    "/projects/timeaudit/",
-    "/projects/timeaudit/backup-recovery/",
-    "/projects/timeaudit/clipboard-history/",
-    "/projects/timeaudit/collection-pipeline/",
-    "/projects/timeaudit/hardware-performance/",
-    "/projects/timeaudit/process-forensics/",
-    "/projects/timeaudit/runtime-reliability/",
-    "/projects/timeaudit/usage-energy/",
-    "/projects/typora-theme-pack/",
-    "/projects/typora-theme-pack/controlled-preview-and-visual-qa/",
-    "/projects/typora-theme-pack/multi-scenario-export-profiles/",
-    "/projects/typora-theme-pack/theme-installation-and-lifecycle/",
-    "/projects/typora-theme-pack/transactional-pdf-export-pipeline/",
-    "/projects/typora-theme-pack/verdant-mint-theme-system/",
-    "/projects/vault-tool/",
-    "/projects/vault-tool/ai-local-interface/",
-    "/projects/vault-tool/dual-password/",
-    "/projects/vault-tool/files-encryption/",
-    "/projects/vault-tool/image-carrier/",
-    "/projects/vault-tool/maintenance-recovery/",
-    "/projects/vault-tool/passwords-formats/",
-    "/projects/vault-tool/private-backup/",
-    "/projects/vault-tool/view-extract/",
-    "/projects/video-scaffold/",
-    "/projects/video-scaffold/delivery-verify/",
-    "/projects/video-scaffold/deterministic-render/",
-    "/projects/video-scaffold/preflight-preview/",
-    "/projects/video-scaffold/project-bootstrap/",
-    "/projects/video-scaffold/recovery-reuse/",
-    "/projects/video-scaffold/scene-authoring/",
-    "/projects/video-scaffold/voice-timing/",
-    "/projects/wechat-direct/",
-    "/projects/wechat-direct/account-source-identity/",
-    "/projects/wechat-direct/bounded-chat-context/",
-    "/projects/wechat-direct/moments-local-cache/",
-    "/projects/wechat-direct/named-chat-archive/",
-    "/projects/wechat-direct/preservation-verification/",
-    "/projects/wechat-direct/reply-media-relations/",
-    "/projects/wechat-history-ai-bridge/",
-    "/projects/wechatdirect/",
-    "/projects/wly0829-cn/",
-    "/projects/work-delivery-copilot/",
-    "/projects/work-delivery/",
-    "/projects/work-delivery/consistent-deliverables/",
-    "/projects/work-delivery/evidence-quality/",
-    "/projects/work-delivery/package-sources/",
-    "/projects/work-delivery/source-change-next-version/",
-    "/projects/work-delivery/value-state-recovery/",
-    "/rescue/",
-    "/rules/",
-    "/rules/authorization/",
     "/rules/capabilities-runtime/",
-    "/rules/charter/",
     "/rules/claude-adapter/",
     "/rules/codex-adapter/",
     "/rules/context-sources/",
     "/rules/engineering-delivery/",
     "/rules/execution-coordination/",
     "/rules/privacy-data/",
-    "/rules/protected-actions/",
-    "/rules/rule-release/",
-    "/search/",
-    "/skills/",
-    "/skills/authorization-file-broker/",
-    "/skills/browser-control-continuity/",
-    "/skills/chinese-asr/",
-    "/skills/cloud-asset-channel/",
-    "/skills/cockpit/",
-    "/skills/control-plane-doctor/",
-    "/skills/daily-preferences/",
-    "/skills/document-materials/",
-    "/skills/documents/",
-    "/skills/explain-to-me/",
-    "/skills/file-intake-router/",
-    "/skills/google-workspace-direct/",
-    "/skills/image-generation/",
-    "/skills/learning/",
-    "/skills/llm-backend-toolkit/",
-    "/skills/local-secret-broker/",
-    "/skills/localocr/",
-    "/skills/md-to-pdf/",
-    "/skills/media-person-self/",
-    "/skills/mojibake-doctor/",
-    "/skills/native-economy-routing/",
-    "/skills/pdf-render-safe/",
-    "/skills/pdf/",
-    "/skills/personal-formal-documents/",
-    "/skills/personal-health/",
-    "/skills/personal-materials/",
-    "/skills/personal-media/",
-    "/skills/personal-panel-refresh/",
-    "/skills/phone-direct/",
-    "/skills/project-entry-gate/",
-    "/skills/proxy-network/",
-    "/skills/reply-as-me/",
-    "/skills/report-page/",
-    "/skills/tailscale-safe-exposure/",
-    "/skills/timeaudit-diagnostics/",
-    "/skills/token-budget-advisor/",
-    "/skills/vault-workflow/",
-    "/skills/wechat-direct/",
-    "/skills/work-delivery/"
+    "/rules/protected-actions/"
   ],
   "html_files": 324,
   "files": [
@@ -1576,8 +1303,8 @@
     },
     {
       "path": "_living/how/astro/shared-config.json",
-      "bytes": 2993,
-      "sha256": "afe5e6f5194cd4d53f5f3313233975e52fa1e34350579f79bd178a461b8ed354"
+      "bytes": 19471,
+      "sha256": "ccf63e10455688f787383ce8f8b4d5bf8483d4d68bf66952e2801a3c715b650e"
     },
     {
       "path": "_living/how/bird-first-only.c7b591064984/config.json",
@@ -1831,8 +1558,8 @@
     },
     {
       "path": "_living/pcconfig/astro/shared-config.json",
-      "bytes": 25590,
-      "sha256": "2a4733c4b6135c569c769748aedad5157539bec6f979ac6659c2fd6574ded16a"
+      "bytes": 25589,
+      "sha256": "42bd9d68a61703360606f8651fbaa8a77318b4f25f339a8f3ddbd4a18ed36d56"
     },
     {
       "path": "_living/pcconfig/bird-first-only.24313bded135/config.json",
@@ -2571,8 +2298,8 @@
     },
     {
       "path": "_living/skill-explain-to-me/astro/shared-config.json",
-      "bytes": 11422,
-      "sha256": "1757571a01449c5004600d333ac93dc0e0cad0dbc55f61e5af0db9bdcfe05948"
+      "bytes": 11430,
+      "sha256": "6a0aa4a2ec42a629381344d1cb46b3131529c8536292cb5427958126dd63d5b0"
     },
     {
       "path": "_living/skill-explain-to-me/bird-first-only.f6499ab9f7eb/config.json",
@@ -2766,8 +2493,8 @@
     },
     {
       "path": "_living/skill-media-person-self/astro/shared-config.json",
-      "bytes": 9502,
-      "sha256": "b13d4abeffd6063f4f98c431edb833c2cbda93921ec3ee1350472d482de22409"
+      "bytes": 9510,
+      "sha256": "552e8fad8105ed3a454e4fe175f7e341518cad3c5186ce858d3c3ab22cd94cea"
     },
     {
       "path": "_living/skill-media-person-self/bird-first-only.2b42e682b90d/config.json",
@@ -2831,8 +2558,8 @@
     },
     {
       "path": "_living/skill-pdf-render-safe/astro/shared-config.json",
-      "bytes": 12967,
-      "sha256": "d7788aaea5dfd1878b88ca08e3c5afdcdc2e61b2056979db878d5c6c277b29d7"
+      "bytes": 12975,
+      "sha256": "4c93ba8bda8f530cad5e9fd4fd4da32fbac01abf9a3096ce67c89e0198c12bc9"
     },
     {
       "path": "_living/skill-pdf-render-safe/bird-first-only.fcd507590afd/config.json",
@@ -3251,8 +2978,8 @@
     },
     {
       "path": "_living/timeaudit/astro/shared-config.json",
-      "bytes": 18484,
-      "sha256": "903f98ce1dd71c6f1c912d34ea86f8044c0585a828c4360949d88ac0c493b132"
+      "bytes": 18497,
+      "sha256": "370daeb200fe6d598b84f7b17cf712bc4b8f5f4c0efb0b4399be7c0744325a6d"
     },
     {
       "path": "_living/timeaudit/bird-first-only.a07df7515cfd/config.json",
@@ -3306,8 +3033,8 @@
     },
     {
       "path": "_living/video-scaffold/astro/shared-config.json",
-      "bytes": 15949,
-      "sha256": "8558cb64574e67eb770aa59aa335378b5248ae523231980271a97a3457add870"
+      "bytes": 16029,
+      "sha256": "c26dddfd45f97c955adcb3d90d1d8c233c38425ab554bb6f5b2e73e60add0b24"
     },
     {
       "path": "_living/video-scaffold/bird-first-only.03f16afd8139/config.json",
@@ -3401,8 +3128,8 @@
     },
     {
       "path": "_living/wly0829-cn/astro/shared-config.json",
-      "bytes": 1831,
-      "sha256": "3965c3f0f4af4f3889f3fc3a2ae66e6a735f4b292af086e9a3f3eb76c056464c"
+      "bytes": 1371,
+      "sha256": "a7727e243734f0119e8596e3de3a32a9d4499be8b28b7f2b6c5a8385ba12a65e"
     },
     {
       "path": "_living/wly0829-cn/bird-source.1602469644a4/config.json",
@@ -25220,6 +24947,11 @@
       "sha256": "d1c4aee07efa1fe10dd116e6ae1bf6225a8d07c768ac5d24ffe77c987324540e"
     },
     {
+      "path": "assets/_fonts/rule-capabilities-runtime-3f42dc2db712.woff2",
+      "bytes": 260748,
+      "sha256": "eb3e6e881c70a50d43e767d94f23b4407fbd14e65053246f85d31dea3689b548"
+    },
+    {
       "path": "assets/_fonts/rule-capabilities-runtime-cdae12af023e.woff2",
       "bytes": 258540,
       "sha256": "b473fd6347ae3bd28636ae0e0b1f39ea10eb51ff18b0836298be920a794b5826"
@@ -25260,6 +24992,11 @@
       "sha256": "db1282272380931903b6c2815e08faadd23c05f5369793cdd97991b869f4033e"
     },
     {
+      "path": "assets/_fonts/rule-codex-adapter-9cf1b8453e89.woff2",
+      "bytes": 207676,
+      "sha256": "5752b8333c363987de22321245dbe9b0fa9bcf14edce4a060cf2d4935594adb7"
+    },
+    {
       "path": "assets/_fonts/rule-codex-adapter-b8d14283dbde.woff2",
       "bytes": 207500,
       "sha256": "f9b35a4758a70257be93bc3ca454f632027250596e694724c3eba9f4b1729985"
@@ -25268,6 +25005,11 @@
       "path": "assets/_fonts/rule-context-sources-6b7715062b3b.woff2",
       "bytes": 217876,
       "sha256": "90efcb4fd4c47ca050db22eb90af2461012ff277d9c3c218fc296949feb70ee9"
+    },
+    {
+      "path": "assets/_fonts/rule-context-sources-70f26650eeb0.woff2",
+      "bytes": 228920,
+      "sha256": "078f751cdbca0ce7f59001d828d2fc5569a252d6f1e6d1cf8eef98dacf3bca8f"
     },
     {
       "path": "assets/_fonts/rule-context-sources-84e27fad184c.woff2",
@@ -25330,9 +25072,19 @@
       "sha256": "5236af410ad7823c1547475da33145ea91e753bbde339ffb781e66c287b68b37"
     },
     {
+      "path": "assets/_fonts/rule-privacy-data-d27355440548.woff2",
+      "bytes": 215036,
+      "sha256": "b568fe3a1b452873e4fe0c79a5e4df57688aab62a39b0b35d271c12f854af596"
+    },
+    {
       "path": "assets/_fonts/rule-protected-actions-49f96744e84f.woff2",
       "bytes": 175184,
       "sha256": "8d6829d91e486dd454086abfdf42c079c05f8f99d5e5647e1d657f7429b9c96a"
+    },
+    {
+      "path": "assets/_fonts/rule-protected-actions-64a3d400736a.woff2",
+      "bytes": 174588,
+      "sha256": "343547e56192f22068279c987eceabed904f54d4d909bcdac331e86a0b70606a"
     },
     {
       "path": "assets/_fonts/rule-protected-actions-8ad9ba17bd30.woff2",
@@ -28927,12 +28679,12 @@
     {
       "path": "release-identity.json",
       "bytes": 244,
-      "sha256": "9bca9823c2961aa5037c7eb25ef4cd5b32b683b864541b6b3ab14098b1332b9d"
+      "sha256": "decc5dc4439dad56eabeb28a766c82aa735d0b9a62b6d01ea79894ec68c3c6e2"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 5393184,
-      "sha256": "627383d915647acb3be42e5eea6f6f74d4d6ef55234746cd3b3aa1bc79f8f07a"
+      "bytes": 5397026,
+      "sha256": "e62645414950fc7a8b8470a705a414128f3bc2370a4691774b69db024ca1c1a8"
     },
     {
       "path": "rescue/index.html",
@@ -28971,8 +28723,8 @@
     },
     {
       "path": "rules/capabilities-runtime/index.html",
-      "bytes": 363707,
-      "sha256": "8604fddcf7c157baa85cd2a90f14d71960ee8a66564f129f55a12c2bd6b9220e"
+      "bytes": 370599,
+      "sha256": "2b54a89d5f52d08d5f6c0f2fc74d9595bdace9e788cd6436e15ad6a11f87821c"
     },
     {
       "path": "rules/charter/assets/hero-c2f6f292d8b962f4-mask.png",
@@ -29001,13 +28753,13 @@
     },
     {
       "path": "rules/claude-adapter/index.html",
-      "bytes": 410187,
-      "sha256": "d43e16e10c72f36031292283dfaf3e7f67bffd7da86d03e9440d90398bbaae08"
+      "bytes": 412829,
+      "sha256": "5e684edf74c8e34cdf8486208469959e0668c8a5173aff1b2e4100807639df9c"
     },
     {
       "path": "rules/codex-adapter/index.html",
-      "bytes": 220701,
-      "sha256": "b92cc99ac40efec08306e07ddea690210c10926b4baed349fb28ee0bc91ae4ba"
+      "bytes": 222050,
+      "sha256": "5db001144d1a13b72b30de5d94685fd370b92566586cd6601e5b88564916e420"
     },
     {
       "path": "rules/context-sources/assets/hero-1b1b8896e9249396-mask.png",
@@ -29021,8 +28773,8 @@
     },
     {
       "path": "rules/context-sources/index.html",
-      "bytes": 298193,
-      "sha256": "ea574d7ef87b453f1a06b835af51faafad74c02626a41cd461f87c473a09960f"
+      "bytes": 310184,
+      "sha256": "f2861ead3482736e5f3414ec28e724489e30f340a342b699abab0e8d215cdc77"
     },
     {
       "path": "rules/engineering-delivery/assets/hero-243c2b74e1033366-mask.png",
@@ -29036,8 +28788,8 @@
     },
     {
       "path": "rules/engineering-delivery/index.html",
-      "bytes": 303399,
-      "sha256": "d9e2c1793c8719586e5dd59df6c314733e0893b47c2ad3679a24b9b942240446"
+      "bytes": 303193,
+      "sha256": "d42ecf8b4e5be5e894fe235477b705843a6d0c4f56a6ba5431e774e4e27bb73a"
     },
     {
       "path": "rules/execution-coordination/assets/hero-b45385d937591584-mask.png",
@@ -29051,8 +28803,8 @@
     },
     {
       "path": "rules/execution-coordination/index.html",
-      "bytes": 289086,
-      "sha256": "c9e06c20f6d7a7b481b0ed0dbec47b7b7a25d53e23789656619d4cca2efac9f5"
+      "bytes": 295846,
+      "sha256": "b98194666eefff98b5c8ee2d837f6b506a5b6dcce99f00c0b5571141abd841a9"
     },
     {
       "path": "rules/index.html",
@@ -29071,13 +28823,13 @@
     },
     {
       "path": "rules/privacy-data/index.html",
-      "bytes": 295603,
-      "sha256": "fd00e71b07c11f2d23ef269bf0c7efec4a574bda60d225f1cd2558ecd56f96f8"
+      "bytes": 296401,
+      "sha256": "e4c662adb7c0e3c914ada4bb78b5321a2769c34264eb00d4db780025c04138a2"
     },
     {
       "path": "rules/protected-actions/index.html",
-      "bytes": 269837,
-      "sha256": "f9903445f66ec07ccfae392804d4094bf3a49afd0793d23903070cc04c6caeb4"
+      "bytes": 269595,
+      "sha256": "e4882b22a7ba73cc612eb76f498e0f6122df0d00bd5ea562ad1abbf86cb87cf3"
     },
     {
       "path": "rules/rule-release/assets/hero-7fee25516ac2071e-mask.png",
@@ -30027,39 +29779,32 @@
         "excerpt": "- **9 月 26–27 日**：撤掉 Codex 远程公网入口和 AI 代填入口密码"
       },
       {
-        "page": "rule-capabilities-runtime",
-        "screen": "rule-capabilities-runtime-10",
-        "project": "github-local-index",
-        "display_name": "GitHub 项目总索引",
-        "excerpt": "- 要查技能装没装、规则与技能基座、电脑配置和 GitHub 项目总索引的登记坏没坏，跑只读的体检脚本；它只看安装和登记，说明不了技能好不好用。"
-      },
-      {
         "page": "rule-context-sources",
         "screen": "rule-context-sources-01",
         "project": "github-local-index",
         "display_name": "GitHub 项目总索引",
-        "excerpt": "- **三个基座**：整套系统最底下的三个仓库：〔AI 规则与技能基座〕（E:\\.agents）、〔GitHub 项目总索引〕（E:\\GitHub总索引）、〔电脑配置与恢复〕（E:\\PCConfig）。"
+        "excerpt": "- **两个基座**：整套系统最底下的两个仓库：〔AI 规则与技能基座〕（E:\\.agents）管 AI 怎么做事，〔电脑配置与恢复〕（E:\\PCConfig）管这台电脑和本机仓库的登记。原来的第三个〔GitHub 项目总索引〕已经冻结，有用的数据和程序并进了这两个基座。"
       },
       {
         "page": "rule-context-sources",
         "screen": "rule-context-sources-02",
         "project": "github-local-index",
         "display_name": "GitHub 项目总索引",
-        "excerpt": "- **〔GitHub 项目总索引〕**（E:\\GitHub总索引）：仓库是哪个、公开还是私有、远端、分支和工作副本、同步、恢复和发布。它只报事实；能公开到什么程度、能不能做，按 E:\\.agents 的规则判断，它不自己另定等级。"
+        "excerpt": "- 原来专管仓库事实的〔GitHub 项目总索引〕已经冻结，不再算基座：它有用的登记和程序已经分别并进上面两处。"
       },
       {
         "page": "rule-context-sources",
         "screen": "rule-context-sources-03",
         "project": "codex-local-remote",
         "display_name": "Codex 远程",
-        "excerpt": "- 〔Codex 远程〕、〔CACB 模型评测〕（整个项目）、〔微信历史桥 WeFlowBridge〕、〔OpenClaw 网关〕和它的备份仓库、两台电脑的剪贴板同步 MeshClip Kit（停用留档，原来在偶用名单里），以及已经退役留档的 Gemini 记忆备份、Claude 记忆备份；冻结名单和仓库标识见本页的活动规则公开副本。"
+        "excerpt": "- 〔Codex 远程〕、〔CACB 模型评测〕（整个项目）、〔微信历史桥 WeFlowBridge〕、〔OpenClaw 网关〕和它的备份仓库、两台电脑的剪贴板同步 MeshClip Kit（停用留档，原来在偶用名单里）、已经退役留档的 Gemini 记忆备份和 Claude 记忆备份，以及〔个人表达〕（怎么跟本人说话的规矩已经分别归进约法、个人理解库和各"
       },
       {
         "page": "rule-context-sources",
         "screen": "rule-context-sources-03",
         "project": "github-local-index",
         "display_name": "GitHub 项目总索引",
-        "excerpt": "- 例：GitHub 项目总索引按这份名单给仓库标“冻结”；驾驶舱也读它，冻结的项目只标“冻结”，不去读它的仓库。"
+        "excerpt": "- 〔Codex 远程〕、〔CACB 模型评测〕（整个项目）、〔微信历史桥 WeFlowBridge〕、〔OpenClaw 网关〕和它的备份仓库、两台电脑的剪贴板同步 MeshClip Kit（停用留档，原来在偶用名单里）、已经退役留档的 Gemini 记忆备份和 Claude 记忆备份，以及〔个人表达〕（怎么跟本人说话的规矩已经分别归进约法、个人理解库和各"
       },
       {
         "page": "rule-context-sources",
@@ -30070,10 +29815,10 @@
       },
       {
         "page": "rule-context-sources",
-        "screen": "rule-context-sources-07",
+        "screen": "rule-context-sources-03",
         "project": "personal-expression",
         "display_name": "个人表达",
-        "excerpt": "| 怎么跟本人说话 | 经〔explain-to-me〕技能，按个人表达项目的流程维护；新增前先查同类并合并，写清本人要的结果和适用范围，保留源消息 UUID 以便按需查原文 |"
+        "excerpt": "- 〔Codex 远程〕、〔CACB 模型评测〕（整个项目）、〔微信历史桥 WeFlowBridge〕、〔OpenClaw 网关〕和它的备份仓库、两台电脑的剪贴板同步 MeshClip Kit（停用留档，原来在偶用名单里）、已经退役留档的 Gemini 记忆备份和 Claude 记忆备份，以及〔个人表达〕（怎么跟本人说话的规矩已经分别归进约法、个人理解库和各"
       },
       {
         "page": "rule-context-sources",
@@ -30095,27 +29840,6 @@
         "project": "personal-expression",
         "display_name": "个人表达",
         "excerpt": "| 个人表达库（内容已归位，原始样本留在 `E:\\PersonalData\\个人表达\\`） | `personal-expression` |"
-      },
-      {
-        "page": "rule-engineering-delivery",
-        "screen": "rule-engineering-delivery-05",
-        "project": "github-local-index",
-        "display_name": "GitHub 项目总索引",
-        "excerpt": "- 维护或准备公开一个仓库时，用〔GitHub 项目总索引〕现有的私人配套查询找到真实的对应关系；新克隆的仓库本机没有链接，不代表没有配套材料。"
-      },
-      {
-        "page": "rule-protected-actions",
-        "screen": "rule-protected-actions-04",
-        "project": "github-local-index",
-        "display_name": "GitHub 项目总索引",
-        "excerpt": "- 仓库改名时，一并更新〔GitHub 项目总索引〕和真正调用这个仓库的地方。"
-      },
-      {
-        "page": "rule-protected-actions",
-        "screen": "rule-protected-actions-05",
-        "project": "github-local-index",
-        "display_name": "GitHub 项目总索引",
-        "excerpt": "- 执行入口归〔GitHub 项目总索引〕：有有效的无限制授权，就直接执行已授权的动作；没有，就调用密码中心验证一次。普通 Git 收尾不找密码中心。"
       },
       {
         "page": "skill-explain-to-me",
@@ -30182,12 +29906,12 @@
       }
     ],
     "warnings": [
-      "冻结正文提及 60 处",
+      "冻结正文提及 56 处",
       "冻结规则差异 1 处",
       "技能清单差异 1 处"
     ],
     "rule_frozen": {
-      "source_file": "E:\\.agents\\releases\\E331\\docs\\contracts\\agents.context-sources.md",
+      "source_file": "E:\\.agents\\releases\\E332\\docs\\contracts\\agents.context-sources.md",
       "site_not_rules": [
         "内存盘守护"
       ],
@@ -30218,5 +29942,5 @@
   },
   "checks_file": "V:\\Personal\\Projects\\wly0829.cn\\site-astro\\.cache\\site-consistency.json",
   "previous_oss_source": "published",
-  "previous_release_id": "626480724da8e7a6a3f13c9959e7cbd1bdc213477342524f31e9455ba2146eae"
+  "previous_release_id": "0831e0003c673374d77d3f5862a495d9eaed6378517b29d09ef8d74a20738ca0"
 }
