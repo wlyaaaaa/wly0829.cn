@@ -458,7 +458,11 @@
      "text": "密码中心"
     }
    ],
-   "live": []
+   "live": [],
+   "frozen_card": {
+    "reason": "它里面的 AI 助手本身不好用，比不上直接用电脑上的 Claude 和 Codex。",
+    "now": "在电脑前直接用 Claude 和 Codex；人在外面就用〔远程电脑串流〕连回电脑。"
+   }
   },
   "notes": {
    "merged": [
@@ -489,8 +493,8 @@
  },
  "source": {
   "page": "sources/pages/openclaw/page.json",
-  "sha256": "fddb2488cfa5a23ed2519665571e95b2234a672327e5318775d4bfa9e305e258",
-  "converted_at_beijing": "2026-10-31T06:46:16+08:00"
+  "sha256": "25cb33d96d50b3d065f11b7e6108b9ef4a07f71c56dbea69068f59961293e819",
+  "converted_at_beijing": "2026-10-31T08:03:52+08:00"
  }
 }
 ---

@@ -833,15 +833,26 @@ def convert(page, check_only=False):
     # 和现在出图时一样在这一步冻结进内容文件；数据变了重新转换这一页即可
     sys.path.insert(0, os.path.join(REPO, "src", "typeset"))
     from engine.content import bound_json
+    from site_consistency import pages as author_pages, project_directory
     from engine.card_rows import fit_card_rows
     from engine.layout import assign_by_spec
     from engine.parse import parse, original_markdown
     from render_blocks import check_screen_images
-    data = bound_json(src, read=lambda p: Path(p).read_text("utf-8-sig"))
+    def source_text(path):
+        text = Path(path).read_text("utf-8-sig")
+        if Path(path).resolve() == Path(REPO, 'sources/pages/projects-home/page.json').resolve():
+            return json.dumps(project_directory(json.loads(text), author_pages()), ensure_ascii=False)
+        if Path(path).name == 'page.json' and Path(REPO, 'sources/pages') in Path(path).resolve().parents:
+            data = json.loads(text)
+            if data.get('kind') in ('project', 'frozen'):
+                data['kind'] = 'frozen' if data.get('status') == '冻结' else 'project'
+                return json.dumps(data, ensure_ascii=False)
+        return text
+    data = bound_json(src, read=source_text)
     specs = {}
     lay_p = os.path.join(REPO, "sources", "pages", page, "layout.json")
     if os.path.exists(lay_p):
-        for it in bound_json(lay_p, read=lambda p: Path(p).read_text("utf-8-sig")):  # 构图里的 text_ref 也按同样的数字展开（区块库 layout.py 同样用 bound_json 读）
+        for it in bound_json(lay_p, read=source_text):  # 构图里的 text_ref 也按同样的数字展开（区块库 layout.py 同样用 bound_json 读）
             specs[(it["screen"], it.get("orientation", "h"))] = {k: v for k, v in it.items()
                                                                  if k not in ("screen", "orientation", "source_image", "source_images", "composition_basis")}
     parts, sections = [], []

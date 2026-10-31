@@ -17,11 +17,6 @@ retry = load('cascade_retry', 'scripts/prepare-resource-retry.py')
 build_runtime = load('cascade_runtime', 'site-astro/tools/build_runtime.py')
 
 class NoCascadeTests(unittest.TestCase):
-    def test_direct_markdown_edit_then_json_change_is_blocked(self):
-        self.assertFalse(build.direct_edit_blocked({}, 'a'))  # 旧记录无 author_fp：保持提示并补记
-        self.assertFalse(build.direct_edit_blocked({'author_fp': 'a'}, 'a'))  # 只有转换器变化
-        self.assertTrue(build.direct_edit_blocked({'author_fp': 'a'}, 'b'))
-
     def test_home_transcript_comparison_is_plain_text(self):
         highlights = load('cascade_highlights', 'scripts/prepare-home-highlights.py')
         text = '数字截至 2026-10-22\n\n16,146 次识别 & 更多'

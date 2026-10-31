@@ -217,6 +217,7 @@
      "id": "g-frozen",
      "name": "冻结（AI 不再维护）",
      "line": "为什么停下、现在用什么代替，点名字进去看。",
+     "screen": "projects-home-41",
      "members": [
       "/projects/openclaw/",
       "/projects/codex-remote/",
@@ -227,7 +228,6 @@
       "/projects/personal-expression/",
       "/projects/github-index/"
      ],
-     "screen": "projects-home-41",
      "cards": [
       "projects-home-42",
       "projects-home-43",
@@ -1083,8 +1083,8 @@
  },
  "source": {
   "page": "sources/pages/projects-home/page.json",
-  "sha256": "29258d51eb479aa0468c4d4ea8706c8f1e10aa84ecb007531231043516edfbb6",
-  "converted_at_beijing": "2026-10-31T07:45:43+08:00"
+  "sha256": "80e364bcd61c78618bbac35b9855e1488e7b4373410bdf10376f8438563b6e64",
+  "converted_at_beijing": "2026-10-31T08:01:18+08:00"
  }
 }
 ---

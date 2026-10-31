@@ -1,6 +1,7 @@
 """Build the complete site from versioned sources and exact asset dependencies."""
 import argparse
 import concurrent.futures
+import contextlib
 import hashlib
 import importlib.util
 import json
@@ -19,6 +20,7 @@ SITE = ROOT / 'site-astro'
 SNAPSHOT = SITE / 'sources/frozen-site'
 HASH_CACHE_PATH = SITE / '.cache/file-fingerprints.json'
 HASH_CACHE = None
+BUILD_LOG = None
 VERIFICATION_FILES = ('baidu_verify_codeva-DRgaQnAmTK.html', 'sogousiteverification.txt')
 sys.path.insert(0, str(ROOT / 'scripts'))
 import astro_rules
@@ -84,7 +86,7 @@ def restore(snapshot):
     write(cache_path, cache)
 
 def run(*args, cwd=SITE, env=None):
-    subprocess.run(args, cwd=cwd, check=True, env=env)
+    subprocess.run(args, cwd=cwd, check=True, env=env, stdout=BUILD_LOG, stderr=subprocess.STDOUT if BUILD_LOG else None)
 
 def fingerprint(paths):
     files = set()
@@ -200,10 +202,6 @@ def converted_markdown_matches(converter, name, md):
     return actual_meta == expected_meta and actual_body == expected_body
 
 
-def direct_edit_blocked(old, author_fp):
-    """A direct Markdown edit followed by a later page.json change would silently hide the JSON change."""
-    return bool(old.get('author_fp')) and old['author_fp'] != author_fp
-
 def refresh_home_highlights():
     """Redraw home-04 when its embedded transcript no longer matches the owning project numbers."""
     highlights = load('build_home_highlights', 'scripts/prepare-home-highlights.py')
@@ -221,7 +219,7 @@ def refresh_home_highlights():
 def sync_markdown(previous):
     sys.path.insert(0, str(SITE / 'tools'))
     converter = load('build_converter', 'site-astro/tools/convert_page.py')
-    converter_fp = fingerprint([SITE / 'tools/convert_page.py', SITE / 'tools/render_blocks.py',
+    converter_fp = fingerprint([SITE / 'tools/convert_page.py', SITE / 'tools/site_consistency.py', SITE / 'tools/render_blocks.py',
         ROOT / 'src/typeset', ROOT / 'sources/assets', ROOT / 'sources/rules',
         SITE / 'src/chrome/toc-labels.json', ROOT / 'scripts/astro_rules.py',
         ROOT / 'config/model-roster.json', ROOT / 'scripts/how-demo-data.json'])
@@ -238,19 +236,21 @@ def sync_markdown(previous):
         if 'group_counts' in refs: dependencies.append(ROOT / 'sources/pages/projects-home')
         author_fp = fingerprint([author, *dependencies]); source_fp = author_fp + converter_fp
         old = previous.get(name, {}); current = proof(md)['sha256'] if md.is_file() else None
-        direct = bool(current and (old.get('direct') or (old.get('md_sha256') and current != old['md_sha256'])))
-        unchanged = old.get('fingerprint') == source_fp and old.get('md_sha256') == current
-        generated = direct and not unchanged and converted_markdown_matches(converter, name, md)
-        if generated: direct = False
-        if not md.is_file() or (old and old.get('fingerprint') != source_fp and not direct and not generated): pending.append(name)
-        elif direct and direct_edit_blocked(old, author_fp): blocked.append(name)
-        elif direct:
-            print(name + ': 保留直接编辑的 Markdown，不覆盖为 JSON 转换结果', flush=True)
-        records[name] = {'fingerprint': source_fp, 'author_fp': author_fp, 'direct': direct}
+        if not current:
+            pending.append(name)
+        elif markdown_frontmatter(md).get('source', {}).get('sha256') != proof(author / 'page.json')['sha256']:
+            if old.get('md_sha256') and old['md_sha256'] != current:
+                blocked.append(name)
+            else:
+                pending.append(name)
+        elif not converted_markdown_matches(converter, name, md):
+            if old.get('md_sha256') == current and old.get('fingerprint') != source_fp:
+                pending.append(name)
+            else:
+                blocked.append(name)
+        records[name] = {'fingerprint': source_fp, 'author_fp': author_fp, 'direct': False}
     if blocked:
-        raise ValueError('这些页的 Markdown 被直接编辑过，之后 page.json 又改了，JSON 的新改动到不了网页：'
-            + '、'.join(blocked) + '。须先统一作者输入：以 JSON 为准重新转换（tools/convert_page.py 页名），'
-            '或把 Markdown 里的新内容并回 page.json 后再转换')
+        raise ValueError('Markdown 与当前 page.json 转换结果不一致：' + '、'.join(blocked))
     if pending: run(sys.executable, 'tools/convert_page.py', *pending)
     for name, row in records.items(): row['md_sha256'] = proof(SITE / 'src/content/pages' / (name + '.md'))['sha256']
     return records
@@ -279,6 +279,8 @@ def build(pages=None):
     if requested and home_redrawn: requested.add('/')
     before = {file_route(p.relative_to(dist).as_posix()): proof(p) for p in dist.rglob('*.html')}
     before_refs = {file_route(p.relative_to(dist).as_posix()): html_references(p) for p in dist.rglob('*.html')}
+    checks = load('site_consistency', 'site-astro/tools/site_consistency.py').audit()
+    checks_path = SITE / '.cache/site-consistency.json'; write(checks_path, checks)
     sources = sync_markdown(old.get('json_sources', {})); stage('source')
     preparation = [SNAPSHOT / 'manifest.json', SITE / 'sources/retained-home-cockpit',
         SITE / 'sources/vendor-deps', SITE / 'sources/hero-motion', SITE / 'public/_home-cockpit', SITE / 'src/chrome/runtime',
@@ -304,7 +306,9 @@ def build(pages=None):
         load('build_stutter', 'site-astro/tools/cockpit_stutter.py').build(public)
         prepared_fp = fingerprint(preparation)
     stage('native_inputs')
-    engine_fp = fingerprint([ROOT / 'src/typeset', ROOT / 'sources/assets', SITE / 'tools/render_blocks.py'])
+    frozen_urls = sorted(p['url'] for p in checks['frozen_projects'])
+    engine_fp = fingerprint([ROOT / 'src/typeset', ROOT / 'sources/assets', SITE / 'tools/render_blocks.py',
+        SITE / 'tools/site_consistency.py']) + hashlib.sha256(json.dumps(frozen_urls).encode()).hexdigest()
     wrapper_paths = [p for p in (SITE / 'src').rglob('*') if p.is_file()
         and 'content' not in p.relative_to(SITE / 'src').parts and p.parent.name not in {'runtime', 'retained'}
         and p.name != 'retained-page.ts' and 'cockpit' not in p.relative_to(SITE / 'src').parts]
@@ -422,7 +426,7 @@ def build(pages=None):
     receipt = {'schema': 'wly.site-build-receipt.v1', 'status': 'built', 'source_commit': source_commit,
         'prepared_at_beijing': datetime.now(timezone(timedelta(hours=8))).isoformat(),
         'seconds': round(time.monotonic() - started, 3), 'steps': steps, 'rebuilt_pages': sorted(rebuilt),
-        'html_files': len(after), 'files': files, 'output': str(dist)}
+        'html_files': len(after), 'files': files, 'output': str(dist), 'checks': checks, 'checks_file': str(checks_path)}
     manifest = read(dist / 'release-manifest.json')
     receipt.update({key: manifest.get(key) for key in ('previous_oss_source', 'previous_release_id')})
     write(dist / '.build-receipt.json', receipt)
@@ -430,15 +434,25 @@ def build(pages=None):
         'pages': {**old.get('pages', {}), **{route: entries[route]['fingerprint'] for route in changed}},
         'rendered': {**old.get('rendered', {}), **{name: render_fps[name] for name in render_names}}})
     write(SITE / '.cache/build-report.json', {key: value for key, value in receipt.items() if key != 'files'})
-    print(json.dumps({key: value for key, value in receipt.items() if key != 'files'}, ensure_ascii=False))
     return receipt
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--pages', help='Comma-separated site routes; requires an existing complete dist')
-    try: build(parser.parse_args().pages)
+    log_path = SITE / '.cache/build-commands.log'; log_path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with log_path.open('w', encoding='utf8') as log, contextlib.redirect_stdout(log):
+            BUILD_LOG = log
+            result = build(parser.parse_args().pages)
+        print(json.dumps({'status': 'built', 'html_files': result['html_files'], 'rebuilt_pages': len(result['rebuilt_pages']),
+            'frozen_mentions': len(result['checks']['frozen_mentions']), 'skill_missing': len(result['checks']['skills'].get('missing', [])),
+            'rule_frozen_diff': len(result['checks']['rule_frozen'].get('site_not_rules', [])) + len(result['checks']['rule_frozen'].get('rules_not_site', [])),
+            'model_mismatches': len(result['checks']['models'].get('mismatches', [])),
+            'receipt': str(ROOT / 'dist/.build-receipt.json'), 'checks': result['checks_file'], 'log': str(log_path)}, ensure_ascii=False))
     except Exception as error:
         write(ROOT / 'dist/.build-receipt.json', {'schema': 'wly.site-build-receipt.v1', 'status': 'failed', 'error': str(error)})
-        raise
+        print(json.dumps({'status': 'failed', 'error': str(error)[:500], 'receipt': str(ROOT / 'dist/.build-receipt.json'),
+            'log': str(log_path)}, ensure_ascii=False))
+        raise SystemExit(1)
     finally:
         if HASH_CACHE is not None: write(HASH_CACHE_PATH, HASH_CACHE)

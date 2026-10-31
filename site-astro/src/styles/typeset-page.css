@@ -181,3 +181,15 @@ body.astro-page [data-b2-connection-notice],body.astro-page aside[data-computer-
 .motion-off .sample-seam:before,.motion-off .sample-updated:after{display:none}
 .motion-off .hotspot:hover,.motion-off .raster-card:hover,.motion-off .shape-card:has(.card-main,.project-main):hover{transform:none!important}
 @media(prefers-reduced-motion:reduce){.ts-page .ts-screen,.ts-canvas :is(.card,.linkbtn):hover{translate:none!important}.ambient-motion,.sample-overlay,.sample-seam:before,.sample-updated:after{display:none!important}.hotspot:hover,.raster-card:hover,.shape-card:has(.card-main,.project-main):hover{transform:none!important}}
+.ts-page .frozen-link-tag {
+  display: inline-flex;
+  vertical-align: baseline;
+  margin-inline-start: .35em;
+  padding: .06em .45em;
+  border: 1px solid var(--muted-line, var(--notice-gray-line, var(--line)));
+  border-radius: 999px;
+  background: var(--muted-bg, var(--notice-gray-bg, var(--cardbg)));
+  color: var(--muted, var(--status-off, var(--text)));
+  font-size: .78em;
+  line-height: 1.3;
+}

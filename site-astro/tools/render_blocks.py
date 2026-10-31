@@ -26,6 +26,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SITE = os.path.dirname(HERE)
 REPO = os.path.dirname(SITE)
 PROTO = os.path.join(REPO, "src", "typeset")
+sys.path.insert(0, HERE)
 sys.path.insert(0, PROTO)
 from engine import assets as A  # noqa: E402
 from engine import layout as L  # noqa: E402
@@ -689,7 +690,24 @@ def rename_site_classes(body):
     return re.sub(r'(\bclass=")([^"]*)(")', one, body)
 
 
+def mark_frozen_links(body, frozen_urls):
+    def frozen_link(match):
+        href = H.unescape(re.search(r'\bhref="([^"]*)"', match[0])[1])
+        if not href:
+            return match[0]
+        target = urllib.parse.urlparse(href)
+        if target.netloc and target.netloc != 'wly0829.cn':
+            return match[0]
+        if target.path.rstrip('/') + '/' not in frozen_urls:
+            return match[0]
+        return match[0] + '<span class="hub-status hub-status-frozen frozen-link-tag">已冻结</span>'
+    return re.sub(r'<a\b(?=[^>]*\bhref=")[^>]*>.*?</a>', frozen_link, body, flags=re.S) if frozen_urls else body
+
+
 def finish_page(name, fm, results, cssv):
+    from site_consistency import frozen, pages
+    frozen_pages = frozen(pages())
+    frozen_urls = {p['url'] for p in frozen_pages.values()} if name not in frozen_pages and name != 'projects-home' else set()
     rt_p = os.path.join(SITE, "src", "chrome", "runtime", name + ".json")
     rt = json.loads(Path(rt_p).read_text("utf-8")) if os.path.exists(rt_p) else {}
     living_path = os.path.join(PUB, "_living", name, "astro", "config.json")
@@ -722,7 +740,7 @@ def finish_page(name, fm, results, cssv):
             overlay = (f'<figure class="ts-art" data-living-config="{shared_living}" data-art-key="%ART_KEY%" '
                        f'style="left:calc({x}px * var(--tz));top:calc({y}px * var(--tz));width:calc({w}px * var(--tz));height:calc({h}px * var(--tz))">'
                        f'<img src="{art_src}"{image_size_attrs(art_src)} alt="" data-ts-art="1" decoding="sync"></figure>')
-        body = defer_images(rewrite_urls(body), first)
+        body = mark_frozen_links(defer_images(rewrite_urls(body), first), frozen_urls)
         style = rewrite_urls(r["style"])
         screens[sid][r["o"]] = {"html": body, "style": style, "height": r["height"], "shape": r["shape"], "overlay": defer_images(rewrite_urls(overlay), first)}
         texts.append(re.sub(r"<[^>]+>", "", H.unescape(body)))
@@ -765,7 +783,7 @@ def finish_page(name, fm, results, cssv):
                     raise ValueError("规则原文缺少同版公共来源绑定：" + r["screen"])
                 art = alias_links(rule_original_html(text))
                 if art:
-                    screens[r["screen"]]["article"] = art
+                    screens[r["screen"]]["article"] = mark_frozen_links(art, frozen_urls)
                     screens[r["screen"]]["source_logical_id"] = screen["source_logical_id"]
                     screens[r["screen"]]["source_public_sha256"] = screen["source_public_sha256"]
                     screens[r["screen"]]["source_rule_part"] = screen["source_rule_part"]

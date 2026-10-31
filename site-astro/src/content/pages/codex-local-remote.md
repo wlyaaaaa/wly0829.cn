@@ -466,7 +466,11 @@
      "text": "远程电脑串流"
     }
    ],
-   "live": []
+   "live": [],
+   "frozen_card": {
+    "reason": "它只能在手机浏览器里管 Codex 这一个程序；〔远程电脑串流〕能把整个电脑桌面搬到手机上，Codex 照样能用，别的也都能操作。",
+    "now": "用〔远程电脑串流〕把电脑桌面连到手机上。"
+   }
   },
   "notes": {
    "merged": [
@@ -497,8 +501,8 @@
  },
  "source": {
   "page": "sources/pages/codex-local-remote/page.json",
-  "sha256": "132ca0f1223056a423996b29311c4f967dca2502746bb87a0f2140fe1628e042",
-  "converted_at_beijing": "2026-10-31T06:46:16+08:00"
+  "sha256": "2badc2ac825e1a45aca4c0fb46aff8cc1c19fcaca222d3226119f414bca50f40",
+  "converted_at_beijing": "2026-10-31T08:03:52+08:00"
  }
 }
 ---

@@ -22,6 +22,32 @@ REPO = 'repos/wlyaaaaa/wly0829.cn'
 CLI = r'E:\Tools\aliyun-cli\aliyun.exe'
 LOCK = r'E:\.agents\tools\Invoke-ShortLock.ps1'
 WORD_CONFIG = ROOT / 'config/public-word-gate.json'
+PUBLISH_RUNS = Path(r'E:\Cache\wly-site-build\publish-runs')
+
+def prune_publish_runs(base=PUBLISH_RUNS, pointer=None):
+    """Keep three newest receipts plus the currently published commit, after retention succeeds."""
+    base = Path(base).resolve()
+    if not base.is_dir():
+        return {'kept': [], 'removed': []}
+    pointer = pointer or retention.shared()/'published.json'
+    current = retention.read(pointer).get('commit') if Path(pointer).is_file() else None
+    runs = sorted((p for p in base.glob('publish-*') if p.is_dir() and not p.is_symlink()
+                   and p.name.removeprefix('publish-').isdigit()),
+                  key=lambda p: int(p.name.removeprefix('publish-')), reverse=True)
+    keep = set(runs[:3])
+    for path in runs:
+        receipt = path/'publish-receipt.json'
+        if current and receipt.is_file() and retention.read(receipt).get('commit') == current:
+            keep.add(path)
+    removed = []
+    for path in runs:
+        if path in keep:
+            continue
+        if path.resolve().parent != base:
+            raise ValueError('Publication run escapes its registered directory: ' + str(path))
+        shutil.rmtree(path)
+        removed.append(str(path))
+    return {'kept': [str(p) for p in runs if p in keep], 'removed': removed}
 
 def scan_public_words(dist):
     """Check every published HTML, search script and rule-source text before any upload."""
@@ -212,9 +238,11 @@ def artifact_commit(dist, plan, output, source_commit):
 
 def publish(args):
     started = time.monotonic()
-    output = (args.output or args.dist.parent/('publish-'+str(time.time_ns()))).resolve()
+    if args.output is None:
+        PUBLISH_RUNS.mkdir(parents=True, exist_ok=True)
+    output = (args.output or PUBLISH_RUNS/('publish-'+str(time.time_ns()))).resolve()
     output.mkdir(parents=True, exist_ok=False)
-    receipt = {'schema': 'wly.publish-receipt.v1', 'status': 'running', 'dry_run': args.dry_run,
+    receipt = {'schema': 'wly.publish-receipt.v1', 'status': 'running', 'dry_run': args.dry_run, 'output': str(output),
                'started_at_beijing': oss.stamp(), 'steps_seconds': {}, 'uploaded_files': 0,
                'uploaded_bytes': 0, 'head': {}, 'get': {}}
     owned = False
@@ -406,8 +434,12 @@ def collect_after_publication(args):
         code = retention.collect(SimpleNamespace(preparation=preparation, commit=publication['commit'],
             rollback=publication.get('oss_retention', {}).get('rollback_ref'), cli=CLI, profile='website-images',
             lock_holder=args.lock_holder, report=report, dry_run=args.dry_run, max_keys=args.retention_max_keys))
-        return {'status': 'retention_dry_run' if args.dry_run else 'retention_complete' if not code else 'retention_incomplete',
-                'publication_status': 'published', 'oss_retention': retention.read(report), 'exit_code': code}
+        result = {'status': 'retention_dry_run' if args.dry_run else 'retention_complete' if not code else 'retention_incomplete',
+                  'publication_status': 'published', 'oss_retention': retention.read(report), 'exit_code': code,
+                  'receipt': str(report)}
+        if not args.dry_run and not code:
+            result['local_runs'] = prune_publish_runs()
+        return result
     finally:
         if claim['status'] == 'acquired':
             command('pwsh', '-NoProfile', '-File', LOCK, '-Mode', 'Release',
@@ -435,8 +467,19 @@ if __name__ == '__main__':
     options = parser.parse_args()
     if options.word_check_only:
         hits = scan_public_words(options.word_check_only)
-        print(json.dumps({'status': 'blocked' if hits else 'pass', 'hits': hits}, ensure_ascii=False, indent=2))
+        print(json.dumps({'status': 'blocked' if hits else 'pass', 'hits': len(hits), 'first_hits': hits[:3]}, ensure_ascii=False))
         raise SystemExit(bool(hits))
-    result = collect_after_publication(options) if options.retention_only else publish(options)
-    print(json.dumps({key: value for key, value in result.items() if key not in ('planned_assets', 'planned_documents', 'head', 'get')}, ensure_ascii=False))
+    if options.dist and options.output is None:
+        PUBLISH_RUNS.mkdir(parents=True, exist_ok=True)
+        options.output = PUBLISH_RUNS/('publish-'+str(time.time_ns()))
+    try:
+        result = collect_after_publication(options) if options.retention_only else publish(options)
+    except Exception as error:
+        print(json.dumps({'status': 'failed', 'error': str(error)[:500],
+            'receipt': str(options.output/'publish-receipt.json') if options.output else None}, ensure_ascii=False))
+        raise SystemExit(1)
+    print(json.dumps({'status': result['status'], 'planned_files': result.get('planned_files'),
+        'uploaded_files': result.get('uploaded_files'), 'commit': result.get('commit'),
+        'error': result.get('error'), 'receipt': result.get('receipt') or str(Path(result['output']) / 'publish-receipt.json'),
+        'local_runs': result.get('local_runs')}, ensure_ascii=False))
     raise SystemExit(result.get('exit_code', 0))

@@ -530,7 +530,11 @@
      "text": "事实来源与任务上下文"
     }
    ],
-   "live": []
+   "live": [],
+   "frozen_card": {
+    "reason": "单独整理成一套，AI 平时不会专门去翻，记得越多越乱；直接写进 AI 每次都会读的〔约法〕和〔个人理解库〕，AI 才会真的照着做。",
+    "now": "AI 跟我说话的规矩写在〔约法〕里，我的说话习惯记在〔个人理解库〕里；“替我拟消息”照常在用。"
+   }
   },
   "notes": {
    "merged": [
@@ -557,8 +561,8 @@
  },
  "source": {
   "page": "sources/pages/personal-expression/page.json",
-  "sha256": "f0489bd2102f976d6f71a7a2d94322df1dfab16441dcb1e5e7a95e74212d9a3d",
-  "converted_at_beijing": "2026-10-31T06:46:16+08:00"
+  "sha256": "81b94e122f513f96f483dc080b38027d32877b4feac03e69475f51afbd568f09",
+  "converted_at_beijing": "2026-10-31T08:03:52+08:00"
  }
 }
 ---

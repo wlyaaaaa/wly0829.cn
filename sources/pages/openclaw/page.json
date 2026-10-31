@@ -610,7 +610,11 @@
         "text": "密码中心"
       }
     ],
-    "live": []
+    "live": [],
+    "frozen_card": {
+      "reason": "它里面的 AI 助手本身不好用，比不上直接用电脑上的 Claude 和 Codex。",
+      "now": "在电脑前直接用 Claude 和 Codex；人在外面就用〔远程电脑串流〕连回电脑。"
+    }
   },
   "notes": {
     "merged": [
