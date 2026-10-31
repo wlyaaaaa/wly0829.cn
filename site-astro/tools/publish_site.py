@@ -7,6 +7,7 @@ import importlib.util
 import json
 import shutil
 import ssl
+import stat
 import subprocess
 import time
 from http.client import IncompleteRead, RemoteDisconnected
@@ -40,12 +41,19 @@ def prune_publish_runs(base=PUBLISH_RUNS, pointer=None):
         if current and receipt.is_file() and retention.read(receipt).get('commit') == current:
             keep.add(path)
     removed = []
+    def remove_readonly(function, target, error):
+        target = Path(target)
+        if (not isinstance(error, PermissionError) or target.is_symlink()
+                or not target.is_file() or target.stat().st_mode & stat.S_IWRITE):
+            raise error
+        target.chmod(target.stat().st_mode | stat.S_IWRITE)
+        function(target)
     for path in runs:
         if path in keep:
             continue
         if path.resolve().parent != base:
             raise ValueError('Publication run escapes its registered directory: ' + str(path))
-        shutil.rmtree(path)
+        shutil.rmtree(path, onexc=remove_readonly)
         removed.append(str(path))
     return {'kept': [str(p) for p in runs if p in keep], 'removed': removed}
 

@@ -5,6 +5,20 @@ from pathlib import Path
 spec = importlib.util.spec_from_file_location('publisher', Path(__file__).resolve().parents[1]/'site-astro/tools/publish_site.py')
 publisher = importlib.util.module_from_spec(spec); spec.loader.exec_module(publisher)
 class PublishTests(unittest.TestCase):
+    def test_old_run_with_readonly_git_object_is_pruned_without_removing_retained_runs(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            folder = Path(temporary)
+            for number in range(1, 5):
+                (folder/f'publish-{number}').mkdir()
+            object_file = folder/'publish-1/site-dist/.git/objects/60/example'
+            object_file.parent.mkdir(parents=True)
+            object_file.write_bytes(b'fictional git object')
+            object_file.chmod(0o444)
+            result = publisher.prune_publish_runs(folder, folder/'no-pointer.json')
+            self.assertFalse((folder/'publish-1').exists())
+            self.assertEqual(len(result['removed']), 1)
+            self.assertTrue(all((folder/f'publish-{number}').is_dir() for number in range(2, 5)))
+
     def test_publication_defers_retirement_and_preserves_head_proofs_and_failure_state(self):
         for fail_page, fail_cleanup, skip_retention in ((False, False, False), (False, True, False), (True, False, False), (False, False, True)):
             with self.subTest(fail_page=fail_page, fail_cleanup=fail_cleanup), tempfile.TemporaryDirectory() as temporary:
