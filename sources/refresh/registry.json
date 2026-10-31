@@ -75,8 +75,8 @@
       "page": "skills-home",
       "screen": "skills-home-01",
       "label": "技能详情页数（按页面类型现数）",
-      "current_value": 30,
-      "as_of": "2026-10-12",
+      "current_value": 31,
+      "as_of": "2026-10-31",
       "category": "文件个数",
       "source_location": "本仓库 sources/pages/*/page.json 的 kind=skill；不含去向页",
       "retrieve": {
@@ -140,8 +140,8 @@
       "page": "agents",
       "screen": "agents-01",
       "label": "规则指针发布和回退次数",
-      "current_value": 234,
-      "as_of": "2026-10-30",
+      "current_value": 240,
+      "as_of": "2026-10-31",
       "category": "某个 JSON 字段",
       "source_location": "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json；仅status=pass且reason=e_rules_active_verified时取pointer.pointer_revision",
       "retrieve": {
@@ -176,8 +176,8 @@
       "page": "agents",
       "screen": "agents-01",
       "label": "当前生效的规则版本",
-      "current_value": "E325",
-      "as_of": "2026-10-10",
+      "current_value": "E331",
+      "as_of": "2026-10-31",
       "category": "某个 JSON 字段",
       "source_location": "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json；仅status=pass且reason=e_rules_active_verified时取verified_current.release_id",
       "retrieve": {
@@ -35534,6 +35534,116 @@
       "observed_at": "2026-10-30T11:07:27+08:00"
     },
     {
+      "id": "r4-skill-image-generation-last-update",
+      "page": "skill-image-generation",
+      "screen": "skill-image-generation-01",
+      "label": "技能源最后修改时间",
+      "current_value": "2026-10-29 13:30",
+      "as_of": "2026-10-31",
+      "category": "方法与来源登记",
+      "field": "status_line.last.at",
+      "source_location": "Git Owner只读E:/.agents当前活动源中skills/image-generation最后提交时间，转北京时间；不用usage_ledger.last_time替代上次更新。",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "技能源最后修改时间",
+      "historical": false,
+      "private": false,
+      "report_ref": "2026-10-31 网站内容轮（Claude）新建技能页时登记",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "r4-image-generation-method-modified",
+        "pointer": [
+          "last_update"
+        ]
+      },
+      "observed_at": "2026-10-31T09:00:00+08:00",
+      "source_observed_at": "2026-10-31T09:00:00+08:00",
+      "refreshed_value": "2026-10-29 13:30",
+      "checked_at": "2026-10-31T09:00:00+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read"
+    },
+    {
+      "id": "r4-skill-image-generation-status-asof",
+      "page": "skill-image-generation",
+      "screen": "skill-image-generation-01",
+      "label": "技能源核对日期",
+      "current_value": "2026-10-31",
+      "as_of": "2026-10-31",
+      "category": "方法与来源登记",
+      "field": "status_line.as_of",
+      "source_location": "同页已定位数字的既有只读来源",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只注明技能源路径最后修改记录的观察日；使用次数本轮没有取同口径记录，保持Unknown。",
+      "historical": false,
+      "private": false,
+      "report_ref": "2026-10-31 网站内容轮（Claude）新建技能页时登记",
+      "qualifies": [
+        "r4-skill-image-generation-last-update"
+      ],
+      "checked_at": "2026-10-31T09:00:00+08:00",
+      "source_observed_at": "2026-10-31T09:00:00+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-30T11:07:27+08:00"
+    },
+    {
+      "id": "r4-skill-proxy-network-last-update",
+      "page": "skill-proxy-network",
+      "screen": "skill-proxy-network-01",
+      "label": "技能源最后修改时间",
+      "current_value": "2026-10-31 06:46",
+      "as_of": "2026-10-31",
+      "category": "方法与来源登记",
+      "field": "status_line.last.at",
+      "source_location": "Git Owner只读E:/.agents当前活动源中skills/proxy-network最后提交时间，转北京时间；不用usage_ledger.last_time替代上次更新。",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "技能源最后修改时间",
+      "historical": false,
+      "private": false,
+      "report_ref": "2026-10-31 网站内容轮（Claude）新建技能页时登记",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "r4-proxy-network-method-modified",
+        "pointer": [
+          "last_update"
+        ]
+      },
+      "observed_at": "2026-10-31T09:00:00+08:00",
+      "source_observed_at": "2026-10-31T09:00:00+08:00",
+      "refreshed_value": "2026-10-31 06:46",
+      "checked_at": "2026-10-31T09:00:00+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "live_read"
+    },
+    {
+      "id": "r4-skill-proxy-network-status-asof",
+      "page": "skill-proxy-network",
+      "screen": "skill-proxy-network-01",
+      "label": "技能源核对日期",
+      "current_value": "2026-10-31",
+      "as_of": "2026-10-31",
+      "category": "方法与来源登记",
+      "field": "status_line.as_of",
+      "source_location": "同页已定位数字的既有只读来源",
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只注明技能源路径最后修改记录的观察日；使用次数本轮没有取同口径记录，保持Unknown。",
+      "historical": false,
+      "private": false,
+      "report_ref": "2026-10-31 网站内容轮（Claude）新建技能页时登记",
+      "qualifies": [
+        "r4-skill-proxy-network-last-update"
+      ],
+      "checked_at": "2026-10-31T09:00:00+08:00",
+      "source_observed_at": "2026-10-31T09:00:00+08:00",
+      "source_coverage_end": null,
+      "observation_basis": "snapshot_timestamp",
+      "observed_at": "2026-10-30T11:07:27+08:00"
+    },
+    {
       "id": "r3-pcconfig-full-task-classification-boundary",
       "page": "pcconfig",
       "screen": "pcconfig-01",
@@ -43136,10 +43246,10 @@
       "page": "agents",
       "screen": "agents-01",
       "field": "screens[0].text",
-      "page_pattern": "历史区间）；234\\ 次为本轮核验所读的指针修订（(E\\d+)\\ 于\\ 10\\ 月\\ 30\\ 日\\ 04:20\\ 生",
+      "page_pattern": "历史区间）；[\\d,]+\\ 次为本轮核验所读的指针修订（(E\\d+)\\ 于\\ 10\\ 月\\ 31\\ 日\\ 07:37\\ 生",
       "label": "现行活动规则版本",
-      "current_value": "E325",
-      "as_of": "2026-10-30",
+      "current_value": "E331",
+      "as_of": "2026-10-31",
       "automatic": true,
       "private": false,
       "historical": false,
@@ -43152,7 +43262,7 @@
           "release_id"
         ]
       },
-      "source_location": "本仓库sources/rules/current-rules.json（E325已核验固定快照）",
+      "source_location": "本仓库sources/rules/current-rules.json（E331已核验固定快照）",
       "measurement_scope": "现行活动规则版本；完整绑定当前作者字段，不把源码/回执观察冒充本轮运行。",
       "observation_basis": "unknown"
     },

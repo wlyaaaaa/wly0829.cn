@@ -317,7 +317,7 @@
         "name": "定时巡查",
         "what": "登录时和之后每 15 分钟在后台跑一轮，不弹窗口；盘没出来最多等 150 秒；同一时间只跑一份，一轮最长 10 分钟",
         "how": "自动：计划任务 RAMDisk_Code_Backup",
-        "status": "在用",
+        "status": "已停用",
         "screen": "ramdisk-guardian-08",
         "source": "zguardian.ps1:111-128；计划任务定义；日志 6,226 轮（facts #10、#28）"
       },
@@ -327,7 +327,7 @@
         "name": "认准这块盘",
         "what": "卷标必须是 RAMDISK，Primo 里正好一块盘对应 Z；对不上就报错，什么都不动",
         "how": "自动，每轮都查",
-        "status": "在用",
+        "status": "已停用",
         "screen": "ramdisk-guardian-08",
         "source": "zguardian.ps1:129-132；9/2 00:05 读不到卷标时挡下（facts #12、#33）"
       },
@@ -337,7 +337,7 @@
         "name": "补齐文件夹和说明",
         "what": "补 12 个缓存和草稿文件夹、盘根《使用说明》（和仓库里的比对指纹，不一样就重抄）、隐藏的就绪标记",
         "how": "自动，每轮都做",
-        "status": "在用",
+        "status": "已停用",
         "screen": "ramdisk-guardian-08",
         "source": "zguardian.ps1:133-153；9/27、9/28 重启后第一轮都 OK（facts #6、#35）"
       },
@@ -347,7 +347,7 @@
         "name": "空间和内存盯梢",
         "what": "六条提醒线：盘剩余少于 2 GiB、已用超过 8 GiB、可用内存少于 8 GB、提交余量少于 4 GB、不可归属内存达到 4 GB、相关增长达到 4 GB；只记不弹",
         "how": "自动；问 AI“内存盘现在健康吗”",
-        "status": "在用",
+        "status": "已停用",
         "screen": "ramdisk-guardian-08",
         "source": "zguardian.ps1:237-241；日志 1,070 条提醒（facts #14、#28）"
       },
@@ -357,7 +357,7 @@
         "name": "出错弹一次",
         "what": "连续出错时只在第一轮弹一次 Windows 消息（留 60 秒）并记下。弹过 2 次：7 月 23 日改容量时、9 月 2 日读不到盘的名字时",
         "how": "自动；收到后跟 AI 说“内存盘报错了，看看”",
-        "status": "在用",
+        "status": "已停用",
         "screen": "ramdisk-guardian-08",
         "source": "zguardian.ps1:35-40；alerts.log（facts #17、#33）"
       },
@@ -367,7 +367,7 @@
         "name": "自动清空重建",
         "what": "盘里缓存不超过 8 GiB、又有证据像是这块盘卡着内存时，用 Primo 命令清空重建、把空盘存回镜像。共 38 次（都按 9 月 29 日以前的旧条件），前 3 次各腾出 23–30 GB",
         "how": "自动，条件够了才动手",
-        "status": "在用",
+        "status": "已停用",
         "screen": "ramdisk-guardian-08",
         "source": "zguardian.ps1:191-235；psm1:29-35；日志 38 次（facts #19、#30、#31）"
       },
@@ -377,7 +377,7 @@
         "name": "看增长才动手",
         "what": "只是可用内存低不再动手：要不可归属内存达到 8 GB，或和 24 小时基线比的相关增长达到 8 GB（可用内存低于 5 GB 时 4 GB 就够）；相关增长要隔 5 分钟以上再看到一次。9 月 29 日上线；10 月 11 日 13:46 出现过一次候选、在等确认，还没真重建过",
         "how": "自动",
-        "status": "待验收",
+        "status": "已停用",
         "screen": "ramdisk-guardian-08",
         "source": "提交 65d02c4；docs/memory-recovery.md“何时可以重建”；tests/Test-RamdiskHistoryReplay.ps1（3 次强信号保留、35 次仅低内存不再触发）；logs\\health.json 北京 9/29 03:31 Health=OK、MemoryBaselineStatus=ready、Decision=no-pressure"
       },
@@ -387,7 +387,7 @@
         "name": "连续三次才算",
         "what": "连续 3 次读数（每 5 秒一次，前后至少跨 10 秒）都紧才算；两次读数隔超过 30 秒就重新数",
         "how": "自动",
-        "status": "待验收",
+        "status": "已停用",
         "screen": "ramdisk-guardian-08",
         "source": "psm1:36-62；9/18 上线后没触发过（facts #20、#24、#25）"
       },
@@ -397,7 +397,7 @@
         "name": "腾不出就停手",
         "what": "离上次动手至少 1 小时；失败就报错、1 小时内不试；腾出不到 1 GB 就 6 小时内不再试",
         "how": "自动",
-        "status": "待验收",
+        "status": "已停用",
         "screen": "ramdisk-guardian-08",
         "source": "psm1:59-60,86-92；zguardian.ps1:222-235（facts #22、#25）"
       },
@@ -407,7 +407,7 @@
         "name": "动手前再核一遍",
         "what": "重建前再核 Primo 盘号、卷的身份、暂停和登记；重建后回读卷标，补文件夹和说明，Primo 命令失败就报错",
         "how": "自动",
-        "status": "待验收",
+        "status": "已停用",
         "screen": "ramdisk-guardian-08",
         "source": "zguardian.ps1:193-211；按盘号认准 9/8 上线，之后没重建过（facts #23、#24）"
       },
@@ -417,7 +417,7 @@
         "name": "暂停自动重建",
         "what": "只停“清空重建”，文件夹维护和体检照常；恢复时不清冷却。9 月 29 日升级守护时用过一次，跑长任务时还没用过",
         "how": "跟 AI 说“先暂停内存盘自动重建，跑完再恢复”",
-        "status": "说不准",
+        "status": "已停用",
         "screen": "ramdisk-guardian-08",
         "source": "Set-RamdiskRecoveryMode.ps1；logs\\recovery-control.json 从没生成过（facts #26）"
       },
@@ -427,7 +427,7 @@
         "name": "长任务登记",
         "what": "用缓存的程序登记进程号和用到几点（30 秒到 24 小时），登记有效期间不重建；进程没了或到期自动作废",
         "how": "让 AI 替长任务登记；用完释放",
-        "status": "说不准",
+        "status": "已停用",
         "screen": "ramdisk-guardian-08",
         "source": "Use-RamdiskCacheLease.ps1；用完即删不留痕，E 盘项目里找不到调用方（facts #27）"
       },
@@ -437,7 +437,7 @@
         "name": "健康体检",
         "what": "只读、不写任何文件：查盘、文件夹、说明、计划任务和最近一轮结果（怎样算正常见“为什么这样设计”第 4 条）",
         "how": "问 AI“内存盘现在健康吗”",
-        "status": "在用",
+        "status": "已停用",
         "screen": "ramdisk-guardian-09",
         "source": "Get-RamdiskHealth.ps1；9/18 旧网站采集、9/28 两次运行（facts #10、#15）"
       },
@@ -447,7 +447,7 @@
         "name": "划不划算",
         "what": "只报量得到的：容量、已用、电脑内存；管理员加一项可读 Primo 的内存模式和镜像实际大小。不猜提速，驱动实际占多少读不到",
         "how": "问 AI“内存盘占了多少内存，还划算吗”",
-        "status": "说不准",
+        "status": "已停用",
         "screen": "ramdisk-guardian-09",
         "source": "Get-RamdiskEfficiency.ps1；零写入不留痕，只找到为写网页跑的记录（facts #5）"
       },
@@ -457,7 +457,7 @@
         "name": "部署和恢复",
         "what": "默认只出预览；确认后装计划任务、核对盘，失败按相反顺序退回；可以只恢复任务、不动别的",
         "how": "换电脑或守护丢了，跟 AI 说“先预览再恢复内存盘守护”",
-        "status": "在用",
+        "status": "已停用",
         "screen": "ramdisk-guardian-09",
         "source": "deploy.ps1；9/18 07:11、07:31 两次真部署（facts #36、#37）"
       },
@@ -467,7 +467,7 @@
         "name": "Chrome 缓存接进来",
         "what": "把 Chrome 的网页缓存、代码缓存、显卡缓存三个文件夹连到 Z；Chrome 开着就先不动；旧文件夹改名留着，不删",
         "how": "部署时点名要这一项",
-        "status": "在用",
+        "status": "已停用",
         "screen": "ramdisk-guardian-09",
         "source": "deploy.ps1:98-123；三个连接现在都在，共 0.43 GB（facts #7）"
       },
@@ -477,7 +477,7 @@
         "name": "关掉快速启动",
         "what": "Windows 的快速启动会打断 Primo 关机存盘、开机建盘；6 月 15 日关掉后一直关着",
         "how": "部署时点名要这一项",
-        "status": "在用",
+        "status": "已停用",
         "screen": "ramdisk-guardian-09",
         "source": "HiberbootEnabled=0；5f8cf40 README §1（facts #9）"
       },
@@ -487,7 +487,7 @@
         "name": "换盘符和间隔",
         "what": "盘不叫 Z 时可以换盘符；巡查间隔可调 1 分钟到 1 天",
         "how": "部署时指定",
-        "status": "没用过",
+        "status": "已停用",
         "screen": "ramdisk-guardian-09",
         "source": "deploy.ps1:11-12,88-92；ramdrive.txt 从没生成过（facts #38）"
       },
@@ -497,7 +497,7 @@
         "name": "镜像瘦身",
         "what": "镜像比盘里内容大很多时，用 Primo 官方命令另存成紧凑镜像，核对后替换，旧的留作退路。9 月 18 日做过一次：12 GiB 缩到 0.55 GiB",
         "how": "请 AI 按项目文档做",
-        "status": "在用",
+        "status": "已停用",
         "screen": "ramdisk-guardian-09",
         "source": "docs/cache-efficiency.md:208-216；logs\\cache-optimization-latest.json（facts #39）"
       },

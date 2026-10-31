@@ -438,67 +438,34 @@
     },
     {
       "index": 8,
-      "text": "三个底座怎么配合",
+      "text": "两个底座怎么配合",
       "kind": "new",
-      "png": "images/nav-unify-label-08-4153dd5e12.png",
-      "webp": "images/nav-unify-label-08-4153dd5e12.webp",
+      "png": "images/nav-unify-label-08-14c7b174c3.png",
+      "webp": "images/nav-unify-label-08-14c7b174c3.webp",
       "size": [
         567,
         80
       ],
       "ink_box_alpha16": [
-        4,
+        13,
         4,
         563,
         76
       ],
-      "png_sha256": "23e89aa382defdaa24cb91a67a84e7a840a6bfc7e4dd8aa06b39e3376e788f3e",
-      "webp_sha256": "f4899dcf55b5d5d3ce92ccca506c2f0f89fb8b0ad0d194f7c5f0edeb19b1ac38",
-      "rgba_sha256": "29fba187d3b7bdc8bf59e7bb1e2534f76c51f8e73b0bdb9e0e96f15a59a3ba88",
+      "png_sha256": "4f46ad250dfe930e02172633b242a626fe32545f15f52b6756f6013a68f8d63d",
+      "webp_sha256": "a30c3a802b5b13a570803046b50c874cb2a8597b792bdef83b5ae3f92d8d4576",
+      "rgba_sha256": "0e72ece30c40dbc01f55736674c470fb11b9d2b5111cc65c07303a749578b084",
       "origin": {
-        "method": "built-in-imagegen",
-        "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\nav-unify\\sources\\generated-standard-sheet-01.png",
-        "source_sha256": "aeb7be553a628e643a1727e00b364bd327f1fd421a32997901be04ab0c3d5fd5",
-        "source_box": [
-          50,
-          955,
-          795,
-          1051
-        ],
-        "source_crop_size": [
-          745,
-          96
-        ],
-        "normalized_ink_height_target": 72,
-        "resampling": "Lanczos",
-        "rgb_core_before": [
-          2,
-          89,
-          50
-        ],
-        "rgb_delta": [
-          -2,
-          23,
-          14
-        ],
+        "method": "luna-local-replace",
+        "previous_png": "images/nav-unify-label-08-4153dd5e12.png",
+        "previous_text": "三个底座怎么配合",
+        "note": "10 月 31 日 Luna（gpt-6-luna，low）以旧标签为参考把“三”换成“两”；Claude 只取新“两”字缩放贴回首字位置、按其余字的墨色 [0,112,64] 着色，其余七字像素不变",
         "target_core_rgb": [
           0,
           112,
           64
         ]
-      },
-      "atlas_ink_box": [
-        12,
-        698,
-        571,
-        770
-      ],
-      "atlas_tile_box": [
-        8,
-        694,
-        575,
-        774
-      ]
+      }
     },
     {
       "index": 9,
