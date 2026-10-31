@@ -82,6 +82,21 @@ class ConsistencyTests(unittest.TestCase):
             self.assertEqual(len(result['frozen_mentions']), 1)
             self.assertEqual(len(result['models']['mismatches']), 1)
 
+    def test_rule_explanation_mismatch_is_warning(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            path = root / 'sources/pages/rule-demo/page.json'
+            path.parent.mkdir(parents=True)
+            path.write_text(json.dumps({'page': 'rule-demo', 'kind': 'rule-topic', 'title': '示例规则',
+                'based_on': {'release': 'E332', 'sha256': 'b' * 64},
+                'explanation_based_on': {'release': 'E331', 'sha256': 'a' * 64},
+                'screens': []}), encoding='utf8')
+            (root / 'config').mkdir()
+            (root / 'config/panel-projects.json').write_text('{"projects":[]}', encoding='utf8')
+            result = checks.audit(root, root / 'missing-supply', root / 'missing-roster', root / 'missing-rules')
+            self.assertEqual([r['page'] for r in result['rule_explanations_pending']], ['rule-demo'])
+            self.assertTrue(any('规则讲解待核对：示例规则' in warning for warning in result['warnings']))
+
     def test_publish_prune_keeps_pointer_and_three_recent(self):
         spec = importlib.util.spec_from_file_location('publish_site', HERE/'publish_site.py')
         module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)

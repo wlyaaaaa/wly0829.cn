@@ -5,6 +5,8 @@ import json
 from pathlib import Path
 import re
 import sys
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from rule_explanation_status import task_lines as rule_task_lines
 
 from checks import HISTORY, WORDS
 from validation import record_errors, registry_errors, validate_entries, LEDGER
@@ -496,6 +498,7 @@ def fact_tasks(inventory, group_size=25):
     rule = inventory.get("rule_version_task", {})
     if rule.get("status") != "current":
         lines += ["## 首要待办：规则版本", "", rule.get("reason", "规则版本未核验"), ""]
+    lines += rule_task_lines(inventory.get("rule_explanations_pending", []))
     lines += ["## 来源提交领先的语义复核候选（只列候选，不决定是否改稿）", ""]
     lines += [f"- {c['page']}：来源 {c['source_project']} 本机提交领先 {c['commits_behind']} 个；"
               f"页面 {c['based_on_commit'][:10]} → 来源 {c['current_commit'][:10]}"
