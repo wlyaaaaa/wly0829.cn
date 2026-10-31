@@ -19,8 +19,10 @@ test('副机在不在线读 laptop.connection，不读自动任务健康的 lapt
   assert.match(on, /笔记本（副机）<\/h3><p class="cp-big">在线<\/p>/);
   const off = REGIONS.computer(normalize(base({ sections: remote, laptop: { state: 'ok', connection: 'offline' } })), ctx);
   assert.match(off, /笔记本（副机）<\/h3><p class="cp-big">离线<\/p><p class="cp-sub">要用它时得先开机连网/);
-  // 只有 state（旧读法）不能当连接：不写在线也不写离线
-  assert.doesNotMatch(REGIONS.computer(normalize(base({ sections: remote, laptop: { state: 'online' } })), ctx), /笔记本（副机）/);
+  // 只有 state（旧读法）不能当连接：不写在线也不写离线，照样占一格写“读不到”，九宫格不缺格
+  const unknown = REGIONS.computer(normalize(base({ sections: remote, laptop: { state: 'online' } })), ctx);
+  assert.match(unknown, /笔记本（副机）<\/h3><p class="cp-big">读不到<\/p>/);
+  assert.doesNotMatch(unknown, /笔记本（副机）<\/h3><p class="cp-big">(在线|离线)/);
 });
 
 test('AI 正在干活：排队、等你确认、等你解锁资料算还在办，照后端 status_text 写；卡住件数以后端 stuck_count 为准', () => {

@@ -191,7 +191,8 @@ export function normalize(raw) {
 // 同一事实只出一次（例如备份卡和来源缺口卡写的是同一句）
 export function dedupeCards(cards) {
   const seen = new Set();
-  return cards.filter((c) => { const k = (c.text || '').trim() || c.id; if (seen.has(k)) return false; seen.add(k); return true; });
+  // 标题和原句都一样才算同一张；只比原句会把两张不同的卡（“Google 云盘副本”“Google 相册副本”都写“暂时读不到”）吞掉一张（本人 10-31：怎么又消失一个）
+  return cards.filter((c) => { const t = (c.text || '').trim(), k = t ? `${c.title || ''}\n${t}` : c.id || c.title; if (seen.has(k)) return false; seen.add(k); return true; });
 }
 
 // 每周体检这一轮到哪一步了，用人话说：跑完了（有结果数）/ 几点开始、正在跑 / 这周还没开始。

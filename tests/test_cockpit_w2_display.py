@@ -70,16 +70,17 @@ const assert = require('node:assert/strict');
   const proj = R.projects(v, ctx);
   // 等你动手的露在外面（红）；AI 在查的收进一行（黄）
   assert.match(proj, /<ul class="cp-proj-list"><li class="cp-proj is-red"[^>]*>.*?<b>乙<\/b>/);
-  assert.match(proj, /<details class="cp-fold" id="proj-ai">.*<li class="cp-proj is-yellow"[^>]*>.*?<b>甲<\/b>/);
+  assert.match(proj, /<details class="cp-fold" id="proj-ai" open>.*<li class="cp-proj is-yellow"[^>]*>.*?<b>甲<\/b>/);
   const info = { name: '电脑配置与恢复', run_health: 'ok', overview: 'ok', know: [{ text: '自启动新增 2 条 <测试>', observed_at: '2026-10-12T00:20:00+08:00' }] };
   const known = R.projects(normalize({ projects: { items: [info] } }), ctx);
   assert.match(known, /cp-proj is-green.*<small>知道就行：自启动新增 2 条 &lt;测试&gt;<\/small>/);
   assert.doesNotMatch(R.projects(normalize({ projects: { items: [{ ...info, know: [] }] } }), ctx), /知道就行|cp-project-know/);
   assert.equal(riverSnapshot(v).today_errors.length, v.today_activity.summary.errors.owner + v.today_activity.summary.errors.other);
-  // 字段没到：不加原因句、不加笔记本行、不出空框
+  // 字段没到：不加原因句、不出空框；副机那一格照样占着写“读不到”（本人 10-31：九宫格不能缺格）
   const bare = normalize({ schema: 'pcconfig.cockpit-view.v1', sections: { computer: [{ id: 'computer_health', title: '电脑资源', text: '处理器 24%', state: 'ok' }] } });
   const pc0 = R.computer(bare, ctx);
-  assert.doesNotMatch(pc0, /原因：|笔记本|cp-plan/);
+  assert.doesNotMatch(pc0, /原因：|cp-plan/);
+  assert.match(pc0, /笔记本（副机）<\/h3><p class="cp-big">读不到<\/p>/);
   assert.deepEqual(riverSnapshot(bare).today_errors, []);
   // 要你处理的卡（公开版、没有 owner_actions）：短标题不遮 next_step；不写“办完后”；空说明不出栏；一个按钮都没有
   const todo = { id: 'pending-1', copy_ai_id: 'pending-1', title: '十月旅游去哪 · 三方盲测对照', project: '', where: 'pc', minutes: 5,

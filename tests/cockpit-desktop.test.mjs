@@ -232,9 +232,9 @@ test('看过截图后的四处：“具体：”不和“进展：”叠；AI �
   const rows = [{ id: 'q', status: 'quota_exhausted' }, { id: 'a', status: 'running' }, { id: 'b', status: 'waiting_owner' }, { id: 'c', status: 'stopped' }, { id: 'd', status: 'unknown' }];
   const run = REGIONS.home(normalize(base({ ai_running: { count: 3, observed_at: at, rows } })), ctx(acts()));
   assert.match(run, /<h2 class="hub-heading cp-run-sum">AI 正在干活：3 个（1 个卡住要你看），另 1 件停了没做完、1 件看不出在干嘛<\/h2>/);
-  const rest = /<summary>其余 (\d+) 个<\/summary><ul class="cp-run-list">(.*?)<\/ul>/.exec(run);
-  assert.equal(Number(rest[1]), (rest[2].match(/<li class="cp-run-row/g) || []).length);
-  assert.equal(Number(rest[1]), 4);
+  // 不再折叠：卡住之外的 4 行直接列在 id=run-all 的列表里
+  const rest = /<ul class="cp-run-list" id="run-all">(.*?)<\/ul>/.exec(run);
+  assert.equal((rest[1].match(/<li class="cp-run-row/g) || []).length, 4);
   // 3) 没写问题的旧卡：有对话名写“「对话名」那个对话在等你回话”并给“打开对话”；没有对话名照实说没写问题
   const old = (extra = {}) => ({ id: 'aw-old', card_type: 'ai_wait', title: '有一个 AI 对话在等你回复', ask_kind: 'cooperate', owner_actions: ['note', 'seen'], ...extra });
   const withConv = old({ open: { conversation: { app: 'claude', title: '示例对话甲', url: 'claude://code/continue?session=local_old', machine: '主驾驶' }, targets: [{ key: 'conversation', label: '打开对话' }] } });

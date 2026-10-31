@@ -39,7 +39,7 @@ test('首屏露件数和卡住的行（件数以后端 stuck_count 为准，额�
   assert.doesNotMatch(html, /class="cp-run-at"/);
   const stuck = /<ul class="cp-run-list is-stuck">(.*?)<\/ul>/.exec(html)?.[1] || '';
   assert.deepEqual([...stuck.matchAll(/<li class="cp-run-row is-([a-z_]+) /g)].map((m) => m[1]), ['quota_exhausted', 'login_failed', 'network_retry']);
-  const rest = /<details class="cp-run-all" id="run-all"><summary>其余 5 个<\/summary><ul class="cp-run-list">(.*?)<\/ul><\/details>/.exec(html)?.[1] || '';
+  const rest = /<ul class="cp-run-list" id="run-all">(.*?)<\/ul>/.exec(html)?.[1] || '';
   assert.deepEqual([...rest.matchAll(/<li class="cp-run-row is-([a-z_]+) /g)].map((m) => m[1]), ['stopped', 'waiting_owner', 'running', 'unknown', 'unknown']);
   // 符号在左边那一列；在干活、在等你回话的状态词只给读屏（跟在符号后面），别的状态词写在主行开头（本人 10-30：停了没做完的字不再盖到主行上）
   const look = Object.fromEntries([...html.matchAll(/<li class="cp-run-row is-([a-z_]+) is-live" data-items="run-\w+"><span class="cp-run-st is-(\w+)"><i aria-hidden="true">(.)<\/i>(?:<span class="cp-run-word">([^<]+)<\/span>)?<\/span><span class="cp-run-doing[^"]*">(?:<span class="cp-run-word is-(\w+)">([^<]+)<\/span>)?/g)]
@@ -57,8 +57,8 @@ test('首屏露件数和卡住的行（件数以后端 stuck_count 为准，额�
   const h2 = REGIONS.home(v2, ctx);
   assert.ok(h2.indexOf('id="ai-running"') < h2.indexOf('class="cp-know"') && h2.indexOf('class="cp-know"') < h2.indexOf('class="cp-lines"'));
   assert.doesNotMatch(REGIONS.overview(v2, ctx), /AI 在跑|cp-you-ai/);
-  // 没有卡住的：只写件数，点开看是哪几个
-  assert.match(h2, /AI 正在干活：1 个<\/h2>.*<summary>看是哪 1 个<\/summary>/);
+  // 没有卡住的：每个对话一行直接列出，不折叠
+  assert.match(h2, /AI 正在干活：1 个<\/h2>.*<ul class="cp-run-list" id="run-all">/);
 });
 
 test('件数那一句：一个都没有写“现在没有 AI 在干活”；读不全照实说', () => {

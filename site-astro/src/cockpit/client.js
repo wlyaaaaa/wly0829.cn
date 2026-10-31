@@ -159,12 +159,12 @@ function paint() {
     if (!c.ov && /^(overview|lamp-)/.test(node.dataset.cp)) continue;
     const html = fn(view, c);
     if (node.innerHTML !== html) {
-      // 展开着的折叠保持展开；按钮和筛选框换字后仍有焦点
-      const open = [...node.querySelectorAll('details[open]')].map((d) => d.id).filter(Boolean);
+      // 折叠照本人上次的样子：展开的保持展开，默认展开、本人收起的保持收起；按钮和筛选框换字后仍有焦点
+      const was = new Map([...node.querySelectorAll('details[id]')].map((d) => [d.id, d.open]));
       const focus = document.activeElement && node.contains(document.activeElement) ? focusKey(document.activeElement) : null;
       const finding = document.activeElement?.matches?.('[data-lfilter]') && node.contains(document.activeElement);
       node.innerHTML = html;
-      open.forEach((id) => node.querySelector('#' + CSS.escape(id))?.setAttribute('open', ''));
+      was.forEach((open, id) => node.querySelector('#' + CSS.escape(id))?.toggleAttribute('open', open));
       if (focus) refocus(node, focus);
       if (finding) { const f = node.querySelector('[data-lfilter]'); f?.focus({ preventScroll: true }); f?.setSelectionRange(f.value.length, f.value.length); }
     }
