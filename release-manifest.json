@@ -30,8 +30,8 @@
       "sha256": "2235b4566742b9b4a9df73a2d2e8cb0847ff2c5de0c86f2903a3c4d9dd6d3ef2"
     },
     "cockpit/storage/index.html": {
-      "bytes": 49515,
-      "sha256": "e965ebb8f487415d773e84dba1603d879a58d7615e852efe516c15b6e1ae4d08"
+      "bytes": 49596,
+      "sha256": "ab0cb2b4210d317ae655cbb58809e0382f9cfb129e3032706b69f89b600f3923"
     },
     "cockpit/stutter/index.html": {
       "bytes": 18611,
@@ -1825,7 +1825,7 @@
       "status": "warning"
     }
   },
-  "release_id": "988a9329aaa8b60e93fd199ff447351312af7ca11e4d40340f159dc9deee9253",
+  "release_id": "5e6aecbaa97addef1000d2257206b6caccfbcbc1684e8e2192d26bed31e21147",
   "baseline_production_commit": "2872547b5925b782419ec7bf5cb0f162c1b53c3e",
   "rules_pin": {
     "schema": "wly.astro-rules-pin.v1",
@@ -4034,25 +4034,16 @@
     "/cockpit/ai/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
+    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
       "producer": "astro"
     },
     "/404.html": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
-      "producer": "astro"
-    },
     "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
+    "/projects/llm-backend-toolkit/": {
       "producer": "astro"
     },
     "/cockpit/stutter/": {
@@ -4061,7 +4052,16 @@
     "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
+    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
       "producer": "astro"
     },
     "/cv/": {
@@ -4638,12 +4638,12 @@
     "html_files": 324
   },
   "previous_oss_source": "published",
-  "previous_release_id": "04ce2c0a55d765ef27d04cfaaef3128cd4f53812080b23c2eed0a5a09331955c",
+  "previous_release_id": "988a9329aaa8b60e93fd199ff447351312af7ca11e4d40340f159dc9deee9253",
   "oss": {
     "schema": "wly.oss-assets.v1",
     "asset_base_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com",
-    "prefix": "releases/777b9b7b17ef98aa82917e12f4641f51b6e72ebc30e9ae0021d0ce3b4cc66ee3",
-    "source_release_id": "e2f3ba5b54fcd101a9a13dd2a711d7ae2d4caa2d16eda1e335e95eea9d4bf4fc",
+    "prefix": "releases/d8680819fcaf880f8f4d388aa07bec3a55facd9641d4dc17dfa0086cba10f726",
+    "source_release_id": "706ce93b578d3736a0135fbdee6f9552528d7243304de4e116b64a4c0dc7e795",
     "objects": {
       "_album/album-1a72f07ce279b5d3fdf8.css": {
         "bytes": 4721,
@@ -5220,6 +5220,18 @@
           "sha256": "73f07b9d2a254cedef555c974fbd2c6d2e9b1b3c15285ddde9f958b0bd747dbd"
         },
         "byte_preserved": false
+      },
+      "_astro/index.astro_astro_type_script_index_0_lang.BLoG8Xmq.js": {
+        "bytes": 6799,
+        "sha256": "ac53de45f381e74ca7ca70f4b09ad1fe5f8c6dc5379d06d5292f2a925b730124",
+        "key": "releases/ff7ea11619eded1d1ff635de6c50380fc38e07710f23783931f756c3f2d8014a/_astro/index.astro_astro_type_script_index_0_lang.BLoG8Xmq.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/ff7ea11619eded1d1ff635de6c50380fc38e07710f23783931f756c3f2d8014a/_astro/index.astro_astro_type_script_index_0_lang.BLoG8Xmq.js",
+        "content_type": "application/javascript",
+        "source": {
+          "bytes": 6799,
+          "sha256": "ac53de45f381e74ca7ca70f4b09ad1fe5f8c6dc5379d06d5292f2a925b730124"
+        },
+        "byte_preserved": true
       },
       "_astro/index.astro_astro_type_script_index_0_lang.BtQs7QFR.js": {
         "bytes": 180,
@@ -87596,7 +87608,6 @@
       "releases/c09610df4084678e9ba7f267fa5e5093c9109e306f5ed3ab53a067d4263d2cc0/_shared/nav-a7004192c7-2aad9745de2f.webp",
       "releases/c0a94e69ccc7a09ff7a0ef9caaab54ef6299961e79c0d8b9b111b2b46ce40ec6/_living/skill-personal-health/bird-first-only.d0e29b696dd1/config.json",
       "releases/c0c8988f5384af2ebf460114a4fd42a0db0355cfb58dfc6ac6ce5c5b015e9d7d/_typeset/rule-capabilities-runtime/1a4e6e66a60e6bc0f81f-rule-capabilities-runtime-01-h.webp",
-      "releases/c0d26cb5167bb2eb55b64852d0e1c0588b6678e56c70c80f452e431b28914588/_astro/index.astro_astro_type_script_index_0_lang.RkT1IJfD.js",
       "releases/c106aca932c42cefa23107b7b204bd133db60e8622b80d433e9c13bb0a5554d8/assets/_fingerprinted/443a1e26f04d1a582103f4475c613c05b9c1f1c9e854081d0d14073fc8e51894.png",
       "releases/c110408a40ef7e9ad30e7566cb1e3883ac054c44bf6e2068560c994f4038221f/assets/_fingerprinted/9a01ab157b243c299ff70241d2a2cfe18f59a760640a5c7b4d402c6e2515a2e2.png",
       "releases/c11952145e2d3081d9f658aa2b74918a84a36c2ecd34268b282bc37fee6915f1/_typeset/runtime/live-ui-page-84b1fd5793b5c77d24f3.css",
@@ -88742,6 +88753,7 @@
       "releases/ff22553cedf551bc1dbabcfdce19767cd8cf362631fbab901959e439b64871c0/_shared/home-comic/295cd8bc1e8a248d5bbb/assets/v-a-title-under.png",
       "releases/ff23028812ce7966bf470dd1575e031e78b03a319a2e245cdd1128a8a2bf5b67/_typeset/runtime/motion-dda3d8b3ffba1e28a7a8.js",
       "releases/ff7c8095635283974331b1fa0308538b46df1b0a6cd89baf8fca9fa988a23762/_typeset/runtime/live-sans-part-57a-b4b8bf9212b603a79246.woff2",
+      "releases/ff7ea11619eded1d1ff635de6c50380fc38e07710f23783931f756c3f2d8014a/_astro/index.astro_astro_type_script_index_0_lang.BLoG8Xmq.js",
       "releases/ff8435a77fe1f62b7418d564a8fed8cac1faf4ac6fad95c33706ed0e059b5cd6/assets/home-02-h-1920-679980566644.avif",
       "releases/ff8c0236ec8e200f89434b86eeea0c0017a7b286205de68523421391a8bf61a8/assets/_fonts/emerald-veil-reversibility-preimage-and-remote-compatibility-6dd988080f1c.woff2",
       "releases/ff941721cdc48864fb0cdf5b5527533e87b279c775fd1b6652a5f0a8826bbd36/_typeset/rule-capabilities-runtime/f16dfaf34c0fd1a437a4-rule-capabilities-runtime-01-h.png",

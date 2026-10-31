@@ -2,60 +2,59 @@
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
   "source_commit": "Unknown",
-  "prepared_at_beijing": "2026-10-31T18:35:39.323588+08:00",
-  "seconds": 227.997,
+  "prepared_at_beijing": "2026-10-31T19:25:48.882316+08:00",
+  "seconds": 211.894,
   "steps": [
     {
       "name": "home_highlights",
-      "seconds": 0.247
+      "seconds": 0.22
     },
     {
       "name": "source",
-      "seconds": 25.412
+      "seconds": 25.207
     },
     {
       "name": "fingerprint",
-      "seconds": 1.8
+      "seconds": 1.25
     },
     {
       "name": "prepare",
-      "seconds": 31.036
+      "seconds": 23.742
     },
     {
       "name": "native_inputs",
-      "seconds": 7.223
+      "seconds": 6.108
     },
     {
       "name": "blocks",
-      "seconds": 1.712
+      "seconds": 0.892
     },
     {
       "name": "astro",
-      "seconds": 19.587
+      "seconds": 16.059
     },
     {
       "name": "assets",
-      "seconds": 27.328
+      "seconds": 6.014
     },
     {
       "name": "finish",
-      "seconds": 10.606
+      "seconds": 35.194
     },
     {
       "name": "finalize",
-      "seconds": 88.869
+      "seconds": 84.916
     },
     {
       "name": "public",
-      "seconds": 12.836
+      "seconds": 11.454
     },
     {
       "name": "inventory",
-      "seconds": 1.341
+      "seconds": 0.837
     }
   ],
   "rebuilt_pages": [
-    "/baidu_verify_codeva-DRgaQnAmTK.html",
     "/cockpit/storage/"
   ],
   "html_files": 324,
@@ -309,6 +308,11 @@
       "path": "_astro/index.astro_astro_type_script_index_0_lang.BIZpMnoR.js",
       "bytes": 180,
       "sha256": "e557989615d4233eb21c4760720227e1244efc3569adb7025f4280b37d8918de"
+    },
+    {
+      "path": "_astro/index.astro_astro_type_script_index_0_lang.BLoG8Xmq.js",
+      "bytes": 6799,
+      "sha256": "ac53de45f381e74ca7ca70f4b09ad1fe5f8c6dc5379d06d5292f2a925b730124"
     },
     {
       "path": "_astro/index.astro_astro_type_script_index_0_lang.BtQs7QFR.js",
@@ -31692,8 +31696,8 @@
     },
     {
       "path": "cockpit/storage/index.html",
-      "bytes": 49515,
-      "sha256": "e965ebb8f487415d773e84dba1603d879a58d7615e852efe516c15b6e1ae4d08"
+      "bytes": 49596,
+      "sha256": "ab0cb2b4210d317ae655cbb58809e0382f9cfb129e3032706b69f89b600f3923"
     },
     {
       "path": "cockpit/stutter/assets/motion-2f8c3c372966efd18f0a.js",
@@ -34053,12 +34057,12 @@
     {
       "path": "release-identity.json",
       "bytes": 211,
-      "sha256": "5b52204a6e19482d9b37f17c71601872f907e70d9939cc89c70864e7b60888f0"
+      "sha256": "5d761a2f5b6c17c127ee0d16d6a309882a0e1fd8d617d367f43b2717cc347d39"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 6293670,
-      "sha256": "952dde4ecc81ac0f8cb8b8200d10006bebbca4f74750ad6c09c9b4472962893d"
+      "bytes": 6294469,
+      "sha256": "b024785d2a2e43e0bab25725934a18518f456133d7cc819c679282607b4f2941"
     },
     {
       "path": "rescue/index.html",
@@ -35328,5 +35332,5 @@
   },
   "checks_file": "E:\\Cache\\wly-site-build\\wt\\site-astro\\.cache\\site-consistency.json",
   "previous_oss_source": "published",
-  "previous_release_id": "04ce2c0a55d765ef27d04cfaaef3128cd4f53812080b23c2eed0a5a09331955c"
+  "previous_release_id": "988a9329aaa8b60e93fd199ff447351312af7ca11e4d40340f159dc9deee9253"
 }
