@@ -170,7 +170,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'||(e.key===' '&&e.targ
   {blocks && <script is:inline defer src={typesetMotion}></script>}
   <script is:inline defer src={tocConsistency}></script>
   <script is:inline defer src="/_interactions/anchor-offset.js"></script>
-  {page === 'how' && <Fragment set:html={`<script id="how-map-data" type="application/json">${safe({nodes: authorPages['../../../sources/pages/how/page.json']?.registry?.nodes?.map(({id,name,href}: any) => ({id,name,href})), relations: authorPages['../../../sources/pages/how/page.json']?.registry?.relations?.map(({from,to,kind,what,on_map}: any) => ({from,to,kind,what,on_map}))})}</script><script defer src="/_interactions/how-map.js"></script>`} />}
+  {page === 'how' && <Fragment set:html={`<script id="how-map-data" type="application/json">${safe({nodes: authorPages['../../../sources/pages/how/page.json']?.registry?.nodes?.map(({id,name,href}: any) => ({id,name,href})), relations: authorPages['../../../sources/pages/how/page.json']?.registry?.relations?.filter((r: any) => !String(r.what).startsWith('（冻结前）')).map(({from,to,kind,what,on_map}: any) => ({from,to,kind,what,on_map}))})}</script><script defer src="/_interactions/how-map.js"></script>`} />}
   {pageData && <script is:inline defer src="/_living/live-dom.js"></script>}
   {blocks && <script is:inline>(()=>{/* 屏淡入：整屏一起从下方 100px 升起、透明度 0→1，统一慢档 800 毫秒；第一屏、卡片网格里的卡片屏、
     带 # 进来的那屏、motion-off、减少动态效果时不播；屏进视口 6% 时加 .ts-entering，播完摘掉。样式在 typeset-page.css） */

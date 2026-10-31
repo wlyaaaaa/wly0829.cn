@@ -10,15 +10,15 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-    "release": "E337",
-    "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
-    "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
-    "activated_at": "2026-10-31T15:26:59.057612+08:00",
+    "release": "E338",
+    "commit": "99816398405d43e3fbcc31a419952866e97eb880",
+    "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118",
+    "activated_at": "2026-10-31T15:58:17.483029+08:00",
     "file": "sources/rules/release.json"
   },
   "explanation_based_on": {
-    "release": "E337",
-    "sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a"
+    "release": "E338",
+    "sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118"
   },
   "video_prompt": "5–8 秒循环：从开头这屏的水彩书架出发，上层那本深绿精装书的丝带书签被微风轻轻吹动，下层 10 本薄册子从左到右依次微微亮起一层浅绿光再暗下去，几片水彩绿叶从画面上方缓缓飘落；画面里不出现任何字，镜头不动。",
   "screens": [

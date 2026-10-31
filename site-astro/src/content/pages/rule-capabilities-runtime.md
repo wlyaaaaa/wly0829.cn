@@ -30,17 +30,17 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E337",
-   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
-   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
-   "activated_at": "2026-10-31T15:26:59.057612+08:00",
+   "release": "E338",
+   "commit": "99816398405d43e3fbcc31a419952866e97eb880",
+   "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118",
+   "activated_at": "2026-10-31T15:58:17.483029+08:00",
    "file": "sources/rules/docs/contracts/agents.capabilities-runtime.md",
-   "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c",
-   "public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9"
+   "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5",
+   "public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0"
   },
   "explanation_based_on": {
-   "release": "E337",
-   "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c"
+   "release": "E338",
+   "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小 AI 助手抬手从洞洞板上取下放大镜看了看又挂回去，洞洞板上的 Chrome、Gmail、Google 云盘三个标志轻轻晃动；脚边贴着“E:”的绿色储物箱里几片绿叶慢慢舒展；右下笔记本电脑屏幕上的看板里，三个小圆点状态灯依次轻轻呼吸（绿、绿、黄）；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，三块小牌子上的字保持不动、不变形。",
   "registry": {
@@ -405,8 +405,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "6aa64d5f10285caebf10ec9736975e3e2de9c527b5904b789ea967cec3a39254",
-  "converted_at_beijing": "2026-10-31T15:43:19+08:00"
+  "sha256": "9e5d4d7fda13dfdc693182900495307606aae3d726eda7bc87e51cf7f4b4f184",
+  "converted_at_beijing": "2026-10-31T16:43:53+08:00"
  }
 }
 ---
@@ -1720,9 +1720,9 @@
 ### 怎么做
 - 要反复读的文件，从本机传到云上（Cloudflare R2）一份，本机留同一版；只传点名的文件，不扫整个目录。
 - 云上用文件的内容指纹作名字（64 位 SHA-256）；同样的内容只存一份，公开范围按公开分级表判断。
-- 设计上，AI 在云里用命令处理素材，结论写回自己的收件箱；本机只取回几 KB 的文字。云端审图尚未通过校准，网站图终审交 Claude Opus。
+- 设计上，AI 在云里用命令处理素材，结论写回自己的收件箱；本机只取回几 KB 的文字。云端审图 10 月 2 日记录时还没通过校准（现在过没过，以读者说明里的登记为准），网站图终审交 Claude Opus。
 - 每次给 AI 用之前，先核对本机文件的指纹：变了就传新版，旧的标“已被替换”，保证 AI 读的和本机一样。
-- 现在要分四层看：① 素材通道本身（R2 存放、指纹核对、查账清理）照常可用；② 旧账号曾接通云端命令读者，那时它自报 GPT-5.6 Sol，但这只是旧账号的记录；③ 命令读者按偶用处理、不维护，也不主动安排接线或升级型号；它现在能不能用、用前怎么核对、谁来建环境，只记在云端素材技能里（那里写的是：截至 10 月 20 日，换账号后的新账号没建云端环境，不能用，不提交云端任务；真要用时以它的探测结果为准）；④ 云端审图校准仍没通过，以后真要启用审图还得先过校准，命令接通、型号核对都不算校准通过。
+- 现在要分四层看：① 素材通道本身（R2 存放、指纹核对、查账清理）照常可用；② 旧账号曾接通云端命令读者，那时它自报 GPT-5.6 Sol，但这只是旧账号的记录；③ 命令读者按偶用处理、不维护，也不主动安排接线或升级型号；它现在能不能用、用前怎么核对、谁来建环境，只记在云端素材技能里（那里写的是：截至 10 月 20 日，换账号后的新账号没建云端环境，不能用，不提交云端任务；真要用时以它的探测结果为准）；④ 云端审图 10 月 2 日记录时校准还没通过（现在以读者说明里的登记为准），以后真要启用审图还得先过校准，命令接通、型号核对都不算校准通过。
 - 照那个技能的写法，建环境、网页设置和换账号由本人做，AI 只用命令提交、查询和取结论。
 - Claude 自己的复核不走云：在本机每张图一次读完、一次答完。画图仍在本机。
 - 具体怎么传、怎么查账和清理，见〔省流量的云端素材〕技能。
@@ -2945,9 +2945,9 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E337",
-   "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c",
-   "public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
+   "release": "E338",
+   "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5",
+   "public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
    "from": null,
    "to": "## 常用入口",
    "start": 0,
@@ -2970,7 +2970,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-11",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
+  "source_public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-11"
  },
  "layout": {
@@ -2978,7 +2978,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版"
+     "text_ref": "原文·E338版"
     },
     {
      "type": "chapter_title",
@@ -3019,7 +3019,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版"
+     "text_ref": "原文·E338版"
     },
     {
      "type": "chapter_title",
@@ -3112,7 +3112,7 @@
 }
 ```
 
-原文 · E337 版
+原文 · E338 版
 
 # 能力与运行方式
 
@@ -3140,13 +3140,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E337",
-   "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c",
-   "public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
+   "release": "E338",
+   "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5",
+   "public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
    "from": "## 常用入口",
    "to": "## 浏览器",
    "start": 1440,
-   "end": 3922,
+   "end": 4027,
    "approved_omissions": []
   },
   "title": "原文（二）：常用入口",
@@ -3160,7 +3160,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-12",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
+  "source_public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-12"
  },
  "layout": {
@@ -3168,7 +3168,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -3196,7 +3196,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -3242,7 +3242,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E337 版 · 续
+原文 · E338 版 · 续
 
 ## 常用入口
 
@@ -3257,7 +3257,7 @@ owner: `E:\.agents`
 
 同一文件预计被 AI 读两次以上，或同批处理流量明显超过文件本身时，按 cloud-asset-channel 技能（`E:/.agents/skills/cloud-asset-channel/SKILL.md`）核对通道与读者，明确指定素材，不扫描目录。本机 Codex 不能直接接收 HTTPS 图片；Claude 本机复核每张图一次读完、一次答完，画图仍在本机。
 
-Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎么核对、谁来建环境，只记在 `cloud-asset-channel` 技能里。云端审图校准未通过，尚未启用，网站图终审由 Claude Opus 完成。
+Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎么核对、谁来建环境，只记在 `cloud-asset-channel` 技能里。云端审图校准未通过，尚未启用（2026-10-02 记录；是否已通过以读者说明（`E:/.agents/docs/cloud-asset-channel-reader.md`）所述的 `validated_use_cases` 登记为准），网站图终审由 Claude Opus 完成。
 
 不主动安排命令接线或模型升级；以后启用审图须先通过校准，命令接通和型号核对不能代替。环境解析、逐块全覆盖证据、一次写收件箱和清理协议只在读者说明（`E:/.agents/docs/cloud-asset-channel-reader.md`）维护，上传目标和登记表读 cloud-asset-channel.json（`E:/.agents/config/cloud-asset-channel.json`），不在规则复制协议参数。
 
@@ -3277,13 +3277,13 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E337",
-   "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c",
-   "public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
+   "release": "E338",
+   "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5",
+   "public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
    "from": "## 浏览器",
    "to": "## 汇报、网站和自动运行的东西",
-   "start": 3922,
-   "end": 6142,
+   "start": 4027,
+   "end": 6247,
    "approved_omissions": []
   },
   "title": "原文（三）：浏览器",
@@ -3302,7 +3302,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-13",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
+  "source_public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-13"
  },
  "layout": {
@@ -3310,7 +3310,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -3336,7 +3336,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -3410,7 +3410,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
 }
 ```
 
-原文 · E337 版 · 续
+原文 · E338 版 · 续
 
 ## 浏览器
 
@@ -3442,13 +3442,13 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E337",
-   "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c",
-   "public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
+   "release": "E338",
+   "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5",
+   "public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
    "from": "## 汇报、网站和自动运行的东西",
    "to": "## 安装位置、配置和本机约定",
-   "start": 6142,
-   "end": 9489,
+   "start": 6247,
+   "end": 9594,
    "approved_omissions": []
   },
   "title": "原文（四）：汇报、网站和自动运行；软件更新和兼容",
@@ -3462,7 +3462,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-14",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
+  "source_public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-14"
  },
  "layout": {
@@ -3470,7 +3470,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -3490,7 +3490,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -3560,7 +3560,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
 }
 ```
 
-原文 · E337 版 · 续
+原文 · E338 版 · 续
 
 ## 汇报、网站和自动运行的东西
 
@@ -3595,13 +3595,13 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E337",
-   "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c",
-   "public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
+   "release": "E338",
+   "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5",
+   "public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
    "from": "## 安装位置、配置和本机约定",
    "to": null,
-   "start": 9489,
-   "end": 10980,
+   "start": 9594,
+   "end": 11085,
    "approved_omissions": []
   },
   "title": "原文（五）：安装位置、配置和本机约定",
@@ -3620,7 +3620,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-15",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
+  "source_public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-15"
  },
  "layout": {
@@ -3628,7 +3628,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -3648,7 +3648,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -3694,7 +3694,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
 }
 ```
 
-原文 · E337 版 · 续
+原文 · E338 版 · 续
 
 ## 安装位置、配置和本机约定
 

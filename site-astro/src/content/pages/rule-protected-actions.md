@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E337",
-   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
-   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
-   "activated_at": "2026-10-31T15:26:59.057612+08:00",
+   "release": "E338",
+   "commit": "99816398405d43e3fbcc31a419952866e97eb880",
+   "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118",
+   "activated_at": "2026-10-31T15:58:17.483029+08:00",
    "file": "sources/rules/docs/contracts/agents.protected-actions.md",
    "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73",
    "public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3"
@@ -258,8 +258,8 @@
  },
  "source": {
   "page": "sources/pages/rule-protected-actions/page.json",
-  "sha256": "d3296d1ca205589320e5a42846e273c35f8994972b439c19ea894f59c3982930",
-  "converted_at_beijing": "2026-10-31T15:43:20+08:00"
+  "sha256": "b784b2a08ef8c66c232d95ea3f99c324aa42b5e09e67c49c6677bada97b4bcdb",
+  "converted_at_beijing": "2026-10-31T16:43:54+08:00"
  }
 }
 ---
@@ -540,7 +540,7 @@
 
 删库　把关　四选一　通行密钥　手机验证码　恢复码
 
-现在开没开无限制授权、个人资料解没解锁：〔现在的授权状态 → 授权与状态〕。网页原文来源快照为 E337（北京时间 10 月 31 日 15:26 起生效），本页讲解与同版专题对应；当前生效版本以 AI 开工时核验的活动入口为准。
+现在开没开无限制授权、个人资料解没解锁：〔现在的授权状态 → 授权与状态〕。网页原文来源快照为 E338（北京时间 10 月 31 日 15:58 起生效），本页讲解与同版专题对应；当前生效版本以 AI 开工时核验的活动入口为准。
 
 ::screen{#rule-protected-actions-09 section="points"}
 
@@ -2687,7 +2687,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.protected-actions.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73",
    "public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3",
    "from": null,
@@ -2730,7 +2730,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版，一字不改"
+     "text_ref": "原文·E338版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2773,7 +2773,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版，一字不改"
+     "text_ref": "原文·E338版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2873,7 +2873,7 @@
 }
 ```
 
-原文 · E337 版，一字不改
+原文 · E338 版，一字不改
 
 # 重大动作与本人验证
 
@@ -2917,7 +2917,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.protected-actions.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73",
    "public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3",
    "from": "## GitHub 重大动作",
@@ -2947,7 +2947,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -2987,7 +2987,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -3093,7 +3093,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E337 版 · 续
+原文 · E338 版 · 续
 
 ## GitHub 重大动作
 

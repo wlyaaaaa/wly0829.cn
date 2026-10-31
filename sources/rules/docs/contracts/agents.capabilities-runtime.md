@@ -27,7 +27,7 @@ owner: `E:\.agents`
 
 同一文件预计被 AI 读两次以上，或同批处理流量明显超过文件本身时，按 cloud-asset-channel 技能（`E:/.agents/skills/cloud-asset-channel/SKILL.md`）核对通道与读者，明确指定素材，不扫描目录。本机 Codex 不能直接接收 HTTPS 图片；Claude 本机复核每张图一次读完、一次答完，画图仍在本机。
 
-Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎么核对、谁来建环境，只记在 `cloud-asset-channel` 技能里。云端审图校准未通过，尚未启用，网站图终审由 Claude Opus 完成。
+Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎么核对、谁来建环境，只记在 `cloud-asset-channel` 技能里。云端审图校准未通过，尚未启用（2026-10-02 记录；是否已通过以读者说明（`E:/.agents/docs/cloud-asset-channel-reader.md`）所述的 `validated_use_cases` 登记为准），网站图终审由 Claude Opus 完成。
 
 不主动安排命令接线或模型升级；以后启用审图须先通过校准，命令接通和型号核对不能代替。环境解析、逐块全覆盖证据、一次写收件箱和清理协议只在读者说明（`E:/.agents/docs/cloud-asset-channel-reader.md`）维护，上传目标和登记表读 cloud-asset-channel.json（`E:/.agents/config/cloud-asset-channel.json`），不在规则复制协议参数。
 

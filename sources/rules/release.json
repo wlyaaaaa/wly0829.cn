@@ -1,9 +1,9 @@
 {
   "schema": "wly.astro-rules-pin.v1",
-  "version": "E337",
-  "release_commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
-  "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
-  "release_record_sha256": "10b4d4c5828504bd209b0fadee7fd36518c9fc7b38fcf42545cc39e1ebcc47da",
+  "version": "E338",
+  "release_commit": "99816398405d43e3fbcc31a419952866e97eb880",
+  "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118",
+  "release_record_sha256": "5b857907038de276e48ab8f8efed36239c4ce4f64459a66ff9368c5ab5a0e0c3",
   "files": [
     {
       "bytes": 22707,
@@ -18,10 +18,10 @@
       "sha256": "860d3b5e8eec0a2e1f8b891cb7ed8032f24c2db7bac54552dd172c862cdb9694"
     },
     {
-      "bytes": 26978,
+      "bytes": 27127,
       "logical_id": "capabilities_runtime_contract",
       "relative_path": "docs/contracts/agents.capabilities-runtime.md",
-      "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c"
+      "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5"
     },
     {
       "bytes": 26988,
@@ -33,7 +33,7 @@
       "bytes": 24020,
       "logical_id": "claude_entry_template",
       "relative_path": "templates/claude-home/CLAUDE.md",
-      "sha256": "60b5793ee5e3bf18c6888299282e534c53b8179bc56d32761cb2982a4c7f8fb6"
+      "sha256": "3bcd3e53c7bce76b7dca8728e96dc29c3284acad106b9099376992dd711ca35b"
     },
     {
       "bytes": 12337,
@@ -45,7 +45,7 @@
       "bytes": 23746,
       "logical_id": "codex_entry_template",
       "relative_path": "templates/codex-home/AGENTS.md",
-      "sha256": "f42e19063e83277a12f61d0246bb4f8bfcd3700ee8a6ec1db53c6bdd47b2024e"
+      "sha256": "a499b5fa55ab5d87196066508d1ca7133a7cb4a267a2193877d2c0ac44bb7a0a"
     },
     {
       "bytes": 18638,
@@ -453,23 +453,23 @@
     ]
   },
   "pointer": {
-    "activated_at_utc": "2026-10-31T07:26:59.0576120+00:00",
+    "activated_at_utc": "2026-10-31T07:58:17.4830292+00:00",
     "current": {
+      "git_commit": "99816398405d43e3fbcc31a419952866e97eb880",
+      "release_id": "E338",
+      "release_record_sha256": "5b857907038de276e48ab8f8efed36239c4ce4f64459a66ff9368c5ab5a0e0c3",
+      "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118"
+    },
+    "pointer_revision": 247,
+    "previous": {
       "git_commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
       "release_id": "E337",
       "release_record_sha256": "10b4d4c5828504bd209b0fadee7fd36518c9fc7b38fcf42545cc39e1ebcc47da",
       "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a"
     },
-    "pointer_revision": 246,
-    "previous": {
-      "git_commit": "bf0bed7f195eb4ac9ddabec5b401f0e43a02fe26",
-      "release_id": "E336",
-      "release_record_sha256": "d210fc0bd0e32e86a58751cd3f8583fc5263ea31a211db84c76efaed2bc71594",
-      "ruleset_sha256": "25411392003ad99e290ee49aac69d3c3940ad424ebb1831823cdc17b4dbe1d04"
-    },
     "schema": "agents.e-rules-current.v1"
   },
-  "pointer_sha256": "1bdba1c372214c45f5a6d6e20db11a3e1c5bffb2d63b97dc5575fe163e1520ae",
+  "pointer_sha256": "35594364b56021f6ec84feb69d015baae529e96daa399dae1531840b1c279f92",
   "documents": {
     "agents_root_rules": {
       "bytes": 22707,
@@ -480,17 +480,17 @@
       "purpose": "约法（最高层）、优先顺序、规则核验和专题导航",
       "primary": true,
       "slug": "charter",
-      "public_source_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
-      "public_source_bytes": 22384,
-      "src": "/_typeset/rule-sources/6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996.md",
-      "prose_sha256": "5050d3f83c14a816a7b7b0db5cb788f22e6a834a0889bdf43e6bee28a928134c",
-      "search_text_sha256": "0e4203f58b7c77154ffc0ad634cea88243cc2af85a15891401c6a77b218ae91c",
+      "public_source_sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2",
+      "public_source_bytes": 22378,
+      "src": "/_typeset/rule-sources/45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2.md",
+      "prose_sha256": "9c07b0bc35289fb34da178d49accce3654b2edc81749d6186dd82341fb9fe578",
+      "search_text_sha256": "6bcb89dac8fc527fda7eb2b569d3544065ad798026882059bd91e066d2177dc7",
       "page": "charter",
       "route": "/rules/charter/",
       "parts": [
         {
           "id": "charter/charter-02",
-          "label": "约法 · L1–L10 · E337",
+          "label": "约法 · L1–L10 · E338",
           "markdown_sha256": "6a70c02617ae570f40380aac5215b78f94847c7b8754e37791e07abd6f5bcf56",
           "prose_sha256": "7d4312bf45c63ef6a94b37ac40565228f0a9f3c6e1da3538696668356b272bdd",
           "selection": {
@@ -503,7 +503,7 @@
         },
         {
           "id": "charter/charter-03",
-          "label": "约法 · L11–L17 · E337",
+          "label": "约法 · L11–L17 · E338",
           "markdown_sha256": "5b612355d35b9abd539b3fecccb4233d265594b9ce45998ffa2ab81ef82e858b",
           "prose_sha256": "f7beaf55e9bc0678763b2bac8ea26e44a7c28f0ff2354dac8f47d0658714e915",
           "selection": {
@@ -516,7 +516,7 @@
         },
         {
           "id": "charter/charter-04",
-          "label": "约法 · L18–L23 · E337",
+          "label": "约法 · L18–L23 · E338",
           "markdown_sha256": "923624049189b6d57ba9c71c2a32ef4faa8aa6caf367c5ed8bb77d2f8e9ff030",
           "prose_sha256": "d185d158441e53993c4314e20a8d663a6c3b9478192ce299a628dd2715f66db9",
           "selection": {
@@ -529,14 +529,14 @@
         },
         {
           "id": "charter/charter-05",
-          "label": "约法 · L24–L30 · E337",
-          "markdown_sha256": "cc390f8b0f049535b4440d49c7c313612c14fb63c21339c32e41e76ae7e3d438",
-          "prose_sha256": "ca0cc3b10d77558eca94824e61d90acb1d844d663febe22f85f12a8b0db73d8c",
+          "label": "约法 · L24–L30 · E338",
+          "markdown_sha256": "9015929e20ddf5734e2b5fffdf0e9a153be44cdfe8a83504dd66c883caf7bba6",
+          "prose_sha256": "46d95d7dab41974750c90889e64fc1c9d00dd5a897270618e5953366fdb0c37b",
           "selection": {
             "from": "### 八、项目与维护",
             "to": null,
             "start": 5506,
-            "end": 8704,
+            "end": 8702,
             "approved_omissions": []
           }
         }
@@ -561,7 +561,7 @@
       "parts": [
         {
           "id": "rule-authorization/rule-authorization-05",
-          "label": "原文 · E337 版，略去个别私人领域字句",
+          "label": "原文 · E338 版，略去个别私人领域字句",
           "markdown_sha256": "1bf8e6abe134c49da129365888d6a9c2b43769ca022fdea5e6f6000b91bbf6f7",
           "prose_sha256": "00fe03a4eaf74940980901fbbf800ddacd9e94a597b9cbba92a70ab4cacf208a",
           "selection": {
@@ -574,7 +574,7 @@
         },
         {
           "id": "rule-authorization/rule-authorization-06",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "b3cce8eee55932bf9c32db9a3c37ed38c83b6641546467540d9cab47af5cdb30",
           "prose_sha256": "ca3060e92b4fb33c9c7abd2946a4f3dbef8e61bb49c41436778dc033d586e54d",
           "selection": {
@@ -587,7 +587,7 @@
         },
         {
           "id": "rule-authorization/rule-authorization-07",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "c80ef867f6f49a499cbc76cdf1a44f58960fd891c5013118c2488ed9119e15af",
           "prose_sha256": "3cc74cee0c9e6640178ac00e80332aa8c407cc666ec87794bbec2724293f88fa",
           "selection": {
@@ -601,25 +601,25 @@
       ]
     },
     "capabilities_runtime_contract": {
-      "bytes": 26978,
+      "bytes": 27127,
       "logical_id": "capabilities_runtime_contract",
       "relative_path": "docs/contracts/agents.capabilities-runtime.md",
-      "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c",
+      "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5",
       "title": "能力与运行方式",
       "purpose": "选工具和技能、领域入口、浏览器、软件更新、安装位置、汇报网页、网站和自动运行",
       "primary": true,
       "slug": "capabilities-runtime",
-      "public_source_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
-      "public_source_bytes": 26941,
-      "src": "/_typeset/rule-sources/08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9.md",
-      "prose_sha256": "13b93c6e58a7de239aed1ea6cef053c4377818bd67c87ed2de80c85b6f86c8fc",
-      "search_text_sha256": "636c9615c49299a946b14f2a2ae420a09c990c128120fd8f4b16c1f2e2284a2c",
+      "public_source_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
+      "public_source_bytes": 27094,
+      "src": "/_typeset/rule-sources/c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0.md",
+      "prose_sha256": "2299bef35fa1641106e3853d43f4432de95e1a8e3d0fc627f1c5a0688be341e1",
+      "search_text_sha256": "b217556474e144f1a69b008883d0cd1171a905f49946bdc69c9de508b2b9bd12",
       "page": "rule-capabilities-runtime",
       "route": "/rules/capabilities-runtime/",
       "parts": [
         {
           "id": "rule-capabilities-runtime/rule-capabilities-runtime-11",
-          "label": "原文 · E337 版",
+          "label": "原文 · E338 版",
           "markdown_sha256": "5ad02578aa000a8701353fbe8d6b7251d5a54c49309fd24dc57d814bc7c4dc06",
           "prose_sha256": "17ab8226efe2143ed7c76012a3496a31b884700c4910bbad356bbd89af4a8874",
           "selection": {
@@ -632,53 +632,53 @@
         },
         {
           "id": "rule-capabilities-runtime/rule-capabilities-runtime-12",
-          "label": "原文 · E337 版 · 续",
-          "markdown_sha256": "e8a1a62886f8b9fb8c78eca11b297cb71991d5e14d35bc7d05a87a59d83810a1",
-          "prose_sha256": "d639dc9e02c0b8f2d50f682be9b97d7e7386434b9d45c37a35683657cf0280db",
+          "label": "原文 · E338 版 · 续",
+          "markdown_sha256": "585a485a08539f0d289b17bc425581f23585cf774c152146031e5105dcfcc7a3",
+          "prose_sha256": "6c6149178f370a09f44a890067362ff1ff2f130b71294da985463601d88e0997",
           "selection": {
             "from": "## 常用入口",
             "to": "## 浏览器",
             "start": 1440,
-            "end": 3922,
+            "end": 4027,
             "approved_omissions": []
           }
         },
         {
           "id": "rule-capabilities-runtime/rule-capabilities-runtime-13",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "0d550475257f0e4943f6d3c7ffd12047d32c1d88031a2219f097660ca99f0839",
           "prose_sha256": "930d9860d0a0b1c9a30c372c924af13ca56aebf02b0d54be8c8608ae6fded267",
           "selection": {
             "from": "## 浏览器",
             "to": "## 汇报、网站和自动运行的东西",
-            "start": 3922,
-            "end": 6142,
+            "start": 4027,
+            "end": 6247,
             "approved_omissions": []
           }
         },
         {
           "id": "rule-capabilities-runtime/rule-capabilities-runtime-14",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "f7fa3350c9f316895acb9450607df9c3efe3dc84a517aa0d2b64de5be74885e3",
           "prose_sha256": "e55d275a9981b03bceb559a1ffbee021fa94e9a13faeacca12ecaa4c4e1a6c3d",
           "selection": {
             "from": "## 汇报、网站和自动运行的东西",
             "to": "## 安装位置、配置和本机约定",
-            "start": 6142,
-            "end": 9489,
+            "start": 6247,
+            "end": 9594,
             "approved_omissions": []
           }
         },
         {
           "id": "rule-capabilities-runtime/rule-capabilities-runtime-15",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "d3009e7a5682890198d9d8a9c2a64ddd7536cdd7841f9f386ddf101e226f1388",
           "prose_sha256": "8e57ef272a43e78bff634987ced01d4a428a7e1547c381788253d4d9fa39546c",
           "selection": {
             "from": "## 安装位置、配置和本机约定",
             "to": null,
-            "start": 9489,
-            "end": 10980,
+            "start": 9594,
+            "end": 11085,
             "approved_omissions": []
           }
         }
@@ -703,7 +703,7 @@
       "parts": [
         {
           "id": "rule-claude-adapter/rule-claude-adapter-11",
-          "label": "原文 · E337 版，一字不改",
+          "label": "原文 · E338 版，一字不改",
           "markdown_sha256": "db48f2b9da750d3cf3dd004a62c291b81fdd61e3c13f7934c4e25e0e5a906648",
           "prose_sha256": "95a6219b37b29c425014a27ac91cfe38185705f9f6ddde3093a3a36a1a25a699",
           "selection": {
@@ -716,7 +716,7 @@
         },
         {
           "id": "rule-claude-adapter/rule-claude-adapter-12",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "b6cc54b40fe8e8ed822e7be9cb7fa26dba85b0f127d1245b847d2f885f64d758",
           "prose_sha256": "b365480a0ea1455e602b958e2e038c24015200d476a2576c64295166fa81fcb4",
           "selection": {
@@ -729,7 +729,7 @@
         },
         {
           "id": "rule-claude-adapter/rule-claude-adapter-13",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "29daa358e4e0df9e7efcccd9c48ec7970bfc130d1783863a369492762e1c0fe9",
           "prose_sha256": "ed69dc25cbe99b9aedfe0f38e78160b07e40e1540b5f61cab910dd34eec52742",
           "selection": {
@@ -742,7 +742,7 @@
         },
         {
           "id": "rule-claude-adapter/rule-claude-adapter-14",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "8263a9ffa955ff9ef872861d95b916bc3b74363e5539f1d16f024dac281288c3",
           "prose_sha256": "1c04690394dd41b1c340f780470264adc87fdd0cd6c5e06f95c8d1714725d166",
           "selection": {
@@ -755,7 +755,7 @@
         },
         {
           "id": "rule-claude-adapter/rule-claude-adapter-15",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "5b1dcf7d6df03dc9138d2791a9922e28220a92bdba044dadebb0a306d958162a",
           "prose_sha256": "5e88c9edb860e0709c1906b3430a93ae89bccb986d0b80fea199693e3e34fe27",
           "selection": {
@@ -768,7 +768,7 @@
         },
         {
           "id": "rule-claude-adapter/rule-claude-adapter-16",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "3c16904e741981ee5641bc1332d97fe2caa5b966eb7c0ff48655a2969ef7c159",
           "prose_sha256": "b8361deb1c32d3f6190575be83c6fc2f2b56dae3fbd8b12ceda188c12c28e31b",
           "selection": {
@@ -781,7 +781,7 @@
         },
         {
           "id": "rule-claude-adapter/rule-claude-adapter-17",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "56f998fdbb9cb5a4433c87a449dfab868bd855a733da4594aa4984c7adbe088c",
           "prose_sha256": "3412697cdd848c7104a7bbad080646de230cf5575f0b9ccd59432b8b89507f0e",
           "selection": {
@@ -798,16 +798,16 @@
       "bytes": 24020,
       "logical_id": "claude_entry_template",
       "relative_path": "templates/claude-home/CLAUDE.md",
-      "sha256": "60b5793ee5e3bf18c6888299282e534c53b8179bc56d32761cb2982a4c7f8fb6",
+      "sha256": "3bcd3e53c7bce76b7dca8728e96dc29c3284acad106b9099376992dd711ca35b",
       "title": "CLAUDE.md",
       "purpose": "AI 的规则入口",
       "primary": false,
       "slug": "CLAUDE",
-      "public_source_sha256": "55dedfc5f44d14eacbdc4805ab30c7595cb53bce4e1ffb6c3588b6c5f892141a",
-      "public_source_bytes": 23222,
-      "src": "/_typeset/rule-sources/55dedfc5f44d14eacbdc4805ab30c7595cb53bce4e1ffb6c3588b6c5f892141a.md",
-      "prose_sha256": "dfeffe1ed9e3127a69d0d46eb38f85906a83f3fac60cb576b2a92164d26b2a86",
-      "search_text_sha256": "c4bc1b9a5ac8fb144e1cc8ee2d5f9e8a409588b211d237870fc6d8622e3d65fb"
+      "public_source_sha256": "3f30ee0cd2892ae5c7b6ad9b5fb2df012ffdb7109dd8782f13cc6b001f27cc44",
+      "public_source_bytes": 23216,
+      "src": "/_typeset/rule-sources/3f30ee0cd2892ae5c7b6ad9b5fb2df012ffdb7109dd8782f13cc6b001f27cc44.md",
+      "prose_sha256": "cfc312a3134f1fa79505d50480ffd9747792237c77f15033a90dcece7b1c5ac7",
+      "search_text_sha256": "621e32dff363cd41fb47830739dbf5f853a2666b83c462cbb932b1374fbcc0e3"
     },
     "codex_adapter_contract": {
       "bytes": 12337,
@@ -828,7 +828,7 @@
       "parts": [
         {
           "id": "rule-codex-adapter/rule-codex-adapter-05",
-          "label": "原文 · E337 版，一字不改",
+          "label": "原文 · E338 版，一字不改",
           "markdown_sha256": "9ba16519efd9b01c9c08abebb4139df854631057b4d0f2302862ac967ac81b2d",
           "prose_sha256": "39441d667e25f5bf846b5794cc7a33ad1eceb7edb0ac62c46ee1627d5838a2c3",
           "selection": {
@@ -841,7 +841,7 @@
         },
         {
           "id": "rule-codex-adapter/rule-codex-adapter-06",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "8620b59a319a16ee651f9a94a1253ed8ea49c5b0e02d0b934247c0df560d30be",
           "prose_sha256": "8f74a371cc02fb2e004cf9175be49301c659cccec833596740f0be1a26e1623e",
           "selection": {
@@ -858,16 +858,16 @@
       "bytes": 23746,
       "logical_id": "codex_entry_template",
       "relative_path": "templates/codex-home/AGENTS.md",
-      "sha256": "f42e19063e83277a12f61d0246bb4f8bfcd3700ee8a6ec1db53c6bdd47b2024e",
+      "sha256": "a499b5fa55ab5d87196066508d1ca7133a7cb4a267a2193877d2c0ac44bb7a0a",
       "title": "AGENTS.md",
       "purpose": "AI 的规则入口",
       "primary": false,
       "slug": "AGENTS",
-      "public_source_sha256": "6596689cd846a62339cda7dcec87f0301341aaceb76f21611f6d3ddfa393b337",
-      "public_source_bytes": 22948,
-      "src": "/_typeset/rule-sources/6596689cd846a62339cda7dcec87f0301341aaceb76f21611f6d3ddfa393b337.md",
-      "prose_sha256": "0239e1be172e46e1c340e866cd8d4de389bdfc694ea6e72bdf4d9597d2bb226e",
-      "search_text_sha256": "60a51283fdb54592765cff7b9aa5fe2db64201fd30addca28eeb8f0273d64e45"
+      "public_source_sha256": "ead0fc797bf4e7452f0f8454afc216b912ea5bd3d02ab36fb428ae26f9390cd4",
+      "public_source_bytes": 22942,
+      "src": "/_typeset/rule-sources/ead0fc797bf4e7452f0f8454afc216b912ea5bd3d02ab36fb428ae26f9390cd4.md",
+      "prose_sha256": "634e9946411cb4907605afc231451c6047ea63ff34ce7ba9b8dd332c33e7e318",
+      "search_text_sha256": "51a54ecd00b51e2caa7fe415943093c9644727fb6b1c7340f44d072eaaa57a4d"
     },
     "context_sources_contract": {
       "bytes": 18638,
@@ -888,7 +888,7 @@
       "parts": [
         {
           "id": "rule-context-sources/rule-context-sources-08",
-          "label": "原文 · E337 版，一字不改",
+          "label": "原文 · E338 版，一字不改",
           "markdown_sha256": "da86ed93b8fa3a7649d59d4d3a4864c8167a03896cecc1ef1d4f33b61a2e39c4",
           "prose_sha256": "93aba29e08e2044284d2931a43e66f61a5c276fb71dc5645b5fbd5d17ce7f559",
           "selection": {
@@ -901,7 +901,7 @@
         },
         {
           "id": "rule-context-sources/rule-context-sources-09",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "189f921ac1f1920031903d7159c2d86fa28ab77b9ad8aef8f23dbd0b3b8e12d6",
           "prose_sha256": "ad31d0d181c688f71e16f788cd4918bb36d69dbdab307eafcf4afabd16f6bfbc",
           "selection": {
@@ -914,7 +914,7 @@
         },
         {
           "id": "rule-context-sources/rule-context-sources-10",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "547ddcd9c2161548fedb7684cc1216171c737d75fc557ae8ce76513cbacba51d",
           "prose_sha256": "d9b27c3922b523e41757ca246302ce9025eaa50b6334808fbee0b5c897ea7cc3",
           "selection": {
@@ -946,7 +946,7 @@
       "parts": [
         {
           "id": "rule-engineering-delivery/rule-engineering-delivery-06",
-          "label": "原文 · E337 版，一字不改",
+          "label": "原文 · E338 版，一字不改",
           "markdown_sha256": "5196ed5bd0d35f20a1ecb55af77656f8119709d9b60c964a03550d5ba71c9314",
           "prose_sha256": "444802f5df8f47227dc1d92a1fe011dd3499da25ef43236807b3152548937908",
           "selection": {
@@ -959,7 +959,7 @@
         },
         {
           "id": "rule-engineering-delivery/rule-engineering-delivery-07",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "d9552e2e93d8dd3e3d29ac096f77af24e05b4445cea5217f84584dd6ce941312",
           "prose_sha256": "4bedf07fdb026b219d6d9c3575efdc7c6e08a8c8d746d20650c423214a5871c8",
           "selection": {
@@ -972,7 +972,7 @@
         },
         {
           "id": "rule-engineering-delivery/rule-engineering-delivery-08",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "898367631fc1b4e9863af01f0a6f90c11facfeacf38ad47d1206c3d31943baef",
           "prose_sha256": "568d9f62f4b5e0925763558ae1e3f64de24be15b24e6f6528d16eae7eaca7376",
           "selection": {
@@ -985,7 +985,7 @@
         },
         {
           "id": "rule-engineering-delivery/rule-engineering-delivery-09",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "0efdd9196d1224234a5bc37a6772190893885883757654399b3b1e9fc17aa059",
           "prose_sha256": "54689a78ede00a0de7c9ae4115c1b3632887f4a2f0e24c6bf1fc1b1f09966e07",
           "selection": {
@@ -1017,7 +1017,7 @@
       "parts": [
         {
           "id": "rule-execution-coordination/rule-execution-coordination-06",
-          "label": "原文 · E337 版，一字不改",
+          "label": "原文 · E338 版，一字不改",
           "markdown_sha256": "bde0a85971cf191fc86624e737339dfc9bfbb4f8d955acba844a2a4793281a9a",
           "prose_sha256": "719118e754683b925788a373e77cd22fbc6266990a52997978ac02355a6d8d9b",
           "selection": {
@@ -1030,7 +1030,7 @@
         },
         {
           "id": "rule-execution-coordination/rule-execution-coordination-07",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "3f68cf2199cdb162e91012c4ea356efd87585b6fbfdda7990d29b7c719426056",
           "prose_sha256": "682d90cad809b7a512322c5fe471c53acf2b18419ea5605042cb1199e889a4be",
           "selection": {
@@ -1052,63 +1052,63 @@
       "purpose": "资料锁和解锁、可信位置、公开分级、私人仓库、备份跟随删除",
       "primary": true,
       "slug": "privacy-data",
-      "public_source_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
-      "public_source_bytes": 12835,
-      "src": "/_typeset/rule-sources/c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669.md",
-      "prose_sha256": "d177a0281d3ee574224250cc9d187095a0fd13772760f7b53cc208c17c0f4fe2",
-      "search_text_sha256": "ff76e3d1c0edb62cb3ff463839a4a6296d19abca85363024ac3e3f859c527f1a",
+      "public_source_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
+      "public_source_bytes": 12820,
+      "src": "/_typeset/rule-sources/760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942.md",
+      "prose_sha256": "16506b0b63925d310eddb294989921b9b6d8c894cf56ef5be5ddd818bac903b5",
+      "search_text_sha256": "2f4e06a189745ae027303afc8e673b1d0feac5784aacc230d5720b768cfd0688",
       "page": "rule-privacy-data",
       "route": "/rules/privacy-data/",
       "parts": [
         {
           "id": "rule-privacy-data/rule-privacy-data-07",
-          "label": "原文 · E337 版，略去个别私人领域字句",
-          "markdown_sha256": "863dc65ee22feca349bd910d0c7c1bbc2b2b04bfb9fc1b58c54754136fd9d798",
-          "prose_sha256": "361ca8eb07ebd8a742d32d428fa5d724210a2aa79280a27ed12fe45286eca557",
+          "label": "原文 · E338 版，略去个别私人领域字句",
+          "markdown_sha256": "6243221edfd53375691c2d4e9d7a87ce030efb38d62cd000dbee89493167df04",
+          "prose_sha256": "3e76231dee96d834b038dee4cd790dd342f7fc898464bd0a47120203cbd03be2",
           "selection": {
             "from": null,
             "to": "- **入口。**",
             "start": 0,
-            "end": 1707,
+            "end": 1702,
             "approved_omissions": []
           }
         },
         {
           "id": "rule-privacy-data/rule-privacy-data-08",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "3bb9a493e92b4aad8d6863e15908e929cc1b91871e3c9c4bb9a900a08807d52f",
           "prose_sha256": "abe5715aacc07293f32a7210841d448305be0186764231678f8e4033529cbde6",
           "selection": {
             "from": "- **入口。**",
             "to": "## 公开个人数据分级表",
-            "start": 1707,
-            "end": 3400,
+            "start": 1702,
+            "end": 3395,
             "approved_omissions": []
           }
         },
         {
           "id": "rule-privacy-data/rule-privacy-data-09",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "d28e899d7ac5ffb347daadb6dd5dce3be5160f3a5cb40ec2002e4be85f38628c",
           "prose_sha256": "8ea98b0f3c71f947d04ad381f681d7b3099cc4d6b6f3f4ea08508693ccb3e1da",
           "selection": {
             "from": "## 公开个人数据分级表",
             "to": "## 私人仓库收口",
-            "start": 3400,
-            "end": 4586,
+            "start": 3395,
+            "end": 4581,
             "approved_omissions": []
           }
         },
         {
           "id": "rule-privacy-data/rule-privacy-data-10",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "1b94ebc074daae3b7e15b3ad0ced9268fe71ff3f4ac9bb4f3ef29006c7d11ada",
           "prose_sha256": "0a7cfa327e8be5f967d9b87e79d0ff200953a5419a800165c2e7eb093d5d83e3",
           "selection": {
             "from": "## 私人仓库收口",
             "to": null,
-            "start": 4586,
-            "end": 5243,
+            "start": 4581,
+            "end": 5238,
             "approved_omissions": []
           }
         }
@@ -1133,7 +1133,7 @@
       "parts": [
         {
           "id": "rule-protected-actions/rule-protected-actions-07",
-          "label": "原文 · E337 版，一字不改",
+          "label": "原文 · E338 版，一字不改",
           "markdown_sha256": "daa6dba0f8e9b22b6bd919b6d9bcf12ff55c2c5489693a34bd5c7afd56b0459a",
           "prose_sha256": "48ef2215c7fac8ce33da5dfc12aab15bd4e69642a10ee4889b27f02fd05fa6b0",
           "selection": {
@@ -1146,7 +1146,7 @@
         },
         {
           "id": "rule-protected-actions/rule-protected-actions-08",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "a5a6d5c22ada5f9ef83a23e12c718818300f3eea8150ad6b7c9a648d3078bf43",
           "prose_sha256": "7404728a28cb2f687ad170f621ae6ec7967f2c0cc9577b377e25a58474dac8c5",
           "selection": {
@@ -1178,7 +1178,7 @@
       "parts": [
         {
           "id": "rule-rule-release/rule-rule-release-05",
-          "label": "原文 · E337 版，一字不改",
+          "label": "原文 · E338 版，一字不改",
           "markdown_sha256": "0c6d8e7decb83db358c5dcbf90053d970bba1a8e99d3646d4170544ed783587a",
           "prose_sha256": "76c376b3a686532202d987b54dbce2150f7c55de3f1c5475b03f01788ff6d7e1",
           "selection": {
@@ -1191,7 +1191,7 @@
         },
         {
           "id": "rule-rule-release/rule-rule-release-06",
-          "label": "原文 · E337 版 · 续",
+          "label": "原文 · E338 版 · 续",
           "markdown_sha256": "1254a0a90f1c6c10b668f4f911b8da32e58675ac847b040b5a5b833fbdd555ae",
           "prose_sha256": "c1933f60112f3c35d2c5adc74bfcedaa6c582b97e3a57fcebfdb595b522a4492",
           "selection": {
@@ -1207,20 +1207,20 @@
   },
   "public_files": {
     "AGENTS.md": {
-      "bytes": 22384,
-      "sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996"
+      "bytes": 22378,
+      "sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2"
     },
     "current-rules.json": {
       "bytes": 643,
-      "sha256": "1bdba1c372214c45f5a6d6e20db11a3e1c5bffb2d63b97dc5575fe163e1520ae"
+      "sha256": "35594364b56021f6ec84feb69d015baae529e96daa399dae1531840b1c279f92"
     },
     "docs/contracts/agents.authorization.md": {
       "bytes": 12799,
       "sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501"
     },
     "docs/contracts/agents.capabilities-runtime.md": {
-      "bytes": 26941,
-      "sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9"
+      "bytes": 27094,
+      "sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0"
     },
     "docs/contracts/agents.claude-adapter.md": {
       "bytes": 26964,
@@ -1243,8 +1243,8 @@
       "sha256": "0c26a77c1d1c3ed60b4fe5bb73581a6e35efdf1912725e3366dd4e542e657e70"
     },
     "docs/contracts/agents.privacy-data.md": {
-      "bytes": 12835,
-      "sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669"
+      "bytes": 12820,
+      "sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942"
     },
     "docs/contracts/agents.protected-actions.md": {
       "bytes": 5766,
@@ -1259,12 +1259,12 @@
       "sha256": "3f24059148d8a83c8e9a307e1c0dcec71a3354ea214f176672d44dfa80c4b806"
     },
     "templates/claude-home/CLAUDE.md": {
-      "bytes": 23222,
-      "sha256": "55dedfc5f44d14eacbdc4805ab30c7595cb53bce4e1ffb6c3588b6c5f892141a"
+      "bytes": 23216,
+      "sha256": "3f30ee0cd2892ae5c7b6ad9b5fb2df012ffdb7109dd8782f13cc6b001f27cc44"
     },
     "templates/codex-home/AGENTS.md": {
-      "bytes": 22948,
-      "sha256": "6596689cd846a62339cda7dcec87f0301341aaceb76f21611f6d3ddfa393b337"
+      "bytes": 22942,
+      "sha256": "ead0fc797bf4e7452f0f8454afc216b912ea5bd3d02ab36fb428ae26f9390cd4"
     }
   }
 }

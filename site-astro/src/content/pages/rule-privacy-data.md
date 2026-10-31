@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E337",
-   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
-   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
-   "activated_at": "2026-10-31T15:26:59.057612+08:00",
+   "release": "E338",
+   "commit": "99816398405d43e3fbcc31a419952866e97eb880",
+   "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118",
+   "activated_at": "2026-10-31T15:58:17.483029+08:00",
    "file": "sources/rules/docs/contracts/agents.privacy-data.md",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
-   "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669"
+   "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942"
   },
   "explanation_based_on": {
    "release": "E337",
@@ -300,8 +300,8 @@
  },
  "source": {
   "page": "sources/pages/rule-privacy-data/page.json",
-  "sha256": "a127a29d596599c32eb29f7961a1ebd2fb682a75b8d5df888745a21d41cc833e",
-  "converted_at_beijing": "2026-10-31T15:43:20+08:00"
+  "sha256": "636abbc4f7777da72817ef729a4f0d19a8ec78ac4d6733c24b321d7e072cc06d",
+  "converted_at_beijing": "2026-10-31T16:43:54+08:00"
  }
 }
 ---
@@ -2727,13 +2727,13 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
-   "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
+   "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
    "from": null,
    "to": "- **入口。**",
    "start": 0,
-   "end": 1707,
+   "end": 1702,
    "approved_omissions": []
   },
   "title": "原文（一）：开头和个人资料的锁和解锁",
@@ -2760,7 +2760,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-07",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
+  "source_public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-07"
  },
  "layout": {
@@ -2770,7 +2770,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版，略去个别私人领域字句"
+     "text_ref": "原文·E338版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -2804,7 +2804,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版，略去个别私人领域字句"
+     "text_ref": "原文·E338版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -2886,7 +2886,7 @@
 }
 ```
 
-原文 · E337 版，略去个别私人领域字句
+原文 · E338 版，略去个别私人领域字句
 
 # 个人资料与数据处理
 
@@ -2897,7 +2897,7 @@ owner: `E:\.agents`
 ## 个人资料的锁和解锁
 
 - **只有一份状态。** 本人资料只有一份解锁状态和截止时间，由 PasswordCenter 的 SecretBroker 管理；本机、图形界面、所有 AI 和已认证的电脑 MCP 共用它。每条真实的新消息开始时，从 Hook（Codex、Claude）或 `ComputerContext`（电脑 MCP）读当前状态；状态缺失、过期或不明时，不取用私人资料，需要资料时按下面的解锁顺序办理。MCP 连上了、文件能读或磁盘加密了，都不等于资料已解锁。
-- **什么时候需要解锁。** 问的是本人自己的情况（身体、心理、生活、学习求职、感情等），就算需要；回答要用到本人的偏好、履历、通信、健康、财务、私人关系或以前的个人经历时也需要。拿不准按需要处理。不依赖本人情况的通用讲解、代码、天气和项目实施、PCConfig 配置、性能排查、规则维护照常做，不需要。不先读私人库、索引或摘要来判断要不要解锁，也不按关键词自动弹验证窗口；普通技术事实不因为属于本人就升级保护。
+- **什么时候需要解锁。** 问的是本人自己的情况（身体、心理、生活、学习等），就算需要；回答要用到本人的偏好、履历、通信、健康、财务、私人关系或以前的个人经历时也需要。拿不准按需要处理。不依赖本人情况的通用讲解、代码、天气和项目实施、PCConfig 配置、性能排查、规则维护照常做，不需要。不先读私人库、索引或摘要来判断要不要解锁，也不按关键词自动弹验证窗口；普通技术事实不因为属于本人就升级保护。
 - **公开内容和定时任务。** 读取公开网页内容不受资料锁限制；需要本人私人资料时仍先解锁，不借公开网页绕锁。定时任务不提前续期，真正需要资料且已到期时再请本人解锁。
 - **怎么解锁。** 判断资料需求和发起解锁只由根会话做；根会话在派活前判断，需要就先解锁再派。解锁是第一步，先于检索、派子代理和作答：需要资料就直接走现有解锁入口，请本人验证一次（本机四选一，手机用现有验证器），不先派别的模型批准，也不验证两次。验证真正通过、资料能读之后，再查资料、派活并完整处理原来的问题；锁着时不给降级回答。
 - **时长。** 当前默认时长读密码中心的 `duration_policy.default_minutes`，不把程序出厂的 8 小时当成当前设置；本人可填 0.5～72 小时，可以有小数。改这一次不改默认；改默认不影响已开的这一次。电脑重启、到期或本人明确锁定，这一次就结束；重开窗口、新消息、子代理、换模型和续作都不延长它。
@@ -2915,13 +2915,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
-   "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
+   "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
    "from": "- **入口。**",
    "to": "## 公开个人数据分级表",
-   "start": 1707,
-   "end": 3400,
+   "start": 1702,
+   "end": 3395,
    "approved_omissions": []
   },
   "title": "原文（二）：入口、可信位置和原样保存",
@@ -2935,7 +2935,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-08",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
+  "source_public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-08"
  },
  "layout": {
@@ -2945,7 +2945,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -2979,7 +2979,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -3037,7 +3037,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E337 版 · 续
+原文 · E338 版 · 续
 
 - **入口。** 查状态、业务检查和锁定分别是密码中心的 `StatusPersonalEnvironment`、`CheckPersonalDataAccess`、`LockPersonalEnvironment`，经已安装的 `C:\ProgramData\PCConfig\AuthorityHost\tools\Invoke-SecretBroker.ps1` 调用。状态未知时先用 `StatusPersonalEnvironment` 重读。`VerifyPersonalEnvironment` 在已有资料期内复用原截止；需要验证时不传 `-AuthorityFactor`，由本人选四选一验证。命令同步等验证终态，窗口首次可见起最长等 5 分钟；模型用宿主后台命令运行，外层超时至少 360 秒，等终态后回读状态，不能把命令启动当验证成功。取消、拒绝和超时按上面的取消规则处理。本人明确要解锁或续期时用 `EnrollPersonalPrivacyWaiver`，用法见 `local-secret-broker` 技能。资料检查直接读共享状态，不需要对话号、消息号或宿主对话记录；只读检查也不消费无限制授权。本人说“锁定个人资料”“冻结个人资料”就走锁定；“冻结项目”“冻结设计”不是资料操作。Hook、技能和电脑 MCP 只读这份状态，不另建权限记录。
 
@@ -3058,13 +3058,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
-   "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
+   "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
    "from": "## 公开个人数据分级表",
    "to": "## 私人仓库收口",
-   "start": 3400,
-   "end": 4586,
+   "start": 3395,
+   "end": 4581,
    "approved_omissions": []
   },
   "title": "原文（三）：公开个人数据分级表",
@@ -3083,7 +3083,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-09",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
+  "source_public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-09"
  },
  "layout": {
@@ -3093,7 +3093,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -3150,7 +3150,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -3220,7 +3220,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E337 版 · 续
+原文 · E338 版 · 续
 
 ## 公开个人数据分级表
 
@@ -3246,13 +3246,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
-   "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
+   "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
    "from": "## 私人仓库收口",
    "to": null,
-   "start": 4586,
-   "end": 5243,
+   "start": 4581,
+   "end": 5238,
    "approved_omissions": []
   },
   "title": "原文（四）：私人仓库收口、备份跟着原件走",
@@ -3266,7 +3266,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-10",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
+  "source_public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-10"
  },
  "layout": {
@@ -3276,7 +3276,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -3320,7 +3320,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -3402,7 +3402,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E337 版 · 续
+原文 · E338 版 · 续
 
 ## 私人仓库收口
 

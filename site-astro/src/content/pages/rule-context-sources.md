@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E337",
-   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
-   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
-   "activated_at": "2026-10-31T15:26:59.057612+08:00",
+   "release": "E338",
+   "commit": "99816398405d43e3fbcc31a419952866e97eb880",
+   "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118",
+   "activated_at": "2026-10-31T15:58:17.483029+08:00",
    "file": "sources/rules/docs/contracts/agents.context-sources.md",
    "sha256": "ea79c44cc07cfb03751ee485d7cb755ff617bd62e868a68c806fc2d084ae5642",
    "public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221"
@@ -439,8 +439,8 @@
  },
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
-  "sha256": "4ecbf147ae54e025ae7be9bfd4cb79c88ef8772ced9de0e1ba886138ab4bcac3",
-  "converted_at_beijing": "2026-10-31T15:44:08+08:00"
+  "sha256": "6611246b54715e2b621f7d7d8601edfc45460c0d90229796fb3becbf6f00262f",
+  "converted_at_beijing": "2026-10-31T16:43:53+08:00"
  }
 }
 ---
@@ -2524,7 +2524,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "ea79c44cc07cfb03751ee485d7cb755ff617bd62e868a68c806fc2d084ae5642",
    "public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
    "from": null,
@@ -2552,7 +2552,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版，一字不改"
+     "text_ref": "原文·E338版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2586,7 +2586,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版，一字不改"
+     "text_ref": "原文·E338版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2664,7 +2664,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
 }
 ```
 
-原文 · E337 版，一字不改
+原文 · E338 版，一字不改
 
 # 事实来源与任务上下文
 
@@ -2720,7 +2720,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "ea79c44cc07cfb03751ee485d7cb755ff617bd62e868a68c806fc2d084ae5642",
    "public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
    "from": "## 三档维护",
@@ -2748,7 +2748,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -2779,7 +2779,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -2846,7 +2846,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E337 版 · 续
+原文 · E338 版 · 续
 
 ## 三档维护
 
@@ -2903,7 +2903,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "ea79c44cc07cfb03751ee485d7cb755ff617bd62e868a68c806fc2d084ae5642",
    "public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
    "from": "### 一样东西只存一处",
@@ -2948,7 +2948,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -2974,7 +2974,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -2992,7 +2992,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
 }
 ```
 
-原文 · E337 版 · 续
+原文 · E338 版 · 续
 
 ### 一样东西只存一处
 

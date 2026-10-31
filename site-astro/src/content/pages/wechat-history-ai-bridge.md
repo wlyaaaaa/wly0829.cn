@@ -393,8 +393,8 @@
    ],
    "live": [],
    "frozen_card": {
-    "reason": "旧桥接方式已被“微信聊天读取”取代",
-    "now": "〔微信聊天读取〕"
+    "reason": "它得让一个别人做的程序一直开着，把微信记录解开再转给 AI，还要另外两个小程序时时盯着它别停；后来做的〔微信聊天读取〕能直接读电脑上的微信记录，用不着这一套了。",
+    "now": "AI 读微信用〔微信聊天读取〕，问到才读一次，不用一直开着别的程序。"
    }
   },
   "notes": {
@@ -424,8 +424,8 @@
  },
  "source": {
   "page": "sources/pages/wechat-history-ai-bridge/page.json",
-  "sha256": "75d77abe8fe4c611987e052a87b583884370e49dce6fcbe7cdfd65e532a33afa",
-  "converted_at_beijing": "2026-10-31T08:03:52+08:00"
+  "sha256": "ac2286aa3c0267df08963cf9d965f83691358289c66af0ec8f7d28ecd5c497ac",
+  "converted_at_beijing": "2026-10-31T16:43:54+08:00"
  }
 }
 ---

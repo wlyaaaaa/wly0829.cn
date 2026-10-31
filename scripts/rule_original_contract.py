@@ -64,15 +64,18 @@ OMISSIONS = {
     'docs/contracts/agents.privacy-data.md': ['`wlyaaaaa/Key` 仓库和 '],
 }
 
-# Public-site topic omissions (owner, 2026-10-31): litigation, mediation and
-# dispute wording never reaches public rule originals. Applied by the native
+# Public-site topic omissions (owner, 2026-10-31): litigation, mediation,
+# dispute, job-hunting and romance wording never reaches public rule originals. Applied by the native
 # rules snapshot (astro_rules.public_body) on top of the verified active text;
 # the active rules themselves are unchanged. A phrase that no longer occurs is
 # skipped; the publication word gate still catches any new wording.
 TOPIC_OMISSIONS = {
     'docs/contracts/agents.authorization.md': ['案件里的调解、和解、撤诉、放弃请求仍按诉讼规则（默认不同意诉前调解）；'],
     'docs/contracts/agents.capabilities-runtime.md': ['、本人诉讼', '、`personal-litigation`'],
-    'docs/contracts/agents.privacy-data.md': ['没公开的纠纷材料、'],
+    'docs/contracts/agents.privacy-data.md': ['没公开的纠纷材料、', '求职', '、感情'],
+    'AGENTS.md': ['求职'],
+    'templates/claude-home/CLAUDE.md': ['求职'],
+    'templates/codex-home/AGENTS.md': ['求职'],
 }
 
 

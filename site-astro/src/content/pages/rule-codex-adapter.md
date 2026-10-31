@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E337",
-   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
-   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
-   "activated_at": "2026-10-31T15:26:59.057612+08:00",
+   "release": "E338",
+   "commit": "99816398405d43e3fbcc31a419952866e97eb880",
+   "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118",
+   "activated_at": "2026-10-31T15:58:17.483029+08:00",
    "file": "sources/rules/docs/contracts/agents.codex-adapter.md",
    "sha256": "eb8dcd12c81eabc16914c45b0e8c9dc1b1c763dc0611ba72c5141fbf66498c8e",
    "public_sha256": "d792fd44742ffd27a853372a11a6da1631cb63fe54cd7983ce765f1a3bafacb7"
@@ -230,8 +230,8 @@
  },
  "source": {
   "page": "sources/pages/rule-codex-adapter/page.json",
-  "sha256": "22d0ca5a347c9ba6b6081e95b5a14e0acd8e402a8b7b40d210cd412fba0fe2bd",
-  "converted_at_beijing": "2026-10-31T15:43:19+08:00"
+  "sha256": "587b1908bca576205ce97cdadefd47d6d022dc7af479c1197804c5038c11ee46",
+  "converted_at_beijing": "2026-10-31T16:43:53+08:00"
  }
 }
 ---
@@ -1256,7 +1256,7 @@ Codex 的主对话、原生子代理和包装器子任务碰到已授权的步�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.codex-adapter.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "eb8dcd12c81eabc16914c45b0e8c9dc1b1c763dc0611ba72c5141fbf66498c8e",
    "public_sha256": "d792fd44742ffd27a853372a11a6da1631cb63fe54cd7983ce765f1a3bafacb7",
    "from": null,
@@ -1295,7 +1295,7 @@ Codex 的主对话、原生子代理和包装器子任务碰到已授权的步�
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版，一字不改"
+     "text_ref": "原文·E338版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1320,7 +1320,7 @@ Codex 的主对话、原生子代理和包装器子任务碰到已授权的步�
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版，一字不改"
+     "text_ref": "原文·E338版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1411,7 +1411,7 @@ Codex 的主对话、原生子代理和包装器子任务碰到已授权的步�
 }
 ```
 
-原文 · E337 版，一字不改
+原文 · E338 版，一字不改
 
 # Codex 适配
 
@@ -1458,7 +1458,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.codex-adapter.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "eb8dcd12c81eabc16914c45b0e8c9dc1b1c763dc0611ba72c5141fbf66498c8e",
    "public_sha256": "d792fd44742ffd27a853372a11a6da1631cb63fe54cd7983ce765f1a3bafacb7",
    "from": "## 派子代理：Codex 的不同处",
@@ -1501,7 +1501,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -1528,7 +1528,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E337版·续"
+     "text_ref": "原文·E338版·续"
     },
     {
      "type": "source_text_card",
@@ -1646,7 +1646,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
 }
 ```
 
-原文 · E337 版 · 续
+原文 · E338 版 · 续
 
 ## 派子代理：Codex 的不同处
 

@@ -38,13 +38,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E337",
-   "commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
-   "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
-   "activated_at": "2026-10-31T15:26:59.057612+08:00",
+   "release": "E338",
+   "commit": "99816398405d43e3fbcc31a419952866e97eb880",
+   "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118",
+   "activated_at": "2026-10-31T15:58:17.483029+08:00",
    "file": "sources/rules/AGENTS.md",
    "sha256": "3acbf716dcec51ecded669574240b9d8c25ffbc72c1d12529b691d7cda9690d9",
-   "public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996"
+   "public_sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2"
   },
   "explanation_based_on": {
    "release": "E337",
@@ -169,8 +169,8 @@
  },
  "source": {
   "page": "sources/pages/charter/page.json",
-  "sha256": "4759762d71a969dc64b0499a7bd1af68494ef3cfef9899d7dc2eaf8a316684f3",
-  "converted_at_beijing": "2026-10-31T15:43:19+08:00"
+  "sha256": "fa6f035539687450f11a349061db6860132a65f6b1a9a562d08e559e16b1781a",
+  "converted_at_beijing": "2026-10-31T16:43:52+08:00"
  }
 }
 ---
@@ -479,7 +479,7 @@
 - 〔九、汇报、网站和我的电脑〕 L26–L29
 - 〔十、关于规则本身〕 L30
 
-当前生效版本以 AI 开工时核验的活动入口为准；网页原文来源快照为 E337（北京时间 10 月 31 日 15:26 起生效）。（更早的一次记录：2026 年 10 月 12 日 19:12 正式核验通过的是当时的活动规则 E268，属于历史。）按 L26，简单的完成回执和短状态直接在对话里说，不专门做网页，也不为做网页把一句话扩成汇报；我明确要网页时照做。约法和导航随 AI 的入口一起加载，开工不用另跑核对；开对话时由程序核对入口和生效版本是否一致，不一致就提醒 AI 先读这一版。草稿和旧版不算数。〔规则怎么发布和核对 → AI 规则与技能基座〕
+当前生效版本以 AI 开工时核验的活动入口为准；网页原文来源快照为 E338（北京时间 10 月 31 日 15:58 起生效）。（更早的一次记录：2026 年 10 月 12 日 19:12 正式核验通过的是当时的活动规则 E268，属于历史。）按 L26，简单的完成回执和短状态直接在对话里说，不专门做网页，也不为做网页把一句话扩成汇报；我明确要网页时照做。约法和导航随 AI 的入口一起加载，开工不用另跑核对；开对话时由程序核对入口和生效版本是否一致，不一致就提醒 AI 先读这一版。草稿和旧版不算数。〔规则怎么发布和核对 → AI 规则与技能基座〕
 
 ::screen{#charter-02 section="talk"}
 
@@ -491,9 +491,9 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "3acbf716dcec51ecded669574240b9d8c25ffbc72c1d12529b691d7cda9690d9",
-   "public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
+   "public_sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2",
    "from": null,
    "to": "### 三、怎样做事",
    "start": 0,
@@ -574,7 +574,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-02",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
+  "source_public_sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2",
   "source_rule_part": "charter/charter-02"
  },
  "layout": {
@@ -659,7 +659,7 @@
 }
 ```
 
-约法 · L1–L10 · E337
+约法 · L1–L10 · E338
 
 # 我的 AI 约法与工作约定
 
@@ -699,9 +699,9 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "3acbf716dcec51ecded669574240b9d8c25ffbc72c1d12529b691d7cda9690d9",
-   "public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
+   "public_sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2",
    "from": "### 三、怎样做事",
    "to": "### 五、我的个人资料",
    "start": 2003,
@@ -765,7 +765,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-03",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
+  "source_public_sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2",
   "source_rule_part": "charter/charter-03"
  },
  "layout": {
@@ -890,7 +890,7 @@
 }
 ```
 
-约法 · L11–L17 · E337
+约法 · L11–L17 · E338
 
 ### 三、怎样做事
 
@@ -915,9 +915,9 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "3acbf716dcec51ecded669574240b9d8c25ffbc72c1d12529b691d7cda9690d9",
-   "public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
+   "public_sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2",
    "from": "### 五、我的个人资料",
    "to": "### 八、项目与维护",
    "start": 3445,
@@ -977,7 +977,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-04",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
+  "source_public_sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2",
   "source_rule_part": "charter/charter-04"
  },
  "layout": {
@@ -1139,7 +1139,7 @@
 }
 ```
 
-约法 · L18–L23 · E337
+约法 · L18–L23 · E338
 
 ### 五、我的个人资料
 
@@ -1172,13 +1172,13 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E337",
+   "release": "E338",
    "sha256": "3acbf716dcec51ecded669574240b9d8c25ffbc72c1d12529b691d7cda9690d9",
-   "public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
+   "public_sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2",
    "from": "### 八、项目与维护",
    "to": null,
    "start": 5506,
-   "end": 8704,
+   "end": 8702,
    "approved_omissions": []
   },
   "title": "项目、汇报网站和电脑、规则本身（L24–L30）",
@@ -1238,7 +1238,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-05",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
+  "source_public_sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2",
   "source_rule_part": "charter/charter-05"
  },
  "layout": {
@@ -1381,7 +1381,7 @@
 }
 ```
 
-约法 · L24–L30 · E337
+约法 · L24–L30 · E338
 
 ### 八、项目与维护
 
@@ -1407,7 +1407,7 @@
 4. **技术默认。** 命令、编码、临时目录和时间见[日常技术默认](/rules/engineering-delivery/#日常技术默认)。
 5. **先给本人看样子，再做。** 本人会看到、会用到的东西，以及要给 AI 加的新规矩、新程序，动手前先在回他那条消息的最后，用一两句话或一张图告诉他：他会看到什么、按了会怎样（规矩和程序就说对他有什么变化）。他提了修改，就把改好的样子再给他看一遍；没有要改的了才开工，开工后不再报。他看不到的活（修报错、后台代码、处理数据）AI 自己做，按重要程度复核。本人不在时只做他看过样子的活和看不到的活。细则见[工程与交付](/rules/engineering-delivery/#目标优先于实现)。
 6. **卡住了换一类办法，别空耗时间。** 同一个小目标用同一类办法两次没成，先查实际发生了什么，再换一类办法，不换着参数重试；派出去的活按产出、不按忙不忙查进度，时间推后就告诉本人。细则见[分工与并行施工·卡住了怎么办](/rules/execution-coordination/#卡住了怎么办)。
-7. **开新事先说用处和哪天收。** 本人让 AI 开做视频、建新工具这类和学习求职无关、要占几天的新事时，AI 先用一句话说它对本人有什么用、大概几天、哪天收；本人说做就做，不拦、不劝。定下的收尾日写进这件事自己的现行文件；过了收尾日本人还让接着做，提一句已过收尾日，本人说继续就继续。修报错、维护已有的东西不算新事。
+7. **开新事先说用处和哪天收。** 本人让 AI 开做视频、建新工具这类和学习无关、要占几天的新事时，AI 先用一句话说它对本人有什么用、大概几天、哪天收；本人说做就做，不拦、不劝。定下的收尾日写进这件事自己的现行文件；过了收尾日本人还让接着做，提一句已过收尾日，本人说继续就继续。修报错、维护已有的东西不算新事。
 8. **要管理员就直接提权，不停下。** 已授权的核对、验收或操作要管理员才能看全、做完时，根会话和子代理都直接静默提权（首选 `sudo pwsh -NoProfile -NonInteractive ...`），不把“权限不够”记成未知、不交回根会话、不专门问本人；两条提权路径真的失败才如实报告。做法见[用户授权·长期授权](/rules/authorization/#长期授权)“申请管理员权限”。
 
 ## 细则在哪里
