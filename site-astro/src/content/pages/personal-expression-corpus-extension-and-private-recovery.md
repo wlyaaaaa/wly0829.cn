@@ -29,7 +29,7 @@
  "source": {
   "page": "sources/pages/personal-expression-corpus-extension-and-private-recovery/page.json",
   "sha256": "af99ab0c753a0123e411982e8c5402da31f87f793a313fe1cf847d8f49c680d6",
-  "converted_at_beijing": "2026-10-31T04:34:16+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:16+08:00"
  }
 }
 ---
@@ -539,7 +539,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

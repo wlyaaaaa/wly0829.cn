@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup-source-catalog/page.json",
   "sha256": "ecac62e11694b346a8f1c03115f9ea478f687a1868e962a0e33c97b64822f3f3",
-  "converted_at_beijing": "2026-10-30T13:04:16+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:11+08:00"
  }
 }
 ---
@@ -566,7 +566,8 @@ DevConfig Backup · 功能说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 27 日"
  },
  "layout": {
   "h": {
@@ -665,7 +666,8 @@ DevConfig Backup · 功能说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -967,7 +969,8 @@ DevConfig Backup · 功能说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-health-evidence-three-state/page.json",
   "sha256": "5a3a90b43f8cb4768fbc1e7176c0c9bb7153f77391d06063886d02324ffafa42",
-  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:16+08:00"
  }
 }
 ---
@@ -787,7 +787,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

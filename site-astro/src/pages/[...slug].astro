@@ -47,6 +47,7 @@ const screen = (s: any) => {
     ? (s.article_label ? `<p class="rule-original-version">${esc(s.article_label)}</p>` : '') + `<article class="rule-original-prose" data-rule-source="${esc(s.source_logical_id)}" data-rule-part="${esc(s.source_rule_part)}" data-rule-public-sha256="${esc(s.source_public_sha256)}">${article}</article>`
     : (s.h ? `<div class="ts-o ts-h${s.v ? '' : ' ts-both'}" style="--ch:${s.h.height}px">${canvas('h', s.h)}</div>` : '')
       + (s.v ? `<div class="ts-o ts-v" style="--ch:${s.v.height}px">${canvas('v', s.v)}</div>` : ''))
+  + (s.derived_as_of ? `<p class="status-asof" data-derived-as-of="1">${esc(s.derived_as_of)}</p>` : '')
   + `</section>`;
 };
 // data-title-src/box 只给排版期检查用，值是构建机上的绝对路径；写进页面前去掉，成品不带本机路径

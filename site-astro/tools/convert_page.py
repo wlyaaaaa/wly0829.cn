@@ -12,6 +12,7 @@
   3. 每个位置用哪张图：素材库里这一屏实际用到的图标、插画、毛笔标题，路径逐条写明。
 - 以后改内容只改这个 Markdown 文件，生成时由 tools/render_blocks.py 照它排版，不再查素材库映射。"""
 import datetime
+from functools import lru_cache
 import hashlib
 import json
 import os
@@ -31,6 +32,43 @@ TOC_LABELS = os.path.join(SITE, "src", "chrome", "toc-labels.json")
 SECTION_LABEL = {"top": "开头", "usage": "怎么用", "tech": "技术", "highlights": "亮点", "features": "全部功能",
                  "history": "演进", "examples": "例子", "abilities": "能做的事", "limits": "边界",
                  "points": "要点", "original": "原文"}
+
+
+@lru_cache(maxsize=4)
+def derived_date_records(root):
+    path = Path(root, "sources/refresh/registry.json")
+    return json.loads(path.read_text("utf-8-sig"))["records"] if path.is_file() else []
+
+
+def derived_screen_dates(page, data):
+    """只从显式登记的当前数字取最旧真实观察日，不用构建日期或正文其他日期。"""
+    if data.get("kind") == "frozen" or data.get("status") in {"frozen", "冻结", "已冻结"}:
+        return {}
+    screens = {s["id"]: s for s in data["screens"] if not s.get("hidden")
+               and s.get("section") not in {"history", "evolution", "timeline"}}
+    dates, unknown = {}, set()
+    for record in derived_date_records(REPO):
+        if (record.get("page") != page or not record.get("derive_as_of") or record.get("historical")
+                or record.get("frozen") or record.get("qualifies") or record.get("screen") not in screens):
+            continue
+        raw = record.get("source_coverage_end") or record.get("observed_at")
+        if not raw:
+            unknown.add(record["screen"])
+            continue
+        try:
+            if record.get("source_coverage_end"):
+                day = datetime.date.fromisoformat(raw[:10])
+            else:
+                stamp = datetime.datetime.fromisoformat(raw.replace("Z", "+00:00"))
+                day = (stamp.replace(tzinfo=datetime.timezone(datetime.timedelta(hours=8)))
+                       if stamp.tzinfo is None else stamp.astimezone(datetime.timezone(datetime.timedelta(hours=8)))).date()
+        except ValueError:
+            unknown.add(record["screen"])
+            continue
+        sid = record["screen"]
+        dates[sid] = min(day, dates[sid]) if sid in dates else day
+    return {sid: f"数字截至 {day.year} 年 {day.month} 月 {day.day} 日"
+            for sid, day in dates.items() if sid not in unknown}
 
 # 规则只认显式刷新形成的同版公共快照，不读旧私有过滤表，不二次改写正文。
 GATE_LOG = []
@@ -849,6 +887,7 @@ def convert(page, check_only=False):
                 return json.dumps(data, ensure_ascii=False)
         return text
     data = bound_json(src, read=source_text)
+    screen_dates = derived_screen_dates(page, data)
     specs = {}
     lay_p = os.path.join(REPO, "sources", "pages", page, "layout.json")
     if os.path.exists(lay_p):
@@ -863,6 +902,8 @@ def convert(page, check_only=False):
         if s.get("hidden"):
             continue
         s = json.loads(json.dumps(s))
+        if s["id"] in screen_dates:
+            s["derived_as_of"] = screen_dates[s["id"]]
         t = s.get("text")
         if isinstance(t, str) and "\n" not in t and "\\n" in t:
             # 源里整屏的换行被写成了字面的 \n（一整段连成一行，区块库认不出标题和要点，例如能力运行第 6 屏）：还原成换行

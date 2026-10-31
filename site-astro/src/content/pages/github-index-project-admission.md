@@ -29,7 +29,7 @@
  "source": {
   "page": "sources/pages/github-index-project-admission/page.json",
   "sha256": "e191d75e9ba786d88991d2d98f2893d9a7c692c404e894f6080b1979b179ec87",
-  "converted_at_beijing": "2026-10-31T06:46:48+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:11+08:00"
  }
 }
 ---
@@ -56,7 +56,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -173,7 +174,8 @@ GitHub 总索引 · 功能说明 · 已冻结：10 月 31 日起项目不再维�
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

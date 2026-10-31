@@ -541,7 +541,7 @@
  "source": {
   "page": "sources/pages/personal-materials/page.json",
   "sha256": "05278bb7bfad17e6fe6250de6317053feeb43dbc187dfd0508c3504556b94869",
-  "converted_at_beijing": "2026-10-31T09:28:10+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:16+08:00"
  }
 }
 ---
@@ -1960,7 +1960,8 @@
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -2232,7 +2233,8 @@ PDF 用 pypdf 读文字层，Word 用 python-docx 读正文段落和表格，TXT
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

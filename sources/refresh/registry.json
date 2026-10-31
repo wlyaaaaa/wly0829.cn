@@ -819,7 +819,8 @@
       "observation_basis": "live_read",
       "checked_at": "2026-10-30T11:06:11+08:00",
       "observed_at": "2026-10-30T11:06:11+08:00",
-      "source_coverage_end": null
+      "source_coverage_end": null,
+      "derive_as_of": true
     },
     {
       "id": "password-center-n-sets-h-0",
@@ -856,7 +857,8 @@
       "observation_basis": "live_read",
       "checked_at": "2026-10-30T11:06:11+08:00",
       "observed_at": "2026-10-30T11:06:11+08:00",
-      "source_coverage_end": null
+      "source_coverage_end": null,
+      "derive_as_of": true
     },
     {
       "id": "password-center-n-package-0",
@@ -1450,7 +1452,8 @@
       "observation_basis": "live_read",
       "checked_at": "2026-10-30T11:06:11+08:00",
       "observed_at": "2026-10-30T11:06:11+08:00",
-      "source_coverage_end": null
+      "source_coverage_end": null,
+      "derive_as_of": true
     },
     {
       "id": "proxyclean-n-code-1",
@@ -1490,7 +1493,8 @@
       "source_observed_at": "2026-10-30T11:06:12+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:12+08:00"
+      "observed_at": "2026-10-30T11:06:12+08:00",
+      "derive_as_of": true
     },
     {
       "id": "proxyclean-n-commits-0",
@@ -1743,7 +1747,8 @@
       "source_observed_at": "2026-10-30T11:06:12+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:12+08:00"
+      "observed_at": "2026-10-30T11:06:12+08:00",
+      "derive_as_of": true
     },
     {
       "id": "typora-theme-pack-n-code-lines-1",
@@ -1780,7 +1785,8 @@
       "source_observed_at": "2026-10-30T11:06:12+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:12+08:00"
+      "observed_at": "2026-10-30T11:06:12+08:00",
+      "derive_as_of": true
     },
     {
       "id": "typora-theme-pack-n-code-lines-2",
@@ -1819,7 +1825,8 @@
       "source_observed_at": "2026-10-30T11:06:12+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:12+08:00"
+      "observed_at": "2026-10-30T11:06:12+08:00",
+      "derive_as_of": true
     },
     {
       "id": "typora-theme-pack-n-code-lines-3",
@@ -1858,7 +1865,8 @@
       "source_observed_at": "2026-10-30T11:06:12+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:12+08:00"
+      "observed_at": "2026-10-30T11:06:12+08:00",
+      "derive_as_of": true
     },
     {
       "id": "typora-theme-pack-n-code-lines-4",
@@ -1897,7 +1905,8 @@
       "source_observed_at": "2026-10-30T11:06:12+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:12+08:00"
+      "observed_at": "2026-10-30T11:06:12+08:00",
+      "derive_as_of": true
     },
     {
       "id": "typora-theme-pack-n-code-lines-5",
@@ -1934,7 +1943,8 @@
       "source_observed_at": "2026-10-30T11:06:12+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:12+08:00"
+      "observed_at": "2026-10-30T11:06:12+08:00",
+      "derive_as_of": true
     },
     {
       "id": "video-scaffold-n-canvas-0",
@@ -2183,7 +2193,8 @@
       "source_observed_at": "2026-10-30T11:06:13+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:13+08:00"
+      "observed_at": "2026-10-30T11:06:13+08:00",
+      "derive_as_of": true
     },
     {
       "id": "video-scaffold-n-commits-0",
@@ -2218,7 +2229,8 @@
       "source_observed_at": "2026-10-30T11:06:13+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:13+08:00"
+      "observed_at": "2026-10-30T11:06:13+08:00",
+      "derive_as_of": true
     },
     {
       "id": "video-scaffold-n-features-0",
@@ -2256,7 +2268,8 @@
       "checked_at": "2026-10-30T11:06:12+08:00",
       "source_observed_at": "2026-10-30T11:06:12+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:06:12+08:00"
+      "observed_at": "2026-10-30T11:06:12+08:00",
+      "derive_as_of": true
     },
     {
       "id": "ai-cli-profile-manager-n-routes-0",
@@ -3323,7 +3336,8 @@
       "source_observed_at": "2026-10-30T11:06:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:14+08:00"
+      "observed_at": "2026-10-30T11:06:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "steam-millennium-config-backup-n-code-1",
@@ -3364,7 +3378,8 @@
       "source_observed_at": "2026-10-30T11:06:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:14+08:00"
+      "observed_at": "2026-10-30T11:06:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "steam-millennium-config-backup-n-tests-0",
@@ -3405,7 +3420,8 @@
       "source_observed_at": "2026-10-30T11:06:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:14+08:00"
+      "observed_at": "2026-10-30T11:06:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "steam-millennium-config-backup-n-tests-1",
@@ -3465,7 +3481,8 @@
       "source_observed_at": "2026-10-30T11:06:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:14+08:00"
+      "observed_at": "2026-10-30T11:06:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "steam-millennium-config-backup-text-0-101",
@@ -3497,7 +3514,8 @@
       "source_observed_at": "2026-10-30T11:06:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:14+08:00"
+      "observed_at": "2026-10-30T11:06:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "steam-millennium-config-backup-n-commits-0",
@@ -3753,7 +3771,8 @@
       "source_observed_at": "2026-10-30T11:06:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:15+08:00"
+      "observed_at": "2026-10-30T11:06:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "sunshine-remote-streaming-n-code-lines-0",
@@ -3870,7 +3889,8 @@
       "checked_at": "2026-10-30T11:06:15+08:00",
       "source_observed_at": "2026-10-30T11:06:15+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:06:15+08:00"
+      "observed_at": "2026-10-30T11:06:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "sunshine-remote-streaming-n-false-reports-0",
@@ -4627,7 +4647,8 @@
       "checked_at": "2026-10-30T11:06:15+08:00",
       "source_observed_at": "2026-10-30T11:06:15+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:06:15+08:00"
+      "observed_at": "2026-10-30T11:06:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "pcconfig-n-disks-0",
@@ -4667,7 +4688,8 @@
       "source_observed_at": "2026-10-30T11:06:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:18+08:00"
+      "observed_at": "2026-10-30T11:06:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "pcconfig-n-disks-1",
@@ -4741,7 +4763,8 @@
       "source_observed_at": "2026-10-30T11:06:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:18+08:00"
+      "observed_at": "2026-10-30T11:06:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "pcconfig-n-disks-3",
@@ -4815,7 +4838,8 @@
       "source_observed_at": "2026-10-30T11:06:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:18+08:00"
+      "observed_at": "2026-10-30T11:06:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "pcconfig-n-disks-5",
@@ -4855,7 +4879,8 @@
       "source_observed_at": "2026-10-30T11:06:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:18+08:00"
+      "observed_at": "2026-10-30T11:06:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "pcconfig-n-disks-6",
@@ -4929,7 +4954,8 @@
       "source_observed_at": "2026-10-30T11:06:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:18+08:00"
+      "observed_at": "2026-10-30T11:06:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "pcconfig-n-disks-8",
@@ -5003,7 +5029,8 @@
       "source_observed_at": "2026-10-30T11:06:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:18+08:00"
+      "observed_at": "2026-10-30T11:06:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "pcconfig-n-disks-10",
@@ -5264,7 +5291,8 @@
       "source_observed_at": "2026-10-30T11:06:15+08:00",
       "checked_at": "2026-10-30T11:06:15+08:00",
       "observed_at": "2026-10-30T11:06:15+08:00",
-      "source_coverage_end": null
+      "source_coverage_end": null,
+      "derive_as_of": true
     },
     {
       "id": "pcconfig-n-tests-1",
@@ -5300,7 +5328,8 @@
       "source_observed_at": "2026-10-30T11:06:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:15+08:00"
+      "observed_at": "2026-10-30T11:06:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "pcconfig-n-code-0",
@@ -5344,7 +5373,8 @@
       "observation_basis": "live_read",
       "checked_at": "2026-10-30T11:06:22+08:00",
       "observed_at": "2026-10-30T11:06:22+08:00",
-      "source_coverage_end": null
+      "source_coverage_end": null,
+      "derive_as_of": true
     },
     {
       "id": "pcconfig-n-commits-0",
@@ -6023,7 +6053,8 @@
       "source_observed_at": "2026-10-30T11:06:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:16+08:00"
+      "observed_at": "2026-10-30T11:06:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "devconfig-backup-n-wechat-files-0",
@@ -6681,7 +6712,8 @@
       "source_observed_at": "2026-10-30T11:06:19+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:19+08:00"
+      "observed_at": "2026-10-30T11:06:19+08:00",
+      "derive_as_of": true
     },
     {
       "id": "wechatdirect-n-kdf-0",
@@ -6717,7 +6749,8 @@
       "source_observed_at": "2026-10-30T11:06:19+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:19+08:00"
+      "observed_at": "2026-10-30T11:06:19+08:00",
+      "derive_as_of": true
     },
     {
       "id": "wechatdirect-n-kdf-1",
@@ -6753,7 +6786,8 @@
       "source_observed_at": "2026-10-30T11:06:19+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:19+08:00"
+      "observed_at": "2026-10-30T11:06:19+08:00",
+      "derive_as_of": true
     },
     {
       "id": "projects-home-n-projects-0",
@@ -7931,7 +7965,8 @@
       "source_observed_at": "2026-10-30T11:06:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:25+08:00"
+      "observed_at": "2026-10-30T11:06:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "timeaudit-n-backup-2",
@@ -7968,7 +8003,8 @@
       "source_observed_at": "2026-10-30T11:06:27+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:27+08:00"
+      "observed_at": "2026-10-30T11:06:27+08:00",
+      "derive_as_of": true
     },
     {
       "id": "timeaudit-n-code-0",
@@ -8120,7 +8156,8 @@
       "source_observed_at": null,
       "source_coverage_end": "2026-10-09",
       "observation_basis": "coverage_end",
-      "observed_at": null
+      "observed_at": null,
+      "derive_as_of": true
     },
     {
       "id": "timeaudit-n-overhead-1",
@@ -8158,7 +8195,8 @@
       "source_observed_at": null,
       "source_coverage_end": "2026-10-09",
       "observation_basis": "coverage_end",
-      "observed_at": null
+      "observed_at": null,
+      "derive_as_of": true
     },
     {
       "id": "remote-control-n-computers-0",
@@ -8755,7 +8793,8 @@
       "page_pattern": "\\| \\*\\*([\\d,]+) 行\\*\\* \\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*[\\d,]+ 次\\*\\* \\|\\n\\|---\\|---\\|---\\|\\n\\| Python 正式代码",
       "measurement_scope": "仅Git跟踪文件；include=[\"google_health_*.py\"]；exclude=[]。按LF计数，含空行/注释，末尾无LF残行不加1，复现页面source的wc -l。",
       "scope_status": "verified",
-      "field": "screens[4].text"
+      "field": "screens[4].text",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-n-tests-0",
@@ -9247,7 +9286,8 @@
       "source_observed_at": "2026-10-30T11:06:31+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:31+08:00"
+      "observed_at": "2026-10-30T11:06:31+08:00",
+      "derive_as_of": true
     },
     {
       "id": "daily-preferences-n-code-0",
@@ -9327,7 +9367,8 @@
       "observation_basis": "live_read",
       "checked_at": "2026-10-30T11:06:32+08:00",
       "observed_at": "2026-10-30T11:06:32+08:00",
-      "source_coverage_end": null
+      "source_coverage_end": null,
+      "derive_as_of": true
     },
     {
       "id": "daily-preferences-n-commits-0",
@@ -9931,7 +9972,8 @@
       "source_observed_at": "2026-10-30T11:06:35+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:35+08:00"
+      "observed_at": "2026-10-30T11:06:35+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-n-tests-0",
@@ -9968,7 +10010,8 @@
       "source_observed_at": "2026-10-30T11:06:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:36+08:00"
+      "observed_at": "2026-10-30T11:06:36+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-formal-documents-n-tests-0",
@@ -10037,7 +10080,8 @@
       "source_observed_at": "2026-10-30T11:06:35+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:35+08:00"
+      "observed_at": "2026-10-30T11:06:35+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-formal-documents-n-audit-lines-0",
@@ -10075,7 +10119,8 @@
       "source_observed_at": "2026-10-30T11:06:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:36+08:00"
+      "observed_at": "2026-10-30T11:06:36+08:00",
+      "derive_as_of": true
     },
     {
       "id": "codex-memory-n-conv-size-0",
@@ -10438,7 +10483,8 @@
       "source_observed_at": "2026-10-30T11:06:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:36+08:00"
+      "observed_at": "2026-10-30T11:06:36+08:00",
+      "derive_as_of": true
     },
     {
       "id": "timeaudit-text-0-312",
@@ -10469,7 +10515,8 @@
       "source_observed_at": "2026-10-30T13:00:44+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T13:00:44+08:00"
+      "observed_at": "2026-10-30T13:00:44+08:00",
+      "derive_as_of": true
     },
     {
       "id": "timeaudit-text-0-313",
@@ -10914,7 +10961,8 @@
       "source_observed_at": "2026-10-30T11:06:31+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:31+08:00"
+      "observed_at": "2026-10-30T11:06:31+08:00",
+      "derive_as_of": true
     },
     {
       "id": "daily-preferences-text-0-327",
@@ -10947,7 +10995,8 @@
       "source_observed_at": "2026-10-30T11:06:31+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:31+08:00"
+      "observed_at": "2026-10-30T11:06:31+08:00",
+      "derive_as_of": true
     },
     {
       "id": "daily-preferences-text-0-328",
@@ -11124,7 +11173,8 @@
       "source_observed_at": "2026-10-30T11:06:50+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:50+08:00"
+      "observed_at": "2026-10-30T11:06:50+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-text-0-334",
@@ -11153,7 +11203,8 @@
       "source_observed_at": "2026-10-30T11:06:50+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:50+08:00"
+      "observed_at": "2026-10-30T11:06:50+08:00",
+      "derive_as_of": true
     },
     {
       "id": "daily-preferences-text-0-335",
@@ -18721,7 +18772,8 @@
       "source_observed_at": "2026-10-30T11:07:05+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:05+08:00"
+      "observed_at": "2026-10-30T11:07:05+08:00",
+      "derive_as_of": true
     },
     {
       "id": "work-delivery-copilot-n-lines-0",
@@ -18752,7 +18804,8 @@
       "source_observed_at": "2026-10-30T11:07:05+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:05+08:00"
+      "observed_at": "2026-10-30T11:07:05+08:00",
+      "derive_as_of": true
     },
     {
       "id": "work-delivery-copilot-n-lines-1",
@@ -18784,7 +18837,8 @@
       "source_observed_at": "2026-10-30T11:07:05+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:05+08:00"
+      "observed_at": "2026-10-30T11:07:05+08:00",
+      "derive_as_of": true
     },
     {
       "id": "steam-millennium-config-backup-as-of-01",
@@ -19079,7 +19133,8 @@
       "source_observed_at": "2026-10-30T11:07:06+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:06+08:00"
+      "observed_at": "2026-10-30T11:07:06+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-agents-rules-contracts-release-id",
@@ -19137,7 +19192,8 @@
       "source_observed_at": "2026-10-30T11:07:07+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:07+08:00"
+      "observed_at": "2026-10-30T11:07:07+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-agents-skills-plugins-installed-count",
@@ -19195,7 +19251,8 @@
       "source_observed_at": "2026-10-30T11:06:10+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:10+08:00"
+      "observed_at": "2026-10-30T11:06:10+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-agents-skills-plugins-plugin-installed-count",
@@ -19222,7 +19279,8 @@
       "source_observed_at": "2026-10-30T11:07:06+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:06+08:00"
+      "observed_at": "2026-10-30T11:07:06+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-agents-skills-plugins-resolved-link-count",
@@ -19394,7 +19452,8 @@
       "source_observed_at": "2026-10-30T11:07:13+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:13+08:00"
+      "observed_at": "2026-10-30T11:07:13+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-codex-memory-claude-project-memory-h-archive-directories",
@@ -19424,7 +19483,8 @@
       "source_observed_at": "2026-10-30T11:07:13+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:13+08:00"
+      "observed_at": "2026-10-30T11:07:13+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-codex-memory-claude-project-memory-files",
@@ -19456,7 +19516,8 @@
       "checked_at": "2026-10-30T11:07:07+08:00",
       "source_observed_at": "2026-09-28T02:36:52.647119+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-09-28T02:36:52.647119+00:00"
+      "observed_at": "2026-09-28T02:36:52.647119+00:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-codex-memory-claude-project-memory-bytes",
@@ -19488,7 +19549,8 @@
       "checked_at": "2026-10-30T11:07:07+08:00",
       "source_observed_at": "2026-09-28T02:36:52.647119+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-09-28T02:36:52.647119+00:00"
+      "observed_at": "2026-09-28T02:36:52.647119+00:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-codex-memory-gemini-workspace-memory-task-state",
@@ -19548,7 +19610,8 @@
       "source_observed_at": "2026-10-30T11:07:13+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:13+08:00"
+      "observed_at": "2026-10-30T11:07:13+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-codex-memory-gemini-workspace-memory-h-archive-directories",
@@ -19578,7 +19641,8 @@
       "source_observed_at": "2026-10-30T11:07:13+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:13+08:00"
+      "observed_at": "2026-10-30T11:07:13+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-codex-memory-openclaw-workspace-recovery-task-state",
@@ -19638,7 +19702,8 @@
       "source_observed_at": "2026-10-30T11:07:13+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:13+08:00"
+      "observed_at": "2026-10-30T11:07:13+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-codex-memory-openclaw-workspace-recovery-h-archive-directories",
@@ -19668,7 +19733,8 @@
       "source_observed_at": "2026-10-30T11:07:13+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:13+08:00"
+      "observed_at": "2026-10-30T11:07:13+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-codex-memory-config-memory-whitelist-sync-desktop-task-state",
@@ -20695,7 +20761,8 @@
       "source_observed_at": "2026-10-30T11:07:26+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:26+08:00"
+      "observed_at": "2026-10-30T11:07:26+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-daily-preferences-fact-verification-credit-refunds",
@@ -20725,7 +20792,8 @@
       "source_observed_at": "2026-10-30T11:07:26+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:26+08:00"
+      "observed_at": "2026-10-30T11:07:26+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-daily-preferences-fact-verification-credit-transfers",
@@ -20755,7 +20823,8 @@
       "source_observed_at": "2026-10-30T11:07:26+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:26+08:00"
+      "observed_at": "2026-10-30T11:07:26+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-daily-preferences-fact-verification-credit-summaries",
@@ -20785,7 +20854,8 @@
       "source_observed_at": "2026-10-30T11:07:26+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:26+08:00"
+      "observed_at": "2026-10-30T11:07:26+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-daily-preferences-source-coverage-source-instances",
@@ -20815,7 +20885,8 @@
       "source_observed_at": "2026-10-30T11:07:26+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:26+08:00"
+      "observed_at": "2026-10-30T11:07:26+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-daily-preferences-source-coverage-registered-categories",
@@ -20845,7 +20916,8 @@
       "source_observed_at": "2026-10-30T11:07:26+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:26+08:00"
+      "observed_at": "2026-10-30T11:07:26+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-daily-preferences-source-coverage-current-categories",
@@ -20875,7 +20947,8 @@
       "source_observed_at": "2026-10-30T11:07:26+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:26+08:00"
+      "observed_at": "2026-10-30T11:07:26+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-daily-preferences-evidence-query-registered-categories",
@@ -20905,7 +20978,8 @@
       "source_observed_at": "2026-10-30T11:07:26+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:26+08:00"
+      "observed_at": "2026-10-30T11:07:26+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-daily-preferences-evidence-query-current-categories",
@@ -20935,7 +21009,8 @@
       "source_observed_at": "2026-10-30T11:07:26+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:26+08:00"
+      "observed_at": "2026-10-30T11:07:26+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-daily-preferences-evidence-query-source-instances",
@@ -20965,7 +21040,8 @@
       "source_observed_at": "2026-10-30T11:07:26+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:26+08:00"
+      "observed_at": "2026-10-30T11:07:26+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-daily-preferences-recommendation-choice-steam-played-game",
@@ -20995,7 +21071,8 @@
       "source_observed_at": "2026-10-30T11:07:26+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:26+08:00"
+      "observed_at": "2026-10-30T11:07:26+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-personal-expression-reply-as-me-reply-samples",
@@ -21024,7 +21101,8 @@
       "source_observed_at": "2026-10-30T11:06:55+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:55+08:00"
+      "observed_at": "2026-10-30T11:06:55+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-personal-expression-reply-as-me-reply-contrasts",
@@ -21053,7 +21131,8 @@
       "source_observed_at": "2026-10-30T11:06:55+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:55+08:00"
+      "observed_at": "2026-10-30T11:06:55+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-personal-expression-feedback-consolidation-and-lessons-sync-reply-samples",
@@ -21082,7 +21161,8 @@
       "source_observed_at": "2026-10-30T11:06:55+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:55+08:00"
+      "observed_at": "2026-10-30T11:06:55+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-personal-expression-corpus-extension-and-private-recovery-reply-samples",
@@ -21111,7 +21191,8 @@
       "source_observed_at": "2026-10-30T11:06:55+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:55+08:00"
+      "observed_at": "2026-10-30T11:06:55+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-personal-expression-reply-as-me-usage-all-time",
@@ -21767,7 +21848,8 @@
       "source_observed_at": "2026-10-30T11:07:11+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:11+08:00"
+      "observed_at": "2026-10-30T11:07:11+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-chinese-asr-models-modes-046",
@@ -21795,7 +21877,8 @@
       "source_observed_at": "2026-10-30T11:07:12+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:12+08:00"
+      "observed_at": "2026-10-30T11:07:12+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-ai-cli-profile-manager-engines-providers-047",
@@ -21824,7 +21907,8 @@
       "source_observed_at": "2026-10-30T11:06:12+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:12+08:00"
+      "observed_at": "2026-10-30T11:06:12+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-ai-cli-profile-manager-engines-providers-048",
@@ -21853,7 +21937,8 @@
       "source_observed_at": "2026-10-30T11:07:12+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:12+08:00"
+      "observed_at": "2026-10-30T11:07:12+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-ai-cli-profile-manager-engines-providers-049",
@@ -21882,7 +21967,8 @@
       "source_observed_at": "2026-10-30T11:06:12+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:12+08:00"
+      "observed_at": "2026-10-30T11:06:12+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-ai-cli-profile-manager-native-desktop-integration-050",
@@ -21911,7 +21997,8 @@
       "source_observed_at": "2026-10-30T11:06:12+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:12+08:00"
+      "observed_at": "2026-10-30T11:06:12+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b7-localocr-document-structure-069",
@@ -22730,7 +22817,8 @@
       "checked_at": "2026-10-30T11:07:13+08:00",
       "source_observed_at": "2026-10-30T11:07:13+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:13+08:00"
+      "observed_at": "2026-10-30T11:07:13+08:00",
+      "derive_as_of": true
     },
     {
       "id": "pcconfig-secrets-providers-install-file-count",
@@ -22789,7 +22877,8 @@
       "source_observed_at": "2026-10-30T11:07:13+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:13+08:00"
+      "observed_at": "2026-10-30T11:07:13+08:00",
+      "derive_as_of": true
     },
     {
       "id": "pcconfig-machine-facts-config-key-count",
@@ -22819,7 +22908,8 @@
       "source_observed_at": "2026-10-30T11:07:13+08:00",
       "checked_at": "2026-10-30T11:07:13+08:00",
       "observed_at": "2026-10-30T11:07:13+08:00",
-      "source_coverage_end": null
+      "source_coverage_end": null,
+      "derive_as_of": true
     },
     {
       "id": "pcconfig-machine-facts-project-count",
@@ -22852,7 +22942,8 @@
       "checked_at": "2026-10-30T11:07:13+08:00",
       "source_observed_at": "2026-10-27T06:21:26.009020+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-27T06:21:26.009020+00:00"
+      "observed_at": "2026-10-27T06:21:26.009020+00:00",
+      "derive_as_of": true
     },
     {
       "id": "pcconfig-machine-facts-restore-anchor-count",
@@ -22882,7 +22973,8 @@
       "checked_at": "2026-10-30T11:07:13+08:00",
       "source_observed_at": "2026-10-30T11:07:13+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:13+08:00"
+      "observed_at": "2026-10-30T11:07:13+08:00",
+      "derive_as_of": true
     },
     {
       "id": "ramdisk-guardian-installation-and-application-recovery-task-period",
@@ -23119,7 +23211,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "as_of": "2026-10-30",
@@ -23152,7 +23245,8 @@
       "observation_basis": "live_read",
       "checked_at": "2026-10-30T11:07:14+08:00",
       "observed_at": "2026-10-30T11:07:14+08:00",
-      "source_coverage_end": null
+      "source_coverage_end": null,
+      "derive_as_of": true
     },
     {
       "as_of": "2026-10-30",
@@ -23185,7 +23279,8 @@
       "observation_basis": "live_read",
       "checked_at": "2026-10-30T11:07:14+08:00",
       "observed_at": "2026-10-30T11:07:14+08:00",
-      "source_coverage_end": null
+      "source_coverage_end": null,
+      "derive_as_of": true
     },
     {
       "as_of": "2026-10-30",
@@ -23218,7 +23313,8 @@
       "observation_basis": "live_read",
       "checked_at": "2026-10-30T11:07:14+08:00",
       "observed_at": "2026-10-30T11:07:14+08:00",
-      "source_coverage_end": null
+      "source_coverage_end": null,
+      "derive_as_of": true
     },
     {
       "as_of": "2026-10-30",
@@ -23251,7 +23347,8 @@
       "observation_basis": "live_read",
       "checked_at": "2026-10-30T11:07:14+08:00",
       "observed_at": "2026-10-30T11:07:14+08:00",
-      "source_coverage_end": null
+      "source_coverage_end": null,
+      "derive_as_of": true
     },
     {
       "as_of": "2026-10-11",
@@ -23427,7 +23524,8 @@
       "source_observed_at": "2026-10-30T11:06:27+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:27+08:00"
+      "observed_at": "2026-10-30T11:06:27+08:00",
+      "derive_as_of": true
     },
     {
       "as_of": "2026-10-11",
@@ -23490,7 +23588,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "as_of": "2026-10-11",
@@ -23519,7 +23618,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "as_of": "2026-10-11",
@@ -23548,7 +23648,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "as_of": "2026-10-11",
@@ -23577,7 +23678,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b8-vault-tool-ai-local-interface-skill-last",
@@ -23701,7 +23803,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-bounded-discovery-b9-003",
@@ -23729,7 +23832,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-bounded-discovery-b9-004",
@@ -23757,7 +23861,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-bounded-discovery-b9-006",
@@ -23791,7 +23896,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-bounded-discovery-b9-007",
@@ -23821,7 +23927,8 @@
       "source_observed_at": "2026-10-30T11:06:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:36+08:00"
+      "observed_at": "2026-10-30T11:06:36+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-bounded-discovery-b9-009",
@@ -23901,7 +24008,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-017",
@@ -23931,7 +24039,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-018",
@@ -23961,7 +24070,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-019",
@@ -23991,7 +24101,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-020",
@@ -24019,7 +24130,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-021",
@@ -24047,7 +24159,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-022",
@@ -24075,7 +24188,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-023",
@@ -24103,7 +24217,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-024",
@@ -24133,7 +24248,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-025",
@@ -24163,7 +24279,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-026",
@@ -24191,7 +24308,8 @@
       "observation_basis": "live_read",
       "checked_at": "2026-10-30T11:06:34+08:00",
       "observed_at": "2026-10-30T11:06:34+08:00",
-      "source_coverage_end": null
+      "source_coverage_end": null,
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-027",
@@ -24219,7 +24337,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-028",
@@ -24247,7 +24366,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-029",
@@ -24275,7 +24395,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-030",
@@ -24303,7 +24424,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-031",
@@ -24331,7 +24453,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-032",
@@ -24359,7 +24482,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-033",
@@ -24387,7 +24511,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-034",
@@ -24415,7 +24540,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-035",
@@ -24445,7 +24571,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-036",
@@ -24473,7 +24600,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-037",
@@ -24507,7 +24635,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-038",
@@ -24541,7 +24670,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-039",
@@ -24571,7 +24701,8 @@
       "source_observed_at": "2026-10-30T11:06:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:36+08:00"
+      "observed_at": "2026-10-30T11:06:36+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-040",
@@ -24601,7 +24732,8 @@
       "source_observed_at": "2026-10-30T11:06:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:36+08:00"
+      "observed_at": "2026-10-30T11:06:36+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-041",
@@ -24634,7 +24766,8 @@
       "source_observed_at": "2026-10-30T11:07:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:16+08:00"
+      "observed_at": "2026-10-30T11:07:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-042",
@@ -24662,7 +24795,8 @@
       "source_observed_at": "2026-10-30T11:07:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:16+08:00"
+      "observed_at": "2026-10-30T11:07:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-043",
@@ -24690,7 +24824,8 @@
       "source_observed_at": "2026-10-30T11:07:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:16+08:00"
+      "observed_at": "2026-10-30T11:07:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-044",
@@ -24718,7 +24853,8 @@
       "source_observed_at": "2026-10-30T11:07:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:16+08:00"
+      "observed_at": "2026-10-30T11:07:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-045",
@@ -24746,7 +24882,8 @@
       "source_observed_at": "2026-10-30T11:07:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:16+08:00"
+      "observed_at": "2026-10-30T11:07:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-046",
@@ -24774,7 +24911,8 @@
       "source_observed_at": "2026-10-30T11:07:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:16+08:00"
+      "observed_at": "2026-10-30T11:07:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-047",
@@ -24802,7 +24940,8 @@
       "source_observed_at": "2026-10-30T11:07:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:16+08:00"
+      "observed_at": "2026-10-30T11:07:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-048",
@@ -24830,7 +24969,8 @@
       "source_observed_at": "2026-10-30T11:07:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:16+08:00"
+      "observed_at": "2026-10-30T11:07:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-049",
@@ -24863,7 +25003,8 @@
       "source_observed_at": "2026-10-30T11:07:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:16+08:00"
+      "observed_at": "2026-10-30T11:07:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-050",
@@ -24893,7 +25034,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-051",
@@ -24923,7 +25065,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-052",
@@ -24953,7 +25096,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-054",
@@ -24983,7 +25127,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-055",
@@ -25013,7 +25158,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-056",
@@ -25043,7 +25189,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-057",
@@ -25073,7 +25220,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-058",
@@ -25101,7 +25249,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-059",
@@ -25129,7 +25278,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-060",
@@ -25157,7 +25307,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-061",
@@ -25185,7 +25336,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-062",
@@ -25215,7 +25367,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-063",
@@ -25243,7 +25396,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-064",
@@ -25299,7 +25453,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-066",
@@ -25382,7 +25537,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-068",
@@ -25410,7 +25566,8 @@
       "source_observed_at": "2026-10-30T11:07:15+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:15+08:00"
+      "observed_at": "2026-10-30T11:07:15+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-069",
@@ -25444,7 +25601,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-070",
@@ -25478,7 +25636,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-071",
@@ -25508,7 +25667,8 @@
       "source_observed_at": "2026-10-30T11:06:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:36+08:00"
+      "observed_at": "2026-10-30T11:06:36+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-072",
@@ -25538,7 +25698,8 @@
       "source_observed_at": "2026-10-30T11:06:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:36+08:00"
+      "observed_at": "2026-10-30T11:06:36+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-073",
@@ -25571,7 +25732,8 @@
       "source_observed_at": "2026-10-30T11:07:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:16+08:00"
+      "observed_at": "2026-10-30T11:07:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-registered-lookup-b9-074",
@@ -25599,7 +25761,8 @@
       "source_observed_at": "2026-10-30T11:07:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:16+08:00"
+      "observed_at": "2026-10-30T11:07:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-verified-open-b9-075",
@@ -25629,7 +25792,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-verified-open-b9-076",
@@ -25659,7 +25823,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-verified-open-b9-077",
@@ -25693,7 +25858,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-verified-open-b9-078",
@@ -25727,7 +25893,8 @@
       "source_observed_at": "2026-10-30T11:07:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:14+08:00"
+      "observed_at": "2026-10-30T11:07:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-verified-open-b9-079",
@@ -25757,7 +25924,8 @@
       "source_observed_at": "2026-10-30T11:06:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:36+08:00"
+      "observed_at": "2026-10-30T11:06:36+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-verified-open-b9-080",
@@ -25787,7 +25955,8 @@
       "source_observed_at": "2026-10-30T11:06:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:36+08:00"
+      "observed_at": "2026-10-30T11:06:36+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-classification-b9-082",
@@ -25850,7 +26019,8 @@
       "source_observed_at": "2026-10-30T11:06:10+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:10+08:00"
+      "observed_at": "2026-10-30T11:06:10+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-classification-b9-084",
@@ -25878,7 +26048,8 @@
       "source_observed_at": "2026-10-30T11:06:10+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:10+08:00"
+      "observed_at": "2026-10-30T11:06:10+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-classification-b9-085",
@@ -25906,7 +26077,8 @@
       "source_observed_at": "2026-10-30T11:06:11+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:11+08:00"
+      "observed_at": "2026-10-30T11:06:11+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-classification-b9-086",
@@ -25934,7 +26106,8 @@
       "source_observed_at": "2026-10-30T11:06:11+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:11+08:00"
+      "observed_at": "2026-10-30T11:06:11+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-classification-b9-087",
@@ -25962,7 +26135,8 @@
       "source_observed_at": "2026-10-30T11:07:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:18+08:00"
+      "observed_at": "2026-10-30T11:07:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-classification-b9-088",
@@ -25992,7 +26166,8 @@
       "source_observed_at": "2026-10-30T11:07:17+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:17+08:00"
+      "observed_at": "2026-10-30T11:07:17+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-classification-b9-089",
@@ -26020,7 +26195,8 @@
       "source_observed_at": "2026-10-30T11:07:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:18+08:00"
+      "observed_at": "2026-10-30T11:07:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-classification-b9-090",
@@ -26050,7 +26226,8 @@
       "source_observed_at": "2026-10-30T11:07:17+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:17+08:00"
+      "observed_at": "2026-10-30T11:07:17+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-cloud-candidates-b9-091",
@@ -26286,7 +26463,8 @@
       "source_observed_at": "2026-10-30T11:06:10+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:10+08:00"
+      "observed_at": "2026-10-30T11:06:10+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-098",
@@ -26342,7 +26520,8 @@
       "source_observed_at": "2026-10-30T11:06:11+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:11+08:00"
+      "observed_at": "2026-10-30T11:06:11+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-100",
@@ -26370,7 +26549,8 @@
       "source_observed_at": "2026-10-30T11:07:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:18+08:00"
+      "observed_at": "2026-10-30T11:07:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-101",
@@ -26400,7 +26580,8 @@
       "source_observed_at": "2026-10-30T11:07:17+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:17+08:00"
+      "observed_at": "2026-10-30T11:07:17+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-102",
@@ -26428,7 +26609,8 @@
       "source_observed_at": "2026-10-30T11:07:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:18+08:00"
+      "observed_at": "2026-10-30T11:07:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-103",
@@ -26456,7 +26638,8 @@
       "source_observed_at": "2026-10-30T11:06:10+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:10+08:00"
+      "observed_at": "2026-10-30T11:06:10+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-104",
@@ -26484,7 +26667,8 @@
       "source_observed_at": "2026-10-30T11:06:10+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:10+08:00"
+      "observed_at": "2026-10-30T11:06:10+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-105",
@@ -26512,7 +26696,8 @@
       "source_observed_at": "2026-10-30T11:06:10+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:10+08:00"
+      "observed_at": "2026-10-30T11:06:10+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-106",
@@ -26540,7 +26725,8 @@
       "source_observed_at": "2026-10-30T11:06:11+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:11+08:00"
+      "observed_at": "2026-10-30T11:06:11+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-107",
@@ -26568,7 +26754,8 @@
       "source_observed_at": "2026-10-30T11:06:11+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:11+08:00"
+      "observed_at": "2026-10-30T11:06:11+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-108",
@@ -26596,7 +26783,8 @@
       "source_observed_at": "2026-10-30T11:07:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:18+08:00"
+      "observed_at": "2026-10-30T11:07:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-109",
@@ -26624,7 +26812,8 @@
       "source_observed_at": "2026-10-30T11:07:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:18+08:00"
+      "observed_at": "2026-10-30T11:07:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-110",
@@ -26652,7 +26841,8 @@
       "source_observed_at": "2026-10-30T11:07:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:18+08:00"
+      "observed_at": "2026-10-30T11:07:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-111",
@@ -26680,7 +26870,8 @@
       "source_observed_at": "2026-10-30T11:07:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:18+08:00"
+      "observed_at": "2026-10-30T11:07:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-112",
@@ -26712,7 +26903,8 @@
       "source_observed_at": "2026-10-30T11:06:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-10-30T11:06:34+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-113",
@@ -26740,7 +26932,8 @@
       "source_observed_at": "2026-10-30T11:07:18+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:18+08:00"
+      "observed_at": "2026-10-30T11:07:18+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-search-browse-b9-114",
@@ -27279,7 +27472,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-phone-recovery-b9-135",
@@ -27309,7 +27503,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-phone-recovery-b9-136",
@@ -27339,7 +27534,8 @@
       "source_observed_at": "2026-10-30T11:07:20+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:20+08:00"
+      "observed_at": "2026-10-30T11:07:20+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-phone-recovery-b9-137",
@@ -27369,7 +27565,8 @@
       "source_observed_at": "2026-10-30T11:07:20+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:20+08:00"
+      "observed_at": "2026-10-30T11:07:20+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-phone-recovery-b9-138",
@@ -27399,7 +27596,8 @@
       "source_observed_at": "2026-10-30T11:07:20+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:20+08:00"
+      "observed_at": "2026-10-30T11:07:20+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-phone-recovery-b9-139",
@@ -27431,7 +27629,8 @@
       "source_observed_at": "2026-10-30T11:07:20+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:20+08:00"
+      "observed_at": "2026-10-30T11:07:20+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-phone-recovery-b9-140",
@@ -27463,7 +27662,8 @@
       "source_observed_at": "2026-10-30T11:07:20+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:20+08:00"
+      "observed_at": "2026-10-30T11:07:20+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-phone-recovery-b9-141",
@@ -27493,7 +27693,8 @@
       "source_observed_at": "2026-10-30T11:07:20+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:20+08:00"
+      "observed_at": "2026-10-30T11:07:20+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-phone-recovery-b9-142",
@@ -27523,7 +27724,8 @@
       "source_observed_at": "2026-10-30T11:07:20+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:20+08:00"
+      "observed_at": "2026-10-30T11:07:20+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-phone-recovery-b9-143",
@@ -27553,7 +27755,8 @@
       "source_observed_at": "2026-10-30T11:07:20+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:20+08:00"
+      "observed_at": "2026-10-30T11:07:20+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-phone-recovery-b9-144",
@@ -27583,7 +27786,8 @@
       "source_observed_at": "2026-10-30T11:07:20+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:20+08:00"
+      "observed_at": "2026-10-30T11:07:20+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-phone-recovery-b9-145",
@@ -27613,7 +27817,8 @@
       "source_observed_at": "2026-10-30T11:07:20+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:20+08:00"
+      "observed_at": "2026-10-30T11:07:20+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-phone-recovery-b9-146",
@@ -27643,7 +27848,8 @@
       "source_observed_at": "2026-10-30T11:07:20+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:20+08:00"
+      "observed_at": "2026-10-30T11:07:20+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-media-phone-preservation-b9-147",
@@ -27823,7 +28029,8 @@
       "source_observed_at": "2026-10-30T11:06:10+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:10+08:00"
+      "observed_at": "2026-10-30T11:06:10+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-evidence-three-state-b9-157",
@@ -27857,7 +28064,8 @@
       "source_observed_at": "2026-10-30T11:07:19+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:19+08:00"
+      "observed_at": "2026-10-30T11:07:19+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-evidence-three-state-b9-158",
@@ -27882,7 +28090,8 @@
       "scope_status": "verified",
       "measurement_scope": "固定collect-only已核实只读，只输出213计数与executed=false",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "参数展开\\s+(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+个用例"
+      "page_pattern": "参数展开\\s+(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+个用例",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-evidence-three-state-b9-159",
@@ -27916,7 +28125,8 @@
       "source_observed_at": "2026-10-30T11:07:19+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:19+08:00"
+      "observed_at": "2026-10-30T11:07:19+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-evidence-three-state-b9-160",
@@ -28060,7 +28270,8 @@
       "source_observed_at": "2026-10-30T11:07:19+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:19+08:00"
+      "observed_at": "2026-10-30T11:07:19+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-offline-decision-brief-b9-165",
@@ -28158,7 +28369,8 @@
       "source_observed_at": "2026-10-30T11:07:19+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:19+08:00"
+      "observed_at": "2026-10-30T11:07:19+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-offline-decision-brief-b9-168",
@@ -28192,7 +28404,8 @@
       "source_observed_at": "2026-10-30T11:07:19+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:19+08:00"
+      "observed_at": "2026-10-30T11:07:19+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-offline-decision-brief-b9-169",
@@ -28313,7 +28526,8 @@
       "source_observed_at": "2026-10-30T11:07:19+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:19+08:00"
+      "observed_at": "2026-10-30T11:07:19+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-protected-foreground-refresh-b9-173",
@@ -28342,7 +28556,8 @@
       "scope_status": "verified",
       "measurement_scope": "指定源码测试文件的函数定义数，不运行",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "tests/test_google_health_refresh\\.py[^\\n]*?（现有\\s+(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+个测试函数）"
+      "page_pattern": "tests/test_google_health_refresh\\.py[^\\n]*?（现有\\s+(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+个测试函数）",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-protected-foreground-refresh-b9-174",
@@ -28372,7 +28587,8 @@
       "source_observed_at": "2026-10-30T11:07:20+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:20+08:00"
+      "observed_at": "2026-10-30T11:07:20+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-raw-preservation-resume-b9-175",
@@ -28465,7 +28681,8 @@
       "scope_status": "verified",
       "measurement_scope": "指定源码测试文件的函数定义数，不运行",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md",
-      "page_pattern": "tests/test_google_health_import\\.py[^\\n]*?（现有\\s+(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+个测试函数）"
+      "page_pattern": "tests/test_google_health_import\\.py[^\\n]*?（现有\\s+(?<![0-9,.])((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?)(?![0-9,.])\\s+个测试函数）",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-raw-preservation-resume-b9-178",
@@ -28495,7 +28712,8 @@
       "source_observed_at": "2026-10-30T11:07:00+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:00+08:00"
+      "observed_at": "2026-10-30T11:07:00+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-raw-preservation-resume-b9-179",
@@ -28525,7 +28743,8 @@
       "source_observed_at": "2026-10-30T11:07:00+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:00+08:00"
+      "observed_at": "2026-10-30T11:07:00+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-raw-preservation-resume-b9-180",
@@ -28555,7 +28774,8 @@
       "source_observed_at": "2026-10-30T11:07:20+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:20+08:00"
+      "observed_at": "2026-10-30T11:07:20+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-raw-preservation-resume-b9-181",
@@ -28585,7 +28805,8 @@
       "source_observed_at": "2026-10-30T11:07:20+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:20+08:00"
+      "observed_at": "2026-10-30T11:07:20+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-health-raw-preservation-resume-b9-182",
@@ -28776,7 +28997,8 @@
       "source_observed_at": "2026-10-30T11:07:21+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:21+08:00"
+      "observed_at": "2026-10-30T11:07:21+08:00",
+      "derive_as_of": true
     },
     {
       "id": "document-materials-current-matter-sources-b9-190",
@@ -28806,7 +29028,8 @@
       "source_observed_at": "2026-10-30T11:07:21+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:21+08:00"
+      "observed_at": "2026-10-30T11:07:21+08:00",
+      "derive_as_of": true
     },
     {
       "id": "document-materials-editable-docx-pdf-b9-191",
@@ -28836,7 +29059,8 @@
       "source_observed_at": "2026-10-30T11:07:21+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:21+08:00"
+      "observed_at": "2026-10-30T11:07:21+08:00",
+      "derive_as_of": true
     },
     {
       "id": "document-materials-editable-docx-pdf-b9-192",
@@ -28866,7 +29090,8 @@
       "source_observed_at": "2026-10-30T11:07:21+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:21+08:00"
+      "observed_at": "2026-10-30T11:07:21+08:00",
+      "derive_as_of": true
     },
     {
       "id": "document-materials-signature-delivery-version-b9-193",
@@ -28896,7 +29121,8 @@
       "source_observed_at": "2026-10-30T11:07:21+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:21+08:00"
+      "observed_at": "2026-10-30T11:07:21+08:00",
+      "derive_as_of": true
     },
     {
       "id": "document-materials-signature-delivery-version-b9-194",
@@ -28926,7 +29152,8 @@
       "source_observed_at": "2026-10-30T11:07:21+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:21+08:00"
+      "observed_at": "2026-10-30T11:07:21+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-recovery-and-tasks-anchor-038",
@@ -28958,7 +29185,8 @@
       "source_observed_at": "2026-10-30T11:07:21+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:21+08:00"
+      "observed_at": "2026-10-30T11:07:21+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-recovery-and-tasks-anchor-039",
@@ -28990,7 +29218,8 @@
       "source_observed_at": "2026-10-30T11:07:21+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:21+08:00"
+      "observed_at": "2026-10-30T11:07:21+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-040",
@@ -29022,7 +29251,8 @@
       "source_observed_at": "2026-10-30T11:07:21+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:21+08:00"
+      "observed_at": "2026-10-30T11:07:21+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-041",
@@ -29057,7 +29287,8 @@
       "checked_at": "2026-10-30T11:07:21+08:00",
       "source_observed_at": "2026-10-27T04:08:56.069760+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-27T04:08:56.069760+00:00"
+      "observed_at": "2026-10-27T04:08:56.069760+00:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-042",
@@ -29092,7 +29323,8 @@
       "checked_at": "2026-10-30T11:07:21+08:00",
       "source_observed_at": "2026-10-27T04:08:56.069760+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-27T04:08:56.069760+00:00"
+      "observed_at": "2026-10-27T04:08:56.069760+00:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-043",
@@ -29127,7 +29359,8 @@
       "checked_at": "2026-10-30T11:07:21+08:00",
       "source_observed_at": "2026-10-27T04:08:56.069760+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-27T04:08:56.069760+00:00"
+      "observed_at": "2026-10-27T04:08:56.069760+00:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-044",
@@ -29162,7 +29395,8 @@
       "checked_at": "2026-10-30T11:07:21+08:00",
       "source_observed_at": "2026-10-27T04:08:56.069760+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-27T04:08:56.069760+00:00"
+      "observed_at": "2026-10-27T04:08:56.069760+00:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-047",
@@ -29199,7 +29433,8 @@
       "checked_at": "2026-10-30T11:07:21+08:00",
       "source_observed_at": "2026-10-27T04:08:56.069760+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-27T04:08:56.069760+00:00"
+      "observed_at": "2026-10-27T04:08:56.069760+00:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-tiered-distribution-anchor-048",
@@ -29389,7 +29624,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-054",
@@ -29421,7 +29657,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-055",
@@ -29453,7 +29690,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-056",
@@ -29485,7 +29723,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-057",
@@ -29517,7 +29756,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-058",
@@ -29549,7 +29789,8 @@
       "source_observed_at": "2026-10-30T11:06:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:16+08:00"
+      "observed_at": "2026-10-30T11:06:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-059",
@@ -29581,7 +29822,8 @@
       "source_observed_at": "2026-10-30T11:06:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:16+08:00"
+      "observed_at": "2026-10-30T11:06:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-anchor-060",
@@ -29710,7 +29952,8 @@
       "checked_at": "2026-10-30T11:07:21+08:00",
       "source_observed_at": "2026-10-30T02:10:50.807158+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T02:10:50.807158+00:00"
+      "observed_at": "2026-10-30T02:10:50.807158+00:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-anchor-068",
@@ -29745,7 +29988,8 @@
       "checked_at": "2026-10-30T11:07:21+08:00",
       "source_observed_at": "2026-10-30T02:10:50.807158+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T02:10:50.807158+00:00"
+      "observed_at": "2026-10-30T02:10:50.807158+00:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-anchor-070",
@@ -29780,7 +30024,8 @@
       "checked_at": "2026-10-30T11:07:22+08:00",
       "source_observed_at": "2026-10-30T02:10:50.807158+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T02:10:50.807158+00:00"
+      "observed_at": "2026-10-30T02:10:50.807158+00:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-anchor-071",
@@ -29817,7 +30062,8 @@
       "checked_at": "2026-10-30T11:07:22+08:00",
       "source_observed_at": "2026-10-30T02:10:50.807158+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T02:10:50.807158+00:00"
+      "observed_at": "2026-10-30T02:10:50.807158+00:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-anchor-072",
@@ -29854,7 +30100,8 @@
       "checked_at": "2026-10-30T11:07:22+08:00",
       "source_observed_at": "2026-10-30T02:10:50.807158+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T02:10:50.807158+00:00"
+      "observed_at": "2026-10-30T02:10:50.807158+00:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-native-bubbles-idle-overlay-anchor-073",
@@ -29888,7 +30135,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-native-bubbles-idle-overlay-anchor-074",
@@ -29922,7 +30170,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-native-bubbles-idle-overlay-anchor-075",
@@ -29956,7 +30205,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-native-bubbles-idle-overlay-anchor-077",
@@ -29988,7 +30238,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-native-bubbles-idle-overlay-anchor-080",
@@ -30020,7 +30271,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-native-bubbles-idle-overlay-anchor-082",
@@ -30052,7 +30304,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-native-bubbles-idle-overlay-anchor-083",
@@ -30084,7 +30337,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-native-bubbles-idle-overlay-anchor-084",
@@ -30116,7 +30370,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-native-bubbles-idle-overlay-anchor-085",
@@ -30148,7 +30403,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-native-bubbles-idle-overlay-anchor-086",
@@ -30180,7 +30436,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-native-bubbles-idle-overlay-anchor-087",
@@ -30212,7 +30469,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-reversibility-preimage-and-remote-compatibility-anchor-091",
@@ -30244,7 +30502,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-reversibility-preimage-and-remote-compatibility-anchor-092",
@@ -30276,7 +30535,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-reversibility-preimage-and-remote-compatibility-anchor-093",
@@ -30308,7 +30568,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-wallpaper-engine-coexistence-and-rain-experiment-anchor-094",
@@ -30342,7 +30603,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-wallpaper-engine-coexistence-and-rain-experiment-anchor-095",
@@ -30374,7 +30636,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-wallpaper-engine-coexistence-and-rain-experiment-anchor-096",
@@ -30406,7 +30669,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-windows-desktop-and-lockscreen-background-anchor-097",
@@ -30438,7 +30702,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-windows-desktop-and-lockscreen-background-anchor-098",
@@ -30470,7 +30735,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-windows-desktop-and-lockscreen-background-anchor-099",
@@ -30502,7 +30768,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-windows-desktop-and-lockscreen-background-anchor-100",
@@ -30534,7 +30801,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-windows-desktop-and-lockscreen-background-anchor-101",
@@ -30566,7 +30834,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-emerald-veil-windows-desktop-and-lockscreen-background-anchor-102",
@@ -30598,7 +30867,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-meshclip-kit-kde-connect-pairing-sync-anchor-103",
@@ -30744,7 +31014,8 @@
       "source_observed_at": "2026-10-30T11:06:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:16+08:00"
+      "observed_at": "2026-10-30T11:06:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-proxyclean-dead-port-and-route-cleanup-anchor-108",
@@ -30776,7 +31047,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-proxyclean-dynamic-proxy-status-anchor-109",
@@ -30808,7 +31080,8 @@
       "source_observed_at": "2026-10-30T11:06:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:16+08:00"
+      "observed_at": "2026-10-30T11:06:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-proxyclean-one-click-and-troubleshooting-boundaries-anchor-110",
@@ -30840,7 +31113,8 @@
       "source_observed_at": "2026-10-30T11:06:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:16+08:00"
+      "observed_at": "2026-10-30T11:06:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-proxyclean-targeted-port-shutdown-anchor-111",
@@ -30872,7 +31146,8 @@
       "source_observed_at": "2026-10-30T11:06:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:16+08:00"
+      "observed_at": "2026-10-30T11:06:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-proxyclean-targeted-port-shutdown-anchor-112",
@@ -30904,7 +31179,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-allowlist-config-and-style-snapshot-anchor-113",
@@ -30965,7 +31241,8 @@
       "source_observed_at": "2026-10-30T11:06:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:14+08:00"
+      "observed_at": "2026-10-30T11:06:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-plugin-manifest-and-install-state-tracking-anchor-115",
@@ -30997,7 +31274,8 @@
       "source_observed_at": "2026-10-30T11:06:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:14+08:00"
+      "observed_at": "2026-10-30T11:06:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-plugin-manifest-and-install-state-tracking-anchor-116",
@@ -31029,7 +31307,8 @@
       "source_observed_at": "2026-10-30T11:06:14+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:14+08:00"
+      "observed_at": "2026-10-30T11:06:14+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-plugin-manifest-and-install-state-tracking-anchor-117",
@@ -31092,7 +31371,8 @@
       "source_observed_at": "2026-10-30T11:07:23+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:23+08:00"
+      "observed_at": "2026-10-30T11:07:23+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-anchor-119",
@@ -31127,7 +31407,8 @@
       "checked_at": "2026-10-30T11:07:23+08:00",
       "source_observed_at": "2026-10-26T02:35:54.198426+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-26T02:35:54.198426+00:00"
+      "observed_at": "2026-10-26T02:35:54.198426+00:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-anchor-120",
@@ -31279,7 +31560,8 @@
       "source_observed_at": "2026-10-30T11:07:21+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:21+08:00"
+      "observed_at": "2026-10-30T11:07:21+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-source-catalog-extra-113",
@@ -31311,7 +31593,8 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:22+08:00"
+      "observed_at": "2026-10-30T11:07:22+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-devconfig-backup-wechat-native-backup-extra-114",
@@ -31433,7 +31716,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-proxyclean-targeted-port-shutdown-extra-118",
@@ -31465,7 +31749,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-proxyclean-dynamic-proxy-status-extra-119",
@@ -31497,7 +31782,8 @@
       "source_observed_at": "2026-10-30T11:07:29+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:29+08:00"
+      "observed_at": "2026-10-30T11:07:29+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-proxyclean-dynamic-proxy-status-extra-120",
@@ -31529,7 +31815,8 @@
       "source_observed_at": "2026-10-30T11:07:29+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:29+08:00"
+      "observed_at": "2026-10-30T11:07:29+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-proxyclean-dynamic-proxy-status-extra-121",
@@ -31561,7 +31848,8 @@
       "source_observed_at": "2026-10-30T11:07:29+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:29+08:00"
+      "observed_at": "2026-10-30T11:07:29+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-proxyclean-dynamic-proxy-status-extra-122",
@@ -31593,7 +31881,8 @@
       "source_observed_at": "2026-10-30T11:07:29+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:29+08:00"
+      "observed_at": "2026-10-30T11:07:29+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-extra-123",
@@ -31625,7 +31914,8 @@
       "source_observed_at": "2026-10-30T11:07:23+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:23+08:00"
+      "observed_at": "2026-10-30T11:07:23+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-tools-steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-extra-124",
@@ -31657,7 +31947,8 @@
       "source_observed_at": "2026-10-30T11:07:23+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:23+08:00"
+      "observed_at": "2026-10-30T11:07:23+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-repository-ledger-repo_count-0-225",
@@ -31916,7 +32207,8 @@
       "source_observed_at": "2026-10-30T11:07:30+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:30+08:00"
+      "observed_at": "2026-10-30T11:07:30+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-repository-ledger-public_count-3-68",
@@ -32150,7 +32442,8 @@
       "source_observed_at": "2026-10-30T11:07:30+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:30+08:00"
+      "observed_at": "2026-10-30T11:07:30+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-project-admission-ahead_count-0-219",
@@ -32180,7 +32473,8 @@
       "source_observed_at": "2026-10-30T11:07:30+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:30+08:00"
+      "observed_at": "2026-10-30T11:07:30+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-project-admission-ahead_count-1-296",
@@ -32210,7 +32504,8 @@
       "source_observed_at": "2026-10-30T11:07:30+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:30+08:00"
+      "observed_at": "2026-10-30T11:07:30+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-worktree-sync-ahead_count-0-261",
@@ -32240,7 +32535,8 @@
       "source_observed_at": "2026-10-30T11:07:30+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:30+08:00"
+      "observed_at": "2026-10-30T11:07:30+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-publication-gate-ahead_count-11-196",
@@ -32270,7 +32566,8 @@
       "source_observed_at": "2026-10-30T11:07:30+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:30+08:00"
+      "observed_at": "2026-10-30T11:07:30+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-snapshot-recovery-baseline_repositories-4-124",
@@ -32300,7 +32597,8 @@
       "source_observed_at": "2026-10-30T11:07:30+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:30+08:00"
+      "observed_at": "2026-10-30T11:07:30+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-snapshot-recovery-observed_repositories-4-130",
@@ -32330,7 +32628,8 @@
       "source_observed_at": "2026-10-30T11:07:30+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:30+08:00"
+      "observed_at": "2026-10-30T11:07:30+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-snapshot-recovery-delta_count-4-136",
@@ -32360,7 +32659,8 @@
       "source_observed_at": "2026-10-30T11:07:30+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:30+08:00"
+      "observed_at": "2026-10-30T11:07:30+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-snapshot-recovery-issue_count-4-141",
@@ -32390,7 +32690,8 @@
       "source_observed_at": "2026-10-30T11:07:30+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:30+08:00"
+      "observed_at": "2026-10-30T11:07:30+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-protected-major-actions-operation_count-0-218",
@@ -32420,7 +32721,8 @@
       "source_observed_at": "2026-10-30T11:07:24+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:24+08:00"
+      "observed_at": "2026-10-30T11:07:24+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-protected-major-actions-operation_count-4-223",
@@ -32450,7 +32752,8 @@
       "source_observed_at": "2026-10-30T11:07:24+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:24+08:00"
+      "observed_at": "2026-10-30T11:07:24+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-protected-major-actions-operation_count-6-720",
@@ -32480,7 +32783,8 @@
       "source_observed_at": "2026-10-30T11:07:24+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:24+08:00"
+      "observed_at": "2026-10-30T11:07:24+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-protected-major-actions-operation_count-10-201",
@@ -32510,7 +32814,8 @@
       "source_observed_at": "2026-10-30T11:07:24+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:24+08:00"
+      "observed_at": "2026-10-30T11:07:24+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-protected-major-actions-line_count-5-203",
@@ -32540,7 +32845,8 @@
       "source_observed_at": "2026-10-30T11:07:24+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:24+08:00"
+      "observed_at": "2026-10-30T11:07:24+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-wechat-direct-bounded-chat-context-test_definition_count-4-97",
@@ -32570,7 +32876,8 @@
       "source_observed_at": "2026-10-30T11:07:24+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:24+08:00"
+      "observed_at": "2026-10-30T11:07:24+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-wechat-direct-moments-local-cache-test_definition_count-3-94",
@@ -32600,7 +32907,8 @@
       "source_observed_at": "2026-10-30T11:07:24+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:24+08:00"
+      "observed_at": "2026-10-30T11:07:24+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-wechat-direct-named-chat-archive-test_definition_count-4-116",
@@ -32630,7 +32938,8 @@
       "source_observed_at": "2026-10-30T11:07:24+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:24+08:00"
+      "observed_at": "2026-10-30T11:07:24+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-wechat-direct-preservation-verification-test_definition_count-3-111",
@@ -32660,7 +32969,8 @@
       "source_observed_at": "2026-10-30T11:07:24+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:24+08:00"
+      "observed_at": "2026-10-30T11:07:24+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-wechat-direct-reply-media-relations-test_definition_count-3-80",
@@ -32690,7 +33000,8 @@
       "source_observed_at": "2026-10-30T11:07:24+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:24+08:00"
+      "observed_at": "2026-10-30T11:07:24+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-wechat-direct-account-source-identity-configured_account_count-4-406",
@@ -32720,7 +33031,8 @@
       "source_observed_at": "2026-10-30T11:07:24+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:24+08:00"
+      "observed_at": "2026-10-30T11:07:24+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-wechat-direct-named-chat-archive-archive_count-5-309",
@@ -32750,7 +33062,8 @@
       "source_observed_at": "2026-10-30T11:07:24+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:24+08:00"
+      "observed_at": "2026-10-30T11:07:24+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-wechat-direct-named-chat-archive-current_sender_identity_archive_count-5-316",
@@ -32780,7 +33093,8 @@
       "source_observed_at": "2026-10-30T11:07:24+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:24+08:00"
+      "observed_at": "2026-10-30T11:07:24+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-wechat-direct-named-chat-archive-noncurrent_sender_identity_archive_count-5-332",
@@ -32810,7 +33124,8 @@
       "source_observed_at": "2026-10-30T11:07:24+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:24+08:00"
+      "observed_at": "2026-10-30T11:07:24+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-evidence-quality-test_definition_count-9-357",
@@ -32840,7 +33155,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-value-state-recovery-test_definition_count-4-117",
@@ -32870,7 +33186,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-value-state-recovery-test_definition_count-4-303",
@@ -32900,7 +33217,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-value-state-recovery-test_definition_count-11-163",
@@ -32930,7 +33248,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-source-change-next-version-rebind_case_count-9-317",
@@ -32960,7 +33279,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-source-change-next-version-rebind_allowed_count-9-328",
@@ -32990,7 +33310,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-source-change-next-version-rebind_rejected_count-9-354",
@@ -33020,7 +33341,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_min-0-100",
@@ -33050,7 +33372,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_min-0-161",
@@ -33080,7 +33403,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_min-2-27",
@@ -33110,7 +33434,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_min-3-67",
@@ -33140,7 +33465,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_min-4-213",
@@ -33170,7 +33496,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_min-6-313",
@@ -33200,7 +33527,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_min-7-390",
@@ -33230,7 +33558,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_min-10-64",
@@ -33260,7 +33589,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_max-0-102",
@@ -33290,7 +33620,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_max-0-163",
@@ -33320,7 +33651,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_max-2-29",
@@ -33350,7 +33682,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_max-3-71",
@@ -33380,7 +33713,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_max-4-215",
@@ -33410,7 +33744,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_max-6-315",
@@ -33440,7 +33775,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_max-7-392",
@@ -33470,7 +33806,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_max-10-66",
@@ -33500,7 +33837,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_min-8-217",
@@ -33530,7 +33868,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-selected_source_max-8-223",
@@ -33560,7 +33899,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-package-sources-mechanical_stage_budget_seconds-5-85",
@@ -33590,7 +33930,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-value-state-recovery-mechanical_stage_budget_seconds-5-473",
@@ -33620,7 +33961,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-value-state-recovery-mechanical_stage_budget_seconds-10-120",
@@ -33650,7 +33992,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-value-state-recovery-first_round_wall_clock_ratio_max-4-976",
@@ -33680,7 +34023,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-value-state-recovery-update_round_wall_clock_ratio_max-4-1024",
@@ -33710,7 +34054,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-value-state-recovery-first_round_wall_clock_ratio_max-7-96",
@@ -33740,7 +34085,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-work-delivery-value-state-recovery-update_round_wall_clock_ratio_max-7-105",
@@ -33770,7 +34116,8 @@
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-worktree-sync-governance-entries-5",
@@ -33801,7 +34148,8 @@
       "checked_at": "2026-10-30T11:07:25+08:00",
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-worktree-sync-governance-repository_overrides-5",
@@ -33832,7 +34180,8 @@
       "checked_at": "2026-10-30T11:07:25+08:00",
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-worktree-sync-governance-retentions-5",
@@ -33863,7 +34212,8 @@
       "checked_at": "2026-10-30T11:07:25+08:00",
       "source_observed_at": "2026-10-30T11:07:25+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:25+08:00"
+      "observed_at": "2026-10-30T11:07:25+08:00",
+      "derive_as_of": true
     },
     {
       "id": "b9-github-index-repository-ledger-saved-baseline-count-4-134",
@@ -33944,7 +34294,8 @@
       "source_observed_at": "2026-10-30T11:07:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:16+08:00"
+      "observed_at": "2026-10-30T11:07:16+08:00",
+      "derive_as_of": true
     },
     {
       "id": "personal-materials-exact-intake-b9-maintenance-event-at",
@@ -35980,7 +36331,8 @@
       "checked_at": "2026-10-30T11:07:28+08:00",
       "source_observed_at": "2026-10-30T11:07:28+08:00",
       "source_coverage_end": null,
-      "observation_basis": "live_read"
+      "observation_basis": "live_read",
+      "derive_as_of": true
     },
     {
       "id": "agents-asof-decision-sections",
@@ -36508,13 +36860,13 @@
       "screen": "timeaudit-backup-recovery-01",
       "label": "完整备份份数与最新大小观察时间",
       "field": "screens[0].text",
-      "page_pattern": "。(10 月 30 日 11:06) 只读查看时有",
+      "page_pattern": "(?<!\\d)(\\d{1,2} 月 \\d{1,2} 日 \\d{1,2}:\\d{2}) 只读查看时有",
       "qualifies": [
         "timeaudit-backup-recovery-b8-archive-count-product",
         "timeaudit-backup-recovery-b8-latest-archive-gib"
       ],
-      "current_value": "2026-10-31",
-      "as_of": "2026-10-30",
+      "current_value": "10 月 31 日 09:26",
+      "as_of": "2026-10-31",
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "注明当前完整数据库备份份数和最新一份GiB大小，不改变前句的备份开始/完成事件时间或成功叙述。",
@@ -37429,7 +37781,8 @@
       "checked_at": "2026-10-30T11:06:13+08:00",
       "source_observed_at": "2026-10-30T11:06:13+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:06:13+08:00"
+      "observed_at": "2026-10-30T11:06:13+08:00",
+      "derive_as_of": true
     },
     {
       "id": "video-scaffold-commits-last-commit-time",
@@ -38778,7 +39131,8 @@
       },
       "source_location": "V:/Personal/Projects/phone-collector/app/src/test",
       "measurement_scope": "正文合成测试定义数；以注明日期的源码或回执为准，不代表本轮执行通过。",
-      "observation_basis": "live_read"
+      "observation_basis": "live_read",
+      "derive_as_of": true
     },
     {
       "id": "oct30-localocr-01-acceptance-date",
@@ -40325,7 +40679,8 @@
       "source_location": "E:/PCConfig/registries/pending_acceptance.json /items；按每项status统计passed/superseded/ended/pending/on_hold，不递归统计子结果",
       "measurement_scope": "功能索引待验收登记总数；绑定当前作者字段的唯一完整显示值；来源核对见 E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "observation_basis": "live_read",
-      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md"
+      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-019",
@@ -40398,7 +40753,8 @@
       "source_location": "E:/Cache/PCConfig/SystemImage/last-run.json /chain_bytes、/observed_utc、/last_full_utc、/plan；E:/PCConfig/tools/system-image/README.md",
       "measurement_scope": "镜像新旧链合计GiB；绑定当前作者字段的唯一完整显示值；来源核对见 E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "observation_basis": "live_read",
-      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md"
+      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-022",
@@ -40656,7 +41012,8 @@
       "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "source_observed_at_pointer": [
         "completed_utc"
-      ]
+      ],
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-033",
@@ -40754,7 +41111,8 @@
       "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "source_observed_at_pointer": [
         "completed_utc"
-      ]
+      ],
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-037",
@@ -40781,7 +41139,8 @@
       "source_location": "E:/Cache/PCConfig/SystemImage/last-run.json /chain_bytes、/observed_utc、/last_full_utc、/plan；E:/PCConfig/tools/system-image/README.md",
       "measurement_scope": "恢复摘要镜像链GiB；绑定当前作者字段的唯一完整显示值；来源核对见 E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "observation_basis": "live_read",
-      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md"
+      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-038",
@@ -40806,7 +41165,8 @@
       "source_location": "E:/Cache/PCConfig/SystemImage/last-run.json /chain_bytes、/observed_utc、/last_full_utc、/plan；E:/PCConfig/tools/system-image/README.md",
       "measurement_scope": "镜像链精确字节数；绑定当前作者字段的唯一完整显示值；来源核对见 E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "observation_basis": "live_read",
-      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md"
+      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-039",
@@ -40833,7 +41193,8 @@
       "source_location": "E:/Cache/PCConfig/SystemImage/last-run.json /chain_bytes、/observed_utc、/last_full_utc、/plan；E:/PCConfig/tools/system-image/README.md",
       "measurement_scope": "镜像链换算GiB；绑定当前作者字段的唯一完整显示值；来源核对见 E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "observation_basis": "live_read",
-      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md"
+      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-040",
@@ -40860,7 +41221,8 @@
       "source_location": "E:/Cache/PCConfig/SystemImage/last-run.json /chain_bytes、/observed_utc、/last_full_utc、/plan；E:/PCConfig/tools/system-image/README.md",
       "measurement_scope": "验证段镜像链GiB；绑定当前作者字段的唯一完整显示值；来源核对见 E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "observation_basis": "live_read",
-      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md"
+      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-041",
@@ -40886,7 +41248,8 @@
       "source_location": "C:/ProgramData/PCConfig/AuthorityHost/registries/secret_broker.json /secretref_targets；只读取目标名、厂商和交付模式，不读取凭据值",
       "measurement_scope": "凭据提供模块已装目标数；绑定当前作者字段的唯一完整显示值；来源核对见 E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "observation_basis": "live_read",
-      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md"
+      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-042",
@@ -40912,7 +41275,8 @@
       "source_location": "C:/ProgramData/PCConfig/AuthorityHost/registries/secret_broker.json /secretref_targets；只读取目标名、厂商和交付模式，不读取凭据值",
       "measurement_scope": "验证段已装目标数；绑定当前作者字段的唯一完整显示值；来源核对见 E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "observation_basis": "live_read",
-      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md"
+      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-043",
@@ -40938,7 +41302,8 @@
       "source_location": "C:/ProgramData/PCConfig/AuthorityHost/registries/secret_broker.json /secretref_targets；只读取目标名、厂商和交付模式，不读取凭据值",
       "measurement_scope": "技术段目标总数；绑定当前作者字段的唯一完整显示值；来源核对见 E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "observation_basis": "live_read",
-      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md"
+      "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-044",
@@ -41516,7 +41881,8 @@
       "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "source_observed_at_pointer": [
         "ObservedUtc"
-      ]
+      ],
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-069",
@@ -41544,7 +41910,8 @@
       "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "source_observed_at_pointer": [
         "ObservedUtc"
-      ]
+      ],
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-070",
@@ -41572,7 +41939,8 @@
       "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "source_observed_at_pointer": [
         "ObservedUtc"
-      ]
+      ],
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-071",
@@ -42348,7 +42716,8 @@
       "source_observed_at_pointer": [
         "completed_at"
       ],
-      "date_semantics": "event_time"
+      "date_semantics": "event_time",
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-104",
@@ -42437,7 +42806,8 @@
       "source_observed_at_pointer": [
         "completed_at"
       ],
-      "date_semantics": "event_time"
+      "date_semantics": "event_time",
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-107",
@@ -42529,7 +42899,8 @@
       "source_observed_at_pointer": [
         "completed_at"
       ],
-      "date_semantics": "event_time"
+      "date_semantics": "event_time",
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-110",
@@ -42607,7 +42978,8 @@
       "checked_at": "2026-10-30T11:06:27+08:00",
       "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-124416-site-refresh-publish-bda5163b/round-01/timeaudit-latest-backup-readback.json",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:06:27+08:00"
+      "observed_at": "2026-10-30T11:06:27+08:00",
+      "derive_as_of": true
     },
     {
       "id": "oct30-g3-113",

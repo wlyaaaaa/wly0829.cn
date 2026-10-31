@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/work-delivery-evidence-quality/page.json",
   "sha256": "c10485b03909fe9c27201e0672460376afcbb8b5b0a643f7ca35ada1fa1082cc",
-  "converted_at_beijing": "2026-10-11T21:05:01+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:25+08:00"
  }
 }
 ---
@@ -949,7 +949,8 @@ typed money/date/datetime、CSV 行列、追加审阅理由与 canonical quality
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

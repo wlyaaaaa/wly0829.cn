@@ -935,7 +935,7 @@
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
   "sha256": "869cd274ae2bee4e970eb80e98d062242dd3dee4f5427298f671b559c92d23de",
-  "converted_at_beijing": "2026-10-31T09:28:09+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:10+08:00"
  }
 }
 ---
@@ -2685,7 +2685,8 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -3702,7 +3703,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup-recovery-and-tasks/page.json",
   "sha256": "3ac1d56390500c7428d3983b6154b9721d9adbe7b0364af5a4f15c411021d229",
-  "converted_at_beijing": "2026-10-31T07:45:41+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:11+08:00"
  }
 }
 ---
@@ -1144,7 +1144,8 @@ DevConfig Backup · 功能说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

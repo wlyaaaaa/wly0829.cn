@@ -130,6 +130,16 @@ def display_readback(root, dist, page, fragment):
     return "verified" if normalize(fragment) and normalize(fragment) in normalize("".join(parser.parts)) else "failed"
 
 
+def derived_md_line(root, page, screen):
+    md = root / "site-astro/src/content/pages" / (page + ".md")
+    text = md.read_text("utf-8-sig")
+    match = re.search(r"::screen\{#" + re.escape(screen) + r"\b[^\n]*\}\n\n```typeset\n(.*?)\n```", text, re.S)
+    if not match:
+        return None
+    line = json.loads(match[1]).get("screen", {}).get("derived_as_of")
+    return line if isinstance(line, str) and re.fullmatch(r"数字截至 \d{4} 年 \d{1,2} 月 \d{1,2} 日", line) else None
+
+
 def verified_field(root, proof):
     from apply_edits import field_at, digest
     parent, key = field_at(json.loads((root / proof["file"]).read_text("utf-8-sig")), proof["field"])
@@ -180,14 +190,30 @@ def close_run(root, result, report=None, dist=None):
                     # 带时分的截至写的是取数时刻，记录新值只有日期；按应用时实际写入的文字核对。
                     written = equal(row["new_value"]) or proof and actual == proof["locator"].get("expected")
                     if row["id"] in applied and written and verified:
+                        date_line = derived_md_line(root, row["page"], row["screen"]) if row.get("derive_as_of") else None
+                        if row.get("derive_as_of") and not date_line:
+                            raise ValueError("派生截至日期未进入渲染输入")
                         if dist is not None:
                             display = display_readback(root, dist, row["page"], proof.get("fragment", str(actual)))
                             if display != "verified": raise ValueError("成品未找到新片段")
+                            if date_line and display_readback(root, dist, row["page"], date_line) != "verified":
+                                raise ValueError("成品未找到派生截至日期")
                         status = "applied_readback_verified"
                         synced.append(row)
                     else:
                         reason = "变化项缺同轮字段、记录或 Markdown 成功回读"
                 elif row["status"] == "unchanged" and row.get("checked_at") and row.get("observation_basis") != "unknown" and equal(row["new_value"]):
+                    if row.get("derive_as_of"):
+                        md = markdown.get(row["page"], {})
+                        md_path = root / "site-astro/src/content/pages" / (row["page"] + ".md")
+                        if (not proof or md.get("status") != "verified" or not md_path.is_file()
+                                or hashlib.sha256(md_path.read_bytes()).hexdigest() != md.get("sha256")):
+                            raise ValueError("派生日期缺同轮应用与 Markdown 回读")
+                        date_line = derived_md_line(root, row["page"], row["screen"])
+                        if not date_line:
+                            raise ValueError("派生截至日期未进入渲染输入")
+                        if dist is not None and display_readback(root, dist, row["page"], date_line) != "verified":
+                            raise ValueError("成品未找到派生截至日期")
                     status = "checked_unchanged"
                     synced.append(row)
                 elif row["status"] in {"unavailable", "domain_fact_task", "scope_pending"} and row.get("checked_at") and reason and equal(row["old_value"]):

@@ -810,6 +810,8 @@ def finish_page(name, fm, results, cssv):
     # 本页的小节名留给小节锚点（目录条“#practice”要落到那一节开头，不落到别处同名的定位点上）
     all_secs = {fm_screens.get(s["id"], {}).get("section") for s in out["screens"]} - {None, ""}
     for s in out["screens"]:
+        if fm_screens.get(s["id"], {}).get("derived_as_of"):
+            s["derived_as_of"] = fm_screens[s["id"]]["derived_as_of"]
         sec = fm_screens.get(s["id"], {}).get("section")
         s["section"] = sec
         if sec and sec not in sec_seen:

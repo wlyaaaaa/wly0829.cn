@@ -141,6 +141,63 @@ class NumberEditsTests(unittest.TestCase):
         self.assertFalse(any(e["record_id"] == "unsafe" for e in payload["edits"]))
         self.assertTrue(any(r["record_id"] == "unsafe" and "日期" in r["reason"] for r in payload["manual_reviews"]))
 
+    def test_derived_date_allows_number_and_blocks_incomplete_same_screen_group(self):
+        self.page["screens"][0]["text"] = "**10 份材料**，另有 **5 次测试**。"
+        self.page["registry"]["numbers"] = []
+        self.save()
+        rows = [dict(id=rid, page="personal-materials", screen="top", field="screens[0].text",
+                     page_pattern=rf"\*\*({old}) {label}", old_value=old, new_value=new,
+                     status="changed", scope_status="verified", derive_as_of=True,
+                     source_observed_at=observed)
+                for rid, old, new, label, observed in
+                [("one", 10, 11, "份材料", "2026-10-11T16:03:00+08:00"),
+                 ("two", 5, 6, "次测试", "2026-10-10T16:03:00+08:00")]]
+        payload = build_number_edits(self.root, {"rows": rows})
+        self.assertEqual({e["record_id"] for e in payload["edits"]}, {"one", "two"})
+        self.assertFalse(payload["skipped"])
+        rows[1]["status"] = "unavailable"
+        payload = build_number_edits(self.root, {"rows": rows})
+        self.assertFalse(payload["edits"])
+        self.assertTrue(any(s["record_id"] == "one" and s["reason"] == "as_of_link_required"
+                            for s in payload["skipped"]))
+
+    def test_derived_date_reconverts_after_registry_observation_sync(self):
+        self.page["screens"][0]["text"] = "**10 份材料**。"
+        self.page["registry"]["numbers"] = []
+        self.save()
+        registry = self.root / "sources/refresh/registry.json"
+        registry.parent.mkdir(parents=True, exist_ok=True)
+        row = dict(id="one", page="personal-materials", screen="top", field="screens[0].text",
+                   page_pattern=r"\*\*(10) 份材料", old_value=10, new_value=11,
+                   status="changed", scope_status="verified", derive_as_of=True,
+                   source_observed_at="2026-10-11T16:03:00+08:00")
+        registry.write_text(json.dumps({"records": [dict(row, current_value=10,
+            observed_at="2026-10-09T16:03:00+08:00")]}, ensure_ascii=False), encoding="utf-8")
+
+        def dated_converter(root, pages, output_dir=None):
+            fake_converter(root, pages, output_dir)
+            out = Path(output_dir) if output_dir else root / "site-astro/src/content/pages"
+            day = json.loads(registry.read_text("utf-8"))["records"][0]["observed_at"][:10]
+            year, month, date = (int(part) for part in day.split("-"))
+            line = f"数字截至 {year} 年 {month} 月 {date} 日"
+            for page in pages:
+                md = out / (page + ".md")
+                md.write_text(md.read_text("utf-8") + "\n::screen{#top}\n\n```typeset\n" +
+                              json.dumps({"screen": {"id": "top", "derived_as_of": line}}, ensure_ascii=False) +
+                              "\n```\n", encoding="utf-8")
+
+        dated_converter(self.root, {"personal-materials"})
+        row.update(checked_at="2026-10-11T16:03:00+08:00", observation_basis="live_read")
+        result = {"schema": "content-refresh.result.v1", "run_id": "derived", "rows": [row]}
+        payload = build_number_edits(self.root, result)
+        from freshness import close_run
+        self.assertEqual(close_run(self.root, result)["status"], "incomplete")
+        report = apply_edits(self.root, payload, converter=dated_converter)
+        self.assertFalse(report["skipped"])
+        self.assertEqual(report["registry_sync"]["records"], ["one"])
+        self.assertIn("数字截至 2026 年 10 月 11 日", (self.root / "site-astro/src/content/pages/personal-materials.md").read_text("utf-8"))
+        self.assertEqual(close_run(self.root, result, report)["status"], "closed")
+
     def test_event_cutoffs_require_manual_review_and_numbers_keep_their_date(self):
         for meaning in ("库最近一次写入", "上次使用", "最后一次运行", "账本覆盖到此日"):
             self.page["screens"][0]["text"] = "，".join(self.labels) + f"，截至 10 月 9 日（{meaning}）"

@@ -1582,7 +1582,7 @@
  "source": {
   "page": "sources/pages/pcconfig/page.json",
   "sha256": "ffe641b7cdf4c90440d2f94d6dbf35ba0d1370b83123ecf3d4a59c45821492c5",
-  "converted_at_beijing": "2026-10-31T09:28:09+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:15+08:00"
  }
 }
 ---
@@ -3118,7 +3118,8 @@ E→G：每天 09:30–17:10　G→H：每天 14:30 和每次登录
   "live": [],
   "screenshots": [],
   "chain": "disks",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -3299,7 +3300,8 @@ C、E 同在一块盘上：这块盘坏了，靠 G、H 上的镜像和备份一�
    "pcconfig-05-v3.png",
    "pcconfig-05-v4.png",
    "pcconfig-05-v2.png"
-  ]
+  ],
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -4276,7 +4278,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -4542,7 +4545,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": "E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-10-desktop.png"
+  "reuse": "E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-10-desktop.png",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -4803,7 +4807,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": "E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-11-desktop.png"
+  "reuse": "E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-11-desktop.png",
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

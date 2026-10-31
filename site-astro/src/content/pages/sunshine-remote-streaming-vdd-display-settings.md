@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-vdd-display-settings/page.json",
   "sha256": "eabdc81df3d547c58cd8f2b5a42ec41eae5844e7c79e156f9dff2ca38065c164",
-  "converted_at_beijing": "2026-10-11T19:04:26+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:23+08:00"
  }
 }
 ---
@@ -558,7 +558,8 @@ Sunshine 远程串流 · 功能说明
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

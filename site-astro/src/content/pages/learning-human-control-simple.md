@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/learning-human-control-simple/page.json",
   "sha256": "fcace82dd80972f6163f2ac1b243026e9801c49ae389a82ce75327074491eca6",
-  "converted_at_beijing": "2026-10-31T04:02:19+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:12+08:00"
  }
 }
 ---
@@ -870,7 +870,8 @@ AI负责把专业工作做到足以让人作决定；人拥有目标、节奏、
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {

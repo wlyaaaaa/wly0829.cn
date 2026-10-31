@@ -29,7 +29,7 @@
  "source": {
   "page": "sources/pages/github-index-worktree-sync/page.json",
   "sha256": "a27a36ad220b98253ab67b9d91644ffe4e4041d5be9574478495f618426df5a0",
-  "converted_at_beijing": "2026-10-31T06:46:48+08:00"
+  "converted_at_beijing": "2026-10-31T12:46:12+08:00"
  }
 }
 ---
@@ -56,7 +56,8 @@
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
@@ -614,7 +615,8 @@ GitHub 总索引 · 功能说明 · 已冻结：10 月 31 日起项目不再维�
   "live": null,
   "screenshots": [],
   "chain": null,
-  "reuse": null
+  "reuse": null,
+  "derived_as_of": "数字截至 2026 年 10 月 30 日"
  },
  "layout": {
   "h": {
