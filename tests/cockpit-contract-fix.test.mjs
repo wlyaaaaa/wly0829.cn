@@ -147,7 +147,7 @@ test('写着不用你管的 AI 晚了用中性色；你今天对 AI 说的话写
 });
 
 test('存储页按返回的 max_age_seconds 判过期，给了预算依据就写出来', () => {
-  const page = readFileSync(new URL('../site-astro/src/pages/cockpit/storage/index.astro', import.meta.url), 'utf8');
+  const page = readFileSync(new URL('../site-astro/src/cockpit/storage.js', import.meta.url), 'utf8');
   assert.match(page, /data\.max_age_seconds/);
   assert.doesNotMatch(page, /age <= 7200000/);
   assert.match(page, /budget_used_bytes/);

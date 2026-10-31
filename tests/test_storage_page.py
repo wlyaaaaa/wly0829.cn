@@ -1,6 +1,7 @@
 """逐盘存储页的浏览器回归：虚构数据，只访问本机测试服务器。"""
 from datetime import datetime, timedelta, timezone
 import importlib.util
+import json
 import os
 from pathlib import Path
 import re
@@ -44,6 +45,41 @@ def fixture(partial=False):
 
 
 class StoragePageTests(unittest.TestCase):
+    def test_disk_headers_do_not_cover_navigation_with_site_shell_css(self):
+        from playwright.sync_api import sync_playwright
+        chrome = ROOT / 'site-astro/src/chrome'
+        dependencies = json.loads((ROOT / 'site-astro/sources/retained-home-cockpit/dependencies.json').read_text('utf8'))
+        styles = json.loads((chrome / 'chrome.json').read_text('utf8'))['css']
+        for href in styles:
+            row = dependencies[href.lstrip('/')]
+            h.STATIC_FILES[href] = ROOT / row['source_path']
+        links = ''.join(f'<link rel="stylesheet" href="{href}">' for href in styles)
+        html = document().decode('utf8').replace('<title>', links + '<title>')
+        html = html.replace('<body>', '<body>' + (chrome / 'header.html').read_text('utf8'))
+        server = h.StatusServer()
+        server.default = (200, fixture(), 0)
+        server.pages['/cockpit/storage/'] = html.encode('utf8')
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(executable_path=h.CHROME, headless=True)
+                for width in (390, 1440):
+                    context = browser.new_context(viewport=dict(width=width, height=1000))
+                    h.isolate(context)
+                    page = context.new_page()
+                    page.goto(server.origin + '/cockpit/storage/', wait_until='networkidle')
+                    page.wait_for_selector('[data-drive="E"] .storage-meter')
+                    for drive in ('E', 'G'):
+                        page.locator(f'[data-drive="{drive}"]').evaluate('e=>scrollTo(0,e.offsetTop+160)')
+                        self.assertEqual(page.locator('#site-header').evaluate('e=>getComputedStyle(e).position'), 'sticky')
+                        for header in page.locator('.storage-heading,.storage-disk-head').all():
+                            self.assertEqual(header.evaluate('e=>getComputedStyle(e).position'), 'static')
+                        self.assertTrue(page.evaluate("Boolean(document.elementFromPoint(30,20)?.closest('#site-header'))"))
+                    context.close()
+                browser.close()
+            self.assertFalse(server.writes())
+        finally:
+            server.close()
+
     def test_five_disk_accounts_expand_and_fit_phone_and_desktop(self):
         from playwright.sync_api import sync_playwright
         OUT.mkdir(parents=True, exist_ok=True)
