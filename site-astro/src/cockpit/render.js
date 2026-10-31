@@ -241,7 +241,7 @@ export function ownerNow(v, now, ctx = {}) {
   // 后端给了 ask_kind 时，不把明确写着“AI 的事”的算进来；急不急也以后端为准。
   // （以前只认 do / decide，后端实际给的是 decision，首屏标题因此一条都没列出来）
   const all = v.need_you.map((x) => ({ x, r: readTodo(x, now) }));
-  const own = all.filter((i) => !['ai', 'know'].includes(i.x.ask_kind));
+  const own = all.filter((i) => i.x.owner_action_required !== false && !['ai', 'know'].includes(i.x.ask_kind));
   const uc = Number.isInteger(ov.owner_urgent_count) && ov.owner_urgent_count >= 0 ? ov.owner_urgent_count : null;
   const hidden = own.filter((i) => actCls(i.x, { ...ctx, viewer: v.viewer }));
   const items = own.filter((i) => !hidden.includes(i));
@@ -335,7 +335,14 @@ export function openGroup(x, viewer) {
   return bits.length ? `<span class="cp-open${phone ? ' is-phone' : ''}" role="group" aria-label="打开">${bits.join('')}</span>` : '';
 }
 function askCard(x, r, ctx) {
-  if (isPh(x)) return `<article class="cp-ask is-private ct-card" id="${esc(todoId(x))}"${itemAttr(x)}><div class="cp-ask-main"><h3 class="cp-ask-title" title="${PH_HINT}">${dot('unavailable')}<span>${esc(x.title || PRIVATE_TITLE)}</span></h3><p class="cp-ask-why">${PH_TODO}</p></div></article>`;
+  if (isPh(x)) return `<article class="cp-ask is-private ct-card" id="${esc(todoId(x))}"${itemAttr(x)}><div class="cp-ask-main"><h3 class="cp-ask-title" title="${PH_HINT}">${dot('unavailable')}<span>${esc(x.title || PRIVATE_TITLE)}</span></h3><p class="cp-ask-why">${x.owner_action_required === false ? '私人事项：本人设备上能看到影响和 AI 处理进度；目前无需你操作，AI 继续处理' : PH_TODO}</p></div></article>`;
+  if (x.owner_action_required === false) {
+    const progress = progressOf(x);
+    return `<article class="cp-ask ct-card${actCls(x, ctx)}" id="${esc(todoId(x))}"${itemAttr(x)}>`
+      + `<div class="cp-ask-main"><h3 class="cp-ask-title">${dot(x.attention_level === 'urgent' ? 'red' : 'attention')}<span>${esc(r.head)}${ownTag(x)}</span></h3>`
+      + `<p class="cp-ask-why">目前无需你操作，AI 继续处理</p>${r.body ? `<p class="cp-own-s">${esc(r.body)}</p>` : ''}${progress ? `<p class="cp-own-s"><b>处理进展</b>${esc(plain(progress))}</p>` : ''}${detail(x)}</div>`
+      + ownerBox(x, ctx, { card: true, extra: openGroup(x, ctx.viewer) }) + '</article>';
+  }
   return ownerCard(x, r, ctx);
 }
 // 后端偶尔给的是内部代号（如 checkpoint_overdue）：认得的换成人话，认不得的不显示
@@ -485,9 +492,9 @@ function aiWork(v, ctx) {
 
 // 要你做／要你回（首屏）：只放要你动手的卡。“AI 在等你回”单独一组“AI 在等你回话”；确认卡、要你动手、要你拍板各一组。
 // AI 在跟、暂缓、排了日子的不在这里（前两样去“AI 的账本”和“你放着 N 件不急的事”）
-const groupOf = (x) => (x.card_type === 'ai_wait' ? 'wait' : x.card_type === 'confirm' || CONFIRM[x.confirmation_kind] ? 'confirm'
+const groupOf = (x) => (x.owner_action_required === false ? 'notice' : x.card_type === 'ai_wait' ? 'wait' : x.card_type === 'confirm' || CONFIRM[x.confirmation_kind] ? 'confirm'
   : x.card_type === 'question' || (!x.card_type && DECIDE.includes(x.ask_kind)) ? 'decide' : 'do');
-const NEED_GROUPS = [['wait', 'AI 在等你回话'], ['confirm', '要你确认'], ['do', '要你动手'], ['decide', '要你拍板']];
+const NEED_GROUPS = [['notice', '严重需关注'], ['wait', 'AI 在等你回话'], ['confirm', '要你确认'], ['do', '要你动手'], ['decide', '要你拍板']];
 // ---- 电脑版（宽度 ≥1200）左栏“要你做 N 件”队列 ----
 // 每件一行：类型、对话名或事、问题（放不下省略）、几点问的或期限；默认第一件展开，点哪行展开哪件，同时只展开一件（记在 act.ui 的 Q_KEY）。
 // “一行一件 / 全部展开”记在这台浏览器（client.js），1700 宽以上默认全部展开、两列。
@@ -509,13 +516,15 @@ export function needCards(v, ctx) {
   const cx = { ...ctx, viewer: v.viewer };
   // 别的页面链到 #pending，没事可做时也留着这个位置标记（整块仍按 cockpit.css 收起）
   if (!all.some((i) => !actCls(i.x, cx))) return anchor('pending') + (v.ok ? '' : `<p class="cp-empty">${dot('unavailable')}${notRead(v.served_at, ctx.now)}</p>`);
-  const order = NEED_GROUPS.flatMap(([k]) => all.filter((i) => groupOf(i.x) === k)).filter((i) => !isPh(i.x) && typeof i.x.id === 'string' && i.x.id);
+  const order = NEED_GROUPS.flatMap(([k]) => all.filter((i) => groupOf(i.x) === k)).filter((i) => groupOf(i.x) !== 'notice' && !isPh(i.x) && typeof i.x.id === 'string' && i.x.id);
   // 展开哪件：点过的那件；还没点过（或那件已经办完不在了）就是第一件；点了“收起”是一件都不展开
   const want = ctx.act?.ui?.get(Q_KEY)?.open;
   const openId = typeof want === 'string' && (want === '' || order.some((i) => i.x.id === want)) ? want : order[0]?.x.id || '';
   // 能收成一行的超过两件才给“一行一件 / 全部展开”（只有一两件、或都是私人占位行时没得切）
   const modes = order.length > 2 ? `<span class="cp-q-modes" role="group" aria-label="怎么排"><button type="button" class="cp-q-mode" data-q-mode="rows" aria-pressed="false">一行一件</button><button type="button" class="cp-q-mode" data-q-mode="all" aria-pressed="false">全部展开</button></span>` : '';
-  const head = blockHead(`要你做 <b>${n}</b> 件`, 'cp-q-head', modes, 'cp-q-n');
+  const notices = all.filter((i) => groupOf(i.x) === 'notice' && !actCls(i.x, cx)).length;
+  const title = [n ? `要你做 <b>${n}</b> 件` : '', notices ? `严重需关注 <b>${notices}</b> 件` : ''].filter(Boolean).join(' · ');
+  const head = blockHead(title || `要你做 <b>${n}</b> 件`, 'cp-q-head', modes, 'cp-q-n');
   const wrap = (i, k) => {
     const x = i.x, card = askCard(x, i.r, cx);
     if (!order.includes(i)) return `<div class="cp-q is-open">${card}</div>`;
