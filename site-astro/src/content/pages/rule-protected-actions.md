@@ -194,16 +194,6 @@
      "text": "分工与并行施工"
     },
     {
-     "target": "/projects/github-local-index/",
-     "screen": "rule-protected-actions-04",
-     "text": "GitHub 项目总索引"
-    },
-    {
-     "target": "/projects/github-local-index/",
-     "screen": "rule-protected-actions-05",
-     "text": "GitHub 项目总索引"
-    },
-    {
      "target": "/projects/password-center/#f-four-factors",
      "screen": "rule-protected-actions-06",
      "text": "密码中心的四选一验证"
@@ -227,6 +217,16 @@
      "target": "/rules/execution-coordination/",
      "screen": "rule-protected-actions-07",
      "text": "分工与并行施工"
+    },
+    {
+     "target": "/projects/pcconfig/",
+     "screen": "rule-protected-actions-04",
+     "text": "电脑配置与恢复"
+    },
+    {
+     "target": "/skills/project-entry-gate/",
+     "screen": "rule-protected-actions-05",
+     "text": "改项目前先核对"
     }
    ],
    "live": []
@@ -254,8 +254,8 @@
  },
  "source": {
   "page": "sources/pages/rule-protected-actions/page.json",
-  "sha256": "c7cc12d6df59553995dea028772c9234204b93a0ccc2f51df5ee99517c8ce3ce",
-  "converted_at_beijing": "2026-10-31T08:33:36+08:00"
+  "sha256": "487e4240d549a138fb86169632fb1e0e9cbaf786bbcbc8f15ede5ca8f7508f6f",
+  "converted_at_beijing": "2026-10-31T10:23:43+08:00"
  }
 }
 ---
@@ -1948,8 +1948,8 @@
   "portrait": "竖版 9:16：标题在上，两张卡片从上到下一张一条、整宽（先“要本人验证的四种动作”，四个小标签排成两行两个；后“普通收尾，不验证”，由来小框在卡底）。字和横版完全一样。",
   "links": [
    {
-    "text": "GitHub 项目总索引",
-    "href": "/projects/github-local-index/"
+    "text": "电脑配置与恢复",
+    "href": "/projects/pcconfig/"
    }
   ],
   "anchors": [
@@ -2171,7 +2171,7 @@
 - 删除分支和标签、改写分支指向的提交（含强制推送）：只要先核对过旧提交还在别的分支或标签里留着、不会丢，也算普通收尾。
 - 普通收尾不请本人验证，也不逐项向本人报告技术细节。
 - 删除或改写前，程序自动核对旧提交还被别的本地或 GitHub 分支、标签留着；核对不过就停下说原因，不改成找本人验证。可能丢提交的强制推送仍要本人明确同意。
-- 仓库改名时，一并更新〔GitHub 项目总索引〕和真正调用这个仓库的地方。
+- 仓库改名时，一并更新〔电脑配置与恢复〕里的仓库位置登记，和真正调用这个仓库的地方。
 - 由来：本人 9 月 27 日说，把删分支、合进主线也当成要验证的动作太严了，让 AI 找个最优解。Claude 按本人授权定下：要本人验证的只留约法 L17 的删库、转移、私有改公开，加上新建公开仓库（等于对外发布）和真正删掉只有一份的数据；合进主线、删内容已在别处保存的分支、改名、改默认分支这些都归普通收尾。本人未否决前照此执行。现行规则又把新建公开仓库移出本人验证：它按对外发布处理，只核本人明确同意；核对过不丢提交的历史改写也明确归入普通收尾。
 
 ::screen{#rule-protected-actions-05 section="points"}
@@ -2186,8 +2186,8 @@
   "portrait": "竖版 9:16：标题在上，两张卡片从上到下一张一条、整宽（先“删库和转移前先备好”，后“谁来执行、回执怎么写”）。字和横版完全一样。",
   "links": [
    {
-    "text": "GitHub 项目总索引",
-    "href": "/projects/github-local-index/"
+    "text": "改项目前先核对",
+    "href": "/skills/project-entry-gate/"
    }
   ],
   "anchors": [
@@ -2401,7 +2401,7 @@
 - 预览会拉取分支、新建本地备份记号，所以不算严格只读；工具把清单打印出来，也不等于本人已经看到。
 
 ### 谁来执行、回执怎么写
-- 执行入口归〔GitHub 项目总索引〕：有有效的无限制授权，就直接执行已授权的动作；没有，就调用密码中心验证一次。普通 Git 收尾不找密码中心。
+- 执行入口是〔改项目前先核对〕技能自带的 GitHub 重大动作入口：有有效的无限制授权，就直接执行已授权的动作；没有，就调用密码中心验证一次。普通 Git 收尾不找密码中心。
 - 这个入口一共能做 10 种 Git 和 GitHub 动作（有的只动本地分支），只有删库、转移、改公开这三种情形要本人验证，其余只做自动核对。
 - 本人验证可能要等一会儿；验证完，入口会重新读一遍仓库现状，这期间仓库变了就停下。
 - 回执分开写两件事：权限核验过没有；这次是本人真做了一次验证，还是复用了已有的授权。复用不能说成刚验证过。

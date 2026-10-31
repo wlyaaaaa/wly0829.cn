@@ -188,11 +188,6 @@
      "text": "分工与并行施工"
     },
     {
-     "target": "/projects/github-local-index/",
-     "screen": "rule-engineering-delivery-05",
-     "text": "GitHub 项目总索引"
-    },
-    {
      "target": "/rules/privacy-data/",
      "screen": "rule-engineering-delivery-05",
      "text": "个人资料与数据处理"
@@ -236,6 +231,11 @@
      "target": "/rules/claude-adapter/",
      "screen": "rule-engineering-delivery-09",
      "text": "Claude 适配的宿主接线"
+    },
+    {
+     "target": "/skills/project-entry-gate/",
+     "screen": "rule-engineering-delivery-05",
+     "text": "改项目前先核对"
     }
    ],
    "live": []
@@ -259,8 +259,8 @@
  },
  "source": {
   "page": "sources/pages/rule-engineering-delivery/page.json",
-  "sha256": "4df09e6d0c916bd22265732d87c9758eb66ba7e30edcc29bddfbf1e1b8e4729e",
-  "converted_at_beijing": "2026-10-31T08:33:36+08:00"
+  "sha256": "94fd994faf670ebfc60706e6e8fdd18f9225f2784a7bb89bdbdc0be9c5acf75c",
+  "converted_at_beijing": "2026-10-31T10:23:40+08:00"
  }
 }
 ---
@@ -1346,10 +1346,6 @@
     "href": "/rules/execution-coordination/"
    },
    {
-    "text": "GitHub 项目总索引",
-    "href": "/projects/github-local-index/"
-   },
-   {
     "text": "个人资料与数据处理",
     "href": "/rules/privacy-data/"
    },
@@ -1406,6 +1402,10 @@
       ]
      }
     }
+   },
+   {
+    "text": "改项目前先核对",
+    "href": "/skills/project-entry-gate/"
    }
   ],
   "anchors": [
@@ -1571,7 +1571,7 @@
 - 接手时发现没人在做的旧改动，先弄清来源和用意，再纳入一起完善；只有真冲突、归属不明或本人明确不推送时，才保留并说明。
 - 不为表面干净去强制推送、泄密、删除来历不明的内容、覆盖别人没提交的改动，或把失败的产物推进默认分支。
 - 用过的分支和工作副本，要么合并后删掉，要么证明多余后删掉，要么写明用途、固定名字和什么时候删再保留；查不清就说清卡在哪。
-- 维护或准备公开一个仓库时，用〔GitHub 项目总索引〕现有的私人配套查询找到真实的对应关系；新克隆的仓库本机没有链接，不代表没有配套材料。
+- 维护或准备公开一个仓库时，用〔改项目前先核对〕技能里的私人配套查询找到真实的对应关系；新克隆的仓库本机没有链接，不代表没有配套材料。
 - 内容怎么迁，按〔个人资料与数据处理〕里的“私人仓库收口”办；挪走当前文件，不等于清理了 Git 历史。
 
 ### 日常技术默认
