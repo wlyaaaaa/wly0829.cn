@@ -1,64 +1,32 @@
 ---
 import Site from '../../../layouts/Site.astro';
 import '../../../cockpit/cockpit.css';
+import '../../../cockpit/storage.css';
 ---
-<Site title="存储占用与增长" kind="cockpit" url="/cockpit/storage/" page="cockpit-storage" toc={[]}>
+<Site title="磁盘空间与增长" kind="cockpit" url="/cockpit/storage/" page="cockpit-storage" toc={[]}>
   <div class="cp-page storage-page">
-    <p><a href="/cockpit/#computer">← 回驾驶舱·电脑</a></p>
-    <h1>存储占用与增长</h1>
-    <p>看看 AI 临时文件、对话记录、数据库和备份用了多少地方，近一周有没有持续挤占磁盘。</p>
-    <p>可重建的 AI 产物由既有维护入口按下表规则清理；异常交给驾驶舱“AI 在跟”的现有故障处理流程。本人原件、未归位的本人原话和唯一备份不自动清理。</p>
-    <button class="cp-btn" type="button" id="storage-refresh">重读状态</button>
-    <p id="storage-status" role="status">尚未读到在线采样，下面没有当前读数。</p>
-    <p class="storage-notes">容量单位为 GiB（1 GiB = 1,073,741,824 字节），时间为北京时间。嵌套类别可能重叠，不可相加；手机上可横向滑动查看全部列。</p>
-    <div class="storage-table" role="region" aria-label="各类别存储统计，可横向滚动" tabindex="0">
-      <table><caption>各类别存储采样</caption>
-        <thead><tr><th scope="col">类别</th><th scope="col">占用</th><th scope="col">近 7 天净变化</th><th scope="col">谁清与保留规则</th><th scope="col">状态</th><th scope="col">采样时间</th></tr></thead>
-        <tbody id="storage-rows"><tr><td colspan="6">尚无可显示的在线采样。重读失败时不以旧数代替当前状态。</td></tr></tbody>
-      </table>
-    </div>
+    <p class="storage-back"><a href="/cockpit/#computer">← 回驾驶舱·电脑</a></p>
+    <header class="storage-heading">
+      <div><h1>磁盘空间去哪了</h1><p>每块盘用了多少、用在哪里，这一周又涨了多少。</p></div>
+      <button class="cp-btn" type="button" id="storage-refresh">重读状态</button>
+    </header>
+    <p id="storage-status" role="status">正在读取电脑的存储采样。</p>
+    <div class="storage-key" aria-label="容量条图例"><span><i class="storage-dot is-known"></i>用途已知</span><span><i class="storage-dot is-unknown"></i>还说不清</span><span><i class="storage-dot is-free"></i>空闲</span></div>
+    <div id="storage-volumes" class="storage-volumes" aria-label="各块磁盘的占用与增长"><p class="storage-empty">尚未读到磁盘采样，读到后显示 C、D、E、G、H 盘。</p></div>
+    <p class="storage-notes">“还说不清”是磁盘已用减去用途已知的部分，其中可能有尚未测全的类别。近一周对比 6—8 天前的同口径采样；样本不足会写明。容量按十进制 GB、TB 显示，时间为北京时间。</p>
+    <details class="storage-all-categories">
+      <summary>查看各类文件的占用与清理规则</summary>
+      <p class="storage-notes">这里保留全部分类；合计与分项可能重叠，请按上面的逐盘账本看总量。</p>
+      <div class="storage-table" role="region" aria-label="各类别存储统计，可横向滚动" tabindex="0">
+        <table><caption>各类别存储采样</caption>
+          <thead><tr><th scope="col">类别</th><th scope="col">占用</th><th scope="col">近一周净变化</th><th scope="col">谁清与保留规则</th><th scope="col">状态</th></tr></thead>
+          <tbody id="storage-rows"><tr><td colspan="5">尚未读到分类采样。</td></tr></tbody>
+        </table>
+      </div>
+    </details>
     <noscript><p>需要启用 JavaScript 才能读取电脑的在线采样；本页没有预置的当前读数。</p></noscript>
   </div>
 </Site>
-<style>
-  .storage-page h1 { color:var(--cp-title);font-size:clamp(26px,4vw,36px);line-height:1.3 } .storage-notes { color:var(--cp-soft);font-size:15px }
-  .storage-table { overflow-x:auto;border:1px solid var(--cp-line);border-radius:12px;margin:20px 0 }
-  table { border-collapse:collapse;width:100%;min-width:980px;text-align:left;font-size:15px } caption { padding:12px;text-align:left;color:var(--cp-soft) }
-  th,td { padding:12px 14px;border-top:1px solid var(--cp-line);vertical-align:top;overflow-wrap:anywhere } th { background:#f1faf4 } td:nth-child(4) { min-width:230px } td:nth-child(6) { min-width:150px }
-</style>
 <script>
-  const rows = document.getElementById('storage-rows'), note = document.getElementById('storage-status'), button = document.getElementById('storage-refresh');
-  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const size = (n) => Number.isFinite(n) && n >= 0 ? (n / 1073741824).toLocaleString('zh-CN', {maximumFractionDigits:2}) + ' GiB' : '未知';
-  const time = (s) => Number.isFinite(Date.parse(s)) ? new Date(s).toLocaleString('zh-CN', {timeZone:'Asia/Shanghai', hour12:false}) : '时间未知';
-  const endpoints = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname) ? ['/__status?view=cockpit'] : ['https://live.wly0829.cn/computer-access/state?view=cockpit', 'https://mcp.wly0829.cn/computer-access/api/status?view=cockpit'];
-  async function load() {
-    button.disabled = true;
-    try {
-      // 几个入口同时发出，第一个拿到有效采样的就用，其余的当场取消；总共最多等 12 秒（和驾驶舱 client.js 的 read 一样）
-      const stop = new AbortController(), timer = setTimeout(() => stop.abort(), 12000);
-      const one = async (url) => { const r = await fetch(url, {cache:'no-store', credentials:'omit', signal:stop.signal}); if (!r.ok) throw new Error('HTTP ' + r.status); const d = (await r.json()).storage_pressure; if (d?.schema === 'pcconfig.ai-storage-pressure.v1' && Array.isArray(d.categories) && d.categories.length) return d; throw new Error('没有采样'); };
-      let data;
-      try { data = await Promise.any(endpoints.map(one)); } catch {} finally { clearTimeout(timer); stop.abort(); }
-      if (!data) throw new Error('unavailable');
-      // 采样多久算过期：照返回的 max_age_seconds（后端现在是 14 小时），没给才按 2 小时
-      const maxAge = Number(data.max_age_seconds) > 0 ? Number(data.max_age_seconds) * 1000 : 7200000;
-      const age = Date.now() - Date.parse(data.observed_at), fresh = Number.isFinite(age) && age >= -60000 && age <= maxAge;
-      note.textContent = fresh ? `采样于 ${time(data.observed_at)}；显示采样时的状态。` : `采样已过期或时间无法确认（${time(data.observed_at)}），下表仅作历史参考，不代表当前异常。`;
-      rows.innerHTML = data.categories.map(c => {
-        const complete = c.complete === true && Number.isFinite(c.bytes) && c.bytes >= 0;
-        const used = complete ? size(c.bytes) : `${Number.isFinite(c.partial_bytes) && c.partial_bytes >= 0 ? '≥ ' + size(c.partial_bytes) : '未知'}（统计不完整）`;
-        const growth = c.baseline_at && Number.isFinite(c.weekly_growth_bytes) ? `${c.weekly_growth_bytes > 0 ? '+' : c.weekly_growth_bytes < 0 ? '−' : ''}${size(Math.abs(c.weekly_growth_bytes))}；对比 ${time(c.baseline_at)}` : '尚无可比快照';
-        const status = c.alert === null ? (complete ? '未触发阈值' : '统计不完整') : ({budget:'超过容量预算，AI 处理', weekly_growth:'一周增长异常，AI 处理', measurement_incomplete:'统计不完整，AI 核对'}[c.alert] || '状态未知');
-        // 不按总占用判预算时（如回收站扣掉还原期内的任务目录），写明拿哪个数去比预算
-        const basis = c.budget_basis && c.budget_basis !== 'total-bytes.v1' && Number.isFinite(c.budget_used_bytes) && c.budget_used_bytes >= 0
-          ? `；按${c.budget_basis === 'outside-task-dir-retention.v1' ? '扣掉还原期内的任务目录后的' : '扣除保留部分后的'} ${size(c.budget_used_bytes)} 比预算${Number.isFinite(c.retained_bytes) && c.retained_bytes > 0 ? `（还原期内 ${size(c.retained_bytes)} 不算）` : ''}` : '';
-        const cells = [c.label, `${used}；预算 ${size(c.budget_bytes)}${basis}`, `${growth}；周增长阈值 ${size(c.growth_limit_bytes)}`, c.retention_zh || '规则未读到', `${fresh ? '' : '历史采样：'}${status}`, time(data.observed_at)];
-        return '<tr>' + cells.map(s => `<td>${esc(s)}</td>`).join('') + '</tr>';
-      }).join('');
-    } catch { rows.innerHTML = '<tr><td colspan="6">当前读不到在线采样，不能判断占用和增长。稍后可重读状态。</td></tr>'; note.textContent = '在线数据不可用；没有把旧读数作为当前状态。'; }
-    finally { button.disabled = false; }
-  }
-  button.addEventListener('click', load);
-  load();
+  import '../../../cockpit/storage.js';
 </script>

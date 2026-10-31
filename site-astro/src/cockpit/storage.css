@@ -1,0 +1,69 @@
+.storage-page { max-width:1440px; margin:0 auto; }
+.storage-page .storage-back { margin:10px 0 16px; font-size:14px; }
+.storage-page .storage-heading { display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; }
+.storage-page h1 { color:var(--cp-title); font-size:clamp(28px,4vw,38px); line-height:1.3; margin:0; }
+.storage-page .storage-heading p { color:var(--cp-soft); margin:8px 0 0; }
+.storage-page #storage-status { font-size:14px; color:var(--cp-soft); margin:18px 0 12px; }
+.storage-page .storage-key { display:flex; gap:12px 22px; flex-wrap:wrap; margin-bottom:16px; font-size:13px; color:var(--cp-soft); }
+.storage-page .storage-key span { display:inline-flex; align-items:center; gap:7px; }
+.storage-page .storage-dot { display:inline-block; width:9px; height:9px; border-radius:50%; }
+.storage-page .is-known { background:#3c9b61; }
+.storage-page .is-unknown { background:#d5a33b; }
+.storage-page .is-free { background:#e6eee8; }
+.storage-page .storage-volumes { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+.storage-page .storage-disk { border:1px solid var(--cp-line); border-radius:18px; padding:22px 24px; min-width:0; background:linear-gradient(150deg,#f7fcf8 0%,#fff 50%); }
+.storage-page .storage-disk.is-unavailable { background:#fafcfb; }
+.storage-page .storage-disk.is-historical { opacity:.75; }
+.storage-page .storage-disk-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+.storage-page .storage-disk h2 { font-size:23px; line-height:1.2; color:var(--cp-title); margin:0; }
+.storage-page .storage-tag { font-size:12px; border:1px solid #dce8e0; border-radius:99px; padding:2px 9px; color:var(--cp-soft); background:#fff; }
+.storage-page .storage-used { display:flex; align-items:baseline; flex-wrap:wrap; gap:2px 10px; margin:0 0 14px; font-variant-numeric:tabular-nums; }
+.storage-page .storage-used strong { font-size:clamp(27px,3vw,35px); line-height:1.25; letter-spacing:-.02em; color:var(--cp-ink); }
+.storage-page .storage-used span { font-size:14px; color:var(--cp-soft); }
+.storage-page .storage-meter { display:flex; height:12px; border-radius:99px; overflow:hidden; background:#e6eee8; margin-bottom:18px; }
+.storage-page .storage-meter span { height:100%; min-width:0; }
+.storage-page .storage-facts { display:grid; grid-template-columns:1fr 1.15fr 1fr; gap:10px; margin:0; }
+.storage-page .storage-fact { min-width:0; }
+.storage-page .storage-fact dt { font-size:13px; color:var(--cp-soft); margin-bottom:4px; }
+.storage-page .storage-fact dd { margin:0; font-size:21px; line-height:1.4; font-weight:750; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+.storage-page .storage-fact small { display:block; margin-top:2px; font-size:12px; font-weight:400; color:var(--cp-soft); line-height:1.5; }
+.storage-page .storage-fact.is-unexplained dd { color:#966d14; }
+.storage-page .storage-fact.is-unexplained { padding-left:12px; border-left:3px solid #e8c477; }
+.storage-page .storage-categories { margin:18px 0 0; padding-top:12px; border-top:1px solid #edf3ef; }
+.storage-page summary { cursor:pointer; color:var(--cp-title); font-size:14px; font-weight:650; }
+.storage-page summary:focus-visible { outline:2px solid var(--cp-green); outline-offset:4px; border-radius:3px; }
+.storage-page .storage-category-list { margin:10px 0 0; padding:0; list-style:none; font-size:14px; }
+.storage-page .storage-category-list li { display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding:5px 0; }
+.storage-page .storage-category-list span { min-width:0; overflow-wrap:anywhere; }
+.storage-page .storage-category-list b { white-space:nowrap; font-variant-numeric:tabular-nums; font-weight:600; }
+.storage-page .storage-top { margin-top:18px; padding-top:15px; border-top:1px solid #edf3ef; }
+.storage-page .storage-top h3 { font-size:14px; font-weight:700; margin:0 0 8px; color:var(--cp-ink); }
+.storage-page .storage-top-list { margin:0; padding:0; list-style:none; counter-reset:folder; }
+.storage-page .storage-top-list li { display:grid; grid-template-columns:20px minmax(0,1fr) auto; gap:8px; padding:5px 0; align-items:baseline; font-size:14px; }
+.storage-page .storage-top-list li::before { counter-increment:folder; content:counter(folder,decimal-leading-zero); color:#8b9d91; font-size:11px; }
+.storage-page .storage-top-list span { overflow-wrap:anywhere; }
+.storage-page .storage-top-list b { font-weight:600; white-space:nowrap; font-variant-numeric:tabular-nums; }
+.storage-page .storage-note { color:var(--cp-soft); font-size:12px; line-height:1.6; margin:8px 0 0; overflow-wrap:anywhere; }
+.storage-page .storage-empty { color:var(--cp-soft); font-size:14px; line-height:1.7; }
+.storage-page .storage-notes { color:var(--cp-soft); font-size:13px; line-height:1.8; margin:20px 0; }
+.storage-page .storage-all-categories { margin-top:24px; border-top:1px solid var(--cp-line); padding-top:20px; }
+.storage-page .storage-all-categories > summary { font-size:16px; }
+.storage-page .storage-table { overflow-x:auto; border:1px solid var(--cp-line); border-radius:12px; margin:14px 0; }
+.storage-page table { border-collapse:collapse; width:100%; min-width:860px; text-align:left; font-size:14px; }
+.storage-page caption { padding:12px; text-align:left; color:var(--cp-soft); }
+.storage-page th,.storage-page td { padding:12px 14px; border-top:1px solid var(--cp-line); vertical-align:top; overflow-wrap:anywhere; }
+.storage-page th { background:#f1faf4; }
+.storage-page td:nth-child(4) { min-width:230px; }
+@media(max-width:1000px) { .storage-page .storage-volumes { grid-template-columns:1fr; } }
+@media(max-width:520px) {
+  .storage-page .storage-disk { padding:18px 16px; border-radius:14px; }
+  .storage-page .storage-heading { gap:14px; }
+  .storage-page .storage-heading p { font-size:14px; }
+  .storage-page .storage-facts { grid-template-columns:1fr 1fr; gap:14px 10px; }
+  .storage-page .storage-fact:last-child { grid-column:1/-1; display:grid; grid-template-columns:auto 1fr; align-items:baseline; gap:0 12px; }
+  .storage-page .storage-fact:last-child dt { margin:0; }
+  .storage-page .storage-fact:last-child dd { font-size:18px; }
+  .storage-page .storage-fact:last-child small { display:inline; margin-left:8px; }
+  .storage-page .storage-fact dd { font-size:20px; }
+  .storage-page .storage-tag { font-size:11px; }
+}
