@@ -950,7 +950,7 @@ function tri(cells) {
   const cell = (c) => `<li class="cp-tri-cell is-${light(c.state)}" data-signal="${c.id}"><a class="hub-stat-field ct-card" href="#${c.id === 'tasks' ? 'tasks' : c.id === 'backup' ? 'backups' : 'computer'}">`
     + `<span class="cp-tri-label">${c.label}</span><b class="cp-tri-status">${dot(c.state)}${statusText(c.status)}</b>`
     + `<span class="cp-tri-who">${c.who.split(' · ').map((w) => `<span>${esc(w)}</span>`).join('<i aria-hidden="true"> · </i>')}</span>`
-    + (c.why ? `<span class="cp-tri-why">${esc(c.why)}</span>` : '') + (c.note ? `<span class="cp-tri-note">${esc(c.note)}</span>` : '') + `</a></li>`;
+    + (c.why ? `<span class="cp-tri-why">${esc(c.why)}</span>` : '') + (c.note ? `<span class="cp-tri-note${c.id === 'computer' ? ' cp-tri-up' : ''}">${esc(c.note)}</span>` : '') + `</a></li>`;
   return `<ul class="cp-tri">${cells.map(cell).join('')}</ul>`;
 }
 // 电脑健康分（和首页小屏同名）：后端只按电脑、自动任务和备份扣分，你的事、AI 的事不扣分。
