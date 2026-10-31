@@ -684,6 +684,25 @@ const BACKUP = {
     sub: esc([isNum(c.bytes) && isNum(c.files) && `${c.files.toLocaleString('en-US')} 个文件`, c.last_synced_at && `${when(c.last_synced_at, now)} 同步过`].filter(Boolean).join(' · ')), more: false },
 };
 const BACKUP_ORDER = ['backups', 'copy_drive', 'copy_photos', 'drive_upload', 'aliyun_billing'];
+// 备份盘 G 和 H（本人 10-31 选定的第六张卡）：每块盘已用多少、一周涨多少、按近一周的速度几天到预算线、核对过几类备份。
+// 数字取存储采样的 backup_g / backup_h；核对类数取备份卡原句里“X 盘有 N 类备份已经核对”，取不到就不写
+const signedGI = (n) => (n < 0 ? '−' : '+') + GI(Math.abs(n));
+function diskTile(v, own, now, off, pageAt) {
+  const { sp, of, fresh } = storageOf(v, now), ok = (n) => Number.isFinite(n) && n >= 0;
+  const checked = (d) => { const m = new RegExp(`${d}\\s*盘有\\s*(\\d+)\\s*类备份已经核对(?:，另外\\s*(\\d+)\\s*类\\s*AI\\s*还在核对)?`).exec(own?.text || ''); return m ? `核对过 ${m[1]} 类${m[2] ? `，${m[2]} 类在核对` : ''}` : ''; };
+  const disks = ['G', 'H'].map((d) => ({ d, x: of('backup_' + d.toLowerCase()) })).filter((r) => r.x && ok(r.x.bytes)).map(({ d, x }) => {
+    const left = ok(x.budget_bytes) ? x.budget_bytes - x.bytes : NaN, grow = x.weekly_growth_bytes;
+    return { d, x, days: Number.isFinite(left) && grow > 0 ? Math.max(0, (left / grow) * 7) : Infinity };
+  });
+  const near = disks.some((r) => r.days < 14 || ['budget', 'weekly_growth'].includes(r.x.alert));
+  const c = { id: 'backup_disks', title: '备份盘 G 和 H', state: !disks.length ? 'unavailable' : !fresh ? 'stale' : near ? 'attention' : 'ok', observed_at: sp.observed_at || null, text: '' };
+  if (!disks.length) return card(c, now, off, pageAt, { big: '读不到', sub: '存储采样这次没读到两块备份盘', more: false });
+  const top = [...disks].sort((a, b) => a.days - b.days)[0];
+  const big = !Number.isFinite(top.days) ? bigOf('够用', '近一周没变多') : top.days < 1 ? bigOf('已到', `${top.d} 盘预算线`) : bigOf(`约 ${Math.round(top.days)} 天`, `${top.d} 盘到预算线`);
+  const list = `<ul class="cp-tile-rows">${disks.map((r) => `<li><span>${r.d} 盘已用 ${esc(GI(r.x.bytes))}</span><b>${Number.isFinite(r.x.weekly_growth_bytes) ? esc('一周 ' + signedGI(r.x.weekly_growth_bytes)) : ''}</b>`
+    + `<small>${esc([ok(r.x.budget_bytes) && `预算 ${GI(r.x.budget_bytes)}`, checked(r.d)].filter(Boolean).join(' · '))}</small></li>`).join('')}</ul>`;
+  return card(c, now, off, pageAt, { big, sub: Number.isFinite(top.days) ? '按近一周的增速算' : '', list, fold: true, more: false, go: GO_STORAGE('各类别和近一周变化') });
+}
 export function backup(v, ctx) {
   const off = !!ctx.offline, stale = staleIds(v), now = ctx.now, at = v.served_at;
   const cards = dedupeCards(v.sections.backup_cloud).filter((c) => !stale.has(c.id)).map((c) => (c.id === 'drive_upload' ? { ...c, text: knownFirst(c.text) } : c));
@@ -698,7 +717,9 @@ export function backup(v, ctx) {
     // 原句只是“暂时读不到”这类话时不另收进“详情”，上面那句已经说清了
     return tileOf({ ...c, missing_reason: why, text: why && /^(暂时)?(读不到|还没读到|没读到)[。.]?$/.test(String(c.text || '').trim()) ? '' : c.text }, now, off, at);
   };
-  const tiles = cards.length ? [...cards].sort((a, b) => rank(a) - rank(b)).map(tile) : [tileOf({ title: '备份', state: 'unavailable', text: '' }, now, off, at)];
+  // 备份盘那张紧跟“备份”，本地的两张挨着，云端的在后面
+  const disks = diskTile(v, own, now, off, at), sorted = [...cards].sort((a, b) => rank(a) - rank(b));
+  const tiles = cards.length ? (own ? sorted.flatMap((c) => (c === own ? [tile(c), disks] : [tile(c)])) : [...sorted.map(tile), disks]) : [tileOf({ title: '备份', state: 'unavailable', text: '' }, now, off, at), disks];
   return anchor('backups') + (issue && !own ? `<p class="cp-line cp-backup-current">${esc(issue)}</p>` : '') + `<div class="cp-pc-grid cp-bk-grid">${tiles.join('')}</div>`;
 }
 
