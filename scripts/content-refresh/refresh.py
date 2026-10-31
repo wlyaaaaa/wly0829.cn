@@ -17,6 +17,8 @@ import time
 from uuid import uuid4
 
 sys.dont_write_bytecode = True
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from rule_explanation_status import pending as pending_rule_explanations, task_lines as rule_task_lines
 from checks import audit_pages
 from inventory import build_inventory, write_inventory, strict_findings
 from engine.content import bound_json
@@ -600,6 +602,7 @@ def task_text(result, registry):
     rule = result.get("rule_version_task", {})
     if rule.get("status") != "current":
         lines += ["## 首要待办：规则版本", "", rule.get("reason", "规则版本未核验"), ""]
+    lines += rule_task_lines(result.get("rule_explanations_pending", []))
     candidates = result.get("source_commit_candidates", [])
     lines += ["## 来源提交领先的语义复核候选（只列候选，不决定是否改稿）", ""]
     lines += [f"- {c['page']}：来源 {c['source_project']} 本机提交领先 {c['commits_behind']} 个；"
@@ -729,6 +732,7 @@ def main():
     only = set(args.only.split(",")) if args.only else None
     inventory = build_inventory(args.root / "sources/pages", registry["records"], entries, registry.get("freshness_policy"), targeted)
     inventory["rule_version_task"] = rule_version_task(args.root)
+    inventory["rule_explanations_pending"] = pending_rule_explanations(args.root)
     inventory["source_commit_candidates"] = source_commit_candidates(args.root, targeted or only or ())
     if only:
         inventory["items"] = [i for i in inventory["items"] if i["page"] in only]
@@ -766,6 +770,7 @@ def main():
     result["manual_tasks"] = review_tasks(inventory, result["rows"], targeted)
     result["semantic_due"] = semantic_due(inventory, result["rows"])
     result["rule_version_task"] = inventory["rule_version_task"]
+    result["rule_explanations_pending"] = inventory["rule_explanations_pending"]
     result["source_commit_candidates"] = inventory["source_commit_candidates"]
     from apply_edits import build_number_edits
     edits = build_number_edits(args.root, result)

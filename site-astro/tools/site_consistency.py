@@ -1,7 +1,11 @@
 """Build-time comparisons against the authored project pages and owner sources."""
 import json
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts'))
+from rule_explanation_status import pending as pending_rule_explanations
 
 ROOT = Path(__file__).resolve().parents[2]
 SUPPLY = Path(r'E:\.agents\config\personal-skill-supply.json')
@@ -91,6 +95,11 @@ def audit(root=ROOT, supply=SUPPLY, roster=ROSTER, rules=None):
                                      'display_name': label, 'excerpt': next((line[:180] for line in body.splitlines() if label in line), '')})
     result = {'frozen_projects': [{'page': n, 'url': p['url'], 'display_name': p['title']}
                                   for n, p in site_frozen.items()], 'frozen_mentions': mentions, 'warnings': []}
+    result['rule_explanations_pending'] = pending_rule_explanations(root)
+    for row in result['rule_explanations_pending']:
+        result['warnings'].append(f"规则讲解待核对：{row['title']}（{row['page']}），"
+                                  f"讲解 {row['checked_release']}，快照 {row['current_release']}；"
+                                  f"原文差异：{row['diff_command']}")
     registry = read(root / 'config/panel-projects.json')['projects']
     repos = {row['route'].rstrip('/') + '/': row.get('source', {}).get('repo', '').split('/')[-1].lower()
              for row in registry}

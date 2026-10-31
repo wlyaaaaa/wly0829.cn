@@ -12,6 +12,7 @@ from unittest.mock import Mock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts/content-refresh"))
 import refresh
+from rule_explanation_status import pending as pending_rule_explanations
 class RefreshTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -41,6 +42,34 @@ class RefreshTests(unittest.TestCase):
             self.assertEqual(refresh.rule_version_task(self.root)["status"], "unknown")
         rules.unlink()
         self.assertEqual(refresh.rule_version_task(self.root)["status"], "unknown")
+
+    def test_rule_explanation_uses_source_hash_and_keeps_version_task_first(self):
+        path = self.root / 'sources/pages/rule-demo/page.json'
+        path.parent.mkdir()
+        page = {'page': 'rule-demo', 'kind': 'rule-topic', 'title': '示例规则',
+                'based_on': {'release': 'E332', 'file': 'sources/rules/docs/contracts/agents.demo.md',
+                             'sha256': 'b' * 64},
+                'explanation_based_on': {'release': 'E331', 'sha256': 'a' * 64}}
+        path.write_text(json.dumps(page), encoding='utf8')
+        rows = pending_rule_explanations(self.root)
+        self.assertEqual([r['page'] for r in rows], ['rule-demo'])
+        task = refresh.task_text({'rule_version_task': {'status': 'mismatch', 'reason': '快照落后'},
+                                  'rule_explanations_pending': rows, 'rows': [], 'manual_tasks': [],
+                                  'semantic_due': {'pages': []}, 'findings': [],
+                                  'observed_at': '2026-10-31T00:00:00+08:00'}, {'writing_points': []})
+        self.assertLess(task.index('首要待办：规则版本'), task.index('规则讲解待核对'))
+        self.assertIn('E331', task)
+        self.assertIn('E332', task)
+        self.assertIn('git diff --no-index', task)
+        from inventory import fact_tasks
+        facts = fact_tasks({'items': [], 'observed_at': '2026-10-31T00:00:00+08:00',
+                            'rule_version_task': {'status': 'mismatch', 'reason': '快照落后'},
+                            'rule_explanations_pending': rows})
+        self.assertLess(facts.index('首要待办：规则版本'), facts.index('规则讲解待核对'))
+        self.assertIn('示例规则', facts)
+        page['based_on']['sha256'] = 'a' * 64
+        path.write_text(json.dumps(page), encoding='utf8')
+        self.assertEqual(pending_rule_explanations(self.root), [])
 
     def test_wsl_failure_names_unavailable_source_without_new_value(self):
         process = Mock(returncode=4294967295)

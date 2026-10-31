@@ -137,6 +137,8 @@ python tools/rule_article_check.py <现在网站构建目录> rules.json        
 
 按需更新活动规则时，在仓库根运行 `python scripts/prepare-astro-release.py refresh --output <规则审计JSON>`，生成已提交的 `sources/rules` 快照与各规则页原文分段；活动原件、公开副本、catalog、指针和入口模板分别绑定 SHA。普通转换和构建只读快照，`scripts/astro_rules.py` 在生产构建中核对活动 E 版身份与完整源清单，不在构建时把本机的新版本写进网页。
 
+Claude 改完规则讲解并按新版原文核对后，更新对应规则页 `page.json` 的 `explanation_based_on`（`release` 和原文 `sha256`）；快照刷新只更新 `based_on`，不代替讲解核对。
+
 页面上只出网页字原文（横版原文卡正文，经 `project_original_html` 公开投影，放在素材库 `rule-paper` 的水彩框里），上面一行版本标签；规则文件开头给维护者看的 owner 行不显示，排好的原文卡也不再另出一份（原文只出现一遍）。
 
 规则快照刷新后全量转换和构建。转换器按每页原文屏重建分段并保留正文顺序，渲染器从当前 Markdown 生成单份 article 和版本标签；正文、模板、分段或活动版不匹配时阻断发布。
