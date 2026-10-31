@@ -266,6 +266,11 @@
      "target": "/skills/authorization-file-broker/",
      "screen": "rule-privacy-data-04",
      "text": "加密文件"
+    },
+    {
+     "target": "/skills/project-entry-gate/",
+     "screen": "rule-privacy-data-06",
+     "text": "改项目前先核对"
     }
    ],
    "live": []
@@ -291,8 +296,8 @@
  },
  "source": {
   "page": "sources/pages/rule-privacy-data/page.json",
-  "sha256": "141af523c7d9f836ca93032b7dbb60487dc4298f0476b9a78f789874cba19805",
-  "converted_at_beijing": "2026-10-31T08:33:36+08:00"
+  "sha256": "677d5f3b9ee6aa51dee53fe8fd425db2a7a8b42fdc8116857a60ac67eaa86bef",
+  "converted_at_beijing": "2026-10-31T10:23:42+08:00"
  }
 }
 ---
@@ -2482,6 +2487,10 @@
     "orientations": [
      "v"
     ]
+   },
+   {
+    "text": "改项目前先核对",
+    "href": "/skills/project-entry-gate/"
    }
   ],
   "anchors": [
@@ -2688,11 +2697,11 @@
 ## 人话要点 · 私人仓库收口、备份跟着原件走
 
 ### 私人仓库收口
-- GitHub 总索引确认是私有、又有写入授权的仓库，远端默认分支要完整同步该入库的内容；不因为私密就打码，也不悄悄漏传。
+- 确认是私有（在 GitHub 上现查，或推送前按〔改项目前先核对〕检查）、又有写入授权的仓库，远端默认分支要完整同步该入库的内容；不因为私密就打码，也不悄悄漏传。
 - 可以不入库的只有五类：明文秘密或 SecretRef；能重建的缓存和生成物；活数据库和频繁变动的大文件；受格式、加密或许可限制的内容；本人说只留本地的内容。不入库要说明原因。
 - 不完整的副本不能叫完整备份，也不等于整盘镜像。
 - 公开仓库里的私密东西，挪到对应的私人配套仓库。
-- 实例：GitHub 总索引给公开项目登记的私人配套仓库是私有的 `public-project-private-backup`（9 月 28 日查“中文语音转写”的登记）。
+- 实例：公开项目配哪个私人配套仓库，登记在〔电脑配置与恢复〕里，用〔改项目前先核对〕技能的配套查询现查；查“中文语音转写”，登记的配套仓库是私有的 `public-project-private-backup`。
 
 ### 备份跟着原件走
 - 这是〔约法 L21〕的细则：G 盘受管备份跟着各自登记的来源，H 盘受管备份跟着 G 盘；新增、修改、删除都同步，不再“只加不删”。
