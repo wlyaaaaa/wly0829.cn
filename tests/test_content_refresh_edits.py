@@ -126,13 +126,29 @@ class NumberEditsTests(unittest.TestCase):
         self.assertEqual(payload["edits"], [])
         self.assertIn("唯一", payload["skipped"][0]["reason"])
 
+    def test_same_screen_unrelated_number_does_not_block_proven_date_pair(self):
+        self.page["screens"][0]["text"] = "**10 份材料**，截至 10 月 9 日。另有 **5 次测试**，日期不明。"
+        self.page["registry"]["numbers"] = []
+        self.save()
+        rows = [dict(id="safe", page="personal-materials", screen="top", field="screens[0].text",
+                     page_pattern=r"\*\*(10) 份材料", old_value="10", new_value=11, status="changed",
+                     scope_status="verified", source_observed_at="2026-10-11T16:03:00+08:00"),
+                dict(id="unsafe", page="personal-materials", screen="top", field="screens[0].text",
+                     page_pattern=r"\*\*(5) 次测试", old_value="5", new_value=6, status="changed",
+                     scope_status="verified", source_observed_at="2026-10-11T16:03:00+08:00")]
+        payload = build_number_edits(self.root, {"rows": rows})
+        self.assertTrue(any(e["record_id"] == "safe" for e in payload["edits"]))
+        self.assertFalse(any(e["record_id"] == "unsafe" for e in payload["edits"]))
+        self.assertTrue(any(r["record_id"] == "unsafe" and "日期" in r["reason"] for r in payload["manual_reviews"]))
+
     def test_event_cutoffs_require_manual_review_and_numbers_keep_their_date(self):
         for meaning in ("库最近一次写入", "上次使用", "最后一次运行", "账本覆盖到此日"):
             self.page["screens"][0]["text"] = "，".join(self.labels) + f"，截至 10 月 9 日（{meaning}）"
             self.save()
             payload = self.build()
-            self.assertEqual(len(payload["manual_reviews"]), 1)
+            self.assertEqual(len(payload["manual_reviews"]), 6)
             self.assertEqual(payload["manual_reviews"][0]["status"], "需人工核对")
+            self.assertTrue(all(r["reason"] for r in payload["manual_reviews"]))
             self.assertFalse(payload["edits"])
             apply_edits(self.root, payload)
             self.assertIn("截至 10 月 9 日", json.loads(self.path.read_text("utf-8"))["screens"][0]["text"])
@@ -142,6 +158,14 @@ class NumberEditsTests(unittest.TestCase):
             self.page["screens"][0]["text"] = "，".join(self.labels) + "\n" + text
             self.save()
             self.assertFalse(self.build()["manual_reviews"])
+
+    def test_declared_manual_date_review_blocks_automatic_replacement(self):
+        self.rows[-1]["manual_review_required"] = True
+        self.rows[-1]["manual_review_note"] = "同一日期位置口径冲突，需人工核对"
+        payload = self.build()
+        self.assertFalse(payload["edits"])
+        self.assertTrue(any("口径冲突" in r["reason"] for r in payload["manual_reviews"]))
+        self.assertTrue(any(r["reason"] == "as_of_link_required" for r in payload["skipped"]))
 
     def test_changed_field_is_reported_and_exact_ranges_do_not_search_another_number(self):
         payload = self.build()
@@ -336,6 +360,8 @@ class NumberEditsTests(unittest.TestCase):
         subprocess.run(argv + ["personal-materials"], check=True, capture_output=True)
         reply = subprocess.run(argv + ["personal-materials"], check=True, capture_output=True, encoding="utf-8")
         self.assertEqual(json.loads(reply.stdout)["already_applied"], 6)
+        self.assertLessEqual(len(reply.stdout.splitlines()), 20)
+        self.assertTrue(Path(json.loads(reply.stdout)["receipt"]).is_file())
 
     def test_datetime_keeps_minutes_seconds_separator_and_timezone_style(self):
         for old, expected in [("2026-10-09 10:00", "2026-10-11 10:34"),

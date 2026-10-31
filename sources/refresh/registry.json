@@ -181,13 +181,10 @@
       "category": "某个 JSON 字段",
       "source_location": "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json；仅status=pass且reason=e_rules_active_verified时取verified_current.release_id",
       "retrieve": {
-        "kind": "rules_inspect",
-        "pointer": [
-          "verified_current",
-          "release_id"
-        ]
+        "kind": "manual",
+        "instructions": "本站规则页固定 E325 发布快照，活动 E331 属另一来源；由规则页 Owner 核对同版快照与写稿后重绑，不能把活动版直接填进旧页。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": false,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-jia\\content-refresh-jia.md",
@@ -206,7 +203,9 @@
       "checked_at": "2026-10-30T11:06:11+08:00",
       "source_observed_at": "2026-10-30T11:06:11+08:00",
       "source_coverage_end": null,
-      "observation_basis": "live_read"
+      "observation_basis": "live_read",
+      "manual_reason": "judgment",
+      "manual_route": "本站规则页固定 E325 发布快照，活动 E331 属另一来源；由规则页 Owner 核对同版快照与写稿后重绑，不能把活动版直接填进旧页。"
     },
     {
       "id": "agents-n-verify-time-0",
@@ -2805,7 +2804,7 @@
       },
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
       "refreshed_value": 15,
       "page_pattern": "一个每 ([\\d]+(?:\\.\\d+)?) 分钟跑一轮",
@@ -2814,7 +2813,7 @@
       "measurement_scope": "真实启用重复触发器间隔秒/60；需同时核对Reasons不含guardian-periodic-trigger-missing，默认值不冒充有效周期。",
       "scope_evidence": "本轮读取来源与源码；见pc-findings.md",
       "manual_reason": "source_broken",
-      "manual_route": "RamdiskGuardian Owner与网站发布者：旧项目入口已退役，确认当前项目边界及可用只读入口后重绑；不从Git历史恢复旧运行功能。"
+      "manual_route": "旧项目入口已退役；本条只作为冻结页的历史观察保留 2026-10-10 的值和日期。恢复当前取数须由 Owner 明确提供新入口及新页面语义。"
     },
     {
       "id": "ramdisk-guardian-n-image-now-0",
@@ -6036,14 +6035,10 @@
       "category": "人工",
       "source_location": "G:\\80_Backup\\ControlPlane\\wechat-hot-last.json",
       "retrieve": {
-        "kind": "json",
-        "path": "G:\\80_Backup\\ControlPlane\\wechat-hot-last.json",
-        "pointer": [
-          "file_count"
-        ],
-        "operation": "value"
+        "kind": "manual",
+        "instructions": "正文现行 G 副本与登记卡旧微信备份不是同一批；由 DevConfig Owner 对同一回执重新登记卡片和正文口径。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": true,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
@@ -6067,7 +6062,9 @@
       "checked_at": "2026-10-30T11:06:17+08:00",
       "source_observed_at": "2026-10-30T02:10:50.807158+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T02:10:50.807158+00:00"
+      "observed_at": "2026-10-30T02:10:50.807158+00:00",
+      "manual_reason": "judgment",
+      "manual_route": "正文现行 G 副本与登记卡旧微信备份不是同一批；由 DevConfig Owner 对同一回执重新登记卡片和正文口径。"
     },
     {
       "id": "devconfig-backup-n-wechat-files-1",
@@ -6079,16 +6076,10 @@
       "category": "人工",
       "source_location": "G:\\80_Backup\\ControlPlane\\wechat-hot-last.json",
       "retrieve": {
-        "kind": "json",
-        "path": "G:\\80_Backup\\ControlPlane\\wechat-hot-last.json",
-        "pointer": [
-          "bytes"
-        ],
-        "operation": "value",
-        "scale": 9.313225746154785e-10,
-        "digits": 1
+        "kind": "manual",
+        "instructions": "正文现行 G 副本与登记卡旧微信备份不是同一批；由 DevConfig Owner 对同一回执重新登记卡片和正文口径。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": true,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
@@ -6112,7 +6103,9 @@
       "checked_at": "2026-10-30T11:06:17+08:00",
       "source_observed_at": "2026-10-30T02:10:50.807158+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T02:10:50.807158+00:00"
+      "observed_at": "2026-10-30T02:10:50.807158+00:00",
+      "manual_reason": "judgment",
+      "manual_route": "正文现行 G 副本与登记卡旧微信备份不是同一批；由 DevConfig Owner 对同一回执重新登记卡片和正文口径。"
     },
     {
       "id": "devconfig-backup-n-config-files-0",
@@ -6124,14 +6117,10 @@
       "category": "某个 JSON 字段",
       "source_location": "E:\\Projects\\Backups\\devconfig-backup\\out\\latest.zip.receipt.json",
       "retrieve": {
-        "kind": "json",
-        "path": "E:\\Projects\\Backups\\devconfig-backup\\out\\latest.zip.receipt.json",
-        "pointer": [
-          "file_count"
-        ],
-        "operation": "value"
+        "kind": "manual",
+        "instructions": "正文最新配置包与登记卡 10 月 10 日旧包不是同一批；由 DevConfig Owner 核对包回执后重绑。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": false,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
@@ -6153,7 +6142,9 @@
       "checked_at": "2026-10-30T11:06:17+08:00",
       "source_observed_at": "2026-10-27T04:08:56.069760+00:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-27T04:08:56.069760+00:00"
+      "observed_at": "2026-10-27T04:08:56.069760+00:00",
+      "manual_reason": "judgment",
+      "manual_route": "正文最新配置包与登记卡 10 月 10 日旧包不是同一批；由 DevConfig Owner 核对包回执后重绑。"
     },
     {
       "id": "devconfig-backup-n-config-size-0",
@@ -7649,13 +7640,10 @@
       "category": "只读自动统计",
       "source_location": "E:/Projects/Tools/TimeAudit/grafana_dashboards/*.json；修复后的现有timeaudit-grafana-counts只读入口，V2 elements与旧panels分支按真实结构计数。",
       "retrieve": {
-        "kind": "entry",
-        "entry": "timeaudit-grafana-counts",
-        "pointer": [
-          "main_panels"
-        ]
+        "kind": "manual",
+        "instructions": "登记卡含两项合写且当前定位是第二项；由 TimeAudit Owner 分开绑定图数，保留旧日期。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": false,
       "historical": false,
       "report_ref": "E:/Cache/Claude/Temp/6428793e/gpt-children/20261011-174134-web-bind-B2-f81fad6f/round-01/evidence/timeaudit-findings.md",
@@ -7674,7 +7662,9 @@
       "source_observed_at": "2026-10-30T13:00:44+08:00",
       "checked_at": "2026-10-30T13:00:44+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T13:00:44+08:00"
+      "observed_at": "2026-10-30T13:00:44+08:00",
+      "manual_reason": "judgment",
+      "manual_route": "登记卡含两项合写且当前定位是第二项；由 TimeAudit Owner 分开绑定图数，保留旧日期。"
     },
     {
       "id": "timeaudit-n-clip-0",
@@ -7885,17 +7875,10 @@
       "category": "只读自动统计",
       "source_location": "E:/Projects/Tools/TimeAudit/timeaudit_health.py → G:/80_Backup/TimeAudit/postgresql/time_audit_*.dump文件元数据",
       "retrieve": {
-        "kind": "entry",
-        "entry": "timeaudit-health",
-        "pointer": [
-          "components",
-          "backup",
-          "size_mib"
-        ],
-        "scale": 0.0009765625,
-        "digits": 1
+        "kind": "manual",
+        "instructions": "正文现行最近备份与登记卡 10 月 11 日历史备份不同批；由 TimeAudit Owner 按当前备份回执重绑。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": true,
       "historical": false,
       "report_ref": "E:/Cache/Claude/Temp/6428793e/gpt-children/20261011-174134-web-bind-B2-f81fad6f/round-01/evidence/timeaudit-findings.md",
@@ -7912,7 +7895,9 @@
       "source_observed_at": "2026-10-30T11:06:27+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:27+08:00"
+      "observed_at": "2026-10-30T11:06:27+08:00",
+      "manual_reason": "judgment",
+      "manual_route": "正文现行最近备份与登记卡 10 月 11 日历史备份不同批；由 TimeAudit Owner 按当前备份回执重绑。"
     },
     {
       "id": "timeaudit-n-backup-1",
@@ -12993,7 +12978,9 @@
       "source_observed_at": "2026-10-30T11:06:25+08:00",
       "source_coverage_end": null,
       "observation_basis": "snapshot_timestamp",
-      "observed_at": "2026-10-30T11:06:25+08:00"
+      "observed_at": "2026-10-30T11:06:25+08:00",
+      "manual_review_required": true,
+      "manual_review_note": "首屏同一日期位置被三条登记复用，分别绑定看板、硬件记录、程序生命周期且观察分钟不同；由 TimeAudit Owner 核对整句共同截至时间和全部相关数字后合并为一条日期绑定。此前保留旧日期。"
     },
     {
       "id": "timeaudit-cutoff-clip",
@@ -19099,13 +19086,10 @@
       "field": "screens[4].text",
       "page_pattern": "当前 (E\\d+)（",
       "retrieve": {
-        "kind": "entry",
-        "entry": "e-rules-inspect",
-        "pointer": [
-          "release_id"
-        ]
+        "kind": "manual",
+        "instructions": "正文描述的是 E325 发布快照及关联提交；由规则页 Owner 在同版快照完成后人工改稿与重绑。"
       },
-      "automatic": true,
+      "automatic": false,
       "scope_status": "verified",
       "measurement_scope": "正式活动规则Inspect -Brief只读核验pass/e_rules_active_verified才返回release_id；不代表任何业务功能已经验收。",
       "source_location": "正式活动规则Inspect -Brief只读核验pass/e_rules_active_verified才返回release_id；不代表任何业务功能已经验收。",
@@ -19116,7 +19100,9 @@
       "source_observed_at": "2026-10-30T11:07:07+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:07+08:00"
+      "observed_at": "2026-10-30T11:07:07+08:00",
+      "manual_reason": "judgment",
+      "manual_route": "正文描述的是 E325 发布快照及关联提交；由规则页 Owner 在同版快照完成后人工改稿与重绑。"
     },
     {
       "id": "b7-agents-rules-contracts-release-file-count",
@@ -22038,7 +22024,9 @@
       "source_observed_at": "2026-10-30T11:07:28+08:00",
       "source_coverage_end": null,
       "observation_basis": "snapshot_timestamp",
-      "observed_at": "2026-10-30T11:07:28+08:00"
+      "observed_at": "2026-10-30T11:07:28+08:00",
+      "manual_reason": "judgment",
+      "manual_route": "由 LocalOCR Owner 只读核对 qualifies 所列各项同一次真实来源观察时间和本句完整日期时间；任一缺观察依据或口径不同，保留旧日期并标 Unknown，不拼接旧时分。"
     },
     {
       "id": "b7-localocr-results-evidence-081",
@@ -22120,7 +22108,9 @@
       "source_observed_at": "2026-10-30T11:07:28+08:00",
       "source_coverage_end": null,
       "observation_basis": "snapshot_timestamp",
-      "observed_at": "2026-10-30T11:07:28+08:00"
+      "observed_at": "2026-10-30T11:07:28+08:00",
+      "manual_reason": "judgment",
+      "manual_route": "由 LocalOCR Owner 只读核对 qualifies 所列各项同一次真实来源观察时间和本句完整日期时间；任一缺观察依据或口径不同，保留旧日期并标 Unknown，不拼接旧时分。"
     },
     {
       "id": "b7-localocr-results-evidence-085",
@@ -22216,16 +22206,10 @@
       "category": "配置/计数",
       "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
       "retrieve": {
-        "kind": "json",
-        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
-        "pointer": [
-          "profiles",
-          2,
-          "options",
-          "use_table_recognition"
-        ]
+        "kind": "manual",
+        "instructions": "来源为布尔配置，正文为合写中文状态；由 LocalOCR Owner 核对各开关与整句后人工同步，不能把 true/false 直接替换中文词。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": false,
       "historical": false,
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
@@ -22235,7 +22219,9 @@
       "checked_at": "2026-10-30T11:07:12+08:00",
       "source_observed_at": "2026-10-30T11:07:12+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:12+08:00"
+      "observed_at": "2026-10-30T11:07:12+08:00",
+      "manual_reason": "judgment",
+      "manual_route": "来源为布尔配置，正文为合写中文状态；由 LocalOCR Owner 核对各开关与整句后人工同步，不能把 true/false 直接替换中文词。"
     },
     {
       "id": "b7-localocr-document-structure-config-use_formula_recognition",
@@ -22248,16 +22234,10 @@
       "category": "配置/计数",
       "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
       "retrieve": {
-        "kind": "json",
-        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
-        "pointer": [
-          "profiles",
-          2,
-          "options",
-          "use_formula_recognition"
-        ]
+        "kind": "manual",
+        "instructions": "来源为布尔配置，正文为合写中文状态；由 LocalOCR Owner 核对各开关与整句后人工同步，不能把 true/false 直接替换中文词。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": false,
       "historical": false,
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
@@ -22267,7 +22247,9 @@
       "checked_at": "2026-10-30T11:07:12+08:00",
       "source_observed_at": "2026-10-30T11:07:12+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:12+08:00"
+      "observed_at": "2026-10-30T11:07:12+08:00",
+      "manual_reason": "judgment",
+      "manual_route": "来源为布尔配置，正文为合写中文状态；由 LocalOCR Owner 核对各开关与整句后人工同步，不能把 true/false 直接替换中文词。"
     },
     {
       "id": "b7-localocr-document-structure-config-use_seal_recognition",
@@ -22280,16 +22262,10 @@
       "category": "配置/计数",
       "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
       "retrieve": {
-        "kind": "json",
-        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
-        "pointer": [
-          "profiles",
-          2,
-          "options",
-          "use_seal_recognition"
-        ]
+        "kind": "manual",
+        "instructions": "来源为布尔配置，正文为合写中文状态；由 LocalOCR Owner 核对各开关与整句后人工同步，不能把 true/false 直接替换中文词。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": false,
       "historical": false,
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
@@ -22299,7 +22275,9 @@
       "checked_at": "2026-10-30T11:07:12+08:00",
       "source_observed_at": "2026-10-30T11:07:12+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:12+08:00"
+      "observed_at": "2026-10-30T11:07:12+08:00",
+      "manual_reason": "judgment",
+      "manual_route": "来源为布尔配置，正文为合写中文状态；由 LocalOCR Owner 核对各开关与整句后人工同步，不能把 true/false 直接替换中文词。"
     },
     {
       "id": "b7-localocr-document-structure-config-use_region_detection",
@@ -22312,16 +22290,10 @@
       "category": "配置/计数",
       "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
       "retrieve": {
-        "kind": "json",
-        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
-        "pointer": [
-          "profiles",
-          2,
-          "options",
-          "use_region_detection"
-        ]
+        "kind": "manual",
+        "instructions": "来源为布尔配置，正文为合写中文状态；由 LocalOCR Owner 核对各开关与整句后人工同步，不能把 true/false 直接替换中文词。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": false,
       "historical": false,
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
@@ -22331,7 +22303,9 @@
       "checked_at": "2026-10-30T11:07:12+08:00",
       "source_observed_at": "2026-10-30T11:07:12+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:12+08:00"
+      "observed_at": "2026-10-30T11:07:12+08:00",
+      "manual_reason": "judgment",
+      "manual_route": "来源为布尔配置，正文为合写中文状态；由 LocalOCR Owner 核对各开关与整句后人工同步，不能把 true/false 直接替换中文词。"
     },
     {
       "id": "b7-localocr-document-structure-config-format_block_content",
@@ -22344,16 +22318,10 @@
       "category": "配置/计数",
       "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
       "retrieve": {
-        "kind": "json",
-        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
-        "pointer": [
-          "profiles",
-          2,
-          "options",
-          "format_block_content"
-        ]
+        "kind": "manual",
+        "instructions": "来源为布尔配置，正文为合写中文状态；由 LocalOCR Owner 核对各开关与整句后人工同步，不能把 true/false 直接替换中文词。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": false,
       "historical": false,
       "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
@@ -22363,7 +22331,9 @@
       "checked_at": "2026-10-30T11:07:13+08:00",
       "source_observed_at": "2026-10-30T11:07:13+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:13+08:00"
+      "observed_at": "2026-10-30T11:07:13+08:00",
+      "manual_reason": "judgment",
+      "manual_route": "来源为布尔配置，正文为合写中文状态；由 LocalOCR Owner 核对各开关与整句后人工同步，不能把 true/false 直接替换中文词。"
     },
     {
       "id": "b7-localocr-document-structure-config-use_chart_recognition",
@@ -22376,16 +22346,10 @@
       "category": "配置/计数",
       "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
       "retrieve": {
-        "kind": "json",
-        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
-        "pointer": [
-          "profiles",
-          2,
-          "options",
-          "use_chart_recognition"
-        ]
+        "kind": "manual",
+        "instructions": "来源为布尔配置，正文为合写中文状态；由 LocalOCR Owner 核对各开关与整句后人工同步，不能把 true/false 直接替换中文词。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": false,
       "historical": false,
       "page_pattern": "use_chart_recognition=(false)",
@@ -22395,7 +22359,9 @@
       "checked_at": "2026-10-30T11:07:13+08:00",
       "source_observed_at": "2026-10-30T11:07:13+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:13+08:00"
+      "observed_at": "2026-10-30T11:07:13+08:00",
+      "manual_reason": "judgment",
+      "manual_route": "来源为布尔配置，正文为合写中文状态；由 LocalOCR Owner 核对各开关与整句后人工同步，不能把 true/false 直接替换中文词。"
     },
     {
       "id": "b7-localocr-document-structure-config-profile-identity",
@@ -22408,15 +22374,10 @@
       "category": "配置",
       "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
       "retrieve": {
-        "kind": "json",
-        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
-        "pointer": [
-          "profiles",
-          2,
-          "id"
-        ]
+        "kind": "manual",
+        "instructions": "来源为布尔配置，正文为合写中文状态；由 LocalOCR Owner 核对各开关与整句后人工同步，不能把 true/false 直接替换中文词。"
       },
-      "automatic": true,
+      "automatic": false,
       "private": false,
       "historical": false,
       "page_pattern": "- (pp-structure-v3) profile 使用",
@@ -22426,7 +22387,9 @@
       "checked_at": "2026-10-30T11:07:13+08:00",
       "source_observed_at": "2026-10-30T11:07:13+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:13+08:00"
+      "observed_at": "2026-10-30T11:07:13+08:00",
+      "manual_reason": "judgment",
+      "manual_route": "来源为布尔配置，正文为合写中文状态；由 LocalOCR Owner 核对各开关与整句后人工同步，不能把 true/false 直接替换中文词。"
     },
     {
       "id": "b7-agents-context-evidence-owner-decision-sections",
@@ -36011,7 +35974,9 @@
       "source_observed_at": "2026-10-30T11:07:04+08:00",
       "source_coverage_end": null,
       "observation_basis": "snapshot_timestamp",
-      "observed_at": "2026-10-30T11:07:04+08:00"
+      "observed_at": "2026-10-30T11:07:04+08:00",
+      "manual_review_required": true,
+      "manual_review_note": "首屏同一日期位置被三条登记复用，分别绑定看板、硬件记录、程序生命周期且观察分钟不同；由 TimeAudit Owner 核对整句共同截至时间和全部相关数字后合并为一条日期绑定。此前保留旧日期。"
     },
     {
       "id": "timeaudit-asof-clipboard-totals",
@@ -36888,7 +36853,9 @@
       "source_observed_at": "2026-10-30T11:07:05+08:00",
       "source_coverage_end": null,
       "observation_basis": "snapshot_timestamp",
-      "observed_at": "2026-10-30T11:07:05+08:00"
+      "observed_at": "2026-10-30T11:07:05+08:00",
+      "manual_review_required": true,
+      "manual_review_note": "首屏同一日期位置被三条登记复用，分别绑定看板、硬件记录、程序生命周期且观察分钟不同；由 TimeAudit Owner 核对整句共同截至时间和全部相关数字后合并为一条日期绑定。此前保留旧日期。"
     },
     {
       "automatic": true,
@@ -41198,8 +41165,8 @@
       "historical": false,
       "scope_status": "verified",
       "retrieve": {
-        "kind": "json",
-        "path": "E:/Projects/Tools/TURZX-SideScreen/tools/turzx_side_screen/out/stream/stream-heartbeat.json",
+        "kind": "entry",
+        "entry": "pc-panel-heartbeat-admin",
         "pointer": [
           "frame"
         ]
@@ -41226,8 +41193,8 @@
       "historical": false,
       "scope_status": "verified",
       "retrieve": {
-        "kind": "json",
-        "path": "E:/Projects/Tools/TURZX-SideScreen/tools/turzx_side_screen/out/stream/stream-heartbeat.json",
+        "kind": "entry",
+        "entry": "pc-panel-heartbeat-admin",
         "pointer": [
           "failed"
         ]
@@ -41972,8 +41939,8 @@
       "historical": false,
       "scope_status": "verified",
       "retrieve": {
-        "kind": "json",
-        "path": "E:/Projects/Tools/TURZX-SideScreen/tools/turzx_side_screen/out/stream/stream-heartbeat.json",
+        "kind": "entry",
+        "entry": "pc-panel-heartbeat-admin",
         "pointer": [
           "period_ms"
         ]
@@ -42000,8 +41967,8 @@
       "historical": false,
       "scope_status": "verified",
       "retrieve": {
-        "kind": "json",
-        "path": "E:/Projects/Tools/TURZX-SideScreen/tools/turzx_side_screen/out/stream/stream-heartbeat.json",
+        "kind": "entry",
+        "entry": "pc-panel-heartbeat-admin",
         "pointer": [
           "frame"
         ]
@@ -42207,7 +42174,7 @@
       "as_of": "2026-10-30",
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "retrieve": {
         "kind": "json",
@@ -42223,7 +42190,8 @@
       "source_observed_at_pointer": [
         "completed_at"
       ],
-      "date_semantics": "event_time"
+      "date_semantics": "event_time",
+      "manual_route": "本条只记 2026-10-30 当次备份事件的北京时间；后续最新回执不能覆盖历史时分。"
     },
     {
       "id": "oct30-g3-103",
@@ -42265,7 +42233,7 @@
       "as_of": "2026-10-30",
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "retrieve": {
         "kind": "json",
@@ -42281,7 +42249,8 @@
       "source_observed_at_pointer": [
         "completed_at"
       ],
-      "date_semantics": "event_time"
+      "date_semantics": "event_time",
+      "manual_route": "本条只记 2026-10-30 当次备份事件的北京时间；后续最新回执不能覆盖历史时分。"
     },
     {
       "id": "oct30-g3-105",
@@ -42294,7 +42263,7 @@
       "as_of": "2026-10-30",
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "retrieve": {
         "kind": "json",
@@ -42310,7 +42279,8 @@
       "source_observed_at_pointer": [
         "completed_at"
       ],
-      "date_semantics": "event_time"
+      "date_semantics": "event_time",
+      "manual_route": "本条只记 2026-10-30 当次备份事件的北京时间；后续最新回执不能覆盖历史时分。"
     },
     {
       "id": "oct30-g3-106",
@@ -42381,7 +42351,7 @@
       "as_of": "2026-10-30",
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "retrieve": {
         "kind": "json",
@@ -42397,7 +42367,8 @@
       "source_observed_at_pointer": [
         "completed_at"
       ],
-      "date_semantics": "event_time"
+      "date_semantics": "event_time",
+      "manual_route": "本条只记 2026-10-30 当次备份事件的北京时间；后续最新回执不能覆盖历史时分。"
     },
     {
       "id": "oct30-g3-109",

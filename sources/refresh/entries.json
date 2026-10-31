@@ -1826,5 +1826,23 @@
     "timeout": 20,
     "source_evidence": "只读手机App周期源码、电脑现行任务注册源码及Git提交时间，不连手机、不读取定位/使用/装机记录、不安装或运行采集。",
     "observation_basis": "live_read"
+  },
+  "pc-panel-heartbeat-admin": {
+    "argv": [
+      "sudo",
+      "--inline",
+      "pwsh",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "Get-Content -LiteralPath 'E:/Projects/Tools/TURZX-SideScreen/tools/turzx_side_screen/out/stream/stream-heartbeat.json' -Raw"
+    ],
+    "cwd": "E:/Projects/Tools/TURZX-SideScreen",
+    "read_only": true,
+    "owner_project": "pc-panel-hub",
+    "output": "json",
+    "timeout": 20,
+    "observation_basis": "snapshot_timestamp",
+    "verification": "完整可见性只读入口；sudo 配置为 inline；失败时保留旧值旧日期"
   }
 }
