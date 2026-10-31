@@ -38,6 +38,10 @@
    "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af",
    "public_sha256": "1feedbf6008434b7c9ea96494f6e1652df4ce59925b3eda00f1ea9d7b81ce8c6"
   },
+  "explanation_based_on": {
+   "release": "E331",
+   "sha256": "5f8e1e95682b8c293e2f29c0f5b3dcdf3e2e6ba235847d5490c6004aaee227af"
+  },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小路起点的 AI 助手抱着文件轻快走几步，“直接做”木牌旁的草叶轻轻摇；栅栏门前的信封、硬币和小木箱静静排着，门边的人影抬手，栅栏门缓缓打开一条缝又合上；木桩上的绿色通行证随风轻摆；小桌上的沙漏翻转一次、细沙往下流，旁边的金色钥匙闪一下光；右上角两扇小窗户里亮起柔和的光，中间的绿色盾牌徽章轻轻呼吸；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
    "groups": [],
@@ -237,8 +241,8 @@
  },
  "source": {
   "page": "sources/pages/rule-authorization/page.json",
-  "sha256": "4da70bff3b532ce270dfa09a951dfb3e07d59d84e2b70665acbadb0a4e58751a",
-  "converted_at_beijing": "2026-10-31T08:33:35+08:00"
+  "sha256": "ddff93ca2b88231a7087a3a004c1e2ff2c5b0d5b4996734c3bdbb2e915a48116",
+  "converted_at_beijing": "2026-10-31T11:19:47+08:00"
  }
 }
 ---

@@ -38,6 +38,10 @@
    "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
    "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da"
   },
+  "explanation_based_on": {
+   "release": "E331",
+   "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2"
+  },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小 AI 助手抬手从洞洞板上取下放大镜看了看又挂回去，洞洞板上的 Chrome、Gmail、Google 云盘三个标志轻轻晃动；脚边贴着“E:”的绿色储物箱里几片绿叶慢慢舒展；右下笔记本电脑屏幕上的看板里，三个小圆点状态灯依次轻轻呼吸（绿、绿、黄）；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，三块小牌子上的字保持不动、不变形。",
   "registry": {
    "groups": [],
@@ -401,8 +405,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "2ab62305709b82ab8786033a4754ad112c65b7b56d4b4ad726150040518c3107",
-  "converted_at_beijing": "2026-10-31T10:23:37+08:00"
+  "sha256": "a278ec429731b66ea1851365bdd95e4a235bdd6ef6f9e9f0ec1a6fde7181ec62",
+  "converted_at_beijing": "2026-10-31T11:19:47+08:00"
  }
 }
 ---

@@ -32,6 +32,10 @@
    "activated_at": "2026-10-31T07:37:25.088872+08:00",
    "file": "sources/rules/release.json"
   },
+  "explanation_based_on": {
+   "release": "E331",
+   "sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103"
+  },
   "video_prompt": "5–8 秒循环：从开头这屏的水彩书架出发，上层那本深绿精装书的丝带书签被微风轻轻吹动，下层 10 本薄册子从左到右依次微微亮起一层浅绿光再暗下去，几片水彩绿叶从画面上方缓缓飘落；画面里不出现任何字，镜头不动。",
   "registry": {
    "groups": [
@@ -247,8 +251,8 @@
  },
  "source": {
   "page": "sources/pages/rules-home/page.json",
-  "sha256": "b8004a25c0be63e817b6d9855e61289ddd3801aec5d52e8f8fceef6cf7962372",
-  "converted_at_beijing": "2026-10-31T08:33:35+08:00"
+  "sha256": "a9b955cf48645505cbbabd236cbda82d686e6e7573b553354eeaf355b2c16004",
+  "converted_at_beijing": "2026-10-31T11:19:48+08:00"
  }
 }
 ---

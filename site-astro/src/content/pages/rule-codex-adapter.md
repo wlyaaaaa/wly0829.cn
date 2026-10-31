@@ -38,6 +38,10 @@
    "sha256": "d982f5455f63fc61c9a3fd433cab1b24c38de2b25716a4d43fd53c706377dbe7",
    "public_sha256": "ae67a463e28ac81948d3462fb90cec9ecce6087913efe01ce564109af7bfd580"
   },
+  "explanation_based_on": {
+   "release": "E331",
+   "sha256": "d982f5455f63fc61c9a3fd433cab1b24c38de2b25716a4d43fd53c706377dbe7"
+  },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：笔记本电脑屏幕上的终端光标轻轻闪烁；上方写着“Hook”的小铃铛轻轻摇一下，垂着的两张小纸条（锁、钥匙图标）随之晃动；左边“AGENTS.md”木牌指向远处厚书的细绿箭头上，一个小光点从木牌流向书本；右边两个小 AI 助手举着的牌子微微上下晃；右下“codex-root”工牌后的细绿线从下往上依次点亮几个小方块，最后亮到电脑；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，四块牌子上的字保持不动、不变形。",
   "registry": {
    "groups": [],
@@ -226,8 +230,8 @@
  },
  "source": {
   "page": "sources/pages/rule-codex-adapter/page.json",
-  "sha256": "6f196a36f6ad457202566d9f9ff64dd86d8de26fc80c0c8c4b2bb5873a3390bc",
-  "converted_at_beijing": "2026-10-31T10:23:39+08:00"
+  "sha256": "41ea235086ed04ba3745eae6f5e9f557e7d9516263e932b2db7bd717fa35d78f",
+  "converted_at_beijing": "2026-10-31T11:19:47+08:00"
  }
 }
 ---

@@ -46,6 +46,10 @@
    "sha256": "e3f69696a8156e3c1f663cdfca978d5567e880c3a094f0af5d430694b6e3e8a0",
    "public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf"
   },
+  "explanation_based_on": {
+   "release": "E331",
+   "sha256": "e3f69696a8156e3c1f663cdfca978d5567e880c3a094f0af5d430694b6e3e8a0"
+  },
   "video_prompt": "5–8 秒无缝循环，白底水彩风，和开头一屏的插画一致：书桌上那本摊开的精装厚书，书页被一阵微风轻轻掀起一两页又落回原处；绿色丝带书签微微摆动；书页上浅绿色的细横线从左到右依次淡淡亮起一遍，像有人一行行读过去；书上方 Claude 和 OpenAI 两个小徽章轻轻上下浮动；几片水彩绿叶从右上角慢慢飘落。镜头固定，不出现任何文字。",
   "registry": {
    "groups": [],
@@ -165,8 +169,8 @@
  },
  "source": {
   "page": "sources/pages/charter/page.json",
-  "sha256": "d22c1a323fef736e52a52147e0c916d3ace8f343dc3383dd4a1b56cfd7c3dbec",
-  "converted_at_beijing": "2026-10-31T08:33:35+08:00"
+  "sha256": "09eec94ede5ff63dc6e08da0cb6aaf26ea687bdacba1787a85773832b708aa7d",
+  "converted_at_beijing": "2026-10-31T11:19:42+08:00"
  }
 }
 ---

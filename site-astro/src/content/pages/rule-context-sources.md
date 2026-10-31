@@ -38,6 +38,10 @@
    "sha256": "6f9ecadfa0079f844e8e90a19715675acf569f483042af5b515d131fd18497c8",
    "public_sha256": "8fab647f710d95ff2d829139f9a6ae9b47be3af10527f36869ed9977846ff9d3"
   },
+  "explanation_based_on": {
+   "release": "E331",
+   "sha256": "6f9ecadfa0079f844e8e90a19715675acf569f483042af5b515d131fd18497c8"
+  },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：林间小路上几片叶子缓缓飘落；三座小木屋的窗子依次亮起暖光又暗下；路口三叉指路牌的三只箭头轮流微微发亮；路边贴着雪花封条的小木箱上，霜花轻轻闪一下；摊开的厚书被风翻过两页，绿色书签始终夹在原处、尾巴轻轻摆动；背景淡水彩纸纹缓慢流动。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
    "groups": [],
@@ -435,8 +439,8 @@
  },
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
-  "sha256": "ae7fbb249d40cad7c57eeb07751da514a72cbf6eeedf922142f878fe17ba0725",
-  "converted_at_beijing": "2026-10-31T10:26:45+08:00"
+  "sha256": "4d9f638c1b2470348f848948856769f79932c5dffb132c7ee2fa7c3cd72a1fab",
+  "converted_at_beijing": "2026-10-31T11:19:47+08:00"
  }
 }
 ---

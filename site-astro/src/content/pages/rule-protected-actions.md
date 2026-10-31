@@ -38,6 +38,10 @@
    "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73",
    "public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3"
   },
+  "explanation_based_on": {
+   "release": "E331",
+   "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73"
+  },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：推小推车的小 AI 助手走到白绿木栏杆前停下；岗亭里戴眼镜的小 AI 助手抬头看一眼单子、点点头；桌上四选一托盘里的黄铜钥匙轻轻亮一下，手机屏幕上的六个圆点依次亮起又熄灭；木栏杆缓缓抬起一半又落回原位；远处 GitHub 小木屋的烟囱冒出一缕淡绿的烟；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子和纸条上的字保持不动、不变形，手机屏幕上不出现数字。",
   "registry": {
    "groups": [],
@@ -254,8 +258,8 @@
  },
  "source": {
   "page": "sources/pages/rule-protected-actions/page.json",
-  "sha256": "487e4240d549a138fb86169632fb1e0e9cbaf786bbcbc8f15ede5ca8f7508f6f",
-  "converted_at_beijing": "2026-10-31T10:23:43+08:00"
+  "sha256": "a9346fc184132b7d7aa0ae98d3b3410df87f7d9019b1c3b0d3a76d3b4eb1711e",
+  "converted_at_beijing": "2026-10-31T11:19:48+08:00"
  }
 }
 ---

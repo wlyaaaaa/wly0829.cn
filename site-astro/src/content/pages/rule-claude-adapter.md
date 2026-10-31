@@ -38,6 +38,10 @@
    "sha256": "7bf2f5f6c71923ac25c4b8f92d6064bfecbe15667c8a1af5b38889c46bcb15f9",
    "public_sha256": "b88a2b60120cac858b46ac033bc27f025bf023620e10fcc3bc442d4c8493e4e2"
   },
+  "explanation_based_on": {
+   "release": "E331",
+   "sha256": "7bf2f5f6c71923ac25c4b8f92d6064bfecbe15667c8a1af5b38889c46bcb15f9"
+  },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：Claude 橙色星芒小窗口轻轻亮一下，一颗小绿光点顺着垂下的绿色细绳经过三个小木块，落到底部的铜牌上，铜牌微微一闪；右边五级木台阶从 low 到 max 依次泛起一层浅绿光；台阶顶上的小木桥上走过一张小任务卡，被右边胸前是 OpenAI 黑色花结的小机器人接住；左下角木钩上的便签轻轻摆动；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，牌子上的字保持不动、不变形。",
   "registry": {
    "groups": [],
@@ -239,8 +243,8 @@
  },
  "source": {
   "page": "sources/pages/rule-claude-adapter/page.json",
-  "sha256": "95d2a382c941a67d053823e8e1188bcf808cebcee06365ef242c8170833b8dec",
-  "converted_at_beijing": "2026-10-31T10:23:38+08:00"
+  "sha256": "64675c991e3213b89aafa49e5309dcefac2c1c3b9a0dc443be17cd3eeee723e7",
+  "converted_at_beijing": "2026-10-31T11:19:47+08:00"
  }
 }
 ---

@@ -38,6 +38,10 @@
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
    "public_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669"
   },
+  "explanation_based_on": {
+   "release": "E331",
+   "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629"
+  },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：一只手把验证卡轻轻贴到小木柜的绿色挂锁上，挂锁“咔”地弹开，旁边的小沙漏翻转、细沙开始往下流；中间五级石台阶从 L1 到 L5 依次微微亮一下，L4 台阶上的小保险箱始终关着；下面 G、H 两块硬盘之间一道细绿光从左流到右，H 盘旁小木箱上的日历牌翻过一页；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
    "groups": [],
@@ -296,8 +300,8 @@
  },
  "source": {
   "page": "sources/pages/rule-privacy-data/page.json",
-  "sha256": "677d5f3b9ee6aa51dee53fe8fd425db2a7a8b42fdc8116857a60ac67eaa86bef",
-  "converted_at_beijing": "2026-10-31T10:23:42+08:00"
+  "sha256": "cf64542241e8311730d20c78c6cfdc390336fee75df40c72bb736b51cd990236",
+  "converted_at_beijing": "2026-10-31T11:19:47+08:00"
  }
 }
 ---

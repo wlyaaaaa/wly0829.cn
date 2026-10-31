@@ -38,6 +38,10 @@
    "sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
    "public_sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b"
   },
+  "explanation_based_on": {
+   "release": "E331",
+   "sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b"
+  },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：玻璃柜里书架上标着 E187 的那本书轻轻发出一圈淡绿的光，路标上“当前”那块木牌微微晃动后稳稳指向它；一只手伸过来想推开玻璃柜门，黄铜锁扣上的“SYSTEM”小铜牌闪一下，门纹丝不动，手缩回；地上两只印着 Claude 和 OpenAI 标志的小信封轻轻翻开又合上；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，书脊和牌子上的字保持不动、不变形。",
   "registry": {
    "groups": [],
@@ -152,8 +156,8 @@
  },
  "source": {
   "page": "sources/pages/rule-rule-release/page.json",
-  "sha256": "134d5620a4f41593f0369d0f8181858d8438b15653f74b30ddbf1cb25809321e",
-  "converted_at_beijing": "2026-10-31T08:33:36+08:00"
+  "sha256": "b6c329e3696f2f5695ec770cba8e08151c9e9dd4b1e4fb726895cfb2d7884d6c",
+  "converted_at_beijing": "2026-10-31T11:19:48+08:00"
  }
 }
 ---

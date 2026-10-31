@@ -38,6 +38,10 @@
    "sha256": "d03a41432438f46c9a2a7aafea6849747e85bd3427d9308c19bbb0c58f604178",
    "public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3"
   },
+  "explanation_based_on": {
+   "release": "E331",
+   "sha256": "d03a41432438f46c9a2a7aafea6849747e85bd3427d9308c19bbb0c58f604178"
+  },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：弯弯小路上，一支小箭从画面外飞来轻轻插进草靶的靶心；小木桌上的放大镜慢慢移过那张纸，纸上的绿勾随之亮一下；几张揉皱的纸和两片落叶打着旋落进浅绿色小回收桶；小路尽头几根细枝条缓缓长长、汇进粗树干，树干顶上的小云轻轻起伏，GitHub 章鱼猫标志保持不动；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，四块小木牌上的字保持不动、不变形。",
   "registry": {
    "groups": [],
@@ -259,8 +263,8 @@
  },
  "source": {
   "page": "sources/pages/rule-engineering-delivery/page.json",
-  "sha256": "94fd994faf670ebfc60706e6e8fdd18f9225f2784a7bb89bdbdc0be9c5acf75c",
-  "converted_at_beijing": "2026-10-31T10:23:40+08:00"
+  "sha256": "57404a2b4169ef6c7c223d06cdc00e7bd1980b360d40b208249dbead17ac78cb",
+  "converted_at_beijing": "2026-10-31T11:19:47+08:00"
  }
 }
 ---
