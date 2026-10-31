@@ -22,8 +22,8 @@
       "sha256": "df478787a83412e9211fa82a88dfd43016943ec03010b87e22f731af45da2cc3"
     },
     "cockpit/ai/index.html": {
-      "bytes": 553871,
-      "sha256": "b7f26ebc1e8fc5ad6490ee64c1a90d5a1b1c3398a6756569e1623f12c0888b41"
+      "bytes": 572340,
+      "sha256": "3e65d8fcf2454ccc08d513009bceb4952e79a1958a5bd1d2eeaa6f3b4d585988"
     },
     "cockpit/index.html": {
       "bytes": 632328,
@@ -54,8 +54,8 @@
       "sha256": "9423d120a82a56c9ffe8e4e97ddcb20b3540773003ad6c8496e4a16d54e67550"
     },
     "how/index.html": {
-      "bytes": 556216,
-      "sha256": "1eb424b2575288f84203663338516bf6f7997f73935e224f0fbec2b4b669edc2"
+      "bytes": 555015,
+      "sha256": "399ef45bbf7ba88c853457e2fe78afa6021d8dd57b0db0c1aef5063c867453cd"
     },
     "how-this-site/index.html": {
       "bytes": 335881,
@@ -83,7 +83,7 @@
     },
     "projects/agents/index.html": {
       "bytes": 659493,
-      "sha256": "fa11c35311b423c5084fd9decbe21895a53a733c2769a36649a20b0a3ce912b3"
+      "sha256": "a8f84060562c3db251ca85125a758ad1bc94e07a8bd68f354d472ad326d2eeb1"
     },
     "projects/agents/protected-policy/index.html": {
       "bytes": 191072,
@@ -426,8 +426,8 @@
       "sha256": "d01caa9c1d8c3334a7abf0bc6587b044d36ffbe5f63f608ca6d72d3399c28c9f"
     },
     "projects/index.html": {
-      "bytes": 451863,
-      "sha256": "a775aedc91d8e29aaaae9c9c7930149c775c021eb8e5ff11fa54294b692ac64e"
+      "bytes": 452527,
+      "sha256": "e7db5ef8c2a92cfe72f6196edfe66e65f0fc9d5ba9a17482bd21df41d3bf592e"
     },
     "projects/learning/authoritative-research/index.html": {
       "bytes": 132848,
@@ -1099,55 +1099,55 @@
     },
     "rules/authorization/index.html": {
       "bytes": 232711,
-      "sha256": "97acf5cf2a0e5b48e006ffd0d3d76b7e558bf565d2f88a1c649a025e6d16aa07"
+      "sha256": "fe07919b0969e036928b4104c1b8816a738ddc95bba171e84ba4c8815d889539"
     },
     "rules/capabilities-runtime/index.html": {
-      "bytes": 370862,
-      "sha256": "8458852bf390935ae095d7ed653c61b8f4a1534582ed838478441985de07bfb5"
+      "bytes": 371329,
+      "sha256": "3b8a2c44a893a629d5c5f8cc577c4af7fb5499bf3c990bb3f7bf98434e76d464"
     },
     "rules/charter/index.html": {
-      "bytes": 180840,
-      "sha256": "61e37f2a676517e26d9aed69163176856cc9d1ba634160e39c7897917426bc87"
+      "bytes": 180834,
+      "sha256": "c721aacd963501d2d242a1759436f4f911a59dc90a744d02c8cd4547fe866de9"
     },
     "rules/claude-adapter/index.html": {
       "bytes": 415893,
-      "sha256": "9326441fafcf0efee391e16f86fba3bdf3d346af1e29b03f8cca280c9709cd5b"
+      "sha256": "ed4879372ec7bbabfb32d1686562d10c58bcd3aa8d4176dd99608d9f9bd7ecae"
     },
     "rules/codex-adapter/index.html": {
       "bytes": 225121,
-      "sha256": "7c513d31987b4d865b96c17b4576040528e2a696f694d1ef34592daad1f865fd"
+      "sha256": "a7288945f60944730862a217c9022280d4fbfb01940c1ab220cc95804ca8dbe2"
     },
     "rules/context-sources/index.html": {
       "bytes": 311788,
-      "sha256": "9c0268f139488f338bc68a6f14be3b0b4dc55a52b1e5b2e013dbd0e350714938"
+      "sha256": "ee24720d8134b5ab0b7f5294d6ef4ad59612b4d4de67bda72ec4f5be6607fd91"
     },
     "rules/engineering-delivery/index.html": {
       "bytes": 303397,
-      "sha256": "031aaab038c5e150a99ff730d49e35d477f653442023f53b00efe699f06f0283"
+      "sha256": "c77ae9f21051e72a0a77bfb6b7a5fccd0e0ed88dc0bfb9b585aa44900e82a244"
     },
     "rules/execution-coordination/index.html": {
       "bytes": 295958,
-      "sha256": "6b3db9916fc18548018c7a5a0253170a5c8edf8ec83e47c97108e102c0c4b834"
+      "sha256": "8faff024c99320c0011b2e9a20cd782490badf2f4bc6d75a60578291e2bbf1b1"
     },
     "rules/index.html": {
       "bytes": 203854,
-      "sha256": "da837a4cc9193060c78bfd5df623fe945b65368620cd3736ff9880d0f92dd8eb"
+      "sha256": "b019a3645e9ae7350a35529c097ca2371de1c9c67be0f75a05e771e70d124793"
     },
     "rules/privacy-data/index.html": {
-      "bytes": 296401,
-      "sha256": "e933afe5d85e99f280951c59cefe159a744a50180132a9705a3d271ecaf1f617"
+      "bytes": 296386,
+      "sha256": "15d9b8fa1739b5196ff5fd4edfcc7cee6f1404417e52b483e1090de4f0575747"
     },
     "rules/protected-actions/index.html": {
       "bytes": 269595,
-      "sha256": "97c2a277a96aabf86d10a6c348a55d6493f4f97a420d99dd6fecee29e143ab58"
+      "sha256": "e932b7cf00c29fd6732abafdad0728b2099821ad6e934713a4127846c93f82c6"
     },
     "rules/rule-release/index.html": {
       "bytes": 222848,
-      "sha256": "1b3cfc2f3f5a68b76a834f52975091535f3c8c39725cc5cebb7dbd043b2fe455"
+      "sha256": "e6a0433998f123efed414b01d74a8c6582dbdd47af70eef343925cda64ca84b0"
     },
     "search/index.html": {
       "bytes": 69192,
-      "sha256": "e9a7999895c9f5b80cf5a6a571caf7a02a4a7945337a99af3f5b4511c1df2ae3"
+      "sha256": "38aa74d83ef136cc19c053f6321add2fe3a97311a99ebd410bede288d54c3806"
     },
     "sitemap.xml": {
       "bytes": 23458,
@@ -1170,8 +1170,8 @@
       "sha256": "756c7f67986daed36acce4fbe97148e2535e1148b97d5ad4ab145d260998d4e7"
     },
     "skills/cockpit/index.html": {
-      "bytes": 133913,
-      "sha256": "13aeb21340a9dccb10807795d2bd4e300d142a6d85011530324abedb26f3a159"
+      "bytes": 133877,
+      "sha256": "63b90c0f368134e3edac61492b1fa30f4c567e63258a201fb531da9beb3f40d3"
     },
     "skills/control-plane-doctor/index.html": {
       "bytes": 56222,
@@ -1650,7 +1650,7 @@
   ],
   "search_budget_review": {
     "search-index.js": {
-      "gzip_bytes": 433965,
+      "gzip_bytes": 434157,
       "review_bytes": 369459.2,
       "status": "warning"
     },
@@ -1825,14 +1825,14 @@
       "status": "warning"
     }
   },
-  "release_id": "803293d727278c26baf3b177527cfa8cd278b473f3edf44220003b044107b402",
+  "release_id": "882c2f093a604fd50bd27869ba26d862250d96c17970f49d799e91b28832f801",
   "baseline_production_commit": "2872547b5925b782419ec7bf5cb0f162c1b53c3e",
   "rules_pin": {
     "schema": "wly.astro-rules-pin.v1",
-    "version": "E337",
-    "release_commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
-    "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a",
-    "release_record_sha256": "10b4d4c5828504bd209b0fadee7fd36518c9fc7b38fcf42545cc39e1ebcc47da",
+    "version": "E338",
+    "release_commit": "99816398405d43e3fbcc31a419952866e97eb880",
+    "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118",
+    "release_record_sha256": "5b857907038de276e48ab8f8efed36239c4ce4f64459a66ff9368c5ab5a0e0c3",
     "files": [
       {
         "bytes": 22707,
@@ -1847,10 +1847,10 @@
         "sha256": "860d3b5e8eec0a2e1f8b891cb7ed8032f24c2db7bac54552dd172c862cdb9694"
       },
       {
-        "bytes": 26978,
+        "bytes": 27127,
         "logical_id": "capabilities_runtime_contract",
         "relative_path": "docs/contracts/agents.capabilities-runtime.md",
-        "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c"
+        "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5"
       },
       {
         "bytes": 26988,
@@ -1862,7 +1862,7 @@
         "bytes": 24020,
         "logical_id": "claude_entry_template",
         "relative_path": "templates/claude-home/CLAUDE.md",
-        "sha256": "60b5793ee5e3bf18c6888299282e534c53b8179bc56d32761cb2982a4c7f8fb6"
+        "sha256": "3bcd3e53c7bce76b7dca8728e96dc29c3284acad106b9099376992dd711ca35b"
       },
       {
         "bytes": 12337,
@@ -1874,7 +1874,7 @@
         "bytes": 23746,
         "logical_id": "codex_entry_template",
         "relative_path": "templates/codex-home/AGENTS.md",
-        "sha256": "f42e19063e83277a12f61d0246bb4f8bfcd3700ee8a6ec1db53c6bdd47b2024e"
+        "sha256": "a499b5fa55ab5d87196066508d1ca7133a7cb4a267a2193877d2c0ac44bb7a0a"
       },
       {
         "bytes": 18638,
@@ -2282,23 +2282,23 @@
       ]
     },
     "pointer": {
-      "activated_at_utc": "2026-10-31T07:26:59.0576120+00:00",
+      "activated_at_utc": "2026-10-31T07:58:17.4830292+00:00",
       "current": {
+        "git_commit": "99816398405d43e3fbcc31a419952866e97eb880",
+        "release_id": "E338",
+        "release_record_sha256": "5b857907038de276e48ab8f8efed36239c4ce4f64459a66ff9368c5ab5a0e0c3",
+        "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118"
+      },
+      "pointer_revision": 247,
+      "previous": {
         "git_commit": "42575c83a18e3ce9ee962ce0878050e551944ac7",
         "release_id": "E337",
         "release_record_sha256": "10b4d4c5828504bd209b0fadee7fd36518c9fc7b38fcf42545cc39e1ebcc47da",
         "ruleset_sha256": "9fab5132b3a89ac0d64a55ee855270abf8722fcc6e13ce32d0ce6d05e679b70a"
       },
-      "pointer_revision": 246,
-      "previous": {
-        "git_commit": "bf0bed7f195eb4ac9ddabec5b401f0e43a02fe26",
-        "release_id": "E336",
-        "release_record_sha256": "d210fc0bd0e32e86a58751cd3f8583fc5263ea31a211db84c76efaed2bc71594",
-        "ruleset_sha256": "25411392003ad99e290ee49aac69d3c3940ad424ebb1831823cdc17b4dbe1d04"
-      },
       "schema": "agents.e-rules-current.v1"
     },
-    "pointer_sha256": "1bdba1c372214c45f5a6d6e20db11a3e1c5bffb2d63b97dc5575fe163e1520ae",
+    "pointer_sha256": "35594364b56021f6ec84feb69d015baae529e96daa399dae1531840b1c279f92",
     "documents": {
       "agents_root_rules": {
         "bytes": 22707,
@@ -2309,17 +2309,17 @@
         "purpose": "约法（最高层）、优先顺序、规则核验和专题导航",
         "primary": true,
         "slug": "charter",
-        "public_source_sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
-        "public_source_bytes": 22384,
-        "src": "/_typeset/rule-sources/6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996.md",
-        "prose_sha256": "5050d3f83c14a816a7b7b0db5cb788f22e6a834a0889bdf43e6bee28a928134c",
-        "search_text_sha256": "0e4203f58b7c77154ffc0ad634cea88243cc2af85a15891401c6a77b218ae91c",
+        "public_source_sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2",
+        "public_source_bytes": 22378,
+        "src": "/_typeset/rule-sources/45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2.md",
+        "prose_sha256": "9c07b0bc35289fb34da178d49accce3654b2edc81749d6186dd82341fb9fe578",
+        "search_text_sha256": "6bcb89dac8fc527fda7eb2b569d3544065ad798026882059bd91e066d2177dc7",
         "page": "charter",
         "route": "/rules/charter/",
         "parts": [
           {
             "id": "charter/charter-02",
-            "label": "约法 · L1–L10 · E337",
+            "label": "约法 · L1–L10 · E338",
             "markdown_sha256": "6a70c02617ae570f40380aac5215b78f94847c7b8754e37791e07abd6f5bcf56",
             "prose_sha256": "7d4312bf45c63ef6a94b37ac40565228f0a9f3c6e1da3538696668356b272bdd",
             "selection": {
@@ -2332,7 +2332,7 @@
           },
           {
             "id": "charter/charter-03",
-            "label": "约法 · L11–L17 · E337",
+            "label": "约法 · L11–L17 · E338",
             "markdown_sha256": "5b612355d35b9abd539b3fecccb4233d265594b9ce45998ffa2ab81ef82e858b",
             "prose_sha256": "f7beaf55e9bc0678763b2bac8ea26e44a7c28f0ff2354dac8f47d0658714e915",
             "selection": {
@@ -2345,7 +2345,7 @@
           },
           {
             "id": "charter/charter-04",
-            "label": "约法 · L18–L23 · E337",
+            "label": "约法 · L18–L23 · E338",
             "markdown_sha256": "923624049189b6d57ba9c71c2a32ef4faa8aa6caf367c5ed8bb77d2f8e9ff030",
             "prose_sha256": "d185d158441e53993c4314e20a8d663a6c3b9478192ce299a628dd2715f66db9",
             "selection": {
@@ -2358,14 +2358,14 @@
           },
           {
             "id": "charter/charter-05",
-            "label": "约法 · L24–L30 · E337",
-            "markdown_sha256": "cc390f8b0f049535b4440d49c7c313612c14fb63c21339c32e41e76ae7e3d438",
-            "prose_sha256": "ca0cc3b10d77558eca94824e61d90acb1d844d663febe22f85f12a8b0db73d8c",
+            "label": "约法 · L24–L30 · E338",
+            "markdown_sha256": "9015929e20ddf5734e2b5fffdf0e9a153be44cdfe8a83504dd66c883caf7bba6",
+            "prose_sha256": "46d95d7dab41974750c90889e64fc1c9d00dd5a897270618e5953366fdb0c37b",
             "selection": {
               "from": "### 八、项目与维护",
               "to": null,
               "start": 5506,
-              "end": 8704,
+              "end": 8702,
               "approved_omissions": []
             }
           }
@@ -2390,7 +2390,7 @@
         "parts": [
           {
             "id": "rule-authorization/rule-authorization-05",
-            "label": "原文 · E337 版，略去个别私人领域字句",
+            "label": "原文 · E338 版，略去个别私人领域字句",
             "markdown_sha256": "1bf8e6abe134c49da129365888d6a9c2b43769ca022fdea5e6f6000b91bbf6f7",
             "prose_sha256": "00fe03a4eaf74940980901fbbf800ddacd9e94a597b9cbba92a70ab4cacf208a",
             "selection": {
@@ -2403,7 +2403,7 @@
           },
           {
             "id": "rule-authorization/rule-authorization-06",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "b3cce8eee55932bf9c32db9a3c37ed38c83b6641546467540d9cab47af5cdb30",
             "prose_sha256": "ca3060e92b4fb33c9c7abd2946a4f3dbef8e61bb49c41436778dc033d586e54d",
             "selection": {
@@ -2416,7 +2416,7 @@
           },
           {
             "id": "rule-authorization/rule-authorization-07",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "c80ef867f6f49a499cbc76cdf1a44f58960fd891c5013118c2488ed9119e15af",
             "prose_sha256": "3cc74cee0c9e6640178ac00e80332aa8c407cc666ec87794bbec2724293f88fa",
             "selection": {
@@ -2430,25 +2430,25 @@
         ]
       },
       "capabilities_runtime_contract": {
-        "bytes": 26978,
+        "bytes": 27127,
         "logical_id": "capabilities_runtime_contract",
         "relative_path": "docs/contracts/agents.capabilities-runtime.md",
-        "sha256": "d099529fc39ee68691885273478458e37792e38caa3b35f3678c544db638879c",
+        "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5",
         "title": "能力与运行方式",
         "purpose": "选工具和技能、领域入口、浏览器、软件更新、安装位置、汇报网页、网站和自动运行",
         "primary": true,
         "slug": "capabilities-runtime",
-        "public_source_sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
-        "public_source_bytes": 26941,
-        "src": "/_typeset/rule-sources/08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9.md",
-        "prose_sha256": "13b93c6e58a7de239aed1ea6cef053c4377818bd67c87ed2de80c85b6f86c8fc",
-        "search_text_sha256": "636c9615c49299a946b14f2a2ae420a09c990c128120fd8f4b16c1f2e2284a2c",
+        "public_source_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
+        "public_source_bytes": 27094,
+        "src": "/_typeset/rule-sources/c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0.md",
+        "prose_sha256": "2299bef35fa1641106e3853d43f4432de95e1a8e3d0fc627f1c5a0688be341e1",
+        "search_text_sha256": "b217556474e144f1a69b008883d0cd1171a905f49946bdc69c9de508b2b9bd12",
         "page": "rule-capabilities-runtime",
         "route": "/rules/capabilities-runtime/",
         "parts": [
           {
             "id": "rule-capabilities-runtime/rule-capabilities-runtime-11",
-            "label": "原文 · E337 版",
+            "label": "原文 · E338 版",
             "markdown_sha256": "5ad02578aa000a8701353fbe8d6b7251d5a54c49309fd24dc57d814bc7c4dc06",
             "prose_sha256": "17ab8226efe2143ed7c76012a3496a31b884700c4910bbad356bbd89af4a8874",
             "selection": {
@@ -2461,53 +2461,53 @@
           },
           {
             "id": "rule-capabilities-runtime/rule-capabilities-runtime-12",
-            "label": "原文 · E337 版 · 续",
-            "markdown_sha256": "e8a1a62886f8b9fb8c78eca11b297cb71991d5e14d35bc7d05a87a59d83810a1",
-            "prose_sha256": "d639dc9e02c0b8f2d50f682be9b97d7e7386434b9d45c37a35683657cf0280db",
+            "label": "原文 · E338 版 · 续",
+            "markdown_sha256": "585a485a08539f0d289b17bc425581f23585cf774c152146031e5105dcfcc7a3",
+            "prose_sha256": "6c6149178f370a09f44a890067362ff1ff2f130b71294da985463601d88e0997",
             "selection": {
               "from": "## 常用入口",
               "to": "## 浏览器",
               "start": 1440,
-              "end": 3922,
+              "end": 4027,
               "approved_omissions": []
             }
           },
           {
             "id": "rule-capabilities-runtime/rule-capabilities-runtime-13",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "0d550475257f0e4943f6d3c7ffd12047d32c1d88031a2219f097660ca99f0839",
             "prose_sha256": "930d9860d0a0b1c9a30c372c924af13ca56aebf02b0d54be8c8608ae6fded267",
             "selection": {
               "from": "## 浏览器",
               "to": "## 汇报、网站和自动运行的东西",
-              "start": 3922,
-              "end": 6142,
+              "start": 4027,
+              "end": 6247,
               "approved_omissions": []
             }
           },
           {
             "id": "rule-capabilities-runtime/rule-capabilities-runtime-14",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "f7fa3350c9f316895acb9450607df9c3efe3dc84a517aa0d2b64de5be74885e3",
             "prose_sha256": "e55d275a9981b03bceb559a1ffbee021fa94e9a13faeacca12ecaa4c4e1a6c3d",
             "selection": {
               "from": "## 汇报、网站和自动运行的东西",
               "to": "## 安装位置、配置和本机约定",
-              "start": 6142,
-              "end": 9489,
+              "start": 6247,
+              "end": 9594,
               "approved_omissions": []
             }
           },
           {
             "id": "rule-capabilities-runtime/rule-capabilities-runtime-15",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "d3009e7a5682890198d9d8a9c2a64ddd7536cdd7841f9f386ddf101e226f1388",
             "prose_sha256": "8e57ef272a43e78bff634987ced01d4a428a7e1547c381788253d4d9fa39546c",
             "selection": {
               "from": "## 安装位置、配置和本机约定",
               "to": null,
-              "start": 9489,
-              "end": 10980,
+              "start": 9594,
+              "end": 11085,
               "approved_omissions": []
             }
           }
@@ -2532,7 +2532,7 @@
         "parts": [
           {
             "id": "rule-claude-adapter/rule-claude-adapter-11",
-            "label": "原文 · E337 版，一字不改",
+            "label": "原文 · E338 版，一字不改",
             "markdown_sha256": "db48f2b9da750d3cf3dd004a62c291b81fdd61e3c13f7934c4e25e0e5a906648",
             "prose_sha256": "95a6219b37b29c425014a27ac91cfe38185705f9f6ddde3093a3a36a1a25a699",
             "selection": {
@@ -2545,7 +2545,7 @@
           },
           {
             "id": "rule-claude-adapter/rule-claude-adapter-12",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "b6cc54b40fe8e8ed822e7be9cb7fa26dba85b0f127d1245b847d2f885f64d758",
             "prose_sha256": "b365480a0ea1455e602b958e2e038c24015200d476a2576c64295166fa81fcb4",
             "selection": {
@@ -2558,7 +2558,7 @@
           },
           {
             "id": "rule-claude-adapter/rule-claude-adapter-13",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "29daa358e4e0df9e7efcccd9c48ec7970bfc130d1783863a369492762e1c0fe9",
             "prose_sha256": "ed69dc25cbe99b9aedfe0f38e78160b07e40e1540b5f61cab910dd34eec52742",
             "selection": {
@@ -2571,7 +2571,7 @@
           },
           {
             "id": "rule-claude-adapter/rule-claude-adapter-14",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "8263a9ffa955ff9ef872861d95b916bc3b74363e5539f1d16f024dac281288c3",
             "prose_sha256": "1c04690394dd41b1c340f780470264adc87fdd0cd6c5e06f95c8d1714725d166",
             "selection": {
@@ -2584,7 +2584,7 @@
           },
           {
             "id": "rule-claude-adapter/rule-claude-adapter-15",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "5b1dcf7d6df03dc9138d2791a9922e28220a92bdba044dadebb0a306d958162a",
             "prose_sha256": "5e88c9edb860e0709c1906b3430a93ae89bccb986d0b80fea199693e3e34fe27",
             "selection": {
@@ -2597,7 +2597,7 @@
           },
           {
             "id": "rule-claude-adapter/rule-claude-adapter-16",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "3c16904e741981ee5641bc1332d97fe2caa5b966eb7c0ff48655a2969ef7c159",
             "prose_sha256": "b8361deb1c32d3f6190575be83c6fc2f2b56dae3fbd8b12ceda188c12c28e31b",
             "selection": {
@@ -2610,7 +2610,7 @@
           },
           {
             "id": "rule-claude-adapter/rule-claude-adapter-17",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "56f998fdbb9cb5a4433c87a449dfab868bd855a733da4594aa4984c7adbe088c",
             "prose_sha256": "3412697cdd848c7104a7bbad080646de230cf5575f0b9ccd59432b8b89507f0e",
             "selection": {
@@ -2627,16 +2627,16 @@
         "bytes": 24020,
         "logical_id": "claude_entry_template",
         "relative_path": "templates/claude-home/CLAUDE.md",
-        "sha256": "60b5793ee5e3bf18c6888299282e534c53b8179bc56d32761cb2982a4c7f8fb6",
+        "sha256": "3bcd3e53c7bce76b7dca8728e96dc29c3284acad106b9099376992dd711ca35b",
         "title": "CLAUDE.md",
         "purpose": "AI 的规则入口",
         "primary": false,
         "slug": "CLAUDE",
-        "public_source_sha256": "55dedfc5f44d14eacbdc4805ab30c7595cb53bce4e1ffb6c3588b6c5f892141a",
-        "public_source_bytes": 23222,
-        "src": "/_typeset/rule-sources/55dedfc5f44d14eacbdc4805ab30c7595cb53bce4e1ffb6c3588b6c5f892141a.md",
-        "prose_sha256": "dfeffe1ed9e3127a69d0d46eb38f85906a83f3fac60cb576b2a92164d26b2a86",
-        "search_text_sha256": "c4bc1b9a5ac8fb144e1cc8ee2d5f9e8a409588b211d237870fc6d8622e3d65fb"
+        "public_source_sha256": "3f30ee0cd2892ae5c7b6ad9b5fb2df012ffdb7109dd8782f13cc6b001f27cc44",
+        "public_source_bytes": 23216,
+        "src": "/_typeset/rule-sources/3f30ee0cd2892ae5c7b6ad9b5fb2df012ffdb7109dd8782f13cc6b001f27cc44.md",
+        "prose_sha256": "cfc312a3134f1fa79505d50480ffd9747792237c77f15033a90dcece7b1c5ac7",
+        "search_text_sha256": "621e32dff363cd41fb47830739dbf5f853a2666b83c462cbb932b1374fbcc0e3"
       },
       "codex_adapter_contract": {
         "bytes": 12337,
@@ -2657,7 +2657,7 @@
         "parts": [
           {
             "id": "rule-codex-adapter/rule-codex-adapter-05",
-            "label": "原文 · E337 版，一字不改",
+            "label": "原文 · E338 版，一字不改",
             "markdown_sha256": "9ba16519efd9b01c9c08abebb4139df854631057b4d0f2302862ac967ac81b2d",
             "prose_sha256": "39441d667e25f5bf846b5794cc7a33ad1eceb7edb0ac62c46ee1627d5838a2c3",
             "selection": {
@@ -2670,7 +2670,7 @@
           },
           {
             "id": "rule-codex-adapter/rule-codex-adapter-06",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "8620b59a319a16ee651f9a94a1253ed8ea49c5b0e02d0b934247c0df560d30be",
             "prose_sha256": "8f74a371cc02fb2e004cf9175be49301c659cccec833596740f0be1a26e1623e",
             "selection": {
@@ -2687,16 +2687,16 @@
         "bytes": 23746,
         "logical_id": "codex_entry_template",
         "relative_path": "templates/codex-home/AGENTS.md",
-        "sha256": "f42e19063e83277a12f61d0246bb4f8bfcd3700ee8a6ec1db53c6bdd47b2024e",
+        "sha256": "a499b5fa55ab5d87196066508d1ca7133a7cb4a267a2193877d2c0ac44bb7a0a",
         "title": "AGENTS.md",
         "purpose": "AI 的规则入口",
         "primary": false,
         "slug": "AGENTS",
-        "public_source_sha256": "6596689cd846a62339cda7dcec87f0301341aaceb76f21611f6d3ddfa393b337",
-        "public_source_bytes": 22948,
-        "src": "/_typeset/rule-sources/6596689cd846a62339cda7dcec87f0301341aaceb76f21611f6d3ddfa393b337.md",
-        "prose_sha256": "0239e1be172e46e1c340e866cd8d4de389bdfc694ea6e72bdf4d9597d2bb226e",
-        "search_text_sha256": "60a51283fdb54592765cff7b9aa5fe2db64201fd30addca28eeb8f0273d64e45"
+        "public_source_sha256": "ead0fc797bf4e7452f0f8454afc216b912ea5bd3d02ab36fb428ae26f9390cd4",
+        "public_source_bytes": 22942,
+        "src": "/_typeset/rule-sources/ead0fc797bf4e7452f0f8454afc216b912ea5bd3d02ab36fb428ae26f9390cd4.md",
+        "prose_sha256": "634e9946411cb4907605afc231451c6047ea63ff34ce7ba9b8dd332c33e7e318",
+        "search_text_sha256": "51a54ecd00b51e2caa7fe415943093c9644727fb6b1c7340f44d072eaaa57a4d"
       },
       "context_sources_contract": {
         "bytes": 18638,
@@ -2717,7 +2717,7 @@
         "parts": [
           {
             "id": "rule-context-sources/rule-context-sources-08",
-            "label": "原文 · E337 版，一字不改",
+            "label": "原文 · E338 版，一字不改",
             "markdown_sha256": "da86ed93b8fa3a7649d59d4d3a4864c8167a03896cecc1ef1d4f33b61a2e39c4",
             "prose_sha256": "93aba29e08e2044284d2931a43e66f61a5c276fb71dc5645b5fbd5d17ce7f559",
             "selection": {
@@ -2730,7 +2730,7 @@
           },
           {
             "id": "rule-context-sources/rule-context-sources-09",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "189f921ac1f1920031903d7159c2d86fa28ab77b9ad8aef8f23dbd0b3b8e12d6",
             "prose_sha256": "ad31d0d181c688f71e16f788cd4918bb36d69dbdab307eafcf4afabd16f6bfbc",
             "selection": {
@@ -2743,7 +2743,7 @@
           },
           {
             "id": "rule-context-sources/rule-context-sources-10",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "547ddcd9c2161548fedb7684cc1216171c737d75fc557ae8ce76513cbacba51d",
             "prose_sha256": "d9b27c3922b523e41757ca246302ce9025eaa50b6334808fbee0b5c897ea7cc3",
             "selection": {
@@ -2775,7 +2775,7 @@
         "parts": [
           {
             "id": "rule-engineering-delivery/rule-engineering-delivery-06",
-            "label": "原文 · E337 版，一字不改",
+            "label": "原文 · E338 版，一字不改",
             "markdown_sha256": "5196ed5bd0d35f20a1ecb55af77656f8119709d9b60c964a03550d5ba71c9314",
             "prose_sha256": "444802f5df8f47227dc1d92a1fe011dd3499da25ef43236807b3152548937908",
             "selection": {
@@ -2788,7 +2788,7 @@
           },
           {
             "id": "rule-engineering-delivery/rule-engineering-delivery-07",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "d9552e2e93d8dd3e3d29ac096f77af24e05b4445cea5217f84584dd6ce941312",
             "prose_sha256": "4bedf07fdb026b219d6d9c3575efdc7c6e08a8c8d746d20650c423214a5871c8",
             "selection": {
@@ -2801,7 +2801,7 @@
           },
           {
             "id": "rule-engineering-delivery/rule-engineering-delivery-08",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "898367631fc1b4e9863af01f0a6f90c11facfeacf38ad47d1206c3d31943baef",
             "prose_sha256": "568d9f62f4b5e0925763558ae1e3f64de24be15b24e6f6528d16eae7eaca7376",
             "selection": {
@@ -2814,7 +2814,7 @@
           },
           {
             "id": "rule-engineering-delivery/rule-engineering-delivery-09",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "0efdd9196d1224234a5bc37a6772190893885883757654399b3b1e9fc17aa059",
             "prose_sha256": "54689a78ede00a0de7c9ae4115c1b3632887f4a2f0e24c6bf1fc1b1f09966e07",
             "selection": {
@@ -2846,7 +2846,7 @@
         "parts": [
           {
             "id": "rule-execution-coordination/rule-execution-coordination-06",
-            "label": "原文 · E337 版，一字不改",
+            "label": "原文 · E338 版，一字不改",
             "markdown_sha256": "bde0a85971cf191fc86624e737339dfc9bfbb4f8d955acba844a2a4793281a9a",
             "prose_sha256": "719118e754683b925788a373e77cd22fbc6266990a52997978ac02355a6d8d9b",
             "selection": {
@@ -2859,7 +2859,7 @@
           },
           {
             "id": "rule-execution-coordination/rule-execution-coordination-07",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "3f68cf2199cdb162e91012c4ea356efd87585b6fbfdda7990d29b7c719426056",
             "prose_sha256": "682d90cad809b7a512322c5fe471c53acf2b18419ea5605042cb1199e889a4be",
             "selection": {
@@ -2881,63 +2881,63 @@
         "purpose": "资料锁和解锁、可信位置、公开分级、私人仓库、备份跟随删除",
         "primary": true,
         "slug": "privacy-data",
-        "public_source_sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
-        "public_source_bytes": 12835,
-        "src": "/_typeset/rule-sources/c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669.md",
-        "prose_sha256": "d177a0281d3ee574224250cc9d187095a0fd13772760f7b53cc208c17c0f4fe2",
-        "search_text_sha256": "ff76e3d1c0edb62cb3ff463839a4a6296d19abca85363024ac3e3f859c527f1a",
+        "public_source_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
+        "public_source_bytes": 12820,
+        "src": "/_typeset/rule-sources/760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942.md",
+        "prose_sha256": "16506b0b63925d310eddb294989921b9b6d8c894cf56ef5be5ddd818bac903b5",
+        "search_text_sha256": "2f4e06a189745ae027303afc8e673b1d0feac5784aacc230d5720b768cfd0688",
         "page": "rule-privacy-data",
         "route": "/rules/privacy-data/",
         "parts": [
           {
             "id": "rule-privacy-data/rule-privacy-data-07",
-            "label": "原文 · E337 版，略去个别私人领域字句",
-            "markdown_sha256": "863dc65ee22feca349bd910d0c7c1bbc2b2b04bfb9fc1b58c54754136fd9d798",
-            "prose_sha256": "361ca8eb07ebd8a742d32d428fa5d724210a2aa79280a27ed12fe45286eca557",
+            "label": "原文 · E338 版，略去个别私人领域字句",
+            "markdown_sha256": "6243221edfd53375691c2d4e9d7a87ce030efb38d62cd000dbee89493167df04",
+            "prose_sha256": "3e76231dee96d834b038dee4cd790dd342f7fc898464bd0a47120203cbd03be2",
             "selection": {
               "from": null,
               "to": "- **入口。**",
               "start": 0,
-              "end": 1707,
+              "end": 1702,
               "approved_omissions": []
             }
           },
           {
             "id": "rule-privacy-data/rule-privacy-data-08",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "3bb9a493e92b4aad8d6863e15908e929cc1b91871e3c9c4bb9a900a08807d52f",
             "prose_sha256": "abe5715aacc07293f32a7210841d448305be0186764231678f8e4033529cbde6",
             "selection": {
               "from": "- **入口。**",
               "to": "## 公开个人数据分级表",
-              "start": 1707,
-              "end": 3400,
+              "start": 1702,
+              "end": 3395,
               "approved_omissions": []
             }
           },
           {
             "id": "rule-privacy-data/rule-privacy-data-09",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "d28e899d7ac5ffb347daadb6dd5dce3be5160f3a5cb40ec2002e4be85f38628c",
             "prose_sha256": "8ea98b0f3c71f947d04ad381f681d7b3099cc4d6b6f3f4ea08508693ccb3e1da",
             "selection": {
               "from": "## 公开个人数据分级表",
               "to": "## 私人仓库收口",
-              "start": 3400,
-              "end": 4586,
+              "start": 3395,
+              "end": 4581,
               "approved_omissions": []
             }
           },
           {
             "id": "rule-privacy-data/rule-privacy-data-10",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "1b94ebc074daae3b7e15b3ad0ced9268fe71ff3f4ac9bb4f3ef29006c7d11ada",
             "prose_sha256": "0a7cfa327e8be5f967d9b87e79d0ff200953a5419a800165c2e7eb093d5d83e3",
             "selection": {
               "from": "## 私人仓库收口",
               "to": null,
-              "start": 4586,
-              "end": 5243,
+              "start": 4581,
+              "end": 5238,
               "approved_omissions": []
             }
           }
@@ -2962,7 +2962,7 @@
         "parts": [
           {
             "id": "rule-protected-actions/rule-protected-actions-07",
-            "label": "原文 · E337 版，一字不改",
+            "label": "原文 · E338 版，一字不改",
             "markdown_sha256": "daa6dba0f8e9b22b6bd919b6d9bcf12ff55c2c5489693a34bd5c7afd56b0459a",
             "prose_sha256": "48ef2215c7fac8ce33da5dfc12aab15bd4e69642a10ee4889b27f02fd05fa6b0",
             "selection": {
@@ -2975,7 +2975,7 @@
           },
           {
             "id": "rule-protected-actions/rule-protected-actions-08",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "a5a6d5c22ada5f9ef83a23e12c718818300f3eea8150ad6b7c9a648d3078bf43",
             "prose_sha256": "7404728a28cb2f687ad170f621ae6ec7967f2c0cc9577b377e25a58474dac8c5",
             "selection": {
@@ -3007,7 +3007,7 @@
         "parts": [
           {
             "id": "rule-rule-release/rule-rule-release-05",
-            "label": "原文 · E337 版，一字不改",
+            "label": "原文 · E338 版，一字不改",
             "markdown_sha256": "0c6d8e7decb83db358c5dcbf90053d970bba1a8e99d3646d4170544ed783587a",
             "prose_sha256": "76c376b3a686532202d987b54dbce2150f7c55de3f1c5475b03f01788ff6d7e1",
             "selection": {
@@ -3020,7 +3020,7 @@
           },
           {
             "id": "rule-rule-release/rule-rule-release-06",
-            "label": "原文 · E337 版 · 续",
+            "label": "原文 · E338 版 · 续",
             "markdown_sha256": "1254a0a90f1c6c10b668f4f911b8da32e58675ac847b040b5a5b833fbdd555ae",
             "prose_sha256": "c1933f60112f3c35d2c5adc74bfcedaa6c582b97e3a57fcebfdb595b522a4492",
             "selection": {
@@ -3036,20 +3036,20 @@
     },
     "public_files": {
       "AGENTS.md": {
-        "bytes": 22384,
-        "sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996"
+        "bytes": 22378,
+        "sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2"
       },
       "current-rules.json": {
         "bytes": 643,
-        "sha256": "1bdba1c372214c45f5a6d6e20db11a3e1c5bffb2d63b97dc5575fe163e1520ae"
+        "sha256": "35594364b56021f6ec84feb69d015baae529e96daa399dae1531840b1c279f92"
       },
       "docs/contracts/agents.authorization.md": {
         "bytes": 12799,
         "sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501"
       },
       "docs/contracts/agents.capabilities-runtime.md": {
-        "bytes": 26941,
-        "sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9"
+        "bytes": 27094,
+        "sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0"
       },
       "docs/contracts/agents.claude-adapter.md": {
         "bytes": 26964,
@@ -3072,8 +3072,8 @@
         "sha256": "0c26a77c1d1c3ed60b4fe5bb73581a6e35efdf1912725e3366dd4e542e657e70"
       },
       "docs/contracts/agents.privacy-data.md": {
-        "bytes": 12835,
-        "sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669"
+        "bytes": 12820,
+        "sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942"
       },
       "docs/contracts/agents.protected-actions.md": {
         "bytes": 5766,
@@ -3088,12 +3088,12 @@
         "sha256": "3f24059148d8a83c8e9a307e1c0dcec71a3354ea214f176672d44dfa80c4b806"
       },
       "templates/claude-home/CLAUDE.md": {
-        "bytes": 23222,
-        "sha256": "55dedfc5f44d14eacbdc4805ab30c7595cb53bce4e1ffb6c3588b6c5f892141a"
+        "bytes": 23216,
+        "sha256": "3f30ee0cd2892ae5c7b6ad9b5fb2df012ffdb7109dd8782f13cc6b001f27cc44"
       },
       "templates/codex-home/AGENTS.md": {
-        "bytes": 22948,
-        "sha256": "6596689cd846a62339cda7dcec87f0301341aaceb76f21611f6d3ddfa393b337"
+        "bytes": 22942,
+        "sha256": "ead0fc797bf4e7452f0f8454afc216b912ea5bd3d02ab36fb428ae26f9390cd4"
       }
     }
   },
@@ -4034,34 +4034,34 @@
     "/cockpit/ai/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
-      "producer": "astro"
-    },
-    "/404.html": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
-      "producer": "astro"
-    },
     "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
       "producer": "astro"
     },
     "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
       "producer": "astro"
     },
+    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
+      "producer": "astro"
+    },
     "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
       "producer": "astro"
     },
+    "/404.html": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
+      "producer": "astro"
+    },
     "/cockpit/stutter/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/": {
       "producer": "astro"
     },
     "/cv/": {
@@ -4638,12 +4638,12 @@
     "html_files": 324
   },
   "previous_oss_source": "published",
-  "previous_release_id": "f9c7349adaf09a1c622c32a0a9026162e3e48459517f6bbb384be5a0cf31edfc",
+  "previous_release_id": "803293d727278c26baf3b177527cfa8cd278b473f3edf44220003b044107b402",
   "oss": {
     "schema": "wly.oss-assets.v1",
     "asset_base_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com",
-    "prefix": "releases/728a5ac46619a73589f699a4dafe152acdd710b84d6a9b5ac482fcb74aa92d0f",
-    "source_release_id": "b2630f80efb638c0b907d15f56a05227fa96e2c4f8a4a5d68bb988e55e0f322a",
+    "prefix": "releases/82dffec441255be729f4181751cb8a830a6896903f21ab8cf048cf285abda306",
+    "source_release_id": "39bba5813e7ced4a7ddd1c021f9ded7a27407d4d412badf59233c90be724e3a0",
     "objects": {
       "_album/album-1a72f07ce279b5d3fdf8.css": {
         "bytes": 4721,
@@ -28585,18 +28585,6 @@
         },
         "byte_preserved": true
       },
-      "_typeset/rule-sources/08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9.md": {
-        "bytes": 26941,
-        "sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9",
-        "key": "releases/b1d6374f4fa358f891ddd576b06c5bf3c07f5eae2181f4e9304c056f2defa6ac/_typeset/rule-sources/08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9.md",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/b1d6374f4fa358f891ddd576b06c5bf3c07f5eae2181f4e9304c056f2defa6ac/_typeset/rule-sources/08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9.md",
-        "content_type": "text/markdown",
-        "source": {
-          "bytes": 26941,
-          "sha256": "08adbe83fce14e1e4290e2fd8b5e4147ad6f63da8fcd653d10a0b2357f9d8fe9"
-        },
-        "byte_preserved": true
-      },
       "_typeset/rule-sources/0c26a77c1d1c3ed60b4fe5bb73581a6e35efdf1912725e3366dd4e542e657e70.md": {
         "bytes": 31079,
         "sha256": "0c26a77c1d1c3ed60b4fe5bb73581a6e35efdf1912725e3366dd4e542e657e70",
@@ -28621,15 +28609,27 @@
         },
         "byte_preserved": true
       },
-      "_typeset/rule-sources/55dedfc5f44d14eacbdc4805ab30c7595cb53bce4e1ffb6c3588b6c5f892141a.md": {
-        "bytes": 23222,
-        "sha256": "55dedfc5f44d14eacbdc4805ab30c7595cb53bce4e1ffb6c3588b6c5f892141a",
-        "key": "releases/956133719ef2077ce0735369f94a9dd825cfb7902780e79a1c81ca114024775d/_typeset/rule-sources/55dedfc5f44d14eacbdc4805ab30c7595cb53bce4e1ffb6c3588b6c5f892141a.md",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/956133719ef2077ce0735369f94a9dd825cfb7902780e79a1c81ca114024775d/_typeset/rule-sources/55dedfc5f44d14eacbdc4805ab30c7595cb53bce4e1ffb6c3588b6c5f892141a.md",
+      "_typeset/rule-sources/3f30ee0cd2892ae5c7b6ad9b5fb2df012ffdb7109dd8782f13cc6b001f27cc44.md": {
+        "bytes": 23216,
+        "sha256": "3f30ee0cd2892ae5c7b6ad9b5fb2df012ffdb7109dd8782f13cc6b001f27cc44",
+        "key": "releases/5dff5b0c42c6f80be94017e607181dfe1385d9dd7bc9a0169d3c4e6b7b598c01/_typeset/rule-sources/3f30ee0cd2892ae5c7b6ad9b5fb2df012ffdb7109dd8782f13cc6b001f27cc44.md",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/5dff5b0c42c6f80be94017e607181dfe1385d9dd7bc9a0169d3c4e6b7b598c01/_typeset/rule-sources/3f30ee0cd2892ae5c7b6ad9b5fb2df012ffdb7109dd8782f13cc6b001f27cc44.md",
         "content_type": "text/markdown",
         "source": {
-          "bytes": 23222,
-          "sha256": "55dedfc5f44d14eacbdc4805ab30c7595cb53bce4e1ffb6c3588b6c5f892141a"
+          "bytes": 23216,
+          "sha256": "3f30ee0cd2892ae5c7b6ad9b5fb2df012ffdb7109dd8782f13cc6b001f27cc44"
+        },
+        "byte_preserved": true
+      },
+      "_typeset/rule-sources/45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2.md": {
+        "bytes": 22378,
+        "sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2",
+        "key": "releases/67c49e07d1a6164b6b6104ff15babe4dc4348bcb4371bb0c904d002946c907be/_typeset/rule-sources/45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2.md",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/67c49e07d1a6164b6b6104ff15babe4dc4348bcb4371bb0c904d002946c907be/_typeset/rule-sources/45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2.md",
+        "content_type": "text/markdown",
+        "source": {
+          "bytes": 22378,
+          "sha256": "45c3bee84ec511950f67642fd1279b34e0ab9c43caf39e314b48bc401325c5e2"
         },
         "byte_preserved": true
       },
@@ -28645,27 +28645,15 @@
         },
         "byte_preserved": true
       },
-      "_typeset/rule-sources/6596689cd846a62339cda7dcec87f0301341aaceb76f21611f6d3ddfa393b337.md": {
-        "bytes": 22948,
-        "sha256": "6596689cd846a62339cda7dcec87f0301341aaceb76f21611f6d3ddfa393b337",
-        "key": "releases/dc4c4ba52a9e6aa36b18f6e8aac28997310193697db9ba7825a70975ba0e463a/_typeset/rule-sources/6596689cd846a62339cda7dcec87f0301341aaceb76f21611f6d3ddfa393b337.md",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/dc4c4ba52a9e6aa36b18f6e8aac28997310193697db9ba7825a70975ba0e463a/_typeset/rule-sources/6596689cd846a62339cda7dcec87f0301341aaceb76f21611f6d3ddfa393b337.md",
+      "_typeset/rule-sources/760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942.md": {
+        "bytes": 12820,
+        "sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
+        "key": "releases/25fab6bc6267cbac12b949b474be61c4a3ee1c039b7f68f443156d03f183d33c/_typeset/rule-sources/760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942.md",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/25fab6bc6267cbac12b949b474be61c4a3ee1c039b7f68f443156d03f183d33c/_typeset/rule-sources/760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942.md",
         "content_type": "text/markdown",
         "source": {
-          "bytes": 22948,
-          "sha256": "6596689cd846a62339cda7dcec87f0301341aaceb76f21611f6d3ddfa393b337"
-        },
-        "byte_preserved": true
-      },
-      "_typeset/rule-sources/6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996.md": {
-        "bytes": 22384,
-        "sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996",
-        "key": "releases/3e45c6b773df7d166155e2de8eab68106bde541bf71464da5968f127fdd3b8ee/_typeset/rule-sources/6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996.md",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/3e45c6b773df7d166155e2de8eab68106bde541bf71464da5968f127fdd3b8ee/_typeset/rule-sources/6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996.md",
-        "content_type": "text/markdown",
-        "source": {
-          "bytes": 22384,
-          "sha256": "6f377dc4d60da1cdaf8938e0eacb89d12ee9183de3ed14b70299b92c4b725996"
+          "bytes": 12820,
+          "sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942"
         },
         "byte_preserved": true
       },
@@ -28705,15 +28693,15 @@
         },
         "byte_preserved": true
       },
-      "_typeset/rule-sources/c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669.md": {
-        "bytes": 12835,
-        "sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669",
-        "key": "releases/18be927612098823b98169f368745242827f3e714d405818b276ec155b3bc508/_typeset/rule-sources/c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669.md",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/18be927612098823b98169f368745242827f3e714d405818b276ec155b3bc508/_typeset/rule-sources/c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669.md",
+      "_typeset/rule-sources/c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0.md": {
+        "bytes": 27094,
+        "sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
+        "key": "releases/ab4bed53ec3a1ce4951c62794270160c513204038738b5ed6765191a505158bf/_typeset/rule-sources/c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0.md",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/ab4bed53ec3a1ce4951c62794270160c513204038738b5ed6765191a505158bf/_typeset/rule-sources/c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0.md",
         "content_type": "text/markdown",
         "source": {
-          "bytes": 12835,
-          "sha256": "c00737770b37208469b7e1bf14a560f9d43326f13062d2835740831761337669"
+          "bytes": 27094,
+          "sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0"
         },
         "byte_preserved": true
       },
@@ -28738,6 +28726,18 @@
         "source": {
           "bytes": 12321,
           "sha256": "d792fd44742ffd27a853372a11a6da1631cb63fe54cd7983ce765f1a3bafacb7"
+        },
+        "byte_preserved": true
+      },
+      "_typeset/rule-sources/ead0fc797bf4e7452f0f8454afc216b912ea5bd3d02ab36fb428ae26f9390cd4.md": {
+        "bytes": 22942,
+        "sha256": "ead0fc797bf4e7452f0f8454afc216b912ea5bd3d02ab36fb428ae26f9390cd4",
+        "key": "releases/e2ba9707175559565404862580731d49b439db38c3bd9bd3738ab7e15839c948/_typeset/rule-sources/ead0fc797bf4e7452f0f8454afc216b912ea5bd3d02ab36fb428ae26f9390cd4.md",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/e2ba9707175559565404862580731d49b439db38c3bd9bd3738ab7e15839c948/_typeset/rule-sources/ead0fc797bf4e7452f0f8454afc216b912ea5bd3d02ab36fb428ae26f9390cd4.md",
+        "content_type": "text/markdown",
+        "source": {
+          "bytes": 22942,
+          "sha256": "ead0fc797bf4e7452f0f8454afc216b912ea5bd3d02ab36fb428ae26f9390cd4"
         },
         "byte_preserved": true
       },
@@ -42433,6 +42433,18 @@
         },
         "byte_preserved": false
       },
+      "assets/_fingerprinted/2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783.png": {
+        "bytes": 1072535,
+        "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
+        "key": "releases/d84e72baa8c8f1808794a5569cd3a689a711e7a19d7f5e261ce8f7cae76f7ea1/assets/_fingerprinted/2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783.png",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/d84e72baa8c8f1808794a5569cd3a689a711e7a19d7f5e261ce8f7cae76f7ea1/assets/_fingerprinted/2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783.png",
+        "content_type": "image/png",
+        "source": {
+          "bytes": 1072535,
+          "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783"
+        },
+        "byte_preserved": true
+      },
       "assets/_fingerprinted/2f9c792e9fd39e688c13cad63f231d1d670d2fb6264667f782fc6b83670a49e2.png": {
         "bytes": 2435844,
         "sha256": "2f9c792e9fd39e688c13cad63f231d1d670d2fb6264667f782fc6b83670a49e2",
@@ -47662,6 +47674,18 @@
         "source": {
           "bytes": 1154586,
           "sha256": "673018aa0cd3fe21ef5e05c112e057e445f52504dabdf45f2c64dec95a07c44d"
+        },
+        "byte_preserved": true
+      },
+      "assets/_fingerprinted/6783142750756868f710b07ddd24707f33da4acbd83331629c187aab2a444720.png": {
+        "bytes": 378872,
+        "sha256": "6783142750756868f710b07ddd24707f33da4acbd83331629c187aab2a444720",
+        "key": "releases/328f65b05e4c15ba0ec45f35e7ec130074396649184fbcbb75d05c6cd79a2a0c/assets/_fingerprinted/6783142750756868f710b07ddd24707f33da4acbd83331629c187aab2a444720.png",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/328f65b05e4c15ba0ec45f35e7ec130074396649184fbcbb75d05c6cd79a2a0c/assets/_fingerprinted/6783142750756868f710b07ddd24707f33da4acbd83331629c187aab2a444720.png",
+        "content_type": "image/png",
+        "source": {
+          "bytes": 378872,
+          "sha256": "6783142750756868f710b07ddd24707f33da4acbd83331629c187aab2a444720"
         },
         "byte_preserved": true
       },
@@ -55249,6 +55273,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fingerprinted/bd2a55824d3c0d660ba3ec66f21d697f621eaa21cb14c7fc62a0c8f0eec1ca44.png": {
+        "bytes": 196535,
+        "sha256": "bd2a55824d3c0d660ba3ec66f21d697f621eaa21cb14c7fc62a0c8f0eec1ca44",
+        "key": "releases/1487c0da03c7eef7603177e22c63883b0308699f884be39a1b711ca86f9c867f/assets/_fingerprinted/bd2a55824d3c0d660ba3ec66f21d697f621eaa21cb14c7fc62a0c8f0eec1ca44.png",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/1487c0da03c7eef7603177e22c63883b0308699f884be39a1b711ca86f9c867f/assets/_fingerprinted/bd2a55824d3c0d660ba3ec66f21d697f621eaa21cb14c7fc62a0c8f0eec1ca44.png",
+        "content_type": "image/png",
+        "source": {
+          "bytes": 196535,
+          "sha256": "bd2a55824d3c0d660ba3ec66f21d697f621eaa21cb14c7fc62a0c8f0eec1ca44"
+        },
+        "byte_preserved": true
+      },
       "assets/_fingerprinted/bd2b34bedac48e5dc9544c1429d3fc6a0ecf9a04cbc5f6ba6095843573a28502.png": {
         "bytes": 295196,
         "sha256": "bd2b34bedac48e5dc9544c1429d3fc6a0ecf9a04cbc5f6ba6095843573a28502",
@@ -61345,6 +61381,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fingerprinted/fbd1f2129330dd87e3d7ab7700a2905db4b046aa75907bb91bcff8cb93fdf2ca.png": {
+        "bytes": 1068699,
+        "sha256": "fbd1f2129330dd87e3d7ab7700a2905db4b046aa75907bb91bcff8cb93fdf2ca",
+        "key": "releases/56ef830cf2001faf3f44255cb0e22f9436ec66c3d99a169a7cb0b9a17ad670a3/assets/_fingerprinted/fbd1f2129330dd87e3d7ab7700a2905db4b046aa75907bb91bcff8cb93fdf2ca.png",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/56ef830cf2001faf3f44255cb0e22f9436ec66c3d99a169a7cb0b9a17ad670a3/assets/_fingerprinted/fbd1f2129330dd87e3d7ab7700a2905db4b046aa75907bb91bcff8cb93fdf2ca.png",
+        "content_type": "image/png",
+        "source": {
+          "bytes": 1068699,
+          "sha256": "fbd1f2129330dd87e3d7ab7700a2905db4b046aa75907bb91bcff8cb93fdf2ca"
+        },
+        "byte_preserved": true
+      },
       "assets/_fingerprinted/fc1b1a43be5c1d5d8a2a88c4d55520d3350731febfae9c008ca75a2c46da8eae.webp": {
         "bytes": 1545728,
         "sha256": "fc1b1a43be5c1d5d8a2a88c4d55520d3350731febfae9c008ca75a2c46da8eae",
@@ -61978,6 +62026,18 @@
         "source": {
           "bytes": 178996,
           "sha256": "dc8d93de1993f614ab2d03e293680f324b1bef1b66325acee17aa6c988239d9f"
+        },
+        "byte_preserved": true
+      },
+      "assets/_fonts/charter-08ff6bc1b9a0.woff2": {
+        "bytes": 235308,
+        "sha256": "e6d6687a3baf28020b63e3d1eda3cc21a97e7cd2bcc967b37abf24140706115f",
+        "key": "releases/5133e61f7dc2ca9e98da60993c810ec9b06608236ba98c89148dd934b4beac8e/assets/_fonts/charter-08ff6bc1b9a0.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/5133e61f7dc2ca9e98da60993c810ec9b06608236ba98c89148dd934b4beac8e/assets/_fonts/charter-08ff6bc1b9a0.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 235308,
+          "sha256": "e6d6687a3baf28020b63e3d1eda3cc21a97e7cd2bcc967b37abf24140706115f"
         },
         "byte_preserved": true
       },
@@ -64261,6 +64321,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/projects-home-0d01a2973058.woff2": {
+        "bytes": 178600,
+        "sha256": "c850a28b8ddf186dd21ef2ff56840340f3ba170626f01a9fd47e1b06e1a5b192",
+        "key": "releases/20b73ded7c31d5fd78db689c8e582da3e4597eff6e4636833f698b5af034d99c/assets/_fonts/projects-home-0d01a2973058.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/20b73ded7c31d5fd78db689c8e582da3e4597eff6e4636833f698b5af034d99c/assets/_fonts/projects-home-0d01a2973058.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 178600,
+          "sha256": "c850a28b8ddf186dd21ef2ff56840340f3ba170626f01a9fd47e1b06e1a5b192"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/projects-home-3ed0c677ab93.woff2": {
         "bytes": 178128,
         "sha256": "af643fd83dc993d010cc031955f81e59cb2b95af8d0fe512a0ab54be56a5a844",
@@ -64717,6 +64789,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/rule-capabilities-runtime-f3cdf0b5e530.woff2": {
+        "bytes": 261692,
+        "sha256": "673ca3fffee45fa5e671d0da10dcc5fdf1f51c44a38c32ff16a6908959e5593c",
+        "key": "releases/ba2763fbe60560e3c72120a0d0f578ab612e5df11f9ec6aa5860dd9680694af9/assets/_fonts/rule-capabilities-runtime-f3cdf0b5e530.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/ba2763fbe60560e3c72120a0d0f578ab612e5df11f9ec6aa5860dd9680694af9/assets/_fonts/rule-capabilities-runtime-f3cdf0b5e530.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 261692,
+          "sha256": "673ca3fffee45fa5e671d0da10dcc5fdf1f51c44a38c32ff16a6908959e5593c"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/rule-claude-adapter-15d0ff30fe85.woff2": {
         "bytes": 244216,
         "sha256": "7a6dcf8b38cb4d4ffdd5be283cba51820645ad0549560d0f14de9988b0e54faa",
@@ -64981,6 +65065,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/rule-privacy-data-66ee91a2af9c.woff2": {
+        "bytes": 214816,
+        "sha256": "ae717f173f18f4f6259c89470135f1e082d374547d8c1472f58ac22eda2e89bf",
+        "key": "releases/2184c7a9da3408c4a8fa4d285aee35445318f8107628ea10064ae4564cf23160/assets/_fonts/rule-privacy-data-66ee91a2af9c.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2184c7a9da3408c4a8fa4d285aee35445318f8107628ea10064ae4564cf23160/assets/_fonts/rule-privacy-data-66ee91a2af9c.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 214816,
+          "sha256": "ae717f173f18f4f6259c89470135f1e082d374547d8c1472f58ac22eda2e89bf"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/rule-privacy-data-7619dc2a44c2.woff2": {
         "bytes": 214984,
         "sha256": "0be5b661f64fea3749235f94e5ced1d8e0fd52f4ee7ad804607fba7b892e240f",
@@ -65242,6 +65338,18 @@
         "source": {
           "bytes": 164472,
           "sha256": "65001edb6dd086fa70ad72158d8d6810e79a73b7589b5803641e57f8e0cefe50"
+        },
+        "byte_preserved": true
+      },
+      "assets/_fonts/skill-cockpit-884a8f98de40.woff2": {
+        "bytes": 163128,
+        "sha256": "6d0779b5bc391c8e1ae98161320cdef796fe8737e9f98e4a4b4c7534fb26b80d",
+        "key": "releases/fd50ebbd12b2633146cb55ec471d97a9915410ffd7dc7826f88820333a7110a4/assets/_fonts/skill-cockpit-884a8f98de40.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/fd50ebbd12b2633146cb55ec471d97a9915410ffd7dc7826f88820333a7110a4/assets/_fonts/skill-cockpit-884a8f98de40.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 163128,
+          "sha256": "6d0779b5bc391c8e1ae98161320cdef796fe8737e9f98e4a4b4c7534fb26b80d"
         },
         "byte_preserved": true
       },
@@ -70454,26 +70562,26 @@
         "byte_preserved": true
       },
       "rule-sources/templates/claude-home/CLAUDE.md": {
-        "bytes": 23222,
-        "sha256": "55dedfc5f44d14eacbdc4805ab30c7595cb53bce4e1ffb6c3588b6c5f892141a",
-        "key": "releases/1198901484dd46a31b7719b034d591b9cfe320025b91657ac8c9321d1c85ed3f/rule-sources/templates/claude-home/CLAUDE.md",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/1198901484dd46a31b7719b034d591b9cfe320025b91657ac8c9321d1c85ed3f/rule-sources/templates/claude-home/CLAUDE.md",
+        "bytes": 23216,
+        "sha256": "3f30ee0cd2892ae5c7b6ad9b5fb2df012ffdb7109dd8782f13cc6b001f27cc44",
+        "key": "releases/c04e6c033da681c54ce63f07c29e12a04bbd0611835ee2928dfeff3f6582c261/rule-sources/templates/claude-home/CLAUDE.md",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/c04e6c033da681c54ce63f07c29e12a04bbd0611835ee2928dfeff3f6582c261/rule-sources/templates/claude-home/CLAUDE.md",
         "content_type": "text/markdown",
         "source": {
-          "bytes": 23222,
-          "sha256": "55dedfc5f44d14eacbdc4805ab30c7595cb53bce4e1ffb6c3588b6c5f892141a"
+          "bytes": 23216,
+          "sha256": "3f30ee0cd2892ae5c7b6ad9b5fb2df012ffdb7109dd8782f13cc6b001f27cc44"
         },
         "byte_preserved": true
       },
       "rule-sources/templates/codex-home/AGENTS.md": {
-        "bytes": 22948,
-        "sha256": "6596689cd846a62339cda7dcec87f0301341aaceb76f21611f6d3ddfa393b337",
-        "key": "releases/2ffea2ed398ab95276087685ab887cded60b7f0990737d9d87a2df39310479b9/rule-sources/templates/codex-home/AGENTS.md",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2ffea2ed398ab95276087685ab887cded60b7f0990737d9d87a2df39310479b9/rule-sources/templates/codex-home/AGENTS.md",
+        "bytes": 22942,
+        "sha256": "ead0fc797bf4e7452f0f8454afc216b912ea5bd3d02ab36fb428ae26f9390cd4",
+        "key": "releases/0cc3c1926c50c38f7ac80fc9617ef712bf9edfb6f815fbfe9717f8e78f41403f/rule-sources/templates/codex-home/AGENTS.md",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/0cc3c1926c50c38f7ac80fc9617ef712bf9edfb6f815fbfe9717f8e78f41403f/rule-sources/templates/codex-home/AGENTS.md",
         "content_type": "text/markdown",
         "source": {
-          "bytes": 22948,
-          "sha256": "6596689cd846a62339cda7dcec87f0301341aaceb76f21611f6d3ddfa393b337"
+          "bytes": 22942,
+          "sha256": "ead0fc797bf4e7452f0f8454afc216b912ea5bd3d02ab36fb428ae26f9390cd4"
         },
         "byte_preserved": true
       },
@@ -70670,14 +70778,14 @@
         "byte_preserved": true
       },
       "search-index.js": {
-        "bytes": 1697234,
-        "sha256": "9815a6fc6cd98496aa31844008efb7230ab1e4268493e19ab15913fb427ae86a",
-        "key": "releases/908a738db8c86c3161eae67467fcf80b6457e115824130fdd22354a85363df1a/search-index.js",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/908a738db8c86c3161eae67467fcf80b6457e115824130fdd22354a85363df1a/search-index.js",
+        "bytes": 1698332,
+        "sha256": "0062790395016376ca654d69f550c84fbf8aebf2a808bdc4d6e62805f61ddf25",
+        "key": "releases/96315659bc563341b53ca3f6b0c90134e6da2f9ad0ea9f32653da59394780d47/search-index.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/96315659bc563341b53ca3f6b0c90134e6da2f9ad0ea9f32653da59394780d47/search-index.js",
         "content_type": "application/javascript",
         "source": {
-          "bytes": 1697234,
-          "sha256": "9815a6fc6cd98496aa31844008efb7230ab1e4268493e19ab15913fb427ae86a"
+          "bytes": 1698332,
+          "sha256": "0062790395016376ca654d69f550c84fbf8aebf2a808bdc4d6e62805f61ddf25"
         },
         "byte_preserved": true
       },
@@ -71079,13 +71187,13 @@
       },
       "search-projects.js": {
         "bytes": 3760553,
-        "sha256": "dabb46b55a844325e8d1795e9bc1ea4363e6345bc27cf61b1101f41d9ccb6e60",
-        "key": "releases/a49df7702d2a2089efa794482e173e593b1c887054894f35b40402ecf20ebc02/search-projects.js",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/a49df7702d2a2089efa794482e173e593b1c887054894f35b40402ecf20ebc02/search-projects.js",
+        "sha256": "10900b5b4fa20fe93ad5198c810d4f467bb007d186ec541e06d4312fc033b3e7",
+        "key": "releases/62793c9c1716ffe95f567e89e6109036f04b9a3d02868d9d645491f826cfdd65/search-projects.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/62793c9c1716ffe95f567e89e6109036f04b9a3d02868d9d645491f826cfdd65/search-projects.js",
         "content_type": "application/javascript",
         "source": {
           "bytes": 3760553,
-          "sha256": "dabb46b55a844325e8d1795e9bc1ea4363e6345bc27cf61b1101f41d9ccb6e60"
+          "sha256": "10900b5b4fa20fe93ad5198c810d4f467bb007d186ec541e06d4312fc033b3e7"
         },
         "byte_preserved": true
       },
@@ -71892,6 +72000,7 @@
       "releases/0ea19b317f2c0e66a43381797bb507cda9f2c27456ede7293ab5d9d0fca3d4e8/_living/skill-explain-to-me/bird-first-only.f6499ab9f7eb/m0.864c54049a.webp",
       "releases/0ea8ed34a21033e4cdb912f295eea1923d827dae2a5637aee85e3af3e36cb94a/_typeset/runtime/live-sans-part-7-3c354cd8e273ee31b164.woff2",
       "releases/0ebee0db5bc0580cdb40d31fa21526256125a0207d88c2f606a5f29bed143934/assets/_fingerprinted/f3a938c987a565ad553b91c9371c031e2844ad934960f80e7b5600976bb4b8b9.jpg",
+      "releases/0ed009fe0c3464f1334e56912c9c0cb94b409d84083d752518b099aeffd15a5e/assets/_fingerprinted/877d44d9a2accd5b88c7ce272a54ca12f28d4d68eaa6140b4c744a93faedd791.png",
       "releases/0eea69669cfdc631b2c19a2f8eba7752b2d8a48846667892850ed922cf8d1197/assets/_fingerprinted/b7acf29791541c4cc71343b57e7cebab332d5a7760760cdf5783ef9a61884fc0.png",
       "releases/0f01aa51e44ca5783b5174c0f5c6e06893b3b147309537f1b35849e78f573779/assets/_fingerprinted/52e27a29e0206bf48fbff4ab5e4713901bd28b658e5da2424771e5bb883f1db2.webp",
       "releases/0f31f3e15599e20753375cea1d7fa06b6230e827806ed42a0024cd89ecdabb9d/_shared/nav-4aa1a3c6743f.webp",
@@ -71943,7 +72052,6 @@
       "releases/1197506dc165d9c9eaf880dab164a179fe5b8896e14a5f15587ec13a11938f8d/_runtime/4a8311e856dea659aa93/computer-access-client-CiGp9WQq.js",
       "releases/1197506dc165d9c9eaf880dab164a179fe5b8896e14a5f15587ec13a11938f8d/_runtime/6bf11b1d611e5be6f865/index-Cgq3wyAK.js",
       "releases/1197506dc165d9c9eaf880dab164a179fe5b8896e14a5f15587ec13a11938f8d/_runtime/d01d47ffa61239c89480/computer-access-summary-client-B3KXV751.js",
-      "releases/1198901484dd46a31b7719b034d591b9cfe320025b91657ac8c9321d1c85ed3f/rule-sources/templates/claude-home/CLAUDE.md",
       "releases/11a39ca62a66f0f395981dae4ed2977becfde72e2e86cecd97dd487ac0661d52/_typeset/runtime/live-sans-part-4c4-01beaa78ff62f693fa81.woff2",
       "releases/11ae730bb415871c0f453505ae7793d65c96d130473f2c9b40a5d14940f21c92/assets/_fingerprinted/bd2b34bedac48e5dc9544c1429d3fc6a0ecf9a04cbc5f6ba6095843573a28502.png",
       "releases/11c0ae2891f93d8c011208a08e2809d01dadf7b95bbad42f169446d484f7e2d2/_typeset/skill-file-intake-router/873aa3fa2948a8aef3c4-skill-file-intake-router-01-h.png",
@@ -71989,6 +72097,7 @@
       "releases/1479664e002cafe48a2bea112b653f5eac2ffa3d4c3a422fd72e4705baf37a4d/assets/_fingerprinted/468d48a979a9aae0bd523175246d21a2153cb221219c70cae07d5b81084217f0.png",
       "releases/147afdccb93efe75d167a68cdc79699ad9acee85018800cec7cf57ad0e2f2536/assets/_fingerprinted/448b4c7a67cccf9e27e77a937c2ed23ee366686409c3c4649af5199022a81073.png",
       "releases/1486f9179753ea0a885e5a45c5816c6d9892acaaa6f3f297b5df62e214b676be/assets/_fingerprinted/4c0b14a27fe624e1037c7c41bc8ad35c5bb3091ba14ce02481aa6e0c6941fe2c.png",
+      "releases/1487c0da03c7eef7603177e22c63883b0308699f884be39a1b711ca86f9c867f/assets/_fingerprinted/bd2a55824d3c0d660ba3ec66f21d697f621eaa21cb14c7fc62a0c8f0eec1ca44.png",
       "releases/1489a1506a199322038b999a52c36baf4dfdd589fcd768e91f544bad2006ab7d/assets/_fingerprinted/c9596ee41b3949d3edb3416253efb511b586fc9f61fd47c5fa444f971326def1.png",
       "releases/148c2a7c0478feefabc5392fe9659031c2afc8c44a7cca7488ceef87bf167d1d/assets/_fingerprinted/e07c67ff62a6a49ec80afd8bd3d6927ac0385bc1866ef4d9039bde40a7e5ed13.png",
       "releases/1493181c810d58ef0c4ed042210f03d252d8beaeb12d115fd4ef28020f76ebfa/assets/_fingerprinted/ce8be71f6e83c736e1acf413241ac177fbbcd0ce1f29ce43d323e10cfe6eec1c.webp",
@@ -72089,6 +72198,7 @@
       "releases/19b3eada794fa54cdf4a6a32372b6599005b62d2b03bf166f74962b69ecd1eb7/assets/_fingerprinted/667c9a99170e7af82ce15d8b16fda8e23101f66a67db0ee85e1362b727a733fc.png",
       "releases/19bede2c0605a399bb62f5c038b37c1b3f56f8eb968aacc3cc3541c62897739f/_typeset/skill-report-page/45955181549dadf05498-skill-report-page-01-v.png",
       "releases/19c2fbfdbdb23af10791035f98e29f8013488e616d2ba0d1bd969d2749261a2b/_shared/nav-99aea2f913-51e26db6204e.webp",
+      "releases/19de7abfe71a3528755e4d8c19bc848c3cd0ad7b3e37b62cadbd420e5f7b1f2d/assets/_fingerprinted/2d93d1dbb7e27d2bfe7edfb1fddc0ce968d1aa0b0d2abf80d5e29944ef796814.png",
       "releases/19e5c075e59f6e5232df50aec0b5c5c5fa6ee413eb0d9bca6bb7b7087b4f7d2f/_living/password-center/bird-first-only.2d55dbe0ae06/config.json",
       "releases/19efa3381aa69b8289f6db52627b6742a955b1d87567b2a6adedd58bcc8893b3/assets/_fingerprinted/8c40219429e53eb5054c579a457fcb8597261f8ade66ade503b6c586e0af18f5.png",
       "releases/19f069c03fbb4a957439b3f0248ac8854cf990b586c8860cb6718ed5a95019b5/_shared/home-comic/295cd8bc1e8a248d5bbb/assets/v-b-p5subs.png",
@@ -72190,7 +72300,9 @@
       "releases/1f8a2ecabd2ed83c2916c3436dae5cdef790428d132aa051262f190199c6d7cf/_typeset/runtime/live-sans-part-b7-5fc4a5aac7ed28f32e72.woff2",
       "releases/1f9807227c1b1906c17f5fa73bc1f077cdfc669424aad962467c4964b3f07d43/assets/_fingerprinted/2e8c2deeb34bec2b7bbd8f1090fda4fb6f2ae6f1f885e025b93f31ac68f56f0d.png",
       "releases/1fc556b626d7831b311463df23152f9a1cf8471c6785792716c7c8e8319bd321/rules/claude-adapter/assets/hero-51f0e1f616a07390-mask.png",
+      "releases/2025dbd304d0199b1ed90b729b77bbc6f0b2bbb8be4b3e9239310893f72dc95e/assets/_fingerprinted/fd0136b15d80cd1eadf7d3d7a94f9306e1c2d9776454b28c009fc4c21fbff27f.png",
       "releases/20336b314897cac242a9429fcae95b551d7f5af6483807dc53cb0625e7539c9e/_shared/nav-e61ad08fd3-4f91e3b03560.avif",
+      "releases/2034e4f05025aaaf733630b58727378004ff81e03067bd7c70a4381ad573455d/assets/_fingerprinted/dd0d6900de4c91a553f10202fc97b1011007055899ad6135ab2e0c9bbfa6b210.png",
       "releases/203a49bac7fd49385707545d3e4cfa6104a2a4dfc57faad8b0cff813cd876297/assets/_fonts/skill-local-secret-broker-9c4181b82b83.woff2",
       "releases/203c69dbbcfd0eaeab142b2d4e7abfc4c7da30e05134dfae3351091f8a3b65bc/_shared/nav-d6543d3bdf2e.webp",
       "releases/20564559f05a2c9a62110f2eabadff214d588d528907b270c2bc7f1ed9bf25e7/_typeset/skill-authorization-file-broker/4990aaa9196d95a3616e-skill-authorization-file-broker-01-v.png",
@@ -72201,6 +72313,7 @@
       "releases/20801ae5cd1303302fb2d0164391b2ebc4c2c9043a4f6569514ae9371e4bd4cb/_typeset/runtime/live-sans-part-42-6511f122583953726558.woff2",
       "releases/2087d5d64e4f84a17aa964ba85fa0c39cd690df3df5b5b7ff9bbfff7ba7185b9/assets/_fingerprinted/323c3a1bd0311d7f5e6d6f66787f1d10a5b910fcf9132b57d1e978fb5e99af94.png",
       "releases/20a09af74000c2fc8abaa2be5846f4ed81ee43d5b1777aa54b709c392f159c05/assets/_fingerprinted/abf8633198001db20cca94fb8036a5abdf276f05a7734d14a8197b78cde80631.png",
+      "releases/20b73ded7c31d5fd78db689c8e582da3e4597eff6e4636833f698b5af034d99c/assets/_fonts/projects-home-0d01a2973058.woff2",
       "releases/20baa0d6b6462127b41727ba46391f78c558408e089593263b6a5902212b7cf7/_typeset/runtime/app-61893663729241e84b08.js",
       "releases/20c562954b3bd0b9189826338e6acaebef71e032d516463c6a124747df346349/assets/_fingerprinted/1af4a257c66e49cfe1094b6c1613737eb8b6ab509ccfe744bd1c9364a4eca9bb.png",
       "releases/211e27450d90538f7f019c7da6d8c7899bf470cdf64d9b78edd9928bb5da2e38/assets/_fingerprinted/e8f21f5b180d19cd31ed962377acf0f5c638b4a6e99e9a17ec29a1f1d267b61e.png",
@@ -72213,6 +72326,7 @@
       "releases/213d12032d8d3c25f05c1674b84de27b310194ee2bf786feb44f26597c0a957b/_shared/nav-a7d6625f8c-81c134b2d5a9.avif",
       "releases/215898c00c32b147e608abb9028d232ebe063b900a25b81fc37954e35d45a953/assets/_fingerprinted/a0ece401130221a5dd9ff84cf651119df886f243438ace57a8ca43b307e4054b.png",
       "releases/216ae4f178d67329a27b60ab9b0bd104ccf6b613ed55f724744b3b9981c4bc53/assets/_fingerprinted/06adec7b17139c69c3bc37ed2681d245e6bc3519f8b245a7d036d19a0f274ff9.png",
+      "releases/2184c7a9da3408c4a8fa4d285aee35445318f8107628ea10064ae4564cf23160/assets/_fonts/rule-privacy-data-66ee91a2af9c.woff2",
       "releases/21874da3fb1ff6a00924c2c6a8e8d57fb4ec2b8c42f2ff243cc1b1d25d1a61e2/_typeset/rule-rule-release/f8956906e6fb4f9edee8-rule-rule-release-01-h.webp",
       "releases/21a81c2252d038d1a4dd4bf632087d6d96295b5b337857f6316173bd609c1e37/_typeset/runtime/live-sans-part-108-859a55da3a671b7bea38.woff2",
       "releases/21a8285769a122fb50bbc0ff50b89e9251139121690b8a7b20b49a420e652423/_astro/cockpit-05-title-01.ClH1RU9N.png",
@@ -72238,6 +72352,7 @@
       "releases/22fca130fee3396daec301e1994daf8111228e2c2d4446c0dbf3ea0ca3182fa4/assets/_fingerprinted/f554f4462988651607c5a8960869c3792984c7e17081de9f2b525a9fd21df834.png",
       "releases/22ffb230db723734f1c08a7f25195888b33680b5f5462b62d05de02a6b25ce06/_shared/nav-2c093b1f4d-71f93744e1c9.avif",
       "releases/23085984fd8b61382553d50a38f0960ba5b6deef5a0d2e1f12893297514726d1/assets/_fingerprinted/cdd00fb6065b2e5032a59b765b21643ac32688ab496cc17f42a04a0d74b147da.png",
+      "releases/23103f022f48815e69ae41b025586d70906df5fd68e02af3849913fbf2470af4/assets/_fingerprinted/61d407568e0f51a69ee50eb21b68d0d0d2b7b9c130c66133ed524db22ba3efe7.png",
       "releases/232816abf1a9d8c4f2ef88e7a1527d52fbb63b2c722c78f537ba963812de3bf6/assets/_fingerprinted/c19c16ab9a16d249d79c8c89e2856b5d7217e13ddfbdac9647f42442f691b091.png",
       "releases/2339aac480a1d06d7c4ed3a643caa44a437ca1cf87f684d17ae9b33f2b7a1fd8/_shared/nav-507ea0dd26-f65d9ba9f465.avif",
       "releases/233faa4b8b271174d0c811128df359b2b366edfaf5b34e3a74a985ec66a032f2/_shared/nav-b317940f68-bb9126c7ac59.webp",
@@ -72438,6 +72553,7 @@
       "releases/2e5cdc2d82703cf9f311857d002b8b0ebad1210738e5074974623519753c24ba/_shared/nav-f8d7d5c654-0c45204dfee6.webp",
       "releases/2e5ea148ba30d2df0ea4715bd5297441f524c773c4049c9dde613da21b2011b4/_living/skill-media-person-self/bird-first-only.2b42e682b90d/m0.f941def5a3.webp",
       "releases/2ebb8034cd00cda55a3d77c1ddf1badc0cfa995f39a16b5df4fec3f0614932be/_album/album-8495390722f7f6c80715.js",
+      "releases/2ebfa3c47c7bbc9667dd95c1c988e178116f2d95f6442d3d625ffc03dab579e7/assets/_fingerprinted/006edcbb9a53b279754fe4816a2ebe44ae212996e7884f7332304605bf528f7d.png",
       "releases/2ed3da004b1751ccc420f6ac79b3252cfedaa4d30bc14084edea20ec81390827/assets/_fingerprinted/ea3b2253569bb9a3bd695c81c3a6f2b48a385841de17eb66b14a8b92042d9f1f.json",
       "releases/2ed5b2008ab9f6eb61562897711bea9629455aeb803bcee520c46feec6685372/_shared/nav-398cd04705c2.avif",
       "releases/2ed9a7b2e48914e0fe289669945a0c35a19edecbfb9d743c2f17310d644988c8/_living/rescue/bird-first-only.6fbc0a084e55/m0.1f766b7759.webp",
@@ -72510,6 +72626,7 @@
       "releases/3266b0a200f55dcb1d0530e223da5d1d5a2d00607013c7c35cb5b5d47fb4744b/projects/password-center/assets/hero-9c801386e9d96a5e-mask.png",
       "releases/326727d815f0f3221dd92c1f1d627d4eaa13d6ca7df7580b168e3fbf898464f7/assets/_fingerprinted/7bb8668a745bd5bffce037a1a5bd661966af6c1e13d76d62fdbc7aeaf7e55900.png",
       "releases/328510d38fd47e10948a47e0b77a9b5aed95e97971c95cc96b1b4b383b1eba48/assets/_fingerprinted/a94503d84ba077d72dc81dcb3752c63c60359547f26f98fb8e321e61f10ddae1.png",
+      "releases/328f65b05e4c15ba0ec45f35e7ec130074396649184fbcbb75d05c6cd79a2a0c/assets/_fingerprinted/6783142750756868f710b07ddd24707f33da4acbd83331629c187aab2a444720.png",
       "releases/3294d1eabd58b4851c36b8f619427c02f14669bf4b5d095bcbf4da2755f838b9/_astro/refresh-button.CxKMxoft.js",
       "releases/32ac9da372115478864b798ee023827d0344c23b2a5f703d7d18d0dfe4e0d0d2/_living/ai-cli-profile-manager/bird-source.e023dece4b8d/config.json",
       "releases/32baa82d580dc12b19c2c9a4010d180e59bbb26d9c51145bd0474df6e0eb7ee4/_typeset/runtime/live-sans-part-ca-03b8406fdeaf461ae7c8.woff2",
@@ -72757,7 +72874,6 @@
       "releases/404d8261438a4b870daeb05a5fcfd7d96336fc6929a068b446852d79637e150a/_shared/home-comic/295cd8bc1e8a248d5bbb/assets/h-a-title-chars-13.png",
       "releases/4054a88d5ba0bbecc872fcabe966b37b57588f46be7facee4c1298b4f426c3b8/_typeset/password-center/26908dc996408c456c72-password-center-01-h.png",
       "releases/406d347b69cd061de078fd947898f0830ece06471bd69aaea8cc68500d61c40e/_shared/home-comic/a554b08e4d2a2e262568/assets/h-a-title-chars-2.png",
-      "releases/407da8aedbafa917bb95ef63657f8c46629b4718627f37eb6964f68dfebbbbce/assets/_fonts/charter-af9a845785c6.woff2",
       "releases/407dae34bbbd00244ca106f406721a1962fa6586cef007815af43e5ba7059b65/assets/_fingerprinted/c30dda6ae3b33992fef0d3a3ad33a68738fb8cc4d73d396b5847af0c7f818e84.png",
       "releases/409dd0d0c3e1775e8a9fafeb7a6ef48f8a4598f8b7ea7444b49c7c0b932ae9e1/assets/_fingerprinted/5a60eed940039ce64479bbe0ad1291324001b4413255407b65200a400029d588.png",
       "releases/40b4e18e252ec15465cc20aff0b6ffb735cd797516b3478a48c84daca801af9f/assets/_fingerprinted/b4ea48ec38f9492dbb7667192475e08ab9d3fcf576a70d49f6eee2b90e9238b5.png",
@@ -73071,6 +73187,7 @@
       "releases/510173b7995f5ede6f271bb5a5cb48ff65190c7ec41f4504362a99a870616479/_shared/home-comic/295cd8bc1e8a248d5bbb/assets/v-b-p4docs-0-lines-2.png",
       "releases/5104f2f71d86038f448218f1842c356e20c31758e6352c1c2133cd36398d3cbf/_typeset/runtime/live-sans-part-3d-03085d02c89b9916d9c1.woff2",
       "releases/51082989307bfa699cef39d5d59c3d425d57ecf26d210531a4b046bdeedafbe8/assets/_fingerprinted/dff7a3ada94d34d5b65958ff7f41acf6afef61dbe3891852889962cb62a19673.png",
+      "releases/5133e61f7dc2ca9e98da60993c810ec9b06608236ba98c89148dd934b4beac8e/assets/_fonts/charter-08ff6bc1b9a0.woff2",
       "releases/517bd33182f4f16cbd3a35553a867c58d254bba5fe2682833c7c7b09ce3b4d02/assets/_fingerprinted/2b289dbc2f3dd4dd0257f0c96a9d095b3b2fff091b5ccb89a9639b34f255361f.png",
       "releases/517ee1123d92b81358090ef433c42bc7be27758c06c9915bd44159e36506c362/assets/_fingerprinted/f974df5fdcb7ca2cb044bb240443e0658f6e1dd2c3a663998a872de33296e6f7.png",
       "releases/5192c017c3c921631c14daca908fb4ea7ae31dfd59d0b1fa265fbedb2f79b54f/_typeset/cockpit/64b35d04344bed044b22-cockpit-01-h.png",
@@ -73179,6 +73296,7 @@
       "releases/56b887ae9c4e84cda24161a577b5621b329bbf07c53a54a97834f285e4571455/_typeset/skill-explain-to-me/fb4de7083bbd8c0af454-skill-explain-to-me-01-h.png",
       "releases/56da5ef603872bcb33bb268d96d97c829695378f9dd867602045aeaa9d8e28c1/projects/typora-theme-pack/assets/hero-0c6733fb6e3aba5f.mp4",
       "releases/56dcdf62b08cc103cd6377f96ecc16816e3b063bee1b9c892f249cd57df92998/_shared/home-comic/295cd8bc1e8a248d5bbb/assets/h-a-title-chars-3.png",
+      "releases/56ef830cf2001faf3f44255cb0e22f9436ec66c3d99a169a7cb0b9a17ad670a3/assets/_fingerprinted/fbd1f2129330dd87e3d7ab7700a2905db4b046aa75907bb91bcff8cb93fdf2ca.png",
       "releases/56f6893aa9de40a86097561109fcb431a1ad9f4119d11454bc338113f75e5c9b/assets/_fingerprinted/f5f72c35e65c02acfaf757f61735643837637dee4da4f7c3794932afa65ddd82.png",
       "releases/56fee5aa49eddad866b8a28a8634fdc7914d38e0fe0e199aef84846631c9beb9/_typeset/ramdisk-guardian/c560bcc1e3a69f006b8e-ramdisk-guardian-01-h.webp",
       "releases/56ff3849bda078e62d3aa3d0a63e64bcaa6a344e8d1c1b2b391d42c7f4dd7545/assets/_fingerprinted/9d8ee7e554afcbf0a63d36af2b8ff7da18106232d54b4932123cdee4a08e77ad.png",
@@ -73231,7 +73349,6 @@
       "releases/5a1ac80ca67fd1cd764192f35d463164f815445235c04ab5c66da3176231ce98/assets/_fingerprinted/c3d90010d2c27276577c6d99187b37285b63a48e138a68efa2480b1ae10603b9.png",
       "releases/5a21aee816c7a7792fc63bf7c443cb3aecf9038d0e36e297fb6203cdc6c03f2c/_shared/nav-bcacfb9b86-8c76ba8a9a07.avif",
       "releases/5a4117c8e275a0b6c61cb204b1231a2a498ce57f629951092ec72dfdac709b26/_living/skill-localocr/bird-source.bbd34f889cfa/config.json",
-      "releases/5a506d42d12976893a2711a123ba898697c8ece988e59d8be4156f07a1a9035f/assets/_fonts/projects-home-879aba21a6e9.woff2",
       "releases/5a576d9922347d9d54295266bce527a380f2dc46f0aee9f3ca8975590d2eb96c/assets/_fingerprinted/74341f40e955f13285b55700bdfd41fa6ab0ab1d477bf260e7532d8dd361bac3.png",
       "releases/5a5a0007a0bc30046b1cfe96205d9b248f943d9d4c113b508194dd8945b53894/assets/_fingerprinted/bb8fbdf1ac286d80f73038fd40f272b6921c4c1b7e1129fae48cf68263ae540a.png",
       "releases/5a606b219cdf9963ed1d00ad09f914b920e278aca96b9d69de703fff7d4cbbee/_shared/home-living/hero-live.config.b07cbbaf8c.json",
@@ -73285,6 +73402,7 @@
       "releases/5c63ec383f6d07dcfe344a02cf94169fec9b45d1b9ad197183edab2e3791a5fb/_typeset/runtime/live-sans-part-44-feab48a053a627b5c59b.woff2",
       "releases/5c6f9abeed8be63993e5febff1739ed18c0696ca74624afb90292667f918754d/_shared/home-comic/a554b08e4d2a2e262568/assets/h-b-p4docs-0-patch.png",
       "releases/5c762c1a1454708fced1ded7003c2b5acd6e4a00758b11d75e7e7f4f7ff04665/_shared/easter_bird.webp",
+      "releases/5c84ac8c59c9d6d5175ed4c21c387a92467a4ef8d17d96b9c080c865ebc158f0/assets/_fingerprinted/02c93e4d5401230db278ed1e08517748a918e05e838da9d22eac7d1af121ec36.png",
       "releases/5c95fb1d40a1eb083186944638ee3ad3d1a8eb12c288e3cf33195561f67d7413/_typeset/mcp/6590f1c60c5cd0569eb2-mcp-01-h.png",
       "releases/5cb9a1e34ebff62864e459be3dd886c3a575a138588fbead5582ed68df68c86b/assets/_fonts/personal-materials-bounded-discovery-16983e75f18d.woff2",
       "releases/5ce3b22bb8d44523fcf85eee709b1e679cbf021b8a1d999f5301a42768474426/_typeset/runtime/live-sans-page-2259a500d77044736105.woff2",
@@ -73333,6 +73451,7 @@
       "releases/5f3bb2a9fee3c0bd7801734284050b459c9d50b627af37a5eadd84926d2f13ab/assets/_fingerprinted/52e50497f31588690c3ad887f787c937798d355d70c0eb3b5bfafe89f4f747c4.png",
       "releases/5f5579c09ef034a0643aa906a1222e062cce900cee6887c19b451383c1c41c21/assets/_fonts/vault-tool-ai-local-interface-d13002ce07f7.woff2",
       "releases/5f61aebfde7559db82ba3dd7df4ded2528d33b8f6253fd5b585c372d9ae2c56d/rules/assets/hero-13362ec1965fb786-cbc9d697.mp4",
+      "releases/5f7236a88491679fdd6f166aa364ebae3ff171f43e6351c0ac1efaadf6ce3117/assets/_fingerprinted/ad355788cbe119f122499a31ce8b00bdd2e7aa120623a0c00aa5d06a5aa4a61d.png",
       "releases/5f76f7b4d022353fc42933b605197c8d08ea72a5064ff569e4d9c53ff2cc1a42/_shared/nav-915c18abd56f.webp",
       "releases/5f79df6f59819c1e8ce837f90144c42156f469a330019a4c959541514625f48c/_shared/nav-007d3d9e3dfd.webp",
       "releases/5f9dadd6e726f7e8efec18ba8e0fff367449a1d97d2f235a0f829085e8949a82/_typeset/runtime/live-sans-part-59c-befd656469cc796923dd.woff2",
@@ -73375,6 +73494,7 @@
       "releases/6242d0dce078206d80d40533ea63e6bcae0fe7a42d96286e09b77e575a9ca2f0/media/localocr/sample-table-actual.md",
       "releases/62447f2d215ea10fe8ac307e5b58fae5d1b76aad7692640625a9adb0c51226de/_typeset/runtime/live-sans-part-66-befe1c2fadedea6045cc.woff2",
       "releases/624ca04836a6a6ff1f6fdc8bb187236f3f4386fc814b4555abbd875e90b1f541/_typeset/runtime/live-sans-part-ed-aa16295331513bd84651.woff2",
+      "releases/62793c9c1716ffe95f567e89e6109036f04b9a3d02868d9d645491f826cfdd65/search-projects.js",
       "releases/628b36f034f68539f3f8c24e87dd8b1ff264c5d529c3d81a326f9d16b56923c5/assets/_fonts/skill-vault-workflow-aa4abc694dc7.woff2",
       "releases/629b40614a1fe0a7e6e8d658f29add16e851bac9e7abcbf8e1beb3e8e1c512f2/_typeset/runtime/live-sans-part-e1-51b402ae339927371a82.woff2",
       "releases/62aa214c46064fa28e7c2695ee6d19eeae2913791158c459b4dfcca8e6cc1cfd/projects/ramdisk-guardian/assets/hero-1d415537493e1859.mp4",
@@ -73659,6 +73779,7 @@
       "releases/726f708bb9fc61e011d692763098a83222934620cf5b02e58e58825f31cb0eb1/_typeset/runtime/live-sans-part-4e-96b471a06458c4388c87.woff2",
       "releases/7289d5595a4650b91f2067641e8287c3e708e1b646059fa648664f0c6df4e189/_shared/nav-68cc25dbbe6a.avif",
       "releases/728f08a287151cb38b6873749dc60e337899b4b18da9cbd10fb053591d92cee5/assets/_fingerprinted/edebadd516d6e836622fda2141ca9c958b593e0f8c929fc29bdef42149319c35.png",
+      "releases/7295a4d515210d48574e174a3086f109aa53358909b61d1c84dfebb76f27a29f/assets/_fingerprinted/7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164.png",
       "releases/729ec37e243c7c1a83a4cd9925c26b251be5b75279f8bf825dc4550a702adb49/_living/skill-wechat-direct/bird-first-only.6108c6a82cb7/config.json",
       "releases/72a500ef03e7821863f44c4386527a064925437fc29c0184e910fabd8043a718/_typeset/steam-millennium-config-backup/607e9fc517296e3b4c01-steam-millennium-config-backup-01-v.png",
       "releases/72bfcdda89b6e4c9df42e516f43b8ac987a8e62c9e48a80a057d76aa153a415d/_shared/home-comic/295cd8bc1e8a248d5bbb/assets/h-a-title-chars-10.png",
@@ -74106,7 +74227,6 @@
       "releases/8b1218fec5a1ddb7c3314eef5512fa96f071f3b9143e0f9c5df3fcfa60b573cb/_typeset/runtime/live-sans-part-c2-1e6cf3c49f69aa954728.woff2",
       "releases/8b12e133c7685a343fe23bb6871bd302a4f08e6e45fe5b49375e48ebd87e666e/_shared/landscape-wide.webp",
       "releases/8b1562b2f13dfd10b7a0c197713f3b8e2e5f06e810ebfc4f8ebbb729ade002b9/_shared/bar-skill-v-52c3eba791c2.webp",
-      "releases/8b1838139650c355f35e201f958472bbd23edb4aa63c8068e05894a2c738d2b0/assets/_fonts/rule-capabilities-runtime-650785f0b987.woff2",
       "releases/8b1f488d7af6f0edfe30b9e52bbae02a8f7093d22b19495ab29f0ecf10285298/_typeset/rule-context-sources/fcc547e2225d71b198cf-rule-context-sources-01-h.webp",
       "releases/8b222182438f2f9c66c68bf2266283b1ac6400adf6f552f8742c8883a5053633/_typeset/runtime/live-sans-part-112-54829f9b008b9c6231dd.woff2",
       "releases/8b323feafe6f1f99357ae34258f5a983fd7f13dee5f747cd14a3d36c0ebb161f/_typeset/runtime/motion-5ce0fd6a823dddf94104.js",
@@ -74174,6 +74294,7 @@
       "releases/8f13d6e6f70f585ab74841e0484656b0a2750b4ce341995891d517413afbe946/assets/_fingerprinted/335bbbab079bb933b422ab05219adba7560d8056f2d45a52d485036acc864f01.png",
       "releases/8f1eb9916a97d1f296a96f94916d9fb034ff556aa0c6e8425b5ccf7f866b39a0/_typeset/runtime/live-sans-part-123-bb7f6daa092baf8866fb.woff2",
       "releases/8f20385b3bc5bbbe0f114672b28f56c01d5239afbfc17d280e1d0b59ea459f20/assets/_fingerprinted/07f20d36a355df46034e098ec4a49c75957c65ee990ebd1a2ac00a8f5c848e43.png",
+      "releases/8f2eac1f4d13fcbc53e49bbb36be8a8c35312d456c75f5d5bd4bac5b32a2b234/assets/_fingerprinted/3692e58386f2440b20e173e2a6aaef1ac68d2bc97a1d1483ad20e4c2741a7fe8.png",
       "releases/8f31884dc2264436ad71a3f7f493231a2083f99bec93068eef7b62ff41960c10/assets/_fonts/video-scaffold-project-bootstrap-eb8e6e45dd0b.woff2",
       "releases/8f5c7a0e1cb8a631b4fe9cc9fb4fc3c94423f9fefb6083fcd0481fce1b3f62b7/assets/_fingerprinted/8d70850524f394bff7bb0e3415c750e7c657fccaf1b29ac21cda0440482051c5.png",
       "releases/8f812fa5d69803aeac6f150fcae8cd51c7483d22ea41825352f21cdccbe7e6f5/_typeset/mcp/0fe5e3e71d4f33abec31-mcp-01-h.webp",
@@ -74195,7 +74316,6 @@
       "releases/905f7384e10fbf7df00291e3d716ac5b5fdf5bb35a0b11c7f7edde670d2d97b9/projects/chinese-asr/assets/hero-5e55f7d0a162319f-mask.png",
       "releases/908280c12c37772900d0824a1c8a81da42222c63fee78d4a4c047756e1072b24/_shared/footer-email.webp",
       "releases/9088a9f3c97460155b47dfd906470f0340df4327b64914249dbf4782de1b728f/_shared/header-paper-h.avif",
-      "releases/908a738db8c86c3161eae67467fcf80b6457e115824130fdd22354a85363df1a/search-index.js",
       "releases/908cccb0e8f0bc33abb9e3a086a47e893d9f30500c93fec919b44696c43aa395/_typeset/skill-personal-formal-documents/3a0e90c3e8cf42159812-skill-personal-formal-documents-01-h.png",
       "releases/908f78f06fd6291481135b196848ef43a3dfa038be844adfbc824261a360bafc/_living/_textures/8cb2e2ee9d39457883ecb895d3d095b886ee250fa3730522ef4a99adfdf8e13b.webp",
       "releases/90a3db80e80e291bd205eab56e670ba3e718d9165d4fce1e5fb149ec6f2ceb27/assets/_fingerprinted/1fe7b25c69359ea9d796e7e8372033aab8bbca7be6805e1d4dcde6babd5be06d.png",
@@ -74236,7 +74356,6 @@
       "releases/92a6afba4ef04534ffd7e4d319ccfc894f574077a5032eff97648f8805779c44/assets/_fingerprinted/635306e581f66c96073a56a0bc09a6571bf3054a972ece0c572eeda5fc871ba4.png",
       "releases/92adebf503c4f339a64cba23f2f1787ddf15de9f387a06d4402f4c079e8f0aac/_living/cockpit/bird-source.8ce64e3214b3/config.json",
       "releases/92c429af8b2f93f554c414709f031b84565c50bb98aab32f5f628e3aef94366e/assets/_fingerprinted/9e4344016d5dd398d86d489c0439dc393bf2c39a9d75943b4ec780943e62e4c9.webp",
-      "releases/92da5e4ccd7ef4f142e715646e254cb4b3c93b9632bab7ade8110d1d18d2122d/assets/_fonts/skill-cockpit-bdc8d091fe07.woff2",
       "releases/92deb019c75743bd0da187819e5bcab4d7e8b8c5f36b76bb380baae8cf3f691f/assets/_fingerprinted/ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f.png",
       "releases/9302742f526b7c2b59e88137a31901d67c137ba874bfc3aa9d0d83458a2a3eea/_typeset/runtime/live-sans-part-73-dc11ad0dbda4508387ba.woff2",
       "releases/930da23b2e826bd57be7db41c92da0dbafae626f51448d21503562d6c6ba1322/assets/_fingerprinted/d4831e4acef346b81f625f897e582e75165c144c3fcd37c101007548c015f00c.webp",
@@ -74294,6 +74413,7 @@
       "releases/95e25ce1c555f853c56f926a6c3b3c3e414f85a223503e65af143e6ed36e4956/_shared/nav-53d77f56548d.webp",
       "releases/961704b37c8db7a784d88dc0e1d2e598e8239898b4412f4a196216382c6ffcc1/assets/_fingerprinted/c50ab9d8d1b6fe8ce9adb3e2f6830294ce86162998feb850f0478ca873bc6412.webp",
       "releases/962f2bd24555eed40d76cf9f9b4c2828c2ba86ecedd4742f2a847491ed303e77/assets/_fingerprinted/6a93052b9b4d3c782b9128acd1ca109b71fbe7e5dcf513916ee4c7731b6ac4ee.png",
+      "releases/96315659bc563341b53ca3f6b0c90134e6da2f9ad0ea9f32653da59394780d47/search-index.js",
       "releases/9661d970419c6843c42dfb5f12d437c3326e3fe80256726ae5b68ef42c2b6aee/assets/_fingerprinted/4d022bed9a5827c8ca33fbf2bd045d35c34272f7dfddb77792ff308767f87a55.png",
       "releases/96688c4dc19d01b269bbc4ebf780c8b5909cf8145c0adb81f4841bd906752e16/assets/_fingerprinted/64e1939194ae5fae80a2f4dcbfd54642cf86a532e0acae4c04620b801fe66f10.png",
       "releases/968358cea4ca486e14d4a66c936e6829fdada6ac7f1ca7bd1608c199c16492b7/skills/work-delivery/assets/hero-66a46571f42aae03-mask.png",
@@ -74343,6 +74463,7 @@
       "releases/98b602ba384956f3eed8e617970116e71d69d5e31cf7aba774dc90516c0e1de7/assets/_fingerprinted/4b72accf42775e0407daa6539d3442c05d1f7885c446c9cd1eee55c2af7077f0.png",
       "releases/98d8bf4ee32bd5a5969aee140af90be2300c9c73accc05d98e6919be5448540c/assets/_fonts/video-scaffold-preflight-preview-5d4a3e6cef9f.woff2",
       "releases/98dfa80d0c26f2cd2edd6189fe43f4c93f5fc9d4d29ffd66973314228b3c939e/_living/live-dom.js",
+      "releases/98e3a35d15db8118c0cd270c769b83b4f13ab700e00c9e8cf7448bdbe4d4c713/assets/_fingerprinted/1766f0993c19002b64a929ec87e163cbbefb504d69d82dbb9a5b277d9873b152.png",
       "releases/98f145ffc6e4c772b94a8bcc0a5275db67047391a7a414f87b2794951011f579/_runtime/697f25dd20946efbadc4/b2-typeset-79d3708dca946797.js",
       "releases/990014019dd5bf5614bb39a17a4c060a86b7f1fb43e0c504ef3aad6cb4ba551a/projects/chinese-asr/assets/hero-5e55f7d0a162319f.mp4",
       "releases/993dfda6bf5b2b39e7a354a14b48158aae5b48963b41c513a70236919d08bd7b/_typeset/runtime/live-sans-part-6d-04ea2891133b23e29cad.woff2",
@@ -74552,7 +74673,6 @@
       "releases/a43891a96c330b15f7cd4c388f21f4541d1ff8de4e4cbba087ae978da1a41c5b/_shared/nav-46d81a290a-fece67c45d3d.webp",
       "releases/a43dc1bf8cab7b06d6838c551f87333a503c27b7b56ff2cde0e6464b8a977597/assets/_fingerprinted/be59abd96b0c8bca2116a21c77e2b8065000584cd25e00175fb7f0e23ba5f3a2.png",
       "releases/a490393eca18ee85f0bdacb150fd45b51474ce4d04cb2f853f05fd47281dd925/_shared/home-comic/295cd8bc1e8a248d5bbb/assets/v-a-title-chars-6.png",
-      "releases/a49df7702d2a2089efa794482e173e593b1c887054894f35b40402ecf20ebc02/search-projects.js",
       "releases/a4ad862b91523cd4e33f1018000444dff208cc9f4eecb5287738fc1d3ec2e760/projects/codex-local-remote/assets/hero-8d1bd35b009c7264-mask.png",
       "releases/a4fa06977f3631617807d382bb3757ea388d3f35356860afff2772e7fd1dd8b9/assets/_fingerprinted/6cbae2c5119c87bf56ad76e49a3cb97ad6d3f6c7b86619d63f07d11ebe8c1a98.png",
       "releases/a4ff3b9913438ec5b872c49e73cb2b4ffbaf95ad0d96dcf022c0a4887416e34d/_typeset/runtime/live-sans-part-493-ac77d50530e96eb10703.woff2",
@@ -74576,6 +74696,7 @@
       "releases/a6300d4dfa76a15a0ec8c0fa21d25292912ede40184b7358d9876f931571e17a/assets/_fingerprinted/694461491e3502e64f6ba01a913e3526aee62e11e4a949b3339fa52579fd460c.png",
       "releases/a634d919698eeec679a968c1b7833bcab6d7f6929bcd5adbeb95681d42d324a3/assets/_fonts/agents-authorization-owner-317ffd0a8b49.woff2",
       "releases/a64667f0c1d024871a0048c1d021a049777dc3b805be8faae73ffaca3ce942ad/assets/_fonts/skill-personal-panel-refresh-1ccb482a9c93.woff2",
+      "releases/a64cb818da9aa2c0b130282641b75bfabb07df606524f111d84a1410a406b180/assets/_fingerprinted/207ca8c4f5cb3177b61374ce0da3e5131b939e2034be7fb401fa42636cd5a6c8.png",
       "releases/a654940fa951080203d73255f69fa9c6dc8428bf63e36bbc6a2010bd98d93f79/assets/_fonts/pcconfig-recovery-backup-67a71c1325e6.woff2",
       "releases/a6668a4c85b6d7893ce4f79c44f1907fdbac3dbf396c4f98c6e4c9133d01da4b/_shared/nav-f8367a4ec7-7879a592274d.avif",
       "releases/a66b7c508fcc82323be4cbf8af1a0085d80e163bd393ab19b679b7dc07327d9e/assets/_fingerprinted/b0e7e0c2521a2dd339fa378fe29cf9e0366d7f915553a52b7cceb4d59500b098.png",
@@ -74944,6 +75065,7 @@
       "releases/b9f834efcdface70f300d880de0c3b3c7aa2edbe35dbca50f42d875742fb9636/_shared/nav-unify-standard/nav-unify-label-74-cc4284472c.webp",
       "releases/ba0b734176172173f145bb4f302443d07ce6e588379000725d6973db62205482/_shared/nav-ba55b824f91a.avif",
       "releases/ba0e4d126c8d83426e7d34870981f57c9a2521a1ea8f910ae263596567cd2394/_typeset/runtime/live-sans-part-b6-4327ba0774838eb3a3aa.woff2",
+      "releases/ba2763fbe60560e3c72120a0d0f578ab612e5df11f9ec6aa5860dd9680694af9/assets/_fonts/rule-capabilities-runtime-f3cdf0b5e530.woff2",
       "releases/ba2ee1eca39f5dbdcc0c07d4d0dc0d265e40b43f3421111e85ca25211cec08fc/_shared/nav-bdeaa8d446e8.avif",
       "releases/ba47c8bcbd05cde4696f1b72fa8a39103e5cc52dd656abe8efed8593b94cb482/assets/_fingerprinted/a7b8917c6567212dc729ba65aa4ce31b59234784e8a5641e26c7946a8e9bba2d.png",
       "releases/ba4eaa7eadbddf0e95d94669ba7c4bd8ff590e164ee1bd394a2169593aa6505f/_shared/home-comic/295cd8bc1e8a248d5bbb/assets/h-b-p4docs-0-lines-0.png",
@@ -74996,6 +75118,7 @@
       "releases/bd3d5eb1c4db176bf92b29dc19b4e3ef0608c50c88dceca8b3097ddde15eed4b/assets/_fingerprinted/decac468fc63bb1e8ca5193d105c91ed877bf6e9216c1c96a36ccaf01e58d9d8.png",
       "releases/bd422a8f03c287893bd68a02aca9285d6ff77001487d14f1d5a7a00ea2e6a491/_typeset/runtime/live-sans-part-83-685ad2c14c8218ef8fa0.woff2",
       "releases/bd52ef16d3153acfe81c3cc74d83b8453be7fe8274293328b0fa88dfda900d91/assets/_fingerprinted/bbdfe8fe41505397c63194c6f9cfabc10d17a761fae560518d6a66d1f3549adb.png",
+      "releases/bd6e1cb5bb3a41069f506801d2f0ae107baad282c77e54affd510dcb2c9d3b9c/assets/_fingerprinted/005ecff58d5a9fe61cfb8ef593a20e6374a4e41c601c4c1fe98e8841d0f94dea.png",
       "releases/bd77e4166c8584c45e354b64ad1ba95a1af6c40225da219f9fe5ce200aac468b/_shared/nav-2c093b1f4d-71f93744e1c9.webp",
       "releases/bd7ea3d4d205e22a92afdf264e475c8eb65895efa676e16834eb029c95da732f/assets/_fingerprinted/ff7969b40fe758b82c628c5165854b2e70bb8be4eb8b71b30fb71ecde33764ff.webp",
       "releases/bd9c4898eb2fbe0f8f0cb6d4a3453fded364b0cc487903c2ef6b6b46f9cecc38/assets/_fingerprinted/d8e3a26743621da58d63a61a560c2b91873874ebcaae024bf8e4f01110310772.png",
@@ -75068,6 +75191,7 @@
       "releases/c029c09b04548bd9031f543a58e72e10e5c7354c9cf6ffe45544a5e872d7ecdc/_typeset/runtime/live-sans-part-508-6bfc774b741ab7d3b853.woff2",
       "releases/c033625576413ae69565dd067222ec54e4a783891106946e7aa4091b3bc04e69/_shared/nav-93d38313e1-cea4557c950d.webp",
       "releases/c047c8890738da78abe8113a70b61ec349d3157fe5ebe7dbeba3428aca45b02d/_typeset/runtime/live-sans-part-402-f5512a4b791c715d74ba.woff2",
+      "releases/c04e6c033da681c54ce63f07c29e12a04bbd0611835ee2928dfeff3f6582c261/rule-sources/templates/claude-home/CLAUDE.md",
       "releases/c05a9013812f21110b79315b33340f99cee77155041dfcdb1e870f17ff165bb5/assets/_fingerprinted/379015743b459a8d1740b72ab769e0e4833d525eb07755bc6cb4244d7625f4aa.png",
       "releases/c05cd0b0aef9b517fbb9ad0529f86f0f82890b46c4a9328b23b3002745efad1e/_typeset/rule-codex-adapter/7a73493921a5fafd8432-rule-codex-adapter-01-v.webp",
       "releases/c064a33efb5a2b1b71d6d0d1126d7224dc317f56833c210d2d840dbb5796d0ea/assets/_fingerprinted/097e0304d288ed51790a51354fd96d4350cbd37b1ff112d8a34f19c169df7e84.png",
@@ -75091,6 +75215,7 @@
       "releases/c19b04d31bbbb9ec0c2fafa6726090f0d1ddf735d076397d5d15a4bc82ec3114/assets/_fingerprinted/64a58cb2780c9fb4014a3f954ed162f7313f328a6c0c77f6554d2245a8638ae5.png",
       "releases/c1b0817f9fc3c504962045c61b80b29cf8adf1913730226f013c97fd32613d76/_typeset/runtime/app-f5e2ad11626403071bb0.js",
       "releases/c1b2d3dbf03bf3e9fe6fe708ae3d48c918e6598a6560364c4ce98d4c07a6b7ce/assets/_fingerprinted/926672233fea2bbf431d07d3d43e65074f681ca306e5113d18d0480f253d4d9c.png",
+      "releases/c1b4bd024360ec000f64e8fffb5ca3176b3c4e0883425d8c3c4d8c2c84b4384b/assets/_fingerprinted/e365b0208f0e75f40c63f79598210e3b0bc529f83a26a6bcdfb133606b8e5f80.png",
       "releases/c1bb3b261deda4e84343b99e79bd5e0d79fd86985a5ef31a49ebde5775dd8a2c/skills/reply-as-me/assets/hero-a58cef6fdf7a4867-mask.png",
       "releases/c1bfc6fc379da310c882657fd4b85ac8c9319f8d0c279894c38599c1bb31e88d/_typeset/runtime/live-ui-cb4eb78b0d1c457804aa.css",
       "releases/c1de1b22e5582eb49985c21342cb83448ee20fb1abe7247097b411c3f1196828/_shared/nav-599652b09b-49891ebc470a.webp",
@@ -75320,7 +75445,6 @@
       "releases/ccbacd626741e18343d06bdd9bee0ea264b875d465317865c3e417e622ac6481/assets/_fingerprinted/b9a99be3ab748a9f9f547d9bf8b2c231c59b37e461d860a805755326075a63d2.png",
       "releases/ccd3a87335398fb69cfe5339a1daa39a89f64ed9663fcc18a20c81d6fc63bad3/_shared/nav-0ceab1e2ae-ee20a983eb81.avif",
       "releases/ccd684658256c932eff24eaf963f12f991d912a313a6cd6bd8c556669890de92/_shared/home-comic/a554b08e4d2a2e262568/assets/v-b-p4docs-2-lines-11.png",
-      "releases/cceb864a995dfc6b1af5e6e2d5efb10cb6a2bda0a2b9c50b7930fbe54029cc7f/assets/_fonts/rule-privacy-data-d27355440548.woff2",
       "releases/ccee32cdfaa0997cd4b38b2e707344a26f1562ae766dd8d536760af99aba0a46/_living/_textures/e60858284e756c481e6fce54e2ccc5653eadd2738efc7165525cedb7ddcbb4b3.webp",
       "releases/cd031a4f7f41bf83cf863fe64c62b51f8c620bd836057a8febfad020b1a74291/assets/_fonts/emerald-veil-wallpaper-engine-coexistence-and-rain-experiment-6b72751f2509.woff2",
       "releases/cd0e94c7a9c45c317f29b3f2947c3438772bef2e849de25bdaa8cf41d2b74674/_shared/home-comic/295cd8bc1e8a248d5bbb/assets/v-b-p4docs-2-lines-0.png",
@@ -75515,6 +75639,7 @@
       "releases/d81772c5907c256c596a491f2dd5b1a9ca881449daaca2fcdea043831d0b3f52/_typeset/vault-tool/857e0647f143de21b9a5-vault-tool-01-v.png",
       "releases/d836d505d14fb447acf45c7d2af98e39c872333caacffab7ae83e34b03930c04/assets/_fingerprinted/344ae4c0b39f545354cd771401e24e6576cb0687b099c991dd72548ba373190a.png",
       "releases/d8484f8ef9e8897ceba43c2996d123585397d378791e4a958f2c3c2327d06c16/_shared/nav-cc709d5c86-b91c8df78c21.avif",
+      "releases/d84e72baa8c8f1808794a5569cd3a689a711e7a19d7f5e261ce8f7cae76f7ea1/assets/_fingerprinted/2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783.png",
       "releases/d858f0a9d233223c769f8c88415dfcaf684517cade701b704fc269744e83c8b2/_typeset/skill-personal-formal-documents/3ade2bd0ce348831743d-skill-personal-formal-documents-01-v.png",
       "releases/d85d664e0890f1193028f2d2a76da07fdc355e5d33cbf5a8ca0388ceba5170cb/_living/vault-tool/bird-first-only.7e8e480a7366/m0.0b54ad54e5.webp",
       "releases/d861294797f6ca9dd9e7dff0e18c341acaff485cd74e730cf5606ca574806072/assets/_fingerprinted/5bbad591cd26d668f1e6938082d95a1da9b8625bc80d780facbb101a7da2c65e.png",
@@ -76159,6 +76284,7 @@
       "releases/fc1e5ee730b154a9dc9ba9d6e692c5d7d0e9a6b34f0f348b1c09d4c7e5992ac5/assets/_fingerprinted/98bdf4875b2158711c94e8cb1bf44bd239f8cbc513a761fb697ad485f7dfcdee.jpg",
       "releases/fc2de2ff7873715ce40587c5af4fac690fd970215aecfa80cfbc1520b2d219aa/assets/_fingerprinted/a76bbb8fc456f7f0f4beafbd3a2e095422aa2550c68ebb3d837e031467ace2ba.png",
       "releases/fc3468abd147d3cd5101e2ae3301dc79805dc7473f5946412174649686e9fbc5/assets/_fingerprinted/4bf86bc6d0a447801dd2540276d1ed5cf76bf0829cfb82ab29bd77fa1d8e81a8.png",
+      "releases/fc483e35dea02cbef0fd19c290113d46877ea4cb1b62019cbd7ca2dc23293c43/assets/_fingerprinted/90e1c348891691d034a7f6e0abdb840afe44e108eef43f6df06258e8cfba69d2.png",
       "releases/fc55d65534f5911cec8aab046e68fd877cd1b56a91a06a42312104b4bbb3ebf0/assets/live-hardware/gpu.webp",
       "releases/fc567cd0c55c33f518325bf8d0fd6bb36470cbb6241d6b0e5b2846df9352b7d1/_living/codex-agent-model-benchmark/bird-source.1a94b3e9b560/config.json",
       "releases/fc67d4047c12670e946362f82f8c79179dcbe59bfcafb9efd8777c3f45673c4b/assets/_fonts/document-materials-page-audit-release-ebb58ab08ee7.woff2",
@@ -76176,6 +76302,7 @@
       "releases/fd4071102dda7ed8447cd7dbd8e1f8f5ab02da81782b8a10f8d9feac94e283df/_shared/nav-f8367a4ec7c3.avif",
       "releases/fd471dab18a1dfc5ef2a82d6eef91c9a90dc6e858b5120c298c90a7cd0448845/assets/_fingerprinted/dcc3c1fc588ad8dad2510a4d704b44594949ec3dc003e22763eb19ff35991ae8.png",
       "releases/fd4b308310d248009250bf5b93a7730bddf3262f3e744a057a3dd8fa2c2c4c0b/assets/_fingerprinted/d3a869c8a9ab1b3991b6ec2feb7b3ac0cbc205e3b00f480f2d60c2de8039727f.png",
+      "releases/fd50ebbd12b2633146cb55ec471d97a9915410ffd7dc7826f88820333a7110a4/assets/_fonts/skill-cockpit-884a8f98de40.woff2",
       "releases/fd57e2d7ebba8d8e3b63eaf31ddd8745257cc49b2ab6903d183a3ae56e1b0cfa/assets/_fonts/skill-proxy-network-d098f132c0f1.woff2",
       "releases/fd62ad8c96464170408216b5af54137db1377fd5041d441b8110f13ec437a75a/_shared/nav-4ffbcdc5180e.avif",
       "releases/fd66568cbabca528beb89d8961f7c2a1e8800eedb3cb98e259b3bde8823c49cf/_living/_textures/767cd871174b9b3e9142906d639e050935a5c11c541f83eb064f55fae8f79698.webp",
@@ -76229,5 +76356,5 @@
   },
   "prepared_at_beijing": "Unknown",
   "finalized_dist": true,
-  "source_commit": "e6ee255e0a56beac51fdf29d830657f0e8a99159"
+  "source_commit": "c28c093ffb97dbea09729341a582b05706cd2c6c"
 }
