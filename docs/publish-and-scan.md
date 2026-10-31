@@ -8,7 +8,7 @@ python -B -X utf8 site-astro/tools/scan_glance.py --dist <dist>
 python -B -X utf8 site-astro/tools/scan_glance.py --dist <dist> --pages all
 python -B -X utf8 site-astro/tools/scan_glance.py --dist <dist> --pages /projects/daily-preferences/,/projects/password-center/
 python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <scan-result.json> --dry-run
-python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <scan-result.json> --output <正式发布输出新目录>
+python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <scan-result.json>
 # 上条发布完成、释放锁后，另跑清理；可与下一轮取数并行。
 python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发布输出目录>
 ```
@@ -39,7 +39,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发�
 
 正式发布默认延后清理，不必再加参数。`--skip-retention` 保留兼容性，显式使用时回执记录 `skipped_by_request` 和删除数 0；它同样不在发布内清理。发布回执中的 `oss_retention.command` 给出后续独立命令，清理失败不把已上线状态改成发布失败。
 
-每次运行在输出目录写 `publish-receipt.json`，包含逐步秒数、计划与实际传输文件数和字节数、HEAD/GET 结果、部署标识及失败原因。`--output <新目录>` 可指定落点；默认写到 dist 的同级唯一目录。失败回执会保留，不把上传完成当成发布成功。
+每次运行在输出目录写 `publish-receipt.json`，包含逐步秒数、计划与实际传输文件数和字节数、HEAD/GET 结果、部署标识及失败原因。默认输出是 `E:\Cache\wly-site-build\publish-runs` 下的唯一目录，`--output <新目录>` 可另指定。失败回执保留，不把上传完成当成发布成功。独立旧资源清理成功后，默认目录按目录名时间保留最近 3 个运行目录，并额外保留当前 `published.json` 所指提交的目录；清理未成功时不触发目录收纳。目录保留不改变 OSS 对象退役规则。
 
 `--dry-run` 同样先核扫描文件哈希，只读上一版清单，计算差异，并在独立临时仓库生成真实的 `site-dist` 提交。首次提交没有父提交；已存在分支时从其提交接续。预演不领发布锁、不 pin、不上传、不推送、不触发部署、不写成功记录。传输时间按固定 10,000,000 字节/秒估算；回执明确记录这个假设，它不是网络实测，也不包含 GitHub Pages 排队时间。
 
@@ -104,7 +104,7 @@ gh workflow enable edgeone-live.yml --repo wlyaaaaa/wly0829.cn
 
 六类失败是大块空白、文字压叠、文字被裁、空图框、请求或站内链接与锚点错误、可见按钮或链接点不动。屏幕像素阈值与叠放白名单集中在 `scan_glance.json`。栏底空白仍须超过 200 像素；用本人截图校准后，行高比例从 25% 调为 20%，使“手机上也能用”屏实际 218.8 像素、20.54% 的空白被检出，屏内竖带仍须超过视口高度 40%。原普查另外七类保留为提示：屏外或透明文字、占位词与坏字、重复标题、重复卡片、重复大图、横向越界、日期说法。
 
-本人北京时间 2026 年 10 月 23 日 07:58 决定解除首页锁定（首页也有截止时间，任何人都可以按需更新）。扫描器已删除 `home_locked` 配置和分支：首页与其他页一样，变化时进入 `published-diff` 选页，首页发出的链接照常检查；只跳转首页的旧别名 `/cv/`、`/system/` 不重复扫描。构建不再保留上一版首页字节，首页亮点数字过期时自动重画（见 [Astro 说明](../site-astro/README.md)）。首页的视觉改动仍由 AI 看静态截图、本人看效果。新扫描器不写死时段按钮个数。
+首页进入 `published-diff` 的变化页扫描；只跳转首页的旧别名 `/cv/`、`/system/` 不重复扫描。首页亮点重画与构建规则见 [Astro 说明](../site-astro/README.md#首页授权页和驾驶舱)。首页的视觉改动仍由 AI 看静态截图、本人看效果。
 
 输出 `scan-result.json` 记录页面、视口、类别、元素选择器、坐标、逐页计时及截图路径，并记录全 dist 的 `dist_files_sha256`。开始和结束的成品清单不同会报 `scan_error`，不能得到通过结论。每页每视口一张整页 PNG，失败局部图从同一张完整截图按实际坐标裁切。请求失败没有元素坐标时附首屏；未选中页面的离线断链只记录 `viewport=offline`、空坐标，不伪造局部截图。退出码非零表示有失败；实时接口读不到单列为 `live_unavailable`，不计作静态 404。
 

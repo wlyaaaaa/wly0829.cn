@@ -49,8 +49,8 @@ See [Project expansion gate](docs/design/panel-content-contract.md#project-expan
 
 ## AI refresh model
 
-- The website's semantic updater is AI. The owner asks naturally to refresh one
-  project or says “全部更新一下”; the website task reads the Registry, collects
+- The website's semantic updater is AI. An owner-requested update follows
+  [the on-demand checklist](docs/ondemand-update.md); the website task reads the Registry, collects
   current Owner evidence, repairs safe in-scope defects, edits the owning
   content in professional plain language, validates it and presents a preview.
   Deterministic scripts may collect facts and verify contracts, but never write
@@ -100,16 +100,10 @@ See [Project expansion gate](docs/design/panel-content-contract.md#project-expan
   Owner source, including when the change came from a feature change rather
   than a commit. A figure that cannot be re-read stays with its old date and an
   explicit Unknown (owner, 2026-10-11 15:47).
-- The homepage is not locked (owner, 2026-10-23 07:58: “考虑到首页也有截止时间，解除首页锁定；任何人都可以按需更新”).
-  Its dated highlight numbers come from the owning project registrations and
-  are regenerated whenever any owner-requested update changes them; homepage
-  bytes may change in an ordinary build, and the homepage follows the same
-  scan, publication and read-back gates as every other changed page.
-- A rendered page counts as updated only when the change reached its actual
-  render input: `site-astro/src/content/pages/<page>.md` must equal the
-  conversion of the current author JSON. A directly edited Markdown that
-  diverges from later JSON changes is a defect to unify from the owning source,
-  never a reason to report JSON-only edits as published.
+- The homepage follows the normal update, scan and publication gates; see
+  [the Astro author and build contract](site-astro/README.md#首页授权页和驾驶舱).
+- A rendered page counts as updated only when its author input reaches the
+  actual render input; see [the Astro author contract](site-astro/README.md#内容文件怎么写).
 - A frozen generator page that the current refresh would otherwise leave
   materially stale is rebuilt as a current typeset page in the same refresh,
   at the same quality bar as other pages; frozen pages untouched by the
@@ -146,9 +140,7 @@ See [Project expansion gate](docs/design/panel-content-contract.md#project-expan
   from `config/panel-projects.json`, including the current content path, source
   identity, evidence collectors and existing snapshot fingerprint. Plans are
   context for AI, not a second writer.
-- `scripts/prepare-astro-release.py refresh` owns the committed `sources/rules`
-  snapshot; `scripts/astro_rules.py` verifies its current E-release identity and
-  complete source inventory during the production build. Project and Skill
+- The committed Rules snapshot follows [the Astro Rules workflow](site-astro/README.md#规则原文). Project and Skill
   explanations live in `sources/pages` and current native Markdown. The AI
   refresh plan fingerprints every owned page and layout, never retired React
   content. A dirty or newer rule source checkout remains non-active candidate
