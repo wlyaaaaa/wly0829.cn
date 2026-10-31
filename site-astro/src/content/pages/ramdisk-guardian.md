@@ -498,7 +498,11 @@
      "text": "电脑配置与恢复"
     }
    ],
-   "live": []
+   "live": [],
+   "frozen_card": {
+    "reason": "原本想把缓存放进内存让电脑变快，实际用下来速度没有明显提升。",
+    "now": "内存盘已经撤掉，缓存和临时文件照常放在电脑的 E 盘上。"
+   }
   },
   "notes": {
    "merged": [
@@ -536,8 +540,8 @@
  },
  "source": {
   "page": "sources/pages/ramdisk-guardian/page.json",
-  "sha256": "49a649ac5bcfe80483607e527fd189088e48bbc2acf5259931acb774e2520119",
-  "converted_at_beijing": "2026-10-31T07:46:05+08:00"
+  "sha256": "629c0b09c0bc5c3a8eadee860ab363a31a93e60fca8e870fecc9aa376c92aac6",
+  "converted_at_beijing": "2026-10-31T08:03:52+08:00"
  }
 }
 ---

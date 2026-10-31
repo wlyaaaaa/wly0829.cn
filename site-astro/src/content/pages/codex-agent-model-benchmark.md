@@ -393,7 +393,11 @@
      "text": "AI工具配置管理"
     }
    ],
-   "live": []
+   "live": [],
+   "frozen_card": {
+    "reason": "每测一次都要花不少 AI 额度，自己出的题也测不准谁更强；日常用下来，哪个好用反而一清二楚。",
+    "now": "选哪个 AI，看厂商公布的成绩和权威评测机构的排名。"
+   }
   },
   "notes": {
    "merged": [
@@ -419,8 +423,8 @@
  },
  "source": {
   "page": "sources/pages/codex-agent-model-benchmark/page.json",
-  "sha256": "0077fe1db384f9746dbada96db3bbbe9c32a69bded1e0215773f1c13f134c168",
-  "converted_at_beijing": "2026-10-31T06:46:16+08:00"
+  "sha256": "502c1e6632cbb580b9992259097944b40b5f53831cc26929fd90f8ca7019d716",
+  "converted_at_beijing": "2026-10-31T08:03:52+08:00"
  }
 }
 ---

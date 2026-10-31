@@ -18,6 +18,8 @@ spec = importlib.util.spec_from_file_location('astro_converter_tests', ROOT/'sit
 converter = importlib.util.module_from_spec(spec); spec.loader.exec_module(converter)
 spec = importlib.util.spec_from_file_location('astro_preparation_tests', ROOT/'scripts/prepare-astro-release.py')
 preparation = importlib.util.module_from_spec(spec); spec.loader.exec_module(preparation)
+spec = importlib.util.spec_from_file_location('astro_runtime_tests', ROOT/'site-astro/tools/build_runtime.py')
+runtime = importlib.util.module_from_spec(spec); spec.loader.exec_module(runtime)
 
 class AstroReleaseTests(unittest.TestCase):
     def setUp(self):
@@ -177,18 +179,16 @@ class AstroReleaseTests(unittest.TestCase):
         routes = ['/', '/skills/retired/', '/github-profile/', '/normal/']
         for route, meta in zip(routes, ['', '<meta name="robots" content="noindex">',
                 "<meta content='follow, NOINDEX' name='ROBOTS'>", '<meta name="robots" content="index, follow">']):
-            path = self.root/preparation.hybrid.route_file(route); path.parent.mkdir(parents=True, exist_ok=True)
+            path = self.root/runtime.nav.route_file(route); path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text('<html><head>'+meta+'</head><body>Page</body></html>', encoding='utf8')
-        self.assertEqual(preparation.write_sitemap(self.root, routes), ['/', '/normal/'])
+        runtime.write_sitemap(self.root, routes)
         sitemap = self.root/'sitemap.xml'
-        sitemap.write_text(sitemap.read_text('utf8').replace('</urlset>',
-            '<url><loc>https://wly0829.cn/skills/retired/</loc></url></urlset>'), encoding='utf8')
-        with self.assertRaisesRegex(ValueError, 'Sitemap contains noindex pages'):
-            preparation.verify_sitemap(self.root)
+        self.assertIn('https://wly0829.cn/normal/', sitemap.read_text('utf8'))
+        self.assertNotIn('https://wly0829.cn/skills/retired/', sitemap.read_text('utf8'))
+        self.assertNotIn('https://wly0829.cn/github-profile/', sitemap.read_text('utf8'))
 
-    def test_author_preview_route_matches_its_built_page(self):
-        self.assertEqual(preparation.author_route({'url': '', 'page': '404'}), '/404/')
-        self.assertEqual(preparation.author_route({'url': '/projects/agents/', 'page': 'agents'}), '/projects/agents/')
+    def test_route_file_matches_the_directory_route(self):
+        self.assertEqual(runtime.nav.route_file('/projects/agents/'), 'projects/agents/index.html')
 
 
 if __name__ == '__main__': unittest.main()

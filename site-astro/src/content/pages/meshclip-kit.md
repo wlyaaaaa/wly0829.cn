@@ -474,7 +474,11 @@
      "text": "在整套系统里的位置 → 怎么协作"
     }
    ],
-   "live": []
+   "live": [],
+   "frozen_card": {
+    "reason": "它靠一个叫 KDE Connect 的软件在两台电脑之间传东西，这个软件已经卸了。",
+    "now": "两台电脑之间复制粘贴，由〔电脑配置与恢复〕里的同步功能负责。"
+   }
   },
   "notes": {
    "merged": [
@@ -502,8 +506,8 @@
  },
  "source": {
   "page": "sources/pages/meshclip-kit/page.json",
-  "sha256": "21523b3721d6df53c6a71a7f8193095b07e703f8c0b4ad1d5b68d347fcbe5bdf",
-  "converted_at_beijing": "2026-10-31T06:46:16+08:00"
+  "sha256": "c5b2ba2f775a66bcff53897c0c436d59f02daea502df8c5343b4fd92f9cf86a6",
+  "converted_at_beijing": "2026-10-31T08:03:52+08:00"
  }
 }
 ---

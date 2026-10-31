@@ -747,7 +747,11 @@
      "meaning": "网站上各项目的仓库和 GitHub 同步没有：几个已同步、几个要看（本项目算出的数，不联网，比的是本机缓存的远端引用）",
      "source": "/computer-access/api/status → projects.items[].github_sync.state（collect_dashboard_facts.py 给的；source=cached_remote_ref）"
     }
-   ]
+   ],
+   "frozen_card": {
+    "reason": "它要定时把所有仓库的情况抄一遍，可这些信息 AI 干活时当场一查就有，还比表上抄的新，专门维护这张表费事又容易过时。",
+    "now": "每个项目放在电脑哪个文件夹、哪些项目放上这个网站，记在〔电脑配置与恢复〕里；删库、把私有仓库改成公开之前，照旧要我确认。"
+   }
   },
   "notes": {
    "merged": [
@@ -778,8 +782,8 @@
  },
  "source": {
   "page": "sources/pages/github-local-index/page.json",
-  "sha256": "f171a4b3ebdcc29c76f64d2db5ff105c1b05df9d36296d0ef66c6b779f12d6b5",
-  "converted_at_beijing": "2026-10-31T06:46:15+08:00"
+  "sha256": "5d37a278b4dcf39df90ef8d9b40c8ffe5c34f33addb1344c0cebd6d226961919",
+  "converted_at_beijing": "2026-10-31T08:03:52+08:00"
  }
 }
 ---

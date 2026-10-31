@@ -1,4 +1,4 @@
-"""Generated Markdown updates remain automatic; genuine body edits survive."""
+"""The generated Markdown must match its current page.json author source."""
 import contextlib
 import importlib.util
 import io
@@ -63,21 +63,16 @@ class MarkdownSyncTests(unittest.TestCase):
         self.assertIn('Next JSON-only update.', self.md.read_text('utf8'))
         self.runner.assert_called_once()
 
-    def test_manual_body_edit_with_valid_source_sha_is_preserved(self):
+    def test_manual_body_edit_with_valid_source_sha_blocks_build(self):
         self.md.write_text(self.md.read_text('utf8').replace('"converted_at_beijing": "body-example"',
                                                           '"converted_at_beijing": "manual-example"'), encoding='utf8')
         manual = self.md.read_bytes()
-        with patch.object(self.converter, 'convert', side_effect=ValueError('fixture failure')):
-            failed = self.sync(self.previous)
-        self.assertTrue(failed['fixture']['direct'])
-        self.assertIn('无法核对转换来源', self.messages)
+        with self.assertRaisesRegex(ValueError, 'Markdown 与当前 page.json 转换结果不一致：fixture'):
+            self.sync(self.previous)
         self.assertEqual(self.md.read_bytes(), manual)
-        records = self.sync(self.previous)
-        self.assertTrue(records['fixture']['direct'])
-        self.assertIn('保留直接编辑', self.messages)
         self.change_page('JSON must not overwrite manual work, nor vanish silently.')
-        with self.assertRaisesRegex(ValueError, '到不了网页：fixture'):
-            self.sync(records)
+        with self.assertRaisesRegex(ValueError, 'Markdown 与当前 page.json 转换结果不一致：fixture'):
+            self.sync(self.previous)
         self.assertEqual(self.md.read_bytes(), manual)
         self.runner.assert_not_called()
 
@@ -97,18 +92,12 @@ class MarkdownSyncTests(unittest.TestCase):
         self.assertEqual(self.converter.OUT_PUBLIC, str(self.site / 'public'))
         self.runner.assert_not_called()
 
-    def test_unchanged_manual_body_skips_conversion_but_inputs_invalidate(self):
+    def test_unchanged_manual_body_is_rejected_even_without_input_change(self):
         self.md.write_text(self.md.read_text('utf8') + '\nManual body.', encoding='utf8')
-        records = self.sync(self.previous)
         with patch.object(build, 'converted_markdown_matches', wraps=build.converted_markdown_matches) as check:
-            records = self.sync(records); check.assert_not_called()
-            script = self.site / 'tools/convert_page.py'; script.parent.mkdir(parents=True)
-            script.write_text('# converter changed', encoding='utf8')
-            records = self.sync(records); self.assertEqual(check.call_count, 1)
-            self.assertTrue(records['fixture']['direct']); self.assertIn('保留直接编辑', self.messages)
-            (self.source.parent / 'layout.json').write_text('[]', encoding='utf8')
-            with self.assertRaisesRegex(ValueError, '到不了网页：fixture'): self.sync(records)
-            self.assertEqual(check.call_count, 2)
+            with self.assertRaisesRegex(ValueError, 'Markdown 与当前 page.json 转换结果不一致：fixture'):
+                self.sync(self.previous)
+            self.assertEqual(check.call_count, 1)
         self.assertIn('Manual body.', self.md.read_text('utf8'))
 
 if __name__ == '__main__': unittest.main()

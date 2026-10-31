@@ -1,0 +1,9 @@
+{
+  "schema": "wly.skill-site-exclusions.v1",
+  "excluded": {
+    "personal-litigation": "私人话题，是否上网站待本人定",
+    "personal-romance": "私人话题，是否上网站待本人定",
+    "career-development": "私人话题，是否上网站待本人定",
+    "personal-finance": "私人话题，是否上网站待本人定"
+  }
+}

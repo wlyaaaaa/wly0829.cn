@@ -391,7 +391,11 @@
      "text": "微信聊天读取"
     }
    ],
-   "live": []
+   "live": [],
+   "frozen_card": {
+    "reason": "旧桥接方式已被“微信聊天读取”取代",
+    "now": "〔微信聊天读取〕"
+   }
   },
   "notes": {
    "merged": [
@@ -420,8 +424,8 @@
  },
  "source": {
   "page": "sources/pages/wechat-history-ai-bridge/page.json",
-  "sha256": "da1138907eb95b2ee945061f96011258ffdb0b6f69089659384c508903048325",
-  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
+  "sha256": "75d77abe8fe4c611987e052a87b583884370e49dce6fcbe7cdfd65e532a33afa",
+  "converted_at_beijing": "2026-10-31T08:03:52+08:00"
  }
 }
 ---

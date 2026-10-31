@@ -323,7 +323,6 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_res
                 if attempt or not retryable_transport(row): break
             if len(attempts) > 1: row = dict(row, attempts=attempts)
             results.append(row)
-            print(json.dumps({"page": route, "viewport": row["viewport"], "failures": len(row["failures"]), "hints": len(row["hints"])}, ensure_ascii=False), flush=True)
         browser.close()
     return results
 def main():
@@ -376,6 +375,8 @@ def main():
               "browser": args.chrome,
               "proxy_stats": dict(server.proxy_stats), "proxy_requests": server.proxy_results, "proxy_disconnects": server.proxy_disconnects}
     result_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(json.dumps({"seconds": result["seconds"], "scanned": len(rows), "counts": result["counts"], "result": str(result_path)}, ensure_ascii=False))
+    print(json.dumps({"status": "failed" if failures else "pass", "seconds": result["seconds"],
+        "scanned": len(rows), "counts": result["counts"], "first_failures": failures[:3],
+        "receipt": str(result_path)}, ensure_ascii=False))
     return int(bool(failures))
 if __name__ == "__main__": sys.exit(main())

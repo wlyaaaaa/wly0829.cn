@@ -11,7 +11,7 @@ test('the website is a visible project and its card, counts and complete source 
   const page = await json('sources/pages/wly0829-cn/page.json');
   const homeSource = await json('sources/pages/projects-home/page.json');
   const home = JSON.parse(execFileSync(process.env.PYTHON || 'python', ['-c',
-    "import json; from src.typeset.engine.content import bound_json; print(json.dumps(bound_json('sources/pages/projects-home/page.json'), ensure_ascii=False))"
+    "import json,sys; from pathlib import Path; sys.path.insert(0,'site-astro/tools'); from site_consistency import pages,project_directory; from src.typeset.engine.content import bound_json; source=Path('sources/pages/projects-home/page.json').resolve(); read=lambda p: json.dumps(project_directory(json.loads(Path(p).read_text('utf8')),pages()),ensure_ascii=False) if Path(p).resolve()==source else Path(p).read_text('utf8'); print(json.dumps(bound_json(source,read=read),ensure_ascii=False))"
   ], { cwd: fileURLToPath(root), encoding: 'utf8', windowsHide: true, env: { ...process.env, PYTHONUTF8: '1' } }));
   assert.equal(homeSource.registry.numbers.find(item => item.id === 'n-projects').text, '{{scale.total}} 个项目');
   assert.ok(homeSource.registry.numbers.find(item => item.id === 'n-features').text.includes('{{scale.features}}'));
