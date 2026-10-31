@@ -1,5 +1,7 @@
 """只读刷新最容易误报或越界的路径。"""
 from datetime import date
+from contextlib import redirect_stdout
+from io import StringIO
 import json
 from pathlib import Path
 import sys
@@ -26,6 +28,53 @@ class RefreshTests(unittest.TestCase):
 
     def run_collect(self, **kwargs):
         return refresh.collect(self.root, {"records": [self.record]}, today=date(2026, 10, 10), **kwargs)["rows"][0]
+
+    def test_rule_mismatch_is_first_task_and_unknown_is_explicit(self):
+        rules = self.root / "sources/rules/release.json"
+        rules.parent.mkdir(parents=True)
+        rules.write_text('{"version":"E325"}', encoding="utf-8")
+        receipt = {"status": "pass", "reason": "e_rules_active_verified", "verified_current": {"release_id": "E331"}}
+        with patch.object(refresh, "bounded", return_value=json.dumps(receipt)):
+            task = refresh.rule_version_task(self.root)
+        self.assertEqual((task["snapshot"], task["active"], task["status"]), ("E325", "E331", "mismatch"))
+        with patch.object(refresh, "bounded", side_effect=TimeoutError("未取到")):
+            self.assertEqual(refresh.rule_version_task(self.root)["status"], "unknown")
+        rules.unlink()
+        self.assertEqual(refresh.rule_version_task(self.root)["status"], "unknown")
+
+    def test_wsl_failure_names_unavailable_source_without_new_value(self):
+        process = Mock(returncode=4294967295)
+        process.communicate.return_value = ("", "WSL service failed")
+        with patch.object(refresh.subprocess, "Popen", return_value=process):
+            with self.assertRaisesRegex(RuntimeError, "WSL 来源暂不可用.*保留旧值旧日期"):
+                refresh.bounded(["wsl.exe", "--status"], 2)
+
+    def test_default_status_card_is_bounded_and_points_to_full_receipt(self):
+        output = StringIO()
+        with redirect_stdout(output):
+            refresh.short_card("checked", self.root / "result.json", {"changed": 12},
+                [dict(record_id=f"r-{i}", page="demo", reason="待核") for i in range(100)], "run-1")
+        lines = output.getvalue().splitlines()
+        self.assertLessEqual(len(lines), 20)
+        card = json.loads(lines[0])
+        self.assertEqual((card["run_id"], card["counts"]["changed"], len(card["failures"])), ("run-1", 12, 5))
+        self.assertTrue(card["receipt"].endswith("result.json"))
+
+    def test_source_commit_candidates_are_sorted_local_descendants_only(self):
+        config = self.root / "config/panel-projects.json"
+        config.parent.mkdir(parents=True)
+        config.write_text(json.dumps({"projects": [{"id": "demo", "enabled": True,
+            "source": {"repo": "owner/demo"}}]}), encoding="utf-8")
+        page = self.root / "sources/pages/demo/page.json"
+        page.write_text(json.dumps({"page": "demo", "based_on": {"commit": "a" * 40}}), encoding="utf-8")
+        exists = Path.exists
+        with patch.object(Path, "exists", autospec=True, side_effect=lambda p: exists(p) or str(p).replace('\\', '/').endswith('demo/.git')):
+            with patch.object(refresh, "bounded", side_effect=lambda argv, seconds:
+                    "https://github.com/owner/demo.git" if "get-url" in argv else
+                    "b" * 40 if "rev-parse" in argv else "a" * 40 if "merge-base" in argv else "3"):
+                rows = refresh.source_commit_candidates(self.root)
+        self.assertEqual([(r["page"], r["commits_behind"]) for r in rows], [("demo", 3)])
+        self.assertEqual(refresh.source_commit_candidates(self.root, {"other"}), [])
     def test_baseline_uses_successful_source_commit_and_never_site_dist_or_unknown(self):
         path = self.root / "wly-oss/published.json"; path.parent.mkdir()
         source, site_dist = "a" * 40, "b" * 40

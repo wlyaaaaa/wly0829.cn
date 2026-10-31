@@ -213,6 +213,8 @@ def body_link(page, row, field, start, end, number, rows):
 
 def qualified_date_review(page, row):
     """日期所说的事件时间不能被计数的本轮观察日期替换。"""
+    if row.get("manual_review_required"):
+        return row.get("manual_review_note") or "需人工核对日期与关联数字口径"
     field = row.get("field") or row.get("page_field") or ""
     if field.startswith("status_line.last"):
         return "需人工核对：上次使用或运行的事件时间，不能替换为本轮观察日期"
@@ -246,17 +248,12 @@ def build_number_edits(root, result):
         parent, key = field_at(authors[filename], target["field"])
         return target, parent[key]
     accepted, positions = set(), {}
-    links, owners, unpaired = defaultdict(set), defaultdict(set), defaultdict(list)
+    links, owners = defaultdict(set), defaultdict(set)
     for row in result["rows"]:
         for ref in row.get("qualifies", []):
             links[row["id"]].add(ref)
             links[ref].add(row["id"])
-    for row in result["rows"]:
-        if row["id"] not in links and row.get("status") != "historical" and not row.get("dynamic"):
-            unpaired[(row["page"], row.get("screen"), row.get("field", "").split(".")[0])].append(row["id"])
-    for group in unpaired.values():
-        for rid in group:
-            links[rid].update(group)
+    # 只绑定显式 qualifies 和同一编辑位置；同屏不同句的数字不共享日期保护。
     for row in sorted(result["rows"], key=lambda r: bool(r.get("qualifies"))):
         if row.get("manual_review_reason"):
             manual_reviews.append({k: row.get(k) for k in ("page", "field", "old_value", "date_candidate", "source_observed_at")} |
@@ -400,6 +397,22 @@ def build_number_edits(root, result):
     reported = {r["record_id"] for r in skipped}
     skipped.extend(dict(page=r["page"], record_id=r["id"], reason="as_of_link_required")
                    for r in result["rows"] if r["id"] in (blocked & accepted) - reported)
+    by_id = {r["id"]: r for r in result["rows"]}
+    for failure in skipped:
+        if failure["reason"] != "as_of_link_required":
+            continue
+        row = by_id[failure["record_id"]]
+        dates = [r for r in result["rows"] if row["id"] in r.get("qualifies", [])]
+        if dates and any(d["status"] not in {"changed", "unchanged"} for d in dates):
+            reason = "关联截至日期未取得可靠的新观察依据；保留旧值旧日期"
+        elif row.get("qualifies"):
+            reason = "截至日期关联的数字未全部闭合；保留旧日期"
+        else:
+            reason = "正文没有可证明注明此数的唯一截至日期；需核对同屏或同句的数字、口径和日期后补配对登记"
+        manual_reviews.append(dict(page=row["page"], record_id=row["id"], field=row.get("field"),
+                                   old_value=row.get("old_value"), date_candidate=None,
+                                   source_observed_at=row.get("source_observed_at"), status="需人工核对", reason=reason,
+                                   manual_route="页面 Owner 按同一事实来源核对数字、口径及实际截至位置；证明后补 qualifies 配对登记，不能证明则保留旧值旧日期"))
     valid = []
     for (filename, field), group in grouped.items():
         group = [e for e in group if e["record_id"] not in blocked]
@@ -572,9 +585,17 @@ def main(argv=None):
     args = parser.parse_args(argv)
     payload = json.loads(args.edits.read_text(encoding="utf-8-sig"))
     report = apply_edits(args.root, payload, set(args.only.split(",")) if args.only else None)
-    if args.report:
-        args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(json.dumps(report, ensure_ascii=False, indent=2))
+    receipt = args.report or args.edits.with_name("apply-report.json")
+    receipt.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    card = dict(status="applied" if not report["skipped"] else "incomplete", run_id=report.get("run_id"),
+                applied=report.get("applied"), already_applied=report.get("already_applied"),
+                counts={key: report.get(key) for key in ("applied", "already_applied")}
+                | {"skipped": len(report["skipped"]), "changed_files": len(report["changed_files"])},
+                failures=[{"record_id": row.get("record_id") or row.get("edit", {}).get("record_id"),
+                           "page": row.get("page") or row.get("edit", {}).get("page"), "reason": row.get("reason")}
+                          for row in report["skipped"][:5]],
+                receipt=str(receipt))
+    print(json.dumps(card, ensure_ascii=False))
     return 1 if report["skipped"] else 0
 
 

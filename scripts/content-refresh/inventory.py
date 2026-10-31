@@ -493,6 +493,14 @@ def fact_tasks(inventory, group_size=25):
              "清点程序没有重取来源。每组交一个事实子代理；只读取登记的领域入口，公开口径按活动公开分级原文和页面规则。",
              "每项交回来源、观察时间、同口径新值或具名 Unknown；取不到保留原日期。历史/冻结项不自动激活。",
              "author/reference 的截至命中用于覆盖核对，不冒充新展示事实；私人来源登记的位置待复核项另列。", ""]
+    rule = inventory.get("rule_version_task", {})
+    if rule.get("status") != "current":
+        lines += ["## 首要待办：规则版本", "", rule.get("reason", "规则版本未核验"), ""]
+    lines += ["## 来源提交领先的语义复核候选（只列候选，不决定是否改稿）", ""]
+    lines += [f"- {c['page']}：来源 {c['source_project']} 本机提交领先 {c['commits_behind']} 个；"
+              f"页面 {c['based_on_commit'][:10]} → 来源 {c['current_commit'][:10]}"
+              for c in inventory.get("source_commit_candidates", [])] or ["无可证明的领先候选。"]
+    lines.append("")
     if inventory.get("offset_binding_gaps"):
         lines += [f"字符偏移待重绑：{len(inventory['offset_binding_gaps'])} 条（已单列缺口，不计严格盘点缺失；未证明可改数）。", ""]
     stamps = [s for s in inventory.get("review_stamps", []) if not targeted or s["page"] in targeted]

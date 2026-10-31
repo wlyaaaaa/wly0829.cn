@@ -81,8 +81,85 @@ def bounded(argv, seconds, cwd=None):
         note = "；子进程清理未核实" if cleanup_unverified else "，已停止本次读取"
         raise TimeoutError("单条来源超时" + note) from None
     if proc.returncode:
+        if proc.returncode == 4294967295 and Path(argv[0]).name.lower() == "wsl.exe":
+            raise RuntimeError("WSL 来源暂不可用（退出码 4294967295）；保留旧值旧日期")
         raise RuntimeError(f"读取程序退出码 {proc.returncode}；未取得新值")
     return out
+
+
+def rule_version_task(root):
+    """只比较活动发布身份与本站快照，不读取候选规则源码。"""
+    snapshot = None
+    try:
+        snapshot = read_json(root / "sources/rules/release.json").get("version")
+        if not isinstance(snapshot, str) or not re.fullmatch(r"E\d+", snapshot):
+            raise ValueError("本站规则快照版本缺失")
+        receipt = read_json_output(bounded(["pwsh", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
+            "E:/.agents/tools/Invoke-EAgentRulesRelease.ps1", "-Mode", "Inspect", "-Json"], 30))
+        if receipt.get("status") != "pass" or receipt.get("reason") != "e_rules_active_verified":
+            raise ValueError("活动规则核验未通过")
+        active = receipt["verified_current"]["release_id"]
+        status = "mismatch" if active != snapshot else "current"
+        reason = f"本站规则快照 {snapshot}，活动规则 {active}；先准备并核对同版快照" if status == "mismatch" else "本站规则快照与活动规则同版"
+    except (OSError, ValueError, KeyError, RuntimeError, TimeoutError, subprocess.SubprocessError) as exc:
+        active, status, reason = None, "unknown", f"活动规则版本未能核验：{exc}"
+    return dict(id="rules-release-identity", status=status, snapshot=snapshot, active=active, reason=reason)
+
+
+def read_json_output(text):
+    return json.loads(text)
+
+
+def short_card(status, output, counts, failures=(), run_id=None):
+    card = {"status": status, "run_id": run_id, "counts": counts,
+            "failures": [{k: f.get(k) for k in ("record_id", "page", "reason")} for f in list(failures)[:5]],
+            "receipt": str(output)}
+    print(json.dumps(card, ensure_ascii=False))
+
+
+def source_commit_candidates(root, selected=()):
+    """仅列本机已提交且可证明是页面基线后代的来源候选。"""
+    if not (root / "config/panel-projects.json").exists():
+        return []
+    config = read_json(root / "config/panel-projects.json")
+    projects = {p["id"]: p for p in config["projects"] if p.get("enabled")}
+    selected = set(selected)
+    heads, candidates = {}, []
+    for file in sorted((root / "sources/pages").glob("*/page.json")):
+        page = read_json(file)
+        if selected and page["page"] not in selected and page.get("parent") not in selected:
+            continue
+        project = projects.get(page.get("parent") or page["page"])
+        base = page.get("based_on", {}).get("commit")
+        if not project or not isinstance(base, str) or not re.fullmatch(r"[0-9a-f]{40}", base):
+            continue
+        repo_name = project["source"]["repo"].split("/")[-1]
+        paths = [Path("E:/.agents") if repo_name == ".agents" else Path("E:/PCConfig") if repo_name == "PCConfig" else Path("E:/Projects/Tools") / repo_name,
+                 Path("E:/Projects/Archives") / repo_name, Path("V:/Personal/Projects") / repo_name]
+        source = next((p for p in paths if (p / ".git").exists()), None)
+        if source is None:
+            continue
+        if source not in heads:
+            try:
+                remote = bounded(["git", "-C", str(source), "remote", "get-url", "origin"], 5).strip()
+                if not remote.lower().rstrip("/").removesuffix(".git").endswith("/" + project["source"]["repo"].lower()):
+                    continue
+                branch = project["source"].get("default_branch", "main")
+                heads[source] = bounded(["git", "-C", str(source), "rev-parse", f"refs/heads/{branch}"], 5).strip()
+            except (OSError, RuntimeError, TimeoutError, subprocess.SubprocessError):
+                heads[source] = None
+        head = heads[source]
+        if not head or head == base:
+            continue
+        try:
+            count = int(bounded(["git", "-C", str(source), "rev-list", "--count", f"{base}..{head}"], 5))
+            ancestor = bounded(["git", "-C", str(source), "merge-base", base, head], 5).strip()
+            if ancestor == base and count > 0:
+                candidates.append(dict(page=page["page"], source_project=project["id"], based_on_commit=base,
+                                       current_commit=head, commits_behind=count, evidence="本机来源仓库默认分支；仅提交领先候选"))
+        except (OSError, ValueError, RuntimeError, TimeoutError, subprocess.SubprocessError):
+            continue
+    return sorted(candidates, key=lambda r: (-r["commits_behind"], r["page"]))
 
 
 def resolve(path, root):
@@ -519,7 +596,15 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
 
 
 def task_text(result, registry):
-    lines = ["# 按需更新任务单", "", "## 写法要点（本次内容审查）", ""]
+    lines = ["# 按需更新任务单", ""]
+    rule = result.get("rule_version_task", {})
+    if rule.get("status") != "current":
+        lines += ["## 首要待办：规则版本", "", rule.get("reason", "规则版本未核验"), ""]
+    candidates = result.get("source_commit_candidates", [])
+    lines += ["## 来源提交领先的语义复核候选（只列候选，不决定是否改稿）", ""]
+    lines += [f"- {c['page']}：来源 {c['source_project']} 本机提交领先 {c['commits_behind']} 个；"
+              f"页面 {c['based_on_commit'][:10]} → 来源 {c['current_commit'][:10]}" for c in candidates] or ["无可证明的领先候选。"]
+    lines += ["", "## 写法要点（本次内容审查）", ""]
     lines += [f"- {point}" for point in registry["writing_points"]]
     lines += ["", f"重取时间：{result['observed_at']}（北京时间）。本程序未修改、发布任何页面。",
               "只改变化的句子及受影响的同页解释，并同步数字登记；成功重取的过期数字更新日期。取不到时保留原日期并移出首屏。",
@@ -538,6 +623,10 @@ def task_text(result, registry):
     lines += [f"- 人工闭环 {t['id']}：{t['page']}；{t['kind']}；{t['reason']}" for t in result.get("manual_tasks", [])]
     lines += ["", "## 语义复核到期（独立列出，不阻断本轮事实闭环）", "", ", ".join(result.get("semantic_due", {}).get("pages", [])) or "无。"]
     lines += [f"- {r['page']} / {r['screen']}：{r['known_gap']}" for r in result["rows"] if r.get("known_gap")]
+    reviews = result.get("number_edit_manual_reviews", [])
+    if reviews:
+        lines += ["", f"## 改数单人工配对与重绑（{len(reviews)} 项）", ""]
+        lines += [f"- {r['record_id']} / {r['page']}：{r['reason']}" for r in reviews]
     for tier, title in TIERS:
         lines += ["", f"## {title}", ""]
         lines += [f"- {f['page']} / {f['screen']} / {f['field']}:{f['line']}：{f['message']}；{f['excerpt']}"
@@ -607,12 +696,13 @@ def main():
         try:
             result = close_run(args.root, read_json(args.close_run), read_json(args.apply_report) if args.apply_report else None, args.dist)
         except (OSError, ValueError, KeyError) as exc:
-            print(json.dumps(dict(status="incomplete", reason=str(exc)), ensure_ascii=False))
+            short_card("incomplete", args.close_run, {}, [dict(record_id=None, page=None, reason=str(exc))])
             return 2
         destination = args.output or args.close_run.parent
         destination.mkdir(parents=True, exist_ok=True)
         (destination / "closure.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
-        print(json.dumps(result, ensure_ascii=False))
+        short_card(result["status"], destination / "closure.json", {"pending": result.get("pending", 0)},
+                   [o for o in result.get("rows", []) if o.get("status") in {"pending", "manual_pending"}], result.get("run_id"))
         return 0 if result["status"] == "closed" else 2
     entries_path = args.entries or (args.registry.parent if args.registry else args.root / "sources/refresh") / "entries.json"
     entries = read_json(entries_path) if entries_path.exists() else {}
@@ -636,8 +726,10 @@ def main():
     output = args.output or Path("E:/Cache/content-refresh") / datetime.now(BEIJING).strftime("%Y%m%d-%H%M%S-%f")
     output.mkdir(parents=True, exist_ok=True)
     targeted = set(args.targeted.split(",")) if args.targeted else set()
-    inventory = build_inventory(args.root / "sources/pages", registry["records"], entries, registry.get("freshness_policy"), targeted)
     only = set(args.only.split(",")) if args.only else None
+    inventory = build_inventory(args.root / "sources/pages", registry["records"], entries, registry.get("freshness_policy"), targeted)
+    inventory["rule_version_task"] = rule_version_task(args.root)
+    inventory["source_commit_candidates"] = source_commit_candidates(args.root, targeted or only or ())
     if only:
         inventory["items"] = [i for i in inventory["items"] if i["page"] in only]
         inventory["review_stamps"] = [i for i in inventory.get("review_stamps", []) if i["page"] in only]
@@ -651,15 +743,16 @@ def main():
     inventory["strict_findings"] = findings
     write_inventory(output, inventory)
     if findings:
-        for finding in findings:
-            print(f"{finding['page']} / {finding['screen']} / {finding['field']}：{finding['excerpt']}；{finding['reason']}")
-        print(json.dumps({"status": "incomplete", "missing": len(findings), "output": str(output)}, ensure_ascii=False))
+        short_card("incomplete", output / "dated-inventory.json", {"missing": len(findings)},
+                   (dict(record_id=",".join(f["record_ids"]), page=f["page"], reason=f["reason"]) for f in findings))
         return 2
     if args.strict and not only and inventory["coverage"].get("required_items") and inventory["coverage"]["automatic_ratio"] < .85:
-        print(json.dumps({"status": "insufficient_automatic_coverage", "coverage": inventory["coverage"]}, ensure_ascii=False))
+        short_card("insufficient_automatic_coverage", output / "dated-inventory.json", inventory["coverage"])
         return 2
     if args.inventory:
-        print(json.dumps({"status": "inventoried", "missing": 0, "observation_basis_gaps": inventory["coverage"].get("observation_basis_gaps", 0), "offset_binding_gaps": inventory["coverage"].get("offset_binding_gaps", 0), "output": str(output), "coverage": inventory["coverage"]}, ensure_ascii=False))
+        short_card("inventoried", output / "dated-inventory.json", inventory["coverage"],
+                   [dict(record_id=inventory["rule_version_task"]["id"], page="rules", reason=inventory["rule_version_task"]["reason"])]
+                   if inventory["rule_version_task"]["status"] != "current" else [])
         return 0
     (output / "tmp").mkdir(exist_ok=True)
     for key in ("TEMP", "TMP", "TMPDIR"):
@@ -672,14 +765,26 @@ def main():
     result["registry_path"] = str((args.registry or args.root / "sources/refresh/registry.json").resolve())
     result["manual_tasks"] = review_tasks(inventory, result["rows"], targeted)
     result["semantic_due"] = semantic_due(inventory, result["rows"])
+    result["rule_version_task"] = inventory["rule_version_task"]
+    result["source_commit_candidates"] = inventory["source_commit_candidates"]
     from apply_edits import build_number_edits
-    (output / "number-edits.json").write_text(json.dumps(build_number_edits(args.root, result), ensure_ascii=False, indent=2), encoding="utf-8")
+    edits = build_number_edits(args.root, result)
+    result["number_edit_manual_reviews"] = edits["manual_reviews"]
+    (output / "number-edits.json").write_text(json.dumps(edits, ensure_ascii=False, indent=2), encoding="utf-8")
     task = task_text(result, registry)
     (output / "opus-task.md").write_text(task, encoding="utf-8")
     (output / "result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    counts = {status: sum(r["status"] == status for r in result["rows"]) for status in
+              ("changed", "unchanged", "unavailable", "historical", "manual_review", "domain_fact_task", "scope_pending")}
+    counts.update(numbers=result["numbers_checked"], applicable=len(edits["edits"]), skipped=len(edits["skipped"]),
+                  automatic_obtained=result.get("automatic_obtained"), automatic_total=result.get("automatic_total"))
+    manual_reasons = {r["record_id"]: r["reason"] for r in edits["manual_reviews"]}
+    failures = [dict(record_id=s["record_id"], page=s["page"], reason=manual_reasons.get(s["record_id"], s["reason"]))
+                for s in edits["skipped"]]
+    if inventory["rule_version_task"]["status"] != "current":
+        failures.insert(0, dict(record_id="rules-release-identity", page="rules", reason=inventory["rule_version_task"]["reason"]))
     if args.no_report:
-        print(json.dumps({"status": "checked", "output": str(output), "retrieval_seconds": result["retrieval_seconds"],
-                          "automatic_success_ratio": result["automatic_success_ratio"]}, ensure_ascii=False))
+        short_card("checked", output / "result.json", counts, failures, result.get("run_id"))
         return 0
     content = output / "report-content.json"
     content.write_text(json.dumps(report_content(result, task, output / "opus-task.md"), ensure_ascii=False), encoding="utf-8")
@@ -697,9 +802,9 @@ def main():
                 or Path(receipt.get("path", "")).resolve() != html.resolve()):
             raise RuntimeError("汇报网页生成或自检失败，不能交付为成功结果")
     except (OSError, ValueError, RuntimeError, TimeoutError, subprocess.SubprocessError) as exc:
-        print(json.dumps({"status": "report_failed", "reason": str(exc), "output": str(output)}, ensure_ascii=False))
+        short_card("report_failed", output / "result.json", counts, [dict(record_id=None, page=None, reason=str(exc))], result.get("run_id"))
         return 1
-    print(json.dumps({"status": "checked", "webpage": str(html)}, ensure_ascii=False))
+    short_card("checked", output / "result.json", counts, failures, result.get("run_id"))
     return 0
 
 
