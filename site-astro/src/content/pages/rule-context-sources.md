@@ -411,7 +411,7 @@
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
   "sha256": "5bef407787dd8be3d4b306b7d35e1e77cd71fa92e7afed0ca1a288cd0b07d943",
-  "converted_at_beijing": "2026-10-31T08:33:36+08:00"
+  "converted_at_beijing": "2026-10-31T09:30:03+08:00"
  }
 }
 ---
@@ -590,7 +590,7 @@
     },
     {
      "type": "notice",
-     "text_ref": "三个基座之间谁把什么交给谁"
+     "text_ref": "两个基座与具体项目如何分工"
     }
    ],
    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。；QA04 修复：按审查第5条把跳转按钮改3列2行，保留原按钮全称和原字序。第4条路牌标签是定稿文字，不直接删去；图内定位缺口另提组件请求。\nmain-closer 2026-10-03T20:29:23+08:00：保全部图内原标签，以现有document_mock绑定唯一完整底图和final-label-geometry实测安全框；取消前置重复主体图，图解改整宽以满足长路径/小牌字高。SHA 04f59cba42618413fec0975b0425b266e64ec9443ad24d3c458cfbd0d28aaf65。此为AI排版补充，列new-looks待验收。",
@@ -639,7 +639,7 @@
     },
     {
      "type": "notice",
-     "text_ref": "三个基座之间谁把什么交给谁"
+     "text_ref": "两个基座与具体项目如何分工"
     }
    ],
    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。\nmain-closer 2026-10-03T20:29:23+08:00：保全部图内原标签，以现有document_mock绑定唯一完整底图和final-label-geometry实测安全框；取消前置重复主体图，图解改整宽以满足长路径/小牌字高。SHA 04f59cba42618413fec0975b0425b266e64ec9443ad24d3c458cfbd0d28aaf65。此为AI排版补充，列new-looks待验收。\nmain-closer 2026-10-03T20:36:28+08:00：实际文字Range超出真实安全牌框，竖版撤下坐标绑定，恢复原合法保字＋composition incomplete；不把单靠固定.tb框的旧机器pass当通过。safe DOM证据 main-closer/family-label-dom.json；横版实测安全绑定保留。\nmain-closer5 2026-10-04T07:00:58.635971+08:00：按Claude本轮裁定，手机首屏采用插画上、文字下；复用01-h既有无字插画，整幅100%宽等比缩放，不裁物件。原五/九标签改既有prose顺排于文字区，全部原字、motion及其它屏保全；不再请求插画牌面净区，也不更改任何素材ready。"
@@ -775,7 +775,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
     },
     {
      "type": "points_card",
-     "text_ref": "四个家，各管各的事实",
+     "text_ref": "两个基座和具体项目",
      "columns": 1,
      "whole_block": true,
      "illustration": "left_inside",
@@ -799,7 +799,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
     },
     {
      "type": "points_card",
-     "text_ref": "基座的日常治理：修问题，不补跑备份",
+     "text_ref": "基座治理：修问题，不补跑备份",
      "columns": 1,
      "whole_block": true,
      "illustration": "left_inside",
@@ -822,7 +822,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
     },
     {
      "type": "points_card",
-     "text_ref": "四个家，各管各的事实",
+     "text_ref": "两个基座和具体项目",
      "columns": 1,
      "whole_block": true,
      "illustration": "left_inside",
@@ -846,7 +846,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
     },
     {
      "type": "points_card",
-     "text_ref": "基座的日常治理：修问题，不补跑备份",
+     "text_ref": "基座治理：修问题，不补跑备份",
      "columns": 1,
      "whole_block": true,
      "illustration": "left_inside",
