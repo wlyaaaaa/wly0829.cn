@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E325",
-   "commit": "5fbf6a12ea23093e7b91748db9abd6866d27f9b4",
-   "ruleset_sha256": "5f011f73cb5a4901f93151328d70eea6c9b9ff6d03ff596c26d7a18700a1f893",
-   "activated_at": "2026-10-30T04:20:33.726689+08:00",
+   "release": "E331",
+   "commit": "985a1c35a97768f86014870625702364d994b55d",
+   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
+   "activated_at": "2026-10-31T07:37:25.088872+08:00",
    "file": "sources/rules/docs/contracts/agents.engineering-delivery.md",
-   "sha256": "747ad02282b91e3ca61bc78459122341e74fb60611d1e4e2599bed7d38d551e8",
-   "public_sha256": "5a485e3de8c3794aa4536dd8e786351fb399075393a64c182f5b96203f7817f7"
+   "sha256": "d03a41432438f46c9a2a7aafea6849747e85bd3427d9308c19bbb0c58f604178",
+   "public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：弯弯小路上，一支小箭从画面外飞来轻轻插进草靶的靶心；小木桌上的放大镜慢慢移过那张纸，纸上的绿勾随之亮一下；几张揉皱的纸和两片落叶打着旋落进浅绿色小回收桶；小路尽头几根细枝条缓缓长长、汇进粗树干，树干顶上的小云轻轻起伏，GitHub 章鱼猫标志保持不动；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，四块小木牌上的字保持不动、不变形。",
   "registry": {
@@ -259,8 +259,8 @@
  },
  "source": {
   "page": "sources/pages/rule-engineering-delivery/page.json",
-  "sha256": "5ae6c95d53cac77a3eea7af27127e3f89c3686cc4e789f25ef0effa1b0fd4f1e",
-  "converted_at_beijing": "2026-10-30T13:04:18+08:00"
+  "sha256": "4df09e6d0c916bd22265732d87c9758eb66ba7e30edcc29bddfbf1e1b8e4729e",
+  "converted_at_beijing": "2026-10-31T08:33:36+08:00"
  }
 }
 ---
@@ -1837,9 +1837,9 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E325",
-   "sha256": "747ad02282b91e3ca61bc78459122341e74fb60611d1e4e2599bed7d38d551e8",
-   "public_sha256": "5a485e3de8c3794aa4536dd8e786351fb399075393a64c182f5b96203f7817f7",
+   "release": "E331",
+   "sha256": "d03a41432438f46c9a2a7aafea6849747e85bd3427d9308c19bbb0c58f604178",
+   "public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
    "from": null,
    "to": "## 验证",
    "start": 0,
@@ -1866,7 +1866,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-06",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "5a485e3de8c3794aa4536dd8e786351fb399075393a64c182f5b96203f7817f7",
+  "source_public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-06"
  },
  "layout": {
@@ -1874,7 +1874,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E325版，一字不改",
+     "text_ref": "原文·E331版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -1914,7 +1914,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E325版，一字不改",
+     "text_ref": "原文·E331版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -2035,7 +2035,7 @@
 }
 ```
 
-原文 · E325 版，一字不改
+原文 · E331 版，一字不改
 
 # 工程与交付
 
@@ -2123,9 +2123,9 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E325",
-   "sha256": "747ad02282b91e3ca61bc78459122341e74fb60611d1e4e2599bed7d38d551e8",
-   "public_sha256": "5a485e3de8c3794aa4536dd8e786351fb399075393a64c182f5b96203f7817f7",
+   "release": "E331",
+   "sha256": "d03a41432438f46c9a2a7aafea6849747e85bd3427d9308c19bbb0c58f604178",
+   "public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
    "from": "## 验证",
    "to": "## 下载、临时文件和清理",
    "start": 7454,
@@ -2152,7 +2152,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-07",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "5a485e3de8c3794aa4536dd8e786351fb399075393a64c182f5b96203f7817f7",
+  "source_public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-07"
  },
  "layout": {
@@ -2160,7 +2160,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E325版·续",
+     "text_ref": "原文·E331版·续",
      "align": "left",
      "size": "small"
     },
@@ -2207,7 +2207,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E325版·续",
+     "text_ref": "原文·E331版·续",
      "align": "left",
      "size": "small"
     },
@@ -2299,7 +2299,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E325 版 · 续
+原文 · E331 版 · 续
 
 ## 验证
 
@@ -2332,9 +2332,9 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E325",
-   "sha256": "747ad02282b91e3ca61bc78459122341e74fb60611d1e4e2599bed7d38d551e8",
-   "public_sha256": "5a485e3de8c3794aa4536dd8e786351fb399075393a64c182f5b96203f7817f7",
+   "release": "E331",
+   "sha256": "d03a41432438f46c9a2a7aafea6849747e85bd3427d9308c19bbb0c58f604178",
+   "public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
    "from": "## 下载、临时文件和清理",
    "to": "## Git 收尾",
    "start": 9497,
@@ -2357,7 +2357,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-08",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "5a485e3de8c3794aa4536dd8e786351fb399075393a64c182f5b96203f7817f7",
+  "source_public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-08"
  },
  "layout": {
@@ -2365,7 +2365,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E325版·续",
+     "text_ref": "原文·E331版·续",
      "align": "left",
      "size": "small"
     },
@@ -2406,7 +2406,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E325版·续",
+     "text_ref": "原文·E331版·续",
      "align": "left",
      "size": "small"
     },
@@ -2486,7 +2486,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E325 版 · 续
+原文 · E331 版 · 续
 
 ## 下载、临时文件和清理
 
@@ -2509,13 +2509,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E325",
-   "sha256": "747ad02282b91e3ca61bc78459122341e74fb60611d1e4e2599bed7d38d551e8",
-   "public_sha256": "5a485e3de8c3794aa4536dd8e786351fb399075393a64c182f5b96203f7817f7",
+   "release": "E331",
+   "sha256": "d03a41432438f46c9a2a7aafea6849747e85bd3427d9308c19bbb0c58f604178",
+   "public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
    "from": "## Git 收尾",
    "to": null,
    "start": 10556,
-   "end": 12345,
+   "end": 12356,
    "approved_omissions": []
   },
   "title": "原文（四）",
@@ -2542,7 +2542,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-09",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "5a485e3de8c3794aa4536dd8e786351fb399075393a64c182f5b96203f7817f7",
+  "source_public_sha256": "9cdb3a698e7a1e7edfb02f9b83277a1cc3ea3605e84650903c001f22f3a963e3",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-09"
  },
  "layout": {
@@ -2550,7 +2550,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E325版·续",
+     "text_ref": "原文·E331版·续",
      "align": "left",
      "size": "small"
     },
@@ -2594,7 +2594,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E325版·续",
+     "text_ref": "原文·E331版·续",
      "align": "left",
      "size": "small"
     },
@@ -2686,7 +2686,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E325 版 · 续
+原文 · E331 版 · 续
 
 ## Git 收尾
 
@@ -2695,7 +2695,7 @@ owner: `E:\.agents`
 - **活动检出不留中间态。** 活动检出本身就是合并处时（计划任务、钩子或技能直接在用的检出），可能冲突的合并先用 `git merge-tree --write-tree` 预演；有冲突就在临时集成工作树里合并、解决并测试，再快进活动检出。活动检出里不留冲突标记或半合并状态，哪怕几分钟，读它的自动任务会当场读坏。
 - **每个改过的仓库都收尾。** 任务结束前按实际改动的落点逐个仓库回读，包括链接指向的私人配套仓库；有改动就验证、提交、推送、回读默认分支。接手时发现没人在做的旧改动，先弄清来源和用意，再纳入完善；只有真实冲突、归属不明或本人明确不推送时才保留并说明。
 - **分支和工作副本要收干净。** 不为表面干净去强制推送、泄密、删除来历不明的内容、覆盖别人没提交的改动，或把失败的产物推进默认分支。任务用过的分支和工作副本，最后要么合并后删掉，要么证明多余后删掉，要么写明用途、稳定名字和什么时候删后保留；查不清就说清卡在哪里。
-- **公开仓库和私人配套库。** 维护或准备公开一个仓库时，通过 GitHub 总索引现有的私人配套查询找到真实对应关系；新克隆没有本机链接不代表没有配套材料。内容迁移按[私人仓库收口](/rules/privacy-data/#私人仓库收口)执行；挪走当前文件不等于清理了 Git 历史。
+- **公开仓库和私人配套库。** 维护或准备公开一个仓库时，通过 `project-entry-gate` 技能的私人配套查询找到真实对应关系；新克隆没有本机链接不代表没有配套材料。内容迁移按[私人仓库收口](/rules/privacy-data/#私人仓库收口)执行；挪走当前文件不等于清理了 Git 历史。
 
 ## 日常技术默认
 

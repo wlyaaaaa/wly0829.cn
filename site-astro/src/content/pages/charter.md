@@ -38,13 +38,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E325",
-   "commit": "5fbf6a12ea23093e7b91748db9abd6866d27f9b4",
-   "ruleset_sha256": "5f011f73cb5a4901f93151328d70eea6c9b9ff6d03ff596c26d7a18700a1f893",
-   "activated_at": "2026-10-30T04:20:33.726689+08:00",
+   "release": "E331",
+   "commit": "985a1c35a97768f86014870625702364d994b55d",
+   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
+   "activated_at": "2026-10-31T07:37:25.088872+08:00",
    "file": "sources/rules/AGENTS.md",
-   "sha256": "39b062591ac217a968c9229c871e28c334974bc4a8dae8d46439def186a1db6f",
-   "public_sha256": "a8a238bdc60f5840da438aaf328a59b6d4571013c5fecf7a356a61f62f313e54"
+   "sha256": "e3f69696a8156e3c1f663cdfca978d5567e880c3a094f0af5d430694b6e3e8a0",
+   "public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf"
   },
   "video_prompt": "5–8 秒无缝循环，白底水彩风，和开头一屏的插画一致：书桌上那本摊开的精装厚书，书页被一阵微风轻轻掀起一两页又落回原处；绿色丝带书签微微摆动；书页上浅绿色的细横线从左到右依次淡淡亮起一遍，像有人一行行读过去；书上方 Claude 和 OpenAI 两个小徽章轻轻上下浮动；几片水彩绿叶从右上角慢慢飘落。镜头固定，不出现任何文字。",
   "registry": {
@@ -165,8 +165,8 @@
  },
  "source": {
   "page": "sources/pages/charter/page.json",
-  "sha256": "1f1dd092b2868fd59d656f77ce8f7dbbcad1e68cbd804037d16e9c22f01c58b4",
-  "converted_at_beijing": "2026-10-30T13:04:15+08:00"
+  "sha256": "d22c1a323fef736e52a52147e0c916d3ace8f343dc3383dd4a1b56cfd7c3dbec",
+  "converted_at_beijing": "2026-10-31T08:33:35+08:00"
  }
 }
 ---
@@ -475,7 +475,7 @@
 - 〔九、汇报、网站和我的电脑〕 L26–L29
 - 〔十、关于规则本身〕 L30
 
-当前生效版本以 AI 开工时核验的活动入口为准；网页原文来源快照为 E325（北京时间 10 月 30 日 04:20 起生效）。（更早的一次记录：2026 年 10 月 12 日 19:12 正式核验通过的是当时的活动规则 E268，属于历史。）按 L26，简单的完成回执和短状态直接在对话里说，不专门做网页，也不为做网页把一句话扩成汇报；我明确要网页时照做。AI 每次开工或接着做之前，先核对现在生效的是哪一版，只读这一版；草稿和旧版不算数。〔规则怎么发布和核对 → AI 规则与技能基座〕
+当前生效版本以 AI 开工时核验的活动入口为准；网页原文来源快照为 E331（北京时间 10 月 31 日 07:37 起生效）。（更早的一次记录：2026 年 10 月 12 日 19:12 正式核验通过的是当时的活动规则 E268，属于历史。）按 L26，简单的完成回执和短状态直接在对话里说，不专门做网页，也不为做网页把一句话扩成汇报；我明确要网页时照做。AI 每次开工或接着做之前，先核对现在生效的是哪一版，只读这一版；草稿和旧版不算数。〔规则怎么发布和核对 → AI 规则与技能基座〕
 
 ::screen{#charter-02 section="talk"}
 
@@ -487,9 +487,9 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E325",
-   "sha256": "39b062591ac217a968c9229c871e28c334974bc4a8dae8d46439def186a1db6f",
-   "public_sha256": "a8a238bdc60f5840da438aaf328a59b6d4571013c5fecf7a356a61f62f313e54",
+   "release": "E331",
+   "sha256": "e3f69696a8156e3c1f663cdfca978d5567e880c3a094f0af5d430694b6e3e8a0",
+   "public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
    "from": null,
    "to": "### 三、怎样做事",
    "start": 0,
@@ -570,7 +570,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-02",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "a8a238bdc60f5840da438aaf328a59b6d4571013c5fecf7a356a61f62f313e54",
+  "source_public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
   "source_rule_part": "charter/charter-02"
  },
  "layout": {
@@ -655,7 +655,7 @@
 }
 ```
 
-约法 · L1–L10 · E325
+约法 · L1–L10 · E331
 
 # 我的 AI 约法与工作约定
 
@@ -695,9 +695,9 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E325",
-   "sha256": "39b062591ac217a968c9229c871e28c334974bc4a8dae8d46439def186a1db6f",
-   "public_sha256": "a8a238bdc60f5840da438aaf328a59b6d4571013c5fecf7a356a61f62f313e54",
+   "release": "E331",
+   "sha256": "e3f69696a8156e3c1f663cdfca978d5567e880c3a094f0af5d430694b6e3e8a0",
+   "public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
    "from": "### 三、怎样做事",
    "to": "### 五、我的个人资料",
    "start": 2003,
@@ -761,7 +761,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-03",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "a8a238bdc60f5840da438aaf328a59b6d4571013c5fecf7a356a61f62f313e54",
+  "source_public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
   "source_rule_part": "charter/charter-03"
  },
  "layout": {
@@ -886,7 +886,7 @@
 }
 ```
 
-约法 · L11–L17 · E325
+约法 · L11–L17 · E331
 
 ### 三、怎样做事
 
@@ -911,9 +911,9 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E325",
-   "sha256": "39b062591ac217a968c9229c871e28c334974bc4a8dae8d46439def186a1db6f",
-   "public_sha256": "a8a238bdc60f5840da438aaf328a59b6d4571013c5fecf7a356a61f62f313e54",
+   "release": "E331",
+   "sha256": "e3f69696a8156e3c1f663cdfca978d5567e880c3a094f0af5d430694b6e3e8a0",
+   "public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
    "from": "### 五、我的个人资料",
    "to": "### 八、项目与维护",
    "start": 3445,
@@ -973,7 +973,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-04",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "a8a238bdc60f5840da438aaf328a59b6d4571013c5fecf7a356a61f62f313e54",
+  "source_public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
   "source_rule_part": "charter/charter-04"
  },
  "layout": {
@@ -1135,7 +1135,7 @@
 }
 ```
 
-约法 · L18–L23 · E325
+约法 · L18–L23 · E331
 
 ### 五、我的个人资料
 
@@ -1168,13 +1168,13 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E325",
-   "sha256": "39b062591ac217a968c9229c871e28c334974bc4a8dae8d46439def186a1db6f",
-   "public_sha256": "a8a238bdc60f5840da438aaf328a59b6d4571013c5fecf7a356a61f62f313e54",
+   "release": "E331",
+   "sha256": "e3f69696a8156e3c1f663cdfca978d5567e880c3a094f0af5d430694b6e3e8a0",
+   "public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
    "from": "### 八、项目与维护",
    "to": null,
    "start": 5506,
-   "end": 8179,
+   "end": 8456,
    "approved_omissions": []
   },
   "title": "项目、汇报网站和电脑、规则本身（L24–L30）",
@@ -1234,7 +1234,7 @@
   "reuse": "",
   "source_excerpt_id": "charter/charter-05",
   "source_logical_id": "agents_root_rules",
-  "source_public_sha256": "a8a238bdc60f5840da438aaf328a59b6d4571013c5fecf7a356a61f62f313e54",
+  "source_public_sha256": "ac74e7546431ad5ed70c52d7d6e4674dedcc561c9e2a23218c080e5b35114eaf",
   "source_rule_part": "charter/charter-05"
  },
  "layout": {
@@ -1377,7 +1377,7 @@
 }
 ```
 
-约法 · L24–L30 · E325
+约法 · L24–L30 · E331
 
 ### 八、项目与维护
 
@@ -1401,8 +1401,9 @@
 2. **资料状态。** 真实新消息先读 Hook 或 `ComputerContext` 的资料状态；自动续作、压缩和工具消息不算。锁着或不明时不取私人资料；问本人自己的事由根会话先请验证，解锁后再查资料、派活和作答，不给降级回答；纯技术工作照常。子代理缺资料交回、不自己验证，见[个人资料与数据处理](/rules/privacy-data/)。
 3. **事实与经验。** 按[事实找谁](/rules/context-sources/#事实找谁)取证；[一样东西只存一处](/rules/context-sources/#一样东西只存一处)，经验按[共享经验的落点](/rules/context-sources/#共享经验的落点)保存（L30）。
 4. **技术默认。** 命令、编码、临时目录和时间见[日常技术默认](/rules/engineering-delivery/#日常技术默认)。
-5. **向本人说明。** 按需读 `explain-to-me` 技能。
-6. **先给本人看样子，再做。** 本人会看到、会用到的东西，以及要给 AI 加的新规矩、新程序，动手前先在回他那条消息的最后，用一两句话或一张图告诉他：他会看到什么、按了会怎样（规矩和程序就说对他有什么变化）。他提了修改，就把改好的样子再给他看一遍；没有要改的了才开工，开工后不再报。他看不到的活（修报错、后台代码、处理数据）AI 自己做，按重要程度复核。本人不在时只做他看过样子的活和看不到的活。细则见[工程与交付](/rules/engineering-delivery/#目标优先于实现)。
+5. **先给本人看样子，再做。** 本人会看到、会用到的东西，以及要给 AI 加的新规矩、新程序，动手前先在回他那条消息的最后，用一两句话或一张图告诉他：他会看到什么、按了会怎样（规矩和程序就说对他有什么变化）。他提了修改，就把改好的样子再给他看一遍；没有要改的了才开工，开工后不再报。他看不到的活（修报错、后台代码、处理数据）AI 自己做，按重要程度复核。本人不在时只做他看过样子的活和看不到的活。细则见[工程与交付](/rules/engineering-delivery/#目标优先于实现)。
+6. **卡住了换一类办法，别空耗时间。** 同一个小目标用同一类办法两次没成，先查实际发生了什么，再换一类办法，不换着参数重试；派出去的活按产出、不按忙不忙查进度，时间推后就告诉本人。细则见[分工与并行施工·卡住了怎么办](/rules/execution-coordination/#卡住了怎么办)。
+7. **开新事先说用处和哪天收。** 本人让 AI 开做视频、建新工具这类和学习求职无关、要占几天的新事时，AI 先用一句话说它对本人有什么用、大概几天、哪天收；本人说做就做，不拦、不劝。定下的收尾日写进这件事自己的现行文件；过了收尾日本人还让接着做，提一句已过收尾日，本人说继续就继续。修报错、维护已有的东西不算新事。
 
 ## 细则在哪里
 

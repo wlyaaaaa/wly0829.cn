@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E325",
-   "commit": "5fbf6a12ea23093e7b91748db9abd6866d27f9b4",
-   "ruleset_sha256": "5f011f73cb5a4901f93151328d70eea6c9b9ff6d03ff596c26d7a18700a1f893",
-   "activated_at": "2026-10-30T04:20:33.726689+08:00",
+   "release": "E331",
+   "commit": "985a1c35a97768f86014870625702364d994b55d",
+   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
+   "activated_at": "2026-10-31T07:37:25.088872+08:00",
    "file": "sources/rules/docs/contracts/agents.rule-release.md",
    "sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
    "public_sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b"
@@ -152,8 +152,8 @@
  },
  "source": {
   "page": "sources/pages/rule-rule-release/page.json",
-  "sha256": "3dd438b3e9ca0502ba7a60138f8490c8bbec0f714bd04dacf9c20e48578f2d1d",
-  "converted_at_beijing": "2026-10-30T11:19:19+08:00"
+  "sha256": "134d5620a4f41593f0369d0f8181858d8438b15653f74b30ddbf1cb25809321e",
+  "converted_at_beijing": "2026-10-31T08:33:36+08:00"
  }
 }
 ---
@@ -1290,7 +1290,7 @@ E186　E187　当前　上一版　SYSTEM
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.rule-release.md",
-   "release": "E325",
+   "release": "E331",
    "sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
    "public_sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
    "from": null,
@@ -1320,7 +1320,7 @@ E186　E187　当前　上一版　SYSTEM
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版，一字不改"
+     "text_ref": "原文·E331版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1350,7 +1350,7 @@ E186　E187　当前　上一版　SYSTEM
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版，一字不改"
+     "text_ref": "原文·E331版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1443,7 +1443,7 @@ E186　E187　当前　上一版　SYSTEM
 }
 ```
 
-原文 · E325 版，一字不改
+原文 · E331 版，一字不改
 
 # 规则发布与恢复
 
@@ -1473,7 +1473,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.rule-release.md",
-   "release": "E325",
+   "release": "E331",
    "sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
    "public_sha256": "41b10aa49f019e7344e3329019936c86baedfd75131221519165ef97297b597b",
    "from": "## 发布和回退",
@@ -1502,7 +1502,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -1525,7 +1525,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -1595,7 +1595,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E325 版 · 续
+原文 · E331 版 · 续
 
 ## 发布和回退
 

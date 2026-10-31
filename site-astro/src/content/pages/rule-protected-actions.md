@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E325",
-   "commit": "5fbf6a12ea23093e7b91748db9abd6866d27f9b4",
-   "ruleset_sha256": "5f011f73cb5a4901f93151328d70eea6c9b9ff6d03ff596c26d7a18700a1f893",
-   "activated_at": "2026-10-30T04:20:33.726689+08:00",
+   "release": "E331",
+   "commit": "985a1c35a97768f86014870625702364d994b55d",
+   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
+   "activated_at": "2026-10-31T07:37:25.088872+08:00",
    "file": "sources/rules/docs/contracts/agents.protected-actions.md",
-   "sha256": "8f8660b2d1e1b4b836432d725b17e2dfaa89f0f305a51f2b6f4c2456e72568f3",
-   "public_sha256": "5b4215be5b110d054e75de59261bea819f84a29c389eb1f1258d1c224d0431ff"
+   "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73",
+   "public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：推小推车的小 AI 助手走到白绿木栏杆前停下；岗亭里戴眼镜的小 AI 助手抬头看一眼单子、点点头；桌上四选一托盘里的黄铜钥匙轻轻亮一下，手机屏幕上的六个圆点依次亮起又熄灭；木栏杆缓缓抬起一半又落回原位；远处 GitHub 小木屋的烟囱冒出一缕淡绿的烟；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子和纸条上的字保持不动、不变形，手机屏幕上不出现数字。",
   "registry": {
@@ -254,8 +254,8 @@
  },
  "source": {
   "page": "sources/pages/rule-protected-actions/page.json",
-  "sha256": "da435e1453f70e0bf4170649b7b1d8fb9b8d82423eb32fe7eb572cf361361c79",
-  "converted_at_beijing": "2026-10-30T13:04:18+08:00"
+  "sha256": "c7cc12d6df59553995dea028772c9234204b93a0ccc2f51df5ee99517c8ce3ce",
+  "converted_at_beijing": "2026-10-31T08:33:36+08:00"
  }
 }
 ---
@@ -536,7 +536,7 @@
 
 删库　把关　四选一　通行密钥　手机验证码　恢复码
 
-现在开没开无限制授权、个人资料解没解锁：〔现在的授权状态 → 授权与状态〕。网页原文来源快照为 E325（北京时间 10 月 30 日 04:20 起生效），本页讲解与同版专题对应；当前生效版本以 AI 开工时核验的活动入口为准。
+现在开没开无限制授权、个人资料解没解锁：〔现在的授权状态 → 授权与状态〕。网页原文来源快照为 E331（北京时间 10 月 31 日 07:37 起生效），本页讲解与同版专题对应；当前生效版本以 AI 开工时核验的活动入口为准。
 
 ::screen{#rule-protected-actions-09 section="points"}
 
@@ -2683,9 +2683,9 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.protected-actions.md",
-   "release": "E325",
-   "sha256": "8f8660b2d1e1b4b836432d725b17e2dfaa89f0f305a51f2b6f4c2456e72568f3",
-   "public_sha256": "5b4215be5b110d054e75de59261bea819f84a29c389eb1f1258d1c224d0431ff",
+   "release": "E331",
+   "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73",
+   "public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3",
    "from": null,
    "to": "## GitHub 重大动作",
    "start": 0,
@@ -2716,7 +2716,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-protected-actions/rule-protected-actions-07",
   "source_logical_id": "protected_actions_contract",
-  "source_public_sha256": "5b4215be5b110d054e75de59261bea819f84a29c389eb1f1258d1c224d0431ff",
+  "source_public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3",
   "source_rule_part": "rule-protected-actions/rule-protected-actions-07"
  },
  "layout": {
@@ -2726,7 +2726,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版，一字不改"
+     "text_ref": "原文·E331版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2769,7 +2769,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版，一字不改"
+     "text_ref": "原文·E331版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2869,7 +2869,7 @@
 }
 ```
 
-原文 · E325 版，一字不改
+原文 · E331 版，一字不改
 
 # 重大动作与本人验证
 
@@ -2913,13 +2913,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.protected-actions.md",
-   "release": "E325",
-   "sha256": "8f8660b2d1e1b4b836432d725b17e2dfaa89f0f305a51f2b6f4c2456e72568f3",
-   "public_sha256": "5b4215be5b110d054e75de59261bea819f84a29c389eb1f1258d1c224d0431ff",
+   "release": "E331",
+   "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73",
+   "public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3",
    "from": "## GitHub 重大动作",
    "to": null,
    "start": 1019,
-   "end": 2272,
+   "end": 2376,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -2933,7 +2933,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-protected-actions/rule-protected-actions-08",
   "source_logical_id": "protected_actions_contract",
-  "source_public_sha256": "5b4215be5b110d054e75de59261bea819f84a29c389eb1f1258d1c224d0431ff",
+  "source_public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3",
   "source_rule_part": "rule-protected-actions/rule-protected-actions-08"
  },
  "layout": {
@@ -2943,7 +2943,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -2983,7 +2983,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3089,15 +3089,15 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E325 版 · 续
+原文 · E331 版 · 续
 
 ## GitHub 重大动作
 
 GitHub 的删除仓库、转移仓库、把非公开仓库改成公开，按约法 L17 的专门规则执行：开着有效无限制授权时不重复弹本人验证，否则验证一次，个人资料是否解锁不影响这一条。新建公开仓库只需本人明确同意，不另做一次身份验证；对外发布和第一次公开发布仍须本人明确同意。向已有公开仓库正常推送按 Git 收尾长期授权直接做，不重复请示。
 
-合并主线、内容已有保留的本地或远端分支和标签删除、核对过不丢提交的历史改写（含强制推送）、分支或仓库改名、新建本人 GitHub 私有仓库、把公开仓库改为私有、改默认分支、把远端改成本人 GitHub 账号下的仓库，都是普通收尾，直接做，不请本人验证，也不逐项向本人报告技术细节。程序在删除或改写前自动核对旧提交仍由其他本地或 GitHub 分支、标签保留；检查不过就停止并说明原因，不改成找本人验证。可能丢提交的强制推送仍须本人明确同意。改名时一并更新总索引和真实调用方。
+合并主线、内容已有保留的本地或远端分支和标签删除、核对过不丢提交的历史改写（含强制推送）、分支或仓库改名、新建本人 GitHub 私有仓库、把公开仓库改为私有、改默认分支、把远端改成本人 GitHub 账号下的仓库，都是普通收尾，直接做，不请本人验证，也不逐项向本人报告技术细节。程序在删除或改写前自动核对旧提交仍由其他本地或 GitHub 分支、标签保留；检查不过就停止并说明原因，不改成找本人验证。可能丢提交的强制推送仍须本人明确同意。改名时一并更新 PCConfig 的仓库位置登记（`registries/repository-paths.json`）和真实调用方。
 
-删库和转移前，AI 先自动确认本地副本是全的：所有分支都在本地，缺的先拉下来；并把只在 GitHub 网页上的东西（例如 issue、发布包）列给本人看。执行入口归 GitHub 总索引：有有效无限制授权时直接执行已授权的动作，否则调用密码中心的 `Invoke-SecretBroker.ps1 -Action VerifyAuthority` 验证一次；普通 Git 收尾不调用密码中心。回执的 `highest_authority_verified` 表示权限核验结果，`human_factor_performed` 如实区分本次真人验证和复用授权，不能把复用说成刚做过一次真人验证。真正销毁唯一数据仍按明确同意和重大动作的规则处理，不作为普通清理的自动回退。
+删库和转移前，AI 先自动确认本地副本是全的：所有分支都在本地，缺的先拉下来；并把只在 GitHub 网页上的东西（例如 issue、发布包）列给本人看。执行入口是 `project-entry-gate` 技能的 `Invoke-ProtectedGitHubMajorAction.ps1`：有有效无限制授权时直接执行已授权的动作，否则调用密码中心的 `Invoke-SecretBroker.ps1 -Action VerifyAuthority` 验证一次；普通 Git 收尾不调用密码中心。回执的 `highest_authority_verified` 表示权限核验结果，`human_factor_performed` 如实区分本次真人验证和复用授权，不能把复用说成刚做过一次真人验证。真正销毁唯一数据仍按明确同意和重大动作的规则处理，不作为普通清理的自动回退。
 
 ## 本人验证方式
 

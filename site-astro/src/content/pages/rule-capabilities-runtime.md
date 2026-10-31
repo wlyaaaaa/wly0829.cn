@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E325",
-   "commit": "5fbf6a12ea23093e7b91748db9abd6866d27f9b4",
-   "ruleset_sha256": "5f011f73cb5a4901f93151328d70eea6c9b9ff6d03ff596c26d7a18700a1f893",
-   "activated_at": "2026-10-30T04:20:33.726689+08:00",
+   "release": "E331",
+   "commit": "985a1c35a97768f86014870625702364d994b55d",
+   "ruleset_sha256": "ff01e695160a44b27a8164efa5a0d2b1fb53f733d0ba2a8c6a1b7da86b411103",
+   "activated_at": "2026-10-31T07:37:25.088872+08:00",
    "file": "sources/rules/docs/contracts/agents.capabilities-runtime.md",
-   "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
-   "public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5"
+   "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
+   "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小 AI 助手抬手从洞洞板上取下放大镜看了看又挂回去，洞洞板上的 Chrome、Gmail、Google 云盘三个标志轻轻晃动；脚边贴着“E:”的绿色储物箱里几片绿叶慢慢舒展；右下笔记本电脑屏幕上的看板里，三个小圆点状态灯依次轻轻呼吸（绿、绿、黄）；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，三块小牌子上的字保持不动、不变形。",
   "registry": {
@@ -396,8 +396,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "646f0bfc01ff855c9ca54738c891bf5cae3caf3c23f46caee9a63ef2b1cc65b7",
-  "converted_at_beijing": "2026-10-31T04:18:20+08:00"
+  "sha256": "e8361afb1c1c5dc1b46e4e2fc3159a8c28aba224e2d8a31a60287decb1aef34c",
+  "converted_at_beijing": "2026-10-31T08:33:35+08:00"
  }
 }
 ---
@@ -2925,9 +2925,9 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E325",
-   "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
-   "public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
+   "release": "E331",
+   "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
+   "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
    "from": null,
    "to": "## 常用入口",
    "start": 0,
@@ -2950,7 +2950,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-11",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
+  "source_public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-11"
  },
  "layout": {
@@ -2958,7 +2958,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版"
+     "text_ref": "原文·E331版"
     },
     {
      "type": "chapter_title",
@@ -2999,7 +2999,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版"
+     "text_ref": "原文·E331版"
     },
     {
      "type": "chapter_title",
@@ -3092,7 +3092,7 @@
 }
 ```
 
-原文 · E325 版
+原文 · E331 版
 
 # 能力与运行方式
 
@@ -3120,9 +3120,9 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E325",
-   "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
-   "public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
+   "release": "E331",
+   "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
+   "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
    "from": "## 常用入口",
    "to": "## 浏览器",
    "start": 1440,
@@ -3140,7 +3140,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-12",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
+  "source_public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-12"
  },
  "layout": {
@@ -3148,7 +3148,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3176,7 +3176,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3222,7 +3222,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E325 版 · 续
+原文 · E331 版 · 续
 
 ## 常用入口
 
@@ -3257,13 +3257,13 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E325",
-   "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
-   "public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
+   "release": "E331",
+   "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
+   "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
    "from": "## 浏览器",
    "to": "## 汇报、网站和自动运行的东西",
    "start": 3999,
-   "end": 6036,
+   "end": 6251,
    "approved_omissions": []
   },
   "title": "原文（三）：浏览器",
@@ -3282,7 +3282,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-13",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
+  "source_public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-13"
  },
  "layout": {
@@ -3290,7 +3290,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3316,7 +3316,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3390,7 +3390,7 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
 }
 ```
 
-原文 · E325 版 · 续
+原文 · E331 版 · 续
 
 ## 浏览器
 
@@ -3400,9 +3400,11 @@ Codex 云端读者先放着，按偶用处理、不维护。换账号后新账�
 
 点击后页面没变化，先截图看实际画面里的弹窗或遮罩；仍没变化就停下这一步、交回卡点，不重复点击。
 
+取文件不点网页“下载”按钮：本机 Chrome 的下载会被迅雷接走、弹出窗口等人点，没人点就卡住。AI 在自己新开、没点过下载的后台标签页里直接取文件内容写盘（可批量），不用登录的公开文件用命令行下载；本人的迅雷设置不动。具体通道见 `browser-control-continuity` 的“取文件”。
+
 网站、平台和软件要求同意协议，按[用户授权·同意协议的执行办法](/rules/authorization/#同意协议的执行办法)直接办理，包含“上传、发布、登录、安装或继续即同意”的提示。派单和续作附上长期授权的现行结论及源消息 UUID，不附原句；子代理的工具要本人确认时，由派它的根会话按[根会话代确认的执行办法](/rules/authorization/#根会话代确认的执行办法)代本人确认已授权的动作，区分同意条款与付款、对外传输等动作；工具不认代确认的真实限制按该节交回，不绕过。
 
-Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时，按 `browser-control-continuity` 修这条路一次；仍不通就停下需要网页的那一步，把卡在哪一层、实际报错和已做到哪里交回根会话，由根会话决定或告诉本人；不需要网页的其余已授权工作照常继续。不自动改用无头浏览器、任务临时配置、应用内或内置浏览器、别的浏览器家族或远程浏览器访问同一网站，子代理也不自己决定换。页面已打开但正文超时、要登录或要验证，是页面结果，不是换浏览器的理由，照实交回。
+页面读取或截图超时、空白时，先当网页卡了：在原页等一会儿再刷新，可以连刷几次，读到就接着干，这不算下面的“修一次”。Chrome 插件连不上、本人的 Chrome 打不开，或刷几次仍读不出来时，按 `browser-control-continuity` 修这条路一次；仍不通就停下需要网页的那一步，把卡在哪一层、实际报错和已做到哪里交回根会话，由根会话决定或告诉本人；不需要网页的其余已授权工作照常继续。不自动改用无头浏览器、任务临时配置、应用内或内置浏览器、别的浏览器家族或远程浏览器访问同一网站，子代理也不自己决定换。页面已打开但正文超时、要登录或要验证，是页面结果，不是换浏览器的理由，照实交回。
 
 已授权的本人账号登录，需要手机号时可直接填写本人常用号码（记在个人理解库的“本人基本信息”卡，问“我的手机号”即可取到，登录一般用第一个）并发送验证码；验证码能从现有允许来源取得（短信验证码用 PCConfig 的按需取码工具 `tools/Invoke-SmsCode.ps1`，说明在 `docs/runtime/sms-code.md`），就及时完成登录，取不到交本人填写。需要账号密码时由本人登录，已退役的浏览器密码盲填不恢复。各宿主按自己的真实能力和限制执行，不把 Claude 的限制写成所有 AI 都不能做。短信来源未接通时如实说明，不把调查报告当成已能自动取码，也不为等待验证码新建全局后台服务。
 
@@ -3420,13 +3422,13 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E325",
-   "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
-   "public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
+   "release": "E331",
+   "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
+   "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
    "from": "## 汇报、网站和自动运行的东西",
    "to": "## 安装位置、配置和本机约定",
-   "start": 6036,
-   "end": 8676,
+   "start": 6251,
+   "end": 9598,
    "approved_omissions": []
   },
   "title": "原文（四）：汇报、网站和自动运行；软件更新和兼容",
@@ -3440,7 +3442,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-14",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
+  "source_public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-14"
  },
  "layout": {
@@ -3448,7 +3450,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3468,7 +3470,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3538,17 +3540,19 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
 }
 ```
 
-原文 · E325 版 · 续
+原文 · E331 版 · 续
 
 ## 汇报、网站和自动运行的东西
 
 - **汇报网页**：什么时候用、做成什么样见约法 L26。各模型的提问、推荐、说明框及生成、存放、到期清理，统一按 `report-page` 技能；需要长期留下的结论写进对应项目的记录，不靠网页保存。
 - **网站**（约法 L27）：本人说“更新网站”时，按 `V:\Personal\Projects\wly0829.cn` 的 AGENTS.md 更新一次。不建自动定时更新。
+- **本人只看驾驶舱**：本人在网站上基本只看驾驶舱（含驾驶舱二级页）；README、项目里的看板和总览页、网站上驾驶舱以外的页面，他都不看。要本人知道、做或选的事必须进驾驶舱，只写在别处等于没告诉他；不为本人另建看板或总览页（本人 2026-10-31，源 6ef403fe）。
 - **自动运行的东西**（约法 L28）：计划任务、看门狗和其他自动运行的东西，要在网站看板上看得见：在做什么、上次和下次什么时候运行、有没有出错、怎么停、停了会影响什么。新增或修改自动运行的东西时，把这些状态写进看板能读的状态文件或登记（按 PCConfig 的现行做法）；看板怎么显示另行建设，不为此在本机另开窗口。后台命令不弹黑窗口。
 - **定时任务的结论写进驾驶舱**：Codex 和 Claude 的定时任务每跑一轮，都用 PCConfig 的结论回执命令写一句人话结论（正常、要你看或出错），写法见 PCConfig `docs/runtime/codex-automation-receipt.md`；分段做的每段都写、以最后一次为准，卡住或出错当场就写。驾驶舱在这个任务那一行显示结论；结论有变化、又是本人用得上的，同时进“要你知道”，出错的只在那一行显示、由 AI 接手；要本人做或选的照旧登记“需要你”。任务自己没写时，Claude 的钩子用它最后的收尾回顾补一份并标黄。回执不会自己推到本人面前；本人在对话里等的结果，还要送回那个对话（Claude 的做法和兜底见[Claude 适配](/rules/claude-adapter/#宿主接线)“定时任务的结果送回等结果的对话”）。
 - **本人没回的对话默认没看见**：本人没回复、AI 也没说做完的对话，算本人没看见；要本人知道、做或选的，都用人话写进驾驶舱：出了什么事、要本人做什么、不做会怎样，不用代号，不让人猜。本人在那个对话里回了才算看见。Claude 桌面版收尾时带了待答问题，由钩子自动登记，10 分钟没回才显示，本人一回复就关掉；收尾不带待答问题，就表示没有等本人的事。Codex 有要本人定或做的事时，在最后一条回复的最后一行写“【等你】<一句人话>”，由钩子同样登记和关闭。AI 自己还要接着做的，登记“AI 在跟”，不留没人知道的半截。
 
-- **问本人之前先自查**：只影响技术做法、排版细节或能撤回的小事，AI 按自己的建议直接做，回复里写一句“我定了：……，不同意说一声”，不问；能自己查到的事实先查；本人授权范围内、能撤回的下一步直接做；已经按建议做好、只差本人点头的，直接报告结果。真要本人定的（影响本人的需求或产品，或者要发消息、对外发布、花钱、删唯一的数据），问题要离开那段对话也看得懂：在做什么事、做到哪了、要本人定什么、每个选择会怎样、AI 的建议；Claude 收尾按钮第一个放建议，每个按钮的话写清点了会怎样（钩子会把对话名、做到哪、问题和按钮原样做成驾驶舱卡）。给本人看的卡和问题不用行话、文件路径和英文代号；派 GPT 时派单的「任务」一栏也会原样显示在驾驶舱“AI 正在跑”，同样写成本人一眼看懂的一句话（做什么、为了什么），不写内部代号、文件名、占位时间，不用“本人”这类 AI 之间的称呼。
+- **问本人之前先自查**：只影响技术做法、修报错、排版细节或能撤回的小事，AI 按自己的建议直接做，回复里写一句“我定了：……，不同意说一声”，不问；能自己查到的事实先查；本人授权范围内、能撤回的下一步直接做；已经按建议做好、只差本人点头的，直接报告结果。要问的是：影响本人的需求或产品；发消息、对外发布、花钱、删唯一的数据、撤不回的迁移；给 AI 加新规矩、新程序，或做本人会看到、会用到的新东西前要他先看样子；只有本人能做的事（登录、验证、接手机、答问卷）。还在等本人回话或动手，问题就必须留在收尾里（Claude 收尾带问题，Codex 最后一行写“【等你】”），不能只在摘要或正文里写“等你一句话”，否则驾驶舱收不到。问题要离开那段对话也看得懂：Claude 收尾的摘要写在做什么、做到哪，问题一句话点明哪件事、要本人定什么，不用“这份”“上面”这类指代，按钮第一个放建议，每个按钮的话写清点了会怎样（钩子会把对话名、做到哪、问题和按钮原样做成驾驶舱卡）；Codex 的驾驶舱卡只有“【等你】”这一行，这一行要自己点明哪件事、要本人定什么和 AI 的建议。给本人看的卡和问题不用行话、文件路径和英文代号；派 GPT 时派单的「任务」一栏也会原样显示在驾驶舱“AI 正在跑”，同样写成本人一眼看懂的一句话（做什么、为了什么），不写内部代号、文件名、占位时间，不用“本人”这类 AI 之间的称呼。
+- **本人怎么看回复，驾驶舱兜底**：本人只看最终输出；同一轮两条最终输出大段重复，就只看最新一条，不重复就都看；对话被定时任务、子代理或命令唤醒过，唤醒前后的输出本人都可能没看到。所以要重写就完整重写，最新那条单独看就够，不能只补一行或写“同上”；要补充就只写新内容，不重复前文。不能指望本人什么都看见：要他知道、做或选的，按“本人没回的对话默认没看见”进驾驶舱兜底；只放他知道了有意义的，其余按“本人不用知道的技术问题不上驾驶舱”不上。
 - **本人不用知道的技术问题不上驾驶舱**：不影响本人在用的功能、本人的需求和资料的技术问题（例如 AI 自己的临时文件、已经改正的内部出错），不写进“要你知道”“需要你”和给本人看的结论；用 `Set-OwnerItem.ps1 -Who ai` 登记成 AI 事项，写清核实办法和检查点，由 PCConfig 的新故障自动接手派 GPT 排查修好。AI 查清后判断明确影响本人的需求和在用的功能、又不是小改动的（例如本人的资料丢了、在用的功能坏了要大改），才用人话告诉本人；要本人亲自做或选的照旧进“需要你”。
 - **要本人做、要本人选、可能漏看的事**：根会话在回复本人的同时，用 `pwsh -NoProfile -File E:\PCConfig\tools\Set-OwnerItem.ps1 -Mode Add` 登记到驾驶舱“需要你”，填写 `-PassCriteria` 完成条件；可机核的方法用 `-AiHint` 写入条目的 `ai_hint`。Claude、Codex 用同一命令；子代理不登记，交根会话决定。
   周治理或任何 AI 核实完成条件后，用同一命令 `-Mode Close -Id <条目id> -Result passed -Note <核实证据>` 关闭；本人说做完，也先查对应条目并核实后关闭。本人在配对过的设备上可以直接在卡片上处理，动作进收件箱，由 AI 照办或核实后关闭；公开版只能看。
@@ -3558,6 +3562,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
 - 可以从官方来源把软件更新到兼容、可回退、净收益为正的稳定版；不越过版本锁定、付费或账号、正在运行的任务、重启或重装、信任边界。最新的、不确定的或需要引用的事实上网核实，技术问题优先看官方。
 - 版本固定只用于复现、安全或合规、已证实不兼容或上游硬约束；在项目里就地写清原因和什么时候解除，不把精确版本变成永久门槛。不拿软件的精确版本号、构建号、带版本的安装路径当正常功能或准入的门槛；版本号可以用于诊断、测试证据、复现和回滚。
 - 给在用的软件（各个宿主、普通程序、插件、技能、MCP、运行环境及其接口、配置和数据格式）新建、修改、安装、升级、集成或迁移时，保护还有用的功能、数据、配置、必要流程和本人能感觉到的体验，不保护旧代码的样子。接口的能力和含义没变，正常更新后应该不用改集成就能用。优先用官方稳定接口和能力探测；没验证过的新版本既不等于不兼容，也不等于已验证。必需字段、未知请求和含义变化不能被吞掉或冒充成功。这不要求每个项目适配所有框架，也不扩大成维护无关软件或恢复冻结项目。
+- 要本人在电脑或手机上点软件设置时，先核对当前界面，给准确的控件名和能一次做完的短步骤；选项跨好几屏或连着找不到菜单时，改用 AI 能做的办法（导出配置再请本人一次导入、命令、电脑 MCP 或 `phone-direct`），不让本人一个按钮一个按钮地报状态。
 - 同一主体的正常更新，不因为自己的适配无故重置还有效的身份或授权，也不要求重复本人验证。只保留有现实用途的旧格式或入口，不借兼容永久留着旧实现。改动涉及兼容时，复用项目原有的回归和真实使用入口来验证；程序能启动、接口有响应或静态测试通过，都不单独说明还能照常用。
 
 ::screen{#rule-capabilities-runtime-15 section="original"}
@@ -3570,13 +3575,13 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E325",
-   "sha256": "476f6cf4017dbafe6c003afeba92efbaa1e723c1614366db1621188aa2a606cd",
-   "public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
+   "release": "E331",
+   "sha256": "019a2a18fa8826af12a409c880f47e6fd5475fb6f1a00c20a095f803db5bdfa2",
+   "public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
    "from": "## 安装位置、配置和本机约定",
    "to": null,
-   "start": 8676,
-   "end": 10176,
+   "start": 9598,
+   "end": 11089,
    "approved_omissions": []
   },
   "title": "原文（五）：安装位置、配置和本机约定",
@@ -3595,7 +3600,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-15",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "8b80c482360d2f2b5d68dcb2137d1400537cd44a12351104da78289a4d5cbfe5",
+  "source_public_sha256": "a819d6caff09e3a10d556d2dab003c6633ceb1c92158e69135391831e38e66da",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-15"
  },
  "layout": {
@@ -3603,7 +3608,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3623,7 +3628,7 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E325版·续"
+     "text_ref": "原文·E331版·续"
     },
     {
      "type": "source_text_card",
@@ -3669,12 +3674,12 @@ Chrome 插件连不上、本人的 Chrome 打不开，或页面读不出来时�
 }
 ```
 
-原文 · E325 版 · 续
+原文 · E331 版 · 续
 
 ## 安装位置、配置和本机约定
 
 - **缺什么装什么。** 任务必需而本机缺的运行环境、SDK、命令行或构建工具，可以从官方支持的途径安装并验证。已有项目服从它的版本锁和 CI；依赖放在生态原本的位置，跨项目的工具和服务归 PCConfig。没有约束的新环境选最新稳定版；兼容层、容器或旧运行环境只在原生途径不能用时才用。付费或账号、重启或重装、放宽安全、信任或授权边界仍按原来的门办。
 - **东西放 E 盘**（约法 L29）：新装软件默认放 E 盘合适的目录（如 `E:\Program Files\<软件名>`）；AI 的缓存、临时文件、构建中间物、大任务产物和新工作区放 PCConfig 登记的数据盘，不往 C 盘堆。任务目录或宿主默认在 C 盘，不是继续写 C 盘的理由：按消费者支持的正式设置指定路径，传给实际执行的进程，并回读真实落点。安装器或系统组件必须固定位置时，按原生位置装并说明，不顺手迁移已有安装。确实不能迁走、还在用的官方小运行环境可以留例外，说明路径和原因。迁移要确认使用者已经在用新位置、原来的空间已经实际腾出；只复制到新盘、C 盘还留一份不算迁移完成。新电脑的盘符、系统盘容量和数据位置由本人决定，本机的 E 盘约定不是新电脑必须有 E 盘的门槛。
 - **配置。** 项目拥有自己的业务配置、默认值、版本和迁移；PCConfig 拥有机器事实和导航。优先静态配置和项目已有机制，确实需要热更新、多进程或跨实例时才用相应的现成机制，不预建全局配置平台。项目登记过的机器或恢复键改了，先验证项目源，再直接更新 PCConfig `project_config_keys.json` 的 `current_value` 和来源引用，并运行 `node tools/validate_project_config_keys.mjs`；登记只是机器导航，不是业务权威，不加监视器或后台同步。秘密用现行的 SecretRef，不放进版本化的普通配置。密钥的产品合同、保存和供给归独立密码中心（私有仓库 `E:\Projects\Tools\PasswordCenter`），PCConfig 管本机安装、路径、任务和恢复接线；取用走 `local-secret-broker` 指向的现役入口。已有厂商密钥可以供其支持的多个模型和多个项目使用，换模型不为密钥重复登记、复制或锁定，也不把一个厂商永久限制为只能有一把密钥；模型名、用量和业务选择归调用项目。
-- **技能和插件。** 技能和插件的规范源在 `E:\.agents\skills` 和 `E:\.agents\plugins`，用户目录只放发现链接；清单 `config/personal-skill-supply.json` 和现有安装器管理安装。要查技能装没装、`.agents`、PCConfig 和 GitHub 索引登记坏没坏时，跑只读的 `tools/Invoke-ControlPlaneDoctor.ps1 -Json`（查单个技能加 `-SkillName <名>`）；它只看安装和登记，说明不了技能好不好用。只有缺的能力真的影响本人要的结果时，才去翻按需插件目录；目录里的示例命令只是数据，不自动执行。
+- **技能和插件。** 技能和插件的规范源在 `E:\.agents\skills` 和 `E:\.agents\plugins`，用户目录只放发现链接；清单 `config/personal-skill-supply.json` 和现有安装器管理安装。要查技能装没装、`.agents` 和 PCConfig 登记坏没坏时，跑只读的 `tools/Invoke-ControlPlaneDoctor.ps1 -Json`（查单个技能加 `-SkillName <名>`）；它只看安装和登记，说明不了技能好不好用。只有缺的能力真的影响本人要的结果时，才去翻按需插件目录；目录里的示例命令只是数据，不自动执行。
 - **Windows。** 命令、编码、临时内容和显卡任务按[日常技术默认](/rules/engineering-delivery/#日常技术默认)处理，外部进程的实际编码现场核对。Codex 的机器根目录和 V、Z 盘分工向 PCConfig 和 Git 源读取，不凭旧路径猜。
