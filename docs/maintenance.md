@@ -4,7 +4,7 @@
 
 ## 日常更新
 
-正文和构图的写作、转换方法见 [Astro 说明](../site-astro/README.md)。修改所属页面的源内容，不直接把已发布 HTML 当作新源。`page.json`、相邻 `layout.json` 与转换后的 Markdown 要表达同一内容；构图中的 `text_ref` 继续对应正文。首页已于 10 月 23 日解除锁定：它随依赖数据照常重建、扫描和发布回读，亮点屏数字过期时构建自动重画（重画改写的作者输入随后提交）；首页不是排版阅读页，不参加阅读检查。直接编辑过 Markdown 的页，之后再改 `page.json` 会被构建拦下，须先统一作者输入。
+正文、构图与首页的作者输入和构建约束见 [Astro 说明](../site-astro/README.md#内容文件怎么写)。修改所属作者源，不直接编辑已发布 HTML 或转换后的 Markdown；首页不是排版阅读页，不参加阅读检查。
 
 日常构建使用主持已确定的常驻工作树 `E:\Cache\wly-site-build\wt`。每轮先核对未提交改动及正在使用同一 `dist` 的任务；有别人的改动或归属不明的文件时先交回主持，不能用切分支、重置或清理覆盖它们。确认源码工作区干净、上一轮写入者已经结束后，才从最新 `origin/main` 开始：
 
@@ -27,14 +27,14 @@ python -B -X utf8 site-astro/tools/scan_glance.py --dist dist
 python -B -X utf8 site-astro/tools/publish_site.py --dist dist --scan-result <扫描结果绝对路径> --dry-run
 # 在已有发布授权内，先上传并回读资源，再正式部署同一份成品。
 python -B -X utf8 site-astro/tools/publish_site.py --dist dist --scan-result <扫描结果绝对路径> --upload-only
-python -B -X utf8 site-astro/tools/publish_site.py --dist dist --scan-result <扫描结果绝对路径> --output <正式发布输出新目录>
+python -B -X utf8 site-astro/tools/publish_site.py --dist dist --scan-result <扫描结果绝对路径>
 # 发布返回、释放锁以后单独清理，可与下一轮取数并行。
 python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发布输出目录>
 ```
 
 扫描默认使用 `published-diff`，比较上一成功发布清单与最终 HTML 哈希，覆盖多轮构建累计的新增及变化路由，不依赖最后一次重建页。规则换版仍只扫这些变化页；只有外壳、排版引擎或共享脚本变化时另外使用 `--pages all`。缺少成功发布记录时工具提示回退 `changed`，按已有扫描记录比较页面哈希；此时核实真实成功前版和累计范围，不能把回退当作发布证据。指定路由可用逗号分隔的 `--pages /route-a/,/route-b/`；首页 `/` 照常可选，只跳转首页的旧别名 `/cv/`、`/system/` 不重复扫描。扫描覆盖大块空白、压叠、裁字、空图框、404 和点不动，结果及稳定后的截图留在扫描目录。动效由本人看，AI 不录屏或判断开场与动效。
 
-正式发布沿用本机已配置的阿里云 CLI、OSS profile 和 `wly0829-publication` 短锁；不新增登录或凭据。发布器只上传变化资源和文档，先资源、后 HTML、最后成功记录；先以 HEAD 核资源大小和 MD5，再 GET 关键页和本次变化页核正文哈希。`--upload-only` 只上传并回读资源，不推 `site-dist`、不切换公网、不写成功指针。正式部署和公网回读全部通过后，才更新 Git 共享目录的 `wly-oss/published.json`。正式发布默认不清理旧对象，成功时 `status=published`、`oss_retention.status=deferred` 并退出 0。保留正式发布输出目录，在发布锁释放后用独立命令清理；清理残留只影响该命令的退出码，不改变已上线事实。OSS 退役与独立回执按[按需更新清单](ondemand-update.md#7-先上传资源再正式发布)和[发布与扫描](publish-and-scan.md)执行。`publish-receipt.json` 区分本地计划、上传、Pages 和公网回读，不能把 dry-run 或资源上传写成已经上线。
+正式发布沿用本机已配置的阿里云 CLI、OSS profile 和 `wly0829-publication` 短锁；不新增登录或凭据。发布器先资源、后 HTML、最后成功记录；`--upload-only` 不切换公网。正式部署和公网回读通过后才更新 Git 共享目录的 `wly-oss/published.json`。默认发布输出位置、保留目录及独立 OSS 清理规则见[发布与扫描](publish-and-scan.md#发布做什么)。`publish-receipt.json` 区分本地计划、上传、Pages 和公网回读，不能把 dry-run 或资源上传写成已经上线。
 
 ## 独立阅读与几何检查
 

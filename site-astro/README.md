@@ -1,6 +1,6 @@
 # site-astro：内容页（区块照现在的网站，排版在浏览器里自动做）
 
-内容页每页一个内容文件 `src/content/pages/<页>.md`，通常由 `tools/convert_page.py` 从 `sources/pages/<页>/page.json`（和 `layout.json`）生成。直接编辑 Markdown 也会生效；构建记住这次编辑（每页另记作者目录及其依赖的指纹 `author_fp`），只有转换器自身变化时照旧保留它。之后若该页 `page.json`（或它引用的页、`layout.json`）又改了，构建直接停下并列出页名，因为 JSON 的新改动到不了网页：先统一作者输入——以 JSON 为准就运行 `python tools/convert_page.py <页>` 覆盖 Markdown，要留 Markdown 里的新内容就先把它并回 `page.json` 再转换，然后重新构建。页头、页尾、目录条、翻页过渡、小鸟、落叶、水彩照现在网站。
+内容页的正文唯一作者源是 `sources/pages/<页>/page.json`，构图另在 `layout.json`；`tools/convert_page.py` 生成 `src/content/pages/<页>.md` 供渲染。不要直接编辑 Markdown；构建逐页核对现有 Markdown 与当前作者源的转换结果，作者源单独变化时重转，发现独立编辑造成的分叉就停止并列出页名。把要保留的文字并回 `page.json`，再转换并重建；不能只改 JSON 就宣称网页已更新。页头、页尾、目录条、翻页过渡、小鸟、落叶、水彩照现在网站。
 
 ## 为什么这样做（第四轮）
 
@@ -20,7 +20,7 @@
 
 首页和授权页保留候选站原 HTML、原图和动效，由 Astro 静态路由输出：入口直接读 `sources/retained-home-cockpit/home.html`、`computer-access.html` 的已接受源码，附加样式和交互保持原样。普通构建不再复制到 `src/chrome/retained`，也不从旧站生成运行件。
 
-首页按本人 10 月 23 日决定解除锁定：构建不再保留上一版首页字节，首页连带变化和其他页一样只打印“连带变化”，照常扫描和发布回读。首页亮点屏 `home-04` 的数字来自 `sources/creative/static-home/highlights-page.json` 绑定的各项目登记；每次构建在准备保留页之前，先用纯文本比较 `home.html` 里 home-04 的嵌入转写与当前 `expected_text(...)`，一致就跳过（不启动浏览器）；不一致就自动运行 `scripts/prepare-home-highlights.py` 的重画（暂存在 `.cache/home-highlights`），打印一行说明后继续，保留页指纹随之变化、首页重建；重画失败或重画后仍不一致则构建失败，不沿用旧首页。重画会改写入库的作者输入（`sources/retained-home-cockpit/home.html`、`dependencies.json`、`assets/` 新图、`sources/frozen-site/manifest.json`），和构建重新生成的 Markdown 一样，随后一并提交。
+首页不锁定：亮点屏 `home-04` 的数字来自 `sources/creative/static-home/highlights-page.json` 绑定的各项目登记。构建先比较 `home.html` 的嵌入转写与当前 `expected_text(...)`；不一致时运行 `scripts/prepare-home-highlights.py` 重画并改写保留作者输入，失败或重画后仍不一致就停止。首页与其他变化页一起扫描、发布和公网回读；重画改写的作者输入随本次改动提交。
 
 驾驶舱是 Astro 原生页，不再读保留 HTML：入口 `src/pages/cockpit/index.astro`，外壳、页头、目录条、页尾和全站一样。
 
@@ -83,7 +83,7 @@ npm run dev -- --host 127.0.0.1 --port 4173
 这一屏的文字（Markdown）
 ````
 
-常规维护改 JSON 作者源再转换（`python tools/convert_page.py <页>`）；若已直接改过 Markdown，先人工统一两份作者输入，再恢复自动转换：
+常规维护改 JSON 作者源再转换（`python tools/convert_page.py <页>`）；已有 Markdown 手改内容先并回 `page.json`，它不是第二份作者输入：
 
 - 改字、数字、链接：改 `sources/pages/<页>/page.json` 里那一屏的 `text`、`links`。
 - 改图：改素材表 `sources/assets/_library/asset-map.jsonl` 里这一屏这个位置的行（转换时写进 `images`，路径相对 `sources/assets`）。同一次提交把 `sources/assets/_library/REQUESTS-READY.json` 的 `asset_map_sha256` 改成新素材表的 SHA-256；两者对不上时排版引擎当素材库还没发布完，退回旧抠图清单，标题图和新插画都会找不到（`tests/test_asset_library_marker.py` 会拦）。
@@ -135,11 +135,11 @@ python tools/rule_article_check.py <现在网站构建目录> rules.json        
 
 ## 规则原文
 
-按需更新时，`scripts/astro_rules.py` 从核验通过的活动规则生成 `sources/rules` 和各规则页的原文分段；活动原件、公开副本、catalog、指针和入口模板分别绑定 SHA。普通转换和构建只读这份已提交的规则源，不读取私人过滤文件，也不在构建时把本机的新版本写进网页。
+按需更新活动规则时，在仓库根运行 `python scripts/prepare-astro-release.py refresh --output <规则审计JSON>`，生成已提交的 `sources/rules` 快照与各规则页原文分段；活动原件、公开副本、catalog、指针和入口模板分别绑定 SHA。普通转换和构建只读快照，`scripts/astro_rules.py` 在生产构建中核对活动 E 版身份与完整源清单，不在构建时把本机的新版本写进网页。
 
 页面上只出网页字原文（横版原文卡正文，经 `project_original_html` 公开投影，放在素材库 `rule-paper` 的水彩框里），上面一行版本标签；规则文件开头给维护者看的 owner 行不显示，排好的原文卡也不再另出一份（原文只出现一遍）。
 
-按需更新活动规则：在仓库根运行 `python scripts/prepare-astro-release.py refresh --output <审计JSON>`，再全量转换和构建。转换器按每页现有的原文屏重建分段，保留完整正文和顺序；渲染器从当前 Markdown 生成单份 article 和版本标签。发布前核验活动原件是否仍与这份规则源一致，正文、模板、分段或当前版本不匹配时阻断发布。
+规则快照刷新后全量转换和构建。转换器按每页原文屏重建分段并保留正文顺序，渲染器从当前 Markdown 生成单份 article 和版本标签；正文、模板、分段或活动版不匹配时阻断发布。
 
 只想试排、不碰站点时，用环境变量把目录换到别处：`CONVERT_OUT_MD=<目录>`（转换结果，公开入口模板写在它下面的 `public/`），`BLOCK_MD_DIR`、`BLOCK_OUT_DIR`、`BLOCK_PUB_DIR`、`BLOCK_WORK_DIR`（区块排版读的内容、写的结果、发布文件和排版缓存；和站点排版同时跑时缓存要分开）。
 
