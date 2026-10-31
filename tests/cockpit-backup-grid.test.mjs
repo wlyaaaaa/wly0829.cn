@@ -45,6 +45,12 @@ test('后端给了结构化数字就写大数字：几项备份正常、余额�
   const h = backup(view(cards), ctx);
   assert.deepEqual(cells(h), [['备份', '8/9 项正常', 'neutral'], ['Google 云盘副本', '300 GiB', 'green'], ['Google 相册副本', '读不到', 'gray'], ['Google Drive 上传', '775/775 个', 'green'], ['阿里云费用', '¥42.47 余额', 'neutral']]);
   assert.match(h, /最近一次成功 12:49<\/p><ul class="cp-tile-rows"><li><span>虚构配置备份<\/span><b>没成功<\/b><small>上次成功 10月30日 12:48<\/small>/);
+  // 正在跑的写“正在跑”，不标没成功；没成功的写几点没成功
+  const two = backup(view([c({ id: 'backups', title: '备份', items_total: 5, items_ok: 4, failing: [
+    { name: '虚构文档备份', state: 'warn', last_success_at: '2026-10-30T12:48:00+08:00', last_failed_at: '2026-10-31T13:00:01+08:00' },
+    { name: '虚构同步', state: 'running', last_success_at: '2026-10-30T16:58:25+08:00' }] })]), ctx);
+  assert.match(two, /<span>虚构文档备份<\/span><b>没成功<\/b><small>13:00 没成功 · 上次成功 10月30日 12:48<\/small>/);
+  assert.match(two, /<span>虚构同步<\/span><b>正在跑<\/b><small>上次成功 10月30日 16:58<\/small>/);
   assert.match(h, /12,345 个文件 · 04:00 同步过/);
   assert.match(h, /虚构原因：相册副本这台电脑上还没接入，PCConfig 在接/);
   assert.match(h, /音乐和录音 · 都传完了/);

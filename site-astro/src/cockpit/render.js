@@ -666,7 +666,10 @@ const isNum = Number.isFinite;
 const BACKUP = {
   backups: (c, now, issue) => {
     const fail = Array.isArray(c.failing) ? c.failing.filter((x) => x?.name) : [];
-    const list = fail.length ? `<ul class="cp-tile-rows">${fail.map((x) => `<li><span>${esc(x.name)}</span><b>没成功</b>${x.last_success_at ? `<small>上次成功 ${esc(when(x.last_success_at, now))}</small>` : ''}</li>`).join('')}</ul>` : '';
+    // 正在跑的不算没成功（后端 state=running，本人 10-31 截图里“正在运行”却标了“没成功”）
+    const run = (x) => x.state === 'running';
+    const note = (x) => [!run(x) && x.last_failed_at && `${when(x.last_failed_at, now)} 没成功`, x.last_success_at && `上次成功 ${when(x.last_success_at, now)}`].filter(Boolean).join(' · ');
+    const list = fail.length ? `<ul class="cp-tile-rows">${fail.map((x) => `<li><span>${esc(x.name)}</span><b>${run(x) ? '正在跑' : '没成功'}</b>${note(x) ? `<small>${esc(note(x))}</small>` : ''}</li>`).join('')}</ul>` : '';
     if (isNum(c.items_total) && isNum(c.items_ok)) return { big: bigOf(`${c.items_ok}/${c.items_total}`, '项正常'), sub: c.last_success_at ? esc(`最近一次成功 ${when(c.last_success_at, now)}`) : '', list, more: false };
     return issue ? { big: esc(WORD[light(cardState(c))]), sub: esc([issue, factText(c)].filter(Boolean).join('；')), more: false, who: false } : null;
   },
