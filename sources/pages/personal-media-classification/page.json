@@ -182,7 +182,7 @@
       "id": "personal-media-classification-12",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- personal_media.py　phone-prepare、phone-apply、review-page、owner-decide、分类与事务\n\n- AGENTS.md　小批量快速路径、保留把关与反膨胀边界\n\n- test_storage_compatibility.py、test_phone_nonvisual.py　直接调用 phone_apply，覆盖保留把关、校准、非视觉流程\n\n- test_personal_media.py　查询、计划状态、单件接入、恢复同步和 HEIC 预览回归\n\n## 如何验证\n\n- 现在已有直接调用 phone_apply 的测试；视觉批次提交前后所有故障组合的专项注入测试仍没找到，按源码和历史批次证据说明。\n\n- 源码现有 520 个测试函数（10 月 30 日静态计数，本次没有运行）；最近一份本地验收回执是 9 月 24 日：186 项运行、2 项跳过、0 失败。\n\n- 历史 2026-08-25 增量把 118 个 occurrence 收敛为 63 个唯一哈希并完成视觉治理。\n\n- 19 张普通截图从双盘保全到可检索的产品目标低于 4 分钟。\n\n## 与其他模块的关系\n\n它决定什么进入当前目录；查找消费 keeper，手机与恢复模块分别提供来源和后续恢复责任。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- personal_media.py　phone-prepare、phone-apply、review-page、owner-decide、分类与事务\n\n- AGENTS.md　小批量快速路径、保留把关与反膨胀边界\n\n- test_storage_compatibility.py、test_phone_nonvisual.py　直接调用 phone_apply，覆盖保留把关、校准、非视觉流程\n\n- test_personal_media.py　查询、计划状态、单件接入、恢复同步和 HEIC 预览回归\n\n## 如何验证\n\n- 现在已有直接调用 phone_apply 的测试；视觉批次提交前后所有故障组合的专项注入测试仍没找到，按源码和历史批次证据说明。\n\n- 源码现有 520 个测试函数（10 月 31 日静态计数，本次没有运行）；最近一份本地验收回执是 9 月 24 日：186 项运行、2 项跳过、0 失败。\n\n- 历史 2026-08-25 增量把 118 个 occurrence 收敛为 63 个唯一哈希并完成视觉治理。\n\n- 19 张普通截图从双盘保全到可检索的产品目标低于 4 分钟。\n\n## 与其他模块的关系\n\n它决定什么进入当前目录；查找消费 keeper，手机与恢复模块分别提供来源和后续恢复责任。",
       "links": [
         {
           "text": "上一个模块 查找与临时浏览",

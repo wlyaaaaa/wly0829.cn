@@ -170,7 +170,7 @@
       "id": "personal-media-phone-recovery-11",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- personal_media.py　recovery-status、recovery-sync 与 phone preserve-clear writeback\n\n- phone_file_preserve_clear.py　writeback、writeback-verify、写回日志与相册核验\n\n- phone-recovery-plan.ndjson　当前恢复计划\n\n- CLOUD_UPLOAD_RESULT.md　9 月 13 日 G 手机包数量、字节及独立备份结果（历史）\n\n## 如何验证\n\n- 10 月 30 日 11:06—11:07 只读：计划 2,442 件一致，G 包预演缺 0、过时 0；没有重算全包哈希。最近一次包同步回执按 10 月 11 日所见是 10 月 10 日 17:26 通过，这次没重读。\n\n- 10 月 7 日真实回写第 3 版回执：2,377 件、待办 0、相册核验通过；本次没有连接手机。\n\n- 既有隔离回归覆盖预览/执行、变化项哈希、固定桶边界、空计划、重复运行与离线根；源码现有 520 个测试函数（10 月 30 日静态计数，本次没有运行），测试设计与当前生产包验收分开。\n\n- 备份完成回执只证明所属备份范围，不等同手机端已恢复。\n\n## 与其他模块的关系\n\n它消费分类后的照片/视频 keeper，并在第二次连接时完成手机保全流程的第三阶段；不拥有云端上传，也不改变本机原件。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- personal_media.py　recovery-status、recovery-sync 与 phone preserve-clear writeback\n\n- phone_file_preserve_clear.py　writeback、writeback-verify、写回日志与相册核验\n\n- phone-recovery-plan.ndjson　当前恢复计划\n\n- CLOUD_UPLOAD_RESULT.md　9 月 13 日 G 手机包数量、字节及独立备份结果（历史）\n\n## 如何验证\n\n- 10 月 30 日 11:06—11:07 只读：计划 2,442 件一致，G 包预演缺 0、过时 0；没有重算全包哈希。最近一次包同步回执按 10 月 11 日所见是 10 月 10 日 17:26 通过，这次没重读。\n\n- 10 月 7 日真实回写第 3 版回执：2,377 件、待办 0、相册核验通过；本次没有连接手机。\n\n- 既有隔离回归覆盖预览/执行、变化项哈希、固定桶边界、空计划、重复运行与离线根；源码现有 520 个测试函数（10 月 31 日静态计数，本次没有运行），测试设计与当前生产包验收分开。\n\n- 备份完成回执只证明所属备份范围，不等同手机端已恢复。\n\n## 与其他模块的关系\n\n它消费分类后的照片/视频 keeper，并在第二次连接时完成手机保全流程的第三阶段；不拥有云端上传，也不改变本机原件。",
       "links": [
         {
           "text": "上一个模块 手机双盘保全",

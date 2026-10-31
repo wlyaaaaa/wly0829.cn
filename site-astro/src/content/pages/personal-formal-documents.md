@@ -44,7 +44,7 @@
     "at": "2026-10-23 20:00"
    },
    "facts": [
-    "近 7 天改进了 8 次"
+    "近 7 天改进了 9 次"
    ],
    "as_of": "2026-10-24",
    "source": "AI 使用记录；项目修改记录"
@@ -423,8 +423,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "c5ebd157d8c56fbe98115c39653ae6f8acd3291504e2e54e5c6117df6e903542",
-  "converted_at_beijing": "2026-10-31T08:33:23+08:00"
+  "sha256": "6f71e1e8d8db7f2055400c4452b6a7b6a236ac2f38f389092f23c0bf5f401463",
+  "converted_at_beijing": "2026-10-31T09:28:10+08:00"
  }
 }
 ---
@@ -479,7 +479,7 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天改进了 8 次",
+       "text": "近 7 天改进了 9 次",
        "state": "fact"
       }
      ],
@@ -553,7 +553,7 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天改进了 8 次",
+       "text": "近 7 天改进了 9 次",
        "state": "fact"
       }
      ],

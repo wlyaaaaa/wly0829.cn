@@ -182,7 +182,7 @@
       "id": "personal-media-local-ingest-12",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- personal_media.py　ingest-file、同内容复用、新 keeper、跨盘复制核对、等价容器变体、seed 与候选刷新\n\n- test_personal_media.py　隔离临时根中的新 keeper、E/G、目录、来源退休、候选刷新与等价视频容器专项回归\n\n- test_storage_compatibility.py　跨真实磁盘复制核对的测试定义\n\n- README.md　精确命令、输入、回读、半状态恢复与依赖说明\n\n## 如何验证\n\n- 源码和 README 均要求 --execute、一个 source、description 与可选 expected SHA-256。\n\n- 专项回归证明新 keeper 的正式原件、G 副本、目录、source 退休、当前 seed、手机计划和云计划同次刷新。\n\n- 专项回归证明等价视频的 E/G keeper、相同首路视频流、G 原始容器变体、关系写回和 source 退休。\n\n- 2026-09-05 的验收运行 55 项测试、0 失败／错误（历史记录）；最近一份本地验收回执是 9 月 24 日：186 项运行、2 项跳过、0 失败；源码现有 520 个测试函数（10 月 30 日静态计数）。跨盘复制核对有测试定义，但本次没有运行，不等于生产接入已经成功过。\n\n## 与其他模块的关系\n\n它是手机之外的单文件入口；完成后仍回到同一个当前目录、手机恢复候选和云端期望集合；实际云同步仍由同项目的 cloud-sync 完成，不建立第二套媒体库。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- personal_media.py　ingest-file、同内容复用、新 keeper、跨盘复制核对、等价容器变体、seed 与候选刷新\n\n- test_personal_media.py　隔离临时根中的新 keeper、E/G、目录、来源退休、候选刷新与等价视频容器专项回归\n\n- test_storage_compatibility.py　跨真实磁盘复制核对的测试定义\n\n- README.md　精确命令、输入、回读、半状态恢复与依赖说明\n\n## 如何验证\n\n- 源码和 README 均要求 --execute、一个 source、description 与可选 expected SHA-256。\n\n- 专项回归证明新 keeper 的正式原件、G 副本、目录、source 退休、当前 seed、手机计划和云计划同次刷新。\n\n- 专项回归证明等价视频的 E/G keeper、相同首路视频流、G 原始容器变体、关系写回和 source 退休。\n\n- 2026-09-05 的验收运行 55 项测试、0 失败／错误（历史记录）；最近一份本地验收回执是 9 月 24 日：186 项运行、2 项跳过、0 失败；源码现有 520 个测试函数（10 月 31 日静态计数）。跨盘复制核对有测试定义，但本次没有运行，不等于生产接入已经成功过。\n\n## 与其他模块的关系\n\n它是手机之外的单文件入口；完成后仍回到同一个当前目录、手机恢复候选和云端期望集合；实际云同步仍由同项目的 cloud-sync 完成，不建立第二套媒体库。",
       "links": [
         {
           "text": "上一个模块 分类、质量与去重",
