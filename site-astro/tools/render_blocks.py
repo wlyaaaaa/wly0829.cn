@@ -13,6 +13,7 @@
 import concurrent.futures as cf
 import hashlib
 import html as H
+import inspect
 import json
 import os
 from pathlib import Path
@@ -33,6 +34,7 @@ from engine import layout as L  # noqa: E402
 from engine.layout import build_html, WIDTH  # noqa: E402
 from engine.parse import original_markdown  # noqa: E402
 from engine.registry import load as load_registry  # noqa: E402
+from render_cache import LEGACY_RENDERER_CODE_FP, legacy_renderer_compatible, markdown_render_sha, promote_legacy_cache  # noqa: E402
 
 # 四个目录都可以用环境变量换到别处（例如按活动版本试排一份规则页、试排一个新页，不碰站点）：
 # BLOCK_MD_DIR、BLOCK_OUT_DIR、BLOCK_PUB_DIR、BLOCK_WORK_DIR（排版缓存；和站点同时跑时要分开，免得互相盖掉）
@@ -313,6 +315,23 @@ def library_fingerprint():
     return h.hexdigest()[:16]
 
 
+def hydration_fingerprint():
+    """Only browser layout and its title capture invalidate every screen.
+
+    Other changes in this module still rerun page assembly through build-site,
+    but need not discard already measured browser geometry.
+    """
+    source = HYDRATE_JS + ''.join(inspect.getsource(fn) for fn in
+        (hydrate, brush_titles, image_size_attrs)) + str(BRUSH_PAD)
+    return hashlib.sha256(source.encode('utf8')).hexdigest()[:16]
+
+
+def screen_cache_key(document, orientation, libfp):
+    payload = json.dumps([libfp, document, orientation], ensure_ascii=False,
+                         sort_keys=True, separators=(',', ':'))
+    return hashlib.sha256(payload.encode('utf8')).hexdigest()[:20]
+
+
 def image_slot_error(page, screen, block, needed, supplied):
     raise ValueError(f"{page} 屏 {screen}：{block} 需要 {needed} 个图位，只配了 {supplied} 个"
                      "（asset-map.jsonl 补行，或把段落移出卡片）")
@@ -390,7 +409,7 @@ def check_screen_images(name, page, screen, meta):
         A._manifest = prior
 
 
-def prepare_page(name, reg, css_files, libfp):
+def prepare_page(name, reg, css_files, libfp, legacy_libfp=None):
     """在本进程里排出这一页每屏两份的 HTML 文件（交给浏览器排版），返回待排清单。"""
     fm, screens = parse_md(os.path.join(MD_DIR, name + ".md"))
     page = dict(fm["page"]); page["screens"] = []
@@ -428,13 +447,18 @@ def prepare_page(name, reg, css_files, libfp):
                 # 和现在出图一样：独立卡（shape=card）、构图写了不要竖版的，手机上照用电脑那份
                 if s.get("shape") == "card" or any((x or {}).get("portrait_required") is False for x in lay.values()):
                     continue
-            art_version = "-mock-art-v1" if any(b.get("type") == "document_mock" for b in (sp or {}).get("blocks", [])) else ""
-            key = hashlib.sha256(json.dumps([libfp + art_version, meta, text, o], ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:20]
             doc, info = checked_html(name, page, s, o, reg, css_files, sp)
+            key = screen_cache_key(doc, o, libfp)
+            legacy_key = None
+            if legacy_libfp:
+                art_version = "-mock-art-v1" if any(b.get("type") == "document_mock" for b in (sp or {}).get("blocks", [])) else ""
+                legacy_key = hashlib.sha256(json.dumps([legacy_libfp + art_version, meta, text, o],
+                    ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:20]
             hp = os.path.join(WORK, name, f"{s['id']}-{o}.html")
             with open(hp, "w", encoding="utf-8", newline="\n" if original_markdown(s) else None) as f:
                 f.write(doc)
-            jobs.append({"page": name, "screen": s["id"], "o": o, "html": hp, "key": key, "shape": s.get("shape") or "",
+            jobs.append({"page": name, "screen": s["id"], "o": o, "html": hp, "key": key,
+                         **({"legacy_key": legacy_key} if legacy_key else {}), "shape": s.get("shape") or "",
                          "replace": s.get("display_replace") or {},
                          "notes": info["notes"], "incomplete": info["incomplete"]})
     return fm, page, jobs
@@ -793,7 +817,8 @@ def finish_page(name, fm, results, cssv):
                 else:
                     raise ValueError("规则原文正文为空：" + r["screen"])
     out = {"page": name, "css": publish_path(CSS_OUT), "font": font, "motion": mm,
-           "source_md_sha256": sha(os.path.join(MD_DIR, name + ".md")), "render_version": RENDER_VERSION,
+           "source_md_sha256": sha(os.path.join(MD_DIR, name + ".md")),
+           "render_md_sha256": markdown_render_sha(os.path.join(MD_DIR, name + ".md")), "render_version": RENDER_VERSION,
            "loader": publish_path(os.path.join(SITE, "src", "scripts", "living-mount.js")),
            "sections": [], "screens": [screens[s] for s in order]}
     sec_seen = set()
@@ -859,15 +884,17 @@ def run(names, workers=2):
     reg, owner, css, warn = load_registry()
     css_files = [os.path.join(PROTO, "style", "base.css")] + css
     cssv = build_css(css_files)
-    # 冻结代码（HYDRATE_JS 等）就在本文件里，改了它旧排版结果也要作废
-    code_fp = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:16]
-    libfp = library_fingerprint() + cssv + RENDER_VERSION + code_fp
+    # 浏览器排版逻辑改变才让所有屏幕的测量缓存失效。
+    code_fp = hydration_fingerprint()
+    shared_fp = library_fingerprint() + cssv + RENDER_VERSION
+    libfp = shared_fp + code_fp
+    legacy_libfp = shared_fp + LEGACY_RENDERER_CODE_FP if legacy_renderer_compatible(__file__) else None
     all_jobs, fms, binds, source_shas = [], {}, {}, {}
     failed = []
     for n in names:
         try:
             source_shas[n] = sha(os.path.join(MD_DIR, n + ".md"))
-            fm, page, jobs = prepare_page(n, reg, css_files, libfp)
+            fm, page, jobs = prepare_page(n, reg, css_files, libfp, legacy_libfp)
         except Exception as e:  # 一页出错不拦别的页，最后列出来
             failed.append(n); print(f"{n}：区块库排这一页出错 {repr(e)[:200]}", flush=True); continue
         page_binds = bindings(n, page["screens"][0]["id"]) if page["screens"] else {}
@@ -875,12 +902,18 @@ def run(names, workers=2):
         # 实际首屏动效绑定影响 art/artBox，必须跟着参与缓存键。
         for j in jobs:
             binding_rect = page_binds.get((j["screen"], j["o"]))
+            # The preliminary key already contains the actual generated HTML.
             j["key"] = hashlib.sha256(json.dumps([j["key"], binding_rect], separators=(",", ":"), sort_keys=True).encode()).hexdigest()[:20]
+            if j.get("legacy_key"):
+                j["legacy_key"] = hashlib.sha256(json.dumps([j["legacy_key"], binding_rect], separators=(",", ":"), sort_keys=True).encode()).hexdigest()[:20]
         fms[n] = fm; all_jobs += jobs
     names = [n for n in names if n not in failed]
     # 增量：指纹没变的屏用上次的结果
     cache_p = os.path.join(WORK, "_cache.json")
     cache = json.loads(Path(cache_p).read_text("utf-8")) if os.path.exists(cache_p) else {}
+    migrated = promote_legacy_cache(cache, all_jobs)
+    if migrated:
+        print(f"区块排版：复用当前已核实旧版缓存 {migrated} 份", flush=True)
     todo = [j for j in all_jobs if j["key"] not in cache]
     print(f"区块排版：{len(all_jobs)} 份（{len(names)} 页），要重排 {len(todo)} 份，用时 {time.time() - t0:.1f} 秒准备")
     chunks = [todo[i::workers] for i in range(workers)] if todo else []
