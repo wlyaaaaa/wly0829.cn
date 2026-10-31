@@ -1,0 +1,28 @@
+{
+  "schema": "agents.duplicate-content-exceptions.v1",
+  "exceptions": [],
+  "non_copies": [
+    {
+      "id": "pinned-rule-sources",
+      "kind": "generated",
+      "paths": [
+        "sources/rules/*",
+        "site-astro/sources/vendor-deps/*",
+        "site-astro/public/rule-sources/*"
+      ],
+      "source": "E:\\.agents rule release named in sources/rules/release.json",
+      "verified_by": "scripts/astro_rules.py refresh/generate/verify against the pinned per-file sha256 in sources/rules/release.json",
+      "reason": "The site publishes the active rules from one pinned release; these files are rendered copies checked against that pin."
+    },
+    {
+      "id": "rendered-pages",
+      "kind": "generated",
+      "paths": [
+        "site-astro/src/content/pages/*"
+      ],
+      "source": "sources/pages/<page> author JSON",
+      "verified_by": "site build converts author JSON and requires each rendered page to equal that conversion (AGENTS.md render-input rule)",
+      "reason": "Rendered pages share navigation chrome and repeat author-source text by construction; duplicates are judged in the author sources."
+    }
+  ]
+}

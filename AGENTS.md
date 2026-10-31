@@ -25,7 +25,7 @@ Before changing the website's product, page copy, styling, interactions,
 navigation, project selection, content generation or public publication, or tools
 or documents that can affect them, read the
 [complete panel content contract](docs/design/panel-content-contract.md) in full.
-It remains mandatory project rules; code paths are interpreted from the repository root.
+It remains mandatory project rules.
 
 ## Product boundary
 

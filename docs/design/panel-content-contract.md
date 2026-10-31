@@ -1,9 +1,7 @@
 # Panel product and content contract
 
-These sections remain project rules. Before changing the website's product, page
-copy, styling, interactions, navigation, project selection, content generation or
-public publication, or tools or documents that can affect them, read this entire
-document. Code paths are interpreted from the repository root.
+These sections remain project rules; when to read them in full is set in the
+repository `AGENTS.md`. Code paths are interpreted from the repository root.
 
 ## Product boundary
 
