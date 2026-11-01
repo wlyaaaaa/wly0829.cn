@@ -16,6 +16,7 @@ docs/design/qa/
 
 # Local publication reports and previews; public release files use site-release/.
 .publish/
+/scan-glance/
 __pycache__/
 
 # Astro 样板的全站试验副本和日志（任务临时）

@@ -17,7 +17,8 @@ const view = (extra = {}) => normalize({
   sections: {
     computer: [pc({ id: 'computer_health', title: '处理器', text: '电脑读数：处理器 29%，66.6℃' }), pc({ id: 'system_resources', title: '内存/系统资源', text: '内存/系统资源正常' }),
       pc({ id: 'disk_space', title: '磁盘余量', text: '磁盘够用：最紧的是 C 盘还剩 83.6 GiB（13.9%）。' }),
-      pc({ id: 'traffic', title: '套餐流量', text: '套餐已用 521.1/604.7 GB，剩余 83.6 GB（虚构缓存）' }),
+      pc({ id: 'traffic', title: '套餐流量', text: '套餐已用 521.1/604.7 GB，剩余 83.6 GB（虚构服务商读数，约每分钟更新）',
+        package: { stale: false, remaining_gb: 83.6, total_gb: 604.7, updated_at_beijing: at, expires_at_beijing: '2027-01-15T00:00:00+08:00', reset_date_beijing: '2026-11-11', reset_source: '本人确认' } }),
       pc({ id: 'proxy_traffic', title: '本机代理流量', text: '今天上网 5.1 GB，近 60 分钟 2.9 GB。没超提醒线。按代理内核累计计算。' }),
       pc({ id: 'temp_reclaim', title: '旧临时目录回收', text: '今天 00:19 把 200 个闲置满 7 天的虚构目录（约 2.3 GB）放进回收站，之后由回收站清理清掉。' })],
     remote: [pc({ id: 'remote', title: '远程连接', text: '此刻能连上；间歇断开还在查。', must_know_id: 'pending-net' })],
@@ -35,7 +36,7 @@ test('电脑区：9 张数据卡按组排成 3×3，大数字从原句里取，G
     ['AI 临时文件', '至少 200 GiB', 'green'], ['旧临时目录回收', '2.3 GB', 'green'], ['存储占用与增长', '正常', 'green'],
     ['流量', '5.1 GB', 'green'], ['远程连接', '能连上', 'green'], ['笔记本（副机）', '在线', 'green']]);
   assert.match(h, /<progress max="100" value="86" aria-label="已用 86%"><\/progress><small>已用 86%<\/small><\/p><p class="cp-sub">C 盘还剩 13\.9%/);
-  assert.match(h, /cp-sub">今天上网 · 近 60 分钟 2\.9 GB · 没超提醒线 · 套餐已用 521\.1\/604\.7 GB<\/p><details class="cp-tile-more">/);
+  assert.match(h, /cp-sub">今天上网 · 近 60 分钟 2\.9 GB · 没超提醒线 · 套餐剩余 83\.6\/604\.7 GB · 到期 2027-01-15 · 11\/11 重置（你确认）<\/p><details class="cp-tile-more">/);
   assert.match(h, /cp-sub">今天 00:19 放进回收站 200 个<\/p><details/);
   assert.match(h, /cp-sub">预算 300 GiB · Claude 100 GiB · Codex 至少 30 GiB<\/p><a class="cp-tile-go" href="\/cockpit\/storage\/">/);
   assert.match(h, /id="remote">.*间歇断开还在查 · <a class="cp-net" href="#know-pending-net">看这里 →<\/a>/);
@@ -54,7 +55,11 @@ test('电脑区：9 张数据卡按组排成 3×3，大数字从原句里取，G
   // 副机连接没判断出来：占格写“读不到”，说清不是离线
   assert.match(computer(view({ laptop: { connection: 'unknown' } }), ctx), /笔记本（副机）<\/h3><p class="cp-big">读不到<\/p><p class="cp-sub">这次没判断出它在不在线，不等于离线<\/p>/);
   // 套餐流量停了：不接套餐那段，卡数不变
-  assert.doesNotMatch(computer(view({ stale_summary: { text: '这些数据没再更新：套餐流量', ids: ['traffic'] } }), ctx), /套餐已用/);
+  const stalePlan = computer(view({ stale_summary: { text: '这些数据没再更新：套餐流量', ids: ['traffic'] } }), ctx);
+  assert.doesNotMatch(stalePlan, /套餐已用|套餐剩余/);
+  assert.match(stalePlan, /套餐信息暂未取得/);
+  assert.doesNotMatch(computer(view(), { ...ctx, now: new Date(+now + 181000) }), /套餐剩余/);
+  assert.doesNotMatch(computer(view(), { ...ctx, offline: true }), /套餐剩余/);
 });
 
 test('存储：AI 临时文件只看自己的 alert，整体状况在“存储占用与增长”那张卡，直接写数字', () => {

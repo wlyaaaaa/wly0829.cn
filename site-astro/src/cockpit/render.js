@@ -634,10 +634,18 @@ export function computer(v, ctx) {
   // 九宫格里固定那几格（含远程）即使进了“这些数据没再更新”也照样占格，写最后读到的内容和时间，不换成空白占位（本人 10-31 18:03：远程卡被写成“读不到 还没读到”）
   const all = dedupeCards(v.sections.computer), cards = all.filter((c) => !stale.has(c.id)), byId = (id) => all.find((c) => c.id === id);
   const tile = (c, extra) => (c ? tileOf(c, now, off, at, extra) : '');
-  // 流量：本机代理今天的量做大字；套餐流量读到了（没停）才在小字后面接“套餐已用 x/y GB”
-  const proxy = cards.find((c) => c.id === 'proxy_traffic'), plan = cards.find((c) => c.id === 'traffic');
-  const planUsed = plan && !['unavailable', 'reading'].includes(plan.state) ? (/已用\s*(\d+(?:\.\d+)?\s*\/\s*\d+(?:\.\d+)?\s*[KMGT]i?B)/.exec(plan.text || '') || [])[1] : '';
-  const traffic = proxy ? tile({ ...proxy, title: '流量' }, { sub: planUsed ? esc('套餐已用 ' + planUsed.replace(/\s*\/\s*/, '/')) : '' }) : tile(plan && { ...plan, title: '流量' });
+  // 本机用量与服务商套餐分开；套餐失败、离线或超过3分钟时不把旧数当当前余额。
+  const proxy = cards.find((c) => c.id === 'proxy_traffic'), plan = byId('traffic'), pack = plan?.package;
+  const packageAge = pack?.updated_at_beijing ? (now - new Date(pack.updated_at_beijing)) / 1000 : Infinity;
+  const packageFresh = !off && !stale.has('traffic') && pack?.stale === false && packageAge >= 0 && packageAge <= 180
+    && Number.isFinite(pack.remaining_gb) && Number.isFinite(pack.total_gb);
+  const expiry = packageFresh && pack.expires_at_beijing ? `到期 ${pack.expires_at_beijing.slice(0, 10)}` : '';
+  const reset = packageFresh && pack.reset_date_beijing ? `${pack.reset_date_beijing.slice(5).replace('-', '/')} 重置${pack.reset_source === '本人确认' ? '（你确认）' : ''}` : '';
+  const packageLine = packageFresh ? [`套餐剩余 ${pack.remaining_gb.toFixed(1)}/${pack.total_gb.toFixed(1)} GB`, expiry, reset].filter(Boolean).join(' · ') : '套餐信息暂未取得';
+  const packageDetail = packageFresh ? plan.text : (plan?.missing_reason || '套餐当前余额暂未取得，约每分钟重读。');
+  const traffic = proxy ? tile({ ...proxy, title: '流量', text: [proxy.text, packageDetail].filter(Boolean).join(' '),
+    state: packageFresh && plan.state === 'attention' ? 'attention' : proxy.state }, { sub: esc(packageLine) })
+    : tile(plan && { ...plan, title: '流量', text: packageDetail, state: packageFresh ? plan.state : 'unavailable' });
   // “你得知道”里有正在修的网络问题时，后端在远程卡上给 must_know_id（文字是“此刻能连上；间歇断开还在查”），点了跳到“你得知道”那一条
   const remoteCards = dedupeCards(v.sections.remote);
   const remote = (remoteCards.length ? remoteCards : [{ title: '远程连接', state: 'unavailable', text: '' }]).map((c, i) => tileOf({ kind: 'remote', ...c }, now, off, at,
