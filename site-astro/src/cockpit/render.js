@@ -639,13 +639,20 @@ export function computer(v, ctx) {
   const packageAge = pack?.updated_at_beijing ? (now - new Date(pack.updated_at_beijing)) / 1000 : Infinity;
   const packageFresh = !off && !stale.has('traffic') && pack?.stale === false && packageAge >= 0 && packageAge <= 180
     && Number.isFinite(pack.remaining_gb) && Number.isFinite(pack.total_gb);
+  const packageWarning = packageFresh && (pack.low_remaining === true || pack.expires_soon === true);
+  const packageWarningText = packageWarning ? [pack.low_remaining && (pack.remaining_gb === 0 ? '套餐额度已用完' : '套餐剩余不足10%'),
+    pack.expires_soon && (Date.parse(pack.expires_at_beijing) <= +now ? '套餐服务已到期' : '套餐将在7天内到期')].filter(Boolean).join('，') : '';
   const expiry = packageFresh && pack.expires_at_beijing ? `到期 ${pack.expires_at_beijing.slice(0, 10)}` : '';
-  const reset = packageFresh && pack.reset_date_beijing ? `${pack.reset_date_beijing.slice(5).replace('-', '/')} 重置${pack.reset_source === '本人确认' ? '（你确认）' : ''}` : '';
-  const packageLine = packageFresh ? [`套餐剩余 ${pack.remaining_gb.toFixed(1)}/${pack.total_gb.toFixed(1)} GB`, expiry, reset].filter(Boolean).join(' · ') : '套餐信息暂未取得';
-  const packageDetail = packageFresh ? plan.text : (plan?.missing_reason || '套餐当前余额暂未取得，约每分钟重读。');
+  const bj = bjParts(now), day = bj && `${bj.y}-${String(bj.m).padStart(2, '0')}-${String(bj.d).padStart(2, '0')}`;
+  const reset = packageFresh && pack.reset_date_beijing && day && pack.reset_date_beijing >= day
+    ? `${pack.reset_date_beijing.slice(5).replace('-', '/')} 重置${pack.reset_source === '本人确认' ? '（你确认，具体时刻未提供）' : ''}` : '';
+  const packageLine = packageFresh ? [packageWarningText, `套餐剩余 ${pack.remaining_gb.toFixed(1)}/${pack.total_gb.toFixed(1)} GB`, expiry, reset].filter(Boolean).join(' · ') : '套餐信息暂未取得';
+  const packageDetail = packageFresh ? `${packageLine}；约每分钟取新数，${dateHm(pack.updated_at_beijing)} 读到。服务商套餐扣费量与本机上网用量分开。`
+    : (plan?.missing_reason || '套餐当前余额暂未取得，约每分钟重读。');
   const traffic = proxy ? tile({ ...proxy, title: '流量', text: [proxy.text, packageDetail].filter(Boolean).join(' '),
-    state: packageFresh && plan.state === 'attention' ? 'attention' : proxy.state }, { sub: esc(packageLine) })
-    : tile(plan && { ...plan, title: '流量', text: packageDetail, state: packageFresh ? plan.state : 'unavailable' });
+    state: packageWarning ? 'attention' : proxy.state, color: packageWarning && proxy.color !== 'red' ? 'yellow' : proxy.color }, { sub: esc(packageLine) })
+    : tile(plan && { ...plan, title: '流量', text: packageDetail, state: packageFresh ? plan.state : 'unavailable',
+      color: !packageFresh ? 'unavailable' : packageWarning ? 'yellow' : plan.color });
   // “你得知道”里有正在修的网络问题时，后端在远程卡上给 must_know_id（文字是“此刻能连上；间歇断开还在查”），点了跳到“你得知道”那一条
   const remoteCards = dedupeCards(v.sections.remote);
   const remote = (remoteCards.length ? remoteCards : [{ title: '远程连接', state: 'unavailable', text: '' }]).map((c, i) => tileOf({ kind: 'remote', ...c }, now, off, at,

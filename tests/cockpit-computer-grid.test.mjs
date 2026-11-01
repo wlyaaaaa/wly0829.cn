@@ -36,7 +36,7 @@ test('电脑区：9 张数据卡按组排成 3×3，大数字从原句里取，G
     ['AI 临时文件', '至少 200 GiB', 'green'], ['旧临时目录回收', '2.3 GB', 'green'], ['存储占用与增长', '正常', 'green'],
     ['流量', '5.1 GB', 'green'], ['远程连接', '能连上', 'green'], ['笔记本（副机）', '在线', 'green']]);
   assert.match(h, /<progress max="100" value="86" aria-label="已用 86%"><\/progress><small>已用 86%<\/small><\/p><p class="cp-sub">C 盘还剩 13\.9%/);
-  assert.match(h, /cp-sub">今天上网 · 近 60 分钟 2\.9 GB · 没超提醒线 · 套餐剩余 83\.6\/604\.7 GB · 到期 2027-01-15 · 11\/11 重置（你确认）<\/p><details class="cp-tile-more">/);
+  assert.match(h, /cp-sub">今天上网 · 近 60 分钟 2\.9 GB · 没超提醒线 · 套餐剩余 83\.6\/604\.7 GB · 到期 2027-01-15 · 11\/11 重置（你确认，具体时刻未提供）<\/p><details class="cp-tile-more">/);
   assert.match(h, /cp-sub">今天 00:19 放进回收站 200 个<\/p><details/);
   assert.match(h, /cp-sub">预算 300 GiB · Claude 100 GiB · Codex 至少 30 GiB<\/p><a class="cp-tile-go" href="\/cockpit\/storage\/">/);
   assert.match(h, /id="remote">.*间歇断开还在查 · <a class="cp-net" href="#know-pending-net">看这里 →<\/a>/);
@@ -60,6 +60,14 @@ test('电脑区：9 张数据卡按组排成 3×3，大数字从原句里取，G
   assert.match(stalePlan, /套餐信息暂未取得/);
   assert.doesNotMatch(computer(view(), { ...ctx, now: new Date(+now + 181000) }), /套餐剩余/);
   assert.doesNotMatch(computer(view(), { ...ctx, offline: true }), /套餐剩余/);
+  const warning = view();
+  warning.sections.computer.find((c) => c.id === 'traffic').package.low_remaining = true;
+  const warned = computer(warning, ctx);
+  assert.equal(cells(warned)[6][2], 'yellow');
+  assert.match(warned, /cp-sub">[^<]*套餐剩余不足10%/);
+  const afterReset = view();
+  afterReset.sections.computer.find((c) => c.id === 'traffic').package.updated_at_beijing = '2026-11-11T23:59:30+08:00';
+  assert.doesNotMatch(computer(afterReset, { ...ctx, now: new Date('2026-11-12T00:00:10+08:00') }), /11\/11 重置/);
 });
 
 test('存储：AI 临时文件只看自己的 alert，整体状况在“存储占用与增长”那张卡，直接写数字', () => {
