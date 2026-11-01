@@ -33,6 +33,12 @@ export function compare(prev, ids) {
   const now = new Set(ids);
   return { fresh: ids.filter((id) => !prev.ids.has(id)), closed: [...prev.ids].filter((id) => !now.has(id)).length };
 }
+// 只有后端确认本次来源完整才比较和记录；首次漏采、断读及旧接口都保留原基线，不把缺项算成关闭。
+export function seenSnapshot(v, page, prev) {
+  if (!v.ok || v.must_know?.sources_complete !== true) return null;
+  const ids = trackedIds(v, page);
+  return { ids, compared: compare(prev, ids) };
+}
 const BJ = new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 const parts = (t) => Object.fromEntries(BJ.formatToParts(new Date(t)).map((p) => [p.type, p.value]));
 // “你上次 23:10 来过，之后新冒出 2 件、AI 关掉 4 件”；不是今天写“10月29日 23:10”；没有变化不写（第一次打开也不写）

@@ -3,8 +3,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { normalize } from '../site-astro/src/cockpit/model.js';
-import { REGIONS, runLine, ownerNow, ledgerDue } from '../site-astro/src/cockpit/render.js';
+import { REGIONS, runLine, ownerNow, ledgerDue, strip } from '../site-astro/src/cockpit/render.js';
 import { html as ovHtml } from '../site-astro/public/_overview/overview-screen.js';
+import { seenSnapshot, parseSeen, serializeSeen } from '../site-astro/src/cockpit/seen.js';
 
 const now = new Date('2026-10-30T11:00:00+08:00'), at = '2026-10-30T10:58:00+08:00';
 const base = (extra = {}) => ({ schema: 'pcconfig.cockpit-view.v1', served_at: at, ...extra });
@@ -12,6 +13,73 @@ const ov = { stale: () => false, lamp: () => '' };
 const ctx = { now, offline: false, phase: 'live', projectUrls: {}, img: {}, ov };
 const text = (h) => h.replace(/<[^>]*>/g, '');
 const css = readFileSync(new URL('../site-astro/src/cockpit/cockpit.css', import.meta.url), 'utf8');
+
+test('通知空态在离线、旧快照和相关来源缺口时不报没有新事，无关来源不阻断', () => {
+  const empty = (extra = {}) => normalize(base({ must_know: { state: 'empty', items: [], archived_items: [] }, ...extra }));
+  const home = (v, cx = ctx) => REGIONS.home(v, cx).match(/<div class="cp-know is-empty">([^]*?)<\/div>/)?.[1] || '';
+  assert.match(home(empty()), /is-green[^]*没有要你知道的新事/);
+  for (const source_id of ['pending', 'automation', 'today_activity', 'dashboard']) {
+    const html = home(empty({ source_gaps: [{ source_id, title: '示例来源暂时读不到' }] }));
+    assert.match(html, /is-gray[^]*这次没读全，不代表没有新事/);
+    assert.doesNotMatch(html, /is-green|没有要你知道的新事/);
+  }
+  const unknown = home(empty({ source_gaps: [{ title: '旧接口缺口，来源未提供' }] }));
+  assert.match(unknown, /部分数据暂时没读全，还不能确认有没有新事/);
+  assert.doesNotMatch(unknown, /is-green/);
+  assert.match(home(empty({ source_gaps: [{ source_id: 'aliyun_billing' }] })), /is-green[^]*没有要你知道的新事/);
+  assert.match(home(empty(), { ...ctx, offline: true }), /is-gray[^]*这会儿读不到，不代表没有新事/);
+  assert.match(home(empty(), { ...ctx, phase: 'snapshot' }), /is-gray[^]*正在读最新消息/);
+  const read = normalize(base({ must_know: { state: 'ok', items: [{ id: 'known', kind: 'repairing', text: '示例已读消息' }] }, source_gaps: [{ source_id: 'pending' }] }));
+  assert.match(REGIONS.home(read, ctx), /示例已读消息/);
+  const failed = home(empty({ must_know: { state: 'unavailable', items: [] } }));
+  assert.match(failed, /这会儿读不到[^]*不代表没有新事/);
+});
+
+test('手机待办空态和待办区在来源读不全时不误报无事，已读待办仍保留', () => {
+  const empty = (source_gaps = []) => normalize(base({ need_you: [], source_gaps }));
+  const firstStrip = (v, cx = ctx) => strip(v, cx).split('</p>')[0];
+  for (const source_id of ['pending', 'dashboard']) {
+    const v = empty([{ source_id }]), html = firstStrip(v);
+    assert.match(html, /is-gray[^]*要你做的事这次没读全/);
+    assert.doesNotMatch(html, /is-green|现在没有要你做的事/);
+    assert.match(REGIONS['need-you'](v, ctx), /这次没读全，不代表没有待办/);
+  }
+  assert.match(firstStrip(empty(), { ...ctx, offline: true }), /is-gray[^]*这会儿读不到/);
+  assert.match(firstStrip(empty(), { ...ctx, phase: 'snapshot' }), /is-gray[^]*正在读要你做的事/);
+  assert.match(firstStrip(empty([{}])), /部分数据暂时没读全/);
+  assert.match(firstStrip(empty([{ source_id: 'aliyun_billing' }])), /is-green[^]*现在没有要你做的事/);
+  assert.equal(REGIONS['need-you'](empty(), ctx), '<span class="cp-anchor" id="pending"></span>');
+  const v = normalize(base({ need_you: [{ id: 'known', title: '示例已读待办', ask_kind: 'action' }], source_gaps: [{ source_id: 'pending' }] }));
+  assert.match(REGIONS['need-you'](v, ctx), /示例已读待办/);
+  assert.match(firstStrip(v), /要你做 1 件/);
+});
+
+test('未满缺口告警时间的漏采不写已读基线，恢复后才与原完整清单比较', () => {
+  const view = (sources_complete, ids = []) => normalize(base({ need_you: ids.map((id) => ({ id, title: id })),
+    must_know: { state: 'ok', sources_complete, items: [{ id: 'notice', kind: 'report', text: '示例仍读到的旧通知' }] } }));
+  let stored = null;
+  const accept = (v) => {
+    const next = seenSnapshot(v, 'home', parseSeen(stored));
+    if (next) stored = serializeSeen(now.getTime(), next.ids);
+    return next;
+  };
+  // 初次采样来源缺漏、仍有通知、尚未出现source_gaps，不能建立不完整基线。
+  assert.equal(accept(view(false, ['a'])), null);
+  assert.equal(stored, null);
+  const complete = accept(view(true, ['a', 'b']));
+  assert.deepEqual(complete.compared, { fresh: [], closed: 0 });
+  const baseline = stored;
+  assert.equal(accept(view(false)), null);
+  assert.equal(accept(view(undefined)), null);
+  assert.equal(stored, baseline);
+  const recovered = accept(view(true, ['b', 'new']));
+  assert.deepEqual(recovered.compared, { fresh: ['new'], closed: 1 });
+  const partial = normalize(base({ must_know: { state: 'empty', sources_complete: false, items: [] } }));
+  assert.match(REGIONS.home(partial, ctx), /这次没读全，不代表没有新事/);
+  assert.match(strip(partial, ctx), /要你做的事这次没读全/);
+  const client = readFileSync(new URL('../site-astro/src/cockpit/client.js', import.meta.url), 'utf8');
+  assert.match(client, /const snapshot = seenSnapshot\(view, page, prev\);\s*if \(!snapshot\) return;\s*ids = snapshot.ids;/);
+});
 
 test('副机在不在线读 laptop.connection，不读自动任务健康的 laptop.state', () => {
   const remote = { remote: [{ id: 'r', title: '远程连接', text: '能连上', state: 'ok', observed_at: at }] };

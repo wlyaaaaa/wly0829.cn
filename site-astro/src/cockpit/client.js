@@ -5,7 +5,7 @@ import { REGIONS, Q_KEY, LF_KEY, needCount } from './render.js';
 import { ACTIONS } from './actions.js';
 import { copyToClipboard } from './clipboard.js';
 import { createActionController } from './action-state.js';
-import { SEEN_PAGES, SEEN_DWELL_MS, seenKey, trackedIds, parseSeen, serializeSeen, compare, newCss } from './seen.js';
+import { SEEN_PAGES, SEEN_DWELL_MS, seenKey, parseSeen, serializeSeen, seenSnapshot, newCss } from './seen.js';
 
 const boot = JSON.parse(document.getElementById('cockpit-boot')?.textContent || '{}');
 // 本机预览走预览脚本的转发入口，线上走 live（边缘）再退到 mcp
@@ -61,10 +61,12 @@ const seen = (() => {
   const marked = () => cmp.fresh.filter((id) => !looked.has(id));
   function sync() {
     if (!key || !shown || offline) return;
-    ids = trackedIds(view, page);
+    const snapshot = seenSnapshot(view, page, prev);
+    if (!snapshot) return;
+    ids = snapshot.ids;
     ready = true;
     if (!prev) { if (!saved) { save(ids); saved = true; } return; }
-    cmp = compare(prev, ids);
+    cmp = snapshot.compared;
     const css = newCss(marked());
     if (!style) { style = document.createElement('style'); style.id = 'cp-new-style'; document.head.append(style); }
     if (style.textContent !== css) style.textContent = css;

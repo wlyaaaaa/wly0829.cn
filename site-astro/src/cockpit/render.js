@@ -12,6 +12,17 @@ const anchor = (id) => `<span class="cp-anchor" id="${esc(id)}"></span>`;
 const blockHead = (title, cls = '', extra = '', headingClass = '') => `<div class="cp-block-heading c-title-strip ${cls}" data-layout="inline" data-brush-position="below_whole_row"><div class="hub-strip-text"><div class="hub-strip-heading-group"><div class="hub-strip-heading-line"><span class="hub-leaf hub-leaf-l" aria-hidden="true"></span><h2 class="hub-heading ${headingClass}">${title}</h2></div></div>${extra ? `<div class="cp-heading-meta">${extra}</div>` : ''}</div><span class="hub-brush" aria-hidden="true"></span></div>`;
 const dot = (state) => `<span class="cp-dot is-${light(state)}" aria-hidden="true"></span>`;
 const notRead = (at, now) => `还没读到${at ? `（上次 ${esc(when(at, now))}）` : ''}`;
+// 空清单只有在本区来源读全时才表示“没有事”；旧接口的缺口没有来源编号时只说读不全，不猜哪一块坏了。
+const NEED_SOURCES = ['pending', 'dashboard'];
+const KNOW_SOURCES = [...NEED_SOURCES, 'automation', 'today_activity'];
+const emptyRead = (v, ctx, sources) => {
+  if (!v.ok || ctx.offline) return 'offline';
+  if (ctx.phase === 'snapshot') return 'snapshot';
+  if (v.must_know?.sources_complete === false) return 'incomplete';
+  if (v.source_gaps.some((g) => sources.includes(g.source_id))) return 'incomplete';
+  return v.source_gaps.some((g) => !g.source_id) ? 'unknown' : '';
+};
+const needUnread = (state) => state === 'offline' ? '要你做的事这会儿读不到' : state === 'snapshot' ? '正在读要你做的事' : state === 'unknown' ? '部分数据暂时没读全，要你做的事还需核对' : '要你做的事这次没读全';
 // 状态是“正在读/正在跑”、自己写了在做什么的卡（例如旧临时目录回收这一轮还在跑）：写“正在跑”和原句，不当成读不到（本人 10-31 18:03）
 const running = (c) => c.state === 'reading' && !!c.text && !/没读到|读不全|暂时读不到/.test(c.text);
 const firstOf = (s) => String(s || '').split(/[；;。]/)[0].trim();
@@ -515,7 +526,10 @@ export function needCards(v, ctx) {
   const { all, n } = ownerNow(v, ctx.now, ctx);
   const cx = { ...ctx, viewer: v.viewer };
   // 别的页面链到 #pending，没事可做时也留着这个位置标记（整块仍按 cockpit.css 收起）
-  if (!all.some((i) => !actCls(i.x, cx))) return anchor('pending') + (v.ok ? '' : `<p class="cp-empty">${dot('unavailable')}${notRead(v.served_at, ctx.now)}</p>`);
+  if (!all.some((i) => !actCls(i.x, cx))) {
+    const unread = emptyRead(v, ctx, NEED_SOURCES);
+    return anchor('pending') + (unread ? `<p class="cp-empty">${dot('unavailable')}${v.ok ? esc(needUnread(unread)) + '，不代表没有待办' : notRead(v.served_at, ctx.now)}</p>` : '');
+  }
   const order = NEED_GROUPS.flatMap(([k]) => all.filter((i) => groupOf(i.x) === k)).filter((i) => groupOf(i.x) !== 'notice' && !isPh(i.x) && typeof i.x.id === 'string' && i.x.id);
   // 展开哪件：点过的那件；还没点过（或那件已经办完不在了）就是第一件；点了“收起”是一件都不展开
   const want = ctx.act?.ui?.get(Q_KEY)?.open;
@@ -1194,7 +1208,14 @@ function knowBlock(v, ctx) {
   };
   const rows = all.map((k, i) => ({ k, i, r: KNOW_RANK[k.kind] ?? 1 })).sort((a, b) => a.r - b.r || a.i - b.i).map(({ k }) => row(k));
   const folded = old.length ? `<details class="cp-know-old" id="know-old"><summary>最近收起的 ${old.length} 条</summary><p class="cp-know-note">结果满 2 天自动收到这里。</p><ul class="cp-know-list">${old.map(row).join('')}</ul></details>` : '';
-  if (!rows.length) return `<div class="cp-know is-empty"><p>${dot('ok')}${esc(m.text || '没有要你知道的新事')}</p>${folded}</div>`;
+  if (!rows.length) {
+    const unread = emptyRead(v, ctx, KNOW_SOURCES);
+    const note = unread === 'offline' ? '你得知道：这会儿读不到，不代表没有新事'
+      : unread === 'snapshot' ? '你得知道：正在读最新消息'
+      : unread === 'unknown' ? '部分数据暂时没读全，还不能确认有没有新事'
+      : unread ? '你得知道：这次没读全，不代表没有新事' : m.text || '没有要你知道的新事';
+    return `<div class="cp-know is-empty"><p>${dot(unread ? 'unavailable' : 'ok')}${esc(note)}</p>${folded}</div>`;
+  }
   // 最多 5 行：超过时露前 4 行，第 5 行是“其余 N 条”
   const shown = rows.length > KNOW_MAX ? rows.slice(0, KNOW_MAX - 1) : rows, more = rows.slice(shown.length);
   return `<div class="cp-know">${blockHead('你得知道', 'cp-know-k')}<ul class="cp-know-list">${shown.join('')}</ul>`
@@ -1392,7 +1413,9 @@ export function strip(v, ctx) {
   // ① 要你做：和顶上“要你做 N 件”、标签页标题同一个数
   if (v.ok || v.need_you.length) {
     const { n, urgent } = ownerNow(v, ctx.now, ctx);
-    rows.push(n ? row('need-you', urgent ? 'red' : 'attention', `要你做 ${n} 件${urgent ? (urgent === n ? '，急' : `，${urgent} 件急`) : '，不急'}`) : row('', 'ok', '现在没有要你做的事'));
+    const unread = emptyRead(v, ctx, NEED_SOURCES);
+    rows.push(n ? row('need-you', urgent ? 'red' : 'attention', `要你做 ${n} 件${urgent ? (urgent === n ? '，急' : `，${urgent} 件急`) : '，不急'}`)
+      : unread ? row('need-you', 'unavailable', needUnread(unread)) : row('', 'ok', '现在没有要你做的事'));
   }
   // ② AI 在干活：在干活的件数，卡住几个、要不要你看
   const a = v.ai_running;
