@@ -642,6 +642,30 @@ function storageTile(v, now, off, pageAt) {
   return card(c, now, off, pageAt, { big: bigOf(top.val, top.name), sub: esc(top.line), list, fold: true, more: false, go });
 }
 const linkCard = (href, title, sub, cls = '') => `<a class="cp-link-card ct-card${cls}" href="${esc(href)}" target="_blank" rel="noopener"><b>${esc(title)}</b><small>${esc(sub)}</small><span class="cp-link-arrow" aria-hidden="true">↗</span></a>`;
+// 各订阅各看自己的读取时间；Clash 保存值始终带记录时间，不冒充实时余额。
+const subscriptionRows = (packages, now, off, stopped) => {
+  const rows = packages.map((p) => {
+    const at = Date.parse(p.updated_at_beijing || ''), age = (+now - at) / 1000;
+    const saved = p.data_kind === 'saved', recorded = Number.isFinite(at) && age >= 0;
+    const fresh = !off && !stopped && p.data_kind === 'live' && p.stale === false && recorded && age <= 180;
+    const readable = (fresh || (saved && recorded)) && Number.isFinite(p.used_gb) && p.used_gb >= 0 && Number.isFinite(p.total_gb) && p.total_gb > 0;
+    const expires = Date.parse(p.expires_at_beijing || ''), expired = Number.isFinite(expires) && expires <= +now;
+    const value = readable ? `${saved ? '上次已用' : '已用'} ${p.used_gb.toFixed(1)}/${p.total_gb.toFixed(1)} GB` : '套餐信息暂未取得';
+    const expiry = Number.isFinite(expires) ? `${expired ? '已到期' : '到期'} ${p.expires_at_beijing.slice(0, 10)}` : '';
+    const auto = p.auto_update_enabled === true ? '订阅自动更新已开启' : p.auto_update_enabled === false ? '订阅自动更新未开启' : '';
+    const warning = fresh && (p.low_remaining === true || p.expires_soon === true);
+    const bj = bjParts(now), day = bj && `${bj.y}-${String(bj.m).padStart(2, '0')}-${String(bj.d).padStart(2, '0')}`;
+    const reset = fresh && p.reset_date_beijing && day && p.reset_date_beijing >= day
+      ? `${p.reset_date_beijing.slice(5).replace('-', '/')} 重置${p.reset_source === '本人确认' ? '（你确认，具体时刻未提供）' : ''}` : '';
+    const line = [saved && recorded ? `Clash 上次记录 ${dateHm(p.updated_at_beijing)}` : fresh ? `${dateHm(p.updated_at_beijing)} 读到` : '', expiry, reset, auto].filter(Boolean).join(' · ');
+    return { name: p.name || '订阅', value, line, warning, readable };
+  });
+  return {
+    list: `<ul class="cp-tile-rows">${rows.map((r) => `<li><span>${esc(r.name)}</span><b>${esc(r.value)}</b>${r.line ? `<small>${esc(r.line)}</small>` : ''}</li>`).join('')}</ul>`,
+    detail: rows.map((r) => `${r.name}：${r.value}${r.line ? '；' + r.line : ''}`).join('。') + '。Clash 取得新的套餐读数后，这里自动显示新记录。服务商套餐扣费量与本机上网用量分开。',
+    warning: rows.some((r) => r.warning), available: rows.some((r) => r.readable),
+  };
+};
 // 9 张数据卡排成 3×3，按组一排：电脑本身、存储、网络；某张因为数据断了没出就留空位，不拉宽别的卡
 export function computer(v, ctx) {
   const g = v.grafana, off = !!ctx.offline, stale = staleIds(v), now = ctx.now, at = v.served_at;
@@ -663,10 +687,14 @@ export function computer(v, ctx) {
   const packageLine = packageFresh ? [packageWarningText, `套餐剩余 ${pack.remaining_gb.toFixed(1)}/${pack.total_gb.toFixed(1)} GB`, expiry, reset].filter(Boolean).join(' · ') : '套餐信息暂未取得';
   const packageDetail = packageFresh ? `${packageLine}；约每分钟取新数，${dateHm(pack.updated_at_beijing)} 读到。服务商套餐扣费量与本机上网用量分开。`
     : (plan?.missing_reason || '套餐当前余额暂未取得，约每分钟重读。');
-  const traffic = proxy ? tile({ ...proxy, title: '流量', text: [proxy.text, packageDetail].filter(Boolean).join(' '),
-    state: packageWarning ? 'attention' : proxy.state, color: packageWarning && proxy.color !== 'red' ? 'yellow' : proxy.color }, { sub: esc(packageLine) })
-    : tile(plan && { ...plan, title: '流量', text: packageDetail, state: packageFresh ? plan.state : 'unavailable',
-      color: !packageFresh ? 'unavailable' : packageWarning ? 'yellow' : plan.color });
+  const packages = Array.isArray(plan?.packages) ? plan.packages.filter((p) => p && typeof p === 'object') : [];
+  const multiple = packages.length ? subscriptionRows(packages, now, off, stale.has('traffic')) : null;
+  const warning = multiple ? multiple.warning : packageWarning, available = multiple ? multiple.available : packageFresh;
+  const trafficDetail = multiple?.detail || packageDetail;
+  const traffic = proxy ? tile({ ...proxy, title: '流量', text: [proxy.text, trafficDetail].filter(Boolean).join(' '),
+    state: warning ? 'attention' : proxy.state, color: warning && proxy.color !== 'red' ? 'yellow' : proxy.color }, multiple ? { list: multiple.list } : { sub: esc(packageLine) })
+    : tile(plan && { ...plan, title: '流量', text: trafficDetail, state: available ? plan.state : 'unavailable',
+      color: !available ? 'unavailable' : warning ? 'yellow' : plan.color }, multiple ? { list: multiple.list } : {});
   // “你得知道”里有正在修的网络问题时，后端在远程卡上给 must_know_id（文字是“此刻能连上；间歇断开还在查”），点了跳到“你得知道”那一条
   const remoteCards = dedupeCards(v.sections.remote);
   const remote = (remoteCards.length ? remoteCards : [{ title: '远程连接', state: 'unavailable', text: '' }]).map((c, i) => tileOf({ kind: 'remote', ...c }, now, off, at,

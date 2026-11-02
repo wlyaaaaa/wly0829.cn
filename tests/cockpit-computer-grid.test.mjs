@@ -70,6 +70,49 @@ test('电脑区：9 张数据卡按组排成 3×3，大数字从原句里取，G
   assert.doesNotMatch(computer(afterReset, { ...ctx, now: new Date('2026-11-12T00:00:10+08:00') }), /11\/11 重置/);
 });
 
+const subscriptions = (packages) => {
+  const v = view();
+  v.sections.computer.find((c) => c.id === 'traffic').packages = packages;
+  return v;
+};
+const livePlan = () => ({ id: 'fly', name: '飞鸟', data_kind: 'live', stale: false, used_gb: 250, total_gb: 500,
+  remaining_gb: 250, updated_at_beijing: at, expires_at_beijing: '2027-10-15T00:00:00+08:00', auto_update_enabled: true });
+const savedPlan = () => ({ id: 'tag', name: 'TAG', data_kind: 'saved', stale: true, used_gb: 400, total_gb: 500,
+  remaining_gb: 100, updated_at_beijing: '2026-10-01T20:00:00+08:00', expires_at_beijing: '2026-10-30T00:00:00+08:00', auto_update_enabled: true });
+
+test('流量同卡显示两家已用/总量，TAG 的到期旧记录不盖住飞鸟实时数据、不新增告警', () => {
+  const h = computer(subscriptions([livePlan(), savedPlan()]), ctx);
+  assert.match(h, /<li><span>飞鸟<\/span><b>已用 250\.0\/500\.0 GB<\/b>/);
+  assert.match(h, /<li><span>TAG<\/span><b>上次已用 400\.0\/500\.0 GB<\/b><small>Clash 上次记录 10月1日 20:00 · 已到期 2026-10-30 · 订阅自动更新已开启/);
+  assert.match(h, /Clash 取得新的套餐读数后，这里自动显示新记录/);
+  assert.equal(cells(h).find((c) => c[0] === '流量')[2], 'green');
+  assert.equal(cells(h).filter((c) => c !== '空').length, 9);
+});
+
+test('TAG 续费后的新流量与有效期原地恢复，不受旧 expired 状态锁住', () => {
+  const tag = { ...savedPlan(), expired: true };
+  assert.match(computer(subscriptions([tag]), ctx), /已到期 2026-10-30/);
+  Object.assign(tag, { used_gb: 5, updated_at_beijing: at, expires_at_beijing: '2026-12-01T00:00:00+08:00' });
+  const renewed = computer(subscriptions([tag]), ctx);
+  assert.match(renewed, /<span>TAG<\/span><b>上次已用 5\.0\/500\.0 GB<\/b>/);
+  assert.match(renewed, /到期 2026-12-01/);
+  assert.doesNotMatch(renewed, /已到期/);
+});
+
+test('各订阅独立按来源处理鲜度，离线不冒充实时；名称转义且不输出订阅地址', () => {
+  const v = subscriptions([livePlan(), { ...savedPlan(), name: '<img src=x onerror="bad()">', url: 'https://example.invalid/private-token' }]);
+  for (const context of [{ ...ctx, now: new Date(+now + 181000) }, { ...ctx, offline: true }]) {
+    const h = computer(v, context);
+    assert.doesNotMatch(h, /已用 250\.0\/500\.0 GB/);
+    assert.match(h, /上次已用 400\.0\/500\.0 GB/);
+    assert.match(h, /&lt;img src=x onerror=&quot;bad\(\)&quot;&gt;/);
+    assert.doesNotMatch(h, /<img src=x|private-token/);
+  }
+  const broken = computer(subscriptions([livePlan(), { ...savedPlan(), total_gb: null }]), ctx);
+  assert.match(broken, /<span>飞鸟<\/span><b>已用 250\.0\/500\.0 GB<\/b>/);
+  assert.match(broken, /<span>TAG<\/span><b>套餐信息暂未取得/);
+});
+
 test('存储：AI 临时文件只看自己的 alert，整体状况在“存储占用与增长”那张卡，直接写数字', () => {
   const others = [{ id: 'recycle_bin', label: 'E 盘当前用户回收站', alert: 'budget', bytes: 25 * GB, complete: true, budget_bytes: 20 * GB },
     { id: 'claude_conversations', label: 'Claude 对话记录', alert: 'budget', bytes: 21 * GB, complete: true, budget_bytes: 18 * GB },
