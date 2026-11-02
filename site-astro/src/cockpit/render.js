@@ -18,7 +18,8 @@ const KNOW_SOURCES = [...NEED_SOURCES, 'automation', 'today_activity'];
 const emptyRead = (v, ctx, sources) => {
   if (!v.ok || ctx.offline) return 'offline';
   if (ctx.phase === 'snapshot') return 'snapshot';
-  if (v.must_know?.sources_complete === false) return 'incomplete';
+  const complete = sources === NEED_SOURCES ? v.must_know?.need_you_sources_complete ?? v.must_know?.sources_complete : v.must_know?.sources_complete;
+  if (complete === false) return 'incomplete';
   if (v.source_gaps.some((g) => sources.includes(g.source_id))) return 'incomplete';
   return v.source_gaps.some((g) => !g.source_id) ? 'unknown' : '';
 };

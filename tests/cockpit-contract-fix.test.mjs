@@ -54,6 +54,27 @@ test('手机待办空态和待办区在来源读不全时不误报无事，已�
   assert.match(firstStrip(v), /要你做 1 件/);
 });
 
+test('待办来源读全后不受通知漏采拖累，通知与已读基线仍保持保守', () => {
+  const view = (extra = {}, gaps = []) => normalize(base({ need_you: [], source_gaps: gaps,
+    must_know: { state: 'empty', sources_complete: false, need_you_sources_complete: true, items: [], ...extra } }));
+  const firstStrip = (v, cx = ctx) => strip(v, cx).split('</p>')[0];
+  const ready = view();
+  assert.match(firstStrip(ready), /is-green[^]*现在没有要你做的事/);
+  assert.equal(ready.must_know.need_you_sources_complete, true);
+  assert.equal(REGIONS['need-you'](ready, ctx), '<span class="cp-anchor" id="pending"></span>');
+  assert.match(REGIONS.home(ready, ctx), /这次没读全，不代表没有新事/);
+  assert.equal(seenSnapshot(ready, 'home', parseSeen(serializeSeen(now.getTime(), ['old']))), null);
+  for (const v of [view({ need_you_sources_complete: false, sources_complete: true }),
+    view({ need_you_sources_complete: undefined }), view({}, [{ source_id: 'pending' }]), view({}, [{ source_id: 'dashboard' }])]) {
+    assert.match(firstStrip(v), /要你做的事这次没读全/);
+    assert.match(REGIONS['need-you'](v, ctx), /这次没读全，不代表没有待办/);
+  }
+  assert.match(firstStrip(ready, { ...ctx, offline: true }), /这会儿读不到/);
+  assert.match(firstStrip(ready, { ...ctx, phase: 'snapshot' }), /正在读要你做的事/);
+  const urgent = { ...ready, need_you: [{ id: 'urgent-ai', title: '示例严重问题，AI 正在处理', attention_level: 'urgent', action_owner: 'ai', owner_action_required: false }] };
+  assert.match(REGIONS['need-you'](urgent, ctx), /示例严重问题，AI 正在处理/);
+});
+
 test('未满缺口告警时间的漏采不写已读基线，恢复后才与原完整清单比较', () => {
   const view = (sources_complete, ids = []) => normalize(base({ need_you: ids.map((id) => ({ id, title: id })),
     must_know: { state: 'ok', sources_complete, items: [{ id: 'notice', kind: 'report', text: '示例仍读到的旧通知' }] } }));

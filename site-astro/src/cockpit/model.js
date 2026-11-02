@@ -164,7 +164,7 @@ export function normalize(raw) {
     overview: v.overview && typeof v.overview === 'object' ? v.overview : null,
     // 下面两块是后端 10 月 12 日加的；字段不在就是 null，页面不出这一块，照旧数据显示
     // “你得知道”（must_know）：items 保留 kind=ai_decision 的 14 天决定回执，其余沿用普通消息。
-    must_know: (() => { const m = v.must_know; if (!m || typeof m !== 'object') return null; return { state: ['ok', 'empty', 'unavailable'].includes(m.state) ? m.state : 'unavailable', sources_complete: typeof m.sources_complete === 'boolean' ? m.sources_complete : null, text: typeof m.text === 'string' ? m.text : '', observed_at: m.observed_at || null, items: list(m.items), archived: list(m.archived_items) }; })(),
+    must_know: (() => { const m = v.must_know; if (!m || typeof m !== 'object') return null; return { state: ['ok', 'empty', 'unavailable'].includes(m.state) ? m.state : 'unavailable', sources_complete: typeof m.sources_complete === 'boolean' ? m.sources_complete : null, need_you_sources_complete: typeof m.need_you_sources_complete === 'boolean' ? m.need_you_sources_complete : null, text: typeof m.text === 'string' ? m.text : '', observed_at: m.observed_at || null, items: list(m.items), archived: list(m.archived_items) }; })(),
     // “AI 正在跑”（后端 10 月 29 日起加的 ai_running）：字段不在就是 null，页面不出这一块；gaps 前端不显示
     ai_running: aiRunning(v.ai_running),
     // 网站上次成功发布的回执（website_release）：{state: success|unavailable, published_at, version, verified, text}；只证明上次成功那次
