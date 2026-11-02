@@ -1,62 +1,61 @@
 {
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
-  "source_commit": "575f0cd88fce4f3ed33b2ceb96c44d44fbe008be",
-  "prepared_at_beijing": "2026-11-02T06:49:50.908978+08:00",
-  "seconds": 248.488,
+  "source_commit": "8125b8b836ad8d990eeb7e8941220e1e62c917e1",
+  "prepared_at_beijing": "2026-11-02T16:29:50.882968+08:00",
+  "seconds": 269.647,
   "steps": [
     {
       "name": "home_highlights",
-      "seconds": 0.319
+      "seconds": 0.364
     },
     {
       "name": "source",
-      "seconds": 29.831
+      "seconds": 42.086
     },
     {
       "name": "fingerprint",
-      "seconds": 2.109
+      "seconds": 1.633
     },
     {
       "name": "prepare",
-      "seconds": 32.361
+      "seconds": 30.22
     },
     {
       "name": "native_inputs",
-      "seconds": 7.785
+      "seconds": 8.547
     },
     {
       "name": "blocks",
-      "seconds": 1.329
+      "seconds": 1.137
     },
     {
       "name": "astro",
-      "seconds": 15.65
+      "seconds": 15.635
     },
     {
       "name": "assets",
-      "seconds": 6.683
+      "seconds": 5.61
     },
     {
       "name": "finish",
-      "seconds": 36.332
+      "seconds": 48.884
     },
     {
       "name": "finalize",
-      "seconds": 99.601
+      "seconds": 102.403
     },
     {
       "name": "public",
-      "seconds": 15.338
+      "seconds": 12.113
     },
     {
       "name": "inventory",
-      "seconds": 1.15
+      "seconds": 1.013
     }
   ],
   "rebuilt_pages": [
-    "/cockpit/",
-    "/cockpit/ai/"
+    "/cockpit/"
   ],
   "html_files": 324,
   "files": [
@@ -321,9 +320,19 @@
       "sha256": "ac53de45f381e74ca7ca70f4b09ad1fe5f8c6dc5379d06d5292f2a925b730124"
     },
     {
+      "path": "_astro/index.astro_astro_type_script_index_0_lang.BsWp2_p7.js",
+      "bytes": 180,
+      "sha256": "c758bb8ebaa2b5583e4586f7fcb18f3f54c99d2525f6bfcf5395286adf50cb70"
+    },
+    {
       "path": "_astro/index.astro_astro_type_script_index_0_lang.BtQs7QFR.js",
       "bytes": 180,
       "sha256": "a45cd4b967db3b8f3b5be36e8378125d801d18e18bb4555d09d80a813a88ee95"
+    },
+    {
+      "path": "_astro/index.astro_astro_type_script_index_0_lang.BUenwOvK.js",
+      "bytes": 180,
+      "sha256": "c758bb8ebaa2b5583e4586f7fcb18f3f54c99d2525f6bfcf5395286adf50cb70"
     },
     {
       "path": "_astro/index.astro_astro_type_script_index_0_lang.ChfAB9Pt.js",
@@ -469,6 +478,11 @@
       "path": "_astro/refresh-button.DLt6uGfe.js",
       "bytes": 144902,
       "sha256": "71ce94ea59cd0f9e29c43db64b1a6f3fa76f609040ce9a98df31f01d3daa4c17"
+    },
+    {
+      "path": "_astro/refresh-button.DmLaGdh7.js",
+      "bytes": 147888,
+      "sha256": "be68006f2d704ea73ea2429ba9a1b31510508e3294b43d8945a4f34db4252be3"
     },
     {
       "path": "_astro/refresh-button.EzDSN3G8.js",
@@ -31737,8 +31751,8 @@
     },
     {
       "path": "cockpit/index.html",
-      "bytes": 675922,
-      "sha256": "20ef6c485b83652764d8283905194d1c83b5b453c63afe58a0caf6bcff08cca2"
+      "bytes": 695460,
+      "sha256": "8a54213d0427f5b16d04acf774f73bd49d33598fb596d1fd4ef2cce5a416ce87"
     },
     {
       "path": "cockpit/storage/index.html",
@@ -34103,12 +34117,12 @@
     {
       "path": "release-identity.json",
       "bytes": 244,
-      "sha256": "3d772357eec7fd4e1a7bfd27d85d3d340d0ed861f05f4816399a76c405954c13"
+      "sha256": "710ed18311e6f5aeda9f3b02b1c794800d24faf8859bc3451ae8975ba9213697"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 6301795,
-      "sha256": "c3e8f3449b5d42c2ceeae554733080aca4561566806990983878a1aa50612c4d"
+      "bytes": 6304226,
+      "sha256": "4561834418a40b991d893c0f090682a659faf2527b9011bc2ee1fbb5e7c88b23"
     },
     {
       "path": "rescue/index.html",
@@ -35349,7 +35363,7 @@
     ],
     "rule_explanations_pending": [],
     "rule_frozen": {
-      "source_file": "E:\\.agents\\releases\\E350\\docs\\contracts\\agents.context-sources.md",
+      "source_file": "E:\\.agents\\releases\\E353\\docs\\contracts\\agents.context-sources.md",
       "site_not_rules": [],
       "rules_not_site": []
     },
@@ -35381,5 +35395,5 @@
   },
   "checks_file": "E:\\Cache\\wly-site-build\\wt\\site-astro\\.cache\\site-consistency.json",
   "previous_oss_source": "published",
-  "previous_release_id": "6f2a3887d9c2db520aea0117deb7909fbf1411ee7898c71ab608962b51ce9337"
+  "previous_release_id": "46df9bd2f56a0436506aea8fc1d5263a30e5a4b5de0b78a88345d850eb781ebd"
 }
