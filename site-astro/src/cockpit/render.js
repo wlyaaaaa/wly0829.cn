@@ -644,6 +644,12 @@ function storageTile(v, now, off, pageAt) {
 }
 const linkCard = (href, title, sub, cls = '') => `<a class="cp-link-card ct-card${cls}" href="${esc(href)}" target="_blank" rel="noopener"><b>${esc(title)}</b><small>${esc(sub)}</small><span class="cp-link-arrow" aria-hidden="true">↗</span></a>`;
 // 各订阅各看自己的读取时间；Clash 保存值始终带记录时间，不冒充实时余额。
+const packageGb = (value) => (value / (2 ** 30 / 1e9)).toFixed(1);
+const packageExpiry = (value) => {
+  const p = bjParts(value), pad = (n) => String(n).padStart(2, '0');
+  return p ? `${p.y}-${pad(p.m)}-${pad(p.d)} ${hm(value)}（北京时间）` : '';
+};
+const PACKAGE_EXPLANATION = '套餐按1024换算，与客户端口径一致；客户端按电脑时区显示到期日，可能相差一天。';
 const subscriptionRows = (packages, now, off, stopped) => {
   const rows = packages.map((p) => {
     const at = Date.parse(p.updated_at_beijing || ''), age = (+now - at) / 1000;
@@ -651,8 +657,8 @@ const subscriptionRows = (packages, now, off, stopped) => {
     const fresh = !off && !stopped && p.data_kind === 'live' && p.stale === false && recorded && age <= 180;
     const readable = (fresh || (saved && recorded)) && Number.isFinite(p.used_gb) && p.used_gb >= 0 && Number.isFinite(p.total_gb) && p.total_gb > 0;
     const expires = Date.parse(p.expires_at_beijing || ''), expired = Number.isFinite(expires) && expires <= +now;
-    const value = readable ? `${saved ? '上次已用' : '已用'} ${p.used_gb.toFixed(1)}/${p.total_gb.toFixed(1)} GB` : '套餐信息暂未取得';
-    const expiry = Number.isFinite(expires) ? `${expired ? '已到期' : '到期'} ${p.expires_at_beijing.slice(0, 10)}` : '';
+    const value = readable ? `${saved ? '上次已用' : '已用'} ${packageGb(p.used_gb)}/${packageGb(p.total_gb)} GB` : '套餐信息暂未取得';
+    const expiry = Number.isFinite(expires) ? `${expired ? '已到期' : '到期'} ${packageExpiry(p.expires_at_beijing)}` : '';
     const auto = p.auto_update_enabled === true ? '订阅自动更新已开启' : p.auto_update_enabled === false ? '订阅自动更新未开启' : '';
     const warning = fresh && (p.low_remaining === true || p.expires_soon === true);
     const bj = bjParts(now), day = bj && `${bj.y}-${String(bj.m).padStart(2, '0')}-${String(bj.d).padStart(2, '0')}`;
@@ -663,7 +669,7 @@ const subscriptionRows = (packages, now, off, stopped) => {
   });
   return {
     list: `<ul class="cp-tile-rows">${rows.map((r) => `<li><span>${esc(r.name)}</span><b>${esc(r.value)}</b>${r.line ? `<small>${esc(r.line)}</small>` : ''}</li>`).join('')}</ul>`,
-    detail: rows.map((r) => `${r.name}：${r.value}${r.line ? '；' + r.line : ''}`).join('。') + '。Clash 取得新的套餐读数后，这里自动显示新记录。服务商套餐扣费量与本机上网用量分开。',
+    detail: rows.map((r) => `${r.name}：${r.value}${r.line ? '；' + r.line : ''}`).join('。') + '。Clash 取得新的套餐读数后，这里自动显示新记录。' + PACKAGE_EXPLANATION + '服务商套餐扣费量与本机上网用量分开。',
     warning: rows.some((r) => r.warning), available: rows.some((r) => r.readable),
   };
 };
@@ -681,12 +687,13 @@ export function computer(v, ctx) {
   const packageWarning = packageFresh && (pack.low_remaining === true || pack.expires_soon === true);
   const packageWarningText = packageWarning ? [pack.low_remaining && (pack.remaining_gb === 0 ? '套餐额度已用完' : '套餐剩余不足10%'),
     pack.expires_soon && (Date.parse(pack.expires_at_beijing) <= +now ? '套餐服务已到期' : '套餐将在7天内到期')].filter(Boolean).join('，') : '';
-  const expiry = packageFresh && pack.expires_at_beijing ? `到期 ${pack.expires_at_beijing.slice(0, 10)}` : '';
+  const expiryAt = packageFresh ? packageExpiry(pack.expires_at_beijing) : '';
+  const expiry = expiryAt ? `到期 ${expiryAt}` : '';
   const bj = bjParts(now), day = bj && `${bj.y}-${String(bj.m).padStart(2, '0')}-${String(bj.d).padStart(2, '0')}`;
   const reset = packageFresh && pack.reset_date_beijing && day && pack.reset_date_beijing >= day
     ? `${pack.reset_date_beijing.slice(5).replace('-', '/')} 重置${pack.reset_source === '本人确认' ? '（你确认，具体时刻未提供）' : ''}` : '';
-  const packageLine = packageFresh ? [packageWarningText, `套餐剩余 ${pack.remaining_gb.toFixed(1)}/${pack.total_gb.toFixed(1)} GB`, expiry, reset].filter(Boolean).join(' · ') : '套餐信息暂未取得';
-  const packageDetail = packageFresh ? `${packageLine}；约每分钟取新数，${dateHm(pack.updated_at_beijing)} 读到。服务商套餐扣费量与本机上网用量分开。`
+  const packageLine = packageFresh ? [packageWarningText, `套餐剩余 ${packageGb(pack.remaining_gb)}/${packageGb(pack.total_gb)} GB`, expiry, reset].filter(Boolean).join(' · ') : '套餐信息暂未取得';
+  const packageDetail = packageFresh ? `${packageLine}；约每分钟取新数，${dateHm(pack.updated_at_beijing)} 读到。${PACKAGE_EXPLANATION}服务商套餐扣费量与本机上网用量分开。`
     : (plan?.missing_reason || '套餐当前余额暂未取得，约每分钟重读。');
   const packages = Array.isArray(plan?.packages) ? plan.packages.filter((p) => p && typeof p === 'object') : [];
   const multiple = packages.length ? subscriptionRows(packages, now, off, stale.has('traffic')) : null;

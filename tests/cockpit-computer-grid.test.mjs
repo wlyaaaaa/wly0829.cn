@@ -10,6 +10,7 @@ const ctx = { now, offline: false, phase: 'live', projectUrls: {}, img: {} };
 const css = readFileSync(new URL('../site-astro/src/cockpit/cockpit.css', import.meta.url), 'utf8');
 const pc = (t) => ({ state: 'ok', color: 'ok', observed_at: at, ...t });
 const GB = 2 ** 30;
+const DECIMAL_GB_PER_CLIENT_GB = GB / 1e9;
 const cats = (...extra) => [{ id: 'ai_cache_total', label: '虚构合计', bytes: null, partial_bytes: 200 * GB, complete: false, budget_bytes: 300 * GB, alert: 'measurement_incomplete' },
   { id: 'claude_temp', bytes: 100 * GB, complete: true, alert: null }, { id: 'codex_temp', bytes: null, partial_bytes: 30 * GB, complete: false, alert: 'measurement_incomplete' }, ...extra];
 const view = (extra = {}) => normalize({
@@ -18,7 +19,7 @@ const view = (extra = {}) => normalize({
     computer: [pc({ id: 'computer_health', title: '处理器', text: '电脑读数：处理器 29%，66.6℃' }), pc({ id: 'system_resources', title: '内存/系统资源', text: '内存/系统资源正常' }),
       pc({ id: 'disk_space', title: '磁盘余量', text: '磁盘够用：最紧的是 C 盘还剩 83.6 GiB（13.9%）。' }),
       pc({ id: 'traffic', title: '套餐流量', text: '套餐已用 521.1/604.7 GB，剩余 83.6 GB（虚构服务商读数，约每分钟更新）',
-        package: { stale: false, remaining_gb: 83.6, total_gb: 604.7, updated_at_beijing: at, expires_at_beijing: '2027-01-15T00:00:00+08:00', reset_date_beijing: '2026-11-11', reset_source: '本人确认' } }),
+        package: { stale: false, remaining_gb: 83.6 * DECIMAL_GB_PER_CLIENT_GB, total_gb: 604.7 * DECIMAL_GB_PER_CLIENT_GB, updated_at_beijing: at, expires_at_beijing: '2027-01-15T00:00:00+08:00', reset_date_beijing: '2026-11-11', reset_source: '本人确认' } }),
       pc({ id: 'proxy_traffic', title: '本机代理流量', text: '今天上网 5.1 GB，近 60 分钟 2.9 GB。没超提醒线。按代理内核累计计算。' }),
       pc({ id: 'temp_reclaim', title: '旧临时目录回收', text: '今天 00:19 把 200 个闲置满 7 天的虚构目录（约 2.3 GB）放进回收站，之后由回收站清理清掉。' })],
     remote: [pc({ id: 'remote', title: '远程连接', text: '此刻能连上；间歇断开还在查。', must_know_id: 'pending-net' })],
@@ -36,7 +37,7 @@ test('电脑区：9 张数据卡按组排成 3×3，大数字从原句里取，G
     ['AI 临时文件', '至少 200 GiB', 'green'], ['旧临时目录回收', '2.3 GB', 'green'], ['存储占用与增长', '正常', 'green'],
     ['流量', '5.1 GB', 'green'], ['远程连接', '能连上', 'green'], ['笔记本（副机）', '在线', 'green']]);
   assert.match(h, /<progress max="100" value="86" aria-label="已用 86%"><\/progress><small>已用 86%<\/small><\/p><p class="cp-sub">C 盘还剩 13\.9%/);
-  assert.match(h, /cp-sub">今天上网 · 近 60 分钟 2\.9 GB · 没超提醒线 · 套餐剩余 83\.6\/604\.7 GB · 到期 2027-01-15 · 11\/11 重置（你确认，具体时刻未提供）<\/p><details class="cp-tile-more">/);
+  assert.match(h, /cp-sub">今天上网 · 近 60 分钟 2\.9 GB · 没超提醒线 · 套餐剩余 83\.6\/604\.7 GB · 到期 2027-01-15 00:00（北京时间） · 11\/11 重置（你确认，具体时刻未提供）<\/p><details class="cp-tile-more">/);
   assert.match(h, /cp-sub">今天 00:19 放进回收站 200 个<\/p><details/);
   assert.match(h, /cp-sub">预算 300 GiB · Claude 100 GiB · Codex 至少 30 GiB<\/p><a class="cp-tile-go" href="\/cockpit\/storage\/">/);
   assert.match(h, /id="remote">.*间歇断开还在查 · <a class="cp-net" href="#know-pending-net">看这里 →<\/a>/);
@@ -75,15 +76,15 @@ const subscriptions = (packages) => {
   v.sections.computer.find((c) => c.id === 'traffic').packages = packages;
   return v;
 };
-const livePlan = () => ({ id: 'fly', name: '飞鸟', data_kind: 'live', stale: false, used_gb: 250, total_gb: 500,
-  remaining_gb: 250, updated_at_beijing: at, expires_at_beijing: '2027-10-15T00:00:00+08:00', auto_update_enabled: true });
-const savedPlan = () => ({ id: 'tag', name: 'TAG', data_kind: 'saved', stale: true, used_gb: 400, total_gb: 500,
-  remaining_gb: 100, updated_at_beijing: '2026-10-01T20:00:00+08:00', expires_at_beijing: '2026-10-30T00:00:00+08:00', auto_update_enabled: true });
+const livePlan = () => ({ id: 'fly', name: '飞鸟', data_kind: 'live', stale: false, used_gb: 250 * DECIMAL_GB_PER_CLIENT_GB, total_gb: 500 * DECIMAL_GB_PER_CLIENT_GB,
+  remaining_gb: 250 * DECIMAL_GB_PER_CLIENT_GB, updated_at_beijing: at, expires_at_beijing: '2027-10-15T00:00:00+08:00', auto_update_enabled: true });
+const savedPlan = () => ({ id: 'tag', name: 'TAG', data_kind: 'saved', stale: true, used_gb: 400 * DECIMAL_GB_PER_CLIENT_GB, total_gb: 500 * DECIMAL_GB_PER_CLIENT_GB,
+  remaining_gb: 100 * DECIMAL_GB_PER_CLIENT_GB, updated_at_beijing: '2026-10-01T20:00:00+08:00', expires_at_beijing: '2026-10-30T00:00:00+08:00', auto_update_enabled: true });
 
 test('流量同卡显示两家已用/总量，TAG 的到期旧记录不盖住飞鸟实时数据、不新增告警', () => {
   const h = computer(subscriptions([livePlan(), savedPlan()]), ctx);
   assert.match(h, /<li><span>飞鸟<\/span><b>已用 250\.0\/500\.0 GB<\/b>/);
-  assert.match(h, /<li><span>TAG<\/span><b>上次已用 400\.0\/500\.0 GB<\/b><small>Clash 上次记录 10月1日 20:00 · 已到期 2026-10-30 · 订阅自动更新已开启/);
+  assert.match(h, /<li><span>TAG<\/span><b>上次已用 400\.0\/500\.0 GB<\/b><small>Clash 上次记录 10月1日 20:00 · 已到期 2026-10-30 00:00（北京时间） · 订阅自动更新已开启/);
   assert.match(h, /Clash 取得新的套餐读数后，这里自动显示新记录/);
   assert.equal(cells(h).find((c) => c[0] === '流量')[2], 'green');
   assert.equal(cells(h).filter((c) => c !== '空').length, 9);
@@ -92,7 +93,7 @@ test('流量同卡显示两家已用/总量，TAG 的到期旧记录不盖住飞
 test('TAG 续费后的新流量与有效期原地恢复，不受旧 expired 状态锁住', () => {
   const tag = { ...savedPlan(), expired: true };
   assert.match(computer(subscriptions([tag]), ctx), /已到期 2026-10-30/);
-  Object.assign(tag, { used_gb: 5, updated_at_beijing: at, expires_at_beijing: '2026-12-01T00:00:00+08:00' });
+  Object.assign(tag, { used_gb: 5 * DECIMAL_GB_PER_CLIENT_GB, updated_at_beijing: at, expires_at_beijing: '2026-12-01T00:00:00+08:00' });
   const renewed = computer(subscriptions([tag]), ctx);
   assert.match(renewed, /<span>TAG<\/span><b>上次已用 5\.0\/500\.0 GB<\/b>/);
   assert.match(renewed, /到期 2026-12-01/);
@@ -111,6 +112,31 @@ test('各订阅独立按来源处理鲜度，离线不冒充实时；名称转�
   const broken = computer(subscriptions([livePlan(), { ...savedPlan(), total_gb: null }]), ctx);
   assert.match(broken, /<span>飞鸟<\/span><b>已用 250\.0\/500\.0 GB<\/b>/);
   assert.match(broken, /<span>TAG<\/span><b>套餐信息暂未取得/);
+});
+
+test('套餐字节按客户端1024口径显示，读取时间和本机用量保持原值', () => {
+  const plan = { ...livePlan(), used_gb: 305.191765502, total_gb: 536.870912, remaining_gb: 231.679146498 };
+  const h = computer(subscriptions([plan]), ctx);
+  assert.match(h, /已用 284\.2\/500\.0 GB/);
+  assert.match(h, /套餐按1024换算，与客户端口径一致/);
+  assert.match(h, /今天上网 · 近 60 分钟 2\.9 GB/);
+  assert.equal(cells(h).find((c) => c[0] === '流量')[1], '5.1 GB');
+});
+
+test('到期时间按北京时间转换跨日，相同时刻不受输入时区影响', () => {
+  const plan = { ...livePlan(), expires_at_beijing: '2027-10-14T14:17:24-07:00' };
+  const h = computer(subscriptions([plan]), ctx);
+  assert.match(h, /到期 2027-10-15 05:17（北京时间）/);
+  assert.match(h, /客户端按电脑时区显示到期日，可能相差一天/);
+  assert.equal(h, computer(subscriptions([{ ...plan, expires_at_beijing: '2027-10-15T05:17:24+08:00' }]), ctx));
+});
+
+test('没有订阅列表时，单套餐余量和详情使用相同单位与北京时间', () => {
+  const v = view(), plan = v.sections.computer.find((c) => c.id === 'traffic');
+  Object.assign(plan.package, { remaining_gb: 231.679146498, total_gb: 536.870912, expires_at_beijing: '2027-10-14T14:17:24-07:00' });
+  const h = computer(v, ctx);
+  assert.match(h, /套餐剩余 215\.8\/500\.0 GB · 到期 2027-10-15 05:17（北京时间）/);
+  assert.match(h, /套餐按1024换算，与客户端口径一致/);
 });
 
 test('存储：AI 临时文件只看自己的 alert，整体状况在“存储占用与增长”那张卡，直接写数字', () => {
