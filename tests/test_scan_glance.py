@@ -8,6 +8,57 @@ from unittest import mock
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location("scan_glance", ROOT / "site-astro/tools/scan_glance.py")
 scan = importlib.util.module_from_spec(SPEC); SPEC.loader.exec_module(scan)
+class StatusCompressionTests(unittest.TestCase):
+    def test_head_range_and_media_do_not_request_compression(self):
+        for method, path, incoming in (("HEAD", "/__status", {}), ("GET", "/__status", {"Range": "bytes=0-3"}),
+                                       ("GET", "/__proxy/oss/releases/test.png", {})):
+            with self.subTest(method=method, path=path, incoming=incoming):
+                handler = object.__new__(scan.Preview)
+                handler.path = path; handler.command = method; handler.headers = incoming
+                handler.wfile = io.BytesIO(); handler.server = SimpleNamespace(proxy_results={})
+                handler.upstream = mock.Mock(return_value=(200, {"Content-Type": "application/octet-stream"}, b"test"))
+                handler.headers_out = mock.Mock()
+                handler.do_GET()
+                sent = handler.upstream.call_args.args[1]
+                self.assertNotIn("Accept-Encoding", sent)
+                if "Range" in incoming: self.assertEqual(sent["Range"], incoming["Range"])
+
+    def test_live_status_gzip_is_decoded_and_query_preserved(self):
+        import gzip
+        seen = []
+        body = b'{"schema":"fixture","value":"' + b'x' * 10000 + b'"}'
+        class Origin(http.server.BaseHTTPRequestHandler):
+            def log_message(self, *args): pass
+            def do_GET(self):
+                seen.append((self.path, self.headers.get("Accept-Encoding")))
+                compressed = self.headers.get("Accept-Encoding") == "gzip"
+                raw = gzip.compress(body) if compressed else body
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(raw)))
+                if compressed: self.send_header("Content-Encoding", "gzip")
+                self.end_headers(); self.wfile.write(raw)
+        origin = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Origin)
+        threading.Thread(target=origin.serve_forever, daemon=True).start()
+        try:
+            with tempfile.TemporaryDirectory(dir=r"E:\Cache") as temp:
+                host = f"http://127.0.0.1:{origin.server_port}"
+                with mock.patch.dict(scan.UPSTREAMS, {"mcp": host, "live": host}):
+                    proxy = scan.make_server(Path(temp), Path(temp) / "out")
+                    threading.Thread(target=proxy.serve_forever, daemon=True).start()
+                    try:
+                        for path in ("/__status?view=cockpit&refresh=1", "/__proxy/live/computer-access/state?view=cockpit"):
+                            with urllib.request.urlopen(proxy.base + path, timeout=5) as response:
+                                self.assertEqual(response.read(), body)
+                                self.assertEqual(int(response.headers["Content-Length"]), len(body))
+                                self.assertIsNone(response.headers.get("Content-Encoding"))
+                        self.assertEqual(seen, [("/computer-access/api/status?view=cockpit&refresh=1", "gzip"),
+                                                ("/computer-access/state?view=cockpit", "gzip")])
+                    finally:
+                        proxy.shutdown(); proxy.server_close(); proxy.upstream_pool.clear()
+        finally:
+            origin.shutdown(); origin.server_close()
+
 class ScanGlanceTests(unittest.TestCase):
     def test_declared_local_meta_refresh_waits_for_destination(self):
         from playwright.sync_api import sync_playwright

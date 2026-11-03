@@ -173,6 +173,9 @@ class Preview(http.server.SimpleHTTPRequestHandler):
             if self.path.startswith(prefix + "/"): upstream = host + self.path[len(prefix):]
         if upstream:
             headers = {"Origin": "https://wly0829.cn", "Referer": "https://wly0829.cn/", "User-Agent": "wly-local-preview", "Accept": self.headers.get("Accept", "*/*")}
+            # urllib3 decodes the live JSON before rewrite; media ranges and HEAD keep their byte semantics.
+            if not head and not self.headers.get("Range") and any(upstream.startswith(UPSTREAMS[key] + "/") for key in ("mcp", "live")):
+                headers["Accept-Encoding"] = "gzip"
             if self.headers.get("Range"): headers["Range"] = self.headers["Range"]
             status, info, raw = self.upstream(upstream, headers, head)
             self.server.proxy_results[upstream] = {"status": status, "kind": "transport" if info.get("X-Glance-Proxy-Error") else "object_error" if info.get("X-Glance-Object-Error") else "http", "error": info.get("X-Glance-Proxy-Error") or info.get("X-Glance-Object-Error")}
