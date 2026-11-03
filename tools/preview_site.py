@@ -1,6 +1,8 @@
 """Serve the actual complete artifact, with only a read-only status proxy."""
 import argparse
 import gzip
+import errno
+import socket
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from io import BytesIO
@@ -75,11 +77,27 @@ class Preview(SimpleHTTPRequestHandler):
         else: super().send_error(code, message, explain)
 
 
+class PreviewServer(ThreadingHTTPServer):
+    # Windows otherwise permits two previews to share the same address.
+    allow_reuse_address = False
+
+    def server_bind(self):
+        if hasattr(socket, 'SO_EXCLUSIVEADDRUSE'):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+        super().server_bind()
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--host', default='127.0.0.1'); parser.add_argument('--port', type=int, default=4321)
+    parser.add_argument('--host', default='127.0.0.1'); parser.add_argument('--port', type=int, default=None, help='listen port (default: 4321, or an available port when busy)')
     args = parser.parse_args()
-    server = ThreadingHTTPServer((args.host, args.port), partial(Preview, directory=str(ROOT)))
+    handler = partial(Preview, directory=str(ROOT))
+    try:
+        server = PreviewServer((args.host, 4321 if args.port is None else args.port), handler)
+    except OSError as error:
+        if args.port is not None or (error.errno != errno.EADDRINUSE and getattr(error, 'winerror', None) != 10048):
+            raise
+        server = PreviewServer((args.host, 0), handler)
     server.daemon_threads = True
     print('Preview: http://' + args.host + ':' + str(server.server_port), flush=True)
     server.serve_forever()
