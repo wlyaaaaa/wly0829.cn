@@ -215,9 +215,11 @@ class VisitorTests(unittest.TestCase):
                 records = query.sls_logs(args, start, end)
             self.assertEqual([record["path"] for record in records], ["/_v.gif", "/_v.gif"])
             expected = base + " | SELECT * WHERE regexp_like(request_uri, '(?i)x-cv-session(?:=|%3d)[A-Za-z0-9-]+|x-event(?:=|%3d)entry') LIMIT 10000" if cv else base + ' AND (request_uri: "/_v.gif" OR request_uri: "%2F_v.gif")' if deep_read else base
+            if deep_read:
+                expected += " | SELECT * ORDER BY __time__ ASC, request_id ASC LIMIT 0, 10000"
             self.assertEqual(json.loads(cloud.call_args.args[0][-1]),
                 {"from": int(start.timestamp()), "to": int(end.timestamp()), "query": expected,
-                 "line": 10000 if cv else 100, "offset": 0, "reverse": False})
+                 "line": 10000 if cv else 0 if deep_read else 100, "offset": 0, "reverse": False})
             cloud.assert_called_once()
             self.assertEqual(cloud.call_args.kwargs, {"timeout": 25, "attempts": 1} if deep_read else {})
         args.deep_read = True
@@ -225,6 +227,37 @@ class VisitorTests(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 query.sls_logs(args, start, end)
         self.assertEqual(cloud.call_count, 2)
+
+    def test_deep_read_sql_pages_keep_full_backlog_and_reject_partial_results(self):
+        args = SimpleNamespace(aliyun="aliyun", profile="website-images", sls_project="oss-log-test",
+                               sls_logstore="oss-log-store", deep_read=True)
+        start = datetime(2026, 10, 12, 10, 28, 6, tzinfo=query.TZ)
+        end = start + timedelta(days=3, hours=20)
+        full = [{**self.sls_row(), "request_id": f"row-{i:05d}"} for i in range(10000)]
+        tail = [{**self.sls_row(), "request_id": "row-10000"}]
+        def page(rows, progress="Complete"):
+            return json.dumps({"meta": {"count": len(rows), "progress": progress}, "data": rows})
+        complete = page(full)
+        cases = (("retry_tail", [complete, query.CloudCommandError("连接中断", "fixture EOF"), page(tail)], True),
+                 ("incomplete_tail", [complete, page(tail, "Incomplete"), page(tail, "Incomplete")], False))
+        for name, responses, succeeds in cases:
+            with self.subTest(case=name), patch.object(query, "cli_run", side_effect=responses) as cloud, patch.object(query.time, "sleep"):
+                if succeeds:
+                    records = query.sls_logs(args, start, end)
+                    self.assertEqual([row["identity"][1] for row in records],
+                                     [row["request_id"] for row in full + tail])
+                else:
+                    with self.assertRaisesRegex(RuntimeError, "SLS 查询未完成"):
+                        query.sls_logs(args, start, end)
+                bodies = [json.loads(call.args[0][-1]) for call in cloud.call_args_list]
+                self.assertEqual(len(bodies), 3)
+                for body, offset, call in zip(bodies, (0, 10000, 10000), cloud.call_args_list):
+                    self.assertEqual((body["from"], body["to"], body["line"], body["offset"]),
+                                     (int(start.timestamp()), int(end.timestamp()), 0, 0))
+                    self.assertTrue(body["query"].endswith(
+                        f" | SELECT * ORDER BY __time__ ASC, request_id ASC LIMIT {offset}, 10000"))
+                    self.assertIn('request_uri: "/_v.gif" OR request_uri: "%2F_v.gif"', body["query"])
+                    self.assertEqual(call.kwargs, {"timeout": 25, "attempts": 1})
 
     def test_sls_cv_legacy_entry_rechecks_all_beacons(self):
         args = SimpleNamespace(aliyun="aliyun", profile="website-images", sls_project="oss-log-test", sls_logstore="oss-log-store", cv=True)

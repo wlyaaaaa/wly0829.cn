@@ -353,18 +353,22 @@ def sls_logs(args, start, end, legacy_fallback=False):
     if not args.sls_project:
         raise ValueError("SLS 项目未配置；请指定 --sls-project")
     cv_query = getattr(args, "cv", False) and not legacy_fallback
-    records, offset, page_size = [], 0, 10000 if cv_query else 100
-    search = f"__topic__:oss_access_log AND bucket:{SOURCE}"
     deep_read = getattr(args, "deep_read", False)
+    records, offset, page_size = [], 0, 10000 if cv_query or deep_read else 100
+    search = f"__topic__:oss_access_log AND bucket:{SOURCE}"
     if cv_query:
         # 所有现代 /cv 信标都有非空访问编号；旧版入口信标用于触发完整回查。
         search += " | SELECT * WHERE regexp_like(request_uri, '(?i)x-cv-session(?:=|%3d)[A-Za-z0-9-]+|x-event(?:=|%3d)entry') LIMIT 10000"
     elif deep_read or legacy_fallback:
         search += ' AND (request_uri: "/_v.gif" OR request_uri: "%2F_v.gif")'
     while True:
+        # 原始查询每页最多 100 条；SQL 大页减少中断后补查积压的逐页开销。
+        page_query = (search + f" | SELECT * ORDER BY __time__ ASC, request_id ASC LIMIT {offset}, {page_size}"
+                      if deep_read and not cv_query else search)
         body = {"from": int(start.timestamp()), "to": int(end.timestamp()),
-                "query": search,
-                "line": page_size, "offset": offset, "reverse": False}
+                "query": page_query,
+                "line": 0 if deep_read and not cv_query else page_size,
+                "offset": 0 if deep_read and not cv_query else offset, "reverse": False}
         command = [args.aliyun, "sls", "GetLogsV2", "--project", args.sls_project,
                    "--logstore", args.sls_logstore, "--region", "cn-shanghai",
                    "--endpoint", "cn-shanghai.log.aliyuncs.com", "--read-timeout", "20", "--connect-timeout", "10",
