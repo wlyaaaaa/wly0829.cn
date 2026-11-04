@@ -129,9 +129,9 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "这 ([\\d,]+) 个个人技能",
-      "observed_at": "2026-10-31T13:55:31+08:00",
-      "checked_at": "2026-10-31T13:55:31+08:00",
-      "source_observed_at": "2026-10-31T13:55:31+08:00",
+      "observed_at": "2026-11-04T08:35:34+08:00",
+      "checked_at": "2026-11-04T08:35:34+08:00",
+      "source_observed_at": "2026-11-04T08:35:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read"
     },
@@ -240,10 +240,10 @@
       "field": "screens[0].text",
       "measurement_scope": "同一无profile pwsh进程，Stopwatch依次包围2次正式Inspect -Json，确认两次通过；取算术平均并按AwayFromZero保留1位小数，单位秒；不包括启动pwsh进程的时间。",
       "scope_status": "verified",
-      "observed_at": "2026-10-31T13:55:32+08:00",
+      "observed_at": "2026-11-04T08:35:35+08:00",
       "known_gap": "0.6秒为10月10日两样本平均后的近似数；本轮相同口径受缓存和负载影响。不是任何环境的一次核验保证；各处旧0.6需同口径同步。",
-      "checked_at": "2026-10-31T13:55:32+08:00",
-      "source_observed_at": "2026-10-31T13:55:32+08:00",
+      "checked_at": "2026-11-04T08:35:35+08:00",
+      "source_observed_at": "2026-11-04T08:35:35+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read"
     },
@@ -957,11 +957,11 @@
       "scope_status": "verified",
       "measurement_scope": "catalog.sqlite3 URI mode=ro；media 表当前所有条目，分别过滤实际 media_type=image/video/audio；只输出单行计数，不输出目录/标签/正文。",
       "known_gap": "展示正文经 src/typeset/engine/content.py 的 bound_json 从 scripts/how-demo-data.json stories[0].detail_screens[0].text 展开；raw page.json 仅有占位引用。重取器未展开前不得声称实际展示定位成功；音频总数不等于全部为录音。",
-      "checked_at": "2026-10-31T09:25:55+08:00",
-      "source_observed_at": "2026-10-31T09:25:55+08:00",
+      "checked_at": "2026-11-04T08:35:34+08:00",
+      "source_observed_at": "2026-11-04T08:35:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-31T09:25:55+08:00"
+      "observed_at": "2026-11-04T08:35:34+08:00"
     },
     {
       "id": "how-n-media-2",
@@ -990,11 +990,11 @@
       "scope_status": "verified",
       "measurement_scope": "catalog.sqlite3 URI mode=ro；media 表当前所有条目，分别过滤实际 media_type=image/video/audio；只输出单行计数，不输出目录/标签/正文。",
       "known_gap": "展示正文经 src/typeset/engine/content.py 的 bound_json 从 scripts/how-demo-data.json stories[0].detail_screens[0].text 展开；raw page.json 仅有占位引用。重取器未展开前不得声称实际展示定位成功；音频总数不等于全部为录音。",
-      "checked_at": "2026-10-31T09:25:55+08:00",
-      "source_observed_at": "2026-10-31T09:25:55+08:00",
+      "checked_at": "2026-11-04T08:35:34+08:00",
+      "source_observed_at": "2026-11-04T08:35:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-31T09:25:55+08:00"
+      "observed_at": "2026-11-04T08:35:34+08:00"
     },
     {
       "id": "how-n-media-3",
@@ -1170,7 +1170,7 @@
       "current_value": "30",
       "as_of": "2026-09-28",
       "category": "人工",
-      "source_location": "E187 AGENTS.md 第 15–71 行逐条数出，与约法页 n-clauses 同一口径",
+      "source_location": "E:/.agents/releases/E372/AGENTS.md 与同版 rules-catalog.json；本批现场计数",
       "retrieve": {
         "kind": "manual",
         "instructions": "正式 Inspect 核验后按同版约法标题与规则目录现数；不以候选源码代替活动规则。"
@@ -1187,11 +1187,11 @@
       ],
       "manual_reason": "judgment",
       "manual_route": "先运行正式 E 活动规则 Inspect，只有通过才读取回执指定的同版 AGENTS.md 和 rules-catalog.json；按约法 L 标题数、约法三级分组标题数、除 agents_root_rules 外的 primary 主题清单逐项核对，排除兼容别名和入口模板。无法核验活动版时保留原日期并回报 Unknown，不读候选源码代替。",
-      "checked_at": "2026-10-30T16:03:19.304841+08:00",
-      "source_observed_at": "2026-10-30T15:43:59.031903+08:00",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:37:37+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T15:43:59.031903+08:00"
+      "observed_at": "2026-11-04T10:37:37+08:00"
     },
     {
       "id": "rules-home-n-groups-0",
@@ -1201,7 +1201,7 @@
       "current_value": "10",
       "as_of": "2026-09-28",
       "category": "人工",
-      "source_location": "E187 AGENTS.md 第 13–69 行的 10 个 ### 标题；组名取自约法页第 1 屏链接，脚本断言 10 个",
+      "source_location": "E:/.agents/releases/E372/AGENTS.md 与同版 rules-catalog.json；本批现场计数",
       "retrieve": {
         "kind": "manual",
         "instructions": "正式 Inspect 核验后按同版约法标题与规则目录现数；不以候选源码代替活动规则。"
@@ -1218,11 +1218,11 @@
       ],
       "manual_reason": "judgment",
       "manual_route": "先运行正式 E 活动规则 Inspect，只有通过才读取回执指定的同版 AGENTS.md 和 rules-catalog.json；按约法 L 标题数、约法三级分组标题数、除 agents_root_rules 外的 primary 主题清单逐项核对，排除兼容别名和入口模板。无法核验活动版时保留原日期并回报 Unknown，不读候选源码代替。",
-      "checked_at": "2026-10-30T16:03:19.304841+08:00",
-      "source_observed_at": "2026-10-30T15:43:59.031903+08:00",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:37:37+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T15:43:59.031903+08:00"
+      "observed_at": "2026-11-04T10:37:37+08:00"
     },
     {
       "id": "rules-home-n-topics-0",
@@ -1232,7 +1232,7 @@
       "current_value": "10",
       "as_of": "2026-09-28",
       "category": "人工",
-      "source_location": "E187 rules-catalog.json 共 11 个文档，除 AGENTS.md 外 10 个；与 AGENTS.md 第 85–96 行“细则在哪里”表 10 行、b1 下 10 个 rule-* 目录一致",
+      "source_location": "E:/.agents/releases/E372/AGENTS.md 与同版 rules-catalog.json；本批现场计数",
       "retrieve": {
         "kind": "manual",
         "instructions": "正式 Inspect 核验后按同版约法标题与规则目录现数；不以候选源码代替活动规则。"
@@ -1250,11 +1250,11 @@
       ],
       "manual_reason": "judgment",
       "manual_route": "先运行正式 E 活动规则 Inspect，只有通过才读取回执指定的同版 AGENTS.md 和 rules-catalog.json；按约法 L 标题数、约法三级分组标题数、除 agents_root_rules 外的 primary 主题清单逐项核对，排除兼容别名和入口模板。无法核验活动版时保留原日期并回报 Unknown，不读候选源码代替。",
-      "checked_at": "2026-10-30T16:03:19.304841+08:00",
-      "source_observed_at": "2026-10-30T15:43:59.031903+08:00",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:37:37+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T15:43:59.031903+08:00"
+      "observed_at": "2026-11-04T10:37:37+08:00"
     },
     {
       "id": "proxyclean-n-layers-0",
@@ -1576,11 +1576,11 @@
       "page_pattern": "([\\d,]+(?:\\.\\d+)?)\\ 套｜编辑主题，Typora\\ 现在用的就是它（已核对\\ T",
       "scope_status": "verified",
       "measurement_scope": "源项目唯一 Verdant Mint 编辑主题；核对 Typora profile.data 所选主题及两份安装 CSS 存在；套数不代表安装文件与源仓库当前版本一致，只返回套数。",
-      "checked_at": "2026-10-30T11:06:12+08:00",
-      "source_observed_at": "2026-10-30T11:06:12+08:00",
+      "checked_at": "2026-11-04T08:35:35+08:00",
+      "source_observed_at": "2026-11-04T08:35:35+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:12+08:00"
+      "observed_at": "2026-11-04T08:35:35+08:00"
     },
     {
       "id": "typora-theme-pack-n-styles-0",
@@ -1613,11 +1613,11 @@
       "page_pattern": "([\\d,]+(?:\\.\\d+)?)\\ 种｜PDF\\ 样式：原版、个人、公司，同一份文稿选一种导",
       "scope_status": "verified",
       "measurement_scope": "静态读取 tools/export_pdf.py 的 MODES 元组，统计可选 PDF 样式；不运行转换、安装或菜单配置。",
-      "checked_at": "2026-10-30T11:06:12+08:00",
-      "source_observed_at": "2026-10-30T11:06:12+08:00",
+      "checked_at": "2026-11-04T08:35:35+08:00",
+      "source_observed_at": "2026-11-04T08:35:35+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:12+08:00"
+      "observed_at": "2026-11-04T08:35:35+08:00"
     },
     {
       "id": "typora-theme-pack-n-sample-pages-0",
@@ -1706,11 +1706,11 @@
       "page_pattern": "([\\d,]+(?:\\.\\d+)?)\\ 次｜提交",
       "measurement_scope": "指定源仓库git rev-list --count HEAD：全部可达提交，含合并提交，不筛日期或路径，单位次。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:06:12+08:00",
-      "source_observed_at": "2026-10-30T11:06:12+08:00",
+      "checked_at": "2026-11-04T08:35:35+08:00",
+      "source_observed_at": "2026-11-04T08:35:35+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:12+08:00"
+      "observed_at": "2026-11-04T08:35:35+08:00"
     },
     {
       "id": "typora-theme-pack-n-code-lines-0",
@@ -1977,11 +1977,11 @@
       "measurement_scope": "读取 origin/main 固定提交的 git archive 内存快照；config 仅AST字面值，动画仅 scene_base.html case 唯一名称，tests/ 下 def test 定义数（不执行、不声称通过），非tests/ Python按LF行数；提交含合并提交。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "checked_at": "2026-10-30T11:06:13+08:00",
-      "source_observed_at": "2026-10-30T11:06:13+08:00",
+      "checked_at": "2026-11-04T08:35:36+08:00",
+      "source_observed_at": "2026-11-04T08:35:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:13+08:00"
+      "observed_at": "2026-11-04T08:35:36+08:00"
     },
     {
       "id": "video-scaffold-n-canvas-1",
@@ -2014,11 +2014,11 @@
       "measurement_scope": "读取 origin/main 固定提交的 git archive 内存快照；config 仅AST字面值，动画仅 scene_base.html case 唯一名称，tests/ 下 def test 定义数（不执行、不声称通过），非tests/ Python按LF行数；提交含合并提交。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "checked_at": "2026-10-30T11:06:13+08:00",
-      "source_observed_at": "2026-10-30T11:06:13+08:00",
+      "checked_at": "2026-11-04T08:35:36+08:00",
+      "source_observed_at": "2026-11-04T08:35:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:13+08:00"
+      "observed_at": "2026-11-04T08:35:36+08:00"
     },
     {
       "id": "video-scaffold-n-canvas-2",
@@ -2051,11 +2051,11 @@
       "measurement_scope": "读取 origin/main 固定提交的 git archive 内存快照；config 仅AST字面值，动画仅 scene_base.html case 唯一名称，tests/ 下 def test 定义数（不执行、不声称通过），非tests/ Python按LF行数；提交含合并提交。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "checked_at": "2026-10-30T11:06:13+08:00",
-      "source_observed_at": "2026-10-30T11:06:13+08:00",
+      "checked_at": "2026-11-04T08:35:36+08:00",
+      "source_observed_at": "2026-11-04T08:35:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:13+08:00"
+      "observed_at": "2026-11-04T08:35:36+08:00"
     },
     {
       "id": "video-scaffold-n-animations-0",
@@ -2090,11 +2090,11 @@
       "measurement_scope": "读取 origin/main 固定提交的 git archive 内存快照；config 仅AST字面值，动画仅 scene_base.html case 唯一名称，tests/ 下 def test 定义数（不执行、不声称通过），非tests/ Python按LF行数；提交含合并提交。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "checked_at": "2026-10-30T11:06:13+08:00",
-      "source_observed_at": "2026-10-30T11:06:13+08:00",
+      "checked_at": "2026-11-04T08:35:36+08:00",
+      "source_observed_at": "2026-11-04T08:35:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:13+08:00"
+      "observed_at": "2026-11-04T08:35:36+08:00"
     },
     {
       "id": "video-scaffold-n-videos-0",
@@ -2152,11 +2152,11 @@
       "measurement_scope": "读取 origin/main 固定提交的 git archive 内存快照；config 仅AST字面值，动画仅 scene_base.html case 唯一名称，tests/ 下 def test 定义数（不执行、不声称通过），非tests/ Python按LF行数；提交含合并提交。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "checked_at": "2026-10-30T11:06:13+08:00",
-      "source_observed_at": "2026-10-30T11:06:13+08:00",
+      "checked_at": "2026-11-04T08:35:36+08:00",
+      "source_observed_at": "2026-11-04T08:35:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:13+08:00"
+      "observed_at": "2026-11-04T08:35:36+08:00"
     },
     {
       "id": "video-scaffold-n-lines-0",
@@ -3084,7 +3084,7 @@
       "source_observed_at_pointer": [
         "created_utc"
       ],
-      "checked_at": "2026-10-30T11:06:13+08:00",
+      "checked_at": "2026-11-04T08:35:36+08:00",
       "source_observed_at": "2026-10-26T02:35:54.198426+00:00",
       "source_coverage_end": null,
       "observed_at": "2026-10-26T02:35:54.198426+00:00"
@@ -3121,10 +3121,10 @@
       "measurement_scope": "manifest.files[].bytes求和，/1024 四舍五入到整数 KB。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "source_observed_at": "2026-10-30T11:06:14+08:00",
+      "source_observed_at": "2026-11-04T08:35:36+08:00",
       "observation_basis": "live_read",
-      "checked_at": "2026-10-30T11:06:14+08:00",
-      "observed_at": "2026-10-30T11:06:14+08:00",
+      "checked_at": "2026-11-04T08:35:36+08:00",
+      "observed_at": "2026-11-04T08:35:36+08:00",
       "source_coverage_end": null
     },
     {
@@ -3156,11 +3156,11 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "^([\\d,]+) 处｜",
-      "checked_at": "2026-10-30T11:06:14+08:00",
-      "source_observed_at": "2026-10-30T11:06:14+08:00",
+      "checked_at": "2026-11-04T08:35:36+08:00",
+      "source_observed_at": "2026-11-04T08:35:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:14+08:00"
+      "observed_at": "2026-11-04T08:35:36+08:00"
     },
     {
       "id": "steam-millennium-config-backup-n-plugins-0",
@@ -3191,11 +3191,11 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "^([\\d,]+) 个插件｜",
-      "checked_at": "2026-10-30T11:06:14+08:00",
-      "source_observed_at": "2026-10-30T11:06:14+08:00",
+      "checked_at": "2026-11-04T08:35:36+08:00",
+      "source_observed_at": "2026-11-04T08:35:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:14+08:00"
+      "observed_at": "2026-11-04T08:35:36+08:00"
     },
     {
       "id": "steam-millennium-config-backup-n-plugins-1",
@@ -3228,11 +3228,11 @@
       "measurement_scope": "当前快照themes直接子目录数。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "checked_at": "2026-10-30T11:06:14+08:00",
-      "source_observed_at": "2026-10-30T11:06:14+08:00",
+      "checked_at": "2026-11-04T08:35:36+08:00",
+      "source_observed_at": "2026-11-04T08:35:36+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:14+08:00"
+      "observed_at": "2026-11-04T08:35:36+08:00"
     },
     {
       "id": "steam-millennium-config-backup-n-enabled-0",
@@ -5602,11 +5602,11 @@
       "measurement_scope": "core_recovery.json backup_media的G/H键数，备份配置层数，不是当天复制成功数。",
       "scope_evidence": "本轮读取来源与源码；见pc-findings.md",
       "field": "screens[0].text",
-      "checked_at": "2026-10-30T11:06:15+08:00",
-      "source_observed_at": "2026-10-30T11:06:15+08:00",
+      "checked_at": "2026-11-04T08:35:37+08:00",
+      "source_observed_at": "2026-11-04T08:35:37+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:15+08:00"
+      "observed_at": "2026-11-04T08:35:37+08:00"
     },
     {
       "id": "pcconfig-text-0-164",
@@ -6016,11 +6016,11 @@
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
       "measurement_scope": "sources.psd1九组来源数组之和14+5+9+8+11+16+5+1+1=70；不含系统导出、对话历史、排除/必需策略。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:06:16+08:00",
-      "source_observed_at": "2026-10-30T11:06:16+08:00",
+      "checked_at": "2026-11-04T08:35:38+08:00",
+      "source_observed_at": "2026-11-04T08:35:38+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:16+08:00"
+      "observed_at": "2026-11-04T08:35:38+08:00"
     },
     {
       "id": "devconfig-backup-text-0",
@@ -6252,11 +6252,11 @@
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
       "measurement_scope": "四个明确登记DevConfig/WeChat计划任务中State非Disabled的数量；不计已停用补传监控，不补跑任何任务。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:06:17+08:00",
-      "source_observed_at": "2026-10-30T11:06:17+08:00",
+      "checked_at": "2026-11-04T08:35:39+08:00",
+      "source_observed_at": "2026-11-04T08:35:39+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:17+08:00"
+      "observed_at": "2026-11-04T08:35:39+08:00"
     },
     {
       "id": "devconfig-backup-n-config-files-0-184",
@@ -6475,11 +6475,11 @@
       "measurement_scope": "现存 window.json 数，与原页面 888 段口径一致，包含 826 完成、62 未完成且零消息窗口；不把它改成仅完成窗口数。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "checked_at": "2026-10-30T11:06:24+08:00",
-      "source_observed_at": "2026-10-30T11:06:24+08:00",
+      "checked_at": "2026-11-04T08:35:38+08:00",
+      "source_observed_at": "2026-11-04T08:35:38+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:24+08:00"
+      "observed_at": "2026-11-04T08:35:38+08:00"
     },
     {
       "id": "wechatdirect-n-reading-runs-1",
@@ -6512,11 +6512,11 @@
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "collection_complete=true 的 window.json message_count 求和；非完成窗口必须零消息，否则报 scope changed。已与 914 个 page-*.json messages 数组长度总和 11541 交叉核对；不输出正文。",
-      "checked_at": "2026-10-30T11:06:24+08:00",
-      "source_observed_at": "2026-10-30T11:06:24+08:00",
+      "checked_at": "2026-11-04T08:35:38+08:00",
+      "source_observed_at": "2026-11-04T08:35:38+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:24+08:00"
+      "observed_at": "2026-11-04T08:35:38+08:00"
     },
     {
       "id": "wechatdirect-n-reading-runs-2",
@@ -6819,18 +6819,18 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "(?m)^\\| \\*\\*([\\d,]+) 个\\*\\* \\|",
-      "checked_at": "2026-10-30T11:06:19+08:00",
-      "source_observed_at": "2026-10-30T11:06:19+08:00",
+      "checked_at": "2026-11-04T08:35:39+08:00",
+      "source_observed_at": "2026-11-04T08:35:39+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:19+08:00"
+      "observed_at": "2026-11-04T08:35:39+08:00"
     },
     {
       "id": "projects-home-n-common-0",
       "page": "projects-home",
       "screen": "projects-home-01",
       "label": "常用项目页数",
-      "current_value": 24,
+      "current_value": 23,
       "as_of": "2026-10-10",
       "category": "文件个数",
       "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
@@ -6856,18 +6856,18 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "(?m)^\\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*([\\d,]+) 个\\*\\* \\|",
-      "checked_at": "2026-10-30T11:06:19+08:00",
-      "source_observed_at": "2026-10-30T11:06:19+08:00",
+      "checked_at": "2026-11-04T08:35:39+08:00",
+      "source_observed_at": "2026-11-04T08:35:39+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:19+08:00"
+      "observed_at": "2026-11-04T08:35:39+08:00"
     },
     {
       "id": "projects-home-n-occasional-0",
       "page": "projects-home",
       "screen": "projects-home-01",
       "label": "偶尔用项目页数",
-      "current_value": 7,
+      "current_value": 6,
       "as_of": "2026-10-10",
       "category": "文件个数",
       "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
@@ -6893,18 +6893,18 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "(?m)^\\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*([\\d,]+) 个\\*\\* \\|",
-      "checked_at": "2026-10-30T11:06:21+08:00",
-      "source_observed_at": "2026-10-30T11:06:21+08:00",
+      "checked_at": "2026-11-04T08:35:39+08:00",
+      "source_observed_at": "2026-11-04T08:35:39+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:21+08:00"
+      "observed_at": "2026-11-04T08:35:39+08:00"
     },
     {
       "id": "projects-home-n-frozen-0",
       "page": "projects-home",
       "screen": "projects-home-01",
       "label": "冻结项目页数",
-      "current_value": 6,
+      "current_value": 8,
       "as_of": "2026-10-10",
       "category": "文件个数",
       "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
@@ -6928,11 +6928,11 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "(?m)^\\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*([\\d,]+) 个\\*\\* \\|",
-      "checked_at": "2026-10-30T11:06:21+08:00",
-      "source_observed_at": "2026-10-30T11:06:21+08:00",
+      "checked_at": "2026-11-04T08:35:39+08:00",
+      "source_observed_at": "2026-11-04T08:35:39+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:21+08:00"
+      "observed_at": "2026-11-04T08:35:39+08:00"
     },
     {
       "id": "projects-home-n-public-0",
@@ -6965,11 +6965,11 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "公开 \\*\\*([\\d,]+) 个\\*\\*",
-      "checked_at": "2026-10-30T11:06:21+08:00",
-      "source_observed_at": "2026-10-30T11:06:21+08:00",
+      "checked_at": "2026-11-04T08:35:39+08:00",
+      "source_observed_at": "2026-11-04T08:35:39+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:21+08:00"
+      "observed_at": "2026-11-04T08:35:39+08:00"
     },
     {
       "id": "projects-home-n-private-0",
@@ -7002,18 +7002,18 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "私有 \\*\\*([\\d,]+) 个\\*\\*",
-      "checked_at": "2026-10-30T11:06:21+08:00",
-      "source_observed_at": "2026-10-30T11:06:21+08:00",
+      "checked_at": "2026-11-04T08:35:39+08:00",
+      "source_observed_at": "2026-11-04T08:35:39+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:21+08:00"
+      "observed_at": "2026-11-04T08:35:39+08:00"
     },
     {
       "id": "projects-home-n-in-use-0",
       "page": "projects-home",
       "screen": "projects-home-01",
       "label": "非冻结项目页数",
-      "current_value": 31,
+      "current_value": 29,
       "as_of": "2026-10-10",
       "category": "文件个数",
       "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
@@ -7037,11 +7037,11 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "\\*\\*([\\d,]+) 个在用的项目",
-      "checked_at": "2026-10-30T11:06:21+08:00",
-      "source_observed_at": "2026-10-30T11:06:21+08:00",
+      "checked_at": "2026-11-04T08:35:40+08:00",
+      "source_observed_at": "2026-11-04T08:35:40+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:21+08:00"
+      "observed_at": "2026-11-04T08:35:40+08:00"
     },
     {
       "id": "projects-home-n-features-0",
@@ -7068,18 +7068,18 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "功能 \\*\\*([\\d,]+) 条\\*\\*",
-      "checked_at": "2026-10-30T16:03:19.304841+08:00",
-      "source_observed_at": "2026-10-30T16:03:19.304841+08:00",
+      "checked_at": "2026-11-04T08:35:40+08:00",
+      "source_observed_at": "2026-11-04T08:35:40+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T16:03:19.304841+08:00"
+      "observed_at": "2026-11-04T08:35:40+08:00"
     },
     {
       "id": "projects-home-n-group-sizes-0",
       "page": "projects-home",
       "screen": "projects-home-01",
       "label": "让 AI 守规矩、用对工具项目数",
-      "current_value": 3,
+      "current_value": 2,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
       "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
@@ -7102,11 +7102,11 @@
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
       "page_pattern": "〔让\\ AI\\ 守规矩、用对工具〕([\\d,]+) 个项目",
-      "checked_at": "2026-10-30T11:06:22+08:00",
-      "source_observed_at": "2026-10-30T11:06:22+08:00",
+      "checked_at": "2026-11-04T08:35:40+08:00",
+      "source_observed_at": "2026-11-04T08:35:40+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:22+08:00"
+      "observed_at": "2026-11-04T08:35:40+08:00"
     },
     {
       "id": "projects-home-n-group-sizes-1",
@@ -7136,11 +7136,11 @@
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
       "page_pattern": "〔让\\ AI\\ 管好秘密〕([\\d,]+) 个项目",
-      "checked_at": "2026-10-30T11:06:22+08:00",
-      "source_observed_at": "2026-10-30T11:06:22+08:00",
+      "checked_at": "2026-11-04T08:35:40+08:00",
+      "source_observed_at": "2026-11-04T08:35:40+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:22+08:00"
+      "observed_at": "2026-11-04T08:35:40+08:00"
     },
     {
       "id": "projects-home-n-group-sizes-2",
@@ -7170,11 +7170,11 @@
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
       "page_pattern": "〔让\\ AI\\ 管好备份和恢复〕([\\d,]+) 个项目",
-      "checked_at": "2026-10-30T11:06:22+08:00",
-      "source_observed_at": "2026-10-30T11:06:22+08:00",
+      "checked_at": "2026-11-04T08:35:40+08:00",
+      "source_observed_at": "2026-11-04T08:35:40+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:22+08:00"
+      "observed_at": "2026-11-04T08:35:40+08:00"
     },
     {
       "id": "projects-home-n-group-sizes-3",
@@ -7204,11 +7204,11 @@
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
       "page_pattern": "〔让电脑顺手、状态看得见〕([\\d,]+) 个项目",
-      "checked_at": "2026-10-30T11:06:22+08:00",
-      "source_observed_at": "2026-10-30T11:06:22+08:00",
+      "checked_at": "2026-11-04T08:35:40+08:00",
+      "source_observed_at": "2026-11-04T08:35:40+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:22+08:00"
+      "observed_at": "2026-11-04T08:35:40+08:00"
     },
     {
       "id": "projects-home-n-group-sizes-4",
@@ -7238,11 +7238,11 @@
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
       "page_pattern": "〔人不在电脑前也能办事〕([\\d,]+) 个项目",
-      "checked_at": "2026-10-30T11:06:22+08:00",
-      "source_observed_at": "2026-10-30T11:06:22+08:00",
+      "checked_at": "2026-11-04T08:35:40+08:00",
+      "source_observed_at": "2026-11-04T08:35:40+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:22+08:00"
+      "observed_at": "2026-11-04T08:35:40+08:00"
     },
     {
       "id": "projects-home-n-group-sizes-5",
@@ -7272,11 +7272,11 @@
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
       "page_pattern": "〔让\\ AI\\ 懂我〕([\\d,]+) 个项目",
-      "checked_at": "2026-10-30T11:06:23+08:00",
-      "source_observed_at": "2026-10-30T11:06:23+08:00",
+      "checked_at": "2026-11-04T08:35:40+08:00",
+      "source_observed_at": "2026-11-04T08:35:40+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:23+08:00"
+      "observed_at": "2026-11-04T08:35:40+08:00"
     },
     {
       "id": "projects-home-n-group-sizes-6",
@@ -7306,18 +7306,18 @@
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
       "page_pattern": "〔让\\ AI\\ 读懂我的材料〕([\\d,]+) 个项目",
-      "checked_at": "2026-10-30T11:06:23+08:00",
-      "source_observed_at": "2026-10-30T11:06:23+08:00",
+      "checked_at": "2026-11-04T08:35:40+08:00",
+      "source_observed_at": "2026-11-04T08:35:40+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:23+08:00"
+      "observed_at": "2026-11-04T08:35:40+08:00"
     },
     {
       "id": "projects-home-n-group-sizes-7",
       "page": "projects-home",
       "screen": "projects-home-01",
       "label": "让 AI 帮我写和做项目数",
-      "current_value": 5,
+      "current_value": 4,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
       "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
@@ -7340,11 +7340,11 @@
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
       "page_pattern": "〔让\\ AI\\ 帮我写和做〕([\\d,]+) 个项目",
-      "checked_at": "2026-10-30T11:06:23+08:00",
-      "source_observed_at": "2026-10-30T11:06:23+08:00",
+      "checked_at": "2026-11-04T08:35:40+08:00",
+      "source_observed_at": "2026-11-04T08:35:40+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:23+08:00"
+      "observed_at": "2026-11-04T08:35:40+08:00"
     },
     {
       "id": "projects-home-n-group-sizes-8",
@@ -7385,7 +7385,7 @@
       "page": "projects-home",
       "screen": "projects-home-01",
       "label": "登记为在用的功能条数",
-      "current_value": 570,
+      "current_value": 520,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
       "source_location": "各项目registry.features[].status；本底值只写在备注，首屏不单列",
@@ -7401,18 +7401,18 @@
       "dynamic": true,
       "measurement_scope": "给定网页根project/frozen页registry.features条目筛status=在用；不含技能/规则页。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:06:23+08:00",
-      "source_observed_at": "2026-10-30T11:06:23+08:00",
+      "checked_at": "2026-11-04T08:35:41+08:00",
+      "source_observed_at": "2026-11-04T08:35:41+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:23+08:00"
+      "observed_at": "2026-11-04T08:35:41+08:00"
     },
     {
       "id": "projects-home-text-0-218",
       "page": "projects-home",
       "screen": "projects-home-01",
       "label": "登记为说不准的功能条数",
-      "current_value": 178,
+      "current_value": 162,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
       "source_location": "各项目registry.features[].status；本底值只写在备注，首屏不单列",
@@ -7428,18 +7428,18 @@
       "dynamic": true,
       "measurement_scope": "给定网页根project/frozen页registry.features条目筛status=说不准；不含技能/规则页。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:06:23+08:00",
-      "source_observed_at": "2026-10-30T11:06:23+08:00",
+      "checked_at": "2026-11-04T08:35:41+08:00",
+      "source_observed_at": "2026-11-04T08:35:41+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:23+08:00"
+      "observed_at": "2026-11-04T08:35:41+08:00"
     },
     {
       "id": "projects-home-text-0-219",
       "page": "projects-home",
       "screen": "projects-home-01",
       "label": "登记为已停用的功能条数",
-      "current_value": 118,
+      "current_value": 203,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
       "source_location": "各项目registry.features[].status；本底值只写在备注，首屏不单列",
@@ -7455,18 +7455,18 @@
       "dynamic": true,
       "measurement_scope": "给定网页根project/frozen页registry.features条目筛status=已停用；不含技能/规则页。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:06:23+08:00",
-      "source_observed_at": "2026-10-30T11:06:23+08:00",
+      "checked_at": "2026-11-04T08:35:41+08:00",
+      "source_observed_at": "2026-11-04T08:35:41+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:23+08:00"
+      "observed_at": "2026-11-04T08:35:41+08:00"
     },
     {
       "id": "projects-home-text-0-221",
       "page": "projects-home",
       "screen": "projects-home-01",
       "label": "登记为没用过的功能条数",
-      "current_value": 22,
+      "current_value": 17,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
       "source_location": "各项目registry.features[].status；本底值只写在备注，首屏不单列",
@@ -7482,18 +7482,18 @@
       "dynamic": true,
       "measurement_scope": "给定网页根project/frozen页registry.features条目筛status=没用过；不含技能/规则页。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:06:23+08:00",
-      "source_observed_at": "2026-10-30T11:06:23+08:00",
+      "checked_at": "2026-11-04T08:35:41+08:00",
+      "source_observed_at": "2026-11-04T08:35:41+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:23+08:00"
+      "observed_at": "2026-11-04T08:35:41+08:00"
     },
     {
       "id": "projects-home-text-0-222",
       "page": "projects-home",
       "screen": "projects-home-01",
       "label": "登记为待实施的功能条数",
-      "current_value": 7,
+      "current_value": 6,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
       "source_location": "各项目registry.features[].status；本底值只写在备注，首屏不单列",
@@ -7509,11 +7509,11 @@
       "dynamic": true,
       "measurement_scope": "给定网页根project/frozen页registry.features条目筛status=待实施；不含技能/规则页。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:06:24+08:00",
-      "source_observed_at": "2026-10-30T11:06:24+08:00",
+      "checked_at": "2026-11-04T08:35:41+08:00",
+      "source_observed_at": "2026-11-04T08:35:41+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:24+08:00"
+      "observed_at": "2026-11-04T08:35:41+08:00"
     },
     {
       "id": "timeaudit-n-hw-samples-0",
@@ -7658,11 +7658,11 @@
       "page_pattern": "\\*\\*([\\d,.]+) 张看板 ·",
       "measurement_scope": "6份主看板V2 elements中Panel/LibraryPanel合计80图；公开小看板另读grafana_provisioning/dashboards，不混进主看板分母。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T13:00:44+08:00",
-      "source_observed_at": "2026-10-30T13:00:44+08:00",
+      "checked_at": "2026-11-04T08:35:41+08:00",
+      "source_observed_at": "2026-11-04T08:35:41+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T13:00:44+08:00"
+      "observed_at": "2026-11-04T08:35:41+08:00"
     },
     {
       "id": "timeaudit-n-panels-1",
@@ -8261,11 +8261,11 @@
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
       "measurement_scope": "已安装上游20个tool注册+源server.py的ComputerContext/ReadDocument+启用maintenance.py的MaintenancePowerShell；去重名称计23。不输出工具参数或私人资料，不冒充本次两台实时tools/list实测。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:06:28+08:00",
-      "source_observed_at": "2026-10-30T11:06:28+08:00",
+      "checked_at": "2026-11-04T08:35:44+08:00",
+      "source_observed_at": "2026-11-04T08:35:44+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:28+08:00"
+      "observed_at": "2026-11-04T08:35:44+08:00"
     },
     {
       "id": "remote-control-n-entries-0",
@@ -8297,11 +8297,11 @@
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
       "measurement_scope": "主机registry.public_origin、副机registry.public_origin、已核对一致的fallback_public_origin三个不同已登记连接入口；不是三个独立基础设施或新的在线验收。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:06:28+08:00",
-      "source_observed_at": "2026-10-30T11:06:28+08:00",
+      "checked_at": "2026-11-04T08:35:44+08:00",
+      "source_observed_at": "2026-11-04T08:35:44+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:28+08:00"
+      "observed_at": "2026-11-04T08:35:44+08:00"
     },
     {
       "id": "remote-control-n-calls-0",
@@ -9526,11 +9526,11 @@
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "对当前catalog每行authority_locator指向的原件只读stat，合计字节数，十进制GB四舍五入到整数；任一原件缺失或不可读则失败，绝不把可读子集冒充总量。",
-      "checked_at": "2026-10-30T11:06:34+08:00",
-      "source_observed_at": "2026-10-30T11:06:34+08:00",
+      "checked_at": "2026-11-04T08:35:49+08:00",
+      "source_observed_at": "2026-11-04T08:35:49+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:34+08:00"
+      "observed_at": "2026-11-04T08:35:49+08:00"
     },
     {
       "id": "personal-media-n-phone-picks-0",
@@ -9560,11 +9560,11 @@
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "当前电脑侧手机恢复计划的非空NDJSON行数；该文件没有header，每行一项，与手机实际回写成功数无关。",
-      "checked_at": "2026-10-30T11:06:32+08:00",
-      "source_observed_at": "2026-10-30T11:06:32+08:00",
+      "checked_at": "2026-11-04T08:35:48+08:00",
+      "source_observed_at": "2026-11-04T08:35:48+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:32+08:00"
+      "observed_at": "2026-11-04T08:35:48+08:00"
     },
     {
       "id": "personal-media-n-writeback-0",
@@ -12249,11 +12249,11 @@
       "binding_verified_at": "2026-10-11T17:56:33+08:00",
       "measurement_scope": "requirements.txt的windows-mcp==完整版本字符串，整体比较0.8.7，不把小数段计数。已核对安装目录存在但不新跑连接验收。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:06:28+08:00",
-      "source_observed_at": "2026-10-30T11:06:28+08:00",
+      "checked_at": "2026-11-04T08:35:44+08:00",
+      "source_observed_at": "2026-11-04T08:35:44+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:28+08:00"
+      "observed_at": "2026-11-04T08:35:44+08:00"
     },
     {
       "id": "personal-materials-registration-as-of",
@@ -13090,10 +13090,10 @@
       "field": "screens[0].text",
       "page_pattern": "\\*\\*([\\d]+(?:\\.\\d+)?) 秒一刷",
       "observation_basis": "live_read",
-      "checked_at": "2026-10-30T11:06:55+08:00",
-      "source_observed_at": "2026-10-30T11:06:55+08:00",
+      "checked_at": "2026-11-04T08:35:57+08:00",
+      "source_observed_at": "2026-11-04T08:35:57+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:06:55+08:00"
+      "observed_at": "2026-11-04T08:35:57+08:00"
     },
     {
       "id": "pc-panel-hub-frames-20260927",
@@ -13178,11 +13178,11 @@
       "scope_status": "verified",
       "field": "screens[0].text",
       "page_pattern": "\\*\\*([\\d]+) 个自动任务",
-      "checked_at": "2026-10-30T11:06:57+08:00",
-      "source_observed_at": "2026-10-30T11:06:57+08:00",
+      "checked_at": "2026-11-04T08:35:59+08:00",
+      "source_observed_at": "2026-11-04T08:35:59+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:57+08:00"
+      "observed_at": "2026-11-04T08:35:59+08:00"
     },
     {
       "id": "pcconfig-cutoff-overview",
@@ -13563,9 +13563,9 @@
       "page_pattern": "^- \\*\\*([\\d,]+) 份\\*\\*　技能源码只有一份",
       "measurement_scope": "只核对personal-skill-supply.json所有install=true源码与发现目录逐项resolve一致，Claude技能目录resolve等于Codex发现目录；份数指同一套源码，不是目录根数。",
       "scope_status": "verified",
-      "observed_at": "2026-10-31T13:56:11+08:00",
-      "checked_at": "2026-10-31T13:56:11+08:00",
-      "source_observed_at": "2026-10-31T13:56:11+08:00",
+      "observed_at": "2026-11-04T08:35:58+08:00",
+      "checked_at": "2026-11-04T08:35:58+08:00",
+      "source_observed_at": "2026-11-04T08:35:58+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read"
     },
@@ -13593,10 +13593,10 @@
       "page_pattern": "这一版的 ([\\d,]+) 个文件",
       "measurement_scope": "同一通过的正式Inspect回执，分别统计verified_current.files、required_rule_paths、两个logical_id入口和rules_catalog；发布器输出14/11/2/1，不能只抄常量。",
       "scope_status": "verified",
-      "observed_at": "2026-10-31T13:55:32+08:00",
+      "observed_at": "2026-11-04T08:35:35+08:00",
       "refreshed_value": 14,
-      "checked_at": "2026-10-31T13:55:32+08:00",
-      "source_observed_at": "2026-10-31T13:55:32+08:00",
+      "checked_at": "2026-11-04T08:35:35+08:00",
+      "source_observed_at": "2026-11-04T08:35:35+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read"
     },
@@ -13624,10 +13624,10 @@
       "page_pattern": "个文件（([\\d,]+) 份规则",
       "measurement_scope": "同一通过的正式Inspect回执，分别统计verified_current.files、required_rule_paths、两个logical_id入口和rules_catalog；发布器输出14/11/2/1，不能只抄常量。",
       "scope_status": "verified",
-      "observed_at": "2026-10-31T13:55:32+08:00",
+      "observed_at": "2026-11-04T08:35:35+08:00",
       "refreshed_value": 11,
-      "checked_at": "2026-10-31T13:55:32+08:00",
-      "source_observed_at": "2026-10-31T13:55:32+08:00",
+      "checked_at": "2026-11-04T08:35:35+08:00",
+      "source_observed_at": "2026-11-04T08:35:35+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read"
     },
@@ -13655,10 +13655,10 @@
       "page_pattern": "份规则、([\\d,]+) 份入口",
       "measurement_scope": "同一通过的正式Inspect回执，分别统计verified_current.files、required_rule_paths、两个logical_id入口和rules_catalog；发布器输出14/11/2/1，不能只抄常量。",
       "scope_status": "verified",
-      "observed_at": "2026-10-31T13:55:32+08:00",
+      "observed_at": "2026-11-04T08:35:35+08:00",
       "refreshed_value": 2,
-      "checked_at": "2026-10-31T13:55:32+08:00",
-      "source_observed_at": "2026-10-31T13:55:32+08:00",
+      "checked_at": "2026-11-04T08:35:35+08:00",
+      "source_observed_at": "2026-11-04T08:35:35+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read"
     },
@@ -13686,10 +13686,10 @@
       "page_pattern": "份入口、([\\d,]+) 张目录",
       "measurement_scope": "同一通过的正式Inspect回执，分别统计verified_current.files、required_rule_paths、两个logical_id入口和rules_catalog；发布器输出14/11/2/1，不能只抄常量。",
       "scope_status": "verified",
-      "observed_at": "2026-10-31T13:55:32+08:00",
+      "observed_at": "2026-11-04T08:35:35+08:00",
       "refreshed_value": 1,
-      "checked_at": "2026-10-31T13:55:32+08:00",
-      "source_observed_at": "2026-10-31T13:55:32+08:00",
+      "checked_at": "2026-11-04T08:35:35+08:00",
+      "source_observed_at": "2026-11-04T08:35:35+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read"
     },
@@ -14788,11 +14788,11 @@
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "scripts/b2-live-runtime.js schedule常规60000毫秒延时换算分钟；资料授权将到期时early分支不改变此常规周期。",
-      "checked_at": "2026-10-30T11:06:59+08:00",
-      "source_observed_at": "2026-10-30T11:06:59+08:00",
+      "checked_at": "2026-11-04T08:36:01+08:00",
+      "source_observed_at": "2026-11-04T08:36:01+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:59+08:00"
+      "observed_at": "2026-11-04T08:36:01+08:00"
     },
     {
       "id": "wly0829-cn-projects",
@@ -14818,11 +14818,11 @@
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "本工作树config/panel-projects.json中enabled项目身份对应的无parent顶级project/frozen页；模块和冻结子页不算项目，不把计划数当已发表数。",
-      "checked_at": "2026-10-30T11:06:19+08:00",
-      "source_observed_at": "2026-10-30T11:06:19+08:00",
+      "checked_at": "2026-11-04T08:35:39+08:00",
+      "source_observed_at": "2026-11-04T08:35:39+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:19+08:00"
+      "observed_at": "2026-11-04T08:35:39+08:00"
     },
     {
       "id": "wly0829-cn-pages",
@@ -15144,11 +15144,11 @@
       "measurement_scope": "只统计产品已配置的原件E与备份G/H按drive去重的落点数，核对当前期望云候选计划仍存在；不声称每份副本当前全量完整或云端实时E2E验证通过。为匹配正文中文数字，“三”是location_count=3的显示值。",
       "source_location": "同页被注明数字记录",
       "category": "来源登记",
-      "checked_at": "2026-10-30T11:07:00+08:00",
-      "source_observed_at": "2026-10-30T11:07:00+08:00",
+      "checked_at": "2026-11-04T08:36:02+08:00",
+      "source_observed_at": "2026-11-04T08:36:02+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:00+08:00"
+      "observed_at": "2026-11-04T08:36:02+08:00"
     },
     {
       "id": "personal-media-firstscreen-asof",
@@ -15203,11 +15203,11 @@
       "measurement_scope": "输入schema中网站选定的contract_or_agreement和unilateral_statement两类；其他文书类型不计。",
       "category": "来源登记",
       "current_value": 2,
-      "checked_at": "2026-10-30T11:07:00+08:00",
-      "source_observed_at": "2026-10-30T11:07:00+08:00",
+      "checked_at": "2026-11-04T08:36:02+08:00",
+      "source_observed_at": "2026-11-04T08:36:02+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:00+08:00"
+      "observed_at": "2026-11-04T08:36:02+08:00"
     },
     {
       "id": "personal-formal-documents-card-states",
@@ -15235,11 +15235,11 @@
       "measurement_scope": "现行文书状态表六行；独立签回状态不计。",
       "category": "来源登记",
       "current_value": 6,
-      "checked_at": "2026-10-30T11:07:00+08:00",
-      "source_observed_at": "2026-10-30T11:07:00+08:00",
+      "checked_at": "2026-11-04T08:36:02+08:00",
+      "source_observed_at": "2026-11-04T08:36:02+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:00+08:00"
+      "observed_at": "2026-11-04T08:36:02+08:00"
     },
     {
       "id": "personal-formal-documents-card-content-sources",
@@ -15266,11 +15266,11 @@
       "measurement_scope": "正式构建入口load_formal_document_request一次接受一个内容源供DOCX/PDF共用；架构变化需复核，不能数任意request引用。",
       "category": "来源登记",
       "current_value": 1,
-      "checked_at": "2026-10-30T11:07:00+08:00",
-      "source_observed_at": "2026-10-30T11:07:00+08:00",
+      "checked_at": "2026-11-04T08:36:03+08:00",
+      "source_observed_at": "2026-11-04T08:36:03+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:00+08:00"
+      "observed_at": "2026-11-04T08:36:03+08:00"
     },
     {
       "id": "personal-formal-documents-improvements-7d",
@@ -16476,11 +16476,11 @@
       "measurement_scope": "同原页面口径：outputs objective-result audio.raw_sha256去重且排除测试前缀；dictation/runtime.log两种识别行elapsed_sec/seconds合算；models整目录文件大小/安装模型根目录数；cloud-jobs结果status=succeeded",
       "field": "screens[0].text",
       "page_pattern": "\\*\\*([\\d,]+) 个模型\\*\\*",
-      "checked_at": "2026-10-30T11:07:09+08:00",
-      "source_observed_at": "2026-10-30T11:07:09+08:00",
+      "checked_at": "2026-11-04T08:36:04+08:00",
+      "source_observed_at": "2026-11-04T08:36:04+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:09+08:00"
+      "observed_at": "2026-11-04T08:36:04+08:00"
     },
     {
       "id": "chinese-asr-models-gib",
@@ -16506,11 +16506,11 @@
       "measurement_scope": "同原页面口径：outputs objective-result audio.raw_sha256去重且排除测试前缀；dictation/runtime.log两种识别行elapsed_sec/seconds合算；models整目录文件大小/安装模型根目录数；cloud-jobs结果status=succeeded",
       "field": "screens[0].text",
       "page_pattern": "共 ([\\d.]+) GiB",
-      "checked_at": "2026-10-30T11:07:09+08:00",
-      "source_observed_at": "2026-10-30T11:07:09+08:00",
+      "checked_at": "2026-11-04T08:36:04+08:00",
+      "source_observed_at": "2026-11-04T08:36:04+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:09+08:00"
+      "observed_at": "2026-11-04T08:36:04+08:00"
     },
     {
       "id": "chinese-asr-cloud-success",
@@ -16892,10 +16892,10 @@
       "field": "screens[3].text",
       "page_pattern": "六组共 ([\\d,]+) 项",
       "observation_basis": "live_read",
-      "checked_at": "2026-10-30T11:07:01+08:00",
-      "source_observed_at": "2026-10-30T11:07:01+08:00",
+      "checked_at": "2026-11-04T08:36:03+08:00",
+      "source_observed_at": "2026-11-04T08:36:03+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:01+08:00"
+      "observed_at": "2026-11-04T08:36:03+08:00"
     },
     {
       "id": "ai-cli-profile-manager-n-tools-0",
@@ -17138,11 +17138,11 @@
         ]
       },
       "page_pattern": "^1\\.\\s+(\\d+) 个｜默认 scrypt 下",
-      "checked_at": "2026-10-30T11:07:01+08:00",
-      "source_observed_at": "2026-10-30T11:07:01+08:00",
+      "checked_at": "2026-11-04T08:36:03+08:00",
+      "source_observed_at": "2026-11-04T08:36:03+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:01+08:00"
+      "observed_at": "2026-11-04T08:36:03+08:00"
     },
     {
       "id": "vault-tool-max-content-slots",
@@ -17167,11 +17167,11 @@
         ]
       },
       "page_pattern": "^2\\.\\s+(\\d+) 套｜一个库里最多放两套内容",
-      "checked_at": "2026-10-30T11:07:01+08:00",
-      "source_observed_at": "2026-10-30T11:07:01+08:00",
+      "checked_at": "2026-11-04T08:36:03+08:00",
+      "source_observed_at": "2026-11-04T08:36:03+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:01+08:00"
+      "observed_at": "2026-11-04T08:36:03+08:00"
     },
     {
       "id": "vault-tool-key-ciphertext-revision-count",
@@ -17193,11 +17193,11 @@
         "entry": "vault-key-ciphertext-revisions"
       },
       "page_pattern": "^3\\.\\s+(\\d+) 版｜私人密文仓库里，密文文件有",
-      "checked_at": "2026-10-30T11:07:02+08:00",
-      "source_observed_at": "2026-10-30T11:07:02+08:00",
+      "checked_at": "2026-11-04T08:36:03+08:00",
+      "source_observed_at": "2026-11-04T08:36:03+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:02+08:00"
+      "observed_at": "2026-11-04T08:36:03+08:00"
     },
     {
       "id": "vault-tool-tests-passed",
@@ -18179,11 +18179,11 @@
         ],
         "timeout": 20
       },
-      "checked_at": "2026-10-30T11:06:11+08:00",
-      "source_observed_at": "2026-10-30T11:06:11+08:00",
+      "checked_at": "2026-11-04T08:35:34+08:00",
+      "source_observed_at": "2026-11-04T08:35:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:11+08:00"
+      "observed_at": "2026-11-04T08:35:34+08:00"
     },
     {
       "id": "b6-password-center-recovery-sites",
@@ -18209,11 +18209,11 @@
         ],
         "timeout": 20
       },
-      "checked_at": "2026-10-30T11:06:11+08:00",
-      "source_observed_at": "2026-10-30T11:06:11+08:00",
+      "checked_at": "2026-11-04T08:35:34+08:00",
+      "source_observed_at": "2026-11-04T08:35:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:11+08:00"
+      "observed_at": "2026-11-04T08:35:34+08:00"
     },
     {
       "id": "b6-password-center-target-count",
@@ -18239,11 +18239,11 @@
         ],
         "timeout": 20
       },
-      "checked_at": "2026-10-30T11:06:11+08:00",
-      "source_observed_at": "2026-10-30T11:06:11+08:00",
+      "checked_at": "2026-11-04T08:35:34+08:00",
+      "source_observed_at": "2026-11-04T08:35:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:11+08:00"
+      "observed_at": "2026-11-04T08:35:34+08:00"
     },
     {
       "id": "b6-password-center-duration-min",
@@ -18269,11 +18269,11 @@
         ],
         "timeout": 20
       },
-      "checked_at": "2026-10-30T11:06:11+08:00",
-      "source_observed_at": "2026-10-30T11:06:11+08:00",
+      "checked_at": "2026-11-04T08:35:34+08:00",
+      "source_observed_at": "2026-11-04T08:35:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:11+08:00"
+      "observed_at": "2026-11-04T08:35:34+08:00"
     },
     {
       "id": "b6-password-center-duration-max",
@@ -18299,11 +18299,11 @@
         ],
         "timeout": 20
       },
-      "checked_at": "2026-10-30T11:06:11+08:00",
-      "source_observed_at": "2026-10-30T11:06:11+08:00",
+      "checked_at": "2026-11-04T08:35:34+08:00",
+      "source_observed_at": "2026-11-04T08:35:34+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:11+08:00"
+      "observed_at": "2026-11-04T08:35:34+08:00"
     },
     {
       "id": "b6-github-local-index-repo-count",
@@ -18617,10 +18617,10 @@
       "scope_status": "verified",
       "measurement_scope": "批量接口 schema sources.minItems；已与 batch.py _prepare 的 2 <= len <= 5 校验一致。",
       "observation_basis": "live_read",
-      "checked_at": "2026-10-30T11:07:04+08:00",
-      "source_observed_at": "2026-10-30T11:07:04+08:00",
+      "checked_at": "2026-11-04T08:36:04+08:00",
+      "source_observed_at": "2026-11-04T08:36:04+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:04+08:00"
+      "observed_at": "2026-11-04T08:36:04+08:00"
     },
     {
       "id": "work-delivery-copilot-n-sources-max",
@@ -18648,10 +18648,10 @@
       "scope_status": "verified",
       "measurement_scope": "批量接口 schema sources.maxItems；已与 batch.py _prepare 的 2 <= len <= 5 校验一致。",
       "observation_basis": "live_read",
-      "checked_at": "2026-10-30T11:07:04+08:00",
-      "source_observed_at": "2026-10-30T11:07:04+08:00",
+      "checked_at": "2026-11-04T08:36:04+08:00",
+      "source_observed_at": "2026-11-04T08:36:04+08:00",
       "source_coverage_end": null,
-      "observed_at": "2026-10-30T11:07:04+08:00"
+      "observed_at": "2026-11-04T08:36:04+08:00"
     },
     {
       "id": "work-delivery-copilot-n-files-0",
@@ -18676,11 +18676,11 @@
       "page_pattern": "\\*\\*([\\d]+) 个文件\\*\\*｜同一版事实出",
       "scope_status": "verified",
       "measurement_scope": "ast.parse 只读 compiler.py 中核心 deliverables dict 与 artifacts.py OUTPUT_NAMES；3 个文本文件 + 3 个 Office 文件，不做生成、不导入模块、不建数据库。",
-      "checked_at": "2026-10-30T11:07:05+08:00",
-      "source_observed_at": "2026-10-30T11:07:05+08:00",
+      "checked_at": "2026-11-04T08:36:04+08:00",
+      "source_observed_at": "2026-11-04T08:36:04+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:05+08:00"
+      "observed_at": "2026-11-04T08:36:04+08:00"
     },
     {
       "id": "work-delivery-copilot-n-docx-time-0",
@@ -18934,11 +18934,11 @@
       "page_pattern": "\\*\\*([\\d,]+) 分钟\\*\\*",
       "measurement_scope": "只读当前源默认配置/壁纸元数据；target_count是代码最多选择一个屏的策略，不把源快照冒充本机展示验收。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:07:06+08:00",
-      "source_observed_at": "2026-10-30T11:07:06+08:00",
+      "checked_at": "2026-11-04T08:36:04+08:00",
+      "source_observed_at": "2026-11-04T08:36:04+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:06+08:00"
+      "observed_at": "2026-11-04T08:36:04+08:00"
     },
     {
       "id": "emerald-veil-first-hotkey",
@@ -18992,11 +18992,11 @@
       "page_pattern": "\\*\\*([\\d,]+) 块屏\\*\\*",
       "measurement_scope": "只读当前源默认配置/壁纸元数据；target_count是代码最多选择一个屏的策略，不把源快照冒充本机展示验收。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:07:06+08:00",
-      "source_observed_at": "2026-10-30T11:07:06+08:00",
+      "checked_at": "2026-11-04T08:36:04+08:00",
+      "source_observed_at": "2026-11-04T08:36:04+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:06+08:00"
+      "observed_at": "2026-11-04T08:36:04+08:00"
     },
     {
       "id": "emerald-veil-first-wallpaper",
@@ -19021,11 +19021,11 @@
       "page_pattern": "\\*\\*([\\d,]+)K\\*\\*",
       "measurement_scope": "只读当前源默认配置/壁纸元数据；target_count是代码最多选择一个屏的策略，不把源快照冒充本机展示验收。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:07:06+08:00",
-      "source_observed_at": "2026-10-30T11:07:06+08:00",
+      "checked_at": "2026-11-04T08:36:04+08:00",
+      "source_observed_at": "2026-11-04T08:36:04+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:06+08:00"
+      "observed_at": "2026-11-04T08:36:04+08:00"
     },
     {
       "id": "github-profile-as-of-03",
@@ -19237,11 +19237,11 @@
       "historical": false,
       "requires_semantic_refresh": true,
       "known_gap": "存在声明项缺发现链接，需发布者同时改写全量一致断言；仅换数字不足以说明当前状态。",
-      "checked_at": "2026-10-30T11:06:56+08:00",
-      "source_observed_at": "2026-10-30T11:06:56+08:00",
+      "checked_at": "2026-11-04T08:35:58+08:00",
+      "source_observed_at": "2026-11-04T08:35:58+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:56+08:00"
+      "observed_at": "2026-11-04T08:35:58+08:00"
     },
     {
       "id": "b7-agents-skills-plugins-personal-installed-count",
@@ -19353,11 +19353,11 @@
       "historical": false,
       "requires_semantic_refresh": true,
       "known_gap": "存在声明项缺发现链接，需发布者同时改写全量一致断言；仅换数字不足以说明当前状态。",
-      "checked_at": "2026-10-30T11:06:56+08:00",
-      "source_observed_at": "2026-10-30T11:06:56+08:00",
+      "checked_at": "2026-11-04T08:35:58+08:00",
+      "source_observed_at": "2026-11-04T08:35:58+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:06:56+08:00"
+      "observed_at": "2026-11-04T08:35:58+08:00"
     },
     {
       "id": "b7-agents-skills-plugins-skill-document-count",
@@ -19777,11 +19777,11 @@
       "source_project": "codex-memory",
       "private": false,
       "historical": false,
-      "checked_at": "2026-10-30T11:07:13+08:00",
-      "source_observed_at": "2026-10-30T11:07:13+08:00",
+      "checked_at": "2026-11-04T08:36:10+08:00",
+      "source_observed_at": "2026-11-04T08:36:10+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:13+08:00"
+      "observed_at": "2026-11-04T08:36:10+08:00"
     },
     {
       "id": "b7-codex-memory-config-memory-whitelist-sync-laptop-window-commits",
@@ -21434,11 +21434,11 @@
         ],
         "timeout": 180
       },
-      "checked_at": "2026-10-30T11:07:28+08:00",
-      "source_observed_at": "2026-10-30T11:07:28+08:00",
+      "checked_at": "2026-11-04T08:36:08+08:00",
+      "source_observed_at": "2026-11-04T08:36:08+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:28+08:00"
+      "observed_at": "2026-11-04T08:36:08+08:00"
     },
     {
       "id": "b7-localocr-results-evidence-031",
@@ -21494,11 +21494,11 @@
         ],
         "timeout": 180
       },
-      "checked_at": "2026-10-30T11:07:28+08:00",
-      "source_observed_at": "2026-10-30T11:07:28+08:00",
+      "checked_at": "2026-11-04T08:36:08+08:00",
+      "source_observed_at": "2026-11-04T08:36:08+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:28+08:00"
+      "observed_at": "2026-11-04T08:36:08+08:00"
     },
     {
       "id": "b7-localocr-results-evidence-033",
@@ -22268,11 +22268,11 @@
       "page_pattern": "完成任务里(没有一条)走结构路线",
       "measurement_scope": "没有一条是零计数；固定只读聚合按相同日常完成任务排除规则计算 engine/requested_engine=structure 的条数。数据取得0后中文表述由Opus核对，不用静态测试证明实际使用。 实际计数0映射为没有一条，正数映射为实际N条，仅消除中文零表述与阿拉伯0之间的表示差异。",
       "scope_status": "verified",
-      "checked_at": "2026-10-30T11:07:28+08:00",
-      "source_observed_at": "2026-10-30T11:07:28+08:00",
+      "checked_at": "2026-11-04T08:36:08+08:00",
+      "source_observed_at": "2026-11-04T08:36:08+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-30T11:07:28+08:00"
+      "observed_at": "2026-11-04T08:36:08+08:00"
     },
     {
       "id": "b7-localocr-document-structure-default-config-count",
@@ -35329,9 +35329,9 @@
       },
       "measurement_scope": "usage_ledger.count_7d实际筛选共同完成日界前7日；本轮coverage_end=2026-10-24，对应北京时间[2026-10-18 00:00,2026-10-25 00:00)。显示日期必须与本轮覆盖同步，不用旧as_of猜窗口。",
       "binding_note": "本轮整表取数后，根会话按已核闭合窗口14—20日写入“近7天AI用了N次”；此正则只捕获当前数字，包括0。使用记录不证明业务完成，统计覆盖与排他补采边界按本页source及根本轮取数回执。",
-      "checked_at": "2026-10-30T11:07:00+08:00",
+      "checked_at": "2026-11-04T08:36:03+08:00",
       "source_observed_at": null,
-      "source_coverage_end": "2026-10-24",
+      "source_coverage_end": "2026-11-02",
       "observation_basis": "coverage_end"
     },
     {
@@ -36046,10 +36046,10 @@
         ]
       },
       "page_pattern": "\\*\\*(\\d+) 分钟\\*\\* \\| \\*\\*30 分钟",
-      "observed_at": "2026-10-31T09:27:08+08:00",
-      "source_observed_at": "2026-10-31T09:27:08+08:00",
+      "observed_at": "2026-11-04T08:36:16+08:00",
+      "source_observed_at": "2026-11-04T08:36:16+08:00",
       "refreshed_value": 15,
-      "checked_at": "2026-10-31T09:27:08+08:00",
+      "checked_at": "2026-11-04T08:36:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read"
     },
@@ -36076,10 +36076,10 @@
         ]
       },
       "page_pattern": "\\*\\*(\\d+) 分钟\\*\\* \\| \\*\\*\\d+ 个\\*\\*",
-      "observed_at": "2026-10-31T09:27:08+08:00",
-      "source_observed_at": "2026-10-31T09:27:08+08:00",
+      "observed_at": "2026-11-04T08:36:16+08:00",
+      "source_observed_at": "2026-11-04T08:36:16+08:00",
       "refreshed_value": 30,
-      "checked_at": "2026-10-31T09:27:08+08:00",
+      "checked_at": "2026-11-04T08:36:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read"
     },
@@ -36137,10 +36137,10 @@
         ]
       },
       "page_pattern": "请系统每 (\\d+) 分钟叫醒一次",
-      "observed_at": "2026-10-30T11:07:27+08:00",
-      "source_observed_at": "2026-10-30T11:07:27+08:00",
+      "observed_at": "2026-11-04T08:36:16+08:00",
+      "source_observed_at": "2026-11-04T08:36:16+08:00",
       "refreshed_value": 15,
-      "checked_at": "2026-10-30T11:07:27+08:00",
+      "checked_at": "2026-11-04T08:36:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read"
     },
@@ -36167,10 +36167,10 @@
         ]
       },
       "page_pattern": "电脑在家每 (\\d+) 分钟经无线调试收一次",
-      "observed_at": "2026-10-30T11:07:27+08:00",
-      "source_observed_at": "2026-10-30T11:07:27+08:00",
+      "observed_at": "2026-11-04T08:36:16+08:00",
+      "source_observed_at": "2026-11-04T08:36:16+08:00",
       "refreshed_value": 30,
-      "checked_at": "2026-10-30T11:07:27+08:00",
+      "checked_at": "2026-11-04T08:36:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read"
     },
@@ -36331,11 +36331,11 @@
       "historical": false,
       "private": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
-      "checked_at": "2026-10-31T09:27:08+08:00",
-      "source_observed_at": "2026-10-31T09:27:08+08:00",
+      "checked_at": "2026-11-04T08:36:16+08:00",
+      "source_observed_at": "2026-11-04T08:36:16+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
-      "observed_at": "2026-10-31T09:27:08+08:00"
+      "observed_at": "2026-11-04T08:36:16+08:00"
     },
     {
       "id": "r3-skill-phone-direct-static-test-definitions",
@@ -41755,7 +41755,7 @@
       "field": "screens[9].text",
       "page_pattern": "第 [\\d,]+ 帧、([\\d,]+) 次失败",
       "label": "当前主机短段心跳失败数",
-      "current_value": "0",
+      "current_value": 0,
       "as_of": "2026-10-30",
       "automatic": true,
       "private": false,
@@ -41774,7 +41774,11 @@
       "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "source_observed_at_pointer": [
         "utc"
-      ]
+      ],
+      "checked_at": "2026-11-04T08:36:18+08:00",
+      "source_observed_at": "2026-11-04T00:36:17.551894+00:00",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T00:36:17.551894+00:00"
     },
     {
       "id": "oct30-g3-061",
@@ -42516,7 +42520,7 @@
       "field": "screens[8].text",
       "page_pattern": "last_full_frame=8100、period=([\\d,]+) ms",
       "label": "当前主机短段心跳周期毫秒",
-      "current_value": "1008",
+      "current_value": 1008,
       "as_of": "2026-10-30",
       "automatic": true,
       "private": false,
@@ -42535,7 +42539,11 @@
       "report_ref": "E:/Cache/Claude/Temp/758e7bff/gpt-children/20261030-110257-site-refresh-facts-09b81fce/round-01/facts-machine-projects.md",
       "source_observed_at_pointer": [
         "utc"
-      ]
+      ],
+      "checked_at": "2026-11-04T08:36:18+08:00",
+      "source_observed_at": "2026-11-04T00:36:17.551894+00:00",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T00:36:17.551894+00:00"
     },
     {
       "id": "oct30-g3-093",
@@ -43738,22 +43746,26 @@
       "field": "screens[0].text",
       "page_pattern": "北京时间 (\\d{4}-\\d{2}-\\d{2}) 更新的模型清单",
       "label": "模型分工表来源日期",
-      "current_value": "2026-10-29",
-      "as_of": "2026-10-30",
+      "current_value": "2026-11-03",
+      "as_of": "2026-11-04",
       "automatic": true,
       "private": false,
       "historical": false,
       "scope_status": "verified",
       "retrieve": {
         "kind": "json",
-        "path": "config/model-roster.json",
+        "path": "E:/.agents/config/model-roster.json",
         "pointer": [
           "updated_beijing_date"
         ]
       },
-      "source_location": "本仓库config/model-roster.json同步E:/.agents/config/model-roster.json",
+      "source_location": "E:/.agents/config/model-roster.json updated_beijing_date；讲解直接依据活动模型清单，非仓库旧副本",
       "measurement_scope": "模型分工表来源日期；完整绑定当前作者字段，不把源码/回执观察冒充本轮运行。",
-      "observation_basis": "unknown"
+      "observation_basis": "live_read",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:35:35+08:00",
+      "observed_at": "2026-11-04T10:35:35+08:00",
+      "source_coverage_end": null
     },
     {
       "id": "oct30-g45-030",
@@ -43936,10 +43948,11 @@
       "page": "rule-claude-adapter",
       "screen": "rule-claude-adapter-03",
       "field": "screens[2].text",
-      "page_pattern": "已经有 ([\\d,]+) 个 API 子代理在跑",
-      "label": "Claude API并发上限",
+      "page_pattern": "接下来的前 (3) 个走 API",
+      "label": "本人点名派API后优先走API的子代理数",
       "current_value": "3",
-      "as_of": "2026-10-30",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
       "automatic": false,
       "private": false,
       "historical": false,
@@ -43947,11 +43960,17 @@
       "retrieve": {
         "kind": "manual"
       },
-      "source_location": "E:/.agents/releases/E325/docs/contracts/agents.claude-adapter.md",
-      "measurement_scope": "Claude API并发上限；完整绑定当前作者字段，不把源码/回执观察冒充本轮运行。",
-      "observation_basis": "unknown",
+      "source_location": "E:/.agents/releases/E372/docs/contracts/agents.claude-adapter.md",
+      "source_project": "agents",
+      "measurement_scope": "本人点名派API后优先走API的子代理数；规则明文数值，不表示运行量或测试结果。",
       "manual_reason": "judgment",
-      "manual_route": "所属Owner只读E:/.agents/releases/E325/docs/contracts/agents.claude-adapter.md，核对同一展示事实与观察边界；只更新已取得同口径证据的字段，不执行产品操作、不用旧回执冒充新验收。"
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/docs/contracts/agents.claude-adapter.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
     },
     {
       "id": "oct30-g45-039",
@@ -45280,6 +45299,524 @@
       "source_observed_at": "2026-10-30T11:07:22+08:00",
       "checked_at": "2026-10-30T13:43:04+08:00",
       "observation_basis": "snapshot_timestamp"
+    },
+    {
+      "id": "nov04-rules-home-options",
+      "page": "rules-home",
+      "screen": "rules-home-04",
+      "field": "screens[2].text",
+      "page_pattern": "(2–3) 个确定的选项",
+      "label": "向本人提问的确定选项数量",
+      "current_value": "2–3",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/AGENTS.md",
+      "source_project": "agents",
+      "measurement_scope": "向本人提问的确定选项数量；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/AGENTS.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-runtime-options",
+      "page": "rule-capabilities-runtime",
+      "screen": "rule-capabilities-runtime-07",
+      "field": "screens[7].text",
+      "page_pattern": "(2–3) 个确定的选项",
+      "label": "向本人提问的确定选项数量",
+      "current_value": "2–3",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/AGENTS.md",
+      "source_project": "agents",
+      "measurement_scope": "向本人提问的确定选项数量；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/AGENTS.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-charter-options",
+      "page": "charter",
+      "screen": "charter-06",
+      "field": "screens[1].text",
+      "page_pattern": "(2–3) 个确定的选项",
+      "label": "向本人提问的确定选项数量",
+      "current_value": "2–3",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/AGENTS.md",
+      "source_project": "agents",
+      "measurement_scope": "向本人提问的确定选项数量；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/AGENTS.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-astra-standing-date",
+      "page": "rule-authorization",
+      "screen": "rule-authorization-08",
+      "field": "screens[2].text",
+      "page_pattern": "本人 (2026-11-02) 定",
+      "label": "完整复核 Claude 成品长期授权决定日期",
+      "current_value": "2026-11-02",
+      "as_of": "2026-11-04",
+      "category": "历史规则决定",
+      "automatic": false,
+      "private": false,
+      "historical": true,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/docs/contracts/agents.authorization.md",
+      "source_project": "agents",
+      "measurement_scope": "完整复核 Claude 成品长期授权决定日期；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/docs/contracts/agents.authorization.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:35:35+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读"
+    },
+    {
+      "id": "nov04-rules-muse-word-limit",
+      "page": "rule-authorization",
+      "screen": "rule-authorization-08",
+      "field": "screens[2].text",
+      "page_pattern": "总量不超过 (1) 万字",
+      "label": "Muse 协作资料上限（万字）",
+      "current_value": "1",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/docs/contracts/agents.authorization.md",
+      "source_project": "agents",
+      "measurement_scope": "Muse 协作资料上限（万字）；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/docs/contracts/agents.authorization.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-muse-standing-date",
+      "page": "rule-authorization",
+      "screen": "rule-authorization-08",
+      "field": "screens[2].text",
+      "page_pattern": "本人 (2026-11-03) 确认",
+      "label": "Muse 三项长期授权确认日期",
+      "current_value": "2026-11-03",
+      "as_of": "2026-11-04",
+      "category": "历史规则决定",
+      "automatic": false,
+      "private": false,
+      "historical": true,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/docs/contracts/agents.authorization.md",
+      "source_project": "agents",
+      "measurement_scope": "Muse 三项长期授权确认日期；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/docs/contracts/agents.authorization.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:35:35+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读"
+    },
+    {
+      "id": "nov04-rules-api-desktop-index",
+      "page": "rule-claude-adapter",
+      "screen": "rule-claude-adapter-03",
+      "field": "screens[2].text",
+      "page_pattern": "第 (4) 个起回桌面",
+      "label": "派API之后回桌面的起始序号",
+      "current_value": "4",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/docs/contracts/agents.claude-adapter.md",
+      "source_project": "agents",
+      "measurement_scope": "派API之后回桌面的起始序号；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/docs/contracts/agents.claude-adapter.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-api-rate-limit-code",
+      "page": "rule-claude-adapter",
+      "screen": "rule-claude-adapter-03",
+      "field": "screens[2].text",
+      "page_pattern": "限流[（(](429)[、,]",
+      "label": "API临时限流HTTP状态码",
+      "current_value": "429",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/docs/contracts/agents.claude-adapter.md",
+      "source_project": "agents",
+      "measurement_scope": "API临时限流HTTP状态码；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/docs/contracts/agents.claude-adapter.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-context-start-recent",
+      "page": "rule-context-sources",
+      "screen": "rule-context-sources-01",
+      "field": "screens[0].text",
+      "page_pattern": "最近 (15) 条本人原话",
+      "label": "压缩恢复带回本人原话条数",
+      "current_value": "15",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/docs/contracts/agents.context-sources.md",
+      "source_project": "agents",
+      "measurement_scope": "压缩恢复带回本人原话条数；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/docs/contracts/agents.context-sources.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-context-resume-recent",
+      "page": "rule-context-sources",
+      "screen": "rule-context-sources-05",
+      "field": "screens[4].text",
+      "page_pattern": "最近 (15) 条本人原话",
+      "label": "长任务接续带回本人原话条数",
+      "current_value": "15",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/docs/contracts/agents.context-sources.md",
+      "source_project": "agents",
+      "measurement_scope": "长任务接续带回本人原话条数；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/docs/contracts/agents.context-sources.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-context-audit-recent",
+      "page": "rule-context-sources",
+      "screen": "rule-context-sources-05",
+      "field": "screens[4].text",
+      "page_pattern": "最近 (15) 条原话",
+      "label": "后台复核前接回的最近原话条数",
+      "current_value": "15",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/docs/contracts/agents.context-sources.md",
+      "source_project": "agents",
+      "measurement_scope": "后台复核前接回的最近原话条数；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/docs/contracts/agents.context-sources.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-temp-idle-days",
+      "page": "rule-engineering-delivery",
+      "screen": "rule-engineering-delivery-04",
+      "field": "screens[3].text",
+      "page_pattern": "且 (7) 天没有活动后",
+      "label": "AI临时目录结束且无活动的回收等待天数",
+      "current_value": "7",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/docs/contracts/agents.engineering-delivery.md",
+      "source_project": "agents",
+      "measurement_scope": "AI临时目录结束且无活动的回收等待天数；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/docs/contracts/agents.engineering-delivery.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-temp-restore-hours",
+      "page": "rule-engineering-delivery",
+      "screen": "rule-engineering-delivery-04",
+      "field": "screens[3].text",
+      "page_pattern": "留 (72) 小时能还原",
+      "label": "回收站可还原小时数",
+      "current_value": "72",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/docs/contracts/agents.engineering-delivery.md",
+      "source_project": "agents",
+      "measurement_scope": "回收站可还原小时数；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/docs/contracts/agents.engineering-delivery.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-image-candidate-days",
+      "page": "rule-engineering-delivery",
+      "screen": "rule-engineering-delivery-04",
+      "field": "screens[3].text",
+      "page_pattern": "生图候选仍按既定的 (7) 天期限处理",
+      "label": "生图候选保留天数",
+      "current_value": "7",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/docs/contracts/agents.engineering-delivery.md",
+      "source_project": "agents",
+      "measurement_scope": "生图候选保留天数；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/docs/contracts/agents.engineering-delivery.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-coordination-api-count",
+      "page": "rule-execution-coordination",
+      "screen": "rule-execution-coordination-01",
+      "field": "screens[0].text",
+      "page_pattern": "接下来 (3) 个走 API",
+      "label": "本人点名派API后API子代理名额",
+      "current_value": "3",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/docs/contracts/agents.claude-adapter.md",
+      "source_project": "agents",
+      "measurement_scope": "本人点名派API后API子代理名额；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/docs/contracts/agents.claude-adapter.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-repeated-check-limit",
+      "page": "rule-execution-coordination",
+      "screen": "rule-execution-coordination-03",
+      "field": "screens[2].text",
+      "page_pattern": "超过 (5) 次先问本人",
+      "label": "重复比较或测试超过此次数先问本人",
+      "current_value": "5",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/AGENTS.md",
+      "source_project": "agents",
+      "measurement_scope": "重复比较或测试超过此次数先问本人；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/AGENTS.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-charter-wait-minutes",
+      "page": "charter",
+      "screen": "charter-06",
+      "field": "screens[1].text",
+      "page_pattern": "超过 (3) 分钟",
+      "label": "途中等待超过此分钟数主动说明",
+      "current_value": "3",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/AGENTS.md",
+      "source_project": "agents",
+      "measurement_scope": "途中等待超过此分钟数主动说明；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/AGENTS.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
+    },
+    {
+      "id": "nov04-rules-charter-repeat-limit",
+      "page": "charter",
+      "screen": "charter-06",
+      "field": "screens[1].text",
+      "page_pattern": "超过 (5) 次",
+      "label": "重复比较或测试先问的次数界线",
+      "current_value": "5",
+      "as_of": "2026-11-04",
+      "category": "规则阈值",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "source_location": "E:/.agents/releases/E372/AGENTS.md",
+      "source_project": "agents",
+      "measurement_scope": "重复比较或测试先问的次数界线；规则明文数值，不表示运行量或测试结果。",
+      "manual_reason": "judgment",
+      "manual_route": "正式 Inspect 核验后读同版 E:/.agents/releases/E372/AGENTS.md，逐条核对这一阈值、范围及讲解；规则变化时同时更新作者正文及唯一绑定。",
+      "observation_basis": "snapshot_timestamp",
+      "checked_at": "2026-11-04T10:38:08+08:00",
+      "source_observed_at": "2026-11-04T10:23:00+08:00",
+      "evidence": "本批 E372 规则稿独立复核及实际作者字段回读",
+      "source_coverage_end": null,
+      "observed_at": "2026-11-04T10:23:00+08:00"
     }
   ],
   "freshness_policy": {

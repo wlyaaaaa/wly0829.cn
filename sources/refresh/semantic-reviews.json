@@ -1,4 +1,65 @@
 {
   "schema": "content-refresh.semantic-reviews.v1",
-  "pages": {}
+  "pages": {
+    "charter": {
+      "checked_at": "2026-11-04T10:23:00+08:00",
+      "run_id": "1813e367-5e5a-44f8-a8bf-937feea14a77",
+      "evidence": "对照 E372 规则原文逐条核对讲解，独立复核通过"
+    },
+    "rules-home": {
+      "checked_at": "2026-11-04T10:23:00+08:00",
+      "run_id": "1813e367-5e5a-44f8-a8bf-937feea14a77",
+      "evidence": "对照 E372 规则原文逐条核对讲解，独立复核通过"
+    },
+    "rule-authorization": {
+      "checked_at": "2026-11-04T10:23:00+08:00",
+      "run_id": "1813e367-5e5a-44f8-a8bf-937feea14a77",
+      "evidence": "对照 E372 规则原文逐条核对讲解，独立复核通过"
+    },
+    "rule-capabilities-runtime": {
+      "checked_at": "2026-11-04T10:23:00+08:00",
+      "run_id": "1813e367-5e5a-44f8-a8bf-937feea14a77",
+      "evidence": "对照 E372 规则原文逐条核对讲解，独立复核通过"
+    },
+    "rule-claude-adapter": {
+      "checked_at": "2026-11-04T10:23:00+08:00",
+      "run_id": "1813e367-5e5a-44f8-a8bf-937feea14a77",
+      "evidence": "对照 E372 规则原文逐条核对讲解，独立复核通过"
+    },
+    "rule-codex-adapter": {
+      "checked_at": "2026-11-04T10:23:00+08:00",
+      "run_id": "1813e367-5e5a-44f8-a8bf-937feea14a77",
+      "evidence": "对照 E372 规则原文逐条核对讲解，独立复核通过"
+    },
+    "rule-context-sources": {
+      "checked_at": "2026-11-04T10:23:00+08:00",
+      "run_id": "1813e367-5e5a-44f8-a8bf-937feea14a77",
+      "evidence": "对照 E372 规则原文逐条核对讲解，独立复核通过"
+    },
+    "rule-engineering-delivery": {
+      "checked_at": "2026-11-04T10:23:00+08:00",
+      "run_id": "1813e367-5e5a-44f8-a8bf-937feea14a77",
+      "evidence": "对照 E372 规则原文逐条核对讲解，独立复核通过"
+    },
+    "rule-execution-coordination": {
+      "checked_at": "2026-11-04T10:23:00+08:00",
+      "run_id": "1813e367-5e5a-44f8-a8bf-937feea14a77",
+      "evidence": "对照 E372 规则原文逐条核对讲解，独立复核通过"
+    },
+    "rule-privacy-data": {
+      "checked_at": "2026-11-04T10:23:00+08:00",
+      "run_id": "1813e367-5e5a-44f8-a8bf-937feea14a77",
+      "evidence": "对照 E372 规则原文逐条核对讲解，独立复核通过"
+    },
+    "rule-protected-actions": {
+      "checked_at": "2026-11-04T10:23:00+08:00",
+      "run_id": "1813e367-5e5a-44f8-a8bf-937feea14a77",
+      "evidence": "对照 E372 规则原文逐条核对讲解，独立复核通过"
+    },
+    "rule-rule-release": {
+      "checked_at": "2026-11-04T10:23:00+08:00",
+      "run_id": "1813e367-5e5a-44f8-a8bf-937feea14a77",
+      "evidence": "对照 E372 规则原文逐条核对讲解，独立复核通过"
+    }
+  }
 }

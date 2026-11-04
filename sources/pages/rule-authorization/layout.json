@@ -338,6 +338,11 @@
         "icon_position": "header_left",
         "row": "standing",
         "width": "64%"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "用 Muse 的三项长期授权",
+        "columns": 1
       }
     ],
     "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 新构图，待样张：该方向无原图。 本轮 qa12a：该卡小插画改现有 items_layout.icon_position=upper_right_inside，正文整宽；审页的05受信任卡按文字定位实为当前04。",
@@ -391,6 +396,11 @@
         "icons": "auto",
         "icon_position": "header_left",
         "page_break_before": true
+      },
+      {
+        "type": "points_card",
+        "text_ref": "用 Muse 的三项长期授权",
+        "columns": 1
       }
     ],
     "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 新构图，待样张：该方向无原图。 原竖图有指定分张/分组边界，当前核心按高度自动分张，未声称精确边界完成。 本轮 qa12a：该卡小插画改现有 items_layout.icon_position=upper_right_inside，正文整宽；审页的05受信任卡按文字定位实为当前04。",

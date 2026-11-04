@@ -30,7 +30,7 @@
       },
       {
         "type": "table",
-        "text_ref": "型号与派法（按北京时间 2026-10-29 更新的模型清单）"
+        "text_ref": "型号与派法（按北京时间 2026-11-03 更新的模型清单）"
       },
       {
         "type": "notice",
@@ -101,7 +101,7 @@
       },
       {
         "type": "table",
-        "text_ref": "型号与派法（按北京时间 2026-10-29 更新的模型清单）"
+        "text_ref": "型号与派法（按北京时间 2026-11-03 更新的模型清单）"
       },
       {
         "type": "notice",
@@ -244,6 +244,11 @@
       },
       {
         "type": "points_card",
+        "text_ref": "用 Muse 时怎么说话",
+        "columns": 1
+      },
+      {
+        "type": "points_card",
         "columns": 1,
         "split_cards": false,
         "illustration": "left_inside",
@@ -324,6 +329,11 @@
       },
       {
         "type": "points_card",
+        "text_ref": "用 Muse 时怎么说话",
+        "columns": 1
+      },
+      {
+        "type": "points_card",
         "columns": 1,
         "split_cards": false,
         "illustration": "left_inside",
@@ -370,6 +380,11 @@
         "icon_position": "header_left",
         "icons": "auto",
         "text_ref": "主对话的责任"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "盲审、盲测和盲调查",
+        "columns": 1
       },
       {
         "type": "points_card",
@@ -422,6 +437,11 @@
         "icon_position": "header_left",
         "icons": "auto",
         "text_ref": "主对话的责任"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "盲审、盲测和盲调查",
+        "columns": 1
       }
     ],
     "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：竖版 9:16：四张卡片从上到下一张一条、整宽，顺序同横版（先左后右、先上后下）。字和横版完全一样。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"

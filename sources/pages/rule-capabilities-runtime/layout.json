@@ -330,6 +330,10 @@
           "_library/fix-round-2/icon-clean-71e040b035621f213a7d.png"
         ],
         "illustration_description": "原规格插画位置：left_inside"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "中外消息快查"
       }
     ],
     "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。横版两等宽卡，左卡底部内嵌清单小框，右卡标题旁调色盘；竖版小工具卡、独立清单框、图片设计卡顺排。",
@@ -370,6 +374,10 @@
         "icons": "auto",
         "illustration": "none",
         "text_ref": "生成图片和设计画面"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "中外消息快查"
       }
     ],
     "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。横版两等宽卡，左卡底部内嵌清单小框，右卡标题旁调色盘；竖版小工具卡、独立清单框、图片设计卡顺排。",
@@ -391,7 +399,7 @@
         "illustration": "left_inside",
         "icons": "auto",
         "connector": "none",
-        "text_ref": "私人领域直接走各自的入口|Gmail、Google 云盘和待办",
+        "text_ref": "私人领域直接走各自的入口|Gmail 和 Google 云盘",
         "icon_position": "header_left",
         "header_icon": [
           "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
@@ -415,7 +423,7 @@
         "illustration": "left_inside",
         "icons": "auto",
         "connector": "none",
-        "text_ref": "私人领域直接走各自的入口|Gmail、Google 云盘和待办",
+        "text_ref": "私人领域直接走各自的入口|Gmail 和 Google 云盘",
         "icon_position": "header_left",
         "header_icon": [
           "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",

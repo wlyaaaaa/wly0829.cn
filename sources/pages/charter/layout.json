@@ -171,6 +171,48 @@
     "notes": "两张竖图顺序v→v2：第一张=居中毛笔约法、居中副标题、卡外居中插画（实图接近全宽）、介绍、谁说了算整卡；第二张=十组目录单列十行、版本说明浅绿条、下方居中按钮。第二张外圈大卡把目录和版本/按钮包在一起；不重复标题、不丢目录。版本说明与按钮在同一para节点，不能为按钮重定位一次。；本轮仅文字核对，标题块已补 manifest 的原图位置；台阶用现组件有效字段 variant=steps、highlight=[2]，其余目录/同卡导航/原文强调构图的支持缺口另列请求。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；本轮目录采用已修好的single_panel内链接列，02用现有points_card实际画浅绿卡头，03-v独立L17用绿notice实现强调；卡头右导航及03横版内双栏仍未支持。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"
   },
   {
+    "screen": "charter-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "人话要点 · 平常最常碰到的几条"
+      },
+      {
+        "type": "prose",
+        "text_ref": "下面的条文是原话"
+      },
+      {
+        "type": "points_card",
+        "columns": 2,
+        "text_ref": "怎么和我说话、什么时候问我|怎么干活"
+      }
+    ]
+  },
+  {
+    "screen": "charter-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "人话要点 · 平常最常碰到的几条"
+      },
+      {
+        "type": "prose",
+        "text_ref": "下面的条文是原话"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "text_ref": "怎么和我说话、什么时候问我|怎么干活"
+      }
+    ]
+  },
+  {
     "screen": "charter-02",
     "orientation": "h",
     "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\charter\\img\\charter-02-h.png",

@@ -39,7 +39,7 @@
    "public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3"
   },
   "explanation_based_on": {
-   "release": "E337",
+   "release": "E372",
    "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：推小推车的小 AI 助手走到白绿木栏杆前停下；岗亭里戴眼镜的小 AI 助手抬头看一眼单子、点点头；桌上四选一托盘里的黄铜钥匙轻轻亮一下，手机屏幕上的六个圆点依次亮起又熄灭；木栏杆缓缓抬起一半又落回原位；远处 GitHub 小木屋的烟囱冒出一缕淡绿的烟；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子和纸条上的字保持不动、不变形，手机屏幕上不出现数字。",
@@ -49,10 +49,10 @@
    "numbers": [
     {
      "id": "n-release",
-     "text": "E259（网页来源快照，北京时间 10 月 12 日 05:01 起生效）",
+     "text": "E372",
      "meaning": "本页原文采用的网站来源快照；AI 实际开工以活动规则入口核验结果为准",
-     "as_of": "2026-10-12",
-     "source": "sources/rules/current-rules.json 与 release.json：网页来源快照 release_id=E259，activated_at_utc=2026-10-11T21:01:29.2652522+00:00；2026-10-12 19:12（北京时间）正式 Inspect：pass/e_rules_active_verified，活动 release_id=E268；protected_actions_contract 作者 sha256=5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa，与本页 E259 作者源一致；公开源 sha256=29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1，公开字节也一致",
+     "as_of": "2026-11-04",
+     "source": "sources/rules/release.json：version=E372，ruleset_sha256=ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7；本页原文 docs/contracts/agents.protected-actions.md，sha256=03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73",
      "screens": [
       "rule-protected-actions-07"
      ]
@@ -258,8 +258,8 @@
  },
  "source": {
   "page": "sources/pages/rule-protected-actions/page.json",
-  "sha256": "1e6a611a0bf778944d982d643745289e0dd27bfb8dac528aa683590c62e75c91",
-  "converted_at_beijing": "2026-11-04T10:21:46+08:00"
+  "sha256": "8674380b6822529832e2afc9092777bec3b991733e64dad2341ea1c20ec2fb56",
+  "converted_at_beijing": "2026-11-04T10:36:30+08:00"
  }
 }
 ---
