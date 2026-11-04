@@ -43,7 +43,7 @@
  "source": {
   "page": "sources/pages/skill-control-plane-doctor/page.json",
   "sha256": "fdd0c2f6907589cfbc90571bc58cd3e5842521cca7358f0a211bec1b1c7d72c9",
-  "converted_at_beijing": "2026-11-04T17:26:16+08:00"
+  "converted_at_beijing": "2026-11-04T17:54:17+08:00"
  }
 }
 ---
@@ -108,7 +108,8 @@
      "type": "illustration",
      "asset": "_library/icons/工具箱回收站.png",
      "align": "center",
-     "target_width": "55%"
+     "target_width": "55%",
+     "target_height": 317
     },
     {
      "type": "prose",

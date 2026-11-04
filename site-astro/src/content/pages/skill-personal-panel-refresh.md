@@ -43,7 +43,7 @@
  "source": {
   "page": "sources/pages/skill-personal-panel-refresh/page.json",
   "sha256": "60f20c2d96658962782b1be89e4c2b366d9cacbe84e4a904eeaafd33daeff737",
-  "converted_at_beijing": "2026-11-04T17:26:16+08:00"
+  "converted_at_beijing": "2026-11-04T17:54:17+08:00"
  }
 }
 ---
@@ -108,7 +108,8 @@
      "type": "illustration",
      "asset": "_library/icons/工具箱回收站.png",
      "align": "center",
-     "target_width": "55%"
+     "target_width": "55%",
+     "target_height": 317
     },
     {
      "type": "prose",

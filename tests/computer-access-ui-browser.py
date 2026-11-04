@@ -25,7 +25,7 @@ async def run(args):
     manifest = args.release / 'release-manifest.json'
     objects = json.loads(manifest.read_text('utf8')).get('oss', {}).get('objects', {}) if manifest.is_file() else {}
     asset_urls = {item['url']: '/' + path for path, item in objects.items() if item.get('url')}
-    state = {'mode': 'normal', 'status_requests': 0, 'writes': [], 'missing': []}
+    state = {'mode': 'normal', 'status_requests': 0, 'local_beacons': 0, 'writes': [], 'missing': []}
     errors, console_errors, results = [], [], []
     def status():
         now = time.time(); result = module.fixture()
@@ -68,6 +68,9 @@ async def run(args):
                     if request.method not in ['GET','HEAD']:
                         state['writes'].append(request.url); return await request_route.abort()
                     if url.hostname=='mcp.wly0829.cn' and '/status' in url.path or url.hostname=='live.wly0829.cn' and url.path=='/computer-access/state': path='/__status'
+                    elif url.hostname=='wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com' and url.path=='/_v.gif':
+                        state['local_beacons'] += 1
+                        return await request_route.fulfill(status=200,content_type='image/gif',body=bytes.fromhex('47494638396101000100800000000000ffffff21f90401000000002c00000000010001000002024401003b'))
                     elif request.url.split('?')[0] in asset_urls: path=asset_urls[request.url.split('?')[0]]
                     elif url.hostname=='wly0829.cn': path=url.path
                     else: return await request_route.abort()

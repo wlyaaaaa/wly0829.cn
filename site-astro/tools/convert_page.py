@@ -855,8 +855,9 @@ def redirect_layout(s, title):
     nodes = parse(s.get("text", ""), markdown_links=original_markdown(s))
     ref = next((node_text(n)[:10] for n in nodes[1:] if n.get("type") == "para" and node_text(n)), None)
     h = [{"type": "chapter_title", "text_ref": title, "align": "left", "size": "large", "row": "go", "width": "70%", "row_fit_illustration": True}]
+    # 竖版内宽 885 的 55% 按此图 1260:820 配高，避免冻结时自然高度撑长。
     v = [{"type": "chapter_title", "text_ref": title, "align": "center", "size": "large"},
-         {"type": "illustration", "asset": REDIRECT_ICON, "align": "center", "target_width": "55%"}]
+         {"type": "illustration", "asset": REDIRECT_ICON, "align": "center", "target_width": "55%", "target_height": 317}]
     if ref:
         h.append({"type": "prose", "text_ref": ref, "row": "go"})
         v.append({"type": "prose", "text_ref": ref})

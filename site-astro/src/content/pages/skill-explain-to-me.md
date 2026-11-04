@@ -53,7 +53,7 @@
  "source": {
   "page": "sources/pages/skill-explain-to-me/page.json",
   "sha256": "b472ab2ff070b3184fc5d5b1479ee992b4a5f8a03873c4f4cc38b987839535b7",
-  "converted_at_beijing": "2026-11-04T17:26:16+08:00"
+  "converted_at_beijing": "2026-11-04T17:54:17+08:00"
  }
 }
 ---
@@ -126,7 +126,8 @@
      "type": "illustration",
      "asset": "_library/icons/工具箱回收站.png",
      "align": "center",
-     "target_width": "55%"
+     "target_width": "55%",
+     "target_height": 317
     },
     {
      "type": "prose",

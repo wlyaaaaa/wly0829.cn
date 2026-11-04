@@ -43,7 +43,7 @@
  "source": {
   "page": "sources/pages/skill-file-intake-router/page.json",
   "sha256": "6ed88c752c5dcbfd553c6dd8e91d08b5e3e220d878a194c6226c4526e8c44fd3",
-  "converted_at_beijing": "2026-11-04T17:26:16+08:00"
+  "converted_at_beijing": "2026-11-04T17:54:17+08:00"
  }
 }
 ---
@@ -108,7 +108,8 @@
      "type": "illustration",
      "asset": "_library/icons/工具箱回收站.png",
      "align": "center",
-     "target_width": "55%"
+     "target_width": "55%",
+     "target_height": 317
     },
     {
      "type": "prose",

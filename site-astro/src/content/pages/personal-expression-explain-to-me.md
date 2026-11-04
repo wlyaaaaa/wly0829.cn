@@ -54,7 +54,7 @@
  "source": {
   "page": "sources/pages/personal-expression-explain-to-me/page.json",
   "sha256": "305687f37fd470594856fd70c71afbd4eb5fb60d21bf1ccc0e91dfa13ec757d3",
-  "converted_at_beijing": "2026-11-04T17:26:16+08:00"
+  "converted_at_beijing": "2026-11-04T17:54:17+08:00"
  }
 }
 ---
@@ -127,7 +127,8 @@
      "type": "illustration",
      "asset": "_library/icons/工具箱回收站.png",
      "align": "center",
-     "target_width": "55%"
+     "target_width": "55%",
+     "target_height": 317
     },
     {
      "type": "prose",

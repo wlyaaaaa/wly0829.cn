@@ -43,7 +43,7 @@
  "source": {
   "page": "sources/pages/skill-mojibake-doctor/page.json",
   "sha256": "658da4b4136f25e1242d890ef39308cc8868949020aa8aa33de162000a8ec66f",
-  "converted_at_beijing": "2026-11-04T17:14:46+08:00"
+  "converted_at_beijing": "2026-11-04T17:54:17+08:00"
  }
 }
 ---
@@ -108,7 +108,8 @@
      "type": "illustration",
      "asset": "_library/icons/工具箱回收站.png",
      "align": "center",
-     "target_width": "55%"
+     "target_width": "55%",
+     "target_height": 317
     },
     {
      "type": "prose",
