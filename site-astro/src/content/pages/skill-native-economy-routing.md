@@ -43,7 +43,7 @@
  "source": {
   "page": "sources/pages/skill-native-economy-routing/page.json",
   "sha256": "8d357a2a94968ca643183904979db1054b91b4e33748d95ae56c81694e120e3f",
-  "converted_at_beijing": "2026-10-11T13:37:01+08:00"
+  "converted_at_beijing": "2026-11-04T17:26:16+08:00"
  }
 }
 ---
@@ -108,7 +108,7 @@
      "type": "illustration",
      "asset": "_library/icons/工具箱回收站.png",
      "align": "center",
-     "size": "medium"
+     "target_width": "55%"
     },
     {
      "type": "prose",

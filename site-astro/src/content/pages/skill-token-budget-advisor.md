@@ -43,7 +43,7 @@
  "source": {
   "page": "sources/pages/skill-token-budget-advisor/page.json",
   "sha256": "e746eeff39769b484072354f97ff7e8ae861ff10bb0cd35a6d0fc6030e573403",
-  "converted_at_beijing": "2026-10-11T13:37:21+08:00"
+  "converted_at_beijing": "2026-11-04T17:26:16+08:00"
  }
 }
 ---
@@ -108,7 +108,7 @@
      "type": "illustration",
      "asset": "_library/icons/工具箱回收站.png",
      "align": "center",
-     "size": "medium"
+     "target_width": "55%"
     },
     {
      "type": "prose",
