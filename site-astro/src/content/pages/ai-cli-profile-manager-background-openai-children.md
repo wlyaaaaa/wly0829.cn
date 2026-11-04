@@ -27,14 +27,14 @@
   "parent": "ai-cli-profile-manager",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "父项目总览状态“常用”；事实按 10 月 11 日 14:00 前的源码（10 月 8 日提交）、9 月 18 日验收原文与回执、当天桌面桥核对整理，没有新建子会话或发厂商请求。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "as_of": "2026-11-04",
+   "source": "项目源码和验收记录"
   }
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-background-openai-children/page.json",
-  "sha256": "6ac610a17f72322035c6a8d556416f664942c4fa741ca784bcf2440af6ad2eae",
-  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
+  "sha256": "0e7b9a644816224ffaaf200ef23a36d9808dbf039f5a3d68260b93a25fdf9281",
+  "converted_at_beijing": "2026-11-04T12:05:28+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和验收记录",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和验收记录"
     },
     {
      "type": "action_button",
@@ -182,9 +182,9 @@ AI CLI Profile Manager · 功能说明
 
 我可以让正在工作的GLM或DeepSeek任务请一个已允许的OpenAI模型复核，父任务不必一直等着。子会话能继续报告进度，也能带着一个明确问题回来；父任务回答后，还是原来的子会话接着做，之前的上下文不必从头复述。
 
-**当前情况：**9 月 18 日已实际验收两条链：GLM-5.3 Flash 和 DeepSeek Flash 各作父任务，与同一个 Luna High 子会话完成往返；GLM-5.3 等其他组合仍需自己的证据，不因创建成功就称工作完成。
+**当前情况：**9 月 18 日已实际验收两条链：GLM-5.3 Flash 和 DeepSeek Flash 各作父任务，与同一个 Luna High 子会话完成往返；GLM-5.3 等其他组合仍需自己的证据，不因创建成功就称工作完成。帮手的旧型号已登记换代时，续问不会暗中换型号，而是提示另开一个，原会话不动；正在运行的桌面桥是否已用上这份代码还没核对。
 
-内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；具体测试保留各自日期，页面不实时探测运行状态。
+内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；型号换代和专用判断按 11 月 4 日读到的源码和已装模块更新；具体测试保留各自日期，页面不实时探测运行状态。
 
 项目源码：公开仓库
 
@@ -348,7 +348,7 @@ AI CLI Profile Manager · 功能说明
 
 ## 入口不可用或证据不足时
 
-缺明确模型许可或父子会话身份不符时停相应动作，保留原会话与失败原因。
+缺明确模型许可或父子会话身份不符时停相应动作，保留原会话与失败原因。子任务的旧型号已登记换代时也一样：不暗换，提示另开新的子任务。
 
 ::screen{#ai-cli-profile-manager-background-openai-children-03 section="usage"}
 
@@ -580,7 +580,7 @@ GLM-5.3 Flash 和 DeepSeek Flash 两条真实桌面父子链 9 月 18 日已接�
 
 ## 当前怎样实现
 
-- openai_child一次提交完整model、reasoning_effort、task_name和message创建实际官方子thread；后续继续同一绑定，明确模型/档位，不用新线程冒充续问。默认等待1秒，可选0—30秒；返回running只证明已受理并仍在运行。
+- openai_child一次提交完整model、reasoning_effort、task_name和message创建实际官方子thread；后续继续同一绑定，明确模型/档位，不用新线程冒充续问。默认等待1秒，可选0—30秒；返回running只证明已受理并仍在运行。带旧thread_id续问时，若中央登记会把这个型号换成别的，返回migration_required并保留原线程，要求新建子任务，不把换型号说成原线程续上。
 
 - 子会话通过openai_parent回报：非提问的进度发送后继续工作；真正提问进入待答。父任务只有回答现存问题时才使用reply_to，普通续问省略该字段。已完成消息ID不能冒充待答问题ID。
 
@@ -679,7 +679,7 @@ GLM-5.3 Flash 和 DeepSeek Flash 两条真实桌面父子链 9 月 18 日已接�
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- 受保护判断专用角色在源码里仍写死为 gpt-6-sol/high 常规与 gpt-6-astra/high 重大后果两档，均只接受agent_type/model/reasoning_effort/task_name/message五字段；wait_ms、thread_id、reply_to、fork_turns连null也不可传。我的 AI 规则后来已调整选型，但这里的代码尚未跟着改，属于待同步的差异。Sol 遇升级条件交回原父，角色名不授予模型身份、principal（受验证的执行主体） 或实施授权。错误参数与身份分别返回可纠正代码及五字段说明，不回显私密请求、不创建子会话；旧父会话可在同一会话消费错误后纠正，不降级普通角色绕过保护。",
+     "text_ref": "- 受保护判断专用角色的名字和帮助里仍写着 gpt-6-sol/high 常规与 gpt-6-astra/high 重大后果两档，均只接受agent_type/model/reasoning_effort/task_name/message五字段；wait_ms、thread_id、reply_to、fork_turns连null也不可传。执行前会把请求和该角色的基准型号分别交给中央解析器，比较解析后的身份，再使用解析出的 model/effort，所以不能只看常量就判仍派旧 Sol。11 月 4 日 09:12 用已装的 `GetDesktopModelPlan.ps1 -ResolveModel` 只读解析：gpt-6-sol/high → gpt-6.1-sol/ultra（source=predecessor、replaced=true），gpt-6-astra/high 不变（replaced=false）。接口仍要求请求里写 reasoning_effort=high，这和归一后的有效档位是两层，不能把接口要求读成 ultra。这只证明当前源码和已装 helper 的选择结果：没有确认正在运行的桌面桥已加载这份实现，也没有创建受保护判断或真实厂商调用。Sol 遇升级条件交回原父，角色名不授予模型身份、principal（受验证的执行主体） 或实施授权。错误参数与身份分别返回可纠正代码及五字段说明，不回显私密请求、不创建子会话；旧父会话可在同一会话消费错误后纠正，不降级普通角色绕过保护。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -697,7 +697,7 @@ GLM-5.3 Flash 和 DeepSeek Flash 两条真实桌面父子链 9 月 18 日已接�
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- 受保护判断专用角色在源码里仍写死为 gpt-6-sol/high 常规与 gpt-6-astra/high 重大后果两档，均只接受agent_type/model/reasoning_effort/task_name/message五字段；wait_ms、thread_id、reply_to、fork_turns连null也不可传。我的 AI 规则后来已调整选型，但这里的代码尚未跟着改，属于待同步的差异。Sol 遇升级条件交回原父，角色名不授予模型身份、principal（受验证的执行主体） 或实施授权。错误参数与身份分别返回可纠正代码及五字段说明，不回显私密请求、不创建子会话；旧父会话可在同一会话消费错误后纠正，不降级普通角色绕过保护。",
+     "text_ref": "- 受保护判断专用角色的名字和帮助里仍写着 gpt-6-sol/high 常规与 gpt-6-astra/high 重大后果两档，均只接受agent_type/model/reasoning_effort/task_name/message五字段；wait_ms、thread_id、reply_to、fork_turns连null也不可传。执行前会把请求和该角色的基准型号分别交给中央解析器，比较解析后的身份，再使用解析出的 model/effort，所以不能只看常量就判仍派旧 Sol。11 月 4 日 09:12 用已装的 `GetDesktopModelPlan.ps1 -ResolveModel` 只读解析：gpt-6-sol/high → gpt-6.1-sol/ultra（source=predecessor、replaced=true），gpt-6-astra/high 不变（replaced=false）。接口仍要求请求里写 reasoning_effort=high，这和归一后的有效档位是两层，不能把接口要求读成 ultra。这只证明当前源码和已装 helper 的选择结果：没有确认正在运行的桌面桥已加载这份实现，也没有创建受保护判断或真实厂商调用。Sol 遇升级条件交回原父，角色名不授予模型身份、principal（受验证的执行主体） 或实施授权。错误参数与身份分别返回可纠正代码及五字段说明，不回显私密请求、不创建子会话；旧父会话可在同一会话消费错误后纠正，不降级普通角色绕过保护。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -712,7 +712,7 @@ GLM-5.3 Flash 和 DeepSeek Flash 两条真实桌面父子链 9 月 18 日已接�
 
 ## 技术实现与依据（三）
 
-- 受保护判断专用角色在源码里仍写死为 gpt-6-sol/high 常规与 gpt-6-astra/high 重大后果两档，均只接受agent_type/model/reasoning_effort/task_name/message五字段；wait_ms、thread_id、reply_to、fork_turns连null也不可传。我的 AI 规则后来已调整选型，但这里的代码尚未跟着改，属于待同步的差异。Sol 遇升级条件交回原父，角色名不授予模型身份、principal（受验证的执行主体） 或实施授权。错误参数与身份分别返回可纠正代码及五字段说明，不回显私密请求、不创建子会话；旧父会话可在同一会话消费错误后纠正，不降级普通角色绕过保护。
+- 受保护判断专用角色的名字和帮助里仍写着 gpt-6-sol/high 常规与 gpt-6-astra/high 重大后果两档，均只接受agent_type/model/reasoning_effort/task_name/message五字段；wait_ms、thread_id、reply_to、fork_turns连null也不可传。执行前会把请求和该角色的基准型号分别交给中央解析器，比较解析后的身份，再使用解析出的 model/effort，所以不能只看常量就判仍派旧 Sol。11 月 4 日 09:12 用已装的 `GetDesktopModelPlan.ps1 -ResolveModel` 只读解析：gpt-6-sol/high → gpt-6.1-sol/ultra（source=predecessor、replaced=true），gpt-6-astra/high 不变（replaced=false）。接口仍要求请求里写 reasoning_effort=high，这和归一后的有效档位是两层，不能把接口要求读成 ultra。这只证明当前源码和已装 helper 的选择结果：没有确认正在运行的桌面桥已加载这份实现，也没有创建受保护判断或真实厂商调用。Sol 遇升级条件交回原父，角色名不授予模型身份、principal（受验证的执行主体） 或实施授权。错误参数与身份分别返回可纠正代码及五字段说明，不回显私密请求、不创建子会话；旧父会话可在同一会话消费错误后纠正，不降级普通角色绕过保护。
 
 ## 执行流程
 
@@ -978,7 +978,12 @@ GLM-5.3 Flash 和 DeepSeek Flash 两条真实桌面父子链 9 月 18 日已接�
   "id": "ai-cli-profile-manager-background-openai-children-10",
   "section": "tech",
   "title": "依据与来源（二）",
-  "links": [],
+  "links": [
+   {
+    "text": "原生桌面接入",
+    "href": "/projects/ai-cli-profile-manager/native-desktop-integration/"
+   }
+  ],
   "anchors": [],
   "live": null,
   "screenshots": [],
@@ -996,7 +1001,7 @@ GLM-5.3 Flash 和 DeepSeek Flash 两条真实桌面父子链 9 月 18 日已接�
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 6ef0e67dbff75135 的错误→纠错→五字段协议回归属旧阶段；当前模块 0.3.19、桌面桥 b47fea3ce81f7a67 已登记。协议合成响应不是真实厂商 E2E（端到端验证），新父工具 schema（数据结构） 和新分支厂商调用仍另验。",
+     "text_ref": "- 6ef0e67dbff75135 的错误→纠错→五字段协议回归属旧阶段；11 月 4 日读到模块仍是 0.3.19；桌面桥 b47fea3ce81f7a67 是 10 月 11 日核对时的登记，之后启用登记已换，见〔原生桌面接入〕。协议合成响应不是真实厂商 E2E（端到端验证），新父工具 schema（数据结构） 和新分支厂商调用仍另验。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1013,7 +1018,7 @@ GLM-5.3 Flash 和 DeepSeek Flash 两条真实桌面父子链 9 月 18 日已接�
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 6ef0e67dbff75135 的错误→纠错→五字段协议回归属旧阶段；当前模块 0.3.19、桌面桥 b47fea3ce81f7a67 已登记。协议合成响应不是真实厂商 E2E（端到端验证），新父工具 schema（数据结构） 和新分支厂商调用仍另验。",
+     "text_ref": "- 6ef0e67dbff75135 的错误→纠错→五字段协议回归属旧阶段；11 月 4 日读到模块仍是 0.3.19；桌面桥 b47fea3ce81f7a67 是 10 月 11 日核对时的登记，之后启用登记已换，见〔原生桌面接入〕。协议合成响应不是真实厂商 E2E（端到端验证），新父工具 schema（数据结构） 和新分支厂商调用仍另验。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1037,7 +1042,7 @@ GLM-5.3 Flash 和 DeepSeek Flash 两条真实桌面父子链 9 月 18 日已接�
 
 ## 依据与来源（二）
 
-- 6ef0e67dbff75135 的错误→纠错→五字段协议回归属旧阶段；当前模块 0.3.19、桌面桥 b47fea3ce81f7a67 已登记。协议合成响应不是真实厂商 E2E（端到端验证），新父工具 schema（数据结构） 和新分支厂商调用仍另验。
+- 6ef0e67dbff75135 的错误→纠错→五字段协议回归属旧阶段；11 月 4 日读到模块仍是 0.3.19；桌面桥 b47fea3ce81f7a67 是 10 月 11 日核对时的登记，之后启用登记已换，见〔原生桌面接入〕。协议合成响应不是真实厂商 E2E（端到端验证），新父工具 schema（数据结构） 和新分支厂商调用仍另验。
 
 ## 与其他模块的关系
 

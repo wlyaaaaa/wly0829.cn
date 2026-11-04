@@ -410,7 +410,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 9月7日完整软件回归中，test_metrics_agent.py 运行 87 项并通过；8 月 31 日 84 项为更早的历史验收。现在这份测试文件定义了 95 个测试方法，另有端点恢复 3 个、天气 7 个；这些是源码里的数量，本轮没有运行，不能写成“今天 95 项通过”。",
+        "text_ref": "- 9月7日完整软件回归中，test_metrics_agent.py 运行 87 项并通过；",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -429,7 +429,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 9月7日完整软件回归中，test_metrics_agent.py 运行 87 项并通过；8 月 31 日 84 项为更早的历史验收。现在这份测试文件定义了 95 个测试方法，另有端点恢复 3 个、天气 7 个；这些是源码里的数量，本轮没有运行，不能写成“今天 95 项通过”。",
+        "text_ref": "- 9月7日完整软件回归中，test_metrics_agent.py 运行 87 项并通过；",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

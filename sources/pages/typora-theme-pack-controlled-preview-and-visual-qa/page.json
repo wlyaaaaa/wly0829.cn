@@ -7,8 +7,11 @@
   "parent": "typora-theme-pack",
   "status_line": {
     "state": "偶尔用",
-    "as_of": "2026-10-11",
-    "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未渲染、未看图。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+    "as_of": "2026-11-04",
+    "source": "项目源码和历史检查记录",
+    "facts": [
+      "表头修复后的样张还没有重新看图"
+    ]
   },
   "screens": [
     {
@@ -165,7 +168,7 @@
     }
   ],
   "based_on": {
-    "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
-    "commit_time": "2026-09-28T12:36:45-05:00"
+    "commit": "9cefc0e1e41d5351693071cfbb7452f5deda93c6",
+    "commit_time": "2026-10-20T03:21:43-05:00"
   }
 }

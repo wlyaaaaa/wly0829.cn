@@ -42,9 +42,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "commit": "6f3cb90f79d8dd7632eb3adf0e1cd5028471bf92",
-   "commit_time": "2026-09-25T03:52:41+08:00",
-   "file": "旧站源码 V:\\Personal\\Projects\\wly0829.cn（app\\page.jsx McpAccessPage、app\\content-mcp-access.js）；PCConfig 91b73e4（tools\\remote-computer-mcp\\README.md、docs\\recovery\\副驾驶笔记本账本.md）；事实单 b1\\pipe\\p2\\facts-ops.md 第 2 节；10 月 1 日 18:29 本写稿人对副机 ComputerContext 的一次只读调用"
+   "observed_at": "2026-11-04",
+   "facts": [
+    "facts/page-mcp.md"
+   ]
   },
   "video_prompt": "以这张图为第一帧，镜头和构图完全不动，只让插画里的东西轻轻动：手机和显示器之间那条绿色丝带像被微风吹着轻轻起伏，丝带上漂着的那一小块桌面画面慢慢滑向手机；另一条虚线上，一颗绿色光点从手机的对话气泡出发，沿虚线流进机箱，机箱侧面的绿色灯带随之亮一下；显示器屏幕上的浅绿画面缓慢流动；笔记本屏幕微微亮起再暗回去；桌角绿植的叶子轻轻摇，一片小叶子缓缓飘落。画面里不出现任何文字和数字，不添加新东西，按钮、文字和空框所在的白色纸面保持干净不动。约 6 秒，首尾衔接成无缝循环，水彩画风不变，没有声音。 ｜ Prompt: Use this image as the first frame. Keep the camera and composition completely still and gently animate only what is in the illustration: the green ribbon between the phone and the monitor ripples softly as if in a light breeze, and the small piece of desktop picture floating on it glides slowly toward the phone; along the other dotted line, a small green light dot leaves the chat bubble on the phone and flows into the PC case, and the green light strip on the side of the case brightens once; the pale green picture on the monitor drifts slowly; the laptop screen glows faintly and dims again; the leaves of the desk plant sway gently and one small leaf drifts down. No text or numbers anywhere, add nothing new, keep the white paper where the buttons, text and empty boxes sit clean and still. About 6 seconds, the last frame matches the first for a seamless loop, same watercolor style, no audio.",
   "registry": {
@@ -120,6 +121,26 @@
      "screens": [
       "mcp-06"
      ]
+    },
+    {
+     "id": "n-chatgpt-main-1014",
+     "text": "10 月 14 日 11:03",
+     "meaning": "手机ChatGPT主机真实连接记录",
+     "as_of": "2026-11-04",
+     "source": "facts/page-mcp.md；_回执-w12.md",
+     "screens": [
+      "mcp-06"
+     ]
+    },
+    {
+     "id": "n-moonlight-lan",
+     "text": "11 月 3 日 22:00–22:02",
+     "meaning": "Moonlight局域网真实验证记录",
+     "as_of": "2026-11-04",
+     "source": "facts/page-mcp.md；_回执-w12.md",
+     "screens": [
+      "mcp-06"
+     ]
     }
    ],
    "mentions": [
@@ -180,8 +201,8 @@
  },
  "source": {
   "page": "sources/pages/mcp/page.json",
-  "sha256": "b7e249b24dddf015aa389f9959ae6ef43facfbea5e3cc02b8e2658f09486fdce",
-  "converted_at_beijing": "2026-10-11T13:58:11+08:00"
+  "sha256": "c9303edc7ac315b47173aa30fc7eece4a6b3bd9ea69d634fb4bc3be4448f8451",
+  "converted_at_beijing": "2026-11-04T12:05:32+08:00"
  }
 }
 ---
@@ -829,7 +850,7 @@ ChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件�
 日常用 Moonlight 连主机（电脑上跑的是 Sunshine；Artemis 也能连）。副机也以 Moonlight 为主，网易 UU、ToDesk 备用。
 
 **怎么连**
-1. 打开手机或笔记本上的 Moonlight，点已经配对好的主机。人不在家时，这台设备要在 Tailscale（只连我自己设备的私人网络）里。
+1. 打开手机或笔记本上的 Moonlight，点已经配对好的主机。在家和电脑同一网络时，Moonlight 自己发现电脑、走局域网，不用手动切（这条局域网通路 11 月 3 日只给笔记本开了，手机在家先按下面不在家的办法走 Tailscale）。人不在家时，这台设备要在 Tailscale（只连我自己设备的私人网络）里，走原来手动加的地址。
 2. 看得见桌面、点得动，才算连上。
 3. 断开后看一眼：主屏和窗口还在原位。
 
@@ -837,7 +858,7 @@ ChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件�
 
 **停在登录界面时**　Moonlight 要先登录才行，这时用 ToDesk：看门狗每 2 分钟把 ToDesk 服务修回开着。重启后、登录前从别的设备真连一次，还没验收。
 
-**最近一次真实验证**　10 月 8 日：同一网络里画面和操作都正常，切到手机热点后连续用 5 分钟没断（我确认的；同网延迟约 5–9 毫秒）。还没验过：连接中途断开后能不能恢复、电脑自然重启后能不能直接连回。这是那一次的实测，不保证所有网络都始终直连。
+**最近一次真实验证**　11 月 3 日 22:00–22:02：笔记本同网走局域网，约 60 帧/秒、网络丢帧 0%、延迟约 4 毫秒，画面和操作都正常、正常断开（我确认的），断开后屏幕摆放和之前一样。同一天 21:54 结束的前一次还走 Tailscale，只有约 2.4 帧/秒、网络丢帧约 96%；外网走 Tailscale 的质量没有新的实测。10 月 8 日：同一网络里画面和操作都正常，切到手机热点后连续用 5 分钟没断（我确认的；同网延迟约 5–9 毫秒）。还没验过：连接中途断开后能不能恢复、电脑自然重启后能不能直接连回。这些是那几次的实测，不保证所有网络都始终直连。
 
 没画面看〔救急先看：串流没画面〕；技术细节见〔远程电脑串流〕。
 
@@ -999,6 +1020,11 @@ ChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件�
      "illustration": "none",
      "connector": "none",
      "text_ref": "平时 ChatGPT"
+    },
+    {
+     "type": "points_card",
+     "columns": 1,
+     "text_ref": "接新程序、解除连接"
     }
    ],
    "notes": "实查：上部左标题/两行介绍，右为桌面和猫的独立插画；中部主机、副机、备用入口三张等宽卡一排。每卡头左图右标题/说明，地址浅灰等宽条完整折行，按钮两列（复制说明绿底，地址白底），正文在底部。下方满宽叶角提示条。卡内地址+［］按钮混合节点目前core.content_card只按普通para排，address_style/button_columns未消费；现button_variants已支持［］但需嵌入每卡并绑定where，不可把三卡同名按钮混为同一行为。新增地址/双按钮组合样式待样张。 本轮用 points_card 的整卡与卡头图标接口承接混合节点，让三张等宽卡内按钮可换行而不溢出；地址等宽、两种按钮样式和备用卡中插画分层仍需组件承接。"
@@ -1079,6 +1105,11 @@ ChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件�
      "illustration": "none",
      "connector": "none",
      "text_ref": "平时 ChatGPT"
+    },
+    {
+     "type": "points_card",
+     "columns": 1,
+     "text_ref": "接新程序、解除连接"
     }
    ],
    "notes": "实查v及替换v2：v的标题/介绍下为机器人和电脑大插画，随后主机、副机两张整宽卡（卡头左图右字，地址与双按钮下排）；v2备用卡整宽，标题+灰说明在上、大转接插画在中、灰底地址/双按钮/正文向下，末尾灰字。替换v2地址无链接下划线，不能统一强加绿色链接；图中复制图标不加任何新字。当前content_card的top_inside会把图放在标题上方，尚不能原样支持标题/插画/地址/双按钮/正文分层，需要样张；说明同横版。 本轮用 points_card 的整卡与卡头图标接口承接混合节点，让三张等宽卡内按钮可换行而不溢出；地址等宽、两种按钮样式和备用卡中插画分层仍需组件承接。"
@@ -1193,6 +1224,8 @@ https://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp
 主机的公网入口坏了才临时加上，干活的仍是主机。要单独授权一次，主入口的登录不能拿来用；两台都要开机联网。不会自动切换，也不会把中断的任务重做一遍。
 
 平时 ChatGPT 里只留主机、副机两个连接。
+
+**接新程序、解除连接**　新程序要连：让 AI 给它单独登记一个身份和精确的回调地址，再由我在电脑的授权页登录一次。固定口令这条路两台电脑都关着，只有程序除此之外没别的办法时才临时打开，用完关掉。连上以后不用隔几天重登：15 分钟一换的通行证会自动续，续期凭据不按时间过期。要断开一个程序：让 AI 在电脑上解除它的授权，它下次要重新登录，别的程序不受影响；主入口、备用入口、副机各算各的。想永远不让它连，再删掉登记。这是现在的配置和说明，11 月 4 日没有真的新接、续期或解除过。
 
 ::screen{#mcp-04 section="chatgpt"}
 
@@ -1477,10 +1510,10 @@ https://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp
 
 ## ChatGPT 怎么接
 
-账号要能用自定义 MCP（开发者模式）。
+账号要能用自定义 MCP。下面按 OpenAI 现在的官方说明写（11 月 4 日读的）；我账号界面上的菜单没有登录核对，名字或位置对不上，以界面为准。
 
-1. 在电脑上打开 ChatGPT 网页：设置 → Security and login（安全和登录）→ 打开 Developer mode（开发者模式）。
-2. 打开〔chatgpt.com/plugins〕，点加号新建一个 MCP 应用，放进项目“我的电脑”，名字叫“主机 MCP”或“副机 MCP”，地址填上一屏那条。
+1. 在电脑上打开 ChatGPT 网页的插件页〔chatgpt.com/plugins〕。
+2. 点加号 → Add custom MCP server（添加自定义 MCP 服务器），名字叫“主机 MCP”或“副机 MCP”，地址填上一屏那条。
 3. 认证选 OAuth，照下表填：
 | 项目 | 填什么 |
 |---|---|
@@ -1488,8 +1521,10 @@ https://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp
 | 客户端密钥 | 留空 |
 | 令牌端点认证方式 | none |
 | 权限范围 | desktop:control |
-4. 点连接，弹出电脑自己的登录页：输入密码中心里登记的“电脑 MCP 入口密码”，不是 OpenAI 的密码。
-5. 连上后先让它调用 ComputerContext，看连的是不是那台电脑，再跑一条只读命令。显示“已安装”不算连通。
+4. 点连接前：看完风险提示选 I understand and want to continue（我了解，继续），点 Create as a plugin（创建为插件），再到个人插件里安装它。然后点连接，弹出电脑自己的登录页：输入密码中心里登记的“电脑 MCP 入口密码”（主机、副机各一条），不是 OpenAI 的密码。
+5. 连上后在对话里选上它，先让它调用 ComputerContext，看连的是不是那台电脑，再跑一条只读命令。显示“已安装”不算连通。
+
+官方说明还列了自动注册客户端的方式，我的电脑没开，只认上面这张表。要不要放进项目“我的电脑”由我自己定，接入不需要这一步。旧步骤里的“设置 → Security and login → 打开 Developer mode”，官方这条流程没有列，加号里找不到入口时再去设置里看。
 
 **在手机上用**　手机 App 能不能直接新建连接还没核实；建不了就在电脑网页上给同一个账号加，手机上照样用。手机上用不用开 Tailscale：不用，ChatGPT 的服务器经公网连电脑，手机原来的代理照开。
 
@@ -2263,6 +2298,8 @@ Claude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前�
 
 | 哪条路 | 哪天（北京时间） | 验证了什么 |
 |---|---|---|
+| 主机、副机当下状态（只读） | 11 月 4 日 11:43（主机）；11:14（副机） | 主机自检健康，桌面和维护都就绪；连到副机读回了它的电脑名。只是读状态，没有让各客户端重新登录或实办 |
+| ChatGPT → 主机 | 10 月 14 日 11:03 | 网页全新临时聊天，没手动指定连接，真跑一条 PowerShell，返回主机名 WLY、退出码 0。管理员、SYSTEM 和登录续期这次没验 |
 | ChatGPT → 主机 | 9 月 11 日 16:54、17:15–17:16 | 普通命令回读主机；管理员和 SYSTEM 维护都返回对的 Windows 身份；登录过期自动续上 |
 | ChatGPT → 副机 | 9 月 11 日 11:28 | 普通命令 8 次全成功；SYSTEM 维护成功 |
 | Claude Code（主机）→ 副机 | 10 月 1 日 18:29 | 只读调用 ComputerContext，返回副机的电脑名和规则 |
@@ -2270,6 +2307,7 @@ Claude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前�
 | 主机上的连接脚本 → 副机（冷连接） | 10 月 8 日 | ComputerContext 和 PowerShell 都通过，返回副机电脑名、命令完成 |
 | 副机的 Codex → 主机备用入口 | 9 月 11 日 17:38、17:45 | 登录完成；新开的任务普通命令和 SYSTEM 维护都成功 |
 | 主机备用入口 | 9 月 11 日 16:28–16:29 | 故意停掉主机的公网隧道，经副机转接，普通命令 3 次全成功 |
+| Moonlight 串流（笔记本同网走局域网） | 11 月 3 日 22:00–22:02 | 约 60 帧/秒、网络丢帧 0%、延迟约 4 毫秒，画面和操作正常（我确认的）。只证明这一次同网 |
 | Moonlight 串流 | 10 月 8 日 | 同网画面、操作正常；切到手机热点连续 5 分钟没断（我确认的）。连接断开后恢复、自然重启后恢复还没验 |
 | 登录前用 ToDesk | 未核实 | 只验过看门狗在跑，没从别的设备真连过 |
 

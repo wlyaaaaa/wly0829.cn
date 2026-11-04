@@ -21,7 +21,7 @@
       {
         "type": "prose",
         "row": "intro",
-        "text_ref": "在自己电脑上把中文录音转成文字，还会指出哪里可能错：默认每段录音让两个不同的模型各听一遍（Qwen3-A"
+        "text_ref": "AI替我处理一段选定的录音时，免费期内先送阿里云百炼（Qwe"
       },
       {
         "type": "illustration",
@@ -35,7 +35,7 @@
         "columns": 4,
         "columns_v": 2,
         "icons": "auto",
-        "text_ref": "**912 段**｜8 月 18 日起"
+        "text_ref": "934段8月18日起，按11月4日08:36现存任务结果清点"
       },
       {
         "type": "live_strip",
@@ -73,7 +73,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "在自己电脑上把中文录音转成文字，还会指出哪里可能错：默认每段录音让两个不同的模型各听一遍（Qwen3-A"
+        "text_ref": "AI替我处理一段选定的录音时，免费期内先送阿里云百炼（Qwe"
       },
       {
         "type": "illustration",
@@ -85,7 +85,7 @@
         "columns": 4,
         "columns_v": 2,
         "icons": "auto",
-        "text_ref": "**912 段**｜8 月 18 日起"
+        "text_ref": "934段8月18日起，按11月4日08:36现存任务结果清点"
       },
       {
         "type": "live_strip",
@@ -123,7 +123,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "云端什么时候传、怎么停、花不花钱：疑难的，再请云端听一遍"
+        "text_ref": "云端什么时候传、怎么停、花不花钱：录音怎么上云"
       }
     ],
     "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左上标题。一张水彩风格的大表格，三列十一行，表头浅绿底；每行最左边一个小水彩图标（一只麦克风压在键盘上、兔子、普通录音、带星的录音、一朵云下面一把放大镜、很长的磁带、文件夹、两个说话气泡、一只指着自己的手、一张写满字的纸加时钟、一只回形针夹着旧纸）。行与行之间细浅绿分隔线。表格右上角画一支小小的分岔路路牌。表格下面一行字，末尾〔疑难的，再请云端听一遍〕画成白底细浅绿描边的圆角按钮。",
@@ -150,7 +150,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "云端什么时候传、怎么停、花不花钱：疑难的，再请云端听一遍"
+        "text_ref": "云端什么时候传、怎么停、花不花钱：录音怎么上云"
       }
     ],
     "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；表格改成十一张小卡片一行一张：卡片粗体写“想要”那一格，下面两行分别是“怎么转：…”“交回什么：…”（这两个前缀是竖版卡片里的小标签，横版不画）；图标放卡片左上；最下面那行字和按钮单独一行，按钮右对齐。",
@@ -169,22 +169,23 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "两种用法"
+        "text_ref": "三种用法"
       },
       {
         "type": "content_card",
-        "columns": 2,
+        "columns": 3,
         "columns_v": 1,
         "illustration": "top_inside",
         "icons": [
           "_library/hires-icons/代码窗口.png",
-          "_library/icons/麦克风.png"
+          "_library/icons/麦克风.png",
+          "_library/icons/双气泡.png"
         ],
         "text_ref": "口述：按Win+H就说"
       },
       {
         "type": "notice",
-        "text_ref": "听写要快，所以只用一个模型；录音要准，所以两个模型、慢一点，但会指出哪里可能错。"
+        "text_ref": "听写要快，所以只用一个本机模型；微信实时语音也要快，所以提前"
       },
       {
         "type": "prose",
@@ -206,22 +207,23 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "两种用法"
+        "text_ref": "三种用法"
       },
       {
         "type": "content_card",
-        "columns": 2,
+        "columns": 3,
         "columns_v": 1,
         "illustration": "top_inside",
         "icons": [
           "_library/hires-icons/代码窗口.png",
-          "_library/icons/麦克风.png"
+          "_library/icons/麦克风.png",
+          "_library/icons/双气泡.png"
         ],
         "text_ref": "口述：按Win+H就说"
       },
       {
         "type": "notice",
-        "text_ref": "听写要快，所以只用一个模型；录音要准，所以两个模型、慢一点，但会指出哪里可能错。"
+        "text_ref": "听写要快，所以只用一个本机模型；微信实时语音也要快，所以提前"
       },
       {
         "type": "prose",
@@ -251,7 +253,7 @@
         "direction": "horizontal",
         "connector": "arrow",
         "illustration": "above_card",
-        "text_ref": "1提交AI把录音交给本机转写服务（只在本机监听），最多等15秒，没完就先拿任务编号。2统一格式转成16k"
+        "text_ref": "1先上云免费期内、云端没被停用时，AI直接把这段录音送阿里云"
       },
       {
         "type": "document_mock",
@@ -304,7 +306,7 @@
         "direction": "vertical",
         "connector": "arrow",
         "illustration": "left_inside",
-        "text_ref": "1提交AI把录音交给本机转写服务（只在本机监听），最多等15秒，没完就先拿任务编号。2统一格式转成16k"
+        "text_ref": "1先上云免费期内、云端没被停用时，AI直接把这段录音送阿里云"
       },
       {
         "type": "document_mock",
@@ -349,7 +351,7 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "疑难的，再请云端听一遍"
+        "text_ref": "录音怎么上云"
       },
       {
         "type": "flow",
@@ -363,7 +365,7 @@
           "处理这段录音的 AI",
           "云端"
         ],
-        "text_ref": "本地稿先存好→本机服务只记一笔“等AI接手”，自己从不上传→处理这段录音的AI把它送到阿里云百炼（Qwe"
+        "text_ref": "AI拿到这次选定的录音→查免费期和有没有被停用→送阿里云百炼"
       },
       {
         "type": "content_card",
@@ -373,7 +375,7 @@
         "icons": "auto",
         "row": "facts-0",
         "width": "50%",
-        "text_ref": "什么算疑难：两个模型对不上、正文里有[疑似]、有一个模型失败、复核说要回听，或者这段被标成重要。"
+        "text_ref": "什么会上传：AI正在处理的这段选定录音，普通清楚的也算，不用"
       },
       {
         "type": "content_card",
@@ -383,7 +385,7 @@
         "icons": "auto",
         "row": "facts-0",
         "width": "50%",
-        "text_ref": "什么不上传：普通清楚的录音和桌面听写，一律不上传。"
+        "text_ref": "什么不上传：桌面听写一律不上传。本机转写服务和文件夹批量自己"
       },
       {
         "type": "content_card",
@@ -435,11 +437,11 @@
       },
       {
         "type": "notice",
-        "text_ref": "8月1日–9月27日全部云端调用（含点名上云和9月26日以前的旧模型）：尝试68次，成功54次，涉及51"
+        "text_ref": "11月4日读到的状态：云端自动上传没被停。"
       },
       {
         "type": "prose",
-        "text_ref": "本地转写时标成重要的录音也算疑难，免费期内照样自动复核；免费期过了还想传，或者不经本地转写直接把整段送上"
+        "text_ref": "本地转写时标成重要的录音也算疑难，免费期内照样自动复核。云优"
       }
     ],
     "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左上标题。标题下一条横向流程（四个小节点：一张存好的纸、一台电脑上方一个写着沙漏的小便签、一只手把一小段波形递向一朵云、云下两张并排的纸中间一个小不等号），绿色箭头相连，流程那段字分成四段写在节点下。中间七张小横卡片两列排（最后一张占满一行），每张左边一个小水彩图标（问号放大镜、一把锁、两条不同粗细的管道、日历、暂停按钮、一枚硬币、一把钥匙），右边粗体小标题加正文。下方一条浅绿底细长卡片放数字那句；最下面一行灰色小字。",
@@ -457,7 +459,7 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "疑难的，再请云端听一遍"
+        "text_ref": "录音怎么上云"
       },
       {
         "type": "flow",
@@ -471,7 +473,7 @@
           "处理这段录音的 AI",
           "云端"
         ],
-        "text_ref": "本地稿先存好→本机服务只记一笔“等AI接手”，自己从不上传→处理这段录音的AI把它送到阿里云百炼（Qwe"
+        "text_ref": "AI拿到这次选定的录音→查免费期和有没有被停用→送阿里云百炼"
       },
       {
         "type": "content_card",
@@ -479,7 +481,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "什么算疑难：两个模型对不上、正文里有[疑似]、有一个模型失败、复核说要回听，或者这段被标成重要。"
+        "text_ref": "什么会上传：AI正在处理的这段选定录音，普通清楚的也算，不用"
       },
       {
         "type": "content_card",
@@ -487,7 +489,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "什么不上传：普通清楚的录音和桌面听写，一律不上传。"
+        "text_ref": "什么不上传：桌面听写一律不上传。本机转写服务和文件夹批量自己"
       },
       {
         "type": "content_card",
@@ -531,11 +533,11 @@
       },
       {
         "type": "notice",
-        "text_ref": "8月1日–9月27日全部云端调用（含点名上云和9月26日以前的旧模型）：尝试68次，成功54次，涉及51"
+        "text_ref": "11月4日读到的状态：云端自动上传没被停。"
       },
       {
         "type": "prose",
-        "text_ref": "本地转写时标成重要的录音也算疑难，免费期内照样自动复核；免费期过了还想传，或者不经本地转写直接把整段送上"
+        "text_ref": "本地转写时标成重要的录音也算疑难，免费期内照样自动复核。云优"
       }
     ],
     "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；流程四个节点改成上下排；七张卡片一行一张；数字卡片；灰色小字。",
@@ -754,7 +756,7 @@
         "direction": "horizontal",
         "connector": "arrow",
         "illustration": "above_card",
-        "text_ref": "1入口AI调asr-smart脚本提交录音；桌面听写是另一条路，登录时由计划任务“ChineseASRD"
+        "text_ref": "1入口四条路：AI处理选定录音先走云入口asr-profes"
       },
       {
         "type": "points_card",
@@ -790,7 +792,7 @@
         "direction": "vertical",
         "connector": "arrow",
         "illustration": "left_inside",
-        "text_ref": "1入口AI调asr-smart脚本提交录音；桌面听写是另一条路，登录时由计划任务“ChineseASRD"
+        "text_ref": "1入口四条路：AI处理选定录音先走云入口asr-profes"
       },
       {
         "type": "points_card",
@@ -824,11 +826,11 @@
       {
         "type": "table",
         "icons": "auto",
-        "text_ref": "做什么模型在哪跑为什么选它日常主听Qwen3-ASR-1.7B（阿里通义千问，17亿参数）本机显卡按公开"
+        "text_ref": "做什么模型在哪跑为什么选它本地主听Qwen3-ASR-1.7"
       },
       {
         "type": "prose",
-        "text_ref": "8个本机模型目录共26.5GiB（10月22日数），都不进GitHub。文件转写现在只有4个识别引擎：Qwen3-ASR-1.7B、SenseVoiceSmall、FireRedASR2-LLM、Pa"
+        "text_ref": "8个本机模型目录共26.5GiB（11月4日数），都不进Gi"
       }
     ],
     "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左上标题。一张四列十一行的水彩表格，表头浅绿底；“在哪跑”一列用小图标区分：本机显卡画一张小显卡，本机画一台小电脑，云端画一朵小云。在“疑难复核”那一行最左边画阿里云的橙色标志。表格下面一行小字。",
@@ -851,11 +853,11 @@
       {
         "type": "table",
         "icons": "auto",
-        "text_ref": "做什么模型在哪跑为什么选它日常主听Qwen3-ASR-1.7B（阿里通义千问，17亿参数）本机显卡按公开"
+        "text_ref": "做什么模型在哪跑为什么选它本地主听Qwen3-ASR-1.7"
       },
       {
         "type": "prose",
-        "text_ref": "8个本机模型目录共26.5GiB（10月22日数），都不进GitHub。文件转写现在只有4个识别引擎：Qwen3-ASR-1.7B、SenseVoiceSmall、FireRedASR2-LLM、Pa"
+        "text_ref": "8个本机模型目录共26.5GiB（11月4日数），都不进Gi"
       }
     ],
     "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；表格改成十一张小卡片一行一张：粗体写“做什么”，下面依次三行“模型…”“在哪跑…”“为什么…”（竖版卡片内用小灰字标签区分这三行，横版不画标签）；最后一行小字。",
@@ -1014,7 +1016,7 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "全部功能（38项）"
+        "text_ref": "全部功能（40项）"
       },
       {
         "type": "status_legend",
@@ -1066,7 +1068,7 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "全部功能（38项）"
+        "text_ref": "全部功能（40项）"
       },
       {
         "type": "status_legend",
@@ -1136,7 +1138,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "云端复核"
+        "text_ref": "云端转写和复核"
       }
     ],
     "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：和标杆页“全部功能”同一种卡片，但组名不单独占一列：每组先一行毛笔小标题（组名），下面该组的功能卡片按本组张数排满每一行：找出要回听的地方第 18–22 项排成 2+3；云端复核第 23–27 项排成 2+3；行内卡片等高等距，不留空卡位；每张卡片左边一个小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（绿＝在用，黄＝待验收，灰＝没用过，浅灰＝说不准）。“｜”只是功能名和那句话的分隔，不画。三张图上下拼成一整段：画风、字号层级、组名和状态点统一；两列、三列、四列行按张数调整卡宽，每排等高等距、铺满画布，上下边都不画边框；这是第二张：没有标题、没有图例，直接接着排。各卡状态：18 绿；19 绿；20 绿；21 绿；22 灰；23 绿；24 绿；25 灰；26 黄；27 浅灰。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
@@ -1171,7 +1173,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "云端复核"
+        "text_ref": "云端转写和复核"
       }
     ],
     "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：同样的字，卡片改成一行一张，组名小标题照旧在每组上方；圆点仍在卡片右上角。三张竖图同样上下拼成一段。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",

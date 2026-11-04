@@ -17,6 +17,7 @@ sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[2]
 NUMBER = re.compile(r"-?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?")
 CHINESE_DATE = re.compile(r"(?:(\d{4})\s*年\s*)?(\d{1,2})\s*月\s*(\d{1,2})\s*日(?:\s+(\d{1,2}):(\d{2})(:\d{2})?)?")
+USAGE_PERIOD = r"\d{1,2} 月 \d{1,2}(?: 日[—–]\d{1,2} 月 \d{1,2}|[—–]\d{1,2}) 日"
 DATETIME = re.compile(r"\d{4}-\d{2}-\d{2}([ T])\d{2}:\d{2}(:\d{2})?(\.\d+)?(Z|[+-]\d{2}:?\d{2})?")
 EVENT_DATE = re.compile(r"(?:最近(?:一次)?|最后(?:一次)?|上(?:一)?次)\s*(?:写入|使用|运行|同步|采集|访问|更新)|(?:数据|记录|账本)\s*(?:记到|覆盖到)|数据水位")
 BEIJING = timezone(timedelta(hours=8))
@@ -62,6 +63,13 @@ def display_fragment(text, start, end, bound_text=None):
 
 def formatted(old, value):
     """仅接受独立数字或日期，沿用页面已有的分隔符和日期写法。"""
+    if re.fullmatch(USAGE_PERIOD, old):
+        if re.fullmatch(USAGE_PERIOD, str(value)):
+            return str(value)
+        first, last = (date.fromisoformat(part) for part in str(value).split("/"))
+        if (last - first).days != 6:
+            raise ValueError("技能次数标签必须覆盖七个完整日")
+        return f"{first.month} 月 {first.day} 日—{last.month} 月 {last.day} 日"
     stamp = DATETIME.fullmatch(old)
     if stamp:
         if not DATETIME.fullmatch(str(value)):
@@ -325,7 +333,10 @@ def build_number_edits(root, result):
             if not same_value(fragment, row["old_value"]):
                 raise ValueError("原位置的值与重取旧值不一致")
             if same_value(str(row["old_value"]), row["new_value"]) and any(
-                    r.get("date_semantics") == "coverage_end" and rid in r.get("qualifies", []) for r in result["rows"]):
+                    r.get("date_semantics") == "coverage_end" and rid in r.get("qualifies", []) for r in result["rows"]) and not (
+                    row.get("retrieve", {}).get("kind") == "usage_ledger"
+                    and row["retrieve"].get("operation") == "count_7d"
+                    and re.fullmatch(rf"{USAGE_PERIOD} AI 用了 [\d,]+ 次", parent[key])):
                 accepted.add(rid)
                 continue
             if row.get("qualifies"):
@@ -343,6 +354,15 @@ def build_number_edits(root, result):
                     pending.append(dict(page=slug, **location, logical_field=target,
                         start=a, end=b, old_value=old, new_value=new,
                         observed_at=evidence_at, record_id=rid))
+            usage = row.get("retrieve", {})
+            if (usage.get("kind") == "usage_ledger" and usage.get("operation") == "count_7d"
+                    and field.startswith("status_line.facts[")):
+                label = re.fullmatch(rf"({USAGE_PERIOD}) AI 用了 ([\d,]+) 次", parent[key])
+                if label:
+                    if label.span(2) != (start, end):
+                        raise ValueError("技能次数标签与数字定位不一致")
+                    last = date.fromisoformat(row.get("source_coverage_end") or "")
+                    add(field, *label.span(1), f"{last - timedelta(days=6)}/{last}")
             number = numbers[ni] if ni is not None else None
             if field.startswith("screens[") and NUMBER.fullmatch(parent[key][start:end]):
                 linked = body_link(page, row, field, start, end, number, result["rows"])

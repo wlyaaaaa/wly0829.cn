@@ -1,0 +1,755 @@
+---
+{
+ "title": "中外消息快查",
+ "kind": "skill",
+ "url": "/skills/news-quickcheck/",
+ "tagline": "用过的人怎么说，AI 进站查原帖，反面说法一起交回。",
+ "toc": [
+  {
+   "id": "top",
+   "label": "开头"
+  },
+  {
+   "id": "examples",
+   "label": "例子"
+  },
+  {
+   "id": "abilities",
+   "label": "能做的事"
+  },
+  {
+   "id": "limits",
+   "label": "边界"
+  },
+  {
+   "id": "tech",
+   "label": "技术"
+  }
+ ],
+ "page": {
+  "schema": "site-b1.page.v1",
+  "page": "skill-news-quickcheck",
+  "kind": "skill",
+  "title": "中外消息快查",
+  "url": "/skills/news-quickcheck/",
+  "tagline": "用过的人怎么说，AI 进站查原帖，反面说法一起交回。",
+  "status": "",
+  "status_line": {
+   "state": "在用",
+   "last": {
+    "label": "上次更新",
+    "at": "2026-11-03 12:16"
+   },
+   "facts": [
+    "11 月 3 日登录检查 12 路：10 路已登录，B 站未知、Grok 超时，这两路随后定点补查已登录；11 月 4 日没有重查"
+   ],
+   "as_of": "2026-11-04",
+   "source": "技能说明和登录检查记录"
+  },
+  "public": false,
+  "repo_url": null,
+  "capability": "",
+  "based_on": {
+   "commit": "953b7c2b",
+   "commit_time": "2026-11-03T12:16:52+08:00",
+   "file": "E:\\.agents\\skills\\news-quickcheck\\SKILL.md；references 下 sources.md、operations.md、evidence-and-sessions.md、muse-tasks.md；scripts/sources.mjs、scripts/search.mjs",
+   "rules_release": "E372"
+  },
+  "search_aliases": [
+   "中外消息快查",
+   "news-quickcheck",
+   "消息快查",
+   "口碑",
+   "传闻",
+   "别人怎么说",
+   "实测"
+  ],
+  "registry": {
+   "relations": [],
+   "mentions": [
+    {
+     "target": "/skills/proxy-network/",
+     "screen": "skill-news-quickcheck-02",
+     "text": "代理与网络"
+    },
+    {
+     "target": "/skills/browser-control-continuity/",
+     "screen": "skill-news-quickcheck-02",
+     "text": "网页上的事接着办"
+    },
+    {
+     "target": "/skills/browser-control-continuity/",
+     "screen": "skill-news-quickcheck-04",
+     "text": "网页上的事接着办"
+    },
+    {
+     "target": "/skills/proxy-network/",
+     "screen": "skill-news-quickcheck-04",
+     "text": "代理与网络"
+    },
+    {
+     "target": "/skills/daily-preferences/",
+     "screen": "skill-news-quickcheck-04",
+     "text": "记得我是谁"
+    }
+   ]
+  },
+  "notes": {
+   "merged": [],
+   "dropped": [
+    "账号细节不上页：哪个账号登在哪个站、小号大号这类。"
+   ],
+   "unsure": [
+    "怎么说和例子是照技能能力写的说明用例，不是本人说过的话，也不是运行记录。"
+   ]
+  }
+ },
+ "source": {
+  "page": "sources/pages/skill-news-quickcheck/page.json",
+  "sha256": "c6dfe311ae15557b5c248aeddafdd9a6792501519128e5ced0812b299033317c",
+  "converted_at_beijing": "2026-11-04T12:05:39+08:00"
+ }
+}
+---
+
+::screen{#skill-news-quickcheck-01 section="top"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-news-quickcheck-01",
+  "section": "top",
+  "title": "做什么、怎么跟 AI 说",
+  "scene": "",
+  "portrait": "",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "中外消息快查",
+     "align": "left",
+     "size": "large",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次更新 11 月 3 日 12:16",
+       "state": "ok"
+      },
+      {
+       "text": "11 月 3 日登录检查 12 路：10 路已登录，B 站未知、Grok 超时，这两路随后定点补查已登录；11 月 4 日没有重查",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 11 月 4 日 · 技能说明和登录检查记录",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
+    },
+    {
+     "type": "prose",
+     "text_ref": "技能名"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "它做什么"
+    },
+    {
+     "type": "prose",
+     "text_ref": "想知道"
+    },
+    {
+     "type": "prose",
+     "text_ref": "交回来的"
+    },
+    {
+     "type": "notice",
+     "text_ref": "不用点名"
+    },
+    {
+     "type": "dialogue",
+     "text_ref": "怎么跟 AI 说",
+     "columns": 2,
+     "split_paras": true,
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "中外消息快查",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次更新 11 月 3 日 12:16",
+       "state": "ok"
+      },
+      {
+       "text": "11 月 3 日登录检查 12 路：10 路已登录，B 站未知、Grok 超时，这两路随后定点补查已登录；11 月 4 日没有重查",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 11 月 4 日 · 技能说明和登录检查记录"
+    },
+    {
+     "type": "prose",
+     "text_ref": "技能名"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "它做什么"
+    },
+    {
+     "type": "prose",
+     "text_ref": "想知道"
+    },
+    {
+     "type": "prose",
+     "text_ref": "交回来的"
+    },
+    {
+     "type": "notice",
+     "text_ref": "不用点名"
+    },
+    {
+     "type": "dialogue",
+     "text_ref": "怎么跟 AI 说",
+     "columns": 2,
+     "split_paras": true,
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+中外消息快查
+
+技能名 news-quickcheck · 规则库里的通用做法，不挂在某个项目下
+
+**它做什么**
+想知道“实际用过的人怎么说”时，官网和百科答不了：某个软件最近是不是老断线、一样东西长期用下来怎么样、一句传言最早从哪来。AI 照这个技能，第一波就真的进对口的网站搜（小红书、知乎、微博、Reddit、GitHub 这些，一次挑 1—3 个，要账号的用我日常 Chrome 里的登录），同时查官方，再把最相关的一两条原帖打开读完。
+
+交回来的先是它最倾向的判断和能点开复查的原帖链接，再是最有分量的相反经历、适用条件和还不知道的部分。普通问题争取 90 秒给第一轮判断、180 秒交结果，这是节奏，不是保证；够回答就交，不等所有站。
+
+不用点名：真实经历会改变答案时，AI 自己会用上它。只问官方怎么说、稳定的常识，或者我给的材料已经够了，就不用它。它查的是当时能查到的东西，不是定时盯新闻。
+
+**怎么跟 AI 说**
+“这个软件最近老断线，看看别人有没有遇到，官方怎么说。”
+“这件东西长期用下来怎么样？把明显的差评和使用条件也告诉我。”
+“这句话最早从哪儿传出来的？几个版本对不上，帮我往前找。”
+“这几条说法哪个靠谱？帮我对一下。”
+“这个帖子你读一下，到底说了什么。”
+“你那边也打开试试，给我能复查的图或文件。”
+
+::screen{#skill-news-quickcheck-02 section="examples"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-news-quickcheck-02",
+  "section": "examples",
+  "title": "一个完整例子",
+  "scene": "",
+  "portrait": "",
+  "links": [
+   {
+    "text": "代理与网络",
+    "href": "/skills/proxy-network/"
+   },
+   {
+    "text": "网页上的事接着办",
+    "href": "/skills/browser-control-continuity/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "一个完整例子",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
+     "type": "dialogue",
+     "text_ref": "我：",
+     "sides": [
+      "right"
+     ],
+     "illustration": "none"
+    },
+    {
+     "type": "timeline",
+     "text_ref": "AI 做了什么",
+     "direction": "vertical",
+     "columns": 1,
+     "connector": "ribbon",
+     "illustration": "left_inside",
+     "icons": "auto"
+    },
+    {
+     "type": "dialogue",
+     "text_ref": "AI 交回",
+     "sides": [
+      "left"
+     ],
+     "illustration": "none"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时"
+    },
+    {
+     "type": "table",
+     "text_ref": "碰到的情况"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "一个完整例子",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
+     "type": "dialogue",
+     "text_ref": "我：",
+     "sides": [
+      "right"
+     ],
+     "illustration": "none"
+    },
+    {
+     "type": "timeline",
+     "text_ref": "AI 做了什么",
+     "direction": "vertical",
+     "columns": 1,
+     "connector": "ribbon",
+     "illustration": "left_inside",
+     "icons": "auto"
+    },
+    {
+     "type": "dialogue",
+     "text_ref": "AI 交回",
+     "sides": [
+      "left"
+     ],
+     "illustration": "none"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时"
+    },
+    {
+     "type": "table",
+     "text_ref": "碰到的情况"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+一个完整例子
+
+示例：照这个技能的做法写的，不是某一次的记录
+
+我：“这个软件最近老断线，看看别人有没有遇到，官方怎么说。”
+
+**AI 做了什么**
+1. 先对齐版本、地区和报错，挑对口的站：软件故障查 GitHub 和 Reddit；同时用联网搜索打开官方状态页和维护者的说法。几路一起发，不等一路回来再开下一路。
+2. 搜索候选先回来；第一条切题的原帖同一波打开读正文，连作者、时间、版本一起看。只读到摘要的，就标“只看到摘要，没读到原文”。
+3. 搜到几条和真正读过几条分开记；同一个来源被转了几次，只算一个来源。
+4. 微博那一路超时：不说“没有帖子”，写清是超时、下一步怎么接；证据够回答，就先交。
+
+**AI 交回**
+“大概率是这个版本的问题，不像你电脑的事，把握中等。GitHub 上一条问题里维护者承认了这个版本的重连问题（原帖读过）；Reddit 上两位用户同版本同症状，都是亲历（原帖读过）。相反的：另一位退回旧版还是断，但他的系统比你老，不一定一样。官方状态页没写。搜到 14 条，读了 4 条；这几个案例说明确实有人遇到，说明不了多常见。微博那一路超时，没算进来。”
+
+**出问题时**
+| 碰到的情况 | AI 怎么办 |
+|---|---|
+| 没结果、要登录、限流、超时 | 分开写实际是哪一种，不都说成“没有”；超时不算没帖子，限流按真实允许的时间再接 |
+| 原帖读不到 | 换读法或换来源再试一次；还不行，就在那条结论旁写“只看到摘要，没读到原文”，不拿 AI 聚合答复顶替 |
+| 只取到一部分 | 留下已取到的，写清哪些页、哪些字段不知道，不说全查过 |
+| 站方明确要我重新登录 | 告诉我哪个平台、登录或扫码怎么做，同时登记到驾驶舱“需要你”，我弄好后 AI 核实再关；超时不算登录过期 |
+| 平台确认改版 | 依据站方公告、真实页面或前后实测，说清旧做法变成什么、搜索和原文还能不能用，修好了也告诉我；单条报错不算改版 |
+| 几个站同时连不上 | 先查〔代理与网络〕；Chrome 连不上走〔网页上的事接着办〕；已取到的材料留着 |
+| Muse 还没完或出错 | 没完就按原任务号接着读，不重发；跨到下一轮的登记进驾驶舱“AI 在跟”；出错如实写清，附件打开看过才算数 |
+
+::screen{#skill-news-quickcheck-03 section="abilities"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-news-quickcheck-03",
+  "section": "abilities",
+  "title": "能做的事",
+  "scene": "",
+  "portrait": "",
+  "links": [],
+  "anchors": [
+   {
+    "id": "a-sites",
+    "text": "能查哪些站"
+   },
+   {
+    "id": "a-muse",
+    "text": "什么时候用 Muse"
+   },
+   {
+    "id": "a-result",
+    "text": "结果长什么样"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "能做的事",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "notice",
+     "text_ref": "进站搜"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "能查哪些站"
+    },
+    {
+     "type": "table",
+     "text_ref": "站"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "什么时候用 Muse",
+     "columns": 1
+    },
+    {
+     "type": "points_card",
+     "text_ref": "结果长什么样",
+     "columns": 1
+    },
+    {
+     "type": "points_card",
+     "text_ref": "用这个技能时",
+     "columns": 1
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "能做的事",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "notice",
+     "text_ref": "进站搜"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "能查哪些站"
+    },
+    {
+     "type": "table",
+     "text_ref": "站"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "什么时候用 Muse",
+     "columns": 1
+    },
+    {
+     "type": "points_card",
+     "text_ref": "结果长什么样",
+     "columns": 1
+    },
+    {
+     "type": "points_card",
+     "text_ref": "用这个技能时",
+     "columns": 1
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+能做的事
+
+进站搜、读原帖、对官方、找反面说法，再把判断和原帖链接一起交回；多步的长活可以同时交给 Muse。下表是程序和规则里登记的能力，不代表每个站此刻都在线，也不代表每篇正文都读得到。
+
+**能查哪些站**
+| 站 | 能查什么 | 要知道的 |
+|---|---|---|
+| X、微博 | 关键词搜帖子 | X 按最新排序、可带日期；微博是综合搜索，没有最新排序，按原帖实际时间筛 |
+| 小红书 | 搜笔记，可按最新和日、周、半年筛 | 详情和评论沿搜索返回的原链读 |
+| 知乎、即刻 | 知乎搜候选再读具体问答和评论；即刻搜帖子 | 都没有可靠的最新排序，知乎候选不带可靠的发帖时间 |
+| 牛客、脉脉 | 搜帖子和动态、职言和社区内容 | 作者、时间回原帖核对，搜索摘要不当正文 |
+| Reddit | 默认按相关性；明确要刚发生的变化才按新排序 | 读原帖和有信息的评论 |
+| B 站、YouTube | 搜视频 | 只读到简介不算看完视频，下结论要核相关片段 |
+| 公众号 | 搜狗微信文章搜索，最多 10 条 | 中转链接要打开，核到公众号原文 |
+| 什么值得买、贴吧、虎扑 | 好价、公开搜索第一页、帖子 | 什么值得买搜的是好价，不是任意讨论；虎扑不给发帖时间 |
+| Hacker News、GitHub | 公开帖子、公开问题 | 候选不等于看过维护者的结论；私有范围交所属项目 |
+| BOSS 直聘 | 按需查岗位和详情 | 只读，不沟通不投递；默认最多 3 条，指定时最多 60 条 |
+| 一亩三分地、linux.do | 用联网搜索找能打开的公开原帖，标“站外发现” | 搜不到不等于站内没有；linux.do 目前没有站内搜索资格，不做站内查询 |
+| V2EX、猎聘、头条、雪球、东方财富、领英 | 没有能用的关键词搜帖，按公开原文或限定网站找 | V2EX 的热门、最新不算搜索；已有猎聘原链可在日常 Chrome 里读，被验证拦住就留作缺口 |
+| Grok、腾讯元宝 | 另一路 AI 检索，按需或点名才用 | 答复和引文只是线索，还要回原帖读 |
+
+**什么时候用 Muse**
+Muse 是 Meta 的 AI 产品，有自己的浏览器和电脑。
+- 我点名时用。
+- AI 判断要连续翻多页、查上几分钟、追源头、对分歧、筛名单，或者要在另一台电脑、另一条网络上实际打开和运行时，同时派给它一份；本机继续查，够用先交，不等它。
+- 普通快问不自动带它；稳定知识、普通官方事实、纯推理、改本机代码也不派。
+- 现在“换地方看”做过真实对照并通过；追源头、对分歧、筛名单、实际跑和其他这五类是我授权的试用，还没有做完对照验收。试用的 14 天从验收通过那天算，到时看派了多少、采用多少、多了什么材料、错了怎样，决定留、改还是停。
+- 它的结果按同样标准核对：原链要读，附件要打开；远端跑通只说明那边的条件，不等于我这台电脑也行。
+- 发给它的话照我平常聊天的样子写，不编我买过、做过的事；要带我的情况，先看资料解了锁没有。
+
+**结果长什么样**
+- 最倾向的判断和把握，第一轮就附上当时读过的原链。
+- 真正打开看过的关键原帖：作者、发帖时间、版本、地区，原话证明了什么；没有可靠作者或时间就写不知道，事情发生的时间和发帖时间分开。
+- 最有分量的相反材料，和还缺什么。
+- 传闻分清：当事方已证实、多方独立印证、单一来源、只有转述、已被否认；同一个来源转载多次只算一个。
+- 搜到几条和读过几条分开。单个案例能说明有人遇到，推不出有多常见；我要估计时，它给判断和决定性的依据，分清估计和统计。
+
+**用这个技能时，AI 守的规矩**
+- 第一波就真的发站内查询，不靠摘要和本机旧记录顶替别人的原帖。
+- 登录页、导航、标题、空白都不算正文；没读到就说没读到。
+- 够回答就交；慢的一路能补重要的独立证据才继续等。
+- 同一个问题不因为超时再发一遍。
+
+::screen{#skill-news-quickcheck-04 section="limits"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-news-quickcheck-04",
+  "section": "limits",
+  "title": "边界",
+  "scene": "",
+  "portrait": "",
+  "links": [
+   {
+    "text": "网页上的事接着办",
+    "href": "/skills/browser-control-continuity/"
+   },
+   {
+    "text": "代理与网络",
+    "href": "/skills/proxy-network/"
+   },
+   {
+    "text": "记得我是谁",
+    "href": "/skills/daily-preferences/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "边界",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "管",
+     "columns": 1
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "不管，交给谁"
+    },
+    {
+     "type": "table",
+     "text_ref": "这些事"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "不做",
+     "columns": 1
+    },
+    {
+     "type": "notice",
+     "text_ref": "现在的情况"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "边界",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "管",
+     "columns": 1
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "不管，交给谁"
+    },
+    {
+     "type": "table",
+     "text_ref": "这些事"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "不做",
+     "columns": 1
+    },
+    {
+     "type": "notice",
+     "text_ref": "现在的情况"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+边界
+
+**管**
+要靠别人真实经历才答得好的问题：实测、口碑、传闻、具体故障和反例，进站查、读原帖、对官方，把判断和原帖链接交回来。
+
+**不管，交给谁**
+| 这些事 | 找谁 |
+|---|---|
+| 只问官方怎么说 | AI 直接打开发布方原页，不走这里 |
+| 稳定的常识、我已经给够的材料 | AI 直接答 |
+| 要在网站上登录、填表、提交 | 〔网页上的事接着办〕 |
+| 连不上网、出口不对 | 〔代理与网络〕 |
+| 结合我自己的情况做判断 | 〔记得我是谁〕和对应的项目；这里只查外面的说法 |
+
+**不做**
+- 只查问：不发帖、不互动、不改账号，不自动购物、不发消息给真人。
+- 不是定时监控，不长期盯某个话题。
+- 查资料时不顺手改程序、补测试，也不自动派维修任务。
+- 不编我的经历，不拿 AI 聚合答复当原文。
+- 站内没登录资格时不让我去找邀请码。
+
+**现在的情况**
+这页写的是能力和做法。写这页时（11 月 4 日）没有发查询、没有派 Muse，各站此刻能不能查、某篇帖子读不读得到，没有核；登录情况见页首，那是 11 月 3 日的记录，登录了也不等于每篇都读得到。
+
+::screen{#skill-news-quickcheck-05 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-news-quickcheck-05",
+  "section": "tech",
+  "title": "技术实现与依据",
+  "scene": "",
+  "portrait": "",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {},
+ "images": []
+}
+```
+
+## 技术实现与依据
+
+这里保留入口、参数、结果字段、账号体检和来源；账号细节不上页。
+
+**11 月 4 日核对**　技能 E:\.agents\skills\news-quickcheck\SKILL.md（.agents df1dbe8e 于北京时间 11 月 2 日 09:53 新建，最后提交 953b7c2b，11 月 3 日 12:16）；references 下 sources.md、operations.md、evidence-and-sessions.md、muse-tasks.md；scripts/sources.mjs、scripts/search.mjs；供应登记 config/personal-skill-supply.json 里 install:true。写这页时只读文件和状态回执，没有发查询、没有派 Muse、没有新开 Chrome。
+
+## 入口
+
+- Claude 和 Codex 共用一个入口：`node E:/.agents/skills/news-quickcheck/scripts/search.mjs`，标准输入或 `--plan 文件` 给 UTF-8 JSON，例如 `{"query":"产品名 实际问题","wave":"first","sources":["reddit"],"readFirst":1}`。`wave` 只取 first 或 deep，`readFirst` 取 0、1、2。每次选 1—3 个站，加宿主联网最多 4 路。
+- 读原帖：`search.mjs --read <来源> <动作> <原链>`，例如牛客 detail、Reddit read、BOSS detail。
+- 标采用：`search.mjs --mark-used <summaryFile> --sources <来源>`，全没采用就传空；多步 Muse 用 `muse/cli.mjs mark --task 编号 --used yes/no`。采用记录、查询成功、附件验收是三件事。
+- Muse：`scripts/muse/cli.mjs`。`ask --kind 追源头 --brief 文件`（自动派另加 `--auto`，涉及本人条件加 `--personal`）；`wait`、`read --task 编号` 只读原任务；`download` 取附件后要实际打开；`follow add/close` 登记和关闭跨轮事项；`trial` 管试用复盘。每项任务 `session.create` 独立对话。
+
+## 程序交回什么
+
+- 逐行事件，先交候选；`readFirst:1` 同波预读第一篇，直接交 `read_result` 的正文或缺口。单条 `--read` 只出 `read_result` 和真正的错误。
+- 原文结果带来源、实际原链、作者、时间、`body`、`status`、`nextStep`；正文合计最多 12000 字符，超出标截断并给全文路径。字段缺失和 `partial` 如实保留。
+- `summaryFile` 带 `results`；`fullResultsFile` 是平铺的完整条目，按 `source` 和 `url` 查指定原帖。摘要里的标题不算全文。
+
+## 几个站的细节
+
+- BOSS 直聘：`limit` 默认 3、上限 60，`page` 是起始页，最多 10 页，按原岗位去重；后页失败保留前面已取到的，并标 `lastCompletedPage`、`stoppedAtPage`、`incompleteReason`，不报全部覆盖。招聘者活跃时间不当职位发布日期，字段为空记不知道。
+- 牛客：站点类型只有 post、all，默认 post；`topicType=jobs` 只是记账标签。
+- 小红书：详情和评论必须沿搜索返回的完整签名原链，不编参数，不把作者页当笔记。来源文档记有 11 月 3 日“秋季穿搭”取到 8 条并回读同作者同编号的样本，这次没有重跑。
+- GitHub：查公开问题，排除拉取请求，优先已登录的 gh，未配置才用公开接口并标原因。Hacker News 走公开 Algolia 检索并回到真实条目。
+
+## 时限和 Muse 范围
+
+- 普通题目标约 90 秒第一轮、180 秒交结果；Muse 初次最多等 135 秒（程序第二波 175 秒）。这些是读取和接回的节奏，还在跑就保留原任务号，服务明确报错如实结项。
+- 来源表 `automatic.firstWave` 为空，快问不自动带 Muse；`automatic.taskKinds` 里“换地方看”记为真实对照通过，追源头、对分歧、筛名单、实际跑、其他五类记为 `owner_authorized_trial`、`comparisonPassed:false`。来源表没有给出试用的验收起止日期。
+- 11 月 3 日的单次测时（样本，不是服务承诺）：Reddit 搜索约 6 秒出候选，原帖 5–16 秒回读；牛客修复后约 6–8 秒；Grok 35.89 秒首引、60.79 秒全文；元宝 30.32 秒全文；Muse 同题短问 41.10 秒答完。
+
+## 账号和体检
+
+- 要账号的来源复用日常 Chrome 默认资料里已登录的账号，已选平台：X、微博、小红书、知乎、B 站、Reddit、Grok、脉脉、牛客、即刻、腾讯元宝。正常查询结束后，后台刷新超过五天没核身份的已登记平台；周治理调 `scripts/sessions.mjs health --json`。Muse 体检只查账户连通，不发问题、不唤醒远端电脑；BOSS 不在定期体检里。
+- 全检和定点补查分开落盘：`E:\Data\news-quickcheck\sessions-health-latest.json` 记 11 月 3 日 07:17:43—07:20:24 全检，12 路 10 路已登录，B 站未知、Grok 超时；`sessions-health-targeted-latest.json` 记 07:25:57—07:26:28 定点补查这两路，都已登录。两次不是同一轮全绿，也不代表之后还在线。
+
+## 实测和缺口
+
+各站现在能不能查、能不能读具体帖子，11 月 4 日没有核；使用次数没有取。Muse 五类试用还没有完成对照验收。页面的“怎么说”和例子是照技能写的，不是真实对话。

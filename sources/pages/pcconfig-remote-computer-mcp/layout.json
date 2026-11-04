@@ -248,7 +248,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 手机浏览器可直接打开本站“授权与状态”：输入本人验证码后，单独或显式组合办理个人资料与无限制授权；两项分别显示结果。电脑关机或服务异常时页面继续可见，单次 502 不被误判为关机。",
+        "text_ref": "1. 手机浏览器可直接打开本站“授权与状态”",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -272,7 +272,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 手机浏览器可直接打开本站“授权与状态”：输入本人验证码后，单独或显式组合办理个人资料与无限制授权；两项分别显示结果。电脑关机或服务异常时页面继续可见，单次 502 不被误判为关机。",
+        "text_ref": "1. 手机浏览器可直接打开本站“授权与状态”",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -292,7 +292,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "9. 当前会话没列出已配置的 MCP 工具时，通过现有配置调用助手复用官方 app-server：默认保温一小时，复用已查到的工具目录；工具已提交而结果丢失时保留未知、不重放。",
+        "text_ref": "9. 当前会话没列出已配置的 MCP 工具时",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -312,7 +312,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "9. 当前会话没列出已配置的 MCP 工具时，通过现有配置调用助手复用官方 app-server：默认保温一小时，复用已查到的工具目录；工具已提交而结果丢失时保留未知、不重放。",
+        "text_ref": "9. 当前会话没列出已配置的 MCP 工具时",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -630,7 +630,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 已装依赖版本逐项与源码一致",
+        "text_ref": "- 11 月 4 日 09:11–09:15 只读",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -649,7 +649,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 已装依赖版本逐项与源码一致",
+        "text_ref": "- 11 月 4 日 09:11–09:15 只读",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

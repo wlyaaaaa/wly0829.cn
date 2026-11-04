@@ -244,7 +244,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截止前最近一次每日检查（10月10日14:30）host-only通过；现装Ta"
+        "text_ref": "最近一次每日检查（11 月 3 日 14:30:02）host-only 通过，11 月 4 日 09:11:24 手动 verify-path-lite -NoWrite 也是 pass / host-only；现装 Tailscale 1.104.2，11 月 4 日 09:10 体检时 Tailscale 服务运行、自动启动，Online=true、无人值守开启；手机 peer（对端）没有请求。公网 IPv6 数量 9 月 28 日记为 4 个，之后未重新核对"
       },
       {
         "type": "numbered_steps",
@@ -268,7 +268,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截止前最近一次每日检查（10月10日14:30）host-only通过；现装Ta"
+        "text_ref": "最近一次每日检查（11 月 3 日 14:30:02）host-only 通过，11 月 4 日 09:11:24 手动 verify-path-lite -NoWrite 也是 pass / host-only；现装 Tailscale 1.104.2，11 月 4 日 09:10 体检时 Tailscale 服务运行、自动启动，Online=true、无人值守开启；手机 peer（对端）没有请求。公网 IPv6 数量 9 月 28 日记为 4 个，之后未重新核对"
       },
       {
         "type": "numbered_steps",
@@ -368,7 +368,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 本项目不创建 Sunshine 公网端口映射或 Funnel。每日检查按端口归属分类，10 月 10 日那次 Sunshine 的 Funnel 入口是 0 个；旧检查记过主机另有用户配置的、不属于 Sunshine 的 Funnel。这不等于整台电脑没有任何公网暴露。",
+        "text_ref": "- 本项目不创建 Sunshine 公网端口映射或 Funnel。检查按端口归属分类，11 月 4 日 09:11 那次 Sunshine 的 Funnel 入口是 0 个，另有 1 个不属于 Sunshine 的 Funnel 公开监听。这不等于整台电脑没有任何公网暴露。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -391,7 +391,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 本项目不创建 Sunshine 公网端口映射或 Funnel。每日检查按端口归属分类，10 月 10 日那次 Sunshine 的 Funnel 入口是 0 个；旧检查记过主机另有用户配置的、不属于 Sunshine 的 Funnel。这不等于整台电脑没有任何公网暴露。",
+        "text_ref": "- 本项目不创建 Sunshine 公网端口映射或 Funnel。检查按端口归属分类，11 月 4 日 09:11 那次 Sunshine 的 Funnel 入口是 0 个，另有 1 个不属于 Sunshine 的 Funnel 公开监听。这不等于整台电脑没有任何公网暴露。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

@@ -119,10 +119,11 @@
           "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
           "_library/icons/日历时钟.png",
           "_library/icons/手机电脑连接.png",
-          "_library/round3/clean-assets/png/03-放大镜-clean.png"
+          "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "_library/icons/手机电脑连接.png"
         ],
         "text_ref": "① 装一次，放行一次",
-        "item_count": 4
+        "item_count": 5
       },
       {
         "type": "notice",
@@ -159,10 +160,11 @@
           "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
           "_library/icons/日历时钟.png",
           "_library/icons/手机电脑连接.png",
-          "_library/round3/clean-assets/png/03-放大镜-clean.png"
+          "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "_library/icons/手机电脑连接.png"
         ],
         "text_ref": "① 装一次，放行一次",
-        "item_count": 4
+        "item_count": 5
       },
       {
         "type": "notice",
@@ -197,11 +199,13 @@
           "_library/icons/文件夹.png",
           "_library/round3/clean-assets/png/46-地球-clean.png",
           "_library/icons/手机.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/手机.png",
           "_library/icons/断线.png",
           "_library/icons/白纸.png"
         ],
         "text_ref": "被系统杀掉或冻住",
-        "item_count": 8
+        "item_count": 10
       }
     ]
   },
@@ -228,11 +232,13 @@
           "_library/icons/文件夹.png",
           "_library/round3/clean-assets/png/46-地球-clean.png",
           "_library/icons/手机.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/手机.png",
           "_library/icons/断线.png",
           "_library/icons/白纸.png"
         ],
         "text_ref": "被系统杀掉或冻住",
-        "item_count": 8
+        "item_count": 10
       }
     ]
   },
@@ -459,9 +465,12 @@
           "_library/round3/clean-assets/png/03-放大镜-clean.png",
           "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
           "_library/icons/笔记本电脑.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/手机.png",
           "_library/icons/手机.png"
         ],
-        "text_ref": "不常驻，靠系统唤醒和送点。"
+        "text_ref": "不常驻，靠系统唤醒和送点。",
+        "item_count": 8
       },
       {
         "type": "stat_card",
@@ -473,7 +482,7 @@
           "_library/icons/断链.png",
           "_library/hires-icons-r2/版本循环文件.png"
         ],
-        "text_ref": "0.1.12"
+        "text_ref": "0.1.17"
       }
     ]
   },
@@ -499,9 +508,12 @@
           "_library/round3/clean-assets/png/03-放大镜-clean.png",
           "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
           "_library/icons/笔记本电脑.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/手机.png",
           "_library/icons/手机.png"
         ],
-        "text_ref": "不常驻，靠系统唤醒和送点。"
+        "text_ref": "不常驻，靠系统唤醒和送点。",
+        "item_count": 8
       },
       {
         "type": "stat_card",
@@ -513,7 +525,7 @@
           "_library/icons/断链.png",
           "_library/hires-icons-r2/版本循环文件.png"
         ],
-        "text_ref": "0.1.12"
+        "text_ref": "0.1.17"
       }
     ]
   },
@@ -577,7 +589,7 @@
         "size": "large",
         "row": "标题与图例",
         "width": "43%",
-        "text_ref": "全部功能（16 项）"
+        "text_ref": "全部功能（20 项）"
       },
       {
         "type": "status_legend",
@@ -595,7 +607,8 @@
           "_library/icons/数据库循环.png",
           "_library/icons/纸箱.png",
           "_library/round3/clean-assets/png/46-地球-clean.png",
-          "_library/icons/秒表.png"
+          "_library/icons/秒表.png",
+          "_library/icons/手机.png"
         ],
         "size": "medium",
         "text_ref": "采集",
@@ -609,8 +622,10 @@
         "icons": [
           "_library/icons/文件夹.png",
           "_library/icons/手机电脑连接.png",
+          "_library/icons/手机.png",
           "_library/hires-icons/数据库.png",
-          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/icons/工具箱.png"
         ],
         "size": "medium",
         "text_ref": "交给电脑",
@@ -634,6 +649,18 @@
         "size": "medium",
         "text_ref": "保活和自查",
         "fill_last_row": true
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/手机.png"
+        ],
+        "size": "medium",
+        "text_ref": "手机上直接看",
+        "fill_last_row": true
       }
     ]
   },
@@ -645,7 +672,7 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "全部功能（16 项）"
+        "text_ref": "全部功能（20 项）"
       },
       {
         "type": "status_legend",
@@ -660,7 +687,8 @@
           "_library/icons/数据库循环.png",
           "_library/icons/纸箱.png",
           "_library/round3/clean-assets/png/46-地球-clean.png",
-          "_library/icons/秒表.png"
+          "_library/icons/秒表.png",
+          "_library/icons/手机.png"
         ],
         "size": "medium",
         "text_ref": "采集"
@@ -673,8 +701,10 @@
         "icons": [
           "_library/icons/文件夹.png",
           "_library/icons/手机电脑连接.png",
+          "_library/icons/手机.png",
           "_library/hires-icons/数据库.png",
-          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/icons/工具箱.png"
         ],
         "size": "medium",
         "text_ref": "交给电脑"
@@ -696,6 +726,17 @@
         ],
         "size": "medium",
         "text_ref": "保活和自查"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/手机.png"
+        ],
+        "size": "medium",
+        "text_ref": "手机上直接看"
       }
     ]
   },

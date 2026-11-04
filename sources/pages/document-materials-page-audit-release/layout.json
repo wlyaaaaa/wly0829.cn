@@ -14,7 +14,7 @@
       },
       {
         "type": "action_button",
-        "text_ref": "〔回到项目 → 个人正式文书〕　〔复制 AI 续作说明〕",
+        "text_ref": "〔回到项目 → 文书和材料制作〕　〔复制 AI 续作说明〕",
         "row": "top",
         "brand_icons": {
           "GitHub": "_library/icons/GitHub标志.png"
@@ -46,7 +46,7 @@
       },
       {
         "type": "action_button",
-        "text_ref": "〔回到项目 → 个人正式文书〕　〔复制 AI 续作说明〕",
+        "text_ref": "〔回到项目 → 文书和材料制作〕　〔复制 AI 续作说明〕",
         "brand_icons": {
           "GitHub": "_library/icons/GitHub标志.png"
         }
@@ -182,7 +182,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **系统核对并处理**　逐页查看内容、页码、可读性、签名和每个文件；机械检查齐全后冻结自包含版本。",
+        "text_ref": "1. **系统核对并处理**　逐页查看内容、页码、可读性、签名和每个文件；机械检查齐全后冻结自包含的候选版本。",
         "row": "start",
         "columns": 1,
         "icons": "none",
@@ -214,7 +214,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **系统核对并处理**　逐页查看内容、页码、可读性、签名和每个文件；机械检查齐全后冻结自包含版本。",
+        "text_ref": "1. **系统核对并处理**　逐页查看内容、页码、可读性、签名和每个文件；机械检查齐全后冻结自包含的候选版本。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",

@@ -28,13 +28,17 @@
   "status_line": {
    "state": "常用",
    "as_of": "2026-10-12",
-   "source": "按 PasswordCenter 968b9816 与 PCConfig 431ad1c1；Codex 与 Claude 桌面都可发起，默认时长读当前设置，10 月 12 日 04:33 核对接管程序与现役清单一致（安装批次 365），本次未打开窗口或办理验证。"
+   "source": "源码和安装清单",
+   "facts": [
+    "Codex 和 Claude 桌面都能发起，默认时长读当前设置",
+    "10 月 12 日核对程序和安装清单一致；窗口和验证没办理"
+   ]
   }
  },
  "source": {
   "page": "sources/pages/pcconfig-owner-takeover/page.json",
-  "sha256": "0b76dcb55b4aee920fa556fc27d9784b7a3d1092aa5aca54d98df97b77a9ff1e",
-  "converted_at_beijing": "2026-11-04T10:21:42+08:00"
+  "sha256": "a79617e3dfd8324700dd124957965de722ef660ae7953f9543cf49e498840efd",
+  "converted_at_beijing": "2026-11-04T12:05:33+08:00"
  }
 }
 ---
@@ -82,9 +86,17 @@
       {
        "text": "常用",
        "state": "ok"
+      },
+      {
+       "text": "Codex 和 Claude 桌面都能发起，默认时长读当前设置",
+       "state": "fact"
+      },
+      {
+       "text": "10 月 12 日核对程序和安装清单一致；窗口和验证没办理",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日",
+     "static_note": "截至 10 月 12 日 · 源码和安装清单",
      "row": "top"
     },
     {
@@ -124,9 +136,17 @@
       {
        "text": "常用",
        "state": "ok"
+      },
+      {
+       "text": "Codex 和 Claude 桌面都能发起，默认时长读当前设置",
+       "state": "fact"
+      },
+      {
+       "text": "10 月 12 日核对程序和安装清单一致；窗口和验证没办理",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日"
+     "static_note": "截至 10 月 12 日 · 源码和安装清单"
     },
     {
      "type": "action_button",

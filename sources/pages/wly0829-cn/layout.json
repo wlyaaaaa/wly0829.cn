@@ -30,7 +30,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "1.0分钟驾驶舱开着时从电脑读一次状态，时间都按北京时间35个项目，连它自己在内，每个项目一页，另有分模块说明262页每屏都排电脑和手机两种版式90分钟日常更新从提出到公网核对完的目标；只改数字60分",
+        "text_ref": "1.0分钟驾驶舱开着时从电脑读一次状态，时间都按北京时间37个项目，连它自己在内，每个项目一页，另有分模块说明268页每屏都排电脑和手机两种版式90分钟日常更新从提出到公网核对完的目标；只改数字60分",
         "columns": 4,
         "columns_v": 2,
         "icons": [
@@ -86,7 +86,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "1.0分钟驾驶舱开着时从电脑读一次状态，时间都按北京时间35个项目，连它自己在内，每个项目一页，另有分模块说明262页每屏都排电脑和手机两种版式90分钟日常更新从提出到公网核对完的目标；只改数字60分",
+        "text_ref": "1.0分钟驾驶舱开着时从电脑读一次状态，时间都按北京时间37个项目，连它自己在内，每个项目一页，另有分模块说明268页每屏都排电脑和手机两种版式90分钟日常更新从提出到公网核对完的目标；只改数字60分",
         "columns": 4,
         "columns_v": 2,
         "icons": [
@@ -316,6 +316,11 @@
           "_library/icons/双气泡.png",
           "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
         ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "想知道有没有人来看，直接问 AI",
+        "columns": 1
       }
     ],
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
@@ -356,6 +361,11 @@
           "_library/icons/双气泡.png",
           "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
         ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "想知道有没有人来看，直接问 AI",
+        "columns": 1
       }
     ],
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
@@ -903,7 +913,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "全部功能（39 项）",
+        "text_ref": "全部功能（44项）",
         "align": "center",
         "size": "large"
       },
@@ -932,7 +942,9 @@
           "_library/icons/文件夹.png",
           "_library/illustrations/水流汇合.png",
           "_library/illustrations/账本.png",
-          "_library/icons/波形照片.png"
+          "_library/icons/波形照片.png",
+          "_library/icons/followup-r3-steam08-three-drives.png",
+          "_library/icons/scene-r3-magnifier-on-check.png"
         ],
         "status_position": "top_right",
         "status_text": "dot_only",
@@ -958,7 +970,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "全部功能（39 项）",
+        "text_ref": "全部功能（44项）",
         "align": "center",
         "size": "large"
       },
@@ -987,7 +999,9 @@
           "_library/icons/文件夹.png",
           "_library/illustrations/水流汇合.png",
           "_library/illustrations/账本.png",
-          "_library/icons/波形照片.png"
+          "_library/icons/波形照片.png",
+          "_library/icons/followup-r3-steam08-three-drives.png",
+          "_library/icons/scene-r3-magnifier-on-check.png"
         ],
         "status_position": "top_right",
         "status_text": "dot_only",
@@ -1071,6 +1085,23 @@
         "last_row": "fill",
         "group_heading_style": "brush",
         "heading_size": "small"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "访问和搜索",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/late-r3-timeaudit-window-person.png",
+          "_library/icons/scene-r3-telescope.png",
+          "_library/illustrations/电脑后台闹钟.png"
+        ],
+        "status_position": "top_right",
+        "status_text": "dot_only",
+        "last_row": "fill",
+        "group_heading_style": "brush",
+        "heading_size": "small"
       }
     ],
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
@@ -1142,6 +1173,23 @@
           "_library/icons/云对勾.png",
           "_library/illustrations/电脑后台闹钟.png",
           "_library/hires-icons-r2/版本循环文件.png"
+        ],
+        "status_position": "top_right",
+        "status_text": "dot_only",
+        "last_row": "fill",
+        "group_heading_style": "brush",
+        "heading_size": "small"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "访问和搜索",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/late-r3-timeaudit-window-person.png",
+          "_library/icons/scene-r3-telescope.png",
+          "_library/illustrations/电脑后台闹钟.png"
         ],
         "status_position": "top_right",
         "status_text": "dot_only",

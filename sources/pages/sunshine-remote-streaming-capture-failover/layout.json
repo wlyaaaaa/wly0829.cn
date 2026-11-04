@@ -292,11 +292,18 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 提交时把 pending（待处理）与 applied（已应用）状态分开：配置 CAS 后在同一 20 秒期限内重启并检查服务；失败时只有当前文件仍是本轮写入的版本才回滚到变更前内容，缺本轮指纹或已被别处改过就拒绝覆盖并报告未恢复。窗口逐个复核身份、来源区域与写后位置，单个失败不阻塞其余窗口。",
+        "text_ref": "- 提交时把 pending（待处理）与 applied（已应用）状态分开：配置 CAS 后在同一期限内（f2e238f 起默认 60 秒）重启并检查服务：Restart-SunshineCaptureService 等旧服务宿主和归属已核实的 Sunshine 子进程退出，宿主退出后补查晚生子进程，再启动并等会话可判定 Idle 或 Active；SCM 显示 Stopped/Running 不够，Unknown 继续等，只等待、不强杀，读不到残留归属即失败（运行版本已包含，11 月 4 日核对时没有执行这条路径）。失败时只有当前文件仍是这次写入的版本才回滚到变更前内容，缺这次的指纹或已被别处改过就拒绝覆盖并报告未恢复。窗口逐个复核身份、来源区域与写后位置，单个失败不阻塞其余窗口。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
         "connector": "none"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 5b04f67 增加 cycle-transition",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
       }
     ]
   },
@@ -312,11 +319,18 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 提交时把 pending（待处理）与 applied（已应用）状态分开：配置 CAS 后在同一 20 秒期限内重启并检查服务；失败时只有当前文件仍是本轮写入的版本才回滚到变更前内容，缺本轮指纹或已被别处改过就拒绝覆盖并报告未恢复。窗口逐个复核身份、来源区域与写后位置，单个失败不阻塞其余窗口。",
+        "text_ref": "- 提交时把 pending（待处理）与 applied（已应用）状态分开：配置 CAS 后在同一期限内（f2e238f 起默认 60 秒）重启并检查服务：Restart-SunshineCaptureService 等旧服务宿主和归属已核实的 Sunshine 子进程退出，宿主退出后补查晚生子进程，再启动并等会话可判定 Idle 或 Active；SCM 显示 Stopped/Running 不够，Unknown 继续等，只等待、不强杀，读不到残留归属即失败（运行版本已包含，11 月 4 日核对时没有执行这条路径）。失败时只有当前文件仍是这次写入的版本才回滚到变更前内容，缺这次的指纹或已被别处改过就拒绝覆盖并报告未恢复。窗口逐个复核身份、来源区域与写后位置，单个失败不阻塞其余窗口。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
         "connector": "none"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 5b04f67 增加 cycle-transition",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
       }
     ]
   },
@@ -488,7 +502,21 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 9 月 18 日 14:07 有原始回执：当时 67/67 通过（涵盖设备快照、GUID 绑定、去抖、CAS 写入、BugCheck/WER/GPU 事件门和窗口计划）；现定义 72 个，本轮没有运行。它们是合成分支，不是物理串流。",
+        "text_ref": "- 9 月 18 日 14:07 有原始回执：当时 67/67 通过（涵盖设备快照、GUID 绑定、去抖、CAS 写入、BugCheck/WER/GPU 事件门和窗口计划）；现定义 78 个（11 月 4 日 09:18 静态计数），没有运行。它们是合成分支，不是物理串流。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 11 月 4 日 11:40 零写入体检",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 11 月 4 日 09:12 只读核对音频源地址修补",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -507,7 +535,21 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 9 月 18 日 14:07 有原始回执：当时 67/67 通过（涵盖设备快照、GUID 绑定、去抖、CAS 写入、BugCheck/WER/GPU 事件门和窗口计划）；现定义 72 个，本轮没有运行。它们是合成分支，不是物理串流。",
+        "text_ref": "- 9 月 18 日 14:07 有原始回执：当时 67/67 通过（涵盖设备快照、GUID 绑定、去抖、CAS 写入、BugCheck/WER/GPU 事件门和窗口计划）；现定义 78 个（11 月 4 日 09:18 静态计数），没有运行。它们是合成分支，不是物理串流。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 11 月 4 日 11:40 零写入体检",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 11 月 4 日 09:12 只读核对音频源地址修补",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

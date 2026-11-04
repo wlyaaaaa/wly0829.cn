@@ -448,7 +448,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 套件的 TestVideoStream 当时因已有生产流而跳过，本轮没有运行；来源工程另行完成精确设备下的真实恢复，本人随后确认实体屏正常刷新。command 204 仍没有设备逐像素 ACK。",
+        "text_ref": "- 套件的 TestVideoStream 当时因已有生产流而跳过，没有运行；",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -467,7 +467,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 套件的 TestVideoStream 当时因已有生产流而跳过，本轮没有运行；来源工程另行完成精确设备下的真实恢复，本人随后确认实体屏正常刷新。command 204 仍没有设备逐像素 ACK。",
+        "text_ref": "- 套件的 TestVideoStream 当时因已有生产流而跳过，没有运行；",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

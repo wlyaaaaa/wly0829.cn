@@ -89,6 +89,34 @@ class NumberEditsTests(unittest.TestCase):
         self.assertEqual(apply_edits(self.root, payload)["already_applied"], 6)
         self.assertEqual(self.path.read_bytes(), first)
 
+    def test_usage_count_and_complete_week_label_move_together(self):
+        for old, coverage, count, expected in [
+            ("10 月 18—24 日", "2026-11-02", 13, "10 月 27 日—11 月 2 日"),
+            ("10 月 27 日—11 月 2 日", "2026-11-09", 7, "11 月 3 日—11 月 9 日"),
+            ("12 月 20 日—12 月 26 日", "2027-01-03", 13, "12 月 28 日—1 月 3 日"),
+            ("10 月 18—24 日", None, 13, None)]:
+            with self.subTest(coverage=coverage):
+                self.page["status_line"] = {"facts": [f"{old} AI 用了 7 次"], "as_of": "2026-10-24"}
+                self.save()
+                row = dict(id="usage", page="personal-materials", screen="top",
+                    field="status_line.facts[0]", page_pattern=r"AI 用了 ([\d,]+) 次$",
+                    old_value=7, new_value=count, status="unchanged" if count == 7 else "changed",
+                    scope_status="verified", source_observed_at="2026-11-04T12:00:00+08:00",
+                    source_coverage_end=coverage, retrieve={"kind": "usage_ledger", "operation": "count_7d"})
+                paired = dict(row, id="coverage", field="status_line.as_of", page_pattern=None,
+                    old_value="2026-10-24", new_value=coverage, qualifies=["usage"], date_semantics="coverage_end")
+                payload = build_number_edits(self.root, {"rows": [row, paired] if count == 7 else [row]})
+                if expected is None:
+                    self.assertFalse(payload["edits"])
+                    self.assertTrue(payload["skipped"])
+                    continue
+                self.assertFalse(payload["skipped"])
+                report = apply_edits(self.root, payload)
+                self.assertFalse(report["skipped"])
+                actual = json.loads(self.path.read_text("utf-8"))["status_line"]["facts"][0]
+                self.assertEqual(actual, f"{expected} AI 用了 {count} 次")
+                self.assertEqual(apply_edits(self.root, payload)["applied"], 0)
+
     def test_changed_counts_keep_commas_sync_registry_and_handle_length_changes(self):
         for row, value in zip(self.rows, [166, 59, 15106, 104, 4]):
             row.update(new_value=value, status="changed")

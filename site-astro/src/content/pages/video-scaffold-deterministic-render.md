@@ -28,7 +28,10 @@
   "status_line": {
    "state": "偶尔用",
    "as_of": "2026-10-11",
-   "source": "内容按北京时间 14:00 前最后一次提交 cc41e514（13:57）核对，未出片、未测速度"
+   "source": "项目源码和说明文档",
+   "facts": [
+    "内容按 10 月 11 日 13:57 的提交核对，没有出片、没有测速度"
+   ]
   },
   "based_on": {
    "commit": "cc41e514b2886fff8e04b1883562d25bd59089ef",
@@ -39,8 +42,8 @@
  },
  "source": {
   "page": "sources/pages/video-scaffold-deterministic-render/page.json",
-  "sha256": "526ae09a29e821c4733a26fedfb1815f8c0b76b79e5b52b56be4979eb4bed1ae",
-  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
+  "sha256": "36fd2162a0a964c0430041db3b61875c63dca0d18113a2df40be799321cbe70a",
+  "converted_at_beijing": "2026-11-04T12:05:42+08:00"
  }
 }
 ---
@@ -88,9 +91,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "内容按 10 月 11 日 13:57 的提交核对，没有出片、没有测速度",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 10 月 11 日 · 项目源码和说明文档",
      "row": "top"
     },
     {
@@ -130,9 +137,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "内容按 10 月 11 日 13:57 的提交核对，没有出片、没有测速度",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 10 月 11 日 · 项目源码和说明文档"
     },
     {
      "type": "action_button",
@@ -177,7 +188,7 @@ video-scaffold · 功能说明
 
 **当前情况：**三种出片方式、片段续作、少帧拒绝和全机排队都在源码里；这次网页核对没有出片，不公布速度、显存或稳定时长。docfilm 的显卡常驻渲染有一次历史整片验收（10 月 23 日，在一部 docfilm 整片上和 CPU 逐帧对照全部过线），只覆盖那部片子用到的镜头、套件和转场。
 
-项目源码：公开仓库
+项目源码：私有仓库
 
 ::screen{#video-scaffold-deterministic-render-02 section="usage"}
 

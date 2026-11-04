@@ -27,14 +27,14 @@
   "parent": "sunshine-remote-streaming",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "码率起点沿用 6 月的历史带宽估算（之后未重新测速）；编码配置按现存配置文件核对；主机编码能力保留 9 月 13 日记录；真实会话的码率、帧率、丢包没有统计"
+   "as_of": "2026-11-04",
+   "source": "项目配置和主机编码检查"
   }
  },
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-bitrate-codec-strategy/page.json",
-  "sha256": "f2f7c5722c502b081e87644cee85e1e0c5eb3fa4e003dff91a297d114e4d094a",
-  "converted_at_beijing": "2026-11-04T10:21:47+08:00"
+  "sha256": "e584def1ea98ad3d6dedd49f759f56608a63356570dacc59680e7a0bfe4dc40e",
+  "converted_at_beijing": "2026-11-04T12:05:40+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目配置和主机编码检查",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目配置和主机编码检查"
     },
     {
      "type": "action_button",
@@ -169,7 +169,7 @@ Sunshine 远程串流 · 功能说明
 
 在外玩游戏或滚动复杂文档时，可以先用 18–20 Mbps 与 AV1 做稳妥起点；如果统计里仍有丢包或排队延迟，就降码率，而不是拿推荐值冒充必然流畅。
 
-**当前情况：**主机的编码参数配置没变（预设 5、两遍编码、空间自适应量化）；9 月 13 日记录主机支持 HEVC 和 AV1 的 10 位编码，之后没有单独重核。约 32 Mbps 上行是 6 月的估算，之后没重新测速。10 月 8 日同网和手机热点真人用过，但没有记下那次的编码格式、码率和帧率；弱网下的画面、帧率与丢包仍未实际验证。
+**当前情况：**主机的编码参数配置没变（预设 5、两遍编码、空间自适应量化）；11 月 4 日 09:11 主机检查确认支持 HEVC 和 AV1 的 10 位编码，这只说明主机能力，不说明手机当时协商到哪种格式。约 32 Mbps 上行是 6 月的估算，之后没重新测速。10 月 8 日同网和手机热点真人用过，但没有记下那次的编码格式、码率和帧率；弱网下的画面、帧率与丢包仍未实际验证。
 
 具体测试保留各自日期，页面不实时探测运行状态。
 
@@ -530,7 +530,7 @@ Sunshine 远程串流 · 功能说明
 
 2. **让客户端协商**　Sunshine 暴露多种编码，手机客户端决定实际格式；HDR 还取决于完整链路。
 
-3. **看画面再调**　实际检查延迟、卡顿、画质与音频；本轮没有真实串流，不给出已达成的帧率或码率结论。
+3. **看画面再调**　实际检查延迟、卡顿、画质与音频；这里没有真实串流的统计，不给出已达成的帧率或码率结论。
 
 ::screen{#sunshine-remote-streaming-bitrate-codec-strategy-05 section="tech"}
 
@@ -625,7 +625,7 @@ Sunshine 远程串流 · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-现存配置：NVENC（NVIDIA 硬件编码器）预设 5、两遍编码 full_res、空间自适应量化开启；HEVC Main10 与 AV1 Main10（10 位色深配置）能力保留 9 月 13 日记录。18–20 Mbps 是客户端建议，弱网会话未测
+现存配置：NVENC（NVIDIA 硬件编码器）预设 5、两遍编码 full_res、空间自适应量化开启；HEVC Main10 与 AV1 Main10（10 位色深配置）能力 11 月 4 日 09:11:24 现场读取都是 true，只证明主机能力。18–20 Mbps 是客户端建议，弱网会话未测
 
 ## 关键规则与设计选择
 
@@ -710,7 +710,7 @@ Sunshine 远程串流 · 功能说明
 
 2. Sunshine 调用 NVIDIA NVENC API，以 P5 预设和全分辨率双遍算法开始压制视频流。
 
-3. 传输协议可能加入 FEC 与音频开销；24.5 Mbps 只是按文档比例计算的预算，不是本轮流量测量。
+3. 传输协议可能加入 FEC 与音频开销；24.5 Mbps 只是按文档比例计算的预算，不是流量测量。
 
 4. 如果会话协商到 AV1，手机硬件解码器会参与渲染；HDR 还需要客户端、系统、显示与编码链共同满足。
 
@@ -904,7 +904,14 @@ Sunshine 远程串流 · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 2026-09-13T06:30:05Z 自然巡检记录编码能力掩码 0x1F0301，hevc-main10=true 且 av1-main10=true；之后未单独重核，也没有建立手机会话。",
+     "text_ref": "- 2026-09-13T06:30:05Z 自然巡检记录编码能力掩码 0x1F0301，hevc-main10=true 且 av1-main10=true（历史）。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 2026-11-04 09:11:24 verify-path-lite",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -921,7 +928,14 @@ Sunshine 远程串流 · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 2026-09-13T06:30:05Z 自然巡检记录编码能力掩码 0x1F0301，hevc-main10=true 且 av1-main10=true；之后未单独重核，也没有建立手机会话。",
+     "text_ref": "- 2026-09-13T06:30:05Z 自然巡检记录编码能力掩码 0x1F0301，hevc-main10=true 且 av1-main10=true（历史）。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 2026-11-04 09:11:24 verify-path-lite",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -953,7 +967,9 @@ Sunshine 远程串流 · 功能说明
 
 ## 如何验证
 
-- 2026-09-13T06:30:05Z 自然巡检记录编码能力掩码 0x1F0301，hevc-main10=true 且 av1-main10=true；之后未单独重核，也没有建立手机会话。
+- 2026-09-13T06:30:05Z 自然巡检记录编码能力掩码 0x1F0301，hevc-main10=true 且 av1-main10=true（历史）。
+
+- 2026-11-04 09:11:24 verify-path-lite -NoWrite 现场读取 HevcMain10=true、Av1Main10=true；NVENC 预设 11 月 4 日 08:36:09 读取仍是 5。核对时没有主动建立手机会话，主机上的媒体端点不算真人画面验收。
 
 - Sunshine 配置文件固化高质量 NVENC P5/双遍参数，现存配置一致。
 

@@ -27,14 +27,14 @@
   "parent": "personal-media",
   "status_line": {
    "state": "在用",
-   "as_of": "2026-10-11",
-   "source": "媒体目录件数、分类与登记大小 10 月 30 日 11:06—11:07 只读取数；原件在位、地点绑定与可见文字覆盖仍是 10 月 11 日 16:31—16:36 核对的结果；解锁后不再另外隐藏私密结果为 10 月 30 日只读核对的源码（北京时间 10 月 28 日提交）；其余源码说明按 10 月 10 日版本，测试计数按 10 月 30 日静态清点；本次没有实际查询、浏览、播放或重算原件"
+   "as_of": "2026-11-04",
+   "source": "媒体目录和项目源码"
   }
  },
  "source": {
   "page": "sources/pages/personal-media-search-browse/page.json",
-  "sha256": "0e9a7f3cf974d92393216cc1d1d16ea5f1dddb1714003cf5e398c99eca6a9d77",
-  "converted_at_beijing": "2026-11-04T10:21:44+08:00"
+  "sha256": "9e4da6cc4fcccc68627031c35387ce42e6485ee4ae118780a38cf71adbc06092",
+  "converted_at_beijing": "2026-11-04T12:05:35+08:00"
  }
 }
 ---
@@ -85,7 +85,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 媒体目录和项目源码",
      "row": "top"
     },
     {
@@ -127,7 +127,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 媒体目录和项目源码"
     },
     {
      "type": "action_button",

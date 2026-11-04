@@ -27,8 +27,15 @@
   "parent": "timeaudit",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-12",
-   "source": "源码为 10 月 29 日 14:24 的合并 91b7ba0（含 14:06 的个人活动读取分阶段诊断 f62b807；10 月 30 日回读，与远端一致）；Docker 停止自愈 6dea0bf 与读取超时修复 5cb3ea9 为 10 月 20 日加入；10 月 20 日 07:35 三条心跳新鲜；10 月 12 日 05:36 完整健康检查正常；未注入故障、未运行测试"
+   "as_of": "2026-11-04",
+   "source": "项目仓库和运行健康检查",
+   "last": {
+    "label": "健康检查",
+    "at": "2026-11-04 11:40"
+   },
+   "facts": [
+    "上午内存黑匣子两次读不到，11:40 读时正常，原因没查实"
+   ]
   },
   "based_on": {
    "commit": "c5ca4eeb9574e72baa0dc22eb317687f7322185c",
@@ -37,8 +44,8 @@
  },
  "source": {
   "page": "sources/pages/timeaudit-runtime-reliability/page.json",
-  "sha256": "8c47c3576f509bb8fe94a60160bf14e5aeabe5c30f1c6b99e8f8fac56c8b53ff",
-  "converted_at_beijing": "2026-11-04T10:21:49+08:00"
+  "sha256": "3728154ea07b4a204ada8f8230e771188f0fb939b871777a5c878c8e85f0a577",
+  "converted_at_beijing": "2026-11-04T12:05:41+08:00"
  }
 }
 ---
@@ -88,11 +95,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用",
+       "text": "常用 · 健康检查 11 月 4 日 11:40",
        "state": "ok"
+      },
+      {
+       "text": "上午内存黑匣子两次读不到，11:40 读时正常，原因没查实",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日",
+     "static_note": "截至 11 月 4 日 · 项目仓库和运行健康检查",
      "row": "top"
     },
     {
@@ -130,11 +141,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用",
+       "text": "常用 · 健康检查 11 月 4 日 11:40",
        "state": "ok"
+      },
+      {
+       "text": "上午内存黑匣子两次读不到，11:40 读时正常，原因没查实",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日"
+     "static_note": "截至 11 月 4 日 · 项目仓库和运行健康检查"
     },
     {
      "type": "action_button",
@@ -177,7 +192,7 @@ TimeAudit · 功能说明
 
 系统不因进程仍显示 Running 就假定它工作，而以最近成功写入判断真假健康。看门狗每分钟先查数据库和看板依赖，再查各条采集链，只恢复确认出问题的那一条；它依赖的 Docker 只有在明确显示“已停止”连续满 10 分钟后，才尝试一次有时限的恢复；它还顺带最多每 10 分钟写一份“今日用电”回执，供驾驶舱显示。
 
-**当前情况：**10 月 12 日 05:36 的完整健康检查里，各组件仍全部正常，没有待写积压、写入失败或采集错误；05:39 看门狗也回报正常、没有降级组件。这次没有注入故障或重验全部恢复路径。10 月 20 日凌晨新加的 Docker 停止自愈还没有真实演练过；10 月 20 日 07:35 三条心跳仍新鲜，只说明当时在线。
+**当前情况：**11 月 4 日 11:40 完整健康检查返回正常，内存黑匣子也正常；今天 11:40 开始的备份仍在运行，完成结果另看备份回执。但当天 09:08 和 09:09 两次读到的是整体降级，只有内存黑匣子这一项读不到（blackbox_coverage_unavailable），其余组件都正常，没有待写积压、写入失败或采集错误；09:09 单独读黑匣子又是成功的。原因没查实，所以不能说它从没出过问题，也没有证据说黑匣子停过。每晚 03:00 还有一次只读自检，11 月 4 日 03:01 这项退出码 0。这些读数都没有注入故障或重验恢复路径；10 月 20 日凌晨新加的 Docker 停止自愈还没有真实演练过。
 
 项目源码：公开仓库
 
@@ -329,7 +344,7 @@ TimeAudit · 功能说明
     {
      "type": "source_text_card",
      "text_ref": "正常时",
-     "columns": 3,
+     "columns": 1,
      "last_full_width": false,
      "icon_position": "header_left",
      "header_icon": [
@@ -403,6 +418,7 @@ TimeAudit · 功能说明
 ## 发现问题时
 
 程序退出或假活时只恢复确认故障的部分，保留失败原因；依赖探测超时或读不出状态只记“引擎状态未知、下轮重试”，这本身不算重启的理由。只有 Docker Desktop 连续 10 分钟明确报告“已停止”，才尝试一次有时限的官方重启；还不行才只结束 Docker 自己安装目录里的进程，再走原有的开机任务。同一次故障只试这一回，不反复重启。
+每晚 03:00 电脑配置与恢复的总任务还会跑一次只读健康检查，新的红灯写进驾驶舱交 AI 跟进，变回绿才退出；它只看退出码，不修项目，也不直接启动 AI。
 
 ## 入口不可用或证据不足时
 
@@ -719,6 +735,8 @@ TimeAudit 大盘停止更新时，在已接入本机诊断的 AI 对话中说明
 
 - GUI 状态、AI 健康与看门狗读同一个 timeaudit_health.py；core-only 排除备份、黑匣子和上一次守护结果，避免递归。exit 2 可以是有效的 degraded/unavailable，心跳、实际持久写入和最后守护结果分开判断；可选两秒开销统计只看精确主采集链子进程，不含独立传感器、Docker 与原生记录，RSS 相加不是独占内存。
 
+- 每晚只读自检归 PCConfig：计划任务 PCConfig Nightly Project Checks 每天 03:00 在已登录的交互用户下运行，错过会补；按 registries/project_cards.json 登记的命令跑项目 .venv 的 python.exe -B timeaudit_health.py，限时 180 秒，只判断退出码、不保存输出。发现新红灯写驾驶舱 ai_following，已有故障接手继续，变绿才退出；停掉总任务只停自动检查，不停采集或已有接手。
+
 ## 执行流程
 
 1. 在 Windows 交互用户会话中启动主程序，非管理员时由现有入口自动隐藏提权，保留原 Python 和参数；start_all.bat 通过 Start-ElevatedEngine.ps1 启动。
@@ -1024,6 +1042,10 @@ TimeAudit 大盘停止更新时，在已接入本机诊断的 AI 对话中说明
 ## 如何验证
 
 - 8 月 31 日基线：三条 heartbeat 新鲜、3 容器运行、ingester healthy、LHM 18085 返回 HTTP 200、看门狗结果 0；10 月 12 日 05:36 完整健康检查仍全部 healthy，待写事件、字符、文件、字节都是 0，写入失败、溢出、捕获错误都是 0，FPS 采集 active、GPU 热点仍 unsupported；05:39 看门狗回执 healthy、没有降级组件，任务结果 0。这只是当时的运行快照，没有注入故障，不等于自愈路径已端到端验收。
+
+- 11 月 4 日 09:08:30 和已提权的 09:09:53，两次完整健康检查都是 degraded，降级名单只有 memory_blackbox，reason=blackbox_coverage_unavailable；其余组件 healthy，待写事件、字符、文件、字节都是 0，写入失败、溢出、捕获错误都是 0，FPS=gated_idle，GPU 热点 unsupported。09:09:14 单独运行 PCConfig 的 Get-MemoryFreezeEvidence.ps1 -CoverageOnly -Json 成功，status=ok，collector_state=running，滚动封闭日志跨度 13.013 小时（CoverageOnly 不读所选区间样本，它的 read_segments=0 不说明黑匣子没记录）。10:33:48—10:33:53 再连读 3 次，整体 healthy、降级名单为空；11:40 又只读一次，仍为 healthy，memory_blackbox=healthy。原因没查实；timeaudit_health.py 第 198–221 行里这项子读取限时 6 秒，只是排查线索，不能当结论。
+
+- 每晚只读自检：11 月 4 日 03:00:01 总任务运行，TimeAudit 这项 03:01:15 退出码 0，failed_since、red_since 都是 null（E:\Data\PCConfig\NightlyProjectChecks\last-run.json）；任务 Ready、已启用，下次 11 月 5 日 03:00。
 
 - 8 月 31 日运行/入库回归纳入 001cee0 的 182 项 + 11 子测试，LHM/看门狗定向 10/10；9 月 8 日 e5459ce 另验证 39 项相关回归。之后未重新运行；当前源码有 356 个以 test_ 开头的测试函数，这次没有运行。
 

@@ -48,7 +48,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "165 份",
+        "text_ref": "166份",
         "variant": "number_header_table",
         "columns": 4,
         "columns_v": 2,
@@ -63,7 +63,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "10 月 30 日 11:06 计数入口正常返回 55 个来源、166 份登记、4 条关系、161 份有文字，文件名清单 50,075 条",
+        "text_ref": "11月04日08:35计数入口正常返回55个来源、166份登记、4条关系、161份有文字，文件名清单72,356条",
         "align": "right"
       },
       {
@@ -139,7 +139,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "165 份",
+        "text_ref": "166份",
         "variant": "number_header_table",
         "columns": 1,
         "columns_v": 1,
@@ -154,7 +154,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "10 月 30 日 11:06 计数入口正常返回 55 个来源、166 份登记、4 条关系、161 份有文字，文件名清单 50,075 条",
+        "text_ref": "11月04日08:35计数入口正常返回55个来源、166份登记、4条关系、161份有文字，文件名清单72,356条",
         "align": "right"
       },
       {
@@ -562,7 +562,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1听懂你的话AI把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词2先查登记在登记过的165份里比对标题、来源和已知文字，平时",
+        "text_ref": "1听懂你的话AI把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词2先查登记在登记过的166份里比对标题、来源和已知文字，平时",
         "columns": 3,
         "direction": "horizontal",
         "connector": "arrow",
@@ -622,7 +622,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1听懂你的话AI把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词2先查登记在登记过的165份里比对标题、来源和已知文字，平时",
+        "text_ref": "1听懂你的话AI把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词2先查登记在登记过的166份里比对标题、来源和已知文字，平时",
         "columns": 1,
         "direction": "vertical",
         "connector": "arrow",
@@ -726,7 +726,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "4,242 行",
+        "text_ref": "4,126行",
         "columns": 3,
         "columns_v": 3,
         "icons": "none"
@@ -795,7 +795,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "4,242 行",
+        "text_ref": "4,126行",
         "columns": 1,
         "columns_v": 1,
         "icons": "none"
@@ -832,7 +832,7 @@
       },
       {
         "type": "segmented_band",
-        "text_ref": "85,189个看过的文件（重叠的来源只算一次）10,250个是照片、视频、录音，跳过",
+        "text_ref": "94,537个看过的文件（重叠的来源只算一次）7,265个是照片、视频、录音，跳过",
         "variant": "funnel",
         "columns": 2,
         "direction": "horizontal",
@@ -840,7 +840,7 @@
       },
       {
         "type": "section_heading",
-        "text_ref": "58个来源是什么",
+        "text_ref": "55个来源是什么",
         "row": "ranges",
         "width": "50%",
         "align": "left",
@@ -855,7 +855,7 @@
       },
       {
         "type": "section_heading",
-        "text_ref": "165份登记原件，共1.2GB",
+        "text_ref": "166份登记原件，共1.2GB",
         "row": "ranges",
         "width": "50%",
         "align": "left",
@@ -863,14 +863,14 @@
       },
       {
         "type": "chart",
-        "text_ref": "PDF74·网页20·Markdown17·Word18·表格11·JSON9·其他16",
+        "text_ref": "PDF74·网页20·Markdown17·Word18·表格11·JSON9·其他1",
         "variant": "stacked",
         "row": "ranges",
         "chart_type": "stacked"
       },
       {
         "type": "prose",
-        "text_ref": "上面四个文件数是 9 月 28 日 20:55 数的"
+        "text_ref": "上面四个文件数是11月4日09:08数的"
       }
     ],
     "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第4项：分段带按现有 funnel 分两列两排，扩大末格可用宽度；单独的其余用时现找是原定稿段落，完整保留。第5项的两图均已使用现有 stacked，图例数值和说明分行及尾点观感仍见 requests/comp-diagram/page-fixer-05-personal-materials-qa.md。",
@@ -903,7 +903,7 @@
       },
       {
         "type": "segmented_band",
-        "text_ref": "85,189个看过的文件（重叠的来源只算一次）10,250个是照片、视频、录音，跳过",
+        "text_ref": "94,537个看过的文件（重叠的来源只算一次）7,265个是照片、视频、录音，跳过",
         "variant": "stack",
         "columns": 1,
         "direction": "vertical",
@@ -911,7 +911,7 @@
       },
       {
         "type": "section_heading",
-        "text_ref": "58个来源是什么",
+        "text_ref": "55个来源是什么",
         "align": "left",
         "size": "medium"
       },
@@ -923,19 +923,19 @@
       },
       {
         "type": "section_heading",
-        "text_ref": "165份登记原件，共1.2GB",
+        "text_ref": "166份登记原件，共1.2GB",
         "align": "left",
         "size": "medium"
       },
       {
         "type": "chart",
-        "text_ref": "PDF74·网页20·Markdown17·Word18·表格11·JSON9·其他16",
+        "text_ref": "PDF74·网页20·Markdown17·Word18·表格11·JSON9·其他1",
         "variant": "stacked",
         "chart_type": "stacked"
       },
       {
         "type": "prose",
-        "text_ref": "上面四个文件数是 9 月 28 日 20:55 数的"
+        "text_ref": "上面四个文件数是11月4日09:08数的"
       }
     ],
     "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第4项：采用现有 stack 纵排等宽四段，保留所有源字和原独立说明段。第5项的两图使用现有 stacked；图例分行及尾点观感仍见 requests/comp-diagram/page-fixer-05-personal-materials-qa.md。",
@@ -1434,7 +1434,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "8 月 25 日–10 月 7 日，一共 23 次提交。"
+        "text_ref": "8月25日–10月21日，一共32次提交。"
       }
     ],
     "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第1项：九节点时间线 columns=1、direction=vertical，完整日期和说明纵排。原标题及原图取色坐标保持。",
@@ -1491,7 +1491,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "8 月 25 日–10 月 7 日，一共 23 次提交。"
+        "text_ref": "8月25日–10月21日，一共32次提交。"
       }
     ],
     "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",

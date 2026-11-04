@@ -332,7 +332,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "18. “软件每周维护”沿用原 PCConfig Governance Check 任务名，执行 Invoke-ManagedSoftwareMaintenance.ps1：查受管软件版本，在空闲时为已授权的主 Python 打同一 3.14 系列稳定补丁、更新 Codex CLI 正式版；正在被使用就等空闲，不终止程序、不跨次版本，也不重建已退役的综合自查。",
+        "text_ref": "18. “软件每周维护”沿用原 PCConfig Governance Check 任务名",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -352,7 +352,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "18. “软件每周维护”沿用原 PCConfig Governance Check 任务名，执行 Invoke-ManagedSoftwareMaintenance.ps1：查受管软件版本，在空闲时为已授权的主 Python 打同一 3.14 系列稳定补丁、更新 Codex CLI 正式版；正在被使用就等空闲，不终止程序、不跨次版本，也不重建已退役的综合自查。",
+        "text_ref": "18. “软件每周维护”沿用原 PCConfig Governance Check 任务名",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -372,7 +372,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 运行时 Provider 返回 Windows、PowerShell 7 和 Windows PowerShell 的路径、版本、架构与编码事实。10 月 11 日 16:34 现场：PowerShell 7.6.4，Windows PowerShell 5.1.26100.9549。",
+        "text_ref": "- 运行时 Provider 返回 Windows、PowerShell 7 和 Windows PowerShell 的路径、版本、架构与编码事实。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -392,7 +392,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 运行时 Provider 返回 Windows、PowerShell 7 和 Windows PowerShell 的路径、版本、架构与编码事实。10 月 11 日 16:34 现场：PowerShell 7.6.4，Windows PowerShell 5.1.26100.9549。",
+        "text_ref": "- 运行时 Provider 返回 Windows、PowerShell 7 和 Windows PowerShell 的路径、版本、架构与编码事实。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",

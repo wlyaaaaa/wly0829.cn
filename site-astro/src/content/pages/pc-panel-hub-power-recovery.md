@@ -27,14 +27,17 @@
   "parent": "pc-panel-hub",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "源码按 10 月 6 日最后一次提交（早于 10 月 11 日 14:00 截止）重新核对：桌面保护改成跟着看门狗全程运行的 250 毫秒子循环，壁纸只发“继续播放”；10 月 11 日 03:09 生产日志里有一次浮层越界自动重新激活请求；睡眠、断电和壁纸实屏仍待验"
+   "as_of": "2026-11-04",
+   "source": "项目源码和运行记录",
+   "facts": [
+    "睡眠、断电和壁纸真实恢复还没实测"
+   ]
   }
  },
  "source": {
   "page": "sources/pages/pc-panel-hub-power-recovery/page.json",
-  "sha256": "4ee504d112f29c4162bbb844d9b4c414ef29336996f2b3f6240b7a5e7b3ea13c",
-  "converted_at_beijing": "2026-11-04T10:21:42+08:00"
+  "sha256": "a874ebfbb8541e27002ada5ee93ac55ccd818d6367ca7573084fa662081d5a95",
+  "converted_at_beijing": "2026-11-04T12:05:33+08:00"
  }
 }
 ---
@@ -59,6 +62,10 @@
    {
     "text": "复制 AI 续作说明",
     "href": "/projects/pc-panel-hub/#ai-brief"
+   },
+   {
+    "text": "串口与刷新",
+    "href": "/projects/pc-panel-hub/serial-transport/"
    }
   ],
   "anchors": [],
@@ -86,9 +93,13 @@
       {
        "text": "常用",
        "state": "ok"
+      },
+      {
+       "text": "睡眠、断电和壁纸真实恢复还没实测",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和运行记录",
      "row": "top"
     },
     {
@@ -128,9 +139,13 @@
       {
        "text": "常用",
        "state": "ok"
+      },
+      {
+       "text": "睡眠、断电和壁纸真实恢复还没实测",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和运行记录"
     },
     {
      "type": "action_button",
@@ -173,7 +188,7 @@ PC Panel Hub · 功能说明
 
 登录、睡眠或屏幕断接后，只恢复受影响的机箱屏、浮层、窗口或壁纸。普通窗口回主屏、壁纸是否重动和水冷屏实体画面仍分别确认，不靠不断重启整机碰运气。
 
-**当前情况：**看门狗异常退出后接回机箱屏有 9 月 7 日实测，明确停止也不会反弹。桌面保护现在由跟着看门狗全程运行的子循环负责，壁纸只请求“继续播放”；10 月 11 日凌晨生产日志记下过一次浮层越界后的自动重新激活请求。壁纸是否真的动了、睡眠和断电恢复都还没实测。
+**当前情况：**看门狗异常退出后接回机箱屏有 9 月 7 日实测，明确停止也不会反弹。桌面保护现在由跟着看门狗全程运行的子循环负责，壁纸只请求“继续播放”；10 月 11 日凌晨生产日志记下过一次浮层越界后的自动重新激活请求。壁纸是否真的动了、睡眠和断电恢复都还没实测；机箱屏发送慢帧和超时也还没根治，见〔串口与刷新〕。
 
 具体测试保留各自日期，页面不实时探测运行状态。
 
@@ -577,7 +592,7 @@ PC Panel Hub · 功能说明
     },
     {
      "type": "prose",
-     "text_ref": "源码按10月6日最后一次提交核对：生产看门狗以不设时限、每250毫秒的方式启动桌"
+     "text_ref": "源码按11月2日最后一次提交ddba2b0核对："
     },
     {
      "type": "numbered_steps",
@@ -599,7 +614,7 @@ PC Panel Hub · 功能说明
     },
     {
      "type": "prose",
-     "text_ref": "源码按10月6日最后一次提交核对：生产看门狗以不设时限、每250毫秒的方式启动桌"
+     "text_ref": "源码按11月2日最后一次提交ddba2b0核对："
     },
     {
      "type": "numbered_steps",
@@ -629,7 +644,7 @@ PC Panel Hub · 功能说明
 ## 技术实现与依据（一）
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
-源码按 10 月 6 日最后一次提交核对：生产看门狗以不设时限、每 250 毫秒的方式启动桌面保护子循环，壁纸只发 play；10 月 11 日 03:09 生产日志有一次浮层越界自动重新激活请求。9 月 7 日同一 VBS 异常退出接回与明确停止已实测，本人确认 TURZX 正常刷新；睡眠、断电、HS2 实屏和壁纸实际恢复仍分别待验
+源码按 11 月 2 日最后一次提交 ddba2b0 核对：生产看门狗以不设时限、每 250 毫秒的方式启动桌面保护子循环，壁纸只发 play；10 月 11 日 03:09 生产日志有一次浮层越界自动重新激活请求。9 月 7 日同一 VBS 异常退出接回与明确停止已实测，本人确认 TURZX 正常刷新；睡眠、断电、HS2 实屏和壁纸实际恢复仍分别待验
 
 ## 关键规则与设计选择
 
@@ -1599,17 +1614,21 @@ HDR-only、主屏/HS2路径与参与桌面的MTT健康、稳定/冷却、控制�
 
 - 10 月 11 日 03:09:56 生产日志记下浮层漂移，03:09:57 发出停止并重新激活请求，03:09:58 新的浮层进程启动；这说明自动请求实际跑过，浮层最终在实体屏上的位置没有单独核对。
 
+- 每晚共享自检（不是本项目第二个看门狗）：电脑配置的任务 PCConfig Nightly Project Checks 北京时间每天 03:00 隐藏运行，本项目只跑 python -B tools\turzx_side_screen\test_metrics_endpoint_recovery.py，这是指标端点恢复的合成子集，超时 180 秒。11 月 4 日 09:10—09:12 只读：任务已启用、Ready、Highest，上次 03:00:01 结果 0，下次 11 月 5 日 03:00；last-run.json 记本项目 checked_at=03:01:07、exit_code=0、red_since=null。红灯进驾驶舱由 AI 跟进，任务本身不启动 AI；Disable-ScheduledTask 只停自动检查，屏幕和已有故障接手照常。绿灯不证明实体屏或发送根因已修。
+
+- 11 月 4 日 09:10—09:12 只读运行状态：计划任务 TURZX SideScreen 为 Running、已启用、Highest，上次 11 月 3 日 16:01:18，LastTaskResult=267009 表示运行中，不是失败码；没有 TURZX SideScreen Resume 任务。HS2.CrystalOverlay、发送程序和 wallpaper64 各 1 个；活动屏 2 块，其中唯一非主 2288×1048 一块。hs2-startup-window-guard.json 于 09:10:35 为 running、250 ms、parent-process、GuardStatus=active，当轮 Applied=0、Failed=0，累计 TotalMoves=88，WallpaperStatus=play-dispatched、ResumeCount=1、VddVerifiedCount=0。88 是动作累计，1 是 play 分派，都不是实体恢复次数；这些只说明进程和请求，不是像素证明。
+
 - Source：9月7日 a4d8e22219f304ec7d4540f4e7612510cc70bf8e 的 HEAD、origin/main 与实时远端一致，源码工作树干净；修补 VBS 异常退出接回和 IncludeWatchdog 停止边界，原有窗口保护、模式保留与独占串口合同不变。
 
-- Tests：a4d8e22 的 test.ps1 -SkipStreamWhenRunning 通过，指标 87、天气 8，PowerWatchdog、刷新默认值、可靠性、节拍、4 个真实 VBS 无硬件行为及公开 ZIP 通过；只跳过会占用生产串口的 TestVideoStream。本轮没有重跑。
+- Tests：a4d8e22 的 test.ps1 -SkipStreamWhenRunning 通过，指标 87、天气 8，PowerWatchdog、刷新默认值、可靠性、节拍、4 个真实 VBS 无硬件行为及公开 ZIP 通过；只跳过会占用生产串口的 TestVideoStream。11 月 4 日核对时没有重跑。
 
 - Installation / Runtime（运行环境）：9 月 7 日既有任务已重新启动；显式停止 34.69 秒未反弹，软件启动 31.06 秒恢复，强制结束 watchdog 后 63.33 秒由原 VBS 自动接回，旧 sender 退出。RTSS 单应用配置经官方 SDK 回读 AppDetectionLevel=0，未另建任务或服务。
 
 - Runtime（运行环境）：没有制造显示器拔插、主屏切换、MTT 重枚举、Code 10 或控制客户端缺失；没有观察 Wallpaper Engine 实际渲染恢复。
 
-- 接线选择、Hub 能力、SATA 供电与 8091 端口拓扑来自当前项目源码和启动合同；它们是可执行恢复说明，不是本轮物理观察结果。
+- 接线选择、Hub 能力、SATA 供电与 8091 端口拓扑来自当前项目源码和启动合同；它们是可执行恢复说明，不是实际物理观察结果。
 
-- Physical：9月7日本人确认 TURZX 实体小屏正常刷新；脚本先前 physical_pixels_verified=false 与后续本人观察分开保留。HS2 正式安装位置 9 月 28 日本人粗看正常；本轮睡眠、关机、断电、壁纸实际恢复和 HS2 实屏未验收。
+- Physical：9月7日本人确认 TURZX 实体小屏正常刷新；脚本先前 physical_pixels_verified=false 与后续本人观察分开保留。HS2 正式安装位置 9 月 28 日本人粗看正常；睡眠、关机、断电、壁纸实际恢复和 HS2 实屏到 11 月 4 日仍未验收。
 
 - ac770044 相关纯软件回归拒绝不完整窗口捕获与未知执行；本网页只消费已发布实现，不把单元结果、心跳或命令 204 写入当实体像素验证。
 

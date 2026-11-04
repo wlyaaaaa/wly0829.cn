@@ -8,7 +8,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "个人正式文书",
+        "text_ref": "文书和材料制作",
         "align": "center",
         "size": "medium"
       },
@@ -50,7 +50,7 @@
       }
     ],
     "portrait_required": true,
-    "source_layout": "横版画面：左上大标题毛笔艺术字“个人正式文书”，下面一行一句话（绿色、比正文大一号），再下面介绍段。右上一幅水彩插画：书桌上一份摊开的两页协议（纸上只画浅灰短线，不画字），右页下方左右两个签字栏：左栏里一笔绿色签名，右栏是空的横线；旁边一台笔记本屏幕上并排两个文件图标（一个蓝色 W 形文档、一个红色 PDF 形文档，图标上不写字）；再旁边一个牛皮纸文件夹，封口贴着绿色封条和一把小锁。中间一排四张数字卡片（和标杆页开头的数字卡一样：上面小插画，大号绿色数字，下面一行小字），小插画依次是：两张叠放的纸、一段六级小台阶、一张纸分成两个文件图标、一个打钩的试管架。数字卡下面一条浅黄底的细长圆角提示条，写“截至 9 月 28 日”那一句，左端一颗黄色小圆点。最下面一行两个白底细绿边的圆角按钮：〔在整套系统里的位置 → 怎么协作〕、〔怎么跟 AI 说 → 技能页〕。这个项目没有自动任务，不画“现在”横条；仓库私有，不放 GitHub 按钮。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+    "source_layout": "横版画面：左上大标题毛笔艺术字“文书和材料制作”，下面一行一句话（绿色、比正文大一号），再下面介绍段。右上一幅水彩插画：书桌上一份摊开的两页协议（纸上只画浅灰短线，不画字），右页下方左右两个签字栏：左栏里一笔绿色签名，右栏是空的横线；旁边一台笔记本屏幕上并排两个文件图标（一个蓝色 W 形文档、一个红色 PDF 形文档，图标上不写字）；再旁边一个牛皮纸文件夹，封口贴着绿色封条和一把小锁。中间一排四张数字卡片（和标杆页开头的数字卡一样：上面小插画，大号绿色数字，下面一行小字），小插画依次是：两张叠放的纸、一段六级小台阶、一张纸分成两个文件图标、一个打钩的试管架。数字卡下面一条浅黄底的细长圆角提示条，写“截至 9 月 28 日”那一句，左端一颗黄色小圆点。最下面一行两个白底细绿边的圆角按钮：〔在整套系统里的位置 → 怎么协作〕、〔怎么跟 AI 说 → 技能页〕。这个项目没有自动任务，不画“现在”横条；仓库私有，不放 GitHub 按钮。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
     "asset_requirements": {
       "illustrations": 1,
       "icons": 4
@@ -70,7 +70,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "个人正式文书",
+        "text_ref": "文书和材料制作",
         "align": "center",
         "size": "medium"
       },
@@ -133,7 +133,7 @@
       {
         "type": "flow",
         "text_ref": "我说要办什么",
-        "columns": 3,
+        "columns": 4,
         "direction": "horizontal",
         "connector": "arrow",
         "illustration": "top_inside",
@@ -172,7 +172,7 @@
       {
         "type": "flow",
         "text_ref": "我说要办什么",
-        "columns": 1,
+        "columns": 4,
         "direction": "vertical",
         "connector": "arrow",
         "illustration": "left_inside",
@@ -348,6 +348,12 @@
         "row": "status"
       },
       {
+        "type": "points_card",
+        "text_ref": "同一件事换个地方递",
+        "whole_block": true,
+        "row": "status"
+      },
+      {
         "type": "notice",
         "text_ref": "交出去这一步"
       }
@@ -400,6 +406,11 @@
       {
         "type": "points_card",
         "text_ref": "不用签名",
+        "whole_block": true
+      },
+      {
+        "type": "points_card",
+        "text_ref": "同一件事换个地方递",
         "whole_block": true
       },
       {
@@ -507,7 +518,7 @@
       {
         "type": "flow",
         "text_ref": "请求文件",
-        "columns": 4,
+        "columns": 3,
         "direction": "horizontal",
         "connector": "arrow",
         "illustration": "top_inside",
@@ -549,7 +560,7 @@
       {
         "type": "flow",
         "text_ref": "请求文件",
-        "columns": 1,
+        "columns": 3,
         "direction": "vertical",
         "connector": "arrow",
         "illustration": "left_inside",
@@ -601,7 +612,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "1,839行",
+        "text_ref": "1,879行",
         "columns": 3,
         "columns_v": 3,
         "icons": [
@@ -659,7 +670,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "1,839行",
+        "text_ref": "1,879行",
         "columns": 1,
         "columns_v": 1,
         "icons": [
@@ -695,7 +706,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "全部功能（15项）",
+        "text_ref": "全部功能（17项）",
         "align": "center",
         "size": "medium"
       },
@@ -737,7 +748,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "全部功能（15项）",
+        "text_ref": "全部功能（17项）",
         "align": "center",
         "size": "medium"
       },
@@ -855,7 +866,7 @@
       {
         "type": "timeline",
         "text_ref": "7月20日",
-        "columns": 6,
+        "columns": 4,
         "direction": "horizontal",
         "connector": "line",
         "illustration": "none",
@@ -890,7 +901,7 @@
       {
         "type": "timeline",
         "text_ref": "7月20日",
-        "columns": 1,
+        "columns": 4,
         "direction": "vertical",
         "connector": "line",
         "illustration": "none",

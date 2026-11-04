@@ -27,14 +27,14 @@
   "parent": "sunshine-remote-streaming",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "修复脚本按 10 月 6 日最后一次提交核对（10 月 20 日回读远端无新提交），远程开机按电脑配置（PCConfig）10 月 9 日的登记；服务状态取 10 月 20 日早上只读服务查询，每日检查连续天数仍截至 10 月 11 日（之后未按原口径重核）；AI 没有做断电开机试验"
+   "as_of": "2026-11-04",
+   "source": "服务查询和每日检查"
   }
  },
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-remote-power-and-repair/page.json",
-  "sha256": "efe956918bc902dfe0be277ae1bf06caf57723b77887475e15a8b8858d0ce781",
-  "converted_at_beijing": "2026-11-04T10:21:48+08:00"
+  "sha256": "57c39a718dfc422a636df41667018ddef947673255decbe8bbb172fe7980d7be",
+  "converted_at_beijing": "2026-11-04T12:05:40+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 服务查询和每日检查",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 服务查询和每日检查"
     },
     {
      "type": "action_button",
@@ -169,7 +169,7 @@ Sunshine 远程串流 · 功能说明
 
 电脑已经开着但网络抽风时，有脚本帮助收敛服务与代理残留；电脑彻底关机时，靠的是现有的远程开机或智能插座，那属于电脑配置项目，不能和在线修复混成“一键修复”。
 
-**当前情况：**本人已报告现有远程开机和智能插座开机都能用，插座和路由器都独立供电、不靠这台电脑（记在电脑配置 10 月 9 日的救援说明里）；AI 没有做过断电冷启动试验。电脑开着时，Sunshine 和 Tailscale 服务在运行（10 月 20 日读数）；每日检查最近一次是 10 月 29 日 14:30 通过，只查主机这边，10 月 11 日之后是否天天通过还没核实；软件修复默认只出计划，确认后才动。
+**当前情况：**本人已报告现有远程开机和智能插座开机都能用，插座和路由器都独立供电、不靠这台电脑（记在电脑配置 10 月 9 日的救援说明里）；AI 没有做过断电冷启动试验。电脑开着时，Sunshine 和 Tailscale 服务在运行（11 月 4 日 09:10 读数）；每日检查最近一次是 11 月 3 日 14:30 通过，只查主机这边，10 月 11 日之后是否天天通过还没核实；软件修复默认只出计划，确认后才动。
 
 具体测试保留各自日期，页面不实时探测运行状态。
 
@@ -392,7 +392,7 @@ Sunshine 远程串流 · 功能说明
 
 ## 正常时
 
-10 月 20 日早上两项服务在运行、自动启动；每日检查截至 10 月 11 日天天通过，之后的连续覆盖这次没按原口径重核（目前无法证实），只知道 10 月 19 日和 10 月 29 日 14:30 这两次只查主机的检查是通过；本人报告过远程开机可用，但 AI 没有取得一次从断电到手机看到画面的完整记录。
+11 月 4 日 09:10 两项服务在运行、自动启动；每日检查截至 10 月 11 日天天通过，之后的连续覆盖这次没按原口径重核（目前无法证实），只知道 10 月 19 日、10 月 29 日和 11 月 3 日 14:30 这几次只查主机的检查是通过；本人报告过远程开机可用，但 AI 没有取得一次从断电到手机看到画面的完整记录。
 
 ## 发现问题时
 
@@ -626,7 +626,7 @@ Sunshine 远程串流 · 功能说明
 
 10 月 20 日早上（7:34—7:43 之间只读查询）：SunshineService 与 Tailscale 运行、自动启动；每日检查截至 10 月 11 日共 24 天通过（只查主机），之后是否天天通过没按原口径重核、目前无法证实；10 月 19 日 14:30 有一次通过回执（coverage=host-only，Tailscale Running/Online、无人值守开着，手机路径和交互 unknown）；没有新的修复回执，即没有新的实际修复记录。本人报告远程开机可用；AI 未做 BIOS、WoL 与断电冷开机试验
 
-本轮另读到 10 月 29 日 14:30 的每日检查回执（runtime/network-health.json）：Health=pass、Coverage=host-only、退出码 0，Tailscale Running/Online、无人值守开着、HEVC 与 AV1 10 位编码可用、没有公开的 Sunshine 端口；对端路径、PeerAcceptance 和 StreamingInteraction 仍是 unknown。这只是主机这一侧的一次结果，不补算 10 月 11 日之后的连续天数，也不代替手机或笔记本实际连上看到画面
+11 月 4 日 09:10 只读健康入口：SunshineService 与 Tailscale 运行、自动启动。同时读到 11 月 3 日 14:30:02 的每日检查回执（runtime/network-health.json；再早一份有记录的是 10 月 29 日 14:30，也通过）：Health=pass、Coverage=host-only、退出码 0，Tailscale Running/Online、无人值守开着、HEVC 与 AV1 10 位编码可用、没有公开的 Sunshine 端口；对端路径、PeerAcceptance 和 StreamingInteraction 仍是 unknown。这只是主机这一侧的一次结果，不补算 10 月 11 日之后的连续天数，也不代替手机或笔记本实际连上看到画面
 
 ## 关键规则与设计选择
 
@@ -903,7 +903,7 @@ Sunshine 远程串流 · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 10 月 11 日 13:33：系统服务 SunshineService 与 Tailscale 均正在运行，启动模式为自动。",
+     "text_ref": "- 11 月 4 日 09:10：系统服务 SunshineService 与 Tailscale 均正在运行，启动模式为自动（10 月 11 日 13:33 也是如此）。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -920,7 +920,7 @@ Sunshine 远程串流 · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 10 月 11 日 13:33：系统服务 SunshineService 与 Tailscale 均正在运行，启动模式为自动。",
+     "text_ref": "- 11 月 4 日 09:10：系统服务 SunshineService 与 Tailscale 均正在运行，启动模式为自动（10 月 11 日 13:33 也是如此）。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -956,9 +956,9 @@ Sunshine 远程串流 · 功能说明
 
 ## 如何验证
 
-- 10 月 11 日 13:33：系统服务 SunshineService 与 Tailscale 均正在运行，启动模式为自动。
+- 11 月 4 日 09:10：系统服务 SunshineService 与 Tailscale 均正在运行，启动模式为自动（10 月 11 日 13:33 也是如此）。
 
-- 计划任务 SunshineRemote-VerifyPath-Daily 已在册；截止前最近一次 10 月 10 日 14:30，9 月 18 日到 10 月 10 日共 23 天日常记录都通过（只查主机）。旧页的 9 月 13 日 06:30Z 那次为当时记录。手机 peer 探测都被跳过，不证明冷开机或登录前捕获。
+- 计划任务 SunshineRemote-VerifyPath-Daily 已在册；最近一次 11 月 3 日 14:30，退出码 0；9 月 18 日到 10 月 10 日共 23 天日常记录都通过（只查主机），之后的连续天数没有重核。旧页的 9 月 13 日 06:30Z 那次为当时记录。手机 peer 探测都被跳过，不证明冷开机或登录前捕获。
 
 - 本人已报告现有远程开机和智能插座开机可用（电脑配置 10 月 9 日登记）；AI 没有做断电试验，也没有证明电脑完全卡死时软件救援一定能执行。
 

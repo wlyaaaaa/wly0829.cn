@@ -109,6 +109,10 @@ class StrictTests(unittest.TestCase):
         self.assertEqual(inventory["coverage"]["required_items"], 0)
         dated = dict(self.cutoff, field="status_line.as_of", page_pattern=None)
         self.assertTrue(any(i["kind"] == "status_line.as_of" for i in self.check([dated])[0]["items"]))
+        self.page["status_line"]["facts"] = ["11 月 4 日没有出片、没有观看", "11 月 4 日服务拒绝连接，2 次失败", "11 月 4 日现存结构记录 0 次，这次没有运行结构模型", "产品归密码中心，这里管安装和机器备份"]
+        self.write_page()
+        semantic = [dict(self.number, id=f"fact-{i}", field=f"status_line.facts[{i}]", page_pattern=None, current_value=self.page["status_line"]["facts"][i], automatic=False, retrieve={"kind":"manual"}, manual_reason="judgment", manual_route="合成案例逐句核对", freshness_class="semantic") for i in (2, 3)]
+        self.assertEqual([i.get("review_stamp", False) for i in build_inventory(self.root, semantic)["items"] if i["field"].startswith("status_line.facts[")], [True, False, False, True])
 
     def test_overview_read_check_preserves_older_data_boundary(self):
         self.page["status_line"].update(as_of="2026-10-11", source="10月11日只读查看；旧10月3–9日调用数之后未重新核对")

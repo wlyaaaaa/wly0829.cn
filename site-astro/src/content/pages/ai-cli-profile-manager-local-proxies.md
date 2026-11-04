@@ -28,13 +28,13 @@
   "status_line": {
    "state": "常用",
    "as_of": "2026-10-11",
-   "source": "父项目总览状态“常用”；本地模型部分按 10 月 11 日 14:00 前的源码（10 月 8 日提交）和当天只读 Ollama 查询核对，两个 ChatGPT→Claude 代理 9 月 29 日退役、Toolkit 接线 9 月 28 日退役，未发生成请求。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "source": "项目源码和本机查询"
   }
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-local-proxies/page.json",
-  "sha256": "c19032c6d6178f4a19b19bd5defd17e441025c441d11e3c468c3355d86a4d9fc",
-  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
+  "sha256": "25ecd236ce68dfa9710cd4ae24aac95474b08ef87f9a4784c410c07f628c366c",
+  "converted_at_beijing": "2026-11-04T12:05:28+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 10 月 11 日 · 项目源码和本机查询",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 10 月 11 日 · 项目源码和本机查询"
     },
     {
      "type": "action_button",
@@ -919,7 +919,7 @@ AI CLI Profile Manager · 功能说明
 
 - 9 月 29 日删除两个代理后的全量离线测试为 470/470、0 失败、0 跳过，本地模型集合、同步和受管身份都在其中；10 月 11 日未重跑。
 
-- 9 月 14 日的 Doctor 读到 Ollama 默认端点不可达，保留为当天记录；10 月 11 日只读查询 Ollama 为 0.35.0，4 个受管标签都在，没有发生成请求，也没有调用 GPU。
+- 9 月 14 日的 Doctor 读到 Ollama 默认端点不可达，保留为当天记录；10 月 11 日只读查询 Ollama 为 0.35.0，4 个受管标签都在，没有发生成请求，也没有调用 GPU。11 月 4 日读到 Ollama 是 0.40.13，换版本后本机模型没有重新实跑。
 
 - 9 月 16 日旧环境实测 35B 由每秒 62–69 个 token 提到 170–171 个，按当天记录保留，没有重跑性能。
 

@@ -27,14 +27,14 @@
   "parent": "daily-preferences",
   "status_line": {
    "state": "在用",
-   "as_of": "2026-10-11",
-   "source": "来源仓库现为 4717320（北京 10/22 07:22）；实现说明沿用 b334b3aa（北京 10/8 00:23）与 10/11 16:33 只读聚合；原话计数另于 10/22 06:48 只读重数；本次没有写入，历史测试保留原日期"
+   "as_of": "2026-11-04",
+   "source": "理解库合同和原话计数"
   }
  },
  "source": {
   "page": "sources/pages/daily-preferences-current-corrections/page.json",
-  "sha256": "7e1a05ed500ab03515c30bf7c0ecd565d56a8960d936f98608fb44d4fca8e058",
-  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
+  "sha256": "d442dfee928d637428fd9c0ca0421bc95b4ebcd63cf82e79251ec4794a98f253",
+  "converted_at_beijing": "2026-11-04T12:05:29+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 理解库合同和原话计数",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 理解库合同和原话计数"
     },
     {
      "type": "action_button",
@@ -787,6 +787,8 @@ schema（数据结构）6 已实现四类表达变化、证据角色与投递版
 7. 更新同源视图并回读
 
 8. 用当前问题检查是否正确使用
+
+9. 改卡前后可运行只读的 card-lint：逐卡列 a–k 共 11 类提示（2026-10-31 起新增 h 核心画像落后、i 最近一次近况后没复核、j 引用的领域文件没了或指向断了、k 写卡时的将来日期已过去）。它不改卡、不让卡失效，命中是信号，由 AI 读全文判断和改写；h、i、j、k 读过仍成立的用 card-lint --review <键>:<快照编号> --check h|i|j|k --reason <理由> 登记，标记绑定当前快照，卡重写后自然失效。11 月 4 日没有运行这项检查，当前命中多少 Unknown。
 
 ::screen{#daily-preferences-current-corrections-08 section="tech"}
 

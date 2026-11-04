@@ -37,12 +37,12 @@
         "columns_v": 2,
         "icons": "auto",
         "illustration": "top_inside",
-        "text_ref": "34.1GBCodex完整对话，11,322个文件（G、H两块盘10月21日同一份），每天12:15存一份2块加密盘对话正文的备份只放在这两块盘上，不上网66.3GB8月30日试恢复：4,441个文件"
+        "text_ref": "36.1GBCodex完整对话，14,375个文件（G、H两块盘11月3日同一份），每天12:15存一份"
       },
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "10月22日06:50核对"
+        "text_ref": "11月4日11:12核对"
       },
       {
         "type": "prose",
@@ -94,12 +94,12 @@
         "columns_v": 2,
         "icons": "auto",
         "illustration": "top_inside",
-        "text_ref": "34.1GBCodex完整对话，11,322个文件（G、H两块盘10月21日同一份），每天12:15存一份2块加密盘对话正文的备份只放在这两块盘上，不上网66.3GB8月30日试恢复：4,441个文件"
+        "text_ref": "36.1GBCodex完整对话，14,375个文件（G、H两块盘11月3日同一份），每天12:15存一份"
       },
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "10月22日06:50核对"
+        "text_ref": "11月4日11:12核对"
       },
       {
         "type": "prose",
@@ -421,7 +421,7 @@
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "10月20日07:41核对"
+        "text_ref": "11月4日11:12核对"
       }
     ],
     "composition_basis": {
@@ -476,7 +476,7 @@
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "10月20日07:41核对"
+        "text_ref": "11月4日11:12核对"
       }
     ],
     "composition_basis": {
@@ -734,8 +734,8 @@
         "illustration": "above_card",
         "icons": [
           "_library/icons/日历时钟.png",
-          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/禁止文件.png",
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/文件夹.png",
           "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
@@ -746,7 +746,7 @@
           3
         ],
         "snake": true,
-        "text_ref": "1记使用小记录先把前一天Codex、Claude调用过的技能、工具和命令名记下来（见全部功能第1"
+        "text_ref": "1记使用小记录先把前一天Claude调用过的技能、工具和命令名记下来（见全部功能第11项）；Co"
       },
       {
         "type": "notice",
@@ -754,7 +754,7 @@
         "icons": [
           "_library/fix-round-2/icon-clean-f2b865944254996a0705.png"
         ],
-        "text_ref": "14:30外接盘（电脑配置与恢复的同步任务）把G上的两份复制到H，在H上整份重算SHA-256，"
+        "text_ref": "14:30外接盘（电脑配置与恢复的同步任务，每天14:30或登录时触发）把G上的两份复制到H，在"
       }
     ],
     "composition_basis": {
@@ -790,8 +790,8 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/日历时钟.png",
-          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/禁止文件.png",
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/文件夹.png",
           "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
@@ -807,7 +807,7 @@
           1
         ],
         "snake": false,
-        "text_ref": "1记使用小记录先把前一天Codex、Claude调用过的技能、工具和命令名记下来（见全部功能第1"
+        "text_ref": "1记使用小记录先把前一天Claude调用过的技能、工具和命令名记下来（见全部功能第11项）；Co"
       },
       {
         "type": "notice",
@@ -815,7 +815,7 @@
         "icons": [
           "_library/fix-round-2/icon-clean-f2b865944254996a0705.png"
         ],
-        "text_ref": "14:30外接盘（电脑配置与恢复的同步任务）把G上的两份复制到H，在H上整份重算SHA-256，"
+        "text_ref": "14:30外接盘（电脑配置与恢复的同步任务，每天14:30或登录时触发）把G上的两份复制到H，在"
       }
     ],
     "composition_basis": {

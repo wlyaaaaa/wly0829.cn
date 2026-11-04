@@ -27,14 +27,14 @@
   "parent": "chinese-asr",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "ChineseASR 公开仓库 main（1bd5a04）的模型登记、直接转写守卫与本机模型目录，于 10 月 11 日按 14:00 前状态只读核对；本轮未运行任何模型。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "as_of": "2026-11-04",
+   "source": "项目模型配置和源码"
   }
  },
  "source": {
   "page": "sources/pages/chinese-asr-models-modes/page.json",
-  "sha256": "e6dbcd2dfb8ce26300f1bfeff9863100fd199e13156de10da271ebab76aae726",
-  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
+  "sha256": "f454ed0fe13634a165b4be4a398d811737b15d56d680ddf3bec3f13976a39a06",
+  "converted_at_beijing": "2026-11-04T12:05:28+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目模型配置和源码",
      "row": "top"
     },
     {
@@ -101,12 +101,12 @@
     },
     {
      "type": "prose",
-     "text_ref": "我按用途选路线：对电脑说话打字用Qwen3-ASR-1.7B；先快速看录音内容用SenseVoiceSmall；平常的录音默认用Qwen与SenseVoice两路严格核对；重要录音点名走高质量路线，由",
+     "text_ref": "我按用途选路线：对电脑说话打字用Qwen3-ASR-1.7B",
      "row": "top"
     },
     {
      "type": "prose",
-     "text_ref": "当前情况：已有快速初稿、日常双模型核对、重要录音高质量路线、带逐句时间的Paraformer路线和疑难云复核。文件转写现在登记4个识别引擎（FireRedASR2-LLM、Qwen3-ASR-1.7B",
+     "text_ref": "当前情况：已有云优先转写、快速初稿、本地双模型核对、重要录音",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目模型配置和源码"
     },
     {
      "type": "action_button",
@@ -146,11 +146,11 @@
     },
     {
      "type": "prose",
-     "text_ref": "我按用途选路线：对电脑说话打字用Qwen3-ASR-1.7B；先快速看录音内容用SenseVoiceSmall；平常的录音默认用Qwen与SenseVoice两路严格核对；重要录音点名走高质量路线，由"
+     "text_ref": "我按用途选路线：对电脑说话打字用Qwen3-ASR-1.7B"
     },
     {
      "type": "prose",
-     "text_ref": "当前情况：已有快速初稿、日常双模型核对、重要录音高质量路线、带逐句时间的Paraformer路线和疑难云复核。文件转写现在登记4个识别引擎（FireRedASR2-LLM、Qwen3-ASR-1.7B"
+     "text_ref": "当前情况：已有云优先转写、快速初稿、本地双模型核对、重要录音"
     },
     {
      "type": "illustration",
@@ -180,11 +180,11 @@
 
 ChineseASR · 功能说明
 
-我按用途选路线：对电脑说话打字用 Qwen3-ASR-1.7B；先快速看录音内容用 SenseVoiceSmall；平常的录音默认用 Qwen 与 SenseVoice 两路严格核对；重要录音点名走高质量路线，由 FireRedASR2-LLM 主听、Qwen 校验。多人录音要逐句时间和按声音分组时点名 Paraformer，确认文案配时间用 Qwen3-ForcedAligner。本地标出疑点的文件在免费期内会再请阿里云 Qwen Audio 3.1 听一遍；普通录音不会因安装新模型而自动改路线或上传云端。
+我按用途选路线：对电脑说话打字用 Qwen3-ASR-1.7B；AI 处理选定录音时，免费期内先用阿里云 Qwen Audio 3.1，不等本地；先快速看录音内容用 SenseVoiceSmall；本地严格核对默认用 Qwen 与 SenseVoice 两路；重要录音要本地证据时点名走高质量路线，由 FireRedASR2-LLM 主听、Qwen 校验。多人录音要逐句时间和按声音分组时点名 Paraformer，确认文案配时间用 Qwen3-ForcedAligner。微信实时语音用提前热好的 Qwen，和云端同时转。本地标出疑点的文件在免费期内会再请阿里云听一遍；本地默认路线不会因安装新模型而自动改路线或上传云端。
 
-**当前情况：**已有快速初稿、日常双模型核对、重要录音高质量路线、带逐句时间的 Paraformer 路线和疑难云复核。文件转写现在登记 4 个识别引擎（FireRedASR2-LLM、Qwen3-ASR-1.7B、SenseVoiceSmall、Paraformer）和 2 套组合（日常 baseline、重要录音 high_quality）。10 月 20 日起，一直没在用的 Fun-ASR-Nano、只登记没接上的 Whisper、本地大模型仲裁和过期的云端 Qwen Audio 3.0 都已删除，不再是可选路线。
+**当前情况：**已有云优先转写、快速初稿、本地双模型核对、重要录音高质量路线、带逐句时间的 Paraformer 路线和疑难云复核。文件转写现在登记 4 个识别引擎（FireRedASR2-LLM、Qwen3-ASR-1.7B、SenseVoiceSmall、Paraformer）和 2 套组合（日常 baseline、重要录音 high_quality）。10 月 20 日起，一直没在用的 Fun-ASR-Nano、只登记没接上的 Whisper、本地大模型仲裁和过期的云端 Qwen Audio 3.0 都已删除，不再是可选路线。
 
-项目技术事实核对于 2026-10-11（北京时间），采用当天 14:00 前的源码状态；模型登记、路线退役和本机模型目录按 10 月 22 日读到的当前源码（325b0c4）更正；具体测试保留各自日期，页面不实时探测运行状态。
+项目技术事实核对于 2026-11-04（北京时间），按当时的 main（4598696）只读核对；具体测试保留各自日期，页面不实时探测运行状态。
 
 项目源码：公开仓库
 
@@ -330,11 +330,11 @@ ChineseASR · 功能说明
 
 ## 举个实际例子
 
-“先快速知道这段语音讲什么；里面要正式引用的部分按重要录音处理。”第一轮用 SenseVoiceSmall 出初稿；重要部分点名高质量路线，FireRedASR2-LLM 主听、Qwen3-ASR-1.7B 校验，把分歧连到原音。不点名的平常录音仍走 Qwen 主识别、SenseVoice 对照的日常两路，不会因为有了更强的路线就被悄悄提升。若我只要给确认过的旁白标词语秒数，则改用对齐入口，不重新识别文案。
+“先快速知道这段语音讲什么；里面要正式引用的部分按重要录音处理。”AI 免费期内先把这段送云端，要引用的部分标成重要。要本地证据时，快看用 SenseVoiceSmall 出初稿；重要部分点名高质量路线，FireRedASR2-LLM 主听、Qwen3-ASR-1.7B 校验，把分歧连到原音。不点名的本地转写仍走 Qwen 主识别、SenseVoice 对照的日常两路，不会因为有了更强的路线就被悄悄提升。若我只要给确认过的旁白标词语秒数，则改用对齐入口，不重新识别文案。
 
 ## 最后我会得到什么
 
-每次交回实际使用的模型、初稿或双路文字、需要回听的差异与时间位置；对齐任务另给逐词秒数。以前登记过的 Whisper Large V3 和 Fun-ASR-Nano 已在 10 月 20 日删除，点名它们会直接报“没有这个引擎”，也不会成为失败后的自动备选。云端识别分两种：本地标出疑点的文件，在免费期内由 AI 自动请云端复核；想跳过本地直接整段上云，或免费期已过，仍须我明确同意这一次。
+每次交回实际使用的模型、初稿或双路文字、需要回听的差异与时间位置；对齐任务另给逐词秒数。以前登记过的 Whisper Large V3 和 Fun-ASR-Nano 已在 10 月 20 日删除，点名它们会直接报“没有这个引擎”，也不会成为失败后的自动备选。云端识别分三种：AI 处理选定录音，免费期内直接上云，不用逐次同意；本地标出疑点的文件，在免费期内由 AI 自动请云端复核；免费期已过还想传，须我明确同意这一次。
 
 ## 正常时
 
@@ -500,7 +500,7 @@ Qwen 主识别失败而 SenseVoice 有结果时，只交暂定文字和失败原
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. **先说要做什么**　听写、快速初稿、日常严格转写、重要录音高质量复核、多人分段和已知文案对齐的输入与输出不同；先按真实请求选择路线。",
+     "text_ref": "1先说要做什么听写、云优先转写、微信实时语音、快速初稿、本地",
      "row": "start",
      "columns": 1,
      "icons": "none",
@@ -534,7 +534,7 @@ Qwen 主识别失败而 SenseVoice 有结果时，只交暂定文字和失败原
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. **先说要做什么**　听写、快速初稿、日常严格转写、重要录音高质量复核、多人分段和已知文案对齐的输入与输出不同；先按真实请求选择路线。",
+     "text_ref": "1先说要做什么听写、云优先转写、微信实时语音、快速初稿、本地",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -576,13 +576,13 @@ Qwen 主识别失败而 SenseVoice 有结果时，只交暂定文字和失败原
 
 - 所需复核强度和时间线
 
-- 跳过本地整段上云时的单次同意（疑难复核在免费期内自动进行）
+- 免费期外上传时的单次同意（免费期内的云优先和疑难复核不用逐次同意）
 
 ## 从开始到拿到结果
 
-1. **先说要做什么**　听写、快速初稿、日常严格转写、重要录音高质量复核、多人分段和已知文案对齐的输入与输出不同；先按真实请求选择路线。
+1. **先说要做什么**　听写、云优先转写、微信实时语音、快速初稿、本地严格转写、重要录音高质量复核、多人分段和已知文案对齐的输入与输出不同；先按真实请求选择路线。
 
-2. **公开实际模型选择**　听写用 Qwen；快速初稿用 SenseVoice；日常严格文件转写用 Qwen 与 SenseVoice；重要录音点名高质量时 FireRed 主听、Qwen 校验。Fun-ASR 与 Paraformer 仅在相应用途明确选择且依赖可用时运行；疑难文件的云复核用阿里云 Qwen Audio 3.1 两款模型，不算进本地路线。
+2. **公开实际模型选择**　听写用 Qwen；选定录音转写和疑难文件的云复核用阿里云 Qwen Audio 3.1 两款模型，不算进本地路线；快速初稿用 SenseVoice；本地严格文件转写用 Qwen 与 SenseVoice；重要录音点名高质量时 FireRed 主听、Qwen 校验；微信实时语音用提前热好的 Qwen。Paraformer 仅在相应用途明确选择且依赖可用时运行；Fun-ASR 已删，不能再选。
 
 3. **交回文字、时间与疑点**　结果记录实际模型和完成层级。双路有分歧就给回听位置；对齐只给确认文案在声音中的词语时间，不证明文案本身正确。
 
@@ -992,7 +992,7 @@ Registry（登记清单） 现登记 4 个识别引擎、2 套 profiles（baseli
 
 - 对照模型不是投票多数，也不自动证明主模型错误。
 
-- 云模型与本地模型分属不同授权和证据边界：疑难文件在免费期内自动复核，整段直接上云或免费期外须显式同意；云模型不与本地 4 个识别引擎、2 套 profiles 混算。
+- 云模型与本地模型分属不同授权和证据边界：选定录音在免费期内走云优先，疑难文件在免费期内自动复核，免费期外上传须显式同意；云模型不与本地 4 个识别引擎、2 套 profiles 混算。
 
 ## 失败与恢复
 
@@ -1237,11 +1237,13 @@ Registry（登记清单） 现登记 4 个识别引擎、2 套 profiles（baseli
 
 ## 依据与来源（二）
 
-- 2026-10-22 重读当前配置：engines 登记 4 个（fireredasr2-llm、qwen3-asr-1.7b、sensevoice、paraformer），profiles 为 baseline、high_quality 两套，cloud_review 只剩两款 Qwen Audio 3.1。32df3b9（10 月 20 日 16:27）删掉了 fun-asr-nano、whisper-large-v3 占位、llm_arbitration 和 3.0 旧云模型，相关测试一并删改；10 月 11 日读到的“登记 6 个、直接转写闭集 5 个”是删除前的旧配置。之后 9343a8e、ed8d64f、325b0c4（10 月 21 日 13:00—13:12）只把测试输出、隐藏入口报错、FireRed 进出和云结果固定为 UTF-8，没有改默认模型（本轮只读源码，未执行测试）。
+- 2026-10-22 重读当前配置：engines 登记 4 个（fireredasr2-llm、qwen3-asr-1.7b、sensevoice、paraformer），profiles 为 baseline、high_quality 两套，cloud_review 只剩两款 Qwen Audio 3.1。32df3b9（10 月 20 日 16:27）删掉了 fun-asr-nano、whisper-large-v3 占位、llm_arbitration 和 3.0 旧云模型，相关测试一并删改；10 月 11 日读到的“登记 6 个、直接转写闭集 5 个”是删除前的旧配置。之后 9343a8e、ed8d64f、325b0c4（10 月 21 日 13:00—13:12）只把测试输出、隐藏入口报错、FireRed 进出和云结果固定为 UTF-8，没有改默认模型（当时只读源码，未执行测试）。
 
 - config、pipeline、Qwen identity、FireRed worker 等单元回归包含在 2026-08-31 的 345 项通过结果中；之后各次全量运行保留各自日期，不合并成新的全量通过。
 
-- Registry（登记清单） 静态回读确认 Paraformer revision=v2.0.4、Qwen revision=a04930db…（runtime qwen-asr 0.0.6）、FireRed 源码 4e7d9aaf…/权重 2c5e0f41…（Fun-ASR-Nano revision=05201c46… 已随路线删除）。10 月 11 日本机 9 个模型目录合计 30,645,308,894 字节（约 28.54 GiB，含辅助模型、对齐器和目录里的源码/元数据/样例，不是当时 6 个引擎体积相加）；10 月 22 日重数为 8 个目录、约 26.5 GiB（Nano 权重已移入回收站）；目录存在只算“在、未验证”，精确配置不冒充推理E2E（端到端验证）。
+- Registry（登记清单） 静态回读确认 Paraformer revision=v2.0.4、Qwen revision=a04930db…（runtime qwen-asr 0.0.6）、FireRed 源码 4e7d9aaf…/权重 2c5e0f41…（Fun-ASR-Nano revision=05201c46… 已随路线删除）。10 月 11 日本机 9 个模型目录合计 30,645,308,894 字节（约 28.54 GiB，含辅助模型、对齐器和目录里的源码/元数据/样例，不是当时 6 个引擎体积相加）；10 月 22 日重数为 8 个目录、约 26.5 GiB（Nano 权重已移入回收站），11 月 4 日再数仍是 8 个、26.5 GiB；目录存在只算“在、未验证”，精确配置不冒充推理E2E（端到端验证）。
+
+- 2026-11-04 只读 configs/models.yaml：4 个引擎、2 套组合、本地默认角色和两款云模型都未变。
 
 - 本次没有对 4 个引擎分别运行真实录音，实际速度与准确率仍以具名 benchmark 为准。
 

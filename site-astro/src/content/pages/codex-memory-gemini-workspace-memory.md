@@ -28,13 +28,13 @@
   "status_line": {
    "state": "已退役",
    "as_of": "2026-10-11",
-   "source": "按 2026-10-11 14:00（北京时间）的 PCConfig 任务登记与开发配置备份范围核对；旧材料目录为 16:35 只读元数据观察"
+   "source": "任务登记和旧材料"
   }
  },
  "source": {
   "page": "sources/pages/codex-memory-gemini-workspace-memory/page.json",
-  "sha256": "b15ec03d079d89510bf0721a3ed5b52d6ec5d27c814fe75a6caecdeaf72651d5",
-  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
+  "sha256": "dad3c000a67f6621020fd3ab67880e47c32e31e6d53b9074807e6bd485f037cc",
+  "converted_at_beijing": "2026-11-04T12:05:29+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 10 月 11 日 · 任务登记和旧材料",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 10 月 11 日 · 任务登记和旧材料"
     },
     {
      "type": "action_button",

@@ -57,20 +57,20 @@ test('备份名称保留“备份”，五格不把第二备份盘截成“第�
   assert.doesNotMatch(textOnly(html), /（第二等）/);
 });
 
-test('今天全好但本周仍反复失败：取自动任务区的灯和层级，只有真正恢复才绿', () => {
-  const signals = [{ id: 'today_tasks', level: 'ok', color: 'ok', value: 0, recovered_today: 2 }];
-  const render = (sections, items) => REGIONS['overview-tri'](view({ overview: overview({ signals, sections, task_health: { current_repeated_7d: items.length } }), automation: { items } }), ctx());
+test('任务未确认恢复时不能绿；确认恢复后仍保留本周反复失败的层级', () => {
   const items = [{ name: '示例任务', state: 'failed', failures_7d: 7 }];
+  const render = (sections, items, health, errors) => REGIONS['overview-tri'](view({ overview: overview({ sections, signals: [{ id: 'today_tasks', level: 'ok', color: 'ok', value: 0, recovered_today: 2 }], task_health: { current_repeated_7d: items.length, ...health } }), automation: { items }, today_activity: { errors } }), ctx());
   const task = (h) => /data-signal="tasks"[^]*?<\/li>/.exec(h)?.[0] || '';
-  for (const sections of [{ automation: sec() }, {}]) {
-    const html = task(render(sections, items));
-    assert.match(html, /cp-dot is-neutral/);
-    assert.match(textOnly(html), /这周反复出错AI 在修，不用你管/);
+  for (const [sections, repeated, health, errors, color, copy] of [
+    [{ automation: sec() }, items, {}, [], 'neutral', /这周反复出错AI 在修，不用你管/], [{}, items, {}, [], 'neutral', /这周反复出错AI 在修，不用你管/],
+    [{ automation: sec('yellow', { level: 'watch', owner_action: 'do' }) }, items, {}, [], 'yellow', /这周反复出错/], [{ automation: sec() }, [], {}, [], 'green', /今天都正常不用你管/],
+    ...[false, true].map((recovered) => [{ automation: sec() }, [], { current_failed_today: 0, unrecovered_today: 1, recovered_today: 0 }, [{ recovered }], 'neutral', /今天 1 个出错，尚未确认恢复AI 在修，不用你管/]),
+    [{ automation: sec() }, [], { current_failed_today: 0, unrecovered_today: 0, recovered_today: 1 }, [{ recovered: false }], 'green', /今天都正常不用你管今天出过错、已恢复 1 个/],
+    [{ automation: sec() }, [], {}, [{ recovered: false }], 'neutral', /今天 1 个出错，尚未确认恢复AI 在修，不用你管/],
+  ]) {
+    const html = task(render(sections, repeated, health, errors));
+    assert.match(html, new RegExp(`cp-dot is-${color}`)); assert.match(textOnly(html), copy);
   }
-  assert.match(task(render({ automation: sec('yellow', { level: 'watch', owner_action: 'do' }) }, items)), /cp-dot is-yellow/);
-  const normal = task(render({ automation: sec() }, []));
-  assert.match(normal, /cp-dot is-green/);
-  assert.match(textOnly(normal), /今天都正常不用你管/);
 });
 
 test('健康分：读到时间和页面时间一样时不另写，旧 15 分钟以上才写几点读到', () => {

@@ -27,14 +27,14 @@
   "parent": "ai-cli-profile-manager",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "父项目总览状态“常用”；事实按 10 月 11 日 14:00 前的源码（10 月 8 日提交）逐份读取 23 份配置清单，各工具版本为 10 月 11 日只查版本号，未重跑真实调用。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "as_of": "2026-11-04",
+   "source": "项目源码和配置清单"
   }
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-engines-providers/page.json",
-  "sha256": "02a128ef1614f0dddbfddf0e93db20c7abf02b018989f066a90cd067767e68d4",
-  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
+  "sha256": "1be6348a09b4361eaf44f37419faeb62bca268eb94f02f69d13d2416904ded15",
+  "converted_at_beijing": "2026-11-04T12:05:28+08:00"
  }
 }
 ---
@@ -89,7 +89,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和配置清单",
      "row": "top"
     },
     {
@@ -136,7 +136,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和配置清单"
     },
     {
      "type": "action_button",
@@ -183,9 +183,9 @@ AI CLI Profile Manager · 功能说明
 
 官方、本地与第三方模型各自对应明确版本、服务和费用线路；用一个名字不能替代这次真实身份。长任务的续作要求会写进启动计划，实际是否遵守仍需任务验收。
 
-**当前情况：**现有 21 个公开配置档（共 23 份配置清单，其中 2 份是不公开的内部模板），覆盖 5 种原版工具，可区分服务、模型和运行方式；配置存在不代表每条云端或本地路线都已实测。
+**当前情况：**现有 21 个公开配置档（共 23 份配置清单，其中 2 份是不公开的内部模板），覆盖 5 种原版工具，可区分服务、模型和运行方式；配置存在不代表每条云端或本地路线都已实测。旧型号退役时，新任务按一份登记好的替代表换到新型号，不跨服务也不靠猜；终端官方路线的默认型号现在是 GPT-6.1 Sol。
 
-内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；具体测试保留各自日期，页面不实时探测运行状态。
+内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；官方默认型号和登记换代按 11 月 4 日读到的源码和已装模块更新；具体测试保留各自日期，页面不实时探测运行状态。
 
 项目源码：公开仓库
 
@@ -343,7 +343,7 @@ AI CLI Profile Manager · 功能说明
 
 ## 发现问题时
 
-模型或服务换版、旧证据失效时指出该路线需重新确认。
+模型或服务换版、旧证据失效时指出该路线需重新确认。型号登记过替代时，新任务直接用替代型号；旧任务续作会先说要迁移，不暗换。
 
 ## 入口不可用或证据不足时
 
@@ -357,7 +357,7 @@ AI CLI Profile Manager · 功能说明
 
 ## 发现问题时
 
-模型或服务换版、旧证据失效时指出该路线需重新确认。
+模型或服务换版、旧证据失效时指出该路线需重新确认。型号登记过替代时，新任务直接用替代型号；旧任务续作会先说要迁移，不暗换。
 
 ## 入口不可用或证据不足时
 
@@ -503,7 +503,12 @@ AI CLI Profile Manager · 功能说明
   "id": "ai-cli-profile-manager-engines-providers-04",
   "section": "tech",
   "title": "技术实现与依据（一）",
-  "links": [],
+  "links": [
+   {
+    "text": "可恢复机器运行",
+    "href": "/projects/ai-cli-profile-manager/recoverable-runs/"
+   }
+  ],
   "anchors": [
    {
     "id": "project-reading-panel-technical",
@@ -601,6 +606,8 @@ AI CLI Profile Manager · 功能说明
 
 - 同一家换型号：用自定义 ID 加 --model 另存一个配置档已经实现，仍用这家的厂商钥匙；模型目录只管显示和容量信息，不是取钥匙的白名单。启动参数里的 --model/-m 虽然下层 Codex 适配器已能处理，但上层启动计划对三家云端厂商仍是“型号固定”，公共入口会拒绝；已退役的型号 ID 也照旧直接拒绝。新型号的真实账号调用还没验证，容量和能力也不猜。
 
+- 登记换代：启动计划、原生型号参数、模型目录、桌面与恢复边界都读取 `AICLI_MODEL_ROUTING_PROVIDER`（先看进程环境，再看当前用户环境），登记路径可用 `AICLI_MODEL_ROUTING_REGISTRY` 指定；只在运行时换算，不改写已存的配置档和清单。只有登记里的替代生效，不跨服务改绑、不按参数大小猜新型号；没配置时行为不变，配置了但读取或解析失败就报错。11 月 4 日本机进程和当前用户的 provider 都是 `E:\.agents\tools\model_routing.ps1`，两个 registry 环境值为空，用 provider 自己的登记。旧 run 或后台帮手续问若会改变原模型，返回 `migration_required`，见〔可恢复机器运行〕。相关源文件与已装 0.3.19 逐文件哈希相同；没有跑真实模型或旧 run 恢复。
+
 - ContextManagement.ps1的Get-AiCliThirdPartyContinuityPolicy只覆盖第三方codex/claude/opencode；codex+openai、claude+anthropic及其他引擎返回null。Add-AiCliThirdPartyContinuityPolicy实际把aicli.third-party-continuity.v1附到LaunchPlan.continuityPolicy和notes：mode=loss-aware、manualCompaction=defer-until-window-pressure、oneMilestonePerSession=true，提示会话聚焦内聚里程碑、等窗口压力再考虑手动压缩。它没有自动写checkpoint（续作检查点）或运行压缩的执行器。10 月 2 日起，受管桌面 Provider 会关闭厂商不支持的 token_budget 和 history-notes 功能，保留原有客户端压缩。
 
 ::screen{#ai-cli-profile-manager-engines-providers-05 section="tech"}
@@ -670,7 +677,7 @@ AI CLI Profile Manager · 功能说明
 
 - 第三方Claude只为已知modelMetadata设置CLAUDE_CODE_MAX_CONTEXT_TOKENS与CLAUDE_CODE_AUTO_COMPACT_WINDOW；清除提前百分比覆盖与DISABLE_AUTO_COMPACT/DISABLE_COMPACT，不禁用溢出保护。未知模型还会清除继承的窗口与压缩控制，保留Claude自身默认。Codex exact resume证明同一任务身份，和这份有损压缩后的项目连续性策略分别验收。
 
-- codex-official｜Codex/OpenAI，模板默认仍写 gpt-5.6-sol、官方登录、high；原生交互与程序化恢复。这个默认值不代表系统或网页任务的永久型号上限；没有全量Live。
+- codex-official｜Codex/OpenAI，模板默认 gpt-6.1-sol（候选 gpt-6.1-sol、gpt-6.1-terra、gpt-6-luna）、官方登录、high；原生交互与程序化恢复。11 月 4 日 09:13 已装模块的零写入预检（--dry-run）回 model=gpt-6.1-sol、policy=danger-full-access，modelInvoked=false、authenticationChecked=false、runtimeCreated=false，所以不能算官方 Live 已验收。这个默认值不代表系统或网页任务的永久型号上限；没有全量Live。
 
 - codex-qwen3-7-max-paygo｜qwen3.7-max-2026-06-08，北京Workspace按量Responses；max→xhigh。交互和程序化身份明确；旧回执仅按原日期保存，10 月 11 日未发Qwen请求。
 
@@ -1055,6 +1062,8 @@ AI CLI Profile Manager · 功能说明
 
 - **模型、Provider 或 endpoint 漂移**：指纹与计划拒绝，要求重新配置和验收。
 
+- **换代登记读取或解析失败**：已配置 provider 却读不出结果就报错，不猜替代、不改 Provider、端点或权限。
+
 ::screen{#ai-cli-profile-manager-engines-providers-11 section="tech"}
 
 ```typeset
@@ -1293,7 +1302,7 @@ AI CLI Profile Manager · 功能说明
 
 - 9 月 29 日退役两个代理后的全量离线测试为 470/470，覆盖 exact Qwen/DeepSeek、本地模型、hidden 模板与模型覆盖拒绝；10 月 11 日未重跑。
 
-- 10 月 11 日只查了版本号：Codex CLI 0.160.0、Claude Code 2.1.278、Qwen Code 0.22.2、OpenCode 1.18.32、Open Interpreter 0.0.40、Ollama 0.35.0。查版本不等于这些工具与 21 条路线都能完成真实任务。官方资料核对确认过 Responses、自定义 Provider 与上游新增项，没有把新增项写成 AICLI 已实现。
+- 10 月 11 日只查了版本号：Codex CLI 0.160.0、Claude Code 2.1.278、Qwen Code 0.22.2、OpenCode 1.18.32、Open Interpreter 0.0.40、Ollama 0.35.0。查版本不等于这些工具与 21 条路线都能完成真实任务。11 月 4 日读到的本工具是已装 0.3.19、Ollama 是 0.40.13，换版本后本机模型没有重新实跑。官方资料核对确认过 Responses、自定义 Provider 与上游新增项，没有把新增项写成 AICLI 已实现。
 
 ## 与其他模块的关系
 

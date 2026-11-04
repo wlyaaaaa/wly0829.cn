@@ -27,14 +27,14 @@
   "parent": "chinese-asr",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "ChineseASR 公开仓库 main（1bd5a04，含 10 月 11 日 00:52 繁简只换字形的改动）按当天 14:00 前状态只读核对；测试只做静态计数，历史运行保留各自日期。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "as_of": "2026-11-04",
+   "source": "项目源码和测试定义"
   }
  },
  "source": {
   "page": "sources/pages/chinese-asr-audit-evidence/page.json",
-  "sha256": "e0fbbd97fbcfb4f633010ece13b161744e98ef3c7532b64c68175702834fdf5a",
-  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
+  "sha256": "f43e07ca388f2367f700fdbf890331be9f63f0e57433fb30e2d9a30dae826a31",
+  "converted_at_beijing": "2026-11-04T12:05:28+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和测试定义",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和测试定义"
     },
     {
      "type": "action_button",
@@ -184,7 +184,7 @@ ChineseASR · 功能说明
 
 **当前情况：**已有带原音频的分歧复核页和片段笔记；能核对文件对应关系，不等于识别文字已经逐字正确。
 
-项目技术事实核对于 2026-10-11（北京时间），采用当天 14:00 前的源码状态；具体测试保留各自日期，页面不实时探测运行状态。
+项目技术事实核对于 2026-11-04（北京时间），按当时的 main（4598696）只读核对；具体测试保留各自日期，页面不实时探测运行状态。
 
 项目源码：公开仓库
 
@@ -334,7 +334,7 @@ ChineseASR · 功能说明
 
 ## 最后我会得到什么
 
-拿到原结果、疑点和可回听位置；人工结论与模型输出分别保留，可重新核对。模型偶尔吐出的繁体只换成简体字形（“軟體”变“软体”），不换成另一种说法，所以正文里的词就是模型听到的词。疑难文件在免费期内另有云端稿并排放着，但云复核还没完成时，不算疑点已经解决。
+拿到原结果、疑点和可回听位置；人工结论与模型输出分别保留，可重新核对。模型偶尔吐出的繁体只换成简体字形（“軟體”变“软体”），不换成另一种说法，所以正文里的词就是模型听到的词。疑难文件在免费期内另有云端稿并排放着，但云复核还没完成时，不算疑点已经解决。AI 直接上云转写的录音没有本地两路，就没有这份疑点清单；云端成功也不等于逐字准确，影响理解的地方仍回听原音。
 
 ## 正常时
 
@@ -759,7 +759,7 @@ ChineseASR · 功能说明
 
 - strict_writer 分开写正文、audit、review、raw、客观结果和 receipt（执行回执）；quality.review.json/html 再呈现上下文音频、时间和补充识别。复核失败只降低质量状态，不删除原正文、raw 或原审计。
 
-- arbitration.py 从 `configs/models.yaml` 读取默认关闭的 `llm_arbitration`；启用时使用本地 `http://127.0.0.1:11434/api/chat`、主模型 `qwen-main-v1:latest`、fallback（后备路线） `qwen3.6-27b-256k:latest`、`uncertain_only` 与 `keep_alive=0`，仅传结构化分歧证据。 它不读取音频，不覆盖主转写与原审计；merged audit / metrics 只保存这份补充判断，响应无效不妨碍基础双 ASR（自动语音识别） 结果交付。
+- 本地大模型仲裁（原 arbitration.py 和 `configs/models.yaml` 里的 `llm_arbitration`）10 月 20 日已删，11 月 4 日在 src 和 configs 里查不到这些名字。它原来默认关闭、只传结构化分歧证据、不读音频也不覆盖主转写，这里只留历史；现在分歧靠两路原始结果、风险规则、补充识别和人工回听。
 
 - 长音频 manifest（清单）/metrics 记录覆盖、身份和耗时；评测同时分开普通 CER、关键符号错误、静音出字、错误放行与复核负担，不能用整段高相似度掩盖金额或否定差异。
 
@@ -1264,7 +1264,7 @@ ChineseASR · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- llm_arbitration、uncertain_only、模型、11434 与 keep_alive=0 配置",
+     "text_ref": "原llm_arbitration配置（uncertain_o",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1281,7 +1281,7 @@ ChineseASR · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- llm_arbitration、uncertain_only、模型、11434 与 keep_alive=0 配置",
+     "text_ref": "原llm_arbitration配置（uncertain_o",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1305,18 +1305,18 @@ ChineseASR · 功能说明
 
 ## 依据与来源（二）
 
-- llm_arbitration、uncertain_only、模型、11434 与 keep_alive=0 配置
+- 原 llm_arbitration 配置（uncertain_only、模型、11434 与 keep_alive=0）已随 32df3b9 删除
 
 ## 如何验证
 
 - audit、risk rules、audio outcome、result writer 和 metadata（元数据） 单元测试包含在2026-08-31 的 345 项通过结果中；之后另有 9 月 17 日运行 482 项（1 跳过）、9 月 24 日运行 495 项（1 跳过）、9 月 29 日运行 531 项（20 跳过）的具名历史记录，各自保留日期，不合并成一次新的全量通过。
 
-- strict writer 与 benchmark 测试覆盖成品文件名、两路 raw、review 投影、静音出字、空文本、partial coverage、回执损坏、模型失败和 truth 对齐。10 月 11 日的繁简改动新增 4 个测试定义（test_text_normalizer 2 个、test_audit 2 个，另改 1 个旧测试预期）；当前共 587 个测试定义，这只是静态计数，本轮没有执行。
+- strict writer 与 benchmark 测试覆盖成品文件名、两路 raw、review 投影、静音出字、空文本、partial coverage、回执损坏、模型失败和 truth 对齐。10 月 11 日的繁简改动新增 4 个测试定义（test_text_normalizer 2 个、test_audit 2 个，另改 1 个旧测试预期）；当前共 587 个测试定义（11 月 4 日 08:36 数），这只是静态计数，没有执行。
 
-- test_arbitration.py 与 test_config.py 覆盖默认关闭、Ollama 主模型 qwen-main-v1:latest、fallback（后备路线） qwen3.6-27b-256k:latest、结构化请求、`uncertain_only`、`keep_alive=0`、有效 JSON 解析和无效响应回退；本轮没有调用真实 Ollama 模型。
+- test_arbitration.py 已随 32df3b9 删除；它以前覆盖默认关闭、结构化请求和无效响应回退，这些结果只算历史。
 
 - 没有任何自动测试能够代替关键片段人工核听，页面明确保留该缺口。
 
 ## 与其他模块的关系
 
-模型、长音频和说话人模块产生的所有结果最终都经过本模块；可选 Ollama 只在长音频不确定 chunk 上增加一层不覆盖原证据的解释。本地审计先落盘，其中的疑难信号会触发运行与边界模块的云复核交接：云端稿并排存放、只补充差异，不改写原审计，未完成的云复核也不能算作文字已核实。模块向用户说明证据强度，但不负责决定真实人物、外部事实或最终文字真值。
+模型、长音频和说话人模块产生的本地结果最终都经过本模块；AI 直接上云的稿件不经过两路审计。本地审计先落盘，其中的疑难信号会触发运行与边界模块的云复核交接：云端稿并排存放、只补充差异，不改写原审计，未完成的云复核也不能算作文字已核实。模块向用户说明证据强度，但不负责决定真实人物、外部事实或最终文字真值。

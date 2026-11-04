@@ -8,7 +8,11 @@
   "status_line": {
     "state": "常用",
     "as_of": "2026-10-12",
-    "source": "按 PasswordCenter 968b9816 与 PCConfig 431ad1c1；Codex 与 Claude 桌面都可发起，默认时长读当前设置，10 月 12 日 04:33 核对接管程序与现役清单一致（安装批次 365），本次未打开窗口或办理验证。"
+    "source": "源码和安装清单",
+    "facts": [
+      "Codex 和 Claude 桌面都能发起，默认时长读当前设置",
+      "10 月 12 日核对程序和安装清单一致；窗口和验证没办理"
+    ]
   },
   "screens": [
     {

@@ -27,14 +27,14 @@
   "parent": "sunshine-remote-streaming",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "源码和运行加载于 10 月 30 日 11:10:14 只读核对：守护进程自 10 月 26 日 10:30:32 运行，抓虚拟屏、目标在线、无阻塞，四个组件的内容指纹均与当前源码相同，本周修复已加载。没有连接手机或改变显示拓扑，客户端画面与真实换屏仍未知。"
+   "as_of": "2026-11-04",
+   "source": "项目源码和主机只读体检"
   }
  },
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-capture-failover/page.json",
-  "sha256": "3eae42f3325a0f7ed9215e8f25ce4b0234f580f3b6edc3eb52dffdc43b127fc3",
-  "converted_at_beijing": "2026-11-04T10:21:47+08:00"
+  "sha256": "50c4b28412119c90e999c60759b6b2b0a8198ef98b00a5974e65ef75b226489f",
+  "converted_at_beijing": "2026-11-04T12:07:30+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和主机只读体检",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和主机只读体检"
     },
     {
      "type": "action_button",
@@ -169,7 +169,7 @@ Sunshine 远程串流 · 功能说明
 
 目标体验仍很直白：在家用物理屏，主屏确实离线时才让 VDD 兜底，主屏回来后把普通窗口拉回；现在已经有实现和测试，但还不能把这段目标场景说成真机成功。
 
-**当前情况：**10 月 30 日 11:10 守护的记录（runtime/worker-health.json）：捕获模式在虚拟屏上，这一轮决定“留在虚拟屏”，Sunshine 配置要抓的那块屏在线，没有报任何阻断原因，这一轮要搬和搬失败的窗口都是 0，记录里没有已搬到虚拟屏的窗口。现在跑着的守护是 10 月 26 日 10:30 启动的，它报出的四个程序文件指纹和当前源码逐个相同：10 月 21—25 日源码里的改动（搬窗来源收紧、启动器日志、心跳发布和换屏判断分开）都已加载，10 月 22 日写的“修复尚未加载”已经过时。10 月 11 日 13:33 体检报过的“阻塞”（配置要抓的屏在当时活动的屏里找不到对应的一个，守护在等串流空闲）已不是现状。这次没有主动做体检、查显示或真实串流，显卡安全闸也没重新判断。手机画面与真实主屏故障转移仍未验收；普通联网串流 10 月 8 日有本人实用结果。
+**当前情况：**11 月 4 日 11:40 只读体检：守护在跑、心跳新鲜，捕获模式在虚拟屏上，这一轮决定“留在虚拟屏”，Sunshine 配置要抓的那块屏在线，没有报任何阻断原因，显卡安全闸放行；同一天的守护记录里，这一轮要搬和搬失败的窗口都是 0，也没有已搬到虚拟屏的窗口。体检结论是“要留意”，唯一的原因是运行的程序比源码旧：守护 11 月 3 日 16:01 启动，四个程序文件里两个和当前源码相同，主程序停在 11 月 2 日那版，安全判断模块停在 10 月 19 日那版。10 月 21—25 日源码里的改动（搬窗来源收紧、启动器日志、心跳发布和换屏判断分开）和 11 月 2 日的“重启时等旧进程真正退出”都在它跑的版本里；11 月 3 日写进源码的换屏日志和 TCP 分表判断还没加载，要等守护下次正常启动，查的时候没有重启它。10 月 11 日 13:33 体检报过的“阻塞”（配置要抓的屏在当时活动的屏里找不到对应的一个，守护在等串流空闲）已不是现状。这次没有改显示，也没有主动发起真实串流。手机画面与真实主屏故障转移仍未验收；普通联网串流 10 月 8 日有本人实用结果。
 
 具体测试保留各自日期，页面不实时探测运行状态。
 
@@ -392,7 +392,7 @@ Sunshine 远程串流 · 功能说明
 
 ## 正常时
 
-代码已覆盖应当保持主屏、何时尝试虚拟屏与如何计划窗口回迁；真实手机画面和拔线前后对照仍未验收。往虚拟屏搬窗时，新源码只认当前证明在线的主屏区域或上次记下的主屏区域；两样都没有，就不再计划新搬窗、原有搬窗记录照样保留，捕获照样在虚拟屏，不是停止捕获。10 月 26 日起运行的守护已加载这条。
+代码已覆盖应当保持主屏、何时尝试虚拟屏与如何计划窗口回迁；真实手机画面和拔线前后对照仍未验收。往虚拟屏搬窗时，新源码只认当前证明在线的主屏区域或上次记下的主屏区域；两样都没有，就不再计划新搬窗、原有搬窗记录照样保留，捕获照样在虚拟屏，不是停止捕获。11 月 4 日运行的守护包含这条。
 
 ## 发现问题时
 
@@ -530,7 +530,7 @@ Sunshine 远程串流 · 功能说明
 
 1. **先读主机现场**　守护器辨认物理主屏、专用虚拟屏和当前有没有人在串流；主屏正常时优先显示它，并拉回误入虚拟屏的普通窗口。
 
-2. **满足条件才兜底**　主屏稳定离线、近期显卡安静、串流明确空闲、窗口记录完好后，才记下窗口位置并切到唯一的专用虚拟屏；“从哪搬窗”只认证明过的主屏区域，没有就只切捕获、不新搬窗（10 月 26 日起运行的守护已加载这条）。
+2. **满足条件才兜底**　主屏稳定离线、近期显卡安静、串流明确空闲、窗口记录完好后，才记下窗口位置并切到唯一的专用虚拟屏；“从哪搬窗”只认证明过的主屏区域，没有就只切捕获、不新搬窗（11 月 4 日运行的守护包含这条）。
 
 3. **主屏恢复后再读回**　条件允许时尝试把窗口和捕获目标拉回主屏；实际窗口位置与手机画面还要分别检查。
 
@@ -626,7 +626,7 @@ Sunshine 远程串流 · 功能说明
 ## 技术实现与依据（一）
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
-10 月 22 日 07:22:22 守护回执（历史）：当时运行中的 WorkerSha256=2EA6698B… 与当时源码 967F366D… 不一致，c09364f（10 月 22 日 06:39）和 6cfbfde（10 月 21 日 06:38）尚未加载；10 月 20 日 07:38:27 那份回执四个组件与当时源码一致。现在：10 月 30 日 11:10:14 读到的守护回执（runtime/worker-health.json）：Mode/CaptureKind=Vdd、Action=StayVdd、ConfiguredTargetOnline=true、BlockedReason=null、ClientAcceptance=unknown，MigratedWindowCount=0、AppliedWindowActionCount=0、FailedWindowActionCount=0；进程 ProcessStartUtc 2026-10-26T02:30:32Z（北京时间 10 月 26 日 10:30）。回执里四个 ComponentSha256（Invoke-SunshineCaptureFailover.ps1、sunshine-capture-failover.psm1、sunshine-safety.psm1、sunshine-headless-config.psm1）与当前源码逐项相等，c09364f、6cfbfde 和 8de3dcf（健康回执发布与捕获周期失败分开）都已加载；这是守护自然重启后加载的，本轮没有重启或部署。本轮没有跑零写入体检。历史：10 月 11 日 13:33 零写入体检曾是 blocked（capture-output-offline-or-ambiguous），当时会话 Active（0 个 TCP、3 个 UDP 串流端点）、动作为“等待串流空闲”。客户端画面 Unknown（未验证），真实切换和手机验收仍未完成
+10 月 22 日 07:22:22 守护回执（历史）：当时运行中的 WorkerSha256=2EA6698B… 与当时源码 967F366D… 不一致，c09364f（10 月 22 日 06:39）和 6cfbfde（10 月 21 日 06:38）尚未加载；10 月 20 日 07:38:27 那份回执四个组件与当时源码一致。10 月 30 日 11:10:14 读到的守护回执（历史）：进程 ProcessStartUtc 2026-10-26T02:30:32Z（北京时间 10 月 26 日 10:30），回执里四个 ComponentSha256（Invoke-SunshineCaptureFailover.ps1、sunshine-capture-failover.psm1、sunshine-safety.psm1、sunshine-headless-config.psm1）当时与源码逐项相等，c09364f、6cfbfde 和 8de3dcf（健康回执发布与捕获周期失败分开）都已加载，是守护自然重启后加载的。现在：11 月 4 日 11:40 零写入体检（Get-SunshineHealth.ps1 -Json，进程退出 0）Status=attention，唯一 Reasons 为 worker-source-bundle-not-current；ProcessStartUtc 2026-11-03T08:01:19Z（北京时间 11 月 3 日 16:01:19），心跳新鲜，Mode/CaptureKind=Vdd、Action=StayVdd、ConfiguredTargetOnline=true、BlockedReason=null、ClientAcceptance=unknown；GPU Allowed=true（current-boot-clean）。这个新开的体检进程加载的是当前模块，报 Active / verified-stream-udp-endpoint、0 条 RTSP 连接、3 个媒体端点（不是客户端数）。四个文件逐项比较（09:10:45）：sunshine-capture-failover.psm1、sunshine-headless-config.psm1 相同，Invoke-SunshineCaptureFailover.ps1、sunshine-safety.psm1 不同。把回执指纹和提交历史对照：运行的主脚本等于 f2e238f（11 月 2 日 09:22），安全模块等于 23fa6d2（10 月 19 日 13:06），所以 c09364f、8de3dcf 和 f2e238f 都在运行版本里，5b04f67（11 月 3 日 16:58）和 27af2fa（11 月 3 日 17:58）还没加载；不是旧修复失效。同一天的守护回执 MigratedWindowCount=0、AppliedWindowActionCount=0、FailedWindowActionCount=0。核对时没有重启或部署。历史：10 月 11 日 13:33 零写入体检曾是 blocked（capture-output-offline-or-ambiguous），当时会话 Active（0 个 TCP、3 个 UDP 串流端点）、动作为“等待串流空闲”。客户端画面 Unknown（未验证），真实切换和手机验收仍未完成
 
 ## 关键规则与设计选择
 
@@ -634,7 +634,7 @@ Sunshine 远程串流 · 功能说明
 
 2. 物理主屏连续缺失 15 秒（排除瞬时休眠与驱动重置）且串流明确空闲 5 秒才切到 VDD，防止正常看视频时发生误切。
 
-3. 往 VDD 搬窗的来源区域只用当前证明在线的物理主屏 WorkArea，或状态里已记录的 LastPhysicalWorkArea；两者都没有时保留原 MigratedWindows 记录，但不计划新的搬窗动作，不再拿 VDD 区域冒充物理来源（Invoke-SunshineCaptureFailover.ps1:343—350、546—557，c09364f；运行中的守护尚未加载）。这收紧的是搬窗来源，不是停止捕获。记录普通窗口的 HWND（窗口句柄）、PID（进程标识）与真实放置矩形；11–13 像素只是当前常见观测，代码按窗口 DPI 动态计算边框容差，取不到时回退 16 像素。
+3. 往 VDD 搬窗的来源区域只用当前证明在线的物理主屏 WorkArea，或状态里已记录的 LastPhysicalWorkArea；两者都没有时保留原 MigratedWindows 记录，但不计划新的搬窗动作，不再拿 VDD 区域冒充物理来源（c09364f 时的 Invoke-SunshineCaptureFailover.ps1:343—350、546—557；11 月 4 日运行的守护包含）。这收紧的是搬窗来源，不是停止捕获。记录普通窗口的 HWND（窗口句柄）、PID（进程标识）与真实放置矩形；11–13 像素只是当前常见观测，代码按窗口 DPI 动态计算边框容差，取不到时回退 16 像素。
 
 4. LIAN LI 水冷屏（TUR0000）与 HS2 机箱屏严格列为本项目黑名单：捕获选择和本项目的窗口迁移动作不以它们为目标。
 
@@ -674,11 +674,18 @@ Sunshine 远程串流 · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- 提交时把 pending（待处理）与 applied（已应用）状态分开：配置 CAS 后在同一 20 秒期限内重启并检查服务；失败时只有当前文件仍是本轮写入的版本才回滚到变更前内容，缺本轮指纹或已被别处改过就拒绝覆盖并报告未恢复。窗口逐个复核身份、来源区域与写后位置，单个失败不阻塞其余窗口。",
+     "text_ref": "- 提交时把 pending（待处理）与 applied（已应用）状态分开：配置 CAS 后在同一期限内（f2e238f 起默认 60 秒）重启并检查服务：Restart-SunshineCaptureService 等旧服务宿主和归属已核实的 Sunshine 子进程退出，宿主退出后补查晚生子进程，再启动并等会话可判定 Idle 或 Active；SCM 显示 Stopped/Running 不够，Unknown 继续等，只等待、不强杀，读不到残留归属即失败（运行版本已包含，11 月 4 日核对时没有执行这条路径）。失败时只有当前文件仍是这次写入的版本才回滚到变更前内容，缺这次的指纹或已被别处改过就拒绝覆盖并报告未恢复。窗口逐个复核身份、来源区域与写后位置，单个失败不阻塞其余窗口。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
      "connector": "none"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 5b04f67 增加 cycle-transition",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
     }
    ]
   },
@@ -692,11 +699,18 @@ Sunshine 远程串流 · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- 提交时把 pending（待处理）与 applied（已应用）状态分开：配置 CAS 后在同一 20 秒期限内重启并检查服务；失败时只有当前文件仍是本轮写入的版本才回滚到变更前内容，缺本轮指纹或已被别处改过就拒绝覆盖并报告未恢复。窗口逐个复核身份、来源区域与写后位置，单个失败不阻塞其余窗口。",
+     "text_ref": "- 提交时把 pending（待处理）与 applied（已应用）状态分开：配置 CAS 后在同一期限内（f2e238f 起默认 60 秒）重启并检查服务：Restart-SunshineCaptureService 等旧服务宿主和归属已核实的 Sunshine 子进程退出，宿主退出后补查晚生子进程，再启动并等会话可判定 Idle 或 Active；SCM 显示 Stopped/Running 不够，Unknown 继续等，只等待、不强杀，读不到残留归属即失败（运行版本已包含，11 月 4 日核对时没有执行这条路径）。失败时只有当前文件仍是这次写入的版本才回滚到变更前内容，缺这次的指纹或已被别处改过就拒绝覆盖并报告未恢复。窗口逐个复核身份、来源区域与写后位置，单个失败不阻塞其余窗口。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
      "connector": "none"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 5b04f67 增加 cycle-transition",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
     }
    ]
   }
@@ -707,7 +721,7 @@ Sunshine 远程串流 · 功能说明
 
 ## 技术实现与依据（二）
 
-- 提交时把 pending（待处理）与 applied（已应用）状态分开：配置 CAS 后在同一 20 秒期限内重启并检查服务；失败时只有当前文件仍是本轮写入的版本才回滚到变更前内容，缺本轮指纹或已被别处改过就拒绝覆盖并报告未恢复。窗口逐个复核身份、来源区域与写后位置，单个失败不阻塞其余窗口。
+- 提交时把 pending（待处理）与 applied（已应用）状态分开：配置 CAS 后在同一期限内（f2e238f 起默认 60 秒）重启并检查服务：Restart-SunshineCaptureService 等旧服务宿主和归属已核实的 Sunshine 子进程退出，宿主退出后补查晚生子进程，再启动并等会话可判定 Idle 或 Active；SCM 显示 Stopped/Running 不够，Unknown 继续等，只等待、不强杀，读不到残留归属即失败（运行版本已包含，11 月 4 日核对时没有执行这条路径）。失败时只有当前文件仍是这次写入的版本才回滚到变更前内容，缺这次的指纹或已被别处改过就拒绝覆盖并报告未恢复。窗口逐个复核身份、来源区域与写后位置，单个失败不阻塞其余窗口。
 
 - 状态文件损坏时（空、全零、非对象、格式或时间坏）停在 capture-state-invalid；持久记录用候选文件刷新、原子替换并回读，保留一份有效的 .previous 作恢复点。
 
@@ -715,9 +729,11 @@ Sunshine 远程串流 · 功能说明
 
 - Set-SunshineHeadlessConfig.ps1 提供独立的人工应急固定 VDD 路径：默认预览、显式 Apply 才写，只改受管配置键，保留原文件备份，同样要过显卡、会话、唯一 VDD 身份和 CAS 这几关，不冒充已重载或已显示。
 
-- tests/Test-SunshineCaptureFailover.ps1 现定义 72 个测试（9 月 18 日有回执时是 67 个，后来新增 3 个损坏状态场景等），覆盖已建模的身份、去抖、会话、窗口与故障分支。
+- tests/Test-SunshineCaptureFailover.ps1 现定义 78 个测试（11 月 4 日 09:18 静态计数，没有运行；9 月 18 日有回执时是 67 个，后来新增 3 个损坏状态场景等），覆盖已建模的身份、去抖、会话、窗口与故障分支。
 
-- 会话检测 Active/Idle/Unknown 三态，端口随 Sunshine 当前 base-port 解析；缺监听、失败或进程身份不符为 Unknown（未验证）。短写操作共用互斥，runtime（运行环境）/worker-health.json 绑定 PID、创建时间、源码 SHA 和上次完整循环，旧心跳不能续成健康。健康回执写失败单独记为 health-publication-failure：不清除已经累计的串流空闲时间，也不把成功的捕获结果改成阻断；真正的捕获周期失败仍记 cycle-transient-failure 并清除空闲计时；写不出回执时不更新成功心跳，持续失败会在体检里显示过期（8de3dcf）。体检读这份回执时允许守护同时整份原子替换它，两边不再互相卡住（174286d）。
+- 会话检测 Active/Idle/Unknown 三态，端口随 Sunshine 当前 base-port 解析；缺监听、失败或进程身份不符为 Unknown（未验证）。当前源码（5b04f67、27af2fa，11 月 4 日运行的守护未加载）完整读取 IPv4/IPv6 的 OWNER_PID_LISTENER、OWNER_PID_CONNECTIONS 四张表，保留 RawState/Family/EvidenceKind，按来源表区分监听和连接；任一表失败、截断或越界都不能证明 Idle，缓冲增长有限重试，系统同步调用没有单次硬超时。连接表里任何 RTSP 行都阻止 Idle，TIME_WAIT 收尾行也可能保守延后换屏，不能说这些行都证明有已建立串流；异常 TCP 状态仍可由已核实唯一 Sunshine UDP 媒体端点证明 Active；没有媒体端点时，须真实 RTSP 监听且没有连接或未知 RTSP 行才是 Idle。短写操作共用互斥，runtime（运行环境）/worker-health.json 绑定 PID、创建时间、源码 SHA 和上次完整循环，旧心跳不能续成健康。健康回执写失败单独记为 health-publication-failure：不清除已经累计的串流空闲时间，也不把成功的捕获结果改成阻断；真正的捕获周期失败仍记 cycle-transient-failure 并清除空闲计时；写不出回执时不更新成功心跳，持续失败会在体检里显示过期（8de3dcf）。体检读这份回执时允许守护同时整份原子替换它，两边不再互相卡住（174286d）。
+
+- 5b04f67 增加 cycle-transition 语义变化日志：只有确实重载并回读成功才记 CaptureCommitted=true；Applied 可以只是普通周期，不能当作一次换屏，更不能当作客户端验收；稳定轮询不每秒写日志。11 月 4 日运行的守护未加载。
 
 ## 执行流程
 
@@ -784,7 +800,7 @@ Sunshine 远程串流 · 功能说明
 
 ## 技术实现与依据（三）
 
-3. 若物理主屏离线，启动 15 秒缺失计时器；计时满、串流明确空闲、近期显卡安静且状态记录有效后，记录主屏普通窗口几何位置，将 output_name 原子替换为 VDD GUID 并迁移窗口。迁移来源只取已证明的物理 WorkArea 或 LastPhysicalWorkArea，两者都没有时只保留迁移 journal、不计划新搬窗（c09364f，10 月 26 日起运行的守护已加载）。
+3. 若物理主屏离线，启动 15 秒缺失计时器；计时满、串流明确空闲、近期显卡安静且状态记录有效后，记录主屏普通窗口几何位置，将 output_name 原子替换为 VDD GUID 并迁移窗口。迁移来源只取已证明的物理 WorkArea 或 LastPhysicalWorkArea，两者都没有时只保留迁移 journal、不计划新搬窗（c09364f，11 月 4 日运行的守护包含）。
 
 4. 主屏重新被证明健康并通过去抖后，守护程序只对符合身份与区域门的普通窗口执行拉回，再恢复物理捕获目标；实际结果需逐窗口与配置回读。
 
@@ -844,7 +860,7 @@ Sunshine 远程串流 · 功能说明
 | 名词 | 意思 |
 |---|---|
 | EDID（扩展显示标识数据） | 显示器提供的身份信息；项目把它与同一次 PnP/活动输出证据组合为稳定标识，并在每次操作前重新核对。 |
-| CAS（Compare-And-Swap） | 原子替换机制；写入配置文件前先校验原有内容是否被修改，防止多进程并发冲突覆写。回滚时也要先确认文件仍是本轮写的版本。 |
+| CAS（Compare-And-Swap） | 原子替换机制；写入配置文件前先校验原有内容是否被修改，防止多进程并发冲突覆写。回滚时也要先确认文件仍是这次写的版本。 |
 | 串流空闲判断 | 先看 RTSP（建连通道）监听、进程和 TCP 会话；TCP 没有会话时，再看同一个 Sunshine 的视频、控制、音频 UDP 端点。UDP 还在就算“进行中”，查询失败或归属冲突算 Unknown（未验证）；只有明确空闲并连续 5 秒才累计。实际端口来自当前 base-port，不固定猜默认值。 |
 
 ## 专业定义
@@ -948,11 +964,11 @@ Sunshine 远程串流 · 功能说明
 
 - **检测到多于一个同名 VDD 或存在未知虚拟驱动**　拒绝推断目标，执行失败关闭，保持当前配置不动并记录错误日志。
 
-- **配置要抓的屏在活动屏里找不到唯一对应**　体检报 blocked（capture-output-offline-or-ambiguous），守护等待串流空闲后再处理；这只说明配置和当前活动屏对不上，不等于虚拟屏坏了，也不推断手机一定黑屏。10 月 11 日就是这种情况；10 月 20 日早上、10 月 22 日 07:22 和 10 月 30 日 11:10 守护的回执里都没有这一阻塞。
+- **配置要抓的屏在活动屏里找不到唯一对应**　体检报 blocked（capture-output-offline-or-ambiguous），守护等待串流空闲后再处理；这只说明配置和当前活动屏对不上，不等于虚拟屏坏了，也不推断手机一定黑屏。10 月 11 日就是这种情况；10 月 20 日早上、10 月 22 日 07:22、10 月 30 日 11:10 和 11 月 4 日 09:10 的记录里都没有这一阻塞。
 
 - **近 15 分钟内有 BugCheck、显示内核错误或匹配的 WER 图形故障**　保持 BlockedByGpuStability，不切捕获或往虚拟屏搬窗；只有空闲且证明来自 VDD、目标是健康物理主屏的普通窗口单向回迁可独立处理。单独一次 Kernel-Power 41（非正常关机）只记诊断，不挡整次开机；WER 按类型参数和报告编号去重，虚拟驱动自检报告不算显卡崩溃；事件查询本身出错仍挡。
 
-- **要往虚拟屏搬窗，却证明不了主屏区域**　当前源码不计划新搬窗、保留已有迁移记录，捕获切换照常判断；不用虚拟屏区域冒充来源。10 月 26 日起运行的守护已加载此修复。
+- **要往虚拟屏搬窗，却证明不了主屏区域**　当前源码不计划新搬窗、保留已有迁移记录，捕获切换照常判断；不用虚拟屏区域冒充来源。11 月 4 日运行的守护包含此修复。
 
 - **窗口恢复记录损坏**　停在 capture-state-invalid，不自动切换、不用空白记录覆盖；核对有效的上一份记录和当前现场后再恢复。
 
@@ -1025,7 +1041,7 @@ Sunshine 远程串流 · 功能说明
 
 - **单轮显示枚举瞬时失败（如驱动重置）**　代码把它记为 cycle-transient-failure 并留待下一轮；自动化测试覆盖了不让该异常直接终止守护器的分支。
 
-- **人工无头写入前 VDD 身份或原配置变化**　拒绝覆盖；若已写入，仅在当前仍匹配本轮结果且 GPU、会话、身份门允许时回滚，未恢复项单独报告。工具本身不自动重启 Sunshine，也不把备份冒充恢复成功。
+- **人工无头写入前 VDD 身份或原配置变化**　拒绝覆盖；若已写入，仅在当前仍匹配这次写入的结果且 GPU、会话、身份门允许时回滚，未恢复项单独报告。工具本身不自动重启 Sunshine，也不把备份冒充恢复成功。
 
 - **隐藏启动器起不来**　新版把 launcher_error 记进 runtime/capture-launcher.log（UTF-16、约 1 MB 轮转）并返回 1，不再悄悄失败；日志只从新版开始有。
 
@@ -1062,7 +1078,21 @@ Sunshine 远程串流 · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 9 月 18 日 14:07 有原始回执：当时 67/67 通过（涵盖设备快照、GUID 绑定、去抖、CAS 写入、BugCheck/WER/GPU 事件门和窗口计划）；现定义 72 个，本轮没有运行。它们是合成分支，不是物理串流。",
+     "text_ref": "- 9 月 18 日 14:07 有原始回执：当时 67/67 通过（涵盖设备快照、GUID 绑定、去抖、CAS 写入、BugCheck/WER/GPU 事件门和窗口计划）；现定义 78 个（11 月 4 日 09:18 静态计数），没有运行。它们是合成分支，不是物理串流。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 11 月 4 日 11:40 零写入体检",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 11 月 4 日 09:12 只读核对音频源地址修补",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1079,7 +1109,21 @@ Sunshine 远程串流 · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 9 月 18 日 14:07 有原始回执：当时 67/67 通过（涵盖设备快照、GUID 绑定、去抖、CAS 写入、BugCheck/WER/GPU 事件门和窗口计划）；现定义 72 个，本轮没有运行。它们是合成分支，不是物理串流。",
+     "text_ref": "- 9 月 18 日 14:07 有原始回执：当时 67/67 通过（涵盖设备快照、GUID 绑定、去抖、CAS 写入、BugCheck/WER/GPU 事件门和窗口计划）；现定义 78 个（11 月 4 日 09:18 静态计数），没有运行。它们是合成分支，不是物理串流。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 11 月 4 日 11:40 零写入体检",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 11 月 4 日 09:12 只读核对音频源地址修补",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1121,11 +1165,15 @@ Sunshine 远程串流 · 功能说明
 
 窗口恢复记录及其上一份有效恢复点（state 与 .previous）
 
-自动化回归测试套件（当前定义 72 个）
+自动化回归测试套件（当前定义 78 个）
 
 ## 如何验证
 
-- 9 月 18 日 14:07 有原始回执：当时 67/67 通过（涵盖设备快照、GUID 绑定、去抖、CAS 写入、BugCheck/WER/GPU 事件门和窗口计划）；现定义 72 个，本轮没有运行。它们是合成分支，不是物理串流。
+- 9 月 18 日 14:07 有原始回执：当时 67/67 通过（涵盖设备快照、GUID 绑定、去抖、CAS 写入、BugCheck/WER/GPU 事件门和窗口计划）；现定义 78 个（11 月 4 日 09:18 静态计数），没有运行。它们是合成分支，不是物理串流。
+
+- 11 月 4 日 11:40 零写入体检：attention（worker-source-bundle-not-current），ConfiguredTargetOnline=true、BlockedReason 为空、Action=StayVdd、ClientAcceptance=unknown；它只说明运行程序落后于源码，没有看客户端画面。
+
+- 11 月 4 日 09:12 只读核对音频源地址修补（native-patches/source-address-ready.json，docs/native-source-address-ready.md）：音频 UDP PING 可能先到，旧源码此时开始采集，媒体发送可能读到默认 0.0.0.0 源地址；修补让音视频先等本会话源地址就绪，沿原握手绝对期限等待并支持停止取消，不改显示、音频配置、路由或防火墙。清单写明 full_sunshine_build_passed=false、deployed=false、original_sunshine_trigger_passed=false；隔离 C++ 回归有记录，核对时没有复跑。历史初始化错误与此缺陷高度吻合，但缺原失败调用参数，不能写成已找到全部历史发送错误根因或已修好。
 
 - 10 月 30 日 11:10:14 守护回执：ConfiguredTargetOnline=true、BlockedReason=null、Action=StayVdd、ClientAcceptance=unknown；它是守护自己的周期记录，不是体检，也不看客户端画面。10 月 20 日 07:38:27、10 月 22 日 07:22:22 回执结论相同，留作历史。历史：10 月 11 日 13:33 截止前体检：blocked，配置要抓的屏不在线或认不唯一（ConfiguredTargetOnline=false），捕获模式和待切目标都是虚拟屏；体检按配置的输出编号在活动屏里严格匹配，它没有看客户端画面，也不能证明虚拟屏驱动坏了。客户端画面和输入未知。
 
@@ -1133,7 +1181,7 @@ Sunshine 远程串流 · 功能说明
 
 - 窗口恢复状态 9 月 14 日的记录（Mode=Vdd、PendingTargetKind=Physical）保留为历史；10 月 11 日 13:33 体检时为 Mode=Vdd、PendingTargetKind=Vdd；10 月 20 日 07:35:51 更新的状态仍为 Mode=Vdd。状态里记的上次目标不能代替配置里当前要抓的屏，状态新鲜也不证明捕获选择或窗口迁移已通过。
 
-- 系统计划任务 SunshineCaptureFailover-Interactive 随 10 月 10 日 11:06 登录启动并常驻；10 月 11 日 13:33 体检时守护心跳新鲜、源码一致；10 月 20 日 07:38 守护回执的四个组件 SHA-256 当时与源码一致；10 月 22 日 07:22 读到当时运行中的守护（10 月 20 日 22:16 启动）脚本指纹 2EA6698B… 与当时源码 967F366D… 不一致，那时 c09364f、6cfbfde 两项修复还没加载；10 月 30 日 11:10 读到的守护 10 月 26 日 10:30 启动，四个组件 SHA-256 与当前源码逐项相等，这两项和 8de3dcf 都已加载。
+- 系统计划任务 SunshineCaptureFailover-Interactive 随 10 月 10 日 11:06 登录启动并常驻；10 月 11 日 13:33 体检时守护心跳新鲜、源码一致；10 月 20 日 07:38 守护回执的四个组件 SHA-256 当时与源码一致；10 月 22 日 07:22 读到当时运行中的守护（10 月 20 日 22:16 启动）脚本指纹 2EA6698B… 与当时源码 967F366D… 不一致，那时 c09364f、6cfbfde 两项修复还没加载；10 月 30 日 11:10 读到的守护 10 月 26 日 10:30 启动，四个组件 SHA-256 当时与源码逐项相等，这两项和 8de3dcf 当时都已加载；11 月 4 日读到的任务上次启动 11 月 3 日 16:01:18（状态码 267009 表示仍在运行），守护主脚本和 sunshine-safety.psm1 落后于当前源码，另两项相同。
 
 ## 与其他模块的关系
 

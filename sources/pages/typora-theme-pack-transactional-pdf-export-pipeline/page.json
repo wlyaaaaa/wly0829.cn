@@ -7,15 +7,18 @@
   "parent": "typora-theme-pack",
   "status_line": {
     "state": "偶尔用",
-    "as_of": "2026-10-11",
-    "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未运行测试或导出。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+    "as_of": "2026-11-04",
+    "source": "项目源码和测试记录",
+    "facts": [
+      "三项导出菜单还没在 Typora 里实际点过"
+    ]
   },
   "screens": [
     {
       "id": "typora-theme-pack-transactional-pdf-export-pipeline-01",
       "section": "top",
       "title": "转换器与 PDF 交付",
-      "text": "# 转换器与 PDF 交付\n\n〔回到项目 → Typora 薄荷主题〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nTypora Theme Pack · 功能说明\n\n把模式和正文交给明确选好的外部转换器，检查这次是否真的成功。现在除了命令行，Typora 的“原版 / 公司 / 个人”三项导出菜单也走这条管道。\n\n**当前情况：**失败保留旧文件、坏 PDF 拒收这些保护在源码里，9 月 29 日 GitHub 自动测试 21 项通过；三项菜单已经配好，但还没在 Typora 里实际点过。新的导出仍核对实际文件，不能借旧 PDF 报成功。\n\n项目源码：公开仓库",
+      "text": "# 转换器与 PDF 交付\n\n〔回到项目 → Typora 薄荷主题〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nTypora Theme Pack · 功能说明\n\n把模式和正文交给明确选好的外部转换器，检查这次是否真的成功。现在除了命令行，Typora 的“原版 / 公司 / 个人”三项导出菜单也走这条管道。\n\n**当前情况：**失败保留旧文件、坏 PDF 拒收这些保护在源码里，GitHub 自动测试最近一次在 10 月 20 日通过；三项菜单已经配好，但还没在 Typora 里实际点过。新的导出仍核对实际文件，不能借旧 PDF 报成功。\n\n项目源码：公开仓库",
       "links": [
         {
           "text": "回到项目 → Typora 薄荷主题",
@@ -89,7 +92,7 @@
       "id": "typora-theme-pack-transactional-pdf-export-pipeline-05",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n源码 21 个测试定义，2026-09-29 01:51 GitHub 自动测试 21 项通过；菜单配置已核对，实际点击待验收；本次未运行\n\n## 关键规则与设计选择\n\n1. --converter > MD_PDF_TOOLKIT_CONVERTER > 本机 JSON；不猜默认打印器，三处都没有就直接报错。\n\n2. 输出必须为 .pdf，不能等于源 Markdown 或转换器；输入须存在且为 .md，输出父目录必须存在。\n\n3. 暂存文件名短且位于目标同目录，避免跨卷原子移动和长文件名问题。\n\n## 当前怎样实现\n\n- configure_converter.py 原子保存 typora-theme-pack.local.v1；相对路径按配置目录解析。本机配置指向一个已存在的 Markdown 转 PDF 转换脚本，配置里不含任何凭据。\n\n- configure_typora_menu.py 只更新 Typora 的三个自定义导出槽，先备份原配置再原子替换，菜单名为原版/公司/个人；三项都调用 typora_export_launcher.ps1，启动器每次从 PCConfig 登记读取 Python，再把输入和模式交给导出脚本。不传固定输出路径，默认存在文稿旁并带对应后缀。\n\n- export_pdf.py 生成 profile CSS 临时文件，调用 sys.executable + converter，带 --input、--output、--css-file、--document-style-policy、--require-style 和可选 --expected-pages。精确页数由兼容转换器验证；主题包自己的底线是至少一页。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n源码 22 个测试定义，最近一次 GitHub 自动测试 2026-10-20 16:55 成功；菜单配置已核对，实际点击待验收；本次未运行\n\n## 关键规则与设计选择\n\n1. --converter > MD_PDF_TOOLKIT_CONVERTER > 本机 JSON；不猜默认打印器，三处都没有就直接报错。\n\n2. 输出必须为 .pdf，不能等于源 Markdown 或转换器；输入须存在且为 .md，输出父目录必须存在。\n\n3. 暂存文件名短且位于目标同目录，避免跨卷原子移动和长文件名问题。\n\n## 当前怎样实现\n\n- configure_converter.py 原子保存 typora-theme-pack.local.v1；相对路径按配置目录解析。本机配置指向一个已存在的 Markdown 转 PDF 转换脚本，配置里不含任何凭据。\n\n- configure_typora_menu.py 只更新 Typora 的三个自定义导出槽，先备份原配置再原子替换，菜单名为原版/公司/个人；三项都调用 typora_export_launcher.ps1，启动器每次从 PCConfig 登记读取 Python，再把输入和模式交给导出脚本。不传固定输出路径，默认存在文稿旁并带对应后缀。\n\n- export_pdf.py 生成 profile CSS 临时文件，调用 sys.executable + converter，带 --input、--output、--css-file、--document-style-policy、--require-style 和可选 --expected-pages。精确页数由兼容转换器验证；主题包自己的底线是至少一页。",
       "links": [],
       "anchors": [
         {
@@ -150,7 +153,7 @@
       "id": "typora-theme-pack-transactional-pdf-export-pipeline-09",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- 交付和校验\n\n- 本机配置\n\n- 失败路径与原件保全\n\n## 如何验证\n\n- 源码里有 21 个测试定义，覆盖旧 PDF 保留、无输出、损坏、0 页、非零退出和原子替换；最近能直接回读的是 2026-09-29 01:51 GitHub 自动测试，21 项全部通过。早先 20 项通过是 cf6d710 阶段的结果。这次没有运行测试。\n\n- 仓库现存三份样张各 2 页、都能解析，只证明已有文件；这次没有新生成 PDF。\n\n- 三项菜单都已改为调用启动器，配置核对无误；但没有在 Typora 里实际点过，菜单导出成功与否待验收。\n\n## 与其他模块的关系\n\n连接选中的样式和外部引擎，负责这一份输出的交付判断；Typora 菜单只是这条管道的另一个启动方式。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- 交付和校验\n\n- 本机配置\n\n- 失败路径与原件保全\n\n## 如何验证\n\n- 源码里有 22 个测试定义，覆盖旧 PDF 保留、无输出、损坏、0 页、非零退出和原子替换，10 月 20 日新增的一项查导出不依赖只给预览用的 Pillow；最近一次 GitHub 自动测试是 2026-10-20 16:55（提交 9cefc0e，整次工作流成功，日志这次没读）。更早：2026-09-29 01:51 那次 21 项全部通过，20 项通过是 cf6d710 阶段的结果。这次没有运行测试。\n\n- 仓库现存三份样张各 2 页、都能解析，只证明已有文件；这次没有新生成 PDF。\n\n- 三项菜单都已改为调用启动器，配置核对无误；但没有在 Typora 里实际点过，菜单导出成功与否待验收。\n\n## 与其他模块的关系\n\n连接选中的样式和外部引擎，负责这一份输出的交付判断；Typora 菜单只是这条管道的另一个启动方式。",
       "links": [
         {
           "text": "上一个模块 导出版式",
@@ -169,7 +172,7 @@
     }
   ],
   "based_on": {
-    "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
-    "commit_time": "2026-09-28T12:36:45-05:00"
+    "commit": "9cefc0e1e41d5351693071cfbb7452f5deda93c6",
+    "commit_time": "2026-10-20T03:21:43-05:00"
   }
 }

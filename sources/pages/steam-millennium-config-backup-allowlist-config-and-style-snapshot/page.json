@@ -7,11 +7,11 @@
   "parent": "steam-millennium-config-backup",
   "status_line": {
     "state": "偶尔用",
-    "as_of": "2026-10-11",
-    "source": "源仓库 10 月 1 日的最新提交，加上北京时间 10 月 11 日 13:32 的只读状态核对",
+    "as_of": "2026-11-04",
+    "source": "项目仓库和运行记录",
     "last": {
       "label": "快照核对",
-      "at": "2026-10-11 13:32"
+      "at": "2026-11-04 09:18"
     }
   },
   "screens": [
@@ -19,7 +19,7 @@
       "id": "steam-millennium-config-backup-allowlist-config-and-style-snapshot-01",
       "section": "top",
       "title": "核心设置与自己的样式",
-      "text": "# 核心设置与自己的样式\n\n〔回到项目 → Steam 外观备份〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nSteam Millennium 配置备份 · 功能说明\n\n保存 Millennium 的核心设置与 quick.css，让重装或误改后能按记录恢复自己的选择。\n\n当前情况：核心设置和自定义样式已采集；本轮没有回填并查看Steam实际界面。\n\n项目快照核对于 2026-10-11 13:32（北京时间，只读核对）；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "text": "# 核心设置与自己的样式\n\n〔回到项目 → Steam 外观备份〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nSteam Millennium 配置备份 · 功能说明\n\n保存 Millennium 的核心设置与 quick.css，让重装或误改后能按记录恢复自己的选择。\n\n当前情况：核心设置和自定义样式已采集；还没有回填到真的 Steam 里看过界面。\n\n内容核对于 2026-11-04 09:18（北京时间，只读）；测试结果写的是各自跑的日期；这页不实时读运行状态，要看现在好不好，问 AI 或看驾驶舱。\n\n项目源码：公开仓库",
       "links": [
         {
           "text": "回到项目 → Steam 外观备份",
@@ -154,7 +154,7 @@
       "id": "steam-millennium-config-backup-allowlist-config-and-style-snapshot-09",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\nconfig/config.json\n真实参数与选择。\n\nconfig/quick.css\n实际滚动条样式定义。\n\ntools/Invoke-MillenniumBackup.ps1 / tools/millennium_backup.py\n复制范围、类型与内容检查、代际和受控恢复的实际逻辑；原 tools/snapshot-millennium-config.ps1 现在只是转交给它的兼容入口。\n\n## 如何验证\n\n- 原有测试的 copies config.json 与 copies quick.css 通过（9 月 8 日的历史测试）。\n\n- 9月8日核心文件经隔离采集及回填后与来源SHA-256相同；该历史测试不等于本次真实界面验收。\n\n## 与其他模块的关系\n\n核心配置中的插件名单和主题选择连接后两类快照；采集与恢复流程负责搬运这些文件。",
+      "text": "## 依据与来源\n\n## 真实入口\n\nconfig/config.json\n真实参数与选择。\n\nconfig/quick.css\n实际滚动条样式定义。\n\ntools/Invoke-MillenniumBackup.ps1 / tools/millennium_backup.py\n复制范围、类型与内容检查、代际和受控恢复的实际逻辑；原来转交给它的兼容脚本 tools/snapshot-millennium-config.ps1 已删除。\n\n## 如何验证\n\n- 原有测试的 copies config.json 与 copies quick.css 通过（9 月 8 日的历史测试）。\n\n- 9月8日核心文件经隔离采集及回填后与来源SHA-256相同；该历史测试不等于本次真实界面验收。\n\n## 与其他模块的关系\n\n核心配置中的插件名单和主题选择连接后两类快照；采集与恢复流程负责搬运这些文件。",
       "links": [
         {
           "text": "下一个模块 插件清单",

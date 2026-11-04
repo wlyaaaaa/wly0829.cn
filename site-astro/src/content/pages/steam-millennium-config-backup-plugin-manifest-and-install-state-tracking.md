@@ -27,18 +27,18 @@
   "parent": "steam-millennium-config-backup",
   "status_line": {
    "state": "偶尔用",
-   "as_of": "2026-10-11",
-   "source": "源仓库 10 月 1 日的最新提交（10 月 20 日回读远端无新提交，本机另有 7 个未提交的清单文件），加上北京时间 10 月 20 日 7:34—7:43 之间的零写入状态核对",
+   "as_of": "2026-11-04",
+   "source": "项目仓库和运行记录",
    "last": {
     "label": "快照核对",
-    "at": "2026-10-11 13:32"
+    "at": "2026-11-04 09:18"
    }
   }
  },
  "source": {
   "page": "sources/pages/steam-millennium-config-backup-plugin-manifest-and-install-state-tracking/page.json",
-  "sha256": "c825cd85032dec05dfa4c6bae658713dce791b68079847b4bf621e376eb41680",
-  "converted_at_beijing": "2026-11-04T10:21:47+08:00"
+  "sha256": "90051166d07e90ede7c665b3c163b4a7f2e1cba42bb02e30bb731ce654cbae8a",
+  "converted_at_beijing": "2026-11-04T12:05:40+08:00"
  }
 }
 ---
@@ -88,11 +88,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 快照核对 10 月 11 日 13:32",
+       "text": "偶尔用 · 快照核对 11 月 4 日 09:18",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目仓库和运行记录",
      "row": "top"
     },
     {
@@ -130,11 +130,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 快照核对 10 月 11 日 13:32",
+       "text": "偶尔用 · 快照核对 11 月 4 日 09:18",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目仓库和运行记录"
     },
     {
      "type": "action_button",
@@ -179,7 +179,7 @@ Steam Millennium 配置备份 · 功能说明
 
 当前情况：快照保留5款插件清单及其中3款启用选择；插件程序和私有设置不由这份清单恢复。
 
-项目快照核对于 2026-10-11 13:32（北京时间，只读核对）；具体测试保留各自日期，页面不实时探测运行状态。
+内容核对于 2026-11-04 09:18（北京时间，只读）；测试结果写的是各自跑的日期；这页不实时读运行状态，要看现在好不好，问 AI 或看驾驶舱。
 
 项目源码：公开仓库
 

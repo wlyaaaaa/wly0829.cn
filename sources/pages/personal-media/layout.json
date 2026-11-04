@@ -48,7 +48,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截至10月11",
+        "text_ref": "截至 11 月 4 日 09:14",
         "align": "right"
       },
       {
@@ -121,7 +121,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截至10月11",
+        "text_ref": "截至 11 月 4 日 09:14",
         "align": "right"
       },
       {
@@ -641,7 +641,10 @@
         ],
         "caption_per_slot": true,
         "equal_row_height": true,
-        "row_items": [5, 5]
+        "row_items": [
+          5,
+          5
+        ]
       }
     ],
     "portrait_required": true,
@@ -821,7 +824,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "17,255行Python正式代码（",
+        "text_ref": "17,614行Python正式代码（",
         "columns": 3,
         "row": "reasons-tail",
         "width": "50%",
@@ -863,7 +866,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "17,255行Python正式代码（",
+        "text_ref": "17,614行Python正式代码（",
         "columns": 3,
         "columns_v": 1,
         "icons": "auto",
@@ -1272,6 +1275,196 @@
     "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：时间线后的主插画靠右、图宽25%，缩到右下角，不占满下半屏。",
     "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-14-v.png"
   },
-  {"screen": "personal-media-gallery-history", "orientation": "h", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "蓝色灯光、温室轮廓与水面倒影把城市夜色拉开成完整层次。", "indices": [0, 1, 2, 3, 4, 5, 6, 7, 8], "columns": 3, "columns_v": 1, "ratios": ["8192:6144", "3072:4096", "6144:8192", "6144:8160", "8192:6144", "8192:6144", "6144:8192", "4096:3072", "6144:8192"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}, {"index": 3, "node_indices": [3]}, {"index": 4, "node_indices": [4]}, {"index": 5, "node_indices": [5]}, {"index": 6, "node_indices": [6]}, {"index": 7, "node_indices": [7]}, {"index": 8, "node_indices": [8]}], "equal_row_height": true}]},
-  {"screen": "personal-media-gallery-history", "orientation": "v", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "蓝色灯光、温室轮廓与水面倒影把城市夜色拉开成完整层次。", "indices": [0, 1, 2, 3, 4, 5, 6, 7, 8], "columns": 3, "columns_v": 1, "ratios": ["8192:6144", "3072:4096", "6144:8192", "6144:8160", "8192:6144", "8192:6144", "6144:8192", "4096:3072", "6144:8192"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}, {"index": 3, "node_indices": [3]}, {"index": 4, "node_indices": [4]}, {"index": 5, "node_indices": [5]}, {"index": 6, "node_indices": [6]}, {"index": 7, "node_indices": [7]}, {"index": 8, "node_indices": [8]}], "equal_row_height": true}]}
+  {
+    "screen": "personal-media-gallery-history",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "画廊"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "蓝色灯光、温室轮廓与水面倒影把城市夜色拉开成完整层次。",
+        "indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "columns": 3,
+        "columns_v": 1,
+        "ratios": [
+          "8192:6144",
+          "3072:4096",
+          "6144:8192",
+          "6144:8160",
+          "8192:6144",
+          "8192:6144",
+          "6144:8192",
+          "4096:3072",
+          "6144:8192"
+        ],
+        "caption_mode": "source_order",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          },
+          {
+            "index": 1,
+            "node_indices": [
+              1
+            ]
+          },
+          {
+            "index": 2,
+            "node_indices": [
+              2
+            ]
+          },
+          {
+            "index": 3,
+            "node_indices": [
+              3
+            ]
+          },
+          {
+            "index": 4,
+            "node_indices": [
+              4
+            ]
+          },
+          {
+            "index": 5,
+            "node_indices": [
+              5
+            ]
+          },
+          {
+            "index": 6,
+            "node_indices": [
+              6
+            ]
+          },
+          {
+            "index": 7,
+            "node_indices": [
+              7
+            ]
+          },
+          {
+            "index": 8,
+            "node_indices": [
+              8
+            ]
+          }
+        ],
+        "equal_row_height": true
+      }
+    ]
+  },
+  {
+    "screen": "personal-media-gallery-history",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "画廊"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "蓝色灯光、温室轮廓与水面倒影把城市夜色拉开成完整层次。",
+        "indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "columns": 3,
+        "columns_v": 1,
+        "ratios": [
+          "8192:6144",
+          "3072:4096",
+          "6144:8192",
+          "6144:8160",
+          "8192:6144",
+          "8192:6144",
+          "6144:8192",
+          "4096:3072",
+          "6144:8192"
+        ],
+        "caption_mode": "source_order",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          },
+          {
+            "index": 1,
+            "node_indices": [
+              1
+            ]
+          },
+          {
+            "index": 2,
+            "node_indices": [
+              2
+            ]
+          },
+          {
+            "index": 3,
+            "node_indices": [
+              3
+            ]
+          },
+          {
+            "index": 4,
+            "node_indices": [
+              4
+            ]
+          },
+          {
+            "index": 5,
+            "node_indices": [
+              5
+            ]
+          },
+          {
+            "index": 6,
+            "node_indices": [
+              6
+            ]
+          },
+          {
+            "index": 7,
+            "node_indices": [
+              7
+            ]
+          },
+          {
+            "index": 8,
+            "node_indices": [
+              8
+            ]
+          }
+        ],
+        "equal_row_height": true
+      }
+    ]
+  }
 ]

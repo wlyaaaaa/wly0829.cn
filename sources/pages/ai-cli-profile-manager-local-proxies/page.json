@@ -8,7 +8,7 @@
   "status_line": {
     "state": "常用",
     "as_of": "2026-10-11",
-    "source": "父项目总览状态“常用”；本地模型部分按 10 月 11 日 14:00 前的源码（10 月 8 日提交）和当天只读 Ollama 查询核对，两个 ChatGPT→Claude 代理 9 月 29 日退役、Toolkit 接线 9 月 28 日退役，未发生成请求。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+    "source": "项目源码和本机查询"
   },
   "screens": [
     {
@@ -138,7 +138,7 @@
       "id": "ai-cli-profile-manager-local-proxies-08",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- `src/AiCliProfileManager/Private/LocalGpuBrokerSession.ps1`：本地模型身份与租约消费\n\n- `data/local-model-set.json`：四个受管模型与客户端映射\n\n- `scripts/Sync-LocalModelConfiguration.ps1`：先预览、再应用的统一同步\n\n- `docs/user/本地模型统一配置.md`：本地模型参数、同步与历史实测记录\n\n## 如何验证\n\n- 9 月 29 日删除两个代理后的全量离线测试为 470/470、0 失败、0 跳过，本地模型集合、同步和受管身份都在其中；10 月 11 日未重跑。\n\n- 9 月 14 日的 Doctor 读到 Ollama 默认端点不可达，保留为当天记录；10 月 11 日只读查询 Ollama 为 0.35.0，4 个受管标签都在，没有发生成请求，也没有调用 GPU。\n\n- 9 月 16 日旧环境实测 35B 由每秒 62–69 个 token 提到 170–171 个，按当天记录保留，没有重跑性能。\n\n## 与其他模块的关系\n\n本模块提供可选运行目标；引擎模块定义 Profile，验证模块决定该目标在当前是否真正可用。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `src/AiCliProfileManager/Private/LocalGpuBrokerSession.ps1`：本地模型身份与租约消费\n\n- `data/local-model-set.json`：四个受管模型与客户端映射\n\n- `scripts/Sync-LocalModelConfiguration.ps1`：先预览、再应用的统一同步\n\n- `docs/user/本地模型统一配置.md`：本地模型参数、同步与历史实测记录\n\n## 如何验证\n\n- 9 月 29 日删除两个代理后的全量离线测试为 470/470、0 失败、0 跳过，本地模型集合、同步和受管身份都在其中；10 月 11 日未重跑。\n\n- 9 月 14 日的 Doctor 读到 Ollama 默认端点不可达，保留为当天记录；10 月 11 日只读查询 Ollama 为 0.35.0，4 个受管标签都在，没有发生成请求，也没有调用 GPU。11 月 4 日读到 Ollama 是 0.40.13，换版本后本机模型没有重新实跑。\n\n- 9 月 16 日旧环境实测 35B 由每秒 62–69 个 token 提到 170–171 个，按当天记录保留，没有重跑性能。\n\n## 与其他模块的关系\n\n本模块提供可选运行目标；引擎模块定义 Profile，验证模块决定该目标在当前是否真正可用。",
       "links": [
         {
           "text": "上一个模块 可恢复机器运行",

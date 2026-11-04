@@ -559,7 +559,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- llm_arbitration、uncertain_only、模型、11434 与 keep_alive=0 配置",
+        "text_ref": "原llm_arbitration配置（uncertain_o",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -578,7 +578,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- llm_arbitration、uncertain_only、模型、11434 与 keep_alive=0 配置",
+        "text_ref": "原llm_arbitration配置（uncertain_o",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

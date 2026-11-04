@@ -46,7 +46,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "78张现",
+        "text_ref": "91张现",
         "align": "left",
         "size": "medium",
         "columns": 4,
@@ -56,7 +56,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "**78 张**｜现在生效的认识卡",
+        "text_ref": "91张现在生效的认识卡",
         "align": "left",
         "size": "small",
         "columns": 1,
@@ -119,7 +119,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "78张现",
+        "text_ref": "91张现",
         "align": "left",
         "size": "medium",
         "columns": 2,
@@ -130,7 +130,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "**78 张**｜现在生效的认识卡",
+        "text_ref": "91张现在生效的认识卡",
         "align": "left",
         "size": "small",
         "columns": 1,
@@ -921,7 +921,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "材料从哪来（33类）",
+        "text_ref": "材料从哪来（37类）",
         "align": "left",
         "size": "large",
         "columns": 1,
@@ -961,7 +961,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "明确不接 5 类",
+        "text_ref": "明确不接4类",
         "align": "left",
         "size": "small",
         "columns": 1,
@@ -979,7 +979,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "材料从哪来（33类）",
+        "text_ref": "材料从哪来（37类）",
         "align": "center",
         "size": "large",
         "columns": 1,
@@ -1007,7 +1007,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "明确不接 5 类",
+        "text_ref": "明确不接4类",
         "align": "left",
         "size": "small",
         "columns": 1,
@@ -1302,7 +1302,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "全部功能（45 项）",
+        "text_ref": "全部功能（47项）",
         "align": "left",
         "size": "large",
         "columns": 1,
@@ -1406,7 +1406,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "全部功能（45 项）",
+        "text_ref": "全部功能（47项）",
         "align": "center",
         "size": "large",
         "columns": 1,
@@ -1541,7 +1541,7 @@
       {
         "type": "feature_card",
         "status_source": "page.registry.features",
-        "text_ref": "23日常推荐菜单",
+        "text_ref": "24日常推荐菜单",
         "align": "left",
         "size": "medium",
         "columns": 3,
@@ -1563,7 +1563,7 @@
       {
         "type": "feature_card",
         "status_source": "page.registry.features",
-        "text_ref": "25别的项目写回来",
+        "text_ref": "26别的项目写回来",
         "align": "left",
         "size": "medium",
         "columns": 3,
@@ -1615,7 +1615,7 @@
       {
         "type": "feature_card",
         "status_source": "page.registry.features",
-        "text_ref": "23日常推荐菜单",
+        "text_ref": "24日常推荐菜单",
         "align": "left",
         "size": "medium",
         "columns": 1,
@@ -1636,7 +1636,7 @@
       {
         "type": "feature_card",
         "status_source": "page.registry.features",
-        "text_ref": "25别的项目写回来",
+        "text_ref": "26别的项目写回来",
         "align": "left",
         "size": "medium",
         "columns": 1,
@@ -1670,7 +1670,7 @@
       {
         "type": "feature_card",
         "status_source": "page.registry.features",
-        "text_ref": "29导入新导出",
+        "text_ref": "31导入新导出",
         "align": "left",
         "size": "medium",
         "columns": 3,
@@ -1691,7 +1691,7 @@
       {
         "type": "feature_card",
         "status_source": "page.registry.features",
-        "text_ref": "41读之前先过资料锁",
+        "text_ref": "43读之前先过资料锁",
         "align": "left",
         "size": "medium",
         "columns": 3,
@@ -1721,7 +1721,7 @@
       {
         "type": "feature_card",
         "status_source": "page.registry.features",
-        "text_ref": "29导入新导出",
+        "text_ref": "31导入新导出",
         "align": "left",
         "size": "medium",
         "columns": 1,
@@ -1742,7 +1742,7 @@
       {
         "type": "feature_card",
         "status_source": "page.registry.features",
-        "text_ref": "41读之前先过资料锁",
+        "text_ref": "43读之前先过资料锁",
         "align": "left",
         "size": "medium",
         "columns": 1,

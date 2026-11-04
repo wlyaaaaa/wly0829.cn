@@ -27,14 +27,18 @@
   "parent": "daily-preferences",
   "status_line": {
    "state": "在用",
-   "as_of": "2026-10-11",
-   "source": "来源仓库 b334b3aa（北京 10/8 00:23）规则、合同与 Skill 一致；本次没有新的手机/云端会话、导出或回写实测，6 项导出测试保留 9/9 原日期"
+   "as_of": "2026-11-04",
+   "source": "理解库合同和同步回执",
+   "facts": [
+    "Muse 上次成功同步：11 月 3 日 08:20",
+    "Muse 上的内容 11 月 4 日没有回读核对"
+   ]
   }
  },
  "source": {
   "page": "sources/pages/daily-preferences-mobile-context-delivery/page.json",
-  "sha256": "1fb2cfec4d575cf31707f6df6fa3ed695ea8ac6f2908b3bc3fb07571fe5ef0c8",
-  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
+  "sha256": "10bdc19944e123d311efa0ab58a25f66460f2063dca30b0c31708d271812002a",
+  "converted_at_beijing": "2026-11-04T12:05:29+08:00"
  }
 }
 ---
@@ -86,9 +90,17 @@
       {
        "text": "在用",
        "state": "ok"
+      },
+      {
+       "text": "Muse 上次成功同步：11 月 3 日 08:20",
+       "state": "fact"
+      },
+      {
+       "text": "Muse 上的内容 11 月 4 日没有回读核对",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 理解库合同和同步回执",
      "row": "top"
     },
     {
@@ -128,9 +140,17 @@
       {
        "text": "在用",
        "state": "ok"
+      },
+      {
+       "text": "Muse 上次成功同步：11 月 3 日 08:20",
+       "state": "fact"
+      },
+      {
+       "text": "Muse 上的内容 11 月 4 日没有回读核对",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 理解库合同和同步回执"
     },
     {
      "type": "action_button",
@@ -173,7 +193,7 @@
 
 在手机或云端继续使用同一份现行理解，保留重要经历、当前更正和限制；新认识也回到原库，不让旧文件变成另一份当前档案。
 
-**当前情况：**手机经电脑连接共用原库的入口已确认；实际读取、回写和失败恢复仍按这次结果核对，不维护第二份当前档案。
+**当前情况：**手机经电脑连接共用原库的入口已确认；实际读取、回写和失败恢复仍按这次结果核对，不维护第二份当前档案。给 Muse 的那份选定背景是副本，不是第二份档案：本机回执记着最后一次成功同步是 11 月 3 日 08:20，11 月 3 日 08:24 那轮内容没变、没有调用；11 月 4 日本机校验通过，但 Muse 上现在是否还一致没有连过去核。
 
 具体测试保留各自日期，页面不实时探测运行状态。
 
@@ -534,6 +554,91 @@
 
 2. **交付与接续**　交回回答、依据与准确保存状态；连接或写入失败从已完成结果续作，不维护另一份现行档案。
 
+::screen{#daily-preferences-mobile-context-delivery-13 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "daily-preferences-mobile-context-delivery-13",
+  "section": "usage",
+  "title": "给 Muse 备的那份背景",
+  "scene": "",
+  "portrait": "",
+  "links": [],
+  "anchors": [
+   {
+    "id": "p-muse",
+    "text": "给 Muse 备的那份背景"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "给 Muse 备的那份背景",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "它是干什么的",
+     "columns": 3,
+     "last_full_width": false,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "给 Muse 备的那份背景",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "它是干什么的",
+     "columns": 1,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 给 Muse 备的那份背景
+
+## 它是干什么的
+
+Muse 是 Codex、Claude 查资料、比较条件时常借用的另一个 AI，它读不到这个库。所以从现行认识卡里挑对这些活有用的内容：背景、在做的事、偏好、尺码这些条件，兴趣和近况顺带，自然改写成一份《关于我》，再配一份协作说明，总共 1 万字以内，不凑满。它只是副本：事实以本库为准，Muse 那边的内容不会写回来。我不用操作；已经长期授权，也不用逐版过目。
+
+## 什么时候更新
+
+不是后台定时。每月总更新，以及平时理解库、学习求职、旅行更新收尾时，负责这次更新的 AI 看选定的内容变没变。没变：回执写“Muse 无变化，未调用”。变了：比如我换了方向，只替换“在做的事”这几个变化的小节，再回读核对，回执写“Muse 已同步：改了哪几处”。某张源卡变了，AI 自己重读这张卡、重新选段改写，不来问我。
+
+## 出问题时
+
+同步或回读失败：本机新版本和上次成功的版本都留着，回执写“本机已更新，Muse 待同步”，这次更新的 AI 接着做或明确交接，不当成没变化。发送前还有一道只读校验，防止把旧版本误发出去，这不是审批。资料锁着时不导出、不同步。回读对上只说明文件到了：第一次发送或结构迁移后，还要开新对话问一个依赖资料的小问题，才算它真用上了。
+
 ::screen{#daily-preferences-mobile-context-delivery-05 section="tech"}
 
 ```typeset
@@ -636,6 +741,8 @@
 
 3. 文件生成时间不代表所有经历或想法发生的时间；旧计划、假设和原材料中的操作安排不自动变成当前行动指令。
 
+4. 给 Muse 的选定背景是这条同库规则的明确例外：Codex、Claude 借 Muse 查资料、比较条件时用，兼顾我偶尔闲聊；只按协作用处选，总量 1 万字以内，不整份导出，事实、我的自述、历史和 AI 判断保留原有性质与日期。Muse 上只是副本，不反写本机；我已长期授权按需同步，不再逐版过目。
+
 ## 当前怎样实现
 
 - 手机或云端 AI 经已接通的电脑 MCP 在电脑上运行 daily-preferences.ps1，按问题选择 profile/evidence/facts/original；重要新原话与认识沿 record/snapshot/snapshot-batch 正常回写并回读，不直接改内部表或生成视图。
@@ -711,7 +818,13 @@
 
 - 两份 Markdown 使用 UTF-8 无 BOM；本地 manifest.json 的 schema（数据结构） 为 daily-preferences.mobile-export.v1，记录 generated_at、card_count、current_statement_count、未覆盖明示编号、源 snapshot_id 和每文件 bytes/characters/SHA-256。生成器的 token_estimate 为 null，不自动下载分词器。
 
-- 导出仅在本次确需独立文件时执行；只有用户当前还需要云文件，才经 google-workspace-direct 的现有提供方更新或新建所需目标并回读。不得自动恢复已归档的两个文件或日常上传流程。
+- 导出仅在本次确需独立文件时执行；只有用户当前还需要云文件，才经 google-workspace-direct 的现有提供方更新或新建所需目标并回读。不得自动恢复已归档的两个文件或日常上传流程。这条只管旧 Drive 完整快照；Muse 的按需同步见下面三条。
+
+- tools/export_mobile_context.py --for muse 依本机选段定位生成《给 Muse 的我.md》（对外标题《关于我》）、《协作说明.md》和 manifest.json，都在 E:\PersonalData\日常偏好\Muse同步\，不进 Git。selection.json 存选段在源卡字段里的起止位置和字段哈希，可带 wording 自然改写；程序只查定位、版本、字段、文件一致性和 1 万字上限，语义由当前 AI 判断。源卡变了返回 projection_refresh_required，当前 AI 重读这张卡，用 muse_profile.py select --replace-source <卡键> 只替换它的全部选段，不交我逐段选。
+
+- tools/muse_profile.py sync --update-ref <这轮更新的定位> 重新生成后比较 last-sent/receipt.json：相同返回 unchanged，不调用 Muse；不同就经共用命令 profile sync 在同一连接上确认在线、推送、回读。远端 memory/muse-owner-context.md 是目录，各字段一个文件，不变的不写，退出的字段清空副本并移除引用；memory/muse-collaboration.md 只在协作说明改变时替换。回读成功才保存 last-sent 和回执、清 pending.json。写入共用本机文件锁，等 30 秒仍占用返回 profile_update_in_progress。
+
+- 发送前的 muse_profile.py validate 只读：核对资料锁、现行范围、源卡选段重建、manifest 和两份文件的哈希，防旧版本误发，不是审批；不取写锁、不写文件、不联网。
 
 ::screen{#daily-preferences-mobile-context-delivery-07 section="tech"}
 
@@ -790,6 +903,10 @@
 
 7. 确需云文件时再更新并核对实际目标
 
+8. 个人总更新以及平时理解库、学习求职、旅行更新收尾：选定背景变了才重选受影响小节并 sync，没变写“Muse 无变化，未调用”
+
+9. 首次发送或存储结构迁移后，再开新会话问一个依赖资料的小问题，验证记忆真的用上
+
 ::screen{#daily-preferences-mobile-context-delivery-08 section="tech"}
 
 ```typeset
@@ -848,6 +965,7 @@
 | 电脑 MCP | 手机或云端 AI 在电脑上执行既有能力的通道；本项目复用原库和命令，不另建云端数据库。 |
 | same-source export（同源导出） | 确需独立文件时，两份阅读文件由同一次现行 profile 结果生成，不在另一处手工维护本人认识。 |
 | manifest（生成清单） | 记录本次源版本和输出字节，便于核对交付；它本身不是云端更新或实际使用的证明。 |
+| 选定背景 | 从现行卡选出对协作有用的片段，同源改写后给 Muse 的副本；不另存一套本人认识，也不是第二份现行档案。 |
 | readback（回读） | 原库回写后核对实际版本与内容；确有云文件更新时再核对外部目标。命令返回、文件生成和实际采用不是同一个证据。 |
 
 ## 专业定义
@@ -937,7 +1055,9 @@
 
 - 不公开或在网页刷新中读取手机背景正文、原话及云文件 ID。
 
-- 不建立手机接入层、后台同步或独立手机画像。
+- 不建立手机接入层、后台同步或独立手机画像；Muse 的选定背景只在更新收尾时按变化同步，不是后台同步，Muse 上的内容也不反写本库。
+
+- 资料锁着或状态不明时，不导出、不同步、不读我在 Muse 里的对话，也不借它的记忆绕开资料锁；旧资料会影响判断时，那题不用 Muse 做涉及我情况的判断。
 
 - 导出当前阅读内容不等于导出全部原件、数据库或历史。
 
@@ -1024,6 +1144,12 @@
 
 - **本次明确需要的云文件更新或正文回读失败**：报告精确完成阶段，核对同一目标的实际内容，不声称已更新或无变化，也不自动重启旧文件维护。
 
+- **Muse 同步或回读失败**：保留 pending.json 和上次成功回执，这次回执写“本机已更新，Muse 待同步”，当前更新的 AI 用同一命令继续或明确交接；不当成无变化，也不加长期定时。
+
+- **源卡变了或退出，旧选段对不上**：返回 projection_refresh_required，当前 AI 重读重选；卡退出就删掉对应选段。空选段或结构异常会拒绝，不能以空选择清空整份背景。
+
+- **回读通过但不知道 Muse 记住了没有**：文件回读不等于记忆生效；首次发送或结构迁移后由主对话另验，没验就写没验。
+
 - **阅读后发现概括缺少会改变判断的语境**：修正拥有该认识的源卡并回读；只有当前确需导出时才重新生成，不手改第二份档案。
 
 ::screen{#daily-preferences-mobile-context-delivery-11 section="tech"}
@@ -1101,6 +1227,8 @@
 
 - **tools/export_mobile_context.py**：完整生成、可移植引用、未覆盖明示与输出清单。
 
+- **DOMAIN_CONTRACT.md“Muse 的选定背景与按需同步” / docs/muse-profile.md / tools/muse_profile.py**：选取范围、长期授权、同步时机和实际命令。
+
 - **tests/test_mobile_context_export.py**：六项完全虚构回归，不接触私人资料或云端。
 
 - **AGENTS.md / daily-preferences Skill**：当前用户确认的电脑 MCP 使用方式与正常能力发现约定。
@@ -1110,6 +1238,8 @@
 - 2026-09-09 在 3bd9c8e 源码运行 6 项虚构导出测试通过，覆盖全部卡与完整详述、未覆盖明示及时间语境、普通事实和网页链接保真、UTF-8 与清单哈希、空库与重复键失败。
 
 - 2026-10-11 核对来源 b334b3aa：AGENTS、DOMAIN_CONTRACT 与 Skill 仍一致写明本人确认接通电脑 MCP、复用同库入口，以及两份旧 Drive 文件停止日常维护；导出器源码仍有上面这些行为，这期间没有相关产品更新。
+
+- Muse：2026-11-04 09:13 只读 validate 退出 0（ok=true、status=validated，本机两份文件及可生成的 30 个远端文件投影一致）；本机回执记 2026-11-03 08:20:57 synced、remote_status=verified、migration=false、写入 18,792 字节；2026-11-03 08:24:56 那轮 status=unchanged，没有调用；pending.json 不存在，manifest 没有缺字段。这些读的是本机文件，不是远端回读。
 
 - 历史源任务曾完成同源文件生成和云端正文回读；该结果只属于当时文件，不作为当前理解版本或新手机会话的证明。
 
@@ -1185,7 +1315,7 @@
 
 ## 依据与来源（二）
 
-- 本页没有重新读取私人导出正文、连接手机、执行导出或云端读写，测试 0；10 月 11 日只执行了电脑上的只读入口，不证明新的手机会话。实际任务仍按真正命令、必要阅读与回写结果验收，不增逐平台准入门。
+- 本页没有重新读取私人导出正文、连接手机、执行导出或云端读写，测试 0；10 月 11 日只执行了电脑上的只读入口，不证明新的手机会话。实际任务仍按真正命令、必要阅读与回写结果验收，不增逐平台准入门。2026-11-04 也没有调用 Muse、发消息或做记忆验收：Muse 上现在的内容和记忆是否仍与本机一致，Unknown。
 
 ## 与其他模块的关系
 

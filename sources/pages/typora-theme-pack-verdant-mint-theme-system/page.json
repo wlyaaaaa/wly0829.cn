@@ -7,15 +7,18 @@
   "parent": "typora-theme-pack",
   "status_line": {
     "state": "偶尔用",
-    "as_of": "2026-10-11",
-    "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未操作 Typora 窗口。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+    "as_of": "2026-11-04",
+    "source": "项目源码和只读核对",
+    "facts": [
+      "Typora 实际显示 11 月 4 日没有打开确认"
+    ]
   },
   "screens": [
     {
       "id": "typora-theme-pack-verdant-mint-theme-system-01",
       "section": "top",
       "title": "一套日常编辑主题",
-      "text": "# 一套日常编辑主题\n\n〔回到项目 → Typora 薄荷主题〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nTypora Theme Pack · 功能说明\n\n让 Typora 的正文、标题、表格和代码有一致的阅读层次。\n\n**当前情况：**Typora 的主题设置仍指向 Verdant Mint；两份主题文件都装着，但只有入口文件和源码一致，共享样式文件还少了 9 月 29 日加的表头底色一行，需要重装一次才算到位。编辑器里实际显示成什么样，这次没有打开确认。\n\n项目源码：公开仓库",
+      "text": "# 一套日常编辑主题\n\n〔回到项目 → Typora 薄荷主题〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nTypora Theme Pack · 功能说明\n\n让 Typora 的正文、标题、表格和代码有一致的阅读层次。\n\n**当前情况：**Typora 的主题设置仍指向 Verdant Mint；两份主题文件都装着，11 月 4 日核对都和源码一致，9 月 29 日加的表头底色这一行也在了。编辑器里实际显示成什么样，这次没有打开确认。\n\n项目源码：公开仓库",
       "links": [
         {
           "text": "回到项目 → Typora 薄荷主题",
@@ -65,7 +68,7 @@
       "id": "typora-theme-pack-verdant-mint-theme-system-03",
       "section": "usage",
       "title": "结果怎么看",
-      "text": "## 结果怎么看\n\n## 正常时\n\n两份主题文件都已安装并和源码一致；在 Typora 里手动选择后，再看正文、表格和代码的真实显示。现在共享文件不一致，还没达到这一步。\n\n## 发现问题时\n\n编辑器没显示新样式时先重开并确认选中了 Verdant Mint；verify 报告某个文件不一致，就重新运行 install。\n\n## 入口不可用或证据不足时\n\n没有可用的 Typora 时只能检查文件和样张，不能称原生编辑器画面已验收。",
+      "text": "## 结果怎么看\n\n## 正常时\n\n两份主题文件都已安装并和源码一致；在 Typora 里手动选择后，再看正文、表格和代码的真实显示。11 月 4 日文件一致这一步已满足，实际显示还没打开看。\n\n## 发现问题时\n\n编辑器没显示新样式时先重开并确认选中了 Verdant Mint；verify 报告某个文件不一致，就重新运行 install。\n\n## 入口不可用或证据不足时\n\n没有可用的 Typora 时只能检查文件和样张，不能称原生编辑器画面已验收。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -89,7 +92,7 @@
       "id": "typora-theme-pack-verdant-mint-theme-system-05",
       "section": "tech",
       "title": "技术实现与依据",
-      "text": "## 技术实现与依据\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n2026-10-11 verify 结果 verified=false：入口 CSS 一致，共享 base.css 与源码不一致（少一行表头底色）；主题设置指向 verdant-mint.css\n\n## 关键规则与设计选择\n\n1. 菜单仅有 verdant-mint.css 一个新增入口，共享 base 不单独列入菜单。\n\n2. 中文字体优先 HarmonyOS Sans SC、Noto Sans SC 和微软雅黑，最终效果受实际字体安装影响。\n\n## 当前怎样实现\n\n- themes/verdant-mint.css 定义薄荷绿变量并导入 themes/verdant/base.css（两份合计 720 行）；基础文件负责正文、标题、引用、表格、列表和打印相关结构。9 月 29 日源码给表头单元格加了 `background: var(--table-head);`，已装的共享文件还是旧版，差的就是这一行。\n\n- CodeMirror（代码编辑器组件）内部 pre / .CodeMirror-line 重置边框、圆角、背景与阴影，避免多行代码继承外层卡片效果。\n\n## 执行流程\n\n1. 读取入口和共享 CSS\n\n2. 安装到主题目录\n\n3. 重开 Typora 并选中主题（安装不会自动选）\n\n4. 用包含表格与代码的文档检查",
+      "text": "## 技术实现与依据\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n2026-11-04 verify 结果 verified=true：两份 CSS 都和源码一致；主题设置指向 verdant-mint.css\n\n## 关键规则与设计选择\n\n1. 菜单仅有 verdant-mint.css 一个新增入口，共享 base 不单独列入菜单。\n\n2. 中文字体优先 HarmonyOS Sans SC、Noto Sans SC 和微软雅黑，最终效果受实际字体安装影响。\n\n## 当前怎样实现\n\n- themes/verdant-mint.css 定义薄荷绿变量并导入 themes/verdant/base.css（两份合计 720 行）；基础文件负责正文、标题、引用、表格、列表和打印相关结构。9 月 29 日源码给表头单元格加了 `background: var(--table-head);`，已装的共享文件现在也含这一行。\n\n- CodeMirror（代码编辑器组件）内部 pre / .CodeMirror-line 重置边框、圆角、背景与阴影，避免多行代码继承外层卡片效果。\n\n## 执行流程\n\n1. 读取入口和共享 CSS\n\n2. 安装到主题目录\n\n3. 重开 Typora 并选中主题（安装不会自动选）\n\n4. 用包含表格与代码的文档检查",
       "links": [],
       "anchors": [
         {
@@ -138,11 +141,19 @@
       "id": "typora-theme-pack-verdant-mint-theme-system-08",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- 主题入口\n\n- 公共结构与代码行重置\n\n## 如何验证\n\n- 2026-10-11 16:31 只读 verify：入口 CSS 源码与已装文件一致，共享 CSS 不一致，总结果 verified=false；没有重装。配置选中、文件一致、原生实际显示是三件分别验证的事。\n\n- 代码行回归测试仍在源码里；最近能直接回读的通过记录是 2026-09-29 01:51 GitHub 自动测试 21 项全部通过，这次没有运行。已安装 Typora 1.14.8，原生窗口和代码块显示这次没有操作确认。\n\n## 与其他模块的关系\n\n服务于日常编辑，三个导出样式独立选择。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- 主题入口\n\n- 公共结构与代码行重置\n\n## 如何验证\n\n- 文件核对结果见〔安装与恢复〕，11 月 4 日两份都一致。配置选中、文件一致、原生实际显示是三件分别验证的事。\n\n- 代码行回归测试仍在源码里；自动测试的数量和最近一次结果见〔PDF 导出〕，这次没有运行。已安装 Typora 1.14.8，原生窗口和代码块显示这次没有操作确认。\n\n## 与其他模块的关系\n\n服务于日常编辑，三个导出样式独立选择。",
       "links": [
         {
           "text": "下一个模块 导出版式",
           "href": "/projects/typora-theme-pack/multi-scenario-export-profiles/"
+        },
+        {
+          "text": "安装与恢复",
+          "href": "/projects/typora-theme-pack/theme-installation-and-lifecycle/"
+        },
+        {
+          "text": "PDF 导出",
+          "href": "/projects/typora-theme-pack/transactional-pdf-export-pipeline/"
         }
       ],
       "anchors": [],
@@ -153,7 +164,7 @@
     }
   ],
   "based_on": {
-    "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
-    "commit_time": "2026-09-28T12:36:45-05:00"
+    "commit": "9cefc0e1e41d5351693071cfbb7452f5deda93c6",
+    "commit_time": "2026-10-20T03:21:43-05:00"
   }
 }

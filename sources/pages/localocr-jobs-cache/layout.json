@@ -246,7 +246,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- observer.py 提供只读阶段、模型、页进度和耗时投影；这不是另一套任务调度，也不提供 OCR（光学字符识别） token 生成速率。",
+        "text_ref": "- 单独的 observer.py 和任务列表接口 10 月 20 日已取消",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -266,7 +266,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- observer.py 提供只读阶段、模型、页进度和耗时投影；这不是另一套任务调度，也不提供 OCR（光学字符识别） token 生成速率。",
+        "text_ref": "- 单独的 observer.py 和任务列表接口 10 月 20 日已取消",
         "columns": 1,
         "icons": "none",
         "illustration": "none",

@@ -248,7 +248,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 主工作站承担正式 E/V/Z、G 在线备份和本地重型 GPU/OCR/ASR；笔记本是副驾驶和备用终端，不复制主机职责。",
+        "text_ref": "1. 主工作站承担正式 E/V、G 在线备份",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -272,7 +272,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 主工作站承担正式 E/V/Z、G 在线备份和本地重型 GPU/OCR/ASR；笔记本是副驾驶和备用终端，不复制主机职责。",
+        "text_ref": "1. 主工作站承担正式 E/V、G 在线备份",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -332,7 +332,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 只有计算机名和活动用户根都与登记一致、本地规则入口存在时，副驾驶账本才适用；其他主机返回不适用。副机规则版本为 E215，副机 PCConfig 检出为 82d2141（10 月 8 日）；这是副机自己的现场，不代表已同步到主机当前规则版本。",
+        "text_ref": "- 只有计算机名和活动用户根都与登记一致",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -352,7 +352,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 只有计算机名和活动用户根都与登记一致、本地规则入口存在时，副驾驶账本才适用；其他主机返回不适用。副机规则版本为 E215，副机 PCConfig 检出为 82d2141（10 月 8 日）；这是副机自己的现场，不代表已同步到主机当前规则版本。",
+        "text_ref": "- 只有计算机名和活动用户根都与登记一致",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -694,7 +694,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 副机 PCConfig 检出 82d2141（10 月 8 日 10:03），已装 codex-memory 引擎源码摘要一致",
+        "text_ref": "- 11 月 4 日 11:14 副机 ComputerContext",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -713,7 +713,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 副机 PCConfig 检出 82d2141（10 月 8 日 10:03），已装 codex-memory 引擎源码摘要一致",
+        "text_ref": "- 11 月 4 日 11:14 副机 ComputerContext",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

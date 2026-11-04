@@ -182,7 +182,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **系统核对并处理**　排开缓存和完全重复，照片视频比较画面意义、质量与更完整版本，录音文档看已有内容证据；逐件给出保留理由、退出或待我决定。",
+        "text_ref": "1. **系统核对并处理**　排开缓存和完全重复，照片视频比较画面意义、质量与更完整版本，有人的合影逐张逐脸放大比（有没有闭眼、表情、清晰度、有没有被挡或裁掉）再选代表，录音文档看已有内容证据；逐件给出保留理由、退出或待我决定。",
         "row": "start",
         "columns": 1,
         "icons": "none",
@@ -214,7 +214,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **系统核对并处理**　排开缓存和完全重复，照片视频比较画面意义、质量与更完整版本，录音文档看已有内容证据；逐件给出保留理由、退出或待我决定。",
+        "text_ref": "1. **系统核对并处理**　排开缓存和完全重复，照片视频比较画面意义、质量与更完整版本，有人的合影逐张逐脸放大比（有没有闭眼、表情、清晰度、有没有被挡或裁掉）再选代表，录音文档看已有内容证据；逐件给出保留理由、退出或待我决定。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -279,6 +279,13 @@
         "icons": "none",
         "illustration": "none",
         "connector": "none"
+      },
+      {
+        "type": "bullet_list",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "text_ref": "- face-compare 点名同一份 review"
       }
     ]
   },
@@ -299,6 +306,13 @@
         "icons": "none",
         "illustration": "none",
         "connector": "none"
+      },
+      {
+        "type": "bullet_list",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "text_ref": "- face-compare 点名同一份 review"
       }
     ]
   },

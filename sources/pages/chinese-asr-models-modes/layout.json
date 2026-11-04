@@ -22,12 +22,12 @@
       },
       {
         "type": "prose",
-        "text_ref": "我按用途选路线：对电脑说话打字用Qwen3-ASR-1.7B；先快速看录音内容用SenseVoiceSmall；平常的录音默认用Qwen与SenseVoice两路严格核对；重要录音点名走高质量路线，由",
+        "text_ref": "我按用途选路线：对电脑说话打字用Qwen3-ASR-1.7B",
         "row": "top"
       },
       {
         "type": "prose",
-        "text_ref": "当前情况：已有快速初稿、日常双模型核对、重要录音高质量路线、带逐句时间的Paraformer路线和疑难云复核。文件转写现在登记4个识别引擎（FireRedASR2-LLM、Qwen3-ASR-1.7B",
+        "text_ref": "当前情况：已有云优先转写、快速初稿、本地双模型核对、重要录音",
         "row": "top"
       },
       {
@@ -58,11 +58,11 @@
       },
       {
         "type": "prose",
-        "text_ref": "我按用途选路线：对电脑说话打字用Qwen3-ASR-1.7B；先快速看录音内容用SenseVoiceSmall；平常的录音默认用Qwen与SenseVoice两路严格核对；重要录音点名走高质量路线，由"
+        "text_ref": "我按用途选路线：对电脑说话打字用Qwen3-ASR-1.7B"
       },
       {
         "type": "prose",
-        "text_ref": "当前情况：已有快速初稿、日常双模型核对、重要录音高质量路线、带逐句时间的Paraformer路线和疑难云复核。文件转写现在登记4个识别引擎（FireRedASR2-LLM、Qwen3-ASR-1.7B"
+        "text_ref": "当前情况：已有云优先转写、快速初稿、本地双模型核对、重要录音"
       },
       {
         "type": "illustration",
@@ -197,7 +197,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **先说要做什么**　听写、快速初稿、日常严格转写、重要录音高质量复核、多人分段和已知文案对齐的输入与输出不同；先按真实请求选择路线。",
+        "text_ref": "1先说要做什么听写、云优先转写、微信实时语音、快速初稿、本地",
         "row": "start",
         "columns": 1,
         "icons": "none",
@@ -233,7 +233,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **先说要做什么**　听写、快速初稿、日常严格转写、重要录音高质量复核、多人分段和已知文案对齐的输入与输出不同；先按真实请求选择路线。",
+        "text_ref": "1先说要做什么听写、云优先转写、微信实时语音、快速初稿、本地",
         "columns": 1,
         "icons": "none",
         "illustration": "none",

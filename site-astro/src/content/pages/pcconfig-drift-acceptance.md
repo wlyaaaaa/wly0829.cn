@@ -28,13 +28,17 @@
   "status_line": {
    "state": "已退役",
    "as_of": "2026-10-11",
-   "source": "统一漂移检查与分区验收器已于 2026-09-28 随综合自查删除（PCConfig 提交 348632a2）；现在按问题分别读恢复、运行时、任务和配置各自的入口。"
+   "source": "退役提交",
+   "facts": [
+    "统一检查器 9 月 28 日已删除",
+    "现在按问题读各自负责的入口"
+   ]
   }
  },
  "source": {
   "page": "sources/pages/pcconfig-drift-acceptance/page.json",
-  "sha256": "0ca1bf1713a779d092a36c7d85995f481e13b4ff3060d34d2f37e8bfa3719cfe",
-  "converted_at_beijing": "2026-11-04T10:21:42+08:00"
+  "sha256": "b9bca5e7abd211b6b9a4f242ec63d7b79fced569fb55f021c62f9de46bb3b315",
+  "converted_at_beijing": "2026-11-04T12:05:33+08:00"
  }
 }
 ---
@@ -82,9 +86,17 @@
       {
        "text": "已退役",
        "state": "ok"
+      },
+      {
+       "text": "统一检查器 9 月 28 日已删除",
+       "state": "fact"
+      },
+      {
+       "text": "现在按问题读各自负责的入口",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 10 月 11 日 · 退役提交",
      "row": "top"
     },
     {
@@ -124,9 +136,17 @@
       {
        "text": "已退役",
        "state": "ok"
+      },
+      {
+       "text": "统一检查器 9 月 28 日已删除",
+       "state": "fact"
+      },
+      {
+       "text": "现在按问题读各自负责的入口",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 10 月 11 日 · 退役提交"
     },
     {
      "type": "action_button",

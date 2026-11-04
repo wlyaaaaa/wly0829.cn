@@ -27,18 +27,18 @@
   "parent": "devconfig-backup",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "DevConfig Backup 公开仓库 52d3356（北京时间 10 月 11 日 08:26 提交）的恢复脚本与 docs/recovery.md，北京时间 10 月 11 日 13:33 回读的计划任务，以及 9 月 18 日的真实恢复验收",
+   "as_of": "2026-11-04",
+   "source": "项目仓库和计划任务回读",
    "last": {
-    "label": "快照核对",
-    "at": "2026-10-11 13:33"
+    "label": "任务回读",
+    "at": "2026-11-04 11:40"
    }
   }
  },
  "source": {
   "page": "sources/pages/devconfig-backup-recovery-and-tasks/page.json",
-  "sha256": "a9cb65bc80184a42afa4eea5d28c57bb52b6037dbd1a1dcacaa07366cd3e9a14",
-  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
+  "sha256": "a0beb888ec234169836f6f89533fead2ca88a79259798ba774b5c455ea1adec6",
+  "converted_at_beijing": "2026-11-04T12:05:30+08:00"
  }
 }
 ---
@@ -88,11 +88,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 快照核对 10 月 11 日 13:33",
+       "text": "常用 · 任务回读 11 月 4 日 11:40",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目仓库和计划任务回读",
      "row": "top"
     },
     {
@@ -130,11 +130,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 快照核对 10 月 11 日 13:33",
+       "text": "常用 · 任务回读 11 月 4 日 11:40",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目仓库和计划任务回读"
     },
     {
      "type": "action_button",
@@ -177,9 +177,9 @@ DevConfig Backup · 功能说明
 
 真正出事时，包旁边的回执与清单就能帮助检查，不必再找丢失电脑里的 state。先预览恢复计划，再解到空目录或明确替换并留回滚点，随后按 PCConfig 重建机器路径和任务；状态窗口能看过程，但关闭窗口不算取消实际备份。
 
-当前情况：配置包在独立目录还原并逐文件核对已有 9 月 18 日验收；恢复的是清单实际收录的文件，包里登记了警告的文件不会自动从旧包补回。完整新机、软件登录、带警告的微信副本恢复和微信实际使用仍未验收。
+当前情况：四个自动任务都启用；配置存 G、配置上云、微信存 G 最近一次完成，微信上云今天 11:00 开始、11:40 仍在运行，尚未结束。配置包在独立目录还原并逐文件核对已有 9 月 18 日验收；恢复的是清单实际收录的文件，包里登记了警告的文件不会自动从旧包补回。完整新机、软件登录、带警告的微信副本恢复和微信实际使用仍未验收。
 
-项目快照核对于 2026-10-11 13:33（北京时间）；具体测试保留各自日期，页面不实时探测运行状态。
+项目快照核对于 2026-11-04 11:40（北京时间）；具体测试保留各自日期，页面不实时探测运行状态。
 
 项目源码：公开仓库
 
@@ -682,7 +682,7 @@ DevConfig Backup · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- Setup-ScheduledTasks.ps1 与 ScheduledTask-Registration.Common.ps1 支持只收敛选定的已登记任务（-TaskName），保留既有时序和设置；四个正式任务都启用、失败最多重试 3 次（配置本地间隔 10 分钟、配置云端 15 分钟、微信 G 盘 15 分钟、微信云端 30 分钟）；微信 Hot 使用当前交互用户 Highest，其余 Limited。临时小时监控仍由独立安装器管理，本轮未重装任何任务。",
+     "text_ref": "- Setup-ScheduledTasks.ps1 与 ScheduledTask-Registration.Common.ps1 支持只收敛选定的已登记任务（-TaskName），保留既有时序和设置；微信 Hot 使用当前交互用户 Highest，其余 Limited。临时小时监控仍由独立安装器管理，这次没有重装任何任务。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -700,7 +700,7 @@ DevConfig Backup · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- Setup-ScheduledTasks.ps1 与 ScheduledTask-Registration.Common.ps1 支持只收敛选定的已登记任务（-TaskName），保留既有时序和设置；四个正式任务都启用、失败最多重试 3 次（配置本地间隔 10 分钟、配置云端 15 分钟、微信 G 盘 15 分钟、微信云端 30 分钟）；微信 Hot 使用当前交互用户 Highest，其余 Limited。临时小时监控仍由独立安装器管理，本轮未重装任何任务。",
+     "text_ref": "- Setup-ScheduledTasks.ps1 与 ScheduledTask-Registration.Common.ps1 支持只收敛选定的已登记任务（-TaskName），保留既有时序和设置；微信 Hot 使用当前交互用户 Highest，其余 Limited。临时小时监控仍由独立安装器管理，这次没有重装任何任务。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -715,13 +715,21 @@ DevConfig Backup · 功能说明
 
 ## 技术实现与依据（二）
 
-- Setup-ScheduledTasks.ps1 与 ScheduledTask-Registration.Common.ps1 支持只收敛选定的已登记任务（-TaskName），保留既有时序和设置；四个正式任务都启用、失败最多重试 3 次（配置本地间隔 10 分钟、配置云端 15 分钟、微信 G 盘 15 分钟、微信云端 30 分钟）；微信 Hot 使用当前交互用户 Highest，其余 Limited。临时小时监控仍由独立安装器管理，本轮未重装任何任务。
+- Setup-ScheduledTasks.ps1 与 ScheduledTask-Registration.Common.ps1 支持只收敛选定的已登记任务（-TaskName），保留既有时序和设置；微信 Hot 使用当前交互用户 Highest，其余 Limited。临时小时监控仍由独立安装器管理，这次没有重装任何任务。
+
+- 现场任务（11 月 4 日 11:40 回读，北京时间）：DevConfigBackup-Local 每天 12:05 加登录后 20 分钟，最近 11 月 3 日 16:21:18 退出 0；DevConfigBackup-Drive-Daily 每天 13:00 有网才启动，最近 11 月 3 日 13:00:01 退出 0；WeChatBackup-Hot-Daily 每天 09:30，最近 11 月 4 日 09:30:01 退出 0；WeChatBackup-Drive-Weekly 名字是旧的，实际每天 11:00 有网才启动，最近 11 月 4 日 11:00:01 启动，11:40 仍为 Running、结果码 267009（表示正在运行）；WeChatDrive-Monitor-Hourly 仍停用，它显示的下次时间不会真的执行。
+
+- 四个任务的设置里 RestartCount 仍是 3（配置本地间隔 10 分钟、配置云端 15 分钟、微信 G 盘 15 分钟、微信云端 30 分钟），但现行约定不把它当业务失败的补跑承诺，业务失败由下一次定时运行自然重跑（docs/recovery.md）。
+
+- 配置的两个隐藏任务在同一把输出锁上排队：Local/Hot 最多等 3,600 秒，Drive 最多等 7,200 秒，拿到锁才重新采集或重读当前包，等满报 backup_resource_wait_timeout；手动入口默认等 0 秒，忙就退出。
+
+- 源码默认钟点和现场不同：Setup-ScheduledTasks.ps1 不传参数时是本机钟面 23:05、00:00、20:30、22:00，按现在的 UTC-7 换算成北京 14:05、15:00、11:30、13:00，而现场是 12:05、13:00、09:30、11:00。这次没有重新注册，所以不能说用默认安装器重装一定保持现在的时刻；重装后要逐项回读。
 
 - 注册器先拒绝别人的同名任务，保存精确 XML、动作与启停前像；任何更新或回读失败按原定义恢复，用户原来暂停的任务不能被重新启用。
 
 - Hidden VBS 启动脚本（Backup-DevConfig-Hidden.vbs 等）隐藏黑框并完整保留并透传退出码。
 
-- 恢复测试分别验证包哈希/清单、危险路径、替换前像、逐文件内容与应用验收状态；源码回归、9 月 18 日隔离恢复和网页本轮只读状态三个证据层互不替代。
+- 恢复测试分别验证包哈希/清单、危险路径、替换前像、逐文件内容与应用验收状态；源码回归、9 月 18 日隔离恢复和网页只读状态三个证据层互不替代。
 
 ## 执行流程
 
@@ -796,7 +804,7 @@ DevConfig Backup · 功能说明
 
 6. 先用默认 G 源或明确的 -BackupRoot 本地/USB 目录做只读预检；确认路径与客户端状态后才 Execute，最后登录官方客户端验收。源目录里如果保留着带警告的旧文件，整树哈希可能与清单对不上而被拒绝（读代码可见，没有实际跑过）。-DriveOnly 仍是未完成真实联网验收的兼容路径。
 
-7. Local 打包时会把已有的 state/rclone-remote-binding.json 复制进包内 _manifests（只含非秘密别名，不含 OAuth/token）。新机重新执行 rclone config 后，再把这份别名选择回填到 state，运行 Setup-ScheduledTasks.ps1 并逐项查看四任务状态。
+7. Local 打包时会把已有的 state/rclone-remote-binding.json 复制进包内 _manifests（只含非秘密别名，不含 OAuth/token）。新机重新执行 rclone config 后，再把这份别名选择回填到 state，运行 Setup-ScheduledTasks.ps1 并逐项查看四任务的状态和触发时刻。
 
 ::screen{#devconfig-backup-recovery-and-tasks-08 section="tech"}
 
@@ -1203,9 +1211,9 @@ DevConfig Backup · 功能说明
 
 - 9 月 18 日来源验收已执行配置包隔离恢复，8,640 文件、8,531,705,353 字节的全树 SHA-256 一致；当时 15 个检查脚本在 PowerShell 7 和 5.1 下共 30 组全部通过。没有据此声称微信官方客户端已恢复。
 
-- 现在源码里有 27 个 Assert 检查脚本和 1 个 Python 测试文件，覆盖任务所有权、精确前像、失败回滚和恢复合同；本轮运行 0 个测试、0 次恢复，不重新注册或启停任何生产任务，只在 13:33 只读回读了四个任务的设置和时间。
+- 现在源码里有 27 个 Assert 检查脚本和 1 个 Python 测试文件，覆盖任务所有权、精确前像、失败回滚和恢复合同；这次运行 0 个测试、0 次恢复，不重新注册或启停任何生产任务，只在 11 月 4 日 11:40 只读回读了任务的设置和时间。
 
-- 本轮没有在干净 Windows 上导入注册表、Wi-Fi 或整套任务，没有恢复过带警告的微信副本，也没有测量恢复耗时。
+- 这次没有在干净 Windows 上导入注册表、Wi-Fi 或整套任务，没有恢复过带警告的微信副本，也没有测量恢复耗时。
 
 ## 与其他模块的关系
 

@@ -286,7 +286,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 受保护判断专用角色在源码里仍写死为 gpt-6-sol/high 常规与 gpt-6-astra/high 重大后果两档，均只接受agent_type/model/reasoning_effort/task_name/message五字段；wait_ms、thread_id、reply_to、fork_turns连null也不可传。我的 AI 规则后来已调整选型，但这里的代码尚未跟着改，属于待同步的差异。Sol 遇升级条件交回原父，角色名不授予模型身份、principal（受验证的执行主体） 或实施授权。错误参数与身份分别返回可纠正代码及五字段说明，不回显私密请求、不创建子会话；旧父会话可在同一会话消费错误后纠正，不降级普通角色绕过保护。",
+        "text_ref": "- 受保护判断专用角色的名字和帮助里仍写着 gpt-6-sol/high 常规与 gpt-6-astra/high 重大后果两档，均只接受agent_type/model/reasoning_effort/task_name/message五字段；wait_ms、thread_id、reply_to、fork_turns连null也不可传。执行前会把请求和该角色的基准型号分别交给中央解析器，比较解析后的身份，再使用解析出的 model/effort，所以不能只看常量就判仍派旧 Sol。11 月 4 日 09:12 用已装的 `GetDesktopModelPlan.ps1 -ResolveModel` 只读解析：gpt-6-sol/high → gpt-6.1-sol/ultra（source=predecessor、replaced=true），gpt-6-astra/high 不变（replaced=false）。接口仍要求请求里写 reasoning_effort=high，这和归一后的有效档位是两层，不能把接口要求读成 ultra。这只证明当前源码和已装 helper 的选择结果：没有确认正在运行的桌面桥已加载这份实现，也没有创建受保护判断或真实厂商调用。Sol 遇升级条件交回原父，角色名不授予模型身份、principal（受验证的执行主体） 或实施授权。错误参数与身份分别返回可纠正代码及五字段说明，不回显私密请求、不创建子会话；旧父会话可在同一会话消费错误后纠正，不降级普通角色绕过保护。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -306,7 +306,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- 受保护判断专用角色在源码里仍写死为 gpt-6-sol/high 常规与 gpt-6-astra/high 重大后果两档，均只接受agent_type/model/reasoning_effort/task_name/message五字段；wait_ms、thread_id、reply_to、fork_turns连null也不可传。我的 AI 规则后来已调整选型，但这里的代码尚未跟着改，属于待同步的差异。Sol 遇升级条件交回原父，角色名不授予模型身份、principal（受验证的执行主体） 或实施授权。错误参数与身份分别返回可纠正代码及五字段说明，不回显私密请求、不创建子会话；旧父会话可在同一会话消费错误后纠正，不降级普通角色绕过保护。",
+        "text_ref": "- 受保护判断专用角色的名字和帮助里仍写着 gpt-6-sol/high 常规与 gpt-6-astra/high 重大后果两档，均只接受agent_type/model/reasoning_effort/task_name/message五字段；wait_ms、thread_id、reply_to、fork_turns连null也不可传。执行前会把请求和该角色的基准型号分别交给中央解析器，比较解析后的身份，再使用解析出的 model/effort，所以不能只看常量就判仍派旧 Sol。11 月 4 日 09:12 用已装的 `GetDesktopModelPlan.ps1 -ResolveModel` 只读解析：gpt-6-sol/high → gpt-6.1-sol/ultra（source=predecessor、replaced=true），gpt-6-astra/high 不变（replaced=false）。接口仍要求请求里写 reasoning_effort=high，这和归一后的有效档位是两层，不能把接口要求读成 ultra。这只证明当前源码和已装 helper 的选择结果：没有确认正在运行的桌面桥已加载这份实现，也没有创建受保护判断或真实厂商调用。Sol 遇升级条件交回原父，角色名不授予模型身份、principal（受验证的执行主体） 或实施授权。错误参数与身份分别返回可纠正代码及五字段说明，不回显私密请求、不创建子会话；旧父会话可在同一会话消费错误后纠正，不降级普通角色绕过保护。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -434,7 +434,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 6ef0e67dbff75135 的错误→纠错→五字段协议回归属旧阶段；当前模块 0.3.19、桌面桥 b47fea3ce81f7a67 已登记。协议合成响应不是真实厂商 E2E（端到端验证），新父工具 schema（数据结构） 和新分支厂商调用仍另验。",
+        "text_ref": "- 6ef0e67dbff75135 的错误→纠错→五字段协议回归属旧阶段；11 月 4 日读到模块仍是 0.3.19；桌面桥 b47fea3ce81f7a67 是 10 月 11 日核对时的登记，之后启用登记已换，见〔原生桌面接入〕。协议合成响应不是真实厂商 E2E（端到端验证），新父工具 schema（数据结构） 和新分支厂商调用仍另验。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -453,7 +453,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 6ef0e67dbff75135 的错误→纠错→五字段协议回归属旧阶段；当前模块 0.3.19、桌面桥 b47fea3ce81f7a67 已登记。协议合成响应不是真实厂商 E2E（端到端验证），新父工具 schema（数据结构） 和新分支厂商调用仍另验。",
+        "text_ref": "- 6ef0e67dbff75135 的错误→纠错→五字段协议回归属旧阶段；11 月 4 日读到模块仍是 0.3.19；桌面桥 b47fea3ce81f7a67 是 10 月 11 日核对时的登记，之后启用登记已换，见〔原生桌面接入〕。协议合成响应不是真实厂商 E2E（端到端验证），新父工具 schema（数据结构） 和新分支厂商调用仍另验。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

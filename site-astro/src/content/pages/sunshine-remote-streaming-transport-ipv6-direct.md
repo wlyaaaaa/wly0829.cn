@@ -27,14 +27,14 @@
   "parent": "sunshine-remote-streaming",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "源码按 10 月 6 日最后一次提交、两机代理分流按电脑配置（PCConfig）10 月 8–9 日的登记（均早于 10 月 11 日 14:00 截止）；主机网络取截止前最近一次（10 月 10 日）每日检查；今天没有指定手机做路径探测"
+   "as_of": "2026-11-04",
+   "source": "主机检查和电脑配置登记"
   }
  },
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-transport-ipv6-direct/page.json",
-  "sha256": "a4e8be9f7e694d7887e623b0d7ccaa71a4944e4e1b53f7ff6f63e90f9d926212",
-  "converted_at_beijing": "2026-11-04T10:21:48+08:00"
+  "sha256": "095f05c2f5324ca47f9981c7b260369d32c39a70319897d44e83b555e1f52f20",
+  "converted_at_beijing": "2026-11-04T12:05:40+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 主机检查和电脑配置登记",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 主机检查和电脑配置登记"
     },
     {
      "type": "action_button",
@@ -169,7 +169,7 @@ Sunshine 远程串流 · 功能说明
 
 人在外面连不上时，不必把 Sunshine、光猫和 Tailscale 混成一个问题：这套入口能先定位本机有没有 IPv6、服务是否登录，再用同一台手机证明当前到底直连还是中继。
 
-**当前情况：**10 月 8 日两台电脑都让 Tailscale 的 UDP 流量绕开代理直连，之后同一网络下直连约 5–9 毫秒，本人确认画面和操作正常，用手机热点连续用了 5 分钟没断。截止前最近一次每日主机检查（10 月 10 日）通过；但没有指定手机做探测，手机此刻走直连、中继还是实际延迟多少，仍然不知道。
+**当前情况：**10 月 8 日两台电脑都让 Tailscale 的 UDP 流量绕开代理直连，之后同一网络下直连约 5–9 毫秒，本人确认画面和操作正常，用手机热点连续用了 5 分钟没断。每日主机检查最近一次（11 月 3 日 14:30）通过，11 月 4 日 09:11 手动再查一次也通过；但都只查主机这边，没有指定手机做探测，手机此刻走直连、中继还是实际延迟多少，仍然不知道。
 
 具体测试保留各自日期，页面不实时探测运行状态。
 
@@ -294,7 +294,7 @@ Sunshine 远程串流 · 功能说明
 
 ## 最后我会得到什么
 
-能分别说明本机服务状态和指定手机的连接路径；10 月 8 日的同网和热点结果是那一次的真人记录，今天没有手机端实测，所以不承诺此刻的直连速度或延迟。
+能分别说明本机服务状态和指定手机的连接路径；10 月 8 日的同网和热点结果是那一次的真人记录，之后没有新的手机端实测，所以不承诺此刻的直连速度或延迟。
 
 ::screen{#sunshine-remote-streaming-transport-ipv6-direct-03 section="usage"}
 
@@ -571,7 +571,7 @@ Sunshine 远程串流 · 功能说明
     },
     {
      "type": "prose",
-     "text_ref": "截止前最近一次每日检查（10月10日14:30）host-only通过；现装Ta"
+     "text_ref": "最近一次每日检查（11 月 3 日 14:30:02）host-only 通过，11 月 4 日 09:11:24 手动 verify-path-lite -NoWrite 也是 pass / host-only；现装 Tailscale 1.104.2，11 月 4 日 09:10 体检时 Tailscale 服务运行、自动启动，Online=true、无人值守开启；手机 peer（对端）没有请求。公网 IPv6 数量 9 月 28 日记为 4 个，之后未重新核对"
     },
     {
      "type": "numbered_steps",
@@ -593,7 +593,7 @@ Sunshine 远程串流 · 功能说明
     },
     {
      "type": "prose",
-     "text_ref": "截止前最近一次每日检查（10月10日14:30）host-only通过；现装Ta"
+     "text_ref": "最近一次每日检查（11 月 3 日 14:30:02）host-only 通过，11 月 4 日 09:11:24 手动 verify-path-lite -NoWrite 也是 pass / host-only；现装 Tailscale 1.104.2，11 月 4 日 09:10 体检时 Tailscale 服务运行、自动启动，Online=true、无人值守开启；手机 peer（对端）没有请求。公网 IPv6 数量 9 月 28 日记为 4 个，之后未重新核对"
     },
     {
      "type": "numbered_steps",
@@ -623,7 +623,7 @@ Sunshine 远程串流 · 功能说明
 ## 技术实现与依据（一）
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
-截止前最近一次每日检查（10 月 10 日 14:30）host-only 通过；现装 Tailscale 1.104.1，10 月 11 日 13:33 体检时 Tailscale 服务运行、自动启动；手机 peer（对端）没有请求。公网 IPv6 数量 9 月 28 日记为 4 个，之后未重新核对
+最近一次每日检查（11 月 3 日 14:30:02）host-only 通过，11 月 4 日 09:11:24 手动 verify-path-lite -NoWrite 也是 pass / host-only；现装 Tailscale 1.104.2，11 月 4 日 09:10 体检时 Tailscale 服务运行、自动启动，Online=true、无人值守开启；手机 peer（对端）没有请求。公网 IPv6 数量 9 月 28 日记为 4 个，之后未重新核对
 
 ## 关键规则与设计选择
 
@@ -714,7 +714,7 @@ Sunshine 远程串流 · 功能说明
 
 3. 协商结果可能是 IPv6/IPv4 direct、peer-relay、DERP 或不可达；必须保存当次 peer 探测分类，不能预设会升级为直连。
 
-4. 真实串流建立后，Sunshine 才通过协商好的连接发送视频与音频；今天没有建立新的会话。
+4. 真实串流建立后，Sunshine 才通过协商好的连接发送视频与音频；11 月 4 日核对时没有建立新的会话。
 
 ::screen{#sunshine-remote-streaming-transport-ipv6-direct-07 section="tech"}
 
@@ -815,7 +815,7 @@ Sunshine 远程串流 · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 本项目不创建 Sunshine 公网端口映射或 Funnel。每日检查按端口归属分类，10 月 10 日那次 Sunshine 的 Funnel 入口是 0 个；旧检查记过主机另有用户配置的、不属于 Sunshine 的 Funnel。这不等于整台电脑没有任何公网暴露。",
+     "text_ref": "- 本项目不创建 Sunshine 公网端口映射或 Funnel。检查按端口归属分类，11 月 4 日 09:11 那次 Sunshine 的 Funnel 入口是 0 个，另有 1 个不属于 Sunshine 的 Funnel 公开监听。这不等于整台电脑没有任何公网暴露。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -836,7 +836,7 @@ Sunshine 远程串流 · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- 本项目不创建 Sunshine 公网端口映射或 Funnel。每日检查按端口归属分类，10 月 10 日那次 Sunshine 的 Funnel 入口是 0 个；旧检查记过主机另有用户配置的、不属于 Sunshine 的 Funnel。这不等于整台电脑没有任何公网暴露。",
+     "text_ref": "- 本项目不创建 Sunshine 公网端口映射或 Funnel。检查按端口归属分类，11 月 4 日 09:11 那次 Sunshine 的 Funnel 入口是 0 个，另有 1 个不属于 Sunshine 的 Funnel 公开监听。这不等于整台电脑没有任何公网暴露。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -866,9 +866,9 @@ Sunshine 远程串流 · 功能说明
 
 ## 边界
 
-- 本项目不创建 Sunshine 公网端口映射或 Funnel。每日检查按端口归属分类，10 月 10 日那次 Sunshine 的 Funnel 入口是 0 个；旧检查记过主机另有用户配置的、不属于 Sunshine 的 Funnel。这不等于整台电脑没有任何公网暴露。
+- 本项目不创建 Sunshine 公网端口映射或 Funnel。检查按端口归属分类，11 月 4 日 09:11 那次 Sunshine 的 Funnel 入口是 0 个，另有 1 个不属于 Sunshine 的 Funnel 公开监听。这不等于整台电脑没有任何公网暴露。
 
-- 私网是正常连接的起点，但本轮没有读 Tailscale 的访问策略，不能说已经证明只有指定设备能连；0 个 Funnel 也不能推到所有公网 IPv6 都被防火墙挡住。
+- 私网是正常连接的起点，但核对时没有读 Tailscale 的访问策略，不能说已经证明只有指定设备能连；0 个 Funnel 也不能推到所有公网 IPv6 都被防火墙挡住。
 
 - 公开文档与脚本中绝对不出现真实的私人 Tailnet 域名或完整的个人 IPv6 地址。
 
@@ -974,11 +974,11 @@ Sunshine 远程串流 · 功能说明
 
 - 每日主机检查只覆盖主机：Tailscale 在线、无人值守开启；peer 未请求，路径和延迟为未知。2026-09-13 与 9 月 14 日的 Running/Auto 记录保留为历史。
 
-- 版本：现装 Tailscale 1.104.1；9 月 4 日回读的 1.102.2 为当时版本。
+- 版本：现装 Tailscale 1.104.2（11 月 4 日 09:18 读程序文件版本信息，1.104.2-tc3430f0d2-g598b63867）；10 月记的 1.104.1 和 9 月 4 日回读的 1.102.2 为当时版本。
 
-- 每日巡检现在每天北京时间 14:30 运行；9 月 18 日到 10 月 10 日共 23 天日常记录都是 host-only 通过（9 月 18 日另有 4 次手工观察不计入）；它不提供 peer，所以当前直连/DERP 路线未证。
+- 每日巡检现在每天北京时间 14:30 运行；9 月 18 日到 10 月 10 日共 23 天日常记录都是 host-only 通过（9 月 18 日另有 4 次手工观察不计入），最近一次 11 月 3 日 14:30 也通过，中间连续天数没有重核；它不提供 peer，所以当前直连/DERP 路线未证。
 
-- 公开入口按端口归属分类：10 月 10 日 Sunshine 0 个；不输出端点地址。
+- 公开入口按端口归属分类：11 月 4 日 09:11 Sunshine 0 个、其他 Funnel 公开监听 1 个、未解析 0 个（10 月 10 日 Sunshine 也是 0 个）；只覆盖 Funnel 这条路，不输出端点地址。
 
 ## 与其他模块的关系
 

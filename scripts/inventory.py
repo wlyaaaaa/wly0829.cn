@@ -326,7 +326,7 @@ def inventory(p,d,s,image_files):
     if sid in ASSET_OVERRIDES:
         ills,icons=ASSET_OVERRIDES[sid];art_notes.append('复核 scene 的特殊组合后指定预算');art_est=True
     if p.parent.name=='github-profile':
-        ills=1 if sid not in ['github-profile-02','github-profile-09'] else 0;icons=0
+        ills=1 if sid not in ['github-profile-02','github-profile-09','github-profile-10','github-profile-11'] else 0;icons=0
     if s.get('shape')=='strip':ills=icons=0;art_notes.append('横条绿叶可复用共享装饰，不单列内容插画')
     if ills:add('illustration',ills,role='无字图像资产位',estimated=art_est)
     if icons:add('icon',icons,role='无字小图像资产位',estimated=art_est)

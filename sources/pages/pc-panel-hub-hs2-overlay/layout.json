@@ -244,7 +244,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "源码按当前main提交c7fa0a2核对（通知改走电脑配置手机桥是10月20日14:51的提交4449b3f；更早的手机来源改动是10月14—16日）；10月22日运行中的HS2.CrystalOve"
+        "text_ref": "源码按当前main提交ddba2b0核对"
       },
       {
         "type": "numbered_steps",
@@ -268,7 +268,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "源码按当前main提交c7fa0a2核对（通知改走电脑配置手机桥是10月20日14:51的提交4449b3f；更早的手机来源改动是10月14—16日）；10月22日运行中的HS2.CrystalOve"
+        "text_ref": "源码按当前main提交ddba2b0核对"
       },
       {
         "type": "numbered_steps",
@@ -606,7 +606,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 当前 main 的 GlobalHotkeyGestureStateTests 与 OverlaySchedulerTests 覆盖物理 Win+F1 一次触发、注入/冲突组合透传、活动媒体/游戏/来电/传输保留及同一手机中继内容不复活；整个项目现有 146 个 C# 测试声明，这是源码里的数量，本轮没有运行。",
+        "text_ref": "- 当前 main 的 GlobalHotkeyGestureStateTests",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -625,7 +625,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 当前 main 的 GlobalHotkeyGestureStateTests 与 OverlaySchedulerTests 覆盖物理 Win+F1 一次触发、注入/冲突组合透传、活动媒体/游戏/来电/传输保留及同一手机中继内容不复活；整个项目现有 146 个 C# 测试声明，这是源码里的数量，本轮没有运行。",
+        "text_ref": "- 当前 main 的 GlobalHotkeyGestureStateTests",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

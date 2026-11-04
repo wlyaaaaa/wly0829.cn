@@ -316,7 +316,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "50份Registry分别保存机器、盘符、目录用途、项目配置键、运行时和恢复关系；每类都有数据结构和校验器。",
+        "text_ref": "68份Registry分别保存",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -336,7 +336,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "50份Registry分别保存机器、盘符、目录用途、项目配置键、运行时和恢复关系；每类都有数据结构和校验器。",
+        "text_ref": "68份Registry分别保存",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -356,7 +356,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "运行时：10月11日16:34现场核到PowerShell7.6.4、WindowsPowerShell5.1.26100.9549，10月12日复核相同。9月11日基线里的DockerCLI29.7",
+        "text_ref": "运行时：10月11日16:34现场核到",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -376,7 +376,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "运行时：10月11日16:34现场核到PowerShell7.6.4、WindowsPowerShell5.1.26100.9549，10月12日复核相同。9月11日基线里的DockerCLI29.7",
+        "text_ref": "运行时：10月11日16:34现场核到",
         "columns": 1,
         "icons": "none",
         "illustration": "none",

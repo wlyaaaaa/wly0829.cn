@@ -60,7 +60,7 @@
    "b1_pages": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\*\\page.json（10 月 1 日读取）",
    "pcconfig_commit": "91b73e4ba6fc3a7f195611eaed75e67b8a06fe9c 2026-10-01",
    "model_roster_source": "E:\\.agents\\config\\model-roster.json",
-   "model_roster_generated_beijing_date": "2026-10-30"
+   "model_roster_generated_beijing_date": "2026-11-03"
   },
   "video_prompt": "6 秒，16:9，只取第 1 屏右边那幅水彩地图插画当第一帧，镜头和构图完全不动。只让插画里的东西轻轻动：湖面泛起细小的波纹、反光慢慢移动；岛与岛之间的小路和木桥上，几颗淡绿色小光点沿着路一颗接一颗缓缓流过去，到了另一座岛就轻轻亮一下再暗下去；岛上小房子的窗口依次亮起柔和的浅绿光再暗回去；右上角伸进画面的那枝绿叶随微风轻摇，一片小叶子飘落到湖面，漾开一圈涟漪；压在左下角的毛笔保持不动。画面里不出现任何文字，不添加新东西，四周白色纸面保持干净。首尾衔接成无缝循环，水彩画风不变，没有声音。",
   "video_prompt_en": "6 seconds, 16:9. Use only the watercolor map illustration on the right side of screen 1 as the first frame. Keep the camera and composition completely still. Gently animate only what is in the picture: tiny ripples spread across the lake and the reflections drift slowly; along the little paths and wooden bridges between the islands, a few pale green dots of light flow slowly one after another, glowing softly when they reach the next island and then fading; the windows of the small houses on the islands light up with a soft pale green glow one by one and dim again; the green sprig reaching in from the upper right sways in a light breeze, and one small leaf drifts down onto the lake, sending out a single ring of ripples; the brush lying at the lower left stays still. No text anywhere, add nothing new, keep the white paper around the edges clean. The last frame matches the first for a seamless loop, same watercolor style, no audio.",
@@ -324,6 +324,20 @@
      "region": "outside",
      "href": null,
      "anchor": null
+    },
+    {
+     "id": "personal-finance",
+     "name": "个人财务",
+     "region": "know-me",
+     "href": "/projects/personal-finance/",
+     "anchor": "/how/#personal-finance"
+    },
+    {
+     "id": "phone-collector",
+     "name": "手机采集",
+     "region": "my-data",
+     "href": "/projects/phone-collector/",
+     "anchor": "/how/#phone-collector"
     }
    ],
    "groups": [
@@ -1138,6 +1152,51 @@
      "on_map": false,
      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json:712",
      "id": "r-87-devconfig-backup-site"
+    },
+    {
+     "id": "r-phone-phone-collector",
+     "from": "phone",
+     "to": "phone-collector",
+     "kind": "状态",
+     "what": "应用使用、装机清单、定位",
+     "on_map": true,
+     "source": "_构图同步-base.md"
+    },
+    {
+     "id": "r-phone-collector-daily-preferences",
+     "from": "phone-collector",
+     "to": "daily-preferences",
+     "kind": "文件",
+     "what": "AI 刷新手机来源时导入",
+     "on_map": true,
+     "source": "_构图同步-base.md"
+    },
+    {
+     "id": "r-me-personal-finance",
+     "from": "me",
+     "to": "personal-finance",
+     "kind": "文字",
+     "what": "几项算不出来的数",
+     "on_map": true,
+     "source": "_构图同步-base.md"
+    },
+    {
+     "id": "r-personal-finance-claude",
+     "from": "personal-finance",
+     "to": "claude",
+     "kind": "文字",
+     "what": "财务现状",
+     "on_map": true,
+     "source": "_构图同步-base.md"
+    },
+    {
+     "id": "r-personal-finance-gpt",
+     "from": "personal-finance",
+     "to": "gpt",
+     "kind": "文字",
+     "what": "财务现状",
+     "on_map": true,
+     "source": "_构图同步-base.md"
     }
    ],
    "relations_spec": {
@@ -1178,7 +1237,8 @@
         "daily-preferences",
         "personal-expression",
         "personal-health",
-        "learning"
+        "learning",
+        "personal-finance"
        ]
       },
       "my-data": {
@@ -1189,7 +1249,8 @@
        "order": [
         "personal-media",
         "personal-materials",
-        "wechatdirect"
+        "wechatdirect",
+        "phone-collector"
        ]
       },
       "see-hear": {
@@ -1588,30 +1649,30 @@
    "numbers": [
     {
      "id": "n-projects",
-     "text": "30 个在用的项目",
-     "meaning": "网站上 30 个在用项目页（不含 4 个冻结项目页）",
-     "as_of": "2026-10-01",
-     "source": "facts-how.md:17；b1/*/page.json kind=project",
+     "text": "29 个在用的项目",
+     "meaning": "37个已登记项目里，在用29个，冻结8个",
+     "as_of": "2026-11-04",
+     "source": "config/panel-projects.json；_新增数字-base.md",
      "screens": [
       "how-01"
      ]
     },
     {
      "id": "n-frozen",
-     "text": "冻结的 4 个项目",
+     "text": "冻结的 8 个项目",
      "meaning": "冻结静态项目页",
-     "as_of": "2026-10-01",
-     "source": "facts-how.md:54-61",
+     "as_of": "2026-11-04",
+     "source": "config/panel-projects.json；_新增数字-base.md",
      "screens": [
       "how-02"
      ]
     },
     {
      "id": "n-media",
-     "text": "4,366 件（照片 3,486、视频 118、录音 762）",
+     "text": "4,656 件",
      "meaning": "媒体库 SQLite media 表条目数，不是全部电脑文件",
-     "as_of": "2026-10-10",
-     "source": "只读 count：file:E:/Media/_manifests/personal-media-current/catalog.sqlite3?mode=ro，select media_type,count(*) from media（北京时间 10 月 10 日 05:3x）",
+     "as_of": "2026-10-31",
+     "source": "scripts/how-demo-data.json；how-09演示数据为10月31日快照，base组没有重新取数",
      "screens": [
       "how-09"
      ]
@@ -1823,8 +1884,8 @@
  },
  "source": {
   "page": "sources/pages/how/page.json",
-  "sha256": "9834b418b784f1c680c4d348d22cfb0e3787795e44f1acb1c2746ea0a5c3e49f",
-  "converted_at_beijing": "2026-10-31T09:28:09+08:00"
+  "sha256": "c299eb03799b273d36ddd37f60c84f139b1f8776ae0ee6fe08650e292b23bb41",
+  "converted_at_beijing": "2026-11-04T12:05:31+08:00"
  }
 }
 ---
@@ -2162,8 +2223,8 @@
   "id": "how-02",
   "section": "map",
   "title": "全景图",
-  "scene": "横版：一整张水彩地图铺满全屏，图里不画任何连线（连线、光点和点亮由网页程序按 registry.relations 画在图上面，所以岛和牌子之间要留出走线的湖面，牌子之间至少隔一块牌子的高度）。标题“全景图”和第一行说明压在左上角白纸边上（约占左上 30% 宽、10% 高）。地图是一片浅蓝绿的湖，湖上 8 座水彩小岛是 8 个区域，加中央一座大岛和底边一条陆地；每座岛左上角用毛笔小字写区域名，岛上每个项目是一块白底细绿边的小圆角牌子（同样大小、同样字号），牌子左边一个小水彩图标（密码中心一把锁、本地加密库一只上锁的小箱子、个人理解库一本翻开的笔记本、个人表达一个对话气泡、个人健康一颗绿心、学习方法一顶学士帽、照片视频录音管理一叠照片、个人材料查找一个文件夹、微信聊天读取微信标志、中文语音转写一只麦克风、本地文字识别一个放大镜、本地视频制作一卷胶片、个人正式文书一支钢笔、工作支持与交付一个公文包、Typora 薄荷主题一片薄荷叶、AI 备份一个带对话气泡的小硬盘、开发配置备份一把扳手和小硬盘、Steam 外观备份 Steam 标志、电脑远程控制一只伸向电脑的机械手、远程电脑串流一块小屏幕、代理上网修复一个地球加小扳手、双屏信息中心两块竖着的小屏、电脑使用与性能记录一个小折线图、内存盘守护一根内存条、屏保与壁纸几个泡泡、AI 工具配置管理一个齿轮）。节点位置（牌子中心，按画面宽、高的百分比）：中央大岛在（50%，42%），四块略大的牌子两行两列：我、手机 / Claude（Claude Opus 5.5）、GPT（在 Codex 里：GPT-6.1 Sol、GPT-6 Luna、GPT-6 Astra），可画 Claude 和 ChatGPT 标志。上排四座岛（y≈20%）：了解我（x≈13%）、我的资料（x≈37%）、看和听（x≈63%）、做成品（x≈87%）。中排两座（y≈44%）：安全（x≈15%）、远程（x≈85%）。下排两座（y≈66%）：备份（x≈27%）、电脑日常（x≈73%）。岛上的牌子按 registry.map_layout 里的顺序，一行两块排。外面四块牌子在岸边：网站：驾驶舱、授权与状态（50%，9%，画一个小网页框）、Google 云端（4%，66%，画 Google 相册和云端硬盘标志）、GitHub（50%，68%，画 GitHub 标志）、副机（第二台笔记本）（96%，66%，画一台笔记本）。底边陆地（y≈86%）写“三个底座”，三块大牌子并排在 x≈22%、50%、78%：AI 规则与技能基座、电脑配置与恢复、GitHub 项目总索引；陆地下沿写那一行“三个底座给所有项目的”。右下角白纸边上一行小字“不在图上的……”和〔项目首页〕。不留大块空湖面，但牌子之间留走线的空。",
-  "portrait": "竖版：同一张地图改成竖长，图里同样不画连线。从上到下：标题和说明；网站牌子；中央大岛（四块牌子两行两列）；8 座区域岛分四排、每排两座：了解我、我的资料 / 看和听、做成品 / 安全、远程 / 备份、电脑日常；Google 云端在备份左侧岸边、副机在远程右侧岸边、GitHub 在最后一排两岛之间；最底下“三个底座”陆地，三块牌子一行三块；最下面一行小字。各节点在竖版里的位置写在 registry.map_layout.portrait。",
+  "scene": "横版：一整张水彩地图铺满全屏，图里不画任何连线（连线、光点和点亮由网页程序按 registry.relations 画在图上面，所以岛和牌子之间要留出走线的湖面，牌子之间至少隔一块牌子的高度）。标题“全景图”和第一行说明压在左上角白纸边上（约占左上 30% 宽、10% 高）。地图是一片浅蓝绿的湖，湖上 8 座水彩小岛是 8 个区域，加中央一座大岛和底边一条陆地；每座岛左上角用毛笔小字写区域名，岛上每个项目是一块白底细绿边的小圆角牌子（同样大小、同样字号），牌子左边一个小水彩图标（密码中心一把锁、本地加密库一只上锁的小箱子、个人理解库一本翻开的笔记本、个人表达一个对话气泡、个人健康一颗绿心、学习方法一顶学士帽、照片视频录音管理一叠照片、个人材料查找一个文件夹、微信聊天读取微信标志、中文语音转写一只麦克风、本地文字识别一个放大镜、本地视频制作一卷胶片、个人正式文书一支钢笔、工作支持与交付一个公文包、Typora 薄荷主题一片薄荷叶、AI 备份一个带对话气泡的小硬盘、开发配置备份一把扳手和小硬盘、Steam 外观备份 Steam 标志、电脑远程控制一只伸向电脑的机械手、远程电脑串流一块小屏幕、代理上网修复一个地球加小扳手、双屏信息中心两块竖着的小屏、电脑使用与性能记录一个小折线图、内存盘守护一根内存条、屏保与壁纸几个泡泡、AI 工具配置管理一个齿轮）。节点位置（牌子中心，按画面宽、高的百分比）：中央大岛在（50%，42%），四块略大的牌子两行两列：我、手机 / Claude（Claude Opus 5.5）、GPT（在 Codex 里：GPT-6.1 Sol、GPT-6 Luna、GPT-6 Astra），可画 Claude 和 ChatGPT 标志。上排四座岛（y≈20%）：了解我（x≈13%）、我的资料（x≈37%）、看和听（x≈63%）、做成品（x≈87%）。中排两座（y≈44%）：安全（x≈15%）、远程（x≈85%）。下排两座（y≈66%）：备份（x≈27%）、电脑日常（x≈73%）。岛上的牌子按 registry.map_layout 里的顺序，一行两块排。外面四块牌子在岸边：网站：驾驶舱、授权与状态（50%，9%，画一个小网页框）、Google 云端（4%，66%，画 Google 相册和云端硬盘标志）、GitHub（50%，68%，画 GitHub 标志）、副机（第二台笔记本）（96%，66%，画一台笔记本）。底边陆地（y≈86%）写“两个底座”，三块大牌子并排在 x≈22%、50%、78%：AI 规则与技能基座、电脑配置与恢复；陆地下沿写那一行“两个底座给所有项目的”。右下角白纸边上一行小字“不在图上的……”和〔项目首页〕。不留大块空湖面，但牌子之间留走线的空。",
+  "portrait": "竖版：同一张地图改成竖长，图里同样不画连线。从上到下：标题和说明；网站牌子；中央大岛（四块牌子两行两列）；8 座区域岛分四排、每排两座：了解我、我的资料 / 看和听、做成品 / 安全、远程 / 备份、电脑日常；Google 云端在备份左侧岸边、副机在远程右侧岸边、GitHub 在最后一排两岛之间；最底下“两个底座”陆地，三块牌子一行三块；最下面一行小字。各节点在竖版里的位置写在 registry.map_layout.portrait。",
   "links": [
    {
     "text": "AI 规则与技能基座",
@@ -2272,6 +2333,14 @@
    {
     "text": "项目首页",
     "href": "/projects/"
+   },
+   {
+    "text": "个人财务",
+    "href": "/projects/personal-finance/"
+   },
+   {
+    "text": "手机采集",
+    "href": "/projects/phone-collector/"
    }
   ],
   "anchors": [
@@ -2390,6 +2459,14 @@
    {
     "id": "ai-cli-profile-manager",
     "text": "AI 工具配置管理"
+   },
+   {
+    "id": "personal-finance",
+    "text": "个人财务"
+   },
+   {
+    "id": "phone-collector",
+    "text": "手机采集"
    }
   ],
   "live": [],
@@ -2444,7 +2521,7 @@
      "align": "left"
     }
    ],
-   "notes": "Claude 本轮裁定：how02 改为现有无字群岛插画加程序分组清单，不再要求49个地图净面或逐牌几何。11个原区名作标题、38条作清单项，原字及定稿顺序保留。横版图上、三列分组清单下；竖版图上、单列分组清单下。复用how01/05现有ready《系统群岛》，不改素材就绪状态。AI技术补充：沿用旧data-map-region/sign编号身份，运行时改读清单实测框，详情见requests/main/main-closer5-how02-grouped-runtime.md。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。\n2026-10-11 Opus 重做：组名带一句说明，导语改成讲清这一屏是什么、点一下会出什么；点选后的关系卡由 how-map.js 画。"
+   "notes": "Claude 本轮裁定：how02 改为现有无字群岛插画加程序分组清单，不再要求49个地图净面或逐牌几何。11个原区名作标题、40条作清单项，原字及定稿顺序保留。横版图上、三列分组清单下；竖版图上、单列分组清单下。复用how01/05现有ready《系统群岛》，不改素材就绪状态。AI技术补充：沿用旧data-map-region/sign编号身份，运行时改读清单实测框，详情见requests/main/main-closer5-how02-grouped-runtime.md。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。\n2026-10-11 Opus 重做：组名带一句说明，导语改成讲清这一屏是什么、点一下会出什么；点选后的关系卡由 how-map.js 画。"
   },
   "v": {
    "blocks": [
@@ -2483,7 +2560,7 @@
      "align": "left"
     }
    ],
-   "notes": "Claude 本轮裁定：how02 改为现有无字群岛插画加程序分组清单，不再要求49个地图净面或逐牌几何。11个原区名作标题、38条作清单项，原字及定稿顺序保留。横版图上、三列分组清单下；竖版图上、单列分组清单下。复用how01/05现有ready《系统群岛》，不改素材就绪状态。AI技术补充：沿用旧data-map-region/sign编号身份，运行时改读清单实测框，详情见requests/main/main-closer5-how02-grouped-runtime.md。\n2026-10-11 Opus 重做：组名带一句说明，导语改成讲清这一屏是什么、点一下会出什么；点选后的关系卡由 how-map.js 画。"
+   "notes": "Claude 本轮裁定：how02 改为现有无字群岛插画加程序分组清单，不再要求49个地图净面或逐牌几何。11个原区名作标题、40条作清单项，原字及定稿顺序保留。横版图上、三列分组清单下；竖版图上、单列分组清单下。复用how01/05现有ready《系统群岛》，不改素材就绪状态。AI技术补充：沿用旧data-map-region/sign编号身份，运行时改读清单实测框，详情见requests/main/main-closer5-how02-grouped-runtime.md。\n2026-10-11 Opus 重做：组名带一句说明，导语改成讲清这一屏是什么、点一下会出什么；点选后的关系卡由 how-map.js 画。"
   }
  },
  "images": [
@@ -3018,8 +3095,8 @@
 
 **两个底座 · 所有项目都靠它们**　〔AI 规则与技能基座〕　〔电脑配置与恢复〕
 **安全 · 密码和加密文件**　〔密码中心〕　〔本地加密库〕
-**了解我 · 让 AI 知道我是谁、要什么**　〔个人理解库〕　〔个人健康〕　〔学习方法〕
-**我的资料 · 照片、文件和微信**　〔照片视频录音管理〕　〔个人材料查找〕　〔微信聊天读取〕
+**了解我 · 让 AI 知道我是谁、要什么**　〔个人理解库〕　〔个人健康〕　〔学习方法〕　〔个人财务〕
+**我的资料 · 照片、文件、微信和手机记录**　〔照片视频录音管理〕　〔个人材料查找〕　〔微信聊天读取〕　〔手机采集〕
 **看和听 · 把录音和图片变成文字**　〔中文语音转写〕　〔本地文字识别〕
 **做成品 · 视频、文书和工作材料**　〔本地视频制作〕　〔个人正式文书〕　〔工作支持与交付〕　〔Typora 薄荷主题〕
 **备份 · AI 记录、开发和游戏配置**　〔AI 备份〕　〔开发配置备份〕　〔Steam 外观备份〕
@@ -3072,7 +3149,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "先能胜任，再快，再省额度",
+     "text_ref": "能用就行的，交能胜任里最划算的",
      "row": "intro"
     },
     {
@@ -3115,7 +3192,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "先能胜任，再快，再省额度"
+     "text_ref": "能用就行的，交能胜任里最划算的"
     },
     {
      "type": "illustration",
@@ -3305,13 +3382,13 @@
 
 # 派谁：每个型号干什么（现行分工）
 
-**先能胜任，再快，再省额度。** 成品的要求决定分工；整段一两步就完的小事，主对话顺手做。本页生成于北京时间 2026-10-30；清单更新于 2026-10-29。
+**能用就行的，交能胜任里最划算的；要惊艳的，样板和关键部分交做得最好的。** 额度多少不参与判断；整段一两步就完的小事，主对话顺手做。本页生成于北京时间 2026-11-03；清单更新于 2026-10-29。
 
 - **写代码、改脚本、修 bug**　Claude：代码库理解、程序根因与方案 opus-high；困难路径 opus-xhigh；GPT：范围清楚 Sol ultra；需先定代码／规则方案交有授权 Astra 或 opus-high；困难路径 Astra ultra，一件活选一家。
 - **调研、查事实**　Claude：综合 opus-medium；冲突 opus-high；要紧决定 opus-xhigh；GPT：指定来源收集、综合和冲突判断 Sol ultra；给定材料摘录 Sol medium；要紧决定 Astra ultra；按原文和出处核对。
 - **给我看的文字、分析和方案**　Claude：当前交 Claude：材料齐的整理和初稿 opus-medium，完整分析和方案 opus-high，要紧的取舍 opus-xhigh。本人定过由 Claude 写的成品、分析、网站文案和对本人价值、偏好的理解照旧；GPT 也可以写或出主意，涉及本人价值和偏好的内容单列，由 Claude 按原话和语境把关。只用一边时那一边全做，主持的根会话承担最终责任。；GPT：可写或出主意；价值偏好内容单列交 Claude 把关；只有 GPT 时全做。
 - **看图、审图和浏览器操作**　Claude：要紧审图 opus-medium；困难 opus-high；主持看成品整体并自选抽查样本。；GPT：浏览器一律 Sol：读一页 medium，施工和难活 ultra；固定清单审图 Sol ultra，要紧图 Astra high，困难 Astra ultra。
-- **独立复核**　Claude：GPT 写的交 Claude；按风险选档，最终由主持验收。；GPT：Claude 写的交有授权 Astra；无授权用 Sol，具体档位按风险、难点选；推荐取舍类汇报另遵分工专题第 5 条的本人逐次授权要求，不派 Sol 替代。
+- **独立复核**　Claude：判断型复核（完整复核、审计、设计和方案评审、文案和分析评审、头脑风暴）默认交全新上下文的 Opus high，完整复核和关键取舍用 xhigh；GPT：照清单核对交 Sol；完整复核、且被复核的东西由 Claude 写时交 Astra ultra。
 - **生图**　Claude：Claude 写好提示，委派 Luna low 调用落盘；主持看整体，个人网站专用分工不外推。；GPT：Codex 主对话直接用内置生图；Claude 经包装器派 Luna low；批量审图 Sol ultra，很重要的交 Claude；不为生图派 Astra。
 
 本人告知新型号、档位或要求重估时，按《分工与并行施工》“新型号怎么调研”查公开数据，直接更新路线和档位；AA 未出分可按厂商数据暂定，数据够用可定稿，AA 出分后短复核。授权和本人限制见约法 L23；换代重评，不自动沿用本代选择。
@@ -3541,7 +3618,7 @@
 
 **两个桌面 AI**　Claude 桌面版和 Codex 桌面版（里面跑 GPT）。两边读同一版规则、用同一套技能。谁接到活，谁就是主对话：管战略、头脑风暴、抽查、QA（质量检查），最后以人的角度看成品。
 
-**派子代理**　主对话把活拆开派出去。Claude 派自己的 Claude Opus 5.5 子代理，按思考深浅分 low、medium、high、xhigh、max 五档，先用每月的 API 额度在后台跑，额度用完或要用浏览器这类工具时，再在桌面版里派同一档；也经一个包装脚本派 GPT：交过去一份任务文件，收回报告和最后一条消息。派之前先想清楚要多少才够：能直接答的不查，能查资料的不实测，要实测就先写清它会改变哪个决定、要花多少额度。派单写清目标、范围、授权、测试上限、时限和怎么验收；出处、方案和花费估算可写可不写，脚本不因缺这些栏拒派；也能设预算，到了自动停（默认关）。规则由主对话核验好，派单里给出版本和要读的专题，子代理不再自己核验。我的原话出处也由主对话负责：派单里分清哪句是我说的、哪句是 AI 补充的，不再附上原话清单和相关决定，子代理照单干活，不另查出处。GPT-6.1 Sol 随时可派，读取、施工和机械活都交它；GPT-6 Luna 现在只用来照提示生图；GPT-6 Astra 最贵，要我对这个对话或项目点头才派。子代理的权限只能比派它的窄。
+**派子代理**　主对话把活拆开派出去。Claude 派自己的 Claude Opus 5.5 子代理，按思考深浅分 low、medium、high、xhigh、max 五档，默认在桌面版里派；我在这个对话说“派API”，接下来 3 个才走每月的 API 额度，第 4 个起回到桌面，余额没了也转回桌面；也经一个包装脚本派 GPT：交过去一份任务文件，收回报告和最后一条消息。派之前先想清楚要多少才够：能直接答的不查，能查资料的不实测，要实测就先写清它会改变哪个决定、要花多少流量和时间。派单写清目标、范围、授权、测试上限、时限和怎么验收；出处、方案和花费估算可写可不写，脚本不因缺这些栏拒派；也能设预算，到了自动停（默认关）。规则由主对话核验好，派单里给出版本和要读的专题，子代理不再自己核验。我的原话出处也由主对话负责：派单里分清哪句是我说的、哪句是 AI 补充的，不再附上原话清单和相关决定，子代理照单干活，不另查出处。GPT-6.1 Sol 随时可派，读取、施工和机械活都交它；GPT-6 Luna 现在只用来照提示生图；GPT-6 Astra 最贵，要我对这个对话或项目点头才派（完整复核、且被复核的东西由 Claude 写的这一类，我给过长期许可）。派出的型号调不动时，不降型号和档位，也不把 GPT 的活转给 Claude：短时限流、满载和服务器临时出错由脚本自动重试；额度真用完或账号用不了，才提醒我换账号，我不在就进驾驶舱，换好后按原型号、原档位重派。子代理的权限只能比派它的窄。
 
 **盯进度、收结果**　查进度时一单一行，最后一行是预计全部完成时间；每单记下用了多少 token、多少磁盘和多长时间。延长期限时会自动通知子任务；要它接着做，补一句话就能续上。Claude 派出 GPT 后不干等，去做不冲突的事：按时限和风险，或在它报风险、卡住、需要纠偏时，看它几分钟一两句的中文进度摘要，不再固定开工 10 分钟、每小时去看（10 月 7 日晚第一次看摘要，就在验收前提前发现了两处要补的事）；到时限它交回已做的部分和卡点，不自动延期，由主对话调整范围或做法、定新时限再接着做。Claude 结束回复时如果后台还有任务没跑完，系统会在它空闲约 55 分钟后把它叫醒，免得没人收尾。收结果时，执行者交核对材料，Claude 抽查和验收；没有实物结果不准写“已完成”，说完成之前先列出还缺什么。
 
@@ -5335,8 +5412,8 @@
 # 看进度、让电脑自己盯着
 
 **⑩ 看进度**　〔驾驶舱〕
-能做：手机打开网页，看自动任务、最近的备份、等我验收的事、电脑读数和今天的动态，每块写着几点读的。
-限制：只看不能停；AI 正在做几件事现在读不到；Google 云端硬盘正在传什么还在接。
+能做：手机打开网页，先看要我做的事，再看 AI 正在干的活和我得知道的事，下面是电脑、自动任务、备份这些状态，每块写着几点读的。配对过的设备上，卡片能点“复制给 AI”“知道了”“晚点提醒”。
+限制：驾驶舱不派活，也不收答复，要 AI 办就复制到对话里；别人打开只看到公开版。
 
 **⑪ 开锁、上锁**　〔授权与状态〕
 能做：手机上输验证器的 6 位动态码，打开个人资料或无限制授权；也能一键锁资料、锁 Windows。
@@ -5355,8 +5432,8 @@
 限制：原任务要开着、AI 停下等着；关了应用不保证叫得醒。
 
 **⑮ 等验证码**
-能做：AI 替我登录网站时，不用我守着手机报验证码。短信验证码：AI 点完“发送验证码”，经无线 ADB 手机桥读取手机短信通知，默认等 30 秒、最多 2 分钟，读出的码只交回原来的登录流程。邮箱验证码：经我的 Google 连接读 Gmail 最近 10 分钟的验证码邮件。
-前提：短信要手机桥已连接现用手机；邮件要个人资料在解锁期。
+能做：AI 替我登录网站时，不用我守着手机报验证码。AI 点完“发送验证码”，同时等手机短信（经无线 ADB 手机桥，回看 5 分钟）和 Gmail（最近 10 分钟），哪个先到用哪个，读出的码只交回原来的登录流程。
+前提：短信要手机桥已连接现用手机，手机没连就只查邮箱；邮件要个人资料在解锁期。
 限制：只在用时跑一会儿，不常驻、不留记录；同一网站同时发了好几次码可能取错，AI 要对着这次的页面核。
 
 **什么时候都办不了**：主机关机、睡着或断网时，靠它的这些都停了。先用 ToDesk、网易 UU 或小米智能插座把电脑开起来、连上网，再回来做。
@@ -5564,7 +5641,7 @@
 
 **〔AI 规则与技能基座〕**　E:\.agents
 管 AI 怎么做事：规则、授权、技能、我的决定原话。进项目前核对仓库、删库和改公开前的把关，也在它的技能里。
-给：每个 AI 开工先核验的那一版规则、技能目录（文件）。
+给：每个 AI 开对话就带上的那一版约法和导航、按需读的专题、技能目录（文件）。
 拿：密码中心的资料锁和授权状态（状态）；本机仓库在哪，读电脑配置与恢复的登记（状态）。
 
 **〔电脑配置与恢复〕**　E:\PCConfig
@@ -5627,6 +5704,14 @@
    {
     "text": "约法",
     "href": "/rules/charter/"
+   },
+   {
+    "text": "个人财务",
+    "href": "/projects/personal-finance/"
+   },
+   {
+    "text": "手机采集",
+    "href": "/projects/phone-collector/"
    }
   ],
   "anchors": [
@@ -5699,7 +5784,8 @@
       "_library/icons/人物.png",
       "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png",
       "_library/fix-round-2/icon-clean-abb681c78df7ffa17f9a.png",
-      "_library/fix-round-2/icon-clean-38a3e62e6a9c7275cc49.png"
+      "_library/fix-round-2/icon-clean-38a3e62e6a9c7275cc49.png",
+      "_library/icons/信封硬币箱.png"
      ],
      "connector": "none",
      "copy_labels": [
@@ -5722,7 +5808,8 @@
      "icons": [
       "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
       "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
-      "_library/icons/微信标志.png"
+      "_library/icons/微信标志.png",
+      "_library/icons/手机.png"
      ],
      "connector": "none",
      "copy_labels": [
@@ -5784,7 +5871,8 @@
       "_library/icons/人物.png",
       "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png",
       "_library/fix-round-2/icon-clean-abb681c78df7ffa17f9a.png",
-      "_library/fix-round-2/icon-clean-38a3e62e6a9c7275cc49.png"
+      "_library/fix-round-2/icon-clean-38a3e62e6a9c7275cc49.png",
+      "_library/icons/信封硬币箱.png"
      ],
      "connector": "none",
      "copy_labels": [
@@ -5807,7 +5895,8 @@
      "icons": [
       "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
       "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
-      "_library/icons/微信标志.png"
+      "_library/icons/微信标志.png",
+      "_library/icons/手机.png"
      ],
      "connector": "none",
      "copy_labels": [
@@ -5932,6 +6021,8 @@
 
 **〔学习方法〕**　拿：我的学习要求、个人理解库的背景（文字）；本地模型排队（状态）。给：讲义、练习和学到哪了（文件）。
 
+**〔个人财务〕**　拿：支付宝、微信支付、银行账单和电商、外卖、出行记录（文件）；AI 算不出来时问我的几项数（文字）。给：AI，一份带日期和出处的财务现状（文字）。我开口才更新；网页只讲做法。
+
 ## 我的资料
 
 **〔照片视频录音管理〕**　拿：手机和电脑上的照片、视频、录音（文件）；转写和认出的字（文字）。给：中文语音转写选中的录音、本地文字识别选中的图（文件）；个人材料查找留下的文档登记（文件）；个人理解库可复用的事实（文字）；G、H 盘和 Google 核对过的副本（文件）。
@@ -5939,6 +6030,8 @@
 **〔个人材料查找〕**　拿：照片视频录音管理交来的文档登记（文件）。给：AI 和个人正式文书，原件在哪、第几页（文字）；本地文字识别没有文字层的 PDF（文件），读回的字对回页码。只登记位置，不复制原件。
 
 **〔微信聊天读取〕**　拿：电脑上主号、副号的微信数据库，只读。给：中文语音转写，语音转成的 WAV（文件）；个人理解库，点名那一段的消息和按会话更新时读的新消息（文字）。“替我拟消息”现在是单独的技能，参考的口吻取自个人理解库整理好的那份。
+
+**〔手机采集〕**　拿：手机系统记下的应用使用、装机清单和定位（状态）。给：电脑在家时每半小时经无线调试收走的文件（文件）；AI 刷新手机来源时，个人理解库再导入（文件）。它不联网；网页只讲做法。
 
 ::screen{#how-07 section="projects"}
 

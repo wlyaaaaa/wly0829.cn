@@ -42,7 +42,7 @@
    },
    "facts": [],
    "as_of": "2026-11-04",
-   "source": "状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-29 13:30 是技能源 E:\\.agents\\skills\\image-generation 最后一次提交（.agents 21a603fd）的北京时间，是源码更新事件，不是使用事件；使用次数本轮没有取同口径记录，Unknown。"
+   "source": "技能清单和技能源码"
   },
   "public": false,
   "repo_url": null,
@@ -94,8 +94,8 @@
  },
  "source": {
   "page": "sources/pages/skill-image-generation/page.json",
-  "sha256": "11c20b778180d0bf643c1df2682091327bef0800e1623f8f408f7740c7358345",
-  "converted_at_beijing": "2026-11-04T10:21:46+08:00"
+  "sha256": "0a4d05c41c6296cce5d0bba06c4d3d83107eef8f72b81ddebca3e99ba452d760",
+  "converted_at_beijing": "2026-11-04T12:05:39+08:00"
  }
 }
 ---
@@ -138,7 +138,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 4 日",
+     "static_note": "截至 11 月 4 日 · 技能清单和技能源码",
      "row": "hero"
     },
     {
@@ -201,7 +201,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 4 日"
+     "static_note": "截至 11 月 4 日 · 技能清单和技能源码"
     },
     {
      "type": "prose",
@@ -718,7 +718,7 @@
 **用这个技能时，AI 守的规矩**
 - 派单写明这是生图任务、一张图一个任务、存到哪个位置；没存上就去生图模型自己的存放处按回执找，不按“最新的文件”去猜。
 - 交回前放大看细处：图里的字逐字和原文核对，不拿识字工具代替人眼；单位和品牌标志、人脸和手、季节和时间都要对。
-- 复核看量：成批的图交 GPT-6.1 Sol 审，很重要的交 Claude；只有几张时主对话自己看。我网站上的图，约定 Luna 画、Sol 审、不合格交 Claude 定。
+- 复核看谁主持：Claude 主持时看量，成批的图交 GPT-6.1 Sol 审，很重要的交 Claude，只有几张时主对话自己看；我网站上的图，Claude 主持时约定 Luna 画、Sol 审、不合格交 Claude 定。GPT 主持时由它和它派的子代理按现行模型路线做完，不需要 Claude。
 - 不合格只修不对的那一块；整体不对就改好要求重画。
 - 按版本存（第 1 版、第 2 版……），不覆盖旧图；审定的图冻结，以后只重做内容变了的部分。
 - Luna 画图不占额度；不为生图派最贵的 GPT-6 Astra，按量收费的接口只在我明确要时用。
@@ -930,7 +930,7 @@
 
 - **Codex 主对话**：直接调用 Codex 自带的生图能力；模型清单记的首选是 GPT Image 2.5，实际工具和型号以宿主为准。
 - **Claude**：写好提示，经 E:\.agents\tools\Invoke-ClaudeGptChild.ps1 派 gpt-6-luna，档位 low，必须带 -TrafficMode Generation（默认的 Auto 在没有任务 JSON 时按普通任务跑，宿主不替它落盘）；不需要本人另行授权，不占订阅额度。
-- **复核**：成批的图交 gpt-6.1-sol（ultra）审，很重要的交 Claude；只有几张时主持的对话自己看，不另派子代理。个人网站的约定是 Luna 画、Sol 审、不合格交 Claude 定，只管网站，不外推。
+- **复核**（11 月 4 日按技能第 24、50、67 行核对）：Claude 为主对话时，成批的图交 gpt-6.1-sol（ultra）审，很重要的交 Claude；只有几张时主持的对话自己看，不另派子代理。个人网站的约定是 Claude 为主对话时 Luna 画、Sol 审、不合格交 Claude 定，只管网站，不外推。GPT 为主对话时，由它和它的子代理按现行模型路线完成提示、验收和交付，不需要 Claude。
 
 ## 派单格式
 
@@ -940,9 +940,9 @@
 
 ## 落盘核对
 
-- 看回执的 generated_image_paths 和本轮 generation.json（图片源、实际复制路径、宽高、SHA-256），确认文件真的在、尺寸对。
+- 看回执的 generated_image_paths 和这一次的 generation.json（图片源、实际复制路径、宽高、SHA-256），确认文件真的在、尺寸对。
 - 宿主只复制到第一个还不存在的目标，绝不覆盖。
-- 回执报 generation_not_landed 或目标里没有图时，按回执或本轮事件给的 savedPath 到 E:\Data\AppData\Codex\generated_images\<线程号>\ 取。
+- 回执报 generation_not_landed 或目标里没有图时，按回执或这一次事件给的 savedPath 到 E:\Data\AppData\Codex\generated_images\<线程号>\ 取。
 
 ## 10 月 31 日这次的实际数据
 

@@ -7,15 +7,15 @@
   "parent": "ai-cli-profile-manager",
   "status_line": {
     "state": "常用",
-    "as_of": "2026-10-11",
-    "source": "父项目总览状态“常用”；事实按 10 月 11 日 14:00 前的源码（10 月 8 日提交）、恢复记录的只读计数和版本查询核对，未新建运行。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+    "as_of": "2026-11-04",
+    "source": "项目源码和已装模块"
   },
   "screens": [
     {
       "id": "ai-cli-profile-manager-recoverable-runs-01",
       "section": "top",
       "title": "中断后只有同一个 Codex 任务身份还能证明，任务才会继续",
-      "text": "# 中断后只有同一个 Codex 任务身份还能证明，任务才会继续\n\n〔回到项目 → AI 工具配置管理〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nAI CLI Profile Manager · 功能说明\n\n后台文件任务留下编号和进度；中断后先找原会话和已发生动作，只有同一身份仍可证才接着做，不能复制摘要新开任务冒充恢复。\n\n**当前情况：**已有查询、中止和接续同一个Codex任务的机制；只有任务和模型身份仍一致才继续，取消受理不等于已完全停止。真实恢复只在 8 月 15 日的故障注入试验里发生过，日常使用中还没见到新的恢复记录。\n\n内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "text": "# 中断后只有同一个 Codex 任务身份还能证明，任务才会继续\n\n〔回到项目 → AI 工具配置管理〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nAI CLI Profile Manager · 功能说明\n\n后台文件任务留下编号和进度；中断后先找原会话和已发生动作，只有同一身份仍可证才接着做，不能复制摘要新开任务冒充恢复。\n\n**当前情况：**已有查询、中止和接续同一个Codex任务的机制；只有任务和模型身份仍一致才继续，取消受理不等于已完全停止。如果这条路线的型号已登记换代，状态会写“需要迁移”：原任务和记录留着，另开新任务用新型号。真实恢复只在 8 月 15 日的故障注入试验里发生过，日常使用中还没见到新的恢复记录。\n\n内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；需要迁移和非 Codex 默认权限按 11 月 4 日读到的源码更新；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
       "links": [
         {
           "text": "回到项目 → AI 工具配置管理",
@@ -65,7 +65,7 @@
       "id": "ai-cli-profile-manager-recoverable-runs-03",
       "section": "usage",
       "title": "结果怎么看",
-      "text": "## 结果怎么看\n\n## 正常时\n\n原任务身份和工作条件一致、继续与清理都核对后报告完成。\n\n## 发现问题时\n\n额度或暂时故障时保留原任务，符合条件才有界续作，不重复已发生的动作。\n\n## 入口不可用或证据不足时\n\n身份变化、记录损坏、本人取消或清理无法确认时停下，不把新任务说成旧任务恢复。",
+      "text": "## 结果怎么看\n\n## 正常时\n\n原任务身份和工作条件一致、继续与清理都核对后报告完成。\n\n## 发现问题时\n\n额度或暂时故障时保留原任务，符合条件才有界续作，不重复已发生的动作。\n\n## 入口不可用或证据不足时\n\n身份变化、记录损坏、本人取消或清理无法确认时停下，不把新任务说成旧任务恢复。型号已登记换代时明说需要迁移，保留原任务，请你另开新任务。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -77,7 +77,7 @@
       "id": "ai-cli-profile-manager-recoverable-runs-04",
       "section": "usage",
       "title": "从哪里开始",
-      "text": "## 从哪里开始\n\n用 aicli run start 发起程序化任务并保存 run id；中断后先用同一 run 记录检查能否恢复。\n\n## 需要准备什么\n\n- 原 run id\n\n- 原项目、模型和输入\n\n- 中断原因\n\n## 从开始到拿到结果\n\n1. **建立可追踪运行**　从标准输入交任务，后台控制器记录身份与公开进度。\n\n2. **中断先判原任务**　检查额度、暂时故障、输入和进程状态，只有同一线程身份仍成立才接续。\n\n3. **报告终态**　交回结果与进程清理证据；身份变化或硬失败时明确停止，不新开任务冒充断点恢复。",
+      "text": "## 从哪里开始\n\n用 aicli run start 发起程序化任务并保存 run id；中断后先用同一 run 记录检查能否恢复。\n\n## 需要准备什么\n\n- 原 run id\n\n- 原项目、模型和输入\n\n- 中断原因\n\n## 从开始到拿到结果\n\n1. **建立可追踪运行**　从标准输入交任务，后台控制器记录身份与公开进度。\n\n2. **中断先判原任务**　检查额度、暂时故障、输入和进程状态，只有同一线程身份仍成立才接续；型号已登记换代时不接回旧会话，明说需要迁移并保留原任务。\n\n3. **报告终态**　交回结果与进程清理证据；身份变化或硬失败时明确停止，不新开任务冒充断点恢复。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -89,7 +89,7 @@
       "id": "ai-cli-profile-manager-recoverable-runs-05",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\nCodex 可恢复控制面、权限回读与故障回归已实现\n\n## 关键规则与设计选择\n\n1. 所有 Codex machine run 固定 danger-full-access + approvalPolicy=never，不是只读沙箱。\n\n2. 非 Codex run 只是一性执行：默认 read-only，可选 workspace-write，不支持后台 exact resume。\n\n3. 受管 public_web_search 默认启用；--no-web-search 只关闭搜索，不改变完全访问。\n\n## 当前怎样实现\n\n- RecoveryService 为每个 run 保存 stateHash、前向 journal、不可变 attempt 事件与回执；正文不持久化。\n\n- CodexAppServerBridge 使用 thread/start、turn/start 与 thread/resume，逐条绑定 thread/turn/item 生命周期。子进程环境按白名单重建，不继承完整父环境或 Key；10 月 8 日起保留 HTTP_PROXY、HTTPS_PROXY、NO_PROXY 和 CLAUDE_CODE_PROXY_RESOLVES_HOSTS 四个变量，让后台任务沿用电脑已有的网络代理设置（与已退役的 ChatGPT 代理无关）。\n\n- CommandRouter 硬限制 timeout（等待超时）、steps、tool calls、output chars 与最多三次 resume，并让 background 只用于 Codex start/resume。\n\n- PublicWebSearch 只访问固定 HTTPS Bing RSS，拒绝重定向、Cookie、任意 URL/Header/Key；公开事件不含 query/result。\n\n- 桥接器结束时必须确认 app-server 与后代进程树清理，失败不会被成功正文覆盖。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\nCodex 可恢复控制面、权限回读与故障回归已实现\n\n## 关键规则与设计选择\n\n1. 所有 Codex machine run 固定 danger-full-access + approvalPolicy=never，不是只读沙箱。\n\n2. 非 Codex run 只是一次性执行：10 月 28 日起默认 danger-full-access，在本机正常执行、网络照常；只有显式选 read-only 或 workspace-write 才套禁网的外层沙箱；仍不支持后台 exact resume。11 月 4 日 09:16 `aicli run opencode-ollama-main ... --dry-run` 读到 policy=danger-full-access、modelInvoked=false、runtimeCreated=false，没有启动模型。\n\n3. 受管 public_web_search 默认启用；--no-web-search 只关闭搜索，不改变完全访问。\n\n## 当前怎样实现\n\n- RecoveryService 为每个 run 保存 stateHash、前向 journal、不可变 attempt 事件与回执；正文不持久化。\n\n- CodexAppServerBridge 使用 thread/start、turn/start 与 thread/resume，逐条绑定 thread/turn/item 生命周期。子进程环境按白名单重建，不继承完整父环境或 Key；10 月 8 日起保留 HTTP_PROXY、HTTPS_PROXY、NO_PROXY 和 CLAUDE_CODE_PROXY_RESOLVES_HOSTS 四个变量，让后台任务沿用电脑已有的网络代理设置（与已退役的 ChatGPT 代理无关）。\n\n- CommandRouter 硬限制 timeout（等待超时）、steps、tool calls、output chars 与最多三次 resume，并让 background 只用于 Codex start/resume。\n\n- PublicWebSearch 只访问固定 HTTPS Bing RSS，拒绝重定向、Cookie、任意 URL/Header/Key；公开事件不含 query/result。\n\n- 桥接器结束时必须确认 app-server 与后代进程树清理，失败不会被成功正文覆盖。",
       "links": [],
       "anchors": [
         {
@@ -150,7 +150,7 @@
       "id": "ai-cli-profile-manager-recoverable-runs-09",
       "section": "tech",
       "title": "出问题时",
-      "text": "## 出问题时\n\n解决什么\n\n防止中断后重复执行、身份悄悄变化、预算只写在文档里或隐藏思考被当成公共进度。\n\n## 边界\n\n- 恢复账本不是通用聊天历史。\n\n- AICLI 不判断低级模型是否胜任，也不自动换到更强模型。\n\n- 旧版本文件任务、当前零写入诊断和桌面后台子会话是不同证据。缺少当前程序化运行身份或清理证明时明确Unknown（未验证），不用另一条路线的成功补齐。\n\n## 失败与恢复\n\n- **控制器或 app-server 中断**：等待 writer 关闭并对账；只有明确瞬态且身份闭合才最多恢复三次。\n\n- **恢复返回新 thread 或权限变化**：resumeSupported=false，要求新工作区全量重跑。\n\n- **事件写入失败但模型已完成**：标记观察层 degraded，不自动重跑造成重复副作用。",
+      "text": "## 出问题时\n\n解决什么\n\n防止中断后重复执行、身份悄悄变化、预算只写在文档里或隐藏思考被当成公共进度。\n\n## 边界\n\n- 恢复账本不是通用聊天历史。\n\n- AICLI 不判断低级模型是否胜任，也不自动换到更强模型。\n\n- 旧版本文件任务、当前零写入诊断和桌面后台子会话是不同证据。缺少当前程序化运行身份或清理证明时明确写未验证，不用另一条路线的成功补齐。\n\n## 失败与恢复\n\n- **控制器或 app-server 中断**：等待 writer 关闭并对账；只有明确瞬态且身份闭合才最多恢复三次。\n\n- **恢复返回新 thread 或权限变化**：resumeSupported=false，要求新工作区全量重跑。\n\n- **型号已登记换代**：读状态就报 `status=migration_required`、目标型号和档位、`resumeSupported=false`；运行核心在执行前拦下，不把新型号放进旧线程，返回 `action=start_new_run`、`originalThreadPreserved=true`。这是有具体原因的另开 run，不是所有中断都要搬新目录。11 月 4 日只读了代码，没有访问真实 run 账本，也没有真实旧 run 走过。\n\n- **事件写入失败但模型已完成**：标记观察层 degraded，不自动重跑造成重复副作用。",
       "links": [],
       "anchors": [],
       "live": null,

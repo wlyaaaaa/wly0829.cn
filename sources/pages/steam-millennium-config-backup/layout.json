@@ -1410,7 +1410,7 @@
         "columns": 1,
         "illustration": "none",
         "connector": "none",
-        "text_ref": "旧入口照样能用",
+        "text_ref": "旧入口",
         "icons": "none",
         "item_count": 1,
         "status_position": "bottom_right"
@@ -1497,7 +1497,7 @@
         "columns": 1,
         "illustration": "none",
         "connector": "none",
-        "text_ref": "旧入口照样能用",
+        "text_ref": "旧入口",
         "portrait_columns": 1,
         "icons": "none",
         "item_count": 1,

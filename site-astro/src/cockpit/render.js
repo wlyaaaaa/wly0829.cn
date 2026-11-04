@@ -1044,15 +1044,14 @@ export function ownerState(level, s, who = '') {
   if (oa === 'none' || need === false) return s?.stuck === true ? 'attention' : 'neutral';
   return !who || AI_HANDLES.test(who) ? 'neutral' : lv;
 }
-// 今天出错的任务里，哪些已经恢复：后端每条错误带 recovered 时按它数；没有就用 overview.task_health；都没有返回 null（照旧只报出错总数）
+// 优先用后端尚未确认恢复的任务数；旧快照依次回退到逐项恢复记录和信号。
 const recovery = (v) => {
-  // 后端 10 月 12 日起：today_tasks 信号的 value 就是现在仍失败的数，recovered_today 是今天已恢复的数
-  const sig = sigOf(v.overview, 'today_tasks');
-  if (Number.isFinite(sig.recovered_today) && Number.isFinite(Number(sig.value))) return { open: Number(sig.value), done: sig.recovered_today };
+  const th = v.overview?.task_health;
+  if (th && Number.isFinite(th.unrecovered_today) && Number.isFinite(th.recovered_today)) return { open: th.unrecovered_today, done: th.recovered_today };
   const list = v.today_activity?.errors || [];
   if (list.length && list.every((e) => typeof e.recovered === 'boolean')) return { open: list.filter((e) => !e.recovered).length, done: list.filter((e) => e.recovered).length };
-  const th = v.overview?.task_health;
-  return th && Number.isFinite(th.unrecovered_today) && Number.isFinite(th.recovered_today) ? { open: th.unrecovered_today, done: th.recovered_today } : null;
+  const sig = sigOf(v.overview, 'today_tasks');
+  return Number.isFinite(sig.recovered_today) && sig.value != null && Number.isFinite(Number(sig.value)) ? { open: Number(sig.value), done: sig.recovered_today } : null;
 };
 const SHORT = { neutral: 'AI 在管', attention: '要你看', red: '要你看', unavailable: '读不到' };
 // 备份不正常时的那一句（状态格第一行和备份区开头共用）：写真实件数，分数里扣了 3 项就写“3 项备份失败（开发配置等）”，只有 1 项照原句
@@ -1084,16 +1083,16 @@ function triCells(v, ctx, off) {
   const pcStatus = pcLevel === 'ok' ? '正常' : LV[pcLevel] ? (pcBad.length ? pcBad.join('，') : pcWhy[0] || '有预警') : '读不到';
   const pcText = (c) => String(c?.text || '').replace(/^电脑读数：/, '');
   const pcDetail = (pcBad.length ? [bad(res) && pcText(res), bad(proc) && pcText(proc)] : [proc?.text && '现在 ' + pcText(proc)]).filter(Boolean).join('；');
-  // 自动任务：只数现在还没恢复的；已恢复的放下面一行灰色小字。“这周反复出错”只留最近一次仍失败的
+  // 自动任务：只数尚未确认恢复的；已恢复的放下面一行灰色小字。“这周反复出错”只留最近一次仍失败的
   const tk = sigOf(ov, 'today_tasks'), errs = todayErrors(v), sum = v.today_activity?.summary || {}, rec = recovery(v);
   const total = errs ? errs.owner + errs.other : Number.isFinite(tk.value) ? tk.value : null;
   const nErr = rec ? rec.open : total;
   // 这周反复出错：后端 task_health.current_repeated_7d（最近仍失败、七天至少 5 次的条数）是 0 时不挂；有数时列最近仍失败的那几条
   const cur = v.overview?.task_health?.current_repeated_7d;
   const repeat = cur === 0 ? [] : v.automation.items.filter((t) => Number(t.failures_7d) >= 5 && t.state === 'failed').sort((a, b) => b.failures_7d - a.failures_7d);
-  const tkSig = nErr === 0 && repeat.length ? { ...tk, ...(ov?.sections?.automation || { level: 'watch', color: 'neutral' }) } : nErr === 0 ? { ...tk, color: 'ok' } : tk;
+  const tkSig = rec?.open ? { ...tk, color: tk.color && tk.color !== 'ok' ? tk.color : 'neutral' } : nErr === 0 && repeat.length ? { ...tk, ...(ov?.sections?.automation || { level: 'watch', color: 'neutral' }) } : nErr === 0 ? { ...tk, color: 'ok' } : tk;
   const tkLevel = nErr === 0 && repeat.length ? tkSig.level : rec && !rec.open && !repeat.length && LV[tk.level] ? 'ok' : tk.level;
-  const tkStatus = nErr == null ? (tk.word || '读不到') : nErr === 0 ? (repeat.length ? '这周反复出错' : '今天都正常') : rec ? `今天 ${nErr} 个出错还没恢复` : `今天出错 ${nErr} 个`;
+  const tkStatus = nErr == null ? (tk.word || '读不到') : nErr === 0 ? (repeat.length ? '这周反复出错' : '今天都正常') : rec ? `今天 ${nErr} 个出错，尚未确认恢复` : `今天出错 ${nErr} 个`;
   const tkWhy = [Number.isFinite(sum.tasks_run) ? `今天跑了 ${sum.tasks_run} 个${errs && !rec ? `，出错 ${total} 个（${errorsText(errs)}）` : ''}` : '', repeat.length ? `这周反复出错：${repeat.slice(0, 2).map((t) => `${t.name} ${t.failures_7d} 次`).join('、')}` : ''].filter(Boolean).join('；');
   const tkNote = rec && rec.done ? `今天出过错、已恢复 ${rec.done} 个` : '';
   // 备份

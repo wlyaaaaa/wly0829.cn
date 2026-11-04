@@ -27,14 +27,14 @@
   "parent": "chinese-asr",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "ChineseASR 公开仓库 main（1bd5a04）的说话人分段、本人声音线索规则与配置，于 10 月 11 日按 14:00 前状态只读核对；未读取私人声纹档案或录音。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "as_of": "2026-11-04",
+   "source": "项目源码和模型配置"
   }
  },
  "source": {
   "page": "sources/pages/chinese-asr-speaker-attribution/page.json",
-  "sha256": "a1451bcbcb4d699285e8724a5512ebb20c0d9e4814bde11a2925524a4202642c",
-  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
+  "sha256": "7093ba37af66d344b60684651b59fa9c9bd357feeed6054a388330500d02c4a5",
+  "converted_at_beijing": "2026-11-04T12:05:28+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和模型配置",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和模型配置"
     },
     {
      "type": "action_button",
@@ -184,7 +184,7 @@ ChineseASR · 功能说明
 
 **当前情况：**已有匿名声音分组和可撤回归属线索；当前证据仍是推断，不能证明说话人的真实身份。
 
-项目技术事实核对于 2026-10-11（北京时间），采用当天 14:00 前的源码状态；具体测试保留各自日期，页面不实时探测运行状态。
+项目技术事实核对于 2026-11-04（北京时间），按当时的 main（4598696）只读核对；具体测试保留各自日期，页面不实时探测运行状态。
 
 项目源码：公开仓库
 
@@ -346,7 +346,7 @@ ChineseASR · 功能说明
 
 ## 入口不可用或证据不足时
 
-时间段或来源证据不能对应原音时只保留匿名组，无法确定的人保持未知。
+时间段或来源证据不能对应原音时只保留匿名组，无法确定的人保持未知。以前 Paraformer 转的旧稿，逐句时间可能和文字错位：这种稿不能拿来判断哪句是谁说的，要重跑；真要截取当证据，还要回听或单段复核。
 
 ::screen{#chinese-asr-speaker-attribution-03 section="usage"}
 
@@ -684,7 +684,7 @@ ChineseASR · 功能说明
 
 ## 当前怎样实现
 
-- Paraformer 可输出逐句时间和 CAM++ 匿名聚类。单文件 transcribe 在调用方确知人数时可显式传 --preset-spk-num N，结果记录分组方式是 automatic 还是 preset；省略则自动聚类。这个参数只在 Paraformer 单文件路径接受，其他引擎和 quick/strict/batch 路径不接受也不传递。
+- Paraformer 可输出逐句时间和 CAM++ 匿名聚类。当前流程用逐字 raw_text 加 timestamp 重建 sentence_info：对得上标 sentence_info_alignment.status=aligned，对不上就把逐句结果移开、不提供逐句时间；旧稿回读不可靠时报 sentence_timestamps_misaligned，属性归属也拒收。单文件 transcribe 在调用方确知人数时可显式传 --preset-spk-num N，结果记录分组方式是 automatic 还是 preset；省略则自动聚类。这个参数只在 Paraformer 单文件路径接受，其他引擎和 quick/strict/batch 路径不接受也不传递。
 
 - Paraformer 固定 `iic/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-pytorch@v2.0.4`；按需 person:self speaker verification 固定 CAM++ model revision v1.0.0、文件 campplus_cn_common.bin、阈值 0.31。
 
@@ -983,6 +983,8 @@ ChineseASR · 功能说明
 
 - **单声道混音分数接近阈值**：该分数进入更宽歧义带，不单独支持归属；仍可使用其他具体、有效的上下文，全部依据不足时才 unknown（未验证）。
 
+- **旧稿逐句时间错位**：回读报 sentence_timestamps_misaligned，属性归属拒收；重跑 Paraformer，真正截证据前再回听或单段复核。
+
 - **声学与具体上下文冲突**：同时记录两侧证据；只有上下文本身具体且一致时才说明为何暂时压过声学，并标为可撤销 inferred，否则 unknown（未验证）。
 
 ::screen{#chinese-asr-speaker-attribution-10 section="tech"}
@@ -1075,7 +1077,9 @@ ChineseASR · 功能说明
 
 - speaker evidence 与 attribution 回归包含在2026-08-31 的 345 项全量通过结果中；之后各次全量运行保留各自日期，不合并成新的全量通过。
 
-- configs/models.yaml 静态回读（2026-10-11）确认 Paraformer revision=v2.0.4、CAM++ speaker verification revision=v1.0.0、threshold=0.31；本轮未加载真实私人 profile，也未把阈值冒充身份认证。
+- configs/models.yaml 静态回读（2026-10-11）确认 Paraformer revision=v2.0.4、CAM++ speaker verification revision=v1.0.0、threshold=0.31；当时未加载真实私人 profile，也未把阈值冒充身份认证。
+
+- 2026-11-04 只读 src/zh_asr/sentence_alignment.py、pipeline.py、transcript_readback.py：逐句重建和错位拒收都在；没有重跑 Paraformer。
 
 - fixtures 覆盖双声道、单声道 unknown（未验证）、无时间戳、零长度时间和冲突证据；另有具体对话理由覆盖弱声纹反证、单声道歧义分数仍可由上下文判断，以及上下文本身冲突必须 unknown（未验证） 的用例。
 

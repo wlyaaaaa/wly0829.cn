@@ -248,7 +248,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 10 月 11 日 G 盘这一代约 45.97 GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。",
+        "text_ref": "111月4日G盘这一代约48.18GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -272,7 +272,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 10 月 11 日 G 盘这一代约 45.97 GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。",
+        "text_ref": "111月4日G盘这一代约48.18GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -332,7 +332,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "4每周一11:00启动WeChatBackup-Drive-Weekly（10月19日周一那次因热备事务没收尾而失败；",
+        "text_ref": "4. 每天 11:00",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -352,7 +352,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "4每周一11:00启动WeChatBackup-Drive-Weekly（10月19日周一那次因热备事务没收尾而失败；",
+        "text_ref": "4. 每天 11:00",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -408,7 +408,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- **单次上传达到 -MaxTransfer 8G 上限**：rclone 停止本轮继续传输并把非完成结果交给任务；后续任务可继续，但总云空间与累计流量仍需单独观察。",
+        "text_ref": "- **单次上传达到 -MaxTransfer 8G 上限**：rclone 停止这次继续传输并把非完成结果交给任务；后续任务可继续，但总云空间与累计流量仍需单独观察。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -431,7 +431,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- **单次上传达到 -MaxTransfer 8G 上限**：rclone 停止本轮继续传输并把非完成结果交给任务；后续任务可继续，但总云空间与累计流量仍需单独观察。",
+        "text_ref": "- **单次上传达到 -MaxTransfer 8G 上限**：rclone 停止这次继续传输并把非完成结果交给任务；后续任务可继续，但总云空间与累计流量仍需单独观察。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

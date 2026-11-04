@@ -30,45 +30,46 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "as_of": "2026-10-30 11:06",
-   "manifest": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\manifest.json",
+   "as_of": "2026-11-04 12:05",
+   "manifest": "config/panel-projects.json",
    "files": [
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\learning\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-memory\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\emerald-veil\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\meshclip-kit\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\password-center\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pcconfig\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-expression\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-formal-documents\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-health\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\proxyclean\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ramdisk-guardian\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\page.json",
+    "sources/pages/agents/page.json",
+    "sources/pages/ai-cli-profile-manager/page.json",
+    "sources/pages/chinese-asr/page.json",
+    "sources/pages/codex-agent-model-benchmark/page.json",
+    "sources/pages/codex-local-remote/page.json",
+    "sources/pages/codex-memory/page.json",
+    "sources/pages/daily-preferences/page.json",
+    "sources/pages/devconfig-backup/page.json",
+    "sources/pages/emerald-veil/page.json",
+    "sources/pages/github-local-index/page.json",
+    "sources/pages/learning/page.json",
+    "sources/pages/localocr/page.json",
+    "sources/pages/meshclip-kit/page.json",
+    "sources/pages/openclaw/page.json",
+    "sources/pages/password-center/page.json",
+    "sources/pages/pc-panel-hub/page.json",
+    "sources/pages/pcconfig/page.json",
+    "sources/pages/personal-expression/page.json",
     "sources/pages/personal-finance/page.json",
-    "sources/pages/phone-collector/page.json"
+    "sources/pages/personal-formal-documents/page.json",
+    "sources/pages/personal-health/page.json",
+    "sources/pages/personal-materials/page.json",
+    "sources/pages/personal-media/page.json",
+    "sources/pages/phone-collector/page.json",
+    "sources/pages/proxyclean/page.json",
+    "sources/pages/ramdisk-guardian/page.json",
+    "sources/pages/remote-control/page.json",
+    "sources/pages/steam-millennium-config-backup/page.json",
+    "sources/pages/sunshine-remote-streaming/page.json",
+    "sources/pages/timeaudit/page.json",
+    "sources/pages/typora-theme-pack/page.json",
+    "sources/pages/vault-tool/page.json",
+    "sources/pages/video-scaffold/page.json",
+    "sources/pages/wechat-history-ai-bridge/page.json",
+    "sources/pages/wechatdirect/page.json",
+    "sources/pages/wly0829-cn/page.json",
+    "sources/pages/work-delivery-copilot/page.json"
    ],
    "scale_source": "sources/pages/*/page.json:kind/status/public/registry.features"
   },
@@ -246,7 +247,7 @@
      "id": "n-projects",
      "text": "37 个项目",
      "meaning": "网站上有项目页的项目（常用、偶尔用、冻结都算）",
-     "as_of": "2026-10-30 11:06",
+     "as_of": "2026-11-04 12:05",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01"
@@ -256,7 +257,7 @@
      "id": "n-common",
      "text": "常用 23 个",
      "meaning": "page.json 的 status 为“常用”",
-     "as_of": "2026-10-30 11:06",
+     "as_of": "2026-11-04 12:05",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01"
@@ -266,7 +267,7 @@
      "id": "n-occasional",
      "text": "偶尔用 6 个",
      "meaning": "page.json 的 status 为“偶尔用”",
-     "as_of": "2026-10-30 11:06",
+     "as_of": "2026-11-04 12:05",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01"
@@ -276,7 +277,7 @@
      "id": "n-frozen",
      "text": "冻结 8 个",
      "meaning": "page.json 的 status 为“冻结”（kind 为 frozen）",
-     "as_of": "2026-10-30 11:06",
+     "as_of": "2026-11-04 12:05",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01",
@@ -287,7 +288,7 @@
      "id": "n-public",
      "text": "公开 19 个",
      "meaning": "page.json 的 public 为 true（冻结的也算）",
-     "as_of": "2026-10-30 11:06",
+     "as_of": "2026-11-04 12:05",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01"
@@ -297,7 +298,7 @@
      "id": "n-private",
      "text": "私有 18 个",
      "meaning": "page.json 的 public 为 false",
-     "as_of": "2026-10-30 11:06",
+     "as_of": "2026-11-04 12:05",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01"
@@ -307,7 +308,7 @@
      "id": "n-group-sizes",
      "text": "让 AI 守规矩、用对工具 2 个项目、让 AI 管好秘密 2 个项目、让 AI 管好备份和恢复 4 个项目、让电脑顺手、状态看得见 5 个项目、人不在电脑前也能办事 2 个项目、让 AI 懂我 5 个项目、让 AI 读懂我的材料 5 个项目、让 AI 帮我写和做 4 个项目、冻结（AI 不再维护） 8 个项目",
      "meaning": "每组有几个项目；和实际显示的卡片数一致",
-     "as_of": "2026-10-30 11:06",
+     "as_of": "2026-11-04 12:05",
      "source": "registry.groups.cards 关联 screens.id，只统计显示的项目卡片",
      "screens": [
       "projects-home-01"
@@ -317,7 +318,7 @@
      "id": "n-in-use",
      "text": "29 个在用的项目",
      "meaning": "常用＋偶尔用（不含冻结）",
-     "as_of": "2026-10-30 11:06",
+     "as_of": "2026-11-04 12:05",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01"
@@ -325,9 +326,9 @@
     },
     {
      "id": "n-features",
-     "text": "功能 1012 条（含冻结项目已停用的 151 条）",
+     "text": "功能 1044 条（含冻结项目已停用的 151 条）",
      "meaning": "各项目页 registry.features 条数相加；所有登记状态都计入，冻结项目另计停用条数。",
-     "as_of": "2026-10-30 11:06",
+     "as_of": "2026-11-04 12:05",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
      "screens": [
       "projects-home-01"
@@ -428,24 +429,9 @@
      "text": "本机模型"
     },
     {
-     "target": "/projects/github-index/",
-     "screen": "projects-home-05",
-     "text": "GitHub 项目总索引"
-    },
-    {
-     "target": "/projects/github-index/#g-find",
-     "screen": "projects-home-05",
-     "text": "找到和认准仓库"
-    },
-    {
-     "target": "/projects/github-index/#g-sync",
-     "screen": "projects-home-05",
-     "text": "查同步"
-    },
-    {
-     "target": "/projects/github-index/#g-publish",
-     "screen": "projects-home-05",
-     "text": "公开和分享之前"
+     "target": "https://github.com/wlyaaaaa/ai-cli-profile-manager",
+     "screen": "projects-home-04",
+     "text": "GitHub"
     },
     {
      "target": "/projects/password-center/",
@@ -488,6 +474,11 @@
      "text": "备份到私人仓库"
     },
     {
+     "target": "https://github.com/wlyaaaaa/vault-tool",
+     "screen": "projects-home-08",
+     "text": "GitHub"
+    },
+    {
      "target": "/projects/pcconfig/",
      "screen": "projects-home-10",
      "text": "电脑配置与恢复"
@@ -521,6 +512,11 @@
      "target": "/projects/devconfig-backup/#g-status",
      "screen": "projects-home-11",
      "text": "看状态和维护"
+    },
+    {
+     "target": "https://github.com/wlyaaaaa/devconfig-backup",
+     "screen": "projects-home-11",
+     "text": "GitHub"
     },
     {
      "target": "/projects/codex-memory/",
@@ -563,6 +559,11 @@
      "text": "查和管"
     },
     {
+     "target": "https://github.com/wlyaaaaa/steam-millennium-config-backup",
+     "screen": "projects-home-13",
+     "text": "GitHub"
+    },
+    {
      "target": "/projects/proxyclean/",
      "screen": "projects-home-16",
      "text": "代理上网修复"
@@ -581,6 +582,11 @@
      "target": "/projects/proxyclean/#g-see",
      "screen": "projects-home-16",
      "text": "看清楚、交给 AI"
+    },
+    {
+     "target": "https://github.com/wlyaaaaa/ProxyClean",
+     "screen": "projects-home-16",
+     "text": "GitHub"
     },
     {
      "target": "/projects/timeaudit/",
@@ -603,6 +609,11 @@
      "text": "剪贴板历史"
     },
     {
+     "target": "https://github.com/wlyaaaaa/TimeAudit",
+     "screen": "projects-home-17",
+     "text": "GitHub"
+    },
+    {
      "target": "/projects/pc-panel-hub/",
      "screen": "projects-home-18",
      "text": "双屏信息中心"
@@ -621,6 +632,11 @@
      "target": "/projects/pc-panel-hub/#g-guard",
      "screen": "projects-home-18",
      "text": "开机、睡眠和窗口"
+    },
+    {
+     "target": "https://github.com/wlyaaaaa/PC-Panel-Hub",
+     "screen": "projects-home-18",
+     "text": "GitHub"
     },
     {
      "target": "/projects/emerald-veil/",
@@ -643,9 +659,34 @@
      "text": "桌面和锁屏"
     },
     {
-     "target": "/how-this-site/",
+     "target": "https://github.com/wlyaaaaa/emerald-veil",
+     "screen": "projects-home-19",
+     "text": "GitHub"
+    },
+    {
+     "target": "/projects/wly0829-cn/",
      "screen": "projects-home-20",
-     "text": "这个网站"
+     "text": "个人网站（总看板）"
+    },
+    {
+     "target": "/projects/wly0829-cn/#g-front",
+     "screen": "projects-home-20",
+     "text": "首页和驾驶舱"
+    },
+    {
+     "target": "/projects/wly0829-cn/#g-upkeep",
+     "screen": "projects-home-20",
+     "text": "AI 怎么维护"
+    },
+    {
+     "target": "/projects/wly0829-cn/#g-paint",
+     "screen": "projects-home-20",
+     "text": "画和动效"
+    },
+    {
+     "target": "https://github.com/wlyaaaaa/wly0829.cn",
+     "screen": "projects-home-20",
+     "text": "GitHub"
     },
     {
      "target": "/projects/remote-control/",
@@ -666,6 +707,11 @@
      "target": "/projects/remote-control/#g-guard",
      "screen": "projects-home-22",
      "text": "规矩和保护"
+    },
+    {
+     "target": "https://github.com/wlyaaaaa/wly0829.cn",
+     "screen": "projects-home-22",
+     "text": "GitHub"
     },
     {
      "target": "/projects/sunshine-remote-streaming/",
@@ -728,6 +774,46 @@
      "text": "查设备记录"
     },
     {
+     "target": "/projects/personal-finance/",
+     "screen": "projects-home-46",
+     "text": "个人财务"
+    },
+    {
+     "target": "/projects/personal-finance/bill-collection/",
+     "screen": "projects-home-46",
+     "text": "收账单"
+    },
+    {
+     "target": "/projects/personal-finance/reconciliation/",
+     "screen": "projects-home-46",
+     "text": "对账"
+    },
+    {
+     "target": "/projects/personal-finance/monthly-report/",
+     "screen": "projects-home-46",
+     "text": "月度报数"
+    },
+    {
+     "target": "/projects/phone-collector/",
+     "screen": "projects-home-47",
+     "text": "手机采集"
+    },
+    {
+     "target": "/projects/phone-collector/#g-collect",
+     "screen": "projects-home-47",
+     "text": "采集"
+    },
+    {
+     "target": "/projects/phone-collector/#g-handoff",
+     "screen": "projects-home-47",
+     "text": "交给电脑"
+    },
+    {
+     "target": "/projects/phone-collector/#g-view",
+     "screen": "projects-home-47",
+     "text": "手机上直接看"
+    },
+    {
      "target": "/projects/learning/",
      "screen": "projects-home-28",
      "text": "学习方法"
@@ -763,9 +849,14 @@
      "text": "录音转文字"
     },
     {
+     "target": "https://github.com/wlyaaaaa/ChineseASR",
+     "screen": "projects-home-30",
+     "text": "GitHub"
+    },
+    {
      "target": "/projects/chinese-asr/#g-cloud",
      "screen": "projects-home-30",
-     "text": "云端复核"
+     "text": "云端转写和复核"
     },
     {
      "target": "/projects/localocr/",
@@ -788,6 +879,11 @@
      "text": "结果靠得住"
     },
     {
+     "target": "https://github.com/wlyaaaaa/LocalOCR",
+     "screen": "projects-home-31",
+     "text": "GitHub"
+    },
+    {
      "target": "/projects/wechatdirect/",
      "screen": "projects-home-32",
      "text": "微信聊天读取"
@@ -803,9 +899,14 @@
      "text": "聊天档案"
     },
     {
-     "target": "/projects/wechatdirect/#g-moments",
+     "target": "https://github.com/wlyaaaaa/WeChatDirect",
      "screen": "projects-home-32",
-     "text": "朋友圈"
+     "text": "GitHub"
+    },
+    {
+     "target": "/projects/wechatdirect/#native-actions",
+     "screen": "projects-home-32",
+     "text": "收发微信"
     },
     {
      "target": "/projects/personal-media/",
@@ -841,26 +942,6 @@
      "target": "/projects/personal-materials/#g-intake",
      "screen": "projects-home-34",
      "text": "收进来"
-    },
-    {
-     "target": "/projects/personal-expression/",
-     "screen": "projects-home-36",
-     "text": "个人表达"
-    },
-    {
-     "target": "/projects/personal-expression/#g-explain",
-     "screen": "projects-home-36",
-     "text": "讲给我听"
-    },
-    {
-     "target": "/projects/personal-expression/#g-reply",
-     "screen": "projects-home-36",
-     "text": "替我拟消息"
-    },
-    {
-     "target": "/projects/personal-expression/#g-learn",
-     "screen": "projects-home-36",
-     "text": "记住纠正"
     },
     {
      "target": "/projects/personal-formal-documents/",
@@ -923,44 +1004,9 @@
      "text": "导出保护"
     },
     {
-     "target": "/projects/openclaw/",
-     "screen": "projects-home-42",
-     "text": "OpenClaw 网关"
-    },
-    {
-     "target": "/projects/openclaw/#why-frozen",
-     "screen": "projects-home-42",
-     "text": "为什么冻结"
-    },
-    {
-     "target": "/projects/codex-remote/",
-     "screen": "projects-home-43",
-     "text": "Codex 远程"
-    },
-    {
-     "target": "/projects/codex-remote/#why-frozen",
-     "screen": "projects-home-43",
-     "text": "为什么冻结"
-    },
-    {
-     "target": "/projects/codex-agent-model-benchmark/",
-     "screen": "projects-home-44",
-     "text": "AI 模型评测"
-    },
-    {
-     "target": "/projects/codex-agent-model-benchmark/#why-frozen",
-     "screen": "projects-home-44",
-     "text": "为什么冻结"
-    },
-    {
-     "target": "/projects/wechat-history-ai-bridge/",
-     "screen": "projects-home-45",
-     "text": "微信记录交给 AI"
-    },
-    {
-     "target": "/projects/wechat-history-ai-bridge/#why-frozen",
-     "screen": "projects-home-45",
-     "text": "为什么冻结"
+     "target": "https://github.com/wlyaaaaa/typora-theme-pack",
+     "screen": "projects-home-39",
+     "text": "GitHub"
     },
     {
      "target": "/projects/video-scaffold/",
@@ -983,6 +1029,61 @@
      "text": "出片"
     },
     {
+     "target": "/projects/openclaw/",
+     "screen": "projects-home-42",
+     "text": "OpenClaw 网关"
+    },
+    {
+     "target": "/projects/openclaw/#why-frozen",
+     "screen": "projects-home-42",
+     "text": "为什么冻结"
+    },
+    {
+     "target": "/projects/sunshine-remote-streaming/",
+     "screen": "projects-home-42",
+     "text": "远程电脑串流"
+    },
+    {
+     "target": "/projects/codex-remote/",
+     "screen": "projects-home-43",
+     "text": "Codex 远程"
+    },
+    {
+     "target": "/projects/codex-remote/#why-frozen",
+     "screen": "projects-home-43",
+     "text": "为什么冻结"
+    },
+    {
+     "target": "/projects/sunshine-remote-streaming/",
+     "screen": "projects-home-43",
+     "text": "远程电脑串流"
+    },
+    {
+     "target": "/projects/codex-agent-model-benchmark/",
+     "screen": "projects-home-44",
+     "text": "AI 模型评测"
+    },
+    {
+     "target": "/projects/codex-agent-model-benchmark/#why-frozen",
+     "screen": "projects-home-44",
+     "text": "为什么冻结"
+    },
+    {
+     "target": "/projects/wechat-history-ai-bridge/",
+     "screen": "projects-home-45",
+     "text": "微信记录交给 AI"
+    },
+    {
+     "target": "/projects/wechat-history-ai-bridge/#why-frozen",
+     "screen": "projects-home-45",
+     "text": "为什么冻结"
+    },
+    {
+     "target": "/projects/wechatdirect/",
+     "screen": "projects-home-45",
+     "text": "微信聊天读取"
+    },
+    {
      "target": "/projects/ramdisk-guardian/",
      "screen": "projects-home-15",
      "text": "内存盘守护"
@@ -1003,44 +1104,44 @@
      "text": "为什么冻结"
     },
     {
-     "target": "/projects/personal-finance/",
-     "screen": "projects-home-46",
-     "text": "个人财务"
+     "target": "/projects/pcconfig/",
+     "screen": "projects-home-24",
+     "text": "电脑配置与恢复"
     },
     {
-     "target": "/projects/personal-finance/bill-collection/",
-     "screen": "projects-home-46",
-     "text": "收账单"
+     "target": "/projects/personal-expression/",
+     "screen": "projects-home-36",
+     "text": "个人表达"
     },
     {
-     "target": "/projects/personal-finance/reconciliation/",
-     "screen": "projects-home-46",
-     "text": "对账"
+     "target": "/projects/personal-expression/#personal-expression-01",
+     "screen": "projects-home-36",
+     "text": "为什么存档"
     },
     {
-     "target": "/projects/personal-finance/monthly-report/",
-     "screen": "projects-home-46",
-     "text": "月度报数"
+     "target": "/rules/charter/",
+     "screen": "projects-home-36",
+     "text": "约法"
     },
     {
-     "target": "/projects/phone-collector/",
-     "screen": "projects-home-47",
-     "text": "手机采集"
+     "target": "/projects/daily-preferences/",
+     "screen": "projects-home-36",
+     "text": "个人理解库"
     },
     {
-     "target": "/projects/phone-collector/#g-collect",
-     "screen": "projects-home-47",
-     "text": "采集"
+     "target": "/projects/github-index/",
+     "screen": "projects-home-05",
+     "text": "GitHub 项目总索引"
     },
     {
-     "target": "/projects/phone-collector/#g-handoff",
-     "screen": "projects-home-47",
-     "text": "交给电脑"
+     "target": "/projects/github-index/#github-local-index-01",
+     "screen": "projects-home-05",
+     "text": "为什么冻结"
     },
     {
-     "target": "/projects/phone-collector/#g-keepalive",
-     "screen": "projects-home-47",
-     "text": "保活和自查"
+     "target": "/projects/pcconfig/",
+     "screen": "projects-home-05",
+     "text": "电脑配置与恢复"
     }
    ],
    "live": []
@@ -1083,8 +1184,8 @@
  },
  "source": {
   "page": "sources/pages/projects-home/page.json",
-  "sha256": "44cd0ea18ffd60b06aa68021d51e16edc797f94ad4229c6d66228d6343096e9e",
-  "converted_at_beijing": "2026-10-31T16:43:53+08:00"
+  "sha256": "1cd27f0a26094fb932c6289cdc7ddd9465483748cdd79b143a3eefd858a23b29",
+  "converted_at_beijing": "2026-11-04T12:05:36+08:00"
  }
 }
 ---
@@ -1412,9 +1513,9 @@
 
 公开 **19 个** · 私有 **18 个**
 
-功能 **1012 条**（各项目页“全部功能”相加，含冻结项目已停用的 151 条）
+功能 **1044 条**（各项目页“全部功能”相加，含冻结项目已停用的 151 条）
 
-截至北京时间 2026-10-30 11:06
+截至北京时间 2026-11-04 12:05
 
 **按本事分组**
 
@@ -2459,7 +2560,7 @@
    "status": "常用",
    "visibility": "private",
    "github": null,
-   "tagline": "每天把电脑备份两份，坏了照着就能恢复。",
+   "tagline": "每天把电脑备份两份；坏了有恢复指南，整机还原还没实测。",
    "links": [
     {
      "text": "每天的备份",
@@ -2568,7 +2669,7 @@
 ```
 
 **〔电脑配置与恢复〕**　常用　　私有
-每天把电脑备份两份，坏了照着就能恢复。
+每天把电脑备份两份；坏了有恢复指南，整机还原还没实测。
 直达：〔每天的备份〕　〔坏了怎么办〕　〔卡死和排障〕
 
 ::screen{#projects-home-11 section="groups"}
@@ -4988,8 +5089,8 @@
     "href": "/projects/phone-collector/#g-handoff"
    },
    {
-    "text": "保活和自查",
-    "href": "/projects/phone-collector/#g-keepalive"
+    "text": "手机上直接看",
+    "href": "/projects/phone-collector/#g-view"
    }
   ],
   "anchors": [
@@ -5008,7 +5109,7 @@
    "status": "常用",
    "visibility": "private",
    "github": null,
-   "tagline": "装在安卓手机上的小 App，把使用记录、装机清单和定位存好，等电脑在家收走交给个人理解库。",
+   "tagline": "安卓手机上的小 App：把使用记录、装机清单、定位和步数存好，等电脑在家收走交给个人理解库；流量打开 App 就能看。",
    "links": [
     {
      "text": "采集",
@@ -5019,8 +5120,8 @@
      "href": "/projects/phone-collector/#g-handoff"
     },
     {
-     "text": "保活和自查",
-     "href": "/projects/phone-collector/#g-keepalive"
+     "text": "手机上直接看",
+     "href": "/projects/phone-collector/#g-view"
     }
    ]
   }
@@ -5099,8 +5200,8 @@
 ```
 
 **〔手机采集〕**　常用　　私有
-装在安卓手机上的小 App，把使用记录、装机清单和定位存好，等电脑在家收走交给个人理解库。
-直达：〔采集〕　〔交给电脑〕　〔保活和自查〕
+安卓手机上的小 App：把使用记录、装机清单、定位和步数存好，等电脑在家收走交给个人理解库；流量打开 App 就能看。
+直达：〔采集〕　〔交给电脑〕　〔手机上直接看〕
 
 ::screen{#projects-home-28 section="groups"}
 
@@ -5402,12 +5503,12 @@
     "href": "/projects/chinese-asr/#g-transcribe"
    },
    {
-    "text": "云端复核",
-    "href": "/projects/chinese-asr/#g-cloud"
-   },
-   {
     "text": "GitHub",
     "href": "https://github.com/wlyaaaaa/ChineseASR"
+   },
+   {
+    "text": "云端转写和复核",
+    "href": "/projects/chinese-asr/#g-cloud"
    }
   ],
   "anchors": [
@@ -5437,7 +5538,7 @@
      "href": "/projects/chinese-asr/#g-transcribe"
     },
     {
-     "text": "云端复核",
+     "text": "云端转写和复核",
      "href": "/projects/chinese-asr/#g-cloud"
     }
    ]
@@ -5536,7 +5637,7 @@
 
 **〔中文语音转写〕**　常用　　〔GitHub〕
 把中文录音和口述变成能逐句核对的文字。
-直达：〔听写〕　〔录音转文字〕　〔云端复核〕
+直达：〔听写〕　〔录音转文字〕　〔云端转写和复核〕
 
 ::screen{#projects-home-31 section="groups"}
 
@@ -5724,12 +5825,12 @@
     "href": "/projects/wechatdirect/#g-archive"
    },
    {
-    "text": "朋友圈",
-    "href": "/projects/wechatdirect/#g-moments"
-   },
-   {
     "text": "GitHub",
     "href": "https://github.com/wlyaaaaa/WeChatDirect"
+   },
+   {
+    "text": "收发微信",
+    "href": "/projects/wechatdirect/#native-actions"
    }
   ],
   "anchors": [
@@ -5748,19 +5849,19 @@
    "status": "常用",
    "visibility": "public",
    "github": "https://github.com/wlyaaaaa/WeChatDirect",
-   "tagline": "让 AI 读懂电脑上的微信，只读点名的那一段。",
+   "tagline": "让 AI 读懂电脑上的微信，只读点名的那一段；我明确要求时也能替我收发。",
    "links": [
     {
      "text": "读聊天",
      "href": "/projects/wechatdirect/#g-read"
     },
     {
-     "text": "聊天档案",
-     "href": "/projects/wechatdirect/#g-archive"
+     "text": "收发微信",
+     "href": "/projects/wechatdirect/#native-actions"
     },
     {
-     "text": "朋友圈",
-     "href": "/projects/wechatdirect/#g-moments"
+     "text": "聊天档案",
+     "href": "/projects/wechatdirect/#g-archive"
     }
    ]
   }
@@ -5857,8 +5958,8 @@
 ```
 
 **〔微信聊天读取〕**　常用　　〔GitHub〕
-让 AI 读懂电脑上的微信，只读点名的那一段。
-直达：〔读聊天〕　〔聊天档案〕　〔朋友圈〕
+让 AI 读懂电脑上的微信，只读点名的那一段；我明确要求时也能替我收发。
+直达：〔读聊天〕　〔收发微信〕　〔聊天档案〕
 
 ::screen{#projects-home-33 section="groups"}
 

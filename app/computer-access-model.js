@@ -359,6 +359,7 @@ export const errorMessages = {
   public_state_changed: "授权、开机或配置状态已变化。请查看最新状态，再决定是否重新办理。",
   public_request_expired: "本次请求已到期，已有授权保持原期限。",
   public_totp_format_invalid: "请输入完整的6位动态验证码，保留开头的0。",
+  public_totp_code_already_used: "这个验证码已使用，请等下一个验证码后重新办理。已有授权保持原期限。",
   totp_verification_failed: "动态验证码不正确。本次未完成，已有授权保持原期限。",
   public_totp_cooldown: "验证暂不可用（冷却中），请等候显示的可重试时间。已有授权不受影响。",
   public_totp_not_ready: "主机验证器暂不可用，请稍后重新检查。",

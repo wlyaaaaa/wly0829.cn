@@ -191,7 +191,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "最近真用了多少：10月8日07:09至9日01:25，主机收到163次工具调用（",
+        "text_ref": "最近真用了多少：11月2日05:46至4日08:18，主机收到563次工具调用（",
         "variant": "stacked",
         "width": "100%",
         "chart_type": "stacked",
@@ -252,7 +252,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "最近真用了多少：10月8日07:09至9日01:25，主机收到163次工具调用（",
+        "text_ref": "最近真用了多少：11月2日05:46至4日08:18，主机收到563次工具调用（",
         "variant": "stacked",
         "chart_type": "stacked",
         "labels_layout": "rows"
@@ -639,7 +639,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "两台用同一个提交的源码，配置、登录凭据、部署和回退各管各的，不互相复制。"
+        "text_ref": "两台共用同一份源码实现，配置、登录凭据、部署和回退各管各的，不互相复制；"
       }
     ],
     "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
@@ -672,7 +672,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "两台用同一个提交的源码，配置、登录凭据、部署和回退各管各的，不互相复制。"
+        "text_ref": "两台共用同一份源码实现，配置、登录凭据、部署和回退各管各的，不互相复制；"
       }
     ],
     "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
@@ -884,7 +884,10 @@
         "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": "auto",
+        "item_spans": {
+          "12": 3
+        }
       },
       {
         "type": "section_heading",
@@ -898,7 +901,10 @@
         "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": "auto",
+        "item_spans": {
+          "12": 3
+        }
       },
       {
         "type": "prose",
@@ -1005,7 +1011,11 @@
         "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": "auto",
+        "item_spans": {
+          "26": 3,
+          "28": 3
+        }
       },
       {
         "type": "section_heading",
@@ -1019,7 +1029,11 @@
         "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": "auto",
+        "item_spans": {
+          "26": 3,
+          "28": 3
+        }
       }
     ],
     "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",

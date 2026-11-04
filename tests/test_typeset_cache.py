@@ -55,11 +55,10 @@ class TypesetCacheTests(unittest.TestCase):
         self.assertEqual(promote_legacy_cache(cache, [{'key': 'resume', 'prior_key': 'old'}]), 1)
         self.assertEqual(cache['resume']['html'], 'measured')
 
-    def test_timestamp_body_and_engine_across_269_pages(self):
+    def test_timestamp_body_and_engine_across_current_pages(self):
         with tempfile.TemporaryDirectory(prefix='typeset-cache-') as folder:
             root = Path(folder)
             pages = sorted((ROOT / 'site-astro/src/content/pages').glob('*.md'))
-            self.assertEqual(len(pages), 269)
             md_before = [markdown_render_sha(page) for page in pages]
             # Use the actual converted Markdown fingerprints. The browser-key
             # checks below use one fixture screen per page without launching Chrome.
@@ -95,7 +94,7 @@ class TypesetCacheTests(unittest.TestCase):
             self.assertNotEqual(old_engine, new_engine)
             engine_before = [renderer.screen_cache_key(doc, 'h', old_engine) for doc in docs]
             engine_after = [renderer.screen_cache_key(doc, 'h', new_engine) for doc in docs]
-            self.assertEqual(sum(a != b for a, b in zip(engine_before, engine_after)), 269)
+            self.assertEqual(sum(a != b for a, b in zip(engine_before, engine_after)), len(pages))
 
             hydration_before = renderer.hydration_fingerprint()
             with patch.object(renderer, 'HYDRATE_JS', renderer.HYDRATE_JS + '\n// layout change'):

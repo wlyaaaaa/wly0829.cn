@@ -27,8 +27,11 @@
   "parent": "video-scaffold",
   "status_line": {
    "state": "偶尔用",
-   "as_of": "2026-10-22",
-   "source": "内容按北京时间 10 月 22 日 01:25 最后一次提交 626774f 核对（10 月 22 日 06:47 读），未打开任何预览"
+   "as_of": "2026-11-04",
+   "source": "项目源码和说明文档",
+   "facts": [
+    "这次没有打开任何预览；文字关卡还没有真片运行记录"
+   ]
   },
   "based_on": {
    "commit": "cc41e514b2886fff8e04b1883562d25bd59089ef",
@@ -39,8 +42,8 @@
  },
  "source": {
   "page": "sources/pages/video-scaffold-preflight-preview/page.json",
-  "sha256": "fbfb07729eea6d1539ca33c2e216d1f8b830f0ea3f7686e4a1c53d5e01383841",
-  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
+  "sha256": "399faee56b0f0ac21a14c4fa300de6c98f5ddcd05a45b66b9c6acec5d5c16e02",
+  "converted_at_beijing": "2026-11-04T12:05:42+08:00"
  }
 }
 ---
@@ -88,9 +91,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "这次没有打开任何预览；文字关卡还没有真片运行记录",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 22 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和说明文档",
      "row": "top"
     },
     {
@@ -130,9 +137,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "这次没有打开任何预览；文字关卡还没有真片运行记录",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 22 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和说明文档"
     },
     {
      "type": "action_button",
@@ -177,7 +188,7 @@ video-scaffold · 功能说明
 
 **当前情况：**四套工具的检查和预览都在源码里；最终转场、混音和成片仍需实际观看，这次网页核对没有打开任何预览。docfilm 的文字时间表关卡 10 月 28 日起才合进主线，这次只读了源码和说明，没有跑过，不能说已实测通过。
 
-项目源码：公开仓库
+项目源码：私有仓库
 
 ::screen{#video-scaffold-preflight-preview-02 section="usage"}
 
@@ -522,7 +533,7 @@ video-scaffold · 功能说明
 
 ## 从哪里开始
 
-图文页：`python -m pipeline.pages <表.json> plan` 排出每页起止并做文字时序检查，`stills [秒数]` 出关键帧。分镜路线：保存片段后运行 `run.ps1 build`、`lint`、`preview`。独立网页作品：`webfilm/run.ps1 preview <作品目录>` 打开实时播放器，`stills --at …` 出关键帧，`render --start … --end …` 只出一段。图文页的 plan 加 `--all` 能一次把所有页的错列全；stills 加 `--sheet` 另出按时间排好的 3×4 小样表。docfilm：`python -X utf8 docfilm/shotlist.py check <镜头单.json>` 做只读检查，`board <镜头单.json>` 出分镜联系表；`python -X utf8 -m docfilm.timeline_check <分段表.json>` 不渲染、只跑文字关卡，`assemble build` 合片前也会自动跑。
+图文页：`python -m pipeline.pages <表.json> plan` 排出每页起止并做文字时序检查，`stills [秒数]` 出关键帧。分镜路线：保存片段后运行 `run.ps1 build`、`lint`、`preview`。独立网页作品：`webfilm/run.ps1 preview <作品目录>` 打开实时播放器，`stills --at …` 出关键帧，`render --start … --end …` 只出一段。图文页的 plan 加 `--all` 能一次把所有页的错列全；stills 加 `--sheet` 另出按时间排好的 3×4 小样表。docfilm：`python -X utf8 docfilm/shotlist.py check <镜头单.json>` 检查镜头单（平时不出片；用了清水印的原件时会写识字图片和缓存，并调用本机文字识别），`board <镜头单.json>` 出分镜联系表；`python -X utf8 -m docfilm.timeline_check <分段表.json>` 不渲染、只跑文字关卡（不占显卡，但会导出文字表和报告），`assemble build` 合片前也会自动跑。
 
 ## 需要准备什么
 
@@ -632,7 +643,7 @@ video-scaffold · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-图文页时间表与关键帧（含 plan --all 和 stills --sheet）、分镜搭建与布局阻断、有声预览、网页作品实时预览与局部出片已在源码中；本次未运行（内容核对到北京时间 2026-10-22 01:25 的最后一次提交 626774f，10 月 22 日 06:47 读）；docfilm 的镜头单检查、分镜联系表和文字时间表关卡按北京时间 10 月 30 日 01:43 最后一次提交 2dbab62 的源码和说明补读，这次也没有运行
+图文页时间表与关键帧（含 plan --all 和 stills --sheet）、分镜搭建与布局阻断、有声预览、网页作品实时预览与局部出片已在源码中；本次未运行（内容核对到北京时间 2026-10-22 01:25 的最后一次提交 626774f，10 月 22 日 06:47 读）；docfilm 的镜头单检查、分镜联系表和文字时间表关卡按北京时间 10 月 31 日 14:19 最后一次提交 3c1c117 的源码和说明核对（11 月 4 日），这次也没有运行
 
 ## 关键规则与设计选择
 
@@ -723,9 +734,9 @@ video-scaffold · 功能说明
 
 - `pipeline.page_compare snapshot/compare` 为已审定画面生成整页和元素片段，逐字节列差异，认不出的元素记“无法比较”。现在默认扫描任意影片目录里的分镜表，也可只列出已通过的表；本次只核对了实现，没有实际比较。
 
-- docfilm `shotlist check` 只读检查锚点、素材登记与打码框、时间顺序，多样性和“字不在文稿里”只作提醒；`board` 给每个镜头在开头、动作做完、结尾各出一张定格拼成联系表。
+- docfilm `shotlist check` 检查锚点、素材登记与打码框、时间顺序和信息层排不排得下，多样性和“字不在文稿里”只作提醒；`board` 给每个镜头在开头、动作做完、结尾各出一张定格拼成联系表。`check` 不能一概当成不写文件的入口：原件写了 `clean: "watermark"` 时，它会创建识字图片和缓存、调用 LocalOCR。这是编译阶段只看选定原件的条件检查，和 filmcheck 对成片跑的 OCR 是两回事；release 的 filmcheck 默认只跑 visual、audio，成片 OCR 要另跑。
 
-- docfilm 文字时间表关卡（`docfilm.timeline_check`，`assemble build` 合片前自动跑）从框架字幕、HUD、通话和短信卡、卡片出字、放大条等实际排版读文字框，运动文字按每个成片帧的实际位置比。默认检查：两层文字完全显示时任意一帧相交就报错；插入段和片尾卡占屏时不能有字幕；全片结尾必须淡黑且至少 0.5 秒；放大条、标签、卡片完整停留至少 1.5 秒（重点放大条 2.5 秒）；普通文字留 5% 安全区，文字不能出卡出画；系列配置可要求顶栏日期在事件表里、不是出片当天，并拦不该上屏的字。每次在成片旁的检查目录导出文字时间表 JSON、CSV 和检查结果，只保留最近五次。
+- docfilm 文字时间表关卡（`docfilm.timeline_check`，`assemble build` 合片前自动跑）从框架字幕、HUD、通话和短信卡、卡片出字、放大条等实际排版读文字框，运动文字按每个成片帧的实际位置比。默认检查：两层文字完全显示时任意一帧相交就报错；插入段和片尾卡占屏时不能有字幕；全片结尾必须淡黑且至少 0.5 秒；放大条、标签、卡片完整停留至少 1.5 秒（重点放大条 2.5 秒）；普通文字留 5% 安全区，文字不能出卡出画；系列配置可要求顶栏日期在事件表里、不是出片当天，并拦不该上屏的字。每次在成片旁的检查目录导出文字时间表 JSON、CSV 和检查结果，只保留最近五次，所以单跑它虽然不渲染、不占显卡，也不是不写文件。
 
 - 放行用 `--waive-text 问题ID=理由`（单独检查时叫 `--waive`），一次只认当前报告里的一个错误编号、理由不能为空；编号按规则、镜号、层名和实际文字算，改无关字幕或重排时间不会让放行失效，改了相关文字就要重新核对。同一问题重复出现时保留每次的时间和证据，并记出现次数；拼错、过期或拿提醒当错误放行都会被拒绝。成片已存在且没加 `--force` 时，build 在关卡前就拒绝运行，不动旧成片和旧清单。
 

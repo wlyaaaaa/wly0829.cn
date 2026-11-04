@@ -58,13 +58,13 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "我在折腾的",
+        "text_ref": "做点日常用得上的东西",
         "align": "left",
         "size": "small"
       },
       {
         "type": "prose",
-        "text_ref": "下面六个项目",
+        "text_ref": "六张卡只写项目名",
         "size": "large"
       }
     ],
@@ -109,16 +109,12 @@
       },
       {
         "type": "prose",
-        "text_ref": "中文语音转写",
+        "text_ref": "把录音变成文字",
         "row": "project"
       },
       {
-        "type": "feature_card",
-        "text_ref": "375+段",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "numeric_emphasis": true,
+        "type": "action_button",
+        "text_ref": "去网站看看",
         "row": "project"
       }
     ],
@@ -163,16 +159,12 @@
       },
       {
         "type": "prose",
-        "text_ref": "本地文字识别",
+        "text_ref": "把图片里的字提出来",
         "row": "project"
       },
       {
-        "type": "feature_card",
-        "text_ref": "现存 11,491 次",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "numeric_emphasis": true,
+        "type": "action_button",
+        "text_ref": "去网站看看",
         "row": "project"
       }
     ],
@@ -217,16 +209,12 @@
       },
       {
         "type": "prose",
-        "text_ref": "电脑使用与性能记录",
+        "text_ref": "回看电脑时间与卡顿",
         "row": "project"
       },
       {
-        "type": "feature_card",
-        "text_ref": "540万秒",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "numeric_emphasis": true,
+        "type": "action_button",
+        "text_ref": "去网站看看",
         "row": "project"
       }
     ],
@@ -265,22 +253,18 @@
       },
       {
         "type": "section_heading",
-        "text_ref": "ai-cli-profile-manager",
+        "text_ref": "AI CLI",
         "row": "project",
         "width": "60%"
       },
       {
         "type": "prose",
-        "text_ref": "AI工具配置管理",
+        "text_ref": "让 AI 命令行好用起来",
         "row": "project"
       },
       {
-        "type": "feature_card",
-        "text_ref": "21条",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "numeric_emphasis": true,
+        "type": "action_button",
+        "text_ref": "去网站看看",
         "row": "project"
       }
     ],
@@ -319,22 +303,18 @@
       },
       {
         "type": "section_heading",
-        "text_ref": "PC-Panel-Hub",
+        "text_ref": "PC Panel",
         "row": "project",
         "width": "68%"
       },
       {
         "type": "prose",
-        "text_ref": "双屏信息中心",
+        "text_ref": "把电脑状态放到小屏上",
         "row": "project"
       },
       {
-        "type": "feature_card",
-        "text_ref": "85,063帧",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "numeric_emphasis": true,
+        "type": "action_button",
+        "text_ref": "去网站看看",
         "row": "project"
       }
     ],
@@ -373,22 +353,18 @@
       },
       {
         "type": "section_heading",
-        "text_ref": "video-scaffold",
+        "text_ref": "Video Scaffold",
         "row": "project",
         "width": "60%"
       },
       {
         "type": "prose",
-        "text_ref": "本地视频制作",
+        "text_ref": "从文案到成片",
         "row": "project"
       },
       {
-        "type": "feature_card",
-        "text_ref": "32种",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "numeric_emphasis": true,
+        "type": "action_button",
+        "text_ref": "去网站看看",
         "row": "project"
       }
     ],
@@ -440,6 +416,38 @@
     "themes_required": [
       "light",
       "dark"
+    ]
+  },
+  {
+    "screen": "github-profile-10",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "打开项目源码",
+        "align": "left",
+        "size": "small"
+      },
+      {
+        "type": "prose",
+        "text_ref": "六张卡下面有一个折叠条"
+      }
+    ]
+  },
+  {
+    "screen": "github-profile-11",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "留一点折腾的足迹",
+        "align": "left",
+        "size": "small"
+      },
+      {
+        "type": "prose",
+        "text_ref": "一条小蛇沿着"
+      }
     ]
   }
 ]

@@ -27,8 +27,11 @@
   "parent": "video-scaffold",
   "status_line": {
    "state": "偶尔用",
-   "as_of": "2026-10-22",
-   "source": "内容按北京时间 10 月 22 日 01:25 最后一次提交 626774f 核对（10 月 22 日 06:47 读），未出片、未观看"
+   "as_of": "2026-11-04",
+   "source": "项目源码和说明文档",
+   "facts": [
+    "这次只核对了说明和命令，没有出片、没有观看；一条命令出片还没有真片验收记录"
+   ]
   },
   "based_on": {
    "commit": "cc41e514b2886fff8e04b1883562d25bd59089ef",
@@ -39,8 +42,8 @@
  },
  "source": {
   "page": "sources/pages/video-scaffold-delivery-verify/page.json",
-  "sha256": "07e59b3c416c8b5f762197ede29b72c3637af50b0808cec94d1834cbb5e4203d",
-  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
+  "sha256": "7979aa5c2d047cbda842fa542b0ceeaaa97dd8d54ce90a88bc1a25208c6791c1",
+  "converted_at_beijing": "2026-11-04T12:05:42+08:00"
  }
 }
 ---
@@ -88,9 +91,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "这次只核对了说明和命令，没有出片、没有观看；一条命令出片还没有真片验收记录",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 22 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和说明文档",
      "row": "top"
     },
     {
@@ -130,9 +137,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "这次只核对了说明和命令，没有出片、没有观看；一条命令出片还没有真片验收记录",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 22 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和说明文档"
     },
     {
      "type": "action_button",
@@ -177,7 +188,7 @@ video-scaffold · 功能说明
 
 **当前情况：**本期影片《电子雪貂饲养员》已于 10 月 11 日 12:43 通过本人审定；分段装配等新入口这次没有找到真实整片的装配回执，网页核对本身也没有出片或观看。docfilm 的一条命令出片 10 月 29 日才合进主线，这次只读了源码和说明，没有跑过，不能说已实测通过。
 
-项目源码：公开仓库
+项目源码：私有仓库
 
 ::screen{#video-scaffold-delivery-verify-02 section="usage"}
 
@@ -518,7 +529,15 @@ video-scaffold · 功能说明
 
 分镜路线：出片后按需运行 merge、cover、chapters、subtitles，最后 verify 和 manifest（清单）。图文页：`pages render` 直接给可播放副本，多段用 `python -m pipeline.pages assemble <拼接表.json> --plan` 先看计划，去掉 `--plan` 实际拼片。独立网页作品用 webfilm 的 review、compose、cover、package。最后都要实际观看。
 
-docfilm：`python -m docfilm.release <分段表.json> --tag v2 --changes <改动单.md> --narration-config <配音配置.json> --out-dir <出片目录>`，第一版不写改动单、改加 `--initial`。要查画面上的隐私文字和念白对稿，另跑 `python -m docfilm.filmcheck film <成片.mp4> --only ocr,asr …`，结果放在独立检查目录。
+docfilm：在项目根目录运行，`python` 用登记的 `E:\PythonEnvs\video-scaffold-gpu-cu12\Scripts\python.exe`；要在显卡上渲，先设 `$env:DOCFILM_DEVICE = "resident"`，不设就是 CPU。
+
+第二版起：`python -m docfilm.release <分段表.json> --tag v2 --changes <改动单.md> --narration-config <配音配置.json> --out-dir <出片目录>`
+
+第一版也要给改动单，另外加 `--initial`：`python -m docfilm.release <分段表.json> --tag v1 --initial --changes <首版改动单.md> --narration-config <配音配置.json> --out-dir <出片目录>`
+
+首版改动单照 `templates/docfilm/改动单.md` 写，表里列本版全部镜头，可以写成一行：`| 1 | A1、A2、B1 | 首版全部镜头 | 首版 | 本人内容改动 |`，不写“全局”那一行；列得和实际镜头不一样，会报“改动单不符”。`--initial` 只在出片目录里还没有上一版成功清单时才有用，不能代替 `--changes`。片子确实没有片尾卡，再加 `--no-endcard <理由>`。
+
+要查画面上的隐私文字和念白对稿，另跑 `python -m docfilm.filmcheck film <成片.mp4> --terms <核对词表.txt> --out <独立检查目录> --only ocr,asr --script <旁白定稿.md> --timeline <timeline.json>`；词表是 UTF-8 文本，每行写 `严重程度|类别|词`（例如 `必须改|姓名|待查姓名`），只放本机。
 
 ## 需要准备什么
 
@@ -528,7 +547,7 @@ docfilm：`python -m docfilm.release <分段表.json> --tag v2 --changes <改动
 
 - 是否需要背景音乐、章节或字幕
 
-- docfilm 另要分段表、配音配置和这一版的改动单
+- docfilm 另要分段表、配音配置和这一版的改动单（第一版也要，表里列全部镜头）
 
 ## 从开始到拿到结果
 
@@ -630,7 +649,7 @@ docfilm：`python -m docfilm.release <分段表.json> --tag v2 --changes <改动
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-分镜交付检查、图文页可播放副本（逐字、整句和说话人字幕）、分段装配（含可配置硬切）与网页作品后期已在源码中；本次没有实际成片验收（内容按北京时间 2026-10-22 01:25 最后一次提交 626774f 核对，10 月 22 日 06:47 读）；docfilm 一条命令出片按 北京时间 10 月 30 日 01:43 最后一次提交 2dbab62 的源码和说明补读，也没有实际跑过
+分镜交付检查、图文页可播放副本（逐字、整句和说话人字幕）、分段装配（含可配置硬切）与网页作品后期已在源码中；本次没有实际成片验收（内容按北京时间 2026-10-22 01:25 最后一次提交 626774f 核对，10 月 22 日 06:47 读）；docfilm 一条命令出片按北京时间 10 月 31 日 14:19 最后一次提交 3c1c117 的源码、说明和 `--help` 核对（11 月 4 日），也没有实际跑过
 
 ## 关键规则与设计选择
 
@@ -654,7 +673,7 @@ docfilm：`python -m docfilm.release <分段表.json> --tag v2 --changes <改动
 
 - 装配入口读 `parts:[{id,path}]`、`out`、`chapters:[{title,from:段id}]` 和可选 `max_title_chars`；各段同一画幅、都要有音视频，章起点可把多段并成一章，第一章从第一段开始。实际拼片同时输出同名的 .chapters.txt 和 .assembly.json。拼接表可写 `fade_frames`：非负整数叠化帧数（60fps，默认 12），0 为直接拼接视频帧；页内换页的硬切由分镜表 `transition: 0` 决定。
 
-- docfilm `release` 依次跑：多音字只读检查（不调配音）、镜头单检查和分段、只渲指纹失效的段并合成整片、文字时间表关卡、filmcheck 画面与声音、从实际成片帧取字幕逐字对稿、片尾、每镜三帧联系表、和上一版的文字 / 画面 / 音轨差异、按镜头截配图。输出、合并中间文件和新渲的段都写进本次检查目录，不改本期原件；文件名是原成片名加版本号和六位输入摘要，已有终版或仍在出片就拒绝覆盖。
+- docfilm `release` 依次跑：多音字只读检查（不调配音）、镜头单检查和分段、只渲指纹失效的段并合成整片、文字时间表关卡、filmcheck 画面与声音、从实际成片帧取字幕逐字对稿、片尾、每镜三帧联系表、和上一版的文字 / 画面 / 音轨差异、按镜头截配图。输出、合并中间文件和新渲的段都写进本次检查目录，不改本期原件；文件名是原成片名加版本号和六位输入摘要，已有终版或仍在出片就拒绝覆盖。`--tag` 和 `--changes` 始终必填，少了停在参数解析；`--initial` 只放行“找不到上一版清单”，不代替改动单：首版把全部镜头算作变化，再和改动单的镜头列严格比对（`release.py` 的 `differences`、`verify_changes`）。
 
 ::screen{#video-scaffold-delivery-verify-06 section="tech"}
 
@@ -721,7 +740,7 @@ docfilm：`python -m docfilm.release <分段表.json> --tag v2 --changes <改动
 
 - 装配回执记录每段源路径、字节数与 SHA、裁剪/帧数/段起点/章节、ffmpeg 命令、最终 ffprobe、验证结果及输出字节与哈希；结束前重验来源没变。成片、章节、回执任一目标已存在都拒绝覆盖，先同目录暂存；并发占用目标会失败。
 
-- docfilm 出片失败可用同一条命令重试：上次的失败清单归进原检查目录，有效的段先硬链接、跨盘才复制，写之前先断开链接，不改到旧文件。新版通过后清掉上一版缓存，只留最近一版，保留帧日志、报告、联系表和比帧证据；失败的尝试留着供续作。比帧每 0.1 秒取一张 960×540 灰度图，整图 PSNR 低于 40 dB 或任一 16×16 小块平均差超过 4 级就判这里变了；音轨也按 0.1 秒比。这只用来定位改动，不代替人看。
+- docfilm 出片失败可用同一条命令重试：上次的失败清单归进原检查目录，有效的段先硬链接、跨盘才复制，写之前先断开链接，不改到旧文件。新版通过后清掉上一版缓存，只留最近一版，保留帧日志、报告、联系表和比帧证据；这一步直接删除、不走回收站，删不掉写进 warnings 和 cleanup.errors，不把已成功的出片改成失败；失败的尝试留着供续作。比帧每 0.1 秒取一张 960×540 灰度图，整图 PSNR 低于 40 dB 或任一 16×16 小块平均差超过 4 级就判这里变了；音轨也按 0.1 秒比。这只用来定位改动，不代替人看。
 
 - 网页作品：`review` 给完整回看视频、12 帧拼图、波形和音频/来源报告；`compose` 可拼片、并排、加旁白与字幕、两遍响度处理（目标 −14 LUFS、真峰值 −1.5 dBTP、48kHz 双声道 AAC，编码后记录实际值）；`cover` 出 16:9 和 4:3；`package` 生成本地静态展示目录，不部署网站。
 
@@ -949,6 +968,7 @@ docfilm：`python -m docfilm.release <分段表.json> --tag v2 --changes <改动
 | 标题仍是占位值 | cover 与 verify 拒绝，补清本期标题后再生成。 |
 | 媒体流、帧数或时长不符 | 保留 ffprobe 事实并回到出片、合成或装配，不靠改文件名通过。 |
 | 拼接表 fade_frames 不是非负整数，或某段比叠化帧数还短 | 装配直接拒绝，改拼接表后重跑。 |
+| docfilm 出片命令少了 `--changes` | 停在参数解析，报缺必填参数，什么都不做；第一版也要给改动单。 |
 | docfilm 出片某一步失败 | 停在那一步，清单写明停止阶段，待验视频留在检查目录；改好后用同一条命令重试，有效的段直接复用。 |
 | 出片前文字检查报错 | 改镜头单后重出；确实要保留的，逐条写 `--waive-text 问题ID=理由` 放行，没有批量放行，也不沿用上轮放行。 |
 | 没有片尾卡 | 显式写 `--no-endcard` 和非空理由，记进清单；否则片尾那一步报错。 |
@@ -1041,9 +1061,9 @@ docfilm：`python -m docfilm.release <分段表.json> --tag v2 --changes <改动
 
 ## 如何验证
 
-- 回归用受控 ffprobe 响应验证完整交付通过，并验证无音频、占位标题和未解析触发词必须失败；整句与说话人字幕、硬切另有 test_sentence_subtitles.py、test_pages_documentary_audio.py、test_pages_assemble.py；当前提交 626774f 源码共 267 个测试定义（全项目），这次没有自己运行。
+- 回归用受控 ffprobe 响应验证完整交付通过，并验证无音频、占位标题和未解析触发词必须失败；整句与说话人字幕、硬切另有 test_sentence_subtitles.py、test_pages_documentary_audio.py、test_pages_assemble.py；当时提交 626774f 源码共 267 个测试定义（全项目），11 月 4 日按最后一次提交 3c1c117 静态数是 690 个；这次都没有自己运行。
 
-- 上次网页核对看到的 GitHub 自动测试是 2026-10-11 15:15—15:17 针对当时提交 c4eec887 的运行：Ubuntu 单测有 6 处因找不到 FFmpeg 出错，Windows 单测取消，Linux 整链短片成功；整体结果是失败，不能说全部通过。最近一次是 2026-10-21T17:25Z（北京时间 10 月 22 日 01:25）针对 626774f 的运行 39643661819：Ubuntu 单测 Ran 267、errors=20、skipped=7，20 处都是缺 ffmpeg / ffprobe；isolated-media 在 `playwright install --with-deps chromium` 失败（runner 为 ubuntu26.04，Playwright 不支持），整链短片没跑；Windows 单测取消；整体失败。10 月 20—22 日 8 次推送全部失败，最近一次成功是 2026-10-10T10:30Z 的 0c25892。以上 10 月 22 日用 gh 只读查看，未重跑。
+- 上次网页核对看到的 GitHub 自动测试是 2026-10-11 15:15—15:17 针对当时提交 c4eec887 的运行：Ubuntu 单测有 6 处因找不到 FFmpeg 出错，Windows 单测取消，Linux 整链短片成功；整体结果是失败，不能说全部通过。之后是 2026-10-21T17:25Z（北京时间 10 月 22 日 01:25）针对 626774f 的运行 39643661819：Ubuntu 单测 Ran 267、errors=20、skipped=7，20 处都是缺 ffmpeg / ffprobe；isolated-media 在 `playwright install --with-deps chromium` 失败（runner 为 ubuntu26.04，Playwright 不支持），整链短片没跑；Windows 单测取消；整体失败。到这一轮为止，10 月 20—22 日 8 次推送全部失败，最近一次成功是 2026-10-10T10:30Z 的 0c25892。最新可查的一轮是北京时间 10 月 22 日 23:11 针对 35a597a 的运行 39802408000，整体失败：isolated-media 卡在 `python -m playwright install --with-deps chromium`，Ubuntu 单测失败，Windows 单测步骤也失败、任务结论 cancelled；这一轮只读了任务和步骤结论，没取单测失败明细，不能把上一轮的原因搬过来。当前主分支 3c1c117 没有通过记录。以上 11 月 4 日 09:10 用 gh 只读查看，未重跑。
 
 - 本期影片已于 10 月 11 日 12:43 通过本人审定；现存整片约 18 分钟、1080p 60 帧，但文件存在不等于又审定一次；通用装配入口的真实整片回执、完整视频端到端验证仍是未核对项。
 

@@ -28,13 +28,17 @@
   "status_line": {
    "state": "常用",
    "as_of": "2026-10-11",
-   "source": "旧设备保护已退役；四类本人验证、共享资料锁、手动锁屏和每周恢复密钥核对继续；设备不可信、自动 BitLocker 隔离和十分钟邀请于 2026-09-26 删除（提交 8d2dbcd4）。"
+   "source": "退役提交和现役安装",
+   "facts": [
+    "四类本人验证、资料锁、手动锁屏和每周恢复密钥核对都在用",
+    "旧设备保护 9 月 26 日已删除"
+   ]
   }
  },
  "source": {
   "page": "sources/pages/pcconfig-protected-actions/page.json",
-  "sha256": "ce976bbf85b182877ea354b33dd94fd8226ab4bd21d9bfa7c546d5e04c125b42",
-  "converted_at_beijing": "2026-11-04T10:21:42+08:00"
+  "sha256": "4e00f1bf4b3515e32c347ef5003d29cc05df38d1bfbebf43bdab4d1673c0b3b5",
+  "converted_at_beijing": "2026-11-04T12:05:34+08:00"
  }
 }
 ---
@@ -82,9 +86,17 @@
       {
        "text": "常用",
        "state": "ok"
+      },
+      {
+       "text": "四类本人验证、资料锁、手动锁屏和每周恢复密钥核对都在用",
+       "state": "fact"
+      },
+      {
+       "text": "旧设备保护 9 月 26 日已删除",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 10 月 11 日 · 退役提交和现役安装",
      "row": "top"
     },
     {
@@ -124,9 +136,17 @@
       {
        "text": "常用",
        "state": "ok"
+      },
+      {
+       "text": "四类本人验证、资料锁、手动锁屏和每周恢复密钥核对都在用",
+       "state": "fact"
+      },
+      {
+       "text": "旧设备保护 9 月 26 日已删除",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 10 月 11 日 · 退役提交和现役安装"
     },
     {
      "type": "action_button",

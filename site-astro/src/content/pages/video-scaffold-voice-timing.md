@@ -28,7 +28,10 @@
   "status_line": {
    "state": "偶尔用",
    "as_of": "2026-10-22",
-   "source": "内容按北京时间 10 月 22 日 01:25 最后一次提交 626774f 核对（10 月 22 日 06:47 读），未发配音请求"
+   "source": "项目源码和说明文档",
+   "facts": [
+    "内容按 10 月 22 日 01:25 的提交核对，没有发配音请求"
+   ]
   },
   "based_on": {
    "commit": "cc41e514b2886fff8e04b1883562d25bd59089ef",
@@ -39,8 +42,8 @@
  },
  "source": {
   "page": "sources/pages/video-scaffold-voice-timing/page.json",
-  "sha256": "5528b89848bd0724e8e02b34888c1e649523cdd483a8e8830323bf5b62310bb0",
-  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
+  "sha256": "b947af7e5d1347d1dc291918f267be6535cdbc1463b0ab96411b16ed292ed1fe",
+  "converted_at_beijing": "2026-11-04T12:05:42+08:00"
  }
 }
 ---
@@ -88,9 +91,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "内容按 10 月 22 日 01:25 的提交核对，没有发配音请求",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 22 日",
+     "static_note": "截至 10 月 22 日 · 项目源码和说明文档",
      "row": "top"
     },
     {
@@ -130,9 +137,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "内容按 10 月 22 日 01:25 的提交核对，没有发配音请求",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 22 日"
+     "static_note": "截至 10 月 22 日 · 项目源码和说明文档"
     },
     {
      "type": "action_button",
@@ -177,7 +188,7 @@ video-scaffold · 功能说明
 
 **当前情况：**已有“用现成定稿配音”“真实录音按逐字稿对齐”“云端配音自带时间（Fish 或 ElevenLabs）”“本地按需对齐”几条路线。10 月 21 日用 ElevenLabs 免费账户的 Roger 音色真跑通过一次 10.04 秒的“配音 → 对时间 → 字幕”，只证明接口通了，音色还没定、听感没人审过；录音对齐只在自动测试里跑过。这次网页核对没有发配音请求，也没有运行对齐模型。
 
-项目源码：公开仓库
+项目源码：私有仓库
 
 ::screen{#video-scaffold-voice-timing-02 section="usage"}
 

@@ -88,7 +88,7 @@
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "截至10月11日"
+        "text_ref": "截至11月4日"
       },
       {
         "type": "live_strip",
@@ -197,7 +197,7 @@
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "截至10月11日"
+        "text_ref": "截至11月4日"
       },
       {
         "type": "live_strip",
@@ -282,7 +282,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "关机错过了，开机后补跑；上云的两个任务有网才跑。失败了自动重试3次：存G的隔10"
+        "text_ref": "关机错过了，开机后补跑；上云的两个任务有网才跑。配置的两个定时任务撞车时排队，不"
       },
       {
         "type": "chapter_title",
@@ -387,7 +387,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "关机错过了，开机后补跑；上云的两个任务有网才跑。失败了自动重试3次：存G的隔10"
+        "text_ref": "关机错过了，开机后补跑；上云的两个任务有网才跑。配置的两个定时任务撞车时排队，不"
       },
       {
         "type": "chapter_title",

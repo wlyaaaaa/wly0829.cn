@@ -28,13 +28,17 @@
   "status_line": {
    "state": "已退役",
    "as_of": "2026-10-11",
-   "source": "旧 P0—P7 受保护数据平台已于 2026-09-25 物理退役（提交 d266224f 等）；选定文件加密改用授权文件，密码与设备恢复改用密码中心恢复集。"
+   "source": "退役提交",
+   "facts": [
+    "旧平台 9 月 25 日已停用并删除",
+    "选定文件改用授权文件，密码恢复改用恢复集"
+   ]
   }
  },
  "source": {
   "page": "sources/pages/pcconfig-protected-data/page.json",
-  "sha256": "178d634d21d43af3e1810ebdd1bc335afa44d63a9811872defb7cb1c5e2a2ab2",
-  "converted_at_beijing": "2026-11-04T10:21:42+08:00"
+  "sha256": "0dc335a60d82a5b16dea89e28c5907bd4e18a576374ec66d0d41668d2e6a2682",
+  "converted_at_beijing": "2026-11-04T12:05:34+08:00"
  }
 }
 ---
@@ -82,9 +86,17 @@
       {
        "text": "已退役",
        "state": "ok"
+      },
+      {
+       "text": "旧平台 9 月 25 日已停用并删除",
+       "state": "fact"
+      },
+      {
+       "text": "选定文件改用授权文件，密码恢复改用恢复集",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 10 月 11 日 · 退役提交",
      "row": "top"
     },
     {
@@ -124,9 +136,17 @@
       {
        "text": "已退役",
        "state": "ok"
+      },
+      {
+       "text": "旧平台 9 月 25 日已停用并删除",
+       "state": "fact"
+      },
+      {
+       "text": "选定文件改用授权文件，密码恢复改用恢复集",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 10 月 11 日 · 退役提交"
     },
     {
      "type": "action_button",

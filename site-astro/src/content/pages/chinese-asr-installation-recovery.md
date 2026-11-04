@@ -27,14 +27,14 @@
   "parent": "chinese-asr",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "ChineseASR 公开仓库 main（1bd5a04）与 9 月 29 日建成的 E 盘离线备用包（提交 f4d75fc），于 10 月 11 日按 14:00 前状态只读核对文件存在与大小；离线安装自检取 9 月 29 日历史记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "as_of": "2026-11-04",
+   "source": "项目源码和离线备用包"
   }
  },
  "source": {
   "page": "sources/pages/chinese-asr-installation-recovery/page.json",
-  "sha256": "6860e0fa65c8c1d876d5d52615874ef0198ef20d242af0a3255a70b8d9fc4a6d",
-  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
+  "sha256": "a7e83f7d2a708b6c90ce933efa77d0eacae98d9df89e5bbda308d3c3c704c12f",
+  "converted_at_beijing": "2026-11-04T12:05:28+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和离线备用包",
      "row": "top"
     },
     {
@@ -101,12 +101,12 @@
     },
     {
      "type": "prose",
-     "text_ref": "升级或换机前，我能分清缺的是 Python 依赖、固定权重还是 FireRed 的 WSL（Windows 的 Linux 子系统）。E 盘另存着一份当前在用模型和锁定版本依赖的离线备用包，上游撤包或暂时没网也能装回来。想换默认模型时，先用相同参考语料比较错误与复核代价，再明确切换并留回退点；不会因为下载完成、目录存在或公开分数更高，就偷偷换掉日常路线。",
+     "text_ref": "升级或换机前，我能分清缺的是Python依赖、固定权重还是F",
      "row": "top"
     },
     {
      "type": "prose",
-     "text_ref": "**当前情况：**已有模型安装、比较、切换和回退入口；9 月 29 日建好一份本机离线备用包（约 35.26 GiB），在新建的 Windows 和 Ubuntu 环境里不连软件源安装并自检通过过。真正拔网线的断网安装、新环境里的 GPU 推理和换到另一台电脑恢复，还没有验证。",
+     "text_ref": "当前情况：已有模型安装、比较、切换和回退入口；9月29日建好",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和离线备用包"
     },
     {
      "type": "action_button",
@@ -146,11 +146,11 @@
     },
     {
      "type": "prose",
-     "text_ref": "升级或换机前，我能分清缺的是 Python 依赖、固定权重还是 FireRed 的 WSL（Windows 的 Linux 子系统）。E 盘另存着一份当前在用模型和锁定版本依赖的离线备用包，上游撤包或暂时没网也能装回来。想换默认模型时，先用相同参考语料比较错误与复核代价，再明确切换并留回退点；不会因为下载完成、目录存在或公开分数更高，就偷偷换掉日常路线。"
+     "text_ref": "升级或换机前，我能分清缺的是Python依赖、固定权重还是F"
     },
     {
      "type": "prose",
-     "text_ref": "**当前情况：**已有模型安装、比较、切换和回退入口；9 月 29 日建好一份本机离线备用包（约 35.26 GiB），在新建的 Windows 和 Ubuntu 环境里不连软件源安装并自检通过过。真正拔网线的断网安装、新环境里的 GPU 推理和换到另一台电脑恢复，还没有验证。"
+     "text_ref": "当前情况：已有模型安装、比较、切换和回退入口；9月29日建好"
     },
     {
      "type": "illustration",
@@ -180,11 +180,11 @@
 
 ChineseASR · 功能说明
 
-升级或换机前，我能分清缺的是 Python 依赖、固定权重还是 FireRed 的 WSL（Windows 的 Linux 子系统）。E 盘另存着一份当前在用模型和锁定版本依赖的离线备用包，上游撤包或暂时没网也能装回来。想换默认模型时，先用相同参考语料比较错误与复核代价，再明确切换并留回退点；不会因为下载完成、目录存在或公开分数更高，就偷偷换掉日常路线。
+升级或换机前，我能分清缺的是 Python 依赖、固定权重还是 FireRed 的 WSL（Windows 的 Linux 子系统）。E 盘另存着一份模型和锁定版本依赖的离线备用包，上游撤包或暂时没网也能装回来。想换默认模型时，先用相同参考语料比较错误与复核代价，再明确切换并留回退点；不会因为下载完成、目录存在或公开分数更高，就偷偷换掉日常路线。
 
-**当前情况：**已有模型安装、比较、切换和回退入口；9 月 29 日建好一份本机离线备用包（约 35.26 GiB），在新建的 Windows 和 Ubuntu 环境里不连软件源安装并自检通过过。真正拔网线的断网安装、新环境里的 GPU 推理和换到另一台电脑恢复，还没有验证。
+**当前情况：**已有模型安装、比较、切换和回退入口；9 月 29 日建好一份本机离线备用包（约 35.26 GiB），在新建的 Windows 和 Ubuntu 环境里不连软件源安装并自检通过过。这份包的模型清单还带着 10 月 20 日删掉的 Fun-ASR-Nano，还没按现在的模型重做；模型文件可以和模型目录共享同一份字节（硬链接），不算第二份独立副本。真正拔网线的断网安装、新环境里的 GPU 推理和换到另一台电脑恢复，还没有验证。
 
-项目技术事实核对于 2026-10-11（北京时间），采用当天 14:00 前的源码状态；具体测试保留各自日期，页面不实时探测运行状态。
+项目技术事实核对于 2026-11-04（北京时间），按当时的 main（4598696）只读核对；具体测试保留各自日期，页面不实时探测运行状态。
 
 项目源码：公开仓库
 
@@ -826,11 +826,13 @@ ChineseASR · 功能说明
 
 - export-lock.ps1 与 build-wheelhouse.ps1 为 Windows 和 FireRed Linux 分别导出依赖锁、下载轮包（当前 Windows 129 个、Linux 68 个），torch 系依赖走 CUDA 12.8 index，其余走 PyPI，并写出逐文件大小与 SHA-256 的清单；offline_bundle.py 管整包清单与模型选择。
 
-- refresh-offline.ps1 串起两套依赖锁和轮包、按配置选模型、源文件与副本 SHA 校验、整包回读和新环境无索引安装自检；全部完成才把候选切成 offline/current，旧版进回收站，任何一步失败都保留旧版。
+- refresh-offline.ps1 串起两套依赖锁和轮包、按配置选模型放进包里（优先用硬链接和模型目录共享同一份字节，不支持或跨卷才复制，10 月 31 日 7fcbc78）、SHA 校验、整包回读和新环境无索引安装自检；全部完成才把候选切成 offline/current，旧版进回收站，任何一步失败都保留旧版。
 
 - verify-wheelhouse.ps1 逐项检查清单内文件存在与 SHA-256；install-offline.ps1 默认先验证，-Venv 用 --no-index --find-links 建 Windows 环境并运行 pip check 与 Doctor，-VerifyLinux/-LinuxVenv 验证新的 WSL 环境，-RestoreModels 补回缺失模型和固定 FireRed 源码，已有但哈希不同的模型拒绝覆盖。两种 Python 须先可用，项目源码先从可信 Git 恢复；原 .venv 丢失时可显式提供 HostPython；Windows 目标须在 E 盘，WSL 临时路径在 E 盘的 Ubuntu 虚拟磁盘内。
 
 - runtime（运行环境）/firered_worker.py 在哈希大权重和加载前同时验证固定源码 HEAD/干净工作树、模型回执、WSL（Windows 的 Linux 子系统） 配置容量和当前可用容量；半精度与 FP32 使用不同门槛。
+
+- src/zh_asr/adapters/firered_worker.py 在加载模型前先对指定 WSL 发行版执行 /bin/true，默认最多等 10 秒；超时结束这次探针并说明尚未加载模型，不用重试加载掩盖 WSL 没就绪，也不关别的 Linux 工作（11 月 3 日 b68e650）。
 
 - model_lifecycle 的 compare 验相同音频/真值/指标、独立样本规模、无重复或无效数据；纯合成、跳过案例或未改善拒绝提升。activate-profile 用当前代码/配置身份只切 strict 两个默认引擎并保存switch.json；rollback拒绝覆盖后来改变的默认值，保留无关设置。权重、运行依赖和驻留进程仍需各自恢复。
 
@@ -901,7 +903,7 @@ ChineseASR · 功能说明
 
 3. 环境通过 pip check/Doctor 后，由 refresh-offline 导出 Windows 与 Linux 两套依赖锁、下载两套轮包，并按当前配置选出要备份的模型。
 
-4. 对模型源文件和副本做 SHA 校验，整包回读，再在新建环境里做无索引安装自检；全部通过才切成 E 盘的 offline/current，旧版进回收站。
+4. 对放进包里的模型做 SHA 校验（硬链接时和模型目录是同一份字节，这一步不证明另有独立副本），整包回读，再在新建环境里做无索引安装自检；全部通过才切成 E 盘的 offline/current，旧版进回收站。
 
 5. Git 仓库只保存源码、脚本和小型 manifest（清单）；离线包、模型和输出都被 Git 忽略，项目源码另从可信 Git 恢复。
 
@@ -977,7 +979,7 @@ ChineseASR · 功能说明
 
 ## 专业定义
 
-把新机安装、断网重建与模型抢修拆成三组可核对工件：依赖包、固定模型缓存与回执、FireRed WSL（Windows Linux 子系统）运行时；E 盘再把当前在用的三者合成一份离线备用包。下载完、装完都还得跑真实冒烟。
+把新机安装、断网重建与模型抢修拆成三组可核对工件：依赖包、固定模型缓存与回执、FireRed WSL（Windows Linux 子系统）运行时；E 盘再把三者合成一份离线备用包。下载完、装完都还得跑真实冒烟。
 
 解决什么
 
@@ -1059,6 +1061,10 @@ ChineseASR · 功能说明
 - offline/current、models、输出与私人音频都被 Git 忽略；公开仓库不是灾备载体。离线备用只有 E 盘项目里这一份，按现有登记不由日常备份另复制到 G、H 盘：它防上游撤包和本机无网重装，E 盘整盘损坏时同样不可用。
 
 - 离线备用已能重建 Windows 环境、验证新的 FireRed WSL 环境并补回缺失模型和固定源码；但真正拔网线断网安装、新 WSL 环境里的 GPU 录音推理和换到另一台电脑恢复，都还没有验证。
+
+- 现存 offline/current 的模型选择还有 FunAudioLLM/Fun-ASR-Nano-2512，而当前配置已删这个引擎；“按当前配置选模型”是刷新流程的设计，这份包还没同步。要不要重制归项目维护，这里只如实交代。
+
+- 硬链接省空间，但不是独立备份：删掉其中一条路径不会让另一条消失，原地改写共享文件却会影响同一份字节。现存包只抽查了模型清单第一项是硬链接，没有逐文件核全包。
 
 - MODEL_RECEIPT 不是模型文件、备份、数字签名或真实推理证明；只有工件仍在时才能逐项校验。
 
@@ -1154,6 +1160,8 @@ ChineseASR · 功能说明
 - **FireRed 模型回执、固定源码 HEAD 或干净工作树不符**：拒绝加载；恢复固定 14 项权重与 pinned checkout（本地检出目录），不在被修改源码上继续证据路线。
 
 - **FireRed WSL（Windows 的 Linux 子系统） 配置总量不足**：先调整 .wslconfig；在没有重要 WSL（Windows 的 Linux 子系统）/Docker 任务时执行 wsl（Windows 的 Linux 子系统） --shutdown 后重新启动，再复核容量。
+
+- **FireRed 的 WSL 就绪检查超时**：默认等 10 秒后结束这次探针，说明模型还没开始加载；等 WSL 起来再提交，不反复重试加载，也不关别的 Linux 工作。
 
 - **FireRed 配置足够但当前可用内存不足**：关闭或等待占用进程后重试，不把临时争用误报为模型损坏，也不让 OOM 后反复装载。
 
@@ -1316,7 +1324,7 @@ ChineseASR · 功能说明
 
 - FireRed WSL（Windows 的 Linux 子系统） 精确 Python 依赖
 
-- 六引擎 Registry（登记清单）、固定 revision 与运行门
+- 四引擎 Registry（登记清单）、固定 revision 与运行门
 
 - Windows CUDA 12.8 PyTorch/TorchAudio 安装
 
@@ -1480,9 +1488,9 @@ ChineseASR · 功能说明
 
 ## 如何验证
 
-- 2026-08-31 安装恢复基线：当时 PUBLIC（公开） main=70e3255326ad8ba7b0e335fdf6b4a19caf0d8029，README、architecture、Registry（登记清单）、requirements 与完整安装/下载/离线脚本已逐项核对；该提交只作历史基线，现行公开 main 为 1bd5a048747392afa1eeec050a46a6146b803595，离线备用来自 9 月 29 日提交 f4d75fc。
+- 2026-08-31 安装恢复基线：当时 PUBLIC（公开） main=70e3255326ad8ba7b0e335fdf6b4a19caf0d8029，README、architecture、Registry（登记清单）、requirements 与完整安装/下载/离线脚本已逐项核对；该提交只作历史基线，现行 main 为 459869608730ed8e6e8ce656c5cef39553255624（11 月 4 日本机读到，和本机记录的 origin/main 一致，未联网刷新远端），离线备用来自 9 月 29 日提交 f4d75fc。
 
-- Unit tests：2026-08-31 本轮 .venv\Scripts\python.exe -m unittest -v tests.test_scripts 运行 18 项并全部通过；它验证脚本合同，不下载 wheel、不装模型也不跑音频。
+- Unit tests：2026-08-31 那次 .venv\Scripts\python.exe -m unittest -v tests.test_scripts 运行 18 项并全部通过；它验证脚本合同，不下载 wheel、不装模型也不跑音频。
 
 - 2026-08-31 Full regression 历史观察：同一轮 .venv\Scripts\python.exe -m unittest discover -s tests -q 运行 345 项，用时 83.524 秒并全部通过；仍不等于真实模型 E2E（端到端验证）。
 
@@ -1516,7 +1524,7 @@ ChineseASR · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- FireRed runtime（运行环境）：WSL（Windows 的 Linux 子系统） Python 3.12.3、PyTorch 2.10.0+cu128、Transformers 5.1.0、NumPy 2.4.2 是现行固定版本和 9 月 29 日包内版本，本轮没有启动 WSL 重取已安装环境；固定源码 HEAD=4e7d9aaf4482a47cec1724807026b9b151926eb5 仍干净。CUDA/BF16 可用、“内存高于半精度门槛”是 9 月 17 日的历史现场，10 月 11 日没有取得 WSL 可用内存。",
+     "text_ref": "FireRedruntime（运行环境）：WSL（Windo",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1533,7 +1541,7 @@ ChineseASR · 功能说明
     },
     {
      "type": "bullet_list",
-     "text_ref": "- FireRed runtime（运行环境）：WSL（Windows 的 Linux 子系统） Python 3.12.3、PyTorch 2.10.0+cu128、Transformers 5.1.0、NumPy 2.4.2 是现行固定版本和 9 月 29 日包内版本，本轮没有启动 WSL 重取已安装环境；固定源码 HEAD=4e7d9aaf4482a47cec1724807026b9b151926eb5 仍干净。CUDA/BF16 可用、“内存高于半精度门槛”是 9 月 17 日的历史现场，10 月 11 日没有取得 WSL 可用内存。",
+     "text_ref": "FireRedruntime（运行环境）：WSL（Windo",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1557,11 +1565,13 @@ ChineseASR · 功能说明
 
 ## 依据与来源（四）
 
-- FireRed runtime（运行环境）：WSL（Windows 的 Linux 子系统） Python 3.12.3、PyTorch 2.10.0+cu128、Transformers 5.1.0、NumPy 2.4.2 是现行固定版本和 9 月 29 日包内版本，本轮没有启动 WSL 重取已安装环境；固定源码 HEAD=4e7d9aaf4482a47cec1724807026b9b151926eb5 仍干净。CUDA/BF16 可用、“内存高于半精度门槛”是 9 月 17 日的历史现场，10 月 11 日没有取得 WSL 可用内存。
+- FireRed runtime（运行环境）：WSL（Windows 的 Linux 子系统） Python 3.12.3、PyTorch 2.10.0+cu128、Transformers 5.1.0、NumPy 2.4.2 是现行固定版本和 9 月 29 日包内版本，11 月 4 日没有启动 WSL 重取已安装环境；固定源码 HEAD=4e7d9aaf4482a47cec1724807026b9b151926eb5 仍干净。CUDA/BF16 可用、“内存高于半精度门槛”是 9 月 17 日的历史现场，10 月 11 日没有取得 WSL 可用内存。
 
 - 离线备用（2026-09-29 建，f4d75fc）：清单 307 个文件、37,855,429,442 字节，连同 bundle.json 共 308 个、37,855,493,658 字节（约 35.26 GiB）；其中模型 104 个文件 30,622,178,199 字节，Windows 轮包 129 个、FireRed Linux 轮包 68 个，FireRed 源码归档 8,570,880 字节。9 月 29 日在新建的 Windows/Ubuntu 环境里用 --no-index/--find-links 只从本地轮包安装，pip check、项目 Doctor 和 FireRed 源码导入通过，整包 307 项 SHA 封存后回读通过；同日离线/脚本专项 20 项通过，全量运行 531 项（20 项跳过）。2026-10-11 只核对 307 项存在且大小吻合、models.yaml 哈希与包内记录一致（bundle.json 自身 SHA-256 b223061e3b66673c309063f7e55935a12cc469718aa00c73f3004cab1aa3db3c），没有重算整包 SHA。
 
-- Unverified：未拔网线断网安装、未在新 WSL 环境做真实 GPU 录音推理、未验证换到另一台电脑恢复；current 仍是 9 月 29 日首份副本，真实的 35 GiB 新旧版本轮换没有验收。本轮也未加载模型、未运行 strict/evidence smoke，未用私人录音做 E2E（端到端验证）。
+- 2026-11-04 09:12–09:14 只读 offline/current/bundle.json 和 model-selection.json：selection.models 还有 Fun-ASR-Nano-2512，model_files=104、files=307；模型清单第一项 models/aligner/Qwen3-ForcedAligner-0.6B/…/chat_template.json 的 LinkType=HardLink。没有重算大权重，没有运行离线刷新或恢复，9 月 29 日的大小和自检仍是那一天的历史。
+
+- Unverified：未拔网线断网安装、未在新 WSL 环境做真实 GPU 录音推理、未验证换到另一台电脑恢复；current 仍是 9 月 29 日那一版，真实的 35 GiB 新旧版本轮换没有验收。11 月 4 日也未加载模型、未运行 strict/evidence smoke，未用私人录音做 E2E（端到端验证）。
 
 ## 与其他模块的关系
 

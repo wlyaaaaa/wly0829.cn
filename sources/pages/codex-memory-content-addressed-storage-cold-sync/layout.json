@@ -168,7 +168,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "在已接入的 AI 对话中查询某个 Codex 会话点是否已到 G 或 H；H 冷备由 PCConfig 的既有任务每天 14:30 处理。",
+        "text_ref": "在已接入的 AI 对话中查询某个 Codex 会话点是否已到 G 或 H；H 冷备由 PCConfig 的既有任务处理（每天 14:30 或登录时触发）。",
         "row": "start",
         "width": "40%"
       },
@@ -209,7 +209,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "在已接入的 AI 对话中查询某个 Codex 会话点是否已到 G 或 H；H 冷备由 PCConfig 的既有任务每天 14:30 处理。"
+        "text_ref": "在已接入的 AI 对话中查询某个 Codex 会话点是否已到 G 或 H；H 冷备由 PCConfig 的既有任务处理（每天 14:30 或登录时触发）。"
       },
       {
         "type": "source_text_card",
@@ -410,7 +410,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "当前（2026-10-2206:50只读）：见上方G/H同一代的点；均为生产者回执，本轮没有做全对象核对、执行冷同步或演练恢复。",
+        "text_ref": "当前（2026-11-0409:18只读）：见上方G/H同一代的点；均为生产者回执加指针和清单元数据，没有做全对象核对、执行冷同",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -429,7 +429,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "当前（2026-10-2206:50只读）：见上方G/H同一代的点；均为生产者回执，本轮没有做全对象核对、执行冷同步或演练恢复。",
+        "text_ref": "当前（2026-11-0409:18只读）：见上方G/H同一代的点；均为生产者回执加指针和清单元数据，没有做全对象核对、执行冷同",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

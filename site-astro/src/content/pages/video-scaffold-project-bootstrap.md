@@ -28,7 +28,10 @@
   "status_line": {
    "state": "偶尔用",
    "as_of": "2026-10-11",
-   "source": "内容按北京时间 15:09 最后一次提交 c4eec887 核对，未重新出片"
+   "source": "项目源码和说明文档",
+   "facts": [
+    "内容按 10 月 11 日 15:09 的提交核对，没有重新出片"
+   ]
   },
   "based_on": {
    "commit": "cc41e514b2886fff8e04b1883562d25bd59089ef",
@@ -39,8 +42,8 @@
  },
  "source": {
   "page": "sources/pages/video-scaffold-project-bootstrap/page.json",
-  "sha256": "a144a9f6938f621742248cbb070562507758daca93f9ea5ac6ab586e4cc8ef8c",
-  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
+  "sha256": "c6b8dd45236c3bc4dcb8d89a1c9bcd70d969a82b82ec54988336a46276ad5a51",
+  "converted_at_beijing": "2026-11-04T12:05:42+08:00"
  }
 }
 ---
@@ -88,9 +91,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "内容按 10 月 11 日 15:09 的提交核对，没有重新出片",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 10 月 11 日 · 项目源码和说明文档",
      "row": "top"
     },
     {
@@ -130,9 +137,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "内容按 10 月 11 日 15:09 的提交核对，没有重新出片",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 10 月 11 日 · 项目源码和说明文档"
     },
     {
      "type": "action_button",
@@ -177,7 +188,7 @@ video-scaffold · 功能说明
 
 **当前情况：**图文页开工、版式一览、分镜工程初始化和环境体检都在源码里；这次网页核对只读了源码，没有运行体检、没有出片。docfilm 的开工入口按 北京时间 10 月 30 日 01:43 最后一次提交 2dbab62 的说明补读，同样没有运行。
 
-项目源码：公开仓库
+项目源码：私有仓库
 
 ::screen{#video-scaffold-project-bootstrap-02 section="usage"}
 

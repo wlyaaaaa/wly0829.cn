@@ -27,18 +27,21 @@
   "parent": "typora-theme-pack",
   "status_line": {
    "state": "偶尔用",
-   "as_of": "2026-10-11",
-   "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未渲染、未看图。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "as_of": "2026-11-04",
+   "source": "项目源码和历史检查记录",
+   "facts": [
+    "表头修复后的样张还没有重新看图"
+   ]
   },
   "based_on": {
-   "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
-   "commit_time": "2026-09-28T12:36:45-05:00"
+   "commit": "9cefc0e1e41d5351693071cfbb7452f5deda93c6",
+   "commit_time": "2026-10-20T03:21:43-05:00"
   }
  },
  "source": {
   "page": "sources/pages/typora-theme-pack-controlled-preview-and-visual-qa/page.json",
-  "sha256": "d00a8efd4c96a9020ed5db3aa30f63c2f12065a0de7accaa189116e40e2f715c",
-  "converted_at_beijing": "2026-11-04T10:21:49+08:00"
+  "sha256": "0a4996c30ae03a430c6b9b2bc66e750dbd465ad90394441ef6366db5a0e51e2a",
+  "converted_at_beijing": "2026-11-04T12:05:41+08:00"
  }
 }
 ---
@@ -90,9 +93,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "表头修复后的样张还没有重新看图",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和历史检查记录",
      "row": "top"
     },
     {
@@ -132,9 +139,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "表头修复后的样张还没有重新看图",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和历史检查记录"
     },
     {
      "type": "action_button",

@@ -27,18 +27,21 @@
   "parent": "typora-theme-pack",
   "status_line": {
    "state": "偶尔用",
-   "as_of": "2026-10-11",
-   "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未操作 Typora 窗口。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "as_of": "2026-11-04",
+   "source": "项目源码和只读核对",
+   "facts": [
+    "Typora 实际显示 11 月 4 日没有打开确认"
+   ]
   },
   "based_on": {
-   "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
-   "commit_time": "2026-09-28T12:36:45-05:00"
+   "commit": "9cefc0e1e41d5351693071cfbb7452f5deda93c6",
+   "commit_time": "2026-10-20T03:21:43-05:00"
   }
  },
  "source": {
   "page": "sources/pages/typora-theme-pack-verdant-mint-theme-system/page.json",
-  "sha256": "95bbc85f0f83baa932bdfa4f91edadefd5102d76f1a7a38ee5e58a356b42b64f",
-  "converted_at_beijing": "2026-11-04T10:21:49+08:00"
+  "sha256": "d643d035b0eafd349aff97dd2be02f09a17fa74297620ce95ef0b8abece119ae",
+  "converted_at_beijing": "2026-11-04T12:05:41+08:00"
  }
 }
 ---
@@ -90,9 +93,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "Typora 实际显示 11 月 4 日没有打开确认",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和只读核对",
      "row": "top"
     },
     {
@@ -132,9 +139,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "Typora 实际显示 11 月 4 日没有打开确认",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和只读核对"
     },
     {
      "type": "action_button",
@@ -177,7 +188,7 @@ Typora Theme Pack · 功能说明
 
 让 Typora 的正文、标题、表格和代码有一致的阅读层次。
 
-**当前情况：**Typora 的主题设置仍指向 Verdant Mint；两份主题文件都装着，但只有入口文件和源码一致，共享样式文件还少了 9 月 29 日加的表头底色一行，需要重装一次才算到位。编辑器里实际显示成什么样，这次没有打开确认。
+**当前情况：**Typora 的主题设置仍指向 Verdant Mint；两份主题文件都装着，11 月 4 日核对都和源码一致，9 月 29 日加的表头底色这一行也在了。编辑器里实际显示成什么样，这次没有打开确认。
 
 项目源码：公开仓库
 
@@ -398,7 +409,7 @@ Typora Theme Pack · 功能说明
 
 ## 正常时
 
-两份主题文件都已安装并和源码一致；在 Typora 里手动选择后，再看正文、表格和代码的真实显示。现在共享文件不一致，还没达到这一步。
+两份主题文件都已安装并和源码一致；在 Typora 里手动选择后，再看正文、表格和代码的真实显示。11 月 4 日文件一致这一步已满足，实际显示还没打开看。
 
 ## 发现问题时
 
@@ -630,7 +641,7 @@ Typora Theme Pack · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-2026-10-11 verify 结果 verified=false：入口 CSS 一致，共享 base.css 与源码不一致（少一行表头底色）；主题设置指向 verdant-mint.css
+2026-11-04 verify 结果 verified=true：两份 CSS 都和源码一致；主题设置指向 verdant-mint.css
 
 ## 关键规则与设计选择
 
@@ -640,7 +651,7 @@ Typora Theme Pack · 功能说明
 
 ## 当前怎样实现
 
-- themes/verdant-mint.css 定义薄荷绿变量并导入 themes/verdant/base.css（两份合计 720 行）；基础文件负责正文、标题、引用、表格、列表和打印相关结构。9 月 29 日源码给表头单元格加了 `background: var(--table-head);`，已装的共享文件还是旧版，差的就是这一行。
+- themes/verdant-mint.css 定义薄荷绿变量并导入 themes/verdant/base.css（两份合计 720 行）；基础文件负责正文、标题、引用、表格、列表和打印相关结构。9 月 29 日源码给表头单元格加了 `background: var(--table-head);`，已装的共享文件现在也含这一行。
 
 - CodeMirror（代码编辑器组件）内部 pre / .CodeMirror-line 重置边框、圆角、背景与阴影，避免多行代码继承外层卡片效果。
 
@@ -814,6 +825,14 @@ CSS 文件已安装不证明软件正选中它；版本兼容要以原生窗口�
    {
     "text": "下一个模块 导出版式",
     "href": "/projects/typora-theme-pack/multi-scenario-export-profiles/"
+   },
+   {
+    "text": "安装与恢复",
+    "href": "/projects/typora-theme-pack/theme-installation-and-lifecycle/"
+   },
+   {
+    "text": "PDF 导出",
+    "href": "/projects/typora-theme-pack/transactional-pdf-export-pipeline/"
    }
   ],
   "anchors": [],
@@ -882,9 +901,9 @@ CSS 文件已安装不证明软件正选中它；版本兼容要以原生窗口�
 
 ## 如何验证
 
-- 2026-10-11 16:31 只读 verify：入口 CSS 源码与已装文件一致，共享 CSS 不一致，总结果 verified=false；没有重装。配置选中、文件一致、原生实际显示是三件分别验证的事。
+- 文件核对结果见〔安装与恢复〕，11 月 4 日两份都一致。配置选中、文件一致、原生实际显示是三件分别验证的事。
 
-- 代码行回归测试仍在源码里；最近能直接回读的通过记录是 2026-09-29 01:51 GitHub 自动测试 21 项全部通过，这次没有运行。已安装 Typora 1.14.8，原生窗口和代码块显示这次没有操作确认。
+- 代码行回归测试仍在源码里；自动测试的数量和最近一次结果见〔PDF 导出〕，这次没有运行。已安装 Typora 1.14.8，原生窗口和代码块显示这次没有操作确认。
 
 ## 与其他模块的关系
 

@@ -7,15 +7,15 @@
   "parent": "wechatdirect",
   "status_line": {
     "state": "常用",
-    "as_of": "2026-10-11",
-    "source": "来源代码核对到 10 月 20 日最后一次提交（v0.2.3，10 月 22 日复核；这次提交只改安装方式和语音自检用的 Python）；无正文环境体检于 10 月 11 日 16:32—16:33 重新检查，真实具名会话没有读取"
+    "as_of": "2026-11-04",
+    "source": "项目源码和环境体检"
   },
   "screens": [
     {
       "id": "wechat-direct-bounded-chat-context-01",
       "section": "top",
       "title": "只读一个明确对象的最小有用聊天上下文",
-      "text": "# 只读一个明确对象的最小有用聊天上下文\n\n〔回到项目 → 微信聊天读取〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nWeChatDirect · 功能说明\n\n问一句微信事实时，不需要先导出整个账号。要补最近变化，可以先按明确账号与时间列出当前会话候选，再选要读的联系人或群；时间未知和扫描后又变化的会话也会保留，不把漏项说成无变化。要先找自己在大群说过什么，可筛本人及归属未定的发言，继续带着同一筛选翻页；需要别人的回应时再围绕命中补读。最终得到带账号、对象、时间、引用与附件关系的上下文，账号不明确或来源不可读就保留缺口。\n\n**当前情况：**已有指定账号和对象的聊天读取、变化发现与引用处理；本轮未读取真实会话，实际缺口由所选窗口返回。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码\n\n公开仓库",
+      "text": "# 只读一个明确对象的最小有用聊天上下文\n\n〔回到项目 → 微信聊天读取〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nWeChatDirect · 功能说明\n\n问一句微信事实时，不需要先导出整个账号。要补最近变化，可以先按明确账号与时间列出当前会话候选，再选要读的联系人或群；时间未知和扫描后又变化的会话也会保留，不把漏项说成无变化。要先找自己在大群说过什么，可筛本人及归属未定的发言，继续带着同一筛选翻页；需要别人的回应时再围绕命中补读。最终得到带账号、对象、时间、引用与附件关系的上下文，账号不明确或来源不可读就保留缺口。\n\n**当前情况：**已有指定账号和对象的聊天读取、变化发现与引用处理；11 月 4 日核对时未读取真实会话，实际缺口由所选窗口返回。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码\n\n公开仓库",
       "links": [
         {
           "text": "回到项目 → 微信聊天读取",
@@ -89,7 +89,7 @@
       "id": "wechat-direct-bounded-chat-context-05",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n9月9日来源投影、上下文与候选发现45项及6子测试通过（之后未重新运行）；当前源码 v0.2.3（最后提交 2026-10-29）共定义 354 个测试函数（2026-10-30 重数），本轮没有运行；2026-10-11 无正文环境体检成功；真实具名会话未读取\n\n## 关键规则与设计选择\n\n1. coverage.hasMore 与 continuation 决定是否还需续查；游标固定账号、聊天、时间范围和搜索条件，每次调用仍是独立本地快照，不宣称历史跨页永不变化。\n\n2. not_found_in_page 不等于请求窗口未命中；末页 not_found_in_remaining_window 只说明剩余范围，存在正文解码缺口时不能说从未说过。\n\n3. coverage.returnedAllScanned 明确展示是否包含所有扫描消息；关键词附近的小窗口不是完整历史，continuation.purpose 分开继续找命中与普通翻页。\n\n4. 聊天默认从最小窗口开始，不先创建全量档案。\n\n5. auto 只有唯一匹配时才选择账号；多匹配必须由用户决定。\n\n6. 返回窗口的 self=0 只表示这段没有观察到本人消息，不代表全历史没有。\n\n7. 空窗口仍说明当前会话是否存在更早或更新的本地可见消息。\n\n8. 私聊与群聊引用目标均可按原生server id精确回查；源中缺失或无法读取时仍保留缺口，不保证全部回复都能补回。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n9月9日来源投影、上下文与候选发现45项及6子测试通过（之后未重新运行）；当前源码 v0.2.3（最后提交 2026-11-03）共定义 354 个测试函数（2026-11-04 重数），没有运行；2026-11-04 无正文环境体检成功；真实具名会话未读取\n\n## 关键规则与设计选择\n\n1. coverage.hasMore 与 continuation 决定是否还需续查；游标固定账号、聊天、时间范围和搜索条件，每次调用仍是独立本地快照，不宣称历史跨页永不变化。\n\n2. not_found_in_page 不等于请求窗口未命中；末页 not_found_in_remaining_window 只说明剩余范围，存在正文解码缺口时不能说从未说过。\n\n3. coverage.returnedAllScanned 明确展示是否包含所有扫描消息；关键词附近的小窗口不是完整历史，continuation.purpose 分开继续找命中与普通翻页。\n\n4. 聊天默认从最小窗口开始，不先创建全量档案。\n\n5. auto 只有唯一匹配时才选择账号；多匹配必须由用户决定。\n\n6. 返回窗口的 self=0 只表示这段没有观察到本人消息，不代表全历史没有。\n\n7. 空窗口仍说明当前会话是否存在更早或更新的本地可见消息。\n\n8. 私聊与群聊引用目标均可按原生server id精确回查；源中缺失或无法读取时仍保留缺口，不保证全部回复都能补回。",
       "links": [],
       "anchors": [
         {
@@ -174,11 +174,15 @@
       "id": "wechat-direct-bounded-chat-context-11",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- `README.md · context`自然语言用途、命令示例与小窗口边界。\n\n- `wechat_cli.py · _resolve_contact / _context_result`唯一对象解析、窗口选择、发送者、回复和结果合同。\n\n- `wechat_source.py · fetch_messages`分片消息读取、内容投影、索引与媒体关系。\n\n- `tests/test_wechat_cli.py`对象歧义、窗口角色、引用目标、媒体缺口和空窗口回归。\n\n## 如何验证\n\n- test_exact_contact_ambiguity_never_picks_first 验证多匹配不猜。\n\n- test_context_keeps_native_ids_quote_target_and_media_gap 验证消息、引用和媒体缺口。\n\n- test_empty_context_reports_that_older_local_history_exists 验证空窗口不冒充全历史为空。\n\n- 真实可用性仍需用户点名对象后的 context E2E（端到端验证），本次网页刷新未执行。\n\n## 与其他模块的关系\n\n这是一次性问题的默认入口；需要长期保存时进入“具名增量归档”，需要打开附件时进入“回复与媒体关系”。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `README.md · context`自然语言用途、命令示例与小窗口边界。\n\n- `wechat_cli.py · _resolve_contact / _context_result`唯一对象解析、窗口选择、发送者、回复和结果合同。\n\n- `wechat_source.py · fetch_messages`分片消息读取、内容投影、索引与媒体关系。\n\n- `tests/test_wechat_cli.py`对象歧义、窗口角色、引用目标、媒体缺口和空窗口回归。\n\n## 如何验证\n\n- test_exact_contact_ambiguity_never_picks_first 验证多匹配不猜。\n\n- test_context_keeps_native_ids_quote_target_and_media_gap 验证消息、引用和媒体缺口。\n\n- test_empty_context_reports_that_older_local_history_exists 验证空窗口不冒充全历史为空。\n\n- 真实可用性仍需用户点名对象后的 context E2E（端到端验证），本次网页刷新未执行。\n\n## 与其他模块的关系\n\n这是一次性问题的默认入口；实时聊天里按消息编号取完整上下文走另一个入口，见〔实时聊天怎么读懂语音〕；需要长期保存时进入“具名增量归档”，需要打开附件时进入“回复与媒体关系”。",
       "links": [
         {
           "text": "下一个模块 具名增量归档",
           "href": "/projects/wechat-direct/named-chat-archive/"
+        },
+        {
+          "text": "实时聊天怎么读懂语音",
+          "href": "/projects/wechatdirect/#live-context"
         }
       ],
       "anchors": [],

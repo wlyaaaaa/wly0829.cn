@@ -27,14 +27,14 @@
   "parent": "daily-preferences",
   "status_line": {
    "state": "在用",
-   "as_of": "2026-10-11",
-   "source": "来源仓库 b334b3aa（北京 10/8 00:23）与 10/11 16:35 只读分类计数；10/22 06:48 另读信用卡分类计数，储蓄卡与钱包对账按来源 4717320（北京 10/22 07:22） 代码与说明核对；本次没有做消费查询或原件验真，9/4 专项数字保留原日期"
+   "as_of": "2026-11-04",
+   "source": "理解库源码和分类计数"
   }
  },
  "source": {
   "page": "sources/pages/daily-preferences-fact-verification/page.json",
-  "sha256": "9f34c7c0733c280b2ebfe6d7c5fd76d7214ab2726d30729d9803bd0360efa7f5",
-  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
+  "sha256": "826cf798f527c1e5893e065643c2613e3ea60db264885bf9f8097479b8eeee8a",
+  "converted_at_beijing": "2026-11-04T12:05:29+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 理解库源码和分类计数",
      "row": "top"
     },
     {
@@ -131,7 +131,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 理解库源码和分类计数"
     },
     {
      "type": "action_button",
@@ -711,7 +711,7 @@
 
 ## 技术实现与依据（二）
 
-9. original 先核制品 SHA，再按类型处理，不按扩展名一概而论：Gemini 的 JSON/HTML 重新定位原包、核对原内容后返回原文；ChatGPT 核消息 content hash（内容指纹）；手机 AppUsage/短信/GPS、Collector、已支持的 Google 与 TimeAudit 等有对应解析器的类型会重新解析并核原生身份与内容；PDF 从同字节制品重新抽取文字（原来的窄掩码已拆掉，抽出的是制品里的原值，但仍是抽取文本、不等于版式原件）；只有其余不支持的类型才标 verified_artifact_cached_excerpt。
+9. original 先核制品 SHA，再按类型处理，不按扩展名一概而论：Gemini 的 JSON/HTML 重新定位原包、核对原内容后返回原文；ChatGPT 核消息 content hash（内容指纹）；手机 AppUsage/短信/GPS、Collector、已支持的 Google 与 TimeAudit 等有对应解析器的类型会重新解析并核原生身份与内容；PDF 从同字节制品重新抽取文字（原来的窄掩码已拆掉，抽出的是制品里的原值，但仍是抽取文本、不等于版式原件）；只有其余不支持的类型才标 verified_artifact_cached_excerpt。默认 original 也尊重项目取材范围：切片返回已存的项目原文并写明没打开完整原件，点名完整原件才用 original --record-id <编号> --reading-mode original。
 
 10. spending 按任意半开日期区间、按日或按月汇总已知花费：as-of 只限制事件日期，不恢复旧数据库知识；购买归属净额与期间支付/退款流分开；预付、外币、候选关联、拆分支付、内部搬款/还款本金与未知范围分别保留；未付款的订单和支付不计入（2026-10-07 起）。储蓄卡流水（2026-10-21 起）分本人操作、还款借贷、收入、退款、消费五类，只有消费和退款进入花费，本人操作与还款借贷保留流水但不进消费合计；储蓄卡和钱包按明确渠道关联：组合付款（储蓄卡加余额）按渠道对上，多店合并付款按同一钱包、同一时刻和金额合计对上，关闭付款的成功退款照样扣除，退回后重转逐笔保留，不按同日同额去重。这种关联只在查询时投影，不改写订单或原流水；`spending --details` 会列出关联依据和仍有歧义的候选。“部分退款关联未知”不阻断已有依据的净额；它只汇总事实，不承担财务规划。
 

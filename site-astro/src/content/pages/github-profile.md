@@ -3,7 +3,7 @@
  "title": "GitHub 个人主页",
  "kind": "github-profile",
  "url": "/github-profile/",
- "tagline": "兴趣为主：我在折腾、也在用的开源小项目。",
+ "tagline": "兴趣为主：做点日常用得上的东西，先去网站看介绍，代码另放。",
  "toc": [
   {
    "id": "banner",
@@ -20,93 +20,106 @@
   "kind": "github-profile",
   "title": "GitHub 个人主页",
   "url": "/github-profile/",
-  "tagline": "兴趣为主：我在折腾、也在用的开源小项目。",
+  "tagline": "兴趣为主：做点日常用得上的东西，先去网站看介绍，代码另放。",
   "status": "",
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/wlyaaaaa",
   "based_on": {
+   "observed_at": "2026-11-04",
    "facts": [
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\p2\\facts-home.md 第 3 节",
-    "V:\\Personal\\Projects\\wlyaaaaa\\README.md（blob a75e3caf，与远端一致）"
-   ],
-   "observed_at": "2026-10-01"
+    "facts\\page-github-profile.md",
+    "V:\\Personal\\Projects\\wlyaaaaa\\README.md（blob 5a5112287aac）"
+   ]
   },
   "video_prompt": "",
   "registry": {
-   "numbers": [
+   "numbers": [],
+   "mentions": [
     {
-     "id": "n-asr-recordings",
-     "text": "435+ 段",
-     "meaning": "8 月 18 日起转成文字的不同录音（至少）；10 月 11 日只读聚合 449 个 objective 文件、按 SHA 去重得 435 段",
-     "as_of": "2026-10-11T15:55:09+08:00",
-     "source": "ChineseASR objective 输出的 SHA 聚合；chinese-asr 页当前只读计数",
-     "screens": [
-      "github-profile-03"
-     ]
+     "target": "https://wly0829.cn/",
+     "screen": "github-profile-01",
+     "text": "wly0829.cn"
     },
     {
-     "id": "n-ocr-runs",
-     "text": "现存 11,491 次 · 10,991 份材料",
-     "meaning": "现存、已完成且所需输出齐全的识别记录下限；涉及材料按原件source_sha256去重。缺输出的旧记录会退役，因此不是全历史累计，材料数不是页数。",
-     "as_of": "2026-10-30T11:07:28+08:00",
-     "source": "同轮collect localocr-n-jobs-0/1；2026-10-30T11:07:28+08:00现存完成任务只读聚合，entry=localocr-jobs-summary，pointer=jobs/materials；未运行OCR。",
-     "screens": [
-      "github-profile-04"
-     ]
+     "target": "/projects/chinese-asr/",
+     "screen": "github-profile-03",
+     "text": "去网站看看"
     },
     {
-     "id": "n-timeaudit-seconds",
-     "text": "649 万秒",
-     "meaning": "每秒一条的硬件记录，6 月 16 日起；只读精确 COUNT 6,494,020 条（10 月 11 日 16:12）",
-     "as_of": "2026-10-11T16:12:19+08:00",
-     "source": "TimeAudit 本机库 public.fact_system_hardware 只读事务下 SELECT COUNT(*)（db_config.local_dsn）",
-     "screens": [
-      "github-profile-05"
-     ]
+     "target": "/projects/localocr/",
+     "screen": "github-profile-04",
+     "text": "去网站看看"
     },
     {
-     "id": "n-routes",
-     "text": "21 条",
-     "meaning": "5 种原版工具配云端和本机模型，其中 2 条这台电脑眼下用不上",
-     "as_of": "2026-10-11T15:55:09+08:00",
-     "source": "ai-cli-profile-manager 当前菜单/路线只读聚合：21 条路线；10 月 11 日 15:55",
-     "screens": [
-      "github-profile-06"
-     ]
+     "target": "/projects/timeaudit/",
+     "screen": "github-profile-05",
+     "text": "去网站看看"
     },
     {
-     "id": "n-panel-frames",
-     "text": "85,063 帧",
-     "meaning": "9 月 27 日 21:27–28 日 21:22 连续发给机箱屏，0 次失败；只代表这一段",
-     "as_of": "2026-09-28",
-     "source": "pc-panel-hub 页第 1 屏；E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\p2\\facts-home.md 1.3 第 5 条",
-     "screens": [
-      "github-profile-07"
-     ]
+     "target": "/projects/ai-cli-profile-manager/",
+     "screen": "github-profile-06",
+     "text": "去网站看看"
     },
     {
-     "id": "n-animations",
-     "text": "39 种",
-     "meaning": "video-scaffold 的场景动画种类",
-     "as_of": "2026-10-11",
-     "source": "video-scaffold 页登记 n-animations（10 月 11 日：templates/scene_base.html 动画 case 去重，已推送主线 c4eec88 为 39 种）",
-     "screens": [
-      "github-profile-08"
-     ]
+     "target": "/projects/pc-panel-hub/",
+     "screen": "github-profile-07",
+     "text": "去网站看看"
+    },
+    {
+     "target": "/projects/video-scaffold/",
+     "screen": "github-profile-08",
+     "text": "video-scaffold"
+    },
+    {
+     "target": "/projects/video-scaffold/",
+     "screen": "github-profile-08",
+     "text": "去网站看看"
+    },
+    {
+     "target": "https://github.com/wlyaaaaa/ChineseASR",
+     "screen": "github-profile-10",
+     "text": "ChineseASR"
+    },
+    {
+     "target": "https://github.com/wlyaaaaa/LocalOCR",
+     "screen": "github-profile-10",
+     "text": "LocalOCR"
+    },
+    {
+     "target": "https://github.com/wlyaaaaa/TimeAudit",
+     "screen": "github-profile-10",
+     "text": "TimeAudit"
+    },
+    {
+     "target": "https://github.com/wlyaaaaa/ai-cli-profile-manager",
+     "screen": "github-profile-10",
+     "text": "AI CLI"
+    },
+    {
+     "target": "https://github.com/wlyaaaaa/PC-Panel-Hub",
+     "screen": "github-profile-10",
+     "text": "PC Panel"
+    },
+    {
+     "target": "https://github.com/wlyaaaaa/video-scaffold",
+     "screen": "github-profile-10",
+     "text": "Video Scaffold"
+    },
+    {
+     "target": "https://wly0829.cn/projects/",
+     "screen": "github-profile-09",
+     "text": "去网站看完整介绍 ↗"
     }
    ]
   },
   "notes": {
-   "merged": [
-    "置顶六个和 README 精选卡是两层内容，现在恰好一致（facts-home 3.2）；这稿只管 README 里的图和字，置顶列表不用改。"
-   ],
+   "merged": [],
    "dropped": [
     "贪吃蛇不生图：照旧由仓库里的 scripts/generate_snake.py 每天北京时间 08:20 从贡献日历生成浅色、深色两张 SVG，放在精选卡片下面，README 那段不动。",
     "开头短视频：GitHub 主页不要视频（派活说明）。"
    ],
    "unsure": [
     "“已删的模型任务工具”已经换过了：它是 llm-backend-toolkit，本人 9 月 27 日 ZS32 定“彻底删掉，从置顶换下来，换哪个 Claude 判断”；同日 20:39–20:42 已把 TimeAudit 加进置顶第 3 位并读回核对（gpt-children\\20260927-203820-github-pins-2\\round-01\\report.md），今天 llm-backend-toolkit 的仓库接口返回 404，确实删了。所以这稿第 3 张卡是 TimeAudit，不再按事实单的候选另换。理由：它是公开仓库（10 月 1 日还在更新），数字最硬（6 月 16 日起每秒一条、540 万秒），补的是“记下电脑每一秒、事后查卡顿”，和另外五个都不重。事实单的候选 devconfig-backup、meshclip-kit、RamdiskGuardian 都公开，但要放进来就得再拿掉一个现有置顶，本人没说过要换别的；若 Claude 想把 devconfig-backup 加进来，最先考虑替下 video-scaffold（偶尔用、只发过 1 期视频），这要本人点头。",
-    "GitHub README 里一张图只能有一个链接，做不了网站那种图上多处热点；所以横幅整张去网站、每张卡整张去仓库、最后一条去网站项目页。卡片拆成六张单独的图就是为了能各自点进仓库。",
     "GitHub 有深色模式：现在的 README 每张图都有浅色、深色两版（picture 标签），新图也照这样各画一张，否则深色模式下白底图很刺眼。",
     "横幅那行“在杭州”是 AI 加的；“Java 出身，现在的乐趣是……”是已公开的 GitHub 简介原句。第 2 屏“都是我自己在用的”是替本人口吻（video-scaffold 是偶尔用，仍算在用）。",
     "卡片的数字取自各项目页第 1 屏，日期都写在卡上；以后项目页数字更新，卡片要一起改（registry.numbers 记了哪张卡）。"
@@ -115,8 +128,8 @@
  },
  "source": {
   "page": "sources/pages/github-profile/page.json",
-  "sha256": "4feb7e0e1d881a88497f995dc0fae7fc8e0146120bb7cd84c8f7bb3b95f32027",
-  "converted_at_beijing": "2026-11-04T08:42:36+08:00"
+  "sha256": "0f427e9ac26c55f01ca61f3413e6e22dc340096f2d88a18959da0d87e4da7907",
+  "converted_at_beijing": "2026-11-04T12:05:31+08:00"
  }
 }
 ---
@@ -239,9 +252,11 @@
 
 # 吴乐阳
 
-Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
+Java 出身，正在把自己的电脑和日常，一点点交给 AI 打理。
 
 在杭州 · 〔wly0829.cn〕
+
+横幅整张点了去网站，下面还有一行“逛逛我的网站 ↗”。简介和杭州写在 GitHub 资料栏里。
 
 ::screen{#github-profile-02 section="projects"}
 
@@ -265,13 +280,13 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
    "blocks": [
     {
      "type": "chapter_title",
-     "text_ref": "我在折腾的",
+     "text_ref": "做点日常用得上的东西",
      "align": "left",
      "size": "small"
     },
     {
      "type": "prose",
-     "text_ref": "下面六个项目",
+     "text_ref": "六张卡只写项目名",
      "size": "large"
     }
    ],
@@ -315,9 +330,9 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 }
 ```
 
-## 我在折腾的
+## 做点日常用得上的东西
 
-下面六个项目都开源，都是我自己每天在用的。
+六张卡只写项目名、一句用途和“去网站看看”，没有数字，点开去网站看介绍；想看代码，在卡片下面折叠的“打开项目源码”里。横幅、六张卡和小蛇都有浅色、深色两版，跟着 GitHub 的配色换（11 月 4 日核对了文件，没在 GitHub 上切过深色）。
 
 ::screen{#github-profile-03 section="projects"}
 
@@ -327,12 +342,12 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
   "id": "github-profile-03",
   "section": "projects",
   "title": "ChineseASR 卡片",
-  "scene": "单独一张卡片图，横 3:2（例如 1560×1040），浅色、深色各画一张，字完全一样（深色那张：深灰绿底、字改浅色、水彩照样）。六张卡同一个版式、同样大小，README 里两张一行、每张显示约 390 宽，所以字要大：最小的字不小于卡片高度的 5.5%。版式：左边约 40% 宽一幅小水彩插画（衬衫领口一只小夹麦，旁边一串灰色声波，变成笔记本上几行字（字画成细线）），插画里不画字；右边上面英文仓库名（粗体绿）占一行，下一行中文名（深蓝灰），两行之间不画间隔号；再下面两行说明，每行约 15 个字；最下面一个大号粗体深绿数字，跟一行灰绿小字，这行小字和说明一样大，不缩小。圆角细浅绿边，和网站卡片一个画风。整张卡在 README 里是一个链接，去 GitHub 仓库。",
+  "scene": "卡片 780×390，只写项目名、一句用途和“去网站看看”，没有数字；整张卡在 README 里是一个链接，去网站介绍页。",
   "portrait": "不另画竖版：GitHub 手机端每张卡一行一张、按宽度缩小同一张图。",
   "links": [
    {
-    "text": "ChineseASR",
-    "href": "https://github.com/wlyaaaaa/ChineseASR"
+    "text": "去网站看看",
+    "href": "/projects/chinese-asr/"
    }
   ],
   "anchors": [],
@@ -360,16 +375,12 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
     },
     {
      "type": "prose",
-     "text_ref": "中文语音转写",
+     "text_ref": "把录音变成文字",
      "row": "project"
     },
     {
-     "type": "feature_card",
-     "text_ref": "435+段",
-     "columns": 1,
-     "icons": "none",
-     "illustration": "none",
-     "numeric_emphasis": true,
+     "type": "action_button",
+     "text_ref": "去网站看看",
      "row": "project"
     }
    ],
@@ -415,12 +426,10 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 }
 ```
 
-**〔ChineseASR〕**
-中文语音转写
+**ChineseASR**
+把录音变成文字
 
-在本机把录音转成逐句可核对的文字；按 Win+H 说话直接打字。
-
-**435+ 段**　录音已转写（截至 10 月 11 日）
+〔去网站看看〕
 
 ::screen{#github-profile-04 section="projects"}
 
@@ -430,12 +439,12 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
   "id": "github-profile-04",
   "section": "projects",
   "title": "LocalOCR 卡片",
-  "scene": "单独一张卡片图，横 3:2（例如 1560×1040），浅色、深色各画一张，字完全一样（深色那张：深灰绿底、字改浅色、水彩照样）。六张卡同一个版式、同样大小，README 里两张一行、每张显示约 390 宽，所以字要大：最小的字不小于卡片高度的 5.5%。版式：左边约 40% 宽一幅小水彩插画（一页扫描件上几个绿色识别框，旁边一只放大镜和一块亮着绿灯的显卡），插画里不画字；右边上面英文仓库名（粗体绿）占一行，下一行中文名（深蓝灰），两行之间不画间隔号；再下面两行说明，每行约 15 个字；最下面一个大号粗体深绿数字，跟一行灰绿小字，这行小字和说明一样大，不缩小。圆角细浅绿边，和网站卡片一个画风。整张卡在 README 里是一个链接，去 GitHub 仓库。",
+  "scene": "卡片 780×390，只写项目名、一句用途和“去网站看看”，没有数字；整张卡在 README 里是一个链接，去网站介绍页。",
   "portrait": "不另画竖版：GitHub 手机端每张卡一行一张、按宽度缩小同一张图。",
   "links": [
    {
-    "text": "LocalOCR",
-    "href": "https://github.com/wlyaaaaa/LocalOCR"
+    "text": "去网站看看",
+    "href": "/projects/localocr/"
    }
   ],
   "anchors": [],
@@ -463,16 +472,12 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
     },
     {
      "type": "prose",
-     "text_ref": "本地文字识别",
+     "text_ref": "把图片里的字提出来",
      "row": "project"
     },
     {
-     "type": "feature_card",
-     "text_ref": "现存6,726次",
-     "columns": 1,
-     "icons": "none",
-     "illustration": "none",
-     "numeric_emphasis": true,
+     "type": "action_button",
+     "text_ref": "去网站看看",
      "row": "project"
     }
    ],
@@ -518,12 +523,10 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 }
 ```
 
-**〔LocalOCR〕**
-本地文字识别
+**LocalOCR**
+把图片里的字提出来
 
-在本机显卡上把图片、扫描件里的字读准，没把握的地方标出来。
-
-**现存 6,726 次**　识别记录，涉及 6,351 份材料（截至 11 月 04 日 08:35，只读清点；输出已不存在的旧记录会被清掉，因此只是现存有效记录的下限，不是全部历史累计；材料数按原件指纹去重，不是页数）
+〔去网站看看〕
 
 ::screen{#github-profile-05 section="projects"}
 
@@ -533,12 +536,12 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
   "id": "github-profile-05",
   "section": "projects",
   "title": "TimeAudit 卡片",
-  "scene": "单独一张卡片图，横 3:2（例如 1560×1040），浅色、深色各画一张，字完全一样（深色那张：深灰绿底、字改浅色、水彩照样）。六张卡同一个版式、同样大小，README 里两张一行、每张显示约 390 宽，所以字要大：最小的字不小于卡片高度的 5.5%。版式：左边约 40% 宽一幅小水彩插画（一块屏幕上几条起伏的绿色折线，旁边一只小怀表），插画里不画字；右边上面英文仓库名（粗体绿）占一行，下一行中文名（深蓝灰），两行之间不画间隔号；再下面两行说明，每行约 15 个字；最下面一个大号粗体深绿数字，跟一行灰绿小字，这行小字和说明一样大，不缩小。圆角细浅绿边，和网站卡片一个画风。整张卡在 README 里是一个链接，去 GitHub 仓库。",
+  "scene": "卡片 780×390，只写项目名、一句用途和“去网站看看”，没有数字；整张卡在 README 里是一个链接，去网站介绍页。",
   "portrait": "不另画竖版：GitHub 手机端每张卡一行一张、按宽度缩小同一张图。",
   "links": [
    {
-    "text": "TimeAudit",
-    "href": "https://github.com/wlyaaaaa/TimeAudit"
+    "text": "去网站看看",
+    "href": "/projects/timeaudit/"
    }
   ],
   "anchors": [],
@@ -566,16 +569,12 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
     },
     {
      "type": "prose",
-     "text_ref": "电脑使用与性能记录",
+     "text_ref": "回看电脑时间与卡顿",
      "row": "project"
     },
     {
-     "type": "feature_card",
-     "text_ref": "749.0万秒",
-     "columns": 1,
-     "icons": "none",
-     "illustration": "none",
-     "numeric_emphasis": true,
+     "type": "action_button",
+     "text_ref": "去网站看看",
      "row": "project"
     }
    ],
@@ -621,12 +620,10 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 }
 ```
 
-**〔TimeAudit〕**
-电脑使用与性能记录
+**TimeAudit**
+回看电脑时间与卡顿
 
-每秒记下硬件、程序和窗口，事后查为什么卡、时间花在哪。
-
-**749.0 万秒**　硬件记录（截至 10 月 23 日）
+〔去网站看看〕
 
 ::screen{#github-profile-06 section="projects"}
 
@@ -635,13 +632,13 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
  "screen": {
   "id": "github-profile-06",
   "section": "projects",
-  "title": "ai-cli-profile-manager 卡片",
-  "scene": "单独一张卡片图，横 3:2（例如 1560×1040），浅色、深色各画一张，字完全一样（深色那张：深灰绿底、字改浅色、水彩照样）。六张卡同一个版式、同样大小，README 里两张一行、每张显示约 390 宽，所以字要大：最小的字不小于卡片高度的 5.5%。版式：左边约 40% 宽一幅小水彩插画（一个终端窗口（只画绿色光标和几条细线），旁边几枚小圆片分别画云和一块显卡），插画里不画字；右边上面英文仓库名（粗体绿）占一行，下一行中文名（深蓝灰），两行之间不画间隔号；再下面两行说明，每行约 15 个字；最下面一个大号粗体深绿数字，跟一行灰绿小字，这行小字和说明一样大，不缩小。圆角细浅绿边，和网站卡片一个画风。整张卡在 README 里是一个链接，去 GitHub 仓库。",
+  "title": "AI CLI 卡片",
+  "scene": "卡片 780×390，只写项目名、一句用途和“去网站看看”，没有数字；整张卡在 README 里是一个链接，去网站介绍页。",
   "portrait": "不另画竖版：GitHub 手机端每张卡一行一张、按宽度缩小同一张图。",
   "links": [
    {
-    "text": "ai-cli-profile-manager",
-    "href": "https://github.com/wlyaaaaa/ai-cli-profile-manager"
+    "text": "去网站看看",
+    "href": "/projects/ai-cli-profile-manager/"
    }
   ],
   "anchors": [],
@@ -663,22 +660,18 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
     },
     {
      "type": "section_heading",
-     "text_ref": "ai-cli-profile-manager",
+     "text_ref": "AI CLI",
      "row": "project",
      "width": "60%"
     },
     {
      "type": "prose",
-     "text_ref": "AI工具配置管理",
+     "text_ref": "让 AI 命令行好用起来",
      "row": "project"
     },
     {
-     "type": "feature_card",
-     "text_ref": "21条",
-     "columns": 1,
-     "icons": "none",
-     "illustration": "none",
-     "numeric_emphasis": true,
+     "type": "action_button",
+     "text_ref": "去网站看看",
      "row": "project"
     }
    ],
@@ -724,12 +717,10 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 }
 ```
 
-**〔ai-cli-profile-manager〕**
-AI 工具配置管理
+**AI CLI**
+让 AI 命令行好用起来
 
-选好模型，打开原版 Codex、Claude Code；请求发到哪家，启动前写清。
-
-**21 条**　模型路线（截至 11 月 4 日）
+〔去网站看看〕
 
 ::screen{#github-profile-07 section="projects"}
 
@@ -738,13 +729,13 @@ AI 工具配置管理
  "screen": {
   "id": "github-profile-07",
   "section": "projects",
-  "title": "PC-Panel-Hub 卡片",
-  "scene": "单独一张卡片图，横 3:2（例如 1560×1040），浅色、深色各画一张，字完全一样（深色那张：深灰绿底、字改浅色、水彩照样）。六张卡同一个版式、同样大小，README 里两张一行、每张显示约 390 宽，所以字要大：最小的字不小于卡片高度的 5.5%。版式：左边约 40% 宽一幅小水彩插画（侧透机箱里一条竖着的长条小屏和水冷头上一块圆角曲面屏，屏上只画色块和小图标），插画里不画字；右边上面英文仓库名（粗体绿）占一行，下一行中文名（深蓝灰），两行之间不画间隔号；再下面两行说明，每行约 15 个字；最下面一个大号粗体深绿数字，跟一行灰绿小字，这行小字和说明一样大，不缩小。圆角细浅绿边，和网站卡片一个画风。整张卡在 README 里是一个链接，去 GitHub 仓库。",
+  "title": "PC Panel 卡片",
+  "scene": "卡片 780×390，只写项目名、一句用途和“去网站看看”，没有数字；整张卡在 README 里是一个链接，去网站介绍页。",
   "portrait": "不另画竖版：GitHub 手机端每张卡一行一张、按宽度缩小同一张图。",
   "links": [
    {
-    "text": "PC-Panel-Hub",
-    "href": "https://github.com/wlyaaaaa/PC-Panel-Hub"
+    "text": "去网站看看",
+    "href": "/projects/pc-panel-hub/"
    }
   ],
   "anchors": [],
@@ -766,22 +757,18 @@ AI 工具配置管理
     },
     {
      "type": "section_heading",
-     "text_ref": "PC-Panel-Hub",
+     "text_ref": "PC Panel",
      "row": "project",
      "width": "68%"
     },
     {
      "type": "prose",
-     "text_ref": "双屏信息中心",
+     "text_ref": "把电脑状态放到小屏上",
      "row": "project"
     },
     {
-     "type": "feature_card",
-     "text_ref": "85,063帧",
-     "columns": 1,
-     "icons": "none",
-     "illustration": "none",
-     "numeric_emphasis": true,
+     "type": "action_button",
+     "text_ref": "去网站看看",
      "row": "project"
     }
    ],
@@ -827,12 +814,10 @@ AI 工具配置管理
 }
 ```
 
-**〔PC-Panel-Hub〕**
-双屏信息中心
+**PC Panel**
+把电脑状态放到小屏上
 
-机箱里两块小屏：一块每秒刷新电脑状态，一块显示时钟和手机提醒。
-
-**85,063 帧**　0 次失败（9 月 27–28 日）
+〔去网站看看〕
 
 ::screen{#github-profile-08 section="projects"}
 
@@ -841,12 +826,16 @@ AI 工具配置管理
  "screen": {
   "id": "github-profile-08",
   "section": "projects",
-  "title": "video-scaffold 卡片",
-  "scene": "单独一张卡片图，横 3:2（例如 1560×1040），浅色、深色各画一张，字完全一样（深色那张：深灰绿底、字改浅色、水彩照样）。六张卡同一个版式、同样大小，README 里两张一行、每张显示约 390 宽，所以字要大：最小的字不小于卡片高度的 5.5%。版式：左边约 40% 宽一幅小水彩插画（一条胶片和一条剪辑时间线，时间线上一个绿色播放键），插画里不画字；右边上面英文仓库名（粗体绿）占一行，下一行中文名（深蓝灰），两行之间不画间隔号；再下面两行说明，每行约 15 个字；最下面一个大号粗体深绿数字，跟一行灰绿小字，这行小字和说明一样大，不缩小。圆角细浅绿边，和网站卡片一个画风。整张卡在 README 里是一个链接，去 GitHub 仓库。",
+  "title": "Video Scaffold 卡片",
+  "scene": "卡片 780×390，只写项目名、一句用途和“去网站看看”，没有数字；整张卡在 README 里是一个链接，去网站介绍页。",
   "portrait": "不另画竖版：GitHub 手机端每张卡一行一张、按宽度缩小同一张图。",
   "links": [
    {
     "text": "video-scaffold",
+    "href": "/projects/video-scaffold/"
+   },
+   {
+    "text": "去网站看看",
     "href": "/projects/video-scaffold/"
    }
   ],
@@ -869,22 +858,18 @@ AI 工具配置管理
     },
     {
      "type": "section_heading",
-     "text_ref": "video-scaffold",
+     "text_ref": "Video Scaffold",
      "row": "project",
      "width": "60%"
     },
     {
      "type": "prose",
-     "text_ref": "本地视频制作",
+     "text_ref": "从文案到成片",
      "row": "project"
     },
     {
-     "type": "feature_card",
-     "text_ref": "39种",
-     "columns": 1,
-     "icons": "none",
-     "illustration": "none",
-     "numeric_emphasis": true,
+     "type": "action_button",
+     "text_ref": "去网站看看",
      "row": "project"
     }
    ],
@@ -930,14 +915,123 @@ AI 工具配置管理
 }
 ```
 
-**〔video-scaffold〕**
-本地视频制作
+**Video Scaffold**
+从文案到成片
 
-把文案和素材做成 4K 视频，动画踩着旁白出现，配好封面和字幕。
+〔去网站看看〕
 
-**39 种**　动画，成片 3840×2160、60 帧
+::screen{#github-profile-10 section="projects"}
 
-**私有**
+```typeset
+{
+ "screen": {
+  "id": "github-profile-10",
+  "section": "projects",
+  "title": "打开项目源码",
+  "scene": "",
+  "portrait": "",
+  "links": [
+   {
+    "text": "ChineseASR",
+    "href": "https://github.com/wlyaaaaa/ChineseASR"
+   },
+   {
+    "text": "LocalOCR",
+    "href": "https://github.com/wlyaaaaa/LocalOCR"
+   },
+   {
+    "text": "TimeAudit",
+    "href": "https://github.com/wlyaaaaa/TimeAudit"
+   },
+   {
+    "text": "AI CLI",
+    "href": "https://github.com/wlyaaaaa/ai-cli-profile-manager"
+   },
+   {
+    "text": "PC Panel",
+    "href": "https://github.com/wlyaaaaa/PC-Panel-Hub"
+   },
+   {
+    "text": "Video Scaffold",
+    "href": "https://github.com/wlyaaaaa/video-scaffold"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": "",
+  "shape": "card"
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "打开项目源码",
+     "align": "left",
+     "size": "small"
+    },
+    {
+     "type": "prose",
+     "text_ref": "六张卡下面有一个折叠条"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 打开项目源码
+
+六张卡下面有一个折叠条“打开项目源码”，点开是六个仓库地址：〔ChineseASR〕　〔LocalOCR〕　〔TimeAudit〕　〔AI CLI〕　〔PC Panel〕　〔Video Scaffold〕
+
+前五个公开。Video Scaffold 是私有仓库，只有我登录能看，别人打开看不到（没用未登录的浏览器试过）。
+
+GitHub 的置顶是另一层，和六张卡不一定一样：11 月 4 日读到置顶 5 个公开仓库，就是上面前五个；Video Scaffold 私有，不在置顶里。
+
+::screen{#github-profile-11 section="projects"}
+
+```typeset
+{
+ "screen": {
+  "id": "github-profile-11",
+  "section": "projects",
+  "title": "留一点折腾的足迹",
+  "scene": "",
+  "portrait": "",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": "",
+  "shape": "card"
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "留一点折腾的足迹",
+     "align": "left",
+     "size": "small"
+    },
+    {
+     "type": "prose",
+     "text_ref": "一条小蛇沿着"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 留一点折腾的足迹
+
+一条小蛇沿着我在 GitHub 上真实的贡献记录走：从左到右，一周一周往前，走到今天再重新开始。计划每天北京时间 08:20 更新，实际什么时候跑由 GitHub 排：最近一次成功是 11 月 3 日 14:47。11 月 4 日 11:30 读时还没有当天那一轮，这不等于坏了。
 
 ::screen{#github-profile-09 section="projects"}
 
@@ -951,7 +1045,7 @@ AI 工具配置管理
   "portrait": "不另画竖版：手机上按宽度缩小；字不小于横条高度的 14%。",
   "links": [
    {
-    "text": "看全部项目 →",
+    "text": "去网站看完整介绍 ↗",
     "href": "https://wly0829.cn/projects/"
    }
   ],
@@ -993,4 +1087,4 @@ AI 工具配置管理
 }
 ```
 
-没开源的项目和每个项目的来龙去脉，网站上讲得更全　〔看全部项目 →〕
+没开源的项目和每个项目的来龙去脉，网站上讲得更全　〔去网站看完整介绍 ↗〕

@@ -25,7 +25,7 @@
       {
         "type": "prose",
         "row": "hero",
-        "text_ref": "说明：账号授权由电脑配置与恢复保管，只认这一个账号，用的时候换不了。AI手边有11个"
+        "text_ref": "说明：账号授权由电脑配置与恢复保管，只认这一个账号，用的时候换不了。AI手边有8个"
       },
       {
         "type": "illustration",
@@ -89,7 +89,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "说明：账号授权由电脑配置与恢复保管，只认这一个账号，用的时候换不了。AI手边有11个"
+        "text_ref": "说明：账号授权由电脑配置与恢复保管，只认这一个账号，用的时候换不了。AI手边有8个"
       },
       {
         "type": "illustration",
@@ -141,7 +141,7 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "标题：一个完整例子：照这套做法，“看看邮箱里刚来的验证码”会这样办"
+        "text_ref": "标题：一个完整例子：照这套做法，“验证码来了吗”会这样办"
       },
       {
         "type": "tag",
@@ -149,7 +149,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "假如我在某个网站点了“发送邮箱验证码”，然后说：“看看邮箱里刚来的验证码。”"
+        "text_ref": "假如我在某个网站点了“发送验证码”，然后说：“验证码来了吗？”"
       },
       {
         "type": "numbered_steps",
@@ -165,63 +165,14 @@
         ],
         "row": "mail-code",
         "width": "67%",
-        "text_ref": "1不反问：资料已解锁（锁着就先请我验证）；不问是哪个网站、要哪类码，直接查最近10分"
+        "text_ref": "1. 不反问"
       },
       {
-        "type": "document_mock",
-        "variant": "window",
-        "row": "mail-code",
-        "text_ref": "表盘上的字：最近10分钟每5秒刷新至少等2分钟已排除1封",
-        "base_asset": "_library/illustrations/ill-r3-3b851ccc59f5297a.png",
-        "label_positions": [
-          {
-            "x": 63.66667,
-            "y": 5.09554,
-            "width": 20.33333,
-            "height": 10.50955,
-            "align": "center"
-          },
-          {
-            "x": 54.83333,
-            "y": 78.02548,
-            "width": 15.66667,
-            "height": 8.59873,
-            "align": "center"
-          },
-          {
-            "x": 80.0,
-            "y": 78.02548,
-            "width": 16.5,
-            "height": 9.87261,
-            "align": "center"
-          },
-          {
-            "x": 8.83333,
-            "y": 63.3758,
-            "width": 33.16667,
-            "height": 19.42675,
-            "align": "center"
-          }
-        ],
-        "label_bindings": [
-          {
-            "label_index": 0,
-            "position_index": 0
-          },
-          {
-            "label_index": 1,
-            "position_index": 1
-          },
-          {
-            "label_index": 2,
-            "position_index": 2
-          },
-          {
-            "label_index": 3,
-            "position_index": 3
-          }
-        ],
-        "layout": "illustration_labels"
+        "type": "points_card",
+        "text_ref": "表盘上的字",
+        "whole_block": true,
+        "columns": 1,
+        "row": "mail-code"
       },
       {
         "type": "points_card",
@@ -270,7 +221,7 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "标题：一个完整例子：照这套做法，“看看邮箱里刚来的验证码”会这样办"
+        "text_ref": "标题：一个完整例子：照这套做法，“验证码来了吗”会这样办"
       },
       {
         "type": "tag",
@@ -278,7 +229,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "假如我在某个网站点了“发送邮箱验证码”，然后说：“看看邮箱里刚来的验证码。”"
+        "text_ref": "假如我在某个网站点了“发送验证码”，然后说：“验证码来了吗？”"
       },
       {
         "type": "numbered_steps",
@@ -293,66 +244,14 @@
           "skill-google-workspace-direct\\skill-google-workspace-direct-02-icon-04.png",
           "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png"
         ],
-        "text_ref": "1不反问：资料已解锁（锁着就先请我验证）；不问是哪个网站、要哪类码，直接查最近10分"
+        "text_ref": "1. 不反问"
       },
       {
-        "type": "document_mock",
-        "variant": "window",
-        "text_ref": "表盘上的字：最近10分钟每5秒刷新至少等2分钟已排除1封",
-        "base_asset": "_library/round3/portrait-label-supply/png/ill-r3-portrait-5c85a0a4b186e1ca.png",
-        "layout": "illustration_labels",
-        "label_positions": [
-          {
-            "x": 46.191406,
-            "y": 13.011152,
-            "width": 29.882812,
-            "height": 11.152416,
-            "align": "center"
-          },
-          {
-            "x": 79.78515625,
-            "y": 50.55762081784386,
-            "width": 18.1640625,
-            "height": 5.5762081784386615,
-            "align": "center",
-            "letter_spacing": -2.25,
-            "word_spacing": -4,
-            "nowrap": true
-          },
-          {
-            "x": 46.191406,
-            "y": 70.855019,
-            "width": 31.835938,
-            "height": 11.598513,
-            "align": "center"
-          },
-          {
-            "x": 9.863281,
-            "y": 65.724907,
-            "width": 25.292969,
-            "height": 27.063197,
-            "align": "center"
-          }
-        ],
-        "label_bindings": [
-          {
-            "label_index": 0,
-            "position_index": 0
-          },
-          {
-            "label_index": 1,
-            "position_index": 1
-          },
-          {
-            "label_index": 2,
-            "position_index": 2
-          },
-          {
-            "label_index": 3,
-            "position_index": 3
-          }
-        ],
-        "notes": "排版：第2标签留在原纸签的扣下无字带，源区[817,680,1003,755]；保留原两空格与36px字形，仅收紧字距/空白距离并整行显示，底图和motion绑定不改。"
+        "type": "points_card",
+        "text_ref": "表盘上的字",
+        "whole_block": true,
+        "columns": 1,
+        "row": null
       },
       {
         "type": "points_card",

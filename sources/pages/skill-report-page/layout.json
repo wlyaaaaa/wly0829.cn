@@ -33,7 +33,7 @@
         "illustration": "none",
         "icons": "none",
         "number_style": "stat",
-        "text_ref": "151份",
+        "text_ref": "128份",
         "row": "intro"
       },
       {
@@ -103,7 +103,7 @@
         "illustration": "none",
         "icons": "none",
         "number_style": "stat",
-        "text_ref": "151份"
+        "text_ref": "128份"
       },
       {
         "type": "illustration",
@@ -481,7 +481,7 @@
         "type": "feature_card",
         "columns": 1,
         "icons": "none",
-        "text_ref": "该用哪种图：照上表挑，一共32种组件（在用）长文字排版：小标题、要点、编号、引用、重点标记排好的"
+        "text_ref": "该用哪种图"
       },
       {
         "type": "prose",
@@ -524,7 +524,7 @@
         "type": "feature_card",
         "columns": 1,
         "icons": "none",
-        "text_ref": "该用哪种图：照上表挑，一共32种组件（在用）长文字排版：小标题、要点、编号、引用、重点标记排好的"
+        "text_ref": "该用哪种图"
       },
       {
         "type": "prose",
@@ -678,7 +678,7 @@
         "type": "feature_card",
         "columns": 1,
         "icons": "none",
-        "text_ref": "写内容文件一条命令生成：AI只写文字和数字，转义、版式、配色、画图都由命令做（在用）生成前自检：",
+        "text_ref": "写内容文件一条命令生成",
         "row": "checks",
         "width": "60%",
         "motion_text": [
@@ -714,7 +714,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "登记和附件（现行代码，10月10日起；本轮没有另做实测）"
+        "text_ref": "登记和附件（现行代码，10月10日起；没有另做实测）"
       }
     ],
     "composition_basis": {
@@ -759,7 +759,7 @@
         "type": "feature_card",
         "columns": 1,
         "icons": "none",
-        "text_ref": "写内容文件一条命令生成：AI只写文字和数字，转义、版式、配色、画图都由命令做（在用）生成前自检：",
+        "text_ref": "写内容文件一条命令生成",
         "motion_text": [
           {
             "kind": "status-dot",
@@ -784,7 +784,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "登记和附件（现行代码，10月10日起；本轮没有另做实测）"
+        "text_ref": "登记和附件（现行代码，10月10日起；没有另做实测）"
       }
     ],
     "composition_basis": {

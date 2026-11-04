@@ -40,7 +40,7 @@
     "近 7 天 AI 用了 337 次"
    ],
    "as_of": "2026-11-02",
-   "source": "AI 使用记录；近 7 天按账本共同完成水位之前七个完整自然日统计，最近使用取该水位之前最后一条记录；调用记录不证明实际业务效果。"
+   "source": "AI 使用记录"
   },
   "based_on": {
    "commit": "8244785b97b2e5cecdb62e2a0d933467e57eb66b",
@@ -134,8 +134,8 @@
  },
  "source": {
   "page": "sources/pages/skill-project-entry-gate/page.json",
-  "sha256": "648b10f6f889d22b61f15335215433a6b790e39f3b6bcca8f30a069fe5c16d9f",
-  "converted_at_beijing": "2026-11-04T09:33:36+08:00"
+  "sha256": "6055a8b855fd1b0b41a1b277b6972d35955ccd3da72c1c0ddff55df15034fd6d",
+  "converted_at_beijing": "2026-11-04T12:05:39+08:00"
  }
 }
 ---
@@ -186,7 +186,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日",
+     "static_note": "截至 11 月 2 日 · AI 使用记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -252,7 +252,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日"
+     "static_note": "截至 11 月 2 日 · AI 使用记录"
     },
     {
      "type": "prose",

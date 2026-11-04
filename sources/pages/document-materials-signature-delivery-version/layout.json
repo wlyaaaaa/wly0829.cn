@@ -14,7 +14,7 @@
       },
       {
         "type": "action_button",
-        "text_ref": "〔回到项目 → 个人正式文书〕　〔复制 AI 续作说明〕",
+        "text_ref": "〔回到项目 → 文书和材料制作〕　〔复制 AI 续作说明〕",
         "row": "top",
         "brand_icons": {
           "GitHub": "_library/icons/GitHub标志.png"
@@ -46,7 +46,7 @@
       },
       {
         "type": "action_button",
-        "text_ref": "〔回到项目 → 个人正式文书〕　〔复制 AI 续作说明〕",
+        "text_ref": "〔回到项目 → 文书和材料制作〕　〔复制 AI 续作说明〕",
         "brand_icons": {
           "GitHub": "_library/icons/GitHub标志.png"
         }
@@ -274,7 +274,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- DOCX 对内嵌媒体做完整 SHA-256 匹配；PDF 只合计每页图像数，要求至少 1，不检查它是否就是签名或是否实际可见。",
+        "text_ref": "- DOCX 对内嵌媒体做完整 SHA-256 匹配；PDF 只合计每页图像数，要求至少 1，不检查它是否就是签名或手印、是否实际可见。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -294,7 +294,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- DOCX 对内嵌媒体做完整 SHA-256 匹配；PDF 只合计每页图像数，要求至少 1，不检查它是否就是签名或是否实际可见。",
+        "text_ref": "- DOCX 对内嵌媒体做完整 SHA-256 匹配；PDF 只合计每页图像数，要求至少 1，不检查它是否就是签名或手印、是否实际可见。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",

@@ -28,14 +28,14 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "140个自动任务，138个有人话说明：做什么、怎么停；另2个是无需固定登记的Windows系统临时任务666.7GiB加密系统镜像，每天13:30自动做；这是10月21日13:47那次做完后整条镜像的大小（那次是一次新的全量",
+        "text_ref": "150个自动任务（109个开着",
         "columns": 4,
         "columns_v": 2,
         "icons": "auto"
       },
       {
         "type": "prose",
-        "text_ref": "数字截至10月22日06:47；镜像按10月21日13:47完成的回执，自动任务按10月22日10:43:46用管理员身份完整只读扫描的结果，外接盘仍按10月11日18:39的回执",
+        "text_ref": "数字截至11月4日11:40",
         "align": "right"
       },
       {
@@ -115,14 +115,14 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "140个自动任务，138个有人话说明：做什么、怎么停；另2个是无需固定登记的Windows系统临时任务666.7GiB加密系统镜像，每天13:30自动做；这是10月21日13:47那次做完后整条镜像的大小（那次是一次新的全量",
+        "text_ref": "150个自动任务（109个开着",
         "columns": 2,
         "columns_v": 2,
         "icons": "auto"
       },
       {
         "type": "prose",
-        "text_ref": "数字截至10月22日06:47；镜像按10月21日13:47完成的回执，自动任务按10月22日10:43:46用管理员身份完整只读扫描的结果，外接盘仍按10月11日18:39的回执",
+        "text_ref": "数字截至11月4日11:40",
         "align": "right"
       },
       {
@@ -498,7 +498,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "云端：开发配置每天、微信备份每周传Google云盘；"
+        "text_ref": "云端：开发配置每天传Google云盘；"
       },
       {
         "type": "prose",
@@ -573,7 +573,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "云端：开发配置每天、微信备份每周传Google云盘；"
+        "text_ref": "云端：开发配置每天传Google云盘；"
       },
       {
         "type": "prose",
@@ -735,7 +735,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "G盘里都放了什么（GiB；系统镜像、微信、照片视频、只在G上的软件、只在G上的项目这5项10月22日06:48重读过，前三项变大、后两项没变；其余8项仍是9月28日的读数）",
+        "text_ref": "G盘里都放了什么（GiB；",
         "chart_type": "bar"
       },
       {
@@ -788,7 +788,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "G盘里都放了什么（GiB；系统镜像、微信、照片视频、只在G上的软件、只在G上的项目这5项10月22日06:48重读过，前三项变大、后两项没变；其余8项仍是9月28日的读数）",
+        "text_ref": "G盘里都放了什么（GiB；",
         "chart_type": "bar"
       },
       {
@@ -1114,7 +1114,7 @@
       },
       {
         "type": "content_card",
-        "text_ref": "没登录也能连开机停在登录界面时，ToDesk也能连上",
+        "text_ref": "没登录也能连开机停在登录界面时，ToDesk服务已经在跑",
         "columns": 2,
         "columns_v": 1,
         "illustration": "left_inside",
@@ -1184,7 +1184,7 @@
       },
       {
         "type": "content_card",
-        "text_ref": "没登录也能连开机停在登录界面时，ToDesk也能连上",
+        "text_ref": "没登录也能连开机停在登录界面时，ToDesk服务已经在跑",
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
@@ -1382,7 +1382,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "145 个",
+        "text_ref": "150 个",
         "chart_type": "donut",
         "width": "100%",
         "number_first": true,
@@ -1446,7 +1446,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "145 个",
+        "text_ref": "150 个",
         "chart_type": "donut",
         "number_first": true,
         "center_node": 0
@@ -1518,7 +1518,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1登记机器的事实只记一处：49个登记文件，记着盘、端",
+        "text_ref": "1登记机器的事实只记一处：68个登记文件",
         "columns": 5,
         "direction": "horizontal",
         "connector": "arrow",
@@ -1571,7 +1571,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1登记机器的事实只记一处：49个登记文件，记着盘、端",
+        "text_ref": "1登记机器的事实只记一处：68个登记文件",
         "columns": 1,
         "direction": "vertical",
         "connector": "arrow",
@@ -1624,7 +1624,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "136309行代码（PowerShell、Pytho",
+        "text_ref": "199109行代码（PowerShell、Pytho",
         "columns": 3,
         "columns_v": 1,
         "icons": [
@@ -1681,7 +1681,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "136309行代码（PowerShell、Pytho",
+        "text_ref": "199109行代码（PowerShell、Pytho",
         "columns": 1,
         "columns_v": 1,
         "icons": [
@@ -2111,7 +2111,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "全部功能（87项）",
+        "text_ref": "全部功能（94项）",
         "align": "center",
         "size": "large"
       },
@@ -2184,7 +2184,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "全部功能（87项）",
+        "text_ref": "全部功能（94项）",
         "align": "center",
         "size": "large"
       },
@@ -2356,6 +2356,7 @@
           "_library/round3/clean-assets/png/06-绿封面册-clean.png",
           "_library/icons/趋势图.png",
           "_library/icons/笔记本电脑.png",
+          "_library/icons/趋势图.png",
           "_library/fix-round-2/icon-clean-10b2a9e171c500a5d21a.png",
           "_library/icons/盾牌对勾.png",
           "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
@@ -2375,7 +2376,8 @@
           "16": 3,
           "55": 3,
           "22": 3,
-          "24": 2
+          "24": 2,
+          "88": 3
         },
         "status_text": "dot_only"
       }
@@ -2426,6 +2428,7 @@
           "_library/round3/clean-assets/png/06-绿封面册-clean.png",
           "_library/icons/趋势图.png",
           "_library/icons/笔记本电脑.png",
+          "_library/icons/趋势图.png",
           "_library/fix-round-2/icon-clean-10b2a9e171c500a5d21a.png",
           "_library/icons/盾牌对勾.png",
           "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
@@ -2631,7 +2634,10 @@
           "16": 3,
           "67": 3,
           "66": 2,
-          "71": 3
+          "71": 3,
+          "89": 3,
+          "90": 3,
+          "91": 3
         },
         "status_text": "dot_only"
       }
@@ -2724,6 +2730,10 @@
           "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/报警灯.png",
           "_library/icons/趋势图.png",
+          "_library/icons/盾牌对勾.png",
+          "_library/icons/报警灯.png",
+          "_library/hires-icons-r2/42-听诊器检查-clean.png",
+          "_library/icons/文件齿轮.png",
           "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
           "_library/hires-icons/01-绿叶装饰-clean.png",
           "_library/hires-icons/开关.png",
@@ -2742,7 +2752,11 @@
           "16": 3,
           "75": 3,
           "76": 3,
-          "74": 3
+          "74": 3,
+          "92": 3,
+          "93": 3,
+          "94": 3,
+          "95": 3
         },
         "status_text": "dot_only"
       }
@@ -2790,6 +2804,10 @@
           "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/报警灯.png",
           "_library/icons/趋势图.png",
+          "_library/icons/盾牌对勾.png",
+          "_library/icons/报警灯.png",
+          "_library/hires-icons-r2/42-听诊器检查-clean.png",
+          "_library/icons/文件齿轮.png",
           "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
           "_library/hires-icons/01-绿叶装饰-clean.png",
           "_library/hires-icons/开关.png",

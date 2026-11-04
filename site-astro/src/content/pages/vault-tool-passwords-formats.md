@@ -27,8 +27,11 @@
   "parent": "vault-tool",
   "status_line": {
    "state": "偶尔用",
-   "as_of": "2026-10-11",
-   "source": "源码按北京时间 14:00 前最后提交 b884ab61（10 月 1 日，版本 2.3.1）核对，没有打开任何真实库。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "as_of": "2026-11-04",
+   "source": "项目源码",
+   "facts": [
+    "11 月 4 日核对没碰真实库"
+   ]
   },
   "based_on": {
    "commit": "b884ab61b8a9b62fd1412c493bff0c34a82afc06",
@@ -37,8 +40,8 @@
  },
  "source": {
   "page": "sources/pages/vault-tool-passwords-formats/page.json",
-  "sha256": "c38bc19786167be52f6cf27493c647f52283acce2d515d58b83a775e0a925b87",
-  "converted_at_beijing": "2026-11-04T10:21:49+08:00"
+  "sha256": "a1351741e59eef3f8fd98ea7019f2418e84e6dc0b013d4929b0acb7c1183bb6e",
+  "converted_at_beijing": "2026-11-04T12:05:41+08:00"
  }
 }
 ---
@@ -90,9 +93,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "11 月 4 日核对没碰真实库",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码",
      "row": "top"
     },
     {
@@ -132,9 +139,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "11 月 4 日核对没碰真实库",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码"
     },
     {
      "type": "action_button",
@@ -881,7 +892,7 @@ vault-tool · 功能说明
 
 - 不得把 AES 算法名称、内存参数或密码强度条换算成已验证的绝对破解保证。
 
-- 本轮 Windows 实际样例不证明 Linux/macOS 与干净新机已验收。
+- 这批 Windows 实际样例不证明 Linux/macOS 与干净新机已验收。
 
 ## 失败与恢复
 

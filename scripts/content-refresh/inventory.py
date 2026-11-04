@@ -228,7 +228,7 @@ def build_inventory(pages_root, records, entries=None, policy=None, targeted=())
                         str(value["at"]) if field.endswith(".at") else
                         json.dumps(value, ensure_ascii=False) if isinstance(value, dict) else str(value),
                         original_date=value.get("at") if isinstance(value, dict) else status.get("as_of"))
-                    items[-1]["snapshot_review"] = name == "last" and isinstance(value, dict) and value.get("label") == "快照核对"
+                    items[-1]["snapshot_review"] = name == "last" and isinstance(value, dict) and value.get("label") in {"快照核对", "回执核对"}
             for index, fact in enumerate(status.get("facts", [])):
                 add("status_line.facts", f"status_line.facts[{index}]", str(fact), original_date=status.get("as_of"))
         layout_path = path.with_name("layout.json")
@@ -314,6 +314,20 @@ def build_inventory(pages_root, records, entries=None, policy=None, targeted=())
         item["source_projects"] = sorted({source_aliases.get(re.sub(r"[-_.]", "", name).lower(), name) for name in item["source_projects"]})
         if item.get("snapshot_review") and not item["historical"]:
             item.update(source_kind=item["kind"], kind="review_stamp", review_stamp=True, requires_refresh=False, automatic=False)
+        if item["kind"] == "status_line.facts" and not item["historical"]:
+            fact = item["excerpt"]
+            undated = re.sub(DATE_POINT + r"(?:[ T]?\d{1,2}:\d{2}(?::\d{2})?)?", "", fact)
+            verification = re.search(r"(?:没有|未|没)(?:重新|再|实际|真实|当场)?(?:办理|执行|运行|跑|测|验|核|回读|出片|观看|打开|发|碰|制作)", fact)
+            current_failure = re.search(r"失败|故障|超时|拒绝连接|没在监听|停在|未修|没根治|未查明|有效不明|版本|源码为", fact)
+            active = [r for r in by_page[item["page"]] if r["id"] in item["active_record_ids"]]
+            semantic = bool(active) and all(r["id"] in valid_ids and r.get("freshness_class") == "semantic"
+                and r.get("field") == item["field"] and not r.get("page_pattern")
+                and not {"start", "end"}.intersection(r) and str(r.get("current_value")) == fact for r in active)
+            dated_review = (re.search(DATE_POINT, fact) or item.get("original_date")) and verification
+            if (not current_failure and not numeric_ids.intersection(item["active_record_ids"])
+                    and not COUNT_CONTENT.search(undated)
+                    and (semantic or dated_review and not re.search(r"[\d〇零一二三四五六七八九十两]", undated))):
+                item.update(source_kind=item["kind"], kind="review_stamp", review_stamp=True, requires_refresh=False, automatic=False)
         if item["kind"] in {"as_of", "status_line.as_of"} and not item["historical"]:
             cards = [i for i in items if i["page"] == item["page"] and i["screen"] == item["screen"]
                      and i["kind"] == "first_screen_card" and not i["historical"]]

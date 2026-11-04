@@ -27,14 +27,14 @@
   "parent": "daily-preferences",
   "status_line": {
    "state": "在用",
-   "as_of": "2026-10-11",
-   "source": "来源仓库 b334b3aa（北京 10/8 00:23）、daily-preferences Skill 推荐说明与 10/11 16:35 只读分类计数；本次没有生成新推荐，历史验收保留原日期"
+   "as_of": "2026-11-04",
+   "source": "理解库技能和分类计数"
   }
  },
  "source": {
   "page": "sources/pages/daily-preferences-recommendation-choice/page.json",
-  "sha256": "50881e34ba71800865b0f9c22fbd3b73cd7e56be29d23561521df9524e095d9d",
-  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
+  "sha256": "e5712ce924182b95dbbc5bd4362fb9feb7285b7e0f4e6fd6cf498122d8742526",
+  "converted_at_beijing": "2026-11-04T12:05:30+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 理解库技能和分类计数",
      "row": "top"
     },
     {
@@ -131,7 +131,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 理解库技能和分类计数"
     },
     {
      "type": "action_button",
@@ -541,6 +541,8 @@
 
 2. **交付与接续**　交回具体理由、取舍和可继续搜索的入口；证据不足保持未知，最终选择和购买仍由本人决定。
 
+**选衣服鞋子时**　AI 同时读身体尺寸和尺码两张卡：人体厘米、我的鞋码、以前买过的单品规格分开看，每项按自己的来源和日期取；商品尺码不当人体尺寸，哪项没记录就留未知，不用别的口径凑。
+
 ::screen{#daily-preferences-recommendation-choice-05 section="tech"}
 
 ```typeset
@@ -718,6 +720,8 @@
 
 11. 实际设备使用只作行为观察，不能直接灌入喜欢分数。AppUsage 所有时期的时长、排名和频次都不采信；Collector 完整北京日才可信，部分日只作有限参考。换来源不清空独立的兴趣和真实经历。音乐喜欢清单可用但个人播放次数未知，微信聊天与支付语境分开。
 
+12. 选衣鞋尺寸只在 personal.body_measurements 和 shopping.clothing_sizes 两张卡维护，逐字段保留来源和日期；有可靠新实测才改该字段的现行值，旧值留在版本和原证据里，未受影响的字段不清空；肩围不作肩宽，商品尺码不作人体值；预算是每次搜索的条件，不进长期画像。网页不放具体尺寸。
+
 ## 当前怎样实现
 
 - Skill/AI先取与本题相关的现行认识，再按会改变选择的轴调用evidence/facts/activity或其他已登记来源，必要时有界original；不固定先读三张卡，也不每题扫描所有平台。Python evidence排除非成功与refunded_full，facts仍保留先买后退。
@@ -727,6 +731,8 @@
 - Steam 游戏候选区分 played 与 observed，明确未玩查询排除 played，游戏查询排除 application；store_price_class 只作当前选择条件，具体历史 acquisition 保持 Unknown（未验证）。
 
 - 搜索接力按品类选 1–2 个平台与可复制关键词，不遍历所有平台。
+
+- 选衣鞋直接用 profile --key personal.body_measurements --key shopping.clothing_sizes --context --json 同读两张卡；摘要没写或词没搜到不等于资料不存在。
 
 - Python CLI（命令行工具） 不生成候选菜单、不搜索实时价格、不调用模型 API，也不执行下单；ingest 的 completed 和 invalidated_snapshots 只报告证据接入与旧推定失效。
 

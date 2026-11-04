@@ -28,13 +28,16 @@
   "status_line": {
    "state": "已退役",
    "as_of": "2026-10-12",
-   "source": "按 2026-10-12 04:34—04:38（北京时间）现场复核：热镜像脚本、计划任务安装器和测试已于 2026-09-27 删除，相关路径与计划任务均不存在；历史实现取自删除前的 Git 记录"
+   "source": "删除前的 Git 记录",
+   "facts": [
+    "脚本、计划任务和测试 9 月 27 日已删除（10 月 12 日 04:34—04:38 现场复核，路径和任务都不存在）"
+   ]
   }
  },
  "source": {
   "page": "sources/pages/agents-working-tree-hot-mirror/page.json",
-  "sha256": "f1023c84c413366782ba10a0ee20af532912c8a38fa589514e9fef653caf34ff",
-  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
+  "sha256": "fe6d66363524016f306d62c76b3df0adc5976de5c9a63abaab29a4dba0a4ebb3",
+  "converted_at_beijing": "2026-11-04T12:05:27+08:00"
  }
 }
 ---
@@ -82,9 +85,13 @@
       {
        "text": "已退役",
        "state": "ok"
+      },
+      {
+       "text": "脚本、计划任务和测试 9 月 27 日已删除（10 月 12 日 04:34—04:38 现场复核，路径和任务都不存在）",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日",
+     "static_note": "截至 10 月 12 日 · 删除前的 Git 记录",
      "row": "top"
     },
     {
@@ -124,9 +131,13 @@
       {
        "text": "已退役",
        "state": "ok"
+      },
+      {
+       "text": "脚本、计划任务和测试 9 月 27 日已删除（10 月 12 日 04:34—04:38 现场复核，路径和任务都不存在）",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 12 日"
+     "static_note": "截至 10 月 12 日 · 删除前的 Git 记录"
     },
     {
      "type": "action_button",

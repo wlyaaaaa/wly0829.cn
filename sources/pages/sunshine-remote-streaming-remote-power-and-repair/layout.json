@@ -410,7 +410,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 10 月 11 日 13:33：系统服务 SunshineService 与 Tailscale 均正在运行，启动模式为自动。",
+        "text_ref": "- 11 月 4 日 09:10：系统服务 SunshineService 与 Tailscale 均正在运行，启动模式为自动（10 月 11 日 13:33 也是如此）。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -429,7 +429,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 10 月 11 日 13:33：系统服务 SunshineService 与 Tailscale 均正在运行，启动模式为自动。",
+        "text_ref": "- 11 月 4 日 09:10：系统服务 SunshineService 与 Tailscale 均正在运行，启动模式为自动（10 月 11 日 13:33 也是如此）。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

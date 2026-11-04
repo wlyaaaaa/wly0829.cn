@@ -27,8 +27,11 @@
   "parent": "vault-tool",
   "status_line": {
    "state": "偶尔用",
-   "as_of": "2026-10-11",
-   "source": "源码按北京时间 14:00 前最后提交 b884ab61（10 月 1 日，版本 2.3.1）核对，没有读取任何真实库或使用记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "as_of": "2026-11-04",
+   "source": "项目源码",
+   "facts": [
+    "11 月 4 日核对没碰真实库"
+   ]
   },
   "based_on": {
    "commit": "b884ab61b8a9b62fd1412c493bff0c34a82afc06",
@@ -37,8 +40,8 @@
  },
  "source": {
   "page": "sources/pages/vault-tool-dual-password/page.json",
-  "sha256": "eee6e31b0ac19cf7b4d8e67824a386f5341bc80adf4740b360f39fd2b38350bc",
-  "converted_at_beijing": "2026-11-04T10:21:49+08:00"
+  "sha256": "5cfe31fccddd2d91ef1c600ac6cba7d2d82e340162e325d228c69a6f17fb57cd",
+  "converted_at_beijing": "2026-11-04T12:05:41+08:00"
  }
 }
 ---
@@ -90,9 +93,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "11 月 4 日核对没碰真实库",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码",
      "row": "top"
     },
     {
@@ -132,9 +139,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "11 月 4 日核对没碰真实库",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码"
     },
     {
      "type": "action_button",

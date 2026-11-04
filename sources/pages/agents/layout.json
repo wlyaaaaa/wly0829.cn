@@ -39,7 +39,7 @@
           "proto:a01-ic3",
           "proto:a01-ic4"
         ],
-        "text_ref": "240 次"
+        "text_ref": "280 次"
       },
       {
         "type": "live_strip",
@@ -88,7 +88,7 @@
           "proto:a01-ic3",
           "proto:a01-ic4"
         ],
-        "text_ref": "240 次"
+        "text_ref": "280 次"
       },
       {
         "type": "live_strip",
@@ -548,30 +548,38 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "钩子：每条新消息带进来什么",
+        "text_ref": "钩子：对话的每个时刻",
         "align": "center",
         "size": "large"
       },
       {
-        "type": "comparison",
-        "text_ref": "Claude",
+        "type": "prose",
+        "text_ref": "钩子是 Claude 和 Codex"
+      },
+      {
+        "type": "notice",
+        "text_ref": "“有”分三层",
+        "tone": "gray"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "开对话、压缩后、续作",
         "columns": 2,
         "columns_v": 1,
-        "groups": [
-          {
-            "text_ref": "Claude"
-          },
-          {
-            "text_ref": "Codex"
-          },
-          {
-            "text_ref": "两边一样的",
-            "span": 2
-          }
-        ],
+        "align": "left",
+        "connector": "none",
         "illustration": "none",
-        "icons": "none",
-        "image_mode": "none"
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "现在装的版本",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
       }
     ],
     "aspect": "16:9",
@@ -588,30 +596,38 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "钩子：每条新消息带进来什么",
+        "text_ref": "钩子：对话的每个时刻",
         "align": "center",
         "size": "large"
       },
       {
-        "type": "comparison",
-        "text_ref": "Claude",
-        "columns": 2,
+        "type": "prose",
+        "text_ref": "钩子是 Claude 和 Codex"
+      },
+      {
+        "type": "notice",
+        "text_ref": "“有”分三层",
+        "tone": "gray"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "开对话、压缩后、续作",
+        "columns": 1,
         "columns_v": 1,
-        "groups": [
-          {
-            "text_ref": "Claude"
-          },
-          {
-            "text_ref": "Codex"
-          },
-          {
-            "text_ref": "两边一样的",
-            "span": 2
-          }
-        ],
+        "align": "left",
+        "connector": "none",
         "illustration": "none",
-        "icons": "none",
-        "image_mode": "none"
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "现在装的版本",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
       }
     ],
     "aspect": "9:16",
@@ -816,7 +832,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "约 7.2 万字",
+        "text_ref": "约9.1万字",
         "columns": 3,
         "columns_v": 1,
         "illustration": "top_inside",
@@ -858,7 +874,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "约 7.2 万字",
+        "text_ref": "约9.1万字",
         "columns": 1,
         "columns_v": 1,
         "illustration": "top_inside",

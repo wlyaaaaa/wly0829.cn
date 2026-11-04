@@ -22,12 +22,12 @@
       },
       {
         "type": "prose",
-        "text_ref": "升级或换机前，我能分清缺的是 Python 依赖、固定权重还是 FireRed 的 WSL（Windows 的 Linux 子系统）。E 盘另存着一份当前在用模型和锁定版本依赖的离线备用包，上游撤包或暂时没网也能装回来。想换默认模型时，先用相同参考语料比较错误与复核代价，再明确切换并留回退点；不会因为下载完成、目录存在或公开分数更高，就偷偷换掉日常路线。",
+        "text_ref": "升级或换机前，我能分清缺的是Python依赖、固定权重还是F",
         "row": "top"
       },
       {
         "type": "prose",
-        "text_ref": "**当前情况：**已有模型安装、比较、切换和回退入口；9 月 29 日建好一份本机离线备用包（约 35.26 GiB），在新建的 Windows 和 Ubuntu 环境里不连软件源安装并自检通过过。真正拔网线的断网安装、新环境里的 GPU 推理和换到另一台电脑恢复，还没有验证。",
+        "text_ref": "当前情况：已有模型安装、比较、切换和回退入口；9月29日建好",
         "row": "top"
       },
       {
@@ -58,11 +58,11 @@
       },
       {
         "type": "prose",
-        "text_ref": "升级或换机前，我能分清缺的是 Python 依赖、固定权重还是 FireRed 的 WSL（Windows 的 Linux 子系统）。E 盘另存着一份当前在用模型和锁定版本依赖的离线备用包，上游撤包或暂时没网也能装回来。想换默认模型时，先用相同参考语料比较错误与复核代价，再明确切换并留回退点；不会因为下载完成、目录存在或公开分数更高，就偷偷换掉日常路线。"
+        "text_ref": "升级或换机前，我能分清缺的是Python依赖、固定权重还是F"
       },
       {
         "type": "prose",
-        "text_ref": "**当前情况：**已有模型安装、比较、切换和回退入口；9 月 29 日建好一份本机离线备用包（约 35.26 GiB），在新建的 Windows 和 Ubuntu 环境里不连软件源安装并自检通过过。真正拔网线的断网安装、新环境里的 GPU 推理和换到另一台电脑恢复，还没有验证。"
+        "text_ref": "当前情况：已有模型安装、比较、切换和回退入口；9月29日建好"
       },
       {
         "type": "illustration",
@@ -673,7 +673,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- FireRed runtime（运行环境）：WSL（Windows 的 Linux 子系统） Python 3.12.3、PyTorch 2.10.0+cu128、Transformers 5.1.0、NumPy 2.4.2 是现行固定版本和 9 月 29 日包内版本，本轮没有启动 WSL 重取已安装环境；固定源码 HEAD=4e7d9aaf4482a47cec1724807026b9b151926eb5 仍干净。CUDA/BF16 可用、“内存高于半精度门槛”是 9 月 17 日的历史现场，10 月 11 日没有取得 WSL 可用内存。",
+        "text_ref": "FireRedruntime（运行环境）：WSL（Windo",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -692,7 +692,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- FireRed runtime（运行环境）：WSL（Windows 的 Linux 子系统） Python 3.12.3、PyTorch 2.10.0+cu128、Transformers 5.1.0、NumPy 2.4.2 是现行固定版本和 9 月 29 日包内版本，本轮没有启动 WSL 重取已安装环境；固定源码 HEAD=4e7d9aaf4482a47cec1724807026b9b151926eb5 仍干净。CUDA/BF16 可用、“内存高于半精度门槛”是 9 月 17 日的历史现场，10 月 11 日没有取得 WSL 可用内存。",
+        "text_ref": "FireRedruntime（运行环境）：WSL（Windo",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

@@ -410,7 +410,14 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 2026-09-13T06:30:05Z 自然巡检记录编码能力掩码 0x1F0301，hevc-main10=true 且 av1-main10=true；之后未单独重核，也没有建立手机会话。",
+        "text_ref": "- 2026-09-13T06:30:05Z 自然巡检记录编码能力掩码 0x1F0301，hevc-main10=true 且 av1-main10=true（历史）。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 2026-11-04 09:11:24 verify-path-lite",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -429,7 +436,14 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 2026-09-13T06:30:05Z 自然巡检记录编码能力掩码 0x1F0301，hevc-main10=true 且 av1-main10=true；之后未单独重核，也没有建立手机会话。",
+        "text_ref": "- 2026-09-13T06:30:05Z 自然巡检记录编码能力掩码 0x1F0301，hevc-main10=true 且 av1-main10=true（历史）。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 2026-11-04 09:11:24 verify-path-lite",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

@@ -37,10 +37,10 @@
     "at": "2026-10-31 05:54"
    },
    "facts": [
-    "10 月 18—24 日 AI 用了 3 次"
+    "10 月 27 日—11 月 2 日 AI 用了 3 次"
    ],
    "as_of": "2026-11-02",
-   "source": "状态分类沿用既有说明，本轮只重读调用记录。本轮2026-10-30只读AI使用小记录，已完成覆盖到2026-10-24；“上次使用”2026-10-22 07:21取这段已完成账本中的最近事件，不限于7天。这里的次数6次，实际范围为北京时间2026-10-18 00:00至2026-10-25 00:00之前（七个完整自然日）；之后的使用情况尚未完整取得，Unknown。次数和时间只表示已记录调用，不证明业务效果。"
+   "source": "AI 使用记录"
   },
   "public": false,
   "repo_url": null,
@@ -121,8 +121,8 @@
  },
  "source": {
   "page": "sources/pages/skill-tailscale-safe-exposure/page.json",
-  "sha256": "f77c9c4d9fd77b39b5c491ff5cdb59edae4b023676d76dc8bf6dfdf69c8bf0ff",
-  "converted_at_beijing": "2026-11-04T10:21:47+08:00"
+  "sha256": "cc159af023f1535cd43e86306c8f1b944fdc46c231240ddbd52d5fbb4208767a",
+  "converted_at_beijing": "2026-11-04T12:05:39+08:00"
  }
 }
 ---
@@ -164,11 +164,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 18—24 日 AI 用了 3 次",
+       "text": "10 月 27 日—11 月 2 日 AI 用了 3 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日",
+     "static_note": "截至 11 月 2 日 · AI 使用记录",
      "row": "hero"
     },
     {
@@ -221,11 +221,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 18—24 日 AI 用了 3 次",
+       "text": "10 月 27 日—11 月 2 日 AI 用了 3 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日"
+     "static_note": "截至 11 月 2 日 · AI 使用记录"
     },
     {
      "type": "prose",

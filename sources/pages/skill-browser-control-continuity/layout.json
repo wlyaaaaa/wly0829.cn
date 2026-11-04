@@ -129,7 +129,12 @@
         "text_ref": "1先看现场",
         "direction": "vertical",
         "text_layout": "inline",
-        "icons": [0, 1, 2, 3]
+        "icons": [
+          0,
+          1,
+          2,
+          3
+        ]
       },
       {
         "type": "flow",
@@ -143,7 +148,10 @@
         "text_ref": "5提交前后都核对：",
         "direction": "vertical",
         "text_layout": "inline",
-        "icons": [4, 5]
+        "icons": [
+          4,
+          5
+        ]
       },
       {
         "type": "document_mock",
@@ -386,10 +394,13 @@
         "illustration": "left_inside",
         "connector": "none",
         "items_layout": {
-          "count": 11,
+          "count": 12,
           "row_sizes": [
-            2,
-            2,
+            1,
+            1,
+            1,
+            1,
+            1,
             2,
             2,
             2,
@@ -409,7 +420,8 @@
           1,
           2,
           2,
-          2
+          2,
+          1
         ]
       }
     ],

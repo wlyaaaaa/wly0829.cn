@@ -27,18 +27,18 @@
   "parent": "steam-millennium-config-backup",
   "status_line": {
    "state": "偶尔用",
-   "as_of": "2026-10-30",
-   "source": "源仓库 10 月 20 日的最新提交（10 月 30 日回读远端无新提交，本机另有 7 个未提交的清单文件），加上北京时间 10 月 30 日 11:06 的 E/G/H 三处清单与文件指纹核对和 11:11 的零写入状态核对",
+   "as_of": "2026-11-04",
+   "source": "项目仓库和运行记录",
    "last": {
     "label": "快照核对",
-    "at": "2026-10-30 11:11"
+    "at": "2026-11-04 09:18"
    }
   }
  },
  "source": {
   "page": "sources/pages/steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking/page.json",
-  "sha256": "39c6cf9e1fccf4dd380c7c9fdf7361c9bfd2620caa3b8b6b12474d61ee24b522",
-  "converted_at_beijing": "2026-11-04T10:21:47+08:00"
+  "sha256": "62335a023486b8660cbca52b835f53b40a2b0522a448ec1fd70773b6da15f59e",
+  "converted_at_beijing": "2026-11-04T12:05:40+08:00"
  }
 }
 ---
@@ -88,11 +88,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 快照核对 10 月 30 日 11:11",
+       "text": "偶尔用 · 快照核对 11 月 4 日 09:18",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日",
+     "static_note": "截至 11 月 4 日 · 项目仓库和运行记录",
      "row": "top"
     },
     {
@@ -130,11 +130,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 快照核对 10 月 30 日 11:11",
+       "text": "偶尔用 · 快照核对 11 月 4 日 09:18",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日"
+     "static_note": "截至 11 月 4 日 · 项目仓库和运行记录"
     },
     {
      "type": "action_button",
@@ -179,7 +179,7 @@ Steam Millennium 配置备份 · 功能说明
 
 当前情况：两套主题的选项和配色都有记录。Adwaita 4.4 三处仍是同一版；Zehn 电脑上已更新，本机保存的这份（10 月 26 日备份）跟着记成 2026.10.13，但这份变化还没提交，公开仓库里仍是 2026.9.7；恢复时要分清的是“现在这份”和“想找回的某个历史快照”，最后仍要在 Steam 里看实际效果。
 
-项目快照核对于 2026-10-30 11:11（北京时间，零写入核对；E、G、H 三处同为 10 月 26 日那一代）；具体测试保留各自日期，页面不实时探测运行状态。
+内容核对于 2026-11-04 09:18（北京时间，只读；E、G、H 三处同为 10 月 26 日那一代）；测试结果写的是各自跑的日期；这页不实时读运行状态，要看现在好不好，问 AI 或看驾驶舱。
 
 项目源码：公开仓库
 

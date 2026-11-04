@@ -27,14 +27,18 @@
   "parent": "pcconfig",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "按 PCConfig 431ad1c1 登记与 10 月 30 日 11:14:17 管理员完整只读任务现场；磁盘急降守护按 1848d49e/72accbdc；重建计划仍按旧快照；综合自查和鼠标样式守护于 2026-09-28 退役，WeFlow 第二实例 9 月 26 日起冻结。"
+   "as_of": "2026-11-04",
+   "source": "任务扫描和运行回执",
+   "facts": [
+    "自动任务 150 个：109 个开着、41 个停着",
+    "软件每周维护 11 月 1 日那轮虚拟盘没压成"
+   ]
   }
  },
  "source": {
   "page": "sources/pages/pcconfig-runtime-startup/page.json",
-  "sha256": "0a23479a0c4d05ea54193b92a9c6272a5547ceda56bf4a2cd2974005ccc68e20",
-  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
+  "sha256": "5041a10de3b973ed40fc786074952f4aadbe41f502011b3b7360bfc52de83aa9",
+  "converted_at_beijing": "2026-11-04T12:05:34+08:00"
  }
 }
 ---
@@ -82,9 +86,17 @@
       {
        "text": "常用",
        "state": "ok"
+      },
+      {
+       "text": "自动任务 150 个：109 个开着、41 个停着",
+       "state": "fact"
+      },
+      {
+       "text": "软件每周维护 11 月 1 日那轮虚拟盘没压成",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 任务扫描和运行回执",
      "row": "top"
     },
     {
@@ -124,9 +136,17 @@
       {
        "text": "常用",
        "state": "ok"
+      },
+      {
+       "text": "自动任务 150 个：109 个开着、41 个停着",
+       "state": "fact"
+      },
+      {
+       "text": "软件每周维护 11 月 1 日那轮虚拟盘没压成",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 任务扫描和运行回执"
     },
     {
      "type": "action_button",
@@ -169,9 +189,11 @@ PCConfig · 功能说明
 
 软件装上只是第一步；这里还看它能否启动、上次任务有没有完成、断电或重装后按什么顺序接回。远控、微信和消息服务各自报告真实可用性。
 
-**当前情况：**10 月 30 日 11:14:17 管理员完整只读扫描在 PCConfig 现行筛选范围读到 145 个计划任务（106 启用、39 停用）；144 个有用途说明，另 1 个 Windows SoftLanding 系统临时任务无需固定登记；原来的每周综合检查已改成“软件每周维护”，只查受管软件版本并在空闲时打补丁。鼠标样式守护已退役，WeFlow 第二实例已冻结；任务存在不代表远控、微信或模型任务已经成功。
+**当前情况：**11 月 4 日 09:11:23 管理员完整只读扫描在 PCConfig 现行筛选范围读到 150 个计划任务（109 启用、41 停用；全 Windows 394 个是另一个口径，不能互换）；149 个有用途说明，另 1 个 Windows SoftLanding 系统临时任务无需固定登记。原来的每周综合检查已改成“软件每周维护”：查受管软件版本、空闲时打补丁，还比对启动项、任务清单和配置登记，并压缩 Ubuntu 和 V 的虚拟盘；11 月 1 日 23:33 那轮虚拟盘因 Ubuntu 在忙没压成，Python 也还在等空闲。V 盘开机自动挂载已装好，11 月 3 日自然开机核对通过。鼠标样式守护已退役，WeFlow 第二实例已冻结；任务存在不代表远控、微信或模型任务已经成功。
 
-项目事实核对截至 2026-10-11 14:00（北京时间）；页面不实时探测运行状态。
+**飞鸟订阅怎么进 Clash：**主机日常只开 Clash，飞鸟和 TAG 是它里面的两份订阅。Clash 不能直接用飞鸟的订阅，电脑上有个转换小程序（订阅桥）：在 Clash 订阅页点“更新”，或者到 6 小时自动更新时，它用原来的登录材料取回内容、验过签名，交给 Clash。转换失败时 Clash 继续用上次能用的配置，已有连接不断；不想自动更新，在 Clash 飞鸟订阅的编辑框关掉，手动更新还能用。11 月 4 日 11:13 重读，转换最近一次成功于当天 11:13，“每 6 小时”也已保存；定时器是不是真按 6 小时跑、Clash 是否已加载这一次的结果，没有验。
+
+项目事实核对截至 2026-11-04 09:26（北京时间）；页面不实时探测运行状态。
 
 项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。
 
@@ -626,7 +648,7 @@ PCConfig · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-10 月 30 日 11:14:17 管理员完整只读任务现场在 PCConfig 筛选范围内为 145 项（106 启用/39 停用）；用途目录 172 项，其中本机任务 144 项、其它来源 28 项。重建计划仍是旧快照的 9 阶段 127 项；启动维护快照仍为 24 项（9 月 30 日 22:47）。
+11 月 4 日 09:11:23 管理员完整只读任务现场在 PCConfig 筛选范围内为 150 项（109 启用/41 停用）；用途目录 183 项，其中本机任务 149 项、其它来源 34 项。重建计划是 11 月 3 日 02:22 更新的 9 阶段 149 项；启动维护快照仍为 24 项（9 月 30 日 22:47）。
 
 ## 关键规则与设计选择
 
@@ -719,7 +741,9 @@ PCConfig · 功能说明
 
 15. 显示拓扑恢复只处理已证的单活屏 NVIDIA/IDD 竞态；它可能重启精确 GPU 并请各显示负责方恢复窗口，条件不匹配只等待，不是通用黑屏按钮。
 
-16. FlyingBird 登录前由隐藏 S4U 任务启动 GUI 控制进程，Helper 服务提供 SYSTEM 网络核心；用户登录后只交接 GUI、保留网络。本人主动关闭后不自动重试拉起；自然冷启动仍待独立验收。
+16. 现在主用 Clash：登录前由隐藏 S4U 任务 PCConfig Clash PreLogon 启动核心，用户登录后只交接界面、保留网络。FlyingBird 原来的登录前自启、交互交接和开机检查三个任务都已停用，飞鸟只留作手动备用，不等于卸载。11 月 3 日 15:59:55 这个任务结果 0，16:00:40 回执写同一核心、TUN 通、HTTP 204；是否严格早于本人首次登录没查清，登录前验收不算通过。
+
+17. 飞鸟订阅桥（docs/recovery/flyingbird_subscription_bridge.md；tools/flyingbird-subscription-bridge）：只给 Clash 做飞鸟远程订阅转换，不启动飞鸟客户端、不读 TAG 配置、不管主核心和住宅侧车。任务 PCConfig Fly Subscription Bridge 没有时间触发器（隐藏、IgnoreNew），桥随界面由现有 Guard 按需管理；6 小时更新是 Clash 原生定时器（飞鸟 remote 的 allow_auto_update=true、update_interval=360），不另建计划任务。失败回固定错误、保留上次有效配置；桥成功不等于 Clash 已加载。厂商升级后可用 relocate_materials.py 离线定位新版材料，只输出不含秘密的候选位置，多义、变值或架构不符就拒绝猜。原 Apex 的三个任务已停用（见第 16 条）。11 月 4 日 09:09—09:12 只读：state.json 为 listening、last_success 09:07:25、last_error_type 为空；Clash 的飞鸟 updated 和已保存配置都是 06:36:53；没有读 Clash 原生定时器的下一次时间，也没有发 GET 触发取数。
 
 ::screen{#pcconfig-runtime-startup-07 section="tech"}
 
@@ -747,7 +771,7 @@ PCConfig · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "18. “软件每周维护”沿用原 PCConfig Governance Check 任务名，执行 Invoke-ManagedSoftwareMaintenance.ps1：查受管软件版本，在空闲时为已授权的主 Python 打同一 3.14 系列稳定补丁、更新 Codex CLI 正式版；正在被使用就等空闲，不终止程序、不跨次版本，也不重建已退役的综合自查。",
+     "text_ref": "18. “软件每周维护”沿用原 PCConfig Governance Check 任务名",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -765,7 +789,7 @@ PCConfig · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "18. “软件每周维护”沿用原 PCConfig Governance Check 任务名，执行 Invoke-ManagedSoftwareMaintenance.ps1：查受管软件版本，在空闲时为已授权的主 Python 打同一 3.14 系列稳定补丁、更新 Codex CLI 正式版；正在被使用就等空闲，不终止程序、不跨次版本，也不重建已退役的综合自查。",
+     "text_ref": "18. “软件每周维护”沿用原 PCConfig Governance Check 任务名",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -780,9 +804,13 @@ PCConfig · 功能说明
 
 ## 技术实现与依据（三）
 
-18. “软件每周维护”沿用原 PCConfig Governance Check 任务名，执行 Invoke-ManagedSoftwareMaintenance.ps1：查受管软件版本，在空闲时为已授权的主 Python 打同一 3.14 系列稳定补丁、更新 Codex CLI 正式版；正在被使用就等空闲，不终止程序、不跨次版本，也不重建已退役的综合自查。
+18. “软件每周维护”沿用原 PCConfig Governance Check 任务名，执行 Invoke-ManagedSoftwareMaintenance.ps1：查受管软件版本，比对启动项、任务清单和配置键登记，带 -VirtualDiskMaintenance 压缩 Ubuntu 和 V 的虚拟盘（不另建第二个维护任务），在空闲时为已授权的主 Python 打同一 3.14 系列稳定补丁、更新 Codex CLI 正式版；正在被使用就等空闲，不终止程序、不跨次版本，也不重建已退役的综合自查。11 月 1 日 23:33 的虚拟盘回执是 failed/ubuntu_busy_no_shutdown，没有恢复错误、驾驶舱公网回读 200，不能说已压缩成功；Python 该轮 deferred（目标 3.14.10），等空闲不是升级成功。
 
 19. 磁盘急降守护（10 月 29 日起）：独立的 SYSTEM 任务每分钟看一次固定盘空闲，按最近五分钟的下降速度推算；预计一小时内跌破警戒线、连续两次才动手，15 分钟内就会跌破则直接动手。它只停 AI 经有上限追踪入口开的、写文件的追踪会话，不删文件、不结束别的程序。内存诊断任务只在开机和维护时跑，不能代替这个分钟守护；AI 做系统追踪只能走这个有上限的入口，时长、大小和启动前的剩余空间都有限制。
+
+20. V 盘开机自动挂载（任务 PCConfig Dev Drive Boot Mount）：SYSTEM 最高权限隐藏任务，开机和任意用户登录两个触发，不依赖先登录；V 被别的卷占着时不覆盖，等 E 和镜像最多 300 秒、最多挂 3 次，健康、信任和 9 个必需目录都核；每周离线维护窗口内按条件推迟，避免抢挂。11 月 3 日自然开机后任务 16:01:18 结果 0，11 月 4 日回执 already_mounted，证明这次开机核对成功，不证明是这个任务亲手挂的。Install-DevDriveBootMount -Mode Remove 只移除任务、不卸当前 V，下次重启 V 不会自己出现。
+
+21. 手机这边是两项自动化：PCConfig Phone Bridge（登录时加每 5 分钟兜底）管通知、来电和三端文字；PCConfig Phone PersonalOS Pull（每 30 分钟）管收文件。停副机 Clip Peer 只断副机这一头，停主机桥连通知和来电一起停；停收文件手机仍继续记录。
 
 ::screen{#pcconfig-runtime-startup-08 section="tech"}
 
@@ -810,7 +838,7 @@ PCConfig · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- 运行时 Provider 返回 Windows、PowerShell 7 和 Windows PowerShell 的路径、版本、架构与编码事实。10 月 11 日 16:34 现场：PowerShell 7.6.4，Windows PowerShell 5.1.26100.9549。",
+     "text_ref": "- 运行时 Provider 返回 Windows、PowerShell 7 和 Windows PowerShell 的路径、版本、架构与编码事实。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -828,7 +856,7 @@ PCConfig · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- 运行时 Provider 返回 Windows、PowerShell 7 和 Windows PowerShell 的路径、版本、架构与编码事实。10 月 11 日 16:34 现场：PowerShell 7.6.4，Windows PowerShell 5.1.26100.9549。",
+     "text_ref": "- 运行时 Provider 返回 Windows、PowerShell 7 和 Windows PowerShell 的路径、版本、架构与编码事实。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -845,19 +873,19 @@ PCConfig · 功能说明
 
 ## 当前怎样实现
 
-- 运行时 Provider 返回 Windows、PowerShell 7 和 Windows PowerShell 的路径、版本、架构与编码事实。10 月 11 日 16:34 现场：PowerShell 7.6.4，Windows PowerShell 5.1.26100.9549。
+- 运行时 Provider 返回 Windows、PowerShell 7 和 Windows PowerShell 的路径、版本、架构与编码事实。11 月 4 日 09:18 现场：PowerShell 7.6.4，Windows PowerShell 5.1.26100.9818；Windows ANSI/OEM 都是 936，PowerShell 7 控制台、管道和默认都是 UTF-8，Windows PowerShell 控制台 UTF-8、管道 20127、默认 936。10 月 11 日读到的 Windows PowerShell 是 5.1.26100.9549。
 
-- managed_software_catalog 登记 11 个组件，每个条目只给状态/更新适配器，不允许自由命令字符串；Invoke-ManagedSoftware 只接受本轮适配器的 JSON，空输出返回 invalid_receipt。
+- managed_software_catalog 登记 12 个组件（比原来多了 OpenCLI），每个条目只给状态/更新适配器，不允许自由命令字符串；Invoke-ManagedSoftware 只接受这一次适配器的 JSON，空输出返回 invalid_receipt。无人值守更新仍只有 Python 和 Codex 两项；OpenCLI 跟正式版，候选准备好、受管业务空闲才切，失败保留前一版，不跟每条 main 提交。
 
 - 更新流程固定为 Resolve → Status → Backup → Preflight → Update → Wait → Verify；目标版本安装前固定，安装后强制相等。
 
-- 环境变量索引记录 94 个变量元数据和 62 个 PATH 条目；Probe-EnvVar 只返回存在性、作用域和差异，不返回值。
+- 环境变量索引记录 96 个变量元数据和 56 个 PATH 条目（11 月 4 日 09:18 数，保留原顺序和重复项）；Probe-EnvVar 只返回存在性、作用域和差异，不返回值。
 
 - 启动快照覆盖当前用户/机器 Run 与用户/公共 Startup 文件夹五个来源；最新维护快照 24 项（9 月 30 日 22:47）。
 
 - 看板读常驻启动项现场（10 月 12 日起）：按开机服务记录的交互登录用户找到该用户自己的用户目录和启动文件夹位置，不沿用系统服务或调用者的环境。用户档案或注册表项缺失、变量不明、不能确认绝对路径时，启用状态记为未知；只有在可靠目录下确认快捷方式确实不在，才记为未启用。这是现场读法的修正，没有新增启动能力。
 
-- 计划任务：10 月 30 日 11:14:17 管理员完整只读扫描在 PCConfig 筛选范围内读到 145 项（106 启用/39 停用），用途目录 172 项（本机任务 144、其它来源 28）；1 个 Windows SoftLanding 临时任务只保留现场观察。重建计划仍按旧快照的 9 阶段 127 项，不拿现行数量改写旧计划。
+- 计划任务：11 月 4 日 09:11:23 管理员完整只读扫描在 PCConfig 筛选范围内读到 150 项（109 启用/41 停用），用途目录 183 项（本机任务 149、其它来源 34）；1 个 Windows SoftLanding 临时任务只保留现场观察。全 Windows 394 项是另一个口径。重建计划是 11 月 3 日 02:22 更新的 9 阶段 149 项（必须重建 52、可选 7、软件自带 51、等本人决定 39）。
 
 - local_gpu_broker/broker.py 按 OCR 与 ASR 两个闭集分组，跨组可并行、组内互斥；Ollama 会话或活跃请求仍阻断外部租约。
 
@@ -1133,7 +1161,7 @@ PCConfig · 功能说明
 | Task signature（任务稳定签名） | 恢复所需的启用状态、动作、触发器、重试和执行限制，不包含瞬时状态。 |
 | LastTaskResult（最近运行结果） | Scheduler 的最近返回码；信息码与真实失败要分类，非零也要结合业务回执。 |
 | Hidden launcher（无窗口父启动器） | 从最外层就不创建可见控制台的启动链；任务的“隐藏”复选框不能单独证明这一点。 |
-| 软件每周维护 | 沿用原 Governance Check 任务名的每周任务，只做受管软件版本检查和空闲补丁维护。 |
+| 软件每周维护 | 沿用原 Governance Check 任务名的每周任务：受管软件版本检查、空闲补丁、启动项和任务清单比对、虚拟盘压缩。 |
 
 ::screen{#pcconfig-runtime-startup-13 section="tech"}
 
@@ -1511,7 +1539,7 @@ PCConfig · 功能说明
 
 - 运行时只读读取器 Get-RuntimeInventory
 
-- 11 个受管组件与适配器路由（managed_software_catalog）
+- 12 个受管组件与适配器路由（managed_software_catalog）
 
 - 软件每周维护 Invoke-ManagedSoftwareMaintenance.ps1
 
@@ -1687,9 +1715,11 @@ PCConfig · 功能说明
 
 - 10 月 11 日 16:32—16:39 对截止提交 431ad1c1 只数登记：环境变量 94、PATH 62、受管组件 11、启动快照 24、任务快照 127、用途目录 145（10 月 22 日再读：系统身份完整只读扫描得任务 140，用途目录 164，现场 3 个任务没登记）
 
-- 10 月 12 日 04:34—04:36 阅读当前源码与看板合同（提交 e0d2c330，Get-PublicDashboardWindows.ps1 与 dashboard-api-contract.md 常驻程序段），确认按登录用户读启动目录、读不清时记未知；本轮没有专门重新扫描全部启动面
+- 10 月 12 日 04:34—04:36 阅读当前源码与看板合同（提交 e0d2c330，Get-PublicDashboardWindows.ps1 与 dashboard-api-contract.md 常驻程序段），确认按登录用户读启动目录、读不清时记未知；当时没有专门重新扫描全部启动面
 
-- 没有做自然冷启动、手机文件发送或登录前异机接入，所以“没登录也能连”仍只有设计和旧来源证据
+- 11 月 4 日 09:09—09:21 只读：任务扫描 150 项（109/41），观察者提权、任务可见完整；运行时读取 Windows PowerShell 5.1.26100.9818；ToDesk 看门狗 Verify 通过，服务 Running/Auto；V 盘已挂载、ReFS 健康、9 个目录齐全。没有运行、启停任何任务
+
+- 没有做手机文件发送或登录前异机接入，所以“没登录也能连”仍只有机器侧核对和旧来源证据；11 月 3 日那次自然开机只核了 V 盘挂载和 Clash 任务回执
 
 - 2026-09-28 提交 348632a2 删除综合自查，提交 9561183b 退役鼠标样式守护；历史：10 月 11 日提交 9181327e、112ed13e 曾修正 Xiaomi 与 Claude 自启的失败判定；Xiaomi Share 旧流程已删除
 

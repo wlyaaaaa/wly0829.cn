@@ -188,7 +188,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **先记使用记录、再看条件**　先采 Codex、Claude 两路使用记录（失败不挡后面），再检查现有点、G 盘和权限；普通状态查询不新建快照。",
+        "text_ref": "1. **先记使用记录、再看条件**　先采 Claude 使用记录，取得快照后再采 Codex 使用记录（都不挡后面），再检查现有点、G 盘和权限；普通状态查询不新建快照。",
         "row": "start",
         "columns": 1,
         "icons": "none",
@@ -224,7 +224,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **先记使用记录、再看条件**　先采 Codex、Claude 两路使用记录（失败不挡后面），再检查现有点、G 盘和权限；普通状态查询不新建快照。",
+        "text_ref": "1. **先记使用记录、再看条件**　先采 Claude 使用记录，取得快照后再采 Codex 使用记录（都不挡后面），再检查现有点、G 盘和权限；普通状态查询不新建快照。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -434,7 +434,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 当前（2026-10-30 11:21 核对）：见上方 G/H 同一代的 10/29 恢复点和同次两路使用记录失败",
+        "text_ref": "- 当前（2026-11-04 09:18 核对）：见上方 G/H 同一代的 11/3 恢复点和同次两路使用记录成功；`state-codex.json`、`state-claude.json` 只取水位，两路 `bootstrap_complete=true`、`last_completed` 都到 11/3 0 点；只读任务自检 status=pass、matches_spec=true。没有读账本正文或逐行总数，没有重算全部对象。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -453,7 +453,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 当前（2026-10-30 11:21 核对）：见上方 G/H 同一代的 10/29 恢复点和同次两路使用记录失败",
+        "text_ref": "- 当前（2026-11-04 09:18 核对）：见上方 G/H 同一代的 11/3 恢复点和同次两路使用记录成功；`state-codex.json`、`state-claude.json` 只取水位，两路 `bootstrap_complete=true`、`last_completed` 都到 11/3 0 点；只读任务自检 status=pass、matches_spec=true。没有读账本正文或逐行总数，没有重算全部对象。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

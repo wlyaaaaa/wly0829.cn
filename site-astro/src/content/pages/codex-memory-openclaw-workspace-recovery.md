@@ -28,13 +28,13 @@
   "status_line": {
    "state": "已退役",
    "as_of": "2026-10-11",
-   "source": "按 2026-10-11 14:00（北京时间）的 PCConfig 任务登记与开发配置备份范围核对；旧材料存在性为 16:35 只读元数据观察；OpenClaw 项目本身已冻结，未检查其源码"
+   "source": "任务登记和旧材料"
   }
  },
  "source": {
   "page": "sources/pages/codex-memory-openclaw-workspace-recovery/page.json",
-  "sha256": "3c048cc7f47c71485b92ba602d2c55a7d3af817d6bf40bbd45ba6c0130367da6",
-  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
+  "sha256": "6aa43127c92fff6ec4d3242fb595b0db35bd24f01789e9eb627f59f761c5ec32",
+  "converted_at_beijing": "2026-11-04T12:05:29+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 10 月 11 日 · 任务登记和旧材料",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 10 月 11 日 · 任务登记和旧材料"
     },
     {
      "type": "action_button",
@@ -639,7 +639,7 @@ OpenClaw 的日常设置和工作区，与官方归档保存的应用状态是�
 
 ## 当前怎样实现
 
-现在没有在运行的 OpenClaw 备份。以下是旧材料格式与旧脚本的说明，按已接受的冻结页基线保留，本轮没有重新检查源码：
+现在没有在运行的 OpenClaw 备份。以下是旧材料格式与旧脚本的说明，按已接受的冻结页基线保留，之后没有重新检查源码：
 
 - 旧日常备份先存本机快照和工作区副本，本机/G 盘各轮换上限 30 份，G 盘按长度和 SHA-256 核对，再从同一份快照同步私有 Git。
 

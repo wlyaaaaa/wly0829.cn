@@ -27,18 +27,21 @@
   "parent": "typora-theme-pack",
   "status_line": {
    "state": "偶尔用",
-   "as_of": "2026-10-11",
-   "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未重新导出。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "as_of": "2026-11-04",
+   "source": "项目源码和现存样张",
+   "facts": [
+    "三项导出菜单还没在 Typora 里实际点过"
+   ]
   },
   "based_on": {
-   "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
-   "commit_time": "2026-09-28T12:36:45-05:00"
+   "commit": "9cefc0e1e41d5351693071cfbb7452f5deda93c6",
+   "commit_time": "2026-10-20T03:21:43-05:00"
   }
  },
  "source": {
   "page": "sources/pages/typora-theme-pack-multi-scenario-export-profiles/page.json",
-  "sha256": "fef33c342993482dc18dc4235d77be802f584a26c15c9989a3d3f2e1c71fc59f",
-  "converted_at_beijing": "2026-11-04T10:21:49+08:00"
+  "sha256": "94e316b65206d7083bda2079a93dfca4ee9222b4a08d4aba62cccb73fd62d568",
+  "converted_at_beijing": "2026-11-04T12:05:41+08:00"
  }
 }
 ---
@@ -90,9 +93,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "三项导出菜单还没在 Typora 里实际点过",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和现存样张",
      "row": "top"
     },
     {
@@ -132,9 +139,13 @@
       {
        "text": "偶尔用",
        "state": "ok"
+      },
+      {
+       "text": "三项导出菜单还没在 Typora 里实际点过",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和现存样张"
     },
     {
      "type": "action_button",
@@ -646,7 +657,7 @@ Typora Theme Pack · 功能说明
 
 - export-profiles 三份 CSS 定义各自色彩、字号、标题与打印规则。original 以石墨色为主，company 使用墨蓝与灰白结构且不加公司 logo 或客户名，personal 由 base.css、去掉 @import 的 verdant-mint.css 和 personal.css 叠成，打印正文 11.2pt、行高 1.84。
 
-- 三种 PDF 都读仓库里的 CSS；编辑器里已装的共享样式文件和源码不一致，不影响 PDF 用的是新样式。
+- 三种 PDF 都读仓库里的 CSS，不读编辑器里装的那份，所以编辑器装没装齐都不影响 PDF。
 
 - 9 月 29 日（f30ac9c）给表头单元格加了浅绿背景，修正了过去转换器默认灰表头盖住个人版配色的问题。
 
@@ -885,6 +896,10 @@ Typora Theme Pack · 功能说明
    {
     "text": "下一个模块 PDF 导出",
     "href": "/projects/typora-theme-pack/transactional-pdf-export-pipeline/"
+   },
+   {
+    "text": "PDF 导出",
+    "href": "/projects/typora-theme-pack/transactional-pdf-export-pipeline/"
    }
   ],
   "anchors": [],
@@ -959,7 +974,7 @@ Typora Theme Pack · 功能说明
 
 - 2026-10-11 16:32 只读解析仓库现存三份样张：各 2 页，原版 100,656 字节、个人 145,549 字节、公司 120,583 字节，生成于 9 月 29 日 01:32。只证明文件可读，这次没有重新导出，也没有看图确认表头修复后的效果。
 
-- Typora 三项菜单的配置已核对，实际点击导出待验收；最近一次 GitHub 自动测试 2026-09-29 01:51 共 21 项通过，这次没有运行。
+- Typora 三项菜单的配置已核对，实际点击导出待验收；自动测试的数量和最近一次结果见〔PDF 导出〕，这次没有运行。
 
 ## 与其他模块的关系
 

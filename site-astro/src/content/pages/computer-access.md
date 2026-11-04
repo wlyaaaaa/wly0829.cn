@@ -36,7 +36,9 @@
   "based_on": {
    "commit": "6f3cb90f79d8dd7632eb3adf0e1cd5028471bf92",
    "commit_time": "2026-09-25T03:52:41+08:00",
-   "file": "旧站源码 V:\\Personal\\Projects\\wly0829.cn（app\\computer-access.jsx、computer-access-model.js、computer-access-bootstrap.js）；后端 PCConfig 91b73e4 tools\\remote-computer-mcp\\public_access.py；事实单 b1\\pipe\\p2\\facts-ops.md 第 3 节、b1\\pipe\\cockpit-data.md 第 2 节；status 只读读数 10 月 1 日 18:10–18:14"
+   "file": "旧站源码 V:\\Personal\\Projects\\wly0829.cn（app\\computer-access.jsx、computer-access-model.js、computer-access-bootstrap.js）；后端 PCConfig 91b73e4 tools\\remote-computer-mcp\\public_access.py；事实单 b1\\pipe\\p2\\facts-ops.md 第 3 节、b1\\pipe\\cockpit-data.md 第 2 节；status 只读读数 10 月 1 日 18:10–18:14",
+   "observed_at": "2026-11-04",
+   "facts": "facts/page-computer-access.md；写稿附件/_回执-w12.md；本批验证码提示前端回归"
   },
   "video_prompt": "以这张图为第一帧，镜头和构图完全不动，只让右上角那幅插画轻轻动：绿色小挂锁的锁梁慢慢抬起一点、再稳稳扣回去，钥匙环随之轻轻晃；通行证上的绿色印章轻轻抬起、再落下，像盖了一次章；小窗的窗帘被微风吹得轻轻摆动；手机屏幕上的小盾牌亮起一圈柔和的绿光再淡下去；旁边的绿叶轻轻摇，一片小叶子缓缓飘落。画面里不出现任何文字和数字，不添加新东西，卡片、按钮、空框所在的白色纸面保持干净不动。约 6 秒，首尾衔接成无缝循环，水彩画风不变，没有声音。 ｜ Prompt: Use this image as the first frame. Keep the camera and composition completely still and gently animate only the small illustration at the upper right: the shackle of the small green padlock lifts slightly and clicks back down, the key ring swaying a little with it; the green stamp on the pass lifts gently and presses down once, as if stamping; the curtain of the small window sways softly in a light breeze; the little shield on the phone screen glows with a soft green ring and fades again; the nearby green leaves sway and one small leaf drifts down. No text or numbers anywhere, add nothing new, keep the white paper with the cards, buttons and empty boxes clean and still. About 6 seconds, the last frame matches the first for a seamless loop, same watercolor style, no audio.",
   "registry": {
@@ -98,7 +100,7 @@
    ],
    "mentions": [
     {
-     "target": "/cockpit/#pc",
+     "target": "/cockpit/#computer",
      "screen": "computer-access-01",
      "text": "电脑状态看驾驶舱"
     },
@@ -150,8 +152,8 @@
  },
  "source": {
   "page": "sources/pages/computer-access/page.json",
-  "sha256": "3c63959f7f639ae841d9b53e01ffe325bba4617a92be23420665aff2d4b08227",
-  "converted_at_beijing": "2026-10-10T13:23:33+08:00"
+  "sha256": "6fdff1699bc91164eef9d339410aa3d52f263bfb778e4a45565485d9bd27ced1",
+  "converted_at_beijing": "2026-11-04T12:05:29+08:00"
  }
 }
 ---
@@ -169,7 +171,7 @@
   "links": [
    {
     "text": "电脑状态看驾驶舱",
-    "href": "/cockpit/#pc"
+    "href": "/cockpit/#computer"
    },
    {
     "text": "连接电脑",
@@ -1571,6 +1573,7 @@
 | 黄 | 正在变 | “资料访问已结束，正在关闭资料。” |
 | 黄 | 结果还不确定 | 网断了或电脑没回话：按钮变成“查询本次结果”，只查原来那次，不要重新提交验证码；两项只办成一项时写“部分完成”，两项分别写结果。 |
 | 红 | 没办成 | “动态验证码不正确。本次未完成，已有授权保持原期限。”“授权、开机或配置状态已变化。请查看最新状态，再决定是否重新办理。” |
+| 红 | 这个验证码刚用过 | “这个验证码已使用，请等下一个验证码后重新办理。已有授权保持原期限。”电脑拒收，也不算输错次数；没有拿真码重试。 |
 | 灰 | 连不上电脑 | “暂时无法连接电脑”“连接服务暂时异常”：不说明电脑关机了；已有授权照原期限走，页面不会把操作再做一遍。 |
 
 **灯和字一起变**　状态一变，卡片上的灯和那行字同一刻换。读不到时灯变成空心灰圈、字写“当前状态未知”，旁边小字写上次读到的，不留旧的绿灯。
@@ -1607,12 +1610,11 @@
   "buttons": [
    {
     "text": "重新检查连接",
-    "where": "左卡第 1 步",
+    "where": "这一屏",
     "does": "重新读一次电脑状态",
     "api": "GET https://mcp.wly0829.cn/computer-access/api/status?refresh=1",
     "variants": [
-     "重新检查连接",
-     "刷新中…"
+     "重新检查连接"
     ]
    }
   ],
@@ -1839,7 +1841,7 @@
 
 ## 连不上电脑时
 页首写“暂时无法连接电脑”或“连接服务暂时异常”：可能是网络、休眠、关机或连接服务出了问题，光凭这一条分不出是哪个。
-1. 点［重新检查连接］。
+1. 点这一屏的［重新检查连接］，或页首的［刷新状态］。
 2. 还不通：用 ToDesk 或网易 UU 看看电脑实际怎么了，别光凭连不上就反复断电。
 3. 更多见〔救急先看：远程连不上〕。
 

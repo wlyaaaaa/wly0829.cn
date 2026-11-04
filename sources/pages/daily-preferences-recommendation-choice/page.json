@@ -7,8 +7,8 @@
   "parent": "daily-preferences",
   "status_line": {
     "state": "在用",
-    "as_of": "2026-10-11",
-    "source": "来源仓库 b334b3aa（北京 10/8 00:23）、daily-preferences Skill 推荐说明与 10/11 16:35 只读分类计数；本次没有生成新推荐，历史验收保留原日期"
+    "as_of": "2026-11-04",
+    "source": "理解库技能和分类计数"
   },
   "screens": [
     {
@@ -73,7 +73,7 @@
       "id": "daily-preferences-recommendation-choice-04",
       "section": "usage",
       "title": "从哪里开始",
-      "text": "## 从哪里开始\n\n说明想选吃喝、商品、出行或娱乐，以及这次在意的条件。\n\n## 需要准备什么\n\n- 本次用途与现实限制\n\n- 想延续或探索的方向（如有）\n\n- 价格是否是本次取舍条件\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　从相关认识和事实形成熟悉、相邻、新鲜的候选，分开实际经历、弱线索与推测；需要实时信息再查。\n\n2. **交付与接续**　交回具体理由、取舍和可继续搜索的入口；证据不足保持未知，最终选择和购买仍由本人决定。",
+      "text": "## 从哪里开始\n\n说明想选吃喝、商品、出行或娱乐，以及这次在意的条件。\n\n## 需要准备什么\n\n- 本次用途与现实限制\n\n- 想延续或探索的方向（如有）\n\n- 价格是否是本次取舍条件\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　从相关认识和事实形成熟悉、相邻、新鲜的候选，分开实际经历、弱线索与推测；需要实时信息再查。\n\n2. **交付与接续**　交回具体理由、取舍和可继续搜索的入口；证据不足保持未知，最终选择和购买仍由本人决定。\n\n**选衣服鞋子时**　AI 同时读身体尺寸和尺码两张卡：人体厘米、我的鞋码、以前买过的单品规格分开看，每项按自己的来源和日期取；商品尺码不当人体尺寸，哪项没记录就留未知，不用别的口径凑。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -110,7 +110,7 @@
       "id": "daily-preferences-recommendation-choice-06",
       "section": "tech",
       "title": "技术实现与依据（二）",
-      "text": "## 技术实现与依据（二）\n\n9. 除非用户明确说只给一个或直接替我选，否则不替用户下单、付款或决定唯一套餐。\n\n10. 旅行住宿等选择现在可按问题结合已接入的行程、订单、GPS区域级观察与本人明示；来源覆盖、移动推断和酒店结果分别说明，不把单次自然题扩成全部旅行历史已经准确理解。\n\n11. 实际设备使用只作行为观察，不能直接灌入喜欢分数。AppUsage 所有时期的时长、排名和频次都不采信；Collector 完整北京日才可信，部分日只作有限参考。换来源不清空独立的兴趣和真实经历。音乐喜欢清单可用但个人播放次数未知，微信聊天与支付语境分开。\n\n## 当前怎样实现\n\n- Skill/AI先取与本题相关的现行认识，再按会改变选择的轴调用evidence/facts/activity或其他已登记来源，必要时有界original；不固定先读三张卡，也不每题扫描所有平台。Python evidence排除非成功与refunded_full，facts仍保留先买后退。\n\n- AI 将来源事实、current（当前状态） 明示、推定和 Unknown（未验证） 分层，再生成三类候选。\n\n- Steam 游戏候选区分 played 与 observed，明确未玩查询排除 played，游戏查询排除 application；store_price_class 只作当前选择条件，具体历史 acquisition 保持 Unknown（未验证）。\n\n- 搜索接力按品类选 1–2 个平台与可复制关键词，不遍历所有平台。\n\n- Python CLI（命令行工具） 不生成候选菜单、不搜索实时价格、不调用模型 API，也不执行下单；ingest 的 completed 和 invalidated_snapshots 只报告证据接入与旧推定失效。",
+      "text": "## 技术实现与依据（二）\n\n9. 除非用户明确说只给一个或直接替我选，否则不替用户下单、付款或决定唯一套餐。\n\n10. 旅行住宿等选择现在可按问题结合已接入的行程、订单、GPS区域级观察与本人明示；来源覆盖、移动推断和酒店结果分别说明，不把单次自然题扩成全部旅行历史已经准确理解。\n\n11. 实际设备使用只作行为观察，不能直接灌入喜欢分数。AppUsage 所有时期的时长、排名和频次都不采信；Collector 完整北京日才可信，部分日只作有限参考。换来源不清空独立的兴趣和真实经历。音乐喜欢清单可用但个人播放次数未知，微信聊天与支付语境分开。\n\n12. 选衣鞋尺寸只在 personal.body_measurements 和 shopping.clothing_sizes 两张卡维护，逐字段保留来源和日期；有可靠新实测才改该字段的现行值，旧值留在版本和原证据里，未受影响的字段不清空；肩围不作肩宽，商品尺码不作人体值；预算是每次搜索的条件，不进长期画像。网页不放具体尺寸。\n\n## 当前怎样实现\n\n- Skill/AI先取与本题相关的现行认识，再按会改变选择的轴调用evidence/facts/activity或其他已登记来源，必要时有界original；不固定先读三张卡，也不每题扫描所有平台。Python evidence排除非成功与refunded_full，facts仍保留先买后退。\n\n- AI 将来源事实、current（当前状态） 明示、推定和 Unknown（未验证） 分层，再生成三类候选。\n\n- Steam 游戏候选区分 played 与 observed，明确未玩查询排除 played，游戏查询排除 application；store_price_class 只作当前选择条件，具体历史 acquisition 保持 Unknown（未验证）。\n\n- 搜索接力按品类选 1–2 个平台与可复制关键词，不遍历所有平台。\n\n- 选衣鞋直接用 profile --key personal.body_measurements --key shopping.clothing_sizes --context --json 同读两张卡；摘要没写或词没搜到不等于资料不存在。\n\n- Python CLI（命令行工具） 不生成候选菜单、不搜索实时价格、不调用模型 API，也不执行下单；ingest 的 completed 和 invalidated_snapshots 只报告证据接入与旧推定失效。",
       "links": [],
       "anchors": [],
       "live": null,

@@ -7,15 +7,15 @@
   "parent": "wechatdirect",
   "status_line": {
     "state": "常用",
-    "as_of": "2026-10-11",
-    "source": "来源代码核对到 10 月 7 日最后一次提交（v0.2.3）；无正文环境体检和账号配置于 10 月 11 日 16:32—16:33 重新检查，没有实际读取聊天"
+    "as_of": "2026-11-04",
+    "source": "项目源码和环境体检"
   },
   "screens": [
     {
       "id": "wechat-direct-account-source-identity-01",
       "section": "top",
       "title": "两个隔离账号、来源身份承诺与只读数据库快照",
-      "text": "# 两个隔离账号、来源身份承诺与只读数据库快照\n\n〔回到项目 → 微信聊天读取〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nWeChatDirect · 功能说明\n\n同名联系人、双开微信和本机加密数据库不会因为“看起来像”而串到另一个账号；源数据库也不会为了读取而被改写。\n\n**当前情况：**已有分开主号、副号并核对来源的机制，只配一个账号也能用；读取时微信可以照常写入，文字、图片与语音依赖分别检查，账号不明确时不猜。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "text": "# 两个隔离账号、来源身份承诺与只读数据库快照\n\n〔回到项目 → 微信聊天读取〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nWeChatDirect · 功能说明\n\n同名联系人、双开微信和本机加密数据库不会因为“看起来像”而串到另一个账号；源数据库也不会为了读取而被改写。\n\n**当前情况：**已有分开主号、副号并核对来源的机制，只配一个账号也能用；读取时微信可以照常写入，文字、图片与语音依赖分别检查，账号不明确时不猜。替我发消息这类动作连“唯一匹配时自动选”也没有，必须明确说主号或副号。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
       "links": [
         {
           "text": "回到项目 → 微信聊天读取",
@@ -89,8 +89,13 @@
       "id": "wechat-direct-account-source-identity-05",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n环境检查可独立于账号运行；文字/图片与Python3.11语音分别验收。当前源码 v0.2.3（最后提交 2026-10-07）\n\n## 关键规则与设计选择\n\n1. primary / secondary 是配置身份，不从窗口、头像或昵称推断和修复。\n\n2. 配置不保存微信密钥明文，真实路径与承诺值只留本机。\n\n3. 源数据库与 WAL 不被写入；所有查询发生在临时快照。\n\n4. Doctor 不打开数据库正文，也不输出路径或密钥。\n\n5. 某个依赖缺失只影响对应能力，例如 voiceDecoder unavailable 不等于文字上下文不可用。\n\n## 当前怎样实现\n\n- accounts.json 只允许 primary / secondary 两个槽位名，但至少配置一个即可，不要求必须双号；本机当前配置了 2 个。每个已配置槽位提供 config_path、local_state_path 和两个来源身份承诺；identity-commitments 可从本人有权读取的这两份已有保护载体计算出这两个承诺，只输出承诺，不输出账号原生 ID 或密钥。这两份载体由哪个程序、哪个版本生成，目前未核实。\n\n- Windows DPAPI 解开 Local State 中的本机 AES key，再解开 dbPath、decryptKey 与 myWxid。\n\n- load_direct_source_identity 只接受一个与原生身份匹配的 db_storage 账号根。",
-      "links": [],
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n环境检查可独立于账号运行；文字/图片与Python3.11语音分别验收。当前源码 v0.2.3（最后提交 2026-11-03）\n\n## 关键规则与设计选择\n\n1. primary / secondary 是配置身份，不从窗口、头像或昵称推断和修复。\n\n2. 配置不保存微信密钥明文，真实路径与承诺值只留本机。\n\n3. 源数据库与 WAL 不被写入；所有查询发生在临时快照。\n\n4. Doctor 不打开数据库正文，也不输出路径或密钥。\n\n5. 某个依赖缺失只影响对应能力，例如 voiceDecoder unavailable 不等于文字上下文不可用。\n\n6. 读取可以用 auto 在唯一匹配时选账号；helper 原生动作必须显式 primary 或 secondary，不从昵称、窗口或 PID 猜；每次动作前再读原生登录身份，退出或切号立即阻止后续动作。细节见〔收发和实时会话的技术依据〕。\n\n## 当前怎样实现\n\n- accounts.json 只允许 primary / secondary 两个槽位名，但至少配置一个即可，不要求必须双号；本机当前配置了 2 个。每个已配置槽位提供 config_path、local_state_path 和两个来源身份承诺；identity-commitments 可从本人有权读取的这两份已有保护载体计算出这两个承诺，只输出承诺，不输出账号原生 ID 或密钥。这两份载体由哪个程序、哪个版本生成，目前未核实。\n\n- Windows DPAPI 解开 Local State 中的本机 AES key，再解开 dbPath、decryptKey 与 myWxid。\n\n- load_direct_source_identity 只接受一个与原生身份匹配的 db_storage 账号根。",
+      "links": [
+        {
+          "text": "收发和实时会话的技术依据",
+          "href": "/projects/wechatdirect/#native-tech"
+        }
+      ],
       "anchors": [
         {
           "id": "project-reading-panel-technical",
@@ -162,7 +167,7 @@
       "id": "wechat-direct-account-source-identity-10",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- `accounts.example.json`隔离槽位和身份承诺的公开结构（可只配一个槽位）。\n\n- `wechat_source.py · load_direct_source_identity`DPAPI、配置解密和唯一账号根。\n\n- `wechat_source.py · EncryptedPageCodec / DirectWeChatReader`页面解密、WAL、临时快照与只读连接。\n\n- `wechat_cli.py · command_doctor / identity-commitments`无正文环境体检、局部可用状态，以及从已有载体计算身份承诺。\n\n## 如何验证\n\n- 2026-10-11 16:33 普通 Doctor 返回 success、configuredAccounts=2、所需文件 2/2、依赖与 voiceDecoder available；16:32 的仅环境检查各项能力也可用（它不检查账号，所以那里的账号数 0 不代表没有账号）。两次都没有测试实际读取，sourceAccess=not_tested。\n\n- test_reader_rejects_wrong_source_identity_commitment_before_reads 验证身份不匹配在正文前失败。\n\n- test_account_config_requires_both_identity_commitments 验证每个槽位两个承诺必需。\n\n- test_doctor_is_body_free_and_requires_windows 验证 Doctor 不打开正文且限制平台。\n\n## 与其他模块的关系\n\n所有聊天、朋友圈、媒体和归档模块都以这里的账号身份与稳定快照为前提；它只建立可信来源，不拥有聊天语义。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `accounts.example.json`隔离槽位和身份承诺的公开结构（可只配一个槽位）。\n\n- `wechat_source.py · load_direct_source_identity`DPAPI、配置解密和唯一账号根。\n\n- `wechat_source.py · EncryptedPageCodec / DirectWeChatReader`页面解密、WAL、临时快照与只读连接。\n\n- `wechat_cli.py · command_doctor / identity-commitments`无正文环境体检、局部可用状态，以及从已有载体计算身份承诺。\n\n## 如何验证\n\n- 2026-10-11 16:33 普通 Doctor 返回 success、configuredAccounts=2、所需文件 2/2、依赖与 voiceDecoder available；16:32 的仅环境检查各项能力也可用（它不检查账号，所以那里的账号数 0 不代表没有账号）。两次都没有测试实际读取，sourceAccess=not_tested。2026-11-04 09:09–09:14 再跑 doctor --environment-only：success，文字、图片、WXGF、语音转 WAV 和离线验真都可用，配置 not_checked、sourceAccess not_tested；同样不证明真实读库。\n\n- test_reader_rejects_wrong_source_identity_commitment_before_reads 验证身份不匹配在正文前失败。\n\n- test_account_config_requires_both_identity_commitments 验证每个槽位两个承诺必需。\n\n- test_doctor_is_body_free_and_requires_windows 验证 Doctor 不打开正文且限制平台。\n\n## 与其他模块的关系\n\n所有聊天、朋友圈、媒体和归档模块都以这里的账号身份与稳定快照为前提；它只建立可信来源，不拥有聊天语义。",
       "links": [
         {
           "text": "上一个模块 朋友圈缓存",

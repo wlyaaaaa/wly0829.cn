@@ -39,7 +39,7 @@
         "columns_v": 2,
         "illustration": "left_inside",
         "card_count": 4,
-        "text_ref": "1 秒一刷"
+        "text_ref": "1.0秒一刷"
       },
       {
         "type": "live_strip",
@@ -366,7 +366,7 @@
         "columns": 3,
         "illustration": "left_inside",
         "card_count": 3,
-        "text_ref": "38,788行代码（C#、PowerShell、Python）146个C#单元测"
+        "text_ref": "38,835行代码（C#、PowerShell、Python）135个C#单元测"
       }
     ],
     "notes": "横版看门狗竖卡在左，两根细箭头连接右侧上下两条流程（5站、4站），底部三数字卡；竖版看门狗在顶，两流程依次纵向箭头，末尾原v2实际一排三张数字卡，按图保留；不按描述改成单张一行。；已逐屏查看横图及全部竖版续图，文字用 page.json。；main-closer：看门狗两细线连接两条实际DOM流程，唯一原组名确定目标，不猜底图部位。",
@@ -667,7 +667,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "card_count": 4,
-        "text_ref": "1 秒一刷"
+        "text_ref": "1.0秒一刷"
       },
       {
         "type": "live_strip",
@@ -952,7 +952,7 @@
         "columns_v": 1,
         "illustration": "top_inside",
         "card_count": 3,
-        "text_ref": "38,788行代码（C#、PowerShell、Python）146个C#单元测"
+        "text_ref": "38,835行代码（C#、PowerShell、Python）135个C#单元测"
       }
     ],
     "notes": "横版看门狗竖卡在左，两根细箭头连接右侧上下两条流程（5站、4站），底部三数字卡；竖版看门狗在顶，两流程依次纵向箭头，末尾原v2实际一排三张数字卡，按图保留；不按描述改成单张一行。；已逐屏查看横图及全部竖版续图，文字用 page.json。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。",

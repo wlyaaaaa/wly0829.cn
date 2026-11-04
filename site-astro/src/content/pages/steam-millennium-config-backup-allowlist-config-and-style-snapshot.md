@@ -27,18 +27,18 @@
   "parent": "steam-millennium-config-backup",
   "status_line": {
    "state": "偶尔用",
-   "as_of": "2026-10-11",
-   "source": "源仓库 10 月 1 日的最新提交，加上北京时间 10 月 11 日 13:32 的只读状态核对",
+   "as_of": "2026-11-04",
+   "source": "项目仓库和运行记录",
    "last": {
     "label": "快照核对",
-    "at": "2026-10-11 13:32"
+    "at": "2026-11-04 09:18"
    }
   }
  },
  "source": {
   "page": "sources/pages/steam-millennium-config-backup-allowlist-config-and-style-snapshot/page.json",
-  "sha256": "c79a19bada2f3aad051e87b98e35e546e8c4cef8ddcffa23942cfb6a61218aee",
-  "converted_at_beijing": "2026-11-04T10:21:47+08:00"
+  "sha256": "4aae49d9121219094b4d5d9b73d46f43d31f84cc21bcae1ca7a8f2da330d82e3",
+  "converted_at_beijing": "2026-11-04T12:05:40+08:00"
  }
 }
 ---
@@ -88,11 +88,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 快照核对 10 月 11 日 13:32",
+       "text": "偶尔用 · 快照核对 11 月 4 日 09:18",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目仓库和运行记录",
      "row": "top"
     },
     {
@@ -130,11 +130,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 快照核对 10 月 11 日 13:32",
+       "text": "偶尔用 · 快照核对 11 月 4 日 09:18",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目仓库和运行记录"
     },
     {
      "type": "action_button",
@@ -177,9 +177,9 @@ Steam Millennium 配置备份 · 功能说明
 
 保存 Millennium 的核心设置与 quick.css，让重装或误改后能按记录恢复自己的选择。
 
-当前情况：核心设置和自定义样式已采集；本轮没有回填并查看Steam实际界面。
+当前情况：核心设置和自定义样式已采集；还没有回填到真的 Steam 里看过界面。
 
-项目快照核对于 2026-10-11 13:32（北京时间，只读核对）；具体测试保留各自日期，页面不实时探测运行状态。
+内容核对于 2026-11-04 09:18（北京时间，只读）；测试结果写的是各自跑的日期；这页不实时读运行状态，要看现在好不好，问 AI 或看驾驶舱。
 
 项目源码：公开仓库
 
@@ -951,7 +951,7 @@ config/quick.css
 实际滚动条样式定义。
 
 tools/Invoke-MillenniumBackup.ps1 / tools/millennium_backup.py
-复制范围、类型与内容检查、代际和受控恢复的实际逻辑；原 tools/snapshot-millennium-config.ps1 现在只是转交给它的兼容入口。
+复制范围、类型与内容检查、代际和受控恢复的实际逻辑；原来转交给它的兼容脚本 tools/snapshot-millennium-config.ps1 已删除。
 
 ## 如何验证
 

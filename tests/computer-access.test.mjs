@@ -204,10 +204,10 @@ test("lookup feedback distinguishes unchanged unknown, new success and query fai
   assert.equal(failed.request_id, "same-id");
 });
 
-test("a logical API failure in an HTTP 200 response cannot be mistaken for a prepared factor request", async () => {
+for (const [code, message] of [["public_state_changed", /状态已变化/], ["public_totp_code_already_used", /这个验证码已使用，请等下一个验证码后重新办理。已有授权保持原期限。/]]) test(`logical API failure ${code} shows its specific guidance without preparing a factor request`, async () => {
   const originalFetch = globalThis.fetch;
-  globalThis.fetch = async () => new Response(JSON.stringify({ status: "error", error: "public_state_changed" }), { status: 200 });
-  try { await assert.rejects(apiRequest("", "/requests", { method: "POST", body: {} }), /状态已变化/); }
+  globalThis.fetch = async () => new Response(JSON.stringify({ status: "error", error: code }), { status: 200 });
+  try { await assert.rejects(apiRequest("", "/requests", { method: "POST", body: {} }), message); }
   finally { globalThis.fetch = originalFetch; }
 });
 
@@ -247,7 +247,7 @@ test("built route preserves the complete static shell and only allows submitting
   assert.ok(html.includes("const formal = ['https://wly0829.cn', 'https://mcp.wly0829.cn'].includes(location.origin) && window.top === window"));
   // 跨站只送来源、不送完整地址（发布侧同一策略见 scripts/prepare-oss-release.py 的 OSS_REFERRER_POLICY）
   assert.match(html, /name="referrer" content="strict-origin-when-cross-origin"/);
-  assert.ok(html.includes('href="/cockpit/#pc"'));
+  assert.ok(html.includes('href="/cockpit/#computer"'));
   assert.ok(!html.includes('class="ca-card ca-network-card"'));
 });
 

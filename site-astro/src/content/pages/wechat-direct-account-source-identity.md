@@ -27,14 +27,14 @@
   "parent": "wechatdirect",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "来源代码核对到 10 月 7 日最后一次提交（v0.2.3）；无正文环境体检和账号配置于 10 月 11 日 16:32—16:33 重新检查，没有实际读取聊天"
+   "as_of": "2026-11-04",
+   "source": "项目源码和环境体检"
   }
  },
  "source": {
   "page": "sources/pages/wechat-direct-account-source-identity/page.json",
-  "sha256": "30910c3a8fd8e03a740acb09486b71ffeb470f0221ed49bbae923f1543647f00",
-  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
+  "sha256": "c0bd6e5624ee26fd39ee8fb0e55b68c29f925be636b99c8e76da2c4c1f857000",
+  "converted_at_beijing": "2026-11-04T12:05:42+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和环境体检",
      "row": "top"
     },
     {
@@ -130,7 +130,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和环境体检"
     },
     {
      "type": "action_button",
@@ -173,7 +173,7 @@ WeChatDirect · 功能说明
 
 同名联系人、双开微信和本机加密数据库不会因为“看起来像”而串到另一个账号；源数据库也不会为了读取而被改写。
 
-**当前情况：**已有分开主号、副号并核对来源的机制，只配一个账号也能用；读取时微信可以照常写入，文字、图片与语音依赖分别检查，账号不明确时不猜。
+**当前情况：**已有分开主号、副号并核对来源的机制，只配一个账号也能用；读取时微信可以照常写入，文字、图片与语音依赖分别检查，账号不明确时不猜。替我发消息这类动作连“唯一匹配时自动选”也没有，必须明确说主号或副号。
 
 具体测试保留各自日期，页面不实时探测运行状态。
 
@@ -533,7 +533,12 @@ WeChatDirect · 功能说明
   "id": "wechat-direct-account-source-identity-05",
   "section": "tech",
   "title": "技术实现与依据（一）",
-  "links": [],
+  "links": [
+   {
+    "text": "收发和实时会话的技术依据",
+    "href": "/projects/wechatdirect/#native-tech"
+   }
+  ],
   "anchors": [
    {
     "id": "project-reading-panel-technical",
@@ -610,7 +615,7 @@ WeChatDirect · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-环境检查可独立于账号运行；文字/图片与Python3.11语音分别验收。当前源码 v0.2.3（最后提交 2026-10-07）
+环境检查可独立于账号运行；文字/图片与Python3.11语音分别验收。当前源码 v0.2.3（最后提交 2026-11-03）
 
 ## 关键规则与设计选择
 
@@ -623,6 +628,8 @@ WeChatDirect · 功能说明
 4. Doctor 不打开数据库正文，也不输出路径或密钥。
 
 5. 某个依赖缺失只影响对应能力，例如 voiceDecoder unavailable 不等于文字上下文不可用。
+
+6. 读取可以用 auto 在唯一匹配时选账号；helper 原生动作必须显式 primary 或 secondary，不从昵称、窗口或 PID 猜；每次动作前再读原生登录身份，退出或切号立即阻止后续动作。细节见〔收发和实时会话的技术依据〕。
 
 ## 当前怎样实现
 
@@ -1021,7 +1028,7 @@ primary / secondary 是两个严格隔离的配置槽位，可以只配一个；
 
 ## 如何验证
 
-- 2026-10-11 16:33 普通 Doctor 返回 success、configuredAccounts=2、所需文件 2/2、依赖与 voiceDecoder available；16:32 的仅环境检查各项能力也可用（它不检查账号，所以那里的账号数 0 不代表没有账号）。两次都没有测试实际读取，sourceAccess=not_tested。
+- 2026-10-11 16:33 普通 Doctor 返回 success、configuredAccounts=2、所需文件 2/2、依赖与 voiceDecoder available；16:32 的仅环境检查各项能力也可用（它不检查账号，所以那里的账号数 0 不代表没有账号）。两次都没有测试实际读取，sourceAccess=not_tested。2026-11-04 09:09–09:14 再跑 doctor --environment-only：success，文字、图片、WXGF、语音转 WAV 和离线验真都可用，配置 not_checked、sourceAccess not_tested；同样不证明真实读库。
 
 - test_reader_rejects_wrong_source_identity_commitment_before_reads 验证身份不匹配在正文前失败。
 

@@ -88,6 +88,7 @@
         "sources/pages/skill-md-to-pdf",
         "sources/pages/skill-media-person-self",
         "sources/pages/skill-mojibake-doctor",
+        "sources/pages/skill-news-quickcheck",
         "sources/pages/skill-pdf",
         "sources/pages/skill-pdf-render-safe",
         "sources/pages/skill-personal-formal-documents",
@@ -138,7 +139,7 @@
         ],
         "conditional_collectors": [
           "one connected-phone preservation or exact-clear acceptance only after an explicit current device request; never connect, clear or keep a phone occupied merely to refresh the website",
-          "one cloud upload or external read-back only after the owner reviews a concrete candidate list and explicitly authorizes that external action; upload=0 is the normal current state",
+          "one bounded current cloud/API state or exact external read-back only when needed to substantiate a changed claim; existing authorized account/content incremental maintenance follows USER_REQUIREMENTS.md and docs/cloud-maintenance.md without per-batch approval; do not upload or delete merely to refresh the website",
           "one selected-original person:self check only when the owner asks whether they appear in that exact image; never perform a broad person scan"
         ],
         "content_format": "typeset"
@@ -160,10 +161,10 @@
         "phone_new_shared_file_E_G_dual_preservation_and_can_unplug_checkpoint",
         "phone_exact_clear_state_separate_from_preservation",
         "single_rebuildable_sqlite_two_production_modules_and_no_background_service",
-        "sealed_under_60gb_photo_video_phone_recovery_package",
-        "upload_zero_cloud_candidates_album_plan_and_explicit_upload_gate",
+        "photo_video_phone_recovery_package_without_size_quota_and_with_separate_roots",
+        "authorized_incremental_cloud_maintenance_with_30_day_upload_settle_and_Photos_web_deletion_batches",
         "trusted_file_manager_deletion_authority_catalog_seed_G_phone_cloud_convergence_and_guarded_mismatch_preservation",
-        "current_24539_media_55_tests_two_live_skips_and_163_phone_items_awaiting_cleanup",
+        "current_catalog_counts_test_definitions_and_phone_closeout_outcomes",
         "public_personal_photo_L2_default_and_value_specific_L3_plus_boundary",
         "scheduled_current_original_and_recovery_sync",
         "complete_selected_recovery_coverage",
@@ -691,7 +692,6 @@
             "localocr/runtime.py",
             "localocr/gpu_broker.py",
             "localocr/gpu_probe.py",
-            "localocr/observer.py",
             "start_server.ps1",
             "stop_server.ps1",
             "release_resources.ps1"
@@ -712,8 +712,9 @@
           "kind": "current_reviewed_semantic_contract",
           "paths": [
             "scripts/manage_runtime.py",
-            "scripts/review_results.py",
-            "localocr/runtime_manager.py"
+            "localocr/runtime.py",
+            "localocr/cli.py",
+            "localocr/objective_result.py"
           ]
         },
         {
@@ -2198,9 +2199,11 @@
         {
           "kind": "current_reviewed_semantic_contract",
           "paths": [
-            "wechat_export.py",
-            "wechat_archive.py",
-            "wechat_runtime.py"
+            "wechat_cli.py",
+            "wechat_helper.py",
+            "wechat_realtime.py",
+            "docs/USAGE.md",
+            "E:/.agents/skills/wechat-direct/SKILL.md"
           ]
         }
       ],

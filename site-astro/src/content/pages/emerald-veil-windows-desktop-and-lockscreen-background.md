@@ -27,18 +27,21 @@
   "parent": "emerald-veil",
   "status_line": {
    "state": "偶尔用",
-   "as_of": "2026-10-11",
-   "source": "源码主线 861a2d2（北京时间 10 月 8 日 23:50）与北京时间 10 月 11 日 13:32–13:33 的只读 Verify（接口报错，未完成）；雨林黑猫壁纸、原图留底、手机壁纸留底在用，只检查不改说不准，换机装回待验收",
+   "as_of": "2026-11-04",
+   "source": "壁纸只读检查和项目源码",
    "last": {
     "label": "快照核对",
-    "at": "2026-10-11"
-   }
+    "at": "2026-11-04"
+   },
+   "facts": [
+    "11 月 4 日检查有偏差：图对，文件位置不合规定，未修"
+   ]
   }
  },
  "source": {
   "page": "sources/pages/emerald-veil-windows-desktop-and-lockscreen-background/page.json",
-  "sha256": "99ad79b7ea47cc79fdd9c3b4ce63d5fa99fe816891554861718e09b1ba755581",
-  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
+  "sha256": "2fb074750f1837768edadc8499bb62b9e1317632ca0e05d164e5cf58c96a1374",
+  "converted_at_beijing": "2026-11-04T12:05:30+08:00"
  }
 }
 ---
@@ -88,11 +91,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 快照核对 10 月 11 日",
+       "text": "偶尔用 · 快照核对 11 月 4 日",
        "state": "ok"
+      },
+      {
+       "text": "11 月 4 日检查有偏差：图对，文件位置不合规定，未修",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 壁纸只读检查和项目源码",
      "row": "top"
     },
     {
@@ -130,11 +137,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 快照核对 10 月 11 日",
+       "text": "偶尔用 · 快照核对 11 月 4 日",
        "state": "ok"
+      },
+      {
+       "text": "11 月 4 日检查有偏差：图对，文件位置不合规定，未修",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 壁纸只读检查和项目源码"
     },
     {
      "type": "action_button",
@@ -177,9 +188,9 @@ Emerald Veil · 功能说明
 
 图片和恢复入口放在一起，新电脑不必重新找图、猜颜色参数或依赖原来的用户名与盘符。
 
-当前情况：北京时间 10 月 11 日的只读检查在读取各屏图片时被 Windows 接口报错打断，桌面和锁屏现在是否都用着选定图片暂未确认；锁屏实际裁剪、显示效果与新电脑恢复仍需对应画面确认。
+当前情况：北京时间 11 月 4 日 11:13 的只读检查读完了桌面和锁屏，结果是“有偏差”：桌面两块屏用的还是这张图（内容完全相同），但文件还在旧位置，不在现在规定的持久位置；锁屏用的是另一份文件，解码后画面误差为 0，同样不算合规。这次没有修。锁屏实际裁剪、显示效果与新电脑恢复仍需对应画面确认。
 
-项目快照核对于 2026-10-11（北京时间）：运行结果来自 13:32–13:38 的只读检查，源码版本核对于 13:42；具体测试保留各自日期，页面不实时探测运行状态。
+项目快照核对于 2026-11-04（北京时间）：运行结果来自 09:07–09:17 的只读检查，源码核对到 4a4e70f；具体测试保留各自日期，页面不实时探测运行状态。
 
 项目源码：公开仓库
 
@@ -634,7 +645,7 @@ Windows个性化设置或其他软件改变了图片、显示模式时，检查�
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-10 月 11 日读回核对未完成（接口报错），当前状态未确认
+11 月 4 日读回完成：status=drift、退出 1；10 月 11 日那次读回未完成（接口报错）
 
 ### 关键规则与设计选择
 
@@ -654,7 +665,7 @@ Windows个性化设置或其他软件改变了图片、显示模式时，检查�
 
 - 首次应用前保存原桌面图（可读取时）、每屏选图、原锁屏图与选择器状态；已有记录仅补入尚未采集的每屏设置，不覆盖原恢复信息。临时写入再移动前像文件，图片引用必须在持久目录且源哈希匹配。
 
-- 锁屏图像检查宽高比（允许相差0.01）后缩为128×72比较RGB均值，容差为3；9 月记录的实际平均误差为0，10 月 11 日没有取得完整读回，当前值未确认。只有确有漂移才用带哈希前缀和新GUID的文件名重设，避开缓存旧图。
+- 锁屏图像检查宽高比（允许相差0.01）后缩为128×72比较RGB均值，容差为3；9 月记录的实际平均误差为0，10 月 11 日没有取得完整读回；11 月 4 日解码误差为0，但图片不在持久副本位置，所以lockScreen.matches仍是false。只有确有漂移才用带哈希前缀和新GUID的文件名重设，避开缓存旧图。
 
 ::screen{#emerald-veil-windows-desktop-and-lockscreen-background-06 section="tech"}
 
@@ -783,7 +794,7 @@ Windows个性化设置或其他软件改变了图片、显示模式时，检查�
 | 名词 | 意思 |
 | --- | --- |
 | 雨林黑猫 · 更绿版 | 已选用的3840×2160电脑底图，由1672×941生成原图放大；是sRGB SDR，不宣称恢复了未知细节、HDR或10位输出。 |
-| 持久图片副本 | Windows显示文件复制到用户图片目录的EmeraldVeil子目录；前像与原图备份仍在%LOCALAPPDATA%\EmeraldVeil\windows-background。Windows引用持久图片而非项目目录。 |
+| 持久图片副本 | Windows显示文件复制到用户图片目录的EmeraldVeil子目录；前像与原图备份仍在%LOCALAPPDATA%\EmeraldVeil\windows-background。Windows引用持久图片而非项目目录。本机是E:\Pictures\EmeraldVeil，但 11 月 4 日的桌面引用还在%LOCALAPPDATA%旧位置，没满足这条。 |
 | 解码后比较 | Windows可能重新编码锁屏缓存，脚本比较画面而非只比缓存文件字节，避免编码变化被误判为换图。 |
 
 ## 专业定义
@@ -792,7 +803,7 @@ Windows个性化设置或其他软件改变了图片、显示模式时，检查�
 
 解决什么
 
-接口设置可能只成功一部分；脚本不是桌面与锁屏的原子事务。出现系统错误应按具体失败位置核对，保留已保存的原图记录后再处理。10 月 11 日那次只读检查就停在读取各屏图片这一步，暂时分不清是脚本问题还是当时的显示环境。
+接口设置可能只成功一部分；脚本不是桌面与锁屏的原子事务。出现系统错误应按具体失败位置核对，保留已保存的原图记录后再处理。10 月 11 日那次只读检查就停在读取各屏图片这一步，分不清是脚本问题还是当时的显示环境；11 月 4 日再查已能完整读完，结果是位置不合规定，不是接口报错。
 
 ::screen{#emerald-veil-windows-desktop-and-lockscreen-background-08 section="tech"}
 
@@ -972,11 +983,13 @@ Windows个性化设置或其他软件改变了图片、显示模式时，检查�
 
 ## 如何验证
 
-- 北京时间10月11日13:32–13:33的只读Verify在读取各屏图片（MonitorPaths）时返回COM E_FAIL（Windows接口报错），没有拿到完整的桌面和锁屏结果，当前状态未确认。9 月那版页面记录的Verify为verified、desktop/lockScreen均true、锁屏平均像素差0，只代表当时。
+- 北京时间11月4日09:11只读 pwsh -NoProfile -File scripts\Set-WindowsBackground.ps1 -Action Verify：读完，status=drift、退出1、changedSurfaces=[]。desktop.matches=false，两块已连接屏逐屏matches=false，都指向 %LOCALAPPDATA%\EmeraldVeil\windows-background\rain-fa8d1fdc7799-6a249f39ddcd4d5ba0c4f457c29b27d9.png，文件存在、SHA-256与选定图相同，只是不在持久副本位置。锁屏指向 %APPDATA%\Microsoft\Windows\Themes\WallpaperEngineLockOverride_randomQSIADA.jpg，lockScreen.matches=false、解码误差0。BackgroundType、RotatingLockScreenEnabled、SlideshowEnabled都是0。不能写成图片坏了或不是这张图，也不能推断锁屏显示错了；真实锁屏没有看。这次没有Apply，为什么还用旧位置说不清。
+
+- 北京时间10月11日13:32–13:33的只读Verify在读取各屏图片（MonitorPaths）时返回COM E_FAIL（Windows接口报错），没有拿到完整的桌面和锁屏结果，当时状态未确认。9 月那版页面记录的Verify为verified、desktop/lockScreen均true、锁屏平均像素差0，只代表当时。
 
 - 图片文件本身按源码主线 861a2d2 里的受管文件核对：电脑底图PNG 3840×2160、17,141,593字节、SHA-256 FA8D1FDC7799D537864D2784B5718E8BA15B77775D246C019179084B0F0239E7；手机壁纸备份 assets/mobile-wallpaper/emerald-elf-1440x3200.png 为1440×3200 sRGB PNG、12,114,553字节、SHA-256 F87BDB1CFF2F8885FC80EF02A0EDFF0EFF2C18E76A63AF63EDCA1E1D60C42EED，按约定不转格式、不重新编码。文件对得上不代表屏幕上正在用它，手机上现在用的是哪张也没有核对。
 
-- 跨机操作与真实锁屏目视需分别做，本轮未重做；不能用接口结果推定观感完全一致。
+- 跨机操作与真实锁屏目视需分别做，到 11 月 4 日都没有重做；不能用接口结果推定观感完全一致。
 
 ## 与其他模块的关系
 

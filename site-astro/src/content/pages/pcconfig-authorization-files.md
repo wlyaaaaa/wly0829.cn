@@ -28,13 +28,17 @@
   "status_line": {
    "state": "常用",
    "as_of": "2026-10-11",
-   "source": "产品与代码归 PasswordCenter（968b9816），PCConfig 管安装与机器备份；10 月 11 日 16:34—16:37 核对三个相关程序源码与安装一致，真实文件操作本次未执行。"
+   "source": "安装记录和源码",
+   "facts": [
+    "产品归密码中心，这里管安装和机器备份",
+    "10 月 11 日核对三个程序和安装一致；真实文件操作没跑"
+   ]
   }
  },
  "source": {
   "page": "sources/pages/pcconfig-authorization-files/page.json",
-  "sha256": "abf25ca121f459135c913adb28396d08a3bafa4e41239f5ecbdb2e73fcefa892",
-  "converted_at_beijing": "2026-11-04T10:21:42+08:00"
+  "sha256": "902153f96c2b08899ebe5e4b2a5176dbbfc46d1d5864fd479d4551ea14bb6550",
+  "converted_at_beijing": "2026-11-04T12:05:33+08:00"
  }
 }
 ---
@@ -82,9 +86,17 @@
       {
        "text": "常用",
        "state": "ok"
+      },
+      {
+       "text": "产品归密码中心，这里管安装和机器备份",
+       "state": "fact"
+      },
+      {
+       "text": "10 月 11 日核对三个程序和安装一致；真实文件操作没跑",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 10 月 11 日 · 安装记录和源码",
      "row": "top"
     },
     {
@@ -124,9 +136,17 @@
       {
        "text": "常用",
        "state": "ok"
+      },
+      {
+       "text": "产品归密码中心，这里管安装和机器备份",
+       "state": "fact"
+      },
+      {
+       "text": "10 月 11 日核对三个程序和安装一致；真实文件操作没跑",
+       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 10 月 11 日 · 安装记录和源码"
     },
     {
      "type": "action_button",

@@ -32,7 +32,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "4份聊天档案，共7934条消息（截至10月11日）888段聊天替理解库读过，共11541条消息（9月8日起）45次打开微信数据库，一次都没写",
+        "text_ref": "4份聊天档案，共7934条消息（截至11月4日）1002段聊",
         "columns": 4,
         "columns_v": 2,
         "icons": "auto"
@@ -87,7 +87,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "4份聊天档案，共7934条消息（截至10月11日）888段聊天替理解库读过，共11541条消息（9月8日起）45次打开微信数据库，一次都没写",
+        "text_ref": "4份聊天档案，共7934条消息（截至11月4日）1002段聊",
         "columns": 4,
         "columns_v": 2,
         "icons": "auto"
@@ -139,7 +139,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "它不在后台跑：没有自动任务，也没有常驻程序，只在我问到微信时由AI调用一次，答完就结束。"
+        "text_ref": "它没有全局常驻程序：平时只在我问到微信时由AI调用一次，答完"
       },
       {
         "type": "source_text_card",
@@ -240,7 +240,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "它不在后台跑：没有自动任务，也没有常驻程序，只在我问到微信时由AI调用一次，答完就结束。"
+        "text_ref": "它没有全局常驻程序：平时只在我问到微信时由AI调用一次，答完"
       },
       {
         "type": "source_text_card",
@@ -329,7 +329,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "它读不到的：本地库里没有的旧聊天、清过缓存的图片和语音、这台电脑上没缓存的朋友圈。本机能看到的不等于微信的全部历史。它也不会主动提醒，有问题",
+        "text_ref": "它读不到的：本地库里没有的旧聊天、清过缓存的图片和语音、这台",
         "tone": "yellow"
       }
     ],
@@ -364,7 +364,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "它读不到的：本地库里没有的旧聊天、清过缓存的图片和语音、这台电脑上没缓存的朋友圈。本机能看到的不等于微信的全部历史。它也不会主动提醒，有问题",
+        "text_ref": "它读不到的：本地库里没有的旧聊天、清过缓存的图片和语音、这台",
         "tone": "yellow"
       }
     ],
@@ -659,11 +659,12 @@
         "icons": "auto",
         "row": "design",
         "width": "67%",
-        "direction": "horizontal"
+        "direction": "horizontal",
+        "last_row": "fill"
       },
       {
         "type": "stat_card",
-        "text_ref": "3个依赖15个命令43次公开提交（8月30日起，10月30日11:06数）",
+        "text_ref": "3个读取依赖（收发接口另算）17个命令54次公开提交（8月3",
         "columns": 1,
         "columns_v": 1,
         "icons": "none",
@@ -719,11 +720,12 @@
         "connector": "none",
         "illustration": "left_inside",
         "icons": "auto",
-        "direction": "vertical"
+        "direction": "vertical",
+        "last_row": "fill"
       },
       {
         "type": "stat_card",
-        "text_ref": "3个依赖15个命令43次公开提交（8月30日起，10月30日11:06数）",
+        "text_ref": "3个读取依赖（收发接口另算）17个命令54次公开提交（8月3",
         "columns": 1,
         "columns_v": 1,
         "icons": "none"
@@ -855,7 +857,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "全部功能（25项）",
+        "text_ref": "全部功能（31项）",
         "align": "center",
         "size": "large"
       },
@@ -932,7 +934,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "全部功能（25项）",
+        "text_ref": "全部功能（31项）",
         "align": "center",
         "size": "large"
       },
@@ -1085,6 +1087,21 @@
         "illustration": "left_inside",
         "icons": "auto",
         "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "替我收发和实时聊天",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "26按次发送我明确要求时",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "last_row": "fill"
       }
     ],
     "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 主工程师收窄中点分隔判定后，功能卡text_ref缩为首25字，避开状态附注的中点；实际节点分配再核对。",
@@ -1175,6 +1192,21 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "替我收发和实时聊天",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "26按次发送我明确要求时",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "last_row": "fill"
       }
     ],
     "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 主工程师收窄中点分隔判定后，功能卡text_ref缩为首25字，避开状态附注的中点；实际节点分配再核对。",
@@ -1292,5 +1324,164 @@
       ]
     },
     "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-11",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "让 AI 替我收发微信",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这是读取之外一个可选的接口。"
+      },
+      {
+        "type": "table",
+        "text_ref": "我可以让它做要说清什么我会拿到什么"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "它什么时候停下来",
+        "columns": 2,
+        "columns_v": 1
+      },
+      {
+        "type": "notice",
+        "text_ref": "现在的状态：代码 11 月 1–3 日加入。",
+        "tone": "yellow"
+      }
+    ]
+  },
+  {
+    "screen": "wechatdirect-11",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "让 AI 替我收发微信",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这是读取之外一个可选的接口。"
+      },
+      {
+        "type": "table",
+        "text_ref": "我可以让它做要说清什么我会拿到什么"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "它什么时候停下来",
+        "columns": 1,
+        "columns_v": 1
+      },
+      {
+        "type": "notice",
+        "text_ref": "现在的状态：代码 11 月 1–3 日加入。",
+        "tone": "yellow"
+      }
+    ]
+  },
+  {
+    "screen": "wechatdirect-12",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "实时聊天怎么读懂语音",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "让 AI 在微信里接着聊的时候用。"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1先准备",
+        "columns": 5,
+        "direction": "horizontal",
+        "connector": "arrow"
+      },
+      {
+        "type": "table",
+        "text_ref": "遇到它怎么做超时，或图片还没看"
+      },
+      {
+        "type": "notice",
+        "text_ref": "什么时候用另一条路：",
+        "tone": "yellow"
+      }
+    ]
+  },
+  {
+    "screen": "wechatdirect-12",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "实时聊天怎么读懂语音",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "让 AI 在微信里接着聊的时候用。"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1先准备",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "arrow"
+      },
+      {
+        "type": "table",
+        "text_ref": "遇到它怎么做超时，或图片还没看"
+      },
+      {
+        "type": "notice",
+        "text_ref": "什么时候用另一条路：",
+        "tone": "yellow"
+      }
+    ]
+  },
+  {
+    "screen": "wechatdirect-13",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "收发和实时会话的技术依据",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "入口："
+      }
+    ]
+  },
+  {
+    "screen": "wechatdirect-13",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "收发和实时会话的技术依据",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "入口：",
+        "columns": 1
+      }
+    ]
   }
 ]

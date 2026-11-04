@@ -292,7 +292,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- Setup-ScheduledTasks.ps1 与 ScheduledTask-Registration.Common.ps1 支持只收敛选定的已登记任务（-TaskName），保留既有时序和设置；四个正式任务都启用、失败最多重试 3 次（配置本地间隔 10 分钟、配置云端 15 分钟、微信 G 盘 15 分钟、微信云端 30 分钟）；微信 Hot 使用当前交互用户 Highest，其余 Limited。临时小时监控仍由独立安装器管理，本轮未重装任何任务。",
+        "text_ref": "- Setup-ScheduledTasks.ps1 与 ScheduledTask-Registration.Common.ps1 支持只收敛选定的已登记任务（-TaskName），保留既有时序和设置；微信 Hot 使用当前交互用户 Highest，其余 Limited。临时小时监控仍由独立安装器管理，这次没有重装任何任务。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -312,7 +312,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- Setup-ScheduledTasks.ps1 与 ScheduledTask-Registration.Common.ps1 支持只收敛选定的已登记任务（-TaskName），保留既有时序和设置；四个正式任务都启用、失败最多重试 3 次（配置本地间隔 10 分钟、配置云端 15 分钟、微信 G 盘 15 分钟、微信云端 30 分钟）；微信 Hot 使用当前交互用户 Highest，其余 Limited。临时小时监控仍由独立安装器管理，本轮未重装任何任务。",
+        "text_ref": "- Setup-ScheduledTasks.ps1 与 ScheduledTask-Registration.Common.ps1 支持只收敛选定的已登记任务（-TaskName），保留既有时序和设置；微信 Hot 使用当前交互用户 Highest，其余 Limited。临时小时监控仍由独立安装器管理，这次没有重装任何任务。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",

@@ -7,8 +7,11 @@
   "parent": "typora-theme-pack",
   "status_line": {
     "state": "偶尔用",
-    "as_of": "2026-10-11",
-    "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未重新导出。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+    "as_of": "2026-11-04",
+    "source": "项目源码和现存样张",
+    "facts": [
+      "三项导出菜单还没在 Typora 里实际点过"
+    ]
   },
   "screens": [
     {
@@ -89,7 +92,7 @@
       "id": "typora-theme-pack-multi-scenario-export-profiles-05",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n现存三份公开样张各 2 页、可解析（2026-09-29 生成）；9 月 29 日个人版表头修复；本次未重新导出或看图\n\n## 关键规则与设计选择\n\n1. original 是中性 Markdown；personal 是薄荷阅读；company 是克制专业呈现。\n\n2. 样式从外部 CSS 注入，不为换色改写正文；`--document-style-policy` 可选 ignore/reject/preserve，主题包默认 ignore。\n\n3. 没有真实公司品牌材料时，不添加假品牌或客户字样。\n\n## 当前怎样实现\n\n- export-profiles 三份 CSS 定义各自色彩、字号、标题与打印规则。original 以石墨色为主，company 使用墨蓝与灰白结构且不加公司 logo 或客户名，personal 由 base.css、去掉 @import 的 verdant-mint.css 和 personal.css 叠成，打印正文 11.2pt、行高 1.84。\n\n- 三种 PDF 都读仓库里的 CSS；编辑器里已装的共享样式文件和源码不一致，不影响 PDF 用的是新样式。\n\n- 9 月 29 日（f30ac9c）给表头单元格加了浅绿背景，修正了过去转换器默认灰表头盖住个人版配色的问题。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n现存三份公开样张各 2 页、可解析（2026-09-29 生成）；9 月 29 日个人版表头修复；本次未重新导出或看图\n\n## 关键规则与设计选择\n\n1. original 是中性 Markdown；personal 是薄荷阅读；company 是克制专业呈现。\n\n2. 样式从外部 CSS 注入，不为换色改写正文；`--document-style-policy` 可选 ignore/reject/preserve，主题包默认 ignore。\n\n3. 没有真实公司品牌材料时，不添加假品牌或客户字样。\n\n## 当前怎样实现\n\n- export-profiles 三份 CSS 定义各自色彩、字号、标题与打印规则。original 以石墨色为主，company 使用墨蓝与灰白结构且不加公司 logo 或客户名，personal 由 base.css、去掉 @import 的 verdant-mint.css 和 personal.css 叠成，打印正文 11.2pt、行高 1.84。\n\n- 三种 PDF 都读仓库里的 CSS，不读编辑器里装的那份，所以编辑器装没装齐都不影响 PDF。\n\n- 9 月 29 日（f30ac9c）给表头单元格加了浅绿背景，修正了过去转换器默认灰表头盖住个人版配色的问题。",
       "links": [],
       "anchors": [
         {
@@ -150,7 +153,7 @@
       "id": "typora-theme-pack-multi-scenario-export-profiles-09",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- 中性样式\n\n- 个人样式\n\n- 专业样式\n\n## 如何验证\n\n- 2026-09-08 07:42 的旧短样例三种导出各 1 页，当时逐张看过渲染结果；2026-09-28 那批更完整的公开样例三种各 2 页，个人版表头当时发灰。\n\n- 2026-10-11 16:32 只读解析仓库现存三份样张：各 2 页，原版 100,656 字节、个人 145,549 字节、公司 120,583 字节，生成于 9 月 29 日 01:32。只证明文件可读，这次没有重新导出，也没有看图确认表头修复后的效果。\n\n- Typora 三项菜单的配置已核对，实际点击导出待验收；最近一次 GitHub 自动测试 2026-09-29 01:51 共 21 项通过，这次没有运行。\n\n## 与其他模块的关系\n\n共享正文和转换管道，保持独立视觉语义。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- 中性样式\n\n- 个人样式\n\n- 专业样式\n\n## 如何验证\n\n- 2026-09-08 07:42 的旧短样例三种导出各 1 页，当时逐张看过渲染结果；2026-09-28 那批更完整的公开样例三种各 2 页，个人版表头当时发灰。\n\n- 2026-10-11 16:32 只读解析仓库现存三份样张：各 2 页，原版 100,656 字节、个人 145,549 字节、公司 120,583 字节，生成于 9 月 29 日 01:32。只证明文件可读，这次没有重新导出，也没有看图确认表头修复后的效果。\n\n- Typora 三项菜单的配置已核对，实际点击导出待验收；自动测试的数量和最近一次结果见〔PDF 导出〕，这次没有运行。\n\n## 与其他模块的关系\n\n共享正文和转换管道，保持独立视觉语义。",
       "links": [
         {
           "text": "上一个模块 编辑主题",
@@ -158,6 +161,10 @@
         },
         {
           "text": "下一个模块 PDF 导出",
+          "href": "/projects/typora-theme-pack/transactional-pdf-export-pipeline/"
+        },
+        {
+          "text": "PDF 导出",
           "href": "/projects/typora-theme-pack/transactional-pdf-export-pipeline/"
         }
       ],
@@ -169,7 +176,7 @@
     }
   ],
   "based_on": {
-    "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
-    "commit_time": "2026-09-28T12:36:45-05:00"
+    "commit": "9cefc0e1e41d5351693071cfbb7452f5deda93c6",
+    "commit_time": "2026-10-20T03:21:43-05:00"
   }
 }

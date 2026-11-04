@@ -27,8 +27,8 @@
   "parent": "vault-tool",
   "status_line": {
    "state": "偶尔用",
-   "as_of": "2026-10-11",
-   "source": "源码按北京时间 14:00 前最后提交 b884ab61（10 月 1 日）核对，没有处理任何真实库。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "as_of": "2026-11-04",
+   "source": "项目源码"
   },
   "based_on": {
    "commit": "b884ab61b8a9b62fd1412c493bff0c34a82afc06",
@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/vault-tool-files-encryption/page.json",
-  "sha256": "415c872b5ea2e496de0decc0da74b2155560453e754631cab02572175013564a",
-  "converted_at_beijing": "2026-11-04T10:21:49+08:00"
+  "sha256": "b915644ca883b590ef111a208645c2bc817b8a93e4bd4956a4d2e7977804980f",
+  "converted_at_beijing": "2026-11-04T12:05:41+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码"
     },
     {
      "type": "action_button",

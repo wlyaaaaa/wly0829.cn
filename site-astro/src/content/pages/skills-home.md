@@ -105,12 +105,11 @@
     {
      "id": "g-read",
      "name": "读懂录音、图片和文档",
-     "line": "把录音、图片和乱码变成能核对的文字，也把 Word、PDF 和图做成查过的文件。",
+     "line": "把录音和图片变成能核对的文字，也把 Word、PDF 和图做成查过的文件。",
      "screen": "skills-home-02",
      "members": [
       "/skills/chinese-asr/",
       "/skills/localocr/",
-      "/skills/mojibake-doctor/",
       "/skills/documents/",
       "/skills/pdf/",
       "/skills/md-to-pdf/",
@@ -155,10 +154,11 @@
     {
      "id": "g-pc",
      "name": "电脑、网页和账号",
-     "line": "网页上办事、查邮箱云盘、从手机取文件和短信、开远程连接、查断网和代理、查电脑卡顿、看驾驶舱、把大文件放云上省流量。",
+     "line": "网页上办事、上网查别人的真实经历、查邮箱云盘、从手机取文件和短信、开远程连接、查断网和代理、查电脑卡顿、看驾驶舱、把大文件放云上省流量。",
      "screen": "skills-home-04",
      "members": [
       "/skills/browser-control-continuity/",
+      "/skills/news-quickcheck/",
       "/skills/google-workspace-direct/",
       "/skills/tailscale-safe-exposure/",
       "/skills/proxy-network/",
@@ -183,7 +183,7 @@
      "id": "n-skills",
      "text": "31 个技能",
      "meaning": "网站上有技能页的技能数",
-     "as_of": "2026-10-31",
+     "as_of": "2026-11-04",
      "source": "本仓库 sources/pages/*/page.json 的 kind=skill 实取 29 个；含新增 Word 文档和 PDF 读写和表单，两页为 Codex 自带插件；去向页不计入。与受管共享技能安装数分开。；10 月 31 日讲给我听（explain-to-me）随个人表达存档删除，改为去向页，现为 29 个。；10 月 31 日新增生图、代理与网络两页，现为 31 个。",
      "screens": [
       "skills-home-01"
@@ -201,9 +201,9 @@
     },
     {
      "id": "n-entry",
-     "text": "17 个",
+     "text": "16 个",
      "meaning": "是某个项目入口的技能数（卡上带“属于”标签）",
-     "as_of": "2026-10-31",
+     "as_of": "2026-11-04",
      "source": "本页卡片带“属于”的个数；10 月 31 日个人表达存档，讲给我听删除、替我拟消息不再标“属于”，现为 17",
      "screens": [
       "skills-home-01"
@@ -581,8 +581,8 @@
  },
  "source": {
   "page": "sources/pages/skills-home/page.json",
-  "sha256": "e96173340fdd80d693667a8231dafcea41d315858f3b956ac76e93bac9fb64d2",
-  "converted_at_beijing": "2026-11-04T08:42:38+08:00"
+  "sha256": "a3923fab2655982ef113b9cce24ea7c57377b91c6291b5eb715185d2196910b7",
+  "converted_at_beijing": "2026-11-04T12:05:40+08:00"
  }
 }
 ---
@@ -666,7 +666,7 @@
      "connector": "none",
      "row": "summary",
      "width": "48%",
-     "text_ref": "31个技能",
+     "text_ref": "31 个技能",
      "row_equal_height": true
     },
     {
@@ -741,7 +741,7 @@
       "_library/hires-icons/打勾清单.png"
      ],
      "connector": "none",
-     "text_ref": "31个技能"
+     "text_ref": "31 个技能"
     },
     {
      "type": "content_card",
@@ -882,7 +882,7 @@
 
 **31 个技能**　截至 11 月 4 日，按用途分 7 组。
 
-卡片右下角带“属于：项目名”的 17 个，是某个项目的入口：它能做的事全列在那个项目页，技能页只讲怎么跟 AI 说、例子和边界。
+卡片右下角带“属于：项目名”的 16 个，是某个项目的入口：它能做的事全列在那个项目页，技能页只讲怎么跟 AI 说、例子和边界。
 
 技能怎么写、怎么装到 Codex 和 Claude，在“AI 规则与技能基座”项目里讲。〔技能怎么装到各个 AI → 基座〕
 
@@ -942,10 +942,6 @@
     "href": "/projects/localocr/"
    },
    {
-    "text": "修乱码",
-    "href": "/skills/mojibake-doctor/"
-   },
-   {
     "text": "Word 文档",
     "href": "/skills/documents/"
    },
@@ -1000,10 +996,6 @@
     "text": "本地文字识别"
    },
    {
-    "id": "skill-mojibake-doctor",
-    "text": "修乱码"
-   },
-   {
     "id": "skill-documents",
     "text": "Word 文档"
    },
@@ -1018,6 +1010,10 @@
    {
     "id": "skill-pdf-render-safe",
     "text": "PDF 逐页检查"
+   },
+   {
+    "id": "skill-news-quickcheck",
+    "text": "中外消息快查"
    }
   ],
   "live": [],
@@ -1053,7 +1049,6 @@
       "看微信聊天": "_library/icons/微信标志.png",
       "中文语音转写技能": "_library/icons/麦克风.png",
       "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
-      "修乱码": "_library/icons/梳理乱线.png",
       "文稿转 PDF": "_library/icons/文稿堆.png",
       "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "Word 文档": "_library/icons/白纸.png",
@@ -1085,7 +1080,6 @@
       "看微信聊天": "_library/icons/微信标志.png",
       "中文语音转写技能": "_library/icons/麦克风.png",
       "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
-      "修乱码": "_library/icons/梳理乱线.png",
       "文稿转 PDF": "_library/icons/文稿堆.png",
       "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "Word 文档": "_library/icons/白纸.png",
@@ -1108,7 +1102,6 @@
       "看微信聊天": "_library/icons/微信标志.png",
       "中文语音转写技能": "_library/icons/麦克风.png",
       "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
-      "修乱码": "_library/icons/梳理乱线.png",
       "文稿转 PDF": "_library/icons/文稿堆.png",
       "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "Word 文档": "_library/icons/白纸.png",
@@ -1146,7 +1139,6 @@
       "看微信聊天": "_library/icons/微信标志.png",
       "中文语音转写技能": "_library/icons/麦克风.png",
       "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
-      "修乱码": "_library/icons/梳理乱线.png",
       "文稿转 PDF": "_library/icons/文稿堆.png",
       "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "Word 文档": "_library/icons/白纸.png",
@@ -1180,7 +1172,6 @@
       "看微信聊天": "_library/icons/微信标志.png",
       "中文语音转写技能": "_library/icons/麦克风.png",
       "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
-      "修乱码": "_library/icons/梳理乱线.png",
       "文稿转 PDF": "_library/icons/文稿堆.png",
       "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "Word 文档": "_library/icons/白纸.png",
@@ -1402,13 +1393,12 @@
 - 〔找照片和录音〕说个大概，找出照片视频原件或录音里那句话。　〔属于：照片视频录音管理〕
 - 〔找文件原件〕说个大概，找出文档原件，翻到要看的那一页。　〔属于：个人材料查找〕
 - 〔照片录音里有没有我〕看指定的照片或录音里有没有我，不认别人。
-- 〔看微信聊天〕问微信里的事，AI 只读点名的那一段。　〔属于：微信聊天读取〕
+- 〔看微信聊天〕问微信里的事，AI 只读点名的那一段；明确说了发给谁，也能代发。　〔属于：微信聊天读取〕
 
-**读懂录音、图片和文档**　把录音、图片和乱码变成能核对的文字，也把 Word、PDF 和图做成查过的文件。
+**读懂录音、图片和文档**　把录音和图片变成能核对的文字，也把 Word、PDF 和图做成查过的文件。
 
 - 〔中文语音转写技能〕跟 AI 说一句，录音就变成能核对的文字。　〔属于：中文语音转写〕
 - 〔本地文字识别〕要逐字准确、成批或只在本机时，交给本地识字。　〔属于：本地文字识别〕
-- 〔修乱码〕查清中文乱码怎么来的，能严格倒回才修。
 - 〔Word 文档〕做能接着改的 Word，每一页都看过再交。
 - 〔PDF 读写和表单〕读、做、填 PDF，值存住了、每页看过才交。
 - 〔文稿转 PDF〕把 Markdown 转成能打印的 PDF，查过再交。
@@ -1814,7 +1804,7 @@
 
 - 〔记得我是谁〕带着对我的了解回答，说错了一纠正就改。　〔属于：个人理解库〕
 - 〔汇报网页〕汇报、裁定和长回答做成网页，点选就能答复；别的回答合适时也能用。
-- 〔替我拟消息〕意思我定，AI 看发给谁、什么关系，写得自然。
+- 〔替我拟消息〕意思我定，AI 按我的口吻写得短而自然；我授权时也能直接跟客服、商家打字。
 
 **学习、工作和生活**　学东西、办工作上的事、写正式文书、问健康，各按一套固定做法办。
 
@@ -1897,6 +1887,10 @@
    {
     "text": "从手机取东西",
     "href": "/skills/phone-direct/"
+   },
+   {
+    "text": "中外消息快查",
+    "href": "/skills/news-quickcheck/"
    }
   ],
   "anchors": [
@@ -1947,6 +1941,10 @@
    {
     "id": "skill-project-entry-gate",
     "text": "改项目前先核对"
+   },
+   {
+    "id": "skill-news-quickcheck",
+    "text": "中外消息快查"
    }
   ],
   "live": [],
@@ -2372,16 +2370,17 @@
 - 〔加密文件〕点名的文件，交给密码中心加密保管　〔属于：密码中心〕
 - 〔加密库操作〕让 AI 管本地加密库，密码只在本机窗口里输　〔属于：本地加密库〕
 
-**电脑、网页和账号**　网页上办事、查邮箱云盘、从手机取文件和短信、开远程连接、查断网和代理、查电脑卡顿、看驾驶舱、把大文件放云上省流量。
+**电脑、网页和账号**　网页上办事、上网查别人的真实经历、查邮箱云盘、从手机取文件和短信、开远程连接、查断网和代理、查电脑卡顿、看驾驶舱、把大文件放云上省流量。
 
 - 〔网页上的事接着办〕网页卡住、要登录时，接着把事办完。
+- 〔中外消息快查〕用过的人怎么说，AI 进站查原帖，反面说法一起交回。
 - 〔从手机取东西〕电脑上的 AI 按需从我手机取下载的文件、短信、当前通知和截图，连不上先自动重连。　〔属于：电脑配置与恢复〕
-- 〔邮件和云盘〕查邮件、找云盘文件，也能等邮箱验证码。　〔属于：电脑配置与恢复〕
+- 〔邮件和云盘〕查邮件、找云盘文件，也能同时等短信和邮箱验证码。　〔属于：电脑配置与恢复〕
 - 〔远程只让自己连〕开个服务给自己的设备用，外人连不上。
 - 〔代理与网络〕断网、连不上、要改代理时，AI 先把两个代理软件一起看全再动手。
 - 〔查电脑卡顿〕说一句“刚才卡了”，AI 按时间对齐证据去查。　〔属于：电脑使用与性能记录〕
 - 〔看驾驶舱〕问电脑和项目现在好不好、要我做什么，AI 读驾驶舱讲给我听。
-- 〔省流量的云端素材〕AI 要反复读的大文件，云上放一份，省得反复传；云端读者眼下没有可用环境，用不了。
+- 〔省流量的云端素材〕AI 要反复读的大文件，云上放一份，省得反复传；云端读者截至 10 月 20 日没有可用环境，现在能不能用要实查。
 
 **维护代码**　改代码之前，先把仓库的事实核对清楚再动手。
 

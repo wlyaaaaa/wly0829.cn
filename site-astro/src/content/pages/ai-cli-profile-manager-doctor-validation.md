@@ -27,14 +27,14 @@
   "parent": "ai-cli-profile-manager",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "父项目总览状态“常用”；事实按 10 月 11 日 14:00 前的源码（10 月 8 日提交）、当天一次零写入诊断和历史验收记录核对，未跑新的体检全集或真实测试。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "as_of": "2026-11-04",
+   "source": "项目源码和检查记录"
   }
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-doctor-validation/page.json",
-  "sha256": "9f984bcb923e5ba2bd8e8600f2f7f20e32d96a4cbabb4d71d1498b9392396b1c",
-  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
+  "sha256": "9aa498d8d507d4fd9616d1213cc5f4dd4af63c5a4acff11dd363d7e847e2adf2",
+  "converted_at_beijing": "2026-11-04T12:05:28+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和检查记录",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和检查记录"
     },
     {
      "type": "action_button",
@@ -182,9 +182,9 @@ AI CLI Profile Manager · 功能说明
 
 先用不发模型请求的体检找出配置或登录缺项；确需证明模型会回答、会用工具或能改文件时，再明确运行对应真实测试。
 
-**当前情况：**可以先不花模型额度检查入口和缺项；三家厂商的钥匙体检只能证明“引用已配置”，钥匙本身是否有效要靠真实请求。真实文本、工具或文件任务测试需明确选择，并保留各自证据日期。10 月 28 日起所有需要 Key 的厂商都引用密码中心，其他已登记厂商也同样只能证明引用已配置；没跑 Live 测试的不算通过。
+**当前情况：**可以先不花模型额度检查入口和缺项；三家厂商的钥匙体检只能证明“引用已配置”，钥匙本身是否有效要靠真实请求。真实文本、工具或文件任务测试需明确选择，并保留各自证据日期。10 月 28 日起所有需要 Key 的厂商都引用密码中心，其他已登记厂商也同样只能证明引用已配置；没跑 Live 测试的不算通过。11 月 3 日 16:39 GitHub 对最新提交的自动检查有一项没过（查可用路线的 profile list --available），原因还没查；这是一轮自动检查的结果，不代表现有路线真实运行都失败。11 月 4 日没有重跑体检全集或真实测试。
 
-内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；具体测试保留各自日期，页面不实时探测运行状态。
+内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；自动检查结果按 11 月 4 日读到的 GitHub 记录；具体测试保留各自日期，页面不实时探测运行状态。
 
 项目源码：公开仓库
 
@@ -827,6 +827,10 @@ AI CLI Profile Manager · 功能说明
    {
     "text": "下一个模块 可恢复机器运行",
     "href": "/projects/ai-cli-profile-manager/recoverable-runs/"
+   },
+   {
+    "text": "GitHub 检查记录",
+    "href": "https://github.com/wlyaaaaa/ai-cli-profile-manager/actions/runs/41604942561"
    }
   ],
   "anchors": [],
@@ -902,6 +906,8 @@ AI CLI Profile Manager · 功能说明
 - 10 月 11 日零写入诊断：模块 0.3.19，桌面桥 b47fea3ce81f7a67 已登记并启用、安装状态 verified，七个文件的类型、大小和 SHA-256 全部一致；诊断自己的“正在运行的进程已加载”和端到端两项仍未验证。
 
 - 9 月 18 日的真实双厂商验收是 GLM-5.3 Flash 和 DeepSeek Flash 各作父任务，与同一个 Luna High 子会话完成 3 轮往返；旁边的合成协议检查不调用真实模型，不能当作厂商端到端证据。新父工具和新模型 Live 未执行。
+
+- GitHub 自动检查：当前提交 e08a575 对应的一轮（北京时间 11 月 3 日 16:39:47 创建，run 41604942561）已结束且整体 failure：desktop-child-contract=success，pester-smoke=failure，失败步骤 Smoke tests，日志里唯一失败项是 `FAIL: profile list --available`，最后 `FAILED: 1`（11 月 4 日 09:12—09:13 只读 gh 查询，见〔GitHub 检查记录〕）。根因没查，也没有重跑；它不是当前全部 Profile 真实运行失败。11 月 4 日也没有跑完整 Doctor、Pester 或 Live。
 
 ## 与其他模块的关系
 

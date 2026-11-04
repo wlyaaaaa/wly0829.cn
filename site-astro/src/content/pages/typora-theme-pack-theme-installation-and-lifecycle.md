@@ -27,18 +27,18 @@
   "parent": "typora-theme-pack",
   "status_line": {
    "state": "偶尔用",
-   "as_of": "2026-10-11",
-   "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未重装或恢复。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+   "as_of": "2026-11-04",
+   "source": "项目源码和只读核对"
   },
   "based_on": {
-   "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
-   "commit_time": "2026-09-28T12:36:45-05:00"
+   "commit": "9cefc0e1e41d5351693071cfbb7452f5deda93c6",
+   "commit_time": "2026-10-20T03:21:43-05:00"
   }
  },
  "source": {
   "page": "sources/pages/typora-theme-pack-theme-installation-and-lifecycle/page.json",
-  "sha256": "4bb4dbdd94b8ef45bbd0e31a332203ad3e843896085cdb9cb6cc86c267cb98f7",
-  "converted_at_beijing": "2026-11-04T10:21:49+08:00"
+  "sha256": "84aa8b8786f102590ce882f90951a327ee4a26e593d269716a92831c12f385b5",
+  "converted_at_beijing": "2026-11-04T12:05:41+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日",
+     "static_note": "截至 11 月 4 日 · 项目源码和只读核对",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日"
+     "static_note": "截至 11 月 4 日 · 项目源码和只读核对"
     },
     {
      "type": "action_button",
@@ -177,7 +177,7 @@ Typora Theme Pack · 功能说明
 
 更新主题时留下原先版本，避免影响自己安装的其他主题。
 
-**当前情况：**两份主题文件里，入口文件和源码一致，共享样式文件不一致（verify 结果为未通过），重新运行一次安装即可收敛；更新会保留旧文件，但恢复旧版仍需明确选择备份。
+**当前情况：**两份主题文件都和源码一致（11 月 4 日 09:10 只读核对通过），不用重装；更新会保留旧文件，但恢复旧版仍需明确选择备份。
 
 项目源码：公开仓库
 
@@ -398,7 +398,7 @@ Typora Theme Pack · 功能说明
 
 ## 正常时
 
-两份本项目主题文件都与当前源版本一致。现在只有一份一致。
+两份本项目主题文件都与当前源版本一致。11 月 4 日核对就是这样。
 
 ## 发现问题时
 
@@ -630,7 +630,7 @@ Typora Theme Pack · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-2026-10-11 verify：入口 CSS 一致、共享 CSS 不一致，verified=false；本次没有重装
+2026-11-04 verify：两份 CSS 都和源码一致，verified=true；本次没有重装（10 月 11 日那次共享 CSS 不一致、verified=false）
 
 ## 关键规则与设计选择
 
@@ -951,7 +951,9 @@ Typora Theme Pack · 功能说明
 
 ## 如何验证
 
-- 2026-10-11 16:31 只读 verify：入口 CSS 源码与已装 SHA-256 一致，共享 CSS 不一致，verified=false；当前主题配置指向 verdant-mint.css，这和 verify 结果是两件事。没有重装、恢复或清理备份。
+- 2026-11-04 09:10 只读 verify：退出 0、verified=true；verdant-mint.css 源和已装都是 e6931a680015dd427aa9981ba201858a31359f8415a5e06a07d48baefc934cae，verdant/base.css 都是 29465c7a5bdd2f3a671561949ad754569df3ea0bb8e97806374e281a826ed8b9；profile.data 当前主题指向 verdant-mint.css，这和 verify 结果是两件事。这次没有重装，说不清是哪天装齐的；Typora 实际画面也没有看。
+
+- 2026-10-11 16:31 只读 verify：入口 CSS 源码与已装 SHA-256 一致，共享 CSS 不一致，verified=false；这是当时的状态。没有重装、恢复或清理备份。
 
 - 隔离安装测试确认无关主题保留（历史）；该测试仍在源码里，2026-09-29 01:51 GitHub 自动测试日志显示它通过，这次没有运行。开发配置备份和新电脑恢复这次也没有执行。
 

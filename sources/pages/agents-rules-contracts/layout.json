@@ -292,7 +292,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 运行 Inspect 核验当前 E 发布版本，读取同版根规则。",
+        "text_ref": "1. 约法和导航随用户级入口带上",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -312,7 +312,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 运行 Inspect 核验当前 E 发布版本，读取同版根规则。",
+        "text_ref": "1. 约法和导航随用户级入口带上",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -434,7 +434,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "活动根规则（Inspect返回的E279AGENTS.md）与10份正式专题",
+        "text_ref": "活动根规则（E372，随用户级入口加载",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -453,7 +453,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "活动根规则（Inspect返回的E279AGENTS.md）与10份正式专题",
+        "text_ref": "活动根规则（E372，随用户级入口加载",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

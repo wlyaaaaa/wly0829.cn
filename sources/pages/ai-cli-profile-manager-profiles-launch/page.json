@@ -8,7 +8,7 @@
   "status_line": {
     "state": "常用",
     "as_of": "2026-10-11",
-    "source": "父项目总览状态“常用”；事实按 10 月 11 日 14:00 前的源码（10 月 8 日提交）和 9 月 28 日厂商凭据改动核对，configure 引用、删除和 eject 导出几处按 10 月 30 日 11:15 前读到的 10 月 28 日提交改写；最近一次全量离线测试为 9 月 29 日，本次未重跑。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+    "source": "项目源码和离线测试"
   },
   "screens": [
     {
@@ -138,7 +138,7 @@
       "id": "ai-cli-profile-manager-profiles-launch-08",
       "section": "tech",
       "title": "依据与来源",
-      "text": "## 依据与来源\n\n## 真实入口\n\n- `src/AiCliProfileManager/Private/CommandRouter.ps1`：命令解析与退出码\n\n- `src/AiCliProfileManager/Private/ProfileService.ps1`：用户 Profile、厂商引用、SecretRef 与删除生命周期\n\n- `scripts/Import-FromOpenClaw.ps1`：已退役并从源码删除，只作为 DeepSeek 旧配置导入的历史记录\n\n- `src/AiCliProfileManager/Private/LaunchPlan.ps1`：计划、型号锁、native 与 eject\n\n## 如何验证\n\n- 9 月 3 日 385 项 Pester 覆盖当时的命令解析、Profile 生命周期、参数和导出；9 月 17 日又完成 442 项源码回归；9 月 29 日退役两个代理后的全量离线测试为 470/470、0 失败、0 跳过。三次都按当天记录保存，10 月 11 日没有重跑。10 月 28 日改了配置引用和导出方式，那次提交说明里的历史回归有 2 项失败，之后也没有本轮重跑的全量结果，不能算全绿。\n\n- 离线发行检查实际执行 version、list/show、native、eject 和错误退出码；自定义型号配置档的保存和默认启动计划只在源码与离线层面成立，还没有用真实账号调用新型号。按原字节复制的新导出方式只有源码依据，本轮没有实际导出核对。\n\n- 10 月 11 日和 10 月 30 日的整理都没有用 start 打开交互会话，也没有对真实私有配置执行导入或导出。\n\n## 与其他模块的关系\n\n本模块决定怎样进入原生工具；引擎模块定义可选身份，秘密模块定义凭据怎样到达目标进程。",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `src/AiCliProfileManager/Private/CommandRouter.ps1`：命令解析与退出码\n\n- `src/AiCliProfileManager/Private/ProfileService.ps1`：用户 Profile、厂商引用、SecretRef 与删除生命周期\n\n- `scripts/Import-FromOpenClaw.ps1`：已退役并从源码删除，只作为 DeepSeek 旧配置导入的历史记录\n\n- `src/AiCliProfileManager/Private/LaunchPlan.ps1`：计划、型号锁、native 与 eject\n\n## 如何验证\n\n- 9 月 3 日 385 项 Pester 覆盖当时的命令解析、Profile 生命周期、参数和导出；9 月 17 日又完成 442 项源码回归；9 月 29 日退役两个代理后的全量离线测试为 470/470、0 失败、0 跳过。三次都按当天记录保存，10 月 11 日没有重跑。10 月 28 日改了配置引用和导出方式，那次提交说明里的历史回归有 2 项失败，之后也没有重跑全量测试，不能算全绿。\n\n- 离线发行检查实际执行 version、list/show、native、eject 和错误退出码；自定义型号配置档的保存和默认启动计划只在源码与离线层面成立，还没有用真实账号调用新型号。按原字节复制的新导出方式只有源码依据，还没有实际导出核对。\n\n- 10 月 11 日和 10 月 30 日的整理都没有用 start 打开交互会话，也没有对真实私有配置执行导入或导出。\n\n## 与其他模块的关系\n\n本模块决定怎样进入原生工具；引擎模块定义可选身份，秘密模块定义凭据怎样到达目标进程。",
       "links": [
         {
           "text": "下一个模块 模型引擎与服务方",

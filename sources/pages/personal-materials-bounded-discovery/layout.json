@@ -5,7 +5,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "没有合适候选时，先查文件名清单，再在获准目录里现找",
+        "text_ref": "没有合适候选时，先查文件名清单；只有蓝湖产品资料还现场找",
         "align": "left",
         "size": "large",
         "row": "top",
@@ -40,7 +40,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "没有合适候选时，先查文件名清单，再在获准目录里现找",
+        "text_ref": "没有合适候选时，先查文件名清单；只有蓝湖产品资料还现场找",
         "align": "left",
         "size": "large"
       },

@@ -19,8 +19,8 @@ class OwnerRouteTests(unittest.TestCase):
         self.assertTrue(records["ramdisk-guardian-text-0-81"]["historical"])
         for rid in ("agents-n-release-0", "b7-agents-rules-contracts-release-id",
                     "devconfig-backup-n-wechat-files-0", "timeaudit-n-backup-0"):
-            self.assertFalse(records[rid]["automatic"])
-            self.assertTrue(records[rid]["manual_route"])
+            method = records[rid]["retrieve"]
+            self.assertTrue((not records[rid]["automatic"] and records[rid]["manual_route"]) if method["kind"] == "manual" else records[rid]["automatic"] and (method["kind"] == "json" or entries[method["entry"]]["read_only"]))
 
     def test_pcconfig_uses_complete_readonly_task_observation(self):
         projects = json.loads((ROOT / "config/panel-projects.json").read_text("utf-8-sig"))["projects"]
@@ -32,17 +32,18 @@ class OwnerRouteTests(unittest.TestCase):
         requirement = project["ai_refresh"]["collector_requirements"][0]
         self.assertIn("-NoWrite -Json", requirement["invocation_contract"])
         self.assertNotIn("pointer_path", requirement)
-        records = json.loads((ROOT / "sources/refresh/registry.json").read_text("utf-8-sig"))["records"]
-        scans = [r for r in records if r["page"] == "pcconfig" and r.get("manual_reason") == "needs_admin_rescan"]
+        records, entries = (json.loads((ROOT / "sources/refresh" / name).read_text("utf-8-sig")) for name in ("registry.json", "entries.json"))
+        scans = [r for r in records["records"] if r["page"] == "pcconfig" and (r.get("manual_reason") == "needs_admin_rescan" or r.get("retrieve", {}).get("entry") == "b2-pcconfig-live-task-counts")]
         required = {"pcconfig-n-tasks-0", "pcconfig-n-tasks-enabled-0", "pcconfig-n-tasks-enabled-1",
                     "pcconfig-n-tasks-split-0", "pcconfig-n-tasks-split-1", "pcconfig-n-tasks-split-2"}
         self.assertTrue(required.issubset({record["id"] for record in scans}))
         for record in scans:
-            self.assertEqual(record["retrieve"]["kind"], "manual")
-            if record["id"] in required:
-                self.assertEqual(record["retrieve"]["instructions"], record["manual_route"])
-            for expected in ("scan_tasks.ps1 -NoWrite -Json", "task_visibility_complete=true", "Unknown", "PCConfig"):
-                self.assertIn(expected, record["manual_route"])
+            method, entry = record["retrieve"], entries.get(record["retrieve"].get("entry"), {})
+            route = record["manual_route"] if method["kind"] == "manual" else " ".join(entry["argv"])
+            self.assertTrue(not record["automatic"] if method["kind"] == "manual" else entry["read_only"] and entry["argv"][0] == "sudo")
+            if method["kind"] == "manual" and record["id"] in required: self.assertEqual(method["instructions"], route)
+            for expected in ("scan_tasks.ps1", "-NoWrite", "-Json", "observer_elevated", "task_visibility_complete"):
+                self.assertIn(expected, route)
 
     def test_github_uses_existing_zero_write_owner_status(self):
         projects = json.loads((ROOT / "config/panel-projects.json").read_text("utf-8-sig"))["projects"]
