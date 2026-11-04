@@ -878,11 +878,11 @@
       "purpose": "事实找谁、冻结名单、三档维护、长任务接续",
       "primary": true,
       "slug": "context-sources",
-      "public_source_sha256": "1a64d0b8ac3364317b22ebb8e51d23f35d8bdcb978b38ca1c413ec9fbfbcbc68",
-      "public_source_bytes": 19510,
-      "src": "/_typeset/rule-sources/1a64d0b8ac3364317b22ebb8e51d23f35d8bdcb978b38ca1c413ec9fbfbcbc68.md",
-      "prose_sha256": "de44cbcb4ad6884ff539584b4f2676c029027f73b516f7e57cb29da46c64e20c",
-      "search_text_sha256": "a809efde0d25e8fee82405b8cde2315d5dca311dbff1b19823a5dc051bbc1383",
+      "public_source_sha256": "4c938740577d4828d1bc0275c57cd717b8b8c39ed018c830d1c8c2391f9cc5b0",
+      "public_source_bytes": 19495,
+      "src": "/_typeset/rule-sources/4c938740577d4828d1bc0275c57cd717b8b8c39ed018c830d1c8c2391f9cc5b0.md",
+      "prose_sha256": "24d8f3b4553202126c163e48717f601538f44c059c4d107a750c484661c70026",
+      "search_text_sha256": "7f21da3f09385109d179ba3378ffeacf2d73ccb14ee566519c41837b5c308676",
       "page": "rule-context-sources",
       "route": "/rules/context-sources/",
       "parts": [
@@ -915,13 +915,13 @@
         {
           "id": "rule-context-sources/rule-context-sources-10",
           "label": "原文 · E372 版 · 续",
-          "markdown_sha256": "ed13d42c1332e03106b9fd77dbc6fab523b1922ac293f7be61557864e32ba2ca",
-          "prose_sha256": "66afd0e8e44bb9285ae216be5112513a2382085b8d9dea793745c2049741a4a8",
+          "markdown_sha256": "763f1497e6a13b5aa292be2253ae939c0361255e373bb25198bb18da20c485b6",
+          "prose_sha256": "0a540aa81f22d54f13ac2fa9b73d3c965f2836ebbc944d5008c4b14a56f9543d",
           "selection": {
             "from": "### 一样东西只存一处",
             "to": null,
             "start": 4646,
-            "end": 8222,
+            "end": 8217,
             "approved_omissions": []
           }
         }
@@ -1231,8 +1231,8 @@
       "sha256": "6a4aa42e69c0eae51d1136de7d3b3f2cc54a7549d3f8d83136bdb6251152fd8b"
     },
     "docs/contracts/agents.context-sources.md": {
-      "bytes": 19510,
-      "sha256": "1a64d0b8ac3364317b22ebb8e51d23f35d8bdcb978b38ca1c413ec9fbfbcbc68"
+      "bytes": 19495,
+      "sha256": "4c938740577d4828d1bc0275c57cd717b8b8c39ed018c830d1c8c2391f9cc5b0"
     },
     "docs/contracts/agents.engineering-delivery.md": {
       "bytes": 33852,

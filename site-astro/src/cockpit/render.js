@@ -1555,14 +1555,14 @@ export function ledger(v, ctx) {
     : ctx.offline ? `<p class="cp-snap">${dot('unavailable')}读不到电脑，这是 ${esc(v.served_at ? when(v.served_at, ctx.now) : '早些时候')} 的数</p>` : '';
   // 1700 宽以上左边一列小目录
   const stale = staleLedger(v, ctx);
-  const toc = [['ai-following', 'AI 在跟'], ['ai-decided', 'AI 自己定了的'], theirs.length ? ['ai-wait', 'AI 等条件再做的'] : null, health ? ['ai-health', '体检和项目后台'] : null, stale ? ['stale-data', '停了的数据'] : null].filter(Boolean);
+  const toc = [['ai-following', 'AI 在跟'], ['ai-decided', 'AI 自己定了的'], theirs.length ? ['ai-wait', 'AI 等条件再做的'] : null, health ? ['ai-health', '体检和项目后台'] : null, ['stale-data', '停了的数据']].filter(Boolean);
   return `<nav class="cp-ledger-toc" aria-label="这页有什么">${toc.map(([id, t]) => `<a href="#${id}">${t}</a>`).join('')}</nav>`
     + snap + `<p class="cp-ledger-sum">${dot('neutral')}${esc(ledgerText(v))}</p>` + sinceLine(ctx)
     + `<section class="cp-ledger-sec" id="ai-following"><h2>AI 在跟</h2>${aiFollowing(v, ctx)}</section>`
     + `<section class="cp-ledger-sec" id="ai-decided"><h2>AI 自己定了的</h2>${decisionsBlock(v, ctx)}${decisionsTable(v, ctx)}</section>`
     + (theirs.length ? `<section class="cp-ledger-sec" id="ai-wait"><h2>AI 等条件再做的</h2><ul class="cp-list cp-wait">${theirs.map((x) => waitRow(x, ctx, [])).join('')}</ul></section>` : '')
     + (health ? `<section class="cp-ledger-sec" id="ai-health"><h2>每周体检和项目后台</h2>${health}</section>` : '')
-    + (stale ? `<section class="cp-ledger-sec" id="stale-data"><h2>停了的数据</h2>${stale}</section>` : '');
+    + `<section class="cp-ledger-sec" id="stale-data"><h2>停了的数据</h2>${stale || '<p class="cp-know-note">暂时没有可列出的停更数据。</p>'}</section>`;
 }
 // 电脑版顶栏右端：哪台设备、几点读到（窄屏不出，那里看标题下的小字）；配对结果、授权失效这类提示也写在这里
 export function meta(v, ctx) {

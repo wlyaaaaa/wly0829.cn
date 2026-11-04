@@ -528,8 +528,8 @@
  },
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
-  "sha256": "5978c03d0d40397303f0d79f52cd04e946ba1a1e6f86f2fb4663af6ebeafee5b",
-  "converted_at_beijing": "2026-11-04T14:39:51+08:00"
+  "sha256": "7c3e84b8ef2cb0242b01f596cc2eebe4efcb3b44125a9ca7bfe3f40fdf18978b",
+  "converted_at_beijing": "2026-11-04T21:16:18+08:00"
  }
 }
 ---
@@ -2284,7 +2284,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
 
 实测（9 月 28 日）：演示页生成加 6 次浏览器自检 1 分 46 秒；再存 2 张整页截图，共 3 分 54 秒
 
-登记和附件（现行代码，10 月 10 日起；没有另做实测）：页面有待选卡片且没加 -NoOpen 时，New-ReportPage.ps1 生成完调用 E:\PCConfig\tools\Set-OwnerItem.ps1 -Mode Add 登记驾驶舱条目，条目 id 由页面路径的 SHA-256 前 24 位算出，-Topic、-Supersedes 把同一件事的前后轮次连起来；登记失败只报警告，页面照常生成。登进驾驶舱的是题目、选项、原因和影响这几栏，要写成离开正文也能看懂的人话；我明确说不上站的聊天原文、照片、原始资料正文和售后争执，不写进这些会公开显示的栏（这几条是 10 月 13—14 日起的现行代码和说明，没有另做实测）。加 -NoOpen 的既不打开也不登记，也不启动预览，不能说真实媒体可用。正式打开的结果看 status：`opened` 且 `opening.foreground_verified=true` 才算读回并核实前台，`foreground_unconfirmed` 是读到了但前台没确认，`open_failed` 看 `opening.error`，重试用原报告的 `-OpenPath`（11 月 4 日读技能说明和生成脚本定义，没有生成报告，打开和媒体没有实测）。非私人的 copy 附件按文件内容的 SHA-256 命名，同一个文件只放一份、重复引用复用它；附件先放好，最后才换上 HTML。
+登记和附件（现行代码，10 月 10 日起；没有另做实测）：页面有待选卡片且没加 -NoOpen 时，New-ReportPage.ps1 生成完调用 E:\PCConfig\tools\Set-OwnerItem.ps1 -Mode Add 登记驾驶舱条目，条目 id 由页面路径的 SHA-256 前 24 位算出，-Topic、-Supersedes 把同一件事的前后轮次连起来；登记失败只报警告，页面照常生成。登进驾驶舱的是题目、选项、原因和影响这几栏，要写成离开正文也能看懂的人话；我明确说不上站的聊天原文、照片和原始资料正文，不写进这些会公开显示的栏（这几条是 10 月 13—14 日起的现行代码和说明，没有另做实测）。加 -NoOpen 的既不打开也不登记，也不启动预览，不能说真实媒体可用。正式打开的结果看 status：`opened` 且 `opening.foreground_verified=true` 才算读回并核实前台，`foreground_unconfirmed` 是读到了但前台没确认，`open_failed` 看 `opening.error`，重试用原报告的 `-OpenPath`（11 月 4 日读技能说明和生成脚本定义，没有生成报告，打开和媒体没有实测）。非私人的 copy 附件按文件内容的 SHA-256 命名，同一个文件只放一份、重复引用复用它；附件先放好，最后才换上 HTML。
 
 ::screen{#skill-report-page-07 section="abilities"}
 

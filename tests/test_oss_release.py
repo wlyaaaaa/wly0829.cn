@@ -430,7 +430,7 @@ class OssReleaseTests(unittest.TestCase):
                 self.headers['Content-Type'] = obj['content_type']
                 self.headers['Access-Control-Allow-Origin'] = 'https://wly0829.cn'
                 self.headers['Content-Length'] = str(obj['bytes'])
-                self.headers['x-oss-hash-crc64ecma'] = '12345'
+                self.headers['x-oss-hash-crc64ecma'] = '12005'
                 self.headers['ETag'] = 'fixture-etag'
                 self.body = (output/'oss'/rel).read_bytes()
                 self.head = request.get_method() == 'HEAD'

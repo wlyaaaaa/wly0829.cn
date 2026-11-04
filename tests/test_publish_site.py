@@ -5,6 +5,9 @@ from pathlib import Path
 spec = importlib.util.spec_from_file_location('publisher', Path(__file__).resolve().parents[1]/'site-astro/tools/publish_site.py')
 publisher = importlib.util.module_from_spec(spec); spec.loader.exec_module(publisher)
 class PublishTests(unittest.TestCase):
+    def setUp(self):
+        gate = unittest.mock.patch.object(publisher, 'scan_public_words', return_value=[])
+        gate.start(); self.addCleanup(gate.stop)
     def test_old_run_with_readonly_git_object_is_pruned_without_removing_retained_runs(self):
         with tempfile.TemporaryDirectory() as temporary:
             folder = Path(temporary)

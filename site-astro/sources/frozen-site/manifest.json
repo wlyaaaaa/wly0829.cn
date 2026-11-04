@@ -694,8 +694,8 @@
       "bytes": 64
     },
     "search-index.js": {
-      "sha256": "18716170da624c55f54845149c66291a147fc56d22840077b83d360293ad4648",
-      "bytes": 1179915,
+      "sha256": "89d4612aa1b7ca3a4e45649862ece82c54ac4a79830d49d9c3482259e5106e2b",
+      "bytes": 1065163,
       "source_path": "site-astro/sources/frozen-site/assets/search-index.js"
     },
     "search-project-localocr.js": {

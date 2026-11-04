@@ -195,7 +195,7 @@
       {"eval":"AA-LCR v1.1","measures":"长材料多步理解","read_as":"已降为专项，不进 v5 总分；不证明闭卷知识可靠。"},
       {"eval":"ITBench-AA","measures":"Kubernetes 故障根因诊断","read_as":"不测修复；Sol 各档缺数据，不能拿旧代补齐。"},
       {"eval":"MMMU-Pro","measures":"大学水平看图推理选择题","read_as":"不证明审美或找全生成图错字。"},
-      {"eval":"Harvey LAB-AA v1.1","measures":"英文、美国法律任务的幻觉门控全条件通过率","read_as":"已有 GPT-6 系列 max 对照；不能与旧细项通过率比较，中国诉讼文书及实际使用档位待公开数据。"},
+      {"eval":"Harvey LAB-AA v1.1","measures":"英文、美国法律任务的幻觉门控全条件通过率","read_as":"已有 GPT-6 系列 max 对照；不能与旧细项通过率比较，中文法律文书及实际使用档位待公开数据。"},
       {"eval":"FrontierCode 2.0、Terminal-Bench-Science 0.1、耗时","measures":"v5 新增真实仓库修改与终端科研；编码代理 v2.0 另用 FrontierCode 1.1，已移出 DeepSWE","read_as":"v5 移出 SciCode、GDPval、LCR，新旧总分不比；v5 为估算 decode 时间，代理榜为活跃 wall time，ToneBench 为脚本流程时间，不混比。"}
     ],
     "tiers": [
@@ -217,7 +217,7 @@
       {"scenario":"长材料读取、摘录、整理（答案就在材料里）","claude":"需读懂 opus-low；矛盾综合 opus-medium","gpt":"定位搬运优先脚本或 Sol medium；跨材料对齐 Sol medium；矛盾判断 Sol ultra。","gpt_unavailable":"逐字 sonnet-low；理解 opus-low；综合 opus-medium。"},
       {"scenario":"看图、审图、截图录屏、操作电脑和浏览器","claude":"要紧审图 opus-medium；困难 opus-high；主持看成品整体并自选抽查样本。","gpt":"浏览器一律 Sol：读一页 medium，施工和难活 ultra；固定清单审图 Sol ultra，要紧图 Astra high，困难 Astra ultra。","gpt_unavailable":"审图按 Claude 一列；需 GPT 的登录工具或身份确实不可用时交回卡点。"},
       {"scenario":"要惊艳的成品（给人看的网页样子和交互、视频编排、文案、设计）","claude":"样板和关键部分默认 opus-xhigh；样板定稿和交付前各一次最终头脑风暴。","gpt":"按样板铺开 Sol ultra，机械填充 Sol medium 或脚本；只有 GPT 时由 GPT 主对话选最合适的型号或自己做并把关。","gpt_unavailable":"样板和关键部分 opus-xhigh，其余按难度。"},
-      {"scenario":"法律文书和案件材料","claude":"正式文书与法律分析 opus-high 起；重大争点、程序风险 opus-xhigh。","gpt":"原文摘录、索引 Sol medium；归类、时间线、要点 Sol ultra；事实核对和技术意见；只用 GPT 时全做。","gpt_unavailable":"摘录 sonnet-low；材料 opus-medium；正文由 Claude 写和审。"},
+      {"scenario":"法律文书和正式材料","claude":"正式文书与法律分析 opus-high 起；重大争点、程序风险 opus-xhigh。","gpt":"原文摘录、索引 Sol medium；归类、时间线、要点 Sol ultra；事实核对和技术意见；只用 GPT 时全做。","gpt_unavailable":"摘录 sonnet-low；材料 opus-medium；正文由 Claude 写和审。"},
       {"scenario":"重大改动的独立复核","claude":"GPT 写的交 Claude；按风险选档，最终由主持验收。","gpt":"Claude 写的交有授权 Astra；无授权用 Sol，具体档位按风险、难点选；推荐取舍类汇报另遵分工专题第 5 条的本人逐次授权要求，不派 Sol 替代。","gpt_unavailable":"按独立上下文及实际可用型号交回；重大动作把关见 protected_actions_contract。"},
       {"scenario":"生图","claude":"Claude 写好提示，委派 Luna low 调用落盘；主持看整体，个人网站专用分工不外推。","gpt":"GPT 为根会话时，Codex 主对话直接用内置生图，审图按“看图、审图、截图录屏、操作电脑和浏览器”场景的 GPT 路线；Claude 为根会话时经包装器派 Luna low，批量审图 Sol ultra，很重要的交 Claude；不为生成图片派 Astra。","gpt_unavailable":"交回缺失的生图工具或身份卡点。"}
     ],

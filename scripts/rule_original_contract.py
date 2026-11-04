@@ -54,32 +54,19 @@ def source_root_opening(tag, attrs, opening):
                                          if v is not None else '') for k, v in attrs) + '>'
 
 
-OMISSIONS = {
-    'docs/contracts/agents.capabilities-runtime.md': ['、本人诉讼', '、`personal-litigation`'],
-    'docs/contracts/agents.context-sources.md': [
-        '| PersonalOS（含退役留档） | `PersonalOS-Retired` |',
-        '| 个人知识库 | `PersonalKnowledgeBase` |',
-        '| 游戏求解 | `md-triple-tactics-talent-solver` |',
-        '| 对齐数据集 | `human-alignment-dataset-001` |'],
-    'docs/contracts/agents.privacy-data.md': ['`wlyaaaaa/Key` 仓库和 '],
-}
+from site_public_words import DEFAULT_PATH as PRIVATE_POLICY, load_policy as _load_policy
 
-# Public-site topic omissions (owner, 2026-10-31): litigation, mediation,
-# dispute, job-hunting and romance wording never reaches public rule originals. Applied by the native
-# rules snapshot (astro_rules.public_body) on top of the verified active text;
-# the active rules themselves are unchanged. A phrase that no longer occurs is
-# skipped; the publication word gate still catches any new wording.
-TOPIC_OMISSIONS = {
-    'docs/contracts/agents.authorization.md': ['案件里的调解、和解、撤诉、放弃请求仍按诉讼规则（默认不同意诉前调解）；'],
-    'docs/contracts/agents.capabilities-runtime.md': ['、本人诉讼', '、`personal-litigation`'],
-    'docs/contracts/agents.privacy-data.md': ['没公开的纠纷材料、', '求职', '、感情'],
-    'AGENTS.md': ['求职'],
-    'templates/claude-home/CLAUDE.md': ['求职'],
-    'templates/codex-home/AGENTS.md': ['求职'],
-}
+OMISSIONS, TOPIC_OMISSIONS = {}, {}
+
+def load_policy(path=None):
+    global OMISSIONS, TOPIC_OMISSIONS
+    policy = _load_policy(path or PRIVATE_POLICY)
+    OMISSIONS, TOPIC_OMISSIONS = policy["omissions"], policy["topic_omissions"]
+    return policy
 
 
 def omit_public_topics(text, relative):
+    load_policy()
     for phrase in TOPIC_OMISSIONS.get(relative, []):
         if text.count(phrase) > 1:
             raise ValueError('Topic omission is ambiguous: ' + relative)
@@ -150,6 +137,7 @@ def public_markdown(raw, relative, *, apply_omissions=True, preserve_literals=Fa
     """Keep every source paragraph; omit only approved values and local literals."""
     text = raw.replace('\r\n', '\n').replace('\r', '\n')
     if apply_omissions:
+        load_policy()
         for phrase in OMISSIONS.get(relative, []):
             if text.count(phrase) != 1:
                 raise ValueError('Approved omission no longer occurs once: ' + relative)
@@ -197,6 +185,7 @@ def excerpts(raw, page):
         return [(f'charter/charter-{screen:02}', '\n\n'.join(articles[i] for i in range(first, last + 1)),
                  {'articles': [first, last], 'approved_omissions': []})
                 for screen, first, last in [(2, 1, 10), (3, 11, 17), (4, 18, 23), (5, 24, 30)]]
+    load_policy()
     result = []
     relative = document_for_page(page)
     ranges = RANGES[page]

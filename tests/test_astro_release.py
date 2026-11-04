@@ -71,6 +71,7 @@ class AstroReleaseTests(unittest.TestCase):
         (self.root/'_typeset/rule-sources/rule.md').write_text('Changed source.', encoding='utf8')
         with self.assertRaisesRegex(ValueError, 'Rule source bytes changed'): astro_rules.verify(self.root, self.pin)
 
+    @unittest.skipUnless(astro_rules.contract.PRIVATE_POLICY.is_file(), 'Private publication policy is not available for source comparison')
     def test_same_release_pin_cannot_relabel_changed_source(self):
         path = self.root/'active.md'; path.write_text('Real source.', encoding='utf8')
         entry = {'logical_id': 'agents_root_rules', 'relative_path': 'AGENTS.md', 'sha256': hashlib.sha256(path.read_bytes()).hexdigest(), 'bytes': path.stat().st_size}

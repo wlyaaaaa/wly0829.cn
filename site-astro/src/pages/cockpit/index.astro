@@ -1,6 +1,6 @@
 ---
 // 驾驶舱：Astro 原生页（O6 裁定的 b 做法），外壳、页头、目录条、页尾和全站一样。
-// 首帧用构建时读到的最近一份数据画好最终版式；读不到就用仓库里的上一份（src/cockpit/snapshot.json，见 build-data.js），都标明读取时间。
+// 首帧用仓库固定公开样本画好最终版式（src/cockpit/snapshot.json，见 build-data.js），标明样本时间。
 // 浏览器里 src/cockpit/client.js 读新数据、原地换字，不换版式。
 import Site from '../../layouts/Site.astro';
 import { pathToFileURL } from 'node:url';
@@ -61,7 +61,7 @@ const engineUrl = (s: string) => Object.entries(motionRuntime.urls).reduce((x, [
 const livingCss = (engineRt?.head || []).find((h: string) => h.startsWith('<link data-living-runtime')) || '';
 const jsAt = (engineRt?.tail || '').indexOf('<script data-living-runtime'), jsEnd = jsAt < 0 ? -1 : engineRt.tail.indexOf('</' + 'script>', jsAt);
 const livingTags = engineUrl(livingCss + (jsEnd < 0 ? '' : engineRt.tail.slice(jsAt, jsEnd + 9)));
-// phase: 'snapshot'：首帧是构建时的数，页面上写明是几点的、整体灰着，浏览器读到新数据再换（读不到时写“读不到（最后 HH:MM 读到）”）
+// phase: 'snapshot'：首帧是固定公开样本，页面上写明是几点的、整体灰着，浏览器读到新数据再换（读不到时写“读不到（最后 HH:MM 读到）”）
 const html = page(view, { now: new Date(), offline: false, phase: 'snapshot', projectUrls, img, ov, birdConfig });
 const boot = safe({ endpoints: ENDPOINTS, local: LOCAL, snapshot, projectUrls, img });
 ---

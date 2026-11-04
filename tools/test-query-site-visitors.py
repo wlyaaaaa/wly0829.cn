@@ -345,7 +345,7 @@ class VisitorTests(unittest.TestCase):
                 query.sls_address()
         self.assertEqual(raised.exception.category, "DNS 解析失败")
         self.assertNotIn("secret-value", str(raised.exception))
-        relay = Mock(server_port=12345)
+        relay = Mock(server_port=12005)
         with patch.object(query.socket, "getaddrinfo", return_value=[(0, 0, 0, "", ("198.18.0.1", 443))]), patch.object(query, "sls_address", side_effect=[raised.exception, "203.0.113.1"]) as resolve, patch.object(query, "ThreadingHTTPServer", return_value=relay), patch.object(query, "Thread"), patch.object(query.subprocess, "run", return_value=good), patch.object(query.time, "sleep") as sleep:
             self.assertEqual(query.cli_run(["aliyun", "sls", "GetLogsV2"]), "{}")
         self.assertEqual(resolve.call_count, 2)
@@ -357,7 +357,7 @@ class VisitorTests(unittest.TestCase):
         dns.assert_not_called()
 
     def test_sls_relay_preserves_oauth_and_retries_network_failures(self):
-        relay = Mock(server_port=12345)
+        relay = Mock(server_port=12005)
         failed = SimpleNamespace(returncode=2, stdout=b"", stderr=b"request failed: EOF")
         good = SimpleNamespace(returncode=0, stdout=b'\xef\xbb\xbf{"data":[]}', stderr=b"")
         with patch.object(query.socket, "getaddrinfo", return_value=[(0, 0, 0, "", ("198.18.0.1", 443))]), patch.object(query, "sls_address", return_value="203.0.113.1"), patch.object(query, "ThreadingHTTPServer", return_value=relay), patch.object(query, "Thread"), patch.object(query.subprocess, "run", side_effect=[failed, subprocess.TimeoutExpired("aliyun", 60), good]) as run, patch.object(query.time, "sleep") as sleep:
@@ -367,7 +367,7 @@ class VisitorTests(unittest.TestCase):
         env = run.call_args.kwargs["env"]
         self.assertIn("oauth.aliyun.com", env["NO_PROXY"].split(","))
         self.assertNotIn("aliyuncs.com", env["NO_PROXY"])
-        self.assertEqual(env["HTTPS_PROXY"], "http://127.0.0.1:12345")
+        self.assertEqual(env["HTTPS_PROXY"], "http://127.0.0.1:12005")
         self.assertEqual(run.call_args.kwargs["timeout"], 60)
         relay.shutdown.assert_called_once()
         relay.server_close.assert_called_once()
@@ -484,7 +484,7 @@ class VisitorTests(unittest.TestCase):
         rows += log(v="self", extra={"x-self": "1", "x-entry": "cv"}) + log(v="bot", ua=UA + " Googlebot", extra={"x-entry": "cv"})
         result = self.analyze([rows], history=history, networks=Mock(return_value={"province": "广东省", "city": "深圳市", "operator": "电信", "organization": "AS123"}))
         group = result["entry"]["cv"]
-        self.assertEqual((group["label"], group["unique_visitors"], group["first_at"]), ("简历来的（/cv）", 1, "2026-10-11T23:59:59+08:00"))
+        self.assertEqual((group["label"], group["unique_visitors"], group["first_at"]), ("专用链接来的（/cv）", 1, "2026-10-11T23:59:59+08:00"))
         self.assertEqual(group["visitors"][0]["cities"], ["深圳市"])
         self.assertEqual(group["visitors"][0]["pages"]["/"]["observed_seconds"], 15)
         self.assertNotIn("/cv/", group["visitors"][0]["pages"])

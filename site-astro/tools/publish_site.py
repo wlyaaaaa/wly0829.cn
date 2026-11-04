@@ -5,6 +5,7 @@ import hashlib
 import html
 import importlib.util
 import json
+import re
 import shutil
 import ssl
 import stat
@@ -22,7 +23,7 @@ ORIGIN = 'https://wly0829.cn'
 REPO = 'repos/wlyaaaaa/wly0829.cn'
 CLI = r'E:\Tools\aliyun-cli\aliyun.exe'
 LOCK = r'E:\.agents\tools\Invoke-ShortLock.ps1'
-WORD_CONFIG = ROOT / 'config/public-word-gate.json'
+WORD_CONFIG = Path('E:/PCConfig/registries/site_public_words.json')
 PUBLISH_RUNS = Path(r'E:\Cache\wly-site-build\publish-runs')
 
 def prune_publish_runs(base=PUBLISH_RUNS, pointer=None):
@@ -57,35 +58,43 @@ def prune_publish_runs(base=PUBLISH_RUNS, pointer=None):
         removed.append(str(path))
     return {'kept': [str(p) for p in runs if p in keep], 'removed': removed}
 
-def scan_public_words(dist):
-    """Check every published HTML, search script and rule-source text before any upload."""
+def scan_public_words(dist, source_root=None):
+    """Check final text artifacts and tracked source text before any upload."""
+    dist, source_root = Path(dist), Path(source_root or ROOT)
     if not dist.is_dir():
         raise ValueError('Dist directory does not exist: ' + str(dist))
-    config = json.loads(WORD_CONFIG.read_text('utf-8'))
-    words = config['words']
-    exceptions = config.get('exceptions', [])
+    config = word_policy.load_policy(WORD_CONFIG)
+    expression = word_policy.word_pattern(config)
+    matcher = re.compile(expression)
+    exceptions = {}
+    for row in config['exceptions']:
+        exceptions.setdefault((row['file'], row['word']), []).append(row['text'])
     hits = []
+    def check_line(rel, line_no, line, scope):
+        for match in matcher.finditer(line):
+            word, pos = match.group(), match.start()
+            if any(any(start <= pos < start + len(text) for start in
+                       (m.start() for m in re.finditer(re.escape(text), line)))
+                   for text in exceptions.get((rel, word), [])):
+                continue
+            hits.append({'scope': scope, 'file': rel, 'line': line_no, 'column': pos+1, 'word': word,
+                         'context': line[max(0, pos-40):pos] + '【' + word + '】' + line[match.end():match.end()+40]})
+    text_extensions = {'.html', '.js', '.mjs', '.json', '.txt', '.xml', '.md', '.svg', '.css', '.ps1', '.webmanifest'}
     for path in sorted(dist.rglob('*')):
-        if not path.is_file():
+        if not path.is_file() or path.suffix.lower() not in text_extensions:
             continue
-        rel = path.relative_to(dist).as_posix()
-        if not (path.suffix == '.html' or (path.suffix == '.js' and path.name.startswith('search-'))
-                or 'rule-sources' in path.parts):
-            continue
-        body = html.unescape(path.read_text('utf-8')) if path.suffix == '.html' else path.read_text('utf-8')
+        rel = 'dist/' + path.relative_to(dist).as_posix()
+        body = path.read_text('utf-8-sig')
+        if path.suffix.lower() == '.html': body = html.unescape(body)
         for line_no, line in enumerate(body.splitlines(), 1):
-            for word in words:
-                pos = 0
-                while (pos := line.find(word, pos)) >= 0:
-                    before, after = line[max(0, pos-12):pos], line[pos+len(word):pos+len(word)+12]
-                    if not any(row['file'] == rel and row['word'] == word and row.get('reason')
-                               and (snippet := row['text']) in line
-                               and any(start <= pos < start + len(snippet)
-                                       for start in range(len(line)) if line.startswith(snippet, start))
-                               for row in exceptions):
-                        hits.append({'file': rel, 'line': line_no, 'column': pos+1,
-                                     'word': word, 'context': before + '【' + word + '】' + after})
-                    pos += len(word)
+            check_line(rel, line_no, line, 'dist')
+    result = subprocess.run(['git', '-C', str(source_root), 'grep', '-n', '-I', '-z', '-P', '-e', expression, '--', '.'],
+                            capture_output=True, encoding='utf-8', creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+    if result.returncode not in (0, 1):
+        raise ValueError('Tracked source word check failed: ' + result.stderr.strip())
+    for row in result.stdout.splitlines():
+        rel, line_no, line = row.split('\0', 2)
+        check_line('source/' + rel, int(line_no), line, 'source')
     return hits
 
 def load(name):
@@ -94,7 +103,7 @@ def load(name):
     spec.loader.exec_module(module)
     return module
 
-oss, retention = load('prepare-oss-release'), load('oss-retention')
+oss, retention, word_policy = load('prepare-oss-release'), load('oss-retention'), load('site_public_words')
 
 def command(*args, timeout=None):
     done = subprocess.run([str(x) for x in args], cwd=ROOT, text=True, encoding='utf8', timeout=timeout,
@@ -264,9 +273,11 @@ def publish(args):
 
     try:
         hits = step('public_word_gate', lambda: scan_public_words(args.dist))
-        (output/'word-check.json').write_text(json.dumps({'hits': hits}, ensure_ascii=False, indent=2), 'utf-8')
-        if hits:
-            raise ValueError(f'Public word gate blocked {len(hits)} occurrence(s); see {output / "word-check.json"}')
+        blocking = [hit for hit in hits if not (getattr(args, 'defer_source_word_cleanup', False) and hit['scope'] == 'source')]
+        (output/'word-check.json').write_text(json.dumps({'hits': hits, 'blocking_hits': blocking,
+            'source_cleanup_deferred': getattr(args, 'defer_source_word_cleanup', False)}, ensure_ascii=False, indent=2), 'utf-8')
+        if blocking:
+            raise ValueError(f'Public word gate blocked {len(blocking)} occurrence(s); see {output / "word-check.json"}')
         source = oss.read(args.dist/oss.MANIFEST)
         if not source.get('finalized_dist'):
             raise ValueError('Run prepare-oss-release.py finalize-dist --dist '+str(args.dist)+' then scan that final dist')
@@ -471,12 +482,19 @@ if __name__ == '__main__':
     parser.add_argument('--upload-workers', type=int, default=12, help='parallel OSS uploads; existing identical objects are skipped')
     parser.add_argument('--retention-max-keys', type=int, default=1000, help='maximum exact obsolete managed keys checked by --retention-only')
     parser.add_argument('--skip-retention', action='store_true', help='compatibility flag: publication always defers cloud cleanup to a separate command')
+    parser.add_argument('--defer-source-word-cleanup', action='store_true', help='record pending source cleanup separately; final artifact hits still block')
     parser.add_argument('--lock-holder', default='codex:publish:'+ROOT.parent.name)
     options = parser.parse_args()
     if options.word_check_only:
         hits = scan_public_words(options.word_check_only)
-        print(json.dumps({'status': 'blocked' if hits else 'pass', 'hits': len(hits), 'first_hits': hits[:3]}, ensure_ascii=False))
-        raise SystemExit(bool(hits))
+        blocking = [hit for hit in hits if not (options.defer_source_word_cleanup and hit['scope'] == 'source')]
+        if options.output:
+            options.output.mkdir(parents=True, exist_ok=True)
+            (options.output/'word-check.json').write_text(json.dumps({'hits': hits, 'blocking_hits': blocking,
+                'source_cleanup_deferred': options.defer_source_word_cleanup}, ensure_ascii=False, indent=2), 'utf-8')
+        print(json.dumps({'status': 'blocked' if blocking else 'source_cleanup_deferred' if hits else 'pass',
+                         'hits': len(hits), 'blocking_hits': len(blocking), 'first_hits': blocking[:3]}, ensure_ascii=False))
+        raise SystemExit(bool(blocking))
     if options.dist and options.output is None:
         PUBLISH_RUNS.mkdir(parents=True, exist_ok=True)
         options.output = PUBLISH_RUNS/('publish-'+str(time.time_ns()))

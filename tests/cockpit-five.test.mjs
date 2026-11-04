@@ -218,4 +218,19 @@ test('停了的数据：收起来的满 3 天的件数也写在折叠的那一�
   const card = (id, title, d) => ({ id, title, text: `${title}数据停了。`, state: 'unavailable', observed_at: d });
   const v = view({ stale_summary: { text: '示例', ids: ['a', 'b'] }, sections: { computer: [card('a', '示例甲', '2026-10-29T19:14:00+08:00'), card('b', '示例乙', '2026-10-20T10:00:00+08:00')] } });
   assert.match(textOnly(REGIONS.home(v, ctx())), /这些数据没再更新：示例甲（10\/29 起读不到）；另 1 样停了 3 天以上，在 AI 的账本里/);
+  assert.match(REGIONS.home(v, ctx()), /href="\/cockpit\/ai\/#stale-data"/);
+  assert.match(REGIONS.ledger(v, ctx()), /id="stale-data"[^]*示例乙/);
+  assert.match(REGIONS.ledger(view(), ctx()), /id="stale-data"[^]*暂时没有可列出的停更数据/);
+});
+
+test('两个静态驾驶舱页共用固定样本，构建不从实时端点取数', async () => {
+  const { readFileSync } = await import('node:fs');
+  const source = readFileSync(new URL('../site-astro/src/cockpit/build-data.js', import.meta.url), 'utf8');
+  const sample = { schema: 'pcconfig.cockpit-view.v1', served_at: at };
+  const code = source.replace("import fallback from './snapshot.json';", `const fallback = ${JSON.stringify(sample)};`);
+  const build = await import('data:text/javascript,' + encodeURIComponent(code));
+  const prior = globalThis.fetch; let calls = 0;
+  globalThis.fetch = async () => { calls++; throw new Error('build must remain offline'); };
+  try { const home = await build.latest(), ledger = await build.latest(); assert.deepEqual(home, sample); assert.strictEqual(home, ledger); assert.equal(calls, 0); }
+  finally { globalThis.fetch = prior; }
 });

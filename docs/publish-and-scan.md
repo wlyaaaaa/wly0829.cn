@@ -15,7 +15,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发�
 
 `<dist>` 是完整构建目录。构建最后调用离线 `finalize-dist`，一次完成资源地址改写和 OSS/Pages 分包身份；扫描和发布都使用收口后的同一份磁盘字节。这个函数不读取线上清单，同一输入的结果可重复，已收口且未改变的目录再次运行不变。唯一构建链已调用该收口步骤；发布入口不再改写页面或资源。没有构建回执时，扫描仍能读取成品并自行计算文件哈希。
 
-发布入口（含预演）在任何上传前按 `config/public-word-gate.json` 检查成品全部 HTML、搜索脚本和 `rule-sources` 原文；命中即失败，完整文件、行列及邻近文字写在发布输出的 `word-check.json`。可先用 `python -B -X utf8 site-astro/tools/publish_site.py --word-check-only <dist>` 只读查看。页面文字从作者源头改；规则原文走 `scripts/rule_original_contract.py` 的省略；实时数据快照走后端公开措辞表。词表承载本人选定的公开话题边界，通用能力说明也遵守，不能仅因没有具体个人记录就按误伤放行。只有确属误伤的单个文件和句子才在配置的 `exceptions` 中以 `file`、`word`、`text`（原句）和 `reason` 登记精确例外，不放宽整个词。
+发布入口（含预演）在任何上传前读取私有配置 `E:\PCConfig\registries\site_public_words.json`，检查成品全部受支持文本文件和本次要进入 main 的受版本管理文本；配置缺失或格式错误就停止，不上传。命中后由 AI 逐句判断，通常从作者源头改句子；只有确属误伤时，才以 `file`、`word`、`text`（原句）和 `reason` 登记精确单句例外，不放宽整个词，每处判断列进本轮报告。完整文件、行列及邻近文字写在发布输出的 `word-check.json`。可先用 `python -B -X utf8 site-astro/tools/publish_site.py --word-check-only <dist>` 只读查看。规则原文走 `scripts/rule_original_contract.py` 读取同表中的省略短语，实际来源版本不变。成品中的未判断命中必须清零；公开仓库旧文件清理超过 30 分钟时，可按本人当次授权先发布成品，再将已列明的清理单独提交到 main，不改写 Git 历史。
 
 资源地址由该资源和实际依赖的内容决定。修改一份 JSON 时，无关脚本和页面不会因为整包指纹变化而换地址；读取该 JSON 的脚本会随真正变化的依赖更新。循环引用使用有限的源依赖闭包，重复定稿不在循环中反复换键。
 

@@ -53,6 +53,7 @@ class NativeRuleSources(unittest.TestCase):
                 self.assertTrue((dist / row['src'].lstrip('/')).exists())
 
 
+@unittest.skipUnless(contract.PRIVATE_POLICY.is_file(), 'Private publication policy is not available for source comparison')
 class SourceExcerptBoundaries(unittest.TestCase):
     previous='本人让 Claude 与 GPT 协作时'
     current='Claude 主持、和 GPT 协作时'

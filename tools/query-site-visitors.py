@@ -398,7 +398,7 @@ def sls_logs(args, start, end, legacy_fallback=False):
             raise ValueError("Incomplete SLS page")
         records.extend(parse_sls_row(row) for row in data)
         if cv_query and len(data) == page_size:
-            raise RuntimeError("SLS 简历查询达到单次上限；未将截断日志当作完整结果")
+            raise RuntimeError("SLS 专用链接查询达到单次上限；未将截断日志当作完整结果")
         if len(data) < page_size:
             if cv_query and any(row["params"]["event"] == "entry" and row["params"]["p"].rstrip("/") == "/cv"
                                 and not row["params"]["cv-session"] for row in records):
@@ -526,7 +526,7 @@ def visitor_metrics(events, history, start, end, networks=None, city=None, org=N
               "visitor_dwell": {visitor: {"total": dwell_summary([item for items in pages.values() for item in items]),
                                          "pages": {page: dwell_summary(items) for page, items in pages.items()}} for visitor, pages in visitor_dwell.items()},
               "navigation_timing_ms": {group: {key: {"median": median(values), "samples": len(values)} for key, values in metrics.items()} for group, metrics in speed.items()}}
-    entries = {"cv": {"label": "简历来的（/cv）", "unique_visitors": 0, "first_at": None, "visitors": []}}
+    entries = {"cv": {"label": "专用链接来的（/cv）", "unique_visitors": 0, "first_at": None, "visitors": []}}
     for visitor, rows in people.items():
         attribution = history.get("first_entry", {}).get(visitor, {})
         name, stamp = attribution.get("entry", "unmarked"), attribution.get("first_at", first.get(visitor))
@@ -713,7 +713,7 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
             "filtered_lines": dict(filtered), "pageviews_without_visitor_id": no_id,
             "include_self": include_self, "include_monitor": include_monitor,
             "notes": ["新/回头客依据本机已观察日志的首次日期，窗口内首次仅为首次观察，未证明绝对新客；苹果 Safari 与微信清存储会使回头客偏少。",
-                      "入口按每个访客编号首次已观察到的标记归类，简历来的（/cv）单列；重复入口和回访不重复计人，直接访问/未标记不证明从未通过简历来过。",
+                      "入口按每个访客编号首次已观察到的标记归类，专用链接来的（/cv）单列；重复入口和回访不重复计人，直接访问/未标记不证明从未通过专用链接来过。",
                       "离线 IP 地区及 ASN 只是网络归属线索，不代表个人身份或雇主；App 来自 UA，可能漏识别或伪装。",
                       "停留是已收到的累计可见时长：离开、恢复前台和每 15 秒前台心跳按同一页面实例取最大值，再跨实例相加；隐藏时不计时、不发心跳。last_report_at 是最近合法可见时长信标的事件时间，不证明认真阅读或访问已结束；15 秒采样仍叠加 SLS 约 3 分钟延迟。没有合法可见时长信标时用相邻页时间差（最多 30 分钟），最后一页及丢失事件保持未知。",
                       "打开速度为 Navigation Timing 的 responseStart、domComplete、loadEventEnd 各减 startTime，即导航开始后的累计完成毫秒数；仅统计有字段的页面打开，按省份/运营商给中位数。",

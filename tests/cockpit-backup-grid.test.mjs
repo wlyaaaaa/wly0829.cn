@@ -37,7 +37,7 @@ test('后端给了结构化数字就写大数字：几项备份正常、余额�
   const cards = [
     c({ id: 'backups', title: '备份', state: 'attention', color: 'neutral', text: '1 项备份要留意', items_total: 9, items_ok: 8, last_success_at: '2026-10-31T12:49:55+08:00',
       failing: [{ name: '虚构配置备份', last_success_at: '2026-10-30T12:48:00+08:00' }] }),
-    c({ id: 'copy_drive', title: 'Google 云盘副本', bytes: 300 * 2 ** 30, files: 12345, last_synced_at: '2026-10-31T04:00:00+08:00' }),
+    c({ id: 'copy_drive', title: 'Google 云盘副本', bytes: 300 * 2 ** 30, files: 12005, last_synced_at: '2026-10-31T04:00:00+08:00' }),
     c({ id: 'copy_photos', title: 'Google 相册副本', state: 'unavailable', color: 'unavailable', observed_at: null, text: '暂时读不到', missing_reason: '虚构原因：相册副本这台电脑上还没接入，PCConfig 在接' }),
     c({ id: 'drive_upload', title: 'Google Drive 上传', uploaded: 775, total: 775, category: '音乐和录音' }),
     c({ id: 'aliyun_billing', title: '阿里云费用', state: 'attention', color: 'neutral', ai_handling: 'AI 在管', observed_at: '2026-10-31T02:00:02+08:00', text: '阿里云费用从今天 03:00起没读到；AI 会核对。', balance_yuan: 42.47, month_spend_yuan: 39.888, runway_days: 700.05 }),
@@ -51,7 +51,7 @@ test('后端给了结构化数字就写大数字：几项备份正常、余额�
     { name: '虚构同步', state: 'running', last_success_at: '2026-10-30T16:58:25+08:00' }] })]), ctx);
   assert.match(two, /<span>虚构文档备份<\/span><b>没成功<\/b><small>13:00 没成功 · 上次成功 10月30日 12:48<\/small>/);
   assert.match(two, /<span>虚构同步<\/span><b>正在跑<\/b><small>上次成功 10月30日 16:58<\/small>/);
-  assert.match(h, /12,345 个文件 · 04:00 同步过/);
+  assert.match(h, /12,005 个文件 · 04:00 同步过/);
   assert.match(h, /虚构原因：相册副本这台电脑上还没接入，PCConfig 在接/);
   assert.match(h, /音乐和录音 · 都传完了/);
   assert.match(h, /本月花了 ¥39\.89 · 约够 700 天<\/p>.*?AI 在管 · 02:00 读到/);
