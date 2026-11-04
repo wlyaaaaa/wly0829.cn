@@ -34838,10 +34838,10 @@
       "current_value": 8,
       "as_of": "2026-10-10",
       "category": "人工",
-      "source_location": "只读 %LOCALAPPDATA%/PCConfig/logs/hot-backup/personal-replica-*.log 与同轮回执；在2026-09-05至2026-10-10既定范围内逐轮对照触发原因/任务或手动调用元数据，只有能证明手动补跑且materials_sync_current complete/exit_code=0的轮次才计入8。现有log_window总成功行数无法区分手动与计划，缺触发标记则交personal-materials/PCConfig源Owner复核，不以42总轮数或日期差替代、不触发备份。",
+      "source_location": "只读 %LOCALAPPDATA%/PCConfig/logs/hot-backup/personal-replica-*.log 与同轮回执；在2026-09-05至2026-10-10既定范围内逐轮对照触发原因/任务或手动调用元数据，只有能证明手动补跑且materials_sync_current complete/exit_code=0的轮次才计入8。现有log_window总成功行数无法区分人工触发与计划触发，缺触发标记则交personal-materials/PCConfig源Owner复核，不以42总轮数或日期差替代、不触发备份。",
       "retrieve": {
         "kind": "manual",
-        "instructions": "只读 %LOCALAPPDATA%/PCConfig/logs/hot-backup/personal-replica-*.log 与同轮回执；在2026-09-05至2026-10-10既定范围内逐轮对照触发原因/任务或手动调用元数据，只有能证明手动补跑且materials_sync_current complete/exit_code=0的轮次才计入8。现有log_window总成功行数无法区分手动与计划，缺触发标记则交personal-materials/PCConfig源Owner复核，不以42总轮数或日期差替代、不触发备份。"
+        "instructions": "只读 %LOCALAPPDATA%/PCConfig/logs/hot-backup/personal-replica-*.log 与同轮回执；在2026-09-05至2026-10-10既定范围内逐轮对照触发原因/任务或手动调用元数据，只有能证明手动补跑且materials_sync_current complete/exit_code=0的轮次才计入8。现有log_window总成功行数无法区分人工触发与计划触发，缺触发标记则交personal-materials/PCConfig源Owner复核，不以42总轮数或日期差替代、不触发备份。"
       },
       "automatic": false,
       "private": false,
@@ -34849,7 +34849,7 @@
       "scope_status": "verified",
       "measurement_scope": "8是截至10月10日的手动补跑子集，不与42全部成功同步轮数复用同一个id。",
       "manual_reason": "judgment",
-      "manual_route": "只读 %LOCALAPPDATA%/PCConfig/logs/hot-backup/personal-replica-*.log 与同轮回执；在2026-09-05至2026-10-10既定范围内逐轮对照触发原因/任务或手动调用元数据，只有能证明手动补跑且materials_sync_current complete/exit_code=0的轮次才计入8。现有log_window总成功行数无法区分手动与计划，缺触发标记则交personal-materials/PCConfig源Owner复核，不以42总轮数或日期差替代、不触发备份。"
+      "manual_route": "只读 %LOCALAPPDATA%/PCConfig/logs/hot-backup/personal-replica-*.log 与同轮回执；在2026-09-05至2026-10-10既定范围内逐轮对照触发原因/任务或手动调用元数据，只有能证明手动补跑且materials_sync_current complete/exit_code=0的轮次才计入8。现有log_window总成功行数无法区分人工触发与计划触发，缺触发标记则交personal-materials/PCConfig源Owner复核，不以42总轮数或日期差替代、不触发备份。"
     },
     {
       "id": "int3-materials-relations",
