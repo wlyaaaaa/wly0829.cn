@@ -2,7 +2,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { normalize } from '../site-astro/src/cockpit/model.js';
-import { REGIONS, page, viewerLine, PRIVATE_TITLE } from '../site-astro/src/cockpit/render.js';
+import { REGIONS, page, ledgerPage, viewerLine, PRIVATE_TITLE } from '../site-astro/src/cockpit/render.js';
+import { trackedIds } from '../site-astro/src/cockpit/seen.js';
 
 const now = new Date();
 const base = (extra = {}) => ({ schema: 'pcconfig.cockpit-view.v1', served_at: now.toISOString(), ...extra });
@@ -57,7 +58,7 @@ test('公开版：占位行灰显只剩标题，一个按钮都没有，页头�
   // 公开版一个按钮都没有（原来的复制按钮也去掉了）
   assert.doesNotMatch(need, /<button|data-copy/);
   assert.doesNotMatch(card, /cp-quiz|cp-chip|去办/);
-  assert.ok(need.includes(`<li class="is-wait is-private" data-items="a1"><span title="私人事项，详情只在本人设备上显示">${PRIVATE_TITLE}</span></li>`));
+  assert.ok(need.includes(`<li class="is-private" data-items="a1"><span title="私人事项，详情只在本人设备上显示">${PRIVATE_TITLE}</span></li>`));
   assert.ok(need.includes(`<li class="is-private" data-items="d1"><span title="私人事项，详情只在本人设备上显示">${PRIVATE_TITLE}</span></li>`));
   // 占位行的公开说法不一定是默认占位字，照行里的 title 显示
   assert.ok(need.includes('<li class="is-private" data-items="d2"><span title="私人事项，详情只在本人设备上显示">周一上午打一个电话</span></li>'));
@@ -115,11 +116,48 @@ test('满 14 天还没结果的、过了自己定的日子的：在“AI 的账�
   const bare = { id: 'ai-bare', title: '', project: '示例项目' };
   const v = normalize(base({ ai_following: [due, late, bare], ai_overdue: [due, late] }));
   const html = REGIONS.ledger(v, ctx);
-  assert.match(html, /AI 自己有 2 件晚了，在补（不用你管）/);
+  assert.match(html, /不影响你用的 3 件/);
   assert.match(html, /跟了 16 天还没结果，AI 这周要么定期限修好，要么结束/);
-  assert.match(html, /原定 10 月 27 日，晚了 2 天/);
+  assert.match(html, /期限 10 月 27 日/);
   // 还没写清要办什么的空条目不给你看
   assert.doesNotMatch(html, /ai-bare|还没写清要办什么/);
   assert.doesNotMatch(REGIONS['need-you'](v, ctx) + REGIONS.home(v, ctx), /示例技术事项|示例稍晚事项/);
   assert.match(REGIONS.home(v, ctx), /<a class="cp-go" href="\/cockpit\/ai\/">AI 手上还有 3 件自己的活，2 件比它自己定的日子晚了（不用你管）<\/a>/);
+});
+
+test('AI 在跟按影响、等条件、排期、其余分组，旧过期行合入且每件只出现一次', () => {
+  const following = [
+    { id: 'affect', title: '示例影响使用', attention_level: 'know', handoff_state: 'waiting', dated_at: '2026-11-05', scheduled: true },
+    { id: 'stop', title: '示例叫停修复', attention_level: 'urgent', handoff_state: 'stopped', handoff_stop_reason: 'round_cap', age_days: 8, progress: '还在排查 <原因>', owner_actions: ['ack'] },
+    { id: 'wait', title: '示例等条件', handoff_state: 'waiting', dated_at: '2026-11-05', scheduled: true },
+    { id: 'far', title: '示例远期检查', dated_at: '2027-02-01', scheduled_at: '2026-10-01' },
+    { id: 'near', title: '示例近期检查', scheduled: true, scheduled_at: '2026-11-06', decision_due_at: '2027-03-01', last_checked_at: now.toISOString() },
+    { id: 'legacy', title: '示例旧数据' },
+    { id: 'decide', title: '示例待 AI 定', awaiting_ai_decision: true, age_days: 16 },
+  ];
+  const overdue = [{ id: 'stop', title: '示例叫停修复', overdue_days: 9 },
+    { id: 'deadline', title: '示例限期叫停', attention_level: 'know', handoff_state: 'stopped', handoff_stop_reason: 'deadline_passed', age_days: 5 }];
+  const v = normalize(base({ viewer: { kind: 'owner' }, ai_following: following, ai_overdue: overdue, ai_ledger_summary: { text: '示例后端原句：手上 8 件' } }));
+  const html = REGIONS.ledger(v, ctx), section = html.split('id="ai-following"')[1].split('id="ai-decided"')[0];
+  assert.match(section, /<div id="ai-impact"><p class="cp-ai-cap">影响你用的 3 件<\/p><ul/);
+  for (const [id, label, count] of [['ai-waiting', '在等条件的', 1], ['ai-scheduled', '到日子才查的', 2], ['ai-rest', '不影响你用的', 2]])
+    assert.ok(section.includes(`<details class="cp-more" id="${id}"><summary>${label} ${count} 件</summary>`));
+  assert.ok(section.indexOf('ai-impact') < section.indexOf('ai-waiting') && section.indexOf('ai-waiting') < section.indexOf('ai-scheduled') && section.indexOf('ai-scheduled') < section.indexOf('ai-rest'));
+  assert.ok(section.indexOf('data-items="stop"') < section.indexOf('data-items="affect"'));
+  assert.ok(section.indexOf('data-items="deadline"') < section.indexOf('data-items="affect"'));
+  assert.ok(section.indexOf('示例近期检查') < section.indexOf('示例远期检查'));
+  assert.match(section, /修了 3 轮没修好，先放着 · 跟了 8 天 · 还在排查 &lt;原因&gt;/);
+  assert.match(section, /到了限期还没修好，先放着 · 跟了 5 天/);
+  assert.match(section, /跟了 16 天还没结果，AI 这周要么定期限修好，要么结束/);
+  assert.match(section, /示例近期检查<\/span><small>期限 11 月 6 日 · /);
+  assert.match(section, /示例远期检查<\/span><small>期限 2027 年 2 月 1 日<\/small>/);
+  assert.match(section, /data-act="ack"[^>]*>知道了/); assert.match(section, /data-copy=/);
+  assert.equal((section.match(/data-items="stop"/g) || []).length, 1);
+  assert.deepEqual(new Set(trackedIds(v, 'ledger')), new Set([...following, ...overdue].map((x) => x.id)));
+  assert.match(html, /示例后端原句：手上 8 件/);
+  assert.doesNotMatch(section, /晚了 \d+ 天|AI 自己有|AI 自己的活都没晚|ai-following-table/);
+  const publicHtml = REGIONS.ledger(normalize(base({ viewer: { kind: 'public' }, ai_following: [ph('p1'), ph('p2')] })), ctx);
+  assert.match(publicHtml, /不影响你用的 2 件/); assert.match(publicHtml, /另有 1 件同类事/);
+  assert.doesNotMatch(publicHtml, /影响你用的 0 件|在等条件的|到日子才查的|<button|data-copy=/);
+  assert.match(ledgerPage(v, ctx), /AI 自己手上的活：影响你用的、在等条件的、到日子才查的、不影响你用的。想看时进来看看。/);
 });

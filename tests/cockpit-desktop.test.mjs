@@ -3,7 +3,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { normalize } from '../site-astro/src/cockpit/model.js';
-import { REGIONS, page, openGroup, Q_KEY, LF_KEY, needCount, decisionOf } from '../site-astro/src/cockpit/render.js';
+import { REGIONS, page, openGroup, Q_KEY, needCount, decisionOf } from '../site-astro/src/cockpit/render.js';
 
 const now = new Date('2026-10-29T21:40:00+08:00');
 const at = '2026-10-29T21:39:30+08:00';
@@ -170,27 +170,19 @@ test('后端 10 月 29 日起的字段：完成说明读 completion_text（不�
   assert.match(t, /<p class="cp-cap cp-acceptance">AI 今天核对了 25 件事，22 件确认办完、已关掉。<\/p>/);
 });
 
-test('账本页电脑版表格：AI 在跟（晚了的在前、AI 定了一行、技术细节收起、可筛）；AI 自己定了（逐条知道了与复制）', () => {
+test('账本所有宽度统一分组：保留 AI 定了与技术细节；AI 自己定了仍有电脑版表格', () => {
   const late = { id: 'f1', title: '示例晚了的事', overdue_since: '2026-10-20T10:00:00+08:00', overdue_days: 9, latest_progress: '示例进展甲', owner_actions: ['note'],
     decision_summary: '示例晚了的事：在 11 月 5 日前处理好；本轮周治理技术核对 growth_present=false' };
   const ok = { id: 'f2', title: '示例没晚的事', scheduled_text: '约 11 月 6 日', owner_actions: ['note'] };
   const dec = (id, extra = {}) => ({ id, kind: 'ai_decision', text: `示例决定${id}：结束跟进；示例原因${id}`, at, owner_actions: ['ack', 'note'], ...extra });
   const mk = (viewer) => normalize(base({ viewer, ai_following: [late, ok], ai_overdue: [late], must_know: { state: 'ok', items: [dec('d1'), dec('d2'), dec('d3', { owner_actions: null })] } }));
   const own = REGIONS.ledger(mk({ kind: 'owner', device_state: 'ok', capabilities: ['batch'] }), ctx(acts()));
-  const follow = /<div class="cp-lt" id="ai-following-table">.*?<\/table>/s.exec(own)?.[0] || '';
-  assert.deepEqual([...follow.matchAll(/<tr class="(is-late|is-ok)/g)].map((m) => m[1]), ['is-late', 'is-ok']);
-  assert.match(follow, /<td class="cp-lt-due">10 月 20 日<\/td><td class="cp-lt-lag"><span class="cp-lt-late">晚 9 天<\/span><\/td><td class="cp-lt-prog"><span>示例进展甲<\/span>/);
-  assert.match(follow, /<td class="cp-lt-due">约 11 月 6 日<\/td><td class="cp-lt-lag"><span class="cp-lt-none">没晚<\/span>/);
-  assert.match(follow, /<div class="cp-ai-dec"><span>AI 定了：在 11 月 5 日前处理好<\/span><details class="cp-tech" id="dect-f1"><summary>技术细节<\/summary><p>本轮周治理技术核对 growth_present=false<\/p><\/details><\/div>/);
-  assert.match(follow, /data-lshow="all" aria-pressed="true">全部 2<.*data-lshow="late" aria-pressed="false">晚了 1<.*data-lshow="ok" aria-pressed="false">没晚 1</);
-  assert.match(follow, /<th class="cp-lt-act">/);
-  // 窄屏列表那行也有“AI 定了”
-  assert.match(own, /<div class="cp-ai-dec"><span>AI 定了：在 11 月 5 日前处理好<\/span><details class="cp-tech" id="decl-f1">/);
+  assert.doesNotMatch(own, /ai-following-table|data-lshow|data-lfilter/);
+  assert.match(own, /不影响你用的 2 件/);
+  assert.match(own, /期限 10 月 20 日 · 示例进展甲/);
+  assert.match(own, /期限 约 11 月 6 日/);
+  assert.match(own, /<div class="cp-ai-dec"><span>AI 定了：在 11 月 5 日前处理好<\/span><details class="cp-tech" id="decl-f1"><summary>技术细节<\/summary><p>本轮周治理技术核对 growth_present=false<\/p><\/details><\/div>/);
   assert.deepEqual(decisionOf({ title: '甲', decision_summary: '甲：结束跟进' }), { what: '结束跟进', basis: '' });
-  // 筛选记在 act.ui：只看晚了的、按字筛
-  const f = REGIONS.ledger(mk({ kind: 'owner' }), ctx(acts({}, { [LF_KEY]: { show: 'late' } })));
-  assert.match(f, /<tr class="is-ok"[^>]* hidden>/);
-  assert.match(REGIONS.ledger(mk({ kind: 'owner' }), ctx(acts({}, { [LF_KEY]: { q: '没晚' } }))), /按“没晚”筛.*<tr class="is-late"[^>]* hidden>/);
   // 每条独立收起或复制；批量勾选和旧的文字提交入口都已取消。
   const decT = /<div class="cp-lt" id="ai-decided-table">.*?<\/table>/s.exec(own)?.[0] || '';
   assert.doesNotMatch(decT, /data-lb|data-act="note"|不同意，改一下/);
