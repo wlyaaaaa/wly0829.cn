@@ -36,8 +36,8 @@
  },
  "source": {
   "page": "sources/pages/localocr-document-structure/page.json",
-  "sha256": "9481de419329ff73a92b0b5422e45dd5861d2750422dbc9c39fb3bc0002ad92a",
-  "converted_at_beijing": "2026-11-04T14:26:58+08:00"
+  "sha256": "36f421cfb48c5984318815690fdd95c9bee188879a70914abc203708c09d8119",
+  "converted_at_beijing": "2026-11-04T16:31:19+08:00"
  }
 }
 ---

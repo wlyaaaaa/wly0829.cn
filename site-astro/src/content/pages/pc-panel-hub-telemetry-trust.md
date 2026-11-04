@@ -36,8 +36,8 @@
  },
  "source": {
   "page": "sources/pages/pc-panel-hub-telemetry-trust/page.json",
-  "sha256": "282ef9b68eb42c65f0a9224a7c473d7e0ae0eaee943e9a617afd051318b2734c",
-  "converted_at_beijing": "2026-11-04T15:34:48+08:00"
+  "sha256": "7643746cf9aac74aefcffb9286ed5afb64eaebd6870bd2726ad63772647ba9ff",
+  "converted_at_beijing": "2026-11-04T16:31:20+08:00"
  }
 }
 ---

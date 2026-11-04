@@ -1669,8 +1669,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig/page.json",
-  "sha256": "83bc52ed2603906fe379509a07fe2393a9dd632dc5da7b3a1b8bd9e6d1e95189",
-  "converted_at_beijing": "2026-11-04T15:34:48+08:00"
+  "sha256": "677a61e452b45a9118b2e5b102d149f7f609b5e5eb3d8275fc30bab21f1b00a1",
+  "converted_at_beijing": "2026-11-04T16:31:20+08:00"
  }
 }
 ---

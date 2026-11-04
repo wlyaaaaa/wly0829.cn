@@ -36,8 +36,8 @@
  },
  "source": {
   "page": "sources/pages/pc-panel-hub-serial-transport/page.json",
-  "sha256": "99eeb33a6ebddec13fc6f4ec93fd59ee838ad532819cf22d10d6e546bef1cf65",
-  "converted_at_beijing": "2026-11-04T15:34:48+08:00"
+  "sha256": "359b18cea6f3013531bcd9f0980cf367f18f67fdc182ce4142c50bffe5aa833e",
+  "converted_at_beijing": "2026-11-04T16:31:20+08:00"
  }
 }
 ---

@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig-runtime-startup/page.json",
-  "sha256": "ac14a9fcc3bcef2c33f2718c076bbd56315a355206df157bde11896cd6dadd22",
-  "converted_at_beijing": "2026-11-04T14:27:00+08:00"
+  "sha256": "3fcc20e6502937635f795924ca2ffde07fd3573de672a8bc3d2abbb30e35969d",
+  "converted_at_beijing": "2026-11-04T16:31:21+08:00"
  }
 }
 ---
