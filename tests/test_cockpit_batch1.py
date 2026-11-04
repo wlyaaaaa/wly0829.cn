@@ -49,7 +49,7 @@ const assert = require('node:assert/strict');
   // 状态格按整词包了 span，比文字时先去掉标签
   o = R.REGIONS['overview-tri'](v, ctx).replace(/<span class="cp-status-word">([^<]*)<\/span>/g, '$1');
   // 2 自动任务只数没恢复的，已恢复的写在灰色小字；已恢复的反复出错不再挂着，仍失败的才挂
-  assert.match(o, /今天 1 个出错还没恢复/);
+  assert.match(o, /今天 1 个出错，尚未确认恢复/);
   assert.match(o, /今天出过错、已恢复 1 个/);
   assert.match(o, /这周反复出错：虚构反复失败 6 次/);
   assert.doesNotMatch(o, /虚构费用 23 次/);
@@ -138,8 +138,8 @@ const assert = require('node:assert/strict');
   o = R.REGIONS['overview-tri'](colored, ctx).replace(/<span class="cp-status-word">([^<]*)<\/span>/g, '$1');
   // 第二行小字只说要不要你管（10-30 批准第 2 项）
   assert.match(o, /cp-tri-cell is-neutral" data-signal="computer">.*?<span class="cp-tri-who"><span>AI 在修，不用你管<\/span>/);
-  assert.match(o, /今天 1 个出错还没恢复/);
-  assert.match(o, /今天出过错、已恢复 2 个/);
+  assert.match(o, /今天 1 个出错，尚未确认恢复/);
+  assert.match(o, /今天出过错、已恢复 1 个/);
   assert.doesNotMatch(o, /这周反复出错/);
   assert.match(R.REGIONS['lamp-need-you'](colored, ctx), /is-yellow.*要你处理/);
   assert.equal(R.REGIONS['lamp-computer'](colored, ctx), '');
