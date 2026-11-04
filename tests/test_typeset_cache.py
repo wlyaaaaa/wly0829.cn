@@ -3,8 +3,9 @@ import json
 from pathlib import Path
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,6 +15,34 @@ from render_cache import legacy_renderer_compatible, markdown_render_sha, promot
 
 
 class TypesetCacheTests(unittest.TestCase):
+    def test_success_survives_later_failure_and_interruption(self):
+        with tempfile.TemporaryDirectory(prefix='typeset-resume-') as folder:
+            browser = MagicMock()
+            browser.new_page.return_value.evaluate.side_effect = [
+                {'html': 'measured'}, RuntimeError('failed screen'), KeyboardInterrupt]
+            playwright = MagicMock()
+            playwright.__enter__.return_value.chromium.launch.return_value = browser
+            module = SimpleNamespace(sync_playwright=lambda: playwright)
+            jobs = [{'key': str(i), 'screen': str(i), 'o': 'h', 'html': 'local.html'} for i in range(3)]
+            with patch.dict(sys.modules, {'playwright.sync_api': module}):
+                with self.assertRaises(KeyboardInterrupt):
+                    renderer.hydrate(jobs, {}, folder)
+                cache = {}
+                renderer.recover_cache(cache, folder)
+                self.assertEqual(list(cache), ['0'])
+                self.assertEqual(cache['0']['html'], 'measured')
+                remaining = [job for job in jobs if job['key'] not in cache]
+                browser.new_page.return_value.evaluate.side_effect = [{'html': 'ok'}] * 2
+                self.assertEqual(len(renderer.hydrate(remaining, {}, folder)), 2)
+                renderer.recover_cache(cache, folder)
+                self.assertEqual(set(cache), {'0', '1', '2'})
+                path = Path(folder, '0.json')
+                with patch.object(renderer.os, 'replace', side_effect=OSError('interrupted write')):
+                    with self.assertRaises(OSError):
+                        renderer.write_cache(path, {'html': 'partial'})
+                self.assertEqual(json.loads(path.read_text('utf8'))['html'], 'measured')
+                self.assertFalse(list(Path(folder).glob('*.tmp')))
+
     def test_verified_legacy_cache_is_promoted_once(self):
         self.assertTrue(legacy_renderer_compatible(renderer.__file__))
         cache = {'old': {'html': 'measured'}, 'newer': {'html': 'current'}}
@@ -23,6 +52,8 @@ class TypesetCacheTests(unittest.TestCase):
         self.assertEqual(promote_legacy_cache(cache, jobs), 1)
         self.assertEqual(cache['new']['html'], 'measured')
         self.assertEqual(cache['newer']['html'], 'current')
+        self.assertEqual(promote_legacy_cache(cache, [{'key': 'resume', 'prior_key': 'old'}]), 1)
+        self.assertEqual(cache['resume']['html'], 'measured')
 
     def test_timestamp_body_and_engine_across_269_pages(self):
         with tempfile.TemporaryDirectory(prefix='typeset-cache-') as folder:

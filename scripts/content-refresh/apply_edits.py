@@ -11,6 +11,7 @@ import subprocess
 import sys
 from copy import deepcopy
 from authors import PLACEHOLDER, affected_pages, convert_markdown, editable_range, markdown_checks, resolve_author
+from selection import Selection
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[2]
@@ -242,6 +243,9 @@ def qualified_date_review(page, row):
 
 def build_number_edits(root, result):
     root, pages, edits, skipped, manual_reviews = Path(root), {}, {}, [], []
+    selection = Selection(root, result.get("manual_owner_request", []))
+    rows, excluded = selection.partition(result["rows"])
+    result = dict(result, rows=rows)
     authors = {}
     def authored(slug, field):
         target = resolve_author(root, slug, field)
@@ -445,6 +449,7 @@ def build_number_edits(root, result):
         updates.append(dict(row, readback_locator=dict(file=filename, field=field, logical_field=logical_field,
             start=start + shift, end=start + shift + len(replacement), expected=replacement)))
     return dict(schema="content-refresh.number-edits.v1", run_id=result.get("run_id"),
+                manual_owner_request=selection.requested, excluded=excluded,
                 registry_path=result.get("registry_path"), edits=valid, skipped=skipped, manual_reviews=manual_reviews,
                 record_updates=updates)
 
@@ -453,7 +458,13 @@ def apply_edits(root, payload, only=None, converter=None):
     if payload.get("schema") != "content-refresh.number-edits.v1":
         raise ValueError("改数单格式不支持")
     root, grouped, converter = Path(root), defaultdict(list), converter or convert_markdown
+    selection = Selection(root, payload.get("manual_owner_request", []))
+    edits, excluded_edits = selection.partition(payload["edits"])
+    updates, excluded_updates = selection.partition(payload.get("record_updates", []))
+    payload = dict(payload, edits=edits, record_updates=updates)
+    excluded = {(r["page"], r["record_id"]): r for r in payload.get("excluded", []) + excluded_edits + excluded_updates}
     report = dict(run_id=payload.get("run_id"), applied=0, already_applied=0, skipped=[], changed_files=[],
+                  manual_owner_request=selection.requested, excluded=list(excluded.values()),
                   field_readback=[], record_readback=[], markdown_readback=[])
     for edit in payload["edits"]:
         if only and edit["page"] not in only:
@@ -640,11 +651,17 @@ def main(argv=None):
     card = dict(status="applied" if not report["skipped"] else "incomplete", run_id=report.get("run_id"),
                 applied=report.get("applied"), already_applied=report.get("already_applied"),
                 counts={key: report.get(key) for key in ("applied", "already_applied")}
-                | {"skipped": len(report["skipped"]), "changed_files": len(report["changed_files"])},
+                | {"skipped": len(report["skipped"]), "changed_files": len(report["changed_files"]), "excluded": len(report["excluded"])},
                 failures=[{"record_id": row.get("record_id") or row.get("edit", {}).get("record_id"),
                            "page": row.get("page") or row.get("edit", {}).get("page"), "reason": row.get("reason")}
                           for row in report["skipped"][:5]],
                 receipt=str(receipt))
+    home = args.root / "site-astro/sources/retained-home-cockpit/home.html"
+    if report["changed_files"] and home.is_file():
+        import runpy
+        prepare = runpy.run_path(str(args.root / "scripts/prepare-home-highlights.py"))
+        if not prepare["transcript_current"](home.read_text("utf-8")):
+            card["next_step"] = "首页亮点数字已变：提交前先运行 scripts/prepare-home-highlights.py --output <本轮目录/首页亮点>，再提交作者文件。"
     print(json.dumps(card, ensure_ascii=False))
     return 1 if report["skipped"] else 0
 

@@ -1257,24 +1257,6 @@
     "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。",
     "observation_basis": "live_read"
   },
-  "usage-skill-current-7d": {
-    "argv": [
-      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
-      "-I",
-      "-S",
-      "-B",
-      "-X",
-      "utf8",
-      "-c",
-      "import sys,json,datetime\nfrom pathlib import Path\nfrom concurrent.futures import ThreadPoolExecutor\nsys.path.insert(0,'E:/Projects/Backups/codex-memory/tools');import ai_usage_ledger as mod\nnow=datetime.datetime.now(mod.BJ)\ncutoff=now-datetime.timedelta(days=7)\nmidnight=now.replace(hour=0,minute=0,second=0,microsecond=0)\nledger=Path('E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl')\nstates=[json.loads(ledger.with_name('state-'+ai+'.json').read_text(encoding='utf-8')) for ai in ('codex','claude')]\nassert all(s.get('bootstrap_complete') is True and mod.timestamp(s.get('last_completed'))==midnight for s in states),'ledger_watermark_not_today_midnight'\nnames={'project-entry-gate','report-page'}\nselected={row['id']:row['name'] for row in (json.loads(line) for line in ledger.open(encoding='utf-8-sig'))\n          if row.get('kind')=='skill' and row.get('name') in names\n          and cutoff<=mod.timestamp(row['ts'])<now}\ndef scan_current(pair):\n    events,stats=mod.scan(pair[0],Path(pair[1]),midnight,now)\n    if stats.get('invalid_lines',0): raise RuntimeError('current_source_partial')\n    return [(e['id'],e['name']) for e in events if e['kind']=='skill' and e['name'] in names]\npairs=[('codex','E:/Data/AppData/Codex'),('claude','C:/Users/10979/.claude')]\nwith ThreadPoolExecutor(max_workers=2) as pool:\n    for part in pool.map(scan_current,pairs):\n        selected.update(part)\nprint(json.dumps({'project_entry_gate_count_7d':sum(v=='project-entry-gate' for v in selected.values()),'report_page_count_7d':sum(v=='report-page' for v in selected.values())}))"
-    ],
-    "cwd": "E:/Projects/Backups/codex-memory/tools",
-    "read_only": true,
-    "owner_project": "pcconfig",
-    "output": "json",
-    "timeout": 210,
-    "observation_basis": "live_read"
-  },
   "codex-memory-encrypted-snapshots": {
     "argv": [
       "python",

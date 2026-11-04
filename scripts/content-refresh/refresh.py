@@ -25,6 +25,7 @@ from engine.content import bound_json
 from validation import LEDGER, validate_entries, validate_method, registry_errors, positive
 from apply_edits import qualified_date_review, proven_offset
 from freshness import cadence, metadata, review_tasks, semantic_due, close_run, now
+from selection import Selection
 
 ROOT = Path(__file__).resolve().parents[2]
 BEIJING = timezone(timedelta(hours=8))
@@ -119,16 +120,19 @@ def short_card(status, output, counts, failures=(), run_id=None):
     print(json.dumps(card, ensure_ascii=False))
 
 
-def source_commit_candidates(root, selected=()):
+def source_commit_candidates(root, selected=(), manual_owner_request=()):
     """仅列本机已提交且可证明是页面基线后代的来源候选。"""
     if not (root / "config/panel-projects.json").exists():
         return []
     config = read_json(root / "config/panel-projects.json")
     projects = {p["id"]: p for p in config["projects"] if p.get("enabled")}
     selected = set(selected)
+    selection = Selection(root, manual_owner_request)
     heads, candidates = {}, []
     for file in sorted((root / "sources/pages").glob("*/page.json")):
         page = read_json(file)
+        if selection.reason(page["page"]):
+            continue
         if selected and page["page"] not in selected and page.get("parent") not in selected:
             continue
         project = projects.get(page.get("parent") or page["page"])
@@ -456,7 +460,7 @@ def page_value(record, page, root):
     return value, observed
 
 
-def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entries=None, workers=8, entries_path=None, targeted=()):
+def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entries=None, workers=8, entries_path=None, targeted=(), manual_owner_request=()):
     today = today or datetime.now(BEIJING).date()
     started = time.monotonic()
     # 留出 taskkill/进程等待（各最多5秒）及审计/落盘尾段；总时限不是额外清理预算。
@@ -466,6 +470,7 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
     validate_entries(entries)
     invalid = {e["record_id"]: "; ".join(e["errors"]) for e in registry_errors(registry["records"], entries)}
     catalog = {p["page"]: p for p in pages(root)}
+    selection = Selection(root, manual_owner_request)
     semantic_path = root / "sources/refresh/semantic-reviews.json"
     semantic_reviews = read_json(semantic_path).get("pages", {}) if semantic_path.exists() else {}
     rows, groups = [], {}
@@ -482,11 +487,14 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
             row["page_error"] = str(exc) or "页面或数字登记不存在"
             row["page_date"] = record.get("as_of")
         screen = next((s for s in page.get("screens", []) if s["id"] == record["screen"]), {})
-        historical = (record.get("historical") or record.get("frozen") or page.get("kind") == "frozen"
-                or page.get("status") in {"frozen", "冻结", "已冻结", "historical", "历史"}
+        historical = (record.get("historical") or record.get("frozen")
+                or page.get("status") in {"historical", "历史"}
                 or screen.get("section") in {"history", "evolution", "timeline"})
         row.update(cadence(dict(record, semantic_checked_at=semantic_reviews.get(record["page"], {}).get("checked_at")), registry.get("freshness_policy"), today, historical, record["page"] in targeted))
-        if row["freshness_class"] == "historical":
+        excluded = selection.reason(record["page"])
+        if excluded:
+            row.update(status="excluded", reason=excluded, refresh_due=False, overdue=False)
+        elif row["freshness_class"] == "historical":
             row.update(status="historical", reason="历史事实或冻结项目，本轮不重取")
         elif row["freshness_class"] == "semantic":
             row.update(status="manual_review" if row["refresh_due"] else "semantic_current", reason=row["cadence_reason"])
@@ -559,7 +567,7 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
                         row.update(status="unavailable", reason="Unknown：来源缺真实观察时间或覆盖末日；保留旧值旧日期")
     by_id = {r["id"]: r for r in rows}
     for row in rows:
-        if row.get("qualifies") and row["status"] != "historical":
+        if row.get("qualifies") and row["status"] not in {"historical", "excluded"}:
             qualified = [by_id.get(ref, {}) for ref in row["qualifies"]]
             row["checked_at"] = now()
             if row["id"] in invalid or row.get("page_error") or not all(r.get("status") in {"changed", "unchanged"} and (r.get("source_observed_at") or r.get("source_coverage_end")) and r.get("page") == row["page"] and not r.get("qualifies") for r in qualified):
@@ -586,8 +594,9 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
     audit = audit_pages(root / "sources/pages", today, registry.get("retired_names", []))
     for finding in audit["findings"]:
         finding["page_title"] = catalog.get(finding["page"].split("/")[0], {}).get("title", finding["page"])
-    automatic = [r for r in rows if r.get("automatic") and not r.get("qualifies") and r["status"] != "historical" and r.get("manual_reason") != "source_broken"]
+    automatic = [r for r in rows if r.get("automatic") and not r.get("qualifies") and r["status"] not in {"historical", "excluded"} and r.get("manual_reason") != "source_broken"]
     return {"schema": "content-refresh.result.v1", "run_id": str(uuid4()), "observed_at": now(),
+            "manual_owner_request": selection.requested, "excluded": selection.partition(rows)[1],
             "manual_tasks": review_tasks({}, rows, targeted), "semantic_due": semantic_due({}, rows), "freshness_policy": registry.get("freshness_policy"),
             "relative_time_risks": [f for f in audit["findings"] if re.search("相对|昨天|今天|目前", f.get("message", "") + f.get("excerpt", ""))],
             "baseline": registry.get("baseline"), "baseline_evidence": registry.get("baseline_evidence", "Unknown；登记基线"), "pages_checked": audit["pages_checked"],
@@ -616,7 +625,8 @@ def task_text(result, registry):
         ("日期口径需人工核对（不自动替换）", [r for r in result["rows"] if r["status"] == "manual_review"]),
         ("已重取且变化", [r for r in result["rows"] if r["status"] == "changed"]),
         ("未取得新值（含领域入口事实任务）", [r for r in result["rows"] if r["status"] in ("unavailable", "domain_fact_task")]),
-        ("口径待核，不计入变化", [r for r in result["rows"] if r.get("automatic") and r.get("scope_status") != "verified"]),
+        ("本轮未纳入（保留旧快照）", [r for r in result["rows"] if r["status"] == "excluded"]),
+        ("口径待核，不计入变化", [r for r in result["rows"] if r["status"] != "excluded" and r.get("automatic") and r.get("scope_status") != "verified"]),
         ("本轮应重取或复核", [r for r in result["rows"] if r["overdue"]])):
         lines += [f"## {title}", ""]
         lines += [f"- {r['page']} / {r['screen']}：{r['label']}；页面 {r['old_value']} → 重取 {r['new_value']}；"
@@ -641,7 +651,7 @@ def report_content(result, task, task_path):
     changed = [r for r in result["rows"] if r["status"] == "changed"]
     missing = [r for r in result["rows"] if r["status"] in ("unavailable", "domain_fact_task")]
     overdue = [r for r in result["rows"] if r["overdue"]]
-    pending = [r for r in result["rows"] if r.get("automatic") and r.get("scope_status") != "verified"]
+    pending = [r for r in result["rows"] if r["status"] != "excluded" and r.get("automatic") and r.get("scope_status") != "verified"]
     blocks = [{"type": "metrics", "items": [{"value": v, "label": k} for k, v in (
         ("检查页面", result["pages_checked"]), ("登记数字", result["numbers_checked"]),
         ("重取后变化", len(changed)), ("未取得新值", len(missing)), ("写法命中", len(result["findings"])))]}]
@@ -685,6 +695,7 @@ def main():
     parser.add_argument("--strict", action="store_true", help="漏登记列出页/屏/原文并非零退出")
     parser.add_argument("--only", help="只检查逗号分隔的页")
     parser.add_argument("--targeted", help="本轮点名讲解核对的页面，逗号分隔；不缩小当前事实重取范围")
+    parser.add_argument("--manual-owner-request", help="本人明确点名的项目id，逗号分隔；纳入手动项目及冻结项目")
     parser.add_argument("--close-run", type=Path, help="核对本轮取数、应用与原位回读闭环")
     parser.add_argument("--apply-report", type=Path, help="同轮应用回执；人工闭环须附 manual_closures")
     parser.add_argument("--dist", type=Path, help="成品目录；闭环时额外核对新片段实际显示")
@@ -704,7 +715,7 @@ def main():
         destination = args.output or args.close_run.parent
         destination.mkdir(parents=True, exist_ok=True)
         (destination / "closure.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
-        short_card(result["status"], destination / "closure.json", {"pending": result.get("pending", 0)},
+        short_card(result["status"], destination / "closure.json", {"pending": result.get("pending", 0), "excluded": len(result.get("excluded", []))},
                    [o for o in result.get("rows", []) if o.get("status") in {"pending", "manual_pending"}], result.get("run_id"))
         return 0 if result["status"] == "closed" else 2
     entries_path = args.entries or (args.registry.parent if args.registry else args.root / "sources/refresh") / "entries.json"
@@ -729,11 +740,16 @@ def main():
     output = args.output or Path("E:/Cache/content-refresh") / datetime.now(BEIJING).strftime("%Y%m%d-%H%M%S-%f")
     output.mkdir(parents=True, exist_ok=True)
     targeted = set(args.targeted.split(",")) if args.targeted else set()
+    requested = args.manual_owner_request.split(",") if args.manual_owner_request else []
+    selection = Selection(args.root, requested)
     only = set(args.only.split(",")) if args.only else None
     inventory = build_inventory(args.root / "sources/pages", registry["records"], entries, registry.get("freshness_policy"), targeted)
+    inventory["excluded"] = selection.partition(registry["records"])[1]
     inventory["rule_version_task"] = rule_version_task(args.root)
     inventory["rule_explanations_pending"] = pending_rule_explanations(args.root)
-    inventory["source_commit_candidates"] = source_commit_candidates(args.root, targeted or only or ())
+    inventory["source_commit_candidates"] = source_commit_candidates(args.root, targeted or only or (), requested)
+    for key in ("items", "review_stamps", "semantic_reviews", "source_commit_candidates"):
+        inventory[key] = selection.partition(inventory.get(key, []))[0]
     if only:
         inventory["items"] = [i for i in inventory["items"] if i["page"] in only]
         inventory["review_stamps"] = [i for i in inventory.get("review_stamps", []) if i["page"] in only]
@@ -765,7 +781,7 @@ def main():
     command_deadline = command_started + args.total_seconds
     stamps = set(inventory.get("review_stamp_record_ids", []))
     registry = dict(registry, records=[r for r in registry["records"] if r["id"] not in stamps])
-    result = collect(args.root, registry, max(0, command_deadline - time.monotonic() - 5), args.item_seconds, entries=entries, workers=args.workers, entries_path=entries_path, targeted=targeted)
+    result = collect(args.root, registry, max(0, command_deadline - time.monotonic() - 5), args.item_seconds, entries=entries, workers=args.workers, entries_path=entries_path, targeted=targeted, manual_owner_request=requested)
     result["registry_path"] = str((args.registry or args.root / "sources/refresh/registry.json").resolve())
     result["manual_tasks"] = review_tasks(inventory, result["rows"], targeted)
     result["semantic_due"] = semantic_due(inventory, result["rows"])
@@ -780,7 +796,7 @@ def main():
     (output / "opus-task.md").write_text(task, encoding="utf-8")
     (output / "result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     counts = {status: sum(r["status"] == status for r in result["rows"]) for status in
-              ("changed", "unchanged", "unavailable", "historical", "manual_review", "domain_fact_task", "scope_pending")}
+              ("changed", "unchanged", "unavailable", "historical", "excluded", "manual_review", "domain_fact_task", "scope_pending")}
     counts.update(numbers=result["numbers_checked"], applicable=len(edits["edits"]), skipped=len(edits["skipped"]),
                   automatic_obtained=result.get("automatic_obtained"), automatic_total=result.get("automatic_total"))
     manual_reasons = {r["record_id"]: r["reason"] for r in edits["manual_reviews"]}

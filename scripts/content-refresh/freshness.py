@@ -66,16 +66,18 @@ def metadata(document, method, entry=None, checked_at=None):
 
 
 def review_tasks(inventory, rows, targeted=()):
+    excluded = {r["page"] for r in rows if r.get("status") == "excluded"}
     tasks = [dict(id="review:" + i["id"], page=i["page"], field=i["field"], kind=i["kind"],
                   reason="需要实际人工核对并提供本轮依据", status="pending")
-             for i in inventory.get("items", []) if not i.get("historical") and (not targeted or i["page"] in targeted)
+             for i in inventory.get("items", []) if i["page"] not in excluded and not i.get("historical") and (not targeted or i["page"] in targeted)
              and (i.get("review_stamp") or i["kind"] == "status_line.state")]
     return tasks
 
 
 def semantic_due(inventory, rows=()):
-    pages = {t["page"] for t in inventory.get("semantic_reviews", [])}
-    pages.update(r["page"] for r in rows if r.get("freshness_class") == "semantic" and r.get("refresh_due"))
+    excluded = {r["page"] for r in rows if r.get("status") == "excluded"}
+    pages = {t["page"] for t in inventory.get("semantic_reviews", []) if t["page"] not in excluded}
+    pages.update(r["page"] for r in rows if r["page"] not in excluded and r.get("freshness_class") == "semantic" and r.get("refresh_due"))
     return dict(count=len(pages), pages=sorted(pages))
 
 
@@ -150,6 +152,7 @@ def close_run(root, result, report=None, dist=None):
     from refresh import pages, page_value, comparable
     from apply_edits import same_value, field_at, digest
     from authors import resolve_author
+    from selection import Selection
     root, report = Path(root), report or {}
     run_id = result.get("run_id")
     if not run_id or result.get("schema") != "content-refresh.result.v1":
@@ -157,12 +160,17 @@ def close_run(root, result, report=None, dist=None):
     if report and report.get("run_id") != run_id:
         raise ValueError("应用回执与取数 run_id 不一致")
     catalog = {p["page"]: p for p in pages(root)}
+    selection = Selection(root, result.get("manual_owner_request", []))
+    _, excluded = selection.partition(result["rows"])
+    excluded_ids = {r["record_id"] for r in excluded}
     applied = {r["record_id"]: r for r in report.get("record_readback", []) if r.get("status") == "verified"}
     markdown = {m["page"]: m for m in report.get("markdown_readback", [])}
     outcomes, synced = [], []
     for row in result["rows"]:
         status, reason, display = "pending", row.get("reason", ""), "not_checked"
-        if row["status"] == "historical":
+        if row["id"] in excluded_ids:
+            status, reason = "excluded", selection.reason(row["page"]) or row.get("reason", "取数时未纳入本轮")
+        elif row["status"] == "historical":
             status = "historical_preserved"
         elif row.get("freshness_class") == "semantic":
             status = "semantic_due" if row.get("refresh_due") else "semantic_current"
@@ -224,12 +232,13 @@ def close_run(root, result, report=None, dist=None):
         outcomes.append(dict(record_id=row["id"], status=status, reason=reason, display_readback=display))
     resolutions = {r.get("id"): r for r in report.get("manual_closures", [])
                    if r.get("id") and r.get("run_id") == run_id and valid_time(r.get("checked_at")) and r.get("evidence") and r.get("status") == "completed"}
-    tasks = [dict(t, status="completed" if t["id"] in resolutions else "pending") for t in result.get("manual_tasks", [])]
+    tasks = [dict(t, status="completed" if t["id"] in resolutions else "pending")
+             for t in selection.partition(result.get("manual_tasks", []))[0]]
     for outcome in outcomes:
         if outcome["status"] == "semantic_due" and "semantic:" + next(r["page"] for r in result["rows"] if r["id"] == outcome["record_id"]) in resolutions:
             outcome["status"] = "manual_completed"
     semantic = {rid[9:]: dict(checked_at=r["checked_at"], run_id=run_id, evidence=r["evidence"])
-                for rid, r in resolutions.items() if rid.startswith("semantic:") and rid[9:] in result.get("semantic_due", {}).get("pages", [])}
+                for rid, r in resolutions.items() if rid.startswith("semantic:") and not selection.reason(rid[9:]) and rid[9:] in result.get("semantic_due", {}).get("pages", [])}
     if semantic:
         path = root / "sources/refresh/semantic-reviews.json"
         data = json.loads(path.read_text("utf-8-sig")) if path.exists() else dict(schema="content-refresh.semantic-reviews.v1", pages={})
@@ -237,7 +246,9 @@ def close_run(root, result, report=None, dist=None):
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     pending = [o for o in outcomes if o["status"] in {"pending", "manual_pending"}] + [t for t in tasks if t["status"] == "pending"]
+    semantic_pages = [p for p in result.get("semantic_due", {}).get("pages", []) if not selection.reason(p)]
     return dict(schema="content-refresh.closure.v1", run_id=run_id, checked_at=now(),
+                excluded=excluded,
                 status="incomplete" if pending else "closed", rows=outcomes, manual_tasks=tasks,
-                semantic_due=result.get("semantic_due", dict(count=0, pages=[])),
+                semantic_due=dict(count=len(semantic_pages), pages=semantic_pages),
                 registry_sync=sync_registry(result.get("registry_path") or root / "sources/refresh/registry.json", synced), pending=len(pending))

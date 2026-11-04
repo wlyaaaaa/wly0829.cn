@@ -20,6 +20,7 @@ from pathlib import Path
 import re
 import shutil
 import sys
+import tempfile
 import time
 import urllib.parse
 
@@ -34,7 +35,7 @@ from engine import layout as L  # noqa: E402
 from engine.layout import build_html, WIDTH  # noqa: E402
 from engine.parse import original_markdown  # noqa: E402
 from engine.registry import load as load_registry  # noqa: E402
-from render_cache import LEGACY_RENDERER_CODE_FP, legacy_renderer_compatible, markdown_render_sha, promote_legacy_cache  # noqa: E402
+from render_cache import LEGACY_RENDERER_CODE_FP, PRE_CHECKPOINT_CODE_FP, legacy_renderer_compatible, markdown_render_sha, promote_legacy_cache  # noqa: E402
 
 # 四个目录都可以用环境变量换到别处（例如按活动版本试排一份规则页、试排一个新页，不碰站点）：
 # BLOCK_MD_DIR、BLOCK_OUT_DIR、BLOCK_PUB_DIR、BLOCK_WORK_DIR（排版缓存；和站点同时跑时要分开，免得互相盖掉）
@@ -409,7 +410,7 @@ def check_screen_images(name, page, screen, meta):
         A._manifest = prior
 
 
-def prepare_page(name, reg, css_files, libfp, legacy_libfp=None):
+def prepare_page(name, reg, css_files, libfp, legacy_libfp=None, prior_libfp=None):
     """在本进程里排出这一页每屏两份的 HTML 文件（交给浏览器排版），返回待排清单。"""
     fm, screens = parse_md(os.path.join(MD_DIR, name + ".md"))
     page = dict(fm["page"]); page["screens"] = []
@@ -458,6 +459,7 @@ def prepare_page(name, reg, css_files, libfp, legacy_libfp=None):
             with open(hp, "w", encoding="utf-8", newline="\n" if original_markdown(s) else None) as f:
                 f.write(doc)
             jobs.append({"page": name, "screen": s["id"], "o": o, "html": hp, "key": key,
+                         **({"prior_key": screen_cache_key(doc, o, prior_libfp)} if prior_libfp else {}),
                          **({"legacy_key": legacy_key} if legacy_key else {}), "shape": s.get("shape") or "",
                          "replace": s.get("display_replace") or {},
                          "notes": info["notes"], "incomplete": info["incomplete"]})
@@ -522,7 +524,7 @@ HYDRATE_JS = r"""async (bind) => {
 }"""
 
 
-def hydrate(jobs, binds):
+def hydrate(jobs, binds, checkpoint_dir=None):
     from playwright.sync_api import sync_playwright
     from engine.render import FIT_JS as fit
     js = HYDRATE_JS.replace("%FIT%", fit)
@@ -547,8 +549,32 @@ def hydrate(jobs, binds):
                     r = None
             if r:
                 out.append({**j, **r})
+                if checkpoint_dir:
+                    write_cache(Path(checkpoint_dir, j["key"] + ".json"), cache_payload(r))
         b.close()
     return out
+
+
+def cache_payload(result):
+    return {k: result.get(k) for k in ("html", "style", "height", "width", "art", "artBox", "titles")}
+
+
+def write_cache(path, value):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temp = tempfile.mkstemp(prefix=path.name + ".", suffix=".tmp", dir=path.parent)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as stream:
+            json.dump(value, stream, ensure_ascii=False)
+        os.replace(temp, path)
+    finally:
+        if os.path.exists(temp):
+            os.unlink(temp)
+
+
+def recover_cache(cache, checkpoint_dir):
+    for path in Path(checkpoint_dir).glob("*.json"):
+        cache[path.stem] = json.loads(path.read_text("utf-8"))
 
 
 # 毛笔字标题图放在区块库标题图的同一个缓存目录，发布时同样进 /assets/_titles/
@@ -889,12 +915,13 @@ def run(names, workers=2):
     shared_fp = library_fingerprint() + cssv + RENDER_VERSION
     libfp = shared_fp + code_fp
     legacy_libfp = shared_fp + LEGACY_RENDERER_CODE_FP if legacy_renderer_compatible(__file__) else None
+    prior_libfp = shared_fp + PRE_CHECKPOINT_CODE_FP if legacy_libfp else None
     all_jobs, fms, binds, source_shas = [], {}, {}, {}
     failed = []
     for n in names:
         try:
             source_shas[n] = sha(os.path.join(MD_DIR, n + ".md"))
-            fm, page, jobs = prepare_page(n, reg, css_files, libfp, legacy_libfp)
+            fm, page, jobs = prepare_page(n, reg, css_files, libfp, legacy_libfp, prior_libfp)
         except Exception as e:  # 一页出错不拦别的页，最后列出来
             failed.append(n); print(f"{n}：区块库排这一页出错 {repr(e)[:200]}", flush=True); continue
         page_binds = bindings(n, page["screens"][0]["id"]) if page["screens"] else {}
@@ -904,13 +931,16 @@ def run(names, workers=2):
             binding_rect = page_binds.get((j["screen"], j["o"]))
             # The preliminary key already contains the actual generated HTML.
             j["key"] = hashlib.sha256(json.dumps([j["key"], binding_rect], separators=(",", ":"), sort_keys=True).encode()).hexdigest()[:20]
-            if j.get("legacy_key"):
-                j["legacy_key"] = hashlib.sha256(json.dumps([j["legacy_key"], binding_rect], separators=(",", ":"), sort_keys=True).encode()).hexdigest()[:20]
+            for field in ("legacy_key", "prior_key"):
+                if j.get(field):
+                    j[field] = hashlib.sha256(json.dumps([j[field], binding_rect], separators=(",", ":"), sort_keys=True).encode()).hexdigest()[:20]
         fms[n] = fm; all_jobs += jobs
     names = [n for n in names if n not in failed]
     # 增量：指纹没变的屏用上次的结果
     cache_p = os.path.join(WORK, "_cache.json")
     cache = json.loads(Path(cache_p).read_text("utf-8")) if os.path.exists(cache_p) else {}
+    checkpoint_dir = Path(WORK, "_completed")
+    recover_cache(cache, checkpoint_dir)
     migrated = promote_legacy_cache(cache, all_jobs)
     if migrated:
         print(f"区块排版：复用当前已核实旧版缓存 {migrated} 份", flush=True)
@@ -920,11 +950,13 @@ def run(names, workers=2):
     done = []
     if chunks:
         with cf.ProcessPoolExecutor(max_workers=len(chunks)) as ex:
-            for res in ex.map(hydrate, chunks, [binds] * len(chunks)):
+            for res in ex.map(hydrate, chunks, [binds] * len(chunks), [str(checkpoint_dir)] * len(chunks)):
                 done += res
     for r in done:
-        cache[r["key"]] = {k: r.get(k) for k in ("html", "style", "height", "width", "art", "artBox", "titles")}
-    Path(cache_p).write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
+        cache[r["key"]] = cache_payload(r)
+    write_cache(cache_p, cache)
+    for checkpoint in checkpoint_dir.glob("*.json"):
+        checkpoint.unlink()
     by_page = {}
     missing = [j for j in all_jobs if j["key"] not in cache]
     incomplete_pages = {j["page"] for j in missing}

@@ -9,11 +9,12 @@ import re
 from pathlib import Path
 
 
-# One-time bridge from the cache written by 4b575598. The renderer-file guard
-# disables it after any subsequent render_blocks.py edit; changes in
-# src/typeset still change libfp and therefore cannot reuse old geometry.
+# Reuse both earlier key formats while checkpoint persistence changes no
+# geometry. The exact renderer-file guard disables this bridge after later
+# renderer edits; src/typeset changes still change libfp and invalidate it.
 LEGACY_RENDERER_CODE_FP = '3c3d79f44efc6362'
-MIGRATION_RENDERER_SHA256 = '628347c6ae35c06db43243b9460aeeaef02aad23c57faf32c6b2e9a45dfe34ac'
+PRE_CHECKPOINT_CODE_FP = '5bea67d3c8ff931a'
+MIGRATION_RENDERER_SHA256 = '3d55e1de753a961e8558b7952ec62a07a7f2ef80f686417b291f27e6b92eefbe'
 
 
 def legacy_renderer_compatible(path):
@@ -23,9 +24,10 @@ def legacy_renderer_compatible(path):
 def promote_legacy_cache(cache, jobs):
     count = 0
     for job in jobs:
-        if job['key'] not in cache and job.get('legacy_key') in cache:
-            cache[job['key']] = cache[job['legacy_key']]
-            count += 1
+        for field in ('prior_key', 'legacy_key'):
+            if job['key'] not in cache and job.get(field) in cache:
+                cache[job['key']] = cache[job[field]]
+                count += 1
     return count
 
 

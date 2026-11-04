@@ -598,7 +598,7 @@ STATUS_STATE = {"在用": "ok", "常用": "ok", "偶尔用": "ok", "待验收": 
 
 def status_items(sl):
     """page.json 顶层 status_line（主持 10 月 10 日 08:00 定的字段，见 status-line-schema.md）→ 首屏状态行：
-    第一项“状态 · 上次……”，后面每条事实一项（最多 2 条）；下面一行小字“截至……（来源）”。查不到的项省略，不编。"""
+    第一项“状态 · 上次……”，后面每条事实一项（最多 2 条）；小字只放截至日期与不超过 16 字的来源。查不到的项省略，不编。"""
     if not isinstance(sl, dict) or not sl.get("state"):
         return [], ""
     yr = str(sl.get("as_of") or "")[:4]
@@ -618,8 +618,8 @@ def status_items(sl):
     items += [{"text": str(f).strip(), "state": "fact"} for f in (sl.get("facts") or [])[:2] if str(f).strip()]  # 事实项：中性圆点
     note = ""
     if day(sl.get("as_of")):
-        # 来源常自带括号（“AI 使用小记录（记到 10 月 8 日）”），用“ · ”隔开，不套两层括号
-        note = "截至 " + day(sl["as_of"]) + (f" · {str(sl['source']).strip()}" if str(sl.get("source") or "").strip() else "")
+        source = str(sl.get("source") or "").strip()
+        note = "截至 " + day(str(sl["as_of"])[:10]) + (f" · {source}" if 0 < len(source) <= 16 else "")
     return items, note
 
 
