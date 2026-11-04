@@ -71,3 +71,10 @@ html body .typeset-live-flow-layer:has(> button.b2-native.b2-image-action[data-b
 @media (orientation: landscape) and (min-width: 981px) {
   #computer-access-03.o3-ready .image-loading-wrap { display: none; }
 }
+
+/* 手机首屏先露资料状态与操作；此样式在保留页的 O3 样式之后注入。 */
+@media (orientation: portrait), (max-width: 980px) {
+  #computer-access-01 .o3-title { grid-column: 1 / 3; grid-row: 1; justify-self: start; width: 100%; }
+  #computer-access-01 .o3-art { grid-column: 3 / 4; grid-row: 1; justify-self: end; align-self: center; width: 96px; }
+  #computer-access-01 .o3-desc { grid-column: 1 / 4; grid-row: 19; font-size: 14px; }
+}
