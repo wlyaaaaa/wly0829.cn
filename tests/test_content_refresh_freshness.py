@@ -228,6 +228,35 @@ class FreshnessTests(unittest.TestCase):
         self.path.write_text(self.path.read_text("utf-8").replace("调用 4", "调用 9"), encoding="utf-8")
         self.assertEqual(close_run(self.root, result, report)["status"], "incomplete")
 
+    def test_display_projection_preserves_codes_and_rejects_old_dates_and_values(self):
+        from freshness import display_readback
+        from apply_edits import display_fragment
+        text = "1. `producer_verified_manifest_bound` 调用 4 次"
+        self.page.update(status_line=dict(state="常用", as_of="2026-11-02", last=dict(label="上次使用", at="2025-10-30 05:29"), source="来源说明" * 8), registry=dict(numbers=[dict(as_of="2026-11-02")]))
+        self.page["screens"][0]["text"] = text; self.write(self.path, self.page)
+        md = self.root / "site-astro/src/content/pages/demo.md"; md.parent.mkdir(parents=True)
+        md.write_text('---\n{"url":"/demo/"}\n---\n', encoding="utf-8")
+        target = self.root / "dist/demo/index.html"; target.parent.mkdir(parents=True)
+        def read(field, value):
+            proof = dict(locator=dict(file="sources/pages/demo/page.json", field=field, start=0, end=len(value)))
+            return display_readback(self.root, target.parent.parent, "demo", value, proof)
+        target.write_text("<p>1 producer_verified_manifest_bound 调用 4 次</p>", encoding="utf-8")
+        self.assertIn("producer_verified_manifest_bound", display_fragment(text, 0, len(text)))
+        self.assertEqual(read("screens[0].text", text), "verified")
+        target.write_text("<p>1 producer_verified_manifest_bound 调用 3 次</p>", encoding="utf-8")
+        self.assertEqual(read("screens[0].text", text), "failed")
+        target.write_text("<p>常用 · 上次使用 2025 年 10 月 30 日 05:29</p><p>截至 11 月 2 日</p>", encoding="utf-8")
+        self.assertEqual(read("status_line.last.at", "2025-10-30 05:29"), "verified")
+        self.assertEqual(read("status_line.as_of", "2026-11-02"), "verified")
+        target.write_text("<p>常用 · 上次使用 2024 年 10 月 30 日 05:29</p><p>截至 11 月 1 日</p>", encoding="utf-8")
+        self.assertEqual(read("status_line.last.at", "2025-10-30 05:29"), "failed")
+        self.assertEqual(read("status_line.as_of", "2026-11-02"), "failed")
+        self.assertEqual(read("status_line.source", self.page["status_line"]["source"]), "not_displayed_by_contract")
+        target.write_text("<p>数字截至 2026 年 11 月 2 日</p>", encoding="utf-8")
+        self.assertEqual(read("registry.numbers[0].as_of", "2026-11-02"), "verified")
+        target.write_text("<p>数字截至 2025 年 11 月 2 日</p>", encoding="utf-8")
+        self.assertEqual(read("registry.numbers[0].as_of", "2026-11-02"), "failed")
+
     def test_manual_state_review_and_semantic_due_require_actual_closure(self):
         result = self.collect()
         report = self.apply(result)

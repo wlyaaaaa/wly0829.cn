@@ -57,7 +57,7 @@ def display_fragment(text, start, end, bound_text=None):
     ends = [text.find(mark, end) for mark in marks]
     fragment = text[a:min((i for i in ends if i >= 0), default=len(text))]
     fragment = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", fragment)
-    return re.sub(r"^\s*[-#>]+\s*", "", re.sub(r"[`*_~]", "", fragment)).strip()
+    return re.sub(r"^\s*[-#>]+\s*", "", re.sub(r"[`*~]", "", fragment)).strip()
 
 
 def formatted(old, value):

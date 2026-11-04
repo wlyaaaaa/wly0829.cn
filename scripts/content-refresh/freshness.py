@@ -2,10 +2,15 @@
 from datetime import date, datetime, timedelta, timezone
 from html import unescape
 from html.parser import HTMLParser
+from functools import lru_cache
 import json
 import hashlib
 from pathlib import Path
 import re
+import runpy
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src/typeset"))
 
 BEIJING = timezone(timedelta(hours=8))
 BASE_POLICY = dict(current="every_request", semantic_review_days=28, historical="preserve")
@@ -121,15 +126,48 @@ class DisplayText(HTMLParser):
         if not self.hidden: self.parts.append(data)
 
 
-def display_readback(root, dist, page, fragment):
+@lru_cache(maxsize=1)
+def display_rules():
+    return runpy.run_path(str(Path(__file__).resolve().parents[2] / "site-astro/tools/convert_page.py"))
+
+
+def display_readback(root, dist, page, fragment, proof=None):
+    from apply_edits import display_fragment, field_at
+    from engine.parse import canon, expected_text
     md = root / "site-astro/src/content/pages" / (page + ".md")
     text = md.read_text("utf-8-sig") if md.exists() else ""
     route = json.loads(text.split("\n---\n", 1)[0][4:]).get("url", "/" + page + "/") if text.startswith("---\n") else "/" + page + "/"
     target = Path(dist) / route.lstrip("/")
     target = target / "index.html" if not target.suffix else target
     parser = DisplayText(); parser.feed(target.read_text("utf-8-sig"))
-    normalize = lambda value: " ".join(unescape(value).split())
-    return "verified" if normalize(fragment) and normalize(fragment) in normalize("".join(parser.parts)) else "failed"
+    visible = canon(unescape("".join(parser.parts)))
+    if proof and proof.get("locator", {}).get("file"):
+        locator = proof["locator"]
+        document = json.loads((root / locator["file"]).read_text("utf-8-sig"))
+        parent, key = field_at(document, locator["field"])
+        if "{{" not in parent[key]:
+            fragment = display_fragment(parent[key], locator["start"], locator["end"])
+        if expected_text(unescape(fragment)) and expected_text(unescape(fragment)) in visible:
+            return "verified"
+        field = locator.get("logical_field", locator["field"])
+        status = json.loads((root / "sources/pages" / page / "page.json").read_text("utf-8-sig")).get("status_line", {})
+        if status and (field.startswith("status_line.") or field.endswith(".as_of") or "截至" in fragment):
+            rules = display_rules(); items, note = rules["status_items"](status)
+            if field == "status_line.source" and len(str(status.get("source", "")).strip()) > 16:
+                return "not_displayed_by_contract"
+            if field == "status_line.last.at" and items:
+                fragment = items[0]["text"]
+            elif field in {"status_line.as_of", "status_line.source"}:
+                fragment = note
+            elif (field.endswith(".as_of") and parent[key] == status.get("as_of")
+                    or rules["same_day_note"](expected_text(fragment), status.get("as_of"))):
+                fragment = note
+        if field.endswith(".as_of") and re.fullmatch(r"\d{4}-\d{2}-\d{2}", parent[key]):
+            year, month, day = parent[key].split("-")
+            dated = f"数字截至 {year} 年 {int(month)} 月 {int(day)} 日"
+            if expected_text(dated) in visible: return "verified"
+    expected = expected_text(unescape(fragment))
+    return "verified" if expected and expected in visible else "failed"
 
 
 def derived_md_line(root, page, screen):
@@ -202,11 +240,11 @@ def close_run(root, result, report=None, dist=None):
                         if row.get("derive_as_of") and not date_line:
                             raise ValueError("派生截至日期未进入渲染输入")
                         if dist is not None:
-                            display = display_readback(root, dist, row["page"], proof.get("fragment", str(actual)))
-                            if display != "verified": raise ValueError("成品未找到新片段")
+                            display = display_readback(root, dist, row["page"], proof.get("fragment", str(actual)), proof)
+                            if display not in {"verified", "not_displayed_by_contract"}: raise ValueError("成品未找到新片段")
                             if date_line and display_readback(root, dist, row["page"], date_line) != "verified":
                                 raise ValueError("成品未找到派生截至日期")
-                        status = "applied_readback_verified"
+                        status = "source_only_verified" if display == "not_displayed_by_contract" else "applied_readback_verified"
                         synced.append(row)
                     else:
                         reason = "变化项缺同轮字段、记录或 Markdown 成功回读"
