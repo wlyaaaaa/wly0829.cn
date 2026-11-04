@@ -179,7 +179,7 @@ function paint() {
   if (river?.ready && view.automation.items.length) river.setSnapshot(riverSnapshot(view), false);
   // 读到新数据后还找不到的：是 AI 自己的活（AI 在跟、AI 已定、AI 等条件的）就去“AI 的账本”那一页找；
   // 别的（条目已经办完关掉了）不再惦记，免得过一会儿突然跳走
-  if (wanted && shown && !reveal(true) && !offline) { if (onLedger(wanted)) location.replace('/cockpit/ai/#' + encodeURIComponent(wanted)); wanted = ''; }
+  if (wanted && shown && !reveal(true) && !offline) { const id = wanted; if (!openTo(id, true)) { if (onLedger(id)) location.replace('/cockpit/ai/#' + encodeURIComponent(id)); wanted = ''; } }
 }
 
 // ---- 本人设备上的收起、提醒与复制（见 actions.js）----
@@ -304,12 +304,14 @@ if (window.todayRiver?.ready) feedRiver(); else document.addEventListener('today
 // 认两种写法：页面元素自己的 id（如 todo-…、know-…、ai-running），或条目原编号（每条的 data-items 里）。
 // 首帧是构建时的旧数，新条目要等第一次读到新数据才画出来，所以没找到时记着，每次换字后再找一次。
 const hashId = () => { try { return decodeURIComponent(location.hash.slice(1)).trim(); } catch { return ''; } };
-// 分区落点（#need-you、#tasks、项目名等）照浏览器原样跳，不高亮；只认条目。落点在收起的折叠里（如“正常运行的 N 个”里的项目名）时先打开折叠再跳
-function openTo(id) {
+// 分区落点不高亮；首帧被实时数据重绘后再定位一次，随后不跟每分钟刷新抢滚动。
+function openTo(id, final = false) {
   const el = id && !id.startsWith('pair=') ? document.getElementById(id) : null;
-  if (!el || !el.closest('details:not([open])')) return;
+  if (!el) return false;
+  if (final) wanted = '';
   for (let p = el.parentElement; p; p = p.parentElement) if (p.tagName === 'DETAILS') p.open = true;
-  el.scrollIntoView({ block: 'start' });
+  requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }));
+  return true;
 }
 // AI 自己的活（AI 在跟、过了日子的、AI 已定、AI 等条件的）在二级页“AI 的账本”上
 const onLedger = (id) => location.pathname === '/cockpit/' && [...view.ai_following, ...(view.ai_overdue || []), ...view.deferred.filter((x) => x.action_owner && x.action_owner !== 'user'),
@@ -532,7 +534,7 @@ function syncTab() {
   img.src = iconWas.href;
 }
 
-window.addEventListener('hashchange', () => { wanted = hashId(); if (!reveal(shown > 0)) openTo(wanted); });
+window.addEventListener('hashchange', () => { wanted = hashId(); if (!reveal(shown > 0)) openTo(wanted, shown > 0); });
 wanted = hashId();
 syncWide();
 if (!reveal(false)) openTo(wanted);
