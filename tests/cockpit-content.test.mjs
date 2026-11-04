@@ -9,6 +9,25 @@ const view = (extra = {}, kind = 'owner') => normalize({ schema: 'pcconfig.cockp
 const visible = (h) => h.replace(/<[^>]*>/g, '');
 const copyOf = (h) => [...h.matchAll(/data-copy="([^"]*)"/g)].map((m) => m[1]).join('\n');
 
+test('项目短句优先，完整旧句和等待数收进默认关闭的“具体”；旧后端照旧', () => {
+  const full = '自动任务 3 个有状况；等你 1 件；AI 正在查 4 件';
+  const item = { name: '示例项目', overview: 'error', run_health: 'failed', waiting_user: 1, waiting_ai: 4, health_reason: full };
+  const render = (extra) => REGIONS.projects(view({ projects: { items: [{ ...item, ...extra }] } }), ctx);
+  const short = '等你 1 件，AI 在查 4 件';
+  const html = render({ health_short: short });
+  const front = /<b>示例项目<\/b><span>([^]*?)<\/span>/.exec(html)?.[1] || '';
+  assert.equal(front, short);
+  assert.ok(front.length <= 40);
+  assert.doesNotMatch(front, /；|等 AI/);
+  assert.match(html, /<details class="cp-proj-detail"><summary>具体<\/summary>/);
+  assert.match(html, /<p>自动任务 3 个有状况；等你 1 件；AI 正在查 4 件 · 等你 1 件 · 等 AI 4 件<\/p>/);
+  for (const extra of [{}, { health_short: '  ' }, { health_short: null }]) {
+    const old = render(extra);
+    assert.match(old, /自动任务 3 个有状况；等你 1 件；AI 正在查 4 件 · 等你 1 件 · 等 AI 4 件/);
+    assert.doesNotMatch(old, /cp-proj-detail/);
+  }
+});
+
 test('运行每行都有复制，打开对话在同一按钮行；最近动静优先真正活动，路径原文只进复制', () => {
   const source = { id: 'r1', status: 'running', title: '示例对话 E:\\示例\\项目', doing: '读取 E:\\示例\\原件.txt',
     progress: { text: '已保存到 E:\\示例\\输出.txt', at: '2026-10-30T08:00:00+08:00' }, last_activity_at: at,

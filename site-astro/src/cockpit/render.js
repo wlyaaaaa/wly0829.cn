@@ -824,8 +824,10 @@ export function projects(v, ctx) {
   const row = (p, s) => {
     const wait = [p.waiting_user ? `等你 ${p.waiting_user} 件` : '', p.waiting_ai ? `等 AI ${p.waiting_ai} 件` : '', p.on_hold ? `暂缓 ${p.on_hold} 件` : ''].filter(Boolean).join(' · ');
     const [id, ...more] = idsOf(slugOf(ctx.projectUrls?.[p.name]));
-    const why = [p.health_reason, wait].filter(Boolean).join(' · '), info = know(p).map((x) => x.text.trim()).join('；');
-    return `<li class="cp-proj is-${light(s)}"${id ? ` id="${esc(id)}"` : ''}>${more.map(anchor).join('')}${dot(s)}<b>${name(p)}</b>${why ? `<span>${esc(plain(why))}</span>` : ''}${info ? `<small>知道就行：${esc(plain(info))}</small>` : ''}</li>`;
+    const brief = typeof p.health_short === 'string' ? p.health_short.trim() : '';
+    const full = [p.health_reason, wait].filter(Boolean).join(' · '), why = brief || full, info = know(p).map((x) => x.text.trim()).join('；');
+    const detail = brief && full ? `<details class="cp-proj-detail"><summary>具体</summary><p>${esc(plain(full))}</p></details>` : '';
+    return `<li class="cp-proj is-${light(s)}"${id ? ` id="${esc(id)}"` : ''}>${more.map(anchor).join('')}${dot(s)}<b>${name(p)}</b>${why ? `<span>${esc(plain(why))}</span>` : ''}${detail}${info ? `<small>知道就行：${esc(plain(info))}</small>` : ''}</li>`;
   };
   // 等你动手的项目一行一个露在外面；AI 在查的、只有“知道就行”的收进一行；正常的再收一行
   const busy = live.filter((p) => stateOf(p) !== 'ok' || p.waiting_user > 0 || know(p).length), calm = live.filter((p) => !busy.includes(p));
@@ -1059,7 +1061,7 @@ function backupIssue(ov) {
   const n = Number.isFinite(Number(bk.value)) && Number(bk.value) > 0 ? Number(bk.value) : why.length;
   if (n <= 1) return why[0] || (n ? '1 项要留意' : '');
   // 只留第一项的名字：“开发配置备份超过 72 小时没成功”→“开发配置”
-  const name = ((/^(.+?)(?:的?备份|失败|过期|超过|需要留意|要留意)/.exec(why[0] || '') || [])[1] || '').trim();
+  const name = ((/^(.+?)(?:的?备份)?(?:失败|过期|超过|需要留意|要留意)/.exec(why[0] || '') || [])[1] || '').trim();
   return `${n} 项备份${why.length && why.every((t) => /失败$/.test(t)) ? '失败' : '要留意'}${name ? `（${name}等）` : ''}`;
 }
 // 首屏三格的内容：每格 {state, status, who, why, note, short, brief}
@@ -1089,7 +1091,8 @@ function triCells(v, ctx, off) {
   // 这周反复出错：后端 task_health.current_repeated_7d（最近仍失败、七天至少 5 次的条数）是 0 时不挂；有数时列最近仍失败的那几条
   const cur = v.overview?.task_health?.current_repeated_7d;
   const repeat = cur === 0 ? [] : v.automation.items.filter((t) => Number(t.failures_7d) >= 5 && t.state === 'failed').sort((a, b) => b.failures_7d - a.failures_7d);
-  const tkLevel = rec && !rec.open && !repeat.length && LV[tk.level] ? 'ok' : tk.level;
+  const tkSig = nErr === 0 && repeat.length ? { ...tk, ...(ov?.sections?.automation || { level: 'watch', color: 'neutral' }) } : nErr === 0 ? { ...tk, color: 'ok' } : tk;
+  const tkLevel = nErr === 0 && repeat.length ? tkSig.level : rec && !rec.open && !repeat.length && LV[tk.level] ? 'ok' : tk.level;
   const tkStatus = nErr == null ? (tk.word || '读不到') : nErr === 0 ? (repeat.length ? '这周反复出错' : '今天都正常') : rec ? `今天 ${nErr} 个出错还没恢复` : `今天出错 ${nErr} 个`;
   const tkWhy = [Number.isFinite(sum.tasks_run) ? `今天跑了 ${sum.tasks_run} 个${errs && !rec ? `，出错 ${total} 个（${errorsText(errs)}）` : ''}` : '', repeat.length ? `这周反复出错：${repeat.slice(0, 2).map((t) => `${t.name} ${t.failures_7d} 次`).join('、')}` : ''].filter(Boolean).join('；');
   const tkNote = rec && rec.done ? `今天出过错、已恢复 ${rec.done} 个` : '';
@@ -1103,7 +1106,7 @@ function triCells(v, ctx, off) {
   return [
     make('computer', '电脑', pcLevel, pc, pcStatus, '不用你管', '正常', pcDetail, upNote),
     // 现在没有仍失败的、也没有当前反复出错的：这一格就是正常（绿），不因后端 color=neutral 写成“今天都正常，AI 在管”
-    make('tasks', '自动任务', tkLevel, nErr === 0 && !repeat.length ? { ...tk, color: 'ok' } : tk, tkStatus, '不用你管', '都正常', tkWhy, tkNote),
+    make('tasks', '自动任务', tkLevel, tkSig, tkStatus, '不用你管', '都正常', tkWhy, tkNote),
     make('backup', '备份', bk.level, bk, bkStatus, '不用你管', '都按时', bkMore),
   ];
 }
@@ -1126,7 +1129,7 @@ const anchorOf = (r) => (r.section === 'today' && /任务/.test(r.text) ? 'tasks
 // 谁在管：后端 overview.sections[区].color / owner_action 说了算（和状态格同一套），AI 在管写“AI 在修，不用你管”
 const WHO_TEXT = { neutral: 'AI 在修，不用你管', attention: '要你看', red: '要你看' };
 const whoOfSec = (ov, sec) => { const s = ov?.sections?.[sec]; return s ? WHO_TEXT[ownerState(s.level, s)] || '' : ''; };
-const backupName = (t) => String(t || '').replace(/(的?备份)?(失败|过期|需要留意|要留意)$|(的?备份)?超过.*$/, '').trim();
+const backupName = (t) => String(t || '').replace(/(失败|过期|需要留意|要留意)$|超过.*$/, '').trim();
 // 扣分合并成几行：备份几项合成一行（“备份 3 项失败”），“自动任务尚未确认恢复 2 个”写成“自动任务 2 个没恢复”，其余照后端原句
 export function scoreGroups(ov) {
   const list = (Array.isArray(ov?.reasons) ? ov.reasons : []).filter((r) => r && typeof r.text === 'string' && r.text.trim() && Number.isFinite(r.delta) && r.delta < 0);

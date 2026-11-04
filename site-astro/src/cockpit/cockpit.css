@@ -640,6 +640,8 @@ ul.cp-know-sub > li > :is(.cp-oa, .cp-oa-status) { grid-column: 1; }
 .cp-proj-list span { color: var(--cp-soft); overflow-wrap: anywhere; }
 .cp-proj-list :is(span:not(.cp-dot), small) { grid-column: 2; }
 .cp-proj-list small { font-size: 13px; color: var(--cp-soft); overflow-wrap: anywhere; }
+.cp-proj-list .cp-proj-detail { grid-column: 2; font-size: 13px; color: var(--cp-soft); }
+.cp-proj-detail summary { cursor: pointer; }
 
 /* AI 正在干活：首屏只露件数和卡住要你看的；其余点开 */
 .cp-run-list.is-stuck { margin-top: 6px; }

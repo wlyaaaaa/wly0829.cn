@@ -93,9 +93,10 @@ def fixture(mode):
     if mode in ['partial','errors']:
         rows.append(row('未知','unknown'))
     if mode == 'errors':
-        rows.extend([row('失败','failed',last_run_at=iso(now-120),status_note='合成失败原因'),
+        rows.extend([row('失败','failed',last_run_at=iso(now-120),status_note='合成失败原因',failures_7d=3),
                      row('过期','overdue',status_note='合成过期原因'),
-                     row('灯出错','failed',schedule_zh='每 5 分钟一次',last_run_at=iso(now-60))])
+                     row('灯出错','failed',schedule_zh='每 5 分钟一次',last_run_at=iso(now-60),failures_7d=7),
+                     row('已恢复',last_run_at=iso(now-90),failures_7d=9), row('未满三次',failures_7d=2)])
         rows.append(row('内部编号','never',plain={}))
     if mode in ['panel-heartbeat','panel-exit']:
         rows=[row('副屏','failed',schedule_zh='常驻',last_run_at=iso(now-36000),heartbeat_at=iso(now-300),related_status={'panel':'stale'},public_message='出错了' if mode=='panel-exit' else '不知道，这次没读到副屏心跳',notice_kind='error' if mode=='panel-exit' else 'unknown',outcomes={'kind':'panel_heartbeat','state':'failed' if mode=='panel-exit' else 'stale','execution_failed':mode=='panel-exit','heartbeat_at':iso(now-300)})]
@@ -139,7 +140,7 @@ def verify_single_river(site):
                 refs['mount'].append(tag)
             for kind, value in [('script', data.get('src')), ('script', data.get('data-src')), ('link', data.get('href'))]:
                 filename = Path(urlsplit(value).path).name if value else ''
-                if tag == kind and filename.startswith('today-river-') and filename.endswith('.js' if kind == 'script' else '.css'):
+                if tag == kind and filename.startswith(('today-river-', 'today-river.')) and filename.endswith('.js' if kind == 'script' else '.css'):
                     refs[kind].append(value)
     parser = RiverTags()
     parser.feed((site / 'cockpit/index.html').read_text('utf8'))
@@ -299,6 +300,9 @@ async def main(args):
                 assert partial['model']['fog']==1 and '读到结果的任务都没有出错' in partial['headline'] and '好坏还不知道' in ''.join(partial['groups']),partial
                 results.append({'device':device,'case':'partial-unknown','snapshot':partial})
                 bad=await refresh('errors')
+                repeated=await page.locator('#today-river #g-repeat > summary').text_content()
+                assert '这周出错 3 次以上（3 个）' in repeated and '现在还失败的排前面。健康分只扣错满 5 次、现在还没好的。' in repeated,repeated
+                assert await page.locator('#today-river #g-repeat .row > summary .nm').all_text_contents()==['合成灯出错 · 最近一次出错','合成失败 · 最近一次出错','合成已恢复 · 最近一次正常']
                 assert '其中 1 个有问题' in bad['headline'] and any('上次时间没读到 · 过期' in x for x in bad['tips']),bad
                 assert '过期' in await page.locator('#today-river #alerts').text_content(),bad
                 assert '没写名字的任务' in await page.locator('#today-river #log').text_content(),bad

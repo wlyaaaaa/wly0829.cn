@@ -29,7 +29,7 @@ const view = (extra = {}) => normalize({ schema: 'pcconfig.cockpit-view.v1', ser
 test('健康分：大数字下面直接写最大的几项扣分，点开每行写谁在管、修好能回到几分，点哪行跳到那块', () => {
   const groups = scoreGroups(overview());
   assert.deepEqual(groups.map((g) => [g.label, g.delta, g.anchor]), [['备份 3 项失败', -30, 'backup'], ['自动任务 2 个没恢复', -16, 'tasks'], ['近 7 天 1 个任务反复出错', -8, 'tasks']]);
-  assert.deepEqual(groups[0].names, ['示例甲', '示例乙记录', '示例丙配置']);
+  assert.deepEqual(groups[0].names, ['示例甲备份', '示例乙记录', '示例丙配置']);
   const html = REGIONS['overview-tri'](view(), ctx());
   const top = textOnly(/<span class="cp-score-top">([^]*?)<\/span><span class="cp-score-why/.exec(html)?.[1] || '');
   assert.equal(top, '备份 3 项失败 −30 · 自动任务 2 个没恢复 −16 · 近 7 天 1 个任务反复出错 −8 ›');
@@ -46,6 +46,31 @@ test('健康分：大数字下面直接写最大的几项扣分，点开每行�
   const full = REGIONS['overview-tri'](view({ overview: overview({ score: 100, reasons: [] }) }), ctx());
   assert.match(full, /<span class="cp-score-top">没有扣分的地方/);
   assert.doesNotMatch(full, /全部修好/);
+});
+
+test('备份名称保留“备份”，五格不把第二备份盘截成“第二”', () => {
+  const reasons = ['第二备份盘同步失败', '文档文件夹备份过期', '开发配置备份超过 72 小时没成功'].map((text) => ({ text, section: 'backup_cloud', delta: -10 }));
+  const o = overview({ reasons });
+  assert.deepEqual(scoreGroups(o)[0].names, ['第二备份盘同步', '文档文件夹备份', '开发配置备份']);
+  const html = REGIONS['overview-tri'](view({ overview: o }), ctx());
+  assert.match(textOnly(html), /3 项备份要留意（第二备份盘同步等）/);
+  assert.doesNotMatch(textOnly(html), /（第二等）/);
+});
+
+test('今天全好但本周仍反复失败：取自动任务区的灯和层级，只有真正恢复才绿', () => {
+  const signals = [{ id: 'today_tasks', level: 'ok', color: 'ok', value: 0, recovered_today: 2 }];
+  const render = (sections, items) => REGIONS['overview-tri'](view({ overview: overview({ signals, sections, task_health: { current_repeated_7d: items.length } }), automation: { items } }), ctx());
+  const items = [{ name: '示例任务', state: 'failed', failures_7d: 7 }];
+  const task = (h) => /data-signal="tasks"[^]*?<\/li>/.exec(h)?.[0] || '';
+  for (const sections of [{ automation: sec() }, {}]) {
+    const html = task(render(sections, items));
+    assert.match(html, /cp-dot is-neutral/);
+    assert.match(textOnly(html), /这周反复出错AI 在修，不用你管/);
+  }
+  assert.match(task(render({ automation: sec('yellow', { level: 'watch', owner_action: 'do' }) }, items)), /cp-dot is-yellow/);
+  const normal = task(render({ automation: sec() }, []));
+  assert.match(normal, /cp-dot is-green/);
+  assert.match(textOnly(normal), /今天都正常不用你管/);
 });
 
 test('健康分：读到时间和页面时间一样时不另写，旧 15 分钟以上才写几点读到', () => {

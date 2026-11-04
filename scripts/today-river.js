@@ -261,7 +261,7 @@ function texts(ranToday, nShore) {
   const anyMine = M.tasks.some(t => t.raw.plain?.mine === true), other = x => anyMine && (x.t || x).raw?.plain?.mine !== true;
   const group = (key, title, say, list, open, timeOf, colorOf, head, fold, nameOf = x => (x.t || x).name) => { if (!list.length) return;
     const d = mk('details', 'group', log); d.id = 'g-' + key; d.open = open;
-    d.innerHTML = `<summary><span class="dot" style="--c:${head}"></span>${title}<span class="n">${list.length}</span><span class="say">${say}</span></summary><div class="rows"></div>`;
+    d.innerHTML = `<summary><span class="dot" style="--c:${head}"></span>${title}<span class="n">${key === 'repeat' ? `（${list.length} 个）` : list.length}</span><span class="say">${say}</span></summary><div class="rows"></div>`;
     const folded = fold ? list.filter(fold) : [], bad = folded.filter(x => (x.t || x).alert).length;
     const box = folded.length ? mk('details', 'row fold', null, `<summary><span class="dot" style="--c:#c3ccc8"></span><span class="t">${folded.length} 个</span><span class="nm">别的软件自带的，${bad ? `其中 ${bad} 个要看` : '都正常'}（点开看）</span></summary><div class="rows"></div>`) : null;
     list.forEach(x => { const t = x.t || x, inBox = box && folded.includes(x), r = mk(t.raw ? 'details' : 'div', 'row', inBox ? box.lastChild : d.lastChild);
@@ -275,9 +275,9 @@ function texts(ranToday, nShore) {
   const latest = t => ({ ok: '最近一次正常', bad: '最近一次出错', warn: '最近一次要留意', ai: '最近一次有状况，AI 在管', gray: '最近一次结果还不知道' })[t.flag];
   const after = x => { const t = x.t, at = parse(x.e.at); if (!t) return '没在任务清单里找到它'; return t.flag === 'ok' && t.last > at ? `${hm(t.last)} 又跑了一次，正常` : latest(t); };
   group('errtoday', '今天出过错的', '和最上面“今天的任务出错”是同一份；出错后又跑成功的写在后面', errs, true, x => parse(x.e.at) > 0 ? hm(parse(x.e.at)) : '', x => x.t?.flag === 'bad' ? C.bad : x.t?.flag === 'ai' ? C.ai : C.warn, C.bad, null, x => `${(x.t || x).name}${x.e.owner === 'other' ? '（别的软件自带）' : ''} · ${after(x)}`);
-  // 这周反复出错：后端给每个任务近 7 天失败次数 failures_7d；没给这个字段就不出这一组
-  const repeat = M.tasks.filter(t => Number.isFinite(t.raw.failures_7d) && t.raw.failures_7d >= 3).sort((a, b) => b.raw.failures_7d - a.raw.failures_7d);
-  group('repeat', '这周反复出错', '近 7 天出错 3 次以上；今天好了也列在这里', repeat, true, t => `${t.raw.failures_7d} 次`, t => C[t.flag === 'ok' ? 'warn' : t.flag], C.warn, null, t => `${t.name} · ${latest(t)}`);
+  // 近 7 天出错满 3 次就列出（含已恢复的）；仍失败的先列，组内按次数排。
+  const repeat = M.tasks.filter(t => Number.isFinite(t.raw.failures_7d) && t.raw.failures_7d >= 3).sort((a, b) => Number(b.raw.state === 'failed') - Number(a.raw.state === 'failed') || b.raw.failures_7d - a.raw.failures_7d);
+  group('repeat', '这周出错 3 次以上', '现在还失败的排前面。健康分只扣错满 5 次、现在还没好的。', repeat, true, t => `${t.raw.failures_7d} 次`, t => C[t.flag === 'ok' ? 'warn' : t.flag], C.warn, null, t => `${t.name} · ${latest(t)}`);
   const day = ms => !(ms > 0) ? '' : dkey(ms) === M.today ? hm(ms) : `${bj(ms).getUTCMonth() + 1}月${bj(ms).getUTCDate()}日`;
   group('alert', '现在出错的、要留意的', '按最近一次运行的结果', M.alerts, true, t => day(t.last), t => C[t.flag], C.bad);
   group('past', M.stale ? '当时已跑完的' : '今天跑完的', '浮标左边升了旗的船', M.past.filter(p => p.t.ran).sort((a, b) => b.at - a.at), true, p => hm(p.at), p => C[p.t.flag], C.ok, other);
