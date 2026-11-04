@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/chinese-asr-runtime-privacy/page.json",
-  "sha256": "de5e23fc21b99d7bb2ba2de222db28c78c754a38f94bacab25b5a7dfe6198411",
-  "converted_at_beijing": "2026-11-04T12:05:28+08:00"
+  "sha256": "4312d297b5718e994eddbad6c1518693c028dea250ad4f9e193c0c380223cec4",
+  "converted_at_beijing": "2026-11-04T19:02:45+08:00"
  }
 }
 ---
@@ -1058,7 +1058,7 @@ AI 处理选定录音时免费期内先上云，桌面听写始终留在本机�
 
 - 微信实时语音没有现成文字时，会把这条语音送配置的云通道；这是 WeChatDirect 实时会话的并行路线，不经过文件任务队列。
 
-- 云优先不是逐字认证：云端成功不等于文字准确。法律、投诉、雇佣等证据录音，云结果是能力优先的专业候选，本地证据链按当次用途和真实分歧补做。
+- 云优先不是逐字认证：云端成功不等于文字准确。要当证据用的录音，云结果是能力优先的专业候选，本地证据链按当次用途和真实分歧补做。
 
 - 云入口的精确数据目的地是阿里云百炼北京区 `qwen-audio-3.1-asr-flash` 与 `qwen-audio-3.1-asr-flash-message`；3.0 Legacy 后备 10 月 20 日已删，需要公网 URL 的 filetrans 不属于当前能力。
 

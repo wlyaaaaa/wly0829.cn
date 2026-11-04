@@ -21,20 +21,33 @@
         "row": "hero"
       },
       {
-        "type": "illustration",
-        "size": "medium",
-        "illustration": "outside",
-        "row": "hero",
-        "width": "40%",
-        "align": "center"
-      },
-      {
         "type": "points_card",
         "text_ref": "先分清两件事：手机能看步骤，不等于手机能修好。每条都写了“手机上”能不能做：",
         "columns": 1,
         "whole_block": true,
         "illustration": "none",
-        "icons": "none"
+        "icons": "none",
+        "row": "hero"
+      },
+      {
+        "type": "illustration",
+        "size": "medium",
+        "illustration": "outside",
+        "row": "hero",
+        "width": "40%",
+        "align": "center",
+        "asset": "_library/illustrations/ill-9a8ad6f966959d.png",
+        "panel_asset_sha256": "139c6945a70dc781cc012b5fbf93ebfe657e122702b5997fa59514e41a5ae548",
+        "panels": [
+          [
+            0,
+            0,
+            617,
+            299
+          ]
+        ],
+        "panel_renderer": "svg",
+        "row_valign": "center"
       },
       {
         "type": "section_heading",
@@ -79,7 +92,22 @@
         "type": "illustration",
         "size": "medium",
         "illustration": "outside",
-        "align": "center"
+        "align": "center",
+        "asset": "_library/illustrations/ill-9a8ad6f966959d.png",
+        "panel_asset_sha256": "139c6945a70dc781cc012b5fbf93ebfe657e122702b5997fa59514e41a5ae548",
+        "panels": [
+          [
+            0,
+            0,
+            617,
+            299
+          ]
+        ],
+        "panel_renderer": "svg",
+        "row": "hero-art",
+        "width": "55%",
+        "row_align": "center",
+        "row_v": true
       },
       {
         "type": "points_card",

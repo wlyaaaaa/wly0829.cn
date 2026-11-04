@@ -122,3 +122,5 @@
 #one-sentence .rule,#one-sentence .take,#one-sentence .ai{ margin-left:22px; }
 #one-sentence .slot,#one-sentence #how-demo-fly{ font-size:14.5px; }
 #one-sentence .result .in{ padding-left:52px; }}
+
+#how-17 .ts-h .ts-canvas > [data-comp="content_card"]{align-items:start}

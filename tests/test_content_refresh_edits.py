@@ -9,7 +9,7 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts/content-refresh"))
 from apply_edits import apply_edits as _apply_edits, build_number_edits, display_fragment, digest
-from authors import affected_pages, resolve_author
+from authors import affected_pages, resolve_author, sync_roster
 from freshness import close_run
 
 FAKE_CONVERTER = '''import json, os, re, sys
@@ -23,7 +23,7 @@ def render(root, pages, output_dir=None):
         if isinstance(value, list): return [expand(v) for v in value]
         if isinstance(value, str) and re.fullmatch(r"\\{\\{[^{}]+\\}\\}", value):
             ref, *parts = value[2:-2].split(".")
-            path = "scripts/how-demo-data.json" if ref == "stories" else f"sources/pages/{ref}/page.json"
+            path = "config/model-roster.json" if ref == "roster" else "scripts/how-demo-data.json" if ref == "stories" else f"sources/pages/{ref}/page.json"
             value = json.loads((root / path).read_text("utf-8-sig"))
             for part in parts:
                 value = value[int(part)] if isinstance(value, list) else value[part]
@@ -74,6 +74,41 @@ class NumberEditsTests(unittest.TestCase):
 
     def build(self):
         return build_number_edits(self.root, {"rows": self.rows})
+
+    def test_roster_date_updates_public_snapshot_and_existing_render_dependencies(self):
+        path = self.root / "config/model-roster.json"; path.parent.mkdir()
+        names = ("写代码、改脚本、修 bug", "调研、查事实（要可靠、少编造）", "给本人看的文字和分析：汇报、网站文案、方案、对本人经历和偏好的理解", "看图、审图、截图录屏、操作电脑和浏览器", "生图")
+        public = {"updated_beijing_date": "2026-10-29", "update_rule": "keep", "routing": {"scenarios": [dict(scenario=n, claude="same", gpt="same") for n in names]}}
+        path.write_text(json.dumps(public, ensure_ascii=False), encoding="utf8")
+        source = self.root / "owner.json"; public.update(updated_beijing_date="2026-11-03", update_rule="new", project_models={"private": "excluded"})
+        source.write_text(json.dumps(public, ensure_ascii=False), encoding="utf8")
+        how = self.root / "sources/pages/how/page.json"; how.parent.mkdir()
+        self.page.update(page="how", roster_date="{{roster.updated_beijing_date}}", based_on={"model_roster_source": str(source)})
+        how.write_text(json.dumps(self.page), encoding="utf8"); fake_converter(self.root, {"how"})
+        row = dict(id="how-model-roster-updated-date", page="how", screen="top", field="roster_date",
+            old_value="2026-10-29", new_value="2026-11-03", status="changed", scope_status="verified",
+            source_observed_at="2026-11-04T12:00:00+08:00")
+        payload = build_number_edits(self.root, {"rows": [row]}); report = apply_edits(self.root, payload)
+        self.assertFalse(payload["skipped"] + report["skipped"])
+        self.assertEqual((payload["edits"][0]["file"], report["markdown_readback"][0]["status"]), ("config/model-roster.json", "verified"))
+        self.assertEqual((json.loads(path.read_text("utf8"))["updated_beijing_date"], report["model_roster_sync"]["changes"][0]["field"]), ("2026-11-03", "update_rule"))
+        self.assertNotIn("project_models", json.loads(path.read_text("utf8")))
+        self.assertIn("2026-11-03", (self.root / "site-astro/src/content/pages/how.md").read_text("utf8"))
+        self.assertEqual(apply_edits(self.root, payload)["applied"], 0)
+        self.assertEqual(sync_roster(self.root, source)["changes"], [])
+        before = path.read_bytes(); public["routing"]["scenarios"].pop(); public["update_rule"] = "must not apply"
+        source.write_text(json.dumps(public, ensure_ascii=False), encoding="utf8")
+        row.update(old_value="2026-11-03", status="unchanged", checked_at="2026-11-04T12:00:00+08:00", observation_basis="live_read")
+        result = dict(schema="content-refresh.result.v1", run_id="roster-run", rows=[row])
+        failed = apply_edits(self.root, build_number_edits(self.root, result))
+        closed = close_run(self.root, result, failed)
+        self.assertEqual(failed["model_roster_sync"]["status"], "failed")
+        self.assertEqual((closed["status"], closed["pending"]), ("incomplete", 1))
+        self.assertEqual(path.read_bytes(), before)
+        self.assertEqual(closed["rows"][0]["status"], "pending")
+        self.page["roster_date"] = "{{roster.update_rule}}"; how.write_text(json.dumps(self.page), encoding="utf8")
+        with self.assertRaisesRegex(ValueError, "placeholder_computed_value"):
+            resolve_author(self.root, "how", "roster_date")
 
     def test_unchanged_five_counts_still_refresh_dates_and_second_run_is_identical(self):
         payload = self.build()

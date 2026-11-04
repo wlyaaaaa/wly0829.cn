@@ -237,7 +237,7 @@
  "source": {
   "page": "sources/pages/rescue/page.json",
   "sha256": "6aaa9e19bfdc0d04000674da3f4740bc73cbf9fb1298d5e2e6fc0455f0c73024",
-  "converted_at_beijing": "2026-11-04T12:05:37+08:00"
+  "converted_at_beijing": "2026-11-04T19:02:45+08:00"
  }
 }
 ---
@@ -325,12 +325,20 @@
      "align": "left",
      "size": "large",
      "row": "hero",
-     "width": "60%",
-     "row_fit_illustration": true
+     "width": "60%"
     },
     {
      "type": "prose",
      "text_ref": "电脑出事时先看这一页。它不连电脑、不读任何实时数据，电脑关着、网络慢的时候，手机也能打开。按症状找到那一条，照着做最短的",
+     "row": "hero"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "先分清两件事：手机能看步骤，不等于手机能修好。每条都写了“手机上”能不能做：",
+     "columns": 1,
+     "whole_block": true,
+     "illustration": "none",
+     "icons": "none",
      "row": "hero"
     },
     {
@@ -339,15 +347,19 @@
      "illustration": "outside",
      "row": "hero",
      "width": "40%",
-     "align": "center"
-    },
-    {
-     "type": "points_card",
-     "text_ref": "先分清两件事：手机能看步骤，不等于手机能修好。每条都写了“手机上”能不能做：",
-     "columns": 1,
-     "whole_block": true,
-     "illustration": "none",
-     "icons": "none"
+     "align": "center",
+     "asset": "_library/illustrations/ill-9a8ad6f966959d.png",
+     "panel_asset_sha256": "139c6945a70dc781cc012b5fbf93ebfe657e122702b5997fa59514e41a5ae548",
+     "panels": [
+      [
+       0,
+       0,
+       617,
+       299
+      ]
+     ],
+     "panel_renderer": "svg",
+     "row_valign": "center"
     },
     {
      "type": "section_heading",
@@ -386,7 +398,22 @@
      "type": "illustration",
      "size": "medium",
      "illustration": "outside",
-     "align": "center"
+     "align": "center",
+     "asset": "_library/illustrations/ill-9a8ad6f966959d.png",
+     "panel_asset_sha256": "139c6945a70dc781cc012b5fbf93ebfe657e122702b5997fa59514e41a5ae548",
+     "panels": [
+      [
+       0,
+       0,
+       617,
+       299
+      ]
+     ],
+     "panel_renderer": "svg",
+     "row": "hero-art",
+     "width": "55%",
+     "row_align": "center",
+     "row_v": true
     },
     {
      "type": "points_card",

@@ -1,5 +1,6 @@
 """定位真实 JSON 作者，并核对作者转换出的 Markdown。"""
 import json
+from hashlib import sha256
 import os
 from pathlib import Path
 import re
@@ -29,6 +30,8 @@ def resolve_author(root, page, field):
             if not match:
                 return dict(file=filename, field=concrete)
             ref, field = match[1].split(".", 1)
+            if ref == "roster" and field == "updated_beijing_date":
+                return dict(file="config/model-roster.json", field=field)
             if ref in {"scale", "rules", "group_counts", "roster"}:
                 raise ValueError("placeholder_computed_value")
             if not re.fullmatch(r"[\w-]+", ref):
@@ -55,9 +58,33 @@ def affected_pages(root, files):
                 for m in PLACEHOLDER.finditer(path.read_text("utf-8-sig"))}
         if (source.parent.name in changed or refs & changed or "scale" in refs and changed
                 or "group_counts" in refs and "projects-home" in changed
+                or "roster" in refs and "config/model-roster.json" in files
                 or "stories" in refs and "scripts/how-demo-data.json" in files):
             affected.add(source.parent.name)
     return affected
+
+
+def sync_roster(root, source):
+    """只同步 how 已公开引用的固定字段；保留快照其余字段及排版。"""
+    path = Path(root) / "config/model-roster.json"
+    raw = path.read_text("utf-8-sig"); public = json.loads(raw)
+    payload = Path(source).read_bytes(); current = json.loads(payload)
+    pairs = [(public, current, key, key) for key in ("updated_beijing_date", "update_rule")]
+    for name in ("写代码、改脚本、修 bug", "调研、查事实（要可靠、少编造）",
+                 "给本人看的文字和分析：汇报、网站文案、方案、对本人经历和偏好的理解",
+                 "看图、审图、截图录屏、操作电脑和浏览器", "生图"):
+        rows = [next(r for r in data["routing"]["scenarios"] if r["scenario"] == name) for data in (public, current)]
+        pairs.extend((rows[0], rows[1], key, f"routing.scenarios.{name}.{key}") for key in ("claude", "gpt"))
+    changes = []
+    for old, new, key, field in pairs:
+        if old[key] == new[key]: continue
+        token = json.dumps(old[key], ensure_ascii=False)
+        if raw.count(token) != 1: raise ValueError("公开模型字段定位不唯一：" + field)
+        raw = raw.replace(token, json.dumps(new[key], ensure_ascii=False), 1)
+        changes.append(dict(field=field, before=old[key], after=new[key]))
+    if changes:
+        path.write_text(raw, encoding="utf8", newline="\r\n" if b"\r\n" in path.read_bytes() else "\n")
+    return dict(source=str(source), source_sha256=sha256(payload).hexdigest(), changes=changes)
 
 
 def convert_markdown(root, pages, output_dir=None):

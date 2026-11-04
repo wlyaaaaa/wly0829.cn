@@ -10,7 +10,7 @@ import re
 import subprocess
 import sys
 from copy import deepcopy
-from authors import PLACEHOLDER, affected_pages, convert_markdown, editable_range, markdown_checks, resolve_author
+from authors import PLACEHOLDER, affected_pages, convert_markdown, editable_range, markdown_checks, resolve_author, sync_roster
 from selection import Selection
 
 sys.dont_write_bytecode = True
@@ -554,7 +554,8 @@ def apply_edits(root, payload, only=None, converter=None):
     accepted_files, applied_by_page = set(), defaultdict(int)
     for filename, edits in grouped.items():
         try:
-            if not (re.fullmatch(r"sources/pages/[\w-]+/page\.json", filename) or filename == "scripts/how-demo-data.json"):
+            if not (re.fullmatch(r"sources/pages/[\w-]+/page\.json", filename) or filename == "scripts/how-demo-data.json"
+                    or filename == "config/model-roster.json" and all(e["field"] == "updated_beijing_date" for e in edits)):
                 raise ValueError("目标必须是页面作者 JSON")
             for edit in edits:
                 if resolve_author(root, edit["page"], edit.get("logical_field", edit["field"])) != dict(file=filename, field=edit["field"]):
@@ -626,6 +627,15 @@ def apply_edits(root, payload, only=None, converter=None):
             accepted_files.add(filename)
         except (OSError, KeyError, ValueError, IndexError, TypeError) as exc:
             report["skipped"].extend(dict(edit, reason=str(exc)) for edit in edits)
+    if checked.get("how") and any(r["id"] == "how-model-roster-updated-date" for r in payload.get("record_updates", [])) and not any(s.get("record_id") == "how-model-roster-updated-date" for s in report["skipped"]):
+        try:
+            source = json.loads((root / "sources/pages/how/page.json").read_text("utf-8-sig"))["based_on"]["model_roster_source"]
+            report["model_roster_sync"] = dict(sync_roster(root, source), status="verified", observed_at=datetime.now(BEIJING).isoformat(timespec="seconds"))
+            if report["model_roster_sync"]["changes"] and "config/model-roster.json" not in report["changed_files"]: report["changed_files"].append("config/model-roster.json")
+            accepted_files.add("config/model-roster.json"); dependencies["config/model-roster.json"] = {"how"}
+        except (OSError, KeyError, ValueError, StopIteration) as exc:
+            report["model_roster_sync"] = dict(status="failed", reason=str(exc), observed_at=datetime.now(BEIJING).isoformat(timespec="seconds"))
+            report["skipped"].append(dict(record_id="how-model-roster-updated-date", page="how", reason=str(exc)))
     # 未改数的记录也须有本轮 Markdown 回读；原页若已偏离作者输入，不覆盖它。
     targets = ((set().union(*(dependencies[f] for f in accepted_files)) if accepted_files else set())
                | {page for page in record_pages if checked[page]})

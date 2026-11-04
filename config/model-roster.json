@@ -1,8 +1,8 @@
 {
   "schema": "agents.model-roster.v1",
-  "updated_beijing_date": "2026-10-29",
+  "updated_beijing_date": "2026-11-03",
   "purpose": "可派模型清单：列出各宿主现在能派哪些型号、各适合什么活。只作参考，不当门禁；实际能不能派以宿主当时真实支持的为准。",
-  "update_rule": "本人告知新型号、档位或要求重估时，按《分工与并行施工》“新型号怎么调研”查公开数据，直接更新路线和档位；AA 未出分可按厂商数据暂定，数据够用可定稿，AA 出分后短复核。授权和本人限制见约法 L23；换代重评，不自动沿用本代选择。",
+  "update_rule": "本人告知新型号、档位或要求重估时，按《分工与并行施工》“新型号怎么调研”查公开数据，直接更新路线和档位；AA 未出分可按厂商数据暂定，数据够用可定稿，AA 出分后短复核。授权和本人限制见约法 L23；换代重评，不自动沿用本代选择。project_models 各行按同节第 6 步：AI 定好，问本人一次是否执行。",
   "hosts": {
     "codex": {
       "root_openai": {
@@ -209,8 +209,8 @@
     "scenarios_note": "先看场景，未覆盖再按 tiers 难度选择；计划注明能用就行、要惊艳或机械活。默认档位及升级规则只见 effort_rule；Claude 施工适用条件见 tiers_note。",
     "scenarios": [
       {"scenario":"只读且步骤简单的小单：读一页、查一项现成数据、回读状态（代码上限 0）","claude":"opus-low；纯机械 sonnet-low","gpt":"Sol medium","gpt_unavailable":"opus-low；纯机械 sonnet-low"},
-      {"scenario":"给本人看的文字和分析：汇报、网站文案、方案、对本人经历和偏好的理解","claude":"当前交 Claude：材料齐的整理和初稿 opus-medium，完整分析和方案 opus-high，要紧的取舍 opus-xhigh。本人定过由 Claude 写的成品、分析、网站文案和对本人价值、偏好的理解照旧；GPT 也可以写或出主意，涉及本人价值和偏好的内容单列，由 Claude 按原话和语境把关。只用一边时那一边全做，主持的根会话承担最终责任。","gpt":"可写或出主意；价值偏好内容单列交 Claude 把关；只有 GPT 时全做。","gpt_unavailable":"按 Claude 一列"},
-      {"scenario":"写代码、改脚本、修 bug","claude":"代码库理解、程序根因与方案 opus-high；困难路径 opus-xhigh","gpt":"范围清楚 Sol ultra；需先定代码／规则方案交有授权 Astra 或 opus-high；困难路径 Astra ultra，一件活选一家。","gpt_unavailable":"小改 opus-low、常规 opus-medium、大改 opus-high；机械改名或补丁 sonnet-low。"},
+      {"scenario":"给本人看的文字和分析：汇报、网站文案、方案、对本人经历和偏好的理解","claude":"Claude 为根会话时：材料齐的整理和初稿 opus-medium，完整分析和方案 opus-high，要紧的取舍 opus-xhigh。本人定过由 Claude 写的成品、分析、网站文案和对本人价值、偏好的理解照旧；GPT 也可以写或出主意，涉及本人价值和偏好的内容单列，由 Claude 按原话和语境把关。主持的根会话承担最终责任。","gpt":"可写或出主意；Claude 为根会话时，价值偏好内容单列交 Claude 把关；GPT 为根会话时由根会话及其子代理全做并把关。","gpt_unavailable":"按 Claude 一列"},
+      {"scenario":"写代码、改脚本、修 bug","claude":"代码库理解、程序根因与方案 opus-high；困难路径 opus-xhigh","gpt":"范围清楚 Sol ultra；需先定代码／规则方案交有授权 Astra，Claude 为根会话时也可交 opus-high；困难路径 Astra ultra，一件活选一家。","gpt_unavailable":"小改 opus-low、常规 opus-medium、大改 opus-high；机械改名或补丁 sonnet-low。"},
       {"scenario":"调研、查事实（要可靠、少编造）","claude":"综合 opus-medium；冲突 opus-high；要紧决定 opus-xhigh","gpt":"指定来源收集、综合和冲突判断 Sol ultra；给定材料摘录 Sol medium；要紧决定 Astra ultra；按原文和出处核对。","gpt_unavailable":"机械 sonnet-low；综合 opus-medium；冲突 opus-high。"},
       {"scenario":"排障、找根因（系统和程序故障）","claude":"程序根因 opus-high；疑难一致性 opus-xhigh","gpt":"范围明确 Sol ultra；系统级暂保留 Sol ultra，缺数据；根因不明先收材料，反复或一致性难点 Astra ultra。","gpt_unavailable":"常规 opus-medium；根因 opus-high；疑难 opus-xhigh。"},
       {"scenario":"多步自动化流程","claude":"短且带条件 opus-low；多分支 opus-medium；复杂 opus-xhigh","gpt":"调用链已定 Sol medium；有条件、多分支或陌生长流程 Sol ultra；复杂约束 Astra ultra。","gpt_unavailable":"固定链 sonnet-low；短带条件 opus-low；多分支 opus-medium；疑难 opus-xhigh。"},
@@ -219,7 +219,7 @@
       {"scenario":"要惊艳的成品（给人看的网页样子和交互、视频编排、文案、设计）","claude":"样板和关键部分默认 opus-xhigh；样板定稿和交付前各一次最终头脑风暴。","gpt":"按样板铺开 Sol ultra，机械填充 Sol medium 或脚本；只有 GPT 时由 GPT 主对话选最合适的型号或自己做并把关。","gpt_unavailable":"样板和关键部分 opus-xhigh，其余按难度。"},
       {"scenario":"法律文书和案件材料","claude":"正式文书与法律分析 opus-high 起；重大争点、程序风险 opus-xhigh。","gpt":"原文摘录、索引 Sol medium；归类、时间线、要点 Sol ultra；事实核对和技术意见；只用 GPT 时全做。","gpt_unavailable":"摘录 sonnet-low；材料 opus-medium；正文由 Claude 写和审。"},
       {"scenario":"重大改动的独立复核","claude":"GPT 写的交 Claude；按风险选档，最终由主持验收。","gpt":"Claude 写的交有授权 Astra；无授权用 Sol，具体档位按风险、难点选；推荐取舍类汇报另遵分工专题第 5 条的本人逐次授权要求，不派 Sol 替代。","gpt_unavailable":"按独立上下文及实际可用型号交回；重大动作把关见 protected_actions_contract。"},
-      {"scenario":"生图","claude":"Claude 写好提示，委派 Luna low 调用落盘；主持看整体，个人网站专用分工不外推。","gpt":"Codex 主对话直接用内置生图；Claude 经包装器派 Luna low；批量审图 Sol ultra，很重要的交 Claude；不为生图派 Astra。","gpt_unavailable":"交回缺失的生图工具或身份卡点。"}
+      {"scenario":"生图","claude":"Claude 写好提示，委派 Luna low 调用落盘；主持看整体，个人网站专用分工不外推。","gpt":"GPT 为根会话时，Codex 主对话直接用内置生图，审图按“看图、审图、截图录屏、操作电脑和浏览器”场景的 GPT 路线；Claude 为根会话时经包装器派 Luna low，批量审图 Sol ultra，很重要的交 Claude；不为生成图片派 Astra。","gpt_unavailable":"交回缺失的生图工具或身份卡点。"}
     ],
     "vendor_rule": [
       "具体执行按场景派，整段一两步的小事可顺手做；按总量判断。",

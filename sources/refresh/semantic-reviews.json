@@ -62,1022 +62,1022 @@
       "evidence": "对照 E372 规则原文逐条核对讲解，独立复核通过"
     },
     "agents": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"base\", \"evidence\": [\"E:\\\\.agents\\\\releases\\\\E372\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-base.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-how17.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\batch2\\\\how17-owner-decision-receipt.json\"], \"semantic_checked\": true, \"reason\": \"指定独立复核五句和本人最终定夺已同步；主题位置、停用网站周检、按需升级观察与各来源状态分开核实。\", \"latest_owner_decisions\": [\"f0afe22f-9cfc-4bd1-b8f1-7fdb139f4c2d\", \"ee714412-9451-425c-aa84-4abc75336a54\", \"1fc506f9-5aaa-47a7-8583-1e6b865d3c9a\"]}"
     },
     "agents-authorization-owner": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"base\", \"evidence\": [\"E:\\\\.agents\\\\releases\\\\E372\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-base.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "agents-capability-routing": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"base\", \"evidence\": [\"E:\\\\.agents\\\\releases\\\\E372\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-base.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "agents-context-evidence": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"base\", \"evidence\": [\"E:\\\\.agents\\\\releases\\\\E372\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-base.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "agents-protected-policy": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"base\", \"evidence\": [\"E:\\\\.agents\\\\releases\\\\E372\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-base.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "agents-rules-contracts": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"base\", \"evidence\": [\"E:\\\\.agents\\\\releases\\\\E372\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-base.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "agents-skills-plugins": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"base\", \"evidence\": [\"E:\\\\.agents\\\\releases\\\\E372\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-base.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "agents-working-tree-hot-mirror": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"base\", \"evidence\": [\"E:\\\\.agents\\\\releases\\\\E372\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-base.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "ai-cli-profile-manager": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\ai-cli-profile-manager.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "ai-cli-profile-manager-background-openai-children": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\ai-cli-profile-manager.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "ai-cli-profile-manager-doctor-validation": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\ai-cli-profile-manager.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "ai-cli-profile-manager-engines-providers": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\ai-cli-profile-manager.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "ai-cli-profile-manager-install-recovery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\ai-cli-profile-manager.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "ai-cli-profile-manager-local-proxies": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\ai-cli-profile-manager.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "ai-cli-profile-manager-native-desktop-integration": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\ai-cli-profile-manager.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "ai-cli-profile-manager-profiles-launch": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\ai-cli-profile-manager.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "ai-cli-profile-manager-recoverable-runs": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\ai-cli-profile-manager.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "ai-cli-profile-manager-secrets-isolation": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\ai-cli-profile-manager.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "chinese-asr": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\chinese-asr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "chinese-asr-audit-evidence": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\chinese-asr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "chinese-asr-desktop-dictation": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\chinese-asr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "chinese-asr-installation-recovery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\chinese-asr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "chinese-asr-known-text-alignment": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\chinese-asr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "chinese-asr-long-batch": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\chinese-asr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "chinese-asr-models-modes": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\chinese-asr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "chinese-asr-runtime-privacy": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\chinese-asr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "chinese-asr-speaker-attribution": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\chinese-asr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "chinese-asr-task-routing": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\chinese-asr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "cockpit": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w12\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\page-cockpit.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w12.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-w12.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "codex-memory": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\codex-memory.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "codex-memory-claude-project-memory": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\codex-memory.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "codex-memory-config-memory-whitelist-sync": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\codex-memory.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "codex-memory-content-addressed-storage-cold-sync": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\codex-memory.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "codex-memory-gemini-workspace-memory": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\codex-memory.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "codex-memory-isolated-disaster-recovery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\codex-memory.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "codex-memory-openclaw-workspace-recovery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\codex-memory.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "codex-memory-vss-conversation-hot-backup": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w7\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\codex-memory.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w7.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "computer-access": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w12\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\page-computer-access.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w12.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-w12.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "daily-preferences": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w5\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\daily-preferences.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w5.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "daily-preferences-current-corrections": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w5\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\daily-preferences.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w5.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "daily-preferences-evidence-query": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w5\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\daily-preferences.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w5.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "daily-preferences-fact-verification": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w5\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\daily-preferences.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w5.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "daily-preferences-mobile-context-delivery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w5\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\daily-preferences.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w5.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "daily-preferences-personal-understanding": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w5\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\daily-preferences.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w5.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "daily-preferences-recommendation-choice": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w5\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\daily-preferences.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w5.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "daily-preferences-source-coverage": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w5\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\daily-preferences.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w5.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "devconfig-backup": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w8\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\devconfig-backup.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w8.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "devconfig-backup-recovery-and-tasks": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w8\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\devconfig-backup.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w8.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "devconfig-backup-source-catalog": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w8\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\devconfig-backup.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w8.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "devconfig-backup-tiered-distribution": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w8\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\devconfig-backup.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w8.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "devconfig-backup-wechat-native-backup": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w8\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\devconfig-backup.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w8.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "document-materials-current-matter-sources": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\document-materials.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "document-materials-editable-docx-pdf": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\document-materials.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "document-materials-page-audit-release": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\document-materials.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "document-materials-reality-readback-recovery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\document-materials.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "document-materials-signature-delivery-version": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\document-materials.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "emerald-veil": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\emerald-veil.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "emerald-veil-native-bubbles-idle-overlay": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\emerald-veil.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "emerald-veil-reversibility-preimage-and-remote-compatibility": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\emerald-veil.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "emerald-veil-wallpaper-engine-coexistence-and-rain-experiment": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\emerald-veil.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "emerald-veil-windows-desktop-and-lockscreen-background": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\emerald-veil.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "github-profile": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w12\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\page-github-profile.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w12.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-w12.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "how": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"base\", \"evidence\": [\"E:\\\\.agents\\\\releases\\\\E372\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-base.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-how17.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\batch2\\\\how17-owner-decision-receipt.json\"], \"semantic_checked\": true, \"reason\": \"指定独立复核五句和本人最终定夺已同步；主题位置、停用网站周检、按需升级观察与各来源状态分开核实。\", \"latest_owner_decisions\": [\"f0afe22f-9cfc-4bd1-b8f1-7fdb139f4c2d\", \"ee714412-9451-425c-aa84-4abc75336a54\", \"1fc506f9-5aaa-47a7-8583-1e6b865d3c9a\"]}"
     },
     "how-this-site": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\wly0829-cn.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "localocr": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\localocr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "localocr-document-structure": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\localocr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "localocr-input-routing": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\localocr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "localocr-installation-recovery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\localocr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "localocr-jobs-cache": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\localocr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "localocr-results-evidence": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\localocr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "localocr-runtime-resources": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\localocr.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "mcp": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w12\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\page-mcp.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w12.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-w12.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "password-center": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\password-center.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pc-panel-hub": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pc-panel-hub.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pc-panel-hub-case-panel-rendering": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pc-panel-hub.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pc-panel-hub-hs2-overlay": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pc-panel-hub.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pc-panel-hub-installation-binding-migration": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pc-panel-hub.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pc-panel-hub-power-recovery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pc-panel-hub.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pc-panel-hub-serial-transport": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pc-panel-hub.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pc-panel-hub-telemetry-trust": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pc-panel-hub.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pcconfig": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w1\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pcconfig.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w1.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pcconfig-authorization-files": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w1\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pcconfig.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w1.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pcconfig-drift-acceptance": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w1\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pcconfig.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w1.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pcconfig-machine-facts": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w1\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pcconfig.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w1.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pcconfig-memory-diagnostics": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w1\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pcconfig.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w1.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pcconfig-owner-takeover": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w1\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pcconfig.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w1.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pcconfig-protected-actions": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w1\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pcconfig.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w1.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pcconfig-protected-data": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w1\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pcconfig.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w1.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pcconfig-recovery-backup": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w1\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pcconfig.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w1.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pcconfig-remote-computer-mcp": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w1\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pcconfig.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w1.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pcconfig-runtime-startup": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w1\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pcconfig.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w1.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pcconfig-secondary-laptop": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w1\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pcconfig.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w1.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "pcconfig-secrets-providers": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w1\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\pcconfig.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w1.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "personal-formal-documents": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\document-materials.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\batch2\\\\最终内容独立复核.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "personal-materials": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w5\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\personal-materials.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w5.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "personal-materials-bounded-discovery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w5\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\personal-materials.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w5.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "personal-materials-exact-intake": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w5\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\personal-materials.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w5.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "personal-materials-registered-lookup": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w5\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\personal-materials.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w5.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "personal-materials-verified-open": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w5\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\personal-materials.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w5.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "personal-media": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w6\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\personal-media.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w6.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "personal-media-classification": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w6\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\personal-media.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w6.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "personal-media-cloud-candidates": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w6\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\personal-media.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w6.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\batch2\\\\媒体等待事项含义复核.json\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "personal-media-local-ingest": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w6\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\personal-media.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w6.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "personal-media-phone-preservation": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w6\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\personal-media.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w6.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "personal-media-phone-recovery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w6\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\personal-media.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w6.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "personal-media-search-browse": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w6\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\personal-media.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w6.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "phone-collector": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\phone-collector.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\batch2\\\\phone-reread.json\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "projects-home": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w12\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\page-projects-home.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w12.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-w12.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "proxyclean": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\proxyclean.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "proxyclean-dead-port-and-route-cleanup": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\proxyclean.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "proxyclean-dynamic-proxy-status": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\proxyclean.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "proxyclean-ipv6-routing-control": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\proxyclean.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "proxyclean-one-click-and-troubleshooting-boundaries": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\proxyclean.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "proxyclean-targeted-port-shutdown": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\proxyclean.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "proxyclean-wifi-rebind-and-recovery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\proxyclean.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "remote-control": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\remote-control.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "rescue": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w12\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\page-rescue.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w12.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-w12.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-authorization-file-broker": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-browser-control-continuity": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-chinese-asr": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-cloud-asset-channel": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-cockpit": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-daily-preferences": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-documents": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-google-workspace-direct": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-image-generation": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-local-secret-broker": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-localocr": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-md-to-pdf": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-media-person-self": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-mojibake-doctor": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_新增-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"新页/去向页稿已独立复核\"}"
     },
     "skill-news-quickcheck": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skill-news-quickcheck.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_新增-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\batch2\\\\最终内容独立复核.md\"], \"semantic_checked\": true, \"reason\": \"新页/去向页稿已独立复核\"}"
     },
     "skill-pdf": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-pdf-render-safe": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-personal-formal-documents": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-personal-materials": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-personal-media": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-phone-direct": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-project-entry-gate": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-proxy-network": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-reply-as-me": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-report-page": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-tailscale-safe-exposure": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-timeaudit-diagnostics": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-vault-workflow": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-wechat-direct": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skill-work-delivery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "skills-home": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w11\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\skills.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w11.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"只更新使用记录/来源，未宣称项目正文重新核对\"}"
     },
     "steam-millennium-config-backup": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\steam-millennium-config-backup.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "steam-millennium-config-backup-allowlist-config-and-style-snapshot": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\steam-millennium-config-backup.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "steam-millennium-config-backup-plugin-manifest-and-install-state-tracking": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\steam-millennium-config-backup.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\steam-millennium-config-backup.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\steam-millennium-config-backup.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "sunshine-remote-streaming": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w6\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\sunshine-remote-streaming.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w6.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "sunshine-remote-streaming-bitrate-codec-strategy": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w6\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\sunshine-remote-streaming.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w6.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "sunshine-remote-streaming-capture-failover": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w6\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\sunshine-remote-streaming.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w6.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "sunshine-remote-streaming-remote-power-and-repair": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w6\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\sunshine-remote-streaming.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w6.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "sunshine-remote-streaming-transport-ipv6-direct": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w6\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\sunshine-remote-streaming.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w6.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "sunshine-remote-streaming-vdd-display-settings": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w6\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\sunshine-remote-streaming.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w6.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "timeaudit": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w8\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\timeaudit.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w8.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "timeaudit-backup-recovery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w8\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\timeaudit.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w8.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "timeaudit-clipboard-history": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w8\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\timeaudit.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w8.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "timeaudit-collection-pipeline": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w8\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\timeaudit.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w8.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "timeaudit-hardware-performance": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w8\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\timeaudit.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w8.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "timeaudit-process-forensics": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w8\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\timeaudit.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w8.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "timeaudit-runtime-reliability": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w8\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\timeaudit.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w8.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "timeaudit-usage-energy": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w8\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\timeaudit.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w8.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "typora-theme-pack": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\typora-theme-pack.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "typora-theme-pack-controlled-preview-and-visual-qa": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\typora-theme-pack.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "typora-theme-pack-multi-scenario-export-profiles": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\typora-theme-pack.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "typora-theme-pack-theme-installation-and-lifecycle": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\typora-theme-pack.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "typora-theme-pack-transactional-pdf-export-pipeline": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\typora-theme-pack.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "typora-theme-pack-verdant-mint-theme-system": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w9\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\typora-theme-pack.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w9.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "vault-tool": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\vault-tool.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "vault-tool-ai-local-interface": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\vault-tool.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "vault-tool-dual-password": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\vault-tool.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "vault-tool-files-encryption": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\vault-tool.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "vault-tool-image-carrier": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\vault-tool.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "vault-tool-maintenance-recovery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\vault-tool.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "vault-tool-passwords-formats": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\vault-tool.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "vault-tool-private-backup": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\vault-tool.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "vault-tool-view-extract": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w2\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\vault-tool.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "video-scaffold": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\video-scaffold.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "video-scaffold-delivery-verify": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\video-scaffold.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "video-scaffold-deterministic-render": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\video-scaffold.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "video-scaffold-preflight-preview": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\video-scaffold.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "video-scaffold-project-bootstrap": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\video-scaffold.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "video-scaffold-recovery-reuse": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\video-scaffold.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "video-scaffold-scene-authoring": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\video-scaffold.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "video-scaffold-voice-timing": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w4\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\video-scaffold.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w4.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "wechat-direct-account-source-identity": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\wechat-direct.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "wechat-direct-bounded-chat-context": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\wechat-direct.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "wechat-direct-moments-local-cache": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\wechat-direct.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "wechat-direct-named-chat-archive": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\wechat-direct.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "wechat-direct-preservation-verification": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\wechat-direct.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "wechat-direct-reply-media-relations": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\wechat-direct.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "wechatdirect": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w3\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\wechat-direct.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w3.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\batch2\\\\最终内容独立复核.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "wly0829-cn": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\wly0829-cn.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "work-delivery-consistent-deliverables": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\work-delivery.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "work-delivery-copilot": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\work-delivery.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "work-delivery-evidence-quality": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\work-delivery.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "work-delivery-package-sources": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\work-delivery.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "work-delivery-source-change-next-version": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\work-delivery.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     },
     "work-delivery-value-state-recovery": {
-      "checked_at": "2026-11-04T17:25:07.833626+08:00",
+      "checked_at": "2026-11-04T19:03:29.101778+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\work-delivery.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
     }

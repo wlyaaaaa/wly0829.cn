@@ -50807,6 +50807,33 @@
       "source_observed_at": "2026-11-04T13:29:41+08:00",
       "observed_at": "2026-11-04T13:29:41+08:00",
       "source_coverage_end": null
+    },
+    {
+      "id": "how-model-roster-updated-date",
+      "page": "how",
+      "screen": "how-05",
+      "affected_screens": [
+        "how-01"
+      ],
+      "field": "registry.numbers[11].as_of",
+      "page_pattern": "^(\\d{4}-\\d{2}-\\d{2})$",
+      "label": "模型清单更新日期",
+      "current_value": "2026-11-03",
+      "as_of": "2026-11-04",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "retrieve": {
+        "kind": "json",
+        "path": "E:/.agents/config/model-roster.json",
+        "pointer": [
+          "updated_beijing_date"
+        ]
+      },
+      "source_location": "E:/.agents/config/model-roster.json updated_beijing_date；只同步现有公共快照的此字段",
+      "measurement_scope": "how-01 与 how-05 共用的模型清单更新日期，保留页面占位引用",
+      "observation_basis": "live_read"
     }
   ],
   "freshness_policy": {

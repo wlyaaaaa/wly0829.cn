@@ -746,7 +746,7 @@
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
   "sha256": "0a8d707e6e75a845835751c47bfc6ab46471e419b4f9849e60e4525dc7927f57",
-  "converted_at_beijing": "2026-11-04T14:40:06+08:00"
+  "converted_at_beijing": "2026-11-04T19:02:45+08:00"
  }
 }
 ---
@@ -1518,7 +1518,7 @@
     {
      "type": "points_card",
      "text_ref": "它什么时候停下来",
-     "columns": 2,
+     "columns": 1,
      "columns_v": 1
     },
     {

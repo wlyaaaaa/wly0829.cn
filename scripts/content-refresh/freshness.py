@@ -280,6 +280,9 @@ def close_run(root, result, report=None, dist=None):
             status = "semantic_due" if row.get("refresh_due") else "semantic_current"
         else:
             try:
+                if (row["id"] == "how-model-roster-updated-date" and row["status"] in {"changed", "unchanged"}
+                        and report.get("model_roster_sync", {}).get("status") != "verified"):
+                    raise ValueError("公开模型快照同步未通过")
                 proof = applied.get(row["id"])
                 if row["status"] == "changed" and proof:
                     locator = proof["locator"]
