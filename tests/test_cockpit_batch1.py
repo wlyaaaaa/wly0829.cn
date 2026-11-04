@@ -49,7 +49,7 @@ const assert = require('node:assert/strict');
   // 状态格按整词包了 span，比文字时先去掉标签
   o = R.REGIONS['overview-tri'](v, ctx).replace(/<span class="cp-status-word">([^<]*)<\/span>/g, '$1');
   // 2 自动任务只数没恢复的，已恢复的写在灰色小字；已恢复的反复出错不再挂着，仍失败的才挂
-  assert.match(o, /今天 1 个出错还没恢复/);
+  assert.match(o, /今天 1 个出错，尚未确认恢复/);
   assert.match(o, /今天出过错、已恢复 1 个/);
   assert.match(o, /这周反复出错：虚构反复失败 6 次/);
   assert.doesNotMatch(o, /虚构费用 23 次/);
@@ -138,13 +138,13 @@ const assert = require('node:assert/strict');
   o = R.REGIONS['overview-tri'](colored, ctx).replace(/<span class="cp-status-word">([^<]*)<\/span>/g, '$1');
   // 第二行小字只说要不要你管（10-30 批准第 2 项）
   assert.match(o, /cp-tri-cell is-neutral" data-signal="computer">.*?<span class="cp-tri-who"><span>AI 在修，不用你管<\/span>/);
-  assert.match(o, /今天 1 个出错还没恢复/);
-  assert.match(o, /今天出过错、已恢复 2 个/);
+  assert.match(o, /今天 1 个出错，尚未确认恢复/);
+  assert.match(o, /今天出过错、已恢复 1 个/);
   assert.doesNotMatch(o, /这周反复出错/);
   assert.match(R.REGIONS['lamp-need-you'](colored, ctx), /is-yellow.*要你处理/);
   assert.equal(R.REGIONS['lamp-computer'](colored, ctx), '');
   const pcc = R.computer(colored, ctx);
-  assert.match(pcc, /cp-card is-neutral ct-card cp-tile">.*内存\/系统资源.*AI 在管：虚构内存在盯/);
+  assert.match(pcc, /cp-card is-neutral ct-card cp-tile">.*内存\/系统资源.*cp-big">AI 在管<\/p><p class="cp-sub">虚构内核内存偏高/);
   assert.match(pcc, /触发的是：虚构程序 1 小时上传 3\.0GB，超过 2GB/);
   assert.match(R.todayBlock(colored, ctx), /cp-card is-gray ct-card">.*学习进度.*数据源停了/);
   const ask = R.needCards(colored, ctx);
@@ -235,19 +235,17 @@ const assert = require('node:assert/strict');
   assert.match(todos, /href="https:\/\/example.invalid\/find"[^>]*>去办 →/);
   assert.match(todos, /约 2 分钟/); assert.match(todos, /会错过提醒/);
   assert.match(todos, /手机上能办/); assert.doesNotMatch(todos, /MCP|data-copy/);
-  assert.match(led, /原定 10 月 10 日，晚了 2 天/);
-  // 没过期的不藏：收在“其余 N 件”里，总数和清单对得上
-  assert.match(led, /<details class="cp-more" id="ai-rest"><summary>其余 1 件[^<]*<\/summary><ul class="cp-ailist"><li data-items="[^"]+"><span>虚构期限内的事/);
-  assert.match(led, /AI 自己有 2 件晚了，在补（不用你管）/);
-  assert.match(led, /没写哪天该有结果，AI 在补上期限/); assert.doesNotMatch(led, /original_deadline_overdue|undated_wake_condition|唤醒条件/);
-  // 当天刚过期、当天登记：不写“已过 0 天”“已跟 0 天”；跟得最久的排最前（登记不明按 14 天）
+  assert.match(led, /期限 10 月 10 日/);
+  // 所有旧数据统一归组，总数和清单对得上
+  assert.match(led, /<details class="cp-more" id="ai-rest"><summary>不影响你用的 3 件<\/summary><ul class="cp-ailist">[^]*?<li data-items="ai-short"><span>虚构期限内的事/);
+  assert.match(led, /不影响你用的 3 件/);
+  assert.match(led, /没定日子/); assert.doesNotMatch(led, /original_deadline_overdue|undated_wake_condition|唤醒条件/);
+  // 旧过期数据保留期限，不再强调晚了几天
   const late = R.ledger(normalize({ ...base0, need_you: [], ai_following: [], counts: { ai_following: 3 }, ai_overdue: [
     { id: 'n0', title: '虚构今天到期', overdue_since: '2026-10-12T09:30:00+08:00', overdue_days: 0, age_days: 0 },
     { id: 'n9', title: '虚构跟了九天', overdue_since: '2026-10-05', overdue_days: 7, age_days: 9 },
     { id: 'nu', title: '虚构登记不明', overdue_since: '2026-10-11', overdue_days: 1, registration_unknown: true }] }), ctx);
-  assert.doesNotMatch(late, /已过 0 天|已跟 0 天|晚了 0 天/); assert.match(late, /原定 10 月 12 日，刚过不到 1 天/);
-  // 按晚了几天从多到少排（10-30 起，不按跟了多久）
-  assert.ok(late.indexOf('虚构跟了九天') < late.indexOf('虚构登记不明') && late.indexOf('虚构登记不明') < late.indexOf('虚构今天到期'));
+  assert.doesNotMatch(late, /已过 0 天|已跟 0 天|晚了 0 天/); assert.match(late, /期限 10 月 12 日/);
   // 排期标题自带日期时不重复
   const dup = R.REGIONS.home(normalize({ ...base0, need_you: [], scheduled: [{ id: 's1', title: '10月21日（周三）：虚构复盘', scheduled_for: '2026-10-21' }, { id: 's2', title: '11/6 虚构快照', scheduled_for: '2026-11-06' }] }), ctx);
   assert.match(dup, /<span>虚构复盘<\/span><small>排在 10 月 21 日<\/small>/); assert.match(dup, /<span>虚构快照<\/span><small>排在 11 月 6 日<\/small>/);
