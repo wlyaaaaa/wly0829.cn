@@ -85,6 +85,17 @@ class RetrievalTests(unittest.TestCase):
         with self.assertRaises(UnicodeDecodeError):
             refresh.retrieve(method, self.root, {})
 
+    def test_skill_counts_share_standard_ledger_without_live_session_scan(self):
+        root = Path(__file__).resolve().parents[1]
+        entries = json.loads((root / "sources/refresh/entries.json").read_text("utf-8-sig"))
+        self.assertNotIn("usage-skill-current-7d", entries)
+        records = json.loads((root / "sources/refresh/registry.json").read_text("utf-8-sig"))["records"]
+        for name in ("project-entry-gate", "report-page"):
+            row = next(r for r in records if r["id"] == f"skill-{name}-status-count-7d")
+            self.assertEqual((row["retrieve"]["kind"], row["retrieve"]["key"], row["retrieve"]["operation"]),
+                             ("usage_ledger", name, "count_7d"))
+            self.assertNotIn("requires_semantic_refresh", row)
+
     def test_ledger_streams_once_filters_kind_and_preserves_last_time(self):
         now = datetime(2026, 10, 22, 6, tzinfo=refresh.BEIJING)
         end = now.replace(hour=0)

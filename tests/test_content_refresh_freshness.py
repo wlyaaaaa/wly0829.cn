@@ -48,6 +48,82 @@ class FreshnessTests(unittest.TestCase):
     def apply(self, result):
         return apply_edits(self.root, build_number_edits(self.root, result), converter=fake_converter)
 
+    def test_selection_inherits_real_owner_and_leaves_parentless_skills_independent(self):
+        from selection import Selection
+        self.page.update(url="/projects/different-id/")
+        self.write(self.path, self.page)
+        self.write(self.root / "sources/pages/child/page.json", dict(page="child", parent="demo"))
+        self.write(self.root / "sources/pages/skill-demo/page.json", dict(page="skill-demo", parent=None, kind="skill"))
+        config = self.root / "config/panel-projects.json"
+        for path in ("sources/pages/demo/page.json", "site-astro/sources/frozen-site/pages/projects/different-id/index.html"):
+            self.write(config, dict(projects=[dict(id="different-id", route="/projects/different-id",
+                ai_refresh=dict(mode="manual_owner_only", content_path=path))]))
+            for frozen in (False, True):
+                self.page["kind"] = "frozen" if frozen else "project"
+                self.write(self.path, self.page)
+                selected = Selection(self.root)
+                self.assertTrue(selected.reason("demo"))
+                self.assertTrue(selected.reason("child"))
+                self.assertIsNone(selected.reason("skill-demo"))
+                self.assertIsNone(Selection(self.root, ["different-id"]).reason("child"))
+        with patch.object(refresh, "bounded") as read:
+            result = self.collect()
+            read.assert_not_called()
+        self.assertTrue(all(r["status"] == "excluded" and not r["overdue"] for r in result["rows"]))
+        self.assertEqual((result["automatic_total"], result["manual_tasks"]), (0, []))
+        self.assertEqual(close_run(self.root, result)["pending"], 0)
+        result = refresh.collect(self.root, self.registry, entries={}, manual_owner_request=["different-id"])
+        self.assertTrue(build_number_edits(self.root, result)["edits"])
+        result["registry_path"] = str(self.registry_path)
+        self.assertEqual(close_run(self.root, result, self.apply(result))["status"], "closed")
+        # CACB 的旧登记仍指向冻结 HTML；实际原生页使用另一条路由。
+        self.page["url"] = "/projects/legacy-name/"
+        self.write(self.path, self.page)
+        aliases = self.root / "scripts/audit-content-refresh.py"
+        aliases.parent.mkdir(parents=True)
+        aliases.write_text("PROJECT_ALIASES = {'demo': 'different-id'}", encoding="utf-8")
+        self.assertIsNone(Selection(self.root, ["different-id"]).reason("child"))
+        self.page["kind"] = "project"
+        self.write(self.path, self.page)
+        self.assertIn("different-id", Selection(self.root).reason("child"))
+
+    def test_old_changed_and_unchanged_candidates_cannot_bypass_current_selection(self):
+        for unchanged in (False, True):
+            self.write(self.root / "snapshot.json", dict(count=3 if unchanged else 4, stamp="2026-10-18T09:00:00+08:00"))
+            result = self.collect()
+            candidate = build_number_edits(self.root, result)
+            self.write(self.root / "config/panel-projects.json", dict(projects=[dict(id="alias", route="/demo",
+                ai_refresh=dict(mode="manual_owner_only", content_path="sources/pages/demo/page.json"))]))
+            before, registry_before = self.path.read_bytes(), self.registry_path.read_bytes()
+            rebuilt = build_number_edits(self.root, result)
+            self.assertEqual((rebuilt["edits"], rebuilt["record_updates"]), ([], []))
+            report = apply_edits(self.root, candidate, converter=fake_converter)
+            self.assertEqual((report["applied"], report["record_readback"]), (0, []))
+            self.assertTrue(report["excluded"])
+            closure = close_run(self.root, result, report)
+            self.assertEqual((closure["status"], closure["pending"]), ("closed", 0))
+            self.assertTrue(all(r["status"] == "excluded" for r in closure["rows"]))
+            self.assertEqual((self.path.read_bytes(), self.registry_path.read_bytes()), (before, registry_before))
+            (self.root / "config/panel-projects.json").unlink()
+
+    def test_apply_card_prompts_home_preparation_before_commit(self):
+        from contextlib import redirect_stdout
+        from io import StringIO
+        import apply_edits as edits_module
+        install_fake_converter(self.root)
+        home = self.root / "site-astro/sources/retained-home-cockpit/home.html"
+        home.parent.mkdir(parents=True)
+        home.write_text("old highlight numbers", encoding="utf-8")
+        script = self.root / "scripts/prepare-home-highlights.py"
+        script.parent.mkdir(parents=True)
+        script.write_text("def transcript_current(text): return text == 'current'", encoding="utf-8")
+        candidate = self.root / "edits.json"
+        self.write(candidate, build_number_edits(self.root, self.collect()))
+        output = StringIO()
+        with redirect_stdout(output):
+            self.assertEqual(edits_module.main([str(candidate), "--root", str(self.root)]), 0)
+        self.assertIn("prepare-home-highlights.py", json.loads(output.getvalue())["next_step"])
+
     def test_time_basis_does_not_promote_a_snapshot_or_unknown_to_today(self):
         checked = "2026-10-23T10:00:00+08:00"
         old = metadata({"meta": {"at": "2026-10-01T09:00:00+08:00"}}, dict(observation_basis="snapshot_timestamp", source_observed_at_pointer=["meta", "at"]), checked_at=checked)

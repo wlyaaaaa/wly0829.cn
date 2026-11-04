@@ -46,7 +46,7 @@
 | 0 | 常驻工作树切到最新 main；确认 `published.json`；规则换版就刷新规则作者源并提交（构建留到第 3 步之后） | GPT | 3 分钟 | 5 分钟 |
 | 1 | `refresh.py --strict` 按清单批量重取全部已登记来源，同时盘点 | GPT（程序跑） | 5 分钟 | 8 分钟 |
 | 2 | 每个涉及项目查提交、未提交改动、运行回执和非 Git 状态，交回语义变化、事实和出处；补齐取不到的项和人工项，事实核对完成的页更新核对戳 | GPT 按项目并行 | 15 分钟 | 20 分钟；到点交回，其余 Unknown 并保留旧日期 |
-| 3 | 看过 `number-edits.json`，用 `apply_edits.py --report` 填入同口径新值与截至日期并核渲染输入回读，与下一步并行；提交后立刻在后台跑一次增量构建（规则换版的整站重建也在这里），第 4、5 步期间跑完 | GPT | 5 分钟 | 8 分钟（后台构建不计入） |
+| 3 | 看过 `number-edits.json`，用 `apply_edits.py --report` 填数并回读；首页亮点受影响时先运行 `scripts/prepare-home-highlights.py --output <本轮目录/首页亮点>`，把重画后的作者文件一起提交，再在后台增量构建；与第 4、5 步并行 | GPT | 5 分钟 | 8 分钟（后台构建不计入） |
 | 4 | GPT 先备齐每个变化屏的屏 ID、唯一旧文、新事实及出处、`layout.json` 的引用段首和占位边界；Opus 只写用途、能力、边界或状态有变化的屏正文，并入已有小节，涉及的冻结页先转换 | GPT 备料，Opus 按页或项目写稿 | 20 分钟 | 30 分钟 |
 | 5 | 看变化屏差异、事实去向及失败清单，抽读 2 页；GPT 在隔离副本预跑 `apply_rewrites.py`、`refresh.py --inventory --strict`、`convert_page.py --check-all`，只交失败屏与警告摘要，问题在第 6 步前退回修好 | Claude 复核，GPT 预检 | 8 分钟 | 12 分钟 |
 | 6 | 等第 3 步后的后台构建结束；合稿、`convert_page.py --check-all`、增量构建（只重建合稿页）、`close-run --apply-report --dist`、`scan_glance --pages published-diff` | GPT | 10 分钟 | 15 分钟 |
@@ -81,7 +81,7 @@
 - **每次核对点名项目。** 点名项目的讲解与人工状态判断每次核对。未点名且稳定的讲解，距最后一次真实语义核对满 28 天，在下次本人更新时列入语义复核；来源变化已影响用途、边界、统计口径或可用性时，本轮立即处理受影响内容。
 - **历史证据保留日期。** 某次测试、故障、发布、恢复和历史阶段数字不按年龄重取。重新读到旧回执，只能证明读到了它；没有真实重验就不能把日期改成今天。被当作当前现状使用的旧快照须按当前事实处理。
 
-沿用既有冻结与明确点名范围边界。稳定讲解的 28 天复核线不降低当前事实每次重取的要求，不更改上面的日常用时目标。相对时间以绝对日期为主：“昨天”“刚刚”“目前已运行几天”等会随阅读时间失真的说法，改为具体日期和已证实的区间。
+沿用既有冻结与明确点名范围边界。`manual_owner_only` 及冻结项目（含继承父项目状态的模块）默认不进入本轮；仅本人明确点名时传 `--manual-owner-request <项目id,...>`，`--targeted` 和 `--only` 都不代替它。取数、改数单、应用和闭环共用此判断；应用旧改数单时再次读当前 Registry。排除项在各回执 `excluded` 和任务单“本轮未纳入”单列，保留旧快照，不算 pending、不伪记 unchanged。父页按 Registry 作者路径和路由定位；`parent=null` 的技能页不猜继承。稳定讲解的 28 天复核线不降低当前事实每次重取的要求，不更改上面的日常用时目标。相对时间以绝对日期为主：“昨天”“刚刚”“目前已运行几天”等会随阅读时间失真的说法，改为具体日期和已证实的区间。
 
 ## 0 准备常驻工作树
 
@@ -114,6 +114,8 @@ python -B -X utf8 scripts/content-refresh/refresh.py --inventory --strict --outp
 python -B -X utf8 scripts/content-refresh/refresh.py --strict --no-report --targeted <点名页id,...> --output <本次任务目录/取数> --total-seconds 300
 # 全部更新不传 --targeted；取数范围仍是全站登记的当前事实。
 python -B -X utf8 scripts/content-refresh/refresh.py --strict --no-report --output <本次任务目录/取数> --total-seconds 300
+# 仅本人明确点名时，把对应 Registry 项目 id 传入；该事实随取数单带到应用和闭环。
+python -B -X utf8 scripts/content-refresh/refresh.py --strict --no-report --manual-owner-request personal-health --output <本次任务目录/取数> --total-seconds 300
 # 分路补登记：只检查本路页面；不替代全站严格检查。
 python -B -X utf8 scripts/content-refresh/refresh.py --inventory --strict --only <页id,...> --output <本次任务目录/本路盘点>
 # 这条命令只生成项目计划，不限制上面 refresh.py 的取数范围。
@@ -181,6 +183,8 @@ npm run refresh:ai -- --project <Registry中的项目id>
 来源坏了时按真实责任修复来源，页面只写已证实的结果和缺口。例如 AI 使用账本停写，先交拥有写入链的项目修复；修好并回读前，相关页面保留旧日期与 Unknown。不能为了赶这轮进度伪造新统计。
 
 改数单跳过原因中，`old_value_not_whole_number` 表示旧值截断了完整数字，`scope_mismatch_or_unverified` 表示登记与正文口径不同或无法核实，`as_of_link_required` 表示找不到可安全联动的观察时间；这些项保留旧数和旧日期，交事实组核对，数字与观察时间的配对编辑须一起成功才应用。
+
+填数完成后，首页亮点引用的数字若有变化，先运行 `python -B -X utf8 scripts/prepare-home-highlights.py --output <本轮目录/首页亮点>`；核对回执，把亮点作者 HTML、依赖和资源同数字一起提交，再启动构建。`apply_edits.py` 短状态卡会提示数字不一致时需要重画。构建内兜底仍保留，但不能以构建中改写作者文件代替这一步；构建应读取已提交的同一份输入。
 
 ## 4 改内容与迁移冻结页
 
