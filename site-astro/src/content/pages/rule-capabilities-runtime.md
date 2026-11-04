@@ -406,7 +406,7 @@
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
   "sha256": "4dc19073d34ec499e329f435dfdc86af2107246383ca77fb1962cb48a003099e",
-  "converted_at_beijing": "2026-11-04T12:05:37+08:00"
+  "converted_at_beijing": "2026-11-04T12:18:23+08:00"
  }
 }
 ---
@@ -1814,8 +1814,6 @@
     },
     {
      "type": "points_card",
-     "row": "points",
-     "width": "33%",
      "icons": "auto",
      "illustration": "left_inside",
      "text_ref": "默认用本人的 Chrome",
@@ -1827,8 +1825,6 @@
     },
     {
      "type": "points_card",
-     "row": "points",
-     "width": "34%",
      "icons": "auto",
      "illustration": "left_inside",
      "text_ref": "登录本人的账号",
@@ -1839,9 +1835,15 @@
      "illustration_description": "原规格插画位置：left_inside"
     },
     {
+     "type": "notice",
+     "icons": [
+      "_library/icons/手机电脑连接.png"
+     ],
+     "illustration": "left_inside",
+     "text_ref": "取码工具现在的样子"
+    },
+    {
      "type": "points_card",
-     "row": "points",
-     "width": "33%",
      "icons": "auto",
      "illustration": "left_inside",
      "text_ref": "预览本地网页",
@@ -1850,18 +1852,9 @@
       "_library/icons/打勾清单.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
-    },
-    {
-     "type": "notice",
-     "row": "points",
-     "icons": [
-      "_library/icons/手机电脑连接.png"
-     ],
-     "illustration": "left_inside",
-     "text_ref": "取码工具现在的样子"
     }
    ],
-   "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。横图三等宽卡、中卡下面附取码说明；竖图取码框在v2最上，然后预览卡。定稿text含字面反斜杠n，本轮主程序已统一解析与G1基准；定稿未修改，四个text_ref均已恢复匹配。\n10 月 11 日空白修：中卡加长后右卡底空，取码说明改附在右卡“预览本地网页”下面，三栏近等高。",
+   "notes": "整屏宽章节标题居中；默认浏览器、账号登录和本机预览依次整宽按正文自然高度排，取码说明紧接账号登录；保留现有绿色卡头、图标与全部正文。不同篇幅不再强行排成等高三栏。",
    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
   },
   "v": {
