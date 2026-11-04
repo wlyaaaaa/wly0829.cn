@@ -594,7 +594,7 @@
  "source": {
   "page": "sources/pages/codex-memory/page.json",
   "sha256": "7169a01d22ad13aa793cff2819755c21b23eccf1e0a8ddb3ee5684673b17035c",
-  "converted_at_beijing": "2026-11-04T16:31:17+08:00"
+  "converted_at_beijing": "2026-11-04T17:23:27+08:00"
  }
 }
 ---
@@ -2389,10 +2389,11 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
       "_library/icons/指向手.png"
      ],
      "row_counts": [
-      4,
+      1,
+      3,
       3
      ],
-     "snake": true,
+     "snake": false,
      "text_ref": "1记使用小记录先把前一天Claude调用过的技能、工具和命令名记下来（见全部功能第11项）；Co"
     },
     {

@@ -107,6 +107,12 @@
 }
 
 /* 改过地址的页：旧地址上一句话的去向页 */
+/* 协作页目录文字较长，电脑上按完整项目换行，所有去处保持可见。 */
+@media (min-width: 768px) {
+  body[data-page-kind="how"] nav.toc { height: auto; }
+  body[data-page-kind="how"] nav.toc > .bar-inner { height: auto; overflow: visible; }
+  body[data-page-kind="how"] nav.toc[data-toc-consistency] .toc-inner { height: auto; min-height: 44px; flex-wrap: wrap; gap: 0 24px; overflow: visible; }
+}
 .moved-notice{max-width:720px;margin:min(18vh,160px) auto;padding:0 16px;text-align:center;font-size:1.15rem;line-height:1.9;color:#334d63}
 .moved-notice a{color:#285d3c;font-weight:600;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
 .moved-notice .moved-title{margin:0 0 14px;font-size:1.6rem;line-height:1.4;color:#0a7232}

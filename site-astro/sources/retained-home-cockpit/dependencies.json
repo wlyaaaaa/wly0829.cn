@@ -8213,9 +8213,9 @@
     "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/runtime/live-sans-part-ff-3b183aa2131ca056cd4f.woff2"
   },
   "_typeset/runtime/live-ui-00b377935d3ee0602a02.js": {
-    "bytes": 31642,
-    "sha256": "00b377935d3ee0602a024cb142134034d34cf53f7e406116a0e3988b1009cd93",
-    "source_path": "site-astro/sources/retained-home-cockpit/assets/00b377935d3ee0602a024cb142134034d34cf53f7e406116a0e3988b1009cd93.js"
+    "bytes": 31648,
+    "sha256": "5b467f446a30291fa3914be787fc8b6916eb3b27dd670f16ff9803e6a15ab383",
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/5b467f446a30291fa3914be787fc8b6916eb3b27dd670f16ff9803e6a15ab383.js"
   },
   "_typeset/runtime/live-ui-page-7a15fde81e66ec530928.css": {
     "bytes": 17824,

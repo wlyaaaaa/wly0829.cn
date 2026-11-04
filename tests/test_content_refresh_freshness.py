@@ -249,6 +249,60 @@ class FreshnessTests(unittest.TestCase):
         inventory["items"].append(dict(id="other", page="other", field="status_line.state", kind="status_line.state"))
         self.assertEqual([t["page"] for t in review_tasks(inventory, [], {"demo"})], ["demo"])
 
+    def test_feature_status_projection_requires_same_real_card_and_matching_state(self):
+        from freshness import display_readback
+        md = self.root / "site-astro/src/content/pages/demo.md"; md.parent.mkdir(parents=True)
+        md.write_text('---\n{"url":"/demo/"}\n---\n', encoding="utf-8")
+        target = self.root / "dist/demo/index.html"; target.parent.mkdir(parents=True)
+        expected = "还在等的 62 项、暂缓 10 项〈在用〉"
+        dot = '<span class="feature-status-dot" data-state="on" data-text="〈在用〉"></span>'
+        good = '<article class="feature-item card" data-state="on"><div>还在等的 62 项、暂缓 10 项</div>' + dot + '</article>'
+        cases = [(good, True), (good.replace('62 项', '61 项'), False),
+                 (good.replace('class="feature-status-dot"', 'class="fake-feature-status-dot"'), False),
+                 (good.replace('data-state="on" data-text', 'data-state="off" data-text'), False),
+                 (good.replace('data-text="〈在用〉"', 'data-text="〈已停用〉"'), False),
+                 (good.replace('class="feature-item card"', 'class="fake-feature-item"'), False),
+                 ('<article class="feature-item" data-state="on">还在等的 62 项、暂缓 10 项</article><article class="feature-item" data-state="on">' + dot + '</article>', False)]
+        for html, accepted in cases:
+            target.write_text(html, encoding="utf-8")
+            self.assertEqual(display_readback(self.root, target.parent.parent, "demo", expected) == "verified", accepted, html)
+
+    def test_dynamic_status_omission_needs_official_top_screen_and_actual_live_binding(self):
+        import copy, hashlib
+        from freshness import display_readback
+        self.page["status_line"] = dict(state="常用", facts=["调用 3 次"])
+        self.number["field"] = "status_line.facts[0]"; self.registry["records"] = [self.number]
+        self.write(self.path, self.page)
+        result = self.collect(); report = self.apply(result)
+        md = self.root / "site-astro/src/content/pages/demo.md"
+        target = self.root / "dist/demo/index.html"; target.parent.mkdir(parents=True)
+        proof = report["record_readback"][0]
+        for comp in ("live_strip", "live_box"):
+            meta = dict(screen=dict(id="demo-01", section="top", live=["run"]),
+                layout={o: dict(blocks=[dict(type="chapter_title"), dict(type=comp)]) for o in ("h", "v")})
+            text = '---\n{"url":"/demo/"}\n---\n::screen{#demo-01 section="top"}\n\n```typeset\n' + json.dumps(meta) + '\n```\n'
+            html = '<section class="ts-screen" id="demo-01"><div data-comp="' + comp + '"><div data-hot="live" data-href="run"></div></div></section>'
+            cases = [("pass", text, html, True), ("missing_md", text.split('::screen')[0], html, True),
+                ("wrong_screen", text, html.replace('id="demo-01"', 'id="demo-02"'), True),
+                ("wrong_key", text, html.replace('data-href="run"', 'data-href="other"'), True),
+                ("static", text, html.replace('data-comp=', 'data-status-line="static" data-comp='), True),
+                ("no_binding", text, html.replace('data-hot="live"', 'data-hot="link"'), True),
+                ("stale_official_md", text, html, False)]
+            for case, author_md, built, official in cases:
+                md.write_text(author_md, encoding="utf-8"); target.write_text(built, encoding="utf-8")
+                receipt = copy.deepcopy(report); receipt["markdown_readback"][0]["sha256"] = hashlib.sha256(md.read_bytes()).hexdigest()
+                with patch("authors.markdown_checks", return_value={"demo": official}):
+                    closed = close_run(self.root, result, receipt, target.parent.parent)
+                row = closed["rows"][0]
+                self.assertEqual(row["status"], "source_only_verified" if case == "pass" else "pending", (comp, case, row))
+                if case == "pass":
+                    self.assertEqual(row["display_readback"], "not_displayed_by_contract")
+                    self.assertIn("不计成品显示通过", row["reason"])
+                    for missing in ("field_readback", "markdown_readback", "record_readback"):
+                        with patch("authors.markdown_checks", return_value={"demo": True}):
+                            incomplete = close_run(self.root, result, dict(receipt, **{missing: []}), target.parent.parent)
+                        self.assertEqual(incomplete["rows"][0]["status"], "pending", missing)
+
     def test_manual_record_review_proves_source_markdown_and_actual_display(self):
         import copy, hashlib
         install_fake_converter(self.root); result = self.collect(); report = self.apply(result)

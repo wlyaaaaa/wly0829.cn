@@ -602,12 +602,11 @@
       {
         "type": "feature_card",
         "text_ref": "一份内容，两种文件",
-        "columns": 3,
+        "columns": 2,
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "flow": "column",
-        "rows": 3,
+        "flow": "row",
         "portrait_columns": 1
       },
       {

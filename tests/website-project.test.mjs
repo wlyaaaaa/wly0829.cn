@@ -19,7 +19,9 @@ test('the website is a visible project and its card, counts and complete source 
   assert.equal(plan.projects.find(item => item.id === page.page)?.content_path, 'sources/pages/wly0829-cn/page.json');
   assert.equal(plan.non_card_explanations.some(item => item.id === 'website-presentation-infrastructure'), false);
   assert.equal(page.screens.length, 14);
-  assert.equal(page.registry.features.length, 39);
+  const featureNumbers = page.screens.filter(screen => screen.section === 'features')
+    .flatMap(screen => [...screen.text.matchAll(/^(\d+)\.\s/gm)].map(match => Number(match[1])));
+  assert.deepEqual(featureNumbers, page.registry.features.map((_, index) => index + 1));
   const card = home.screens.find(screen => screen.id === 'projects-home-20');
   assert.notEqual(card.hidden, true);
   assert.equal(card.card.href, page.url);

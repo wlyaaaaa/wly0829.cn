@@ -444,7 +444,7 @@
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
   "sha256": "7e8bf9748ee6d1e3cfdadaf48f3cee6fce0a700f15eee2fc9cbfbc50e12b9c37",
-  "converted_at_beijing": "2026-11-04T14:40:04+08:00"
+  "converted_at_beijing": "2026-11-04T17:23:27+08:00"
  }
 }
 ---
@@ -1928,12 +1928,11 @@ Python 写成：主程序 1,879 行（不算空行），另用共用的检查模
     {
      "type": "feature_card",
      "text_ref": "一份内容，两种文件",
-     "columns": 3,
+     "columns": 2,
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": "auto",
-     "flow": "column",
-     "rows": 3,
+     "flow": "row",
      "portrait_columns": 1
     },
     {

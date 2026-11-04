@@ -808,7 +808,7 @@
  "source": {
   "page": "sources/pages/chinese-asr/page.json",
   "sha256": "ad5df1206a6bd2de1d652df0f8ecf3e457d77367ea7dc8ce5b5e7c7483d432f9",
-  "converted_at_beijing": "2026-11-04T12:05:28+08:00"
+  "converted_at_beijing": "2026-11-04T17:23:27+08:00"
  }
 }
 ---
@@ -3173,25 +3173,21 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
     },
     {
      "type": "content_card",
-     "columns": 1,
+     "columns": 2,
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": "auto",
-     "text_ref": "不投票，也不让AI改写。主听的原话留着，对照模型只负责指出分歧，分歧处标[疑似]交给人听。让第三个模型投",
-     "row": "design",
-     "width": "68%"
+     "text_ref": "不投票，也不让AI改写。主听的原话留着，对照模型只负责指出分歧，分歧处标[疑似]交给人听。让第三个模型投"
     },
     {
      "type": "stat_card",
-     "columns": 1,
+     "columns": 3,
      "columns_v": 3,
      "icons": [
       "_library/hires-icons/代码窗口.png",
       "_library/hires-icons/打勾清单.png",
       "_library/hires-icons-r2/版本循环文件.png"
      ],
-     "row": "design",
-     "width": "32%",
      "text_ref": "25225行代码（Python23179行、PowerShell2016行、VBS30行）544个测试定义（只计数）"
     }
    ],

@@ -111,19 +111,70 @@ def sync_registry(path, rows):
 
 
 class DisplayText(HTMLParser):
+    STATUS_LABELS = {"在用": "on", "待验收": "pending", "待实施": "ring", "没用过": "unused", "说不准": "uncertain", "已停用": "off"}
+
     def __init__(self):
         super().__init__(); self.parts, self.hidden = [], 0
+        self.stack, self.feature_articles, self.live_bindings = [], [], set()
+
+    def append(self, text):
+        self.parts.append(text)
+        for frame in self.stack:
+            if "feature" in frame: frame["feature"]["parts"].append(text)
 
     def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        frame = dict(tag=tag, attrs=attrs)
+        if tag == "article" and "feature-item" in attrs.get("class", "").split():
+            frame["feature"] = dict(parts=[], state=attrs.get("data-state"), projected=False)
+            self.feature_articles.append(frame["feature"])
+        if not self.hidden:
+            article = next((f["feature"] for f in reversed(self.stack) if "feature" in f), None)
+            label = attrs.get("data-text", "")
+            word = label[1:-1] if label.startswith("〈") and label.endswith("〉") else label
+            if (tag == "span" and "feature-status-dot" in attrs.get("class", "").split() and article and word in self.STATUS_LABELS
+                    and self.STATUS_LABELS.get(word) == attrs.get("data-state") == article["state"]):
+                # 图例代替原状态词，只在同一张真实功能卡内恢复其语义。
+                article["parts"].append(label); article["projected"] = True
+            screen = next((f["attrs"] for f in reversed(self.stack) if f["tag"] == "section" and "ts-screen" in f["attrs"].get("class", "").split()), {})
+            live = next((f["attrs"] for f in reversed(self.stack) if f["attrs"].get("data-comp") in {"live_strip", "live_box"}), {})
+            if (screen.get("id") and live and live.get("data-status-line") != "static"
+                    and attrs.get("data-hot") == "live" and attrs.get("data-href")):
+                self.live_bindings.add((screen["id"], live["data-comp"], attrs["data-href"]))
         if tag in {"script", "style"}: self.hidden += 1
-        elif tag in {"p", "div", "br", "li", "section", "h1", "h2", "h3"}: self.parts.append(" ")
+        elif tag in {"p", "div", "br", "li", "section", "h1", "h2", "h3"}: self.append(" ")
+        if tag not in {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}:
+            self.stack.append(frame)
 
     def handle_endtag(self, tag):
         if tag in {"script", "style"}: self.hidden = max(0, self.hidden - 1)
-        elif tag in {"p", "div", "li", "section"}: self.parts.append(" ")
+        elif tag in {"p", "div", "li", "section"}: self.append(" ")
+        index = next((i for i in range(len(self.stack) - 1, -1, -1) if self.stack[i]["tag"] == tag), None)
+        if index is not None: del self.stack[index:]
 
     def handle_data(self, data):
-        if not self.hidden: self.parts.append(data)
+        if not self.hidden: self.append(data)
+
+
+def dynamic_status_replaces_static(text, parser):
+    """只认可官方首屏渲染输入及同屏成品中确有对应动态热区的既有优先规则。"""
+    match = re.search(r"::screen\{#[^\n]*\}\n\n```typeset\n(.*?)\n```", text, re.S)
+    if not match: return False
+    meta = json.loads(match[1]); screen = meta.get("screen", {})
+    keys = screen.get("live", [])
+    if screen.get("section") != "top" or not keys or not isinstance(keys, list): return False
+    layouts = meta.get("layout", {})
+    if not layouts: return False
+    for layout in layouts.values():
+        blocks = layout.get("blocks", [])
+        title = next((i for i, b in enumerate(blocks) if b.get("type") == "chapter_title"), None)
+        live = [b for b in blocks[(title + 1):] if b.get("type") in {"live_strip", "live_box"}] if title is not None else []
+        if not live or any(b.get("static_items") for b in live): return False
+        for block in live:
+            bound = block.get("keys", keys)
+            if isinstance(bound, str): bound = [bound]
+            if not bound or any((screen["id"], block["type"], key) not in parser.live_bindings for key in bound): return False
+    return True
 
 
 @lru_cache(maxsize=1)
@@ -141,16 +192,22 @@ def display_readback(root, dist, page, fragment, proof=None):
     target = target / "index.html" if not target.suffix else target
     parser = DisplayText(); parser.feed(target.read_text("utf-8-sig"))
     visible = canon(unescape("".join(parser.parts)))
+    def displayed(value):
+        expected = expected_text(unescape(value))
+        return bool(expected) and (expected in visible or any(article["projected"] and expected in canon(unescape("".join(article["parts"]))) for article in parser.feature_articles))
     if proof and proof.get("locator", {}).get("file"):
         locator = proof["locator"]
         document = json.loads((root / locator["file"]).read_text("utf-8-sig"))
         parent, key = field_at(document, locator["field"])
         if "{{" not in parent[key]:
             fragment = display_fragment(parent[key], locator["start"], locator["end"])
-        if expected_text(unescape(fragment)) and expected_text(unescape(fragment)) in visible:
+        if displayed(fragment):
             return "verified"
         field = locator.get("logical_field", locator["field"])
         status = json.loads((root / "sources/pages" / page / "page.json").read_text("utf-8-sig")).get("status_line", {})
+        if status and field.startswith("status_line.") and dynamic_status_replaces_static(text, parser):
+            from authors import markdown_checks
+            if markdown_checks(root, [page]).get(page): return "not_displayed_by_contract"
         if status and (field.startswith("status_line.") or field.endswith(".as_of") or "截至" in fragment):
             rules = display_rules(); items, note = rules["status_items"](status)
             if field == "status_line.source" and len(str(status.get("source", "")).strip()) > 16:
@@ -166,8 +223,7 @@ def display_readback(root, dist, page, fragment, proof=None):
             year, month, day = parent[key].split("-")
             dated = f"数字截至 {year} 年 {int(month)} 月 {int(day)} 日"
             if expected_text(dated) in visible: return "verified"
-    expected = expected_text(unescape(fragment))
-    return "verified" if expected and expected in visible else "failed"
+    return "verified" if displayed(fragment) else "failed"
 
 
 def derived_md_line(root, page, screen):
@@ -255,6 +311,7 @@ def close_run(root, result, report=None, dist=None):
                             if date_line and display_readback(root, dist, row["page"], date_line) != "verified":
                                 raise ValueError("成品未找到派生截至日期")
                         status = "source_only_verified" if display == "not_displayed_by_contract" else "applied_readback_verified"
+                        if status == "source_only_verified": reason = "作者与官方 Markdown 已回读；按渲染契约此静态字段不显示（首屏动态状态条优先或来源长注省略），不计成品显示通过"
                         synced.append(row)
                     else:
                         reason = "变化项缺同轮字段、记录或 Markdown 成功回读"
@@ -303,9 +360,10 @@ def close_run(root, result, report=None, dist=None):
                     fragment = display_fragment(parent[key], start, end, bound[bound_key])
                     proof = dict(locator=dict(locator, logical_field=field, start=start, end=end))
                     display = display_readback(root, dist, row["page"], fragment, proof)
-                    if display != "verified": raise ValueError("成品未找到人工日期的实际上下文")
-                    status = "manual_source_verified" if source else "manual_review_verified"
-                    reason = "人工已核对作者、Markdown 与成品：" + str(closed["evidence"])
+                    if display not in {"verified", "not_displayed_by_contract"}: raise ValueError("成品未找到人工日期的实际上下文")
+                    status = "source_only_verified" if display == "not_displayed_by_contract" else "manual_source_verified" if source else "manual_review_verified"
+                    reason = ("作者与官方 Markdown 已回读；按渲染契约此静态字段不显示（首屏动态状态条优先或来源长注省略），不计成品显示通过："
+                              if display == "not_displayed_by_contract" else "人工已核对作者、Markdown 与成品：") + str(closed["evidence"])
                 elif (row["status"] in {"unavailable", "domain_fact_task", "scope_pending"} and row.get("checked_at") and reason and equal(row["old_value"])
                       and not (row.get("raw_status") in {"changed", "unchanged"} and row.get("raw_new_value") is not None)):
                     status = "unknown_preserved"

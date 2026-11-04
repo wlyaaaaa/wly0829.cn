@@ -856,7 +856,7 @@ def redirect_layout(s, title):
     ref = next((node_text(n)[:10] for n in nodes[1:] if n.get("type") == "para" and node_text(n)), None)
     h = [{"type": "chapter_title", "text_ref": title, "align": "left", "size": "large", "row": "go", "width": "70%", "row_fit_illustration": True}]
     v = [{"type": "chapter_title", "text_ref": title, "align": "center", "size": "large"},
-         {"type": "illustration", "asset": REDIRECT_ICON, "align": "center", "size": "medium"}]
+         {"type": "illustration", "asset": REDIRECT_ICON, "align": "center", "target_width": "55%"}]
     if ref:
         h.append({"type": "prose", "text_ref": ref, "row": "go"})
         v.append({"type": "prose", "text_ref": ref})

@@ -884,21 +884,17 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "不投票，也不让AI改写。主听的原话留着，对照模型只负责指出分歧，分歧处标[疑似]交给人听。让第三个模型投",
-        "row": "design",
-        "width": "68%"
+        "text_ref": "不投票，也不让AI改写。主听的原话留着，对照模型只负责指出分歧，分歧处标[疑似]交给人听。让第三个模型投"
       },
       {
         "type": "stat_card",
-        "columns": 1,
+        "columns": 3,
         "columns_v": 3,
         "icons": [
           "_library/hires-icons/代码窗口.png",
           "_library/hires-icons/打勾清单.png",
           "_library/hires-icons-r2/版本循环文件.png"
         ],
-        "row": "design",
-        "width": "32%",
         "text_ref": "25225行代码（Python23179行、PowerShell2016行、VBS30行）544个测试定义（只计数）"
       }
     ],
