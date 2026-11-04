@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E338",
-   "commit": "99816398405d43e3fbcc31a419952866e97eb880",
-   "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118",
-   "activated_at": "2026-10-31T15:58:17.483029+08:00",
+   "release": "E371",
+   "commit": "3c09ab215347bdeef9b20027169a68cbe43e1a61",
+   "ruleset_sha256": "0027aa3691052764d05c2e68802eeb1049c7ae7b5151d4f59a605251d402c130",
+   "activated_at": "2026-11-04T07:38:37.086979+08:00",
    "file": "sources/rules/docs/contracts/agents.context-sources.md",
-   "sha256": "ea79c44cc07cfb03751ee485d7cb755ff617bd62e868a68c806fc2d084ae5642",
-   "public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221"
+   "sha256": "3c34c48686673a80f4bba169e9cf355b7eb4fd2ded4b730cf1f860fa30de4b91",
+   "public_sha256": "1706512e7b5413606856d73800729ac04833f616760447fcf7b56f95198e5554"
   },
   "explanation_based_on": {
    "release": "E337",
@@ -439,8 +439,8 @@
  },
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
-  "sha256": "6611246b54715e2b621f7d7d8601edfc45460c0d90229796fb3becbf6f00262f",
-  "converted_at_beijing": "2026-10-31T16:43:53+08:00"
+  "sha256": "600957db66c5d091678a4f7d2f0582db4d54b58ff81207a33ee2bf42389b6933",
+  "converted_at_beijing": "2026-11-04T08:31:33+08:00"
  }
 }
 ---
@@ -2524,9 +2524,9 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E338",
-   "sha256": "ea79c44cc07cfb03751ee485d7cb755ff617bd62e868a68c806fc2d084ae5642",
-   "public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
+   "release": "E371",
+   "sha256": "3c34c48686673a80f4bba169e9cf355b7eb4fd2ded4b730cf1f860fa30de4b91",
+   "public_sha256": "1706512e7b5413606856d73800729ac04833f616760447fcf7b56f95198e5554",
    "from": null,
    "to": "## 三档维护",
    "start": 0,
@@ -2544,7 +2544,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-08",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
+  "source_public_sha256": "1706512e7b5413606856d73800729ac04833f616760447fcf7b56f95198e5554",
   "source_rule_part": "rule-context-sources/rule-context-sources-08"
  },
  "layout": {
@@ -2552,7 +2552,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版，一字不改"
+     "text_ref": "原文·E371版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2586,7 +2586,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版，一字不改"
+     "text_ref": "原文·E371版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2664,7 +2664,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
 }
 ```
 
-原文 · E338 版，一字不改
+原文 · E371 版，一字不改
 
 # 事实来源与任务上下文
 
@@ -2720,9 +2720,9 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E338",
-   "sha256": "ea79c44cc07cfb03751ee485d7cb755ff617bd62e868a68c806fc2d084ae5642",
-   "public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
+   "release": "E371",
+   "sha256": "3c34c48686673a80f4bba169e9cf355b7eb4fd2ded4b730cf1f860fa30de4b91",
+   "public_sha256": "1706512e7b5413606856d73800729ac04833f616760447fcf7b56f95198e5554",
    "from": "## 三档维护",
    "to": "### 一样东西只存一处",
    "start": 2198,
@@ -2740,7 +2740,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-09",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
+  "source_public_sha256": "1706512e7b5413606856d73800729ac04833f616760447fcf7b56f95198e5554",
   "source_rule_part": "rule-context-sources/rule-context-sources-09"
  },
  "layout": {
@@ -2748,7 +2748,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -2779,7 +2779,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -2846,7 +2846,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E338 版 · 续
+原文 · E371 版 · 续
 
 ## 三档维护
 
@@ -2903,13 +2903,13 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E338",
-   "sha256": "ea79c44cc07cfb03751ee485d7cb755ff617bd62e868a68c806fc2d084ae5642",
-   "public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
+   "release": "E371",
+   "sha256": "3c34c48686673a80f4bba169e9cf355b7eb4fd2ded4b730cf1f860fa30de4b91",
+   "public_sha256": "1706512e7b5413606856d73800729ac04833f616760447fcf7b56f95198e5554",
    "from": "### 一样东西只存一处",
    "to": null,
    "start": 4617,
-   "end": 7835,
+   "end": 8077,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -2940,7 +2940,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-10",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "c9c773b434af8c4f355252120c555736dd13d9849686fdbec9c26aac526b9221",
+  "source_public_sha256": "1706512e7b5413606856d73800729ac04833f616760447fcf7b56f95198e5554",
   "source_rule_part": "rule-context-sources/rule-context-sources-10"
  },
  "layout": {
@@ -2948,7 +2948,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -2974,7 +2974,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -2992,11 +2992,11 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
 }
 ```
 
-原文 · E338 版 · 续
+原文 · E371 版 · 续
 
 ### 一样东西只存一处
 
-规则、事实、决定和本人原话各只存一处，就是上面“事实找谁”分给它的家；本人原话存原话存档，本人以后要遵守的做法存规则，本人自己的事实存理解库明示。别处用到时，写一句现行结论并指向那一处（路径、章节或编号），不整段抄。会变的数（版本、数量、剩余空间、“第几行”、部署或运行状态）的家是能查到它的命令、配置或系统本身：说明、规则、手册这类长期文档写去哪查，非写不可就注明是哪天看到的；带日期的决定记录、汇报、计划和评测保留当时的值，不回头改。发现副本时，先把副本里更新或多出来的内容并回它的家，再把副本改成指针。由工具从唯一来源生成、并核对一致的副本（例如规则发布快照、装到用户目录的入口文件、网站生成的说明页面）不算副本。急救步骤的来源在 PCConfig，网站照它生成，并保证电脑离线时仍能在网站读到急救页；给本人看的内容不再在仓库 README 或另一份长指南里手写维护。过时的历史报告和设计稿不改写，没人再用就移出工作区。跨文件引用写链接加章节名或条目名，不写“第几条”，重新编号时才不会悄悄指错。跨文件查重用 [Find-DuplicateContent.ps1](/source-tools/Find-DuplicateContent.ps1)，结果逐组判断后再收副本；项目里由程序生成并核对的副本和带日期的记录，在项目根 `.duplicate-content-exceptions.json` 的 `non_copies` 声明一次，不再算副本。指不到的链接和章节用 Test-DocReferences.ps1（`E:/.agents/tools/Test-DocReferences.ps1`） 查。
+规则、事实、决定和本人原话各只存一处，就是上面“事实找谁”分给它的家；本人原话存原话存档，本人以后要遵守的做法存规则，本人自己的事实存理解库明示。别处用到时，写一句现行结论并指向那一处（路径、章节或编号），不整段抄。会变的数（版本、数量、剩余空间、“第几行”、部署或运行状态）的家是能查到它的命令、配置或系统本身：说明、规则、手册这类长期文档写去哪查，非写不可就注明是哪天看到的；带日期的决定记录、汇报、计划和评测保留当时的值，不回头改。发现副本时，先把副本里更新或多出来的内容并回它的家，再把副本改成指针。由工具从唯一来源生成、并核对一致的副本（例如规则发布快照、装到用户目录的入口文件、网站生成的说明页面）不算副本。急救步骤的来源在 PCConfig，网站照它生成，并保证电脑离线时仍能在网站读到急救页；给本人看的内容不再在仓库 README 或另一份长指南里手写维护。过时的历史报告和设计稿不改写，没人再用就移出工作区。跨文件引用写链接加章节名或条目名，不写“第几条”，重新编号时才不会悄悄指错。跨文件查重用 [Find-DuplicateContent.ps1](/source-tools/Find-DuplicateContent.ps1)，结果逐组判断后再收副本；项目里由程序生成并核对的副本和带日期的记录，在项目根 `.duplicate-content-exceptions.json` 的 `non_copies` 声明一次，不再算副本。指不到的链接和章节用 Test-DocReferences.ps1（`E:/.agents/tools/Test-DocReferences.ps1`） 查。写死的会变机器值（没登记的本机端口、软件版本号、按本机钟点写的时间、“当前状态”写法）用 PCConfig 的 Find-VolatileFacts.ps1（`E:/PCConfig/tools/Find-VolatileFacts.ps1`） 找：没登记的本机端口在 PCConfig 测试里直接报错，其余候选由每周体检逐条判断。
 
 把几处现行结论合成一段的汇总（例如理解库核心画像、当前处境卡、驾驶舱条目标题、项目首页）也算引用：每条带“截至哪天”并指向家；案件阶段、计划、用药、金额这类会变的状态只写意义和指向，不写成现在时。改了家的任务负责找出直接引用它的汇总，在同一任务里更新；做不到的由下次全量更新的收尾核对补上。能用程序查的交给程序（例如理解库 `card-lint` 的 h、i 类），查出来就算待处理，不能只列出来不算数。
 
@@ -3005,6 +3005,8 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
 记忆的使用边界按[约法 L30](/rules/charter/#十关于规则本身)，两个宿主的关闭配置见各自适配专题。进上下文的只有全局规则和项目规则；原话存档和旧决定月卷都不注入，只在要查当时怎么说的时候按编号翻。
 
 **原话。** 本人的每条原话由两个宿主的钩子自动原样存进原话存档，资料锁着时由后台在解锁后补存；位置、格式和补存见运维说明（`E:/.agents/docs/operations/context-hooks.md`）。AI 不手抄原话，引用时写源消息 UUID。
+
+跨任务查旧资料时，普通查询、派单、交接和每周整理采用来源已选作项目材料的原句。混合消息只带选中的部分，只存档的对话留给原会话接续或本人点名核对原件。
 
 **长期的写进规则，只管这一次的不写。** 根会话当场判断：
 - 只管这一次的：提问、好奇、本次安排和选项回答、当场改了就完的纠正、“这次先别……”。留在对话和任务状态里，不写任何地方。

@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E338",
-   "commit": "99816398405d43e3fbcc31a419952866e97eb880",
-   "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118",
-   "activated_at": "2026-10-31T15:58:17.483029+08:00",
+   "release": "E371",
+   "commit": "3c09ab215347bdeef9b20027169a68cbe43e1a61",
+   "ruleset_sha256": "0027aa3691052764d05c2e68802eeb1049c7ae7b5151d4f59a605251d402c130",
+   "activated_at": "2026-11-04T07:38:37.086979+08:00",
    "file": "sources/rules/docs/contracts/agents.authorization.md",
-   "sha256": "860d3b5e8eec0a2e1f8b891cb7ed8032f24c2db7bac54552dd172c862cdb9694",
-   "public_sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501"
+   "sha256": "8f85dd529a0d730e092483b848d99968e4493a0eaa8d8e3f71ac6c0bb8e46d5a",
+   "public_sha256": "c78209d8afa72b5afb2c2ba46dbfe26d066c8ffd134efaf667e257439a847b06"
   },
   "explanation_based_on": {
    "release": "E337",
@@ -241,8 +241,8 @@
  },
  "source": {
   "page": "sources/pages/rule-authorization/page.json",
-  "sha256": "06d9060dfb46f03c6393bcc32bcca0e8d4da5739cd1a884cc4d1fb4a85a7afd4",
-  "converted_at_beijing": "2026-10-31T16:43:53+08:00"
+  "sha256": "f17c3b0236439726d943b9fa6ac1b6b096addc48f83ab0201278381c6e8ec287",
+  "converted_at_beijing": "2026-11-04T08:31:32+08:00"
  }
 }
 ---
@@ -1563,13 +1563,13 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E338",
-   "sha256": "860d3b5e8eec0a2e1f8b891cb7ed8032f24c2db7bac54552dd172c862cdb9694",
-   "public_sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501",
+   "release": "E371",
+   "sha256": "8f85dd529a0d730e092483b848d99968e4493a0eaa8d8e3f71ac6c0bb8e46d5a",
+   "public_sha256": "c78209d8afa72b5afb2c2ba46dbfe26d066c8ffd134efaf667e257439a847b06",
    "from": null,
    "to": "## 子代理和项目规则不扩大授权",
    "start": 0,
-   "end": 3134,
+   "end": 4001,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -1592,7 +1592,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-05",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501",
+  "source_public_sha256": "c78209d8afa72b5afb2c2ba46dbfe26d066c8ffd134efaf667e257439a847b06",
   "source_rule_part": "rule-authorization/rule-authorization-05"
  },
  "layout": {
@@ -1600,7 +1600,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版，略去个别私人领域字句"
+     "text_ref": "原文·E371版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -1635,7 +1635,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版，略去个别私人领域字句"
+     "text_ref": "原文·E371版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -1729,7 +1729,7 @@
 }
 ```
 
-原文 · E338 版，略去个别私人领域字句
+原文 · E371 版，略去个别私人领域字句
 
 # 用户授权
 
@@ -1752,11 +1752,15 @@ owner: `E:\.agents`
 
 现有的长期授权：
 
+- **以本人身份使用 Muse**：本人长期授权 Codex、Claude 及其子代理使用 Muse，等同本人在用。所有对话、资料和信息交换都用本人口吻，像本人一样自然说话，不让 Muse 觉得是 AI 在调用，不描写或表现自己是智能体；提供给 Muse 的资料正文和协作说明不出现 Claude、Codex、AI、派单、智能体等字样或写法。已有资料及可修改的记忆、工作区旧内容随更新一并改正；只改说法，不编造本人的事实或经历，不增加其他技术手段。本人 2026-11-03 07:28、07:54 确认。
+- **Muse 协作资料**：本人同意由 AI 按协作需要选择现行资料，同步到本人已登录的 Muse，不按敏感程度隔离，不再逐版请本人过目。资料主要服务 Codex、Claude 派活，背景、在做的事、偏好和尺码优先，兴趣与闲聊近况顺带；总量在 10,000 字以内，不整份灌入理解库档案，不含长期预算。以后随个人项目按需同步变化、新增、更正和删除，规则只在理解库 `V:\Personal\Projects\daily-preferences\DOMAIN_CONTRACT.md` 维护；资料锁着时不取、不同步。AI 派活另开对话，主聊天只在资料更新时用本人口吻自然通知一句。本人 2026-11-03 05:29—05:41 确认。
+- **Muse 任务审批**：本人长期授权 AI 对 Muse 已派任务弹出的审批直接同意，包括出网、动作确认，以及付款、发消息等审批，并在本机任务台账记录审批内容、同意时间和结果。派单照任务本身写要查的事，不因此主动加入买东西或替本人发消息的目标；没有用到的接口不为这条授权另行接入。本人 2026-11-03 05:32 确认。
+
 - **Git 收尾**：授权在仓库里干活，就包括验证后的定向提交和正常推送（细则见[工程与交付](/rules/engineering-delivery/)）。
 - **同意网站、平台和软件协议**：本人长期授权 Claude、GPT 及它们派出的子代理，在替本人完成已授权的事情时，直接同意网站、平台、软件要求的用户协议、服务条款、使用规范、隐私政策，包括上传、发布、登录、安装页面上“继续即同意”等提示，不再为同意协议问本人（本人 2026-10-28 18:09，源 3577e088）。
 - **申请管理员权限**：已授权的核对、验收或操作要管理员才能看全、做完时，主持和子代理都直接静默提权执行，不把“权限不够、读不全”记成未知，不用推断补位，也不留给根会话。首选系统 sudo 内联模式：`sudo pwsh -NoProfile -NonInteractive -File <脚本> <参数>`（或 `-Command`），直接接回输出和退出码；sudo 不存在、被关或不是内联模式时，用 `Start-Process pwsh -Verb RunAs -Wait -PassThru -WindowStyle Hidden`，管理员进程先设 `[Console]::OutputEncoding` 为 UTF-8，输出写 UTF-8 文件再读回并传回退出码，结果写明是否已提权（如 `observer_elevated`）。两条路径真的失败才如实报告；UAC 需要本人在场时明确写“需要本人在场提权”，由根会话安排，不交半成品。各电脑的 UAC 和 sudo 设置以 PCConfig 登记为准，不因此修改系统设置。只有本人、上级规则或适用项目规则明确说不提权时才不用；需要密码中心受信任身份的操作不提权运行。提权不推迟已授权工作，不专门请本人决定普通提权步骤；权限/ACL 改动、撤回快照和重大动作等仍按各自专题办理。提权只给 Windows 权限，不产生、扩大或缩小动作授权（出处：决定文档“需要管理员视角才能核实时默认静默提权，不把读不全记成未知”）。
 - **选型号和思考档位**：AI 按质量和总花费自己选；质量需要时可以用比根会话或父代理更强的型号或更高的档位，不逐次问（见[分工与并行施工](/rules/execution-coordination/)和模型清单）。本人这次明确限定的型号、档位、预算或厂商优先。
-- **Claude 派 GPT**：哪些型号不用另行授权就能派、哪个要本人给对话或项目授权、派出的 Codex 能做什么，都按约法 L23，这里不另写。
+- **Claude 派 GPT**：哪些型号不用另行授权就能派、哪个要本人给对话或项目授权、派出的 Codex 能做什么，都按约法 L23，这里不另写。另有一项本人长期授权，只限完整复核一类，范围和出处登记在模型清单 `routing.current_generation_defaults.review_full_claude`（本人 2026-11-02 23:19，源 af3c86f8）。
 - **子代理要本人确认时由根会话代确认**：派出的 GPT 等子代理因为工具要求本人确认（含“当场确认”）而停下时，凡是本人已经授权过的事，由派它的根会话当场代本人确认、让它接着做，不再拿来问本人；不限于协议，也不限于某个网站（本人 2026-10-29 20:27—20:32，源 dee43ef4、84f941d1、c26bbdf8）。做法见下面“根会话代确认的执行办法”。
 - **已经在用的目标继续收尾**：本人授权之前就已登记、现在仍在用的目标（仓库、网站、已登记的发布目标），验证、发布、部署、回读和同步默认继续，本人说只留本地或不发布时除外。新建本人 GitHub 私有仓库、把远端改成本人 GitHub 账号下的仓库、核对过不丢提交的历史改写（含强制推送），按普通 Git 收尾直接做。除此以外，第一次新建或选择新的外部目标、新的公开或部署目标、花钱、不可恢复的迁移、可能丢提交的强制推送、改信任根（受信任 AI 的登记或本人验证依据）或授权边界，仍要本人明确同意。
 
@@ -1789,13 +1793,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E338",
-   "sha256": "860d3b5e8eec0a2e1f8b891cb7ed8032f24c2db7bac54552dd172c862cdb9694",
-   "public_sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501",
+   "release": "E371",
+   "sha256": "8f85dd529a0d730e092483b848d99968e4493a0eaa8d8e3f71ac6c0bb8e46d5a",
+   "public_sha256": "c78209d8afa72b5afb2c2ba46dbfe26d066c8ffd134efaf667e257439a847b06",
    "from": "## 子代理和项目规则不扩大授权",
    "to": "## 受信任的 AI",
-   "start": 3134,
-   "end": 4440,
+   "start": 4001,
+   "end": 5307,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1826,7 +1830,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-06",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501",
+  "source_public_sha256": "c78209d8afa72b5afb2c2ba46dbfe26d066c8ffd134efaf667e257439a847b06",
   "source_rule_part": "rule-authorization/rule-authorization-06"
  },
  "layout": {
@@ -1834,7 +1838,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -1867,7 +1871,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -1944,7 +1948,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E338 版 · 续
+原文 · E371 版 · 续
 
 ## 子代理和项目规则不扩大授权
 
@@ -1974,13 +1978,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E338",
-   "sha256": "860d3b5e8eec0a2e1f8b891cb7ed8032f24c2db7bac54552dd172c862cdb9694",
-   "public_sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501",
+   "release": "E371",
+   "sha256": "8f85dd529a0d730e092483b848d99968e4493a0eaa8d8e3f71ac6c0bb8e46d5a",
+   "public_sha256": "c78209d8afa72b5afb2c2ba46dbfe26d066c8ffd134efaf667e257439a847b06",
    "from": "## 受信任的 AI",
    "to": null,
-   "start": 4440,
-   "end": 5105,
+   "start": 5307,
+   "end": 5972,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -1999,7 +2003,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-07",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "0ed2510df0108f3cfe128d60fa196aebcc3110ea8a1c8d96e314c476bd120501",
+  "source_public_sha256": "c78209d8afa72b5afb2c2ba46dbfe26d066c8ffd134efaf667e257439a847b06",
   "source_rule_part": "rule-authorization/rule-authorization-07"
  },
  "layout": {
@@ -2007,7 +2011,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -2044,7 +2048,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -2097,7 +2101,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E338 版 · 续
+原文 · E371 版 · 续
 
 ## 受信任的 AI
 

@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E338",
-   "commit": "99816398405d43e3fbcc31a419952866e97eb880",
-   "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118",
-   "activated_at": "2026-10-31T15:58:17.483029+08:00",
+   "release": "E371",
+   "commit": "3c09ab215347bdeef9b20027169a68cbe43e1a61",
+   "ruleset_sha256": "0027aa3691052764d05c2e68802eeb1049c7ae7b5151d4f59a605251d402c130",
+   "activated_at": "2026-11-04T07:38:37.086979+08:00",
    "file": "sources/rules/docs/contracts/agents.rule-release.md",
-   "sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494",
-   "public_sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494"
+   "sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d",
+   "public_sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d"
   },
   "explanation_based_on": {
    "release": "E337",
@@ -156,8 +156,8 @@
  },
  "source": {
   "page": "sources/pages/rule-rule-release/page.json",
-  "sha256": "5b773a7bba0ab54b34f28efa84da75761a41071b242abb75a1688e1d6fc7a01a",
-  "converted_at_beijing": "2026-10-31T16:43:54+08:00"
+  "sha256": "bcc6e4f6a0d2fc5b0e12e659231bdaaa1e510014300499b77d641001170e7163",
+  "converted_at_beijing": "2026-11-04T08:31:34+08:00"
  }
 }
 ---
@@ -1296,9 +1296,9 @@ E186　E187　当前　上一版　SYSTEM
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.rule-release.md",
-   "release": "E338",
-   "sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494",
-   "public_sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494",
+   "release": "E371",
+   "sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d",
+   "public_sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d",
    "from": null,
    "to": "## 发布和回退",
    "start": 0,
@@ -1316,7 +1316,7 @@ E186　E187　当前　上一版　SYSTEM
   "reuse": "",
   "source_excerpt_id": "rule-rule-release/rule-rule-release-05",
   "source_logical_id": "rule_release_contract",
-  "source_public_sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494",
+  "source_public_sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d",
   "source_rule_part": "rule-rule-release/rule-rule-release-05"
  },
  "layout": {
@@ -1326,7 +1326,7 @@ E186　E187　当前　上一版　SYSTEM
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版，一字不改"
+     "text_ref": "原文·E371版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1356,7 +1356,7 @@ E186　E187　当前　上一版　SYSTEM
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版，一字不改"
+     "text_ref": "原文·E371版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1449,7 +1449,7 @@ E186　E187　当前　上一版　SYSTEM
 }
 ```
 
-原文 · E338 版，一字不改
+原文 · E371 版，一字不改
 
 # 规则发布与恢复
 
@@ -1479,13 +1479,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.rule-release.md",
-   "release": "E338",
-   "sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494",
-   "public_sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494",
+   "release": "E371",
+   "sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d",
+   "public_sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d",
    "from": "## 发布和回退",
    "to": null,
    "start": 953,
-   "end": 3045,
+   "end": 3068,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1499,7 +1499,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-rule-release/rule-rule-release-06",
   "source_logical_id": "rule_release_contract",
-  "source_public_sha256": "86295f8c2d525e3ce7c88f0c02e89b82b60ce5157a417a25520a674b24d96494",
+  "source_public_sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d",
   "source_rule_part": "rule-rule-release/rule-rule-release-06"
  },
  "layout": {
@@ -1508,7 +1508,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -1531,7 +1531,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -1601,7 +1601,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E338 版 · 续
+原文 · E371 版 · 续
 
 ## 发布和回退
 
@@ -1610,7 +1610,7 @@ owner: `E:\.agents`
 - **限制句按意思判断。** 发布门对改变措辞、缩短、挪位置或改成指向同版仍有效的同一规则做一次 Sol medium 语义比对，限制的对象、范围、条件和强度都不变就自动放行，不请本人同意；判定为改写的旧句和目标版本证据写入发布回执及版本记录。真正放宽、删除限制，或改动 `AGENTS.md` 的“我的 AI 约法”一节，要用发布入口的 `-OwnerApproval <源消息UUID>` 指向本人原话（可以列几条）。原话里本人在谈改规则（说到规则、约法或约法条号，例如“L14 必要时可改”），就是明确同意改规则，直接放行；否则发布门做一次 Sol medium 比对，确认每处改动都符合原话里本人真正想要的结果就放行，不另外问本人。规则写本意、不照抄字面：补全本意显然包含的同类对象和说法可以放行；违背原话方向、放宽到本意没涉及的对象，或只是 AI 自己提的、本人没反对的，不放行。比对不可用或拿不准时，按要本人同意处理。
 - **并发。** 发布器会核对当前指针的校验值；如果别的任务刚发布过，先重读并把它的结果并进来，不覆盖。新的发布必须包含当前在用的那次提交。不为发布新建队列、后台服务或全局施工平台。
 - **失败和回退。** 发布失败时恢复原来的指针和入口，旧版本照常可用。指针缺失但 `releases` 下仍有 `E*` 目录时，报 `e_rules_current_pointer_missing`；按现存目录的 `release.json` 重建指针后再核验。成功后只留“当前”和“上一版”两份可重建的目录，历史由私有 Git 保存。回退把正文、目录和入口模板一起恢复到上一版；不改写历史代号，也不重建同一个代号来冒充回退。
-- **入口模板随版本部署。** 发布器将两份模板中的版本号和根规则占位符替换为本版代号与 `AGENTS.md` 全文（约法和导航），本版文件的相对链接改为发布目录下的绝对路径，锚点保留；非本版文件沿用源码绝对路径。渲染后的 `templates/codex-home/AGENTS.md` 写到发布器配置的 Codex home 的 `AGENTS.md`；渲染后的 `templates/claude-home/CLAUDE.md` 写到 `~/.claude/CLAUDE.md`，根会话和加载用户级入口的子代理直接带上约法。Hook 核对时优先用 `CODEX_HOME` 定位 Codex home，未设置时用 `~/.codex`。release 记录、校验值和核验覆盖渲染后的字节，回退逐字节恢复上一版入口；无占位符的旧模板保持原样。约法有变化时，在发布汇报里提醒本人启动一次笔记本的按需巡检；由笔记本从主机当前活动规则同步约法段，主机不反向写笔记本，连不上时保留笔记本现有规则。
+- **入口模板随版本部署。** 发布器将两份模板中的版本号和根规则占位符替换为本版代号与 `AGENTS.md` 全文（约法和导航），本版文件的相对链接改为发布目录下的绝对路径，锚点保留；非本版文件沿用源码绝对路径。渲染后的 `templates/codex-home/AGENTS.md` 写到发布器配置的 Codex home 的 `AGENTS.md`；渲染后的 `templates/claude-home/CLAUDE.md` 写到 `~/.claude/CLAUDE.md`，根会话和加载用户级入口的子代理直接带上约法。Hook 核对时优先用 `CODEX_HOME` 定位 Codex home，未设置时用 `~/.codex`。release 记录、校验值和核验覆盖渲染后的字节，回退逐字节恢复上一版入口；无占位符的旧模板保持原样。笔记本约法同步由既有每周定时巡检处理，普通约法更新不单独登记驾驶舱本人事项，也不要求本人手动启动按需巡检；由笔记本从主机当前活动规则同步约法段，主机不反向写笔记本，连不上时保留笔记本现有规则。
 - **防随手改。** 活动规则目录、指针和两个入口保留现有 SYSTEM 保护；发布器按需提权，完成后恢复保护并回读，不换成只有文件只读属性。发布不调用本人的秘密或本人验证，也不新增授权体系。
 
 ## 验证

@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E338",
-   "commit": "99816398405d43e3fbcc31a419952866e97eb880",
-   "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118",
-   "activated_at": "2026-10-31T15:58:17.483029+08:00",
+   "release": "E371",
+   "commit": "3c09ab215347bdeef9b20027169a68cbe43e1a61",
+   "ruleset_sha256": "0027aa3691052764d05c2e68802eeb1049c7ae7b5151d4f59a605251d402c130",
+   "activated_at": "2026-11-04T07:38:37.086979+08:00",
    "file": "sources/rules/docs/contracts/agents.engineering-delivery.md",
-   "sha256": "bc1567117e8417fba0ec67d6d3ec5ff3c0109ec5a97f718c2556f1682dcc8e6e",
-   "public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4"
+   "sha256": "b81817b6cedb8a606ef42185caa584809281b85be2ec0c54c4dd0124533210f5",
+   "public_sha256": "6ea39201f816ad82ccd47c73f0869c6c52a430c96305b33834e293e8ec880f34"
   },
   "explanation_based_on": {
    "release": "E337",
@@ -263,8 +263,8 @@
  },
  "source": {
   "page": "sources/pages/rule-engineering-delivery/page.json",
-  "sha256": "e6fd688b0d6e3e7adce5f63bc7ec5753587ef84e238c045c3b57a70cf32a4d2c",
-  "converted_at_beijing": "2026-10-31T16:43:54+08:00"
+  "sha256": "f31f585af581ba5d2b023b66951c31dd802cc354aac50f4b324301008e3dc1a5",
+  "converted_at_beijing": "2026-11-04T08:31:33+08:00"
  }
 }
 ---
@@ -1841,13 +1841,13 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E338",
-   "sha256": "bc1567117e8417fba0ec67d6d3ec5ff3c0109ec5a97f718c2556f1682dcc8e6e",
-   "public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
+   "release": "E371",
+   "sha256": "b81817b6cedb8a606ef42185caa584809281b85be2ec0c54c4dd0124533210f5",
+   "public_sha256": "6ea39201f816ad82ccd47c73f0869c6c52a430c96305b33834e293e8ec880f34",
    "from": null,
    "to": "## 验证",
    "start": 0,
-   "end": 7490,
+   "end": 7541,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -1870,7 +1870,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-06",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
+  "source_public_sha256": "6ea39201f816ad82ccd47c73f0869c6c52a430c96305b33834e293e8ec880f34",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-06"
  },
  "layout": {
@@ -1878,7 +1878,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E338版，一字不改",
+     "text_ref": "原文·E371版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -1918,7 +1918,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E338版，一字不改",
+     "text_ref": "原文·E371版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -2039,7 +2039,7 @@
 }
 ```
 
-原文 · E338 版，一字不改
+原文 · E371 版，一字不改
 
 # 工程与交付
 
@@ -2054,7 +2054,7 @@ owner: `E:\.agents`
 - **先找现成的，先算维护账。** 做以后要长期维护的东西（框架、引擎、生成器、检查器、服务，或几十行以上不只是衔接的代码），先找成熟的开源项目和本机已有工具（清单见[能力与运行方式](/rules/capabilities-runtime/)的“本机小工具”），自己只写配置和衔接；动手前先算清“以后改一处要多久、牵动多大范围”，算不出来就先做小样实测，不凭感觉说“可行”。
 - **做不到就当场说。** 本人问“可行吗、能保证吗”时，没有把握保质保量，就当场说“我做不到”或“这条路不行”；本人的建议可以否掉，不当成必须照做的前提。
 - **完成时间只认第一次说的。** 告诉过本人的完成时间，第二次往后推时，如实说明是做法不行还是偶发问题，并请本人在换做法、缩范围、停手里选一个；不依赖这个决定的活照常做，不空等。估计 12 小时以上的任务用 `tools/Set-LongTask.ps1` 登记，承诺时间、延期次数、检查点和空转由程序记和提醒，规则里不写操作细节。
-- **给本人看、给本人用的东西，做完先自己当本人用一遍。** 网页、驾驶舱、汇报页样式，主持在真实页面上按本人的屏幕宽度亲自看，把每个按钮按一遍；测试和自动扫描通过代替不了这一步。不比现在差才交，不建议本人接受更差的版本。做完直接上线，不另搭预览地址、不设上线审批：网站只有本人一个人看，坏了一步退回。本人指出一处毛病，先把整页同类查全，一次改完再给他看，不一处一处补。
+- **给本人看、给本人用的东西，做完先自己当本人用一遍。** 网页、驾驶舱、汇报页样式，由 GPT 子代理按现行浏览器分工在本人 Chrome 后台标签页里，以本人的屏幕宽度逐项试用、按过每个按钮，并将完整截图和操作结果送回；主持看成品整体并判断。测试和自动扫描通过代替不了这一步。不比现在差才交，不建议本人接受更差的版本。做完直接上线，不另搭预览地址、不设上线审批：网站只有本人一个人看，坏了一步退回。本人指出一处毛病，先把整页同类查全，一次改完再给他看，不一处一处补。
 - **先给本人看样子，再做。** 做什么、做成什么样、值不值，这类判断 AI 常有本人一眼就看出的扯淡，复核子代理也补不了（它们只认技术和证据）；等做完再看，时间和钱已经没了，报得多本人又烦。所以本人会看到、会用到的东西（新功能、新交互、改版、改他的用法），以及要给 AI 加的新规矩、新程序，动手前在回他那条消息的最后，用一两句大白话或一张图告诉他：他会看到什么、按了会怎样、大概多久；规矩和程序就说对他有什么变化。要写具体的样子，例如“你按‘知道了’，卡片先显示‘可以撤回’”，不写“优化卡片交互”。他提了修改，就把改好的样子再给他看一遍；没有要改的了才开工，开工后不再报，做完给他看结果。他自己说了要做成什么样的，照做；他举的例子不算。他看不到、不用他判断的活（修报错、后台代码、处理数据），AI 自己定、不报，按重要程度复核（见[分工与并行施工](/rules/execution-coordination/#派子代理的原则)“复核按本次改动的风险定深浅”一条），不无限复核。本人不在时，只做他看过样子的活和他看不到的活；中途冒出新东西，只准备好那一两句话或那张图放着、不开工，他回来后的第一条回复先说这段时间做了什么、哪条等他看。
 - **改共用的东西先查全用处。** 改多处共用的样式、组件或函数前，先列出所有用到的地方，改完逐一看过。
 - **给本人看的数字和告警要能追到来源。** 页面和汇报里的数字、告警，交付或上线前逐个能追到来源并抽核；核不了的不显示，或写明没核过。
@@ -2127,13 +2127,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E338",
-   "sha256": "bc1567117e8417fba0ec67d6d3ec5ff3c0109ec5a97f718c2556f1682dcc8e6e",
-   "public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
+   "release": "E371",
+   "sha256": "b81817b6cedb8a606ef42185caa584809281b85be2ec0c54c4dd0124533210f5",
+   "public_sha256": "6ea39201f816ad82ccd47c73f0869c6c52a430c96305b33834e293e8ec880f34",
    "from": "## 验证",
    "to": "## 下载、临时文件和清理",
-   "start": 7490,
-   "end": 9545,
+   "start": 7541,
+   "end": 9617,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -2156,7 +2156,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-07",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
+  "source_public_sha256": "6ea39201f816ad82ccd47c73f0869c6c52a430c96305b33834e293e8ec880f34",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-07"
  },
  "layout": {
@@ -2164,7 +2164,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E338版·续",
+     "text_ref": "原文·E371版·续",
      "align": "left",
      "size": "small"
     },
@@ -2211,7 +2211,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E338版·续",
+     "text_ref": "原文·E371版·续",
      "align": "left",
      "size": "small"
     },
@@ -2303,7 +2303,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E338 版 · 续
+原文 · E371 版 · 续
 
 ## 验证
 
@@ -2315,7 +2315,7 @@ owner: `E:\.agents`
 - **验证用真实任务。** 测试提示要像本人平时说话：一句很短的需求，不写一堆提示和答案，不点名预期的工具或内部路径。客观接口用程序测。本人要求简单验收时，用少量有代表性的真实用例。
 - **部署前按本人的用法验。** 凡是本人会碰到的改动，安装或部署前按涉及的场景选：在新开的对话里试一次、真点一下按钮、真用一下手机。验的是本人实际会怎么用，不能只跑测试就算验收。AI 自己能执行的真实使用验收由 AI 做并报告结果（例如用 AICLI 调同一厂商的两个模型各发一个小请求，少量费用本人接受），不列成本人的步骤；只有必须本人在场的（本人验证、本人设备上的操作、主观体验）和要在软件界面上点选的（见[能力与运行方式](/rules/capabilities-runtime/)）才请本人。
 - **看得见的成品在用的地方验整体。** 网页、文档、图、视频这类本人看得见的成品，放进它真正被用的地方先看整体，再看细节：网页在真实浏览器里按常用屏幕从上到下看比例和版式，图放进要用的位置看大小。动画、加载先后这类跟时机有关的问题，本机快网速下的测试常常测不出：先从做法上排除（例如显示过的图不再藏，播不播开场在页面第一次显示之前就定），再在慢网速、慢电脑、首次打开的条件下逐帧录屏检查，并把录屏放进验收页给本人看；只在本机快网速下通过不算通过。半成品早给本人看，不闷头做完再一起返工。
-- **要惊艳的成品，验完再想一次怎么更好**（约法 L22）。验收、质量检查和复核只查做没做到已定的要求，不会主动去找更好的做法；要惊艳的成品在样板定稿前和交付前各做一次头脑风暴，只问“从良好到惊艳还差什么”。样板阶段是主要机会：这时改方向最便宜，可以做小范围的并列版本，按实际效果选。交付前看整件成品，找一到三处最值得的提升。由主持的 AI 以本人的眼光看，可以请别家模型给几条独立想法，最后由主持的挑。交付写明：哪里还能明显更好、怎么改、要花多少、建议不建议这轮做；没有实质提升就直说“已经够好”。便宜又见效的当场做；和本人禁令冲突的先问本人；和要求、建议、已选选项冲突而判断更好的，按上文“没照做的写法”直接做并单列；明显加大成本的做成候选给本人挑，或放下一版。一轮就停，不变成反复返工。能用就行的活（报错修复、格式转换、照已定风格的重复填充这类）不做这一步，但照样要做对、做稳。
+- **要惊艳的成品，验完再想一次怎么更好**（约法 L22）。验收、质量检查和复核只查做没做到已定的要求，不会主动去找更好的做法；要惊艳的成品在样板定稿前和交付前各做一次头脑风暴，只问“从良好到惊艳还差什么”。样板阶段是主要机会：这时改方向最便宜，可以做小范围的并列版本，按实际效果选。交付前看整件成品，找一到三处最值得的提升。由主持的 AI 以本人的眼光看，可以请另一个全新上下文的模型给几条独立想法（选谁按模型清单的复核分工），最后由主持的挑。交付写明：哪里还能明显更好、怎么改、要花多少、建议不建议这轮做；没有实质提升就直说“已经够好”。便宜又见效的当场做；和本人禁令冲突的先问本人；和要求、建议、已选选项冲突而判断更好的，按上文“没照做的写法”直接做并单列；明显加大成本的做成候选给本人挑，或放下一版。一轮就停，不变成反复返工。能用就行的活（报错修复、格式转换、照已定风格的重复填充这类）不做这一步，但照样要做对、做稳。
 - **测试测结构和意思。** 规则和文档的测试检查真实字段、来源、引用和关键意思，不逐字锁句子、文件数量或固定编号。
 - **复核**按[分工与并行施工](/rules/execution-coordination/#派子代理的原则)“复核按本次改动的风险定深浅”一条办理。
 - **说清证据的时间和范围。** 版本、数量和运行状态的结论要分得清是以前成立还是现在成立；新证据推翻旧结论时，标明旧结论已过时。会改变当前决定的动态事实，向对应来源现场回读。`tools/Invoke-ControlPlaneDoctor.ps1` 是按需检查，不是每个任务的后台关卡。
@@ -2336,13 +2336,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E338",
-   "sha256": "bc1567117e8417fba0ec67d6d3ec5ff3c0109ec5a97f718c2556f1682dcc8e6e",
-   "public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
+   "release": "E371",
+   "sha256": "b81817b6cedb8a606ef42185caa584809281b85be2ec0c54c4dd0124533210f5",
+   "public_sha256": "6ea39201f816ad82ccd47c73f0869c6c52a430c96305b33834e293e8ec880f34",
    "from": "## 下载、临时文件和清理",
    "to": "## Git 收尾",
-   "start": 9545,
-   "end": 10604,
+   "start": 9617,
+   "end": 10930,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -2361,7 +2361,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-08",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
+  "source_public_sha256": "6ea39201f816ad82ccd47c73f0869c6c52a430c96305b33834e293e8ec880f34",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-08"
  },
  "layout": {
@@ -2369,7 +2369,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E338版·续",
+     "text_ref": "原文·E371版·续",
      "align": "left",
      "size": "small"
     },
@@ -2410,7 +2410,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E338版·续",
+     "text_ref": "原文·E371版·续",
      "align": "left",
      "size": "small"
     },
@@ -2490,7 +2490,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E338 版 · 续
+原文 · E371 版 · 续
 
 ## 下载、临时文件和清理
 
@@ -2500,8 +2500,9 @@ owner: `E:\.agents`
 - **整理默认是移动。** 只有本人原件、还有别处在用或确实需要备份时才复制保留源文件。先复制再删源时，确认目标完整可用、引用已更新，再处理源副本。
 - **用完就清理**（约法 L13）。本任务产生的文件、下载和临时文件用完可以直接删除，确认退役的东西也可以直接删除。回收站是可选做法：选用时运行 `pwsh -NoProfile -File E:\.agents\tools\Move-TaskItemToRecycleBin.ps1 -LiteralPath <精确绝对路径> -AllowedRoot <本任务落点> -Json`，并确认回执里原路径和回收站里的实体都对得上。回收站放不下或工具拒绝时，可以直接删除已确认属于本任务、可清理的文件。
 - **清理受阻继续找办法。** 已获本人授权、已确认可清理的对象，一条删除命令被审批拒绝时，查实际限制并继续找受支持的清理方式；删除仍受阻时，改用受支持的正式回收工具按精确路径移入回收站，并核对原路径和回收实体。拒绝原因不明时，不自行认定只是命令写法受限；动作本身被明确禁止时，不换工具、shell 或封装绕过，也不关闭安全审查。确无受支持的方式时，保留并说明具体残留和原因。
-- **只留有用的。** 保留要有具体用途且确实需要本机副本：本人待取的交付物、项目运行和维护资产、必要的恢复材料。“以后可能有用”不算。暂时要留的，在任务状态里写明路径、理由和什么时候清。
-- **不动不属于本任务的东西。** 本人原件、其他任务的文件、归属不明的、正在用的、必要的恢复材料都不动；不按年龄、文件名或目录整库清空。文件被占用时，确认属于本任务且没有本人未保存的内容，就自己解除占用后清理；查不清归属或是否有未保存内容，就保留并说明。挡住清理的是处理掉也不丢东西的残留时（例如别的任务留下、目录已经不在的工作副本登记，见[分工与并行施工](/rules/execution-coordination/#多个任务同时改东西)），直接处理，不请本人决定，也不在汇报里提。其他清理受阻要说清残留、原因和下一步，不谎称清完，也不留给本人手动收拾。
+- **只留有用的。** 保留要有具体用途且确实需要本机副本：本人待取的交付物、项目运行和维护资产、必要的恢复材料。“以后可能有用”不算。暂时要留的，用显式保留标记写明路径、理由和到期时间，到期后重新按生命周期处理。
+- **AI 临时目录按生命周期回收。** 所属会话或子任务结束且 7 天无活动后，将整目录放进本人回收站，保留 72 小时还原期；没有验收标记或归属记录不构成永久保留理由。回收前排除正在运行的进程和打开的句柄，保护未合并或有改动的 Git 工作树、尚未到期的显式保留标记、对话原文、本人原件和诊断转储。干净且远端可恢复的临时 Git 克隆可由正式回收入口显式开启干净仓库模式后核对回收。生图候选仍按既定 7 天期限处理。
+- **保护原件和其他任务的内容。** 本人原件、其他任务的文件、正在用的内容和必要的恢复材料不擅自处理；只有 AI 临时根内符合上条生命周期的目录可整目录回收，其他归属不明的内容仍保留，不按文件名或目录名清空。文件被占用时，确认属于本任务且没有本人未保存的内容，才解除占用后清理；无法确认的保留并说明具体保护原因。挡住清理的是处理掉也不丢东西的残留时（例如别的任务留下、目录已经不在的工作副本登记，见[分工与并行施工](/rules/execution-coordination/#多个任务同时改东西)），直接处理，不请本人决定，也不在汇报里提。其他清理受阻要说清残留、原因和下一步，不谎称清完，也不留给本人手动收拾。
 
 ::screen{#rule-engineering-delivery-09 section="original"}
 
@@ -2513,13 +2514,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E338",
-   "sha256": "bc1567117e8417fba0ec67d6d3ec5ff3c0109ec5a97f718c2556f1682dcc8e6e",
-   "public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
+   "release": "E371",
+   "sha256": "b81817b6cedb8a606ef42185caa584809281b85be2ec0c54c4dd0124533210f5",
+   "public_sha256": "6ea39201f816ad82ccd47c73f0869c6c52a430c96305b33834e293e8ec880f34",
    "from": "## Git 收尾",
    "to": null,
-   "start": 10604,
-   "end": 12404,
+   "start": 10930,
+   "end": 12730,
    "approved_omissions": []
   },
   "title": "原文（四）",
@@ -2546,7 +2547,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-09",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "88efe3ba55bcd1bb7608e042f1dc16dd3ea96482737867662cb1ad7827991de4",
+  "source_public_sha256": "6ea39201f816ad82ccd47c73f0869c6c52a430c96305b33834e293e8ec880f34",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-09"
  },
  "layout": {
@@ -2554,7 +2555,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E338版·续",
+     "text_ref": "原文·E371版·续",
      "align": "left",
      "size": "small"
     },
@@ -2598,7 +2599,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E338版·续",
+     "text_ref": "原文·E371版·续",
      "align": "left",
      "size": "small"
     },
@@ -2690,7 +2691,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E338 版 · 续
+原文 · E371 版 · 续
 
 ## Git 收尾
 

@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E338",
-   "commit": "99816398405d43e3fbcc31a419952866e97eb880",
-   "ruleset_sha256": "d485a1974475db4e088e785b26f7065f3b5b73aa6266c7502390c006236e3118",
-   "activated_at": "2026-10-31T15:58:17.483029+08:00",
+   "release": "E371",
+   "commit": "3c09ab215347bdeef9b20027169a68cbe43e1a61",
+   "ruleset_sha256": "0027aa3691052764d05c2e68802eeb1049c7ae7b5151d4f59a605251d402c130",
+   "activated_at": "2026-11-04T07:38:37.086979+08:00",
    "file": "sources/rules/docs/contracts/agents.capabilities-runtime.md",
-   "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5",
-   "public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0"
+   "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
+   "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f"
   },
   "explanation_based_on": {
    "release": "E338",
@@ -405,8 +405,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "9e5d4d7fda13dfdc693182900495307606aae3d726eda7bc87e51cf7f4b4f184",
-  "converted_at_beijing": "2026-10-31T16:43:53+08:00"
+  "sha256": "9c8b93b11c327cc8b346d0905bf0c522e9586ce7edf138debb8f1b3734458507",
+  "converted_at_beijing": "2026-11-04T08:31:33+08:00"
  }
 }
 ---
@@ -2945,13 +2945,13 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E338",
-   "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5",
-   "public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
+   "release": "E371",
+   "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
+   "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
    "from": null,
    "to": "## 常用入口",
    "start": 0,
-   "end": 1440,
+   "end": 2714,
    "approved_omissions": []
   },
   "title": "原文（一）：开头、选能力",
@@ -2970,7 +2970,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-11",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
+  "source_public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-11"
  },
  "layout": {
@@ -2978,7 +2978,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版"
+     "text_ref": "原文·E371版"
     },
     {
      "type": "chapter_title",
@@ -3019,7 +3019,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版"
+     "text_ref": "原文·E371版"
     },
     {
      "type": "chapter_title",
@@ -3112,7 +3112,7 @@
 }
 ```
 
-原文 · E338 版
+原文 · E371 版
 
 # 能力与运行方式
 
@@ -3130,6 +3130,21 @@ owner: `E:\.agents`
 - 默认简体中文：先说实际结果、影响和用法；有用的英文第一次出现时加简短中文释义，代码、路径、常见缩写和精确标识除外。关键的没做完的事必须说，不为了模板完整输出无用字段。
 - **短时流程要跟住。** 验证码、登录确认这类要趁有效期处理的流程，在当前任务里主动盯着实际能读的来源，收到就及时完成已授权的后续操作；不刚开始等就改成几分钟后的定时任务然后结束。按来源的真实能力和时间窗口选现成的等待或有界轮询；完成、取消、窗口结束或来源读不了时，说明结果或缺口并结束等待。这不要求为几小时后的事一直挂着，也不新建全局轮询器或后台服务。
 
+### 登录是否影响判断
+
+同一来源有本人可用的对应账号时，始终优先用该账号的登录态搜索和读取。公开结果可以并行补充、交叉核对，不能因为公开页面能打开就跳过可用的登录态。账号下的内容、排序、可见范围和字段可能不同；使用个性化结果时标明适用的账号和人群，推断更大总体前核对覆盖范围和取样偏差。
+
+- 只有对应账号暂不可用时，才判断是否必须等登录。本人要的是该账号的数据，或账号差异可能明显影响覆盖、可信度、个性化匹配或最终判断，且没有同等证据时，先恢复登录，暂停依赖它的结论。必要时先做一次有界核对；仍无法排除重要差异，就按需要登录处理。按已有授权能代办就代办；确需本人操作时，点明网站和页面、登录预计多看到什么、影响哪项判断、需要他做哪一步。保留进度，恢复后从原目标继续核实。
+- 账号不可用，但已有依据确认所需事实、范围和时期等价，或差异不会影响这次判断时，公开证据可以作答，说明依据和范围。不同平台和旧记录分别计数。
+- 目标是把本人要的事办成。遇到故障，AI 根据已有证据、剩余时间和这一路对结论的重要性，判断该刷新、等候、换等价来源还是请本人验证。空白或暂时断线时，沿原账号和原目标有界重试；明确限流则按站方要求退避再试。单站失败保留其他来源已核实的事实；多个独立来源一起出现解析、连接或握手错误时，先按 `proxy-network` 核本机网络与对应出口。空白、网络故障和限流都不能证明掉线。重要数据仍缺就保留目标和可重试时间，恢复后继续，旧记录注明时间。已提交的消息或其他有副作用的动作不自动重发。
+- 遇到验证码，先确认拦住的是本人账号、当前设备或请求，还是公共读取工具的出口，再看站方要求的是短信登录、扫码确认、人机验证还是信任设备。验证码本身的有效期和验证后会话的有效期分别核实；站方未说明的时长就说未知。有依据表明一次正常验证能长期复用，可以现在做；短时或效力未知的验证若关系本题关键数据，也及时办理。只有确需本人动手时才把相应验证页交给他，完成后回读原目标。
+
+## 桌面应用的注册表视图
+
+从 Claude、Codex 的 Windows 桌面应用启动的命令，读写 HKCU 时可能落在 MSIX 应用的私有注册表视图。没有包身份、`sudo` 提权成功，以及在同一环境写后回读，都不能证明系统真表已经改变。需要影响系统的 HKCU 修改，读取、备份和写入须通过 WMI `StdRegProv`，或通过 `Win32_Process.Create` 创建的外部进程执行；已有键的 `reg export` 备份也要在该外部进程中完成，验收再用真表独立回读。
+
+`StdRegProv` 的字符串读取会展开 `REG_EXPAND_SZ` 中已定义的环境变量；恢复快照要保留原始命令时，在外部进程中用 `.NET RegistryKey.GetValue` 的 `DoNotExpandEnvironmentNames` 读取。PCConfig 的启动项 provider 已负责这条读取路线，调用者直接用其正常入口。
+
 ::screen{#rule-capabilities-runtime-12 section="original"}
 
 ```typeset
@@ -3140,13 +3155,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E338",
-   "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5",
-   "public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
+   "release": "E371",
+   "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
+   "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
    "from": "## 常用入口",
    "to": "## 浏览器",
-   "start": 1440,
-   "end": 4027,
+   "start": 2714,
+   "end": 5491,
    "approved_omissions": []
   },
   "title": "原文（二）：常用入口",
@@ -3160,7 +3175,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-12",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
+  "source_public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-12"
  },
  "layout": {
@@ -3168,7 +3183,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -3196,7 +3211,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -3242,9 +3257,11 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E338 版 · 续
+原文 · E371 版 · 续
 
 ## 常用入口
+
+- **中外消息快查。** 按本题所需证据选源，有可用账号的来源优先走登录态；宿主联网可并行找发布方原文。需要近期亲历、追溯传闻或确认账号可见内容时，两家按中外消息快查（`E:/.agents/skills/news-quickcheck/SKILL.md`）查站内原文。
 
 - **本机小工具。** 问本机已有的小工具、以前用过的工具、图片超分或本机现成做法时，先查唯一清单 `E:\Tools\LocalToolbox\catalog.json`；按用途检索用 `E:\Tools\LocalToolbox\Find-LocalTool.ps1 -Query '<用途>' -Json`。工具列表、型号和哈希只在那份清单里。
 - **快速计算机清理文件。** 直达 PCConfig 的 `E:\PCConfig\docs\runtime\ai-cache-sweep.md`“快速计算机清理文件”流程：先执行已核实的明显无用项并清本批回收实体、回读实际空间，疑难对象和基座源码修复并行；复用已有证据，不反复整盘扫描，不把全量引擎修好当作普通项清理的前置。
@@ -3257,7 +3274,7 @@ owner: `E:\.agents`
 
 同一文件预计被 AI 读两次以上，或同批处理流量明显超过文件本身时，按 cloud-asset-channel 技能（`E:/.agents/skills/cloud-asset-channel/SKILL.md`）核对通道与读者，明确指定素材，不扫描目录。本机 Codex 不能直接接收 HTTPS 图片；Claude 本机复核每张图一次读完、一次答完，画图仍在本机。
 
-Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎么核对、谁来建环境，只记在 `cloud-asset-channel` 技能里。云端审图校准未通过，尚未启用（2026-10-02 记录；是否已通过以读者说明（`E:/.agents/docs/cloud-asset-channel-reader.md`）所述的 `validated_use_cases` 登记为准），网站图终审由 Claude Opus 完成。
+Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎么核对、谁来建环境，只记在 `cloud-asset-channel` 技能里。云端审图校准未通过，尚未启用（2026-10-02 记录；是否已通过以读者说明（`E:/.agents/docs/cloud-asset-channel-reader.md`）所述的 `validated_use_cases` 登记为准）；Claude 为根会话时，网站图终审由 Claude Opus 完成，GPT 为根会话时由根会话及其子代理按现行模型路线完成，不需要 Claude。
 
 不主动安排命令接线或模型升级；以后启用审图须先通过校准，命令接通和型号核对不能代替。环境解析、逐块全覆盖证据、一次写收件箱和清理协议只在读者说明（`E:/.agents/docs/cloud-asset-channel-reader.md`）维护，上传目标和登记表读 cloud-asset-channel.json（`E:/.agents/config/cloud-asset-channel.json`），不在规则复制协议参数。
 
@@ -3277,13 +3294,13 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E338",
-   "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5",
-   "public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
+   "release": "E371",
+   "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
+   "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
    "from": "## 浏览器",
    "to": "## 汇报、网站和自动运行的东西",
-   "start": 4027,
-   "end": 6247,
+   "start": 5491,
+   "end": 7991,
    "approved_omissions": []
   },
   "title": "原文（三）：浏览器",
@@ -3302,7 +3319,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-13",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
+  "source_public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-13"
  },
  "layout": {
@@ -3310,7 +3327,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -3336,7 +3353,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -3410,11 +3427,11 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
 }
 ```
 
-原文 · E338 版 · 续
+原文 · E371 版 · 续
 
 ## 浏览器
 
-浏览器默认用本人正在用的外部 Chrome（约法 L29）：访问网站、看网页、用本人账号登录，一律用 Chrome 插件在本人已开着的 Chrome 里、自己新开的后台标签页中操作。本人当轮明确点名别的浏览器时听本人的。不用工具自带的默认浏览器、应用内浏览器（含 Claude 内置浏览器、Codex 应用内浏览器）、无头浏览器、任务临时配置或别的浏览器家族去访问网站，也不把它们当成本人的默认。Claude 根和子代理的网页任务一律派 GPT 用 Codex Chrome 插件在本人 Chrome 后台标签页里做；本机文件和本机回环地址的本地预览也派 GPT 做，Claude 内置浏览器已由本人关闭、不使用，Claude in Chrome 扩展也已由本人关闭、不使用，具体见[Claude 适配](/rules/claude-adapter/#宿主接线)的“浏览器”。Codex 桌面版的主对话和原生子代理也一样，网页任务用共用包装器派 GPT 去做，不调桌面自带的浏览器工具，具体见[Codex 适配](/rules/codex-adapter/#入口和新消息)的“浏览器”。控制会话断了、运行环境要恢复时按 `browser-control-continuity` 修本人 Chrome 这条路，保留本人已打开的页面；这不改变网站上动作、账号和内容的授权。
+浏览器默认用本人正在用的外部 Chrome（约法 L29）：要操作浏览器（在网页里点选、填表、看渲染后的页面、登录本人账号、截图）时，一律用 Chrome 插件在本人已开着的 Chrome 里、自己新开的后台标签页中操作。只读搜索由各宿主和子代理直接调用，无需经包装器转交。任务适合并行调查或独立复核时，Claude 和 Codex 按分工规则派子代理，子代理也能直接使用同一搜索技能。只读查公开资料用宿主自带的联网搜索和网页读取（Claude 的 WebSearch、WebFetch，Codex 的 `web.run`）；借本人 Chrome 登录状态在后台自动完成、AI 不操作页面的只读站内搜索命令（例如 OpenCLI 的 search、hot、thread）也直接调用。自带读取读不出且确实必须看的页面，按操作浏览器办。本人当轮明确点名别的浏览器时听本人的。不用工具自带的默认浏览器、应用内浏览器（含 Claude 内置浏览器、Codex 应用内浏览器）、无头浏览器、任务临时配置或别的浏览器家族去访问网站，也不把它们当成本人的默认。Claude 根和子代理要用浏览器的活一律派 GPT 用 Codex Chrome 插件在本人 Chrome 后台标签页里做；本机文件和本机回环地址的本地预览也派 GPT 做，Claude 内置浏览器已由本人关闭、不使用，Claude in Chrome 扩展也已由本人关闭、不使用，具体见[Claude 适配](/rules/claude-adapter/#宿主接线)的“浏览器”。Codex 桌面版的主对话和原生子代理也一样，要用浏览器的活用共用包装器派 GPT 去做，不调桌面自带的浏览器工具，具体见[Codex 适配](/rules/codex-adapter/#入口和新消息)的“浏览器”。控制会话断了、运行环境要恢复时按 `browser-control-continuity` 修本人 Chrome 这条路，保留本人已打开的页面；这不改变网站上动作、账号和内容的授权。
 
 在本人 Chrome 里干活全程放在后台，不把 Chrome 调到前台打扰本人：跳转和点击放在自己新开的后台标签页里做，本人已开的标签页只读（本人点名要用的除外）；会新开标签页的链接或按钮不直接点，先取出地址在自己的后台标签页里打开；不主动调用显示浏览器的能力，本人要看着时除外（出处：`docs/owner-decisions/2026-10.md`“AI 操作 Chrome 弹到前台要根治”）。
 
@@ -3442,13 +3459,13 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E338",
-   "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5",
-   "public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
+   "release": "E371",
+   "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
+   "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
    "from": "## 汇报、网站和自动运行的东西",
    "to": "## 安装位置、配置和本机约定",
-   "start": 6247,
-   "end": 9594,
+   "start": 7991,
+   "end": 11342,
    "approved_omissions": []
   },
   "title": "原文（四）：汇报、网站和自动运行；软件更新和兼容",
@@ -3462,7 +3479,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-14",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
+  "source_public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-14"
  },
  "layout": {
@@ -3470,7 +3487,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -3490,7 +3507,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -3560,7 +3577,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
 }
 ```
 
-原文 · E338 版 · 续
+原文 · E371 版 · 续
 
 ## 汇报、网站和自动运行的东西
 
@@ -3568,12 +3585,12 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
 - **网站**（约法 L27）：本人说“更新网站”时，按 `V:\Personal\Projects\wly0829.cn` 的 AGENTS.md 更新一次。不建自动定时更新。
 - **本人只看驾驶舱**：本人在网站上基本只看驾驶舱（含驾驶舱二级页）；README、项目里的看板和总览页、网站上驾驶舱以外的页面，他都不看。要本人知道、做或选的事必须进驾驶舱，只写在别处等于没告诉他；不为本人另建看板或总览页（本人 2026-10-31，源 6ef403fe）。
 - **自动运行的东西**（约法 L28）：计划任务、看门狗和其他自动运行的东西，要在网站看板上看得见：在做什么、上次和下次什么时候运行、有没有出错、怎么停、停了会影响什么。新增或修改自动运行的东西时，把这些状态写进看板能读的状态文件或登记（按 PCConfig 的现行做法）；看板怎么显示另行建设，不为此在本机另开窗口。后台命令不弹黑窗口。
-- **定时任务的结论写进驾驶舱**：Codex 和 Claude 的定时任务每跑一轮，都用 PCConfig 的结论回执命令写一句人话结论（正常、要你看或出错），写法见 PCConfig `docs/runtime/codex-automation-receipt.md`；分段做的每段都写、以最后一次为准，卡住或出错当场就写。驾驶舱在这个任务那一行显示结论；结论有变化、又是本人用得上的，同时进“要你知道”，出错的只在那一行显示、由 AI 接手；要本人做或选的照旧登记“需要你”。任务自己没写时，Claude 的钩子用它最后的收尾回顾补一份并标黄。回执不会自己推到本人面前；本人在对话里等的结果，还要送回那个对话（Claude 的做法和兜底见[Claude 适配](/rules/claude-adapter/#宿主接线)“定时任务的结果送回等结果的对话”）。
+- **定时任务的结论写进驾驶舱**：Codex 和 Claude 的定时任务每跑一轮，都用 PCConfig 的结论回执命令写一句人话结论（正常、要你看或出错），写法见 PCConfig `docs/runtime/codex-automation-receipt.md`；分段做的每段都写、以最后一次为准，卡住或出错当场就写。驾驶舱在这个任务那一行显示结论；是否同时进入“要你知道”或“需要你”，统一按 cockpit 技能的分级告知（`E:/.agents/skills/cockpit/SKILL.md#分级告知`），AI 接手不免除告知。任务自己没写时，Claude 的钩子用它最后的收尾回顾补一份并标黄。回执不会自己推到本人面前；本人在对话里等的结果，还要送回那个对话（Claude 的做法和兜底见[Claude 适配](/rules/claude-adapter/#宿主接线)“定时任务的结果送回等结果的对话”）。
 - **本人没回的对话默认没看见**：本人没回复、AI 也没说做完的对话，算本人没看见；要本人知道、做或选的，都用人话写进驾驶舱：出了什么事、要本人做什么、不做会怎样，不用代号，不让人猜。本人在那个对话里回了才算看见。Claude 桌面版收尾时带了待答问题，由钩子自动登记，10 分钟没回才显示，本人一回复就关掉；收尾不带待答问题，就表示没有等本人的事。Codex 有要本人定或做的事时，在最后一条回复的最后一行写“【等你】<一句人话>”，由钩子同样登记和关闭。AI 自己还要接着做的，登记“AI 在跟”，不留没人知道的半截。
 
 - **问本人之前先自查**：只影响技术做法、修报错、排版细节或能撤回的小事，AI 按自己的建议直接做，回复里写一句“我定了：……，不同意说一声”，不问；能自己查到的事实先查；本人授权范围内、能撤回的下一步直接做；已经按建议做好、只差本人点头的，直接报告结果。要问的是：影响本人的需求或产品；发消息、对外发布、花钱、删唯一的数据、撤不回的迁移；给 AI 加新规矩、新程序，或做本人会看到、会用到的新东西前要他先看样子；只有本人能做的事（登录、验证、接手机、答问卷）。还在等本人回话或动手，问题就必须留在收尾里（Claude 收尾带问题，Codex 最后一行写“【等你】”），不能只在摘要或正文里写“等你一句话”，否则驾驶舱收不到。问题要离开那段对话也看得懂：Claude 收尾的摘要写在做什么、做到哪，问题一句话点明哪件事、要本人定什么，不用“这份”“上面”这类指代，按钮第一个放建议，每个按钮的话写清点了会怎样（钩子会把对话名、做到哪、问题和按钮原样做成驾驶舱卡）；Codex 的驾驶舱卡只有“【等你】”这一行，这一行要自己点明哪件事、要本人定什么和 AI 的建议。给本人看的卡和问题不用行话、文件路径和英文代号；派 GPT 时派单的「任务」一栏也会原样显示在驾驶舱“AI 正在跑”，同样写成本人一眼看懂的一句话（做什么、为了什么），不写内部代号、文件名、占位时间，不用“本人”这类 AI 之间的称呼。
 - **本人怎么看回复，驾驶舱兜底**：本人只看最终输出；同一轮两条最终输出大段重复，就只看最新一条，不重复就都看；对话被定时任务、子代理或命令唤醒过，唤醒前后的输出本人都可能没看到。所以要重写就完整重写，最新那条单独看就够，不能只补一行或写“同上”；要补充就只写新内容，不重复前文。不能指望本人什么都看见：要他知道、做或选的，按“本人没回的对话默认没看见”进驾驶舱兜底；只放他知道了有意义的，其余按“本人不用知道的技术问题不上驾驶舱”不上。
-- **本人不用知道的技术问题不上驾驶舱**：不影响本人在用的功能、本人的需求和资料的技术问题（例如 AI 自己的临时文件、已经改正的内部出错），不写进“要你知道”“需要你”和给本人看的结论；用 `Set-OwnerItem.ps1 -Who ai` 登记成 AI 事项，写清核实办法和检查点，由 PCConfig 的新故障自动接手派 GPT 排查修好。AI 查清后判断明确影响本人的需求和在用的功能、又不是小改动的（例如本人的资料丢了、在用的功能坏了要大改），才用人话告诉本人；要本人亲自做或选的照旧进“需要你”。
+- **本人不用知道的技术问题不上驾驶舱**：统一按 cockpit 技能的分级告知（`E:/.agents/skills/cockpit/SKILL.md#分级告知`） 决定后台处理、进入“要你知道”或“需要你”；无人值守不能等本人主动追问，AI 能自行处理也不能隐去明显或重大的影响。AI 自己继续办的，用 `Set-OwnerItem.ps1 -Who ai` 保留承接方、核实办法和检查点；告知本人不等于改为等本人答复，严重程度与本人动作需求分别判断。
 - **要本人做、要本人选、可能漏看的事**：根会话在回复本人的同时，用 `pwsh -NoProfile -File E:\PCConfig\tools\Set-OwnerItem.ps1 -Mode Add` 登记到驾驶舱“需要你”，填写 `-PassCriteria` 完成条件；可机核的方法用 `-AiHint` 写入条目的 `ai_hint`。Claude、Codex 用同一命令；子代理不登记，交根会话决定。
   周治理或任何 AI 核实完成条件后，用同一命令 `-Mode Close -Id <条目id> -Result passed -Note <核实证据>` 关闭；本人说做完，也先查对应条目并核实后关闭。本人在配对过的设备上可以直接在卡片上处理，动作进收件箱，由 AI 照办或核实后关闭；公开版只能看。
 
@@ -3595,13 +3612,13 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E338",
-   "sha256": "4563449b4c4226704f1fc0f8d3d9943f9e1b2c490a7afbf20ce9702d2185f1a5",
-   "public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
+   "release": "E371",
+   "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
+   "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
    "from": "## 安装位置、配置和本机约定",
    "to": null,
-   "start": 9594,
-   "end": 11085,
+   "start": 11342,
+   "end": 12833,
    "approved_omissions": []
   },
   "title": "原文（五）：安装位置、配置和本机约定",
@@ -3620,7 +3637,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-15",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "c8e53c78017042b585ebba23696a7aa6b51a7520e321b6ac5d6e674e71cc38e0",
+  "source_public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-15"
  },
  "layout": {
@@ -3628,7 +3645,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -3648,7 +3665,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E338版·续"
+     "text_ref": "原文·E371版·续"
     },
     {
      "type": "source_text_card",
@@ -3694,7 +3711,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
 }
 ```
 
-原文 · E338 版 · 续
+原文 · E371 版 · 续
 
 ## 安装位置、配置和本机约定
 
