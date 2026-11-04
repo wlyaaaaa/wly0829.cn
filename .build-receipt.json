@@ -1,62 +1,338 @@
 {
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
-  "source_commit": "ec5fc5cad357647e9f8a310114d35b9ccb946c7f",
-  "prepared_at_beijing": "2026-11-04T21:47:07.514849+08:00",
-  "seconds": 256.221,
+  "source_commit": "380c27c1425ea4ac7b6713046aee39709e90ca5f",
+  "prepared_at_beijing": "2026-11-04T23:18:04.929038+08:00",
+  "seconds": 377.772,
   "steps": [
     {
       "name": "home_highlights",
-      "seconds": 0.566
+      "seconds": 0.313
     },
     {
       "name": "source",
-      "seconds": 44.382
+      "seconds": 20.691
     },
     {
       "name": "fingerprint",
-      "seconds": 1.078
+      "seconds": 1.126
     },
     {
       "name": "prepare",
-      "seconds": 25.499
+      "seconds": 20.285
     },
     {
       "name": "native_inputs",
-      "seconds": 6.542
+      "seconds": 5.472
     },
     {
       "name": "blocks",
-      "seconds": 0.895
+      "seconds": 94.613
     },
     {
       "name": "astro",
-      "seconds": 11.468
+      "seconds": 22.121
     },
     {
       "name": "assets",
-      "seconds": 4.834
+      "seconds": 11.932
     },
     {
       "name": "finish",
-      "seconds": 43.369
+      "seconds": 63.523
     },
     {
       "name": "finalize",
-      "seconds": 103.494
+      "seconds": 123.933
     },
     {
       "name": "public",
-      "seconds": 13.232
+      "seconds": 12.841
     },
     {
       "name": "inventory",
-      "seconds": 0.86
+      "seconds": 0.923
     }
   ],
   "rebuilt_pages": [
-    "/cockpit/",
-    "/cockpit/ai/"
+    "/404/",
+    "/cockpit/ai/",
+    "/cockpit/storage/",
+    "/github-profile/",
+    "/how-this-site/",
+    "/how/",
+    "/mcp/",
+    "/projects/",
+    "/projects/agents/",
+    "/projects/agents/authorization-owner/",
+    "/projects/agents/capability-routing/",
+    "/projects/agents/context-evidence/",
+    "/projects/agents/protected-policy/",
+    "/projects/agents/rules-contracts/",
+    "/projects/agents/skills-plugins/",
+    "/projects/agents/working-tree-hot-mirror/",
+    "/projects/ai-cli-profile-manager/",
+    "/projects/ai-cli-profile-manager/background-openai-children/",
+    "/projects/ai-cli-profile-manager/doctor-validation/",
+    "/projects/ai-cli-profile-manager/engines-providers/",
+    "/projects/ai-cli-profile-manager/install-recovery/",
+    "/projects/ai-cli-profile-manager/local-proxies/",
+    "/projects/ai-cli-profile-manager/native-desktop-integration/",
+    "/projects/ai-cli-profile-manager/profiles-launch/",
+    "/projects/ai-cli-profile-manager/recoverable-runs/",
+    "/projects/ai-cli-profile-manager/secrets-isolation/",
+    "/projects/chinese-asr/",
+    "/projects/chinese-asr/audit-evidence/",
+    "/projects/chinese-asr/desktop-dictation/",
+    "/projects/chinese-asr/installation-recovery/",
+    "/projects/chinese-asr/known-text-alignment/",
+    "/projects/chinese-asr/long-batch/",
+    "/projects/chinese-asr/models-modes/",
+    "/projects/chinese-asr/runtime-privacy/",
+    "/projects/chinese-asr/speaker-attribution/",
+    "/projects/chinese-asr/task-routing/",
+    "/projects/codex-agent-model-benchmark/",
+    "/projects/codex-local-remote/",
+    "/projects/codex-memory/",
+    "/projects/codex-memory/claude-project-memory/",
+    "/projects/codex-memory/config-memory-whitelist-sync/",
+    "/projects/codex-memory/content-addressed-storage-cold-sync/",
+    "/projects/codex-memory/gemini-workspace-memory/",
+    "/projects/codex-memory/isolated-disaster-recovery/",
+    "/projects/codex-memory/openclaw-workspace-recovery/",
+    "/projects/codex-memory/vss-conversation-hot-backup/",
+    "/projects/codex-remote/",
+    "/projects/daily-preferences/",
+    "/projects/daily-preferences/current-corrections/",
+    "/projects/daily-preferences/evidence-query/",
+    "/projects/daily-preferences/fact-verification/",
+    "/projects/daily-preferences/mobile-context-delivery/",
+    "/projects/daily-preferences/personal-understanding/",
+    "/projects/daily-preferences/recommendation-choice/",
+    "/projects/daily-preferences/source-coverage/",
+    "/projects/devconfig-backup/",
+    "/projects/devconfig-backup/recovery-and-tasks/",
+    "/projects/devconfig-backup/source-catalog/",
+    "/projects/devconfig-backup/tiered-distribution/",
+    "/projects/devconfig-backup/wechat-native-backup/",
+    "/projects/document-materials/",
+    "/projects/document-materials/current-matter-sources/",
+    "/projects/document-materials/editable-docx-pdf/",
+    "/projects/document-materials/page-audit-release/",
+    "/projects/document-materials/reality-readback-recovery/",
+    "/projects/document-materials/signature-delivery-version/",
+    "/projects/emerald-veil/",
+    "/projects/emerald-veil/native-bubbles-idle-overlay/",
+    "/projects/emerald-veil/reversibility-preimage-and-remote-compatibility/",
+    "/projects/emerald-veil/wallpaper-engine-coexistence-and-rain-experiment/",
+    "/projects/emerald-veil/windows-desktop-and-lockscreen-background/",
+    "/projects/github-index/",
+    "/projects/github-index/project-admission/",
+    "/projects/github-index/protected-major-actions/",
+    "/projects/github-index/publication-gate/",
+    "/projects/github-index/repository-ledger/",
+    "/projects/github-index/snapshot-recovery/",
+    "/projects/github-index/worktree-sync/",
+    "/projects/github-local-index/",
+    "/projects/learning/",
+    "/projects/learning/authoritative-research/",
+    "/projects/learning/dialogue-revision/",
+    "/projects/learning/human-control-simple/",
+    "/projects/learning/plain-language/",
+    "/projects/learning/questions-validation/",
+    "/projects/learning/route-checkpoint/",
+    "/projects/localocr/",
+    "/projects/localocr/document-structure/",
+    "/projects/localocr/input-routing/",
+    "/projects/localocr/installation-recovery/",
+    "/projects/localocr/jobs-cache/",
+    "/projects/localocr/results-evidence/",
+    "/projects/localocr/runtime-resources/",
+    "/projects/meshclip-kit/",
+    "/projects/meshclip-kit/exact-peer-firewall-hardening/",
+    "/projects/meshclip-kit/kde-connect-pairing-sync/",
+    "/projects/meshclip-kit/silent-watchdog-and-session-lifecycle/",
+    "/projects/meshclip-kit/tailscale-peer-reachability/",
+    "/projects/openclaw/",
+    "/projects/password-center/",
+    "/projects/pc-panel-hub/",
+    "/projects/pc-panel-hub/case-panel-rendering/",
+    "/projects/pc-panel-hub/hs2-overlay/",
+    "/projects/pc-panel-hub/installation-binding-migration/",
+    "/projects/pc-panel-hub/power-recovery/",
+    "/projects/pc-panel-hub/serial-transport/",
+    "/projects/pc-panel-hub/telemetry-trust/",
+    "/projects/pcconfig/",
+    "/projects/pcconfig/authorization-files/",
+    "/projects/pcconfig/drift-acceptance/",
+    "/projects/pcconfig/machine-facts/",
+    "/projects/pcconfig/memory-diagnostics/",
+    "/projects/pcconfig/owner-takeover/",
+    "/projects/pcconfig/protected-actions/",
+    "/projects/pcconfig/protected-data/",
+    "/projects/pcconfig/recovery-backup/",
+    "/projects/pcconfig/remote-computer-mcp/",
+    "/projects/pcconfig/runtime-startup/",
+    "/projects/pcconfig/secondary-laptop/",
+    "/projects/pcconfig/secrets-providers/",
+    "/projects/personal-expression/",
+    "/projects/personal-expression/corpus-extension-and-private-recovery/",
+    "/projects/personal-expression/explain-to-me/",
+    "/projects/personal-expression/feedback-consolidation-and-lessons-sync/",
+    "/projects/personal-expression/reply-as-me/",
+    "/projects/personal-finance/",
+    "/projects/personal-finance/bill-collection/",
+    "/projects/personal-finance/monthly-report/",
+    "/projects/personal-finance/reconciliation/",
+    "/projects/personal-formal-documents/",
+    "/projects/personal-health/",
+    "/projects/personal-health/current-evidence-route/",
+    "/projects/personal-health/evidence-three-state/",
+    "/projects/personal-health/health-owner-boundary/",
+    "/projects/personal-health/offline-decision-brief/",
+    "/projects/personal-health/protected-foreground-refresh/",
+    "/projects/personal-health/raw-preservation-resume/",
+    "/projects/personal-materials/",
+    "/projects/personal-materials/bounded-discovery/",
+    "/projects/personal-materials/exact-intake/",
+    "/projects/personal-materials/registered-lookup/",
+    "/projects/personal-materials/verified-open/",
+    "/projects/personal-media/",
+    "/projects/personal-media/classification/",
+    "/projects/personal-media/cloud-candidates/",
+    "/projects/personal-media/local-ingest/",
+    "/projects/personal-media/phone-preservation/",
+    "/projects/personal-media/phone-recovery/",
+    "/projects/personal-media/search-browse/",
+    "/projects/phone-collector/",
+    "/projects/proxyclean/",
+    "/projects/proxyclean/dead-port-and-route-cleanup/",
+    "/projects/proxyclean/dynamic-proxy-status/",
+    "/projects/proxyclean/ipv6-routing-control/",
+    "/projects/proxyclean/one-click-and-troubleshooting-boundaries/",
+    "/projects/proxyclean/targeted-port-shutdown/",
+    "/projects/proxyclean/wifi-rebind-and-recovery/",
+    "/projects/ramdisk-guardian/",
+    "/projects/ramdisk-guardian/drive-arrival-sensing-and-skeleton-healing/",
+    "/projects/ramdisk-guardian/host-memory-telemetry-and-silent-monitoring/",
+    "/projects/ramdisk-guardian/installation-and-application-recovery/",
+    "/projects/ramdisk-guardian/unaccounted-watchdog-and-driver-auto-release/",
+    "/projects/ramdisk-guardian/volatile-cache-contract-and-backup-retirement/",
+    "/projects/remote-control/",
+    "/projects/steam-millennium-config-backup/",
+    "/projects/steam-millennium-config-backup/allowlist-config-and-style-snapshot/",
+    "/projects/steam-millennium-config-backup/plugin-manifest-and-install-state-tracking/",
+    "/projects/steam-millennium-config-backup/scheduled-snapshot-guardian-and-clean-restore-boundary/",
+    "/projects/steam-millennium-config-backup/theme-options-palette-and-dual-baseline-tracking/",
+    "/projects/sunshine-remote-streaming/",
+    "/projects/sunshine-remote-streaming/bitrate-codec-strategy/",
+    "/projects/sunshine-remote-streaming/capture-failover/",
+    "/projects/sunshine-remote-streaming/remote-power-and-repair/",
+    "/projects/sunshine-remote-streaming/transport-ipv6-direct/",
+    "/projects/sunshine-remote-streaming/vdd-display-settings/",
+    "/projects/timeaudit/",
+    "/projects/timeaudit/backup-recovery/",
+    "/projects/timeaudit/clipboard-history/",
+    "/projects/timeaudit/collection-pipeline/",
+    "/projects/timeaudit/hardware-performance/",
+    "/projects/timeaudit/process-forensics/",
+    "/projects/timeaudit/runtime-reliability/",
+    "/projects/timeaudit/usage-energy/",
+    "/projects/typora-theme-pack/",
+    "/projects/typora-theme-pack/controlled-preview-and-visual-qa/",
+    "/projects/typora-theme-pack/multi-scenario-export-profiles/",
+    "/projects/typora-theme-pack/theme-installation-and-lifecycle/",
+    "/projects/typora-theme-pack/transactional-pdf-export-pipeline/",
+    "/projects/typora-theme-pack/verdant-mint-theme-system/",
+    "/projects/vault-tool/",
+    "/projects/vault-tool/ai-local-interface/",
+    "/projects/vault-tool/dual-password/",
+    "/projects/vault-tool/files-encryption/",
+    "/projects/vault-tool/image-carrier/",
+    "/projects/vault-tool/maintenance-recovery/",
+    "/projects/vault-tool/passwords-formats/",
+    "/projects/vault-tool/private-backup/",
+    "/projects/vault-tool/view-extract/",
+    "/projects/video-scaffold/",
+    "/projects/video-scaffold/delivery-verify/",
+    "/projects/video-scaffold/deterministic-render/",
+    "/projects/video-scaffold/preflight-preview/",
+    "/projects/video-scaffold/project-bootstrap/",
+    "/projects/video-scaffold/recovery-reuse/",
+    "/projects/video-scaffold/scene-authoring/",
+    "/projects/video-scaffold/voice-timing/",
+    "/projects/wechat-direct/",
+    "/projects/wechat-direct/account-source-identity/",
+    "/projects/wechat-direct/bounded-chat-context/",
+    "/projects/wechat-direct/moments-local-cache/",
+    "/projects/wechat-direct/named-chat-archive/",
+    "/projects/wechat-direct/preservation-verification/",
+    "/projects/wechat-direct/reply-media-relations/",
+    "/projects/wechat-history-ai-bridge/",
+    "/projects/wechatdirect/",
+    "/projects/wly0829-cn/",
+    "/projects/work-delivery-copilot/",
+    "/projects/work-delivery/",
+    "/projects/work-delivery/consistent-deliverables/",
+    "/projects/work-delivery/evidence-quality/",
+    "/projects/work-delivery/package-sources/",
+    "/projects/work-delivery/source-change-next-version/",
+    "/projects/work-delivery/value-state-recovery/",
+    "/rescue/",
+    "/rules/",
+    "/rules/authorization/",
+    "/rules/capabilities-runtime/",
+    "/rules/charter/",
+    "/rules/claude-adapter/",
+    "/rules/codex-adapter/",
+    "/rules/context-sources/",
+    "/rules/engineering-delivery/",
+    "/rules/execution-coordination/",
+    "/rules/privacy-data/",
+    "/rules/protected-actions/",
+    "/rules/rule-release/",
+    "/search/",
+    "/skills/",
+    "/skills/authorization-file-broker/",
+    "/skills/browser-control-continuity/",
+    "/skills/chinese-asr/",
+    "/skills/cloud-asset-channel/",
+    "/skills/cockpit/",
+    "/skills/control-plane-doctor/",
+    "/skills/daily-preferences/",
+    "/skills/document-materials/",
+    "/skills/documents/",
+    "/skills/explain-to-me/",
+    "/skills/file-intake-router/",
+    "/skills/google-workspace-direct/",
+    "/skills/image-generation/",
+    "/skills/learning/",
+    "/skills/llm-backend-toolkit/",
+    "/skills/local-secret-broker/",
+    "/skills/localocr/",
+    "/skills/md-to-pdf/",
+    "/skills/media-person-self/",
+    "/skills/mojibake-doctor/",
+    "/skills/native-economy-routing/",
+    "/skills/news-quickcheck/",
+    "/skills/pdf-render-safe/",
+    "/skills/pdf/",
+    "/skills/personal-formal-documents/",
+    "/skills/personal-health/",
+    "/skills/personal-materials/",
+    "/skills/personal-media/",
+    "/skills/personal-panel-refresh/",
+    "/skills/phone-direct/",
+    "/skills/project-entry-gate/",
+    "/skills/proxy-network/",
+    "/skills/reply-as-me/",
+    "/skills/report-page/",
+    "/skills/tailscale-safe-exposure/",
+    "/skills/timeaudit-diagnostics/",
+    "/skills/token-budget-advisor/",
+    "/skills/vault-workflow/",
+    "/skills/wechat-direct/",
+    "/skills/work-delivery/"
   ],
   "html_files": 325,
   "files": [
@@ -504,6 +780,11 @@
       "path": "_astro/page-interactions.BE1IanXr.js",
       "bytes": 11919,
       "sha256": "dbc14d4aa4149ac92af788dab1c3475630a16be4de9e48cace80d627bc1faeae"
+    },
+    {
+      "path": "_astro/page-interactions.DKEMpHMK.js",
+      "bytes": 12106,
+      "sha256": "1f680e2b32c2694fdd1bdc12315ed4a93f97b0bb6c2a4e65db33348877ad315d"
     },
     {
       "path": "_astro/refresh-button.B4MsOk3e.js",
@@ -1562,8 +1843,8 @@
     },
     {
       "path": "_living/how/astro/shared-config.json",
-      "bytes": 19471,
-      "sha256": "ccf63e10455688f787383ce8f8b4d5bf8483d4d68bf66952e2801a3c715b650e"
+      "bytes": 2993,
+      "sha256": "afe5e6f5194cd4d53f5f3313233975e52fa1e34350579f79bd178a461b8ed354"
     },
     {
       "path": "_living/how/bird-first-only.c7b591064984/config.json",
@@ -1817,8 +2098,8 @@
     },
     {
       "path": "_living/pcconfig/astro/shared-config.json",
-      "bytes": 25589,
-      "sha256": "42bd9d68a61703360606f8651fbaa8a77318b4f25f339a8f3ddbd4a18ed36d56"
+      "bytes": 25590,
+      "sha256": "2a4733c4b6135c569c769748aedad5157539bec6f979ac6659c2fd6574ded16a"
     },
     {
       "path": "_living/pcconfig/bird-first-only.24313bded135/config.json",
@@ -2557,8 +2838,8 @@
     },
     {
       "path": "_living/skill-explain-to-me/astro/shared-config.json",
-      "bytes": 11430,
-      "sha256": "6a0aa4a2ec42a629381344d1cb46b3131529c8536292cb5427958126dd63d5b0"
+      "bytes": 11422,
+      "sha256": "1757571a01449c5004600d333ac93dc0e0cad0dbc55f61e5af0db9bdcfe05948"
     },
     {
       "path": "_living/skill-explain-to-me/bird-first-only.f6499ab9f7eb/config.json",
@@ -2752,8 +3033,8 @@
     },
     {
       "path": "_living/skill-media-person-self/astro/shared-config.json",
-      "bytes": 9510,
-      "sha256": "552e8fad8105ed3a454e4fe175f7e341518cad3c5186ce858d3c3ab22cd94cea"
+      "bytes": 9502,
+      "sha256": "b13d4abeffd6063f4f98c431edb833c2cbda93921ec3ee1350472d482de22409"
     },
     {
       "path": "_living/skill-media-person-self/bird-first-only.2b42e682b90d/config.json",
@@ -2782,8 +3063,8 @@
     },
     {
       "path": "_living/skill-mojibake-doctor/astro/shared-config.json",
-      "bytes": 10130,
-      "sha256": "863695fbf815289549c13466418e769bbbe834e8fb35e4c89ee59f12608bff50"
+      "bytes": 10122,
+      "sha256": "81c6f102b5339e13829c8b40846ff3439348b9ce018a2481d18d09b15317bb5d"
     },
     {
       "path": "_living/skill-mojibake-doctor/bird-first-only.8257fc625ccf/config.json",
@@ -2817,8 +3098,8 @@
     },
     {
       "path": "_living/skill-pdf-render-safe/astro/shared-config.json",
-      "bytes": 12975,
-      "sha256": "4c93ba8bda8f530cad5e9fd4fd4da32fbac01abf9a3096ce67c89e0198c12bc9"
+      "bytes": 12967,
+      "sha256": "d7788aaea5dfd1878b88ca08e3c5afdcdc2e61b2056979db878d5c6c277b29d7"
     },
     {
       "path": "_living/skill-pdf-render-safe/bird-first-only.fcd507590afd/config.json",
@@ -3237,8 +3518,8 @@
     },
     {
       "path": "_living/timeaudit/astro/shared-config.json",
-      "bytes": 18497,
-      "sha256": "370daeb200fe6d598b84f7b17cf712bc4b8f5f4c0efb0b4399be7c0744325a6d"
+      "bytes": 18484,
+      "sha256": "903f98ce1dd71c6f1c912d34ea86f8044c0585a828c4360949d88ac0c493b132"
     },
     {
       "path": "_living/timeaudit/bird-first-only.a07df7515cfd/config.json",
@@ -3292,8 +3573,8 @@
     },
     {
       "path": "_living/video-scaffold/astro/shared-config.json",
-      "bytes": 16029,
-      "sha256": "c26dddfd45f97c955adcb3d90d1d8c233c38425ab554bb6f5b2e73e60add0b24"
+      "bytes": 15949,
+      "sha256": "8558cb64574e67eb770aa59aa335378b5248ae523231980271a97a3457add870"
     },
     {
       "path": "_living/video-scaffold/bird-first-only.03f16afd8139/config.json",
@@ -3387,8 +3668,8 @@
     },
     {
       "path": "_living/wly0829-cn/astro/shared-config.json",
-      "bytes": 1371,
-      "sha256": "a7727e243734f0119e8596e3de3a32a9d4499be8b28b7f2b6c5a8385ba12a65e"
+      "bytes": 1831,
+      "sha256": "3965c3f0f4af4f3889f3fc3a2ae66e6a735f4b292af086e9a3f3eb76c056464c"
     },
     {
       "path": "_living/wly0829-cn/bird-source.1602469644a4/config.json",
@@ -3873,7 +4154,7 @@
     {
       "path": "_runtime/8e3947f318e9b33462dd/search-projects.js",
       "bytes": 1075178,
-      "sha256": "8e3947f318e9b33462dd4e8b3a777dad0daf754dbbebaae4d0241ee7594ecea6"
+      "sha256": "c8b8f92fae87fb0ca5527f340208c71303efcfa05c9f796110cc2a6aefbf8333"
     },
     {
       "path": "_runtime/8fbfb28ee100ba6cc7ec/resource-retry-0e62ab1ef145e9d198a8.js",
@@ -4113,7 +4394,7 @@
     {
       "path": "_runtime/da4246a63f90dfcc016a/search-project-personal-media.js",
       "bytes": 13625,
-      "sha256": "da4246a63f90dfcc016ac90336387bc4cc595b40e4bcf50c1325033fa1fe4669"
+      "sha256": "20da389fbf1eb46f74144acace2650afe38f6bacca5052c748ed8a2abb4a7240"
     },
     {
       "path": "_runtime/dc18ae0b53289166ad19/search-project-personal-materials.js",
@@ -26751,11 +27032,6 @@
       "sha256": "f447631806fbe26406a963d2cf87942ad03e7893db6ced3bd0608c60a34d0c22"
     },
     {
-      "path": "assets/_fingerprinted/f45a50596a80b764c6f951e6faa700e7f5dfd5f32ca7377d132d9837dba161ca.webp",
-      "bytes": 30758,
-      "sha256": "f45a50596a80b764c6f951e6faa700e7f5dfd5f32ca7377d132d9837dba161ca"
-    },
-    {
       "path": "assets/_fingerprinted/f4b221cf96c65d1642e923a3d7822454712396dde83ce8fbdaf72b60211340b2.png",
       "bytes": 399240,
       "sha256": "f4b221cf96c65d1642e923a3d7822454712396dde83ce8fbdaf72b60211340b2"
@@ -30241,6 +30517,11 @@
       "sha256": "60b667b6b9d1c7eec4c68d1ddd631346a3ed15f6502889e75578feb88394005f"
     },
     {
+      "path": "assets/_fonts/personal-media-66dde2368017.woff2",
+      "bytes": 225508,
+      "sha256": "4aa6e61ed0f5bf8dfe6fd303468995cba5a1a8aa7d0095ca81e37e473b11ef23"
+    },
+    {
       "path": "assets/_fonts/personal-media-6a43ec989fd3.woff2",
       "bytes": 218872,
       "sha256": "c4160fbafac16edfadf4a972781e4612e8c7409174aa97326394167e2efb48e9"
@@ -30264,6 +30545,11 @@
       "path": "assets/_fonts/personal-media-classification-10265b325e4a.woff2",
       "bytes": 187288,
       "sha256": "91044109cac75f12551ca71f3b0a00cec3d9bd2066ceb94c087ddd9c7a9e9627"
+    },
+    {
+      "path": "assets/_fonts/personal-media-classification-660c10f16dd6.woff2",
+      "bytes": 198556,
+      "sha256": "b8c22ae47db48a26bff3083e0010435154c2e989d124290ee7e9234a8a7eb1bd"
     },
     {
       "path": "assets/_fonts/personal-media-classification-8ba7b8c0a35b.woff2",
@@ -30319,6 +30605,11 @@
       "path": "assets/_fonts/personal-media-d21e3da088e9.woff2",
       "bytes": 222928,
       "sha256": "80f3ab12ad264d6bdb1accd8528f43969b7b614911ce62a5970572b04d18feba"
+    },
+    {
+      "path": "assets/_fonts/personal-media-local-ingest-3c685a503af7.woff2",
+      "bytes": 172888,
+      "sha256": "7c5d093e74c8f0fdbce03cfdae8b31672d4b6ab151d3f424b463deba3c22a262"
     },
     {
       "path": "assets/_fonts/personal-media-local-ingest-611d41f0c851.woff2",
@@ -30379,6 +30670,11 @@
       "path": "assets/_fonts/personal-media-phone-recovery-7f5b7443a069.woff2",
       "bytes": 174056,
       "sha256": "c3abb6bb76a3df6c9cf4e72ecfd06de3906b2d45289ad92a4db224e31ca7dc7a"
+    },
+    {
+      "path": "assets/_fonts/personal-media-phone-recovery-85911285d137.woff2",
+      "bytes": 180752,
+      "sha256": "c818e07af1ab37edb9fe1130448ad49ce40fcf6cc0eadb230b4a1932a452ec66"
     },
     {
       "path": "assets/_fonts/personal-media-phone-recovery-b4257f47748d.woff2",
@@ -34062,8 +34358,8 @@
     },
     {
       "path": "cockpit/ai/index.html",
-      "bytes": 166410,
-      "sha256": "b499f17eb649ff003ddfaaf7c00b6f67d703923ef7d68ce038d62306d26fcda1"
+      "bytes": 166821,
+      "sha256": "ec75e0ef24f6a96ab4274b4846d9c7596b5b2614571ba4a544f5e0d30d8fb3ab"
     },
     {
       "path": "cockpit/assets/b2-controls-f2afbded2566.css",
@@ -34182,8 +34478,8 @@
     },
     {
       "path": "cockpit/storage/index.html",
-      "bytes": 49596,
-      "sha256": "5d605bf6255c1dfaeffa259fc4f49c1e8f84cc75feaa40a0e45a90d717585819"
+      "bytes": 50007,
+      "sha256": "32ac1e6e7b53d34c2305c11cc3b7f7d803e5ad105e079b7bd86bd77a099a09f6"
     },
     {
       "path": "cockpit/stutter/assets/motion-2f8c3c372966efd18f0a.js",
@@ -34277,8 +34573,8 @@
     },
     {
       "path": "github-profile/index.html",
-      "bytes": 74699,
-      "sha256": "b5864e6b006bcdb10002b1e07c4a3782deaaa000d22c2ebd618415c86fc418a4"
+      "bytes": 75110,
+      "sha256": "6b52367fde8cf8349d27b522434d36c0eb399eaf2f8a279a1c8e0e6476916493"
     },
     {
       "path": "how/index.html",
@@ -34586,11 +34882,6 @@
       "sha256": "d341e3f76b2ce336b991ac5e227a86f643fa93882d7a95e456f33aa1ba55c68d"
     },
     {
-      "path": "media/document-materials/fictional-after-sales-page.webp",
-      "bytes": 30758,
-      "sha256": "f45a50596a80b764c6f951e6faa700e7f5dfd5f32ca7377d132d9837dba161ca"
-    },
-    {
       "path": "media/emerald-veil/desktop-wallpaper.webp",
       "bytes": 1743642,
       "sha256": "15c8f97c699af6e0f33196fdd89066ffdcfefaefda78cddcf2e19939730107dd"
@@ -34727,8 +35018,8 @@
     },
     {
       "path": "media/pcconfig/08-passkey-browser.png",
-      "bytes": 97602,
-      "sha256": "15a637685dec4513cb2ee2df78a34f7e5368b06353f02758e1ec1e4969f4937d"
+      "bytes": 63734,
+      "sha256": "65cbd6cfd08cf257600c2051e2fb12f55862bbe448d9280ba5a5870eb59b9cbd"
     },
     {
       "path": "media/pcconfig/09-totp.png",
@@ -35007,18 +35298,18 @@
     },
     {
       "path": "projects/agents/authorization-owner/index.html",
-      "bytes": 199308,
-      "sha256": "489d365443671efcb3c30ea63704ffd10009d5084c51d310ce6bce0c40cd0830"
+      "bytes": 199719,
+      "sha256": "b6211400356d381f3edf6d2773314cd36142799be2038e5e7c0b472263fc2340"
     },
     {
       "path": "projects/agents/capability-routing/index.html",
-      "bytes": 224320,
-      "sha256": "a6d6288013c4a4cfea3443da94157f930203e6370e74fc1777cef0ec0c0c284c"
+      "bytes": 224731,
+      "sha256": "eb4c6345b13140d64d4a75311591a188d7cb6c29f6199ff86a7a0b5a4c96dd1f"
     },
     {
       "path": "projects/agents/context-evidence/index.html",
-      "bytes": 201854,
-      "sha256": "d59c992ccb7a5be6b812f315b4da889da8c928d5a12f1a535fb919aafbe26e1c"
+      "bytes": 202265,
+      "sha256": "ada5eb47e1ac074cba433a134d70cda1adc6d8f780eac7c1d26717945c466f1d"
     },
     {
       "path": "projects/agents/index.html",
@@ -35027,23 +35318,23 @@
     },
     {
       "path": "projects/agents/protected-policy/index.html",
-      "bytes": 193365,
-      "sha256": "fd6367b865be448709dd61f6b5cd68e65c409439ac929eb072dea22267e55fe4"
+      "bytes": 193776,
+      "sha256": "87186f8ebc6b4f57787faffb43d5e06ea20dd6bd50f1c0b7a4df2f0a4149d73a"
     },
     {
       "path": "projects/agents/rules-contracts/index.html",
-      "bytes": 159815,
-      "sha256": "7f7af5d616a648e967068751044c75bd431e8ca902128e27c9d18a6368ceb8d6"
+      "bytes": 160226,
+      "sha256": "29e0f8e11d9089c3f0e01ca7a15ec5b4d71fdb9ce5f748f80aafa0d20cd34a88"
     },
     {
       "path": "projects/agents/skills-plugins/index.html",
-      "bytes": 199532,
-      "sha256": "b09be4db24307020c7cb959fec4942a468ab2a080c4fd32983f638b3ab6f42e9"
+      "bytes": 199943,
+      "sha256": "4a1f5d3c4e76a52b4e0896c5117d8b23f2694f31d3a43ac796bc7d54df76db59"
     },
     {
       "path": "projects/agents/working-tree-hot-mirror/index.html",
-      "bytes": 158662,
-      "sha256": "7128ba4acdd481bb53ecaa2ee5dac97c4cba6d634aecc55e01fdb7f02f0924ac"
+      "bytes": 159073,
+      "sha256": "8ac476a4977762ec413718a549406917353dac23187dd1a9655706b5664cae8f"
     },
     {
       "path": "projects/ai-cli-profile-manager/assets/hero-cce2a1faafc04606-mask.png",
@@ -35057,18 +35348,18 @@
     },
     {
       "path": "projects/ai-cli-profile-manager/background-openai-children/index.html",
-      "bytes": 166045,
-      "sha256": "f8dfd29550c31b7dcb738ba571ce2f084988ac4201a1a837e4bceb16e0615119"
+      "bytes": 166456,
+      "sha256": "28f0ca3757110bf62ab0eb633ad27f8e2878f4f7b541095824d49aab7e090183"
     },
     {
       "path": "projects/ai-cli-profile-manager/doctor-validation/index.html",
-      "bytes": 146521,
-      "sha256": "1b191cc29ed275d99f48d8eae988a56d934ce8e147580cf546e35a540f0bdb2a"
+      "bytes": 146932,
+      "sha256": "3b9fea15b6e040b7c9f2de444e82fbc19657e3aa7e8b897353e616f1a2dc60e3"
     },
     {
       "path": "projects/ai-cli-profile-manager/engines-providers/index.html",
-      "bytes": 232683,
-      "sha256": "7ff6e5d7a18eb03961d14c14edeb8f128643ed5b4cac47e4e4f56229217e5477"
+      "bytes": 233094,
+      "sha256": "44cb6d06d95dbc4c6e5c809134daff01dcc293ed77f35f6df13956b0405eb772"
     },
     {
       "path": "projects/ai-cli-profile-manager/index.html",
@@ -35077,33 +35368,33 @@
     },
     {
       "path": "projects/ai-cli-profile-manager/install-recovery/index.html",
-      "bytes": 161391,
-      "sha256": "e6cbdfc77ffe90075d63b94e46d6af779b8d0e45dc0888dc9b0b939ad86bcc82"
+      "bytes": 161802,
+      "sha256": "6376181b2ab859e50713b55c4ed9ea1637eda83ea167807ec65406d29a439635"
     },
     {
       "path": "projects/ai-cli-profile-manager/local-proxies/index.html",
-      "bytes": 153697,
-      "sha256": "af9f7e93c9bd9710729be0f7c515c6171448c9026b2656f67b560e2dc4d85c8b"
+      "bytes": 154108,
+      "sha256": "bbd62bdb69c7339a0c6c95c807bae34a2a06d609414b4bc796965b7577d26452"
     },
     {
       "path": "projects/ai-cli-profile-manager/native-desktop-integration/index.html",
-      "bytes": 156470,
-      "sha256": "4b015ff3428e5954d9907b1d8f3bffc81c6a37d9105ea9088543331814f035da"
+      "bytes": 156881,
+      "sha256": "ea08db38715a33cb156bab3feac65d49a247ebcc95c5e2c60616a111e1ee73a9"
     },
     {
       "path": "projects/ai-cli-profile-manager/profiles-launch/index.html",
-      "bytes": 161963,
-      "sha256": "a16b2d2b551b28a241a6a2f4b82471337b81f74c19e63bf6dc26e7e6e13a27c6"
+      "bytes": 162374,
+      "sha256": "8c10a8f0b3a4e07c865ef6eed7285ab60c99178025fd8bdcc3dfa4fb2d8bc620"
     },
     {
       "path": "projects/ai-cli-profile-manager/recoverable-runs/index.html",
-      "bytes": 164538,
-      "sha256": "a1ad89381e3d74170abd2cee7baad2ead15dd6c9f9c24f77ef4634b4d66dddfb"
+      "bytes": 164949,
+      "sha256": "3964ef03cb2fbcdac3c08f7b1d1d3c8486c347cde1545a84a98bcdb8fcfe2f1e"
     },
     {
       "path": "projects/ai-cli-profile-manager/secrets-isolation/index.html",
-      "bytes": 169929,
-      "sha256": "500cbd1ef57d67c429441dc885975ee41dc72cfb87daf7d26b25415000330bd4"
+      "bytes": 170340,
+      "sha256": "302273efd1cd62892f2b15d41c87d7c1c096ea6bcec188f4ab2e311c6359a9af"
     },
     {
       "path": "projects/cacb/blind-quality-review/index.html",
@@ -35162,13 +35453,13 @@
     },
     {
       "path": "projects/chinese-asr/audit-evidence/index.html",
-      "bytes": 197095,
-      "sha256": "eed617b7e7266fdf1e074c29c563288e8f7b377cd07723dbbf0a18ada90fdb2c"
+      "bytes": 197506,
+      "sha256": "868485b7c84d7758db1b49722f622ea93d67c0ecdb8c03fd6bd44e5db62c7898"
     },
     {
       "path": "projects/chinese-asr/desktop-dictation/index.html",
-      "bytes": 186613,
-      "sha256": "c5ca65f887b8ad966f8bee74346a64f3449b2f674112f1d72826910451179ac8"
+      "bytes": 187024,
+      "sha256": "66b29770f2f880eb4ae61bc57edef898981f532133a0b51bd5b7a6f51c47619c"
     },
     {
       "path": "projects/chinese-asr/index.html",
@@ -35177,38 +35468,38 @@
     },
     {
       "path": "projects/chinese-asr/installation-recovery/index.html",
-      "bytes": 267239,
-      "sha256": "eaf23cd01b54e1183003067343a5d9fbb46e4623601c55e8edf5a87a424e140f"
+      "bytes": 267650,
+      "sha256": "e14f681bcd7c785e4a416cee9c8731579f47bfc09600f86cc8664d10b6d11285"
     },
     {
       "path": "projects/chinese-asr/known-text-alignment/index.html",
-      "bytes": 152612,
-      "sha256": "594f4da1c6d5dab583ba9681465c90f7d67faf067feaaecfbe73d3bfcbc8ed38"
+      "bytes": 153023,
+      "sha256": "beaf3d685262b053462acde894d05100e8ac73ea6136a1325fffba960e673fb7"
     },
     {
       "path": "projects/chinese-asr/long-batch/index.html",
-      "bytes": 147906,
-      "sha256": "cd3f63e073631ec63507d946ff316136fa08b5147db57e38cbb477b3d5e9f940"
+      "bytes": 148317,
+      "sha256": "b6d5ab4a20ad3a2a243bc8629665372a1d27e3c5f5b3066eb46e0a90d995eb29"
     },
     {
       "path": "projects/chinese-asr/models-modes/index.html",
-      "bytes": 203078,
-      "sha256": "96e2faa1dd86015f9116cb7c7216cb4e084126a0f489c3d2759cf1c80693d245"
+      "bytes": 203489,
+      "sha256": "3092ae1c182937048870d5932790bf89e2f83d1002142322b992b78fd81a7d8c"
     },
     {
       "path": "projects/chinese-asr/runtime-privacy/index.html",
-      "bytes": 227828,
-      "sha256": "01486c3517c5902b6a5cec1c2931d30a99c23f11355617c95ebc7a548c0cae85"
+      "bytes": 228239,
+      "sha256": "ab9bd2b952e3383523b2050bb2de0e1de214232f092a94dd84c24be83cebc803"
     },
     {
       "path": "projects/chinese-asr/speaker-attribution/index.html",
-      "bytes": 165007,
-      "sha256": "5c126cb840c01c7d6868d68d3d64117b79348c8c97516c342342da70f7e2beff"
+      "bytes": 165418,
+      "sha256": "b278abb81cd0d93c696f5fdf365baec21a705e1ab607763d78aef51ee10e1e39"
     },
     {
       "path": "projects/chinese-asr/task-routing/index.html",
-      "bytes": 187696,
-      "sha256": "85772ba1851eef42acf50054b79e70726461f87d0fb30d313375a1de44117946"
+      "bytes": 188107,
+      "sha256": "4d29c1d26aac06fd34f2fcabf5c0dabe2477f2bcd31a95899e4558225c00c700"
     },
     {
       "path": "projects/codex-agent-model-benchmark/assets/hero-f7640ecd3948e710-mask.png",
@@ -35237,48 +35528,48 @@
     },
     {
       "path": "projects/codex-local-remote/index.html",
-      "bytes": 46580,
-      "sha256": "68506fb3c9a8dda2829088aff57009fd2a7138388ea1edcd72e43409b6645ff9"
+      "bytes": 46991,
+      "sha256": "efeeb8f876cd06f461b5ad620ef837ba12ad1252990d92430992adf1ad19f85a"
     },
     {
       "path": "projects/codex-memory/claude-project-memory/index.html",
-      "bytes": 150874,
-      "sha256": "99bfdaca17bfa6b7dd7f95534312aeade35cc68e88bcf381fd1a59b32817dd4d"
+      "bytes": 151285,
+      "sha256": "c6a7ef6e98f43e295b81eb2f65119e16589e1bc59d399144887cd09c2643e047"
     },
     {
       "path": "projects/codex-memory/config-memory-whitelist-sync/index.html",
-      "bytes": 178145,
-      "sha256": "5a855950c1f8ddba03fb528a04ba56df613aba042b9e4ae585525133c43ca939"
+      "bytes": 178556,
+      "sha256": "dd1262d436a9fdb55000ddf1a77ad17f5ab267acebe8c5126a01df7905ddb7f0"
     },
     {
       "path": "projects/codex-memory/content-addressed-storage-cold-sync/index.html",
-      "bytes": 164823,
-      "sha256": "a7be3c176276a5a1a5fb5665928059886c74fc5a313bdf10db3f406bfa47133a"
+      "bytes": 165234,
+      "sha256": "0c8890056c9bc99d19485b8cef73682e1b43efb8e0065c5c773efd3a305c9e5c"
     },
     {
       "path": "projects/codex-memory/gemini-workspace-memory/index.html",
-      "bytes": 152114,
-      "sha256": "0079dfb8135e788a8b15562c55990bc1245f5e95aae8e79966957e3271a35587"
+      "bytes": 152525,
+      "sha256": "3f94fbe76d2d6367158f15e7eef608fa8ca25a5dfecb1788758994e4b2b3787b"
     },
     {
       "path": "projects/codex-memory/index.html",
       "bytes": 456816,
-      "sha256": "fe0439684130f3f67a4dd692d1f5252c47f6e9a1c42112159d72f379ce87f40c"
+      "sha256": "a0e203d59049fef3fbc140ae7a957f518e9ec1400d931f779997404d2912a1ed"
     },
     {
       "path": "projects/codex-memory/isolated-disaster-recovery/index.html",
-      "bytes": 164840,
-      "sha256": "8abc5743c80d72082f07e2791852ff76d8275060495938c2b2991881c50603a0"
+      "bytes": 165251,
+      "sha256": "f106b1185d268828de846a18c5b1e86a504409a010f892ebc9213fe20b6c40a6"
     },
     {
       "path": "projects/codex-memory/openclaw-workspace-recovery/index.html",
-      "bytes": 152302,
-      "sha256": "4f6d665dd986da207bb3c06c43865953c32a52ea298892b8d0f500e2c9f1549e"
+      "bytes": 152713,
+      "sha256": "a353579e01e8e5b13bb815038e86b5a9549cd2af69e55df84b28cf271b9d537e"
     },
     {
       "path": "projects/codex-memory/vss-conversation-hot-backup/index.html",
-      "bytes": 183872,
-      "sha256": "ff077d1aaf6cf3e0e67216a84dfe4f545e41b2c949806d560b6dd15089c96e2c"
+      "bytes": 184283,
+      "sha256": "2910382b6d98092e8af4e94e86204fa87baa9d403380a23bd2eeeab15d7f78f1"
     },
     {
       "path": "projects/codex-remote/conversation-control/index.html",
@@ -35342,18 +35633,18 @@
     },
     {
       "path": "projects/daily-preferences/current-corrections/index.html",
-      "bytes": 160716,
-      "sha256": "4f23892ea90ca3ebd3b77d60f928aaac1b0d6f08591bd7ba92b3792f9372b8f5"
+      "bytes": 161127,
+      "sha256": "8ed18bafdc6b1d28901af9716312dbf5f262df09dc9cff497facf9739ef1757d"
     },
     {
       "path": "projects/daily-preferences/evidence-query/index.html",
-      "bytes": 250152,
-      "sha256": "3e2567979b09247bd98277cbc48077307a498735567700bc43598716d19c20cf"
+      "bytes": 250579,
+      "sha256": "fd56fdab55db2401e42c09b0951489d709e2e1d2295e352a9eb39fc551ef125f"
     },
     {
       "path": "projects/daily-preferences/fact-verification/index.html",
-      "bytes": 202355,
-      "sha256": "a56ac0fd3568077ee0407f43326f4c8b5638e64d080c803e9c3de0e34a4b447f"
+      "bytes": 202766,
+      "sha256": "8ebbafb6c8a846ed8269d479f115e3944438a42f81a1269f632778239dca9d4c"
     },
     {
       "path": "projects/daily-preferences/index.html",
@@ -35362,23 +35653,23 @@
     },
     {
       "path": "projects/daily-preferences/mobile-context-delivery/index.html",
-      "bytes": 214576,
-      "sha256": "aa9cf685ebde693bf670f9f184cded8fa8c5b93cc569969b2d246f15df0b9032"
+      "bytes": 214987,
+      "sha256": "6e11fcdbd66c6d5ee0e2ec8d4fe90d8be38ce6edf7e4281ba82f9fc1e9c93cbb"
     },
     {
       "path": "projects/daily-preferences/personal-understanding/index.html",
-      "bytes": 192578,
-      "sha256": "4d1b910b18e1a6e95dfcd51ae8d142044333ba4dbde0dc5d2b6f2a0ae686ade0"
+      "bytes": 192989,
+      "sha256": "2deb11731d06ddec7eea3a05896c4d54e5a7a2d8bfdb52ab28d4a2343a2890bf"
     },
     {
       "path": "projects/daily-preferences/recommendation-choice/index.html",
-      "bytes": 184708,
-      "sha256": "1078ab68e6e1f1c82f5d017e5612b7bb622b72f165e1898d9a646bd6772a6b4a"
+      "bytes": 185119,
+      "sha256": "23f22c0a0b190089d6a1091c98a5b43f4e912fdf364b189b137a393829fe9b36"
     },
     {
       "path": "projects/daily-preferences/source-coverage/index.html",
-      "bytes": 396241,
-      "sha256": "0c9a5c14bff706b9d23cc41f632f02fc701f875aad28c2e1ceaf4288398bc766"
+      "bytes": 396652,
+      "sha256": "bd55a3174c7c76d797dfe9f6102d8948f24bcdb4a5afb22bcdccbb257770d847"
     },
     {
       "path": "projects/devconfig-backup/assets/hero-4e3f08e653641d08-mask.png",
@@ -35397,53 +35688,53 @@
     },
     {
       "path": "projects/devconfig-backup/recovery-and-tasks/index.html",
-      "bytes": 199102,
-      "sha256": "47969b3f80486425c91ca1d93ebcb5e3574b8da0b1e4caebde7e1ab3fe1f7dae"
+      "bytes": 199513,
+      "sha256": "2ecadda16ae45bf063ca7fc9313dfddda2b9892a25743425a33a739796975c56"
     },
     {
       "path": "projects/devconfig-backup/source-catalog/index.html",
-      "bytes": 187268,
-      "sha256": "14bad5259f34a5b59a4f411e71435d26f71f32e626ddbe7b632993e087ab294c"
+      "bytes": 187679,
+      "sha256": "41af522f92c595e108aefa7ef049888acc0cb664ad12c71948565e37145b4fc9"
     },
     {
       "path": "projects/devconfig-backup/tiered-distribution/index.html",
-      "bytes": 217580,
-      "sha256": "b81f81919f1a0ab7fc769228714c1e63425acee6a5b8f9381053477472b084df"
+      "bytes": 217991,
+      "sha256": "f8c1e2e849cfae72ac9d94e854f2fe436cf1b5e17ee19c38c5749944a090df29"
     },
     {
       "path": "projects/devconfig-backup/wechat-native-backup/index.html",
-      "bytes": 215557,
-      "sha256": "bf4ede241181278a91cb4407322a8782e877a658a704436187ef2cfca93afec8"
+      "bytes": 215968,
+      "sha256": "aa32f8ccacab3037332210158b32b661b520f88d6135d0d00da32ed4fc0d8d6c"
     },
     {
       "path": "projects/document-materials/current-matter-sources/index.html",
-      "bytes": 151453,
-      "sha256": "dfdf0312bfcc1c2157584a7e536294b55ce73fff3c48a980fe02c77767aa4e82"
+      "bytes": 151864,
+      "sha256": "89354fb457f8ae99b68b7a3b6d5037cc5e9585ba44507553367fec0091ef1ed0"
     },
     {
       "path": "projects/document-materials/editable-docx-pdf/index.html",
-      "bytes": 147150,
-      "sha256": "ee00f61b365a1e483a97357bcee021864374a540ebc8e24be06d8dc468888704"
+      "bytes": 147561,
+      "sha256": "4246e2068bedf41b1827027f97c1546df927b05a10cf028cda254702829280a3"
     },
     {
       "path": "projects/document-materials/index.html",
-      "bytes": 46650,
-      "sha256": "cb4d0bd5856ab7e89800dc094f7739607374f105ecc5b0db6bd64a526e767425"
+      "bytes": 47061,
+      "sha256": "7778f5eedc1949f7b53b04c95d6539da751aca71a5d2eb37b5c1caa99ec82a97"
     },
     {
       "path": "projects/document-materials/page-audit-release/index.html",
-      "bytes": 171561,
-      "sha256": "457bc7c7153ec4b950cbbc662326896c2359835d0d3f81b3841976a36a1ed6bc"
+      "bytes": 171972,
+      "sha256": "7b590aec9d9640f838b4e18a4cf1ebd2386b9ce6c57336a85a3bb6ab1976c9ba"
     },
     {
       "path": "projects/document-materials/reality-readback-recovery/index.html",
-      "bytes": 154055,
-      "sha256": "2cc5dd1724fc6d21368e34dedd6fe185239beb880b22170e5357458737928415"
+      "bytes": 154466,
+      "sha256": "0c47b53f8d55960a6483412321f82fd0dd2fd134b730d0438935305641e847e6"
     },
     {
       "path": "projects/document-materials/signature-delivery-version/index.html",
-      "bytes": 163220,
-      "sha256": "28e7c73f457275b630c7e4a9923d0cb1b32b0db991e39da527a3be5c54e67e7f"
+      "bytes": 163631,
+      "sha256": "b5d05756edb0b00f93d8b74c6994961a300e43f660c6faf6d9ec07cf7d47665c"
     },
     {
       "path": "projects/emerald-veil/index.html",
@@ -35452,23 +35743,23 @@
     },
     {
       "path": "projects/emerald-veil/native-bubbles-idle-overlay/index.html",
-      "bytes": 169972,
-      "sha256": "9891648fb0e5a0adbc5096e980917acd14c564faec819e42f5d9ae8957804560"
+      "bytes": 170383,
+      "sha256": "906eba7e0683034630b7a92cdd70e3a8bf112366b632002a6b3cb3ebd90668f4"
     },
     {
       "path": "projects/emerald-veil/reversibility-preimage-and-remote-compatibility/index.html",
-      "bytes": 181678,
-      "sha256": "ba4826f767b90276c06b4af68586658a4c7d68743c3ea74dd7ef6cc21b1b1cc5"
+      "bytes": 182089,
+      "sha256": "57e97f6c7a8afc5019822b0781b21442dc8eeea30d15e2158da6b665fcb47d77"
     },
     {
       "path": "projects/emerald-veil/wallpaper-engine-coexistence-and-rain-experiment/index.html",
-      "bytes": 165518,
-      "sha256": "3b5023da296f9d4bd53efd976c5c63457cece8d860d0129538484c0a5caa1df9"
+      "bytes": 165929,
+      "sha256": "ae4d47442592bd8469570824a19cb6d79eea9fa7a315b9cb4b821832ba9859a3"
     },
     {
       "path": "projects/emerald-veil/windows-desktop-and-lockscreen-background/index.html",
-      "bytes": 166487,
-      "sha256": "590967103605c9fa583f9b7232202855381a6d976f7b6c15deae57e0489d12f0"
+      "bytes": 166898,
+      "sha256": "3b5f9e8f17ce01f142ba76e0630878e6bb50a639ccfe5c29944f3a136965cbdc"
     },
     {
       "path": "projects/github-index/index.html",
@@ -35477,33 +35768,33 @@
     },
     {
       "path": "projects/github-index/project-admission/index.html",
-      "bytes": 189371,
-      "sha256": "b95b8fa7f1def5b8344b5ddff6c36731b14ff3fa71245e9aadffc1bc8955d9c8"
+      "bytes": 189782,
+      "sha256": "8f05197de7f01b25df2ab7f418ead2ca069a23e0e71124a1ef6d7c00f1e687ed"
     },
     {
       "path": "projects/github-index/protected-major-actions/index.html",
-      "bytes": 229158,
-      "sha256": "b8b12cbeb469761294fb2a3e41b0aee7023342a2d068c678abb8bbdf536c366c"
+      "bytes": 229569,
+      "sha256": "8b5f91e223a05ffbf57aa724efd0b7f10d32ffed62e870b7e6e3151cd952a74d"
     },
     {
       "path": "projects/github-index/publication-gate/index.html",
-      "bytes": 176742,
-      "sha256": "a888b3c37d4cd53c3341fd81fd94472413772d149d2aa7e19d28fb31afa388f2"
+      "bytes": 177153,
+      "sha256": "37f601d5d1f9330977099da7a7d09ef60a86de6d51747b562158b92f48f88a08"
     },
     {
       "path": "projects/github-index/repository-ledger/index.html",
-      "bytes": 185669,
-      "sha256": "01332cc6fab58036d6a8c74aa8f74ef6411c4ea6c2f673fe59970e377ba2098f"
+      "bytes": 186080,
+      "sha256": "54840e361cf8a18a918e9f4c508d50d648f79a088a3ff18ca7be4d1325e1fec0"
     },
     {
       "path": "projects/github-index/snapshot-recovery/index.html",
-      "bytes": 183218,
-      "sha256": "9413dbd75e73b54e70ebef3efd2b90079978fa8063e5f10415d1f6fe97e52020"
+      "bytes": 183629,
+      "sha256": "22624710a0235fcbc4f55511a2fe3376d854edd7c863f3836238644576c4efff"
     },
     {
       "path": "projects/github-index/worktree-sync/index.html",
-      "bytes": 186007,
-      "sha256": "53d055489aad565a925fd6d02ce934b5eaf7004d29f2b90ca40d2b884d4a7a83"
+      "bytes": 186418,
+      "sha256": "6d408d255cf2270eaac78bb3597c60130015d4df1f0c114466b90ff8e2163581"
     },
     {
       "path": "projects/github-local-index/assets/hero-1641a89b2613d788-mask.png",
@@ -35517,8 +35808,8 @@
     },
     {
       "path": "projects/github-local-index/index.html",
-      "bytes": 46600,
-      "sha256": "2a5af5d8bd04bc60b90d61a563e5da2d9cfa9b502e1db0138bf02873d720a48f"
+      "bytes": 47011,
+      "sha256": "e4587c924640337231910ce45c7f5249fc36a3d375a9b256f5370e2148036133"
     },
     {
       "path": "projects/index.html",
@@ -35537,18 +35828,18 @@
     },
     {
       "path": "projects/learning/authoritative-research/index.html",
-      "bytes": 132566,
-      "sha256": "defd47c2ddd5c559e94de2c282bca2954b42f31cce646ead22851103e5b4ac07"
+      "bytes": 132977,
+      "sha256": "bc74ca0ea0e4e1a1dd9248e051921f8ff3f6c3dfb9bab7975e61f18f60a36727"
     },
     {
       "path": "projects/learning/dialogue-revision/index.html",
-      "bytes": 142391,
-      "sha256": "a5a1209de3cacef35561bca30c25efc272b770922a4cc1ae6504fb9547cb799f"
+      "bytes": 142802,
+      "sha256": "1209c333b9c8ef949dd52f146a89467cdadde563125dbacad37a28f917a1884a"
     },
     {
       "path": "projects/learning/human-control-simple/index.html",
-      "bytes": 142894,
-      "sha256": "a8614123f0208c1b30088d3c86882100aa66173b9cf43a61019924582d4d3a73"
+      "bytes": 143305,
+      "sha256": "0cecf6984e2b45dcc6c34e1407e6cb51ff4fa28523587219b6cd7900945bf66b"
     },
     {
       "path": "projects/learning/index.html",
@@ -35557,18 +35848,18 @@
     },
     {
       "path": "projects/learning/plain-language/index.html",
-      "bytes": 138491,
-      "sha256": "de584c3c172d76daa213f622f4035283e0d624a00a8b5a713c22fb09ffe98ace"
+      "bytes": 138902,
+      "sha256": "4fbe17fb7b44eef596b2807adbda2462e02efbc2aa89a7e49fd5e945242f3720"
     },
     {
       "path": "projects/learning/questions-validation/index.html",
-      "bytes": 146600,
-      "sha256": "f59350367b304c24e25a81f11fe4f17b32448509b47fbc71d353869c402a401e"
+      "bytes": 147011,
+      "sha256": "bf1ac116bdb094085d63a8dc6405f4ebdc72b63a0cc4a526101952d6128256b1"
     },
     {
       "path": "projects/learning/route-checkpoint/index.html",
-      "bytes": 156825,
-      "sha256": "2e4e399954e2f3129a947653ab60a602506eb297b41f2c8e4f8cbc74be3410ef"
+      "bytes": 157236,
+      "sha256": "b9c2607cec63b9ec1dfc45702d38d76222ac273fb64cb6a503d9721ff527e33b"
     },
     {
       "path": "projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/index.html",
@@ -35622,8 +35913,8 @@
     },
     {
       "path": "projects/localocr/document-structure/index.html",
-      "bytes": 145320,
-      "sha256": "ab639800841a4dedc9329f291e9a539a0345706776e9c127ee255ed71e8f2b83"
+      "bytes": 145731,
+      "sha256": "a9677b721086a7dc231fc495da4930808069c90a31e8362a887a01ba9e6036aa"
     },
     {
       "path": "projects/localocr/index.html",
@@ -35632,28 +35923,28 @@
     },
     {
       "path": "projects/localocr/input-routing/index.html",
-      "bytes": 170966,
-      "sha256": "83832f859a89a4e409ff1dde0adfccdedce22a8ce794b872a8abcf5d99212a45"
+      "bytes": 171377,
+      "sha256": "7243d47e2e36d46fb2be508da078d3e2235afbffcab4e9855e05c24540a496ea"
     },
     {
       "path": "projects/localocr/installation-recovery/index.html",
-      "bytes": 180569,
-      "sha256": "63cb533302627c5d6e0d1c640ddeb727113c0a1eb238a22fe587b1f2e194dcd0"
+      "bytes": 180980,
+      "sha256": "69ba9fef5f7ffdcde3508b79561c110c4549fee5b4fe761f5d54b7bd5052b98a"
     },
     {
       "path": "projects/localocr/jobs-cache/index.html",
-      "bytes": 155809,
-      "sha256": "fe4741b181bec0800dee79fd95f0dc6affcc6eece8b0483e91bbc59f118aeee5"
+      "bytes": 156220,
+      "sha256": "8f019f43796c099b00b47d615ec09b622c89bfbaf9118a3278a492105d1bb220"
     },
     {
       "path": "projects/localocr/results-evidence/index.html",
-      "bytes": 164088,
-      "sha256": "fdf552e1cfe6cc2ce374b27317678497f7c49acaafcdf1cc7dd37102d2109d27"
+      "bytes": 164499,
+      "sha256": "dad0f0e1aaf0b9ad8f5876fc96056d79b7646b4d28465389a476bc64a7faeb94"
     },
     {
       "path": "projects/localocr/runtime-resources/index.html",
-      "bytes": 161358,
-      "sha256": "562d00380c442e967488d70aec711afd1caeeb11d3467428f8adb9c72acab3c8"
+      "bytes": 161769,
+      "sha256": "b48405937832597425110f2d98f20bc74b9d9b91f43b9abd53dd081f2297add1"
     },
     {
       "path": "projects/meshclip-kit/assets/hero-cde1a67022295cfa-mask.png",
@@ -35667,8 +35958,8 @@
     },
     {
       "path": "projects/meshclip-kit/exact-peer-firewall-hardening/index.html",
-      "bytes": 155098,
-      "sha256": "e2cc3d28312acf83e56121ef37de4f3c564ed2b4e8cfe5ecb47ec6c07f2472e2"
+      "bytes": 155509,
+      "sha256": "aa1ab8d84b6d25ebe90ccd6e8c07c3855ad3b2bf4b86db10c56756b6c35b4537"
     },
     {
       "path": "projects/meshclip-kit/index.html",
@@ -35677,18 +35968,18 @@
     },
     {
       "path": "projects/meshclip-kit/kde-connect-pairing-sync/index.html",
-      "bytes": 145780,
-      "sha256": "b03f7723c8307072b91d0b895e719d5982bb961f4b10fcce87c517430667cdc8"
+      "bytes": 146191,
+      "sha256": "b1501fa40d7bdbbaeb0691f51f62b2f7014d158a0b236bfea6e413f87ca26b77"
     },
     {
       "path": "projects/meshclip-kit/silent-watchdog-and-session-lifecycle/index.html",
-      "bytes": 153746,
-      "sha256": "50255aaf8aa23ce50c02014aab53a20f54bf15d1d2730a028adfa5cba325a98a"
+      "bytes": 154157,
+      "sha256": "3f4abb2f565eab1167524ef92a5928b11f44c7cdb21c810d3802d84f7627faf4"
     },
     {
       "path": "projects/meshclip-kit/tailscale-peer-reachability/index.html",
-      "bytes": 155056,
-      "sha256": "c7b5ecf8d61bae34b46422192e644e48deb1653ac14f00a0eb107d0c6eb052ff"
+      "bytes": 155467,
+      "sha256": "c397bdc30639b8363bdaab561a3ff1fb9aa2e4d264fac33fb4e7a9d7a6de90e0"
     },
     {
       "path": "projects/openclaw/index.html",
@@ -35762,13 +36053,13 @@
     },
     {
       "path": "projects/pc-panel-hub/case-panel-rendering/index.html",
-      "bytes": 153394,
-      "sha256": "10667093485cfde085da7bb0676d4f0d354e296273c223b3d62289df5d1af687"
+      "bytes": 153805,
+      "sha256": "3171931ea1f54c59b00515988e7b0c67b487ef2f4a1216c6090beac8d2078910"
     },
     {
       "path": "projects/pc-panel-hub/hs2-overlay/index.html",
-      "bytes": 229154,
-      "sha256": "edfa900f85ee30c8dfc1fe9c9b722ae6ffc39dc4c5a789f249e0ffb70a21c149"
+      "bytes": 229565,
+      "sha256": "b5b5630eacde85dc9a129d27ad473e4b7af2369865ab107eb511323fe2cb7ab8"
     },
     {
       "path": "projects/pc-panel-hub/index.html",
@@ -35777,23 +36068,23 @@
     },
     {
       "path": "projects/pc-panel-hub/installation-binding-migration/index.html",
-      "bytes": 216528,
-      "sha256": "14ff5e2ad4624959edf7ddc25f95ef8181858322a46a35034e3c7c8a22294747"
+      "bytes": 216939,
+      "sha256": "e8b1203a248581621681ef85180b189e089e98dbead57390e9f2381569b418ce"
     },
     {
       "path": "projects/pc-panel-hub/power-recovery/index.html",
-      "bytes": 276185,
-      "sha256": "864d83314f85e3bf617a12f07ee37153cfa104a46a13e9af4ae46829d65f703f"
+      "bytes": 276596,
+      "sha256": "60c30f04ce7b598485ae475a99904aeb4de430118ca6309b17c7375be7c51b0d"
     },
     {
       "path": "projects/pc-panel-hub/serial-transport/index.html",
-      "bytes": 173746,
-      "sha256": "cb1bac542894b02935944b197115b30bad443fa82d11576b13042aff13304f8b"
+      "bytes": 174157,
+      "sha256": "f910ded940ece470568b020ad5f07c9efa4ae2b8bea078f7936c6467cef0598d"
     },
     {
       "path": "projects/pc-panel-hub/telemetry-trust/index.html",
-      "bytes": 160803,
-      "sha256": "6bc88f2999c3184f5ed8584f3213dd9fe846418dc59a992e0cff5fc71edafcdb"
+      "bytes": 161214,
+      "sha256": "400361f89f5ebb8de13a7c1c5bd85e45468cce5660905e3b8d9e98f87615b702"
     },
     {
       "path": "projects/pcconfig/assets/hero-9908315cb1faf4e5-mask.png",
@@ -35807,68 +36098,68 @@
     },
     {
       "path": "projects/pcconfig/authorization-files/index.html",
-      "bytes": 183705,
-      "sha256": "2c0e6a47b1308e94d89bcc4019c48fc76eda638dd0dbbe1b8c5ec1979e575292"
+      "bytes": 184116,
+      "sha256": "5bc796353c4e11ebf82dde8b24606bda4605e81936fbd5bce2d379dff27127e5"
     },
     {
       "path": "projects/pcconfig/drift-acceptance/index.html",
-      "bytes": 157074,
-      "sha256": "7fa44653acbafdd9cf1eb4e8972ae3f442070230ae5253f4d7ed0a0f41dc759c"
+      "bytes": 157485,
+      "sha256": "f13e54bc64caf516ef7f2ac7afb303c85cd42dbb4dd0dcfd96a2cb834a0af2c7"
     },
     {
       "path": "projects/pcconfig/index.html",
-      "bytes": 1023723,
-      "sha256": "5ff9257f53732788baf7c0611120b05168be1dfc7cc79f058f63537d20040585"
+      "bytes": 1023737,
+      "sha256": "1c2ec7ccf965eb0240bc3206fef10a5d50ee9ff2700f200378a7188310db6050"
     },
     {
       "path": "projects/pcconfig/machine-facts/index.html",
-      "bytes": 194295,
-      "sha256": "ff033ae1d73744829106c665dfff8bdca5375411ae56921b62bc228afea39919"
+      "bytes": 194706,
+      "sha256": "d00d5baf6fd935a3b4f251b2a4806b8ba230cc29763bb13377026c9060c0ff59"
     },
     {
       "path": "projects/pcconfig/memory-diagnostics/index.html",
-      "bytes": 181556,
-      "sha256": "a8f1c43078f0568c135f1211b77e885e5932eac9c5ac078879f972dbfa5cc883"
+      "bytes": 181967,
+      "sha256": "b40f89fa005d141d8d8c247270d5e54452fcdfe08a2a0d2e971d867f5a0fcbd2"
     },
     {
       "path": "projects/pcconfig/owner-takeover/index.html",
-      "bytes": 169160,
-      "sha256": "8d183657f0d0c3a17bd7261dea47c6d3a9da6399824ccdd523af5f2935b06c81"
+      "bytes": 169571,
+      "sha256": "c95416be17551b8a35cc43e023d762718a431dc79dd91f4b319bcf656cd15fe7"
     },
     {
       "path": "projects/pcconfig/protected-actions/index.html",
-      "bytes": 197037,
-      "sha256": "a22985d164063d9dcae7c012389c5e9b98243dc52bca8b96cd00fd3f26071c6b"
+      "bytes": 197448,
+      "sha256": "278652366063f7e2f620ea65e104eca34835b20c866ea7f1749f46ab9407fd45"
     },
     {
       "path": "projects/pcconfig/protected-data/index.html",
-      "bytes": 166052,
-      "sha256": "eb4827069eae0cba3508e3efcdcc42de529b19d144d7f8968bd6a1f172a0c53f"
+      "bytes": 166463,
+      "sha256": "3a3febef69da9ec77bc4a75d4c2076a87ff8ec5dc1d29a753592cf8715084ec8"
     },
     {
       "path": "projects/pcconfig/recovery-backup/index.html",
-      "bytes": 219873,
-      "sha256": "661641b59f9e947d2aec082397cf66efe97d3c17987baef3ea34cab0a96488de"
+      "bytes": 220284,
+      "sha256": "00a97fc73cc3967ec34ae8c0e1d728183dbb8d1ba9e9a4a646b19902de490219"
     },
     {
       "path": "projects/pcconfig/remote-computer-mcp/index.html",
-      "bytes": 222767,
-      "sha256": "f5d8411e0292db9a94410ed637e1d699f2ef4c1b8f4e50bad07c1bca01cb7aa4"
+      "bytes": 223178,
+      "sha256": "f5a02611526f850f3692254d1cfd91b2dd7b7c516306eb7036d7dbf99573aa53"
     },
     {
       "path": "projects/pcconfig/runtime-startup/index.html",
-      "bytes": 243071,
-      "sha256": "b43fd9184cebf3e665d29fd58e0c406eba62ff39aeaa8ad841d037619194b1b7"
+      "bytes": 243482,
+      "sha256": "080815253cca951a920208d3337dcd8b84bcea3e6388718594fd5f7979d28117"
     },
     {
       "path": "projects/pcconfig/secondary-laptop/index.html",
-      "bytes": 213524,
-      "sha256": "c7dccb80728ea42640d71b418e4a17c6f27233925e304c19e93c86beccd9cc67"
+      "bytes": 213935,
+      "sha256": "5f70f3a73fa806522295bd54bacb1abb8797b04e13d48ca584f5f9ba937fa1a5"
     },
     {
       "path": "projects/pcconfig/secrets-providers/index.html",
-      "bytes": 225740,
-      "sha256": "24505320bfb89a5c247aaf4626bdc2aee99c6a8fcfbee1d101c55ceb5c80b691"
+      "bytes": 226151,
+      "sha256": "c59df4e3fef7588aca644ffbf578018034a65d479a3a8815ff56ab7b35489847"
     },
     {
       "path": "projects/personal-expression/assets/hero-bef7abb6f09b51bf-mask.png",
@@ -35882,18 +36173,18 @@
     },
     {
       "path": "projects/personal-expression/corpus-extension-and-private-recovery/index.html",
-      "bytes": 162641,
-      "sha256": "d2ab072bf0c696f18fb4fb19d8579fe8878d5a286eb35de15d4efdb3936c75bc"
+      "bytes": 163052,
+      "sha256": "ce6edebdfc8baa3571951558ab490e187c89fd42ab942da7c8267b1479324536"
     },
     {
       "path": "projects/personal-expression/explain-to-me/index.html",
-      "bytes": 56049,
-      "sha256": "0e02e88d23c873f0883106b3325641401269cd62d9088fa4f6b17305c6eed0d9"
+      "bytes": 56460,
+      "sha256": "3dfb8f01fb7be38eaf3ee554cb14c0eab4af93e28a990d92621eb31923a6dd42"
     },
     {
       "path": "projects/personal-expression/feedback-consolidation-and-lessons-sync/index.html",
-      "bytes": 169204,
-      "sha256": "3b1cfe5f7eae865780307f38e37e80af6f54036dc725f11944d462cdf9c80969"
+      "bytes": 169615,
+      "sha256": "32a3fc2dfbf0c11c6316ec9f64f1bb7acd3cd4d2dd041095211234ee67f00451"
     },
     {
       "path": "projects/personal-expression/index.html",
@@ -35902,28 +36193,28 @@
     },
     {
       "path": "projects/personal-expression/reply-as-me/index.html",
-      "bytes": 165506,
-      "sha256": "cf7c711cf731a7804b90e9a73f57a960e3dc0c4c6f2de6ad0d455b43cf565395"
+      "bytes": 165917,
+      "sha256": "d2f15235d760763e23837c9c050ac8a5948472a385bcc696f46073a655bc63ca"
     },
     {
       "path": "projects/personal-finance/bill-collection/index.html",
-      "bytes": 144825,
-      "sha256": "4bd2a3c36d8f6a05429663fc540f445877abaf0b3ccc0831e2b8335f3f0a3767"
+      "bytes": 145236,
+      "sha256": "1df0ddaa9b0d35db17c618bf97c4fa2fba6f363c8712a3f303a7fb56ff7ca0ed"
     },
     {
       "path": "projects/personal-finance/index.html",
-      "bytes": 248315,
-      "sha256": "8c71dde0f03b4738a487516a2a385a4202d713de6b15b005e770fb9edaa80257"
+      "bytes": 248726,
+      "sha256": "167946a4ac3b352dff5e6685a4c1943dd4a5b556a46e849ba806f810f5cb6685"
     },
     {
       "path": "projects/personal-finance/monthly-report/index.html",
-      "bytes": 143901,
-      "sha256": "5f10f8bde8ba0ee82717a2d53e66aa377eb5488fc60c6d50ce7d51caf7618547"
+      "bytes": 144312,
+      "sha256": "8f177784c0747b66e6ca8c9e81d8986461522156f5c0358b222cf7780fac9838"
     },
     {
       "path": "projects/personal-finance/reconciliation/index.html",
-      "bytes": 151029,
-      "sha256": "e6c45b71e834e1b896795bd1f94c0a47fb43fe08c455f65c91cdd990561bafe5"
+      "bytes": 151440,
+      "sha256": "b8642f395ec4e65f023309e91c56b5b0ccdeae99009a9ac9082c883e73112e1d"
     },
     {
       "path": "projects/personal-formal-documents/assets/hero-83243fbc9397095a-mask.png",
@@ -35937,23 +36228,23 @@
     },
     {
       "path": "projects/personal-formal-documents/index.html",
-      "bytes": 383029,
-      "sha256": "4f9284527b65517242ec5e75d076d305e36ef848decbabfc433a7bac193b40cf"
+      "bytes": 383050,
+      "sha256": "3d68af0df528a498c90c55a7f035cfd83ce226572ebeae9db771b72249c6f2c4"
     },
     {
       "path": "projects/personal-health/current-evidence-route/index.html",
-      "bytes": 133148,
-      "sha256": "2ff52dbfcd27d8ff527aa752d19d1171507245bdb0763e5a339884b6d394b503"
+      "bytes": 133559,
+      "sha256": "aa3857492271fd236de53cfe4c0c18cf5b82df5b49ee0ac23f05b6db27a21d1d"
     },
     {
       "path": "projects/personal-health/evidence-three-state/index.html",
-      "bytes": 137492,
-      "sha256": "55b0d3304b7be480aa43c5fbdf1a2ebf8f6c6f8e7f79ee2c654bb94f97e4ff4d"
+      "bytes": 137903,
+      "sha256": "ce0cc0ab176daddb945b03dfcf2a78bd33d4304bba7a5d36e9aeb7f473ec9ff9"
     },
     {
       "path": "projects/personal-health/health-owner-boundary/index.html",
-      "bytes": 159466,
-      "sha256": "91f5ebd5998e2ef241ae70b1eee7d6f80d4e320e63ed8e685295670bfc2a9a20"
+      "bytes": 159877,
+      "sha256": "b8cf93d2e629e07f4ca2f0a4897e6d087df8ebbde1bcc63dae578a2991dc54a6"
     },
     {
       "path": "projects/personal-health/index.html",
@@ -35962,28 +36253,28 @@
     },
     {
       "path": "projects/personal-health/offline-decision-brief/index.html",
-      "bytes": 185694,
-      "sha256": "8cd2cce19cb03e84748100747b574e6f09e22527fd2d0ffe6acb6fe566d64da9"
+      "bytes": 186105,
+      "sha256": "e235f7913175402c6cc224281e0362d8d5828ad54546f4e037d462858babc824"
     },
     {
       "path": "projects/personal-health/protected-foreground-refresh/index.html",
-      "bytes": 150371,
-      "sha256": "be8952b1e1eadce5ed9e3d39af910ec9b45580020b8f47f560fec65a4f494b3a"
+      "bytes": 150782,
+      "sha256": "726baed0d6e2af641794cd93c88333a740ace239e9a8af8f833f12a00acef86a"
     },
     {
       "path": "projects/personal-health/raw-preservation-resume/index.html",
-      "bytes": 179312,
-      "sha256": "0b11440987d48f8b5f536921a75fd111d8f1d811928e33555d2441c7b68076e5"
+      "bytes": 179723,
+      "sha256": "158548dc6297369e980a9126380190397976de0e01943d458b930423a2049c46"
     },
     {
       "path": "projects/personal-materials/bounded-discovery/index.html",
-      "bytes": 184729,
-      "sha256": "bbedbcee1bf167a6bc29dc13e267b3820a4b4cfaf3e9df0dfff8db4c810390f5"
+      "bytes": 185140,
+      "sha256": "0030da9ad36c01c0aa638431a1b751931cb4e0d3cad9ed247881e00416247281"
     },
     {
       "path": "projects/personal-materials/exact-intake/index.html",
-      "bytes": 227419,
-      "sha256": "dccbdc9d3fc92258d4a35c0ecdf9b3c821f9985d440a1bdf361bd6d02395cb5e"
+      "bytes": 227830,
+      "sha256": "5b375297c1244569484d09791ae97b62e73a7bfa266115a875af56bac57c7d9c"
     },
     {
       "path": "projects/personal-materials/index.html",
@@ -35992,13 +36283,13 @@
     },
     {
       "path": "projects/personal-materials/registered-lookup/index.html",
-      "bytes": 185515,
-      "sha256": "c18d9598e5d1fb33cfdb950500c1b4acd3bba4bc08daea8030c4a3edad698f24"
+      "bytes": 185926,
+      "sha256": "e4dc4ce608b164b53db633cd6dbaf7bcaa59620f9dcacf87c2af5d94d2697490"
     },
     {
       "path": "projects/personal-materials/verified-open/index.html",
-      "bytes": 203262,
-      "sha256": "6f06e3b1d778d1696ae9bd232e48f5088eb5a9d2388d215511d47fdc2cb276e3"
+      "bytes": 203673,
+      "sha256": "860eab8099c3d05241b0b27e715059a8b18bbc6e85a5f6b71003ca1f5731414b"
     },
     {
       "path": "projects/personal-media/assets/hero-ac3e8f3893a033b9-mask.png",
@@ -36012,43 +36303,43 @@
     },
     {
       "path": "projects/personal-media/classification/index.html",
-      "bytes": 185891,
-      "sha256": "5d8e3f8e67a90618583cf91f8fce765e5405e91c2b45b1120a3ad91cd312137f"
+      "bytes": 186302,
+      "sha256": "837188d4bbc7c5272e5ed1d30a56e2bba3021b2ade4144f69a5298d376a6a82b"
     },
     {
       "path": "projects/personal-media/cloud-candidates/index.html",
-      "bytes": 192995,
-      "sha256": "648cbe71f8939dd34502eab3adcb675ea936aab6fc8ce4b2c18fef715ba6a891"
+      "bytes": 193406,
+      "sha256": "9b5b2697dff2497cd2ff783239ad417978de6b9c287875d4123f4657f4e47e1e"
     },
     {
       "path": "projects/personal-media/index.html",
-      "bytes": 566133,
-      "sha256": "727c2d5da673971231387736223f3dbd19e8efbdfd08263dd029bf0572b33d5c"
+      "bytes": 566169,
+      "sha256": "f984a24f69982eeb44567e3b3f5fbafa0d097477836f29ede40f58629cbc7651"
     },
     {
       "path": "projects/personal-media/local-ingest/index.html",
-      "bytes": 172163,
-      "sha256": "42bd7e3b9e8993d07bd18d8383610eb5a6881dce3264f842ebd867f03de1ceeb"
+      "bytes": 172574,
+      "sha256": "e7f64d4eda0acfa691568758563d8872d4bbd3420f32189440f140d135120f5e"
     },
     {
       "path": "projects/personal-media/phone-preservation/index.html",
-      "bytes": 209881,
-      "sha256": "c10d24f4892a8b3e1fda9223a57723e07b09d75e43083d7d67e937573af6c090"
+      "bytes": 210292,
+      "sha256": "6308b4318e303823e553f4bcce0f32b492c6f4b8c8c1c6d66c039211490ef771"
     },
     {
       "path": "projects/personal-media/phone-recovery/index.html",
-      "bytes": 176288,
-      "sha256": "e7cde2a350f36969f117388b717b544fc9f1daf848201ac8e4212d566738eb80"
+      "bytes": 176717,
+      "sha256": "44606bfe6f5399d442582e9b36471542cacf7e833f535c73aada956794c5f484"
     },
     {
       "path": "projects/personal-media/search-browse/index.html",
-      "bytes": 171486,
-      "sha256": "4449ee5199886a8070ad12f574439f65988b4a6dea9f8c60a4ece483041d0a8c"
+      "bytes": 171897,
+      "sha256": "2a4ff812daa2377d33bc7ff714368303a4213221c260005149175c0fd338893e"
     },
     {
       "path": "projects/phone-collector/index.html",
-      "bytes": 336099,
-      "sha256": "b0c376426a578dd8c949b8affbae3bfe2b3bb057f5823692b6402a7d4c508e7d"
+      "bytes": 336510,
+      "sha256": "a4c0c1f9f69af1af54381a21eddc21c0adca69aaddabd48bb63b48667a5b144c"
     },
     {
       "path": "projects/proxyclean/assets/hero-13c8bb6217be4f89-mask.png",
@@ -36062,13 +36353,13 @@
     },
     {
       "path": "projects/proxyclean/dead-port-and-route-cleanup/index.html",
-      "bytes": 175905,
-      "sha256": "7c72bdb92e393caa128bb8e97542360a160f0ac580a55539aa042abc3b2ddcc5"
+      "bytes": 176316,
+      "sha256": "b348c388145e68e977d98e4a547d2a53f33c6715178562c9a7a64a52fd6048a7"
     },
     {
       "path": "projects/proxyclean/dynamic-proxy-status/index.html",
-      "bytes": 172007,
-      "sha256": "c61a028e3cf06c96340aa6ab51276e78dea9289b681e44cc60d38247752465b1"
+      "bytes": 172418,
+      "sha256": "41774591601ca742174cbd02051e6aa9d29d0a3acf2cac7866703cb2d0d6a7af"
     },
     {
       "path": "projects/proxyclean/index.html",
@@ -36077,23 +36368,23 @@
     },
     {
       "path": "projects/proxyclean/ipv6-routing-control/index.html",
-      "bytes": 175346,
-      "sha256": "e87c0d08763e1e4d60d231c0b3f79dc6ee44028aaa7cde6bf0b22341ff55ac84"
+      "bytes": 175757,
+      "sha256": "12821a82190fb523c4169a67dfa6e30f450076e95ebb5bbc4859339c23da598d"
     },
     {
       "path": "projects/proxyclean/one-click-and-troubleshooting-boundaries/index.html",
-      "bytes": 185350,
-      "sha256": "e025ceac8d4b9e3b306b4fa13c238965b7e14db8b7780eea9c432d06799da131"
+      "bytes": 185761,
+      "sha256": "7ff9a42595cebf290767aff68b3b4cb266f56e5d09d72c3e4a66c7c9855a4d27"
     },
     {
       "path": "projects/proxyclean/targeted-port-shutdown/index.html",
-      "bytes": 175620,
-      "sha256": "ea6d70314d62281d9aa9e6fa6f17ffdb24af0cf8be65a40f1477dfde357c9575"
+      "bytes": 176031,
+      "sha256": "38aff075d5775d46113a09ecb86de5770876b065605973b6385a42813d9ff3d4"
     },
     {
       "path": "projects/proxyclean/wifi-rebind-and-recovery/index.html",
-      "bytes": 175788,
-      "sha256": "6e7d9a479e7a4dbe657e39ff33bef37b255c702c832a23014bae5d8ce2966402"
+      "bytes": 176199,
+      "sha256": "2f5ddc67ad50f90733dda10a9687b3de7e7ff45079cd9865dc532e8b66e69e4c"
     },
     {
       "path": "projects/ramdisk-guardian/assets/hero-1d415537493e1859-mask.png",
@@ -36107,13 +36398,13 @@
     },
     {
       "path": "projects/ramdisk-guardian/drive-arrival-sensing-and-skeleton-healing/index.html",
-      "bytes": 153687,
-      "sha256": "74a89e938cca5233cf1c7243aa8274b0e7e655051f2d0c9b8c7d755c1f2e9565"
+      "bytes": 154098,
+      "sha256": "b5cfb712482f0aa5a66df63de7ab7fda61a3c5b7e48f82570cd24531943333a4"
     },
     {
       "path": "projects/ramdisk-guardian/host-memory-telemetry-and-silent-monitoring/index.html",
-      "bytes": 162581,
-      "sha256": "6783f27dc519b89ee8e6eb15ba4542be00d0c7b0102872622546d24446161a5a"
+      "bytes": 162992,
+      "sha256": "b6103c8c8653ec1233b34baa190b4b4d0df80075c48a39303f443d395b2ec2ed"
     },
     {
       "path": "projects/ramdisk-guardian/index.html",
@@ -36122,18 +36413,18 @@
     },
     {
       "path": "projects/ramdisk-guardian/installation-and-application-recovery/index.html",
-      "bytes": 178099,
-      "sha256": "5f044ba069e56562d55ae7a58014c569ce56b4e19f97005e40e41384516e0b5a"
+      "bytes": 178510,
+      "sha256": "192b11bc9fd41efcab4a4e0379b856a6d6ca573c1191ee0461fdef36ae43f20b"
     },
     {
       "path": "projects/ramdisk-guardian/unaccounted-watchdog-and-driver-auto-release/index.html",
-      "bytes": 175307,
-      "sha256": "4db267e5f90f7961e54ad228ea1bb2b449cd2e254ac818f6fcdfc92d06b53259"
+      "bytes": 175718,
+      "sha256": "e1c7812bbfb5182788856870bb9ed5808ccd79a70acf415f278603559549068c"
     },
     {
       "path": "projects/ramdisk-guardian/volatile-cache-contract-and-backup-retirement/index.html",
-      "bytes": 152259,
-      "sha256": "b6ad7523298b89d314d9c4d9c2146dfada7d156594d4951b3bd006a5e479bcbd"
+      "bytes": 152670,
+      "sha256": "d022598b8b30fef1025db1a0ab522c7e7620897724beeb2c740a8cae1990b0d2"
     },
     {
       "path": "projects/remote-control/assets/hero-269eb301390819f3-mask.png",
@@ -36152,8 +36443,8 @@
     },
     {
       "path": "projects/steam-millennium-config-backup/allowlist-config-and-style-snapshot/index.html",
-      "bytes": 153324,
-      "sha256": "3d31de71bda63f772e4f0e21282bb725025c324fbb4a636e7ce59c094c598609"
+      "bytes": 153735,
+      "sha256": "09365d6f137dfbae945973d5f20bbb7be4c3b9f8cc8198bff44d9d9fab69ca73"
     },
     {
       "path": "projects/steam-millennium-config-backup/assets/hero-cca3bc2b91e55a36-mask.png",
@@ -36172,28 +36463,28 @@
     },
     {
       "path": "projects/steam-millennium-config-backup/plugin-manifest-and-install-state-tracking/index.html",
-      "bytes": 158646,
-      "sha256": "9c27506956981d20fa947936f10ec456a7fd2251238cbf52b9b2f967aa68a4a9"
+      "bytes": 159057,
+      "sha256": "404e0260592c7254f84ea6e76af71e3f917cabededd300a75cf57235e2de1d8d"
     },
     {
       "path": "projects/steam-millennium-config-backup/scheduled-snapshot-guardian-and-clean-restore-boundary/index.html",
-      "bytes": 173285,
-      "sha256": "150ceb1abad173d83b40b69034399c697c20fe03ecf073397b8c54e09d074ab8"
+      "bytes": 173696,
+      "sha256": "fe495327e8994a7cb048fe1ee10d46977826281f26abf28db4a27ddcbf235d8d"
     },
     {
       "path": "projects/steam-millennium-config-backup/theme-options-palette-and-dual-baseline-tracking/index.html",
-      "bytes": 157500,
-      "sha256": "5039c5631ff835bdeb9cda2abf95ceea1b384f9067fea74fc4551d6780b201b9"
+      "bytes": 157911,
+      "sha256": "2d3d089f41d53fccdfcf1bc8b77b197690b2f032ccc53a4d6b61787b8cff2793"
     },
     {
       "path": "projects/sunshine-remote-streaming/bitrate-codec-strategy/index.html",
-      "bytes": 156824,
-      "sha256": "dd75cf1b895f3fbcc02f433167f6370debd303b173e7d4d09cfc06f2d3bc3167"
+      "bytes": 157235,
+      "sha256": "6c6bb1034f924131527d00e4b89849f563dd15486d958e7954f0f6bf83c049b2"
     },
     {
       "path": "projects/sunshine-remote-streaming/capture-failover/index.html",
-      "bytes": 218781,
-      "sha256": "bf1186bc9d181bd2fd02b6e363dba9ea93f1a7fbedb1bfc0060234932793f202"
+      "bytes": 219192,
+      "sha256": "11676f5a7064022a52b2a6428d06957e5c1605bc7de4cc610548fa9abcd69623"
     },
     {
       "path": "projects/sunshine-remote-streaming/index.html",
@@ -36202,18 +36493,18 @@
     },
     {
       "path": "projects/sunshine-remote-streaming/remote-power-and-repair/index.html",
-      "bytes": 164213,
-      "sha256": "1e6a4315e47f8ef79f710759e95a0043fd2f6eac80c8788e720c504c122d39f0"
+      "bytes": 164624,
+      "sha256": "f674a8188ecc50965db4f92c0ed6609a8dd66fa7ce5e8394ebd45aefe26087a9"
     },
     {
       "path": "projects/sunshine-remote-streaming/transport-ipv6-direct/index.html",
-      "bytes": 172244,
-      "sha256": "5e5272fb973e8ed230c0e1d90a395f3279b0ae69749ad4c488660b6d2308417a"
+      "bytes": 172655,
+      "sha256": "5576381f4a6d01d873b510b2ce8368b7f782c8367a212f0d7550fa94ad9fe7a6"
     },
     {
       "path": "projects/sunshine-remote-streaming/vdd-display-settings/index.html",
-      "bytes": 159045,
-      "sha256": "b3f9b67f102c7bdf218b113c373c869a2eb9540f2a13408aa1bdefb0b0464ee1"
+      "bytes": 159456,
+      "sha256": "0932246a09311e64ba760226d1a6a92d32eb175b634eb3a01ec148ebc91a5e59"
     },
     {
       "path": "projects/timeaudit/assets/hero-756c00ec3a221150-mask.png",
@@ -36227,23 +36518,23 @@
     },
     {
       "path": "projects/timeaudit/backup-recovery/index.html",
-      "bytes": 213928,
-      "sha256": "f1953805fa8a9ca213053b43f7daa339b2a7fb8381c8d687b11611e780a711cd"
+      "bytes": 214339,
+      "sha256": "f84f5bd1d43cf5ff0e6dbd0b0a9d937a33f7fd427c1b60dba3a493dfd4d24583"
     },
     {
       "path": "projects/timeaudit/clipboard-history/index.html",
-      "bytes": 196763,
-      "sha256": "82eda7a32dcc0f567d656fb9d9d0a3d7fec1224542673c565f0a52c190fb53f8"
+      "bytes": 197174,
+      "sha256": "580ef5a46499a8a50979236c69c0f2e417bb0cae243f220c4d893c87fc3b6b87"
     },
     {
       "path": "projects/timeaudit/collection-pipeline/index.html",
-      "bytes": 157568,
-      "sha256": "fe2e0afb914e992ea673fbc3974b60964a3c474183e4b7442bc98ecf4e7cdb55"
+      "bytes": 157979,
+      "sha256": "14505b64247ade253eb607271f3cd9c8ed7fbe2099a0f03f228a4b2474a871bf"
     },
     {
       "path": "projects/timeaudit/hardware-performance/index.html",
-      "bytes": 204402,
-      "sha256": "d428a56d466ace85f741d996e96f0574f443397917ad953cffe0f4cb8c54406b"
+      "bytes": 204813,
+      "sha256": "53e6b2f23602ff3f94cd2e3830396df762dcb82f966d5ad2ec47850f2f50aa8c"
     },
     {
       "path": "projects/timeaudit/index.html",
@@ -36252,18 +36543,18 @@
     },
     {
       "path": "projects/timeaudit/process-forensics/index.html",
-      "bytes": 157744,
-      "sha256": "3408e7f377ed04f16add47d0fc584a79b4b67afd24609188153f70528bb93400"
+      "bytes": 158155,
+      "sha256": "bf4d011d6971c614e065b1b57f93d5a38d3ba18a8e36ffc049c5de3736a18713"
     },
     {
       "path": "projects/timeaudit/runtime-reliability/index.html",
-      "bytes": 189949,
-      "sha256": "cbe6f5fccd3b199b39ee6c8f9e48273c47340c3081488ac8977b000154e4aac6"
+      "bytes": 190360,
+      "sha256": "f93054b2c996f6769167faca7e3ed794ca68bc63839a74342a71cbba0744d258"
     },
     {
       "path": "projects/timeaudit/usage-energy/index.html",
-      "bytes": 165024,
-      "sha256": "652de67b444a31aadf6a2e5e69b974b781e3e8bd1baa08fa295757c3911d9900"
+      "bytes": 165435,
+      "sha256": "03326b3c3da81778841bda46a389076df140d10c5411d60f4dde8d3cdea00971"
     },
     {
       "path": "projects/typora-theme-pack/assets/hero-0c6733fb6e3aba5f-mask.png",
@@ -36277,8 +36568,8 @@
     },
     {
       "path": "projects/typora-theme-pack/controlled-preview-and-visual-qa/index.html",
-      "bytes": 144621,
-      "sha256": "12bf559e822806391bc860c05add826760b9943db430dbc6d05f8aaa52beb4e6"
+      "bytes": 145032,
+      "sha256": "463449ca6638a04e5b32c6d8eff465669a66521f09108e175549f6bcf1b16950"
     },
     {
       "path": "projects/typora-theme-pack/index.html",
@@ -36287,43 +36578,43 @@
     },
     {
       "path": "projects/typora-theme-pack/multi-scenario-export-profiles/index.html",
-      "bytes": 147938,
-      "sha256": "2afdd75f38ae984eda97ab2fa7e321567b795676cf18a4bfc8a85bc1ecaf35a4"
+      "bytes": 148349,
+      "sha256": "39495fc30b5d54fe39cf38ee75e795536494876ad54de6f725ca8b1732647f65"
     },
     {
       "path": "projects/typora-theme-pack/theme-installation-and-lifecycle/index.html",
-      "bytes": 148672,
-      "sha256": "3bae10f8f4d9c9dbcd7e2ae1af2c88e61af7bc41c050ef1f595095b833da0925"
+      "bytes": 149083,
+      "sha256": "885ababa916bb68552b62a09359a997911d1f9feddbde3034418fac1ab030d47"
     },
     {
       "path": "projects/typora-theme-pack/transactional-pdf-export-pipeline/index.html",
-      "bytes": 152538,
-      "sha256": "4ec28c4a098aac07b1736196ed0f887f13eea7cf7235e5b9db47096d198fae82"
+      "bytes": 152949,
+      "sha256": "8b905ec3af5673c6ceab305ff95983cb75ab87479b5f3e9a7bd2ff7f5019f32e"
     },
     {
       "path": "projects/typora-theme-pack/verdant-mint-theme-system/index.html",
-      "bytes": 141226,
-      "sha256": "b95f9a9490b31f46186960a84f128eebf56c00ff221ad4ed9448e9202476e931"
+      "bytes": 141637,
+      "sha256": "d67aa2066b5c5929715643f05c0cd37cbf0a1ae6a291541777accd1e3ff38947"
     },
     {
       "path": "projects/vault-tool/ai-local-interface/index.html",
-      "bytes": 172519,
-      "sha256": "6954f16a04b748a9c1644f437ca59e705253e779e56df34672c25e976563a428"
+      "bytes": 172930,
+      "sha256": "2750844d5f3066b6ef1c94e23fb8b1bee3ead3cb9385d61319118ca76f33075c"
     },
     {
       "path": "projects/vault-tool/dual-password/index.html",
-      "bytes": 152337,
-      "sha256": "5cf87f57c4132c19a3332dca56c6a2b4ca127b5f74e7f6bcc10d7a55c631cae5"
+      "bytes": 152748,
+      "sha256": "43bd58646132f3f78e5f189ee14714091a76c57a6b281e7792e13640ba6c2b56"
     },
     {
       "path": "projects/vault-tool/files-encryption/index.html",
-      "bytes": 154656,
-      "sha256": "61904ac825c68cb1ab5ffbfac165910f2a278fdd94084883e882550fd9513113"
+      "bytes": 155067,
+      "sha256": "25cc81b1490197fe163717bb790d3d8a11c288f7bf1d66a21080a8b3f233d18e"
     },
     {
       "path": "projects/vault-tool/image-carrier/index.html",
-      "bytes": 150540,
-      "sha256": "f3fb0755460326db8c9fc3014509762dc63349a4f1729a2040a27c324ede457b"
+      "bytes": 150951,
+      "sha256": "63e15633d1018cd584016bb8abf9f38894ed9284abcae368fe7550b8cff67170"
     },
     {
       "path": "projects/vault-tool/index.html",
@@ -36332,23 +36623,23 @@
     },
     {
       "path": "projects/vault-tool/maintenance-recovery/index.html",
-      "bytes": 155721,
-      "sha256": "784571ecba307c0043e43ae1e6092fadd75eb459771c009032cddf064331f34e"
+      "bytes": 156132,
+      "sha256": "de4dc6846b21b9bbf2b6ce037beef303f0f4c2b74f72a76adba7e0723bb3c9e6"
     },
     {
       "path": "projects/vault-tool/passwords-formats/index.html",
-      "bytes": 154652,
-      "sha256": "fe0c17a39b2685f3cf706106a723634c603a91b3f61a9d16fa13161bcdc5d369"
+      "bytes": 155063,
+      "sha256": "1427b622246914b3fe28649f2ab557c33905381872dc7e724d3e29b95da36ebc"
     },
     {
       "path": "projects/vault-tool/private-backup/index.html",
-      "bytes": 173803,
-      "sha256": "43c923e033b8c496993f23bfda6697c284c72bdaa81983d3a701d57e269a044a"
+      "bytes": 174214,
+      "sha256": "d859a756772f82e81a6f51f7956e161f4bbf8b41fbc7badd95209f7b6316044b"
     },
     {
       "path": "projects/vault-tool/view-extract/index.html",
-      "bytes": 158090,
-      "sha256": "8d38881ae3641c0a5caf12fe05a21c43e07caf97f8266234caf2ca05657a7092"
+      "bytes": 158501,
+      "sha256": "d47272fcef22484b5e9e056b88d26c997edb608c943ad6585f04cd30c266e32e"
     },
     {
       "path": "projects/video-scaffold/assets/hero-36810b6767117f92-mask.png",
@@ -36362,13 +36653,13 @@
     },
     {
       "path": "projects/video-scaffold/delivery-verify/index.html",
-      "bytes": 200969,
-      "sha256": "5439703624f3eddda1af1dcb1eaed56b8b08dc8bcda1842ca4f241beee88b929"
+      "bytes": 201380,
+      "sha256": "9351e0dca8fbec3a34602241cde4037beb9f3d704f13f7f5a8167503716abe2d"
     },
     {
       "path": "projects/video-scaffold/deterministic-render/index.html",
-      "bytes": 181986,
-      "sha256": "f0fc1845d11f33c57b3478f5346fd029f87fa461d388ed6d37aadf3c2174be36"
+      "bytes": 182397,
+      "sha256": "c750d4767631690de32ba9aa1aa929fa7260247918857b9a6df959b4301192ae"
     },
     {
       "path": "projects/video-scaffold/index.html",
@@ -36377,63 +36668,63 @@
     },
     {
       "path": "projects/video-scaffold/preflight-preview/index.html",
-      "bytes": 185018,
-      "sha256": "b2634348d82240dce48883bfe94aa03cd5b44d53ae97f575305407300b9763b8"
+      "bytes": 185429,
+      "sha256": "d718795726e95b8fcd8a57890f986ef08d8797930f8285c04a75a02d7095a55e"
     },
     {
       "path": "projects/video-scaffold/project-bootstrap/index.html",
-      "bytes": 168774,
-      "sha256": "3498702b2d6f53326fd43e1c5a02946a2ba2354b1130c095bad6e5ea0cbe663c"
+      "bytes": 169185,
+      "sha256": "a39f3ef4fc934cdef4154eab1207b728a88d341ed4e255fbe28d2c1f5348231c"
     },
     {
       "path": "projects/video-scaffold/recovery-reuse/index.html",
-      "bytes": 177934,
-      "sha256": "343cccdd836cdfa0ad8be76ef99880ee9fb1f6535c9005e60de5c4342ef4cca0"
+      "bytes": 178345,
+      "sha256": "88294a9c52e4bb01375fe2681a3bf2452d604afe51042c79df6d231e74700ec8"
     },
     {
       "path": "projects/video-scaffold/scene-authoring/index.html",
-      "bytes": 213475,
-      "sha256": "1b98d2af0760916b72712e7a702e09263967c8969c3b063730fb2685303bce7b"
+      "bytes": 213886,
+      "sha256": "e9d66f889f998fe69ff025fc5f9b64f13139b06e21bdbefc1e0bbad27d878a52"
     },
     {
       "path": "projects/video-scaffold/voice-timing/index.html",
-      "bytes": 204085,
-      "sha256": "9a8b8357acbab01b440035cbd96351fc559f087cff5bb89b30a2265d860fdcba"
+      "bytes": 204496,
+      "sha256": "f61677320d30ad3cef26228f507b6ac927679b1a2d4284e0c2633dbe08bcfcf7"
     },
     {
       "path": "projects/wechat-direct/account-source-identity/index.html",
-      "bytes": 164889,
-      "sha256": "4fffe99bb48b5e6fbe800b06f382c93892e490c7e609443de60a4032257f57a3"
+      "bytes": 165300,
+      "sha256": "0087431047765302bf5d5250a5cfd8c54dc38fc653c549dec914e52aadf0cca4"
     },
     {
       "path": "projects/wechat-direct/bounded-chat-context/index.html",
-      "bytes": 172470,
-      "sha256": "19ce3ec0cacebbf1a64f184988e91928ab018114ab6182a8060597faf656a88f"
+      "bytes": 172881,
+      "sha256": "472246bd91b82faf4c63231a9e7f7ee6ebb1e7ca2156ddd68a36214f1f975ddd"
     },
     {
       "path": "projects/wechat-direct/index.html",
-      "bytes": 46592,
-      "sha256": "adaf660b2e402694ad02cc619a00ec543d0f2ebeac31b60cf0bd78ac2cfbde91"
+      "bytes": 47003,
+      "sha256": "c51502e5bd12bec865ee6a600e1427daf32fa43f094a3c0acb2aa7134e2d36b5"
     },
     {
       "path": "projects/wechat-direct/moments-local-cache/index.html",
-      "bytes": 148136,
-      "sha256": "a1d3d3234f07891599f169f8759187150215961b2712b20538fa3bbe5a9942cd"
+      "bytes": 148547,
+      "sha256": "045c681962851740d2b51682419e5b6e8e4f22c4826c92d0489e531a4cc23c96"
     },
     {
       "path": "projects/wechat-direct/named-chat-archive/index.html",
-      "bytes": 190599,
-      "sha256": "1bbb54cb8c95de4e32feb6077aa14ad1cff44bbd4ff250d587f07b186bc32ce1"
+      "bytes": 191010,
+      "sha256": "aac8e505f5d91c727d33c371dc2a32c60d937ed815ccad52ca9e179d1b3957a0"
     },
     {
       "path": "projects/wechat-direct/preservation-verification/index.html",
-      "bytes": 155027,
-      "sha256": "1f3ff157c72ea49be7ffbcfbc601653c0bbc79e225bcb418af73d8f258836814"
+      "bytes": 155438,
+      "sha256": "37f610ef826e20e66037f4ed63264245387b131f6b528be015c71132b0224c05"
     },
     {
       "path": "projects/wechat-direct/reply-media-relations/index.html",
-      "bytes": 161013,
-      "sha256": "e956a93b372db325e6fcd89835e29ecec01c104bc2fd79b43f21823d1179bdbb"
+      "bytes": 161424,
+      "sha256": "5cbc85dbebce97d99a2dbeda53948e304a070b4d7946c760e1870a3589c0735c"
     },
     {
       "path": "projects/wechat-history-ai-bridge/ai-consumer-contract-and-metadata-envelope/index.html",
@@ -36492,38 +36783,38 @@
     },
     {
       "path": "projects/wly0829-cn/index.html",
-      "bytes": 554339,
-      "sha256": "e1b15483edc5ccf592f4c8218697d2ffb7736fdbf9cb2e0542c4a03323f23739"
+      "bytes": 554343,
+      "sha256": "2dc756a2f147a1422f6746ee3199dba397ee70c109033a22de716b4b15a092ba"
     },
     {
       "path": "projects/work-delivery/consistent-deliverables/index.html",
-      "bytes": 167374,
-      "sha256": "70bb0f366d7b16f703ff785bbbaf4735d83c30a1e0e14d2ee9ded5bcc32733f0"
+      "bytes": 167785,
+      "sha256": "b17f53eb7aaa00d77c051c6f3cdd0bc4ab89780672286dfed9d44a6f17d5527f"
     },
     {
       "path": "projects/work-delivery/evidence-quality/index.html",
-      "bytes": 153670,
-      "sha256": "cbda070201ea1377903dba52f15ac6a733ce89e12b39b985591bbbe21a8fe388"
+      "bytes": 154081,
+      "sha256": "9b91e26ee2950d8404e62068456513e9a778a2349635cb0d199381b2dbab5dcd"
     },
     {
       "path": "projects/work-delivery/index.html",
-      "bytes": 46634,
-      "sha256": "55bd938d44b272eaf653ed36d4e65d50c6106623ff512917569d5be37f4ad7c1"
+      "bytes": 47045,
+      "sha256": "f692cc15ff73ef5a1826c582b647001c3dd8496a096b49b960b4f7c35d69b6c4"
     },
     {
       "path": "projects/work-delivery/package-sources/index.html",
-      "bytes": 164489,
-      "sha256": "dfa1677c9f50f9e40e6303b7b4387d876acb956bc2d6cf7179a2685e0fbb0779"
+      "bytes": 164900,
+      "sha256": "4101afea68542a2455f7bb6dfb3d8e3ed488b642b7ef138d5d833caa08c2e07a"
     },
     {
       "path": "projects/work-delivery/source-change-next-version/index.html",
-      "bytes": 159296,
-      "sha256": "7a0b9f71d0a21ed22858c9e6328c35cc1e465ff1a0f81a1ebb7d3dd7b85fffaa"
+      "bytes": 159707,
+      "sha256": "40f20c799adb4520eb4a1141afde62760781453a5866d452da5588e93bff2459"
     },
     {
       "path": "projects/work-delivery/value-state-recovery/index.html",
-      "bytes": 182349,
-      "sha256": "6af8ed95b1187da05a173e52e57ee8c2468bf4f77390b5d2d421f2cf7e9bf05e"
+      "bytes": 182760,
+      "sha256": "f472009ac2bb8f8dcd331bb860174ee2783fa06e880313dd4bd0eed4bb9e520c"
     },
     {
       "path": "projects/work-delivery-copilot/assets/hero-eed7e145673e8f8c-mask.png",
@@ -36543,12 +36834,12 @@
     {
       "path": "release-identity.json",
       "bytes": 244,
-      "sha256": "1bf44509b73a01960592e2230de8a8dabe82a0e094a00442a65f735635291fb3"
+      "sha256": "942c44900669c039f18278c633f5f14b31ee11b631c151024884eb46f4483eb9"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 6704925,
-      "sha256": "524fe66cf4c8e9bdf3703a47b0cb3a8920958de8711bef68bda7cf2ca4621efa"
+      "bytes": 6706852,
+      "sha256": "61b17303c36858efe57e667986f1206ef9c0c3867c8ccd34ef5bd1025bc6e987"
     },
     {
       "path": "rescue/index.html",
@@ -36713,22 +37004,22 @@
     {
       "path": "search/index.html",
       "bytes": 69192,
-      "sha256": "5fa5a3157bbaf70a6fad2f9526ce2ef989024e62bdc238e21b1379a45ea692d4"
+      "sha256": "69873353bb222cf97e9a0340268ddf74580ee2444dd473f248b853489e9ff948"
     },
     {
       "path": "search-index.js",
-      "bytes": 1086224,
-      "sha256": "ef47738a53ab5393225d8f496ade3ef2b6748e6748138b942ceac92c645abd6a"
+      "bytes": 1819300,
+      "sha256": "5749d685f5c3957296fa5a8da385d1695bcc8df4c72779beeaa4555ed0bbd7fc"
     },
     {
       "path": "search-project-agents.js",
-      "bytes": 24755,
-      "sha256": "0442a7c5cbc589c3c7fe14eb167925cebe78519700320d5124aca7323d8c5518"
+      "bytes": 251264,
+      "sha256": "489eddac0a0d494ddefa2d7e6a4b63efc69ca44385458aeaae5ec6d6c853824f"
     },
     {
       "path": "search-project-ai-cli-profile-manager.js",
-      "bytes": 20982,
-      "sha256": "37964a6833cc8c116a6ef1ad1e151c067ae64dddff3af5cf72e20aa0f4cab9af"
+      "bytes": 229833,
+      "sha256": "1659fc76355acafebe4a2d6877e3ddab9119e6578c3babb57f8f838df974d7a2"
     },
     {
       "path": "search-project-cacb.js",
@@ -36737,53 +37028,53 @@
     },
     {
       "path": "search-project-chinese-asr.js",
-      "bytes": 22874,
-      "sha256": "0d2050ea762a9258fc92c5bb2ded28de8d2ea8fd87756ae00435d6afaa736dee"
+      "bytes": 273040,
+      "sha256": "73c03c529ff8780266a3856d25db51c04b5ebb6a6bdefee1252a8f09ecc3f3af"
     },
     {
       "path": "search-project-codex-memory.js",
-      "bytes": 12263,
-      "sha256": "d25e3b1b8098014f002beb447ab8a388d57ccbc3ce471f8d5525f5020e04d337"
+      "bytes": 167813,
+      "sha256": "64409479441a939454f2b10a9d3586d0c8fd234e17b6cf6acab87bf6188b943f"
     },
     {
       "path": "search-project-codex-remote.js",
-      "bytes": 19282,
-      "sha256": "7d13aefef494136a30bed00d1b2f64f679b7667e76f25e260049b45ec40b0c8b"
+      "bytes": 37886,
+      "sha256": "704c485605e52ca3f643b484ddbc66671295c643d30eac068859631019e2abb0"
     },
     {
       "path": "search-project-daily-preferences.js",
-      "bytes": 16753,
-      "sha256": "3c147cd5ae8b93898bece5157ac157a8f8e4f7dbdbd0e037fef4b296f94210d1"
+      "bytes": 292167,
+      "sha256": "76387612ef0ed665f9f506a46c3927b670f40c8d7ef0a233ff1cb5b91747a1ac"
     },
     {
       "path": "search-project-devconfig-backup.js",
-      "bytes": 10055,
-      "sha256": "37c52f842bd745297b38452deca5e44959fbbf25cf9f05bf513b34b278d242e6"
+      "bytes": 161323,
+      "sha256": "f1a7b25cb31d36537d2928bab0f2d755a181359c639f40c894749d304ee8ca79"
     },
     {
       "path": "search-project-document-materials.js",
-      "bytes": 8307,
-      "sha256": "6a97665579b0271e703d8403df2ea0d835b99ed570948f567d1366456e5a644f"
+      "bytes": 98425,
+      "sha256": "581256efc822da52c209b6a5c6b01626dbbfb7d16ce92d418c22f74154aea257"
     },
     {
       "path": "search-project-emerald-veil.js",
-      "bytes": 6732,
-      "sha256": "9d3f782eb7b16eb4802ae7cf943a5aedd62725078f1cde6238494ef97029e0df"
+      "bytes": 107506,
+      "sha256": "27388bfb3075259c4c8226c68126dafa8ff05a63899fc8238515a56d01954f63"
     },
     {
       "path": "search-project-github-index.js",
-      "bytes": 17402,
-      "sha256": "f90d67e5a1fa5f4e8d0c55f144820e445af995cf1b46256bf3b47af2761e9bc4"
+      "bytes": 174637,
+      "sha256": "f8378b26d9a1802c24a4c8ea1e7d315f29aa04bcd13a17f891c59eade9fa126b"
     },
     {
       "path": "search-project-learning.js",
-      "bytes": 9406,
-      "sha256": "57a3ff2aad51a148f30859cbce73fb800ffa2878c01db9fc70ca4d1e794a3dc9"
+      "bytes": 128133,
+      "sha256": "05f6c368b211bc01ac559e450d2364a2763e88fc506760f1926459f92d405e07"
     },
     {
       "path": "search-project-llm-backend-toolkit.js",
-      "bytes": 9529,
-      "sha256": "01d84cefc80c7b9b0e0bed04ae1aede9244f2b9a88804dee613e780c6b451912"
+      "bytes": 40,
+      "sha256": "ec950b67a23f9e979dcd05c5e418120a0dae1343ec884f49906fd6c2756230ae"
     },
     {
       "path": "search-project-localocr.js",
@@ -36792,8 +37083,8 @@
     },
     {
       "path": "search-project-meshclip-kit.js",
-      "bytes": 6158,
-      "sha256": "c5131c228ba8c85bb74f1d1e5bd94d0d5ebef4281eba7b4ed5ce5e383cdf2b4f"
+      "bytes": 89902,
+      "sha256": "11661723f759e0638f6aa9670632cc645b6cae001cda7e0b45a7a33fbfa2d9e1"
     },
     {
       "path": "search-project-openclaw-gateway.js",
@@ -36802,93 +37093,93 @@
     },
     {
       "path": "search-project-pc-panel-hub.js",
-      "bytes": 23380,
-      "sha256": "d03bebbf59209e04a2759fabcf20f2e400712d8de8c8f6989024a49993f4cacb"
+      "bytes": 197323,
+      "sha256": "ed3ef7f8bacab22e4fc31586f6146f750fe4a11e04977270881befcf12f28b07"
     },
     {
       "path": "search-project-pcconfig.js",
-      "bytes": 61586,
-      "sha256": "0b2714ed0377edb81d94e3e14daaaa2548c45738af7365770e59fff71974a811"
+      "bytes": 432750,
+      "sha256": "54af11b8ded548508b62fd087573d9b23d89ed8b5cc8573d826d86fa76a9ef3b"
     },
     {
       "path": "search-project-personal-expression.js",
-      "bytes": 4943,
-      "sha256": "9c822e3b88cde2326d93121f2f42ab8c2a671e05a5b065767df7ccc372f6266d"
+      "bytes": 88774,
+      "sha256": "450409b852a07693494d9f878fe779f369f7e9aab3437446fb116d187dc32b42"
     },
     {
       "path": "search-project-personal-health.js",
-      "bytes": 15256,
-      "sha256": "2c27978f5500fb96cb4a0e683d30374296cbb2b72a2d16c4c85b1b330d8bff28"
+      "bytes": 138470,
+      "sha256": "89952bd6d23b3788140f35e910a76ca61512266811a322c311da5a4339d49cf9"
     },
     {
       "path": "search-project-personal-materials.js",
-      "bytes": 9171,
-      "sha256": "7604063f60c55d9f67087f431d5e8cd5a0f4e8dbf0090dcb936963ae534bca81"
+      "bytes": 148377,
+      "sha256": "d3909d5eb45555e0e324a1cf8412f1606f8491cec61b2fa79498f7bae899a999"
     },
     {
       "path": "search-project-personal-media.js",
-      "bytes": 13625,
-      "sha256": "9934ad425d9a7b82475a5674e43046aa75d55bac3209a78e955db23d15128aed"
+      "bytes": 196721,
+      "sha256": "3f21cd35d3d4429262680bb2e85eceb460812c6344715e9b262d4bb9096ae4b0"
     },
     {
       "path": "search-project-proxyclean.js",
-      "bytes": 12036,
-      "sha256": "c33b039e720ea0145715540a17be6a53f8e4742df94e1f8da5590a501c92a8b2"
+      "bytes": 159663,
+      "sha256": "6861cd3b46ca6ec69fd1e6f247518a44e3ab63f4926deceef13da9fb4f6698d5"
     },
     {
       "path": "search-project-ramdisk-guardian.js",
-      "bytes": 6466,
-      "sha256": "757a28efd8f3f25188fc06ae7ccadc2f478bd88f94f6f8ce34e3cce2eb61b577"
+      "bytes": 128026,
+      "sha256": "4d1e055f93578fbfc5642e1c6f47798c5f0f6b54c2e886c6aa50d50e05ec6584"
     },
     {
       "path": "search-project-steam-millennium-config-backup.js",
-      "bytes": 6197,
-      "sha256": "5b8c50306d33a420f19cdce46f4eef4c8c7720fcb66a4003eaa31e75fbd6b1fb"
+      "bytes": 97316,
+      "sha256": "35ee364a37965c9d6611ba698fcfce3f7dae0ad4a9da218688073c94324dd704"
     },
     {
       "path": "search-project-sunshine-remote-streaming.js",
-      "bytes": 11116,
-      "sha256": "ce70f2a40519db36c5f8aaa353a7086b7aedd38262c4d8f63d7741f2497cc031"
+      "bytes": 145383,
+      "sha256": "2b04b7195268f6db863489e40c9d312c97fadf390bf10b6b1805c97d96c55ac9"
     },
     {
       "path": "search-project-timeaudit.js",
-      "bytes": 19281,
-      "sha256": "3f572a0535ca54430b8aea7ef415e63d08299b6276b25dda998281768b615b27"
+      "bytes": 207186,
+      "sha256": "cf13f633861f31534f3926d83463d431bb5243a486e2d62177347903d9faadf3"
     },
     {
       "path": "search-project-typora-theme-pack.js",
-      "bytes": 4407,
-      "sha256": "3799ccb61330255548b758e64a7be3867feb9945415f4a8b399cccb01f031977"
+      "bytes": 84524,
+      "sha256": "185ba073ea06e75c915799c5df875a03805c7de0ba27df03f9fe4d2a1b727812"
     },
     {
       "path": "search-project-vault-tool.js",
-      "bytes": 13588,
-      "sha256": "b779fbd3141a3c810e701f5519ff430143bf0a2a32d4229fc3201d186e5b4c81"
+      "bytes": 169374,
+      "sha256": "f6deb1e8fc8d442b317e40b0d10dfd8ccddca330dbbb6f711c54060adab8a075"
     },
     {
       "path": "search-project-video-scaffold.js",
-      "bytes": 12202,
-      "sha256": "602eb22fd63643934846e0c7f8252adbe83ecf13b8ec8be6627265bfe719c803"
+      "bytes": 231971,
+      "sha256": "1cc1e8e037be0b62e6c6340f78164a621f136843967fcd5a73ae9ceb9df3bdf2"
     },
     {
       "path": "search-project-wechat-direct.js",
-      "bytes": 14646,
-      "sha256": "db82925b54a2913cfae3e56d0bb0a0185531792fe4d14e76f6519b590cbeab4d"
+      "bytes": 114383,
+      "sha256": "56f216d2f7405f9f5c42a19e5899e25b072f6afda2de68b20ce796c93167b0ff"
     },
     {
       "path": "search-project-wechat-history-ai-bridge.js",
-      "bytes": 8526,
-      "sha256": "9fa03242368430a86f06406c6461016b4ef8b493228fe082fd1983250e0668a8"
+      "bytes": 21614,
+      "sha256": "5b9dce3ae0de3ee52dd591e327e87819c7b8184c06d5e2026b9f0dd3f4ddd292"
     },
     {
       "path": "search-project-work-delivery.js",
-      "bytes": 8413,
-      "sha256": "47d2f7e2e26284116de16065808eadd0f62fc5314679d626f9200260d51aa928"
+      "bytes": 97563,
+      "sha256": "27938665fdc8490e6bbf5082ab9f0e50ccf47851539ac08e049d3a3a6386c21c"
     },
     {
       "path": "search-projects.js",
-      "bytes": 3978209,
-      "sha256": "a7e69422532743f2f7826e340bf5e21b73480e20e66a75532b915c7082bc6b6c"
+      "bytes": 3977703,
+      "sha256": "b1701a167bf10fd9316c5e0f2b9a30bc243a8217eaf72d205abd41288f9d828a"
     },
     {
       "path": "sitemap.xml",
@@ -36922,8 +37213,8 @@
     },
     {
       "path": "skills/browser-control-continuity/index.html",
-      "bytes": 264451,
-      "sha256": "99a0a9198acf6d4445a208a92846ff43c3ec7d60823db03b3210540416c18736"
+      "bytes": 264455,
+      "sha256": "136b50be0345a373e1b1199b96b7cb4d5c3f00fcbc036cda31d259dcb71eb1fd"
     },
     {
       "path": "skills/chinese-asr/assets/hero-fb71da432eb4f536-mask.png",
@@ -36947,13 +37238,13 @@
     },
     {
       "path": "skills/cockpit/index.html",
-      "bytes": 136515,
-      "sha256": "9fad1b7d389b420d4e4c46edb2644f280e67cbe2e24657a854d2f92333fb70fc"
+      "bytes": 136926,
+      "sha256": "ba82fb42b12868fa328714afde1ef7954f2b2189f8c67aab00b285c843ad894a"
     },
     {
       "path": "skills/control-plane-doctor/index.html",
-      "bytes": 56246,
-      "sha256": "de8f51ebb3f78e10ca9e7fe8d0267d017431b6b4c2a6a0e56db0dca20844605d"
+      "bytes": 56657,
+      "sha256": "93efdaf7a328dcf07f937082dd462371d7846b6513c8f5ac29bf98104b5b18b8"
     },
     {
       "path": "skills/daily-preferences/assets/hero-7e29be7e1bc7c2f2-mask.png",
@@ -36972,8 +37263,8 @@
     },
     {
       "path": "skills/document-materials/index.html",
-      "bytes": 46648,
-      "sha256": "f4f05204d9c02c80a43bbfd1d9152e43432bebc88e7bd9ba48cc72f9d2fcf35b"
+      "bytes": 47059,
+      "sha256": "60f06510d66c10e7436f1cff9ddb1de33e497c26dc762bdc6c6e653ef9f783cc"
     },
     {
       "path": "skills/documents/index.html",
@@ -36992,13 +37283,13 @@
     },
     {
       "path": "skills/explain-to-me/index.html",
-      "bytes": 56994,
-      "sha256": "e321d26d0fa1cd50ffb19af63c4c727db484276dcbb730e14958181fb1fbab32"
+      "bytes": 57405,
+      "sha256": "a244ab391bdb264609f1e6b7e3013aec9b15342db0101fa0bbd58336e01d227f"
     },
     {
       "path": "skills/file-intake-router/index.html",
-      "bytes": 56238,
-      "sha256": "e5c28fab22041c2b130bd1896d9f1d0ef914d3d2618f6256d5babc9da6ca78bd"
+      "bytes": 56649,
+      "sha256": "d78aa9c599336f606757b2a158dfeb42064fb4c48882f672e95f7db0fb5740a2"
     },
     {
       "path": "skills/google-workspace-direct/assets/hero-a0592545904cd9a4-mask.png",
@@ -37017,8 +37308,8 @@
     },
     {
       "path": "skills/image-generation/index.html",
-      "bytes": 170577,
-      "sha256": "2353afa3bc3ace9fffc42076ab7591676da1c33182ff7937cec414e854d20b5d"
+      "bytes": 170988,
+      "sha256": "3bb7fb7980e92294ce24df0b1aefedbf885cd58d577ba8235b7c30a0f36d722d"
     },
     {
       "path": "skills/index.html",
@@ -37042,8 +37333,8 @@
     },
     {
       "path": "skills/llm-backend-toolkit/index.html",
-      "bytes": 55005,
-      "sha256": "a69516435423b5280335cf4ef1d86522f3a8c7e246218ba47729e9cbf877ab49"
+      "bytes": 55416,
+      "sha256": "44157b4e2347c5170a408af551c1cdc9a6238b3fa531f54e6b17306b68170827"
     },
     {
       "path": "skills/local-secret-broker/assets/hero-9b17b7a9155a1f98-mask.png",
@@ -37107,18 +37398,18 @@
     },
     {
       "path": "skills/mojibake-doctor/index.html",
-      "bytes": 57009,
-      "sha256": "394776376ababfaeb579c8f686f0f7e75d18ef693347b361180ac652d5ff6789"
+      "bytes": 57420,
+      "sha256": "40095af79d14dcc33634e65de3bf5d4cb46ca7c4a4f293a416eeff364146ee3f"
     },
     {
       "path": "skills/native-economy-routing/index.html",
-      "bytes": 55227,
-      "sha256": "68478aa0aa5f000d8a35f51a2b8183b5813db6b61b506dac968825d5f984f91d"
+      "bytes": 55638,
+      "sha256": "197c19eac67b7cf74ece6f75a2b550055bb15cd46b325784aeb11c93894cff53"
     },
     {
       "path": "skills/news-quickcheck/index.html",
-      "bytes": 184346,
-      "sha256": "53c9fb18bc8c9c2511a91ebb0fe6f784c3b9a1f0d25a77b61c4230248047e3ee"
+      "bytes": 184757,
+      "sha256": "e160bde6571395baba96fd1cd71843f6a64413b6c1bf7c5cecac26c796ae426c"
     },
     {
       "path": "skills/pdf/index.html",
@@ -37192,13 +37483,13 @@
     },
     {
       "path": "skills/personal-panel-refresh/index.html",
-      "bytes": 55240,
-      "sha256": "38a0339393d80009271218ed857be3ca63b67f4f9f6ac64f8141801c08497be5"
+      "bytes": 55651,
+      "sha256": "b8504908dccf902f31372d0ac7c38a6ba683a95530adece1db47604984fc7dd9"
     },
     {
       "path": "skills/phone-direct/index.html",
-      "bytes": 263395,
-      "sha256": "37a144e2f1362bbc6257544b2e928a626f3434696226e657fb6821b979266291"
+      "bytes": 263806,
+      "sha256": "bedfd31d953219aefdfccce72169977514a8c800236843eda75303a68defdf84"
     },
     {
       "path": "skills/project-entry-gate/assets/hero-7b75959c93da2c84-mask.png",
@@ -37217,8 +37508,8 @@
     },
     {
       "path": "skills/proxy-network/index.html",
-      "bytes": 181837,
-      "sha256": "8758150de6a1244757439f90f0ed0e50f6d9b734c2eb06b2719a3a46cdd1e913"
+      "bytes": 182248,
+      "sha256": "05c50aa4449f0e85fc7491322f8823cf5588dd11f3181270673d332b28067b4e"
     },
     {
       "path": "skills/reply-as-me/assets/hero-a58cef6fdf7a4867-mask.png",
@@ -37237,8 +37528,8 @@
     },
     {
       "path": "skills/report-page/index.html",
-      "bytes": 333252,
-      "sha256": "3a18d5548b51fd356eafa957e077b0c5a6c3ee6c9fb41fce710776bd7fb21c5d"
+      "bytes": 333258,
+      "sha256": "3ab506bd65fdf435a42fd1a2f537d44fb8a40ebc6a96ec75626944cb49e397e5"
     },
     {
       "path": "skills/tailscale-safe-exposure/assets/hero-7ea0c7e2981cf84c-mask.png",
@@ -37272,8 +37563,8 @@
     },
     {
       "path": "skills/token-budget-advisor/index.html",
-      "bytes": 54956,
-      "sha256": "784276ab87a6d8c0aeadb5124dcd6661ab4df33abbc8e6226b80894e7cfb7734"
+      "bytes": 55367,
+      "sha256": "0d27d857422201d687d5f8dfb0c08b9d22dfff52fc32e7642a9b0ace6dd99503"
     },
     {
       "path": "skills/vault-workflow/assets/hero-c906be98cb36926b-mask.png",
@@ -37794,7 +38085,7 @@
     ],
     "rule_explanations_pending": [],
     "rule_frozen": {
-      "source_file": "E:\\.agents\\releases\\E376\\docs\\contracts\\agents.context-sources.md",
+      "source_file": "E:\\.agents\\releases\\E378\\docs\\contracts\\agents.context-sources.md",
       "site_not_rules": [],
       "rules_not_site": []
     },
