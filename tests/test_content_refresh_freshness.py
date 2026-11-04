@@ -19,11 +19,9 @@ from test_content_refresh_edits import fake_converter, install_fake_converter
 
 class FreshnessTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory()
-        self.addCleanup(self.temp.cleanup)
+        self.temp = tempfile.TemporaryDirectory(); self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        self.path = self.root / "sources/pages/demo/page.json"
-        self.path.parent.mkdir(parents=True)
+        self.path = self.root / "sources/pages/demo/page.json"; self.path.parent.mkdir(parents=True)
         self.page = dict(page="demo", kind="project", semantic_checked_at=now(), screens=[dict(id="top", text="调用 3 次；截至 2026-10-01")])
         self.write(self.path, self.page)
         self.write(self.root / "snapshot.json", dict(count=4, stamp="2026-10-18T09:00:00+08:00"))
@@ -37,12 +35,10 @@ class FreshnessTests(unittest.TestCase):
         self.write(self.registry_path, self.registry)
 
     def write(self, path, data):
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+        path.parent.mkdir(parents=True, exist_ok=True); path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
 
     def collect(self):
-        result = refresh.collect(self.root, self.registry, entries={})
-        result["registry_path"] = str(self.registry_path)
+        result = refresh.collect(self.root, self.registry, entries={}); result["registry_path"] = str(self.registry_path)
         return result
 
     def apply(self, result):
@@ -50,8 +46,7 @@ class FreshnessTests(unittest.TestCase):
 
     def test_selection_inherits_real_owner_and_leaves_parentless_skills_independent(self):
         from selection import Selection
-        self.page.update(url="/projects/different-id/")
-        self.write(self.path, self.page)
+        self.page.update(url="/projects/different-id/"); self.write(self.path, self.page)
         self.write(self.root / "sources/pages/child/page.json", dict(page="child", parent="demo"))
         self.write(self.root / "sources/pages/skill-demo/page.json", dict(page="skill-demo", parent=None, kind="skill"))
         config = self.root / "config/panel-projects.json"
@@ -59,19 +54,15 @@ class FreshnessTests(unittest.TestCase):
             self.write(config, dict(projects=[dict(id="different-id", route="/projects/different-id",
                 ai_refresh=dict(mode="manual_owner_only", content_path=path))]))
             for frozen in (False, True):
-                self.page["kind"] = "frozen" if frozen else "project"
-                self.write(self.path, self.page)
+                self.page["kind"] = "frozen" if frozen else "project"; self.write(self.path, self.page)
                 selected = Selection(self.root)
-                self.assertTrue(selected.reason("demo"))
-                self.assertTrue(selected.reason("child"))
-                self.assertIsNone(selected.reason("skill-demo"))
-                self.assertIsNone(Selection(self.root, ["different-id"]).reason("child"))
+                self.assertEqual((bool(selected.reason("demo")), bool(selected.reason("child")),
+                    selected.reason("skill-demo"), Selection(self.root, ["different-id"]).reason("child")), (True, True, None, None))
         with patch.object(refresh, "bounded") as read:
             result = self.collect()
             read.assert_not_called()
-        self.assertTrue(all(r["status"] == "excluded" and not r["overdue"] for r in result["rows"]))
-        self.assertEqual((result["automatic_total"], result["manual_tasks"]), (0, []))
-        self.assertEqual(close_run(self.root, result)["pending"], 0)
+        self.assertEqual((all(r["status"] == "excluded" and not r["overdue"] for r in result["rows"]),
+            result["automatic_total"], result["manual_tasks"], close_run(self.root, result)["pending"]), (True, 0, [], 0))
         result = refresh.collect(self.root, self.registry, entries={}, manual_owner_request=["different-id"])
         self.assertTrue(build_number_edits(self.root, result)["edits"])
         result["registry_path"] = str(self.registry_path)
@@ -90,20 +81,17 @@ class FreshnessTests(unittest.TestCase):
     def test_old_changed_and_unchanged_candidates_cannot_bypass_current_selection(self):
         for unchanged in (False, True):
             self.write(self.root / "snapshot.json", dict(count=3 if unchanged else 4, stamp="2026-10-18T09:00:00+08:00"))
-            result = self.collect()
-            candidate = build_number_edits(self.root, result)
+            result = self.collect(); candidate = build_number_edits(self.root, result)
             self.write(self.root / "config/panel-projects.json", dict(projects=[dict(id="alias", route="/demo",
                 ai_refresh=dict(mode="manual_owner_only", content_path="sources/pages/demo/page.json"))]))
             before, registry_before = self.path.read_bytes(), self.registry_path.read_bytes()
             rebuilt = build_number_edits(self.root, result)
             self.assertEqual((rebuilt["edits"], rebuilt["record_updates"]), ([], []))
             report = apply_edits(self.root, candidate, converter=fake_converter)
-            self.assertEqual((report["applied"], report["record_readback"]), (0, []))
-            self.assertTrue(report["excluded"])
+            self.assertEqual((report["applied"], report["record_readback"], bool(report["excluded"])), (0, [], True))
             closure = close_run(self.root, result, report)
-            self.assertEqual((closure["status"], closure["pending"]), ("closed", 0))
-            self.assertTrue(all(r["status"] == "excluded" for r in closure["rows"]))
-            self.assertEqual((self.path.read_bytes(), self.registry_path.read_bytes()), (before, registry_before))
+            self.assertEqual((closure["status"], closure["pending"], all(r["status"] == "excluded" for r in closure["rows"]),
+                self.path.read_bytes(), self.registry_path.read_bytes()), ("closed", 0, True, before, registry_before))
             (self.root / "config/panel-projects.json").unlink()
 
     def test_apply_card_prompts_home_preparation_before_commit(self):
@@ -112,8 +100,7 @@ class FreshnessTests(unittest.TestCase):
         import apply_edits as edits_module
         install_fake_converter(self.root)
         home = self.root / "site-astro/sources/retained-home-cockpit/home.html"
-        home.parent.mkdir(parents=True)
-        home.write_text("old highlight numbers", encoding="utf-8")
+        home.parent.mkdir(parents=True); home.write_text("old highlight numbers", encoding="utf-8")
         script = self.root / "scripts/prepare-home-highlights.py"
         script.parent.mkdir(parents=True)
         script.write_text("def transcript_current(text): return text == 'current'", encoding="utf-8")
@@ -139,28 +126,22 @@ class FreshnessTests(unittest.TestCase):
 
     def test_cadence_every_request_semantic_28_days_target_change_and_history(self):
         today = date(2026, 10, 23)
-        self.assertTrue(cadence(dict(as_of="2026-10-23"), today=today)["refresh_due"])
         semantic = dict(freshness_class="semantic", semantic_checked_at="2026-09-26")
-        self.assertFalse(cadence(semantic, today=today)["refresh_due"])
-        self.assertTrue(cadence(dict(semantic, semantic_checked_at="2026-09-25"), today=today)["refresh_due"])
-        self.assertTrue(cadence(semantic, today=today, targeted=True)["refresh_due"])
-        self.assertTrue(cadence(dict(semantic, source_changed=True), today=today)["refresh_due"])
+        cases = [(dict(as_of="2026-10-23"), False, True), (semantic, False, False),
+            (dict(semantic, semantic_checked_at="2026-09-25"), False, True), (semantic, True, True),
+            (dict(semantic, source_changed=True), False, True), (dict(historical=True), False, False)]
+        for record, targeted, due in cases: self.assertEqual(cadence(record, today=today, targeted=targeted)["refresh_due"], due)
         self.assertEqual(cadence(dict(freshness_class="semantic"), today=today)["freshness_status"], "due_unknown")
-        self.assertFalse(cadence(dict(historical=True), today=today)["refresh_due"])
 
     def test_collect_uses_source_date_and_unknown_keeps_old_date_and_candidate(self):
         result = self.collect()
-        self.assertEqual(result["rows"][1]["new_value"], "2026-10-18")
-        self.assertEqual(result["rows"][0]["source_observed_at"], "2026-10-18T09:00:00+08:00")
-        self.assertTrue(result["run_id"])
+        self.assertEqual((result["rows"][1]["new_value"], result["rows"][0]["source_observed_at"],
+            bool(result["run_id"])), ("2026-10-18", "2026-10-18T09:00:00+08:00", True))
         self.registry["records"][0].pop("source_observed_at_pointer")
         result = self.collect()
-        self.assertEqual((result["rows"][0]["status"], result["rows"][0]["new_value"]), ("unavailable", 4))
-        self.assertIsNone(result["rows"][1]["new_value"])
-        self.assertEqual(result["rows"][1]["old_value"], "2026-10-01")
-        self.assertEqual(build_number_edits(self.root, result)["edits"], [])
-        self.page["screens"][0]["text"] = "调用 3 次；仓库 4 次"
-        self.write(self.path, self.page)
+        self.assertEqual((result["rows"][0]["status"], result["rows"][0]["new_value"], result["rows"][1]["new_value"],
+            result["rows"][1]["old_value"], build_number_edits(self.root, result)["edits"]), ("unavailable", 4, None, "2026-10-01", []))
+        self.page["screens"][0]["text"] = "调用 3 次；仓库 4 次"; self.write(self.path, self.page)
         self.number.update(start=10, end=11)
         with patch.object(refresh, "bounded") as source:
             result = self.collect()
@@ -173,9 +154,8 @@ class FreshnessTests(unittest.TestCase):
         inventory = build_inventory(self.root / "sources/pages", [bad, historical], {})
         inventory["record_bindings"].append(dict(record_id="outside", status="binding_error", classification="current"))
         findings = strict_findings(inventory, [bad, historical], {})
-        self.assertTrue(any("bad" in f["record_ids"] for f in findings))
-        self.assertFalse(any("old" in f["record_ids"] for f in findings))
-        self.assertEqual(next(b for b in inventory["record_bindings"] if b["record_id"] == "old")["classification"], "historical")
+        self.assertEqual((any("bad" in f["record_ids"] for f in findings), any("old" in f["record_ids"] for f in findings),
+            next(b for b in inventory["record_bindings"] if b["record_id"] == "old")["classification"]), (True, False, "historical"))
 
     def test_page_number_shown_through_a_placeholder_counts_as_displayed(self):
         self.page["registry"] = dict(numbers=[dict(id="n-x", text="3 次", as_of="2026-10-01")])
@@ -187,8 +167,7 @@ class FreshnessTests(unittest.TestCase):
         self.assertIn("home", located())
 
     def test_cli_inventory_collect_apply_and_close_with_registry_readback(self):
-        output = self.root / "run"
-        install_fake_converter(self.root)
+        output = self.root / "run"; install_fake_converter(self.root)
         def run(script, *args, expected=0):
             proc = subprocess.run([sys.executable, "-B", "-X", "utf8", str(SCRIPTS / script), *map(str, args)], capture_output=True, text=True, encoding="utf-8")
             self.assertEqual(proc.returncode, expected, proc.stdout + proc.stderr)
@@ -201,14 +180,11 @@ class FreshnessTests(unittest.TestCase):
         run("apply_edits.py", output / "number-edits.json", "--root", self.root, "--report", report_path)
         run("refresh.py", "--root", self.root, "--close-run", output / "result.json", "--apply-report", report_path)
         report = json.loads(report_path.read_text("utf-8"))
-        self.assertEqual(report["run_id"], result["run_id"])
-        self.assertTrue(all(f["status"] == "verified" for f in report["field_readback"]))
+        self.assertEqual((report["run_id"], all(f["status"] == "verified" for f in report["field_readback"])), (result["run_id"], True))
         registry = json.loads(self.registry_path.read_text("utf-8"))
-        self.assertEqual(registry["records"][0]["current_value"], 4)
-        self.assertEqual(registry["records"][0]["source_observed_at"], "2026-10-18T09:00:00+08:00")
-        self.assertIn("调用 4 次；截至 2026-10-18", self.path.read_text("utf-8"))
-        dist = self.root / "dist/demo"
-        dist.mkdir(parents=True)
+        self.assertEqual((registry["records"][0]["current_value"], registry["records"][0]["source_observed_at"],
+            "调用 4 次；截至 2026-10-18" in self.path.read_text("utf-8")), (4, "2026-10-18T09:00:00+08:00", True))
+        dist = self.root / "dist/demo"; dist.mkdir(parents=True)
         (dist / "index.html").write_text("<p>调用 <b>4</b> 次；截至 2026-10-18</p>", encoding="utf-8")
         run("refresh.py", "--root", self.root, "--close-run", output / "result.json", "--apply-report", report_path, "--dist", dist.parent)
         self.assertTrue(all(r["display_readback"] == "verified" for r in json.loads((output / "closure.json").read_text("utf-8"))["rows"]))
@@ -258,24 +234,48 @@ class FreshnessTests(unittest.TestCase):
         self.assertEqual(read("registry.numbers[0].as_of", "2026-11-02"), "failed")
 
     def test_manual_state_review_and_semantic_due_require_actual_closure(self):
-        result = self.collect()
-        report = self.apply(result)
+        result = self.collect(); report = self.apply(result)
         inventory = dict(items=[dict(id="state", page="demo", field="status_line.state", kind="status_line.state")])
         result["manual_tasks"] = review_tasks(inventory, [])
         self.assertEqual(close_run(self.root, result, report)["pending"], 1)
         report["manual_closures"] = [dict(id="review:state", run_id=result["run_id"], checked_at=now(), evidence="受控样例状态已核对", status="completed")]
         self.assertEqual(close_run(self.root, result, report)["status"], "closed")
-        result["semantic_due"] = dict(count=1, pages=["demo"])
-        report["manual_closures"].append(dict(id="semantic:demo", run_id="other", checked_at=now(), evidence="旧轮", status="completed"))
+        result["semantic_due"] = dict(count=1, pages=["demo"]); report["manual_closures"].append(dict(id="semantic:demo", run_id="other", checked_at=now(), evidence="旧轮", status="completed"))
         path = self.root / "sources/refresh/semantic-reviews.json"
-        self.assertFalse(path.exists())
         close_run(self.root, result, report)
         self.assertFalse(path.exists())
-        report["manual_closures"][-1]["run_id"] = result["run_id"]
-        close_run(self.root, result, report)
+        report["manual_closures"][-1]["run_id"] = result["run_id"]; close_run(self.root, result, report)
         self.assertEqual(json.loads(path.read_text("utf-8"))["pages"]["demo"]["evidence"], "旧轮")
         inventory["items"].append(dict(id="other", page="other", field="status_line.state", kind="status_line.state"))
         self.assertEqual([t["page"] for t in review_tasks(inventory, [], {"demo"})], ["demo"])
+
+    def test_manual_record_review_proves_source_markdown_and_actual_display(self):
+        import copy, hashlib
+        install_fake_converter(self.root); result = self.collect(); report = self.apply(result)
+        result["rows"][1].update(status="manual_review", new_value=None, date_candidate="2026-10-18")
+        report["record_readback"] = [r for r in report["record_readback"] if r["record_id"] != "d"]
+        report["manual_closures"] = [dict(id="record:d", run_id=result["run_id"], actual_value="2026-10-18",
+            checked_at=now(), evidence="合成来源与日期口径已人工核对", status="completed")]
+        target = self.root / "dist/demo/index.html"; target.parent.mkdir(parents=True)
+        md = self.root / "site-astro/src/content/pages/demo.md"; original = md.read_bytes()
+        cases = [(False, c) for c in ("pass", "wrong_run", "missing_evidence", "stale_md", "date_elsewhere", "changed", "no_dist")]
+        cases += [(True, c) for c in ("pass", "false", "domain", "none", "unknown", "scope", "unconfirmed_scope", "time", "naive_time", "location", "automatic", "changed", "scope_pending")]
+        for source, case in cases:
+            candidate, receipt, value = copy.deepcopy(result), copy.deepcopy(report), None if case == "none" else "Unknown" if case == "unknown" else False if case == "false" else 0
+            md.write_bytes(original.replace("调用 4".encode(), "调用 3".encode()) if case == "stale_md" else original)
+            if source:
+                candidate["rows"] = [dict(candidate["rows"][1], status="scope_pending" if case == "scope_pending" else "domain_fact_task" if case == "domain" else "unavailable",
+                    automatic=case == "automatic", retrieve=dict(kind="manual"), scope_status="pending" if case == "scope" else "verified", qualifies=None, page_pattern=r"确认值 ([^；]+)")]
+                self.page["screens"][0]["text"] = f"确认值 {value}；截至 2026-10-18"; self.write(self.path, self.page); fake_converter(self.root, ["demo"])
+                receipt["manual_closures"][0].update(actual_value=value, source_location="" if case == "location" else "合成snapshot.json",
+                    source_observed_at="2040-01-01T09:00:00+08:00" if case == "time" else "2026-10-18T09:00:00" + ("" if case == "naive_time" else "+08:00"), manual_scope_verified=case != "unconfirmed_scope")
+            receipt["markdown_readback"][0]["sha256"] = hashlib.sha256(md.read_bytes()).hexdigest()
+            receipt["manual_closures"][0].update(run_id="another" if case == "wrong_run" else result["run_id"], evidence="" if case == "missing_evidence" else "合成来源已核对")
+            target.write_text(f"<p>确认值 {value}；截至 2026-10-18</p>" if source else "<p>别处日期 2026-10-18</p>" if case == "date_elsewhere" else "<p>调用 4 次；截至 2026-10-18</p>", encoding="utf-8")
+            if case == "changed": candidate["rows"][-1]["status"] = "changed"
+            closed = close_run(self.root, candidate, receipt, None if case == "no_dist" else target.parent.parent)
+            self.assertEqual(next(r for r in closed["rows"] if r["record_id"] == "d")["status"] == ("manual_source_verified" if source else "manual_review_verified"), case in {"pass", "false", "domain"}, (source, case))
+            self.assertEqual(json.loads(self.registry_path.read_text("utf-8"))["records"][1]["current_value"], "2026-10-18")
 
     def test_unknown_and_unchanged_close_only_after_real_current_check(self):
         self.write(self.root / "snapshot.json", dict(count=3, stamp="2026-10-01T09:00:00+08:00"))

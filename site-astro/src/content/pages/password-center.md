@@ -786,10 +786,10 @@
     },
     {
      "id": "n-package",
-     "text": "2221 个文件",
-     "meaning": "G 上现役程序包（manifest 06a37382…）的文件数",
+     "text": "2223 个文件",
+     "meaning": "G 上已批准现役程序包的全部文件数；清单登记 2221 项，另含清单自身等文件，不混成清单条数",
      "as_of": "2026-11-04",
-     "source": "见来源记录 password-center-n-package-0，观察于 2026-10-30T11:06:11+08:00",
+     "source": "2026年11月4日12:09只读核对批准清单指向的G程序包，核清单SHA-256后递归数全部文件",
      "screens": [
       "password-center-10"
      ]
@@ -1066,8 +1066,8 @@
  },
  "source": {
   "page": "sources/pages/password-center/page.json",
-  "sha256": "c30f9fadb76a1a8b325f4b52308837bd148cf7ef70cc7e9916d620ee8a2cbf14",
-  "converted_at_beijing": "2026-11-04T12:05:33+08:00"
+  "sha256": "a9ba54784ef409b2f60a8cb99425c5054e33fb2192d4a8badd5262ac311adc17",
+  "converted_at_beijing": "2026-11-04T13:12:23+08:00"
  }
 }
 ---

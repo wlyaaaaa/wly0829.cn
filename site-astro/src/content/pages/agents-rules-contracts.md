@@ -36,8 +36,8 @@
  },
  "source": {
   "page": "sources/pages/agents-rules-contracts/page.json",
-  "sha256": "5f00ff6d264ea7475f7741ce927fa0dacdf32f00a7c545cd2f03ebfaf2c942b9",
-  "converted_at_beijing": "2026-11-04T12:05:27+08:00"
+  "sha256": "2b2d4a46ce99720f381544a1d8261647113880d37b6ee1b3772f806732e91e9f",
+  "converted_at_beijing": "2026-11-04T13:12:19+08:00"
  }
 }
 ---
@@ -958,20 +958,7 @@ AI 不会拿上个月的报告当今天的现场，也不会跑到错误仓库�
   "section": "tech",
   "title": "依据与来源",
   "links": [],
-  "anchors": [
-   {
-    "id": "g-asked",
-    "text": "我开口才开始"
-   },
-   {
-    "id": "g-auto",
-    "text": "我不开口也会办"
-   },
-   {
-    "id": "g-your-turn",
-    "text": "轮到我的时候"
-   }
-  ],
+  "anchors": [],
   "live": null,
   "screenshots": [],
   "chain": null,

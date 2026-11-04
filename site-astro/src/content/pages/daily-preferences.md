@@ -678,10 +678,10 @@
     },
     {
      "id": "n-frozen",
-     "text": "43 个",
+     "text": "67 个",
      "meaning": "引用快照目录的冻结副本文件，只数文件，未逐个校验",
-     "as_of": "2026-10-12",
-     "source": "E:\\PersonalData\\日常偏好\\引用快照 文件数",
+     "as_of": "2026-11-04",
+     "source": "2026年11月4日12:09既有只读来源入口枚举引用快照文件数，未逐个校验",
      "screens": [
       "daily-preferences-10"
      ]
@@ -698,20 +698,20 @@
     },
     {
      "id": "n-tests",
-     "text": "测试定义 793 个（只计数）",
-     "meaning": "仅静态清点测试定义，本轮没有重跑；历史实跑保持原日期。",
-     "as_of": "2026-10-22",
-     "source": "本轮只读来源记录 daily-preferences-n-tests-0，观察于 2026-10-22T08:06:26+08:00",
+     "text": "测试定义 941 个（只计数）",
+     "meaning": "Git跟踪tests目录Python test_函数和JavaScript test调用的静态定义计数，没有执行或声称通过",
+     "as_of": "2026-11-04",
+     "source": "2026年11月4日12:09正式只读静态计数；历史实跑日期保持原样",
      "screens": [
       "daily-preferences-10"
      ]
     },
     {
      "id": "n-commits",
-     "text": "258 次",
+     "text": "334 次",
      "meaning": "截至本轮观察时刻的 HEAD 可达提交总数，含合并。",
-     "as_of": "2026-10-22",
-     "source": "本轮只读来源记录 daily-preferences-n-commits-0，观察于 2026-10-22T08:06:26+08:00",
+     "as_of": "2026-11-04",
+     "source": "2026年11月4日12:09只读HEAD全部可达提交计数，含合并",
      "screens": [
       "daily-preferences-10"
      ]
@@ -955,8 +955,8 @@
  },
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
-  "sha256": "bfc58e5416d5e4c7203b210a331dbfa6e7b3dbcb3caa888b7007d8f949b47752",
-  "converted_at_beijing": "2026-11-04T12:05:29+08:00"
+  "sha256": "61ca4f157db375a26b7e3bda22c8cae06fcfac8691e4d3faf74f2526932aeda0",
+  "converted_at_beijing": "2026-11-04T13:12:21+08:00"
  }
 }
 ---
@@ -3761,7 +3761,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "stat_card",
-     "text_ref": "**64 个**｜冻结的引用副本文件",
+     "text_ref": "67个冻结的引用副本文件",
      "align": "left",
      "size": "medium",
      "columns": 4,
@@ -3805,7 +3805,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     },
     {
      "type": "stat_card",
-     "text_ref": "**64 个**｜冻结的引用副本文件",
+     "text_ref": "67个冻结的引用副本文件",
      "align": "left",
      "size": "medium",
      "columns": 2,
@@ -3940,9 +3940,9 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
 - **手机和云端不另存一份。** 它们经电脑 MCP 调同一套命令；原来放在 Google Drive 的两份快照已停更。只有给 Muse 的那份选定背景是副本：挑对协作有用的内容，1 万字以内，事实仍以本库为准，Muse 那边不写回来（〔给 Muse 的背景〕）。
 - **近况会自己标过期（9 月 27 日做好，还没在真实使用里验过）。** 每次“要更新了”整段重写近况卡，旧版留历史；窗口结束超过 7 天、或之后又有新记录，程序就标过期，AI 读到时先说“这是到某日为止的近况”，只补读之后那几天。睡眠和手表步数由个人健康项目的只读工具提供、不存进本库，手机系统步数存在本库；它们和亮屏、定位在这里都只当作息的线索，不当健康结论。
 
-**64 个**｜冻结的引用副本文件（只数了文件，没逐个校验）
+**67 个**｜冻结的引用副本文件（只数了文件，没逐个校验）
 **30,297 行**｜Python 和 JavaScript 正式代码（54 个文件，11 月 04 日 08:35 计数）
-**840 个**｜测试定义（只计数，10 月 30 日 11:06 没有重跑）
+**941 个**｜测试定义（只计数，11 月 4 日 12:09 没有重跑）
 **334 次**｜提交（9 月 1 日起，11 月 04 日 08:35 数）
 
 ::screen{#daily-preferences-11 section="highlights"}

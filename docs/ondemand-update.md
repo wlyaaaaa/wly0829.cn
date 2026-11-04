@@ -273,6 +273,10 @@ python -B -X utf8 site-astro/tools/scan_glance.py --dist dist --pages published-
 
 close-run 变化项须同时有同一 `run_id` 应用回执中的字段回读、记录值原位回读、所属页 `markdown_readback` 三项 `verified`。`--dist` 按 Markdown frontmatter 的 `url`（缺省 `/<页id>/`）查成品 HTML，去标签、HTML 反转义和归一空白后，必须找到回读的新片段，才记 `display_readback=verified`；找不到仍为 pending。回执写入 `closure.json`，pending 使命令非零退出。核对戳、状态等人工任务须在同轮回执 `manual_closures` 提供任务 id、`run_id`、`checked_at`、`evidence` 和 `status="completed"`，不能用程序读过页面代替核对。
 
+已由事实人员实际重读的人工来源，也可逐记录提供 `record:<记录id>` 的 `actual_value`、带时区的 `source_observed_at`、`source_location`、`checked_at`、具体 `evidence` 和 `manual_scope_verified=true`。仅限口径已确认、自动读取关闭且取法为 `manual`、无定位错误的未取到行；未知值、自动读取失败、变化数字和口径待核均不能走这条路。它同样需要官方转换、同轮 Markdown 指纹和成品实际上下文通过，记为人工来源已核对，不写自动取数成功数或自动登记同步。
+
+日期需要人工判断口径时，同轮 `manual_closures` 可另附 `record:<记录id>`，提供 `actual_value`、真实 `checked_at` 和具体来源证据；它只确认带 `qualifies` 的人工日期，不代替变化数字的应用证明。闭合仍须核当前作者正式转换与 Markdown 一致、同轮 Markdown 指纹有效，并在成品里读到该日期的实际上下文；保留旧日期只记为已核对保留，不自动推进来源日期。
+
 未给 `--dist` 时，闭环会明确写 `display_readback=not_checked`；即使字段与渲染输入闭环为 `closed`，也只能说明事实已进入渲染输入，不能宣称成品已显示。正式更新使用上面带 `--dist` 的命令；成品显示通过之后，仍须完成扫描、发布和公网回读。
 
 严格盘点和完整性测试是构建前必须通过的门；新页漏登记会直接失败。工具验收另外实跑整表 `refresh.py --output <目录> --total-seconds 300`：取数不超过 300 秒，`result.json` 中自动项取到新值的比例至少 90%；`source_broken` 项单列，不计入这一比例。登记自动覆盖的 85% 与本次自动取到新值的 90% 是不同指标，不能相互代替。

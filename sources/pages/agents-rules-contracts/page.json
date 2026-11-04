@@ -163,20 +163,7 @@
       "title": "依据与来源",
       "text": "## 依据与来源\n\n## 真实入口\n\n- 活动根规则（E372，随用户级入口加载；入口缺失时读 Inspect 返回的 AGENTS.md）与 10 份正式专题\n\n- 合同导航 `docs/contracts/README.md`\n\n- 合同目录 `config/control-plane-contract-catalog.json`（32 条）\n\n- 活动上下文与事实来源专题（事实找谁、冻结项目、三档维护）\n\n## 如何验证\n\n- 当前：根会话确认根规则来自 E372 发布版本，而不是源码候选或 C 盘历史（11 月 4 日核验通过）。只证明规则文件完整，不是业务验收。\n\n- 历史：10 月 30 日曾确认 E325；10 月 22 日曾确认 E280；10 月 12 日 04:41 曾确认当时的 E258 及上一版 E257 核验通过。\n\n- GlobalRulesStructure 的测试入口仍在源码登记中（当前测试定义 103 项（只计数），11 月 4 日 08:35 重读）；原来的 ContractCatalog、ContractRouting 和跨控制面覆盖测试已随 10 月 29 日删除的目录工具一起删掉。11 月 4 日没有运行任何测试，不说它们已经通过。旧页没有给出这些测试各自的完整回执，这里也不为它补造历史日期。",
       "links": [],
-      "anchors": [
-        {
-          "id": "g-asked",
-          "text": "我开口才开始"
-        },
-        {
-          "id": "g-auto",
-          "text": "我不开口也会办"
-        },
-        {
-          "id": "g-your-turn",
-          "text": "轮到我的时候"
-        }
-      ],
+      "anchors": [],
       "live": null,
       "screenshots": [],
       "chain": null,

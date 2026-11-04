@@ -631,9 +631,9 @@
       {
         "id": "n-size",
         "text": "53.1 KB / 54,383 B",
-        "meaning": "一份备份 20 个文件的字节数之和 53,573 B",
+        "meaning": "同一份20文件快照的精确字节合计54383B，按1024换算为53.1084KiB；页面按一位小数显示53.1KB",
         "as_of": "2026-11-04",
-        "source": "snapshot-manifest.json files[].bytes 求和",
+        "source": "2026年11月4日12:31既有只读快照聚合入口bytes=54383；未读取或恢复快照内容",
         "screens": [
           "steam-millennium-config-backup-01"
         ]
@@ -741,10 +741,10 @@
       },
       {
         "id": "n-code",
-        "text": "Python 核心 1,212 行＋读文件告警模块 74 行；4 个 PowerShell 入口共 339 行；VBS 2 个",
-        "meaning": "Python 核心和读文件告警模块都只用标准库；4 个 PowerShell 入口共 339 行；隐藏启动用的 VBS 2 个",
-        "as_of": "2026-10-12",
-        "source": "源码只读计行（1721b8a9）：tools/millennium_backup.py 1,212、tools/backup_file_warnings.py 74；4 个 PowerShell 入口共 339 行；隐藏启动用的 VBS 2 个",
+        "text": "Python 核心 1,212 行＋读文件告警模块 74 行；3 个 PowerShell 入口共 325 行；VBS 2 个",
+        "meaning": "Python核心和读文件告警模块都只用标准库；现存Invoke、Manage、Show三个PowerShell入口共325行，已删的snapshot兼容入口不算；隐藏启动VBS两个",
+        "as_of": "2026-11-04",
+        "source": "2026年11月4日12:09正式只读计行，核心1212行、告警模块74行、PowerShell三入口325行；12:31再只读核实三文件存在、snapshot入口不在",
         "screens": [
           "steam-millennium-config-backup-05"
         ]

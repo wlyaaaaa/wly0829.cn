@@ -425,8 +425,8 @@ class NumberEditsTests(unittest.TestCase):
     def test_scaled_numbers_keep_the_page_decimal_places(self):
         from apply_edits import formatted
         self.assertEqual([formatted("740", 749.0), formatted("3,899", 3994.0), formatted("1.80", 1.8),
-                          formatted("58.4", 54.1), formatted("740", 749.5), formatted("7,559", 7760)],
-                         ["749", "3,994", "1.80", "54.1", "749.5", "7,760"])
+                          formatted("58.4", 54.1), formatted("740", 749.5), formatted("7,559", 7760), formatted("12:12:14", "12:09:02"), formatted("11 月 3 日 11:40:02—12:12:14", "11 月 4 日 11:40:02—12:09:02")],
+                         ["749", "3,994", "1.80", "54.1", "749.5", "7,760", "12:09:02", "11 月 4 日 11:40:02—12:09:02"])
 
     def test_unchanged_status_text_lets_its_cutoff_advance(self):
         self.page["screens"][0]["text"] = "截至 10 月 9 日，提醒还没正式发过"

@@ -17,6 +17,7 @@ sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[2]
 NUMBER = re.compile(r"-?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?")
 CHINESE_DATE = re.compile(r"(?:(\d{4})\s*年\s*)?(\d{1,2})\s*月\s*(\d{1,2})\s*日(?:\s+(\d{1,2}):(\d{2})(:\d{2})?)?")
+CLOCK = r"(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?"
 USAGE_PERIOD = r"\d{1,2} 月 \d{1,2}(?: 日[—–]\d{1,2} 月 \d{1,2}|[—–]\d{1,2}) 日"
 DATETIME = re.compile(r"\d{4}-\d{2}-\d{2}([ T])\d{2}:\d{2}(:\d{2})?(\.\d+)?(Z|[+-]\d{2}:?\d{2})?")
 EVENT_DATE = re.compile(r"(?:最近(?:一次)?|最后(?:一次)?|上(?:一)?次)\s*(?:写入|使用|运行|同步|采集|访问|更新)|(?:数据|记录|账本)\s*(?:记到|覆盖到)|数据水位")
@@ -70,6 +71,16 @@ def formatted(old, value):
         if (last - first).days != 6:
             raise ValueError("技能次数标签必须覆盖七个完整日")
         return f"{first.month} 月 {first.day} 日—{last.month} 月 {last.day} 日"
+    if re.fullmatch(CLOCK, old):
+        if not re.fullmatch(CLOCK, str(value)):
+            raise ValueError("时刻新值无效")
+        return str(value)[:5] if len(old) == 5 else str(value) if len(str(value)) == 8 else str(value) + ":00"
+    interval = re.split(r"([—–])", old)
+    if len(interval) == 3 and CHINESE_DATE.fullmatch(interval[0]) and re.fullmatch(CLOCK, interval[2]):
+        incoming = re.split(r"[—–]", str(value))
+        if len(incoming) != 2:
+            raise ValueError("备份时间区间新值无效")
+        return formatted(interval[0], incoming[0]) + interval[1] + formatted(interval[2], incoming[1])
     stamp = DATETIME.fullmatch(old)
     if stamp:
         if not DATETIME.fullmatch(str(value)):
@@ -129,7 +140,7 @@ def proven_offset(text, record):
     if "start" not in record and "end" not in record:
         return None
     start, end = record.get("start"), record.get("end")
-    tokens = r"(?<![\d.,])(?:" + DATETIME.pattern + "|" + CHINESE_DATE.pattern + r"|\d{4}-\d{2}-\d{2}|" + NUMBER.pattern + r")(?![\d.,])"
+    tokens = r"(?<![\d.,])(?:" + DATETIME.pattern + "|" + CHINESE_DATE.pattern + "[—–]" + CLOCK + "|" + CHINESE_DATE.pattern + "|" + CLOCK + r"|\d{4}-\d{2}-\d{2}|" + NUMBER.pattern + r")(?![\d.,])"
     if (type(start) is not int or type(end) is not int
             or not any(m.span() == (start, end) for m in re.finditer(tokens, text))
             or not same_value(text[start:end], record.get("current_value"))):

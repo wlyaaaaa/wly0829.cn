@@ -188,8 +188,8 @@ def verified_field(root, proof):
 
 def close_run(root, result, report=None, dist=None):
     from refresh import pages, page_value, comparable
-    from apply_edits import same_value, field_at, digest
-    from authors import resolve_author
+    from apply_edits import same_value, field_at, digest, locate, display_fragment, CHINESE_DATE
+    from authors import resolve_author, markdown_checks
     from selection import Selection
     root, report = Path(root), report or {}
     run_id = result.get("run_id")
@@ -203,6 +203,14 @@ def close_run(root, result, report=None, dist=None):
     excluded_ids = {r["record_id"] for r in excluded}
     applied = {r["record_id"]: r for r in report.get("record_readback", []) if r.get("status") == "verified"}
     markdown = {m["page"]: m for m in report.get("markdown_readback", [])}
+    resolutions = {r.get("id"): r for r in report.get("manual_closures", [])
+                   if r.get("id") and r.get("run_id") == run_id and valid_time(r.get("checked_at")) and r.get("evidence") and r.get("status") == "completed"}
+    manual_sources = {r["id"] for r in result["rows"] if r["status"] in {"unavailable", "domain_fact_task"}
+                      and r.get("automatic") is False and r.get("retrieve", {}).get("kind") == "manual"
+                      and not r.get("page_error") and r.get("scope_status") == "verified"}
+    manual_pages = {r["page"] for r in result["rows"] if (r["status"] == "manual_review" and r.get("qualifies")
+                    or r["id"] in manual_sources) and "record:" + r["id"] in resolutions}
+    manual_markdown = markdown_checks(root, manual_pages) if dist is not None and manual_pages else {}
     outcomes, synced = [], []
     for row in result["rows"]:
         status, reason, display = "pending", row.get("reason", ""), "not_checked"
@@ -262,14 +270,46 @@ def close_run(root, result, report=None, dist=None):
                             raise ValueError("成品未找到派生截至日期")
                     status = "checked_unchanged"
                     synced.append(row)
+                elif row["status"] == "manual_review" and row.get("qualifies") or row["id"] in manual_sources:
+                    closed = resolutions.get("record:" + row["id"], {})
+                    source = row["id"] in manual_sources
+                    if (not isinstance(closed.get("evidence"), str) or not closed["evidence"].strip()
+                            or closed.get("actual_value") is None or str(closed["actual_value"]).strip().lower() in {"", "unknown", "未知", "none", "null"}
+                            or not equal(closed["actual_value"])):
+                        raise ValueError("人工事实缺同轮核对、仍未知或与当前展示值不同")
+                    if source:
+                        observed = datetime.fromisoformat(str(closed.get("source_observed_at")))
+                        checked = datetime.fromisoformat(str(closed.get("checked_at")))
+                        if (not observed.tzinfo or not checked.tzinfo or observed > checked or closed.get("manual_scope_verified") is not True
+                                or not isinstance(closed.get("source_location"), str) or not closed["source_location"].strip()):
+                            raise ValueError("人工来源缺真实时间、位置或逐项口径确认")
+                    elif not (CHINESE_DATE.fullmatch(str(actual)) or valid_time(actual)) or not same_value(str(actual), actual):
+                        raise ValueError("人工日期不是有效日期")
+                    chinese = CHINESE_DATE.fullmatch(str(actual))
+                    if (chinese and not chinese[1] and re.match(r"\d{4}-", str(closed["actual_value"]))
+                            and str(closed["actual_value"])[:4] != str(row.get("date_candidate", ""))[:4]):
+                        raise ValueError("人工日期年份与来源候选不一致")
+                    md, md_path = markdown.get(row["page"], {}), root / "site-astro/src/content/pages" / (row["page"] + ".md")
+                    if (not manual_markdown.get(row["page"]) or md.get("status") != "verified" or not md_path.is_file()
+                            or hashlib.sha256(md_path.read_bytes()).hexdigest() != md.get("sha256")):
+                        raise ValueError("人工日期缺当前作者转换与 Markdown 成功回读")
+                    field = row.get("field", row.get("page_field"))
+                    locator = resolve_author(root, row["page"], field)
+                    parent, key = field_at(json.loads((root / locator["file"]).read_text("utf-8-sig")), locator["field"])
+                    start, end = locate(parent[key], row)
+                    bound, bound_key = field_at(catalog[row["page"]], field)
+                    fragment = display_fragment(parent[key], start, end, bound[bound_key])
+                    proof = dict(locator=dict(locator, logical_field=field, start=start, end=end))
+                    display = display_readback(root, dist, row["page"], fragment, proof)
+                    if display != "verified": raise ValueError("成品未找到人工日期的实际上下文")
+                    status = "manual_source_verified" if source else "manual_review_verified"
+                    reason = "人工已核对作者、Markdown 与成品：" + str(closed["evidence"])
                 elif row["status"] in {"unavailable", "domain_fact_task", "scope_pending"} and row.get("checked_at") and reason and equal(row["old_value"]):
                     status = "unknown_preserved"
             except (OSError, KeyError, ValueError, IndexError, StopIteration) as exc:
                 if dist is not None and row["status"] == "changed": display = "failed"
                 reason = "原位回读失败：" + str(exc)
         outcomes.append(dict(record_id=row["id"], status=status, reason=reason, display_readback=display))
-    resolutions = {r.get("id"): r for r in report.get("manual_closures", [])
-                   if r.get("id") and r.get("run_id") == run_id and valid_time(r.get("checked_at")) and r.get("evidence") and r.get("status") == "completed"}
     tasks = [dict(t, status="completed" if t["id"] in resolutions else "pending")
              for t in selection.partition(result.get("manual_tasks", []))[0]]
     for outcome in outcomes:

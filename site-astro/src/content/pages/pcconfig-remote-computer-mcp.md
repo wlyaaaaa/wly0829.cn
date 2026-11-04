@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig-remote-computer-mcp/page.json",
-  "sha256": "f42b5005fd8e48ecf9a690d783a0334192d438e962ccfbf2b140a09085602f59",
-  "converted_at_beijing": "2026-11-04T12:05:34+08:00"
+  "sha256": "16f9a9b9a45cb38bd6a79910adadb07383c99b900f3c02654fd008050d70d5b3",
+  "converted_at_beijing": "2026-11-04T13:12:24+08:00"
  }
 }
 ---
@@ -666,7 +666,7 @@ PCConfig · 功能说明
 
 4. 手机可继续用原有海外代理，不需要同时启用手机 Tailscale；OpenAI 服务器经公网 HTTPS 调用电脑入口。
 
-5. 两机都要 Windows 已启动、联网且服务可用；维护入口是登录前 SYSTEM 服务，普通桌面操作仍要实际用户登录。物理重启后的未登录验收尚未完成。11 月 4 日 09:11–09:12 主机只读 Status：healthy、maintenance_healthy、interactive_ready 都为 true，SYSTEM 前端加 Session 1 用户工作进程，隔离预热 ready；09:12:50 副机 ComputerContext 实际成功；09:15 主备公网授权元数据都返回 200。这些只说明此刻：物理重启后未登录、普通桌面业务、新的 OAuth 登录和手机原生 App 都没有新的端到端验收；Status 能证明读的是活动检出，不能证明每个后改模块都已加载进进程。
+5. 两机都要 Windows 已启动、联网且服务可用；维护入口是登录前 SYSTEM 服务，普通桌面操作仍要实际用户登录。物理重启后的未登录验收尚未完成。11 月 4 日 11:43 主机只读 Status：healthy、maintenance_healthy、interactive_ready 都为 true，SYSTEM 前端加 Session 1 用户工作进程，隔离预热 ready；09:12:50 副机 ComputerContext 实际成功；09:15 主备公网授权元数据都返回 200。这些只说明各自读取时刻：物理重启后未登录、普通桌面业务、新的 OAuth 登录和手机原生 App 都没有新的端到端验收；Status 能证明读的是活动检出，不能证明每个后改模块都已加载进进程。
 
 6. 先用 ComputerContext 确认目标。副机连接主机叫 main_desktop，主机连接副机叫 secondary_laptop；两边各用自己的规则，不能互相冒充。
 

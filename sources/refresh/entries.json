@@ -134,17 +134,20 @@
   },
   "timeaudit-health": {
     "argv": [
-      "E:/Projects/Tools/TimeAudit/.venv/Scripts/python.exe",
-      "-B",
-      "-c",
-      "import json,timeaudit_health; print(json.dumps(timeaudit_health.build_health(),ensure_ascii=True,allow_nan=False,separators=(\",\",\":\")))"
+      "sudo",
+      "pwsh",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "& 'E:/Projects/Tools/TimeAudit/.venv/Scripts/python.exe' '-B' '-c' 'import json,timeaudit_health; print(json.dumps(timeaudit_health.build_health(),ensure_ascii=True,allow_nan=False,separators=(\",\",\":\")))'"
     ],
     "cwd": "E:/Projects/Tools/TimeAudit",
     "read_only": true,
     "owner_project": "timeaudit",
     "output": "json",
-    "timeout": 15,
-    "observation_basis": "live_read"
+    "timeout": 30,
+    "observation_basis": "live_read",
+    "verification": "原已登记timeaudit_health.build_health()完整只读入口；以sudo pwsh静默管理员启动同一注册Python，保持其原参数，不新增业务动作。避免内存黑匣子CoverageOnly子读取因普通用户视野不足被误报unavailable。"
   },
   "timeaudit-backup-retention": {
     "argv": [
@@ -900,7 +903,7 @@
       "-X",
       "utf8",
       "-c",
-      "import json,re,statistics; from pathlib import Path; r=Path('E:/Projects/Tools/ChineseASR');o=r/'outputs';bad=('acceptance','batch-smoke','benchmark-smoke','closeout','cloud-smoke','e2e','maintenance','quality-acceptance','smoke','strict-','a4-demo','cloud-jobs');hashes=set()\nfor p in o.rglob('*objective-result.json'):\n if not p.relative_to(o).parts[0].startswith(bad):\n  h=json.loads(p.read_text('utf-8-sig')).get('audio',{}).get('raw_sha256')\n  if h: hashes.add(h)\nt=(o/'dictation/runtime.log').read_text('utf-8-sig');elapsed=[float(v) for v in re.findall(r'(?:transcribed[^\\n]*?elapsed_sec=|model[^\\n]*?operation=transcribe[^\\n]*?seconds=)([\\d.]+)',t)]\nmodels=list((r/'models/modelscope').glob('*/*'))+[p for p in (r/'models/firered').iterdir() if (p/'model.pth.tar').is_file()]+[p for p in (r/'models/aligner').iterdir() if p.is_dir()]\nprint(json.dumps({'transcribed':len(hashes),'dictation_median':round(statistics.median(elapsed),2),'dictation_samples':len(elapsed),'models':sum(p.is_dir() for p in models),'models_gib':round(sum(p.stat().st_size for p in (r/'models').rglob('*') if p.is_file())/1024**3,1),'cloud_success':sum(json.loads(p.read_text('utf-8-sig')).get('status')=='succeeded' for p in (o/'cloud-jobs').glob('*.result.json'))}))\n"
+      "import json,re,statistics; from pathlib import Path; r=Path('E:/Projects/Tools/ChineseASR');o=r/'outputs';bad=('acceptance','batch-smoke','benchmark-smoke','closeout','cloud-smoke','e2e','maintenance','quality-acceptance','smoke','strict-','a4-demo','cloud-jobs');hashes=set()\nfor p in o.rglob('*objective-result.json'):\n if not p.relative_to(o).parts[0].startswith(bad):\n  h=json.loads(p.read_text('utf-8-sig')).get('audio',{}).get('raw_sha256')\n  if h: hashes.add(h)\nt=(o/'dictation/runtime.log').read_text('utf-8-sig');elapsed=[float(v) for v in re.findall(r'(?:transcribed[^\\n]*?elapsed_sec=|model[^\\n]*?operation=transcribe[^\\n]*?seconds=)([\\d.]+)',t)]\nmodels=list((r/'models/modelscope').glob('*/*'))+[p for p in (r/'models/firered').iterdir() if (p/'model.pth.tar').is_file()]+[p for p in (r/'models/aligner').iterdir() if p.is_dir()]\nprint(json.dumps({'transcribed':len(hashes),'dictation_median':round(statistics.median(elapsed),2),'dictation_samples':len(elapsed),'models':sum(p.is_dir() for p in models),'models_gib':round(sum(p.stat().st_size for p in (r/'models').rglob('*') if p.is_file())/1024**3,1),'cloud_total':len(list((o/'cloud-jobs').glob('*.result.json'))),'cloud_failed':sum(json.loads(p.read_text('utf-8-sig')).get('status')=='failed' for p in (o/'cloud-jobs').glob('*.result.json')),'cloud_blocked':sum(json.loads(p.read_text('utf-8-sig')).get('status')=='blocked' for p in (o/'cloud-jobs').glob('*.result.json')),'cloud_success':sum(json.loads(p.read_text('utf-8-sig')).get('status')=='succeeded' for p in (o/'cloud-jobs').glob('*.result.json'))}))\n"
     ],
     "cwd": "E:/Projects/Tools/ChineseASR",
     "read_only": true,
@@ -1799,14 +1802,14 @@
       "-X",
       "utf8",
       "-c",
-      "import json,re,subprocess,datetime\nfrom pathlib import Path\np=Path(r\"V:/Personal/Projects/phone-collector\")\ns=(p/\"app/src/main/java/cn/wly/collector/CollectorRuntime.kt\").read_text(encoding=\"utf-8\")\nsteps_source=(p/\"app/src/main/java/cn/wly/collector/CollectorEngine.kt\").read_text(encoding=\"utf-8\")\ngroups=set(re.findall(r'step\\(steps, \"([A-Za-z]+)\"\\)',steps_source)) - {\"exportPending\"}\nassert \"store.append(\\\"runs\\\"\" in steps_source and {\"location\",\"usage\",\"packages\",\"exits\"}<=groups,\"source_output_groups_unknown\"\nm=re.findall(r\"\\.setPeriodic\\((\\d+) \\* 60_000L\\)\",s)\nassert len(m)==1,\"periodic_interval_ambiguous\"\ns2=Path(r\"E:/PCConfig/tools/Manage-PhonePersonalOSPull.ps1\").read_text(encoding=\"utf-8-sig\")\nm2=re.findall(r\"else \\{ New-ScheduledTaskTrigger[^\\n]*FromMinutes\\((\\d+)\\)\\)\",s2)\nassert len(m2)==1,\"pull_interval_ambiguous\"\nraw=subprocess.check_output([\"git\",\"-C\",str(p),\"log\",\"-1\",\"--format=%cI\"],text=True).strip()\nd=datetime.datetime.fromisoformat(raw).astimezone(datetime.timezone(datetime.timedelta(hours=8)))\nprint(json.dumps({\"data_groups\":len(groups),\"phone_period_minutes\":int(m[0]),\"pc_pull_minutes\":int(m2[0]),\"last_update\":d.strftime(\"%Y-%m-%d\")}))"
+      "import json,re,subprocess,datetime\nfrom pathlib import Path\np=Path(r\"V:/Personal/Projects/phone-collector\")\ns=(p/\"app/src/main/java/cn/wly/collector/CollectorRuntime.kt\").read_text(encoding=\"utf-8\")\nsteps_source=(p/\"app/src/main/java/cn/wly/collector/CollectorEngine.kt\").read_text(encoding=\"utf-8\")\ngroups=set(re.findall(r'step\\(steps, \"([A-Za-z]+)\"\\)',steps_source)) - {\"exportPending\"}\nassert \"store.append(\\\"runs\\\"\" in steps_source and {\"location\",\"usage\",\"packages\",\"exits\"}<=groups,\"source_output_groups_unknown\"\nm=re.findall(r\"\\.setPeriodic\\((\\d+) \\* 60_000L\\)\",s)\nassert len(m)==1,\"periodic_interval_ambiguous\"\ns2=Path(r\"E:/PCConfig/tools/Manage-PhonePersonalOSPull.ps1\").read_text(encoding=\"utf-8-sig\")\nm2=re.findall(r\"else \\{ New-ScheduledTaskTrigger[^\\n]*FromMinutes\\((\\d+)\\)\\)\",s2)\nassert len(m2)==1,\"pull_interval_ambiguous\"\nraw=subprocess.check_output([\"git\",\"-C\",str(p),\"log\",\"-1\",\"--format=%cI\"],text=True).strip()\nd=datetime.datetime.fromisoformat(raw).astimezone(datetime.timezone(datetime.timedelta(hours=8)))\ngradle=(p/\"app/build.gradle.kts\").read_text(encoding=\"utf-8\")\nversion=re.findall(r'versionName\\s*=\\s*\"([^\"]+)\"',gradle);version_code=re.findall(r'versionCode\\s*=\\s*(\\d+)',gradle)\nassert len(version)==len(version_code)==1,\"gradle_version_ambiguous\"\nprint(json.dumps({\"version_name\":version[0],\"version_code\":int(version_code[0]),\"data_groups\":len(groups|{\"runs\"}),\"phone_period_minutes\":int(m[0]),\"pc_pull_minutes\":int(m2[0]),\"last_update\":d.strftime(\"%Y-%m-%d\")}))"
     ],
     "cwd": "E:/PCConfig",
     "read_only": true,
     "owner_project": "phone-collector",
     "output": "json",
     "timeout": 20,
-    "source_evidence": "只读手机App周期源码、电脑现行任务注册源码及Git提交时间，不连手机、不读取定位/使用/装机记录、不安装或运行采集。",
+    "source_evidence": "只读手机App周期源码、电脑现行任务注册源码及Git提交时间，不连手机、不读取定位/使用/装机记录、不安装或运行采集。；data_groups把独立store.append(\"runs\")算入，Kotlin五个step输出加运行共六类；版本只读build.gradle.kts唯一versionName/versionCode。",
     "observation_basis": "live_read"
   },
   "pc-panel-heartbeat-admin": {
@@ -1860,5 +1863,215 @@
     "timeout": 20,
     "source_evidence": "仅固定Git或gh api元数据、Skill方法常量或Get-ScheduledTask/Info读取；无提交标题、财务快照、账单、业务采集或写入；stdout仅给网站所需方法常量和状态。",
     "observation_basis": "live_read"
+  },
+  "b2-daily-source-status-counts": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import subprocess,json\na=[\"python\",\"-B\",\"-X\",\"utf8\",\"V:/Personal/Projects/daily-preferences/daily_preferences.py\",\"status\",\"--json\",\"--privacy-level\",\"screen\"]\nx=json.loads(subprocess.check_output(a,encoding=\"utf-8\",timeout=35,creationflags=getattr(subprocess,\"CREATE_NO_WINDOW\",0)))\nprint(json.dumps({\"missing\":len(x[\"missing_logical_sources\"]),\"excluded\":len(x[\"excluded_logical_sources\"]),\"silent\":len(x[\"source_freshness\"][\"silent\"])}))"
+    ],
+    "cwd": "V:/Personal/Projects/daily-preferences",
+    "read_only": true,
+    "owner_project": "daily-preferences",
+    "output": "json",
+    "timeout": 40,
+    "observation_basis": "live_read",
+    "verification": "已读daily_preferences.py status:7859起和connect_read_only:868起：正式status只用只读连接与SELECT/只读派生，无采集或导入。内存接收正式screen状态后只输出missing/excluded/silent长度，不输出来源、原话、卡片正文，不写库。"
+  },
+  "b2-pcconfig-live-task-counts": {
+    "argv": [
+      "sudo",
+      "pwsh",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "$ErrorActionPreference='Stop'; $x=(& 'E:/PCConfig/tools/scan_tasks.ps1' -NoWrite -Json -IncludeRuntime | ConvertFrom-Json -Depth 50 -DateKind String); if(-not $x.observer_elevated -or -not $x.task_visibility_complete){throw 'full_visibility_required'}; $t=@($x.scheduled_tasks); $c=(Get-Content -LiteralPath 'E:/PCConfig/registries/task_purpose_catalog.json' -Raw -Encoding utf8 | ConvertFrom-Json -Depth 50).entries; $ids=@{}; foreach($item in $c){if($item.source -eq 'windows'){$ids[([string]$item.task_path+'|'+[string]$item.task_name)]=$true}}; $described=@($t | Where-Object {$ids.ContainsKey(([string]$_.task_path+'|'+[string]$_.task_name))}).Count; [ordered]@{observed_utc=$x.observed_utc;total=$t.Count;described=$described;unregistered=($t.Count-$described);enabled=@($t | Where-Object enabled).Count;disabled=@($t | Where-Object {-not $_.enabled}).Count} | ConvertTo-Json -Compress"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "pcconfig",
+    "output": "json",
+    "timeout": 80,
+    "observation_basis": "snapshot_timestamp",
+    "source_observed_at_pointer": [
+      "observed_utc"
+    ],
+    "verification": "已读scan_tasks.ps1参数及输出控制流：-NoWrite互斥于-Write，现役WindowsTaskScheduler只读扫描，IncludeRuntime只读取任务运行元数据；先静默sudo，全可见与管理员两标志必须true。仅输出同一筛选范围总/开/停和真实observed_utc，不写登记、不运行任务、不输出任务参数或原始行。"
+  },
+  "b2-materials-maintenance-counts": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json\nfrom pathlib import Path\nx=json.loads(Path(\"G:/80_Backup/ControlPlane/personal-replica-hot-last.json\").read_text(\"utf-8-sig\"));s=[s for s in x[\"maintenance_steps\"] if s[\"id\"]==\"materials_sync_current\"];assert len(s)==1,\"maintenance_step_ambiguous\";s=s[0]\nprint(json.dumps({\"partial_sources\":len(s[\"summary\"][\"filename_index_partial_sources\"]),\"completed_utc\":s[\"completed_utc\"]}))"
+    ],
+    "cwd": "V:/Personal/Projects/personal-materials",
+    "read_only": true,
+    "owner_project": "personal-materials",
+    "output": "json",
+    "timeout": 10,
+    "observation_basis": "snapshot_timestamp",
+    "source_observed_at_pointer": [
+      "completed_utc"
+    ],
+    "verification": "标准库只读已有personal-replica-hot-last.json并唯一选择materials_sync_current，输出summary.filename_index_partial_sources的长度及同一完成时刻；不读来源条目、不跑维护，不把complete当清单完整。"
+  },
+  "b2-flyingbird-clash-metadata": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,yaml\nfrom pathlib import Path\np=Path(\"C:/Users/10979/AppData/Roaming/io.github.clash-verge-rev.clash-verge-rev/profiles.yaml\");x=yaml.safe_load(p.read_text(\"utf-8-sig\"));s=[i for i in x[\"items\"] if i.get(\"uid\")==\"RMV4hODZqOqL\"];assert len(s)==1,\"flyingbird_profile_ambiguous\";s=s[0];m=s[\"option\"][\"update_interval\"];assert isinstance(m,int) and m>0 and m%60==0,\"native_interval_not_whole_hours\"\nprint(json.dumps({\"interval_minutes\":m,\"interval_hours\":m//60,\"allow_auto_update\":s[\"option\"][\"allow_auto_update\"],\"updated\":s.get(\"updated\")}))"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "pcconfig",
+    "output": "json",
+    "timeout": 10,
+    "observation_basis": "live_read",
+    "verification": "只读现有Clash profiles.yaml，用已登记飞鸟UID唯一选择，仅读option.allow_auto_update/update_interval及updated；不访问订阅URL、不读凭据值、不请求桥、不改Clash配置、不证明已加载或下一次排期。"
+  },
+  "b2-timeaudit-receipt-times": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,datetime\nfrom pathlib import Path\np=Path(\"E:/Projects/Tools/TimeAudit/log/backup-history.jsonl\");rows=[json.loads(l) for l in p.read_text(\"utf-8-sig\").splitlines() if l.strip()];done=[x for x in rows if x.get(\"status\")==\"pass\" and x.get(\"completed_at\")];assert done,\"no_completed_backup\";last=max(done,key=lambda x:datetime.datetime.fromisoformat(x[\"completed_at\"]))\ntz=datetime.timezone(datetime.timedelta(hours=8));ds=datetime.datetime.fromisoformat(last[\"started_at\"]).astimezone(tz);dc=datetime.datetime.fromisoformat(last[\"completed_at\"]).astimezone(tz)\nc=json.loads(Path(\"G:/80_Backup/TimeAudit/ClipboardHistory/backup-last-run.json\").read_text(\"utf-8-sig\"));power=json.loads(Path(\"E:/Projects/Tools/TimeAudit/log/power-today.json\").read_text(\"utf-8-sig\"))\nprint(json.dumps({\"last_completed_backup\":last[\"completed_at\"],\"last_started_backup\":last[\"started_at\"],\"last_completed_hms\":dc.strftime(\"%H:%M:%S\"),\"last_exit_code\":last[\"exit_code\"],\"completed_window\":f\"{ds.month} 月 {ds.day} 日 {ds:%H:%M:%S}—{dc:%H:%M:%S}\" if ds.date()==dc.date() else f\"{ds.month} 月 {ds.day} 日 {ds:%H:%M:%S}—{dc.month} 月 {dc.day} 日 {dc:%H:%M:%S}\",\"clipboard_backup_created\":datetime.datetime.fromtimestamp(c[\"created_at_unix_ms\"]/1000,datetime.timezone.utc).isoformat(),\"power_written_at\":power[\"written_at\"]}))"
+    ],
+    "cwd": "E:/Projects/Tools/TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 10,
+    "observation_basis": "live_read",
+    "verification": "标准库只读3份已存在生产者元数据：backup-history.jsonl筛status=pass且completed_at非空并按真实完成事件取最近，ClipboardHistory备份created_at_unix_ms转UTC ISO，power-today.written_at原串。不读数据库或用电值、不跑备份或恢复，不拿正在运行一轮的开始时间替换上一轮完成。"
+  },
+  "b2-cockpit-current-counts": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,urllib.request\nx=json.load(urllib.request.urlopen(\"http://127.0.0.1:18793/computer-access/api/status?view=cockpit\",timeout=12));assert x[\"schema\"]==\"pcconfig.cockpit-view.v1\",\"cockpit_schema_changed\"\ndef task(n):\n a=[i for i in x[\"automation\"][\"items\"] if i[\"name\"]==n];assert len(a)==1,\"task_identity_ambiguous\";return a[0]\nd=task(\"文档文件夹备份\");c=task(\"第二备份盘同步\");b=[i for i in x[\"sections\"][\"backup_cloud\"] if i[\"id\"]==\"backups\"];assert len(b)==1,\"backup_summary_ambiguous\";b=b[0]\nprint(json.dumps({\"observed_at\":x[\"collected_at\"],\"documents_failed_7d\":d[\"failures_7d\"],\"cold_failed_7d\":c[\"failures_7d\"],\"owner_count\":x[\"counts\"][\"need_you\"],\"reply_count\":sum(i.get(\"card_type\")==\"question\" for i in x[\"need_you\"]),\"cooperate_count\":sum(i.get(\"ask_kind\")==\"cooperate\" for i in x[\"need_you\"]),\"deferred_count\":x[\"counts\"][\"deferred\"],\"backups_ok\":b[\"items_ok\"],\"backups_total\":b[\"items_total\"]}))"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "pcconfig",
+    "output": "json",
+    "timeout": 20,
+    "observation_basis": "snapshot_timestamp",
+    "source_observed_at_pointer": [
+      "observed_at"
+    ],
+    "verification": "现有本机状态接口GET、不加refresh或认证写动作，schema必须pcconfig.cockpit-view.v1；按任务公开名唯一选择文档/第二备份盘，仅读failures_7d；仅读需要你/暂缓聚合数和backups.items_ok/items_total，不输出任何任务正文、私人内容或凭据，不运行任务。"
+  },
+  "b2-core-cold-receipt-counts": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json\nfrom pathlib import Path\nx=json.loads((Path.home()/\"AppData/Local/PCConfig/core-recovery/cold-last.json\").read_text(\"utf-8-sig\"));a=x[\"cold_result\"][\"results\"];print(json.dumps({\"started_utc\":x[\"started_utc\"],\"completed_utc\":x[\"completed_utc\"],\"total\":len(a),\"complete\":sum(i.get(\"status\")==\"complete\" for i in a)}))"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "pcconfig",
+    "output": "json",
+    "timeout": 10,
+    "observation_basis": "snapshot_timestamp",
+    "source_observed_at_pointer": [
+      "completed_utc"
+    ],
+    "verification": "只读既有core-recovery/cold-last.json的同轮started/completed及cold_result.results总数/status=complete个数，不读文件名/正文，不执行同步，不把部分完成转成整轮通过。"
+  },
+  "b2-pc-panel-trust-counts": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,urllib.request,datetime\nx=json.load(urllib.request.urlopen(\"http://127.0.0.1:18766/snapshot\",timeout=10));t=x[\"trust\"];stamp=x[\"timestamp_unix_ms\"];assert isinstance(stamp,(int,float)) and stamp>0,\"snapshot_timestamp_missing\"\nprint(json.dumps({\"score\":t[\"score\"],\"level\":t[\"level\"],\"missing_count\":t[\"missing_count\"],\"fallback_count\":t[\"fallback_count\"],\"stale_count\":t[\"stale_count\"],\"fps_status\":x.get(\"fps\",{}).get(\"status\",x.get(\"fps\",{}).get(\"capture_status\")),\"weather_status\":x.get(\"weather\",{}).get(\"status\"),\"observed_at\":datetime.datetime.fromtimestamp(stamp/1000,datetime.timezone.utc).isoformat()}))"
+    ],
+    "cwd": "E:/Projects/Tools/TURZX-SideScreen",
+    "read_only": true,
+    "owner_project": "pc-panel-hub",
+    "output": "json",
+    "timeout": 15,
+    "observation_basis": "snapshot_timestamp",
+    "source_observed_at_pointer": [
+      "observed_at"
+    ],
+    "verification": "现役本机18766/snapshot只读GET；内存解析后只输出trust.score/level/missing_count/fallback_count/stale_count和timestamp_unix_ms转成的真实ISO时间，不输出前台、进程排行、位置、网卡名或天气值，不启动/重启/改配置。 同一次GET另只投影fps.status/capture_status和weather.status，缺值不猜；不读取天气内容或FPS数值。"
+  },
+  "b2-devconfig-readonly-status": {
+    "argv": [
+      "sudo",
+      "pwsh",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "$ErrorActionPreference='Stop'; $x=(& 'E:/Projects/Backups/devconfig-backup/Backup-Status.ps1' -NoDrive -Json | ConvertFrom-Json -Depth 80 -DateKind String); if($x.write_mode -ne 'zero_write'){throw 'status_write_mode_changed'}; [ordered]@{observed_utc=$x.observed_utc;status=$x.status;completed_count=@($x.last_attempts | Where-Object {$_.status -in @('complete','complete_with_skipped_files')}).Count;wechat_drive_status=(@($x.last_attempts | Where-Object task_kind -eq 'wechat-drive') | Select-Object -First 1).status} | ConvertTo-Json -Compress"
+    ],
+    "cwd": "E:/Projects/Backups/devconfig-backup",
+    "read_only": true,
+    "owner_project": "devconfig-backup",
+    "output": "json",
+    "timeout": 40,
+    "observation_basis": "snapshot_timestamp",
+    "source_observed_at_pointer": [
+      "observed_utc"
+    ],
+    "verification": "已读Backup-Status.ps1:21–71及NoDrive分支，正式-NoDrive -Json只核已有生产回执/清单，不联网、不重散列全载荷、不刷新OAuth；强制write_mode=zero_write。管理员完整读取Scheduler，仅返回生成时间、总体状态、最近四项完成个数与微信上云状态，不输出路径或文件警告正文，不执行备份。"
+  },
+  "b2-timeaudit-diagnostic-window-time": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,subprocess\na=[\"E:/Projects/Tools/TimeAudit/.venv/Scripts/python.exe\",\"-B\",\"E:/Projects/Tools/TimeAudit/timeaudit_diagnostic_summary.py\",\"--hours\",\"1\"];x=json.loads(subprocess.check_output(a,encoding=\"utf-8\",timeout=45,creationflags=getattr(subprocess,\"CREATE_NO_WINDOW\",0)));assert x[\"status\"]==\"ok\",\"diagnostic_summary_unavailable\"\nprint(json.dumps({\"generated_at_utc\":x[\"generated_at_utc\"],\"window_end_utc\":x[\"window\"][\"until_inclusive_utc\"]}))"
+    ],
+    "cwd": "E:/Projects/Tools/TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 50,
+    "observation_basis": "snapshot_timestamp",
+    "source_observed_at_pointer": [
+      "generated_at_utc"
+    ],
+    "verification": "正式timeaudit_diagnostic_summary.py --hours 1为现有有界只读聚合，源码585–624限制时间窗并只query_aggregate；输出只有该次真实generated时间与window终点，不输出进程、窗口名、活动正文或指标值，不写库、不做采集/修复。"
+  },
+  "b2-news-quickcheck-last-source-change": {
+    "argv": [
+      "git",
+      "-C",
+      "E:/.agents",
+      "log",
+      "-1",
+      "--format={\"changed_at\":\"%cI\"}",
+      "--",
+      "skills/news-quickcheck"
+    ],
+    "cwd": "E:/.agents",
+    "read_only": true,
+    "owner_project": "agents",
+    "output": "json",
+    "timeout": 10,
+    "observation_basis": "live_read",
+    "verification": "git log只读当前技能源码目录最近可达提交的原时区%cI，仅输出事件时间；不读浏览器会话或账号、不运行搜索技能，不改源码。"
   }
 }
