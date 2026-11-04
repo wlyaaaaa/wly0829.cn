@@ -37,6 +37,8 @@ python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发�
 - 每轮默认最多核对 1000 个受管候选，使用已有 8 路并发查询，可用 `--retention-max-keys` 调整；超出的对象留待下次单独清理。已核实不存在或已删的受管登记同步移除，不重复查询空对象。退役结果和预演分别写 `oss-retention.json`、`oss-retention-plan.json`。清理命令返回 `retention_complete` 或 `retention_incomplete`，残留只让清理命令退出 1，不改已上线的发布结果；可加 `--dry-run` 仅查询计划，返回 `retention_dry_run`，有未完成项仍非零退出。发布失败、仅上传或发布预演均不触发清理。
 - 沿用已有 `aliyun ossutil` 的 `website-images` 配置，程序不读取、复制或记录凭据内容。没有新增 CDN 刷新步骤，既有被替换的发布链也没有这一步。
 
+经本人明确批准退役、从回滚保留中排除的精确对象，在原回滚记录的 `retired_objects` 中保存原大小与内容指纹；只有引用地址的项保留原来的空记录。重读冻结前版时逐项核对这些原始记录后再扣除，不改原清单或其哈希，也不把退役对象重新加入保留集。
+
 正式发布默认延后清理，不必再加参数。`--skip-retention` 保留兼容性，显式使用时回执记录 `skipped_by_request` 和删除数 0；它同样不在发布内清理。发布回执中的 `oss_retention.command` 给出后续独立命令，清理失败不把已上线状态改成发布失败。
 
 每次运行在输出目录写 `publish-receipt.json`，包含逐步秒数、计划与实际传输文件数和字节数、HEAD/GET 结果、部署标识及失败原因。默认输出是 `E:\Cache\wly-site-build\publish-runs` 下的唯一目录，`--output <新目录>` 可另指定。失败回执保留，不把上传完成当成发布成功。独立旧资源清理成功后，默认目录按目录名时间保留最近 3 个运行目录，并额外保留当前 `published.json` 所指提交的目录；清理未成功时不触发目录收纳。目录保留不改变 OSS 对象退役规则。

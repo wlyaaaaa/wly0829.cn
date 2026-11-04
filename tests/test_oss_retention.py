@@ -319,5 +319,33 @@ class RetentionTests(unittest.TestCase):
             snapshot.write_text('{}')
             with self.assertRaisesRegex(ValueError, 'snapshot changed'): retention.rollback_keep(self.preparation, plan)
 
+    def test_explicit_retired_objects_keep_frozen_fingerprint_checks(self):
+        snapshot = self.preparation/'previous-publication.json'
+        retention.write(snapshot, {'release_id': 'old', 'oss': {'asset_base_url': retention.BASE,
+            'objects': {'old.js': {'key': self.obsolete, **self.fingerprint},
+                        'kept.js': {'key': self.keep, **self.fingerprint}}, 'reference_keys': [self.pending]}})
+        plan = {'previous_publication_sha256': retention.digest(snapshot)}
+        inventory = self.shared/'rollback-retention.json'
+        with patch.object(retention, 'shared', return_value=self.shared), \
+             patch.object(retention, 'oss_contract', return_value=SimpleNamespace(verify_manifest=lambda value: value)):
+            self.assertEqual(retention.rollback_keep(self.preparation, plan, 'same'), {self.keep, self.obsolete, self.pending})
+            state = retention.read(inventory); record = state['records'][plan['previous_publication_sha256']]
+            record['retired_objects'] = {key: record['objects'].pop(key) for key in (self.obsolete, self.pending)}
+            retention.write(inventory, state)
+            self.assertEqual(retention.rollback_keep(self.preparation, plan, 'same'), {self.keep})
+            self.assertEqual(retention.read(inventory)['records'], state['records'])
+            self.assertEqual(retention.digest(snapshot), plan['previous_publication_sha256'])
+            self.assertEqual(retention.rollback_keep(self.preparation, plan, 'next'), {self.keep})
+            state = retention.read(inventory)
+            for bad in ('fingerprint', 'unknown_key', 'overlap', 'shape'):
+                invalid = json.loads(json.dumps(state)); entry = invalid['records'][plan['previous_publication_sha256']]
+                if bad == 'fingerprint': entry['retired_objects'][self.obsolete]['bytes'] += 1
+                elif bad == 'unknown_key': entry['retired_objects']['releases/unknown/x.js'] = {}
+                elif bad == 'overlap': entry['objects'][self.obsolete] = entry['retired_objects'][self.obsolete]
+                else: entry['retired_objects'] = []
+                retention.write(inventory, invalid)
+                with self.subTest(bad=bad), self.assertRaises(ValueError):
+                    retention.rollback_keep(self.preparation, plan, 'same')
+
 
 if __name__ == '__main__': unittest.main()

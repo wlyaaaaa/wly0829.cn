@@ -104,6 +104,10 @@ def rollback_keep(preparation, plan, commit=None, persist=True):
     state = read(path) if path.exists() else {'schema': 'wly.oss-rollback-retention.v1', 'bucket': BUCKET, 'records': {}}
     if state.get('schema') != 'wly.oss-rollback-retention.v1' or state.get('bucket') != BUCKET:
         raise ValueError('Unknown rollback retention inventory; collection is incomplete')
+    for record in state['records'].values():
+        retired = record.get('retired_objects', {})
+        if not isinstance(retired, dict) or set(retired) & set(record.get('objects', {})):
+            raise ValueError('Unknown or contradictory retired rollback objects')
     now = datetime.now(timezone.utc)
     snapshot_sha = plan.get('previous_publication_sha256')
     if snapshot_sha:
@@ -117,6 +121,10 @@ def rollback_keep(preparation, plan, commit=None, persist=True):
         for key in previous['oss'].get('reference_keys', []):
             objects.setdefault(key, {})
         record = state['records'].get(snapshot_sha)
+        for key, proof in (record or {}).get('retired_objects', {}).items():
+            if key not in objects or objects[key] != proof:
+                raise ValueError('Retired previous publication object differs: ' + key)
+            del objects[key]
         if record and record.get('objects', objects) != objects:
             raise ValueError('Frozen previous publication objects changed')
         if not record:
