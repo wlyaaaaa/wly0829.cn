@@ -41,12 +41,12 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-29 08:03"
+    "at": "2026-11-03 10:45"
    },
    "facts": [
     "近 7 天改进了 10 次"
    ],
-   "as_of": "2026-11-02",
+   "as_of": "2026-11-03",
    "source": "AI 使用记录；项目修改记录"
   },
   "public": false,
@@ -443,8 +443,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "c88f4faff04c9ab34b7daeb0130a1d3b37757188da393d27898cf683224cfe0e",
-  "converted_at_beijing": "2026-11-04T13:12:25+08:00"
+  "sha256": "7e8bf9748ee6d1e3cfdadaf48f3cee6fce0a700f15eee2fc9cbfbc50e12b9c37",
+  "converted_at_beijing": "2026-11-04T14:40:04+08:00"
  }
 }
 ---
@@ -495,7 +495,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 29 日 08:03",
+       "text": "常用 · 上次使用 11 月 3 日 10:45",
        "state": "ok"
       },
       {
@@ -503,7 +503,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录；项目修改记录",
+     "static_note": "截至 11 月 3 日 · AI 使用记录；项目修改记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -569,7 +569,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 29 日 08:03",
+       "text": "常用 · 上次使用 11 月 3 日 10:45",
        "state": "ok"
       },
       {
@@ -577,7 +577,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录；项目修改记录"
+     "static_note": "截至 11 月 3 日 · AI 使用记录；项目修改记录"
     },
     {
      "type": "stat_card",
@@ -1908,7 +1908,8 @@ Python 写成：主程序 1,879 行（不算空行），另用共用的检查模
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {

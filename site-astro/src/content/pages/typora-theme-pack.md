@@ -285,8 +285,7 @@
       "typora-theme-pack-01",
       "typora-theme-pack-05",
       "typora-theme-pack-07",
-      "typora-theme-pack-09",
-      "typora-theme-pack-10"
+      "typora-theme-pack-09"
      ]
     },
     {
@@ -457,8 +456,8 @@
  },
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
-  "sha256": "b140301f2dfa830fbe78bb223b70f0808b4a8481b585d134fc02a96c7ef38ee5",
-  "converted_at_beijing": "2026-11-04T12:05:41+08:00"
+  "sha256": "b50b795ef4d2d47af7efb5009a3b3da6225fd7c91fb347f1919ee4647426ea35",
+  "converted_at_beijing": "2026-11-04T15:41:49+08:00"
  }
 }
 ---
@@ -1423,7 +1422,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
   "screenshots": [],
   "chain": "",
   "reuse": "",
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -1892,7 +1891,8 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -2366,7 +2366,8 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
   "live": [],
   "screenshots": [],
   "chain": "",
-  "reuse": ""
+  "reuse": "",
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {

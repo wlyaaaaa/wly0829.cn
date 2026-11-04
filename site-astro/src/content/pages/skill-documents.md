@@ -40,7 +40,7 @@
     "10 月 18—24 日 AI 用了 0 次",
     "Codex 自带插件，11 月 4 日核对本机可用的是 26.1103.10131 版"
    ],
-   "as_of": "2026-10-21",
+   "as_of": "2026-11-03",
    "source": "AI 使用记录和本机插件目录"
   },
   "public": false,
@@ -358,8 +358,8 @@
  },
  "source": {
   "page": "sources/pages/skill-documents/page.json",
-  "sha256": "3ad389b7aa5f11f907a9836cd5c47454d0b4a6a76136d9d864382ab26e2901f7",
-  "converted_at_beijing": "2026-11-04T12:05:38+08:00"
+  "sha256": "b05e74e2ecef7a4f44a3e27d2c8a87af2720946770b198c162fd208ccba85e3b",
+  "converted_at_beijing": "2026-11-04T15:34:55+08:00"
  }
 }
 ---
@@ -434,7 +434,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 21 日 · AI 使用记录和本机插件目录",
+     "static_note": "截至 11 月 3 日 · AI 使用记录和本机插件目录",
      "row": "hero"
     },
     {
@@ -517,7 +517,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 21 日 · AI 使用记录和本机插件目录"
+     "static_note": "截至 11 月 3 日 · AI 使用记录和本机插件目录"
     },
     {
      "type": "prose",

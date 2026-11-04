@@ -284,6 +284,14 @@ class FreshnessTests(unittest.TestCase):
         self.write(self.root / "snapshot.json", dict(count=3))
         result = self.collect()
         self.assertEqual(close_run(self.root, result)["rows"][0]["status"], "unknown_preserved")
+        row = dict(result["rows"][0], automatic=False, retrieve=dict(kind="manual"), scope_status="verified")
+        manual = dict(result, rows=[row])
+        self.assertEqual(close_run(self.root, manual)["rows"][0]["status"], "unknown_preserved")
+        invalid = dict(run_id=result["run_id"], manual_closures=[dict(id="record:" + row["id"], run_id="wrong")])
+        self.assertEqual(close_run(self.root, manual, invalid)["rows"][0]["status"], "pending")
+        self.assertEqual(close_run(self.root, dict(manual, rows=[dict(row, raw_status="changed", raw_new_value=4)]))["rows"][0]["status"], "pending")
+        self.assertEqual(close_run(self.root, dict(manual, rows=[dict(row, manual_closure_required=True)]))["rows"][0]["status"], "pending")
+        self.assertEqual(close_run(self.root, dict(manual, rows=[dict(row, status="manual_review", qualifies=["n"])]))["rows"][0]["status"], "pending")
         result["rows"][0]["checked_at"] = None
         self.assertEqual(close_run(self.root, result)["status"], "incomplete")
 

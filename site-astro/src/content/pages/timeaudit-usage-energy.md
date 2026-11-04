@@ -31,7 +31,7 @@
    "source": "项目仓库和用电回执",
    "last": {
     "label": "用电回执",
-    "at": "2026-11-04 09:00"
+    "at": "2026-11-04 13:20"
    }
   },
   "based_on": {
@@ -41,8 +41,8 @@
  },
  "source": {
   "page": "sources/pages/timeaudit-usage-energy/page.json",
-  "sha256": "393dbf1f9991f4839b569e5ab75dd4ee52fc0ddf8cb15ce4b068913c9f97491b",
-  "converted_at_beijing": "2026-11-04T12:05:41+08:00"
+  "sha256": "c0df5d45f8878d1f0edc6c61635a6344b5a6dc5cea3b17a137d9663441af56a4",
+  "converted_at_beijing": "2026-11-04T14:39:52+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 用电回执 11 月 4 日 09:00",
+       "text": "常用 · 用电回执 11 月 4 日 13:20",
        "state": "ok"
       }
      ],
@@ -134,7 +134,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 用电回执 11 月 4 日 09:00",
+       "text": "常用 · 用电回执 11 月 4 日 13:20",
        "state": "ok"
       }
      ],

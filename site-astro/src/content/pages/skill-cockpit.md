@@ -34,10 +34,10 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-11-02 22:51"
+    "at": "2026-11-03 21:51"
    },
    "facts": [],
-   "as_of": "2026-11-02",
+   "as_of": "2026-11-03",
    "source": "AI 使用记录"
   },
   "public": false,
@@ -122,8 +122,8 @@
  },
  "source": {
   "page": "sources/pages/skill-cockpit/page.json",
-  "sha256": "9a9e24de85267bcd58b0f22f04938cab2f90095938b5b46b3f9d312277185550",
-  "converted_at_beijing": "2026-11-04T12:05:38+08:00"
+  "sha256": "00841adf4494f849eede5335349de44bedc1582328bbadee2b26bb6c510310e4",
+  "converted_at_beijing": "2026-11-04T14:39:50+08:00"
  }
 }
 ---
@@ -167,11 +167,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 11 月 2 日 22:51",
+       "text": "常用 · 上次使用 11 月 3 日 21:51",
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录",
+     "static_note": "截至 11 月 3 日 · AI 使用记录",
      "row": "hero"
     },
     {
@@ -230,11 +230,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 11 月 2 日 22:51",
+       "text": "常用 · 上次使用 11 月 3 日 21:51",
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录"
+     "static_note": "截至 11 月 3 日 · AI 使用记录"
     },
     {
      "type": "prose",

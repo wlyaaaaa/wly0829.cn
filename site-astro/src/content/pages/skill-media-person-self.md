@@ -34,12 +34,12 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-11 17:48"
+    "at": "2026-10-31 15:37"
    },
    "facts": [
-    "上次记录未用过；现在的七日次数没取到"
+    "10 月 28 日—11 月 3 日 AI 用了 3 次"
    ],
-   "as_of": "2026-10-20",
+   "as_of": "2026-11-03",
    "source": "AI 使用记录"
   },
   "public": false,
@@ -100,8 +100,8 @@
  },
  "source": {
   "page": "sources/pages/skill-media-person-self/page.json",
-  "sha256": "df6c966a5d81de81b1dd6b98c2060f9cc787410d05ea1130621762da3ba51af5",
-  "converted_at_beijing": "2026-11-04T12:05:39+08:00"
+  "sha256": "86ebaf1a4457a72ef14b0032ad28bf779b6527c7f6ca8c95563db854cbc505b6",
+  "converted_at_beijing": "2026-11-04T15:34:55+08:00"
  }
 }
 ---
@@ -139,15 +139,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 11 日 17:48",
+       "text": "偶尔用 · 上次使用 10 月 31 日 15:37",
        "state": "ok"
       },
       {
-       "text": "上次记录未用过；现在的七日次数没取到",
+       "text": "10 月 28 日—11 月 3 日 AI 用了 3 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 20 日 · AI 使用记录",
+     "static_note": "截至 11 月 3 日 · AI 使用记录",
      "row": "hero"
     },
     {
@@ -199,15 +199,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 11 日 17:48",
+       "text": "偶尔用 · 上次使用 10 月 31 日 15:37",
        "state": "ok"
       },
       {
-       "text": "上次记录未用过；现在的七日次数没取到",
+       "text": "10 月 28 日—11 月 3 日 AI 用了 3 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 20 日 · AI 使用记录"
+     "static_note": "截至 11 月 3 日 · AI 使用记录"
     },
     {
      "type": "prose",

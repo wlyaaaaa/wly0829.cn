@@ -37,9 +37,9 @@
     "at": "2026-10-20 15:16"
    },
    "facts": [
-    "10 月 27 日—11 月 2 日 AI 用了 0 次"
+    "10 月 28 日—11 月 3 日 AI 用了 0 次"
    ],
-   "as_of": "2026-11-02",
+   "as_of": "2026-11-03",
    "source": "AI 使用记录"
   },
   "public": null,
@@ -144,8 +144,8 @@
  },
  "source": {
   "page": "sources/pages/skill-work-delivery/page.json",
-  "sha256": "029f5032b701f2348c578da5ea57a67b7b9827d11efba922b6221c2274995bb9",
-  "converted_at_beijing": "2026-11-04T12:05:40+08:00"
+  "sha256": "75c586f691d244fe70c4adb0a838cf71f0dc2ce06072976322723f703fdf1fb1",
+  "converted_at_beijing": "2026-11-04T14:39:51+08:00"
  }
 }
 ---
@@ -236,11 +236,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 27 日—11 月 2 日 AI 用了 0 次",
+       "text": "10 月 28 日—11 月 3 日 AI 用了 0 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录",
+     "static_note": "截至 11 月 3 日 · AI 使用记录",
      "row": "hero"
     },
     {
@@ -325,11 +325,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 27 日—11 月 2 日 AI 用了 0 次",
+       "text": "10 月 28 日—11 月 3 日 AI 用了 0 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录"
+     "static_note": "截至 11 月 3 日 · AI 使用记录"
     },
     {
      "type": "prose",

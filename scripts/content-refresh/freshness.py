@@ -205,6 +205,8 @@ def close_run(root, result, report=None, dist=None):
     markdown = {m["page"]: m for m in report.get("markdown_readback", [])}
     resolutions = {r.get("id"): r for r in report.get("manual_closures", [])
                    if r.get("id") and r.get("run_id") == run_id and valid_time(r.get("checked_at")) and r.get("evidence") and r.get("status") == "completed"}
+    submitted = {r.get("id") for r in report.get("manual_closures", [])}
+    submitted.update("record:" + r["id"] for r in result["rows"] if r.get("manual_closure_required"))
     manual_sources = {r["id"] for r in result["rows"] if r["status"] in {"unavailable", "domain_fact_task"}
                       and r.get("automatic") is False and r.get("retrieve", {}).get("kind") == "manual"
                       and not r.get("page_error") and r.get("scope_status") == "verified"}
@@ -270,7 +272,7 @@ def close_run(root, result, report=None, dist=None):
                             raise ValueError("成品未找到派生截至日期")
                     status = "checked_unchanged"
                     synced.append(row)
-                elif row["status"] == "manual_review" and row.get("qualifies") or row["id"] in manual_sources:
+                elif row["status"] == "manual_review" and row.get("qualifies") or row["id"] in manual_sources and "record:" + row["id"] in submitted:
                     closed = resolutions.get("record:" + row["id"], {})
                     source = row["id"] in manual_sources
                     if (not isinstance(closed.get("evidence"), str) or not closed["evidence"].strip()
@@ -304,7 +306,8 @@ def close_run(root, result, report=None, dist=None):
                     if display != "verified": raise ValueError("成品未找到人工日期的实际上下文")
                     status = "manual_source_verified" if source else "manual_review_verified"
                     reason = "人工已核对作者、Markdown 与成品：" + str(closed["evidence"])
-                elif row["status"] in {"unavailable", "domain_fact_task", "scope_pending"} and row.get("checked_at") and reason and equal(row["old_value"]):
+                elif (row["status"] in {"unavailable", "domain_fact_task", "scope_pending"} and row.get("checked_at") and reason and equal(row["old_value"])
+                      and not (row.get("raw_status") in {"changed", "unchanged"} and row.get("raw_new_value") is not None)):
                     status = "unknown_preserved"
             except (OSError, KeyError, ValueError, IndexError, StopIteration) as exc:
                 if dist is not None and row["status"] == "changed": display = "failed"

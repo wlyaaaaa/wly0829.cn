@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/personal-materials-exact-intake/page.json",
-  "sha256": "91330b051bd31914881263f0712210d112ef8f361e11d85315d2de3b40a3ee2d",
-  "converted_at_beijing": "2026-11-04T12:05:35+08:00"
+  "sha256": "f30bbf9e1a3d2e8737192571e950bb56ace7332decc729ec53eec47fe0d01b25",
+  "converted_at_beijing": "2026-11-04T14:39:49+08:00"
  }
 }
 ---
@@ -844,7 +844,7 @@
 
 ## 技术实现与依据（四）
 
-- 每日维护：PCConfig 登记的任务每天北京时间 17:10 在个人资料镜像前调用 sync-current（10 月 20 日起这一步还刷新除蓝湖外全部登记目录的文件名清单）。11 月 4 日 09:12 读日志：该步骤共 67 条记录，66 条 complete（最新一条完成于 11 月 3 日 17:12）、1 条 failed（10 月 22 日 17:10，退出码 125，后面又有成功记录，不是现在还在失败；根因没查）。任务 PersonalDataReplica-Hot-Daily 就绪，上次 11 月 3 日 17:10:01 结果 0，下次 11 月 4 日 17:10。最新回执：removed_material_count=0、unavailable_source_count=0、filename_index_status=partial，17 个来源达到时间上限；complete 不代表文件名清单完整。这只说明这一维护步骤的日志，不等于 67 次全量重算或备份全部成功。
+- 每日维护：PCConfig 登记的任务每天北京时间 17:10 在个人资料镜像前调用 sync-current（10 月 20 日起这一步还刷新除蓝湖外全部登记目录的文件名清单）。11 月 4 日 09:12 读日志：该步骤共 67 条记录，66 条 complete（最新一条完成于 11 月 3 日 17:12）、1 条 failed（10 月 22 日 17:10，退出码 125，后面又有成功记录，不是现在还在失败；根因没查）。任务 PersonalDataReplica-Hot-Daily 就绪，上次 11 月 3 日 17:10:01 结果 0，下次 11 月 4 日 17:10。最新回执：removed_material_count=0、unavailable_source_count=0、filename_index_status=partial，17 个来源达到时间上限；complete 不代表文件名清单完整。这只说明这一维护步骤的日志，不等于 66 次全量重算或备份全部成功。
 
 ## 执行流程
 

@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig-runtime-startup/page.json",
-  "sha256": "5041a10de3b973ed40fc786074952f4aadbe41f502011b3b7360bfc52de83aa9",
-  "converted_at_beijing": "2026-11-04T12:05:34+08:00"
+  "sha256": "ac14a9fcc3bcef2c33f2718c076bbd56315a355206df157bde11896cd6dadd22",
+  "converted_at_beijing": "2026-11-04T14:27:00+08:00"
  }
 }
 ---
@@ -191,7 +191,7 @@ PCConfig · 功能说明
 
 **当前情况：**11 月 4 日 09:11:23 管理员完整只读扫描在 PCConfig 现行筛选范围读到 150 个计划任务（109 启用、41 停用；全 Windows 394 个是另一个口径，不能互换）；149 个有用途说明，另 1 个 Windows SoftLanding 系统临时任务无需固定登记。原来的每周综合检查已改成“软件每周维护”：查受管软件版本、空闲时打补丁，还比对启动项、任务清单和配置登记，并压缩 Ubuntu 和 V 的虚拟盘；11 月 1 日 23:33 那轮虚拟盘因 Ubuntu 在忙没压成，Python 也还在等空闲。V 盘开机自动挂载已装好，11 月 3 日自然开机核对通过。鼠标样式守护已退役，WeFlow 第二实例已冻结；任务存在不代表远控、微信或模型任务已经成功。
 
-**飞鸟订阅怎么进 Clash：**主机日常只开 Clash，飞鸟和 TAG 是它里面的两份订阅。Clash 不能直接用飞鸟的订阅，电脑上有个转换小程序（订阅桥）：在 Clash 订阅页点“更新”，或者到 6 小时自动更新时，它用原来的登录材料取回内容、验过签名，交给 Clash。转换失败时 Clash 继续用上次能用的配置，已有连接不断；不想自动更新，在 Clash 飞鸟订阅的编辑框关掉，手动更新还能用。11 月 4 日 11:13 重读，转换最近一次成功于当天 11:13，“每 6 小时”也已保存；定时器是不是真按 6 小时跑、Clash 是否已加载这一次的结果，没有验。
+**飞鸟订阅怎么进 Clash：**主机日常只开 Clash，飞鸟和 TAG 是它里面的两份订阅。Clash 不能直接用飞鸟的订阅，电脑上有个转换小程序（订阅桥）：在 Clash 订阅页点“更新”，或者到 6 小时自动更新时，它用原来的登录材料取回内容、验过签名，交给 Clash。转换失败时 Clash 继续用上次能用的配置，已有连接不断；不想自动更新，在 Clash 飞鸟订阅的编辑框关掉，手动更新还能用。11 月 4 日 13:04 重读，转换最近一次成功于当天 13:04，“每 6 小时”也已保存；定时器是不是真按 6 小时跑、Clash 是否已加载这一次的结果，没有验。
 
 项目事实核对截至 2026-11-04 09:26（北京时间）；页面不实时探测运行状态。
 
@@ -743,7 +743,7 @@ PCConfig · 功能说明
 
 16. 现在主用 Clash：登录前由隐藏 S4U 任务 PCConfig Clash PreLogon 启动核心，用户登录后只交接界面、保留网络。FlyingBird 原来的登录前自启、交互交接和开机检查三个任务都已停用，飞鸟只留作手动备用，不等于卸载。11 月 3 日 15:59:55 这个任务结果 0，16:00:40 回执写同一核心、TUN 通、HTTP 204；是否严格早于本人首次登录没查清，登录前验收不算通过。
 
-17. 飞鸟订阅桥（docs/recovery/flyingbird_subscription_bridge.md；tools/flyingbird-subscription-bridge）：只给 Clash 做飞鸟远程订阅转换，不启动飞鸟客户端、不读 TAG 配置、不管主核心和住宅侧车。任务 PCConfig Fly Subscription Bridge 没有时间触发器（隐藏、IgnoreNew），桥随界面由现有 Guard 按需管理；6 小时更新是 Clash 原生定时器（飞鸟 remote 的 allow_auto_update=true、update_interval=360），不另建计划任务。失败回固定错误、保留上次有效配置；桥成功不等于 Clash 已加载。厂商升级后可用 relocate_materials.py 离线定位新版材料，只输出不含秘密的候选位置，多义、变值或架构不符就拒绝猜。原 Apex 的三个任务已停用（见第 16 条）。11 月 4 日 09:09—09:12 只读：state.json 为 listening、last_success 09:07:25、last_error_type 为空；Clash 的飞鸟 updated 和已保存配置都是 06:36:53；没有读 Clash 原生定时器的下一次时间，也没有发 GET 触发取数。
+17. 飞鸟订阅桥（docs/recovery/flyingbird_subscription_bridge.md；tools/flyingbird-subscription-bridge）：只给 Clash 做飞鸟远程订阅转换，不启动飞鸟客户端、不读 TAG 配置、不管主核心和住宅侧车。任务 PCConfig Fly Subscription Bridge 没有时间触发器（隐藏、IgnoreNew），桥随界面由现有 Guard 按需管理；6 小时更新是 Clash 原生定时器（飞鸟 remote 的 allow_auto_update=true、update_interval=360），不另建计划任务。失败回固定错误、保留上次有效配置；桥成功不等于 Clash 已加载。厂商升级后可用 relocate_materials.py 离线定位新版材料，只输出不含秘密的候选位置，多义、变值或架构不符就拒绝猜。原 Apex 的三个任务已停用（见第 16 条）。11 月 4 日 13:04—09:12 只读：state.json 为 listening、last_success 13:04:15、last_error_type 为空；Clash 的飞鸟 updated 和已保存配置都是 12:36:57；没有读 Clash 原生定时器的下一次时间，也没有发 GET 触发取数。
 
 ::screen{#pcconfig-runtime-startup-07 section="tech"}
 

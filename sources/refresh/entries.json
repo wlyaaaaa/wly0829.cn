@@ -1733,7 +1733,7 @@
     "argv": [
       "E:/Scoop/apps/jq/current/jq.exe",
       "-s",
-      "if length==2 and all(.[]; .bootstrap_complete==true and (.last_completed|type)==\"string\" and (.last_completed|endswith(\"T00:00:00+08:00\"))) then ([.[].last_completed]|min|.[0:10]|strptime(\"%Y-%m-%d\")|strftime(\"%Y-%m-%d\")) as $day | {complete_until_date:$day} else error(\"invalid_completed_window\") end",
+      "if length==2 and all(.[]; .bootstrap_complete==true and (.last_completed|type)==\"string\" and (.last_completed|test(\"^[0-9]{4}-[0-9]{2}-[0-9]{2}T00:00:00[+]08:00$\"))) then ([.[].last_completed]|min|.[0:10]|strptime(\"%Y-%m-%d\")|strftime(\"%Y-%m-%d\")) as $day | ($day|strptime(\"%Y-%m-%d\")|mktime-86400|strftime(\"%Y-%m-%d\")) as $covered | {complete_until_date:$day,covered_through_date:$covered,source_coverage_end:$covered} else error(\"invalid_completed_window\") end",
       "E:/Data/PCConfig/AiUsageLedger/state-codex.json",
       "E:/Data/PCConfig/AiUsageLedger/state-claude.json"
     ],
@@ -1742,8 +1742,11 @@
     "owner_project": "codex-memory",
     "output": "json",
     "timeout": 10,
-    "verification": "复用现有 b7-usage-ledger-complete-day 的 jq 只读两份 state 输入。要求两路 bootstrap_complete=true、午夜北京时区 last_completed，取较早的排他边界日期，不减一天；输出仅 complete_until_date。原稿截至 10 月 11 日、source 说明记到当天零点，不能用本轮读旧账本的观察日期推进。无写入、网络或业务模块执行。",
-    "observation_basis": "unknown"
+    "verification": "现有jq -s只读固定两份state；恰好两路且bootstrap_complete=true，last_completed须为完整YYYY-MM-DDT00:00:00+08:00北京午夜格式。取两路较早last_completed的排他日期，complete_until_date保持该日期以兼容旧调用；其前一个北京日期才是已完整覆盖末日，分别输出covered_through_date与同值source_coverage_end。metadata使用coverage_end并指向实际输出的source_coverage_end；不取today、不用读取时刻冒充补采水位，不读账本正文，不写状态、不联网、不执行业务模块。",
+    "observation_basis": "coverage_end",
+    "source_coverage_end_pointer": [
+      "source_coverage_end"
+    ]
   },
   "r3-phone-direct-method-modified": {
     "argv": [

@@ -37,9 +37,9 @@
     "at": "2026-10-31 04:58"
    },
    "facts": [
-    "10 月 27 日—11 月 2 日 AI 用了 5 次"
+    "10 月 28 日—11 月 3 日 AI 用了 5 次"
    ],
-   "as_of": "2026-11-02",
+   "as_of": "2026-11-03",
    "source": "AI 使用记录"
   },
   "public": false,
@@ -111,8 +111,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-health/page.json",
-  "sha256": "f2d2cc16dde505e7a2fda95e53b612dd7b3488fbd83837e7061d1571a5bb06fa",
-  "converted_at_beijing": "2026-11-04T12:05:39+08:00"
+  "sha256": "52cd1d163ddaae4026455f9b1358c28a55115740181a48fb40597cfdd702e374",
+  "converted_at_beijing": "2026-11-04T14:39:51+08:00"
  }
 }
 ---
@@ -162,11 +162,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 27 日—11 月 2 日 AI 用了 5 次",
+       "text": "10 月 28 日—11 月 3 日 AI 用了 5 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录",
+     "static_note": "截至 11 月 3 日 · AI 使用记录",
      "row": "hero"
     },
     {
@@ -234,11 +234,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 27 日—11 月 2 日 AI 用了 5 次",
+       "text": "10 月 28 日—11 月 3 日 AI 用了 5 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录"
+     "static_note": "截至 11 月 3 日 · AI 使用记录"
     },
     {
      "type": "prose",

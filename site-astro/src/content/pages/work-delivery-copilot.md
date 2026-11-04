@@ -48,7 +48,7 @@
     "at": "2026-10-20 15:16"
    },
    "facts": [],
-   "as_of": "2026-11-02",
+   "as_of": "2026-11-03",
    "source": "AI 使用记录"
   },
   "public": false,
@@ -372,8 +372,8 @@
  },
  "source": {
   "page": "sources/pages/work-delivery-copilot/page.json",
-  "sha256": "7aa32f2cb6311f8f3dea8f9d10b75c9bd76480a7ab7b07a580650bce0752e9cb",
-  "converted_at_beijing": "2026-11-04T12:05:43+08:00"
+  "sha256": "c6dadb49f573846624daaf01fcfd67251af611d3286c0a18d992cf9aa286169e",
+  "converted_at_beijing": "2026-11-04T14:39:52+08:00"
  }
 }
 ---
@@ -464,7 +464,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录",
+     "static_note": "截至 11 月 3 日 · AI 使用记录",
      "row": "hero"
     },
     {
@@ -524,7 +524,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录"
+     "static_note": "截至 11 月 3 日 · AI 使用记录"
     },
     {
      "type": "stat_card",

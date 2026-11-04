@@ -34,12 +34,12 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-11-02 18:09"
+    "at": "2026-11-03 20:31"
    },
    "facts": [
-    "近 7 天 AI 用了 337 次"
+    "近 7 天 AI 用了 284 次"
    ],
-   "as_of": "2026-11-02",
+   "as_of": "2026-11-03",
    "source": "AI 使用记录"
   },
   "based_on": {
@@ -134,8 +134,8 @@
  },
  "source": {
   "page": "sources/pages/skill-project-entry-gate/page.json",
-  "sha256": "6055a8b855fd1b0b41a1b277b6972d35955ccd3da72c1c0ddff55df15034fd6d",
-  "converted_at_beijing": "2026-11-04T12:05:39+08:00"
+  "sha256": "6bba16fee305d0a7024575218901c5cf93e0444b09fee27381f69e5231555c82",
+  "converted_at_beijing": "2026-11-04T14:39:51+08:00"
  }
 }
 ---
@@ -178,15 +178,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 11 月 2 日 18:09",
+       "text": "常用 · 上次使用 11 月 3 日 20:31",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 337 次",
+       "text": "近 7 天 AI 用了 284 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录",
+     "static_note": "截至 11 月 3 日 · AI 使用记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -244,15 +244,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 11 月 2 日 18:09",
+       "text": "常用 · 上次使用 11 月 3 日 20:31",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 337 次",
+       "text": "近 7 天 AI 用了 284 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录"
+     "static_note": "截至 11 月 3 日 · AI 使用记录"
     },
     {
      "type": "prose",

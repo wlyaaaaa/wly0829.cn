@@ -31,7 +31,7 @@
    "source": "项目仓库和诊断摘要",
    "last": {
     "label": "诊断窗",
-    "at": "2026-11-04 09:09"
+    "at": "2026-11-04 13:30"
    }
   },
   "based_on": {
@@ -41,8 +41,8 @@
  },
  "source": {
   "page": "sources/pages/timeaudit-collection-pipeline/page.json",
-  "sha256": "28dea3286c8153bdfe104edec532a5abb88e3c4072ab3d784745df7b9ab39c54",
-  "converted_at_beijing": "2026-11-04T12:05:41+08:00"
+  "sha256": "07327d70f0328f44689b6c5b1074e73b0bb13832d200a46f2d0ff64ae40499c3",
+  "converted_at_beijing": "2026-11-04T14:39:51+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 诊断窗 11 月 4 日 09:09",
+       "text": "常用 · 诊断窗 11 月 4 日 13:30",
        "state": "ok"
       }
      ],
@@ -134,7 +134,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 诊断窗 11 月 4 日 09:09",
+       "text": "常用 · 诊断窗 11 月 4 日 13:30",
        "state": "ok"
       }
      ],

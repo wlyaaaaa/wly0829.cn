@@ -31,7 +31,7 @@
    "source": "项目仓库和诊断摘要",
    "last": {
     "label": "诊断窗",
-    "at": "2026-11-04 09:09"
+    "at": "2026-11-04 13:30"
    },
    "facts": [
     "游戏帧率还没通过实际游戏验收"
@@ -44,8 +44,8 @@
  },
  "source": {
   "page": "sources/pages/timeaudit-hardware-performance/page.json",
-  "sha256": "3e194a1fdac41fdfbf3e1de6058545c905a4c8e270f03ca8b359dd81d0bb073f",
-  "converted_at_beijing": "2026-11-04T12:05:41+08:00"
+  "sha256": "7153a7477f977dd7500c5ace640923e2d20e7ad1bccd0b5bc0af4e69063bde20",
+  "converted_at_beijing": "2026-11-04T14:39:51+08:00"
  }
 }
 ---
@@ -95,7 +95,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 诊断窗 11 月 4 日 09:09",
+       "text": "常用 · 诊断窗 11 月 4 日 13:30",
        "state": "ok"
       },
       {
@@ -141,7 +141,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 诊断窗 11 月 4 日 09:09",
+       "text": "常用 · 诊断窗 11 月 4 日 13:30",
        "state": "ok"
       },
       {

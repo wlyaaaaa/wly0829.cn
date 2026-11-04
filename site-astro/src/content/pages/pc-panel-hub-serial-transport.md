@@ -36,8 +36,8 @@
  },
  "source": {
   "page": "sources/pages/pc-panel-hub-serial-transport/page.json",
-  "sha256": "268567a46db480785db186a112dfd5e5c317778c526ae4b3b802f21c38bd6bda",
-  "converted_at_beijing": "2026-11-04T12:05:33+08:00"
+  "sha256": "99eeb33a6ebddec13fc6f4ec93fd59ee838ad532819cf22d10d6e546bef1cf65",
+  "converted_at_beijing": "2026-11-04T15:34:48+08:00"
  }
 }
 ---
@@ -975,7 +975,7 @@ PC Panel Hub · 功能说明
 
 ## 如何验证
 
-- 11 月 4 日 09:09:16 主机心跳：ok/fresh、mode=hybrid_diff_204_full_200、frame=38367、sent=38367、failed=0、last_full_frame=37800、full_resync_every_frames=900、period=1007 ms、send_ms=17、elapsed_ms=124；这段会话从 11 月 3 日 22:18:50 看门狗重启后开始，只证明这一段主机写入，不与 9 月的 85,063 帧累加。
+- 11 月 4 日 15:14:53 主机心跳：ok/fresh、mode=hybrid_diff_204_full_200、frame=59526、sent=59526、failed=0、last_full_frame=59400、full_resync_every_frames=900、period=1011 ms、send_ms=47、elapsed_ms=78；这段会话从 11 月 3 日 22:18:50 看门狗重启后开始，只证明这一段主机写入，不与 9 月的 85,063 帧累加。
 
 - 11 月 4 日 09:31 进度（电脑配置待验收登记 owner-20261018-4b1f21e646）：已把 11 月 3 日 22:18 那次停顿缩小到画面发出后写心跳文件的阶段，仍未根治；仍由 AI 跟进、不要本人操作，下一检查点 11 月 4 日 15:00，限期 11 月 6 日 18:00。
 

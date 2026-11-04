@@ -43,7 +43,7 @@
    "facts": [
     "11 月 3 日登录检查 12 路：10 路已登录，B 站未知、Grok 超时，这两路随后定点补查已登录；11 月 4 日没有重查"
    ],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-03",
    "source": "技能说明和登录检查记录"
   },
   "public": false,
@@ -106,8 +106,8 @@
  },
  "source": {
   "page": "sources/pages/skill-news-quickcheck/page.json",
-  "sha256": "c6dfe311ae15557b5c248aeddafdd9a6792501519128e5ced0812b299033317c",
-  "converted_at_beijing": "2026-11-04T12:05:39+08:00"
+  "sha256": "f1f9740549e25cba79d258d490a1f13702971d3108481d009154eead0a901013",
+  "converted_at_beijing": "2026-11-04T14:39:50+08:00"
  }
 }
 ---
@@ -153,7 +153,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 技能说明和登录检查记录",
+     "static_note": "截至 11 月 3 日 · 技能说明和登录检查记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -207,7 +207,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 技能说明和登录检查记录"
+     "static_note": "截至 11 月 3 日 · 技能说明和登录检查记录"
     },
     {
      "type": "prose",

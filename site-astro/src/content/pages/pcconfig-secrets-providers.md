@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig-secrets-providers/page.json",
-  "sha256": "d93af768bcc694ccb32981ef19971719f9c2276b3ea1a594893ada3ff1e144e6",
-  "converted_at_beijing": "2026-11-04T12:05:34+08:00"
+  "sha256": "67e15b1af88de5381ab20d61618c0dfdcb14eaefdab780645c19be19b2b908e1",
+  "converted_at_beijing": "2026-11-04T15:34:49+08:00"
  }
 }
 ---
@@ -791,7 +791,7 @@ PCConfig · 功能说明
 
 14. 资料期默认时长读当前设置（11 月 4 日读到是 24 小时），不写死出厂的 8 小时；范围 0.5—72 小时可带小数，单次改动与默认分开，已颁发的期保持原截止。
 
-15. 已安装登记里有 11 个凭据引用目标（10 月 30 日只读目标名和厂商，没读值）：高德、健康 Google 只读短票、通义千问、智谱 GLM、DeepSeek、Anthropic、ElevenLabs、Google Workspace、Google Photos、OpenRouter、本机 Grafana。交法分三种：密码中心带着密钥替程序调用厂商官方出口（高德、ElevenLabs 只走这条）；把值原生交给本机登记的程序（Google 两个入口取 OAuth 材料、OpenRouter 交给 AI 工具配置管理、Grafana 交本机管理员账号；千问、GLM、DeepSeek、Anthropic 两种都支持）；健康只交最长 1 小时的访问令牌，不交刷新令牌，交之前先查资料锁。原生交付会把明文交给当前用户合法的上级调用链或子进程环境，客户端拿到后怎么联网由客户端负责；“不进回执”不等于从不交给程序。
+15. 已安装登记里有 11 个凭据引用目标（11 月 4 日只读目标名和厂商，没读值）：高德、健康 Google 只读短票、通义千问、智谱 GLM、DeepSeek、Anthropic、ElevenLabs、Google Workspace、Google Photos、OpenRouter、本机 Grafana。交法分三种：密码中心带着密钥替程序调用厂商官方出口（高德、ElevenLabs 只走这条）；把值原生交给本机登记的程序（Google 两个入口取 OAuth 材料、OpenRouter 交给 AI 工具配置管理、Grafana 交本机管理员账号；千问、GLM、DeepSeek、Anthropic 两种都支持）；健康只交最长 1 小时的访问令牌，不交刷新令牌，交之前先查资料锁。原生交付会把明文交给当前用户合法的上级调用链或子进程环境，客户端拿到后怎么联网由客户端负责；“不进回执”不等于从不交给程序。
 
 16. 固定 Workspace 入口只有一个账号绑定，动作不能在运行时换账号；Photos 用自己独立的绑定和授权，Workspace 已登录不能证明 Photos 已授权。两者的 OAuth 客户端信息和刷新令牌 10 月 28 日起存在密码中心，不再由 PCConfig 自己加密存文件；访问令牌现在放在按凭据版本绑定的跨进程短期缓存里，缓存没有才向密码中心取一次凭据，刷新时有跨进程锁；长期的刷新令牌和客户端密钥仍只在密码中心，回执不返回值。
 

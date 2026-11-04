@@ -479,7 +479,7 @@
  "source": {
   "page": "sources/pages/proxyclean/page.json",
   "sha256": "53b84786a99a8d6164dab21320d4d9fdbfaaa53c89bc4055f062d6eeb51e63f2",
-  "converted_at_beijing": "2026-11-04T13:12:26+08:00"
+  "converted_at_beijing": "2026-11-04T14:40:05+08:00"
  }
 }
 ---
@@ -1474,7 +1474,7 @@ AI 用命令行跑同一套程序：读一份状态报告（给本机排查用�
   "screenshots": [],
   "chain": "",
   "reuse": "",
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {

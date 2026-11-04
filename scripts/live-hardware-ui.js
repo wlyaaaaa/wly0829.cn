@@ -156,7 +156,7 @@
     const root = el(compact ? 'a' : 'div', 'live-hardware-' + (compact ? 'compact' : 'full'), null, 'live-hardware-' + (compact ? 'compact' : 'full'));
     root.dataset.liveHardware = compact ? 'compact' : 'full'; root.dataset.cached = String(c.cached || c.old); top(root);
     if (compact) {
-      root.href = '/cockpit/#pc'; root.setAttribute('aria-label', '电脑现在，查看完整硬件状态');
+      root.href = '/cockpit/#computer'; root.setAttribute('aria-label', '电脑现在，查看完整硬件状态');
       const grid = el('div', 'live-hardware-compact-grid', null, 'compact-grid');
       function tile(name, item, value, key, risk) {
         const cell = el('div', 'live-hardware-compact-tile', null, key); if (risk) cell.dataset.risk = risk;

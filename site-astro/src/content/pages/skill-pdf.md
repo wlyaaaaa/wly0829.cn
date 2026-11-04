@@ -34,13 +34,13 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-23 13:08"
+    "at": "2026-10-29 15:41"
    },
    "facts": [
-    "10 月 18—24 日 AI 用了 3 次",
+    "10 月 28 日—11 月 3 日 AI 用了 4 次",
     "Codex 自带插件，11 月 4 日核对本机可用的是 26.1103.10131 版"
    ],
-   "as_of": "2026-10-21",
+   "as_of": "2026-11-03",
    "source": "AI 使用记录和本机插件目录"
   },
   "public": false,
@@ -308,8 +308,8 @@
  },
  "source": {
   "page": "sources/pages/skill-pdf/page.json",
-  "sha256": "faf3c47c4b0089e049eecf1f42663f73cba22055b805def8838fe07482e6f837",
-  "converted_at_beijing": "2026-11-04T12:05:39+08:00"
+  "sha256": "ec5ecbe529919a60bfdd351db884d5d1309b5c758b601bfcb22efcf8a10cc9f7",
+  "converted_at_beijing": "2026-11-04T15:34:55+08:00"
  }
 }
 ---
@@ -372,11 +372,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 23 日 13:08",
+       "text": "偶尔用 · 上次使用 10 月 29 日 15:41",
        "state": "ok"
       },
       {
-       "text": "10 月 18—24 日 AI 用了 3 次",
+       "text": "10 月 28 日—11 月 3 日 AI 用了 4 次",
        "state": "fact"
       },
       {
@@ -384,7 +384,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 21 日 · AI 使用记录和本机插件目录",
+     "static_note": "截至 11 月 3 日 · AI 使用记录和本机插件目录",
      "row": "hero"
     },
     {
@@ -455,11 +455,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 23 日 13:08",
+       "text": "偶尔用 · 上次使用 10 月 29 日 15:41",
        "state": "ok"
       },
       {
-       "text": "10 月 18—24 日 AI 用了 3 次",
+       "text": "10 月 28 日—11 月 3 日 AI 用了 4 次",
        "state": "fact"
       },
       {
@@ -467,7 +467,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 21 日 · AI 使用记录和本机插件目录"
+     "static_note": "截至 11 月 3 日 · AI 使用记录和本机插件目录"
     },
     {
      "type": "prose",

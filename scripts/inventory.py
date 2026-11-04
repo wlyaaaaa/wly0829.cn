@@ -295,7 +295,7 @@ def inventory(p,d,s,image_files):
       'projects-home-01':(1,0),'rules-home-01':(1,0),'rules-home-02':(0,10),'rules-home-03':(0,6),'rules-home-04':(0,2),
       'skills-home-01':(1,0),'skills-home-02':(0,9),'skills-home-03':(0,8),'skills-home-04':(0,9),
       'how-01':(1,0),'how-02':(1,34),'how-03':(0,4),'how-04':(1,4),'how-05':(0,6),
-      'how-09':(2,0),'how-10':(2,0),'how-11':(2,0),'how-12':(1,0),'how-13':(1,4),'how-14':(2,0),'how-15':(1,1),
+      'how-09':(2,0),'how-10':(2,0),'how-11':(2,0),'how-12':(1,0),'how-13':(1,4),'how-14':(2,0),'how-15':(1,1),'how-17':(0,0),
       'how-this-site-08':(0,4),'how-this-site-09':(0,3),'how-this-site-11':(0,0),'how-this-site-12':(1,0),
       'how-this-site-13':(1,0),'how-this-site-14':(1,0),'how-this-site-14b':(1,5),'how-this-site-15':(0,6),
       'cockpit-01':(1,0),'cockpit-02':(1,0),'cockpit-03':(1,6),'cockpit-04':(0,1),'cockpit-05':(1,5),

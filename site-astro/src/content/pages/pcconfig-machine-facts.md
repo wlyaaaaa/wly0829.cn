@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig-machine-facts/page.json",
-  "sha256": "38884d62b9bc2776611cbe7e41363543fa9066a72be5c40627b6f912a3450936",
-  "converted_at_beijing": "2026-11-04T12:05:33+08:00"
+  "sha256": "4a5debb80dbc0085ed062d92bfeb2139ad273ca85e09ab1435b3a333402c1561",
+  "converted_at_beijing": "2026-11-04T14:39:48+08:00"
  }
 }
 ---
@@ -1283,7 +1283,7 @@ PCConfig · 功能说明
 
 - folders.json 登记目录用途边界；不再维护重复的路径负责方投影
 
-- repository-paths.json 是 10 月 27 日那次成功发现的快照，包含 46 个仓库导航条目；authoritative=false，不冒充实时完整仓库名单
+- repository-paths.json 是 10 月 27 日那次成功发现的快照，包含 45 个仓库导航条目；authoritative=false，不冒充实时完整仓库名单
 
 - project_restore_anchors.json 保存 24 个恢复锚点
 

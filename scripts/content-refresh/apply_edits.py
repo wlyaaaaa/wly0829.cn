@@ -16,7 +16,8 @@ from selection import Selection
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[2]
 NUMBER = re.compile(r"-?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?")
-CHINESE_DATE = re.compile(r"(?:(\d{4})\s*年\s*)?(\d{1,2})\s*月\s*(\d{1,2})\s*日(?:\s+(\d{1,2}):(\d{2})(:\d{2})?)?")
+VERSION = re.compile(r"(?:0|[1-9]\d*)(?:\.(?:0|[1-9]\d*)){2,}")
+CHINESE_DATE = re.compile(r"(?:(\d{4})\s*年\s*)?(\d{1,2})\s*月\s*(\d{1,2})\s*日(?:\s*(\d{1,2}):(\d{2})(:\d{2})?)?")
 CLOCK = r"(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?"
 USAGE_PERIOD = r"\d{1,2} 月 \d{1,2}(?: 日[—–]\d{1,2} 月 \d{1,2}|[—–]\d{1,2}) 日"
 DATETIME = re.compile(r"\d{4}-\d{2}-\d{2}([ T])\d{2}:\d{2}(:\d{2})?(\.\d+)?(Z|[+-]\d{2}:?\d{2})?")
@@ -71,7 +72,11 @@ def formatted(old, value):
         if (last - first).days != 6:
             raise ValueError("技能次数标签必须覆盖七个完整日")
         return f"{first.month} 月 {first.day} 日—{last.month} 月 {last.day} 日"
+    if old in list("零一二三四五六七八九十") and re.fullmatch(r"\d+(?:\.0+)?", str(value)) and Decimal(str(value)) <= 10:
+        return "零一二三四五六七八九十"[int(Decimal(str(value)))]
     if re.fullmatch(CLOCK, old):
+        if DATETIME.fullmatch(str(value)):
+            stamp = datetime.fromisoformat(str(value)); value = (stamp.replace(tzinfo=BEIJING) if stamp.tzinfo is None else stamp).astimezone(BEIJING).strftime("%H:%M:%S")
         if not re.fullmatch(CLOCK, str(value)):
             raise ValueError("时刻新值无效")
         return str(value)[:5] if len(old) == 5 else str(value) if len(str(value)) == 8 else str(value) + ":00"
@@ -129,7 +134,7 @@ def formatted(old, value):
 
 def same_value(fragment, value):
     try:
-        return formatted(fragment, value) == fragment or (
+        return fragment == str(value) or formatted(fragment, value) == fragment or (
             NUMBER.fullmatch(fragment) and Decimal(fragment.replace(",", "")) ==
             Decimal(str(value).replace(",", "")))
     except (ValueError, InvalidOperation):
@@ -234,8 +239,25 @@ def body_link(page, row, field, start, end, number, rows):
     return next(iter(candidates))
 
 
+def manual_date_approved(page, row):
+    proof = row.get("manual_date_approval") or {}
+    try:
+        parent, key = field_at(page, row.get("field") or row.get("page_field") or "")
+        start, end = locate(parent[key], row); fragment = parent[key][start:end]
+        checked = datetime.fromisoformat(proof.get("checked_at", "")); chinese = CHINESE_DATE.fullmatch(fragment)
+        return bool(row.get("_accepted_run_id") and proof.get("run_id") == row["_accepted_run_id"] and checked.tzinfo
+            and row.get("qualifies") and proof.get("qualifies") == row["qualifies"]
+            and not (row.get("field") or row.get("page_field") or "").startswith("status_line.last")
+            and isinstance(proof.get("evidence"), str) and proof["evidence"].strip() and not {"start", "end"}.intersection(row)
+            and (chinese or DATETIME.fullmatch(fragment) or re.fullmatch(r"\d{4}-\d{2}-\d{2}", fragment))
+            and (not chinese or chinese[1] or not re.match(r"\d{4}-", str(proof.get("actual_value"))) or str(proof["actual_value"])[:4] == str(row.get("date_candidate", ""))[:4])
+            and same_value(fragment, proof.get("actual_value")))
+    except (KeyError, ValueError, IndexError, TypeError, AttributeError, re.error): return False
+
+
 def qualified_date_review(page, row):
     """日期所说的事件时间不能被计数的本轮观察日期替换。"""
+    if manual_date_approved(page, row): return None
     if row.get("manual_review_required"):
         return row.get("manual_review_note") or "需人工核对日期与关联数字口径"
     field = row.get("field") or row.get("page_field") or ""
@@ -264,6 +286,7 @@ def build_number_edits(root, result):
     root, pages, edits, skipped, manual_reviews = Path(root), {}, {}, [], []
     selection = Selection(root, result.get("manual_owner_request", []))
     rows, excluded = selection.partition(result["rows"])
+    rows = [dict(r, _accepted_run_id=r.get("_accepted_run_id") if r.get("_accepted_run_id") == result.get("run_id") else None) for r in rows]
     result = dict(result, rows=rows)
     authors = {}
     def authored(slug, field):
@@ -274,6 +297,16 @@ def build_number_edits(root, result):
         parent, key = field_at(authors[filename], target["field"])
         return target, parent[key]
     accepted, positions = set(), {}
+    accepted.update(r["id"] for r in rows if result.get("run_id") and isinstance(r.get("manual_source_certificate"), dict) and r["manual_source_certificate"].get("run_id") == result["run_id"]
+        and r["manual_source_certificate"].get("source_verified") is True and r.get("automatic") is False and r.get("retrieve", {}).get("kind") == "manual"
+        and r.get("scope_status") == "verified" and r.get("status") in {"unavailable", "domain_fact_task"} and not r.get("qualifies") and not r.get("page_error")
+        and r.get("freshness_class", "current") == "current" and not r.get("historical") and not r.get("frozen") and not r.get("requires_semantic_refresh")
+        and not (r.get("source_precision") == "estimated" and r.get("display_precision") == "exact"))
+    accepted.update(r["id"] for r in rows if r.get("dynamic") and r.get("automatic") is True and r.get("status") == "unchanged" and r.get("scope_status") == "verified"
+        and r.get("retrieve", {}).get("kind") in {"page_count", "feature_count", "group_count"} and (r.get("source_observed_at") or r.get("source_coverage_end"))
+        and not r.get("qualifies") and not r.get("page_error") and r.get("freshness_class", "current") == "current" and not r.get("historical") and not r.get("frozen")
+        and not r.get("requires_semantic_refresh") and not (r.get("source_precision") == "estimated" and r.get("display_precision") == "exact")
+        and same_value(str(r.get("old_value")), r.get("new_value")))
     links, owners = defaultdict(set), defaultdict(set)
     for row in result["rows"]:
         for ref in row.get("qualifies", []):
@@ -281,7 +314,9 @@ def build_number_edits(root, result):
             links[ref].add(row["id"])
     derived = defaultdict(list)
     for row in result["rows"]:
-        if row.get("derive_as_of"):
+        if (row.get("derive_as_of") and not row.get("historical") and not row.get("frozen")
+                and row.get("status") not in {"historical", "excluded"}
+                and row.get("freshness_class") not in {"historical", "frozen", "excluded"}):
             derived[(row["page"], row["screen"])].append(row["id"])
     for group in derived.values():
         for rid in group:
@@ -319,6 +354,7 @@ def build_number_edits(root, result):
                 continue
             if row.get("qualifies") and not set(row["qualifies"]) <= accepted:
                 raise ValueError("as_of_link_required")
+            if manual_date_approved(page, row): accepted.add(rid); continue
             numbers = page.get("registry", {}).get("numbers", [])
             nid = row.get("page_number") or row.get("registry_number")
             ni = next((i for i, n in enumerate(numbers) if n.get("id") == nid), None)
@@ -331,8 +367,17 @@ def build_number_edits(root, result):
             start, end = locate(parent[key], row, field.startswith("registry.numbers["))
             editable_range(parent[key], start, end)
             positions[rid] = (author["file"], author["field"], field, start, end, parent[key][start:end])
+            fragment = parent[key][start:end]
+            if (row["status"] == "unchanged" and isinstance(row["old_value"], str)
+                    and fragment == row["old_value"] == row["new_value"] and VERSION.fullmatch(fragment)
+                    and not re.search(r"[A-Za-z0-9_.+-]$", parent[key][:start])
+                    and not re.match(r"[A-Za-z0-9_.+-]", parent[key][end:])):
+                # 原字未变的完整版本串仍需定位及原位/Markdown回读，不按小数解析或改写。
+                proven_offset(parent[key], row)
+                accepted.add(rid)
+                continue
             whole_number(parent[key], start, end)
-            if NUMBER.fullmatch(str(row["new_value"])) and not NUMBER.fullmatch(str(row["old_value"])):
+            if NUMBER.fullmatch(str(row["new_value"])) and not NUMBER.fullmatch(str(row["old_value"])) and not same_value(str(row["old_value"]), row["new_value"]):
                 raise ValueError("old_value_not_whole_number")
             proven_offset(parent[key], row)
             fragment = parent[key][start:end]
@@ -471,7 +516,7 @@ def build_number_edits(root, result):
         valid.extend(group)
     updates = []
     for row in result["rows"]:
-        if row["id"] not in accepted - blocked:
+        if row["id"] not in accepted - blocked or row["id"] not in positions:
             continue
         filename, field, logical_field, start, end, fragment = positions[row["id"]]
         relevant = [e for e in valid if e["file"] == filename and e["field"] == field]
@@ -627,6 +672,13 @@ def apply_edits(root, payload, only=None, converter=None):
                     fragment=display_fragment(parent[key], locator["start"], locator["end"], bound_parent[bound_key]),
                     field_sha256=digest(parent[key]), status="verified"))
                 successful.append(row)
+                field_proof = next((p for p in report["field_readback"]
+                    if (p["file"], p["field"]) == (locator["file"], locator["field"])), None)
+                if field_proof is None:
+                    field_proof = dict(file=locator["file"], field=locator["field"], record_ids=[])
+                    report["field_readback"].append(field_proof)
+                field_proof.update(sha256=digest(parent[key]), status="verified")
+                field_proof["record_ids"] = sorted(set(field_proof["record_ids"]) | {row["id"]})
             except (KeyError, ValueError, IndexError, StopIteration) as exc:
                 report["skipped"].append(dict(record_id=row["id"], reason=str(exc)))
         registry_path = Path(payload.get("registry_path") or root / "sources/refresh/registry.json")
@@ -665,6 +717,9 @@ def apply_edits(root, payload, only=None, converter=None):
             for page in failed_dated:
                 report["skipped"].extend(dict(record_id=r["id"], page=page, reason="derived_as_of_markdown_readback_failed")
                                          for r in successful if r["page"] == page)
+    verified_ids = {r["record_id"] for r in report["record_readback"]} - {r.get("record_id") for r in report["skipped"]}
+    for proof in report["field_readback"]: proof["record_ids"] = sorted(set(proof["record_ids"]) & verified_ids)
+    report["field_readback"] = [p for p in report["field_readback"] if p["record_ids"]]
     return report
 
 

@@ -430,8 +430,8 @@
  },
  "source": {
   "page": "sources/pages/phone-collector/page.json",
-  "sha256": "e1c594146b4c5e97ae5b6dc38d513d923124c77af0d3c05b3f2d7cd2d0bf6523",
-  "converted_at_beijing": "2026-11-04T11:18:10+08:00"
+  "sha256": "70bb6845aa1f0df27c5a9f3a72134bd79d2c39e5e27fa47bd5e87f4ee148185c",
+  "converted_at_beijing": "2026-11-04T14:27:01+08:00"
  }
 }
 ---
@@ -1275,7 +1275,7 @@
 
 | **0.1.17** | **0 个** | **44 次** |
 |---|---|---|
-| 现行源码版本：Kotlin，最低 Android 11（API 30），目标 API 36 | 联网权限：App 不申请网络，数据只经电脑收走 | 仓库提交，截至 11 月 4 日 11:13 |
+| 现行源码版本：Kotlin，最低 Android 11（API 30），目标 API 36 | 联网权限：App 不申请网络，数据只经电脑收走 | 仓库提交，截至 11 月 4 日 13:30 |
 
 ::screen{#phone-collector-06 section="highlights"}
 

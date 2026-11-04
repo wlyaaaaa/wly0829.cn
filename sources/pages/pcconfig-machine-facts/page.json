@@ -210,7 +210,7 @@
       "id": "pcconfig-machine-facts-14",
       "section": "tech",
       "title": "依据与来源（一）",
-      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- folders.json 登记目录用途边界；不再维护重复的路径负责方投影\n\n- repository-paths.json 是 10 月 27 日那次成功发现的快照，包含 46 个仓库导航条目；authoritative=false，不冒充实时完整仓库名单\n\n- project_restore_anchors.json 保存 24 个恢复锚点\n\n- project_config_keys.json 导航路径、端口、模型和数据源的当前值与真实来源\n\n- 机器生成 Registry/报告的 allowlist、续作检查点与 current 边界\n\n- 路径与项目配置导航合同（docs/contracts/pcconfig.path-project-config.md）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- folders.json 登记目录用途边界；不再维护重复的路径负责方投影\n\n- repository-paths.json 是 10 月 27 日那次成功发现的快照，包含 45 个仓库导航条目；authoritative=false，不冒充实时完整仓库名单\n\n- project_restore_anchors.json 保存 24 个恢复锚点\n\n- project_config_keys.json 导航路径、端口、模型和数据源的当前值与真实来源\n\n- 机器生成 Registry/报告的 allowlist、续作检查点与 current 边界\n\n- 路径与项目配置导航合同（docs/contracts/pcconfig.path-project-config.md）",
       "links": [
         {
           "text": "下一个模块 内存故障取证",

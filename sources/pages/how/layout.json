@@ -42,11 +42,12 @@
       },
       {
         "type": "action_button",
-        "text_ref": "全景图",
-        "columns": 4,
+        "text_ref": "哪些事 AI 自己办，什么时候轮到我",
+        "columns": 3,
         "row_counts": [
-          4,
-          4
+          3,
+          3,
+          3
         ],
         "align": "left",
         "entry_arrow_refs": [
@@ -54,7 +55,7 @@
         ]
       }
     ],
-    "notes": "10 月 11 日本人选第一屏 B（重画协作场景）：左栏标题、介绍、状态行（一行，带圆点，不要“现在”小标题）、四种线型图例（单列四行），右栏新插画 how-01-hero-v1（row_fit_illustration，图按原比例、高度按文字栏定）；8 个入口 4×2 排在这一行下面。状态行日期取 page.json based_on.model_roster_generated_beijing_date。"
+    "notes": "10 月 11 日本人选第一屏 B（重画协作场景）：左栏标题、介绍、状态行（一行，带圆点，不要“现在”小标题）、四种线型图例（单列四行），右栏新插画 how-01-hero-v1（row_fit_illustration，图按原比例、高度按文字栏定）；9 个入口 3×3 排在这一行下面。状态行日期取 page.json based_on.model_roster_generated_beijing_date。"
   },
   {
     "screen": "how-01",
@@ -93,12 +94,13 @@
       },
       {
         "type": "link_grid",
-        "text_ref": "全景图",
+        "text_ref": "哪些事 AI 自己办，什么时候轮到我",
         "columns": 2,
         "portrait_columns": 2,
         "illustration": "none",
         "icons": "none",
         "rows": [
+          1,
           2,
           2,
           2,
@@ -107,7 +109,189 @@
         "variant": "entry_cards"
       }
     ],
-    "notes": "竖版顺序：标题、介绍、状态行、新插画、四行图例、两列四行入口（入口无图标，保留原链接全名）。"
+    "notes": "竖版顺序：标题、介绍、状态行、新插画、四行图例、首个入口独占一行、其余入口两列四行（入口无图标，保留原链接全名）。"
+  },
+  {
+    "screen": "how-17",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "哪些事 AI 自己办，什么时候轮到我",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "大多数事我不用管"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "我开口才开始",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我开口 → AI 做到底"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "“更新网站”",
+        "columns": 3,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "notice",
+        "text_ref": "容易以为是自动的",
+        "tone": "gray"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "我不开口也会办",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "prose",
+        "text_ref": "到点了 → AI 做到能做的最后一步"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "每天的备份",
+        "columns": 3,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "轮到我的时候",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "prose",
+        "text_ref": "AI 做到一半 → 告诉我为什么"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "AI 在等我回话",
+        "columns": 3,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "notice",
+        "text_ref": "驾驶舱不派活",
+        "tone": "gray"
+      },
+      {
+        "type": "prose",
+        "text_ref": "做法和钟点按 2026 年 11 月 4 日核对"
+      }
+    ],
+    "notes": "本人选 A：开场简介正下方、全景图之前。标题图未登记时用既有字体兜底。"
+  },
+  {
+    "screen": "how-17",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "哪些事 AI 自己办，什么时候轮到我",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "大多数事我不用管"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "我开口才开始",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我开口 → AI 做到底"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "“更新网站”",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "notice",
+        "text_ref": "容易以为是自动的",
+        "tone": "gray"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "我不开口也会办",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "prose",
+        "text_ref": "到点了 → AI 做到能做的最后一步"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "每天的备份",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "轮到我的时候",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "prose",
+        "text_ref": "AI 做到一半 → 告诉我为什么"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "AI 在等我回话",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "notice",
+        "text_ref": "驾驶舱不派活",
+        "tone": "gray"
+      },
+      {
+        "type": "prose",
+        "text_ref": "做法和钟点按 2026 年 11 月 4 日核对"
+      }
+    ],
+    "notes": "本人选 A：开场简介正下方、全景图之前。标题图未登记时用既有字体兜底。"
   },
   {
     "screen": "how-02",

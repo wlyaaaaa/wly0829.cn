@@ -34,12 +34,12 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-11-02 11:25"
+    "at": "2026-11-03 15:54"
    },
    "facts": [
-    "10 月 27 日—11 月 2 日 AI 用了 35 次"
+    "10 月 28 日—11 月 3 日 AI 用了 39 次"
    ],
-   "as_of": "2026-11-02",
+   "as_of": "2026-11-03",
    "source": "AI 使用记录"
   },
   "public": null,
@@ -108,8 +108,8 @@
  },
  "source": {
   "page": "sources/pages/skill-timeaudit-diagnostics/page.json",
-  "sha256": "8306007cfee5c136d4ca4e28f6cb223502c0f35d7d34476ce12910e821b79d04",
-  "converted_at_beijing": "2026-11-04T12:05:40+08:00"
+  "sha256": "7d74a4204d49ebd80c97e69ed2a33d19adbff3387834a79b30e39327b463acc6",
+  "converted_at_beijing": "2026-11-04T14:39:51+08:00"
  }
 }
 ---
@@ -154,15 +154,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 11 月 2 日 11:25",
+       "text": "常用 · 上次使用 11 月 3 日 15:54",
        "state": "ok"
       },
       {
-       "text": "10 月 27 日—11 月 2 日 AI 用了 35 次",
+       "text": "10 月 28 日—11 月 3 日 AI 用了 39 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录",
+     "static_note": "截至 11 月 3 日 · AI 使用记录",
      "row": "hero"
     },
     {
@@ -225,15 +225,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 11 月 2 日 11:25",
+       "text": "常用 · 上次使用 11 月 3 日 15:54",
        "state": "ok"
       },
       {
-       "text": "10 月 27 日—11 月 2 日 AI 用了 35 次",
+       "text": "10 月 28 日—11 月 3 日 AI 用了 39 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录"
+     "static_note": "截至 11 月 3 日 · AI 使用记录"
     },
     {
      "type": "prose",

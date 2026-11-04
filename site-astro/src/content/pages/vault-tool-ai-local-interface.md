@@ -34,7 +34,7 @@
     "at": "2026-10-20 13:59"
    },
    "facts": [
-    "使用记录记到 11 月 2 日，只记技能名，不能证明用成了"
+    "使用记录记到 11 月 3 日，只记技能名，不能证明用成了"
    ]
   },
   "based_on": {
@@ -44,8 +44,8 @@
  },
  "source": {
   "page": "sources/pages/vault-tool-ai-local-interface/page.json",
-  "sha256": "0cfde69ba1a7cd0d0745474c4417cc5bc37d9fcf7c727f9d52dc5b00176a8bfe",
-  "converted_at_beijing": "2026-11-04T12:05:41+08:00"
+  "sha256": "8fe799691438d853053abfcdb6440c607a334b3ee84ce99a9628d79ee9d8f8f2",
+  "converted_at_beijing": "2026-11-04T14:39:52+08:00"
  }
 }
 ---
@@ -99,7 +99,7 @@
        "state": "ok"
       },
       {
-       "text": "使用记录记到 11 月 2 日，只记技能名，不能证明用成了",
+       "text": "使用记录记到 11 月 3 日，只记技能名，不能证明用成了",
        "state": "fact"
       }
      ],
@@ -145,7 +145,7 @@
        "state": "ok"
       },
       {
-       "text": "使用记录记到 11 月 2 日，只记技能名，不能证明用成了",
+       "text": "使用记录记到 11 月 3 日，只记技能名，不能证明用成了",
        "state": "fact"
       }
      ],

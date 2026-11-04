@@ -48,10 +48,10 @@
     "at": "2026-11-01 02:22"
    },
    "facts": [
-    "近七天 AI 用了 12 次（记录到 11 月 2 日）",
+    "近七天 AI 用了 10 次（记录到 11 月 2 日）",
     "替我发消息和实时语音已接上，15 秒没验收"
    ],
-   "as_of": "2026-11-02",
+   "as_of": "2026-11-03",
    "source": "AI 使用记录和项目仓库"
   },
   "public": true,
@@ -745,8 +745,8 @@
  },
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
-  "sha256": "bd06f347ba03551121a69b90b1304515d9460f6966837f7f0ddfad7524e25ffa",
-  "converted_at_beijing": "2026-11-04T12:05:42+08:00"
+  "sha256": "0a8d707e6e75a845835751c47bfc6ab46471e419b4f9849e60e4525dc7927f57",
+  "converted_at_beijing": "2026-11-04T14:40:06+08:00"
  }
 }
 ---
@@ -817,7 +817,7 @@
        "state": "ok"
       },
       {
-       "text": "近七天 AI 用了 12 次（记录到 11 月 2 日）",
+       "text": "近七天 AI 用了 10 次（记录到 11 月 2 日）",
        "state": "fact"
       },
       {
@@ -825,7 +825,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录和项目仓库",
+     "static_note": "截至 11 月 3 日 · AI 使用记录和项目仓库",
      "row": "hero"
     },
     {
@@ -892,7 +892,7 @@
        "state": "ok"
       },
       {
-       "text": "近七天 AI 用了 12 次（记录到 11 月 2 日）",
+       "text": "近七天 AI 用了 10 次（记录到 11 月 2 日）",
        "state": "fact"
       },
       {
@@ -900,7 +900,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日 · AI 使用记录和项目仓库"
+     "static_note": "截至 11 月 3 日 · AI 使用记录和项目仓库"
     },
     {
      "type": "stat_card",
@@ -2752,7 +2752,7 @@
   "screenshots": [],
   "chain": "",
   "reuse": "",
-  "derived_as_of": "数字截至 2026 年 10 月 30 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
