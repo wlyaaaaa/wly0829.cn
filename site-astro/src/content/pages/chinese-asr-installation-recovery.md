@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/chinese-asr-installation-recovery/page.json",
   "sha256": "6860e0fa65c8c1d876d5d52615874ef0198ef20d242af0a3255a70b8d9fc4a6d",
-  "converted_at_beijing": "2026-10-30T15:12:30+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）与 9 月 29 日建成的 E 盘离线备用包（提交 f4d75fc），于 10 月 11 日按 14:00 前状态只读核对文件存在与大小；离线安装自检取 9 月 29 日历史记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）与 9 月 29 日建成的 E 盘离线备用包（提交 f4d75fc），于 10 月 11 日按 14:00 前状态只读核对文件存在与大小；离线安装自检取 9 月 29 日历史记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

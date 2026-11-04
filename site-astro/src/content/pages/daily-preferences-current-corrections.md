@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/daily-preferences-current-corrections/page.json",
   "sha256": "7e1a05ed500ab03515c30bf7c0ecd565d56a8960d936f98608fb44d4fca8e058",
-  "converted_at_beijing": "2026-11-04T08:42:35+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源仓库现为 4717320（北京 10/22 07:22）；实现说明沿用 b334b3aa（北京 10/8 00:23）与 10/11 16:33 只读聚合；原话计数另于 10/22 06:48 只读重数；本次没有写入，历史测试保留原日期",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源仓库现为 4717320（北京 10/22 07:22）；实现说明沿用 b334b3aa（北京 10/8 00:23）与 10/11 16:33 只读聚合；原话计数另于 10/22 06:48 只读重数；本次没有写入，历史测试保留原日期"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

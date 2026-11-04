@@ -546,7 +546,7 @@
  "source": {
   "page": "sources/pages/personal-health/page.json",
   "sha256": "8a6c9f2fd3db8277be3bb50450aa4af9f830ac78ea3cc2ed4ad30d86c6629c3e",
-  "converted_at_beijing": "2026-10-31T13:58:50+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -597,7 +597,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 每周自动刷新 10 月 7 日跑完、正常退出，下次排在 10 月 14 日（10 月 11 日 16:3x 只读查看）；“近 7 天 AI 用了 5 次”是 10 月 3–9 日的小记录，之后未重新核对",
+     "static_note": "截至 10 月 11 日",
      "row": "首屏"
     },
     {
@@ -646,7 +646,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 每周自动刷新 10 月 7 日跑完、正常退出，下次排在 10 月 14 日（10 月 11 日 16:3x 只读查看）；“近 7 天 AI 用了 5 次”是 10 月 3–9 日的小记录，之后未重新核对"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "stat_card",

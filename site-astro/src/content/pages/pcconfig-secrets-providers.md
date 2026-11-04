@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/pcconfig-secrets-providers/page.json",
   "sha256": "cd3e690c57ac7584013f3bb48dbcf5cc8a93594e75d303f386e98fc05c5fb185",
-  "converted_at_beijing": "2026-11-04T08:42:49+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · 密码中心 9 月 28 日已独立成项目，PCConfig 只管机器安装与接线；Google 授权 10 月 28 日改由密码中心保管（PCConfig de6c119e），10 月 30 日只读已安装登记 11 个取用目标；AI 网站代填、遮盖复制和登记式恢复载体已退役，Google 远端动作本次未重新验证。",
+     "static_note": "截至 10 月 30 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · 密码中心 9 月 28 日已独立成项目，PCConfig 只管机器安装与接线；Google 授权 10 月 28 日改由密码中心保管（PCConfig de6c119e），10 月 30 日只读已安装登记 11 个取用目标；AI 网站代填、遮盖复制和登记式恢复载体已退役，Google 远端动作本次未重新验证。"
+     "static_note": "截至 10 月 30 日"
     },
     {
      "type": "action_button",

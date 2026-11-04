@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/meshclip-kit-silent-watchdog-and-session-lifecycle/page.json",
   "sha256": "a095e91963c31c75ea30d2bb559e0092e058c91808ededcd281be71cf3d505f4",
-  "converted_at_beijing": "2026-10-22T08:32:32+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:41+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码核至 9 月 29 日提交 61fa792e，运行情况取北京时间 10 月 11 日 13:33 的一次主机自检；冻结依据 E279 冻结名单（停用留档），GitHub 仓库 10 月 21 日归档、本机副本已删，归档后看门狗与计划任务实际状态未查",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码核至 9 月 29 日提交 61fa792e，运行情况取北京时间 10 月 11 日 13:33 的一次主机自检；冻结依据 E279 冻结名单（停用留档），GitHub 仓库 10 月 21 日归档、本机副本已删，归档后看门狗与计划任务实际状态未查"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

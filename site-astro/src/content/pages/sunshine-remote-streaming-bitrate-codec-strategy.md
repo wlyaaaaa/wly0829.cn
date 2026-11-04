@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-bitrate-codec-strategy/page.json",
   "sha256": "f2f7c5722c502b081e87644cee85e1e0c5eb3fa4e003dff91a297d114e4d094a",
-  "converted_at_beijing": "2026-11-04T08:42:50+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:47+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 码率起点沿用 6 月的历史带宽估算（之后未重新测速）；编码配置按现存配置文件核对；主机编码能力保留 9 月 13 日记录；真实会话的码率、帧率、丢包没有统计",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 码率起点沿用 6 月的历史带宽估算（之后未重新测速）；编码配置按现存配置文件核对；主机编码能力保留 9 月 13 日记录；真实会话的码率、帧率、丢包没有统计"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

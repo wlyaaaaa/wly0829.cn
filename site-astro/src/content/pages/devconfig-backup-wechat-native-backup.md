@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup-wechat-native-backup/page.json",
   "sha256": "6f7933dcd68a3396846c1859a241ef8e3293c823a06b4b35c8c20b514ecc2b36",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · DevConfig Backup 公开仓库 de0f4e3 的微信备份源码（北京时间 10 月 30 日 11:13 回读，与远端 main 一致），加上 10 月 30 日 11:11 只读回读的零写入状态入口、G 盘热备回执和 PCConfig 最新一轮冷备总回执；未联网、未重新散列原文件；只记数量和状态，不读聊天内容",
+     "static_note": "截至 10 月 30 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · DevConfig Backup 公开仓库 de0f4e3 的微信备份源码（北京时间 10 月 30 日 11:13 回读，与远端 main 一致），加上 10 月 30 日 11:11 只读回读的零写入状态入口、G 盘热备回执和 PCConfig 最新一轮冷备总回执；未联网、未重新散列原文件；只记数量和状态，不读聊天内容"
+     "static_note": "截至 10 月 30 日"
     },
     {
      "type": "action_button",

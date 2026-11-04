@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/work-delivery-source-change-next-version/page.json",
   "sha256": "322354c591ea3dab45e4c58ec257d83a2657b6da5204561b368eee5143d7a2c6",
-  "converted_at_beijing": "2026-11-04T08:42:51+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:51+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 工作交付源码（main 7a8d0e5，最后提交 9 月 29 日）按 10 月 11 日 14:00 前现状重新核对，结构锚点规则来自 9 月 24 日提交 c621e2f；本轮没有重跑测试，合成来源变化验收保留 9 月 1 日原日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 工作交付源码（main 7a8d0e5，最后提交 9 月 29 日）按 10 月 11 日 14:00 前现状重新核对，结构锚点规则来自 9 月 24 日提交 c621e2f；本轮没有重跑测试，合成来源变化验收保留 9 月 1 日原日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

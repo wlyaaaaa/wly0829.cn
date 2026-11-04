@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-recoverable-runs/page.json",
   "sha256": "43f35a20ef4798908dfed9ea1c6d0082c4c702c9da357f2f5e62b54329b709c1",
-  "converted_at_beijing": "2026-10-30T15:12:30+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 父项目总览状态“常用”；事实按 10 月 11 日 14:00 前的源码（10 月 8 日提交）、恢复记录的只读计数和版本查询核对，未新建运行。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 父项目总览状态“常用”；事实按 10 月 11 日 14:00 前的源码（10 月 8 日提交）、恢复记录的只读计数和版本查询核对，未新建运行。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

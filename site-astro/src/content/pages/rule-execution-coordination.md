@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E371",
-   "commit": "3c09ab215347bdeef9b20027169a68cbe43e1a61",
-   "ruleset_sha256": "0027aa3691052764d05c2e68802eeb1049c7ae7b5151d4f59a605251d402c130",
-   "activated_at": "2026-11-04T07:38:37.086979+08:00",
+   "release": "E372",
+   "commit": "f44463a9fd2c4bacb8c562315d297db27d501f35",
+   "ruleset_sha256": "ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7",
+   "activated_at": "2026-11-04T08:49:37.968049+08:00",
    "file": "sources/rules/docs/contracts/agents.execution-coordination.md",
-   "sha256": "2d3cab325a823240f029931a5f37d097cde4e7e846abe60f6b9ca0c61bd4a646",
-   "public_sha256": "fc66c730025bcf961955321c538d23acd9a4b865d8dbd6ddb2060a9df10fffcf"
+   "sha256": "c400d8dbe59c6c7f75ec36a005eae0a4c983093d0ed11253a4b8e53f4be36b73",
+   "public_sha256": "2f66642bb99bc9f7ca166b267c6132b82f502dd1366ca5851914f46c44fd9bc4"
   },
   "explanation_based_on": {
    "release": "E337",
@@ -209,8 +209,8 @@
  },
  "source": {
   "page": "sources/pages/rule-execution-coordination/page.json",
-  "sha256": "c2e238ba68142ac1e978407ee682c79c66b86c656f29fbbd915574bbfe9ce83f",
-  "converted_at_beijing": "2026-11-04T08:31:33+08:00"
+  "sha256": "7c9a3a03d52e8d1e599b14af65ab8c8c27146fa8fca4eed2c99ca1d30e12740e",
+  "converted_at_beijing": "2026-11-04T10:21:46+08:00"
  }
 }
 ---
@@ -1460,9 +1460,9 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.execution-coordination.md",
-   "release": "E371",
-   "sha256": "2d3cab325a823240f029931a5f37d097cde4e7e846abe60f6b9ca0c61bd4a646",
-   "public_sha256": "fc66c730025bcf961955321c538d23acd9a4b865d8dbd6ddb2060a9df10fffcf",
+   "release": "E372",
+   "sha256": "c400d8dbe59c6c7f75ec36a005eae0a4c983093d0ed11253a4b8e53f4be36b73",
+   "public_sha256": "2f66642bb99bc9f7ca166b267c6132b82f502dd1366ca5851914f46c44fd9bc4",
    "from": null,
    "to": "## 改动与花费成比例",
    "start": 0,
@@ -1489,7 +1489,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
   "reuse": "",
   "source_excerpt_id": "rule-execution-coordination/rule-execution-coordination-06",
   "source_logical_id": "execution_coordination_contract",
-  "source_public_sha256": "fc66c730025bcf961955321c538d23acd9a4b865d8dbd6ddb2060a9df10fffcf",
+  "source_public_sha256": "2f66642bb99bc9f7ca166b267c6132b82f502dd1366ca5851914f46c44fd9bc4",
   "source_rule_part": "rule-execution-coordination/rule-execution-coordination-06"
  },
  "layout": {
@@ -1498,7 +1498,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E371版，一字不改"
+     "text_ref": "原文·E372版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1522,7 +1522,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E371版，一字不改"
+     "text_ref": "原文·E372版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1598,7 +1598,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
 }
 ```
 
-原文 · E371 版，一字不改
+原文 · E372 版，一字不改
 
 # 分工与并行施工
 
@@ -1676,13 +1676,13 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.execution-coordination.md",
-   "release": "E371",
-   "sha256": "2d3cab325a823240f029931a5f37d097cde4e7e846abe60f6b9ca0c61bd4a646",
-   "public_sha256": "fc66c730025bcf961955321c538d23acd9a4b865d8dbd6ddb2060a9df10fffcf",
+   "release": "E372",
+   "sha256": "c400d8dbe59c6c7f75ec36a005eae0a4c983093d0ed11253a4b8e53f4be36b73",
+   "public_sha256": "2f66642bb99bc9f7ca166b267c6132b82f502dd1366ca5851914f46c44fd9bc4",
    "from": "## 改动与花费成比例",
    "to": null,
    "start": 5864,
-   "end": 13288,
+   "end": 13408,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1721,7 +1721,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
   "reuse": "",
   "source_excerpt_id": "rule-execution-coordination/rule-execution-coordination-07",
   "source_logical_id": "execution_coordination_contract",
-  "source_public_sha256": "fc66c730025bcf961955321c538d23acd9a4b865d8dbd6ddb2060a9df10fffcf",
+  "source_public_sha256": "2f66642bb99bc9f7ca166b267c6132b82f502dd1366ca5851914f46c44fd9bc4",
   "source_rule_part": "rule-execution-coordination/rule-execution-coordination-07"
  },
  "layout": {
@@ -1730,7 +1730,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -1804,7 +1804,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -1902,7 +1902,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ## 改动与花费成比例
 
@@ -1919,6 +1919,7 @@ Claude 主持时负责想、把关，以及模型清单交给它的惊艳样板�
   - 能直接答的不查；需要查证时先搜官方文档、已有研究，查已有日志和回执，能搜到可靠资料的不实测。
   - 权威评测、厂商和媒体的可靠资料可采信，不因“没亲眼看见”坚持自己验证；模型选型按权威评测和厂商数据，不自己实测。
   - 只有查不到可靠资料、且实测结果会改变决定时才实测；动手或派单前写明会改变哪个决定，以及必要的流量和时间，不为估算查询账号额度。
+  - 拿真实 AI 跑测试时，真技能、钩子和本人的 Chrome 都可能被触发，`--ignore-user-config`、`--ephemeral` 这类开关断不开它们：先确认题目不会动到本人的东西，先跑一个看有没有副作用，再批量。
   - 不写没有意义的机械测试和过度测试；测试只覆盖会改变结果的关键路径。
   - 证据已经足以说明结果就停，不为“完整证明”去重建、穷举，也不重跑已经通过的部分。
 - **替换后的旧实现**按[仓库和过程材料](/rules/engineering-delivery/#仓库和过程材料)删除。

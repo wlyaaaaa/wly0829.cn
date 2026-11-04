@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/timeaudit-process-forensics/page.json",
   "sha256": "98b3a05def7c5bb0feb3f330a278b417a9962a18c2d0b9f8f98e7014641ca2bd",
-  "converted_at_beijing": "2026-10-22T08:32:41+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:48+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 源码仍是 10 月 11 日 12:44 的提交 c5ca4eeb（10 月 12 日 05:39 复核，生命周期等改动仍是未提交候选）；生命周期估算与精确数 10 月 12 日 05:38—05:40 只读重取，未读个人程序明细",
+     "static_note": "截至 10 月 12 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 源码仍是 10 月 11 日 12:44 的提交 c5ca4eeb（10 月 12 日 05:39 复核，生命周期等改动仍是未提交候选）；生命周期估算与精确数 10 月 12 日 05:38—05:40 只读重取，未读个人程序明细"
+     "static_note": "截至 10 月 12 日"
     },
     {
      "type": "action_button",

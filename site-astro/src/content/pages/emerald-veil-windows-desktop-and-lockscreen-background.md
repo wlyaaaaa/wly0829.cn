@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/emerald-veil-windows-desktop-and-lockscreen-background/page.json",
   "sha256": "99ad79b7ea47cc79fdd9c3b4ce63d5fa99fe816891554861718e09b1ba755581",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码主线 861a2d2（北京时间 10 月 8 日 23:50）与北京时间 10 月 11 日 13:32–13:33 的只读 Verify（接口报错，未完成）；雨林黑猫壁纸、原图留底、手机壁纸留底在用，只检查不改说不准，换机装回待验收",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码主线 861a2d2（北京时间 10 月 8 日 23:50）与北京时间 10 月 11 日 13:32–13:33 的只读 Verify（接口报错，未完成）；雨林黑猫壁纸、原图留底、手机壁纸留底在用，只检查不改说不准，换机装回待验收"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

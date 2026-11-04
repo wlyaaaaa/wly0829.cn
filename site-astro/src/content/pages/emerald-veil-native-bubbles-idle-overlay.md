@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/emerald-veil-native-bubbles-idle-overlay/page.json",
   "sha256": "10e43acb0b6d7f3a2522ad9a5ea9861df7198bfd633c89e939cbaeff2d91ed5b",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码主线 861a2d2（北京时间 10 月 8 日 23:50）与北京时间 10 月 11 日 13:33–13:36 的只读安装、配置和常驻状态检查；闲时泡泡在用",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码主线 861a2d2（北京时间 10 月 8 日 23:50）与北京时间 10 月 11 日 13:33–13:36 的只读安装、配置和常驻状态检查；闲时泡泡在用"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/wechat-direct-named-chat-archive/page.json",
   "sha256": "286e2c71133ff8063dd354acd90abdd7b9afa977357f8764be4f5d3e09e4468d",
-  "converted_at_beijing": "2026-11-04T08:42:51+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源代码核对到 10 月 20 日最后一次提交（v0.2.3，10 月 22 日复核；这次提交只改安装方式和语音自检用的 Python）；现有档案的份数和计数于 10 月 11 日 16:32 重新清点，没有读正文，也没有运行真实同步或测试",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -130,7 +130,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源代码核对到 10 月 20 日最后一次提交（v0.2.3，10 月 22 日复核；这次提交只改安装方式和语音自检用的 Python）；现有档案的份数和计数于 10 月 11 日 16:32 重新清点，没有读正文，也没有运行真实同步或测试"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

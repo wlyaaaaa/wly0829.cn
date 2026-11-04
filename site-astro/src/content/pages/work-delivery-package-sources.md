@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/work-delivery-package-sources/page.json",
   "sha256": "264e41908d093a1eeefab0a63417dac8569343b9360d9342e9b9d9ae593e3d53",
-  "converted_at_beijing": "2026-11-04T08:42:51+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:51+08:00"
  }
 }
 ---
@@ -85,7 +85,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 工作交付源码（main 7a8d0e5，9 月 29 日起固定数据库默认位置）按 10 月 11 日 14:00 前现状重新核对；本轮没有运行建包命令或测试。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -127,7 +127,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 工作交付源码（main 7a8d0e5，9 月 29 日起固定数据库默认位置）按 10 月 11 日 14:00 前现状重新核对；本轮没有运行建包命令或测试。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

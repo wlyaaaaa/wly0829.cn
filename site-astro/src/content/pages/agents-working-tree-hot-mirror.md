@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/agents-working-tree-hot-mirror/page.json",
   "sha256": "f1023c84c413366782ba10a0ee20af532912c8a38fa589514e9fef653caf34ff",
-  "converted_at_beijing": "2026-10-12T05:03:42+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 按 2026-10-12 04:34—04:38（北京时间）现场复核：热镜像脚本、计划任务安装器和测试已于 2026-09-27 删除，相关路径与计划任务均不存在；历史实现取自删除前的 Git 记录",
+     "static_note": "截至 10 月 12 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 按 2026-10-12 04:34—04:38（北京时间）现场复核：热镜像脚本、计划任务安装器和测试已于 2026-09-27 删除，相关路径与计划任务均不存在；历史实现取自删除前的 Git 记录"
+     "static_note": "截至 10 月 12 日"
     },
     {
      "type": "action_button",

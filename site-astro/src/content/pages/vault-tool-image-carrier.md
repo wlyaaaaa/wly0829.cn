@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/vault-tool-image-carrier/page.json",
   "sha256": "1ef58dca178e56c07f5087551e523adb75dec6e9ba6a6fbbe65282266494c484",
-  "converted_at_beijing": "2026-10-30T15:12:32+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:49+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 b884ab61（10 月 1 日，版本 2.3.1）核对；9 月 29 日起写入改为一律不覆盖已有文件。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 b884ab61（10 月 1 日，版本 2.3.1）核对；9 月 29 日起写入改为一律不覆盖已有文件。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

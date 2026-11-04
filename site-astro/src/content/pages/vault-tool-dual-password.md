@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/vault-tool-dual-password/page.json",
   "sha256": "eee6e31b0ac19cf7b4d8e67824a386f5341bc80adf4740b360f39fd2b38350bc",
-  "converted_at_beijing": "2026-10-30T15:12:32+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:49+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 b884ab61（10 月 1 日，版本 2.3.1）核对，没有读取任何真实库或使用记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 b884ab61（10 月 1 日，版本 2.3.1）核对，没有读取任何真实库或使用记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

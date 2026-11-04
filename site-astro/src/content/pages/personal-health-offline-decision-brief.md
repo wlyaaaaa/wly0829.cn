@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-health-offline-decision-brief/page.json",
   "sha256": "e6f3bbe7d23a85d4da93b836989f5f4660b952dc3f9b017cf2d053768760a03e",
-  "converted_at_beijing": "2026-10-31T13:58:51+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码最后变更 10 月 7 日，10 月 11 日只读核对；真实采集链已有完成记录，本次未打开任何简报健康内容",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码最后变更 10 月 7 日，10 月 11 日只读核对；真实采集链已有完成记录，本次未打开任何简报健康内容"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

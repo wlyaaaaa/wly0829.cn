@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-background-openai-children/page.json",
   "sha256": "6ac610a17f72322035c6a8d556416f664942c4fa741ca784bcf2440af6ad2eae",
-  "converted_at_beijing": "2026-10-30T15:12:30+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 父项目总览状态“常用”；事实按 10 月 11 日 14:00 前的源码（10 月 8 日提交）、9 月 18 日验收原文与回执、当天桌面桥核对整理，没有新建子会话或发厂商请求。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 父项目总览状态“常用”；事实按 10 月 11 日 14:00 前的源码（10 月 8 日提交）、9 月 18 日验收原文与回执、当天桌面桥核对整理，没有新建子会话或发厂商请求。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

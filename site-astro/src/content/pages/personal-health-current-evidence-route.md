@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-health-current-evidence-route/page.json",
   "sha256": "f8e2f77427360bbc85bca5df713bdaf5d573e1a9eef027d55898f3ac1961f4c9",
-  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目规则与 personal-health 技能 10 月 11 日只读核对，源码最后变更 10 月 7 日；网页未读取任何健康正文",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目规则与 personal-health 技能 10 月 11 日只读核对，源码最后变更 10 月 7 日；网页未读取任何健康正文"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

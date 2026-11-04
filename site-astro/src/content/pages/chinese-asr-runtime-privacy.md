@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/chinese-asr-runtime-privacy/page.json",
   "sha256": "74eaf3bf674f0a9829bc6aaa5d8be5875f26a87c4e0aaa2d6219c856f493f0cd",
-  "converted_at_beijing": "2026-10-30T15:12:31+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）按 10 月 11 日 14:00 前的源码与配置只读核对；云端调用统计取保留的结果元数据（云结果时间 8 月 1 日至 9 月 27 日），本轮未调用云端。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）按 10 月 11 日 14:00 前的源码与配置只读核对；云端调用统计取保留的结果元数据（云结果时间 8 月 1 日至 9 月 27 日），本轮未调用云端。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

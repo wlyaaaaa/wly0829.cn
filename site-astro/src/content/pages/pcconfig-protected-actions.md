@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/pcconfig-protected-actions/page.json",
   "sha256": "ce976bbf85b182877ea354b33dd94fd8226ab4bd21d9bfa7c546d5e04c125b42",
-  "converted_at_beijing": "2026-10-31T07:45:42+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:42+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 旧设备保护已退役；四类本人验证、共享资料锁、手动锁屏和每周恢复密钥核对继续；设备不可信、自动 BitLocker 隔离和十分钟邀请于 2026-09-26 删除（提交 8d2dbcd4）。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 旧设备保护已退役；四类本人验证、共享资料锁、手动锁屏和每周恢复密钥核对继续；设备不可信、自动 BitLocker 隔离和十分钟邀请于 2026-09-26 删除（提交 8d2dbcd4）。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

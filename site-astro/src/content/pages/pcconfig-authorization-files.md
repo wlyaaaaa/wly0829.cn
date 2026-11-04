@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/pcconfig-authorization-files/page.json",
   "sha256": "abf25ca121f459135c913adb28396d08a3bafa4e41239f5ecbdb2e73fcefa892",
-  "converted_at_beijing": "2026-11-04T08:42:49+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:42+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 产品与代码归 PasswordCenter（968b9816），PCConfig 管安装与机器备份；10 月 11 日 16:34—16:37 核对三个相关程序源码与安装一致，真实文件操作本次未执行。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 产品与代码归 PasswordCenter（968b9816），PCConfig 管安装与机器备份；10 月 11 日 16:34—16:37 核对三个相关程序源码与安装一致，真实文件操作本次未执行。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/document-materials-reality-readback-recovery/page.json",
   "sha256": "622e634f47e74f9c2b9532fc5340228f1804f6bf196f66a9e5b8747d46ca9efa",
-  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 11 日 14:00 前的版本（最后变更 10 月 9 日），当日 16:35 只读核对，现实状态语义未变；真实外部处理数量本次未读",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 11 日 14:00 前的版本（最后变更 10 月 9 日），当日 16:35 只读核对，现实状态语义未变；真实外部处理数量本次未读"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

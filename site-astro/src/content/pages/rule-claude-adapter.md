@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E371",
-   "commit": "3c09ab215347bdeef9b20027169a68cbe43e1a61",
-   "ruleset_sha256": "0027aa3691052764d05c2e68802eeb1049c7ae7b5151d4f59a605251d402c130",
-   "activated_at": "2026-11-04T07:38:37.086979+08:00",
+   "release": "E372",
+   "commit": "f44463a9fd2c4bacb8c562315d297db27d501f35",
+   "ruleset_sha256": "ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7",
+   "activated_at": "2026-11-04T08:49:37.968049+08:00",
    "file": "sources/rules/docs/contracts/agents.claude-adapter.md",
    "sha256": "a43c5fbcedfcc73d987f4bfe84e27be32cebc6e6892503152077c655bfd50b05",
    "public_sha256": "546f4a571c87c2408ea15d223ba880309d5994c066ccca486803fa58094bb43e"
@@ -243,8 +243,8 @@
  },
  "source": {
   "page": "sources/pages/rule-claude-adapter/page.json",
-  "sha256": "1216a731232359e5664ff9dc4e7494a956096726644753b8d047f3f275331d91",
-  "converted_at_beijing": "2026-11-04T08:31:33+08:00"
+  "sha256": "f8cb886d3da4e7265f39877d41f3fa07f4cb7fadd61e769779ae39870d574c0a",
+  "converted_at_beijing": "2026-11-04T10:21:45+08:00"
  }
 }
 ---
@@ -3072,7 +3072,7 @@ Hook 是 Claude 在固定时刻自动运行的程序。开对话时那个只核�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.claude-adapter.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "a43c5fbcedfcc73d987f4bfe84e27be32cebc6e6892503152077c655bfd50b05",
    "public_sha256": "546f4a571c87c2408ea15d223ba880309d5994c066ccca486803fa58094bb43e",
    "from": null,
@@ -3105,7 +3105,7 @@ Hook 是 Claude 在固定时刻自动运行的程序。开对话时那个只核�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版，一字不改"
+     "text_ref": "原文·E372版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -3139,7 +3139,7 @@ Hook 是 Claude 在固定时刻自动运行的程序。开对话时那个只核�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版，一字不改"
+     "text_ref": "原文·E372版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -3241,7 +3241,7 @@ Hook 是 Claude 在固定时刻自动运行的程序。开对话时那个只核�
 }
 ```
 
-原文 · E371 版，一字不改
+原文 · E372 版，一字不改
 
 # Claude 适配
 
@@ -3279,7 +3279,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.claude-adapter.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "a43c5fbcedfcc73d987f4bfe84e27be32cebc6e6892503152077c655bfd50b05",
    "public_sha256": "546f4a571c87c2408ea15d223ba880309d5994c066ccca486803fa58094bb43e",
    "from": "## 派子代理：Claude 的不同处",
@@ -3316,7 +3316,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3353,7 +3353,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3407,7 +3407,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ## 派子代理：Claude 的不同处
 
@@ -3438,7 +3438,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.claude-adapter.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "a43c5fbcedfcc73d987f4bfe84e27be32cebc6e6892503152077c655bfd50b05",
    "public_sha256": "546f4a571c87c2408ea15d223ba880309d5994c066ccca486803fa58094bb43e",
    "from": "- **从包装器进入。**",
@@ -3479,7 +3479,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3512,7 +3512,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3538,7 +3538,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 - **从包装器进入。** 使用 `E:\.agents\tools\Invoke-ClaudeGptChild.ps1`，`-ParentHarness` 默认 `Claude`。Start、Resume 走私有 AppServer（后台服务）；Start 默认独立执行，Resume 沿用已存方式。确需桌面身份可传 `-Detached:$false`，或只把凭据动作交根。运行中纠偏用同轮 Steer。不直接调用 `codex exec`、Codex 的 `openai_child` 或专用判断角色。共用容量和接续见[分工与并行施工](/rules/execution-coordination/#原生容量不足与原线程接续)；`-ParentHarness Codex` 只供[Codex 的已授权转用](/rules/codex-adapter/#原生容量不足时转用共用包装器)，不搬用 Claude 的型号许可。
 - **资料与权限。** Codex 子任务按正常 Codex 配置和当前授权工作，不复制 Claude 对话授权值，不另加沙箱或审批覆盖。独立执行者没有桌面祖先身份：真正依赖密码中心桌面身份的凭据步骤交回根会话，其余已授权步骤照常完成；不另行登录、转交秘密或改身份核验来补。资料需求、共享资料期和缺口交回按[派子代理的原则](/rules/execution-coordination/#派子代理的原则)“根核验规则和判断资料需求”一条。
@@ -3562,7 +3562,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.claude-adapter.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "a43c5fbcedfcc73d987f4bfe84e27be32cebc6e6892503152077c655bfd50b05",
    "public_sha256": "546f4a571c87c2408ea15d223ba880309d5994c066ccca486803fa58094bb43e",
    "from": "命令参数按需查",
@@ -3603,7 +3603,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3638,7 +3638,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3691,7 +3691,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 命令参数按需查 `Get-Help E:\.agents\tools\Invoke-ClaudeGptChild.ps1 -Full`。Steer 长消息或含中文引号时用 `-PromptFile`，不同时传 `-Message`；用 Status 核对是否接受、是否被模型看到及汇报中的处理结果，不把入队当成完成。Resume 只用于已结束的原线程，沿用原型号、档位和脱离方式。
 
@@ -3714,7 +3714,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.claude-adapter.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "a43c5fbcedfcc73d987f4bfe84e27be32cebc6e6892503152077c655bfd50b05",
    "public_sha256": "546f4a571c87c2408ea15d223ba880309d5994c066ccca486803fa58094bb43e",
    "from": "- **要在新会话里验收的**",
@@ -3751,7 +3751,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3777,7 +3777,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3804,7 +3804,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 - **要在新会话里验收的**（Hook、MCP、技能）：用真正的新桌面会话，运行中的会话仍持旧 Hook 和 MCP。开验收会话或子代理都先想清楚档位并显式设定，不沿用根会话的档位（根会话常开 max；`start_session` 不传 `effort`、`model` 就沿用根会话的）：只看装没装上、能不能触发的，用 Sonnet 5.5、low；看日常回答表现的，用 Opus、high；验收一律不开 max。也可以给可复制提示，首行注明型号和档位，让本人新开、选好后粘贴；结果交回或由根回读。MCP 原命令可按 `%USERPROFILE%\.claude.json` 的 `mcpServers` 跑 stdio 作补充，两种证据分开。嵌套 `claude -p` 没登录、也非新桌面会话，不能代替，不为它登录或转交凭据。
 - **权限**：用户设置里全局使用 `permissions.defaultMode=bypassPermissions`，和 Codex 的完全访问对等；不用 auto 模式或 `autoMode` 条目复制授权。宿主固定拦截的操作（删除盘根或一级目录、`Remove-Item` 通配、前台长时间 sleep、`AskUserQuestion` 等）不是停工理由：改用字面子路径、回收站工具（见[工程与交付](/rules/engineering-delivery/)），或用后台任务、Monitor 等待。
@@ -3827,7 +3827,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.claude-adapter.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "a43c5fbcedfcc73d987f4bfe84e27be32cebc6e6892503152077c655bfd50b05",
    "public_sha256": "546f4a571c87c2408ea15d223ba880309d5994c066ccca486803fa58094bb43e",
    "from": "## Hook 和个人资料状态",
@@ -3855,7 +3855,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3891,7 +3891,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3967,7 +3967,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ## Hook 和个人资料状态
 
@@ -4005,7 +4005,7 @@ Claude、本机、图形界面和电脑 MCP 共用资料状态。用 `CheckPerso
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.claude-adapter.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "a43c5fbcedfcc73d987f4bfe84e27be32cebc6e6892503152077c655bfd50b05",
    "public_sha256": "546f4a571c87c2408ea15d223ba880309d5994c066ccca486803fa58094bb43e",
    "from": "## 受信任 AI 的其他能力",
@@ -4038,7 +4038,7 @@ Claude、本机、图形界面和电脑 MCP 共用资料状态。用 `CheckPerso
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -4075,7 +4075,7 @@ Claude、本机、图形界面和电脑 MCP 共用资料状态。用 `CheckPerso
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -4152,7 +4152,7 @@ Claude、本机、图形界面和电脑 MCP 共用资料状态。用 `CheckPerso
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ## 受信任 AI 的其他能力
 

@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-vdd-display-settings/page.json",
   "sha256": "eabdc81df3d547c58cd8f2b5a42ec41eae5844e7c79e156f9dff2ca38065c164",
-  "converted_at_beijing": "2026-11-04T08:42:50+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:48+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 6 日最后一次提交（早于 10 月 11 日 14:00 截止）核对；驱动配置文件按现存内容核对；虚拟屏实际模式、缩放和 Windows HDR 截止前没有新的回读，之后未重新核对；没有执行 Apply",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 6 日最后一次提交（早于 10 月 11 日 14:00 截止）核对；驱动配置文件按现存内容核对；虚拟屏实际模式、缩放和 Windows HDR 截止前没有新的回读，之后未重新核对；没有执行 Apply"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

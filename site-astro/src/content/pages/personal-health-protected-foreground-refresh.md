@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-health-protected-foreground-refresh/page.json",
   "sha256": "2f7dbbc7f3dc055d59058dba3975b86074b853a2ce3eef39a6c09fd32c1e028e",
-  "converted_at_beijing": "2026-10-31T13:58:51+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目源码最后变更 10 月 7 日、源码按 10 月 11 日 14:00 前为准；周任务状态与凭据登记方式为 10 月 11 日只读查看，本次没有联网刷新",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目源码最后变更 10 月 7 日、源码按 10 月 11 日 14:00 前为准；周任务状态与凭据登记方式为 10 月 11 日只读查看，本次没有联网刷新"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

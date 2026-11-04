@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-media-local-ingest/page.json",
   "sha256": "857e7206476027b15535d60b530cdb4498f44a572d57476b9c08f73e34930d30",
-  "converted_at_beijing": "2026-11-04T08:42:37+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:44+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 10 日版本，10 月 11 日只读核对；本次没有接入任何真实新文件、没有跑测试",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 10 日版本，10 月 11 日只读核对；本次没有接入任何真实新文件、没有跑测试"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

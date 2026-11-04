@@ -40,7 +40,7 @@
  "source": {
   "page": "sources/pages/video-scaffold-scene-authoring/page.json",
   "sha256": "8f11b7a45ba0b0bc1477ab851103bd8274fe652d46c3365ca42379bb49163e5f",
-  "converted_at_beijing": "2026-10-30T13:04:20+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
  }
 }
 ---
@@ -90,7 +90,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 内容按北京时间 10 月 22 日 01:25 最后一次提交 626774f 核对（10 月 22 日 06:47 读），未制作新画面",
+     "static_note": "截至 10 月 22 日",
      "row": "top"
     },
     {
@@ -132,7 +132,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 内容按北京时间 10 月 22 日 01:25 最后一次提交 626774f 核对（10 月 22 日 06:47 读），未制作新画面"
+     "static_note": "截至 10 月 22 日"
     },
     {
      "type": "action_button",

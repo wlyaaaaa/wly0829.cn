@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/chinese-asr-known-text-alignment/page.json",
   "sha256": "a3e60e2fa9ec8f6daeeb5a9225765951e07654757c222f8ae8c5f3bd0a0c1509",
-  "converted_at_beijing": "2026-10-30T15:12:30+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的对齐合同、配置与固定对齐模型文件，于 10 月 11 日按 14:00 前状态只读核对，语义未变；本轮未调用对齐。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的对齐合同、配置与固定对齐模型文件，于 10 月 11 日按 14:00 前状态只读核对，语义未变；本轮未调用对齐。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

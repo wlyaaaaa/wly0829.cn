@@ -387,7 +387,7 @@
  "source": {
   "page": "sources/pages/phone-collector/page.json",
   "sha256": "b6e6bfdd2f576384e6ce9873e4ccdfa786323f77b5d6301fb19f4fe9a3b91fdb",
-  "converted_at_beijing": "2026-11-04T08:42:49+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:44+08:00"
  }
 }
 ---
@@ -442,7 +442,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 私有仓库最近提交北京 10 月 30 日 00:16（源码 0.1.13，versionCode 14，4092595）；10 月 30 日只读源码和文档，没有连手机，手机上实际装的版本和跨夜表现都没核",
+     "static_note": "截至 11 月 4 日",
      "row": "首屏"
     },
     {
@@ -501,7 +501,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 私有仓库最近提交北京 10 月 30 日 00:16（源码 0.1.13，versionCode 14，4092595）；10 月 30 日只读源码和文档，没有连手机，手机上实际装的版本和跨夜表现都没核"
+     "static_note": "截至 11 月 4 日"
     },
     {
      "type": "stat_card",

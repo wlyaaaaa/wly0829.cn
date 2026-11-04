@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/timeaudit-clipboard-history/page.json",
   "sha256": "7e1aa790b84db44701b8aebd73c9388a76f4e20191ae194c53d32ad2194ade19",
-  "converted_at_beijing": "2026-11-04T08:42:39+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:48+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 源码最新提交是 10 月 20 日 17:47 的 12491e2（10 月 22 日复核）；记录数 10 月 22 日 06:48 只读重取，近线备份回执 10 月 22 日回读（只数条数，不读内容）",
+     "static_note": "截至 10 月 22 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 源码最新提交是 10 月 20 日 17:47 的 12491e2（10 月 22 日复核）；记录数 10 月 22 日 06:48 只读重取，近线备份回执 10 月 22 日回读（只数条数，不读内容）"
+     "static_note": "截至 10 月 22 日"
     },
     {
      "type": "action_button",

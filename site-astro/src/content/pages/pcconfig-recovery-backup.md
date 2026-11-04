@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/pcconfig-recovery-backup/page.json",
   "sha256": "56489f230aa9a4584efa085750311453be82a3909f6feafe9d7e9e6701b98e21",
-  "converted_at_beijing": "2026-11-04T08:42:49+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:42+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · 按 PCConfig 431ad1c1 恢复登记，以及 efb7cd62（取消强制镜像加密）、ef6cafba（个人资料卷影时点）；镜像按 10 月 29 日 13:59 完成的回执，H 冷备按 10 月 29 日 18:06 的回执（整轮部分完成）；空盘整机还原本人决定不演练，新机正常启动与应用数据可见仍未验收。",
+     "static_note": "截至 10 月 30 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · 按 PCConfig 431ad1c1 恢复登记，以及 efb7cd62（取消强制镜像加密）、ef6cafba（个人资料卷影时点）；镜像按 10 月 29 日 13:59 完成的回执，H 冷备按 10 月 29 日 18:06 的回执（整轮部分完成）；空盘整机还原本人决定不演练，新机正常启动与应用数据可见仍未验收。"
+     "static_note": "截至 10 月 30 日"
     },
     {
      "type": "action_button",

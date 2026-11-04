@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/work-delivery-evidence-quality/page.json",
   "sha256": "c10485b03909fe9c27201e0672460376afcbb8b5b0a643f7ca35ada1fa1082cc",
-  "converted_at_beijing": "2026-11-04T08:42:51+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:51+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 工作交付源码（main 7a8d0e5）按 10 月 11 日 14:00 前现状重新核对，当前 45 项测试定义本轮未运行；已有通过记录保留 9 月 1 日、9 月 28 日原日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 工作交付源码（main 7a8d0e5）按 10 月 11 日 14:00 前现状重新核对，当前 45 项测试定义本轮未运行；已有通过记录保留 9 月 1 日、9 月 28 日原日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

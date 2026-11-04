@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/proxyclean-targeted-port-shutdown/page.json",
   "sha256": "eb9d4eda7d06b89ea33dfdab2e2a1f438f9bff3dfaf5a84de4abaef8b089f6b4",
-  "converted_at_beijing": "2026-11-04T08:42:50+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:45+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）逐项核对；没有实关客户端。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -130,7 +130,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）逐项核对；没有实关客户端。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

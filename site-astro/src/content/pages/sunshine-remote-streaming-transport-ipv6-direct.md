@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-transport-ipv6-direct/page.json",
   "sha256": "a4e8be9f7e694d7887e623b0d7ccaa71a4944e4e1b53f7ff6f63e90f9d926212",
-  "converted_at_beijing": "2026-10-11T19:04:26+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:48+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 6 日最后一次提交、两机代理分流按电脑配置（PCConfig）10 月 8–9 日的登记（均早于 10 月 11 日 14:00 截止）；主机网络取截止前最近一次（10 月 10 日）每日检查；今天没有指定手机做路径探测",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 6 日最后一次提交、两机代理分流按电脑配置（PCConfig）10 月 8–9 日的登记（均早于 10 月 11 日 14:00 截止）；主机网络取截止前最近一次（10 月 10 日）每日检查；今天没有指定手机做路径探测"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

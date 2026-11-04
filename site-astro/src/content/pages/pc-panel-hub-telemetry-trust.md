@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/pc-panel-hub-telemetry-trust/page.json",
   "sha256": "0bc7bc1db269946023f23a0738c7f8d88cf9e1872e5388cb501a2d5b1e32ce18",
-  "converted_at_beijing": "2026-10-11T19:04:25+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:42+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 6 日最后一次提交（早于 10 月 11 日 14:00 截止）重新核对，端口按配置文件和电脑配置（PCConfig）截止前登记；可信度分数和测试保留各自历史日期，本轮没有重跑",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -130,7 +130,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 6 日最后一次提交（早于 10 月 11 日 14:00 截止）重新核对，端口按配置文件和电脑配置（PCConfig）截止前登记；可信度分数和测试保留各自历史日期，本轮没有重跑"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

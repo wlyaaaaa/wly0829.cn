@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-materials-bounded-discovery/page.json",
   "sha256": "e24fe1c40cd9b2e9611495c2cf60681293b15b88315d9d60b454f8b6647f04b2",
-  "converted_at_beijing": "2026-11-04T08:42:49+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -85,7 +85,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 21 日版本（48b539d；发现规则 10 月 20 日 9b8e35c 改为查全部清单）；文件名清单条数为 10 月 22 日 06:47 只读计数；有界盘点仍是 10 月 11 日 23:52 只读观察，在 20 秒上限处截止、只是下限",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -127,7 +127,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 21 日版本（48b539d；发现规则 10 月 20 日 9b8e35c 改为查全部清单）；文件名清单条数为 10 月 22 日 06:47 只读计数；有界盘点仍是 10 月 11 日 23:52 只读观察，在 20 秒上限处截止、只是下限"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

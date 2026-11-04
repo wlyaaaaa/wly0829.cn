@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/chinese-asr-long-batch/page.json",
   "sha256": "cee3b0b3544f0059d392bbf3c7eaab2110571c83e44719820b2950e91f1c2af0",
-  "converted_at_beijing": "2026-10-30T15:12:30+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的切片、续跑与批量配置和实现，于 10 月 11 日按 14:00 前状态只读核对，语义未变；本轮未执行任何模型。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的切片、续跑与批量配置和实现，于 10 月 11 日按 14:00 前状态只读核对，语义未变；本轮未执行任何模型。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

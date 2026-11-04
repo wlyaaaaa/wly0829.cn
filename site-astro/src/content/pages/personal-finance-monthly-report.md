@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-finance-monthly-report/page.json",
   "sha256": "dc02b53ca97eeb945e6e42e6f1914f1f9f5624137b72ac641072e179afcc9957",
-  "converted_at_beijing": "2026-10-22T09:26:43+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 财务私有仓库最近提交北京 10 月 21 日 17:58；10 月 22 日只读核对规则，没有读出任何金额",
+     "static_note": "截至 10 月 22 日",
      "row": "top"
     },
     {
@@ -123,7 +123,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 财务私有仓库最近提交北京 10 月 21 日 17:58；10 月 22 日只读核对规则，没有读出任何金额"
+     "static_note": "截至 10 月 22 日"
     },
     {
      "type": "action_button",

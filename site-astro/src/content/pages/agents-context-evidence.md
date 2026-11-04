@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/agents-context-evidence/page.json",
   "sha256": "4facb3fa2e8b5e6791a86a5f00b48a77b40f1ec8eb9d424ad4f11bfefeee38b5",
-  "converted_at_beijing": "2026-11-04T08:42:47+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 按 2026-10-12 02:18 激活的活动规则 E258（10 月 12 日 04:41 核验）与 .agents 源码（截点 3a6a086b）核对；决定节数、测试登记与消息分类任务为 10 月 12 日 04:32–04:38 只读观察，后台复核与 Hook 配置沿用 10 月 11 日 16:34–16:38 观察；本轮没有运行 Doctor、测试或分类任务",
+     "static_note": "截至 10 月 12 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 按 2026-10-12 02:18 激活的活动规则 E258（10 月 12 日 04:41 核验）与 .agents 源码（截点 3a6a086b）核对；决定节数、测试登记与消息分类任务为 10 月 12 日 04:32–04:38 只读观察，后台复核与 Hook 配置沿用 10 月 11 日 16:34–16:38 观察；本轮没有运行 Doctor、测试或分类任务"
+     "static_note": "截至 10 月 12 日"
     },
     {
      "type": "action_button",

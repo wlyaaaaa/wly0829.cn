@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/codex-memory-claude-project-memory/page.json",
   "sha256": "2eda8f0ea6774a75eb200adaa10efae2ec90e45014e8ae59ee04eab79b26003f",
-  "converted_at_beijing": "2026-10-31T12:46:10+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 按 2026-10-11 14:00（北京时间）的 AI 备份源码与 PCConfig 任务登记核对；旧材料存在性与记忆开关为 16:35–16:37 只读观察；Claude 使用记录补采状态于 2026-10-12 05:39（北京时间）只读核对",
+     "static_note": "截至 10 月 12 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 按 2026-10-11 14:00（北京时间）的 AI 备份源码与 PCConfig 任务登记核对；旧材料存在性与记忆开关为 16:35–16:37 只读观察；Claude 使用记录补采状态于 2026-10-12 05:39（北京时间）只读核对"
+     "static_note": "截至 10 月 12 日"
     },
     {
      "type": "action_button",

@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary/page.json",
   "sha256": "ebaccee8996221a8a19a13d0744c93672cbf8ca182a975c39f64bcff05e1cc17",
-  "converted_at_beijing": "2026-11-04T08:42:50+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:47+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · 源仓库 10 月 20 日的最新提交（10 月 30 日回读远端无新提交，本机另有 7 个未提交的清单文件），加上北京时间 10 月 30 日 11:06 的 E/G/H 三处清单与文件指纹核对和 11:11 的零写入状态核对",
+     "static_note": "截至 10 月 30 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · 源仓库 10 月 20 日的最新提交（10 月 30 日回读远端无新提交，本机另有 7 个未提交的清单文件），加上北京时间 10 月 30 日 11:06 的 E/G/H 三处清单与文件指纹核对和 11:11 的零写入状态核对"
+     "static_note": "截至 10 月 30 日"
     },
     {
      "type": "action_button",

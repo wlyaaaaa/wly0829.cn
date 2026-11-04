@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/daily-preferences-mobile-context-delivery/page.json",
   "sha256": "1fb2cfec4d575cf31707f6df6fa3ed695ea8ac6f2908b3bc3fb07571fe5ef0c8",
-  "converted_at_beijing": "2026-10-22T08:32:28+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 b334b3aa（北京 10/8 00:23）规则、合同与 Skill 一致；本次没有新的手机/云端会话、导出或回写实测，6 项导出测试保留 9/9 原日期",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -130,7 +130,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 b334b3aa（北京 10/8 00:23）规则、合同与 Skill 一致；本次没有新的手机/云端会话、导出或回写实测，6 项导出测试保留 9/9 原日期"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

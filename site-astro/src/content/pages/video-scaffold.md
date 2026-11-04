@@ -685,7 +685,7 @@
  "source": {
   "page": "sources/pages/video-scaffold/page.json",
   "sha256": "ae571cc90f413cc020b3fed52aa686eca80cbafe614a5fd3f13fba0e6bc8c4f7",
-  "converted_at_beijing": "2026-10-31T12:46:24+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
  }
 }
 ---
@@ -750,7 +750,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 上次更新按北京时间 10 月 30 日 01:43 最后一次提交 2dbab62；10 月 30 日 11:06 读；7 天提交数仍按 10 月 11 日 14:00 前统计，这次没重取；这次网页核对没有出片、没有观看",
+     "static_note": "截至 10 月 11 日",
      "row": "hero"
     },
     {
@@ -828,7 +828,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 上次更新按北京时间 10 月 30 日 01:43 最后一次提交 2dbab62；10 月 30 日 11:06 读；7 天提交数仍按 10 月 11 日 14:00 前统计，这次没重取；这次网页核对没有出片、没有观看"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "stat_card",

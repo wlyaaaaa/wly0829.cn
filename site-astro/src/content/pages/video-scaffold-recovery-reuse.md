@@ -40,7 +40,7 @@
  "source": {
   "page": "sources/pages/video-scaffold-recovery-reuse/page.json",
   "sha256": "4b6e9375e0b6dd3cb34f8c0a296c9d6c56717fb41af632e5f4fa9cac6108693e",
-  "converted_at_beijing": "2026-10-30T13:04:20+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
  }
 }
 ---
@@ -90,7 +90,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 内容按北京时间 15:09 最后一次提交 c4eec887 核对，未运行恢复路径",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -132,7 +132,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 内容按北京时间 15:09 最后一次提交 c4eec887 核对，未运行恢复路径"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

@@ -603,7 +603,7 @@
  "source": {
   "page": "sources/pages/vault-tool/page.json",
   "sha256": "b568cacca82488ea9522d13f38420aac9bc0cc0e959bbbec13f797608ceff031",
-  "converted_at_beijing": "2026-11-04T08:42:39+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:49+08:00"
  }
 }
 ---
@@ -666,7 +666,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用账本只统计到 10 月 10 日零点，只记技能名、不记做了什么和成没成功，不能当使用证明（10 月 11 日只读重取，源码 b884ab61）。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "hero"
     },
     {
@@ -717,7 +717,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用账本只统计到 10 月 10 日零点，只记技能名、不记做了什么和成没成功，不能当使用证明（10 月 11 日只读重取，源码 b884ab61）。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "stat_card",

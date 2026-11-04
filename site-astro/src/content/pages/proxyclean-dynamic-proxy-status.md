@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/proxyclean-dynamic-proxy-status/page.json",
   "sha256": "5c961067b05b4f1b83e78d9b879817c202060c373105371b7b90f208e2997c48",
-  "converted_at_beijing": "2026-11-04T08:42:50+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:45+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）和当天 13:41 的一次本机只读状态核对。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -130,7 +130,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）和当天 13:41 的一次本机只读状态核对。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

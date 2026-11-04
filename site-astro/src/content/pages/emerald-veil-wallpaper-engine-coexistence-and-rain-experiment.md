@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/emerald-veil-wallpaper-engine-coexistence-and-rain-experiment/page.json",
   "sha256": "50228725d30ef393bd3bd8e26db92dabf566b9926f16150bc0db7dd93ac0d4d2",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码主线 861a2d2（北京时间 10 月 8 日 23:50）静态核对；泡泡底下垫壁纸在用，黑幕时让路说不准，会下雨的动态壁纸已停用（旧停播/续播控制器 9 月 18 日删除，雨景实验文件 9 月 29 日删除）",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码主线 861a2d2（北京时间 10 月 8 日 23:50）静态核对；泡泡底下垫壁纸在用，黑幕时让路说不准，会下雨的动态壁纸已停用（旧停播/续播控制器 9 月 18 日删除，雨景实验文件 9 月 29 日删除）"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

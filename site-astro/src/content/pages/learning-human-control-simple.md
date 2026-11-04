@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/learning-human-control-simple/page.json",
   "sha256": "fcace82dd80972f6163f2ac1b243026e9801c49ae389a82ce75327074491eca6",
-  "converted_at_beijing": "2026-10-31T13:58:50+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:41+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 规则按 10 月 7 日版本，10 月 11 日只读核对；本页只讲项目怎么运作，不公开任何状态文件里的值",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 规则按 10 月 7 日版本，10 月 11 日只读核对；本页只讲项目怎么运作，不公开任何状态文件里的值"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

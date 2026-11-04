@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/pcconfig-memory-diagnostics/page.json",
   "sha256": "8b82c79be83954f19d79d6cc438dc589706efd873a18124178ac9b5d88cb7f47",
-  "converted_at_beijing": "2026-10-12T05:03:46+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:42+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按 PCConfig 431ad1c1 源码与说明；自然开机与硬断电尾段仍未实测。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按 PCConfig 431ad1c1 源码与说明；自然开机与硬断电尾段仍未实测。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

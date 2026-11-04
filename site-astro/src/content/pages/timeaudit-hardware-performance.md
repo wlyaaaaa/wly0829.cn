@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/timeaudit-hardware-performance/page.json",
   "sha256": "b28e53a5235d9a4fcc443602f13a53822bfb858c3fa8d3da6187237bb640e9ff",
-  "converted_at_beijing": "2026-11-04T08:42:50+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:48+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 源码仍是 10 月 11 日 12:44 的提交 c5ca4eeb（10 月 12 日 05:39 复核）；10 月 12 日 05:36 只读汇总最近 15 分钟，未启动游戏；给电脑配置项目的异常摘要链已于 9 月 29 日删除",
+     "static_note": "截至 10 月 12 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 源码仍是 10 月 11 日 12:44 的提交 c5ca4eeb（10 月 12 日 05:39 复核）；10 月 12 日 05:36 只读汇总最近 15 分钟，未启动游戏；给电脑配置项目的异常摘要链已于 9 月 29 日删除"
+     "static_note": "截至 10 月 12 日"
     },
     {
      "type": "action_button",

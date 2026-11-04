@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/localocr-runtime-resources/page.json",
   "sha256": "99231190cc01c17c58817e3ea7c38031d28d9c0e3db8bffed2036ec9f4c74e70",
-  "converted_at_beijing": "2026-10-30T15:12:31+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:41+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · LocalOCR 主线最后提交 d9e51bd（北京时间 10 月 26 日 04:14）、current 版本链接与五个关键安装文件哈希，于 2026-10-30 11:11–11:15（北京时间）只读核对；普通 OCR 自动回 CPU、显式 GPU/VL/Structure 仍需显卡及失租约失败，按这份已安装源码说明。10 月 30 日 11:11 左右的 health 检查拒绝连接，本轮未启动服务或模型，在线与模型加载状态 Unknown；10 月 16 日旧验收、PCConfig 431ad1c1 及 10 月 20 日/10 月 11 日服务检查保留各自原日期。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · LocalOCR 主线最后提交 d9e51bd（北京时间 10 月 26 日 04:14）、current 版本链接与五个关键安装文件哈希，于 2026-10-30 11:11–11:15（北京时间）只读核对；普通 OCR 自动回 CPU、显式 GPU/VL/Structure 仍需显卡及失租约失败，按这份已安装源码说明。10 月 30 日 11:11 左右的 health 检查拒绝连接，本轮未启动服务或模型，在线与模型加载状态 Unknown；10 月 16 日旧验收、PCConfig 431ad1c1 及 10 月 20 日/10 月 11 日服务检查保留各自原日期。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

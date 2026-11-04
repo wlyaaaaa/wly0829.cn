@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/work-delivery-consistent-deliverables/page.json",
   "sha256": "395e1b901d656469536a9f267a63bcd2d99d2d3a051df95e61767f9aef562871",
-  "converted_at_beijing": "2026-10-11T21:05:01+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:51+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 工作交付源码（main 7a8d0e5，生成链 9 月 24 日提交 c621e2f 修订）按 10 月 11 日 14:00 前现状重新核对；本轮没有生成 Office 文件，合成验收保留 9 月 1 日原日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 工作交付源码（main 7a8d0e5，生成链 9 月 24 日提交 c621e2f 修订）按 10 月 11 日 14:00 前现状重新核对；本轮没有生成 Office 文件，合成验收保留 9 月 1 日原日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

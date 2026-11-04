@@ -95,7 +95,7 @@
  "source": {
   "page": "sources/pages/skill-image-generation/page.json",
   "sha256": "11c20b778180d0bf643c1df2682091327bef0800e1623f8f408f7740c7358345",
-  "converted_at_beijing": "2026-11-04T08:42:38+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:46+08:00"
  }
 }
 ---
@@ -138,7 +138,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-29 13:30 是技能源 E:\\.agents\\skills\\image-generation 最后一次提交（.agents 21a603fd）的北京时间，是源码更新事件，不是使用事件；使用次数本轮没有取同口径记录，Unknown。",
+     "static_note": "截至 11 月 4 日",
      "row": "hero"
     },
     {
@@ -201,7 +201,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-29 13:30 是技能源 E:\\.agents\\skills\\image-generation 最后一次提交（.agents 21a603fd）的北京时间，是源码更新事件，不是使用事件；使用次数本轮没有取同口径记录，Unknown。"
+     "static_note": "截至 11 月 4 日"
     },
     {
      "type": "prose",

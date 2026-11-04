@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/pcconfig-machine-facts/page.json",
   "sha256": "f9674692cb2d469b7dd174552aa89474c899226748b35dbb2e5332787b9f250d",
-  "converted_at_beijing": "2026-11-04T08:42:49+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:42+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 路径、端口与配置导航按 PCConfig 431ad1c1 登记；稳定硬件投影发布器、开发存储健康器和 TimeAudit 增量消费者于 2026-09-28 随综合自查退役（提交 348632a2），硬件与版本另列 10 月 11 日 16:34 现场读数。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 路径、端口与配置导航按 PCConfig 431ad1c1 登记；稳定硬件投影发布器、开发存储健康器和 TimeAudit 增量消费者于 2026-09-28 随综合自查退役（提交 348632a2），硬件与版本另列 10 月 11 日 16:34 现场读数。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

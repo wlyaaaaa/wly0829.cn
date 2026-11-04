@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/pcconfig-remote-computer-mcp/page.json",
   "sha256": "93427cd702d30cbd1a7d97b25b419dd6ddeab1de7ae52abd9edbf95020eb1bbc",
-  "converted_at_beijing": "2026-10-30T13:04:17+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按 PCConfig 431ad1c1 源码与合同，并含 10 月 29 日的启动监督、重载退出码和门牌交接（8952e8be、aef0e9bf）；10 月 30 日 11:15 主机 Status 健康，副机与公网端到端未重验；Windows-MCP 10 月 1 日升到 0.8.7，看板改为后台显示缓存；手机与套餐结论仍是 9 月 18 日原日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按 PCConfig 431ad1c1 源码与合同，并含 10 月 29 日的启动监督、重载退出码和门牌交接（8952e8be、aef0e9bf）；10 月 30 日 11:15 主机 Status 健康，副机与公网端到端未重验；Windows-MCP 10 月 1 日升到 0.8.7，看板改为后台显示缓存；手机与套餐结论仍是 9 月 18 日原日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

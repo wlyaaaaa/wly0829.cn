@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-finance-reconciliation/page.json",
   "sha256": "b8dbb87ad93c929ae491c47b0c66ae7c690f8c4efdfdaa893a843c00e838ef66",
-  "converted_at_beijing": "2026-10-22T09:26:42+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 理解库消费统计程序最后变更北京 10 月 21 日 17:51，当天用于重算月均；10 月 22 日只读核对，没有重跑测试",
+     "static_note": "截至 10 月 22 日",
      "row": "top"
     },
     {
@@ -123,7 +123,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 理解库消费统计程序最后变更北京 10 月 21 日 17:51，当天用于重算月均；10 月 22 日只读核对，没有重跑测试"
+     "static_note": "截至 10 月 22 日"
     },
     {
      "type": "action_button",

@@ -40,7 +40,7 @@
  "source": {
   "page": "sources/pages/video-scaffold-project-bootstrap/page.json",
   "sha256": "a144a9f6938f621742248cbb070562507758daca93f9ea5ac6ab586e4cc8ef8c",
-  "converted_at_beijing": "2026-10-30T13:04:20+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
  }
 }
 ---
@@ -90,7 +90,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 内容按北京时间 15:09 最后一次提交 c4eec887 核对，未重新出片",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -132,7 +132,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 内容按北京时间 15:09 最后一次提交 c4eec887 核对，未重新出片"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

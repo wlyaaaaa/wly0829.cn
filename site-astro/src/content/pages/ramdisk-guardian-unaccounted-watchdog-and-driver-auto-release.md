@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release/page.json",
   "sha256": "04c14d47cb4fb43d3e54140337a54380fe9e02b2e24a8215b20216e9032ebb9d",
-  "converted_at_beijing": "2026-10-22T08:32:36+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:45+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按 RamdiskGuardian 源提交 8c39cfd（2026-10-20 22:35 北京时间，2026-10-22 只读核对）：守护、体检、部署、暂停/登记脚本与全部测试已删除，README 只留退役声明；Z 盘、计划任务和 Chrome 缓存连接的现状未读（Unknown）；正文其余数字与证据保留退役前各自日期",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -130,7 +130,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按 RamdiskGuardian 源提交 8c39cfd（2026-10-20 22:35 北京时间，2026-10-22 只读核对）：守护、体检、部署、暂停/登记脚本与全部测试已删除，README 只留退役声明；Z 盘、计划任务和 Chrome 缓存连接的现状未读（Unknown）；正文其余数字与证据保留退役前各自日期"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

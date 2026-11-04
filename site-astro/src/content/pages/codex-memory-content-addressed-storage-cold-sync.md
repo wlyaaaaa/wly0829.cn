@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/codex-memory-content-addressed-storage-cold-sync/page.json",
   "sha256": "2b47a6b2efe27baf005db4b0c6982674e3f848d238082a641ca98ef27dc87b0c",
-  "converted_at_beijing": "2026-11-04T08:42:35+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 机制按 2026-10-11 的 AI 备份源码（63df06c）核对，源码现为 9f56256，发布后只修测试路径；G/H 当前点指针与回执于 2026-10-22 06:50（北京时间）只读复读；新增故障路径的测试只读定义、本轮未执行",
+     "static_note": "截至 10 月 12 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 机制按 2026-10-11 的 AI 备份源码（63df06c）核对，源码现为 9f56256，发布后只修测试路径；G/H 当前点指针与回执于 2026-10-22 06:50（北京时间）只读复读；新增故障路径的测试只读定义、本轮未执行"
+     "static_note": "截至 10 月 12 日"
     },
     {
      "type": "action_button",

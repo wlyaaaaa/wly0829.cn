@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/pcconfig-secondary-laptop/page.json",
   "sha256": "82c64ada3e207adb845f531796a1d1c9fedad0b740228b4a8fcde3b1a98c34fc",
-  "converted_at_beijing": "2026-10-11T19:04:25+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按主机账本（PCConfig 431ad1c1）。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按主机账本（PCConfig 431ad1c1）。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

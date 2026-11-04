@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/codex-memory-isolated-disaster-recovery/page.json",
   "sha256": "b0c59bad6a345a596c975b7786b6054e6d24666a76d6a73c459dcd6f67e1295d",
-  "converted_at_beijing": "2026-11-04T08:42:35+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 机制按 2026-10-11 的 AI 备份源码（63df06c）与 PCConfig 恢复规则核对；G/H 当前点与回执于 2026-10-22 06:50（北京时间）只读复读，计划任务现场沿用 10 月 12 日读数；本轮没有执行恢复",
+     "static_note": "截至 10 月 12 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 机制按 2026-10-11 的 AI 备份源码（63df06c）与 PCConfig 恢复规则核对；G/H 当前点与回执于 2026-10-22 06:50（北京时间）只读复读，计划任务现场沿用 10 月 12 日读数；本轮没有执行恢复"
+     "static_note": "截至 10 月 12 日"
     },
     {
      "type": "action_button",

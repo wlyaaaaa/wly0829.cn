@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/agents-skills-plugins/page.json",
   "sha256": "dad04149b6e952d20778848781a4c062e59b0cdc2d4413b63304ff8e865ab5d9",
-  "converted_at_beijing": "2026-10-31T12:46:08+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 按 2026-10-12 04:33—04:35（北京时间）的 .agents 源码与活动规则 E258 核对；技能链接与本机工具目录为只读观察，本轮没有运行任何工具、安装器或浏览器",
+     "static_note": "截至 10 月 12 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 按 2026-10-12 04:33—04:35（北京时间）的 .agents 源码与活动规则 E258 核对；技能链接与本机工具目录为只读观察，本轮没有运行任何工具、安装器或浏览器"
+     "static_note": "截至 10 月 12 日"
     },
     {
      "type": "action_button",

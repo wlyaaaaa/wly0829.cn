@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/steam-millennium-config-backup-plugin-manifest-and-install-state-tracking/page.json",
   "sha256": "c825cd85032dec05dfa4c6bae658713dce791b68079847b4bf621e376eb41680",
-  "converted_at_beijing": "2026-11-04T08:42:50+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:47+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源仓库 10 月 1 日的最新提交（10 月 20 日回读远端无新提交，本机另有 7 个未提交的清单文件），加上北京时间 10 月 20 日 7:34—7:43 之间的零写入状态核对",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源仓库 10 月 1 日的最新提交（10 月 20 日回读远端无新提交，本机另有 7 个未提交的清单文件），加上北京时间 10 月 20 日 7:34—7:43 之间的零写入状态核对"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

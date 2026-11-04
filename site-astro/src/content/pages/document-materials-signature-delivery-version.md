@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/document-materials-signature-delivery-version/page.json",
   "sha256": "91eb482b2b31d1b3e6f357f8480a759888e76f76772602423aa8cb8b2f90fe73",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 11 日 14:00 前的版本（最后变更 10 月 9 日），当日 16:35 只读核对；本次没有真实签名或递送",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 11 日 14:00 前的版本（最后变更 10 月 9 日），当日 16:35 只读核对；本次没有真实签名或递送"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

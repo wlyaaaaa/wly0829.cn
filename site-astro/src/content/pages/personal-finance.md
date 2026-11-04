@@ -388,7 +388,7 @@
  "source": {
   "page": "sources/pages/personal-finance/page.json",
   "sha256": "6e0d971e2c487b77da5ad39608aff2bc555c8f59275ffb30c3716b3a0c4ace5a",
-  "converted_at_beijing": "2026-10-31T09:28:10+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -443,7 +443,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 31 日 · 财务私有仓库最新提交北京 10 月 22 日 07:13；提醒任务已注册、从未运行（10 月 22 日只读查看）",
+     "static_note": "截至 10 月 31 日",
      "row": "首屏"
     },
     {
@@ -497,7 +497,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 31 日 · 财务私有仓库最新提交北京 10 月 22 日 07:13；提醒任务已注册、从未运行（10 月 22 日只读查看）"
+     "static_note": "截至 10 月 31 日"
     },
     {
      "type": "stat_card",

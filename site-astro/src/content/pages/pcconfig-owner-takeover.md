@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/pcconfig-owner-takeover/page.json",
   "sha256": "0b76dcb55b4aee920fa556fc27d9784b7a3d1092aa5aca54d98df97b77a9ff1e",
-  "converted_at_beijing": "2026-11-04T08:42:36+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:42+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 按 PasswordCenter 968b9816 与 PCConfig 431ad1c1；Codex 与 Claude 桌面都可发起，默认时长读当前设置，10 月 12 日 04:33 核对接管程序与现役清单一致（安装批次 365），本次未打开窗口或办理验证。",
+     "static_note": "截至 10 月 12 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 按 PasswordCenter 968b9816 与 PCConfig 431ad1c1；Codex 与 Claude 桌面都可发起，默认时长读当前设置，10 月 12 日 04:33 核对接管程序与现役清单一致（安装批次 365），本次未打开窗口或办理验证。"
+     "static_note": "截至 10 月 12 日"
     },
     {
      "type": "action_button",

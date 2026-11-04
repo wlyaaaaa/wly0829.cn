@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/learning-questions-validation/page.json",
   "sha256": "b3ada0218988a959df347c388f530bbf5956e308fd3e5ca3d532e4b4e3b16eaa",
-  "converted_at_beijing": "2026-10-31T04:11:12+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:41+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目规则按 10 月 7 日版本，10 月 11 日只读核对；本页只讲这一部分怎么运作，不含学习内容或进度；本次没有上课、没有跑测试",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目规则按 10 月 7 日版本，10 月 11 日只读核对；本页只讲这一部分怎么运作，不含学习内容或进度；本次没有上课、没有跑测试"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

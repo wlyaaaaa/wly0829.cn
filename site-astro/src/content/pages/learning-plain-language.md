@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/learning-plain-language/page.json",
   "sha256": "f1f98b7ae9c388fa9a3b74be1c29a57265345ac8702cfa9691199e0dfbc5093f",
-  "converted_at_beijing": "2026-10-31T04:02:53+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:41+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目规则按 10 月 7 日版本，10 月 11 日只读核对；本页只讲这一部分怎么运作，不含讲义原文或学习内容",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目规则按 10 月 7 日版本，10 月 11 日只读核对；本页只讲这一部分怎么运作，不含讲义原文或学习内容"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

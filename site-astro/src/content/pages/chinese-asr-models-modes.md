@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/chinese-asr-models-modes/page.json",
   "sha256": "e6dbcd2dfb8ce26300f1bfeff9863100fd199e13156de10da271ebab76aae726",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的模型登记、直接转写守卫与本机模型目录，于 10 月 11 日按 14:00 前状态只读核对；本轮未运行任何模型。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的模型登记、直接转写守卫与本机模型目录，于 10 月 11 日按 14:00 前状态只读核对；本轮未运行任何模型。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

@@ -109,7 +109,7 @@
  "source": {
   "page": "sources/pages/skill-proxy-network/page.json",
   "sha256": "718f9a694952df6b9ab63b0cf55d1d00859ea2fd189a6bd6b3560761658c47f7",
-  "converted_at_beijing": "2026-11-04T08:42:38+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:47+08:00"
  }
 }
 ---
@@ -161,7 +161,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-31 06:46 是技能源 E:\\.agents\\skills\\proxy-network 最后一次提交（.agents 86ff7f38）的北京时间，是源码更新事件，不是使用事件；技能 10 月 31 日 05:58 才新建，使用次数本轮没有取同口径记录，Unknown。",
+     "static_note": "截至 11 月 4 日",
      "row": "hero"
     },
     {
@@ -224,7 +224,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-31 06:46 是技能源 E:\\.agents\\skills\\proxy-network 最后一次提交（.agents 86ff7f38）的北京时间，是源码更新事件，不是使用事件；技能 10 月 31 日 05:58 才新建，使用次数本轮没有取同口径记录，Unknown。"
+     "static_note": "截至 11 月 4 日"
     },
     {
      "type": "prose",

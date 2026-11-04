@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-finance-bill-collection/page.json",
   "sha256": "fffdcbc5379b9070255c26820209f64554d34addb774b8b408efc931c218e2df",
-  "converted_at_beijing": "2026-10-22T09:26:41+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "waiting"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 每月手册和提醒任务 10 月 21 日建成；提醒任务从未运行，第一次排在 11 月 6 日 09:00（10 月 22 日只读查看）",
+     "static_note": "截至 10 月 22 日",
      "row": "top"
     },
     {
@@ -123,7 +123,7 @@
        "state": "waiting"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 每月手册和提醒任务 10 月 21 日建成；提醒任务从未运行，第一次排在 11 月 6 日 09:00（10 月 22 日只读查看）"
+     "static_note": "截至 10 月 22 日"
     },
     {
      "type": "action_button",

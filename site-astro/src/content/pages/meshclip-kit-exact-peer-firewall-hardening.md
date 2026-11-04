@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/meshclip-kit-exact-peer-firewall-hardening/page.json",
   "sha256": "a66c4e73e269dda42841b541b31b986b4f6451e4773634a4dccc886ff28978b0",
-  "converted_at_beijing": "2026-10-22T08:32:32+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:41+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码核至 9 月 29 日提交 61fa792e（10 月 20 日回读远端无新提交），运行情况取北京时间 10 月 20 日 7:34—7:43 之间的一次主机只读自检；冻结依据 E279 冻结名单（停用留档），GitHub 仓库 10 月 21 日归档、本机副本已删，归档后运行状态未查",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码核至 9 月 29 日提交 61fa792e（10 月 20 日回读远端无新提交），运行情况取北京时间 10 月 20 日 7:34—7:43 之间的一次主机只读自检；冻结依据 E279 冻结名单（停用留档），GitHub 仓库 10 月 21 日归档、本机副本已删，归档后运行状态未查"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

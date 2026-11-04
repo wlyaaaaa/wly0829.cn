@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-health-health-owner-boundary/page.json",
   "sha256": "2b09d80000099531926a13cef1f71b4200f48a5c50a560232935627d39a43b61",
-  "converted_at_beijing": "2026-10-31T13:58:51+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目规则、设备流程与采集代码 10 月 11 日只读核对，源码最后变更 10 月 7 日；未读取任何健康正文，实际采用了哪些结果不知道",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目规则、设备流程与采集代码 10 月 11 日只读核对，源码最后变更 10 月 7 日；未读取任何健康正文，实际采用了哪些结果不知道"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

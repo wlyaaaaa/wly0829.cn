@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/learning-dialogue-revision/page.json",
   "sha256": "d6b05c2172f82efe8fc20a594c890b1b5c6bff79046bd919ac936bcca8c94a81",
-  "converted_at_beijing": "2026-10-31T04:02:18+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:41+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 规则按 10 月 7 日版本，10 月 11 日只读核对；本页只讲项目怎么运作，不含任何个人反馈或讲义内容",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 规则按 10 月 7 日版本，10 月 11 日只读核对；本页只讲项目怎么运作，不含任何个人反馈或讲义内容"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

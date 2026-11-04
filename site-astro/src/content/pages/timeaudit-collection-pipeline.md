@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/timeaudit-collection-pipeline/page.json",
   "sha256": "6a27b1b572e33dd51f2c12dc51f9c11aed47121832d94313075babb9e8be50c6",
-  "converted_at_beijing": "2026-11-04T08:42:50+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:48+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 源码仍是 10 月 11 日 12:44 的提交 c5ca4eeb（10 月 12 日 05:39 复核）；10 月 12 日 05:36 只读汇总最近 15 分钟，未重新验收整条采集链",
+     "static_note": "截至 10 月 12 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 源码仍是 10 月 11 日 12:44 的提交 c5ca4eeb（10 月 12 日 05:39 复核）；10 月 12 日 05:36 只读汇总最近 15 分钟，未重新验收整条采集链"
+     "static_note": "截至 10 月 12 日"
     },
     {
      "type": "action_button",

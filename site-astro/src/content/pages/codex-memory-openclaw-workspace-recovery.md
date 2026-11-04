@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/codex-memory-openclaw-workspace-recovery/page.json",
   "sha256": "3c048cc7f47c71485b92ba602d2c55a7d3af817d6bf40bbd45ba6c0130367da6",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按 2026-10-11 14:00（北京时间）的 PCConfig 任务登记与开发配置备份范围核对；旧材料存在性为 16:35 只读元数据观察；OpenClaw 项目本身已冻结，未检查其源码",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按 2026-10-11 14:00（北京时间）的 PCConfig 任务登记与开发配置备份范围核对；旧材料存在性为 16:35 只读元数据观察；OpenClaw 项目本身已冻结，未检查其源码"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

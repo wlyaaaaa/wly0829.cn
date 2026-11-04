@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/chinese-asr-desktop-dictation/page.json",
   "sha256": "089e963f467a52c88f76c0ecf6b64f15b69b9b2a12a9c96d34b63c165045d5cc",
-  "converted_at_beijing": "2026-10-30T15:12:30+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04，北京 10 月 11 日 00:52）按当天 14:00 前状态只读核对，听写运行状态取 10 月 11 日 13:38 记录；历史测试保留各自日期。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04，北京 10 月 11 日 00:52）按当天 14:00 前状态只读核对，听写运行状态取 10 月 11 日 13:38 记录；历史测试保留各自日期。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

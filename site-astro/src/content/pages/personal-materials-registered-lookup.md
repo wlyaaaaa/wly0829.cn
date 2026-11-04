@@ -41,7 +41,7 @@
  "source": {
   "page": "sources/pages/personal-materials-registered-lookup/page.json",
   "sha256": "15797d4f602645d78e043acb09cbf5e1aa761e11f909b2a569f72c6efd4db44a",
-  "converted_at_beijing": "2026-11-04T08:42:49+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:44+08:00"
  }
 }
 ---
@@ -93,7 +93,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 10 月 22 日 06:47 计数入口正常返回（55 个来源、166 份登记、4 条关系、161 份有文字）；源码按 10 月 21 日版本（48b539d），本次没有跑测试、没有打开原件",
+     "static_note": "截至 10 月 22 日",
      "row": "top"
     },
     {
@@ -136,7 +136,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 10 月 22 日 06:47 计数入口正常返回（55 个来源、166 份登记、4 条关系、161 份有文字）；源码按 10 月 21 日版本（48b539d），本次没有跑测试、没有打开原件"
+     "static_note": "截至 10 月 22 日"
     },
     {
      "type": "action_button",

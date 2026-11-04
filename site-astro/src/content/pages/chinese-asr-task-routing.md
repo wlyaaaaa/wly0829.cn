@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/chinese-asr-task-routing/page.json",
   "sha256": "845081e10f7313ccfa23ba22015cec1056c4fc0aadf423a56643bafed7db4d1e",
-  "converted_at_beijing": "2026-10-30T15:12:31+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的本地任务服务与入口脚本，于 10 月 11 日按 14:00 前状态只读核对；服务健康取 10 月 11 日 13:33 记录，历史测试保留各自日期。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04）的本地任务服务与入口脚本，于 10 月 11 日按 14:00 前状态只读核对；服务健康取 10 月 11 日 13:33 记录，历史测试保留各自日期。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E371",
-   "commit": "3c09ab215347bdeef9b20027169a68cbe43e1a61",
-   "ruleset_sha256": "0027aa3691052764d05c2e68802eeb1049c7ae7b5151d4f59a605251d402c130",
-   "activated_at": "2026-11-04T07:38:37.086979+08:00",
+   "release": "E372",
+   "commit": "f44463a9fd2c4bacb8c562315d297db27d501f35",
+   "ruleset_sha256": "ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7",
+   "activated_at": "2026-11-04T08:49:37.968049+08:00",
    "file": "sources/rules/docs/contracts/agents.context-sources.md",
-   "sha256": "3c34c48686673a80f4bba169e9cf355b7eb4fd2ded4b730cf1f860fa30de4b91",
-   "public_sha256": "1706512e7b5413606856d73800729ac04833f616760447fcf7b56f95198e5554"
+   "sha256": "ee0b69f1f34c95bd74b70f3fe0c3edbb9b745042cd82c607f7636e377c59e34f",
+   "public_sha256": "1a64d0b8ac3364317b22ebb8e51d23f35d8bdcb978b38ca1c413ec9fbfbcbc68"
   },
   "explanation_based_on": {
    "release": "E337",
@@ -439,8 +439,8 @@
  },
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
-  "sha256": "600957db66c5d091678a4f7d2f0582db4d54b58ff81207a33ee2bf42389b6933",
-  "converted_at_beijing": "2026-11-04T08:31:33+08:00"
+  "sha256": "3a1a4c63b8645db00b5a880c6cb1d4491eaf500b5bc3e7684ea7771746625f8b",
+  "converted_at_beijing": "2026-11-04T10:21:46+08:00"
  }
 }
 ---
@@ -2524,9 +2524,9 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E371",
-   "sha256": "3c34c48686673a80f4bba169e9cf355b7eb4fd2ded4b730cf1f860fa30de4b91",
-   "public_sha256": "1706512e7b5413606856d73800729ac04833f616760447fcf7b56f95198e5554",
+   "release": "E372",
+   "sha256": "ee0b69f1f34c95bd74b70f3fe0c3edbb9b745042cd82c607f7636e377c59e34f",
+   "public_sha256": "1a64d0b8ac3364317b22ebb8e51d23f35d8bdcb978b38ca1c413ec9fbfbcbc68",
    "from": null,
    "to": "## 三档维护",
    "start": 0,
@@ -2544,7 +2544,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-08",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "1706512e7b5413606856d73800729ac04833f616760447fcf7b56f95198e5554",
+  "source_public_sha256": "1a64d0b8ac3364317b22ebb8e51d23f35d8bdcb978b38ca1c413ec9fbfbcbc68",
   "source_rule_part": "rule-context-sources/rule-context-sources-08"
  },
  "layout": {
@@ -2552,7 +2552,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版，一字不改"
+     "text_ref": "原文·E372版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2586,7 +2586,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版，一字不改"
+     "text_ref": "原文·E372版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2664,7 +2664,7 @@ E:\.agents　E:\PCConfig　具体项目　冻结　接续点
 }
 ```
 
-原文 · E371 版，一字不改
+原文 · E372 版，一字不改
 
 # 事实来源与任务上下文
 
@@ -2720,13 +2720,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E371",
-   "sha256": "3c34c48686673a80f4bba169e9cf355b7eb4fd2ded4b730cf1f860fa30de4b91",
-   "public_sha256": "1706512e7b5413606856d73800729ac04833f616760447fcf7b56f95198e5554",
+   "release": "E372",
+   "sha256": "ee0b69f1f34c95bd74b70f3fe0c3edbb9b745042cd82c607f7636e377c59e34f",
+   "public_sha256": "1a64d0b8ac3364317b22ebb8e51d23f35d8bdcb978b38ca1c413ec9fbfbcbc68",
    "from": "## 三档维护",
    "to": "### 一样东西只存一处",
    "start": 2198,
-   "end": 4617,
+   "end": 4646,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -2740,7 +2740,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-09",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "1706512e7b5413606856d73800729ac04833f616760447fcf7b56f95198e5554",
+  "source_public_sha256": "1a64d0b8ac3364317b22ebb8e51d23f35d8bdcb978b38ca1c413ec9fbfbcbc68",
   "source_rule_part": "rule-context-sources/rule-context-sources-09"
  },
  "layout": {
@@ -2748,7 +2748,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -2779,7 +2779,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -2846,7 +2846,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ## 三档维护
 
@@ -2880,7 +2880,7 @@ README 只给 AI 和维护使用，简短列出现行入口，不再另写一份
 
 ### 压缩后的后台复核
 
-压缩恢复先接本人要的产出、最近几条更正和已定事实，不默认重读清单或决定原文；需要哪条，当场按出处读哪条。根会话在压缩前更新项目已有的短任务状态，没有入口时用本任务 `work/task-state.md`，内容按上一节，不复制整段历史。
+压缩恢复先接本人要的产出、最近几条更正和已定事实，钩子从原话存档带回本会话最近 15 条本人原话；其余原话、清单和决定原文不默认重读，需要哪条，当场按出处读哪条。根会话在压缩前更新项目已有的短任务状态，没有入口时用本任务 `work/task-state.md`，内容按上一节，不复制整段历史。
 
 Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，不阻塞正常工作。当前用 Sol ultra，资料定位优先脚本；Luna 初筛不能代替最终复核。
 
@@ -2903,13 +2903,13 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E371",
-   "sha256": "3c34c48686673a80f4bba169e9cf355b7eb4fd2ded4b730cf1f860fa30de4b91",
-   "public_sha256": "1706512e7b5413606856d73800729ac04833f616760447fcf7b56f95198e5554",
+   "release": "E372",
+   "sha256": "ee0b69f1f34c95bd74b70f3fe0c3edbb9b745042cd82c607f7636e377c59e34f",
+   "public_sha256": "1a64d0b8ac3364317b22ebb8e51d23f35d8bdcb978b38ca1c413ec9fbfbcbc68",
    "from": "### 一样东西只存一处",
    "to": null,
-   "start": 4617,
-   "end": 8077,
+   "start": 4646,
+   "end": 8222,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -2940,7 +2940,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-10",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "1706512e7b5413606856d73800729ac04833f616760447fcf7b56f95198e5554",
+  "source_public_sha256": "1a64d0b8ac3364317b22ebb8e51d23f35d8bdcb978b38ca1c413ec9fbfbcbc68",
   "source_rule_part": "rule-context-sources/rule-context-sources-10"
  },
  "layout": {
@@ -2948,7 +2948,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -2974,7 +2974,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -2992,7 +2992,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ### 一样东西只存一处
 
@@ -3002,7 +3002,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
 
 ### 共享经验的落点
 
-记忆的使用边界按[约法 L30](/rules/charter/#十关于规则本身)，两个宿主的关闭配置见各自适配专题。进上下文的只有全局规则和项目规则；原话存档和旧决定月卷都不注入，只在要查当时怎么说的时候按编号翻。
+记忆的使用边界按[约法 L30](/rules/charter/#十关于规则本身)，两个宿主的关闭配置见各自适配专题。进上下文的只有全局规则和项目规则；旧决定月卷不注入，原话存档只在压缩和恢复时带回本会话最近 15 条，其余要查当时怎么说的时候按编号翻。
 
 **原话。** 本人的每条原话由两个宿主的钩子自动原样存进原话存档，资料锁着时由后台在解锁后补存；位置、格式和补存见运维说明（`E:/.agents/docs/operations/context-hooks.md`）。AI 不手抄原话，引用时写源消息 UUID。
 
@@ -3029,7 +3029,7 @@ Claude、Codex 根会话的增量复核复用原话存档和 GPT 后台任务，
 - 照原话的意思、条件和范围写。原话里有“因为……”“除非……”“……的时候”，规则里保留；不把当时那件事的具体做法升格成通用原则。
 - 禁令写明是禁令，附时间和源消息 UUID 备查，不附原句；偏离前先问本人。
 - 先查有没有同一件事的旧规则，有就改那一条，不另加一条；新旧冲突以本人最新的话为准，删掉旧的。
-- 每周治理任务（由 GPT 执行，换一家模型看）扫这一周的原话存档，找出说了以后要遵守、规则里却没有的，规则写得比原话宽或放错层的，以及反复出问题、根因还没修掉的地方，交对应会话处理。
+- 每周治理任务（由 GPT 执行，换一家模型看）扫这一周的原话存档，找出说了以后要遵守、规则里却没有的，规则写得比原话宽或放错层的，以及反复出问题、根因还没修掉的地方，交对应会话处理。同一任务对照现行规则查钩子里写死的话，对不上的改钩子；核对方法和已知不一致见上下文 Hook 运维（`E:/.agents/docs/operations/context-hooks.md`）。
 
 **旧决定月卷只是历史。** `docs/owner-decisions/` 不再新增，不注入，也不当规则读；跟现行规则冲突时以规则为准。子代理不改规则、不记原话，照派单做。
 

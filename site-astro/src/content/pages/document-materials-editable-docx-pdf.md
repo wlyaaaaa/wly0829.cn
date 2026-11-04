@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/document-materials-editable-docx-pdf/page.json",
   "sha256": "e17c56ab69fa2043a4653b5104c8c02192ccd047ff4017c84509137b3829e49c",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 11 日 14:00 前的版本（最后变更 10 月 9 日），当日 16:35 只读核对；本次没有制作、打印或安装验证",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按 10 月 11 日 14:00 前的版本（最后变更 10 月 9 日），当日 16:35 只读核对；本次没有制作、打印或安装验证"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

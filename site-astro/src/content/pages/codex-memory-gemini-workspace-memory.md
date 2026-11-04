@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/codex-memory-gemini-workspace-memory/page.json",
   "sha256": "b15ec03d079d89510bf0721a3ed5b52d6ec5d27c814fe75a6caecdeaf72651d5",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按 2026-10-11 14:00（北京时间）的 PCConfig 任务登记与开发配置备份范围核对；旧材料目录为 16:35 只读元数据观察",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按 2026-10-11 14:00（北京时间）的 PCConfig 任务登记与开发配置备份范围核对；旧材料目录为 16:35 只读元数据观察"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

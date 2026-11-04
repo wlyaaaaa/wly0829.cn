@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/wechat-direct-account-source-identity/page.json",
   "sha256": "30910c3a8fd8e03a740acb09486b71ffeb470f0221ed49bbae923f1543647f00",
-  "converted_at_beijing": "2026-11-04T08:42:50+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源代码核对到 10 月 7 日最后一次提交（v0.2.3）；无正文环境体检和账号配置于 10 月 11 日 16:32—16:33 重新检查，没有实际读取聊天",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -130,7 +130,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源代码核对到 10 月 7 日最后一次提交（v0.2.3）；无正文环境体检和账号配置于 10 月 11 日 16:32—16:33 重新检查，没有实际读取聊天"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

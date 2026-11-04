@@ -726,7 +726,7 @@
  "source": {
   "page": "sources/pages/wly0829-cn/page.json",
   "sha256": "9d8dc15202a10712159a6b2a328962b3f88d75faddd16815b6c9e1c216ccf499",
-  "converted_at_beijing": "2026-11-04T08:42:39+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
  }
 }
 ---
@@ -794,7 +794,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 网站仓库主线修改记录（北京时间 10 月 30 日 11:06 读取，近 7 天按该观察时刻向前 7 天计）",
+     "static_note": "截至 11 月 4 日",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -868,7 +868,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 网站仓库主线修改记录（北京时间 10 月 30 日 11:06 读取，近 7 天按该观察时刻向前 7 天计）"
+     "static_note": "截至 11 月 4 日"
     },
     {
      "type": "stat_card",

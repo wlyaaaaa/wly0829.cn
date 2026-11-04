@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-engines-providers/page.json",
   "sha256": "02a128ef1614f0dddbfddf0e93db20c7abf02b018989f066a90cd067767e68d4",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
  }
 }
 ---
@@ -89,7 +89,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 父项目总览状态“常用”；事实按 10 月 11 日 14:00 前的源码（10 月 8 日提交）逐份读取 23 份配置清单，各工具版本为 10 月 11 日只查版本号，未重跑真实调用。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -136,7 +136,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 父项目总览状态“常用”；事实按 10 月 11 日 14:00 前的源码（10 月 8 日提交）逐份读取 23 份配置清单，各工具版本为 10 月 11 日只查版本号，未重跑真实调用。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

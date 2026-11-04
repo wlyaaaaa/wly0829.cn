@@ -40,7 +40,7 @@
  "source": {
   "page": "sources/pages/video-scaffold-deterministic-render/page.json",
   "sha256": "526ae09a29e821c4733a26fedfb1815f8c0b76b79e5b52b56be4979eb4bed1ae",
-  "converted_at_beijing": "2026-10-30T13:04:20+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
  }
 }
 ---
@@ -90,7 +90,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 内容按北京时间 14:00 前最后一次提交 cc41e514（13:57）核对，未出片、未测速度",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -132,7 +132,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 内容按北京时间 14:00 前最后一次提交 cc41e514（13:57）核对，未出片、未测速度"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

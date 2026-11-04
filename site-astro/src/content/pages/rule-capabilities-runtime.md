@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E371",
-   "commit": "3c09ab215347bdeef9b20027169a68cbe43e1a61",
-   "ruleset_sha256": "0027aa3691052764d05c2e68802eeb1049c7ae7b5151d4f59a605251d402c130",
-   "activated_at": "2026-11-04T07:38:37.086979+08:00",
+   "release": "E372",
+   "commit": "f44463a9fd2c4bacb8c562315d297db27d501f35",
+   "ruleset_sha256": "ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7",
+   "activated_at": "2026-11-04T08:49:37.968049+08:00",
    "file": "sources/rules/docs/contracts/agents.capabilities-runtime.md",
    "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
    "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f"
@@ -405,8 +405,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "9c8b93b11c327cc8b346d0905bf0c522e9586ce7edf138debb8f1b3734458507",
-  "converted_at_beijing": "2026-11-04T08:31:33+08:00"
+  "sha256": "bcec64e655390cdf337a19816b4621549c2184a22f32df9f974893d878faec4a",
+  "converted_at_beijing": "2026-11-04T10:21:45+08:00"
  }
 }
 ---
@@ -2945,7 +2945,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
    "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
    "from": null,
@@ -2978,7 +2978,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版"
+     "text_ref": "原文·E372版"
     },
     {
      "type": "chapter_title",
@@ -3019,7 +3019,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版"
+     "text_ref": "原文·E372版"
     },
     {
      "type": "chapter_title",
@@ -3112,7 +3112,7 @@
 }
 ```
 
-原文 · E371 版
+原文 · E372 版
 
 # 能力与运行方式
 
@@ -3155,7 +3155,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
    "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
    "from": "## 常用入口",
@@ -3183,7 +3183,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3211,7 +3211,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3257,7 +3257,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ## 常用入口
 
@@ -3294,7 +3294,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
    "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
    "from": "## 浏览器",
@@ -3327,7 +3327,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3353,7 +3353,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3427,7 +3427,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ## 浏览器
 
@@ -3459,7 +3459,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
    "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
    "from": "## 汇报、网站和自动运行的东西",
@@ -3487,7 +3487,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3507,7 +3507,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3577,7 +3577,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ## 汇报、网站和自动运行的东西
 
@@ -3612,7 +3612,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
    "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
    "from": "## 安装位置、配置和本机约定",
@@ -3645,7 +3645,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3665,7 +3665,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3711,7 +3711,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ## 安装位置、配置和本机约定
 

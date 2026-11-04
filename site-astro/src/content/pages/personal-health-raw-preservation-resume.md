@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-health-raw-preservation-resume/page.json",
   "sha256": "a3930ef4d511f501ea21305e0f1bbb450d780956999b2d02a30621f79650d912",
-  "converted_at_beijing": "2026-10-31T13:58:51+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -85,7 +85,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码最后变更 10 月 7 日；已存采集清单的数量和日期范围为 10 月 11 日只读计数，本次没有联网导入、没有跑测试",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -127,7 +127,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码最后变更 10 月 7 日；已存采集清单的数量和日期范围为 10 月 11 日只读计数，本次没有联网导入、没有跑测试"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

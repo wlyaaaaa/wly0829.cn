@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/proxyclean-wifi-rebind-and-recovery/page.json",
   "sha256": "e0d32086d04cc923f152b21a6e2cbad4a2a4213dbdac637fd1a33af26ba53359",
-  "converted_at_beijing": "2026-10-30T15:12:31+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:45+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）逐段核对，含义无变化；没有操作真实网卡。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -130,7 +130,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）逐段核对，含义无变化；没有操作真实网卡。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

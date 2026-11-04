@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-remote-power-and-repair/page.json",
   "sha256": "efe956918bc902dfe0be277ae1bf06caf57723b77887475e15a8b8858d0ce781",
-  "converted_at_beijing": "2026-10-30T13:04:19+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:48+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 修复脚本按 10 月 6 日最后一次提交核对（10 月 20 日回读远端无新提交），远程开机按电脑配置（PCConfig）10 月 9 日的登记；服务状态取 10 月 20 日早上只读服务查询，每日检查连续天数仍截至 10 月 11 日（之后未按原口径重核）；AI 没有做断电开机试验",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 修复脚本按 10 月 6 日最后一次提交核对（10 月 20 日回读远端无新提交），远程开机按电脑配置（PCConfig）10 月 9 日的登记；服务状态取 10 月 20 日早上只读服务查询，每日检查连续天数仍截至 10 月 11 日（之后未按原口径重核）；AI 没有做断电开机试验"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

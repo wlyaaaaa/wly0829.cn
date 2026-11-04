@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/learning-authoritative-research/page.json",
   "sha256": "07551882777b1cf1d09c50cb9033cca4cd39c0fd0d14392ec960d909299319cf",
-  "converted_at_beijing": "2026-10-31T04:02:17+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:41+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 规则按 10 月 7 日版本，10 月 11 日只读核对，做法未变；本页只讲项目怎么运作，不展开具体材料和进度",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 规则按 10 月 7 日版本，10 月 11 日只读核对，做法未变；本页只讲项目怎么运作，不展开具体材料和进度"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

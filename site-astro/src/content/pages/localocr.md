@@ -633,7 +633,7 @@
  "source": {
   "page": "sources/pages/localocr/page.json",
   "sha256": "f41186c1c48dc6b5b25ad6b07a7f246b4cbc0d60dd820f509489b8c23dfe1ff6",
-  "converted_at_beijing": "2026-11-04T08:42:36+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:41+08:00"
  }
 }
 ---
@@ -692,7 +692,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日 · 识别服务日志；AI 使用记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 11 月 2 日",
      "row": "hero"
     },
     {
@@ -749,7 +749,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 2 日 · 识别服务日志；AI 使用记录。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 11 月 2 日"
     },
     {
      "type": "stat_card",

@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/timeaudit-runtime-reliability/page.json",
   "sha256": "8c47c3576f509bb8fe94a60160bf14e5aeabe5c30f1c6b99e8f8fac56c8b53ff",
-  "converted_at_beijing": "2026-11-04T08:42:50+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:49+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 源码为 10 月 29 日 14:24 的合并 91b7ba0（含 14:06 的个人活动读取分阶段诊断 f62b807；10 月 30 日回读，与远端一致）；Docker 停止自愈 6dea0bf 与读取超时修复 5cb3ea9 为 10 月 20 日加入；10 月 20 日 07:35 三条心跳新鲜；10 月 12 日 05:36 完整健康检查正常；未注入故障、未运行测试",
+     "static_note": "截至 10 月 12 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 源码为 10 月 29 日 14:24 的合并 91b7ba0（含 14:06 的个人活动读取分阶段诊断 f62b807；10 月 30 日回读，与远端一致）；Docker 停止自愈 6dea0bf 与读取超时修复 5cb3ea9 为 10 月 20 日加入；10 月 20 日 07:35 三条心跳新鲜；10 月 12 日 05:36 完整健康检查正常；未注入故障、未运行测试"
+     "static_note": "截至 10 月 12 日"
     },
     {
      "type": "action_button",

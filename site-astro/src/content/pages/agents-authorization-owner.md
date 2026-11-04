@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/agents-authorization-owner/page.json",
   "sha256": "27d31777634d87762360654553c05fb92c2121454ea7a478c0692b444a6ec4ef",
-  "converted_at_beijing": "2026-10-31T07:45:41+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 按 2026-10-12 04:32—04:41（北京时间）的活动规则 E258 与 .agents 源码核对；AuthorityHost 安装清单为 04:39 只读观察，资料期默认时长仍按 10 月 11 日 16:37 的观察；本轮没有办理任何授权或本人验证",
+     "static_note": "截至 10 月 12 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 按 2026-10-12 04:32—04:41（北京时间）的活动规则 E258 与 .agents 源码核对；AuthorityHost 安装清单为 04:39 只读观察，资料期默认时长仍按 10 月 11 日 16:37 的观察；本轮没有办理任何授权或本人验证"
+     "static_note": "截至 10 月 12 日"
     },
     {
      "type": "action_button",

@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/learning-route-checkpoint/page.json",
   "sha256": "87a21b0f5668fe75dff8b181494e544551fa9bd65e03d8e00922084125b0bd52",
-  "converted_at_beijing": "2026-10-31T04:05:41+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:41+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目规则按 10 月 7 日版本，10 月 11 日只读核对；本页只讲这一部分怎么运作，不展示实际主题、路线或进度",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目规则按 10 月 7 日版本，10 月 11 日只读核对；本页只讲这一部分怎么运作，不展示实际主题、路线或进度"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

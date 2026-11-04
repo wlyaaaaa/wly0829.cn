@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/pcconfig-runtime-startup/page.json",
   "sha256": "0a23479a0c4d05ea54193b92a9c6272a5547ceda56bf4a2cd2974005ccc68e20",
-  "converted_at_beijing": "2026-10-30T13:04:17+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按 PCConfig 431ad1c1 登记与 10 月 30 日 11:14:17 管理员完整只读任务现场；磁盘急降守护按 1848d49e/72accbdc；重建计划仍按旧快照；综合自查和鼠标样式守护于 2026-09-28 退役，WeFlow 第二实例 9 月 26 日起冻结。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按 PCConfig 431ad1c1 登记与 10 月 30 日 11:14:17 管理员完整只读任务现场；磁盘急降守护按 1848d49e/72accbdc；重建计划仍按旧快照；综合自查和鼠标样式守护于 2026-09-28 退役，WeFlow 第二实例 9 月 26 日起冻结。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

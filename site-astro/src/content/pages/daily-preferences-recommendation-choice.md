@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/daily-preferences-recommendation-choice/page.json",
   "sha256": "50881e34ba71800865b0f9c22fbd3b73cd7e56be29d23561521df9524e095d9d",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 b334b3aa（北京 10/8 00:23）、daily-preferences Skill 推荐说明与 10/11 16:35 只读分类计数；本次没有生成新推荐，历史验收保留原日期",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -131,7 +131,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源仓库 b334b3aa（北京 10/8 00:23）、daily-preferences Skill 推荐说明与 10/11 16:35 只读分类计数；本次没有生成新推荐，历史验收保留原日期"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

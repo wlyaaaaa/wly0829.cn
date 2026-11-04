@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/work-delivery-value-state-recovery/page.json",
   "sha256": "25a17e7955ecef1fa4b8c9aa78cd35d69a60575e2bfb54e47071e841d2a21aae",
-  "converted_at_beijing": "2026-11-04T08:42:51+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:51+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 工作交付源码（main 7a8d0e5）按 10 月 11 日 14:00 前现状重新核对，数据库和备份位置于 10 月 11 日 16:32—16:35 只读查看；测试与合成验收保留 9 月 1 日、9 月 28 日原日期，本轮未重跑。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 工作交付源码（main 7a8d0e5）按 10 月 11 日 14:00 前现状重新核对，数据库和备份位置于 10 月 11 日 16:32—16:35 只读查看；测试与合成验收保留 9 月 1 日、9 月 28 日原日期，本轮未重跑。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

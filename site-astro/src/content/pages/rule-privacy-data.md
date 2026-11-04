@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E371",
-   "commit": "3c09ab215347bdeef9b20027169a68cbe43e1a61",
-   "ruleset_sha256": "0027aa3691052764d05c2e68802eeb1049c7ae7b5151d4f59a605251d402c130",
-   "activated_at": "2026-11-04T07:38:37.086979+08:00",
+   "release": "E372",
+   "commit": "f44463a9fd2c4bacb8c562315d297db27d501f35",
+   "ruleset_sha256": "ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7",
+   "activated_at": "2026-11-04T08:49:37.968049+08:00",
    "file": "sources/rules/docs/contracts/agents.privacy-data.md",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
    "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942"
@@ -300,8 +300,8 @@
  },
  "source": {
   "page": "sources/pages/rule-privacy-data/page.json",
-  "sha256": "05ad6958f10b772f0eec0cd6e0756d0d6d66b504488f4706f64a339779708c06",
-  "converted_at_beijing": "2026-11-04T08:31:33+08:00"
+  "sha256": "e0917a62dc7c959e2d8f3725a81c81887c2411ad7a954f9bb7ad3e1a72675334",
+  "converted_at_beijing": "2026-11-04T10:21:46+08:00"
  }
 }
 ---
@@ -2727,7 +2727,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
    "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
    "from": null,
@@ -2770,7 +2770,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E371版，略去个别私人领域字句"
+     "text_ref": "原文·E372版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -2804,7 +2804,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E371版，略去个别私人领域字句"
+     "text_ref": "原文·E372版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -2886,7 +2886,7 @@
 }
 ```
 
-原文 · E371 版，略去个别私人领域字句
+原文 · E372 版，略去个别私人领域字句
 
 # 个人资料与数据处理
 
@@ -2915,7 +2915,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
    "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
    "from": "- **入口。**",
@@ -2945,7 +2945,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -2979,7 +2979,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3037,7 +3037,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 - **入口。** 查状态、业务检查和锁定分别是密码中心的 `StatusPersonalEnvironment`、`CheckPersonalDataAccess`、`LockPersonalEnvironment`，经已安装的 `C:\ProgramData\PCConfig\AuthorityHost\tools\Invoke-SecretBroker.ps1` 调用。状态未知时先用 `StatusPersonalEnvironment` 重读。`VerifyPersonalEnvironment` 在已有资料期内复用原截止；需要验证时不传 `-AuthorityFactor`，由本人选四选一验证。命令同步等验证终态，窗口首次可见起最长等 5 分钟；模型用宿主后台命令运行，外层超时至少 360 秒，等终态后回读状态，不能把命令启动当验证成功。取消、拒绝和超时按上面的取消规则处理。本人明确要解锁或续期时用 `EnrollPersonalPrivacyWaiver`，用法见 `local-secret-broker` 技能。资料检查直接读共享状态，不需要对话号、消息号或宿主对话记录；只读检查也不消费无限制授权。本人说“锁定个人资料”“冻结个人资料”就走锁定；“冻结项目”“冻结设计”不是资料操作。Hook、技能和电脑 MCP 只读这份状态，不另建权限记录。
 
@@ -3058,7 +3058,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
    "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
    "from": "## 公开个人数据分级表",
@@ -3093,7 +3093,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3150,7 +3150,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3220,7 +3220,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ## 公开个人数据分级表
 
@@ -3246,7 +3246,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
    "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
    "from": "## 私人仓库收口",
@@ -3276,7 +3276,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3320,7 +3320,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E371版·续"
+     "text_ref": "原文·E372版·续"
     },
     {
      "type": "source_text_card",
@@ -3402,7 +3402,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ## 私人仓库收口
 

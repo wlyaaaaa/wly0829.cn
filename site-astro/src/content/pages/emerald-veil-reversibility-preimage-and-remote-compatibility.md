@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/emerald-veil-reversibility-preimage-and-remote-compatibility/page.json",
   "sha256": "6df3b19be8ed640cf32fbcd7be9cae4a29dc144e6e319704128b0372685254ac",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码主线 861a2d2（北京时间 10 月 8 日 23:50）与北京时间 10 月 11 日 13:33–13:36 的只读安装检查和常驻结果读取；开启、登录自启、设置自修在用，查看状态、紧急停用、撤回原设置、卸载说不准",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码主线 861a2d2（北京时间 10 月 8 日 23:50）与北京时间 10 月 11 日 13:33–13:36 的只读安装检查和常驻结果读取；开启、登录自启、设置自修在用，查看状态、紧急停用、撤回原设置、卸载说不准"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/wechat-direct-moments-local-cache/page.json",
   "sha256": "2c597297b20071d1b83d039e316c318bfcd6ea7a8984114eb1554d8055abf5f5",
-  "converted_at_beijing": "2026-11-04T08:42:50+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:50+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源代码核对到 10 月 20 日最后一次提交（v0.2.3，10 月 22 日复核；这次提交只改安装方式和语音自检用的 Python）；账号配置于 10 月 11 日 16:33 重新检查，本轮没有读取真实朋友圈缓存",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -130,7 +130,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 来源代码核对到 10 月 20 日最后一次提交（v0.2.3，10 月 22 日复核；这次提交只改安装方式和语音自检用的 Python）；账号配置于 10 月 11 日 16:33 重新检查，本轮没有读取真实朋友圈缓存"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

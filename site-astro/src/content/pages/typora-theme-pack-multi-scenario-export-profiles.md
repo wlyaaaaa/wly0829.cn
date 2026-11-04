@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/typora-theme-pack-multi-scenario-export-profiles/page.json",
   "sha256": "fef33c342993482dc18dc4235d77be802f584a26c15c9989a3d3f2e1c71fc59f",
-  "converted_at_beijing": "2026-10-30T15:12:32+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:49+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未重新导出。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未重新导出。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup-source-catalog/page.json",
   "sha256": "44d3e55d46df0fa582ae2ef8bf9013bbc783a06cae1582a9ab97ca016b380062",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · DevConfig Backup 公开仓库 de0f4e3 的来源清单与采集源码（北京时间 10 月 30 日 11:13 回读，与远端 main 一致），加上 10 月 30 日 11:11 零写入状态入口读到的最新成功包与最近一次失败回执；未重跑、未重新解包或重算哈希",
+     "static_note": "截至 10 月 30 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · DevConfig Backup 公开仓库 de0f4e3 的来源清单与采集源码（北京时间 10 月 30 日 11:13 回读，与远端 main 一致），加上 10 月 30 日 11:11 零写入状态入口读到的最新成功包与最近一次失败回执；未重跑、未重新解包或重算哈希"
+     "static_note": "截至 10 月 30 日"
     },
     {
      "type": "action_button",

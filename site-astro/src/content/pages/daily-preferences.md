@@ -935,7 +935,7 @@
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
   "sha256": "6df1d19c68cf4de8aa440dd2d35d29a87a39cb170dbf33800bd00921a38055a0",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:39+08:00"
  }
 }
 ---
@@ -997,7 +997,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用记录（10 月 5 日起，记到 10 月 9 日）",
+     "static_note": "截至 10 月 11 日",
      "row": "hero"
     },
     {
@@ -1089,7 +1089,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用记录（10 月 5 日起，记到 10 月 9 日）"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "stat_card",

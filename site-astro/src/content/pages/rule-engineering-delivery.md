@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E371",
-   "commit": "3c09ab215347bdeef9b20027169a68cbe43e1a61",
-   "ruleset_sha256": "0027aa3691052764d05c2e68802eeb1049c7ae7b5151d4f59a605251d402c130",
-   "activated_at": "2026-11-04T07:38:37.086979+08:00",
+   "release": "E372",
+   "commit": "f44463a9fd2c4bacb8c562315d297db27d501f35",
+   "ruleset_sha256": "ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7",
+   "activated_at": "2026-11-04T08:49:37.968049+08:00",
    "file": "sources/rules/docs/contracts/agents.engineering-delivery.md",
    "sha256": "b81817b6cedb8a606ef42185caa584809281b85be2ec0c54c4dd0124533210f5",
    "public_sha256": "6ea39201f816ad82ccd47c73f0869c6c52a430c96305b33834e293e8ec880f34"
@@ -263,8 +263,8 @@
  },
  "source": {
   "page": "sources/pages/rule-engineering-delivery/page.json",
-  "sha256": "f31f585af581ba5d2b023b66951c31dd802cc354aac50f4b324301008e3dc1a5",
-  "converted_at_beijing": "2026-11-04T08:31:33+08:00"
+  "sha256": "664ccc485f91ead5ffe84895b3157734b8a195bb4501b1906fb8acd5bb83beea",
+  "converted_at_beijing": "2026-11-04T10:21:46+08:00"
  }
 }
 ---
@@ -1841,7 +1841,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "b81817b6cedb8a606ef42185caa584809281b85be2ec0c54c4dd0124533210f5",
    "public_sha256": "6ea39201f816ad82ccd47c73f0869c6c52a430c96305b33834e293e8ec880f34",
    "from": null,
@@ -1878,7 +1878,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E371版，一字不改",
+     "text_ref": "原文·E372版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -1918,7 +1918,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E371版，一字不改",
+     "text_ref": "原文·E372版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -2039,7 +2039,7 @@
 }
 ```
 
-原文 · E371 版，一字不改
+原文 · E372 版，一字不改
 
 # 工程与交付
 
@@ -2127,7 +2127,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "b81817b6cedb8a606ef42185caa584809281b85be2ec0c54c4dd0124533210f5",
    "public_sha256": "6ea39201f816ad82ccd47c73f0869c6c52a430c96305b33834e293e8ec880f34",
    "from": "## 验证",
@@ -2164,7 +2164,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E371版·续",
+     "text_ref": "原文·E372版·续",
      "align": "left",
      "size": "small"
     },
@@ -2211,7 +2211,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E371版·续",
+     "text_ref": "原文·E372版·续",
      "align": "left",
      "size": "small"
     },
@@ -2303,7 +2303,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ## 验证
 
@@ -2336,7 +2336,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "b81817b6cedb8a606ef42185caa584809281b85be2ec0c54c4dd0124533210f5",
    "public_sha256": "6ea39201f816ad82ccd47c73f0869c6c52a430c96305b33834e293e8ec880f34",
    "from": "## 下载、临时文件和清理",
@@ -2369,7 +2369,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E371版·续",
+     "text_ref": "原文·E372版·续",
      "align": "left",
      "size": "small"
     },
@@ -2410,7 +2410,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E371版·续",
+     "text_ref": "原文·E372版·续",
      "align": "left",
      "size": "small"
     },
@@ -2490,7 +2490,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ## 下载、临时文件和清理
 
@@ -2514,7 +2514,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E371",
+   "release": "E372",
    "sha256": "b81817b6cedb8a606ef42185caa584809281b85be2ec0c54c4dd0124533210f5",
    "public_sha256": "6ea39201f816ad82ccd47c73f0869c6c52a430c96305b33834e293e8ec880f34",
    "from": "## Git 收尾",
@@ -2555,7 +2555,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E371版·续",
+     "text_ref": "原文·E372版·续",
      "align": "left",
      "size": "small"
     },
@@ -2599,7 +2599,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E371版·续",
+     "text_ref": "原文·E372版·续",
      "align": "left",
      "size": "small"
     },
@@ -2691,7 +2691,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E371 版 · 续
+原文 · E372 版 · 续
 
 ## Git 收尾
 

@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-health-evidence-three-state/page.json",
   "sha256": "894eb40ca157f0ade235decf5f20755650faaaff8e9add8a7ec7352b6b83bde4",
-  "converted_at_beijing": "2026-10-31T13:58:51+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码最后变更 10 月 7 日，10 月 11 日只读核对；本次没有跑测试、没有打开任何健康内容",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源码最后变更 10 月 7 日，10 月 11 日只读核对；本次没有跑测试、没有打开任何健康内容"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

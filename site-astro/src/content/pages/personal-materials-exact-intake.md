@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-materials-exact-intake/page.json",
   "sha256": "fdd8dfc2b1f11939e0c00d80ac0e17994e12a54cb4e8ad2fca1830d7cc2f793f",
-  "converted_at_beijing": "2026-11-04T08:42:49+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:43+08:00"
  }
 }
 ---
@@ -85,7 +85,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 10 月 22 日 06:47 计数与只读汇总（166 份登记、55 个来源、4 条关系、161 份有文字）；每日维护日志同时读到最近一次成功在 10 月 21 日 17:10；本次没有接入、撤销任何登记",
+     "static_note": "截至 10 月 22 日",
      "row": "top"
     },
     {
@@ -127,7 +127,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 22 日 · 10 月 22 日 06:47 计数与只读汇总（166 份登记、55 个来源、4 条关系、161 份有文字）；每日维护日志同时读到最近一次成功在 10 月 21 日 17:10；本次没有接入、撤销任何登记"
+     "static_note": "截至 10 月 22 日"
     },
     {
      "type": "action_button",

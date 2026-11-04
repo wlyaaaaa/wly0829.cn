@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/steam-millennium-config-backup-allowlist-config-and-style-snapshot/page.json",
   "sha256": "c79a19bada2f3aad051e87b98e35e546e8c4cef8ddcffa23942cfb6a61218aee",
-  "converted_at_beijing": "2026-10-11T19:07:12+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:47+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源仓库 10 月 1 日的最新提交，加上北京时间 10 月 11 日 13:32 的只读状态核对",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 源仓库 10 月 1 日的最新提交，加上北京时间 10 月 11 日 13:32 的只读状态核对"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

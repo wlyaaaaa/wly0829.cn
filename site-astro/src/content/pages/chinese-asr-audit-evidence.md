@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/chinese-asr-audit-evidence/page.json",
   "sha256": "e0fbbd97fbcfb4f633010ece13b161744e98ef3c7532b64c68175702834fdf5a",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04，含 10 月 11 日 00:52 繁简只换字形的改动）按当天 14:00 前状态只读核对；测试只做静态计数，历史运行保留各自日期。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04，含 10 月 11 日 00:52 繁简只换字形的改动）按当天 14:00 前状态只读核对；测试只做静态计数，历史运行保留各自日期。使用档沿用既有类别，本轮分类依据 Unknown；其余事实按各自注明日期。"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

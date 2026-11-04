@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup-tiered-distribution/page.json",
   "sha256": "1caf28122e769e975f05f79f4804d55437ef72cc0fe31c233ee8f407f6a3b708",
-  "converted_at_beijing": "2026-10-30T13:04:16+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · DevConfig Backup 公开仓库 de0f4e3 的源码（北京时间 10 月 30 日 11:13 回读，与远端 main 一致），加上 10 月 30 日 11:11 只读回读的零写入状态入口、本机/G 回执和 PCConfig 最新一轮冷备总回执（10 月 29 日 14:30—18:06）；未联网、未重读 H 介质",
+     "static_note": "截至 10 月 30 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 30 日 · DevConfig Backup 公开仓库 de0f4e3 的源码（北京时间 10 月 30 日 11:13 回读，与远端 main 一致），加上 10 月 30 日 11:11 只读回读的零写入状态入口、本机/G 回执和 PCConfig 最新一轮冷备总回执（10 月 29 日 14:30—18:06）；未联网、未重读 H 介质"
+     "static_note": "截至 10 月 30 日"
     },
     {
      "type": "action_button",

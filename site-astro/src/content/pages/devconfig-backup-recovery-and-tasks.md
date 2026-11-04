@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup-recovery-and-tasks/page.json",
   "sha256": "a9cb65bc80184a42afa4eea5d28c57bb52b6037dbd1a1dcacaa07366cd3e9a14",
-  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:40+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · DevConfig Backup 公开仓库 52d3356（北京时间 10 月 11 日 08:26 提交）的恢复脚本与 docs/recovery.md，北京时间 10 月 11 日 13:33 回读的计划任务，以及 9 月 18 日的真实恢复验收",
+     "static_note": "截至 10 月 11 日",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · DevConfig Backup 公开仓库 52d3356（北京时间 10 月 11 日 08:26 提交）的恢复脚本与 docs/recovery.md，北京时间 10 月 11 日 13:33 回读的计划任务，以及 9 月 18 日的真实恢复验收"
+     "static_note": "截至 10 月 11 日"
     },
     {
      "type": "action_button",

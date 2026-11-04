@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/agents-protected-policy/page.json",
   "sha256": "eba06d3c75768dd9ed2e58da83411ca4f0bfa44c99d2319cf5d05916f8f07c52",
-  "converted_at_beijing": "2026-10-30T13:04:14+08:00"
+  "converted_at_beijing": "2026-11-04T10:21:38+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 按 2026-10-12 04:32—04:41（北京时间）的活动规则 E258 与 .agents 源码核对；规则版本与 ACL 为 04:41 只读观察，本轮没有执行任何重大动作、本人验证或发布",
+     "static_note": "截至 10 月 12 日",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 12 日 · 按 2026-10-12 04:32—04:41（北京时间）的活动规则 E258 与 .agents 源码核对；规则版本与 ACL 为 04:41 只读观察，本轮没有执行任何重大动作、本人验证或发布"
+     "static_note": "截至 10 月 12 日"
     },
     {
      "type": "action_button",

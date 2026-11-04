@@ -10,10 +10,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-    "release": "E371",
-    "commit": "3c09ab215347bdeef9b20027169a68cbe43e1a61",
-    "ruleset_sha256": "0027aa3691052764d05c2e68802eeb1049c7ae7b5151d4f59a605251d402c130",
-    "activated_at": "2026-11-04T07:38:37.086979+08:00",
+    "release": "E372",
+    "commit": "f44463a9fd2c4bacb8c562315d297db27d501f35",
+    "ruleset_sha256": "ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7",
+    "activated_at": "2026-11-04T08:49:37.968049+08:00",
     "file": "sources/rules/release.json"
   },
   "explanation_based_on": {
