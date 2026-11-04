@@ -179,7 +179,6 @@ export function security(v, ctx) {
 
 // ---- “要你做的事”怎么读：后端按需问字段（P2）有就用；没有就从现有标题里拆，拆不出就照原句显示 ----
 const CIRCLED = /[①②③④⑤⑥⑦⑧⑨]/;
-const BJ = (s) => { const m = /(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/.exec(s || ''); return m ? Date.parse(`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:00+08:00`) : NaN; };
 const clean = (t) => String(t || '').replace(/\s*做完点“复制给 AI”说一声。?/g, '').replace(/\s*(最后核对：[^。]*。?|尚未核对。?)/g, '').trim();
 // 没写问题的旧“AI 在等你回”卡（标题只有“有一个 AI 对话在等你回复”）：有对话名写“「对话名」那个对话在等你回话”，没有就照实说它没写问题。
 // 钩子以后会把问题写全，这里只是旧卡的兜底；“打开对话”照 open 字段画
@@ -365,7 +364,7 @@ const LATE_CODES = ['original_deadline_overdue', 'undated_wake_condition', 'ai_d
 const stuckWhy = (s) => (!s ? '' : /^[a-z][a-z0-9_]*$/.test(s) ? STUCK_CODES[s] || '' : s);
 // 进展：后端投影的是 progress（字符串或 {text}），旧数据叫 latest_progress
 const progressOf = (x) => String((typeof x.progress === 'string' ? x.progress : x.progress?.text) || x.latest_progress || '').trim();
-// AI 在跟（二级页“AI 的账本”）：晚了的一行一条（晚得最多的在前），其余收起，每条可复制。
+// AI 在跟（二级页“AI 的账本”）：按对本人使用的影响分组，每条可复制。
 // 写给本人看的话：“满 14 天待 AI 定”→“跟了 16 天还没结果，AI 这周要么定期限修好，要么结束”；
 // 没写清要办什么的不列：空标题、只写了项目名、“还没写清要办什么”“说明还不全”这类占位标题
 const bare = (x) => { const t = clean(x.title); return (!isPh(x) && (!t || t === x.project)) || /还没写清要办什么|说明还不全/.test(t); };
@@ -416,51 +415,39 @@ const decLine = (x, pre) => {
   const id = `${pre}-${String(x.id || '').replace(/[^\w-]/g, '')}`;
   return `<div class="cp-ai-dec"><span>AI 定了：${esc(d.what)}</span>${d.basis ? `<details class="cp-tech" id="${esc(id)}"><summary>技术细节</summary><p>${esc(d.basis)}</p></details>` : ''}</div>`;
 };
-// 账本件数（筛选按钮、总句、首页“AI 手上 N 件”同一个数）：合成一行的同类私人事项、说明还没写全不单列的照样计数，
+// 账本件数（四组、总句、首页“AI 手上 N 件”同一个数）：合成一行的同类私人事项、说明还没写全不单列的照样计数，
 // 列表末尾写一行“另有 N 件没单列（……）”
 function ledgerRows(v) {
-  const lateAll = v.ai_overdue ? [...v.ai_overdue] : v.ai_following.filter((x) => x.stuck === true);
-  const lateIds = new Set(lateAll.map((x) => x.id));
-  const restAll = v.ai_following.filter((x) => !lateIds.has(x.id));
-  const late = mergePh(lateAll.filter((x) => !bare(x)).sort(byLate)), rest = mergePh(restAll.filter((x) => !bare(x)));
-  return { lateAll, restAll, late, rest, merged: [...late, ...rest].reduce((s, e) => s + e.more, 0), blank: [...lateAll, ...restAll].filter(bare).length };
+  const all = new Map();
+  for (const x of [...(v.ai_overdue || []), ...v.ai_following]) all.set(x.id || x, { ...all.get(x.id || x), ...x });
+  const groups = [[], [], [], []];
+  for (const x of all.values()) groups[['know', 'urgent'].includes(x.attention_level) ? 0 : x.handoff_state === 'waiting' ? 1 : x.dated_at || x.scheduled === true ? 2 : 3].push(x);
+  groups[0].sort((a, b) => Number(b.handoff_state === 'stopped') - Number(a.handoff_state === 'stopped') || byLate(a, b));
+  const rows = groups.map((items) => ({ items, rows: mergePh(items.filter((x) => !bare(x))) }));
+  return { groups: rows, merged: rows.flatMap((g) => g.rows).reduce((s, e) => s + e.more, 0), blank: [...all.values()].filter(bare).length };
 }
 const unlisted = (r, cls) => (r.merged || r.blank ? `<p class="${cls}">另有 ${r.merged + r.blank} 件没单列（${[r.merged ? `${r.merged} 件同类私人事项，合在上面同名那行` : '', r.blank ? `${r.blank} 件说明还没写全，AI 会补上` : ''].filter(Boolean).join('；')}）</p>` : '');
 function aiFollowing(v, ctx) {
   const now = ctx.now;
   const row = ({ x, more }, small) => `<li${liCls(x, ctx)}${itemAttr(x)}>${rowText(x, plain(clean(x.title) || x.project), esc(small))}${moreText(more)}${decLine(x, 'decl')}${ledgerBox(x, ctx)}</li>`;
-  if (v.ai_overdue) {
-    const lr = ledgerRows(v), late = lr.lateAll;
-    const lines = lr.late.map((e) => {
-      const x = e.x, at = x.overdue_since ? dayText(x.overdue_since, now) : '';
-      const d = Number(x.overdue_days), days = x.registration_unknown ? 14 : Number.isFinite(x.age_days) ? x.age_days : null;
-      const why = x.awaiting_ai_decision ? `跟了 ${days ?? 14} 天还没结果，AI 这周要么定期限修好，要么结束` : at ? `原定 ${at}${d >= 1 ? `，晚了 ${d} 天` : '，刚过不到 1 天'}` : '没写哪天该有结果，AI 在补上期限';
-      return row(e, [why, plain(progressOf(x) || (LATE_CODES.includes(x.stuck_reason) ? '' : stuckWhy(x.stuck_reason)))].filter(Boolean).join(' · '));
-    }).join('');
-    const rest = lr.restAll;
-    // 其余的分两类说：有日子还没到的、根本没定日子的（不把没定日子的说成“还没到日子”）
-    const dated = rest.filter((x) => ledgerDue(x, now)).length, undated = rest.length - dated;
-    const restSum = `其余 ${rest.length} 件` + (undated ? `：${[dated ? `${dated} 件还没到日子` : '', `${undated} 件没定日子`].filter(Boolean).join('、')}` : '还没到日子');
-    const restRow = (e) => { const due = ledgerDue(e.x, now); return row(e, [due ? `期限 ${due.text}${due.old ? `（${due.old}）` : ''}` : '没定日子', e.x.last_checked_at ? checkedAgo(e.x.last_checked_at, now) : ''].filter(Boolean).join(' · ')); };
-    const restList = rest.length ? `<details class="cp-more" id="ai-rest"><summary>${restSum}</summary><ul class="cp-ailist">${lr.rest.map(restRow).join('')}</ul></details>` : '';
-    return `<div class="cp-ai" id="ai">${late.length ? `<p class="cp-ai-cap">${dot('neutral')}AI 自己有 ${late.length} 件晚了，在补（不用你管）</p><ul class="cp-ailist">${lines}</ul>` : `<p class="cp-line">${dot('ok')}AI 自己的活都没晚。</p>`}${restList}${unlisted(lr, 'cp-ai-more')}</div>`;
-  }
-  const rows = v.ai_following.filter((x) => !bare(x)).map((x) => {
-    const title = clean(x.title);
-    const cp = /检查点\s*(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2})/.exec(x.title || '');
-    const cpAt = cp ? BJ(cp[1]) : NaN;
-    const passed = Number.isFinite(cpAt) && cpAt < now.getTime();
-    const h = x.handler && typeof x.handler === 'object' ? x.handler : null;
-    const stuck = x.stuck === true || h?.stuck === true || passed;
-    const why = stuckWhy(x.stuck_reason) || (passed ? `约定 ${dateHm(new Date(cpAt).toISOString())} 检查，已超过 ${Math.max(1, Math.round((now.getTime() - cpAt) / 36e5))} 小时还没收到进展` : '');
-    const state = stuck ? 'stuck' : h?.kind === 'running' ? 'running' : h?.kind === 'queued' ? 'queued' : h?.kind === 'none' ? 'none' : 'wait';
-    return { x, title: passed ? title.replace(/[；;]\s*下一个检查点[^；;]*$/, '') : title, why, state, h };
-  });
-  if (!rows.length) return `<p class="cp-line" id="ai">${dot('ok')}AI 现在手上没有自己的活。</p>`;
-  const line = (r) => `<li class="is-${r.state}${phCls(r.x)}${actCls(r.x, ctx)}"${itemAttr(r.x)}>${rowText(r.x, plain(r.title), [r.why, r.h?.task ? `由“${r.h.task}”在办` : '', r.h?.next_run_at ? '下次 ' + dateHm(r.h.next_run_at) : '', r.x.last_checked_at ? checkedAgo(r.x.last_checked_at, now) : '还没核对过'].filter(Boolean).map(esc).join(' · '))}${ledgerBox(r.x, ctx)}</li>`;
-  const stuck = rows.filter((r) => r.state === 'stuck'), rest = rows.filter((r) => r.state !== 'stuck');
-  return `<div class="cp-ai" id="ai">${stuck.length ? `<p class="cp-ai-cap">${dot('neutral')}AI 自己有 ${stuck.length} 件超过约定的检查时间，在补（不用你管）</p><ul class="cp-ailist">${stuck.map(line).join('')}</ul>` : ''}`
-    + (rest.length ? `<details class="cp-more" id="ai-rest"><summary>其余 ${rest.length} 件还没到约定日子</summary><ul class="cp-ailist">${rest.map(line).join('')}</ul></details>` : '') + `</div>`;
+  const lr = ledgerRows(v);
+  if (!lr.groups.some((g) => g.items.length)) return `<p class="cp-line" id="ai">${dot('ok')}AI 现在手上没有自己的活。</p>`;
+  const datedDue = (x) => ledgerDue({ scheduled_at: x.dated_at || x.scheduled_at }, now);
+  const small = (x, scheduled) => {
+    const due = (scheduled && datedDue(x)) || ledgerDue(x, now), days = x.registration_unknown ? 14 : Number.isFinite(x.age_days) ? x.age_days : null;
+    const stop = x.handoff_state === 'stopped' && ({ round_cap: '修了 3 轮没修好，先放着', deadline_passed: '到了限期还没修好，先放着' })[x.handoff_stop_reason];
+    const why = stop ? `${stop}${days != null ? ` · 跟了 ${days} 天` : ''}` : x.awaiting_ai_decision ? `跟了 ${days ?? 14} 天还没结果，AI 这周要么定期限修好，要么结束`
+      : due ? `期限 ${due.text}${due.old ? `（${due.old}）` : ''}` : '没定日子';
+    return [why, plain(progressOf(x) || (LATE_CODES.includes(x.stuck_reason) ? '' : stuckWhy(x.stuck_reason))), x.last_checked_at ? checkedAgo(x.last_checked_at, now) : ''].filter(Boolean).join(' · ');
+  };
+  const labels = ['影响你用的', '在等条件的', '到日子才查的', '不影响你用的'], ids = ['ai-impact', 'ai-waiting', 'ai-scheduled', 'ai-rest'];
+  const groups = lr.groups.map((g, i) => {
+    if (!g.items.length) return '';
+    if (i === 2) g.rows.sort((a, b) => (datedDue(a.x)?.at ?? Infinity) - (datedDue(b.x)?.at ?? Infinity));
+    const title = `${labels[i]} ${g.items.length} 件`, list = `<ul class="cp-ailist">${g.rows.map((e) => row(e, small(e.x, i === 2))).join('')}</ul>`;
+    return i === 0 ? `<div id="${ids[i]}"><p class="cp-ai-cap">${title}</p>${list}</div>` : `<details class="cp-more" id="${ids[i]}"><summary>${title}</summary>${list}</details>`;
+  }).join('');
+  return `<div class="cp-ai" id="ai">${groups}${unlisted(lr, 'cp-ai-more')}</div>`;
 }
 
 // 每周 AI 体检这一轮做了什么（后端 governance.last_run，字段见 G3）；没给 counts 就不出，退回原来的显示
@@ -1538,48 +1525,11 @@ const lampOf = (key) => (v, ctx) => {
   if (st === 'neutral' || st === 'ok') return '';
   return ctx.ov.lamp({ ...sec, level: st === 'red' ? 'act' : 'watch', word: '要你看' }, false);
 };
-// 二级页电脑版（宽度 ≥1200）的表格。窄屏照旧是上面的列表；两样都画，cockpit.css 按宽度只显示一样（表格行不带 data-items，通知跳转找列表那行）。
-// 筛选（全部 / 晚了 / 没晚、输入几个字）和勾选记在 client.js 的 act.ui（下面两个键），重画时照样画出来
+// 旧跟进表格的状态键仍供 client.js 兼容；AI 在跟在所有宽度统一使用四组列表。
+// AI 自己定了的仍保留电脑版表格（data-ids 只用于标新）。
 export const LF_KEY = '\u0000ledger-filter', LB_KEY = '\u0000ledger-batch';
-const cellNote = (x, ctx) => (isPh(x) ? '' : ledgerBox(x, ctx));
 // 表格行的编号只给“新”标记用（seen.js 的 newCss），不叫 data-items，免得通知跳转找到看不见的那处
 const rowIds = (x) => (typeof x?.id === 'string' && x.id.trim() ? ` data-ids="${esc(x.id.trim())}"` : '');
-function followTable(v, ctx) {
-  const now = ctx.now;
-  const lr = ledgerRows(v);
-  const rows = [...lr.late.map((e) => ({ ...e, late: true })), ...lr.rest.map((e) => ({ ...e, late: false }))];
-  if (!rows.length) return '';
-  const f = ctx.act?.ui?.get(LF_KEY) || {}, show = ['late', 'ok'].includes(f.show) ? f.show : 'all', q = String(f.q || '').trim().toLowerCase();
-  const nLate = lr.lateAll.length, nAll = nLate + lr.restAll.length;
-  // 一行都不能回话（公开版、后端没给按钮）时不留最后那一列
-  const anyAct = ctx.viewer?.kind === 'owner' && rows.some(({ x }) => !isPh(x));
-  const tr = ({ x, late, more }) => {
-    const title = isPh(x) ? x.title || PRIVATE_TITLE : plain(clean(x.title) || x.project || '');
-    const d = Number(x.overdue_days), days = x.registration_unknown ? 14 : Number.isFinite(x.age_days) ? x.age_days : null;
-    // 该有结果的日子：AI 新定的期限优先，原定日子放小字；都没有写“—”；没晚只说给有日子、日子还没过的
-    const due = ledgerDue(x, now);
-    const lag = !late ? '' : x.awaiting_ai_decision ? `跟了 ${days ?? 14} 天没结果` : d >= 1 ? `晚 ${d} 天` : x.overdue_since ? '刚过不到 1 天' : '没定日子';
-    const fine = !late && due && !(due.at != null && due.at < now.getTime());
-    const prog = isPh(x) ? '' : plain(progressOf(x) || (LATE_CODES.includes(x.stuck_reason) ? '' : stuckWhy(x.stuck_reason)));
-    const checked = isPh(x) ? '' : x.last_checked_at ? checkedAgo(x.last_checked_at, now) : '';
-    const hay = [title, x.project, prog, x.decision_summary].filter(Boolean).join(' ').toLowerCase();
-    const hide = (show === 'late' && !late) || (show === 'ok' && late) || (q && !hay.includes(q));
-    return `<tr class="${late ? 'is-late' : 'is-ok'}${phCls(x)}${actCls(x, ctx)}"${rowIds(x)}${hide ? ' hidden' : ''}>`
-      + `<td class="cp-lt-what">${isPh(x) ? `<span title="${PH_HINT}">${esc(title)}</span>${moreText(more)}` : `<span class="cp-lt-title">${esc(title)}${ownTag(x)}</span>${prog && String(x.owner_detail || '').includes(prog) ? '' : detail(x)}${decLine(x, 'dect')}`}</td>`
-      + `<td class="cp-lt-due">${due ? `${esc(due.text)}${due.old ? `<small>${esc(due.old)}</small>` : ''}` : '—'}</td><td class="cp-lt-lag">${lag ? `<span class="cp-lt-late">${esc(lag)}</span>` : `<span class="cp-lt-none">${fine ? '没晚' : '—'}</span>`}</td>`
-      + `<td class="cp-lt-prog">${prog ? `<span>${esc(prog)}</span>` : ''}${checked ? `<small>${esc(checked)}</small>` : ''}</td>`
-      + (anyAct ? `<td class="cp-lt-act">${cellNote(x, ctx)}</td>` : '') + `</tr>`;
-  };
-  const body = rows.map(tr).join('');
-  // 件数都按条目算：合成一行的同类私人事项按它代表的件数，说明还没写全不单列的也算在全部、晚了、没晚里
-  const blankLate = lr.lateAll.filter(bare).length, blankRest = lr.restAll.filter(bare).length;
-  const shown = rows.filter((r) => !((show === 'late' && !r.late) || (show === 'ok' && r.late))).reduce((s, r) => s + 1 + r.more, 0) + (show === 'late' ? blankLate : show === 'ok' ? blankRest : blankLate + blankRest);
-  const chip = (k, label, n) => `<button type="button" class="cp-q-mode" data-lshow="${k}" aria-pressed="${show === k}">${label} ${n}</button>`;
-  return `<div class="cp-lt" id="ai-following-table"><div class="cp-lt-bar"><span class="cp-q-modes" role="group" aria-label="看哪些">${chip('all', '全部', nAll)}${chip('late', '晚了', nLate)}${chip('ok', '没晚', nAll - nLate)}</span>`
-    + `<input type="search" class="cp-lt-find" data-lfilter value="${esc(f.q || '')}" placeholder="筛选：输入几个字" aria-label="筛选 AI 在跟的事">${q ? `<small class="cp-lt-count">按“${esc(f.q.trim())}”筛</small>` : shown < nAll ? `<small class="cp-lt-count">显示 ${shown} 件</small>` : ''}</div>`
-    + `<table class="cp-ltable"><thead><tr><th class="cp-lt-what">事项</th><th class="cp-lt-due">该有结果的日子</th><th class="cp-lt-lag">晚几天</th><th class="cp-lt-prog">最近进展</th>${anyAct ? '<th class="cp-lt-act"><span class="cp-vh">处理和复制</span></th>' : ''}</tr></thead><tbody>${body}</tbody></table>`
-    + `<p class="cp-lt-empty" hidden>没有对得上的</p>${unlisted(lr, 'cp-lt-more')}</div>`;
-}
 function decisionsTable(v, ctx) {
   const list = (v.must_know?.items || []).filter((k) => k.kind === 'ai_decision' && (isPh(k) || (typeof k.text === 'string' && k.text)));
   if (!list.length) return '';
@@ -1606,7 +1556,7 @@ export function ledger(v, ctx) {
   const toc = [['ai-following', 'AI 在跟'], ['ai-decided', 'AI 自己定了的'], theirs.length ? ['ai-wait', 'AI 等条件再做的'] : null, health ? ['ai-health', '体检和项目后台'] : null, stale ? ['stale-data', '停了的数据'] : null].filter(Boolean);
   return `<nav class="cp-ledger-toc" aria-label="这页有什么">${toc.map(([id, t]) => `<a href="#${id}">${t}</a>`).join('')}</nav>`
     + snap + `<p class="cp-ledger-sum">${dot('neutral')}${esc(ledgerText(v))}</p>` + sinceLine(ctx)
-    + `<section class="cp-ledger-sec" id="ai-following"><h2>AI 在跟</h2>${aiFollowing(v, ctx)}${followTable(v, ctx)}</section>`
+    + `<section class="cp-ledger-sec" id="ai-following"><h2>AI 在跟</h2>${aiFollowing(v, ctx)}</section>`
     + `<section class="cp-ledger-sec" id="ai-decided"><h2>AI 自己定了的</h2>${decisionsBlock(v, ctx)}${decisionsTable(v, ctx)}</section>`
     + (theirs.length ? `<section class="cp-ledger-sec" id="ai-wait"><h2>AI 等条件再做的</h2><ul class="cp-list cp-wait">${theirs.map((x) => waitRow(x, ctx, [])).join('')}</ul></section>` : '')
     + (health ? `<section class="cp-ledger-sec" id="ai-health"><h2>每周体检和项目后台</h2>${health}</section>` : '')
@@ -1677,6 +1627,6 @@ export function page(v, ctx) {
 export function ledgerPage(v, ctx) {
   ctx = { ...ctx, viewer: v.viewer };
   return `<section class="cp-section cp-ledger c-text" id="top"><p class="cp-back"><a href="/cockpit/">← 回驾驶舱</a></p><h1 class="cp-ledger-h1">AI 的账本</h1>`
-    + `<p class="cp-lead">AI 自己手上的活：在跟的、晚了的、它自己定了的、每周体检。都不用你管，想看时进来看看。</p>`
+    + `<p class="cp-lead">AI 自己手上的活：影响你用的、在等条件的、到日子才查的、不影响你用的。想看时进来看看。</p>`
     + `<p class="cp-viewer" data-cp="viewer" role="status">${viewerLine(v, ctx)}</p><div class="cp-action-toast" data-cp="action-toast">${actionToast(ctx)}</div><div class="cp-body" data-cp="ledger">${ledger(v, ctx)}</div></section>`;
 }

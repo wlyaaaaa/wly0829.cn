@@ -173,40 +173,23 @@ const ledgerView = (extra = {}) => normalize(base({
     ...['p1', 'p2', 'p3'].map((id) => ({ id, title: '一个平台上的结果还在等回复', placeholder: true })),
   ], ...extra }));
 
-test('AI 账本：日期优先 AI 新定的期限、不是今年带年份、没日子写“—”；晚了按天数排；总句分开说', () => {
+test('AI 账本：日期沿用新期限、非今年带年份；旧数据统一归组，保留进展和末尾提示', () => {
   assert.deepEqual(ledgerDue({ checkpoint_at: '2026-10-29T15:15:00+08:00', decision_due_at: '2026-10-30T18:00:00+08:00' }, now), { text: '10 月 30 日', old: '原定 10 月 29 日', at: Date.parse('2026-10-30T18:00:00+08:00') });
   assert.equal(ledgerDue({ scheduled_at: '2027-09-06T09:00:00+08:00', scheduled_text: '约 9 月 6 日' }, now).text, '约 2027 年 9 月 6 日');
   assert.equal(ledgerDue({}, now), null);
-  const v = ledgerView({ viewer: { kind: 'owner', device_state: 'ok' } });
-  const html = REGIONS.ledger(v, ctx);
-  const table = /<table class="cp-ltable">([^]*?)<\/table>/.exec(html)?.[1] || '';
-  // 晚了的按晚了几天从多到少；没天数的排后面
-  assert.deepEqual([...table.matchAll(/cp-lt-title">(示例[^<]+)</g)].map((m) => m[1]).slice(0, 3), ['示例晚九天', '示例晚一天', '示例没日子']);
-  assert.match(table, /示例新期限[^]*?<td class="cp-lt-due">10 月 30 日<small>原定 10 月 29 日<\/small><\/td><td class="cp-lt-lag"><span class="cp-lt-none">没晚<\/span>/);
-  assert.match(table, /示例明年[^]*?<td class="cp-lt-due">约 2027 年 9 月 6 日<\/td>/);
-  assert.match(table, /示例没定日子[^]*?<td class="cp-lt-due">—<\/td><td class="cp-lt-lag"><span class="cp-lt-none">—<\/span>/);
-  assert.doesNotMatch(table, /没写</);
-  assert.match(table, /<th class="cp-lt-due">该有结果的日子<\/th>/);
-  assert.doesNotMatch(html, /回一句话/);
-  // 窄屏列表：晚得多的在前，写出进展；原因代码写成人话，不露英文
-  const list = /<div class="cp-ai" id="ai">([^]*?)<details class="cp-more" id="ai-rest">/.exec(html)?.[1] || '';
-  assert.ok(list.indexOf('示例晚九天') < list.indexOf('示例晚一天'));
-  assert.match(list, /原定 10 月 29 日，晚了 1 天 · 示例进展：已修好一半/);
-  assert.match(list, /没写哪天该有结果，AI 在补上期限/);
-  assert.doesNotMatch(html, /original_deadline_overdue|undated_wake_condition|ai_decision_due/);
-  // 其余的分开说：有日子的“还没到日子”、没日子的“没定日子”；“说明还不全”的占位标题不列
-  // 件数和筛选按钮、总句同一个数：不单列的照样计数，列表末尾写“另有 N 件没单列”
-  assert.match(html, /<summary>其余 7 件：2 件还没到日子、5 件没定日子<\/summary>/);
+  const html = REGIONS.ledger(ledgerView({ viewer: { kind: 'owner', device_state: 'ok' } }), ctx);
+  assert.match(html, /示例新期限[^]*?<small>期限 10 月 30 日（原定 10 月 29 日）<\/small>/);
+  assert.match(html, /示例明年[^]*?<small>期限 约 2027 年 9 月 6 日<\/small>/);
+  assert.match(html, /示例没定日子<\/span><small>没定日子<\/small>/);
+  assert.match(html, /期限 10 月 29 日 · 示例进展：已修好一半/);
+  assert.match(html, /<summary>不影响你用的 10 件<\/summary>/);
   assert.match(html, /<p class="cp-ai-more">另有 3 件没单列（2 件同类私人事项，合在上面同名那行；1 件说明还没写全，AI 会补上）<\/p>/);
-  assert.match(html, /<p class="cp-lt-more">另有 3 件没单列/);
-  assert.doesNotMatch(html, /说明还不全/);
-  // 进展是字符串时，复制内容不能把字符串自带的 .at 方法当成时间写进去
-  assert.doesNotMatch(html, /native code/);
+  assert.doesNotMatch(html, /说明还不全|original_deadline_overdue|undated_wake_condition|ai_decision_due|native code|晚了 \d+ 天/);
 });
 
 test('AI 账本公开版：标题一样的私人占位行合成一行；本人版行上有 open 就画“打开”组', () => {
   const pub = REGIONS.ledger(ledgerView({ viewer: { kind: 'public' } }), ctx);
-  assert.equal((text(pub).match(/一个平台上的结果还在等回复/g) || []).length, 2); // 列表一行、表格一行
+  assert.equal((text(pub).match(/一个平台上的结果还在等回复/g) || []).length, 1); // 所有宽度同一行
   assert.match(pub, /另有 2 件同类事（私人事项）/);
   const owner = { kind: 'owner', device_state: 'ok', device_kind: 'pc', device_machine: '副驾驶', capabilities: ['open', 'report'] };
   const open = { conversation: { machine: '主驾驶', url: 'claude://x', title: '示例' }, report: true, targets: [{ key: 'conversation', label: '打开对话' }] };

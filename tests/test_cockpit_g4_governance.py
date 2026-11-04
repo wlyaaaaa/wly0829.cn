@@ -44,7 +44,7 @@ const assert = require('node:assert/strict');
   for (const governance of [{ next_run_at: last_run.next_run_at }, { last_run: { summary: 'x' } }, undefined]) {
     const old = R.ledger(normalize({ schema: 'pcconfig.cockpit-view.v1', ai_following: ai, deferred: [{ title: '换键盘', action_owner: 'user' }], governance }), ctx);
     assert.doesNotMatch(old, /cp-gov|这周 AI 体检|为什么暂缓/);
-    assert.match(old, /其余 1 件还没到约定日子/);
+    assert.match(old, /不影响你用的 1 件/);
   }
   // 精简视图：暂缓原因透传
   const lean = normalize({ schema: 'pcconfig.cockpit-view.v1', deferred: [{ id: 'p1', title: '换键盘', reason: '14 天没回应' }] });
