@@ -61,7 +61,7 @@ class AstroSearchTests(unittest.TestCase):
                 (root/rel).write_text('window.index='+json.dumps(rows)+';', encoding='utf8')
             previous = {'oss': {'objects': {rel: {'url': '/old/'+rel} for rel in before}}}
             with patch.object(runtime, 'ROOT', root), patch.object(runtime, 'SITE', root/'site-astro'):
-                runtime.sync_search(root, previous, {route: {}, skill_route: {}}, {}, {route})
+                runtime.sync_search(root, previous, {route: {}}, {}, {route})
             after = {rel: runtime.nav.search_records((root/rel).read_text('utf8')) for rel in before}
             expected = {'search-index.js': ['/kept/', route+'#top', '/tail/', skill_route],
                 'search-projects.js': [route+'#a', other['href'], route+'#new'],
@@ -75,5 +75,42 @@ class AstroSearchTests(unittest.TestCase):
                 self.assertEqual(after[rel][0]['title'], 'Current · Renamed')
                 self.assertEqual(after[rel][0]['detail'], 'New <text>')
                 self.assertEqual(after[rel][0]['search'], '')
+
+    def test_refresh_rebuilds_only_existing_affected_project_shards(self):
+        with tempfile.TemporaryDirectory() as workspace:
+            root = Path(workspace); route = '/projects/demo/phone-recovery/'
+            source = root/'sources/pages/demo/page.json'; source.parent.mkdir(parents=True)
+            source.write_text(json.dumps({'url': route, 'page': 'demo', 'title': 'Current', 'screens': [
+                {'id': 'a', 'title': 'Use', 'text': 'Current package and folder behavior'}]}), encoding='utf8')
+            hidden = root/'sources/pages/hidden/page.json'; hidden.parent.mkdir(parents=True)
+            hidden.write_text(json.dumps({'url': '/hidden/', 'kind': 'github-profile'}), encoding='utf8')
+            page = root/'projects/demo/phone-recovery/index.html'; page.parent.mkdir(parents=True)
+            page.write_text('<div id="top"></div><div id="a"></div>', encoding='utf8')
+            search = root/'search/index.html'; search.parent.mkdir(parents=True)
+            search.write_text('<script src="/search-projects.js"></script>', encoding='utf8')
+            manifest = root/'site-astro/sources/frozen-site/manifest.json'; manifest.parent.mkdir(parents=True)
+            manifest.write_text('{}', encoding='utf8')
+            stale = {'type': '项目内容', 'projectSlug': 'demo', 'href': route+'#gone', 'detail': 'Retired'}
+            kept = {'type': '项目内容', 'projectSlug': 'other', 'href': '/projects/other/', 'detail': 'Keep'}
+            before = {'search-index.js': [{'type': '页面', 'href': '/hidden/', 'detail': 'Noindex'}], 'search-projects.js': [stale, kept],
+                      'search-project-localocr.js': [], 'search-project-demo.js': [stale],
+                      'search-project-other.js': [kept]}
+            for rel, rows in before.items():
+                (root/rel).write_text('window.__WLY_PROJECT_SEARCH_INDEX__='+json.dumps(rows)+';', encoding='utf8')
+            unrelated = (root/'search-project-other.js').read_bytes()
+            html_before = page.read_bytes()
+            previous = {'oss': {'objects': {rel: {'url': '/old/'+rel} for rel in before}}}
+            with patch.object(runtime, 'ROOT', root), patch.object(runtime, 'SITE', root/'site-astro'):
+                runtime.sync_search(root, previous, {route: {}, '/hidden/': {}, '/old/': {'destination': route}}, {}, set())
+            main = runtime.search_wire(runtime.nav.search_records((root/'search-projects.js').read_text('utf8')))
+            shard = runtime.nav.search_records((root/'search-project-demo.js').read_text('utf8'))
+            self.assertEqual(shard, [row for row in main if row.get('projectSlug') == 'demo'])
+            self.assertEqual([row['href'] for row in shard], [route+'#a'])
+            self.assertEqual(shard[0]['detail'], 'Current package and folder behavior')
+            self.assertIn(kept, main)
+            self.assertFalse(any(row['href'] == '/hidden/' for row in runtime.nav.search_records((root/'search-index.js').read_text('utf8'))))
+            self.assertEqual(page.read_bytes(), html_before)
+            self.assertEqual((root/'search-project-other.js').read_bytes(), unrelated)
+            self.assertFalse((root/'search-project-phone-recovery.js').exists())
 
 if __name__ == '__main__': unittest.main()

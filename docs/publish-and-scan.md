@@ -15,7 +15,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发�
 
 `<dist>` 是完整构建目录。构建最后调用离线 `finalize-dist`，一次完成资源地址改写和 OSS/Pages 分包身份；扫描和发布都使用收口后的同一份磁盘字节。这个函数不读取线上清单，同一输入的结果可重复，已收口且未改变的目录再次运行不变。唯一构建链已调用该收口步骤；发布入口不再改写页面或资源。没有构建回执时，扫描仍能读取成品并自行计算文件哈希。
 
-发布入口（含预演）在任何上传前读取私有配置 `E:\PCConfig\registries\site_public_words.json`，检查成品全部受支持文本文件和本次要进入 main 的受版本管理文本；配置缺失或格式错误就停止，不上传。命中后由 AI 逐句判断，通常从作者源头改句子；只有确属误伤时，才以 `file`、`word`、`text`（原句）和 `reason` 登记精确单句例外，不放宽整个词，每处判断列进本轮报告。完整文件、行列及邻近文字写在发布输出的 `word-check.json`。可先用 `python -B -X utf8 site-astro/tools/publish_site.py --word-check-only <dist>` 只读查看。规则原文走 `scripts/rule_original_contract.py` 读取同表中的省略短语，实际来源版本不变。成品中的未判断命中必须清零；公开仓库旧文件清理超过 30 分钟时，可按本人当次授权先发布成品，再将已列明的清理单独提交到 main，不改写 Git 历史。
+发布入口（含预演）在任何上传前读取私有配置 `E:\PCConfig\registries\site_public_words.json`，检查成品全部受支持文本文件和本次要进入 main 的受版本管理文本；配置缺失或格式错误就停止，不上传。命中后，由当时做这件事的 AI 看这句话自己判断留、改还是删；通常要改，换个说法把功能和事实讲清楚；删只用在这句话本来就不该公开或对读者没用时，不能一有问题就删，也不为了避开某个词把功能从页面上删掉。确属误伤时，才以 `file`、`word`、`text`（原句）和 `reason` 登记精确单句例外，不放宽整个词，每处判断列进本轮报告。完整文件、行列及邻近文字写在发布输出的 `word-check.json`。可先用 `python -B -X utf8 site-astro/tools/publish_site.py --word-check-only <dist>` 只读查看。规则原文走 `scripts/rule_original_contract.py` 读取同表中的省略短语，实际来源版本不变。成品中的未判断命中必须清零；公开仓库旧文件清理超过 30 分钟时，可按本人当次授权先发布成品，再将已列明的清理单独提交到 main，不改写 Git 历史。
 
 资源地址由该资源和实际依赖的内容决定。修改一份 JSON 时，无关脚本和页面不会因为整包指纹变化而换地址；读取该 JSON 的脚本会随真正变化的依赖更新。循环引用使用有限的源依赖闭包，重复定稿不在循环中反复换键。
 
@@ -29,7 +29,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发�
 
 - 显式 `--previous-manifest <文件>` 无效时直接报错；未指定时，沿用 `oss-retention.py` 对真实成功 GitHub Pages 部署的发现方式。不会把未部署的最新提交当成上一版。
 - 先逐个比较整份 dist 的文件 SHA256 与指定扫描记录，增、删、改任何文件均拒绝发布并列出差异。再按最终成品清单与真实成功前版计算上传计划；对象地址变化也必须上传对应字节，不能因为哈希相同就跳过新地址。资源先上传 OSS，随后把原字节的 Pages 成品提交到专用 `site-dist` 分支；全部部署和回读通过后，最后写既有 Git 共享目录的 `wly-oss/published.json` 成功记录。
-- OSS 对本次上传对象做 HEAD，核大小及 ETag 或 Content-MD5；首页、驾驶舱、`/computer-access/` 和变化的 HTML 做 GET，核 HTTP 200 和正文 SHA256。推完 `site-dist` 后，从 `main` 手动触发 `pages.yml` 并传入刚推的 `sha`；按触发命令返回的运行网址取得 run id，等待该次运行成功才开始页面回读。`--pages-timeout`（默认 600 秒）覆盖触发和等待，失败或超时直接报错；若 GitHub CLI 未返回运行网址，也报错而不猜是哪次运行。
+- OSS 对本次上传对象做 HEAD，核大小及 ETag 或 Content-MD5；首页、驾驶舱、`/computer-access/` 和变化的 HTML 做 GET，核 HTTP 200 和正文 SHA256。每轮中，每个网址遇传输中断、超时或 HTTP 5xx 最多请求五次，间隔递增；404 和正文 SHA 不符立即记为失败。一轮结束后，只对仍因传输失败的网址等待两到三分钟再补一轮，最多补三轮；已经通过或内容错误的网址不再请求。每轮结束就保存回执，全部补轮结束后再判断，保留每个网址的最终结果、各轮尝试和累计重试次数，失败时列出具体网址。推完 `site-dist` 后，从 `main` 手动触发 `pages.yml` 并传入刚推的 `sha`；按触发命令返回的运行网址取得 run id，等待该次运行成功才开始页面回读。`--pages-timeout`（默认 600 秒）覆盖触发和等待，失败或超时直接报错；若 GitHub CLI 未返回运行网址，也报错而不猜是哪次运行。
 - 驾驶舱等分本人版和公开版的页面，公网回读后另派 GPT 用本人默认的 Chrome（主驾驶上已配对，打开就是本人版）新开标签页核对本人版：截首屏和下一屏、看控制台、测“打开到读到实时数据”的秒数，用完关掉自己开的标签页；无头浏览器只能看公开版，不能代替这一步。
 - `oss-retention.py pin` 在上传前保留本次所需对象。保留集包含清单对象，以及成品 HTML、CSS、JS 中实际引用的绝对 OSS 地址。资源回读后，以本轮真实 HEAD 证明补齐受管对象登记并保存 pin；正式发布本身不调用 `collect`，不删除旧对象。部署和公网回读成功后写成功基线，返回 `status=published`、`publication_status=published`、`oss_retention.status=deferred`，删除数 0，退出 0。
 - 每份施工登记在 Git 共享目录 `wly-oss/pins/<pin-id>.json` 的 `plan_snapshot` 保存清单原文，并以 `plan_sha256` 核对原始字节；`plan` 路径保留来源定位，原文件仍在时也核对其哈希，准备目录清掉不影响已保存的快照。发布回执的 `oss_retention_pin` 记录落点和清单哈希。历史登记没有快照且原清单已缺失时，保留该登记的全部精确 key，在 `pending_pins` 列明原因，继续核对其他候选；结果仍如实记为 `incomplete`，不会自动撤销其他施工登记。未知登记格式或现存清单哈希变化仍停止退役。

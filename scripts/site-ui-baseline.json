@@ -20353,19 +20353,6 @@
     {
       "route": "/projects/document-materials/",
       "width": 390,
-      "kind": "image-not-loaded-review",
-      "element": "#project-gallery > div.project-gallery-grid:nth-of-type(2) > button.project-gallery-card > img",
-      "phenomenon": "image-not-loaded-review",
-      "evidence": {
-        "text": "",
-        "src": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/media/document-materials/fictional-after-sales-page.webp",
-        "complete": false
-      },
-      "unmeasurable": true
-    },
-    {
-      "route": "/projects/document-materials/",
-      "width": 390,
       "kind": "anchor-click-failed",
       "element": "#project-gallery",
       "phenomenon": "anchor-click-failed",

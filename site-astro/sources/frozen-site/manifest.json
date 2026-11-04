@@ -704,7 +704,7 @@
       "source_path": "site-astro/sources/frozen-site/assets/search-project-localocr.js"
     },
     "search-projects.js": {
-      "sha256": "4f2cdd6a433cc0895317a2b4028de60a74e52d31b6f6b9d88dfab3aae3ac13e9",
+      "sha256": "9a1e9c912fb8f82309b21cb8aaf8f7373eedeb08d46c3045729a4e483cdfd045",
       "bytes": 1333154,
       "source_path": "site-astro/sources/frozen-site/assets/search-projects.js"
     },
@@ -17079,11 +17079,6 @@
       "bytes": 24266,
       "source_path": "public/media/localocr/sample-table-original.webp"
     },
-    "assets/_fingerprinted/f45a50596a80b764c6f951e6faa700e7f5dfd5f32ca7377d132d9837dba161ca.webp": {
-      "sha256": "f45a50596a80b764c6f951e6faa700e7f5dfd5f32ca7377d132d9837dba161ca",
-      "bytes": 30758,
-      "source_path": "public/media/document-materials/fictional-after-sales-page.webp"
-    },
     "assets/_fingerprinted/f4b221cf96c65d1642e923a3d7822454712396dde83ce8fbdaf72b60211340b2.png": {
       "sha256": "f4b221cf96c65d1642e923a3d7822454712396dde83ce8fbdaf72b60211340b2",
       "bytes": 399240,
@@ -18486,7 +18481,7 @@
       "source_path": "site-astro/sources/frozen-site/assets/_runtime/dc18ae0b53289166ad19/search-project-personal-materials.js"
     },
     "_runtime/da4246a63f90dfcc016a/search-project-personal-media.js": {
-      "sha256": "da4246a63f90dfcc016ac90336387bc4cc595b40e4bcf50c1325033fa1fe4669",
+      "sha256": "20da389fbf1eb46f74144acace2650afe38f6bacca5052c748ed8a2abb4a7240",
       "bytes": 13625,
       "source_path": "site-astro/sources/frozen-site/assets/_runtime/da4246a63f90dfcc016a/search-project-personal-media.js"
     },
@@ -18561,7 +18556,7 @@
       "source_path": "site-astro/sources/frozen-site/assets/_runtime/e95b76867c4da696a94b/search-project-work-delivery.js"
     },
     "_runtime/8e3947f318e9b33462dd/search-projects.js": {
-      "sha256": "8e3947f318e9b33462dd4e8b3a777dad0daf754dbbebaae4d0241ee7594ecea6",
+      "sha256": "c8b8f92fae87fb0ca5527f340208c71303efcfa05c9f796110cc2a6aefbf8333",
       "bytes": 1075178,
       "source_path": "site-astro/sources/frozen-site/assets/_runtime/8e3947f318e9b33462dd/search-projects.js"
     },
@@ -18740,6 +18735,11 @@
       "bytes": 2542464,
       "sha256": "dcf78ee602c48fb9b7458102d5fad455f0dd669bd8e4145744d63c0c98c5d766",
       "source_path": "site-astro/sources/retained-home-cockpit/assets/dcf78ee602c48fb9b7458102d5fad455f0dd669bd8e4145744d63c0c98c5d766.webp"
+    },
+    "media/pcconfig/08-passkey-browser.png": {
+      "sha256": "65cbd6cfd08cf257600c2051e2fb12f55862bbe448d9280ba5a5870eb59b9cbd",
+      "bytes": 63734,
+      "source_path": "sources/assets/pcconfig/08-passkey-browser-legacy-v02.png"
     }
   },
   "inherited_assets": {
@@ -25290,7 +25290,6 @@
     "2h-20261007-bird-atlas/media/codex-remote/thumbs/18-real-reply-queue-toggle.webp": "media/codex-remote/thumbs/18-real-reply-queue-toggle.webp",
     "2h-20261007-bird-atlas/media/codex-remote/thumbs/19-real-composer-controls.webp": "media/codex-remote/thumbs/19-real-composer-controls.webp",
     "2h-20261007-bird-atlas/media/codex-remote/thumbs/20-demo-queued-message-actions.webp": "media/codex-remote/thumbs/20-demo-queued-message-actions.webp",
-    "2h-20261007-bird-atlas/media/document-materials/fictional-after-sales-page.webp": "media/document-materials/fictional-after-sales-page.webp",
     "2h-20261007-bird-atlas/media/emerald-veil/desktop-wallpaper.webp": "media/emerald-veil/desktop-wallpaper.webp",
     "2h-20261007-bird-atlas/media/emerald-veil/phone-wallpaper.webp": "media/emerald-veil/phone-wallpaper.webp",
     "2h-20261007-bird-atlas/media/emerald-veil/thumbs/desktop-wallpaper.webp": "media/emerald-veil/thumbs/desktop-wallpaper.webp",
@@ -25318,7 +25317,6 @@
     "2h-20261007-bird-atlas/media/pcconfig/05-clipboard-date-range.png": "media/pcconfig/05-clipboard-date-range.png",
     "2h-20261007-bird-atlas/media/pcconfig/06-access-duration.png": "media/pcconfig/06-access-duration.png",
     "2h-20261007-bird-atlas/media/pcconfig/07-factor-picker.png": "media/pcconfig/07-factor-picker.png",
-    "2h-20261007-bird-atlas/media/pcconfig/08-passkey-browser.png": "media/pcconfig/08-passkey-browser.png",
     "2h-20261007-bird-atlas/media/pcconfig/09-totp.png": "media/pcconfig/09-totp.png",
     "2h-20261007-bird-atlas/media/pcconfig/10-account-private-window.png": "media/pcconfig/10-account-private-window.png",
     "2h-20261007-bird-atlas/media/personal-media/01-singapore-tree-well.webp": "media/personal-media/01-singapore-tree-well.webp",
@@ -51725,10 +51723,6 @@
       "bytes": 18444,
       "sha256": "d341e3f76b2ce336b991ac5e227a86f643fa93882d7a95e456f33aa1ba55c68d"
     },
-    "2h-20261007-bird-atlas/media/document-materials/fictional-after-sales-page.webp": {
-      "bytes": 30758,
-      "sha256": "f45a50596a80b764c6f951e6faa700e7f5dfd5f32ca7377d132d9837dba161ca"
-    },
     "2h-20261007-bird-atlas/media/emerald-veil/desktop-wallpaper.webp": {
       "bytes": 1743642,
       "sha256": "15c8f97c699af6e0f33196fdd89066ffdcfefaefda78cddcf2e19939730107dd"
@@ -51836,10 +51830,6 @@
     "2h-20261007-bird-atlas/media/pcconfig/07-factor-picker.png": {
       "bytes": 56680,
       "sha256": "f38ff64a98a89fe25dca43e23cf6ae348677468fafa26f1ecd531e6a634eda67"
-    },
-    "2h-20261007-bird-atlas/media/pcconfig/08-passkey-browser.png": {
-      "bytes": 97602,
-      "sha256": "15a637685dec4513cb2ee2df78a34f7e5368b06353f02758e1ec1e4969f4937d"
     },
     "2h-20261007-bird-atlas/media/pcconfig/09-totp.png": {
       "bytes": 31720,
@@ -54354,7 +54344,6 @@
     "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/media/codex-remote/18-real-reply-queue-toggle.jpg": "/assets/_fingerprinted/1a8e7d72a8e4961354733ff07282460bbc8eedad91fc15f076f44f256c972e96.jpg",
     "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/media/codex-remote/19-real-composer-controls.jpg": "/assets/_fingerprinted/2d485424c0513c26196f793410dad9a3d99e6f80069831c9f51705033a4e1a70.jpg",
     "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/media/codex-remote/20-demo-queued-message-actions.jpg": "/assets/_fingerprinted/6fd02bf5fc8107232e9c547de9f7e96e9d57a6f7ab0f02d02d3b060d33810a66.jpg",
-    "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/media/document-materials/fictional-after-sales-page.webp": "/assets/_fingerprinted/f45a50596a80b764c6f951e6faa700e7f5dfd5f32ca7377d132d9837dba161ca.webp",
     "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/media/emerald-veil/desktop-wallpaper.webp": "/assets/_fingerprinted/15c8f97c699af6e0f33196fdd89066ffdcfefaefda78cddcf2e19939730107dd.webp",
     "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/media/emerald-veil/phone-wallpaper.webp": "/assets/_fingerprinted/52e27a29e0206bf48fbff4ab5e4713901bd28b658e5da2424771e5bb883f1db2.webp",
     "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/media/localocr/sample-table-original.webp": "/assets/_fingerprinted/f447631806fbe26406a963d2cf87942ad03e7893db6ced3bd0608c60a34d0c22.webp",

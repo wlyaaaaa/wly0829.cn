@@ -140,12 +140,15 @@ def search_wire_loader():
 
 def sync_search(root, previous, converted, pin, changed_routes):
     replacements = {}; generated = []
-    targets = {nav.route_file(route): nav.PageFacts((root / nav.route_file(route)).read_text('utf8'), root) for route in changed_routes}
     author = {data['url']: data for data in (read(path) for path in (ROOT/'sources/pages').glob('*/page.json')) if data.get('url')}
+    excluded_routes = {route for route in converted if converted[route].get('destination')
+                       or author.get(route, {}).get('kind') in {'404', 'skill-redirect', 'github-profile'}}
+    search_routes = set(converted) - excluded_routes
+    targets = {nav.route_file(route): nav.PageFacts((root / nav.route_file(route)).read_text('utf8'), root) for route in search_routes}
     # Authored aliases travel with the same page as its current explanation.
     skill_aliases = {route: page['search_aliases'] for route, page in author.items() if page.get('search_aliases')}
     for route in converted:
-        if route not in changed_routes or converted[route].get('destination') or route not in author: continue
+        if route not in search_routes or route not in author: continue
         if route.startswith('/rules/'):
             rows = [row for row in pin['documents'].values() if row['primary'] and (route == '/rules/' or route == '/rules/' + row['slug'] + '/')]
             title = '我的 AI 约法与工作约定' if route == '/rules/' else rows[0]['title']
@@ -171,7 +174,7 @@ def sync_search(root, previous, converted, pin, changed_routes):
         kept = []
         added = [row for row in generated if (row['type'] == '项目内容') == (rel != 'search-index.js') and (rel != 'search-project-localocr.js' or row['projectSlug'] == 'localocr')]
         for row in rows:
-            if row['href'].split('#')[0] not in changed_routes:
+            if row['href'].split('#')[0] not in search_routes | excluded_routes:
                 kept.append(row)
             else:
                 match = next((i for i, value in enumerate(added) if (value['type'], value['href']) == (row['type'], row['href'])), None)
@@ -189,7 +192,15 @@ def sync_search(root, previous, converted, pin, changed_routes):
         prefix = 'window.' + ('__WLY_SEARCH_INDEX__' if rel == 'search-index.js' else '__WLY_PROJECT_SEARCH_INDEX__') + '='
         payload = search_wire(kept + added, encode=True) if rel == 'search-projects.js' else kept + added
         old.write_bytes((prefix + json.dumps(payload, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c') + ';\n').encode())
+        if rel == 'search-projects.js': current_projects = kept + added
         replacements[obj['url']] = '/' + rel
+    affected_projects = {route.split('/')[2] for route in search_routes if route.startswith('/projects/')}
+    for path in root.glob('search-project-*.js'):
+        slug = path.name.removeprefix('search-project-').removesuffix('.js')
+        if slug not in affected_projects or slug == 'localocr': continue
+        payload = [row for row in current_projects if row.get('projectSlug') == slug]
+        path.write_bytes(('window.__WLY_PROJECT_SEARCH_INDEX__=' + json.dumps(payload, ensure_ascii=False,
+                         separators=(',', ':')).replace('<', '\\u003c') + ';\n').encode())
     # The global search client has literal index URLs; keep its code intact and
     # change only those existing resource literals, then retain its new hash.
     search_path = root/'search/index.html'

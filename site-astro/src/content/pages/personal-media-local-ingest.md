@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/personal-media-local-ingest/page.json",
-  "sha256": "c876bd94ab17ecab1451d9aa04c80623bbc4516b22ed8d7e1206d14b2d480af1",
-  "converted_at_beijing": "2026-11-04T12:05:35+08:00"
+  "sha256": "d016a9122d10105dfe787251020511034445db22eefe14ce883d810d09903613",
+  "converted_at_beijing": "2026-11-04T22:47:00+08:00"
  }
 }
 ---
@@ -702,7 +702,7 @@
 
 - 各条路线都刷新当前 seed 与产品候选，写最小接入回执（含 canonical_placement 和 storage_layout）；cloud_upload 固定为 0。
 
-- update-entry 按单一 SHA-256 与 --execute 定位已登记 keeper，可更新具名相册（1–120 字符，只用于图片，固定的证件和特殊图片相册不能换名）、本人确认的地点和日期以及既有恢复资格；只先推进本地 seed 和候选，返回 external_provider_calls=0。云端、手机写回及新增原件保全分别处理。
+- update-entry 按单一 SHA-256 与 --execute 定位已登记 keeper，可更新具名相册（1–120 字符，只用于图片，固定的证件和私人图片相册不能换名）、本人确认的地点和日期以及既有恢复资格；只先推进本地 seed 和候选，返回 external_provider_calls=0。云端、手机写回及新增原件保全分别处理。
 
 ::screen{#personal-media-local-ingest-07 section="tech"}
 

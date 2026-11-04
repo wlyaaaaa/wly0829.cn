@@ -65,6 +65,9 @@ const head = rt ? currentImageLoading(withoutTocRuntime(rt.head.map((h: string) 
 // 这里保留真实的 #ai-brief；只有增强弹窗完成接管后才隐藏静态后备。
 // 现在网站上没有对应页、因而没有运行件的页（例如旧项目名的别名页），用内容文件里的页面数据
 const pageData = (() => { const m = rt?.tail.match(/<script id="page-data" type="application\/json">(.*?)<\/script>/s); try { return m ? JSON.parse(m[1]) : null; } catch { return null; } })() ?? pageMeta ?? null;
+const sharedArt = JSON.parse(runtimes['../chrome/runtime/agents.json'].tail.match(/<script id="page-data" type="application\/json">(.*?)<\/script>/s)[1]).shared.art;
+const interactionArt = Object.fromEntries(['back_to_top', 'easter_bird'].map((key) => [key, sharedArt[key]]));
+if (!rt && Object.values(interactionArt).some((src) => !src)) throw new Error('共用页面交互图片未登记');
 const authorPages = import.meta.glob('../../../sources/pages/*/page.json', { eager: true, import: 'default' }) as Record<string, any>;
 const authorPage = authorPages[`../../../sources/pages/${page}/page.json`] || pageMeta || pageData;
 const paragraphs = (authorPage?.screens || []).flatMap((s: any) => String(s.text || '').split(/\n\s*\n/));
@@ -165,7 +168,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'||(e.key===' '&&e.targ
     document.addEventListener('scroll',(e)=>{if(e.target instanceof Element&&e.target.matches('nav.toc .toc-inner'))edge();},{capture:true,passive:true});
     addEventListener('resize',edge);addEventListener('load',edge);edge();})();</script>
   <Fragment set:html={tail} />
-  {!rt && <script is:inline defer src={pageInteractions}></script>}
+  {!rt && <script is:inline defer src={pageInteractions} data-art={safe(interactionArt)}></script>}
   {needsPageBird && <script is:inline defer src={pageBird} data-bird={safe({script: `/_living/_engine/${birdFolder}bird.js`, atlas: `/_living/_engine/${birdFolder}bird-atlas.webp`})}></script>}
   {blocks && <script is:inline defer src={typesetMotion}></script>}
   <script is:inline defer src={tocConsistency}></script>

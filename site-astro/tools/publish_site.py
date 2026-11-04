@@ -115,6 +115,8 @@ def command(*args, timeout=None):
 LAST_ATTEMPT_KEYS = ('schema', 'status', 'publication_status', 'dry_run', 'started_at_beijing', 'completed_at_beijing',
                      'total_seconds', 'source_commit', 'source_commit_evidence', 'commit', 'deployment', 'error', 'oss_retention')
 RETRY_DELAYS = (0.5, 1, 2, 2, 2, 2, 2, 2)  # 连接层错误最多重试 8 次；内容核对不一致、HTTP 状态和其他错误一律不重试
+PAGE_RETRY_DELAYS = (0.5, 1, 2, 4)  # 每个页面最多请求五次，仅重试传输错误和 HTTP 5xx
+PAGE_ROUND_DELAYS = (120, 150, 180)  # 整轮结束后仅为传输失败网址补查，最多三轮
 HEAD_TIMEOUT, PAGE_TIMEOUT, GH_TIMEOUT, GIT_TIMEOUT, PUSH_TIMEOUT = 8, 15, 60, 120, 600
 GIT_NET = ('-c', 'http.lowSpeedLimit=1000', '-c', 'http.lowSpeedTime=30')
 CONNECTION_MARKERS = ('schannel', 'ssl', 'tls', 'handshake', 'eof', 'connection reset', 'connection was reset',
@@ -181,15 +183,74 @@ def get_page(item):
     route = '/'+rel[:-10] if rel.endswith('index.html') else '/'+rel
     request = Request(ORIGIN+oss.quote(route, safe='/')+'?publish='+row['sha256'][:16],
                       headers={'Accept-Encoding': 'identity', 'Cache-Control': 'no-cache'})
-    def fetch():
-        with urlopen(request, timeout=PAGE_TIMEOUT) as response:
-            if response.status != 200:
-                raise ValueError('Public HTML GET is not 200: '+rel)
-            return response.status, hashlib.file_digest(response, 'sha256').hexdigest()
-    status, digest = retrying(fetch, lambda error: connection_level(error, url_read=True))
-    if status != 200 or digest != row['sha256']:
-        raise ValueError('Public HTML GET differs: '+rel)
-    return rel, {'status': 'pass', 'http': 200, 'sha256': digest}
+    proof = {'status': 'failed', 'url': request.full_url, 'expected_sha256': row['sha256'], 'attempts': []}
+    for attempt, delay in enumerate((*PAGE_RETRY_DELAYS, None), 1):
+        status, digest = None, None
+        try:
+            with urlopen(request, timeout=PAGE_TIMEOUT) as response:
+                status = response.status
+                if status != 200:
+                    raise HTTPError(request.full_url, status, 'Public HTML GET is not 200', response.headers, None)
+                digest = hashlib.file_digest(response, 'sha256').hexdigest()
+            if digest != row['sha256']:
+                raise ValueError('Public HTML GET differs: '+rel)
+            proof.update(status='pass', http=status, sha256=digest, retryable=False)
+            proof['attempts'].append({'attempt': attempt, 'status': 'pass', 'http': status, 'sha256': digest})
+            break
+        except Exception as error:
+            if isinstance(error, HTTPError):
+                status = error.code
+                error.close()
+            transport = ((isinstance(error, HTTPError) and 500 <= error.code < 600)
+                         or connection_level(error, url_read=True))
+            proof.update(http=status, error=str(error), error_type=type(error).__name__, retryable=transport)
+            if digest is not None:
+                proof['sha256'] = digest
+            proof['attempts'].append({'attempt': attempt, 'status': 'failed', 'http': status,
+                'error': str(error), 'error_type': type(error).__name__, 'retryable': transport,
+                'retry_delay_seconds': delay if transport else None})
+            if not transport or delay is None:
+                break
+            time.sleep(delay)
+    proof.update(attempt_count=len(proof['attempts']), retry_count=len(proof['attempts'])-1)
+    if proof['status'] == 'pass':
+        proof.pop('error', None); proof.pop('error_type', None)
+    return rel, proof
+
+def verify_pages(selected, receipt, checkpoint=None):
+    pending = dict(sorted(selected.items()))
+    receipt['get_rounds'] = []
+    for number, wait in enumerate((0, *PAGE_ROUND_DELAYS), 1):
+        if wait:
+            time.sleep(wait)
+        results = {}
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            for rel, proof in pool.map(get_page, pending.items()):
+                proof['attempts'] = [{**attempt, 'round': number} for attempt in proof.get('attempts', [])]
+                results[rel] = proof
+                previous = receipt['get'].get(rel, {})
+                count = previous.get('attempt_count', 0) + proof.get('attempt_count', 1)
+                receipt['get'][rel] = {**proof, 'attempt_count': count, 'retry_count': count-1,
+                    'round_count': previous.get('round_count', 0)+1,
+                    'attempts': previous.get('attempts', [])+proof['attempts']}
+        receipt['get_rounds'].append({'round': number, 'wait_seconds': wait, 'results': results,
+            'attempt_count': sum(proof.get('attempt_count', 1) for proof in results.values()),
+            'retry_count': sum(proof.get('retry_count', 0) for proof in results.values()),
+            'failed_urls': [proof['url'] for proof in results.values() if proof['status'] != 'pass']})
+        pending = {rel: selected[rel] for rel, proof in results.items()
+                   if proof['status'] != 'pass' and proof.get('retryable')}
+        failures = [proof['url'] for proof in receipt['get'].values() if proof['status'] != 'pass']
+        receipt['get_summary'] = {'workers': 8, 'total': len(selected), 'passed': len(selected)-len(failures),
+            'failed': len(failures), 'retried_urls': sum(proof.get('retry_count', 0) > 0 for proof in receipt['get'].values()),
+            'attempts': sum(proof.get('attempt_count', 1) for proof in receipt['get'].values()),
+            'retries': sum(proof.get('retry_count', 0) for proof in receipt['get'].values()),
+            'rounds': len(receipt['get_rounds']), 'failed_urls': failures}
+        if checkpoint:
+            checkpoint()
+        if not pending:
+            break
+    if failures:
+        raise ValueError('Public HTML GET failed: '+', '.join(failures))
 
 def pages(commit, timeout):
     deadline = time.monotonic()+timeout
@@ -277,7 +338,8 @@ def publish(args):
         (output/'word-check.json').write_text(json.dumps({'hits': hits, 'blocking_hits': blocking,
             'source_cleanup_deferred': getattr(args, 'defer_source_word_cleanup', False)}, ensure_ascii=False, indent=2), 'utf-8')
         if blocking:
-            raise ValueError(f'Public word gate blocked {len(blocking)} occurrence(s); see {output / "word-check.json"}')
+            raise ValueError(f'Public word gate blocked {len(blocking)} occurrence(s); see {output / "word-check.json"}; '
+                             'AI wording review: docs/publish-and-scan.md, public word gate paragraph')
         source = oss.read(args.dist/oss.MANIFEST)
         if not source.get('finalized_dist'):
             raise ValueError('Run prepare-oss-release.py finalize-dist --dist '+str(args.dist)+' then scan that final dist')
@@ -410,11 +472,8 @@ def publish(args):
         selected = {rel: plan['github_files'][rel] for rel in
                     {'index.html', 'cockpit/index.html', 'computer-access/index.html'} |
                     {rel for rel in documents if rel.endswith('.html')}}
-        def verify_pages():
-            with ThreadPoolExecutor(max_workers=8) as pool:
-                for rel, proof in pool.map(get_page, selected.items()):
-                    receipt['get'][rel] = proof
-        step('get_key_and_changed_pages', verify_pages)
+        step('get_key_and_changed_pages', lambda: verify_pages(selected, receipt,
+            lambda: oss.write(output/'publish-receipt.json', receipt)))
         step('successful_manifest_last', lambda: retention.write(retention.shared()/'published.json', {
             'schema': 'wly.site-publication.v1', 'commit': receipt['commit'], 'deployment': receipt['deployment'],
             'source_commit': source_commit,
@@ -493,7 +552,8 @@ if __name__ == '__main__':
             (options.output/'word-check.json').write_text(json.dumps({'hits': hits, 'blocking_hits': blocking,
                 'source_cleanup_deferred': options.defer_source_word_cleanup}, ensure_ascii=False, indent=2), 'utf-8')
         print(json.dumps({'status': 'blocked' if blocking else 'source_cleanup_deferred' if hits else 'pass',
-                         'hits': len(hits), 'blocking_hits': len(blocking), 'first_hits': blocking[:3]}, ensure_ascii=False))
+                         'hits': len(hits), 'blocking_hits': len(blocking), 'first_hits': blocking[:3],
+                         **({'review': 'AI wording review: docs/publish-and-scan.md, public word gate paragraph'} if blocking else {})}, ensure_ascii=False))
         raise SystemExit(bool(blocking))
     if options.dist and options.output is None:
         PUBLISH_RUNS.mkdir(parents=True, exist_ok=True)

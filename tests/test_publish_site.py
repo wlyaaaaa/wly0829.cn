@@ -55,10 +55,14 @@ class PublishTests(unittest.TestCase):
                      unittest.mock.patch.object(publisher, 'command', return_value='{"status":"acquired"}'), \
                      unittest.mock.patch.object(publisher, 'artifact_commit', return_value={'root': str(root), 'commit': 'a'*40, 'changed_files': []}), \
                      unittest.mock.patch.object(publisher, 'pages', return_value=42), \
-                     unittest.mock.patch.object(publisher, 'get_page', side_effect=ValueError('GET mismatch') if fail_page else lambda item: (item[0], {'status': 'pass', 'sha256': item[1]['sha256']})):
+                     unittest.mock.patch.object(publisher, 'get_page', side_effect=lambda item: (item[0],
+                         {'status': 'failed', 'url': 'https://example.invalid/'+item[0], 'retry_count': 4} if fail_page
+                         else {'status': 'pass', 'sha256': item[1]['sha256']})):
                     if fail_page:
-                        with self.assertRaisesRegex(ValueError, 'GET mismatch'): publisher.publish(options)
+                        with self.assertRaisesRegex(ValueError, 'Public HTML GET failed: https://example.invalid/'): publisher.publish(options)
                         cleanup.assert_not_called(); self.assertFalse((shared/'published.json').exists())
+                        failed = publisher.retention.read(folder/'run/publish-receipt.json')
+                        self.assertEqual((len(failed['get']), failed['get_summary']['failed']), (3, 3))
                     else:
                         result = publisher.publish(options)
                         self.assertEqual(result['status'], 'published')
@@ -73,7 +77,7 @@ class PublishTests(unittest.TestCase):
                 self.assertEqual((attempt['dry_run'], attempt['source_commit']), (False, 'Unknown'))
                 self.assertTrue(attempt['completed_at_beijing'].endswith('+08:00'))
                 self.assertNotIn('head', attempt)
-                if fail_page: self.assertIn('GET mismatch', attempt['error'])
+                if fail_page: self.assertIn('https://example.invalid/', attempt['error'])
     def test_standalone_retention_uses_success_receipt_and_releases_its_own_lock(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary); receipt = {'publication_status': 'published', 'dry_run': False, 'commit': 'a'*40}
@@ -133,13 +137,13 @@ class PublishTests(unittest.TestCase):
             self.assertEqual((calls.call_count, clock[0]), (expected_calls, elapsed))
             self.assertEqual(sum(call.args[1:3] == ('workflow', 'run') for call in calls.call_args_list), 1)
             self.assertEqual([call.kwargs['timeout'] for call in calls.call_args_list[1:]], list(range(timeout, timeout-elapsed-1, -2)) if timeout == 30 else [3, 1])
-    def test_public_fetch_retries_transport_errors_but_rejects_local_http_and_content_errors(self):
+    def test_public_head_retries_transport_errors_but_rejects_local_http_and_content_errors(self):
         payload = b'x'; digest = publisher.hashlib.sha256(payload).hexdigest()
         with tempfile.TemporaryDirectory() as temporary, unittest.mock.patch.object(publisher.time, 'sleep') as sleeps:
             root = Path(temporary); (root/'a.css').write_bytes(payload)
             item = ('a.css', {'url': 'https://example.invalid/a.css', 'bytes': 1, 'sha256': digest})
-            for head in (False, True):
-                run = lambda: publisher.head(item, root) if head else publisher.get_page(item)
+            for head in (True,):
+                run = lambda: publisher.head(item, root)
                 failures = (ssl.SSLEOFError('SSL EOF'), RemoteDisconnected('EOF'), IncompleteRead(b'x', 2), OSError(2, 'missing'))
                 for failure in (*failures, publisher.HTTPError('u', 404, 'nf', {}, None), OSError(2, 'missing', str(root/'missing')), publisher.URLError(FileNotFoundError(2, 'missing', 'missing.pem'))):
                     response = io.BytesIO(payload); response.status = 200
@@ -164,6 +168,96 @@ class PublishTests(unittest.TestCase):
             with unittest.mock.patch.object(publisher, 'urlopen') as calls:
                 with self.assertRaises(FileNotFoundError): publisher.head(('missing', item[1]), root)
             calls.assert_not_called(); sleeps.assert_not_called()
+
+    def test_public_pages_retry_transfers_and_5xx_with_five_attempt_limit(self):
+        payload = b'fixture'; digest = publisher.hashlib.sha256(payload).hexdigest()
+        item = ('fixture/index.html', {'sha256': digest})
+        failures = [ssl.SSLEOFError('SSL EOF'), RemoteDisconnected('connection interrupted'),
+                    IncompleteRead(b'x', 2), TimeoutError('timed out'), publisher.URLError(ConnectionResetError('reset')),
+                    publisher.HTTPError('https://example.invalid', 503, 'unavailable', {}, None)]
+        for failure in failures:
+            with self.subTest(failure=type(failure).__name__), unittest.mock.patch.object(publisher.time, 'sleep') as sleeps:
+                response = io.BytesIO(payload); response.status = 200
+                with unittest.mock.patch.object(publisher, 'urlopen', side_effect=[failure, failure, response]) as calls:
+                    rel, proof = publisher.get_page(item)
+                self.assertEqual((rel, proof['status'], proof['attempt_count'], proof['retry_count']), (item[0], 'pass', 3, 2))
+                self.assertEqual((calls.call_count, [call.args[0] for call in sleeps.call_args_list]), (3, [0.5, 1]))
+                self.assertEqual(proof['sha256'], digest)
+                self.assertTrue(all(row['retryable'] for row in proof['attempts'][:-1]))
+                self.assertNotIn('error', proof)
+        with unittest.mock.patch.object(publisher.time, 'sleep') as sleeps, \
+             unittest.mock.patch.object(publisher, 'urlopen', side_effect=ssl.SSLEOFError('always broken')) as calls:
+            proof = publisher.get_page(item)[1]
+        self.assertEqual((proof['status'], proof['attempt_count'], proof['retry_count'], calls.call_count), ('failed', 5, 4, 5))
+        self.assertEqual([call.args[0] for call in sleeps.call_args_list], [0.5, 1, 2, 4])
+        self.assertEqual(proof['url'], 'https://wly0829.cn/fixture/?publish='+digest[:16])
+
+    def test_public_pages_reject_wrong_content_and_non_retryable_http_immediately(self):
+        item = ('index.html', {'sha256': publisher.hashlib.sha256(b'expected').hexdigest()})
+        for status, body in ((200, b'wrong'), (404, b'missing'), (201, b'wrong')):
+            with self.subTest(status=status), unittest.mock.patch.object(publisher.time, 'sleep') as sleeps:
+                response = io.BytesIO(body); response.status = status; response.headers = {}
+                with unittest.mock.patch.object(publisher, 'urlopen', return_value=response) as calls:
+                    proof = publisher.get_page(item)[1]
+                self.assertEqual((proof['status'], proof['http'], proof['attempt_count'], calls.call_count), ('failed', status, 1, 1))
+                sleeps.assert_not_called()
+                self.assertFalse(proof['attempts'][0]['retryable'])
+                if status == 200: self.assertEqual(proof['sha256'], publisher.hashlib.sha256(body).hexdigest())
+
+    def test_public_page_batch_finishes_and_keeps_every_url_when_one_keeps_disconnecting(self):
+        payload = b'fixture'; digest = publisher.hashlib.sha256(payload).hexdigest()
+        selected = {rel: {'sha256': digest} for rel in ('index.html', 'broken/index.html', 'last/index.html')}
+        def fetch(request, timeout):
+            if '/broken/' in request.full_url: raise IncompleteRead(b'x', 2)
+            response = io.BytesIO(payload); response.status = 200
+            return response
+        receipt = {'get': {}}
+        with unittest.mock.patch.object(publisher, 'urlopen', side_effect=fetch), unittest.mock.patch.object(publisher.time, 'sleep'):
+            with self.assertRaisesRegex(ValueError, 'https://wly0829.cn/broken/'):
+                publisher.verify_pages(selected, receipt)
+        self.assertEqual(set(receipt['get']), set(selected))
+        self.assertEqual((receipt['get_summary']['passed'], receipt['get_summary']['failed'], receipt['get_summary']['retries']), (2, 1, 19))
+        self.assertEqual(receipt['get_summary']['failed_urls'], [receipt['get']['broken/index.html']['url']])
+        self.assertEqual(receipt['get']['last/index.html']['status'], 'pass')
+
+    def test_public_page_rounds_only_repeat_transport_failures_and_preserve_all_attempts(self):
+        payload = b'fixture'; digest = publisher.hashlib.sha256(payload).hexdigest()
+        selected = {rel+'/index.html': {'sha256': digest} for rel in ('pass', 'recover', 'broken', 'missing', 'wrong')}
+        calls = {rel: 0 for rel in selected}
+        def fetch(request, timeout):
+            rel = request.full_url.split('https://wly0829.cn/', 1)[1].split('/?', 1)[0]+'/index.html'
+            calls[rel] += 1
+            if rel.startswith('broken/') or (rel.startswith('recover/') and calls[rel] <= 5):
+                raise IncompleteRead(b'x', 2)
+            if rel.startswith('missing/'):
+                raise publisher.HTTPError(request.full_url, 404, 'missing', {}, None)
+            response = io.BytesIO(b'wrong' if rel.startswith('wrong/') else payload); response.status = 200
+            return response
+        receipt = {'get': {}}; checkpoints = []
+        with tempfile.TemporaryDirectory() as temporary, \
+             unittest.mock.patch.object(publisher, 'urlopen', side_effect=fetch), unittest.mock.patch.object(publisher.time, 'sleep') as sleeps:
+            path = Path(temporary)/'publish-receipt.json'
+            def checkpoint():
+                publisher.oss.write(path, receipt)
+                checkpoints.append(publisher.oss.read(path))
+            with self.assertRaisesRegex(ValueError, 'https://wly0829.cn/broken/'):
+                publisher.verify_pages(selected, receipt, checkpoint)
+        self.assertEqual(calls, {'pass/index.html': 1, 'recover/index.html': 6, 'broken/index.html': 20,
+                                 'missing/index.html': 1, 'wrong/index.html': 1})
+        self.assertEqual((receipt['get_summary']['passed'], receipt['get_summary']['failed'], receipt['get_summary']['attempts'],
+                          receipt['get_summary']['retries'], receipt['get_summary']['rounds']), (2, 3, 29, 24, 4))
+        self.assertEqual([row['wait_seconds'] for row in receipt['get_rounds']], [0, 120, 150, 180])
+        self.assertEqual([call.args[0] for call in sleeps.call_args_list if call.args[0] >= 120], [120, 150, 180])
+        self.assertEqual([set(row['results']) for row in receipt['get_rounds']],
+                         [set(selected), {'broken/index.html', 'recover/index.html'}, {'broken/index.html'}, {'broken/index.html'}])
+        recovered = receipt['get']['recover/index.html']
+        self.assertEqual((recovered['status'], recovered['attempt_count'], recovered['retry_count'], recovered['round_count']), ('pass', 6, 5, 2))
+        self.assertEqual([attempt['round'] for attempt in recovered['attempts']], [1, 1, 1, 1, 1, 2])
+        self.assertEqual(receipt['get_rounds'][0]['results']['recover/index.html']['status'], 'failed')
+        self.assertEqual(receipt['get_rounds'][1]['results']['recover/index.html']['status'], 'pass')
+        self.assertEqual([row['get_summary']['rounds'] for row in checkpoints], [1, 2, 3, 4])
+        self.assertEqual([row['get_summary']['attempts'] for row in checkpoints], [13, 19, 24, 29])
+        self.assertEqual([row['get']['recover/index.html']['status'] for row in checkpoints], ['failed', 'pass', 'pass', 'pass'])
     def test_pages_reports_a_dispatch_command_timeout(self):
         with unittest.mock.patch.object(publisher, 'command', side_effect=publisher.subprocess.TimeoutExpired('gh', 1)) as commands, unittest.mock.patch.object(publisher.time, 'sleep') as sleeps:
             with self.assertRaises(publisher.subprocess.TimeoutExpired): publisher.pages('a'*40, 1)
