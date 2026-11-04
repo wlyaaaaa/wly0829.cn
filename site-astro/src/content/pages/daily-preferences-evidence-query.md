@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/daily-preferences-evidence-query/page.json",
-  "sha256": "ee0bbb74459b9a196773a2645d099b95f36c3bbb9562a86cec7239eb8ef4bf34",
-  "converted_at_beijing": "2026-10-31T13:58:49+08:00"
+  "sha256": "c4624a679eb2ce4f1a0de471c4187239e805026ffcba96e9870e6c652bdc66b1",
+  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
  }
 }
 ---
@@ -665,7 +665,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -721,7 +721,7 @@
 
 13. 真实订单权重高于长 AI 文本；Steam 累计游玩时长只保留为事实，不参与偏好评分。当前免费游戏在其他条件相同时只低 0.5 分。
 
-14. profile/evidence的source_discovery可见实际登记的逻辑来源（2026-10-30 11:07 只读为 37 类，其中 36 类有现行记录，170 个来源实例；10 月 11 日是 34 类、33 类、160 个）、本次检索范围和后续读取入口；有相关认识时不同时扫描全部原文，未匹配认识时仍能发现原文候选。
+14. profile/evidence的source_discovery可见实际登记的逻辑来源（2026-10-30 11:07 只读为 37 类，其中 36 类有现行记录，171 个来源实例；10 月 11 日是 34 类、33 类、160 个）、本次检索范围和后续读取入口；有相关认识时不同时扫描全部原文，未匹配认识时仍能发现原文候选。
 
 15. facts可在明确逻辑来源/平台/实例时无关键词分页浏览；长正文默认标preview_not_full，--full或original才给完整内容，不能把预览当全文已读。
 

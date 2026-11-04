@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/wechat-direct-named-chat-archive/page.json",
-  "sha256": "abba672097421cee7989bbbcf13b12cd0193f899a84cfefb78feb6ed2e851a4b",
-  "converted_at_beijing": "2026-10-31T13:58:52+08:00"
+  "sha256": "286e2c71133ff8063dd354acd90abdd7b9afa977357f8764be4f5d3e09e4468d",
+  "converted_at_beijing": "2026-11-04T08:42:51+08:00"
  }
 }
 ---
@@ -552,7 +552,7 @@ WeChatDirect · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -610,7 +610,7 @@ WeChatDirect · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-当前源码 v0.2.3（最后提交 2026-10-29）为首次全量、增量、无变化快速路径、显式重核、文件占用和提交顺序定义了回归测试（全项目共 293 个测试函数，2026-10-30 重数），本轮没有运行；本页未读取真实档案正文
+当前源码 v0.2.3（最后提交 2026-10-29）为首次全量、增量、无变化快速路径、显式重核、文件占用和提交顺序定义了回归测试（全项目共 354 个测试函数，2026-10-30 重数），本轮没有运行；本页未读取真实档案正文
 
 ## 关键规则与设计选择
 
@@ -646,7 +646,7 @@ WeChatDirect · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {

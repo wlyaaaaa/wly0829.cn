@@ -38,10 +38,10 @@
    "state": "在用",
    "last": {
     "label": "上次更新",
-    "at": "2026-10-31 06:46"
+    "at": "2026-11-03 04:20"
    },
    "facts": [],
-   "as_of": "2026-10-31",
+   "as_of": "2026-11-04",
    "source": "状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-31 06:46 是技能源 E:\\.agents\\skills\\proxy-network 最后一次提交（.agents 86ff7f38）的北京时间，是源码更新事件，不是使用事件；技能 10 月 31 日 05:58 才新建，使用次数本轮没有取同口径记录，Unknown。"
   },
   "public": false,
@@ -108,8 +108,8 @@
  },
  "source": {
   "page": "sources/pages/skill-proxy-network/page.json",
-  "sha256": "1c5e5a95b1470609e5f73c65fed3d4aeab56d9113511654b6c350878ae574c90",
-  "converted_at_beijing": "2026-10-31T08:33:22+08:00"
+  "sha256": "718f9a694952df6b9ab63b0cf55d1d00859ea2fd189a6bd6b3560761658c47f7",
+  "converted_at_beijing": "2026-11-04T08:42:38+08:00"
  }
 }
 ---
@@ -157,11 +157,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 10 月 31 日 06:46",
+       "text": "在用 · 上次更新 11 月 3 日 04:20",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 31 日 · 状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-31 06:46 是技能源 E:\\.agents\\skills\\proxy-network 最后一次提交（.agents 86ff7f38）的北京时间，是源码更新事件，不是使用事件；技能 10 月 31 日 05:58 才新建，使用次数本轮没有取同口径记录，Unknown。",
+     "static_note": "截至 11 月 4 日 · 状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-31 06:46 是技能源 E:\\.agents\\skills\\proxy-network 最后一次提交（.agents 86ff7f38）的北京时间，是源码更新事件，不是使用事件；技能 10 月 31 日 05:58 才新建，使用次数本轮没有取同口径记录，Unknown。",
      "row": "hero"
     },
     {
@@ -220,11 +220,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 10 月 31 日 06:46",
+       "text": "在用 · 上次更新 11 月 3 日 04:20",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 31 日 · 状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-31 06:46 是技能源 E:\\.agents\\skills\\proxy-network 最后一次提交（.agents 86ff7f38）的北京时间，是源码更新事件，不是使用事件；技能 10 月 31 日 05:58 才新建，使用次数本轮没有取同口径记录，Unknown。"
+     "static_note": "截至 11 月 4 日 · 状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-31 06:46 是技能源 E:\\.agents\\skills\\proxy-network 最后一次提交（.agents 86ff7f38）的北京时间，是源码更新事件，不是使用事件；技能 10 月 31 日 05:58 才新建，使用次数本轮没有取同口径记录，Unknown。"
     },
     {
      "type": "prose",

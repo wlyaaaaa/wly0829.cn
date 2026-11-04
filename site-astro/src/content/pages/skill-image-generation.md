@@ -38,10 +38,10 @@
    "state": "在用",
    "last": {
     "label": "上次更新",
-    "at": "2026-10-29 13:30"
+    "at": "2026-10-31 21:21"
    },
    "facts": [],
-   "as_of": "2026-10-31",
+   "as_of": "2026-11-04",
    "source": "状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-29 13:30 是技能源 E:\\.agents\\skills\\image-generation 最后一次提交（.agents 21a603fd）的北京时间，是源码更新事件，不是使用事件；使用次数本轮没有取同口径记录，Unknown。"
   },
   "public": false,
@@ -94,8 +94,8 @@
  },
  "source": {
   "page": "sources/pages/skill-image-generation/page.json",
-  "sha256": "7832ff9645dfc196cfc5192177b3f60e90f7546e76ab10ceb77cd1a45ec7010f",
-  "converted_at_beijing": "2026-10-31T08:33:22+08:00"
+  "sha256": "11c20b778180d0bf643c1df2682091327bef0800e1623f8f408f7740c7358345",
+  "converted_at_beijing": "2026-11-04T08:42:38+08:00"
  }
 }
 ---
@@ -134,11 +134,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 10 月 29 日 13:30",
+       "text": "在用 · 上次更新 10 月 31 日 21:21",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 31 日 · 状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-29 13:30 是技能源 E:\\.agents\\skills\\image-generation 最后一次提交（.agents 21a603fd）的北京时间，是源码更新事件，不是使用事件；使用次数本轮没有取同口径记录，Unknown。",
+     "static_note": "截至 11 月 4 日 · 状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-29 13:30 是技能源 E:\\.agents\\skills\\image-generation 最后一次提交（.agents 21a603fd）的北京时间，是源码更新事件，不是使用事件；使用次数本轮没有取同口径记录，Unknown。",
      "row": "hero"
     },
     {
@@ -197,11 +197,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 10 月 29 日 13:30",
+       "text": "在用 · 上次更新 10 月 31 日 21:21",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 31 日 · 状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-29 13:30 是技能源 E:\\.agents\\skills\\image-generation 最后一次提交（.agents 21a603fd）的北京时间，是源码更新事件，不是使用事件；使用次数本轮没有取同口径记录，Unknown。"
+     "static_note": "截至 11 月 4 日 · 状态分类按技能在现行技能清单里启用（install=true）判断。“上次更新”2026-10-29 13:30 是技能源 E:\\.agents\\skills\\image-generation 最后一次提交（.agents 21a603fd）的北京时间，是源码更新事件，不是使用事件；使用次数本轮没有取同口径记录，Unknown。"
     },
     {
      "type": "prose",

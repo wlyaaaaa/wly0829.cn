@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-capture-failover/page.json",
   "sha256": "3eae42f3325a0f7ed9215e8f25ce4b0234f580f3b6edc3eb52dffdc43b127fc3",
-  "converted_at_beijing": "2026-10-31T13:58:52+08:00"
+  "converted_at_beijing": "2026-11-04T08:42:50+08:00"
  }
 }
 ---
@@ -561,7 +561,7 @@ Sunshine 远程串流 · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {

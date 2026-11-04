@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/wechat-direct-preservation-verification/page.json",
-  "sha256": "e2782a4b5f794fe33ea752a8726965493250d9ec002384a10c3006189cbd29cd",
-  "converted_at_beijing": "2026-10-31T13:58:52+08:00"
+  "sha256": "60ca14ba8d8255ba44e4f51b79911d2dc3004f73d0d28993cdaeef1cee431804",
+  "converted_at_beijing": "2026-11-04T08:42:51+08:00"
  }
 }
 ---
@@ -460,7 +460,7 @@ WeChatDirect · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -518,7 +518,7 @@ WeChatDirect · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-保全包、目录发布、四种格式验真、路径 containment（隔离处置） 和媒体派生关系均有回归测试定义（当前源码 v0.2.3，最后提交 2026-10-29，共 293 个测试函数，2026-10-30 重数，本轮没有运行）
+保全包、目录发布、四种格式验真、路径 containment（隔离处置） 和媒体派生关系均有回归测试定义（当前源码 v0.2.3，最后提交 2026-10-29，共 354 个测试函数，2026-10-30 重数，本轮没有运行）
 
 ## 关键规则与设计选择
 

@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/document-materials-signature-delivery-version/page.json",
   "sha256": "91eb482b2b31d1b3e6f357f8480a759888e76f76772602423aa8cb8b2f90fe73",
-  "converted_at_beijing": "2026-10-31T13:58:49+08:00"
+  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
  }
 }
 ---
@@ -1109,7 +1109,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {

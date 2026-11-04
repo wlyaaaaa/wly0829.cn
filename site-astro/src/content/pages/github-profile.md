@@ -115,8 +115,8 @@
  },
  "source": {
   "page": "sources/pages/github-profile/page.json",
-  "sha256": "4f262bd227d2d5a34cd22f41efe403e6170f5708f59e01aa8cb36f3773cbbca0",
-  "converted_at_beijing": "2026-10-31T13:58:33+08:00"
+  "sha256": "4feb7e0e1d881a88497f995dc0fae7fc8e0146120bb7cd84c8f7bb3b95f32027",
+  "converted_at_beijing": "2026-11-04T08:42:36+08:00"
  }
 }
 ---
@@ -468,7 +468,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
     },
     {
      "type": "feature_card",
-     "text_ref": "现存7,210次",
+     "text_ref": "现存6,726次",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -523,7 +523,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 
 在本机显卡上把图片、扫描件里的字读准，没把握的地方标出来。
 
-**现存 7,210 次**　识别记录，涉及 6,826 份材料（截至 10 月 31 日 13:56，只读清点；输出已不存在的旧记录会被清掉，因此只是现存有效记录的下限，不是全部历史累计；材料数按原件指纹去重，不是页数）
+**现存 6,726 次**　识别记录，涉及 6,351 份材料（截至 11 月 04 日 08:35，只读清点；输出已不存在的旧记录会被清掉，因此只是现存有效记录的下限，不是全部历史累计；材料数按原件指纹去重，不是页数）
 
 ::screen{#github-profile-05 section="projects"}
 
@@ -729,7 +729,7 @@ AI 工具配置管理
 
 选好模型，打开原版 Codex、Claude Code；请求发到哪家，启动前写清。
 
-**21 条**　模型路线（截至 10 月 31 日）
+**21 条**　模型路线（截至 11 月 4 日）
 
 ::screen{#github-profile-07 section="projects"}
 

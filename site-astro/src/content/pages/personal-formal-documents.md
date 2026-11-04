@@ -41,12 +41,12 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-26 20:24"
+    "at": "2026-10-29 08:03"
    },
    "facts": [
-    "近 7 天改进了 9 次"
+    "近 7 天改进了 10 次"
    ],
-   "as_of": "2026-10-26",
+   "as_of": "2026-11-02",
    "source": "AI 使用记录；项目修改记录"
   },
   "public": false,
@@ -269,10 +269,10 @@
     },
     {
      "id": "n-lines",
-     "text": "1,859 行",
+     "text": "1,879 行",
      "meaning": "src/legal_filing_kit/formal_documents.py 的行数（不含空行，含注释；含空行共 2,013 行），不限定文书种类",
-     "as_of": "2026-10-31",
-     "source": "见来源记录 personal-formal-documents-n-lines-0，观察于 2026-10-22T06:47:52+08:00",
+     "as_of": "2026-11-04",
+     "source": "见来源记录 personal-formal-documents-n-lines-0，观察于 2026-11-04T08:35:50+08:00",
      "screens": [
       "personal-formal-documents-06",
       "personal-formal-documents-07"
@@ -282,7 +282,7 @@
      "id": "n-audit-lines",
      "text": "1,437 行",
      "meaning": "共用检查模块 audit.py 的行数（不含空行）",
-     "as_of": "2026-10-31",
+     "as_of": "2026-11-04",
      "source": "见来源记录 personal-formal-documents-n-audit-lines-0，观察于 2026-10-22T06:47:52+08:00",
      "screens": [
       "personal-formal-documents-06"
@@ -423,8 +423,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "356d81b6d344a5f85ed7b3bd66ebd5a216b8cfd2d716885421236b94228dcf8e",
-  "converted_at_beijing": "2026-10-31T13:58:50+08:00"
+  "sha256": "4f6e0fa6a5513c060b2c932cba0f8634190b9c5310582a9542bfb0128b4bbbbd",
+  "converted_at_beijing": "2026-11-04T08:42:49+08:00"
  }
 }
 ---
@@ -475,15 +475,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 26 日 20:24",
+       "text": "常用 · 上次使用 10 月 29 日 08:03",
        "state": "ok"
       },
       {
-       "text": "近 7 天改进了 9 次",
+       "text": "近 7 天改进了 10 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 26 日 · AI 使用记录；项目修改记录",
+     "static_note": "截至 11 月 2 日 · AI 使用记录；项目修改记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -549,15 +549,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 26 日 20:24",
+       "text": "常用 · 上次使用 10 月 29 日 08:03",
        "state": "ok"
       },
       {
-       "text": "近 7 天改进了 9 次",
+       "text": "近 7 天改进了 10 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 26 日 · AI 使用记录；项目修改记录"
+     "static_note": "截至 11 月 2 日 · AI 使用记录；项目修改记录"
     },
     {
      "type": "stat_card",
@@ -1617,7 +1617,7 @@
   "screenshots": [],
   "chain": "",
   "reuse": "",
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -1840,7 +1840,7 @@
 7. **封存**｜原样的输入、Word、PDF、附件、检查结果、签名快照连同清单放进一个新文件夹；全部通过，才另复制出一份“可以交出”的材料包
 8. **随时再核**｜按清单重新比每个文件的大小和内容指纹，再重跑一遍检查
 
-Python 写成：主程序 1,859 行（不算空行），另用共用的检查模块 1,437 行；39 个自动测试只用虚构内容，不碰真实事项和我的签名。
+Python 写成：主程序 1,879 行（不算空行），另用共用的检查模块 1,437 行；39 个自动测试只用虚构内容，不碰真实事项和我的签名。
 
 ::screen{#personal-formal-documents-07 section="tech"}
 

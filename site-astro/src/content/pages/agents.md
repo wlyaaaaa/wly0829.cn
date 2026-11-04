@@ -936,8 +936,8 @@
  },
  "source": {
   "page": "sources/pages/agents/page.json",
-  "sha256": "28d18e5f91c4dcb6fe348aed0bfc45d1da21ed76e0ec87e09e275c64cd361a04",
-  "converted_at_beijing": "2026-11-04T08:31:23+08:00"
+  "sha256": "06c041016bf76c811cc672e59926b3f38145fa6629bb5e7fd3becff189d2d93b",
+  "converted_at_beijing": "2026-11-04T08:42:34+08:00"
  }
 }
 ---
@@ -2235,7 +2235,7 @@
 - 技能：E:\.agents\skills、E:\.agents\plugins → 清单 personal-skill-supply.json → 目录链接 C:\Users\<用户名>\.agents\skills；Claude 的 skills 目录本身也链到这里
 - 钩子：Claude 挂 7 个时刻（每条新消息前、每轮回复结束前、派子代理/提问/传话和操作 Chrome 前、每次调用工具后、上下文压缩前、压缩后、会话开始或续作时）；Codex 挂 8 个时刻（每条新消息前、每轮回复结束前、派子代理和提问前、每次调用工具后、压缩前、压缩后、会话开始或续作时、每个子代理启动时）
 
-**体量**　10 月 30 日 11:06 重读：6132 个文件 · 测试定义 90 项（只计数，不是通过数） · 3,988 次提交（6 月 30 日起） · 169,325 行（PowerShell、Python、Node.js、C#、Markdown、JSON）
+**体量**　11 月 04 日 08:35 重读：7949 个文件 · 测试定义 103 项（只计数，不是通过数） · 4,302 次提交（6 月 30 日起） · 206,680 行（PowerShell、Python、Node.js、C#、Markdown、JSON）
 
 ::screen{#agents-06 section="tech"}
 

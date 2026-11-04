@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig-machine-facts/page.json",
-  "sha256": "07800e773e6cc0d2cafb7e0cd9db595329c8e2715a477c663d27478e316b0fd3",
-  "converted_at_beijing": "2026-10-31T13:58:50+08:00"
+  "sha256": "f9674692cb2d469b7dd174552aa89474c899226748b35dbb2e5332787b9f250d",
+  "converted_at_beijing": "2026-11-04T08:42:49+08:00"
  }
 }
 ---
@@ -561,7 +561,7 @@ PCConfig · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -601,7 +601,7 @@ PCConfig · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-路径、端口与项目配置查询在用：64 份 Registry、135 个配置键；配置键只保存当前导航值与来源；稳定投影发布器、开发存储健康器和 TimeAudit 增量消费者已于 2026-09-28 删除，没有发布替代的新版投影。
+路径、端口与项目配置查询在用：68 份 Registry、150 个配置键；配置键只保存当前导航值与来源；稳定投影发布器、开发存储健康器和 TimeAudit 增量消费者已于 2026-09-28 删除，没有发布替代的新版投影。
 
 ::screen{#pcconfig-machine-facts-06 section="tech"}
 

@@ -40,8 +40,8 @@
  },
  "source": {
   "page": "sources/pages/personal-materials-registered-lookup/page.json",
-  "sha256": "a89a3fc4e665e08921b9269c68b96338d165ab1522a181675c5b085de81d6c1d",
-  "converted_at_beijing": "2026-10-31T13:58:51+08:00"
+  "sha256": "15797d4f602645d78e043acb09cbf5e1aa761e11f909b2a569f72c6efd4db44a",
+  "converted_at_beijing": "2026-11-04T08:42:49+08:00"
  }
 }
 ---
@@ -69,7 +69,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -320,7 +320,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -564,7 +564,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -707,7 +707,7 @@
 
 - 没有 verified 匹配时才查 open_state=unverified 的来源名、标题、原生 ID、版本字段、材料 search_text 与 material_text，并标为 unverified_source_evidence；即使没有 material_text，来源原生元数据仍可形成未验证候选。
 
-- material_text 只接收 native、ocr（光学字符识别）或 extracted 三类可重建文字；目前（10 月 31 日）32 份 native 完整文字，115 份 extracted、14 份 ocr 部分文字；10 月 11 日时还没有 ocr。它们可以帮助召回，但不能替代当前原件验真。
+- material_text 只接收 native、ocr（光学字符识别）或 extracted 三类可重建文字；目前（11 月 4 日）32 份 native 完整文字，115 份 extracted、14 份 ocr 部分文字；10 月 11 日时还没有 ocr。它们可以帮助召回，但不能替代当前原件验真。
 
 - 查询文本去除常见请求词，并结合完整短语、拉丁词和中文二元片段计算有界匹配分。
 
@@ -810,7 +810,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -878,7 +878,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -1035,7 +1035,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {

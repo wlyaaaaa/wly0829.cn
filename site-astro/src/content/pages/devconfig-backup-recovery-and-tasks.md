@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup-recovery-and-tasks/page.json",
-  "sha256": "3ac1d56390500c7428d3983b6154b9721d9adbe7b0364af5a4f15c411021d229",
-  "converted_at_beijing": "2026-10-31T13:58:49+08:00"
+  "sha256": "a9cb65bc80184a42afa4eea5d28c57bb52b6037dbd1a1dcacaa07366cd3e9a14",
+  "converted_at_beijing": "2026-11-04T08:42:48+08:00"
  }
 }
 ---
@@ -1145,7 +1145,7 @@ DevConfig Backup · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -1203,7 +1203,7 @@ DevConfig Backup · 功能说明
 
 - 9 月 18 日来源验收已执行配置包隔离恢复，8,640 文件、8,531,705,353 字节的全树 SHA-256 一致；当时 15 个检查脚本在 PowerShell 7 和 5.1 下共 30 组全部通过。没有据此声称微信官方客户端已恢复。
 
-- 现在源码里有 26 个 Assert 检查脚本和 1 个 Python 测试文件，覆盖任务所有权、精确前像、失败回滚和恢复合同；本轮运行 0 个测试、0 次恢复，不重新注册或启停任何生产任务，只在 13:33 只读回读了四个任务的设置和时间。
+- 现在源码里有 27 个 Assert 检查脚本和 1 个 Python 测试文件，覆盖任务所有权、精确前像、失败回滚和恢复合同；本轮运行 0 个测试、0 次恢复，不重新注册或启停任何生产任务，只在 13:33 只读回读了四个任务的设置和时间。
 
 - 本轮没有在干净 Windows 上导入注册表、Wi-Fi 或整套任务，没有恢复过带警告的微信副本，也没有测量恢复耗时。
 

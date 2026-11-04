@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/personal-media-classification/page.json",
-  "sha256": "da3cb8c5627175444ee48b0bd334a149097cf46dccb7deac9afe7be503944482",
-  "converted_at_beijing": "2026-10-31T13:58:51+08:00"
+  "sha256": "5c27433b1b302de2c290ead2442c812be0f72389edce67643d37acaf00e7998d",
+  "converted_at_beijing": "2026-11-04T08:42:49+08:00"
  }
 }
 ---
@@ -62,7 +62,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -549,7 +549,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 10 月 31 日"
+  "derived_as_of": "数字截至 2026 年 11 月 4 日"
  },
  "layout": {
   "h": {
@@ -1181,7 +1181,7 @@
 
 - 现在已有直接调用 phone_apply 的测试；视觉批次提交前后所有故障组合的专项注入测试仍没找到，按源码和历史批次证据说明。
 
-- 源码现有 520 个测试函数（10 月 31 日静态计数，本次没有运行）；最近一份本地验收回执是 9 月 24 日：186 项运行、2 项跳过、0 失败。
+- 源码现有 520 个测试函数（11 月 4 日静态计数，本次没有运行）；最近一份本地验收回执是 9 月 24 日：186 项运行、2 项跳过、0 失败。
 
 - 历史 2026-08-25 增量把 118 个 occurrence 收敛为 63 个唯一哈希并完成视觉治理。
 

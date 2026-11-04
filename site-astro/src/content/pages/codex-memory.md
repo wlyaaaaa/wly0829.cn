@@ -593,8 +593,8 @@
  },
  "source": {
   "page": "sources/pages/codex-memory/page.json",
-  "sha256": "07e8a414cd0fe65d056d059a693e53cc07e31cefcfb2dd541a8fac7c082dcfbf",
-  "converted_at_beijing": "2026-10-31T13:58:32+08:00"
+  "sha256": "a5e0ee27399ebacb58a760e106eb3d15019b35e58bcc5f43283adbeca35e6c8f",
+  "converted_at_beijing": "2026-11-04T08:42:35+08:00"
  }
 }
 ---
@@ -1321,7 +1321,7 @@
 Codex 的数据在 E 盘，不在每天的系统镜像里；其余四个工具的数据在 C 盘，每天 13:30 的系统镜像带着它们，只留 3 天。
 G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（Windows 整盘加密）锁着。
 
-截至 10 月 31 日 13:30
+截至 11 月 03 日 13:30
 
 ::screen{#codex-memory-03 section="usage"}
 
