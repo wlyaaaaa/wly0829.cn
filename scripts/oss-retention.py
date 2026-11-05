@@ -16,8 +16,10 @@ from urllib.request import Request, urlopen
 from xml.sax.saxutils import escape
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'scripts'))
+import oss_origins
 BUCKET = 'wly0829-img-media-shanghai'
-BASE = 'https://' + BUCKET + '.oss-cn-shanghai.aliyuncs.com'
+BASE = oss_origins.configured_base()
 LOCK = r'E:\.agents\tools\Invoke-ShortLock.ps1'
 
 
@@ -115,7 +117,7 @@ def rollback_keep(preparation, plan, commit=None, persist=True):
         if digest(snapshot) != snapshot_sha:
             raise ValueError('Previous publication snapshot changed')
         previous = oss_contract().verify_manifest(read(snapshot))
-        if previous['oss']['asset_base_url'] != BASE:
+        if previous['oss']['asset_base_url'] not in oss_origins.aliases(BASE):
             raise ValueError('Previous publication belongs to another object target')
         objects = {row['key']: {'bytes': row['bytes'], 'sha256': row['sha256']} for row in previous['oss']['objects'].values()}
         for key in previous['oss'].get('reference_keys', []):
@@ -151,7 +153,7 @@ def plan_pin(preparation):
     preparation = Path(preparation).resolve()
     plan_path = preparation / 'oss-plan.json'
     plan = read(plan_path)
-    if plan.get('schema') != 'wly.oss-release-plan.v1' or plan.get('test_only') or plan['asset_base_url'] != BASE:
+    if plan.get('schema') != 'wly.oss-release-plan.v1' or plan.get('test_only') or plan['asset_base_url'] not in oss_origins.aliases(BASE):
         raise ValueError('Only the existing Shanghai website generation is authorized')
     objects = {row['key']: {'bytes': row['bytes'], 'sha256': row['sha256']} for row in plan['objects'].values()}
     for key in plan.get('reference_keys', []):
@@ -246,7 +248,7 @@ def collect_verified(args):
     current = manifest(args.commit)
     if command('git', 'ls-remote', 'origin', 'refs/heads/site-dist').split()[0] != args.commit:
         raise ValueError('Production site-dist changed; collection is incomplete')
-    if current['oss']['asset_base_url'] != BASE:
+    if current['oss']['asset_base_url'] not in oss_origins.aliases(BASE):
         raise ValueError('Publication or rollback identity does not match the existing target')
     if 'rollback_ref' in current:
         if current['rollback_ref'] != args.rollback:

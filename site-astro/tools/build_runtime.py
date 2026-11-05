@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SITE = ROOT / 'site-astro'
 sys.path.insert(0, str(ROOT / 'scripts'))
 import astro_rules
+import oss_origins
 
 def load(name, filename):
     spec = importlib.util.spec_from_file_location(name, ROOT / filename)
@@ -40,7 +41,7 @@ def previous_resources(prior, published):
         return local, 'dist' if local else 'none', prior.get('release_id')
     accepted = published['oss']
     return {**accepted, 'objects': {**local.get('objects', {}), **accepted['objects']},
-            'local_objects': local.get('objects', {}) if local.get('asset_base_url') == accepted.get('asset_base_url') else {}}, 'published', published['release_id']
+            'local_objects': local.get('objects', {}) if oss_origins.same_bucket(local.get('asset_base_url'), accepted.get('asset_base_url')) else {}}, 'published', published['release_id']
 def file_route(rel): return '/' if rel == 'index.html' else '/' + rel[:-10] if rel.endswith('/index.html') else '/' + rel
 def copy(source, target):
     raw = Path(source).read_bytes(); target = Path(target); target.parent.mkdir(parents=True, exist_ok=True)
@@ -346,6 +347,11 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
     for path in dist.rglob('*.html'):
         body = path.read_bytes().decode('utf8'); updated = visitor_html(body)
         if updated != body: path.write_bytes(updated.encode('utf8'))
+    # Normalize build copies only: frozen sources, historical URLs and their proofs remain immutable.
+    for path in dist.rglob('*'):
+        if path.is_file() and path.suffix in transport.TEXT | {'.md', '.webmanifest'} and path.name not in {'release-manifest.json', 'release-identity.json', '.build-receipt.json'}:
+            before = path.read_text('utf8'); after = oss_origins.rewrite_origins(before)
+            if after != before: path.write_bytes(after.encode('utf8'))
     files = {p.relative_to(dist).as_posix(): {'bytes': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
              for p in dist.rglob('*') if p.is_file() and p.name not in {'.build-receipt.json', 'release-manifest.json', 'release-identity.json'}}
     manifest = {'schema': 'wly.hybrid-release.v1', 'files': files, 'routes': routes, 'search_budget_review': search_review,

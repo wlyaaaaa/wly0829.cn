@@ -125,7 +125,7 @@ class SourceTests(unittest.TestCase):
             self.assertEqual((restored/'index.html').read_bytes(),raw)
 
     def test_explicit_asset_base_adds_only_its_canonical_https_origin(self):
-        base='https://wly0829-assets-shanghai-20261003.oss-cn-shanghai.aliyuncs.com/releases/current/'
+        base='https://wly0829-assets-shanghai-20261003.cn-shanghai.oss.aliyuncs.com/releases/current/'
         with tempfile.TemporaryDirectory() as temporary:
             root=Path(temporary)/'raw';fixture_source(root)
             default,_=prep.policy_and_observation(root,prep.inventory(root))
@@ -133,7 +133,7 @@ class SourceTests(unittest.TestCase):
             self.assertEqual(default['origins'],[])
             self.assertEqual(explicit['origins'],[base.split('/releases/')[0]])
             self.assertEqual(default['scripts'],explicit['scripts']);self.assertEqual(default['data'],explicit['data'])
-            actual='https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com'
+            actual='https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com'
             configured,_=prep.policy_and_observation(root,prep.inventory(root),actual)
             self.assertEqual(configured['origins'],[actual])
             self.assertEqual(prep.asset_origin('https://ASSETS.EXAMPLE:443/releases/test/'),'https://assets.example')

@@ -1,5 +1,5 @@
 (() => {
-  const endpoint = 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/_v.gif';
+  const endpoint = 'https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/_v.gif';
   const randomId = () => globalThis.crypto?.randomUUID?.() || Date.now().toString(36) + Math.random().toString(36).slice(2);
   let visitor = '', self = false, entry = '', cvSession = '';
   const entryRedirect = /^\/cv\/?$/.test(location.pathname);

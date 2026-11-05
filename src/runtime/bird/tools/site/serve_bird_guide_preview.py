@@ -15,12 +15,15 @@ import http.server
 import json
 import mimetypes
 import socketserver
+import sys
 import tempfile
 import urllib.request
 from pathlib import Path
 from urllib.parse import unquote
+sys.path.insert(0, str(Path(__file__).resolve().parents[5] / 'scripts'))
+from oss_origins import configured_base, aliases
 
-OSS = 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/'
+OSS = configured_base() + '/'
 REFERER = 'https://wly0829.cn/'
 TEXT = ('.html', '.css', '.js', '.mjs', '.json')
 mimetypes.add_type('image/webp', '.webp'); mimetypes.add_type('image/avif', '.avif'); mimetypes.add_type('text/javascript', '.js')
@@ -96,7 +99,8 @@ def main():
                 name = url.rsplit('/', 1)[-1]
                 ctype = mimetypes.guess_type(name)[0] or 'application/octet-stream'
                 if name.endswith(TEXT) or ctype.startswith('text/'):
-                    body = body.replace(OSS.encode(), b'/__oss/')
+                    for origin in aliases(OSS.rstrip('/')):
+                        body = body.replace((origin+'/').encode(), b'/__oss/')
                     if ctype.startswith('text/') or name.endswith(('.js', '.json')):
                         ctype += '; charset=utf-8'
                 self.send(body, ctype)

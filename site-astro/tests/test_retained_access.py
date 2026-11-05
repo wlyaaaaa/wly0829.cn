@@ -14,7 +14,7 @@ ROOT = SITE.parent
 SOURCE = SITE / 'sources/retained-home-cockpit/computer-access.html'
 BUILT = ROOT / 'dist/computer-access/index.html'
 # 构建收尾把站内资源改成阿里云发布目录的绝对地址；对照时按本站根路径还原
-OSS = re.compile(r'https://wly0829-img-media-shanghai\.oss-cn-shanghai\.aliyuncs\.com/releases/[^/"]+/')
+OSS = re.compile(r'https://wly0829-img-media-shanghai\.(?:oss-cn-shanghai|cn-shanghai\.oss)\.aliyuncs\.com/releases/[^/"]+/')
 
 
 def page_data(text):

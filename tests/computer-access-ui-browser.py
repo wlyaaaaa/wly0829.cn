@@ -68,7 +68,7 @@ async def run(args):
                     if request.method not in ['GET','HEAD']:
                         state['writes'].append(request.url); return await request_route.abort()
                     if url.hostname=='mcp.wly0829.cn' and '/status' in url.path or url.hostname=='live.wly0829.cn' and url.path=='/computer-access/state': path='/__status'
-                    elif url.hostname=='wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com' and url.path=='/_v.gif':
+                    elif url.hostname in ('wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com','wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com') and url.path=='/_v.gif':
                         state['local_beacons'] += 1
                         return await request_route.fulfill(status=200,content_type='image/gif',body=bytes.fromhex('47494638396101000100800000000000ffffff21f90401000000002c00000000010001000002024401003b'))
                     elif request.url.split('?')[0] in asset_urls: path=asset_urls[request.url.split('?')[0]]
