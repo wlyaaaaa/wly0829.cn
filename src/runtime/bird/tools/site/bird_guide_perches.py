@@ -18,9 +18,12 @@ import hashlib
 import io
 import json
 import re
+import sys
 import urllib.request
 from pathlib import Path, PurePosixPath
 from urllib.parse import unquote, urlsplit
+sys.path.insert(0, str(Path(__file__).resolve().parents[5] / 'scripts'))
+from oss_origins import configured_base, rewrite_origins
 
 import numpy as np
 from PIL import Image
@@ -33,7 +36,7 @@ CORNER_BIRDS = 0.75     # 站在卡片边框上时，鸟身离卡片两端的角
 BIRD_WIDTH = 1.25       # 鸟宽约等于 1.25 个站高（站姿外框）
 STRIPS = 28             # 鸟轮廓切成竖条，每条一个上下范围
 REFERER = 'https://wly0829.cn/'
-OSS_ORIGIN = 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com'
+OSS_ORIGIN = configured_base()
 PAGE_DATA = re.compile(r'<script id="page-data" type="application/json">(.*?)</script>', re.S)
 CLICKABLE = ('links', 'hotspots', 'native_actions', 'interactive_cards', 'live', 'native_live')
 
@@ -104,7 +107,7 @@ class Images:
     def _absolute_source_url(url):
         parts = urlsplit(url)
         if parts.scheme:
-            return url
+            return rewrite_origins(url)
         if url.startswith('//'):
             return 'https:' + url
         path = unquote(parts.path)

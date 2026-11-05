@@ -154,11 +154,11 @@ def net(*args, timeout=None):
 retention.command = lambda *args: (net(*args, timeout=GH_TIMEOUT) if args[0] in ('git', 'gh')
                                   else command(*args, timeout=120))  # 删除失败须先回读，不能按网络错误重放写操作
 
-def delta(current, previous):
+def delta(current, previous, include_url=True):
     previous = {**{row.get('key', rel): row for rel, row in previous.items()}, **previous}
     return {rel: row for rel, row in current.items()
             if rel != oss.MANIFEST and (row['sha256'] != (old := previous.get(rel, previous.get(row.get('key'), {}))).get('sha256')
-                                       or row.get('key') != old.get('key'))}
+                                       or row.get('key') != old.get('key') or include_url and row.get('url') != old.get('url'))}
 
 def head(item, root):
     rel, row = item
@@ -361,12 +361,14 @@ def publish(args):
         receipt['source_commit_evidence'] = ('explicit task baseline' if args.source_commit else
                 'build receipt' if build.get('source_commit') else 'source manifest' if source.get('source_commit') else 'Unknown')
         preparation = output
-        plan = {'schema': 'wly.oss-release-plan.v1', 'release_id': source['release_id'], 'asset_base_url': retention.BASE,
+        plan = {'schema': 'wly.oss-release-plan.v1', 'release_id': source['release_id'], 'asset_base_url': source['oss']['asset_base_url'],
                 'test_only': False, 'remote_verified': False, 'objects': source['oss']['objects'],
                 'github_files': {rel: {'bytes': (args.dist/rel).stat().st_size, 'sha256': fingerprints[rel]}
                                  for rel in fingerprints if rel not in source['oss']['objects']},
                 'retained_objects': dict(source['oss'].get('retained_objects', {})), 'reference_keys': source['oss']['reference_keys']}
         assets = delta(plan['objects'], (previous or {}).get('oss', {}).get('objects', {}))
+        uploads = delta(plan['objects'], (previous or {}).get('oss', {}).get('objects', {}), include_url=False)
+        origin_readbacks = assets.keys() - uploads.keys()
         if previous:
             proofs = {row['key']: previous['oss']['verification']['objects'][rel] for rel, row in previous['oss']['objects'].items()}
             plan['retained_objects'].update({rel: proofs[row['key']] for rel, row in plan['objects'].items() if rel not in assets and row['key'] in proofs})
@@ -374,10 +376,11 @@ def publish(args):
             plan['previous_publication_sha256'] = oss.digest(output/'previous-publication.json')
         oss.write(output/oss.PLAN, plan)
         documents = delta(plan['github_files'], (previous or {}).get('files', {}))
-        receipt['planned_assets'] = list(assets)
+        receipt['planned_assets'] = list(uploads)
+        receipt['planned_origin_readbacks'] = sorted(origin_readbacks)
         receipt['planned_documents'] = list(documents)
-        receipt['planned_files'] = len(assets)+len(documents)+1
-        receipt['planned_bytes'] = sum(row['bytes'] for row in [*assets.values(), *documents.values()])+plan['github_files'][oss.MANIFEST]['bytes']
+        receipt['planned_files'] = len(uploads)+len(documents)+1
+        receipt['planned_bytes'] = sum(row['bytes'] for row in [*uploads.values(), *documents.values()])+plan['github_files'][oss.MANIFEST]['bytes']
         receipt['estimated_transfer_seconds'] = round(receipt['planned_bytes']/10_000_000, 3)
         receipt['estimate_bytes_per_second'] = 10_000_000
         receipt['oss_retention'] = {'status': 'skipped_by_request' if getattr(args, 'skip_retention', False) else 'deferred',
@@ -406,6 +409,7 @@ def publish(args):
 
         def upload_one(item):
             rel, row = item
+            if rel in origin_readbacks: return rel, row, False, head(item, args.dist)[1]
             try:  # 续传：对象已在且大小、MD5 一致就不重传，这次检查即为它的回读证明；不在或不一致都重新上传
                 return rel, row, False, head(item, args.dist)[1]
             except Exception:

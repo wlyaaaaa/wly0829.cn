@@ -25,6 +25,7 @@ VERIFICATION_FILES = ('baidu_verify_codeva-DRgaQnAmTK.html', 'sogousiteverificat
 sys.path.insert(0, str(ROOT / 'scripts'))
 sys.path.insert(0, str(SITE / 'tools'))
 import astro_rules
+import oss_origins
 from render_cache import markdown_render_sha
 
 def load(name, relative):
@@ -284,7 +285,7 @@ def build(pages=None):
     checks = load('site_consistency', 'site-astro/tools/site_consistency.py').audit()
     checks_path = SITE / '.cache/site-consistency.json'; write(checks_path, checks)
     sources = sync_markdown(old.get('json_sources', {})); stage('source')
-    preparation = [SNAPSHOT / 'manifest.json', SITE / 'sources/retained-home-cockpit',
+    preparation = [ROOT / 'config/build.json', ROOT / 'scripts/oss_origins.py', SNAPSHOT / 'manifest.json', SITE / 'sources/retained-home-cockpit',
         SITE / 'sources/vendor-deps', SITE / 'sources/hero-motion', SITE / 'public/_home-cockpit', SITE / 'src/chrome/runtime',
         ROOT / 'sources/rules', ROOT / 'sources/assets', ROOT / 'src/typeset',
         SITE / 'tools/build_runtime.py', SITE / 'tools/pack_living.py', SITE / 'tools/adapt_motion.py',
@@ -349,7 +350,7 @@ def build(pages=None):
         entries[route] = {'fingerprint': generated_fp, 'kind': 'generated'}
     entries['/cockpit/stutter/']['fingerprint'] = fingerprint(stutter_inputs + [SITE / 'tools/cockpit_stutter.py'])
     entries['/cv/'] = {'fingerprint': fingerprint([ROOT / 'scripts/build-site.py']), 'kind': 'generated'}
-    visitor_fp = fingerprint([ROOT / 'scripts/visitor-beacon.js', ROOT / 'scripts/footer-email-copy.js', ROOT / 'scripts/header-menu.js'])
+    visitor_fp = fingerprint([ROOT / 'config/build.json', ROOT / 'scripts/oss_origins.py', ROOT / 'scripts/visitor-beacon.js', ROOT / 'scripts/footer-email-copy.js', ROOT / 'scripts/header-menu.js'])
     for row in entries.values(): row['fingerprint'] += visitor_fp
     if requested and requested - entries.keys(): raise ValueError('Unknown routes: ' + ', '.join(sorted(requested - entries.keys())))
     selected = requested if requested is not None else set(entries)
@@ -409,7 +410,7 @@ def build(pages=None):
         if entries[file_route(relative)]['kind'] != 'frozen' or (finalized_before and file_route(relative) not in changed): continue
         expected_body = runtime.transport.localize((SNAPSHOT / 'pages' / relative).read_bytes().decode('utf8'), snapshot)
         if relative == 'search/index.html': expected_body = runtime.search_index_entry(expected_body, snapshot)
-        expected_body = runtime.visitor_html(expected_body)
+        expected_body = oss_origins.rewrite_origins(runtime.visitor_html(expected_body))
         if (dist / relative).read_bytes() != expected_body.encode('utf8'):
             raise ValueError('Frozen HTML changed beyond resource addresses: ' + relative)
     if not all((dist / route_file(route)).is_file() for route in snapshot['routes']): raise ValueError('Complete build lost a required route')

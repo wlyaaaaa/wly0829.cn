@@ -13,6 +13,10 @@ SVG=b'<svg xmlns="http://www.w3.org/2000/svg" width="120" height="80"><rect widt
 CLASSIC=b'window.fixtureClassic=(window.fixtureClassic||0)+1;'
 MODULE=b'import {value} from "./dep.js";window.fixtureModule=(window.fixtureModule||0)+1;window.fixtureModuleValue=value;'
 DATA=b'{"fixture":true,"answer":42}'
+def album_head(head, metadata):
+    module=(ROOT/'site-astro/src/album-head.ts').as_uri()
+    script='import {currentAlbumHead} from '+json.dumps(module)+';let s="";for await(const c of process.stdin)s+=c;const p=JSON.parse(s);const metadata=()=>{if(p.metadata===null)throw Error("Unexpected album metadata read");return p.metadata};process.stdout.write(JSON.stringify(currentAlbumHead(p.head,metadata,{source:"",css:"/album.css"})));'
+    return json.loads(subprocess.run(['node','--input-type=module','-e',script],input=json.dumps({'head':head,'metadata':metadata}),text=True,capture_output=True,encoding='utf8',check=True).stdout)
 HTML='''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script src="/fixture/static.js" defer></script></head><body>
 <a id="original-link" href="#unchanged" style="display:block;width:120px;height:80px"><picture><source srcset="/fixture/picture.svg 1x"><img id="picture" src="/fixture/fallback.svg" width="120" height="80" loading="eager"></picture></a>
 <button id="original-button" style="position:fixed;bottom:8px;left:8px">原按钮</button>
@@ -77,16 +81,26 @@ class SourceTests(unittest.TestCase):
             subprocess.run(['node','--check','-'],input=runtime,text=True,capture_output=True,check=True,encoding='utf8')
 
     def test_album_replay_replaces_previous_metadata_without_rewriting_data(self):
-        inject = __import__('runpy').run_path(str(ROOT/'scripts/prepare-page-flip.py'))['inject_runtime']
-        original = '<head><meta charset="utf-8"><script id="album-page">{"old":true}</script><link id="album-route-index" href="/old.json"></head><script id="page-data">{"example":"album-page"}</script>'
-        once = inject(original, '', '/album.css', '/new.json', {'route':'/current/'})[0]
-        twice = inject(once, '', '/album.css', '/newest.json', {'route':'/latest/'})[0]
-        for text in (once, twice):
-            self.assertEqual(text.count('id="album-page"'), 1)
-            self.assertEqual(text.count('id="album-route-index"'), 1)
-            self.assertIn('<script id="page-data">{"example":"album-page"}</script>', text)
-        self.assertIn('"route":"/latest/"', twice)
-        self.assertIn('href="/newest.json"', twice)
+        self.assertEqual(album_head(['<meta charset="utf-8">'],None),['<meta charset="utf-8">'])
+        runtime_spec=importlib.util.spec_from_file_location('retry_build_runtime',ROOT/'site-astro/tools/build_runtime.py')
+        runtime=importlib.util.module_from_spec(runtime_spec);runtime_spec.loader.exec_module(runtime)
+        head=['<meta charset="utf-8">','<script id="album-page">{"old":true}</script>',
+              '<link id="album-route-index" href="/_album/routes-111111.json">']
+        data='<script id="page-data">{"example":"album-page"}</script>'
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary); snapshots=[]; indexes=[]
+            for route,image in (('/current/','/first.png'),('/latest/','/last.png')):
+                head=album_head(head,{'route':route,'images':[{'src':image}]})
+                (root/'index.html').write_text('<head>'+''.join(head)+'</head>'+data,encoding='utf8')
+                index=runtime.album_index(root,{'runtime_urls':{}},{'/'});indexes.append(index['resource'])
+                head=[re.sub(r'/_album/routes-[a-f0-9]+\.json',index['resource'],fragment) for fragment in head]
+                text=(root/'index.html').read_text('utf8');snapshots.append(text)
+                self.assertEqual(json.loads((root/index['resource'].lstrip('/')).read_text('utf8'))['routes']['/']['images'],[{'src':image}])
+            for text in snapshots:
+                self.assertEqual(text.count('id="album-page"'),1);self.assertEqual(text.count('id="album-route-index"'),1)
+                self.assertIn(data,text)
+            self.assertIn('"route":"/latest/"',snapshots[-1]);self.assertIn('href="'+indexes[-1]+'"',snapshots[-1])
+            self.assertNotEqual(*indexes);self.assertNotIn(indexes[0],snapshots[-1])
 
     def test_stylesheet_marker_preserves_handlers_and_rollback_exact_original_bytes(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -108,7 +122,8 @@ class SourceTests(unittest.TestCase):
             self.assertTrue(all((restored/rel).read_bytes()==(root/rel).read_bytes() for rel in files))
 
     def test_initial_capture_is_exactly_bounded_and_preparation_rollback_preserves_source_bytes(self):
-        self.assertIn('data-resource-retry="next-2e" src="/retry.js"', __import__('runpy').run_path(str(ROOT/'scripts/prepare-page-flip.py'))['inject_runtime']('<head><script defer data-resource-retry="next-2e" src="/retry.js"></script></head>', '', '', '', {})[0])
+        head=''.join(album_head(['<script defer data-resource-retry="next-2e" src="/retry.js"></script>'],{}))
+        self.assertIn('data-resource-retry="next-2e" src="/retry.js"',head);self.assertNotIn('data-album-runtime',head)
         with tempfile.TemporaryDirectory() as temporary:
             root=Path(temporary)/'raw';fixture_source(root)
             raw=(root/'index.html').read_bytes().replace(b'<script src="/fixture/static.js" defer>',b'<script onerror="window.originalError=true" src="/fixture/static.js" defer>')
@@ -125,7 +140,7 @@ class SourceTests(unittest.TestCase):
             self.assertEqual((restored/'index.html').read_bytes(),raw)
 
     def test_explicit_asset_base_adds_only_its_canonical_https_origin(self):
-        base='https://wly0829-assets-shanghai-20261003.oss-cn-shanghai.aliyuncs.com/releases/current/'
+        base='https://wly0829-assets-shanghai-20261003.cn-shanghai.oss.aliyuncs.com/releases/current/'
         with tempfile.TemporaryDirectory() as temporary:
             root=Path(temporary)/'raw';fixture_source(root)
             default,_=prep.policy_and_observation(root,prep.inventory(root))
@@ -133,7 +148,7 @@ class SourceTests(unittest.TestCase):
             self.assertEqual(default['origins'],[])
             self.assertEqual(explicit['origins'],[base.split('/releases/')[0]])
             self.assertEqual(default['scripts'],explicit['scripts']);self.assertEqual(default['data'],explicit['data'])
-            actual='https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com'
+            actual='https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com'
             configured,_=prep.policy_and_observation(root,prep.inventory(root),actual)
             self.assertEqual(configured['origins'],[actual])
             self.assertEqual(prep.asset_origin('https://ASSETS.EXAMPLE:443/releases/test/'),'https://assets.example')

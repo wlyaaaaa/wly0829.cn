@@ -4,7 +4,9 @@
 
 ## 目标与输入
 
-正式资源目标为 `wly0829-img-media-shanghai`、`cn-shanghai`，默认 HTTPS 地址为 `https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com`。这是北京时间 2026-10-04 02:53 引导 `3ac11b33-8a56-4beb-9b60-a948f8fc75e6` 选定的目标；此前北京桶保留备用的迁移事实不授权改变本次目标。
+正式资源目标仍为 `wly0829-img-media-shanghai`、`cn-shanghai`；公共读取地址由 `config/build.json` 的 `asset_base_url` 决定，默认 `https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com`，同时支持 IPv4 与 IPv6。桶、对象和管理端点不变；旧的 `<桶名>.oss-cn-shanghai.aliyuncs.com` 继续可用。回退时只把该配置改回旧读取地址并沿原构建、扫描、发布流程重发；紧急回退仍可直接部署已保留的旧 `site-dist`。此前北京桶只保留原备用关系。
+
+构建只改副本中的精确资源来源，覆盖图片、样式、脚本、字体、视频、重试允许来源、分享图片和下载资源；冻结原件及历史 URL、哈希、验收基线保持原始事实。改写版本 8 接续同桶旧、新地址，旧版本 1–7 仍按原语义重放。内容未变的对象保留原 key，地址变化重新做新域名 HEAD；这一步失败会停止，不转为覆盖上传。旧清单、回滚和在途对象仍按同桶精确 key 保留。`wly0829-assets-shanghai-20261003` 只剩兼容测试，2026-11-06 只读检查返回 `NoSuchBucket`，没有把它列作现役素材来源。
 
 本机发布器沿用 `E:\Tools\aliyun-cli\aliyun.exe` 和已有 `website-images` profile，不查看或复制凭据，不另登录，不改桶、Referer 或 CORS 设置。素材不因跨来源而重画、重编码或改分辨率。视频挂载、遮罩和封面需要它们自己的真实来源证据；准备器只改资源地址，不替产品选择新的媒体。
 

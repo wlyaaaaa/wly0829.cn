@@ -5,7 +5,7 @@
   "comic_package": "sources/creative/comic",
   "river_handoff": "sources/creative/today-river",
   "demo_assets": "sources/creative/demo/assets/src",
-  "asset_base_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com",
+  "asset_base_url": "https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com",
   "home_bio": true,
   "stutter_page": true,
   "home_bio_script": "sources/signature/prepare-home-bio.py",

@@ -52,7 +52,7 @@ def canonical_object(url):
 
 
 def declared_oss_static(payload, owner, manifest):
-    rewriter=oss.Rewriter({},manifest['oss']['asset_base_url'],manifest['oss']['prefix'],ORIGIN,version=4)
+    rewriter=oss.Rewriter({},manifest['oss']['asset_base_url'],manifest['oss']['prefix'],ORIGIN,version=manifest['oss'].get('rewriter_version',4))
     return any(rewriter.is_oss_resource(value,owner,context) for tag,attrs,raw,offset in oss.HtmlTags(payload.decode('utf8')).tags
                for value,context in rewriter.resource_values(tag,attrs))
 
@@ -69,7 +69,7 @@ def artifact(preparation, release=None):
     plan = oss.verify_local(preparation)
     if plan['test_only'] or plan['html_origin'] != ORIGIN or not plan.get('remote_verified'):
         raise ValueError('Network gate requires sealed production preparation at the final website origin')
-    if not re.fullmatch(r'https://[a-z0-9-]+\.oss-cn-shanghai\.aliyuncs\.com', plan['asset_base_url']):
+    if not re.fullmatch(r'https://[a-z0-9-]+\.(?:oss-cn-shanghai|cn-shanghai\.oss)\.aliyuncs\.com', plan['asset_base_url']):
         raise ValueError('Network gate requires the sealed Shanghai OSS origin')
     root = Path(release).resolve() if release else preparation/'github'
     manifest_path = root/oss.MANIFEST

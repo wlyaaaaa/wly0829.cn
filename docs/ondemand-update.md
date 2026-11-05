@@ -24,11 +24,11 @@
 
 ## 下次更新顺带做（做完删掉这段）
 
-**把 OSS 资源域名换成支持 IPv6 的。** 本人家里新建的 IPv4 连接约一成多会卡住约 19 秒，重启光猫没用，本人决定不改光猫（PCConfig `docs/recovery/network-recovery.md`“新建 IPv4 连接卡住”）。网站资源域名 `<桶名>.oss-cn-shanghai.aliyuncs.com` 只有 IPv4，所以本人打开本站时图片和样式常被卡住。同一个桶的 `<桶名>.cn-shanghai.oss.aliyuncs.com` 有 IPv6，本机对它的请求走的是国内优先 IPv6 的出站。
+**合入已准备的 IPv6 资源地址改动。** 分支 `prep/oss-ipv6-20261106` 只做了切换准备，未合并、未上传 OSS、未发布；等本次内容更新一起发布。默认读取地址改为 `<桶名>.cn-shanghai.oss.aliyuncs.com`，保留 IPv4 和旧地址，不改桶配置或网络。
 
-实测（2026-11-05 21:37–21:42，本机正常上网路径，一次一个请求，取同一个不存在的对象）：旧域名 7/60 卡住，新域名 0/60，成功耗时中位 114→124 毫秒。`wly0829-img-media-shanghai` 和 `wly0829-assets-shanghai-20261003` 两个桶的新域名都查到了 AAAA；只有前者实测过证书和请求。没试过真实资源、实际网页、Referer 和 CORS，切之前要验。
+现役主桶的图片、样式、脚本、字体、视频各 2 个真实对象已逐次比对：新旧正文、类型和缓存头一致；两种网站 Referer、无 Referer、字体和脚本 CORS 及预检一致，旧域名一次断连后原样重试成功。两个新域名证书均通过，主桶的真实 IPv4/IPv6 请求均成功。第二桶的旧、新地址及现有身份列举都返回 `NoSuchBucket`，没有可验的真实对象；不新建、不恢复该桶。
 
-要动的地方：`config/build.json` 的 `asset_base_url`、第二个桶的地址（`tests/test_resource_retry.py` 第 128 行有写法）、CSP（`tests/test_oss_csp.py`）、冻结页和 `scripts/site-ui-baseline.json` 里的旧地址。旧域名继续可用，可以分批切。改完同步 [OSS 资源契约](oss-publication.md) 第 7 行。
+合入后跑完整测试和正式构建，核最终 HTML/CSS/JS/JSON/字体引用、重试允许来源与分享图片都使用新地址，再按 [发布与扫描](publish-and-scan.md) 做变化页扫描、发布预演、正式发布和公网回读；域名切换会让几乎全部页面成为变化页。准备阶段只做单元和小范围构建，Chrome 已用真实网站来源预览切换后的资源入口；线上旧 CSS/JS 内部依赖仍要等正式构建发布后复验。冻结原件及 `scripts/site-ui-baseline.json` 的旧 URL 是历史证据，保留不改，构建副本统一切换。上线回读全部通过后由本次更新删除本节；回退办法见 [OSS 资源契约](oss-publication.md)。
 
 ## 开始前核对工具状态
 

@@ -31,6 +31,7 @@ from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
+import oss_origins
 MANIFEST = 'release-manifest.json'
 PLAN = 'oss-plan.json'
 # These files describe the HTML host rather than page content. Moving robots or
@@ -66,7 +67,7 @@ class FinalizeCache:
     """Local acceleration only; cache state never enters a release identity."""
     def __init__(self, dist, full, timings):
         self.dist = dist; self.path = ROOT/'site-astro/.cache'/('finalize-'+hashlib.sha256(str(dist).encode()).hexdigest()[:16]+'.json')
-        self.identity = [str(dist), digest(__file__), digest(Path(__file__).with_name('prepare-home-entry-links.py'))]
+        self.identity = [str(dist), digest(__file__), digest(Path(oss_origins.__file__)), digest(Path(__file__).with_name('prepare-home-entry-links.py'))]
         try: previous = read(self.path) if not full else {}
         except (OSError, ValueError): previous = {}
         if not isinstance(previous, dict) or previous.get('identity') != self.identity: previous = {}
@@ -275,7 +276,7 @@ def validate_target(base, prefix, allow_test=False):
     if allow_test:
         if parts.scheme not in ('http', 'https') or parts.hostname not in ('localhost', '127.0.0.1'):
             raise ValueError('Test origin must be loopback')
-    elif parts.scheme != 'https' or not re.fullmatch(r'[a-z0-9][a-z0-9-]+\.oss-cn-(?:beijing|shanghai)\.aliyuncs\.com', parts.hostname or '') or parts.port:
+    elif parts.scheme != 'https' or not re.fullmatch(oss_origins.HOST, parts.hostname or '') or parts.port:
         raise ValueError('Production asset base must be the selected Beijing or Shanghai default HTTPS origin')
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._/-]*', prefix) or any(x in ('', '.', '..') for x in prefix.split('/')):
         raise ValueError('Prefix must be a nonempty version path, without empty/dot segments')
@@ -288,14 +289,14 @@ def release_identifier(source, base, prefix, github, objects):
                                     sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
 
-def current_home_links(source, version=4):
-    if version not in (1,2,3,4,5,6,7):raise ValueError('Unsupported homepage navigation replay version')
+def current_home_links(source, version=4, rule_pin=None):
+    if version not in (1,2,3,4,5,6,7,8):raise ValueError('Unsupported homepage navigation replay version')
     raw=(Path(source)/'index.html').read_bytes()
     if not all(value in raw for value in (b'home-01-link-1-0', b'home-01-link-2-0')):
         return raw,None
     spec=importlib.util.spec_from_file_location('home_entry_links',Path(__file__).with_name('prepare-home-entry-links.py'))
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-    return module.prepare_links(source,return_bytes=True,legacy=version<4)
+    return module.prepare_links(source,return_bytes=True,legacy=version<4,rule_pin=rule_pin)
 
 
 def verify_manifest(manifest, require_remote=True):
@@ -377,7 +378,7 @@ def verify_manifest(manifest, require_remote=True):
 
 class Rewriter:
     def __init__(self, files, base, prefix, origin, version=1, source_root=None):
-        if version not in (1,2,3,4,5,6,7):
+        if version not in (1,2,3,4,5,6,7,8):
             raise ValueError('Unknown OSS asset rewriter version')
         self.files = files
         self.assets = set(files) - {x for x in files if x.endswith('.html')} - HOST_CONTROLS
@@ -410,17 +411,23 @@ class Rewriter:
                 kind = self.resource_kind(found[0])
                 if context == 'js' and re.search(r'\bfetch\s*\(\s*$', text[:match.start()]): kind = 'connect'
                 yield found[0], kind
+            elif self.version>=8 and any(match['value'].startswith(origin+'/') for origin in oss_origins.aliases(self.base)):
+                rel = urlsplit(match['value']).path.lstrip('/')
+                kind = 'connect' if context=='js' and re.search(r'\bfetch\s*\(\s*$', text[:match.start()]) else self.resource_kind(rel)
+                yield rel, kind
         if context == 'css':
             for match in CSS_URL.finditer(text):
                 found = self.resolve(match['value'].strip(), owner, context)
                 if found: yield found[0], self.resource_kind(found[0])
+                elif self.version>=8 and any(match['value'].strip().startswith(origin+'/') for origin in oss_origins.aliases(self.base)):
+                    rel = urlsplit(match['value'].strip()).path.lstrip('/'); yield rel, self.resource_kind(rel)
 
     def is_oss_resource(self, value, owner, context):
         if self.resolve(value, owner, context): return True
         try: parts = urlsplit(html.unescape(value))
         except ValueError: return False
         return parts.scheme == 'https' and bool(re.fullmatch(
-            r'[a-z0-9-]+\.oss-cn-(?:beijing|shanghai)\.aliyuncs\.com', parts.hostname or ''))
+            oss_origins.HOST if self.version>=8 else r'[a-z0-9-]+\.oss-cn-(?:beijing|shanghai)\.aliyuncs\.com', parts.hostname or ''))
 
     def resource_values(self, tag, attrs):
         """Resource-bearing values; navigation and share metadata do not load."""
@@ -497,6 +504,8 @@ class Rewriter:
                 for value in values:
                     found = self.resolve(value, owner, 'resource')
                     if found: dependencies.add((found[0], self.resource_kind(found[0])))
+                    elif self.version>=8 and any(value.startswith(origin+'/') for origin in oss_origins.aliases(self.base)):
+                        rel = urlsplit(value).path.lstrip('/'); dependencies.add((rel, self.resource_kind(rel)))
         for match in BLOCK.finditer(text):
             context = 'css' if match['tag'].lower() == 'style' else 'json' if re.search(r'type=["\']application/(?:ld\+)?json', match.group(0).split('>',1)[0], re.I) else 'js'
             dependencies.update(self.literal_dependencies(match['body'], owner, context))
@@ -539,10 +548,11 @@ class Rewriter:
             if self.version>=3 and context in ('js','json'):return None
             raise
         if parts.scheme or parts.netloc:
-            if (parts.scheme+'://'+parts.netloc).rstrip('/') == self.base and parts.path.strip('/'):
+            if ((parts.scheme+'://'+parts.netloc).rstrip('/') == self.base or self.version>=8 and oss_origins.same_bucket(parts.scheme+'://'+parts.netloc, self.base)) and parts.path.strip('/'):
                 previous_url = unquote(urlunsplit((parts.scheme, parts.netloc, parts.path, '', '')))
-                if hasattr(self, '_cache_previous'): self._cache_previous.add(previous_url)
-                previous_rel = self.previous_urls.get(previous_url)
+                lookup = oss_origins.rebase_url(previous_url, self.base) if self.version>=8 else previous_url
+                if hasattr(self, '_cache_previous'): self._cache_previous.add(lookup)
+                previous_rel = self.previous_urls.get(lookup)
                 if previous_rel in self.assets:
                     return previous_rel, parts
                 self.absolute_references.add(unquote(parts.path).lstrip('/'))
@@ -573,7 +583,7 @@ class Rewriter:
     def url(self, raw, owner, context):
         found = self.resolve(raw, owner, context)
         if found is None:
-            return raw
+            return oss_origins.rebase_url(raw, self.base) if self.version>=8 else raw
         rel, parts = found
         self.references.setdefault(owner, set()).add(rel)
         new = self.target(rel)
@@ -781,7 +791,8 @@ class Rewriter:
             text = text[:change['start']] + change['after'] + text[change['end']:]
         if changes:
             self.changes[owner] = changes
-        addresses = re.findall(re.escape(self.base)+r'/[^\s<>"\'`)\]}]+', html.unescape(text).replace('\\/', '/'))
+        origins = oss_origins.aliases(self.base) if self.version>=8 else (self.base,)
+        addresses = re.findall('(?:'+'|'.join(map(re.escape, origins))+r')/[^\s<>"\'`)\]}]+', html.unescape(text).replace('\\/', '/'))
         for address in addresses:
             key = unquote(urlsplit(html.unescape(address)).path).lstrip('/')
             if key.startswith('releases/'):
@@ -848,7 +859,7 @@ def inherited_assets(manifest):
     return objects, {alias: previous['oss']['verification']['objects'][original] for alias, original in mapping.items()}
 
 
-def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=7, previous_manifest=None, offline=False):
+def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=8, previous_manifest=None, offline=False):
     source, output = Path(source).resolve(), Path(output).resolve()
     if output == source or output.is_relative_to(source) or source.is_relative_to(output):
         raise ValueError('Source and new output must be disjoint')
@@ -868,7 +879,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
             previous = verify_manifest(read(previous_manifest))
         except (OSError, ValueError, KeyError, TypeError) as error:
             raise ValueError('Explicit previous-manifest is unavailable or invalid: ' + str(previous_manifest)) from error
-    elif not allow_test and not offline and base == 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com':
+    elif not allow_test and not offline and oss_origins.same_bucket(base, oss_origins.configured_base()):
         spec = importlib.util.spec_from_file_location('oss_retention', Path(__file__).with_name('oss-retention.py'))
         retention = importlib.util.module_from_spec(spec); spec.loader.exec_module(retention)
         predecessor = retention.predecessor()
@@ -878,6 +889,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
         if rel in rewriter.assets and previous['oss']['asset_base_url'] == base and obj.get('source') == actual[rel]} if previous else {}
     if offline:
         previous_oss = source_manifest.get('previous_oss', {})
+        if rewriter_version>=8: previous_oss = oss_origins.rebase_previous(previous_oss, base)
         if previous_oss.get('asset_base_url') == base:
             local = previous_oss.get('local_objects', {})
             rewriter.previous_urls = {unquote(row['url']): rel for rel, row in sorted(
@@ -1003,6 +1015,8 @@ def _finalize_dist(dist):
     """Finalize build bytes offline; publishing and repeat runs never rewrite them."""
     dist = Path(dist).resolve(); source = read(dist/MANIFEST)
     if source.get('finalized_dist'):
+        if source['oss']['asset_base_url'] != oss_origins.configured_base():
+            raise ValueError('Asset origin changed; rebuild before finalizing')
         expected = {**source['files'], **{rel: {key: row[key] for key in ('bytes', 'sha256')}
                     for rel, row in source['oss']['objects'].items() if (dist/rel).is_file()}}
         if {rel: row for rel, row in inventory(dist).items() if rel != MANIFEST} != expected:
@@ -1012,7 +1026,7 @@ def _finalize_dist(dist):
     prefix = 'releases/'+hashlib.sha256(json.dumps(resources, sort_keys=True).encode()).hexdigest()
     with tempfile.TemporaryDirectory(prefix='finalize-', dir=dist.parent) as temporary:
         prepared = Path(temporary)/'prepared'
-        plan = prepare(dist, 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com', prefix, prepared, offline=True)
+        plan = prepare(dist, oss_origins.configured_base(), prefix, prepared, offline=True)
         final = read(prepared/'github'/MANIFEST); final['finalized_dist'] = True
         final['oss'].update(retained_objects=plan['retained_objects'], reference_keys=plan['reference_keys'])
         measured('manifest', lambda: write(prepared/'github'/MANIFEST, final))
@@ -1052,6 +1066,7 @@ def verify_local(output, virtual=None):
     rewriter.retained = plan.get('retained_addresses', {rel: plan['objects'][rel] for rel in plan.get('retained_objects', {})})
     if 'asset_keys' in plan:
         previous_oss = source_manifest.get('previous_oss', {})
+        if rewriter.version>=8: previous_oss = oss_origins.rebase_previous(previous_oss, rewriter.base)
         if previous_oss.get('asset_base_url') == rewriter.base:
             rewriter.previous_urls = {unquote(row['url']): rel for rel, row in sorted(
                 [*previous_oss.get('local_objects', {}).items(), *previous_oss['objects'].items()],
@@ -1203,7 +1218,7 @@ def main():
     p.add_argument('--output', required=True)
     p.add_argument('--html-origin', default='https://wly0829.cn')
     p.add_argument('--test-loopback', action='store_true', help='Local rehearsal only; publisher rejects this plan')
-    p.add_argument('--rewriter-version',type=int,choices=(2,3,4,5,6,7),default=7)
+    p.add_argument('--rewriter-version',type=int,choices=(2,3,4,5,6,7,8),default=8)
     p.add_argument('--previous-manifest',type=Path,help='Reuse exact objects and original receipts from this sealed release')
     for command in ('verify-local',):
         p = commands.add_parser(command)

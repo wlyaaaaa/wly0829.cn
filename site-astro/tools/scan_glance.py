@@ -7,7 +7,11 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib.parse import parse_qs, quote, unquote, urljoin, urlsplit
 HERE = Path(__file__).resolve().parent
-UPSTREAMS = {"mcp": "https://mcp.wly0829.cn", "live": "https://live.wly0829.cn", "oss": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com"}
+sys.path.insert(0, str(HERE.parents[1] / 'scripts'))
+import oss_origins
+UPSTREAMS = {"mcp": "https://mcp.wly0829.cn", "live": "https://live.wly0829.cn", "oss": oss_origins.configured_base()}
+UPSTREAMS.update({f"oss-{bucket}-{i}": origin for bucket in oss_origins.BUCKETS for i, origin in enumerate(
+    oss_origins.aliases('https://'+bucket+'.cn-shanghai.oss.aliyuncs.com')) if origin != UPSTREAMS['oss']})
 VIEWPORTS = ((1920, 1080), (3840, 2160))
 RETRY_NETWORK_ERRORS = ("ERR_NO_BUFFER_SPACE", "ERR_ABORTED", "ERR_CONNECTION_RESET")
 def read_json(path): return json.loads(Path(path).read_text(encoding="utf-8-sig"))
@@ -111,7 +115,7 @@ class Preview(http.server.SimpleHTTPRequestHandler):
             if expected and hashlib.sha256(raw).hexdigest() != expected:
                 return 502, {"X-Glance-Object-Error": "sha256_mismatch"}, b""
             return 200, {"Content-Type": self.guess_type(str(local)), "X-Glance-Local-Object": "1"}, raw
-        cacheable = not head and canonical.startswith(UPSTREAMS["oss"] + "/releases/")
+        cacheable = not head and any(canonical.startswith(origin + "/releases/") for key, origin in UPSTREAMS.items() if key.startswith('oss'))
         key = hashlib.sha256((canonical + "\n" + (expected or "") + "\n" + headers.get("Range", "")).encode()).hexdigest() if cacheable else None
         lock = self.server.oss_locks.setdefault(key, threading.Lock()) if key else threading.Lock()
         with lock:
