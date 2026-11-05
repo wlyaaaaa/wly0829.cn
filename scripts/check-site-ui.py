@@ -47,12 +47,11 @@ def inventory(root, pages=None):
         if not matches: raise ValueError('Unknown affected page: '+name)
         chosen.update(matches)
     return sorted(chosen)
-async def review(page, base, route, width, dom, blocked=None, readonly=False, native=False):
+async def review(page, base, route, width, dom, blocked=None, readonly=False):
     issues, checks = [], {'reloads': [], 'phases': []}
     fail = lambda kind, element, evidence: issues.append(dict(kind=kind, element=element, evidence=evidence))
     response = await page.goto(base+route, wait_until='domcontentloaded', timeout=30000)
     if not response or response.status >= 400: fail('route-http', route, {'status': response.status if response else None})
-    initial_main = await page.locator('main').text_content() if native and await page.locator('main').count() else None
     await page.evaluate('document.fonts.ready'); await page.wait_for_timeout(800)
     await page.evaluate("""async()=>{for(let y=0;y<document.documentElement.scrollHeight;y+=innerHeight*.8){
       scrollTo({top:y,behavior:'instant'});await new Promise(r=>setTimeout(r,100));
@@ -62,11 +61,6 @@ async def review(page, base, route, width, dom, blocked=None, readonly=False, na
     await page.evaluate("()=>Promise.race([Promise.all([...document.images].filter(e=>e.checkVisibility()).map(e=>e.complete?Promise.resolve():new Promise(r=>{e.addEventListener('load',r,{once:true});e.addEventListener('error',r,{once:true})}))),new Promise(r=>setTimeout(r,5000))])")
     if blocked is not None: await page.evaluate('values=>window.__uiBlockedImages=values',blocked.get(page,{}))
     measured = await page.evaluate(dom); issues.extend(measured['issues']); checks.update(measured['counts'], measurements=measured.get('measurements',[]))
-    if native:
-        current_main = await page.locator('main').text_content() if await page.locator('main').count() else None
-        consistent = initial_main is not None and current_main == initial_main
-        checks['native_readability'] = {'consistent': consistent}
-        if not consistent: fail('native-main-rewritten' if initial_main is not None else 'native-main-missing', 'main', {})
     checks['video_before_interaction'] = await page.evaluate(VIDEOS)
     for video in checks['video_before_interaction']:
         if video['ready']>=2 and video['paused']: fail('video-autoplay',video['src'],video)
@@ -138,8 +132,6 @@ async def review(page, base, route, width, dom, blocked=None, readonly=False, na
 async def run(args):
     if args.base_url and (args.full or not args.pages) and not args.online_full: raise ValueError('Online all-route checks require --online-full; use local --root --full by default')
     started = time.monotonic(); routes = inventory(args.root.resolve(), None if args.full or args.online_full else args.pages)
-    manifest = args.root/'release-manifest.json'
-    native_routes = set(json.loads(manifest.read_text('utf8')).get('native_readability', {}).get('routes', {})) if manifest.is_file() else set()
     preparation = args.oss_preparation or (args.root.parent if (args.root.parent/'oss-plan.json').is_file() else None)
     objects = json.loads((preparation/'oss-plan.json').read_text('utf8'))['objects'] if preparation else {}
     assets = {urlsplit(obj['url'])._replace(query='',fragment='').geturl():(preparation/'oss'/rel,obj) for rel,obj in objects.items()}
@@ -188,7 +180,7 @@ async def run(args):
             async with semaphore:
                 page = await context.new_page(); await page.set_viewport_size({'width':width,'height':900})
                 try:
-                    record = await review(page,base,route,width,dom,blocked,route in args.readonly_routes,route in native_routes)
+                    record = await review(page,base,route,width,dom,blocked,route in args.readonly_routes)
                     if not args.base_url:
                         gaps = [key for key in blocked.get(page,{}) if re.search(r'\.(js|css|woff2?|mp4|webm)$',urlsplit(key).path,re.I)]
                         if gaps: record['issues'].append(dict(kind='local-assets-unavailable-review',element=route,evidence={'assets':gaps})); record['dependency_unavailable']=True

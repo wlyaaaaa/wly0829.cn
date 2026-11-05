@@ -326,7 +326,7 @@
     },
     {
      "id": "n-features",
-     "text": "功能 1044 条（含冻结项目已停用的 151 条）",
+     "text": "功能 1045 条（含冻结项目已停用的 151 条）",
      "meaning": "各项目页 registry.features 条数相加；所有登记状态都计入，冻结项目另计停用条数。",
      "as_of": "2026-11-04 13:29",
      "source": "sources/pages/*/page.json:kind/status/public/registry.features",
@@ -1185,7 +1185,7 @@
  "source": {
   "page": "sources/pages/projects-home/page.json",
   "sha256": "77158fc62089ffa53874a8106baae26f6ec07336fc761783849f65aaaf7e8336",
-  "converted_at_beijing": "2026-11-04T16:31:23+08:00"
+  "converted_at_beijing": "2026-11-06T07:35:07+08:00"
  }
 }
 ---
@@ -1513,7 +1513,7 @@
 
 公开 **19 个** · 私有 **18 个**
 
-功能 **1044 条**（各项目页“全部功能”相加，含冻结项目已停用的 151 条）
+功能 **1045 条**（各项目页“全部功能”相加，含冻结项目已停用的 151 条）
 
 截至北京时间 2026-11-04 13:29
 
