@@ -1198,7 +1198,8 @@ function knowBlock(v, ctx) {
   const mine = (k) => k.kind !== 'recovered' && k.kind !== 'ai_decision';
   // 结果类（标签“结果”）超过 2 天自动放进“最近收起”：后端该关没关时的页面兜底（本人 10-30 批准第 5 项；根治在后端）
   const RESULT = ['report', 'just_completed', 'done'];
-  const aged = (k) => RESULT.includes(k.kind) && Number.isFinite(Date.parse(k.at || '')) && ctx.now.getTime() - Date.parse(k.at) > 48 * 36e5;
+  const weekly = (k) => v.viewer?.kind === 'owner' && k.card_type === 'weekly_summary';
+  const aged = (k) => !weekly(k) && RESULT.includes(k.kind) && Number.isFinite(Date.parse(k.at || '')) && ctx.now.getTime() - Date.parse(k.at) > 48 * 36e5;
   const all = m.items.filter(ok).filter(mine).filter((k) => !aged(k)), old = [...m.items.filter(ok).filter(mine).filter(aged), ...m.archived.filter(ok).filter(mine)];
   const tagOf = (kind) => { const [tag, st] = KNOW_TAG[kind] || ['你得知道', 'neutral']; return `<span class="cp-know-tag is-${light(st)}">${tag}</span>`; };
   // 刚做完的（后端 kind=just_completed，带 executor）：小字写“几点 · Claude 做完”
@@ -1231,7 +1232,7 @@ function knowBlock(v, ctx) {
     const text = isPh(k) ? k.title || PRIVATE_TITLE : k.kind === 'just_completed' ? plain(k.text).replace(/^\s*刚做完[：:]\s*/, '') : plain(k.text);
     return `<li id="${esc(knowId(k))}" class="is-${esc(k.kind || 'other')}${phCls(k)}${actCls(k, ctx)}"${itemAttr(k)}>${tagOf(k.kind)}<span class="cp-know-text">${esc(text)}${ownTag(k)}${extra}${tail}${updates}</span>${ownerBox(k, ctx, { only: ['ack'] })}</li>`;
   };
-  const rows = all.map((k, i) => ({ k, i, r: KNOW_RANK[k.kind] ?? 1 })).sort((a, b) => a.r - b.r || a.i - b.i).map(({ k }) => row(k));
+  const rows = all.map((k, i) => ({ k, i, r: weekly(k) ? -1 : KNOW_RANK[k.kind] ?? 1 })).sort((a, b) => a.r - b.r || a.i - b.i).map(({ k }) => row(k));
   const folded = old.length ? `<details class="cp-know-old" id="know-old"><summary>最近收起的 ${old.length} 条</summary><p class="cp-know-note">结果满 2 天自动收到这里。</p><ul class="cp-know-list">${old.map(row).join('')}</ul></details>` : '';
   if (!rows.length) {
     const unread = emptyRead(v, ctx, KNOW_SOURCES);

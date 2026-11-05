@@ -17,6 +17,21 @@ const wait = (extra = {}) => ({ id: 'aw-1', card_type: 'ai_wait', conversation_t
   consequence: '不回的话它就停在这一步。', owner_actions: AW, item_version: 'v-aw-1', ...extra });
 const textOnly = (h) => h.replace(/<[^>]*>/g, '');
 
+test('每周统计完整首句排在在修前；其他汇报仍在在修后，公开版顺序不变', () => {
+  const title = '最近 7 天 Claude 自己改了项目代码 5 次，派活 4 单，第 3 次提醒响了 1 次。';
+  const repairs = Array.from({ length: 5 }, (_, i) => ({ id: `r${i}`, kind: 'repairing', text: `在修${i}`, at }));
+  const report = { id: 'weekly', kind: 'report', text: title + '了解分工。', at, headline: title, card_type: 'weekly_summary' };
+  const other = { id: 'other', kind: 'report', text: '其他汇报，仍按原来显示。', at };
+  const view = { must_know: { state: 'ok', items: [...repairs, report, other] } };
+  const html = REGIONS.home(own(view), ctx());
+  const shown = html.split('id="know-rest"')[0];
+  assert.ok(shown.includes(title)); assert.ok(shown.indexOf('id="know-weekly"') < shown.indexOf('id="know-r0"'));
+  assert.equal((shown.match(/id="know-r\d"/g) || []).length, 3); assert.ok(!shown.includes('id="know-other"'));
+  assert.ok(REGIONS.home(own(view), { ...ctx(), now: new Date(now.getTime() + 3 * 864e5) }).split('id="know-rest"')[0].includes(title));
+  const pub = REGIONS.home(normalize(base({ ...view, viewer: { kind: 'public' } })), ctx()).split('id="know-rest"')[0];
+  assert.ok(!pub.includes('id="know-weekly"')); assert.equal((pub.match(/id="know-r\d"/g) || []).length, 4);
+});
+
 test('等待卡首行只露标题、原因和三个按钮；问题、选项、进展与后果保存在默认关闭详情', () => {
   const html = REGIONS['need-you'](own({ need_you: [wait()] }), ctx(acts()));
   const main = /<div class="cp-ask-main">([^]*?)<\/div>/.exec(html)?.[1] || '';
