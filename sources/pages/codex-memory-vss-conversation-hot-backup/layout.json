@@ -434,7 +434,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "当前（2026-11-0412:39核对）：G是今天12:28新点，H仍是昨天16:47旧点；同次两路使用记录成功，生产者窗口均到11月4日0点，覆盖11月3日全天。随后只读两份状态文件时，state-codex.json、state-claude.json的bootstrap_complete=true、last_completed也都到11月4日0点；早上09:18读取的任务自检为status=pass、matches_spec=true，这次没有重新运行自检。没有读账本正文或逐行总数，没有重算全部对象。",
+        "text_ref": "当前（2026-11-0605:20核对）：G、H同为11月5日的`20261105T042159Z-19d60ba0`，closure_sha256相同；同次两路使用记录成功，生产者窗口均到11月5日0点，覆盖11月4日全天。任务自检是11月4日早上09:18读取的status=pass、matches_spec=true，这次没有重新运行自检。没有读账本正文或逐行总数，没有重算全部对象。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -453,7 +453,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "当前（2026-11-0412:39核对）：G是今天12:28新点，H仍是昨天16:47旧点；同次两路使用记录成功，生产者窗口均到11月4日0点，覆盖11月3日全天。随后只读两份状态文件时，state-codex.json、state-claude.json的bootstrap_complete=true、last_completed也都到11月4日0点；早上09:18读取的任务自检为status=pass、matches_spec=true，这次没有重新运行自检。没有读账本正文或逐行总数，没有重算全部对象。",
+        "text_ref": "当前（2026-11-0605:20核对）：G、H同为11月5日的`20261105T042159Z-19d60ba0`，closure_sha256相同；同次两路使用记录成功，生产者窗口均到11月5日0点，覆盖11月4日全天。任务自检是11月4日早上09:18读取的status=pass、matches_spec=true，这次没有重新运行自检。没有读账本正文或逐行总数，没有重算全部对象。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

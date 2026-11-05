@@ -1,4 +1,5 @@
 """A conversion audit stamp must not trigger browser layout work."""
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -11,6 +12,7 @@ from unittest.mock import MagicMock, patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'site-astro/tools'))
 import render_blocks as renderer
+import render_cache
 from render_cache import legacy_renderer_compatible, markdown_render_sha, promote_legacy_cache
 
 
@@ -44,7 +46,12 @@ class TypesetCacheTests(unittest.TestCase):
                 self.assertFalse(list(Path(folder).glob('*.tmp')))
 
     def test_verified_legacy_cache_is_promoted_once(self):
-        self.assertTrue(legacy_renderer_compatible(renderer.__file__))
+        with tempfile.TemporaryDirectory(prefix='legacy-cache-') as folder:
+            source = Path(folder) / 'renderer.py'; source.write_bytes(b'verified renderer')
+            with patch.object(render_cache, 'MIGRATION_RENDERER_SHA256', hashlib.sha256(source.read_bytes()).hexdigest()):
+                self.assertTrue(legacy_renderer_compatible(source))
+                source.write_bytes(b'changed renderer')
+                self.assertFalse(legacy_renderer_compatible(source))
         cache = {'old': {'html': 'measured'}, 'newer': {'html': 'current'}}
         jobs = [{'key': 'new', 'legacy_key': 'old'},
                 {'key': 'newer', 'legacy_key': 'old'},

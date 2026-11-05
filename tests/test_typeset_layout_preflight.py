@@ -10,18 +10,17 @@ from engine.parse import parse, original_markdown
 
 class TextLayoutPreflightTests(unittest.TestCase):
     def test_three_previous_row_failures_and_repaired_rows(self):
-        for page, sid, ref in [('agents', 'agents-12', '钩子'), ('personal-media', 'personal-media-08', '连上手机'), ('skill-browser-control-continuity', 'skill-browser-control-continuity-04', '1先判断要不要开浏览器')]:
-            folder = ROOT / 'sources/pages' / page
-            data = bound_json(folder / 'page.json', read=lambda p: Path(p).read_text('utf-8-sig'))
-            screen = dict(next(s for s in data['screens'] if s['id'] == sid), anchors=[])
-            layout = json.loads((folder / 'layout.json').read_text('utf-8-sig'))
-            specs = next(s['blocks'] for s in layout if s['screen'] == sid and s.get('orientation', 'h') == 'h')
-            block = next(b for b in assign_by_spec(parse(screen['text'], markdown_links=original_markdown(screen)), specs, []) if b['spec'].get('text_ref') == ref)
-            self.assertEqual(convert.check_text_layout(data, screen, [block]), [])
-            old = copy.deepcopy(block)
-            if page == 'agents': old['spec'].pop('row_counts'); old['spec'].pop('fill_first_row')
-            else: old['spec']['item_rows'] = [3, 1, 4] if page == 'personal-media' else [2, 2, 2, 2, 2, 1]
-            self.assertTrue(any('横排卡片正文失衡' in issue for issue in convert.check_text_layout(data, screen, [old])), page)
+        # 保留真实事故的字数比例；页面改稿不能把原反例悄悄变成均衡短卡。
+        for kind, sizes in [('feature_card', [240, 30, 30]), ('flow', [200, 30, 30]), ('flow', [430, 60])]:
+            with self.subTest(kind=kind, sizes=sizes):
+                page, screen = {'page': 'row-fixture'}, {'id': 'row-fixture-01', 'text': '', 'anchors': []}
+                block = {'type': kind, 'spec': {'columns': len(sizes), 'direction': 'horizontal', 'icons': 'none'},
+                         'nodes': [{'type': 'steps', 'items': [{'n': i + 1, 'lead': f'卡{i}', 'text': '甲' * size} for i, size in enumerate(sizes)]}]}
+                self.assertTrue(any('横排卡片正文失衡' in issue for issue in convert.check_text_layout(page, screen, [block])))
+                repaired = copy.deepcopy(block)
+                repaired['spec']['row_counts' if kind == 'feature_card' else 'item_rows'] = [1, len(sizes) - 1]
+                if kind == 'feature_card': repaired['spec']['fill_first_row'] = True
+                self.assertEqual(convert.check_text_layout(page, screen, [repaired]), [])
 
     def test_anchor_checks_ignore_markdown_but_catch_changed_title(self):
         screen = {'id': 'fixture', 'text': '## 经验按时写进文件\n\n正文还会提到旧说法：经验当场写进文件。', 'anchors': [{'id': 'p-experience', 'text': '经验按时写进文件'}]}

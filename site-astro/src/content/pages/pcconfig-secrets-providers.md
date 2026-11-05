@@ -27,7 +27,7 @@
   "parent": "pcconfig",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-06",
    "source": "安装清单和状态读取",
    "facts": [
     "现役安装是 11 月 6 日 03:20 装的第 402 版",
@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig-secrets-providers/page.json",
-  "sha256": "2fced027559080004fdc1189227caa76e121090f3065ce34677cbca3921507cd",
-  "converted_at_beijing": "2026-11-06T05:00:00+08:00"
+  "sha256": "8d678335743e2a344a89804c76351d003f8f2f9da356074a9d9f0c4ef82f948b",
+  "converted_at_beijing": "2026-11-06T07:33:26+08:00"
  }
 }
 ---
@@ -96,7 +96,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 安装清单和状态读取",
+     "static_note": "截至 11 月 6 日 · 安装清单和状态读取",
      "row": "top"
     },
     {
@@ -146,7 +146,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 安装清单和状态读取"
+     "static_note": "截至 11 月 6 日 · 安装清单和状态读取"
     },
     {
      "type": "action_button",
@@ -191,7 +191,7 @@ PCConfig · 功能说明
 
 **当前情况：**密码中心 9 月 28 日起是独立项目，PCConfig 只负责在这台电脑上安装它、接好固定服务；AI 替我在网页里代填密码、遮盖复制和 30 分钟自动清剪贴板都已取消。四类本人验证、共享资料期、恢复集和固定 Google 入口照常；Google 邮件、云盘和相册的授权材料 10 月 28 日起交给密码中心保管。Google 待办的日常使用已退役，要办的事改在驾驶舱登记，源码里的待办读写动作仍保留。Google 远端动作没有重新联网验证。
 
-项目事实核对截至 2026-10-11 14:00（北京时间）；安装版本和 Google 入口的状态按 11 月 4 日 09:10—09:22 只读补充；页面不实时探测运行状态。
+项目事实核对截至 2026-10-11 14:00（北京时间）；安装版本按 11 月 6 日 05:14 只读补充，Google 入口的状态按 11 月 4 日 09:10—09:22 只读补充；页面不实时探测运行状态。
 
 项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。
 
@@ -562,7 +562,12 @@ PCConfig · 功能说明
   "id": "pcconfig-secrets-providers-05",
   "section": "tech",
   "title": "技术实现与依据（一）",
-  "links": [],
+  "links": [
+   {
+    "text": "密码中心",
+    "href": "/projects/password-center/"
+   }
+  ],
   "anchors": [
    {
     "id": "project-reading-panel-technical",
@@ -630,7 +635,7 @@ PCConfig · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-产品归 PasswordCenter，PCConfig 只拥有机器接线与安装。现役安装是批次 402，11 月 3 日 20:08:28 装上，清单列 778 个文件，来自 PasswordCenter 提交 1f8a4cdc、PCConfig 提交 f2570931；11 月 6 日只抽 3 个关键程序比过字节，都和源码一致，没有重核全部 778 个（10 月 11 日批次 364、776 个文件时核过 11 个相关程序）。Google 远端可用性没有联网验证，仍是 Unknown。
+产品归 PasswordCenter，PCConfig 只拥有机器接线与安装。现役安装是批次 402，11 月 6 日 03:20:23 装上，清单列 778 个文件，来自 PasswordCenter 提交 221b2845、PCConfig 提交 17339726；11 月 6 日只抽 2 个关键程序（这版改动的两个 Broker 文件）比过字节，都和源码一致，没有重核全部 778 个（10 月 11 日批次 364、776 个文件时核过 11 个相关程序）。这版让普通取用少走重复检查，详细条件见〔密码中心〕。Google 远端可用性没有联网验证，仍是 Unknown。
 
 ::screen{#pcconfig-secrets-providers-06 section="tech"}
 

@@ -1,0 +1,324 @@
+[
+  {
+    "screen": "skill-dispatch-work-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "派活和验收",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "技能名"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "它做什么"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我交代一件事"
+      },
+      {
+        "type": "prose",
+        "text_ref": "交回来的是"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不用点名"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "怎么跟 AI 说",
+        "columns": 2,
+        "split_paras": true,
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "skill-dispatch-work-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "派活和验收",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "技能名"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "它做什么"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我交代一件事"
+      },
+      {
+        "type": "prose",
+        "text_ref": "交回来的是"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不用点名"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "怎么跟 AI 说",
+        "columns": 2,
+        "split_paras": true,
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "skill-dispatch-work-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整例子",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：",
+        "sides": [
+          "right"
+        ],
+        "illustration": "none"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "AI 做了什么",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI 交回",
+        "sides": [
+          "left"
+        ],
+        "illustration": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时"
+      },
+      {
+        "type": "table",
+        "text_ref": "碰到的情况"
+      }
+    ]
+  },
+  {
+    "screen": "skill-dispatch-work-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整例子",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：",
+        "sides": [
+          "right"
+        ],
+        "illustration": "none"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "AI 做了什么",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI 交回",
+        "sides": [
+          "left"
+        ],
+        "illustration": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时"
+      },
+      {
+        "type": "table",
+        "text_ref": "碰到的情况"
+      }
+    ]
+  },
+  {
+    "screen": "skill-dispatch-work-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "能做的事",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "notice",
+        "text_ref": "把一件活"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "谁做什么"
+      },
+      {
+        "type": "table",
+        "text_ref": "角色"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "一张单子写什么",
+        "columns": 1
+      },
+      {
+        "type": "points_card",
+        "text_ref": "怎么算做完",
+        "columns": 1
+      },
+      {
+        "type": "points_card",
+        "text_ref": "用这个技能时",
+        "columns": 1
+      }
+    ]
+  },
+  {
+    "screen": "skill-dispatch-work-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "能做的事",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "notice",
+        "text_ref": "把一件活"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "谁做什么"
+      },
+      {
+        "type": "table",
+        "text_ref": "角色"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "一张单子写什么",
+        "columns": 1
+      },
+      {
+        "type": "points_card",
+        "text_ref": "怎么算做完",
+        "columns": 1
+      },
+      {
+        "type": "points_card",
+        "text_ref": "用这个技能时",
+        "columns": 1
+      }
+    ]
+  },
+  {
+    "screen": "skill-dispatch-work-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "管",
+        "columns": 1
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "table",
+        "text_ref": "这些事"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "不做",
+        "columns": 1
+      },
+      {
+        "type": "notice",
+        "text_ref": "现在的情况"
+      }
+    ]
+  },
+  {
+    "screen": "skill-dispatch-work-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "管",
+        "columns": 1
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "table",
+        "text_ref": "这些事"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "不做",
+        "columns": 1
+      },
+      {
+        "type": "notice",
+        "text_ref": "现在的情况"
+      }
+    ]
+  }
+]

@@ -144,11 +144,14 @@ class CockpitPageTests(unittest.TestCase):
                     page.evaluate('todayRiver.seek(12)')
                     page.screenshot(path=str(OUT / f'cockpit-{width}.png'), full_page=True)
 
-                    # 套餐流量的三种情况：读到了（网格卡大数字，比别的读数旧时写上几点读到）、没读到、只有很久以前那次（卡上先说几点读到的，点“详情”是那时的值）；首屏件数不跟着乱
+                    # 套餐用独立 package 记录；超过3分钟的余额不能继续当当前值，首屏件数不跟着乱。
                     traffic = page.locator('[data-cp="computer"] .cp-tile').filter(has=page.locator('h3', has_text=re.compile('^流量$')))  # 没有本机代理卡时，套餐流量就是“流量”那张
-                    for mode, card in [('ok', {'text': '套餐已用 20 / 100 GB，剩余 80 GB', 'state': 'ok', 'observed_at': h.ago(hours=3)}),
-                                       ('none', {'text': '', 'state': 'unavailable'}),
-                                       ('stale', {'text': '套餐缓存已用 20 / 100 GB，剩余 80 GB', 'state': 'unavailable', 'observed_at': h.ago(hours=25)})]:
+                    for mode, card in [('ok', {'text': '套餐已用 20 / 100 GB，剩余 80 GB', 'state': 'ok', 'observed_at': h.ago(seconds=5),
+                                              'package': {'stale': False, 'updated_at_beijing': h.ago(seconds=5), 'remaining_gb': 80, 'total_gb': 100}}),
+                                       ('none', {'text': '', 'state': 'unavailable', 'missing_reason': '套餐当前余额暂未取得'}),
+                                       ('stale', {'text': '套餐缓存已用 20 / 100 GB，剩余 80 GB', 'state': 'unavailable', 'observed_at': h.ago(hours=25),
+                                                  'missing_reason': '套餐当前余额暂未取得',
+                                                  'package': {'stale': False, 'updated_at_beijing': h.ago(hours=25), 'remaining_gb': 80, 'total_gb': 100}})]:
                         def body(card=card):
                             b = fixture()
                             b['sections']['computer'][-1] = {'id': 'traffic', 'title': '套餐流量', **card}
@@ -158,16 +161,15 @@ class CockpitPageTests(unittest.TestCase):
                         page.wait_for_function("(m)=>{const c=[...document.querySelectorAll('[data-cp=computer] .cp-tile')].find(x=>x.querySelector('h3')?.textContent.trim()==='流量');return c&&!!c.querySelector(m==='ok'?'.cp-dot.is-green':'.cp-dot.is-gray')}", arg=mode)
                         text = traffic.inner_text()
                         if mode == 'ok':
-                            self.assertIn('80 GB', traffic.locator('.cp-big').inner_text())
-                            self.assertIn('套餐已用 20/100 GB', text)
-                            self.assertIn(when(card['observed_at']) + ' 读到', text)
+                            self.assertIn('套餐剩余 74.5/93.1 GB', text)  # 服务商十进制GB按当前1024口径显示
+                            self.assertIn('约每分钟取新数', text)
+                            self.assertIn('读到', text)
                         elif mode == 'none':
-                            self.assertIn('还没读到', text)
+                            self.assertIn('套餐当前余额暂未取得', text)
                         else:
                             self.assertIn('这是 ' + when(card['observed_at']) + ' 读到的，之后 25 小时没读到新的', text)
-                            self.assertNotIn(card['text'], text)
-                            traffic.locator('summary').click()
-                            self.assertIn(card['text'], traffic.inner_text())
+                            self.assertIn('套餐当前余额暂未取得', text)
+                            self.assertNotIn('74.5/93.1', text)
                         self.assertEqual(page.locator('.cp-ask').count(), 5)
                         self.assertEqual(page.locator('.cp-you-n b').inner_text(), '5')
                     state['value'] = fixture

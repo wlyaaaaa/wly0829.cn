@@ -17,7 +17,7 @@ try:
 except ModuleNotFoundError:
     from scripts.release_delta import inventory, source_path, write_changes
 from urllib.parse import urljoin, urlsplit
-spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
+spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('prepare-oss-release.py'))
 builder = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(builder)
 

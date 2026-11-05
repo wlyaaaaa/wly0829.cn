@@ -78,6 +78,7 @@
         "sources/pages/skill-cloud-asset-channel",
         "sources/pages/skill-cockpit",
         "sources/pages/skill-daily-preferences",
+        "sources/pages/skill-dispatch-work",
         "sources/pages/skill-documents",
         "sources/pages/skill-explain-to-me",
         "sources/pages/skill-google-workspace-direct",

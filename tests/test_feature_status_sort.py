@@ -14,7 +14,7 @@ spec.loader.exec_module(feature)
 
 
 class FeatureStatusSortTests(unittest.TestCase):
-    def test_render_sorts_whole_cards_stably_and_preserves_groups_and_unknowns(self):
+    def test_render_preserves_source_order_groups_numbers_icons_and_spans(self):
         ctx = SimpleNamespace(orient='h', min_font=24, screen={}, inline=lambda value: html.escape(str(value)),
                               warn=lambda *args: None, incomplete=lambda *args: None)
         states = ['已停用', '在用', '待验收', '在用', '待实施', '没用过', '说不准']
@@ -26,12 +26,12 @@ class FeatureStatusSortTests(unittest.TestCase):
         rendered = feature.render_feature_card({'nodes': nodes, 'spec': {'icons': [f'file:///icon-{i}.png' for i in range(10)],
              'item_spans': {'3': 2}, 'status_display': 'text'}}, ctx)
         cards = re.findall(r'<article\b.*?</article>', rendered)
-        self.assertEqual([re.search(r'卡\d+', card)[0] for card in cards[:7]], ['卡2', '卡1', '卡3', '卡4', '卡6', '卡5', '卡0'])
-        self.assertEqual([re.search(r'data-feature-source-index="(\d+)"', card)[1] for card in cards[:7]], ['2', '1', '3', '4', '6', '5', '0'])
-        self.assertTrue(all(re.search(rf'feature-number[^>]*>{index + 1}<', card) for index, card in zip([2, 1, 3, 4, 6, 5, 0], cards)))
-        self.assertTrue(all(f'icon-{index}.png' in card for index, card in zip([2, 1, 3, 4, 6, 5, 0], cards)))
-        self.assertIn('grid-column:span 2', cards[0])
-        self.assertEqual([re.search(r'feature-name[^>]*>([^<]+)', card)[1] for card in cards[7:]], ['未知卡', '待验收卡', '已停用卡'])
+        self.assertEqual([re.search(r'卡\d+', card)[0] for card in cards[:7]], [f'卡{i}' for i in range(7)])
+        self.assertEqual([re.search(r'data-feature-source-index="(\d+)"', card)[1] for card in cards[:7]], list(map(str, range(7))))
+        self.assertTrue(all(re.search(rf'feature-number[^>]*>{index + 1}<', card) for index, card in enumerate(cards[:7])))
+        self.assertTrue(all(f'icon-{index}.png' in card for index, card in enumerate(cards[:7])))
+        self.assertIn('grid-column:span 2', cards[2])
+        self.assertEqual([re.search(r'feature-name[^>]*>([^<]+)', card)[1] for card in cards[7:]], ['未知卡', '已停用卡', '待验收卡'])
         self.assertLess(rendered.index('卡0'), rendered.index('第二组'))
 
 

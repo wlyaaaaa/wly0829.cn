@@ -31,12 +31,12 @@
           "_library/icons/手机电脑连接.png",
           "_library/hires-icons/打勾清单.png"
         ],
-        "text_ref": "4 类"
+        "text_ref": "6 类"
       },
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "截至10月22"
+        "text_ref": "截至11月6日"
       },
       {
         "type": "action_button",
@@ -79,12 +79,12 @@
           "_library/icons/手机电脑连接.png",
           "_library/hires-icons/打勾清单.png"
         ],
-        "text_ref": "4 类"
+        "text_ref": "6 类"
       },
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "截至10月22"
+        "text_ref": "截至11月6日"
       },
       {
         "type": "action_button",
@@ -482,7 +482,7 @@
           "_library/icons/断链.png",
           "_library/hires-icons-r2/版本循环文件.png"
         ],
-        "text_ref": "0.1.17"
+        "text_ref": "0.1.19"
       }
     ]
   },
@@ -525,7 +525,7 @@
           "_library/icons/断链.png",
           "_library/hires-icons-r2/版本循环文件.png"
         ],
-        "text_ref": "0.1.17"
+        "text_ref": "0.1.19"
       }
     ]
   },
@@ -589,7 +589,7 @@
         "size": "large",
         "row": "标题与图例",
         "width": "43%",
-        "text_ref": "全部功能（20 项）"
+        "text_ref": "全部功能（21 项）"
       },
       {
         "type": "status_legend",
@@ -625,7 +625,8 @@
           "_library/icons/手机.png",
           "_library/hires-icons/数据库.png",
           "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
-          "_library/icons/工具箱.png"
+          "_library/icons/工具箱.png",
+          "_library/icons/手机电脑连接.png"
         ],
         "size": "medium",
         "text_ref": "交给电脑",
@@ -672,7 +673,7 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "全部功能（20 项）"
+        "text_ref": "全部功能（21 项）"
       },
       {
         "type": "status_legend",
@@ -704,7 +705,8 @@
           "_library/icons/手机.png",
           "_library/hires-icons/数据库.png",
           "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
-          "_library/icons/工具箱.png"
+          "_library/icons/工具箱.png",
+          "_library/icons/手机电脑连接.png"
         ],
         "size": "medium",
         "text_ref": "交给电脑"

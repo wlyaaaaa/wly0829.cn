@@ -28,14 +28,14 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "150个自动任务（109个开着",
+        "text_ref": "152个自动任务（111个开着",
         "columns": 4,
         "columns_v": 2,
         "icons": "auto"
       },
       {
         "type": "prose",
-        "text_ref": "数字截至11月4日11:40",
+        "text_ref": "数字截至11月6日05:21",
         "align": "right"
       },
       {
@@ -115,14 +115,14 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "150个自动任务（109个开着",
+        "text_ref": "152个自动任务（111个开着",
         "columns": 2,
         "columns_v": 2,
         "icons": "auto"
       },
       {
         "type": "prose",
-        "text_ref": "数字截至11月4日11:40",
+        "text_ref": "数字截至11月6日05:21",
         "align": "right"
       },
       {
@@ -1382,7 +1382,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "150 个",
+        "text_ref": "152 个",
         "chart_type": "donut",
         "width": "100%",
         "number_first": true,
@@ -1446,7 +1446,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "150 个",
+        "text_ref": "152 个",
         "chart_type": "donut",
         "number_first": true,
         "center_node": 0

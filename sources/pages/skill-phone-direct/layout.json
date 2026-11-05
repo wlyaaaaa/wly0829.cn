@@ -62,7 +62,7 @@
     "blocks": [
       {"type": "chapter_title", "text_ref": "能做的事", "size": "large", "align": "center"},
       {"type": "notice", "text_ref": "从手机取四样东西"},
-      {"type": "section_heading", "text_ref": "两条线，AI 自己挑"},
+      {"type": "section_heading", "text_ref": "三条线，AI 自己挑"},
       {"type": "table", "text_ref": "我在哪"},
       {"type": "points_card", "text_ref": "用这个技能时", "columns": 1, "item_cards": true, "inner_columns": 2, "icons": "auto", "illustration": "left_inside"}
     ],
@@ -74,7 +74,7 @@
     "blocks": [
       {"type": "chapter_title", "text_ref": "能做的事", "size": "large", "align": "center"},
       {"type": "notice", "text_ref": "从手机取四样东西"},
-      {"type": "section_heading", "text_ref": "两条线，AI 自己挑"},
+      {"type": "section_heading", "text_ref": "三条线，AI 自己挑"},
       {"type": "table", "text_ref": "我在哪"},
       {"type": "points_card", "text_ref": "用这个技能时", "columns": 1, "item_cards": true, "inner_columns": 1, "icons": "auto", "illustration": "left_inside"}
     ]

@@ -18740,6 +18740,16 @@
       "sha256": "65cbd6cfd08cf257600c2051e2fb12f55862bbe448d9280ba5a5870eb59b9cbd",
       "bytes": 63734,
       "source_path": "sources/assets/pcconfig/08-passkey-browser-legacy-v02.png"
+    },
+    "_typeset/home-highlights/921d4b2f248448eaa850-home-highlights-v-2x.webp": {
+      "bytes": 3032248,
+      "sha256": "921d4b2f248448eaa8504bd246a544667d1476bad2a8325c5a5cf9dc22a5d5fc",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/921d4b2f248448eaa8504bd246a544667d1476bad2a8325c5a5cf9dc22a5d5fc.webp"
+    },
+    "_typeset/home-highlights/ea1c4af51eefd38ba180-home-highlights-h-2x.webp": {
+      "bytes": 2543148,
+      "sha256": "ea1c4af51eefd38ba18020978c526e5586e33ba745656923a94060a59939c771",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/ea1c4af51eefd38ba18020978c526e5586e33ba745656923a94060a59939c771.webp"
     }
   },
   "inherited_assets": {

@@ -27,14 +27,14 @@
   "parent": "personal-materials",
   "status_line": {
    "state": "在用",
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-06",
    "source": "材料库计数和备份日志"
   }
  },
  "source": {
   "page": "sources/pages/personal-materials-exact-intake/page.json",
-  "sha256": "a05107ec449f47b9688be7c94fe8fa79da049281ef4a1631815ab2adeb4bef10",
-  "converted_at_beijing": "2026-11-06T05:00:01+08:00"
+  "sha256": "b2b499594933a37f215df0e13899219925af2036a2af1acc7267957523c5ae16",
+  "converted_at_beijing": "2026-11-06T07:33:26+08:00"
  }
 }
 ---
@@ -85,7 +85,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 材料库计数和备份日志",
+     "static_note": "截至 11 月 6 日 · 材料库计数和备份日志",
      "row": "top"
     },
     {
@@ -127,7 +127,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 材料库计数和备份日志"
+     "static_note": "截至 11 月 6 日 · 材料库计数和备份日志"
     },
     {
      "type": "action_button",
@@ -811,7 +811,7 @@
     },
     {
      "type": "numbered_steps",
-     "text_ref": "每日维护：PCConfig登记的任务每天北京时间17:10在个人资料镜像前调用sync-current（10月20日起这一步还刷新除蓝湖外全部登记目录的文件名清单）。11月4日09:12读日志：该步",
+     "text_ref": "每日维护：PCConfig登记的任务每天北京时间17:10在个人资料镜像前调用sync-current（10月20日起这一步还刷新除蓝湖外全部登记目录的文件名清单）。11月6日05:10读日志：该步",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -829,7 +829,7 @@
     },
     {
      "type": "numbered_steps",
-     "text_ref": "每日维护：PCConfig登记的任务每天北京时间17:10在个人资料镜像前调用sync-current（10月20日起这一步还刷新除蓝湖外全部登记目录的文件名清单）。11月4日09:12读日志：该步",
+     "text_ref": "每日维护：PCConfig登记的任务每天北京时间17:10在个人资料镜像前调用sync-current（10月20日起这一步还刷新除蓝湖外全部登记目录的文件名清单）。11月6日05:10读日志：该步",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -844,7 +844,7 @@
 
 ## 技术实现与依据（四）
 
-- 每日维护：PCConfig 登记的任务每天北京时间 17:10 在个人资料镜像前调用 sync-current（10 月 20 日起这一步还刷新除蓝湖外全部登记目录的文件名清单）。11 月 4 日 09:12 读日志：该步骤共 67 条记录，68 条 complete（最新一条完成于 11 月 5 日 17:10）、1 条 failed（10 月 22 日 17:10，退出码 125，后面又有成功记录，不是现在还在失败；根因没查）。任务 PersonalDataReplica-Hot-Daily 就绪，上次 11 月 3 日 17:10:01 结果 0，下次 11 月 4 日 17:10。最新回执：removed_material_count=0、unavailable_source_count=0、filename_index_status=partial，17 个来源达到时间上限；complete 不代表文件名清单完整。这只说明这一维护步骤的日志，不等于 68 次全量重算或备份全部成功。
+- 每日维护：PCConfig 登记的任务每天北京时间 17:10 在个人资料镜像前调用 sync-current（10 月 20 日起这一步还刷新除蓝湖外全部登记目录的文件名清单）。11 月 6 日 05:10 读日志：该步骤共 69 条记录，68 条 complete（最新一条完成于 11 月 5 日 17:10）、1 条 failed（10 月 22 日 17:10，退出码 125，后面又有成功记录，不是现在还在失败；根因没查）。任务 PersonalDataReplica-Hot-Daily 就绪，上次 11 月 5 日 17:10:01 结果 1，下次 11 月 6 日 17:10（11 月 6 日 05:19 只读，触发器每天北京时间 17:10；整项任务结果 1 的原因没查）。最新回执（11 月 5 日 17:10:38 完成）：这一步 complete、退出码 0，removed_material_count=0、unavailable_source_count=0、filename_index_status=refreshed、filename_index_partial_sources 为空；11 月 3 日那次还是 partial、17 个来源达到时间上限，所以 complete 本身不代表文件名清单完整，要看这个字段。这只说明这一维护步骤的日志，不等于 68 次全量重算或备份全部成功。
 
 ## 执行流程
 

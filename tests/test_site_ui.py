@@ -117,7 +117,7 @@ class SiteUiTests(unittest.TestCase):
             ('svg-empty', '<svg width="40" height="40"><defs><rect width="30" height="30"/></defs></svg>'),
             ('svg-empty', '<svg width="40" height="40"><g opacity="0"><rect width="30" height="30"/></g></svg>'),
             ('image-text-unmeasurable', '<a class="hotspot" data-typeset-kind="link" aria-label="电脑状态看驾驶舱" href="/cockpit/#pc" style="display:block;width:172px;height:73px"></a>'),
-            ('image-placeholder', '<img src="'+IMAGE+'" alt="placeholder" width="40" height="40">')]
+            ('image-placeholder', '<img class="placeholder" src="'+IMAGE+'" alt="fixture" width="40" height="40">')]
         self.assertEqual(self.scan('<img src="'+IMAGE+'" width="40" height="40">')['issues'], [])
         for kind, markup in fixtures:
             with self.subTest(kind=kind, markup=markup):
@@ -133,7 +133,7 @@ class SiteUiTests(unittest.TestCase):
             file.parent.mkdir(parents=True, exist_ok=True)
             file.write_text('<script id="page-data">'+json.dumps({'page': name})+'</script>', 'utf8')
         self.assertEqual(site_ui.inventory(folder, ['guide']), ['/guide/', '/guide/detail/'])
-        self.assertEqual(site_ui.inventory(folder, ['homepage', '/guide/']), ['/', '/guide/'])
+        self.assertEqual(site_ui.inventory(folder, ['homepage', '/guide/']), ['/guide/'])
         with self.assertRaises(ValueError): site_ui.inventory(folder, ['not-a-page'])
 
     def test_ci_page_scope_and_gate_failure_propagation(self):

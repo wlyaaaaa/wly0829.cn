@@ -9,7 +9,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 loader = importlib.util.spec_from_file_location('oss_video', ROOT/'scripts/prepare-oss-runtime.py')
 runtime = importlib.util.module_from_spec(loader); loader.loader.exec_module(runtime)
-ACTUAL = [ROOT/'site-release'/name for name in (
+ACTUAL = [ROOT/'site-astro/sources/frozen-site/assets'/name for name in (
     '_shared/app-a86fd4dfcf0c.js',
     '_typeset/runtime/app-90947cee074fae291b72.js',
     '_typeset/runtime/app-4fdb48d7d6fb118dc0c8.js')]

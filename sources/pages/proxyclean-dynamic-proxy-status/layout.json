@@ -248,7 +248,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 坚持零固定端口表：完全根据系统的 Get-NetTCPConnection 动态判定哪些代理进程在监听。",
+        "text_ref": "1. 坚持零固定端口表：经 Get-PCTcpListener 读 Windows 的 GetExtendedTcpTable 监听者专表（同时读 IPv4、IPv6）动态判定哪些代理进程在监听，不再靠 Get-NetTCPConnection -State Listen 或 netstat 的状态文字筛选。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -272,7 +272,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 坚持零固定端口表：完全根据系统的 Get-NetTCPConnection 动态判定哪些代理进程在监听。",
+        "text_ref": "1. 坚持零固定端口表：经 Get-PCTcpListener 读 Windows 的 GetExtendedTcpTable 监听者专表（同时读 IPv4、IPv6）动态判定哪些代理进程在监听，不再靠 Get-NetTCPConnection -State Listen 或 netstat 的状态文字筛选。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",

@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/proxyclean-dead-port-and-route-cleanup/page.json",
-  "sha256": "9629f1c1a44b54bd50cd1e9ef3d955043ca281e31805696b000fe2d526b553be",
-  "converted_at_beijing": "2026-11-06T05:00:01+08:00"
+  "sha256": "a4b7101e91b7c6e80e8ee8ba5682c995f117960e7f33c790ae392b0e419b15a1",
+  "converted_at_beijing": "2026-11-06T07:33:27+08:00"
  }
 }
 ---
@@ -646,7 +646,7 @@ ProxyClean · 功能说明
 
 - 同一组件声明 InternetSetOption(SETTINGS_CHANGED 39, REFRESH 37)。
 
-- Get-PCListenerState 通过 Get-NetTCPConnection -State Listen 严格检验回环与通配地址监听状态。
+- Get-PCListenerState 严格检验回环、通配地址和地址族的监听状态；监听集合改由 Get-PCTcpListener 的原生监听者专表提供，快照和 Test-LocalProxyDead 都换了这个入口。读不到时仍保留 unknown，不把未知端口当死端口。11 月 6 日 05:16 只读观察，没有执行清理。
 
 - Test-PCPhysicalRoute 检查网卡 Status 为 Up 且 NextHop 非 0.0.0.0 且非 198.18/198.19 fake-ip 网段。
 

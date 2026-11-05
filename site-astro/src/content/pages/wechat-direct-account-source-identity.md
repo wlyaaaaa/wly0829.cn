@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/wechat-direct-account-source-identity/page.json",
-  "sha256": "c0bd6e5624ee26fd39ee8fb0e55b68c29f925be636b99c8e76da2c4c1f857000",
-  "converted_at_beijing": "2026-11-06T05:00:02+08:00"
+  "sha256": "4c23eba3b4a039396d2e5a4dec8a872b338d987b8c1ff22c91a451b7fe228677",
+  "converted_at_beijing": "2026-11-06T07:33:27+08:00"
  }
 }
 ---
@@ -615,7 +615,7 @@ WeChatDirect · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-环境检查可独立于账号运行；文字/图片与Python3.11语音分别验收。当前源码 v0.2.3（最后提交 2026-11-03）
+环境检查可独立于账号运行；文字/图片与Python3.11语音分别验收。当前源码 v0.2.3（最后提交 2026-11-06）
 
 ## 关键规则与设计选择
 

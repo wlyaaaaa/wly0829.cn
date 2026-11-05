@@ -70,6 +70,7 @@ def remove_living_runtime(text: str) -> str:
         "\n document.dispatchEvent(new CustomEvent('site-status',{detail:livingSnapshot()}));": '',
         ',snapshot:livingSnapshot': '',
         'function livingSnapshot(){return Object.freeze({phase,overall:window.HomeLivingStatusModel(last,phase)});}\n': '',
+        'function livingSnapshot(){return Object.freeze({phase,overall:window.HomeLivingStatusModel(last,phase),overview:last?.overview});}\n': '',
         "(document.querySelector('[data-slot]')||page.home_living===true)": "document.querySelector('[data-slot]')",
     }
     for old, new in inverses.items():

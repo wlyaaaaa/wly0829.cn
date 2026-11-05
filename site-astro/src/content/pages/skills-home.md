@@ -3,7 +3,7 @@
  "title": "技能",
  "kind": "skills-home",
  "url": "/skills/",
- "tagline": "AI 碰到某类事时照着办的说明书，一共 31 个。",
+ "tagline": "AI 碰到某类事时照着办的说明书，一共 32 个。",
  "toc": [
   {
    "id": "top",
@@ -19,7 +19,7 @@
   },
   {
    "id": "pc-and-code",
-   "label": "密码、电脑和代码"
+   "label": "密码、电脑、派活和代码"
   }
  ],
  "page": {
@@ -28,7 +28,7 @@
   "kind": "skills-home",
   "title": "技能",
   "url": "/skills/",
-  "tagline": "AI 碰到某类事时照着办的说明书，一共 31 个。",
+  "tagline": "AI 碰到某类事时照着办的说明书，一共 32 个。",
   "status": "",
   "public": false,
   "repo_url": null,
@@ -164,15 +164,17 @@
       "/skills/proxy-network/",
       "/skills/timeaudit-diagnostics/",
       "/skills/cockpit/",
-      "/skills/cloud-asset-channel/"
+      "/skills/cloud-asset-channel/",
+      "/skills/phone-direct/"
      ]
     },
     {
      "id": "g-code",
-     "name": "维护代码",
-     "line": "改代码之前，先把仓库的事实核对清楚再动手。",
+     "name": "派活和改代码",
+     "line": "一件活分给哪个 AI、做完谁核对；改代码之前，先把仓库的事实核对清楚再动手。",
      "screen": "skills-home-04",
      "members": [
+      "/skills/dispatch-work/",
       "/skills/project-entry-gate/"
      ]
     }
@@ -181,10 +183,10 @@
    "numbers": [
     {
      "id": "n-skills",
-     "text": "31 个技能",
+     "text": "32 个技能",
      "meaning": "网站上有技能页的技能数",
      "as_of": "2026-11-04",
-     "source": "本仓库 sources/pages/*/page.json 的 kind=skill 实取 29 个；含新增 Word 文档和 PDF 读写和表单，两页为 Codex 自带插件；去向页不计入。与受管共享技能安装数分开。；10 月 31 日讲给我听（explain-to-me）随个人表达存档删除，改为去向页，现为 29 个。；10 月 31 日新增生图、代理与网络两页，现为 31 个。",
+     "source": "本仓库 sources/pages/*/page.json 的 kind=skill 实取 29 个；含新增 Word 文档和 PDF 读写和表单，两页为 Codex 自带插件；去向页不计入。与受管共享技能安装数分开。；10 月 31 日讲给我听（explain-to-me）随个人表达存档删除，改为去向页，现为 29 个。；10 月 31 日新增生图、代理与网络两页，现为 31 个。；11 月 6 日新增派活和验收，现为 32 个。",
      "screens": [
       "skills-home-01"
      ]
@@ -545,6 +547,11 @@
      "target": "/skills/cockpit/",
      "screen": "skills-home-04",
      "text": "看驾驶舱"
+    },
+    {
+     "target": "/skills/dispatch-work/",
+     "screen": "skills-home-04",
+     "text": "派活和验收"
     }
    ],
    "live": []
@@ -581,8 +588,8 @@
  },
  "source": {
   "page": "sources/pages/skills-home/page.json",
-  "sha256": "61426bf74e5871abdb1601082b2181c85d4a0a4ae6f6701672c9fecae491728c",
-  "converted_at_beijing": "2026-11-06T04:59:46+08:00"
+  "sha256": "1816f075062814b79b234fc8a2c68178c2a18c86060fb07a1e0e4793ef2b25f6",
+  "converted_at_beijing": "2026-11-06T07:21:11+08:00"
  }
 }
 ---
@@ -666,7 +673,7 @@
      "connector": "none",
      "row": "summary",
      "width": "48%",
-     "text_ref": "31 个技能",
+     "text_ref": "32 个技能",
      "row_equal_height": true
     },
     {
@@ -741,7 +748,7 @@
       "_library/hires-icons/打勾清单.png"
      ],
      "connector": "none",
-     "text_ref": "31 个技能"
+     "text_ref": "32 个技能"
     },
     {
      "type": "content_card",
@@ -880,7 +887,7 @@
 
 **怎么用**：直接跟 AI 说要办的事，AI 自己挑用哪个技能，不用记名字。
 
-**31 个技能**　截至 11 月 6 日，按用途分 7 组。
+**32 个技能**　截至 11 月 6 日，按用途分 7 组。
 
 卡片右下角带“属于：项目名”的 16 个，是某个项目的入口：它能做的事全列在那个项目页，技能页只讲怎么跟 AI 说、例子和边界。
 
@@ -1820,7 +1827,7 @@
  "screen": {
   "id": "skills-home-04",
   "section": "pc-and-code",
-  "title": "密码、电脑和代码",
+  "title": "密码、电脑、派活和代码",
   "scene": "横版 16:9，同一风格。右上角一小簇水彩绿叶作点缀，不另写标题。从上到下分成几条横带，每条是一组：横带顶上一行是组名（粗体深绿，比正文大一号）后面隔一个空格跟灰绿色小字的一句组说明（组名不单独占一列）；这一行下面是这组的卡片：“密码和加密”3 张（一行靠左排，不拉宽）；“电脑、网页和账号”5 张（排成两行，上面 4 张、下面 1 张靠左）；“维护代码”1 张（靠左放）。全页统一：每排 4 张，卡片同宽同高；一组超过 4 张就换行，最后一排靠左、不拉宽；不满 4 张的组也靠左、和别组的卡同宽。每张卡白底、细浅绿描边、圆角、同一行等宽等高：卡左上角一个小水彩图标（不带字），图标右边是技能名，画成链接样式（粗体绿色字、细下划线、末尾小 ↗），名字下面一两行深蓝灰常规字写一句话；是项目入口的卡，右下角加一个浅绿底圆角小标签〔属于：项目名〕，画成可点的样子（深绿字、末尾小 ↗）；不是入口的卡右下角空着。各卡的图标：密码和本人验证：一把钥匙和一只小保险箱；加密文件：一个文件夹上挂一把小锁；加密库操作：一扇圆形的厚重保险库门；网页上的事接着办：Chrome 的标志加一个向前的绿色箭头；邮件、云盘和待办：Gmail 的信封标志和 Google 云盘的三角标志并排；远程只让自己连：两台小设备之间一条连线，连线中间一面小盾牌；查电脑卡顿：一只秒表压在一条起伏的折线上；省流量的云端素材：一朵绿色水彩云托着一张小图片，云下一根细线连到一台小笔记本电脑；改项目前先核对：GitHub 的黑色章鱼猫标志旁边一个放大镜。组与组之间用很淡的水彩绿色笔刷线分隔。",
   "portrait": "竖版 9:16，字完全一样：各组从上往下排，每组先是组名，组说明换到组名下一行；下面卡片一行一张、占满宽度，图标在卡片左边，技能名和一句话在右边，“属于”小标签在一句话下面靠右。",
   "links": [
@@ -1891,6 +1898,10 @@
    {
     "text": "中外消息快查",
     "href": "/skills/news-quickcheck/"
+   },
+   {
+    "text": "派活和验收",
+    "href": "/skills/dispatch-work/"
    }
   ],
   "anchors": [
@@ -1936,7 +1947,7 @@
    },
    {
     "id": "g-code",
-    "text": "维护代码"
+    "text": "派活和改代码"
    },
    {
     "id": "skill-project-entry-gate",
@@ -1945,6 +1956,10 @@
    {
     "id": "skill-news-quickcheck",
     "text": "中外消息快查"
+   },
+   {
+    "id": "skill-dispatch-work",
+    "text": "派活和验收"
    }
   ],
   "live": [],
@@ -1983,7 +1998,8 @@
       "查电脑卡顿": "_library/icons/秒表.png",
       "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
-      "改项目前先核对": "_library/icons/GitHub标志.png"
+      "改项目前先核对": "_library/icons/GitHub标志.png",
+      "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
      }
     },
     {
@@ -2014,27 +2030,28 @@
       "查电脑卡顿": "_library/icons/秒表.png",
       "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
-      "改项目前先核对": "_library/icons/GitHub标志.png"
+      "改项目前先核对": "_library/icons/GitHub标志.png",
+      "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
      }
     },
     {
      "type": "section_heading",
      "align": "left",
      "size": "medium",
-     "text_ref": "维护代码",
+     "text_ref": "派活和改代码",
      "heading_font": "brush",
      "heading_size": "small",
      "illustration": "none"
     },
     {
      "type": "directory_tile",
-     "columns": 1,
+     "columns": 2,
      "align": "left",
      "size": "medium",
      "illustration": "left_inside",
      "icons": "auto",
      "connector": "none",
-     "text_ref": "〔改项目前先核对〕动代码之前，先认准仓库、查清同步。",
+     "text_ref": "〔派活和验收〕我交代一件事，主持的 AI 分给合适的 AI，做完交回来核对；我不用记命令。",
      "icon_map": {
       "密码和本人验证": "_library/icons/保险箱.png",
       "加密文件": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
@@ -2045,7 +2062,8 @@
       "查电脑卡顿": "_library/icons/秒表.png",
       "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
-      "改项目前先核对": "_library/icons/GitHub标志.png"
+      "改项目前先核对": "_library/icons/GitHub标志.png",
+      "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
      }
     }
    ],
@@ -2082,7 +2100,8 @@
       "查电脑卡顿": "_library/icons/秒表.png",
       "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
-      "改项目前先核对": "_library/icons/GitHub标志.png"
+      "改项目前先核对": "_library/icons/GitHub标志.png",
+      "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
      }
     },
     {
@@ -2115,14 +2134,15 @@
       "查电脑卡顿": "_library/icons/秒表.png",
       "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
-      "改项目前先核对": "_library/icons/GitHub标志.png"
+      "改项目前先核对": "_library/icons/GitHub标志.png",
+      "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
      }
     },
     {
      "type": "section_heading",
      "align": "left",
      "size": "medium",
-     "text_ref": "维护代码",
+     "text_ref": "派活和改代码",
      "page_break_before": true,
      "heading_font": "brush",
      "heading_size": "small",
@@ -2137,7 +2157,7 @@
      "illustration": "left_inside",
      "icons": "auto",
      "connector": "none",
-     "text_ref": "〔改项目前先核对〕动代码之前，先认准仓库、查清同步。",
+     "text_ref": "〔派活和验收〕我交代一件事，主持的 AI 分给合适的 AI，做完交回来核对；我不用记命令。",
      "icon_map": {
       "密码和本人验证": "_library/icons/保险箱.png",
       "加密文件": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
@@ -2148,7 +2168,8 @@
       "查电脑卡顿": "_library/icons/秒表.png",
       "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
-      "改项目前先核对": "_library/icons/GitHub标志.png"
+      "改项目前先核对": "_library/icons/GitHub标志.png",
+      "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
      }
     }
    ],
@@ -2382,6 +2403,7 @@
 - 〔看驾驶舱〕问电脑和项目现在好不好、要我做什么，AI 读驾驶舱讲给我听。
 - 〔省流量的云端素材〕AI 要反复读的大文件，云上放一份，省得反复传；云端读者截至 11 月 4 日没有可用环境，现在能不能用要实查。
 
-**维护代码**　改代码之前，先把仓库的事实核对清楚再动手。
+**派活和改代码**　一件活分给哪个 AI、做完谁核对；改代码之前，先把仓库的事实核对清楚再动手。
 
+- 〔派活和验收〕我交代一件事，主持的 AI 分给合适的 AI，做完交回来核对；我不用记命令。
 - 〔改项目前先核对〕动代码之前，先认准仓库、查清同步。

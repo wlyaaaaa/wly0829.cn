@@ -32,7 +32,7 @@ class StaticHomeTests(unittest.TestCase):
         def html(d, p, additions=''):
             return '<html><head>'+additions+'<script src="'+d['shared']['script_bundle']+'" defer></script></head><body>'\
                 +'<section id="home-01" style="aspect-ratio:2/1;--grid-index:0"><picture>'+p+'</picture><a href="/new/">new source link</a></section>'\
-                +'<script id="page-data" type="application/json">'+json.dumps(d)+'</script><p>new source content</p></body></html>'
+                +'<script id="page-data" type="application/json">'+json.dumps(d)+'</script><div id="story">newer story</div><p>new source content</p></body></html>'
         (reference / 'index.html').write_text(html(data, picture), encoding='utf8')
         data = copy.deepcopy(data)
         for layout in data['screens'][0]['layouts'].values():

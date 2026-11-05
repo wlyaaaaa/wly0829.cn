@@ -27,17 +27,17 @@
   "parent": "proxyclean",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-06",
    "source": "项目源码和本机只读状态",
    "facts": [
-    "11 月 4 日 11:13 只读检查符合默认（没查 Git、Docker 这几层）"
+    "11 月 6 日 05:16 只读检查符合默认（没查 Git、Docker 这几层）"
    ]
   }
  },
  "source": {
   "page": "sources/pages/proxyclean-dynamic-proxy-status/page.json",
-  "sha256": "56c94c4f5ae888db6ea83b94551ca6704f2e37a1a30ff74fbeb85e01eacb8f4e",
-  "converted_at_beijing": "2026-11-06T05:00:01+08:00"
+  "sha256": "f98b8a8ca39aba4f2b1b599b8b2c626ea6dee18870a749a49044eb07924792ca",
+  "converted_at_beijing": "2026-11-06T07:33:27+08:00"
  }
 }
 ---
@@ -91,11 +91,11 @@
        "state": "ok"
       },
       {
-       "text": "11 月 4 日 11:13 只读检查符合默认（没查 Git、Docker 这几层）",
+       "text": "11 月 6 日 05:16 只读检查符合默认（没查 Git、Docker 这几层）",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 项目源码和本机只读状态",
+     "static_note": "截至 11 月 6 日 · 项目源码和本机只读状态",
      "row": "top"
     },
     {
@@ -137,11 +137,11 @@
        "state": "ok"
       },
       {
-       "text": "11 月 4 日 11:13 只读检查符合默认（没查 Git、Docker 这几层）",
+       "text": "11 月 6 日 05:16 只读检查符合默认（没查 Git、Docker 这几层）",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 项目源码和本机只读状态"
+     "static_note": "截至 11 月 6 日 · 项目源码和本机只读状态"
     },
     {
      "type": "action_button",
@@ -586,7 +586,7 @@ Docker 保存了独立本地代理，或设置已改但运行记录仍沿用旧�
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. 坚持零固定端口表：完全根据系统的 Get-NetTCPConnection 动态判定哪些代理进程在监听。",
+     "text_ref": "1. 坚持零固定端口表：经 Get-PCTcpListener 读 Windows 的 GetExtendedTcpTable 监听者专表（同时读 IPv4、IPv6）动态判定哪些代理进程在监听，不再靠 Get-NetTCPConnection -State Listen 或 netstat 的状态文字筛选。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -608,7 +608,7 @@ Docker 保存了独立本地代理，或设置已改但运行记录仍沿用旧�
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. 坚持零固定端口表：完全根据系统的 Get-NetTCPConnection 动态判定哪些代理进程在监听。",
+     "text_ref": "1. 坚持零固定端口表：经 Get-PCTcpListener 读 Windows 的 GetExtendedTcpTable 监听者专表（同时读 IPv4、IPv6）动态判定哪些代理进程在监听，不再靠 Get-NetTCPConnection -State Listen 或 netstat 的状态文字筛选。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -639,7 +639,7 @@ Docker 保存了独立本地代理，或设置已改但运行记录仍沿用旧�
 
 ### 关键规则与设计选择
 
-1. 坚持零固定端口表：完全根据系统的 Get-NetTCPConnection 动态判定哪些代理进程在监听。
+1. 坚持零固定端口表：经 Get-PCTcpListener 读 Windows 的 GetExtendedTcpTable 监听者专表（同时读 IPv4、IPv6）动态判定哪些代理进程在监听，不再靠 Get-NetTCPConnection -State Listen 或 netstat 的状态文字筛选。
 
 2. 将 Docker Desktop 纳入只读代理审计，但不把本地端点字符串升级成死端口或容器断网根因。
 
@@ -654,6 +654,8 @@ Docker 保存了独立本地代理，或设置已改但运行记录仍沿用旧�
 - 本地端口不再用单条正则提取：先交给 Get-ProxyEndpoints 按分号和协议映射、URI、1-65535 范围、IP 地址族与是否回环逐项解析，再取已解析本地端口的唯一集合；监听按地址族和回环/通配判断，只有 IPv6 通配而 IPv4 双栈情况不明时保留“未知”。
 
 - 本机状态输出（界面详情、复制诊断和命令行 JSON）保留代理端点的普通主机、端口和 IP，远程代理也照实写出地址；只去掉网址里的用户名密码，并把 token、api_key、password 这类查询参数换成 <credentials>。JSON 用 credentials_filtered 标明“已过滤凭据”，不再标成整体脱敏。
+
+- 系统代理开关关着时，就算保存的地址正好对着一个活监听，也不把它算到哪个客户端头上。11 月 6 日 05:16 正式只读运行读到开关关闭、保存着一个本地地址、归属为空，结论“符合默认”；这不代表出口、网页、桌面应用或真实关闭、修复已验收。
 
 - Get-PCDockerSnapshot 检查 %APPDATA%\Docker\settings-store.json 中的 OverrideProxyHTTP 等覆盖项。
 
@@ -726,7 +728,7 @@ Docker 保存了独立本地代理，或设置已改但运行记录仍沿用旧�
 
 1. 读取注册表获取 WinINET 当前系统代理端点与开启状态。
 
-2. 扫描 Get-NetTCPConnection 获取所有监听中的 TCP 连接，结合进程表识别代理核心进程名与 PID。
+2. 经 Get-PCTcpListener 读原生监听者专表，按进程关系、地址族和端点归属识别代理核心进程名与 PID；Windows 普通 TCP 状态字段不可靠，不再作为监听来源。
 
 3. 检查 IPv4 默认路由并列出 NextHop 落在 198.18/198.19 的条目；另外记下 IPv4/IPv6 各条默认路由和分流路由的地址族、路由与接口优先级、是否直连网段、是否隧道接口，只用来解释，实际去往目标的路由写“未探测”。该状态脚本不判定这些路由生死，也不据此扩大删路由范围。
 

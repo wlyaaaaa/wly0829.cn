@@ -57,7 +57,7 @@
         "connector": "none",
         "row": "summary",
         "width": "48%",
-        "text_ref": "31 个技能",
+        "text_ref": "32 个技能",
         "row_equal_height": true
       },
       {
@@ -135,7 +135,7 @@
           "_library/hires-icons/打勾清单.png"
         ],
         "connector": "none",
-        "text_ref": "31 个技能"
+        "text_ref": "32 个技能"
       },
       {
         "type": "content_card",
@@ -509,7 +509,8 @@
           "查电脑卡顿": "_library/icons/秒表.png",
           "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
-          "改项目前先核对": "_library/icons/GitHub标志.png"
+          "改项目前先核对": "_library/icons/GitHub标志.png",
+          "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
         }
       },
       {
@@ -540,27 +541,28 @@
           "查电脑卡顿": "_library/icons/秒表.png",
           "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
-          "改项目前先核对": "_library/icons/GitHub标志.png"
+          "改项目前先核对": "_library/icons/GitHub标志.png",
+          "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
         }
       },
       {
         "type": "section_heading",
         "align": "left",
         "size": "medium",
-        "text_ref": "维护代码",
+        "text_ref": "派活和改代码",
         "heading_font": "brush",
         "heading_size": "small",
         "illustration": "none"
       },
       {
         "type": "directory_tile",
-        "columns": 1,
+        "columns": 2,
         "align": "left",
         "size": "medium",
         "illustration": "left_inside",
         "icons": "auto",
         "connector": "none",
-        "text_ref": "〔改项目前先核对〕动代码之前，先认准仓库、查清同步。",
+        "text_ref": "〔派活和验收〕我交代一件事，主持的 AI 分给合适的 AI，做完交回来核对；我不用记命令。",
         "icon_map": {
           "密码和本人验证": "_library/icons/保险箱.png",
           "加密文件": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
@@ -571,7 +573,8 @@
           "查电脑卡顿": "_library/icons/秒表.png",
           "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
-          "改项目前先核对": "_library/icons/GitHub标志.png"
+          "改项目前先核对": "_library/icons/GitHub标志.png",
+          "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
         }
       }
     ],
@@ -611,7 +614,8 @@
           "查电脑卡顿": "_library/icons/秒表.png",
           "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
-          "改项目前先核对": "_library/icons/GitHub标志.png"
+          "改项目前先核对": "_library/icons/GitHub标志.png",
+          "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
         }
       },
       {
@@ -644,14 +648,15 @@
           "查电脑卡顿": "_library/icons/秒表.png",
           "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
-          "改项目前先核对": "_library/icons/GitHub标志.png"
+          "改项目前先核对": "_library/icons/GitHub标志.png",
+          "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
         }
       },
       {
         "type": "section_heading",
         "align": "left",
         "size": "medium",
-        "text_ref": "维护代码",
+        "text_ref": "派活和改代码",
         "page_break_before": true,
         "heading_font": "brush",
         "heading_size": "small",
@@ -666,7 +671,7 @@
         "illustration": "left_inside",
         "icons": "auto",
         "connector": "none",
-        "text_ref": "〔改项目前先核对〕动代码之前，先认准仓库、查清同步。",
+        "text_ref": "〔派活和验收〕我交代一件事，主持的 AI 分给合适的 AI，做完交回来核对；我不用记命令。",
         "icon_map": {
           "密码和本人验证": "_library/icons/保险箱.png",
           "加密文件": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
@@ -677,7 +682,8 @@
           "查电脑卡顿": "_library/icons/秒表.png",
           "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
-          "改项目前先核对": "_library/icons/GitHub标志.png"
+          "改项目前先核对": "_library/icons/GitHub标志.png",
+          "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
         }
       }
     ],

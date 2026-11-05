@@ -37,12 +37,12 @@
         "columns_v": 2,
         "icons": "auto",
         "illustration": "top_inside",
-        "text_ref": "36.3GBCodex完整对话，14,787个文件（G上11月4日12:28新一份；H仍是11月3日那份），每天12:15存一份"
+        "text_ref": "36.5GBCodex完整对话，15,095个文件（G、H都是11月5日12:31那一份），每天12:15存一份"
       },
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "11月4日11:12核对"
+        "text_ref": "11月6日05:20核对"
       },
       {
         "type": "prose",
@@ -94,12 +94,12 @@
         "columns_v": 2,
         "icons": "auto",
         "illustration": "top_inside",
-        "text_ref": "36.3GBCodex完整对话，14,787个文件（G上11月4日12:28新一份；H仍是11月3日那份），每天12:15存一份"
+        "text_ref": "36.5GBCodex完整对话，15,095个文件（G、H都是11月5日12:31那一份），每天12:15存一份"
       },
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "11月4日11:12核对"
+        "text_ref": "11月6日05:20核对"
       },
       {
         "type": "prose",
@@ -421,7 +421,7 @@
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "11月4日11:12核对"
+        "text_ref": "11月6日05:20核对"
       }
     ],
     "composition_basis": {
@@ -476,7 +476,7 @@
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "11月4日11:12核对"
+        "text_ref": "11月6日05:20核对"
       }
     ],
     "composition_basis": {

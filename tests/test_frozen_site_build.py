@@ -18,6 +18,11 @@ class CompleteBuildTests(unittest.TestCase):
         native = ROOT / 'site-astro/src/pages'
         expected.update(p.relative_to(native).as_posix().removesuffix('.astro') + '.html'
                         for p in native.rglob('index.astro') if '[' not in str(p.relative_to(native)))
+        for author in (ROOT / 'sources/pages').glob('*/page.json'):
+            page = json.loads(author.read_text('utf8'))
+            for route in [page.get('url'), *page.get('old_urls', [])]:
+                if route:
+                    expected.add('index.html' if route == '/' else route.lstrip('/') if route.endswith('.html') else route.strip('/') + '/index.html')
         self.assertEqual({p.relative_to(dist).as_posix() for p in dist.rglob('*.html')}, expected)
 
     def test_complete_artifact_has_no_old_aliyun_release_addresses(self):

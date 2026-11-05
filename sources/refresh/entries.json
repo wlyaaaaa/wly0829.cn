@@ -2082,5 +2082,24 @@
     "timeout": 10,
     "observation_basis": "live_read",
     "verification": "git log只读当前技能源码目录最近可达提交的原时区%cI，仅输出事件时间；不读浏览器会话或账号、不运行搜索技能，不改源码。"
+  },
+  "b3-dispatch-work-last-source-change": {
+    "argv": [
+      "git",
+      "-C",
+      "E:/.agents",
+      "log",
+      "-1",
+      "--format={\"changed_at\":\"%cI\"}",
+      "--",
+      "skills/dispatch-work"
+    ],
+    "cwd": "E:/.agents",
+    "read_only": true,
+    "owner_project": "agents",
+    "output": "json",
+    "timeout": 10,
+    "observation_basis": "live_read",
+    "verification": "git log只读当前技能源码目录最近可达提交的原时区%cI，仅输出事件时间；不读浏览器会话或账号、不运行派活技能，不改源码。"
   }
 }

@@ -3,9 +3,11 @@ import importlib.util
 import json
 from pathlib import Path
 import tempfile
+import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'scripts'))
 spec = importlib.util.spec_from_file_location('navigation', ROOT / 'scripts/repair-release-navigation.py')
 nav = importlib.util.module_from_spec(spec); spec.loader.exec_module(nav)
 spec = importlib.util.spec_from_file_location('hybrid', ROOT / 'scripts/hybrid-release.py')
@@ -174,15 +176,16 @@ class NavigationRepair(unittest.TestCase):
                 self.assertEqual(nav.rule_neighbors(expected['next']['href'],pages)['previous']['href'],route)
         self.assertIn('claude-adapter',nav.RULE_TOPICS)
 
-    def test_release_search_serializer_cannot_reintroduce_source_path_or_unknown_fields(self):
+    def test_release_search_serializer_preserves_authored_paths_and_drops_unknown_producer_fields(self):
         raw={'title':'例子','href':'/projects/example/','detail':'先读 E:\\Fixture\\steps.md。继续说明。',
              'search':'来源 file:///E:/Fixture/picture.png。','aliases':['\\\\fixture\\files\\input.json'],
              'producer':{'source_path':'E:\\Fixture\\provenance.json'}}
         text=nav.serialize_search([raw])
         row=nav.search_records(text)[0]
         self.assertNotIn('producer',row)
-        self.assertEqual(row['detail'],'先读 （本机路径）。继续说明。')
-        self.assertNotIn('Fixture',text);self.assertNotIn('fixture',text)
+        self.assertEqual(row['detail'],raw['detail'])
+        self.assertEqual(row['search'],raw['search']);self.assertEqual(row['aliases'],raw['aliases'])
+        self.assertNotIn('provenance.json',text)
 
 
 if __name__ == '__main__': unittest.main()

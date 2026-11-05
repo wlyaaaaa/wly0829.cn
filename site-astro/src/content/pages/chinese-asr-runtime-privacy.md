@@ -27,14 +27,14 @@
   "parent": "chinese-asr",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-06",
    "source": "项目源码和云端状态"
   }
  },
  "source": {
   "page": "sources/pages/chinese-asr-runtime-privacy/page.json",
-  "sha256": "4312d297b5718e994eddbad6c1518693c028dea250ad4f9e193c0c380223cec4",
-  "converted_at_beijing": "2026-11-04T19:02:45+08:00"
+  "sha256": "69b18dd54f99451a1754fc3c677e80abf7aa827bf5c2d8d02678683e814b5f45",
+  "converted_at_beijing": "2026-11-06T07:33:25+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 项目源码和云端状态",
+     "static_note": "截至 11 月 6 日 · 项目源码和云端状态",
      "row": "top"
     },
     {
@@ -135,7 +135,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 项目源码和云端状态"
+     "static_note": "截至 11 月 6 日 · 项目源码和云端状态"
     },
     {
      "type": "action_button",
@@ -757,7 +757,7 @@ AI 处理选定录音时，免费期内、没有被暂停就先走云端；云�
 
 - FireRed worker 隔离在专用运行环境，不改变默认模型。
 
-- asr-professional-cloud.ps1 是唯一云上传入口，在读音频前要求唯一用途和上传依据：-CloudFirst 自带配置免费期依据，无需 CloudUploadAuthorized 或 LocalOutDir，也不需要已有本地作业；其余用途要 CloudUploadAuthorized，或带本地结果目录和疑难证据的 AutomaticReview；CloudFirst 和 QualityReview 同用返回 cloud_use_purpose_ambiguous。原来的 -Legacy 开关 10 月 20 日已删，现在可用 -ResumeJobId 沿用原云请求和检查点续作。重要路线写 importance=important，质量复核写 purpose=quality_review 且不写 importance，普通云优先写 purpose=transcription（11 月 3 日 bff36eb）。
+- asr-professional-cloud.ps1 是唯一云上传入口，在读音频前要求唯一用途和上传依据：-CloudFirst 自带配置免费期依据，无需 CloudUploadAuthorized 或 LocalOutDir，也不需要已有本地作业；其余用途要 CloudUploadAuthorized，或带本地结果目录和疑难证据的 AutomaticReview；CloudFirst 和 QualityReview 同用返回 cloud_use_purpose_ambiguous。原来的 -Legacy 开关 10 月 20 日已删，现在可用 -ResumeJobId 沿用原云请求和检查点续作。重要路线写 importance=important，质量复核写 purpose=quality_review 且不写 importance，普通云优先写 purpose=transcription（11 月 3 日 bff36eb）。同一入口 11 月 6 日（afd6ffff）加了三个提速条件：上传从全局轮流改成按音频内容轮流，不同内容可并行，内容相同即便路径不同仍轮流；单声道 16 位 PCM WAV 的云端准备用 soxr 在进程内重采样，其他格式和声道仍走 ffmpeg；24 小时内已确认凭据正常且之后没失败时，跳过不改变状态的成功上报，失败仍当场上报。这里只是上传并发，GPU 的本地同族串行规则不变；提交说明记过 6 条同时成功、7.3–8.9 秒的历史实测，核对时没有上传或复测。
 
 - 云 provider 仍是 Alibaba Cloud Model Studio（阿里云百炼）北京区：`qwen-audio-3.1-asr-flash` 走 HTTPS Base64、每段不超过 120 秒，用于短录音、说话人和方言；`qwen-audio-3.1-asr-flash-message` 走 WebSocket、每段不超过 30 秒 PCM，用于较长录音和热词。两者免费期配置都到北京时间 2026-12-21 00:00（不含截止点）。`qwen-audio-3.0-asr-flash` 的 180 秒路线原来只作显式 Legacy 后备（免费期配置已于北京时间 2026-09-27 02:00 过期），10 月 20 日连同 -Legacy 开关一起删除；filetrans 仍未接入，不借公网 URL。
 
@@ -831,7 +831,7 @@ AI 处理选定录音时，免费期内、没有被暂停就先走云端；云�
 
 - 自动停止与恢复（cloud_review.py、scripts/cloud-review-state.py）：免费期过期不自动上传并写原因；额度耗尽、欠费、余额不足、无权限、模型下线等持久停用；网络、超时、限流、5xx 只影响本次。可用 pause --reason 手动暂停，只有本人要求 resume 才解除；更换模型、新免费期或新额度周期只解除供应商停用，不解除手动暂停，点名上云不受暂停影响。阿里云“免费额度用完即停”开关没开、本地也不计用量，余额为零时仍可能后付费欠费。到期时由处理录音的 AI 提醒本人核对能否继续免费，没有新增计时任务；未确认新免费期前用本地，显式授权的单次上传可继续但标可能计费。
 
-- 微信实时语音（src/zh_asr/realtime.py，11 月 3 日 d483aaf）：python -m zh_asr.realtime 走标准输入输出 JSONL，不开端口，不写录音或文字日志；启动先冷加载一次、显卡预热、再退回内存，回 event=ready 才接消息。每个 transcribe 请求给一个绝对路径的 WAV（最长 60 秒，不截断），同一工作进程按听写配置的 max_chunk_sec=20 分段连续覆盖全文，整个请求共享最多 10 秒预算；结果绑定原音 SHA-256、时长、每段起止和真实耗时。状态分 completed、partial、empty、failed、not_ready，后四种都不算完整转写；未就绪不自动重载，只有显式 prepare 或重新启动才准备；close 或输入结束清理工作进程。它只管本机识别；读取消息、优先用微信缓存文字、和云端并行及 15 秒总时限都归 WeChatDirect，见〔实时聊天怎么读懂语音〕。
+- 微信实时语音（src/zh_asr/realtime.py，11 月 3 日 d483aaf）：python -m zh_asr.realtime 走标准输入输出 JSONL，不开端口，不写录音或文字日志；启动先冷加载一次、显卡预热、再退回内存，回 event=ready 才接消息。每个 transcribe 请求给一个绝对路径的 WAV（最长 60 秒，不截断），同一工作进程按听写配置的 max_chunk_sec=20 分段连续覆盖全文，整个请求共享最多 10 秒预算；结果绑定原音 SHA-256、时长、每段起止和真实耗时。状态分 completed、partial、empty、failed、not_ready，后四种都不算完整转写；未就绪不自动重载，只有显式 prepare 或重新启动才准备；close 或输入结束清理工作进程。11 月 6 日（afd6ffff）起，准备时提前导入音频库；结果完成就立即交回，不再等模型退回内存；连续 3 秒没有新请求才退回 CPU/RAM 并释放显卡许可，退回最多等 20 秒，失败就撤销 prepared、中止自己的工作进程，后续返回 not_ready，不当场冷装。这些只读核对了源码和测试定义，没有运行，也不是桌面听写的新默认。它只管本机识别；读取消息、优先用微信缓存文字、和云端并行及 15 秒总时限都归 WeChatDirect，见〔实时聊天怎么读懂语音〕。
 
 - outputs、models、私人评测、wheelhouse 和录音由 Git ignore 与公开门排除。
 

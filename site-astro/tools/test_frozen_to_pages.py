@@ -1,5 +1,6 @@
 """冻结模块迁移回归：真实正文、失败原子性和已有作者/素材边界。"""
 import hashlib
+from functools import lru_cache
 import json
 import os
 from pathlib import Path
@@ -26,8 +27,14 @@ REQUIRED = ("project-hero project-lead snapshot-card module-product plain-langua
 DISCARD = ".breadcrumbs,.project-reading-nav,.continuation-brief,.project-navigation,.visually-hidden,script,style,svg"
 
 
+@lru_cache(maxsize=8)
 def fixture(route=ROUTE):
-    return (REPO / "site-astro/sources/frozen-site/pages" / route.strip("/") / "index.html").read_text("utf-8-sig")
+    relative = route.strip("/") + "/index.html"
+    source = REPO / "site-astro/sources/frozen-site/pages" / relative
+    if source.is_file():
+        return source.read_text("utf-8-sig")
+    snapshot = json.loads((REPO / "site-astro/sources/frozen-site/manifest.json").read_text("utf8"))
+    return subprocess.check_output(["git", "show", snapshot["source_commit"] + ":site-release/" + relative], cwd=REPO).decode("utf-8-sig")
 
 
 def plain(text):
