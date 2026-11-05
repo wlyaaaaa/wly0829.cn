@@ -5,6 +5,7 @@ import hashlib
 import contextlib
 import json
 import os
+import tempfile
 from pathlib import Path
 import unittest
 from unittest import mock
@@ -115,11 +116,22 @@ class OssCspTests(unittest.TestCase):
         self.assertIn('img-src ' + BASE, self.policies(current)[0])
         self.assertNotIn("img-src 'none'", current)
 
+    def test_historical_home_replay_forwards_its_rule_pin(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary);(root/'index.html').write_bytes(b'home-01-link-1-0 home-01-link-2-0')
+            pin={'release':'historical-fixture'};helper=mock.Mock();helper.prepare_links.return_value=(b'bound-home',None)
+            with mock.patch.object(oss.importlib.util,'spec_from_file_location'), mock.patch.object(oss.importlib.util,'module_from_spec',return_value=helper):
+                self.assertEqual(oss.current_home_links(root,4,rule_pin=pin),(b'bound-home',None))
+            helper.prepare_links.assert_called_once_with(root,return_bytes=True,legacy=False,rule_pin=pin)
+
     def test_native_gate_keeps_all_failed_events_and_resolves_alias_documents(self):
         rows = [{'status':'fail','loading_failed':[{'blockedReason':'csp'},{'errorText':'net::ERR_ABORTED','canceled':True}],
                  'http_failures':[{'http':404}],'page_errors':['execution failed']}]
         self.assertEqual(network.summarize(rows,BASE), {'routes':1,'passed':0,'csp_blocked':1,'loading_failed':2,
-            'blocking_loading_failed':2,'expected_navigation_cancellations':0,'http_failures':1,'oss_http_403':0,'page_errors':1})
+            'blocking_loading_failed':2,'expected_navigation_cancellations':0,'http_failures':1,'oss_http_403':0,'page_errors':1,
+            'connection_failures':1,'route_reruns':0})
+        recovered=network.summarize([{'status':'pass','loading_failed':[],'previous_attempts':rows}],BASE)
+        self.assertEqual((recovered['passed'],recovered['loading_failed'],recovered['connection_failures'],recovered['route_reruns']),(1,0,1,1))
         self.assertTrue(network.is_csp_failure({'type':'Document','errorText':'net::ERR_BLOCKED_BY_CSP'}))
         self.assertEqual(network.route_file('/how-this-site/'), 'how-this-site/index.html')
         self.assertEqual(network.route_file('/404.html'), '404.html')
@@ -390,6 +402,8 @@ class MetadataHotfixBaselineTests(unittest.TestCase):
     def git_output(self,args,**kwargs):
         if args[:2]==['git','diff']:return '\n'.join(self.changes)+'\n'
         if args[:2]==['git','show']:
+            if args[2] in (ref+':config/assembled-rules-pin.json' for ref in (self.before_ref,self.after_ref)):
+                return json.dumps({'schema':'fixture.historical-rule-pin','release':'fixture-old-rules'}).encode()
             ref,relative=args[2].split(':site-release/',1);return self.git_bytes(ref,relative)
         raise AssertionError('Unexpected Git query: '+repr(args))
 
