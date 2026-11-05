@@ -507,16 +507,19 @@ class NumberEditsTests(unittest.TestCase):
         self.assertFalse(payload["skipped"])
 
     def test_timed_cutoff_reads_back_the_written_time(self):
-        self.page["screens"][0]["text"] = "，".join(self.labels) + "，截至 10 月 9 日 08:06"
-        self.save()
-        self.rows[-1].update(page_pattern=r"截至 (\d+ 月 \d+ 日 \d+:\d+)", old_value="10 月 9 日 08:06")
-        result = dict(schema="content-refresh.result.v1", run_id="timed", rows=self.rows)
-        report = apply_edits(self.root, build_number_edits(self.root, result))
-        self.assertFalse(report["skipped"])
-        self.assertIn("截至 10 月 11 日 16:03", json.loads(self.path.read_text("utf-8"))["screens"][0]["text"])
-        self.assertIn("date", {r["record_id"] for r in report["record_readback"]})
-        closure = close_run(self.root, result, report)
-        self.assertEqual({r["record_id"]: r["status"] for r in closure["rows"]}["date"], "applied_readback_verified")
+        for pattern, old in [(r"截至 (\d+ 月 \d+ 日 \d+:\d+)", "10 月 9 日 08:06"),
+                             (r"截至 (\d+ 月 \d+ 日)", "10 月 9 日")]:
+            with self.subTest(pattern=pattern):
+                self.page["screens"][0]["text"] = "，".join(self.labels) + "，截至 10 月 9 日 08:06"
+                self.save()
+                self.rows[-1].update(page_pattern=pattern, old_value=old)
+                result = dict(schema="content-refresh.result.v1", run_id="timed", rows=self.rows)
+                report = apply_edits(self.root, build_number_edits(self.root, result))
+                self.assertFalse(report["skipped"])
+                self.assertIn("截至 10 月 11 日 16:03", json.loads(self.path.read_text("utf-8"))["screens"][0]["text"])
+                self.assertIn("date", {r["record_id"] for r in report["record_readback"]})
+                closure = close_run(self.root, result, report)
+                self.assertEqual({r["record_id"]: r["status"] for r in closure["rows"]}["date"], "applied_readback_verified")
 
     def test_scaled_numbers_keep_the_page_decimal_places(self):
         from apply_edits import formatted

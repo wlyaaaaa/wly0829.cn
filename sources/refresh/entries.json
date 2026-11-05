@@ -610,7 +610,7 @@
       "-I",
       "-B",
       "-c",
-      "import subprocess,json,re,datetime\nr=subprocess.run([r\"E:\\Scoop\\shims\\gh.exe\",\"api\",\"repos/wlyaaaaa/codex-memory/commits?sha=backup%2Fsecondary-laptop&per_page=100\"],capture_output=True,text=True,encoding=\"utf-8\",timeout=20,check=True)\nrows=json.loads(r.stdout)\nif not isinstance(rows,list) or len(rows)>=100: raise ValueError(\"history_requires_pagination_review\")\npattern=re.compile(r\"^codex memory secondary-laptop snapshot \\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$\")\nbj=datetime.timezone(datetime.timedelta(hours=8))\nstart=datetime.datetime(2026,9,10,tzinfo=bj)\nend=datetime.datetime(2026,10,11,tzinfo=bj)\ncount=sum(bool(pattern.fullmatch(v[\"commit\"][\"message\"].splitlines()[0])) and start<=datetime.datetime.fromisoformat(v[\"commit\"][\"committer\"][\"date\"].replace(\"Z\",\"+00:00\"))<end for v in rows)\nprint(json.dumps({\"snapshots_in_page_date_range\":count,\"all_commits\":len(rows),\"latest_commit\":rows[0][\"sha\"]}))\n"
+      "import subprocess,json,re,datetime\nr=subprocess.run([r\"E:\\Scoop\\shims\\gh.exe\",\"api\",\"--paginate\",\"--slurp\",\"repos/wlyaaaaa/codex-memory/commits?sha=backup%2Fsecondary-laptop&per_page=100\"],capture_output=True,text=True,encoding=\"utf-8\",timeout=20,check=True)\nbatches=json.loads(r.stdout)\nif not isinstance(batches,list) or not all(isinstance(page,list) for page in batches): raise ValueError(\"history_pagination_not_arrays\")\nrows=[row for page in batches for row in page]\npattern=re.compile(r\"^codex memory secondary-laptop snapshot \\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$\")\nbj=datetime.timezone(datetime.timedelta(hours=8))\nstart=datetime.datetime(2026,9,10,tzinfo=bj)\nend=datetime.datetime(2026,10,11,tzinfo=bj)\ncount=sum(bool(pattern.fullmatch(v[\"commit\"][\"message\"].splitlines()[0])) and start<=datetime.datetime.fromisoformat(v[\"commit\"][\"committer\"][\"date\"].replace(\"Z\",\"+00:00\"))<end for v in rows)\nprint(json.dumps({\"snapshots_in_page_date_range\":count,\"all_commits\":len(rows),\"latest_commit\":rows[0][\"sha\"]}))\n"
     ],
     "cwd": "E:\\Projects\\Backups\\codex-memory",
     "read_only": true,
@@ -887,7 +887,7 @@
       "python3",
       "-B",
       "-c",
-      "import json,re,subprocess; from pathlib import Path; r=Path('/root/localocr-runtimes/current/acceptance');d=json.loads((r/'acceptance.json').read_text());t=(r/'unit.log').read_text();n=re.search(r'Ran (\\d+) tests',t);s=re.search(r'OK \\(skipped=(\\d+)\\)',t);assert d['ok'] is True and d['unit_exit_code']==0 and n and s\nm=Path('/root/.paddlex/official_models');b=int(subprocess.check_output(['du','-sb',str(m)],text=True).split()[0])\nprint(json.dumps({'model_count':sum(p.is_dir() for p in m.iterdir()),'model_gib':round(b/1024**3,1),'tests':int(n[1]),'skipped':int(s[1])}))\n"
+      "import json,re,subprocess,datetime; from pathlib import Path; r=Path('/root/localocr-runtimes/current/acceptance');d=json.loads((r/'acceptance.json').read_text());t=(r/'unit.log').read_text();n=re.search(r'Ran (\\d+) tests',t);s=re.search(r'OK \\(skipped=(\\d+)\\)',t);assert d['ok'] is True and d['unit_exit_code']==0 and n and s\nm=Path('/root/.paddlex/official_models');b=int(subprocess.check_output(['du','-sb',str(m)],text=True).split()[0])\nprint(json.dumps({'model_count':sum(p.is_dir() for p in m.iterdir()),'model_gib':round(b/1024**3,1),'acceptance_observed_at':datetime.datetime.fromtimestamp(d['started_unix']+d['elapsed_sec'],datetime.timezone.utc).isoformat(),'tests':int(n[1]),'skipped':int(s[1])}))\n"
     ],
     "cwd": "E:/Projects/Tools/LocalOCR",
     "read_only": true,
@@ -1269,7 +1269,7 @@
       "-X",
       "utf8",
       "-c",
-      "import json;from pathlib import Path\nG=json.loads(Path('G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json').read_text(encoding='utf-8-sig'));H=json.loads(Path('E:/Data/PCConfig/SecretBroker/h-cold-backup-receipt.json').read_text(encoding='utf-8-sig'));b=H['H_bitlocker'];assert G['status']=='complete' and 'includes_configuration' not in G and G['capture_semantics']=='vss_crash_consistent' and H['status']=='complete' and b['volume_status']=='FullyEncrypted' and b['protection_status']=='On' and b['encryption_percentage']==100,'encrypted_snapshot_unavailable'\nprint(json.dumps({'count':2,'G_snapshot_at':G.get('completed_at_utc',G.get('completed_utc')),'H_snapshot_at':H['completed_utc']}))"
+      "import json,datetime;from pathlib import Path\nG=json.loads(Path('G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json').read_text(encoding='utf-8-sig'));H=json.loads(Path('E:/Data/PCConfig/SecretBroker/h-cold-backup-receipt.json').read_text(encoding='utf-8-sig'));b=H['H_bitlocker'];assert G['status']=='complete' and 'includes_configuration' not in G and G['capture_semantics']=='vss_crash_consistent' and H['status']=='complete' and b['volume_status']=='FullyEncrypted' and b['protection_status']=='On' and b['encryption_percentage']==100,'encrypted_snapshot_unavailable'\nprint(json.dumps({'count':2,'source_observed_at':min((G.get('completed_at_utc',G.get('completed_utc')),H['completed_utc']),key=lambda v:datetime.datetime.fromisoformat(v.replace('Z','+00:00'))),'G_snapshot_at':G.get('completed_at_utc',G.get('completed_utc')),'H_snapshot_at':H['completed_utc']}))"
     ],
     "cwd": "E:/Projects/Backups/codex-memory/tools",
     "read_only": true,
@@ -1277,7 +1277,10 @@
     "output": "json",
     "timeout": 20,
     "verification": "G默认Hot必经Assert-GMedia 1195-1201/1346后才publish 1369及complete 1110-1125；实际无ConfigPath，回执当前指针/closure一致；H回执明确状态。缓存快照，非本轮现场，详见round02 bitlocker-evidence。",
-    "observation_basis": "unknown"
+    "observation_basis": "snapshot_timestamp",
+    "source_observed_at_pointer": [
+      "source_observed_at"
+    ]
   },
   "b7-agents-module-source-metrics": {
     "argv": [
@@ -1481,7 +1484,7 @@
       "-X",
       "utf8",
       "-c",
-      "import json\nfrom pathlib import Path\nd=json.loads(Path('E:/Data/PCConfig/PersonalMedia/phone-closeout-status.json').read_text(encoding='utf-8-sig'))\nassert d['status'] in ('PASS','FAIL','SKIPPED')\nb=d['batches'];print(json.dumps({'batches':len(b),'passed':sum(v.get('status')=='PASS' for v in b),'waiting':sum(v.get('status')=='WAITING' for v in b),'status':d['status']}))"
+      "import json\nfrom pathlib import Path\nd=json.loads(Path('E:/Data/PCConfig/PersonalMedia/phone-closeout-status.json').read_text(encoding='utf-8-sig'))\nassert d['status'] in ('PASS','FAIL','SKIPPED')\nb=d['batches'];print(json.dumps({'batches':len(b),'passed':sum(v.get('status')=='PASS' for v in b),'waiting':sum(v.get('status')=='WAITING' for v in b),'status':d['status'],'finished_utc':d['finished_utc']}))"
     ],
     "cwd": "V:/Personal/Projects/personal-media",
     "read_only": true,
@@ -1489,7 +1492,10 @@
     "output": "json",
     "timeout": 20,
     "verification": "2026-10-11 固定代码只读PCConfig既有phone-closeout-status.json汇总；不会启动closeout或连接手机；只输出批次数/PASS/WAITING数与总体状态，未输出批次路径或回执正文。实际7/3/4/PASS。",
-    "observation_basis": "unknown"
+    "observation_basis": "snapshot_timestamp",
+    "source_observed_at_pointer": [
+      "finished_utc"
+    ]
   },
   "personal-media-physical-selected-count": {
     "argv": [

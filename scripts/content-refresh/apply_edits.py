@@ -399,6 +399,7 @@ def build_number_edits(root, result):
                 for stamp in CHINESE_DATE.finditer(parent[key]):
                     if stamp.start() == start and end <= stamp.end():
                         end = stamp.end()
+                positions[rid] = (author["file"], author["field"], field, start, end, parent[key][start:end])
 
             pending = []
             def add(target, a, b, value):
