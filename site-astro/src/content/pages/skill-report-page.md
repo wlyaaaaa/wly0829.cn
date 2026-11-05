@@ -41,9 +41,9 @@
     "at": "2026-11-02 16:46"
    },
    "facts": [
-    "近 7 天 AI 用了 45 次"
+    "近 7 天 AI 用了 39 次"
    ],
-   "as_of": "2026-11-03",
+   "as_of": "2026-11-04",
    "source": "AI 使用记录"
   },
   "based_on": {
@@ -388,10 +388,10 @@
    "numbers": [
     {
      "id": "n-pages",
-     "text": "131 份",
+     "text": "146 份",
      "meaning": "根目录当前现存HTML文件数，同标题不同版本分别计数；不是标题去重数或累计生成数",
-     "as_of": "2026-11-04",
-     "source": "见来源记录 skill-report-page-n-pages-0，观察于 2026-11-04T13:29:31+08:00",
+     "as_of": "2026-11-06",
+     "source": "见来源记录 skill-report-page-n-pages-0，观察于 2026-11-06T04:53:53+08:00",
      "screens": [
       "skill-report-page-01"
      ]
@@ -528,8 +528,8 @@
  },
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
-  "sha256": "7c3e84b8ef2cb0242b01f596cc2eebe4efcb3b44125a9ca7bfe3f40fdf18978b",
-  "converted_at_beijing": "2026-11-04T21:16:18+08:00"
+  "sha256": "3d798fc04e2dbcbc1c79b3f740b9919656ba93c4b82924e49250075c9f86616a",
+  "converted_at_beijing": "2026-11-06T05:14:09+08:00"
  }
 }
 ---
@@ -576,11 +576,11 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 45 次",
+       "text": "近 7 天 AI 用了 39 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 3 日 · AI 使用记录",
+     "static_note": "截至 11 月 4 日 · AI 使用记录",
      "row": "intro"
     },
     {
@@ -629,7 +629,7 @@
      "illustration": "none",
      "icons": "none",
      "number_style": "stat",
-     "text_ref": "131份"
+     "text_ref": "146份"
     }
    ],
    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。三数字来自三个原 group，需数字样式而非普通组标题；八气泡包括原粘回答复括注，正文不添加词。；page-fixer-09（按审页意见）：三个数字组改用stat_card，原字与数字字号保留；八气泡横版两列，收紧两栏高差"
@@ -651,11 +651,11 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 45 次",
+       "text": "近 7 天 AI 用了 39 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 3 日 · AI 使用记录"
+     "static_note": "截至 11 月 4 日 · AI 使用记录"
     },
     {
      "type": "stat_card",
@@ -664,7 +664,7 @@
      "illustration": "none",
      "icons": "none",
      "number_style": "stat",
-     "text_ref": "131份"
+     "text_ref": "146份"
     },
     {
      "type": "prose",
@@ -754,9 +754,9 @@
 
 AI 写内容文件（文字和数字，也可以自己手画一段图解或互动），版式、配色、现成图表和检查都交给一条命令；平时页面用“清爽杂志”风格（白底纯绿，标题用宋体，靠细线分隔），10 月 13 日我定的。整份页面只存在我电脑上，不发到网上；有要我答的题时，题目、选项、为什么必须我答、不答的影响会登记到驾驶舱的“需要你”里，驾驶舱在网站上能看到需要我处理的事；卡片只提供“复制给 AI”“知道了”“晚点提醒”，回答回到原对话，不在驾驶舱提交选项。
 
-**131 份**
+**146 份**
 汇报文件夹里现在还留着的汇报页（按根目录现存 HTML 文件计，同标题的不同版本分别计数）；数的是现存的页，不是累计做过多少份
-截至 11 月 04 日 13:29（只读清点）
+截至 11 月 06 日 05:09（只读清点）
 
 **171 张**
 62 个标题各取最新一版，其中 50 份带决策卡

@@ -46,12 +46,12 @@
    "state": "在用",
    "last": {
     "label": "上次更新",
-    "at": "2026-11-04 11:10"
+    "at": "2026-11-06 04:41"
    },
    "facts": [
-    "近 7 天提交 165 次"
+    "近 7 天提交 174 次"
    ],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-06",
    "source": "网站仓库修改记录"
   },
   "public": true,
@@ -779,8 +779,8 @@
  },
  "source": {
   "page": "sources/pages/wly0829-cn/page.json",
-  "sha256": "9f46c63ec6322bfba3a6ad30a1ee26dd175be15c8e603719db0100ff465d6eac",
-  "converted_at_beijing": "2026-11-04T21:16:18+08:00"
+  "sha256": "a276ac68496aecae73af14a3cd3317ff28742d76a52c3470b8a3d33d795f8cc0",
+  "converted_at_beijing": "2026-11-06T05:14:12+08:00"
  }
 }
 ---
@@ -844,15 +844,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 11 月 4 日 11:10",
+       "text": "在用 · 上次更新 11 月 6 日 04:41",
        "state": "ok"
       },
       {
-       "text": "近 7 天提交 165 次",
+       "text": "近 7 天提交 174 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 网站仓库修改记录",
+     "static_note": "截至 11 月 6 日 · 网站仓库修改记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -918,15 +918,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 11 月 4 日 11:10",
+       "text": "在用 · 上次更新 11 月 6 日 04:41",
        "state": "ok"
       },
       {
-       "text": "近 7 天提交 165 次",
+       "text": "近 7 天提交 174 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 网站仓库修改记录"
+     "static_note": "截至 11 月 6 日 · 网站仓库修改记录"
     },
     {
      "type": "stat_card",

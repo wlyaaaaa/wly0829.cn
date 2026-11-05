@@ -38,10 +38,10 @@
    "state": "在用",
    "last": {
     "label": "上次更新",
-    "at": "2026-10-31 21:21"
+    "at": "2026-11-06 02:59"
    },
    "facts": [],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-06",
    "source": "技能清单和技能源码"
   },
   "public": false,
@@ -94,8 +94,8 @@
  },
  "source": {
   "page": "sources/pages/skill-image-generation/page.json",
-  "sha256": "0a4d05c41c6296cce5d0bba06c4d3d83107eef8f72b81ddebca3e99ba452d760",
-  "converted_at_beijing": "2026-11-04T12:05:39+08:00"
+  "sha256": "0f164891dab7cf9f87a804361c044d780d2e8890893df2f8f7218acb9923cac1",
+  "converted_at_beijing": "2026-11-06T04:59:46+08:00"
  }
 }
 ---
@@ -134,11 +134,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 10 月 31 日 21:21",
+       "text": "在用 · 上次更新 11 月 6 日 02:59",
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 技能清单和技能源码",
+     "static_note": "截至 11 月 6 日 · 技能清单和技能源码",
      "row": "hero"
     },
     {
@@ -197,11 +197,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 10 月 31 日 21:21",
+       "text": "在用 · 上次更新 11 月 6 日 02:59",
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 技能清单和技能源码"
+     "static_note": "截至 11 月 6 日 · 技能清单和技能源码"
     },
     {
      "type": "prose",

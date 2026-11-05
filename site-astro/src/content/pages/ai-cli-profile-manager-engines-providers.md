@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-engines-providers/page.json",
   "sha256": "1be6348a09b4361eaf44f37419faeb62bca268eb94f02f69d13d2416904ded15",
-  "converted_at_beijing": "2026-11-04T12:05:28+08:00"
+  "converted_at_beijing": "2026-11-06T04:59:59+08:00"
  }
 }
 ---
@@ -66,7 +66,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {

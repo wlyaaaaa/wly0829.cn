@@ -30,15 +30,15 @@
    "as_of": "2026-11-04",
    "source": "安装清单和状态读取",
    "facts": [
-    "现役安装是 11 月 3 日 20:08 装的第 401 版",
+    "现役安装是 11 月 6 日 03:20 装的第 402 版",
     "Google 授权没联网验证，账号现在有效不明"
    ]
   }
  },
  "source": {
   "page": "sources/pages/pcconfig-secrets-providers/page.json",
-  "sha256": "67e15b1af88de5381ab20d61618c0dfdcb14eaefdab780645c19be19b2b908e1",
-  "converted_at_beijing": "2026-11-04T15:34:49+08:00"
+  "sha256": "2fced027559080004fdc1189227caa76e121090f3065ce34677cbca3921507cd",
+  "converted_at_beijing": "2026-11-06T05:00:00+08:00"
  }
 }
 ---
@@ -88,7 +88,7 @@
        "state": "ok"
       },
       {
-       "text": "现役安装是 11 月 3 日 20:08 装的第 401 版",
+       "text": "现役安装是 11 月 6 日 03:20 装的第 402 版",
        "state": "fact"
       },
       {
@@ -138,7 +138,7 @@
        "state": "ok"
       },
       {
-       "text": "现役安装是 11 月 3 日 20:08 装的第 401 版",
+       "text": "现役安装是 11 月 6 日 03:20 装的第 402 版",
        "state": "fact"
       },
       {
@@ -630,7 +630,7 @@ PCConfig · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-产品归 PasswordCenter，PCConfig 只拥有机器接线与安装。现役安装是批次 401，11 月 3 日 20:08:28 装上，清单列 778 个文件，来自 PasswordCenter 提交 1f8a4cdc、PCConfig 提交 f2570931；11 月 4 日只抽 3 个关键程序比过字节，都和源码一致，没有重核全部 778 个（10 月 11 日批次 364、776 个文件时核过 11 个相关程序）。Google 远端可用性没有联网验证，仍是 Unknown。
+产品归 PasswordCenter，PCConfig 只拥有机器接线与安装。现役安装是批次 402，11 月 3 日 20:08:28 装上，清单列 778 个文件，来自 PasswordCenter 提交 1f8a4cdc、PCConfig 提交 f2570931；11 月 6 日只抽 3 个关键程序比过字节，都和源码一致，没有重核全部 778 个（10 月 11 日批次 364、776 个文件时核过 11 个相关程序）。Google 远端可用性没有联网验证，仍是 Unknown。
 
 ::screen{#pcconfig-secrets-providers-06 section="tech"}
 
@@ -733,7 +733,7 @@ PCConfig · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {
@@ -1553,7 +1553,7 @@ PCConfig · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {

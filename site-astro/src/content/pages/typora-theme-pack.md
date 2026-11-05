@@ -51,7 +51,7 @@
    "facts": [
     "三项导出菜单还没在 Typora 里实际点过"
    ],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-06",
    "source": "项目修改记录和只读核对"
   },
   "public": true,
@@ -248,7 +248,7 @@
      "id": "n-theme-count",
      "text": "1 套",
      "meaning": "编辑主题数（Typora 菜单里新增的只有 Verdant Mint）",
-     "as_of": "2026-10-12",
+     "as_of": "2026-11-06",
      "source": "themes/ 目录；profile.data theme=verdant-mint.css（10 月 11 日现查）；已装 verdant-mint.css 与仓库一致，verdant/base.css 少 f30ac9c 加的表头底色一行",
      "screens": [
       "typora-theme-pack-01"
@@ -258,7 +258,7 @@
      "id": "n-styles",
      "text": "3 种",
      "meaning": "PDF 样式：original、personal、company",
-     "as_of": "2026-10-12",
+     "as_of": "2026-11-06",
      "source": "export_pdf.py MODES；export-profiles/ 三个 CSS",
      "screens": [
       "typora-theme-pack-01",
@@ -279,7 +279,7 @@
      "id": "n-tests",
      "text": "22 项",
      "meaning": "tests/test_project.py 的测试定义数",
-     "as_of": "2026-11-04",
+     "as_of": "2026-11-06",
      "source": "def test_ 计数 21；最近能回读的运行是 2026-09-29 01:51 GitHub Actions 21 项通过",
      "screens": [
       "typora-theme-pack-01",
@@ -292,7 +292,7 @@
      "id": "n-commits",
      "text": "7 次",
      "meaning": "仓库全部提交数，首次 71b2e24（8 月 12 日 07:04），最后 f30ac9c（9 月 29 日 01:36）",
-     "as_of": "2026-11-04",
+     "as_of": "2026-11-06",
      "source": "git rev-list --count HEAD=6，HEAD 仍是 f30ac9c（10 月 11 日现查）",
      "screens": [
       "typora-theme-pack-01",
@@ -456,8 +456,8 @@
  },
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
-  "sha256": "b50b795ef4d2d47af7efb5009a3b3da6225fd7c91fb347f1919ee4647426ea35",
-  "converted_at_beijing": "2026-11-04T15:41:49+08:00"
+  "sha256": "1a952324dd0190cc7394208dd8f36b444cd7e9288fe947ea0e536eb85ead77fd",
+  "converted_at_beijing": "2026-11-06T05:00:02+08:00"
  }
 }
 ---
@@ -545,7 +545,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 项目修改记录和只读核对",
+     "static_note": "截至 11 月 6 日 · 项目修改记录和只读核对",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -619,7 +619,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 项目修改记录和只读核对"
+     "static_note": "截至 11 月 6 日 · 项目修改记录和只读核对"
     },
     {
      "type": "stat_card",
@@ -1422,7 +1422,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
   "screenshots": [],
   "chain": "",
   "reuse": "",
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {
@@ -1892,7 +1892,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
   "screenshots": [],
   "chain": "",
   "reuse": "",
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {
@@ -2367,7 +2367,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
   "screenshots": [],
   "chain": "",
   "reuse": "",
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {

@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/wechat-direct-named-chat-archive/page.json",
-  "sha256": "0297934d77efd7aeeae503097b40b9764199b5b5b2055a63b983e70cc44b72ea",
-  "converted_at_beijing": "2026-11-04T12:05:42+08:00"
+  "sha256": "f08b449dc778ef8945dc5e1dea31a79c080bbb0c250e10a3efb11761c0c43d53",
+  "converted_at_beijing": "2026-11-06T05:00:02+08:00"
  }
 }
 ---
@@ -552,7 +552,7 @@ WeChatDirect · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {
@@ -610,7 +610,7 @@ WeChatDirect · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-当前源码 v0.2.3（最后提交 2026-11-03）为首次全量、增量、无变化快速路径、显式重核、文件占用和提交顺序定义了回归测试（全项目共 354 个测试函数，2026-11-04 重数），没有运行；本页未读取真实档案正文
+当前源码 v0.2.3（最后提交 2026-11-03）为首次全量、增量、无变化快速路径、显式重核、文件占用和提交顺序定义了回归测试（全项目共 434 个测试函数，2026-11-04 重数），没有运行；本页未读取真实档案正文
 
 ## 关键规则与设计选择
 
@@ -646,7 +646,7 @@ WeChatDirect · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {
@@ -696,7 +696,7 @@ WeChatDirect · 功能说明
 
 - 默认 overlapSeconds=86400，允许 0 到 31 天；单分片且目录不变时使用 sortSeqReplayFloor。
 
-- 旧说话人语义的完成态档案在下次对同一对象运行 sync-contact 时，先验原档，再以 sender_identity_reconcile 重核当前本机可见历史；其他聊天不扫描、不改写。源中已不存在的旧消息保留正文与原证据，显示身份未重核并计数。2026-10-11 16:32 清点时，4 份档案中 1 份已记录当前发送者解释版本，3 份没有；它们要等下次被点名同步时才会重核。
+- 旧说话人语义的完成态档案在下次对同一对象运行 sync-contact 时，先验原档，再以 sender_identity_reconcile 重核当前本机可见历史；其他聊天不扫描、不改写。源中已不存在的旧消息保留正文与原证据，显示身份未重核并计数。2026-10-11 16:32 清点时，5 份档案中 2 份已记录当前发送者解释版本，3 份没有；它们要等下次被点名同步时才会重核。
 
 - 来源指纹未变时先再取一次指纹确认稳定，重验 manifest（清单） 自哈希及其与 state 的账号、身份承诺、联系人、来源指纹和数量绑定；messages.jsonl 核对 SHA-256 与记录数，context.md 和 ai-context.md 分别核对完整 SHA-256 与字节数。全部一致才在原目录返回 sourceMetadataFastPath/noChange 并只更新 last-run，不复制、不重新发布整包。
 

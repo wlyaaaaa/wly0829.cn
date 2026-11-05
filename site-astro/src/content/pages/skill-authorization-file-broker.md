@@ -37,9 +37,9 @@
     "at": "2026-10-30 05:29"
    },
    "facts": [
-    "10 月 28 日—11 月 3 日 AI 用了 1 次"
+    "10 月 29 日—11 月 4 日 AI 用了 1 次"
    ],
-   "as_of": "2026-11-03",
+   "as_of": "2026-11-04",
    "source": "AI 使用记录"
   },
   "public": false,
@@ -98,8 +98,8 @@
  },
  "source": {
   "page": "sources/pages/skill-authorization-file-broker/page.json",
-  "sha256": "2ee827d98698fd8be365beb3747e450702d05f809e8d3a15329e481a6962191f",
-  "converted_at_beijing": "2026-11-04T14:39:50+08:00"
+  "sha256": "2733f09804c3e913c2d76ab51aa3213d04acfd1cd422123ef702109e23066278",
+  "converted_at_beijing": "2026-11-06T04:59:45+08:00"
  }
 }
 ---
@@ -149,11 +149,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 28 日—11 月 3 日 AI 用了 1 次",
+       "text": "10 月 29 日—11 月 4 日 AI 用了 1 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 3 日 · AI 使用记录",
+     "static_note": "截至 11 月 4 日 · AI 使用记录",
      "row": "intro"
     },
     {
@@ -211,11 +211,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 28 日—11 月 3 日 AI 用了 1 次",
+       "text": "10 月 29 日—11 月 4 日 AI 用了 1 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 3 日 · AI 使用记录"
+     "static_note": "截至 11 月 4 日 · AI 使用记录"
     },
     {
      "type": "prose",

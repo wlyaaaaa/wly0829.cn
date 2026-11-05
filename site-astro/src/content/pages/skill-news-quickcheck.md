@@ -38,7 +38,7 @@
    "state": "在用",
    "last": {
     "label": "上次更新",
-    "at": "2026-11-03 12:16"
+    "at": "2026-11-05 22:15"
    },
    "facts": [
     "11 月 3 日登录检查 12 路：10 路已登录，B 站未知、Grok 超时，这两路随后定点补查已登录；11 月 4 日没有重查"
@@ -106,8 +106,8 @@
  },
  "source": {
   "page": "sources/pages/skill-news-quickcheck/page.json",
-  "sha256": "f1f9740549e25cba79d258d490a1f13702971d3108481d009154eead0a901013",
-  "converted_at_beijing": "2026-11-04T14:39:50+08:00"
+  "sha256": "f2e3b8cc619055f882c65c8814e1b462e81271baadea09341fe6f8b52879258d",
+  "converted_at_beijing": "2026-11-06T04:59:46+08:00"
  }
 }
 ---
@@ -145,7 +145,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 11 月 3 日 12:16",
+       "text": "在用 · 上次更新 11 月 5 日 22:15",
        "state": "ok"
       },
       {
@@ -199,7 +199,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 11 月 3 日 12:16",
+       "text": "在用 · 上次更新 11 月 5 日 22:15",
        "state": "ok"
       },
       {

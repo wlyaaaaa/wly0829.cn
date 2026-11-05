@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/document-materials-current-matter-sources/page.json",
   "sha256": "172c8100a3b6dfc45156915f077324f96d23fd3bf30ba8830300cf6a93d221b0",
-  "converted_at_beijing": "2026-11-04T12:05:30+08:00"
+  "converted_at_beijing": "2026-11-06T05:00:00+08:00"
  }
 }
 ---
@@ -953,7 +953,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {

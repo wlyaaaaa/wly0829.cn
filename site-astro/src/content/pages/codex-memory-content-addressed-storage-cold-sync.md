@@ -34,15 +34,15 @@
     "at": "2026-11-04 12:39"
    },
    "facts": [
-    "G 是今天 12:28 新点；H 仍是 11 月 3 日旧点",
+    "G 是今天 12:31 新点；H 仍是 11 月 6 日旧点",
     "只读回执，未重新散列全部对象或演练恢复"
    ]
   }
  },
  "source": {
   "page": "sources/pages/codex-memory-content-addressed-storage-cold-sync/page.json",
-  "sha256": "fef98608535429f08a52b8a4b537d17dc99ba4b1deab32033c5324a8c8703215",
-  "converted_at_beijing": "2026-11-04T15:34:43+08:00"
+  "sha256": "999bdcc60cc3b494b43405498b0035edaa8ff2ce1ebc377e2e8e30d2befda0f0",
+  "converted_at_beijing": "2026-11-06T04:59:42+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       },
       {
-       "text": "G 是今天 12:28 新点；H 仍是 11 月 3 日旧点",
+       "text": "G 是今天 12:31 新点；H 仍是 11 月 6 日旧点",
        "state": "fact"
       },
       {
@@ -142,7 +142,7 @@
        "state": "ok"
       },
       {
-       "text": "G 是今天 12:28 新点；H 仍是 11 月 3 日旧点",
+       "text": "G 是今天 12:31 新点；H 仍是 11 月 6 日旧点",
        "state": "fact"
       },
       {

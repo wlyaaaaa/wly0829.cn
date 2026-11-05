@@ -31,7 +31,7 @@
    "source": "项目仓库和诊断摘要",
    "last": {
     "label": "诊断窗",
-    "at": "2026-11-04 13:30"
+    "at": "2026-11-06 05:10"
    }
   },
   "based_on": {
@@ -41,8 +41,8 @@
  },
  "source": {
   "page": "sources/pages/timeaudit-collection-pipeline/page.json",
-  "sha256": "07327d70f0328f44689b6c5b1074e73b0bb13832d200a46f2d0ff64ae40499c3",
-  "converted_at_beijing": "2026-11-04T14:39:51+08:00"
+  "sha256": "24897a62a107ecda2666972a34136181c30cba8ef06d78d74f5eccf6927daa7e",
+  "converted_at_beijing": "2026-11-06T05:14:10+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 诊断窗 11 月 4 日 13:30",
+       "text": "常用 · 诊断窗 11 月 6 日 05:10",
        "state": "ok"
       }
      ],
@@ -134,7 +134,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 诊断窗 11 月 4 日 13:30",
+       "text": "常用 · 诊断窗 11 月 6 日 05:10",
        "state": "ok"
       }
      ],
@@ -993,7 +993,7 @@ TimeAudit · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {

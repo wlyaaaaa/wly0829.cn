@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/codex-memory-openclaw-workspace-recovery/page.json",
   "sha256": "6aa43127c92fff6ec4d3242fb595b0db35bd24f01789e9eb627f59f761c5ec32",
-  "converted_at_beijing": "2026-11-04T12:05:29+08:00"
+  "converted_at_beijing": "2026-11-06T04:59:59+08:00"
  }
 }
 ---
@@ -557,7 +557,7 @@ OpenClaw 的日常设置和工作区，与官方归档保存的应用状态是�
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {

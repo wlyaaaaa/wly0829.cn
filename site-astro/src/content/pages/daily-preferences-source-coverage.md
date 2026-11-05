@@ -32,14 +32,14 @@
    "facts": [
     "171 个来源实例，登记 37 类",
     "待补 0 类，按我的选择排除 5 类",
-    "8 类来源超过应有节奏没新数据，不等于坏了"
+    "0 类来源超过应有节奏没新数据，不等于坏了"
    ]
   }
  },
  "source": {
   "page": "sources/pages/daily-preferences-source-coverage/page.json",
-  "sha256": "86531f4e7f76ec672e6f6fb64cc4a76d3dc444ff56b7d5e92d7d69bd3131b8fa",
-  "converted_at_beijing": "2026-11-04T12:05:30+08:00"
+  "sha256": "83273ebe198f2e92190d7a71acaa6cbcd1174de3a57e85eaff857a6f16a22fe9",
+  "converted_at_beijing": "2026-11-06T05:00:00+08:00"
  }
 }
 ---
@@ -2000,7 +2000,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {

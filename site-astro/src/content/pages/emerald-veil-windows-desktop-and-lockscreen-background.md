@@ -41,7 +41,7 @@
  "source": {
   "page": "sources/pages/emerald-veil-windows-desktop-and-lockscreen-background/page.json",
   "sha256": "2fb074750f1837768edadc8499bb62b9e1317632ca0e05d164e5cf58c96a1374",
-  "converted_at_beijing": "2026-11-04T12:05:30+08:00"
+  "converted_at_beijing": "2026-11-06T05:00:00+08:00"
  }
 }
 ---
@@ -919,7 +919,7 @@ Windows个性化设置或其他软件改变了图片、显示模式时，检查�
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {

@@ -38,10 +38,10 @@
    "state": "在用",
    "last": {
     "label": "上次更新",
-    "at": "2026-11-03 04:20"
+    "at": "2026-11-06 02:18"
    },
    "facts": [],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-06",
    "source": "技能清单和技能源码"
   },
   "public": false,
@@ -108,8 +108,8 @@
  },
  "source": {
   "page": "sources/pages/skill-proxy-network/page.json",
-  "sha256": "0737bc37f6077c345b669fe136f0614bbd6f6c9d7ee28025cec6d6d4705f27b4",
-  "converted_at_beijing": "2026-11-04T12:05:39+08:00"
+  "sha256": "d1a832fcb3b0e12bd83e90f7d5d97d17bb32764e3bb8605e824d35a9b6c83e29",
+  "converted_at_beijing": "2026-11-06T04:59:46+08:00"
  }
 }
 ---
@@ -157,11 +157,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 11 月 3 日 04:20",
+       "text": "在用 · 上次更新 11 月 6 日 02:18",
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 技能清单和技能源码",
+     "static_note": "截至 11 月 6 日 · 技能清单和技能源码",
      "row": "hero"
     },
     {
@@ -220,11 +220,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 11 月 3 日 04:20",
+       "text": "在用 · 上次更新 11 月 6 日 02:18",
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 4 日 · 技能清单和技能源码"
+     "static_note": "截至 11 月 6 日 · 技能清单和技能源码"
     },
     {
      "type": "prose",

@@ -31,7 +31,7 @@
    "source": "项目仓库和诊断摘要",
    "last": {
     "label": "诊断窗",
-    "at": "2026-11-04 13:30"
+    "at": "2026-11-06 05:10"
    },
    "facts": [
     "游戏帧率还没通过实际游戏验收"
@@ -44,8 +44,8 @@
  },
  "source": {
   "page": "sources/pages/timeaudit-hardware-performance/page.json",
-  "sha256": "7153a7477f977dd7500c5ace640923e2d20e7ad1bccd0b5bc0af4e69063bde20",
-  "converted_at_beijing": "2026-11-04T14:39:51+08:00"
+  "sha256": "8a05d4d02146cb22b06fa0526f7211dd191d5dcee4b7a453fa49b4c90d5a551e",
+  "converted_at_beijing": "2026-11-06T05:14:10+08:00"
  }
 }
 ---
@@ -95,7 +95,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 诊断窗 11 月 4 日 13:30",
+       "text": "常用 · 诊断窗 11 月 6 日 05:10",
        "state": "ok"
       },
       {
@@ -141,7 +141,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 诊断窗 11 月 4 日 13:30",
+       "text": "常用 · 诊断窗 11 月 6 日 05:10",
        "state": "ok"
       },
       {
@@ -1305,7 +1305,7 @@ e5459ce 起拒收 NVML 坏值并已换代；11 月 4 日 08:09—09:09 共 3,561
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {

@@ -41,7 +41,7 @@
  "source": {
   "page": "sources/pages/emerald-veil-wallpaper-engine-coexistence-and-rain-experiment/page.json",
   "sha256": "c23368be6530b319a7623b83780f1c4342b45aca1ed575bdf909e2e6927e7247",
-  "converted_at_beijing": "2026-11-04T12:05:30+08:00"
+  "converted_at_beijing": "2026-11-06T05:00:00+08:00"
  }
 }
 ---
@@ -576,7 +576,7 @@ Wallpaper Engine 的图片、播放列表和设置都不被改动，也不会被
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {
@@ -922,7 +922,7 @@ Wallpaper Engine 的图片、播放列表和设置都不被改动，也不会被
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {

@@ -31,7 +31,7 @@
    "source": "项目仓库和运行健康检查",
    "last": {
     "label": "健康检查",
-    "at": "2026-11-04 13:29"
+    "at": "2026-11-06 05:10"
    },
    "facts": [
     "上午内存黑匣子两次读不到，12:41 读时正常，原因没查实"
@@ -44,8 +44,8 @@
  },
  "source": {
   "page": "sources/pages/timeaudit-runtime-reliability/page.json",
-  "sha256": "b51eeaa6c74555e05734b63674214cc83fbf76df3908dda71dcdf8e8e8457b92",
-  "converted_at_beijing": "2026-11-04T14:39:51+08:00"
+  "sha256": "f333171a9930d7c53ba03b055b407ee24dedbfbc9108c88febd44a864ff58695",
+  "converted_at_beijing": "2026-11-06T05:14:10+08:00"
  }
 }
 ---
@@ -95,7 +95,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 健康检查 11 月 4 日 13:29",
+       "text": "常用 · 健康检查 11 月 6 日 05:10",
        "state": "ok"
       },
       {
@@ -141,7 +141,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 健康检查 11 月 4 日 13:29",
+       "text": "常用 · 健康检查 11 月 6 日 05:10",
        "state": "ok"
       },
       {
@@ -971,7 +971,7 @@ TimeAudit 大盘停止更新时，在已接入本机诊断的 AI 对话中说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {

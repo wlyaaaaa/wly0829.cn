@@ -530,7 +530,7 @@
      "id": "n-tools",
      "text": "23 个",
      "meaning": "每台电脑开放的工具数（上游 20 + 自加 3）",
-     "as_of": "2026-11-04",
+     "as_of": "2026-11-06",
      "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:124,228；副机工具目录实测",
      "screens": [
       "remote-control-01",
@@ -839,8 +839,8 @@
  },
  "source": {
   "page": "sources/pages/remote-control/page.json",
-  "sha256": "b8850457498c4057e65e8ad4580e2240b4c740a38dc568ccf143a34ac5e06887",
-  "converted_at_beijing": "2026-11-04T16:14:59+08:00"
+  "sha256": "5e3dba9829649510e44db87b85f2dd81a690dbe5c3ede975faf0fc879fb54625",
+  "converted_at_beijing": "2026-11-06T05:00:01+08:00"
  }
 }
 ---
@@ -1184,7 +1184,7 @@
   "screenshots": [],
   "chain": "",
   "reuse": "",
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {
@@ -2188,7 +2188,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
 大数字卡：
 **约 1.2 万行**｜程序（Python、PowerShell，远程服务和副机部署，不含同住一处的驾驶舱看板接口）；按 10 月 10 日统计，这次没重数
 **8,693 行**｜自动测试，47 个测试文件；按 10 月 10 日统计，这次没重数
-**619 次**｜提交（9 月 9 日起，同样两处加 4 份远程登记；11 月 4 日按 Git 路径历史重数）
+**673 次**｜提交（9 月 9 日起，同样两处加 4 份远程登记；11 月 6 日按 Git 路径历史重数）
 
 ::screen{#remote-control-06 section="tech"}
 

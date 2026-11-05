@@ -37,9 +37,9 @@
     "at": "2026-11-03 04:47"
    },
    "facts": [
-    "10 月 28 日—11 月 3 日 AI 用了 8 次"
+    "10 月 29 日—11 月 4 日 AI 用了 8 次"
    ],
-   "as_of": "2026-11-03",
+   "as_of": "2026-11-04",
    "source": "AI 使用记录"
   },
   "based_on": {
@@ -94,8 +94,8 @@
  },
  "source": {
   "page": "sources/pages/skill-learning/page.json",
-  "sha256": "6ffe6a7b2e9ea5fc38c634470c60a41ba13d6eb4eb099d07db5081c32ec58cfd",
-  "converted_at_beijing": "2026-11-04T14:39:50+08:00"
+  "sha256": "f956a7a4afcb4019dc87d7053f351e4835b777a109ca7624b55189ab0f7f0867",
+  "converted_at_beijing": "2026-11-06T04:59:46+08:00"
  }
 }
 ---
@@ -145,11 +145,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 28 日—11 月 3 日 AI 用了 8 次",
+       "text": "10 月 29 日—11 月 4 日 AI 用了 8 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 3 日 · AI 使用记录",
+     "static_note": "截至 11 月 4 日 · AI 使用记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -236,11 +236,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 28 日—11 月 3 日 AI 用了 8 次",
+       "text": "10 月 29 日—11 月 4 日 AI 用了 8 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 3 日 · AI 使用记录"
+     "static_note": "截至 11 月 4 日 · AI 使用记录"
     },
     {
      "type": "prose",

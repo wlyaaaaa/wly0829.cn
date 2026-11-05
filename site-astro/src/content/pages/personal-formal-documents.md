@@ -44,9 +44,9 @@
     "at": "2026-11-03 10:45"
    },
    "facts": [
-    "近 7 天改进了 10 次"
+    "近 7 天改进了 11 次"
    ],
-   "as_of": "2026-11-03",
+   "as_of": "2026-11-04",
    "source": "AI 使用记录；项目修改记录"
   },
   "public": false,
@@ -291,7 +291,7 @@
      "id": "n-lines",
      "text": "1,879 行",
      "meaning": "src/legal_filing_kit/formal_documents.py 的行数（不含空行，含注释；含空行共 2,013 行），不限定文书种类",
-     "as_of": "2026-11-04",
+     "as_of": "2026-11-06",
      "source": "见来源记录 personal-formal-documents-n-lines-0，观察于 2026-11-04T08:35:50+08:00",
      "screens": [
       "personal-formal-documents-06",
@@ -302,7 +302,7 @@
      "id": "n-audit-lines",
      "text": "1,437 行",
      "meaning": "共用检查模块 audit.py 的行数（不含空行）",
-     "as_of": "2026-11-04",
+     "as_of": "2026-11-06",
      "source": "见来源记录 personal-formal-documents-n-audit-lines-0，观察于 2026-10-22T06:47:52+08:00",
      "screens": [
       "personal-formal-documents-06"
@@ -443,8 +443,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "7e8bf9748ee6d1e3cfdadaf48f3cee6fce0a700f15eee2fc9cbfbc50e12b9c37",
-  "converted_at_beijing": "2026-11-04T17:23:27+08:00"
+  "sha256": "62407ed9a53183c58644d028d78a759dc828aded60ea4aefaaea8a09e55b94c0",
+  "converted_at_beijing": "2026-11-06T05:00:00+08:00"
  }
 }
 ---
@@ -499,11 +499,11 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天改进了 10 次",
+       "text": "近 7 天改进了 11 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 3 日 · AI 使用记录；项目修改记录",
+     "static_note": "截至 11 月 4 日 · AI 使用记录；项目修改记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -573,11 +573,11 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天改进了 10 次",
+       "text": "近 7 天改进了 11 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 3 日 · AI 使用记录；项目修改记录"
+     "static_note": "截至 11 月 4 日 · AI 使用记录；项目修改记录"
     },
     {
      "type": "stat_card",
@@ -1654,7 +1654,7 @@
   "screenshots": [],
   "chain": "",
   "reuse": "",
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {
@@ -1909,7 +1909,7 @@ Python 写成：主程序 1,879 行（不算空行），另用共用的检查模
   "screenshots": [],
   "chain": "",
   "reuse": "",
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {

@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/agents-skills-plugins/page.json",
-  "sha256": "e1b21a5aa69ef0b27dade15ca07326375fe5201161d72cf845019890df17ab23",
-  "converted_at_beijing": "2026-11-04T14:40:03+08:00"
+  "sha256": "93a8a3100af7b015e4f188e827549b40dbbecca568ea3a3fc812541a28f02b8c",
+  "converted_at_beijing": "2026-11-06T04:59:59+08:00"
  }
 }
 ---
@@ -577,7 +577,7 @@
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {
@@ -643,7 +643,7 @@
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-11 月 4 日重读：`config/personal-skill-supply.json` 中 32 个 install=true（个人 Skill 30 个、插件自带 Skill 2 个，后两个是 md-to-pdf 和 pdf-render-safe，来自同一个受管插件包）；和 10 月 22 日比，新加的个人 Skill 是 image-generation（生图做法）、news-quickcheck 和 proxy-network，退役的是 explain-to-me 和 mojibake-doctor。image-generation 10 月 30 日约 11:33 只读核对过它在发现目录里的链接指向 `E:\.agents\skills\image-generation`，当前宿主的技能清单也列出了它，没有重跑供应检查。上一次整体核对是 10 月 22 日 07:31，当时登记的 31 个在发现目录 `C:\Users\<用户名>\.agents\skills` 下 31 个都在，都是指向清单来源的目录链接；那天早上 06:46—06:51 只读枚举时是 30 个，差的是新加的 personal-finance：源文件在、发现目录里没有链接，补上后 07:31 验收通过。外部接入的 Word、PDF 两个能力不在这份清单里，不混进同一个分母。这些只是路径观察，不是快速校验、新会话发现或真实使用通过。历史：10 月 12 日 04:33 是 29 个 install=true（个人 27、插件 2），29/29 链接指向清单来源且 SKILL.md 存在。
+11 月 6 日重读：`config/personal-skill-supply.json` 中 33 个 install=true（个人 Skill 31 个、插件自带 Skill 2 个，后两个是 md-to-pdf 和 pdf-render-safe，来自同一个受管插件包）；和 10 月 22 日比，新加的个人 Skill 是 image-generation（生图做法）、news-quickcheck 和 proxy-network，退役的是 explain-to-me 和 mojibake-doctor。image-generation 10 月 30 日约 11:33 只读核对过它在发现目录里的链接指向 `E:\.agents\skills\image-generation`，当前宿主的技能清单也列出了它，没有重跑供应检查。上一次整体核对是 10 月 22 日 07:31，当时登记的 31 个在发现目录 `C:\Users\<用户名>\.agents\skills` 下 31 个都在，都是指向清单来源的目录链接；那天早上 06:46—06:51 只读枚举时是 30 个，差的是新加的 personal-finance：源文件在、发现目录里没有链接，补上后 07:31 验收通过。外部接入的 Word、PDF 两个能力不在这份清单里，不混进同一个分母。这些只是路径观察，不是快速校验、新会话发现或真实使用通过。历史：10 月 12 日 04:33 是 29 个 install=true（个人 27、插件 2），29/29 链接指向清单来源且 SKILL.md 存在。
 
 ## 关键规则与设计选择
 

@@ -37,9 +37,9 @@
     "at": "2026-11-03 16:12"
    },
    "facts": [
-    "10 月 28 日—11 月 3 日 AI 用了 13 次"
+    "10 月 29 日—11 月 4 日 AI 用了 5 次"
    ],
-   "as_of": "2026-11-03",
+   "as_of": "2026-11-04",
    "source": "AI 使用记录"
   },
   "based_on": {
@@ -98,8 +98,8 @@
  },
  "source": {
   "page": "sources/pages/skill-chinese-asr/page.json",
-  "sha256": "4e4ab91fbbe7bb99427db6d05501e76ed43f241ead3ff4c795517d1e9527b82f",
-  "converted_at_beijing": "2026-11-04T14:39:50+08:00"
+  "sha256": "c77ba59aa8426aeea4de3f604e396c1a21a259a93c6afbfc3e96e48ea807dea9",
+  "converted_at_beijing": "2026-11-06T04:59:46+08:00"
  }
 }
 ---
@@ -146,11 +146,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 28 日—11 月 3 日 AI 用了 13 次",
+       "text": "10 月 29 日—11 月 4 日 AI 用了 5 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 3 日 · AI 使用记录",
+     "static_note": "截至 11 月 4 日 · AI 使用记录",
      "row": "hero"
     },
     {
@@ -246,11 +246,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 28 日—11 月 3 日 AI 用了 13 次",
+       "text": "10 月 29 日—11 月 4 日 AI 用了 5 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 3 日 · AI 使用记录"
+     "static_note": "截至 11 月 4 日 · AI 使用记录"
     },
     {
      "type": "prose",

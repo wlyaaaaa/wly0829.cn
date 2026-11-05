@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/steam-millennium-config-backup-plugin-manifest-and-install-state-tracking/page.json",
   "sha256": "90051166d07e90ede7c665b3c163b4a7f2e1cba42bb02e30bb731ce654cbae8a",
-  "converted_at_beijing": "2026-11-04T12:05:40+08:00"
+  "converted_at_beijing": "2026-11-06T05:00:01+08:00"
  }
 }
 ---
@@ -567,7 +567,7 @@ Steam Millennium 配置备份 · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {
@@ -738,7 +738,7 @@ Steam Millennium 配置备份 · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {
@@ -901,7 +901,7 @@ Steam Millennium 配置备份 · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {

@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/chinese-asr-audit-evidence/page.json",
-  "sha256": "f43e07ca388f2367f700fdbf890331be9f63f0e57433fb30e2d9a30dae826a31",
-  "converted_at_beijing": "2026-11-04T12:05:28+08:00"
+  "sha256": "a87bb1545e75d7f8c928070994f4fc002a07088e3a93e31e22df9be0c59b2628",
+  "converted_at_beijing": "2026-11-06T04:59:59+08:00"
  }
 }
 ---
@@ -1251,7 +1251,7 @@ ChineseASR · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 4 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {
@@ -1311,7 +1311,7 @@ ChineseASR · 功能说明
 
 - audit、risk rules、audio outcome、result writer 和 metadata（元数据） 单元测试包含在2026-08-31 的 345 项通过结果中；之后另有 9 月 17 日运行 482 项（1 跳过）、9 月 24 日运行 495 项（1 跳过）、9 月 29 日运行 531 项（20 跳过）的具名历史记录，各自保留日期，不合并成一次新的全量通过。
 
-- strict writer 与 benchmark 测试覆盖成品文件名、两路 raw、review 投影、静音出字、空文本、partial coverage、回执损坏、模型失败和 truth 对齐。10 月 11 日的繁简改动新增 4 个测试定义（test_text_normalizer 2 个、test_audit 2 个，另改 1 个旧测试预期）；当前共 587 个测试定义（11 月 4 日 08:36 数），这只是静态计数，没有执行。
+- strict writer 与 benchmark 测试覆盖成品文件名、两路 raw、review 投影、静音出字、空文本、partial coverage、回执损坏、模型失败和 truth 对齐。10 月 11 日的繁简改动新增 4 个测试定义（test_text_normalizer 2 个、test_audit 2 个，另改 1 个旧测试预期）；当前共 592 个测试定义（11 月 4 日 08:36 数），这只是静态计数，没有执行。
 
 - test_arbitration.py 已随 32df3b9 删除；它以前覆盖默认关闭、结构化请求和无效响应回退，这些结果只算历史。
 
