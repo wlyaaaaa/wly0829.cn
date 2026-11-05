@@ -4,6 +4,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import re
 import sys
 import tempfile
 import unittest
@@ -111,6 +112,60 @@ class AstroReleaseTests(unittest.TestCase):
         row['parts'].reverse()
         with self.assertRaisesRegex(ValueError, 'lost or reordered'): astro_rules.verify(self.root, self.pin)
 
+    def sectioned_charter(self):
+        return ('# 我的 AI 约法\n\n## 最要紧的（到哪个项目都算数）\n\n'
+                '先问本人。（L3、L8）\n\n## 我是这样的人、要什么\n\n'
+                '- 说中文。（L1）\n- 技术自己定。（L3）\n\n'
+                '## 被我纠正、质疑，或我说“以后……”时（L7、L30）\n\n'
+                '只记必要的要求。\n\n## 做这些事先看\n\n[派活](agents.execution-coordination.md)\n')
+
+    def test_charter_parts_preserve_old_and_sectioned_sources(self):
+        old = '# 根规则\n\n' + '\n\n'.join(astro_rules.PART_BOUNDARIES['charter']) + '\n旧正文。\n'
+        screens = [{'id': f'charter-{i:02}', 'shape': 'source_text'} for i in range(2, 6)]
+        for body in (old, self.sectioned_charter()):
+            parts = astro_rules.public_parts(body, 'charter', screens)
+            self.assertEqual(len(parts), 4)
+            self.assertEqual(''.join(body[s['start']:s['end']] for _, s in parts.values()), body)
+            for text, selection in parts.values():
+                self.assertEqual(text, body[selection['start']:selection['end']].strip())
+        rows = astro_rules.contract.excerpts(self.sectioned_charter(), 'charter')
+        self.assertEqual([(text, s) for _, text, s in rows], list(parts.values()))
+        self.assertEqual(rows, astro_rules.contract.excerpts(self.sectioned_charter().replace('\n', '\r\n'), 'charter'))
+
+    def test_sectioned_charter_rejects_missing_duplicate_and_reversed_boundaries(self):
+        body = self.sectioned_charter(); marks = astro_rules.contract.CHARTER_SECTION_BOUNDARIES
+        screens = [{'id': str(i), 'shape': 'source_text'} for i in range(4)]
+        invalid = [body.replace(marks[1], '## Changed'), body + '\n' + marks[1],
+                   body.replace(marks[0], 'TEMP').replace(marks[1], marks[0]).replace('TEMP', marks[1])]
+        for text in invalid:
+            with self.subTest(text=text), self.assertRaises(ValueError):
+                astro_rules.public_parts(text, 'charter', screens)
+
+    def test_sentence_tags_and_moved_articles_render_unique_fragments_without_prose_changes(self):
+        for body in (self.sectioned_charter(), '**L22 分工。**\n\n重复。（L22）\n'):
+            rendered = astro_rules.render(body)
+            ids = re.findall(r'<span id="([^"]+)"></span>', rendered)
+            self.assertEqual(len(ids), len(set(ids)))
+            self.assertEqual(astro_rules.contract.canonical_plain(rendered),
+                             astro_rules.contract.canonical_plain(astro_rules.contract.render_markdown(body)))
+        self.assertIn('id="L1"', astro_rules.render(self.sectioned_charter()))
+        self.assertEqual(astro_rules.render(self.sectioned_charter()).count('id="L3"'), 1)
+
+    def test_new_charter_conversion_replaces_old_article_ranges_with_source_fragments(self):
+        body = self.sectioned_charter(); sha = hashlib.sha256(body.encode()).hexdigest()
+        row = self.pin['documents']['agents_root_rules']; row.update(public_source_sha256=sha)
+        row['parts'][0].update(markdown_sha256=hashlib.sha256(body.strip().encode()).hexdigest())
+        root = self.root/'sources/rules'; root.mkdir(parents=True)
+        (root/'rule.md').write_bytes(body.encode())
+        (root/'release.json').write_text(json.dumps(self.pin), encoding='utf8')
+        screen = {'id': 'charter-02', 'source_excerpt_id': 'charter/charter-02',
+                  'source': {'file': 'rule.md', 'release': 'E-fixture', 'sha256': 'c'*64},
+                  'text': self.label+'\n\n'+body, 'anchors': ['L22', 'L27', 'about-rules']}
+        with patch.object(converter, 'REPO', str(self.root)), patch.object(converter, 'RULES_RELEASE', None):
+            converter.rule_gate(screen, 'charter', check_only=True)
+        self.assertIn('L1', screen['anchors']); self.assertIn('L3', screen['anchors'])
+        self.assertNotIn('L22', screen['anchors']); self.assertNotIn('about-rules', screen['anchors'])
+
     def test_original_copy_failure_is_rejected(self):
         source = self.root/'sources/assets/original.bin'; source.parent.mkdir(parents=True)
         source.write_bytes(b'old')
@@ -176,6 +231,30 @@ class AstroReleaseTests(unittest.TestCase):
             with self.assertRaisesRegex(SystemExit, 'missing_jobs'): renderer.run(['fixture'], workers=1)
             finish.assert_not_called()
         self.assertEqual(old.read_text('utf8'), 'previous result')
+
+    def test_new_charter_ignores_frozen_article_positions_and_deduplicates_across_parts(self):
+        md = self.root/'md'; md.mkdir(); out = self.root/'rendered'
+        runtime_dir = self.root/'src/chrome/runtime'; runtime_dir.mkdir(parents=True)
+        legacy = {'screens': [{'id': 'part-0', 'screen_anchors': ['L22', 'about-rules']}]}
+        (runtime_dir/'charter.json').write_text(json.dumps({'tail':
+            '<script id="page-data" type="application/json">'+json.dumps(legacy)+'</script>'}), encoding='utf8')
+        fm = {'url': '/rules/charter/', 'title': '约法', 'page': {}}
+        chunks = []; results = []
+        for i in range(2):
+            sid = 'part-'+str(i)
+            screen = {'id': sid, 'shape': 'source_text', 'section': 'original', 'anchors': ['L15'],
+                'source_sectioned_charter': True, 'source_logical_id': 'agents_root_rules',
+                'source_rule_part': 'charter/'+sid, 'source_public_sha256': 'a'*64}
+            chunks.append('::screen{#'+sid+'}\n\n```typeset\n'+json.dumps({'screen': screen})
+                          +'\n```\n\n原文 · E-fixture 版\n\n新条款。（L15）\n')
+            results.append({'screen': sid, 'o': 'h', 'shape': 'source_text', 'html': '', 'style': '', 'height': 100})
+        (md/'charter.md').write_text('---\n'+json.dumps(fm)+'\n---\n\n'+''.join(chunks), encoding='utf8')
+        with patch.object(renderer, 'SITE', str(self.root)), patch.object(renderer, 'MD_DIR', str(md)), patch.object(renderer, 'OUT_DIR', str(out)), patch.object(renderer, '_ALIASES', {}), patch.object(renderer, 'font_subset', return_value='/font.woff2'), patch.object(renderer, 'publish_path', return_value='/fixture-resource'):
+            rendered = renderer.finish_page('charter', fm, results, 'fixture')
+        points = [point for s in rendered['screens'] for point in s.get('points', [])]
+        self.assertEqual(points, ['L15'])
+        self.assertFalse(any('id="L15"' in s['article'] for s in rendered['screens']))
+        self.assertNotIn('L22', points); self.assertNotIn('about-rules', points)
 
     def test_sitemap_excludes_actual_noindex_and_rejects_reintroduced_page(self):
         routes = ['/', '/skills/retired/', '/github-profile/', '/normal/']

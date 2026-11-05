@@ -128,6 +128,11 @@ def rule_gate(screen, page=None, check_only=False):
     screen["source_logical_id"] = key
     screen["source_public_sha256"] = row["public_source_sha256"]
     screen["source_rule_part"] = part
+    if page == "charter":
+        import astro_rules
+        if astro_rules.contract.sectioned_charter(raw.decode("utf-8")):
+            screen["anchors"] = re.findall(r'<span id="([^"]+)"></span>', astro_rules.render(body.strip()))
+            screen["source_sectioned_charter"] = True
     for template in (() if check_only else pin["documents"].values()):
         if template["relative_path"].startswith("templates/"):
             source_path = root / template["relative_path"]
