@@ -12,6 +12,12 @@ from urllib.parse import unquote
 from public_page_contract import omit_local_literals, local_values
 
 CONTRACT = 'e216-original-ranges-v1'
+CHARTER_SECTION_BOUNDARIES = ['## 我是这样的人、要什么',
+    '## 被我纠正、质疑，或我说“以后……”时（L7、L30）', '## 做这些事先看']
+
+
+def sectioned_charter(raw):
+    return bool(re.search(r'^## 最要紧的（到哪个项目都算数）\s*$', raw, re.M))
 
 
 def excerpt_contract_id(version):
@@ -166,6 +172,16 @@ def document_for_page(page):
 def excerpts(raw, page):
     raw = raw.replace('\r\n', '\n').replace('\r', '\n')
     if page == 'charter':
+        if sectioned_charter(raw):
+            boundaries = CHARTER_SECTION_BOUNDARIES
+            offsets = [0, *(marker_offset(raw, marker) for marker in boundaries), len(raw)]
+            if offsets != sorted(set(offsets)):
+                raise ValueError('Charter source sections are reversed or repeated')
+            return [(f'charter/charter-{i+2:02}', raw[a:b].strip(),
+                     {'from': boundaries[i-1] if i else None,
+                      'to': boundaries[i] if i < len(boundaries) else None,
+                      'start': a, 'end': b, 'approved_omissions': []})
+                    for i, (a, b) in enumerate(zip(offsets, offsets[1:]))]
         matches = list(re.finditer(r'^- (\*\*L(\d+)\b[^\n]*)(?:\n|$)', raw, re.M))
         # L numbers are selectors, not a fixed wording or word-count assertion.
         if len(matches) != 30 or {int(m[2]) for m in matches} != set(range(1, 31)):

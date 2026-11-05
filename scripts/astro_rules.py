@@ -41,7 +41,8 @@ def prose_digest(body):
 def public_parts(body, page, screens):
     """Slice one complete frozen document into the existing owning screens."""
     originals = [screen for screen in screens if screen.get('shape') == 'source_text']
-    boundaries = PART_BOUNDARIES[page]
+    boundaries = (contract.CHARTER_SECTION_BOUNDARIES
+                  if page == 'charter' and contract.sectioned_charter(body) else PART_BOUNDARIES[page])
     if len(originals) != len(boundaries) + 1:
         raise ValueError('Rule original screen boundaries changed: ' + page)
     offsets = [0, *(contract.marker_offset(body, marker) for marker in boundaries), len(body)]
@@ -72,15 +73,25 @@ def public_body(raw, relative):
 
 def render(body):
     rendered = contract.render_markdown(body)
+    seen = set()
+    def anchor(identity):
+        if identity in seen: return ''
+        seen.add(identity)
+        return '<span id="' + contract.html.escape(identity, quote=True) + '"></span>'
     legacy_headings = {'云端素材通道': 'p-cloud', '公开个人数据分级表': 'p-classification'}
     def heading(match):
         title = contract.canonical_plain(match[2])
         aliases = contract.source_heading_aliases('# ' + title)
         if title in legacy_headings: aliases.append(legacy_headings[title])
-        return ''.join('<span id="' + contract.html.escape(alias, quote=True) + '"></span>' for alias in aliases) + match[0]
+        return ''.join(anchor(alias) for alias in aliases) + match[0]
     rendered = re.sub(r'(<h[1-6]>)(.*?)(</h[1-6]>)', heading, rendered)
     if re.search(r'\*\*L(?:[1-9]|[12]\d|30)\b', body):
-        rendered = re.sub(r'<strong>L([1-9]|[12]\d|30)\b', lambda m: '<span id="L' + m[1] + '"></span>' + m[0], rendered)
+        rendered = re.sub(r'<strong>L([1-9]|[12]\d|30)\b', lambda m: anchor('L' + m[1]) + m[0], rendered)
+    # New charters keep repeated L references as sentence-end tags. Preserve
+    # their prose while assigning one fragment to the first occurrence.
+    rendered = ''.join(piece if piece.startswith('<') else re.sub(r'（L\d+(?:、L\d+)*）',
+        lambda m: ''.join(anchor(tag) for tag in re.findall(r'L\d+', m[0])) + m[0], piece)
+        for piece in re.split(r'(<[^>]+>)', rendered))
     return re.sub(r'(<strong>可派范围看模型清单[。.]</strong>)', r'<span id="p-model-table"></span>\1', rendered, count=1)
 
 
@@ -142,6 +153,8 @@ def refresh():
                 identity = screen.get('source_excerpt_id', page['page']+'/'+screen['id']); body, selection = pieces[identity]
                 label = screen.get('text', '').split('\n', 1)[0]
                 label = re.sub(r'\bE\d+\b', pin['version'], label) if label.startswith(('原文', '约法')) else '原文 · '+pin['version']+' 版'
+                if page['page'] == 'charter' and contract.sectioned_charter(source):
+                    label = '原文 · '+pin['version']+' 版'
                 screen['text'] = label+'\n\n'+body; screen['source_excerpt_id'] = identity
                 screen['source'] = {'file': row['relative_path'], 'release': pin['version'], 'sha256': row['sha256'],
                     'public_sha256': row['public_source_sha256'], **selection}

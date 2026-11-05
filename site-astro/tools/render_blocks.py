@@ -868,15 +868,21 @@ def finish_page(name, fm, results, cssv):
         if sec and sec not in sec_seen:
             sec_seen.add(sec); s["anchor"] = sec
         ids = [a.get("id") if isinstance(a, dict) else a for a in fm_screens.get(s["id"], {}).get("anchors") or []]
-        ids = [a for a in dict.fromkeys(ids + page_points.get(s["id"], [])) if a and a not in sec_seen and a not in all_secs and a != s["id"]]
+        legacy_points = [] if fm_screens.get(s["id"], {}).get("source_sectioned_charter") else page_points.get(s["id"], [])
+        ids = [a for a in dict.fromkeys(ids + legacy_points) if a and a not in sec_seen and a not in all_secs and a != s["id"]]
         sec_seen.update(ids)
         if ids:
             s["points"] = ids
     # 原文别名可能与另一屏的定位点重名，按全页已有锚点去重，正文不动。
     owned = all_secs | sec_seen | set(order)
+    def original_anchor(match):
+        identity = H.unescape(match[1])
+        if identity in owned: return ""
+        owned.add(identity)
+        return match[0]
     for s in out["screens"]:
         if s.get("article"):
-            s["article"] = re.sub(r'<span id="([^"]+)"></span>', lambda m: "" if H.unescape(m[1]) in owned else m[0], s["article"])
+            s["article"] = re.sub(r'<span id="([^"]+)"></span>', original_anchor, s["article"])
     os.makedirs(OUT_DIR, exist_ok=True)
     Path(OUT_DIR, name + ".json").write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8", newline="\n")
     return out
