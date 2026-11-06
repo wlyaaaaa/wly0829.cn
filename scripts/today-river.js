@@ -113,7 +113,8 @@ function six(M, t) {
   return `<h4>${esc(t.name)}<span class="state ${cls}">${word}</span><small>${esc(t.group)}</small></h4><div class="six">
     ${owner(r)}<div><b>在做什么</b>${v(r.plain?.what)}</div><div><b>${t.panel ? '最后读到副屏心跳' : '上次什么时候跑的'}</b>${(t.panel ? t.pulse : t.last) > 0 ? esc(whenText(M, t.panel ? t.pulse : t.last)) : '<span class="none">' + (r.state === 'never' ? '还没跑过' : r.state === 'paused' ? '还没启动过' : '没读到') + '</span>'}</div>
     <div><b>下次什么时候跑</b>${next ? esc(next) : '<span class="none">没读到</span>'}</div><div><b>有没有出错</b>${esc(err)}</div>
-    <div><b>怎么停</b>${v(r.plain?.stop)}</div><div><b>停了影响什么</b>${v(r.plain?.impact)}</div></div>`;
+    <div><b>怎么停</b>${v(r.plain?.stop)}</div><div><b>停了影响什么</b>${v(r.plain?.impact)}</div>
+    ${r.outcomes?.kind === 'phone_personalos_pull' && r.outcomes?.media_autopull && t.note ? `<div style="grid-column:1/-1"><b>最近结果</b>${esc(t.note)}</div>` : ''}</div>`;
 }
 
 // ---------- 画面 ----------
