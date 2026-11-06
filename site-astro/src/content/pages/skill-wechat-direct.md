@@ -37,9 +37,9 @@
     "at": "2026-11-01 02:22"
    },
    "facts": [
-    "10 月 29 日—11 月 4 日 AI 用了 3 次"
+    "10 月 30 日—11 月 5 日 AI 用了 2 次"
    ],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-05",
    "source": "AI 使用记录"
   },
   "public": false,
@@ -95,8 +95,8 @@
  },
  "source": {
   "page": "sources/pages/skill-wechat-direct/page.json",
-  "sha256": "fe6d254e356b02fccdaa93e4c1567418ce839965b7ad4e268837bfeb2b1a6cea",
-  "converted_at_beijing": "2026-11-06T07:21:12+08:00"
+  "sha256": "5996f8665e700369d9ed89500622532ec7a1a02cb3c1ff6566a65474053f7092",
+  "converted_at_beijing": "2026-11-06T14:29:01+08:00"
  }
 }
 ---
@@ -146,11 +146,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 3 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 2 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录",
+     "static_note": "截至 11 月 5 日 · AI 使用记录",
      "row": "intro"
     },
     {
@@ -213,11 +213,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 3 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 2 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录"
+     "static_note": "截至 11 月 5 日 · AI 使用记录"
     },
     {
      "type": "prose",

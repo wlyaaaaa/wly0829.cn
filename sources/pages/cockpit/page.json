@@ -25,7 +25,7 @@
       "links": [
         {
           "text": "约法 L27",
-          "href": "/rules/charter/#L27"
+          "href": "/rules/capabilities-runtime/#p-site"
         },
         {
           "text": "↓ 电脑",
@@ -177,7 +177,7 @@
       "links": [
         {
           "text": "约法 L21",
-          "href": "/rules/charter/#L21"
+          "href": "/rules/privacy-data/#p-backup"
         }
       ],
       "anchors": [],
@@ -478,7 +478,7 @@
     ],
     "mentions": [
       {
-        "target": "/rules/charter/#L27",
+        "target": "/rules/capabilities-runtime/#p-site",
         "screen": "cockpit-01",
         "text": "约法 L27"
       },
@@ -538,7 +538,7 @@
         "text": "约法 L28"
       },
       {
-        "target": "/rules/charter/#L21",
+        "target": "/rules/privacy-data/#p-backup",
         "screen": "cockpit-06",
         "text": "约法 L21"
       },

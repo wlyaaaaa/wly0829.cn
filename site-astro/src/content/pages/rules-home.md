@@ -3,7 +3,7 @@
  "title": "规则",
  "kind": "rules-home",
  "url": "/rules/",
- "tagline": "AI 守的两层规矩：约法和 10 个专题。",
+ "tagline": "AI 守的规矩：开场一页和 10 个专题。",
  "toc": [
   {
    "id": "top",
@@ -20,21 +20,21 @@
   "kind": "rules-home",
   "title": "规则",
   "url": "/rules/",
-  "tagline": "AI 守的两层规矩：约法和 10 个专题。",
+  "tagline": "AI 守的规矩：开场一页和 10 个专题。",
   "status": "",
   "public": false,
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E372",
-   "commit": "f44463a9fd2c4bacb8c562315d297db27d501f35",
-   "ruleset_sha256": "ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7",
-   "activated_at": "2026-11-04T08:49:37.968049+08:00",
+   "release": "E389",
+   "commit": "c74447f7cefadc860208ad2425c236981caa837d",
+   "ruleset_sha256": "bece26ac3f4569cf3582648846158e8e2c9145498e148bdaa1fe9edf514759f2",
+   "activated_at": "2026-11-06T13:22:34.536034+08:00",
    "file": "sources/rules/release.json"
   },
   "explanation_based_on": {
-   "release": "E372",
-   "sha256": "ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7"
+   "release": "E389",
+   "sha256": "bece26ac3f4569cf3582648846158e8e2c9145498e148bdaa1fe9edf514759f2"
   },
   "video_prompt": "5–8 秒循环：从开头这屏的水彩书架出发，上层那本深绿精装书的丝带书签被微风轻轻吹动，下层 10 本薄册子从左到右依次微微亮起一层浅绿光再暗下去，几片水彩绿叶从画面上方缓缓飘落；画面里不出现任何字，镜头不动。",
   "registry": {
@@ -82,31 +82,11 @@
      ]
     },
     {
-     "id": "n-clauses",
-     "text": "30 条",
-     "meaning": "约法条数 L1–L30",
-     "as_of": "2026-09-28",
-     "source": "E187 AGENTS.md 第 15–71 行逐条数出，与约法页 n-clauses 同一口径",
-     "screens": [
-      "rules-home-01"
-     ]
-    },
-    {
-     "id": "n-groups",
-     "text": "分 10 组",
-     "meaning": "约法分组数（一至十）",
-     "as_of": "2026-09-28",
-     "source": "E187 AGENTS.md 第 13–69 行的 10 个 ### 标题；组名取自约法页第 1 屏链接，脚本断言 10 个",
-     "screens": [
-      "rules-home-01"
-     ]
-    },
-    {
      "id": "n-release",
      "text": "E372",
      "meaning": "本页原文采用的网站来源快照；AI 实际开工以活动规则入口核验结果为准",
      "as_of": "2026-11-04",
-     "source": "sources/rules/current-rules.json 与 release.json：网页来源快照 release_id=E372，activated_at_utc=2026-11-04T00:49:37.9680491+00:00；正文通过 E372 与 11 月 4 日 08:49 读取同一已核验快照。",
+     "source": "sources/rules/current-rules.json 与 release.json：网页来源快照 release_id=E372，activated_at_utc=2026-11-04T00:49:37.9680491+00:00；正文通过 E389 与 11 月 6 日 13:22 读取同一已核验快照。",
      "screens": [
       "rules-home-01"
      ]
@@ -115,56 +95,6 @@
    "relations": [],
    "highlights": [],
    "mentions": [
-    {
-     "target": "/rules/charter/#talk",
-     "screen": "rules-home-01",
-     "text": "一、怎样对我说话"
-    },
-    {
-     "target": "/rules/charter/#needs",
-     "screen": "rules-home-01",
-     "text": "二、怎样理解我的需求、什么时候必须问我"
-    },
-    {
-     "target": "/rules/charter/#work",
-     "screen": "rules-home-01",
-     "text": "三、怎样做事"
-    },
-    {
-     "target": "/rules/charter/#authorization",
-     "screen": "rules-home-01",
-     "text": "四、我的授权与安全"
-    },
-    {
-     "target": "/rules/charter/#personal-data",
-     "screen": "rules-home-01",
-     "text": "五、我的个人资料"
-    },
-    {
-     "target": "/rules/charter/#backup",
-     "screen": "rules-home-01",
-     "text": "六、我的数据与备份"
-    },
-    {
-     "target": "/rules/charter/#delegation",
-     "screen": "rules-home-01",
-     "text": "七、AI 怎么分工和花钱"
-    },
-    {
-     "target": "/rules/charter/#projects",
-     "screen": "rules-home-01",
-     "text": "八、项目与维护"
-    },
-    {
-     "target": "/rules/charter/#reports-site-pc",
-     "screen": "rules-home-01",
-     "text": "九、汇报、网站和我的电脑"
-    },
-    {
-     "target": "/rules/charter/#about-rules",
-     "screen": "rules-home-01",
-     "text": "十、关于规则本身"
-    },
     {
      "target": "/rules/charter/",
      "screen": "rules-home-01",
@@ -224,6 +154,31 @@
      "target": "/rules/rule-release/",
      "screen": "rules-home-02",
      "text": "规则发布与恢复"
+    },
+    {
+     "target": "/rules/rule-release/#p-vendor",
+     "screen": "rules-home-01",
+     "text": "厂商和钩子排在哪"
+    },
+    {
+     "target": "/rules/charter/#charter-02",
+     "screen": "rules-home-01",
+     "text": "最要紧的（到哪个项目都算数）"
+    },
+    {
+     "target": "/rules/charter/#charter-03",
+     "screen": "rules-home-01",
+     "text": "我是这样的人、要什么"
+    },
+    {
+     "target": "/rules/charter/#charter-04",
+     "screen": "rules-home-01",
+     "text": "被我纠正、质疑，或我说“以后……”时"
+    },
+    {
+     "target": "/rules/charter/#charter-05",
+     "screen": "rules-home-01",
+     "text": "做这些事先看"
     }
    ],
    "live": []
@@ -251,8 +206,8 @@
  },
  "source": {
   "page": "sources/pages/rules-home/page.json",
-  "sha256": "4a44030933b2aa24543322ca3125decaaa5596a06d2e2ee74479f941e3b8b0d2",
-  "converted_at_beijing": "2026-11-04T10:36:30+08:00"
+  "sha256": "f70679885cf3d15ef67bbafba1566602ed44686b2d2f4dfaa49341ea483ecc80",
+  "converted_at_beijing": "2026-11-06T13:54:07+08:00"
  }
 }
 ---
@@ -264,50 +219,10 @@
  "screen": {
   "id": "rules-home-01",
   "section": "top",
-  "title": "两层规则和约法",
+  "title": "开场一页和 10 个专题",
   "scene": "横版 16:9。风格照已通过的规则原文样张 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png（白底、纯绿、深蓝灰正文、细浅绿描边圆角卡），和约法页开头一屏同一种毛笔标题写法。上半部分左右分栏。左边约占 52%：左上毛笔艺术字大标题“规则”，下面一道绿色笔刷线；笔刷线下一行粗体深绿小标题（Codex、Claude……分两层。）；再下面画成上下叠放的两块圆角色块，表示两层：上块深绿底白字写“约法”那一行，下块浅绿底深蓝灰字写“10 个专题”那一行，两块之间一个向下的小箭头；色块下面一行灰绿色小字（我当下明确说的话，比这两层都优先。）。左边色块下方留出的位置画一幅水彩插画：一个两层的小木书架，上层只放一本厚厚的精装书，封面深绿，垂一条绿色丝带书签，书旁一枚绿色印章（印面朝下，看不到印文）；下层整齐竖着 10 本薄册子，书脊从深绿到浅绿渐变；书架旁几片水彩绿叶。插画里不出现任何字，书脊和封面都不写字。右边约占 48% 是一张大圆角卡（约法卡），白底细绿描边、卡头一条浅绿底色带：卡头左边粗体深绿“约法”，下面一行深蓝灰常规字写约法的一句话；再下面“30 条，分 10 组”粗体深绿，下面 10 个组名排成两列五行（左列一至五、右列六至十），每个组名画成链接样式（绿色字、细下划线、末尾小 ↗），行与行之间细虚线分隔；卡片底部居中一个实心绿底白字的大圆角按钮〔约法全文〕。整屏最下面一条贯通全宽的细长浅绿圆角横条，里面是版本说明那一段，行末〔怎么发布和核验 → 基座〕画成白底细绿描边的圆角按钮。",
   "portrait": "竖版 9:16，字完全一样，从上往下排：毛笔大标题“规则”和笔刷线；粗体小标题；上下叠放的两块色块（约法、10 个专题）和中间的小箭头；灰绿色小字一行；水彩书架插画缩成宽约 70% 居中；约法大卡占满宽度，10 个组名改成一列十行，〔约法全文〕按钮在卡底居中；最下面版本横条，文字在上，〔怎么发布和核验 → 基座〕按钮换到文字下面单独一行居中。",
   "links": [
-   {
-    "text": "一、怎样对我说话",
-    "href": "/rules/charter/#talk"
-   },
-   {
-    "text": "二、怎样理解我的需求、什么时候必须问我",
-    "href": "/rules/charter/#needs"
-   },
-   {
-    "text": "三、怎样做事",
-    "href": "/rules/charter/#work"
-   },
-   {
-    "text": "四、我的授权与安全",
-    "href": "/rules/charter/#authorization"
-   },
-   {
-    "text": "五、我的个人资料",
-    "href": "/rules/charter/#personal-data"
-   },
-   {
-    "text": "六、我的数据与备份",
-    "href": "/rules/charter/#backup"
-   },
-   {
-    "text": "七、AI 怎么分工和花钱",
-    "href": "/rules/charter/#delegation"
-   },
-   {
-    "text": "八、项目与维护",
-    "href": "/rules/charter/#projects"
-   },
-   {
-    "text": "九、汇报、网站和我的电脑",
-    "href": "/rules/charter/#reports-site-pc"
-   },
-   {
-    "text": "十、关于规则本身",
-    "href": "/rules/charter/#about-rules"
-   },
    {
     "text": "约法全文",
     "href": "/rules/charter/"
@@ -319,6 +234,26 @@
    {
     "text": "对话里哪些事会自动发生（钩子）",
     "href": "/projects/agents/#agents-07"
+   },
+   {
+    "text": "厂商和钩子排在哪",
+    "href": "/rules/rule-release/#p-vendor"
+   },
+   {
+    "text": "最要紧的（到哪个项目都算数）",
+    "href": "/rules/charter/#charter-02"
+   },
+   {
+    "text": "我是这样的人、要什么",
+    "href": "/rules/charter/#charter-03"
+   },
+   {
+    "text": "被我纠正、质疑，或我说“以后……”时",
+    "href": "/rules/charter/#charter-04"
+   },
+   {
+    "text": "做这些事先看",
+    "href": "/rules/charter/#charter-05"
    }
   ],
   "anchors": [],
@@ -353,12 +288,12 @@
      "connector": "arrow",
      "illustration": "none",
      "row": "top",
-     "text_ref": "约法：上层"
+     "text_ref": "约法：开场那一页"
     },
     {
      "type": "prose",
      "row": "top",
-     "text_ref": "我当下明确说的话"
+     "text_ref": "我当下的决定比这两层都优先"
     },
     {
      "type": "illustration",
@@ -370,12 +305,12 @@
      "type": "comparison",
      "columns": 1,
      "groups": [
-      14
+      8
      ],
      "illustration": "none",
      "layout": "single_panel",
-     "inner_link_columns": 2,
-     "inner_link_order": "column_major",
+     "inner_link_columns": 1,
+     "inner_link_order": "row_major",
      "row": "top",
      "width": "48%",
      "text_ref": "约法"
@@ -410,11 +345,11 @@
      "variant": "stack",
      "connector": "arrow",
      "illustration": "none",
-     "text_ref": "约法：上层"
+     "text_ref": "约法：开场那一页"
     },
     {
      "type": "prose",
-     "text_ref": "我当下明确说的话"
+     "text_ref": "我当下的决定比这两层都优先"
     },
     {
      "type": "illustration",
@@ -427,12 +362,12 @@
      "columns": 1,
      "columns_v": 1,
      "groups": [
-      14
+      8
      ],
      "illustration": "none",
      "layout": "single_panel",
-     "inner_link_columns": 2,
-     "inner_link_order": "column_major",
+     "inner_link_columns": 1,
+     "inner_link_order": "row_major",
      "text_ref": "约法"
     },
     {
@@ -520,35 +455,29 @@
 
 **Codex、Claude 和它们派出的子代理，守同一套规矩，分两层。**
 
-- **约法**：上层，只写我的价值观、偏好和已经定下的事。
-- **10 个专题**：下层细则，写每件事具体怎么办；和约法对不上时，以约法为准。
+- **约法**：开场那一页，AI 开对话就带着；只放到哪个项目都算数的话，和我是什么样的人、要什么。
+- **10 个专题**：碰到对应的事才读，写每件事具体怎么办。
 
-我当下明确说的话，比这两层都优先。
+我当下的决定比这两层都优先，只有重大的事和资料锁的验证除外。约法最前面那几段、授权、重大动作、个人资料三个专题和入口结尾“容易错的”那段是硬的，AI 觉得不对也只能先拿事实问我。其余的放到眼前这件事上明显不对，或者两句打架，AI 按我要的结果做，当场说一声。
 
-现实里，模型还会先听两样东西：厂商的训练和安全政策，厂商写给它的说明。第一样谁也改不了；第二样我改不了原文，只删过 Codex 那份里和约法打架的几句。我们自己的钩子只替规则传话和拦动作。规则改了、AI 的行为没变，先查这两处。
+模型还会先听厂商的东西，钩子只替规则传话和拦动作，这些排在哪见〔厂商和钩子排在哪〕。
 
 〔对话里哪些事会自动发生（钩子）〕
 
 ## 约法
 
-我逐条审定的 30 条总纲，AI 做任何事都先守它
+开场一页：硬的几句放最前面，其余告诉 AI 我要什么
 
-**30 条，分 10 组**
+**这一页怎么分**
 
-- 〔一、怎样对我说话〕
-- 〔二、怎样理解我的需求、什么时候必须问我〕
-- 〔三、怎样做事〕
-- 〔四、我的授权与安全〕
-- 〔五、我的个人资料〕
-- 〔六、我的数据与备份〕
-- 〔七、AI 怎么分工和花钱〕
-- 〔八、项目与维护〕
-- 〔九、汇报、网站和我的电脑〕
-- 〔十、关于规则本身〕
+- 〔最要紧的（到哪个项目都算数）〕
+- 〔我是这样的人、要什么〕
+- 〔被我纠正、质疑，或我说“以后……”时〕
+- 〔做这些事先看〕
 
 〔约法全文〕
 
-当前生效版本以 AI 开工时核对到的那一版为准；网页原文来源快照为 E372（北京时间 11 月 4 日 08:49 起生效）。规则改了要发布成新版本才算数，草稿和旧版不算。〔怎么发布和核验 → 基座〕
+当前生效版本以 AI 开工时核对到的那一版为准；网页原文来源快照为 E389（北京时间 11 月 6 日 13:22 起生效）。规则改了要发布成新版本才算数，草稿和旧版不算。〔怎么发布和核验 → 基座〕
 
 ::screen{#rules-home-03 section="top"}
 
@@ -766,7 +695,7 @@
 
 # 派谁：什么活交哪个 AI
 
-Claude Opus 当主持：想方案、把关、抽查，也亲手写给我看的成品、网站文字和正式文书。范围写死、有验收办法的施工、修复和核对，以及批量读取、摘录、格式转换这类机械活，都派给 GPT-6.1 Sol：简单的只读小单用 medium，其余用 ultra。GPT-6 Luna 不花额度，现在只用来照写好的提示生图、落盘。最贵的 GPT-6 Astra 要我给这个对话或项目授权才派；唯一的长期例外是完整复核 Claude 写的东西，可以直接交它。谁能胜任只看厂商公布的数据和 AA 这类权威评测，不在本机自己测。
+Claude Opus 当主持时：听懂需求、定方案、判断和写给我看的字都留给它自己；写代码交 GPT-6.1 Sol ultra，例外见入口结尾“容易错的”那段。查资料、批量核对、操作浏览器和截图也交 Sol。GPT-6 Luna 不花额度，只把写好的提示原样交给生图工具、落盘。Codex 单独和我聊时不一样：它自己想、自己做，只有并行、量大或要全新上下文才开子代理；要定大方案 Sol 交 Astra，Astra 自己定；判断型复核 Sol 交 Astra，Astra 另开一个全新的 Astra。最贵的 GPT-6 Astra，Claude 要我给这个对话或项目授权才派；长期例外是完整复核 Claude 写的东西，每月的月度信和汇报复核，新 Astra 换代时读一遍写给它的限制。谁能胜任只看厂商公布的数据和 AA 这类权威评测，不在本机自己测。
 
 〔现行型号、档位和分工 → 怎么协作〕
 
@@ -1043,8 +972,8 @@ Claude Opus 当主持：想方案、把关、抽查，也亲手写给我看的�
 **③ 要发消息、对外发布、花钱、删唯一的数据、做撤不回的迁移吗？**
 是 → 要本人明确同意，说清对象、内容和动作才算；项目第一次公开发布前也要先问。本人长期授权过的范围不用每次重说。验证和解锁只证明是本人，不等于同意。
 
-**④ 需求、做不做、怎么取舍、和价值观有关的事拿不准吗？**
-是 → 先查本人记过的，仍不清楚就问本人：给一个完整的推荐样子和 2–3 个确定的选项，标出建议；依赖答案的部分停下等，其余接着做。技术和计算问题、修报错、能撤回的小事、已经定过的事不问本人，也不凑题：AI 自己定最优解，说清定了什么、怎么改回。
+**④ 是本人还没定过、又会改变他的需求、取舍或实际用法的事吗？**
+是 → 本人来定：先给他看样子（一两句或一张图：会看到什么、按了会怎样）、现在什么情况、AI 的建议；有几个真选项列几个，最多 2–3 个，写清后果；只有一种合理做法，给一句样子和建议就行。依赖答案的部分等他，其余接着做；他不在时只做他看过样子的和他看不见的。只有他能做的（登录、验证、接手机）也找他。拿不准又影响结果，先查本人记过的。技术问题、修报错、不改变他看到什么和怎么用的小事、前提没变的已有决定、交给 AI 选的事不问本人：AI 自己定最优解，说清定了什么、怎么改回。
 
 **四样都不是 → 直接做。** 本人给的范围内，普通的、能撤回的读、改、测试和验证不一步步问；验证后提交推送，做完才停。干活途中少发话，要本人知道的都写进最后的回复。没理由少做、反复要授权，和越界一样是错。
 
@@ -1422,13 +1351,13 @@ Claude Opus 当主持：想方案、把关、抽查，也亲手写给我看的�
 
 **日常干活**　平常干活最常用到，碰到对应的事就读。
 
-- 〔事实来源与任务上下文〕事实找谁、哪些项目冻结、长任务怎么接着做。
-- 〔分工与并行施工〕派不派子代理、派谁，多个任务同时施工怎么不打架。
+- 〔事实来源与任务上下文〕事实找谁、记到哪、哪些项目冻结、长任务怎么接着做。
+- 〔分工与并行施工〕谁想谁做、派谁，新型号和限制怎么看，多个任务同时施工怎么不打架。
 - 〔工程与交付〕做到什么程度、怎样才算验过、做完怎么收尾。
-- 〔能力与运行方式〕用哪个工具和入口，浏览器、更新、装哪、网站和自动任务，给本人登记要做或要选的事。
+- 〔能力与运行方式〕用哪个工具和入口，浏览器、更新、装哪、网站和自动任务，给本人登记要做或要选的事，写给本人之前对一遍。
 
 **只在特定场合读**　平时不用读，用到 Codex 或 Claude 特有的机制、或者改规则本身时才读。
 
 - 〔Codex 适配〕只对 Codex 有用的入口、授权、派活和升级细则。
 - 〔Claude 适配〕只对 Claude 桌面版有用的身份、派活和接线规矩。
-- 〔规则发布与恢复〕哪一版规则算数，怎么发布新版、退回上一版。
+- 〔规则发布与恢复〕哪一版规则算数，怎么发布新版、退回上一版，厂商和钩子排在哪。

@@ -42,6 +42,17 @@ class AstroReleaseTests(unittest.TestCase):
                         'parts': [{'id': 'charter/charter-02', 'label': self.label, 'markdown_sha256': sha, 'prose_sha256': sha}]}}}
         self.current = {'release_id': self.pin['version'], 'ruleset_sha256': 'a'*64, 'release_record_sha256': 'b'*64}
 
+    def test_public_body_applies_only_approved_omissions_before_snapshotting(self):
+        source = "# 规则\n\n保留这一句。省略示例字眼下一句原样。\n"
+        policy = {"omissions": {"AGENTS.md": ["省略示例字眼"]}, "topic_omissions": {}}
+        with patch.object(astro_rules.contract, "_load_policy", return_value=policy):
+            body = astro_rules.public_body(source.encode("utf-8"), "AGENTS.md")
+            self.assertEqual(body, "# 规则\n\n保留这一句。下一句原样。\n")
+            self.assertEqual(astro_rules.contract.public_markdown(body, "AGENTS.md",
+                apply_omissions=False, preserve_literals=True), body)
+            with self.assertRaisesRegex(ValueError, "Approved omission"):
+                astro_rules.public_body((source + "省略示例字眼").encode("utf-8"), "AGENTS.md")
+
     def test_same_size_changed_asset_publishes_current_bytes_at_a_new_address(self):
         assets = self.root/'sources/assets'; assets.mkdir(parents=True); source = assets/'image.svg'
         old = b'<svg xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="red"/></svg>'
@@ -72,13 +83,13 @@ class AstroReleaseTests(unittest.TestCase):
         (self.root/'_typeset/rule-sources/rule.md').write_text('Changed source.', encoding='utf8')
         with self.assertRaisesRegex(ValueError, 'Rule source bytes changed'): astro_rules.verify(self.root, self.pin)
 
-    @unittest.skipUnless(astro_rules.contract.PRIVATE_POLICY.is_file(), 'Private publication policy is not available for source comparison')
     def test_same_release_pin_cannot_relabel_changed_source(self):
         path = self.root/'active.md'; path.write_text('Real source.', encoding='utf8')
         entry = {'logical_id': 'agents_root_rules', 'relative_path': 'AGENTS.md', 'sha256': hashlib.sha256(path.read_bytes()).hexdigest(), 'bytes': path.stat().st_size}
         self.pin.update(files=[entry], catalog={}, release_commit='fixture')
         current = {**self.current, 'files': [entry], 'catalog': {}, 'git_commit': 'fixture', 'artifact_paths': {'agents_root_rules': str(path)}}
-        with self.assertRaisesRegex(ValueError, 'verified active source'): astro_rules.verify(self.root, self.pin, current)
+        with patch.object(astro_rules.contract, '_load_policy', return_value={'omissions': {}, 'topic_omissions': {}}):
+            with self.assertRaisesRegex(ValueError, 'verified active source'): astro_rules.verify(self.root, self.pin, current)
 
     def test_workbench_navigation_and_owning_original_do_not_duplicate(self):
         self.assertEqual(astro_rules.verify(self.root, self.pin)['primary_originals'], 1)

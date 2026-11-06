@@ -34,12 +34,12 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-11-03 00:51"
+    "at": "2026-11-05 21:32"
    },
    "facts": [
-    "10 月 29 日—11 月 4 日 AI 用了 23 次"
+    "10 月 30 日—11 月 5 日 AI 用了 15 次"
    ],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-05",
    "source": "AI 使用记录"
   },
   "public": false,
@@ -166,8 +166,8 @@
  },
  "source": {
   "page": "sources/pages/skill-daily-preferences/page.json",
-  "sha256": "0343116511c3ad129d48a7bbaef9906919faec5c17d130b06c77b55cfb9de29b",
-  "converted_at_beijing": "2026-11-06T04:59:46+08:00"
+  "sha256": "1b6873ced47ff9856b3ccc21f22b302ee2adcab3f97b1cd1f94573d84cbaa240",
+  "converted_at_beijing": "2026-11-06T14:29:00+08:00"
  }
 }
 ---
@@ -210,15 +210,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 11 月 3 日 00:51",
+       "text": "常用 · 上次使用 11 月 5 日 21:32",
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 23 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 15 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录",
+     "static_note": "截至 11 月 5 日 · AI 使用记录",
      "row": "intro"
     },
     {
@@ -280,15 +280,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 11 月 3 日 00:51",
+       "text": "常用 · 上次使用 11 月 5 日 21:32",
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 23 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 15 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录"
+     "static_note": "截至 11 月 5 日 · AI 使用记录"
     },
     {
      "type": "prose",

@@ -17,7 +17,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "遇到一件事该去哪查；哪些项目冻结不碰、哪些只修报错；长任务停了怎么接着做；本人的原话和以后要遵守的做法各记在哪。",
+        "text_ref": "遇到一件事该去哪查；哪些项目冻结不碰、哪些只修报错；长任务停了怎么接着做；什么记、什么不记，记到哪。",
         "bold": true,
         "row": "hero"
       },
@@ -138,7 +138,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "遇到一件事该去哪查；哪些项目冻结不碰、哪些只修报错；长任务停了怎么接着做；本人的原话和以后要遵守的做法各记在哪。",
+        "text_ref": "遇到一件事该去哪查；哪些项目冻结不碰、哪些只修报错；长任务停了怎么接着做；什么记、什么不记，记到哪。",
         "bold": true
       },
       {
@@ -524,7 +524,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "经验按时写进文件，不写进记忆区",
+        "text_ref": "经验写进文件，不写进记忆区",
         "columns": 1,
         "whole_block": true,
         "illustration": "left_inside",
@@ -608,7 +608,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "经验按时写进文件，不写进记忆区",
+        "text_ref": "经验写进文件，不写进记忆区",
         "columns": 1,
         "whole_block": true,
         "illustration": "left_inside",
@@ -691,6 +691,14 @@
         ],
         "icon_position": "header_left",
         "motion_icon_arrow": true
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "写之前先查"
       }
     ],
     "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。；QA04 修复：按审查第7条将两张要点卡改为50:50等宽。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。"
@@ -733,6 +741,14 @@
         ],
         "icon_position": "header_left",
         "motion_icon_arrow": true
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "写之前先查"
       }
     ],
     "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。"
@@ -753,7 +769,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "按时点记，记完说一句",
+        "text_ref": "要不要记：收尾时再想，大部分不用记",
         "columns": 1,
         "whole_block": true,
         "illustration": "left_inside",
@@ -827,7 +843,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "按时点记，记完说一句",
+        "text_ref": "要不要记：收尾时再想，大部分不用记",
         "columns": 1,
         "whole_block": true,
         "illustration": "none",
@@ -890,7 +906,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E230 版，一字不改"
+        "text_ref": "原文 · {{rules.release_id}} 版，公开副本省略了个别字眼"
       },
       {
         "type": "source_text_card",
@@ -931,7 +947,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E230 版，一字不改"
+        "text_ref": "原文 · {{rules.release_id}} 版，公开副本省略了个别字眼"
       },
       {
         "type": "source_text_card",

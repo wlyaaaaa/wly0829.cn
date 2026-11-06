@@ -41,16 +41,16 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
 
 - **先看授权覆盖什么。** Claude 自己的子代理及 GPT Sol、Terra、Luna 可直接派（约法 L23）；Astra 必须已有授权覆盖本次项目、对话、期限和选型限制。“本对话直到叫停”不跨对话，“一个项目”不跨项目，同时限定项目和期限就同时遵守。覆盖时直接派，不逐次问，也不扩大许可。
 - **提醒本人授权 Astra。** 无授权而任务属于 `routing.vendor_rule` 的提醒场景时，规划阶段提醒一次（约法 L23），说明优势和未授权替代，不为提醒查询或估算本人账号额度；本人答复注明对话或项目后按范围派。等待时做独立部分，派活时仍无答复就用替代，交付说明；同一活不重提，本人说不用则本对话不再提醒。
-- **默认分工和选型。** 按模型清单 `routing` 和[共同选型原则](/rules/execution-coordination/#派子代理的原则)，每次显式传 `-Model`、`-Effort`；档位及旧值映射只见清单。GPT 涉及本人价值、偏好和理解的内容单列后由 Claude 把关。Astra 可再派 Sol、Luna，范围和授权仍沿用父任务。
+- **默认分工和选型。** 按模型清单 `routing` 和[共同选型原则](/rules/execution-coordination/#派子代理的原则)，每次显式传 `-Model`、`-Effort`；档位及旧值映射只见清单。GPT 涉及本人价值、偏好和理解的内容单列后由 Claude 把关。Astra 可再派 Sol、Luna，范围和授权仍沿用父任务；Sol、Terra、Luna 不能自己再叫 Astra，需要时写进汇报交回根会话（钩子和包装器会拒绝，做法见派发说明（`E:/.agents/docs/claude-gpt-child-dispatch.md`））。
 - **从包装器进入。** 使用 `E:\.agents\tools\Invoke-ClaudeGptChild.ps1`，`-ParentHarness` 默认 `Claude`。Start、Resume 走私有 AppServer（后台服务）；Start 默认独立执行，Resume 沿用已存方式。确需桌面身份可传 `-Detached:$false`，或只把凭据动作交根。运行中纠偏用同轮 Steer。不直接调用 `codex exec`、Codex 的 `openai_child` 或专用判断角色。共用容量和接续见[分工与并行施工](/rules/execution-coordination/#原生容量不足与原线程接续)；`-ParentHarness Codex` 只供[Codex 的已授权转用](/rules/codex-adapter/#原生容量不足时转用共用包装器)，不搬用 Claude 的型号许可。
 - **资料与权限。** Codex 子任务按正常 Codex 配置和当前授权工作，不复制 Claude 对话授权值，不另加沙箱或审批覆盖。独立执行者没有桌面祖先身份：真正依赖密码中心桌面身份的凭据步骤交回根会话，其余已授权步骤照常完成；不另行登录、转交秘密或改身份核验来补。资料需求、共享资料期和缺口交回按[派子代理的原则](/rules/execution-coordination/#派子代理的原则)“根核验规则和判断资料需求”一条。
-- **派活单和预算。** 字段、模板、预算、参数和验收只见派发说明（`E:/.agents/docs/claude-gpt-child-dispatch.md`）；修改仓库用任务专用工作树。
+- **怎么派一单。** 命令、单子模板、怎么等、怎么验收见 `dispatch-work` 技能；全部字段和参数见派发说明（`E:/.agents/docs/claude-gpt-child-dispatch.md`）；修改仓库用任务专用工作树。
 - **和真人说话。** 子任务要以本人身份和真人对话（客服、商家、卖家、房东、平台人工、微信联系人）或替本人拟要发出的消息时，派单必须写一行“和真人说话按 reply-as-me”；包装器在派单出现客服、商家、卖家、房东、人工、聊天等字样又没写这一行时自动补上，只是兜底。
-- **交代和交付。** 子任务是非交互的：技术做法自己定，不能自己定的需求或取舍写进最终汇报，由根会话整理；先做完不依赖该决定的工作，不在无人回答的地方等提问。交付简短结论、必要证据和汇报路径，除任务明确要求网页外，不做可视化，也不打开窗口。任务范围内的核对、验收或操作需要管理员时，直接按[用户授权的静默提权做法](/rules/authorization/#长期授权)执行。会影响其他会话的决定写到对应项目文件；仅在同改一处、发生事故或确需协调时发消息，不用中途进度刷屏。
+- **交代和交付。** 子任务技术做法自己定；拿不准的需求或取舍把问题和建议写进留言，继续做不受影响的部分，不等回答，同一件事只问一次；没定的最终汇报再写一遍。交付简短结论、必要证据和汇报路径，除任务明确要求网页外，不做可视化，也不打开窗口。任务范围内的核对、验收或操作需要管理员时，直接按[用户授权的静默提权做法](/rules/authorization/#长期授权)执行。会影响其他会话的决定写到对应项目文件；仅在同改一处、发生事故或确需协调时发消息，不用中途进度刷屏。
 - **保存和接续。** 保留会话，不加 `--ephemeral`；Claude 默认不启用 `-ContinueOnQuota`。失败、超时或换好账号后按原型号、原档位、原派单在原线程 Resume，具体接续按共用专题。会话保存、CLI 列表和桌面即时可见分别报告，不保证运行中可在桌面输入，不为刷新列表重启桌面。
 - **命令不断线。** 独立隐藏执行者不随 Claude 退出或更新停止。等候须覆盖全部运行任务，按回执 `watch_command` 挂后台 Watch，不另挂 Backstop；订阅和回执见派发说明。
 - **后台命令时限。** 长时间 Start、Resume、Watch 显式设 `run_in_background:true`，`timeout` 用回执 `watch_timeout_ms`（当前 7200000 毫秒）。Watch 周期不改变任务截止，监测和停止入口由独立执行者持有。
-- **时间按需延长。** 派活单时限优先，无派活单才用 `-TimeoutSeconds`（默认 7200 秒）。截止前总时长的 10%（5–30 分钟）返回一次 `deadline_soon`，先 Steer 交已有结果；根调整范围或做法及新时限后才 `Extend -Minutes N -Reason` 并重挂 Watch，不自动延期。超预算续作用 `Resume -Minutes N -Reason`；N 默认为本轮预算，显式 `-TimeoutSeconds` 时加在秒数上，两者都没给就拒绝。无人处理时自动提醒收尾，接受提醒后宽限 1–3 分钟，以 `timeout` 停止。
+- **时间是估计。** 派活单时限优先，无派活单才用 `-TimeoutSeconds`（默认 7200 秒）。到点执行者把已有产出和剩余工作报给根并接着做；根说继续就 `Extend -Minutes N -Reason` 往后延并重挂 Watch，觉得不对就 Steer 或 Stop；叫醒了一直没回应，到 3 倍才停。超行数的续作用 `Resume -Minutes N -Reason`；N 默认为本轮预算，显式 `-TimeoutSeconds` 时加在秒数上，两者都没给就拒绝。
 - **执行者消失和重启。** 进程号或启动时间对不上时标 `failed/runner_gone`；Watch 发现可恢复任务给 `runner_gone_recoverable`、`recovery_command`。Claude 恢复先用 `Recover -SessionId <完整父会话号>`：仅续作该父会话下执行者消失、最新轮无非空报告、未永久删除的任务，原线程核对半截产物，能续就续，不能续就重做。单项失败不挡其他任务；已有报告交根验收，归属不明旧目录用 Status 核对后手动 Resume。恢复后照 `watch_command` 覆盖所有运行任务；后台命令结束不证明子任务停止。
 - **结束后清理。** 临时内容按[生命周期回收](/rules/engineering-delivery/#下载临时文件和清理)，不以验收标记作为永久保留条件；需要长期取用的汇报和代码成果先落到对应交付目录或源码仓库。Stop 默认保留线程和成果，只有显式 `-DeleteThread` 才永久删本轮线程及后代；不追删已归档对话。失败留回执，不改任务结局。
 
@@ -85,7 +85,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
 
 Stop 核对本轮真实 Report 的明确目标集合，未解锁的资料拦截、漏挂 Watch 或验收缺口可拦一次。根按原因解锁并重试或补做、补挂 Watch、补齐验收，子代理缺口须读完整报告；同轮第二次只提示。
 
-根会话有 GPT 等候、原生后台 Agent 或 Bash/PowerShell 等未完成后台任务时，受管 Stop 用一个会话级 `asyncRewake`（异步唤醒）保活等待，按主代理最近真实活动加 55 分钟计时；新消息、主代理工具调用和下一次停止刷新活动，多个任务共用一次唤醒。未完成状态优先读宿主 `background_tasks`，GPT 执行器状态作补判；任务全结束或无法确认还在后台运行时以退出码 0 静默结束，仍有后台任务且主代理空闲达到 55 分钟时以退出码 2 叫醒，主持可继续等待。子代理自己的进度和 SendMessage 发出时刻不算主代理活动。该保活不改 Watch/Resume 的内部续等或子任务执行；宿主能力依据见官方 [asyncRewake 与后台 Hook](https://code.claude.com/docs/en/hooks#limitations)及 [Stop 输入](https://code.claude.com/docs/en/hooks#stop-input)。
+根会话有 GPT 等候、原生后台 Agent 或 Bash/PowerShell 等未完成后台任务时，受管 Stop 用一个会话级 `asyncRewake`（异步唤醒）保活等待，按主代理最近真实活动加 55 分钟计时；新消息、主代理工具调用和下一次停止刷新活动，多个任务共用一次唤醒。未完成状态优先读宿主 `background_tasks`，GPT 执行器状态作补判；任务全结束或无法确认还在后台运行时以退出码 0 静默结束，仍有后台任务且主代理空闲达到 55 分钟时以退出码 2 叫醒，主持可继续等待。子代理自己的进度和 SendMessage 发出时刻不算主代理活动。连续 10 次叫醒都没有本人消息、也没有叫醒那一轮之外的主代理工具调用，就不再叫醒，任务完成通知照常，之后有本人消息或真实工具调用重新计数；GPT 子任务在跑却没有活的 Watch 时不受这个次数限制，仍然叫醒。长时间等候指一个命令或它等的事必须 7 小时后才执行、7 小时内必定不执行（例如定时 7 小时后才跑、邮件明确 7 小时后才到）；这时跑 `python -B E:\.agents\tools\claude_root_runtime.py keepalive-skip-background --session-id <完整会话号>`，后台任务不再触发保活，任务完成通知照常。随时可能结束或到来的等候（GPT 子任务、微信消息）不算，拿不准就不关。程序在本会话第一次挂后台命令时和每次因后台任务叫醒时都会提醒，不用记；本人发新消息后开关失效，下次叫醒会再提醒。该保活不改 Watch/Resume 的内部续等或子任务执行；宿主能力依据见官方 [asyncRewake 与后台 Hook](https://code.claude.com/docs/en/hooks#limitations)及 [Stop 输入](https://code.claude.com/docs/en/hooks#stop-input)。
 
 程序细节、部署和维护只见上下文 Hook 运维（`E:/.agents/docs/operations/context-hooks.md#个人资料先解锁与结束兜底`），验证等待见[个人资料的锁和解锁](/rules/privacy-data/#个人资料的锁和解锁)。回执不放在回复开头，先回答本人当前的问题。
 

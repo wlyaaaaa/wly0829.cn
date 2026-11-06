@@ -34,12 +34,12 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-30 05:24"
+    "at": "2026-11-05 22:53"
    },
    "facts": [
-    "10 月 29 日—11 月 4 日 AI 用了 7 次"
+    "10 月 30 日—11 月 5 日 AI 用了 4 次"
    ],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-05",
    "source": "AI 使用记录"
   },
   "public": false,
@@ -123,8 +123,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-materials/page.json",
-  "sha256": "9e034b217ec423a5b9ec44033311bc737da22f09f8e61ed29a402552508cdb19",
-  "converted_at_beijing": "2026-11-06T04:59:46+08:00"
+  "sha256": "38c1e0b0a77ebc25442fdce1ef59da35f224af751988cf65d1c6bf8164d027f9",
+  "converted_at_beijing": "2026-11-06T14:29:00+08:00"
  }
 }
 ---
@@ -167,15 +167,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 30 日 05:24",
+       "text": "偶尔用 · 上次使用 11 月 5 日 22:53",
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 7 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 4 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录",
+     "static_note": "截至 11 月 5 日 · AI 使用记录",
      "row": "hero"
     },
     {
@@ -251,15 +251,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 30 日 05:24",
+       "text": "偶尔用 · 上次使用 11 月 5 日 22:53",
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 7 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 4 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录"
+     "static_note": "截至 11 月 5 日 · AI 使用记录"
     },
     {
      "type": "prose",

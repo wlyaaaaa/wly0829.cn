@@ -42,7 +42,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "这是Codex和Claude共用的授权规则，是约法L15哪些事要我明确同意和L16限时的“无限制授权”的细则。",
+        "text_ref": "这是Codex和Claude共用的授权规则，是开场那一页“撤不回的事”那段和“重大的事”那段的细则。",
         "row": "intro"
       },
       {
@@ -128,7 +128,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "这是Codex和Claude共用的授权规则，是约法L15哪些事要我明确同意和L16限时的“无限制授权”的细则。"
+        "text_ref": "这是Codex和Claude共用的授权规则，是开场那一页“撤不回的事”那段和“重大的事”那段的细则。"
       },
       {
         "type": "action_button",
@@ -330,7 +330,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "现有的五项长期授权",
+        "text_ref": "现有的六项长期授权",
         "columns": 1,
         "whole_block": true,
         "illustration": "left_inside",
@@ -389,7 +389,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "现有的五项长期授权",
+        "text_ref": "现有的六项长期授权",
         "columns": 1,
         "whole_block": true,
         "illustration": "left_inside",

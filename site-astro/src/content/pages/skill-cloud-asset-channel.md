@@ -37,9 +37,9 @@
     "at": "2026-10-31 15:39"
    },
    "facts": [
-    "10 月 29 日—11 月 4 日 AI 用了 3 次"
+    "10 月 30 日—11 月 5 日 AI 用了 3 次"
    ],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-05",
    "source": "AI 使用记录"
   },
   "public": false,
@@ -284,8 +284,8 @@
  },
  "source": {
   "page": "sources/pages/skill-cloud-asset-channel/page.json",
-  "sha256": "d52356abe8f59bd667b03f58fa8b252985dc073db0a338811f07e8f73550037b",
-  "converted_at_beijing": "2026-11-06T04:59:46+08:00"
+  "sha256": "a041053d17aac6ed2f820e18cbde3fd9b4e7d5427c94102671b3eddb1a5ac233",
+  "converted_at_beijing": "2026-11-06T14:29:00+08:00"
  }
 }
 ---
@@ -339,11 +339,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 3 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 3 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录",
+     "static_note": "截至 11 月 5 日 · AI 使用记录",
      "row": "hero"
     },
     {
@@ -416,11 +416,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 3 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 3 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录"
+     "static_note": "截至 11 月 5 日 · AI 使用记录"
     },
     {
      "type": "prose",

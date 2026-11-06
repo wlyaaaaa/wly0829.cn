@@ -110,6 +110,32 @@ class NumberEditsTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "placeholder_computed_value"):
             resolve_author(self.root, "how", "roster_date")
 
+    def test_modern_roster_sync_warns_without_rewriting_manual_how_copy(self):
+        path = self.root / "config/model-roster.json"; path.parent.mkdir()
+        public = {"updated_beijing_date": "2026-11-03", "routing": {
+            "scenarios": [{"scenario": "写代码", "default": "old", "switch": "same"}],
+            "scenarios_note": "checked", "evals": [{"read_as": "reviewed public history"}]}}
+        path.write_text(json.dumps(public), encoding="utf8")
+        how = self.root / "sources/pages/how/page.json"; how.parent.mkdir()
+        how.write_text('{"page":"how","screens":[{"id":"how-05","text":"author-reviewed copy"}]}', encoding="utf8")
+        before = how.read_bytes()
+        current = json.loads(json.dumps(public)); current["updated_beijing_date"] = "2026-11-05"
+        current["routing"]["scenarios"][0]["default"] = "new"
+        current["routing"]["evals"][0]["read_as"] = "unreviewed private detail"
+        current["project_models"] = {"private": "not published"}
+        current["limits"] = [{"model": "Sol", "source": "published source"}]
+        source = self.root / "owner-modern.json"; source.write_text(json.dumps(current), encoding="utf8")
+        result = sync_roster(self.root, source)
+        actual = json.loads(path.read_text("utf8"))
+        self.assertEqual(actual["routing"]["scenarios"][0]["default"], "new")
+        self.assertEqual(actual["routing"]["evals"], public["routing"]["evals"])
+        self.assertEqual(actual["limits"], current["limits"])
+        self.assertNotIn("project_models", actual)
+        self.assertTrue(result["how05_review_required"])
+        self.assertEqual(result["review_message"], "how-05 要重读")
+        self.assertEqual(how.read_bytes(), before)
+        self.assertFalse(sync_roster(self.root, source)["how05_review_required"])
+
     def test_unchanged_five_counts_still_refresh_dates_and_second_run_is_identical(self):
         payload = self.build()
         self.assertEqual((payload["schema"], len(payload["edits"]), bool(payload["skipped"]),

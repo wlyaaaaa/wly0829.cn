@@ -568,7 +568,7 @@
      "text": "由〔电脑配置与恢复〕登记"
     },
     {
-     "target": "/rules/charter/#L21",
+     "target": "/rules/privacy-data/#p-backup",
      "screen": "steam-millennium-config-backup-07",
      "text": "我定过备份要跟着原件删（〔约法 L21〕）"
     },
@@ -606,8 +606,8 @@
  },
  "source": {
   "page": "sources/pages/steam-millennium-config-backup/page.json",
-  "sha256": "e8cf2d1cc4036b4d60c090062a2ea50a8420dc84dab4e90ecd8c924e056fc28c",
-  "converted_at_beijing": "2026-11-06T05:14:09+08:00"
+  "sha256": "9a468c88b57b0e742b995e20fc24225bb031d31fdf69cad07da6c745629d0845",
+  "converted_at_beijing": "2026-11-06T14:29:01+08:00"
  }
 }
 ---
@@ -1004,7 +1004,7 @@
 截图说明：Adwaita 主题作者随主题附带的官方样张（浅色）。我用的就是这套主题，但强调色和配色是自己调的绿；图里的游戏列表是作者的示例，不是我的。
 
 20 个文件｜一份备份：能装回的设置，加上插件和主题清单，一共 53.1 KB
-3 处｜E 盘项目文件夹、G 盘、外接 H 盘各存一份，逐个文件比对指纹；11 月 6 日 05:09 核对：E、G、H 三处都是 10 月 26 日那一代，清单一致、核对通过
+3 处｜E 盘项目文件夹、G 盘、外接 H 盘各存一份，逐个文件比对指纹；11 月 6 日 14:25 核对：E、G、H 三处都是 10 月 26 日那一代，清单一致、核对通过
 5 个插件｜连同 2 套主题记进清单：名字、版本、从哪下的；平时开着其中 3 个
 每周一 10:30｜自动存一次（北京时间）；最近一次是 11 月 2 日 10:30，设置和版本都没变，没有多存一代，20 个文件重新核对通过、没有告警，G 盘同一分钟也核对通过；下一次排在 11 月 9 日 10:30。要我已登录 Windows 才跑
 
@@ -2564,7 +2564,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
   "links": [
    {
     "text": "约法 L21",
-    "href": "/rules/charter/#L21"
+    "href": "/rules/privacy-data/#p-backup"
    }
   ],
   "anchors": [],

@@ -300,10 +300,10 @@
    "numbers": [
     {
      "id": "n-config-files",
-     "text": "9,942 个文件",
+     "text": "10,038 个文件",
      "meaning": "11月4日12:19完成的当前本机/G配置包清单文件数",
      "as_of": "2026-11-04",
-     "source": "当前包devconfig-20261103-211744-27715513.zip的manifest与receipt都记file_count=9942；12:42只读核对",
+     "source": "见来源记录 devconfig-backup-n-config-files-0，观察于 2026-11-06T14:25:49+08:00",
      "screens": [
       "devconfig-backup-01"
      ]
@@ -342,7 +342,7 @@
      "id": "n-sources",
      "text": "70 个来源",
      "meaning": "sources.psd1 里的文件和文件夹来源（不含系统导出和对话历史段）：用户目录 19 个文件夹、17 个单文件，AppData 33 项，Scoop 1 项；9 月 29 日为 66 个，10 月 7 日 2cc7be0 加 FlyingBird 4 项",
-     "as_of": "2026-11-04",
+     "as_of": "2026-11-06",
      "source": "Import-PowerShellDataFile sources.psd1 各段计数（HEAD 2cc7be0：HomeDirs 14＋HomePreciseDirs 5＋HomeFiles 9＋HomePreciseFiles 8＋AppDataRoamingFiles 16＋AppDataRoamingDirs 11＋AppDataLocalDirs 5＋AppDataLocalFiles 1＋ExtraDirs 1）；同法数 9d35282 得 66，与旧稿一致",
      "screens": [
       "devconfig-backup-01",
@@ -353,10 +353,10 @@
     },
     {
      "id": "n-wechat-files",
-     "text": "157,674 个文件 · 44.9 GiB",
+     "text": "157,950 个文件 · 44.9 GiB",
      "meaning": "11月4日10:17:54完成的G微信副本：157674文件、48182328962字节；不代表今天云端上传成功",
-     "as_of": "2026-11-04",
-     "source": "G微信生产回执与12:39零写入Status元数据，今日云端最终核对失败另列",
+     "as_of": "2026-11-06",
+     "source": "见来源记录 devconfig-backup-n-wechat-files-0，观察于 2026-11-06T14:25:48+08:00",
      "screens": [
       "devconfig-backup-01"
      ]
@@ -377,7 +377,7 @@
      "id": "n-tasks",
      "text": "4 个自动任务",
      "meaning": "启用中的计划任务；另有 1 个补传监控停着",
-     "as_of": "2026-11-04",
+     "as_of": "2026-11-06",
      "source": "Get-ScheduledTask（10 月 11 日 13:33–13:41 只读核对：DevConfigBackup-Local、DevConfigBackup-Drive-Daily、WeChatBackup-Hot-Daily、WeChatBackup-Drive-Weekly 启用，WeChatDrive-Monitor-Hourly 停用）",
      "screens": [
       "devconfig-backup-01"
@@ -610,8 +610,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
-  "sha256": "4fed6770e5f5addbb063aa8483401629dd8b58d35c1bc550c381dad604da3919",
-  "converted_at_beijing": "2026-11-06T07:33:26+08:00"
+  "sha256": "8ef5f62f8b75cfe763320ff0b1e73d44e795d1c4eaa89452fcd57b292c9d9410",
+  "converted_at_beijing": "2026-11-06T14:43:34+08:00"
  }
 }
 ---
@@ -983,22 +983,22 @@
 重装系统或电脑坏了，最难重建的是各种开发软件和 AI 工具的设置，还有微信里的聊天记录。它每天把这两样复制出来、逐个文件核对，存到机箱里的 G 盘，再传到 Google 云盘；外接盘那一份由电脑配置与恢复同步。全程是脚本，不用 AI 模型。
 
 - **70 个来源**　开发配置清单；Codex 的配置和记忆、Antigravity 和 OpenCode 的设置只有它在备
-- **157,832 个文件**　微信原始文件 44.9 GiB（11 月 5 日 10:32 完成的 G 副本），每天拍快照复制一份到 G
-- **10,018 个文件**　最新一个开发配置包，压缩后 460.8 MiB（11 月 6 日 01:47 做成）
+- **157,950 个文件**　微信原始文件 44.9 GiB（11 月 6 日 10:17 完成的 G 副本），每天拍快照复制一份到 G
+- **10,038 个文件**　最新一个开发配置包，压缩后 461.1 MiB（11 月 6 日 12:16 做成）
 - **4 个自动任务**　配置每天存 G、每天上云；微信每天存 G、每天检查上云
 
-**四个任务最近一次都完成了，微信上云也补上了**：11 月 6 日 05:30 只读核对，配置存 G、配置上云、微信存 G、微信上云最近一次都完成、都退出 0。微信上云 11 月 5 日 11:00:02—12:23:02 成功；11 月 4 日那次最后核对没通过，已是历史。配置 11 月 6 日 01:41—01:47 又做了一个新包，已在本机和 G 落稳，但 1 个被占用的锁文件没收进去，所以是“成功，但有跳过的文件”；这个新包比云端和 H 盘上的晚一代。没有重跑，也没联网重验云端。
+**四个任务最近一次都完成了，微信上云也补上了**：11 月 6 日 14:26 只读核对，配置存 G、配置上云、微信存 G、微信上云最近一次都完成、都退出 0。微信上云 11 月 6 日 11:00:02—12:11:19 成功；11 月 4 日那次最后核对没通过，已是历史。配置 11 月 6 日 12:05—12:16 做的新包已在本机和 G 落稳，但 1 个被占用的锁文件没收进去，所以是“成功，但有跳过的文件”；13:04 这个新包也已上云，H 盘的配置和微信还是旧的一代，等下一轮冷备。没有重跑，也没联网重验云端。
 
-- **本机**　配置：11 月 6 日 01:47 的包（10,018 个文件）。微信不在本机另存副本，原件就在 E 盘。
-- **G 盘**　配置：同一个包，01:47 到位。微信：11 月 5 日 10:32 的一份（157,832 个文件），每个文件都按清单核对过。
-- **云端（Google 云盘）**　配置：本机成功回执记 11 月 5 日 13:05:01 已确认 11 月 5 日 12:27 那个包，比本机和 G 的新包早一代，等下一次 13:00 上云。微信：11 月 5 日 12:22 传完，就是 G 上 10:32 那一份（157,832 个文件）。这些是本机记录，云上实际内容没有联网重读。
-- **H 盘（外接盘）**　最新一轮冷备 11 月 6 日 01:23—02:51 结束，整轮“部分完成”，挡住的是个人资料那一项；配置和微信两项自己都完成。配置：H 的当前包指针是 11 月 5 日 12:27 那个包，和云端同一个，比 G 早一代；这轮开始时 G 上还是它，01:47 的新包要等下一轮。微信：这轮全部核对 157,832 个文件、修复 0 个，清单和 G 这一代相同。这两项回执没写各自的结束时刻，这次也没有再重算 H 上的文件。
+- **本机**　配置：11 月 6 日 12:16 的包（10,038 个文件）。微信不在本机另存副本，原件就在 E 盘。
+- **G 盘**　配置：同一个包，12:16 到位。微信：11 月 6 日 10:17 的一份（157,950 个文件），每个文件都按清单核对过。
+- **云端（Google 云盘）**　配置：本机成功回执记 11 月 6 日 13:04:26 已确认和本机、G 同一个新包。微信：成功回执记 11 月 6 日 11:10:55，就是 G 上 10:17 那一份（157,950 个文件），上云任务 12:11 结束。这些是本机记录，云上实际内容没有联网重读。
+- **H 盘（外接盘）**　最新一轮冷备 11 月 6 日 01:23—02:51 结束，整轮“部分完成”，挡住的是个人资料那一项；配置和微信两项自己都完成。配置：H 的当前包指针还是 11 月 5 日 12:27 那个包，比本机、G、云端的新包早两代（中间还有 11 月 6 日 01:47 那一代）。微信：这轮全部核对 157,832 个文件、修复 0 个，H 上是 11 月 5 日 10:32 那一代，比 G、云端早一代。这两项要等下一轮冷备才跟上。这两项回执没写各自的结束时刻，这次也没有再重算 H 上的文件。
 
-微信这一层现在 G、云端、H 是同一代；配置这一层本机和 G 比云端、H 晚一代，是因为开机后多跑了一次采集，不是失败。副本身份跟上、复制回执完成和这次重新核对所有文件是三件事，要分开看。H 由电脑配置与恢复另外同步，整轮进度看驾驶舱。应用恢复没有验过。
+配置这一层现在本机、G、云端是同一个包，H 早两代；微信这一层 G、云端是同一代，H 早一代。H 每天 14:30 或登录时才跟上，13:51 读到它落后是这个节奏，不是失败。副本身份跟上、复制回执完成和这次重新核对所有文件是三件事，要分开看。H 由电脑配置与恢复另外同步，整轮进度看驾驶舱。应用恢复没有验过。
 
-此前的失败都被后续运行补上了：11 月 4 日 11:00—12:11 微信上云最后核对没通过、退出 1，11 月 5 日那轮成功；10 月 31 日 21:19 配置采集因来源名单中途变了而失败；11 月 2 日 11:00 的微信上云中途结束、没留下结果（原因没查实），当天中午的两个配置任务也没开跑，15:31 补跑时上云和存 G 撞车，上云那个退出（当天配置没有上云），存 G 那个 16:18 完成，之后定时任务改成了排队。更早的 10 月 11 日和 10 月 29 日，配置采集都因 Codex 的状态数据库没能限时做出一致副本而失败，没出新包，前一个好包原样留着——失败不覆盖旧包就是这样起作用的。限时放宽之后采集已经成功过，11 月 3 日 16:21 和 11 月 6 日 01:41 这两次 5 个数据库副本都做成了；这只证明这几次，不能说原因已经根治。
+此前的失败都被后续运行补上了：11 月 4 日 11:00—12:11 微信上云最后核对没通过、退出 1，11 月 5 日那轮成功；10 月 31 日 21:19 配置采集因来源名单中途变了而失败；11 月 2 日 11:00 的微信上云中途结束、没留下结果（原因没查实），当天中午的两个配置任务也没开跑，15:31 补跑时上云和存 G 撞车，上云那个退出（当天配置没有上云），存 G 那个 16:18 完成，之后定时任务改成了排队。更早的 10 月 11 日和 10 月 29 日，配置采集都因 Codex 的状态数据库没能限时做出一致副本而失败，没出新包，前一个好包原样留着——失败不覆盖旧包就是这样起作用的。限时放宽之后采集已经成功过，11 月 3 日 16:21、11 月 6 日 01:41 和 12:05 这几次 5 个数据库副本都做成了；这只证明这几次，不能说原因已经根治。
 
-截至 11 月 6 日 05:30
+截至 11 月 6 日 13:51
 
 **现在**　〔现在正不正常 → 驾驶舱〕
 
@@ -2728,7 +2728,9 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 
 **规模**　56 个受 Git 管的文件、约 7,000 行，其中 27 个是自检脚本，另有 1 个 Python 测试文件；96 次提交（11 月 4 日 09:10 回读，没有未提交改动；这些脚本这次没有运行）。
 
-**截至 11 月 6 日 05:30 的状态**（只读回读，没重跑、没联网；状态入口 Backup-Status -NoDrive -Json 退出码 0、write_mode=zero_write，整体 receipts_current_with_skipped_files（配置采集有 1 个跳过的锁文件））　配置：本地/G 均为 current，当前包 devconfig-20261105-104707-2c50930d.zip，是北京时间 11 月 6 日 01:47:41 本机完成、01:47:43 G 完成的那一代，10,018 个文件、483,162,505 字节即 460.8 MiB，无文件警告；verification=producer_verified_not_rehashed_by_status，状态入口没有重新解包或重算哈希。最近一次本地采集：11 月 6 日 01:41:27—01:47:44 complete_with_skipped_files（开机登录后 20 分钟那次触发），跳过 1 个被占用的锁文件（PowerToys 的 settings.json.cli-lock，sharing_violation），第 1 次尝试就做成，捕获后又变过的文件记 4 个；sqlite_snapshots 记 5 个 sqlite_online_backup，全部 integrity_check=ok；capture_consistency=per_file_verified_not_point_in_time，逐文件一致不等于同一时点快照。本机上云记录：11 月 5 日 13:00:02—13:06:37 drive=complete、package=verified_existing，13:05:01 写成功回执，对应前一代 devconfig-20261104-212514-5dc5d82a.zip（483,108,262 字节、9,992 个文件，G 上 11 月 5 日 12:27:22 完成），比本机/G 当前包早一代。Drive：not_contacted，云上实际内容没有重读。微信：G 热备 11 月 5 日 10:32:55 完成（09:30:02 启动），157,832 个文件、48,191,819,862 字节（44.9 GiB），sha256_full_tree、vss_crash_consistent，无文件警告；verification=producer_verified_manifest_bound，没有重新散列全部原文件。微信上云 11 月 5 日 11:00:02—12:23:02 complete，成功回执 12:22:41，157,832 个文件、48,191,819,862 字节，rclone_checksum_check，upload_source.gate=passed，来源是 G 上这一代（清单 SHA-256 相同）。外接盘：PCConfig 的 core-recovery/cold-last.json 记 11 月 6 日 01:23:22—02:51:48 那一轮整体 partial，reason=cold_sets_blocked:personal_data；devconfig 和 wechat 两项都 complete，都是 source_follow_verified_prune、0 单文件警告。devconfig 保留集核验 33 个文件（元数据身份比对，没有重算内容），H 的 DevConfig/current.json 指向 devconfig-20261104-212514-5dc5d82a.zip，和云端同一个 SHA-256，比 G 早一代。wechat 这项 sha256_full_tree 核验 157,832 个文件、48,191,819,862 字节、修复 0，清单 SHA-256 与 G 当前代相同。结果条目没有写两项各自的结束时刻。运行历史里最近的失败：11 月 4 日 12:11:44 wechat_drive_final_verification_failed；11 月 2 日 15:31:14 backup_resource_busy；11 月 2 日 11:00:01 开始的微信上云没有最终记录（backup_process_interrupted，退出码未知）。应用恢复 not_tested、微信应用一致性 not_proven。
+**截至 11 月 6 日 13:51 的状态**（只读回读，没重跑、没联网；状态入口 Backup-Status -NoDrive -Json 退出码 0、write_mode=zero_write，整体 receipts_current_with_skipped_files（配置采集有 1 个跳过的锁文件））　配置：本地/G 均为 current，当前包 devconfig-20261105-211440-97ace87f.zip，是北京时间 11 月 6 日 12:16:02 本机完成、12:16:05 G 完成的那一代，10,038 个文件、483,495,780 字节即 461.1 MiB，无文件警告；verification=producer_verified_not_rehashed_by_status，状态入口没有重新解包或重算哈希。最近一次本地采集：11 月 6 日 12:05:02—12:16:12 complete_with_skipped_files，跳过 1 个被占用的锁文件（PowerToys 的 settings.json.cli-lock，sharing_violation），第 1 次尝试就做成，捕获后又变过的文件记 4 个；sqlite_snapshots 记 5 个 sqlite_online_backup，全部 integrity_check=ok；capture_consistency=per_file_verified_not_point_in_time，逐文件一致不等于同一时点快照。本机上云记录：11 月 6 日 13:00:02—13:05:17 drive=complete、package=verified_existing，13:04:26 写成功回执，对应同一个 devconfig-20261105-211440-97ace87f.zip、同一 SHA-256。Drive：not_contacted，云上实际内容没有重读。微信：G 热备 11 月 6 日 10:17:03 完成（09:30:02 启动），157,950 个文件、48,206,842,439 字节（44.9 GiB），sha256_full_tree、vss_crash_consistent，无文件警告；verification=producer_verified_manifest_bound，没有重新散列全部原文件。微信上云 11 月 6 日 11:00:02—12:11:19 complete，成功回执 11:10:55，157,950 个文件、48,206,842,439 字节，rclone_checksum_check，upload_source.gate=passed，来源是 G 上这一代（清单 SHA-256 相同）。外接盘：PCConfig 的 core-recovery/cold-last.json 仍记 11 月 6 日 01:23:22—02:51:48 那一轮整体 partial，reason=cold_sets_blocked:personal_data；13:48 读到 H 的 DevConfig/current.json 还指向 devconfig-20261104-212514-5dc5d82a.zip（11 月 5 日 12:27 那一代），比本机/G/云端早两代；H 微信 manifest 还是 583a0445…（11 月 5 日 10:32 那一代，157,832 个文件），比 G/云端早一代；这两项要等下一轮冷备。运行历史里最近的失败：11 月 4 日 12:11:44 wechat_drive_final_verification_failed；11 月 2 日 15:31:14 backup_resource_busy；11 月 2 日 11:00:01 开始的微信上云没有最终记录（backup_process_interrupted，退出码未知）。应用恢复 not_tested、微信应用一致性 not_proven。
+
+**11 月 6 日 05:30 回读到的历史状态**（只读回读，没重跑、没联网；状态入口 Backup-Status -NoDrive -Json 退出码 0、write_mode=zero_write，整体 receipts_current_with_skipped_files（配置采集有 1 个跳过的锁文件））　配置：本地/G 均为 current，当前包 devconfig-20261105-104707-2c50930d.zip，是北京时间 11 月 6 日 01:47:41 本机完成、01:47:43 G 完成的那一代，10,018 个文件、483,162,505 字节即 460.8 MiB，无文件警告；verification=producer_verified_not_rehashed_by_status，状态入口没有重新解包或重算哈希。最近一次本地采集：11 月 6 日 01:41:27—01:47:44 complete_with_skipped_files（开机登录后 20 分钟那次触发），跳过 1 个被占用的锁文件（PowerToys 的 settings.json.cli-lock，sharing_violation），第 1 次尝试就做成，捕获后又变过的文件记 4 个；sqlite_snapshots 记 5 个 sqlite_online_backup，全部 integrity_check=ok；capture_consistency=per_file_verified_not_point_in_time，逐文件一致不等于同一时点快照。本机上云记录：11 月 5 日 13:00:02—13:06:37 drive=complete、package=verified_existing，13:05:01 写成功回执，对应前一代 devconfig-20261104-212514-5dc5d82a.zip（483,108,262 字节、9,992 个文件，G 上 11 月 5 日 12:27:22 完成），比本机/G 当前包早一代。Drive：not_contacted，云上实际内容没有重读。微信：G 热备 11 月 5 日 10:32:55 完成（09:30:02 启动），157,832 个文件、48,191,819,862 字节（44.9 GiB），sha256_full_tree、vss_crash_consistent，无文件警告；verification=producer_verified_manifest_bound，没有重新散列全部原文件。微信上云 11 月 5 日 11:00:02—12:23:02 complete，成功回执 12:22:41，157,832 个文件、48,191,819,862 字节，rclone_checksum_check，upload_source.gate=passed，来源是 G 上这一代（清单 SHA-256 相同）。外接盘：PCConfig 的 core-recovery/cold-last.json 记 11 月 6 日 01:23:22—02:51:48 那一轮整体 partial，reason=cold_sets_blocked:personal_data；devconfig 和 wechat 两项都 complete，都是 source_follow_verified_prune、0 单文件警告。devconfig 保留集核验 33 个文件（元数据身份比对，没有重算内容），H 的 DevConfig/current.json 指向 devconfig-20261104-212514-5dc5d82a.zip，和云端同一个 SHA-256，比 G 早一代。wechat 这项 sha256_full_tree 核验 157,832 个文件、48,191,819,862 字节、修复 0，清单 SHA-256 与 G 当前代相同。结果条目没有写两项各自的结束时刻。运行历史里最近的失败：11 月 4 日 12:11:44 wechat_drive_final_verification_failed；11 月 2 日 15:31:14 backup_resource_busy；11 月 2 日 11:00:01 开始的微信上云没有最终记录（backup_process_interrupted，退出码未知）。应用恢复 not_tested、微信应用一致性 not_proven。
 
 **11 月 4 日 15:08 回读到的历史状态**（只读回读，没重跑、没联网；状态入口 Backup-Status -NoDrive -Json 退出码 0、write_mode=zero_write，整体 attention_required（当天微信上云最终核对失败；配置采集另有 5 个跳过的锁文件））　配置：本地/G 均为 current，当前包 devconfig-20261103-211744-27715513.zip，是北京时间 11 月 4 日 12:19:33 本机完成、12:19:35 G 完成的那一代，9,942 个文件、481,660,055 字节即 459.3 MiB，无文件警告；verification=producer_verified_not_rehashed_by_status，状态入口没有重新解包或重算哈希。最近一次本地采集：11 月 4 日 12:05:02—12:19:38 complete_with_skipped_files，跳过 5 个被占用的锁文件，第 1 次尝试就做成（最多 3 次），捕获后又变过的文件记 9 个；sqlite_snapshots 记 5 个 sqlite_online_backup，全部 integrity_check=ok。包回执的 complete 只对已收录的文件成立。本机上云记录：11 月 4 日 13:00:02—13:06:43 drive=complete、package=verified_existing，13:04:40 写成功回执，明确对应 devconfig-20261103-211744-27715513.zip、481,660,055 字节，SHA-256 与本机/G 当前包一致。12:39 读时的上一条记录是 11 月 3 日 13:00:02—13:11:19 drive=complete、package=verified_existing，13:10:22 写成功指针，对应更早的 devconfig-20261102-211708-d7b67478.zip（479,712,438 字节，9,833 个文件）；那是当时的旧观察。Drive：not_contacted，云上实际内容没有重读。微信：G 热备 11 月 4 日 10:17:54 完成（09:30:02 启动），157,674 个文件、48,182,328,962 字节（44.9 GiB），sha256_full_tree、source_follow_verified、vss_crash_consistent，无文件警告；verification=producer_verified_manifest_bound，没有重新散列全部原文件。微信上云新一轮于 11 月 4 日 11:00:02 开始、12:11:44 结束，status=failed、drive=failed，failure=wechat_drive_final_verification_failed，任务退出 1；最近一次成功仍是 11 月 3 日 11:00:02—12:11:08 complete，成功回执 12:10:47，157,403 个文件、48,171,565,186 字节，rclone_checksum_check，来源绑定 11 月 3 日 10:25:56 那一代 G 热备（gate passed），不是 11 月 4 日这一代。外接盘：15:08 核对的 H 配置 current.json 已与 G 指向同一包、同一 SHA-256；H 微信 manifest 也与 G 同 run_id=cd2285a15e784719a1d3e25da3b92f88、同内容摘要，清单记 157,674 个文件、48,182,328,962 字节。本次没有重新散列 H 包或微信全树，也未单独取得 H 子项本次复制完成时间；清单的生成时刻不是 H 完成时刻。14:30 新一轮冷备仍在运行。上一份已结束的整轮证据：PCConfig 的 core-recovery/cold-last.json 记 11 月 3 日 16:03:21—17:53:13 那一轮整体 partial，reason=cold_sets_blocked:documents_and_local_saves,personal_media；devconfig 和 wechat 两项都 complete（前者保留集核验 33 个文件，后者核验 157,403 个文件，都是 source_follow_verified_prune、0 单文件警告），12:39 读时 H 上的配置当前包是 devconfig-20261102-211708-d7b67478.zip，和当时云端同一代；没有在 H 上重算全树内容。运行历史里最近的失败：11 月 2 日 15:31:14 backup_resource_busy；11 月 2 日 11:00:01 开始的微信上云没有最终记录，状态入口显示 backup_process_interrupted，退出码未知；10 月 31 日 21:28:00 backup_source_selection_changed_during_collection。应用恢复 not_tested。
 

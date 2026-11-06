@@ -729,7 +729,7 @@
      "text": "Qwen、GLM、DeepSeek 各一把，放在〔密码中心〕"
     },
     {
-     "target": "/rules/charter/#L23",
+     "target": "/rules/execution-coordination/#p-l23",
      "screen": "ai-cli-profile-manager-11",
      "text": "别家模型当主力时能派哪些 GPT 帮手，归〔约法 L23〕和〔分工与并行施工〕管"
     },
@@ -802,8 +802,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
-  "sha256": "6626d9fa19c5c6cba19d9ad0e131269b2225dab3125aebaaabbcafb759043a3d",
-  "converted_at_beijing": "2026-11-06T04:59:41+08:00"
+  "sha256": "bf3cf7adedcb4d928f8a2d5a2bffd6b2d08460bf0d27cd17049b83ed5de5677f",
+  "converted_at_beijing": "2026-11-06T13:54:09+08:00"
  }
 }
 ---
@@ -2866,7 +2866,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    },
    {
     "text": "约法 L23",
-    "href": "/rules/charter/#L23"
+    "href": "/rules/execution-coordination/#p-l23"
    },
    {
     "text": "分工与并行施工",

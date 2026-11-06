@@ -422,7 +422,7 @@
       },
       {
         "type": "content_card",
-        "text_ref": "写代码、改脚本、修 bug",
+        "text_ref": "听懂需求、取舍、对我说话",
         "columns": 2,
         "columns_v": 1,
         "align": "left",
@@ -432,7 +432,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "{{roster.update_rule}}",
+        "text_ref": "调不动时不降型号和档位",
         "tone": "gray"
       },
       {
@@ -470,7 +470,7 @@
       },
       {
         "type": "content_card",
-        "text_ref": "写代码、改脚本、修 bug",
+        "text_ref": "听懂需求、取舍、对我说话",
         "columns": 1,
         "columns_v": 1,
         "align": "left",
@@ -480,7 +480,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "{{roster.update_rule}}",
+        "text_ref": "调不动时不降型号和档位",
         "tone": "gray"
       },
       {

@@ -30,16 +30,16 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E372",
-   "commit": "f44463a9fd2c4bacb8c562315d297db27d501f35",
-   "ruleset_sha256": "ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7",
-   "activated_at": "2026-11-04T08:49:37.968049+08:00",
+   "release": "E389",
+   "commit": "c74447f7cefadc860208ad2425c236981caa837d",
+   "ruleset_sha256": "bece26ac3f4569cf3582648846158e8e2c9145498e148bdaa1fe9edf514759f2",
+   "activated_at": "2026-11-06T13:22:34.536034+08:00",
    "file": "sources/rules/docs/contracts/agents.protected-actions.md",
    "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73",
    "public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3"
   },
   "explanation_based_on": {
-   "release": "E372",
+   "release": "E389",
    "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：推小推车的小 AI 助手走到白绿木栏杆前停下；岗亭里戴眼镜的小 AI 助手抬头看一眼单子、点点头；桌上四选一托盘里的黄铜钥匙轻轻亮一下，手机屏幕上的六个圆点依次亮起又熄灭；木栏杆缓缓抬起一半又落回原位；远处 GitHub 小木屋的烟囱冒出一缕淡绿的烟；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子和纸条上的字保持不动、不变形，手机屏幕上不出现数字。",
@@ -148,16 +148,6 @@
    "highlights": [],
    "mentions": [
     {
-     "target": "/rules/charter/#L16",
-     "screen": "rule-protected-actions-01",
-     "text": "L16 限时的“无限制授权”"
-    },
-    {
-     "target": "/rules/charter/#L17",
-     "screen": "rule-protected-actions-01",
-     "text": "L17 重大的事"
-    },
-    {
      "target": "/computer-access/",
      "screen": "rule-protected-actions-01",
      "text": "现在的授权状态 → 授权与状态"
@@ -188,7 +178,7 @@
      "text": "起疑就锁盘"
     },
     {
-     "target": "/rules/charter/#L22",
+     "target": "/rules/execution-coordination/#p-l22",
      "screen": "rule-protected-actions-03",
      "text": "约法 L22"
     },
@@ -231,6 +221,11 @@
      "target": "/skills/project-entry-gate/",
      "screen": "rule-protected-actions-05",
      "text": "改项目前先核对"
+    },
+    {
+     "target": "/rules/charter/#L17",
+     "screen": "rule-protected-actions-01",
+     "text": "“重大的事”那段"
     }
    ],
    "live": []
@@ -258,8 +253,8 @@
  },
  "source": {
   "page": "sources/pages/rule-protected-actions/page.json",
-  "sha256": "8674380b6822529832e2afc9092777bec3b991733e64dad2341ea1c20ec2fb56",
-  "converted_at_beijing": "2026-11-04T10:36:30+08:00"
+  "sha256": "713d7339cb5b6e39c3f9fd48b07cc1d1c528413ba36f2902ab8ee41069bab506",
+  "converted_at_beijing": "2026-11-06T13:54:07+08:00"
  }
 }
 ---
@@ -275,14 +270,6 @@
   "scene": "横版 16:9。左边约 55% 宽是文字区：左上“重大动作与本人验证”用毛笔艺术字大标题（和约法样张的“约法”两字同一种写法），下面一行粗体深绿副标题，再下面介绍段。介绍段下面一张浅绿细边圆角卡片“先认几个词”，七个词条竖排，词条名粗体绿色。卡片下面一行“跳到：”后面六个圆角小按钮（白底浅绿描边绿字），就是那六个〔〕链接。右边约 45% 宽一幅水彩插画：一条林间小路上横着一道漆成白绿两色的木栏杆，栏杆旁一个小木岗亭，岗亭檐下挂小木牌“把关”，亭里坐一个戴眼镜的小 AI 助手，胸前是 Claude 的橙色星芒标志，正低头看一张单子。路上另一个小 AI 助手推着一辆小推车走到栏杆前停下，车上一只纸箱，箱侧贴着纸条“删库”。栏杆这一侧放一张小木桌，桌上一只浅绿托盘，托盘沿上刻着“四选一”，盘里并排四样东西：一把系着小牌“通行密钥”的黄铜钥匙、一部屏幕朝上的手机（屏幕上只画代表验证码的圆点，不画数字；这些圆点仅作插画示意，不规定验证码位数）旁边小牌“手机验证码”、一张折起的纸条上写“恢复码”、一张小卡片上并排画 Google 的彩色 G 标志和微软的四色方块标志。栏杆另一侧小路尽头一间小木屋，屋顶上画 GitHub 的黑色章鱼猫标志。插画里只有这六处小牌子和纸条有字，text 里“删库　把关　四选一　通行密钥　手机验证码　恢复码”这一行就是它们的字，不要另外画成一行文字。整屏最下面一条横跨全宽的细长圆角横条（浅绿底），左边是“现在开没开无限制授权、个人资料解没解锁：”，右边一个显眼的按钮〔现在的授权状态 → 授权与状态〕。",
   "portrait": "竖版 9:16，自上而下：毛笔大标题；粗体副标题；水彩插画（同横版，缩成整宽一幅：上半是岗亭、栏杆和推车，下半是小木桌上的四选一托盘，远处小木屋和 GitHub 标志放在右上角；六处小牌子的字不变）；介绍段；“先认几个词”卡片（七个词条一行一条）；“跳到：”六个按钮排三行、每行两个；最下面“授权与状态”横条改成上面一行说明、下面一个整宽按钮。",
   "links": [
-   {
-    "text": "L16 限时的“无限制授权”",
-    "href": "/rules/charter/#L16"
-   },
-   {
-    "text": "L17 重大的事",
-    "href": "/rules/charter/#L17"
-   },
    {
     "text": "哪些算重大",
     "href": "/rules/protected-actions/#p-major"
@@ -310,6 +297,10 @@
    {
     "text": "现在的授权状态 → 授权与状态",
     "href": "/computer-access/"
+   },
+   {
+    "text": "“重大的事”那段",
+    "href": "/rules/charter/#L17"
    }
   ],
   "anchors": [],
@@ -525,10 +516,10 @@
 
 **哪些事算重大，动手前怎么把关，什么时候、用什么方式请本人验证。**
 
-这是 Codex 和 Claude 共用的规则，管四件事：哪些动作算“重大的事”；这类事动手前由谁把一遍关；什么时候必须请本人验证、有哪几种验证方式；GitHub 上删库、转移、改公开这类动作怎么办。它是约法〔L16 限时的“无限制授权”〕和〔L17 重大的事〕的细则。平时干活不因为这份规则多一道审批。
+这是 Codex 和 Claude 共用的规则，管四件事：哪些动作算“重大的事”；这类事动手前由谁把一遍关；什么时候必须请本人验证、有哪几种验证方式；GitHub 上删库、转移、改公开这类动作怎么办。它是开场那一页〔“重大的事”那段〕的细则。这个专题是硬的：AI 觉得不对，只能先拿事实问本人，不能自己改；平时干活不因为这份规则多一道审批。
 
 **先认几个词**
-- **重大的事**：约法 L17 列出的七类高风险动作，例如删库、把私人资料发到外面、删掉只有一份的数据。
+- **重大的事**：开场那一页列出的七类高风险动作，例如删库、把私人资料发到外面、删掉只有一份的数据。
 - **本人验证**：在密码中心弹出的窗口里，用四种方式之一证明“现在点头的是本人”。
 - **无限制授权**：本人给某个对话开的一段限时授权（0.5–72 小时，默认时长照密码中心当前设置）；开着时本人的明确指令优先于 AI 自己的规则，也算已经确认是本人。
 - **个人资料解锁期**：本人验证一次后开的一段时间，时长本人定；期间 AI 可以用本人的私人资料。
@@ -540,7 +531,7 @@
 
 删库　把关　四选一　通行密钥　手机验证码　恢复码
 
-现在开没开无限制授权、个人资料解没解锁：〔现在的授权状态 → 授权与状态〕。网页原文来源快照为 E372（北京时间 11 月 4 日 08:49 起生效），本页讲解与同版专题对应；当前生效版本以 AI 开工时核验的活动入口为准。
+现在开没开无限制授权、个人资料解没解锁：〔现在的授权状态 → 授权与状态〕。网页原文来源快照为 E389（北京时间 11 月 6 日 13:22 起生效），本页讲解与同版专题对应；当前生效版本以 AI 开工时核验的活动入口为准。
 
 ::screen{#rule-protected-actions-09 section="points"}
 
@@ -1691,7 +1682,7 @@
   "links": [
    {
     "text": "约法 L22",
-    "href": "/rules/charter/#L22"
+    "href": "/rules/execution-coordination/#p-l22"
    },
    {
     "text": "分工与并行施工",
@@ -2687,7 +2678,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.protected-actions.md",
-   "release": "E372",
+   "release": "E389",
    "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73",
    "public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3",
    "from": null,
@@ -2730,7 +2721,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E372版，一字不改"
+     "text_ref": "原文·E389版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2773,7 +2764,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E372版，一字不改"
+     "text_ref": "原文·E389版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2873,7 +2864,7 @@
 }
 ```
 
-原文 · E372 版，一字不改
+原文 · E389 版，一字不改
 
 # 重大动作与本人验证
 
@@ -2917,7 +2908,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.protected-actions.md",
-   "release": "E372",
+   "release": "E389",
    "sha256": "03675781035e4fd1942f4f45b9f7a8c910c94421cd21e9a414e0fa1198046f73",
    "public_sha256": "941bf9f832b34c8aaf2a4088613a950112b7d8dd5f9466ade6d5b706d42939f3",
    "from": "## GitHub 重大动作",
@@ -2947,7 +2938,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -2987,7 +2978,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -3093,7 +3084,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E372 版 · 续
+原文 · E389 版 · 续
 
 ## GitHub 重大动作
 

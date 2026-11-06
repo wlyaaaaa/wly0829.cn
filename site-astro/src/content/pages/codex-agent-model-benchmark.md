@@ -373,7 +373,7 @@
      "text": "四条原因，逐条看"
     },
     {
-     "target": "/rules/charter/#L23",
+     "target": "/rules/execution-coordination/#p-l23",
      "screen": "codex-agent-model-benchmark-01",
      "text": "约法 L23"
     },
@@ -383,7 +383,7 @@
      "text": "约法 L24"
     },
     {
-     "target": "/rules/charter/#L22",
+     "target": "/rules/execution-coordination/#p-l22",
      "screen": "codex-agent-model-benchmark-01",
      "text": "约法 L22"
     },
@@ -423,8 +423,8 @@
  },
  "source": {
   "page": "sources/pages/codex-agent-model-benchmark/page.json",
-  "sha256": "502c1e6632cbb580b9992259097944b40b5f53831cc26929fd90f8ca7019d716",
-  "converted_at_beijing": "2026-10-31T08:03:52+08:00"
+  "sha256": "62a73d61029a5eb78db12089d57e9d547b0dc9483979e82678cc96becf939ebc",
+  "converted_at_beijing": "2026-11-06T13:54:10+08:00"
  }
 }
 ---

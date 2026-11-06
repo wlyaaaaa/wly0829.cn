@@ -37,10 +37,10 @@
     "at": "2026-10-11 15:48"
    },
    "facts": [
-    "10 月 29 日—11 月 4 日 AI 用了 0 次",
+    "10 月 30 日—11 月 5 日 AI 用了 0 次",
     "Codex 自带插件，11 月 6 日核对本机可用的是 26.1030.10813 版"
    ],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-05",
    "source": "AI 使用记录和本机插件目录"
   },
   "public": false,
@@ -358,8 +358,8 @@
  },
  "source": {
   "page": "sources/pages/skill-documents/page.json",
-  "sha256": "b318d5c4b5fed4c85a96b14eee1af4562882952e700bdb4797a440f07a3a34b8",
-  "converted_at_beijing": "2026-11-06T05:06:52+08:00"
+  "sha256": "c7dee63b4a994accd841a708ecb2cc3a40938d5ba6c72c1731d4063619312c9f",
+  "converted_at_beijing": "2026-11-06T14:29:00+08:00"
  }
 }
 ---
@@ -426,7 +426,7 @@
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 0 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 0 次",
        "state": "fact"
       },
       {
@@ -434,7 +434,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录和本机插件目录",
+     "static_note": "截至 11 月 5 日 · AI 使用记录和本机插件目录",
      "row": "hero"
     },
     {
@@ -509,7 +509,7 @@
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 0 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 0 次",
        "state": "fact"
       },
       {
@@ -517,7 +517,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录和本机插件目录"
+     "static_note": "截至 11 月 5 日 · AI 使用记录和本机插件目录"
     },
     {
      "type": "prose",

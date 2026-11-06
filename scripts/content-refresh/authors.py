@@ -65,26 +65,39 @@ def affected_pages(root, files):
 
 
 def sync_roster(root, source):
-    """只同步 how 已公开引用的固定字段；保留快照其余字段及排版。"""
+    """同步公开模型投影；how-05 是人工稿，场景变化只提示重读。"""
     path = Path(root) / "config/model-roster.json"
-    raw = path.read_text("utf-8-sig"); public = json.loads(raw)
     payload = Path(source).read_bytes(); current = json.loads(payload)
-    pairs = [(public, current, key, key) for key in ("updated_beijing_date", "update_rule")]
-    for name in ("写代码、改脚本、修 bug", "调研、查事实（要可靠、少编造）",
-                 "给本人看的文字和分析：汇报、网站文案、方案、对本人经历和偏好的理解",
-                 "看图、审图、截图录屏、操作电脑和浏览器", "生图"):
-        rows = [next(r for r in data["routing"]["scenarios"] if r["scenario"] == name) for data in (public, current)]
-        pairs.extend((rows[0], rows[1], key, f"routing.scenarios.{name}.{key}") for key in ("claude", "gpt"))
-    changes = []
-    for old, new, key, field in pairs:
-        if old[key] == new[key]: continue
-        token = json.dumps(old[key], ensure_ascii=False)
-        if raw.count(token) != 1: raise ValueError("公开模型字段定位不唯一：" + field)
-        raw = raw.replace(token, json.dumps(new[key], ensure_ascii=False), 1)
-        changes.append(dict(field=field, before=old[key], after=new[key]))
+    previous = json.loads(path.read_text("utf-8-sig"))
+    # 私有项目分工不进入公开快照；未被页面引用的历史评测说明保持已审公开版本。
+    projected = {key: current[key] for key in (*previous.keys(), "limits") if key in current}
+    projected.pop("project_models", None)
+    projected["routing"] = dict(current["routing"])
+    if "evals" in previous.get("routing", {}):
+        projected["routing"]["evals"] = previous["routing"]["evals"]
+    old_rows = {r["scenario"]: r for r in previous["routing"]["scenarios"]}
+    new_rows = {r["scenario"]: r for r in current["routing"]["scenarios"]}
+    if (any("claude" in row or "gpt" in row for row in old_rows.values())
+            and not any("default" in row for row in new_rows.values())
+            and set(old_rows) - set(new_rows)):
+        raise ValueError("模型场景来源缺项，how-05 要重读")
+    watched = ("default", "switch")
+    scenario_changes = [{"scenario": name, "before": {k: old_rows.get(name, {}).get(k) for k in watched},
+                         "after": {k: new_rows.get(name, {}).get(k) for k in watched}}
+                        for name in new_rows if any(old_rows.get(name, {}).get(k) != new_rows[name].get(k) for k in watched)]
+    scenario_changes += [{"scenario": name, "before": old_rows[name], "after": None}
+                         for name in old_rows if name not in new_rows]
+    changes = [{"field": key, "before": previous.get(key), "after": value}
+               for key, value in projected.items() if previous.get(key) != value]
     if changes:
-        path.write_text(raw, encoding="utf8", newline="\r\n" if b"\r\n" in path.read_bytes() else "\n")
-    return dict(source=str(source), source_sha256=sha256(payload).hexdigest(), changes=changes)
+        text = json.dumps(projected, ensure_ascii=False, indent=2) + "\n"
+        crlf = b"\r\n" in path.read_bytes()
+        path.write_bytes(text.replace("\n", "\r\n" if crlf else "\n").encode("utf-8"))
+    review = bool(scenario_changes or previous["routing"].get("scenarios_note") != current["routing"].get("scenarios_note"))
+    return dict(source=str(source), source_sha256=sha256(payload).hexdigest(), changes=changes,
+                scenario_changes=scenario_changes, how05_review_required=review,
+                review_message="how-05 要重读" if review else "",
+                projection_fields=list(projected), retained_public_fields=["routing.evals"])
 
 
 def convert_markdown(root, pages, output_dir=None):

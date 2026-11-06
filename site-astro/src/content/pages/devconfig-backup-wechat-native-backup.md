@@ -31,18 +31,18 @@
    "source": "项目仓库和备份回执",
    "last": {
     "label": "回执核对",
-    "at": "2026-11-06 05:30"
+    "at": "2026-11-06 13:51"
    },
    "facts": [
-    "11 月 6 日 05:30 读：四项最近都完成；11 月 4 日微信上云失败已补上",
-    "微信 G、云端、H 同一代（11 月 5 日 10:32）；客户端恢复没验过"
+    "11 月 6 日 14:26 读：四项最近都完成；11 月 4 日微信上云失败已补上",
+    "微信 G、云端同一代（11 月 6 日 10:17），H 早一代；客户端恢复没验过"
    ]
   }
  },
  "source": {
   "page": "sources/pages/devconfig-backup-wechat-native-backup/page.json",
-  "sha256": "fba8da1139a6253e6feea624cb24decaa05c5514ac965c0f91f82e2e94c7a201",
-  "converted_at_beijing": "2026-11-06T07:33:26+08:00"
+  "sha256": "bd3de5ca57f5921437854fe65c9c136121900c00b07d37fb1371fc36bf5c4b65",
+  "converted_at_beijing": "2026-11-06T14:32:49+08:00"
  }
 }
 ---
@@ -92,15 +92,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 回执核对 11 月 6 日 05:30",
+       "text": "常用 · 回执核对 11 月 6 日 13:51",
        "state": "ok"
       },
       {
-       "text": "11 月 6 日 05:30 读：四项最近都完成；11 月 4 日微信上云失败已补上",
+       "text": "11 月 6 日 14:26 读：四项最近都完成；11 月 4 日微信上云失败已补上",
        "state": "fact"
       },
       {
-       "text": "微信 G、云端、H 同一代（11 月 5 日 10:32）；客户端恢复没验过",
+       "text": "微信 G、云端同一代（11 月 6 日 10:17），H 早一代；客户端恢复没验过",
        "state": "fact"
       }
      ],
@@ -142,15 +142,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 回执核对 11 月 6 日 05:30",
+       "text": "常用 · 回执核对 11 月 6 日 13:51",
        "state": "ok"
       },
       {
-       "text": "11 月 6 日 05:30 读：四项最近都完成；11 月 4 日微信上云失败已补上",
+       "text": "11 月 6 日 14:26 读：四项最近都完成；11 月 4 日微信上云失败已补上",
        "state": "fact"
       },
       {
-       "text": "微信 G、云端、H 同一代（11 月 5 日 10:32）；客户端恢复没验过",
+       "text": "微信 G、云端同一代（11 月 6 日 10:17），H 早一代；客户端恢复没验过",
        "state": "fact"
       }
      ],
@@ -197,9 +197,9 @@ DevConfig Backup · 功能说明
 
 不必每次把几十 GB 重新压成一个大包；没变化的文件会跳过，单次云传输也有上限。代价是文件级副本仍需官方客户端做最终可用性验收。
 
-当前情况：11 月 6 日 05:30 读，四个自动任务最近一次都完成、都退出 0；11 月 4 日微信上云最终核对失败已是历史，11 月 5 日那轮成功了。G 盘：11 月 5 日 10:32 的热备已完成，157,832 个文件、约 48.19 GB，每个文件都按清单核对过，没有文件警告。云端：11 月 5 日 12:22 传完同一代；任务每天 11:00 检查，内容变了才传。外接 H 盘：11 月 6 日 01:23—02:51 那轮冷备里，微信这一项完成，全部核对 157,832 个文件、修复 0 个，清单和 G 这一代相同；整轮“部分完成”挡住的是个人资料那一项，不是微信。这项回执没写自己的结束时刻，这次也没有再重算 H 的文件。云上实际内容这次没联网重读，官方客户端恢复未验，也不能证明微信应用层面一致。
+当前情况：11 月 6 日 13:51 读，四个自动任务最近一次都完成、都退出 0；11 月 4 日微信上云最终核对失败已是历史，11 月 5 日那轮成功了。G 盘：11 月 6 日 10:17 的热备已完成，157,950 个文件、约 48.21 GB，每个文件都按清单核对过，没有文件警告。云端：成功回执 11 月 6 日 11:10:55，是同一代；任务每天 11:00 检查，内容变了才传。外接 H 盘：还是 11 月 5 日 10:32 那一代，比 G、云端早一代，要等下一轮冷备；11 月 6 日 01:23—02:51 那轮冷备里，微信这一项完成，全部核对 157,832 个文件、修复 0 个；整轮“部分完成”挡住的是个人资料那一项，不是微信。这项回执没写自己的结束时刻，这次也没有再重算 H 的文件。云上实际内容这次没联网重读，官方客户端恢复未验，也不能证明微信应用层面一致。
 
-项目快照核对于 2026-11-06 05:30（北京时间），只读状态入口、回执和 PCConfig 冷备总回执，没有修复、重跑、联网或重新散列原文件；具体测试保留各自日期，页面不实时探测运行状态。
+项目快照核对于 2026-11-06 13:51（北京时间），只读状态入口、回执和 PCConfig 冷备总回执，没有修复、重跑、联网或重新散列原文件；具体测试保留各自日期，页面不实时探测运行状态。
 
 项目源码：公开仓库
 
@@ -322,7 +322,7 @@ DevConfig Backup · 功能说明
 
 ### 最后我会得到什么
 
-最近一次完成的 G 盘记录（11 月 5 日 10:32）说明已保存微信数据库、图片和音视频约 48.19 GB。要是某次热备没收尾（比如 10 月 19 日那次），工具会如实说当前副本“说不准”，不拿前一次的旧成功顶替。这一份已经上云：11 月 5 日 12:22 传完；H 盘这一项 11 月 6 日那轮也完成，清单和这一代相同。这次没有再逐个重算 H 文件，云端实际内容也没有联网确认。文件齐全不等于微信客户端一定能读回聊天。
+最近一次完成的 G 盘记录（11 月 6 日 10:17）说明已保存微信数据库、图片和音视频约 48.21 GB。要是某次热备没收尾（比如 10 月 19 日那次），工具会如实说当前副本“说不准”，不拿前一次的旧成功顶替。这一份已经上云：成功回执 11 月 6 日 11:10:55；H 盘还是 11 月 5 日 10:32 那一代，要等下一轮冷备。这次没有再逐个重算 H 文件，云端实际内容也没有联网确认。文件齐全不等于微信客户端一定能读回聊天。
 
 ::screen{#devconfig-backup-wechat-native-backup-03 section="usage"}
 
@@ -589,7 +589,7 @@ DevConfig Backup · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 5 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {
@@ -606,7 +606,7 @@ DevConfig Backup · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "111月5日G盘这一代约48.19GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。",
+     "text_ref": "111月6日G盘这一代约48.21GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -628,7 +628,7 @@ DevConfig Backup · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "111月5日G盘这一代约48.19GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。",
+     "text_ref": "111月6日G盘这一代约48.21GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -655,11 +655,11 @@ DevConfig Backup · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-当前 G 回执是 11 月 5 日 10:32:55 完成，157,832 文件、48.19 GB，producer_verified_manifest_bound、VSS 时点、无文件警告；同一代 11 月 5 日 11:00:02—12:23:02 上云完成，成功回执 12:22:41，rclone_checksum_check、upload_source.gate=passed、用的是 G 已验代，没有联网重读；11 月 4 日 11:00:02—12:11:44 那次最终核对失败（wechat_drive_final_verification_failed、任务退出 1）留作历史。05:30 回读 PCConfig 11 月 6 日 01:23:22—02:51:48 整轮回执：整体 partial（挡住的是 personal_data），wechat 项 complete，sha256_full_tree 核验 157,832 文件、48,191,819,862 字节、修复 0，清单 SHA-256=583a04456b8d827820853d7a16131faaf1b8788622889bbca14ec8de52964053，和 G 当前回执、云端成功回执相同；这项没写自己的结束时刻，本次也未再重算 G/H 全部文件。客户端恢复 not_tested、应用一致性 not_proven（11 月 6 日 05:30 回读）
+当前 G 回执是 11 月 6 日 10:17:03 完成，157,950 文件、48.21 GB，producer_verified_manifest_bound、VSS 时点、无文件警告；同一代 11 月 6 日 11:00:02—12:11:19 上云完成，成功回执 11:10:55，rclone_checksum_check、upload_source.gate=passed、用的是 G 已验代，没有联网重读；11 月 4 日 11:00:02—12:11:44 那次最终核对失败（wechat_drive_final_verification_failed、任务退出 1）留作历史。13:51 回读 PCConfig 11 月 6 日 01:23:22—02:51:48 整轮回执：整体 partial（挡住的是 personal_data），wechat 项 complete，sha256_full_tree 核验 157,832 文件、48,191,819,862 字节、修复 0，清单 SHA-256=583a04456b8d827820853d7a16131faaf1b8788622889bbca14ec8de52964053，是 11 月 5 日 10:32 那一代，和 G 当前回执、云端成功回执的 6ba215ac8ead08d7b8010c1d0b38952634740d8b38c8ba1505b591c6054b8eb9 不同，H 要等下一轮冷备；这项没写自己的结束时刻，本次也未再重算 G/H 全部文件。客户端恢复 not_tested、应用一致性 not_proven（11 月 6 日 13:51 回读）
 
 ### 关键规则与设计选择
 
-1. 11 月 5 日 G 盘这一代约 48.19 GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。
+1. 11 月 6 日 G 盘这一代约 48.21 GB，仍采用文件级候选，不为每次增量重新压缩整个媒体库。
 
 2. G 盘先建立独立候选再校验切换，旧成功代保留；可复用的硬链接只来自已验备份，不能把活动原件硬链接进去。个别文件有警告时保留它的旧文件或登记的旧一代，可恢复的前代可以多于一份。
 
@@ -813,7 +813,7 @@ DevConfig Backup · 功能说明
 
 ## 技术实现与依据（三）
 
-4. 每天 11:00 启动 WeChatBackup-Drive-Weekly（任务名是旧的，实际每天运行），先按上面的条件判断要不要跳过。最近一次是 11 月 5 日 11:00:02—12:23:02，complete，upload_source.gate=passed、用的是 G 已验代，本机记录，没有联网重读云端；11 月 4 日 11:00:02—12:11:44 那次最终核对失败（wechat_drive_final_verification_failed），任务退出 1；更早的成功是 11 月 3 日 11:00:02—12:11:08 那次；11 月 2 日 11:00:01 那次中途结束、没有最终记录（backup_process_interrupted，退出码未知）；10 月 19 日那次因热备事务没收尾而失败；10 月 22 日 11:00—12:10 那次完成。
+4. 每天 11:00 启动 WeChatBackup-Drive-Weekly（任务名是旧的，实际每天运行），先按上面的条件判断要不要跳过。最近一次是 11 月 6 日 11:00:02—12:11:19，complete，upload_source.gate=passed、用的是 G 已验代，本机记录，没有联网重读云端；此前 11 月 5 日 11:00:02—12:23:02 也完成；11 月 4 日 11:00:02—12:11:44 那次最终核对失败（wechat_drive_final_verification_failed），任务退出 1；更早的成功是 11 月 3 日 11:00:02—12:11:08 那次；11 月 2 日 11:00:01 那次中途结束、没有最终记录（backup_process_interrupted，退出码未知）；10 月 19 日那次因热备事务没收尾而失败；10 月 22 日 11:00—12:10 那次完成。
 
 5. 按远端 binding 锁定 G 盘当前已核对的一代，复制、核对后在同过滤范围清旧并复验；不直接边读活动微信边上传，警告文件的云端旧副本不清。
 
@@ -1092,7 +1092,7 @@ DevConfig Backup · 功能说明
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 5 日"
+  "derived_as_of": "数字截至 2026 年 11 月 6 日"
  },
  "layout": {
   "h": {
@@ -1146,7 +1146,9 @@ DevConfig Backup · 功能说明
 
 ## 依据与来源（二）
 
-- 11 月 6 日 05:30 核对状态与回执（Backup-Status -NoDrive -Json 零写入、退出码 0）：整体 receipts_current_with_skipped_files，跳过的是配置采集里 1 个锁文件，微信这一层是 current。G 微信热备 11 月 5 日 10:32:55 完成，157,832 文件、48,191,819,862 字节，verification=producer_verified_manifest_bound、capture_consistency=vss_crash_consistent、无文件警告；这是生产者的验真，这次只读取、没有重新散列原文件。微信 Drive 成功回执 11 月 5 日 12:22:41，157,832 文件、48,191,819,862 字节，rclone_checksum_check、source_follow_verified，来源绑定 G 上同一代；这次没有联网重读云端（not_contacted）。PCConfig 的 core-recovery/cold-last.json 记 11 月 6 日 01:23:22—02:51:48 那一轮整体 partial（挡住的是 personal_data），wechat 集合 complete，sha256_full_tree 核验 157,832 文件、48,191,819,862 字节、修复 0，source_follow_verified_prune、0 单文件警告，清单 SHA-256 与 G 相同；回执没写这一项的结束时刻，H 上的内容这次没有再重算。
+- 11 月 6 日 13:51 核对状态与回执（Backup-Status -NoDrive -Json 零写入、退出码 0）：整体 receipts_current_with_skipped_files，跳过的是配置采集里 1 个锁文件，微信这一层是 current。G 微信热备 11 月 6 日 10:17:03 完成，157,950 文件、48,206,842,439 字节，verification=producer_verified_manifest_bound、capture_consistency=vss_crash_consistent、无文件警告；这是生产者的验真，这次只读取、没有重新散列原文件。微信 Drive 成功回执 11 月 6 日 11:10:55，157,950 文件、48,206,842,439 字节，清单 SHA-256=6ba215ac8ead08d7b8010c1d0b38952634740d8b38c8ba1505b591c6054b8eb9，rclone_checksum_check、source_follow_verified，来源绑定 G 上同一代；这次没有联网重读云端（not_contacted）。H 上还是旧清单 583a04456b8d827820853d7a16131faaf1b8788622889bbca14ec8de52964053（11 月 5 日 10:32 那一代）：PCConfig 的 core-recovery/cold-last.json 记 11 月 6 日 01:23:22—02:51:48 那一轮整体 partial（挡住的是 personal_data），wechat 集合 complete，sha256_full_tree 核验 157,832 文件、48,191,819,862 字节、修复 0，source_follow_verified_prune、0 单文件警告；要等下一轮冷备，回执没写这一项的结束时刻，H 上的内容这次没有再重算。
+
+- 历史：11 月 6 日 05:30 核对状态与回执（Backup-Status -NoDrive -Json 零写入、退出码 0）：整体 receipts_current_with_skipped_files，跳过的是配置采集里 1 个锁文件，微信这一层是 current。G 微信热备 11 月 5 日 10:32:55 完成，157,832 文件、48,191,819,862 字节，verification=producer_verified_manifest_bound、capture_consistency=vss_crash_consistent、无文件警告；这是生产者的验真，这次只读取、没有重新散列原文件。微信 Drive 成功回执 11 月 5 日 12:22:41，157,832 文件、48,191,819,862 字节，rclone_checksum_check、source_follow_verified，来源绑定 G 上同一代；这次没有联网重读云端（not_contacted）。PCConfig 的 core-recovery/cold-last.json 记 11 月 6 日 01:23:22—02:51:48 那一轮整体 partial（挡住的是 personal_data），wechat 集合 complete，sha256_full_tree 核验 157,832 文件、48,191,819,862 字节、修复 0，source_follow_verified_prune、0 单文件警告，清单 SHA-256 与 G 相同；回执没写这一项的结束时刻，H 上的内容这次没有再重算。
 
 - 历史：11 月 4 日 15:08 核对状态与回执（Backup-Status -NoDrive -Json 零写入、退出码 0）：整体 attention_required，因为当天微信上云失败；配置采集另有 5 个跳过的锁文件，微信 G 副本这一层是 current。G 微信热备 11 月 4 日 10:17:54 完成，157,674 文件、48,182,328,962 字节，verification=producer_verified_manifest_bound、capture_consistency=vss_crash_consistent、无文件警告；这是生产者的验真，当时只读取、没有重新散列原文件。微信 Drive 成功回执 11 月 3 日 12:10:47，157,403 文件、48,171,565,186 字节，rclone_checksum_check、source_follow_verified，来源绑定 11 月 3 日 10:25:56 那一代 G 热备；当时没有联网重读云端（not_contacted）。15:08 另读 G/H 清单：同 run_id=cd2285a15e784719a1d3e25da3b92f88、同 content_sha256=e366230f48c268cd97cd2f211357337b7b9b58b6b8fd9d4e6b38ca55a0310958，H 清单也记 157,674 文件、48,182,328,962 字节。当时未逐文件重算 G/H，也没有另取 H 子项完成回执；G 清单生成时刻不能当 H 完成时刻。PCConfig 当天 14:30 新一轮当时还在运行。再上一份已结束的整轮证据：core-recovery/cold-last.json 记 11 月 3 日 16:03:21—17:53:13 那一轮整体 partial（挡住的是文档与本地存档、个人媒体），wechat 集合 complete，157,403 文件，source_follow_verified_prune、0 单文件警告；没有在 H 上重算全树内容。
 

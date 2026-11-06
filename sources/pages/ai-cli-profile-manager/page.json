@@ -273,7 +273,7 @@
         },
         {
           "text": "约法 L23",
-          "href": "/rules/charter/#L23"
+          "href": "/rules/execution-coordination/#p-l23"
         },
         {
           "text": "分工与并行施工",
@@ -1261,7 +1261,7 @@
         "text": "Qwen、GLM、DeepSeek 各一把，放在〔密码中心〕"
       },
       {
-        "target": "/rules/charter/#L23",
+        "target": "/rules/execution-coordination/#p-l23",
         "screen": "ai-cli-profile-manager-11",
         "text": "别家模型当主力时能派哪些 GPT 帮手，归〔约法 L23〕和〔分工与并行施工〕管"
       },

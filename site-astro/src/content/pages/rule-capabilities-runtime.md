@@ -30,17 +30,17 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E372",
-   "commit": "f44463a9fd2c4bacb8c562315d297db27d501f35",
-   "ruleset_sha256": "ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7",
-   "activated_at": "2026-11-04T08:49:37.968049+08:00",
+   "release": "E389",
+   "commit": "c74447f7cefadc860208ad2425c236981caa837d",
+   "ruleset_sha256": "bece26ac3f4569cf3582648846158e8e2c9145498e148bdaa1fe9edf514759f2",
+   "activated_at": "2026-11-06T13:22:34.536034+08:00",
    "file": "sources/rules/docs/contracts/agents.capabilities-runtime.md",
-   "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
-   "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f"
+   "sha256": "9332bfccd659ebb4ccf06b5d4e042e1b8c2f9c984f1ac46326072fb9bf73ed20",
+   "public_sha256": "dee468dd4738087e05e9c11cd015532a7f57c483126fbe63f64043c39a97e11b"
   },
   "explanation_based_on": {
-   "release": "E372",
-   "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45"
+   "release": "E389",
+   "sha256": "9332bfccd659ebb4ccf06b5d4e042e1b8c2f9c984f1ac46326072fb9bf73ed20"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小 AI 助手抬手从洞洞板上取下放大镜看了看又挂回去，洞洞板上的 Chrome、Gmail、Google 云盘三个标志轻轻晃动；脚边贴着“E:”的绿色储物箱里几片绿叶慢慢舒展；右下笔记本电脑屏幕上的看板里，三个小圆点状态灯依次轻轻呼吸（绿、绿、黄）；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，三块小牌子上的字保持不动、不变形。",
   "registry": {
@@ -228,11 +228,6 @@
      "text": "L26 汇报网页"
     },
     {
-     "target": "/rules/charter/#L27",
-     "screen": "rule-capabilities-runtime-01",
-     "text": "L27 网站"
-    },
-    {
      "target": "/rules/charter/#L28",
      "screen": "rule-capabilities-runtime-01",
      "text": "L28 自动运行"
@@ -313,11 +308,6 @@
      "text": "report-page"
     },
     {
-     "target": "/rules/charter/#L27",
-     "screen": "rule-capabilities-runtime-07",
-     "text": "约法 L27"
-    },
-    {
      "target": "/rules/charter/#L28",
      "screen": "rule-capabilities-runtime-07",
      "text": "约法 L28"
@@ -376,6 +366,21 @@
      "target": "/skills/phone-direct/",
      "screen": "rule-capabilities-runtime-02",
      "text": "手机直取"
+    },
+    {
+     "target": "/rules/capabilities-runtime/#p-site",
+     "screen": "rule-capabilities-runtime-01",
+     "text": "网站是真实看板"
+    },
+    {
+     "target": "/rules/capabilities-runtime/#p-self-check",
+     "screen": "rule-capabilities-runtime-01",
+     "text": "写给本人之前对一遍"
+    },
+    {
+     "target": "/rules/capabilities-runtime/#p-self-check",
+     "screen": "rule-capabilities-runtime-03",
+     "text": "写给本人之前对一遍"
     }
    ],
    "live": []
@@ -405,8 +410,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "4dc19073d34ec499e329f435dfdc86af2107246383ca77fb1962cb48a003099e",
-  "converted_at_beijing": "2026-11-04T12:18:23+08:00"
+  "sha256": "32592d08ce5f27802976f6af5faf756320a9243fbf7b4acd283f5ed99449e02e",
+  "converted_at_beijing": "2026-11-06T13:54:08+08:00"
  }
 }
 ---
@@ -437,10 +442,6 @@
    {
     "text": "L26 汇报网页",
     "href": "/rules/charter/#L26"
-   },
-   {
-    "text": "L27 网站",
-    "href": "/rules/charter/#L27"
    },
    {
     "text": "L28 自动运行",
@@ -527,6 +528,14 @@
    {
     "text": "现在正不正常 → 驾驶舱",
     "href": "/cockpit/"
+   },
+   {
+    "text": "网站是真实看板",
+    "href": "/rules/capabilities-runtime/#p-site"
+   },
+   {
+    "text": "写给本人之前对一遍",
+    "href": "/rules/capabilities-runtime/#p-self-check"
    }
   ],
   "anchors": [],
@@ -768,7 +777,7 @@
 
 **AI 拿什么来做事：用哪个工具和入口、浏览器怎么用、软件怎么更新、东西装在哪；汇报网页、网站和自动运行的东西怎么办。**
 
-这是 Codex、Claude 和它们派出的子代理共用的规则专题，管“拿什么做”：先想清要的结果，再挑现在真正能用的工具、技能和入口。能不能做、怎么分工、做到什么算完不在这里定，分别见〔用户授权〕〔分工与并行施工〕〔工程与交付〕。约法里〔L26 汇报网页〕〔L27 网站〕〔L28 自动运行〕〔L29 浏览器和存放位置〕四条，细则都在这里。
+这是 Codex、Claude 和它们派出的子代理共用的规则专题，管“拿什么做”：先想清要的结果，再挑现在真正能用的工具、技能和入口。能不能做、怎么分工、做到什么算完不在这里定，分别见〔用户授权〕〔分工与并行施工〕〔工程与交付〕。开场那一页里〔L26 汇报网页〕〔L28 自动运行〕〔L29 浏览器和存放位置〕的细则都在这里；〔网站是真实看板〕（L27）和〔写给本人之前对一遍〕（L2 的自查）的完整原文也放在这一篇。
 
 **先认几个词**
 - **宿主**：AI 实际跑在里面的程序，例如 Codex、Claude 桌面版。
@@ -990,6 +999,10 @@
    {
     "text": "工程与交付",
     "href": "/rules/engineering-delivery/"
+   },
+   {
+    "text": "写给本人之前对一遍",
+    "href": "/rules/capabilities-runtime/#p-self-check"
    }
   ],
   "anchors": [
@@ -1116,6 +1129,7 @@
 - 默认简体中文，先说实际结果、影响和怎么用。
 - 有用的英文第一次出现时加简短的中文解释；代码、路径、常见缩写和精确名称除外。
 - 关键的没做完的事必须说；不为凑模板输出没用的栏目。
+- 写给本人之前自己对一遍，清单见〔写给本人之前对一遍〕。
 
 ### 验证码这类限时的事要盯住
 - 验证码、登录确认这类要趁有效期办的事，在当前任务里主动盯着真正能读到的来源，收到就及时做完已授权的后续操作。
@@ -1347,17 +1361,19 @@
 - 问本机已有的小工具、以前用过的工具、图片超分或本机现成的做法时，先查唯一的工具清单 E:\Tools\LocalToolbox\catalog.json。
 - 按用途找，用同一目录下的 Find-LocalTool.ps1。
 - 工具列表、型号和校验值（哈希）只记在那一份清单里。
+- **快速清理电脑文件**：本人说快速清理时，走电脑配置与恢复里现成的流程：先做已核实的明显无用项、回读实际空间，疑难对象和修工具并行做，不反复整盘扫描。
 - **内存快满时**：AI 不等本人，按电脑配置与恢复里现有的内存守护登记（memory_guard）自动处理：有占用不停往上涨的程序，只处理它，登记和规则以外的程序不动；AI 自己正在跑的任务就是占内存的大户时，先停自己的。什么时候算快满、哪些能安全回收、软件怎么分类，只看那份登记，不在全局规则里另抄一份；AI 装会常驻后台的软件时，顺手在那份登记里给它归好类。
 
 **清单现在写的（9 月 29 日版）**：登记 12 项——3 个独立小工具（例如图片超分与精确尺寸输出、Windows 卡顿轨迹分析器）、1 个操作步骤（Codex 快捷方式打不开时怎么打开）、8 个指向现有项目或技能的入口（例如按需短信验证码、中文乱码诊断与修复）。
 
 ### 生成图片和设计画面
-- 图片默认用 Codex 自带生图。任何 Codex 对话都能直接调用；Claude 写好提示交 Luna 生图、落盘用 low，不派 Astra。质量看生图模型和提示；收费 API 回退需本人明确要。
+- 图片默认用 Codex 自带生图。任何 Codex 对话都能直接调用；Claude 写好提示交 Luna 把提示原样交给生图工具、落盘用 low，一个字不改，不派 Astra。质量看生图模型和提示；一批从派出到拿到大约 2～3 分钟；收费 API 回退需本人明确要。
 - 能凭文字画、参考图延续风格和角色、改局部或做透明底、一次出几版；界面、插画之外，也能做 PPT、视频分镜和海报。
 - 设计出几版本人定风格，再照图写代码；素材由 AI 选。定稿当参考保持一致，局部有错只修那块；要求其余像素不变时，把改好的块贴回原图。
 - 成品按版本存进项目，核对落盘、不覆盖旧图；审定图冻结，只重做变了的内容。当前模型记在清单，排名不当永久结论。
 - 复核按需：成批交 Sol，很重要交 Claude；只有几张主对话自己看。图里的字逐字查，整体和参考并排比。
-- Claude 不用代码画这类设计；要准确或会变的图表、日期和状态仍用代码，或填进图里留的空白；固定文字可画进图里。
+- 画面里用代码的只有五类：动效；会变的内容（计数、日期、状态、实时数据）；数据图表；原件证据的摆放和打码；字为主、随内容改的流程框和对照图（这类要快）。其余 Claude 不用代码画；固定文字可画进图里，会变的也可以填进图里留的空白。
+- 证据类东西（截图、聊天记录、单据、证件和当证据用的实拍）永不生图；生成图里的字逐字和原文核对。
 - 本网站仍是 Luna 画、Sol 审，不合格交 Claude 定；只管本项目。
 
 ### 中外消息快查
@@ -2063,10 +2079,6 @@
     "href": "/skills/report-page/"
    },
    {
-    "text": "约法 L27",
-    "href": "/rules/charter/#L27"
-   },
-   {
     "text": "约法 L28",
     "href": "/rules/charter/#L28"
    },
@@ -2107,6 +2119,10 @@
    {
     "id": "p-owner-items",
     "text": "要本人做或选的事不会漏"
+   },
+   {
+    "id": "p-self-check",
+    "text": "写给本人之前对一遍"
    }
   ],
   "live": [],
@@ -2190,6 +2206,14 @@
      "header_icon": [
       "_library/fix-round-2/icon-clean-6a38e42190b5f0212a91.png"
      ]
+    },
+    {
+     "type": "points_card",
+     "columns": 1,
+     "split_cards": false,
+     "illustration": "none",
+     "icons": "none",
+     "text_ref": "写给本人之前对一遍"
     }
    ],
    "notes": "横版按自然阅读顺序整宽排列各卡与说明框，插画居中等比显示；不再沿用已实际堆叠的三栏行组。全部原文、链接与原图保留。",
@@ -2236,6 +2260,14 @@
      "illustration": "none",
      "icons": "none",
      "text_ref": "要本人做或选的事不会漏"
+    },
+    {
+     "type": "points_card",
+     "columns": 1,
+     "split_cards": false,
+     "illustration": "none",
+     "icons": "none",
+     "text_ref": "写给本人之前对一遍"
     }
    ],
    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。原横图三列，中间短卡下方有卡外笔记本插画；左右说明框均嵌在所属大卡底部。原竖图前两卡插画在卡内右侧；两说明框在所属大卡下方但卡内。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。\nE230 新增第四张卡排在“现在的登记”小框之后，手机阅读顺序到末尾。",
@@ -2382,7 +2414,8 @@
 **现在的做法**：页面默认放 E:\Documents\AI汇报\；每生成一张新页，顺带把 14 天前的旧页放进回收站。
 
 ### 网站怎么更新
-- 本人说“更新网站”时，按网站项目 V:\Personal\Projects\wly0829.cn 里的 AGENTS.md 更新一次（〔约法 L27〕）。
+- wly0829.cn 是本人真实在用的个人看板，虽然公开，但不是演示品（约法 L27）。
+- 本人说“更新网站”时，按网站项目 V:\Personal\Projects\wly0829.cn 里的 AGENTS.md 更新到最新，通常每周一次。
 - 不建自动定时更新。
 
 ### 自动运行的东西要看得见
@@ -2402,13 +2435,24 @@
 - 本人在配对过的设备上看的是本人版，可以直接在卡片上处理：提交答案、标“办好了”或“不用了”、晚点提醒、交给 AI；这些动作先进收件箱，由 AI 照办或核实后关闭。公开版只能看。
 - 本人没回、AI 也没说做完的对话，算本人没看见；要本人知道、做或选的，用人话写进驾驶舱：出了什么事、要本人做什么、不做会怎样，不用代号。
 - 告知按影响分级：没影响本人在用的功能、需求和资料的（例如 AI 的临时文件、已经改正的内部出错），AI 后台处理，不进本人的两栏；已明显影响在用功能、稳定性、重要自动任务结果或既定安排的，进“要你知道”；关键用途大范围不可用、重要原件可能丢失或损坏、损失还在扩大，或确需本人亲手办、授权、付款、取舍的，进“需要你”。
+- 几分钟内要本人动手的、他说过“做完叫我”的、AI 判断他该看或该知道的，用电脑配置与恢复里现成的发手机脚本发到他手机，限时的带作废时间；他在不在电脑前由程序判断。能放着等他回来办的仍进驾驶舱。
 - 没人看着时不能等本人追问：AI 能修、正在修，也不能隐去明显或重大的影响。告知不等于改成等本人答复，严重程度和要不要本人动手分开判断；AI 自己接着办的，写清谁在办、怎么核实、什么时候再看。
 - 本人只看最终输出（〔约法 L12〕）：干活途中少发话，要他知道的结论、方案和建议都放进最后的回复，不靠途中说过的话也能看懂。同一轮两条最终输出大段重复，他只看最新一条；对话被定时任务、子代理或命令唤醒过，唤醒前后的输出他都可能没看到。所以要重写就完整重写，让最新那条单独看就够，不只补一行或写“同上”；要补充就只写新的，不重复前文。要他知道、做或选的，照上面进驾驶舱兜底，只放他知道了有意义的。
 - 问本人之前先自查：只影响技术做法、修报错、排版细节或能撤回的小事，AI 直接按自己的建议做，回复里写一句“我定了：……，不同意说一声”；能自己查到的事实先查，授权范围内能撤回的下一步直接做，已经按建议做好、只差本人点头的，直接报结果。
-- 真要问本人的只有这几类：影响本人的需求或产品；要取舍、和价值观有关的；发消息、对外发布、花钱、删只有一份的数据、撤不回的迁移；给 AI 加新规矩、新程序，或做本人会看到、会用到的新东西之前请他先看样子；只有本人能做的事（登录、验证、接手机、答问卷）。问的时候给一个完整的推荐样子和 2–3 个确定的选项，标出建议；依赖答案的部分停下等，不依赖的接着做（〔约法 L3〕）。
+- 真要问本人的只有这几类：影响本人的需求或产品；要取舍、和价值观有关的；发消息、对外发布、花钱、删只有一份的数据、撤不回的迁移；给 AI 加新规矩、新程序，或做本人会看到、会用到的新东西之前请他先看样子；只有本人能做的事（登录、验证、接手机、答问卷）。问的时候先给样子、现在什么情况和建议；有几个真选项列几个，最多 2–3 个，写清后果；只有一种合理做法，给一句样子和建议就行。依赖答案的部分停下等，不依赖的接着做（〔约法 L3〕）。
 - 还在等本人回话或动手，问题就必须留在这一轮的收尾里：Claude 的收尾框带上问题，Codex 在最后一行写“【等你】”加一句话；只在正文里写“等你一句话”，驾驶舱收不到。问题要离开那段对话也看得懂：点明是哪件事、要本人定什么，不用“这份”“上面”这类指代，附上 AI 的建议（Claude 收尾的第一个按钮放建议，每个按钮写清点了会怎样）。
 - 子代理不自己登记，把要本人做或选的事交回根会话，由根会话决定登记。
 - 例：“这件事要我确认，帮我记在‘需要你’里，写清怎样才算完成。”
+
+### 写给本人之前对一遍
+AI 每条写给本人的话发出去前自己对一遍，这段不写进回复：
+- 本人问的每一条都先答了吗。
+- 他没看过 AI 查的东西和途中的话，只看这条能懂吗。
+- 写具体了吗：哪一页、哪个按钮、他会看到什么、放在哪里。
+- 能一句说完的是一句吗（本人原话：“你刚刚明明只需要说，401拿不到流量”）。
+- 有没有条号和内部词；非说不可，先说它是干什么的。
+- 他问“是干什么的”，是不是只说干什么、没给建议。
+- 改方案，是因为有新事实、新理由或他改了要求，还是只因为他不满意。
 
 ::screen{#rule-capabilities-runtime-08 section="points"}
 
@@ -2976,9 +3020,9 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E372",
-   "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
-   "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
+   "release": "E389",
+   "sha256": "9332bfccd659ebb4ccf06b5d4e042e1b8c2f9c984f1ac46326072fb9bf73ed20",
+   "public_sha256": "dee468dd4738087e05e9c11cd015532a7f57c483126fbe63f64043c39a97e11b",
    "from": null,
    "to": "## 常用入口",
    "start": 0,
@@ -3001,7 +3045,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-11",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
+  "source_public_sha256": "dee468dd4738087e05e9c11cd015532a7f57c483126fbe63f64043c39a97e11b",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-11"
  },
  "layout": {
@@ -3009,7 +3053,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版"
+     "text_ref": "原文·E389版"
     },
     {
      "type": "chapter_title",
@@ -3050,7 +3094,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版"
+     "text_ref": "原文·E389版"
     },
     {
      "type": "chapter_title",
@@ -3143,7 +3187,7 @@
 }
 ```
 
-原文 · E372 版
+原文 · E389 版
 
 # 能力与运行方式
 
@@ -3186,13 +3230,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E372",
-   "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
-   "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
+   "release": "E389",
+   "sha256": "9332bfccd659ebb4ccf06b5d4e042e1b8c2f9c984f1ac46326072fb9bf73ed20",
+   "public_sha256": "dee468dd4738087e05e9c11cd015532a7f57c483126fbe63f64043c39a97e11b",
    "from": "## 常用入口",
    "to": "## 浏览器",
    "start": 2714,
-   "end": 5491,
+   "end": 5528,
    "approved_omissions": []
   },
   "title": "原文（二）：常用入口",
@@ -3206,7 +3250,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-12",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
+  "source_public_sha256": "dee468dd4738087e05e9c11cd015532a7f57c483126fbe63f64043c39a97e11b",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-12"
  },
  "layout": {
@@ -3214,7 +3258,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -3242,7 +3286,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -3288,7 +3332,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E372 版 · 续
+原文 · E389 版 · 续
 
 ## 常用入口
 
@@ -3297,7 +3341,7 @@ owner: `E:\.agents`
 - **本机小工具。** 问本机已有的小工具、以前用过的工具、图片超分或本机现成做法时，先查唯一清单 `E:\Tools\LocalToolbox\catalog.json`；按用途检索用 `E:\Tools\LocalToolbox\Find-LocalTool.ps1 -Query '<用途>' -Json`。工具列表、型号和哈希只在那份清单里。
 - **快速计算机清理文件。** 直达 PCConfig 的 `E:\PCConfig\docs\runtime\ai-cache-sweep.md`“快速计算机清理文件”流程：先执行已核实的明显无用项并清本批回收实体、回读实际空间，疑难对象和基座源码修复并行；复用已有证据，不反复整盘扫描，不把全量引擎修好当作普通项清理的前置。
 - **内存快满时自动处理。** AI 不等本人，按 PCConfig 的 `E:\PCConfig\registries\memory_guard.json` 登记的失控优先、安全回收与急救规则自动处理；有失控增长者时只处理增长者，清单及规则外的对象不动。AI 自己的任务若是占用大户，先停自己的。触发阈值、安全边界和分类只读 PCConfig 登记，不在全局规则复制；AI 安装会常驻后台的软件时，同时在该登记给它分类。
-- **生成图片和设计画面。** 任何项目里的静态画面默认用生图（Codex 自带生图；Claude 写好提示派 Luna 调用）：照片感画面、插画、封面、图标和标志、带固定文字的图、精准抠图、透明底和精准局部替换都算；网页、PPT、视频的设计也先生图定样子，再照图写代码。画面里用代码的只有四类：动效，会变的内容（计数、日期、状态、实时数据），数据图表，原件证据的摆放和打码；证据类东西（截图、聊天记录、单据、证件和当证据用的实拍）永不生图，生成图里的字逐字和原文核对，怎么派、怎么验收和管版本见 `image-generation` 技能。
+- **生成图片和设计画面。** 任何项目里的静态画面默认用生图（Codex 自带生图；Claude 写好提示派 Luna 调用）：照片感画面、插画、封面、图标和标志、带固定文字的图、精准抠图、透明底和精准局部替换都算；网页、PPT、视频的设计也先生图定样子，再照图写代码。画面里用代码的只有五类：动效，会变的内容（计数、日期、状态、实时数据），数据图表，原件证据的摆放和打码，字为主、随内容改的流程框和对照图（这类要快，生图一批要等 2～3 分钟）；证据类东西（截图、聊天记录、单据、证件和当证据用的实拍）永不生图，生成图里的字逐字和原文核对，怎么派、怎么验收和管版本见 `image-generation` 技能。
 - **个人领域直达。** 健康和微信分别直达 `personal-health`、`wechat-direct`；只有原件位置不明、要跨已允许的位置查找或原来的定位失效时，才用 `personal-materials` 找到、打开并核对原件；精确录音和扫描件分别交给 `chinese-asr`、`localocr`。照片视频只在本人明确要求时做成独立的有界任务。没有独立领域项目时，直接用当前对话的事实和会改变答案的最少原件回答。不恢复中央个人数据库、统一事件图、跨领域画像、后台同步、总技能或默认的全景上下文。
 - **Google。** 现行入口是 `google-workspace-direct`：仅通过固定 PCConfig OAuth/provider 处理 Gmail 和 Google Drive，各自按能力验收，具体操作见该技能；日历保持冻结，Google Tasks 不再接入（要本人做、要本人选的事登记进驾驶舱）。本人明确要写入时，也只调用这个入口已有的精确操作；不落库、不自动同步、不换账号，也不悄悄改走别的接入、连接器、浏览器或 rclone。入口没接好、账号失效或能力不够时如实说不可用或有限，不造第二 provider；写入、分享、发送和邀请要有对应能力和授权，删除、公开分享、发送和邀请还须绑定精确外部动作授权。Google Admin、支付和 Photos 不属于该入口。配置和凭据文件存在不说明账号、读取或写入现在可用。
 
@@ -3325,13 +3369,13 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E372",
-   "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
-   "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
+   "release": "E389",
+   "sha256": "9332bfccd659ebb4ccf06b5d4e042e1b8c2f9c984f1ac46326072fb9bf73ed20",
+   "public_sha256": "dee468dd4738087e05e9c11cd015532a7f57c483126fbe63f64043c39a97e11b",
    "from": "## 浏览器",
    "to": "## 汇报、网站和自动运行的东西",
-   "start": 5491,
-   "end": 7991,
+   "start": 5528,
+   "end": 8028,
    "approved_omissions": []
   },
   "title": "原文（三）：浏览器",
@@ -3350,7 +3394,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-13",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
+  "source_public_sha256": "dee468dd4738087e05e9c11cd015532a7f57c483126fbe63f64043c39a97e11b",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-13"
  },
  "layout": {
@@ -3358,7 +3402,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -3384,7 +3428,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -3458,7 +3502,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
 }
 ```
 
-原文 · E372 版 · 续
+原文 · E389 版 · 续
 
 ## 浏览器
 
@@ -3490,13 +3534,13 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E372",
-   "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
-   "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
+   "release": "E389",
+   "sha256": "9332bfccd659ebb4ccf06b5d4e042e1b8c2f9c984f1ac46326072fb9bf73ed20",
+   "public_sha256": "dee468dd4738087e05e9c11cd015532a7f57c483126fbe63f64043c39a97e11b",
    "from": "## 汇报、网站和自动运行的东西",
    "to": "## 安装位置、配置和本机约定",
-   "start": 7991,
-   "end": 11342,
+   "start": 8028,
+   "end": 11766,
    "approved_omissions": []
   },
   "title": "原文（四）：汇报、网站和自动运行；软件更新和兼容",
@@ -3510,7 +3554,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-14",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
+  "source_public_sha256": "dee468dd4738087e05e9c11cd015532a7f57c483126fbe63f64043c39a97e11b",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-14"
  },
  "layout": {
@@ -3518,7 +3562,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -3538,7 +3582,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -3608,18 +3652,20 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
 }
 ```
 
-原文 · E372 版 · 续
+原文 · E389 版 · 续
 
 ## 汇报、网站和自动运行的东西
 
-- **汇报网页**：什么时候用、做成什么样见约法 L26。各模型的提问、推荐、说明框及生成、存放、到期清理，统一按 `report-page` 技能；需要长期留下的结论写进对应项目的记录，不靠网页保存。
-- **网站**（约法 L27）：本人说“更新网站”时，按 `V:\Personal\Projects\wly0829.cn` 的 AGENTS.md 更新一次。不建自动定时更新。
+- **汇报网页**：什么时候用、做成什么样见约法 L26。各模型的提问、推荐、说明框及生成、存放、到期清理，统一按 `report-page` 技能；需要长期留下的结论写进对应项目的记录，不靠网页保存。选项都要是确定的做法，不用“A 或 B”把选择推给本人（约法 L26）。
+- **网站**（约法 L27）：wly0829.cn 是本人真实在用的个人看板，虽然公开，但不是演示品。本人说“更新网站”时，按 `V:\Personal\Projects\wly0829.cn` 的 AGENTS.md 更新到最新，通常每周一次。不建自动定时更新。
 - **本人只看驾驶舱**：本人在网站上基本只看驾驶舱（含驾驶舱二级页）；README、项目里的看板和总览页、网站上驾驶舱以外的页面，他都不看。要本人知道、做或选的事必须进驾驶舱，只写在别处等于没告诉他；不为本人另建看板或总览页（本人 2026-10-31，源 6ef403fe）。
 - **自动运行的东西**（约法 L28）：计划任务、看门狗和其他自动运行的东西，要在网站看板上看得见：在做什么、上次和下次什么时候运行、有没有出错、怎么停、停了会影响什么。新增或修改自动运行的东西时，把这些状态写进看板能读的状态文件或登记（按 PCConfig 的现行做法）；看板怎么显示另行建设，不为此在本机另开窗口。后台命令不弹黑窗口。
 - **定时任务的结论写进驾驶舱**：Codex 和 Claude 的定时任务每跑一轮，都用 PCConfig 的结论回执命令写一句人话结论（正常、要你看或出错），写法见 PCConfig `docs/runtime/codex-automation-receipt.md`；分段做的每段都写、以最后一次为准，卡住或出错当场就写。驾驶舱在这个任务那一行显示结论；是否同时进入“要你知道”或“需要你”，统一按 cockpit 技能的分级告知（`E:/.agents/skills/cockpit/SKILL.md#分级告知`），AI 接手不免除告知。任务自己没写时，Claude 的钩子用它最后的收尾回顾补一份并标黄。回执不会自己推到本人面前；本人在对话里等的结果，还要送回那个对话（Claude 的做法和兜底见[Claude 适配](/rules/claude-adapter/#宿主接线)“定时任务的结果送回等结果的对话”）。
 - **本人没回的对话默认没看见**：本人没回复、AI 也没说做完的对话，算本人没看见；要本人知道、做或选的，都用人话写进驾驶舱：出了什么事、要本人做什么、不做会怎样，不用代号，不让人猜。本人在那个对话里回了才算看见。Claude 桌面版收尾时带了待答问题，由钩子自动登记，10 分钟没回才显示，本人一回复就关掉；收尾不带待答问题，就表示没有等本人的事。Codex 有要本人定或做的事时，在最后一条回复的最后一行写“【等你】<一句人话>”，由钩子同样登记和关闭。AI 自己还要接着做的，登记“AI 在跟”，不留没人知道的半截。
 
 - **问本人之前先自查**：只影响技术做法、修报错、排版细节或能撤回的小事，AI 按自己的建议直接做，回复里写一句“我定了：……，不同意说一声”，不问；能自己查到的事实先查；本人授权范围内、能撤回的下一步直接做；已经按建议做好、只差本人点头的，直接报告结果。要问的是：影响本人的需求或产品；发消息、对外发布、花钱、删唯一的数据、撤不回的迁移；给 AI 加新规矩、新程序，或做本人会看到、会用到的新东西前要他先看样子；只有本人能做的事（登录、验证、接手机、答问卷）。还在等本人回话或动手，问题就必须留在收尾里（Claude 收尾带问题，Codex 最后一行写“【等你】”），不能只在摘要或正文里写“等你一句话”，否则驾驶舱收不到。问题要离开那段对话也看得懂：Claude 收尾的摘要写在做什么、做到哪，问题一句话点明哪件事、要本人定什么，不用“这份”“上面”这类指代，按钮第一个放建议，每个按钮的话写清点了会怎样（钩子会把对话名、做到哪、问题和按钮原样做成驾驶舱卡）；Codex 的驾驶舱卡只有“【等你】”这一行，这一行要自己点明哪件事、要本人定什么和 AI 的建议。给本人看的卡和问题不用行话、文件路径和英文代号；派 GPT 时派单的「任务」一栏也会原样显示在驾驶舱“AI 正在跑”，同样写成本人一眼看懂的一句话（做什么、为了什么），不写内部代号、文件名、占位时间，不用“本人”这类 AI 之间的称呼。
+- **写给本人之前对一遍**（约法 L2）：写给我之前对一遍：我问的每一条都先答了吗；我没看过你查的东西和途中的话，只看这条能懂吗；写具体了吗（哪一页、哪个按钮、我会看到什么、放在哪里）；能一句说完的是一句吗（我的原话：“你刚刚明明只需要说，401拿不到流量”）；有没有条号和内部词（入口、链路、口径、收口、回执、派发、函数名），非说不可先说它是干什么的；我问“是干什么的”，是不是只说干什么、没给建议；你改方案，是因为有新事实、新理由或我改了要求，还是只因为我不满意。这段是给你对的，不用在回复里提。
+- **说中文**（约法 L1）：对本人说话一律用简体中文，AI 给他看的思考摘要也用中文，子代理也一样。
 - **本人怎么看回复，驾驶舱兜底**：本人只看最终输出；同一轮两条最终输出大段重复，就只看最新一条，不重复就都看；对话被定时任务、子代理或命令唤醒过，唤醒前后的输出本人都可能没看到。所以要重写就完整重写，最新那条单独看就够，不能只补一行或写“同上”；要补充就只写新内容，不重复前文。不能指望本人什么都看见：要他知道、做或选的，按“本人没回的对话默认没看见”进驾驶舱兜底；只放他知道了有意义的，其余按“本人不用知道的技术问题不上驾驶舱”不上。
 - **本人不用知道的技术问题不上驾驶舱**：统一按 cockpit 技能的分级告知（`E:/.agents/skills/cockpit/SKILL.md#分级告知`） 决定后台处理、进入“要你知道”或“需要你”；无人值守不能等本人主动追问，AI 能自行处理也不能隐去明显或重大的影响。AI 自己继续办的，用 `Set-OwnerItem.ps1 -Who ai` 保留承接方、核实办法和检查点；告知本人不等于改为等本人答复，严重程度与本人动作需求分别判断。
 - **要本人做、要本人选、可能漏看的事**：根会话在回复本人的同时，用 `pwsh -NoProfile -File E:\PCConfig\tools\Set-OwnerItem.ps1 -Mode Add` 登记到驾驶舱“需要你”，填写 `-PassCriteria` 完成条件；可机核的方法用 `-AiHint` 写入条目的 `ai_hint`。Claude、Codex 用同一命令；子代理不登记，交根会话决定。
@@ -3643,13 +3689,13 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E372",
-   "sha256": "55dd7b4c4da20eae72d0c8f5e60f10e61005d1a09b9c616faa7d665dd9c7ce45",
-   "public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
+   "release": "E389",
+   "sha256": "9332bfccd659ebb4ccf06b5d4e042e1b8c2f9c984f1ac46326072fb9bf73ed20",
+   "public_sha256": "dee468dd4738087e05e9c11cd015532a7f57c483126fbe63f64043c39a97e11b",
    "from": "## 安装位置、配置和本机约定",
    "to": null,
-   "start": 11342,
-   "end": 12833,
+   "start": 11766,
+   "end": 13257,
    "approved_omissions": []
   },
   "title": "原文（五）：安装位置、配置和本机约定",
@@ -3668,7 +3714,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
   "reuse": "",
   "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-15",
   "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "79b78b0ca6d48410a79b301d2e874c591b9da18d346b6a307b95b85b855e643f",
+  "source_public_sha256": "dee468dd4738087e05e9c11cd015532a7f57c483126fbe63f64043c39a97e11b",
   "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-15"
  },
  "layout": {
@@ -3676,7 +3722,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -3696,7 +3742,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -3742,7 +3788,7 @@ Codex 云端读者按偶用处理、不维护；现在能不能用、用前怎�
 }
 ```
 
-原文 · E372 版 · 续
+原文 · E389 版 · 续
 
 ## 安装位置、配置和本机约定
 

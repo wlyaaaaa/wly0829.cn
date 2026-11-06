@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-capture-failover/page.json",
-  "sha256": "a11c871b260098e52577e590e8211d467f27ac2f31d301b521746427e339ab04",
-  "converted_at_beijing": "2026-11-06T07:33:27+08:00"
+  "sha256": "c90ff0331ca53f972aaf9f2b8e938c725f617f0758aea0d8046aeaf4ac33d396",
+  "converted_at_beijing": "2026-11-06T14:40:56+08:00"
  }
 }
 ---
@@ -169,7 +169,7 @@ Sunshine 远程串流 · 功能说明
 
 目标体验仍很直白：在家用物理屏，主屏确实离线时才让 VDD 兜底，主屏回来后把普通窗口拉回；现在已经有实现和测试，但还不能把这段目标场景说成真机成功。
 
-**当前情况：**11 月 6 日 05:29 只读体检：结论是主机这边正常，没有列出要留意的原因；守护在跑、心跳新鲜，跑的程序和当前源码一致（任务 11 月 6 日 01:21 随开机启动）；捕获模式在虚拟屏上，这一轮决定“留在虚拟屏”，Sunshine 配置要抓的那块屏在线，没有报任何阻断原因，显卡安全闸放行；已搬到虚拟屏的窗口是 0 个。11 月 4 日报过的“要留意”（运行的程序比源码旧）已不是现状：10 月 21—25 日源码里的改动（搬窗来源收紧、启动器日志、心跳发布和换屏判断分开）、11 月 2 日的“重启时等旧进程真正退出”和 11 月 3 日写进源码的换屏日志、TCP 分表判断现在都已加载，但加载不等于在真实换屏里验过。10 月 11 日 13:33 体检报过的“阻塞”（配置要抓的屏在当时活动的屏里找不到对应的一个，守护在等串流空闲）也已不是现状。这次没有改显示，也没有主动发起真实串流。手机画面与真实主屏故障转移仍未验收；普通联网串流 10 月 8 日有本人实用结果。
+**当前情况：**11 月 6 日 13:58:58 只读体检：结论是主机这边正常，没有列出要留意的原因；守护在跑、心跳新鲜，跑的程序和当前源码一致（任务 11 月 6 日 01:21 随开机启动）；捕获模式在虚拟屏上，这一轮决定“留在虚拟屏”，Sunshine 配置要抓的那块屏在线，没有报任何阻断原因，显卡安全闸放行；已搬到虚拟屏的窗口是 0 个。11 月 4 日报过的“要留意”（运行的程序比源码旧）已不是现状：10 月 21—25 日源码里的改动（搬窗来源收紧、启动器日志、心跳发布和换屏判断分开）、11 月 2 日的“重启时等旧进程真正退出”和 11 月 3 日写进源码的换屏日志、TCP 分表判断现在都已加载，但加载不等于在真实换屏里验过。10 月 11 日 13:33 体检报过的“阻塞”（配置要抓的屏在当时活动的屏里找不到对应的一个，守护在等串流空闲）也已不是现状。这次没有改显示，也没有主动发起真实串流。手机画面与真实主屏故障转移仍未验收；普通联网串流 10 月 8 日有本人实用结果。
 
 具体测试保留各自日期，页面不实时探测运行状态。
 
@@ -626,7 +626,7 @@ Sunshine 远程串流 · 功能说明
 ## 技术实现与依据（一）
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
-10 月 22 日 07:22:22 守护回执（历史）：当时运行中的 WorkerSha256=2EA6698B… 与当时源码 967F366D… 不一致，c09364f（10 月 22 日 06:39）和 6cfbfde（10 月 21 日 06:38）尚未加载；10 月 20 日 07:38:27 那份回执四个组件与当时源码一致。10 月 30 日 11:10:14 读到的守护回执（历史）：进程 ProcessStartUtc 2026-10-26T02:30:32Z（北京时间 10 月 26 日 10:30），回执里四个 ComponentSha256（Invoke-SunshineCaptureFailover.ps1、sunshine-capture-failover.psm1、sunshine-safety.psm1、sunshine-headless-config.psm1）当时与源码逐项相等，c09364f、6cfbfde 和 8de3dcf（健康回执发布与捕获周期失败分开）都已加载，是守护自然重启后加载的。现在：11 月 6 日 05:29 零写入体检（Get-SunshineHealth.ps1 -Json）Status=host-observed-healthy，Reasons 为空；任务 SunshineCaptureFailover-Interactive 11 月 6 日 01:21:26 启动，Worker.Fresh=true、SourceCurrent=true，Mode/CaptureKind=Vdd、Action=StayVdd、ConfiguredTargetOnline=true、BlockedReason=null、ClientAcceptance=unknown；GPU Allowed=true（current-boot-clean）；Active / verified-stream-udp-endpoint、0 条 RTSP 连接、3 个媒体端点（不是客户端数）；MigratedWindowCount=0。这只证明主机观察，不证明客户端画面。之前：11 月 4 日 13:03 零写入体检（进程退出 0）Status=attention，唯一 Reasons 为 worker-source-bundle-not-current；ProcessStartUtc 2026-11-03T08:01:19Z（北京时间 11 月 3 日 16:01:19），心跳新鲜，Mode/CaptureKind=Vdd、Action=StayVdd、ConfiguredTargetOnline=true、BlockedReason=null、ClientAcceptance=unknown；GPU Allowed=true（current-boot-clean）。这个新开的体检进程加载的是当前模块，报 Active / verified-stream-udp-endpoint、0 条 RTSP 连接、3 个媒体端点（不是客户端数）。四个文件逐项比较（09:10:45）：sunshine-capture-failover.psm1、sunshine-headless-config.psm1 相同，Invoke-SunshineCaptureFailover.ps1、sunshine-safety.psm1 不同。把回执指纹和提交历史对照：运行的主脚本等于 f2e238f（11 月 2 日 09:22），安全模块等于 23fa6d2（10 月 19 日 13:06），所以 c09364f、8de3dcf 和 f2e238f 都在运行版本里，5b04f67（11 月 3 日 16:58）和 27af2fa（11 月 3 日 17:58）当时还没加载；不是旧修复失效。同一天的守护回执 MigratedWindowCount=0、AppliedWindowActionCount=0、FailedWindowActionCount=0。核对时没有重启或部署。历史：10 月 11 日 13:33 零写入体检曾是 blocked（capture-output-offline-or-ambiguous），当时会话 Active（0 个 TCP、3 个 UDP 串流端点）、动作为“等待串流空闲”。客户端画面 Unknown（未验证），真实切换和手机验收仍未完成
+10 月 22 日 07:22:22 守护回执（历史）：当时运行中的 WorkerSha256=2EA6698B… 与当时源码 967F366D… 不一致，c09364f（10 月 22 日 06:39）和 6cfbfde（10 月 21 日 06:38）尚未加载；10 月 20 日 07:38:27 那份回执四个组件与当时源码一致。10 月 30 日 11:10:14 读到的守护回执（历史）：进程 ProcessStartUtc 2026-10-26T02:30:32Z（北京时间 10 月 26 日 10:30），回执里四个 ComponentSha256（Invoke-SunshineCaptureFailover.ps1、sunshine-capture-failover.psm1、sunshine-safety.psm1、sunshine-headless-config.psm1）当时与源码逐项相等，c09364f、6cfbfde 和 8de3dcf（健康回执发布与捕获周期失败分开）都已加载，是守护自然重启后加载的。现在：11 月 6 日 13:58:58 零写入体检（Get-SunshineHealth.ps1 -Json）Status=host-observed-healthy，Reasons 为空；任务 SunshineCaptureFailover-Interactive 11 月 6 日 01:21:26 启动，Worker.Fresh=true、SourceCurrent=true，Mode/CaptureKind=Vdd、Action=StayVdd、ConfiguredTargetOnline=true、BlockedReason=null、ClientAcceptance=unknown；GPU Allowed=true（current-boot-clean）；Active / verified-stream-udp-endpoint、0 条 RTSP 连接、3 个媒体端点（不是客户端数）；MigratedWindowCount=0。这只证明主机观察，不证明客户端画面。之前：11 月 4 日 13:03 零写入体检（进程退出 0）Status=attention，唯一 Reasons 为 worker-source-bundle-not-current；ProcessStartUtc 2026-11-03T08:01:19Z（北京时间 11 月 3 日 16:01:19），心跳新鲜，Mode/CaptureKind=Vdd、Action=StayVdd、ConfiguredTargetOnline=true、BlockedReason=null、ClientAcceptance=unknown；GPU Allowed=true（current-boot-clean）。这个新开的体检进程加载的是当前模块，报 Active / verified-stream-udp-endpoint、0 条 RTSP 连接、3 个媒体端点（不是客户端数）。四个文件逐项比较（09:10:45）：sunshine-capture-failover.psm1、sunshine-headless-config.psm1 相同，Invoke-SunshineCaptureFailover.ps1、sunshine-safety.psm1 不同。把回执指纹和提交历史对照：运行的主脚本等于 f2e238f（11 月 2 日 09:22），安全模块等于 23fa6d2（10 月 19 日 13:06），所以 c09364f、8de3dcf 和 f2e238f 都在运行版本里，5b04f67（11 月 3 日 16:58）和 27af2fa（11 月 3 日 17:58）当时还没加载；不是旧修复失效。同一天的守护回执 MigratedWindowCount=0、AppliedWindowActionCount=0、FailedWindowActionCount=0。核对时没有重启或部署。历史：10 月 11 日 13:33 零写入体检曾是 blocked（capture-output-offline-or-ambiguous），当时会话 Active（0 个 TCP、3 个 UDP 串流端点）、动作为“等待串流空闲”。客户端画面 Unknown（未验证），真实切换和手机验收仍未完成
 
 ## 关键规则与设计选择
 
@@ -1173,7 +1173,7 @@ Sunshine 远程串流 · 功能说明
 
 - 11 月 4 日 11:40 零写入体检（历史）：attention（worker-source-bundle-not-current），ConfiguredTargetOnline=true、BlockedReason 为空、Action=StayVdd、ClientAcceptance=unknown；它只说明当时运行程序落后于源码，没有看客户端画面。
 
-- 11 月 6 日 05:29 零写入体检：host-observed-healthy，Reasons 为空，Worker.Fresh=true、SourceCurrent=true，ConfiguredTargetOnline=true、BlockedReason 为空、Action=StayVdd、ClientAcceptance=unknown；它只证明主机观察，没有看客户端画面，也不是一次换屏验收。
+- 11 月 6 日 13:58:58 零写入体检：host-observed-healthy，Reasons 为空，Worker.Fresh=true、SourceCurrent=true，ConfiguredTargetOnline=true、BlockedReason 为空、Action=StayVdd、ClientAcceptance=unknown；它只证明主机观察，没有看客户端画面，也不是一次换屏验收。
 
 - 11 月 4 日 09:12 只读核对音频源地址修补（native-patches/source-address-ready.json，docs/native-source-address-ready.md）：音频 UDP PING 可能先到，旧源码此时开始采集，媒体发送可能读到默认 0.0.0.0 源地址；修补让音视频先等本会话源地址就绪，沿原握手绝对期限等待并支持停止取消，不改显示、音频配置、路由或防火墙。这份清单写明 full_sunshine_build_passed=false、deployed=false、original_sunshine_trigger_passed=false，其中构建这一项是后来那次构建之前的记录，没有再改。后来提交的 docs/native-source-address-ready.md（e466c8a，11 月 5 日 01:39）记明：11 月 4 日完整构建过一次、从未运行，成品和构建缓存已删；本人 11 月 5 日决定继续用官方版、不部署修补，只在串流空闲时真实画面切不过来或“串流画面切换”任务再报错时重新评估；真实客户端初始化和原换屏回归都没有通过。隔离 C++ 回归有记录，核对时没有复跑。历史初始化错误与此缺陷高度吻合，但缺原失败调用参数，不能写成已找到全部历史发送错误根因或已修好。
 

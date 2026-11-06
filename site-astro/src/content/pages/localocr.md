@@ -51,10 +51,10 @@
     "at": "2026-11-03 16:12"
    },
    "facts": [
-    "近 7 天 AI 点名用了 4 次",
+    "近 7 天 AI 点名用了 3 次",
     "11 月 4 日 11:13 重读：本机服务仍没在监听；当天早前 Linux 子系统读现役版本超时，现在能不能识别没有验证；当天 03:06 的每晚自检通过"
    ],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-05",
    "source": "AI 使用记录和项目源码"
   },
   "public": true,
@@ -653,8 +653,8 @@
  },
  "source": {
   "page": "sources/pages/localocr/page.json",
-  "sha256": "3e950073305ea37a477a251d87dcf6ee97fb54f114e9f743f9c7751db5e861e8",
-  "converted_at_beijing": "2026-11-06T04:59:43+08:00"
+  "sha256": "eb3842e032fb777b8e3de025e0d7f8ceda8fb4ac831632a6b076111f7c4d34cf",
+  "converted_at_beijing": "2026-11-06T14:28:57+08:00"
  }
 }
 ---
@@ -709,7 +709,7 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 点名用了 4 次",
+       "text": "近 7 天 AI 点名用了 3 次",
        "state": "fact"
       },
       {
@@ -717,7 +717,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录和项目源码",
+     "static_note": "截至 11 月 5 日 · AI 使用记录和项目源码",
      "row": "hero"
     },
     {
@@ -770,7 +770,7 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 点名用了 4 次",
+       "text": "近 7 天 AI 点名用了 3 次",
        "state": "fact"
       },
       {
@@ -778,7 +778,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录和项目源码"
+     "static_note": "截至 11 月 5 日 · AI 使用记录和项目源码"
     },
     {
      "type": "stat_card",

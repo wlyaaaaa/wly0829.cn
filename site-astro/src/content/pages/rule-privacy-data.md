@@ -30,16 +30,16 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E372",
-   "commit": "f44463a9fd2c4bacb8c562315d297db27d501f35",
-   "ruleset_sha256": "ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7",
-   "activated_at": "2026-11-04T08:49:37.968049+08:00",
+   "release": "E389",
+   "commit": "c74447f7cefadc860208ad2425c236981caa837d",
+   "ruleset_sha256": "bece26ac3f4569cf3582648846158e8e2c9145498e148bdaa1fe9edf514759f2",
+   "activated_at": "2026-11-06T13:22:34.536034+08:00",
    "file": "sources/rules/docs/contracts/agents.privacy-data.md",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
-   "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942"
+   "public_sha256": "8617aa90c262a1013c438a5671a0cd2226d3f03137f9ed834de9ea9d2ed03f24"
   },
   "explanation_based_on": {
-   "release": "E372",
+   "release": "E389",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：一只手把验证卡轻轻贴到小木柜的绿色挂锁上，挂锁“咔”地弹开，旁边的小沙漏翻转、细沙开始往下流；中间五级石台阶从 L1 到 L5 依次微微亮一下，L4 台阶上的小保险箱始终关着；下面 G、H 两块硬盘之间一道细绿光从左流到右，H 盘旁小木箱上的日历牌翻过一页；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
@@ -147,31 +147,6 @@
    "highlights": [],
    "mentions": [
     {
-     "target": "/rules/charter/#L14",
-     "screen": "rule-privacy-data-01",
-     "text": "L14 我的电脑可信"
-    },
-    {
-     "target": "/rules/charter/#L18",
-     "screen": "rule-privacy-data-01",
-     "text": "L18 个人资料锁着时"
-    },
-    {
-     "target": "/rules/charter/#L19",
-     "screen": "rule-privacy-data-01",
-     "text": "L19 可信位置里原样保存"
-    },
-    {
-     "target": "/rules/charter/#L20",
-     "screen": "rule-privacy-data-01",
-     "text": "L20 公开内容怎么看"
-    },
-    {
-     "target": "/rules/charter/#L21",
-     "screen": "rule-privacy-data-01",
-     "text": "L21 备份跟着原件走"
-    },
-    {
      "target": "/rules/authorization/",
      "screen": "rule-privacy-data-01",
      "text": "用户授权"
@@ -242,11 +217,6 @@
      "text": "用户授权"
     },
     {
-     "target": "/rules/charter/#L21",
-     "screen": "rule-privacy-data-06",
-     "text": "约法 L21"
-    },
-    {
      "target": "/projects/pcconfig/",
      "screen": "rule-privacy-data-06",
      "text": "电脑配置与恢复"
@@ -275,6 +245,26 @@
      "target": "/skills/project-entry-gate/",
      "screen": "rule-privacy-data-06",
      "text": "改项目前先核对"
+    },
+    {
+     "target": "/rules/charter/#L18",
+     "screen": "rule-privacy-data-01",
+     "text": "资料锁"
+    },
+    {
+     "target": "/rules/charter/#L19",
+     "screen": "rule-privacy-data-01",
+     "text": "密码和密钥"
+    },
+    {
+     "target": "/rules/charter/#L14",
+     "screen": "rule-privacy-data-01",
+     "text": "可信设备"
+    },
+    {
+     "target": "/rules/charter/#L20",
+     "screen": "rule-privacy-data-01",
+     "text": "公开内容"
     }
    ],
    "live": []
@@ -300,8 +290,8 @@
  },
  "source": {
   "page": "sources/pages/rule-privacy-data/page.json",
-  "sha256": "189700ee2460d53911bf2ce15cb3e52bf0ca190de5c0c7c495f69d440a4275ec",
-  "converted_at_beijing": "2026-11-04T10:36:30+08:00"
+  "sha256": "4136bcdbb241f9c8dc791353ceddc8585391d02e27c9bde340f920b2143f7b17",
+  "converted_at_beijing": "2026-11-06T14:01:14+08:00"
  }
 }
 ---
@@ -330,26 +320,6 @@
     "href": "/rules/authorization/#p-direct"
    },
    {
-    "text": "L14 我的电脑可信",
-    "href": "/rules/charter/#L14"
-   },
-   {
-    "text": "L18 个人资料锁着时",
-    "href": "/rules/charter/#L18"
-   },
-   {
-    "text": "L19 可信位置里原样保存",
-    "href": "/rules/charter/#L19"
-   },
-   {
-    "text": "L20 公开内容怎么看",
-    "href": "/rules/charter/#L20"
-   },
-   {
-    "text": "L21 备份跟着原件走",
-    "href": "/rules/charter/#L21"
-   },
-   {
     "text": "密码中心项目页",
     "href": "/projects/password-center/"
    },
@@ -372,6 +342,22 @@
    {
     "text": "现在的资料状态 → 授权与状态",
     "href": "/computer-access/"
+   },
+   {
+    "text": "资料锁",
+    "href": "/rules/charter/#L18"
+   },
+   {
+    "text": "密码和密钥",
+    "href": "/rules/charter/#L19"
+   },
+   {
+    "text": "可信设备",
+    "href": "/rules/charter/#L14"
+   },
+   {
+    "text": "公开内容",
+    "href": "/rules/charter/#L20"
    }
   ],
   "anchors": [],
@@ -523,7 +509,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "这是Codex、Claude和它们派出的子代理共用的专题，是约法L14我的电脑可信、"
+     "text_ref": "这是Codex、Claude和它们派出的子代理共用的专题，是开场那一页里"
     },
     {
      "type": "action_button",
@@ -612,7 +598,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "这是Codex、Claude和它们派出的子代理共用的专题，是约法L14我的电脑可信、"
+     "text_ref": "这是Codex、Claude和它们派出的子代理共用的专题，是开场那一页里"
     },
     {
      "type": "glossary",
@@ -774,13 +760,13 @@
 - **要用本人的私人资料**：问的是本人自己的情况（身体、心理、生活等），或回答要用到本人的偏好、履历、通信、健康、财务、私人关系、以前的个人经历；拿不准按需要处理。资料锁开着才用；锁着就先请本人验证一次，通过后再查资料、派活和作答，不换来源绕过，也不拿缩水的回答凑。〔资料锁怎么走〕
 - **准备公开**：姓名、生日、照片、履历这类普通资料不设限，不因为是个人资料就删改；能用的密码和凭据永远不公开；只有真会招来诈骗、骚扰、被追踪的才谨慎。按〔五级怎么分〕判断；定了等级不等于可以发布，发布另看〔用户授权〕。
 
-这是 Codex、Claude 和它们派出的子代理共用的专题，是约法〔L14 我的电脑可信〕、〔L18 个人资料锁着时〕、〔L19 可信位置里原样保存〕、〔L20 公开内容怎么看〕、〔L21 备份跟着原件走〕的细则。
+这是 Codex、Claude 和它们派出的子代理共用的专题，是开场那一页里〔资料锁〕〔密码和密钥〕〔可信设备〕〔公开内容〕几句的细则；备份跟着原件走（原 L21）的完整规则就在这一篇。这个专题是硬的：AI 觉得不对，只能先拿事实问本人，不能自己改。
 
 **先认几个词**
 - **密码中心**：本机管密码、密钥和本人验证的程序（〔密码中心项目页〕），其中的 SecretBroker 管资料锁。
 - **SecretRef**：密码中心里的一条取用登记，登记过的程序凭它拿到密钥，规则、聊天和配置里都不出现密钥本身。
 - **Hook、电脑 MCP**：Hook 是 Codex、Claude 每收到一条消息先自动跑的一小段程序；电脑 MCP 让别处的 AI 经网络操作这台电脑。
-- **L1–L5**：公开内容的五个等级，和约法的 L1–L30 条号不是一回事。
+- **L1–L5**：公开内容的五个等级，和约法句尾的 L 几标签不是一回事。
 
 跳到：〔资料的锁和解锁〕〔可信位置和秘密〕〔公开分级表〕〔私人仓库和备份〕
 
@@ -2484,13 +2470,6 @@
   "portrait": "竖版 9:16：标题在上，两张卡片从上到下一张一条、整宽，先“私人仓库收口”后“备份跟着原件走”，实例便签跟在各自卡片底部。字和横版完全一样。",
   "links": [
    {
-    "text": "约法 L21",
-    "href": "/rules/charter/#L21",
-    "locator_text": {
-     "h": "【约法L21]"
-    }
-   },
-   {
     "text": "电脑配置与恢复",
     "href": "/projects/pcconfig/",
     "orientations": [
@@ -2713,7 +2692,7 @@
 - 实例：公开项目配哪个私人配套仓库，登记在〔电脑配置与恢复〕里，用〔改项目前先核对〕技能的配套查询现查；查“中文语音转写”，登记的配套仓库是私有的 `public-project-private-backup`。
 
 ### 备份跟着原件走
-- 这是〔约法 L21〕的细则：G 盘受管备份跟着各自登记的来源，H 盘受管备份跟着 G 盘；新增、修改、删除都同步，不再“只加不删”。
+- 这是原约法 L21 的完整规则：G 盘受管备份跟着各自登记的来源，H 盘受管备份跟着 G 盘；新增、修改、删除都同步，不再“只加不删”。
 - 照片、视频、音乐、个人资料，以及 G 盘上只有一份原件的项目和软件文件夹（`G:\20_Projects`、`G:\70_Software`），删掉后在备份里留 30 天后悔期；具体范围以〔电脑配置与恢复〕（PCConfig）的登记为准。
 - 备份里还有、原件里已经没有的，不往回拷到原件。
 - 在已授权同步的范围内，盘和源目录都正常可读、又没有已知的挪位原因时，源里消失的东西按本人删了处理，不逐件追问。
@@ -2732,9 +2711,9 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E372",
+   "release": "E389",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
-   "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
+   "public_sha256": "8617aa90c262a1013c438a5671a0cd2226d3f03137f9ed834de9ea9d2ed03f24",
    "from": null,
    "to": "- **入口。**",
    "start": 0,
@@ -2765,7 +2744,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-07",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
+  "source_public_sha256": "8617aa90c262a1013c438a5671a0cd2226d3f03137f9ed834de9ea9d2ed03f24",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-07"
  },
  "layout": {
@@ -2775,7 +2754,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E372版，略去个别私人领域字句"
+     "text_ref": "原文·E389版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -2809,7 +2788,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E372版，略去个别私人领域字句"
+     "text_ref": "原文·E389版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -2891,7 +2870,7 @@
 }
 ```
 
-原文 · E372 版，略去个别私人领域字句
+原文 · E389 版，略去个别私人领域字句
 
 # 个人资料与数据处理
 
@@ -2920,13 +2899,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E372",
+   "release": "E389",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
-   "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
+   "public_sha256": "8617aa90c262a1013c438a5671a0cd2226d3f03137f9ed834de9ea9d2ed03f24",
    "from": "- **入口。**",
    "to": "## 公开个人数据分级表",
    "start": 1702,
-   "end": 3395,
+   "end": 3376,
    "approved_omissions": []
   },
   "title": "原文（二）：入口、可信位置和原样保存",
@@ -2940,7 +2919,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-08",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
+  "source_public_sha256": "8617aa90c262a1013c438a5671a0cd2226d3f03137f9ed834de9ea9d2ed03f24",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-08"
  },
  "layout": {
@@ -2950,7 +2929,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -2984,7 +2963,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -3042,7 +3021,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E372 版 · 续
+原文 · E389 版 · 续
 
 - **入口。** 查状态、业务检查和锁定分别是密码中心的 `StatusPersonalEnvironment`、`CheckPersonalDataAccess`、`LockPersonalEnvironment`，经已安装的 `C:\ProgramData\PCConfig\AuthorityHost\tools\Invoke-SecretBroker.ps1` 调用。状态未知时先用 `StatusPersonalEnvironment` 重读。`VerifyPersonalEnvironment` 在已有资料期内复用原截止；需要验证时不传 `-AuthorityFactor`，由本人选四选一验证。命令同步等验证终态，窗口首次可见起最长等 5 分钟；模型用宿主后台命令运行，外层超时至少 360 秒，等终态后回读状态，不能把命令启动当验证成功。取消、拒绝和超时按上面的取消规则处理。本人明确要解锁或续期时用 `EnrollPersonalPrivacyWaiver`，用法见 `local-secret-broker` 技能。资料检查直接读共享状态，不需要对话号、消息号或宿主对话记录；只读检查也不消费无限制授权。本人说“锁定个人资料”“冻结个人资料”就走锁定；“冻结项目”“冻结设计”不是资料操作。Hook、技能和电脑 MCP 只读这份状态，不另建权限记录。
 
@@ -3051,7 +3030,7 @@ owner: `E:\.agents`
 - **可信位置。** 本机、工作区、BitLocker 保护的本地硬盘和 U 盘，以及本人自己账号下默认私有的空间（例如 Google Drive、Notion、私有 GitHub、Dropbox、OneDrive）都是可信位置，不因为联网或在云上就降级。账号归属不明、共享范围不明或可见性有冲突时，按“不明”处理，不靠推定越过证据；确定公开的目标另按公开分级办。
 - **原样保存**（约法 L19）：在可信位置里读取、编辑、复制、备份、恢复或输出时，`.env`、令牌、密码、私钥、OAuth 文件按任务需要原样保留，不遮盖、删除、截断或换成占位符。手机号这类私人联系方式在本机和私有仓库里也照原样记，不打码；只有要公开时才按公开分级判断。可信不等于可以写入，写入授权另看。
 - **安全就这几样**（约法 L14）：保护只有个人资料的解锁加密（约法 L18）、密码中心（SecretBroker），以及 BitLocker、开机和 Windows 登录（锁屏）密码这类正常的系统安全和本人明确选用的加密技能，这些照旧。本机当前用户、文件、进程、软件和私人账号空间默认可信，副驾驶笔记本和本人的手机同样可信，上一条列的私人云端（私有 GitHub、Google Drive 等）同样可信；本人的远程访问工具（如 ToDesk、Sunshine/Moonlight、Windows 远程桌面）和跨设备同步工具（如 KDE Connect、小米妙享、手机连接）连着的设备也可信，经它们查看、串流或同步密码是正常用法。本机和这些私人云端都不得为想象中的攻击者另加遮盖、防截屏、防同步、定时清理、身份层、审计链、额外加密或安全流程；误删、损坏、失败和回滚按正确性和可恢复性处理，“安全”不是加流程或逃避验收的理由。本人明确要求的具体安全任务，或外部平台对这次动作真实提出的条件除外。
-- **秘密放哪里。** 密码、令牌、密钥和 SecretRef 只放在密码中心、SecretBroker 或加密技能里，不写进规则、聊天或普通配置。私密内容和凭据不上网搜索，只用脱敏的关键词。`local-secret-broker` 管 SecretRef；`wlyaaaaa/Key` 仓库和 Vault（VAULT03、vault-tool）走 `vault-workflow`，普通文件加解密走 `authorization-file-broker`。BitLocker 恢复密钥的专用本机全量查看，是批量显示秘密明文的唯一例外；结果不进模型、聊天、标准输出、JSON、剪贴板或文件。
+- **秘密放哪里。** 密码、令牌、密钥和 SecretRef 只放在密码中心、SecretBroker 或加密技能里，不写进规则、聊天或普通配置。私密内容和凭据不上网搜索，只用脱敏的关键词。`local-secret-broker` 管 SecretRef；Vault（VAULT03、vault-tool）走 `vault-workflow`，普通文件加解密走 `authorization-file-broker`。BitLocker 恢复密钥的专用本机全量查看，是批量显示秘密明文的唯一例外；结果不进模型、聊天、标准输出、JSON、剪贴板或文件。
 
 ::screen{#rule-privacy-data-09 section="original"}
 
@@ -3063,13 +3042,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E372",
+   "release": "E389",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
-   "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
+   "public_sha256": "8617aa90c262a1013c438a5671a0cd2226d3f03137f9ed834de9ea9d2ed03f24",
    "from": "## 公开个人数据分级表",
    "to": "## 私人仓库收口",
-   "start": 3395,
-   "end": 4581,
+   "start": 3376,
+   "end": 4562,
    "approved_omissions": []
   },
   "title": "原文（三）：公开个人数据分级表",
@@ -3088,7 +3067,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-09",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
+  "source_public_sha256": "8617aa90c262a1013c438a5671a0cd2226d3f03137f9ed834de9ea9d2ed03f24",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-09"
  },
  "layout": {
@@ -3098,7 +3077,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -3155,7 +3134,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -3225,7 +3204,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E372 版 · 续
+原文 · E389 版 · 续
 
 ## 公开个人数据分级表
 
@@ -3251,13 +3230,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E372",
+   "release": "E389",
    "sha256": "0d5e6f64b6f7c12ca6e49386f1c401be42f229fbdcab0b510c3044d7c7cc4629",
-   "public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
+   "public_sha256": "8617aa90c262a1013c438a5671a0cd2226d3f03137f9ed834de9ea9d2ed03f24",
    "from": "## 私人仓库收口",
    "to": null,
-   "start": 4581,
-   "end": 5238,
+   "start": 4562,
+   "end": 5219,
    "approved_omissions": []
   },
   "title": "原文（四）：私人仓库收口、备份跟着原件走",
@@ -3271,7 +3250,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-10",
   "source_logical_id": "privacy_data_contract",
-  "source_public_sha256": "760008d6bc0cb182f5ae42790d54d2b60a5ae68f88ca177f997a381bbf953942",
+  "source_public_sha256": "8617aa90c262a1013c438a5671a0cd2226d3f03137f9ed834de9ea9d2ed03f24",
   "source_rule_part": "rule-privacy-data/rule-privacy-data-10"
  },
  "layout": {
@@ -3281,7 +3260,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -3325,7 +3304,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -3407,7 +3386,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E372 版 · 续
+原文 · E389 版 · 续
 
 ## 私人仓库收口
 

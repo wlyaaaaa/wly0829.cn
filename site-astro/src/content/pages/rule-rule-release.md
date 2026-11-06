@@ -3,7 +3,7 @@
  "title": "规则发布与恢复",
  "kind": "rule-topic",
  "url": "/rules/rule-release/",
- "tagline": "哪一版规则算数，怎么发布新版、退回上一版。",
+ "tagline": "哪一版规则算数，怎么发布新版、退回上一版，厂商和钩子排在哪。",
  "toc": [
   {
    "id": "top",
@@ -24,23 +24,23 @@
   "kind": "rule-topic",
   "title": "规则发布与恢复",
   "url": "/rules/rule-release/",
-  "tagline": "哪一版规则算数，怎么发布新版、退回上一版。",
+  "tagline": "哪一版规则算数，怎么发布新版、退回上一版，厂商和钩子排在哪。",
   "status": "",
   "public": false,
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E372",
-   "commit": "f44463a9fd2c4bacb8c562315d297db27d501f35",
-   "ruleset_sha256": "ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7",
-   "activated_at": "2026-11-04T08:49:37.968049+08:00",
+   "release": "E389",
+   "commit": "c74447f7cefadc860208ad2425c236981caa837d",
+   "ruleset_sha256": "bece26ac3f4569cf3582648846158e8e2c9145498e148bdaa1fe9edf514759f2",
+   "activated_at": "2026-11-06T13:22:34.536034+08:00",
    "file": "sources/rules/docs/contracts/agents.rule-release.md",
-   "sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d",
-   "public_sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d"
+   "sha256": "dca1dfb004266b5cfff27bc9ae7ea268d3534139a792b25936b4de4602946cd7",
+   "public_sha256": "dca1dfb004266b5cfff27bc9ae7ea268d3534139a792b25936b4de4602946cd7"
   },
   "explanation_based_on": {
-   "release": "E372",
-   "sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d"
+   "release": "E389",
+   "sha256": "dca1dfb004266b5cfff27bc9ae7ea268d3534139a792b25936b4de4602946cd7"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：玻璃柜里书架上标着 E187 的那本书轻轻发出一圈淡绿的光，路标上“当前”那块木牌微微晃动后稳稳指向它；一只手伸过来想推开玻璃柜门，黄铜锁扣上的“SYSTEM”小铜牌闪一下，门纹丝不动，手缩回；地上两只印着 Claude 和 OpenAI 标志的小信封轻轻翻开又合上；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，书脊和牌子上的字保持不动、不变形。",
   "registry": {
@@ -134,6 +134,11 @@
      "target": "/rules/context-sources/#p-tiers",
      "screen": "rule-rule-release-04",
      "text": "事实来源与任务上下文"
+    },
+    {
+     "target": "/rules/rule-release/#p-vendor",
+     "screen": "rule-rule-release-01",
+     "text": "厂商和钩子排在哪"
     }
    ],
    "live": []
@@ -156,8 +161,8 @@
  },
  "source": {
   "page": "sources/pages/rule-rule-release/page.json",
-  "sha256": "5e68020a41bd113a51b51943b9771fe78060beb44f6b85dcc4a45acb2a358a85",
-  "converted_at_beijing": "2026-11-04T10:36:30+08:00"
+  "sha256": "f9927df8bfa3499196b7113cec2e4f1febb774c5c4bccfbe31177f808e72e5ef",
+  "converted_at_beijing": "2026-11-06T13:54:08+08:00"
  }
 }
 ---
@@ -192,6 +197,10 @@
    {
     "text": "怎么搭的 → AI 规则与技能基座",
     "href": "/projects/agents/#tech"
+   },
+   {
+    "text": "厂商和钩子排在哪",
+    "href": "/rules/rule-release/#p-vendor"
    }
   ],
   "anchors": [],
@@ -483,7 +492,7 @@
 
 **哪一版规则算数、AI 怎么读；改了怎么发布成新的一版，改坏了怎么退回，怎么防止被随手改掉。**
 
-这个专题管的是规则本身的“版本”：所有 AI 开工时读的，只能是正式发布、核对过的那一版；规则要能改、有历史、改坏了能一键退回，又不能谁打开文件管理器就改掉。平时约法随 AI 的入口一起加载，开工不用另跑核验；只有维护、发布或回退规则时才读这一页。
+这个专题管的是规则本身的“版本”：所有 AI 开工时读的，只能是正式发布、核对过的那一版；规则要能改、有历史、改坏了能一键退回，又不能谁打开文件管理器就改掉。平时约法随 AI 的入口一起加载，开工不用另跑核验；只有维护、发布或回退规则时才读这一页。模型还会先听厂商的东西，钩子只替规则传话和拦动作，这些排在哪也写在这一页，见〔厂商和钩子排在哪〕。
 
 **先认几个词**
 - **活动规则**：当前生效的那一版规则，所有 AI 开工时读的就是它。
@@ -494,7 +503,7 @@
 - **回读**：推送或写入以后再读一遍，确认真的到位了。
 - **SYSTEM 保护**：文件归 Windows 的 SYSTEM 账户，本人账户和管理员都只能读。
 
-跳到：〔哪一版算数〕〔怎么读〕〔发布和回退〕〔验证〕
+跳到：〔哪一版算数〕〔怎么读〕〔厂商和钩子排在哪〕〔发布和回退〕〔验证〕
 
 E186　E187　当前　上一版　SYSTEM
 
@@ -523,6 +532,10 @@ E186　E187　当前　上一版　SYSTEM
    {
     "id": "p-read",
     "text": "怎么读"
+   },
+   {
+    "id": "p-vendor",
+    "text": "厂商和钩子排在哪"
    }
   ],
   "live": [],
@@ -580,6 +593,14 @@ E186　E187　当前　上一版　SYSTEM
      "inset_prefixes": [
       "例"
      ]
+    },
+    {
+     "type": "points_card",
+     "columns": 1,
+     "split_cards": false,
+     "illustration": "none",
+     "icons": "none",
+     "text_ref": "厂商和钩子排在哪"
     }
    ],
    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 2026-10-03 page-fixer-09：三卡显式绑定库内册子、印章、放大镜；原例便签接已有黄实例接口。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。",
@@ -639,6 +660,14 @@ E186　E187　当前　上一版　SYSTEM
      "inset_prefixes": [
       "例"
      ]
+    },
+    {
+     "type": "points_card",
+     "columns": 1,
+     "split_cards": false,
+     "illustration": "none",
+     "icons": "none",
+     "text_ref": "厂商和钩子排在哪"
     }
    ],
    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 2026-10-03 page-fixer-09：三卡显式绑定库内册子、印章、放大镜；原例便签接已有黄实例接口。",
@@ -742,6 +771,11 @@ E186　E187　当前　上一版　SYSTEM
 - 规则仓库里的 AGENTS.md 只是待审的源稿，不能因为“目录离得更近”就盖过在用的规则。
 - 仓库根放着一个很短的 CLAUDE.md 指路桩：Claude Code 在项目里找不到 CLAUDE.md 时，会把 AGENTS.md 当项目规则读，有它挡着，源稿就不会这样生效。它只指向用户级入口；用户级入口缺了，就给出核验命令，不再复制一份完整入口。
 - 读取失败，只影响依赖缺的那部分内容的决定；不会因此锁住私人资料，也不触发别的保护。
+
+### 厂商和钩子排在哪
+- 厂商的东西排在这些规则前面，这是现实，不是本人定的：模型自身的训练和安全政策，OpenAI 给 Codex、Anthropic 给 Claude 写的说明。第一样谁也改不了；第二样本人改不了原文，只删过 Codex 那份里和约法打架的几句。
+- 钩子只替规则传话和拦动作，和规则不一致就改钩子。
+- 规则改了、AI 的行为没变，先查厂商说明和钩子。
 
 ::screen{#rule-rule-release-03 section="points"}
 
@@ -945,7 +979,8 @@ E186　E187　当前　上一版　SYSTEM
 - 发布只用 Invoke-EAgentRulesRelease.ps1 -Mode Activate，回退只用 -Mode Rollback。
 - 发布器从选定的提交取文件，生成这一版的文件清单和内容指纹，切换“当前”和“上一版”，再读回核对。
 - 只查真正参与发布的文件有没有没提交的改动：别的项目或技能正改着东西，不拦发布，也不把别人没做完的改动混进来。
-- **限制句按意思判断**：带“不得、禁止、先问本人”这类限制的句子，只是换了措辞、缩短、挪了位置，或改成指向同一版里仍然有效的同一条规则时，发布门用 GPT-6.1 Sol medium 档按意思比一次：限制管谁、管多大范围、在什么条件下、有多严都没变，就自动放行，不请本人同意，判为改写的旧句和新位置写进发布回执和版本记录。真正放宽或删掉限制，或者改动约法正文（规则根文件里“我的 AI 约法”那一节），仍要用现有的本人同意核对：发布时给发布入口加 `-OwnerApproval <本人那条消息的编号>`；比对用不了或拿不准时，按“意思变了”处理。
+- **限制句按意思判断**：带“不得、禁止、先问本人”这类限制的句子，只是换了措辞、缩短、挪了位置，或改成指向同一版里仍然有效的同一条规则时，发布门用 GPT-6.1 Sol medium 档按意思比一次：限制管谁、管多大范围、在什么条件下、有多严都没变，就自动放行，不请本人同意，判为改写的旧句和新位置写进发布回执和版本记录。真正放宽或删掉限制，仍要用现有的本人同意核对：发布时给发布入口加 `-OwnerApproval <本人那条消息的编号>`；比对用不了或拿不准时，按“意思变了”处理。
+- **开场那一页和两家入口，改一句都先给本人看**：改动 `AGENTS.md`、`templates/claude-home/CLAUDE.md`、`templates/codex-home/AGENTS.md` 的任何一句（加句、改句、删句），先在回复里给本人看这句，他点头，发布写他那条消息的编号。程序只认这是他真发的消息，不判断里面写了什么，也不比对意思，他回“嗯”也行；这条回复同意的是不是这句改动，由改的模型自己核对。
 
 ### 同时有人发布
 - 发布器先核对指针的内容指纹；别的任务刚发布过，就先重读，把它的结果并进来，不覆盖。
@@ -1282,7 +1317,7 @@ E186　E187　当前　上一版　SYSTEM
 - 解析程序找不到、或候选表读不出来，就如实报失败，不把跳过说成通过。
 
 ### 快速发布还是标准发布
-- 普通文字和已知的局部改动，走现有的快速发布入口 Invoke-EAgentRulesFastRelease.ps1。
+- 普通文字和已知的局部改动，走现有的快速发布入口 Invoke-EAgentRulesFastRelease.ps1；改开场那一页和两家入口的，走哪条路都要先有本人点头的那条消息。
 - 身份、授权、保护、发布器本身，或者影响范围说不清的改动，走标准发布。
 - 快速入口核对时说“这条路径有测试”，只表示有对应的测试；走不走快速路径，仍由 AI 判断。
 
@@ -1296,13 +1331,13 @@ E186　E187　当前　上一版　SYSTEM
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.rule-release.md",
-   "release": "E372",
-   "sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d",
-   "public_sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d",
+   "release": "E389",
+   "sha256": "dca1dfb004266b5cfff27bc9ae7ea268d3534139a792b25936b4de4602946cd7",
+   "public_sha256": "dca1dfb004266b5cfff27bc9ae7ea268d3534139a792b25936b4de4602946cd7",
    "from": null,
    "to": "## 发布和回退",
    "start": 0,
-   "end": 953,
+   "end": 1081,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -1316,7 +1351,7 @@ E186　E187　当前　上一版　SYSTEM
   "reuse": "",
   "source_excerpt_id": "rule-rule-release/rule-rule-release-05",
   "source_logical_id": "rule_release_contract",
-  "source_public_sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d",
+  "source_public_sha256": "dca1dfb004266b5cfff27bc9ae7ea268d3534139a792b25936b4de4602946cd7",
   "source_rule_part": "rule-rule-release/rule-rule-release-05"
  },
  "layout": {
@@ -1326,21 +1361,17 @@ E186　E187　当前　上一版　SYSTEM
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版，一字不改"
+     "text_ref": "原文·E389版，一字不改"
     },
     {
      "type": "source_text_card",
      "text_ref": "规则发布与恢复",
-     "whole_block": true,
-     "row": "original",
-     "width": "50%"
+     "whole_block": true
     },
     {
      "type": "source_text_card",
      "text_ref": "读规则",
-     "whole_block": true,
-     "row": "original",
-     "width": "50%"
+     "whole_block": true
     }
    ],
    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。",
@@ -1356,7 +1387,7 @@ E186　E187　当前　上一版　SYSTEM
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版，一字不改"
+     "text_ref": "原文·E389版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1449,7 +1480,7 @@ E186　E187　当前　上一版　SYSTEM
 }
 ```
 
-原文 · E372 版，一字不改
+原文 · E389 版，一字不改
 
 # 规则发布与恢复
 
@@ -1469,6 +1500,8 @@ owner: `E:\.agents`
 
 规则源仓库里的 `AGENTS.md` 只是待审材料，不能靠“目录更近”盖过活动规则。仓库根的 `CLAUDE.md` 是一个短的指路桩：Claude Code 在项目没有 `CLAUDE.md` 时会把 `AGENTS.md` 当项目规则加载，这个桩防止候选源码因此生效；它只指向用户级入口，并在用户级入口缺失时给出核验命令，不再复制一份完整入口。读取失败只影响依赖缺失内容的决定，不触发锁资料或其他保护。
 
+厂商的东西排在这些规则前面，这是现实，不是本人定的：模型自身的训练和安全政策，OpenAI 给 Codex、Anthropic 给 Claude 写的说明。钩子只替规则传话和拦动作，和规则不一致就改钩子。规则改了、AI 的行为没变，先查厂商说明和钩子。
+
 ::screen{#rule-rule-release-06 section="original"}
 
 ```typeset
@@ -1479,13 +1512,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.rule-release.md",
-   "release": "E372",
-   "sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d",
-   "public_sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d",
+   "release": "E389",
+   "sha256": "dca1dfb004266b5cfff27bc9ae7ea268d3534139a792b25936b4de4602946cd7",
+   "public_sha256": "dca1dfb004266b5cfff27bc9ae7ea268d3534139a792b25936b4de4602946cd7",
    "from": "## 发布和回退",
    "to": null,
-   "start": 953,
-   "end": 3068,
+   "start": 1081,
+   "end": 3432,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1499,7 +1532,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-rule-release/rule-rule-release-06",
   "source_logical_id": "rule_release_contract",
-  "source_public_sha256": "dc43a2feb67fb9ec7e17a9aad616af1398348bc65cbbcf6d85e83abf76ef275d",
+  "source_public_sha256": "dca1dfb004266b5cfff27bc9ae7ea268d3534139a792b25936b4de4602946cd7",
   "source_rule_part": "rule-rule-release/rule-rule-release-06"
  },
  "layout": {
@@ -1508,7 +1541,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -1531,7 +1564,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -1601,13 +1634,14 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E372 版 · 续
+原文 · E389 版 · 续
 
 ## 发布和回退
 
 - **一次发布一批。** 同一件事的相关修改合在一起测试、一次发布；已经造成实际错误的修复不为凑批等待。发布前跑完相关测试，定向提交，推送到默认分支并回读远端。
 - **只用一个发布入口。** 发布用 `Invoke-EAgentRulesRelease.ps1 -Mode Activate`，回退用 `-Mode Rollback`。发布器从选定的提交取文件，生成这一版的集合和校验值，切换“当前”和“上一版”，再回读核对。只检查真正参与发布的文件有没有未提交的改动，不因为无关项目或技能的改动停下，也不把别人没做完的修改混进来。
-- **限制句按意思判断。** 发布门对改变措辞、缩短、挪位置或改成指向同版仍有效的同一规则做一次 Sol medium 语义比对，限制的对象、范围、条件和强度都不变就自动放行，不请本人同意；判定为改写的旧句和目标版本证据写入发布回执及版本记录。真正放宽、删除限制，或改动 `AGENTS.md` 的“我的 AI 约法”一节，要用发布入口的 `-OwnerApproval <源消息UUID>` 指向本人原话（可以列几条）。原话里本人在谈改规则（说到规则、约法或约法条号，例如“L14 必要时可改”），就是明确同意改规则，直接放行；否则发布门做一次 Sol medium 比对，确认每处改动都符合原话里本人真正想要的结果就放行，不另外问本人。规则写本意、不照抄字面：补全本意显然包含的同类对象和说法可以放行；违背原话方向、放宽到本意没涉及的对象，或只是 AI 自己提的、本人没反对的，不放行。比对不可用或拿不准时，按要本人同意处理。
+- **限制句按意思判断。** 发布门对改变措辞、缩短、挪位置或改成指向同版仍有效的同一规则做一次 Sol medium 语义比对，限制的对象、范围、条件和强度都不变就自动放行，不请本人同意；判定为改写的旧句和目标版本证据写入发布回执及版本记录。真正放宽、删除限制，要用发布入口的 `-OwnerApproval <源消息UUID>` 指向本人原话（可以列几条）。原话里本人在谈改规则（说到规则、约法或约法条号，例如“L14 必要时可改”），就是明确同意改规则，直接放行；否则发布门做一次 Sol medium 比对，确认每处改动都符合原话里本人真正想要的结果就放行，不另外问本人。规则写本意、不照抄字面：补全本意显然包含的同类对象和说法可以放行；违背原话方向、放宽到本意没涉及的对象，或只是 AI 自己提的、本人没反对的，不放行。比对不可用或拿不准时，按要本人同意处理。
+- **开场那一页和两家入口。** 改动 `AGENTS.md`、`templates/claude-home/CLAUDE.md`、`templates/codex-home/AGENTS.md` 的任何一句（加句、改句、删句）：先在回复里给本人看这句，他点头，发布写 `-OwnerApproval <他那条消息的 UUID>`。程序只认这是他真发的消息，不判断里面有没有“规则”二字，也不比对意思，他回“嗯”也行；这条回复同意的是不是这句改动，由改的模型自己核对。《分工与并行施工》开头原约法 L22、L23 那一节也一样。
 - **并发。** 发布器会核对当前指针的校验值；如果别的任务刚发布过，先重读并把它的结果并进来，不覆盖。新的发布必须包含当前在用的那次提交。不为发布新建队列、后台服务或全局施工平台。
 - **失败和回退。** 发布失败时恢复原来的指针和入口，旧版本照常可用。指针缺失但 `releases` 下仍有 `E*` 目录时，报 `e_rules_current_pointer_missing`；按现存目录的 `release.json` 重建指针后再核验。成功后只留“当前”和“上一版”两份可重建的目录，历史由私有 Git 保存。回退把正文、目录和入口模板一起恢复到上一版；不改写历史代号，也不重建同一个代号来冒充回退。
 - **入口模板随版本部署。** 发布器将两份模板中的版本号和根规则占位符替换为本版代号与 `AGENTS.md` 全文（约法和导航），本版文件的相对链接改为发布目录下的绝对路径，锚点保留；非本版文件沿用源码绝对路径。渲染后的 `templates/codex-home/AGENTS.md` 写到发布器配置的 Codex home 的 `AGENTS.md`；渲染后的 `templates/claude-home/CLAUDE.md` 写到 `~/.claude/CLAUDE.md`，根会话和加载用户级入口的子代理直接带上约法。Hook 核对时优先用 `CODEX_HOME` 定位 Codex home，未设置时用 `~/.codex`。release 记录、校验值和核验覆盖渲染后的字节，回退逐字节恢复上一版入口；无占位符的旧模板保持原样。笔记本约法同步由既有每周定时巡检处理，普通约法更新不单独登记驾驶舱本人事项，也不要求本人手动启动按需巡检；由笔记本从主机当前活动规则同步约法段，主机不反向写笔记本，连不上时保留笔记本现有规则。

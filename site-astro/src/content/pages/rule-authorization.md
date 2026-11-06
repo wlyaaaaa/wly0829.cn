@@ -30,17 +30,17 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E372",
-   "commit": "f44463a9fd2c4bacb8c562315d297db27d501f35",
-   "ruleset_sha256": "ec8cb7ec2f7657d9e77f2d8146a59b32959a0ab5cf9685b03d0b0e30309cece7",
-   "activated_at": "2026-11-04T08:49:37.968049+08:00",
+   "release": "E389",
+   "commit": "c74447f7cefadc860208ad2425c236981caa837d",
+   "ruleset_sha256": "bece26ac3f4569cf3582648846158e8e2c9145498e148bdaa1fe9edf514759f2",
+   "activated_at": "2026-11-06T13:22:34.536034+08:00",
    "file": "sources/rules/docs/contracts/agents.authorization.md",
-   "sha256": "8f85dd529a0d730e092483b848d99968e4493a0eaa8d8e3f71ac6c0bb8e46d5a",
-   "public_sha256": "c78209d8afa72b5afb2c2ba46dbfe26d066c8ffd134efaf667e257439a847b06"
+   "sha256": "bc8aa6ad3e30ced791464e579519c4870dbb3aa1feecd82a97f737e7abd2f50d",
+   "public_sha256": "22e264173890af45a4e137ee0141377e1465ad3e5250729825f1d4b7ddd4525b"
   },
   "explanation_based_on": {
-   "release": "E372",
-   "sha256": "8f85dd529a0d730e092483b848d99968e4493a0eaa8d8e3f71ac6c0bb8e46d5a"
+   "release": "E389",
+   "sha256": "bc8aa6ad3e30ced791464e579519c4870dbb3aa1feecd82a97f737e7abd2f50d"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小路起点的 AI 助手抱着文件轻快走几步，“直接做”木牌旁的草叶轻轻摇；栅栏门前的信封、硬币和小木箱静静排着，门边的人影抬手，栅栏门缓缓打开一条缝又合上；木桩上的绿色通行证随风轻摆；小桌上的沙漏翻转一次、细沙往下流，旁边的金色钥匙闪一下光；右上角两扇小窗户里亮起柔和的光，中间的绿色盾牌徽章轻轻呼吸；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -71,12 +71,14 @@
     },
     {
      "id": "n-standing-count",
-     "text": "现有的五项长期授权",
-     "meaning": "原文“现有的长期授权”下列出的五项：Git 收尾、管理员权限、选型号和思考档位、Claude 派 GPT、已经在用的目标继续收尾",
-     "as_of": "2026-10-01",
-     "source": "E203 docs\\contracts\\agents.authorization.md 第 20–26 行，数列表项",
+     "text": "现有的六项长期授权",
+     "meaning": "原文“现有的长期授权”下列出的六项：Git 收尾、管理员权限、重启 Linux 子系统、选型号和思考档位、Claude 派 GPT、已经在用的目标继续收尾",
+     "as_of": "2026-11-06",
+     "source": "E389 docs/contracts/agents.authorization.md，数列表项",
      "screens": [
-      "rule-authorization-02"
+      "rule-authorization-01",
+      "rule-authorization-02",
+      "rule-authorization-08"
      ]
     }
    ],
@@ -112,16 +114,6 @@
    ],
    "highlights": [],
    "mentions": [
-    {
-     "target": "/rules/charter/#L15",
-     "screen": "rule-authorization-01",
-     "text": "L15 哪些事要我明确同意"
-    },
-    {
-     "target": "/rules/charter/#L16",
-     "screen": "rule-authorization-01",
-     "text": "L16 限时的“无限制授权”"
-    },
     {
      "target": "/rules/protected-actions/",
      "screen": "rule-authorization-01",
@@ -203,11 +195,6 @@
      "text": "个人资料与数据处理"
     },
     {
-     "target": "/rules/charter/#L16",
-     "screen": "rule-authorization-06",
-     "text": "约法 L16"
-    },
-    {
      "target": "/rules/protected-actions/",
      "screen": "rule-authorization-06",
      "text": "重大动作与本人验证"
@@ -216,6 +203,21 @@
      "target": "/rules/protected-actions/",
      "screen": "rule-authorization-07",
      "text": "重大动作与本人验证"
+    },
+    {
+     "target": "/rules/charter/#L15",
+     "screen": "rule-authorization-01",
+     "text": "“撤不回的事”那段"
+    },
+    {
+     "target": "/rules/charter/#L16",
+     "screen": "rule-authorization-01",
+     "text": "“重大的事”那段"
+    },
+    {
+     "target": "/rules/charter/#L16",
+     "screen": "rule-authorization-06",
+     "text": "开场那一页“重大的事”那段"
     }
    ],
    "live": []
@@ -241,8 +243,8 @@
  },
  "source": {
   "page": "sources/pages/rule-authorization/page.json",
-  "sha256": "2eecf62c81aa2fddc0cd3de96b11256d55edd3f135be176e4d1ffab4febe1a91",
-  "converted_at_beijing": "2026-11-04T10:36:30+08:00"
+  "sha256": "8e67e58da356d9e41bbe4335a5ad9580036339f3d16605feaa2ab498f2cd592f",
+  "converted_at_beijing": "2026-11-06T13:54:07+08:00"
  }
 }
 ---
@@ -261,14 +263,6 @@
    {
     "text": "重大动作与本人验证",
     "href": "/rules/protected-actions/#p-decide"
-   },
-   {
-    "text": "L15 哪些事要我明确同意",
-    "href": "/rules/charter/#L15"
-   },
-   {
-    "text": "L16 限时的“无限制授权”",
-    "href": "/rules/charter/#L16"
    },
    {
     "text": "直接做的和要同意的",
@@ -293,6 +287,14 @@
    {
     "text": "现在的授权状态 → 授权与状态",
     "href": "/computer-access/"
+   },
+   {
+    "text": "“撤不回的事”那段",
+    "href": "/rules/charter/#L15"
+   },
+   {
+    "text": "“重大的事”那段",
+    "href": "/rules/charter/#L16"
    }
   ],
   "anchors": [],
@@ -343,7 +345,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "这是Codex和Claude共用的授权规则，是约法L15哪些事要我明确同意和L16限时的“无限制授权”的细则。",
+     "text_ref": "这是Codex和Claude共用的授权规则，是开场那一页“撤不回的事”那段和“重大的事”那段的细则。",
      "row": "intro"
     },
     {
@@ -426,7 +428,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "这是Codex和Claude共用的授权规则，是约法L15哪些事要我明确同意和L16限时的“无限制授权”的细则。"
+     "text_ref": "这是Codex和Claude共用的授权规则，是开场那一页“撤不回的事”那段和“重大的事”那段的细则。"
     },
     {
      "type": "action_button",
@@ -535,11 +537,11 @@
 **哪些事 AI 直接做、哪些要本人点头；说过一次就一直算数的授权有哪些；限时的“无限制授权”怎么开。**
 
 **一句话答案**
-- **直接做**：本人给的范围内，本机普通、能撤回的读取、编辑、测试和验证；本人长期授权过的五项（Git 收尾、申请管理员权限、选型号和档位、Claude 派 GPT、在用的目标继续收尾），办事时的两项确认授权（直接同意网站和软件的协议、子代理要确认时由主对话代确认），以及用 Muse 的三项（以本人身份用、同步协作资料、同意已派任务的审批），也不用再问。
+- **直接做**：本人给的范围内，本机普通、能撤回的读取、编辑、测试和验证；本人长期授权过的六项（Git 收尾、申请管理员权限、重启 Linux 子系统、选型号和档位、Claude 派 GPT、在用的目标继续收尾），办事时的两项确认授权（直接同意网站和软件的协议、子代理要确认时由主对话代确认），以及用 Muse 的三项（以本人身份用、同步协作资料、同意已派任务的审批），也不用再问。
 - **先要本人明确同意**：发消息、对外发布、花钱、删除只有一份的数据、撤不回的迁移、项目第一次公开发布。同意过的，也不自动扩到第一次新建的目标、别的账号或新的公开地方。
 - **重大的事另有一关**：例如删库、查看密码明文、把私人资料发到外面，动手前先把关、看要不要请本人验证，见〔重大动作与本人验证〕。
 
-这是 Codex 和 Claude 共用的授权规则，是约法〔L15 哪些事要我明确同意〕和〔L16 限时的“无限制授权”〕的细则。
+这是 Codex 和 Claude 共用的授权规则，是开场那一页〔“撤不回的事”那段〕和〔“重大的事”那段〕的细则。这个专题是硬的：AI 觉得不对，只能先拿事实问本人，不能自己改。
 
 跳到：〔直接做的和要同意的〕〔长期授权〕〔子代理和项目规则不扩权〕〔无限制授权〕〔受信任的 AI〕
 
@@ -781,7 +783,7 @@
 
 ### 直接做
 - 在本人给的范围内，本机上普通、能撤回的读取、编辑、测试和验证，AI 直接做，不一步步问。
-- 本人长期授权过的事，在原来的范围内直接做，不用本人再说一遍（五项长期授权、两项确认授权和用 Muse 的三项见下一屏）。
+- 本人长期授权过的事，在原来的范围内直接做，不用本人再说一遍（六项长期授权、两项确认授权和用 Muse 的三项见下一屏）。
 - 授权已经覆盖、目标和前提都成立时，直接真调用一次工具，不先猜平台会拒绝就自己停下。
 - 工具真的拒绝、要求再验证、用不了或报错，就照真实结果处理和报告；不假装成功，也不盲目重试。
 - 没理由少做、缩小能力、反复要授权、把不归本人的问题推回给本人，和越界一样是错（〔约法 L10〕）。
@@ -818,7 +820,7 @@
    },
    {
     "text": "约法 L23",
-    "href": "/rules/charter/#L23"
+    "href": "/rules/execution-coordination/#p-l23"
    },
    {
     "text": "用 Muse 时怎么说话",
@@ -848,7 +850,7 @@
    },
    {
     "id": "p-standing-list",
-    "text": "现有的五项长期授权"
+    "text": "现有的六项长期授权"
    },
    {
     "id": "p-standing-muse",
@@ -888,7 +890,7 @@
     },
     {
      "type": "points_card",
-     "text_ref": "现有的五项长期授权",
+     "text_ref": "现有的六项长期授权",
      "columns": 1,
      "whole_block": true,
      "illustration": "left_inside",
@@ -944,7 +946,7 @@
     },
     {
      "type": "points_card",
-     "text_ref": "现有的五项长期授权",
+     "text_ref": "现有的六项长期授权",
      "columns": 1,
      "whole_block": true,
      "illustration": "left_inside",
@@ -1054,11 +1056,12 @@
 - 换一轮对话、上下文被压缩、在 Codex 和 Claude 之间、交给子代理或新任务，都照样有效；不要求本人在当前消息里再说一遍。
 - AI 的推断、习惯、模板、标题、以前的做法和项目规则，都不能产生长期授权，也不能把已有的长期授权说成没有。
 
-### 现有的五项长期授权和两项确认授权
+### 现有的六项长期授权和两项确认授权
 - **Git 收尾**：授权在仓库里干活，就包括验证后只提交这次相关的改动、正常推送（细则见〔工程与交付〕）。新建本人 GitHub 私有仓库、把远端改成本人 GitHub 账号下的仓库、核对过不丢提交的历史改写（含强制推送），也都属于这项普通收尾；可能丢提交的强制推送不在里面。
 - **申请管理员权限**：已授权的核对、验收或操作要管理员才能看全、做完时，主对话和子代理都直接静默提权，不把“权限不够、读不全”记成不知道，也不留给主对话；首选系统自带的 sudo，用不了再用后台的 UAC 提权方式，结果写明是否已提权。两条路都真失败才如实报告；确实要本人在场点 UAC 的那一步，写明“需要本人在场提权”，交回主对话安排，而不是整件事停下来等。只有本人、上级规则或适用的项目规则明确说不提权时才不提；要密码中心受信任身份的操作不提权运行。提权只让命令拿到 Windows 的权限，不产生、也不扩大或缩小做事的授权；改权限设置、撤回快照、重大的事仍按各自的规矩办。
+- **重启 Linux 子系统**：Linux 子系统（WSL）卡住或修东西需要时，AI 直接重启，不问本人；包括先停 Docker、重启后再开 Docker，TimeAudit 跟着停一会儿也算在内（本人 2026-11-04 定）。只管 Linux 子系统，不扩到整台电脑或其他服务。
 - **选型号和思考档位**：AI 按质量和总花费自己选，质量需要时可以比主对话或派它的 AI 用更强的型号、更高的档位，不逐次问（见〔分工与并行施工〕）；本人这次明确限定的型号、档位、预算或厂商优先。
-- **Claude 派 GPT**：哪些型号不用另外授权就能派、哪个要本人授权，都按〔约法 L23〕，这里不另写：现在是 GPT-6.1 Sol、GPT-6.1 Terra、GPT-6 Luna 不用本人另外授权就可以直接派，GPT-6 Astra 仍按本人给当前对话或项目的授权。另有一项本人长期授权，只限完整复核一类：被复核的东西由 Claude 写时，完整复核可以直接交 GPT-6 Astra（本人 2026-11-02 定，范围登记在模型清单）。派出去的只做交给它的任务。
+- **Claude 派 GPT**：哪些型号不用另外授权就能派、哪个要本人授权，都按〔约法 L23〕，这里不另写：现在是 GPT-6.1 Sol、GPT-6.1 Terra、GPT-6 Luna 不用本人另外授权就可以直接派，GPT-6 Astra 仍按本人给当前对话或项目的授权。另有本人长期授权，各只限一类，范围登记在模型清单：被复核的东西由 Claude 写时，完整复核可以直接交 GPT-6 Astra（本人 2026-11-02 定）；每月更新的月度信和汇报复核（本人 2026-11-04 定）；新 Astra 换代时读一遍写给它的限制，只限读这一遍，不包括复核别家的表，也不能派别的活（本人 2026-11-05 定）。派出去的只做交给它的任务。
 - **在用的目标继续收尾**：本人授权前就已登记、现在仍在用的仓库、网站和发布目标，验证、发布、部署、读回核对和同步默认接着做；本人说只留本地或不发布时除外。上面三种 GitHub 普通收尾同样直接做；其余第一次新建的外部目标、新公开或部署目标、花钱、可能丢提交的强推等例外，见上一屏“先要本人明确同意”。
 - **同意网站、平台和软件的协议**：Claude、GPT 和它们派出的子代理替本人办已经授权的事时，网站、平台或软件要求同意的用户协议、服务条款、使用规范、隐私政策，包括上传、发布、登录、安装页面上“继续即同意”这类提示，直接同意，不再为协议问本人（本人 2026-10-28 定）。这只省掉“为协议问一句”，不扩大事情本身的授权：付费订阅、自动续费、付款借贷仍按〔约法 L15〕，重大的事仍按〔重大动作与本人验证〕，页面把它们写成“协议”也不直接同意。
 - **子代理要本人确认时，由主对话代确认**：派出的 GPT 等子代理因为工具要求本人确认（包括“当场确认”）停下时，只要这一步本人已经授权过，就由派它的主对话当场代本人确认、让它接着做，不再拿来问本人；不限于协议，也不限于某个网站（本人 2026-10-29 定）。代确认只替本人说“确认”，不扩大授权：〔约法 L15〕那几类本人还没对这件具体事同意的、〔约法 L17〕重大的事，仍照原规则找本人；工具规定必须本人亲手做的步骤（改密码、绕过浏览器安全警告、付款交易这类）交本人办。子代理的工具不认代确认时，只交回这一步和具体限制，其余已授权的活照做，不换工具绕过，也不让本人重复给授权。
@@ -1359,7 +1362,7 @@
 - 交给子代理的只是完成任务要用的内容，不扩散秘密或无关资料。
 - 项目规则管项目里的业务、命令、测试、兼容和自动生成的部分，可以在项目里把做法收紧。
 - 但项目、AI、技能、模板和历史文档都不能产生授权，也不能把本人已有的长期授权降为没有，或要本人重说一遍。
-- 公开分级表里的 L1、L2（本人的姓名、履历这类普通资料等，默认公开不设限；不是约法的 L1、L2 条），项目想给它们加公开限制，要同时有真实的项目需要，和本人对这个项目、这个范围的明确指示（分级表见〔个人资料与数据处理〕）。
+- 公开分级表里的 L1、L2（本人的姓名、履历这类普通资料等，默认公开不设限；不是约法句尾的 L1、L2 标签），项目想给它们加公开限制，要同时有真实的项目需要，和本人对这个项目、这个范围的明确指示（分级表见〔个人资料与数据处理〕）。
 
 ::screen{#rule-authorization-04 section="points"}
 
@@ -1599,13 +1602,13 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E372",
-   "sha256": "8f85dd529a0d730e092483b848d99968e4493a0eaa8d8e3f71ac6c0bb8e46d5a",
-   "public_sha256": "c78209d8afa72b5afb2c2ba46dbfe26d066c8ffd134efaf667e257439a847b06",
+   "release": "E389",
+   "sha256": "bc8aa6ad3e30ced791464e579519c4870dbb3aa1feecd82a97f737e7abd2f50d",
+   "public_sha256": "22e264173890af45a4e137ee0141377e1465ad3e5250729825f1d4b7ddd4525b",
    "from": null,
    "to": "## 子代理和项目规则不扩大授权",
    "start": 0,
-   "end": 4001,
+   "end": 4411,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -1628,7 +1631,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-05",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "c78209d8afa72b5afb2c2ba46dbfe26d066c8ffd134efaf667e257439a847b06",
+  "source_public_sha256": "22e264173890af45a4e137ee0141377e1465ad3e5250729825f1d4b7ddd4525b",
   "source_rule_part": "rule-authorization/rule-authorization-05"
  },
  "layout": {
@@ -1636,7 +1639,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版，略去个别私人领域字句"
+     "text_ref": "原文·E389版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -1671,7 +1674,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版，略去个别私人领域字句"
+     "text_ref": "原文·E389版，略去个别私人领域字句"
     },
     {
      "type": "source_text_card",
@@ -1765,7 +1768,7 @@
 }
 ```
 
-原文 · E372 版，略去个别私人领域字句
+原文 · E389 版，略去个别私人领域字句
 
 # 用户授权
 
@@ -1795,8 +1798,9 @@ owner: `E:\.agents`
 - **Git 收尾**：授权在仓库里干活，就包括验证后的定向提交和正常推送（细则见[工程与交付](/rules/engineering-delivery/)）。
 - **同意网站、平台和软件协议**：本人长期授权 Claude、GPT 及它们派出的子代理，在替本人完成已授权的事情时，直接同意网站、平台、软件要求的用户协议、服务条款、使用规范、隐私政策，包括上传、发布、登录、安装页面上“继续即同意”等提示，不再为同意协议问本人（本人 2026-10-28 18:09，源 3577e088）。
 - **申请管理员权限**：已授权的核对、验收或操作要管理员才能看全、做完时，主持和子代理都直接静默提权执行，不把“权限不够、读不全”记成未知，不用推断补位，也不留给根会话。首选系统 sudo 内联模式：`sudo pwsh -NoProfile -NonInteractive -File <脚本> <参数>`（或 `-Command`），直接接回输出和退出码；sudo 不存在、被关或不是内联模式时，用 `Start-Process pwsh -Verb RunAs -Wait -PassThru -WindowStyle Hidden`，管理员进程先设 `[Console]::OutputEncoding` 为 UTF-8，输出写 UTF-8 文件再读回并传回退出码，结果写明是否已提权（如 `observer_elevated`）。两条路径真的失败才如实报告；UAC 需要本人在场时明确写“需要本人在场提权”，由根会话安排，不交半成品。各电脑的 UAC 和 sudo 设置以 PCConfig 登记为准，不因此修改系统设置。只有本人、上级规则或适用项目规则明确说不提权时才不用；需要密码中心受信任身份的操作不提权运行。提权不推迟已授权工作，不专门请本人决定普通提权步骤；权限/ACL 改动、撤回快照和重大动作等仍按各自专题办理。提权只给 Windows 权限，不产生、扩大或缩小动作授权（出处：决定文档“需要管理员视角才能核实时默认静默提权，不把读不全记成未知”）。
+- **重启 Linux 子系统**：Linux 子系统（WSL）卡住或修东西需要时，AI 直接重启，不问本人；包括先停 Docker、重启后再开 Docker，TimeAudit 跟着停一会儿也算在内（本人 2026-11-04 20:22，源 40c96a84）。只管 Linux 子系统，不扩到整台电脑或其他服务。做法和验收见 PCConfig `docs/recovery/docker_desktop_storage.md`。
 - **选型号和思考档位**：AI 按质量和总花费自己选；质量需要时可以用比根会话或父代理更强的型号或更高的档位，不逐次问（见[分工与并行施工](/rules/execution-coordination/)和模型清单）。本人这次明确限定的型号、档位、预算或厂商优先。
-- **Claude 派 GPT**：哪些型号不用另行授权就能派、哪个要本人给对话或项目授权、派出的 Codex 能做什么，都按约法 L23，这里不另写。另有一项本人长期授权，只限完整复核一类，范围和出处登记在模型清单 `routing.current_generation_defaults.review_full_claude`（本人 2026-11-02 23:19，源 af3c86f8）。
+- **Claude 派 GPT**：哪些型号不用另行授权就能派、哪个要本人给对话或项目授权、派出的 Codex 能做什么，都按约法 L23，这里不另写。另有三项本人长期授权，范围和出处登记在模型清单：只限完整复核一类，见 `routing.current_generation_defaults.review_full_claude`（本人 2026-11-02 23:19，源 af3c86f8）；只限每月更新的月度信和汇报复核一类，见同处 `review_monthly_letter`（本人 2026-11-04 16:36，源 89ecc60a）。第三项只限新 Astra 换代时读一遍写给它的限制，见同处 `limits_read_new_astra`，只限读这一遍，不包括复核别家的表，也不能派别的活（本人 2026-11-05 22:18，源 dfb55bdc）。
 - **子代理要本人确认时由根会话代确认**：派出的 GPT 等子代理因为工具要求本人确认（含“当场确认”）而停下时，凡是本人已经授权过的事，由派它的根会话当场代本人确认、让它接着做，不再拿来问本人；不限于协议，也不限于某个网站（本人 2026-10-29 20:27—20:32，源 dee43ef4、84f941d1、c26bbdf8）。做法见下面“根会话代确认的执行办法”。
 - **已经在用的目标继续收尾**：本人授权之前就已登记、现在仍在用的目标（仓库、网站、已登记的发布目标），验证、发布、部署、回读和同步默认继续，本人说只留本地或不发布时除外。新建本人 GitHub 私有仓库、把远端改成本人 GitHub 账号下的仓库、核对过不丢提交的历史改写（含强制推送），按普通 Git 收尾直接做。除此以外，第一次新建或选择新的外部目标、新的公开或部署目标、花钱、不可恢复的迁移、可能丢提交的强制推送、改信任根（受信任 AI 的登记或本人验证依据）或授权边界，仍要本人明确同意。
 
@@ -1829,13 +1833,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E372",
-   "sha256": "8f85dd529a0d730e092483b848d99968e4493a0eaa8d8e3f71ac6c0bb8e46d5a",
-   "public_sha256": "c78209d8afa72b5afb2c2ba46dbfe26d066c8ffd134efaf667e257439a847b06",
+   "release": "E389",
+   "sha256": "bc8aa6ad3e30ced791464e579519c4870dbb3aa1feecd82a97f737e7abd2f50d",
+   "public_sha256": "22e264173890af45a4e137ee0141377e1465ad3e5250729825f1d4b7ddd4525b",
    "from": "## 子代理和项目规则不扩大授权",
    "to": "## 受信任的 AI",
-   "start": 4001,
-   "end": 5307,
+   "start": 4411,
+   "end": 5728,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1851,12 +1855,12 @@ owner: `E:\.agents`
     "href": "/rules/privacy-data/#个人资料的锁和解锁"
    },
    {
-    "text": "约法 L16",
-    "href": "/rules/charter/#四我的授权与安全"
-   },
-   {
     "text": "重大动作与本人验证",
     "href": "/rules/protected-actions/"
+   },
+   {
+    "text": "开场那一页“重大的事”那段",
+    "href": "/rules/charter/#L16"
    }
   ],
   "anchors": [],
@@ -1866,7 +1870,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-06",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "c78209d8afa72b5afb2c2ba46dbfe26d066c8ffd134efaf667e257439a847b06",
+  "source_public_sha256": "22e264173890af45a4e137ee0141377e1465ad3e5250729825f1d4b7ddd4525b",
   "source_rule_part": "rule-authorization/rule-authorization-06"
  },
  "layout": {
@@ -1874,7 +1878,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -1907,7 +1911,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -1984,7 +1988,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E372 版 · 续
+原文 · E389 版 · 续
 
 ## 子代理和项目规则不扩大授权
 
@@ -2000,7 +2004,7 @@ owner: `E:\.agents`
 
 在本人定的范围和时间里，本人的明确指令优先于 AI 自己的规则、项目限制、模型路由和 AI 审批；不追加厂商或型号资格检查，也不要求指定模型批准。AI 仍要说真话、提更好的方案、说清具体风险和别的任务正在做什么；本人了解后仍然坚持的，就照做，并自己做好相称的协调、保全和恢复。真实工具能力、验证方式、期限和执行结果不能伪造。
 
-无限制授权的本人确认效力按[约法 L16](/rules/charter/#四我的授权与安全)；重大动作如何使用该效力见[重大动作与本人验证](/rules/protected-actions/)。已有无限制授权不自动打开个人资料，已有资料期也不建立或延长无限制授权。本人明确同时要两项时，全局接管入口 `Invoke-OwnerTakeover.ps1 -Operation OpenGlobal -GrantPersonalAccess` 可在同一窗口用一次本人验证建立两份授权；按回执分别说明成功、只成功一项或状态不明，保留各自截止，不把部分成功说成全部成功，也不另开第二次验证。普通对话范围的接管不带这项组合。
+无限制授权的本人确认效力按[开场那一页“重大的事”那段](/rules/charter/#最要紧的到哪个项目都算数)；重大动作如何使用该效力见[重大动作与本人验证](/rules/protected-actions/)。已有无限制授权不自动打开个人资料，已有资料期也不建立或延长无限制授权。本人明确同时要两项时，全局接管入口 `Invoke-OwnerTakeover.ps1 -Operation OpenGlobal -GrantPersonalAccess` 可在同一窗口用一次本人验证建立两份授权；按回执分别说明成功、只成功一项或状态不明，保留各自截止，不把部分成功说成全部成功，也不另开第二次验证。普通对话范围的接管不带这项组合。
 
 本人要求开始、验收或重试无限制授权时，直接打开密码中心现役的本人接管入口 `Invoke-OwnerTakeover.ps1 -Operation Open`，由本人填时长并完成一次本人验证；不需要先有别的授权、登记或模型判断。Codex 和 Claude 的具体调用见各自适配专题。验证成功前没有接管权限；成功后只消费这一份授权和它的原截止。新对话、别的 AI 和别的电脑不会因为共用设备自动继承对话范围的授权。
 
@@ -2014,13 +2018,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E372",
-   "sha256": "8f85dd529a0d730e092483b848d99968e4493a0eaa8d8e3f71ac6c0bb8e46d5a",
-   "public_sha256": "c78209d8afa72b5afb2c2ba46dbfe26d066c8ffd134efaf667e257439a847b06",
+   "release": "E389",
+   "sha256": "bc8aa6ad3e30ced791464e579519c4870dbb3aa1feecd82a97f737e7abd2f50d",
+   "public_sha256": "22e264173890af45a4e137ee0141377e1465ad3e5250729825f1d4b7ddd4525b",
    "from": "## 受信任的 AI",
    "to": null,
-   "start": 5307,
-   "end": 5972,
+   "start": 5728,
+   "end": 6393,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -2039,7 +2043,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-07",
   "source_logical_id": "authorization_contract",
-  "source_public_sha256": "c78209d8afa72b5afb2c2ba46dbfe26d066c8ffd134efaf667e257439a847b06",
+  "source_public_sha256": "22e264173890af45a4e137ee0141377e1465ad3e5250729825f1d4b7ddd4525b",
   "source_rule_part": "rule-authorization/rule-authorization-07"
  },
  "layout": {
@@ -2047,7 +2051,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -2084,7 +2088,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E372版·续"
+     "text_ref": "原文·E389版·续"
     },
     {
      "type": "source_text_card",
@@ -2137,7 +2141,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E372 版 · 续
+原文 · E389 版 · 续
 
 ## 受信任的 AI
 

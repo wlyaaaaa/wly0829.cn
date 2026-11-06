@@ -36,8 +36,8 @@
  },
  "source": {
   "page": "sources/pages/proxyclean-dynamic-proxy-status/page.json",
-  "sha256": "f98b8a8ca39aba4f2b1b599b8b2c626ea6dee18870a749a49044eb07924792ca",
-  "converted_at_beijing": "2026-11-06T07:33:27+08:00"
+  "sha256": "8e5c9c42761f47ee5c6ac88b17d8ae9df4b3fbcbecd7899d9afaa9e3e0d9da23",
+  "converted_at_beijing": "2026-11-06T14:40:56+08:00"
  }
 }
 ---
@@ -655,7 +655,7 @@ Docker 保存了独立本地代理，或设置已改但运行记录仍沿用旧�
 
 - 本机状态输出（界面详情、复制诊断和命令行 JSON）保留代理端点的普通主机、端口和 IP，远程代理也照实写出地址；只去掉网址里的用户名密码，并把 token、api_key、password 这类查询参数换成 <credentials>。JSON 用 credentials_filtered 标明“已过滤凭据”，不再标成整体脱敏。
 
-- 系统代理开关关着时，就算保存的地址正好对着一个活监听，也不把它算到哪个客户端头上。11 月 6 日 05:16 正式只读运行读到开关关闭、保存着一个本地地址、归属为空，结论“符合默认”；这不代表出口、网页、桌面应用或真实关闭、修复已验收。
+- 系统代理开关关着时，就算保存的地址正好对着一个活监听，也不把它算到哪个客户端头上。11 月 6 日 13:54 正式只读运行读到开关关闭、保存着一个本地地址、归属为空，结论“符合默认”；这不代表出口、网页、桌面应用或真实关闭、修复已验收。
 
 - Get-PCDockerSnapshot 检查 %APPDATA%\Docker\settings-store.json 中的 OverrideProxyHTTP 等覆盖项。
 

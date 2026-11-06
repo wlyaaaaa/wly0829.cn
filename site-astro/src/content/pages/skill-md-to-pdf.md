@@ -37,9 +37,9 @@
     "at": "2026-10-31 08:39"
    },
    "facts": [
-    "10 月 29 日—11 月 4 日 AI 用了 1 次"
+    "10 月 30 日—11 月 5 日 AI 用了 1 次"
    ],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-05",
    "source": "AI 使用记录"
   },
   "public": false,
@@ -400,8 +400,8 @@
  },
  "source": {
   "page": "sources/pages/skill-md-to-pdf/page.json",
-  "sha256": "906e4908b9d1877cb0e8acc841baee502b0d9a34d126c3a7a7b52f158d4be11c",
-  "converted_at_beijing": "2026-11-06T04:59:46+08:00"
+  "sha256": "e42977f99e581693f15ea7acd39cc74bc04e8afb37fa537c99b9e4d619501b2c",
+  "converted_at_beijing": "2026-11-06T14:29:00+08:00"
  }
 }
 ---
@@ -496,11 +496,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 1 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 1 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录",
+     "static_note": "截至 11 月 5 日 · AI 使用记录",
      "row": "hero"
     },
     {
@@ -618,11 +618,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 1 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 1 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录"
+     "static_note": "截至 11 月 5 日 · AI 使用记录"
     },
     {
      "type": "prose",

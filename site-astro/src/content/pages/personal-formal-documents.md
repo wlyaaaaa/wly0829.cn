@@ -46,7 +46,7 @@
    "facts": [
     "近 7 天改进了 11 次"
    ],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-05",
    "source": "AI 使用记录；项目修改记录"
   },
   "public": false,
@@ -443,8 +443,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "62407ed9a53183c58644d028d78a759dc828aded60ea4aefaaea8a09e55b94c0",
-  "converted_at_beijing": "2026-11-06T05:00:00+08:00"
+  "sha256": "3f5c295ca6f982340bf14d2c8b4e56414d3b630c4d34043dfa500554b37596fe",
+  "converted_at_beijing": "2026-11-06T14:28:57+08:00"
  }
 }
 ---
@@ -503,7 +503,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录；项目修改记录",
+     "static_note": "截至 11 月 5 日 · AI 使用记录；项目修改记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -577,7 +577,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录；项目修改记录"
+     "static_note": "截至 11 月 5 日 · AI 使用记录；项目修改记录"
     },
     {
      "type": "stat_card",

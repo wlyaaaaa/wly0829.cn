@@ -37,9 +37,9 @@
     "at": "2026-10-20 13:59"
    },
    "facts": [
-    "10 月 29 日—11 月 4 日 AI 用了 0 次"
+    "10 月 30 日—11 月 5 日 AI 用了 0 次"
    ],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-05",
    "source": "AI 使用记录"
   },
   "public": false,
@@ -96,8 +96,8 @@
  },
  "source": {
   "page": "sources/pages/skill-vault-workflow/page.json",
-  "sha256": "fad4e327211dec1356c6915204e4a8e643fec8bc3225ddfacfc67f2ea6d0496b",
-  "converted_at_beijing": "2026-11-06T07:21:12+08:00"
+  "sha256": "297d91f33af7520334b513954b917ec995414f123de869080255e5c747508b97",
+  "converted_at_beijing": "2026-11-06T14:29:01+08:00"
  }
 }
 ---
@@ -144,11 +144,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 0 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 0 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录",
+     "static_note": "截至 11 月 5 日 · AI 使用记录",
      "row": "balanced-heading"
     },
     {
@@ -206,11 +206,11 @@
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 0 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 0 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录"
+     "static_note": "截至 11 月 5 日 · AI 使用记录"
     },
     {
      "type": "illustration",

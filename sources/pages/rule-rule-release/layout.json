@@ -177,6 +177,14 @@
         "inset_prefixes": [
           "例"
         ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "厂商和钩子排在哪"
       }
     ],
     "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 2026-10-03 page-fixer-09：三卡显式绑定库内册子、印章、放大镜；原例便签接已有黄实例接口。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。",
@@ -560,6 +568,14 @@
         "inset_prefixes": [
           "例"
         ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "厂商和钩子排在哪"
       }
     ],
     "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 2026-10-03 page-fixer-09：三卡显式绑定库内册子、印章、放大镜；原例便签接已有黄实例接口。",

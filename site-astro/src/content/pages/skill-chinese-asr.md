@@ -34,12 +34,12 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-11-03 16:12"
+    "at": "2026-11-05 03:25"
    },
    "facts": [
-    "10 月 29 日—11 月 4 日 AI 用了 5 次"
+    "10 月 30 日—11 月 5 日 AI 用了 5 次"
    ],
-   "as_of": "2026-11-04",
+   "as_of": "2026-11-05",
    "source": "AI 使用记录"
   },
   "based_on": {
@@ -98,8 +98,8 @@
  },
  "source": {
   "page": "sources/pages/skill-chinese-asr/page.json",
-  "sha256": "c77ba59aa8426aeea4de3f604e396c1a21a259a93c6afbfc3e96e48ea807dea9",
-  "converted_at_beijing": "2026-11-06T04:59:46+08:00"
+  "sha256": "175780fa8ef8aa9f002bffe4a92bd1f5b43e7c740daad966a1b373ac8c59a795",
+  "converted_at_beijing": "2026-11-06T14:29:00+08:00"
  }
 }
 ---
@@ -142,15 +142,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 11 月 3 日 16:12",
+       "text": "偶尔用 · 上次使用 11 月 5 日 03:25",
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 5 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 5 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录",
+     "static_note": "截至 11 月 5 日 · AI 使用记录",
      "row": "hero"
     },
     {
@@ -242,15 +242,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 11 月 3 日 16:12",
+       "text": "偶尔用 · 上次使用 11 月 5 日 03:25",
        "state": "ok"
       },
       {
-       "text": "10 月 29 日—11 月 4 日 AI 用了 5 次",
+       "text": "10 月 30 日—11 月 5 日 AI 用了 5 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 11 月 4 日 · AI 使用记录"
+     "static_note": "截至 11 月 5 日 · AI 使用记录"
     },
     {
      "type": "prose",
