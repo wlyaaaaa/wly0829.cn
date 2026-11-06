@@ -191,7 +191,8 @@ def get_page(item):
                 status = response.status
                 if status != 200:
                     raise HTTPError(request.full_url, status, 'Public HTML GET is not 200', response.headers, None)
-                digest = hashlib.file_digest(response, 'sha256').hexdigest()
+                # read() raises IncompleteRead for a truncated Content-Length body; readinto() can silently stop.
+                digest = hashlib.sha256(response.read()).hexdigest()
             if digest != row['sha256']:
                 raise ValueError('Public HTML GET differs: '+rel)
             proof.update(status='pass', http=status, sha256=digest, retryable=False)

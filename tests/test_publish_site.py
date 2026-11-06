@@ -1,6 +1,6 @@
 import importlib.util, tempfile, types, unittest.mock
 import io, ssl
-from http.client import IncompleteRead, RemoteDisconnected
+from http.client import HTTPResponse, IncompleteRead, RemoteDisconnected
 from pathlib import Path
 spec = importlib.util.spec_from_file_location('publisher', Path(__file__).resolve().parents[1]/'site-astro/tools/publish_site.py')
 publisher = importlib.util.module_from_spec(spec); spec.loader.exec_module(publisher)
@@ -191,6 +191,24 @@ class PublishTests(unittest.TestCase):
         self.assertEqual((proof['status'], proof['attempt_count'], proof['retry_count'], calls.call_count), ('failed', 5, 4, 5))
         self.assertEqual([call.args[0] for call in sleeps.call_args_list], [0.5, 1, 2, 4])
         self.assertEqual(proof['url'], 'https://wly0829.cn/fixture/?publish='+digest[:16])
+
+    def test_public_pages_retry_a_truncated_http_body_before_comparing_content(self):
+        payload = b'fixture'; digest = publisher.hashlib.sha256(payload).hexdigest()
+        def response(body):
+            stream = io.BytesIO(b'HTTP/1.1 200 OK\r\nContent-Length: 7\r\n\r\n'+body)
+            result = HTTPResponse(types.SimpleNamespace(makefile=lambda *args: stream))
+            result.begin()
+            self.addCleanup(result.close)
+            return result
+        with unittest.mock.patch.object(publisher, 'urlopen', side_effect=[response(b'fix'), response(payload)]) as calls, \
+             unittest.mock.patch.object(publisher.time, 'sleep') as sleeps:
+            proof = publisher.get_page(('index.html', {'sha256': digest}))[1]
+        self.assertEqual((proof['status'], proof['attempt_count'], proof['retry_count']), ('pass', 2, 1))
+        self.assertEqual(calls.call_count, 2)
+        self.assertEqual(proof['attempts'][0]['error_type'], 'IncompleteRead')
+        self.assertTrue(proof['attempts'][0]['retryable'])
+        self.assertEqual(proof['sha256'], digest)
+        sleeps.assert_called_once_with(0.5)
 
     def test_public_pages_reject_wrong_content_and_non_retryable_http_immediately(self):
         item = ('index.html', {'sha256': publisher.hashlib.sha256(b'expected').hexdigest()})
