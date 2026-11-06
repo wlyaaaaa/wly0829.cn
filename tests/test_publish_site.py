@@ -23,10 +23,11 @@ class PublishTests(unittest.TestCase):
             self.assertTrue(all((folder/f'publish-{number}').is_dir() for number in range(2, 5)))
 
     def test_publication_defers_retirement_and_preserves_head_proofs_and_failure_state(self):
-        for fail_page, fail_cleanup, skip_retention in ((False, False, False), (False, True, False), (True, False, False), (False, False, True)):
+        for fail_page, fail_cleanup, skip_retention, recovered in ((False, False, False, False), (False, True, False, False),
+                (True, False, False, False), (False, False, True, False), (False, False, False, True), (True, False, False, True)):
             with self.subTest(fail_page=fail_page, fail_cleanup=fail_cleanup), tempfile.TemporaryDirectory() as temporary:
                 folder = Path(temporary); root = folder/'dist'; root.mkdir()
-                for rel in ('index.html', 'cockpit/index.html', 'computer-access/index.html', 'a.js'):
+                for rel in ('index.html', 'cockpit/index.html', 'computer-access/index.html', 'unchanged/index.html', 'a.js'):
                     target = root/rel; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(b'fixture')
                 publisher.oss.write(root/'release-manifest.json', {'schema': 'wly.hybrid-release.v1', 'release_id': 'fixture', 'files': publisher.oss.inventory(root)})
                 source = publisher.oss.finalize_dist(root)
@@ -48,7 +49,13 @@ class PublishTests(unittest.TestCase):
                     if fail_cleanup: raise OSError('cloud delete failed')
                     publisher.retention.write(args.report, {'status': 'complete', 'deleted_objects': 0, 'deleted_bytes': 0})
                     return 0
-                with unittest.mock.patch.object(publisher.retention, 'predecessor', return_value=None), \
+                previous = None
+                if recovered:
+                    previous = {**source, 'oss': {**source['oss'], 'verification': {
+                        'schema': 'wly.oss-incremental-verification.v1', 'release_id': source['release_id'], 'complete': True,
+                        'objects': {rel: proof((rel, row), root)[1] for rel, row in source['oss']['objects'].items()}}},
+                        'publication_readback_required': True}
+                with unittest.mock.patch.object(publisher.retention, 'predecessor', return_value=previous), \
                      unittest.mock.patch.object(publisher.retention, 'shared', return_value=shared), \
                      unittest.mock.patch.object(publisher.retention, 'collect', side_effect=collect) as cleanup, \
                      unittest.mock.patch.object(publisher, 'head', side_effect=proof), \
@@ -62,11 +69,12 @@ class PublishTests(unittest.TestCase):
                         with self.assertRaisesRegex(ValueError, 'Public HTML GET failed: https://example.invalid/'): publisher.publish(options)
                         cleanup.assert_not_called(); self.assertFalse((shared/'published.json').exists())
                         failed = publisher.retention.read(folder/'run/publish-receipt.json')
-                        self.assertEqual((len(failed['get']), failed['get_summary']['failed']), (3, 3))
+                        self.assertEqual((len(failed['get']), failed['get_summary']['failed']), (4, 4))
                     else:
                         result = publisher.publish(options)
                         self.assertEqual(result['status'], 'published')
                         self.assertEqual(result['publication_status'], 'published')
+                        self.assertIn('unchanged/index.html', result['get'])
                         cleanup.assert_not_called()
                         registered = publisher.retention.read(shared/'managed.json')['objects']
                         self.assertTrue(all(row['etag'] == 'a'*32 for row in registered.values()))

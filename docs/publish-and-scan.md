@@ -47,6 +47,8 @@ python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发�
 
 成品仓库包含全部 Pages 文件、资源清单和成品身份，部署工作流只保留在 `main`，源码工作树不切分支。关闭 Git 换行转换后逐文件核暂存 blob 原始字节；普通 push 不强推。`--source-commit <40位源码SHA>` 可说明成品对应的源码，优先使用成品已有构建回执；缺失写 `Unknown`，不把当前源码 HEAD 冒充构建证据。
 
+若 Pages 已部署、最终网页核对却失败，下一次发布可从现有施工登记恢复同版资源证明：须核对公网成品身份、计划快照哈希、资源清单和完整 HEAD 证明。恢复本身不修改成功记录；这次发布必须重新核对全部 HTML，包含字节未变的原失败页，全部通过后才更新成功记录。证据缺失、错版或变化仍停止。
+
 ## EdgeOne live 函数单独发布
 
 `live.wly0829.cn` 的实时状态转发由腾讯云 EdgeOne Pages（现称 Makers）项目承载。以后把 `edge/edgeone/edge-functions/[[path]].js` 的改动推送到 main，GitHub 工作流会更新函数专用部署分支，EdgeOne 自动发布；需要重发同一版时，也可以用下面的一条命令完成，无需再登录腾讯云。普通请求是“把最新 main 的 live 转发函数上线”，完成后应从公网主入口读到实际的新行为。前面的 `publish_site.py` 只更新 OSS 与 GitHub Pages，不会更新 EdgeOne 函数。这条无人值守路线已于北京时间 2026 年 10 月 12 日完成实测。

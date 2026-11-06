@@ -258,6 +258,53 @@ class RetentionTests(unittest.TestCase):
             self.assertEqual(calls.call_count, 1 if bad_at in (0, 3) else 2); sleeps.assert_not_called()
             for effect in effects:
                 if hasattr(effect, 'close'): effect.close()
+
+    def test_deployed_but_unaccepted_predecessor_requires_bound_complete_head_proofs(self):
+        self.public_patch.stop()
+        contract = retention.oss_contract()
+        for fault in (None, 'missing', 'other-release', 'plan', 'proof-plan', 'object', 'incomplete'):
+            with self.subTest(fault=fault), tempfile.TemporaryDirectory(dir=self.root) as temporary:
+                folder = Path(temporary); dist = folder/'dist'; dist.mkdir()
+                (dist/'index.html').write_text('<html>fixture</html>', encoding='utf-8')
+                (dist/'a.js').write_bytes(b'console.log("fixture")')
+                contract.write(dist/contract.MANIFEST, {'schema': 'wly.hybrid-release.v1',
+                    'release_id': 'fixture', 'files': contract.inventory(dist)})
+                current = contract.finalize_dist(dist)
+                shared = folder/'shared'; preparation = folder/'run'
+                plan = {'schema': 'wly.oss-release-plan.v1', 'asset_base_url': retention.BASE,
+                    'release_id': current['release_id'], 'objects': current['oss']['objects'],
+                    'reference_keys': current['oss']['reference_keys'], 'github_files': current['files']}
+                retention.write(preparation/'oss-plan.json', plan)
+                with patch.object(retention, 'shared', return_value=shared):
+                    pin_path, pin, _ = retention.plan_pin(preparation)
+                proof = {'schema': 'wly.oss-incremental-verification.v1', 'complete': True,
+                    'release_id': current['release_id'], 'plan_sha256': pin['plan_sha256'],
+                    'objects': {rel: {'status': 'pass', 'http': 200, 'bytes': row['bytes'],
+                        'sha256': row['sha256']} for rel, row in plan['objects'].items()}}
+                if fault == 'other-release': pin['release_id'] = 'other'
+                if fault == 'plan': retention.write(preparation/'oss-plan.json', {'changed': True})
+                if fault == 'proof-plan': proof['plan_sha256'] = '0'*64
+                if fault == 'object': next(iter(proof['objects'].values()))['sha256'] = '0'*64
+                if fault == 'incomplete': proof['complete'] = False
+                retention.write(pin_path, pin)
+                if fault != 'missing': retention.write(preparation/'remote-verification.json', proof)
+                retention.write(shared/'published.json', {'manifest': {'release_id': 'older'}})
+                before = (shared/'published.json').read_bytes()
+                payload = json.dumps(current).encode()
+                identity = json.dumps({'release_id': current['release_id'],
+                    'manifest_sha256': retention.hashlib.sha256(payload).hexdigest()}).encode()
+                with patch.object(retention, 'shared', return_value=shared), \
+                     patch.object(retention, 'command', side_effect=['[{"id":7}]', '[{"state":"success"}]']), \
+                     patch.object(retention, 'public_read', side_effect=[payload, identity]):
+                    if fault:
+                        with self.assertRaises(ValueError): retention.predecessor()
+                    else:
+                        result = retention.predecessor()
+                        self.assertEqual(result['release_id'], current['release_id'])
+                        self.assertEqual(result['oss']['verification'], proof)
+                        self.assertTrue(result['publication_readback_required'])
+                self.assertEqual((shared/'published.json').read_bytes(), before)
+
     def test_finalized_hybrid_without_named_ref_uses_exact_frozen_predecessor_and_known_rollback(self):
         current = {'schema': 'wly.hybrid-release.v1', 'finalized_dist': True, 'release_id': 'current',
                    'files': {}, 'routes': {}, 'baseline_production_commit': 'a'*40,

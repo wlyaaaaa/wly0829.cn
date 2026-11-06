@@ -474,9 +474,10 @@ def publish(args):
                                          for rel in receipt['site_dist']['changed_files']
                                          if (Path(receipt['site_dist']['root'])/rel).is_file())
         receipt['deployment'] = step('pages', lambda: pages(receipt['commit'], args.pages_timeout))
+        readback_documents = plan['github_files'] if (previous or {}).get('publication_readback_required') else documents
         selected = {rel: plan['github_files'][rel] for rel in
                     {'index.html', 'cockpit/index.html', 'computer-access/index.html'} |
-                    {rel for rel in documents if rel.endswith('.html')}}
+                    {rel for rel in readback_documents if rel.endswith('.html')}}
         step('get_key_and_changed_pages', lambda: verify_pages(selected, receipt,
             lambda: oss.write(output/'publish-receipt.json', receipt)))
         step('successful_manifest_last', lambda: retention.write(retention.shared()/'published.json', {

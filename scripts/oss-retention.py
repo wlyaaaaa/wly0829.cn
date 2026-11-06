@@ -84,14 +84,42 @@ def predecessor():
             if current.get('finalized_dist'):
                 saved_path = shared()/'published.json'
                 saved = read(saved_path).get('manifest', {}) if saved_path.is_file() else {}
-                if saved.get('release_id') != current['release_id']:
-                    raise ValueError('Public finalized release lacks its same-release local HEAD verification')
-                current['oss']['verification'] = oss_contract().verify_manifest(saved)['oss']['verification']
+                if saved.get('release_id') == current['release_id']:
+                    current['oss']['verification'] = oss_contract().verify_manifest(saved)['oss']['verification']
+                else:
+                    current = recover_predecessor(current)
             return oss_contract().verify_manifest(current)
     local_manifest = ROOT / 'site-release' / 'release-manifest.json'
     if deployments or (shared() / 'published.json').exists() or (local_manifest.exists() and read(local_manifest).get('oss')):
         raise ValueError('No confirmed successful publication; supply its exact previous-manifest')
     return None
+
+
+def recover_predecessor(current):
+    """Reuse bound HEAD evidence after deployment but before final acceptance."""
+    contract = oss_contract()
+    contract.verify_manifest(current, require_remote=False)
+    for path in sorted((shared()/'pins').glob('*.json')):
+        pin = read(path)
+        if (pin.get('schema') != 'wly.oss-pin.v1' or pin.get('bucket') != BUCKET
+                or pin.get('release_id') != current['release_id']):
+            continue
+        plan_path = Path(pin['plan'])
+        proof_path = plan_path.parent/'remote-verification.json'
+        if not proof_path.is_file():
+            continue
+        snapshot = pin.get('plan_snapshot')
+        plan_sha = hashlib.sha256(snapshot.encode('utf-8')).hexdigest() if snapshot is not None else digest(plan_path)
+        if plan_sha != pin['plan_sha256'] or (plan_path.is_file() and digest(plan_path) != plan_sha):
+            raise ValueError('Deployed predecessor plan differs from its pinned snapshot')
+        plan = json.loads(snapshot) if snapshot is not None else read(plan_path)
+        proof = read(proof_path)
+        if (proof.get('plan_sha256') != plan_sha or plan.get('release_id') != current['release_id']
+                or plan.get('objects') != current['oss']['objects']):
+            raise ValueError('Deployed predecessor HEAD evidence is not bound to its plan')
+        candidate = {**current, 'oss': {**current['oss'], 'verification': proof}}
+        return {**contract.verify_manifest(candidate), 'publication_readback_required': True}
+    raise ValueError('Public finalized release lacks its same-release local HEAD verification')
 
 
 def oss_contract():
