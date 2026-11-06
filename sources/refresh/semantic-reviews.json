@@ -1080,6 +1080,11 @@
       "checked_at": "2026-11-04T19:31:03.416793+08:00",
       "run_id": "aa007b92-eb9d-43e0-9c7b-a835a5cb2224",
       "evidence": "{\"group\": \"w10\", \"evidence\": [\"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\facts\\\\work-delivery.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_回执-w10.md\", \"E:\\\\Cache\\\\wly-site-build\\\\refresh-runs\\\\unattended-20261104\\\\写稿附件\\\\_复核-batch2.md\"], \"semantic_checked\": true, \"reason\": \"写稿组按当前facts核对并合稿，独立复核附件已接受\"}"
+    },
+    "skill-dispatch-work": {
+      "checked_at": "2026-11-06T14:46:33+08:00",
+      "run_id": "e0b90e74-670e-4b82-bdd6-a0c9426453a1",
+      "evidence": "E:\\Cache\\wly-site-build\\refresh-runs\\update-20261106\\写稿附件\\_回执-skills.md SHA256=1be45b82486fc357daa3a2eef75c3e1f0f7f41bfd38383d118b94ca01b5347b5，实际改稿/核对回执：| **skill-dispatch-work（新页）** | 01—05 | 见 `_新增-skills.md`：主持的 AI 怎么分活、做完怎么交回、谁核对；本人不用记命令也不用运行什么 |；只确认讲解、已实现边界和具名历史；不升级为运行、真实恢复或聊天实测。"
     }
   }
 }

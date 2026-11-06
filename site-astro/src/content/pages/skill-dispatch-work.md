@@ -38,7 +38,7 @@
    "state": "在用",
    "last": {
     "label": "上次更新",
-    "at": "2026-11-06 02:59"
+    "at": "2026-11-06 09:37"
    },
    "facts": [],
    "as_of": "2026-11-06",
@@ -107,8 +107,8 @@
  },
  "source": {
   "page": "sources/pages/skill-dispatch-work/page.json",
-  "sha256": "b947d8a355dd8408b21771b34631110d4a1d4a234a5a19e0ed4ac244289f2053",
-  "converted_at_beijing": "2026-11-06T13:54:09+08:00"
+  "sha256": "7ff248d267efac8cf00d3184cff7be5d9715ec4749f3ba6fa0b7074d11103d12",
+  "converted_at_beijing": "2026-11-06T15:54:01+08:00"
  }
 }
 ---
@@ -146,7 +146,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 11 月 6 日 02:59",
+       "text": "在用 · 上次更新 11 月 6 日 09:37",
        "state": "ok"
       }
      ],
@@ -196,7 +196,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 11 月 6 日 02:59",
+       "text": "在用 · 上次更新 11 月 6 日 09:37",
        "state": "ok"
       }
      ],
