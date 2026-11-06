@@ -118,6 +118,7 @@ RETRY_DELAYS = (0.5, 1, 2, 2, 2, 2, 2, 2)  # 连接层错误最多重试 8 次�
 PAGE_RETRY_DELAYS = (0.5, 1, 2, 4)  # 每个页面最多请求五次，仅重试传输错误和 HTTP 5xx
 PAGE_ROUND_DELAYS = (120, 150, 180)  # 整轮结束后仅为传输失败网址补查，最多三轮
 HEAD_TIMEOUT, PAGE_TIMEOUT, GH_TIMEOUT, GIT_TIMEOUT, PUSH_TIMEOUT = 8, 15, 60, 120, 600
+PAGES_CONFIRM_TIMEOUT = 1200  # Include preparation/queue time before the 15-minute job completes.
 GIT_NET = ('-c', 'http.lowSpeedLimit=1000', '-c', 'http.lowSpeedTime=30')
 CONNECTION_MARKERS = ('schannel', 'ssl', 'tls', 'handshake', 'eof', 'connection reset', 'connection was reset',
                       'connection was aborted', 'connection refused', 'timed out', 'timeout', 'could not resolve',
@@ -543,7 +544,8 @@ if __name__ == '__main__':
     parser.add_argument('--previous-manifest', type=Path)
     parser.add_argument('--output', type=Path)
     parser.add_argument('--source-commit')
-    parser.add_argument('--pages-timeout', type=int, default=600)
+    parser.add_argument('--pages-timeout', type=int, default=PAGES_CONFIRM_TIMEOUT,
+                        help='total confirmation budget, including dispatch, queue and the 15-minute Pages job')
     parser.add_argument('--upload-workers', type=int, default=12, help='parallel OSS uploads; existing identical objects are skipped')
     parser.add_argument('--retention-max-keys', type=int, default=1000, help='maximum exact obsolete managed keys checked by --retention-only')
     parser.add_argument('--skip-retention', action='store_true', help='compatibility flag: publication always defers cloud cleanup to a separate command')

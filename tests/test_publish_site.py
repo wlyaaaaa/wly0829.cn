@@ -127,6 +127,23 @@ class PublishTests(unittest.TestCase):
         with unittest.mock.patch.object(publisher.time, 'monotonic', side_effect=lambda: clock[0]), unittest.mock.patch.object(publisher.time, 'sleep', side_effect=lambda seconds: clock.__setitem__(0, clock[0]+seconds)), unittest.mock.patch.object(publisher, 'command', side_effect=[
                 'https://github.com/wlyaaaaa/wly0829.cn/actions/runs/42', '{"status":"queued","conclusion":null}']):
             with self.assertRaisesRegex(TimeoutError, 'run 42'): publisher.pages('a'*40, 1)
+    def test_pages_default_waits_for_completion_after_preparation_and_deployment(self):
+        for budget, succeeds in ((600, False), (publisher.PAGES_CONFIRM_TIMEOUT, True)):
+            clock = [0]
+            def command(*args, **kwargs):
+                if args[1:3] == ('workflow', 'run'):
+                    return 'https://github.com/wlyaaaaa/wly0829.cn/actions/runs/42'
+                clock[0] += min(50, kwargs['timeout'])
+                return publisher.json.dumps({'status': 'completed' if clock[0] >= 700 else 'in_progress',
+                                             'conclusion': 'success' if clock[0] >= 700 else None})
+            with self.subTest(budget=budget), unittest.mock.patch.object(publisher, 'command', side_effect=command) as calls, \
+                 unittest.mock.patch.object(publisher.time, 'monotonic', side_effect=lambda: clock[0]), \
+                 unittest.mock.patch.object(publisher.time, 'sleep', side_effect=lambda delay: clock.__setitem__(0, clock[0]+delay)):
+                if succeeds:
+                    self.assertEqual(publisher.pages('a'*40, budget), 42)
+                else:
+                    with self.assertRaises(TimeoutError): publisher.pages('a'*40, budget)
+            self.assertEqual(sum(call.args[1:3] == ('workflow', 'run') for call in calls.call_args_list), 1)
     def test_pages_never_guesses_a_run_when_dispatch_returns_no_exact_url(self):
         for result in ('', 'https://github.com/other/repo/actions/runs/42'):
             with self.subTest(result=result), unittest.mock.patch.object(publisher, 'command', return_value=result) as commands:
