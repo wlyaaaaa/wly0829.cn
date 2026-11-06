@@ -504,8 +504,8 @@
       "id": "how-14",
       "section": "case-away",
       "title": "例三：人不在电脑前（二）",
-      "scene": "横版：标题下面一幅横向小水彩：左边一台台式机、右边一台笔记本，中间一张淡绿色的网把两台和上方一只手机连在一起（代表 Tailscale 私网），网上几颗光点来回流动；图里不写字。下面四张等宽卡片：每行两张，格式同上一屏（标题、能做、前提、限制）。左边竖条小地图只画：副机（第二台笔记本）、电脑远程控制、代理上网修复、手机。",
-      "portrait": "竖版：标题；小水彩缩到屏宽；四张卡一行一张、满宽。",
+      "scene": "横版：标题下面一幅横向小水彩：左边一台台式机、右边一台笔记本，中间一张淡绿色的网把两台和上方一只手机连在一起（代表 Tailscale 私网），网上几颗光点来回流动；图里不写字。下面五张卡片：⑤⑥⑦满宽，⑧⑨一行两张，格式同上一屏（标题、能做、前提、限制）。左边竖条小地图只画：副机（第二台笔记本）、电脑远程控制、代理上网修复、手机。",
+      "portrait": "竖版：标题；小水彩缩到屏宽；五张卡一行一张、满宽。",
       "text": "{{stories.stories.2.detail_screens.1.text}}",
       "links": "{{stories.stories.2.detail_screens.1.links}}",
       "anchors": [],
@@ -522,6 +522,20 @@
       "portrait": "竖版：标题；六张卡一行一张、满宽；横条满宽放最后。",
       "text": "{{stories.stories.2.detail_screens.2.text}}",
       "links": "{{stories.stories.2.detail_screens.2.links}}",
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "how-case-away",
+      "reuse": ""
+    },
+    {
+      "id": "how-18",
+      "section": "case-away",
+      "title": "例三：人不在电脑前（四）",
+      "scene": "横版：标题；第一张满宽卡片放⑯，右边一个铃铛小图标；下面两张等宽卡片放⑰和⑱，各带一个小图标；最下面一条浅灰底的满宽横条放“这屏的依据”。卡片每行开头是小标签（能做、前提、会找我、不会找我、不叫我、限制），格式同前几屏。",
+      "portrait": "竖版：标题；三张卡一行一张、满宽；横条满宽放最后。",
+      "text": "{{stories.stories.2.detail_screens.3.text}}",
+      "links": "{{stories.stories.2.detail_screens.3.links}}",
       "anchors": [],
       "live": [],
       "screenshots": [],
@@ -2548,6 +2562,26 @@
         "target": "/computer-access/",
         "screen": "how-15",
         "text": "〔授权与状态〕"
+      },
+      {
+        "target": "/cockpit/",
+        "screen": "how-18",
+        "text": "〔驾驶舱〕"
+      },
+      {
+        "target": "/skills/phone-direct/",
+        "screen": "how-18",
+        "text": "〔手机直取〕"
+      },
+      {
+        "target": "/projects/wechatdirect/",
+        "screen": "how-18",
+        "text": "〔微信聊天读取〕"
+      },
+      {
+        "target": "/projects/pcconfig/#pcconfig-10",
+        "screen": "how-14",
+        "text": "〔手机桥〕"
       }
     ],
     "incoming_links": {
@@ -2630,5 +2664,10 @@
       "第 11 屏例二标题“电脑坏了，换一台，一句话开始恢复”和每步“真做过／还没做过”的标法。",
       "第 4、13 屏“走的是 ChatGPT 聊天本身，不占 Codex 的额度”“不占 Codex 的额度”（据本人 9 月 29 日原话）。"
     ]
-  }
+  },
+  "search_aliases": [
+    "手机和电脑",
+    "通知",
+    "什么情况发邮件"
+  ]
 }

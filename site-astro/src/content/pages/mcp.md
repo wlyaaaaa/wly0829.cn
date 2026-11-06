@@ -201,8 +201,8 @@
  },
  "source": {
   "page": "sources/pages/mcp/page.json",
-  "sha256": "c9303edc7ac315b47173aa30fc7eece4a6b3bd9ea69d634fb4bc3be4448f8451",
-  "converted_at_beijing": "2026-11-04T12:05:32+08:00"
+  "sha256": "1f2b2d343ee4cc7c08be10027f6416961674c8366e86183284ed4bb795b6a3ab",
+  "converted_at_beijing": "2026-11-06T09:18:11+08:00"
  }
 }
 ---
@@ -233,6 +233,10 @@
    {
     "text": "驾驶舱",
     "href": "/cockpit/#remote"
+   },
+   {
+    "text": "电脑什么时候找我",
+    "href": "/how/#how-18"
    }
   ],
   "anchors": [],
@@ -499,7 +503,7 @@ ChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件�
 **现在**
 主机　副机　主机授权
 
-要开、要关个人资料和无限制授权，去〔授权与状态〕；电脑本身累不累，看〔驾驶舱〕。
+要开、要关个人资料和无限制授权，去〔授权与状态〕；电脑本身累不累，看〔驾驶舱〕；什么情况找我，看〔电脑什么时候找我〕。
 只给我本人和我授权过的客户端用：复制地址拿不到任何操作权限。
 
 ::screen{#mcp-02 section="see-desktop"}

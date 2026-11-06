@@ -151,8 +151,10 @@ class Ctx:
                 component_block = dict(block, spec={k: v for k, v in block["spec"].items()
                                                   if k not in ("inline_row", "inline_width", "source_prose", "textless")})
             markup = fn(component_block, self)
-            if self.screen.get("id") in {"agents-01", "rules-home-02", "how-05", "rule-execution-coordination-01", "skills-home-04"}:
+            if self.screen.get("id") in {"agents-01", "rules-home-02", "how-05", "how-18", "rule-execution-coordination-01", "skills-home-04"}:
                 markup = re.sub(r'(<[a-z][\w-]*)(?=[\s>])', r'\1 data-layout-screen="' + E(self.screen["id"]) + '"', markup, count=1)
+            if self.screen.get("id") == "how-18" and "_library/icons/铃铛.png" in block.get("spec", {}).get("icons", []):
+                markup = markup.replace('data-layout-screen="how-18"', 'data-layout-screen="how-18" data-layout-icon="bell"', 1)
             return markup
         finally:
             self.inline = prior_inline

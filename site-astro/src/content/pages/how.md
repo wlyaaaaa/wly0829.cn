@@ -1802,6 +1802,26 @@
      "target": "/computer-access/",
      "screen": "how-15",
      "text": "〔授权与状态〕"
+    },
+    {
+     "target": "/cockpit/",
+     "screen": "how-18",
+     "text": "〔驾驶舱〕"
+    },
+    {
+     "target": "/skills/phone-direct/",
+     "screen": "how-18",
+     "text": "〔手机直取〕"
+    },
+    {
+     "target": "/projects/wechatdirect/",
+     "screen": "how-18",
+     "text": "〔微信聊天读取〕"
+    },
+    {
+     "target": "/projects/pcconfig/#pcconfig-10",
+     "screen": "how-14",
+     "text": "〔手机桥〕"
     }
    ],
    "incoming_links": {
@@ -1884,12 +1904,17 @@
     "第 11 屏例二标题“电脑坏了，换一台，一句话开始恢复”和每步“真做过／还没做过”的标法。",
     "第 4、13 屏“走的是 ChatGPT 聊天本身，不占 Codex 的额度”“不占 Codex 的额度”（据本人 9 月 29 日原话）。"
    ]
-  }
+  },
+  "search_aliases": [
+   "手机和电脑",
+   "通知",
+   "什么情况发邮件"
+  ]
  },
  "source": {
   "page": "sources/pages/how/page.json",
-  "sha256": "d46f1b1d7af3c11174501469e1f638d123085c3e47d4183959be0abd605272e4",
-  "converted_at_beijing": "2026-11-06T07:33:28+08:00"
+  "sha256": "26a2c4dd4b7f60a94aa00df70593ea62b86d1691e7726769f7578d32d6bb9549",
+  "converted_at_beijing": "2026-11-06T09:15:36+08:00"
  }
 }
 ---
@@ -5246,12 +5271,12 @@ AI 做到一半 → 告诉我为什么、要做几步 → 我做完 → AI 接�
 两种用法要分清：一种是我自己远远看着桌面、亲手操作；另一种是让 AI 替我用电脑，我只在对话里交代。下面按“我想……”一样样列，每样写清能做什么、要什么前提、做不到什么。
 
 **① 想看一眼桌面、自己动手**　〔远程电脑串流〕
-能做：手机或副机上的 Moonlight 看主机整个桌面，鼠标键盘操作传回去；主机用 Sunshine 送画面，两端走 Tailscale 私网。
-前提：主机开着，Sunshine 和 Tailscale 在线，两端配过对。
-限制：网络差时会卡，连不上直连会绕中转；服务正常不等于这一刻画面一定连得上。
+能做：手机或副机上的 Moonlight 看主机整个桌面，鼠标键盘操作传回去；主机用 Sunshine 送画面。同一个网时优先走局域网，外出才走 Tailscale 私网。
+前提：主机开着，Sunshine 在线，两端配过对；外出时两端的 Tailscale 也要在线。
+限制：网络差时会卡，外出连不上直连会绕中转；服务正常不等于这一刻画面一定连得上。
 
 **② Moonlight 连不上**　备用远控
-能做：网易 UU 远程、ToDesk 看桌面；Windows 远程桌面只放行我的手机和副机。
+能做：网易 UU 远程、ToDesk 看桌面；Windows 远程桌面现在只放行副机，没有手机。
 前提：各自装好、登录过。
 限制：要我手动换，不会自动切；电脑还没登录时 ToDesk 能不能连，还在待验收。
 
@@ -5273,12 +5298,16 @@ AI 做到一半 → 告诉我为什么、要做几步 → 我做完 → AI 接�
   "id": "how-14",
   "section": "case-away",
   "title": "例三：人不在电脑前（二）",
-  "scene": "横版：标题下面一幅横向小水彩：左边一台台式机、右边一台笔记本，中间一张淡绿色的网把两台和上方一只手机连在一起（代表 Tailscale 私网），网上几颗光点来回流动；图里不写字。下面四张等宽卡片：每行两张，格式同上一屏（标题、能做、前提、限制）。左边竖条小地图只画：副机（第二台笔记本）、电脑远程控制、代理上网修复、手机。",
-  "portrait": "竖版：标题；小水彩缩到屏宽；四张卡一行一张、满宽。",
+  "scene": "横版：标题下面一幅横向小水彩：左边一台台式机、右边一台笔记本，中间一张淡绿色的网把两台和上方一只手机连在一起（代表 Tailscale 私网），网上几颗光点来回流动；图里不写字。下面五张卡片：⑤⑥⑦满宽，⑧⑨一行两张，格式同上一屏（标题、能做、前提、限制）。左边竖条小地图只画：副机（第二台笔记本）、电脑远程控制、代理上网修复、手机。",
+  "portrait": "竖版：标题；小水彩缩到屏宽；五张卡一行一张、满宽。",
   "links": [
    {
     "text": "代理上网修复",
     "href": "/projects/proxyclean/"
+   },
+   {
+    "text": "手机桥",
+    "href": "/projects/pcconfig/#pcconfig-10"
    }
   ],
   "anchors": [],
@@ -5349,6 +5378,16 @@ AI 做到一半 → 告诉我为什么、要做几步 → 我做完 → AI 接�
     {
      "type": "content_card",
      "text_ref": "⑥ 两台互相修",
+     "columns": 1,
+     "columns_v": 1,
+     "align": "left",
+     "connector": "none",
+     "illustration": "none",
+     "icons": "none"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "⑦ 通知和文字互通",
      "columns": 1,
      "columns_v": 1,
      "align": "left",
@@ -5444,7 +5483,7 @@ AI 做到一半 → 告诉我为什么、要做几步 → 我做完 → AI 接�
 
 # 副机和主机：共享端口和数据
 
-副机就是我的第二台笔记本。主机、副机和手机都在我自己的 Tailscale 私网里，彼此直接连，不对公网开放。
+副机就是我的第二台笔记本。主机、副机和手机都在我自己的 Tailscale 私网里，下面共享的端口只在这张私网里开放，不对公网开放；手机 ChatGPT 走的公网入口是另一条路，见④。
 
 **⑤ 共享端口**
 能做：主机的两个代理只在私网里给手机和副机用；主机数据库开了一个只读的测试口给副机；副机的 SSH 和远程桌面只让主机进。
@@ -5452,7 +5491,12 @@ AI 做到一半 → 告诉我为什么、要做几步 → 我做完 → AI 接�
 
 **⑥ 两台互相修**
 能做：副机上的 Codex 连主机，主机上的 Codex、Claude 连副机；一台的服务停了，从另一台用管理员或 SYSTEM（Windows 最高的系统身份）把它拉起来。9 月 11 日故意停掉主机的隧道，从副机绕进去修好了。
-限制：两台都要开着、联网。
+限制：两台都要开着、联网，还要有一条进得去目标机的维护通道；整机卡死、维护也进不去时，软件救不了。
+
+**⑦ 通知和文字互通**　〔手机桥〕
+能做：手机通知和来电在电脑上看；手机和两台电脑之间复制的文字互通。
+前提：手机这头要主机的手机桥连着；手机不在家时，两台电脑之间仍互通。
+限制：只传 100KB 以内的文字，图片和文件不走这条；来电能在电脑上看和点接听、拒接，不等于能在电脑上通话。
 
 **⑧ 临时接力**　钉钉
 能做：手机和两台电脑之间临时传文字、链接和文件。
@@ -5781,11 +5825,189 @@ AI 做到一半 → 告诉我为什么、要做几步 → 我做完 → AI 接�
 限制：原任务要开着、AI 停下等着；关了应用不保证叫得醒。
 
 **⑮ 等验证码**
-能做：AI 替我登录网站时，不用我守着手机报验证码。AI 点完“发送验证码”，同时等手机短信（经无线 ADB 手机桥，回看 5 分钟）和 Gmail（最近 10 分钟），哪个先到用哪个，读出的码只交回原来的登录流程。
-前提：短信要手机桥已连接现用手机，手机没连就只查邮箱；邮件要个人资料在解锁期。
+能做：不用我守着手机报验证码。我跟 AI 要码时，同时等手机短信（回看 5 分钟）和 Gmail（最近 10 分钟），哪个先到用哪个；AI 替我走网站登录时只取短信码（默认回看 60 秒、等 30 秒）。读出的码只交回原来的流程。
+前提：短信要手机桥已连接现用手机，合并取码时手机没连就只查邮箱；邮件要个人资料在解锁期。
 限制：只在用时跑一会儿，不常驻、不留记录；同一网站同时发了好几次码可能取错，AI 要对着这次的页面核。
 
 **什么时候都办不了**：主机关机、睡着或断网时，靠它的这些都停了。先用 ToDesk、网易 UU 或小米智能插座把电脑开起来、连上网，再回来做。
+
+::screen{#how-18 section="case-away"}
+
+```typeset
+{
+ "screen": {
+  "id": "how-18",
+  "section": "case-away",
+  "title": "例三：人不在电脑前（四）",
+  "scene": "横版：标题；第一张满宽卡片放⑯，右边一个铃铛小图标；下面两张等宽卡片放⑰和⑱，各带一个小图标；最下面一条浅灰底的满宽横条放“这屏的依据”。卡片每行开头是小标签（能做、前提、会找我、不会找我、不叫我、限制），格式同前几屏。",
+  "portrait": "竖版：标题；三张卡一行一张、满宽；横条满宽放最后。",
+  "links": [
+   {
+    "text": "驾驶舱",
+    "href": "/cockpit/"
+   },
+   {
+    "text": "手机直取",
+    "href": "/skills/phone-direct/"
+   },
+   {
+    "text": "微信聊天读取",
+    "href": "/projects/wechatdirect/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "how-case-away",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "手机和电脑怎么联动",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "⑯ 电脑和 AI 来找我",
+     "columns": 1,
+     "columns_v": 1,
+     "align": "left",
+     "connector": "none",
+     "illustration": "right_inside",
+     "icons": [
+      "_library/icons/铃铛.png"
+     ]
+    },
+    {
+     "type": "content_card",
+     "text_ref": "⑰ AI 从手机拿东西",
+     "columns": 2,
+     "columns_v": 1,
+     "align": "left",
+     "connector": "none",
+     "illustration": "right_inside",
+     "icons": [
+      "_library/icons/手机电脑连接.png",
+      "_library/icons/微信标志.png"
+     ]
+    },
+    {
+     "type": "notice",
+     "text_ref": "这屏的依据",
+     "align": "left"
+    }
+   ],
+   "notes": "新构图，待样张；图标来自现有图库，和 how-15 同一种卡内小图标。",
+   "reference_screen": "how-15"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "手机和电脑怎么联动",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "⑯ 电脑和 AI 来找我",
+     "columns": 1,
+     "columns_v": 1,
+     "align": "left",
+     "connector": "none",
+     "illustration": "right_inside",
+     "icons": [
+      "_library/icons/铃铛.png"
+     ]
+    },
+    {
+     "type": "content_card",
+     "text_ref": "⑰ AI 从手机拿东西",
+     "columns": 1,
+     "columns_v": 1,
+     "align": "left",
+     "connector": "none",
+     "illustration": "right_inside",
+     "icons": [
+      "_library/icons/手机电脑连接.png"
+     ]
+    },
+    {
+     "type": "content_card",
+     "text_ref": "⑱ 微信谁发",
+     "columns": 1,
+     "columns_v": 1,
+     "align": "left",
+     "connector": "none",
+     "illustration": "right_inside",
+     "icons": [
+      "_library/icons/微信标志.png"
+     ]
+    },
+    {
+     "type": "notice",
+     "text_ref": "这屏的依据",
+     "align": "left"
+    }
+   ],
+   "notes": "新构图，待样张；竖版一张卡一行。",
+   "reference_screen": "how-15"
+  }
+ },
+ "images": [
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "how/how-18-title-01.png",
+   "source_image": "E:\\Cache\\wly-site-build\\refresh-runs\\update-20261106\\round2-prep\\how-18-title-v1.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-15f554ec7609e77526e5",
+   "title_text": "手机和电脑怎么联动",
+   "sha256": "c75f0eca20807d86081e98e6ba01263d37c751fb83f85f88c8e69d39545e4ee1",
+   "status": "ready",
+   "source_box": [
+    0,
+    354,
+    1536,
+    671
+   ],
+   "g4_target_reference_available": false
+  }
+ ]
+}
+```
+
+# 手机和电脑怎么联动
+
+**⑯ 电脑和 AI 来找我**　〔驾驶舱〕
+能做：每次发一封 QQ 邮件，以邮件为准；手机连着时再补一条通知。人在电脑前先等 10 分钟，离开就放行，急事立刻发；每天最多 60 次，急事不占。手机快没电只在电脑弹窗和水冷屏上提醒，不走邮件。
+会找我：新出现要我做或选的事；AI 等我回话；AI 判断我该知道的；AI 对话停了；自动任务到点没开工或一直没结论；线上驾驶舱打不开；有人认真看了网站；我说过“做完叫我”的。几分钟内要我动手的（扫码、手机确认、解锁）和很大的问题算急事。
+不会找我：普通 AI 长活做完默认不响；已看、已交给 AI、推迟还没到的不发；同一件事 24 小时内不重发。
+前提：通知程序开着；资料锁着时邮件排队，解锁后补发。电脑断电断网时，Google 云端每 10 分钟查一次，失联 20 分钟往 QQ 邮箱发一封，恢复再一封；通知程序停跑、信发不出时也由它报一声，不带事项内容。
+限制：记录里的“已发”不等于我看到了，也说明不了手机弹没弹。
+
+**⑰ AI 从手机拿东西**　〔手机直取〕
+能做：要用时 AI 直接取手机上的文件、短信、当前通知、截图；我开口也能把电脑文件放到手机下载目录。要验证码见⑮。
+前提：手机配过对。在电脑旁走局域网或蓝牙；人在外面走 Tailscale，用手机流量。取私人内容要资料在解锁期。
+限制：这和每半小时收一次手机文件是两件事：定时收取只走局域网或 USB，人在外面时文件先留在手机上，回家再收。连不上工具先自己重连，还不行才按实际原因找我；手机重启后要先回家连上 Wi-Fi。
+
+**⑱ 微信谁发**　〔微信聊天读取〕
+能做：AI 在我授权的范围内替我发给别人，分条发，发完接着等回复；也能盯指定的聊天，有回复就叫醒 AI 出稿，稿子写在对话里。
+前提：说清用哪个号、发给谁，动作和内容都有我的授权；有新消息不等于同意发。
+不叫我：盯聊天、出稿只叫醒 AI，不叫我；程序不会用微信给我发通知。只有微信掉线要我重新登录时才叫我一次，走⑯那条路。
+限制：分条发和等回复是 11 月 5–6 日新加的，只记过一次发给文件传输助手的实测；在真实联系人上的效果还没核实。
+
+**这屏的依据**：做法按 2026 年 11 月 6 日的说明和现成记录核对；这一天没有发信、操作手机或微信做实测。
 
 ::screen{#how-03 section="bases"}
 

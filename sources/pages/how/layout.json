@@ -1324,6 +1324,16 @@
       },
       {
         "type": "content_card",
+        "text_ref": "⑦ 通知和文字互通",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
         "text_ref": "⑧ 临时接力",
         "columns": 1,
         "columns_v": 1,
@@ -1477,6 +1487,109 @@
       }
     ],
     "notes": "现有原图只有 v2 的⑬⑭，两张整宽卡左文右插画、标题在卡顶；其余⑩⑪⑫⑮及末尾说明缺原图，沿这两张卡构图补齐，待样张。 qa04 修正：横竖⑩至⑮均使用显式同序图标；⑩以显示器替代灰底装饰叶；⑬日历时钟、⑮沙漏。原能做/前提/限制文字本就由正文输出，移除core不消费的copy_labels字段，不删字。"
+  },
+  {
+    "screen": "how-18",
+    "orientation": "h",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "手机和电脑怎么联动",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑯ 电脑和 AI 来找我",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "right_inside",
+        "icons": [
+          "_library/icons/铃铛.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑰ AI 从手机拿东西",
+        "columns": 2,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "right_inside",
+        "icons": [
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/微信标志.png"
+        ]
+      },
+      {
+        "type": "notice",
+        "text_ref": "这屏的依据",
+        "align": "left"
+      }
+    ],
+    "notes": "新构图，待样张；图标来自现有图库，和 how-15 同一种卡内小图标。",
+    "reference_screen": "how-15"
+  },
+  {
+    "screen": "how-18",
+    "orientation": "v",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "手机和电脑怎么联动",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑯ 电脑和 AI 来找我",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "right_inside",
+        "icons": [
+          "_library/icons/铃铛.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑰ AI 从手机拿东西",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "right_inside",
+        "icons": [
+          "_library/icons/手机电脑连接.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑱ 微信谁发",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "right_inside",
+        "icons": [
+          "_library/icons/微信标志.png"
+        ]
+      },
+      {
+        "type": "notice",
+        "text_ref": "这屏的依据",
+        "align": "left"
+      }
+    ],
+    "notes": "新构图，待样张；竖版一张卡一行。",
+    "reference_screen": "how-15"
   },
   {
     "screen": "how-03",

@@ -589,7 +589,7 @@
  "source": {
   "page": "sources/pages/skills-home/page.json",
   "sha256": "1816f075062814b79b234fc8a2c68178c2a18c86060fb07a1e0e4793ef2b25f6",
-  "converted_at_beijing": "2026-11-06T08:49:17+08:00"
+  "converted_at_beijing": "2026-11-06T09:17:44+08:00"
  }
 }
 ---
@@ -2394,6 +2394,30 @@
    "title_text": "维护代码",
    "sha256": "db02ad8f02ee91d900afeeb34767e6c154f128624361bb15e51e159a36c291f3",
    "status": "ready",
+   "g4_target_reference_available": false
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "skills-home/skills-home-04-title-dispatch-01.png",
+   "source_image": "E:\\Cache\\wly-site-build\\refresh-runs\\update-20261106\\round2-prep\\skills-section-dispatch-v1.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-69b9504655c62e0602cf",
+   "title_text": "派活和改代码",
+   "sha256": "1a632a54fec803b04dd8e505b8fcc69c1fc75d3f7986446cb8fde367b8e201b9",
+   "status": "ready",
+   "source_box": [
+    0,
+    319,
+    1536,
+    721
+   ],
    "g4_target_reference_available": false
   }
  ]

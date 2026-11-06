@@ -45,12 +45,13 @@ b { font-weight: 700; color: var(--accent); }
 .grid.sides, .grid.stats:not(.hub-stat-grid) { align-items: center; }
 .grid.steps { align-items: start; }
 /* 点名的说明屏按内容高度顶对齐，其他页保留原有构图。 */
-.grid.stats[data-layout-screen="agents-01"], .grid.sides[data-layout-screen="how-05"] { align-items: start; }
+.grid.stats[data-layout-screen="agents-01"], .grid.sides:is([data-layout-screen="how-05"], [data-layout-screen="how-18"]) { align-items: start; }
 .c-hub-stats[data-layout-screen="agents-01"] .hub-stat-fields { align-items: start; }
 .o-v .c-hub-stats[data-layout-screen="agents-01"] .hub-stat-fields { grid-template-columns: minmax(0, 1fr) !important; }
 .o-v .c-hub-stats[data-layout-screen="agents-01"] .hub-stat-fields > .hub-stat-field { grid-column: 1 !important; grid-row: auto !important; }
 .c-directory-tiles:is([data-layout-screen="rules-home-02"], [data-layout-screen="skills-home-04"]) .hub-directory-grid > :is(.hub-directory-card, .hub-directory-entry) { align-self: start; }
 .o-v [data-layout-screen="rule-execution-coordination-01"] .table-field { grid-template-columns: minmax(0, 1fr) !important; row-gap: .2em; }
+[data-layout-screen="how-18"][data-layout-icon="bell"] .sideic img { mix-blend-mode: multiply; }
 /* 独立卡组件只解除卡本身的拉伸，不影响同网格内的插画或装饰层。 */
 .c-feature-card > .feature-item,
 .c-feature-card :is(.feature-group-grid, .feature-last-row, .feature-layout-row) > .feature-item,
