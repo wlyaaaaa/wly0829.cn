@@ -1,7 +1,9 @@
 """Build-time comparisons against the authored project pages and owner sources."""
 import json
 import re
+import subprocess
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts'))
@@ -10,10 +12,57 @@ from rule_explanation_status import pending as pending_rule_explanations
 ROOT = Path(__file__).resolve().parents[2]
 SUPPLY = Path(r'E:\.agents\config\personal-skill-supply.json')
 ROSTER = Path(r'E:\.agents\config\model-roster.json')
+REPO_EXCLUSIONS = Path(r'E:\PCConfig\registries\site_repo_exclusions.json')
 
 
 def read(path):
     return json.loads(Path(path).read_text('utf-8-sig'))
+
+
+def project_repositories(root=ROOT, exclusions=REPO_EXCLUSIONS, github=None):
+    """Update-only check. Detailed names belong in a local refresh receipt, never build checks."""
+    result = {'schema': 'wly.site-repository-comparison.v1', 'status': 'unavailable',
+              'observed_at_beijing': datetime.now(timezone(timedelta(hours=8))).isoformat(),
+              'counts': {}, 'unregistered': [], 'missing': [], 'warnings': []}
+    try:
+        registry = read(Path(root) / 'config/panel-projects.json')['projects']
+        policy = read(exclusions)
+        excluded = policy['excluded']
+        if (policy.get('schema') != 'wly.site-repo-exclusions.v1' or not isinstance(excluded, dict)
+                or any(not isinstance(v, str) or not v.strip() for v in excluded.values())):
+            raise ValueError('私有项目排除名单格式不符')
+        def normalized(value):
+            if not isinstance(value, str) or not re.fullmatch(r'wlyaaaaa/[\w.-]+', value, re.I):
+                raise ValueError('仓库身份格式不符')
+            return value.lower()
+        ignored = {normalized(k) for k in excluded}
+        if github is None:
+            process = subprocess.run(['gh', 'repo', 'list', 'wlyaaaaa', '--limit', '1000',
+                '--json', 'nameWithOwner'], check=True, capture_output=True, text=True,
+                encoding='utf8', timeout=10, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+            github = json.loads(process.stdout)
+        if not isinstance(github, list) or not github or len(github) >= 1000:
+            raise ValueError('仓库列表为空或触及读取上限，不能据此认定项目已删除')
+        remote = {normalized(row['nameWithOwner']) for row in github}
+        registered, indirect = set(), []
+        for project in registry:
+            identity = project.get('source', {}).get('repo', '')
+            if isinstance(identity, str) and re.fullmatch(r'wlyaaaaa/[\w.-]+', identity, re.I):
+                registered.add(normalized(identity))
+            else:
+                indirect.append(project['id'])
+        result.update(unregistered=sorted(remote - registered - ignored), missing=sorted(registered - remote),
+                      non_repository_sources=indirect)
+        result['counts'] = dict(github_repositories=len(remote), registry_projects=len(registry),
+            registered_repositories=len(registered), excluded_repositories=len(remote & ignored),
+            unregistered=len(result['unregistered']), missing=len(result['missing']),
+            non_repository_sources=len(indirect))
+        result['status'] = 'warning' if result['unregistered'] or result['missing'] else 'pass'
+        if result['status'] == 'warning':
+            result['warnings'].append(f"项目仓库对照：{len(result['unregistered'])} 个未登记，{len(result['missing'])} 个登记仓库未找到；查看本机回执")
+    except (OSError, ValueError, KeyError, TypeError, AttributeError, subprocess.SubprocessError) as error:
+        result['warnings'].append(f'项目仓库对照取不到：{type(error).__name__}：{error}')
+    return result
 
 
 def pages(root=ROOT):

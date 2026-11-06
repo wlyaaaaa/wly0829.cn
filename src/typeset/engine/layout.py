@@ -150,7 +150,10 @@ class Ctx:
             if any(k in block.get("spec", {}) for k in ("inline_row", "inline_width", "source_prose", "textless")):
                 component_block = dict(block, spec={k: v for k, v in block["spec"].items()
                                                   if k not in ("inline_row", "inline_width", "source_prose", "textless")})
-            return fn(component_block, self)
+            markup = fn(component_block, self)
+            if self.screen.get("id") in {"agents-01", "rules-home-02", "how-05", "rule-execution-coordination-01", "skills-home-04"}:
+                markup = re.sub(r'(<[a-z][\w-]*)(?=[\s>])', r'\1 data-layout-screen="' + E(self.screen["id"]) + '"', markup, count=1)
+            return markup
         finally:
             self.inline = prior_inline
             self.motion_card_refs = prior_cards

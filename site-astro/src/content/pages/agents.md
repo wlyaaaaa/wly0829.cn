@@ -937,7 +937,7 @@
  "source": {
   "page": "sources/pages/agents/page.json",
   "sha256": "6b404982239eeaa8e6e262ddb9131f2c47793b426e8838990ae04081cb97bb42",
-  "converted_at_beijing": "2026-11-06T05:14:03+08:00"
+  "converted_at_beijing": "2026-11-06T08:38:06+08:00"
  }
 }
 ---
@@ -1040,7 +1040,7 @@
       "proto:a01-ic3",
       "proto:a01-ic4"
      ],
-     "text_ref": "280 次"
+     "text_ref": "295 次8 月 30 日起，规则发布和回退"
     }
    ],
    "notes": "首屏：标题和介绍在左、插画在右；四张数字卡；现在横条。示范规格（主工程师写）"
@@ -1067,14 +1067,14 @@
     },
     {
      "type": "stat_card",
-     "columns_v": 2,
+     "columns_v": 1,
      "icons": [
       "proto:a01-ic1",
       "proto:a01-ic2",
       "proto:a01-ic3",
       "proto:a01-ic4"
      ],
-     "text_ref": "280 次"
+     "text_ref": "295 次8 月 30 日起，规则发布和回退"
     },
     {
      "type": "illustration",

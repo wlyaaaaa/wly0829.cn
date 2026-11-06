@@ -28,6 +28,9 @@ from freshness import cadence, metadata, review_tasks, semantic_due, close_run, 
 from selection import Selection
 
 ROOT = Path(__file__).resolve().parents[2]
+REPOSITORY_RECEIPTS = Path('E:/Cache/content-refresh/repository-checks')
+sys.path.append(str(ROOT / 'site-astro/tools'))
+from site_consistency import project_repositories
 BEIJING = timezone(timedelta(hours=8))
 NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?")
 TIERS = (("block", "发布前阻断"), ("advisory", "提醒，不阻断"))
@@ -113,10 +116,12 @@ def read_json_output(text):
     return json.loads(text)
 
 
-def short_card(status, output, counts, failures=(), run_id=None):
+def short_card(status, output, counts, failures=(), run_id=None, project_repositories=None):
     card = {"status": status, "run_id": run_id, "counts": counts,
             "failures": [{k: f.get(k) for k in ("record_id", "page", "reason")} for f in list(failures)[:5]],
             "receipt": str(output)}
+    if project_repositories is not None:
+        card['project_repositories'] = project_repositories
     print(json.dumps(card, ensure_ascii=False))
 
 
@@ -739,11 +744,26 @@ def main():
         parser.error("来源表格式不符，records 必须是数组")
     output = args.output or Path("E:/Cache/content-refresh") / datetime.now(BEIJING).strftime("%Y%m%d-%H%M%S-%f")
     output.mkdir(parents=True, exist_ok=True)
+    repositories = project_repositories(args.root)
+    private_output = (REPOSITORY_RECEIPTS / datetime.now(BEIJING).strftime('%Y%m%d-%H%M%S-%f')
+                      if output.resolve().is_relative_to(args.root.resolve()) else output)
+    repository_receipt = private_output / 'project-repositories.json'
+    repository_summary = {k: repositories[k] for k in ('status', 'counts', 'warnings')}
+    try:
+        private_output.mkdir(parents=True, exist_ok=True)
+        repository_receipt.write_text(json.dumps(repositories, ensure_ascii=False, indent=2), encoding='utf8')
+        repository_summary['receipt'] = str(repository_receipt)
+    except OSError as error:
+        repository_summary.update(status='unavailable', receipt=None)
+        repository_summary['warnings'].append(f'项目仓库对照本机回执未能保存：{type(error).__name__}')
+    def card(*values):
+        short_card(*values, project_repositories=repository_summary)
     targeted = set(args.targeted.split(",")) if args.targeted else set()
     requested = args.manual_owner_request.split(",") if args.manual_owner_request else []
     selection = Selection(args.root, requested)
     only = set(args.only.split(",")) if args.only else None
     inventory = build_inventory(args.root / "sources/pages", registry["records"], entries, registry.get("freshness_policy"), targeted)
+    inventory['project_repositories'] = repository_summary
     inventory["excluded"] = selection.partition(registry["records"])[1]
     inventory["rule_version_task"] = rule_version_task(args.root)
     inventory["rule_explanations_pending"] = pending_rule_explanations(args.root)
@@ -763,14 +783,14 @@ def main():
     inventory["strict_findings"] = findings
     write_inventory(output, inventory)
     if findings:
-        short_card("incomplete", output / "dated-inventory.json", {"missing": len(findings)},
+        card("incomplete", output / "dated-inventory.json", {"missing": len(findings)},
                    (dict(record_id=",".join(f["record_ids"]), page=f["page"], reason=f["reason"]) for f in findings))
         return 2
     if args.strict and not only and inventory["coverage"].get("required_items") and inventory["coverage"]["automatic_ratio"] < .85:
-        short_card("insufficient_automatic_coverage", output / "dated-inventory.json", inventory["coverage"])
+        card("insufficient_automatic_coverage", output / "dated-inventory.json", inventory["coverage"])
         return 2
     if args.inventory:
-        short_card("inventoried", output / "dated-inventory.json", inventory["coverage"],
+        card("inventoried", output / "dated-inventory.json", inventory["coverage"],
                    [dict(record_id=inventory["rule_version_task"]["id"], page="rules", reason=inventory["rule_version_task"]["reason"])]
                    if inventory["rule_version_task"]["status"] != "current" else [])
         return 0
@@ -783,6 +803,7 @@ def main():
     registry = dict(registry, records=[r for r in registry["records"] if r["id"] not in stamps])
     result = collect(args.root, registry, max(0, command_deadline - time.monotonic() - 5), args.item_seconds, entries=entries, workers=args.workers, entries_path=entries_path, targeted=targeted, manual_owner_request=requested)
     result["registry_path"] = str((args.registry or args.root / "sources/refresh/registry.json").resolve())
+    result['project_repositories'] = repository_summary
     result["manual_tasks"] = review_tasks(inventory, result["rows"], targeted)
     result["semantic_due"] = semantic_due(inventory, result["rows"])
     result["rule_version_task"] = inventory["rule_version_task"]
@@ -805,7 +826,7 @@ def main():
     if inventory["rule_version_task"]["status"] != "current":
         failures.insert(0, dict(record_id="rules-release-identity", page="rules", reason=inventory["rule_version_task"]["reason"]))
     if args.no_report:
-        short_card("checked", output / "result.json", counts, failures, result.get("run_id"))
+        card("checked", output / "result.json", counts, failures, result.get("run_id"))
         return 0
     content = output / "report-content.json"
     content.write_text(json.dumps(report_content(result, task, output / "opus-task.md"), ensure_ascii=False), encoding="utf-8")
@@ -823,9 +844,9 @@ def main():
                 or Path(receipt.get("path", "")).resolve() != html.resolve()):
             raise RuntimeError("汇报网页生成或自检失败，不能交付为成功结果")
     except (OSError, ValueError, RuntimeError, TimeoutError, subprocess.SubprocessError) as exc:
-        short_card("report_failed", output / "result.json", counts, [dict(record_id=None, page=None, reason=str(exc))], result.get("run_id"))
+        card("report_failed", output / "result.json", counts, [dict(record_id=None, page=None, reason=str(exc))], result.get("run_id"))
         return 1
-    short_card("checked", output / "result.json", counts, failures, result.get("run_id"))
+    card("checked", output / "result.json", counts, failures, result.get("run_id"))
     return 0
 
 

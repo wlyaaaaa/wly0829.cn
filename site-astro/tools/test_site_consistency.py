@@ -3,6 +3,7 @@ import json
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -12,6 +13,43 @@ from render_blocks import mark_frozen_links
 
 
 class ConsistencyTests(unittest.TestCase):
+    def test_repository_comparison_normalizes_duplicates_and_private_exclusions(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); (root/'config').mkdir()
+            (root/'config/panel-projects.json').write_text(json.dumps({'projects': [
+                {'id': 'one', 'source': {'repo': 'wlyaaaaa/Kept'}},
+                {'id': 'same', 'source': {'repo': 'wlyaaaaa/kept'}},
+                {'id': 'gone', 'source': {'repo': 'wlyaaaaa/gone'}},
+                {'id': 'indirect', 'source': {'repo': 'PRIVATE_MANAGED_SOURCE'}}]}), encoding='utf8')
+            policy = root/'private.json'
+            policy.write_text(json.dumps({'schema': 'wly.site-repo-exclusions.v1',
+                'excluded': {'wlyaaaaa/private-example': '已有决定'}}), encoding='utf8')
+            remote = [{'nameWithOwner': 'wlyaaaaa/KEPT'}, {'nameWithOwner': 'wlyaaaaa/new-example'},
+                      {'nameWithOwner': 'wlyaaaaa/private-example'}]
+            result = checks.project_repositories(root, policy, remote)
+            self.assertEqual(result['unregistered'], ['wlyaaaaa/new-example'])
+            self.assertEqual(result['missing'], ['wlyaaaaa/gone'])
+            self.assertEqual(result['counts']['registered_repositories'], 2)
+            self.assertEqual(result['counts']['registry_projects'], 4)
+            self.assertEqual(result['non_repository_sources'], ['indirect'])
+            self.assertEqual(result['status'], 'warning')
+            for broken in ([], [{'nameWithOwner': 'unexpected-owner/example'}]):
+                self.assertEqual(checks.project_repositories(root, policy, broken)['status'], 'unavailable')
+            with mock.patch.object(checks.subprocess, 'run') as run:
+                run.return_value.stdout = json.dumps(remote)
+                self.assertEqual(checks.project_repositories(root, policy)['missing'], ['wlyaaaaa/gone'])
+                self.assertEqual(run.call_args.kwargs['timeout'], 10)
+                for error in (checks.subprocess.TimeoutExpired('gh', 10),
+                              checks.subprocess.CalledProcessError(1, ['gh'])):
+                    run.side_effect = error
+                    self.assertEqual(checks.project_repositories(root, policy)['status'], 'unavailable')
+                run.side_effect = None; run.return_value.stdout = 'bad-json'
+                self.assertEqual(checks.project_repositories(root, policy)['status'], 'unavailable')
+            (root/'config/panel-projects.json').write_text('{"projects":[1]}', encoding='utf8')
+            self.assertEqual(checks.project_repositories(root, policy, remote)['status'], 'unavailable')
+            policy.unlink()
+            self.assertEqual(checks.project_repositories(root, policy, remote)['status'], 'unavailable')
+
     def test_frozen_group_follows_page_status_and_card_source(self):
         frozen_page = {'kind': 'frozen', 'status': '冻结', 'url': '/projects/old/', 'title': '旧项目',
                        'registry': {'frozen_card': {'reason': '依赖已经停用', 'now': '由新项目承担'}}}
@@ -93,7 +131,9 @@ class ConsistencyTests(unittest.TestCase):
                 'screens': []}), encoding='utf8')
             (root / 'config').mkdir()
             (root / 'config/panel-projects.json').write_text('{"projects":[]}', encoding='utf8')
-            result = checks.audit(root, root / 'missing-supply', root / 'missing-roster', root / 'missing-rules')
+            with mock.patch.object(checks.subprocess, 'run') as network:
+                result = checks.audit(root, root / 'missing-supply', root / 'missing-roster', root / 'missing-rules')
+                network.assert_not_called()
             self.assertEqual([r['page'] for r in result['rule_explanations_pending']], ['rule-demo'])
             self.assertTrue(any('规则讲解待核对：示例规则' in warning for warning in result['warnings']))
 

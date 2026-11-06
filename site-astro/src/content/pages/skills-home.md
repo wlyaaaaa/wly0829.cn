@@ -589,7 +589,7 @@
  "source": {
   "page": "sources/pages/skills-home/page.json",
   "sha256": "1816f075062814b79b234fc8a2c68178c2a18c86060fb07a1e0e4793ef2b25f6",
-  "converted_at_beijing": "2026-11-06T07:21:11+08:00"
+  "converted_at_beijing": "2026-11-06T08:49:17+08:00"
  }
 }
 ---
@@ -1999,7 +1999,7 @@
       "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
       "改项目前先核对": "_library/icons/GitHub标志.png",
-      "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
+      "派活和验收": "_library/icons/dispatch-work-square-20261106.png"
      }
     },
     {
@@ -2031,7 +2031,7 @@
       "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
       "改项目前先核对": "_library/icons/GitHub标志.png",
-      "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
+      "派活和验收": "_library/icons/dispatch-work-square-20261106.png"
      }
     },
     {
@@ -2063,7 +2063,7 @@
       "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
       "改项目前先核对": "_library/icons/GitHub标志.png",
-      "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
+      "派活和验收": "_library/icons/dispatch-work-square-20261106.png"
      }
     }
    ],
@@ -2101,7 +2101,7 @@
       "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
       "改项目前先核对": "_library/icons/GitHub标志.png",
-      "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
+      "派活和验收": "_library/icons/dispatch-work-square-20261106.png"
      }
     },
     {
@@ -2135,7 +2135,7 @@
       "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
       "改项目前先核对": "_library/icons/GitHub标志.png",
-      "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
+      "派活和验收": "_library/icons/dispatch-work-square-20261106.png"
      }
     },
     {
@@ -2169,7 +2169,7 @@
       "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
       "改项目前先核对": "_library/icons/GitHub标志.png",
-      "派活和验收": "_library/icons/scene-r3-hand-passes-task-card.png"
+      "派活和验收": "_library/icons/dispatch-work-square-20261106.png"
      }
     }
    ],
@@ -2326,6 +2326,21 @@
    "source_phrase": "GitHub 的黑色章鱼猫标志旁边一个放大镜。",
    "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 11,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/dispatch-work-square-20261106.png",
+   "fallback": false,
+   "key": "派活和验收",
+   "source_phrase": "一只手递出带绿勾的无字任务卡：派活和验收",
+   "sha256": "3a96bc8d7cc371f4a61dc06129665758f6085fc38ca27658dff008fe5ca05667",
+   "status": "ready",
+   "verified_no_text": true
   },
   {
    "role": "title",

@@ -46,6 +46,8 @@ const safe = (o: unknown) => JSON.stringify(o).replace(/</g, '\u003c');
 const tocOrder = new Map<string, number>();
 (blocks?.screens || []).forEach((s: any, i: number) => { for (const id of [s.id, s.anchor, ...(s.points || [])]) if (id && !tocOrder.has(id)) tocOrder.set(id, i); });
 const tocHtml = (() => {
+  // 约法的章节标题来自当前转换结果，不能让旧运行件覆盖新旧快照的真实目录。
+  if (page === 'charter') return null;
   if (!rt?.toc_html) return null;
   let last = -1;
   return rt.toc_html.replace(/<nav\b(?![^>]*\bdata-toc-consistency\b)/, '<nav data-toc-consistency="uniform-v1"').replace(/<a class="nav-link"([^>]*?) data-section="([^"]+)"/g, (m: string, pre: string, sec: string) => {

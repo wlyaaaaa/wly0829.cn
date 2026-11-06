@@ -89,6 +89,25 @@ class RefreshTests(unittest.TestCase):
         self.assertEqual((card["run_id"], card["counts"]["changed"], len(card["failures"])), ("run-1", 12, 5))
         self.assertTrue(card["receipt"].endswith("result.json"))
 
+    def test_repository_warning_does_not_block_or_copy_private_names_into_output(self):
+        registry = self.root/'sources/refresh/registry.json'; registry.parent.mkdir()
+        registry.write_text(json.dumps({'schema': 'content-refresh.sources.v1', 'records': []}), encoding='utf8')
+        details = {'status': 'unavailable', 'counts': {}, 'warnings': ['项目仓库对照取不到'],
+                   'unregistered': ['wlyaaaaa/not-for-public-test'], 'missing': []}
+        with tempfile.TemporaryDirectory() as private:
+            stdout = StringIO(); output = self.root/'output'
+            with patch.object(sys, 'argv', ['refresh', '--root', str(self.root), '--inventory', '--output', str(output)]), \
+                    patch.object(refresh, 'project_repositories', return_value=details), \
+                    patch.object(refresh, 'REPOSITORY_RECEIPTS', Path(private)), redirect_stdout(stdout):
+                self.assertEqual(refresh.main(), 0)
+            card = json.loads(stdout.getvalue())['project_repositories']
+            self.assertEqual(card['status'], 'unavailable')
+            self.assertTrue(Path(card['receipt']).is_relative_to(private))
+            self.assertEqual(json.loads(Path(card['receipt']).read_text('utf8')), details)
+            self.assertNotIn('not-for-public-test', stdout.getvalue())
+            for file in output.rglob('*'):
+                if file.is_file(): self.assertNotIn('not-for-public-test', file.read_text('utf8'))
+
     def test_source_commit_candidates_are_sorted_local_descendants_only(self):
         config = self.root / "config/panel-projects.json"
         config.parent.mkdir(parents=True)
