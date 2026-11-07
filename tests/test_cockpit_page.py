@@ -43,6 +43,31 @@ def fixture(counter=itertools.count(1), **over):
 
 
 class CockpitPageTests(unittest.TestCase):
+    def test_live_first_frame_and_restore_reads(self):
+        from playwright.sync_api import sync_playwright
+        server = h.StatusServer()
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(executable_path=h.CHROME, headless=True)
+                for owner in (False, True):
+                    body = fixture(viewer={'kind': 'owner' if owner else 'public'})
+                    server.pages['/cockpit/'] = h.document(body)
+                    server.default = (200, body, 1.5)
+                    context = browser.new_context(); h.isolate(context)
+                    page = context.new_page(); page.goto(server.origin + '/cockpit/', wait_until='domcontentloaded')
+                    self.assertTrue(page.locator('.cp-loading').is_visible())
+                    self.assertFalse(page.locator('#need-you').is_visible())
+                    page.wait_for_selector('html[data-cp-ready]')
+                    self.assertFalse(page.locator('.cp-loading').is_visible())
+                    for event in ("location.hash = 'need-0'", "dispatchEvent(new PageTransitionEvent('pageshow', {persisted:true}))"):
+                        before = server.status_reads; page.evaluate(event)
+                        page.wait_for_function('window.CockpitData.view.ok')
+                        page.wait_for_timeout(200)
+                        self.assertGreater(server.status_reads, before)
+                    context.close()
+                browser.close()
+        finally:
+            server.close()
     def test_phone_power_values_stay_inside_their_cells(self):
         from playwright.sync_api import sync_playwright
         OUT.mkdir(parents=True, exist_ok=True)

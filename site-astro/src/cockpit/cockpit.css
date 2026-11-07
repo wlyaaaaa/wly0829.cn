@@ -14,6 +14,11 @@
   background: #fff;
 }
 .cp-page img { max-width: 100%; height: auto; }
+.cp-loading { display: none; }
+@media (scripting: enabled) {
+  html:not([data-cp-ready]) .cp-page:has(> .cp-loading) > :not(.cp-loading) { display: none; }
+  html:not([data-cp-ready]) .cp-loading { display: block; }
+}
 .cp-page a { color: var(--cp-title); }
 .cp-section { padding: 28px 0 8px; border-top: 1px solid #edf5ef; scroll-margin-top: 120px; }
 /* 从其他页跳进来的落点：留出页头和目录条的高度 */

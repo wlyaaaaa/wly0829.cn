@@ -331,7 +331,8 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
             before = path.read_text('utf8'); after = transport.localize(before, snapshot)
             if finalized and not any(prefix in before for prefix in legacy): continue
             if after != before: path.write_bytes(after.encode('utf8'))
-    scripts = {transport.PREFIX.sub('/', match) for page in dist.rglob('*.html') for match in re.findall(r'<script\b[^>]*\b(?:data-)?src="([^"]+)"', page.read_text('utf8'))}
+    active_urls = {row['url']: '/' + rel for rel, row in prior.get('oss', {}).get('objects', {}).items()}
+    scripts = {active_urls.get(match, transport.PREFIX.sub('/', match)) for page in dist.rglob('*.html') for match in re.findall(r'<script\b[^>]*\b(?:data-)?src="([^"]+)"', page.read_text('utf8'))}
     unused = ['/' + path.relative_to(dist).as_posix() for path in (dist / '_typeset/runtime').glob('b2-typeset-*.js') if '/' + path.relative_to(dist).as_posix() not in scripts]
     for path in dist.rglob('resource-retry-*.js'):
         copy_bytes = retry.prune_content_retry_policy(path.read_text('utf8'), unused).encode('utf8')

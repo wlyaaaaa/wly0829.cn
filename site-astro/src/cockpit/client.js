@@ -1,5 +1,5 @@
-// 驾驶舱浏览器端：页面一打开就是构建时那份快照画好的最终版式；这里只负责读新数据、原地换字。
-// 每分钟读一次（页面在后台时不读）；刷新按钮叫醒电脑重读，等三个采集器都完成再换。
+// 驾驶舱浏览器端：先等实时数据，再原地换字；无脚本时保留构建时的公开样本。
+// 前台每 30 秒、后台每 3 分钟读取；刷新按钮叫醒电脑重读，等三个采集器都完成再换。
 import { normalize, riverSnapshot, freshAfter } from './model.js';
 import { REGIONS, Q_KEY, LF_KEY, needCount } from './render.js';
 import { ACTIONS } from './actions.js';
@@ -11,7 +11,7 @@ const boot = JSON.parse(document.getElementById('cockpit-boot')?.textContent || 
 // 本机预览走预览脚本的转发入口，线上走 live（边缘）再退到 mcp
 const local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
 const endpoints = (local ? boot.local : boot.endpoints) || [];
-let view = normalize(boot.snapshot);
+let view = normalize({});
 let offline = false, busy = null;
 let wanted = ''; // 地址里 # 后面要找的那一条（见下面 reveal）
 let asked = 0, shown = 0;
@@ -157,8 +157,6 @@ function paint() {
   for (const node of document.querySelectorAll('[data-cp]')) {
     const fn = REGIONS[node.dataset.cp];
     if (!fn) continue;
-    // 总览屏脚本还没加载完时先不动这几块，保留首帧
-    if (!c.ov && /^(overview|lamp-)/.test(node.dataset.cp)) continue;
     const html = fn(view, c);
     if (node.innerHTML !== html) {
       // 折叠照本人上次的样子：展开的保持展开，默认展开、本人收起的保持收起；按钮和筛选框换字后仍有焦点
@@ -171,6 +169,7 @@ function paint() {
       if (finding) { const f = node.querySelector('[data-lfilter]'); f?.focus({ preventScroll: true }); f?.setSelectionRange(f.value.length, f.value.length); }
     }
   }
+  if (shown) document.documentElement.setAttribute('data-cp-ready', '');
   syncWide();
   syncCopy();
   syncTab();
@@ -534,12 +533,13 @@ function syncTab() {
   img.src = iconWas.href;
 }
 
-window.addEventListener('hashchange', () => { wanted = hashId(); if (!reveal(shown > 0)) openTo(wanted, shown > 0); });
+window.addEventListener('hashchange', () => { wanted = hashId(); if (!reveal(shown > 0)) openTo(wanted, shown > 0); if (!busy) load(); });
+window.addEventListener('pageshow', (event) => { if (event.persisted && !busy) load(); });
 wanted = hashId();
 syncWide();
 if (!reveal(false)) openTo(wanted);
 
 pair().finally(() => load());
-// 页面在前台每分钟读一次；在后台（切到别的标签页）每 3 分钟读一次，标签页上的“(N) 驾驶舱”和图标红点照样跟着变
-setInterval(() => { if (!busy && (!document.hidden || Date.now() - lastLoad >= 175000)) load(); }, 60000);
+// 页面在前台每 30 秒读一次；在后台（切到别的标签页）每 3 分钟读一次，标签页上的“(N) 驾驶舱”和图标红点照样跟着变
+setInterval(() => { if (!busy && (!document.hidden || Date.now() - lastLoad >= 175000)) load(); }, 30000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden && !busy) load(); });

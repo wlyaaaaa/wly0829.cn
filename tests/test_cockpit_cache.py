@@ -118,10 +118,10 @@ class CockpitRetentionTests(unittest.TestCase):
     def test_success_failure_new_success_and_partial_fields(self):
         build = h.view('构建时虚构处理器', observed=h.ago(hours=2))
         self.load(build)
-        # 一次都没读到：首帧就是构建时那份，写明是几点读到的；连不上电脑说清楚，不装成实时
+        # 一次都没读到：只显示读不到，不把构建时的样本和时间当成这次读到的。
         self.wait_link('连不上电脑')
-        self.assertIn('构建时虚构处理器', self.text('computer'))
-        self.assertIn(self.when(build['served_at']) + ' 读到', self.text('computer'))
+        self.assertNotIn('构建时虚构处理器', self.text('computer'))
+        self.assertNotIn(self.when(build['served_at']) + ' 读到', self.text('meta'))
         before = self.storage()
 
         t_a = h.ago(minutes=2)  # 在总览 180 秒时限内，安全和授权那格才算读到
@@ -226,11 +226,11 @@ class CockpitRetentionTests(unittest.TestCase):
         self.refresh(503)
         self.wait_link('连不上电脑')
         self.assertIn('内存里的虚构处理器', self.text('computer'))
-        # 重新加载：这次打开页面以来读到的只在内存里，回到构建时那份（写明读到时间），不凭空多出历史
+        # 重新加载：先前读到的只在内存里；未读到新数据就显示读不到，不退回构建样本。
         self.page.reload(wait_until='domcontentloaded')
         self.page.wait_for_function('window.CockpitData')
         self.wait_link('连不上电脑')
-        self.assertIn('构建时虚构处理器', self.text('computer'))
+        self.assertNotIn('构建时虚构处理器', self.text('computer'))
         self.assertNotIn('内存里的虚构处理器', self.text('computer'))
 
     def test_initial_success_replaces_build_snapshot_and_survives_failure(self):
@@ -290,11 +290,11 @@ class CockpitRetentionTests(unittest.TestCase):
         self.refresh(200, h.view(observed=t1))
         self.wait_link('都正常')
         self.assertIn(self.when(t1) + ' 读到', self.text('meta'))  # 10-30 批准第 5 项：几点读到只在顶上写一次
-        # 其他页“看驾驶舱”的落点 /cockpit/#<项目>：锚点在，跳过去不改内容
+        # 其他页“看驾驶舱”的落点 /cockpit/#<项目>：锚点在，跳过去重读；来源相同则保留内容。
         self.assertEqual(self.page.locator('#fixture-project').count(), 1)
         # 正常的项目收在“正常运行的 N 个”里：跳过来时把它打开（只多一个 open），别的不变
         shut = lambda r: {k: v.replace(' open=""', '') for k, v in r.items()}
-        before = self.regions()
+        before = self.regions(); self.server.default = (200, h.view(observed=t1), 0)
         self.page.evaluate("location.hash='#fixture-project';window.dispatchEvent(new Event('hashchange'))")
         self.page.wait_for_timeout(200)
         self.assertEqual(shut(self.regions()), shut(before))

@@ -1586,6 +1586,7 @@ const SECTIONS = [['tasks', '自动任务', '电脑自己在做的事，有没�
 // 整页：外框固定，内容由上面各函数填。电脑版单栏（本人 10-30 选定 A 版）：横幅（标题、读取时间、总述 | 插画和小鸟）→ 五格（电脑、自动任务、备份、安全和授权、健康分）
 // → 要你做 → AI 正在干活 → 你得知道和几行入口 → 自动任务（今天的河默认展开）→ 电脑 → 今天的动态 → 备份和云端 → 项目；事实区正常的只占一行。
 // 手机和窄屏照旧：标题总述、三行状态条、要你做、AI 正在干活、你得知道、状态一览、其余各块，插画放页尾（cockpit.css 排位）
+const loading = '<p class="cp-loading" role="status">正在读电脑状态…</p>';
 export function page(v, ctx) {
   ctx = { ...ctx, viewer: v.viewer };
   const r = (k) => '<div class="cp-body" data-cp="' + k + '">' + REGIONS[k](v, ctx) + '</div>';
@@ -1596,14 +1597,14 @@ export function page(v, ctx) {
     + body + '</section>';
   const help = '<details class="cp-help" id="cp-help"><summary class="cp-tool ct-inline-action" title="这页怎么用" aria-label="这页怎么用">?</summary><div class="cp-help-pop">'
     + '<p><b>这页怎么用</b></p><p>最上面是要你做的事；下面是你得知道和 AI 在干的活，再往下是各项明细。每条可复制给 AI，选项和确认内容也会一起带过去。</p>'
-    + '<p>AI 自己的活收在“AI 的账本”。每分钟从电脑读一次（页面在后台时每 3 分钟一次），时间都是北京时间；↻ 立刻重读。</p>'
+    + '<p>AI 自己的活收在“AI 的账本”。每 30 秒从电脑读一次（页面在后台时每 3 分钟一次），时间都是北京时间；↻ 立刻重读。</p>'
     + '<p><b>公开版和本人设备</b></p><p>别人打开看到的是公开版：私人事项只写件数或“私人事项”，AI 正在干的活只写个数，也没有按钮。'
     + '配对过的本人设备上能看到私人事项的原文和要做什么、为什么、怎么办，AI 每件活此刻做到哪一步并能直接打开那个对话，今天的河里私人任务的名字和结论；每条后面还有“复制给 AI”“知道了”“晚点提醒”。</p>'
     + '<p><b>键盘</b></p><dl class="cp-keys"><dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>下一件、上一件</dd><dt><kbd>1</kbd>—<kbd>9</kbd></dt><dd>直接打开第几件</dd>'
     + '<dt><kbd>o</kbd></dt><dd>打开那个对话</dd><dt><kbd>s</kbd></dt><dd>晚点提醒</dd><dt><kbd>u</kbd></dt><dd>撤回刚才那下</dd><dt><kbd>?</kbd></dt><dd>打开、关上这个说明</dd></dl>'
     + '<p><b>下面各块</b></p><dl class="cp-keys cp-help-secs">' + SECTIONS.map(([, title, sub]) => '<dt>' + esc(title) + '</dt><dd>' + esc(sub) + '</dd>').join('') + '</dl>'
     + '<p>分区标题旁只在要你看或读不到时挂标签；几点读到只在顶上写一次，某块比它旧 15 分钟以上才另写。</p></div></details>';
-  return '<div class="cp-action-toast" data-cp="action-toast">' + actionToast(ctx) + '</div>'
+  return loading + '<div class="cp-action-toast" data-cp="action-toast">' + actionToast(ctx) + '</div>'
     + '<section class="cp-dashboard c-text" id="top"><div class="cp-banner">'
     + '<div class="cp-intro cp-hero-copy"><h1 class="cp-main-title"><img src="' + src(ctx, 'cockpit-01-title-01.png') + '" alt="" width="483" height="198" loading="eager"><span class="cp-h1-text">驾驶舱</span></h1>'
     + '<div class="cp-tools"><p class="cp-meta" data-cp="meta" role="status">' + meta(v, ctx) + '</p>'
@@ -1629,7 +1630,7 @@ export function page(v, ctx) {
 // 二级页整页（/cockpit/ai/）
 export function ledgerPage(v, ctx) {
   ctx = { ...ctx, viewer: v.viewer };
-  return `<section class="cp-section cp-ledger c-text" id="top"><p class="cp-back"><a href="/cockpit/">← 回驾驶舱</a></p><h1 class="cp-ledger-h1">AI 的账本</h1>`
+  return loading + `<section class="cp-section cp-ledger c-text" id="top"><p class="cp-back"><a href="/cockpit/">← 回驾驶舱</a></p><h1 class="cp-ledger-h1">AI 的账本</h1>`
     + `<p class="cp-lead">AI 自己手上的活：影响你用的、在等条件的、到日子才查的、不影响你用的。想看时进来看看。</p>`
     + `<p class="cp-viewer" data-cp="viewer" role="status">${viewerLine(v, ctx)}</p><div class="cp-action-toast" data-cp="action-toast">${actionToast(ctx)}</div><div class="cp-body" data-cp="ledger">${ledger(v, ctx)}</div></section>`;
 }
