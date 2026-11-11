@@ -27,6 +27,7 @@ sys.path.insert(0, str(SITE / 'tools'))
 import astro_rules
 import oss_origins
 from render_cache import markdown_render_sha
+from typeset_lock import verify_typeset_lock
 
 def load(name, relative):
     spec = importlib.util.spec_from_file_location(name, ROOT / relative)
@@ -258,9 +259,11 @@ def sync_markdown(previous):
     for name, row in records.items(): row['md_sha256'] = proof(SITE / 'src/content/pages' / (name + '.md'))['sha256']
     return records
 
-def build(pages=None):
+def build(pages=None, check_lock_only=False):
     started = time.monotonic(); previous_stage = started; steps = []
+    verify_typeset_lock(ROOT)
     load('render_environment', 'site-astro/tools/render_blocks.py').verify_render_lock()
+    if check_lock_only: return
     # Redraw before reading source cleanliness: a redraw rewrites tracked author inputs,
     # so an uncommitted redraw must leave the build source Unknown instead of HEAD.
     home_redrawn = refresh_home_highlights()
@@ -444,11 +447,17 @@ def build(pages=None):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--pages', help='Comma-separated site routes; requires an existing complete dist')
+    parser.add_argument('--check-render-lock', action='store_true', help='Check shared inputs and fixed browser/fonts only')
+    args = parser.parse_args()
+    if args.check_render_lock:
+        build(check_lock_only=True)
+        print('共用排版层与固定浏览器、字体检查通过')
+        raise SystemExit(0)
     log_path = SITE / '.cache/build-commands.log'; log_path.parent.mkdir(parents=True, exist_ok=True)
     try:
         with log_path.open('w', encoding='utf8') as log, contextlib.redirect_stdout(log):
             BUILD_LOG = log
-            result = build(parser.parse_args().pages)
+            result = build(args.pages)
         print(json.dumps({'status': 'built', 'html_files': result['html_files'], 'rebuilt_pages': len(result['rebuilt_pages']),
             'frozen_mentions': len(result['checks']['frozen_mentions']), 'skill_missing': len(result['checks']['skills'].get('missing', [])),
             'rule_frozen_diff': len(result['checks']['rule_frozen'].get('site_not_rules', [])) + len(result['checks']['rule_frozen'].get('rules_not_site', [])),
