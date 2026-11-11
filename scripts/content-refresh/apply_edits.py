@@ -535,6 +535,17 @@ def apply_edits(root, payload, only=None, converter=None):
     if payload.get("schema") != "content-refresh.number-edits.v1":
         raise ValueError("改数单格式不支持")
     root, grouped, converter = Path(root), defaultdict(list), converter or convert_markdown
+    update_run = Path(payload["update_run"]) if payload.get("update_run") else None
+    if update_run:
+        state = json.loads((update_run / "state.json").read_text("utf-8-sig"))
+        if (Path(state["root"]).resolve() != root.resolve() or state["run_id"] != payload.get("update_run_id")
+                or state.get("numbers", {}).get("status") != "collecting"):
+            raise ValueError("本次更新不能再次改数；数字问题留待下次取数")
+        try:
+            with (update_run / "numbers/application-started.json").open("x", encoding="utf-8") as guard:
+                json.dump(dict(run_id=state["run_id"]), guard)
+        except FileExistsError:
+            raise ValueError("本次更新已经应用过数字，不能再次改数") from None
     selection = Selection(root, payload.get("manual_owner_request", []))
     edits, excluded_edits = selection.partition(payload["edits"])
     updates, excluded_updates = selection.partition(payload.get("record_updates", []))
@@ -731,6 +742,11 @@ def apply_edits(root, payload, only=None, converter=None):
     verified_ids = {r["record_id"] for r in report["record_readback"]} - {r.get("record_id") for r in report["skipped"]}
     for proof in report["field_readback"]: proof["record_ids"] = sorted(set(proof["record_ids"]) & verified_ids)
     report["field_readback"] = [p for p in report["field_readback"] if p["record_ids"]]
+    if update_run:
+        files = set(report["changed_files"]) | {"sources/refresh/registry.json"}
+        files.update(f"site-astro/src/content/pages/{r['page']}.md" for r in report["markdown_readback"])
+        report["files_sha256"] = {f: sha256((root / f).read_bytes()).hexdigest() for f in sorted(files) if (root / f).is_file()}
+        (update_run / "numbers/apply-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     return report
 
 

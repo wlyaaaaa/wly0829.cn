@@ -36001,7 +36001,7 @@
       "page": "skill-phone-direct",
       "screen": "skill-phone-direct-01",
       "label": "技能源最后修改时间",
-      "current_value": "2026-11-05 05:25",
+      "current_value": "2026-11-07 20:36",
       "as_of": "2026-10-22",
       "category": "方法与来源登记",
       "field": "status_line.last.at",
@@ -36019,10 +36019,10 @@
           "last_update"
         ]
       },
-      "observed_at": "2026-11-06T14:26:38+08:00",
-      "source_observed_at": "2026-11-06T14:26:38+08:00",
+      "observed_at": "2026-11-12T05:18:49+08:00",
+      "source_observed_at": "2026-11-12T05:18:49+08:00",
       "refreshed_value": "2026-10-21 21:13",
-      "checked_at": "2026-11-06T14:26:38+08:00",
+      "checked_at": "2026-11-12T05:18:49+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read"
     },
@@ -36031,7 +36031,7 @@
       "page": "skill-phone-direct",
       "screen": "skill-phone-direct-01",
       "label": "技能和手机桥方法核对日期",
-      "current_value": "2026-11-06",
+      "current_value": "2026-11-12",
       "as_of": "2026-10-22",
       "category": "方法与来源登记",
       "field": "status_line.as_of",
@@ -36045,11 +36045,11 @@
       "qualifies": [
         "r3-skill-phone-direct-last-update"
       ],
-      "checked_at": "2026-11-06T14:27:13+08:00",
-      "source_observed_at": "2026-11-06T14:26:38+08:00",
+      "checked_at": "2026-11-12T05:18:49+08:00",
+      "source_observed_at": "2026-11-12T05:18:49+08:00",
       "source_coverage_end": null,
       "observation_basis": "snapshot_timestamp",
-      "observed_at": "2026-11-06T14:26:38+08:00"
+      "observed_at": "2026-11-12T05:18:49+08:00"
     },
     {
       "id": "r4-skill-image-generation-last-update",
@@ -36483,7 +36483,7 @@
       "page": "skill-phone-direct",
       "screen": "skill-phone-direct-05",
       "label": "手机直取静态合成测试函数数",
-      "current_value": 44,
+      "current_value": 46,
       "as_of": "2026-10-30",
       "field": "screens[4].text",
       "page_pattern": "共 ([\\d,]+) 个测试函数",
@@ -36499,10 +36499,10 @@
       "measurement_scope": "源码中def test_*测试方法定义数；不含类/辅助函数，不表示本轮执行或通过，不以它证明短信/通知/截图真机验收。",
       "historical": false,
       "private": false,
-      "observed_at": "2026-11-06T14:26:39+08:00",
+      "observed_at": "2026-11-12T05:18:49+08:00",
       "report_ref": "E:\\Cache\\Claude\\Temp\\a8703a82\\gpt-children\\20261022-064426-site-ondemand-r1-7fd4f4eb\\round-03\\registry-review.md",
-      "checked_at": "2026-11-06T14:26:39+08:00",
-      "source_observed_at": "2026-11-06T14:26:39+08:00",
+      "checked_at": "2026-11-12T05:18:49+08:00",
+      "source_observed_at": "2026-11-12T05:18:49+08:00",
       "source_coverage_end": null,
       "observation_basis": "live_read",
       "derive_as_of": true
