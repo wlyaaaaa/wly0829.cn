@@ -25,15 +25,17 @@ runtime = importlib.util.module_from_spec(spec); spec.loader.exec_module(runtime
 class AstroReleaseTests(unittest.TestCase):
     def test_finish_normalizes_css_bytes_on_first_and_repeated_assembly(self):
         dist = self.root/'css-dist'; dist.mkdir()
-        snapshot = {'runtime_urls': {}, 'routes': [], 'search_objects': {}, 'pages': {}, 'baseline_production_commit': 'fixture'}
+        snapshot = {'runtime_urls': {'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/legacy/assets/old.js': '/assets/old.js'}, 'routes': [], 'search_objects': {}, 'pages': {}, 'baseline_production_commit': 'fixture'}
         for finalized in (False, True):
             for name, body in [('local.css', b'body{}\r\n'),
                                ('origin.css', b'/* https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/x */\r\n')]:
                 (dist/name).write_bytes(body)
+            (dist/'kept.json').write_bytes(b'{"x":"https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/legacy/assets/old.js"}\r\n')
             (dist/'release-manifest.json').write_text(json.dumps({'finalized_dist': finalized}), encoding='utf8')
             with patch.object(runtime, 'sync_search'), patch.object(runtime, 'published_manifest', return_value={}):
                 runtime.finish(dist, snapshot, {}, {}, changed_routes=set())
             self.assertEqual((dist/'local.css').read_bytes(), b'body{}\n')
+            self.assertEqual((dist/'kept.json').read_bytes(), b'{"x":"/assets/old.js"}\r\n')
             self.assertEqual((dist/'origin.css').read_bytes(),
                 b'/* https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/x */\n')
 

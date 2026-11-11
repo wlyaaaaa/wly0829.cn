@@ -51,9 +51,32 @@ def proof(path):
         HASH_CACHE[key] = cached
     return dict(cached['proof'])
 
+def living_outputs():
+    return {f'_living/{path.stem}/astro/shared-config.json': path.stem
+        for path in (SITE / 'src/chrome/runtime').glob('*.json')
+        if read(path).get('living_config') and (md := SITE / 'src/content/pages' / (path.stem + '.md')).is_file()
+        and markdown_frontmatter(md).get('url') not in {'/', '/cockpit/', '/computer-access/'}}
+
+def broken_living_outputs(outputs):
+    broken = set(); public = SITE / 'public'
+    for relative, name in outputs.items():
+        rendered = SITE / 'src/content/rendered' / (name + '.json')
+        if not rendered.is_file():
+            broken.add(name); continue
+        urls = {url for screen in read(rendered)['screens'] for side in ('h', 'v')
+            for url in re.findall(r'data-living-config="([^"]+)"', screen.get(side, {}).get('overlay', ''))}
+        if not urls: continue
+        hashes = {match[1] for url in urls if (match := re.fullmatch(r'/assets/_fingerprinted/([a-f0-9]{64})\.json', url))}
+        target = public / relative
+        if len(urls) != 1 or len(hashes) != 1 or not target.is_file() or proof(target)['sha256'] not in hashes:
+            broken.add(name)
+        elif any(not (public / url.lstrip('/')).is_file() or proof(public / url.lstrip('/'))['sha256'] not in hashes for url in urls):
+            broken.add(name)
+    return broken
+
 def restore(snapshot):
     public = SITE / 'public'; cache_path = SITE / '.cache/materialized.json'
-    cache = read(cache_path) if cache_path.is_file() else {}
+    cache = read(cache_path) if cache_path.is_file() else {}; generated = living_outputs()
     def checked(path, row):
         if not path.is_file(): return False
         st = path.stat(); stamp = [st.st_size, st.st_mtime_ns, st.st_ctime_ns]
@@ -76,6 +99,8 @@ def restore(snapshot):
         author_source = row.get('source_path', '').startswith(('site-astro/public/_home-cockpit/', 'site-astro/sources/retained-home-cockpit/'))
         expected = proof(source) if author_source else row
         if not checked(source, expected): raise ValueError('Asset source differs: ' + relative)
+        # The current renderer owns these outputs; adapt_motion only rebuilds config.json.
+        if relative in generated: return
         if not checked(target, expected):
             target.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(source, target)
             if not checked(target, expected): raise ValueError('Asset copy differs: ' + relative)
@@ -355,13 +380,16 @@ def build(pages=None):
     for row in entries.values(): row['fingerprint'] += visitor_fp
     if requested and requested - entries.keys(): raise ValueError('Unknown routes: ' + ', '.join(sorted(requested - entries.keys())))
     selected = requested if requested is not None else set(entries)
+    generated_living = living_outputs(); broken_living = broken_living_outputs(generated_living)
     changed = {route for route in selected if not (dist / route_file(route)).is_file()
-        or old.get('pages', {}).get(route) != entries[route]['fingerprint']}
+        or old.get('pages', {}).get(route) != entries[route]['fingerprint'] or entries[route].get('name') in broken_living}
     if '/404.html' in changed: changed.add('/404/')
     names = {entries[route]['name'] for route in changed if entries[route]['kind'] == 'native'}
     render_names = [name for name in sorted(names) if old.get('rendered', {}).get(name) != render_fps[name]
-        or not (SITE / 'src/content/rendered' / (name + '.json')).is_file()]
+        or not (SITE / 'src/content/rendered' / (name + '.json')).is_file() or name in broken_living]
     if render_names: run(sys.executable, 'tools/render_blocks.py', *render_names)
+    invalid_living = broken_living_outputs({relative: name for relative, name in generated_living.items() if name in names})
+    if invalid_living: raise ValueError('Generated living config differs: ' + '、'.join(sorted(invalid_living)))
     for name in names:
         if read(SITE / 'src/content/rendered' / (name + '.json')).get('render_md_sha256') != markdown_render_sha(SITE / 'src/content/pages' / (name + '.md')):
             raise ValueError('Rendered Markdown changed: ' + name)
