@@ -1,5 +1,6 @@
 """Frozen dependencies survive changes to their authoring source."""
 import importlib.util
+import hashlib
 import json
 import tempfile
 import unittest
@@ -32,9 +33,18 @@ class ImmutableManifestTests(unittest.TestCase):
             before = manifest.read_bytes(); source.write_bytes(b'changed')
             spec = importlib.util.spec_from_file_location('frozen_restore_test', ROOT / 'scripts/build-site.py')
             build = importlib.util.module_from_spec(spec); spec.loader.exec_module(build)
+            site = root / 'site-astro'; relative = '_living/fixture/astro/shared-config.json'; current = b'{"h":{"effects":[]}}'
+            digest = hashlib.sha256(current).hexdigest(); url = '/assets/_fingerprinted/' + digest + '.json'
+            for path, raw in {'src/chrome/runtime/fixture.json': b'{"living_config":"/_living/fixture/config.json"}', 'src/content/pages/fixture.md': b'---\n{"url":"/fixture/"}\n---\n', 'public/' + relative: current, 'public' + url: current, 'src/content/rendered/fixture.json': json.dumps({'screens': [{'h': {'overlay': '<figure data-living-config="' + url + '">'}}]}).encode()}.items():
+                target = site / path; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(raw)
+            snapshot = json.loads(manifest.read_text('utf-8')); snapshot['assets'][relative] = {**next(iter(snapshot['assets'].values())), 'source_path': 'site-astro/sources/vendor-deps/_typeset/rule-sources/test.md'}
             with patch.object(build, 'ROOT', root), patch.object(build, 'SITE', root / 'site-astro'), \
                  patch.object(build, 'SNAPSHOT', manifest.parent), patch.object(build, 'HASH_CACHE', {}):
-                build.restore(json.loads(manifest.read_text('utf-8')))
+                build.restore(snapshot)
+                self.assertEqual((site / 'public' / relative).read_bytes(), current); self.assertEqual(build.broken_living_outputs(build.living_outputs()), set())
+                (site / 'public' / relative).write_bytes(b'bad'); self.assertEqual(build.broken_living_outputs(build.living_outputs()), {'fixture'})
+                (site / 'public' / relative).unlink(); self.assertEqual(build.broken_living_outputs(build.living_outputs()), {'fixture'})
+                frozen = root / snapshot['assets'][relative]['source_path']; original = frozen.read_bytes(); frozen.write_bytes(b'bad'); self.assertRaisesRegex(ValueError, 'Asset source differs', build.restore, snapshot); frozen.write_bytes(original)
             self.assertEqual((root / 'site-astro/public/_typeset/rule-sources/test.md').read_bytes(), b'frozen')
             self.assertEqual(vendor.migrate(root)['migrated'], 0)
             self.assertEqual(manifest.read_bytes(), before)
