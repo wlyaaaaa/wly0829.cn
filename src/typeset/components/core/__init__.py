@@ -678,17 +678,18 @@ def _connections(content, config):
     """跨组件细线按真实DOM端口画；目标/源/坐标不足时保留原块并报告未完成。"""
     import json
     cfg = json.dumps(config, ensure_ascii=False).replace('<', '\\u003c')
+    # Preserve the published v1 arrow ID (6); allocate it once, independent of redraws.
     script = '''<script>(()=>{const root=document.currentScript.parentElement,c=CONFIG;
 const scope=root.closest('.row')||document.querySelector('#page');
 const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');
 svg.setAttribute('class','core-connection-lines');svg.setAttribute('aria-hidden','true');
 if(getComputedStyle(scope).position==='static')scope.style.position='relative';scope.appendChild(svg);
+const markerId='core-connection-arrow-'+(globalThis.coreConnectionNumber=(globalThis.coreConnectionNumber||5)+1);
 const key=s=>s.replace(/\\s/g,'');const update=()=>{const sr=scope.getBoundingClientRect(),rr=root.getBoundingClientRect();
 svg.style.left='0px';svg.style.top='0px';svg.style.width=sr.width+'px';svg.style.height=sr.height+'px';
 svg.setAttribute('viewBox','0 0 '+sr.width+' '+sr.height);svg.replaceChildren();delete root.dataset.incomplete;
 let sources=[...root.querySelectorAll(c.source)];if(c.fanout&&sources.length===1)sources=c.targets.map(()=>sources[0]);
 if(sources.length!==c.targets.length){root.dataset.incomplete='跨组件引线源节点数量不符';return;}
-const markerId='core-connection-arrow-'+(globalThis.coreConnectionNumber=(globalThis.coreConnectionNumber||0)+1);
 if(c.arrow){const defs=document.createElementNS(ns,'defs'),marker=document.createElementNS(ns,'marker'),path=document.createElementNS(ns,'path');
 marker.setAttribute('id',markerId);marker.setAttribute('viewBox','0 0 8 8');marker.setAttribute('refX','7');marker.setAttribute('refY','4');marker.setAttribute('markerWidth','6');marker.setAttribute('markerHeight','6');marker.setAttribute('orient','auto');
 path.setAttribute('d','M0 0L8 4L0 8');path.setAttribute('fill','var(--accent)');marker.appendChild(path);defs.appendChild(marker);svg.appendChild(defs);}
