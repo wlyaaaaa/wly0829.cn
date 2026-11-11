@@ -243,10 +243,10 @@ def publish_path(p):
     return url
 
 
-def rewrite_urls(text, found=None, art=None):
+def rewrite_urls(text, found=None, cache=False):
     def one(match):
         path = file_url_to_path(match[0])
-        if art and path == file_url_to_path(art):
+        if cache:
             checksum = input_sha(path)
             url = '/assets/_source/' + checksum + Path(path).suffix.lower()
             target = Path(WORK, '_assets', url.lstrip('/'))
@@ -693,13 +693,11 @@ def cache_payload(result):
             # loading uses it), pointing at the captured title's portable URL.
             value = re.sub(r'<img\b[^>]*>', lambda m: TITLE_SOURCE.sub(
                 lambda _: 'data-title-src="' + re.search(r'\bsrc="([^"]+)"', m[0])[1] + '"', m[0]), value)
-            return rewrite_urls(value, urls, result.get('art'))
+            return rewrite_urls(value, urls, cache=True)
         if isinstance(value, list): return [portable(v) for v in value]
         return value
     payload = {k: portable(v) for k, v in payload.items()}
     payload['assets'] = dict(result.get('assets', {}))
-    if (result.get('art') or '').startswith('/assets/_fingerprinted/'):
-        payload['assets'].pop(result['art'], None)
     payload['assets'].update({url: input_sha(file_url_to_path(url)) for url in urls if url.startswith('/assets/_source/')})
     bundle_assets(payload, [url for url in urls if not url.startswith('/assets/_source/')], WORK, PUB, input_sha)
     return payload
@@ -1031,6 +1029,8 @@ def finish_page(name, fm, results, cssv):
             s["article"] = re.sub(r'<span id="([^"]+)"></span>', original_anchor, s["article"])
     for result in results:
         urls = asset_urls(json.dumps(screens[result['screen']][result['o']], ensure_ascii=False))
+        private = {u: h for u, h in result['assets'].items() if u.startswith('/assets/_source/')}
+        result['assets'].clear(); result['assets'].update(private)
         bundle_assets(result, urls | {font, out['css'], out['loader']} | ({living} if living else set()), WORK, PUB, input_sha)
     os.makedirs(OUT_DIR, exist_ok=True)
     Path(OUT_DIR, name + ".json").write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8", newline="\n")
@@ -1099,7 +1099,9 @@ def run(names, workers=2, migrate_from=None):
         IMPORT_ROOT = str(Path(migrate_from).resolve())
         migrate_cache(migrate_from, all_jobs, cache, sys.modules[__name__])
     for j in all_jobs:
-        if j['key'] in cache: restore_assets(cache[j['key']], WORK, PUB, input_sha)
+        if j['key'] in cache:
+            restore_assets(cache[j['key']], WORK, PUB, input_sha)
+            cache[j['key']] = cache_payload(cache[j['key']])
     index_path = Path(WORK, '_index.json')
     index = json.loads(index_path.read_text('utf8')) if index_path.exists() else {}
     index.update({j['page'] + '/' + j['screen'] + '-' + j['o']:

@@ -67,9 +67,11 @@ class TypesetCacheTests(unittest.TestCase):
                 bundle_assets(result, [font_url, '/assets/motion.json'], work, public, renderer.sha)
                 self.assertIn('/_living/texture.webp', result['assets'])
                 restored = root / 'new checkout' / 'public'
-                restore_assets(result, work, restored, renderer.sha)
+                restored_work = root / 'new checkout' / 'cache'
+                restore_assets(result, work, restored, renderer.sha, restored_work)
                 for url, checksum in result['assets'].items():
-                    self.assertEqual(renderer.sha(restored / url.lstrip('/')), checksum)
+                    base = restored_work / '_assets' if url.startswith('/assets/_source/') else restored
+                    self.assertEqual(renderer.sha(base / url.lstrip('/')), checksum)
                 (work / '_assets' / font_url.lstrip('/')).write_bytes(b'corrupt')
                 with self.assertRaises(ValueError): restore_assets(result, work, root / 'empty', renderer.sha)
 
@@ -112,10 +114,12 @@ class TypesetCacheTests(unittest.TestCase):
             config.write_text(json.dumps({'h': {'texture': {'src': '/_living/texture.webp'}}}), encoding='utf8')
             with patch.multiple(renderer, WORK=str(work), PUB=str(public), IMPORT_ROOT=str(root)):
                 result = renderer.cache_payload({'html': f'<img src="{original.as_uri()}">', 'art': original.as_uri()})
+                later = renderer.cache_payload({'html': f'<img src="{original.as_uri()}">'})
                 self.assertTrue(result['art'].startswith('/assets/_source/'))
                 renderer.share_living_texture('/_living/config.json', result['art'])
                 actual = renderer.rewrite_urls(result['html'])
                 self.assertIn(renderer.sha(texture) + '.webp', actual)
+                self.assertEqual(renderer.rewrite_urls(later['html']), actual)
                 self.assertFalse((public / 'assets/_fingerprinted' / (renderer.sha(original) + '.png')).exists())
                 target_work = root / 'copied cache'; target_public = root / 'empty public'
                 restore_assets(result, work, target_public, renderer.sha, target_work)
