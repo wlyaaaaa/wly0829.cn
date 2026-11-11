@@ -43,8 +43,9 @@ MD_DIR = os.environ.get("BLOCK_MD_DIR") or os.path.join(SITE, "src", "content", 
 OUT_DIR = os.environ.get("BLOCK_OUT_DIR") or os.path.join(SITE, "src", "content", "rendered")
 PUB = os.environ.get("BLOCK_PUB_DIR") or os.path.join(SITE, "public")
 WORK = os.environ.get("BLOCK_WORK_DIR") or os.path.join(SITE, ".cache", "blocks")
-CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-SANS_FONT = "C:/Windows/Fonts/NotoSansSC-VF.ttf"
+RENDER_LOCK = json.loads(Path(REPO, "config/render.lock.json").read_text("utf-8"))
+CHROME = RENDER_LOCK["chrome"]["path"]
+SANS_FONT = RENDER_LOCK["fonts"][0]["path"]
 CSS_OUT = os.path.join(PUB, "assets", "_typeset", "typeset.css")
 RENDER_VERSION = "r4-11"  # 同版原文、原图尺寸与视口加载接线改变，旧结果全部重排
 
@@ -60,6 +61,21 @@ def sha(path):
         for b in iter(lambda: f.read(1 << 20), b""):
             h.update(b)
     return h.hexdigest()
+
+
+def locked_fonts(document):
+    """Override only measurement font sources; published CSS uses page subsets."""
+    css = Path(PROTO, "style/base.css").read_text("utf-8")
+    faces = "\n".join(re.findall(r"@font-face\s*\{[^}]*\}", css))
+    for font in RENDER_LOCK["fonts"]:
+        faces = faces.replace(Path(font["source_path"]).as_uri(), Path(font["path"]).as_uri())
+    return document.replace("</head>", "<style>" + faces + "</style></head>", 1)
+
+
+def verify_render_lock():
+    for item in [RENDER_LOCK["chrome"], *RENDER_LOCK["fonts"]]:
+        if sha(item["path"]) != item["sha256"]:
+            raise ValueError("固定排版环境文件不符：" + item["path"])
 
 
 # —— 素材发布：本地原文件逐字节复制到 public 下，返回网址 ——
@@ -323,7 +339,7 @@ def hydration_fingerprint():
     but need not discard already measured browser geometry.
     """
     source = HYDRATE_JS + ''.join(inspect.getsource(fn) for fn in
-        (hydrate, brush_titles, image_size_attrs)) + str(BRUSH_PAD)
+        (hydrate, brush_titles, image_size_attrs)) + str(BRUSH_PAD) + sha(Path(REPO, "config/render.lock.json"))
     return hashlib.sha256(source.encode('utf8')).hexdigest()[:16]
 
 
@@ -449,6 +465,7 @@ def prepare_page(name, reg, css_files, libfp, legacy_libfp=None, prior_libfp=Non
                 if s.get("shape") == "card" or any((x or {}).get("portrait_required") is False for x in lay.values()):
                     continue
             doc, info = checked_html(name, page, s, o, reg, css_files, sp)
+            doc = locked_fonts(doc)
             key = screen_cache_key(doc, o, libfp)
             legacy_key = None
             if legacy_libfp:
@@ -528,10 +545,9 @@ def hydrate(jobs, binds, checkpoint_dir=None):
     from playwright.sync_api import sync_playwright
     from engine.render import FIT_JS as fit
     js = HYDRATE_JS.replace("%FIT%", fit)
-    out = []
+    out = []; brush_measurements = 0
     with sync_playwright() as p:
-        b = p.chromium.launch(executable_path=CHROME if os.path.exists(CHROME) else None, headless=True,
-                              args=["--disable-gpu", "--disable-lcd-text"])
+        b = p.chromium.launch(executable_path=CHROME, headless=True, args=RENDER_LOCK["args"])
         for j in jobs:
             pg = b.new_page(viewport={"width": WIDTH[j["o"]], "height": 200}, device_scale_factor=1)
             try:
@@ -543,6 +559,7 @@ def hydrate(jobs, binds, checkpoint_dir=None):
             pg.close()
             if r and "brushfont" in r.get("html", ""):
                 try:
+                    brush_measurements += 1
                     r["html"] = brush_titles(b, j, js, binds, r["html"])
                 except Exception as e:
                     print(f"  {j['screen']}-{j['o']} 毛笔字标题转图出错：{repr(e)[:160]}", flush=True)
@@ -552,6 +569,7 @@ def hydrate(jobs, binds, checkpoint_dir=None):
                 if checkpoint_dir:
                     write_cache(Path(checkpoint_dir, j["key"] + ".json"), cache_payload(r))
         b.close()
+    print("量屏计数：" + json.dumps({"screens": len(jobs), "brush_titles": brush_measurements, "completed": len(out)}), flush=True)
     return out
 
 
@@ -899,6 +917,8 @@ def bindings(name, first_screen):
 
 
 def run(names, workers=2):
+    verify_render_lock()
+    print("量屏环境：" + json.dumps(RENDER_LOCK, ensure_ascii=False), flush=True)
     workers = min(2, max(1, workers))
     _published.clear(); _living_configs.clear()
     t0 = time.time()
