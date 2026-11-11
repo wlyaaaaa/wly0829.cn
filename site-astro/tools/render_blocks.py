@@ -184,6 +184,20 @@ def cache_input(meta, text, page, document, fonts, root=None):
     return screen_input(meta, text, page, assets, fonts, root or REPO)
 
 
+def reference_id(path):
+    """Keep distinct source references distinct when their pixels are identical."""
+    path = Path(path).resolve()
+    if any(_under(path, root) for root in (Path(WORK, '_inputs'), Path(WORK, '_assets/assets/_source'))):
+        match = re.fullmatch(r'[a-f0-9]{64}-([a-f0-9]{12})\.[a-z0-9]+', path.name)
+        if not match: raise ValueError('缓存缺少原引用身份，请从原缓存重迁：' + str(path))
+        return match[1]
+    for root, prefix in ((IMPORT_ROOT, ''), (REPO, ''), (PUB, 'site-astro/public/')):
+        if root and _under(path, root):
+            relative = prefix + path.relative_to(Path(root).resolve()).as_posix()
+            return hashlib.sha256(relative.encode('utf8')).hexdigest()[:12]
+    raise ValueError('素材不在排版来源目录内：' + str(path))
+
+
 def portable_document(document):
     """All measurement files share content-addressed, relative dependencies."""
     def stage(path):
@@ -200,7 +214,8 @@ def portable_document(document):
                 target = file_url_to_path(url) if url.startswith('file:///') else path.parent / urllib.parse.unquote(url)
                 return 'url("' + stage(target) + '")'
             content = re.sub(r'url\(([^)]+)\)', css_url, content.decode('utf8')).encode('utf8')
-        name = hashlib.sha256(content).hexdigest() + path.suffix.lower()
+        identity = '' if path.suffix.lower() in ('.css', '.js', '.ttf', '.woff', '.woff2') else '-' + reference_id(path)
+        name = hashlib.sha256(content).hexdigest() + identity + path.suffix.lower()
         target = Path(WORK, '_inputs', name)
         if not target.exists():
             target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(content)
@@ -248,7 +263,7 @@ def rewrite_urls(text, found=None, cache=False):
         path = file_url_to_path(match[0])
         if cache:
             checksum = input_sha(path)
-            url = '/assets/_source/' + checksum + Path(path).suffix.lower()
+            url = '/assets/_source/' + checksum + '-' + reference_id(path) + Path(path).suffix.lower()
             target = Path(WORK, '_assets', url.lstrip('/'))
             if not target.exists() or input_sha(target) != checksum:
                 target.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(path, target)
@@ -256,7 +271,7 @@ def rewrite_urls(text, found=None, cache=False):
             url = publish_path(path)
         if found is not None: found.add(url)
         return url
-    return re.sub(FILE_URL.pattern + r'|\.\./_inputs/[a-f0-9]{64}\.[a-z0-9]+|/assets/(?:_source|_fingerprinted)/[a-f0-9]{64}\.[a-z0-9]+', one, text)
+    return re.sub(FILE_URL.pattern + r'|\.\./_inputs/[a-f0-9]{64}(?:-[a-f0-9]{12})?\.[a-z0-9]+|/assets/(?:_source|_fingerprinted)/[a-f0-9]{64}(?:-[a-f0-9]{12})?\.[a-z0-9]+', one, text)
 
 
 def defer_images(body, first=False):

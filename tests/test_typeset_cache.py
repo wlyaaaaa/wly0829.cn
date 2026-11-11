@@ -115,12 +115,15 @@ class TypesetCacheTests(unittest.TestCase):
             with patch.multiple(renderer, WORK=str(work), PUB=str(public), IMPORT_ROOT=str(root)):
                 result = renderer.cache_payload({'html': f'<img src="{original.as_uri()}">', 'art': original.as_uri()})
                 later = renderer.cache_payload({'html': f'<img src="{original.as_uri()}">'})
+                duplicate = root / 'other.png'; duplicate.write_bytes(original.read_bytes())
+                other = renderer.cache_payload({'html': f'<img src="{duplicate.as_uri()}">'})
                 self.assertTrue(result['art'].startswith('/assets/_source/'))
                 renderer.share_living_texture('/_living/config.json', result['art'])
                 actual = renderer.rewrite_urls(result['html'])
                 self.assertIn(renderer.sha(texture) + '.webp', actual)
                 self.assertEqual(renderer.rewrite_urls(later['html']), actual)
                 self.assertFalse((public / 'assets/_fingerprinted' / (renderer.sha(original) + '.png')).exists())
+                self.assertIn(renderer.sha(original) + '.png', renderer.rewrite_urls(other['html']))
                 target_work = root / 'copied cache'; target_public = root / 'empty public'
                 restore_assets(result, work, target_public, renderer.sha, target_work)
                 self.assertFalse(target_public.exists())
