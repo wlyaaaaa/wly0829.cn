@@ -1631,7 +1631,7 @@ export function page(v, ctx) {
     + sec('computer', '电脑', '', r('computer'))
     + sec('today', '今天的动态', '', r('today'))
     + sec('backup', '备份和云端', '', r('backup'))
-    + sec('projects', '项目', '', r('projects'))
+    + sec('projects', '项目', '', '<p class="cp-line"><a href="/cockpit/projects/">全部项目 ›</a></p>' + r('projects'))
     + '</div></div></section>';
 }
 

@@ -343,6 +343,7 @@ def build(pages=None):
         entries[route] = {'fingerprint': retained_fp, 'kind': 'retained'}
     entries['/cockpit/storage/'] = {'fingerprint': fingerprint([fixed['/cockpit/storage/'], SITE / 'src/cockpit/cockpit.css', SITE / 'src/cockpit/storage.js', SITE / 'src/cockpit/storage.css']) + wrapper_fp, 'kind': 'retained'}
     entries['/cockpit/ai/'] = {'fingerprint': fingerprint([fixed['/cockpit/ai/'], SITE / 'src/cockpit']) + wrapper_fp, 'kind': 'retained'}
+    entries['/cockpit/projects/'] = {'fingerprint': fingerprint([fixed['/cockpit/projects/'], SITE / 'src/cockpit/cockpit.css', SITE / 'src/cockpit/projects.js', SITE / 'src/cockpit/projects.css']) + wrapper_fp, 'kind': 'retained'}
     for relative in snapshot['pages']:
         entries.setdefault(file_route(relative), {'fingerprint': fingerprint([SNAPSHOT / 'pages' / relative]), 'kind': 'frozen'})
     generated_fp = fingerprint([ROOT / 'config/final-project-order.json', SITE / 'tools/cockpit_stutter.py'])
