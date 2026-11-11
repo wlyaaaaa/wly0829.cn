@@ -260,6 +260,7 @@ def sync_markdown(previous):
 
 def build(pages=None):
     started = time.monotonic(); previous_stage = started; steps = []
+    load('render_environment', 'site-astro/tools/render_blocks.py').verify_render_lock()
     # Redraw before reading source cleanliness: a redraw rewrites tracked author inputs,
     # so an uncommitted redraw must leave the build source Unknown instead of HEAD.
     home_redrawn = refresh_home_highlights()
@@ -310,7 +311,7 @@ def build(pages=None):
         prepared_fp = fingerprint(preparation)
     stage('native_inputs')
     frozen_urls = sorted(p['url'] for p in checks['frozen_projects'])
-    engine_fp = fingerprint([ROOT / 'src/typeset', ROOT / 'sources/assets', SITE / 'tools/render_blocks.py',
+    engine_fp = fingerprint([ROOT / 'src/typeset', ROOT / 'sources/assets', ROOT / 'config/render.lock.json', SITE / 'tools/render_blocks.py',
         SITE / 'tools/render_cache.py', SITE / 'tools/site_consistency.py']) + hashlib.sha256(json.dumps(frozen_urls).encode()).hexdigest()
     wrapper_paths = [p for p in (SITE / 'src').rglob('*') if p.is_file()
         and 'content' not in p.relative_to(SITE / 'src').parts and p.parent.name not in {'runtime', 'retained'}
