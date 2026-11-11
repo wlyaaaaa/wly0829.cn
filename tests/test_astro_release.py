@@ -23,6 +23,20 @@ spec = importlib.util.spec_from_file_location('astro_runtime_tests', ROOT/'site-
 runtime = importlib.util.module_from_spec(spec); spec.loader.exec_module(runtime)
 
 class AstroReleaseTests(unittest.TestCase):
+    def test_finish_normalizes_css_bytes_on_first_and_repeated_assembly(self):
+        dist = self.root/'css-dist'; dist.mkdir()
+        snapshot = {'runtime_urls': {}, 'routes': [], 'search_objects': {}, 'pages': {}, 'baseline_production_commit': 'fixture'}
+        for finalized in (False, True):
+            for name, body in [('local.css', b'body{}\r\n'),
+                               ('origin.css', b'/* https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/x */\r\n')]:
+                (dist/name).write_bytes(body)
+            (dist/'release-manifest.json').write_text(json.dumps({'finalized_dist': finalized}), encoding='utf8')
+            with patch.object(runtime, 'sync_search'), patch.object(runtime, 'published_manifest', return_value={}):
+                runtime.finish(dist, snapshot, {}, {}, changed_routes=set())
+            self.assertEqual((dist/'local.css').read_bytes(), b'body{}\n')
+            self.assertEqual((dist/'origin.css').read_bytes(),
+                b'/* https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/x */\n')
+
     def setUp(self):
         self.workspace = tempfile.TemporaryDirectory(prefix='astro-release-', dir=os.environ['TEMP'])
         self.addCleanup(self.workspace.cleanup); self.root = Path(self.workspace.name)
@@ -236,6 +250,8 @@ class AstroReleaseTests(unittest.TestCase):
         md.mkdir(); work.mkdir(); (md/'fixture.md').write_text('fixture', encoding='utf8')
         old = self.root/'old-render.json'; old.write_text('previous result', encoding='utf8')
         job = {'page': 'fixture', 'screen': 'fixture-01', 'o': 'h', 'key': 'new-job'}
+        fingerprint = patch.object(renderer, 'hydration_fingerprint', return_value='fixture-code')
+        fingerprint.start(); self.addCleanup(fingerprint.stop)
         original_cwd = os.getcwd(); self.addCleanup(os.chdir, original_cwd)
         with patch.object(renderer, 'REPO', str(self.root)), patch.object(renderer, 'MD_DIR', str(md)), patch.object(renderer, 'WORK', str(work)), patch.object(renderer, 'PUB', str(public)), patch.object(renderer, 'publish_path'), patch.object(renderer.shutil, 'copyfile'), patch.object(renderer, 'load_registry', return_value=({}, None, [], [])), patch.object(renderer, 'build_css', return_value='css'), patch.object(renderer, 'library_fingerprint', return_value='lib'), patch.object(renderer, 'prepare_page', return_value=({}, {'screens': []}, [job])), patch.object(renderer.cf, 'ProcessPoolExecutor') as executor, patch.object(renderer, 'finish_page') as finish, patch.object(renderer, 'fix_dead_fragments'):
             executor.return_value.__enter__.return_value.map.return_value = [[]]

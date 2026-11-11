@@ -21,6 +21,38 @@ spec.loader.exec_module(oss)
 
 
 class OssReleaseTests(unittest.TestCase):
+    def test_offline_previous_chunk_url_survives_absence_but_current_bytes_win(self):
+        base = 'http://127.0.0.1:8765'; rel = 'assets/old.js'
+        old_url = base+'/releases/previous/'+rel; original = b'void 0;'
+        row = {'url': old_url, 'key': 'releases/previous/'+rel, 'bytes': len(original),
+               'sha256': oss.hashlib.sha256(original).hexdigest(), 'content_type': 'application/javascript'}
+        row['source'] = {name: row[name] for name in ('bytes', 'sha256')}
+        for index, payload in enumerate((None, original, b'void 1;')):
+            path = self.source/rel; path.unlink(missing_ok=True)
+            if payload is not None: path.write_bytes(payload)
+            (self.source/'index.html').write_bytes(('<script src="/'+rel+'?v=1#part"></script>'
+                '<script src="'+old_url+'"></script>').encode())
+            manifest = oss.read(self.source/oss.MANIFEST)
+            manifest['files'] = {key: value for key, value in oss.inventory(self.source).items() if key != oss.MANIFEST}
+            manifest['previous_oss'] = {'asset_base_url': base, 'objects': {rel: row}}
+            oss.write(self.source/oss.MANIFEST, manifest)
+            out = self.root/('old-chunk-'+str(index))
+            plan = oss.prepare(self.source, base, 'releases/current', out, allow_test=True, offline=True)
+            html = (out/'github/index.html').read_text('utf8')
+            expected = old_url if payload in (None, original) else plan['objects'][rel]['url']
+            self.assertIn('src="'+expected+'?v=1#part"', html)
+            self.assertIn('src="'+expected+'"', html)
+            if payload is None:
+                self.assertIn('releases/previous/'+rel, plan['reference_keys'])
+                self.assertNotIn(rel, plan['closure'].get('index.html', []))
+            if payload not in (None, original): self.assertNotEqual(expected, old_url)
+        rewrite = oss.Rewriter({'index.html': {}}, base, 'releases/current', 'https://wly0829.cn', version=8)
+        rewrite.previous_urls = {old_url: rel}; rewrite.previous_assets = {rel: old_url}
+        cache = oss.FinalizeCache(self.source, False, {}); raw = ('<script src="'+old_url+'"></script>').encode()
+        self.assertIn(old_url.encode(), cache.rewrite(rewrite, raw, 'index.html'))
+        rewrite.previous_assets[rel] = old_url.replace('/previous/', '/published/')
+        self.assertIn(rewrite.previous_assets[rel].encode(), cache.rewrite(rewrite, raw, 'index.html'))
+
     def test_delta_reuses_virtual_inherited_text_but_rechecks_physical_text(self):
         from types import SimpleNamespace
         path = self.source/'assets/site.css'
