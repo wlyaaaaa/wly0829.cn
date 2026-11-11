@@ -12,8 +12,10 @@ const boot = JSON.parse(document.getElementById('cockpit-boot')?.textContent || 
 const local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
 const endpoints = (local ? boot.local : boot.endpoints) || [];
 let view = normalize({});
-let offline = false, busy = null;
+let offline = false, busy = null, readError = '';
 let wanted = ''; // 地址里 # 后面要找的那一条（见下面 reveal）
+// 重画会换掉条目节点；在原来的 4 秒内给新节点恢复高亮。
+let hitId = '', hitUntil = 0, hitTimer = null;
 let asked = 0, shown = 0;
 // 本人设备钥匙：只存在这台浏览器的 localStorage；读写不了就当公开版。notice 是页头的一句短提示（配对结果、授权失效）
 const KEY = 'wly-cockpit-device', TOKEN = /^[A-Za-z0-9_-]{43}$/;
@@ -39,12 +41,12 @@ async function homeWay() {
   if (state === 'prompt') homeAsked = true;
   return state;
 }
-let notice = '';
-const say = (text, ms = 15000) => { notice = text; paint(); setTimeout(() => { if (notice === text) { notice = ''; paint(); } }, ms); };
+let notice = '', loadNotice = false;
+const say = (text, ms = 15000, fromLoad = false) => { notice = text; loadNotice = fromLoad; paint(); setTimeout(() => { if (notice === text) { notice = ''; paint(); } }, ms); };
 // phase：还没收到过任何一次读取结果时是 snapshot（首帧那份构建时的数），之后是 live；读不到另由 offline 说明
 // act：本人设备上点过的收起、提醒、撤回，以及未选择的提醒日期。
 const act = { state: new Map(), ui: new Map(), recent: new Map() };
-const ctx = () => ({ now: new Date(), viewer: view.viewer, offline, notice, phase: shown ? 'live' : 'snapshot', paired: !!store.get(), projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen, act, since: seen.since() });
+const ctx = () => ({ now: new Date(), viewer: view.viewer, offline, readError, notice, phase: shown ? 'live' : 'snapshot', paired: !!store.get(), projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen, act, since: seen.since() });
 
 // ---- 新出现的标“新”（seen.js）：只存条目编号和时间。第一次打开不标；读到新数据后才和上次比（首帧是构建时的旧数，不拿它比）。
 // 新的卡和行左边一个小绿点“新”，进视野停留一会儿（SEEN_DWELL_MS）或页面关掉／切走就算看过，下次不再标
@@ -109,6 +111,7 @@ async function read(wake) {
   const way = !local && token && home.on() ? await homeWay() : null;
   const bases = way ? [...endpoints, HOME_URL] : endpoints;
   const stop = new AbortController();
+  let failure = '';
   const timer = setTimeout(() => stop.abort(), 12000);
   const one = async (base) => {
     const url = new URL(base, location.href), mine = base === HOME_URL;
@@ -116,8 +119,12 @@ async function read(wake) {
     const signal = mine && way === 'prompt' ? AbortSignal.timeout(60000) : stop.signal;
     try {
       const r = await fetch(url, { cache: 'no-store', credentials: 'omit', headers: token ? { 'X-Cockpit-Device': token } : {}, signal });
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      const v = normalize(await r.json());
+      const j = await r.json().catch(() => null);
+      if (!r.ok) {
+        failure = `后台出错（HTTP ${r.status}）${typeof j?.message === 'string' && j.message.trim() ? '：' + j.message.trim() : ''}`;
+        throw new Error(failure);
+      }
+      const v = normalize(j);
       if (!v.ok) throw new Error('不是驾驶舱视图');
       // 本机那一路只认本人版主驾驶：回来的不是（钥匙对不上、登记表读不了）就当没读到，交给另外两路定，不拿它删钥匙
       if (mine && !isHome(v)) throw new Error('本机回的不是本人版');
@@ -134,8 +141,8 @@ async function read(wake) {
     // 钥匙不认识或已撤销：删掉本地钥匙；登记表暂时读不了（unavailable）不删
     if (token && v.viewer?.device_state === 'invalid') { store.drop(); say('这台设备的授权已失效'); }
     else if (!local && token && v.viewer?.device_state !== 'unavailable') home.mark(isHome(v));
-    return v;
-  } catch { return null; /* 都没读到（或 12 秒到了） */ } finally { clearTimeout(timer); stop.abort(); }
+    return { view: v, error: '' };
+  } catch { return { view: null, error: failure }; /* 都没读到（或 12 秒到了） */ } finally { clearTimeout(timer); stop.abort(); }
 }
 
 // 配对：AI 在这台设备上打开 /cockpit/#pair=<一次性配对码>；先去掉地址里的码，再换成长期钥匙
@@ -179,6 +186,7 @@ function paint() {
   // 读到新数据后还找不到的：是 AI 自己的活（AI 在跟、AI 已定、AI 等条件的）就去“AI 的账本”那一页找；
   // 别的（条目已经办完关掉了）不再惦记，免得过一会儿突然跳走
   if (wanted && shown && !reveal(true) && !offline) { const id = wanted; if (!openTo(id, true)) { if (onLedger(id)) location.replace('/cockpit/ai/#' + encodeURIComponent(id)); wanted = ''; } }
+  restoreHit();
 }
 
 // ---- 本人设备上的收起、提醒与复制（见 actions.js）----
@@ -268,9 +276,11 @@ let lastLoad = 0;
 async function load(wake = false) {
   const turn = ++asked;
   lastLoad = Date.now();
-  const v = await read(wake);
+  const result = await read(wake), v = result.view;
   if (turn < shown) return v;
   shown = turn;
+  if (loadNotice) { notice = ''; loadNotice = false; }
+  readError = result.error;
   if (v) {
     actionController.reconcile([v.need_you, v.ai_following, v.ai_overdue || [], v.deferred, v.must_know?.items || [], v.ai_running?.rows || []].flat().map((x) => x.id), v);
     view = v; offline = false;
@@ -289,7 +299,7 @@ async function refresh() {
       await new Promise((r) => setTimeout(r, 2000));
       v = await load(false);
     }
-    return { fresh: !!v && freshAfter(v, clicked - 1000), at: Date.parse(view.served_at || '') / 1000 || null };
+    return { fresh: !!v && freshAfter(v, clicked - 1000), at: Date.parse(view.served_at || '') / 1000 || null, error: readError };
   })();
   try { return await busy; } finally { busy = null; }
 }
@@ -322,8 +332,31 @@ function findItem(id) {
   const all = [...document.querySelectorAll('[data-items]')].filter((n) => n.dataset.items.split(' ').includes(id));
   return all.find((n) => n.getClientRects().length) || all[0] || null;
 }
+function clearHit() {
+  if (!hitId) return;
+  findItem(hitId)?.classList.remove('cp-hit');
+  hitId = ''; hitUntil = 0;
+  clearTimeout(hitTimer); hitTimer = null;
+}
+function rememberHit(id) {
+  if (!id) return;
+  if (hitId && hitId !== id) findItem(hitId)?.classList.remove('cp-hit');
+  hitId = id; hitUntil = Date.now() + 4000;
+  clearTimeout(hitTimer);
+  hitTimer = setTimeout(() => {
+    if (hitId !== id) return;
+    findItem(id)?.classList.remove('cp-hit');
+    hitId = ''; hitUntil = 0; hitTimer = null;
+  }, 4000);
+}
+function restoreHit() {
+  if (!hitId) return;
+  if (Date.now() >= hitUntil) return clearHit();
+  findItem(hitId)?.classList.add('cp-hit');
+}
 // final：已经是读到新数据后的那一版，找到就不再惦记；首帧（构建时的旧数）上先跳一次，读到新数据换字后再对准一次
 function reveal(final) {
+  const id = wanted;
   let target = findItem(wanted);
   if (!target) return false;
   const q = target.closest('.cp-q[data-q]:not(.is-open)');
@@ -334,7 +367,7 @@ function reveal(final) {
   target.classList.remove('cp-hit');
   void target.offsetWidth; // 同一条再点一次也重新闪
   target.classList.add('cp-hit');
-  setTimeout(() => target.classList.remove('cp-hit'), 4000);
+  rememberHit(id);
   return true;
 }
 // ---- 电脑版（宽度 ≥1200）----
@@ -373,8 +406,8 @@ async function reloadNow(btn) {
   btn.setAttribute('aria-busy', 'true');
   try {
     const r = await refresh();
-    say(r?.fresh ? '已更新' : '电脑没回应，现在显示的是之前读到的数据');
-  } catch { say('电脑没回应，现在显示的是之前读到的数据'); } finally { reloading = false; btn.setAttribute('aria-busy', 'false'); }
+    say(r?.fresh ? '已更新' : r?.error || (r?.at ? '电脑没回应，现在显示的是之前读到的数据' : '还没读到数据，稍后再试'), 15000, true);
+  } catch { say('这次没读到新数据，稍后再试', 15000, true); } finally { reloading = false; btn.setAttribute('aria-busy', 'false'); }
 }
 // 卡上的“打开”组（后端 open 字段才有，见 render.js 的 openGroup）：在主驾驶上打开、看汇报；都只带条目编号和哪一项，路径由电脑从登记里取
 const OPEN_URL = 'https://mcp.wly0829.cn/computer-access/api/cockpit/open';

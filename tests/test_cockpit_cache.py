@@ -99,7 +99,7 @@ class CockpitRetentionTests(unittest.TestCase):
         return self.page.locator(f'[data-cp="{region}"]').first.inner_text()
 
     def link(self):
-        """“安全和授权”那一格的状态词：读到时“都正常”，读不到电脑时“连不上电脑”。"""
+        """“安全和授权”那一格的状态词：读到时“都正常”，后台 5xx 时“后台出错”。"""
         return self.page.locator('.cp-tri-cell[data-signal="security"] .cp-tri-status').inner_text().strip()
 
     def wait_link(self, word):
@@ -119,7 +119,7 @@ class CockpitRetentionTests(unittest.TestCase):
         build = h.view('构建时虚构处理器', observed=h.ago(hours=2))
         self.load(build)
         # 一次都没读到：只显示读不到，不把构建时的样本和时间当成这次读到的。
-        self.wait_link('连不上电脑')
+        self.wait_link('后台出错')
         self.assertNotIn('构建时虚构处理器', self.text('computer'))
         self.assertNotIn(self.when(build['served_at']) + ' 读到', self.text('meta'))
         before = self.storage()
@@ -130,7 +130,7 @@ class CockpitRetentionTests(unittest.TestCase):
         self.assertIn('测试处理器 A', self.text('computer'))
 
         self.assertFalse(self.refresh(503)['fresh'])
-        self.wait_link('连不上电脑')
+        self.wait_link('后台出错')
         old = self.regions()
         self.assertIn('测试处理器 A', self.text('computer'))
         self.assertIn(self.when(t_a) + ' 读到', self.text('computer'))
@@ -164,7 +164,7 @@ class CockpitRetentionTests(unittest.TestCase):
         self.assertIn('没读到新的', backup)
         self.assertIn('还没读到', self.text('projects'))
         self.refresh(503)
-        self.wait_link('连不上电脑')
+        self.wait_link('后台出错')
         self.assertIn('测试处理器 C', self.text('computer'))
         self.assertIn('这是 ' + self.when(t_a) + ' 读到的', self.text('backup'))
         # 原用例的“重新加载后还在”“整 24 小时后过期”两段已移除：现行页面不再写本地存储，重新加载回到构建时那份快照（见 test_storage_unavailable_uses_memory_only）。
@@ -220,16 +220,16 @@ class CockpitRetentionTests(unittest.TestCase):
         self.context.add_init_script("Object.defineProperty(window,'localStorage',{get(){throw Error('fictional storage unavailable')}})")
         build = h.view('构建时虚构处理器', observed=h.ago(hours=2))
         self.load(build)
-        self.wait_link('连不上电脑')
+        self.wait_link('后台出错')
         self.refresh(200, h.view('内存里的虚构处理器'))
         self.wait_link('都正常')
         self.refresh(503)
-        self.wait_link('连不上电脑')
+        self.wait_link('后台出错')
         self.assertIn('内存里的虚构处理器', self.text('computer'))
         # 重新加载：先前读到的只在内存里；未读到新数据就显示读不到，不退回构建样本。
         self.page.reload(wait_until='domcontentloaded')
         self.page.wait_for_function('window.CockpitData')
-        self.wait_link('连不上电脑')
+        self.wait_link('后台出错')
         self.assertNotIn('构建时虚构处理器', self.text('computer'))
         self.assertNotIn('内存里的虚构处理器', self.text('computer'))
 
@@ -240,7 +240,7 @@ class CockpitRetentionTests(unittest.TestCase):
         self.page.wait_for_function("document.querySelector('[data-cp=computer]').textContent.includes('初次成功的虚构处理器')")
         self.server.default = (503, {'status': 'error'}, 0)
         self.refresh(503)
-        self.wait_link('连不上电脑')
+        self.wait_link('后台出错')
         self.assertIn('初次成功的虚构处理器', self.text('computer'))
         self.assertNotIn('构建时虚构处理器', self.text('computer'))
 
@@ -258,7 +258,7 @@ class CockpitRetentionTests(unittest.TestCase):
         self.assertEqual(self.link(), '都正常')
         self.assertNotIn('读不到', self.page.locator('[data-cp=overview-tri] .cp-tri').inner_text())
         self.refresh(503)
-        self.wait_link('连不上电脑')
+        self.wait_link('后台出错')
         self.assertIn('最新并发测试处理器', self.text('computer'))
 
     def test_wrong_project_future_unknown_and_malformed_storage_are_not_history(self):
@@ -270,7 +270,7 @@ class CockpitRetentionTests(unittest.TestCase):
           localStorage.setItem('site-live:v1:cockpit:'+slot,JSON.stringify({project,result:{text:'unusable fixture',state},at}));
           localStorage.setItem('site-live:v1:cockpit:cockpit-tasks',JSON.stringify({project:null,result:{text:'bad fixture',rows:'invalid rows',state:'ok'},at:Date.now()}));""")
         self.load(h.view('构建时虚构处理器', observed=h.ago(hours=2)))
-        self.wait_link('连不上电脑')
+        self.wait_link('后台出错')
         planted = self.storage()
         self.assertEqual(len(planted), 4)
         body = self.page.locator('.cp-page').inner_text()
@@ -279,7 +279,7 @@ class CockpitRetentionTests(unittest.TestCase):
         self.refresh(200, h.view())
         self.wait_link('都正常')
         self.refresh(503)
-        self.wait_link('连不上电脑')
+        self.wait_link('后台出错')
         self.assertNotIn('unusable fixture', self.page.locator('.cp-page').inner_text())
         self.assertEqual(self.storage(), planted)
 
@@ -302,7 +302,7 @@ class CockpitRetentionTests(unittest.TestCase):
         # 之后读不到、重画：读到的时间还是当时那次，不被改成重画的时间
         self.page.wait_for_timeout(1100)
         self.refresh(503)
-        self.wait_link('连不上电脑')
+        self.wait_link('后台出错')
         self.assertIn(self.when(t1) + ' 读到', self.text('computer'))
         self.assertEqual(self.storage(), {})
 
@@ -329,7 +329,7 @@ class CockpitRetentionTests(unittest.TestCase):
         self.assertEqual(charts.count(), 0)
         self.assertIn('图表网页现在打不开（上次检查 ' + self.when(checked) + '）', self.text('computer'))
         self.refresh(503)
-        self.wait_link('连不上电脑')
+        self.wait_link('后台出错')
         rows = self.regions()
         self.assertEqual(charts.count(), 0)
         self.assertEqual(self.page.locator('iframe').count(), 0)

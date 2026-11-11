@@ -20,9 +20,9 @@
     btn.setAttribute('aria-busy', 'true');
     try {
       const r = await data.refresh({ wake: true });
-      say(r?.fresh ? `已更新 ${hhmm(r.at)}` : `电脑没回应，现在显示的是 ${r?.at ? hhmm(r.at) : '之前'} 的数据`);
+      say(r?.fresh ? `已更新 ${hhmm(r.at)}` : r?.error || (r?.at ? `电脑没回应，现在显示的是 ${hhmm(r.at)} 的数据` : '还没读到数据，稍后再试'));
     } catch {
-      say('电脑没回应，现在显示的是之前读到的数据');
+      say('这次没读到新数据，稍后再试');
     } finally {
       btn.setAttribute('aria-busy', 'false');
     }

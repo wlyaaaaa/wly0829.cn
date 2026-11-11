@@ -145,8 +145,9 @@
 .cp-stats3 span { font-size: 13px; color: var(--cp-soft); }
 .cp-src { margin: 6px 0 0; font-size: 13px; color: var(--cp-soft); }
 .cp-stats3 li.cp-stat-note { grid-column: span 2; align-content: center; border-style: dashed; background: #fbfdfc; }
-.cp-bars { list-style: none; margin: 0; padding: 0; display: flex; align-items: flex-end; gap: 8px; height: 110px; }
-.cp-bars li { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; min-width: 0; }
+.cp-bars { list-style: none; margin: 0; padding: 0; display: flex; align-items: flex-end; gap: 8px; }
+.cp-bars li { flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 0; }
+.cp-bar-track { display: flex; align-items: flex-end; justify-content: center; width: 100%; height: 110px; flex: none; }
 .cp-bar { width: 70%; max-width: 34px; height: var(--h); background: #bfe8cc; border-radius: 6px 6px 2px 2px; }
 .cp-bars li.is-now .cp-bar { background: var(--cp-green); }
 .cp-bars li.is-none .cp-bar { background: repeating-linear-gradient(45deg, #e6ece8 0 4px, #f4f7f5 4px 8px); }
@@ -1088,7 +1089,7 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 .cp-score-title .hub-heading { font-size: 20px; }
 .cp-score-value { font-size: 42px; line-height: 1.2; font-weight: 800; color: var(--accent); }
 .cp-score-number > small { font-size: 23px; color: var(--muted); }
-.cp-score-meter { width: 100%; height: 7px; border: 0; border-radius: 99px; overflow: hidden; appearance: none; background: var(--line); }
+.cp-score-meter { width: 100%; height: 7px; max-width: 100%; min-width: 0; border: 0; border-radius: 99px; overflow: hidden; appearance: none; background: var(--line); }
 .cp-score-meter::-webkit-progress-bar { background: var(--line); }
 .cp-score-meter::-webkit-progress-value { background: var(--accent); }
 .cp-score-meter::-moz-progress-bar { background: var(--accent); }
@@ -1148,7 +1149,9 @@ kbd { display: inline-block; min-width: 1.4em; padding: 0 5px; border: 1px solid
 .cp-score-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 14px; font-size: 13.5px; line-height: 1.6; color: var(--text); }
 .cp-score-top b { font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
 .cp-score-top i { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } /* 分隔点只给读屏，换行时不在行尾吊一个点 */
-.cp-score-hit { white-space: nowrap; }
+.cp-score-hit { white-space: normal; overflow-wrap: anywhere; }
+.cp-score-hit b { white-space: nowrap; }
+.cp-score, .cp-page .cp-score > summary, .cp-score-top { min-width: 0; max-width: 100%; }
 .cp-score-more { margin-left: -10px; font-weight: 800; color: var(--link); }
 .cp-score[open] .cp-score-more { display: inline-block; transform: rotate(90deg); }
 .cp-page .cp-score-body { display: block; margin-top: 10px; padding: 10px; }
