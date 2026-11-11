@@ -67,6 +67,9 @@
 - `start --first-pass`仅全站头一遍使用：全站每页入围，含5个手动项目；冻结项目只核冻结说明和去向，无总截止，三次修复上限照旧。续跑不重开start，改用`status --run-dir <原目录>`，读`scope.json`、`state.json`和`timing.md`。
 - 同一命令的`begin/repair/drop --page 页名`开页、续修、放下（放下附`--reason`）；`step-start --page 页名 --step content|program|visual --budget 秒`开步骤，`pass/reject`收回执（通过附`--artifact 本次目录内文件`，退回附`--reason`）；同一退回后的重改只开一次`repair`，各关共用三次。
 - 所有操作均带`--run-dir`，重发沿用`--event-id`；全局`step-start/step-end --step 步骤名`也记用时，结束附`--artifact`。截止后只可放下、记`publish/report`和已过关页的`record-published --page 页名 --artifact 发布回执`；登记不代替正式发布与账的回读核验。最终`finish --artifact 本次汇报`固定收工时间，保留未完成页，继续须新开一次。
+- `python -B -X utf8 scripts/content-refresh/block_tool.py export 页名 --out 本次目录/块.json`：导出原文字符区间、横竖各自的块归属、字数与登记数；默认容量保守取原有字数（余量0），`--capacities 已测容量.json` 可按 `屏id/h或v/块索引（从0开始）` 提供已测上限。
+- 同一工具的 `write 块.json 改法.json --run-dir 本次目录/草稿` 只写一页一目录的草稿；改法是 `[{"block":1,"action":"改成","text":"新原文"}]`，动作可为“不动、改成、删、其后加”，未列的块不动；嵌套引用和本屏登记数随原文区间重绑，错块或多义则整页报错。
+- 过关后由合入单运行同一工具的 `merge 本次目录/草稿/页名`：核对作者基线，合入本页正文、摆法与数字定位，保留其他页的登记改动。测试：`python -B -X utf8 -m unittest discover -s scripts/content-refresh -p test_block_tool.py`。
 - 试建、看屏、合入、成包发布：待 f3 到 f6 补。成批开单和汇总：待 c4b 补。派单模板在私有伴随库 `docs/update-templates/`。
 
 ## 改动记录
