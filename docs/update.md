@@ -71,6 +71,10 @@
 - `batch-plan --run-dir <本次目录> --task-id <整件编号>`按私有伴随库 `docs/update-templates/` 开 a（每页）、b（每项目）；`--kinds ef --materials <JSON>`开改稿核对，JSON 按页短名填模板材料（`本页改动清单`、`改完的整页`、可选`页图片目录`），`*`可填共用的`块导出文件`。e 只开有改动清单的页，f 每周只开材料列到的页、头一遍全开；两阶段页稿快照分开。
 - `batch-run --run-dir <本次目录> --max-running 10 --min-free-gb 6`作为一条后台命令：按路数与空闲内存补发、一个 Watch 等候并收回执；每单都带具体 RepeatReason，保留原派活拦截。Codex 主持须加`--parent-harness Codex --session-id <当前完整线程号>`；留言、失败或异常叫醒交主持，原命令可续，不重开已有单。
 - `batch-collect --run-dir <本次目录>`只收不派；`batch-summary.md`每项目一行，JSON 另列计数、并发峰值、每张业务回执与包装器本轮汇报、Sol 已知工时及未知数（明细在`batch.json`）。只按当前阶段分流：零项结束、登记数交数字、单句合批阅、候选/整段/数变等进 c；`opus_to_open`列填好卡的路径和档位，由主持开，命令不调用 Opus。`host-notes.md`留失败、歧义和留言，内存不足留待补发；试建、看屏、合入、成包发布待 f3 到 f6 补。
+- `python -B -X utf8 scripts/content-refresh/block_tool.py export 页名 --out 本次目录/块.json`：导出原文字符区间、横竖各自的块归属、字数与登记数；默认容量保守取原有字数（余量0），`--capacities 已测容量.json` 可按 `屏id/h或v/块索引（从0开始）` 提供已测上限。
+- 同一工具的 `write 块.json 改法.json --run-dir 本次目录/草稿` 只写一页一目录的草稿；改法是 `[{"block":1,"action":"改成","text":"新原文"}]`，动作可为“不动、改成、删、其后加”，未列的块不动；嵌套引用和本屏登记数随原文区间重绑，错块或多义则整页报错。
+- 过关后由合入单运行同一工具的 `merge 本次目录/草稿/页名`：核对作者基线，合入本页正文、摆法与数字定位，保留其他页的登记改动。测试：`python -B -X utf8 -m unittest discover -s scripts/content-refresh -p test_block_tool.py`。
+- 试建、看屏、合入、成包发布：待 f3 到 f6 补。派单模板在私有伴随库 `docs/update-templates/`。
 
 ## 改动记录
 - 2026-11-12：由五处旧规矩换成这一页（旧条目去向表在施工记录里，不进仓库）。
