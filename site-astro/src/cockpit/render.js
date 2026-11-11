@@ -18,10 +18,15 @@ const KNOW_SOURCES = [...NEED_SOURCES, 'automation', 'today_activity'];
 const emptyRead = (v, ctx, sources) => {
   if (!v.ok || ctx.offline) return 'offline';
   if (ctx.phase === 'snapshot') return 'snapshot';
-  const complete = sources === NEED_SOURCES ? v.must_know?.need_you_sources_complete ?? v.must_know?.sources_complete : v.must_know?.sources_complete;
+  const complete = sources === NEED_SOURCES ? v.must_know?.need_you_sources_complete ?? v.must_know?.sources_complete : sources === KNOW_SOURCES ? v.must_know?.sources_complete : null;
   if (complete === false) return 'incomplete';
   if (v.source_gaps.some((g) => sources.includes(g.source_id))) return 'incomplete';
   return v.source_gaps.some((g) => !g.source_id) ? 'unknown' : '';
+};
+// 空态先确认本区来源读到了，缺失不等于零；已读到的条目仍照常列出。
+const unreadLine = (v, ctx, sources = NEED_SOURCES, ready = true, cls = 'cp-line') => {
+  const state = emptyRead(v, ctx, sources);
+  return state || !v.served_at || !ready ? `<p class="${cls}">${dot('unavailable')}${state === 'snapshot' ? '正在读最新数据' : '这次没读到，不代表没有'}</p>` : '';
 };
 const needUnread = (state) => state === 'offline' ? '要你做的事这会儿读不到' : state === 'snapshot' ? '正在读要你做的事' : state === 'unknown' ? '部分数据暂时没读全，要你做的事还需核对' : '要你做的事这次没读全';
 // 状态是“正在读/正在跑”、自己写了在做什么的卡（例如旧临时目录回收这一轮还在跑）：写“正在跑”和原句，不当成读不到（本人 10-31 18:03）
@@ -73,7 +78,7 @@ const pairedWaiting = (v, ctx) => v.viewer?.kind !== 'owner' && ctx.paired === t
 const PAIRED_WAIT = '正在读你的完整版，私人事项稍后出来';
 export function viewerLine(v, ctx = {}) {
   const n = v.private_count, w = v.viewer, waiting = pairedWaiting(v, ctx);
-  const note = ctx.notice ? `<span class="cp-viewer-note">${esc(ctx.notice)}</span>` : '';
+  const note = ctx.notice || ctx.readError ? `<span class="cp-viewer-note">${esc(ctx.notice || ctx.readError)}</span>` : '';
   const line = w?.kind === 'owner' ? `你的设备 · 全部显示${n > 0 ? `（其中 ${n} 件公网看不到）` : ''}`
     : waiting ? `你的设备 · ${PAIRED_WAIT}` : n > 0 ? `公开版 · ${n} 件私人事项只在本人设备上显示` : '';
   return note + (line ? `<span class="cp-viewer-line${w?.kind === 'owner' || waiting ? ' is-owner' : ''}">${line}</span>` : '');
@@ -104,7 +109,7 @@ export function card(c, now, off = false, pageAt = '', t = null) {
   const missing = (c.state === 'unavailable' || c.state === 'reading') && !running(c);
   const gap = ago(c.observed_at, now).replace(/^刚刚$/, '').replace(/前$/, '');
   const state = off ? 'unavailable' : running(c) ? 'neutral' : cardState(c);
-  const text = c.text ? esc(c.text) + (missing && c.observed_at ? `<span class="cp-stale">（这是 ${esc(when(c.observed_at, now))} 读到的，之后${gap ? ' ' + esc(gap) : ''}没读到新的）</span>` : '') : c.missing_reason ? esc(c.missing_reason) : c.observed_at ? notRead(c.observed_at, now) : NO_REASON;
+  const text = t?.say && !missing ? esc(t.say) : c.text ? esc(c.text) + (missing && c.observed_at ? `<span class="cp-stale">（这是 ${esc(when(c.observed_at, now))} 读到的，之后${gap ? ' ' + esc(gap) : ''}没读到新的）</span>` : '') : c.missing_reason ? esc(c.missing_reason) : c.observed_at ? notRead(c.observed_at, now) : NO_REASON;
   const time = off && t ? '' : off ? (missing ? '' : `<p class="cp-time cp-off-note">读不到${c.observed_at ? `（最后 ${esc(when(c.observed_at, now))} 读到）` : ''}</p>`)
     : state === 'stale' ? `<p class="cp-time">数据源停了，上面是最后一次记录，不是你的事${c.observed_at ? ` · ${esc(when(c.observed_at, now))} 读到` : ''}</p>`
     // 大字已经写了“AI 在管”的网格卡（t.who === false），下面不再重复写一遍
@@ -169,7 +174,7 @@ export function security(v, ctx) {
   const unread = off || ctx.phase === 'snapshot' || old;
   const lastRead = s.observed_at ? '上次 ' + when(s.observed_at, ctx.now) + ' 读到' : '还没读到过';
   const pdAt = s.personal_data.expires_at, unAt = s.unrestricted.expires_at;
-  const [word, state] = off ? ['连不上电脑', 'unavailable'] : unread ? ['没读到', 'unavailable']
+  const [word, state] = off ? [ctx.readError ? '后台出错' : '连不上电脑', 'unavailable'] : unread ? ['没读到', 'unavailable']
     : un === 'active' ? ['无限制授权开着', 'attention'] : un === 'inactive' && ['unlocked', 'locked'].includes(pd) ? ['都正常', 'ok'] : ['没读到', 'unavailable'];
   const sub = unread ? lastRead : pd === 'unlocked' ? (pdAt ? `资料解锁到 ${dateHm(pdAt)}` : '资料已解锁')
     : un === 'active' && unAt ? `开到 ${dateHm(unAt)}` : pd === 'locked' ? '资料锁着' : '资料状态没读到';
@@ -431,7 +436,7 @@ function aiFollowing(v, ctx) {
   const now = ctx.now;
   const row = ({ x, more }, small) => `<li${liCls(x, ctx)}${itemAttr(x)}>${rowText(x, plain(clean(x.title) || x.project), esc(small))}${moreText(more)}${decLine(x, 'decl')}${ledgerBox(x, ctx)}</li>`;
   const lr = ledgerRows(v);
-  if (!lr.groups.some((g) => g.items.length)) return `<p class="cp-line" id="ai">${dot('ok')}AI 现在手上没有自己的活。</p>`;
+  if (!lr.groups.some((g) => g.items.length)) return unreadLine(v, ctx, NEED_SOURCES, !!v.must_know && v.must_know.state !== 'unavailable') || `<p class="cp-line" id="ai">${dot('ok')}AI 现在手上没有自己的活。</p>`;
   const datedDue = (x) => ledgerDue({ scheduled_at: x.dated_at || x.scheduled_at }, now);
   const small = (x, scheduled) => {
     const due = (scheduled && datedDue(x)) || ledgerDue(x, now), days = x.registration_unknown ? 14 : Number.isFinite(x.age_days) ? x.age_days : null;
@@ -479,14 +484,14 @@ function aiWork(v, ctx) {
   if (!items.length) return '';
   const run = items.filter((p) => nOf(p.running_automations) > 0), tasks = items.filter((p) => nOf(p.running_tasks) > 0);
   const taskGap = items.some((p) => nOf(p.running_tasks) == null), runGap = items.some((p) => nOf(p.running_automations) == null);
-  const branches = items.filter((p) => Number(p.unmerged_branches) > 0), nb = branches.reduce((n, p) => n + Number(p.unmerged_branches), 0);
+  const branches = items.filter((p) => Number(p.unmerged_branches) > 0);
   const names = (list, k) => list.map((p) => `${p.project}${k === 'running_tasks' && p.running_tasks_basis === 'confirmed_minimum' ? ` 至少${p[k]}个` : Number(p[k]) > 1 ? ` ${p[k]} 个` : ''}`).join('、');
   const bits = [
     tasks.length ? `已读到的 AI 后台任务：${names(tasks, 'running_tasks')}${taskGap ? '；另有项目状态未读到' : ''}` : taskGap ? '部分项目的 AI 后台任务状态暂时读不到' : '已接入的 AI 后台任务当前未运行',
     run.length ? `已读到的自动任务：${names(run, 'running_automations')}${runGap ? '；另有项目状态未读到' : ''}` : runGap ? '部分项目的自动任务状态暂时读不到' : '已登记项目没有正在运行的自动任务',
-    nb ? `代码分支记录：${branches.length} 个项目共 ${nb} 条未合入主版本；需逐项核对用途后，才能判断哪些要处理。` : '',
+    branches.length ? `代码分支记录：${branches.map((p) => `${p.project} ${p.unmerged_branches} 条未合入主版本（${p.git_observed_at ? `${when(p.git_observed_at, ctx.now)} 读到` : 'Git 记录时刻没读到'}）`).join('；')}；需逐项核对用途后，才能判断哪些要处理。` : '',
   ].filter(Boolean);
-  return `<div class="cp-aiwork"><b>项目后台进展</b><small>这里只统计已接入的后台任务，不代表所有 AI 聊天。</small><ul>${bits.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>${v.ai_work.observed_at ? `<small>${esc(when(v.ai_work.observed_at, ctx.now))} 读到</small>` : ''}</div>`;
+  return `<div class="cp-aiwork"><b>项目后台进展</b><small>这里只统计已接入的后台任务，不代表所有 AI 聊天。</small><ul>${bits.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>${v.ai_work.observed_at ? `<small>后台任务 ${esc(when(v.ai_work.observed_at, ctx.now))} 读到</small>` : ''}</div>`;
 }
 
 // 要你做／要你回（首屏）：只放要你动手的卡。“AI 在等你回”单独一组“AI 在等你回话”；确认卡、要你动手、要你拍板各一组。
@@ -657,6 +662,7 @@ const subscriptionRows = (packages, now, off, stopped) => {
   return {
     list: `<ul class="cp-tile-rows">${rows.map((r) => `<li><span>${esc(r.name)}</span><b>${esc(r.value)}</b>${r.line ? `<small>${esc(r.line)}</small>` : ''}</li>`).join('')}</ul>`,
     detail: rows.map((r) => `${r.name}：${r.value}${r.line ? '；' + r.line : ''}`).join('。') + '。Clash 取得新的套餐读数后，这里自动显示新记录。' + PACKAGE_EXPLANATION + '服务商套餐扣费量与本机上网用量分开。',
+    note: 'Clash 取得新的套餐读数后，这里自动显示新记录。' + PACKAGE_EXPLANATION + '服务商套餐扣费量与本机上网用量分开。',
     warning: rows.some((r) => r.warning), available: rows.some((r) => r.readable),
   };
 };
@@ -686,8 +692,10 @@ export function computer(v, ctx) {
   const multiple = packages.length ? subscriptionRows(packages, now, off, stale.has('traffic')) : null;
   const warning = multiple ? multiple.warning : packageWarning, available = multiple ? multiple.available : packageFresh;
   const trafficDetail = multiple?.detail || packageDetail;
+  const proxyRest = TILE.proxy_traffic(String(proxy?.text || '')) ? String(proxy.text).split(/(?<=[。；;])/).filter((x) => !/今天(?:上网)?\s*\d|近\s*60\s*分钟|提醒线/.test(x)).join('').trim() : proxy?.text;
+  const packageRest = packageFresh ? `约每分钟取新数，${dateHm(pack.updated_at_beijing)} 读到。${PACKAGE_EXPLANATION}服务商套餐扣费量与本机上网用量分开。` : packageDetail;
   const traffic = proxy ? tile({ ...proxy, title: '流量', text: [proxy.text, trafficDetail].filter(Boolean).join(' '),
-    state: warning ? 'attention' : proxy.state, color: warning && proxy.color !== 'red' ? 'yellow' : proxy.color }, multiple ? { list: multiple.list } : { sub: esc(packageLine) })
+    state: warning ? 'attention' : proxy.state, color: warning && proxy.color !== 'red' ? 'yellow' : proxy.color }, multiple ? { list: multiple.list, say: [proxyRest, multiple.note].filter(Boolean).join(' ') } : { sub: esc(packageLine), say: [proxyRest, packageRest].filter(Boolean).join(' ') })
     : tile(plan && { ...plan, title: '流量', text: trafficDetail, state: available ? plan.state : 'unavailable',
       color: !available ? 'unavailable' : warning ? 'yellow' : plan.color }, multiple ? { list: multiple.list } : {});
   // “你得知道”里有正在修的网络问题时，后端在远程卡上给 must_know_id（文字是“此刻能连上；间歇断开还在查”），点了跳到“你得知道”那一条
@@ -837,7 +845,7 @@ const EVENT = { acceptance_reviewed: (x) => `AI 核对了 ${x.count ?? ''} 件�
 const short = (d) => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d || ''); return m ? `${+m[3]}日` : ''; };
 const bars = (rows, unit) => {
   const max = Math.max(1, ...rows.map((r) => r.n || 0));
-  return `<ol class="cp-bars">${rows.map((r) => `<li class="${r.n == null ? 'is-none' : ''}${r.now ? ' is-now' : ''}" title="${esc(r.label)} ${r.n == null ? '没统计到' : r.n + unit}"><span class="cp-bar" style="--h:${r.n == null ? 6 : Math.max(6, Math.round(r.n / max * 100))}%"></span><b>${r.n == null ? '—' : esc(r.n)}</b><small>${esc(r.label)}</small></li>`).join('')}</ol>`;
+  return `<ol class="cp-bars">${rows.map((r) => `<li class="${r.n == null ? 'is-none' : ''}${r.now ? ' is-now' : ''}" title="${esc(r.label)} ${r.n == null ? '没统计到' : r.n + unit}"><span class="cp-bar-track"><span class="cp-bar" style="--h:${r.n == null ? 6 : r.n / max * 100}%"></span></span><b>${r.n == null ? '—' : esc(r.n)}</b><small>${esc(r.label)}</small></li>`).join('')}</ol>`;
 };
 function codeCard(v, ctx) {
   const c = v.changes, n = c.today.commits;
@@ -927,7 +935,7 @@ function activityBlock(v, ctx) {
   const done = [Number.isFinite(s.backups_done) ? `完成 ${s.backups_done} 项备份` : '', Number.isFinite(s.images_done) && s.images_done ? `${s.images_done} 次系统镜像` : ''].filter(Boolean).join('、');
   void line;
   return `<article class="cp-feature cp-activity ct-card"><h3>电脑后台今天做的事</h3>${done ? `<p class="cp-big-line">今天${esc(done)}</p>` : ''}${acc}${names}${yline}`
-    + (items ? `<ol class="cp-timeline">${items}</ol>` : `<p class="cp-line">${dot('ok')}今天还没有备份、出错、重启这类事。</p>`)
+    + (items ? `<ol class="cp-timeline">${items}</ol>` : unreadLine(v, ctx, ['today_activity', 'today'], v.today_activity.state === 'ok' && !!v.today_activity.observed_at) || `<p class="cp-line">${dot('ok')}今天还没有备份、出错、重启这类事。</p>`)
     + (a.observed_at ? `<p class="cp-time">${esc(when(a.observed_at, ctx.now))} 读到</p>` : '') + `</article>`;
 }
 
@@ -1261,7 +1269,7 @@ function recoveredBlock(v, ctx) {
 const CODE = /\b[a-z][a-z0-9]*(?:_[a-z0-9]+)+\b|[A-Za-z]:\\\S+/;
 function decisionsBlock(v, ctx) {
   const list = (v.must_know?.items || []).filter((k) => k.kind === 'ai_decision' && (isPh(k) || (typeof k.text === 'string' && k.text)));
-  if (!list.length) return `<p class="cp-line">${dot('ok')}最近 AI 没有自己定过什么。</p>`;
+  if (!list.length) return unreadLine(v, ctx, NEED_SOURCES, !!v.must_know && v.must_know.state !== 'unavailable') || `<p class="cp-line">${dot('ok')}最近 AI 没有自己定过什么。</p>`;
   const item = (k) => {
     if (isPh(k)) return `<li id="${esc(knowId(k))}" class="is-ai_decision is-private"${itemAttr(k)}><span class="cp-know-dec-topic">${esc(k.title || PRIVATE_TITLE)}</span></li>`;
     const d = splitDecision(k);
@@ -1407,7 +1415,7 @@ const overview = (v, ctx) => {
   const read = v.ok && !ctx.offline;
   // 页面刚打开、还没读到新数据时，首帧是构建网页那会儿的数：写明是几点的，整体灰着（样式在 cockpit.css 的 .cp-snap）
   // 构建时还不知道哪天被打开，这里总带日期（“10月12日 07:32”），过了零点也不会说错
-  const snap = ctx.phase === 'snapshot' ? `<p class="cp-snap">${dot('unavailable')}这是 ${esc(v.served_at ? dateHm(v.served_at) : '早些时候')} 的数，不是现在的<span class="cp-snap-reading">，正在读最新…</span></p>` : '';
+  const snap = ctx.phase === 'snapshot' ? `<p class="cp-snap">${dot('unavailable')}${v.served_at ? `这是 ${esc(dateHm(v.served_at))} 的数，不是现在的` : '还没读到数据'}<span class="cp-snap-reading">，正在读最新…</span></p>` : '';
   if (!read && !v.need_you.length) return `<div class="cp-you is-off">${snap}<p class="cp-you-n">要你做的事还没读到</p><p class="cp-you-sub">${notRead(v.served_at, ctx.now)}</p></div>`;
   const late = items.some((i) => i.r.overdue || String(i.x.overdue_text || '').trim());
   const tag = !n ? '' : urgent ? `<span class="cp-you-tag is-urgent">${urgent === n ? (n === 1 ? '急' : '都急') : `${urgent} 件急`}</span>` : `<span class="cp-you-tag">${late ? '过了原定时间，但不急' : n === 1 ? '不急' : '都不急'}</span>`;
@@ -1551,9 +1559,9 @@ function decisionsTable(v, ctx) {
 // 二级页“AI 的账本”（/cockpit/ai/）：AI 在跟、晚了的、它自己定了的、等条件的、每周体检和项目后台。都不用本人管，想看时点进来
 export function ledger(v, ctx) {
   const theirs = theirsOf(v), health = govRun(v, ctx) + aiWork(v, ctx);
-  const snap = ctx.phase === 'snapshot' ? `<p class="cp-snap">${dot('unavailable')}这是 ${esc(v.served_at ? dateHm(v.served_at) : '早些时候')} 的数，不是现在的<span class="cp-snap-reading">，正在读最新…</span></p>`
+  const snap = ctx.phase === 'snapshot' ? `<p class="cp-snap">${dot('unavailable')}${v.served_at ? `这是 ${esc(dateHm(v.served_at))} 的数，不是现在的` : '还没读到数据'}<span class="cp-snap-reading">，正在读最新…</span></p>`
     // 读过之后又读不到电脑：照样列着上次的数，但写明是几点的，不让旧数看起来像实时
-    : ctx.offline ? `<p class="cp-snap">${dot('unavailable')}读不到电脑，这是 ${esc(v.served_at ? when(v.served_at, ctx.now) : '早些时候')} 的数</p>` : '';
+    : ctx.offline ? `<p class="cp-snap">${dot('unavailable')}${esc(ctx.readError || '读不到电脑')}，${v.served_at ? `这是 ${esc(when(v.served_at, ctx.now))} 的数` : '还没读到数据'}</p>` : '';
   // 1700 宽以上左边一列小目录
   const stale = staleLedger(v, ctx);
   const toc = [['ai-following', 'AI 在跟'], ['ai-decided', 'AI 自己定了的'], theirs.length ? ['ai-wait', 'AI 等条件再做的'] : null, health ? ['ai-health', '体检和项目后台'] : null, ['stale-data', '停了的数据']].filter(Boolean);
@@ -1563,13 +1571,13 @@ export function ledger(v, ctx) {
     + `<section class="cp-ledger-sec" id="ai-decided"><h2>AI 自己定了的</h2>${decisionsBlock(v, ctx)}${decisionsTable(v, ctx)}</section>`
     + (theirs.length ? `<section class="cp-ledger-sec" id="ai-wait"><h2>AI 等条件再做的</h2><ul class="cp-list cp-wait">${theirs.map((x) => waitRow(x, ctx, [])).join('')}</ul></section>` : '')
     + (health ? `<section class="cp-ledger-sec" id="ai-health"><h2>每周体检和项目后台</h2>${health}</section>` : '')
-    + `<section class="cp-ledger-sec" id="stale-data"><h2>停了的数据</h2>${stale || '<p class="cp-know-note">暂时没有可列出的停更数据。</p>'}</section>`;
+    + `<section class="cp-ledger-sec" id="stale-data"><h2>停了的数据</h2>${stale || unreadLine(v, ctx, KNOW_SOURCES, !v.source_gaps.length, 'cp-know-note') || '<p class="cp-know-note">暂时没有可列出的停更数据。</p>'}</section>`;
 }
 // 电脑版顶栏右端：哪台设备、几点读到（窄屏不出，那里看标题下的小字）；配对结果、授权失效这类提示也写在这里
 export function meta(v, ctx) {
   const w = v.viewer, owner = w?.kind === 'owner', n = v.private_count, waiting = pairedWaiting(v, ctx);
   const who = owner ? w.device_machine || '你的设备' : waiting ? '你的设备' : w ? '公开版' : '';
-  const at = ctx.offline ? `读不到电脑${v.served_at ? `（最后 ${when(v.served_at, ctx.now)}）` : ''}` : !v.served_at ? '还没读到'
+  const at = ctx.offline ? `${ctx.readError || '读不到电脑'}${v.served_at ? `（最后 ${when(v.served_at, ctx.now)}）` : ''}` : !v.served_at ? '还没读到'
     : ctx.phase === 'snapshot' ? `${dateHm(v.served_at)} 的数` : `${when(v.served_at, ctx.now)} 读到`;
   const sub = owner ? (n > 0 ? `全部显示，其中 ${n} 件公网看不到` : '全部显示') : waiting ? PAIRED_WAIT : n > 0 ? `${n} 件私人事项只在本人设备上显示` : '';
   return (ctx.notice ? `<span class="cp-meta-note">${esc(ctx.notice)}</span>` : '')
