@@ -29,6 +29,10 @@
 只能定位到页时为 `null`。`errors`、`warnings` 中每项均有 `code/screen/message`。
 整合检查时按 `page` 合并两组数组，`passed` 取所有步骤的交集。
 
+量屏父进程监看完成检查点：连续120秒没有新结果时，终止本次执行器的未完成作业，
+回收已有成功检查点，缺块页仍写 `render_failed`，保留旧结果。持续产出的长批次
+会不断重置计时；120秒不是整批运行时间上限。
+
 ## 摆法比较
 
 排版完成后自动输出 `site-astro/.cache/layout-diff.json`，

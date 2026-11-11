@@ -1040,6 +1040,42 @@ def bindings(name, first_screen):
     return {(sid, o): lb[o]["rect"] for o in ("h", "v") if o in lb and lb[o].get("rect")}
 
 
+HYDRATE_IDLE_SECONDS = 120
+
+
+def hydrate_chunks(chunks, binds, checkpoint_dir):
+    """A live worker may be stuck in page.evaluate; bound time without progress."""
+    done, errors = [], {}
+    progress = len(list(Path(checkpoint_dir).glob("*.json")))
+    last_progress = time.monotonic()
+    ex = cf.ProcessPoolExecutor(max_workers=len(chunks))
+    try:
+        futures = {ex.submit(hydrate, chunk, binds, str(checkpoint_dir)): chunk for chunk in chunks}
+        pending = set(futures)
+        while pending:
+            ready, pending = cf.wait(pending, timeout=min(5, HYDRATE_IDLE_SECONDS), return_when=cf.FIRST_COMPLETED)
+            for future in ready:
+                try:
+                    done += future.result()
+                except (Exception, SystemExit) as e:
+                    errors.update({j["key"]: str(e) for j in futures[future]})
+            current = len(list(Path(checkpoint_dir).glob("*.json")))
+            if ready or current != progress:
+                progress, last_progress = current, time.monotonic()
+            elif time.monotonic() - last_progress >= HYDRATE_IDLE_SECONDS:
+                message = f"量屏作业连续 {HYDRATE_IDLE_SECONDS} 秒没有进展，已终止未完成作业"
+                errors.update({j["key"]: message for future in pending for j in futures[future]})
+                print(message, flush=True)
+                ex.kill_workers()
+                break
+    except BaseException:
+        ex.kill_workers()
+        raise
+    finally:
+        ex.shutdown(wait=True)
+    return done, errors
+
+
 def run(names, workers=2):
     requested = list(names)
     checks = {n: page_result(n) for n in names}
@@ -1105,14 +1141,7 @@ def run(names, workers=2):
     chunks = [todo[i::workers] for i in range(workers)] if todo else []
     done, job_errors = [], {}
     if chunks:
-        with cf.ProcessPoolExecutor(max_workers=len(chunks)) as ex:
-            futures = {ex.submit(hydrate, chunk, binds, str(checkpoint_dir)): chunk for chunk in chunks}
-            for future in cf.as_completed(futures):
-                try:
-                    done += future.result()
-                except Exception as e:
-                    job_errors.update({j["key"]: str(e) for j in futures[future]})
-                    print(f"量屏作业出错：{e}；受影响的页在缺块回执中列出", flush=True)
+        done, job_errors = hydrate_chunks(chunks, binds, checkpoint_dir)
     for r in done:
         cache[r["key"]] = cache_payload(r)
     recover_cache(cache, checkpoint_dir)

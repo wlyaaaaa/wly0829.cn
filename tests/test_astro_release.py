@@ -8,6 +8,7 @@ import re
 import sys
 import tempfile
 import unittest
+from concurrent.futures import Future
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -247,18 +248,28 @@ class AstroReleaseTests(unittest.TestCase):
         self.assertEqual(rendered['render_md_sha256'], renderer.markdown_render_sha(path))
         self.assertEqual(rendered['render_version'], renderer.RENDER_VERSION)
 
-    def test_missing_render_job_exits_nonzero_without_overwriting_old_result(self):
+    def test_missing_render_job_is_page_error_without_overwriting_old_result(self):
         md, work, public = self.root/'md', self.root/'work', self.root/'public'
         md.mkdir(); work.mkdir(); (md/'fixture.md').write_text('fixture', encoding='utf8')
-        old = self.root/'old-render.json'; old.write_text('previous result', encoding='utf8')
+        out = self.root/'rendered'; out.mkdir()
+        old = out/'fixture.json'; old.write_text('previous result', encoding='utf8')
         job = {'page': 'fixture', 'screen': 'fixture-01', 'o': 'h', 'key': 'new-job'}
         fingerprint = patch.object(renderer, 'hydration_fingerprint', return_value='fixture-code')
         fingerprint.start(); self.addCleanup(fingerprint.stop)
         original_cwd = os.getcwd(); self.addCleanup(os.chdir, original_cwd)
-        with patch.object(renderer, 'REPO', str(self.root)), patch.object(renderer, 'MD_DIR', str(md)), patch.object(renderer, 'WORK', str(work)), patch.object(renderer, 'PUB', str(public)), patch.object(renderer, 'publish_path'), patch.object(renderer.shutil, 'copyfile'), patch.object(renderer, 'load_registry', return_value=({}, None, [], [])), patch.object(renderer, 'build_css', return_value='css'), patch.object(renderer, 'library_fingerprint', return_value='lib'), patch.object(renderer, 'prepare_page', return_value=({}, {'screens': []}, [job])), patch.object(renderer.cf, 'ProcessPoolExecutor') as executor, patch.object(renderer, 'finish_page') as finish, patch.object(renderer, 'fix_dead_fragments'):
-            executor.return_value.__enter__.return_value.map.return_value = [[]]
-            with self.assertRaisesRegex(SystemExit, 'missing_jobs'): renderer.run(['fixture'], workers=1)
-            finish.assert_not_called()
+        with patch.object(renderer, 'REPO', str(self.root)), patch.object(renderer, 'SITE', str(self.root)), patch.object(renderer, 'OUT_DIR', str(out)), patch.object(renderer, 'MD_DIR', str(md)), patch.object(renderer, 'WORK', str(work)), patch.object(renderer, 'PUB', str(public)), patch.object(renderer, 'publish_path'), patch.object(renderer.shutil, 'copyfile'), patch.object(renderer, 'load_registry', return_value=({}, None, [], [])), patch.object(renderer, 'build_css', return_value='css'), patch.object(renderer, 'library_fingerprint', return_value='lib'), patch.object(renderer, 'prepare_page', return_value=({}, {'screens': []}, [job])), patch.object(renderer.cf, 'ProcessPoolExecutor') as executor, patch.object(renderer, 'finish_page') as finish, patch.object(renderer, 'fix_dead_fragments'), patch.object(renderer, 'write_layout_diff'), patch.object(renderer, 'HYDRATE_IDLE_SECONDS', 0.05), patch.dict(os.environ, BLOCK_PAGE_CHECKS=str(self.root/'checks.json')):
+            for state in ('missing', 'exception', 'stalled'):
+                with self.subTest(state=state):
+                    future = Future()
+                    if state == 'missing': future.set_result([])
+                    if state == 'exception': future.set_exception(RuntimeError('worker interrupted'))
+                    executor.return_value.submit.return_value = future
+                    result = renderer.run(['fixture'], workers=1)
+                    self.assertFalse(result['pages'][0]['passed'])
+                    self.assertEqual(result['pages'][0]['errors'][0]['screen'], 'fixture-01')
+                    self.assertEqual(json.loads((self.root/'checks.json').read_text('utf8')), result)
+                    finish.assert_not_called()
+            executor.return_value.kill_workers.assert_called_once()
         self.assertEqual(old.read_text('utf8'), 'previous result')
 
     def test_new_charter_ignores_frozen_article_positions_and_deduplicates_across_parts(self):
