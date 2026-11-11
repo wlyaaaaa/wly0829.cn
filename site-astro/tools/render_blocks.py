@@ -1099,8 +1099,9 @@ def finish_page(name, fm, results, cssv):
             s["article"] = re.sub(r'<span id="([^"]+)"></span>', original_anchor, s["article"])
     for result in results:
         urls = asset_urls(json.dumps(screens[result['screen']][result['o']], ensure_ascii=False))
-        private = {u: h for u, h in result['assets'].items() if u.startswith('/assets/_source/')}
-        result['assets'].clear(); result['assets'].update(private)
+        assets = result.setdefault('assets', {})
+        private = {u: h for u, h in assets.items() if u.startswith('/assets/_source/')}
+        assets.clear(); assets.update(private)
         bundle_assets(result, urls | {font, out['css'], out['loader']} | ({living} if living else set()), WORK, PUB, input_sha)
     os.makedirs(OUT_DIR, exist_ok=True)
     Path(OUT_DIR, name + ".json").write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8", newline="\n")
