@@ -63,12 +63,13 @@ def bundle_assets(result, urls, work, public, sha):
             pending.extend(asset_urls(source.read_text('utf8')) - seen)
 
 
-def restore_assets(result, source_work, public, sha):
+def restore_assets(result, source_work, public, sha, target_work=None):
     for url, checksum in result.get('assets', {}).items():
         relative = Path(url.lstrip('/'))
         if not url.startswith(('/assets/', '/_living/')) or '..' in relative.parts:
             raise ValueError('Invalid cached asset URL: ' + url)
-        source, target = Path(source_work, '_assets', relative), Path(public, relative)
+        source = Path(source_work, '_assets', relative)
+        target = Path(target_work or source_work, '_assets', relative) if url.startswith('/assets/_source/') else Path(public, relative)
         if target.exists() and sha(target) == checksum: continue
         if sha(source) != checksum: raise ValueError('Cached asset checksum mismatch: ' + url)
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -78,7 +79,7 @@ def restore_assets(result, source_work, public, sha):
 def migrate_cache(source, jobs, cache, renderer):
     """Promote only identical screen inputs; never launch a measuring browser."""
     source = Path(source).resolve()
-    old_work = source / 'site-astro/.cache/blocks'
+    old_work = source if (source / '_cache.json').is_file() else source / 'site-astro/.cache/blocks'
     old_cache = json.loads((old_work / '_cache.json').read_text('utf8'))
     renderer.recover_cache(old_cache, old_work / '_completed')
     index_path = old_work / '_index.json'
@@ -119,14 +120,21 @@ def migrate_cache(source, jobs, cache, renderer):
         if old.get('input_key') != job['key'] or old.get('key') not in old_cache: continue
         existing = job['key'] in cache
         result = cache[job['key']] if existing else old_cache[old['key']]
-        restore_assets(result, renderer.WORK if existing else old_work, renderer.PUB, renderer.input_sha)
+        restore_assets(result, renderer.WORK if existing else old_work, renderer.PUB, renderer.input_sha, renderer.WORK)
         result = renderer.cache_payload(result)
+        if index_path.exists():
+            bundle_assets(result, [u for u in result['assets'] if not u.startswith('/assets/_source/')],
+                          renderer.WORK, renderer.PUB, renderer.input_sha)
+            cache[job['key']] = result; migrated += not existing
+            continue
         if job['page'] not in rendered:
             path = source / 'site-astro/src/content/rendered' / (job['page'] + '.json')
             rendered[job['page']] = json.loads(path.read_text('utf8'))
         page = rendered[job['page']]
         screen = next(s for s in page['screens'] if s['id'] == job['screen'])
         urls = asset_urls(json.dumps(screen[job['o']], ensure_ascii=False)) | {page['font'], page['css'], page['loader']}
+        living = '/_living/' + job['page'] + '/astro/config.json'
+        if (source / 'site-astro/public' / living.lstrip('/')).is_file(): urls.add(living)
         bundle_assets(result, urls, renderer.WORK, source / 'site-astro/public', renderer.input_sha)
         restore_assets(result, renderer.WORK, renderer.PUB, renderer.input_sha)
         cache[job['key']] = result

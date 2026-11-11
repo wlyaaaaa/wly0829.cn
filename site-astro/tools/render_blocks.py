@@ -58,6 +58,8 @@ _input_shas = {}
 def file_url_to_path(u):
     if u.startswith('../_inputs/'):
         return os.path.join(WORK, '_inputs', u.rsplit('/', 1)[1])
+    if u.startswith('/assets/_source/'):
+        return os.path.join(WORK, '_assets', *u.lstrip('/').split('/'))
     if u.startswith('/assets/'):
         return os.path.join(PUB, *urllib.parse.unquote(u).lstrip('/').split('/'))
     p = urllib.parse.unquote(H.unescape(u[len("file:///") :]))
@@ -241,12 +243,20 @@ def publish_path(p):
     return url
 
 
-def rewrite_urls(text, found=None):
+def rewrite_urls(text, found=None, art=None):
     def one(match):
-        url = publish_path(file_url_to_path(match[0]))
+        path = file_url_to_path(match[0])
+        if art and path == file_url_to_path(art):
+            checksum = input_sha(path)
+            url = '/assets/_source/' + checksum + Path(path).suffix.lower()
+            target = Path(WORK, '_assets', url.lstrip('/'))
+            if not target.exists() or input_sha(target) != checksum:
+                target.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(path, target)
+        else:
+            url = publish_path(path)
         if found is not None: found.add(url)
         return url
-    return re.sub(FILE_URL.pattern + r'|\.\./_inputs/[a-f0-9]{64}\.[a-z0-9]+', one, text)
+    return re.sub(FILE_URL.pattern + r'|\.\./_inputs/[a-f0-9]{64}\.[a-z0-9]+|/assets/(?:_source|_fingerprinted)/[a-f0-9]{64}\.[a-z0-9]+', one, text)
 
 
 def defer_images(body, first=False):
@@ -683,12 +693,15 @@ def cache_payload(result):
             # loading uses it), pointing at the captured title's portable URL.
             value = re.sub(r'<img\b[^>]*>', lambda m: TITLE_SOURCE.sub(
                 lambda _: 'data-title-src="' + re.search(r'\bsrc="([^"]+)"', m[0])[1] + '"', m[0]), value)
-            return rewrite_urls(value, urls)
+            return rewrite_urls(value, urls, result.get('art'))
         if isinstance(value, list): return [portable(v) for v in value]
         return value
     payload = {k: portable(v) for k, v in payload.items()}
     payload['assets'] = dict(result.get('assets', {}))
-    bundle_assets(payload, urls, WORK, PUB, input_sha)
+    if (result.get('art') or '').startswith('/assets/_fingerprinted/'):
+        payload['assets'].pop(result['art'], None)
+    payload['assets'].update({url: input_sha(file_url_to_path(url)) for url in urls if url.startswith('/assets/_source/')})
+    bundle_assets(payload, [url for url in urls if not url.startswith('/assets/_source/')], WORK, PUB, input_sha)
     return payload
 
 
@@ -1018,7 +1031,7 @@ def finish_page(name, fm, results, cssv):
             s["article"] = re.sub(r'<span id="([^"]+)"></span>', original_anchor, s["article"])
     for result in results:
         urls = asset_urls(json.dumps(screens[result['screen']][result['o']], ensure_ascii=False))
-        bundle_assets(result, urls | {font, out['css'], out['loader']}, WORK, PUB, input_sha)
+        bundle_assets(result, urls | {font, out['css'], out['loader']} | ({living} if living else set()), WORK, PUB, input_sha)
     os.makedirs(OUT_DIR, exist_ok=True)
     Path(OUT_DIR, name + ".json").write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8", newline="\n")
     return out

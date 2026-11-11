@@ -84,6 +84,9 @@ class TypesetCacheTests(unittest.TestCase):
             for url in urls.values():
                 path = site / 'public' / url.lstrip('/'); path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(b'fixture')
+            saved = {'html': 'measured'}
+            bundle_assets(saved, urls.values(), work, site / 'public', renderer.sha)
+            renderer.write_cache(work / '_cache.json', {'old': saved})
             renderer.write_cache(site / 'src/content/rendered/page.json',
                                  {**urls, 'screens': [{'id': 'one', 'h': {'html': 'measured'}}]})
             jobs = [{'page': 'page', 'screen': sid, 'o': 'h', 'key': key}
@@ -95,6 +98,28 @@ class TypesetCacheTests(unittest.TestCase):
                     self.assertEqual(render_cache.migrate_cache(source, jobs, cache, renderer), 0)
             self.assertEqual(set(cache), {'new'})
             self.assertEqual(set(cache['new']['assets']), set(urls.values()))
+
+    def test_portable_art_preserves_existing_lossless_texture_reuse(self):
+        from PIL import Image
+        with tempfile.TemporaryDirectory(prefix='cached-art-') as folder:
+            root = Path(folder); public = root / 'public'; work = root / 'work'
+            texture = public / '_living/texture.webp'; texture.parent.mkdir(parents=True)
+            original = root / 'art.png'; image = Image.new('RGB', (100, 100), 'green')
+            image.save(original); image.save(texture, lossless=True)
+            self.assertLess(texture.stat().st_size, original.stat().st_size)
+            config = public / '_living/config.json'
+            config.write_text(json.dumps({'h': {'texture': {'src': '/_living/texture.webp'}}}), encoding='utf8')
+            with patch.multiple(renderer, WORK=str(work), PUB=str(public), IMPORT_ROOT=str(root)):
+                result = renderer.cache_payload({'html': f'<img src="{original.as_uri()}">', 'art': original.as_uri()})
+                self.assertTrue(result['art'].startswith('/assets/_source/'))
+                renderer.share_living_texture('/_living/config.json', result['art'])
+                actual = renderer.rewrite_urls(result['html'])
+                self.assertIn(renderer.sha(texture) + '.webp', actual)
+                self.assertFalse((public / 'assets/_fingerprinted' / (renderer.sha(original) + '.png')).exists())
+                target_work = root / 'copied cache'; target_public = root / 'empty public'
+                restore_assets(result, work, target_public, renderer.sha, target_work)
+                self.assertFalse(target_public.exists())
+                self.assertEqual(renderer.sha(target_work / '_assets' / result['art'].lstrip('/')), renderer.sha(original))
 
     def test_timestamp_body_and_engine_across_current_pages(self):
         with tempfile.TemporaryDirectory(prefix='typeset-cache-') as folder:
