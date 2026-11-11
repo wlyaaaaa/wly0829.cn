@@ -75,61 +75,116 @@ def sha(path):
 
 
 def asset_dependencies(value, base=None, root=None):
-    """Collect local resources, including entity-encoded JSON and nested assets."""
+    """Follow resource references, never prose, tool sources or global catalogs."""
     repo = Path(root or REPO).resolve()
     assets = repo / 'sources/assets' if root else Path(A.ASSET_ROOT).resolve()
     public = repo / 'site-astro/public' if root else Path(PUB).resolve()
+    proto = repo / 'src/typeset' if root else Path(PROTO).resolve()
+    legacy, runtime = repo / 'public', repo / 'site-astro/src/chrome/runtime'
+    title_cache = repo / '.publish/typeset-out/_cache' if root else Path(A.CACHE).resolve()
+    roots = (assets, public, proto, legacy, runtime, title_cache)
     found = set()
     extensions = {'.png', '.jpg', '.jpeg', '.webp', '.avif', '.svg', '.gif', '.css',
                   '.js', '.mjs', '.json', '.woff', '.woff2', '.ttf', '.mp4'}
+    fields = {'asset', 'src', 'href', 'avif', 'file', 'full', 'poster', 'mask', 'icon', 'icon_badge', 'image', 'script', 'atlas', 'speaker',
+              'script_bundle', 'style_bundle', 'living_config', 'heading_icon', 'group_heading_icon'}
+    collections = {'icons', 'gallery_assets', 'art', 'arts', 'avatars', 'illustrations', 'icon_map',
+                   'avif_assets', 'leaves', 'today_river_assets'}
+    attributes = {'src', 'href', 'xlink:href', 'poster', 'data-src', 'data-ts-src', 'data-lazy-src',
+                  'data-gallery-src', 'data-href', 'data-living-config', 'data-slice-manifest',
+                  'data-shot-source', 'data-shot-full-source'}
+    def reference(ref, owner):
+        ref = H.unescape(ref).strip().split('?', 1)[0].split('#', 1)[0]
+        if ref.startswith(('http:', 'https:', 'data:', '//')): return
+        if ref.startswith('proto:'):
+            ref = str(proto / 'assets' / (ref[6:] + ('' if ref.endswith('.png') else '.png')))
+        ref = file_url_to_path(ref) if ref.startswith('file:///') else urllib.parse.unquote(ref)
+        if Path(ref).suffix.lower() not in extensions: return
+        ref = A.local_path(ref)
+        if root:
+            for old_root, new_root in ((Path(REPO).resolve(), repo), (Path(A.ASSET_ROOT).resolve(), assets)):
+                if Path(ref).is_relative_to(old_root):
+                    ref = str(new_root / Path(ref).relative_to(old_root)); break
+        if ref.startswith('/assets/'): choices = [assets / ref[8:], public / ref.lstrip('/')]
+        elif ref.startswith('/'): choices = [public / ref.lstrip('/'), legacy / ref.lstrip('/')]
+        elif ref.replace('\\', '/').startswith('sources/assets/'): choices = [assets / ref.replace('\\', '/')[15:]]
+        elif ref.replace('\\', '/').startswith('public/'): choices = [legacy / ref[7:]]
+        else: choices = [owner / ref, assets / ref, public / ref]
+        choices = [p.resolve() for p in choices]
+        path = next((p for p in choices if any(p.is_relative_to(root) for root in roots) and p.is_file()), None)
+        if path is None or path in found: return
+        found.add(path)
+        rel = path.relative_to(public).as_posix() if path.is_relative_to(public) else ''
+        # Generated catalogs and shared bundles describe the whole site.
+        if (rel.startswith('_album/routes-') or rel in {'_album/astro-runtime.json', '_living/quality-runtime/manifest.json'}
+                or rel and re.fullmatch(r'search-(?:index|projects|project-.+)\.js', path.name) or path.suffix in {'.js', '.mjs'} and
+                rel.startswith(('_shared/', '_typeset/runtime/', '_interactions/', '_live/', '_album/', '_living/_engine/', '_living/quality-runtime/'))): return
+        if path.suffix == '.json':
+            data = json.loads(path.read_text('utf-8-sig'))
+            if not isinstance(data, dict) or data.get('schema') != 'wly.album-routes.v1':
+                if path.is_relative_to(runtime):
+                    data = {k: v for k, v in data.items() if k in {'head', 'tail', 'toc_html', 'living_config'}}
+                visit(data, path.parent)
+        elif path.suffix == '.css': css(path.read_text('utf-8-sig'), path.parent)
+        elif path.suffix == '.svg': markup(path.read_text('utf-8-sig'), path.parent)
+        elif path.suffix in {'.js', '.mjs'}:
+            source = path.read_text('utf-8-sig')
+            for match in re.finditer(r'''(?:\b(?:from|import)\s*|\bimport\s*\()\s*["']([^"']+)["']''', source):
+                reference(match[1], path.parent)
+    def css(text, owner):
+        for match in re.finditer(r'''url\(\s*["']?([^"')]+)["']?\s*\)|@import\s+["']([^"']+)["']''', text):
+            reference(match[1] or match[2], owner)
     class Attributes(HTMLParser):
         def __init__(self, owner):
-            super().__init__(convert_charrefs=True); self.owner = owner
+            super().__init__(convert_charrefs=True); self.owner = owner; self.mode = None; self.script_id = ''
         def handle_starttag(self, tag, attrs):
-            for _, val in attrs:
-                if val: visit(val, self.owner)
+            attrs = dict(attrs)
+            if tag == 'script':
+                self.mode = 'json' if attrs.get('type') == 'application/json' else None
+                self.script_id = attrs.get('id', '')
+            elif tag == 'style': self.mode = 'css'
+            for key, val in attrs.items():
+                if not val: continue
+                if key in attributes: reference(val, self.owner)
+                elif key.endswith('srcset'):
+                    for part in val.split(','): reference(re.sub(r'\s+\d+(?:\.\d+)?[wx]$', '', part.strip()), self.owner)
+                elif key == 'style': css(val, self.owner)
+                elif val.lstrip().startswith(('{', '[')): encoded(val, self.owner, key == 'data-art')
         handle_startendtag = handle_starttag
+        def handle_endtag(self, tag):
+            if tag in {'script', 'style'}: self.mode = None
         def handle_data(self, data):
-            if data.lstrip().startswith(('{', '[')): visit(data, self.owner)
-    def visit(item, owner):
+            if self.mode == 'css': css(data, self.owner)
+            elif self.mode == 'json' and self.script_id != 'album-page':
+                parsed = json.loads(data)
+                # Site.astro clears old screen images; album-head.ts replaces album-page.
+                if self.script_id == 'page-data':
+                    shared = parsed.get('shared', {})
+                    video = parsed.get('video') or {}
+                    # The embedded shared inventory belongs to the runtime file.
+                    parsed = {'shared': {k: shared[k] for k in ('script_bundle', 'style_bundle') if k in shared},
+                              'art': {k: shared.get('art', {}).get(k) for k in ('back_to_top', 'easter_bird')}}
+                    if video.get('mount_allowed') is True: parsed['video'] = video
+                visit(parsed, self.owner)
+    def markup(text, owner): Attributes(owner).feed(text)
+    def encoded(text, owner, refs=False):
+        try: parsed = json.loads(H.unescape(text))
+        except json.JSONDecodeError: return
+        visit(parsed, owner, refs)
+    def visit(item, owner, refs=False):
         if isinstance(item, dict):
-            for key, val in item.items(): visit(key, owner); visit(val, owner)
+            for key, val in item.items():
+                if refs: reference(key, owner)
+                resource = key in fields or key in collections or key.endswith(('_icon', '_icons', '_icon_map', '_image', '_images', '_asset', '_assets', '_art', '_illustration'))
+                visit(val, owner, refs or resource and not key.startswith('source_'))
             return
         if isinstance(item, (list, tuple)):
-            for val in item: visit(val, owner)
+            for val in item: visit(val, owner, refs)
             return
         if not isinstance(item, str): return
-        if '<' in item and '>' in item: Attributes(owner).feed(item)
-        if item.lstrip().startswith(('{', '[')):
-            try: parsed = json.loads(H.unescape(item))
-            except json.JSONDecodeError: pass
-            else: visit(parsed, owner); return
-        text = H.unescape(item).replace('\\/', '/').replace('\\"', '"')
-        candidates = [text, *re.findall(r'''(?=["']([^"'<>]+)["'])''', text),
-                      *re.findall(r'''[^\s"'<>()[\]{},;=]+''', text)]
-        for candidate in candidates:
-            candidate = candidate.strip()
-            if candidate.startswith('proto:'):
-                candidate = str(Path(repo / 'src/typeset' if root else PROTO, 'assets', candidate[6:] + ('' if candidate.endswith('.png') else '.png')))
-            if candidate.startswith(('http:', 'https:', 'data:', '//')): continue
-            ref = candidate.split('?', 1)[0].split('#', 1)[0]
-            ref = file_url_to_path(ref) if ref.startswith('file:///') else urllib.parse.unquote(ref)
-            if any(char in ref for char in '\n\r<>"{}'): continue
-            if Path(ref).suffix.lower() not in extensions: continue
-            ref = A.local_path(ref)
-            if root:
-                for old_root, new_root in ((Path(REPO).resolve(), repo), (Path(A.ASSET_ROOT).resolve(), assets)):
-                    if Path(ref).is_relative_to(old_root):
-                        ref = str(new_root / Path(ref).relative_to(old_root)); break
-            if ref.startswith('/assets/'): choices = [assets / ref[8:], public / ref.lstrip('/')]
-            elif ref.startswith('/'): choices = [public / ref.lstrip('/')]
-            else: choices = [owner / ref, repo / ref, assets / ref, public / ref]
-            path = next((p.resolve() for p in choices if p.is_file()), None)
-            if path is None or path in found or not any(path.is_relative_to(p) for p in (repo, assets, public)): continue
-            found.add(path)
-            if path.suffix.lower() in {'.css', '.js', '.mjs', '.json', '.svg'}:
-                raw = path.read_text('utf-8-sig')
-                visit(json.loads(raw) if path.suffix.lower() == '.json' else raw, path.parent)
+        if refs or item.startswith('file:///'): reference(item, owner)
+        if '<' in item and '>' in item: markup(item, owner)
+        for match in re.finditer(r'!\[[^\]]*\]\(([^)\s]+)\)', item): reference(match[1], owner)
     visit(value, Path(base or repo))
     return found
 
