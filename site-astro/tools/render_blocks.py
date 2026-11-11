@@ -36,6 +36,8 @@ from engine.layout import build_html, WIDTH  # noqa: E402
 from engine.parse import original_markdown  # noqa: E402
 from engine.registry import load as load_registry  # noqa: E402
 from render_cache import LEGACY_RENDERER_CODE_FP, PRE_CHECKPOINT_CODE_FP, legacy_renderer_compatible, markdown_render_sha, promote_legacy_cache  # noqa: E402
+from page_checks import issue, page_result, write_checks  # noqa: E402
+from layout_diff import write_layout_diff  # noqa: E402
 
 # 四个目录都可以用环境变量换到别处（例如按活动版本试排一份规则页、试排一个新页，不碰站点）：
 # BLOCK_MD_DIR、BLOCK_OUT_DIR、BLOCK_PUB_DIR、BLOCK_WORK_DIR（排版缓存；和站点同时跑时要分开，免得互相盖掉）
@@ -917,6 +919,11 @@ def bindings(name, first_screen):
 
 
 def run(names, workers=2):
+    requested = list(names)
+    checks = {n: page_result(n) for n in names}
+    def fail(n, error, screen=None):
+        checks[n]["passed"] = False
+        checks[n]["errors"].append(issue("render_failed", screen, str(error)))
     verify_render_lock()
     print("量屏环境：" + json.dumps(RENDER_LOCK, ensure_ascii=False), flush=True)
     workers = min(2, max(1, workers))
@@ -948,9 +955,10 @@ def run(names, workers=2):
         try:
             source_shas[n] = sha(os.path.join(MD_DIR, n + ".md"))
             fm, page, jobs = prepare_page(n, reg, css_files, libfp, legacy_libfp, prior_libfp)
-        except Exception as e:  # 一页出错不拦别的页，最后列出来
+            page_binds = bindings(n, page["screens"][0]["id"]) if page["screens"] else {}
+        except (Exception, SystemExit) as e:  # 一页出错不拦别的页，最后列出来
+            fail(n, e)
             failed.append(n); print(f"{n}：区块库排这一页出错 {repr(e)[:200]}", flush=True); continue
-        page_binds = bindings(n, page["screens"][0]["id"]) if page["screens"] else {}
         binds.update(page_binds)
         # 实际首屏动效绑定影响 art/artBox，必须跟着参与缓存键。
         for j in jobs:
@@ -973,19 +981,27 @@ def run(names, workers=2):
     todo = [j for j in all_jobs if j["key"] not in cache]
     print(f"区块排版：{len(all_jobs)} 份（{len(names)} 页），要重排 {len(todo)} 份，用时 {time.time() - t0:.1f} 秒准备")
     chunks = [todo[i::workers] for i in range(workers)] if todo else []
-    done = []
+    done, job_errors = [], {}
     if chunks:
         with cf.ProcessPoolExecutor(max_workers=len(chunks)) as ex:
-            for res in ex.map(hydrate, chunks, [binds] * len(chunks), [str(checkpoint_dir)] * len(chunks)):
-                done += res
+            futures = {ex.submit(hydrate, chunk, binds, str(checkpoint_dir)): chunk for chunk in chunks}
+            for future in cf.as_completed(futures):
+                try:
+                    done += future.result()
+                except Exception as e:
+                    job_errors.update({j["key"]: str(e) for j in futures[future]})
+                    print(f"量屏作业出错：{e}；受影响的页在缺块回执中列出", flush=True)
     for r in done:
         cache[r["key"]] = cache_payload(r)
+    recover_cache(cache, checkpoint_dir)
     write_cache(cache_p, cache)
     for checkpoint in checkpoint_dir.glob("*.json"):
         checkpoint.unlink()
     by_page = {}
     missing = [j for j in all_jobs if j["key"] not in cache]
     incomplete_pages = {j["page"] for j in missing}
+    for j in missing:
+        fail(j["page"], "排版缺块：" + j["o"] + "；" + job_errors.get(j["key"], "量屏未返回结果"), j["screen"])
     for j in all_jobs:
         if j["key"] in cache:
             by_page.setdefault(j["page"], []).append({**j, **cache[j["key"]]})
@@ -996,12 +1012,16 @@ def run(names, workers=2):
             if sha(os.path.join(MD_DIR, n + ".md")) != source_shas[n]:
                 raise ValueError("排版过程中内容文件已改变，需要按新内容重新排版")
             finish_page(n, fms[n], by_page.get(n, []), cssv)
-        except Exception as e:
+        except (Exception, SystemExit) as e:
+            fail(n, e)
             failed.append(n); print(f"{n}：收尾出错 {repr(e)[:200]}", flush=True)
     fix_dead_fragments([n for n in names if n not in failed])
     print(f"区块排版完成：{len(names) - len([f for f in failed if f in names])} 页，{time.time() - t0:.1f} 秒；出错 {len(failed)} 页 {failed}")
-    if failed or missing:
-        raise SystemExit("区块排版未完成：" + repr({"failed_pages": failed, "missing_jobs": [j["page"] + "/" + j["screen"] + "-" + j["o"] for j in missing]}))
+    report = write_checks(os.environ.get("BLOCK_PAGE_CHECKS") or Path(SITE, ".cache/render-page-checks.json"),
+                          "render", [checks[n] for n in requested])
+    write_layout_diff(os.environ.get("BLOCK_LAYOUT_BASELINE"), OUT_DIR, [n for n in names if n not in failed],
+                      os.environ.get("BLOCK_LAYOUT_RECEIPT") or Path(SITE, ".cache/layout-diff.json"))
+    return report
 
 
 # 页面外壳里固定有的锚点（页头“开头”、跳到正文、项目页的“复制 AI 续作说明”）
