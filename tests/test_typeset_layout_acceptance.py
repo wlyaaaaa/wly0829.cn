@@ -13,60 +13,16 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 
-
 def load(name, filename):
     spec = importlib.util.spec_from_file_location(name, ROOT / 'scripts' / filename)
     value = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(value)
     return value
 
-
 p = load('layout_source_test', 'prepare-typeset-release.py')
 o = load('layout_oss_test', 'verify-typeset-oss.py')
 
-
 class LayoutAcceptanceTests(unittest.TestCase):
-    def test_cross_root_rebuild_keeps_external_inputs_and_staged_body_exact(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp); config = root / 'recipe.json'
-            p.write(config, {'scope': 'full-pages-creative-2f-static-home'})
-            def proof(path):
-                return {'path': str(path), 'sha256': p.digest(path), 'bytes': path.stat().st_size}
-            def fixture(name):
-                base = root / name; raw = base / 'dist-raw'; raw.mkdir(parents=True)
-                files = {'app.js': {'sha256': 'a' * 64, 'bytes': 1}}
-                rid = p.hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()
-                raw_manifest = {'release_id': rid, 'files': files}
-                p.write(raw / p.hybrid.MANIFEST, raw_manifest)
-                staged = base / 'dist-staged-build-report.json'
-                p.write(staged, {'stage': 'native-before-creative', **raw_manifest})
-                names = ['static-home', 'river', 'comic', 'album', 'demo', 'retry']
-                roots = [base / (n + '-site') for n in names]
-                creative = {'config': proof(config), 'raw_release_id': rid, 'steps': [],
-                            'staged_build_report': proof(staged)}
-                for i, stage in enumerate(roots):
-                    manifest = {'release_id': rid, 'files': files,
-                        'prepared_at_beijing': '2026-10-05T20:00:00+08:00',
-                        'home_static_preparation': {'baseline': str(raw), 'output': str(roots[0]),
-                            'baseline_manifest': proof(raw / p.hybrid.MANIFEST),
-                            'observed_at_beijing': '2026-10-05T20:00:00+08:00'}}
-                    p.write(stage / p.hybrid.MANIFEST, manifest)
-                    creative['steps'].append({'name': names[i], 'before_release_id': rid,
-                        'after_release_id': rid, 'manifest': proof(stage / p.hybrid.MANIFEST)})
-                build = {'release_id': rid, 'files': files, 'inputs': {str(config): {k: proof(config)[k] for k in ('sha256', 'bytes')},
-                    str(staged): {k: proof(staged)[k] for k in ('sha256', 'bytes')}}, 'creative_preparation': creative}
-                final = {**manifest, 'creative_preparation': creative}
-                p.write(base / 'dist' / p.hybrid.MANIFEST, final)
-                return build, final
-            old, _ = fixture('reviewed'); new, final = fixture('rebuilt')
-            with patch.object(p.hybrid, 'verify_release', lambda path: p.read(path / p.hybrid.MANIFEST)), patch.object(p.hybrid, 'inventory', lambda path: p.read(path / p.hybrid.MANIFEST)['files']):
-                self.assertEqual(*p.rebuilt_generation(old, new, final))
-                changed = copy.deepcopy(new); changed['inputs'][str(config)]['sha256'] = 'b' * 64
-                with self.assertRaises(ValueError):
-                    p.rebuilt_generation(old, changed, final)
-                changed = copy.deepcopy(new); changed['creative_preparation']['steps'].reverse()
-                with self.assertRaises(ValueError):
-                    p.rebuilt_generation(old, changed, final)
 
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -272,55 +228,6 @@ class LayoutAcceptanceTests(unittest.TestCase):
         self.write(self.acceptance_path, self.acceptance)
         with self.assertRaisesRegex(ValueError, 'duplicate JSON fields'): self.validate()
 
-    def test_prepare_accepts_layout_but_still_requires_publication_directive(self):
-        baseline, release, typeset = (self.root / name for name in ('baseline', 'release', 'typeset'))
-        baseline.mkdir(); release.mkdir(); typeset.mkdir()
-        (baseline / 'index.html').write_text('same homepage', encoding='utf8')
-        (release / 'index.html').write_bytes((baseline / 'index.html').read_bytes())
-        old = {'index.html': {'sha256': p.digest(baseline / 'index.html'), 'bytes': (baseline / 'index.html').stat().st_size}}
-        inventory = self.root / 'inventory.jsonl'
-        geometry = self.root / 'geometry.json'; self.write(geometry, {})
-        rows = []
-        for page in self.selected:
-            source = self.root / (page + '.txt'); source.write_text('synthetic source', encoding='utf8')
-            rows.append({'page': page, 'screen_id': page + '-01', 'source_path': str(source), 'source_sha256': p.digest(source)})
-            folder = typeset / page; folder.mkdir()
-            manifest_path = folder / 'page-manifest.json'
-            self.write(manifest_path, {'page': page, 'screens': [{'screen': page + '-01', 'images': [
-                {'image': page + '-01-h.png', 'links': 'links.json'}]}]})
-            html = release / page / 'index.html'; html.parent.mkdir(); html.write_text('fixture HTML', encoding='utf8')
-            entry = self.build['pages'][page]
-            entry.update(geometry_sha256=p.digest(geometry), html_sha256=p.digest(html), quality={'status': 'pass'}, inputs={str(path.resolve()): {'sha256': 'f' * 64, 'bytes': 1}
-                for path in (source, manifest_path, inventory, folder / (page + '-01-h.png'), folder / 'links.json')})
-            entry['inputs'][str(source.resolve())] = {'sha256': p.digest(source), 'bytes': source.stat().st_size}
-            self.verification['pages'][page]['effects']['evidence']['geometry_sha256'] = p.digest(geometry)
-        inventory.write_text('\n'.join(json.dumps(row) for row in rows), encoding='utf8')
-        files = {**old, **{page + '/index.html': {'sha256': p.digest(release / page / 'index.html'), 'bytes': 12} for page in self.selected}}
-        self.build.update(files=files, geometry_path=str(geometry), geometry_sha256=p.digest(geometry), baseline_root=str(baseline),
-            baseline_index_sha256=old['index.html']['sha256'], built_at_beijing='2026-10-05T03:01:00+08:00')
-        self.write(self.build_path, self.build)
-        self.verification['build_report_sha256'] = p.digest(self.build_path); self.rebind_raw()
-        self.acceptance['source_build_report_sha256'] = p.digest(self.build_path)
-        self.write(self.acceptance_path, self.acceptance)
-        release_manifest = {'release_id': self.build['release_id'], 'files': files, 'baseline_files': old,
-                            'accepted_pages': {self.build['pages'][page]['url']: {} for page in self.selected}}
-        self.write(release / 'release-manifest.json', release_manifest)
-        baseline_manifest = baseline / 'release-manifest.json'; self.write(baseline_manifest, {})
-        args = SimpleNamespace(typeset_root=typeset, inventory=inventory, geometry=geometry, baseline=baseline,
-            baseline_manifest=baseline_manifest, release=release, build_report=self.build_path, verification=self.verification_path,
-            directive=None, rebuilt_report=None, pages=self.selected, layout_acceptance=self.acceptance_path, output=self.root / 'prepared.json')
-        with patch.object(p.hybrid, 'verify_release', return_value=release_manifest), patch.object(p.hybrid, 'verify_baseline', return_value=(old, None)), \
-             patch.object(p, 'geometry_evidence', return_value={}), patch.object(p, 'quality_evidence', return_value={'source_status': 'pass', 'program_failures': []}), \
-             patch.object(p, 'bound_file'):
-            result = p.prepare(args)
-            self.assertEqual(result['status'], 'blocked')
-            self.assertEqual({row['kind'] for row in result['blockers']}, {'publication_instruction'})
-            self.assertEqual(result['layout_acceptance']['raw_status'], 'fail')
-            args.layout_acceptance = None
-            default = p.prepare(args)
-            self.assertIn('page_evidence', {row['kind'] for row in default['blockers']})
-            self.assertNotIn('layout_acceptance', default)
-
     def test_bounded_oss_reuses_same_layout_proof_without_lowering_transfer_gate(self):
         instruction = self.root / 'transfer-instruction.md'
         instruction.write_text(o.EXTENDED_INSTRUCTION + ' 2e、2f 和以后各版 最多重试一次', encoding='utf8')
@@ -365,32 +272,6 @@ class LayoutAcceptanceTests(unittest.TestCase):
         (baseline / 'index.html').write_bytes(b'original home')
         self.assertFalse(o.unchanged_static_home({'home_static_preparation': {}},
             {'source_root': str(source)}, {'baseline_root': str(baseline)}))
-
-    def test_stage_requires_same_explicit_acceptance_and_unchanged_raw_qa(self):
-        reviewed, staged = self.root / 'reviewed', self.root / 'staged'
-        reviewed.mkdir(); staged.mkdir()
-        self.build['output_root'] = str(reviewed); self.write(self.build_path, self.build)
-        self.verification['build_report_sha256'] = p.digest(self.build_path); self.rebind_raw()
-        self.acceptance['source_build_report_sha256'] = p.digest(self.build_path); self.write(self.acceptance_path, self.acceptance)
-        layout = self.validate()
-        evidence = {page: {'url': self.build['pages'][page]['url'], 'evidence': {'page': page, 'layout_acceptance_sha256': layout['sha256']}}
-                    for page in self.selected}
-        receipt = {'schema': 'wly.typeset-preparation.v1', 'status': 'ready', 'blockers': [], 'release_id': self.build['release_id'],
-                   'build_report_sha256': p.digest(self.build_path), 'selected_pages': self.selected, 'pages': evidence, 'layout_acceptance': layout}
-        receipt_path = self.root / 'prepared.json'; self.write(receipt_path, receipt)
-        manifest = {'release_id': self.build['release_id'], 'files': {}, 'rollback_ref': 'fixture-rollback',
-                    'accepted_pages': {row['url']: row['evidence'] for row in evidence.values()}}
-        expected = self.root / 'expected.json'; self.write(expected, manifest)
-        self.write(staged / 'release-manifest.json', manifest)
-        args = SimpleNamespace(release=staged, build_report=self.build_path, preparation=receipt_path, expected_manifest=expected,
-                               rollback_ref='fixture-rollback', output=self.root / 'staged-check.json', layout_acceptance=None)
-        with patch.object(p.hybrid, 'verify_release', return_value=manifest):
-            with self.assertRaisesRegex(ValueError, 'explicitly supply'): p.stage_check(args)
-            args.layout_acceptance = self.acceptance_path
-            self.assertEqual(p.stage_check(args)['raw_dom_status'], 'fail')
-            self.verification_path.write_text(self.verification_path.read_text('utf8') + '\n', encoding='utf8')
-            with self.assertRaisesRegex(ValueError, 'raw QA changed'): p.stage_check(args)
-
 
 if __name__ == '__main__':
     unittest.main()

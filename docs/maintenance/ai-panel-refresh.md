@@ -1,6 +1,6 @@
 # AI 刷新计划适配合同
 
-网站更新的唯一主流程是 [按需更新操作清单](../ondemand-update.md)。范围确认、事实重取、内容判断、独立复核、构建、预览、发布和公网回读均按该清单执行；本文只规定现有 `refresh:ai` 只读计划与 v2 结果校验包怎样接入，不再维护另一套刷新或发布步骤。
+网站更新的唯一主流程是 [网站怎么更新](../update.md)。范围、取数、核写、试建、看屏、发布和公网回读均按该页执行；本文只规定现有 `refresh:ai` 只读计划与 v2 结果校验包怎样接入，不再维护另一套刷新或发布步骤。
 
 ## 只读计划入口
 
@@ -10,7 +10,7 @@ npm run refresh:ai -- --project cacb --manual-owner-request
 npm run refresh:ai -- --all
 ```
 
-`prepare-ai-panel-refresh.mjs` 读取 `config/panel-projects.json` 和当前作者输入，返回 `wly.ai-panel-refresh-plan.v2`。它不运行采集器、不判断内容是否重要、不改正文、不创建网站任务。本人要求更新网站后，主持可将这个计划作为按需流程的来源、范围和指纹附件；来源项目、规则或 Skill 变化本身不能启动刷新，只在原任务汇报可能过时之处。
+`prepare-ai-panel-refresh.mjs` 读取 `config/panel-projects.json` 和当前作者输入，返回 `wly.ai-panel-refresh-plan.v2`。它不运行采集器、不判断内容是否重要、不改正文、不创建网站任务。本人要求更新网站后，主持可将这个计划作为按需流程的来源、范围和指纹附件；来源项目、规则或 Skill 变化本身不能启动刷新，只在来源项目的提交说明里留一行“变化：……”。
 
 - `--project` 只选择一个启用项目，`--all` 按 Registry 的固定名次选择全部启用项目，两者互斥。
 - `manual_owner_only` 项目必须已有本人的明确更新请求，才能附 `--manual-owner-request`。没有该标记时计划返回 `manual_owner_request_required`，不能据此取证或改动其内容；带标记不会自行创造本人授权。

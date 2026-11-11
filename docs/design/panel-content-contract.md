@@ -36,9 +36,7 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   the same number of modules.
 - A registry entry defaults to `real_dashboard`: publish dense, current facts,
   architecture, failures and evidence. Only a project explicitly designated by
-  the owner as `curated_packaging` may use packaging copy or exclusions. A
-  curated project may also be `manual_owner_only`: only an explicit owner request
-  can refresh it; source, rule and Skill events never create a website task.
+  the owner as `curated_packaging` may use packaging copy or exclusions.
 - The owner selected the website itself as “个人网站（总看板）” on 2026-10-07.
   It owns the single personal dashboard and appears as a normal project card.
 - The site's overall identity stays platform-neutral: no one assistant product,
@@ -72,27 +70,6 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   go deeper. Only after the reader can form a real working picture should the
   page lead with architecture, commands, schemas, hashes and implementation
   evidence; adding more words never substitutes for removing mystery copy.
-- Plain-language acceptance is semantic, not lexical. Natural first-person
-  requests, dialogue, metaphors, colloquial wording and moderate exaggeration
-  are welcome when they make the product easier to understand. A fixed opening
-  phrase, global forbidden-word list, tone score or regex coverage percentage
-  never proves quality. Vivid wording must not change a fact, evidence level,
-  operating boundary or current status, or turn an unverified outcome into a
-  guarantee.
-- A wording-only editorial pass uses the latest accepted default branch as its
-  semantic baseline and preserves every capability, fact, state, boundary,
-  evidence level and Unknown. It does not require a source-independent
-  completeness rebuild. If the wording adds, removes, weakens or reinterprets
-  product meaning, only that affected scope becomes a source-backed content
-  refresh. Copy from an older worktree is a proposal: port useful wording onto
-  the current publication Owner result, never merge, cherry-pick or copy it in
-  a way that overwrites later Owner work.
-- Plain-language review covers every visible interaction surface, including
-  project kickers, System requests, Rule and Skill examples, `plainExample`,
-  module `example` and `usageExamples`. A reader-layer example normally leads
-  with one request a person might actually make and the result they would see;
-  commands, fixtures, internal states and proof details stay in the technical
-  layer unless that exact request genuinely needs them.
 - When a project reads, collects or accepts information, its reader layer must
   name the actual devices, services, applications or files and explain the
   concrete data categories it uses, what happens to them and what the owner
@@ -136,12 +113,6 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   its actual public-safe name and role in the reader layer after the purpose;
   keep complete IDs, parameters, versions and evidence in the technical layer.
   "Do not lead with a stack" is not permission to hide the available choices.
-- Project, module, example, search excerpt and evolution must tell the same
-  current story. Review the whole owning explanation when a capability changes;
-  changing one result field while leaving the request or earlier stage wrong
-  is incomplete. Evolution groups needs and resulting capabilities, not commits.
-  Keep current implementation, accepted future design and unavailable evidence
-  visibly distinct. Do not activate a pending business design from the website.
 - Reader boundaries are short, project-authored statements of the most important
   decision-changing gap. The complete dated snapshot remains in the reference
   layer; never delete useful evidence merely to shorten the opening. Optional
@@ -152,16 +123,6 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   product's identity. A first-time reader must understand the value and use
   without reading the reference layer.
 
-- **Stranger 30-second gate:** a reader with no knowledge of this machine,
-  .agents, PCConfig, Git, model routing or the author's private history must
-  be able to answer, from the default visible layer, what this page is for,
-  what they can ask it to do, what the system will do, what result they get,
-  when the system stops or asks the owner, and what is still unavailable.
-  Passing tests, complete fields or technically correct terminology do not
-  satisfy this gate. If the answer requires understanding Owner, Provider,
-  schema, runtime, ruleset, SHA or logical ids, the reader layer has failed.
-  Professional detail must remain available; move it into an explicit
-  technical/evidence layer instead of deleting it.
 - Rules follow the same reader/technical split as projects. The default Rules
   experience starts from ordinary situations and shows a plain conclusion,
   trigger, system behavior, owner action, real example and non-behavior.
@@ -198,13 +159,6 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   recruiter readability are not valid reasons to remove these facts.
 - Public visibility is never a reason to suppress a non-secret fact that would
   change the owner's understanding of the current project.
-- The first project viewport stays product-first and discloses a short project
-  status, the most important snapshot boundary and its observation time in
-  plain language. Exact model stacks, recovery/runtime versions, repository and
-  worktree facts, commits and test matrices remain complete in `技术`; they
-  must not displace the product's purpose and use from `产品用法`. A boundary may
-  name one decision-changing gap, but it must distinguish what the project can
-  do from what this webpage did not re-verify.
 - If a reviewed L3+ value must be withheld, or a reusable secret is present,
   omit only that payload/value while keeping the public-safe identity, state,
   boundary and effect on current decisions. Unknown stays explicit Unknown.
@@ -232,17 +186,6 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   “related to Git / AI / files” but cannot explain what useful task it performs.
   Field completeness, a glossary, translated labels, tests and correct terms do
   not make that page understandable by themselves.
-- A page is also still a riddle when current Owner evidence can safely answer a
-  basic scale or state question but the page hides behind “not read in this
-  refresh”, “private source” or a generic boundary. Real-dashboard pages must
-  directly expose decision-changing public-safe aggregates, current counts,
-  component/path identities, usable results, known coverage and named gaps.
-  Omitting raw private payload does not authorize omitting its harmless count or
-  product state. Personal-media must state separate current photo, video and
-  audio counts, then split audio by its real canonical roles instead of calling
-  every audio file a recording; personal-materials must state current source, material,
-  relation and searchable-text counts when the bounded read-only status path is
-  available.
 - Personal-materials and personal-media canonical roots are trusted owner
   surfaces. When the owner deletes an exact original in the file manager and
   that locator no longer exists under an available registered root, the product
@@ -251,9 +194,7 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   backup task maintains the current catalog, seed, bound relations/text,
   G mirrors, phone-package and cloud-candidate derivatives. No separate
   deletion/protection/recovery framework is required. A whole source root
-  being unavailable is still only unavailable. Public copy may claim this only
-  after source tests pass; until then it is a named source blocker, never a
-  silent restore or a completed capability.
+  being unavailable is still only unavailable.
 - Explain an unfamiliar technical term when its meaning is needed to understand
   the action or result, preferably in the sentence itself; `English（中文含义）`
   is useful only when that short explanation actually helps. Familiar formats,
@@ -270,56 +211,9 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
 - Preserve the professional reference content after the reader layer. Do not
   delete boundaries, failure behavior, implementation detail or verification
   evidence merely to make the opening easier to read.
-- AI content must make an independent product judgment from current Owner
-  evidence. Do not copy a README section by section, paraphrase one source as
-  if that were analysis, or repeat fashionable conclusions without explaining
-  the project's own trade-offs, evidence, failure modes and decision impact.
-- A new project, full refresh or completeness audit must start with a
-  `source_independent_coverage` pass. Reconstruct the source project's
-  long-lived product axes from its own current rules, human entrypoints,
-  product contracts, registries, recovery documents and code entrypoints
-  before reading the website's module list, search aliases or existing
-  coverage claims. Registry impact paths help locate evidence; they cannot
-  prove that every important subsystem was observed.
-- Compare that source inventory with the page in two separate layers. Every
-  selected long-lived axis needs both a product explanation (purpose, people or
-  devices, ordinary scenario, result and deliberate trade-off) and a technical
-  reference (identity, components, data flow, entrypoints, state/failure,
-  recovery, current evidence and named unknowns). A timeline mention, source
-  path, test count, glossary term or isolated technical paragraph proves
-  neither layer.
-- For every long-lived mechanism selected from source, the owning product
-  reader layer must let a first-time reader answer five practical questions in
-  plain language: which accident it prevents; when it activates; what actually
-  happens; what happens on conflict or unavailability; and which result,
-  evidence or recovery point is returned. Naming the mechanism only in a
-  system diagram, glossary, rule field or technical module is still a content
-  omission.
-- `product_capability_completeness_gate`: omitting a current, source-backed,
-  public-safe, long-lived product capability that could change how the owner
-  uses or judges the project is a P0 content defect. Missing either its product
-  explanation or its technical reference blocks that project's content PASS
-  and blocks publication of the incomplete snapshot. UI quality, route
-  existence, search results, schema fields, build success and prior page-only
-  audits cannot downgrade or offset this defect.
-- Decide module boundaries only after the source-to-page difference is known.
-  Add a module when the source proves an independent long-lived capability
+- Add a module when the source proves an independent long-lived capability
   with its own users/devices, lifecycle or recovery boundary; otherwise repair
-  the owning module in place. Module count remains project-specific. A fresh
-  reviewer must be able to name important source subsystems that are absent
-  from the page; auditing only the page's existing fields is circular and
-  cannot produce a content PASS.
-- Project evolution is a milestone timeline, not a commit log. Group related
-  changes into one important product stage that explains the resulting change
-  in capability, boundary or user experience. A stage may use one date or a
-  date range. Small fixes, tests, refactors, copy changes and individual commits
-  never create evolution entries; AI refreshes merge, rewrite or remove old
-  stages before considering a new one.
-- Grouping evolution stages must preserve important product transitions and
-  their dated evidence. Keep commit/version references with each product stage,
-  including multiple references when several stages merge; the stage may expose
-  these as optional evidence. Do not create a second evolution chapter in the
-  technical layer. A title needs readable space, never a narrow commit column.
+  the owning module in place. Module count remains project-specific.
 - Do not impose word targets or maximum lengths on reference pages. Content is
   complete only when the owner can reconstruct the subject without another
   conversation or private memory.
@@ -345,14 +239,8 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   Direct routes must expose complete content before enhancement; clicks must
   not show a spinner, skeleton or blank state. Likely transitions must issue
   non-blocking prefetch hints before interaction, but native navigation never
-  waits for a hint to finish. Verify both first load and transitions on the
-  public site, and never meet a size budget by deleting
+  waits for a hint to finish. Never meet a size budget by deleting
   required professional content or moving narratives back into shared JS.
-- Registered byte budgets are anti-bloat review thresholds, not permanent
-  content ceilings. If current facts and professional detail cannot fit without
-  semantic loss, first audit real duplication, dependencies and public
-  wall-clock behavior, then record and apply only the smallest justified budget
-  increase. Never enlarge a budget merely to hide an avoidable regression.
 - Use official brand marks from a maintained icon library for external social
   links. Do not approximate brand logos with generic UI icons.
 - A project whose Registry visibility is PUBLIC exposes one explicit GitHub
@@ -374,7 +262,7 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
 
 ### 日常维护取舍
 
-本网站日常取舍先保证好用、按需更新速度和页面效果，再考虑节省费用；不因省费用把日常维护转交本人。新增付费仍须在已有授权范围内。
+不因省费用把日常维护转交本人。新增付费仍须在已有授权范围内。
 
 ### 退役内容的去处
 
@@ -390,10 +278,24 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
 
 ## Public-content gate
 
+讲钩子时，从基座 `docs/operations/context-hooks.md` 核两边的实现；已实现、已启用、确有触发记录分开讲，相同的讲一次，不同的点名。
+
+### 个人财务页的内容与更新边界
+
+个人财务页只讲账单收取、对账、消费与还款的区分、月度报数这些做法；金额、余额、商家和账单一律不公开。本人点名该页时才更新。
+
+### 手机采集App页的公开内容
+
+手机采集 App 页只讲收什么、怎样交电脑、怎样保活以及出错怎样处理；不发布定位点、使用记录或装机清单内容。
+
+命中后，由当时做这件事的 AI 看这句话自己判断留、改还是删；通常要改，换个说法把功能和事实讲清楚；删只用在这句话本来就不该公开或对读者没用时，不能一有问题就删，也不为了避开某个词把功能从页面上删掉。确属误伤时，才以 `file`、`word`、`text`（原句）和 `reason` 登记精确单句例外，不放宽整个词，每处判断列进本轮报告。
+
+Protected-action judgment qualifications remain governed separately by the
+active protection contract; ordinary website editing does not acquire them.
+
 - Never track credential values: passwords, private keys, access tokens,
   recovery secrets, authentication codes or equivalent reusable secret
-  material. Detecting one must fail the public build instead of merely hiding
-  it in the interface.
+  material.
 - Do not remove technical paths, identifiers, hashes, generation facts,
   implementation details, failure evidence or operating limitations merely
   because the repository is public. This panel is allowed to be technically
@@ -487,16 +389,11 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   the fixed value order. Historical Gemini/Astra construction assignments do
   not constrain current work. Choose authors, implementation and independent
   review through active economy routing and actual ownership; an authorized
-  whole-site repair may cover its affected projects together. Combine the
-  results for final local verification. Publication follows the owner's current
-  release authorization and the final verification gates. Do not create
+  whole-site repair may cover its affected projects together. Do not create
   placeholder cards or re-vote the backlog after each delivery; change the fixed order only when the owner
   explicitly corrects it or material project truth makes the value judgment
   wrong.
-- vault-tool is the existing local file-encryption and recovery product. It
-  receives one
-  source-first complete product and technical snapshot, necessary source
-  repair, independent content audit, PUBLIC release and read-back. Explain
+- vault-tool is the existing local file-encryption and recovery product. Explain
   selected files and directories, archive creation versus merge, local viewing
   and extraction, password/keyfile and format choices, maintenance and recovery,
   dual-password containers, image carriers, AI metadata and local UI boundaries,
@@ -508,10 +405,7 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   metadata inspection, actual cryptographic round trips, GUI interaction and
   remote recovery are separate evidence layers. No placeholder card or advance
   route is allowed for a later item.
-- video-scaffold is the existing staged local video-production scaffold. It
-  receives one
-  source-first complete product and technical snapshot, necessary source
-  repair, independent content audit, PUBLIC release and read-back. Explain a
+- video-scaffold is the existing staged local video-production scaffold. Explain a
   clean project bootstrap, Fish Audio narration and its external text boundary,
   Fish-native word timing or ChineseASR alignment of confirmed text, reviewed
   SVG fragments and real asset URIs,
@@ -525,10 +419,7 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   current finished video.
 - AI CLI Profile Manager is the existing Windows 11 PowerShell
   product for launching and operating native Codex CLI, Claude Code, Qwen Code,
-  OpenCode and the current Rust Open Interpreter through explicit Profiles. It
-  receives one source-first
-  complete product and technical snapshot, necessary source repair, independent
-  content audit, PUBLIC release and read-back. Explain Profile creation and
+  OpenCode and the current Rust Open Interpreter through explicit Profiles. Explain Profile creation and
   selection, `start` / `native` / `eject`, exact Provider and no-fallback
   identities, DPAPI and target-process-only secret injection, Doctor versus
   text/tool/Agent Live evidence, recoverable Codex machine runs, permission and
@@ -541,9 +432,7 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   paid Live calls, a second run ledger, a daemon, database, dynamic website
   runtime or unrelated planned-project placeholder routes merely to build the page.
 - OpenClawGateway is the existing public-safe Windows operations layer for an
-  OpenClaw message gateway. It receives one source-first complete product and
-  technical snapshot, necessary source repair, independent content audit,
-  PUBLIC release and read-back. Explain Telegram and Feishu ingress separately
+  OpenClaw message gateway. Explain Telegram and Feishu ingress separately
   from real message E2E; official Gateway lifecycle, loopback health, heartbeat
   and Windows task history; catalog-backed local versus remote model and cost
   posture; manual controlled updates across stable, extended-stable, beta and
@@ -561,9 +450,7 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   update/restart the runtime, activate a restore, create another gateway,
   install a plugin or prebuild another planned project merely for the page.
 - sunshine-remote-streaming is the existing PRIVATE Windows operations layer
-  for Sunshine and Moonlight remote streaming. It receives one source-first complete
-  product and technical snapshot, necessary source repair, independent content
-  audit, PUBLIC release and read-back. Explain physical-primary capture with a
+  for Sunshine and Moonlight remote streaming. Explain physical-primary capture with a
   uniquely verified MTT1337 VDD fallback; window-placement recovery; independent
   VDD resolution, refresh, scaling and HDR controls; disabled automatic display
   topology changes; GPU-instability fail-closed behavior; transport-layer
@@ -587,9 +474,7 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   one no-quota selected-media entry with separate photo/video roots, current
   counts and E/G read-back. A canonical original deleted by the owner in the
   trusted file manager is authoritative retirement, not an accidental-loss or
-  restore request: publish catalog/seed/G/phone-package/cloud-candidate
-  convergence only after the source implementation and tests prove it, and
-  otherwise show the source blocker explicitly. Its Overview also contains 10–20 owner-authorized,
+  restore request. Its Overview also contains 10–20 owner-authorized,
   aesthetically selected real photos with lightweight thumbnails and clearly
   sharper, size-optimized display images loaded only when selected. The owner
   requested this web delivery on 2026-09-08; preserve framing, orientation and
@@ -598,9 +483,7 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   their source is private. The completed document-materials project directly
   explains entry bypass, current matter and original inputs, same-source
   DOCX/PDF, page/color/grayscale verification, signature and ready versioning,
-  reality-state separation, sign-back and copy-and-verify recovery. These requirements do not authorize
-  building a later project before its turn; finish and report each selected
-  project first.
+  reality-state separation, sign-back and copy-and-verify recovery.
 - “Skills” means the owner's personal usable capability catalog, not a catalog
   owned by one assistant product. It may include both personally maintained
   Skills and high-value externally supplied Skills that are genuinely available
@@ -615,12 +498,7 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   the subject, its current state, technical design, operating flow, boundaries,
   failures and verification without another conversation.
 - Every enabled Registry project may enter routes and navigation only within
-  its own content, evidence and public-safety boundary. Source, install,
-  runtime and evidence gaps remain visible; local integration must not upgrade
-  them to production PASS. Publication follows only after current project facts
-  are refreshed, verified and read back from Pages.
-- UI completion, route existence and concise summaries do not satisfy the MVP
-  content gate.
+  its own content, evidence and public-safety boundary.
 - Before changing public project selection or copy, read
   `docs/design/private-content-rules.md` when that local-only file exists. It
   may add stricter exclusions and must never be staged.

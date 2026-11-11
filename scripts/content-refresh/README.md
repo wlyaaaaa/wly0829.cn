@@ -207,4 +207,4 @@ python -B -X utf8 scripts/content-refresh/refresh.py --output <目录> --total-s
 ```
 
 使用账本的写入恢复和完整性由源项目核实；停写时，对依赖当前持续写入的页登记 source_broken 并保留旧日期，不能凭一次读到计数就宣称全链恢复。
-日常 90 分钟路径、20 分钟事实调查上限、单项 3 分钟 Unknown 与完整演练门见 [按需更新操作清单](../../docs/ondemand-update.md)。
+更新规矩见 [网站怎么更新](../../docs/update.md)。

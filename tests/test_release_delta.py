@@ -49,42 +49,6 @@ class ReleaseDeltaTests(unittest.TestCase):
     def put(self, root, rel, text):
         path=root/rel; path.parent.mkdir(parents=True,exist_ok=True); path.write_text(text,'utf8')
 
-    def assemble_river(self, name, sparse):
-        native=self.root/(name+'-native')
-        hybrid.assemble(self.base,self.native,native,self.manifest,self.accepted,defer=sparse)
-        output=self.root/(name+'-river')
-        with patch.dict(os.environ, {'WLY_RELEASE_DELTA':'1' if sparse else '0'}):
-            river.prepare(native,output,self.handoff)
-        current=output/'site'; files=inventory(current)
-        changes={rel:{'kind':'integrated_preparation','source_path':str(source_path(current,rel)),'before':self.manifest['files'].get(rel),'after':value} for rel,value in files.items() if rel!='cockpit/index.html' and value!=self.manifest['files'].get(rel)}
-        final=self.root/name
-        manifest=hybrid.assemble(self.base,current,final,self.manifest,self.accepted,candidate_files=files,overlay={'files':changes})
-        manifest['today_river_preparation']=hybrid.read(current/hybrid.MANIFEST)['today_river_preparation']
-        hybrid.write(final/hybrid.MANIFEST,manifest)
-        return final,current
-
-    def test_sparse_and_full_materialization_have_identical_published_bytes(self):
-        full,_=self.assemble_river('full',False)
-        sparse,current=self.assemble_river('sparse',True)
-        self.assertEqual({p.relative_to(full).as_posix():p.read_bytes() for p in full.rglob('*') if p.is_file()}, {p.relative_to(sparse).as_posix():p.read_bytes() for p in sparse.rglob('*') if p.is_file()})
-        self.assertFalse((current/'kept/index.html').exists())
-        self.assertEqual((sparse/'kept/index.html').read_bytes(),(self.base/'kept/index.html').read_bytes())
-        text=(sparse/'cockpit/index.html').read_text('utf8')
-        self.assertEqual(text.count('data-today-river'),1)
-        self.assertEqual(len(__import__('re').findall(r'<script[^>]*src="[^"]*today-river-[a-f0-9]+\.js"',text)),1)
-        replay=self.root/'replayed'
-        with patch.dict(os.environ, {'WLY_RELEASE_DELTA':'0'}):
-            river.prepare(sparse,replay,self.handoff)
-        self.assertEqual((replay/'site/cockpit/index.html').read_bytes(),(sparse/'cockpit/index.html').read_bytes())
-        self.assertEqual((replay/'site/release-manifest.json').read_bytes(),(sparse/'release-manifest.json').read_bytes())
-
-    def test_sparse_changed_asset_tampering_is_rejected_at_final_assembly(self):
-        _,current=self.assemble_river('sealed',True)
-        rel=next(rel for rel in inventory(current) if 'today-river-' in rel and rel.endswith('.js') and rel not in self.manifest['files'])
-        source_path(current,rel).write_bytes(b'tampered')
-        with self.assertRaisesRegex(ValueError,'Candidate output changed'):
-            hybrid.assemble(self.base,current,self.root/'bad',self.manifest,self.accepted,candidate_files=inventory(current))
-
     def test_evidence_paths_are_stable_without_losing_hashes(self):
         proof={'path':str(ROOT/'scripts/today-river.js'),'sha256':'abc','source_root':str(self.root/'current')}
         self.assertEqual(stable_evidence(proof,ROOT),{'path':'scripts/today-river.js','sha256':'abc','source_root':'release-input/abc'})

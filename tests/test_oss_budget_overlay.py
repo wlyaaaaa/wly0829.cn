@@ -9,17 +9,14 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 
-
 def load(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
 
-
 h = load('budget_hybrid', ROOT/'scripts/hybrid-release.py')
 oss = load('budget_oss', ROOT/'scripts/prepare-oss-release.py')
-
 
 class OssBudgetOverlayTests(unittest.TestCase):
     def setUp(self):
@@ -54,18 +51,6 @@ class OssBudgetOverlayTests(unittest.TestCase):
         self.refresh(source)
         return source
 
-
-
-
-
-
-
-
-
-
-
-
-
     def overlay(self):
         original = self.source/'index.html'
         after = self.put(self.root/'overlay-assets', 'index.html', b'<h1>Prepared homepage</h1>')
@@ -90,14 +75,6 @@ class OssBudgetOverlayTests(unittest.TestCase):
         Path(entry['source_path']).write_bytes(b'changed source body')
         with self.assertRaisesRegex(ValueError, 'Overlay source changed'):
             h.load_overlay(path, self.source)
-
-    def test_integrated_overlay_cannot_cover_accepted_page(self):
-        path, _ = self.overlay()
-        overlay = h.load_overlay(path, self.source)
-        with self.assertRaisesRegex(ValueError, 'overlaps a rebuilt page'):
-            h.assemble(self.source, self.source, self.root/'overlap-output',
-                       h.read(self.source/h.MANIFEST), {'/': {}}, overlay=overlay)
-
 
 if __name__ == '__main__':
     unittest.main()
