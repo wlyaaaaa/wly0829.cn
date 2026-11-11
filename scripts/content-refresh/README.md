@@ -247,3 +247,20 @@ python -B -X utf8 scripts/content-refresh/refresh.py --output <目录> --total-s
 
 使用账本的写入恢复和完整性由源项目核实；停写时，对依赖当前持续写入的页登记 source_broken 并保留旧日期，不能凭一次读到计数就宣称全链恢复。
 更新规矩见 [网站怎么更新](../../docs/update.md)。
+
+## 本次改页的程序检查
+
+`checks.check_update(bundle)` 接受下列 JSON；命令见 [更新命令](../../docs/update.md#命令做出来的单各自补自己的几行)。
+
+```json
+{"changed_pages":["sample"],"pages":{"sample":{"page":"sample","screens":[],"html":"<main>试建成品文字</main>"}},"blocks":{"sample":{"schema":"wly.content-blocks.v1","page":"sample","blocks":[]}},"published_blocks":{"sample":{"schema":"wly.content-blocks.v1","page":"sample","blocks":[]}},"number_relations":[]}
+```
+
+`pages` 为本轮试建页面对象，每页加 `html` 字段，放该页实际试建 HTML 的完整文本；不能传仍含合法绑定的作者原文充当 HTML。
+模板只扫描 HTML 文字及图片替代文字、提示文字，按 `data-screen` 定位（页头等无所属屏时为空）；脚本、样式、template 与显式 hidden 内容不扫，因此也覆盖首屏静态状态条，合法作者绑定不误报。
+`blocks` 和 `published_blocks` 分别为 C1 `block_tool.export_page` 的本轮、上次发布导出，按页名映射；后者随成功发布保留，不拿当前作者源充数。
+字数按顶层原文块的 `chars` 逐屏求和，横竖摆法不重复计；严格超过30%才提醒，新屏另记缺少旧屏基线。
+`number_relations` 原样传 C2 `inventory.build_inventory(...)["number_relations"]` 或 `inventory.number_relations(records, bindings)`，只采用实际页面绑定；不同口径、截至不能自行配成关系。
+只输出 `changed_pages`，跨页关系只记本次改动的成员页与屏。模板残留、同值/加总冲突、无效关系与本页输入错误进入 `errors`；取不到的关系与字数增长进入 `warnings`。
+回执 `schema=wly.page-checks.v1`，`pages` 每项含 `page/passed/errors/warnings`；每条含 `code/screen/message`，数字项另带 `record_id/values`，增长项带 `previous_chars/current_chars`。
+`passed` 只由错误决定；命令写完全部页后，有错误退出1，全通过退出0；整体输入不可读或缺少必需顶层字段退出2。此接口供试建步骤调用，不修改作者源或发布。
