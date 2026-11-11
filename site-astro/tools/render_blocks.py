@@ -36,6 +36,8 @@ from engine.layout import build_html, WIDTH  # noqa: E402
 from engine.parse import original_markdown  # noqa: E402
 from engine.registry import load as load_registry  # noqa: E402
 from render_cache import LEGACY_RENDERER_CODE_FP, PRE_CHECKPOINT_CODE_FP, legacy_renderer_compatible, markdown_render_sha, promote_legacy_cache  # noqa: E402
+from page_checks import issue, page_result, write_checks  # noqa: E402
+from layout_diff import write_layout_diff  # noqa: E402
 
 # 四个目录都可以用环境变量换到别处（例如按活动版本试排一份规则页、试排一个新页，不碰站点）：
 # BLOCK_MD_DIR、BLOCK_OUT_DIR、BLOCK_PUB_DIR、BLOCK_WORK_DIR（排版缓存；和站点同时跑时要分开，免得互相盖掉）
@@ -43,8 +45,9 @@ MD_DIR = os.environ.get("BLOCK_MD_DIR") or os.path.join(SITE, "src", "content", 
 OUT_DIR = os.environ.get("BLOCK_OUT_DIR") or os.path.join(SITE, "src", "content", "rendered")
 PUB = os.environ.get("BLOCK_PUB_DIR") or os.path.join(SITE, "public")
 WORK = os.environ.get("BLOCK_WORK_DIR") or os.path.join(SITE, ".cache", "blocks")
-CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-SANS_FONT = "C:/Windows/Fonts/NotoSansSC-VF.ttf"
+RENDER_LOCK = json.loads(Path(REPO, "config/render.lock.json").read_text("utf-8"))
+CHROME = RENDER_LOCK["chrome"]["path"]
+SANS_FONT = RENDER_LOCK["fonts"][0]["path"]
 CSS_OUT = os.path.join(PUB, "assets", "_typeset", "typeset.css")
 RENDER_VERSION = "r4-11"  # 同版原文、原图尺寸与视口加载接线改变，旧结果全部重排
 
@@ -60,6 +63,21 @@ def sha(path):
         for b in iter(lambda: f.read(1 << 20), b""):
             h.update(b)
     return h.hexdigest()
+
+
+def locked_fonts(document):
+    """Override only measurement font sources; published CSS uses page subsets."""
+    css = Path(PROTO, "style/base.css").read_text("utf-8")
+    faces = "\n".join(re.findall(r"@font-face\s*\{[^}]*\}", css))
+    for font in RENDER_LOCK["fonts"]:
+        faces = faces.replace(Path(font["source_path"]).as_uri(), Path(font["path"]).as_uri())
+    return document.replace("</head>", "<style>" + faces + "</style></head>", 1)
+
+
+def verify_render_lock():
+    for item in [RENDER_LOCK["chrome"], *RENDER_LOCK["fonts"]]:
+        if sha(item["path"]) != item["sha256"]:
+            raise ValueError("固定排版环境文件不符：" + item["path"])
 
 
 # —— 素材发布：本地原文件逐字节复制到 public 下，返回网址 ——
@@ -323,7 +341,7 @@ def hydration_fingerprint():
     but need not discard already measured browser geometry.
     """
     source = HYDRATE_JS + ''.join(inspect.getsource(fn) for fn in
-        (hydrate, brush_titles, image_size_attrs)) + str(BRUSH_PAD)
+        (hydrate, brush_titles, image_size_attrs)) + str(BRUSH_PAD) + sha(Path(REPO, "config/render.lock.json"))
     return hashlib.sha256(source.encode('utf8')).hexdigest()[:16]
 
 
@@ -449,6 +467,7 @@ def prepare_page(name, reg, css_files, libfp, legacy_libfp=None, prior_libfp=Non
                 if s.get("shape") == "card" or any((x or {}).get("portrait_required") is False for x in lay.values()):
                     continue
             doc, info = checked_html(name, page, s, o, reg, css_files, sp)
+            doc = locked_fonts(doc)
             key = screen_cache_key(doc, o, libfp)
             legacy_key = None
             if legacy_libfp:
@@ -528,10 +547,9 @@ def hydrate(jobs, binds, checkpoint_dir=None):
     from playwright.sync_api import sync_playwright
     from engine.render import FIT_JS as fit
     js = HYDRATE_JS.replace("%FIT%", fit)
-    out = []
+    out = []; brush_measurements = 0
     with sync_playwright() as p:
-        b = p.chromium.launch(executable_path=CHROME if os.path.exists(CHROME) else None, headless=True,
-                              args=["--disable-gpu", "--disable-lcd-text"])
+        b = p.chromium.launch(executable_path=CHROME, headless=True, args=RENDER_LOCK["args"])
         for j in jobs:
             pg = b.new_page(viewport={"width": WIDTH[j["o"]], "height": 200}, device_scale_factor=1)
             try:
@@ -543,6 +561,7 @@ def hydrate(jobs, binds, checkpoint_dir=None):
             pg.close()
             if r and "brushfont" in r.get("html", ""):
                 try:
+                    brush_measurements += 1
                     r["html"] = brush_titles(b, j, js, binds, r["html"])
                 except Exception as e:
                     print(f"  {j['screen']}-{j['o']} 毛笔字标题转图出错：{repr(e)[:160]}", flush=True)
@@ -552,6 +571,7 @@ def hydrate(jobs, binds, checkpoint_dir=None):
                 if checkpoint_dir:
                     write_cache(Path(checkpoint_dir, j["key"] + ".json"), cache_payload(r))
         b.close()
+    print("量屏计数：" + json.dumps({"screens": len(jobs), "brush_titles": brush_measurements, "completed": len(out)}), flush=True)
     return out
 
 
@@ -899,6 +919,13 @@ def bindings(name, first_screen):
 
 
 def run(names, workers=2):
+    requested = list(names)
+    checks = {n: page_result(n) for n in names}
+    def fail(n, error, screen=None):
+        checks[n]["passed"] = False
+        checks[n]["errors"].append(issue("render_failed", screen, str(error)))
+    verify_render_lock()
+    print("量屏环境：" + json.dumps(RENDER_LOCK, ensure_ascii=False), flush=True)
     workers = min(2, max(1, workers))
     _published.clear(); _living_configs.clear()
     t0 = time.time()
@@ -928,9 +955,10 @@ def run(names, workers=2):
         try:
             source_shas[n] = sha(os.path.join(MD_DIR, n + ".md"))
             fm, page, jobs = prepare_page(n, reg, css_files, libfp, legacy_libfp, prior_libfp)
-        except Exception as e:  # 一页出错不拦别的页，最后列出来
+            page_binds = bindings(n, page["screens"][0]["id"]) if page["screens"] else {}
+        except (Exception, SystemExit) as e:  # 一页出错不拦别的页，最后列出来
+            fail(n, e)
             failed.append(n); print(f"{n}：区块库排这一页出错 {repr(e)[:200]}", flush=True); continue
-        page_binds = bindings(n, page["screens"][0]["id"]) if page["screens"] else {}
         binds.update(page_binds)
         # 实际首屏动效绑定影响 art/artBox，必须跟着参与缓存键。
         for j in jobs:
@@ -953,19 +981,27 @@ def run(names, workers=2):
     todo = [j for j in all_jobs if j["key"] not in cache]
     print(f"区块排版：{len(all_jobs)} 份（{len(names)} 页），要重排 {len(todo)} 份，用时 {time.time() - t0:.1f} 秒准备")
     chunks = [todo[i::workers] for i in range(workers)] if todo else []
-    done = []
+    done, job_errors = [], {}
     if chunks:
         with cf.ProcessPoolExecutor(max_workers=len(chunks)) as ex:
-            for res in ex.map(hydrate, chunks, [binds] * len(chunks), [str(checkpoint_dir)] * len(chunks)):
-                done += res
+            futures = {ex.submit(hydrate, chunk, binds, str(checkpoint_dir)): chunk for chunk in chunks}
+            for future in cf.as_completed(futures):
+                try:
+                    done += future.result()
+                except Exception as e:
+                    job_errors.update({j["key"]: str(e) for j in futures[future]})
+                    print(f"量屏作业出错：{e}；受影响的页在缺块回执中列出", flush=True)
     for r in done:
         cache[r["key"]] = cache_payload(r)
+    recover_cache(cache, checkpoint_dir)
     write_cache(cache_p, cache)
     for checkpoint in checkpoint_dir.glob("*.json"):
         checkpoint.unlink()
     by_page = {}
     missing = [j for j in all_jobs if j["key"] not in cache]
     incomplete_pages = {j["page"] for j in missing}
+    for j in missing:
+        fail(j["page"], "排版缺块：" + j["o"] + "；" + job_errors.get(j["key"], "量屏未返回结果"), j["screen"])
     for j in all_jobs:
         if j["key"] in cache:
             by_page.setdefault(j["page"], []).append({**j, **cache[j["key"]]})
@@ -976,12 +1012,16 @@ def run(names, workers=2):
             if sha(os.path.join(MD_DIR, n + ".md")) != source_shas[n]:
                 raise ValueError("排版过程中内容文件已改变，需要按新内容重新排版")
             finish_page(n, fms[n], by_page.get(n, []), cssv)
-        except Exception as e:
+        except (Exception, SystemExit) as e:
+            fail(n, e)
             failed.append(n); print(f"{n}：收尾出错 {repr(e)[:200]}", flush=True)
     fix_dead_fragments([n for n in names if n not in failed])
     print(f"区块排版完成：{len(names) - len([f for f in failed if f in names])} 页，{time.time() - t0:.1f} 秒；出错 {len(failed)} 页 {failed}")
-    if failed or missing:
-        raise SystemExit("区块排版未完成：" + repr({"failed_pages": failed, "missing_jobs": [j["page"] + "/" + j["screen"] + "-" + j["o"] for j in missing]}))
+    report = write_checks(os.environ.get("BLOCK_PAGE_CHECKS") or Path(SITE, ".cache/render-page-checks.json"),
+                          "render", [checks[n] for n in requested])
+    write_layout_diff(os.environ.get("BLOCK_LAYOUT_BASELINE"), OUT_DIR, [n for n in names if n not in failed],
+                      os.environ.get("BLOCK_LAYOUT_RECEIPT") or Path(SITE, ".cache/layout-diff.json"))
+    return report
 
 
 # 页面外壳里固定有的锚点（页头“开头”、跳到正文、项目页的“复制 AI 续作说明”）

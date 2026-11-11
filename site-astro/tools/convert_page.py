@@ -2,7 +2,7 @@
 
 用法：python tools/convert_page.py <页名> [<页名> ...]      （在 site-astro 目录下运行）
       python tools/convert_page.py --all                    （sources/pages 下全部有 page.json 的页）
-      python tools/convert_page.py --check-all              （只校验全部页，不写文件）
+      python tools/convert_page.py --check-all              （只校验全部页，不写内容文件）
 
 第四轮做法（照现在的页面逐段对齐）：
 - 现在网站每一屏的整屏图，就是共用区块库（src/typeset/components，HTML + CSS）在固定画布上排好再截的图。
@@ -20,6 +20,7 @@ from pathlib import Path
 import re
 import shutil
 import sys
+from page_checks import PageCheckError, issue, page_result, write_checks
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SITE = os.path.dirname(HERE)
@@ -928,7 +929,11 @@ def convert(page, check_only=False):
             meta["layout"], meta["images"] = redirect_layout(s, data["title"]), []
         if swap:  # 按活动版本重出时，构图里认首行标签的 text_ref 跟着换
             meta["layout"] = swap_text_ref(meta["layout"], *swap)
+        unmatched_start = len(UNMATCHED)
         heal_text_refs(s, meta)
+        if len(UNMATCHED) > unmatched_start:
+            raise PageCheckError([issue("text_ref_unmatched", s["id"], "认不出块：" + message)
+                                  for message in UNMATCHED[unmatched_start:]])
         did_status = False
         if first and data.get("kind") in STATUS_KINDS and not os.environ.get("CONVERT_NO_STATUS_FIRST"):  # 设这个变量只为出“改前”对照
             did_status = status_first(page, meta, s, data.get("status_line") or STATUS_DEMO.get(page))
@@ -997,6 +1002,20 @@ def all_pages():
     return sorted(d for d in os.listdir(root) if d not in RETAINED and os.path.exists(os.path.join(root, d, "page.json")))
 
 
+def convert_pages(names, check_only=False):
+    pages = []
+    for n in names:
+        try:
+            k = convert(n, check_only=check_only)
+        except (Exception, SystemExit) as e:
+            pages.append(page_result(n, e)); print(n, "校验失败" if check_only else "转换失败", str(e))
+            continue
+        pages.append(page_result(n))
+        print(n, "校验完成" if check_only else "转换完成", k, "屏")
+    return write_checks(os.environ.get("CONVERT_PAGE_CHECKS") or Path(SITE, ".cache/convert-page-checks.json"),
+                        "preflight" if check_only else "conversion", pages)
+
+
 if __name__ == "__main__":
     names = sys.argv[1:]
     if "--rules-release" in names:
@@ -1010,15 +1029,8 @@ if __name__ == "__main__":
             raise SystemExit("--check-all 只校验全部页，可搭配 --rules-release，不能搭配页名或 --all")
     if names in (["--all"], ["--check-all"]):
         names = all_pages()
-    failed = []
-    for n in names:
-        try:
-            k = convert(n, check_only=check_only)
-        except SystemExit:
-            raise
-        except Exception as e:  # 批量时一页失败不拦其它页，最后列出来
-            failed.append((n, str(e))); print(n, "校验失败" if check_only else "转换失败", str(e)); continue
-        print(n, "校验完成" if check_only else "转换完成", k, "屏")
+    report = convert_pages(names, check_only)
+    failed = [p["page"] for p in report["pages"] if not p["passed"]]
     for g in GATE_LOG:
         print("  规则同版公共绑定：", json.dumps(g, ensure_ascii=False))
     if STATUS_REPORT:
@@ -1044,5 +1056,3 @@ if __name__ == "__main__":
     for u in UNMATCHED:
         print("  构图 text_ref 在源里找不到：", u)
     print(f"共 {len(names)} 页，失败 {len(failed)} 页")
-    if failed:
-        raise SystemExit("内容转换未完成：" + repr(failed))
