@@ -9,6 +9,7 @@ from pathlib import Path
 import re
 import runpy
 import sys
+from editorial_ledger import stage_reviews
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src/typeset"))
 
@@ -382,11 +383,7 @@ def close_run(root, result, report=None, dist=None):
     semantic = {rid[9:]: dict(checked_at=r["checked_at"], run_id=run_id, evidence=r["evidence"])
                 for rid, r in resolutions.items() if rid.startswith("semantic:") and not selection.reason(rid[9:]) and rid[9:] in result.get("semantic_due", {}).get("pages", [])}
     if semantic:
-        path = root / "sources/refresh/semantic-reviews.json"
-        data = json.loads(path.read_text("utf-8-sig")) if path.exists() else dict(schema="content-refresh.semantic-reviews.v1", pages={})
-        data["pages"].update(semantic)
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+        stage_reviews(root, semantic)
     pending = [o for o in outcomes if o["status"] in {"pending", "manual_pending"}] + [t for t in tasks if t["status"] == "pending"]
     semantic_pages = [p for p in result.get("semantic_due", {}).get("pages", []) if not selection.reason(p)]
     return dict(schema="content-refresh.closure.v1", run_id=run_id, checked_at=now(),

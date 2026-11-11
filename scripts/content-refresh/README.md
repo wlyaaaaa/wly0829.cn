@@ -117,10 +117,13 @@ python -B -X utf8 scripts/content-refresh/refresh.py --close-run E:\Cache\conten
 到期的稳定讲解单列 `semantic_due` 数量及页名，写入 `opus-task.md`、`fact-tasks.md`
 和 `closure.json`，不并入事实闭环的人工 pending。语义复核周期仍为 28 天；没有真实复核时间
 的页为 `due_unknown`，点名页和来源变化影响的解释本轮核对。
-真实语义复核时间只从 `sources/refresh/semantic-reviews.json` 读取，不取 page.json 中的旧字段。
-文件格式为 `{"schema":"content-refresh.semantic-reviews.v1","pages":{}}`；
-闭环收到同一 `run_id`、带 `evidence` 的 `semantic:<页id>` 人工完成记录后，才写入该页
-`checked_at/run_id/evidence`，不预填日期。
+真实语义复核时间只从私有伴随库的编辑底稿读取，不取 page.json 中的旧字段。
+`editorial_ledger.py` 按本机登记定位私有项目目录；每项目、每技能一本，规则共用一本，本站一本。
+账记录能力去处及公开标记、演进分段、图片含义，另记来源仓库、逐页核对点和逐屏来源文件。
+闭环收到同轮有证据的 `semantic:<页id>` 完成记录，只暂存 `pending_review`；
+发布程序调用 `Ledger.advance_page()`，该页正式发布回读成功后才接受记录并推进各来源提交。
+旧讲解核对记录保留原时间、轮次和证据；`legacy_basis` 仅保留旧依据，不证明本轮重核或发布。
+隔离验收可用 `--companion` 或 `WLY_EDITORIAL_ROOT` 指向仓库外的样例目录；不将私账复制进公开仓库。
 
 重取器只支持固定的只读办法：Git 提交数；文件或行数（可限定 Git 跟踪文件、递归包含和排除模式；`nonempty` 排除空白行，`empty_only` 只排空字符串行、保留纯空白行，`newline_only` 复现 `wc -l`）；JSON 标量或数组长度；活动规则正式 Inspect 结果；正则出现次数；本仓库页面数、功能数、首页组成员数。每条自动来源写明 `measurement_scope` 和 `scope_status`，仅 `verified` 才执行、比较；缺失或 `pending` 标“口径待核”，不算变化。范围、单位、是否含测试或网页成片、约数不同都不能用 offset 凑。文本按 UTF-8 或明确 UTF-16/32 标记读取；未匹配代码文件报取不到。`scale`、`round_to`、`digits` 用于复现原单位和近似数。没有任意 shell 命令字段；实测使用现有 Python 3.14。
 

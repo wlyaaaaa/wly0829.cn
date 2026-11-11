@@ -15,12 +15,15 @@ from freshness import cadence, metadata, now, close_run, review_tasks, LIVE_METH
 from inventory import build_inventory, strict_findings
 from apply_edits import build_number_edits, apply_edits
 from test_content_refresh_edits import fake_converter, install_fake_converter
+from editorial_ledger import Ledger
 
 
 class FreshnessTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(); self.addCleanup(self.temp.cleanup)
-        self.root = Path(self.temp.name)
+        self.root = Path(self.temp.name) / "site"
+        private = patch.dict("os.environ", WLY_EDITORIAL_ROOT=str(Path(self.temp.name) / "private"))
+        private.start(); self.addCleanup(private.stop)
         self.path = self.root / "sources/pages/demo/page.json"; self.path.parent.mkdir(parents=True)
         self.page = dict(page="demo", kind="project", semantic_checked_at=now(), screens=[dict(id="top", text="调用 3 次；截至 2026-10-01")])
         self.write(self.path, self.page)
@@ -245,7 +248,10 @@ class FreshnessTests(unittest.TestCase):
         close_run(self.root, result, report)
         self.assertFalse(path.exists())
         report["manual_closures"][-1]["run_id"] = result["run_id"]; close_run(self.root, result, report)
-        self.assertEqual(json.loads(path.read_text("utf-8"))["pages"]["demo"]["evidence"], "旧轮")
+        store = Ledger(self.root)
+        self.assertEqual(store.read(store.book_for("demo"))["pages"]["demo"]["pending_review"]["evidence"], "旧轮")
+        self.assertEqual(store.reviews(), {})
+        self.assertFalse(path.exists())
         inventory["items"].append(dict(id="other", page="other", field="status_line.state", kind="status_line.state"))
         self.assertEqual([t["page"] for t in review_tasks(inventory, [], {"demo"})], ["demo"])
 
