@@ -74,7 +74,7 @@
 - `python -B -X utf8 scripts/content-refresh/block_tool.py export 页名 --out 本次目录/块.json`：导出原文字符区间、横竖各自的块归属、字数与登记数；默认容量保守取原有字数（余量0），`--capacities 已测容量.json` 可按 `屏id/h或v/块索引（从0开始）` 提供已测上限。
 - 同一工具的 `write 块.json 改法.json --run-dir 本次目录/草稿` 只写一页一目录的草稿；改法是 `[{"block":1,"action":"改成","text":"新原文"}]`，动作可为“不动、改成、删、其后加”，未列的块不动；嵌套引用和本屏登记数随原文区间重绑，错块或多义则整页报错。
 - 过关后由合入单运行同一工具的 `merge 本次目录/草稿/页名`：核对作者基线，合入本页正文、摆法与数字定位，保留其他页的登记改动。测试：`python -B -X utf8 -m unittest discover -s scripts/content-refresh -p test_block_tool.py`。
+- `python -B -X utf8 scripts/content-refresh/checks.py --input 本次目录/检查输入.json --out 本次目录/页检查.json`：只查输入中本次改页的未填模板、同值与加总关系、屏字数增长；输入和逐页回执见 [检查接口](../scripts/content-refresh/README.md#本次改页的程序检查)，超过三成只提醒。
 - 试建、看屏、合入、成包发布：待 f3 到 f6 补。派单模板在私有伴随库 `docs/update-templates/`。
-
 ## 改动记录
 - 2026-11-12：由五处旧规矩换成这一页（旧条目去向表在施工记录里，不进仓库）。

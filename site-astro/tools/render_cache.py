@@ -113,7 +113,7 @@ def migrate_cache(source, jobs, cache, renderer):
                     if not path.exists(): continue
                     document = path.read_text('utf8')
                     old_key = digest([digest([libfp, document, orientation]), binds.get((sid, orientation))])
-                    content = screen_input(meta, text, fm['page'], renderer.input_assets(document), fonts, source)
+                    content = renderer.cache_input(meta, text, fm['page'], document, fonts, source)
                     key = screen_cache_key(content, orientation, binds.get((sid, orientation)))
                     index[name + '/' + sid + '-' + orientation] = {'key': old_key, 'input_key': key}
     migrated = 0

@@ -1,5 +1,6 @@
 """Read visible author copy; findings are review leads, never automatic edits."""
 from datetime import date, datetime, timedelta, timezone
+from html.parser import HTMLParser
 import json
 from pathlib import Path
 import re
@@ -140,3 +141,119 @@ def audit_pages(pages_root: Path, today: date | None = None, retired_names=(), i
                                     add('retired-current-mention', f'已退役名称仍出现在现行说明中：{name}；核对去向，勿自动删除。')
                                     break
     return {'pages_checked': len(paths), 'findings': findings}
+
+
+class _PageText(HTMLParser):
+    """试建 HTML 的可见文字按 data-screen 归属，不扫描脚本或样式。"""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.stack, self.words = [], {}
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        sid, skip = self.stack[-1][1:] if self.stack else ('', False)
+        sid = attrs.get('data-screen', sid)
+        skip = skip or tag in {'script', 'style', 'template'} or 'hidden' in attrs
+        if not skip:
+            self.words.setdefault(sid, []).extend(attrs[k] for k in ('alt', 'title') if attrs.get(k))
+        if tag not in {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'}:
+            self.stack.append((tag, sid, skip))
+
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+        self.handle_endtag(tag)
+
+    def handle_endtag(self, tag):
+        for index in range(len(self.stack) - 1, -1, -1):
+            if self.stack[index][0] == tag:
+                del self.stack[index:]
+                break
+
+    def handle_data(self, data):
+        sid, skip = self.stack[-1][1:] if self.stack else ('', False)
+        if not skip:
+            self.words.setdefault(sid, []).append(data)
+
+
+def check_update(bundle):
+    """检查本次改页；pages 含本轮试建 HTML 和屏身份，块和关系由 C1/C2 提供。
+
+    blocks/published_blocks 是页名到 C1 导出的映射；published_blocks 必须取
+    上次发布快照，不以当前作者源代替。number_relations 使用 C2 的同名结果。
+    """
+    from validation import block_counts
+    results = []
+    for slug in dict.fromkeys(bundle['changed_pages']):
+        result = dict(page=slug, passed=True, errors=[], warnings=[])
+        results.append(result)
+
+        def add(code, screen, message, *, warning=False, **details):
+            result['warnings' if warning else 'errors'].append(
+                dict(code=code, screen=screen, message=message, **details))
+
+        try:
+            page = bundle['pages'][slug]
+            if page['page'] != slug:
+                raise ValueError('正文所属页不符')
+            screens = {screen['id'] for screen in page['screens']}
+            if not isinstance(page['html'], str):
+                raise ValueError('缺少本轮试建 HTML 文本')
+            visible = _PageText()
+            visible.feed(page['html'])
+            for sid, words in visible.words.items():
+                for matched in re.finditer(r'\{\{[^{}]*\}\}', ''.join(words)):
+                    add('unfilled-template', sid, '页上留有未填模板：' + matched[0], excerpt=matched[0])
+        except (KeyError, TypeError, ValueError) as exc:
+            add('page-input-invalid', '', str(exc))
+            result['passed'] = False
+            continue
+
+        try:
+            current = block_counts(bundle['blocks'][slug], slug)
+            if set(current) - screens:
+                raise ValueError('块导出含正文中不存在的屏')
+            if any(screen.get('text') and screen['id'] not in current for screen in page['screens']):
+                raise ValueError('正文有屏未导出块字数')
+            previous = block_counts(bundle['published_blocks'][slug], slug)
+            for sid, count in current.items():
+                if sid not in previous:
+                    add('screen-baseline-missing', sid, '上次发布无此屏字数，未作增长比较', warning=True)
+                elif count * 10 > previous[sid] * 13:
+                    add('screen-text-growth', sid, f'本屏字数从{previous[sid]}增到{count}，超过三成',
+                        warning=True, previous_chars=previous[sid], current_chars=count)
+        except (KeyError, TypeError, ValueError, AttributeError) as exc:
+            add('block-input-invalid', '', '无法比较本次与上次发布字数：' + str(exc))
+
+        for relation in bundle['number_relations']:
+            status = relation['status']
+            if status == 'passed':
+                continue
+            members = relation['values'] or [relation]
+            affected = dict.fromkeys(v['screen'] for v in members if v['page'] == slug)
+            for sid in affected:
+                code = ('number-' + relation['kind'] + '-mismatch' if status == 'conflict'
+                        else 'number-relation-' + status)
+                add(code, sid, relation['reason'], warning=status == 'unavailable',
+                    record_id=relation['record_id'], values=relation['values'])
+        result['passed'] = not result['errors']
+    return dict(schema='wly.page-checks.v1', pages=results,
+                passed=all(result['passed'] for result in results))
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description='检查本次改页的模板、数字关系和屏字数增长')
+    parser.add_argument('--input', type=Path, required=True, help='C1/C2 与试建正文组成的 JSON')
+    parser.add_argument('--out', type=Path, required=True)
+    args = parser.parse_args()
+    try:
+        result = check_update(json.loads(args.input.read_text('utf-8-sig')))
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', 'utf8')
+    except (OSError, KeyError, TypeError, ValueError) as exc:
+        parser.exit(2, str(exc) + '\n')
+    parser.exit(0 if result['passed'] else 1)
+
+
+if __name__ == '__main__':
+    main()

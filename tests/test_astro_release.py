@@ -1,5 +1,6 @@
 """Native Astro publication keeps original bytes and rejects stale rule prose."""
 import hashlib
+from concurrent.futures import Future
 import importlib.util
 import json
 import os
@@ -220,7 +221,7 @@ class AstroReleaseTests(unittest.TestCase):
         path.write_text('---\n' + json.dumps(fm) + '\n---\n\n::screen{#charter-04}\n\n```typeset\n'
             + json.dumps({'screen': screen}) + '\n```\n\n' + current + '\n', encoding='utf8')
         result = {'screen': 'charter-04', 'o': 'h', 'shape': 'source_text', 'html': '<p>Old canvas text</p>', 'style': '', 'height': 100}
-        with patch.object(renderer, 'SITE', str(self.root)), patch.object(renderer, 'MD_DIR', str(md)), patch.object(renderer, 'OUT_DIR', str(out)), patch.object(renderer, '_ALIASES', {}), patch.object(renderer, 'font_subset', return_value='/font.woff2'), patch.object(renderer, 'publish_path', return_value='/fixture-resource'):
+        with patch.object(renderer, 'SITE', str(self.root)), patch.object(renderer, 'MD_DIR', str(md)), patch.object(renderer, 'OUT_DIR', str(out)), patch.object(renderer, '_ALIASES', {}), patch.object(renderer, 'font_subset', return_value='/font.woff2'), patch.object(renderer, 'publish_path', return_value='/fixture-resource'), patch.object(renderer, 'bundle_assets'):
             rendered = renderer.finish_page('charter', fm, [result], 'fixture')
         article = rendered['screens'][0]
         self.assertIn('Current text', article['article']); self.assertIn('E:\\.agents', article['article'])
@@ -231,15 +232,17 @@ class AstroReleaseTests(unittest.TestCase):
         self.assertEqual(rendered['render_md_sha256'], renderer.markdown_render_sha(path))
         self.assertEqual(rendered['render_version'], renderer.RENDER_VERSION)
 
-    def test_missing_render_job_exits_nonzero_without_overwriting_old_result(self):
+    def test_missing_render_job_fails_its_page_without_overwriting_old_result(self):
         md, work, public = self.root/'md', self.root/'work', self.root/'public'
         md.mkdir(); work.mkdir(); (md/'fixture.md').write_text('fixture', encoding='utf8')
         old = self.root/'old-render.json'; old.write_text('previous result', encoding='utf8')
-        job = {'page': 'fixture', 'screen': 'fixture-01', 'o': 'h', 'key': 'new-job'}
+        job = {'page': 'fixture', 'screen': 'fixture-01', 'o': 'h', 'input': {}}
         original_cwd = os.getcwd(); self.addCleanup(os.chdir, original_cwd)
-        with patch.object(renderer, 'REPO', str(self.root)), patch.object(renderer, 'MD_DIR', str(md)), patch.object(renderer, 'WORK', str(work)), patch.object(renderer, 'PUB', str(public)), patch.object(renderer, 'publish_path'), patch.object(renderer.shutil, 'copyfile'), patch.object(renderer, 'load_registry', return_value=({}, None, [], [])), patch.object(renderer, 'build_css', return_value='css'), patch.object(renderer, 'library_fingerprint', return_value='lib'), patch.object(renderer, 'prepare_page', return_value=({}, {'screens': []}, [job])), patch.object(renderer.cf, 'ProcessPoolExecutor') as executor, patch.object(renderer, 'finish_page') as finish, patch.object(renderer, 'fix_dead_fragments'):
-            executor.return_value.__enter__.return_value.map.return_value = [[]]
-            with self.assertRaisesRegex(SystemExit, 'missing_jobs'): renderer.run(['fixture'], workers=1)
+        with patch.object(renderer, 'REPO', str(self.root)), patch.object(renderer, 'SITE', str(self.root)), patch.object(renderer, 'MD_DIR', str(md)), patch.object(renderer, 'WORK', str(work)), patch.object(renderer, 'PUB', str(public)), patch.object(renderer, 'publish_path'), patch.object(renderer.shutil, 'copyfile'), patch.object(renderer, 'load_registry', return_value=({}, None, [], [])), patch.object(renderer, 'build_css', return_value='css'), patch.object(renderer, 'prepare_page', return_value=({}, {'screens': []}, [job])), patch.object(renderer.cf, 'ProcessPoolExecutor') as executor, patch.object(renderer, 'finish_page') as finish, patch.object(renderer, 'fix_dead_fragments'):
+            future = Future(); future.set_result([])
+            executor.return_value.__enter__.return_value.submit.return_value = future
+            result = renderer.run(['fixture'], workers=1)
+            self.assertFalse(result['pages'][0]['passed'])
             finish.assert_not_called()
         self.assertEqual(old.read_text('utf8'), 'previous result')
 
@@ -260,7 +263,7 @@ class AstroReleaseTests(unittest.TestCase):
                           +'\n```\n\n原文 · E-fixture 版\n\n新条款。（L15）\n')
             results.append({'screen': sid, 'o': 'h', 'shape': 'source_text', 'html': '', 'style': '', 'height': 100})
         (md/'charter.md').write_text('---\n'+json.dumps(fm)+'\n---\n\n'+''.join(chunks), encoding='utf8')
-        with patch.object(renderer, 'SITE', str(self.root)), patch.object(renderer, 'MD_DIR', str(md)), patch.object(renderer, 'OUT_DIR', str(out)), patch.object(renderer, '_ALIASES', {}), patch.object(renderer, 'font_subset', return_value='/font.woff2'), patch.object(renderer, 'publish_path', return_value='/fixture-resource'):
+        with patch.object(renderer, 'SITE', str(self.root)), patch.object(renderer, 'MD_DIR', str(md)), patch.object(renderer, 'OUT_DIR', str(out)), patch.object(renderer, '_ALIASES', {}), patch.object(renderer, 'font_subset', return_value='/font.woff2'), patch.object(renderer, 'publish_path', return_value='/fixture-resource'), patch.object(renderer, 'bundle_assets'):
             rendered = renderer.finish_page('charter', fm, results, 'fixture')
         points = [point for s in rendered['screens'] for point in s.get('points', [])]
         self.assertEqual(points, ['L15'])

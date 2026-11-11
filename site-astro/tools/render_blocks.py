@@ -13,6 +13,7 @@
 import concurrent.futures as cf
 import hashlib
 import html as H
+from html.parser import HTMLParser
 import json
 import os
 from pathlib import Path
@@ -35,6 +36,8 @@ from engine.layout import build_html, WIDTH  # noqa: E402
 from engine.parse import original_markdown  # noqa: E402
 from engine.registry import load as load_registry  # noqa: E402
 from render_cache import FILE_URL, TITLE_SOURCE, asset_urls, bundle_assets, markdown_render_sha, migrate_cache, restore_assets, screen_cache_key, screen_input  # noqa: E402
+from page_checks import issue, page_result, write_checks  # noqa: E402
+from layout_diff import write_layout_diff  # noqa: E402
 
 # 四个目录都可以用环境变量换到别处（例如按活动版本试排一份规则页、试排一个新页，不碰站点）：
 # BLOCK_MD_DIR、BLOCK_OUT_DIR、BLOCK_PUB_DIR、BLOCK_WORK_DIR（排版缓存；和站点同时跑时要分开，免得互相盖掉）
@@ -46,7 +49,7 @@ RENDER_LOCK = json.loads(Path(REPO, "config/render.lock.json").read_text("utf-8"
 CHROME = RENDER_LOCK["chrome"]["path"]
 SANS_FONT = RENDER_LOCK["fonts"][0]["path"]
 CSS_OUT = os.path.join(PUB, "assets", "_typeset", "typeset.css")
-RENDER_VERSION = "r4-11"  # 同版原文、原图尺寸与视口加载接线改变，旧结果全部重排
+RENDER_VERSION = "r4-11"  # 网页结果格式标签；量屏版本由 render_cache.VERSIONS 绑定。
 IMPORT_ROOT = None
 _inputs = {}
 _input_shas = {}
@@ -67,6 +70,78 @@ def sha(path):
         for b in iter(lambda: f.read(1 << 20), b""):
             h.update(b)
     return h.hexdigest()
+
+
+def asset_dependencies(value, base=None, root=None):
+    """Collect local resources, including entity-encoded JSON and nested assets."""
+    repo = Path(root or REPO).resolve()
+    assets = repo / 'sources/assets' if root else Path(A.ASSET_ROOT).resolve()
+    public = repo / 'site-astro/public' if root else Path(PUB).resolve()
+    found = set()
+    extensions = {'.png', '.jpg', '.jpeg', '.webp', '.avif', '.svg', '.gif', '.css',
+                  '.js', '.mjs', '.json', '.woff', '.woff2', '.ttf', '.mp4'}
+    class Attributes(HTMLParser):
+        def __init__(self, owner):
+            super().__init__(convert_charrefs=True); self.owner = owner
+        def handle_starttag(self, tag, attrs):
+            for _, val in attrs:
+                if val: visit(val, self.owner)
+        handle_startendtag = handle_starttag
+        def handle_data(self, data):
+            if data.lstrip().startswith(('{', '[')): visit(data, self.owner)
+    def visit(item, owner):
+        if isinstance(item, dict):
+            for key, val in item.items(): visit(key, owner); visit(val, owner)
+            return
+        if isinstance(item, (list, tuple)):
+            for val in item: visit(val, owner)
+            return
+        if not isinstance(item, str): return
+        if '<' in item and '>' in item: Attributes(owner).feed(item)
+        if item.lstrip().startswith(('{', '[')):
+            try: parsed = json.loads(H.unescape(item))
+            except json.JSONDecodeError: pass
+            else: visit(parsed, owner); return
+        text = H.unescape(item).replace('\\/', '/').replace('\\"', '"')
+        candidates = [text, *re.findall(r'''(?=["']([^"'<>]+)["'])''', text),
+                      *re.findall(r'''[^\s"'<>()[\]{},;=]+''', text)]
+        for candidate in candidates:
+            candidate = candidate.strip()
+            if candidate.startswith('proto:'):
+                candidate = str(Path(repo / 'src/typeset' if root else PROTO, 'assets', candidate[6:] + ('' if candidate.endswith('.png') else '.png')))
+            if candidate.startswith(('http:', 'https:', 'data:', '//')): continue
+            ref = candidate.split('?', 1)[0].split('#', 1)[0]
+            ref = file_url_to_path(ref) if ref.startswith('file:///') else urllib.parse.unquote(ref)
+            if any(char in ref for char in '\n\r<>"{}'): continue
+            if Path(ref).suffix.lower() not in extensions: continue
+            ref = A.local_path(ref)
+            if ref.startswith('/assets/'): choices = [assets / ref[8:], public / ref.lstrip('/')]
+            elif ref.startswith('/'): choices = [public / ref.lstrip('/')]
+            else: choices = [owner / ref, repo / ref, assets / ref, public / ref]
+            path = next((p.resolve() for p in choices if p.is_file()), None)
+            if path is None or path in found or not any(path.is_relative_to(p) for p in (repo, assets, public)): continue
+            found.add(path)
+            if path.suffix.lower() in {'.css', '.js', '.mjs', '.json', '.svg'}:
+                raw = path.read_text('utf-8-sig')
+                visit(json.loads(raw) if path.suffix.lower() == '.json' else raw, path.parent)
+    visit(value, Path(base or repo))
+    return found
+
+
+def asset_fingerprint(value, digest=sha, root=None):
+    """A title's reviewed crop is a dependency of that title alone."""
+    files = asset_dependencies(value, root=root)
+    repo = Path(root or REPO).resolve()
+    assets = repo / 'sources/assets' if root else Path(A.ASSET_ROOT).resolve()
+    public = repo / 'site-astro/public' if root else Path(PUB).resolve()
+    regions_path = assets / 'title-content-regions.json'
+    regions = json.loads(regions_path.read_text('utf-8')).get('regions', {}) if regions_path.is_file() else {}
+    rows = [(path.relative_to(repo).as_posix() if path.is_relative_to(repo) else
+             'assets/' + path.relative_to(assets).as_posix() if path.is_relative_to(assets) else
+             'public/' + path.relative_to(public).as_posix(), digest(path))
+            for path in sorted(files)]
+    payload = [rows, {key: regions[key] for _, key in rows if key in regions}]
+    return hashlib.sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
 
 
 def locked_fonts(document):
@@ -96,6 +171,11 @@ def input_sha(path):
     stamp = (str(path), stat.st_size, stat.st_mtime_ns)
     if stamp not in _input_shas: _input_shas[stamp] = sha(path)
     return _input_shas[stamp]
+
+
+def cache_input(meta, text, page, document, fonts, root=None):
+    assets = input_assets(document) + [asset_fingerprint(meta, digest=input_sha, root=root)]
+    return screen_input(meta, text, page, assets, fonts, root or REPO)
 
 
 def portable_document(document):
@@ -487,8 +567,8 @@ def prepare_page(name, reg, css_files):
                     continue
             doc, info = checked_html(name, page, s, o, reg, css_files, sp)
             doc = locked_fonts(doc)
-            content = screen_input(meta, text, fm['page'], input_assets(doc),
-                                   [f['sha256'] for f in RENDER_LOCK['fonts']], REPO)
+            content = cache_input(meta, text, fm['page'], doc,
+                                  [f['sha256'] for f in RENDER_LOCK['fonts']])
             doc = portable_document(doc)
             hp = os.path.join(WORK, name, f"{s['id']}-{o}.html")
             with open(hp, "w", encoding="utf-8", newline="\n" if original_markdown(s) else None) as f:
@@ -951,6 +1031,11 @@ def bindings(name, first_screen, site=SITE):
 
 
 def run(names, workers=2, migrate_from=None):
+    requested = list(names)
+    checks = {n: page_result(n) for n in names}
+    def fail(n, error, screen=None):
+        checks[n]["passed"] = False
+        checks[n]["errors"].append(issue("render_failed", screen, str(error)))
     verify_render_lock()
     print("量屏环境：" + json.dumps(RENDER_LOCK, ensure_ascii=False), flush=True)
     workers = min(2, max(1, workers))
@@ -976,9 +1061,10 @@ def run(names, workers=2, migrate_from=None):
         try:
             source_shas[n] = sha(os.path.join(MD_DIR, n + ".md"))
             fm, page, jobs = prepare_page(n, reg, css_files)
-        except Exception as e:  # 一页出错不拦别的页，最后列出来
+            page_binds = bindings(n, page["screens"][0]["id"]) if page["screens"] else {}
+        except (Exception, SystemExit) as e:  # 一页出错不拦别的页，最后列出来
+            fail(n, e)
             failed.append(n); print(f"{n}：区块库排这一页出错 {repr(e)[:200]}", flush=True); continue
-        page_binds = bindings(n, page["screens"][0]["id"]) if page["screens"] else {}
         binds.update(page_binds)
         # 实际首屏动效绑定影响 art/artBox，必须跟着参与缓存键。
         for j in jobs:
@@ -997,27 +1083,40 @@ def run(names, workers=2, migrate_from=None):
         migrate_cache(migrate_from, all_jobs, cache, sys.modules[__name__])
     for j in all_jobs:
         if j['key'] in cache: restore_assets(cache[j['key']], WORK, PUB, input_sha)
-    write_cache(Path(WORK, '_index.json'), {j['page'] + '/' + j['screen'] + '-' + j['o']:
-                {'key': j['key'], 'input_key': j['key']} for j in all_jobs})
+    index_path = Path(WORK, '_index.json')
+    index = json.loads(index_path.read_text('utf8')) if index_path.exists() else {}
+    index.update({j['page'] + '/' + j['screen'] + '-' + j['o']:
+                 {'key': j['key'], 'input_key': j['key']} for j in all_jobs})
+    write_cache(index_path, index)
     todo = [j for j in all_jobs if j["key"] not in cache]
     if migrate_from:
         write_cache(cache_p, cache)
+        print(f'换钥匙准备完成：{time.time() - t0:.1f} 秒；失败页 {failed}', flush=True)
+        if failed: raise SystemExit('换钥匙输入准备失败：' + repr(failed))
         return  # A migration command must never fall through to browser work.
     print(f"区块排版：{len(all_jobs)} 份（{len(names)} 页），要重排 {len(todo)} 份，用时 {time.time() - t0:.1f} 秒准备")
     chunks = [todo[i::workers] for i in range(workers)] if todo else []
-    done = []
+    done, job_errors = [], {}
     if chunks:
         with cf.ProcessPoolExecutor(max_workers=len(chunks)) as ex:
-            for res in ex.map(hydrate, chunks, [binds] * len(chunks), [str(checkpoint_dir)] * len(chunks)):
-                done += res
+            futures = {ex.submit(hydrate, chunk, binds, str(checkpoint_dir)): chunk for chunk in chunks}
+            for future in cf.as_completed(futures):
+                try:
+                    done += future.result()
+                except Exception as e:
+                    job_errors.update({j["key"]: str(e) for j in futures[future]})
+                    print(f"量屏作业出错：{e}；受影响的页在缺块回执中列出", flush=True)
     for r in done:
         cache[r["key"]] = cache_payload(r)
+    recover_cache(cache, checkpoint_dir)
     write_cache(cache_p, cache)
     for checkpoint in checkpoint_dir.glob("*.json"):
         checkpoint.unlink()
     by_page = {}
     missing = [j for j in all_jobs if j["key"] not in cache]
     incomplete_pages = {j["page"] for j in missing}
+    for j in missing:
+        fail(j["page"], "排版缺块：" + j["o"] + "；" + job_errors.get(j["key"], "量屏未返回结果"), j["screen"])
     for j in all_jobs:
         if j["key"] in cache:
             by_page.setdefault(j["page"], []).append({**j, **cache[j["key"]]})
@@ -1028,13 +1127,17 @@ def run(names, workers=2, migrate_from=None):
             if sha(os.path.join(MD_DIR, n + ".md")) != source_shas[n]:
                 raise ValueError("排版过程中内容文件已改变，需要按新内容重新排版")
             finish_page(n, fms[n], by_page.get(n, []), cssv)
-        except Exception as e:
+        except (Exception, SystemExit) as e:
+            fail(n, e)
             failed.append(n); print(f"{n}：收尾出错 {repr(e)[:200]}", flush=True)
     write_cache(cache_p, cache)
     fix_dead_fragments([n for n in names if n not in failed])
     print(f"区块排版完成：{len(names) - len([f for f in failed if f in names])} 页，{time.time() - t0:.1f} 秒；出错 {len(failed)} 页 {failed}")
-    if failed or missing:
-        raise SystemExit("区块排版未完成：" + repr({"failed_pages": failed, "missing_jobs": [j["page"] + "/" + j["screen"] + "-" + j["o"] for j in missing]}))
+    report = write_checks(os.environ.get("BLOCK_PAGE_CHECKS") or Path(SITE, ".cache/render-page-checks.json"),
+                          "render", [checks[n] for n in requested])
+    write_layout_diff(os.environ.get("BLOCK_LAYOUT_BASELINE"), OUT_DIR, [n for n in names if n not in failed],
+                      os.environ.get("BLOCK_LAYOUT_RECEIPT") or Path(SITE, ".cache/layout-diff.json"))
+    return report
 
 
 # 页面外壳里固定有的锚点（页头“开头”、跳到正文、项目页的“复制 AI 续作说明”）
@@ -1081,7 +1184,9 @@ def fix_dead_fragments(names):
 
 
 def all_pages():
-    return sorted(f[:-3] for f in os.listdir(MD_DIR) if f.endswith(".md"))
+    # Match build-site's native-page selection; these three use code renderers.
+    return sorted(f[:-3] for f in os.listdir(MD_DIR) if f.endswith(".md")
+                  and f[:-3] not in {'home', 'cockpit', 'computer-access'})
 
 
 if __name__ == "__main__":

@@ -10,6 +10,24 @@ LEDGER = "__usage_ledger__"
 NUMBER_CLASSES = {"fixed_parameter", "runtime_field", "status_conclusion", "historical_example"}
 
 
+def block_counts(document, page):
+    """C1 原文块分区的字数；横竖布局里的重复归属不再相加。"""
+    if document.get("schema") != "wly.content-blocks.v1" or document.get("page") != page:
+        raise ValueError("块导出格式或所属页不符")
+    blocks = document.get("blocks")
+    if not isinstance(blocks, list):
+        raise ValueError("块导出缺 blocks 数组")
+    counts, ids = {}, set()
+    for block in blocks:
+        sid, number, chars = block.get("screen"), block.get("id"), block.get("chars")
+        if (not isinstance(sid, str) or not sid or not isinstance(number, int) or isinstance(number, bool)
+                or number < 1 or number in ids or not isinstance(chars, int) or isinstance(chars, bool) or chars < 0):
+            raise ValueError("块导出的屏、编号或字数无效")
+        ids.add(number)
+        counts[sid] = counts.get(sid, 0) + chars
+    return counts
+
+
 def select_sql(sql):
     if not isinstance(sql, str):
         raise ValueError("SQL 必须是单条 select")
