@@ -1,7 +1,41 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { GRANT_STAGE_KEY, adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, canRestartUnsubmittedGrant, capacity, createGrantAttempt, createGrantRecovery, saveGrantRequest, createStatusReader, durationMinutes, grantLabel, grantResultNeedsQuery, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, markGrantVerificationSubmitted, memorySpecification, networkConnection, readGrantStage, queryResultUpdate, rate, reductionAction, reductionFailureResult, resourceReadLabel, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
+import vm from "node:vm";
+import { GRANT_STAGE_KEY, adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, canRestartUnsubmittedGrant, capacity, createGrantAttempt, createGrantRecovery, saveGrantRequest, createStatusReader, durationMinutes, errorMessages, grantLabel, grantResultNeedsQuery, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, markGrantVerificationSubmitted, memorySpecification, networkConnection, readGrantStage, queryResultUpdate, rate, reductionAction, reductionFailureResult, resourceReadLabel, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
+
+test("all three close requests carry the paired device and settle unpaired rejection", async () => {
+  const source = await readFile(new URL("../scripts/b2-live-runtime.js", import.meta.url), "utf8");
+  const closeSource = source.slice(source.indexOf("async function lock("), source.indexOf("\nconst dialog="));
+  const originalFetch = globalThis.fetch, token = "paired_" + "x".repeat(36);
+  try {
+    for (const kind of ["personal-data", "unrestricted", "windows"]) {
+      for (const stored of [token, null, "invalid", "unreadable", "r".repeat(43)]) {
+        let sent, result, notice;
+        globalThis.fetch = async (url, options) => {
+          sent = { url, ...options };
+          return new Response(JSON.stringify(stored === token ? { state: "succeeded" } : { status: "error", error: "cockpit_owner_required" }), { status: stored === token ? 200 : 403 });
+        };
+        const env = { busy: false, formal: true, online: () => true, base: "https://synthetic.invalid", actions: [],
+          status: { state_version: "v1", public_actions: { lock_data: true, end_unrestricted: true, lock_windows: true },
+            personal_data: { state: "unlocked", expires_at_unix: 200 }, unrestricted: { state: "active", expires_at_unix: 200 }, host: { screen_state: "unlocked" } },
+          localStorage: { getItem(key) { assert.equal(key, "wly-cockpit-device"); if (stored === "unreadable") throw Error("storage unavailable"); return stored; } },
+          reader: { invalidate() {}, read() {} }, crypto: { randomUUID: () => "fake-request" }, clock: () => 100, render() {},
+          rememberAction: value => { result = value; }, message: text => { notice = text; },
+          apiRequest, canEndGrant, unresolvedAction, successfulReductionSnapshot, queryResultUpdate, reductionFailureResult, errorMessages };
+        vm.runInNewContext(closeSource + "\nthis.close = lock;", env);
+        await env.close(kind);
+        assert.equal(sent.url, `https://synthetic.invalid/computer-access/api/locks/${kind}`);
+        assert.equal(sent.method, "POST");
+        assert.equal(sent.headers["X-Cockpit-Device"], /^[A-Za-z0-9_-]{43}$/.test(stored || "") ? stored : undefined);
+        assert.equal(result.state, stored === token ? "succeeded" : "failed");
+        assert.equal(unresolvedAction(result), false);
+        if (stored === token) assert.doesNotMatch(notice, /未确认/);
+        else { assert.equal(result.request_created, false); assert.equal(notice, "这台设备没配对，不能在这里关。"); }
+      }
+    }
+  } finally { globalThis.fetch = originalFetch; }
+});
 
 test("only a complete authoritative grant updates remaining time and returns the form to ready", () => {
   const before = { state_version: "old", personal_data: { state: "unlocked", expires_at_unix: 100 }, unrestricted: { state: "active", expires_at_unix: 200 } };
