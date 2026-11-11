@@ -13,6 +13,7 @@
 import concurrent.futures as cf
 import hashlib
 import html as H
+from html.parser import HTMLParser
 import inspect
 import json
 import os
@@ -61,6 +62,74 @@ def sha(path):
         for b in iter(lambda: f.read(1 << 20), b""):
             h.update(b)
     return h.hexdigest()
+
+
+def asset_dependencies(value, base=None):
+    """Collect local resources, including entity-encoded JSON and nested assets."""
+    repo, assets, public = Path(REPO).resolve(), Path(A.ASSET_ROOT).resolve(), Path(PUB).resolve()
+    found = set()
+    extensions = {'.png', '.jpg', '.jpeg', '.webp', '.avif', '.svg', '.gif', '.css',
+                  '.js', '.mjs', '.json', '.woff', '.woff2', '.ttf', '.mp4'}
+    class Attributes(HTMLParser):
+        def __init__(self, owner):
+            super().__init__(convert_charrefs=True); self.owner = owner
+        def handle_starttag(self, tag, attrs):
+            for _, val in attrs:
+                if val: visit(val, self.owner)
+        handle_startendtag = handle_starttag
+        def handle_data(self, data):
+            if data.lstrip().startswith(('{', '[')): visit(data, self.owner)
+    def visit(item, owner):
+        if isinstance(item, dict):
+            for key, val in item.items(): visit(key, owner); visit(val, owner)
+            return
+        if isinstance(item, (list, tuple)):
+            for val in item: visit(val, owner)
+            return
+        if not isinstance(item, str): return
+        if '<' in item and '>' in item: Attributes(owner).feed(item)
+        if item.lstrip().startswith(('{', '[')):
+            try: parsed = json.loads(H.unescape(item))
+            except json.JSONDecodeError: pass
+            else: visit(parsed, owner); return
+        text = H.unescape(item).replace('\\/', '/').replace('\\"', '"')
+        candidates = [text, *re.findall(r'''(?=["']([^"'<>]+)["'])''', text),
+                      *re.findall(r'''[^\s"'<>()[\]{},;=]+''', text)]
+        for candidate in candidates:
+            candidate = candidate.strip()
+            if candidate.startswith('proto:'):
+                candidate = str(Path(PROTO, 'assets', candidate[6:] + ('' if candidate.endswith('.png') else '.png')))
+            if candidate.startswith(('http:', 'https:', 'data:', '//')): continue
+            ref = candidate.split('?', 1)[0].split('#', 1)[0]
+            ref = file_url_to_path(ref) if ref.startswith('file:///') else urllib.parse.unquote(ref)
+            if any(char in ref for char in '\n\r<>"{}'): continue
+            if Path(ref).suffix.lower() not in extensions: continue
+            ref = A.local_path(ref)
+            if ref.startswith('/assets/'): choices = [assets / ref[8:], public / ref.lstrip('/')]
+            elif ref.startswith('/'): choices = [public / ref.lstrip('/')]
+            else: choices = [owner / ref, repo / ref, assets / ref, public / ref]
+            path = next((p.resolve() for p in choices if p.is_file()), None)
+            if path is None or path in found or not any(path.is_relative_to(p) for p in (repo, assets, public)): continue
+            found.add(path)
+            if path.suffix.lower() in {'.css', '.js', '.mjs', '.json', '.svg'}:
+                raw = path.read_text('utf-8-sig')
+                visit(json.loads(raw) if path.suffix.lower() == '.json' else raw, path.parent)
+    visit(value, Path(base or REPO))
+    return found
+
+
+def asset_fingerprint(value, digest=sha):
+    """A title's reviewed crop is a dependency of that title alone."""
+    files = asset_dependencies(value)
+    regions_path = Path(A.ASSET_ROOT, 'title-content-regions.json')
+    regions = json.loads(regions_path.read_text('utf-8')).get('regions', {}) if regions_path.is_file() else {}
+    repo, assets, public = Path(REPO).resolve(), Path(A.ASSET_ROOT).resolve(), Path(PUB).resolve()
+    rows = [(path.relative_to(repo).as_posix() if path.is_relative_to(repo) else
+             'assets/' + path.relative_to(assets).as_posix() if path.is_relative_to(assets) else
+             'public/' + path.relative_to(public).as_posix(), digest(path))
+            for path in sorted(files)]
+    payload = [rows, {key: regions[key] for _, key in rows if key in regions}]
+    return hashlib.sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
 
 
 def locked_fonts(document):
@@ -344,7 +413,7 @@ def hydration_fingerprint():
 
 
 def screen_cache_key(document, orientation, libfp):
-    payload = json.dumps([libfp, document, orientation], ensure_ascii=False,
+    payload = json.dumps([libfp, document, orientation, asset_fingerprint(document)], ensure_ascii=False,
                          sort_keys=True, separators=(',', ':'))
     return hashlib.sha256(payload.encode('utf8')).hexdigest()[:20]
 
