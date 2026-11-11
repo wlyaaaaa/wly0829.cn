@@ -47,7 +47,7 @@ def screen_cache_key(content, orientation, binding=None):
 
 
 def asset_urls(text):
-    return set(re.findall(r'["\'(](/assets/[^"\'\s<>\\)]+)', text))
+    return set(re.findall(r'["\'(](/(?:assets|_living)/[^"\'\s<>\\)]+)', text))
 
 
 def bundle_assets(result, urls, work, public, sha):
@@ -70,7 +70,7 @@ def bundle_assets(result, urls, work, public, sha):
 def restore_assets(result, source_work, public, sha):
     for url, checksum in result.get('assets', {}).items():
         relative = Path(url.lstrip('/'))
-        if not url.startswith('/assets/') or '..' in relative.parts:
+        if not url.startswith(('/assets/', '/_living/')) or '..' in relative.parts:
             raise ValueError('Invalid cached asset URL: ' + url)
         source, target = Path(source_work, '_assets', relative), Path(public, relative)
         if target.exists() and sha(target) == checksum: continue
@@ -121,9 +121,9 @@ def migrate_cache(source, jobs, cache, renderer):
     for job in jobs:
         old = index.get(job['page'] + '/' + job['screen'] + '-' + job['o'], {})
         if old.get('input_key') != job['key'] or old.get('key') not in old_cache: continue
-        if job['key'] in cache: continue
-        result = old_cache[old['key']]
-        restore_assets(result, old_work, renderer.PUB, renderer.input_sha)
+        existing = job['key'] in cache
+        result = cache[job['key']] if existing else old_cache[old['key']]
+        restore_assets(result, renderer.WORK if existing else old_work, renderer.PUB, renderer.input_sha)
         result = renderer.cache_payload(result)
         if job['page'] not in rendered:
             path = source / 'site-astro/src/content/rendered' / (job['page'] + '.json')
@@ -134,7 +134,7 @@ def migrate_cache(source, jobs, cache, renderer):
         bundle_assets(result, urls, renderer.WORK, source / 'site-astro/public', renderer.input_sha)
         restore_assets(result, renderer.WORK, renderer.PUB, renderer.input_sha)
         cache[job['key']] = result
-        migrated += 1
+        migrated += not existing
     print('换钥匙：' + json.dumps({'migrated': migrated, 'missing': sum(j['key'] not in cache for j in jobs),
                                 'measurements': 0}, ensure_ascii=False), flush=True)
     return migrated

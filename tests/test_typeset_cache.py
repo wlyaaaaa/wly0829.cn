@@ -61,7 +61,11 @@ class TypesetCacheTests(unittest.TestCase):
                 font_url = '/assets/_fonts/page.woff2'
                 (public / font_url.lstrip('/')).parent.mkdir(parents=True, exist_ok=True)
                 (public / font_url.lstrip('/')).write_bytes(b'subset font')
-                bundle_assets(result, [font_url], work, public, renderer.sha)
+                texture = public / '_living/texture.webp'; texture.parent.mkdir(parents=True)
+                texture.write_bytes(b'animation pixels')
+                config = public / 'assets/motion.json'; config.write_text('{"src":"/_living/texture.webp"}', encoding='utf8')
+                bundle_assets(result, [font_url, '/assets/motion.json'], work, public, renderer.sha)
+                self.assertIn('/_living/texture.webp', result['assets'])
                 restored = root / 'new checkout' / 'public'
                 restore_assets(result, work, restored, renderer.sha)
                 for url, checksum in result['assets'].items():

@@ -115,6 +115,10 @@ def asset_dependencies(value, base=None, root=None):
             if any(char in ref for char in '\n\r<>"{}'): continue
             if Path(ref).suffix.lower() not in extensions: continue
             ref = A.local_path(ref)
+            if root:
+                for old_root, new_root in ((Path(REPO).resolve(), repo), (Path(A.ASSET_ROOT).resolve(), assets)):
+                    if Path(ref).is_relative_to(old_root):
+                        ref = str(new_root / Path(ref).relative_to(old_root)); break
             if ref.startswith('/assets/'): choices = [assets / ref[8:], public / ref.lstrip('/')]
             elif ref.startswith('/'): choices = [public / ref.lstrip('/')]
             else: choices = [owner / ref, repo / ref, assets / ref, public / ref]
