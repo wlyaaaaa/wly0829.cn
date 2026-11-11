@@ -9,11 +9,10 @@
   没写构图的屏由区块库自动分块。不写坐标。
 - 图：只用内容文件里逐条写明的图（不再查素材库映射）；原文件逐字节复制到 public/assets/，不转码、不缩图。
 - 字：正文字体和现在出图用的 Noto Sans SC 是同一个文件，按每页用到的字抽成 woff2（字形不变）。
-- 增量：每屏按（内容 + 区块库 + 样式）算指纹，没变的屏不重排。"""
+- 增量：每屏按内容、本页设置、素材内容及排版版本算钥匙，没变的屏不重排。"""
 import concurrent.futures as cf
 import hashlib
 import html as H
-import inspect
 import json
 import os
 from pathlib import Path
@@ -35,7 +34,7 @@ from engine import layout as L  # noqa: E402
 from engine.layout import build_html, WIDTH  # noqa: E402
 from engine.parse import original_markdown  # noqa: E402
 from engine.registry import load as load_registry  # noqa: E402
-from render_cache import LEGACY_RENDERER_CODE_FP, PRE_CHECKPOINT_CODE_FP, legacy_renderer_compatible, markdown_render_sha, promote_legacy_cache  # noqa: E402
+from render_cache import FILE_URL, TITLE_SOURCE, asset_urls, bundle_assets, markdown_render_sha, migrate_cache, restore_assets, screen_cache_key, screen_input  # noqa: E402
 
 # 四个目录都可以用环境变量换到别处（例如按活动版本试排一份规则页、试排一个新页，不碰站点）：
 # BLOCK_MD_DIR、BLOCK_OUT_DIR、BLOCK_PUB_DIR、BLOCK_WORK_DIR（排版缓存；和站点同时跑时要分开，免得互相盖掉）
@@ -48,10 +47,17 @@ CHROME = RENDER_LOCK["chrome"]["path"]
 SANS_FONT = RENDER_LOCK["fonts"][0]["path"]
 CSS_OUT = os.path.join(PUB, "assets", "_typeset", "typeset.css")
 RENDER_VERSION = "r4-11"  # 同版原文、原图尺寸与视口加载接线改变，旧结果全部重排
+IMPORT_ROOT = None
+_inputs = {}
+_input_shas = {}
 
 
 def file_url_to_path(u):
-    p = urllib.parse.unquote(u[len("file:///"):])
+    if u.startswith('../_inputs/'):
+        return os.path.join(WORK, '_inputs', u.rsplit('/', 1)[1])
+    if u.startswith('/assets/'):
+        return os.path.join(PUB, *urllib.parse.unquote(u).lstrip('/').split('/'))
+    p = urllib.parse.unquote(H.unescape(u[len("file:///") :]))
     return os.path.normpath(p)
 
 
@@ -78,6 +84,47 @@ def verify_render_lock():
             raise ValueError("固定排版环境文件不符：" + item["path"])
 
 
+def input_assets(document):
+    urls = FILE_URL.findall(document)
+    urls += ['file:///' + H.unescape(p).replace('\\', '/') for p in re.findall(r'data-title-src="([^"]+)"', document)]
+    return sorted({input_sha(file_url_to_path(u)) for u in urls
+                   if Path(file_url_to_path(u)).suffix.lower() not in ('.css', '.js', '.ttf', '.woff2')})
+
+
+def input_sha(path):
+    stat = os.stat(path)
+    stamp = (str(path), stat.st_size, stat.st_mtime_ns)
+    if stamp not in _input_shas: _input_shas[stamp] = sha(path)
+    return _input_shas[stamp]
+
+
+def portable_document(document):
+    """All measurement files share content-addressed, relative dependencies."""
+    def stage(path):
+        path = Path(path).resolve()
+        for font in RENDER_LOCK['fonts']:
+            if path == Path(font['source_path']).resolve(): path = Path(font['path'])
+        stamp = (str(path), path.stat().st_size, path.stat().st_mtime_ns)
+        if stamp in _inputs: return _inputs[stamp]
+        content = path.read_bytes()
+        if path.suffix.lower() == '.css':
+            def css_url(match):
+                url = match[1].strip().strip('"\'')
+                if url.startswith(('data:', 'http', '/', '#')) and not url.startswith('file:///'): return match[0]
+                target = file_url_to_path(url) if url.startswith('file:///') else path.parent / urllib.parse.unquote(url)
+                return 'url("' + stage(target) + '")'
+            content = re.sub(r'url\(([^)]+)\)', css_url, content.decode('utf8')).encode('utf8')
+        name = hashlib.sha256(content).hexdigest() + path.suffix.lower()
+        target = Path(WORK, '_inputs', name)
+        if not target.exists():
+            target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(content)
+        _inputs[stamp] = name
+        return name
+    document = FILE_URL.sub(lambda m: '../_inputs/' + stage(file_url_to_path(m[0])), document)
+    return re.sub(r'data-title-src="([^"]+)"', lambda m: 'data-title-src="../_inputs/' +
+                  stage(H.unescape(m[1])) + '"', document)
+
+
 # —— 素材发布：本地原文件逐字节复制到 public 下，返回网址 ——
 def _under(p, root):
     try:
@@ -92,7 +139,7 @@ _living_configs = {}
 
 def publish_path(p):
     p = os.path.normpath(p)
-    if not (_under(p, REPO) or _under(p, PUB)):
+    if not any(_under(p, root) for root in (REPO, PUB, WORK, IMPORT_ROOT) if root):
         raise ValueError("仓库外的文件不发布：" + p)
     st = os.stat(p)
     key = (p, st.st_size, st.st_mtime_ns)
@@ -110,8 +157,12 @@ def publish_path(p):
     return url
 
 
-def rewrite_urls(text):
-    return re.sub(r'file:///[^"\'\)\s<>]+', lambda m: publish_path(file_url_to_path(m.group(0))), text)
+def rewrite_urls(text, found=None):
+    def one(match):
+        url = publish_path(file_url_to_path(match[0]))
+        if found is not None: found.add(url)
+        return url
+    return re.sub(FILE_URL.pattern + r'|\.\./_inputs/[a-f0-9]{64}\.[a-z0-9]+', one, text)
 
 
 def defer_images(body, first=False):
@@ -319,36 +370,6 @@ def parse_md(path):
     return fm, screens
 
 
-def library_fingerprint():
-    h = hashlib.sha256()
-    for root, dirs, files in os.walk(PROTO):
-        dirs[:] = sorted(d for d in dirs if d != "__pycache__")
-        for name in sorted(files):
-            if name.endswith((".pyc", ".pyo")):
-                continue
-            p = Path(root, name)
-            h.update(p.relative_to(PROTO).as_posix().encode("utf-8") + b"\0")
-            h.update(hashlib.sha256(p.read_bytes()).digest())
-    return h.hexdigest()[:16]
-
-
-def hydration_fingerprint():
-    """Only browser layout and its title capture invalidate every screen.
-
-    Other changes in this module still rerun page assembly through build-site,
-    but need not discard already measured browser geometry.
-    """
-    source = HYDRATE_JS + ''.join(inspect.getsource(fn) for fn in
-        (hydrate, brush_titles, image_size_attrs)) + str(BRUSH_PAD) + sha(Path(REPO, "config/render.lock.json"))
-    return hashlib.sha256(source.encode('utf8')).hexdigest()[:16]
-
-
-def screen_cache_key(document, orientation, libfp):
-    payload = json.dumps([libfp, document, orientation], ensure_ascii=False,
-                         sort_keys=True, separators=(',', ':'))
-    return hashlib.sha256(payload.encode('utf8')).hexdigest()[:20]
-
-
 def image_slot_error(page, screen, block, needed, supplied):
     raise ValueError(f"{page} 屏 {screen}：{block} 需要 {needed} 个图位，只配了 {supplied} 个"
                      "（asset-map.jsonl 补行，或把段落移出卡片）")
@@ -426,7 +447,7 @@ def check_screen_images(name, page, screen, meta):
         A._manifest = prior
 
 
-def prepare_page(name, reg, css_files, libfp, legacy_libfp=None, prior_libfp=None):
+def prepare_page(name, reg, css_files):
     """在本进程里排出这一页每屏两份的 HTML 文件（交给浏览器排版），返回待排清单。"""
     fm, screens = parse_md(os.path.join(MD_DIR, name + ".md"))
     page = dict(fm["page"]); page["screens"] = []
@@ -466,18 +487,14 @@ def prepare_page(name, reg, css_files, libfp, legacy_libfp=None, prior_libfp=Non
                     continue
             doc, info = checked_html(name, page, s, o, reg, css_files, sp)
             doc = locked_fonts(doc)
-            key = screen_cache_key(doc, o, libfp)
-            legacy_key = None
-            if legacy_libfp:
-                art_version = "-mock-art-v1" if any(b.get("type") == "document_mock" for b in (sp or {}).get("blocks", [])) else ""
-                legacy_key = hashlib.sha256(json.dumps([legacy_libfp + art_version, meta, text, o],
-                    ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:20]
+            content = screen_input(meta, text, fm['page'], input_assets(doc),
+                                   [f['sha256'] for f in RENDER_LOCK['fonts']], REPO)
+            doc = portable_document(doc)
             hp = os.path.join(WORK, name, f"{s['id']}-{o}.html")
             with open(hp, "w", encoding="utf-8", newline="\n" if original_markdown(s) else None) as f:
                 f.write(doc)
-            jobs.append({"page": name, "screen": s["id"], "o": o, "html": hp, "key": key,
-                         **({"prior_key": screen_cache_key(doc, o, prior_libfp)} if prior_libfp else {}),
-                         **({"legacy_key": legacy_key} if legacy_key else {}), "shape": s.get("shape") or "",
+            jobs.append({"page": name, "screen": s["id"], "o": o, "html": hp, "input": content,
+                         "shape": s.get("shape") or "",
                          "replace": s.get("display_replace") or {},
                          "notes": info["notes"], "incomplete": info["incomplete"]})
     return fm, page, jobs
@@ -574,7 +591,21 @@ def hydrate(jobs, binds, checkpoint_dir=None):
 
 
 def cache_payload(result):
-    return {k: result.get(k) for k in ("html", "style", "height", "width", "art", "artBox", "titles")}
+    payload = {k: result.get(k) for k in ("html", "style", "height", "width", "art", "artBox", "titles")}
+    urls = set()
+    def portable(value):
+        if isinstance(value, str):
+            # The source check has finished; keep the title marker (eager image
+            # loading uses it), pointing at the captured title's portable URL.
+            value = re.sub(r'<img\b[^>]*>', lambda m: TITLE_SOURCE.sub(
+                lambda _: 'data-title-src="' + re.search(r'\bsrc="([^"]+)"', m[0])[1] + '"', m[0]), value)
+            return rewrite_urls(value, urls)
+        if isinstance(value, list): return [portable(v) for v in value]
+        return value
+    payload = {k: portable(v) for k, v in payload.items()}
+    payload['assets'] = dict(result.get('assets', {}))
+    bundle_assets(payload, urls, WORK, PUB, input_sha)
+    return payload
 
 
 def write_cache(path, value):
@@ -681,7 +712,7 @@ def rule_original_html(text):
 
 def image_size_attrs(url):
     from PIL import Image
-    path = file_url_to_path(url) if url.startswith("file:///") else os.path.join(PUB, *urllib.parse.unquote(urllib.parse.urlsplit(url).path).lstrip("/").split("/"))
+    path = file_url_to_path(url) if url.startswith(("file:///", "../_inputs/", "/assets/")) else os.path.join(PUB, *urllib.parse.unquote(urllib.parse.urlsplit(url).path).lstrip("/").split("/"))
     with Image.open(path) as image:
         width, height = image.size
     return f' width="{width}" height="{height}"'
@@ -815,7 +846,7 @@ def finish_page(name, fm, results, cssv):
         if art_src and r["o"] == "h" and living:
             motion = {"screen": sid, "art_url": publish_path(file_url_to_path(art_src)), "art_key": sha(file_url_to_path(art_src))}
         if r["o"] == "h" and r.get("titles") and motion is not None and motion.get("screen") == sid and "brush_url" not in motion:
-            motion["brush_url"] = publish_path(file_url_to_path(r["titles"][0])) if r["titles"][0].startswith("file:///") else None
+            motion["brush_url"] = publish_path(file_url_to_path(r["titles"][0])) if r["titles"][0].startswith(("file:///", "/assets/")) else None
     font = font_subset(name, texts + [text for screen, text in source_screens.values() if screen.get("source_logical_id")] + [fm.get("title", ""), fm.get("tagline", "")])
     # 翻页过渡要的“这页的插画和标题是哪张图”：按文件内容算指纹
     mm = None
@@ -901,13 +932,16 @@ def finish_page(name, fm, results, cssv):
     for s in out["screens"]:
         if s.get("article"):
             s["article"] = re.sub(r'<span id="([^"]+)"></span>', original_anchor, s["article"])
+    for result in results:
+        urls = asset_urls(json.dumps(screens[result['screen']][result['o']], ensure_ascii=False))
+        bundle_assets(result, urls | {font, out['css'], out['loader']}, WORK, PUB, input_sha)
     os.makedirs(OUT_DIR, exist_ok=True)
     Path(OUT_DIR, name + ".json").write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8", newline="\n")
     return out
 
 
-def bindings(name, first_screen):
-    rt_p = os.path.join(SITE, "src", "chrome", "runtime", name + ".json")
+def bindings(name, first_screen, site=SITE):
+    rt_p = os.path.join(site, "src", "chrome", "runtime", name + ".json")
     if not os.path.exists(rt_p):
         return {}
     rt = json.load(open(rt_p, encoding="utf-8"))
@@ -916,11 +950,11 @@ def bindings(name, first_screen):
     return {(sid, o): lb[o]["rect"] for o in ("h", "v") if o in lb and lb[o].get("rect")}
 
 
-def run(names, workers=2):
+def run(names, workers=2, migrate_from=None):
     verify_render_lock()
     print("量屏环境：" + json.dumps(RENDER_LOCK, ensure_ascii=False), flush=True)
     workers = min(2, max(1, workers))
-    _published.clear(); _living_configs.clear()
+    _published.clear(); _living_configs.clear(); _inputs.clear(); _input_shas.clear()
     t0 = time.time()
     os.chdir(REPO)  # page.json 里截图等路径相对仓库根（和现在出图时一样）
     mount = os.path.join(SITE, "src", "scripts", "living-mount.js")
@@ -936,18 +970,12 @@ def run(names, workers=2):
     reg, owner, css, warn = load_registry()
     css_files = [os.path.join(PROTO, "style", "base.css")] + css
     cssv = build_css(css_files)
-    # 浏览器排版逻辑改变才让所有屏幕的测量缓存失效。
-    code_fp = hydration_fingerprint()
-    shared_fp = library_fingerprint() + cssv + RENDER_VERSION
-    libfp = shared_fp + code_fp
-    legacy_libfp = shared_fp + LEGACY_RENDERER_CODE_FP if legacy_renderer_compatible(__file__) else None
-    prior_libfp = shared_fp + PRE_CHECKPOINT_CODE_FP if legacy_libfp else None
     all_jobs, fms, binds, source_shas = [], {}, {}, {}
     failed = []
     for n in names:
         try:
             source_shas[n] = sha(os.path.join(MD_DIR, n + ".md"))
-            fm, page, jobs = prepare_page(n, reg, css_files, libfp, legacy_libfp, prior_libfp)
+            fm, page, jobs = prepare_page(n, reg, css_files)
         except Exception as e:  # 一页出错不拦别的页，最后列出来
             failed.append(n); print(f"{n}：区块库排这一页出错 {repr(e)[:200]}", flush=True); continue
         page_binds = bindings(n, page["screens"][0]["id"]) if page["screens"] else {}
@@ -955,11 +983,7 @@ def run(names, workers=2):
         # 实际首屏动效绑定影响 art/artBox，必须跟着参与缓存键。
         for j in jobs:
             binding_rect = page_binds.get((j["screen"], j["o"]))
-            # The preliminary key already contains the actual generated HTML.
-            j["key"] = hashlib.sha256(json.dumps([j["key"], binding_rect], separators=(",", ":"), sort_keys=True).encode()).hexdigest()[:20]
-            for field in ("legacy_key", "prior_key"):
-                if j.get(field):
-                    j[field] = hashlib.sha256(json.dumps([j[field], binding_rect], separators=(",", ":"), sort_keys=True).encode()).hexdigest()[:20]
+            j['key'] = screen_cache_key(j.pop('input'), j['o'], binding_rect)
         fms[n] = fm; all_jobs += jobs
     names = [n for n in names if n not in failed]
     # 增量：指纹没变的屏用上次的结果
@@ -967,10 +991,18 @@ def run(names, workers=2):
     cache = json.loads(Path(cache_p).read_text("utf-8")) if os.path.exists(cache_p) else {}
     checkpoint_dir = Path(WORK, "_completed")
     recover_cache(cache, checkpoint_dir)
-    migrated = promote_legacy_cache(cache, all_jobs)
-    if migrated:
-        print(f"区块排版：复用当前已核实旧版缓存 {migrated} 份", flush=True)
+    if migrate_from:
+        global IMPORT_ROOT
+        IMPORT_ROOT = str(Path(migrate_from).resolve())
+        migrate_cache(migrate_from, all_jobs, cache, sys.modules[__name__])
+    for j in all_jobs:
+        if j['key'] in cache: restore_assets(cache[j['key']], WORK, PUB, input_sha)
+    write_cache(Path(WORK, '_index.json'), {j['page'] + '/' + j['screen'] + '-' + j['o']:
+                {'key': j['key'], 'input_key': j['key']} for j in all_jobs})
     todo = [j for j in all_jobs if j["key"] not in cache]
+    if migrate_from:
+        write_cache(cache_p, cache)
+        return  # A migration command must never fall through to browser work.
     print(f"区块排版：{len(all_jobs)} 份（{len(names)} 页），要重排 {len(todo)} 份，用时 {time.time() - t0:.1f} 秒准备")
     chunks = [todo[i::workers] for i in range(workers)] if todo else []
     done = []
@@ -998,6 +1030,7 @@ def run(names, workers=2):
             finish_page(n, fms[n], by_page.get(n, []), cssv)
         except Exception as e:
             failed.append(n); print(f"{n}：收尾出错 {repr(e)[:200]}", flush=True)
+    write_cache(cache_p, cache)
     fix_dead_fragments([n for n in names if n not in failed])
     print(f"区块排版完成：{len(names) - len([f for f in failed if f in names])} 页，{time.time() - t0:.1f} 秒；出错 {len(failed)} 页 {failed}")
     if failed or missing:
@@ -1053,6 +1086,10 @@ def all_pages():
 
 if __name__ == "__main__":
     names = sys.argv[1:]
+    migrate_from = None
+    if '--migrate-cache-from' in names:
+        i = names.index('--migrate-cache-from')
+        migrate_from = names[i + 1]; del names[i:i + 2]
     if not names or names == ["--all"]:
         names = all_pages()
-    run(names, int(os.environ.get("BLOCK_WORKERS", "2")))
+    run(names, int(os.environ.get("BLOCK_WORKERS", "2")), migrate_from)
