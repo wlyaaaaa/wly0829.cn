@@ -150,7 +150,7 @@ export function reductionFailureResult(failure, requestId, action, lookupOnly = 
   const beforeCreation = !lookupOnly && new Set([
     "public_state_changed", "public_lock_disabled", "public_windows_lock_disabled",
     "public_owner_end_disabled", "public_request_invalid", "public_origin_not_allowed",
-    "public_request_rate_limited", "public_request_too_large",
+    "public_request_rate_limited", "public_request_too_large", "cockpit_owner_required",
   ]).has(code);
   return { ...failure?.data, request_id: requestId, action,
     state: beforeCreation ? "failed" : failure?.data?.state || "unknown", error: code,
@@ -354,6 +354,7 @@ export function adaptStatus(data) {
 }
 
 export const errorMessages = {
+  cockpit_owner_required: "这台设备没配对，不能在这里关。",
   public_factor_not_submitted: "本次验证码未提交。请重新输入验证码后验证。",
   public_request_tracking_unavailable: "无法保存本次请求状态，验证码未提交。请重新加载页面后再试。",
   public_state_changed: "授权、开机或配置状态已变化。请查看最新状态，再决定是否重新办理。",
@@ -392,7 +393,7 @@ export const errorMessages = {
   disabled: "此操作已由主机停用。",
 };
 
-export async function apiRequest(base, path, { method = "GET", body, csrf, signal, timeout = path.startsWith('/status') ? 8000 : 10000 } = {}) {
+export async function apiRequest(base, path, { method = "GET", body, csrf, device, signal, timeout = path.startsWith('/status') ? 8000 : 10000 } = {}) {
   const controller = new AbortController();
   const abort = () => controller.abort();
   signal?.addEventListener("abort", abort, { once: true });
@@ -400,7 +401,7 @@ export async function apiRequest(base, path, { method = "GET", body, csrf, signa
   try {
     const response = await fetch(`${base}${API_PATH}${path}`, {
       method, cache: "no-store", credentials: "include", signal: controller.signal,
-      headers: { ...(body ? { "Content-Type": "application/json" } : {}), ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
+      headers: { ...(body ? { "Content-Type": "application/json" } : {}), ...(csrf ? { "X-CSRF-Token": csrf } : {}), ...(device ? { "X-Cockpit-Device": device } : {}) },
       ...(body ? { body: JSON.stringify(body) } : {}),
     });
     let data;
