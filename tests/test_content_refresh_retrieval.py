@@ -195,9 +195,9 @@ class RetrievalTests(unittest.TestCase):
         self.assertEqual(peak, 8)
         self.assertEqual(result["automatic_success_ratio"], 1)
         self.assertEqual(result["rows"][-1]["new_value"], datetime.now(refresh.BEIJING).date().isoformat())
-        with patch.object(refresh, "bounded") as command:
+        with patch.object(refresh, "bounded", return_value="[3]") as command:
             refresh.collect(self.root, {"records": records}, total_seconds=.2)
-            command.assert_not_called()  # 不能先耗尽总预算，再另加进程终止时间。
+            self.assertEqual(command.call_count, len(records))  # 总预算不截断后续来源。
         private = dict(records[0], private=True)
         with patch.object(refresh, "bounded", return_value="[3]"):
             self.assertEqual(refresh.collect(self.root, {"records": [private]})["rows"][0]["new_value"], 3)

@@ -161,9 +161,9 @@ class RefreshTests(unittest.TestCase):
         with patch.object(refresh, "bounded", side_effect=TimeoutError("单条超时")):
             row = self.run_collect()
         self.assertEqual((row["status"], row["new_value"], row["page_date"]), ("unavailable", None, "2026-09-28"))
-        with patch.object(refresh, "bounded") as read:
-            self.assertIn("总重取时限", self.run_collect(total_seconds=0)["reason"])
-            read.assert_not_called()
+        with patch.object(refresh, "bounded", return_value="[2021]") as read:
+            self.assertEqual(self.run_collect(total_seconds=.01)["new_value"], 2021)
+            read.assert_called_once()
     def test_file_count_line_count_and_scalar_json(self):
         (self.root / "tools").mkdir()
         (self.root / "tools/a.py").write_text("一行\n  \n二行", encoding="utf-8")

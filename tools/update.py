@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts/content-refresh"))
 from editorial_ledger import Ledger
 from update_gates import Run, git, locked, now, protected_inputs, read, timestamp, write
+from update_numbers import numbers, require_numbers
 
 MANUAL = {"learning", "personal-health", "cacb", "codex-remote", "personal-finance"}
 FROZEN = {"frozen", "冻结", "已冻结", "historical", "历史"}
@@ -155,6 +156,9 @@ def main():
     begin.add_argument("--first-pass", action="store_true", help="仅全站头一遍：全页入围，无总截止")
     for key, default in (("repositories", REPOSITORIES), ("supply", SUPPLY), ("exclusions", EXCLUSIONS)):
         begin.add_argument("--" + key, type=Path, default=default)
+    numeric = sub.add_parser("numbers")
+    numeric.add_argument("--budget", type=float, default=300, help="取数默认预算，只记用时不截断")
+    numeric.add_argument("--only", help="明确只换这些页的数字，逗号分隔；默认取全部已登记允许页")
     for action in ("status", "begin", "repair", "step-start", "step-end", "pass", "reject", "drop", "record-published", "finish"):
         cmd = sub.add_parser(action)
         cmd.add_argument("--page")
@@ -172,7 +176,11 @@ def main():
         elif args.action == "status":
             run = Run(args.run_dir)
             with locked(run.directory): state = run.load(); run.summary(state)
+        elif args.action == "numbers":
+            state = numbers(args.run_dir, args.budget, args.only)
         else:
+            if args.action in {"begin", "repair"} or args.action == "step-start" and args.page:
+                require_numbers(args.run_dir)
             state = Run(args.run_dir).apply(args.action, args.page, args.step, args.artifact, args.reason, args.budget, args.event_id)
         print(json.dumps(dict(run_dir=str(args.run_dir), **state), ensure_ascii=False, indent=2))
     except (ValueError, KeyError, OSError, subprocess.SubprocessError) as error:

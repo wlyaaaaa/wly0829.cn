@@ -52,6 +52,9 @@ class UpdateTests(unittest.TestCase):
         directory = self.base / ("run-" + str(len(list(self.base.glob("run-*")))))
         start(self.root, directory, kwargs.pop("requested_at", now().isoformat()), repositories=self.repos,
               supply=self.supply, exclusions=self.exclusions, **kwargs)
+        state = read(directory / "state.json")
+        state["numbers"] = dict(status="committed", commit=subprocess.check_output(["git", "-C", str(self.root), "rev-parse", "HEAD"], text=True).strip())
+        write(directory / "state.json", state)
         self.put(directory / "output.json", dict(synthetic=True))
         return Run(directory)
 

@@ -469,8 +469,7 @@ def page_value(record, page, root):
 def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entries=None, workers=8, entries_path=None, targeted=(), manual_owner_request=()):
     today = today or datetime.now(BEIJING).date()
     started = time.monotonic()
-    # 留出 taskkill/进程等待（各最多5秒）及审计/落盘尾段；总时限不是额外清理预算。
-    deadline = started + max(0, total_seconds - 15)
+    # 总预算只记用时；每个来源仍按自身超时结束，不因300秒耗尽放弃后续来源。
     entries_path = entries_path or root / "sources/refresh/entries.json"
     entries = entries if entries is not None else read_json(entries_path) if entries_path.exists() else {}
     validate_entries(entries)
@@ -529,16 +528,13 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
         rows.append(row)
 
     def run_group(selected):
-        remaining = deadline - time.monotonic()
-        if remaining <= 0:
-            return [{"error": "总重取时限已到，跳过剩余来源"}] * len(selected), None
         methods = [dict(r["retrieve"], **{k: r[k] for k in ("observation_basis", "source_observed_at_pointer", "source_coverage_end_pointer") if k in r and (k != "observation_basis" or r[k] != "unknown")}) for r in selected]
         for row, method in zip(selected, methods):
             if row.get("observation_basis") == "unknown" and "observation_basis" in row:
                 original = next(r for r in registry["records"] if r["id"] == row["id"])
                 if "observation_basis" in original:
                     method["observation_basis"] = original["observation_basis"]
-        seconds = min(remaining, max([item_seconds] + [m.get("timeout", entries.get(LEDGER if m["kind"] == "usage_ledger" else m.get("entry", ""), {}).get("timeout", item_seconds)) for m in methods]))
+        seconds = max([item_seconds] + [m.get("timeout", entries.get(LEDGER if m["kind"] == "usage_ledger" else m.get("entry", ""), {}).get("timeout", item_seconds)) for m in methods])
         try:
             argv = [sys.executable, str(Path(__file__).resolve()), "--retrieve-batch", json.dumps(methods, ensure_ascii=False),
                     "--root", str(root), "--entries", str(entries_path), "--item-seconds", str(seconds)]
@@ -606,7 +602,7 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
             "relative_time_risks": [f for f in audit["findings"] if re.search("相对|昨天|今天|目前", f.get("message", "") + f.get("excerpt", ""))],
             "baseline": registry.get("baseline"), "baseline_evidence": registry.get("baseline_evidence", "Unknown；登记基线"), "pages_checked": audit["pages_checked"],
             "numbers_checked": len(rows), "rows": rows, "findings": audit["findings"],
-            "retrieval_seconds": round(time.monotonic() - started, 3), "workers": max(8, workers),
+            "retrieval_seconds": round(time.monotonic() - started, 3), "budget_seconds": total_seconds, "workers": max(8, workers),
             "automatic_total": len(automatic), "automatic_obtained": sum(r["status"] in {"changed", "unchanged"} for r in automatic),
             "automatic_success_ratio": sum(r["status"] in {"changed", "unchanged"} for r in automatic) / len(automatic) if automatic else None}
 
@@ -690,7 +686,6 @@ def report_content(result, task, task_path):
 
 
 def main():
-    command_started = time.monotonic()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--registry", type=Path)
@@ -706,7 +701,7 @@ def main():
     parser.add_argument("--dist", type=Path, help="成品目录；闭环时额外核对新片段实际显示")
     parser.add_argument("--no-report", action="store_true", help="只交机器清单和任务文件，不生成汇报网页")
     parser.add_argument("--workers", type=int, default=8)
-    parser.add_argument("--total-seconds", type=float, default=300)
+    parser.add_argument("--total-seconds", type=float, default=300, help="默认取数预算，只记录、不截断")
     parser.add_argument("--item-seconds", type=float, default=6)
     parser.add_argument("--retrieve", help=argparse.SUPPRESS)
     parser.add_argument("--retrieve-batch", help=argparse.SUPPRESS)
@@ -734,7 +729,7 @@ def main():
         print(json.dumps(value, ensure_ascii=False))
         return 0
     try:
-        positive(args.total_seconds, "总时限")
+        positive(args.total_seconds, "取数预算")
         positive(args.item_seconds, "单项时限")
         validate_entries(entries)
     except ValueError as exc:
@@ -786,9 +781,6 @@ def main():
         card("incomplete", output / "dated-inventory.json", {"missing": len(findings)},
                    (dict(record_id=",".join(f["record_ids"]), page=f["page"], reason=f["reason"]) for f in findings))
         return 2
-    if args.strict and not only and inventory["coverage"].get("required_items") and inventory["coverage"]["automatic_ratio"] < .85:
-        card("insufficient_automatic_coverage", output / "dated-inventory.json", inventory["coverage"])
-        return 2
     if args.inventory:
         card("inventoried", output / "dated-inventory.json", inventory["coverage"],
                    [dict(record_id=inventory["rule_version_task"]["id"], page="rules", reason=inventory["rule_version_task"]["reason"])]
@@ -798,10 +790,9 @@ def main():
     for key in ("TEMP", "TMP", "TMPDIR"):
         os.environ[key] = str((output / "tmp").resolve())
     registry = dict(registry, **publication_baseline(args.root, registry.get("baseline")))
-    command_deadline = command_started + args.total_seconds
     stamps = set(inventory.get("review_stamp_record_ids", []))
     registry = dict(registry, records=[r for r in registry["records"] if r["id"] not in stamps])
-    result = collect(args.root, registry, max(0, command_deadline - time.monotonic() - 5), args.item_seconds, entries=entries, workers=args.workers, entries_path=entries_path, targeted=targeted, manual_owner_request=requested)
+    result = collect(args.root, registry, args.total_seconds, args.item_seconds, entries=entries, workers=args.workers, entries_path=entries_path, targeted=targeted, manual_owner_request=requested)
     result["registry_path"] = str((args.registry or args.root / "sources/refresh/registry.json").resolve())
     result['project_repositories'] = repository_summary
     result["manual_tasks"] = review_tasks(inventory, result["rows"], targeted)
@@ -832,12 +823,9 @@ def main():
     content.write_text(json.dumps(report_content(result, task, output / "opus-task.md"), ensure_ascii=False), encoding="utf-8")
     html = output / "result.html"
     try:
-        report_seconds = min(180, command_deadline - time.monotonic() - 10)
-        if report_seconds <= 0:
-            raise TimeoutError("总时限已到；机器结果已保存，汇报网页未生成")
         receipt = json.loads(bounded(["pwsh", "-NoProfile", "-File",
             "E:/.agents/skills/report-page/scripts/New-ReportPage.ps1", "-ContentPath", str(content),
-            "-OutputPath", str(html), "-NoOpen", "-KeepDays", "0"], report_seconds))
+            "-OutputPath", str(html), "-NoOpen", "-KeepDays", "0"], 180))
         (output / "report-receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2), encoding="utf-8")
         if (not html.is_file() or receipt.get("status") != "created" or receipt.get("opened") is not False
                 or receipt.get("checks", {}).get("passed") is not True

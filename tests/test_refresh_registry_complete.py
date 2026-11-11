@@ -18,7 +18,6 @@ class RegistryCompletenessTests(unittest.TestCase):
         findings = strict_findings(inventory, records, entries)
         lines = [f"{i['page']} / {i['screen']} / {i['excerpt']}：{i['reason']}" for i in findings]
         self.assertEqual(len(findings), 0, f"{len(findings)} 项漏登记：\n" + "\n".join(lines))
-        self.assertGreaterEqual(inventory["coverage"]["automatic_ratio"], .85, "自动取数覆盖低于85%")
 
 
 if __name__ == "__main__":

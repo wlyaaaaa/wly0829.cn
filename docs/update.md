@@ -62,6 +62,7 @@
 - 连着两次到总上限时放下的页超过三成：停下，带数据告诉本人这套流程不行，不再打补丁。
 
 ## 命令（做出来的单各自补自己的几行）
+- `python -B -X utf8 tools/update.py numbers --run-dir <本次目录>`：先取全部已登记允许页的数字、写作者源和真实观察日并提交；`state.json`、`scope.json` 的 `author_base_commit` 是核写正文的起点，同次再改数会拒绝。`--budget` 默认300秒，只记用时；明确只换指定页数字时加 `--only 页名,页名`。数字随头一趟发布，此命令不发布、不挪已发布核对点。
 - 未结：IPv6 资源地址的准备分支等下一次正式发布一起合入，见 [OSS 资源契约](oss-publication.md) 末节。
 - `python -B -X utf8 tools/update.py start --requested-at <开口时间，含+08:00> --run-dir <公开工作树外的新目录>`：记来源提交、范围、一道多选题；`--project ID`、`--page 页名`可重复，点名时只列点名范围；`--scope <JSON数组文件>`提供周更范围名单，可与点名合用；均不填则列全部动了的项目，`--numbers-only`只换数。
 - `start --first-pass`仅全站头一遍使用：全站每页入围，含5个手动项目；冻结项目只核冻结说明和去向，无总截止，三次修复上限照旧。续跑不重开start，改用`status --run-dir <原目录>`，读`scope.json`、`state.json`和`timing.md`。
