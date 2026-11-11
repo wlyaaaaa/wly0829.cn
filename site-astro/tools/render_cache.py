@@ -96,7 +96,7 @@ def migrate_cache(source, jobs, cache, renderer):
         libfp = json.loads(subprocess.check_output([sys.executable, '-B', '-X', 'utf8', '-c',
                            code, str(source / 'site-astro/tools')], cwd=source, text=True))
         lock = json.loads((source / 'config/render.lock.json').read_text('utf8'))
-        fonts = [renderer.sha(f['path']) for f in lock['fonts']]
+        fonts = [f['sha256'] for f in lock['fonts']]
         index = {}
         for name in dict.fromkeys(j['page'] for j in jobs):
             md = source / 'site-astro/src/content/pages' / (name + '.md')
