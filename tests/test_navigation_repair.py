@@ -13,7 +13,6 @@ nav = importlib.util.module_from_spec(spec); spec.loader.exec_module(nav)
 spec = importlib.util.spec_from_file_location('hybrid', ROOT / 'scripts/hybrid-release.py')
 hybrid = importlib.util.module_from_spec(spec); spec.loader.exec_module(hybrid)
 
-
 class NavigationRepair(unittest.TestCase):
     def test_home_comic_and_highlights_anchor_follow_the_same_reading_order(self):
         order = ['home-01', 'home-04', 'home-02', 'home-03', 'home-05']
@@ -87,20 +86,6 @@ class NavigationRepair(unittest.TestCase):
         self.assertIn('暂时读不到时保留未知', actual['search'])
         self.assertFalse(any(e['href']=='/#deleted' for e in records))
         self.assertFalse(any('unknown_source_path' in e for e in records))
-
-    def test_prior_fallback_restores_automatically_when_target_is_in_next_hybrid_release(self):
-        old=self.root/'old'; candidate=self.root/'candidate'; old.mkdir(); candidate.mkdir()
-        data={'neighbors':{'next':{'title':'目标','href':'/','original_href':'/future/#actual'}}}
-        (old/'index.html').write_text('<h1>原首页</h1>',encoding='utf8')
-        (old/'404.html').write_text('404',encoding='utf8')
-        (old/'kept').mkdir(); (old/'kept/index.html').write_text('<script id="page-data">'+json.dumps(data)+'</script>',encoding='utf8')
-        (candidate/'future').mkdir(); (candidate/'future/index.html').write_text('<h1 id="actual">已发布目标</h1>',encoding='utf8')
-        baseline={'files':hybrid.inventory(old),'routes':['/','/kept/','/404.html']}
-        out=self.root/'out'; manifest=hybrid.assemble(old,candidate,out,baseline,{'/future/':{}})
-        result=json.loads(nav.PAGE_DATA.search((out/'kept/index.html').read_text())[2])
-        self.assertEqual(result['neighbors']['next']['href'],'/future/#actual')
-        self.assertEqual(manifest['release_overlay']['kept/index.html']['kind'],'navigation_restoration')
-        self.assertEqual(hybrid.verify_release(out)['release_id'],manifest['release_id'])
 
     def test_viewer_text_node_handler_uses_parent_element(self):
         text="document.addEventListener('selectstart',e=>{if(e.target.closest('.screen picture,.screen .hotspot,.raster-card'))e.preventDefault();});"
@@ -186,6 +171,5 @@ class NavigationRepair(unittest.TestCase):
         self.assertEqual(row['detail'],raw['detail'])
         self.assertEqual(row['search'],raw['search']);self.assertEqual(row['aliases'],raw['aliases'])
         self.assertNotIn('provenance.json',text)
-
 
 if __name__ == '__main__': unittest.main()

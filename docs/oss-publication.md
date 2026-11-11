@@ -45,6 +45,14 @@ CI 使用 Ubuntu，只部署成品，不运行源码构建、扫描、公开内�
 
 准备库继续解析旧完整 GET、HEAD/CRC64/MD5、混合复用以及同版本机内容核验回执。它们分别保留原 `release_id`、checker 身份、对象指纹与核验方法，不把旧全包封口写成新发布的必要步骤，也不把新 HEAD 改名为旧正文核验。
 
-定稿器中的继承资源解析仍需准确历史提交中的 `site-release/release-manifest.json`；资源复制和继承逻辑仅存于 `prepare-oss-release.py`，hybrid 装配、全量验证、旧 Git 提取回退及其 CLI 已删。当前回退通过同一个 Pages workflow 的 `ref` 输入部署实际旧 `site-dist` SHA，具体未来命令见 [网站维护](maintenance.md)，没有备用源码重建链。
+定稿器中的继承资源解析仍需准确历史提交中的 `site-release/release-manifest.json`；资源复制和继承逻辑仅存于 `prepare-oss-release.py`，hybrid 装配、全量验证、旧 Git 提取回退及其 CLI 已删。当前回退通过同一个 Pages workflow 的 `sha` 输入部署实际旧 `site-dist` SHA，具体命令见 [发布与扫描](publish-and-scan.md)，没有备用源码重建链。
 
 本地准备器保留 `--test-loopback` 的测试材料语义：loopback 计划明确为 `test_only`，不能作为生产传送。已有受控静态补取回执记录首次失败和一次实际补取、响应正文及 MIME/CORS，不能冒充原生冷网络或速度达标。记录这些迁移材料不表示本轮上传、Pages 部署或旧回退已执行。
+
+## 未合入的准备：IPv6 资源地址
+
+**合入已准备的 IPv6 资源地址改动。** 分支 `prep/oss-ipv6-20261106` 只做了切换准备，未合并、未上传 OSS、未发布；等本次内容更新一起发布。默认读取地址改为 `<桶名>.cn-shanghai.oss.aliyuncs.com`，保留 IPv4 和旧地址，不改桶配置或网络。
+
+现役主桶的图片、样式、脚本、字体、视频各 2 个真实对象已逐次比对：新旧正文、类型和缓存头一致；两种网站 Referer、无 Referer、字体和脚本 CORS 及预检一致，旧域名一次断连后原样重试成功。两个新域名证书均通过，主桶的真实 IPv4/IPv6 请求均成功。第二桶的旧、新地址及现有身份列举都返回 `NoSuchBucket`，没有可验的真实对象；不新建、不恢复该桶。
+
+合入后跑完整测试和正式构建，核最终 HTML/CSS/JS/JSON/字体引用、重试允许来源与分享图片都使用新地址，再按 [发布与扫描](publish-and-scan.md) 做变化页扫描、发布预演、正式发布和公网回读；域名切换会让几乎全部页面成为变化页。准备阶段只做单元和小范围构建，Chrome 已用真实网站来源预览切换后的资源入口；线上旧 CSS/JS 内部依赖仍要等正式构建发布后复验。冻结原件及 `scripts/site-ui-baseline.json` 的旧 URL 是历史证据，保留不改，构建副本统一切换。上线回读全部通过后由本次更新删除本节；回退办法见 [OSS 资源契约](oss-publication.md)。

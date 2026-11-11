@@ -14,7 +14,7 @@
 
 Scripts 的能力由对应项目直接承接，不生成独立卡片、路由、内容包、TODO 或未来施工项；`md-triple-tactics-talent-solver` 只保留为 System 的历史 GitHub 总账资产，不属于独立项目规划，也不生成项目卡、路由、内容包或未来施工项。
 
-排序按理性多数认可的综合净价值判断：既看普适直接收益和防损，也给已有真实消费者的控制面有限乘数，再按成熟度修正兑现概率并扣除采用、维护、复杂度和副作用成本；不会把下游价值重复相加，也不因本人当前使用频率、历史建设顺序或个人偏好加分。所有不单独成卡的关系说明都已在现有项目或 System 中闭合，当前没有非卡说明 TODO（待办）。CACB、学习方法、Codex Remote 和 personal-health 是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目；其余已发布项目默认 `real_dashboard`。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
+排序按理性多数认可的综合净价值判断：既看普适直接收益和防损，也给已有真实消费者的控制面有限乘数，再按成熟度修正兑现概率并扣除采用、维护、复杂度和副作用成本；不会把下游价值重复相加，也不因本人当前使用频率、历史建设顺序或个人偏好加分。所有不单独成卡的关系说明都已在现有项目或 System 中闭合，当前没有非卡说明 TODO（待办）。CACB、学习方法、Codex Remote 和 personal-health 是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目；其余已发布项目默认 `real_dashboard`。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：更新按 [网站怎么更新](docs/update.md) 过关后，自动普通推送 `main`、发布并公网回读。
 
 ## 项目模式
 
@@ -41,50 +41,12 @@ npm run verify:public
 
 ## AI 快速刷新
 
-网页正文由 AI 更新。用户只需要说“刷新个人看板里的 PCConfig”或“全部更新一下”；AI 读取 Registry 和真实 Owner、形成独立产品判断、自动修复必要源问题并原位更新内容。只有本人要求“更新网站”时才开始更新；来源项目、规则或 Skill 发布后不自动交接，也不新建网站任务。AI 在别的工作中发现网站已过时，只在汇报里提一句，等本人要求更新。一次定向请求只处理点名的登记快照及受影响的直接表面，小改默认不更新，全量复核也允许全部项目保持字节不变。仍匹配的证据才复用，批次稳定后只运行一次最终完整门；预览服务在可控后台会话中限时运行。网站门通过后自动发布到现有 PUBLIC `main` 并完成 Pages 回读。
+本人说“更新网站”（可点名项目）才更新，流程与分工见 [网站怎么更新](docs/update.md)，发布操作见 [发布与扫描](docs/publish-and-scan.md)。
+别的项目改了，只在那个项目的提交说明里留一行“变化：……”，不开网站任务。
 
-AI 内部可先取得定向或全量刷新计划：
-
-```powershell
-npm run refresh:ai -- --project pcconfig
-npm run refresh:ai -- --project chinese-asr
-npm run refresh:ai -- --project timeaudit
-npm run refresh:ai -- --project pc-panel-hub
-npm run refresh:ai -- --project wechat-direct
-npm run refresh:ai -- --project personal-materials
-npm run refresh:ai -- --project document-materials
-npm run refresh:ai -- --project work-delivery
-npm run refresh:ai -- --project daily-preferences
-npm run refresh:ai -- --project personal-media
-npm run refresh:ai -- --project localocr
-npm run refresh:ai -- --project vault-tool
-npm run refresh:ai -- --project video-scaffold
-npm run refresh:ai -- --project openclaw-gateway
-npm run refresh:ai -- --project cacb --manual-owner-request
-npm run refresh:ai -- --project personal-health --manual-owner-request
-npm run refresh:ai -- --all
-npm run verify:ai-refresh -- --bundle <ai-result.json>
-```
-
-该命令只返回项目、实际上线的总览与全部模块源（包括页面 JSON、布局和当前 Markdown）的聚合指纹、事实采集入口和刷新边界；尚未迁移的四个项目明确列出仍参与构建的冻结 HTML，不写网页正文。完整合同见 [个人看板 AI 快速刷新合同](docs/maintenance/ai-panel-refresh.md)。
-
-`manual_owner_only` 项目没有 Source/Skill 自动刷新。未带
-`--manual-owner-request` 时，CACB、学习方法、Codex Remote 或 personal-health 的定向计划，以及包含
-这些项目的全量计划只返回 `manual_owner_request_required`，不会收集证据或创建网站
-任务；只有本人明确要求的网站任务才可携带该标记继续。
+## 静态页面与加载
 
 当前每条路由都在构建时生成完整静态正文，禁用 JavaScript 仍可阅读；浏览器只加载一个小型共享增强脚本，使用原生目录页面导航，并最多预取下一条非兼容路由。共享交互 JavaScript、共享 CSS、全站紧凑搜索和全部项目模块搜索的 gzip 审查阈值以 Registry 的当前实测线为准；它们是防膨胀审查线，不是永久内容上限。搜索在构建时从项目快照与模块、规则、Skills、System 节点的审过字段生成有界自然短语，只保留搜索语义，不把完整正文复制进公共 JavaScript。当前完整构建的实际 gzip 数值记录在 `design-qa.md`，README 不把一次构建数字固化成永久事实。不得用点击后正文加载、fetch（网络读取）、spinner、骨架屏、空白或删减专业正文换取体积；图片画廊仍可使用轻量缩略图，并只在用户打开后解码完整图片。
-
-规则作者源由现有 `python scripts/prepare-astro-release.py refresh --output <本轮回执.json>` 从已核验的 current E release 更新到 `sources/rules`；构建再验证该快照并排版原文。Skills 目录和详情由 `sources/pages/skills-home`、`sources/pages/skill-*` 拥有。旧 React 专用的 `refresh:agents-snapshot` 与 `verify:snapshot` 已退役；文件指纹只说明作者输入是否变化，不代替当前活动规则与来源证据的核验。
-
-定位 Source 变化影响的候选页面：
-
-```powershell
-npm run impact -- --project agents --path AGENTS.md
-npm run impact -- --project agents --path AGENTS.md --material-change
-```
-
-路径命中只表示影响候选，`--material-change` 标明已确认的实质漂移；来源变化不自动路由或新建网站任务。AI 在来源任务的汇报中说明过时内容，等本人要求更新网站后，再按该请求的范围处理候选页面。
 
 ## 事实来源
 

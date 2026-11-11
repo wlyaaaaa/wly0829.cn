@@ -14,11 +14,9 @@ def load(name, path):
     module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
     return module
 
-
 h = load('speed_hybrid', ROOT/'scripts/hybrid-release.py')
 p = load('speed_readback', ROOT/'scripts/prepare-typeset-release.py')
 fixture = load('speed_oss_fixture', ROOT/'tests/test_oss_release.py')
-
 
 class PublicationSpeedTests(unittest.TestCase):
     def setUp(self):
@@ -38,47 +36,6 @@ class PublicationSpeedTests(unittest.TestCase):
             'routes':[h.file_route(rel) for rel in files if rel.endswith('.html')],
             'accepted_pages':{'/':{}, '/projects/demo/':{}, '/404.html':{}}, 'baseline_files':{}, 'release_overlay':{}}
         h.write(self.source/h.MANIFEST, self.manifest)
-
-
-
-
-
-
-
-    def online(self, previous=None, retry=None, bad_identity=False):
-        self.counter += 1; output = self.root/('online-'+str(self.counter)+'.json')
-        args = SimpleNamespace(release=self.source, output=output, previous_report=previous, retry_report=retry)
-        def fetch(relative, *unused):
-            if relative == 'release-identity.json':
-                return json.dumps({'release_id':'wrong' if bad_identity else self.manifest['release_id'], 'manifest_sha256':p.digest(self.source/h.MANIFEST)}).encode()
-            target = self.source/relative
-            return (target/'index.html' if target.is_dir() else target).read_bytes()
-        with patch.object(p, 'fetch_bytes', side_effect=fetch) as transport:
-            result = p.readback(args)
-        return result, [call.args[0] for call in transport.call_args_list], output
-
-    def test_readback_reuses_only_valid_fingerprints_and_full_bypasses_reuse(self):
-        first, unused, old = self.online(); current, calls, unused = self.online(old)
-        self.assertEqual(current['checks'], first['checks']); self.assertEqual(calls, ['release-identity.json'])
-        self.put('assets/main.js', 'void 2;'); self.refresh()
-        current, calls, unused = self.online(old)
-        self.assertEqual(current['retried_files'], 1); self.assertIn('assets/main.js', calls)
-        with patch.dict(os.environ, {'WLY_RELEASE_FULL':'1'}):
-            current, calls, unused = self.online(old)
-            self.assertEqual(current['retried_files'], current['checked_files'])
-        data = h.read(old); data['files_sha256'] = '0'*64; h.write(old, data)
-        current, calls, unused = self.online(old)
-        self.assertEqual(current['retried_files'], current['checked_files'])
-        self.assertTrue(current['previous_report_fallback_reason'])
-
-    def test_same_release_id_changed_manifest_rejects_old_retry(self):
-        first, unused, old = self.online()
-        self.manifest['rollback_ref'] = 'new-metadata'; h.write(self.source/h.MANIFEST, self.manifest)
-        with self.assertRaisesRegex(ValueError, 'different release'): self.online(retry=old)
-
-    def test_small_identity_mismatch_reads_and_checks_full_manifest(self):
-        first, calls, unused = self.online(bad_identity=True)
-        self.assertEqual(first['status'], 'pass'); self.assertIn('release-manifest.json', calls)
 
     def test_full_remote_retry_also_rechecks_retained_objects(self):
         output, plan = fixture.OssReleaseTests.prepare(self)
