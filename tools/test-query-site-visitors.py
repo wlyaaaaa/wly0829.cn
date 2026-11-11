@@ -332,6 +332,73 @@ class VisitorTests(unittest.TestCase):
                 self.assertEqual(run.call_count, int(succeeds))
                 self.assertEqual([call.args for call in sleep.call_args_list], [(1,)])
 
+    def test_deep_read_failure_details_survive_both_attempts_and_json(self):
+        args = SimpleNamespace(aliyun="aliyun", profile="website-images", sls_project="oss-log-test",
+                               sls_logstore="oss-log-store", deep_read=True)
+        start = datetime(2026, 10, 12, 10, tzinfo=query.TZ)
+        responses = [subprocess.CompletedProcess([], 2, b"", b"EOF secret-value"),
+                     subprocess.CompletedProcess([], 3, b"", b"connection reset secret-value")]
+        with patch.object(query.socket, "getaddrinfo", return_value=[]), patch.object(query.subprocess, "run", side_effect=responses), patch.object(query.time, "sleep"):
+            with self.assertRaises(query.CloudCommandError) as raised:
+                query.sls_logs(args, start, start + timedelta(hours=1))
+        diagnostics = raised.exception.diagnostics
+        self.assertEqual([r["subtype"] for r in diagnostics], ["eof", "connection_reset"])
+        self.assertEqual([r["returncode"] for r in diagnostics], [2, 3])
+        self.assertTrue(all(isinstance(r["elapsed_ms"], int) and r["elapsed_ms"] >= 0 for r in diagnostics))
+        with patch.object(sys, "argv", [query.__file__, "--deep-read", "--since", start.isoformat()]), patch.object(query, "sync_cloud", side_effect=raised.exception), patch("builtins.print") as output:
+            self.assertEqual(query.main(), 1)
+        result = json.loads(output.call_args.args[0])
+        self.assertEqual(result["query_diagnostics"], diagnostics)
+        self.assertNotIn("secret-value", output.call_args.args[0])
+
+    def test_tunnel_records_failure_side_and_stage_without_socket_text(self):
+        for phase, side, error in (("relay", "upstream", None), ("relay", "client", OSError(10054, "secret-value")),
+                                   ("connect", "upstream", OSError(10061, "secret-value"))):
+            with self.subTest(phase=phase, side=side, error=type(error).__name__):
+                tunnel = query.SlsTunnel.__new__(query.SlsTunnel)
+                tunnel.path, tunnel.connection = "cn-shanghai.log.aliyuncs.com:443", Mock()
+                tunnel.server = SimpleNamespace(sls_address="203.0.113.1", diagnostic_lock=query.Lock(), diagnostic_rows=[])
+                tunnel.send_response, tunnel.end_headers = Mock(), Mock()
+                remote = Mock(); remote.__enter__ = Mock(return_value=remote); remote.__exit__ = Mock(return_value=False)
+                peer = remote if side == "upstream" else tunnel.connection
+                peer.recv.side_effect = error if phase == "relay" and error else None
+                peer.recv.return_value = b""
+                with patch.object(query.socket, "create_connection", side_effect=error if phase == "connect" else None, return_value=remote), patch.object(query.select, "select", return_value=([peer], [], [])):
+                    tunnel.do_CONNECT()
+                row, = tunnel.server.diagnostic_rows
+                self.assertEqual((row["phase"], row["close_side"], row["end"]), (phase, side, "socket_error" if error else "eof"))
+                self.assertEqual(row["errno"], error.errno if error else None)
+                self.assertNotIn("secret-value", json.dumps(row))
+
+    def test_cli_subtypes_are_bounded_and_process_timeout_is_distinct(self):
+        for marker, expected in ((b"EOF", "eof"), (b"connection reset", "connection_reset"),
+                                 (b"connection refused", "connection_refused"), (b"TLS handshake", "tls_handshake"),
+                                 (b"timeout", "timeout"), (b"no such host", "dns"), (b"secret-value", "other")):
+            self.assertEqual(query.cli_subtype(subprocess.CompletedProcess([], 1, b"", marker)), expected)
+        with patch.object(query.socket, "getaddrinfo", return_value=[]), patch.object(query.subprocess, "run", side_effect=subprocess.TimeoutExpired("secret-value", 25)):
+            with self.assertRaises(query.CloudCommandError) as raised:
+                query.cli_run(["aliyun", "sls", "GetLogsV2"], timeout=25, attempts=1)
+        self.assertEqual(raised.exception.diagnostics[0]["subtype"], "process_timeout")
+        self.assertIsNone(raised.exception.diagnostics[0]["returncode"])
+
+    def test_cli_failure_snapshots_each_attempt_after_existing_relay_cleanup(self):
+        relay, rows = Mock(server_port=12005), []
+        def run(*args, **kwargs):
+            row = {"phase": "relay", "end": "active", "close_side": "unknown"}
+            rows.append(row); relay.diagnostic_rows.append(row)
+            return subprocess.CompletedProcess([], len(rows), b"", b"EOF secret-value")
+        def close():
+            for index, row in enumerate(rows):
+                row.update(end="eof", close_side="upstream" if index == 0 else "client")
+        relay.server_close.side_effect = close
+        with patch.object(query.socket, "getaddrinfo", return_value=[(0, 0, 0, "", ("198.18.0.1", 443))]), patch.object(query, "sls_address", return_value="203.0.113.1"), patch.object(query, "ThreadingHTTPServer", return_value=relay), patch.object(query, "Thread"), patch.object(query.subprocess, "run", side_effect=run), patch.object(query.time, "sleep"):
+            with self.assertRaises(query.CloudCommandError) as raised:
+                query.cli_run(["aliyun", "sls", "GetLogsV2"], attempts=2)
+        self.assertEqual([r["relay"][0]["close_side"] for r in raised.exception.diagnostics], ["upstream", "client"])
+        self.assertTrue(all(r["relay"][0]["end"] == "eof" for r in raised.exception.diagnostics))
+        rows[0]["end"] = "active"
+        self.assertEqual(raised.exception.diagnostics[0]["relay"][0]["end"], "eof")
+
     def test_dns_failure_classification_and_normal_retry_budget(self):
         good = subprocess.CompletedProcess([], 0, b"{}", b"")
         with patch.object(query.socket, "getaddrinfo", side_effect=[query.socket.gaierror("secret-value"), query.socket.gaierror("secret-value"), []]) as dns, patch.object(query.subprocess, "run", return_value=good) as run, patch.object(query.time, "sleep") as sleep:

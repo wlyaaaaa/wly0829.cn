@@ -22,7 +22,7 @@ import shutil
 from statistics import median
 import struct
 import subprocess
-from threading import Thread
+from threading import Lock, Thread
 import time
 import zlib
 from urllib.parse import parse_qs, unquote, urlsplit
@@ -195,19 +195,39 @@ class SlsTunnel(BaseHTTPRequestHandler):
         if port != "443" or not (host == "cn-shanghai.log.aliyuncs.com" or host.endswith(".cn-shanghai.log.aliyuncs.com")):
             self.send_error(403)
             return
+        started = time.monotonic()
+        row = {"phase": "connect", "close_side": "upstream", "end": "active", "errno": None,
+               "client_bytes": 0, "upstream_bytes": 0, "elapsed_ms": 0}
+        with self.server.diagnostic_lock:
+            if len(self.server.diagnostic_rows) < 4:
+                self.server.diagnostic_rows.append(row)
+        def update(**values):
+            with self.server.diagnostic_lock:
+                row.update(values, elapsed_ms=round((time.monotonic() - started) * 1000))
         try:
             with socket.create_connection((self.server.sls_address, 443), timeout=20) as remote:
+                update(phase="relay", close_side="client")
                 self.send_response(200, "Connection established")
                 self.end_headers()
                 peers = [self.connection, remote]
                 while ready := select.select(peers, [], [], 30)[0]:
                     for peer in ready:
+                        side = "client" if peer is self.connection else "upstream"
+                        update(close_side=side)
                         data = peer.recv(65536)
                         if not data:
+                            update(end="eof")
                             return
+                        update(**{side + "_bytes": row[side + "_bytes"] + len(data)},
+                               close_side="upstream" if side == "client" else "client")
                         (remote if peer is self.connection else self.connection).sendall(data)
-        except OSError:
+                        update(close_side="unknown")
+                update(end="idle_timeout", close_side="unknown")
+        except OSError as error:
+            update(end="socket_error", errno=error.errno)
             return
+        finally:
+            update()
 
 @lru_cache(maxsize=1)
 def sls_address():
@@ -242,18 +262,33 @@ def cli_error(result):
 
 
 class CloudCommandError(RuntimeError):
-    def __init__(self, category, message):
+    def __init__(self, category, message, diagnostics=None):
         self.category = category
+        self.diagnostics = diagnostics or []
         super().__init__(message)
+
+
+def cli_subtype(result):
+    error = (result.stderr + result.stdout).decode("utf-8", errors="replace").lower()
+    for subtype, markers in (("connection_reset", ("connection reset",)), ("connection_refused", ("connection refused",)),
+                             ("tls_handshake", ("tls handshake",)), ("eof", ("eof",)),
+                             ("timeout", ("timeout", "timed out", "deadline exceeded")), ("dns", ("no such host", "name resolution"))):
+        if any(marker in error for marker in markers):
+            return subtype
+    return "other"
 
 
 def cli_run(command, *, timeout=None, attempts=None):
     relay, env = None, None
     is_sls = command[1] == "sls"
-    prepared = False
+    prepared, diagnostics = False, []
     try:
         attempts = attempts if attempts is not None else (3 if is_sls else 1)
         for attempt in range(attempts):
+            started, returncode, subtype = time.monotonic(), None, "other"
+            if relay:
+                with relay.diagnostic_lock:
+                    relay.diagnostic_rows = []
             try:
                 if is_sls and not prepared:
                     if any(address[4][0].startswith(("198.18.", "198.19."))
@@ -261,6 +296,7 @@ def cli_run(command, *, timeout=None, attempts=None):
                         address = sls_address()
                         relay = ThreadingHTTPServer(("127.0.0.1", 0), SlsTunnel)
                         relay.sls_address = address
+                        relay.diagnostic_lock, relay.diagnostic_rows = Lock(), []
                         Thread(target=relay.serve_forever, daemon=True).start()
                         # OAuth refresh must keep its normal path; this relay accepts SLS only.
                         env = {**os.environ, "NO_PROXY": "oauth.aliyun.com,oauth.alibabacloud.com,signin.aliyun.com,signin.alibabacloud.com",
@@ -268,23 +304,33 @@ def cli_run(command, *, timeout=None, attempts=None):
                     prepared = True
                 result = subprocess.run(command, capture_output=True, timeout=timeout if timeout is not None else (60 if is_sls else 180), env=env)
             except socket.gaierror:
-                category = "DNS 解析失败"
+                category, subtype = "DNS 解析失败", "dns"
             except CloudCommandError as error:
-                category = error.category
+                category, subtype = error.category, "dns" if error.category == "DNS 解析失败" else "other"
             except subprocess.TimeoutExpired:
-                category = "连接超时"
+                category, subtype = "连接超时", "process_timeout"
             else:
                 if not result.returncode:
                     return result.stdout.decode("utf-8-sig")
                 category = cli_error(result)
+                subtype, returncode = cli_subtype(result), result.returncode
+            connections = []
+            if relay:
+                with relay.diagnostic_lock:
+                    connections = list(relay.diagnostic_rows)
+            diagnostics.append({"subtype": subtype, "elapsed_ms": round((time.monotonic() - started) * 1000),
+                                "returncode": returncode, "relay": connections})
             if is_sls and category in ("连接超时", "DNS 解析失败", "连接中断") and attempt < attempts - 1:
                 time.sleep(attempt + 1)
                 continue
-            raise CloudCommandError(category, f"阿里云命令失败（{category}，尝试 {attempt + 1} 次）；未输出可能含凭据的原始错误")
+            raise CloudCommandError(category, f"阿里云命令失败（{category}，尝试 {attempt + 1} 次）；未输出可能含凭据的原始错误", diagnostics[-3:])
     finally:
         if relay:
             relay.shutdown()
             relay.server_close()
+            with relay.diagnostic_lock:
+                for diagnostic in diagnostics:
+                    diagnostic["relay"] = [dict(row) for row in diagnostic["relay"]]
 
 
 def list_objects(args, prefix):
@@ -373,12 +419,14 @@ def sls_logs(args, start, end, legacy_fallback=False):
                    "--logstore", args.sls_logstore, "--region", "cn-shanghai",
                    "--endpoint", "cn-shanghai.log.aliyuncs.com", "--read-timeout", "20", "--connect-timeout", "10",
                    "--profile", args.profile, "--body", json.dumps(body)]
-        attempts = 2 if deep_read else 3
+        attempts, diagnostics = (2 if deep_read else 3), []
         for attempt in range(attempts):
             # 深读一页最多两次 25 秒调用；不叠加 CLI 的三次网络重试。
             try:
                 page = json.loads(cli_run(command, timeout=25, attempts=1) if deep_read else cli_run(command))
             except CloudCommandError as error:
+                diagnostics.extend(error.diagnostics)
+                error.diagnostics = diagnostics[-attempts:]
                 if not deep_read or error.category not in ("连接超时", "DNS 解析失败", "连接中断") or attempt == attempts - 1:
                     raise
                 time.sleep(1)
@@ -814,8 +862,10 @@ def main():
             code = "query_invalid_response"
         else:
             code = "query_failed"
-        print(json.dumps({"status": "error", "error_code": code,
-                          "reason": "网站访客查询失败；未将失败当作零访客"}, ensure_ascii=False))
+        failure = {"status": "error", "error_code": code, "reason": "网站访客查询失败；未将失败当作零访客"}
+        if isinstance(error, CloudCommandError) and error.diagnostics:
+            failure["query_diagnostics"] = error.diagnostics
+        print(json.dumps(failure, ensure_ascii=False))
         return 1
     return 0
 if __name__ == "__main__":
