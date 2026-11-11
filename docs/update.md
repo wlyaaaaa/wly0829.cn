@@ -67,7 +67,9 @@
 - `start --first-pass`仅全站头一遍使用：全站每页入围，含5个手动项目；冻结项目只核冻结说明和去向，无总截止，三次修复上限照旧。续跑不重开start，改用`status --run-dir <原目录>`，读`scope.json`、`state.json`和`timing.md`。
 - 同一命令的`begin/repair/drop --page 页名`开页、续修、放下（放下附`--reason`）；`step-start --page 页名 --step content|program|visual --budget 秒`开步骤，`pass/reject`收回执（通过附`--artifact 本次目录内文件`，退回附`--reason`）；同一退回后的重改只开一次`repair`，各关共用三次。
 - 所有操作均带`--run-dir`，重发沿用`--event-id`；全局`step-start/step-end --step 步骤名`也记用时，结束附`--artifact`。截止后只可放下、记`publish/report`和已过关页的`record-published --page 页名 --artifact 发布回执`；登记不代替正式发布与账的回读核验。最终`finish --artifact 本次汇报`固定收工时间，保留未完成页，继续须新开一次。
-- 试建、看屏、合入、成包发布：待 f3 到 f6 补。成批开单和汇总：待 c4b 补。派单模板在私有伴随库 `docs/update-templates/`。
+- `batch-plan --run-dir <本次目录> --task-id <整件编号>`按私有伴随库 `docs/update-templates/` 开 a（每页）、b（每项目）；`--kinds ef --materials <JSON>`开改稿核对，JSON 按页短名填模板材料（`本页改动清单`、`改完的整页`、可选`页图片目录`），`*`可填共用的`块导出文件`。e 只开有改动清单的页，f 每周只开材料列到的页、头一遍全开；两阶段页稿快照分开。
+- `batch-run --run-dir <本次目录> --max-running 10 --min-free-gb 6`作为一条后台命令：按路数与空闲内存补发、一个 Watch 等候并收回执；每单都带具体 RepeatReason，保留原派活拦截。Codex 主持须加`--parent-harness Codex --session-id <当前完整线程号>`；留言、失败或异常叫醒交主持，原命令可续，不重开已有单。
+- `batch-collect --run-dir <本次目录>`只收不派；`batch-summary.md`每项目一行，JSON 另列计数、并发峰值、每张业务回执与包装器本轮汇报、Sol 已知工时及未知数（明细在`batch.json`）。只按当前阶段分流：零项结束、登记数交数字、单句合批阅、候选/整段/数变等进 c；`opus_to_open`列填好卡的路径和档位，由主持开，命令不调用 Opus。`host-notes.md`留失败、歧义和留言，内存不足留待补发；试建、看屏、合入、成包发布待 f3 到 f6 补。
 
 ## 改动记录
 - 2026-11-12：由五处旧规矩换成这一页（旧条目去向表在施工记录里，不进仓库）。

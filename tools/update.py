@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts/content-refresh"))
 from editorial_ledger import Ledger
 from update_gates import Run, git, locked, now, protected_inputs, read, timestamp, write
+import update_batch
 
 MANUAL = {"learning", "personal-health", "cacb", "codex-remote", "personal-finance"}
 FROZEN = {"frozen", "冻结", "已冻结", "historical", "历史"}
@@ -163,10 +164,13 @@ def main():
         cmd.add_argument("--reason", default="")
         cmd.add_argument("--budget", type=float)
         cmd.add_argument("--event-id", help="重发同一操作时沿用，避免重复计数")
+    update_batch.register(sub)
     for cmd in sub.choices.values(): cmd.add_argument("--run-dir", type=Path, required=True)
     args = parser.parse_args()
     try:
-        if args.action == "start":
+        if args.action.startswith("batch-"):
+            state = update_batch.main(args)
+        elif args.action == "start":
             state = start(args.root, args.run_dir, args.requested_at, args.project, args.page, args.scope,
                           args.numbers_only, args.first_pass, args.repositories, args.supply, args.exclusions)
         elif args.action == "status":
