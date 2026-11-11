@@ -1,5 +1,41 @@
 # 按需更新程序
 
+## 数字分类与关系检查
+
+`records[].number_class` 可选，四值是 `fixed_parameter`（固定参数）、
+`runtime_field`（运行时结构化字段）、`status_conclusion`（状态结论）、
+`historical_example`（历史值和例子）。前两类待接代码/配置或只读字段取数；
+标记本身不等于已经自动取数。状态结论供后续内容更新转程序现取或驾驶舱入口，
+历史值和例子按原事件保留；分类不自动改页面正文、取数办法或日期。
+
+每条记录可登记 `relations:[{"kind":"equal","record_ids":["另一记录id"]}]`，
+或 `relations:[{"kind":"sum","record_ids":["分项一id","分项二id"]}]`。
+当前记录是同值左项或加总的总数；同值可引用多处，加总至少两个分项。
+引用必须存在且不能重复或指向自己；所有成员的 `measurement_scope` 和 `as_of`
+必须非空且逐字相同。口径描述包含统计集合、单位和分项划分，具体字段由各自
+`retrieve`/`label` 说明；截至必须有来源依据，不能为了配关系抹平不同观察日。
+仅因值相同、相同来源的不同单位或不同截至，均不能登记同值关系。
+
+供后续程序检查使用的纯函数是 `inventory.build_inventory(pages_root, records, entries)`，
+也可调用 `inventory.number_relations(records, record_bindings)`；来源格式用
+`validation.registry_errors(records, entries)` 校验。均不执行来源取数。
+现有 `refresh.py --inventory` 输出的 `dated-inventory.json` 增加：
+
+- `number_classes`：四类各有多少条；未分类的旧登记不冒充已分类。
+- `registry_errors`：包含关系格式、引用、口径和截至错误的登记问题。
+- `number_relations`：逐关系结果，含 `record_id/page/screen/relation_index/kind`、
+  `record_ids/measurement_scope/as_of`、`status/reason` 和 `values`。
+  `values[]` 逐项含 `record_id/page/screen/value/binding_status`；加总附
+  `computed_value`（十进制字符串，避免浮点加法误差）。
+  输出 `record_ids` 包含当前记录和已找到的引用项；登记内该字段只列其他记录。
+- `number_relation_findings`：所有非 `passed` 结果，直接交后续程序检查。
+
+结果有 `passed`、`conflict`（同值不一或总分不合）、`unavailable`（成员页面位置
+不可读或非单个数字）、`invalid`（关系登记不合规）。只用实际页面绑定值，
+不拿 `current_value` 填补读取失败；历史快照也可以检查当时的总分关系。
+`strict_findings()` 合入这些问题，现有 `--strict` 因此非零退出；取不到和不合规
+单独列出，不冒充数值冲突。不解析句子猜关系，不修改页面，不调用来源入口。
+
 ## 来源登记与只读入口
 
 保留 `registry.json` 的 `content-refresh.sources.v1` 和原有记录字段。新增字段均放在

@@ -1,6 +1,7 @@
 """只清点作者输入；不重取来源、不联网、不生成网页。"""
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
+from decimal import Decimal, InvalidOperation
 import json
 from pathlib import Path
 import re
@@ -9,7 +10,7 @@ sys.path.append(str(Path(__file__).resolve().parents[1]))
 from rule_explanation_status import task_lines as rule_task_lines
 
 from checks import HISTORY, WORDS
-from validation import record_errors, registry_errors, validate_entries, LEDGER
+from validation import record_errors, registry_errors, relation_errors, validate_entries, LEDGER
 from apply_edits import EVENT_DATE
 
 BEIJING = timezone(timedelta(hours=8))
@@ -106,6 +107,51 @@ def matches(record, item, page, text):
     pattern = r"(?<![\d.])" + re.escape(needle) + r"(?![\d.])"
     return (len(re.findall(pattern, parser.canon(text))) == 1
             and bool(re.search(pattern, parser.canon(item["excerpt"]))))
+
+
+def number_relations(records, bindings):
+    """只比较已绑定的页面现值，登记 current_value 不作为页面读取失败的后备。"""
+    by_id = {r["id"]: r for r in records}
+    bound = {b["record_id"]: b for b in bindings}
+    results = []
+    for record in records:
+        relations = record.get("relations", [])
+        for index, relation in enumerate(relations if isinstance(relations, list) else [relations]):
+            errors = relation_errors(record, relation, by_id) if isinstance(relations, list) else ["relations 必须为数组"]
+            refs = relation.get("record_ids", []) if isinstance(relation, dict) else []
+            refs = refs if isinstance(refs, list) else []
+            members = [record] + [by_id[v] for v in refs if isinstance(v, str) and v in by_id]
+            values = [dict(record_id=r["id"], page=r["page"], screen=r["screen"],
+                           value=bound.get(r["id"], {}).get("value"),
+                           binding_status=bound.get(r["id"], {}).get("status", "missing")) for r in members]
+            result = dict(record_id=record["id"], page=record["page"], screen=record["screen"],
+                          relation_index=index, kind=relation.get("kind") if isinstance(relation, dict) else None,
+                          record_ids=[v["record_id"] for v in values], values=values,
+                          measurement_scope=record.get("measurement_scope"), as_of=record.get("as_of"),
+                          status="invalid" if errors else "passed", reason="; ".join(errors))
+            if not errors:
+                try:
+                    if any(v["binding_status"] != "readable" or v["value"] in (None, "", "Unknown")
+                           or isinstance(v["value"], bool) for v in values):
+                        raise ValueError("关系成员页面现值不可读；不使用登记旧值代替")
+                    normalized = []
+                    for value in values:
+                        text = str(value["value"])
+                        normalized.append(Decimal(text.replace(",", "")) if re.fullmatch(r"[+-]?\d[\d,]*(?:\.\d+)?", text) else text)
+                    if not all(isinstance(v, Decimal) and v.is_finite() for v in normalized):
+                        raise ValueError("关系成员须为单个有限数字")
+                    if relation["kind"] == "sum":
+                        expected = sum(normalized[1:])
+                        result["computed_value"] = str(expected)
+                        consistent = normalized[0] == expected
+                    else:
+                        consistent = all(v == normalized[0] for v in normalized[1:])
+                    if not consistent:
+                        result.update(status="conflict", reason="同值两处不一样" if relation["kind"] == "equal" else "加总对不上")
+                except (ValueError, InvalidOperation) as exc:
+                    result.update(status="unavailable", reason=str(exc))
+            results.append(result)
+    return results
 
 
 def build_inventory(pages_root, records, entries=None, policy=None, targeted=()):
@@ -379,7 +425,11 @@ def build_inventory(pages_root, records, entries=None, policy=None, targeted=())
         state = cadence(dict(freshness_class="semantic", semantic_checked_at=reviews.get(slug, {}).get("checked_at"), source_changed=page.get("source_changed")), policy, targeted=slug in targeted)
         if state["refresh_due"]:
             semantic.append(dict(id="semantic-page:" + slug, page=slug, kind="semantic", reason=state["cadence_reason"], status="pending"))
+    relations = number_relations(records, bindings)
     return dict(schema="content-refresh.inventory.v1", observed_at=datetime.now(BEIJING).isoformat(timespec="seconds"),
+                number_relations=relations, number_relation_findings=[r for r in relations if r["status"] != "passed"],
+                registry_errors=registry_errors(records, entries or {}),
+                number_classes=dict(Counter(r["number_class"] for r in records if r.get("number_class"))),
                 semantic_reviews=semantic, semantic_due=dict(count=len(semantic), pages=[s["page"] for s in semantic]),
                 targeted_pages=sorted(targeted), observation_basis_gaps=basis_gaps, offset_binding_gaps=offset_gaps,
                 record_bindings=bindings,
@@ -452,8 +502,10 @@ def strict_findings(inventory, records, entries=None, invalid_record_ids=()):
             item["strict_status"] = "offset_binding_gap"
     reported = {rid for f in findings for rid in f.get("record_ids", [])}
     historical = set(inventory.get("historical_record_ids", [])) - located
-    for error in registry_errors(records, entries):
+    for error in inventory["registry_errors"] if "registry_errors" in inventory else registry_errors(records, entries):
         rid = error["record_id"]
+        if rid != "duplicate" and rid not in by_id:
+            continue
         if rid in reported or rid in historical or rid in inventory.get("review_stamp_record_ids", []):
             continue
         record = by_id.get(rid, {})
@@ -484,6 +536,10 @@ def strict_findings(inventory, records, entries=None, invalid_record_ids=()):
             for duplicate in previous[1:]:
                 unique.remove(duplicate)
     findings = unique
+    for relation in inventory.get("number_relation_findings", []):
+        if relation["record_id"] in by_id:
+            findings.append(dict(relation, field="source_registry." + relation["record_id"], line=1,
+                                 excerpt="；".join(f"{v['page']} / {v['record_id']} = {v['value']}" for v in relation["values"])))
     inventory["coverage"].update(strict_inventory_summary(inventory, findings))
     return findings
 

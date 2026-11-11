@@ -7,6 +7,7 @@ KINDS = {"manual", "entry", "sqlite_ro", "log_window", "usage_ledger", "git_coun
          "file_count", "line_count", "json", "rules_inspect", "regex_count",
          "page_count", "feature_count", "group_count"}
 LEDGER = "__usage_ledger__"
+NUMBER_CLASSES = {"fixed_parameter", "runtime_field", "status_conclusion", "historical_example"}
 
 
 def select_sql(sql):
@@ -76,6 +77,8 @@ def validate_method(method, entries):
 def record_errors(record, entries, ids):
     errors = []
     try:
+        if "number_class" in record and record["number_class"] not in NUMBER_CLASSES:
+            raise ValueError("number_class 必须为 fixed_parameter/runtime_field/status_conclusion/historical_example")
         if record.get("freshness_class", "current") not in {"current", "semantic", "historical"}:
             raise ValueError("freshness_class 必须为 current/semantic/historical")
         if record.get("observation_basis", "unknown") not in {"live_read", "snapshot_timestamp", "coverage_end", "unknown"}:
@@ -101,9 +104,35 @@ def record_errors(record, entries, ids):
     return errors
 
 
+def relation_errors(record, relation, by_id):
+    """关系的口径和截至是显式登记；不能因值相同推断关系。"""
+    if not isinstance(relation, dict) or relation.get("kind") not in ("equal", "sum"):
+        return ["关系 kind 必须为 equal/sum"]
+    refs = relation.get("record_ids")
+    if (not isinstance(refs, list) or not refs or not all(isinstance(v, str) for v in refs)
+            or len(set(refs)) != len(refs) or record["id"] in refs or any(v not in by_id for v in refs)):
+        return ["关系 record_ids 必须指向存在、不重复的其他记录"]
+    if relation["kind"] == "sum" and len(refs) < 2:
+        return ["加总关系至少需要两个分项"]
+    errors = []
+    for key in ("measurement_scope", "as_of"):
+        value = record.get(key)
+        if not isinstance(value, str) or not value.strip() or any(by_id[v].get(key) != value for v in refs):
+            errors.append("关系 " + key + " 缺失或不一致")
+    return errors
+
+
 def registry_errors(records, entries):
     ids = {r["id"] for r in records}
     errors = [{"record_id": r["id"], "page": r["page"], "screen": r["screen"], "errors": record_errors(r, entries, ids)} for r in records]
+    by_id = {r["id"]: r for r in records}
+    for record, error in zip(records, errors):
+        relations = record.get("relations", [])
+        if not isinstance(relations, list):
+            error["errors"].append("relations 必须为数组")
+            continue
+        for relation in relations:
+            error["errors"].extend(relation_errors(record, relation, by_id))
     if len(ids) != len(records):
         errors.append({"record_id": "duplicate", "errors": ["重复记录 id"]})
     return [e for e in errors if e["errors"]]
