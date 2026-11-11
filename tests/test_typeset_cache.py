@@ -87,8 +87,6 @@ class TypesetCacheTests(unittest.TestCase):
             saved = {'html': 'measured'}
             bundle_assets(saved, urls.values(), work, site / 'public', renderer.sha)
             renderer.write_cache(work / '_cache.json', {'old': saved})
-            renderer.write_cache(site / 'src/content/rendered/page.json',
-                                 {**urls, 'screens': [{'id': 'one', 'h': {'html': 'measured'}}]})
             jobs = [{'page': 'page', 'screen': sid, 'o': 'h', 'key': key}
                     for sid, key in [('one', 'new'), ('two', 'reject')]]
             cache = {}
@@ -96,8 +94,11 @@ class TypesetCacheTests(unittest.TestCase):
                 with patch.object(renderer, 'hydrate', side_effect=AssertionError('must not measure')):
                     self.assertEqual(render_cache.migrate_cache(source, jobs, cache, renderer), 1)
                     self.assertEqual(render_cache.migrate_cache(source, jobs, cache, renderer), 0)
+                    copied = {}
+                    self.assertEqual(render_cache.migrate_cache(work, jobs, copied, renderer), 1)
             self.assertEqual(set(cache), {'new'})
             self.assertEqual(set(cache['new']['assets']), set(urls.values()))
+            self.assertEqual(copied, cache)
 
     def test_portable_art_preserves_existing_lossless_texture_reuse(self):
         from PIL import Image
