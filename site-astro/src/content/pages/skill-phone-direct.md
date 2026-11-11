@@ -38,10 +38,10 @@
    "state": "在用",
    "last": {
     "label": "上次更新",
-    "at": "2026-11-05 05:25"
+    "at": "2026-11-07 20:36"
    },
    "facts": [],
-   "as_of": "2026-11-06",
+   "as_of": "2026-11-12",
    "source": "技能和电脑配置的提交记录"
   },
   "public": false,
@@ -149,8 +149,8 @@
  },
  "source": {
   "page": "sources/pages/skill-phone-direct/page.json",
-  "sha256": "c93293bcc21c66f2324bf7410b959a7cb5db35f8ef3886c5eacbbdae8d9bea01",
-  "converted_at_beijing": "2026-11-06T07:21:11+08:00"
+  "sha256": "08303095e2accb52e8daec2153cb7f5801b871a5cfd4872bece9209fede07179",
+  "converted_at_beijing": "2026-11-12T05:19:00+08:00"
  }
 }
 ---
@@ -194,11 +194,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 11 月 5 日 05:25",
+       "text": "在用 · 上次更新 11 月 7 日 20:36",
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 6 日 · 技能和电脑配置的提交记录",
+     "static_note": "截至 11 月 12 日 · 技能和电脑配置的提交记录",
      "row": "hero"
     },
     {
@@ -257,11 +257,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次更新 11 月 5 日 05:25",
+       "text": "在用 · 上次更新 11 月 7 日 20:36",
        "state": "ok"
       }
      ],
-     "static_note": "截至 11 月 6 日 · 技能和电脑配置的提交记录"
+     "static_note": "截至 11 月 12 日 · 技能和电脑配置的提交记录"
     },
     {
      "type": "prose",
@@ -1041,7 +1041,7 @@ AI：“电脑在家里的网络上找不到手机，Tailscale 上也不在线�
   "screenshots": [],
   "chain": null,
   "reuse": null,
-  "derived_as_of": "数字截至 2026 年 11 月 6 日"
+  "derived_as_of": "数字截至 2026 年 11 月 12 日"
  },
  "layout": {},
  "images": []
@@ -1052,7 +1052,7 @@ AI：“电脑在家里的网络上找不到手机，Tailscale 上也不在线�
 
 这里保留入口、子命令、输出、退出码、连接和核对的实现。
 
-**10 月 22 日核对**　技能 E:\.agents\skills\phone-direct\SKILL.md（.agents 0348800d，北京时间 10 月 21 日 21:13）；入口脚本 E:\PCConfig\tools\phone_direct.py（PCConfig 7df54f9b，同日 21:13），运行说明 docs/runtime/phone-direct.md，配置 registries/phone_direct.json；合成测试 tools/test_phone_direct.py 共 44 个测试函数，这次没有重跑。复用常驻无线 ADB 手机桥（tools/phone_bridge.py，计划任务 PCConfig Phone Bridge）的共用连接，没有为它新增服务、MCP 或计划任务。
+**10 月 22 日核对**　技能 E:\.agents\skills\phone-direct\SKILL.md（.agents 0348800d，北京时间 10 月 21 日 21:13）；入口脚本 E:\PCConfig\tools\phone_direct.py（PCConfig 7df54f9b，同日 21:13），运行说明 docs/runtime/phone-direct.md，配置 registries/phone_direct.json；合成测试 tools/test_phone_direct.py 共 46 个测试函数，这次没有重跑。复用常驻无线 ADB 手机桥（tools/phone_bridge.py，计划任务 PCConfig Phone Bridge）的共用连接，没有为它新增服务、MCP 或计划任务。
 
 **11 月 6 日核对**　三条线的选路在共用的 tools/phone_connection.py，蓝牙转发在 tools/phone_bluetooth.py（提交见“依据与来源”）。05:14 只读跑过入口的 `--help` 和 `ensure --help`，都退出 0，帮助里列着 `--fast`；没有跑 ensure（它会动驾驶舱事项），没有取文件，也没有重连手机。
 
