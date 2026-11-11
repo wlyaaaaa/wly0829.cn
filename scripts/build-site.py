@@ -27,6 +27,7 @@ sys.path.insert(0, str(SITE / 'tools'))
 import astro_rules
 import oss_origins
 from render_cache import markdown_render_sha
+from render_blocks import asset_fingerprint, parse_md, RULE_FRAMES
 
 def load(name, relative):
     spec = importlib.util.spec_from_file_location(name, ROOT / relative)
@@ -223,7 +224,7 @@ def sync_markdown(previous):
     sys.path.insert(0, str(SITE / 'tools'))
     converter = load('build_converter', 'site-astro/tools/convert_page.py')
     converter_fp = fingerprint([SITE / 'tools/convert_page.py', SITE / 'tools/site_consistency.py', SITE / 'tools/render_blocks.py',
-        ROOT / 'src/typeset', ROOT / 'sources/assets', ROOT / 'sources/rules',
+        ROOT / 'src/typeset', ROOT / 'sources/rules',
         SITE / 'src/chrome/toc-labels.json', ROOT / 'scripts/astro_rules.py',
         ROOT / 'config/model-roster.json', ROOT / 'scripts/how-demo-data.json'])
     converter_fp += json.dumps({k: v for k, v in os.environ.items() if k.startswith('CONVERT_')}, sort_keys=True)
@@ -237,7 +238,8 @@ def sync_markdown(previous):
         dependencies = [ROOT / 'sources/pages' / ref for ref in refs if ref not in {'scale', 'roster', 'stories', 'rules'}]
         if 'scale' in refs: dependencies.append(ROOT / 'sources/pages')
         if 'group_counts' in refs: dependencies.append(ROOT / 'sources/pages/projects-home')
-        author_fp = fingerprint([author, *dependencies]); source_fp = author_fp + converter_fp
+        author_fp = fingerprint([author, *dependencies])
+        source_fp = author_fp + converter_fp + converter.page_asset_fingerprint(name, lambda p: proof(p)['sha256'])
         old = previous.get(name, {}); current = proof(md)['sha256'] if md.is_file() else None
         if not current:
             pending.append(name)
@@ -288,7 +290,7 @@ def build(pages=None):
     sources = sync_markdown(old.get('json_sources', {})); stage('source')
     preparation = [ROOT / 'config/build.json', ROOT / 'scripts/oss_origins.py', SNAPSHOT / 'manifest.json', SITE / 'sources/retained-home-cockpit',
         SITE / 'sources/vendor-deps', SITE / 'sources/hero-motion', SITE / 'public/_home-cockpit', SITE / 'src/chrome/runtime',
-        ROOT / 'sources/rules', ROOT / 'sources/assets', ROOT / 'src/typeset',
+        ROOT / 'sources/rules', ROOT / 'src/typeset',
         SITE / 'tools/build_runtime.py', SITE / 'tools/pack_living.py', SITE / 'tools/adapt_motion.py',
         SITE / 'tools/cockpit_stutter.py', ROOT / 'scripts/astro_rules.py', ROOT / 'scripts/album-runtime.js',
         ROOT / 'scripts/album-runtime.css', ROOT / 'scripts/same-origin-runtime.py', ROOT / 'scripts/site-live-runtime.js',
@@ -311,7 +313,7 @@ def build(pages=None):
         prepared_fp = fingerprint(preparation)
     stage('native_inputs')
     frozen_urls = sorted(p['url'] for p in checks['frozen_projects'])
-    engine_fp = fingerprint([ROOT / 'src/typeset', ROOT / 'sources/assets', ROOT / 'config/render.lock.json', SITE / 'tools/render_blocks.py',
+    engine_fp = fingerprint([ROOT / 'src/typeset', ROOT / 'config/render.lock.json', SITE / 'tools/render_blocks.py',
         SITE / 'tools/render_cache.py', SITE / 'tools/site_consistency.py']) + hashlib.sha256(json.dumps(frozen_urls).encode()).hexdigest()
     wrapper_paths = [p for p in (SITE / 'src').rglob('*') if p.is_file()
         and 'content' not in p.relative_to(SITE / 'src').parts and p.parent.name not in {'runtime', 'retained'}
@@ -331,7 +333,11 @@ def build(pages=None):
         render_inputs = [md, runtime_path]
         living_config = read(runtime_path).get('living_config') if runtime_path.is_file() else None
         if living_config: render_inputs.append(public / living_config.lstrip('/'))
-        render_fps[name] = markdown_render_sha(md) + fingerprint(render_inputs[1:]) + engine_fp
+        screens = parse_md(md)[1]
+        if fm.get('url', '').startswith('/rules/') and any(meta['screen'].get('shape') == 'source_text' for meta, _ in screens):
+            render_inputs += [ROOT / 'sources/assets' / path for path in RULE_FRAMES]
+        render_fps[name] = markdown_render_sha(md) + fingerprint(render_inputs[1:]) + engine_fp + asset_fingerprint(
+            [screens, *[p.as_uri() for p in render_inputs[1:] if p.is_file()]], lambda p: proof(p)['sha256'])
         for route in [fm.get('url') or '/' + name + '/', *(fm.get('old_urls') or [])]:
             route = normalize_route(route)
             if route in {'/', '/cockpit/', '/computer-access/'}: continue

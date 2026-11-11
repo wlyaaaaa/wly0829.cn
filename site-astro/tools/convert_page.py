@@ -252,6 +252,25 @@ def gallery_title(meta, text):
     return text
 
 
+def page_asset_fingerprint(page, digest):
+    """Only this page's selected library rows and referenced files invalidate it."""
+    from engine.content import bound_json
+    from render_blocks import asset_fingerprint
+    folder = Path(REPO, 'sources/pages', page)
+    data = bound_json(str(folder / 'page.json'))
+    layout = bound_json(str(folder / 'layout.json')) if (folder / 'layout.json').is_file() else []
+    inputs = []
+    for screen in data['screens']:
+        if screen.get('hidden'): continue
+        specs = {row.get('orientation', 'h'): row for row in layout if row['screen'] == screen['id']}
+        meta = {'layout': specs, 'images': screen_images(screen['id'], specs)}
+        if data.get('kind') == 'skill-redirect':
+            meta['layout'], meta['images'] = redirect_layout(screen, data['title']), []
+        gallery_title(meta, screen.get('text', ''))
+        inputs.append([screen, meta])
+    return hashlib.sha256(json.dumps(inputs, ensure_ascii=False, sort_keys=True).encode()).hexdigest() + asset_fingerprint(inputs, digest)
+
+
 # —— K1-A 首屏先放状态（本人 10 月 10 日 05:29 选 A）：项目页、技能页的第 1 屏，标题下面先放状态——
 #    “现在”实时条（live_strip / live_box，实时位由 live-dom.js 填；“运行”那一格读到时带上次运行时间），
 #    再放首屏的数字卡（连同卡前、卡后给数字注日期和来源的那一句，见 STATUS_ASOF）；讲解、插画、清单和按钮照原顺序往后挪，一字不删。
