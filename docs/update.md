@@ -63,7 +63,11 @@
 
 ## 命令（做出来的单各自补自己的几行）
 - 未结：IPv6 资源地址的准备分支等下一次正式发布一起合入，见 [OSS 资源契约](oss-publication.md) 末节。
-- `update`：待 f1 补。试建、看屏、合入、成包发布：待 f3 到 f6 补。成批开单和汇总：待 c4b 补。派单模板在私有伴随库 `docs/update-templates/`。
+- `python -B -X utf8 tools/update.py start --requested-at <开口时间，含+08:00> --run-dir <公开工作树外的新目录>`：记来源提交、范围、一道多选题；`--project ID`、`--page 页名`可重复，点名时只列点名范围；`--scope <JSON数组文件>`提供周更范围名单，可与点名合用；均不填则列全部动了的项目，`--numbers-only`只换数。
+- `start --first-pass`仅全站头一遍使用：全站每页入围，含5个手动项目；冻结项目只核冻结说明和去向，无总截止，三次修复上限照旧。续跑不重开start，改用`status --run-dir <原目录>`，读`scope.json`、`state.json`和`timing.md`。
+- 同一命令的`begin/repair/drop --page 页名`开页、续修、放下（放下附`--reason`）；`step-start --page 页名 --step content|program|visual --budget 秒`开步骤，`pass/reject`收回执（通过附`--artifact 本次目录内文件`，退回附`--reason`）；同一退回后的重改只开一次`repair`，各关共用三次。
+- 所有操作均带`--run-dir`，重发沿用`--event-id`；全局`step-start/step-end --step 步骤名`也记用时，结束附`--artifact`。截止后只可放下、记`publish/report`和已过关页的`record-published --page 页名 --artifact 发布回执`；登记不代替正式发布与账的回读核验。最终`finish --artifact 本次汇报`固定收工时间，保留未完成页，继续须新开一次。
+- 试建、看屏、合入、成包发布：待 f3 到 f6 补。成批开单和汇总：待 c4b 补。派单模板在私有伴随库 `docs/update-templates/`。
 
 ## 改动记录
 - 2026-11-12：由五处旧规矩换成这一页（旧条目去向表在施工记录里，不进仓库）。
