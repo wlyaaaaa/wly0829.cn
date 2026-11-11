@@ -11,6 +11,7 @@
 - 字：正文字体和现在出图用的 Noto Sans SC 是同一个文件，按每页用到的字抽成 woff2（字形不变）。
 - 增量：每屏按内容、本页设置、素材内容及排版版本算钥匙，没变的屏不重排。"""
 import concurrent.futures as cf
+from functools import lru_cache
 import hashlib
 import html as H
 from html.parser import HTMLParser
@@ -239,6 +240,7 @@ def cache_input(meta, text, page, document, fonts, root=None):
     return screen_input(meta, text, page, assets, fonts, root or REPO)
 
 
+@lru_cache(maxsize=None)
 def reference_id(path):
     """Keep distinct source references distinct when their pixels are identical."""
     path = Path(path).resolve()
@@ -1128,6 +1130,7 @@ def run(names, workers=2, migrate_from=None):
     print("量屏环境：" + json.dumps(RENDER_LOCK, ensure_ascii=False), flush=True)
     workers = min(2, max(1, workers))
     _published.clear(); _living_configs.clear(); _inputs.clear(); _input_shas.clear()
+    reference_id.cache_clear()
     t0 = time.time()
     os.chdir(REPO)  # page.json 里截图等路径相对仓库根（和现在出图时一样）
     mount = os.path.join(SITE, "src", "scripts", "living-mount.js")
