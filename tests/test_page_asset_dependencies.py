@@ -16,6 +16,26 @@ spec = importlib.util.spec_from_file_location('asset_build', ROOT / 'scripts/bui
 build = importlib.util.module_from_spec(spec); spec.loader.exec_module(build)
 
 class PageAssetTests(unittest.TestCase):
+    def test_global_indexes_and_runtime_bundles_stop_at_the_file(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder); site = root/'site-astro'; public = site/'public'; assets = root/'sources/assets'
+            runtime = site/'src/chrome/runtime/fixture.json'
+            for path in (assets, public/'_album', public/'_shared', runtime.parent): path.mkdir(parents=True)
+            (assets/'own.png').write_bytes(b'own'); other = assets/'other.png'; other.write_bytes(b'other')
+            index = public/'_album/routes-global.json'
+            index.write_text(json.dumps({'schema': 'wly.album-routes.v1', 'routes': {'other': {'src': '/assets/other.png'}}}), encoding='utf8')
+            bundle = public/'_shared/retry.js'; bundle.write_text('import "/assets/other.png"; const note="package.json";', encoding='utf8')
+            config = public/'local.json'; config.write_text('{"src":"/assets/own.png","description":"package.json"}', encoding='utf8')
+            (root/'package.json').write_text('{"src":"/assets/other.png"}', encoding='utf8')
+            data = {'screens': [{'src': '/assets/other.png'}], 'shared': {'script_bundle': '/_shared/retry.js', 'art': {'back_to_top': '/assets/own.png', 'catalog': '/assets/other.png'}}}
+            runtime.write_text(json.dumps({'head': ['<link href="/_album/routes-global.json">'], 'living_config': '/local.json', 'tail': '<script id="page-data" type="application/json">'+json.dumps(data)+'</script>'}), encoding='utf8')
+            with patch.multiple(render, REPO=str(root), SITE=str(site), PUB=str(public)), patch.object(render.A, 'ASSET_ROOT', str(assets)):
+                self.assertEqual(render.asset_dependencies(runtime.as_uri()), {runtime, index, bundle, config, assets/'own.png'})
+                before = render.asset_fingerprint(runtime.as_uri()); other.write_bytes(b'changed')
+                self.assertEqual(before, render.asset_fingerprint(runtime.as_uri()))
+                index.write_text(index.read_text('utf8')+' ', encoding='utf8')
+                self.assertNotEqual(before, render.asset_fingerprint(runtime.as_uri()))
+
     def test_reference_closure_isolated_fingerprints_and_immutable_names(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder); assets = root / 'sources/assets'; assets.mkdir(parents=True)
@@ -25,7 +45,7 @@ class PageAssetTests(unittest.TestCase):
                      'style.css': b'body{background:url(top.png)}'}
             for name, raw in files.items(): (assets / name).write_bytes(raw)
             with patch.multiple(render, REPO=str(root), PUB=str(public)), patch.object(render.A, 'ASSET_ROOT', str(assets)), patch.multiple(build, ROOT=root, SITE=root/'site-astro', HASH_CACHE={}):
-                value = '<i data-config="' + html.escape(json.dumps({'script_bundle': '/assets/bundle.js', 'gallery': ['完整 图.webp'], 'art': {'back_to_top': '/assets/top.png'}}), quote=True) + '"></i><img srcset="/assets/one.png 1x, /assets/two.png 2x"><link href="/assets/style.css"><script type="application/json">{"leaf":"/assets/more.svg"}</script>'
+                value = '<i data-config="' + html.escape(json.dumps({'script_bundle': '/assets/bundle.js', 'gallery_assets': ['完整 图.webp'], 'art': {'back_to_top': '/assets/top.png'}}), quote=True) + '"></i><img srcset="/assets/one.png 1x, /assets/two.png 2x"><link href="/assets/style.css"><script type="application/json">{"leaves":["/assets/more.svg"]}</script>'
                 self.assertEqual({p.name for p in render.asset_dependencies(value)}, set(files))
                 first, second = {'asset': 'one.png'}, {'asset': 'two.png'}
                 before = [render.asset_fingerprint(v) for v in (first, second)]
