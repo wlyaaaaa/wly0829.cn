@@ -11,6 +11,7 @@ from rule_explanation_status import task_lines as rule_task_lines
 from checks import HISTORY, WORDS
 from validation import record_errors, registry_errors, validate_entries, LEDGER
 from apply_edits import EVENT_DATE
+from editorial_ledger import read_reviews
 
 BEIJING = timezone(timedelta(hours=8))
 COUNT_CONTENT = re.compile(r"\d[\d,.]*(?:\s*/\s*\d[\d,.]*)?\s*(?:个|项|件|次|条|份|组|页|行|人|台|块|张|种|套|屏|层|路|节|秒|分钟|字节|[KMGT]i?B|%)|(?:数量|计数|总数|条目|[一-龥A-Za-z_]{1,24}数)\s*[:：｜|]\s*[*` ]*\d[\d,.]*")
@@ -363,8 +364,7 @@ def build_inventory(pages_root, records, entries=None, policy=None, targeted=())
         except (KeyError, ValueError, IndexError, StopIteration, re.error) as exc:
             bindings.append(dict(record_id=record["id"], classification=classification, status="binding_error", reason=str(exc) or "页面定位不存在"))
     from freshness import cadence
-    review_path = Path(pages_root).parent / "refresh/semantic-reviews.json"
-    reviews = json.loads(review_path.read_text(encoding="utf-8-sig")).get("pages", {}) if review_path.exists() else {}
+    reviews = read_reviews(Path(pages_root).parents[1])
     historical_ids = {b["record_id"] for b in bindings if b["classification"] == "historical"}
     basis_gaps = [dict(record_id=r["id"], page=r["page"], reason="观察依据未登记") for r in records
                   if r["id"] not in historical_ids and r.get("automatic")

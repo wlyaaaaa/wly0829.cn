@@ -26,6 +26,7 @@ from validation import LEDGER, validate_entries, validate_method, registry_error
 from apply_edits import qualified_date_review, proven_offset
 from freshness import cadence, metadata, review_tasks, semantic_due, close_run, now
 from selection import Selection
+from editorial_ledger import read_reviews
 
 ROOT = Path(__file__).resolve().parents[2]
 REPOSITORY_RECEIPTS = Path('E:/Cache/content-refresh/repository-checks')
@@ -476,8 +477,7 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
     invalid = {e["record_id"]: "; ".join(e["errors"]) for e in registry_errors(registry["records"], entries)}
     catalog = {p["page"]: p for p in pages(root)}
     selection = Selection(root, manual_owner_request)
-    semantic_path = root / "sources/refresh/semantic-reviews.json"
-    semantic_reviews = read_json(semantic_path).get("pages", {}) if semantic_path.exists() else {}
+    semantic_reviews = read_reviews(root)
     rows, groups = [], {}
     for record in registry["records"]:
         row = dict(record, old_value=None, new_value=None, status="unavailable", reason="",

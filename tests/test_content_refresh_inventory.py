@@ -11,13 +11,16 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts/content-refresh"))
 import refresh
 from inventory import build_inventory, fact_tasks
+from editorial_ledger import Ledger
 
 
 class InventoryTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
-        self.root = Path(self.temp.name)
+        self.root = Path(self.temp.name) / "site"
+        private = patch.dict("os.environ", WLY_EDITORIAL_ROOT=str(Path(self.temp.name) / "private"))
+        private.start(); self.addCleanup(private.stop)
         self.page = {
             "page": "demo", "kind": "project", "title": "示例", "screens": [
                 {"id": "demo-01", "section": "top", "text":
@@ -164,10 +167,10 @@ class InventoryTests(unittest.TestCase):
         inventory = build_inventory(self.root / "sources/pages", [])
         self.assertEqual(inventory["semantic_due"], {"count": 1, "pages": ["demo"]})
         self.assertIn("不阻断本轮事实闭环", fact_tasks(inventory))
-        receipt = self.root / "sources/refresh/semantic-reviews.json"
-        receipt.parent.mkdir()
-        receipt.write_text(json.dumps({"schema": "content-refresh.semantic-reviews.v1", "pages": {
-            "demo": {"checked_at": "2099-01-01T00:00:00+08:00", "run_id": "fixture", "evidence": "合成核对"}}}), encoding="utf-8")
+        store = Ledger(self.root); book = store.read(store.book_for("demo"))
+        book["pages"]["demo"] = dict(semantic_review=dict(
+            checked_at="2099-01-01T00:00:00+08:00", run_id="fixture", evidence="合成核对"))
+        store.write(book)
         self.assertEqual(build_inventory(self.root / "sources/pages", [])["semantic_due"], {"count": 0, "pages": []})
 
 
