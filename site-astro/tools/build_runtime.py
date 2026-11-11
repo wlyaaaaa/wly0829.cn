@@ -328,8 +328,9 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
             if path.read_bytes() != body.encode('utf8'): path.write_bytes(body.encode('utf8'))
     for path in dist.rglob('*'):
         if path.is_file() and path.suffix in transport.TEXT - {'.html'} and path.name != 'release-manifest.json':
-            before = path.read_text('utf8'); after = transport.localize(before, snapshot)
-            if finalized and not any(prefix in before for prefix in legacy): continue
+            before = path.read_bytes().decode('utf8')
+            after = before if finalized and not any(prefix in before for prefix in legacy) else transport.localize(before, snapshot)
+            if path.suffix == '.css': after = after.replace('\r\n', '\n').replace('\r', '\n')
             if after != before: path.write_bytes(after.encode('utf8'))
     active_urls = {row['url']: '/' + rel for rel, row in prior.get('oss', {}).get('objects', {}).items()}
     scripts = {active_urls.get(match, transport.PREFIX.sub('/', match)) for page in dist.rglob('*.html') for match in re.findall(r'<script\b[^>]*\b(?:data-)?src="([^"]+)"', page.read_text('utf8'))}
@@ -351,7 +352,8 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
     # Normalize build copies only: frozen sources, historical URLs and their proofs remain immutable.
     for path in dist.rglob('*'):
         if path.is_file() and path.suffix in transport.TEXT | {'.md', '.webmanifest'} and path.name not in {'release-manifest.json', 'release-identity.json', '.build-receipt.json'}:
-            before = path.read_text('utf8'); after = oss_origins.rewrite_origins(before)
+            before = path.read_bytes().decode('utf8'); after = oss_origins.rewrite_origins(before)
+            if path.suffix == '.css': after = after.replace('\r\n', '\n').replace('\r', '\n')
             if after != before: path.write_bytes(after.encode('utf8'))
     files = {p.relative_to(dist).as_posix(): {'bytes': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
              for p in dist.rglob('*') if p.is_file() and p.name not in {'.build-receipt.json', 'release-manifest.json', 'release-identity.json'}}

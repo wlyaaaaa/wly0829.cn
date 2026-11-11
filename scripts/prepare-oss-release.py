@@ -103,7 +103,7 @@ class FinalizeCache:
             return [rewriter.base, rewriter.origin, rewriter.version, self.contracts[rewriter], [owner in getattr(rewriter, 'retained', {}), rewriter.target(owner), bool(rewriter.asset_keys)] if owner in rewriter.assets else None,
                     {rel: [rewriter.target(rel), rewriter.files.get(rel), rel in getattr(rewriter, 'retained', {})] for rel in row['refs']},
                     {rel: [rewriter.files.get(rel), bool(rewriter.source_root and (rewriter.source_root/rel).is_file())] for rel in row['inputs']},
-                    {url: rewriter.previous_urls.get(url) for url in row['lookups']}]
+                    {url: [rewriter.previous_urls.get(url), rewriter.previous_assets.get(url)] for url in row['lookups']}]
         key = hashlib.sha256(owner.encode() + b'\0' + data).hexdigest(); row = None if self.full else self.rewrites.get(key)
         try:
             if row is not None:
@@ -392,6 +392,7 @@ class Rewriter:
         self._dependencies = {}
         self.asset_keys = {}
         self.previous_urls = {}
+        self.previous_assets = {}
 
     @staticmethod
     def resource_kind(rel):
@@ -553,7 +554,8 @@ class Rewriter:
                 lookup = oss_origins.rebase_url(previous_url, self.base) if self.version>=8 else previous_url
                 if hasattr(self, '_cache_previous'): self._cache_previous.add(lookup)
                 previous_rel = self.previous_urls.get(lookup)
-                if previous_rel in self.assets:
+                if previous_rel in self.assets or previous_rel in self.previous_assets:
+                    if hasattr(self, '_cache_previous'): self._cache_previous.add(previous_rel)
                     return previous_rel, parts
                 self.absolute_references.add(unquote(parts.path).lstrip('/'))
             if (parts.scheme + '://' + parts.netloc).rstrip('/') != self.origin:
@@ -564,6 +566,9 @@ class Rewriter:
         else:
             candidate = posixpath.normpath(posixpath.join(posixpath.dirname(owner), unquote(parts.path)))
         if candidate in self.assets:
+            return candidate, parts
+        if hasattr(self, '_cache_previous'): self._cache_previous.add(candidate)
+        if candidate in self.previous_assets:
             return candidate, parts
         # Vite dependency arrays use release-root paths; they are consumed by
         # the preload helper, not by import's relative-module resolution.
@@ -585,8 +590,12 @@ class Rewriter:
         if found is None:
             return oss_origins.rebase_url(raw, self.base) if self.version>=8 else raw
         rel, parts = found
-        self.references.setdefault(owner, set()).add(rel)
-        new = self.target(rel)
+        if rel in self.assets:
+            self.references.setdefault(owner, set()).add(rel)
+            new = self.target(rel)
+        else:
+            new = self.previous_assets[rel]
+            self.absolute_references.add(unquote(urlsplit(new).path).lstrip('/'))
         if parts.query:
             new += '?' + parts.query
         if parts.fragment:
@@ -893,7 +902,8 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
         if previous_oss.get('asset_base_url') == base:
             local = previous_oss.get('local_objects', {})
             rewriter.previous_urls = {unquote(row['url']): rel for rel, row in sorted(
-                [*local.items(), *previous_oss['objects'].items()], key=lambda item: item[0] not in inherited) if rel in rewriter.assets}
+                [*local.items(), *previous_oss['objects'].items()], key=lambda item: item[0] not in inherited)}
+            rewriter.previous_assets = {rel: url for url, rel in rewriter.previous_urls.items() if rel not in rewriter.assets}
             rewriter.local_retained_candidates = {rel: row for rel, row in local.items()
                 if rel in rewriter.assets and (row['sha256'] == actual[rel]['sha256'] or row.get('source') == actual[rel])}
             rewriter.retained.update(rewriter.local_retained_candidates)
@@ -1070,7 +1080,8 @@ def verify_local(output, virtual=None):
         if previous_oss.get('asset_base_url') == rewriter.base:
             rewriter.previous_urls = {unquote(row['url']): rel for rel, row in sorted(
                 [*previous_oss.get('local_objects', {}).items(), *previous_oss['objects'].items()],
-                key=lambda item: item[0] not in inherited) if rel in rewriter.assets}
+                key=lambda item: item[0] not in inherited)}
+            rewriter.previous_assets = {rel: url for url, rel in rewriter.previous_urls.items() if rel not in rewriter.assets}
         if offline_asset_keys(rewriter, source, inherited) != plan['asset_keys']:
             raise ValueError('Offline dependency keys are not reproducible')
         rewriter.asset_keys = plan['asset_keys']
