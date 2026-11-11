@@ -1,8 +1,4 @@
-"""Stable identity of Markdown that can affect native rendering.
-
-The converter's audit timestamp is not displayed and must not invalidate a
-page. Keep every other frontmatter field and the complete body in the key.
-"""
+"""Portable screen identity, complete resources and zero-measurement migration."""
 import hashlib
 import json
 import re

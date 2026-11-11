@@ -531,8 +531,8 @@ def check_screen_images(name, page, screen, meta):
         A._manifest = prior
 
 
-def prepare_page(name, reg, css_files):
-    """在本进程里排出这一页每屏两份的 HTML 文件（交给浏览器排版），返回待排清单。"""
+def prepare_page(name, reg, css_files, _preview_label=None):
+    """生成待排清单；单页预览入口的旧标签参数不参与缓存钥匙。"""
     fm, screens = parse_md(os.path.join(MD_DIR, name + ".md"))
     page = dict(fm["page"]); page["screens"] = []
     for meta, text in screens:
