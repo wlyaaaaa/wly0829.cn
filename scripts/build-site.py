@@ -26,7 +26,7 @@ sys.path.insert(0, str(ROOT / 'scripts'))
 sys.path.insert(0, str(SITE / 'tools'))
 import astro_rules
 import oss_origins
-from render_cache import markdown_render_sha
+from render_cache import ArtifactStore, markdown_render_sha
 from render_blocks import asset_fingerprint, parse_md, RULE_FRAMES
 
 def load(name, relative):
@@ -313,6 +313,8 @@ def build(pages=None):
     checks = load('site_consistency', 'site-astro/tools/site_consistency.py').audit()
     checks_path = SITE / '.cache/site-consistency.json'; write(checks_path, checks)
     sources = sync_markdown(old.get('json_sources', {})); stage('source')
+    artifacts = ArtifactStore(); block_work = Path(os.environ.get('BLOCK_WORK_DIR') or SITE / '.cache/blocks')
+    print('成品取回：' + json.dumps(artifacts.restore(SITE, block_work)), flush=True)
     preparation = [ROOT / 'config/build.json', ROOT / 'scripts/oss_origins.py', SNAPSHOT / 'manifest.json', SITE / 'sources/retained-home-cockpit',
         SITE / 'sources/vendor-deps', SITE / 'sources/hero-motion', SITE / 'public/_home-cockpit', SITE / 'src/chrome/runtime',
         ROOT / 'sources/rules', ROOT / 'src/typeset',
@@ -473,6 +475,7 @@ def build(pages=None):
         'pages': {**old.get('pages', {}), **{route: entries[route]['fingerprint'] for route in changed}},
         'rendered': {**old.get('rendered', {}), **{name: render_fps[name] for name in render_names}}})
     write(SITE / '.cache/build-report.json', {key: value for key, value in receipt.items() if key != 'files'})
+    print('成品存入：' + json.dumps(artifacts.save(SITE, block_work)), flush=True)
     return receipt
 
 if __name__ == '__main__':
