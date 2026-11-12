@@ -75,6 +75,6 @@
 - 同一工具的 `write 块.json 改法.json --run-dir 本次目录/草稿` 只写一页一目录的草稿；改法是 `[{"block":1,"action":"改成","text":"新原文"}]`，动作可为“不动、改成、删、其后加”，未列的块不动；嵌套引用和本屏登记数随原文区间重绑，错块或多义则整页报错。
 - `python -B -X utf8 tools/update.py merge --run-dir <本次目录>`：只合入三关全过且草稿未再改动的 `drafts/<页名>/`；正文、摆法、素材行和数字定位一起提交，账中同能力的页同进同退。未合页的草稿与原因留原处，下次范围优先列出；结果在 `merge.json`。
 - `python -B -X utf8 scripts/content-refresh/checks.py --input 本次目录/检查输入.json --out 本次目录/页检查.json`：只查输入中本次改页的未填模板、同值与加总关系、屏字数增长；输入和逐页回执见 [检查接口](../scripts/content-refresh/README.md#本次改页的程序检查)，超过三成只提醒。
-- 试建、看屏、成包发布：待 f3、f5、f6 补。派单模板在私有伴随库 `docs/update-templates/`。
+- `python -B -X utf8 tools/update.py trial --run-dir <本次目录> --baseline-dist <完整旧成品> --baseline-rendered <旧rendered目录> --checks-input <C1/C2检查输入.json>`：在短路径独立副本套 `drafts/`，只建内容已过关的改页；检查输入含 `published_blocks/number_relations`，程序补本轮HTML及块。逐页接 program 关；`layout-notes.json`收“排版和好看”；`trial.json`指向真成品、用时和各关回执，`screens.json`列改屏/摆法翻屏，`scan/scan-result.json`含1536×860及390宽每屏截图。公开命中无所属页时全趟不过。看屏、成包发布待 f5、f6；派单模板在私有伴随库 `docs/update-templates/`。
 ## 改动记录
 - 2026-11-12：由五处旧规矩换成这一页（旧条目去向表在施工记录里，不进仓库）。

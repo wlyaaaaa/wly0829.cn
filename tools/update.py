@@ -1,4 +1,4 @@
-"""update：固定本次来源、列范围、接文件回执；不代 AI 判断，不构建或发布。"""
+"""update：固定本次来源、接草稿试建与三关回执；不代 AI 判断或发布。"""
 import argparse
 from datetime import timedelta
 from hashlib import sha256
@@ -261,6 +261,9 @@ def main():
     numeric.add_argument("--budget", type=float, default=300, help="取数默认预算，只记用时不截断")
     numeric.add_argument("--only", help="明确只换这些页的数字，逗号分隔；默认取全部已登记允许页")
     sub.add_parser("merge")
+    trial = sub.add_parser("trial")
+    for name in ("baseline-dist", "baseline-rendered", "checks-input"):
+        trial.add_argument("--" + name, type=Path, required=True)
     for action in ("status", "begin", "repair", "step-start", "step-end", "pass", "reject", "drop", "record-published", "finish"):
         cmd = sub.add_parser(action)
         cmd.add_argument("--page")
@@ -285,6 +288,9 @@ def main():
             state = numbers(args.run_dir, args.budget, args.only)
         elif args.action == "merge":
             state = merge(args.run_dir)
+        elif args.action == "trial":
+            from update_trial import trial
+            state = trial(args.run_dir, args.baseline_dist, args.baseline_rendered, args.checks_input)
         else:
             if args.action in {"begin", "repair"} or args.action == "step-start" and args.page:
                 require_numbers(args.run_dir)

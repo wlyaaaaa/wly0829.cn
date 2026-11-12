@@ -8,7 +8,7 @@ window.scanGlance = config => {
     while (a) { if (a.id) { parts.unshift('#' + CSS.escape(a.id)); break; } const tag = a.tagName.toLowerCase(); const siblings = a.parentElement ? [...a.parentElement.children].filter(x => x.tagName === a.tagName) : [a]; parts.unshift(tag + (siblings.length > 1 ? ':nth-of-type(' + (siblings.indexOf(a) + 1) + ')' : '')); a = a.parentElement; }
     const value = parts.join(' > '); selectors.set(e, value); return value; };
   const rect = r => ({ x: Math.round((r.left + scrollX) * 10) / 10, y: Math.round((r.top + scrollY) * 10) / 10, width: Math.round(r.width * 10) / 10, height: Math.round(r.height * 10) / 10 });
-  const pack = (e, text, why, extra = {}, r = e.getBoundingClientRect()) => ({ selector: sel(e), text: norm(text).slice(0, t.excerpt_chars), rect: rect(r), message: why, ...extra });
+  const pack = (e, text, why, extra = {}, r = e.getBoundingClientRect()) => ({ selector: sel(e), screen: e.closest('section.ts-screen')?.dataset.screen || null, text: norm(text).slice(0, t.excerpt_chars), rect: rect(r), message: why, ...extra });
   // 收起的 details 里，只有它自己的 summary 会画出来；嵌套 details 的 summary 也算被收起。浏览器能判时再用 checkVisibility 复核（display:contents 没有盒子，取最近有盒子的祖先）。
   const folded = e => { for (let d = e.closest('details:not([open])'); d; d = d.parentElement && d.parentElement.closest('details:not([open])')) { const own = [...d.children].find(c => c.tagName === 'SUMMARY'); if (!own || !own.contains(e)) return true; }
     let a = e; while (a && css(a).display === 'contents') a = a.parentElement; return !!a && typeof a.checkVisibility === 'function' && !a.checkVisibility({ contentVisibilityAuto: true }); };
@@ -54,7 +54,7 @@ window.scanGlance = config => {
   const media = [...body.querySelectorAll('img,svg,canvas,video,' + q.cards)].filter(visible).map(e => ({ e, rs: [e.getBoundingClientRect()] })), painted = [...texts, ...media].map(r => ({ e: r.e, rs: r.rs.map(z => paint(z, r.e)).filter(Boolean) }));
   for (const e of body.querySelectorAll('section.ts-screen')) { if (!visible(e)) continue; const b = e.getBoundingClientRect(), occupied = [];
     for (const r of painted) if (e.contains(r.e)) for (const z of r.rs) { const top = Math.max(b.top, z.top), bottom = Math.min(b.bottom, z.bottom); if (bottom > top && z.right > Math.max(0, b.left) && z.left < Math.min(vw, b.right)) occupied.push([top, bottom]); }
-    occupied.sort((a, c) => a[0] - c[0]); let end = b.top; const gap = to => { const height = to - end; if (height > innerHeight * t.screen_blank_viewport_fraction) blank.push(pack(e, (textMap.get(e) || []).join(' '), '屏内连续竖向空带超过视口高度阈值', { gapHeight: Math.round(height), viewportFraction:height/innerHeight }, { left: b.left, top: end, width: b.width, height })); };
+    occupied.sort((a, c) => a[0] - c[0]); let end = b.top; const gap = to => { const height = to - end; if (height > innerHeight * t.screen_blank_viewport_fraction) blank.push(pack(e, (textMap.get(e) || []).join(' '), '屏内连续竖向空带超过视口高度阈值', { gapHeight: Math.round(height), viewportFraction:height/innerHeight,emptyScreen:!occupied.length }, { left: b.left, top: end, width: b.width, height })); };
     for (const interval of occupied) { gap(interval[0]); end = Math.max(end, interval[1]); } gap(b.bottom); }
   for (const row of body.querySelectorAll('.row')) { if (!visible(row)) continue; const b=row.getBoundingClientRect(), scope=row.closest('.ts-o') || row;
     if (css(row).display === 'flex' && css(row).flexDirection === 'column') continue; // 顺序堆叠没有横向短栏；屏级空带仍照常测量。
@@ -119,6 +119,6 @@ window.scanGlance = config => {
     } finally { for(const [e,style] of disabledPaint)style===null?e.removeAttribute('style'):e.setAttribute('style',style); } } }
   scrollTo({top:origin.y,left:origin.x,behavior:'instant'});
   const classify=(category,rows)=>rows.map(r=>({category,...r}));
-  return {title:document.title,height:Math.max(body.scrollHeight,document.documentElement.scrollHeight),links,failures:[...classify('blank',blank),...classify('imbalance',imbalance),...classify('overlap',overlaps),...classify('clipped',clipped),...classify('image',images),...classify('blocked',blocked)],hints:[...classify('hidden',hidden),...classify('placeholder',placeholders),...classify('duplicate_heading',duplicateHeadings),...classify('duplicate_card',duplicateCards),...classify('duplicate_image',duplicateImages),...classify('overflow',overflowElements),...classify('date',dates)]};
+  return {title:document.title,height:Math.max(body.scrollHeight,document.documentElement.scrollHeight),links,failures:[...classify('blank',blank.filter(r=>r.emptyScreen)),...classify('overlap',overlaps),...classify('clipped',clipped),...classify('image',images),...classify('blocked',blocked)],hints:[...classify('blank',blank.filter(r=>!r.emptyScreen)),...classify('imbalance',imbalance),...classify('hidden',hidden),...classify('placeholder',placeholders),...classify('duplicate_heading',duplicateHeadings),...classify('duplicate_card',duplicateCards),...classify('duplicate_image',duplicateImages),...classify('overflow',overflowElements),...classify('date',dates)]};
 };
 void 0;

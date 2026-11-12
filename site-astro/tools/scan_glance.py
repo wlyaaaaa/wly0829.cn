@@ -7,12 +7,14 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib.parse import parse_qs, quote, unquote, urljoin, urlsplit
 HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parents[1] / 'scripts'))
 import oss_origins
+from page_checks import issue, write_checks
 UPSTREAMS = {"mcp": "https://mcp.wly0829.cn", "live": "https://live.wly0829.cn", "oss": oss_origins.configured_base()}
 UPSTREAMS.update({f"oss-{bucket}-{i}": origin for bucket in oss_origins.BUCKETS for i, origin in enumerate(
     oss_origins.aliases('https://'+bucket+'.cn-shanghai.oss.aliyuncs.com')) if origin != UPSTREAMS['oss']})
-VIEWPORTS = ((1920, 1080), (3840, 2160))
+VIEWPORTS = ((1536, 860), (390, 844))
 RETRY_NETWORK_ERRORS = ("ERR_NO_BUFFER_SPACE", "ERR_ABORTED", "ERR_CONNECTION_RESET")
 def read_json(path): return json.loads(Path(path).read_text(encoding="utf-8-sig"))
 def file_inventory(root):
@@ -29,7 +31,7 @@ def published_manifest():
     path = retention.shared() / "published.json"
     return read_json(path)["manifest"] if path.is_file() else None
 
-def select_pages(dist, mode, hashes, previous):
+def select_pages(dist, mode, hashes, previous, allow_missing=False):
     if mode == "published-diff":
         published = published_manifest()
         if published is None:
@@ -41,7 +43,7 @@ def select_pages(dist, mode, hashes, previous):
     elif mode == "changed": selected = [r for r, h in hashes.items() if previous.get(r) != h]
     else: selected = [route_name(x.strip()) for x in mode.split(",") if x.strip()]
     missing = set(selected) - hashes.keys()
-    if missing: raise ValueError(f"成品缺少页面：{sorted(missing)}")
+    if missing and not allow_missing: raise ValueError(f"成品缺少页面：{sorted(missing)}")
     # 这两个旧入口只跳转首页；首页本身照常扫描，不再重复扫跳转别名。
     return sorted(set(selected) - {"/cv/", "/system/"})
 
@@ -50,6 +52,22 @@ def successful_routes(selected, rows, unchanged=True):
     return {r for r in selected if unchanged
             and {row["viewport"] for row in rows if row["page"] == r} == expected
             and all(not row["failures"] for row in rows if row["page"] == r)}
+
+def page_checks(selected, rows, unchanged=True, missing=()):
+    complete = successful_routes(selected, rows, unchanged)
+    results = []
+    for route in selected:
+        views = [row for row in rows if row["page"] == route]
+        errors = [issue(item["category"], item.get("screen"), item["message"],
+                        viewport=row["viewport"], **{k: v for k, v in item.items() if k not in {"category", "screen", "message", "viewport"}})
+                  for row in views for item in row["failures"]]
+        if route in missing: errors.append(issue("missing_output", None, "成品缺少页面：" + route))
+        elif route not in complete and not errors:
+            errors.append(issue("scan_incomplete", None, "扫描期间成品改变" if not unchanged else "未完成所有视口扫描"))
+        warnings = [issue(item["category"], item.get("screen"), item["message"], viewport=row["viewport"], **{k: v for k, v in item.items() if k not in {"category", "screen", "message", "viewport"}})
+                    for row in views for item in row["hints"]]
+        results.append(dict(page=route, passed=not errors, errors=errors, warnings=warnings))
+    return results
 
 def scan_baseline(result):
     inputs = result.get("input_html_sha256", result.get("html_sha256", {}))
@@ -317,6 +335,13 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_res
                 try:
                     shot = args.out / "screenshots" / (stem + ".png")
                     page.screenshot(path=str(shot), full_page=True, timeout=30000); row["screenshot"] = str(shot)
+                    row["screens"] = []
+                    for n, section in enumerate(page.locator("section.ts-screen").all()):
+                        if not section.is_visible(): continue
+                        screen = section.get_attribute("data-screen") or section.get_attribute("id")
+                        path = args.out / "screenshots" / f"{stem}--screen-{n:03}.png"
+                        section.screenshot(path=str(path), timeout=30000)
+                        row["screens"].append(dict(screen=screen, screenshot=str(path), viewport=row["viewport"]))
                     tick("scroll_settle_dom_fullshot")
                     with Image.open(shot) as full:
                         for n, item in enumerate(row["failures"]):
@@ -344,10 +369,11 @@ def main():
     previous = scan_baseline(read_json(result_path)) if result_path.exists() else {}
     dist_files = file_inventory(args.dist)
     hashes = {route_name(rel): digest for rel, digest in dist_files.items() if rel.endswith(".html")}
-    selected = select_pages(args.dist, args.pages, hashes, previous)
+    selected = select_pages(args.dist, args.pages, hashes, previous, allow_missing=True)
+    missing = set(selected) - hashes.keys()
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "link_check.py"), str(args.out / "links.json"), "--dist", str(args.dist), "--skip", ""], check=True, capture_output=True, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
     links = read_json(args.out / "links.json")["items"]
-    offline = [dict(finding("404", item["problem"], "a[href=" + json.dumps(item["href"]) + "]"), page=route_name(item["page"]), viewport="offline") for item in links if route_name(item["page"]) not in selected]
+    offline = [dict(finding("404", item["problem"], "a[href=" + json.dumps(item["href"]) + "]"), page=route_name(item["page"]), viewport="offline") for item in links if route_name(item["page"]) not in selected] if args.pages in {"all", "changed", "published-diff"} else []
     rows = []
     with tempfile.TemporaryDirectory(prefix="runtime-", dir=args.out) as temp:
         scratch = Path(temp); os.environ.update(TEMP=str(scratch), TMP=str(scratch), TMPDIR=str(scratch))
@@ -356,7 +382,7 @@ def main():
         server = make_server(args.dist, args.out, args.port, manifest)
         threading.Thread(target=server.serve_forever, daemon=True).start()
         try:
-            jobs = [(route, w, h) for route in selected for w, h in VIEWPORTS]
+            jobs = [(route, w, h) for route in selected if route not in missing for w, h in VIEWPORTS]
             with ThreadPoolExecutor(max_workers=4) as pool:
                 futures = [pool.submit(scan_worker, i, jobs[i::4], args, server.base, scratch, config, links, server.proxy_results) for i in range(4) if jobs[i::4]]
                 for i, future in enumerate(futures):
@@ -372,6 +398,10 @@ def main():
     unchanged = dist_files == file_inventory(args.dist)
     if not unchanged: failures.append(dict(finding("scan_error", "扫描期间 dist 文件增删或字节变化"), page="offline", viewport="offline"))
     complete = successful_routes(selected, rows, unchanged)
+    checks_path = args.out / "page-checks.json"
+    checks = write_checks(checks_path, "scan", page_checks(selected, rows, unchanged, missing))
+    failures.extend(dict(finding(e["code"], e["message"]), page=p["page"], viewport="offline")
+                    for p in checks["pages"] for e in p["errors"] if e["code"] in {"missing_output", "scan_incomplete"})
     result = {"observed_at_beijing": datetime.now(timezone(timedelta(hours=8))).isoformat(),
               "seconds": round(time.monotonic() - started, 3), "pages": rows, "selected_routes": selected,
               "failures": failures, "counts": dict(Counter(item["category"] for item in failures)),
@@ -380,6 +410,7 @@ def main():
               "html_sha256": {r: h for r, h in previous.items() if r in hashes and r not in selected} | {r: hashes[r] for r in complete}, "input_html_sha256": hashes,
               "dist_files_sha256": dist_files, "dist_files_unchanged": unchanged,
               "browser": args.chrome,
+              "page_checks_file": str(checks_path),
               "proxy_stats": dict(server.proxy_stats), "proxy_requests": server.proxy_results, "proxy_disconnects": server.proxy_disconnects}
     result_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"status": "failed" if failures else "pass", "seconds": result["seconds"],
