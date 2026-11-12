@@ -142,14 +142,16 @@ class ScanGlanceTests(unittest.TestCase):
                 page = browser.new_page(); page.set_content(fixture)
                 page.evaluate((ROOT / "site-astro/tools/scan_glance_dom.js").read_text("utf8"))
                 def measure():
-                    return [f for f in page.evaluate("config => scanGlance(config)", config)["failures"] if f["category"] == "imbalance"]
+                    dom = page.evaluate("config => scanGlance(config)", config)
+                    self.assertFalse(any(f["category"] == "imbalance" for f in dom["failures"]))
+                    return [f for f in dom["hints"] if f["category"] == "imbalance"]
                 broken = measure()
                 self.assertEqual([f["selector"] for f in broken], ["#step-4"])
                 self.assertGreater(broken[0]["ratio"], 1.8); self.assertGreater(broken[0]["difference"], 200)
                 heights = page.eval_on_selector_all('.step', 'es => es.map(e => e.getBoundingClientRect().height)')
                 self.assertEqual(len(set(heights)), 1)  # grid 拉齐的框不能遮住内容高度差。
                 self.assertEqual(scan.successful_routes(['/fixture/'],
-                    [{"page": "/fixture/", "viewport": f"{w}x{h}", "failures": broken} for w, h in scan.VIEWPORTS]), set())
+                    [{"page": "/fixture/", "viewport": f"{w}x{h}", "failures": [], "hints": broken} for w, h in scan.VIEWPORTS]), {'/fixture/'})
                 page.add_style_tag(content='.steps{grid-template-columns:1fr}')
                 self.assertEqual(measure(), [])
                 page.add_style_tag(content='.steps{display:flex;flex-direction:column}.step{width:250px}')
@@ -180,6 +182,11 @@ class ScanGlanceTests(unittest.TestCase):
                 self.assertEqual(measure(), [])
                 page.eval_on_selector('.feature-masonry-grid', "e => {e.className='feature-group-grid ct-source_text_card';e.dataset.flow='independent_columns'}")
                 self.assertEqual([f["selector"] for f in measure()], ["#masonry-long"])
+                for content, blocked in [("", True), ("<p>Some content above a local gap</p>", False)]:
+                    page.set_content('<section class="ts-screen" style="width:1200px;height:2400px">' + content + '</section>')
+                    dom = page.evaluate("config => scanGlance(config)", config)
+                    self.assertEqual(any(f["category"] == "blank" for f in dom["failures"]), blocked)
+                    self.assertEqual(any(f["category"] == "blank" for f in dom["hints"]), not blocked)
             finally:
                 browser.close()
     def test_closed_details_rows_skipped_but_visible_overlap_and_clip_reported(self):
@@ -285,6 +292,17 @@ class ScanGlanceTests(unittest.TestCase):
             self.assertFalse(scan.retryable_transport({"failures": [scan.finding("scan_error", code)]}))
             for category in ("404", "geometry", "scan_error"):
                 self.assertFalse(scan.retryable_transport({"failures": [scan.finding("transport", code), scan.finding(category, "real failure")]}))
+    def test_page_receipts_keep_good_bad_and_missing_separate(self):
+        selected = ["/good/", "/bad/", "/missing/", "/partial/"]
+        rows = [dict(page=p, viewport=f"{w}x{h}", failures=[], hints=[scan.finding("imbalance", "short column")])
+                for p in selected[:2] for w, h in scan.VIEWPORTS]
+        rows[-1]["failures"] = [scan.finding("clipped", "text clipped")]
+        rows.append(dict(page="/partial/", viewport=rows[0]["viewport"], failures=[], hints=[]))
+        checks = scan.page_checks(selected, rows, missing={"/missing/"})
+        self.assertEqual([p["passed"] for p in checks], [True, False, False, False])
+        self.assertEqual([p["errors"][0]["code"] for p in checks[1:]], ["clipped", "missing_output", "scan_incomplete"])
+        self.assertEqual(checks[0]["warnings"][0]["code"], "imbalance")
+        self.assertFalse(scan.page_checks(["/good/"], rows, unchanged=False)[0]["passed"])
     def test_worker_retry_keeps_attempts_and_uses_second_result(self):
         cases = [("transport", "ERR_ABORTED", [], 2), ("transport", "ERR_CONNECTION_RESET", [scan.finding("transport", "ERR_ABORTED")], 2),
                  ("404", "ERR_ABORTED", [], 1), ("scan_error", "ERR_ABORTED", [], 1), ("transport", "ERR_TIMED_OUT", [], 1),

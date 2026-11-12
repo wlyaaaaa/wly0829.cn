@@ -292,6 +292,86 @@ def sync_markdown(previous):
     for name, row in records.items(): row['md_sha256'] = proof(SITE / 'src/content/pages' / (name + '.md'))['sha256']
     return records
 
+@contextlib.contextmanager
+def trial_routes():
+    fixed = [p for p in (SITE / 'src/pages').rglob('*.astro') if '[' not in p.name]
+    try:
+        for path in fixed: path.rename(path.with_suffix('.astro.trial'))
+        yield
+    finally:
+        for path in fixed:
+            if path.with_suffix('.astro.trial').exists(): path.with_suffix('.astro.trial').rename(path)
+
+
+def trial_build(names, dist, report, baseline_rendered=None):
+    """Build draft author pages without requiring or finalizing a complete release."""
+    from page_checks import page_result, issue, write_checks
+    names = list(dict.fromkeys(names.split(',')))
+    if not names or any(not re.fullmatch(r'[A-Za-z0-9_-]+', n) for n in names):
+        raise ValueError('Expected author page names')
+    verify_typeset_lock(ROOT)
+    load('trial_render_environment', 'site-astro/tools/render_blocks.py').verify_render_lock()
+    dist, report = Path(dist).resolve(), Path(report).resolve()
+    dist.mkdir(parents=True, exist_ok=True); report.parent.mkdir(parents=True, exist_ok=True)
+    rows = {n: page_result(n) for n in names}
+    for n, row in rows.items():
+        try:
+            fm = markdown_frontmatter(SITE / 'src/content/pages' / (n + '.md')) if (SITE / 'src/content/pages' / (n + '.md')).is_file() else read(ROOT / 'sources/pages' / n / 'page.json')
+            row['route'] = normalize_route(fm.get('url') or '/' + n + '/')
+            if row['route'] in {'/', '/cockpit/', '/computer-access/'}: raise ValueError('Trial requires an author-rendered page: ' + n)
+            (dist / route_file(row['route'])).unlink(missing_ok=True)
+        except (OSError, ValueError, KeyError) as error:
+            row.update(passed=False, errors=[issue('route_invalid', None, str(error))])
+    work = Path(os.environ.get('BLOCK_WORK_DIR') or SITE / '.cache/blocks')
+    print('成品取回：' + json.dumps(ArtifactStore().restore(SITE, work)), flush=True)
+    snapshot = read(SNAPSHOT / 'manifest.json')
+    restore(snapshot); load('trial_runtime', 'site-astro/tools/build_runtime.py').prepare(snapshot)
+    run(sys.executable, 'tools/pack_living.py'); run(sys.executable, 'tools/adapt_motion.py', *names)
+    for stage, script, key in [('conversion', 'convert_page.py', 'CONVERT_PAGE_CHECKS'), ('render', 'render_blocks.py', 'BLOCK_PAGE_CHECKS')]:
+        selected = [n for n, row in rows.items() if row['passed']]
+        if not selected: break
+        receipt = report.with_name(stage + '-page-checks.json')
+        receipt.unlink(missing_ok=True)
+        env = {**os.environ, key: str(receipt)}
+        if baseline_rendered:
+            env.update(BLOCK_LAYOUT_BASELINE=str(Path(baseline_rendered).resolve()),
+                       BLOCK_LAYOUT_RECEIPT=str(report.with_name('layout-diff.json')))
+        subprocess.run([sys.executable, '-B', '-X', 'utf8', str(SITE / 'tools' / script), *selected], cwd=SITE, env=env, check=False)
+        checked = {p['page']: p for p in read(receipt)['pages']}
+        for n in selected:
+            result = checked.get(n, page_result(n, ValueError('Missing stage receipt'), 'missing_stage_receipt')); rows[n]['passed'] = result['passed']
+            rows[n]['errors'] += [dict(e, stage=stage) for e in result['errors']]
+            rows[n]['warnings'] += result.get('warnings', [])
+    with trial_routes():
+        for n, row in rows.items():
+            if not row['passed']: continue
+            try:
+                fm = markdown_frontmatter(SITE / 'src/content/pages' / (n + '.md'))
+                row['route'] = normalize_route(fm.get('url') or '/' + n + '/')
+                rendered = SITE / 'src/content/rendered' / (n + '.json')
+                if read(rendered).get('render_md_sha256') != markdown_render_sha(SITE / 'src/content/pages' / (n + '.md')):
+                    raise ValueError('Rendered Markdown changed: ' + n)
+                with tempfile.TemporaryDirectory(prefix='astro-', dir=dist.parent) as temporary:
+                    stage = Path(temporary)
+                    env = {**os.environ, 'SITE_BUILD_PAGES': row['route'], 'SITE_BUILD_OUT_DIR': str(stage)}
+                    run('node', 'node_modules/astro/bin/astro.mjs', 'build', '--force', env=env)
+                    source = stage / route_file(row['route'])
+                    if not source.is_file(): raise ValueError('Astro did not generate selected route: ' + row['route'])
+                    copy_changed(source, dist / route_file(row['route']))
+                    for path in stage.rglob('*'):
+                        if path.is_file() and path.suffix != '.html': copy_changed(path, dist / path.relative_to(stage))
+                row.update(html=str(dist / route_file(row['route'])), rendered=str(rendered))
+            except (OSError, ValueError, subprocess.SubprocessError) as error:
+                row['passed'] = False; row['errors'].append(issue('astro_failed', None, str(error)))
+                (dist / route_file(row['route'])).unlink(missing_ok=True)
+    for source in (SITE / 'public').rglob('*'):
+        if source.is_file() and source.suffix != '.html': copy_changed(source, dist / source.relative_to(SITE / 'public'))
+    result = write_checks(report, 'trial-build', list(rows.values()))
+    result.update(output=str(dist), passed=all(row['passed'] for row in rows.values()))
+    write(report, result)
+    return result
+
+
 def build(pages=None, check_lock_only=False):
     started = time.monotonic(); previous_stage = started; steps = []
     verify_typeset_lock(ROOT)
@@ -512,8 +592,17 @@ def build(pages=None, check_lock_only=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--pages', help='Comma-separated site routes; requires an existing complete dist')
+    parser.add_argument('--trial-pages', help='Comma-separated author page names; never finalize or publish')
+    parser.add_argument('--dist', type=Path, help='Trial output; selected old HTML is removed before building')
+    parser.add_argument('--report', type=Path, help='Trial page checks JSON')
+    parser.add_argument('--baseline-rendered', type=Path, help='Previous rendered JSON for layout comparison')
     parser.add_argument('--check-render-lock', action='store_true', help='Check shared inputs and fixed browser/fonts only')
     args = parser.parse_args()
+    if args.trial_pages:
+        if not args.dist or not args.report: parser.error('--trial-pages requires --dist and --report')
+        result = trial_build(args.trial_pages, args.dist, args.report, args.baseline_rendered)
+        print(json.dumps(result, ensure_ascii=False))
+        raise SystemExit(0 if result['passed'] else 1)
     if args.check_render_lock:
         build(check_lock_only=True)
         print('共用排版层与固定浏览器、字体检查通过')

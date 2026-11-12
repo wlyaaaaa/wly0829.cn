@@ -70,11 +70,11 @@
 - 所有操作均带`--run-dir`，重发沿用`--event-id`；全局`step-start/step-end --step 步骤名`也记用时，结束附`--artifact`。截止后只可放下、记`publish/report`和已过关页的`record-published --page 页名 --artifact 发布回执`；登记不代替正式发布与账的回读核验。最终`finish --artifact 本次汇报`固定收工时间，保留未完成页，继续须新开一次。
 - `batch-plan --run-dir <本次目录> --task-id <整件编号>`按私有伴随库 `docs/update-templates/` 开 a（每页）、b（每项目）；`--kinds ef --materials <JSON>`开改稿核对，JSON 按页短名填模板材料（`本页改动清单`、`改完的整页`、可选`页图片目录`），`*`可填共用的`块导出文件`。e 只开有改动清单的页，f 每周只开材料列到的页、头一遍全开；两阶段页稿快照分开。
 - `batch-run --run-dir <本次目录> --max-running 10 --min-free-gb 6`作为一条后台命令：按路数与空闲内存补发、一个 Watch 等候并收回执；每单都带具体 RepeatReason，保留原派活拦截。Codex 主持须加`--parent-harness Codex --session-id <当前完整线程号>`；留言、失败或异常叫醒交主持，原命令可续，不重开已有单。
-- `batch-collect --run-dir <本次目录>`只收不派；`batch-summary.md`每项目一行，JSON 另列计数、并发峰值、每张业务回执与包装器本轮汇报、Sol 已知工时及未知数（明细在`batch.json`）。只按当前阶段分流：零项结束、登记数交数字、单句合批阅、候选/整段/数变等进 c；`opus_to_open`列填好卡的路径和档位，由主持开，命令不调用 Opus。`host-notes.md`留失败、歧义和留言，内存不足留待补发；试建、看屏、合入、成包发布待 f3 到 f6 补。
-- `python -B -X utf8 scripts/content-refresh/block_tool.py export 页名 --out 本次目录/块.json`：导出原文字符区间、横竖各自的块归属、字数与登记数；默认容量保守取原有字数（余量0），`--capacities 已测容量.json` 可按 `屏id/h或v/块索引（从0开始）` 提供已测上限。
-- 同一工具的 `write 块.json 改法.json --run-dir 本次目录/草稿` 只写一页一目录的草稿；改法是 `[{"block":1,"action":"改成","text":"新原文"}]`，动作可为“不动、改成、删、其后加”，未列的块不动；嵌套引用和本屏登记数随原文区间重绑，错块或多义则整页报错。
+- `batch-collect --run-dir <本次目录>`只收不派；`batch-summary.md`每项目一行，JSON 另列计数、并发峰值、每张业务回执与包装器本轮汇报、Sol 已知工时及未知数（明细在`batch.json`）。只按当前阶段分流：零项结束、登记数交数字、单句合批阅、候选/整段/数变等进 c；`opus_to_open`列填好卡的路径和档位，由主持开，命令不调用 Opus。`host-notes.md`留失败、歧义和留言，内存不足留待补发；看屏待 f6 补。
+- `python -B -X utf8 scripts/content-refresh/block_tool.py export 页名 --out 本次目录/块.json`：导出原文字符区间、横竖各自的块归属、字数与登记数；默认容量保守取原有字数（余量0），`--capacities 已测容量.json` 可按 `屏id/h或v/块索引（从0开始）` 提供已测上限；同一工具的 `write 块.json 改法.json --run-dir 本次目录/草稿` 只写一页一目录的草稿；改法是 `[{"block":1,"action":"改成","text":"新原文"}]`，动作可为“不动、改成、删、其后加”，未列的块不动；嵌套引用和本屏登记数随原文区间重绑，错块或多义则整页报错。
 - `python -B -X utf8 tools/update.py merge --run-dir <本次目录>`：只合入三关全过且草稿未再改动的 `drafts/<页名>/`；正文、摆法、素材行和数字定位一起提交，账中同能力的页同进同退。未合页的草稿与原因留原处，下次范围优先列出；结果在 `merge.json`。
 - `python -B -X utf8 scripts/content-refresh/checks.py --input 本次目录/检查输入.json --out 本次目录/页检查.json`：只查输入中本次改页的未填模板、同值与加总关系、屏字数增长；输入和逐页回执见 [检查接口](../scripts/content-refresh/README.md#本次改页的程序检查)，超过三成只提醒。
+- `python -B -X utf8 tools/update.py trial --run-dir <本次目录> --baseline-dist <完整旧成品> --baseline-rendered <旧rendered目录> --checks-input <C1/C2检查输入.json>`：在短路径独立副本套 `drafts/`，只建内容已过关的改页；检查输入含 `published_blocks/number_relations`，程序补本轮HTML及块。逐页接 program 关；`layout-notes.json`收“排版和好看”；`trial.json`指向真成品、用时和各关回执，`screens.json`列改屏/摆法翻屏，`scan/scan-result.json`含1536×860及390宽每屏截图。公开命中无所属页时全趟不过。看屏待 f6；派单模板在私有伴随库 `docs/update-templates/`。
 - `publish --run-dir <本次目录> --dry-run`：首页重画先提交、整站构建、对账及扫描后预演；正式发布去掉`--dry-run`，同包预演后上传、发布、回读，成功才记账。仅首趟旧式基线加`--legacy-baseline-reason <整站换版理由>`，回执记“首发用旧式基准”；`--confirm <本趟live/publish-receipt.json>`在中断后只补记本趟账。
 ## 改动记录
 - 2026-11-12：由五处旧规矩换成这一页（旧条目去向表在施工记录里，不进仓库）。

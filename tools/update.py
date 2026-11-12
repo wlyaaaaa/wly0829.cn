@@ -1,4 +1,4 @@
-"""update：固定本次来源、列范围、接文件回执，整包发布后逐页记账。"""
+"""update：固定本次来源、列范围、接草稿试建与三关回执，整包发布后逐页记账。"""
 import argparse
 import importlib.util
 from datetime import timedelta
@@ -379,6 +379,9 @@ def main():
     publication_action.add_argument("--dry-run", action="store_true")
     publishing.add_argument("--legacy-baseline-reason", help="首趟旧式基线整站换版的明确理由")
     publication_action.add_argument("--confirm", type=Path, help="正式回读已成功时，仅补记本趟账")
+    trial = sub.add_parser("trial")
+    for name in ("baseline-dist", "baseline-rendered", "checks-input"):
+        trial.add_argument("--" + name, type=Path, required=True)
     for action in ("status", "begin", "repair", "step-start", "step-end", "pass", "reject", "drop", "record-published", "finish"):
         cmd = sub.add_parser(action)
         cmd.add_argument("--page")
@@ -405,6 +408,9 @@ def main():
             state = merge(args.run_dir)
         elif args.action == "publish":
             state = publish(args.run_dir, args.dry_run, args.legacy_baseline_reason, args.confirm)
+        elif args.action == "trial":
+            from update_trial import trial
+            state = trial(args.run_dir, args.baseline_dist, args.baseline_rendered, args.checks_input)
         else:
             if args.action in {"begin", "repair"} or args.action == "step-start" and args.page:
                 require_numbers(args.run_dir)
