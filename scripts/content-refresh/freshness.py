@@ -390,4 +390,4 @@ def close_run(root, result, report=None, dist=None):
                 excluded=excluded,
                 status="incomplete" if pending else "closed", rows=outcomes, manual_tasks=tasks,
                 semantic_due=dict(count=len(semantic_pages), pages=semantic_pages),
-                registry_sync=sync_registry(result.get("registry_path") or root / "sources/refresh/registry.json", synced), pending=len(pending))
+                registry_sync=dict(status="pending_publication", records=[]), registry_pending=synced, pending=len(pending))
