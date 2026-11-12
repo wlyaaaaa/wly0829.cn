@@ -12,7 +12,7 @@ from rule_explanation_status import task_lines as rule_task_lines
 from checks import HISTORY, WORDS
 from validation import record_errors, registry_errors, relation_errors, validate_entries, LEDGER
 from apply_edits import EVENT_DATE
-from editorial_ledger import read_reviews
+from editorial_ledger import atomic_write_text, read_reviews
 
 BEIJING = timezone(timedelta(hours=8))
 COUNT_CONTENT = re.compile(r"\d[\d,.]*(?:\s*/\s*\d[\d,.]*)?\s*(?:个|项|件|次|条|份|组|页|行|人|台|块|张|种|套|屏|层|路|节|秒|分钟|字节|[KMGT]i?B|%)|(?:数量|计数|总数|条目|[一-龥A-Za-z_]{1,24}数)\s*[:：｜|]\s*[*` ]*\d[\d,.]*")
@@ -604,5 +604,5 @@ def fact_tasks(inventory, group_size=25):
 
 
 def write_inventory(output, inventory):
-    (output / "dated-inventory.json").write_text(json.dumps(inventory, ensure_ascii=False, indent=2), encoding="utf-8")
-    (output / "fact-tasks.md").write_text(fact_tasks(inventory), encoding="utf-8")
+    atomic_write_text(output / "dated-inventory.json", json.dumps(inventory, ensure_ascii=False, indent=2), encoding="utf-8")
+    atomic_write_text(output / "fact-tasks.md", fact_tasks(inventory), encoding="utf-8")

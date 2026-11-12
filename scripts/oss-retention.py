@@ -18,6 +18,8 @@ from xml.sax.saxutils import escape
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 import oss_origins
+sys.path.insert(0, str(ROOT / 'scripts/content-refresh'))
+from editorial_ledger import atomic_write_text
 BUCKET = 'wly0829-img-media-shanghai'
 BASE = oss_origins.configured_base()
 LOCK = r'E:\.agents\tools\Invoke-ShortLock.ps1'
@@ -33,9 +35,7 @@ def read(path):
 
 def write(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix('.writing')
-    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding='utf-8')
-    temporary.replace(path)
+    atomic_write_text(path, json.dumps(value, ensure_ascii=False, indent=2), encoding='utf-8')
 
 
 def digest(path):

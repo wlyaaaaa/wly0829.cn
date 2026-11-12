@@ -1,5 +1,5 @@
 """整批校验后机械合入 Opus 屏稿；只修改明确列出的 JSON 值。"""
-import argparse, json, re, tempfile
+import argparse, json, os, re, tempfile
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 def reject_constant(value): raise ValueError(f"无效 JSON 常量: {value}")
@@ -68,6 +68,8 @@ def apply_rewrites(root, drafts):
             with tempfile.NamedTemporaryFile(dir=path.parent, prefix=path.name + ".", suffix=".tmp", delete=False) as handle:
                 staged.append((path, Path(handle.name)))
                 handle.write(data)
+                handle.flush()
+                os.fsync(handle.fileno())
         for path, temporary in staged:
             temporary.replace(path)
     finally:

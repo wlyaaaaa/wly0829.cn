@@ -8,7 +8,7 @@ import re
 import shutil
 import subprocess
 
-from editorial_ledger import Ledger
+from editorial_ledger import Ledger, atomic_write_text
 from update_gates import Run, git, locked, now, protected_inputs, read, timestamp, write
 
 DISPATCH = "E:/.agents/tools/Invoke-ClaudeGptChild.ps1"
@@ -33,7 +33,7 @@ def fill(templates, name, values, target):
     source = next(Path(templates).glob(name + ("-*.md" if name in "abcef" else ".md")))
     text = re.sub(r"\{\{([^{}]+)\}\}", lambda m: str(values[m[1]]), source.read_text("utf-8-sig"))
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(text, encoding="utf-8")
+    atomic_write_text(target, text, encoding="utf-8")
 
 
 def prepare(directory, task_id, kinds="ab", materials=None, repositories=REPOS, supply=SUPPLY):
@@ -162,7 +162,7 @@ def collect(directory, batch):
                               completed=sum(j["status"] == "completed" for j in jobs), total=len(jobs)))
     for n, offset in enumerate(range(0, len(singles), 70), 1):
         items = directory / "opus" / batch["stage"] / f"items-{n}.md"; items.parent.mkdir(parents=True, exist_ok=True)
-        items.write_text("项目｜页｜编号｜种类｜原句｜来源｜建议\n" + "\n".join(singles[offset:offset + 70]) + f"\n同屏上下文：{directory / 'pages' / 'ab'} 下各页 page.json。", encoding="utf-8")
+        atomic_write_text(items, "项目｜页｜编号｜种类｜原句｜来源｜建议\n" + "\n".join(singles[offset:offset + 70]) + f"\n同屏上下文：{directory / 'pages' / 'ab'} 下各页 page.json。", encoding="utf-8")
         values = dict(本次目录=str(directory), 批号=n, 时限分钟=45, 整件编号=batch["task_id"], 本批单句改法文件=str(items),
                       来源仓库和截至提交="；".join(p["values"]["来源仓库和截至提交"] for p in batch["projects"].values()))
         card = directory / "opus" / batch["stage"] / f"review-{n}.md"; fill(batch["templates"], "批阅", values, card)
@@ -172,8 +172,8 @@ def collect(directory, batch):
                   sol_time_unknown=sum(bool(j.get("run_dir")) and j.get("seconds") is None for j in batch["jobs"]),
                   opus_started=0, opus_hours=0, capacity_wait=batch.get("capacity_wait"))
     write(directory / "batch-summary.json", result); write(directory / "batch.json", batch)
-    (directory / "batch-summary.md").write_text("\n".join(f"{r['project']}｜{r['completed']}/{r['total']}｜{'、'.join(r['routes'])}｜{json.dumps(r['counts'], ensure_ascii=False)}" for r in summaries) + "\n", encoding="utf-8")
-    (directory / "host-notes.md").write_text("\n".join(notes) + "\n", encoding="utf-8")
+    atomic_write_text(directory / "batch-summary.md", "\n".join(f"{r['project']}｜{r['completed']}/{r['total']}｜{'、'.join(r['routes'])}｜{json.dumps(r['counts'], ensure_ascii=False)}" for r in summaries) + "\n", encoding="utf-8")
+    atomic_write_text(directory / "host-notes.md", "\n".join(notes) + "\n", encoding="utf-8")
     return result
 
 
@@ -217,7 +217,7 @@ def execute(directory, max_running=10, min_free_gb=6, parent_harness="Claude", s
             if notice.get("reason") not in {"task_finished", "all_finished"}:
                 result = collect(directory, batch); result["watch_notice"] = notice
                 result["notes"].append("Watch 需要主持处理：" + str(notice.get("reason")))
-                (directory / "host-notes.md").write_text("\n".join(result["notes"]) + "\n", encoding="utf-8")
+                atomic_write_text(directory / "host-notes.md", "\n".join(result["notes"]) + "\n", encoding="utf-8")
                 write(directory / "batch-summary.json", result)
                 return result
 

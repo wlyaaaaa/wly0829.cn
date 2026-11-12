@@ -17,6 +17,8 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[2]
 SITE = ROOT / 'site-astro'
 sys.path.insert(0, str(ROOT / 'scripts'))
+sys.path.insert(0, str(ROOT / 'scripts/content-refresh'))
+from editorial_ledger import atomic_write_bytes, atomic_write_text
 import astro_rules
 import oss_origins
 
@@ -105,7 +107,7 @@ def previous_resources(prior, published):
 def file_route(rel): return '/' if rel == 'index.html' else '/' + rel[:-10] if rel.endswith('/index.html') else '/' + rel
 def copy(source, target):
     raw = Path(source).read_bytes(); target = Path(target); target.parent.mkdir(parents=True, exist_ok=True)
-    if not target.is_file() or target.read_bytes() != raw: target.write_bytes(raw)
+    if not target.is_file() or target.read_bytes() != raw: atomic_write_bytes(target, raw)
     return raw
 
 def prepare(snapshot):
@@ -139,7 +141,7 @@ def retired_project_routes(dist, previous):
         routes = [value for value in previous['routes'] if value == route or value.startswith(route)]
         for old in routes:
             target = dist/nav.route_file(old); target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_text('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex"><title>'+html.escape(item['title'])+'</title></head><body><main><p>'+html.escape(item['title'])+'旧页面已撤下。<a href="'+html.escape(destination, quote=True)+'">查看现有项目</a></p></main></body></html>', encoding='utf8')
+            atomic_write_text(target, '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex"><title>'+html.escape(item['title'])+'</title></head><body><main><p>'+html.escape(item['title'])+'旧页面已撤下。<a href="'+html.escape(destination, quote=True)+'">查看现有项目</a></p></main></body></html>', encoding='utf8')
 
 def search_index_entry(body, snapshot, prior=None):
     """The existing client reads both tables once; load globals before it."""
@@ -254,7 +256,7 @@ def sync_search(root, previous, converted, pin, changed_routes):
                 if field in row: row[field] = row.pop(field)
         prefix = 'window.' + ('__WLY_SEARCH_INDEX__' if rel == 'search-index.js' else '__WLY_PROJECT_SEARCH_INDEX__') + '='
         payload = search_wire(kept + added, encode=True) if rel == 'search-projects.js' else kept + added
-        old.write_bytes((prefix + json.dumps(payload, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c') + ';\n').encode())
+        atomic_write_bytes(old, (prefix + json.dumps(payload, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c') + ';\n').encode())
         if rel == 'search-projects.js': current_projects = kept + added
         replacements[obj['url']] = '/' + rel
     affected_projects = {route.split('/')[2] for route in search_routes if route.startswith('/projects/')}
@@ -262,21 +264,21 @@ def sync_search(root, previous, converted, pin, changed_routes):
         slug = path.name.removeprefix('search-project-').removesuffix('.js')
         if slug not in affected_projects or slug == 'localocr': continue
         payload = [row for row in current_projects if row.get('projectSlug') == slug]
-        path.write_bytes(('window.__WLY_PROJECT_SEARCH_INDEX__=' + json.dumps(payload, ensure_ascii=False,
+        atomic_write_bytes(path, ('window.__WLY_PROJECT_SEARCH_INDEX__=' + json.dumps(payload, ensure_ascii=False,
                          separators=(',', ':')).replace('<', '\\u003c') + ';\n').encode())
     # The global search client has literal index URLs; keep its code intact and
     # change only those existing resource literals, then retain its new hash.
     search_path = root/'search/index.html'
     search_html = search_index_entry(search_path.read_bytes().decode('utf8'), read(SITE / 'sources/frozen-site/manifest.json'),
                                      read(root/'release-manifest.json') if (root/'release-manifest.json').is_file() else {})
-    search_path.write_bytes(search_html.encode('utf8'))
+    atomic_write_bytes(search_path, search_html.encode('utf8'))
     for rel, obj in previous['oss']['objects'].items():
         if not rel.startswith('assets/') or not rel.endswith('.js') or obj['url'] not in search_html: continue
         target = root/rel; target.parent.mkdir(parents=True, exist_ok=True)
         seed_file(rel, target)
         raw = target.read_text('utf8'); patched = raw
         for old, new in replacements.items(): patched = patched.replace(old, new)
-        target.write_bytes(patched.encode()); replacements[obj['url']] = '/' + rel
+        atomic_write_bytes(target, patched.encode()); replacements[obj['url']] = '/' + rel
     # search_objects contains only indexes, so locate the retained client from
     # the scripts actually loaded by /search/, rather than that smaller table.
     loaded = [(attrs, raw, offset) for tag, attrs, raw, offset in oss.HtmlTags(search_html).tags
@@ -294,13 +296,13 @@ def sync_search(root, previous, converted, pin, changed_routes):
         raw = target.read_text('utf8')
         if '__WLY_SEARCH_INDEX__' in raw and '__WLY_PROJECT_SEARCH_INDEX__' in raw:
             (root/isolated).unlink(missing_ok=True)
-    search_path.write_bytes(search_html.encode('utf8'))
+    atomic_write_bytes(search_path, search_html.encode('utf8'))
     for path in (root / nav.route_file(route) for route in changed_routes):
         rel = path.relative_to(root).as_posix(); raw = path.read_bytes(); patched = raw
         applied = {old: new for old, new in replacements.items() if old.encode() in raw}
         for old, new in applied.items(): patched = patched.replace(old.encode(), new.encode())
         if patched != raw:
-            path.write_bytes(patched)
+            atomic_write_bytes(path, patched)
     return {p.name: dict(sorted(content_inputs.items())) for p in sorted(root.glob('search-*.js'))}
 
 def search_budget_review(root):
@@ -335,7 +337,7 @@ def write_sitemap(root, routes):
     urls = sorted(route for route in routes if route.endswith('/') and route != '/system/'
                   and not has_noindex(root/nav.route_file(route)))
     sitemap = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join('<url><loc>https://wly0829.cn'+route+'</loc></url>' for route in urls) + '</urlset>\n'
-    (root/'sitemap.xml').write_text(sitemap, encoding='utf8')
+    atomic_write_text(root/'sitemap.xml', sitemap, encoding='utf8')
 
 
 def album_index(dist, snapshot, changed_routes):
@@ -349,10 +351,10 @@ def album_index(dist, snapshot, changed_routes):
     if not old: return {}
     raw = transport.localize(json.dumps({'schema': 'wly.album-routes.v1', 'routes': routes}, ensure_ascii=False, sort_keys=True, separators=(',', ':')) + '\n', snapshot).encode('utf8')
     address = '/_album/routes-' + hashlib.sha256(raw).hexdigest()[:20] + '.json'
-    target = dist / address.lstrip('/'); target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(raw)
+    target = dist / address.lstrip('/'); target.parent.mkdir(parents=True, exist_ok=True); atomic_write_bytes(target, raw)
     for path, body in pages.items():
         for previous in sorted(old, key=len, reverse=True): body = body.replace(previous, address)
-        path.write_bytes(body.encode('utf8'))
+        atomic_write_bytes(path, body.encode('utf8'))
     return {'resource': address, 'routes': len(routes)}
 
 def visitor_html(body):
@@ -377,7 +379,7 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
     for route in changed_routes & set(nav.SITE_NAVIGATION.values()) - {'/', '/cockpit/', '/computer-access/'}:
         path = dist / nav.route_file(route)
         body, _ = nav.repair_owned_navigation(path.read_text('utf8'), navigation, owner_route=route)
-        path.write_bytes(body.encode('utf8'))
+        atomic_write_bytes(path, body.encode('utf8'))
     if (dist / '404/index.html').exists(): copy(dist / '404/index.html', dist / '404.html')
     previous = {'oss': {'objects': snapshot['search_objects']}, 'files': snapshot['pages']}
     site_inputs = sync_search(dist, previous, converted, pin, changed_routes)
@@ -388,37 +390,37 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
         if path.is_file():
             body = path.read_bytes().decode('utf8')
             if not finalized or any(prefix in body for prefix in legacy): body = transport.localize(body, snapshot)
-            if path.read_bytes() != body.encode('utf8'): path.write_bytes(body.encode('utf8'))
+            if path.read_bytes() != body.encode('utf8'): atomic_write_bytes(path, body.encode('utf8'))
     for path in dist.rglob('*'):
         if path.is_file() and path.suffix in transport.TEXT - {'.html'} and path.name != 'release-manifest.json':
             before = path.read_bytes().decode('utf8')
             after = before if finalized and not any(prefix in before for prefix in legacy) else transport.localize(before, snapshot)
             if path.suffix == '.css': after = after.replace('\r\n', '\n').replace('\r', '\n')
-            if after != before: path.write_bytes(after.encode('utf8'))
+            if after != before: atomic_write_bytes(path, after.encode('utf8'))
     active_urls = {row['url']: '/' + rel for rel, row in prior.get('oss', {}).get('objects', {}).items()}
     scripts = {active_urls.get(match, transport.PREFIX.sub('/', match)) for page in dist.rglob('*.html') for match in re.findall(r'<script\b[^>]*\b(?:data-)?src="([^"]+)"', page.read_text('utf8'))}
     unused = ['/' + path.relative_to(dist).as_posix() for path in (dist / '_typeset/runtime').glob('b2-typeset-*.js') if '/' + path.relative_to(dist).as_posix() not in scripts]
     for path in dist.rglob('resource-retry-*.js'):
         copy_bytes = retry.prune_content_retry_policy(path.read_text('utf8'), unused).encode('utf8')
-        if path.read_bytes() != copy_bytes: path.write_bytes(copy_bytes)
+        if path.read_bytes() != copy_bytes: atomic_write_bytes(path, copy_bytes)
     for url in unused: (dist / url.lstrip('/')).unlink()
     album = album_index(dist, snapshot, changed_routes)
     if (dist / '404/index.html').exists(): copy(dist / '404/index.html', dist / '404.html')
     for path in (dist / '_album').glob('routes-*.json'):
         if finalized and not any(prefix in path.read_text('utf8') for prefix in legacy): continue
-        path.write_bytes(transport.localize(path.read_text('utf8'), snapshot).encode('utf8'))
+        atomic_write_bytes(path, transport.localize(path.read_text('utf8'), snapshot).encode('utf8'))
     routes = sorted(file_route(p.relative_to(dist).as_posix()) for p in dist.rglob('*.html'))
     write_sitemap(dist, routes)
     site_inputs['sitemap.xml'] = {'@indexable-routes': value_sha(sorted(route for route in routes if route.endswith('/') and route != '/system/' and not has_noindex(dist/nav.route_file(route))))}
     for path in dist.rglob('*.html'):
         body = path.read_bytes().decode('utf8'); updated = visitor_html(body)
-        if updated != body: path.write_bytes(updated.encode('utf8'))
+        if updated != body: atomic_write_bytes(path, updated.encode('utf8'))
     # Normalize build copies only: frozen sources, historical URLs and their proofs remain immutable.
     for path in dist.rglob('*'):
         if path.is_file() and path.suffix in transport.TEXT | {'.md', '.webmanifest'} and path.name not in {'release-manifest.json', 'release-identity.json', '.build-receipt.json'}:
             before = path.read_bytes().decode('utf8'); after = oss_origins.rewrite_origins(before)
             if path.suffix == '.css': after = after.replace('\r\n', '\n').replace('\r', '\n')
-            if after != before: path.write_bytes(after.encode('utf8'))
+            if after != before: atomic_write_bytes(path, after.encode('utf8'))
     files = {p.relative_to(dist).as_posix(): {'bytes': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
              for p in sorted(dist.rglob('*')) if p.is_file() and p.name not in {'.build-receipt.json', 'release-manifest.json', 'release-identity.json'}}
     manifest = {'schema': 'wly.hybrid-release.v1', 'files': files, 'routes': routes, 'search_budget_review': search_review,
@@ -429,5 +431,5 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
                   'selected_pages': sorted(p.stem for p in (SITE / 'src/content/pages').glob('*.md')), 'html_files': len(routes)}}
     manifest['previous_oss'], manifest['previous_oss_source'], manifest['previous_release_id'] = previous_resources(prior, published_manifest())
     manifest.pop('finalized_dist', None)
-    (dist / 'release-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
+    atomic_write_text(dist / 'release-manifest.json', json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
     return {'routes': routes, 'release_id': manifest['release_id'], 'album': album}

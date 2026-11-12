@@ -32,6 +32,8 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 import oss_origins
+sys.path.insert(0, str(ROOT / 'scripts/content-refresh'))
+from editorial_ledger import atomic_write_text
 MANIFEST = 'release-manifest.json'
 PLAN = 'oss-plan.json'
 # These files describe the HTML host rather than page content. Moving robots or
@@ -247,7 +249,7 @@ def read(path):
 
 
 def write(path, value):
-    Path(path).write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
+    atomic_write_text(path, json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
 
 
 def digest(path):

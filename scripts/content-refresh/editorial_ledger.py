@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import re
+import tempfile
 
 SCHEMA = "wly.editorial-ledger.v1"
 REPOSITORY = "wlyaaaaa/wly0829.cn"
@@ -17,11 +18,32 @@ def read_json(path):
     return json.loads(Path(path).read_text("utf-8-sig"))
 
 
+def _atomic_write(path, data, **options):
+    path, temporary = Path(path), None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w" if isinstance(data, str) else "wb",
+                dir=path.parent, prefix=path.name + ".", suffix=".tmp", delete=False, **options) as stream:
+            temporary = Path(stream.name)
+            stream.write(data)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+
+
+def atomic_write_text(path, text, encoding="utf-8", newline=None):
+    _atomic_write(path, text, encoding=encoding, newline=newline)
+
+
+def atomic_write_bytes(path, data):
+    _atomic_write(path, data)
+
+
 def write_json(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_bytes((json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
-    temporary.replace(path)
+    atomic_write_bytes(path, (json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
 
 
 def companion_root(root):

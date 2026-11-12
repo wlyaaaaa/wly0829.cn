@@ -8,6 +8,10 @@ from pathlib import Path
 import re
 import subprocess
 import uuid
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts/content-refresh"))
+from editorial_ledger import atomic_write_text
 
 GATES = ("content", "program", "visual")
 
@@ -30,9 +34,7 @@ def read(path):
 def write(path, data):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    temp = path.with_suffix(path.suffix + ".tmp")
-    temp.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    temp.replace(path)
+    atomic_write_text(path, json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def git(root, *args):
@@ -83,7 +85,7 @@ class Run:
         lines = ["# 用时表", "", f"从开口累计 {result['total_seconds']} 秒。", "",
                  "|页/步骤|预算秒|实际秒|轮次|状态|", "|---|---:|---:|---:|---|"]
         lines += [f"|{t.get('page') or '全局'}/{t['step']}|{t['budget_seconds'] if t.get('budget_seconds') is not None else '未设'}|{t['seconds']}|{t['round']}|{'结束' if t.get('ended_at') else '进行中'}|" for t in rows]
-        (self.directory / "timing.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+        atomic_write_text(self.directory / "timing.md", "\n".join(lines) + "\n", encoding="utf-8")
         return result
 
     def apply(self, action, page=None, step=None, artifact=None, reason="", budget=None, event_id=None):
