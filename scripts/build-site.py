@@ -23,6 +23,8 @@ HASH_CACHE = None
 BUILD_LOG = None
 VERIFICATION_FILES = ('baidu_verify_codeva-DRgaQnAmTK.html', 'sogousiteverification.txt')
 sys.path.insert(0, str(ROOT / 'scripts'))
+sys.path.insert(0, str(ROOT / 'scripts/content-refresh'))
+from editorial_ledger import atomic_write_text
 sys.path.insert(0, str(SITE / 'tools'))
 import astro_rules
 import oss_origins
@@ -40,7 +42,7 @@ def read(path):
 
 def write(path, value):
     path = Path(path); path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
+    atomic_write_text(path, json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
 
 def proof(path):
     global HASH_CACHE
@@ -546,7 +548,7 @@ def build(pages=None, check_lock_only=False):
     stage('assets')
     if '/cv/' in changed:
         target = dist / 'cv/index.html'; target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="robots" content="noindex"><noscript><meta http-equiv="refresh" content="0;url=/"></noscript></head><body></body></html>\n', encoding='utf8')
+        atomic_write_text(target, '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="robots" content="noindex"><noscript><meta http-equiv="refresh" content="0;url=/"></noscript></head><body></body></html>\n', encoding='utf8')
     converted = {route: {'producer': 'astro'} for route, row in entries.items() if row['kind'] != 'frozen'}
     if changed or prepare_changed or assets_changed:
         runtime.finish(dist, snapshot, pin, converted, changed_routes={r for r in changed if entries[r]['kind'] != 'frozen'})

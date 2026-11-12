@@ -1,4 +1,5 @@
 """Read visible author copy; findings are review leads, never automatic edits."""
+from editorial_ledger import atomic_write_text
 from datetime import date, datetime, timedelta, timezone
 from html.parser import HTMLParser
 import json
@@ -249,7 +250,7 @@ def main():
     try:
         result = check_update(json.loads(args.input.read_text('utf-8-sig')))
         args.out.parent.mkdir(parents=True, exist_ok=True)
-        args.out.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', 'utf8')
+        atomic_write_text(args.out, json.dumps(result, ensure_ascii=False, indent=2) + '\n', 'utf8')
     except (OSError, KeyError, TypeError, ValueError) as exc:
         parser.exit(2, str(exc) + '\n')
     parser.exit(0 if result['passed'] else 1)

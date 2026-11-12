@@ -1,4 +1,5 @@
 """定位真实 JSON 作者，并核对作者转换出的 Markdown。"""
+from editorial_ledger import atomic_write_bytes
 import json
 from hashlib import sha256
 import os
@@ -92,7 +93,7 @@ def sync_roster(root, source):
     if changes:
         text = json.dumps(projected, ensure_ascii=False, indent=2) + "\n"
         crlf = b"\r\n" in path.read_bytes()
-        path.write_bytes(text.replace("\n", "\r\n" if crlf else "\n").encode("utf-8"))
+        atomic_write_bytes(path, text.replace("\n", "\r\n" if crlf else "\n").encode("utf-8"))
     review = bool(scenario_changes or previous["routing"].get("scenarios_note") != current["routing"].get("scenarios_note"))
     return dict(source=str(source), source_sha256=sha256(payload).hexdigest(), changes=changes,
                 scenario_changes=scenario_changes, how05_review_required=review,
