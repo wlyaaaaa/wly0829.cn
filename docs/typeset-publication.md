@@ -2,6 +2,12 @@
 
 当前维护从仓库根 `npm run build` 开始，发布只用本机 `site-astro/tools/publish_site.py`。本页保留源包、量测、阅读和迁移的技术契约，方便核对现成输入与恢复材料；它不是另一条构建或发布流程。日常命令见 [发布与扫描](publish-and-scan.md)，差量传送与回执见 [发布与扫描](publish-and-scan.md)。
 
+## 共用排版层第 1 版
+
+`config/typeset.lock.json` 保存 `src/typeset/**`、共用页面样式、量屏与转换代码、缓存及一致性代码和 Python 依赖版本；浏览器、字体版本和启动参数通过原有 `config/render.lock.json` 的完整字节锁定，实际文件仍由量屏入口核验。构建在重画首页前先检查，改动、增添或删去锁内文件都会点名并停止。只验这一关：`python -B -X utf8 scripts/build-site.py --check-render-lock`，不重画首页、不量屏、不写构建回执。
+
+换锁命令：`python -B -X utf8 scripts/typeset_lock.py --write`。只有主持已验收全站重排后说明页成品与修改前逐字节相同，才运行此命令并提交新锁；命令记录已验收的输入，不代替全站重排和成品比较，也不能用于直接解除构建报错。它不改 `config/render.lock.json`。分支施工期间生成的锁供局部验证，最终锁须在所有获准的共用层改动合入后、统一验收通过后重写。
+
 ## 页面源与完整包
 
 | 材料 | 当前用途 |
