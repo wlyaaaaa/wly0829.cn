@@ -198,7 +198,9 @@ class FreshnessTests(unittest.TestCase):
         result = self.collect()
         self.assertEqual(close_run(self.root, result)["status"], "incomplete")
         report = self.apply(result)
-        self.assertEqual(close_run(self.root, result, report)["status"], "closed")
+        before = self.registry_path.read_bytes(); closure = close_run(self.root, result, report)
+        self.assertEqual(closure["status"], "closed")
+        self.assertEqual((closure["registry_sync"]["status"], self.registry_path.read_bytes()), ("pending_publication", before))
         for key in ("field_readback", "record_readback", "markdown_readback"):
             self.assertEqual(close_run(self.root, result, dict(report, **{key: []}))["status"], "incomplete")
         self.assertTrue(all(r["display_readback"] == "not_checked" for r in close_run(self.root, result, report)["rows"]))

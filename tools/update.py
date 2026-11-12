@@ -1,5 +1,6 @@
-"""update：固定本次来源、列范围、接文件回执；不代 AI 判断，不构建或发布。"""
+"""update：固定本次来源、列范围、接文件回执，整包发布后逐页记账。"""
 import argparse
+import importlib.util
 from datetime import timedelta
 from hashlib import sha256
 import json
@@ -244,6 +245,118 @@ def merge(directory):
         return receipt
 
 
+def site_publisher(root):
+    spec = importlib.util.spec_from_file_location("update_publisher", root / "site-astro/tools/publish_site.py")
+    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    return module
+
+
+def confirm_publication(directory, receipt):
+    """只接受本次冻结包的正式回读；中断后可用同一回执补记。"""
+    run = Run(directory)
+    with locked(run.directory):
+        state = run.load(); root = Path(state["root"])
+        batch_file = run.directory / state["publication_batch"]; batch = read(batch_file)
+        receipt = Path(receipt).resolve()
+        if receipt != batch_file.parent / "live/publish-receipt.json": raise ValueError("不是本趟正式发布回执")
+        proof = read(receipt); publisher = site_publisher(root); dist = root / "dist"
+        if (batch["run_id"] != state["run_id"] or proof.get("update_batch") != batch
+                or proof.get("schema") != "wly.publish-receipt.v1" or proof.get("status") != "published"
+                or proof.get("dry_run") is not False or not proof.get("deployment")
+                or any(proof.get(key) != batch[key] for key in ("source_commit", "release_id", "manifest_sha256"))):
+            raise ValueError("发布回执与本轮冻结成品不一致")
+        result = dict(status="published", pages=sorted(batch["pages"]), receipt=str(receipt))
+        if all(state["pages"][p].get("publication") == receipt.relative_to(run.directory).as_posix() for p in batch["pages"]): return result
+        if publisher.oss.digest(dist / "release-manifest.json") != batch["manifest_sha256"]: raise ValueError("本趟冻结成品已变")
+        source = read(dist / "release-manifest.json")
+        # 成功回执已绑定当时源码；补记只核原包，允许作者源随后推进或收尾中断。
+        publisher.check_input_proofs(dist, source, {}, read(dist / ".build-receipt.json"), batch["source_commit"], verify_source=False)
+        publication = dict(schema="wly.site-publication.v1", status="published", deployment=proof["deployment"],
+                           source_commit=batch["source_commit"], verified_at_beijing=proof["completed_at_beijing"], readback=proof["get"])
+        for page, row in batch["pages"].items():
+            back = proof["get"].get(publisher.runtime.nav.route_file(row["route"]), {})
+            expected = source["input_fingerprints"]["routes"][row["route"]]["output_sha256"]
+            if (state["pages"][page].get("merged_commit") != row["merged_commit"] or back.get("status") != "pass"
+                    or back.get("http") != 200 or back.get("sha256") != expected or back.get("expected_sha256") != expected):
+                raise ValueError("本趟页缺成功回读：" + page)
+        store = Ledger(root)
+        for page, row in batch["pages"].items():
+            if not store.advance_page(page, row["checked_sources"], publication): raise ValueError("发布核对点未接受：" + page)
+            state["pages"][page].update(status="published", publication=receipt.relative_to(run.directory).as_posix())
+        if batch.get("registry_pending"):
+            from freshness import sync_registry
+            state["registry_sync"] = sync_registry(root / "sources/refresh/registry.json",
+                [r for r in batch["registry_pending"] if r["page"] in batch["pages"]])
+            if git(root, "diff", "--name-only", "--", "sources/refresh/registry.json"):
+                git(root, "commit", "--only", "-m", "Record verified publication checks", "--", "sources/refresh/registry.json")
+        write(run.directory / "state.json", state); run.summary(state)
+        return result
+
+
+def publish(directory, dry_run=False, legacy_baseline_reason=None, confirm=None):
+    if confirm: return confirm_publication(directory, confirm)
+    require_numbers(directory)
+    run = Run(directory)
+    with locked(run.directory):
+        state = run.load(); root = Path(state["root"]); store = Ledger(root)
+        scope = read(run.directory / "scope.json"); catalog = {r["page"]: r for r in scope["pages"]}
+        accepted = {p: row for p, row in state["pages"].items() if row.get("merged_commit") and row["status"] != "published"}
+        if not accepted: raise ValueError("没有本趟已合入、尚未发布的页")
+        if git(root, "status", "--porcelain", "--untracked-files=all"): raise ValueError("成包前作者工作树须干净")
+        for row in accepted.values(): git(root, "merge-base", "--is-ancestor", row["merged_commit"], "HEAD")
+        output = run.directory / ("publish-" + uuid.uuid4().hex); output.mkdir()
+        timing = dict(page=None, step="publish", round=1 + sum(t["step"] == "publish" for t in state["timings"]), started_at=now().isoformat())
+        state["timings"].append(timing); write(run.directory / "state.json", state)
+        try:
+            publisher = site_publisher(root); builder = publisher.load("build-site")
+            builder.build(check_lock_only=True)
+            builder.refresh_home_highlights()
+            home_files = ["site-astro/sources/retained-home-cockpit/" + p for p in ("home.html", "dependencies.json", "assets")]
+            home_files.append("site-astro/sources/frozen-site/manifest.json")
+            git(root, "add", "--", *home_files)
+            if git(root, "diff", "--cached", "--name-only"):
+                git(root, "commit", "-m", "Freeze homepage inputs for publication", "-m", "变化：首页亮点重画与本趟源码一起冻结。")
+            source_commit = git(root, "rev-parse", "HEAD")
+            with (output / "prepare.log").open("w", encoding="utf-8") as log:
+                def command(*args):
+                    subprocess.run([str(x) for x in args], cwd=root, check=True, stdout=log, stderr=subprocess.STDOUT)
+                command(sys.executable, "-B", "-X", "utf8", root / "scripts/build-site.py")
+                dist = root / "dist"; source = read(dist / "release-manifest.json")
+                if source.get("source_commit") != source_commit: raise ValueError("构建没有冻结实际源码提交")
+                pages = {}
+                for p, row in accepted.items():
+                    sources = store.read(catalog[p]["book"])["source_repositories"]
+                    if not sources: raise ValueError("账里未登记来源仓库：" + p)
+                    pages[p] = dict(route=catalog[p]["url"], merged_commit=row["merged_commit"], checked_sources={s: dict(
+                        commit=scope["sources"][s]["commit"], time=scope["sources"][s]["observed_at"], materials_path=str(run.directory / "scope.json")) for s in sources})
+                prefixes = tuple("sources/pages/" + p + "/" for p in pages)
+                allowed = {r["route"] for r in pages.values()}
+                allowed.update(url for url, row in source["input_fingerprints"]["routes"].items() if any(k.startswith(prefixes) for k in row["inputs"]))
+                highlights = publisher.load("prepare-home-highlights")
+                if any(p.relative_to(root).as_posix().startswith(prefixes) for p in highlights.input_paths()): allowed.add("/")
+                numbers_dir = run.directory / "numbers"; closure = {}
+                if (numbers_dir / "result.json").is_file():
+                    from freshness import close_run
+                    closure = close_run(root, read(numbers_dir / "result.json"), read(numbers_dir / "apply-report.json"), dist)
+                    write(output / "freshness.json", closure)
+                batch = dict(run_id=state["run_id"], batch_id=output.name, source_commit=source_commit,
+                    release_id=source["release_id"], manifest_sha256=publisher.oss.digest(dist / "release-manifest.json"),
+                    pages=pages, allowed_routes=sorted(allowed), legacy_baseline_reason=legacy_baseline_reason,
+                    registry_pending=closure.get("registry_pending", []))
+                batch_file = output / "batch.json"; write(batch_file, batch)
+                state["publication_batch"] = batch_file.relative_to(run.directory).as_posix(); write(run.directory / "state.json", state)
+                command(sys.executable, "-B", "-X", "utf8", root / "site-astro/tools/scan_glance.py", "--dist", dist, "--out", output / "scan")
+                base = [sys.executable, "-B", "-X", "utf8", root / "site-astro/tools/publish_site.py", "--dist", dist,
+                        "--scan-result", output / "scan/scan-result.json", "--update-batch", batch_file]
+                command(*base, "--dry-run", "--output", output / "dry-run")
+                if not dry_run: command(*base, "--output", output / "live")
+            timing["result"] = "dry_run" if dry_run else "published"
+        finally:
+            timing.update(ended_at=now().isoformat(), artifact=str(output.relative_to(run.directory)))
+            write(run.directory / "state.json", state); run.summary(state)
+    return dict(status="dry_run", batch=str(batch_file)) if dry_run else confirm_publication(directory, output / "live/publish-receipt.json")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="action", required=True)
@@ -261,6 +374,11 @@ def main():
     numeric.add_argument("--budget", type=float, default=300, help="取数默认预算，只记用时不截断")
     numeric.add_argument("--only", help="明确只换这些页的数字，逗号分隔；默认取全部已登记允许页")
     sub.add_parser("merge")
+    publishing = sub.add_parser("publish")
+    publication_action = publishing.add_mutually_exclusive_group()
+    publication_action.add_argument("--dry-run", action="store_true")
+    publishing.add_argument("--legacy-baseline-reason", help="首趟旧式基线整站换版的明确理由")
+    publication_action.add_argument("--confirm", type=Path, help="正式回读已成功时，仅补记本趟账")
     for action in ("status", "begin", "repair", "step-start", "step-end", "pass", "reject", "drop", "record-published", "finish"):
         cmd = sub.add_parser(action)
         cmd.add_argument("--page")
@@ -285,6 +403,8 @@ def main():
             state = numbers(args.run_dir, args.budget, args.only)
         elif args.action == "merge":
             state = merge(args.run_dir)
+        elif args.action == "publish":
+            state = publish(args.run_dir, args.dry_run, args.legacy_baseline_reason, args.confirm)
         else:
             if args.action in {"begin", "repair"} or args.action == "step-start" and args.page:
                 require_numbers(args.run_dir)

@@ -106,7 +106,7 @@ def load(name, directory=ROOT/'scripts'):
 oss, retention, word_policy = load('prepare-oss-release'), load('oss-retention'), load('site_public_words')
 runtime = load('build_runtime', ROOT/'site-astro/tools')
 
-def check_input_proofs(dist, source, previous, build, source_commit):
+def check_input_proofs(dist, source, previous, build, source_commit, verify_source=True):
     value = source.get('input_fingerprints')
     if not value or value != build.get('input_fingerprints') or build.get('status') != 'built':
         raise ValueError('Manifest input fingerprints differ from the successful build receipt')
@@ -126,10 +126,32 @@ def check_input_proofs(dist, source, previous, build, source_commit):
             raise ValueError('Unbuilt or invalid input fingerprint: '+rel)
         if rel not in {oss.MANIFEST, 'release-identity.json'} and row.get('output_sha256') != oss.digest(dist/rel):
             raise ValueError('Built output differs from its input proof: '+rel)
-    runtime.verify_inputs(value)
+    if verify_source: runtime.verify_inputs(value)
     result = runtime.reconcile(dist, value, previous or {})
     if result['drift']: raise ValueError('Unchanged inputs produced changed output: '+', '.join(result['drift']))
     return result
+
+def check_update_batch(batch, source, source_commit, manifest_sha256, reconciliation):
+    if (not batch.get('run_id') or not batch.get('batch_id') or not batch.get('pages')
+            or source_commit == 'Unknown' or batch.get('source_commit') != source_commit
+            or batch.get('release_id') != source['release_id'] or batch.get('manifest_sha256') != manifest_sha256):
+        raise ValueError('Update batch differs from the frozen publication artifact')
+    allowed = {runtime.nav.route_file(route) for route in batch['allowed_routes']}
+    if any(runtime.nav.route_file(row['route']) not in allowed or not re.fullmatch('[a-f0-9]{40}', row.get('merged_commit', ''))
+           for row in batch['pages'].values()):
+        raise ValueError('Update batch contains an unmerged or unregistered page')
+    baseline = reconciliation['baseline']
+    if baseline == 'legacy':
+        if not str(batch.get('legacy_baseline_reason') or '').strip():
+            raise ValueError('Legacy publication baseline requires an explicit reason')
+        return '首发用旧式基准：' + batch['legacy_baseline_reason']
+    if baseline != 'published':
+        raise ValueError('Update publication requires a successful publication baseline')
+    unexpected = sorted(row['path'] for row in reconciliation['pages'] if row['path'] not in allowed)
+    if unexpected:
+        raise ValueError('Publication changed pages outside this update batch: ' + ', '.join(unexpected))
+    return '本趟过关页及登记引用页'
+
 
 def command(*args, timeout=None):
     done = subprocess.run([str(x) for x in args], cwd=ROOT, text=True, encoding='utf8', timeout=timeout,
@@ -394,11 +416,17 @@ def publish(args):
         receipt['source_commit_evidence'] = ('explicit task baseline' if args.source_commit else
                 'build receipt' if build.get('source_commit') else 'source manifest' if source.get('source_commit') else 'Unknown')
         receipt['published_reconciliation'] = check_input_proofs(args.dist, source, previous, build, source_commit)
+        receipt.update(release_id=source['release_id'], manifest_sha256=oss.digest(args.dist/oss.MANIFEST))
+        batch = oss.read(args.update_batch) if getattr(args, 'update_batch', None) else None
+        if batch is not None:
+            receipt['update_batch'] = batch
+            receipt['update_baseline'] = check_update_batch(batch, source, source_commit, receipt['manifest_sha256'],
+                                                           receipt['published_reconciliation'])
         preparation = output
         plan = {'schema': 'wly.oss-release-plan.v1', 'release_id': source['release_id'], 'asset_base_url': source['oss']['asset_base_url'],
                 'test_only': False, 'remote_verified': False, 'objects': source['oss']['objects'],
                 'github_files': {rel: {'bytes': (args.dist/rel).stat().st_size, 'sha256': fingerprints[rel]}
-                                 for rel in fingerprints if rel not in source['oss']['objects']},
+                                 for rel in fingerprints if rel not in source['oss']['objects'] and rel != '.build-receipt.json'},
                 'retained_objects': dict(source['oss'].get('retained_objects', {})), 'reference_keys': source['oss']['reference_keys']}
         assets = delta(plan['objects'], (previous or {}).get('oss', {}).get('objects', {}))
         uploads = delta(plan['objects'], (previous or {}).get('oss', {}).get('objects', {}), include_url=False)
@@ -512,13 +540,14 @@ def publish(args):
         readback_documents = plan['github_files'] if (previous or {}).get('publication_readback_required') else documents
         selected = {rel: plan['github_files'][rel] for rel in
                     {'index.html', 'cockpit/index.html', 'computer-access/index.html'} |
+                    ({runtime.nav.route_file(row['route']) for row in batch['pages'].values()} if batch else set()) |
                     {rel for rel in readback_documents if rel.endswith('.html')}}
         step('get_key_and_changed_pages', lambda: verify_pages(selected, receipt,
             lambda: oss.write(output/'publish-receipt.json', receipt)))
         check_input_proofs(args.dist, source, previous, build, source_commit)
         step('successful_manifest_last', lambda: retention.write(retention.shared()/'published.json', {
             'schema': 'wly.site-publication.v1', 'commit': receipt['commit'], 'deployment': receipt['deployment'],
-            'source_commit': source_commit,
+            'source_commit': source_commit, **({'update_batch': batch} if batch is not None else {}),
             'manifest': manifest, 'build_files': {rel: {'bytes': (args.dist/rel).stat().st_size, 'sha256': oss.digest(args.dist/rel)}
                 for rel in (oss.MANIFEST, 'release-identity.json')}, 'readback': receipt['get'], 'verified_at_beijing': oss.stamp()}))
         receipt['status'] = 'published'
@@ -580,6 +609,7 @@ if __name__ == '__main__':
     parser.add_argument('--previous-manifest', type=Path)
     parser.add_argument('--output', type=Path)
     parser.add_argument('--source-commit')
+    parser.add_argument('--update-batch', type=Path, help='frozen accepted-page batch from tools/update.py')
     parser.add_argument('--pages-timeout', type=int, default=PAGES_CONFIRM_TIMEOUT,
                         help='total confirmation budget, including dispatch, queue and the 15-minute Pages job')
     parser.add_argument('--upload-workers', type=int, default=12, help='parallel OSS uploads; existing identical objects are skipped')
