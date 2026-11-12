@@ -1,9 +1,10 @@
-"""Remeasure selected horizontal screens; retain a two-column result under its existing key."""
+"""Remeasure selected screens until layout or title matches; retain the existing cache key."""
 import argparse
 import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import sys
 import time
@@ -16,10 +17,16 @@ def main():
     ap.add_argument('--source', type=Path, default=Path(__file__).resolve().parents[2])
     ap.add_argument('--work', type=Path, required=True, help='New short directory for trial files')
     ap.add_argument('--tries', type=int, default=10)
+    ap.add_argument('--orientation', choices=('h', 'v'), default='h')
+    ap.add_argument('--condition', choices=('two-column', 'title-size', 'title-pixels'), default='two-column')
+    ap.add_argument('--reference', type=Path, help='Per-screen title sizes/pixel hashes extracted from frozen baseline HTML')
     ap.add_argument('--dry-run', action='store_true', help='Write only work files; leave existing caches untouched')
     args = ap.parse_args()
     if args.tries < 1:
         ap.error('--tries must be positive')
+    if args.condition != 'two-column' and not args.reference:
+        ap.error('Title conditions require --reference')
+    references = json.loads(args.reference.read_text('utf-8')) if args.reference else {}
     source, cache, work = (p.resolve() for p in (args.source, args.cache, args.work))
     work.mkdir(parents=True, exist_ok=False)
     os.environ.update(TEMP=str(work), TMP=str(work), TMPDIR=str(work))
@@ -52,10 +59,11 @@ def main():
     libfp = rb.library_fingerprint() + rb.sha(css)[:12] + rb.RENDER_VERSION + rb.hydration_fingerprint()
     known = json.loads((cache / '_cache.json').read_text('utf-8'))
     report = {'source': str(source), 'cache': str(cache), 'dry_run': args.dry_run,
-              'chrome': rb.RENDER_LOCK['chrome'], 'session_kind': 'local_render', 'runs': [], 'blocked': blocked}
+              'chrome': rb.RENDER_LOCK['chrome'], 'session_kind': 'local_render', 'runs': [], 'blocked': blocked,
+              'condition': args.condition, 'orientation': args.orientation, 'reference': str(args.reference)}
     failed = []
     for sid in args.screen:
-        paths = list(cache.glob(f'*/{sid}-h.html'))
+        paths = list(cache.glob(f'*/{sid}-{args.orientation}.html'))
         if len(paths) != 1:
             raise ValueError(f'{sid}: expected one existing measurement HTML, found {len(paths)}')
         path = paths[0]
@@ -63,12 +71,14 @@ def main():
         md = source / 'site-astro/src/content/pages' / (path.parent.name + '.md')
         first = rb.parse_md(md)[1][0][0]['screen']['id']
         binds = rb.bindings(path.parent.name, first)
-        key = rb.screen_cache_key(document, 'h', libfp)
-        key = hashlib.sha256(json.dumps([key, binds.get((sid, 'h'))], separators=(',', ':'), sort_keys=True).encode()).hexdigest()[:20]
+        key = rb.screen_cache_key(document, args.orientation, libfp)
+        key = hashlib.sha256(json.dumps([key, binds.get((sid, args.orientation))], separators=(',', ':'), sort_keys=True).encode()).hexdigest()[:20]
         checkpoint = cache / '_completed' / (key + '.json')
         if key not in known and not checkpoint.is_file():
             raise ValueError(f'{sid}: input key {key} is absent; use its original source and cache')
-        job = {'page': path.parent.name, 'screen': sid, 'o': 'h', 'html': str(path), 'key': key}
+        short_html = work / (key + '.html')
+        shutil.copyfile(path, short_html)
+        job = {'page': path.parent.name, 'screen': sid, 'o': args.orientation, 'html': str(short_html), 'key': key}
         for attempt in range(1, args.tries + 1):
             started = time.monotonic()
             results = rb.hydrate([job], binds)
@@ -78,8 +88,27 @@ def main():
             cols = row.find_all('div', class_='col', recursive=False) if row else []
             art = next((c.select_one('[data-comp="illustration"] img') for c in cols if not c.select_one('[data-comp="chapter_title"]') and c.select_one('[data-comp="illustration"] img')), None)
             ok = len(cols) >= 2 and art is not None and float(art.get('data-ts-w', 0)) >= 300
+            layout = 'two-column' if ok else 'other'
+            images = soup.select('.brushfont-img > img') if soup else []
+            sizes = [[float(re.search(r'(?:^|;)\s*' + field + r':\s*([\d.]+)px', im.get('style', ''))[1])
+                      for field in ('width', 'height')] for im in images]
+            pixels = []
+            if args.condition == 'title-pixels':
+                from PIL import Image
+                for im in images:
+                    with Image.open(rb.file_url_to_path(im['src'])) as original:
+                        rgba = original.convert('RGBA')
+                        paper = Image.alpha_composite(Image.new('RGBA', rgba.size, 'white'), rgba).convert('RGB')
+                        pixels.append(hashlib.sha256(str(paper.size).encode() + paper.tobytes()).hexdigest())
+            if args.condition != 'two-column':
+                expected = references[sid]
+                ok = len(sizes) == len(expected['sizes']) and all(abs(a - b) <= .02
+                     for actual, target in zip(sizes, expected['sizes']) for a, b in zip(actual, target))
+                if args.condition == 'title-pixels':
+                    ok = ok and pixels == expected['pixels']
             record = {'screen': sid, 'attempt': attempt, 'seconds': round(time.monotonic() - started, 3),
-                      'layout': 'two-column' if ok else 'other', 'key': key, 'input_sha256': rb.sha(path)}
+                      'layout': layout, 'matched': ok, 'title_sizes': sizes, 'title_pixels': pixels,
+                      'key': key, 'input_sha256': rb.sha(path)}
             report['runs'].append(record)
             if ok:
                 payload = rb.cache_payload(result)
