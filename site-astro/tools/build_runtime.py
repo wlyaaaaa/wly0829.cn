@@ -32,7 +32,67 @@ def read(path): return json.loads(Path(path).read_text('utf8'))
 
 def published_manifest():
     path = retention.shared() / 'published.json'
-    return retention.read(path)['manifest'] if path.is_file() else {}
+    if not path.is_file(): return {}
+    saved = retention.read(path)
+    return {**saved['manifest'], **({'_build_files': saved['build_files']} if 'build_files' in saved else {})}
+
+def value_sha(value):
+    return hashlib.sha256(json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+
+def input_record(inputs): return {'fingerprint': value_sha(inputs), 'inputs': dict(inputs)}
+
+def source_identity(root=ROOT):
+    head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip()
+    status = subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=all'], cwd=root)
+    return {'head': head, 'status_sha256': hashlib.sha256(status).hexdigest(), 'source_commit': head if not status else 'Unknown'}
+
+def verify_inputs(inputs, root=ROOT):
+    changed = [name for name, expected in inputs['source_files_sha256'].items()
+               if (oss.digest(root / name) if (root / name).is_file() else 'missing') != expected]
+    if changed: raise ValueError('构建输入在冻结后改变：' + ', '.join(changed))
+    if source_identity(root) != inputs['source_identity']:
+        raise ValueError('源码身份在构建输入冻结后改变；请重新构建')
+
+def reconcile(dist, inputs, previous):
+    actual = {p.relative_to(dist).as_posix(): oss.digest(p) for p in Path(dist).rglob('*')
+              if p.is_file() and p.name != '.build-receipt.json'}
+    manifest = read(Path(dist) / 'release-manifest.json') if (Path(dist) / 'release-manifest.json').is_file() else {}
+    actual = {**{rel: row['sha256'] for rel, row in manifest.get('oss', {}).get('objects', {}).items()}, **actual}
+    prior = {rel: row['sha256'] for rel, row in {**previous.get('files', {}),
+             **previous.get('oss', {}).get('objects', {}), **previous.get('_build_files', {})}.items()}
+    old_inputs = previous.get('input_fingerprints', {})
+    rows = {nav.route_file(route): row for route, row in inputs['routes'].items()}
+    old_rows = {nav.route_file(route): row for route, row in old_inputs.get('routes', {}).items()}
+    rows.update(inputs['site_files']); old_rows.update(old_inputs.get('site_files', {}))
+    global_files = inputs['site_files'].keys() | old_inputs.get('site_files', {}).keys()
+    changes = []; drift = []
+    for rel in sorted(actual.keys() | prior.keys()):
+        if actual.get(rel) == prior.get(rel): continue
+        now, old = rows.get(rel, {}), old_rows.get(rel, {})
+        a, b = now.get('inputs', {}), old.get('inputs', {})
+        causes = sorted(key for key in a.keys() | b.keys() if a.get(key) != b.get(key))
+        if '@source-files' in causes:
+            a, b = inputs['source_files_sha256'], old_inputs.get('source_files_sha256', {})
+            causes = sorted(set(causes) - {'@source-files'} | {key for key in a.keys() | b.keys() if a.get(key) != b.get(key)})
+        if now and old and now['fingerprint'] == old['fingerprint']: drift.append(rel)
+        labels = {'@indexable-routes': '可收录路由集合', '@search-aliases': '搜索别名', '@content-files': '成品文件清单',
+                  '@pages': '逐页输入及成品', '@site-files': '搜索与站点地图', '@source-identity': '源码身份', '@rules-pin': '规则版本', '@previous-release': '上次成功发布版本', '@release-id': '成品版本'}
+        changes.append({'path': rel, 'inputs_changed': causes, 'status': 'added' if rel not in prior else 'removed' if rel not in actual else 'changed',
+                        'cause': '、'.join(labels.get(key, key) for key in causes) if causes else '输入未变' if old else '上次发布没有输入指纹'})
+    result = {'baseline': 'published' if old_inputs else 'legacy' if previous else 'missing',
+              'pages': [row for row in changes if row['path'].endswith('.html') and row['path'] not in global_files],
+              'site_files': [row for row in changes if row['path'] in global_files],
+              'other_files': [row for row in changes if not row['path'].endswith('.html') and row['path'] not in global_files], 'drift': drift}
+    print('发布对账：变了 ' + str(len(result['pages'])) + ' 页', flush=True)
+    if not old_inputs: print('上次成功发布没有输入指纹；本轮只核成品差异' if previous else '没有成功发布基线', flush=True)
+    for row in result['pages'] + result['site_files']: print(row['path'] + '：' + row['cause'], flush=True)
+    return result
+
+def seal_inputs(dist, inputs):
+    manifest = read(dist / 'release-manifest.json'); manifest['input_fingerprints'] = inputs
+    oss.write(dist / 'release-manifest.json', manifest)
+    identity = read(dist / 'release-identity.json'); identity['manifest_sha256'] = oss.digest(dist / 'release-manifest.json')
+    oss.write(dist / 'release-identity.json', identity)
 
 def previous_resources(prior, published):
     local = prior.get('oss', prior.get('previous_oss', {}))
@@ -140,7 +200,7 @@ def search_wire_loader():
 
 
 def sync_search(root, previous, converted, pin, changed_routes):
-    replacements = {}; generated = []
+    replacements = {}; generated = []; content_inputs = {}
     author = {data['url']: data for data in (read(path) for path in (ROOT/'sources/pages').glob('*/page.json')) if data.get('url')}
     excluded_routes = {route for route in converted if converted[route].get('destination')
                        or author.get(route, {}).get('kind') in {'404', 'skill-redirect', 'github-profile'}}
@@ -148,6 +208,7 @@ def sync_search(root, previous, converted, pin, changed_routes):
     targets = {nav.route_file(route): nav.PageFacts((root / nav.route_file(route)).read_text('utf8'), root) for route in search_routes}
     # Authored aliases travel with the same page as its current explanation.
     skill_aliases = {route: page['search_aliases'] for route, page in author.items() if page.get('search_aliases')}
+    content_inputs['@search-aliases'] = value_sha(skill_aliases)
     for route in converted:
         if route not in search_routes or route not in author: continue
         if route.startswith('/rules/'):
@@ -162,6 +223,7 @@ def sync_search(root, previous, converted, pin, changed_routes):
                 screens = re.findall(r'::screen\{[^\n]*\}\n\n```typeset\n(.*?)\n```\n\n?(.*?)(?=\n::screen\{|\Z)', md.read_text('utf8'), re.S)
                 current = {json.loads(meta)['screen']['id']: body.rstrip('\n') for meta, body in screens}
                 texts = [(sid, label, current.get(sid, body)) for sid, label, body in texts]
+        content_inputs['sources/pages/' + author[route]['page'] + '/page.json#search'] = value_sha([title, texts, skill_aliases.get(route, [])])
         slug = route.split('/')[2] if route.startswith('/projects/') else None
         for anchor, label, text in [('top', '总览', texts[0][2]), *texts]:
             href = route + '#' + anchor if nav.target_exists(route + '#' + anchor, targets) else route
@@ -239,6 +301,7 @@ def sync_search(root, previous, converted, pin, changed_routes):
         for old, new in applied.items(): patched = patched.replace(old.encode(), new.encode())
         if patched != raw:
             path.write_bytes(patched)
+    return {p.name: dict(sorted(content_inputs.items())) for p in sorted(root.glob('search-*.js'))}
 
 def search_budget_review(root):
     policy = read(ROOT / 'config/panel-projects.json')['refresh_policy']
@@ -317,7 +380,7 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
         path.write_bytes(body.encode('utf8'))
     if (dist / '404/index.html').exists(): copy(dist / '404/index.html', dist / '404.html')
     previous = {'oss': {'objects': snapshot['search_objects']}, 'files': snapshot['pages']}
-    sync_search(dist, previous, converted, pin, changed_routes)
+    site_inputs = sync_search(dist, previous, converted, pin, changed_routes)
     search_review = search_budget_review(dist)
     # Current O6 requires every deployed resource address to be same-origin.
     for route in changed_routes | {'/', '/cockpit/', '/computer-access/'} | {file_route(rel) for rel in snapshot['pages']}:
@@ -346,6 +409,7 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
         path.write_bytes(transport.localize(path.read_text('utf8'), snapshot).encode('utf8'))
     routes = sorted(file_route(p.relative_to(dist).as_posix()) for p in dist.rglob('*.html'))
     write_sitemap(dist, routes)
+    site_inputs['sitemap.xml'] = {'@indexable-routes': value_sha(sorted(route for route in routes if route.endswith('/') and route != '/system/' and not has_noindex(dist/nav.route_file(route))))}
     for path in dist.rglob('*.html'):
         body = path.read_bytes().decode('utf8'); updated = visitor_html(body)
         if updated != body: path.write_bytes(updated.encode('utf8'))
@@ -356,11 +420,11 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
             if path.suffix == '.css': after = after.replace('\r\n', '\n').replace('\r', '\n')
             if after != before: path.write_bytes(after.encode('utf8'))
     files = {p.relative_to(dist).as_posix(): {'bytes': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
-             for p in dist.rglob('*') if p.is_file() and p.name not in {'.build-receipt.json', 'release-manifest.json', 'release-identity.json'}}
+             for p in sorted(dist.rglob('*')) if p.is_file() and p.name not in {'.build-receipt.json', 'release-manifest.json', 'release-identity.json'}}
     manifest = {'schema': 'wly.hybrid-release.v1', 'files': files, 'routes': routes, 'search_budget_review': search_review,
         'release_id': hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest(),
         'baseline_production_commit': snapshot['baseline_production_commit'], 'rules_pin': pin,
-        'accepted_pages': {**{file_route(rel): {'producer': 'frozen'} for rel in snapshot['pages']}, **converted},
+        'accepted_pages': {**{file_route(rel): {'producer': 'frozen'} for rel in snapshot['pages']}, **converted}, 'site_inputs': site_inputs,
         'astro': {'converted_routes': sorted(converted), 'retained_sample': {'source': 'site-astro/sources/retained-home-cockpit'},
                   'selected_pages': sorted(p.stem for p in (SITE / 'src/content/pages').glob('*.md')), 'html_files': len(routes)}}
     manifest['previous_oss'], manifest['previous_oss_source'], manifest['previous_release_id'] = previous_resources(prior, published_manifest())

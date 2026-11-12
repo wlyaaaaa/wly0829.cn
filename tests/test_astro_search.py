@@ -61,7 +61,10 @@ class AstroSearchTests(unittest.TestCase):
                 (root/rel).write_text('window.index='+json.dumps(rows)+';', encoding='utf8')
             previous = {'oss': {'objects': {rel: {'url': '/old/'+rel} for rel in before}}}
             with patch.object(runtime, 'ROOT', root), patch.object(runtime, 'SITE', root/'site-astro'):
-                runtime.sync_search(root, previous, {route: {}}, {}, {route})
+                inputs = runtime.sync_search(root, previous, {route: {}}, {}, {route})
+                data = json.loads(source.read_text('utf8')); data['layout'] = {'columns': 2}
+                source.write_text(json.dumps(data), encoding='utf8')
+                self.assertEqual(runtime.sync_search(root, previous, {route: {}}, {}, {route}), inputs)
             after = {rel: runtime.nav.search_records((root/rel).read_text('utf8')) for rel in before}
             expected = {'search-index.js': ['/kept/', route+'#top', '/tail/', skill_route],
                 'search-projects.js': [route+'#a', other['href'], route+'#new'],

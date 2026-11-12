@@ -8,6 +8,8 @@ class PublishTests(unittest.TestCase):
     def setUp(self):
         gate = unittest.mock.patch.object(publisher, 'scan_public_words', return_value=[])
         gate.start(); self.addCleanup(gate.stop)
+        proofs = unittest.mock.patch.object(publisher, 'check_input_proofs', return_value={})
+        proofs.start(); self.addCleanup(proofs.stop)
     def test_old_run_with_readonly_git_object_is_pruned_without_removing_retained_runs(self):
         with tempfile.TemporaryDirectory() as temporary:
             folder = Path(temporary)
@@ -29,7 +31,7 @@ class PublishTests(unittest.TestCase):
                 folder = Path(temporary); root = folder/'dist'; root.mkdir()
                 for rel in ('index.html', 'cockpit/index.html', 'computer-access/index.html', 'unchanged/index.html', 'a.js'):
                     target = root/rel; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(b'fixture')
-                publisher.oss.write(root/'release-manifest.json', {'schema': 'wly.hybrid-release.v1', 'release_id': 'fixture', 'files': publisher.oss.inventory(root)})
+                publisher.oss.write(root/'release-manifest.json', {'schema': 'wly.hybrid-release.v1', 'release_id': 'fixture', 'files': publisher.oss.inventory(root), 'input_fingerprints': {'fixture': 'kept'}})
                 source = publisher.oss.finalize_dist(root)
                 scan = folder/'scan.json'
                 publisher.oss.write(scan, {'failures': [], 'dist_files_sha256':
@@ -74,6 +76,9 @@ class PublishTests(unittest.TestCase):
                         result = publisher.publish(options)
                         self.assertEqual(result['status'], 'published')
                         self.assertEqual(result['publication_status'], 'published')
+                        saved = publisher.retention.read(shared/'published.json')
+                        self.assertEqual(saved['manifest']['input_fingerprints'], {'fixture': 'kept'})
+                        self.assertEqual(saved['build_files']['release-identity.json']['sha256'], publisher.oss.digest(root/'release-identity.json'))
                         self.assertIn('unchanged/index.html', result['get'])
                         cleanup.assert_not_called()
                         registered = publisher.retention.read(shared/'managed.json')['objects']

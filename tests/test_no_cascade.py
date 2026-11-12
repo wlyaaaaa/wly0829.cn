@@ -101,14 +101,79 @@ class NoCascadeTests(unittest.TestCase):
                 self.assertIn(index, (outputs[number]/'oss/assets/client.js').read_text('utf8'))
                 self.assertEqual((outputs[0]/'github/index.html').read_bytes(), (outputs[number]/'github/index.html').read_bytes())
 
-    def test_guard_reports_home_cascade_like_other_pages(self):
+    def test_published_reconciliation_noop_text_reference_image_and_drift(self):
         with tempfile.TemporaryDirectory() as temp:
-            dist = Path(temp); (dist/'index.html').write_text('<script src="/new.js"></script>', encoding='utf8')
-            entries = {'/': {'fingerprint': 'same'}}; accepted = {'files': {'index.html': {'sha256': 'old'}}}
-            with patch('builtins.print') as output:
-                self.assertEqual(build.guard_unchanged_html(dist, entries, {'/': 'same'}, accepted, {'/': {'/old.js'}}), ['/'])
-                self.assertIn('连带变化：/', output.call_args.args[0])
-                self.assertEqual(build.guard_unchanged_html(dist, entries, {'/': 'changed'}, accepted, {}), [])
-        self.assertFalse(hasattr(build_runtime, 'accepted_home'))
+            dist = Path(temp); routes = ['/', '/reference/', '/photo/', '/other/']
+            dependencies = ['sources/pages/a/page.json', 'sources/pages/a/page.json', 'sources/assets/photo.png', 'sources/pages/b/page.json']
+            def inputs(changed=None):
+                return {'routes': {route: build_runtime.input_record({dep: 'new' if dep == changed else 'old'})
+                    for route, dep in zip(routes, dependencies)}, 'site_files': {'sitemap.xml': build_runtime.input_record({'@routes': 'same'})}}
+            def put(route, body):
+                path = dist/build.route_file(route); path.parent.mkdir(parents=True, exist_ok=True); path.write_text(body, encoding='utf8')
+            for route in routes: put(route, 'old')
+            (dist/'sitemap.xml').write_text('routes', encoding='utf8')
+            accepted = {'files': oss.inventory(dist), 'input_fingerprints': inputs()}
+            self.assertEqual(build_runtime.reconcile(dist, inputs(), accepted)['pages'], [])
+            for dep, changed in [(dependencies[0], routes[:2]), (dependencies[2], [routes[2]])]:
+                for route in routes: put(route, 'new' if route in changed else 'old')
+                result = build_runtime.reconcile(dist, inputs(dep), accepted)
+                self.assertEqual({r['path'] for r in result['pages']}, {build.route_file(r) for r in changed})
+                self.assertTrue(all(r['inputs_changed'] == [dep] for r in result['pages']))
+                self.assertEqual((result['drift'], result['site_files']), ([], []))
+            result = build_runtime.reconcile(dist, inputs(), accepted)
+            self.assertEqual(result['drift'], ['photo/index.html'])
+            (dist/'sitemap.xml').write_text('unexpected', encoding='utf8')
+            self.assertIn('sitemap.xml', build_runtime.reconcile(dist, inputs(), accepted)['drift'])
+
+    def test_sealed_build_proofs_and_publisher_reject_changed_bytes_and_claims(self):
+        publisher = load('proof_publisher', 'site-astro/tools/publish_site.py')
+        with tempfile.TemporaryDirectory() as temp, patch.object(publisher.runtime, 'verify_inputs'):
+            dist = Path(temp); (dist/'index.html').write_text('fixture', encoding='utf8')
+            oss.write(dist/'release-manifest.json', {'schema': 'wly.hybrid-release.v1', 'release_id': 'fixture', 'files': oss.inventory(dist)})
+            oss.finalize_dist(dist, source_commit='Unknown')
+            value = {'source_identity': {'source_commit': 'Unknown'}, 'source_files_sha256': {}, 'site_files': {},
+                     'routes': {'/': {**build_runtime.input_record({'page.json': 'old'}), 'output_sha256': oss.digest(dist/'index.html')}}}
+            build_runtime.seal_inputs(dist, value); source = oss.read(dist/'release-manifest.json')
+            receipt = {'status': 'built', 'source_commit': 'Unknown', 'input_fingerprints': value,
+                       'files': [{'path': p.relative_to(dist).as_posix(), 'sha256': oss.digest(p)} for p in dist.rglob('*') if p.is_file()]}
+            self.assertEqual(publisher.check_input_proofs(dist, source, source, receipt, 'Unknown')['pages'], [])
+            with self.assertRaisesRegex(ValueError, 'Source commit'):
+                publisher.check_input_proofs(dist, source, source, receipt, 'a'*40)
+            (dist/'index.html').write_text('unexplained drift', encoding='utf8')
+            with self.assertRaisesRegex(ValueError, 'inventory'):
+                publisher.check_input_proofs(dist, source, source, receipt, 'Unknown')
+            value['routes']['/']['output_sha256'] = oss.digest(dist/'index.html')
+            build_runtime.seal_inputs(dist, value)
+            receipt['files'] = [{'path': p.relative_to(dist).as_posix(), 'sha256': oss.digest(p)} for p in dist.rglob('*') if p.is_file()]
+            with self.assertRaisesRegex(ValueError, 'Unchanged inputs'):
+                publisher.check_input_proofs(dist, oss.read(dist/'release-manifest.json'), source, receipt, 'Unknown')
+
+    def test_frozen_source_bytes_and_identity_are_checked_after_generation(self):
+        with tempfile.TemporaryDirectory() as temp, patch.object(build_runtime, 'source_identity', return_value={'head': 'after-redraw'}):
+            root = Path(temp); path = root/'input.json'; path.write_text('redrawn', encoding='utf8')
+            value = {'source_identity': {'head': 'after-redraw'}, 'source_files_sha256': {'input.json': oss.digest(path)}}
+            build_runtime.verify_inputs(value, root)
+            path.write_text('later edit', encoding='utf8')
+            with self.assertRaisesRegex(ValueError, 'input.json'): build_runtime.verify_inputs(value, root)
+            path.write_text('redrawn', encoding='utf8'); value['source_identity'] = {'head': 'before-redraw'}
+            with self.assertRaisesRegex(ValueError, '源码身份'): build_runtime.verify_inputs(value, root)
+
+    def test_sealing_repeated_build_keeps_global_bytes_and_404_alias_proofs(self):
+        with tempfile.TemporaryDirectory() as temp, patch.object(build, 'VERIFICATION_FILES', ()):
+            dist = Path(temp); entries = {route: {'fingerprint': 'same', 'inputs': {'404/page.json': 'same'}} for route in ['/', '/404/', '/404.html']}
+            for route in entries:
+                path = dist/build.route_file(route); path.parent.mkdir(parents=True, exist_ok=True); path.write_text('404', encoding='utf8')
+            (dist/'sitemap.xml').write_text('routes', encoding='utf8')
+            oss.write(dist/'release-manifest.json', {'schema': 'wly.hybrid-release.v1', 'release_id': 'fixture', 'files': oss.inventory(dist),
+                'site_inputs': {'sitemap.xml': {'@indexable-routes': 'same'}}})
+            oss.finalize_dist(dist, source_commit='Unknown')
+            first = build.input_fingerprints(dist, entries, {}, set(entries), {}, {'source_commit': 'Unknown'}, build_runtime)
+            build_runtime.seal_inputs(dist, first); accepted = oss.read(dist/'release-manifest.json')
+            accepted['_build_files'] = {rel: {'sha256': oss.digest(dist/rel)} for rel in ['release-manifest.json', 'release-identity.json']}
+            second = build.input_fingerprints(dist, entries, {}, set(entries), {}, {'source_commit': 'Unknown'}, build_runtime)
+            self.assertEqual(first, second); self.assertEqual(first['routes']['/404/'], first['routes']['/404.html'])
+            build_runtime.seal_inputs(dist, second)
+            result = build_runtime.reconcile(dist, second, accepted)
+            self.assertEqual((result['pages'], result['site_files'], result['drift']), ([], [], []))
 
 if __name__ == '__main__': unittest.main()
