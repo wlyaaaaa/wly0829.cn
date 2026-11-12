@@ -33,7 +33,7 @@ def number_errors(work, dist, page, records, proofs):
     current = bound_json(work / f'sources/pages/{page}/page.json', root=work, read=lambda p: Path(p).read_text('utf8'))
     for proof in proofs:
         record = next((r for r in records if r['id'] == proof['record_id'] and r['page'] == page), None)
-        if record is None: continue
+        if record is None or record.get('retired_reason') == '随句删除': continue
         try:
             locator = proof['locator']; field = record.get('field', record.get('page_field')) or locator.get('logical_field', locator['field'])
             if record.get('page_number') and not any(record.get(k) for k in ('field', 'page_field', 'page_pattern')):
@@ -70,7 +70,7 @@ def trial(directory, baseline_dist, baseline_rendered, checks_input):
     for p in names: run.apply('step-start', p, 'program')
     def command(args, log, *, json_output=False):
         with (output / log).open('w', encoding='utf8') as handle:
-            result = subprocess.run([str(a) for a in args], cwd=work, env={**os.environ, 'BLOCK_WORK_DIR': 'E:/Cache/wly-site-build/bw/f3'},
+            result = subprocess.run([str(a) for a in args], cwd=work, env={**os.environ, 'BLOCK_WORK_DIR': os.environ.get('BLOCK_WORK_DIR', 'E:/Cache/wly-site-build/bw/f3')},
                                     stdout=handle, stderr=subprocess.PIPE if json_output else subprocess.STDOUT, text=True, encoding='utf8')
         if result.returncode not in (0, 1): raise ValueError(f'{log} 命令失败：{result.returncode}')
         return read(output / log) if json_output else result
