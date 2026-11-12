@@ -956,7 +956,7 @@
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
   "sha256": "b3fe0e0503a3ae553f140ca8750074851ff6c21b169ca98d6b6e9badcac3d5cd",
-  "converted_at_beijing": "2026-11-06T14:28:56+08:00"
+  "converted_at_beijing": "2026-11-12T11:35:07+08:00"
  }
 }
 ---
@@ -1066,7 +1066,6 @@
     },
     {
      "type": "prose",
-     "text_ref": "87张现在生效的认识卡",
      "align": "left",
      "size": "small",
      "columns": 1,
@@ -1156,7 +1155,6 @@
     },
     {
      "type": "prose",
-     "text_ref": "87张现在生效的认识卡",
      "align": "left",
      "size": "small",
      "columns": 1,
