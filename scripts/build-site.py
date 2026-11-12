@@ -469,7 +469,7 @@ def build(pages=None, check_lock_only=False):
         native_cockpit = name == 'cockpit' and "retainedPage('cockpit')" not in fixed[route].read_text('utf8')
         entries[route] = entry([fixed[route], SITE / 'src/cockpit', SITE / 'public/_overview', SITE / 'src/chrome/living-engine.json',
             ROOT / 'scripts/today-river.js', ROOT / 'scripts/today-river.css', ROOT / 'sources/creative/today-river/assets2'] if native_cockpit else retained_inputs(name, snapshot), 'retained')
-    for slug, scripts in {'storage': ['storage.js', 'storage.css'], 'ai': [], 'projects': ['projects.js', 'projects.css']}.items():
+    for slug, scripts in {'storage': ['storage.js', 'storage.css'], 'ai': []}.items():
         route = '/cockpit/' + slug + '/'
         entries[route] = entry([fixed[route], *([SITE / 'src/cockpit'] if slug == 'ai' else
             [SITE / 'src/cockpit' / name for name in ['cockpit.css', *scripts]])], 'retained')
