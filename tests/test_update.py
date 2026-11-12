@@ -1,5 +1,6 @@
 """更新骨架：真实进程中断、硬截止、跨关修复次数和范围。"""
 from datetime import timedelta
+from hashlib import sha256
 import json
 import os
 from pathlib import Path
@@ -11,7 +12,7 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
-from update import start
+from update import start, merge
 from update_gates import GATES, Run, now, read, timestamp, write
 
 
@@ -141,6 +142,73 @@ class UpdateTests(unittest.TestCase):
         write(self.repos, repos)
         self.assertFalse(any(p['blocked'] for p in self.create().load()['pages'].values()))
         self.assertEqual(set(self.create(projects=['learning']).load()['pages']), {'learning'})
+
+    def test_only_accepted_drafts_merge_and_failed_groups_lead_next_run(self):
+        pages = ('demo', 'child', 'learning', 'cold')
+        registry = dict(records=[dict(id=p, page=p, start=1) for p in pages])
+        self.put(self.root / 'sources/refresh/registry.json', registry)
+        asset_file = 'sources/assets/_library/asset-map.jsonl'
+        old_assets = [dict(page=p, asset='old') for p in pages]
+        self.put(self.root / 'sources/assets/_library/REQUESTS-READY.json', dict(status='ready'))
+        (self.root/asset_file).write_text(''.join(json.dumps(r)+'\n' for r in old_assets), encoding='utf8')
+        for p in pages:
+            self.put(self.root / f'sources/pages/{p}/layout.json', [])
+            self.put(self.root / f'sources/assets/{p}/manifest.jsonl', dict(page=p, asset='old'))
+        git = lambda *args: subprocess.check_output(['git', '-C', str(self.root), *args], text=True, encoding='utf8').strip()
+        git('add', 'sources'); git('commit', '-qm', 'draft fixture')
+        for book, peers in [('project-demo', ['child', 'learning']), ('project-learning', ['learning', 'cold'])]:
+            path = self.private / f'files/editorial-ledgers/{book}.json'; data = read(path)
+            data['capabilities'] = [dict(id=book, destinations=[dict(page=p, screen=p+'-01') for p in peers])]
+            write(path, data)
+        run = self.create(first_pass=True); before = {}
+        for p in pages:
+            files = [f'sources/pages/{p}/{f}.json' for f in ('page', 'layout')] + [f'sources/assets/{p}/manifest.jsonl']
+            draft = run.directory / 'drafts' / p
+            base = {f: sha256((self.root/f).read_bytes()).hexdigest() for f in files}
+            for f in files:
+                before[f] = (self.root/f).read_bytes(); self.put(draft/f, dict(draft=p))
+            changed = json.loads(json.dumps(registry))
+            next(r for r in changed['records'] if r['page'] == p)['start'] = 8
+            self.put(draft/'sources/refresh/registry.json', changed)
+            (draft/asset_file).parent.mkdir(parents=True, exist_ok=True)
+            (draft/asset_file).write_text(json.dumps(dict(page=p, asset='new'))+'\n', encoding='utf8')
+            self.put(draft/'draft.json', dict(page=p, files=files+['sources/refresh/registry.json'], base=base,
+                     registry_base=[r for r in registry['records'] if r['page'] == p]))
+            manifest = read(draft/'draft.json'); manifest.update(asset_base=[r for r in old_assets if r['page'] == p])
+            manifest['files'].append(asset_file); self.put(draft/'draft.json', manifest)
+        for p in pages[:2]:
+            run.apply('begin', p)
+            for step in GATES:
+                run.apply('step-start', p, step); run.apply('pass', p, step, artifact='output.json')
+        run.apply('begin', 'learning'); run.apply('step-start', 'learning', 'content')
+        run.apply('reject', 'learning', 'content', reason='fixture bad sentence')
+        target = run.directory/'drafts/demo/sources/pages/demo/page.json'; saved = target.read_bytes()
+        target.write_bytes(saved+b' ')
+        self.assertIn('demo', merge(run.directory)['deferred'])
+        target.write_bytes(saved)
+        result = self.cli(run, 'merge')
+        self.assertEqual(result['merged'], ['demo']); self.assertEqual(set(result['deferred']), set(pages[1:]))
+        for f, raw in before.items():
+            self.assertEqual((self.root/f).read_bytes() != raw, '/demo/' in f)
+        self.assertEqual([r['start'] for r in read(self.root/'sources/refresh/registry.json')['records'] if r['page'] != 'demo'], [1, 1, 1])
+        self.assertEqual(git('status', '--porcelain'), '')
+        actual_assets = [json.loads(line) for line in (self.root/asset_file).read_text('utf8').splitlines()]
+        self.assertEqual(actual_assets, [dict(r, asset='new') if r['page'] == 'demo' else r for r in old_assets])
+        self.assertEqual(read(self.root/'sources/assets/_library/REQUESTS-READY.json')['asset_map_sha256'], sha256((self.root/asset_file).read_bytes()).hexdigest())
+        self.assertEqual(read(run.directory/'drafts/child/deferred.json')['reason'], result['deferred']['child']['reason'])
+        next_run = self.create(first_pass=True)
+        ordered = read(next_run.directory/'scope.json')['pages']
+        self.assertEqual({r['page'] for r in ordered[:3]}, set(pages[1:]))
+        self.assertTrue(all('fixture bad sentence' in r['retry']['reason'] for r in ordered[:3]))
+        self.assertEqual(merge(run.directory)['merged'], [])
+        # 新页未过关时，其目录仍只在本次草稿中，不会生成作者输入。
+        state = run.load(); state['pages']['new-page'] = dict(status='rejected', repairs=0, passed=[], reason='new page bad')
+        write(run.directory/'state.json', state)
+        scope = read(run.directory/'scope.json'); scope['pages'].append(dict(scope['pages'][0], page='new-page', url='/new/'))
+        write(run.directory/'scope.json', scope)
+        self.put(run.directory/'drafts/new-page/draft.json', dict(page='new-page'))
+        self.assertIn('new-page', merge(run.directory)['deferred'])
+        self.assertFalse((self.root/'sources/pages/new-page').exists())
 
 
 if __name__ == "__main__":
