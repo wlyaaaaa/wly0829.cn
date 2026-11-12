@@ -359,12 +359,6 @@
         "columns": 4,
         "connector": "arrow",
         "illustration": "above_card",
-        "segment_refs": [
-          "本地稿先存好",
-          "本机服务",
-          "处理这段录音的 AI",
-          "云端"
-        ],
         "text_ref": "AI拿到这次选定的录音→查免费期和有没有被停用→送阿里云百炼"
       },
       {
@@ -467,12 +461,6 @@
         "columns": 4,
         "connector": "arrow",
         "illustration": "above_card",
-        "segment_refs": [
-          "本地稿先存好",
-          "本机服务",
-          "处理这段录音的 AI",
-          "云端"
-        ],
         "text_ref": "AI拿到这次选定的录音→查免费期和有没有被停用→送阿里云百炼"
       },
       {

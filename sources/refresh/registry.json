@@ -39920,7 +39920,7 @@
       "page": "localocr",
       "screen": "localocr-07",
       "field": "screens[7].text",
-      "page_pattern": "(10 月 30 日 11:11) 左右再查仍是拒绝连接",
+      "page_pattern": "(10 月 30 日 11:11) 左右和 11 月 4 日 09:06—09:14 再查仍是拒绝连接",
       "label": "本轮本机health拒绝连接观察时间",
       "current_value": "10 月 30 日 11:11",
       "as_of": "2026-10-30",
