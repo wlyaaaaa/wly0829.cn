@@ -70,7 +70,7 @@ def trial(directory, baseline_dist, baseline_rendered, checks_input):
     for p in names: run.apply('step-start', p, 'program')
     def command(args, log, *, json_output=False):
         with (output / log).open('w', encoding='utf8') as handle:
-            result = subprocess.run([str(a) for a in args], cwd=work, env={**os.environ, 'BLOCK_WORK_DIR': 'E:/Cache/wly-site-build/bw/f3'},
+            result = subprocess.run([str(a) for a in args], cwd=work, env={**os.environ, 'BLOCK_WORK_DIR': os.environ.get('BLOCK_WORK_DIR', 'E:/Cache/wly-site-build/bw/f3')},
                                     stdout=handle, stderr=subprocess.PIPE if json_output else subprocess.STDOUT, text=True, encoding='utf8')
         if result.returncode not in (0, 1): raise ValueError(f'{log} 命令失败：{result.returncode}')
         return read(output / log) if json_output else result

@@ -14,7 +14,7 @@ from engine.content import bound_json
 from engine.layout import assign_by_spec, _starts, LIST_TYPES
 from engine.parse import parse, normalize, original_markdown, node_text
 from convert_page import heal_text_refs
-from apply_edits import locate, whole_number
+from apply_edits import CHINESE_DATE, field_at, locate, whole_number
 
 TEXT = {'prose', 'content_card', 'feature_card', 'dialogue', 'bullet_list', 'step_list', 'callout'}
 def read(path): return json.loads(Path(path).read_text('utf-8-sig'))
@@ -104,7 +104,7 @@ def model(root, slug, page=None, layout=None):
 
 def number_rows(registry, slug, page):
     for row in registry['records']:
-        if row.get('page') != slug: continue
+        if row.get('page') != slug or row.get('retired_reason') == '随句删除': continue
         field = row.get('field', row.get('page_field', '')) or ''
         match = re.fullmatch(r'screens\[(\d+)\]\.text', field)
         if field and not match: continue
@@ -135,7 +135,57 @@ def export_page(root, slug, capacities=None):
                     cap = (capacities or {}).get(key, count)
                     item['layouts'][orient].append(dict(block=index, start=g['start'], end=g['end'], type=layouts[orient]['blocks'][index]['type'], chars=count, capacity=cap, remaining=cap-count, capacity_basis='measured' if key in (capacities or {}) else 'existing_text'))
             out['blocks'].append(item)
+    out['fields'] = {'status_line': page.get('status_line')}
+    out['fields'].update({f'screens[{i}].links': s.get('links', []) for i, s in enumerate(page['screens'])})
     return out
+
+def retire(row, registry):
+    """旧观察保留；跨页同值、加总或截至引用仍须一并处理。"""
+    related = {rid for relation in row.get('relations', []) for rid in relation.get('record_ids', [])}
+    related.update(row.get('qualifies', []))
+    conflicts = [r for r in registry['records'] if r.get('page') != row['page'] and
+                 (r['id'] in related or json.dumps(row['id']) in json.dumps(r, ensure_ascii=False))]
+    if conflicts:
+        row['retirement_dependencies'] = [dict(page=r['page'], record_id=r['id']) for r in conflicts]
+        print(f"{row['id']}: 别页仍引用登记数: " + ', '.join(f"{r['page']}/{r['id']}" for r in conflicts), file=sys.stderr)
+    row.update(historical=True, retired_reason='随句删除')
+
+def number_removed(old, new, start, end):
+    # 数字作为完整词比对，避免 131.0 的小数点误对到 CARDS.md 的点。
+    tokens = lambda text: list(re.finditer(r'\d+(?:[.,]\d+)*|[^\d]', text))
+    before, after = tokens(old), tokens(new)
+    removed = set()
+    for tag, a, b, c, d in SequenceMatcher(None, [m[0] for m in before], [m[0] for m in after], autojunk=False).get_opcodes():
+        if tag == 'delete' or tag == 'replace' and not any(re.search(r'\d', m[0]) for m in after[c:d]):
+            removed.update(range(a, b))
+    digits = {i for i, m in enumerate(before) if start <= m.start() < end and re.match(r'\d', m[0])}
+    return bool(digits) and (digits <= removed or len(digits) > 1 and bool(digits & removed)
+                            and not CHINESE_DATE.fullmatch(old[start:end]))
+
+def edit_fields(page, edits, registry, slug):
+    old = deepcopy(page)
+    for edit in edits:
+        field, action = edit['field'], edit['action']
+        match = re.fullmatch(r'screens\[(\d+)\]\.links', field)
+        if field == 'status_line': parent, key = page, field
+        elif match: parent, key = page['screens'][int(match[1])], 'links'
+        else: raise ValueError('只支持 status_line 和 screens[N].links 页级字段')
+        if action == '不动': continue
+        if action == '删': parent.pop(key, None)
+        elif action == '改成':
+            value = edit['value']
+            if not isinstance(value, dict if field == 'status_line' else list): raise ValueError('页级字段类型不符')
+            parent[key] = deepcopy(value)
+        elif action == '其后加' and match:
+            if not isinstance(edit['value'], list): raise ValueError('链接登记须为列表')
+            parent.setdefault(key, []).extend(deepcopy(edit['value']))
+        else: raise ValueError('未知页级字段动作')
+    for row in registry['records']:
+        field = row.get('field', row.get('page_field', '')) or ''
+        if row.get('page') != slug or not field.startswith('status_line') or row.get('retired_reason'): continue
+        try: field_at(page, field)
+        except (KeyError, IndexError): retire(row, registry)
+    return page != old
 
 def write_draft(root, document, edits, run_dir):
     root, run_dir = Path(root), Path(run_dir)
@@ -147,9 +197,11 @@ def write_draft(root, document, edits, run_dir):
         raise ValueError('有块没匹配上，导出编号或原文区间不完整')
     operations = {}
     for edit in edits:
+        if 'field' in edit: continue
         if edit['block'] not in {b['id'] for b in document['blocks']}: raise ValueError('未知块编号')
         operations.setdefault(edit['block'], []).append(edit)
     registry = read(root/'sources/refresh/registry.json'); base_rows = deepcopy([r for r in registry['records'] if r.get('page') == slug]); changed = False
+    changed = edit_fields(page, [e for e in edits if 'field' in e], registry, slug)
     for sid, (raw, visible, layouts, groups) in screens.items():
         units = [deepcopy(b) for b in document['blocks'] if b['screen'] == sid]; chunks, position = [], 0
         for unit in units:
@@ -278,9 +330,18 @@ def write_draft(root, document, edits, run_dir):
             if rsid != sid: continue
             start, end = locate(old_text, row); fragment = old_text[start:end]
             unit = next(u for u in units if u['start'] <= start < u['end'])
+            if not unit['new_text'] or number_removed(unit['text'], unit['new_text'], start-unit['start'], end-unit['start']):
+                retire(row, registry); continue
             matches = list(re.finditer(row['page_pattern'], new_text, re.M)) if row.get('page_pattern') else []
             if len(matches) > 1: raise ValueError(f"{row['id']}: 登记数定位不到或不唯一")
-            if matches:
+            old_date = CHINESE_DATE.fullmatch(fragment); near = move(start)
+            dates = [m for m in CHINESE_DATE.finditer(unit['new_text']) if old_date and old_date[4] and not m[4]
+                     and tuple(int(m[k] or 0) for k in (1, 2, 3)) == tuple(int(old_date[k] or 0) for k in (1, 2, 3))
+                     and near is not None and unit['new_start']+m.start() <= near < unit['new_start']+m.end()]
+            if not matches and len(dates) == 1:
+                a = unit['new_start']+dates[0].start(); fragment = dates[0][0]
+                row['date_precision'] = 'date'
+            elif matches:
                 a, b = matches[0].span(1 if matches[0].lastindex else 0)
                 if new_text[a:b] != fragment or not unit['new_start'] <= a < b <= unit['new_end']: raise ValueError(f"{row['id']}: 登记数值改变或移到了另一块")
             elif unit['text'] == unit['new_text']: a = unit['new_start'] + start-unit['start']
@@ -309,7 +370,9 @@ def write_draft(root, document, edits, run_dir):
     if (root/asset).is_file():
         raw = (root/asset).read_bytes(); dest = draft/asset; dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_bytes(raw); base[asset] = sha256(raw).hexdigest(); payloads[asset] = raw
-    manifest = dict(page=slug, base=base, files=list(payloads), registry_base=base_rows)
+    manifest = dict(page=slug, base=base, files=list(payloads), registry_base=base_rows,
+                    retired_numbers=[dict(record_id=r['id'], reason=r['retired_reason'], dependencies=r.get('retirement_dependencies', []))
+                                     for r in registry['records'] if r.get('page') == slug and r.get('retired_reason')])
     asset_map = 'sources/assets/_library/asset-map.jsonl'
     if (root/asset_map).is_file():
         lines = [line for line in (root/asset_map).read_bytes().splitlines(True) if line.strip() and json.loads(line).get('page') == slug]
