@@ -43,7 +43,7 @@ def git(root, *args):
 def protected_inputs(root):
     paths = git(root, "ls-files", "src/typeset", "site-astro/tools", "scripts/build-site.py",
                 "scripts/prepare-oss-release.py", "scripts/verify*", "docs/update.md",
-                "site-astro/src/styles/typeset-page.css", "tools/update*.py").splitlines()
+                "site-astro/src/styles/typeset-page.css", "tools/update*.py", "tools/review_capture.py", "tools/review_orders.py").splitlines()
     return {p: hashlib.sha256((Path(root) / p).read_bytes()).hexdigest() for p in paths}
 
 
