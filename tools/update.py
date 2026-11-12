@@ -1,6 +1,7 @@
 """update：固定本次来源、列范围、接文件回执；不代 AI 判断，不构建或发布。"""
 import argparse
 from datetime import timedelta
+from hashlib import sha256
 import json
 from pathlib import Path
 import subprocess
@@ -10,7 +11,8 @@ import uuid
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts/content-refresh"))
 from editorial_ledger import Ledger
-from update_gates import Run, git, locked, now, protected_inputs, read, timestamp, write
+from block_tool import asset_rows, draft_updates
+from update_gates import GATES, Run, draft_hash, git, locked, now, protected_inputs, read, timestamp, write
 from update_numbers import numbers, require_numbers
 import update_batch
 
@@ -75,6 +77,9 @@ def start(root, directory, requested_at, projects=(), pages=(), scope=None, numb
     root = Path(root).resolve(); requested = timestamp(requested_at)
     if requested > now(): raise ValueError("开口时间不能在未来")
     store = Ledger(root); catalog = inventory(store)
+    carry_file = store.companion / "files/update-dropped.json"
+    carry = read(carry_file) if carry_file.exists() else {}
+    catalog += [r["scope"] for p, r in carry.items() if p not in {v["page"] for v in catalog}]
     named = set(projects); named_pages = set(pages)
     known = {p["id"] for p in store.projects} | {r["book"] for r in catalog}
     if named - known or named_pages - {r["page"] for r in catalog}:
@@ -114,13 +119,14 @@ def start(root, directory, requested_at, projects=(), pages=(), scope=None, numb
         old = data["pages"]
         changed = not sources or any(s in failures for s in sources) or any(any(p.get("checked_sources", {}).get(s, {}).get("commit") != snapshots.get(s, {}).get("commit")
                                         for s in sources) for p in old.values()) or not old
-        if not (first_pass or is_named or numbers_only or changed): continue
+        if not (first_pass or is_named or numbers_only or changed or row["page"] in carry): continue
         review = old.get(row["page"], {}).get("semantic_review", {}).get("checked_at", "")
         row.update(named=is_named, highlighted=any(row["url"].startswith(h) for h in highlights),
                    last_review=review, review_scope="frozen-notice" if row["frozen"] else "whole-page",
                    blocked=(["账里未登记来源仓库"] if not sources else [failures[s] for s in sources if s in failures]))
+        if row["page"] in carry: row.update(retry=carry[row["page"]])
         selected.append(row)
-    selected.sort(key=lambda r: (not r["top_level"], not r["named"], not r["highlighted"],
+    selected.sort(key=lambda r: ("retry" not in r, not r["top_level"], not r["named"], not r["highlighted"],
                                  timestamp(r["last_review"]).timestamp() if r["last_review"] else 0, r["page"]))
     small = numbers_only or (0 < sum(r["named"] for r in selected) <= 3)
     deadline = None if first_pass else (requested + timedelta(hours=3 if small else 12)).isoformat()
@@ -144,6 +150,100 @@ def start(root, directory, requested_at, projects=(), pages=(), scope=None, numb
     return state
 
 
+def replace_asset_rows(raw, page, rows):
+    if [r for r in asset_rows(raw) if r.get("page") == page] == rows: return raw
+    replacement = b"".join((json.dumps(r, ensure_ascii=False) + "\n").encode("utf-8") for r in rows)
+    result = []; inserted = False
+    for line in raw.splitlines(keepends=True):
+        if line.strip() and json.loads(line).get("page") == page:
+            if not inserted: result.append(replacement); inserted = True
+        else: result.append(line)
+    if not inserted: result.append((b"\n" if raw and not raw.endswith(b"\n") else b"") + replacement)
+    return b"".join(result)
+
+
+def merge(directory):
+    """三关回执决定哪些草稿可进作者源；同一能力的去处按账同进同退。"""
+    require_numbers(directory)
+    run = Run(directory)
+    with locked(run.directory):
+        state = run.load(); root = Path(state["root"]); store = Ledger(root)
+        drafts = run.directory / "drafts"
+        if git(root, "status", "--porcelain", "--untracked-files=all"):
+            raise ValueError("合入前作者工作树须干净，不能混入别的修改")
+        scope = {r["page"]: r for r in read(run.directory / "scope.json")["pages"]}
+        candidates = {p: drafts / p for p in state["pages"] if (drafts / p / "draft.json").is_file()
+                      and not state["pages"][p].get("merged_commit")}
+        groups = [{d["page"] for d in cap.get("destinations", [])}
+                  for book in {r["book"] for r in scope.values()} for cap in store.read(book)["capabilities"]]
+        ready = {p for p, row in state["pages"].items() if row["status"] == "ready" and set(row["passed"]) == set(GATES)}
+        peers = set().union(*groups) | candidates.keys()
+        failures = {p: state["pages"].get(p, {}).get("reason") or "三关或草稿未齐" for p in peers
+                    if p not in ready or p not in candidates and not state["pages"].get(p, {}).get("merged_commit")}
+        registry_file = "sources/refresh/registry.json"; registry = read(root / registry_file)
+        asset_map = "sources/assets/_library/asset-map.jsonl"
+        map_raw = (root / asset_map).read_bytes() if (root / asset_map).is_file() else b""
+        updates = {}
+        for p in sorted(candidates.keys() - failures.keys()):
+            try:
+                if state["pages"][p].get("draft_sha256") != draft_hash(run.directory, p): raise ValueError("过关后草稿已变，须重走三关")
+                updates[p] = draft_updates(root, candidates[p])
+            except (ValueError, KeyError, OSError) as error:
+                failures[p] = str(error)
+        blocking = {p: {p} for p in failures}
+        for _ in groups:  # 传播原始失败原因；重叠能力的传递同组也不能半合入。
+            for group in groups:
+                causes = set().union(*(blocking.get(p, set()) for p in group))
+                if causes:
+                    for p in group: blocking[p] = blocking.get(p, set()) | causes
+        allowed = candidates.keys() - blocking.keys()
+        deferred = {p: dict(reason="；".join(f"{q}：{failures[q]}" for q in sorted(blocking[p])),
+                            draft=str(candidates[p]), scope=scope[p]) for p in candidates.keys() & blocking.keys()}
+        for p, row in deferred.items(): write(candidates[p] / "deferred.json", row)
+        payloads = {}; merged_map = map_raw
+        for p in sorted(allowed):
+            files, rows, materials = updates[p]; payloads.update(files)
+            replacements = {r["id"]: r for r in rows}
+            registry["records"] = [replacements.pop(r["id"], r) if r.get("page") == p else r
+                                   for r in registry["records"] if r.get("page") != p or r["id"] in replacements] + list(replacements.values())
+            if materials is not None: merged_map = replace_asset_rows(merged_map, p, materials)
+        if merged_map != map_raw:
+            payloads[asset_map] = merged_map
+            marker_file = "sources/assets/_library/REQUESTS-READY.json"; marker = read(root / marker_file)
+            marker["asset_map_sha256"] = sha256(merged_map).hexdigest()
+            payloads[marker_file] = (json.dumps(marker, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+        if allowed and registry != read(root / registry_file):
+            payloads[registry_file] = (json.dumps(registry, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+        changed = {f: raw for f, raw in payloads.items() if not (root / f).exists() or (root / f).read_bytes() != raw}
+        before = {f: (root / f).read_bytes() if (root / f).exists() else None for f in changed}
+        commit = git(root, "rev-parse", "HEAD")
+        try:
+            for f, raw in changed.items():
+                target = root / f; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(raw)
+            if changed:
+                git(root, "add", "--", *changed)
+                git(root, "commit", "-m", "Merge accepted page drafts", "-m", "变化：过关草稿进入作者源，未过页保留原内容。")
+                commit = git(root, "rev-parse", "HEAD")
+        except (OSError, subprocess.SubprocessError):
+            try: git(root, "reset", "--", *changed)
+            finally:
+                for f, raw in before.items():
+                    if raw is None: (root / f).unlink(missing_ok=True)
+                    else: (root / f).write_bytes(raw)
+            raise
+        for p in allowed: state["pages"][p].update(merged_commit=commit, draft=str(candidates[p]))
+        carry_file = store.companion / "files/update-dropped.json"
+        carry = read(carry_file) if carry_file.exists() else {}
+        for p in allowed: carry.pop(p, None)
+        carry.update({p: dict(r, scope={k: v for k, v in r["scope"].items() if k != "retry"}) for p, r in deferred.items()})
+        write(carry_file, carry)
+        receipt = dict(merged=sorted(allowed), deferred=deferred, commit=commit, files=sorted(changed))
+        write(run.directory / "merge.json", receipt)
+        write(run.directory / "state.json", state)
+        run.summary(state)
+        return receipt
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="action", required=True)
@@ -160,6 +260,7 @@ def main():
     numeric = sub.add_parser("numbers")
     numeric.add_argument("--budget", type=float, default=300, help="取数默认预算，只记用时不截断")
     numeric.add_argument("--only", help="明确只换这些页的数字，逗号分隔；默认取全部已登记允许页")
+    sub.add_parser("merge")
     for action in ("status", "begin", "repair", "step-start", "step-end", "pass", "reject", "drop", "record-published", "finish"):
         cmd = sub.add_parser(action)
         cmd.add_argument("--page")
@@ -182,6 +283,8 @@ def main():
             with locked(run.directory): state = run.load(); run.summary(state)
         elif args.action == "numbers":
             state = numbers(args.run_dir, args.budget, args.only)
+        elif args.action == "merge":
+            state = merge(args.run_dir)
         else:
             if args.action in {"begin", "repair"} or args.action == "step-start" and args.page:
                 require_numbers(args.run_dir)

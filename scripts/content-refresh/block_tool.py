@@ -1,4 +1,4 @@
-"""更新专用编号块：export 导出，write 生成草稿，merge 合入已验收草稿。"""
+"""更新专用编号块：export 导出，write 生成草稿；合入由 update.py 接三关。"""
 import argparse
 from copy import deepcopy
 from difflib import SequenceMatcher
@@ -305,23 +305,43 @@ def write_draft(root, document, edits, run_dir):
     draft = run_dir/slug; draft.mkdir(parents=True, exist_ok=True)
     for file, payload in payloads.items():
         dest = draft/file; dest.parent.mkdir(parents=True, exist_ok=True); dest.write_bytes(payload)
-    save(draft/'draft.json', dict(page=slug, base=document['base'], files=list(payloads), registry_base=base_rows))
+    base = dict(document['base']); asset = f'sources/assets/{slug}/manifest.jsonl'
+    if (root/asset).is_file():
+        raw = (root/asset).read_bytes(); dest = draft/asset; dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(raw); base[asset] = sha256(raw).hexdigest(); payloads[asset] = raw
+    manifest = dict(page=slug, base=base, files=list(payloads), registry_base=base_rows)
+    asset_map = 'sources/assets/_library/asset-map.jsonl'
+    if (root/asset_map).is_file():
+        lines = [line for line in (root/asset_map).read_bytes().splitlines(True) if line.strip() and json.loads(line).get('page') == slug]
+        dest = draft/asset_map; dest.parent.mkdir(parents=True, exist_ok=True); dest.write_bytes(b''.join(lines))
+        manifest.update(asset_base=[json.loads(line) for line in lines], files=manifest['files']+[asset_map])
+    save(draft/'draft.json', manifest)
     return draft
 
+def asset_rows(raw):
+    return [json.loads(line) for line in raw.decode('utf8').splitlines() if line.strip()]
+
+def draft_updates(root, draft):
+    """只核基线和准备写入，不动作者源；同组的所有页先一起核完。"""
+    root, draft = Path(root), Path(draft); manifest = read(draft/'draft.json'); p = manifest['page']
+    registry_file = 'sources/refresh/registry.json'; asset_map = 'sources/assets/_library/asset-map.jsonl'
+    files = {f'sources/pages/{p}/page.json', f'sources/pages/{p}/layout.json'}
+    if (asset := f'sources/assets/{p}/manifest.jsonl') in manifest['files']: files.add(asset)
+    extras = {asset_map} if 'asset_base' in manifest else set()
+    if p != draft.name or set(manifest['files']) != files | {registry_file} | extras: raise ValueError('草稿混入别页文件')
+    for file in files:
+        target = root/file; digest = sha256(target.read_bytes()).hexdigest() if target.exists() else None
+        if file not in manifest['base'] or digest != manifest['base'][file]: raise ValueError('作者源已变：'+file)
+    registry = read(root/registry_file)
+    if [r for r in registry['records'] if r.get('page') == p] != manifest['registry_base']: raise ValueError('作者源已变：本页数字登记')
+    rows = [r for r in read(draft/registry_file)['records'] if r.get('page') == p]
+    materials = asset_rows((draft/asset_map).read_bytes()) if extras else None
+    if extras and ([r for r in asset_rows((root/asset_map).read_bytes()) if r.get('page') == p] != manifest['asset_base']
+                   or any(r.get('page') != p for r in materials)): raise ValueError('作者源已变或混入别页：本页素材行')
+    return {f: (draft/f).read_bytes() for f in files}, rows, materials
+
 def merge_draft(root, draft):
-    root, draft = Path(root), Path(draft); manifest = read(draft/'draft.json')
-    registry_file = 'sources/refresh/registry.json'; registry = read(root/registry_file)
-    for file, digest in manifest['base'].items():
-        if file == registry_file: continue
-        if sha256((root/file).read_bytes()).hexdigest() != digest: raise ValueError(f'作者源已变: {file}')
-    if [r for r in registry['records'] if r.get('page') == manifest['page']] != manifest['registry_base']:
-        raise ValueError('作者源已变: 本页数字登记')
-    updated = {r['id']: r for r in read(draft/registry_file)['records'] if r.get('page') == manifest['page']}
-    for index, row in enumerate(registry['records']):
-        if row['id'] in updated: registry['records'][index] = updated[row['id']]
-    for file in manifest['files']:
-        if file != registry_file: (root/file).write_bytes((draft/file).read_bytes())
-    if registry != read(root/registry_file): save(root/registry_file, registry)
+    raise ValueError('草稿须由 tools/update.py merge 接三关并合入')
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__); parser.add_argument('--root', type=Path, default=ROOT)

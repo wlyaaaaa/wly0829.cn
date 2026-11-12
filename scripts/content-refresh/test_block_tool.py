@@ -46,10 +46,18 @@ class BlockToolTests(unittest.TestCase):
     def test_roundtrip_and_merge_preserve_original_bytes(self):
         before = {f: (self.root/f).read_bytes() for f in self.files}
         doc = self.export(); draft = self.write(doc, [{'block': b['id'], 'action': '不动'} for b in doc['blocks']])
-        tool.merge_draft(self.root, draft)
+        payloads, _, _ = tool.draft_updates(self.root, draft)
         for file, payload in before.items():
             self.assertEqual((draft/file).read_bytes(), payload)
             self.assertEqual((self.root/file).read_bytes(), payload)
+            if file in payloads: self.assertEqual(payloads[file], payload)
+        asset = self.root/'sources/assets/_library/asset-map.jsonl'
+        asset.parent.mkdir(parents=True, exist_ok=True)
+        asset.write_text(json.dumps(dict(page='sample', asset='old.png'))+'\n', encoding='utf8')
+        draft = self.write(self.export(), [])
+        self.assertEqual(tool.read(draft/'draft.json')['asset_base'], [dict(page='sample', asset='old.png')])
+        self.assertEqual((draft/'sources/assets/_library/asset-map.jsonl').read_bytes(), asset.read_bytes())
+        with self.assertRaisesRegex(ValueError, 'tools/update.py merge'): tool.merge_draft(self.root, draft)
 
     def test_rewrite_rebinds_each_layout_nested_refs_and_registered_number(self):
         doc = self.export(); original = (self.root/self.files[0]).read_bytes()
@@ -66,9 +74,10 @@ class BlockToolTests(unittest.TestCase):
         text = tool.read(draft/self.files[0])['screens'][0]['text']
         row = tool.read(draft/self.files[2])['records'][0]; a, b = tool.locate(text, row)
         self.assertEqual(text[a:b], '12')
-        tool.merge_draft(self.root, draft)
+        payloads, _, _ = tool.draft_updates(self.root, draft)
+        for file, raw in payloads.items(): (self.root/file).write_bytes(raw)
         self.assertEqual((self.root/self.files[0]).read_bytes(), (draft/self.files[0]).read_bytes())
-        with self.assertRaisesRegex(ValueError, '作者源已变'): tool.merge_draft(self.root, draft)
+        with self.assertRaisesRegex(ValueError, '作者源已变'): tool.draft_updates(self.root, draft)
 
     def test_same_new_opening_and_missing_layout_block_are_rejected(self):
         doc = self.export(); text = '同一个新的段落开头足够长用来验证前缀冲突以及顺序串块'

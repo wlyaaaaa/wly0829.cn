@@ -47,6 +47,12 @@ def protected_inputs(root):
     return {p: hashlib.sha256((Path(root) / p).read_bytes()).hexdigest() for p in paths}
 
 
+def draft_hash(directory, page):
+    draft = Path(directory) / "drafts" / page
+    return hashlib.sha256(b"".join(f.encode() + b"\0" + (draft / f).read_bytes() + b"\0"
+                          for f in ["draft.json", *read(draft / "draft.json")["files"]])).hexdigest()
+
+
 @contextmanager
 def locked(directory):
     with (Path(directory) / "state.lock").open("a+b") as handle:
@@ -140,6 +146,10 @@ class Run:
                     if not current or current["status"] != "active" or step not in GATES:
                         raise ValueError("只能核对正在做的页")
                     if action == "pass":
+                        if (self.directory / "drafts" / page / "draft.json").is_file():
+                            digest = draft_hash(self.directory, page)
+                            if current["passed"] and current.get("draft_sha256") != digest: raise ValueError("草稿已改：退回后 repair，重走三关")
+                            current["draft_sha256"] = digest
                         current["passed"].append(step)
                         if set(current["passed"]) == set(GATES): current["status"] = "ready"
                     else:
