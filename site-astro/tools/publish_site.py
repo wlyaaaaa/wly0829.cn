@@ -97,13 +97,39 @@ def scan_public_words(dist, source_root=None):
         check_line('source/' + rel, int(line_no), line, 'source')
     return hits
 
-def load(name):
-    spec = importlib.util.spec_from_file_location(name, ROOT/'scripts'/(name+'.py'))
+def load(name, directory=ROOT/'scripts'):
+    spec = importlib.util.spec_from_file_location(name, directory/(name+'.py'))
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
 
 oss, retention, word_policy = load('prepare-oss-release'), load('oss-retention'), load('site_public_words')
+runtime = load('build_runtime', ROOT/'site-astro/tools')
+
+def check_input_proofs(dist, source, previous, build, source_commit):
+    value = source.get('input_fingerprints')
+    if not value or value != build.get('input_fingerprints') or build.get('status') != 'built':
+        raise ValueError('Manifest input fingerprints differ from the successful build receipt')
+    identity = oss.read(dist/'release-identity.json')
+    if any(commit != source_commit for commit in (build.get('source_commit'), source.get('source_commit'),
+            identity.get('source_commit'), value['source_identity']['source_commit'])):
+        raise ValueError('Source commit differs from the frozen build identity')
+    if identity.get('release_id') != source['release_id'] or identity.get('manifest_sha256') != oss.digest(dist/oss.MANIFEST):
+        raise ValueError('Release identity differs from the frozen manifest')
+    rows = {runtime.nav.route_file(route): row for route, row in value['routes'].items()}
+    rows.update(value['site_files'])
+    actual = {p.relative_to(dist).as_posix(): oss.digest(p) for p in dist.rglob('*') if p.is_file() and p.name != '.build-receipt.json'}
+    if actual != {row['path']: row['sha256'] for row in build['files']} or any(rel not in rows for rel in actual if rel.endswith('.html')):
+        raise ValueError('Dist inventory differs from the successful build input proofs')
+    for rel, row in rows.items():
+        if row['fingerprint'] != runtime.value_sha(row['inputs']) or row.get('current_fingerprint', row['fingerprint']) != row['fingerprint']:
+            raise ValueError('Unbuilt or invalid input fingerprint: '+rel)
+        if rel not in {oss.MANIFEST, 'release-identity.json'} and row.get('output_sha256') != oss.digest(dist/rel):
+            raise ValueError('Built output differs from its input proof: '+rel)
+    runtime.verify_inputs(value)
+    result = runtime.reconcile(dist, value, previous or {})
+    if result['drift']: raise ValueError('Unchanged inputs produced changed output: '+', '.join(result['drift']))
+    return result
 
 def command(*args, timeout=None):
     done = subprocess.run([str(x) for x in args], cwd=ROOT, text=True, encoding='utf8', timeout=timeout,
@@ -355,6 +381,11 @@ def publish(args):
             raise ValueError('Dist differs from successful scan: '+(', '.join(changed) if changed else 'scan has failures'))
         previous = step('previous_manifest', lambda: oss.verify_manifest(oss.read(args.previous_manifest))
                         if args.previous_manifest else retention.predecessor())
+        if previous:
+            saved_path = retention.shared()/'published.json'
+            saved = retention.read(saved_path) if saved_path.is_file() else {}
+            if saved.get('manifest', {}).get('release_id') == previous['release_id']:
+                previous = {**previous, '_build_files': saved.get('build_files', {})}
         build = oss.read(args.dist/'.build-receipt.json') if (args.dist/'.build-receipt.json').is_file() else {}
         source_commit = args.source_commit or build.get('source_commit') or source.get('source_commit') or 'Unknown'
         if source_commit != 'Unknown' and not oss.re.fullmatch('[a-f0-9]{40}', source_commit):
@@ -362,6 +393,7 @@ def publish(args):
         receipt['source_commit'] = source_commit
         receipt['source_commit_evidence'] = ('explicit task baseline' if args.source_commit else
                 'build receipt' if build.get('source_commit') else 'source manifest' if source.get('source_commit') else 'Unknown')
+        receipt['published_reconciliation'] = check_input_proofs(args.dist, source, previous, build, source_commit)
         preparation = output
         plan = {'schema': 'wly.oss-release-plan.v1', 'release_id': source['release_id'], 'asset_base_url': source['oss']['asset_base_url'],
                 'test_only': False, 'remote_verified': False, 'objects': source['oss']['objects'],
@@ -390,6 +422,7 @@ def publish(args):
             'reason': 'Run separately after successful publication and publication-lock release',
             'command': ['python', '-B', '-X', 'utf8', 'site-astro/tools/publish_site.py', '--retention-only', str(output)]}
         if args.dry_run:
+            check_input_proofs(args.dist, source, previous, build, source_commit)
             receipt['site_dist'] = step('local_site_dist_commit', lambda:
                     artifact_commit(args.dist, plan, output, source_commit))
             receipt['status'] = 'dry_run'
@@ -465,6 +498,7 @@ def publish(args):
         receipt['oss_retention_pin'] = {'path': str(pin_path), 'plan_sha256': verification['plan_sha256'],
                                        'storage': 'plan_snapshot in shared Git pin'}
 
+        check_input_proofs(args.dist, source, previous, build, source_commit)
         receipt['site_dist'] = step('local_site_dist_commit', lambda:
                 artifact_commit(args.dist, plan, output, source_commit))
         receipt['commit'] = receipt['site_dist']['commit']
@@ -481,10 +515,12 @@ def publish(args):
                     {rel for rel in readback_documents if rel.endswith('.html')}}
         step('get_key_and_changed_pages', lambda: verify_pages(selected, receipt,
             lambda: oss.write(output/'publish-receipt.json', receipt)))
+        check_input_proofs(args.dist, source, previous, build, source_commit)
         step('successful_manifest_last', lambda: retention.write(retention.shared()/'published.json', {
             'schema': 'wly.site-publication.v1', 'commit': receipt['commit'], 'deployment': receipt['deployment'],
             'source_commit': source_commit,
-            'manifest': manifest, 'readback': receipt['get'], 'verified_at_beijing': oss.stamp()}))
+            'manifest': manifest, 'build_files': {rel: {'bytes': (args.dist/rel).stat().st_size, 'sha256': oss.digest(args.dist/rel)}
+                for rel in (oss.MANIFEST, 'release-identity.json')}, 'readback': receipt['get'], 'verified_at_beijing': oss.stamp()}))
         receipt['status'] = 'published'
         receipt['publication_status'] = 'published'
         return receipt

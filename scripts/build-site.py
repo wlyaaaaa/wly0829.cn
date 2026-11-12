@@ -27,7 +27,7 @@ sys.path.insert(0, str(SITE / 'tools'))
 import astro_rules
 import oss_origins
 from render_cache import ArtifactStore, markdown_render_sha
-from render_blocks import asset_fingerprint, parse_md, RULE_FRAMES
+from render_blocks import asset_dependencies, asset_fingerprint, parse_md, RULE_FRAMES
 
 def load(name, relative):
     spec = importlib.util.spec_from_file_location(name, ROOT / relative)
@@ -117,16 +117,18 @@ def restore(snapshot):
 def run(*args, cwd=SITE, env=None):
     subprocess.run(args, cwd=cwd, check=True, env=env, stdout=BUILD_LOG, stderr=subprocess.STDOUT if BUILD_LOG else None)
 
-def fingerprint(paths):
+def input_files(paths):
     files = set()
     for path in paths:
         path = Path(path)
         files.update(p for p in path.rglob('*') if p.is_file()) if path.is_dir() else files.add(path)
+    return {path.relative_to(ROOT).as_posix(): proof(path)['sha256'] if path.is_file() else 'missing'
+            for path in sorted(files) if '__pycache__' not in path.parts and path.suffix not in {'.pyc', '.pyo'}}
+
+def fingerprint(paths):
     digest = hashlib.sha256()
-    for path in sorted(files):
-        if '__pycache__' in path.parts or path.suffix in {'.pyc', '.pyo'}: continue
-        digest.update(path.relative_to(ROOT).as_posix().encode() + b'\0')
-        digest.update(proof(path)['sha256'].encode() if path.is_file() else b'missing')
+    for name, value in input_files(paths).items():
+        digest.update(name.encode() + b'\0'); digest.update(value.encode())
     return digest.hexdigest()
 
 def route_file(route):
@@ -146,26 +148,29 @@ def copy_changed(source, target):
     target.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(source, target)
     return True
 
-def html_references(path):
-    return {value for value in re.findall(r'''\b(?:src|href|data-src)=["']([^"']+)["']''', Path(path).read_text('utf8'))
-            if re.search(r'\.(?:js|mjs|css|json|png|jpe?g|webp|avif|svg|gif|woff2?|ttf|mp4)(?:[?#]|$)', value)}
-
-def guard_unchanged_html(dist, entries, previous_pages, published, previous_refs):
-    changed = []
-    for route, row in entries.items():
-        rel = route_file(route); accepted = published.get('files', {}).get(rel)
-        if previous_pages.get(route) != row['fingerprint'] or not accepted: continue
-        path = dist / rel
-        if proof(path)['sha256'] == accepted['sha256']: continue
-        refs = html_references(path)
-        differences = refs ^ previous_refs[route] if route in previous_refs else set()
-        # A saved SHA cannot reconstruct old HTML. Only name an observed
-        # reference difference; never invent the cause of a body-only change.
-        details = (', '.join(sorted(differences)) if differences else
-                   '本地引用未变；需核对已发布正文或内联内容' if route in previous_refs else '没有旧 HTML；已发布 SHA 无法还原差异引用')
-        print('连带变化：' + route + '，原因资源：' + details, flush=True)
-        changed.append(route)
-    return changed
+def input_fingerprints(dist, entries, old, completed, frozen, identity, runtime):
+    routes = {}
+    for route, entry in entries.items():
+        row = runtime.input_record(entry['inputs']); output = proof(dist / route_file(route))['sha256']
+        if route not in completed and old.get('pages', {}).get(route) != entry['fingerprint']:
+            prior = old.get('input_fingerprints', {}).get('routes', {}).get(route, {})
+            if prior.get('output_sha256') != output: raise ValueError('没有此页成品的构建输入：' + route)
+            row = {**prior, 'current_fingerprint': row['fingerprint']}
+        routes[route] = {**row, 'output_sha256': output}
+    for name in VERIFICATION_FILES:
+        if name.endswith('.html'):
+            routes['/' + name] = {**runtime.input_record(input_files([ROOT / 'public' / name])), 'output_sha256': proof(dist / name)['sha256']}
+    manifest = read(dist / 'release-manifest.json')
+    site = {rel: {**runtime.input_record(values), 'output_sha256': proof(dist / rel)['sha256']}
+            for rel, values in manifest.get('site_inputs', {}).items()}
+    metadata = {'@content-files': runtime.value_sha({**manifest['files'], **manifest['oss']['objects']}),
+                '@pages': runtime.value_sha(routes), '@site-files': runtime.value_sha(site),
+                '@source-files': runtime.value_sha(frozen), '@source-identity': runtime.value_sha(identity),
+                '@rules-pin': runtime.value_sha(manifest.get('rules_pin')), '@previous-release': manifest.get('previous_release_id')}
+    site['release-manifest.json'] = runtime.input_record(metadata)
+    site['release-identity.json'] = runtime.input_record({**metadata, '@release-id': manifest['release_id']})
+    return {'schema': 'wly.site-input-fingerprints.v1', 'routes': routes, 'site_files': site,
+            'source_files_sha256': frozen, 'source_identity': identity}
 
 def markdown_frontmatter(path):
     match = re.match(r'^---\n(.*?)\n---\n', path.read_text('utf8'), re.S)
@@ -278,7 +283,8 @@ def sync_markdown(previous):
                 pending.append(name)
             else:
                 blocked.append(name)
-        records[name] = {'fingerprint': source_fp, 'author_fp': author_fp, 'direct': False}
+        records[name] = {'fingerprint': source_fp, 'author_fp': author_fp, 'direct': False,
+                         'inputs': input_files([author, *dependencies])}
     if blocked:
         raise ValueError('Markdown 与当前 page.json 转换结果不一致：' + '、'.join(blocked))
     if pending: run(sys.executable, 'tools/convert_page.py', *pending)
@@ -291,8 +297,6 @@ def build(pages=None):
     # Redraw before reading source cleanliness: a redraw rewrites tracked author inputs,
     # so an uncommitted redraw must leave the build source Unknown instead of HEAD.
     home_redrawn = refresh_home_highlights()
-    source_clean = not subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=all'], cwd=ROOT)
-    source_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() if source_clean else 'Unknown'
     def stage(name):
         nonlocal previous_stage
         now = time.monotonic(); seconds = round(now - previous_stage, 3); previous_stage = now
@@ -309,7 +313,6 @@ def build(pages=None):
     requested = {normalize_route(value) for value in pages.split(',')} if pages else None
     if requested and home_redrawn: requested.add('/')
     before = {file_route(p.relative_to(dist).as_posix()): proof(p) for p in dist.rglob('*.html')}
-    before_refs = {file_route(p.relative_to(dist).as_posix()): html_references(p) for p in dist.rglob('*.html')}
     checks = load('site_consistency', 'site-astro/tools/site_consistency.py').audit()
     checks_path = SITE / '.cache/site-consistency.json'; write(checks_path, checks)
     sources = sync_markdown(old.get('json_sources', {})); stage('source')
@@ -340,13 +343,18 @@ def build(pages=None):
         prepared_fp = fingerprint(preparation)
     stage('native_inputs')
     frozen_urls = sorted(p['url'] for p in checks['frozen_projects'])
-    engine_fp = fingerprint([ROOT / 'src/typeset', ROOT / 'config/render.lock.json', SITE / 'tools/render_blocks.py',
-        SITE / 'tools/render_cache.py', SITE / 'tools/site_consistency.py']) + hashlib.sha256(json.dumps(frozen_urls).encode()).hexdigest()
+    engine_paths = [ROOT / 'src/typeset', ROOT / 'config/render.lock.json', SITE / 'tools/render_blocks.py',
+        SITE / 'tools/render_cache.py', SITE / 'tools/site_consistency.py']
+    engine_fp = fingerprint(engine_paths) + hashlib.sha256(json.dumps(frozen_urls).encode()).hexdigest()
     wrapper_paths = [p for p in (SITE / 'src').rglob('*') if p.is_file()
         and 'content' not in p.relative_to(SITE / 'src').parts and p.parent.name not in {'runtime', 'retained'}
         and p.name != 'retained-page.ts' and 'cockpit' not in p.relative_to(SITE / 'src').parts]
-    wrapper_fp = fingerprint(wrapper_paths + [SITE / 'astro.config.mjs', SITE / 'package-lock.json',
-        public / '_living/quality-runtime/manifest.json'])
+    wrapper_paths += [SITE / 'astro.config.mjs', SITE / 'package-lock.json', public / '_living/quality-runtime/manifest.json']
+    wrapper_fp = fingerprint(wrapper_paths)
+    common_inputs = input_files(engine_paths + wrapper_paths)
+    common_inputs['@frozen-project-routes'] = runtime.value_sha(frozen_urls)
+    def entry(paths, kind):
+        return {'fingerprint': fingerprint(paths), 'inputs': input_files(paths), 'kind': kind}
     entries = {}; render_fps = {}; fixed = {}
     for path in (SITE / 'src/pages').rglob('*.astro'):
         rel = path.relative_to(SITE / 'src/pages').as_posix()
@@ -363,36 +371,51 @@ def build(pages=None):
         screens = parse_md(md)[1]
         if fm.get('url', '').startswith('/rules/') and any(meta['screen'].get('shape') == 'source_text' for meta, _ in screens):
             render_inputs += [ROOT / 'sources/assets' / path for path in RULE_FRAMES]
-        render_fps[name] = markdown_render_sha(md) + fingerprint(render_inputs[1:]) + engine_fp + asset_fingerprint(
-            [screens, *[p.as_uri() for p in render_inputs[1:] if p.is_file()]], lambda p: proof(p)['sha256'])
+        assets = [screens, *[p.as_uri() for p in render_inputs[1:] if p.is_file()]]
+        render_fps[name] = markdown_render_sha(md) + fingerprint(render_inputs[1:]) + engine_fp + asset_fingerprint(assets, lambda p: proof(p)['sha256'])
+        page_inputs = {**common_inputs, **sources.get(name, {}).get('inputs', {}),
+                       **input_files(render_inputs + list(asset_dependencies(assets)))}
         for route in [fm.get('url') or '/' + name + '/', *(fm.get('old_urls') or [])]:
             route = normalize_route(route)
             if route in {'/', '/cockpit/', '/computer-access/'}: continue
             if route in entries or route in fixed: raise ValueError('同一路由由两处产出：' + route)
-            entries[route] = {'name': name, 'fingerprint': render_fps[name] + wrapper_fp, 'kind': 'native'}
+            entries[route] = {'name': name, 'fingerprint': render_fps[name] + wrapper_fp, 'kind': 'native', 'inputs': page_inputs}
     for name, route in [('home', '/'), ('cockpit', '/cockpit/'), ('computer-access', '/computer-access/')]:
         native_cockpit = name == 'cockpit' and "retainedPage('cockpit')" not in fixed[route].read_text('utf8')
-        retained_fp = fingerprint([fixed[route], SITE / 'src/cockpit', SITE / 'public/_overview', SITE / 'src/chrome/living-engine.json',
-            ROOT / 'scripts/today-river.js', ROOT / 'scripts/today-river.css', ROOT / 'sources/creative/today-river/assets2'] if native_cockpit else retained_inputs(name, snapshot))
-        entries[route] = {'fingerprint': retained_fp, 'kind': 'retained'}
-    entries['/cockpit/storage/'] = {'fingerprint': fingerprint([fixed['/cockpit/storage/'], SITE / 'src/cockpit/cockpit.css', SITE / 'src/cockpit/storage.js', SITE / 'src/cockpit/storage.css']) + wrapper_fp, 'kind': 'retained'}
-    entries['/cockpit/ai/'] = {'fingerprint': fingerprint([fixed['/cockpit/ai/'], SITE / 'src/cockpit']) + wrapper_fp, 'kind': 'retained'}
-    entries['/cockpit/projects/'] = {'fingerprint': fingerprint([fixed['/cockpit/projects/'], SITE / 'src/cockpit/cockpit.css', SITE / 'src/cockpit/projects.js', SITE / 'src/cockpit/projects.css']) + wrapper_fp, 'kind': 'retained'}
+        entries[route] = entry([fixed[route], SITE / 'src/cockpit', SITE / 'public/_overview', SITE / 'src/chrome/living-engine.json',
+            ROOT / 'scripts/today-river.js', ROOT / 'scripts/today-river.css', ROOT / 'sources/creative/today-river/assets2'] if native_cockpit else retained_inputs(name, snapshot), 'retained')
+    for slug, scripts in {'storage': ['storage.js', 'storage.css'], 'ai': [], 'projects': ['projects.js', 'projects.css']}.items():
+        route = '/cockpit/' + slug + '/'
+        entries[route] = entry([fixed[route], *([SITE / 'src/cockpit'] if slug == 'ai' else
+            [SITE / 'src/cockpit' / name for name in ['cockpit.css', *scripts]])], 'retained')
+        entries[route]['fingerprint'] += wrapper_fp
+        entries[route]['inputs'].update(input_files(wrapper_paths))
     for relative in snapshot['pages']:
-        entries.setdefault(file_route(relative), {'fingerprint': fingerprint([SNAPSHOT / 'pages' / relative]), 'kind': 'frozen'})
-    generated_fp = fingerprint([ROOT / 'config/final-project-order.json', SITE / 'tools/cockpit_stutter.py'])
-    for route in set(snapshot['routes']) - entries.keys():
-        entries[route] = {'fingerprint': generated_fp, 'kind': 'generated'}
-    entries['/cockpit/stutter/']['fingerprint'] = fingerprint(stutter_inputs + [SITE / 'tools/cockpit_stutter.py'])
-    entries['/cv/'] = {'fingerprint': fingerprint([ROOT / 'scripts/build-site.py']), 'kind': 'generated'}
-    visitor_fp = fingerprint([ROOT / 'config/build.json', ROOT / 'scripts/oss_origins.py', ROOT / 'scripts/visitor-beacon.js', ROOT / 'scripts/footer-email-copy.js', ROOT / 'scripts/header-menu.js'])
-    for row in entries.values(): row['fingerprint'] += visitor_fp
+        path = SNAPSHOT / 'pages' / relative
+        assets = asset_dependencies(runtime.transport.localize(path.read_text('utf8'), snapshot))
+        entries.setdefault(file_route(relative), entry([path, *assets], 'frozen'))
+    generated_paths = [ROOT / 'config/final-project-order.json', SITE / 'tools/cockpit_stutter.py']
+    for route in sorted(set(snapshot['routes']) - entries.keys()):
+        entries[route] = entry(generated_paths, 'generated')
+    entries['/cockpit/stutter/'] = entry(stutter_inputs + [SITE / 'tools/cockpit_stutter.py'], 'generated')
+    entries['/cv/'] = entry([ROOT / 'scripts/build-site.py'], 'generated')
+    visitor_paths = [ROOT / 'config/build.json', ROOT / 'scripts/oss_origins.py', ROOT / 'scripts/visitor-beacon.js', ROOT / 'scripts/footer-email-copy.js', ROOT / 'scripts/header-menu.js',
+                     ROOT / 'scripts/prepare-oss-release.py', SITE / 'tools/build_runtime.py']
+    visitor_fp = fingerprint(visitor_paths)
+    for row in entries.values():
+        row['fingerprint'] += visitor_fp; row['inputs'] = {**row['inputs'], **input_files(visitor_paths)}
+    entries['/404.html'] = {**entries['/404/'], 'kind': 'copy'}
     if requested and requested - entries.keys(): raise ValueError('Unknown routes: ' + ', '.join(sorted(requested - entries.keys())))
     selected = requested if requested is not None else set(entries)
     generated_living = living_outputs(); broken_living = broken_living_outputs(generated_living)
     changed = {route for route in selected if not (dist / route_file(route)).is_file()
         or old.get('pages', {}).get(route) != entries[route]['fingerprint'] or entries[route].get('name') in broken_living}
     if '/404.html' in changed: changed.add('/404/')
+    if '/404/' in changed: changed.add('/404.html')
+    frozen = {key: value for row in entries.values() for key, value in row['inputs'].items() if not key.startswith('@')}
+    frozen.update(input_files([ROOT / 'scripts/build-site.py', ROOT / 'scripts/prepare-oss-release.py',
+                               SITE / 'tools/build_runtime.py', SITE / 'tools/convert_page.py', *[ROOT / 'public' / name for name in VERIFICATION_FILES]]))
+    identity = runtime.source_identity(ROOT); source_commit = identity['source_commit']
     names = {entries[route]['name'] for route in changed if entries[route]['kind'] == 'native'}
     render_names = [name for name in sorted(names) if old.get('rendered', {}).get(name) != render_fps[name]
         or not (SITE / 'src/content/rendered' / (name + '.json')).is_file() or name in broken_living]
@@ -455,7 +478,11 @@ def build(pages=None):
     stage('finish')
     run(sys.executable, str(ROOT / 'scripts/prepare-oss-release.py'), 'finalize-dist', '--dist', str(dist),
         '--source-commit', source_commit, cwd=ROOT)
-    guard_unchanged_html(dist, entries, old.get('pages', {}), runtime.published_manifest(), before_refs)
+    inputs = input_fingerprints(dist, entries, old, changed, frozen, identity, runtime)
+    runtime.verify_inputs(inputs, ROOT); runtime.seal_inputs(dist, inputs)
+    reconciliation = runtime.reconcile(dist, inputs, runtime.published_manifest())
+    write(SITE / '.cache/published-reconciliation.json', reconciliation)
+    if reconciliation['drift']: raise ValueError('输入未变但成品改变：' + '、'.join(reconciliation['drift']))
     stage('finalize')
     run('node', str(ROOT / 'scripts/verify-public-content.mjs'), '--dist', str(dist), '--incremental', cwd=ROOT)
     stage('public')
@@ -467,11 +494,12 @@ def build(pages=None):
     receipt = {'schema': 'wly.site-build-receipt.v1', 'status': 'built', 'source_commit': source_commit,
         'prepared_at_beijing': datetime.now(timezone(timedelta(hours=8))).isoformat(),
         'seconds': round(time.monotonic() - started, 3), 'steps': steps, 'rebuilt_pages': sorted(rebuilt),
-        'html_files': len(after), 'files': files, 'output': str(dist), 'checks': checks, 'checks_file': str(checks_path)}
+        'html_files': len(after), 'files': files, 'output': str(dist), 'checks': checks, 'checks_file': str(checks_path),
+        'input_fingerprints': inputs, 'published_reconciliation': reconciliation}
     manifest = read(dist / 'release-manifest.json')
     receipt.update({key: manifest.get(key) for key in ('previous_oss_source', 'previous_release_id')})
     write(dist / '.build-receipt.json', receipt)
-    write(state_path, {'prepared': prepared_fp, 'pin': pin, 'json_sources': sources, 'asset_sources': asset_sources,
+    write(state_path, {'prepared': prepared_fp, 'pin': pin, 'json_sources': sources, 'asset_sources': asset_sources, 'input_fingerprints': inputs,
         'pages': {**old.get('pages', {}), **{route: entries[route]['fingerprint'] for route in changed}},
         'rendered': {**old.get('rendered', {}), **{name: render_fps[name] for name in render_names}}})
     write(SITE / '.cache/build-report.json', {key: value for key, value in receipt.items() if key != 'files'})
@@ -487,6 +515,8 @@ if __name__ == '__main__':
             BUILD_LOG = log
             result = build(parser.parse_args().pages)
         print(json.dumps({'status': 'built', 'html_files': result['html_files'], 'rebuilt_pages': len(result['rebuilt_pages']),
+            'comparison_baseline': result['published_reconciliation']['baseline'],
+            'changed_pages': result['published_reconciliation']['pages'], 'changed_site_files': result['published_reconciliation']['site_files'],
             'frozen_mentions': len(result['checks']['frozen_mentions']), 'skill_missing': len(result['checks']['skills'].get('missing', [])),
             'rule_frozen_diff': len(result['checks']['rule_frozen'].get('site_not_rules', [])) + len(result['checks']['rule_frozen'].get('rules_not_site', [])),
             'model_mismatches': len(result['checks']['models'].get('mismatches', [])),
