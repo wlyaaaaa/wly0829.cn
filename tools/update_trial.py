@@ -33,7 +33,7 @@ def number_errors(work, dist, page, records, proofs):
     current = bound_json(work / f'sources/pages/{page}/page.json', root=work, read=lambda p: Path(p).read_text('utf8'))
     for proof in proofs:
         record = next((r for r in records if r['id'] == proof['record_id'] and r['page'] == page), None)
-        if record is None: continue
+        if record is None or record.get('retired_reason') == '随句删除': continue
         try:
             locator = proof['locator']; field = record.get('field', record.get('page_field')) or locator.get('logical_field', locator['field'])
             if record.get('page_number') and not any(record.get(k) for k in ('field', 'page_field', 'page_pattern')):

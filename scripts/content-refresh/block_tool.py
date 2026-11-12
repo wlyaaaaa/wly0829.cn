@@ -155,12 +155,13 @@ def number_removed(old, new, start, end):
     # 数字作为完整词比对，避免 131.0 的小数点误对到 CARDS.md 的点。
     tokens = lambda text: list(re.finditer(r'\d+(?:[.,]\d+)*|[^\d]', text))
     before, after = tokens(old), tokens(new)
-    removed = set()
+    removed, replaced = set(), set()
     for tag, a, b, c, d in SequenceMatcher(None, [m[0] for m in before], [m[0] for m in after], autojunk=False).get_opcodes():
         if tag == 'delete' or tag == 'replace' and not any(re.search(r'\d', m[0]) for m in after[c:d]):
             removed.update(range(a, b))
+        elif tag == 'replace': replaced.update(range(a, b))
     digits = {i for i, m in enumerate(before) if start <= m.start() < end and re.match(r'\d', m[0])}
-    return bool(digits) and (digits <= removed or len(digits) > 1 and bool(digits & removed)
+    return bool(digits) and not digits & replaced and (digits <= removed or len(digits) > 1 and bool(digits & removed)
                             and not CHINESE_DATE.fullmatch(old[start:end]))
 
 def edit_fields(page, edits, registry, slug):
@@ -181,12 +182,13 @@ def edit_fields(page, edits, registry, slug):
             if not isinstance(edit['value'], list): raise ValueError('链接登记须为列表')
             parent.setdefault(key, []).extend(deepcopy(edit['value']))
         else: raise ValueError('未知页级字段动作')
+    if page == old: return False
     for row in registry['records']:
         field = row.get('field', row.get('page_field', '')) or ''
         if row.get('page') != slug or not field.startswith('status_line') or row.get('retired_reason'): continue
         try: field_at(page, field)
         except (KeyError, IndexError): retire(row, registry)
-    return page != old
+    return True
 
 def write_draft(root, document, edits, run_dir):
     root, run_dir = Path(root), Path(run_dir)
