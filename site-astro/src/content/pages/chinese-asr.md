@@ -808,7 +808,7 @@
  "source": {
   "page": "sources/pages/chinese-asr/page.json",
   "sha256": "a6164a4d1ef52847d1e3a5ad548b87c967919e37e059e51b4e474b69693b4fd3",
-  "converted_at_beijing": "2026-11-06T07:33:25+08:00"
+  "converted_at_beijing": "2026-11-12T11:35:07+08:00"
  }
 }
 ---
@@ -1867,12 +1867,6 @@ P2　12:03　这句两个模型差得多，建议回听
      "columns": 4,
      "connector": "arrow",
      "illustration": "above_card",
-     "segment_refs": [
-      "本地稿先存好",
-      "本机服务",
-      "处理这段录音的 AI",
-      "云端"
-     ],
      "text_ref": "AI拿到这次选定的录音→查免费期和有没有被停用→送阿里云百炼"
     },
     {
@@ -1969,12 +1963,6 @@ P2　12:03　这句两个模型差得多，建议回听
      "columns": 4,
      "connector": "arrow",
      "illustration": "above_card",
-     "segment_refs": [
-      "本地稿先存好",
-      "本机服务",
-      "处理这段录音的 AI",
-      "云端"
-     ],
      "text_ref": "AI拿到这次选定的录音→查免费期和有没有被停用→送阿里云百炼"
     },
     {

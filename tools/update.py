@@ -295,20 +295,23 @@ def confirm_publication(directory, receipt):
 
 def publish(directory, dry_run=False, legacy_baseline_reason=None, confirm=None):
     if confirm: return confirm_publication(directory, confirm)
-    require_numbers(directory)
     run = Run(directory)
     with locked(run.directory):
         state = run.load(); root = Path(state["root"]); store = Ledger(root)
         scope = read(run.directory / "scope.json"); catalog = {r["page"]: r for r in scope["pages"]}
         accepted = {p: row for p, row in state["pages"].items() if row.get("merged_commit") and row["status"] != "published"}
-        if not accepted: raise ValueError("没有本趟已合入、尚未发布的页")
+        publisher = site_publisher(root)
+        previous = publisher.retention.predecessor() if not accepted and str(legacy_baseline_reason or "").strip() else None
+        legacy_swap = bool(previous and not previous.get("input_fingerprints"))
+        if not legacy_swap: require_numbers(directory)
+        if not accepted and not legacy_swap: raise ValueError("没有本趟已合入、尚未发布的页")
         if git(root, "status", "--porcelain", "--untracked-files=all"): raise ValueError("成包前作者工作树须干净")
         for row in accepted.values(): git(root, "merge-base", "--is-ancestor", row["merged_commit"], "HEAD")
         output = run.directory / ("publish-" + uuid.uuid4().hex); output.mkdir()
         timing = dict(page=None, step="publish", round=1 + sum(t["step"] == "publish" for t in state["timings"]), started_at=now().isoformat())
         state["timings"].append(timing); write(run.directory / "state.json", state)
         try:
-            publisher = site_publisher(root); builder = publisher.load("build-site")
+            builder = publisher.load("build-site")
             builder.build(check_lock_only=True)
             builder.refresh_home_highlights()
             home_files = ["site-astro/sources/retained-home-cockpit/" + p for p in ("home.html", "dependencies.json", "assets")]
@@ -341,7 +344,7 @@ def publish(directory, dry_run=False, legacy_baseline_reason=None, confirm=None)
                     write(output / "freshness.json", closure)
                 batch = dict(run_id=state["run_id"], batch_id=output.name, source_commit=source_commit,
                     release_id=source["release_id"], manifest_sha256=publisher.oss.digest(dist / "release-manifest.json"),
-                    pages=pages, allowed_routes=sorted(allowed), legacy_baseline_reason=legacy_baseline_reason,
+                    pages=pages, page_count=len(pages), allowed_routes=sorted(allowed), legacy_baseline_reason=legacy_baseline_reason,
                     registry_pending=closure.get("registry_pending", []))
                 batch_file = output / "batch.json"; write(batch_file, batch)
                 state["publication_batch"] = batch_file.relative_to(run.directory).as_posix(); write(run.directory / "state.json", state)

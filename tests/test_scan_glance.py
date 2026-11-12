@@ -189,6 +189,31 @@ class ScanGlanceTests(unittest.TestCase):
                     self.assertEqual(any(f["category"] == "blank" for f in dom["hints"]), not blocked)
             finally:
                 browser.close()
+    def test_native_scroll_visibility_keeps_real_clipping_and_blocking(self):
+        from playwright.sync_api import sync_playwright
+        fixture = '<style>body{margin:0;font:16px/20px sans-serif}.outer{width:160px;overflow:hidden;margin:10px}.scroller{width:160px;height:50px;overflow:auto hidden}.stage{position:relative;width:500px;height:50px}button{height:30px;white-space:nowrap}#panButton{position:absolute;left:120px;top:5px;width:100px}#unreachable{position:absolute;left:-30px;top:25px;white-space:nowrap}.cut{width:80px;height:24px;overflow:hidden;white-space:nowrap}.vertical{width:150px;height:8px;overflow:hidden}.covered{position:relative;width:150px;height:40px}#cover{position:absolute;inset:0;background:white}</style>' \
+            '<div class="outer"><div class="scroller" id="scroll"><div class="stage"><button id="panButton"><span id="panText">Slide to read</span></button><span id="unreachable">Cannot reach</span></div></div></div>' \
+            '<div class="cut"><span id="badText">Permanently clipped words</span></div>' \
+            '<div class="outer" style="width:100px"><div class="scroller" style="width:200px"><div class="stage" style="width:400px"><span id="outerCut" style="position:absolute;left:350px">END</span></div></div></div>' \
+            '<div class="outer"><div class="scroller"><div class="stage"><div class="cut"><span id="innerBad">Clipped inside scroll content</span></div><div class="vertical"><span id="verticalText">Vertically clipped</span></div></div></div></div>' \
+            '<div class="covered"><button id="blockedButton">Really blocked</button><div id="cover"></div></div>'
+        config = scan.read_json(ROOT / "site-astro/tools/scan_glance.json")
+        with tempfile.TemporaryDirectory(prefix='scan-scroll-', dir=r'E:\Cache') as temp, sync_playwright() as pw:
+            browser = pw.chromium.launch_persistent_context(temp, executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe', headless=True, viewport={"width":390,"height":844})
+            try:
+                page = browser.new_page(); page.route('**/*', lambda route: route.abort()); page.set_content(fixture)
+                page.evaluate((ROOT / "site-astro/tools/scan_glance_dom.js").read_text("utf8"))
+                dom = page.evaluate("config => scanGlance(config)", config)
+                clipped = {f["selector"] for f in dom["failures"] if f["category"] == "clipped"}
+                blocked = {f["selector"] for f in dom["failures"] if f["category"] == "blocked"}
+                self.assertNotIn("#panText", clipped); self.assertNotIn("#panButton", blocked)
+                self.assertTrue({"#badText", "#innerBad", "#verticalText", "#unreachable", "#outerCut"}.issubset(clipped))
+                self.assertIn("#blockedButton", blocked)
+                page.eval_on_selector('#scroll', "e => {const a=e.getBoundingClientRect(),r=document.querySelector('#panText').getBoundingClientRect();e.scrollLeft+=(r.left+r.right-a.left-a.right)/2}")
+                reachable = page.wait_for_function("() => {const a=document.querySelector('#scroll'),r=document.querySelector('#panText').getBoundingClientRect(),b=a.getBoundingClientRect();return a.scrollLeft>0&&r.left>=b.left&&r.right<=b.right}")
+                self.assertTrue(reachable.json_value())
+            finally:
+                browser.close()
     def test_closed_details_rows_skipped_but_visible_overlap_and_clip_reported(self):
         from playwright.sync_api import sync_playwright
         # 驾驶舱任务清单的形状：收起的分组里嵌套 details 的 summary 行，排版位置落在下一组标题上，但画面上没画出来。

@@ -132,7 +132,8 @@ def check_input_proofs(dist, source, previous, build, source_commit, verify_sour
     return result
 
 def check_update_batch(batch, source, source_commit, manifest_sha256, reconciliation):
-    if (not batch.get('run_id') or not batch.get('batch_id') or not batch.get('pages')
+    empty_legacy = batch.get('pages') == {} and reconciliation['baseline'] == 'legacy' and str(batch.get('legacy_baseline_reason') or '').strip()
+    if (not batch.get('run_id') or not batch.get('batch_id') or (not batch.get('pages') and not empty_legacy)
             or source_commit == 'Unknown' or batch.get('source_commit') != source_commit
             or batch.get('release_id') != source['release_id'] or batch.get('manifest_sha256') != manifest_sha256):
         raise ValueError('Update batch differs from the frozen publication artifact')
