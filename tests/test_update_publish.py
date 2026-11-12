@@ -85,6 +85,43 @@ class UpdatePublishTests(unittest.TestCase):
         self.assertEqual(self.run.load()["pages"]["learning"]["status"], "ready")
         self.assertEqual(git(self.root, "status", "--porcelain"), "")
 
+    def test_zero_page_legacy_swap_dry_run_keeps_new_baseline_gates(self):
+        for row in self.state["pages"].values(): row.pop("merged_commit", None)
+        self.state.pop("numbers", None); write(self.run.directory / "state.json", self.state)
+        legacy = deepcopy(self.previous); legacy.pop("input_fingerprints")
+        verify = self.pub.runtime.verify_inputs; real_run = update.subprocess.run
+        builder = SimpleNamespace(build=lambda **kw: None, refresh_home_highlights=lambda: False, input_paths=lambda: [])
+        def command(args, **kwargs):
+            script = Path(args[4]).name if len(args) > 4 and args[0] == update.sys.executable else ""
+            if script == "build-site.py": return SimpleNamespace(returncode=0)
+            if script == "scan_glance.py":
+                write(Path(args[-1]) / "scan-result.json", dict(failures=[], dist_files_sha256={p.relative_to(self.dist).as_posix(): self.pub.oss.digest(p) for p in self.dist.rglob("*") if p.is_file()})); return
+            if script == "publish_site.py":
+                self.pub.publish(SimpleNamespace(dist=self.dist, output=Path(args[-1]), dry_run=True, scan_result=Path(args[args.index("--scan-result") + 1]),
+                    previous_manifest=None, source_commit=None, update_batch=Path(args[args.index("--update-batch") + 1]))); return
+            return real_run(args, **kwargs)
+        with patch.object(self.pub, "scan_public_words", return_value=[]), patch.object(self.pub.retention, "predecessor", return_value=legacy) as predecessor, \
+             patch.object(self.pub.retention, "shared", return_value=self.folder / "shared"), patch.object(self.pub, "net", return_value=""), \
+             patch.object(self.pub.runtime, "verify_inputs", side_effect=lambda data: verify(data, self.root)), patch.object(self.pub, "load", return_value=builder), \
+             patch.object(update, "site_publisher", return_value=self.pub), patch.object(update.subprocess, "run", side_effect=command), \
+             patch.object(update, "git", side_effect=lambda root, *args: "" if args[0] == "add" else git(root, *args)):
+            with self.assertRaisesRegex(ValueError, "numbers"): update.publish(self.run.directory, dry_run=True)
+            prepared = update.publish(self.run.directory, dry_run=True, legacy_baseline_reason="11-07 首趟整站换版")
+            batch = read(prepared["batch"]); result = read(Path(prepared["batch"]).parent / "dry-run/publish-receipt.json")
+            self.assertEqual((batch["pages"], batch["page_count"], result["uploaded_files"]), ({}, 0, 0))
+            self.assertIn("首发用旧式基准：11-07", result["update_baseline"])
+            with self.assertRaises(ValueError):
+                self.pub.check_update_batch(batch, self.source, self.head, batch["manifest_sha256"], dict(baseline="published"))
+            predecessor.return_value = self.previous
+            with self.assertRaisesRegex(ValueError, "numbers"):
+                update.publish(self.run.directory, dry_run=True, legacy_baseline_reason="仍拒绝")
+            self.state["numbers"] = dict(status="committed", commit=self.head); write(self.run.directory / "state.json", self.state)
+            with self.assertRaisesRegex(ValueError, "没有本趟"):
+                update.publish(self.run.directory, dry_run=True, legacy_baseline_reason="仍拒绝")
+            self.state.pop("numbers"); self.state["pages"]["demo"]["merged_commit"] = self.head; write(self.run.directory / "state.json", self.state)
+            with self.assertRaisesRegex(ValueError, "numbers"):
+                update.publish(self.run.directory, dry_run=True, legacy_baseline_reason="仍拒绝")
+
     def test_drift_and_legacy_requirements(self):
         prior = deepcopy(self.previous); prior["input_fingerprints"] = self.source["input_fingerprints"]
         with self.assertRaisesRegex(ValueError, "Unchanged inputs"):
