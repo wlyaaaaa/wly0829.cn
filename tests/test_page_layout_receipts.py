@@ -47,8 +47,7 @@ class PageLayoutReceiptsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=ROOT.parent) as temp:
             finish = Mock()
             stubs = dict(verify_render_lock=lambda: None, load_registry=lambda: ({}, {}, [], []),
-                         build_css=lambda _: '', hydration_fingerprint=lambda: '', library_fingerprint=lambda: '',
-                         legacy_renderer_compatible=lambda _: False, sha=lambda _: 'hash', finish_page=finish,
+                         build_css=lambda _: '', sha=lambda _: 'hash', finish_page=finish,
                          prepare_page=Mock(side_effect=[SystemExit('bad screen'), ({}, {'screens': []}, [])]),
                          fix_dead_fragments=Mock(), write_layout_diff=Mock(), hydrate=Mock())
             with patch.multiple(render_blocks, **stubs, REPO=temp, SITE=temp, MD_DIR=temp, OUT_DIR=temp,

@@ -50,12 +50,14 @@ class PageAssetTests(unittest.TestCase):
                 first, second = {'asset': 'one.png'}, {'asset': 'two.png'}
                 before = [render.asset_fingerprint(v) for v in (first, second)]
                 build_before = [build.fingerprint(render.asset_dependencies(v)) for v in (first, second)]
-                keys = [render.screen_cache_key((assets / n).as_uri(), 'h', 'same') for n in ('one.png', 'two.png')]
+                def key(name):
+                    return render.screen_cache_key(render.cache_input({'screen': {'id': 'one'}, 'asset': name}, '', {}, (assets / name).as_uri(), []), 'h')
+                keys = [key(n) for n in ('one.png', 'two.png')]
                 old = render.publish_path(str(assets / 'one.png'))
                 (assets / 'one.png').write_bytes(b'new')
                 self.assertEqual([a != render.asset_fingerprint(v) for a, v in zip(before, (first, second))], [True, False])
                 self.assertEqual([a != build.fingerprint(render.asset_dependencies(v)) for a, v in zip(build_before, (first, second))], [True, False])
-                self.assertEqual([a != render.screen_cache_key((assets / n).as_uri(), 'h', 'same') for a, n in zip(keys, ('one.png', 'two.png'))], [True, False])
+                self.assertEqual([a != key(n) for a, n in zip(keys, ('one.png', 'two.png'))], [True, False])
                 new = render.publish_path(str(assets / 'one.png'))
                 self.assertNotEqual(old, new)
                 self.assertEqual([(public / u.lstrip('/')).read_bytes() for u in (old, new)], [b'old', b'new'])
