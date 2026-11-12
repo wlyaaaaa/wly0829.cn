@@ -1,10 +1,12 @@
 """Portable screen identity, complete resources and zero-measurement migration."""
 import hashlib
 import json
+import os
 import re
 import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 
@@ -71,9 +73,147 @@ def restore_assets(result, source_work, public, sha, target_work=None):
         source = Path(source_work, '_assets', relative)
         target = Path(target_work or source_work, '_assets', relative) if url.startswith('/assets/_source/') else Path(public, relative)
         if target.exists() and sha(target) == checksum: continue
-        if sha(source) != checksum: raise ValueError('Cached asset checksum mismatch: ' + url)
+        if not source.is_file() or sha(source) != checksum:
+            source = ArtifactStore().objects / checksum
+        if not source.is_file() or sha(source) != checksum:
+            raise ValueError('Cached asset checksum mismatch: ' + url)
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source, target)
+
+
+class ArtifactStore:
+    """Immutable content objects and retained manifests; CURRENT commits a snapshot."""
+    def __init__(self, root=None, snapshot=None):
+        self.root = Path(root or os.environ.get('SITE_ARTIFACT_STORE') or
+                         'E:/Cache/wly-site-build/artifact-store')
+        self.objects = self.root / 'objects'
+        self.verified = set()
+        self.snapshot = snapshot
+
+    @staticmethod
+    def sha(path):
+        with Path(path).open('rb') as stream:
+            return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+    def object(self, checksum):
+        if not re.fullmatch('[a-f0-9]{64}', checksum): raise ValueError('Invalid artifact hash')
+        path = self.objects / checksum
+        if checksum not in self.verified:
+            if self.sha(path) != checksum: raise ValueError('Artifact checksum mismatch: ' + checksum)
+            self.verified.add(checksum)
+        return path
+
+    def atomic(self, target, value):
+        target.parent.mkdir(parents=True, exist_ok=True)
+        fd, name = tempfile.mkstemp(dir=target.parent, suffix='.tmp')
+        try:
+            with os.fdopen(fd, 'wb') as stream:
+                if isinstance(value, Path):
+                    with value.open('rb') as source: shutil.copyfileobj(source, stream)
+                else: stream.write(value)
+            os.replace(name, target)
+        finally:
+            Path(name).unlink(missing_ok=True)
+
+    def put(self, value, checksum=None):
+        actual = self.sha(value) if isinstance(value, Path) else hashlib.sha256(value).hexdigest()
+        if checksum and actual != checksum: raise ValueError('Artifact source checksum mismatch: ' + str(value))
+        checksum = checksum or actual
+        target = self.objects / checksum
+        if not target.is_file() or (checksum not in self.verified and self.sha(target) != checksum):
+            self.atomic(target, value)
+        self.object(checksum)
+        return checksum
+
+    def manifest(self):
+        pointer = self.root / 'CURRENT'
+        if not self.snapshot and not pointer.is_file():
+            return {'schema': 'wly.render-artifacts.v1', 'screens': {}, 'index': {}, 'rendered': {}}
+        checksum = self.snapshot or pointer.read_text('ascii').strip()
+        value = json.loads(self.object(checksum).read_text('utf8'))
+        if value['schema'] != 'wly.render-artifacts.v1': raise ValueError('Unsupported render artifacts')
+        return value
+
+    def save(self, site, work):
+        site, work = Path(site), Path(work)
+        if not (work / '_cache.json').is_file(): return {'screens': 0, 'rendered': 0}
+        manifest = self.manifest()
+        cache = json.loads((work / '_cache.json').read_text('utf8'))
+        index = json.loads((work / '_index.json').read_text('utf8'))
+        active = {row['key'] for row in index.values()} & cache.keys()
+        for key in sorted(active):
+            result = cache[key]
+            for url, checksum in result.get('assets', {}).items():
+                # Each version keeps its own bytes even when a public URL is reused.
+                if (self.objects / checksum).is_file():
+                    try: self.object(checksum); continue
+                    except ValueError: pass
+                source = work / '_assets' / url.lstrip('/')
+                if not source.is_file(): source = site / 'public' / url.lstrip('/')
+                self.put(source, checksum)
+            manifest['screens'][key] = self.put(json.dumps(result, ensure_ascii=False).encode('utf8'))
+        manifest['index'] = {name: row for name, row in index.items() if row['key'] in active}
+        manifest['rendered'] = {path.name: self.put(path) for path in sorted((site / 'src/content/rendered').glob('*.json'))}
+        identity = site.parent / 'dist/release-identity.json'
+        manifest['build_identity'] = json.loads(identity.read_text('utf8')) if identity.is_file() else None
+        body = json.dumps(manifest, ensure_ascii=False, sort_keys=True).encode('utf8')
+        checksum = self.put(body)
+        self.atomic(self.root / 'manifests' / (checksum + '.json'), body)
+        self.atomic(self.root / 'CURRENT', (checksum + '\n').encode('ascii'))
+        return {'snapshot': checksum, 'screens': len(active), 'rendered': len(manifest['rendered'])}
+
+    def restore(self, site, work):
+        site, work = Path(site), Path(work)
+        manifest = self.manifest(); fetched = {}; missing = 0
+        for key, checksum in manifest['screens'].items():
+            try:
+                result = json.loads(self.object(checksum).read_text('utf8'))
+                for asset_sha in result.get('assets', {}).values(): self.object(asset_sha)
+            except (OSError, ValueError):
+                missing += 1; continue  # A missing screen is left for the normal renderer.
+            fetched[key] = result
+        cache_path = work / '_cache.json'
+        local = json.loads(cache_path.read_text('utf8')) if cache_path.is_file() else {}
+        checked = {}
+        def available(url, checksum):
+            candidates = [work / '_assets' / url.lstrip('/'), self.objects / checksum]
+            if not url.startswith('/assets/_source/'): candidates.append(site / 'public' / url.lstrip('/'))
+            for path in candidates:
+                if path not in checked: checked[path] = self.sha(path) if path.is_file() else None
+                if checked[path] == checksum: return True
+            return False
+        local = {key: result for key, result in local.items()
+                 if all(available(url, sha) for url, sha in result.get('assets', {}).items())}
+        library = dict(fetched); fetched.update(local)
+        if fetched or cache_path.is_file():
+            self.atomic(cache_path, json.dumps(fetched, ensure_ascii=False).encode('utf8'))
+            index_path = work / '_index.json'
+            index = {name: row for name, row in manifest['index'].items() if row['key'] in fetched}
+            if index_path.is_file(): index.update(json.loads(index_path.read_text('utf8')))
+            self.atomic(index_path, json.dumps(index, ensure_ascii=False).encode('utf8'))
+            assets = {}
+            for row in manifest['index'].values():
+                if row['key'] in library: assets.update(library[row['key']].get('assets', {}))
+            for url, checksum in assets.items():
+                relative = Path(url.lstrip('/'))
+                if not url.startswith(('/assets/', '/_living/')) or '..' in relative.parts:
+                    raise ValueError('Invalid cached asset URL: ' + url)
+                target = work / '_assets' / relative
+                if not target.is_file(): self.atomic(target, self.object(checksum))
+                if not url.startswith('/assets/_source/'):
+                    target = site / 'public' / relative
+                    if not target.is_file(): self.atomic(target, self.object(checksum))
+        restored = 0
+        for name, checksum in manifest['rendered'].items():
+            if Path(name).name != name: raise ValueError('Invalid rendered artifact name')
+            target = site / 'src/content/rendered' / name
+            md = site / 'src/content/pages' / Path(name).with_suffix('.md')
+            if target.is_file() or not md.is_file(): continue
+            try: source = self.object(checksum)
+            except (OSError, ValueError): continue
+            if json.loads(source.read_text('utf8')).get('render_md_sha256') != markdown_render_sha(md): continue
+            self.atomic(target, source); restored += 1
+        return {'screens': len(fetched) - len(local), 'missing': missing, 'rendered': restored}
 
 
 def migrate_cache(source, jobs, cache, renderer):
