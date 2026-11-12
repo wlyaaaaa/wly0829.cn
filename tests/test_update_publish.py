@@ -38,12 +38,9 @@ class UpdatePublishTests(unittest.TestCase):
         self.previous["_build_files"] = {name: dict(sha256=self.pub.oss.digest(self.dist / name)) for name in ("release-manifest.json", "release-identity.json")}
         self.previous["oss"]["verification"] = dict(complete=True, objects={rel: dict(status="pass", http=200, **row) for rel, row in self.source["oss"]["objects"].items()})
         self.folder = self.run.directory / "publish-test"; self.folder.mkdir()
-        scope = read(self.run.directory / "scope.json"); stamp = scope["sources"]["example/source"]
         self.batch = dict(run_id=self.state["run_id"], batch_id=self.folder.name, source_commit=self.head, release_id=self.source["release_id"],
-            manifest_sha256=self.pub.oss.digest(self.dist / "release-manifest.json"), pages={p: dict(route=f"/projects/{p}/", merged_commit=self.head,
-            checked_sources={"example/source": dict(commit=stamp["commit"], time=stamp["observed_at"], materials_path="scope.json")}) for p in ("demo", "child")},
+            manifest_sha256=self.pub.oss.digest(self.dist / "release-manifest.json"), pages={p: dict(route=f"/projects/{p}/", merged_commit=self.head) for p in ("demo", "child")},
             allowed_routes=["/projects/demo/", "/projects/child/"], legacy_baseline_reason=None)
-        write(self.folder / "batch.json", self.batch); self.state["publication_batch"] = "publish-test/batch.json"
         write(self.run.directory / "state.json", self.state)
 
     def test_actual_dry_run_and_readback_only_advance_merged_pages(self):
@@ -79,12 +76,14 @@ class UpdatePublishTests(unittest.TestCase):
                 with self.assertRaises(ValueError): update.confirm_publication(self.run.directory, receipt)
                 self.assertEqual(self.run.load()["pages"]["demo"]["status"], "ready")
                 write(self.root / "sources/refresh/registry.json", dict(records=[dict(id=p, page=p, current_value=0) for p in ("demo", "child", "learning")]))
-                write(self.folder / "freshness.json", dict(registry_pending=[dict(id=p, page=p, new_value=1) for p in ("demo", "child", "learning")]))
-                write(receipt, proof); update.confirm_publication(self.run.directory, receipt)
+                git(self.root, "add", "-f", "sources/refresh/registry.json"); git(self.root, "commit", "-qm", "fixture registry")
+                self.batch["registry_pending"] = [dict(id=p, page=p, new_value=1) for p in ("demo", "child", "learning")]; write(self.folder / "batch.json", self.batch)
+                proof["update_batch"] = self.batch; write(receipt, proof); update.confirm_publication(self.run.directory, receipt); update.confirm_publication(self.run.directory, receipt)
         self.assertEqual([r["current_value"] for r in read(self.root / "sources/refresh/registry.json")["records"]], [1, 1, 0])
         book = update.Ledger(self.root).read("project-demo")
         self.assertEqual(set(p for p, r in book["pages"].items() if r["checked_sources"]["example/source"]["commit"] == self.head), {"demo", "child"})
         self.assertEqual(self.run.load()["pages"]["learning"]["status"], "ready")
+        self.assertEqual(git(self.root, "status", "--porcelain"), "")
 
     def test_drift_and_legacy_requirements(self):
         prior = deepcopy(self.previous); prior["input_fingerprints"] = self.source["input_fingerprints"]

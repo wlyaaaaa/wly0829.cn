@@ -106,7 +106,7 @@ def load(name, directory=ROOT/'scripts'):
 oss, retention, word_policy = load('prepare-oss-release'), load('oss-retention'), load('site_public_words')
 runtime = load('build_runtime', ROOT/'site-astro/tools')
 
-def check_input_proofs(dist, source, previous, build, source_commit):
+def check_input_proofs(dist, source, previous, build, source_commit, verify_source=True):
     value = source.get('input_fingerprints')
     if not value or value != build.get('input_fingerprints') or build.get('status') != 'built':
         raise ValueError('Manifest input fingerprints differ from the successful build receipt')
@@ -126,7 +126,7 @@ def check_input_proofs(dist, source, previous, build, source_commit):
             raise ValueError('Unbuilt or invalid input fingerprint: '+rel)
         if rel not in {oss.MANIFEST, 'release-identity.json'} and row.get('output_sha256') != oss.digest(dist/rel):
             raise ValueError('Built output differs from its input proof: '+rel)
-    runtime.verify_inputs(value)
+    if verify_source: runtime.verify_inputs(value)
     result = runtime.reconcile(dist, value, previous or {})
     if result['drift']: raise ValueError('Unchanged inputs produced changed output: '+', '.join(result['drift']))
     return result

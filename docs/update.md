@@ -76,6 +76,5 @@
 - `python -B -X utf8 tools/update.py merge --run-dir <本次目录>`：只合入三关全过且草稿未再改动的 `drafts/<页名>/`；正文、摆法、素材行和数字定位一起提交，账中同能力的页同进同退。未合页的草稿与原因留原处，下次范围优先列出；结果在 `merge.json`。
 - `python -B -X utf8 scripts/content-refresh/checks.py --input 本次目录/检查输入.json --out 本次目录/页检查.json`：只查输入中本次改页的未填模板、同值与加总关系、屏字数增长；输入和逐页回执见 [检查接口](../scripts/content-refresh/README.md#本次改页的程序检查)，超过三成只提醒。
 - `publish --run-dir <本次目录> --dry-run`：首页重画先提交、整站构建、对账及扫描后预演；正式发布去掉`--dry-run`，同包预演后上传、发布、回读，成功才记账。仅首趟旧式基线加`--legacy-baseline-reason <整站换版理由>`，回执记“首发用旧式基准”；`--confirm <本趟live/publish-receipt.json>`在中断后只补记本趟账。
-- 试建、看屏：待 f3、f6 补。派单模板在私有伴随库 `docs/update-templates/`。
 ## 改动记录
 - 2026-11-12：由五处旧规矩换成这一页（旧条目去向表在施工记录里，不进仓库）。
