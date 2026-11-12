@@ -96,16 +96,65 @@ class BlockToolTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, '装不下'):
             self.write(doc, [dict(block=self.block(doc, '乙'), action='其后加', text='很长的新内容。'*30)])
 
-    def test_missing_or_ambiguous_registered_number_is_rejected(self):
+    def test_changed_or_ambiguous_registered_number_is_rejected(self):
         doc = self.export()
-        with self.assertRaisesRegex(ValueError, '登记数'):
-            self.write(doc, [dict(block=self.block(doc, '乙'), action='改成', text='乙段落，没有数量。')])
-        for text in ('乙段落，项目有 12 项。乙段落，项目有 12 项。', '重写后是 12。也可以是 12。'):
+        for text in ('乙段落，项目有 34 项。', '乙段落，项目有 12 项。乙段落，项目有 12 项。', '重写后是 12。也可以是 12。'):
             with self.assertRaisesRegex(ValueError, '登记数'):
                 self.write(doc, [dict(block=self.block(doc, '乙'), action='改成', text=text)])
         self.registry['records'][0]['page_pattern'] = r'(段落)'
         tool.save(self.root/self.files[2], self.registry)
         with self.assertRaisesRegex(ValueError, '登记数'): self.export()
+
+    def test_deleted_sentence_retires_number_and_keeps_other_pages(self):
+        doc = self.export()
+        for edit in (dict(block=self.block(doc, '乙'), action='删'),
+                     dict(block=self.block(doc, '乙'), action='改成', text='乙段落，没有数量。')):
+            draft = self.write(doc, [edit])
+            row = tool.read(draft/self.files[2])['records'][0]
+            self.assertTrue(row['historical'])
+            self.assertEqual(row['retired_reason'], '随句删除')
+            self.assertEqual(list(tool.number_rows({'records': [row]}, 'sample', self.page)), [])
+            self.assertEqual(tool.read(self.root/self.files[2]), self.registry)
+        self.registry['records'].append(dict(id='foreign', page='other', relations=[dict(kind='equal', record_ids=['quantity'])]))
+        tool.save(self.root/self.files[2], self.registry)
+        draft = self.write(self.export(), [dict(block=self.block(doc, '乙'), action='删')])
+        rows = tool.read(draft/self.files[2])['records']
+        self.assertEqual(rows[1], self.registry['records'][1])
+        self.assertEqual(tool.read(draft/'draft.json')['retired_numbers'][0]['dependencies'],
+                         [dict(page='other', record_id='foreign')])
+
+    def test_status_and_link_actions_share_the_draft(self):
+        self.page['status_line'] = dict(state='偶尔用', last=dict(at='2026-11-01'), facts=['3 次'])
+        self.page['screens'][0]['links'] = [dict(text='旧', href='/old/')]
+        self.registry['records'].append(dict(id='last', page='sample', field='status_line.last.at'))
+        for file, value in zip(self.files, [self.page, self.layout, self.registry]): tool.save(self.root/file, value)
+        doc = self.export()
+        self.assertEqual(doc['fields']['status_line'], self.page['status_line'])
+        edits = [dict(field='status_line', action='改成', value=dict(state='偶尔用')),
+                 dict(field='screens[0].links', action='改成', value=[dict(text='新', href='/new/')]),
+                 dict(field='screens[0].links', action='其后加', value=[dict(text='再加', href='/added/')])]
+        draft = self.write(doc, edits); page = tool.read(draft/self.files[0])
+        self.assertEqual(page['status_line'], dict(state='偶尔用'))
+        self.assertEqual([r['href'] for r in page['screens'][0]['links']], ['/new/', '/added/'])
+        self.assertEqual(tool.read(draft/self.files[2])['records'][1]['retired_reason'], '随句删除')
+        draft = self.write(doc, [dict(field='status_line', action='删'), dict(field='screens[0].links', action='删')])
+        page = tool.read(draft/self.files[0])
+        self.assertNotIn('status_line', page)
+        self.assertNotIn('links', page['screens'][0])
+
+    def test_partial_summary_deletion_and_shorter_date_keep_their_meaning(self):
+        self.assertTrue(tool.number_removed('共 12 项，另有 3 项。', '共 12 项。', 0, 15))
+        self.assertFalse(tool.number_removed('项目有 12 项。', '项目共 34 项。', 4, 6))
+        self.page['screens'][0]['text'] = self.page['screens'][0]['text'].replace('项目有 12 项', '11 月 06 日 14:26 核对')
+        self.registry['records'][0]['page_pattern'] = r'(11 月 06 日 14:26) 核对'
+        for file, value in zip(self.files, [self.page, self.layout, self.registry]): tool.save(self.root/file, value)
+        doc = self.export()
+        draft = self.write(doc, [dict(block=self.block(doc, '乙'), action='改成', text='乙段落，11 月 6 日核对。')])
+        row = tool.read(draft/self.files[2])['records'][0]
+        text = tool.read(draft/self.files[0])['screens'][0]['text']; a, b = tool.locate(text, row)
+        self.assertEqual(text[a:b], '11 月 6 日')
+        self.assertEqual(row['date_precision'], 'date')
+        self.assertNotIn('retired_reason', row)
 
     def test_measured_capacity_can_exceed_existing_copy_length(self):
         capacities = {f'sample-01/{o}/{i}': 300 for o in ('h', 'v') for i in range(3)}
