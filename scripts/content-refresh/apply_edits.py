@@ -1,4 +1,5 @@
 """只生成和应用已核验位置的数字、日期替换；不写叙述内容。"""
+from editorial_ledger import atomic_write_bytes, atomic_write_text
 import argparse
 from collections import defaultdict
 from datetime import date, datetime, timedelta, timezone
@@ -622,7 +623,7 @@ def apply_edits(root, payload, only=None, converter=None):
             report["already_applied"] += file_already
             if changed:
                 rendered = json.dumps(page, ensure_ascii=False, indent=2) + "\n"
-                path.write_text(rendered, encoding="utf-8", newline="\r\n" if "\r\n" in path.read_bytes().decode("utf-8-sig") else "\n")
+                atomic_write_text(path, rendered, encoding="utf-8", newline="\r\n" if "\r\n" in path.read_bytes().decode("utf-8-sig") else "\n")
                 report["applied"] += file_applied
                 for page_name, count in file_counts.items():
                     applied_by_page[page_name] += count
@@ -728,11 +729,11 @@ def apply_edits(root, payload, only=None, converter=None):
                 failed_ids = {r["id"] for r in successful if r["page"] in failed_dated}
                 current["records"] = [original.get(r["id"], r) if r["id"] in failed_ids else r
                                       for r in current["records"]]
-                registry_path.write_text(json.dumps(current, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                atomic_write_text(registry_path, json.dumps(current, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
                 report["registry_sync"]["records"] = [rid for rid in report["registry_sync"]["records"]
                                                        if rid not in failed_ids]
                 for page in failed_dated:
-                    (root / f"site-astro/src/content/pages/{page}.md").write_bytes(markdown_before[page])
+                    atomic_write_bytes(root / f"site-astro/src/content/pages/{page}.md", markdown_before[page])
                     for item in report["markdown_readback"]:
                         if item["page"] == page:
                             item["sha256"] = sha256(markdown_before[page]).hexdigest()
@@ -746,7 +747,7 @@ def apply_edits(root, payload, only=None, converter=None):
         files = set(report["changed_files"]) | {"sources/refresh/registry.json"}
         files.update(f"site-astro/src/content/pages/{r['page']}.md" for r in report["markdown_readback"])
         report["files_sha256"] = {f: sha256((root / f).read_bytes()).hexdigest() for f in sorted(files) if (root / f).is_file()}
-        (update_run / "numbers/apply-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+        atomic_write_text(update_run / "numbers/apply-report.json", json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     return report
 
 
@@ -760,7 +761,7 @@ def main(argv=None):
     payload = json.loads(args.edits.read_text(encoding="utf-8-sig"))
     report = apply_edits(args.root, payload, set(args.only.split(",")) if args.only else None)
     receipt = args.report or args.edits.with_name("apply-report.json")
-    receipt.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    atomic_write_text(receipt, json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     card = dict(status="applied" if not report["skipped"] else "incomplete", run_id=report.get("run_id"),
                 applied=report.get("applied"), already_applied=report.get("already_applied"),
                 counts={key: report.get(key) for key in ("applied", "already_applied")}

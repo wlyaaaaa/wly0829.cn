@@ -385,7 +385,7 @@ def publish(args):
     try:
         hits = step('public_word_gate', lambda: scan_public_words(args.dist))
         blocking = [hit for hit in hits if not (getattr(args, 'defer_source_word_cleanup', False) and hit['scope'] == 'source')]
-        (output/'word-check.json').write_text(json.dumps({'hits': hits, 'blocking_hits': blocking,
+        runtime.atomic_write_text(output/'word-check.json', json.dumps({'hits': hits, 'blocking_hits': blocking,
             'source_cleanup_deferred': getattr(args, 'defer_source_word_cleanup', False)}, ensure_ascii=False, indent=2), 'utf-8')
         if blocking:
             raise ValueError(f'Public word gate blocked {len(blocking)} occurrence(s); see {output / "word-check.json"}; '
@@ -623,7 +623,7 @@ if __name__ == '__main__':
         blocking = [hit for hit in hits if not (options.defer_source_word_cleanup and hit['scope'] == 'source')]
         if options.output:
             options.output.mkdir(parents=True, exist_ok=True)
-            (options.output/'word-check.json').write_text(json.dumps({'hits': hits, 'blocking_hits': blocking,
+            runtime.atomic_write_text(options.output/'word-check.json', json.dumps({'hits': hits, 'blocking_hits': blocking,
                 'source_cleanup_deferred': options.defer_source_word_cleanup}, ensure_ascii=False, indent=2), 'utf-8')
         print(json.dumps({'status': 'blocked' if blocking else 'source_cleanup_deferred' if hits else 'pass',
                          'hits': len(hits), 'blocking_hits': len(blocking), 'first_hits': blocking[:3],

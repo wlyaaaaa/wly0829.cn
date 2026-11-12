@@ -9,7 +9,7 @@ from pathlib import Path
 import re
 import runpy
 import sys
-from editorial_ledger import stage_reviews
+from editorial_ledger import atomic_write_text, stage_reviews
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src/typeset"))
 
@@ -104,7 +104,7 @@ def sync_registry(path, rows):
         record["observed_at"] = row.get("source_observed_at")
         changed.append(record["id"])
     if changed:
-        path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+        atomic_write_text(path, json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
         actual = {r["id"]: r for r in json.loads(path.read_text(encoding="utf-8-sig"))["records"]}
         if any(actual[rid]["current_value"] != updates[rid]["new_value"] for rid in changed):
             raise ValueError("来源登记同步回读不一致")

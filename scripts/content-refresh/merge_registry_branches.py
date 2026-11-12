@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Merge refresh registries by identity; missing identities never mean deletion."""
+from editorial_ledger import atomic_write_text
 import argparse
 import json
 import subprocess
@@ -132,12 +133,12 @@ def main():
     serialized = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
-        args.report.write_text(serialized, encoding="utf-8", newline="\n")
+        atomic_write_text(args.report, serialized, encoding="utf-8", newline="\n")
     print(serialized, end="")
     if report["conflicts"]:
         return 1
     for path, document in outputs.items():
-        (repo / path).write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+        atomic_write_text(repo / path, json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     return 0
 
 

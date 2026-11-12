@@ -1,4 +1,5 @@
 """更新专用编号块：export 导出，write 生成草稿；合入由 update.py 接三关。"""
+from editorial_ledger import atomic_write_bytes, atomic_write_text
 import argparse
 from copy import deepcopy
 from difflib import SequenceMatcher
@@ -20,7 +21,7 @@ TEXT = {'prose', 'content_card', 'feature_card', 'dialogue', 'bullet_list', 'ste
 def read(path): return json.loads(Path(path).read_text('utf-8-sig'))
 def save(path, value):
     path = Path(path); path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
+    atomic_write_text(path, json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
 def at(value, path):
     for key in path: value = value[key]
     return value
@@ -304,16 +305,16 @@ def write_draft(root, document, edits, run_dir):
         payloads[file] = original if read(root/file) == value or not changed else (json.dumps(value, ensure_ascii=False, indent=2)+'\n').encode('utf8')
     draft = run_dir/slug; draft.mkdir(parents=True, exist_ok=True)
     for file, payload in payloads.items():
-        dest = draft/file; dest.parent.mkdir(parents=True, exist_ok=True); dest.write_bytes(payload)
+        dest = draft/file; dest.parent.mkdir(parents=True, exist_ok=True); atomic_write_bytes(dest, payload)
     base = dict(document['base']); asset = f'sources/assets/{slug}/manifest.jsonl'
     if (root/asset).is_file():
         raw = (root/asset).read_bytes(); dest = draft/asset; dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_bytes(raw); base[asset] = sha256(raw).hexdigest(); payloads[asset] = raw
+        atomic_write_bytes(dest, raw); base[asset] = sha256(raw).hexdigest(); payloads[asset] = raw
     manifest = dict(page=slug, base=base, files=list(payloads), registry_base=base_rows)
     asset_map = 'sources/assets/_library/asset-map.jsonl'
     if (root/asset_map).is_file():
         lines = [line for line in (root/asset_map).read_bytes().splitlines(True) if line.strip() and json.loads(line).get('page') == slug]
-        dest = draft/asset_map; dest.parent.mkdir(parents=True, exist_ok=True); dest.write_bytes(b''.join(lines))
+        dest = draft/asset_map; dest.parent.mkdir(parents=True, exist_ok=True); atomic_write_bytes(dest, b''.join(lines))
         manifest.update(asset_base=[json.loads(line) for line in lines], files=manifest['files']+[asset_map])
     save(draft/'draft.json', manifest)
     return draft

@@ -26,7 +26,7 @@ from validation import LEDGER, validate_entries, validate_method, registry_error
 from apply_edits import qualified_date_review, proven_offset
 from freshness import cadence, metadata, review_tasks, semantic_due, close_run, now
 from selection import Selection
-from editorial_ledger import read_reviews
+from editorial_ledger import atomic_write_text, read_reviews
 
 ROOT = Path(__file__).resolve().parents[2]
 REPOSITORY_RECEIPTS = Path('E:/Cache/content-refresh/repository-checks')
@@ -714,7 +714,7 @@ def main():
             return 2
         destination = args.output or args.close_run.parent
         destination.mkdir(parents=True, exist_ok=True)
-        (destination / "closure.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+        atomic_write_text(destination / "closure.json", json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
         short_card(result["status"], destination / "closure.json", {"pending": result.get("pending", 0), "excluded": len(result.get("excluded", []))},
                    [o for o in result.get("rows", []) if o.get("status") in {"pending", "manual_pending"}], result.get("run_id"))
         return 0 if result["status"] == "closed" else 2
@@ -746,7 +746,7 @@ def main():
     repository_summary = {k: repositories[k] for k in ('status', 'counts', 'warnings')}
     try:
         private_output.mkdir(parents=True, exist_ok=True)
-        repository_receipt.write_text(json.dumps(repositories, ensure_ascii=False, indent=2), encoding='utf8')
+        atomic_write_text(repository_receipt, json.dumps(repositories, ensure_ascii=False, indent=2), encoding='utf8')
         repository_summary['receipt'] = str(repository_receipt)
     except OSError as error:
         repository_summary.update(status='unavailable', receipt=None)
@@ -803,10 +803,10 @@ def main():
     from apply_edits import build_number_edits
     edits = build_number_edits(args.root, result)
     result["number_edit_manual_reviews"] = edits["manual_reviews"]
-    (output / "number-edits.json").write_text(json.dumps(edits, ensure_ascii=False, indent=2), encoding="utf-8")
+    atomic_write_text(output / "number-edits.json", json.dumps(edits, ensure_ascii=False, indent=2), encoding="utf-8")
     task = task_text(result, registry)
-    (output / "opus-task.md").write_text(task, encoding="utf-8")
-    (output / "result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    atomic_write_text(output / "opus-task.md", task, encoding="utf-8")
+    atomic_write_text(output / "result.json", json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     counts = {status: sum(r["status"] == status for r in result["rows"]) for status in
               ("changed", "unchanged", "unavailable", "historical", "excluded", "manual_review", "domain_fact_task", "scope_pending")}
     counts.update(numbers=result["numbers_checked"], applicable=len(edits["edits"]), skipped=len(edits["skipped"]),
@@ -820,13 +820,13 @@ def main():
         card("checked", output / "result.json", counts, failures, result.get("run_id"))
         return 0
     content = output / "report-content.json"
-    content.write_text(json.dumps(report_content(result, task, output / "opus-task.md"), ensure_ascii=False), encoding="utf-8")
+    atomic_write_text(content, json.dumps(report_content(result, task, output / "opus-task.md"), ensure_ascii=False), encoding="utf-8")
     html = output / "result.html"
     try:
         receipt = json.loads(bounded(["pwsh", "-NoProfile", "-File",
             "E:/.agents/skills/report-page/scripts/New-ReportPage.ps1", "-ContentPath", str(content),
             "-OutputPath", str(html), "-NoOpen", "-KeepDays", "0"], 180))
-        (output / "report-receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2), encoding="utf-8")
+        atomic_write_text(output / "report-receipt.json", json.dumps(receipt, ensure_ascii=False, indent=2), encoding="utf-8")
         if (not html.is_file() or receipt.get("status") != "created" or receipt.get("opened") is not False
                 or receipt.get("checks", {}).get("passed") is not True
                 or Path(receipt.get("path", "")).resolve() != html.resolve()):

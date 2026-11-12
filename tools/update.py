@@ -11,7 +11,7 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts/content-refresh"))
-from editorial_ledger import Ledger
+from editorial_ledger import Ledger, atomic_write_bytes, atomic_write_text
 from block_tool import asset_rows, draft_updates
 from update_gates import GATES, Run, draft_hash, git, locked, now, protected_inputs, read, timestamp, write
 from update_numbers import numbers, require_numbers
@@ -140,7 +140,7 @@ def start(root, directory, requested_at, projects=(), pages=(), scope=None, numb
     lines = ["# 一道多选题", "", "以下变化哪些要上站或调整去向？可多选；未选的继续保留现状，新页另开一件活。", ""]
     labels = dict(new_repositories="新仓库", missing_projects="登记项目未找到", new_skills="新技能")
     lines += [f"- [ ] {labels[kind]}：{item}" for kind, items in question.items() for item in items]
-    (directory / "questions.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    atomic_write_text(directory / "questions.md", "\n".join(lines) + "\n", encoding="utf-8")
     state = dict(schema="wly.update-run.v1", status="open" if selected else "no-changes", run_id=uuid.uuid4().hex, root=str(root), requested_at=requested_at,
                  cutoff=cutoff, deadline=deadline, first_pass=first_pass, scope="scope.json", events=[],
                  protected_inputs=protected_inputs(root),
@@ -220,7 +220,7 @@ def merge(directory):
         commit = git(root, "rev-parse", "HEAD")
         try:
             for f, raw in changed.items():
-                target = root / f; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(raw)
+                target = root / f; target.parent.mkdir(parents=True, exist_ok=True); atomic_write_bytes(target, raw)
             if changed:
                 git(root, "add", "--", *changed)
                 git(root, "commit", "-m", "Merge accepted page drafts", "-m", "变化：过关草稿进入作者源，未过页保留原内容。")
@@ -230,7 +230,7 @@ def merge(directory):
             finally:
                 for f, raw in before.items():
                     if raw is None: (root / f).unlink(missing_ok=True)
-                    else: (root / f).write_bytes(raw)
+                    else: atomic_write_bytes(root / f, raw)
             raise
         for p in allowed: state["pages"][p].update(merged_commit=commit, draft=str(candidates[p]))
         carry_file = store.companion / "files/update-dropped.json"
