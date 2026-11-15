@@ -2,6 +2,7 @@
 """Synthetic OSS logs only. Run: python -B -X utf8 tools/test-query-site-visitors.py"""
 from datetime import date, datetime, timedelta
 import importlib.util
+import io
 import json
 from pathlib import Path
 import subprocess
@@ -356,7 +357,7 @@ class VisitorTests(unittest.TestCase):
                                    ("connect", "upstream", OSError(10061, "secret-value"))):
             with self.subTest(phase=phase, side=side, error=type(error).__name__):
                 tunnel = query.SlsTunnel.__new__(query.SlsTunnel)
-                tunnel.path, tunnel.connection = "cn-shanghai.log.aliyuncs.com:443", Mock()
+                tunnel.path, tunnel.connection = query.SLS_ENDPOINT + ":443", Mock()
                 tunnel.server = SimpleNamespace(sls_address="203.0.113.1", diagnostic_lock=query.Lock(), diagnostic_rows=[])
                 tunnel.send_response, tunnel.end_headers = Mock(), Mock()
                 remote = Mock(); remote.__enter__ = Mock(return_value=remote); remote.__exit__ = Mock(return_value=False)
@@ -380,6 +381,31 @@ class VisitorTests(unittest.TestCase):
                 query.cli_run(["aliyun", "sls", "GetLogsV2"], timeout=25, attempts=1)
         self.assertEqual(raised.exception.diagnostics[0]["subtype"], "process_timeout")
         self.assertIsNone(raised.exception.diagnostics[0]["returncode"])
+
+    def test_sls_dualstack_dns_prefers_ipv6_and_accepts_ipv4_only_answers(self):
+        for ipv6 in (True, False):
+            query.sls_address.cache_clear()
+            def resolve(url, **kwargs):
+                kind = 28 if "type=AAAA" in url else 1
+                rows = [{"type": kind, "data": "2001:db8::1" if kind == 28 else "203.0.113.1"}]
+                return io.BytesIO(json.dumps({"Answer": rows if ipv6 or kind == 1 else []}).encode())
+            with self.subTest(ipv6=ipv6), patch.object(query, "urlopen", side_effect=resolve) as dns:
+                self.assertEqual(query.sls_address(), "2001:db8::1" if ipv6 else "203.0.113.1")
+                self.assertIn("cn-shanghai.dualstack.log.aliyuncs.com", dns.call_args.args[0])
+        query.sls_address.cache_clear()
+
+    def test_sls_tunnel_retries_ipv4_when_ipv6_network_is_unavailable(self):
+        tunnel = query.SlsTunnel.__new__(query.SlsTunnel)
+        tunnel.path, tunnel.connection = query.SLS_ENDPOINT + ":443", Mock()
+        tunnel.server = SimpleNamespace(sls_address="2001:db8::1", diagnostic_lock=query.Lock(), diagnostic_rows=[])
+        tunnel.send_response, tunnel.end_headers = Mock(), Mock()
+        remote = Mock(); remote.__enter__ = Mock(return_value=remote); remote.__exit__ = Mock(return_value=False)
+        remote.recv.return_value = b""
+        with patch.object(query.socket, "create_connection", side_effect=[OSError(10051, "unreachable"), remote]) as connect, patch.object(query, "sls_address", return_value="203.0.113.1") as resolve, patch.object(query.select, "select", return_value=([remote], [], [])):
+            tunnel.do_CONNECT()
+        self.assertEqual([call.args[0] for call in connect.call_args_list], [("2001:db8::1", 443), ("203.0.113.1", 443)])
+        resolve.assert_called_once_with("A")
+        tunnel.send_response.assert_called_once_with(200, "Connection established")
 
     def test_cli_failure_snapshots_each_attempt_after_existing_relay_cleanup(self):
         relay, rows = Mock(server_port=12005), []

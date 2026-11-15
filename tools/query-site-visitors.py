@@ -31,6 +31,7 @@ from urllib.request import Request, urlopen
 TZ = timezone(timedelta(hours=8))
 BUCKET = "wly0829-access-logs-shanghai"
 SOURCE = "wly0829-img-media-shanghai"
+SLS_ENDPOINT = "cn-shanghai.dualstack.log.aliyuncs.com"
 PREFIX = "access/" + SOURCE + "/"
 TOKEN = re.compile(r'"((?:\\.|[^"\\])*)"|\[([^\]]*)\]|([^\s"\[\]]+)')
 BOT = re.compile(r"bot|crawl|spider|headless|curl|wget|python|probe|lighthouse|uptime|httpclient|scanner|playwright|puppeteer", re.I)
@@ -192,7 +193,7 @@ class SlsTunnel(BaseHTTPRequestHandler):
         pass
     def do_CONNECT(self):
         host, _, port = self.path.rpartition(":")
-        if port != "443" or not (host == "cn-shanghai.log.aliyuncs.com" or host.endswith(".cn-shanghai.log.aliyuncs.com")):
+        if port != "443" or not (host == SLS_ENDPOINT or host.endswith("." + SLS_ENDPOINT)):
             self.send_error(403)
             return
         started = time.monotonic()
@@ -205,7 +206,14 @@ class SlsTunnel(BaseHTTPRequestHandler):
             with self.server.diagnostic_lock:
                 row.update(values, elapsed_ms=round((time.monotonic() - started) * 1000))
         try:
-            with socket.create_connection((self.server.sls_address, 443), timeout=20) as remote:
+            try:
+                remote = socket.create_connection((self.server.sls_address, 443), timeout=5)
+            except OSError:
+                if ":" not in self.server.sls_address:
+                    raise
+                # Keep working on networks without IPv6; TLS and SNI stay in the CLI.
+                remote = socket.create_connection((sls_address("A"), 443), timeout=20)
+            with remote:
                 update(phase="relay", close_side="client")
                 self.send_response(200, "Connection established")
                 self.end_headers()
@@ -229,17 +237,22 @@ class SlsTunnel(BaseHTTPRequestHandler):
         finally:
             update()
 
-@lru_cache(maxsize=1)
-def sls_address():
+@lru_cache(maxsize=2)
+def sls_address(record_type="AAAA"):
     for attempt in range(3):
         try:
-            with urlopen("https://dns.google/resolve?name=cn-shanghai.log.aliyuncs.com&type=A", timeout=15) as response:
+            with urlopen(f"https://dns.alidns.com/resolve?name={SLS_ENDPOINT}&type={record_type}", timeout=8) as response:
                 answers = json.load(response).get("Answer", [])
-            addresses = [str(ipaddress.IPv4Address(row["data"])) for row in answers if row.get("type") == 1]
+            kind, address_type = (28, ipaddress.IPv6Address) if record_type == "AAAA" else (1, ipaddress.IPv4Address)
+            addresses = [str(address_type(row["data"])) for row in answers if row.get("type") == kind]
             if addresses:
                 return addresses[0]
+            if record_type == "AAAA":
+                return sls_address("A")
         except (OSError, ValueError):
             if attempt == 2:
+                if record_type == "AAAA":
+                    return sls_address("A")
                 raise CloudCommandError("DNS 解析失败", "无法解析 SLS 服务地址；未将连接失败当作零访客") from None
             time.sleep(attempt + 1)
     raise CloudCommandError("DNS 解析失败", "无法解析 SLS 服务地址；未将连接失败当作零访客")
@@ -292,7 +305,7 @@ def cli_run(command, *, timeout=None, attempts=None):
             try:
                 if is_sls and not prepared:
                     if any(address[4][0].startswith(("198.18.", "198.19."))
-                           for address in socket.getaddrinfo("cn-shanghai.log.aliyuncs.com", 443)):
+                           for address in socket.getaddrinfo(SLS_ENDPOINT, 443)):
                         address = sls_address()
                         relay = ThreadingHTTPServer(("127.0.0.1", 0), SlsTunnel)
                         relay.sls_address = address
@@ -417,7 +430,7 @@ def sls_logs(args, start, end, legacy_fallback=False):
                 "offset": 0 if deep_read and not cv_query else offset, "reverse": False}
         command = [args.aliyun, "sls", "GetLogsV2", "--project", args.sls_project,
                    "--logstore", args.sls_logstore, "--region", "cn-shanghai",
-                   "--endpoint", "cn-shanghai.log.aliyuncs.com", "--read-timeout", "20", "--connect-timeout", "10",
+                   "--endpoint", SLS_ENDPOINT, "--read-timeout", "20", "--connect-timeout", "10",
                    "--profile", args.profile, "--body", json.dumps(body)]
         attempts, diagnostics = (2 if deep_read else 3), []
         for attempt in range(attempts):
