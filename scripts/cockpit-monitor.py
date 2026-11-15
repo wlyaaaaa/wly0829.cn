@@ -23,7 +23,7 @@ def api_valid(data):
     return shaped and isinstance(stamp, (int, float)), stamp
 
 
-def probe(item, timeout=20):
+def _probe_once(item, timeout):
     name, url = item
     started = time.monotonic()
     row = {'name': name, 'url': url, 'http': None, 'bytes': 0}
@@ -59,15 +59,31 @@ def probe(item, timeout=20):
     return row
 
 
+def probe(item, timeout=8):
+    started = time.monotonic()
+    attempts = []
+    for _ in range(3):
+        row = _probe_once(item, timeout)
+        attempts.append({key: row[key] for key in ('http', 'bytes', 'seconds', 'error') if key in row})
+        if row.get('error') not in {'RemoteDisconnected', 'TimeoutError', 'URLError', 'ConnectionResetError',
+                                    'ConnectionAbortedError', 'SSLEOFError', 'IncompleteRead'}:
+            break
+    row['request_seconds'] = row['seconds']
+    row['seconds'] = round(time.monotonic() - started, 3)
+    row['attempts'] = attempts
+    row['bytes'] = sum(attempt['bytes'] for attempt in attempts)
+    return row
+
+
 def verdict(rows):
     control = next(row for row in rows if row['name'] == 'control')
-    if control['http'] != 200 or not control.get('valid') or control['seconds'] >= 8 or any(row.get('error') for row in rows):
+    if control['http'] != 200 or not control.get('valid') or control.get('request_seconds', control['seconds']) >= 8 or any(row.get('error') for row in rows):
         return 'unknown', '本机网络或目标链路未确认，未判为网站故障', 2
     if any(row['http'] != 200 or not row.get('valid') or row.get('invalid') for row in rows):
         return 'failed', '驾驶舱页面或主接口返回异常，请查看巡检回执', 1
     if any(row.get('fresh') is False for row in rows):
         return 'unknown', '接口有响应，但当前读数已过期', 2
-    if any(row['seconds'] >= 8 for row in rows):
+    if any(row.get('request_seconds', row['seconds']) >= 8 for row in rows):
         return 'unknown', '页面和接口可读但本机访问慢，未判为网站故障', 2
     return 'success', '驾驶舱页面和主接口可读，图片不在巡检范围', 0
 
