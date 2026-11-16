@@ -624,6 +624,7 @@ class OssReleaseTests(unittest.TestCase):
         first = oss.finalize_dist(self.source)
         preserved = (self.source/'index.html').read_bytes()
         old = first['oss']['objects']['assets/main.js']
+        old_dependency = first['oss']['objects']['assets/mod.js']
         target = self.source/'projects/demo/index.html'
         target.write_bytes(('<script src="'+old['url']+'"></script>').encode())
         (self.source/'assets/mod.js').write_bytes(b'console.log("changed dependency");')
@@ -635,6 +636,7 @@ class OssReleaseTests(unittest.TestCase):
         final = oss.finalize_dist(self.source, html_files=['projects/demo/index.html'])
         self.assertEqual((self.source/'index.html').read_bytes(), preserved)
         self.assertIn(old['key'], final['oss']['reference_keys'])
+        self.assertIn(old_dependency['key'], final['oss']['reference_keys'])
         current = final['oss']['objects']['assets/main.js']
         self.assertNotEqual(current['url'], old['url'])
         self.assertIn(current['url'].encode(), target.read_bytes())

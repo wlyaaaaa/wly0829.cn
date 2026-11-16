@@ -561,8 +561,9 @@ def build(pages=None, check_lock_only=False):
             raise ValueError('Frozen HTML changed beyond resource addresses: ' + relative)
     if not all((dist / route_file(route)).is_file() for route in snapshot['routes']): raise ValueError('Complete build lost a required route')
     stage('finish')
+    finalize_scope = ['--html-files', *sorted(route_file(route) for route in changed)] if requested is not None else []
     run(sys.executable, str(ROOT / 'scripts/prepare-oss-release.py'), 'finalize-dist', '--dist', str(dist),
-        '--source-commit', source_commit, '--html-files', *sorted(route_file(route) for route in changed), cwd=ROOT)
+        '--source-commit', source_commit, *finalize_scope, cwd=ROOT)
     inputs = input_fingerprints(dist, entries, old, changed, frozen, identity, runtime)
     runtime.verify_inputs(inputs, ROOT); runtime.seal_inputs(dist, inputs)
     reconciliation = runtime.reconcile(dist, inputs, runtime.published_manifest())

@@ -876,6 +876,15 @@ def inherited_assets(manifest):
     return objects, {alias: previous['oss']['verification']['objects'][original] for alias, original in mapping.items()}
 
 
+def preserved_resource_keys(manifest, html_files, base):
+    if html_files is None or not any(rel.endswith('.html') and rel not in html_files for rel in manifest['files']): return set()
+    previous = manifest.get('previous_oss', {})
+    if not oss_origins.same_bucket(previous.get('asset_base_url'), base): return set()
+    # Historical manifests lack per-object dependency edges. Keep their full
+    # resource generation while any of its HTML remains; full builds reset it.
+    return set(previous.get('reference_keys', ())) | {row['key'] for field in ('objects', 'local_objects') for row in previous.get(field, {}).values()}
+
+
 def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=8, previous_manifest=None, offline=False, html_files=None):
     source, output = Path(source).resolve(), Path(output).resolve()
     if output == source or output.is_relative_to(source) or source.is_relative_to(output):
@@ -929,6 +938,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     rewriter.changes.clear(); rewriter.references.clear(); rewriter.missing.clear()
     if offline:
         rewriter.absolute_references.clear()
+    rewriter.absolute_references.update(preserved_resource_keys(source_manifest, html_files, base))
     output.mkdir(parents=True)
     home_bytes,home_proof=measured('home', lambda: current_home_links(source,version=rewriter_version)) if html_files is None or 'index.html' in html_files else ((source/'index.html').read_bytes(), None)
     objects, github, virtual = {}, {}, {}
@@ -1096,6 +1106,7 @@ def verify_local(output, virtual=None):
         rewriter.asset_keys = plan['asset_keys']
         rewriter.changes.clear(); rewriter.references.clear(); rewriter.missing.clear(); rewriter.absolute_references.clear()
     html_files = plan.get('html_files')
+    rewriter.absolute_references.update(preserved_resource_keys(source_manifest, html_files, rewriter.base))
     home_bytes,home_proof=measured('home', lambda: current_home_links(source,version=plan.get('rewriter_version',1))) if html_files is None or 'index.html' in html_files else ((source/'index.html').read_bytes(), None)
     if (home_proof!=plan.get('home_entry_overlay')
             and (plan.get('home_entry_overlay') is not None or home_bytes!=(source/'index.html').read_bytes())):
@@ -1116,6 +1127,8 @@ def verify_local(output, virtual=None):
             raise ValueError('Binary bytes changed: ' + rel)
     if rewriter.changes != plan['url_changes'] or rewriter.missing:
         raise ValueError('URL change log/closure is not reproducible')
+    if html_files is not None and sorted(rewriter.absolute_references) != plan['reference_keys']:
+        raise ValueError('Preserved resource keys are not reproducible')
     return plan
 
 
