@@ -159,7 +159,13 @@ const assert = require('node:assert/strict');
   // 体检 phase：跑完写后端结果句；正在跑写几点开始
   const gv = (g) => R.ledger(normalize({ ...base0, governance: { ...base0.governance, ...g } }), ctx);
   assert.match(gv({ phase: 'completed', status_note: '跑完：修好8、关掉0、还在跟21、转暂缓6、要你2', last_run: { started_at: '2026-10-12T12:58:00+08:00', ended_at: '2026-10-12T14:53:00+08:00' } }), /每周 AI 体检：跑完：修好8、关掉0、还在跟21、转暂缓6、要你2（10月12日 14:53）/);
-  assert.match(gv({ phase: 'running', last_run: { started_at: '2026-10-12T12:58:00+08:00' } }), /每周 AI 体检：10月12日 12:58 开始，正在跑/);
+  const previousRun = { started_at: '2026-10-05T13:02:00+08:00', ended_at: '2026-10-05T13:34:00+08:00', counts: { fixed: 1, closed: 3, following: 12, deferred: 0, need_you: 2 } };
+  const running = gv({ phase: 'running', last_run: previousRun });
+  assert.match(running, /本周 AI 体检：10月12日 12:58 开始，正在跑/);
+  assert.match(running, /上次 AI 体检（10月5日 13:02）记录：当时修好 1、关掉 3/);
+  assert.doesNotMatch(running, /本周 AI 体检：10月5日/);
+  const noStart = normalize({ ...base0, governance: { ...base0.governance, phase: 'running', last_run: previousRun }, automation: { items: [] } });
+  assert.equal(govState(noStart, now).text, '正在跑（还没收到跑完的回执）');
   // 首页小屏读 color
   const sm = OV.html(ov({ signals: [{ id: 'computer', level: 'act', color: 'neutral' }, { id: 'today_tasks', level: 'act', value: 1, recovered_today: 1, color: 'neutral' }, { id: 'backup', level: 'ok', value: 0, color: 'ok' }] }), { size: 'small', now: now.getTime() });
   assert.match(sm, /ov-sig is-neutral" data-signal="computer">.*?AI 在管/);

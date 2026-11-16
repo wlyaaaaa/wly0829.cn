@@ -206,7 +206,7 @@ export function govState(v, now = new Date()) {
   if (['not_started', 'running', 'completed', 'unavailable'].includes(g.phase)) {
     const need = Number.isInteger(c.need_you) ? c.need_you : 0;
     if (g.phase === 'completed') return { state: 'done', text: (typeof g.status_note === 'string' && g.status_note ? g.status_note : '跑完了，数量没记录') + (r.ended_at ? `（${dateHm(r.ended_at)}）` : ''), next, need };
-    if (g.phase === 'running') return { state: 'running', text: `${r.started_at || (task && task.last_run_at) ? dateHm(r.started_at || task.last_run_at) + ' 开始，' : ''}正在跑（还没收到跑完的回执）`, next, need: 0 };
+    if (g.phase === 'running') return { state: 'running', text: `${task?.last_run_at ? dateHm(task.last_run_at) + ' 开始，' : ''}正在跑（还没收到跑完的回执）`, next, need: 0 };
     if (g.phase === 'not_started') return { state: 'idle', text: '这周还没开始', next, need: 0 };
     return { state: 'failed', text: '这周的体检情况读不到', next, need: 0 };
   }
