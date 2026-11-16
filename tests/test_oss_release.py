@@ -619,6 +619,29 @@ class OssReleaseTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Finalized dist bytes changed'):
             oss.finalize_dist(self.source)
 
+    def test_partial_finalize_preserves_other_html_and_its_previous_asset_keys(self):
+        self.addCleanup(oss.FinalizeCache(self.source, False, {}).path.unlink, missing_ok=True)
+        first = oss.finalize_dist(self.source)
+        preserved = (self.source/'index.html').read_bytes()
+        old = first['oss']['objects']['assets/main.js']
+        target = self.source/'projects/demo/index.html'
+        target.write_bytes(('<script src="'+old['url']+'"></script>').encode())
+        (self.source/'assets/mod.js').write_bytes(b'console.log("changed dependency");')
+        manifest = oss.read(self.source/oss.MANIFEST)
+        manifest.pop('finalized_dist')
+        manifest['previous_oss'] = manifest.pop('oss')
+        manifest['files'] = {k:v for k,v in oss.inventory(self.source).items() if k != oss.MANIFEST}
+        oss.write(self.source/oss.MANIFEST, manifest)
+        final = oss.finalize_dist(self.source, html_files=['projects/demo/index.html'])
+        self.assertEqual((self.source/'index.html').read_bytes(), preserved)
+        self.assertIn(old['key'], final['oss']['reference_keys'])
+        current = final['oss']['objects']['assets/main.js']
+        self.assertNotEqual(current['url'], old['url'])
+        self.assertIn(current['url'].encode(), target.read_bytes())
+        self.assertNotIn(old['url'].encode(), target.read_bytes())
+        self.assertIn(final['oss']['objects']['assets/mod.js']['url'].encode(),
+                      (self.source/'assets/main.js').read_bytes())
+
     def test_finalize_resource_change_invalidates_rewrites_and_corrupt_cache_falls_back(self):
         cache = oss.FinalizeCache(self.source, False, {}).path; self.addCleanup(cache.unlink, missing_ok=True)
         raw = {p.relative_to(self.source): p.read_bytes() for p in self.source.rglob('*') if p.is_file()}

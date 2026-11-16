@@ -60,7 +60,10 @@ def measured(name, operation):
         if _FINALIZE_CACHE is not None: _FINALIZE_CACHE.timings[name] = _FINALIZE_CACHE.timings.get(name, 0) + time.perf_counter() - started
 
 
-def rewrite_cached(rewriter, data, owner):
+def rewrite_cached(rewriter, data, owner, html_files=None):
+    if html_files is not None and owner.endswith('.html') and owner not in html_files:
+        rewriter.record_absolute_references(data.decode('utf8'))
+        return data
     return measured('rewrite', lambda: _FINALIZE_CACHE.rewrite(rewriter, data, owner)
                     if _FINALIZE_CACHE is not None else rewriter.rewrite(data, owner))
 
@@ -802,13 +805,16 @@ class Rewriter:
             text = text[:change['start']] + change['after'] + text[change['end']:]
         if changes:
             self.changes[owner] = changes
+        self.record_absolute_references(text)
+        return text.encode('utf8')
+
+    def record_absolute_references(self, text):
         origins = oss_origins.aliases(self.base) if self.version>=8 else (self.base,)
         addresses = re.findall('(?:'+'|'.join(map(re.escape, origins))+r')/[^\s<>"\'`)\]}]+', html.unescape(text).replace('\\/', '/'))
         for address in addresses:
             key = unquote(urlsplit(html.unescape(address)).path).lstrip('/')
             if key.startswith('releases/'):
                 self.absolute_references.add(key)
-        return text.encode('utf8')
 
 
 def offline_asset_keys(rewriter, source, inherited):
@@ -870,7 +876,7 @@ def inherited_assets(manifest):
     return objects, {alias: previous['oss']['verification']['objects'][original] for alias, original in mapping.items()}
 
 
-def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=8, previous_manifest=None, offline=False):
+def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=8, previous_manifest=None, offline=False, html_files=None):
     source, output = Path(source).resolve(), Path(output).resolve()
     if output == source or output.is_relative_to(source) or source.is_relative_to(output):
         raise ValueError('Source and new output must be disjoint')
@@ -924,7 +930,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     if offline:
         rewriter.absolute_references.clear()
     output.mkdir(parents=True)
-    home_bytes,home_proof=measured('home', lambda: current_home_links(source,version=rewriter_version))
+    home_bytes,home_proof=measured('home', lambda: current_home_links(source,version=rewriter_version)) if html_files is None or 'index.html' in html_files else ((source/'index.html').read_bytes(), None)
     objects, github, virtual = {}, {}, {}
     for rel in actual:
         if rel in inherited: continue
@@ -935,7 +941,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
             continue
         if rel.endswith('.html') or Path(rel).suffix in TEXT_ASSETS:
             payload=home_bytes if rel=='index.html' else (source/rel).read_bytes()
-            result = rewrite_cached(rewriter, payload, rel)
+            result = rewrite_cached(rewriter, payload, rel, html_files)
             if (_FINALIZE_CACHE is not None and not _FINALIZE_CACHE.full and result == payload
                     and (rel != 'index.html' or payload == (source/rel).read_bytes())): virtual[rel] = source/rel
             else: destination.write_bytes(result)
@@ -986,6 +992,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
         plan['asset_keys'] = rewriter.asset_keys
         plan['retained_addresses'] = rewriter.retained
     plan['inherited_assets'] = source_manifest.get('inherited_assets', {})
+    if html_files is not None: plan['html_files'] = sorted(html_files)
     if previous:
         write(output / 'previous-publication.json', previous)
         plan['previous_publication_sha256'] = digest(output / 'previous-publication.json')
@@ -1001,7 +1008,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     return plan
 
 
-def finalize_dist(dist, full=False, timings=None, source_commit=None):
+def finalize_dist(dist, full=False, timings=None, source_commit=None, html_files=None):
     global _FINALIZE_CACHE
     if source_commit is not None and source_commit != 'Unknown' and not re.fullmatch('[a-f0-9]{40}', source_commit):
         raise ValueError('source-commit must be an exact source SHA, or Unknown')
@@ -1009,7 +1016,7 @@ def finalize_dist(dist, full=False, timings=None, source_commit=None):
     for name in ('hash', 'inventory', 'copy', 'home', 'rewrite', 'verify', 'manifest', 'cache'): timings.setdefault(name, 0)
     cache = FinalizeCache(Path(dist).resolve(), full, timings); _FINALIZE_CACHE = cache
     try:
-        final = _finalize_dist(dist)
+        final = _finalize_dist(dist, html_files)
         if source_commit is not None and final.get('source_commit') != source_commit:
             final['source_commit'] = source_commit
             measured('manifest', lambda: write(Path(dist)/MANIFEST, final))
@@ -1023,7 +1030,7 @@ def finalize_dist(dist, full=False, timings=None, source_commit=None):
         _FINALIZE_CACHE = None; timings['total'] = time.perf_counter() - started
 
 
-def _finalize_dist(dist):
+def _finalize_dist(dist, html_files=None):
     """Finalize build bytes offline; publishing and repeat runs never rewrite them."""
     dist = Path(dist).resolve(); source = read(dist/MANIFEST)
     if source.get('finalized_dist'):
@@ -1038,7 +1045,7 @@ def _finalize_dist(dist):
     prefix = 'releases/'+hashlib.sha256(json.dumps(resources, sort_keys=True).encode()).hexdigest()
     with tempfile.TemporaryDirectory(prefix='finalize-', dir=dist.parent) as temporary:
         prepared = Path(temporary)/'prepared'
-        plan = prepare(dist, oss_origins.configured_base(), prefix, prepared, offline=True)
+        plan = prepare(dist, oss_origins.configured_base(), prefix, prepared, offline=True, html_files=html_files)
         final = read(prepared/'github'/MANIFEST); final['finalized_dist'] = True
         final['oss'].update(retained_objects=plan['retained_objects'], reference_keys=plan['reference_keys'])
         measured('manifest', lambda: write(prepared/'github'/MANIFEST, final))
@@ -1088,7 +1095,8 @@ def verify_local(output, virtual=None):
             raise ValueError('Offline dependency keys are not reproducible')
         rewriter.asset_keys = plan['asset_keys']
         rewriter.changes.clear(); rewriter.references.clear(); rewriter.missing.clear(); rewriter.absolute_references.clear()
-    home_bytes,home_proof=measured('home', lambda: current_home_links(source,version=plan.get('rewriter_version',1)))
+    html_files = plan.get('html_files')
+    home_bytes,home_proof=measured('home', lambda: current_home_links(source,version=plan.get('rewriter_version',1))) if html_files is None or 'index.html' in html_files else ((source/'index.html').read_bytes(), None)
     if (home_proof!=plan.get('home_entry_overlay')
             and (plan.get('home_entry_overlay') is not None or home_bytes!=(source/'index.html').read_bytes())):
         raise ValueError('Home entry restoration evidence is not reproducible')
@@ -1101,7 +1109,7 @@ def verify_local(output, virtual=None):
         target = virtual.get(rel, output / ('github' if rel in plan['github_files'] else 'oss') / rel)
         if rel.endswith('.html') or Path(rel).suffix in TEXT_ASSETS:
             payload=home_bytes if rel=='index.html' else (source/rel).read_bytes()
-            expected_bytes = rewrite_cached(rewriter, payload, rel)
+            expected_bytes = rewrite_cached(rewriter, payload, rel, html_files)
             if target.read_bytes() != expected_bytes:
                 raise ValueError('Changes outside deterministic URL rewrite: ' + rel)
         elif digest(source/rel) != digest(target):
@@ -1224,6 +1232,7 @@ def main():
     commands = parser.add_subparsers(dest='command', required=True)
     p = commands.add_parser('finalize-dist'); p.add_argument('--dist', required=True); p.add_argument('--full', action='store_true')
     p.add_argument('--source-commit', help='Source SHA established by the build, or Unknown for an uncommitted source')
+    p.add_argument('--html-files', nargs='*', help='Rebuilt HTML paths; other HTML keeps its existing bytes and asset references')
     p = commands.add_parser('prepare')
     p.add_argument('--source', required=True)
     p.add_argument('--asset-base-url', required=True)
@@ -1239,7 +1248,7 @@ def main():
         p.add_argument('--confirm-download-over-5gb',action='store_true')
     args = parser.parse_args()
     if args.command == 'finalize-dist':
-        timings = {}; final = finalize_dist(args.dist, full=args.full, timings=timings, source_commit=args.source_commit)
+        timings = {}; final = finalize_dist(args.dist, full=args.full, timings=timings, source_commit=args.source_commit, html_files=args.html_files)
         print(json.dumps({'status': 'finalized', 'release_id': final['release_id'], 'timings': timings}))
     elif args.command == 'prepare':
         plan = prepare(args.source, args.asset_base_url, args.prefix, args.output, args.html_origin, args.test_loopback,args.rewriter_version,args.previous_manifest)
