@@ -14,7 +14,7 @@ from engine.content import bound_json
 SUPPLY = Path('E:/.agents/config/personal-skill-supply.json')
 ENTRY = Path('E:/.agents/tools/Invoke-EAgentRulesRelease.ps1')
 SKILL_ALIASES = {'learning': 'career-development', 'document-materials': 'personal-formal-documents'}
-UNSELECTED_PERSONAL_DOMAINS = {'personal-litigation', 'personal-romance'}
+UNSELECTED_PERSONAL_DOMAINS = {'personal-litigation', 'personal-profile', 'personal-romance'}
 PROJECT_ALIASES = {'github-local-index': 'github-index', 'codex-local-remote': 'codex-remote',
     'wechatdirect': 'wechat-direct', 'work-delivery-copilot': 'work-delivery', 'openclaw': 'openclaw-gateway',
     'personal-formal-documents': 'document-materials', 'codex-agent-model-benchmark': 'cacb'}
@@ -144,7 +144,7 @@ def audit(root=ROOT, now=None):
         'duplicate_urls': duplicates, 'count_mismatches': counts, 'version_mismatches': versions, 'unknown': unknown, 'stale_numbers': stale,
         'stale_date_unknown': stale_unknown, 'writing_audit': writing,
         'stale_summary': {'paragraphs': len(stale), 'numbers': sum(len(row['numbers']) for row in stale), 'first_screen_paragraphs': sum(row['first_screen'] for row in stale), 'first_screen_numbers': sum(len(row['numbers']) for row in stale if row['first_screen']), 'first_screen_number_card_paragraphs': len(cards)},
-        'boundaries': ['个人技能子页按本机 personal-skill-supply.json 中 install=true 的当前清单核对；仅排除本次网站明确不展示的 personal-litigation、personal-romance 两领域，新增已安装技能同样进入缺页检查。', '两个领域的排除来自本次网站选择，不是 L3 敏感规则；不扩展到全部厂商技能或未选项目库。', '宿主集成能力不属于个人技能供应清单，安装及版本为 Unknown，未计入个人技能子页预期。', '固定数字为阿拉伯数字出现次数；移除日期、时间和列表序号，不推定新实数。', '日期适用于同屏最近的快照声明；无年份按最近过去的同月日解释，演进历史屏排除。', '旧固定数字及日期未知只提醒；完整页面写法审计附报告，仅 tier=block 影响对齐。页面审计不采集来源，不改正文或数字。']}
+        'boundaries': ['个人技能子页按本机 personal-skill-supply.json 中 install=true 的当前清单核对；仅排除本次网站明确不展示的 personal-litigation、personal-profile、personal-romance 三项，新增已安装技能同样进入缺页检查。', '这几项排除来自本次网站选择，不是 L3 敏感规则；不扩展到全部厂商技能或未选项目库。', '宿主集成能力不属于个人技能供应清单，安装及版本为 Unknown，未计入个人技能子页预期。', '固定数字为阿拉伯数字出现次数；移除日期、时间和列表序号，不推定新实数。', '日期适用于同屏最近的快照声明；无年份按最近过去的同月日解释，演进历史屏排除。', '旧固定数字及日期未知只提醒；完整页面写法审计附报告，仅 tier=block 影响对齐。页面审计不采集来源，不改正文或数字。']}
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True); parser.add_argument('--require-aligned', action='store_true')
