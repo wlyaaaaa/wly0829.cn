@@ -1,6 +1,6 @@
 # 个人 AI 协作系统首页 v2
 
-状态：现行产品约定；本地验证与发布状态以 design-qa.md 为准
+> **历史材料。** 本文记录旧 System 首页方案。现役首页从 `site-v2/home-build/site/` 组装，入口见 [README](../../README.md)。
 
 ## 产品角色
 

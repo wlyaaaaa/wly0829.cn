@@ -1,5 +1,7 @@
 # MAP 共享信息架构 v1
 
+> **历史材料。** 保留早期信息架构。现行路由和版式见 [布局与交互](layout-and-interaction.md) 与 [README](../../README.md)。
+
 status: accepted-for-implementation
 
 accepted_at: 2026-08-30

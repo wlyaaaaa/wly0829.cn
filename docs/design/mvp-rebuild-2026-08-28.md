@@ -1,5 +1,7 @@
 # wly0829.cn MVP rebuild
 
+> **历史材料。** 保留 MVP 时期的产品取舍。当前站源、入口和组装见 [README](../../README.md)，当前内容边界见 [总合同](panel-content-contract.md)。
+
 status: ten_project_personal_health_candidate
 
 ## Goal

@@ -231,11 +231,9 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   widths; when a future project has more modules, wrap the visible links into
   additional rows with the same separators and active state. Never shrink text
   below readability merely to force one row.
-- The desktop project index uses a two-column grid sized for four cards in the
-  first viewport and continues vertically. Mobile uses one column sized for
-  roughly two cards in the first viewport. When the registry contains only one
-  project, that single card spans both desktop columns instead of occupying an
-  empty half-grid; two-column placement begins only when a second project exists.
+- The project index follows the same desktop layout on every device as defined
+  in [AGENTS.md](../../AGENTS.md). The `width=1440` viewport scales the whole
+  page to the phone display and keeps pinch-to-zoom enabled.
 - Project navigation must not introduce click-time lazy loading or a visible
   loading pause. The current panel generates complete route-specific HTML at
   build time, uses native directory-document navigation, keeps one small shared

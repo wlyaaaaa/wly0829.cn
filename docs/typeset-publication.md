@@ -1,5 +1,7 @@
 # 源包准备与独立排版检查
 
+> **历史材料。** 旧排版链和它的命令用于追溯。现行构建、发布、扫描见 [发布与扫描](publish-and-scan.md)；仍被现役调用的 OSS 库见 [OSS 资源契约](oss-publication.md)。
+
 当前维护从仓库根 `npm run build` 开始，发布只用本机 `site-astro/tools/publish_site.py`。本页保留源包、量测、阅读和迁移的技术契约，方便核对现成输入与恢复材料；它不是另一条构建或发布流程。日常命令见 [发布与扫描](publish-and-scan.md)，差量传送与回执见 [发布与扫描](publish-and-scan.md)。
 
 ## 共用排版层第 1 版
