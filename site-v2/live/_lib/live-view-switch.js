@@ -5,7 +5,7 @@
   let publicView = sessionStorage.getItem(key) === 'public', owner = false, invalid = false, button;
   function place() {
     const back = document.querySelector?.('main a.back'), stage = document.querySelector?.('#stage, main.stage');
-    const anchor = back || (/^\/live\/?$/.test(location.pathname) && stage?.querySelector('#notices'))
+    const anchor = back || (/^\/live\/?$/.test(location.pathname) && (stage?.querySelector(':scope > .live-conn') || stage?.querySelector('#notices')))
       || (/^\/computer-access\/?$/.test(location.pathname) && stage?.querySelector('.cells'));
     if (!anchor) return;
     const row = document.createElement('div'); row.dataset.liveViewRow = '';

@@ -344,7 +344,38 @@ html.mo-on .page--live :is(.more, .back, .l2-nav__groups a):active { scale: var(
 .notice:not(:has(.btn)) { padding-right: 20px; }
 .notice > .lamp { width: 9px; height: 9px; }
 .notice__x { width: 30px; padding: 0; font-size: 16px; }
-.live-connection-banner { margin: 0 0 16px; padding: 12px 18px; border: 1px solid #9ca79f; border-left: 4px solid #00a650; border-radius: 10px; background: #f7faf7; color: #263529; font-size: 16px; font-weight: 700; line-height: 1.5; }
+/* 页顶那张卡（本人 11-23 选的 B，01:01 定了和页顶提醒合成一张）：和下面大卡同宽的毛玻璃圆角卡，一件事一行；卡本身不能点、没有叉。
+   连接那一行的灯和箭头一直在动，连上后灯变正绿、约 2 秒后只收走这一行。插头插画只在连接那一行里（这一行出现才下载这张图）。 */
+.live-conn { position: relative; overflow: hidden; margin: 0 0 16px; border-radius: 18px; background: rgb(255 255 255 / .6);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25); backdrop-filter: blur(18px) saturate(1.25);
+  box-shadow: 0 10px 30px rgb(72 58 96 / .1), inset 0 0 0 1px rgb(255 255 255 / .75); color: #262a30;
+  transition: height .5s var(--mo-out, ease), opacity .5s ease, margin .5s ease; }
+.live-conn[hidden] { display: none; }
+.live-conn.is-closing { height: 0 !important; margin-bottom: 0; opacity: 0; }
+.live-conn__row { position: relative; display: flex; align-items: center; gap: 14px; min-height: 66px; padding: 10px 28px; box-sizing: border-box;
+  font-size: 17px; line-height: 1.5; transition: height .5s var(--mo-out, ease), opacity .5s ease, padding .5s ease; }
+.live-conn__row > :not(.live-conn__art) { position: relative; }
+.live-conn__row.is-closing { height: 0 !important; min-height: 0; padding-block: 0; opacity: 0; }
+.live-conn__row + .live-conn__row { border-top: 1px solid rgb(40 40 60 / .07); }
+.live-conn__row[data-key="pair"] { font-weight: 600; color: #3d4249; }
+.live-conn__art { position: absolute; top: -8px; right: 0; bottom: -8px; width: 330px; pointer-events: none;
+  background: url("/live/img/connection-plug-v1.webp") right 14px center / auto 100% no-repeat;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 28%); mask-image: linear-gradient(to right, transparent, #000 28%);
+  animation: live-conn-in .9s ease; transition: opacity .6s ease; }
+.live-conn__row.is-back .live-conn__art { opacity: 0; }
+.live-conn__lamp { flex: none; width: 12px; height: 12px; border-radius: 50%; background: #f2a516;
+  box-shadow: 0 0 0 4px rgb(242 165 22 / .16), 0 0 14px rgb(242 165 22 / .7);
+  animation: live-conn-breathe 2.8s ease-in-out infinite; transition: background .45s ease, box-shadow .45s ease; }
+.live-conn__row.is-back .live-conn__lamp { background: #00A650; box-shadow: 0 0 0 4px rgb(0 166 80 / .16), 0 0 14px rgb(0 166 80 / .6); }
+.live-conn__say b { font-size: 19px; font-weight: 800; letter-spacing: .02em; }
+.live-conn__at { color: #61666e; font-weight: 500; }
+.live-conn__wait { display: inline-flex; align-items: center; gap: 8px; margin: 0 340px 0 auto; color: #8b9098; font-size: 15px; white-space: nowrap; transition: opacity .45s ease; }
+.live-conn__row.is-back .live-conn__wait { opacity: 0; }
+.live-conn__spin { display: inline-flex; width: 18px; height: 18px; color: #7d838c; animation: live-conn-spin 3.2s linear infinite; }
+.live-conn__spin svg { width: 100%; height: 100%; }
+@keyframes live-conn-breathe { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.82); } }
+@keyframes live-conn-spin { to { transform: rotate(360deg); } }
+@keyframes live-conn-in { from { opacity: 0; } }
 
 /* ============ 页眉右边：几点读到、问情况 ============ */
 /* 点“几点读到”重读：药丸从左右两边同时往正中收，收成一颗圆按钮停在原来的正中，图标跟着滑到正中，到了再转；
@@ -925,3 +956,10 @@ span.fog__slow { margin: 0 0 0 8px; }
 }
 .live-item-confirm button:focus-visible { outline: 2px solid #00A650; outline-offset: 2px; }
 @keyframes live-item-confirm-in { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: scale(1); } }
+
+/* 页顶提醒搬进连不上卡片以后（本人 11-23 01:01 定的合成一张）：每条是卡里的一行，不再各带一个框；内容、按钮和跳转不变。 */
+html .live-conn > #notices { display: block; margin: 0; }
+html .live-conn > #notices > :is(.notice, .l1-unreadable-note, li) { display: flex; flex-wrap: wrap; align-items: center; width: auto; min-height: 58px; margin: 0;
+  padding: 10px 28px; border: 0; border-radius: 0; background: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none;
+  box-sizing: border-box; font-size: 16px; font-weight: 600; line-height: 1.6; color: #3d4249; }
+html .live-conn > #notices > li + li, html .live-conn__rows:not(:empty) + #notices > li:first-child { border-top: 1px solid rgb(40 40 60 / .07); }

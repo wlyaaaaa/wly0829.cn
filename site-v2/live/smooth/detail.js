@@ -80,7 +80,7 @@
         const off = link?.heartbeat === 'stopped';
         if (offline !== (off || state.offline)) { offline = off || state.offline; if (data) draw(); }
         needsPc();
-        U.list(notices, off || state.offline ? [{ key: 'link', cls: 'notice glass', html: U.fieldHtml(state.text || '电脑连不上，下面是最后一份数。', { name: '连接情况' }) }] : []);
+        // 连不上的原因和截止时刻只写在页顶那张连不上卡片里（live-ui.js 的 connection），这里不再重复一枚“连接情况”。
         if (!data && !state.offline && state.text && (state.phase === 'none' || state.phase === 'gone')) U.html(part('head'), U.head(state.text, { lamp: false }));
         [hero.querySelector('.card__body'), ...(board?.cards() || [])].forEach(el => U.blockNote(el, state));
       },

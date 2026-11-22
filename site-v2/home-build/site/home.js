@@ -213,6 +213,8 @@ function cellView(id, facts, owner, pending, down) {
   if (id === 'computer') {
     if (down.hostOff) return { title: '电脑', num: '', unit: '', sub: '', note: '没开机', off: true, label: '电脑没开机' };
     const cpu = Number.isFinite(facts.cpu) ? String(Math.round(facts.cpu)) : '';
+    // 心跳停了但没确认关机：有上一份读数就照写（带“截止”），没有就照实说没回应，不说没开机。
+    if (down.silent && !cpu && !pending) return { title: 'CPU', num: '', unit: '', sub: '', note: '没回应', label: '电脑没回应' };
     const sub = Number.isFinite(facts.uptime) ? `开机 ${uptimeText(facts.uptime)}` : facts.on && !pending && !down.offline ? '开机时长还没读到' : '';
     return { title: 'CPU', num: cpu, unit: cpu && '℃', sub, note: cpu ? '' : missing, wait: pending && !cpu,
       label: `CPU ${cpu ? cpu + '℃' : missing}${sub ? '，' + sub : ''}`.trim() };
@@ -267,7 +269,7 @@ function paintCell(cell, view, href, sample, quiet) {
   return 0;
 }
 // pending：数还在路上（第一次还没回话，或后端说正在准备）。回了话还是没有数，才写“还没读到”。
-const down = { offline: false, hostOff: false };
+const down = { offline: false, hostOff: false, silent: false };
 const lastReadings = new Map();
 let lastViewer;
 // 屏上的数是几点的：当天只写时刻，隔天带上月-日（北京时间）。
@@ -746,25 +748,56 @@ firstScreenReady.then(() => setTimeout(stillPanels, 6000));
 
 // 首页只订阅副屏小包；一分钟重读与后台暂停由实况共用取数层负责。
 const liveClient = document.createElement('script');
-const banner = element('p', 'live-connection-banner', document.querySelector('main'));
-banner.setAttribute('role', 'status'); banner.hidden = true;
+// 读不到实况时的提示（本人 11-23 选的 A）：在“实时状态”“它如何工作”两个按钮正下方，跟着画一起缩放，不是按钮、不挡东西。
+// 一直显示到连上；连上后灯变绿、写“连上了”，约 2 秒淡出。副屏和动效照常。
+const tip = element('div', 'home-conn', pane);
+tip.setAttribute('role', 'status'); tip.hidden = true;
+tip.innerHTML = '<p class="home-conn__line"><span class="home-conn__lamp" aria-hidden="true"></span><b></b><span class="home-conn__at"></span></p><p class="home-conn__sub"></p>';
+const [tipSay, tipAt, tipSub] = ['b', '.home-conn__at', '.home-conn__sub'].map((selector) => tip.querySelector(selector));
+let tipTimer = 0, tipOff = false;
+// 家里网站上这台设备的配对失效时，原来顶上那句说明也放在这里（不亮灯）。
+function connectionTip(off, reason, at, sub, pair = '') {
+  if (off || pair) {
+    clearTimeout(tipTimer);
+    tip.classList.toggle('is-pair', !off);
+    tipSay.textContent = off ? reason || '连不上实况服务' : pair;
+    tipAt.textContent = !off ? '' : at ? ` · 右边屏上是 ${at} 的数据` : ' · 右边屏上暂时没有数';
+    tipSub.textContent = off ? sub : '';
+    tip.classList.remove('is-back');
+    if (tip.hidden) { tip.hidden = false; void tip.offsetWidth; }
+    tip.classList.add('is-shown');
+    tipOff = !!off;
+  } else if (tip.hidden || tip.classList.contains('is-back')) {
+    // 没事，或者“连上了”正在显示、等它自己淡出
+  } else if (!tipOff) {
+    tip.classList.remove('is-shown', 'is-pair'); tip.hidden = true;
+  } else {
+    tip.classList.add('is-back');
+    tipSay.textContent = '连上了'; tipAt.textContent = ''; tipSub.textContent = '';
+    tipTimer = setTimeout(() => {
+      tip.classList.remove('is-shown');
+      tipTimer = setTimeout(() => { tip.hidden = true; tip.classList.remove('is-back'); tipOff = false; }, 700);
+    }, 2000);
+  }
+}
 liveClient.src = '/live/_lib/live-client.js';
 liveClient.onload = () => window.Live.watch('screen', {}, {
   link(state) {
     down.hostOff = state.hostOff;
+    down.silent = !!state.silent;
     down.offline = state.offline;
     for (const panel of panels) for (const { link } of panel.cells) {
       if (state.text) link.title = state.text; else link.removeAttribute('title');
     }
-    if (banner.textContent !== state.pageText) banner.textContent = state.pageText;
-    banner.hidden = !state.pageText;
+    // 失败后先隔 2、4、8 秒各再试一次，之后跟着每分钟重读一起试（live-client.js 的 retryFailure 和 startPolling）。
+    connectionTip(state.offline, state.reason, state.pageAtText, '每分钟自动再试，连上就换成最新的', state.pairNotice);
     renderScreen(state.data, state.meta, state.warming || state.publicPaused, state.offline ? null : state.now);
   }
 });
-// 实况那份脚本没取到（断网、被拦）：没有数可等了，按连不上算，别让四格一直空着。
+// 实况那份脚本没取到（断网、被拦）：没有数可等了，按连不上算，别让四格一直空着。这时页面不会自己再试。
 liveClient.onerror = () => {
   down.offline = true;
-  banner.textContent = '连不上实况服务 · 这页没有可显示的上次数据。'; banner.hidden = false;
+  connectionTip(true, '连不上实况服务', '', '刷新这一页再试，连上就换成最新的');
   renderScreen(null, null);
 };
 document.head.append(liveClient);
