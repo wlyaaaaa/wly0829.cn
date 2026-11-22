@@ -16,6 +16,7 @@ SOURCE = HERE.parent / "文稿"
 OUTPUT = HERE.parents[1] / "demo"
 SITE = HERE.parents[4] / "dist"
 VIZ = HERE.parent / "viz"
+LIVE_SOURCE = HERE.parents[3] / "live"  # 实况在原理页之后才组装进站，查实况页在不在先看源码
 FILES = ["文章标题.md", "引言.md", "第1节-设备互联.md", "第2节-数据采集与回溯.md",
          "第3节-个人理解.md", "第4节-凭据与数据安全.md", "第5节-代办事务.md", "第6节-内容制作.md",
          "第7节-无人值守与通知.md", "第8节-系统维护与恢复.md", "第9节-多模型协作.md",
@@ -106,6 +107,25 @@ def make_names(kind, article, site):
     return sorted(found, key=lambda row: row["position"])
 
 
+def page_exists(href, site):
+    path = href.split("#", 1)[0].lstrip("/")
+    if (site / path).is_file() or (site / path / "index.html").is_file():
+        return True
+    return path.startswith("live/") and (LIVE_SOURCE / path[len("live/"):] / "index.html").is_file()
+
+
+def make_pages(article, site):
+    """文中提到的实况各页、规则页等：按 linked-pages.json 的叫法找，页面还没建好的只显示名字（预留）。"""
+    found = []
+    for page in json.loads((HERE / "linked-pages.json").read_text(encoding="utf-8")):
+        hits = [(article.find(word), word) for word in page["match"] if word in article]
+        if hits:
+            href = page["href"] if page_exists(page["href"], site) else ""
+            slug = page["href"].strip("/").replace("/", "-") or "home"
+            found.append(dict(name=page["name"], slug=slug, matched=page["name"], position=min(hits)[0], href=href))
+    return sorted(found, key=lambda row: row["position"])
+
+
 def build(published, site=SITE, output=OUTPUT):
     output.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(HERE / "principles.css", output / "principles.css")
@@ -139,10 +159,11 @@ def build(published, site=SITE, output=OUTPUT):
     current = next(a for a in header.select("a.pill") if a.get_text() == "原理")
     current["aria-current"], current["href"] = "page", "/principles/"
     names = {kind: make_names(kind, "\n\n".join(raw), site) for kind in ("projects", "skills")}
+    names["pages"] = make_pages("\n\n".join(raw), site)
     meta = (f'<dl><div><dt>发布</dt><dd>{escape(published)}</dd></div><div><dt>作者</dt><dd>吴乐阳</dd></div>'
             f'<div><dt>字数</dt><dd>{word_count:,} 字</dd></div></dl>')
     meta += '<p class="publication-note">本文记录的是 2026 年 11 月的样子，之后不再更新；现行规矩见<a href="/rules/">规则页</a>。</p><dl>'
-    for kind, label in (("projects", "文中提到的项目"), ("skills", "文中提到的技能")):
+    for kind, label in (("projects", "文中提到的项目"), ("skills", "文中提到的技能"), ("pages", "文中提到的页面")):
         meta += f'<div class="mentioned"><dt>{label}</dt><dd><ul>'
         for row in names[kind]:
             name = escape(row["matched"])

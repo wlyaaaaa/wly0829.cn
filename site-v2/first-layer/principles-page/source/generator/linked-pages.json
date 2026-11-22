@@ -1,0 +1,13 @@
+[
+  {"name": "实况", "match": ["实况"], "href": "/live/"},
+  {"name": "实况 · AI 对话", "match": ["AI 对话"], "href": "/live/chats/"},
+  {"name": "实况 · 等你的事", "match": ["等你的事"], "href": "/live/items/"},
+  {"name": "实况 · 自动任务", "match": ["自动任务页"], "href": "/live/automation/"},
+  {"name": "实况 · 计划任务", "match": ["计划任务页"], "href": "/live/tasks/"},
+  {"name": "实况 · AI 账本", "match": ["AI 账本"], "href": "/live/ledger/"},
+  {"name": "实况 · 存储", "match": ["存储页"], "href": "/live/storage/"},
+  {"name": "实况 · 智能体", "match": ["智能体页"], "href": "/live/agents/", "note": "预留：智能体页还在做，页面建好后地址不是 /live/agents/ 就改这里；目标不在时只显示名字、不出链接"},
+  {"name": "规则页", "match": ["约法"], "href": "/rules/"},
+  {"name": "连接电脑", "match": ["MCP"], "href": "/mcp/"},
+  {"name": "授权与状态", "match": ["无限制授权", "资料锁"], "href": "/computer-access/"}
+]
