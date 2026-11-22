@@ -308,15 +308,17 @@
 
   // 复用通知的落点：展开目标所在折叠，露出后滚过去并亮一下。
   let landed = false;
-  function land() {
+  // keepOnBack：退回来时筛出的几行照样亮着（位置由退回恢复，不再滚），目前只有备份总表用（M115）。
+  function land({ keepOnBack = false } = {}) {
     if (landed) return;
-    if (returned) { landed = true; return; }
+    if (returned && !keepOnBack) { landed = true; return; }
     const p = new URLSearchParams(location.search), id = p.get('item');
     if (!id && !p.has('attention') && !p.has('source')) return;
     const kind = p.get('attention'), cls = p.has('source') ? `source-${p.get('source')}` : kind === '1' ? 'is-attention' : `attention-${kind}`;
     const targets = [...document.querySelectorAll('[data-key]')].filter(el => id ? el.dataset.key === id : el.classList.contains(cls));
     if (!targets.length) return;
     landed = true;
+    if (returned) { targets.forEach(el => el.classList.add('notice-target')); return; }
     for (const el of targets) {
       for (let box = el.closest('.fold'); box; box = box.parentElement?.closest('.fold')) box._liveOpen?.();
     }

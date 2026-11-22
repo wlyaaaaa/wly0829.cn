@@ -11,6 +11,12 @@
 (() => {
   'use strict';
   const shown = ul => !ul.closest('.fold:not(.is-open), details:not([open])') && ul.getClientRects().length > 0;
+  // 刚进来的卡还在从 0 撑开（LiveUI.list 的进场动画）：按撑开以后的高度分栏，不然一进来几张都量成 2px、全挤进同一栏，另一栏下面空一大截（M056）
+  const grown = li => {
+    const grow = li.getAnimations?.().find(a => a.playState !== 'finished' && a.effect?.getKeyframes?.().at(-1)?.height);
+    const end = grow ? parseFloat(grow.effect.getKeyframes().at(-1).height) : NaN;
+    return Number.isFinite(end) ? Math.max(end, li.offsetHeight) : li.offsetHeight;
+  };
 
   // 后一张清单往上提以后，它和外面那层（展开的盒子）的空处会盖住上面几栏的底：空处让点击穿过去，卡和“收起”照常能点
   function through(ul, value, first) {
@@ -29,7 +35,7 @@
       queued = false;
       const cols = columns(), visible = lists.filter((ul, i) => i === 0 || shown(ul));
       const cards = visible.flatMap(ul => [...ul.children].filter(li => !li.classList.contains('is-leaving')));
-      if (!cards.length || cards.some(li => !li.offsetHeight)) return;
+      if (!cards.length || cards.some(li => !grown(li))) return;
       const keys = cards.map(li => li.dataset.key || '');
       const prefix = (a, b) => a.every((k, i) => b[i] === k);
       if (cols !== colsUsed || !(prefix(order, keys) || prefix(keys, order))) assigned.clear();
@@ -51,7 +57,7 @@
           const key = li.dataset.key || '';
           let col = assigned.get(key);
           if (col == null || col >= cols) { col = heights.indexOf(Math.min(...heights)); assigned.set(key, col); }
-          const span = Math.ceil(li.offsetHeight) + gap;
+          const span = Math.ceil(grown(li)) + gap;
           Object.assign(li.style, { gridColumn: String(col + 1), gridRow: `${heights[col] - base + 1} / span ${span}`, margin: '0' });
           heights[col] += span;
         }
