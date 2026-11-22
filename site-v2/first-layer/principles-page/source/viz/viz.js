@@ -1,4 +1,4 @@
-/* 第一屏总图、第 4 节和结尾环的动效。不开脚本、要求减少动效时，图直接显示终态。 */
+/* 第一屏总图、第 4 节、第 10 节压缩图和结尾环的动效，进入视野播一遍。不开脚本时，图直接显示终态。 */
 (function () {
   "use strict";
 
@@ -54,6 +54,19 @@
       plate.classList.add("s4-ready");
       diagrams.observe(plate);
     });
+  }
+  // 第 10 节压缩图：图露出六成时，线从左往右画出来一遍
+  var compact = document.querySelector("#viz-s10-compact .viz__plate");
+  if (compact && "IntersectionObserver" in window) {
+    compact.classList.add("s10c-ready");
+    var co = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting || en.intersectionRatio < 0.6) return;
+        co.disconnect();
+        compact.classList.replace("s10c-ready", "s10c-play");
+      });
+    }, { threshold: 0.6 });
+    co.observe(compact);
   }
   var end = document.querySelector(".viz--chain-end");
   if (end && "IntersectionObserver" in window) {
