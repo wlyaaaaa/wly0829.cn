@@ -237,7 +237,7 @@
       });
       if (!rows.length && extra) rows.push({ key: `restore-history:${group.set}:${group.kind}`, cls: 'row row--flat', html: `<span></span><p class="row__sub">${extra}</p>` });
       if (rows.length <= 5) return rows;
-      return [...rows.slice(0, 5), { key: `restore-more:${group.set}:${group.kind}`, cls: 'backup-more', html: `<details><summary class="more">展开（还有 ${rows.length - 5} 条）</summary><ul class="rows list">${rows.slice(5).map(row => `<li class="${row.cls}">${row.html}</li>`).join('')}</ul></details>` }];
+      return [...rows.slice(0, 5), { key: `restore-more:${group.set}:${group.kind}`, cls: 'backup-more', html: `<details><summary class="more live-disclosure"><span class="disclosure-closed">展开（还有 ${rows.length - 5} 条）</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary><ul class="rows list">${rows.slice(5).map(row => `<li class="${row.cls}">${row.html}</li>`).join('')}</ul></details>` }];
     });
     U.list($('points'), restored.length ? restored : empty(restoreText(d)));
     const coverage = [d.coverage?.local_note, d.columns?.local?.note].some(note => note && sp(note) === sp(d.coverage)) ? '' : U.fieldHtml(d.coverage, { name: '备份范围', place: 'body', kind: viewer });

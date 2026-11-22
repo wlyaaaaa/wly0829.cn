@@ -9,10 +9,14 @@
 <p class="card__head" id="head"></p><p class="hero__note" id="note"></p><div class="hero__links"><a class="more" href="#restore">能退回哪一天 ›</a></div></div></div></article>
 <div class="backup-summary" id="backup-summary"></div><div class="backup-matrix" id="backup-matrix" aria-label="各类资料在各去处的副本"></div>
 <div class="l2-board"><section class="l2-col" data-mo-rise><p class="part" data-keep>每类资料的副本</p><ul class="rows list" id="sets"></ul>
-<button class="more" type="button" id="more" hidden></button><div class="fold" id="rest-box"><div><ul class="rows list" id="rest"></ul></div></div><p class="pj-note" id="coverage"></p></section>
+<div class="fold" id="rest-box"><div><ul class="rows list" id="rest"></ul></div></div><button class="more" type="button" id="more" hidden></button><p class="pj-note" id="coverage"></p></section>
 <section class="l2-col" id="restore" data-mo-rise><p class="part" data-keep>恢复点与最近一次恢复</p><ul class="rows list" id="points"></ul></section></div></main>
 <style>
 .page--backups #more[aria-expanded="true"] .more__shut, .page--backups #more:not([aria-expanded="true"]) .more__open { display: none; }
+.page--backups #more[aria-expanded="true"] .more__chev,
+.page--backups .backup-more details[open] > summary .more__chev { rotate: -90deg; }
+.page--backups .backup-more details[open] { display: flex; flex-direction: column; }
+.page--backups .backup-more details[open] > summary { order: 1; align-self: flex-start; }
 .page--backups .hero__note:not([hidden]) { display: block; }
 .page--backups .backup-grid td[data-state] { background: transparent; color: var(--ink); border-radius: 0; }
 .page--backups .backup-grid td[data-state="gap"] { color: #a14b3a; box-shadow: inset 0 -1px #d8aa91; }

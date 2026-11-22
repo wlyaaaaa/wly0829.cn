@@ -151,8 +151,8 @@
     const tail = [offline.length && `${names(offline)}离线没读到`, lost.length && `${names(lost)}没读到`, missingV && 'V 盘还没接进读数'].filter(Boolean);
     const lead = stale ? (at ? `磁盘读数停在 ${when(at)}` : '磁盘读数已过期') : '磁盘读数不全';
     const count = Number(d?.gray_count) || 0;
-    const grayNote = marked.length ? `${count || marked.length} 项读不准 · 灰灯已标出 ${names(marked)}`
-      : count ? `${count} 项读不准，读数里没标明具体是哪几项` : '';
+    const grayNote = marked.length ? `${count || marked.length} 项读数还不能确认 · 灰灯已标出 ${names(marked)}`
+      : count ? `${count} 项读数还不能确认，读数里没标明具体是哪几项` : '';
     return { text: [lead, ...tail].join(' · '), note: [grayNote, d?.ai_fixing_count != null && `AI 在修 ${d.ai_fixing_count} 件`].filter(Boolean).join(' · ') };
   }
   const staleStorage = d => d?.stale || d?.q === 'stale' || d?.gray_reason === 'stale';

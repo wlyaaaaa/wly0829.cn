@@ -293,7 +293,7 @@
     const time = line.querySelector('.grp__cutoff'), top = document.querySelector('#hero .head__cutoff')?.textContent;
     if (/^数据截止 (?:\d{2}-\d{2} )?\d{2}:\d{2}$/.test(time.textContent) &&
         [reported, top].some(note => U.sameCutoffNote(note, time.textContent))) time.textContent = '';
-    line.title = [...line.children].map(el => el.textContent).filter(Boolean).join(' · ');
+    V.cardLineTitle(line);
   }
   const detailBoard = { ...board, blocks(d, map, off) {
     summary = d?.summary;

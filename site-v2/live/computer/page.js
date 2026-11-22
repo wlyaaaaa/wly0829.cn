@@ -561,7 +561,7 @@
   const boardHost = $('board');
   const board = V.board(boardHost, {
     key: 'computer',
-    sync, reading, edgeDotLines: ['net-loss'],
+    sync, reading, keepChips: true, edgeDotLines: ['net-loss'],
     onCount: renderCount,
   });
   // 接口给的 series 和上面约定的 id 对不上时：按 series.group / panel 现搭这一组（一个 panel 一格，前四格做收着时的大数字）

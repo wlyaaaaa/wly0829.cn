@@ -379,7 +379,7 @@
       notes.push(fieldHtml(cutoff, { name: '数据截止时刻' }));
     }
     if (data.attention_count > 0) notes.push(`${esc(data.attention_count)} 项要处理`);
-    if (data.gray_count > 0) notes.push(`${esc(data.gray_count)} 项读不准`);
+    if (data.gray_count > 0) notes.push(`${esc(data.gray_count)} 项读数还不能确认`);
     if (data.ai_fixing_count != null && (showZeroFixing !== false || data.ai_fixing_count !== 0)) notes.push(nowrap(`AI 在修 ${data.ai_fixing_count} 件`));
     return {
       tone, lamp: `<span class="lamp${small ? ' lamp--sm' : ''}" data-tone="${tone}" aria-hidden="true"></span>`,

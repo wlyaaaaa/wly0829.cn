@@ -657,7 +657,7 @@
       const k = i ?? data.labels.length - 1, lab = data.labels[k];
       const raw = i == null ? (data.at || lab?.title || lab?.text) : (lab?.title || lab?.text), t = /^\d{4}-\d{2}-\d{2}(?:T|$)/.test(raw || '') ? sec(raw.length === 10 ? `${raw}T00:00:00+08:00` : raw) : NaN;
       const when = Number.isFinite(t) ? `${md(t)}${raw.length > 10 ? ' ' + hm(t) : ''}` : raw;
-      html(vals, `<span class="chart__val vz-bars__when">${esc(when || '')}</span>${series.map((s) => `<span class="chart__val" style="--c:${s.color}"><i class="chart__key${s.soft ? ' is-soft' : ''}"></i><span class="chart__label">${esc(s.label)}</span><b${data.values[s.id]?.[k] == null ? ' style="font-size:13px;font-weight:400;color:var(--muted)"' : ''}>${data.quality?.[s.id]?.[k] === 'partial' && data.values[s.id]?.[k] != null ? '至少 ' : ''}${esc(formatValue(data.values[s.id]?.[k], s.unit ?? unit) ?? opts.missingText ?? window.LiveUI.collectionText(s.label, data))}</b>${data.notes?.[s.id]?.[k] ? `<small style="font-size:12px">${esc(data.notes[s.id][k])}</small>` : ''}</span>`).join('')}`);
+      html(vals, `<span class="chart__val vz-bars__when">${esc(when || '')}</span>${series.map((s) => `<span class="chart__val" style="--c:${s.color}"><i class="chart__key${s.soft ? ' is-soft' : ''}"></i>${series.length > 1 ? `<span class="chart__label">${esc(s.label)}</span>` : ''}<b${data.values[s.id]?.[k] == null ? ' style="font-size:13px;font-weight:400;color:var(--muted)"' : ''}>${data.quality?.[s.id]?.[k] === 'partial' && data.values[s.id]?.[k] != null ? '至少 ' : ''}${esc(formatValue(data.values[s.id]?.[k], s.unit ?? unit) ?? opts.missingText ?? window.LiveUI.collectionText(s.label, data))}</b>${data.notes?.[s.id]?.[k] ? `<small style="font-size:12px">${esc(data.notes[s.id][k])}</small>` : ''}</span>`).join('')}`);
       xs.querySelectorAll('.vz-bars__lab').forEach((n, j) => n.classList.toggle('is-on', j === i));
     }
     const el = (tag, attrs) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); return n; };
@@ -1182,6 +1182,13 @@
   // 每组是一张整宽的卡，图表章节始终展开：左边大图、右边数字小格，点一格切换大图。
   // 黄、红的组排在前面；quiet 不放灯、不排序，章里可放页面自己的东西（build）。
   const LEVEL_ORDER = { red: 0, yellow: 1, ok: 2, none: 3 };
+  function cardLineTitle(line) {
+    const part = (el) => [...el.childNodes].map((n) => n.nodeType !== 1 ? n.textContent : getComputedStyle(n).display === 'none' ? ''
+      : (n.matches('span[data-block]') && n.previousElementSibling?.matches('span[data-block]') ? ' · ' : '') + n.textContent).join('')
+      .replace(/\s+/g, ' ').replace(/(?: ?· ?)+/g, ' · ').replace(/^[\s·]+|[\s·]+$/g, '');
+    const tip = [...line.querySelectorAll(':scope > .grp__said, :scope > .grp__status, :scope > .grp__cutoff')].map(part).filter(Boolean).join(' · ');
+    if (tip) line.title = tip; else line.removeAttribute('title');
+  }
   function board(host, opts = {}) {
     host.classList.add('vz-board');
     const items = new Map();
@@ -1345,7 +1352,11 @@
         }
         if (payload) { it.chart.set(payload); if (opts.reading) it.chart.point(null); }
       }
-      if (it.chips) it.chips.set((it.g.chips || []).filter((c) => c.key !== it.pick), payload);
+      if (it.chips) {
+        const choices = it.g.chips || [];
+        const visible = opts.keepChips ? choices.map(c => ({ ...c, on: c.key === it.pick })) : choices.filter(c => c.key !== it.pick);
+        it.chips.set(visible, payload);
+      }
       const said = it.chart ? say(it) : '';
       html(it.card.querySelector('.grp__say'), esc(sp(said)));
       it.extra?.set?.(it.g, payload);
@@ -1438,13 +1449,9 @@
       const reasonInLine = typeof g.why === 'string' && subtitle.split(' · ').includes(sp(g.why));
       const status = window.LiveUI.status(reasonInLine ? { ...g, text: g.why } : g, { missingNames: g.missingNames ?? undefined,
         cutoffShown: text => [...cutoff.keys()].some(shown => window.LiveUI.sameCutoffNote(shown, text)) });
-      html(it.card.querySelector('.grp__status'), [status.note, !g.empty && blockNotes(sourceNotes.map(b => ({ ...b, text: clean(b.text) })), subtitle, g.name)].filter(Boolean).join(' · '));
-      // 悬停提示照行里排出来的几句写、句句隔开（页上用样式补的“ · ”也补上）；读前那层“正在读…”和藏起来的不算
-      const lineEl = it.card.querySelector('.grp__line');
-      const part = (el) => [...el.childNodes].map((n) => n.nodeType !== 1 ? n.textContent : getComputedStyle(n).display === 'none' ? ''
-        : (n.matches('span[data-block]') && n.previousElementSibling?.matches('span[data-block]') ? ' · ' : '') + n.textContent).join('').replace(/\s+/g, ' ').replace(/(?: ?· ?)+/g, ' · ').replace(/^[\s·]+|[\s·]+$/g, '');
-      const tip = [...lineEl.querySelectorAll(':scope > .grp__said, :scope > .grp__status, :scope > .grp__cutoff')].map(part).filter(Boolean).join(' · ');
-      if (tip) lineEl.title = tip; else lineEl.removeAttribute('title');
+      const visibleNotes = ['power', 'smooth', 'security'].includes(opts.key) ? sourceNotes.filter(b => b.state !== 'unavailable') : sourceNotes;
+      html(it.card.querySelector('.grp__status'), [status.note, !g.empty && blockNotes(visibleNotes.map(b => ({ ...b, text: clean(b.text) })), subtitle, g.name)].filter(Boolean).join(' · '));
+      cardLineTitle(it.card.querySelector('.grp__line'));
       html(it.card.querySelector('.grp__gf'), g.grafana ? `<a class="gf" href="${esc(g.grafana)}" target="_blank" rel="noopener" data-gf data-needs-pc>Grafana <span class="more__chev">↗</span></a>` : '');
       window.LiveLight?.tone(it.card, g);
       settle(it, warn);
@@ -1692,5 +1699,5 @@
     };
   }
 
-  window.LiveViz = { timeline, heatmap, bars, share, rank, figures, chips, moments, audit, calendar, board, weave, block, blockState, blockGroup, blockData, chartQuery, chartWidth, watchChart, fmt, fmtHtml, warm, dur, durHtml, hues: HUE, stateHues: STATE_HUE, categoryHues: CAT_HUE, categoryNames: CAT_NAME, md, weekday, dayLabel };
+  window.LiveViz = { timeline, heatmap, bars, share, rank, figures, chips, moments, audit, calendar, board, cardLineTitle, weave, block, blockState, blockGroup, blockData, chartQuery, chartWidth, watchChart, fmt, fmtHtml, warm, dur, durHtml, hues: HUE, stateHues: STATE_HUE, categoryHues: CAT_HUE, categoryNames: CAT_NAME, md, weekday, dayLabel };
 })();

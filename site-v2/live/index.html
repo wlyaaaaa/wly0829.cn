@@ -39,6 +39,19 @@
  .page--live #computer .kv__row:has(.traffic-hour) dt { grid-column: 2 / -1; }
  .page--live #computer .kv__row:has(.traffic-hour) dd { grid-column: 2 / -1; grid-row: 2; }
 }
+@container (max-width: 260px) {
+ .page--live #computer .kv__row:is(:last-child,:has(small):not(:has(.traffic-hour))) dt { grid-column: 2 / -1; }
+ .page--live #computer .kv__row:is(:last-child,:has(small):not(:has(.traffic-hour))) dd { grid-column: 2 / -1; grid-row: 2; }
+ .page--live #computer .kv__row:last-child dd a { white-space: normal; }
+}
+@media (max-width: 760px) {
+ .page--live #computer[data-pic] { --win: 72px; }
+ .page--live #computer .card__glass { padding-inline: 16px; }
+ .page--live #computer[data-pic="right"] .card__body { padding-right: 0; }
+ .page--live #computer .kv__label { white-space: normal; }
+ .page--live #computer .kv__row dt { grid-column: 2 / -1; }
+ .page--live #computer .kv__row dd { grid-column: 2 / -1; grid-row: 2; }
+}
 .page--live .chat-progress-line a.more { margin: 0; padding: 0; translate: none; }
 /* 再看已完成的：和还有 N 个对话同一个样子，不露浏览器默认的黑三角 */
 .page--live #chats [data-part="recent-more"] > summary { list-style: none; }
