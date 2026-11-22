@@ -16,6 +16,7 @@ SOURCE = HERE.parent / "文稿"
 OUTPUT = HERE.parents[1] / "demo"
 SITE = HERE.parents[4] / "dist"
 VIZ = HERE.parent / "viz"
+LIVE_SOURCE = HERE.parents[3] / "live"  # 实况在原理页之后才组装进站，查实况页在不在先看源码
 FILES = ["文章标题.md", "引言.md", "第1节-设备互联.md", "第2节-数据采集与回溯.md",
          "第3节-个人理解.md", "第4节-凭据与数据安全.md", "第5节-代办事务.md", "第6节-内容制作.md",
          "第7节-无人值守与通知.md", "第8节-系统维护与恢复.md", "第9节-多模型协作.md",
@@ -51,17 +52,20 @@ def add_viz(article, output):
         lead, stop, rest = caption.partition("。")
         cap = (f'<figcaption class="viz__cap"><span class="viz__lead">{escape(lead + stop)}</span>{escape(rest)}</figcaption>' if caption else "")
         source = VIZ / item["file"]
+        target = output / item["file"]
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, target)
         if source.suffix == ".webp":
-            target = output / item["file"]
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(source, target)
             with Image.open(source) as image:
                 w, h = image.size
-            picture = (f'<img src="{escape(item["file"])}" alt="{escape(item["alt"])}" '
-                       f'width="{w}" height="{h}" loading="lazy" decoding="async">')
+            plate = (f'<div class="viz__plate"><img src="{escape(item["file"])}" alt="{escape(item["alt"])}" '
+                     f'width="{w}" height="{h}" loading="lazy" decoding="async"></div>')
         else:
-            picture = source.read_text(encoding="utf-8")
-        figure = BeautifulSoup(f'<figure class="{item["class"]}" id="viz-{item["id"]}"><div class="viz__plate">{picture}</div>{cap}</figure>', "html.parser")
+            # 示意图各是一个文件，组装时和别的图一样改成 OSS 地址；viz.js 滑到附近才取回来内联进衬底，
+            # 图里的字照样用页面字体、受 viz.css 管，动效也够得着。衬底按 viewBox 先占好位，图到了页面不跳。
+            w, h = re.search(r'viewBox="[-\d.]+ [-\d.]+ ([\d.]+) ([\d.]+)"', source.read_text(encoding="utf-8")).groups()
+            plate = f'<div class="viz__plate" data-src="{escape(item["file"])}" style="aspect-ratio:{w}/{h}"></div>'
+        figure = BeautifulSoup(f'<figure class="{item["class"]}" id="viz-{item["id"]}">{plate}{cap}</figure>', "html.parser")
         if item["after"].startswith("【图："):
             assert matches[0].get_text() == item["after"], f'配图记号须独占一段：{item["id"]}'
             matches[0].replace_with(figure)
@@ -106,6 +110,25 @@ def make_names(kind, article, site):
     return sorted(found, key=lambda row: row["position"])
 
 
+def page_exists(href, site):
+    path = href.split("#", 1)[0].lstrip("/")
+    if (site / path).is_file() or (site / path / "index.html").is_file():
+        return True
+    return path.startswith("live/") and (LIVE_SOURCE / path[len("live/"):] / "index.html").is_file()
+
+
+def make_pages(article, site):
+    """文中提到的实况各页、规则页等：按 linked-pages.json 的叫法找，页面还没建好的只显示名字（预留）。"""
+    found = []
+    for page in json.loads((HERE / "linked-pages.json").read_text(encoding="utf-8")):
+        hits = [(article.find(word), word) for word in page["match"] if word in article]
+        if hits:
+            href = page["href"] if page_exists(page["href"], site) else ""
+            slug = page["href"].strip("/").replace("/", "-") or "home"
+            found.append(dict(name=page["name"], slug=slug, matched=page["name"], position=min(hits)[0], href=href))
+    return sorted(found, key=lambda row: row["position"])
+
+
 def build(published, site=SITE, output=OUTPUT):
     output.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(HERE / "principles.css", output / "principles.css")
@@ -139,10 +162,11 @@ def build(published, site=SITE, output=OUTPUT):
     current = next(a for a in header.select("a.pill") if a.get_text() == "原理")
     current["aria-current"], current["href"] = "page", "/principles/"
     names = {kind: make_names(kind, "\n\n".join(raw), site) for kind in ("projects", "skills")}
+    names["pages"] = make_pages("\n\n".join(raw), site)
     meta = (f'<dl><div><dt>发布</dt><dd>{escape(published)}</dd></div><div><dt>作者</dt><dd>吴乐阳</dd></div>'
             f'<div><dt>字数</dt><dd>{word_count:,} 字</dd></div></dl>')
     meta += '<p class="publication-note">本文记录的是 2026 年 11 月的样子，之后不再更新；现行规矩见<a href="/rules/">规则页</a>。</p><dl>'
-    for kind, label in (("projects", "文中提到的项目"), ("skills", "文中提到的技能")):
+    for kind, label in (("projects", "文中提到的项目"), ("skills", "文中提到的技能"), ("pages", "文中提到的页面")):
         meta += f'<div class="mentioned"><dt>{label}</dt><dd><ul>'
         for row in names[kind]:
             name = escape(row["matched"])
@@ -154,9 +178,12 @@ def build(published, site=SITE, output=OUTPUT):
     # 四大块各带 data-mo-rise；装配站里有了 /motion/ 才在 head 末尾加那两行，没并进站之前不引用不存在的文件。
     motion = ('<link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script>'
               if (site / "motion" / "motion.css").exists() else "")
+    # 第一屏总图和样式一起先取，viz.js 一跑就能放进去，不等脚本下完才开始下图。
+    first = article.select_one(".viz__plate[data-src]")
+    preload = f'<link rel="preload" href="{escape(first["data-src"])}" as="fetch" crossorigin="anonymous">' if first else ""
     html = f'''<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><link rel="icon" href="data:,">
-<title>原理</title><link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/rules/rules.css"><link rel="stylesheet" href="principles.css"><link rel="stylesheet" href="viz.css">{motion}</head>
+<title>原理</title><link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/rules/rules.css"><link rel="stylesheet" href="principles.css"><link rel="stylesheet" href="viz.css">{preload}{motion}</head>
 <body>{header}<main class="rules-page principles-page"><div class="rules-title" data-mo-rise><h1>{escape(heading)}</h1><p class="principles-subtitle">{escape(subtitle)}</p></div>
 <div class="rules-layout"><nav class="rules-toc" aria-label="本篇目录" data-mo-rise><ol>{''.join(toc)}</ol></nav>
 <article class="rules-body" data-mo-rise>{article}</article><aside class="rules-meta" aria-label="文章信息" data-mo-rise>{meta}</aside></div></main>
@@ -180,7 +207,7 @@ def build(published, site=SITE, output=OUTPUT):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--published", default="2026-11-21", help="发布日写实际上线那天")
+    parser.add_argument("--published", default="2026-11-23", help="发布日写实际上线那天")
     parser.add_argument("--site", type=Path, default=SITE, help="本次已组装的页眉、列表和链接目标")
     parser.add_argument("--output", type=Path, default=OUTPUT)
     args = parser.parse_args()
