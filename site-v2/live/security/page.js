@@ -227,8 +227,8 @@
         report('需核实', groups.review, g => {
           const screening = /impersonation/.test(g.key || '');
           const fields = [Number.isInteger(g.programs) && (screening ? `${g.programs} 个程序没签名或路径不常见，要确认不是冒充的` : `${g.programs} 个程序名`),
-            g.strong > 0 && `其中 ${g.strong} 个要尽快确认`, g.at && `${stamp(g.at)} 读到`, who(g)].filter(Boolean);
-          return `<a href="#grp-impersonation" data-goto="impersonation">${name(g)}</a>（${U.esc(fields.join('；'))}）`;
+            g.strong > 0 && `其中 ${g.strong} 个要尽快确认`, g.at && `${stamp(g.at)} 读到`, g.ai_fixing === true ? 'AI 在逐个核对' : '下一步：交给 AI 逐个核对签名和安装位置，你不用自己查；现在还没有 AI 接手'].filter(Boolean);
+          return `<a href="#grp-impersonation" data-goto="impersonation">${name(g)}${screening ? ' · 看是哪几个 ›' : ''}</a>（${U.esc(fields.join('；'))}）`;
         })
       ].filter(Boolean);
       count.hidden = false;

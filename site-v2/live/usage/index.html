@@ -28,6 +28,12 @@
 .page--usage .vz-cal__dot { width: var(--cal-cell); height: var(--cal-cell); }
 .page--usage .use-cal__week { grid-template-rows: repeat(7, var(--cal-cell)); line-height: var(--cal-cell); }
 .page--usage .year-row .vz-heat__key { justify-content: center; margin-top: 18px; }
+/* 月历图例：每种颜色旁边都看得到对应的色块（灰点、空心圈画大一点、深一点，日历里同样） */
+.page--usage .year-row .vz-heat__key { flex-wrap: wrap; gap: 6px 18px; }
+.page--usage .use-key__part { display: inline-flex; align-items: center; gap: 4px; }
+.page--usage .year-row .vz-heat__key .vz-cal__dot { width: 14px; height: 14px; border-radius: 50%; }
+.page--usage .vz-cal__dot.is-zero { background: rgb(20 20 19 / .1); }
+.page--usage .vz-cal__dot.is-none { box-shadow: inset 0 0 0 1.5px rgb(20 20 19 / .2); }
 .page--usage .year-sum { padding-left: 22px; }
 .page--usage .use-days .chart__head { display: grid; grid-template-columns: 1fr; gap: 8px; min-height: 58px; }
 .page--usage .use-days .chart__vals { justify-content: flex-start; flex-wrap: wrap; gap: 8px 14px; }

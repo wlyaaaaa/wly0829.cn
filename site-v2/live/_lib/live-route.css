@@ -240,6 +240,9 @@ body.page--route {
 .route-row--log .route-row__line { flex: 1 1 auto; }
 .route-row--log .route-row__line > .lamp { align-self: center; margin-right: -4px; }
 .route-row--log .route-row__sub { flex: 0 1 auto; max-width: 34%; margin: 0; }
+/* 过程记录里摘要、回复那一行下面接的原文 */
+.route-row__text { margin: 2px 0 0; font-size: 14px; line-height: 22px; color: var(--route-ink); white-space: pre-line; overflow-wrap: anywhere; }
+.route-row__text + .route-clip__more { font-size: 13px; line-height: 22px; }
 .route-row__time { flex: none; width: 92px; padding-top: 1px; font-size: 13.5px; line-height: 24px; color: var(--route-muted); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
 .route-log .route-foot { margin-top: auto; padding-top: 14px; }
 

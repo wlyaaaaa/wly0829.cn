@@ -94,11 +94,21 @@
       why: [reason ? `${primary?.name ? esc(primary.name) + '：' : ''}${reason}` : (!(modern ? headline : selected) && esc(missing('副本情况'))), state.note].filter(Boolean).join('。') };
   }
   const STATE = { ready: '齐了', complete: '齐了', completed: '齐了', partial: '只核实了一部分', missing: '已确认没有副本', unknown: '尚未证实', queued: '在等', waiting: '在等', stable: '在等', stale: '旧了', failed: '没传成' };
-  const VERIFIED = { sha256_verified: 'SHA-256 校验通过', current_closure_and_sources_verified: '当前材料及来源校验通过', sha256_full_g_scope: 'G 盘范围完整校验', ok: '通过', failed: '未通过', reused: '复用已校验结果' };
+  const VERIFIED = { sha256_verified: '完好（校验码对得上）', current_closure_and_sources_verified: '完好，用到的来源也都在', sha256_full_g_scope: 'G 盘上的全都核过', ok: '完好', failed: '没通过：文件坏了或对不上', reused: '上次核过、没动过，沿用' };
+  // 恢复材料的技术原名（后台给的英文或内部名）换成看得懂的说法；没列到的照原名，只把内部代号换掉
+  const KIT_NAMES = {
+    'Veeam 系统镜像恢复 ISO': '系统整机恢复启动盘（Veeam）',
+    '随 CoreRecovery 当前版本发布的 Veeam 整包校验工具': '检查恢复启动盘是否完好的工具',
+    'Gigabyte X870E AORUS PRO ICE BIOS F4b fan profile backup': '主板风扇设置的备份',
+    'Gigabyte X870E AORUS PRO ICE Rev 1.0 BIOS and local fan profile bundle': '主板 BIOS 和风扇设置整包',
+    'Gigabyte X870E AORUS PRO ICE photo-derived core BIOS/UEFI settings record': '主板 BIOS 关键设置记录（照屏幕照片整理）',
+    'Top-level recovery asset SHA256 manifest': '全部恢复材料的校验码清单',
+    '备份区换新电脑的一条命令取回入口': '换新电脑时一条命令取回恢复材料',
+  };
   const hero = $('hero'), heroRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(2), name: '一类备份' });
   const copiesRead = U.reading($('copies'), { ghost: U.ghost.rows(3), slow: false });
   const MATERIAL = { current: '当前材料', retained_historical: '保留的历史材料', technical_snapshot: '技术快照', registered_manifest_snapshot: '清单快照' };
-  const ASSET_CATEGORY = { boot_media: '启动介质', recovery_tools: '恢复工具', bios_settings: 'BIOS 设置', documentation: '使用说明', windows_iso: 'Windows 安装镜像', winpe_build_material: 'WinPE 制作材料', drivers: '驱动程序', bios_drivers: 'BIOS 与驱动', hash_manifest: '校验清单' };
+  const ASSET_CATEGORY = { boot_media: '启动介质', recovery_tools: '恢复工具', bios_settings: 'BIOS 设置', documentation: '使用说明', windows_iso: 'Windows 安装镜像', winpe_build_material: 'WinPE 制作材料', drivers: '驱动程序', bios_drivers: 'BIOS 与驱动', hash_manifest: '校验清单', core_recovery: '恢复包核心材料' };
   let set = null, bundle = null, bundleSource, verification = null, verificationAt = null, viewer = 'public';
   Light.add(hero);
   document.querySelector('[data-back]').href = route('/live/backups/');
@@ -244,10 +254,14 @@
     const text = [[result, completed].filter(Boolean).join(' · '), [scope, excluded].filter(Boolean).join(' · '),
       gScope && '只核对材料完整性，未做实际启动或恢复验证。',
       d.file_count == null ? offline() ? '' : U.collectionText('核对的文件数', d) : `这次核对了 ${count(d, 'file_count')} 份文件`,
-      d.freshly_hashed_file_count != null && d.reused_member_count != null ? `${count(d, 'freshly_hashed_file_count')} 份重新核对，${count(d, 'reused_member_count')} 份沿用已核对记录` : '', U.olderNote?.(d.at, d)].filter(Boolean);
+      d.freshly_hashed_file_count != null && d.reused_member_count != null ? (d.reused_member_count > 0 ? `其中 ${count(d, 'freshly_hashed_file_count')} 份这次重新算了一遍校验码；另外 ${count(d, 'reused_member_count')} 份上次核过以后没动过，沿用上次的结果` : `${count(d, 'freshly_hashed_file_count')} 份都重新算了一遍校验码`) : '', U.olderNote?.(d.at, d)].filter(Boolean);
     const summary = text.length ? `${point && !d.point ? `<p class="fe-l3b-note">${offline() ? '下面是最近一次核对，未对应到这份备份。' : `${U.collectionText('这一份的对应结果', d)}，下面是最近一次核对。`}</p>` : ''}${text.map(line => `<p class="fe-l3b-note">${said(line)}</p>`).join('')}` : `<p class="fe-l3b-note">${esc(missing('这份备份核对的结果'))}</p>`;
     const timed = d.rows?.some(row => verificationTime(row));
-    const assets = d.rows?.length ? table(['资产类别', '名称', '分组', '结论', '成员数', ...(timed ? ['核对时间'] : [])], d.rows.slice(0, assetLimit).map(row => [said(ASSET_CATEGORY[row.category] || row.category, '资产类别'), said(row.name, '资产名称'), (row.groups || []).map(group => said(MATERIAL[group] || group, '材料分组')).join('、'), (row.conclusions || []).map(c => `${said(VERIFIED[c.status] || c.status, '校验结论')}${c.path ? `<small>${pathHtml(c.path, '恢复材料路径')}</small>` : ''}`).join('<br>'), count(row, 'count'), ...(timed ? [verificationTime(row)] : [])]), '逐资产核对结果', completed) : '';
+    // 每样恢复材料一行：先写看得懂的名字和核对结果；后台的技术原名、文件位置收在“原名和位置”里，要查再点开
+    const kitName = row => { const raw = U.fieldText(row.name, viewer).trim(); return Object.hasOwn(KIT_NAMES, raw) ? KIT_NAMES[raw] : raw.replace(/CoreRecovery/g, '电脑恢复包'); };
+    const kitOrigin = row => { const raw = U.fieldText(row.name, viewer).trim(), paths = (row.conclusions || []).filter(c => c.path), renamed = raw && kitName(row) !== raw;
+      return renamed || paths.length ? `<details class="backup-path"><summary>原名和位置</summary><div>${[renamed && said(row.name, '资产名称'), ...paths.map(c => pathHtml(c.path, '恢复材料路径'))].filter(Boolean).join('<br>')}</div></details>` : ''; };
+    const assets = d.rows?.length ? table(['哪一类', '是什么', '核对结果', '几份文件', ...(timed ? ['核对时间'] : [])], d.rows.slice(0, assetLimit).map(row => [said(ASSET_CATEGORY[row.category] || row.category, '资产类别'), `${esc(kitName(row))}${(row.groups || []).length ? `<small>${(row.groups || []).map(group => said(MATERIAL[group] || group, '材料分组')).join('、')}</small>` : ''}${kitOrigin(row)}`, (row.conclusions || []).map(c => said(VERIFIED[c.status] || c.status, '校验结论')).join('<br>'), count(row, 'count'), ...(timed ? [verificationTime(row)] : [])]), '每样恢复材料核对得怎样', completed) : '';
     U.html($('verified'), summary + assets);
     nextBatch($('verified'), d.rows?.length || 0, assetLimit, () => { assetLimit += 5; renderVerification(); });
   }

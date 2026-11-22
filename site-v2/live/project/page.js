@@ -106,7 +106,9 @@
   // 读数句子里夹着的机器时刻（2026-11-17T15:47:23.82+08:00）按北京时间写成“11-17 15:47”
   const isoText = t => typeof t === 'string' ? t.replace(/\b\d{4}-\d\d-\d\dT\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)?/g, x => { const at = /(?:Z|[+-]\d\d:\d\d)$/.test(x) ? x : `${x}+08:00`; return Number.isFinite(Date.parse(at)) ? stamp(x) : x; }) : t;
   const metricText = v => sp(sp(v).replace(/\d{4}-\d\d-\d\d(?:T\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)?)?/g, stamp).replaceAll('登记', '记录'));
-  const metricNote = v => metricText(v);
+  // 后台有几项口径只给了一个内部代号（我的说明书“说明”点开那几句），换成人话
+  const SCOPE_WORDS = { 现行主题卡: '只算现在在用的认识，退役的旧认识不算', 现有记录: '按库里现在留着的记录算' };
+  const metricNote = v => metricText(typeof v === 'string' && Object.hasOwn(SCOPE_WORDS, v.trim()) ? SCOPE_WORDS[v.trim()] : v);
   // 公开版：名字能公开的那一行留在原位，数的位置写“仅本人可见”；名字本身就露私事的，后端不给这一行、只给个数（段的 hidden），
   // 合成段尾一句“另有 N 项仅本人可见”。只放宽，不在前端再藏别的。
   const lower = (m, key) => (m?.lower_bound === true || m?.at_least === true || m?.isPartial === true || m?.value?.lower_bound === true || m?.value?.at_least === true || m?.value?.isPartial === true) || m?.q === 'partial' && (!Array.isArray(m.partial) || m.partial.includes(key));

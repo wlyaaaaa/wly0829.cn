@@ -153,10 +153,19 @@
     const count = Number(d?.gray_count) || 0;
     const grayNote = marked.length ? `${count || marked.length} 项读数还不能确认 · 灰灯已标出 ${names(marked)}`
       : count ? `${count} 项读数还不能确认，读数里没标明具体是哪几项` : '';
-    return { text: [lead, ...tail].join(' · '), note: [grayNote, d?.ai_fixing_count != null && `AI 在修 ${d.ai_fixing_count} 件`].filter(Boolean).join(' · ') };
+    return { text: [lead, ...tail].join(' · '), note: [grayNote, fixing(d)].filter(Boolean).join(' · ') };
   }
   const staleStorage = d => d?.stale || d?.q === 'stale' || d?.gray_reason === 'stale';
-  const storageStatus = d => U.status(d && { ...d, attention_count: 0, why: field(d.why, '状态说明'), stale_text: field(d.stale_text, '读数说明') });
+  const storageStatus = d => U.status(d && { ...d, attention_count: 0, ai_fixing_count: undefined, why: field(d.why, '状态说明'), stale_text: field(d.stale_text, '读数说明') });
+  // 谁在管：有 AI 在修写几件；一件都没有就直说“还没有 AI 接手”，不写“AI 在修 0 件”
+  const fixing = d => d?.ai_fixing_count > 0 ? `AI 在修 ${d.ai_fixing_count} 件` : d?.ai_fixing_count === 0 ? '还没有 AI 接手' : '';
+  // 页首说了自动清理出事，旁边直接写出了什么事、点了跳到下面“自动清理”那张卡
+  function cleanupWhy(d) {
+    const alarm = window.StorageCleanup?.alarm(d), g = alarm && window.StorageCleanup.digest(d);
+    if (!g) return '';
+    const reason = g.deleted > 0 ? '看被删的是哪几件' : g.last?.result === 'error' ? `出错原因：${K.field(g.last.error, '清理出错原因', viewer) || '这一轮没写原因'}` : `每 ${g.hours} 小时该跑一轮，上次是 ${when(g.last.finished_at)}`;
+    return `<a href="#cleanup-card">${esc(reason)}，看下面“自动清理” ›</a>`;
+  }
   function attention(d) {
     const volumes = d?.volumes || [];
     const disks = staleStorage(d) ? [] : volumes.filter(v => v.level !== 'gray' && K.letter(v) !== 'F')
@@ -173,7 +182,8 @@
     if (withheld) links.push(esc(withheld));
     const unexplained = Math.max(0, (Number(d?.attention_count) || 0) - rows.size - hidden);
     if (unexplained) links.push(`后台标了 ${unexplained} 项要留意，这次没给出项目和原因`);
-    return links.join(' · ');
+    const total = Math.max(Number(d?.attention_count) || 0, rows.size + hidden);
+    return links.length ? `<b>要留意 ${total || links.length} 项</b>：${links.join(' · ')}` : '';
   }
   function storageSummary(d) {
     if (!d || !d.volumes?.length && !d.categories?.length && !d.disks?.length && !d.ssd_writers?.rows?.length && !d.database?.rows?.length && !d.totals?.metrics?.length && !Object.values(d.periods || {}).some(p => p.metrics?.length)) return { text: U.offline?.() ? '存储' : '存储暂时读不到', ...storageStatus(d) };
@@ -266,7 +276,8 @@
     const available = !!(d?.cleanup || d?.volumes?.length || d?.disks?.length || d?.categories?.length || d?.ssd_writers || d?.database || d?.totals?.metrics?.length || Object.values(d?.periods || {}).some(p => p.metrics?.length)), summary = storageSummary(visible);
     document.querySelector('.l2-board').hidden = $('ssd-box').hidden = !available; hero.classList.toggle('is-unavailable', !available && !U.offline?.());
     const title = field(d?.text, '存储标题');
-    U.html($('head'), summary.lamp + U.head(locked ? '存储 · 存储读数内容仅本人可见' : K.isPlaceholder(title) ? `存储 · ${title}` : summary.text, { lamp: false })); const heroNote = [attention(visible), summary.note].filter(Boolean).join(' · ');
+    U.html($('head'), summary.lamp + U.head(locked ? '存储 · 存储读数内容仅本人可见' : K.isPlaceholder(title) ? `存储 · ${title}` : summary.text, { lamp: false })); const warned = attention(visible), cleanup = cleanupWhy(visible), who = (warned || cleanup) && !String(summary.note || '').includes(fixing(visible)) ? fixing(visible) : '';
+    const heroNote = [warned, cleanup, summary.note, who].filter(Boolean).join(' · ');
     U.html($('hero-note'), heroNote); $('hero-note').hidden = !heroNote;
     Light.tone(hero, summary.tone);
     const { visible: listed, hidden } = K.splitRows(d?.categories, viewer);

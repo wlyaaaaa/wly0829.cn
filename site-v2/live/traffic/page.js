@@ -51,11 +51,20 @@
       return `${when(start)}–${when(end)} ${reason}`;
     }).filter(Boolean).join('；');
     gapNote.hidden = !gapNote.textContent;
-    if (!d) { daily.set(null); $('days-quality').textContent = ''; return; }
+    if (!d) { daily.set(null); $('days-quality').textContent = ''; $('days-note').hidden = true; return; }
     U.html($('curve-window'), [shownDays === '7' ? '近 7 天 · 小时均值' : '曲线画近 24 小时 · 小时均值，上面的总数从今天 0 点算', U.olderNote?.(d.curve?.at || d.at || d.curve?.to || d.to, d.curve || d)].filter(Boolean).map(esc).join(' · '));
     const keys = ['upload', 'download'], rows = d.days || [], quality = Object.fromEntries(keys.map(key => [key, rows.map(day => dayPartial(day, key, d) ? 'partial' : 'ok')]));
     daily.set(d.days == null ? null : { labels: rows.map(day => ({ text: U.date(day.at || day.date), title: U.date(day.at || day.date) })), values: Object.fromEntries(keys.map(key => [key, rows.map(day => day[key] ?? null)])), quality });
     let column = 0; const lower = rows.flatMap((day, i) => keys.flatMap(key => day[key] > 0 ? (++column, quality[key][i] === 'partial' ? [column] : []) : []));
+    // 虚线框的柱子直接在图下说清：那天哪段没测到，实际只多不少（不用切到“近 7 天”看折线下的缺测）
+    const gapsOf = day => { const start = Date.parse((day.date || day.at?.slice(0, 10)) + 'T00:00:00+08:00'), end = start + 86400000;
+      return [...(d.curve?.gaps || []), ...(d.gaps || [])].map(g => [Math.max(start, Date.parse(g.from)), Math.min(end, Date.parse(g.to))]).filter(([a, b]) => a < b)
+        .map(([a, b]) => `${U.time(new Date(a).toISOString())}–${b === end ? '24:00' : U.time(new Date(b).toISOString())}`); };
+    const dashed = rows.filter((day, i) => keys.some(key => day[key] > 0 && quality[key][i] === 'partial')).map(day => {
+      const spans = [...new Set(gapsOf(day))], why = spans.length ? `${spans.join('、')} 没测到` : sp(day.gap || '') || (U.date(day.at || day.date) === U.date(today?.to || '') ? '今天还没过完、有一段还没测到' : '有一段没测到');
+      return `${U.date(day.at || day.date)}（${why}）`; });
+    $('days-note').textContent = dashed.length ? `虚线框的柱子是那天没测全，实际只会比画出来的多：${dashed.join('；')}` : '';
+    $('days-note').hidden = !dashed.length;
     $('days-quality').textContent = lower.length ? `${lower.map(i => `.page--traffic #traffic-days .vz-bars__body path:nth-child(${i})`).join(',')}{fill-opacity:.4;stroke:var(--ink-soft);stroke-width:1;stroke-dasharray:3 3}` : '';
   }
   const bar = U.topbar({ ask: () => traffic ? `请看实况海外流量：上传 ${bytes(traffic.upload, partial(traffic, 'upload'))}，下载 ${bytes(traffic.download, partial(traffic, 'download'))}。请说明现在的情况。` : '' });
@@ -84,7 +93,8 @@
   }
   function renderPrograms(d) {
     const table = d?.program_table, source = table?.rows ?? d?.programs ?? [];
-    const separate = U.separateTraffic(table?.separate);
+    // 和电脑页网络卡同一句人话（M042）：后台原话写的是“独立侧车实测……”
+    const separate = U.separateTraffic(table?.separate && { ...table.separate, note: U.separateTrafficNote });
     const separateRow = $('program-separate');
     separateRow.hidden = !separate;
     U.html(separateRow, separate ? `<b>${esc(separate.name)}</b> · ${U.nowrap(separate.summary)}` : '', false);
@@ -113,7 +123,7 @@
       return { key: p.id, name, original, total, value: total == null ? null : total / 2 ** 30, text, sub, upload, download, note };
     }).sort((a, b) => (b.total ?? -1) - (a.total ?? -1));
     if (rows.length) programs.set(rows.slice(0, 5));
-    summary.textContent = [rows.length && `查看全部 ${rows.length} 个程序明细${rows.length > 5 ? `（含其余 ${rows.length - 5} 个）` : ''}`, separate && (rows.length ? '含 Claude 独立实测' : '查看 Claude 独立实测')].filter(Boolean).join(' · ');
+    summary.textContent = [rows.length && `查看全部 ${rows.length} 个程序明细${rows.length > 5 ? `（含其余 ${rows.length - 5} 个）` : ''}`, separate && (rows.length ? '另含单独记的 Claude 流量' : '查看单独记的 Claude 流量')].filter(Boolean).join(' · ');
     const displayRows = separate ? [...rows, { ...separate, key: 'claude-sidecar', original: '—', text: separate.total }] : rows;
     const body = displayRows.map(r => `<tr data-key="${esc(r.key)}">${[r.name, r.original, r.upload, r.download, r.text, r.note].map(v => `<td>${esc(v)}</td>`).join('')}</tr>`).join('');
     U.html(detailRows, `<table><thead><tr><th>软件</th><th>原进程</th><th>上传</th><th>下载</th><th>合计</th><th>说明</th></tr></thead><tbody>${body}</tbody></table>`, false);

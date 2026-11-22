@@ -208,8 +208,12 @@
       const { name, detail, mark } = helperWords(h), model = U.fieldText(U.draw10 ? U.draw10.modelName(h) : h.model, viewer);
       list.push({ key: `h-${h.id || i}`, at: h.at, word: chatState(h), name: name || U.fieldHtml(model), sub: name ? ['帮手', model].filter(Boolean).join(' · ') : '', detail, lamp: U.status(h, { small: true }).lamp, mark });
     }
-    for (const [key, v, word, name] of [['summary', chat.summary, '摘要', '写好正式摘要'], ['reply', reply, '回复', '发出最新回复']]) if (v && typeof v === 'object' && v.at)
-      list.push({ key, at: v.at, word, name: esc(name) });
+    // 摘要、回复这两行接上已有的原文：本人版整段摆出，访客版先露两行、点“展开”看全；仅本人可见的照常写锁
+    for (const [key, v, word, name, label] of [['summary', chat.summary, '摘要', '写好正式摘要', '正式摘要'], ['reply', reply, '回复', '发出最新回复', '最新回复']]) if (v && typeof v === 'object' && v.at) {
+      const original = replyBody(key === 'summary' ? U.chatProgressText(v, chat, viewer) : v), body = chatCell(original, label, chat, 0, true) || chatCell(original, label, chat), clip = viewer !== 'owner' && `log-${key}`;
+      const detail = body ? `<p class="route-row__text"${clip ? ` data-clip="${clip}" style="--clip-lines:2"` : ''}>${body}</p>${clip ? `<button type="button" class="route-clip__more" data-clip-for="${clip}" hidden>展开</button>` : ''}` : '';
+      list.push({ key, at: v.at, word, name: esc(name), detail });
+    }
     if (validTime(chat.at) && !list.some(e => Date.parse(e.at) === Date.parse(chat.at))) list.push({ key: 'update', at: chat.at, word: '主对话更新' });
     return list.filter(e => validTime(e.at)).sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
   }
@@ -228,7 +232,7 @@
     U.html($('log-more'), b.html);
   }
   R.on('helpers', () => { if (chat) drawHelpers(); });
-  R.on('log', () => { if (chat) drawLog(); });
+  R.on('log', () => { if (chat) { drawLog(); R.reclip(); } });
 
   function workLine(d, reply) {
     const progress = [d.doing, d.progress, d.text].find(value => {

@@ -493,6 +493,7 @@
   const join = (list) => list.filter(Boolean).map(sp).join(' · ');
   const title = (it, text, resource) => { const own = resource === 'chats' ? 'AI 对话' : '事项', field = { visibility: it.visibility, public: it.public, rewrite: it.rewrite, hidden_what: it.hidden_what, ...(text && typeof text === 'object' ? text : { text }) }, hidden = viewer === 'public' && (field.visibility === 'owner' || field.public === 'owner' || field.hidden), words = U.fieldHtml(field, { name: own, place: 'title', kind: viewer }) || (lastState?.offline ? '' : U.collectionText()), note = hidden || (field.rewrite === 'pending' || field.hidden) && !field.text && !field.value ? U.fieldHtml(field, { name: field.hidden_what || (resource === 'chats' ? '这场对话的内容' : '这件事'), kind: viewer }) : ''; return (hidden ? `<span class="row__title">${words}</span>` : `<a class="row__title home-detail-link" href="${esc(route(`/live/${resource === 'chats' ? 'chat' : 'item'}/?id=${encodeURIComponent(it.id)}`))}">${words}</a>`) + (note ? `<span class="row__meta">${note}</span>` : ''); };
   let home = null, at = null, source = null, seen = null, lastState = null, viewer = 'owner';
+  let aiMessages = null;   // 首页的 AI 留言（ai-messages 读口），画在页顶那张卡里
   const newMarks = new Map();
   const fresh = (scope, born, readAt = at, readSource = source) => {
     if (!newMarks.has(scope)) newMarks.set(scope, U.seen(scope, readSource));
@@ -1387,6 +1388,15 @@
       const item = { id: 'phone', text: viewer === 'public' && typeof home.needs.phone.text === 'string' ? addressed(home.needs.phone.text).replace('这里的事请自己看', '相关事项等本人查看') : home.needs.phone.text, actions: [{ kind: 'copy', label: '问情况', intent: 'ask' }] };
       rows.push({ key: 'phone', cls: 'notice glass', html: `${lamp('red')}<a class="head__tail--link" href="${esc(route('/live/notifications/'))}">${U.fieldHtml(item.text, { name: '提醒', kind: viewer })} <span class="more__chev">›</span></a>${U.actions(item, item.actions)}` });
     }
+    // AI 留言（选了“实况”的那几条，后台 ai-messages 读口）：一条一行，标题、时刻，正文点“全文”展开；到期后台自己撤
+    for (const m of aiMessages || []) {
+      const plainText = v => U.fieldText(v, viewer).trim().replace(/^AI\s*留言\s*[｜|:：]\s*/u, ''), titleText = plainText(m.title), bodyText = plainText(m.body);
+      const words = titleText || bodyText;
+      if (!words && !m.title?.hidden && m.title?.visibility !== 'owner') continue;
+      const opened = notices.querySelector(`[data-key="${CSS.escape(`msg-${m.id}`)}"] details`)?.open;
+      const body = bodyText && bodyText !== titleText ? `<details class="notice-message__body"${opened ? ' open' : ''}><summary>全文</summary><p>${U.fieldHtml(m.body, { name: 'AI 留言', kind: viewer })}</p></details>` : '';
+      rows.push({ key: `msg-${m.id}`, cls: 'notice glass notice--message', html: `${lamp('blue')}<span><b>AI 留言</b>：${titleText ? esc(titleText) : U.fieldHtml(m.title ?? m.body, { name: 'AI 留言', kind: viewer })}${timed(m.created_at) ? ` <span class="notice-message__at">· ${esc(recordStamp(m.created_at))}</span>` : ''}</span>${body}` });
+    }
     paintList(notices, rows);
   }
 
@@ -1688,6 +1698,8 @@
   }
   window.LiveProjectLook?.load().then(looks => { projectLooks = looks; if (home?.projects) renderProjectGroups(home.projects); });
   subscribe();
+  // AI 留言不随“只看某个项目”变，单独订一份；有变化就重画页顶那张卡
+  window.Live.watch('ai-messages', null, { data(d) { aiMessages = Array.isArray(d?.items) ? d.items : null; if (lastState) renderNotices(lastState); } });
 
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
 })();

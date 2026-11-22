@@ -38,6 +38,7 @@
   const dayStart = (t) => Math.floor((t + BJ) / 86400) * 86400 - BJ;
   const dayKey = (t) => new Date((t + BJ) * 1000).toISOString().slice(0, 10);
   const hm = (t) => new Date((t + BJ) * 1000).toISOString().slice(11, 16);
+  const md = (t) => dayKey(t).slice(5);
   const sec = (iso) => Date.parse(iso) / 1000;
   const FOCUS_MIN_SECONDS = 15 * 60;
   function rangeText(window) {
@@ -242,7 +243,7 @@
   const sync = C.sync();
   const chapters = [
     { key: 'day', name: '这三天', pic: '/live/img/s1900-usage-clock-v1.webp', palette: ['apricot', 'pink'],
-      line: (d) => { const w = longestWork(d?.day, workIdx()); return w ? `连续在用最长一段 ${S.partial(d.day, 'spans') ? '至少 ' : ''}${dur(w[1] - w[0])}（${hm(w[0])}–${hm(w[1])}）` : ''; },
+      line: (d) => { const w = longestWork(d?.day, workIdx()); return w ? `连续在用最长一段 ${S.partial(d.day, 'spans') ? '至少 ' : ''}${dur(w[1] - w[0])}（${md(w[0])} ${hm(w[0])}–${md(w[1]) === md(w[0]) ? '' : md(w[1]) + ' '}${hm(w[1])}）` : ''; },
       build(el) {
         el.innerHTML = '<div data-x="tl"></div><p class="use-note" data-x="tl-note" hidden></p>';
         const rows = ['day', 'day1', 'day2'].map(key => ({ key, label: '' }));
@@ -277,7 +278,7 @@
     }, pic: '/live/img/s1900-usage-notebook-v1.webp', palette: ['apricot', 'violet'],
       line: () => '',
       build(el) {
-        el.innerHTML = `<div class="year-row"><div><div data-x="cal"></div><div class="vz-heat__key" data-x="cal-key" hidden><span>少</span>${[35, 51, 67, 84, 100].map((p) => `<i style="background:color-mix(in srgb, #ce557f ${p}%, #fff)"></i>`).join('')}<span>多</span><i class="vz-cal__dot is-zero"></i><span>没用</span><i class="vz-cal__dot is-none"></i><span>没有记录</span></div><p class="use-note" data-x="cal-span"></p></div><div class="year-sum"><div class="year-sum__k">累计在用</div><div class="year-sum__v" data-x="total"></div><div class="year-sum__sub" data-x="best"></div></div></div>`;
+        el.innerHTML = `<div class="year-row"><div><div data-x="cal"></div><div class="vz-heat__key" data-x="cal-key" hidden><span class="use-key__part"><span>用得少</span>${[35, 51, 67, 84, 100].map((p) => `<i style="background:color-mix(in srgb, #ce557f ${p}%, #fff)"></i>`).join('')}<span>用得多</span></span><span class="use-key__part"><i class="vz-cal__dot is-zero"></i><span>灰点：那天电脑开着但没用</span></span><span class="use-key__part"><i class="vz-cal__dot is-none"></i><span>空心圈：那天没有记录</span></span></div><p class="use-note" data-x="cal-span"></p></div><div class="year-sum"><div class="year-sum__k">累计在用</div><div class="year-sum__v" data-x="total"></div><div class="year-sum__sub" data-x="best"></div></div></div>`;
         const calHost = el.querySelector('[data-x="cal"]'), cal = block('year', calHost, V.calendar(calHost, {
           unit: '秒', weekdays: ['一', '二', '三', '四', '五', '六', '日'],
           color: value => `color-mix(in srgb, #ce557f ${Math.round(35 + 65 * Math.min(value / 86400, 1))}%, #fff)`,
