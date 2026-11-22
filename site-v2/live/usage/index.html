@@ -90,6 +90,9 @@
 .page--usage [data-x="sw"] .chart__head { justify-content: flex-start; gap: 18px; }
 .page--usage [data-x="sw"] .chart__vals { margin-left: 0; }
 .page--usage .grp__status { font-size: 13px; font-weight: 400; color: var(--muted); }
+/* 用在哪：统计起止和下面那句说明要看全，换行不截成省略号（M499） */
+.page--usage .grp[data-key="where"] .grp__line { flex-wrap: wrap; }
+.page--usage .grp[data-key="where"] :is(.grp__said, .grp__status, .grp__cutoff) { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
 .page--usage .use-focus-key:empty { display:none; }
 .page--usage .use-recent { margin-top:20px; padding-top:16px; border-top:1px solid var(--hair); }
 .page--usage .focus-track__tick { color:var(--muted); }

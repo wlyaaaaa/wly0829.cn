@@ -194,20 +194,27 @@
     U.html(reading, [currentText, gap && U.fieldHtml(gap, { name: '统计说明', place: 'body' })].filter(Boolean).join(' · '));
     reading.hidden = !currentText && !gap;
     const gapHtml = gap => U.fieldHtml(gap, { name: '统计说明', place: 'body' });
+    // 两栏按型号露一样多行（至少 5 行），多出来的收进“展开”，免得“近 7 天”比“今天”长出一大截、左下空着（M460）
+    const modelsOf = key => stats[key]?.models && (U.draw10?.modelRows(stats[key].models) || stats[key].models);
+    const keep = Math.max(5, Math.min(...['today', 'week'].map(key => modelsOf(key)?.length ?? 0)));
     const counts = [['today', '今天'], ['week', '近 7 天']].map(([key, label]) => {
       const d = stats[key];
       if (d?.q === 'warming') return `<div><h2>${label}</h2><p class="row__sub">正在准备</p></div>`;
       // 只因还有几条记录没确认开没开才不全的（下面单写了几条、暂未计入），已确认的对话数照实写，不写“至少”
       const pendingOnly = d?.unconfirmed_openings > 0 && !String(d?.gap ?? '').includes('只有部分主对话有记录');
       const sure = m => { if (!pendingOnly || !Array.isArray(m?.partial)) return m; const partial = m.partial.filter(k => k !== 'opened'); return partial.length ? { ...m, partial } : { ...m, q: 'ok', partial, gap: null }; };
-      const models = d?.models && (U.draw10?.modelRows(d.models) || d.models).map(sure);
+      const models = d?.models && modelsOf(key).map(sure);
       const firstGap = models?.[0]?.gap;
       const modelGap = typeof firstGap === 'string' && models.every(m => m.gap === firstGap) ? firstGap : '';
-      const modelList = models ? models.map(m => {
+      const modelRow = m => {
         const model = U.draw10?.modelHtml(m, { name: '型号', place: 'body', kind: viewer }) ?? U.fieldHtml(m.model, { name: '型号', place: 'body' });
         const counts = `${n(m.opened, m, 'opened', '对话')} · ${n(m.helpers, m, 'helpers', '帮手')}`;
         return `<p><small>${model || '型号没记下'} · ${counts}${m.gap && !modelGap ? ' · ' + gapHtml(m.gap) : ''}</small></p>`;
-      }).join('') : `<p class="row__sub">${esc(U.collectionText('各型号', stats))}</p>`;
+      };
+      const shown = models && models.length > keep + 1 ? keep : models?.length, open = $('chat-counts').querySelector(`details[data-models="${key}"]`)?.open;
+      const modelList = models ? models.slice(0, shown).map(modelRow).join('') + (models.length > shown
+        ? `<details class="chat-models-more" data-models="${key}"${open ? ' open' : ''}><summary class="more live-disclosure"><span class="disclosure-closed">展开（还有 ${models.length - shown} 个型号）</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary>${models.slice(shown).map(modelRow).join('')}</details>` : '')
+        : `<p class="row__sub">${esc(U.collectionText('各型号', stats))}</p>`;
       const notes = [...new Set([d?.gap, modelGap].filter(Boolean))].map(gap => `<p><small>${gapHtml(gap)}</small></p>`).join('');
       return `<div><h2>${label}</h2><p>${n(d?.opened, sure(d), 'opened', '对话')} · ${n(d?.helpers, d, 'helpers', '帮手')} <small>${n(d?.manual_opened, d, 'manual_opened', '本人对话')}</small></p>${notes}${modelList}</div>`;
     }).join('');
@@ -319,7 +326,34 @@
     board.layout(true);
     recentBoard.layout(true);
     fitThoughts();
+    fitRecent();
   }
+  // 右栏（等本人和近 72 小时已结束）比左栏长出一大截时，已结束的从后往前再多收几条进“展开”，每组至少露 1 条；
+  // 左栏变高（展开、来了新对话）或换了窗口宽时重新算（M460）
+  let recentRows = new Map();
+  const cardsHeight = host => [...host.querySelectorAll(':scope > .lb > .lb-card')].filter(c => !c.hidden)
+    .reduce((sum, c, i) => sum + c.getBoundingClientRect().height + (i ? 22 : 0), 0);
+  function fitRecent() {
+    const list = $('recent-list'), more = $('recent-more'), open = $('recent-box').classList.contains('is-open');
+    const rows = [...list.children].filter(li => recentRows.has(li.dataset.key));
+    if (!open && $('recent').getBoundingClientRect().height) {
+      rows.forEach(li => li.classList.toggle('chat-ended-extra', recentRows.get(li.dataset.key).extra));
+      list.querySelectorAll(':scope > .chat-ended-label').forEach(label => label.classList.remove('chat-ended-extra'));
+      const over = () => cardsHeight($('chat-recent-board')) - cardsHeight($('chat-board'));
+      // 从最后一条往前收，最前面那条一直露着；一组收空了，组名也一起收
+      for (const li of rows.filter(li => !li.classList.contains('chat-ended-extra')).slice(1).reverse()) {
+        const h = li.getBoundingClientRect().height;
+        if (!h || over() < h / 2) break;
+        li.classList.add('chat-ended-extra');
+        if (li.previousElementSibling?.matches('.chat-ended-label')) li.previousElementSibling.classList.add('chat-ended-extra');
+      }
+    }
+    const left = rows.filter(li => li.classList.contains('chat-ended-extra')).reduce((sum, li) => sum + recentRows.get(li.dataset.key).count, 0);
+    more.hidden = !left && !open;
+    U.html(more, `<span class="lb-more__open">展开（还有 ${left} 个）</span><span class="lb-more__shut">收起</span> <span class="more__chev">›</span>`);
+  }
+  $('recent-more').addEventListener('click', () => requestAnimationFrame(fitRecent));
+  if (typeof ResizeObserver === 'function') new ResizeObserver(() => fitRecent()).observe($('chat-board'));
   function renderRecent() {
     $('recent').hidden = !!U.offline?.() && !recentUsable && homeChats?.recent == null;
     if (!recentUsable && !homeChats?.recent?.length && !U.offline?.() && [404, 503].includes(recentState?.meta?.status)) { U.list($('recent-list'), wait('最近结束的对话暂时读不到')); U.list($('recent-rest'), []); $('recent-more').hidden = $('recent-next').hidden = true; recentRead.done(); return; }
@@ -333,17 +367,17 @@
     // 每组先摆 5 个，多的留在本组后面、点“展开”才露出来：组名只出一次，展开后仍按组、组里按时间排。
     const main = sections.flatMap(({ key, name, rows }) => rows.length ? [{ key: `ended:${key}`, cls: 'chat-ended-label', html: `<h3>${name}</h3>` },
       ...rows.map((row, i) => i < 5 ? row : { ...row, cls: `${row.cls} chat-ended-extra` })] : []);
-    const rest = main.filter(row => row.cls.includes('chat-ended-extra'));
+    recentRows = new Map(main.filter(row => row.count).map(row => [row.key, { count: row.count, extra: row.cls.includes('chat-ended-extra') }]));
     U.html($('recent-title'), recentTitle + (label ? `<span class="lb-card__count">${esc(label)}</span>` : ''), false);
     U.list($('recent-list'), main.length ? main : wait(label === '0 个' ? '72 小时内没有结束的对话'
       : label ? '暂时只读到数量' : recentState?.warming ? '正在读' : U.collectionText()));
     U.list($('recent-rest'), []);
-    $('recent-more').hidden = !rest.length; U.html($('recent-more'), `<span class="lb-more__open">展开（还有 ${rest.reduce((sum, row) => sum + (row.count || 0), 0)} 个）</span><span class="lb-more__shut">收起</span> <span class="more__chev">›</span>`);
     U.html($('recent-note'), esc(total != null && total > count ? `已列出 ${count} 个` : '') + (pages.get('')?.hidden ? ` ${U.hiddenMore?.(pages.get('').hidden, '场', pages.get('').hidden_what || '对话') || ''}` : ''));
     $('recent-next').hidden = nextRecentCursor() == null; U.html($('recent-next'), '继续读 ›');
     if (recentUsable) recentRead.done();
     recentBoard.layout(true);
     fitThoughts();
+    fitRecent();
     U.land();
   }
   function missing(text, temporary = false) { U.html($('head'), U.head('AI 对话', { lamp: false })); U.html($('chat-note'), U.fieldHtml(text, { name: 'AI 对话', place: 'body', kind: viewer })); if (temporary) { $('head').querySelector('.lamp')?.setAttribute('data-tone', 'off'); L.tone($('hero'), 'off', 'off'); } if (!activeChats) U.list($('active-list'), wait(text)); }

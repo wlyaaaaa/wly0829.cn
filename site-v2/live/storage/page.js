@@ -248,7 +248,8 @@
     U.list($('notices'), state.offline ? [{ key: 'storage', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${copy}${esc(sp(state.text))}</span>` }] : []);
   }
   function categoryRows(list, row, hidden) {
-    const limit = viewer === 'owner' ? list.length : 5;
+    // 本人版也先露 5 类，其余收进“还有 N 类”，免得这张卡比旁边两张长出一大截（M460）
+    const limit = 5;
     K.put($('categories'), list.length ? list.slice(0, limit).map(row).join('') : hidden ? '' :
       `<li class="pj-note">${U.offline?.() ? missed : '暂时读不到各用途的占用'}。</li>`);
     K.put($('categories-rest'), list.slice(limit).map(row).join(''));
