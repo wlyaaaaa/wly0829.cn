@@ -35,9 +35,9 @@ main .pill:hover, main .pill:active, dialog .pill:hover, dialog .pill:active {
 /* 2 */
 .site-header { display: none !important; }
 
-/* 3 */
-#pictures { margin-top: calc(12px + 55px + 14px); }
-.picture { scroll-margin-top: calc(12px + 55px + 14px); }
+/* 3：窗口拉窄时 #pictures 整列按 --picture-scale 缩（page.js 写的 zoom），让出的这条也跟着缩，首图就顶进页眉；除回去，任何宽度都让出页眉那一整条 */
+#pictures { margin-top: calc((12px + 55px + 14px) / var(--picture-scale, 1)); }
+.picture { scroll-margin-top: calc((12px + 55px + 14px) / var(--picture-scale, 1)); }
 
 /* 4 */
 #details { inset: 0; height: 100%; }

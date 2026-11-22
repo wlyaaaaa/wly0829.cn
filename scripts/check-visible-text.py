@@ -250,7 +250,7 @@ async def snapshot(page, base, route, role, limit, viewer):
     try:
         for attempt in range(2):
             response = await page.goto(base + route, wait_until="domcontentloaded", timeout=16000)
-            if route.startswith(("/live/", "/projects/", "/computer-access/", "/mcp/")) or route == "/":
+            if route.startswith(("/live/", "/computer-access/", "/mcp/")) or route == "/":
                 try:
                     await page.wait_for_function(r"""() => {
                        const main=document.querySelector('main')?.innerText || '';
@@ -325,7 +325,7 @@ async def snapshot(page, base, route, role, limit, viewer):
 
 async def verified_view(page, base, role):
     public = role == "公开版"
-    entry = "/__view/" + ("public" if public else "owner") + "?back=/projects/"
+    entry = "/__view/" + ("public" if public else "owner") + "?back=/live/"
     await page.goto(base + entry, wait_until="domcontentloaded", timeout=16000)
     if public:
         await page.locator("#wly-preview-view").filter(has_text="回本人版").wait_for(timeout=14000)

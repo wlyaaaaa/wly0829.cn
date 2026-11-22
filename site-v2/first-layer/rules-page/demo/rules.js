@@ -96,12 +96,8 @@
   const path = 'rules/' + rulePage + '?release=' + encodeURIComponent(releaseId);
   const lanPort = Number(document.querySelector('meta[name="wly-lan-live-port"]')?.content);
   const lan = !official && location.protocol === 'http:' && location.port === '8829' && lanPort >= 1024 && lanPort <= 65535;
-  const isPublic = () => {
-    try {
-      return window.LiveView?.isPublic() || sessionStorage.getItem('wly-live-view') === 'public' ||
-        !official && /(?:^|;\s*)wly-preview-view=public(?:;|$)/.test(document.cookie);
-    } catch { return true; }
-  };
+  // 规则页没有访客版：本人设备照旧读本人正文，不跟实况页“看公开版”走；只有家网预览的公开入口按公开版看
+  const isPublic = () => !official && /(?:^|;\s*)wly-preview-view=public(?:;|$)/.test(document.cookie);
   const device = () => {
     try {
       const token = localStorage.getItem('wly-cockpit-device');
@@ -146,7 +142,6 @@
         const heading = new DOMParser().parseFromString(value.source_title, 'text/html').querySelector('[data-source-title]');
         if (!heading) throw new Error('Missing rule title');
         render([heading.innerHTML, value.toc, value.body, '约法 ' + value.charter_words + ' 字<br>' + value.topic_words + ' 字'], true);
-        window.LiveView?.owner({ kind: 'owner' });
       }
     } catch {
       if (active === request) render(publicParts, false);
@@ -156,7 +151,7 @@
   }
   function refreshOwner() { clear(); readOwner(); }
   document.addEventListener('visibilitychange', refreshOwner);
-  addEventListener('storage', event => { if (event.key === 'wly-cockpit-device' || event.key === 'wly-live-view') refreshOwner(); });
+  addEventListener('storage', event => { if (event.key === 'wly-cockpit-device') refreshOwner(); });
   addEventListener('offline', clear);
   addEventListener('online', refreshOwner);
   addEventListener('pagehide', clear);
