@@ -180,7 +180,7 @@ def build(published, site=SITE, output=OUTPUT):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--published", default="2026-11-21", help="发布日写实际上线那天")
+    parser.add_argument("--published", default="2026-11-23", help="发布日写实际上线那天")
     parser.add_argument("--site", type=Path, default=SITE, help="本次已组装的页眉、列表和链接目标")
     parser.add_argument("--output", type=Path, default=OUTPUT)
     args = parser.parse_args()
