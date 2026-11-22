@@ -76,9 +76,8 @@
 #changes .pj-item--change .pj-at { font-size: 13px; line-height: 23px; color: #6b6a64; }
 #changes .pj-list-group .list { border-bottom: 0; }
 #active .pj-card .pj-fig__v.is-long .pj-stat-piece { display: inline; white-space: normal; }
-#active .pj-card .pj-fig__v.is-long.pj-fig__reading-note { display: block; font-size: 14px; font-weight: 400; line-height: 21px; }
-/* 窗口不到 1280 宽时，整句读数不再两行截断、字小一号；一句短话放不下也换行，不切掉（M248）。1440 宽和手机（按 1440 等比缩小）不受影响 */
-@media (max-width: 1279px) { #active .pj-card .pj-fig__v.is-long { display: block; -webkit-line-clamp: unset; font-size: 17px; line-height: 25px; } #active .pj-card .pj-fig__v:not(.is-long) { white-space: normal; overflow-wrap: anywhere; } #active .pj-card .pj-fig__v:not(.is-long) .pj-stat-piece { display: inline; white-space: normal; } }
+/* 窗口不到 1280 宽时，整句读数不再两行截断，按正文字号写、不加粗；一句短话放不下也换行，不切掉（M248）。1440 宽和手机（按 1440 等比缩小）不受影响 */
+@media (max-width: 1279px) { #active .pj-card .pj-fig__v.is-long { display: block; -webkit-line-clamp: unset; font-size: 14px; font-weight: 400; line-height: 21px; } #active .pj-card .pj-fig__v:not(.is-long) { white-space: normal; overflow-wrap: anywhere; } #active .pj-card .pj-fig__v:not(.is-long) .pj-stat-piece { display: inline; white-space: normal; } }
 /* 下面几块和画册一套：大标题加绿条；本地还没推的改动排成小卡，有没推提交的放大排前；最近成品按项目一张卡；变化卡片按内容多少自然排两栏。 */
 .pj-extra { margin-top: 44px; }
 .pj-extra > .part, #activity .card__body > .part { display: flex; align-items: center; gap: 12px; margin: 0 0 6px; font-size: 22px; line-height: 30px; font-weight: 700; letter-spacing: .06em; color: #141413; }
@@ -103,10 +102,12 @@
 .pj-mini.is-hot .pj-mini__name { font-size: 18px; line-height: 26px; }
 .pj-mini__big { margin: 2px 0 0; font-size: 15px; line-height: 32px; color: #141413; }
 .pj-mini__big b { margin-right: 4px; font-size: 28px; font-weight: 700; color: #00A650; font-variant-numeric: tabular-nums; }
-#recent-artifacts .pj-extra__list { columns: 330px; column-gap: 24px; }
+#recent-artifacts .pj-extra__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 24px; align-items: start; }
+/* 排好以后（page.js packCards）：每张卡占自己那一列、高多少就占多少行，下一张紧贴着排，不再按同排最高的卡留白（M487） */
+#recent-artifacts .pj-extra__list.is-packed { grid-auto-rows: 1px; grid-auto-flow: row dense; row-gap: 0; }
 #recent-artifacts .pj-extra__all { flex: none; }
 #recent-artifacts .pj-extra__all[hidden] { display: none; }
-.pj-art { min-width: 0; margin-bottom: 24px; padding: 16px 20px 6px; border-radius: 18px; break-inside: avoid; }
+.pj-art { min-width: 0; padding: 16px 20px 6px; border-radius: 18px; }
 .pj-art__head { display: flex; align-items: center; gap: 12px; padding-bottom: 10px; }
 .pj-art__head .pj-mini__pic { width: 40px; height: 40px; border-radius: 10px; }
 .pj-art__head .row__title { min-width: 0; overflow-wrap: anywhere; font-size: 17px; line-height: 24px; font-weight: 700; letter-spacing: .03em; color: #141413; }

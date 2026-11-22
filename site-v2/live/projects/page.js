@@ -164,8 +164,7 @@
       const labelHidden = viewer === 'public' && labelBody.includes('live-mark--owner') && (label?.hidden || label?.visibility === 'owner' || label?.public === 'owner' || /^〔?[^〔〕<>]*(?:仅本人可见|可信设备可见)〕?$/.test(labelHtml.trim()));
       const labelLine = label && !labelHidden ? `<small class="pj-fig__sub" title="${esc(typeof label === 'string' ? label : '')}">${labelHtml}</small>` : '';
       const labelMark = labelBody !== labelHtml ? `<small class="pj-fig__mark">${labelBody}</small>` : '';
-      const steamNote = it.id === 'steam-millennium-config-backup' && [...text].length > 11;
-      const valueLine = `<span class="pj-fig__v${/还没读到|还在采集|开始记|没有记录/.test(text) ? ' row__sub' : ''}${[...text].length > 11 ? ' is-long' : ''}${steamNote ? ' pj-fig__reading-note' : ''}" title="${esc(marked ? '' : text)}">${valueHtml}</span>`;
+      const valueLine = `<span class="pj-fig__v${/还没读到|还在采集|开始记|没有记录/.test(text) ? ' row__sub' : ''}${[...text].length > 11 ? ' is-long' : ''}" title="${esc(marked ? '' : text)}">${valueHtml}</span>`;
       const reading = (hasText ? labelLine + labelMark + valueLine : '') + (hasText || through ? scopeHtml + readAt : '');
       return { key: it.id, href: it.href, secret: hidden, group: ({ daily: '日用', occasional: '偶用' })[it.phase] || '未分档', cls: 'pj-fig', html: `${status.lamp}${it.href ? `<a class="pj-fig__link" title="${esc(it.name || it.label || it.title || it.id)}" href="${esc(route(it.href))}">${shown} ›</a>` : `<span class="pj-fig__k">${shown}</span>`}${reading}${hasText && window.LiveProjectViz.lower(h, 'value') && window.LiveProjectViz.gap(h) ? `<small class="pj-fig__sub">${U.fieldHtml(window.LiveProjectViz.gap(h), { name: '读数说明', kind: viewer })}</small>` : ''}${recent(it)}${phase ? `<small class="pj-fig__sub">${U.fieldHtml(phase, { name: '项目分档', kind: viewer })}</small>` : ''}${status.note ? `<small class="pj-fig__sub">${status.note}</small>` : ''}${note ? `<small class="pj-fig__mark">${note}</small>` : ''}` };
     }), '没有在用的项目');
@@ -274,6 +273,7 @@
     };
     button.addEventListener('click', () => {
       const open = button.getAttribute('aria-expanded') !== 'true';
+      for (const ul of box.querySelectorAll('.pj-extra__list')) ul.packKey = '';
       for (const el of folds()) el.open = open;
       sync();
     });
@@ -282,6 +282,27 @@
       if (button.getAttribute('aria-expanded') === 'true') for (const el of folds()) el.open = true;
       sync();
     };
+  }
+  // 最近成品卡高矮不一（M487）：每张卡按顺序放进当时最矮的一列，第一排仍是前几张，同一列里卡贴着卡排，不按同排最高的卡留白。
+  // 卡里点“展开”只拉长自己那一列，别的卡不换列；列数变了（窗口宽度）、卡换了，或点“展开全部／收起全部”时才重新分列。
+  function packCards(ul) {
+    // 列数按整块的宽度算：“再看几个项目”那一组收在折叠里，自己的宽度不一定跟着窗口变。
+    const host = ul.closest('.pj-extra')?.querySelector('.pj-extra__list') || ul;
+    const fit = () => {
+      const cards = [...ul.children].filter(li => !li.classList.contains('is-leaving'));
+      const cols = Math.max(1, Math.floor((host.clientWidth + 24) / (330 + 24))), key = `${cols}|${cards.map(li => li.dataset.key).join()}`;
+      if (!cards.length || cards.some(li => !li.offsetHeight)) { ul.packKey = ''; return; }
+      if (key !== ul.packKey) {
+        ul.packKey = key;
+        const heights = Array(cols).fill(0);
+        for (const li of cards) { const col = heights.indexOf(Math.min(...heights)); li.style.gridColumn = String(col + 1); heights[col] += li.offsetHeight + 24; }
+      }
+      for (const li of cards) li.style.gridRowEnd = `span ${Math.ceil(li.offsetHeight) + 24}`;
+      ul.classList.add('is-packed');
+    };
+    if (!ul.packObserver) { ul.packObserver = new ResizeObserver(() => requestAnimationFrame(fit)); ul.packObserver.observe(ul); if (host !== ul) ul.packObserver.observe(host); }
+    for (const li of ul.children) ul.packObserver.observe(li);
+    fit();
   }
   function drawProjectExtras(d) {
     const field = v => U.fieldHtml(v, { kind: viewer });
@@ -299,6 +320,7 @@
       const more = box.querySelector('.pj-extra__more');
       more.hidden = !rest.length; more.querySelector('.disclosure-closed').textContent = `再看 ${rest.length} 个项目`;
       U.list(box.querySelector('[data-extra-rest]'), rest);
+      if (id === 'recent-artifacts') box.querySelectorAll('.pj-extra__list').forEach(packCards);
       box.syncDisclosure?.();
       watchBands(box);
     };
