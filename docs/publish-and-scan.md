@@ -16,6 +16,8 @@ npm run preview -- --host 127.0.0.1 --port 5194
 
 `dist/.build-receipt.json` 记录真实源码身份、输入指纹、文件清单、构建时间与各步骤耗时，`release-manifest.json` 与 `release-identity.json` 由现有准备库封口；没有成功封口就不进入正式发布。源码未提交时记 `Unknown`，不冒充提交版本。可复现的发布清单不写每次变化的构建时钟，实际时间只在构建回执里。
 
+活动规则版本更新时，即使从干净检出开始，组装也可能重写跟踪的 `site-v2/first-layer/rules-page/demo/` 样稿。`source_commit` 若为 `Unknown`，用 `git status --short` 检查。正式更新时把确应上线的规则首页和变化专题列进选页，核对并提交对应样稿后重建，回执中的提交须等于本轮源码提交。隔离预览退出前清掉自己生成的样稿改动。
+
 内容缓存放在忽略的 `.cache/site-assembly/`，删除后自动重建；规则页缓存包含当前活动规则指针、实际规则和模板内容。`python -B -X utf8 scripts/build-site.py --full --cache-dir .cache/cold-build` 用一个新的空缓存目录验证全冷构建。`python -B -X utf8 tests/test_incremental_build.py` 会实际改一页、对比增量与空缓存构建的完整文件名和 SHA-256（构建回执含时钟与耗时，单独排除），最后还原源文件。
 
 ## 扫描与公开词检查

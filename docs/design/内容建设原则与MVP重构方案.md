@@ -1,5 +1,7 @@
 # 看板内容建设原则
 
+本文保留内容建设原则和旧 MVP 的重构记录。现行页面、路由、版式及施工入口见 [总合同](panel-content-contract.md)、[布局与交互](layout-and-interaction.md) 与 [README](../../README.md)。
+
 ## 1. 第一读者是本人
 
 网站首先要让吴乐阳自己看懂项目，而不是让外部访问者觉得“高级”。

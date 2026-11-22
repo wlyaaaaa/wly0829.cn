@@ -248,11 +248,11 @@ python -B -X utf8 tools/update.py --batch $batch result
 
 选页用 `pages` 对象，每页给稳定的英文编号、`route`、`title`、`reason`。需要转定稿的页另填 `project`、`draft_page`、`draft_dir`；只改右栏用 `details_only:true`，换图在 `images` 里按现行图编号登记采用文件。新页用 `new:true`，留待下次用 `deferred` 写原因。受影响的列表页等记在 `references`。报告额外事项放 `notes`。需推进页账的页用 `checked_sources` 记录源仓库、提交和北京时间，必要时用 `ledger_page` 对齐历史页号。
 
-`renames` 按页列改名命中，`before` 留选中旧图，`convert` 只转换名单中选定的稿和图。正式构建前按 [README](../README.md) 挂本轮已登记的 `public`、`owner` 实况回执配置，备用包导出器用这次发布对应的 PCConfig 工作树。对照封存成品差异，将确实连带变化的实况、规则、列表和其他页面写进 `pages` 或 `references`。改共享外壳时按 [发布与扫描](publish-and-scan.md) 对同一 `dist` 用 `--pages all --out '<本轮目录>/scan'`，之后仍用本批次 `publish`。
+`renames` 按页列改名命中，`before` 留选中旧图，`convert` 只转换名单中选定的稿和图。正式构建前按 [README](../README.md) 挂本轮已登记的 `public`、`owner` 实况回执配置，备用包导出器用这次发布对应的 PCConfig 工作树。构建改写跟踪的规则样稿时，按 [源码提交与封存说明](publish-and-scan.md#工作副本依赖与构建) 处理。对照封存成品差异，将确实连带变化的实况、规则、列表和其他页面写进 `pages` 或 `references`。改共享外壳时对同一 `dist` 用 `--pages all --out '<本轮目录>/scan'`，之后仍用本批次 `publish`。
 
 `publish` 用当前正式基线比对成品。选页之外的变化先核原因和计划再发。`result` 从逐页回读、OSS 回收回执和前后图生成底稿，`result --report-generator '<本轮实际生成者型号>'` 只生成本地草稿（`-NoOpen`）。按第 7 步补齐，主持按汇报页技能用 `-OpenPath` 正式打开同一页。重新查看批次用 `status`。
 
-本地预演若要明确指定上次成品，可给 `publish --dry-run` 加 `--previous-manifest <清单>` 和 `--previous-site-dist <上次成品目录>`。日常正式更新使用已登记的上次发布。
+纯本地预演给 `publish --dry-run` 加 `--previous-manifest <上次成功发布清单>` 和 `--previous-site-dist <同版成品目录>`，用于核对实际已发布的上一版 HTML。缺旧资源字节时看预演回执中的保留原因。日常正式更新使用已登记的上次发布。
 
 - **改图和修字。** 单页稿先用私有流水线的 `check_draft.py <项目输出目录> --页 <页名>` 检查。把每张图的比例、提示和参考准备好，再按私有 `工具/用法.md` 用 `make_images.ps1` 出图。旧图进入改字时，使用独立的本轮图目录和 `-旧图修字`，v1 为改图首版，v2 到 v5 各为一轮修字，经核字后在清单登记采用的版本。
 - **改图指导（修字的提示怎么写）：** 2026-11-19 试跑修了四轮字得出，以后每次修完照第一节那条补（有用的写这里，没用的归档在本次目录 `记录\改图写法-归档.md`）。
