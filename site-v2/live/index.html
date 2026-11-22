@@ -237,6 +237,11 @@
 @media (max-width: 1200px) {
  .page--live #phone :is(.card__head, .kv__row dd):has(.phone-reading-time) { margin-inline-end: calc(24px - var(--win)); }
 }
+/* 电脑窗口窄（如 1024 宽）：AI 对话行尾两个按钮挪到这一行下面，标题和型号用整行宽（M498） */
+@media (max-width: 1279px) {
+ .page--live #chats .row--chat > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-content: flex-start; margin-top: 6px; padding-left: 0; }
+ .page--live #chats .chat-meta-part { max-width: 100%; white-space: normal; }
+}
 @media (max-width: 700px) {
  .page--live #projects .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
  .page--live #needs .row { grid-template-columns: var(--gut) minmax(0, 1fr); }

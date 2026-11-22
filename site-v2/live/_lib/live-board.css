@@ -56,6 +56,11 @@ body.page--board { --col: min(1856px, calc(100vw - 64px)); }
   align-items: stretch;
 }
 .lbp-title { display: flex; align-items: center; gap: 14px; min-width: 0; }
+/* 电脑窗口窄（如 1024 宽）一行摆不下三块：标题单独占一行，读数卡和右边小卡排在下面（M495） */
+@media (max-width: 1279px) {
+  .lbp-top { grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); }
+  .lbp-title { grid-column: 1 / -1; }
+}
 .lbp-title img { flex: none; width: 92px; height: 92px; object-fit: contain; user-select: none; -webkit-user-drag: none; }
 .lbp-title h1 { margin: 0; font-family: var(--black); font-weight: 900; font-size: 32px; line-height: 40px; letter-spacing: .04em; color: var(--ink); white-space: nowrap; }
 .lbp-title p { margin: 8px 0 0; font-size: 14px; line-height: 23px; letter-spacing: .03em; color: #6b6a64; }

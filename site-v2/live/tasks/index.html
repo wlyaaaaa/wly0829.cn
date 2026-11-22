@@ -27,9 +27,6 @@
 #task-side { align-self: stretch; }
 /* 右边一栏展开“再看”“变化”时在栏里滚动，不把左边标题、中间大卡和下面的搜索往下推 */
 #task-side { contain: size; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
-#upcoming details { position: relative; }
-#upcoming details[open] { padding-bottom: 26px; }
-#upcoming details[open] > summary { position: absolute; left: 0; bottom: 0; margin: 0; }
 /* 首屏统计格按字的长短排，标签不折成两行 */
 .page--tasks .lbp-stats { display: flex; flex-wrap: wrap; }
 .page--tasks .lbp-stat { flex: 1 1 auto; }
@@ -53,6 +50,8 @@
 .page--tasks #groups .lb:has(.lb-card__more[aria-expanded="true"]) > .lb-card { align-self: start; }
 .page--tasks #groups .lb:not(.is-single) > .lb-card:not(.task-full) { grid-column: auto !important; }
 .page--tasks .task-full { grid-column: 1 / -1 !important; }
+/* 电脑窗口窄（如 1024 宽）三栏摆不下任务名：分组卡改两栏（M492） */
+@media (max-width: 1279px) { .page--tasks #groups .lb:not(.is-single) { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .page--tasks .task-compact { min-height: 46px; padding-block: 5px; }
 .task-compact .lb-cell--name p { margin: 0; }
 .task-compact .lb-cell--name { overflow-wrap: normal; }

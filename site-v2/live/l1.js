@@ -1009,9 +1009,14 @@
       ? '' : sp(U.fieldHtml(row.display_name ?? row.name, { name: '任务名', place: 'label', kind }));
     const failures = (d.items || []).filter(row => row.source_readable !== false && row.enabled !== false &&
       (row.state === 'failed' || row.state == null && row.last?.result === 'failed'));
+    // 这一轮没读到运行状态的照样列出来（M516）：名字和下次时间照写，状态写“这轮没读到”；上次出过事的排前面
+    const next = row => timed(row.next_at) ? ` · 下次 ${day(row.next_at) === day(state.now || Date.now()) ? '' : U.date(row.next_at) + ' '}${U.time(row.next_at)}` : '';
+    const unread = (d.items || []).filter(row => row.source_readable === false && row.enabled !== false && row.state !== 'disabled')
+      .sort((a, b) => Number(['failed', 'warn'].includes(b.state)) - Number(['failed', 'warn'].includes(a.state)) || (Date.parse(a.next_at) || Infinity) - (Date.parse(b.next_at) || Infinity));
     const samples = [
       ...failures.map(row => [row, '上次运行失败', true]),
       ...(d.running || []).map(row => [row, old ? '上次读到在跑' : '正在跑']),
+      ...unread.map(row => [row, '这轮没读到' + next(row)]),
     ];
     const seen = new Set(), rows = [];
     for (const [row, status, failed] of samples) {
