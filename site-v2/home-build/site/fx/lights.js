@@ -21,7 +21,7 @@
  *          （秒是灯效自己的钟：掉帧时比墙上的钟慢，字照它走才不会比光先到）；画布画上副屏时调 onLive()，
  *          收走、丢了或关掉时调 onGone()
  *          state：hover / press 第几格（没有是 -1）、ptr 指针在画上的位置（没有是 null）、pulse[4] 那一格的数几时到的或变的、
- *          off[4] 那一格熄没熄、offline 连不上、sheen 镜头退了几成。
+ *          hostOff 电脑没开机、sheen 镜头退了几成。
  *
  * container：和整幅画一样大的定位容器（和瀑布模块同一个规矩）。模块在里面放一层，
  * 各处共用一张画布，位置用百分比；容器整体缩放、平移时不用任何同步。
@@ -370,11 +370,11 @@
   var FRAG_PANEL = COMMON +
     'uniform sampler2D uArt;\n' +
     'uniform vec4 uArtRect, uFrame, uGlass;\n' +   // 小图盖在画上的哪一块；白色外框的外沿；发光的玻璃
-    'uniform vec4 uCellE, uPulse, uOff;\n' +       // 每一格：亮暗（放上去 1、按下是负的）、数到了或变了多少秒、熄没熄
+    'uniform vec4 uCellE, uPulse;\n' +             // 每一格：亮暗（放上去 1、按下是负的）、数到了或变了多少秒
     'uniform vec3 uPtr;\n' +                       // 指针在画上的 x、y，在不在屏上
     'uniform vec2 uRad;\n' +                       // 外框、玻璃的圆角
     'uniform float uEdge[5];\n' +                  // 四格的上下边
-    'uniform float uLive, uSheen, uTemp;\n' +      // 连得上 1 → 连不上 0；镜头退了几成；CPU 多热（0 凉 → 1 烫，负的是没读到）
+    'uniform float uSheen, uTemp, uHostOff;\n' +   // 镜头进度、CPU 温度、开机键显现的程度
     'uniform vec2 uFlow;\n' +                     // 屏沿彩光走到一轮颜色的第几成；云往右飘了多少像素（快慢都跟着首页别的灯）
     'float sdBox(vec2 P,vec4 b,float r){ vec2 q=abs(P-(b.xy+b.zw)*.5)-(b.zw-b.xy)*.5+r; return length(max(q,0.))+min(max(q.x,q.y),0.)-r; }\n' +
     'float fbm(vec2 p){ float a=.5,s=0.; for(int i=0;i<4;i++){ s+=a*vn(p); p=p*2.03+vec2(17.1,9.2); a*=.5; } return s; }\n' +
@@ -394,10 +394,9 @@
     '  float A=min(uAmt,2.);\n' +
     // 开机分三段（uBoot 0→1）：0–.70 光从上往下流满；.62–.86 屏沿的彩光点着；之后多出来的那点亮收回去
     '  float rev=clamp(uBoot/.70,0.,1.);\n' +
-    '  float rimK=smoothstep(.62,.86,uBoot)*mix(.28,1.,uLive);\n' +
+    '  float rimK=smoothstep(.62,.86,uBoot);\n' +
     '  float s=along(P);\n' +
     '  vec3 rc=mix(vec3(1.),hue(s*2.-uFlow.x),.60);\n' +                  // 彩光的颜色：两轮彩虹绕屏一圈，顺着屏边走
-    '  rc=mix(vec3(.80,.84,1.),rc,.3+.7*uLive);\n' +                      // 夜里收成很淡的月白
     '  float comet=.2+.12*cos(6.2832*(s*2.-uFlow.x));\n' +                // 彩光里略亮的一段，跟着颜色一起走（和灯条上略亮的那一小段一个意思；不另跑一颗亮点）
     '  float br=sin(uT*1.25)*.6+sin(uT*.53+1.3)*.4;\n' +                  // 一明一暗，和水冷头小屏同一个节奏（5 秒、12 秒两个起伏叠着）
     '  vec4 outv=vec4(0.);\n' +
@@ -406,7 +405,7 @@
     '    vec2 gq=clamp(P,uGlass.xy+7.,uGlass.zw-7.);\n' +
     '    float mn=min(C.r,min(C.g,C.b)), mx=max(C.r,max(C.g,C.b));\n' +
     '    float white=smoothstep(.50,.76,mn)*(1.-smoothstep(.10,.30,(mx-mn)/max(mx,.01)));\n' +
-    '    float k=exp(-dF*dF/190.)*white*(.34+.12*br+.25*comet)*A*rimK*(1.-.75*pick(uOff,gq.y))*edgeFade(5.);\n' +
+    '    float k=exp(-dF*dF/190.)*white*(.34+.12*br+.25*comet)*A*rimK*edgeFade(5.);\n' +
     '    if(k>.003){\n' +
     '      vec3 sc=textureLod(uArt,(gq-uArtRect.xy)/uArtRect.zw,3.).rgb; sc/=max(sc.r,max(sc.g,sc.b));\n' +
     '      vec3 cc=mix(sc,rc,.55);\n' +
@@ -450,20 +449,20 @@
     '      lines=mix(lines,vec3(.93)*col*smoothstep(lv-.7,lv+.7,sp.y),tube);\n' +
     '    }\n' +
     '    A0+=(lines-was)*im; ln=mix(ln,lines,im);\n' +
-    // 没开机、连不上：第四格的温度计换成开机键（缺口朝上的一个圈、中间一竖），和“电脑 没开机”对得上。
+    // 确认没开机：第四格的温度计换成开机键（缺口朝上的一个圈、中间一竖）。
     // 这一处连底色一起换成估出来的干净底色，温度计的线一点不留
-    '    if(ii==3&&uOff.w>.001){\n' +
+    '    if(ii==3&&uHostOff>.001){\n' +
     '      vec2 bp=sp-vec2(0.,1.5); float bl=length(bp);\n' +
     '      float bd=-bp.y>.814*bl ? length(vec2(abs(bp.x)-6.68,bp.y+9.36)) : abs(bl-11.5);\n' +
     '      bd=min(bd,length(vec2(bp.x,bp.y-clamp(bp.y,-14.5,-3.))));\n' +
     '      vec3 bw=max(vec3(.995)-bg0,0.)*(1.-smoothstep(.75,1.75,bd));\n' +
-    '      A0=mix(A0,bg0+bw,im*uOff.w); ln=mix(ln,bw,im*uOff.w);\n' +
+    '      A0=mix(A0,bg0+bw,im*uHostOff); ln=mix(ln,bw,im*uHostOff);\n' +
     '    }\n' +
     '  }\n' +
     '  vec3 L=A0;\n' +
     '  float glass=1.-smoothstep(-1.4,.8,dG);\n' +                        // 玻璃里面是 1
     '  vec2 q=P-uGlass.xy, gs=uGlass.zw-uGlass.xy;\n' +
-    '  float off=pick(uOff,P.y), e=pick(uCellE,P.y), on=1.-off;\n' +
+    '  float e=pick(uCellE,P.y);\n' +
     // 屏边那一条和白边框上画里原有的彩色先去掉，换成下面会走的
     '  float bz=step(0.,dG);\n' +
     '  L=mix(L,vec3(max(L.r,max(L.g,L.b))),max((1.-smoothstep(.8,2.6,abs(dG)))*.85,bz*.9));\n' +
@@ -474,17 +473,17 @@
     '  vec2 c2=vec2(qc.x-uFlow.y*1.2,qc.y)*vec2(.031,.060)+vec2(11.,3.)-par*.0020;\n' +
     '  float n1=fbm(c1), n2=fbm(c2+n1*.7);\n' +
     '  float cloud=smoothstep(.42,.72,n1*.62+n2*.46), wisp=smoothstep(.50,.78,n2);\n' +
-    '  L=mix(L,mix(L,vec3(1.,.95,.96),.52),(cloud*.36+wisp*.12)*glass*on*min(A,1.6));\n' +
+    '  L=mix(L,mix(L,vec3(1.,.95,.96),.52),(cloud*.36+wisp*.12)*glass*min(A,1.6));\n' +
     // 几道斜光（和花园左上角那几道阳光一个斜法），很慢地移
     '  float ru=(q.x+q.y*.62)*.021;\n' +
     '  float ray=smoothstep(.50,.88,vn(vec2(ru+uT*.035,.5))*.6+vn(vec2(ru*2.3-uT*.05,4.))*.4);\n' +
-    '  L+=vec3(1.,.90,.80)*ray*.085*(1.-.55*q.y/gs.y)*glass*on*A;\n' +
-    '  L*=1.+(.035*br+.015)*glass*on*A;\n' +                              // 整块屏很慢地一明一暗
+    '  L+=vec3(1.,.90,.80)*ray*.085*(1.-.55*q.y/gs.y)*glass*A;\n' +
+    '  L*=1.+(.035*br+.015)*glass*A;\n' +                                 // 整块屏很慢地一明一暗
     // 玻璃反光：一道斜的亮带隔一阵扫过去；镜头往后退时另有一道跟着走
     '  float du=(q.x+q.y*.45)/gs.x, sw=fract(uT/10.);\n' +
     '  float sh1=exp(-pow((du-mix(-.7,3.6,smoothstep(0.,.30,sw)))/.20,2.))*(1.-smoothstep(.26,.30,sw));\n' +
     '  float sh2=exp(-pow((du-mix(-.6,3.5,uSheen))/.30,2.))*smoothstep(0.,.03,uSheen)*(1.-smoothstep(.97,1.,uSheen));\n' +
-    '  L+=vec3(1.,.98,.96)*(sh1*.12+sh2*.15)*glass*(1.-.6*off);\n' +
+    '  L+=vec3(1.,.98,.96)*(sh1*.12+sh2*.15)*glass;\n' +
     // 玻璃的厚度（和机箱那块玻璃一个做法）：屏面比白框低一层，上沿、左沿压一道暗，四周一圈很淡的暗角；
     // 斜着三道固定的高光（一道宽的、紧挨一道细的，远处再一道淡的），不动
     '  float inT=P.y-uGlass.y, inL=P.x-uGlass.x, inB=uGlass.w-P.y, inR=uGlass.z-P.x;\n' +
@@ -511,21 +510,8 @@
     '  L*=1.+(crest*.20-trough*.07)*glass;\n' +
     '  L+=mix(vec3(1.),hue(pr*.012-uT*.3),.25)*crest*.06*glass;\n' +
     '  L*=1.+.09*exp(-tp*3.2)*glass;\n' +
-    // 没开机的那一格、连不上（电脑没开机时也是）的整块屏：天黑了，但不是黑屏——沉成暮紫色，上深下浅，底下留一点晚霞；
-    // 连不上时还有几颗看得清的星、右上角一弯月牙。时间停了，云、光、星都不动
-    '  float lum=dot(L,vec3(.299,.587,.114)), gy=q.y/gs.y;\n' +
-    '  vec3 dusk=(mix(vec3(.37,.32,.66),vec3(.48,.40,.75),gy)+vec3(.06,.03,.02)*gy*gy*gy)*(.82+.32*lum);\n' +
-    '  dusk+=vec3(.95,.93,1.)*max(lum-.90,0.)*1.4;\n' +                    // 图标、分隔线这些白线留着
-    '  vec2 sg=floor(q/7.), sf=fract(q/7.)-.5-(vec2(hash(sg+1.7),hash(sg+5.3))-.5)*.24;\n' +
-    '  float sb=hash(sg+7.), big=step(.80,sb);\n' +
-    '  float star=step(.955,hash(sg))*exp(-dot(sf,sf)*mix(34.,18.,big))*(.50+.50*sb)*(1.-.55*gy);\n' +
-    '  vec2 mp=q-vec2(gs.x-17.,19.);\n' +
-    '  float moon=(1.-smoothstep(6.3,7.2,length(mp)))*smoothstep(5.6,6.6,length(mp-vec2(3.1,-2.2)));\n' +
-    '  vec3 night=dusk+vec3(1.,.97,.90)*(star*.95+moon*.80+exp(-length(mp)/7.)*.10);\n' +
-    '  L=mix(L,dusk*.92,off*glass);\n' +
-    '  L=mix(L,night,(1.-uLive)*glass);\n' +
     // 屏沿的彩光：屏边那一条、往屏里晕开的一点、白边框上的反光
-    '  float line=exp(-dG*dG/2.4), gain=rimK*(1.-.7*off);\n' +
+    '  float line=exp(-dG*dG/2.4), gain=rimK;\n' +
     '  L=mix(L,rc,line*.88*gain);\n' +
     '  L+=rc*exp(min(dG,0.)/4.5)*(1.-bz)*.16*gain*(1.+1.4*comet)*min(A,1.6);\n' +
     '  L*=1.-exp(-max(dG,0.)/5.)*bz*(.42+.3*comet)*gain*(1.-rc);\n' +
@@ -601,9 +587,9 @@
     }
     function bootSpeed(key) { return (!bootLen || key === 'water') ? 1 : 0.15 + 0.85 * ease(bootT / bootLen); }
 
-    // 副屏：首页随时改的状态（放上去、按下、指针、熄了的格、连不上）在这里缓一缓再交给着色器
+    // 副屏：首页随时改的状态（放上去、按下、指针、电脑没开机）在这里缓一缓再交给着色器
     var panel = (opts.panel && opts.panel.image) ? opts.panel : null;
-    var pv = { e: [0, 0, 0, 0], off: [0, 0, 0, 0], ptr: [0, 0, 0], live: 1, temp: -1, rgb: 0, drift: 0 };
+    var pv = { e: [0, 0, 0, 0], hostOff: 0, ptr: [0, 0, 0], temp: -1, rgb: 0, drift: 0 };
     // 快慢跟首页别的灯走：屏沿彩光每秒走几轮颜色（照内存条灯）、云每秒往右飘多少像素（照水冷头小屏的云海）
     function panelFlow() { return geom.panel.flow * par.ram / geom.ram.period; }
     function panelDrift() { return geom.panel.drift * par.screen * geom.screen.speed; }
@@ -611,16 +597,16 @@
     function stepPanel(dt) {
       var s = panel.state || {}, dark = bootK('panel') < 0.02, i;
       for (i = 0; i < 4; i++) {
-        var pressed = s.press === i, off = s.off && s.off[i] ? 1 : 0;
+        var pressed = s.press === i;
         pv.e[i] = toward(pv.e[i], pressed ? -0.7 : s.hover === i ? 1 : 0, dt, pressed ? 30 : 10);   // 放上去约 0.2 秒，按下约 0.09 秒
-        pv.off[i] = dark ? off : toward(pv.off[i], off, dt, 4);                                     // 还没亮起来时不用过渡
       }
+      var off = s.hostOff ? 1 : 0;
+      pv.hostOff = dark ? off : toward(pv.hostOff, off, dt, 4);
       if (s.ptr) { pv.ptr[0] = s.ptr[0]; pv.ptr[1] = s.ptr[1]; }
       pv.ptr[2] = toward(pv.ptr[2], s.ptr ? 1 : 0, dt, 8);
-      pv.live = dark ? (s.offline ? 0 : 1) : toward(pv.live, s.offline ? 0 : 1, dt, 5);              // 连不上：约 0.6 秒褪色，时间跟着停
       // 水银柱：没读到温度就照画里原样；屏亮到第四格以后才从底下升上去
       pv.temp = !(s.temp >= 0) ? -1 : bootK('panel') < 0.62 ? 0 : toward(Math.max(pv.temp, 0), s.temp, dt, 1.6);
-      var run = dt * bootSpeed('panel') * pv.live;                                                   // 开机时从慢到正常；连不上时跟着停
+      var run = dt * bootSpeed('panel');                                                           // 开机时从慢到正常
       pv.rgb = (pv.rgb + run * panelFlow()) % 1; pv.drift += run * panelDrift();
     }
     // 屏上的字是首页叠的：告诉它光几时流到哪一行（秒，从这次开机算起），它照着一行行显出来
@@ -660,7 +646,7 @@
           gl.uniform4f(gl.getUniformLocation(p, 'uFlow'), g.flow[0], g.flow[1], g.flow[2], g.flow[3]);
           gl.uniform1f(gl.getUniformLocation(p, 'uCyc'), g.cycle);
         } },
-      { key: 'panel', frag: FRAG_PANEL, res: 1, speed: function () { return pv.live; }, amt: function () { return par.panel; },
+      { key: 'panel', frag: FRAG_PANEL, res: 1, speed: function () { return 1; }, amt: function () { return par.panel; },
         init: function (gl, p, g, P) {
           // 亮屏那张小图放在第二个贴图位（第一个是原画）
           P.tex2 = gl.createTexture();
@@ -679,16 +665,15 @@
           gl.uniform2f(gl.getUniformLocation(p, 'uRad'), g.radius[0], g.radius[1]);
           gl.uniform1fv(gl.getUniformLocation(p, 'uEdge'), new Float32Array(g.edges));
           P.u = {};
-          ['uCellE', 'uPulse', 'uOff', 'uPtr', 'uLive', 'uSheen', 'uTemp', 'uFlow'].forEach(function (n) { P.u[n] = gl.getUniformLocation(p, n); });
+          ['uCellE', 'uPulse', 'uHostOff', 'uPtr', 'uSheen', 'uTemp', 'uFlow'].forEach(function (n) { P.u[n] = gl.getUniformLocation(p, n); });
         },
         frame: function (gl, P) {
           var s = panel.state || {}, now = performance.now(), t = [9, 9, 9, 9], i;
           if (s.pulse) for (i = 0; i < 4; i++) if (s.pulse[i] && now >= s.pulse[i]) t[i] = Math.min(9, (now - s.pulse[i]) / 1000);   // 时刻可以定在稍后
           gl.uniform4f(P.u.uCellE, pv.e[0], pv.e[1], pv.e[2], pv.e[3]);
           gl.uniform4f(P.u.uPulse, t[0], t[1], t[2], t[3]);
-          gl.uniform4f(P.u.uOff, pv.off[0], pv.off[1], pv.off[2], pv.off[3]);
+          gl.uniform1f(P.u.uHostOff, pv.hostOff);
           gl.uniform3f(P.u.uPtr, pv.ptr[0], pv.ptr[1], pv.ptr[2]);
-          gl.uniform1f(P.u.uLive, pv.live);
           gl.uniform1f(P.u.uSheen, s.sheen || 0);
           gl.uniform1f(P.u.uTemp, pv.temp);
           gl.uniform2f(P.u.uFlow, pv.rgb, pv.drift % 1048576);
