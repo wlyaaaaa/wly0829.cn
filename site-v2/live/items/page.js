@@ -44,6 +44,21 @@
   document.querySelector('.lbp-tools__end').insertAdjacentHTML('afterbegin', '<button id="open-next" class="more" type="button" hidden></button>');
   const openMore = $('open-next'); openMore.addEventListener('click', () => readOpen());
   const cards = new Map(), collections = new Map(), initialReads = new Set(); let query = '', balanceKey = '';
+  const hiddenWhileWriting = new Map();
+  const hiddenByWrite = item => {
+    const entry = hiddenWhileWriting.get(item.id);
+    return viewer === 'owner' && entry && (entry.pending || entry.version === item.item_version);
+  };
+  $('item-action-receipts').addEventListener('item-write', ({ detail: { items, saved } }) => {
+    for (const item of items) {
+      if (saved === null || saved.includes(item.id)) hiddenWhileWriting.set(item.id, { pending: saved === null, version: item.item_version });
+      else hiddenWhileWriting.delete(item.id);
+    }
+    // 旧滚动锚点可能正是要撤下的那行，不能再用它锁位置。
+    U.anchor.stop();
+    redrawItems();
+    if (reportsData) renderReports(reportsData);
+  });
   function redrawItems() { for (const [key, c] of collections) list(key, c.items, c.empty, c.renderer, true, c.partial); balanceBoard(true); }
   $('due-sort').addEventListener('change', redrawItems);
   function dueOrder(items) {
@@ -78,6 +93,9 @@
   }
   function filterBoard() {
     const picked = $('kind-pick').value, status = $('state-pick').value;
+    $('stats').querySelectorAll('[data-kind]').forEach(button => {
+      button.setAttribute('aria-pressed', String(status !== 'closed' && button.dataset.kind === picked));
+    });
     for (const [kind, c] of cards) {
       c.el.hidden = kind === 'closed' && status === 'closed' ? picked === 'reports' :
         (kind === 'reports' && reportCount === 0) || !!picked && picked !== kind || !!status && (status === 'closed' ? kind !== 'closed' : kind === 'closed');
@@ -88,6 +106,13 @@
     $('board-empty').hidden = [...cards].some(([, c]) => !c.el.hidden); showOpenMore(); balanceBoard();
   }
   $('kind-pick').addEventListener('change', filterBoard); $('state-pick').addEventListener('change', filterBoard);
+  $('stats').addEventListener('click', event => {
+    const button = event.target.closest('button[data-kind]');
+    if (!button) return;
+    $('kind-pick').value = button.getAttribute('aria-pressed') === 'true' ? '' : button.dataset.kind;
+    if ($('state-pick').value === 'closed') $('state-pick').value = '';
+    filterBoard();
+  });
   document.querySelectorAll('a[href="#reports"]').forEach(a => a.addEventListener('click', e => { if (reportCount !== 0) return; e.preventDefault(); $('kind-pick').value = 'reports'; filterBoard(); }));
   $('search').addEventListener('submit', e => e.preventDefault());
   $('q').addEventListener('input', () => { query = $('q').value.trim().toLowerCase(); redrawItems(); if (reportsData) renderReports(reportsData); });
@@ -235,7 +260,7 @@
     collections.set(key, { items, empty, renderer, partial });
     const known = Array.isArray(items);
     const closedKind = key === 'closed' ? $('kind-pick').value : '';
-    items = (items || []).filter(it => (!query || matchesQuery(it)) && (!KIND[closedKind] || it.kind === closedKind));
+    items = (items || []).filter(it => (key === 'closed' || !hiddenByWrite(it)) && (!query || matchesQuery(it)) && (!KIND[closedKind] || it.kind === closedKind));
     if (key !== 'closed' && key !== 'reports') {
       U.blockNote($(key), null);
       items = dueOrder(items);
@@ -416,7 +441,8 @@
     U.html($('stats'), Object.entries(KIND).map(([key, label]) => {
       const value = counts?.[key], bounded = lower(key);
       const shown = value == null || bounded && value === 0 ? '—' : `${bounded ? '至少 ' : ''}${esc(value)}`;
-      return `<div class="lbp-stat" data-kind="${key}">${window.LiveBoard.icon('check')}<b>${shown}</b><small>${viewer === 'owner' ? label : label.replaceAll('你', '本人')}</small></div>`;
+      const pressed = $('kind-pick').value === key && $('state-pick').value !== 'closed';
+      return `<button class="lbp-stat" type="button" data-kind="${key}" aria-controls="groups" aria-pressed="${pressed}">${window.LiveBoard.icon('check')}<b>${shown}</b><small>${viewer === 'owner' ? label : label.replaceAll('你', '本人')}</small></button>`;
     }).join(''));
     L.tone($('hero'), { ...needs, level: needs.header_level ?? needs.level });
     for (const key of Object.keys(KIND)) {
@@ -447,7 +473,7 @@
   $('closed-next').addEventListener('click', async () => { $('closed-next').disabled = true; try { const r = await window.Live.get('items/closed', { project, cursor: next }); if (r.data && r.meta?.viewer?.kind === viewer && r.meta.at === states.get('items/closed')?.meta?.at) U.anchor(() => renderClosed(r.data, true)); else U.html($('closed-next'), esc(r.warming ? '正在读' : r.text || U.collectionText())); } finally { $('closed-next').disabled = false; } });
   function renderReports(d) {
     reportsData = d;
-    const rows = d.items?.filter(it => (!query || matchesQuery(it)) && !pendingItems.has(it.owner_item || it.item_id || it.item || it.id) && !(it.actions || []).some(a => a.href && pendingItems.has(new URL(a.href, location.origin).searchParams.get('id'))));
+    const rows = d.items?.filter(it => !hiddenByWrite(it) && (!query || matchesQuery(it)) && !pendingItems.has(it.owner_item || it.item_id || it.item || it.id) && !(it.actions || []).some(a => a.href && pendingItems.has(new URL(a.href, location.origin).searchParams.get('id'))));
     const drawn = rows?.length ? rows.map(it => ({ key: it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : U.status({ ...it, level: it.light }, { small: true }).lamp}<div class="row__text"><p class="row__main"><span class="row__title">${U.fieldHtml(it.text && typeof it.text === 'object' ? { ...it, ...it.text } : it, { name: '待答汇报', place: 'title', kind: viewer })}</span></p><p class="row__sub">${[it.unanswered != null ? `${sp(it.unanswered)} 题没答` : !U.offline?.() && U.collectionText(), it.opened && `${U.date(it.opened)} ${U.time(it.opened)} 弹出`].filter(Boolean).join(' · ')}</p></div><div class="row__acts">${actions(it)}${checkbox(it)}</div>` })) : viewer === 'public' && !query && d.hidden ? [] : wait(d.items == null ? U.collectionText() : d.items.length ? '汇报里的待答问题已列在前面的事里' : '没有两小时没答的汇报');
     reportCount = rows == null ? null : rows.length + (viewer === 'public' && !query ? d.hidden || 0 : 0); filterBoard();
     U.html(cards.get('reports').title, `${viewer === 'owner' ? '等你答的汇报' : '等本人答的汇报'}（${reportCount ?? '—'} 件）`);
