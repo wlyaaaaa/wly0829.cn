@@ -459,7 +459,7 @@
   $('closed-batch').addEventListener('click', () => { closedBatch += 5; redrawClosed(); });
   function renderClosed(d, append = false) {
     closedPacket = append ? { ...closedPacket, ...d, hidden: closedPacket?.hidden ?? d.hidden, hidden_summary: closedPacket?.hidden_summary ?? d.hidden_summary } : d;
-    closedItems = append ? [...closedItems, ...(d.items || [])] : d.items || [];
+    closedItems = append ? [...new Map([...closedItems, ...d.items].map(it => [it.id, it])).values()] : d.items || [];
     next = d.next;
     const partial = next != null;
     const empty = d.items == null ? U.collectionText() : partial ? '已读范围还没有这类事项' : '近 7 天没有下去的事';
@@ -470,7 +470,23 @@
     U.html($('closed-next'), '再往前读 ›');
   }
   watch('items/closed', d => renderClosed(d), text => { list('closed', null, text); recentClosed = null; renderSide(); $('closed-next').hidden = true; });
-  $('closed-next').addEventListener('click', async () => { $('closed-next').disabled = true; try { const r = await window.Live.get('items/closed', { project, cursor: next }); if (r.data && r.meta?.viewer?.kind === viewer && r.meta.at === states.get('items/closed')?.meta?.at) U.anchor(() => renderClosed(r.data, true)); else U.html($('closed-next'), esc(r.warming ? '正在读' : r.text || U.collectionText())); } finally { $('closed-next').disabled = false; } });
+  $('closed-next').addEventListener('click', async (event) => {
+    const button = event.currentTarget, cursor = next, kind = viewer;
+    if (cursor == null) return;
+    button.disabled = true;
+    try {
+      const r = await window.Live.get('items/closed', { project, cursor });
+      if (viewer !== kind || next !== cursor) return;
+      // 续页的采集时刻可能晚于首屏，同一受众的事项按编号合并。
+      if (r.viewer?.kind === kind && Array.isArray(r.data?.items) && r.meta.status >= 200 && r.meta.status < 400) {
+        U.anchor(() => renderClosed(r.data, true));
+      } else {
+        U.html(button, r.warming ? '正在读' : '这一批没读到，重试 ›');
+      }
+    } finally {
+      button.disabled = false;
+    }
+  });
   function renderReports(d) {
     reportsData = d;
     const rows = d.items?.filter(it => !hiddenByWrite(it) && (!query || matchesQuery(it)) && !pendingItems.has(it.owner_item || it.item_id || it.item || it.id) && !(it.actions || []).some(a => a.href && pendingItems.has(new URL(a.href, location.origin).searchParams.get('id'))));
