@@ -450,6 +450,9 @@
           ticks.push([t, mm === 1 ? `${dd.getUTCFullYear()} 年` : `${mm} 月`, mm === 1]);
         }
         if (ticks.length && !ticks.some((k) => k[2])) { const dd = bj(ticks[0][0]); ticks[0][1] = `${dd.getUTCFullYear()} 年 ${ticks[0][1]}`; }
+      } else if (to - from > 4 * 86400) {    // 几天到一个多月（使用时间“近一个月”）：只在零点写日期，按宽度隔几天一格，不再混着钟点
+        const every = Math.max(1, Math.ceil((to - from) / 86400 * 60 / Math.max(w, 1)));
+        for (let t = Math.ceil((from + BJ) / 86400) * 86400 - BJ, i = 0; t <= to; t += 86400, i++) if (i % every === 0) ticks.push([t, md(t)]);
       } else {                               // 短的：24 小时左右每 3 小时一格，超过 36 小时（近 72 小时）每 6 小时一格；零点写日期
         const step = to - from > 36 * 3600 ? 21600 : 10800;
         for (let t = Math.ceil((from + BJ) / step) * step - BJ; t <= to; t += step) ticks.push([t, bj(t).getUTCHours() ? hm(t) : md(t)]);

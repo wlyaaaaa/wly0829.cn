@@ -506,7 +506,7 @@
   function renderSeparateTraffic(card) {
     const separate = computer?.traffic?.program_table?.separate;
     const row = separate && U.separateTraffic({
-      ...separate, note: '这里只算量到的 Claude 桌面版和它自带程序的流量，这笔单独记，不加进代理流量总数。',
+      ...separate, note: U.separateTrafficNote,
     });
     let reading = card.querySelector('[data-traffic-separate]');
     if (!row) { reading?.remove(); return; }
@@ -854,8 +854,8 @@
       // 说清是什么、要做什么：程序身份筛查找出的是没签名或路径不常见的程序，要确认不是冒充的。
       const screening = /impersonation/.test(g.key || '');
       const fields = [Number.isInteger(g.programs) && (screening ? `${g.programs} 个程序没签名或路径不常见，要确认不是冒充的` : `${g.programs} 个程序名`),
-        g.strong > 0 && `其中 ${g.strong} 个要尽快确认`, at(g) && `${at(g)} 读到`, who(g)].filter(Boolean);
-      return `<a href="${esc(href)}">${label(g)}</a>（${esc(fields.join('；'))}）`;
+        g.strong > 0 && `其中 ${g.strong} 个要尽快确认`, at(g) && `${at(g)} 读到`, g.ai_fixing === true ? 'AI 在逐个核对' : '下一步：交给 AI 逐个核对签名和安装位置，你不用自己查；现在还没有 AI 接手'].filter(Boolean);
+      return `<a href="${esc(href)}">${label(g)}${screening ? ' · 看是哪几个 ›' : ''}</a>（${esc(fields.join('；'))}）`;
     });
     const known = computer?.attention_count != null || computer?.attention_groups != null || computer?.attention_summary;
     const lines = [`<b>已确认异常 ${confirmed.length} 组</b>${confirmed.length ? ' · ' + confirmed.join('；') : ''}`,

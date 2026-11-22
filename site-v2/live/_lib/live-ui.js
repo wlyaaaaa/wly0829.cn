@@ -159,11 +159,12 @@
     const shown = lower && power ? Math.floor(value * 10 ** digits) / 10 ** digits : Number(value.toFixed(digits));
     return `${shown} ${prefix}${unit}`;
   }
+  const separateTrafficNote = '这里只算量到的 Claude 桌面版和它自带程序的流量，这笔单独记，不加进代理流量总数。';
   function separateTraffic(row) {
     if (!row || row.name !== 'Claude' || ![row.upload, row.download].every(Number.isSafeInteger) || ![row.from, row.to].every(at => Number.isFinite(Date.parse(at)))) return null;
     const bytes = n => `至少 ${trafficBytes(n, 'B', true)}`;
     const stamp = at => `${date(at)} ${time(at)}`;
-    const note = `计量从 ${stamp(row.from)} 到 ${stamp(row.to)} · ${row.note || '独立侧车实测，不重复计入代理合计'}`;
+    const note = `计量从 ${stamp(row.from)} 到 ${stamp(row.to)} · ${row.note || separateTrafficNote}`;
     const upload = bytes(row.upload), download = bytes(row.download), total = bytes(row.upload + row.download);
     return { name: row.name, upload, download, total, note, summary: `上传 ${upload} · 下载 ${download} · 合计 ${total} · ${note}` };
   }
@@ -1579,5 +1580,5 @@
     back.after(nav);
   })();
 
-  window.LiveUI = { restoreBack, programName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, fieldText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic };
+  window.LiveUI = { restoreBack, programName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, fieldText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();

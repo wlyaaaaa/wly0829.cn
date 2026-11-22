@@ -968,3 +968,10 @@ html .live-conn > #notices > :is(.notice, .l1-unreadable-note, li) { display: fl
   padding: 10px 28px; border: 0; border-radius: 0; background: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none;
   box-sizing: border-box; font-size: 16px; font-weight: 600; line-height: 1.6; color: #3d4249; }
 html .live-conn > #notices > li + li, html .live-conn__rows:not(:empty) + #notices > li:first-child { border-top: 1px solid rgb(40 40 60 / .07); }
+/* 实况首页的 AI 留言：一条一行，时刻写淡；“全文”点开在这一行下面展开，正文保留换行 */
+.notice--message .notice-message__at { color: #8b9098; font-weight: 500; }
+.notice-message__body { flex-basis: 100%; margin: 2px 0 0 20px; font-weight: 500; }
+.notice-message__body > summary { width: fit-content; cursor: pointer; color: #1d7a46; font-size: 14.5px; }
+.notice-message__body > summary:hover { text-decoration: underline; text-underline-offset: 3px; }
+.notice-message__body[open] > summary { color: #00A650; }
+.notice-message__body > p { margin: 6px 0 4px; font-weight: 400; white-space: pre-line; overflow-wrap: anywhere; }

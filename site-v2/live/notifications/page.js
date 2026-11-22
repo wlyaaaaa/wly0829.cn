@@ -383,7 +383,8 @@
     // 后台的 why 是第一条没到的结果类别（“结果未知”这类），首屏那句已经说清，不再重复。
     const why=oldReading&&cutoffOnly(d.why)||/^(?:结果未确认|结果未知|失败|未开始)$/.test(U.sp(d.why||''))?'':d.why;
     const missingNames={...gapNames,at:'发完的时刻',queue_seconds:'排队用时',send_seconds:'发送用时',delivery24:'近 24 小时的统计',delivery7:'近 7 天的统计',attention_rows:'没到的清单',...d.missing_names};
-    const header=U.status({...d,gray_count:undefined,why:why||(!failed&&['gray','off'].includes(d.level)&&!oldReading?'通知记录没有更新':undefined),
+    // 没到的那几条上一行已经逐条点名，这里不再另写“N 项要处理”
+    const header=U.status({...d,gray_count:undefined,attention_count:issues.length?0:d.attention_count,why:why||(!failed&&['gray','off'].includes(d.level)&&!oldReading?'通知记录没有更新':undefined),
       stale_text:oldReading?staleLine:d.stale_text},{missingNames,showZeroFixing:false,cutoffShown:oldReading?cutoffOnly:undefined});
     const namedMissing=header.tone==='gray'?[]:Object.entries(d.missing||{}).map(([key,reason])=>combine([missingNames[key]||(/[\u3400-\u9fff]/.test(key)?key:''),/[\u3400-\u9fff]/.test(reason)||typeof reason==='object'?reason:'']));
     const coverageNotes=[...new Set([...(d.coverage?.missing||[]),...namedMissing,...sources.filter(incomplete).map(o=>o.gap),...gaps.map(g=>g.text||combine([gapNames[g.reason]&&'缺'+gapNames[g.reason],interval(g.from,g.to)]))])].filter(v=>v&&!(oldReading&&cutoffOnly(v)));
