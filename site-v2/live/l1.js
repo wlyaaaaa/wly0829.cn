@@ -355,7 +355,7 @@
   function hasCardData(id, d) {
     if (!d || d.q === 'warming') return false;
     if (id === 'chats') return d.unconnected_source_count === null || Number.isInteger(d.unconnected_source_count) && d.unconnected_source_count > 0 || [d.running, d.waiting, d.done72, d.last_counts?.running, d.last_counts?.done72].some(v => v != null) || [...d.active || [], ...d.recent || [], ...d.fallback || []].length > 0;
-    if (id === 'backups') return (d.summary?.sets ?? d.sets) != null || (d.items || []).length > 0 || d.restore?.some(set => set.points?.length);
+    if (id === 'backups') return (d.summary?.sets ?? d.sets) != null || (d.items || []).length > 0 || d.restore?.some(set => set.points?.length || set.failed_points?.length);
     if (id === 'needs') return d.counts != null || (d.items || []).length > 0;
     if (id === 'ledger') return d.open != null || (d.items || []).length > 0;
     if (id === 'phone') return d.state === 'offline' || !!d.link?.route || !!d.received?.last_at || (d.metrics || []).some(m => m.value != null);
@@ -1228,7 +1228,17 @@
       return { key: `${p.set || ''}:${p.id ?? p.at}`, cls: 'row row--flat', html: `<div class="row__text"><p class="row__main restore__line"><span class="row__title">${label}</span><span class="l1-unit">${time}</span>${history}</p>${body !== label ? `<p class="row__sub">${body}</p>` : ''}</div>` };
     });
     if (neverRestored && backupRows.length + restoreRows.length < previewRange.backups[0]) restoreRows.push({ key: 'never-restored', cls: 'row row--flat row--preview-note', html: '<p class="row__text row__sub">都没恢复过</p>' });
-    paintList(parts.backups.restore, restoreRows, { animate: false });
+    const failedRows = (backups.restore || []).flatMap((set, index) => {
+      const point = set.failed_points?.[0];
+      if (!point) return [];
+      const label = U.fieldHtml(set.name || '系统镜像', { name: '备份名称', kind: viewer });
+      const status = point.state === 'unknown' ? '未核实' : '备份失败';
+      const at = timed(point.at) ? `${U.date(point.at)} ${U.time(point.at)}` : U.collectionText('时间');
+      const reason = point.reason ? `<p class="row__sub">${U.fieldHtml(point.reason, { name: '失败原因', kind: viewer })}</p>` : '';
+      return [{ key: `restore-failed:${set.set ?? set.id ?? index}`, cls: 'row row--flat row--preview-note',
+        html: `<div class="row__text"><p class="row__main restore__line"><span class="row__title">${label} · ${status}</span><span class="l1-unit">${at}</span></p>${reason}</div>` }];
+    });
+    paintList(parts.backups.restore, [...failedRows, ...restoreRows], { animate: false });
     fitCard('backups');
     parts.backups.summary.hidden = backupRows.length + restoreRows.length >= previewRange.backups[0];
     const more = parts.backups.more;
