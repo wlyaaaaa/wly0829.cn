@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta name="referrer" content="strict-origin-when-cross-origin">
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>手机 · 实况</title>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/79376fe0a57cdf8bdb3d0f35f5b46e8ad182309dc6afc26e8084e7c31d70520c/connect-auth/glass.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ea5101dcb96bd7df846c4c896b753ae7a1948ef8f5c243b3e1be2a3855055830/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/da80d2bc3669f7ab436b2b25dee5917004f22a6e7859086a49b64d7187898c67/live/_lib/live.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/5cbbcba4c4596e41314f6bd6b160b5f7e7b7a41742565b8eb31689536b8fccae/live/_lib/live-page.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0becd6b9fb291285f95d2bd0cc6bdfc03b5a7c3b1e34f8f688a76c5e0f4097a4/live/_lib/live-viz.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css">
+<style>
+.page--phone .grp { --live-figure-count:4; }
+.page--phone [data-key="apps"] .grp__figs { grid-template-columns:1.05fr 1fr .9fr 1.55fr; }
+.page--phone [data-key="collect"] .grp__fk { white-space:normal; overflow:visible; letter-spacing:0; line-height:18px; }
+.page--phone [data-key="collect"] .grp__fig { grid-template-rows:36px 30px; }
+.page--phone [data-key="network"] .grp__fig:is([data-key="sim1"],[data-key="sim2"]) .grp__fv { font-size:14px; font-weight:400; }
+.page--phone .grp[data-key="usage"] { --pic-y:32%; }
+.page--phone .grp[data-key="usage"]:is(.is-gone,:not(:has(.grp__extra:not([hidden])))) .card__pic { display:none; }
+.page--phone .grp__line:has(>.grp__said:not(:empty)) > .grp__status:not(:empty)::before,
+.page--phone .grp__status[data-leading-note] > [data-block]:first-child::before { content:'· '; }
+.page--phone .grp[data-key="network"] { --pic-x:78%; --pic-y:56%; }
+.page--phone .grp.is-open:is([data-key="usage"],[data-key="network"])[data-pic] {
+  --win:min(29%,360px);
+  --phone-art-fade:linear-gradient(#000 84%,transparent);
+}
+.page--phone .grp.is-open:is([data-key="usage"],[data-key="network"]) .card__pic {
+  bottom:auto;
+  aspect-ratio:2 / 3;
+  max-height:100%;
+}
+.page--phone .grp.is-open:is([data-key="usage"],[data-key="network"]) .card__pic img {
+  object-fit:contain;
+  object-position:right top;
+  -webkit-mask-image:var(--phone-art-fade);
+  mask-image:var(--phone-art-fade);
+}
+.phone-unread .head__lead { color:var(--muted); }
+.page--phone .phone-range { display:flex; align-items:center; justify-content:space-between; gap:20px; margin:0 0 18px; font-size:14px; }
+.page--phone .phone-gap { position:absolute; top:50%; transform:translateY(-50%); text-align:center; color:var(--ink-soft); font-size:12px; white-space:nowrap; pointer-events:none; }
+.page--phone .phone-chart .chart--hero .chart__plot { height:220px; }
+.page--phone :is([data-key="usage"],[data-key="network"]) .vz-rank__list:has(> :nth-child(7)) { columns:232px 2; column-gap:20px; }
+.page--phone :is([data-key="usage"],[data-key="network"]) .vz-rank__row {
+  break-inside:avoid;
+  margin:0 0 3px;
+  padding:4px 4px 7px;
+  column-gap:8px;
+  line-height:20px;
+}
+.page--phone :is([data-key="usage"],[data-key="network"]) :is(.vz-rank__name,.vz-rank__label) { display:block; white-space:normal; overflow:visible; overflow-wrap:anywhere; }
+.page--phone :is([data-key="usage"],[data-key="network"]) .vz-rank__name small { margin-inline-start:8px; white-space:nowrap; }
+.page--phone .phone-details + .use-note, .page--phone .use-note + h3 { margin-top:24px; }
+.page--phone :is(.grp__fv,.mach__tag,.vz-rank__v,.phone-details dd) { white-space:nowrap; overflow-wrap:normal; }
+.page--phone .phone-reading-note { display:block; margin-top:4px; color:var(--muted); font-size:12px; line-height:20px; white-space:normal; }
+.page--phone [data-key="collect"] [data-row="link"] .vz-tl__plot {
+  margin-inline:var(--phone-link-start,0px) var(--phone-link-end-gap,0px);
+  container-type:inline-size;
+}
+.page--phone .phone-start { position:absolute; inset:auto auto 100% 0; translate:min(0px,calc(100cqi - 100%)); width:max-content; padding-bottom:4px; font-size:12px; color:var(--ink-soft); white-space:nowrap; pointer-events:none; }
+.page--phone [data-key="collect"] .vz-legend { grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px 20px; }
+.page--phone [data-key="collect"] .vz-tl__row:first-child { padding-top:20px; }
+.page--phone [data-key="collect"] .vz-legend__vals { flex-direction:row; flex-wrap:wrap; gap:0 8px; font-size:12px; }
+.page--phone [data-key="collect"] .vz-legend__vals small { min-width:0; margin-right:4px; }
+.page--phone [data-key="battery"] .grp__figs { grid-template-columns:repeat(5,minmax(0,1fr)); }
+.live-offline.page--phone .phone-details:empty, .live-offline .page--phone .phone-details:empty { display:none; }
+.live-offline .page--phone .mach__pt { background:transparent; box-shadow:none; border:1px solid var(--muted); }
+.page--phone .phone-changes { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px 32px; }
+.page--phone .phone-changes > .use-note { margin:0; padding:8px 0; border-bottom:1px solid var(--hair); }
+.page--phone .phone-changes > details { grid-column:1 / -1; }
+.page--phone [data-key="storage"] .vz-share { grid-template-columns:170px minmax(280px,500px); justify-content:start; }
+.page--phone .grp__acts { position:absolute; top:16px; right:18px; }
+.page--phone [data-key="usage"] .use-two { grid-template-columns:minmax(0,39fr) minmax(0,61fr); gap:22px; }
+.page--phone [data-key="usage"] .use-two.is-compact { grid-template-columns:minmax(0,1fr) minmax(240px,.8fr); max-width:820px; gap:24px; }
+.page--phone [data-key="usage"] .use-two:not(.is-compact) .vz-share { grid-template-columns:120px minmax(0,1fr); gap:5px; }
+.page--phone [data-key="usage"] .use-two:not(.is-compact) .vz-share__ring { width:120px; }
+.page--phone [data-key="usage"] .vz-share__mid b { font-size:17px; }
+.page--phone [data-key="usage"] .vz-share__mid small { font-size:10px; margin-inline:1px 0; }
+.page--phone [data-key="usage"] .vz-share__mid span { max-width:7em; font-size:11px; text-wrap:balance; }
+.page--phone [data-key="usage"] .vz-share__row { grid-template-columns:8px minmax(0,1fr) auto minmax(22px,max-content); column-gap:5px; }
+.page--phone [data-key="usage"] .vz-share__name { overflow-wrap:anywhere; }
+.page--phone .use-two.is-compact .vz-share { grid-template-columns:140px minmax(0,1fr); gap:18px; }
+.page--phone .use-two.is-compact .vz-share__ring { width:140px; }
+.page--phone [data-key="usage"] .vz-legend { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.page--phone [data-key="usage"] .vz-heat__cell { height:12px; }
+.page--phone .phone-battery-overlay { display:grid; padding-right:54px; }
+.page--phone .phone-battery-overlay > .phone-chart { grid-area:1 / 1; }
+.page--phone .phone-battery-overlay .chart__head { min-height:26px; }
+.page--phone .phone-battery-overlay > .phone-chart:first-child .chart__vals { margin-left:12px; margin-right:auto; }
+.page--phone .phone-temp { pointer-events:none; }
+.page--phone .phone-temp > h3 { visibility:hidden; }
+.page--phone .phone-temp .chart__name { display:none; }
+.page--phone .phone-temp .chart__head { justify-content:flex-end; }
+.page--phone .phone-temp :is(.chart__grid,.chart__x,.chart__area,.chart__band,.chart__tip) { display:none; }
+.page--phone .phone-temp .chart__y { left:100%; margin-left:8px; text-align:left; }
+.page--phone .phone-temp .chart__stroke { stroke-width:1.2; }
+.page--phone .phone-temp .chart__wait { right:0; left:auto; max-width:45%; }
+.page--phone [data-key="network"] .phone-details { grid-template-columns:minmax(0,1fr); margin-inline:12px; }
+.page--phone [data-key="network"] .phone-details > div { display:grid; grid-template-columns:minmax(130px,1fr) minmax(0,2fr); }
+.page--phone [data-key="storage"] .grp__figs { grid-template-columns:.8fr 1.2fr 1.2fr .8fr; }
+.page--phone [data-key="storage"] [data-figure-gap] { margin:4px 0 0; letter-spacing:0; text-wrap:pretty; }
+.page--phone [data-key="apps"] .grp__line { flex-direction:column; gap:3px; }
+.page--phone [data-key="apps"] :is(.grp__said,.grp__status,.grp__cutoff) { white-space:normal; overflow:visible; max-width:none; margin-left:0; }
+.page--phone :is([data-key="battery"],[data-key="storage"]) .grp__line { flex-wrap:wrap; gap:3px 8px; }
+.page--phone :is([data-key="battery"],[data-key="storage"]) :is(.grp__said,.grp__status) { white-space:normal; overflow:visible; }
+.page--phone :is([data-key="battery"],[data-key="storage"]) .grp__cutoff { flex:none; max-width:100%; overflow:visible; white-space:normal; }
+@media (max-width:1350px) {
+  .page--phone [data-key="usage"] :is(.use-two,.use-two.is-compact) { grid-template-columns:minmax(0,1fr); }
+}
+@media (max-width:600px) {
+  .page--phone [data-key="storage"] .vz-share { grid-template-columns:minmax(0,1fr); }
+  .page--phone :is(.phone-changes,.phone-details) { grid-template-columns:minmax(0,1fr); }
+  .page--phone [data-key="collect"] .vz-legend { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+</style>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ce77afee8852c883dd887f09072045f03474cbc5fbe963f521eebafe0ca2955a/motion/motion.js"></script>
+<meta name="color-scheme" content="only light">
+<style>:root{color-scheme:only light}</style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://wly0829.cn/live/phone/">
+<meta property="og:url" content="https://wly0829.cn/live/phone/">
+<meta name="description" content="手机 · 实况的当前状态与相关记录。">
+<meta property="og:title" content="手机 · 实况">
+<meta property="og:description" content="手机 · 实况的当前状态与相关记录。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/540207abf4dd0ec7de97154ce3796271cd94057b003ee3d654446b6160de16b6/%E5%85%AC%E7%94%A8/fonts/ui-ac38aa837995a377.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c1d655f467b997c6b2f1bdafa2629b3616debe1796c103aae561ab6ecf3d55cc/%E5%85%AC%E7%94%A8/fonts/live-892c1d93467f3051.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
+</head>
+<body class="page page--live page--l2 page--data page--phone">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div>
+  <a class="back" href="/live/" data-back data-mo-rise>实况</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card card--hero card--machine" id="hero" data-pic="right" data-mo-rise>
+    <div class="card__glow" aria-hidden="true"></div>
+    <div class="card__glass glass">
+      <div class="mach">
+        <img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/998fea271e48216612dc4b60bcdb7954564bc2c1a6516bd89232f6d3ba034b19/live/img/s1900-phone-desk-v1.webp" width="2172" height="724" alt="花窗书桌上的手机">
+        <svg class="mach__lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" data-part="lines"></svg>
+        <div data-part="tags"></div>
+      </div>
+      <div class="card__body">
+        <p class="card__head" data-part="head"><span class="lamp" aria-hidden="true"></span><span class="head__lead">正在读</span></p>
+        <ul class="hero__warns" data-part="warns" hidden></ul>
+        <p class="hero__note" data-part="note" hidden></p>
+        <div class="hero__devs" data-part="devs"></div>
+        <p class="row__sub" data-part="system"></p>
+      </div>
+    </div>
+  </article>
+  <div class="usage-odd" id="odd" hidden></div>
+  <nav class="l2-nav l2-nav--data" aria-label="去别的地方">
+    <span class="l2-nav__groups"><a href="/live/computer/">电脑 ›</a><a href="/live/usage/">使用时间 ›</a><a href="/live/notifications/">通知发送回执 ›</a></span>
+    <span class="l2-nav__end">
+    </span>
+  </nav>
+  <section class="vz-board" id="board" data-mo-rise aria-label="手机各组"></section>
+</main>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b602737c9961ba9acd007f91d63c1921c8a9dca967be5010d4795431bc299fd/trust-modal/trust-modal.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29d2613a75302214fd7d022bd43ce21b98dbb2d29ac7ae3c08a48115f1213ba3/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/841291e05c543e09854fe3b2381bf3490c43b08089a404a34f0f37c1b7b47589/live/_lib/live-client.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6ae153296ea9e4d9664721a7280e9549076d01144309a88f83114beaa71d5fa0/live/_lib/live-ui.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0ba940ff16c447f474fcfb04240c6458059170eae1713ea588bc1ea58fab6795/live/_lib/live-light.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29e231c1598e6e89f1d1f9efbb5e550cdcb3eea156c712c968f7799b038222c8/live/_lib/live-chart.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c895c4fc4927c256f63a9dd884d048ed641014359db868565e38464d1ab37e6f/live/_lib/live-viz.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/70201c22832ab25277c45fa16182ac36d6d67f07f6b401dc5507090c85f7a732/live/phone/draw10.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/24ce20aefc7501f6fcfd79071e68f76b037c1d5687e4d300e0851e63b017e8c2/live/phone/page.js"></script>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e508cada4fbb10cef90b14adf9a5b18bcb487fdb521ee3074fbce34981cb8c9f/_site/visitor-beacon.js"></script>
+<script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
+</body>
+</html>

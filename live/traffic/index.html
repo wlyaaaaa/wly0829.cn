@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta name="referrer" content="strict-origin-when-cross-origin">
+<meta charset="utf-8"><meta name="viewport" content="width=1440"><title>海外流量 · 实况</title>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/79376fe0a57cdf8bdb3d0f35f5b46e8ad182309dc6afc26e8084e7c31d70520c/connect-auth/glass.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ea5101dcb96bd7df846c4c896b753ae7a1948ef8f5c243b3e1be2a3855055830/trust-modal/trust-modal.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/da80d2bc3669f7ab436b2b25dee5917004f22a6e7859086a49b64d7187898c67/live/_lib/live.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/5cbbcba4c4596e41314f6bd6b160b5f7e7b7a41742565b8eb31689536b8fccae/live/_lib/live-page.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css"><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ce77afee8852c883dd887f09072045f03474cbc5fbe963f521eebafe0ca2955a/motion/motion.js"></script>
+<style id="days-quality"></style><style>
+.page--traffic .more, .page--traffic .vz-rank__v, .page--traffic .pj-fig__v > b, .page--traffic #month-total > span { white-space: nowrap; }
+.page--traffic #traffic-days { padding-left: 26px; }
+.page--traffic #traffic-days .chart__y { left: -26px; width: 62px !important; }
+.page--traffic #coverage .row__sub { text-wrap: pretty; }
+.page--traffic #traffic-empty { display: flex; align-items: center; gap: 10px; }
+.page--traffic #traffic-curve.is-empty .chart__plot { height: auto; min-height: 0; margin: 0; }
+.page--traffic #traffic-curve.is-empty .chart__wait { position: static; transform: none; padding: 12px 0; }
+.page--traffic #traffic-curve.is-empty .chart__head { display: none; }
+.page--traffic .l2-board { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; align-items: stretch; }
+.page--traffic .traffic-wide { grid-column: 1 / -1; min-width: 0; }
+.page--traffic .l2-board .grp { --win: 190px; margin: 0; }
+.page--traffic .l2-board .grp__chapter { min-width: 0; }
+.page--traffic .l2-board .grp__head { grid-template-columns: 22px minmax(0,1fr) auto; column-gap: 16px; }
+.page--traffic .l2-board .grp__acts { grid-column: 3; }
+.page--traffic #totals { margin: 0 0 12px; }
+.page--traffic #coverage { --gut: 0px; margin: 0 0 8px; }
+.page--traffic #coverage .row { padding: 0; border: 0; }
+.page--traffic #traffic-curve { padding-left: 30px; }
+.page--traffic #traffic-curve .chart__y { left: -30px; width: 66px !important; }
+.page--traffic #traffic-curve .chart__plot { height: 230px; }
+.page--traffic #traffic-days { margin-top: 28px; }
+.page--traffic #hero #head:not(:has(> .lamp)) { padding-inline-start: var(--gut); }
+.page--traffic #head + .hero__note:not([hidden]),
+.page--traffic #traffic-why[hidden] + #month-total { margin-top: 24px; }
+.page--traffic #month-total, .page--traffic #month-total :is(span,small) { font-size: 14px; line-height: 22px; }
+.page--traffic .vz-mark { background: none; box-shadow: none; color: var(--ink-soft); text-shadow: none; }
+.page--traffic #program-card { --win: clamp(280px, 28%, 380px); }
+.page--traffic #program-card .card__glass { min-height: 380px; }
+.page--traffic #program-card .card__pic {
+  top: 50%; bottom: auto; aspect-ratio: 1; transform: translateY(-50%);
+  mask-image: linear-gradient(to right, transparent, #000 30%);
+}
+.page--traffic #program-card .card__pic img {
+  object-fit: contain; transform: none;
+  mask-image: linear-gradient(transparent, #000 7% 93%, transparent);
+}
+.page--traffic #program-rank .vz-rank__row { padding-block: 8px; }
+.page--traffic #program-separate { margin: 0; padding: 8px 0; border-top: 1px solid var(--hair); }
+.page--traffic #program-rank .vz-rank__name small { color: #4a4944; }
+.page--traffic #program-details { margin-top: 10px; padding: 10px 22px 10px 64px; }
+.page--traffic #program-details summary { cursor: pointer; font-size: 14px; }
+.page--traffic #program-detail-rows { margin-top: 8px; }
+.traffic-network-heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.traffic-network-heading:has(+ .panel-table) { margin-bottom: 12px; }
+.traffic-network-heading :is(h2,p) { margin: 0; }
+.traffic-network-heading h2 { font-size: 20px; line-height: 27px; }
+.page--traffic .panel-table { overflow-x: auto; }
+.page--traffic :is(.panel-table table, .traffic-network-table) { width: 100%; border-collapse: collapse; font-size: 13px; line-height: 20px; }
+.page--traffic :is(.panel-table, .traffic-network-table) :is(th, td) { padding: 5px 10px; border-bottom: 1px solid var(--hair); text-align: left; white-space: nowrap; }
+.page--traffic .panel-table :is(th, td):nth-child(2) { min-width: 0; max-width: none; white-space: nowrap; }
+.page--traffic .traffic-network-detail, .page--traffic .traffic-network-detail :is(th, td) { white-space: normal; overflow-wrap: anywhere; }
+.page--traffic .traffic-network-detail dd { margin-inline-start: 0; }
+</style>
+<style>.page--l2 .card--hero[data-pic] .card__glass { min-height: 192px; }</style><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0becd6b9fb291285f95d2bd0cc6bdfc03b5a7c3b1e34f8f688a76c5e0f4097a4/live/_lib/live-viz.css"><meta name="color-scheme" content="only light">
+<style>:root{color-scheme:only light}</style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://wly0829.cn/live/traffic/">
+<meta property="og:url" content="https://wly0829.cn/live/traffic/">
+<meta name="description" content="查看网络流量：哪些程序在上传下载、今天和近几天用了多少。">
+<meta property="og:title" content="海外流量 · 实况">
+<meta property="og:description" content="查看网络流量：哪些程序在上传下载、今天和近几天用了多少。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/540207abf4dd0ec7de97154ce3796271cd94057b003ee3d654446b6160de16b6/%E5%85%AC%E7%94%A8/fonts/ui-ac38aa837995a377.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c1d655f467b997c6b2f1bdafa2629b3616debe1796c103aae561ab6ecf3d55cc/%E5%85%AC%E7%94%A8/fonts/live-892c1d93467f3051.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
+</head>
+<body class="page page--live page--l2 page--resources page--traffic">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div><a class="back" href="/live/" data-back data-mo-rise>实况</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card card--hero" id="hero" data-tone="off" data-pic="right" data-mo-rise style="--pic-y:52%">
+    <div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/319b44dfc0052812d677e40d7ec12e77a8fe90ea7bcd9589c367afb9f0dce5c6/live/img/traffic.webp" alt="" aria-hidden="true">
+    <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/319b44dfc0052812d677e40d7ec12e77a8fe90ea7bcd9589c367afb9f0dce5c6/live/img/traffic.webp" width="1000" height="1000" alt=""></span><div class="card__body">
+      <p class="card__head" id="head">今日已记录的海外代理流量</p>
+      <p class="hero__note" id="traffic-why" hidden></p>
+      <p class="hero__note" id="month-total">本月累计没有记录 · 只算走代理的</p><div class="hero__links"><a class="more more--link" href="/live/computer/">电脑 ›</a><a class="more more--link" href="/live/storage/">存储 ›</a></div>
+    </div></div>
+  </article>
+  <p class="pj-note" id="traffic-empty" hidden>这块没存下来，连上后补上。</p><div class="l2-board">
+    <section class="card grp grp--quiet l2-col traffic-wide" data-pic="right" data-tone="none" data-mo-rise>
+      <div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a3b83f145c6e90fa1ed1d2bedf2ac1a65a33673c1d63e2be2c26e0ab2438fee6/live/img/grp-network.webp" alt="" aria-hidden="true"><div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a3b83f145c6e90fa1ed1d2bedf2ac1a65a33673c1d63e2be2c26e0ab2438fee6/live/img/grp-network.webp" alt=""></span><div class="card__body grp__body">
+      <div class="grp__head"><span class="grp__lamp"></span><span class="grp__title"><b class="grp__name">上传与下载</b><span class="grp__line panel-window" id="curve-window">近 24 小时 · 小时均值</span></span><span class="grp__acts"><span class="seg" role="group" aria-label="时间段"><button type="button" data-days="1" data-needs-pc aria-pressed="true">今天</button><button type="button" data-days="7" data-needs-pc aria-pressed="false">近 7 天</button></span></span></div>
+      <div class="grp__chapter"><ul class="pj-figs" id="totals"><li class="pj-fig"><span class="pj-fig__k">上传</span><span class="pj-fig__v" id="upload-value"></span></li><li class="pj-fig"><span class="pj-fig__k">下载</span><span class="pj-fig__v" id="download-value"></span></li></ul><ul class="rows list" id="coverage" aria-label="读数范围"></ul>
+        <div id="traffic-curve"></div><p class="pj-note" id="traffic-gap-note" hidden></p><div id="traffic-days"></div>
+      </div>
+      </div></div>
+    </section>
+    <div class="traffic-wide" role="group" aria-labelledby="program-title">
+      <section class="card grp grp--quiet l2-col" id="program-card" data-pic="right" data-tone="none" data-mo-rise>
+        <div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/08d3f5eaade9613d1c244b467c004fdf3de8bfd029f4fc3ea4e8f64ee1b34e39/live/img/use-where.webp" alt="" aria-hidden="true"><div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/08d3f5eaade9613d1c244b467c004fdf3de8bfd029f4fc3ea4e8f64ee1b34e39/live/img/use-where.webp" alt=""></span><div class="card__body grp__body">
+        <div class="grp__head"><span class="grp__lamp"></span><span class="grp__title"><b class="grp__name" id="program-title">今日已记录的海外代理流量</b><span class="grp__line panel-window" id="program-window"></span></span></div>
+        <div class="grp__chapter"><div class="vz-rank--detail" id="program-rank"></div><p class="row__sub" id="program-separate" hidden></p></div></div></div>
+      </section>
+      <details class="glass" id="program-details" hidden>
+        <summary>更多程序</summary>
+        <div class="panel-table" id="program-detail-rows"></div>
+      </details>
+    </div>
+  </div>
+</main>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b602737c9961ba9acd007f91d63c1921c8a9dca967be5010d4795431bc299fd/trust-modal/trust-modal.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29d2613a75302214fd7d022bd43ce21b98dbb2d29ac7ae3c08a48115f1213ba3/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/841291e05c543e09854fe3b2381bf3490c43b08089a404a34f0f37c1b7b47589/live/_lib/live-client.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6ae153296ea9e4d9664721a7280e9549076d01144309a88f83114beaa71d5fa0/live/_lib/live-ui.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0ba940ff16c447f474fcfb04240c6458059170eae1713ea588bc1ea58fab6795/live/_lib/live-light.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29e231c1598e6e89f1d1f9efbb5e550cdcb3eea156c712c968f7799b038222c8/live/_lib/live-chart.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c895c4fc4927c256f63a9dd884d048ed641014359db868565e38464d1ab37e6f/live/_lib/live-viz.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7cc06ac5896f1ed6d3424710bf146a878c75fc79403c9f1f7b366f3156ba0952/live/traffic/page.js"></script>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e508cada4fbb10cef90b14adf9a5b18bcb487fdb521ee3074fbce34981cb8c9f/_site/visitor-beacon.js"></script>
+<script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
+</body></html>

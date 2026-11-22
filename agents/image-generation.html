@@ -1,0 +1,100 @@
+<!doctype html><html lang="zh-CN"><head><meta name="referrer" content="strict-origin-when-cross-origin"><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>画图改图</title><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/28f49146889983e9a0fee8a33b1f66fd823c13ea4a83e7bdaaadba3bdbdb8132/%E5%85%AC%E7%94%A8/page.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0053dcabaa70eec15d8b49184a6ce2b2ace64b4acda86bbefeab4ce3ff8db41a/%E5%85%AC%E7%94%A8/button-art.css"><script type="application/x-project-script" data-src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/fa46cd30cab8e479e0139389abdccef102ec548ea4b5a9085682f02cba7e41a9/agents/content.js"></script><script type="application/x-project-script" data-src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7f0329d0ae066800b277e5d2453ec8a6fb469ffbafb281f46f864d8649e9864d/%E5%85%AC%E7%94%A8/page.js"></script><script type="application/x-project-script" data-src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a61c4285162500ed47acec93d49e36de3320829477163f4f4a6729637b2be0cf/%E5%85%AC%E7%94%A8/button-art.js"></script>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/5044ee92fce71c2ca1769446d770bad7011874c9d9e750c49fdf96b2ad75fab9/%E5%85%AC%E7%94%A8/%E9%85%8D%E9%A1%B5%E7%9C%89.css"><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js" defer></script><link rel="expect" href="#pictures" blocking="render">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css">
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ce77afee8852c883dd887f09072045f03474cbc5fbe963f521eebafe0ca2955a/motion/motion.js"></script>
+<meta name="color-scheme" content="only light">
+<style>:root{color-scheme:only light}</style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://wly0829.cn/agents/image-generation.html">
+<meta property="og:url" content="https://wly0829.cn/agents/image-generation.html">
+<meta name="description" content="画面都交给画图模型直接画、直接改，连网页和视频也先画出整张样子。">
+<meta property="og:title" content="画图改图">
+<meta property="og:description" content="画面都交给画图模型直接画、直接改，连网页和视频也先画出整张样子。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f04addbabb1b6ad1cc4379ade9c7c817cabd3a6e026a50ac0988aae0fa8659c6/wall/img/thumb-909fdbd675d0b38f7a59d49fb2476ea165a526f84fb8cf8c0906b2ddcf8d525e.webp">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/540207abf4dd0ec7de97154ce3796271cd94057b003ee3d654446b6160de16b6/%E5%85%AC%E7%94%A8/fonts/ui-ac38aa837995a377.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
+</head>
+<body data-page="image-generation"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float">
+  <div class="topbar__glass"></div>
+
+  <nav class="topbar__group" aria-label="主导航">
+    <a class="pill" href="/live/">实况</a>
+    <a class="pill" href="/principles/">原理</a>
+    <a class="pill" href="/rules/">规则</a>
+    <a class="pill" href="/skills/" aria-current="page">技能</a>
+    <a class="pill" href="/projects/">项目</a>
+  </nav>
+
+  <a class="brand" href="/" aria-label="Inside a Personal Agent，回首页">
+    <span class="brand__lamp"></span>
+    <span class="brand__word">Inside a Personal Agent</span>
+  </a>
+
+  <div class="topbar__group topbar__group--right">
+    <a class="pill" href="/mcp/">连接电脑</a>
+    <a class="pill" href="/computer-access/">授权与状态</a>
+  </div>
+</header><div class="site-header" aria-hidden="true"></div><main id="pictures" aria-label="画图改图介绍"><section class="picture" id="image-generation-01" data-initial-cover><img crossorigin="anonymous" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/3994dac11f1f78dad8b32d27a9e00c0051604f84db6b303913b5d03039f813f7/agents/assets/%E7%94%BB%E5%9B%BE%E6%94%B9%E5%9B%BE-01-v2.webp" data-cover-pending width="2172" height="724" alt="封面" fetchpriority="high"><h2 class="picture-title-fallback">画图改图</h2><p class="picture-cover-error" role="status">封面图暂时没加载出来。<br>画面都交给画图模型直接画、直接改，连网页和视频也先画出整张样子。</p></section></main>
+<dialog id="details" aria-labelledby="detail-title"><div class="detail-stage"><div class="detail-shot" title="点击图片收起"></div><aside class="drawer"><header style="--order:0"><div class="detail-meta"></div><h2 id="detail-title"></h2><div class="detail-count"></div><button id="close" type="button">收起 ×</button><i class="progress"></i></header><div class="detail-body" tabindex="0"></div></aside></div></dialog><script>(() => {
+  const cover = document.querySelector('[data-initial-cover] > img');
+  if (cover) {
+    const root = document.documentElement;
+    const pictures = document.getElementById('pictures');
+    pictures.style.setProperty('--picture-scale', Math.min(1, root.clientWidth / pictures.offsetWidth));
+    if (root.classList.contains('mo-cover-refresh')) {
+      cover.addEventListener('animationend', () => {
+        root.classList.remove('mo-cover-refresh');
+        root.style.removeProperty('--mo-refresh-cover');
+        cover.setAttribute('data-cover-carried', '');
+      }, { once: true });
+    }
+    const failed = () => cover.setAttribute('data-cover-error', '');
+    const show = () => cover.decode().then(() => {
+      cover.removeAttribute('data-cover-pending');
+      cover.removeAttribute('data-cover-error');
+    }, failed);
+    cover.addEventListener('load', show);
+    cover.addEventListener('error', failed);
+    if (cover.complete) cover.naturalWidth ? show() : failed();
+  }
+
+  const pending = [...document.querySelectorAll('script[type="application/x-project-script"]')];
+  const status = document.createElement('p');
+  const retry = document.createElement('button');
+  status.className = 'project-load-status';
+  status.setAttribute('role', 'status');
+  retry.type = 'button';
+  retry.textContent = '重试正文';
+  status.append('正文暂时没有加载出来。', retry);
+
+  async function load() {
+    retry.disabled = true;
+    while (pending.length) {
+      const script = document.createElement('script');
+      script.src = pending[0].dataset.src;
+      const loaded = await new Promise(resolve => {
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.head.append(script);
+      });
+      if (!loaded) {
+        script.remove();
+        document.querySelector('#pictures').prepend(status);
+        retry.disabled = false;
+        return;
+      }
+      pending.shift();
+    }
+    status.remove();
+  }
+
+  retry.addEventListener('click', load);
+  load();
+})();
+</script>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e508cada4fbb10cef90b14adf9a5b18bcb487fdb521ee3074fbce34981cb8c9f/_site/visitor-beacon.js"></script>
+<script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
+</body></html>

@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta name="referrer" content="strict-origin-when-cross-origin">
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>实况</title>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/79376fe0a57cdf8bdb3d0f35f5b46e8ad182309dc6afc26e8084e7c31d70520c/connect-auth/glass.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ea5101dcb96bd7df846c4c896b753ae7a1948ef8f5c243b3e1be2a3855055830/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/da80d2bc3669f7ab436b2b25dee5917004f22a6e7859086a49b64d7187898c67/live/_lib/live.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css">
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ce77afee8852c883dd887f09072045f03474cbc5fbe963f521eebafe0ca2955a/motion/motion.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0a19095d333c3a4e7cd530ff119b438ce36e338ad70cafb48193f6e8aeb1c0a7/live/_lib/live-motion.js"></script>
+<style>
+.live-first-read .board { visibility: hidden; }
+.live-first-status { display: none; }
+.live-first-read .live-first-status { display: block; position: absolute; margin: 14px 0; }
+.page--live :is(.row, .project-cell):has(.home-detail-link) { position: relative; }
+.page--live .home-detail-link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
+.page--live .home-detail-link:focus-visible { outline: none; }
+.page--live .home-detail-link:focus-visible::after { outline: 2px solid var(--ink); outline-offset: -2px; }
+.page--live :is(.row, .project-cell):has(.home-detail-link) :is(a:not(.home-detail-link), button, summary, input, select, textarea, [contenteditable], [role="button"], [role="link"]) { position: relative; z-index: 2; }
+.page--live #needs [data-part="closed-box"] .row__text > .more { grid-column: 2 / -1; grid-row: 2; justify-self: start; white-space: nowrap; }
+.page--live .board .row__acts { flex-wrap: wrap; justify-content: flex-end; max-width: 190px; }
+.page--live #needs .row__acts { flex-wrap: nowrap; max-width: none; }
+.page--live #needs .row__main > .detail-toggle { display: inline; }
+.page--live #needs .head__rewrite { display: inline-block; margin-left: 8px; white-space: nowrap; }
+.page--live #needs .row__main > .tag { display: inline-block; padding-block: 4px; vertical-align: middle; }
+.page--live #phone .head__tail { display: inline; white-space: nowrap; }
+.page--live #phone .phone-head-tail { display: inline-block; white-space: nowrap; }
+.page--live #phone [data-part="head"] > .row__sub { display: inline-block; max-width: 100%; text-wrap: pretty; }
+.page--live #phone .accumulating-note { text-wrap: balance; }
+.page--live #computer .kv__row:last-child dd { display: flex; flex-wrap: wrap; column-gap: 5px; }
+.page--live #computer .traffic-hour, .page--live #computer .kv__label { display: inline-block; white-space: nowrap; }
+.page--live #computer .traffic-hour { margin-inline-start: .55em; max-width: 100%; white-space: normal; }
+/* 窗口窄到读数那一栏快挤没了：海外流量名字放上一行，读数占整行，不伸出卡外（M415） */
+.page--live #computer .kv { container-type: inline-size; }
+@container (max-width: 200px) {
+ .page--live #computer .kv__row:has(.traffic-hour) dt { grid-column: 2 / -1; }
+ .page--live #computer .kv__row:has(.traffic-hour) dd { grid-column: 2 / -1; grid-row: 2; }
+}
+.page--live .chat-progress-line a.more { margin: 0; padding: 0; translate: none; }
+/* 再看已完成的：和还有 N 个对话同一个样子，不露浏览器默认的黑三角 */
+.page--live #chats [data-part="recent-more"] > summary { list-style: none; }
+.page--live #chats [data-part="recent-more"] > summary::-webkit-details-marker { display: none; }
+.page--live #chats [data-part="recent-more"][open] > summary .more__chev { rotate: 90deg; }
+.page--live #computer .kv__row:has(.kv__label--wide) dt { grid-column: 2 / -1; }
+.page--live #computer .kv__row:has(.kv__label--wide) dd { grid-column: 2 / -1; grid-row: 2; }
+.page--live :is(#tasks,#automation) .card__glow { transform: scale(.6); transform-origin: 25% 0; }
+.page--live :is(#tasks,#automation) .task-preview .row { grid-template-columns: minmax(0, 1fr); padding: 5px 0; }
+.page--live :is(#tasks,#automation) .task-preview .row:has(> .row__acts) { grid-template-columns: minmax(0, 1fr) auto; column-gap: 8px; }
+.page--live :is(#tasks,#automation) .task-preview .row > .row__text { grid-column: 1; margin: 0; white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+.page--live :is(#tasks,#automation) .task-preview .row > .row__acts { grid-column: 2; margin: 0; padding: 0; }
+.page--live #automation .automation-preview-head {
+  display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px;
+  min-width: 0; margin: 0; font-size: 15.5px; font-weight: 500; line-height: 23px;
+}
+.page--live #automation .automation-preview-head time { color: var(--muted); font-size: 13px; font-weight: 400; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.page--live #automation .automation-preview-head .row__title { min-width: 0; color: inherit; text-decoration: none; }
+.page--live #automation .automation-preview-row:hover a.row__title { color: #00813f; }
+.page--live #automation .automation-preview-detail { margin: 1px 0 0; color: var(--ink-soft); font-size: 13px; line-height: 20px; }
+.page--live #automation .automation-preview-detail b { white-space: nowrap; }
+.page--live #automation .automation-preview-hidden { color: var(--muted); font-size: 13px; }
+.page--live #automation[data-auto-state] [data-part="status"] { margin: 4px 0 12px; }
+.page--live #automation[data-auto-state] .task-preview .auto-state-row { grid-template-columns: 14px minmax(0, 1fr); align-items: baseline; padding-block: 12px; }
+.page--live #automation[data-auto-state] .task-preview .auto-state-row > .row__text { grid-column: 2; }
+.page--live #automation .auto-state-row > .lamp { margin: 0; align-self: center; }
+.page--live #automation .auto-state-row .row__meta { margin-inline-start: 8px; white-space: normal; }
+.page--live #automation .auto-state-recent .row__meta { display: block; margin-inline-start: 0; }
+.page--live #automation .auto-state-footer { padding-top: 12px; border-top: 1px solid var(--hair); }
+.page--live #automation[data-auto-state="idle"] .card__pic img { object-fit: contain; object-position: right bottom; }
+.page--live #automation[data-auto-state] [data-part="status"] { color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
+.page--live #automation .auto-why { display: block; margin-top: 2px; }
+.page--live #automation .auto-seg { white-space: nowrap; }
+.page--live #automation .auto-owner { color: #E1271E; font-weight: 700; }
+.page--live #automation[data-auto-state] .task-preview .auto-a-row { align-items: start; padding-block: 10px; border-bottom: 1px solid var(--hair); }
+.page--live #automation[data-auto-state] .task-preview .auto-a-row:last-child { border-bottom: 0; }
+.page--live #automation .auto-a-row > .lamp, .page--live #automation .auto-a-row > .auto-row-gap { align-self: start; margin-top: 9px; }
+.page--live #automation .auto-a-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin: 0; font-size: 16px; line-height: 26px; }
+.page--live #automation .auto-a-head .row__title { font-weight: 650; color: var(--ink); text-decoration: none; }
+.page--live #automation .auto-a-row:hover a.row__title { color: #00813f; }
+.page--live #automation .auto-a-row .row__meta { display: block; margin: 1px 0 0; color: var(--ink-soft); font-size: 14px; line-height: 21px; white-space: normal; }
+.page--live #automation .auto-a-row .auto-tag { margin-top: 1px; }
+.page--live #backups .restore__line { font-weight: 400; }
+.page--live #backups .restore__line .row__title { margin-right: 8px; }
+.page--live #phone .head__lead { white-space: nowrap; font-size: clamp(24px, 1.75vw, 34px); }
+.page--live .board .row__title { word-break: normal; }
+.page--live .board .row__title .l1-unit { display: inline; white-space: nowrap; }
+.page--live .board .row.is-expanded > .row__text > .helpers { display: none; }
+.page--live #chats .row--chat > .row__text { display: contents; }
+.page--live #chats .row--chat .row__main { grid-column: 2; grid-row: 1; }
+.page--live #chats .row--chat > .row__acts { grid-row: 1; }
+.page--live #chats .row--chat > .row__text > :is(.row__line,.row__sub,.helpers,.row__detail) { grid-column: 2 / -1; }
+.page--live .l1-helper { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.page--live .l1-helper > span:first-child { min-width: 0; }
+.page--live .l1-helper .row__acts { flex-shrink: 0; margin-left: auto; }
+.page--live .l1-options { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.page--live #needs .row__sub, .page--live #chats [data-steady] { text-wrap: pretty; }
+.page--live #backups .head__tail { text-wrap: pretty; }
+.page--live #ledger .card__glass { display: grid; align-items: center; }
+.live-unreadable .board { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.live-unreadable .board__col { display: contents; }
+.live-unreadable .board__wide { grid-column: auto; }
+.page--live.live-unreadable .board .card .card__glass { min-height: 0; padding: 14px 20px; }
+.live-unreadable .card__body { padding: 0 !important; }
+.live-unreadable .card__body > :not([data-part="head"]):not([data-part="status"]) { display: none !important; }
+.page--live.live-unreadable .board .card .card__head, .live-unreadable #phone .card__head { display: flex; margin: 0; padding: 0; border: 0; align-items: center; }
+.page--live.live-unreadable .board .card .card__head > .lamp, .live-unreadable #phone .card__head > .lamp { position: relative; inset: auto; width: 12px; height: 12px; flex: 0 0 12px; margin: 0; align-self: center; }
+.live-unreadable .head__lead { font-family: var(--sans); font-size: 18px; font-weight: 600; line-height: 26px; color: var(--ink-soft); }
+.page--live.live-unreadable #phone .head__lead { font-size: 18px; }
+.l1-unreadable-note { font-size: 17px; line-height: 26px; color: var(--ink-soft); }
+.live-unreadable .live-refresh-text { margin-left: 0; font-size: 0; }
+.live-unreadable .live-refresh-text::after { content: '连不上'; font-size: 13px; }
+.live-unreadable .live-refresh-icon { display: none; }
+.page--live.live-unreadable .topbar .live-at { background: none; border-color: transparent; box-shadow: none; color: var(--muted); cursor: default; }
+.page--live.live-unreadable .topbar .live-at::before { display: none; }
+
+.page--live :is(#needs,#chats,#tasks,#backups,#ledger) .row { padding: 6px 0; }
+.page--live :is(#needs,#chats,#tasks,#backups,#ledger) .row__text { display: block; min-width: 0; overflow: hidden; }
+.page--live :is(#needs,#chats,#tasks,#backups,#ledger) .row__text { white-space: nowrap; text-overflow: ellipsis; }
+.page--live #chats .row--chat > .row__text { display: block; grid-column: 2; grid-row: 1; }
+.page--live :is(#needs,#chats,#tasks,#backups,#ledger,#projects) .head__link { min-width: 0; max-width: 100%; row-gap: 2px; }
+.page--live :is(#needs,#chats,#tasks,#backups,#ledger,#projects) :is(.head__lead,.head__tail) { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+.page--live :is(#needs,#chats,#tasks,#backups,#ledger) .row__main { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.page--live :is(#needs,#chats,#tasks,#backups,#ledger) .row__main > .row__title { display: inline; }
+.page--live :is(#needs,#chats,#tasks,#backups,#ledger) .row__text > :is(.row__sub,.row__line,.helpers) { display: none; }
+.page--live #needs .row__text { grid-column: 2; grid-row: 1; }
+.page--live #chats .row--chat .row__main { grid-column: auto; grid-row: auto; }
+.page--live #ledger .card__glass { display: block; }
+.page--live .card--empty .card__body > :not([data-part="head"]):not([data-part="status"]) { display: none !important; }
+.page--live .card--empty .card__glass { min-height: 0; padding-block: 20px; }
+.page--live .card--empty .head__lead { font: 400 15px/24px var(--sans); color: var(--muted); }
+.page--live #ledger { --gut: 25px; }
+.page--live #ledger .card__glass { min-height: 174px; }
+.page--live :is(#needs,#chats,#tasks,#automation)[data-pic="right"] .card__body { padding-right: var(--win); }
+.page--live :is(#needs,#chats) .row__acts { padding-left: 10px; }
+.page--live :is(#backups,#tasks,#automation,#computer) .head__link { display: grid; grid-template-columns: minmax(0, 1fr) auto; row-gap: 2px; }
+.page--live :is(#backups,#tasks,#automation,#computer) .head__tail:not(:last-child) { grid-column: 1 / -1; grid-row: 2; font-size: 13px; line-height: 20px; white-space: normal; }
+.page--live :is(#backups,#tasks,#automation,#computer) .head__tail:last-child { grid-column: 2; grid-row: 1; margin-left: 0; }
+.page--live :is(#backups,#tasks,#automation,#computer) .head__link { grid-template-columns: max-content minmax(0, 1fr); column-gap: 8px; }
+.page--live #computer .head__tail:not(:last-child) { word-break: keep-all; overflow-wrap: anywhere; }
+.page--live :is(#backups,#tasks,#automation,#computer) .head__tail:last-child { justify-self: start; }
+.page--live :is(#computer .kv__row:last-child, #phone .kv__row) dt a { color: inherit; text-decoration: none; }
+.page--live :is(#computer .kv__row:last-child, #phone .kv__row) dt a:hover { text-decoration: underline; }
+.page--live #backups [data-part="main"] .row { grid-template-columns: var(--gut) minmax(0, max-content) auto; justify-content: start; }
+.page--live #backups .row__acts { padding-left: 10px; }
+.page--live #backups .row > .lamp { scale: .6; transform-origin: left center; }
+.page--live #backups [data-part="restore"] .row { border-top: 1px solid var(--hair); padding: 8px 0; }
+.page--live #backups [data-part="restore"] .row__sub { display: block; white-space: normal; }
+.page--live :is(#computer,#phone) .kv__row { grid-template-columns: 25px 88px minmax(0, 1fr); }
+.page--live #computer [data-part="why"] { margin-left: 25px; }
+.page--live #computer .kv__row:last-child dd { gap: 4px 10px; }
+.page--live #computer .kv__row:last-child .kv__link::after { content: none; }
+.page--live #computer .kv__link > small { margin-top: 4px; text-wrap: pretty; }
+.page--live #phone .card__head + [hidden] + .kv { margin-top: 12px; }
+.page--live #phone .card__note:has(> .lamp) { padding-left: 18px; }
+.page--live #phone .card__note > .lamp { left: 0; scale: .65; transform-origin: left center; }
+
+.page--live #chats .row__text { white-space: normal; }
+.page--live #chats .row__meta { display: block; margin-inline-start: 0; white-space: normal; }
+.page--live #chats .chat-meta-part { display: inline-block; margin-right: .5em; white-space: nowrap; }
+.page--live .board #chats .row__main > .row__title { display: inline-block; max-width: 100%; text-wrap: balance; }
+.page--live #chats .row__text > .row__sub { display: block; white-space: normal; margin-top: 4px; }
+.page--live #chats .chat-preview__text { margin: 0; white-space: pre-line; overflow-wrap: anywhere; }
+.page--live #chats .chat-preview:has(> .chat-preview__toggle[aria-expanded="false"]) .chat-preview__text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+.page--live #chats .chat-preview__toggle { margin: 2px 0 0; padding-inline: 0; translate: none; }
+/* 首页：说明和动作分行，名牌统一高度；共享灯与光规则由共用单维护。 */
+.page--live #needs .row__text:has(> .row__main) { display: contents; white-space: normal; }
+.page--live #needs .row__main { grid-column: 2; grid-row: 1; }
+.page--live #needs .row__text > .row__sub { display: block; white-space: normal; margin-top: 4px; }
+.page--live #needs .needs-summary { margin: 12px 0 0 var(--gut); }
+.page--live #ledger .card__glass { min-height: 0; }
+.page--live #ledger .card__head { margin-bottom: 0; }
+.page--live #ledger .card__pic { display: none; }
+.page--live #ledger .card__body { padding-right: 0; }
+.page--live #ledger .head__link { flex-wrap: wrap; }
+.page--live #backups [data-part="main"] .row { grid-template-columns: var(--gut) minmax(0, 1fr) auto; }
+.page--live #backups .row__title { font-weight: 400; }
+.page--live:not(.live-unreadable) .card__body:has(.card__head > .lamp) > :is([data-part="status"],[data-part="gap"],[data-part="why"]) { margin-inline-start: 25px; }
+.page--live #projects .card__body { padding-right: 0; }
+.page--live #projects .project-groups { display: grid; gap: 16px; margin-top: 20px; }
+.page--live #projects .project-group { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 12px; padding: 12px; border-radius: 22px; background: linear-gradient(120deg, rgb(213 236 222 / .8), rgb(235 244 230 / .65)); border: 1px solid rgb(125 181 148 / .24); }
+.page--live #projects .project-group--occasional { background: linear-gradient(120deg, rgb(233 222 247 / .8), rgb(239 235 246 / .65)); border-color: rgb(171 148 205 / .22); }
+.page--live #projects .project-group--unknown { background: rgb(237 237 231 / .8); }
+.page--live #projects .project-group > h3 { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; margin: 0; font-size: 22px; line-height: 1.4; text-align: center; }
+.page--live #projects .project-group > h3 > span { font-size: 28px; }
+.page--live #projects .project-more { grid-column: 2; min-width: 0; font-size: 14px; }
+.page--live #projects .project-more > summary { cursor: pointer; padding: 2px 0 8px; }
+.page--live .board #projects .project-grid { display: grid; gap: 8px; grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+.page--live #projects .project-cell { position: relative; min-height: 88px; padding: 12px 14px; border: 1px solid rgb(255 255 255 / .8); background: rgb(255 255 255 / .68); border-radius: 14px; display: flex; flex-direction: column; justify-content: flex-start; }
+.page--live #projects .project-cell > a { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 600; color: inherit; text-decoration: none; }
+.page--live #projects .project-icon { width: 20px; height: 20px; flex: 0 0 20px; }
+.page--live #projects .project-cell > small { font-size: 13px; line-height: 21px; overflow-wrap: anywhere; }
+.page--live #projects .project-cell > a + small { margin-top: 3px; }
+.page--live #projects .project-cell > .project-changed { font-size: 11px; color: #575b55; }
+.page--live #projects .project-recent { display: inline-block; margin-inline-start: 4px; font-size: 11px; color: #37749a; background: #e6f3ff; border-radius: 5px; padding: 0 5px; white-space: nowrap; }
+.page--live #projects .project-cell:has(.project-recent) { background: #f0f8ff; }
+.page--live :is(#computer,#phone) :is(.row__sub,.card__note,[data-part="why"]) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.page--live #phone .card__note:has(> .btn) { display: flex; align-items: center; overflow: visible; }
+.page--live #phone .card__note-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.page--live #phone .card__note > .btn { flex: none; }
+.page--live #computer .card__body > :is([data-part="gap"],[data-part="status"],[data-part="why"]) { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+.page--live #chats .card__head:has(.chat-head-link) { margin-inline-end: calc(20px - var(--win)); }
+.page--live .board #chats .chat-head-link { display: block; flex: 1 1 100%; container-type: inline-size; }
+.page--live #chats .chat-head-title { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
+.page--live #chats .chat-head-title > .head__lead { white-space: nowrap; }
+.page--live #chats .chat-head-scope { color: var(--muted); font-size: 13px; }
+.page--live #chats .chat-head-link > .chat-head-summary { display: block; white-space: nowrap; overflow-wrap: normal; margin-left: 0; font-size: min(13.5px, 2.28cqi); letter-spacing: 0; }
+.page--live #phone .phone-head-cutoffs.row__sub { white-space: normal; }
+.page--live #phone .phone-reading-time { display: inline-block; white-space: nowrap; overflow-wrap: normal; }
+.page--live :is(#needs,#chats,#tasks,#backups,#ledger) [data-part="head"] > .row__sub { flex-basis: 100%; margin-left: var(--gut); }
+.page--live :is(#chats,#tasks,#backups) [data-part="head"] > br { display: none; }
+.page--live #needs .notice-detail[open] > p { white-space: normal; overflow-wrap: anywhere; }
+.page--live .board .row__main { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal !important; overflow: hidden !important; }
+/* AI 对话：软件、型号、档位、状态和时间整行都显示，放不下就换行，不截成省略号。 */
+.page--live .board #chats .row--chat .row__main { display: block; -webkit-line-clamp: unset; overflow: visible !important; }
+.page--live #projects .project-cell > a > .project-name { flex: 1; min-width: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal; overflow: hidden; }
+.page--live #projects [data-part="published"]:not([hidden]) { display: contents; }
+/* 灯固定在标题首行的左侧，长说明换行时不把标题挤下去。 */
+.page--live:not(.live-unreadable) :is(#needs,#chats,#computer,#tasks,#automation,#backups) [data-part="head"]:has(> .lamp) { position: relative; padding-left: 25px; }
+.page--live:not(.live-unreadable) :is(#needs,#chats,#computer,#tasks,#automation,#backups) [data-part="head"] > .lamp { position: absolute; left: 0; top: var(--headline-lamp-top, 11px); margin: 0; }
+.page--live .card--empty { --headline-lamp-top: 6px; }
+.page--live:not(.live-unreadable) :is(#needs,#chats,#computer,#tasks,#automation,#backups) [data-part="head"]:has(> .lamp) > :is(.head__marker,.head__cutoff,.row__sub) { margin-left: 0; }
+@media (max-width: 1200px) {
+ .page--live #phone :is(.card__head, .kv__row dd):has(.phone-reading-time) { margin-inline-end: calc(24px - var(--win)); }
+}
+@media (max-width: 700px) {
+ .page--live #projects .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+ .page--live #needs .row { grid-template-columns: var(--gut) minmax(0, 1fr); }
+ .page--live #needs .row__acts { grid-column: 2; grid-row: auto; justify-content: flex-start; padding-left: 0; }
+}
+@media (max-width: 520px) {
+ .page--live #chats .row--chat { grid-template-columns: var(--gut) minmax(0, 1fr); margin-inline-end: calc(16px - var(--win)); }
+ .page--live #chats .row--chat > .row__acts { grid-column: 2; grid-row: 2; justify-content: flex-start; margin-top: 0; padding-left: 0; }
+}
+</style>
+<meta name="color-scheme" content="only light">
+<style>:root{color-scheme:only light}</style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://wly0829.cn/live/">
+<meta property="og:url" content="https://wly0829.cn/live/">
+<meta name="description" content="电脑、计划任务、自动任务、备份、项目和 AI 当前进展的实时总览。">
+<meta property="og:title" content="实况">
+<meta property="og:description" content="电脑、计划任务、自动任务、备份、项目和 AI 当前进展的实时总览。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/540207abf4dd0ec7de97154ce3796271cd94057b003ee3d654446b6160de16b6/%E5%85%AC%E7%94%A8/fonts/ui-ac38aa837995a377.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c1d655f467b997c6b2f1bdafa2629b3616debe1796c103aae561ab6ecf3d55cc/%E5%85%AC%E7%94%A8/fonts/live-892c1d93467f3051.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
+</head>
+<body class="page page--live live-first-read">
+
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+
+<!-- 排版：等你的事、AI 对话在左；电脑、手机、自动任务在右；其余卡片按实际高度分配，项目通栏放在最底下。
+     出事时才有的横条（连不上、AI 出口不通、手机通知没送到、只看某个项目）在两栏上面。
+     l1.js 等第一份内容和分栏摆好，再给视口内的块接全站入场。 -->
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div>
+
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <p class="live-first-status row__sub" role="status">正在读实况…</p>
+
+  <div class="board">
+    <div class="board__col">
+      <article class="card" id="needs" data-pic="right">
+        <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/825e3b60116ab0e834c258a05357acbd161ccebe10f76f4d8f7e567673467665/live/img/needs.webp" alt="" aria-hidden="true">
+        <div class="card__glass glass">
+          <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/825e3b60116ab0e834c258a05357acbd161ccebe10f76f4d8f7e567673467665/live/img/needs.webp" width="1000" height="1000" alt=""></span>
+          <div class="card__body"></div>
+        </div>
+      </article>
+
+      <article class="card" id="chats" data-pic="right">
+        <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/fe8f9814af2e6a27532ee4fae4ebc175b7b2b6f929991defd12985b8266fe395/live/img/chats.webp" alt="" aria-hidden="true">
+        <div class="card__glass glass">
+          <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/fe8f9814af2e6a27532ee4fae4ebc175b7b2b6f929991defd12985b8266fe395/live/img/chats.webp" width="1000" height="1000" alt=""></span>
+          <div class="card__body"></div>
+        </div>
+      </article>
+    </div>
+
+    <div class="board__col">
+      <article class="card" id="computer" data-pic="right">
+        <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/877fc0cebaf875aabeb29135932e391f19f12eee2cc688bd3eedbc02fb9d3956/live/img/computer.webp" alt="" aria-hidden="true">
+        <div class="card__glass glass">
+          <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/877fc0cebaf875aabeb29135932e391f19f12eee2cc688bd3eedbc02fb9d3956/live/img/computer.webp" width="1000" height="1000" alt=""></span>
+          <div class="card__body"></div>
+        </div>
+      </article>
+
+      <article class="card" id="automation" data-pic="right">
+        <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7d356eba91f3142d4ba6fea18698496c4dd34ce316ee1b9a88a6d26a98388645/live/img/automation-hero.webp" alt="" aria-hidden="true">
+        <div class="card__glass glass">
+          <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7d356eba91f3142d4ba6fea18698496c4dd34ce316ee1b9a88a6d26a98388645/live/img/automation-hero.webp" width="360" height="360" alt=""></span>
+          <div class="card__body">
+            <p class="card__head" data-part="head"><a class="head__link" href="/live/automation/"><span class="head__lead">自动任务</span><span class="head__tail" aria-hidden="true">›</span></a></p>
+            <p class="row__sub" data-part="status">AI 自动接活和 AI 定时任务</p>
+            <ul class="rows task-preview" data-part="main"></ul>
+            <p class="row__sub auto-state-footer" data-part="automation-footer" hidden></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" id="ledger" data-pic="right">
+        <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/2a8c859d906e050ee0c1fb5f5e032ae6a4cbec78681c19e4e6d68ee92655c3f3/live/img/ledger.webp" alt="" aria-hidden="true">
+        <div class="card__glass glass">
+          <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/2a8c859d906e050ee0c1fb5f5e032ae6a4cbec78681c19e4e6d68ee92655c3f3/live/img/ledger.webp" width="1000" height="1000" alt=""></span>
+          <div class="card__body"></div>
+        </div>
+      </article>
+
+      <article class="card" id="tasks" data-pic="right">
+        <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c20e84764e21427fd62996390226b94058e829d61c8e3ddf6c9922e37100518f/live/img/tasks.webp" alt="" aria-hidden="true">
+        <div class="card__glass glass">
+          <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c20e84764e21427fd62996390226b94058e829d61c8e3ddf6c9922e37100518f/live/img/tasks.webp" width="1000" height="1000" alt=""></span>
+          <div class="card__body">
+            <p class="card__head" data-part="head"><a class="head__link" href="/live/tasks/"><span class="head__lead">计划任务</span><span class="head__tail" aria-hidden="true">›</span></a></p>
+            <p class="row__sub" data-part="status">Windows 登记的任务</p>
+            <ul class="rows task-preview" data-part="main"></ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" id="backups" data-pic="right">
+        <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bf97204e263edba5e5868dbb6b07f3cfdd6abb60a0defbf7c9f1d54b6b55d5b5/live/img/backups.webp" alt="" aria-hidden="true">
+        <div class="card__glass glass">
+          <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bf97204e263edba5e5868dbb6b07f3cfdd6abb60a0defbf7c9f1d54b6b55d5b5/live/img/backups.webp" width="1000" height="1000" alt=""></span>
+          <div class="card__body"></div>
+        </div>
+      </article>
+    </div>
+
+    <article class="card board__wide" id="projects" data-pic="right">
+      <div class="card__glow" aria-hidden="true"></div>
+      <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/82cdaf68ea75f13295b5c59d47ad4172549c3bd061c8a75459e458ea209e2942/live/img/projects.webp" alt="" aria-hidden="true">
+      <div class="card__glass glass">
+        <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/82cdaf68ea75f13295b5c59d47ad4172549c3bd061c8a75459e458ea209e2942/live/img/projects.webp" width="1000" height="1000" alt=""></span>
+        <div class="card__body"></div>
+      </div>
+    </article>
+  </div>
+</main>
+
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b602737c9961ba9acd007f91d63c1921c8a9dca967be5010d4795431bc299fd/trust-modal/trust-modal.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29d2613a75302214fd7d022bd43ce21b98dbb2d29ac7ae3c08a48115f1213ba3/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/841291e05c543e09854fe3b2381bf3490c43b08089a404a34f0f37c1b7b47589/live/_lib/live-client.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6ae153296ea9e4d9664721a7280e9549076d01144309a88f83114beaa71d5fa0/live/_lib/live-ui.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0ba940ff16c447f474fcfb04240c6458059170eae1713ea588bc1ea58fab6795/live/_lib/live-light.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d62023e5657104ea47280862adced01a2ad870d8f9485a65d737b1e28800b66a/live/_lib/live-project-look.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/1fe2badf6f9a008c4127f8b9c83c952d2438efe22bb74d200247420af30da5fc/live/chats/draw10.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/27365deec9aae8b83ffb5b49035d8fcb56bd1247672d70ba4b84b20dd5aa878d/live/automation/presentation.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/b0f8cae104a78f7c0c9b927cc60c1b74f303496f850c51777d48fee790505abc/live/l1.js"></script>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e508cada4fbb10cef90b14adf9a5b18bcb487fdb521ee3074fbce34981cb8c9f/_site/visitor-beacon.js"></script>
+<script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
+</body>
+</html>

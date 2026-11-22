@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta name="referrer" content="strict-origin-when-cross-origin">
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>使用时间 · 实况</title>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/79376fe0a57cdf8bdb3d0f35f5b46e8ad182309dc6afc26e8084e7c31d70520c/connect-auth/glass.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ea5101dcb96bd7df846c4c896b753ae7a1948ef8f5c243b3e1be2a3855055830/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/da80d2bc3669f7ab436b2b25dee5917004f22a6e7859086a49b64d7187898c67/live/_lib/live.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/5cbbcba4c4596e41314f6bd6b160b5f7e7b7a41742565b8eb31689536b8fccae/live/_lib/live-page.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0becd6b9fb291285f95d2bd0cc6bdfc03b5a7c3b1e34f8f688a76c5e0f4097a4/live/_lib/live-viz.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css">
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ce77afee8852c883dd887f09072045f03474cbc5fbe963f521eebafe0ca2955a/motion/motion.js"></script>
+<style>
+.page--usage .traffic-range { justify-content:flex-start; margin:32px 0 28px; }
+.page--usage #usage-range { margin:0; padding:4px; gap:8px; align-items:center; min-height:0; }
+.page--usage #usage-range button { min-width:148px; height:44px; padding:0 22px; font-size:17px; line-height:1; }
+.page--usage .grp .card__pic { mask-image:linear-gradient(90deg,transparent,#000 30%); -webkit-mask-image:linear-gradient(90deg,transparent,#000 30%); }
+.page--usage .vz-share__mid > span { max-width: 100%; line-height: 16px; letter-spacing: 0; color:var(--muted); }
+.page--usage .vz-share__mid em { line-height: 1.1; }
+.page--usage .vz-share__mid b { font-size: 20px; }
+.page--usage .vz-tl__label { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.page--usage #hero .usage-odd { margin: 18px 0 0; padding-top: 14px; border-top: 1px solid var(--hair); }
+.page--usage .year-row { grid-template-columns: minmax(0, 1fr) 190px; gap: 24px; max-width: 960px; }
+.page--usage .vz-cal__months { --cal-cell: 24px; grid-template-columns: repeat(auto-fit, minmax(188px, 1fr)); gap: 20px 24px; }
+.page--usage .vz-cal__grid { grid-template-rows: repeat(7, var(--cal-cell)); grid-auto-columns: var(--cal-cell); }
+.page--usage .vz-cal__dot { width: var(--cal-cell); height: var(--cal-cell); }
+.page--usage .use-cal__week { grid-template-rows: repeat(7, var(--cal-cell)); line-height: var(--cal-cell); }
+.page--usage .year-row .vz-heat__key { justify-content: center; margin-top: 18px; }
+.page--usage .year-sum { padding-left: 22px; }
+.page--usage .use-days .chart__head { display: grid; grid-template-columns: 1fr; gap: 8px; min-height: 58px; }
+.page--usage .use-days .chart__vals { justify-content: flex-start; flex-wrap: wrap; gap: 8px 14px; }
+.page--usage .use-days .vz-bars__plot { height: 190px; }
+.page--usage .use-days .use-compare-key { margin-left: 46px; }
+.page--usage .use-days:has([data-x="cmp"] .vz-bars__plot.is-empty) { grid-template-columns: minmax(0,1fr); gap: 16px; }
+.page--usage [data-x="cmp"]:has(.vz-bars__plot.is-empty) { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; padding-top: 12px; border-top: 1px solid var(--hair); }
+.page--usage [data-x="cmp"]:has(.vz-bars__plot.is-empty) .chart__head { display: block; min-height: 0; }
+.page--usage [data-x="cmp"] .vz-bars__plot.is-empty { height: auto; }
+.page--usage [data-x="cmp"] .vz-bars__plot.is-empty > :not(.vz-wait),
+.page--usage [data-x="cmp"]:has(.vz-bars__plot.is-empty) :is(.vz-bars__x, .chart__vals) { display: none; }
+.page--usage [data-x="cmp"] .vz-bars__plot.is-empty .vz-wait { position: static; display: block; padding: 0; text-align: left; }
+.page--usage .use-where { display: grid; grid-template-columns: minmax(0,1fr); gap: 24px; }
+.page--usage [data-key="where"] .card__pic {
+  bottom: auto;
+  height: min(520px, 100%);
+  mask-image: linear-gradient(90deg, transparent, #000 30%), linear-gradient(180deg, #000 72%, transparent);
+  mask-composite: intersect;
+}
+.page--usage .use-windows { padding-top: 20px; border-top: 1px solid var(--hair); }
+.page--usage .use-where .vz-share { grid-template-columns:170px minmax(0,1fr); gap:20px; align-items:start; }
+.page--usage .use-where .vz-share__ring { justify-self:center; }
+@media (min-width: 1000px) {
+  .page--usage .use-where :is(.vz-share__list, .vz-rank__list):has(> :nth-child(7)) {
+    columns: 2;
+    column-gap: 28px;
+  }
+  .page--usage .use-where :is(.vz-share__row, .vz-rank__row) { break-inside: avoid; }
+}
+.page--usage .use-where :is(.vz-share__row,.vz-rank__row) { display:grid; grid-template-columns:32px minmax(0,1fr) 88px 42px; column-gap:11px; min-height:44px; margin-block:4px; padding:5px 0; align-items:center; }
+.page--usage .use-where :is(.vz-share__name,.vz-rank__name) { grid-column:2; min-width:0; overflow-wrap:anywhere; }
+.page--usage .use-where .vz-rank__name { display:block; }
+.page--usage .use-where .vz-rank__name small { display:block; margin:4px 0 0; }
+.page--usage .use-where :is(.vz-share__v,.vz-rank__v) { grid-column:3; text-align:right; font-variant-numeric:tabular-nums; }
+.page--usage :is(.vz-share__pct,.use-rank-pct) { grid-column:4; text-align:right; font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums; }
+.page--usage .use-where :is(.vz-rank__row--private,.vz-rank__row--empty) { display:block; }
+.page--usage .use-windows .vz-rank__row { grid-template-columns: minmax(0,1fr) 88px 42px; }
+.page--usage .use-windows .vz-rank__name { grid-column: 1; }
+.page--usage .use-windows .vz-rank__v { grid-column: 2; }
+.page--usage .use-windows .use-rank-pct { grid-column: 3; }
+.page--usage .use-windows .vz-rank__row--private { min-height: 0; }
+.page--usage [data-key="day"] .vz-tl:has(.vz-tl__plot:not(.is-empty)) { padding-top: 32px; }
+.page--usage [data-key="day"] .vz-tl__row { grid-template-columns:116px minmax(0,1fr); }
+.page--usage [data-key="day"] .vz-tl__row + .vz-tl__row { margin-top: 32px; }
+.page--usage [data-key="day"] .vz-tl__label { white-space:normal; line-height:20px; font-variant-numeric:tabular-nums; }
+.page--usage [data-key="day"] .vz-tl__plot { height:28px; }
+.page--usage [data-key="day"] .vz-tl__halo { display:none; }
+.page--usage [data-key="day"] .vz-tl__cursor { top:2px; bottom:2px; box-shadow:inset 0 0 0 2px rgb(20 20 19 / .65), inset 0 0 0 3px rgb(255 255 255 / .85); }
+.page--usage [data-key="day"] .vz-legend { margin-left:130px; grid-template-columns:repeat(3,minmax(0,1fr)); }
+.page--usage [data-key="day"] .vz-legend__vals > span { display:flex; align-items:baseline; gap:8px; white-space:nowrap; }
+.page--usage [data-key="day"] .vz-legend__vals small { min-width:92px; }
+.page--usage [data-key="day"] .vz-tl__row:not([data-row="day2"]) .is-now { display:none; }
+.page--usage [data-x="sw"] .chart__head { justify-content: flex-start; gap: 18px; }
+.page--usage [data-x="sw"] .chart__vals { margin-left: 0; }
+.page--usage .grp__status { font-size: 13px; font-weight: 400; color: var(--muted); }
+.page--usage .use-focus-key:empty { display:none; }
+.page--usage .use-recent { margin-top:20px; padding-top:16px; border-top:1px solid var(--hair); }
+.page--usage .focus-track__tick { color:var(--muted); }
+.page--usage [data-x="recent"] .vz-rank__name { display:block; white-space:normal; }
+.page--usage [data-x="recent"] .vz-rank__name small { display:block; margin:4px 0 0; overflow-wrap:anywhere; }
+@media (max-width:600px) {
+  .page--usage :is(.use-two,.year-row) { grid-template-columns:minmax(0,1fr); }
+  .page--usage .vz-cal__months { --cal-cell: 18px; grid-template-columns:repeat(auto-fit,minmax(146px,1fr)); }
+}
+</style>
+<style>
+.use-union-values { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px; margin:0 0 28px; }
+.use-union-values span { display:block; color:var(--muted); font-size:14px; margin-bottom:8px; }
+.use-union-values b { display:block; font-size:24px; font-weight:500; }
+.page--usage [data-key="union"] .vz-tl__plot { height:20px; }
+</style>
+<meta name="color-scheme" content="only light">
+<style>:root{color-scheme:only light}</style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://wly0829.cn/live/usage/">
+<meta property="og:url" content="https://wly0829.cn/live/usage/">
+<meta name="description" content="查看电脑使用时间和应用使用情况。">
+<meta property="og:title" content="使用时间 · 实况">
+<meta property="og:description" content="查看电脑使用时间和应用使用情况。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/540207abf4dd0ec7de97154ce3796271cd94057b003ee3d654446b6160de16b6/%E5%85%AC%E7%94%A8/fonts/ui-ac38aa837995a377.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c1d655f467b997c6b2f1bdafa2629b3616debe1796c103aae561ab6ecf3d55cc/%E5%85%AC%E7%94%A8/fonts/live-892c1d93467f3051.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
+</head>
+<body class="page page--live page--l2 page--data page--usage">
+
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+
+<!-- 第二层：使用时间（电脑页“使用时间 ›”点进来）。说的是用了多少，不是好不好：页头没有灯，彩虹光，画是一只流着彩虹光的沙漏。
+     页头下面一行“跟平常不一样的”；再往下一章一张整宽的卡（LiveViz.board，quiet：不放灯、默认全展开）：
+     这一天 → 这一年 → 每天用了多久 → 用在哪 → 几点在用 → 专注和切窗口。数只从 /computer/usage 来（Live.watch）。 -->
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div>
+
+  <a class="back" href="/live/" data-back data-mo-rise>实况</a>
+
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+
+  <article class="card card--hero card--quiet" id="hero" data-pic="right" data-tone="none" data-mo-rise style="--pic-y: 50%">
+    <div class="card__glow" aria-hidden="true"></div>
+    <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/403584e484e2f2be7086682a322b5c292a4da24280308553eaadd8f493942d74/live/img/s1900-usage-calendar-v1.webp" alt="" aria-hidden="true">
+    <div class="card__glass glass">
+      <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/403584e484e2f2be7086682a322b5c292a4da24280308553eaadd8f493942d74/live/img/s1900-usage-calendar-v1.webp" width="900" height="900" alt=""></span>
+      <div class="card__body">
+        <p class="card__head" data-part="head"><span class="head__lead">正在读</span></p>
+        <p class="hero__note" data-part="note" hidden></p>
+        <div class="hero__links" data-part="links">
+          <a class="more more--link" href="/live/computer/">电脑 <span class="more__chev">›</span></a>
+        </div>
+        <p class="usage-odd" id="odd" hidden></p>
+      </div>
+    </div>
+  </article>
+
+  <nav class="traffic-range" aria-label="使用时间范围"><span class="seg" id="usage-range"><button type="button" data-range="72h" aria-pressed="true">近 72 小时</button><button type="button" data-range="30d" aria-pressed="false">近一个月</button></span></nav>
+  <p class="use-note" id="usage-window-gap" hidden></p>
+  <section class="vz-board" id="board" data-mo-rise aria-label="使用时间"></section>
+</main>
+
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b602737c9961ba9acd007f91d63c1921c8a9dca967be5010d4795431bc299fd/trust-modal/trust-modal.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29d2613a75302214fd7d022bd43ce21b98dbb2d29ac7ae3c08a48115f1213ba3/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/841291e05c543e09854fe3b2381bf3490c43b08089a404a34f0f37c1b7b47589/live/_lib/live-client.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6ae153296ea9e4d9664721a7280e9549076d01144309a88f83114beaa71d5fa0/live/_lib/live-ui.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0ba940ff16c447f474fcfb04240c6458059170eae1713ea588bc1ea58fab6795/live/_lib/live-light.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29e231c1598e6e89f1d1f9efbb5e550cdcb3eea156c712c968f7799b038222c8/live/_lib/live-chart.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c895c4fc4927c256f63a9dd884d048ed641014359db868565e38464d1ab37e6f/live/_lib/live-viz.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/3dd8d8ff6da92fec23fc6b940e87b5d8aada8a204c8140422f3ff08edd180ae1/live/_lib/live-stat.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/5d8cac65878dddfa11fc1d9f9bddc5855ab2aad69c307b5b9c457e1f364a9d95/live/usage/union.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0127253bc9dd2e2f71b378b77a767c0cb812eb879cabd2020726850dd74e4949/live/usage/page.js"></script>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e508cada4fbb10cef90b14adf9a5b18bcb487fdb521ee3074fbce34981cb8c9f/_site/visitor-beacon.js"></script>
+<script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
+</body>
+</html>

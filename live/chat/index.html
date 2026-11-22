@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta name="referrer" content="strict-origin-when-cross-origin">
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>一个对话 · 实况</title>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/79376fe0a57cdf8bdb3d0f35f5b46e8ad182309dc6afc26e8084e7c31d70520c/connect-auth/glass.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ea5101dcb96bd7df846c4c896b753ae7a1948ef8f5c243b3e1be2a3855055830/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/da80d2bc3669f7ab436b2b25dee5917004f22a6e7859086a49b64d7187898c67/live/_lib/live.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/5cbbcba4c4596e41314f6bd6b160b5f7e7b7a41742565b8eb31689536b8fccae/live/_lib/live-page.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e84888435d8697161c386b0c8f1702e40eed7687262b7e12dae9492084f95d51/live/_lib/live-record.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a9a464f43d77a99798008a8ca29c8d7723c7908f7b9ab04a28b0a7a859e924e5/live/_lib/live-route.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css">
+<style>
+/* 光晕左右最多伸到页边留白的外沿。 */
+.route-head .card__glow { inset-inline: max(-60px, calc((var(--col) - 100vw) / 2)); }
+.route-say__text > .trust-note.live-mark--owner { flex-direction: row-reverse; padding: 0; background: transparent; border: 0; box-shadow: none; }
+.route-say__text > .trust-note.live-mark--owner:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.route-cols { align-items: start; }
+.route-mid > .route-crew { flex: none; }
+.route-cols:has(> .route-mid[hidden]) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.route-mid[hidden] { display: none; }
+.route-log .route-foot:empty { display: none; }
+#plan-box { scroll-margin-top: 70px; }
+.route-body.route-body--locked .route-cols { grid-template-columns: minmax(0, 1fr); }
+#plan .route-stop__text { -webkit-line-clamp: unset; }
+.route-say__text, .route-fact, .route-think__text { white-space: pre-wrap; overflow-wrap: anywhere; }
+</style>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ce77afee8852c883dd887f09072045f03474cbc5fbe963f521eebafe0ca2955a/motion/motion.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0a19095d333c3a4e7cd530ff119b438ce36e338ad70cafb48193f6e8aeb1c0a7/live/_lib/live-motion.js"></script>
+<meta name="color-scheme" content="only light">
+<style>:root{color-scheme:only light}</style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://wly0829.cn/live/chat/">
+<meta property="og:url" content="https://wly0829.cn/live/chat/">
+<meta name="description" content="查看一个 AI 对话说了什么、接下来怎么做和参与的全部帮手。">
+<meta property="og:title" content="一个对话 · 实况">
+<meta property="og:description" content="查看一个 AI 对话说了什么、接下来怎么做和参与的全部帮手。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/540207abf4dd0ec7de97154ce3796271cd94057b003ee3d654446b6160de16b6/%E5%85%AC%E7%94%A8/fonts/ui-ac38aa837995a377.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c1d655f467b997c6b2f1bdafa2629b3616debe1796c103aae561ab6ecf3d55cc/%E5%85%AC%E7%94%A8/fonts/live-892c1d93467f3051.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
+</head>
+<body class="page page--live page--l3 page--route">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div>
+  <a class="back" href="/live/chats/" data-back data-mo-rise>AI 对话</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card route-head" id="hero" data-tone="off" data-pic="right" data-mo-rise>
+    <div class="card__glow" aria-hidden="true"></div>
+    <span class="route-art route-head__art" aria-hidden="true"></span>
+    <div class="card__body">
+      <p class="card__head" data-part="head"></p>
+      <p class="row__sub" data-part="privacy" hidden></p>
+      <p class="route-head__meta" data-part="meta" hidden></p>
+      <div class="route-head__row">
+        <div class="route-say"><span class="route-say__icon" aria-hidden="true"></span><p class="route-say__text" data-part="say" data-clip="say" hidden></p><button type="button" class="route-clip__more" data-clip-for="say" hidden>展开</button></div>
+        <div class="route-head__acts" data-part="acts" hidden></div>
+      </div>
+    </div>
+  </article>
+  <div class="route-body" id="rec">
+    <section class="route-card route-plan" id="plan-box" data-mo-rise>
+      <div class="route-plan__label"><span class="route-badge" data-ico="plan" aria-hidden="true"></span><div><h2 class="route-h__text rec-part">计划</h2><p class="route-plan__sub" id="plan-sub"></p></div></div>
+      <div class="route-plan__line"><ol class="route-line" id="plan"></ol><p class="route-plan__note" id="plan-note" hidden></p></div>
+    </section>
+    <div class="route-cols" data-mo-rise>
+      <section class="route-card route-now" id="now-box">
+        <h2 class="route-h"><span class="route-badge" data-ico="now" aria-hidden="true"></span><span class="route-h__text" id="now-label">正在执行</span></h2>
+        <p class="route-now__step" id="now-step"></p>
+        <p class="route-now__text" id="now-text"></p>
+        <section id="words"><div class="route-facts" id="facts"></div></section>
+        <span class="route-art route-now__art" aria-hidden="true"></span>
+      </section>
+      <div class="route-mid">
+        <section class="route-card route-think" id="think-box" hidden>
+          <h2 class="route-h"><span class="route-badge" data-ico="think" aria-hidden="true"></span><span class="route-h__text">思考摘要</span><button type="button" class="route-h__fold" data-clip-for="thinking" data-clip-icon aria-label="展开思考摘要" hidden></button></h2>
+          <p class="route-think__text" id="thinking" data-clip="thinking"></p>
+          <span class="route-art route-corner" aria-hidden="true"></span>
+        </section>
+        <section class="route-card route-crew" id="helpers-box">
+          <h2 class="route-h"><span class="route-badge" data-ico="crew" aria-hidden="true"></span><span class="route-h__text">帮手（子任务）</span><span class="route-h__tail" id="helpers-part"></span></h2>
+          <p class="route-tally" id="helpers-tally" hidden></p>
+          <ol class="route-rows" id="helpers"></ol>
+          <p class="route-note" id="helpers-note" hidden></p>
+          <div class="route-foot" id="helpers-more"></div>
+          <span class="route-art route-corner" aria-hidden="true"></span>
+        </section>
+      </div>
+      <section class="route-card route-log" id="log-box">
+        <h2 class="route-h"><span class="route-badge" data-ico="log" aria-hidden="true"></span><span class="route-h__text">过程记录</span><span class="route-h__tail" id="log-part"></span></h2>
+        <ol class="route-rows route-rows--log" id="log"></ol>
+        <p class="route-note" id="log-note" hidden></p>
+        <div class="route-foot" id="log-more"></div>
+      </section>
+    </div>
+  </div>
+</main>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b602737c9961ba9acd007f91d63c1921c8a9dca967be5010d4795431bc299fd/trust-modal/trust-modal.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29d2613a75302214fd7d022bd43ce21b98dbb2d29ac7ae3c08a48115f1213ba3/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/841291e05c543e09854fe3b2381bf3490c43b08089a404a34f0f37c1b7b47589/live/_lib/live-client.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6ae153296ea9e4d9664721a7280e9549076d01144309a88f83114beaa71d5fa0/live/_lib/live-ui.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/818dc211f0c1bb09b3ca14283230198118e65a14730809c06645e09654a045e2/live/item/record-text.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0ba940ff16c447f474fcfb04240c6458059170eae1713ea588bc1ea58fab6795/live/_lib/live-light.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/3cc2b260a2d46a90e314a34ae44e04d378d725c02e1ee4e37f331e6f0eec949f/live/_lib/live-route.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/1fe2badf6f9a008c4127f8b9c83c952d2438efe22bb74d200247420af30da5fc/live/chats/draw10.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/2120c9a73d4a136f2feeed53fa6fe890eef96c0d944bf67fb735cfd07c516c97/live/chat/page.js"></script>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e508cada4fbb10cef90b14adf9a5b18bcb487fdb521ee3074fbce34981cb8c9f/_site/visitor-beacon.js"></script>
+<script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
+</body>
+</html>

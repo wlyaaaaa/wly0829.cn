@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta name="referrer" content="strict-origin-when-cross-origin">
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>笔记本 · 实况</title>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/79376fe0a57cdf8bdb3d0f35f5b46e8ad182309dc6afc26e8084e7c31d70520c/connect-auth/glass.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ea5101dcb96bd7df846c4c896b753ae7a1948ef8f5c243b3e1be2a3855055830/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/da80d2bc3669f7ab436b2b25dee5917004f22a6e7859086a49b64d7187898c67/live/_lib/live.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/5cbbcba4c4596e41314f6bd6b160b5f7e7b7a41742565b8eb31689536b8fccae/live/_lib/live-page.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a80d76fd2a519f29023a1ca073ee6e30b733688319c2fd7726dbd821e35b0aa8/live/laptop/page.css">
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ce77afee8852c883dd887f09072045f03474cbc5fbe963f521eebafe0ca2955a/motion/motion.js"></script>
+<meta name="color-scheme" content="only light">
+<style>:root{color-scheme:only light}</style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://wly0829.cn/live/laptop/">
+<meta property="og:url" content="https://wly0829.cn/live/laptop/">
+<meta name="description" content="查看笔记本是否在线、电量、资源占用、连接和需要注意的问题。">
+<meta property="og:title" content="笔记本 · 实况">
+<meta property="og:description" content="查看笔记本是否在线、电量、资源占用、连接和需要注意的问题。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/540207abf4dd0ec7de97154ce3796271cd94057b003ee3d654446b6160de16b6/%E5%85%AC%E7%94%A8/fonts/ui-ac38aa837995a377.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c1d655f467b997c6b2f1bdafa2629b3616debe1796c103aae561ab6ecf3d55cc/%E5%85%AC%E7%94%A8/fonts/live-892c1d93467f3051.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
+</head>
+<body class="page page--live page--l2 page--data page--laptop">
+<svg class="laptop-symbols" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="li-laptop" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="m4 16-2 4h20l-2-4M9 20h6"/></symbol>
+  <symbol id="li-battery" viewBox="0 0 24 24"><rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 10v4M6 10v4m3-4v4m3-4v4"/></symbol>
+  <symbol id="li-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 3v3m6-3v3m-6 12v3m6-3v3M3 9h3m-3 6h3m12-6h3m-3 6h3"/></symbol>
+  <symbol id="li-memory" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="10" rx="2"/><path d="M6 10v2m4-2v2m4-2v2m4-2v2M6 16v3m4-3v3m4-3v3m4-3v3"/></symbol>
+  <symbol id="li-disk" viewBox="0 0 24 24"><path d="M3 15l3-9h12l3 9m-5 2h2"/><rect x="3" y="13" width="18" height="6" rx="2"/></symbol>
+  <symbol id="li-network" viewBox="0 0 24 24"><path d="M2 8a16 16 0 0 1 20 0M5 12a11 11 0 0 1 14 0m-11 4a6 6 0 0 1 8 0m-4 4h.01"/></symbol>
+  <symbol id="li-remote" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="13" rx="2"/><path d="M8 21h8m-4-5v5m-3-11h6m-2-2 2 2-2 2"/></symbol>
+  <symbol id="li-apps" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+  <symbol id="li-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 5-2 6-2 8h16c0-2-2-3-2-8m-8 12a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="li-terminal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m7 9 3 3-3 3m6 0h4"/></symbol>
+  <symbol id="li-browser" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></symbol>
+  <symbol id="li-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v5c0 5 4 8 8 10 4-2 8-5 8-10V6Zm-3 9 2 2 4-4"/></symbol>
+</svg>
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <nav class="laptop-trail" aria-label="所在位置"><a class="back" href="/live/computer/" data-back>电脑</a><span aria-hidden="true">›</span><span aria-current="page">笔记本</span></nav>
+  <section id="laptop" data-device-state="loading">
+    <header class="glass laptop-hero">
+      <div class="laptop-hero__info">
+        <span class="laptop-hero__icon" aria-hidden="true"><svg class="laptop-icon"><use href="#li-laptop"/></svg></span>
+        <div><h1>笔记本</h1><p id="laptop-state" aria-live="polite">正在读笔记本</p>
+          <p id="laptop-hardware"></p><p id="laptop-system"></p></div>
+      </div>
+    </header>
+    <dl class="laptop-metrics" id="laptop-metrics">
+      <div class="glass" data-metric="battery"><dt><svg class="laptop-icon" aria-hidden="true"><use href="#li-battery"/></svg>电量</dt><dd></dd></div>
+      <div class="glass" data-metric="cpu"><dt><svg class="laptop-icon" aria-hidden="true"><use href="#li-cpu"/></svg>CPU</dt><dd></dd></div>
+      <div class="glass" data-metric="memory"><dt><svg class="laptop-icon" aria-hidden="true"><use href="#li-memory"/></svg>内存</dt><dd></dd></div>
+      <div class="glass" data-metric="disk"><dt><svg class="laptop-icon" aria-hidden="true"><use href="#li-disk"/></svg>磁盘剩余</dt><dd></dd></div>
+      <div class="glass" data-metric="network"><dt><svg class="laptop-icon" aria-hidden="true"><use href="#li-network"/></svg>网络</dt><dd></dd></div>
+      <div class="glass" data-metric="remote"><dt><svg class="laptop-icon" aria-hidden="true"><use href="#li-remote"/></svg>远程连接</dt><dd></dd></div>
+    </dl>
+    <div class="laptop-panels">
+      <section class="glass laptop-panel" aria-labelledby="laptop-apps-title">
+        <header><h2 id="laptop-apps-title"><svg class="laptop-icon" aria-hidden="true"><use href="#li-apps"/></svg>正在跑的程序 <small>（按 CPU 占用）</small></h2></header>
+        <table aria-labelledby="laptop-apps-title"><thead><tr><th scope="col">程序</th><th scope="col">CPU</th><th scope="col">内存</th></tr></thead><tbody id="laptop-apps"></tbody></table>
+      </section>
+      <section class="glass laptop-panel" aria-labelledby="laptop-notes-title">
+        <header><h2 id="laptop-notes-title"><svg class="laptop-icon" aria-hidden="true"><use href="#li-bell"/></svg>需要注意</h2></header><ul class="laptop-notes" id="laptop-notes"></ul>
+      </section>
+    </div>
+  </section>
+</main>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b602737c9961ba9acd007f91d63c1921c8a9dca967be5010d4795431bc299fd/trust-modal/trust-modal.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29d2613a75302214fd7d022bd43ce21b98dbb2d29ac7ae3c08a48115f1213ba3/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/841291e05c543e09854fe3b2381bf3490c43b08089a404a34f0f37c1b7b47589/live/_lib/live-client.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6ae153296ea9e4d9664721a7280e9549076d01144309a88f83114beaa71d5fa0/live/_lib/live-ui.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0ba940ff16c447f474fcfb04240c6458059170eae1713ea588bc1ea58fab6795/live/_lib/live-light.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/37f0e711e51cf0285f07a8e3643db038b9409d1761e316ba6923d0af91ec05c8/live/laptop/page.js"></script>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e508cada4fbb10cef90b14adf9a5b18bcb487fdb521ee3074fbce34981cb8c9f/_site/visitor-beacon.js"></script>
+<script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
+</body></html>

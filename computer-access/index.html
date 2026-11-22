@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta name="referrer" content="strict-origin-when-cross-origin">
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>授权与状态</title>
+<!-- 页眉用的是定稿的原件，一个字不改 -->
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/79376fe0a57cdf8bdb3d0f35f5b46e8ad182309dc6afc26e8084e7c31d70520c/connect-auth/glass.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ea5101dcb96bd7df846c4c896b753ae7a1948ef8f5c243b3e1be2a3855055830/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css">
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ce77afee8852c883dd887f09072045f03474cbc5fbe963f521eebafe0ca2955a/motion/motion.js"></script>
+<meta name="color-scheme" content="only light">
+<style>:root{color-scheme:only light}</style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://wly0829.cn/computer-access/">
+<meta property="og:url" content="https://wly0829.cn/computer-access/">
+<meta name="description" content="授权与状态">
+<meta property="og:title" content="授权与状态">
+<meta property="og:description" content="授权与状态">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9f07073e00bab17f1ec0b3c92c28976b0011c497027f02f6796c334ea8ed61a9/connect-auth/img/pass.webp">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/540207abf4dd0ec7de97154ce3796271cd94057b003ee3d654446b6160de16b6/%E5%85%AC%E7%94%A8/fonts/ui-ac38aa837995a377.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c1d655f467b997c6b2f1bdafa2629b3616debe1796c103aae561ab6ecf3d55cc/%E5%85%AC%E7%94%A8/fonts/live-892c1d93467f3051.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
+</head>
+<body class="page page--auth">
+
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float">
+  <div class="topbar__glass"></div>
+
+  <nav class="topbar__group" aria-label="主导航">
+    <a class="pill" href="/live/">实况</a>
+    <a class="pill" href="/principles/">原理</a>
+    <a class="pill" href="/rules/">规则</a>
+    <a class="pill" href="/skills/">技能</a>
+    <a class="pill" href="/projects/">项目</a>
+  </nav>
+
+  <a class="brand" href="/" aria-label="Inside a Personal Agent，回首页">
+    <span class="brand__lamp"></span>
+    <span class="brand__word">Inside a Personal Agent</span>
+  </a>
+
+  <div class="topbar__group topbar__group--right">
+    <a class="pill" href="/mcp/">连接电脑</a>
+    <a class="pill" href="/computer-access/" aria-current="page">授权与状态</a>
+  </div>
+</header>
+
+<main class="stage" id="stage">
+  <!-- 玻璃后面的光场 -->
+  <div class="field" aria-hidden="true"></div>
+
+  <section class="cells" aria-label="授权与状态">
+
+    <article class="cell" id="cell-pd" data-key="pd" style="--d:0" data-mo-rise>
+      <div class="cell__glow" aria-hidden="true"></div>
+      <div class="cell__glass glass">
+        <span class="lamp" aria-hidden="true"></span>
+        <h2 class="cell__name">个人资料</h2>
+        <p class="cell__state" aria-live="polite"></p>
+        <div class="cell__acts"></div>
+      </div>
+    </article>
+
+    <article class="cell" id="cell-ur" data-key="ur" style="--d:1" data-mo-rise>
+      <div class="cell__glow" aria-hidden="true"></div>
+      <div class="cell__glass glass">
+        <span class="lamp" aria-hidden="true"></span>
+        <h2 class="cell__name">无限制授权</h2>
+        <p class="cell__state" aria-live="polite"></p>
+        <div class="cell__acts"></div>
+      </div>
+    </article>
+
+    <article class="cell" id="cell-win" data-key="win" style="--d:2" data-mo-rise>
+      <div class="cell__glow" aria-hidden="true"></div>
+      <div class="cell__glass glass">
+        <span class="lamp" aria-hidden="true"></span>
+        <h2 class="cell__name">Windows</h2>
+        <p class="cell__state" aria-live="polite"></p>
+        <div class="cell__acts"></div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- 办的时候：三块下面横着展开的一整条 -->
+  <div class="dealbar" id="dealbar">
+    <div class="dealbar__inner">
+      <div class="dealbar__wrap">
+        <span class="dealbar__notch" aria-hidden="true"></span>
+        <div class="dealbar__glass glass">
+          <div class="dealbar__deals"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="links" aria-label="介绍" style="--d:3" data-mo-rise>
+    <a class="link" href="/password-center/限时通行证.html#限时通行证-05" data-mo-press>
+      <img class="link__glow" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9f07073e00bab17f1ec0b3c92c28976b0011c497027f02f6796c334ea8ed61a9/connect-auth/img/pass.webp" alt="" aria-hidden="true" style="--gx:8%">
+      <span class="link__glass glass">
+        <span class="link__pic" style="--x0:.014; --x1:.414; --yc:.45">
+          <img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9f07073e00bab17f1ec0b3c92c28976b0011c497027f02f6796c334ea8ed61a9/connect-auth/img/pass.webp" width="2172" height="724" alt="">
+        </span>
+        <span class="link__text">
+          <span class="link__kicker">密码中心</span>
+          <span class="link__title">限时通行证</span>
+        </span>
+        <svg class="link__arrow" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 14 14 4M6.2 4H14v7.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </a>
+  </nav>
+</main>
+
+<!-- 办的时候那一条里排成一行的东西：多久、两项一起办、（结果那一句）、6 位码、验证 -->
+<template id="deal-tpl">
+  <div class="deal">
+    <div class="hours" role="radiogroup">
+      <button class="chip" type="button" role="radio" data-h="0.5" data-mo-press>0.5 小时</button>
+      <button class="chip" type="button" role="radio" data-h="2" data-mo-press>2 小时</button>
+      <button class="chip" type="button" role="radio" data-h="8" data-mo-press>8 小时</button>
+      <button class="chip" type="button" role="radio" data-h="24" data-mo-press>24 小时</button>
+      <label class="chip chip--own" role="radio" data-mo-press><input type="text" inputmode="decimal" maxlength="4" autocomplete="off" aria-label="自己填几小时，0.5 到 72">小时</label>
+    </div>
+    <label class="both"><input type="checkbox">两项一起办</label>
+    <span class="go__msg" aria-live="polite"></span>
+    <div class="code" role="group" aria-label="6 位码">
+      <input inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="第 1 位">
+      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 2 位">
+      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 3 位">
+      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 4 位">
+      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 5 位">
+      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 6 位">
+    </div>
+    <div class="go">
+      <button class="btn btn--ink go__btn" type="button" disabled data-mo-press>验证</button>
+    </div>
+  </div>
+</template>
+
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b602737c9961ba9acd007f91d63c1921c8a9dca967be5010d4795431bc299fd/trust-modal/trust-modal.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29d2613a75302214fd7d022bd43ce21b98dbb2d29ac7ae3c08a48115f1213ba3/live/_lib/live-view-switch.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ed022841b90f8c65bb06e65d2403e8b4fba9d7fac399070b3c3083cd0e45d3e9/connect-auth/auth.js"></script>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e508cada4fbb10cef90b14adf9a5b18bcb487fdb521ee3074fbce34981cb8c9f/_site/visitor-beacon.js"></script>
+<script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
+</body>
+</html>

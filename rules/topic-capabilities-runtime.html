@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta name="referrer" content="strict-origin-when-cross-origin">
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>能力与运行方式 · 规则</title>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/62df9fc2f2bafa6f91f0edad48f76e655700bf0b7119ecd61e2042b2b6800da1/rules/rules.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css">
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ce77afee8852c883dd887f09072045f03474cbc5fbe963f521eebafe0ca2955a/motion/motion.js"></script>
+<meta name="color-scheme" content="only light">
+<style>:root{color-scheme:only light}</style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://wly0829.cn/rules/topic-capabilities-runtime.html">
+<meta property="og:url" content="https://wly0829.cn/rules/topic-capabilities-runtime.html">
+<meta name="description" content="owner: E:\.agents">
+<meta property="og:title" content="能力与运行方式 · 规则">
+<meta property="og:description" content="owner: E:\.agents">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/540207abf4dd0ec7de97154ce3796271cd94057b003ee3d654446b6160de16b6/%E5%85%AC%E7%94%A8/fonts/ui-ac38aa837995a377.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/95972aa92c3a41746bcb05fae12a549d5eaa54e57f2804bcf62c629cf8c5ab62/%E5%85%AC%E7%94%A8/fonts/article-2633ad8da732d2c3.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
+</head>
+<body>
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float">
+  <div class="topbar__glass"></div>
+
+  <nav class="topbar__group" aria-label="主导航">
+    <a class="pill" href="/live/">实况</a>
+    <a class="pill" href="/principles/">原理</a>
+    <a class="pill" href="/rules/" aria-current="page">规则</a>
+    <a class="pill" href="/skills/">技能</a>
+    <a class="pill" href="/projects/">项目</a>
+  </nav>
+
+  <a class="brand" href="/" aria-label="Inside a Personal Agent，回首页">
+    <span class="brand__lamp"></span>
+    <span class="brand__word">Inside a Personal Agent</span>
+  </a>
+
+  <div class="topbar__group topbar__group--right">
+    <a class="pill" href="/mcp/">连接电脑</a>
+    <a class="pill" href="/computer-access/">授权与状态</a>
+  </div>
+</header>
+<main class="rules-page" data-rule-release="E481" data-rule-page="topic-capabilities-runtime">
+  <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="能力与运行方式">能力与运行方式</h1></div>
+  <div class="rules-layout">
+    <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#选能力"><span class="toc-number">01</span><span class="toc-label">选能力</span></a></li>
+<li class="toc-level-2"><a href="#登录是否影响判断"><span class="toc-label">登录是否影响判断</span></a></li>
+<li class="toc-level-1"><a href="#桌面应用的注册表视图"><span class="toc-number">02</span><span class="toc-label">桌面应用的注册表视图</span></a></li>
+<li class="toc-level-1"><a href="#常用入口"><span class="toc-number">03</span><span class="toc-label">常用入口</span></a></li>
+<li class="toc-level-1"><a href="#云端素材通道"><span class="toc-number">04</span><span class="toc-label">云端素材通道</span></a></li>
+<li class="toc-level-1"><a href="#浏览器"><span class="toc-number">05</span><span class="toc-label">浏览器</span></a></li>
+<li class="toc-level-1"><a href="#汇报网站和自动运行的东西"><span class="toc-number">06</span><span class="toc-label">汇报、网站和自动运行</span></a></li>
+<li class="toc-level-1"><a href="#软件更新和兼容"><span class="toc-number">07</span><span class="toc-label">软件更新和兼容</span></a></li>
+<li class="toc-level-1"><a href="#安装位置配置和本机约定"><span class="toc-number">08</span><span class="toc-label">安装位置、配置和约定</span></a></li></ol></nav>
+    <article class="rules-body" id="rules-body">
+<p class="doc-owner">owner: <code>E:\.agents</code></p>
+<p>先想清要的结果，再选现在真正可用的能力。这里管工具、技能、领域入口、浏览器、软件更新、安装位置、汇报网页、网站和自动运行的东西；授权、施工和交付标准不在这里重定。</p>
+<h2 id="选能力">选能力</h2>
+<ul>
+<li>按目标、风险、信息增益、能否撤回、等待时间和总花费选工具和方法，保留本人选的模型和框架。能力目录只是候选：需要时查当前真实的工具、现有入口和说明；不把当前列表当上限，也不把“工具存在”当成“一定能用”。技能、模板和计划不能自己生出新目标或审批。</li>
+<li>独立电脑 MCP 和本机宿主遵守同一套工作约定，但各用自己真实的身份和能力。缺某个宿主特有的事件或工具，只影响相关动作，不让别的工作停下，也不冒充别的宿主的身份。共用的桌面、鼠标键盘和浏览器会话按当前动作协调，用完归还。新接入宿主或 AI 时，个人资料链路投影正式的同一份共享状态，使用共同来源的根/子角色提示，按宿主真实接口接入结构化资料兜底并通过共同语义、误拦/漏拦和错误放行测试；不能另维护名单或提示，不猜模型措辞。技能加载与源码维护无法区分时，不按技能文件读取拦截。确实缺相关接口时写明那项缺口，不报已接通，其余普通工作照常。资料策略与调用办法统一见<a href="topic-privacy-data.html">个人资料与数据处理</a>和状态钩子维护手册。</li>
+<li><strong>三家一起装。</strong> 本人日常用 Claude、Codex 和 Antigravity 三个智能体。给其中一家接上或改动的能力和接线（钩子、技能、MCP、插件、宿主设置这类），另两家也同样接、同样改；能共用一份的共用一份，不各写一套。哪家没有对应机制的，用它最接近的办法做到同样效果，做不到的写明缺口（Antigravity 的缺口记在<a href="topic-antigravity-adapter.html#%E7%BC%BA%E5%8F%A3">Antigravity 适配</a>）。只为绕开某一家自己的毛病（比如它的命令拦截）加的，只改那一家；只该跑一次的事（比如自动任务）不各家各跑一份；派活、选型号的分工照<a href="topic-execution-coordination.html">分工与并行施工</a>，不归本条管（本人 2026-11-15，源消息 43af21a6-773c-41da-943a-94cb9aca6171）。</li>
+<li><strong>快速操作由 AI 执行。</strong> 本人提出“快速操作”“快速开关”“一键开关”时，默认由 AI 使用现有工具直接执行并回读结果。不要把它理解为让本人点击快捷方式、运行命令或照步骤操作，也不要因此自行新增快捷方式或按钮。只有本人明确选择手动操作，或实际流程确实需要本人在场时，才交本人完成对应步骤（出处：<code>docs/owner-decisions/2026-10.md</code>“快速操作由 AI 执行”）。</li>
+<li><strong>界面上的点选默认交本人。</strong> 现在的点屏工具（computer use）还不够成熟，需要在软件界面上点选的操作（例如安全软件里恢复被禁止的启动项、Codex 桌面里编辑自动任务），AI 先查清并写好几步说明交本人点，点完由 AI 回读结果；AI 不主动用点屏工具代点，本人明确要 AI 点时照办。命令行、配置文件和官方命令能完成的照常由 AI 做；浏览器里的网页操作按下文“浏览器”一节。</li>
+<li><strong>本人正在用电脑时不抢前台。</strong> 本人此刻是不是正在这台电脑上操作，由 AI 当场判断；AI 操作时发现他在抢（指针被挪走、窗口被切走、他在打字），就算在操作，马上让出来。他在操作时，AI 不把窗口或网页拉到最前、不动系统的鼠标指针和键盘、不抢输入焦点：会打断他手上的事，他打的字也可能落进 AI 的窗口。AI 自己要做的改在后台做（后台标签页、不跳到前面的窗口、命令行）。非要在屏幕上做的（比如本人让 AI 代点界面），AI 自己另开一块虚拟显示器（开关工具登记在下文“本机小工具”清单里），把窗口放上去，用不动指针、不抢焦点的办法操作（比如界面自动化接口），用完关掉；本人的主电脑和副驾驶笔记本都这样。主电脑上本来就有的那块虚拟显示器是本人关了主屏时自己用的，不给 AI 占。汇报网页做好后弹到最前、要他亲手登录或操作的网页拉到最前，是本人要的原设计，照旧。他当场叫 AI 拉到前面或用鼠标键盘时照办（本人 2026-11-15，源消息 3322e055-090a-4d52-ab9e-c6da3f8bd157、3281cb97-ccef-43ff-b586-97e498e8d199、0873c94e-573e-47cc-97ca-88764f8323aa）。</li>
+<li>能力缺失或真的不兼容时，只停依赖它的那部分，其余继续，用人话说清影响；不悄悄降质量、删功能或绕过身份、权限和保护要求。本人自己的能力坏了要修好或正式替换（见<a href="topic-engineering-delivery.html">工程与交付</a>）；暂缓、回退旧版或局部停用只是处置状态，不算修好。</li>
+<li>有用的英文第一次出现时加简短中文释义，代码、路径、常见缩写和精确标识除外。关键的没做完的事必须说，不为了模板完整输出无用字段。</li>
+<li><strong>短时流程要跟住。</strong> 验证码、登录确认这类要趁有效期处理的流程，在当前任务里主动盯着实际能读的来源，收到就及时完成已授权的后续操作；不刚开始等就改成几分钟后的自动任务然后结束。按来源的真实能力和时间窗口选现成的等待或有界轮询；完成、取消、窗口结束或来源读不了时，说明结果或缺口并结束等待。这不要求为几小时后的事一直挂着，也不新建全局轮询器或后台服务。</li>
+</ul>
+<h3 id="登录是否影响判断">登录是否影响判断</h3>
+<p>同一来源有本人可用的对应账号时，始终优先用该账号的登录态搜索和读取。公开结果可以并行补充、交叉核对，不能因为公开页面能打开就跳过可用的登录态。账号下的内容、排序、可见范围和字段可能不同；使用个性化结果时标明适用的账号和人群，推断更大总体前核对覆盖范围和取样偏差。</p>
+<ul>
+<li>只有对应账号暂不可用时才重新登录：按 浏览器技能 先去密码中心找凭据，手机号登录先自己收验证码，短信和邮箱一起等。找不到凭据、等不到验证码、要扫码或本人验证时，再请本人完成具体那一步；不因此绕开该站，也不先论证值不值得请（本人 2026-11-11，源消息 7cb84c72-b6c8-4b65-b392-21c715b69e1d）。本人在电脑前就把登录页拉到 Chrome 最前面（命令见 news-quickcheck 技能），说清登上后多看到什么、影响哪项判断。他睡着、出门也照常进实况、发通知和邮件，按事项去重；先做不依赖它的部分。没有查询在等时不为登录单独找他。保留进度，登上后从原目标继续核实。</li>
+<li>他登上之前，已有依据确认所需事实、范围和时期等价，或差异不会影响这次判断的，可以先用公开证据作答，说明依据和范围。不同平台和旧记录分别计数。</li>
+<li>目标是把本人要的事办成。遇到故障，AI 根据已有证据、剩余时间和这一路对结论的重要性，判断该刷新、等候、换等价来源还是请本人验证。空白或暂时断线时，沿原账号和原目标有界重试；明确限流则按站方要求退避再试。单站失败保留其他来源已核实的事实；多个独立来源一起出现解析、连接或握手错误时，先按 <code>proxy-network</code> 核本机网络与对应出口。空白、网络故障和限流都不能证明掉线。重要数据仍缺就保留目标和可重试时间，恢复后继续，旧记录注明时间。已提交的消息或其他有副作用的动作不自动重发。</li>
+<li>遇到验证码，先确认拦住的是本人账号、当前设备或请求，还是公共读取工具的出口，再看站方要求的是短信登录、扫码确认、人机验证还是信任设备。验证码本身的有效期和验证后会话的有效期分别核实；站方未说明的时长就说未知。有依据表明一次正常验证能长期复用，可以现在做；短时或效力未知的验证若关系本题关键数据，也及时办理。只有确需本人动手时才把相应验证页交给他，完成后回读原目标。</li>
+</ul>
+<h2 id="桌面应用的注册表视图">桌面应用的注册表视图</h2>
+<p>从 Claude、Codex 的 Windows 桌面应用启动的命令，读写 HKCU 时可能落在 MSIX 应用的私有注册表视图。没有包身份、<code>sudo</code> 提权成功，以及在同一环境写后回读，都不能证明系统真表已经改变。需要影响系统的 HKCU 修改，读取、备份和写入须通过 WMI <code>StdRegProv</code>，或通过 <code>Win32_Process.Create</code> 创建的外部进程执行；已有键的 <code>reg export</code> 备份也要在该外部进程中完成，验收再用真表独立回读。</p>
+<p><code>StdRegProv</code> 的字符串读取会展开 <code>REG_EXPAND_SZ</code> 中已定义的环境变量；恢复快照要保留原始命令时，在外部进程中用 <code>.NET RegistryKey.GetValue</code> 的 <code>DoNotExpandEnvironmentNames</code> 读取。PCConfig 的启动项 provider 已负责这条读取路线，调用者直接用其正常入口。</p>
+<h2 id="常用入口">常用入口</h2>
+<ul>
+<li><strong>本机小工具。</strong> 问本机已有的小工具、以前用过的工具、图片超分或本机现成做法时，先查唯一清单 <code>E:\Tools\LocalToolbox\catalog.json</code>；按用途检索用 <code>E:\Tools\LocalToolbox\Find-LocalTool.ps1 -Query '&lt;用途&gt;' -Json</code>。工具列表、型号和哈希只在那份清单里。</li>
+<li><strong>自动清理。</strong> 在 PCConfig 的自动清理说明 看规则表、最近一轮结果和下次运行时间。任务收尾和定期清理按<a href="topic-engineering-delivery.html#%E4%B8%8B%E8%BD%BD%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6%E5%92%8C%E6%B8%85%E7%90%86">工程与交付</a>办理。</li>
+<li><strong>内存快满时自动处理。</strong> AI 不等本人，按 PCConfig 的 <code>E:\PCConfig\registries\memory_guard.json</code> 登记的失控优先、安全回收与急救规则自动处理；有失控增长者时只处理增长者，清单及规则外的对象不动。AI 自己的任务若是占用大户，先停自己的。触发阈值、安全边界和分类只读 PCConfig 登记，不在全局规则复制；AI 安装会常驻后台的软件时，同时在该登记给它分类。</li>
+<li><strong>个人领域直达。</strong> 健康、本人诉讼和微信分别直达 <code>personal-health</code>、<code>personal-litigation</code>、<code>wechat-direct</code>；只有原件位置不明、要跨已允许的位置查找或原来的定位失效时，才用 <code>personal-materials</code> 找到、打开并核对原件；精确录音和扫描件分别交给 <code>chinese-asr</code>、<code>localocr</code>。照片视频只在本人明确要求时做成独立的有界任务。没有独立领域项目时，直接用当前对话的事实和会改变答案的最少原件回答。不恢复中央个人数据库、统一事件图、跨领域画像、后台同步、总技能或默认的全景上下文。</li>
+<li><strong>Google。</strong> Gmail 和 Google Drive 统一走 <code>google-workspace-direct</code> 技能；写入、分享、发送和邀请要有对应能力和授权，删除、公开分享、发送和邀请还须绑定精确外部动作授权。</li>
+</ul>
+<h2 id="云端素材通道">云端素材通道</h2>
+<p>同一文件预计被 AI 读两次以上，或同批处理流量明显超过文件本身时，按 cloud-asset-channel 技能核对通道与读者，明确指定素材，不扫描目录。</p>
+<p>密码、密钥、恢复码、身份证件和银行卡照片不进桶；公开范围按<a href="topic-privacy-data.html#%E5%85%AC%E5%BC%80%E4%B8%AA%E4%BA%BA%E6%95%B0%E6%8D%AE%E5%88%86%E7%BA%A7%E8%A1%A8">个人资料与数据处理</a>。上传用 Wrangler 既有网页授权，不创建 API 令牌、不经手密钥原文。</p>
+<h2 id="浏览器">浏览器</h2>
+<p>只读查公开资料用宿主自带的联网搜索和网页读取；在本人 Chrome 后台自动完成、不操作页面的只读站内搜索命令也直接调用。要操作网页、登录、截图或看必要的渲染页面时，用本人外部 Chrome；Claude 根和子代理、Codex 桌面根和原生子代理按各自适配的分工默认派 GPT 处理；Antigravity 不用登录的日常网页可以用自带浏览器，要登录或要用本人 Chrome 的同样默认经包装器派 GPT（见<a href="topic-antigravity-adapter.html#%E6%B5%8F%E8%A7%88%E5%99%A8">Antigravity 适配</a>）；具体分工和 GPT 额度用完的后备先读 <code>browser-control-continuity</code> 技能。本人当轮点名的浏览器照办，动作、账号和内容仍按原授权。</p>
+<h2 id="汇报网站和自动运行的东西">汇报、网站和自动运行的东西</h2>
+<ul>
+<li>
+<p><strong>网站</strong>：wly0829.cn 是本人真实在用的个人看板，虽然公开，但不是演示品。本人说“更新网站”时，按 <code>V:\Personal\Projects\wly0829.cn</code> 的 AGENTS.md 更新到最新，通常每周一次。不建自动定时更新。</p>
+</li>
+<li>
+<p><strong>本人只看实况</strong>：本人在网站上基本只看实况（含实况二级页）；README、项目里的看板和总览页、网站上实况以外的页面，他都不看。要本人知道、做或选的事必须进实况，只写在别处等于没告诉他；不为本人另建看板或总览页（本人 2026-10-31，源 6ef403fe）。</p>
+</li>
+<li>
+<p><strong>自动任务自行决定并执行</strong>：在任务范围和已有授权内，自动任务的方案、取舍和处理方式由 AI 按最优解自行决定并执行，做完报告结果，不再因拿不准或涉及取舍等待本人选择；这项自主决定替代约法的轻重方案选择、先看样子和开工点头要求，必须本人亲手办理或超出已有授权的动作仍按约法（本人 2026-11-16，源消息 01a1dfff-1140-70c3-b881-16f480bd1f33）。</p>
+</li>
+<li>
+<p><strong>自动任务的结论写进实况</strong>：Codex 和 Claude 的自动任务每跑一轮，都用 PCConfig 的结论回执命令写一句人话结论（正常、要你看或出错），写法见 PCConfig <code>docs/runtime/codex-automation-receipt.md</code>；分段做的每段都写、以最后一次为准，卡住或出错当场就写。实况在自动任务的该任务行显示结论；自动故障只递事实，由 AI 判断：需要本人亲手办的记“要你做”（要开对话接手的先交现有主持，见 cockpit 技能），需要本人决定（花钱、删唯一数据、超出已有授权、本人的价值取舍）或补他才知道的信息的记“要你选”，其它结论是否需知会由 AI 按分级告知判断，AI 接手不免除告知。任务自己没写时，Claude 的钩子用它最后的收尾回顾补一份并标黄。回执不会自己推到本人面前；本人在对话里等的结果，还要送回那个对话（Claude 的做法和兜底见<a href="topic-claude-adapter.html#%E5%AE%BF%E4%B8%BB%E6%8E%A5%E7%BA%BF">Claude 适配</a>“自动任务的结果送回等结果的对话”）。</p>
+</li>
+<li>
+<p><strong>本人没回的对话默认没看见</strong>：本人没回复、AI 也没说做完的对话，算本人没看见；要本人知道、做或选的，都用人话写进实况：出了什么事、要本人做什么、不做会怎样，不用代号，不让人猜。本人在那个对话里回了才算看见。Claude 对话等回话在实况“AI 对话”里显示；钩子只递问题和答复事实，由 AI 判断是否登记本人事项、回答了哪件事及是否处理完，再更新或关闭原条。Codex 有要本人定或做的事时，仍在最后一条回复的最后一行写“【等你】&lt;一句人话&gt;”；钩子只递事实，登记、更新和关闭由 AI 判断后办理。AI 自己还要接着做的，保留承接方、进展和检查点，符合范围的记入实况“AI 账本”，不留没人知道的半截。</p>
+</li>
+<li>
+<p><strong>问本人：问意思要勤，问许可要省。</strong> 自动任务按本节“自动任务自行决定并执行”的授权办理；其余任务拿不准他这句话的意思、几条路里走哪条，当场用选项问（Claude 用弹出选项，Codex 用自带的提问工具，Antigravity 见其适配专题，没有就在最后一行写“【等你】”；大工程不弹选项，题挂到那一页、收尾只说页上有题等他，禁令见“跟本人定方案”技能“怎么问”），一两个问题，每个选项一行写清选了会怎样（各要花的时间不一样就写上各要多久），第一个放建议；一两句能问清的事不做网页，也不攒到做完再问。该他定的取舍，动手之前把真备选摆出来（有几个摆几个，最多三个，各写后果和建议），别只端一个做好的结果请他批准。他这句话是什么意思，不算“能自己查到的事实”，别去翻旧原话猜；做设计、核现状也不翻旧原话对照（禁令，同见该技能“怎么问”）。施工方向、等价修复和止血按<a href="index.html">约法</a>“做事”。等答复时，不依赖待决方向的已授权工作直接做。文件里查得到的事实先查。方案还没定时，收尾不问“开工吗”。除了上述轻重方向，还要他定的是：影响本人的需求或产品；选错要推倒重来的方向（技术的也算）；发消息、对外发布、花钱、删唯一的数据、撤不回的迁移；给 AI 加新规矩、新程序，或做本人会看到、会用到的新东西前要他先看样子；只有本人能做的事（登录、验证、接手机、答问卷）。还在等本人回话或动手，问题就必须留在收尾里（Claude 收尾带问题，Codex 最后一行写“【等你】”，Antigravity 见其适配专题），不能只在摘要或正文里写“等你一句话”；钩子递事实给 AI 判断，不自动造本人事项。问题要离开对话也看得懂：说清在做什么、做到哪、要本人定什么，建议放第一个，每个选项写清后果；实况“AI 对话”显示对话进展和等答状态（Antigravity 的现状见<a href="topic-antigravity-adapter.html#%E7%BC%BA%E5%8F%A3">Antigravity 适配</a>），另需本人办理的由 AI 判断后登记，不由钩子自动造卡。给本人看的卡和问题不用行话、文件路径和英文代号；派 GPT 时派单的“任务”一栏会原样显示在实况“AI 对话”，同样写成一眼能懂的一句话（做什么、为了什么），不写内部代号、文件名、占位时间，不用“本人”这类 AI 之间的称呼。</p>
+</li>
+<li>
+<p><strong>写给本人之前对一遍</strong>（约法 L2）：写给我之前对一遍：我这条是在问、在猜、在举例，还是要你做，你答的、做的对上了吗（问句先答，没说停别停）；我问的每一条都先答了吗；我没看过你查的东西和途中的话，只看这条能懂吗；长的（凭直觉，大概参考 1000 个汉字以上）、要展开说或要我裁定的，做成汇报网页了吗；写具体了吗（哪一页、哪个按钮、我会看到什么、放在哪里）；能一句说完的是一句吗（我的原话：“你刚刚明明只需要说，401拿不到流量”）；有没有条号和内部词（入口、链路、口径、收口、回执、派发、函数名），非说不可先说它是干什么的；我问“是干什么的”，是不是只说干什么、没给建议；你改方案，是因为有新事实、新理由或我改了要求，还是只因为我不满意。这段是给你对的，不用在回复里提。</p>
+</li>
+<li>
+<p><strong>说中文</strong>（约法 L1）：对本人说话一律用简体中文，AI 给他看的思考摘要也用中文，子代理也一样。</p>
+</li>
+<li>
+<p><strong>本人怎么看回复，实况兜底</strong>：本人只看最终输出；同一轮两条最终输出大段重复，就只看最新一条，不重复就都看；对话被自动任务、子代理或命令唤醒过，唤醒前后的输出本人都可能没看到。所以要重写就完整重写，最新那条单独看就够，不能只补一行或写“同上”；要补充就只写新内容，不重复前文。不能指望本人什么都看见：要他知道、做或选的，按“本人没回的对话默认没看见”进实况兜底；只放他知道了有意义的，其余按 <code>cockpit</code> 技能的“分级告知”处理。</p>
+</li>
+</ul>
+<h2 id="软件更新和兼容">软件更新和兼容</h2>
+<ul>
+<li>可以从官方来源把软件更新到兼容、可回退、净收益为正的稳定版；不越过版本锁定、付费或账号、正在运行的任务、重启或重装、信任边界。最新的、不确定的或需要引用的事实上网核实，技术问题优先看官方。</li>
+<li>版本固定只用于复现、安全或合规、已证实不兼容或上游硬约束；在项目里就地写清原因和什么时候解除，不把精确版本变成永久门槛。不拿软件的精确版本号、构建号、带版本的安装路径当正常功能或准入的门槛；版本号可以用于诊断、测试证据、复现和回滚。</li>
+<li>给在用的软件（各个宿主、普通程序、插件、技能、MCP、运行环境及其接口、配置和数据格式）新建、修改、安装、升级、集成或迁移时，保护还有用的功能、数据、配置、必要流程和本人能感觉到的体验，不保护旧代码的样子。接口的能力和含义没变，正常更新后应该不用改集成就能用。优先用官方稳定接口和能力探测；没验证过的新版本既不等于不兼容，也不等于已验证。必需字段、未知请求和含义变化不能被吞掉或冒充成功。这不要求每个项目适配所有框架，也不扩大成维护无关软件或恢复冻结项目。</li>
+<li>要本人在电脑或手机上点软件设置时，先核对当前界面，给准确的控件名和能一次做完的短步骤；选项跨好几屏或连着找不到菜单时，改用 AI 能做的办法（导出配置再请本人一次导入、命令、电脑 MCP 或 <code>phone-direct</code>），不让本人一个按钮一个按钮地报状态。</li>
+<li>同一主体的正常更新，不因为自己的适配无故重置还有效的身份或授权，也不要求重复本人验证。只保留有现实用途的旧格式或入口，不借兼容永久留着旧实现。改动涉及兼容时，复用项目原有的回归和真实使用入口来验证；程序能启动、接口有响应或静态测试通过，都不单独说明还能照常用。</li>
+</ul>
+<h2 id="安装位置配置和本机约定">安装位置、配置和本机约定</h2>
+<ul>
+<li><strong>缺什么装什么。</strong> 任务必需而本机缺的运行环境、SDK、命令行或构建工具，可以从官方支持的途径安装并验证。已有项目服从它的版本锁和 CI；依赖放在生态原本的位置，跨项目的工具和服务归 PCConfig。没有约束的新环境选最新稳定版；兼容层、容器或旧运行环境只在原生途径不能用时才用。付费或账号、重启或重装、放宽安全、信任或授权边界仍按原来的门办。</li>
+<li><strong>东西放 E 盘</strong>（约法 L29）：新装软件默认放 E 盘合适的目录（如 <code>E:\Program Files\&lt;软件名&gt;</code>）；AI 的缓存、临时文件、构建中间物、大任务产物和新工作区放 PCConfig 登记的数据盘，不往 C 盘堆。任务目录或宿主默认在 C 盘，不是继续写 C 盘的理由：按消费者支持的正式设置指定路径，传给实际执行的进程，并回读真实落点。安装器或系统组件必须固定位置时，按原生位置装并说明，不顺手迁移已有安装。确实不能迁走、还在用的官方小运行环境可以留例外，说明路径和原因。迁移要确认使用者已经在用新位置、原来的空间已经实际腾出；只复制到新盘、C 盘还留一份不算迁移完成。新电脑的盘符、系统盘容量和数据位置由本人决定，本机的 E 盘约定不是新电脑必须有 E 盘的门槛。</li>
+<li><strong>配置。</strong> 项目拥有自己的业务配置、默认值、版本和迁移；PCConfig 拥有机器事实和导航。优先静态配置和项目已有机制，确实需要热更新、多进程或跨实例时才用相应的现成机制，不预建全局配置平台。项目登记过的机器或恢复键改了，先验证项目源，再直接更新 PCConfig <code>project_config_keys.json</code> 的 <code>current_value</code> 和来源引用，并运行 <code>node tools/validate_project_config_keys.mjs</code>；登记只是机器导航，不是业务权威，不加监视器或后台同步。秘密不放进版本化的普通配置；账号密码等仍用现行的 SecretRef，归独立密码中心（私有仓库 <code>E:\Projects\Tools\PasswordCenter</code>），PCConfig 管本机安装、路径、任务和恢复接线。云服务 API 密钥按 <code>local-secret-broker</code> 技能使用电脑上的加密副本，位置、读取和同步命令也见该技能；已经接着密码中心的老程序本次不动，下次要改时再换。已有厂商密钥可以供其支持的多个模型和多个项目使用，换模型不为密钥重复登记、复制或锁定，也不把一个厂商永久限制为只能有一把密钥；模型名、用量和业务选择归调用项目。</li>
+<li><strong>技能和插件。</strong> 技能和插件的规范源在 <code>E:\.agents\skills</code> 和 <code>E:\.agents\plugins</code>，用户目录只放发现链接；清单 <code>config/personal-skill-supply.json</code> 和现有安装器管理安装。要查技能装没装、<code>.agents</code> 和 PCConfig 登记坏没坏时，跑只读的 <code>tools/Invoke-ControlPlaneDoctor.ps1 -Json</code>（查单个技能加 <code>-SkillName &lt;名&gt;</code>）；它只看安装和登记，说明不了技能好不好用。只有缺的能力真的影响本人要的结果时，才去翻按需插件目录；目录里的示例命令只是数据，不自动执行。</li>
+<li><strong>Windows。</strong> 命令、编码、临时内容和显卡任务按<a href="topic-engineering-delivery.html#%E6%97%A5%E5%B8%B8%E6%8A%80%E6%9C%AF%E9%BB%98%E8%AE%A4">日常技术默认</a>处理，外部进程的实际编码现场核对。Codex 的机器根目录和 V、Z 盘分工向 PCConfig 和 Git 源读取，不凭旧路径猜。</li>
+</ul>
+</article>
+    <aside class="rules-meta" aria-label="版本与专题">
+      <dl>
+        <div><dt>版本</dt><dd>E481</dd></div>
+        <div><dt>发布</dt><dd>2026-11-22 10:50 <small>北京时间</small></dd></div>
+        <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
+        <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
+        <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
+<li><a href="topic-protected-actions.html">重大动作与本人验证</a></li>
+<li><a href="topic-privacy-data.html">个人资料与数据处理</a></li>
+<li><a href="topic-context-sources.html">事实来源与任务上下文</a></li>
+<li><a href="topic-execution-coordination.html">分工与并行施工</a></li>
+<li><a href="topic-engineering-delivery.html">工程与交付</a></li>
+<li><a href="topic-capabilities-runtime.html" aria-current="page">能力与运行方式</a></li>
+<li><a href="topic-rule-release.html">规则发布与恢复</a></li>
+<li><a href="topic-claude-adapter.html">Claude 适配</a></li>
+<li><a href="topic-codex-adapter.html">Codex 适配</a></li>
+<li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 6,458 字<br>能力与运行方式 6,970 字</dd></div>
+        <div class="meta-extra"><dt>钩子</dt><dd><a href="/agents/规矩落地.html#规矩落地-02">AI 百工谱 · 规矩落地</a></dd></div>
+      </dl>
+    </aside>
+  </div>
+</main>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29d2613a75302214fd7d022bd43ce21b98dbb2d29ac7ae3c08a48115f1213ba3/live/_lib/live-view-switch.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9052e44eeb65aa54ed966bc9a63306b7efc043d4309f3d8db2b1fdfad9a6329b/rules/rules.js"></script>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e508cada4fbb10cef90b14adf9a5b18bcb487fdb521ee3074fbce34981cb8c9f/_site/visitor-beacon.js"></script>
+<script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
+</body>
+</html>

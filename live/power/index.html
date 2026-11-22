@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta name="referrer" content="strict-origin-when-cross-origin">
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>用电 · 实况</title>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/79376fe0a57cdf8bdb3d0f35f5b46e8ad182309dc6afc26e8084e7c31d70520c/connect-auth/glass.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ea5101dcb96bd7df846c4c896b753ae7a1948ef8f5c243b3e1be2a3855055830/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/da80d2bc3669f7ab436b2b25dee5917004f22a6e7859086a49b64d7187898c67/live/_lib/live.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/5cbbcba4c4596e41314f6bd6b160b5f7e7b7a41742565b8eb31689536b8fccae/live/_lib/live-page.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0becd6b9fb291285f95d2bd0cc6bdfc03b5a7c3b1e34f8f688a76c5e0f4097a4/live/_lib/live-viz.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css">
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ce77afee8852c883dd887f09072045f03474cbc5fbe963f521eebafe0ca2955a/motion/motion.js"></script>
+<meta name="color-scheme" content="only light">
+<style>:root{color-scheme:only light}</style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://wly0829.cn/live/power/">
+<meta property="og:url" content="https://wly0829.cn/live/power/">
+<meta name="description" content="查看电脑用了多少电（kWh）、什么时候用得多、哪些程序最费电。">
+<meta property="og:title" content="用电 · 实况">
+<meta property="og:description" content="查看电脑用了多少电（kWh）、什么时候用得多、哪些程序最费电。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/540207abf4dd0ec7de97154ce3796271cd94057b003ee3d654446b6160de16b6/%E5%85%AC%E7%94%A8/fonts/ui-ac38aa837995a377.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c1d655f467b997c6b2f1bdafa2629b3616debe1796c103aae561ab6ecf3d55cc/%E5%85%AC%E7%94%A8/fonts/live-892c1d93467f3051.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
+</head>
+<body class="page page--live page--l2 page--data page--power">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div>
+  <a class="back" href="/live/" data-back data-mo-rise>实况</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card card--hero" id="hero" data-pic="right" data-tone="none" data-mo-rise style="--pic-y:52%">
+    <div class="card__glow" aria-hidden="true"></div>
+    <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6d60a361bdc60c014a73d107e66bd2bc54090e14f2a12a780eed68e85c7b5a27/live/img/head-power.webp" alt="" aria-hidden="true">
+    <div class="card__glass glass">
+      <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6d60a361bdc60c014a73d107e66bd2bc54090e14f2a12a780eed68e85c7b5a27/live/img/head-power.webp" width="900" height="900" alt=""></span>
+      <div class="card__body">
+        <p class="card__head" data-part="head"><span class="head__lead">正在读</span></p>
+        <p class="hero__count" data-part="count" hidden></p>
+        <p class="hero__note" data-part="note" hidden></p>
+        <div class="hero__links" data-part="links"><a class="more more--link" href="/live/computer/">电脑 <span class="more__chev">›</span></a></div>
+      </div>
+    </div>
+  </article>
+  <nav class="l2-nav l2-nav--data" aria-label="查看各组"><span class="l2-nav__groups"><span>用电</span></span></nav>
+  <section class="vz-board" id="board" data-mo-rise aria-label="用电各组"></section>
+</main>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b602737c9961ba9acd007f91d63c1921c8a9dca967be5010d4795431bc299fd/trust-modal/trust-modal.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29d2613a75302214fd7d022bd43ce21b98dbb2d29ac7ae3c08a48115f1213ba3/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/841291e05c543e09854fe3b2381bf3490c43b08089a404a34f0f37c1b7b47589/live/_lib/live-client.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6ae153296ea9e4d9664721a7280e9549076d01144309a88f83114beaa71d5fa0/live/_lib/live-ui.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0ba940ff16c447f474fcfb04240c6458059170eae1713ea588bc1ea58fab6795/live/_lib/live-light.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29e231c1598e6e89f1d1f9efbb5e550cdcb3eea156c712c968f7799b038222c8/live/_lib/live-chart.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c895c4fc4927c256f63a9dd884d048ed641014359db868565e38464d1ab37e6f/live/_lib/live-viz.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/3dd8d8ff6da92fec23fc6b940e87b5d8aada8a204c8140422f3ff08edd180ae1/live/_lib/live-stat.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8010b7700d3db9ec354ac203f9f5e76b4f427fb1dff1f55b9d5309c86a402ed5/live/smooth/detail.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7dedc073350e16efdd891580565dcc48859067fe24f06da8465541cf984b1f63/live/computer/adaptive.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/70ff8c1b398ff4346e42d94f7c7525bf818e15c18155a7a3e70dad6172880e72/live/power/page.js"></script>
+<style>
+.page--power .hero__warns { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+.page--power .hero__warns li { display: flex; flex-wrap: wrap; gap: 4px 8px; }
+.page--power .hero__note { display: block; }
+.page--power .hero__note > span { display: inline; }
+.page--power .hero__note > span + span::before { content: ' · '; }
+.page--power .hero__note .stat-gap { margin-left: 0; }
+.page--power .grp[data-key="power"] .vz-chips { grid-template-columns: minmax(0, 1fr); }
+.page--power .grp:is([data-key="power"], [data-key="scenes"]) .grp__chapter { container-type: inline-size; }
+.page--power .grp[data-key="scenes"] .grp-split { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.page--power .grp[data-key="scenes"] .vz-rank__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  column-gap: 24px;
+}
+.page--power .grp[data-key="scenes"] .vz-rank__row--empty { grid-column: 1 / -1; }
+@container (max-width: 640px) {
+  .page--power .grp[data-key="power"] .grp__main { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+}
+.page--power .grp[data-key="supply"] .grp-split > :last-child { grid-column: 1 / -1; }
+.page--power .grp[data-key="supply"] [data-rank="2"] > .vz-rank__list { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+.page--power .grp[data-key="apps"] .grp__fig { grid-template-rows: auto 30px 30px; }
+.page--power .grp[data-key="apps"] .grp__fk { white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+.page--power :is([data-key="apps"], [data-key="supply"] [data-rank="2"]) .vz-rank__name { display: block; white-space: normal; overflow-wrap: anywhere; }
+.page--power .grp[data-key="apps"] .vz-rank__label { white-space: normal; }
+.page--power [data-app-rank] .vz-rank__name { padding-inline-start: 25px; }
+.page--power .power-app-icon { position: absolute; inset-inline-start: 0; }
+.page--power .grp[data-key="supply"] [data-rank="2"] .vz-rank__row { align-content: start; row-gap: 4px; }
+.page--power .grp[data-key="supply"] [data-rank="2"] .vz-rank__name { display: contents; }
+.page--power .grp[data-key="supply"] [data-rank="2"] .vz-rank__name small { grid-column: 1 / -1; grid-row: 2; margin: 0; }
+.page--power .grp[data-key="supply"] [data-rank="2"] .vz-rank__v { grid-column: 2; grid-row: 1; }
+</style>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e508cada4fbb10cef90b14adf9a5b18bcb487fdb521ee3074fbce34981cb8c9f/_site/visitor-beacon.js"></script>
+<script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
+</body>
+</html>
+

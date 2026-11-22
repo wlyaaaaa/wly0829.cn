@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta name="referrer" content="strict-origin-when-cross-origin">
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>安全 · 实况</title>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/79376fe0a57cdf8bdb3d0f35f5b46e8ad182309dc6afc26e8084e7c31d70520c/connect-auth/glass.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ea5101dcb96bd7df846c4c896b753ae7a1948ef8f5c243b3e1be2a3855055830/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/da80d2bc3669f7ab436b2b25dee5917004f22a6e7859086a49b64d7187898c67/live/_lib/live.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/5cbbcba4c4596e41314f6bd6b160b5f7e7b7a41742565b8eb31689536b8fccae/live/_lib/live-page.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0becd6b9fb291285f95d2bd0cc6bdfc03b5a7c3b1e34f8f688a76c5e0f4097a4/live/_lib/live-viz.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css">
+<style>
+#hero .card__body { padding-right: min(calc(var(--win) * .6), 45%); }
+#hero .card__head:has(> .lamp) { position: relative; padding-left: var(--gut); }
+#hero .card__head > .lamp { position: absolute; top: 0; left: 0; }
+#hero .head__lead { min-width: 0; white-space: normal; overflow-wrap: anywhere; text-wrap: pretty; }
+#hero .security-count { white-space: nowrap; }
+#hero [data-part="basis"] { margin-top: 10px; overflow-wrap: anywhere; }
+#hero [data-part="note"]:not([hidden]) { display: block; }
+#hero [data-part="note"] > span { display: block; margin-left: 0; font: inherit; color: inherit; }
+.page--security .grp[data-key="protection"] .grp__figs { grid-template-columns: minmax(0, 1fr); }
+.page--security .security-protection--summary { grid-template-columns: repeat(5, minmax(0, 1fr)); width: 100%; gap: 14px; margin: 0; }
+.page--security .security-protection--summary > div { display: block; border: 0; padding: 0; }
+.page--security .security-protection--summary dd { margin-top: 4px; font-size: 21px; font-weight: 600; line-height: 30px; white-space: nowrap; }
+.page--security .security-protection--summary dd small { display: block; font-size: 12px; line-height: 18px; font-weight: 400; color: var(--muted); }
+.page--security .security-missing { font-size: 13px; font-weight: 400; color: var(--muted); }
+.page--security .vz-audit__head { grid-template-columns: 20px minmax(250px, 1fr) 168px minmax(0, 1.5fr) 20px; }
+.page--security :is([data-key="services"], [data-key="impersonation"]) .vz-audit__name > .stat-gap:first-child { display: block; margin-left: 0; overflow-wrap: normal; }
+.page--security .vz-audit__n { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: baseline; gap: 2px 4px; text-align: right; white-space: normal; }
+.page--security .vz-audit__n > span { min-width: 0; }
+.page--security .vz-audit__n > span:last-child { white-space: nowrap; }
+.page--security .vz-audit__n b { display: inline-block; min-width: 44px; text-align: right; }
+.page--security .vz-audit__pills { flex-wrap: wrap; }
+.page--security .security-audit-link { font-size: 13px; font-weight: 400; color: var(--muted); }
+.page--security .vz-audit__rows > .security-audit-group { display: block; border: 0; padding: 0; }
+.page--security .security-audit-group .vz-audit__rows { margin-left: 0; }
+.page--security .security-audit-group > .vz-note { margin: 12px 0 4px; }
+.page--security .security-clue-why { display: block; margin-left: 0; color: var(--muted); }
+.page--security .security-life { margin-right: 24px; }
+.page--security .security-life .chart__plot { height: 240px; }
+.page--security .grp[data-key="impersonation"] .grp__chapter { padding-bottom: 12px; }
+.page--security .grp[data-key="impersonation"] .grp__head { min-height: 80px; padding-block: 10px; }
+@media (max-width:600px) {
+  .page--security .stage { width:auto; max-width:100%; margin-inline:16px; padding-inline:0; }
+  #hero .card__body { padding-right: min(38%, 88px); }
+  .page--security :is(.grp,.grp.is-open) { --win:80px; }
+  .page--security .grp__head, .page--security .grp.is-open .grp__head { grid-template-columns:18px minmax(0,1fr) 104px; gap:8px; padding-inline:16px; }
+  .page--security .grp__figs { grid-column:2 / -1; grid-row:2; grid-template-columns:minmax(0,1fr); width:100%; }
+  .page--security .grp__acts { grid-column:3; grid-row:1; }
+  .page--security .grp .grp__chapter { padding-inline:16px; }
+  .page--security .security-protection--summary { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .page--security .security-protection--summary dd { white-space:normal; overflow-wrap:anywhere; }
+  .page--security .vz-audit__head { grid-template-columns:20px minmax(0,1fr) 20px; gap:8px; }
+  .page--security .vz-audit__chev { grid-column:3; grid-row:1; }
+  .page--security :is(.vz-audit__name,.vz-pill) { min-width:0; max-width:100%; white-space:normal; overflow-wrap:anywhere; }
+  .page--security .vz-pill { height:auto; min-height:24px; }
+  .page--security :is(.vz-audit__n,.vz-audit__pills) { grid-column:2; justify-content:flex-start; text-align:left; }
+  .page--security .vz-audit__rows { margin-left:0; }
+  .page--security .vz-audit__rows li { grid-template-columns:56px minmax(0,1fr); overflow-wrap:anywhere; }
+  .page--security .vz-audit__c { grid-column:2; }
+  .page--security .security-life { margin-right:0; }
+}
+</style>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ce77afee8852c883dd887f09072045f03474cbc5fbe963f521eebafe0ca2955a/motion/motion.js"></script>
+<meta name="color-scheme" content="only light">
+<style>:root{color-scheme:only light}</style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://wly0829.cn/live/security/">
+<meta property="og:url" content="https://wly0829.cn/live/security/">
+<meta name="description" content="查看电脑上有没有冒充的程序、进程的生灭和安全审计。">
+<meta property="og:title" content="安全 · 实况">
+<meta property="og:description" content="查看电脑上有没有冒充的程序、进程的生灭和安全审计。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/540207abf4dd0ec7de97154ce3796271cd94057b003ee3d654446b6160de16b6/%E5%85%AC%E7%94%A8/fonts/ui-ac38aa837995a377.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c1d655f467b997c6b2f1bdafa2629b3616debe1796c103aae561ab6ecf3d55cc/%E5%85%AC%E7%94%A8/fonts/live-892c1d93467f3051.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
+</head>
+<body class="page page--live page--l2 page--data page--security">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div>
+  <a class="back" href="/live/" data-back data-mo-rise>实况</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card card--hero card--quiet" id="hero" data-pic="right" data-tone="none" data-mo-rise style="--pic-y:52%">
+    <div class="card__glow" aria-hidden="true"></div>
+    <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/cbb3424eb4e833c124ce8bf07b6858ad219934be4d93db3128234a8e1ccd03f6/live/img/head-security.webp" alt="" aria-hidden="true">
+    <div class="card__glass glass">
+      <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/cbb3424eb4e833c124ce8bf07b6858ad219934be4d93db3128234a8e1ccd03f6/live/img/head-security.webp" width="1000" height="1000" alt=""></span>
+      <div class="card__body">
+        <p class="card__head" data-part="head"><span class="head__lead">正在读</span></p>
+        <p class="hero__note" data-part="basis" hidden></p>
+        <p class="hero__count" data-part="count" hidden></p>
+        <p class="hero__note" data-part="note" hidden></p>
+        <div class="hero__links" data-part="links"><a class="more more--link" href="/live/computer/">电脑 ›</a></div>
+      </div>
+    </div>
+  </article>
+  <nav class="l2-nav" aria-label="数据组"><span class="l2-nav__groups">安全</span><span class="l2-nav__end"></span></nav>
+  <section class="vz-board" id="board" data-mo-rise aria-label="安全"></section>
+</main>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b602737c9961ba9acd007f91d63c1921c8a9dca967be5010d4795431bc299fd/trust-modal/trust-modal.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29d2613a75302214fd7d022bd43ce21b98dbb2d29ac7ae3c08a48115f1213ba3/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/841291e05c543e09854fe3b2381bf3490c43b08089a404a34f0f37c1b7b47589/live/_lib/live-client.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6ae153296ea9e4d9664721a7280e9549076d01144309a88f83114beaa71d5fa0/live/_lib/live-ui.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0ba940ff16c447f474fcfb04240c6458059170eae1713ea588bc1ea58fab6795/live/_lib/live-light.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29e231c1598e6e89f1d1f9efbb5e550cdcb3eea156c712c968f7799b038222c8/live/_lib/live-chart.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c895c4fc4927c256f63a9dd884d048ed641014359db868565e38464d1ab37e6f/live/_lib/live-viz.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/3dd8d8ff6da92fec23fc6b940e87b5d8aada8a204c8140422f3ff08edd180ae1/live/_lib/live-stat.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8010b7700d3db9ec354ac203f9f5e76b4f427fb1dff1f55b9d5309c86a402ed5/live/smooth/detail.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7dedc073350e16efdd891580565dcc48859067fe24f06da8465541cf984b1f63/live/computer/adaptive.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7c6c68065a45bc6745e0be6995a577d73e235bb610515f6549873ca4af778c7e/live/security/page.js"></script>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e508cada4fbb10cef90b14adf9a5b18bcb487fdb521ee3074fbce34981cb8c9f/_site/visitor-beacon.js"></script>
+<script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
+</body>
+</html>

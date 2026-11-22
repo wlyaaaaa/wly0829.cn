@@ -1,0 +1,10 @@
+{
+  "release_id": "ffae1691adc4f2c82b5c03d03206756e532ead2d92c7e0aa0e5a449154a51a1d",
+  "manifest_sha256": "e423a6def3875c33c0fbf6c4a9720461578467733f055d04a981b2aabc42737c",
+  "source_commit": "91fb16d2bda2ff5748f0881eadda785528ed786a",
+  "live_fallback": {
+    "origin": "https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com",
+    "key": "releases/10b8810d1ae79b589c3f09ea5dd280b70d21b232baa1375ffa398276178cab8b/live/_fallback.json",
+    "path": "/live/_fallback.json"
+  }
+}

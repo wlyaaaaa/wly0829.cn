@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta name="referrer" content="strict-origin-when-cross-origin">
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>账本一条 · 实况</title>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/79376fe0a57cdf8bdb3d0f35f5b46e8ad182309dc6afc26e8084e7c31d70520c/connect-auth/glass.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ea5101dcb96bd7df846c4c896b753ae7a1948ef8f5c243b3e1be2a3855055830/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/da80d2bc3669f7ab436b2b25dee5917004f22a6e7859086a49b64d7187898c67/live/_lib/live.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/5cbbcba4c4596e41314f6bd6b160b5f7e7b7a41742565b8eb31689536b8fccae/live/_lib/live-page.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e84888435d8697161c386b0c8f1702e40eed7687262b7e12dae9492084f95d51/live/_lib/live-record.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6031fda3e0bd06d0fd253fb8b0a05ebf7c7dd07f99b638973323d2c83b1a5595/live/item/record.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/1a3ce84d9892a752d06c8a5b24c7552295a05f7cef8b933ab00a41b5fbb6ecbf/live/_lib/live-dossier.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css">
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ce77afee8852c883dd887f09072045f03474cbc5fbe963f521eebafe0ca2955a/motion/motion.js"></script>
+<style>.rec-meta>span,.run__when,.trust-note,.btn{white-space:nowrap}.row__title,.rec-fact dt{word-break:keep-all}.rec-acts{gap:10px;flex-wrap:wrap}.rec-meta>span{white-space:normal;overflow-wrap:anywhere}.is-unavailable .head__lead{font-size:14px;line-height:22px;color:var(--muted)}</style>
+<meta name="color-scheme" content="only light">
+<style>:root{color-scheme:only light}</style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://wly0829.cn/live/issue/">
+<meta property="og:url" content="https://wly0829.cn/live/issue/">
+<meta name="description" content="查看 AI 账本里一条事项的来龙去脉、处理经过和关联的事。">
+<meta property="og:title" content="账本一条 · 实况">
+<meta property="og:description" content="查看 AI 账本里一条事项的来龙去脉、处理经过和关联的事。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/540207abf4dd0ec7de97154ce3796271cd94057b003ee3d654446b6160de16b6/%E5%85%AC%E7%94%A8/fonts/ui-ac38aa837995a377.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c1d655f467b997c6b2f1bdafa2629b3616debe1796c103aae561ab6ecf3d55cc/%E5%85%AC%E7%94%A8/fonts/live-892c1d93467f3051.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
+</head>
+<body class="page page--live page--l3" data-record="issue">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage dossier" id="stage">
+  <div class="field" aria-hidden="true"></div>
+  <a class="back" href="/live/ledger/" data-back data-mo-rise>AI 账本</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card card--record dossier__hero" id="hero" data-tone="off" data-pic="right" data-mo-rise>
+    <div class="card__glow" aria-hidden="true"></div>
+    <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a9af01622a1e628041aaddb9b879e50e20940e8fb6af670c9e321b213ad5cd7d/live/img/dossier-issue-v1.webp" alt="" aria-hidden="true">
+    <div class="card__glass glass">
+      <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a9af01622a1e628041aaddb9b879e50e20940e8fb6af670c9e321b213ad5cd7d/live/img/dossier-issue-v1.webp" width="1000" height="1000" alt=""></span>
+      <div class="card__body">
+        <p class="dossier__kicker" data-keep><span data-part="lamp" hidden></span><span>账本一条</span></p>
+        <p class="card__head" data-part="head"></p>
+        <div class="dossier__lead" data-part="lead" hidden></div>
+        <button class="more dossier__unfold" type="button" id="lead-more" aria-expanded="false" hidden></button>
+        <p class="rec-meta" data-part="meta" hidden></p>
+      </div>
+    </div>
+  </article>
+  <div class="dossier__grid" data-shape="two">
+    <div class="dossier__main rec" id="rec">
+      <section class="dossier-card dossier-card--why glass" data-auto data-mo-rise hidden>
+        <span class="dossier-card__tint" aria-hidden="true"></span>
+        <span class="dossier-card__art" aria-hidden="true"></span>
+        <h2 class="dossier-card__title"><span class="dossier-icon" data-icon="why" aria-hidden="true"></span>结论</h2>
+        <div class="rec-say rec-prose" data-part="say" data-fill hidden></div>
+      </section>
+      <section class="dossier-card dossier-card--ask glass" id="questions" data-mo-rise hidden>
+        <span class="dossier-card__tint" aria-hidden="true"></span>
+        <h2 class="dossier-card__title"><span class="dossier-icon" data-icon="ask" aria-hidden="true"></span><span class="rec-part">要本人选的</span></h2>
+        <div class="rec-copy" id="question-text"></div>
+        <div class="fold" id="questions-box-rest"><div><div class="rec-copy" id="question-rest"></div></div></div>
+        <button class="more" type="button" id="questions-more" aria-expanded="false" hidden></button>
+      </section>
+      <section class="dossier-card rec-runs glass" id="history-box" data-mo-rise>
+        <h2 class="dossier-card__title rec-part" data-keep><span class="dossier-icon" data-icon="time" aria-hidden="true"></span>经过</h2>
+        <ol class="runs" id="events"></ol>
+        <div class="fold" id="events-box-rest"><div><ol class="runs" id="events-rest"></ol></div></div>
+        <button class="more" type="button" id="events-more" hidden></button>
+        <button class="more" type="button" id="earlier" hidden>继续读更早的经过 ›</button>
+      </section>
+      <p class="rec-part" id="coverage"></p>
+    </div>
+    <aside class="dossier__side">
+      <section class="dossier-card dossier-card--state glass" data-auto data-mo-rise hidden>
+        <span class="dossier-card__tint" aria-hidden="true"></span>
+        <div class="card__body">
+          <h2 class="dossier-card__title"><span class="dossier-icon" data-icon="state" aria-hidden="true"></span>状态</h2>
+          <p class="dossier__state" data-part="state" data-fill hidden></p>
+          <p class="dossier__note" data-part="note" data-fill hidden></p>
+          <div id="about" data-fill hidden><dl class="rec-facts" id="facts"></dl></div>
+          <div class="rec-acts" data-part="acts" data-fill hidden></div>
+        </div>
+      </section>
+      <div class="dossier__more" data-follow="rec">
+        <section class="dossier-card glass" id="related" data-mo-rise hidden>
+          <h2 class="dossier-card__title"><span class="dossier-icon" data-icon="link" aria-hidden="true"></span>相关链接</h2>
+          <div id="links"></div>
+        </section>
+        <section class="dossier-card dossier-card--raw glass" id="raw" data-mo-rise hidden>
+          <h2 class="dossier-card__title"><button class="dossier-card__title dossier-fold" type="button" id="raw-more" aria-expanded="false" aria-controls="raw-box"><span class="dossier-icon" data-icon="raw" aria-hidden="true"></span>原始记录<span class="dossier-fold__chev" aria-hidden="true">›</span></button></h2>
+          <div class="fold" id="raw-box"><div><dl class="rec-facts" id="raw-facts"></dl></div></div>
+        </section>
+      </div>
+    </aside>
+  </div>
+</main>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b602737c9961ba9acd007f91d63c1921c8a9dca967be5010d4795431bc299fd/trust-modal/trust-modal.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/29d2613a75302214fd7d022bd43ce21b98dbb2d29ac7ae3c08a48115f1213ba3/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/841291e05c543e09854fe3b2381bf3490c43b08089a404a34f0f37c1b7b47589/live/_lib/live-client.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6ae153296ea9e4d9664721a7280e9549076d01144309a88f83114beaa71d5fa0/live/_lib/live-ui.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/818dc211f0c1bb09b3ca14283230198118e65a14730809c06645e09654a045e2/live/item/record-text.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0ba940ff16c447f474fcfb04240c6458059170eae1713ea588bc1ea58fab6795/live/_lib/live-light.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/1ffff079ec644501b00b40786dc1b068bf4147318ad9949dfea99ea581b449f2/live/_lib/live-dossier.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/24943ac81f2d312491eabefb403493faa44948894b92ad837444bcb29e94866a/live/issue/readings.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/366971ee30e3dfb678871babae88512832382c84017136c5e50c76ced272bce8/live/item/page.js"></script>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e508cada4fbb10cef90b14adf9a5b18bcb487fdb521ee3074fbce34981cb8c9f/_site/visitor-beacon.js"></script>
+<script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
+</body>
+</html>
