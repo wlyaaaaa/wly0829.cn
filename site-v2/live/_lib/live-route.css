@@ -216,17 +216,18 @@ body.page--route {
 
 /* 行：帮手、过程记录共用 */
 .route-rows { position: relative; z-index: 1; margin: 6px 0 0; padding: 0; list-style: none; }
-.route-row { display: flex; align-items: flex-start; gap: 12px; min-width: 0; padding: 10px 0; border-bottom: 1px solid var(--route-rule); }
+/* 卡片窄时（如 1024 宽三张卡并排）行尾按钮换到下一行靠右，不把名字挤成一字一行 */
+.route-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px; min-width: 0; padding: 10px 0; border-bottom: 1px solid var(--route-rule); }
 .route-row:last-child { border-bottom: 0; }
 .route-row > .lamp { margin-top: 8px; }
 .route-row__ico { margin-top: 3px; font-size: 18px; color: var(--route-muted); opacity: .8; }
-.route-row__main { flex: 1 1 auto; min-width: 0; }
+.route-row__main { flex: 1 1 200px; min-width: 0; }
 .route-row__line { display: flex; align-items: baseline; gap: 12px; min-width: 0; margin: 0; font-size: 15px; line-height: 24px; color: var(--route-ink); }
 .route-word { flex: none; font-weight: 700; white-space: nowrap; }
 .route-row__name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--route-soft); }
 .route-row__name .trust-note, .route-row__name .live-mark { white-space: nowrap; }
 .route-row__sub { margin: 1px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13.5px; line-height: 21px; color: var(--route-muted); font-variant-numeric: tabular-nums; }
-.route-row__acts { flex: none; display: flex; gap: 8px; align-self: center; }
+.route-row__acts { flex: none; display: flex; gap: 8px; align-self: center; margin-left: auto; }
 .route-row__acts:empty { display: none; }
 .route-row.is-now .route-word { color: var(--route-accent-deep); }
 .route-row--empty .route-row__line { color: var(--route-muted); }
@@ -234,7 +235,7 @@ body.page--route {
 /* 过程记录：左边一列时刻，正常的行前面不画圆点 */
 .route-log { display: flex; flex-direction: column; }
 .route-rows--log { margin-top: 10px; }
-.route-row--log { gap: 14px; padding: 8px 0; }
+.route-row--log { flex-wrap: nowrap; gap: 14px; padding: 8px 0; }
 .route-row--log .route-row__main { display: flex; align-items: baseline; gap: 14px; }
 .route-row--log .route-row__line { flex: 1 1 auto; }
 .route-row--log .route-row__line > .lamp { align-self: center; margin-right: -4px; }
