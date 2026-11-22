@@ -33,15 +33,11 @@
 .page--live #computer .kv__row:last-child dd { display: flex; flex-wrap: wrap; column-gap: 5px; }
 .page--live #computer .traffic-hour, .page--live #computer .kv__label { display: inline-block; white-space: nowrap; }
 .page--live #computer .traffic-hour { margin-inline-start: .55em; max-width: 100%; white-space: normal; }
-/* 窗口窄到读数那一栏快挤没了：海外流量名字放上一行，读数占整行，不伸出卡外（M415） */
+/* 窗口窄到读数那一栏快挤没了（如 1024 宽）：每行名字放上一行，读数占整行，不伸出卡外（M415、M515） */
 .page--live #computer .kv { container-type: inline-size; }
-@container (max-width: 200px) {
- .page--live #computer .kv__row:has(.traffic-hour) dt { grid-column: 2 / -1; }
- .page--live #computer .kv__row:has(.traffic-hour) dd { grid-column: 2 / -1; grid-row: 2; }
-}
 @container (max-width: 260px) {
- .page--live #computer .kv__row:is(:last-child,:has(small):not(:has(.traffic-hour))) dt { grid-column: 2 / -1; }
- .page--live #computer .kv__row:is(:last-child,:has(small):not(:has(.traffic-hour))) dd { grid-column: 2 / -1; grid-row: 2; }
+ .page--live #computer .kv__row dt { grid-column: 2 / -1; }
+ .page--live #computer .kv__row dd { grid-column: 2 / -1; grid-row: 2; }
  .page--live #computer .kv__row:last-child dd a { white-space: normal; }
 }
 @media (max-width: 760px) {
@@ -199,7 +195,7 @@
 .page--live #projects .project-group > h3 > span { font-size: 28px; }
 .page--live #projects .project-more { grid-column: 2; min-width: 0; font-size: 14px; }
 .page--live #projects .project-more > summary { cursor: pointer; padding: 2px 0 8px; }
-.page--live .board #projects .project-grid { display: grid; gap: 8px; grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+.page--live .board #projects .project-grid { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); margin: 0; padding: 0; list-style: none; }
 .page--live #projects .project-cell { position: relative; min-height: 88px; padding: 12px 14px; border: 1px solid rgb(255 255 255 / .8); background: rgb(255 255 255 / .68); border-radius: 14px; display: flex; flex-direction: column; justify-content: flex-start; }
 .page--live #projects .project-cell > a { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 600; color: inherit; text-decoration: none; }
 .page--live #projects .project-icon { width: 20px; height: 20px; flex: 0 0 20px; }
@@ -370,15 +366,15 @@
 </main>
 
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b602737c9961ba9acd007f91d63c1921c8a9dca967be5010d4795431bc299fd/trust-modal/trust-modal.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e725a7764dfccaabe41b069e838c7b9da8a2ddcd00a7c0818e17d7cf32522330/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8bbc4632dc58a1016c1c7a5cda46c82491bad5e9b831e683e4f6fdb59fb58d74/live/_lib/live-client.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ff4d822d3e9cb297fbd96cc6cac6b0a41089cdec7c958d520f56a361c62f8c44/live/_lib/live-ui.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e725a7764dfccaabe41b069e838c7b9da8a2ddcd00a7c0818e17d7cf32522330/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/016d598300bfa67d7a698938508fb87759b02d77d14f5164863f7d5a76a1bbf6/live/_lib/live-client.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/63c038fa690348194b6ace7332e29d0e88e9903bd74ff4e16dd46c1944246591/live/_lib/live-ui.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0ba940ff16c447f474fcfb04240c6458059170eae1713ea588bc1ea58fab6795/live/_lib/live-light.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d62023e5657104ea47280862adced01a2ad870d8f9485a65d737b1e28800b66a/live/_lib/live-project-look.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0d9596efea478989ff6db58c2dcdd04a9ed54b1b9babcf9c9cb7e9f0ac1e205b/live/chats/draw10.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/27365deec9aae8b83ffb5b49035d8fcb56bd1247672d70ba4b84b20dd5aa878d/live/automation/presentation.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9d037e87e2e29788ebbc274f775533ce0f8a5130e12fec48755c0f762f797aaa/live/l1.js"></script>
-<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e508cada4fbb10cef90b14adf9a5b18bcb487fdb521ee3074fbce34981cb8c9f/_site/visitor-beacon.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e8c4207d5071f185aedb0dbd314bbec6826ded6b4dcd91aa10b792fa38aa73c4/live/l1.js"></script>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/691a18256ada23451dec379364c53d2bc51aafbfbbe085002808ea041944be4e/_site/visitor-beacon.js"></script>
 <script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
 </body>
 </html>

@@ -66,7 +66,7 @@
   const pageId = randomId();
   let visibleMs = 0, visibleSince = document.hidden ? null : performance.now(), lastLeave = -1;
   // The published project links are the allowlist for query-based identifiers.
-  const catalogUrl = document.currentScript?.src && new URL('https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ebc6c06b698fbf730e673ff4ab45d3f90b25097ca124d0fdda3aa6bef2c0c81d/live/project/cover-links.json', location.origin);
+  const catalogUrl = document.currentScript?.src && new URL('https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a9cd55211137c38b249c48d5908205d0d1b530b6bda126c6c696ff7106c2e7ff/live/project/cover-links.json', location.origin);
   let catalog;
   const projectId = ({pathname, search}) => {
     const id = /^\/live\/project\/?$/.test(pathname) ? new URLSearchParams(search).get('id')
