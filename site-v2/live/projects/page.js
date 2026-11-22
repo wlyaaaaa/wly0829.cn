@@ -35,7 +35,7 @@
     });
   }
   function updateCutoff(key, data) {
-    const section = $(key), at = stamp(data?.at);
+    const section = $(key === 'changes' ? 'changes-footer' : key), at = stamp(data?.at);
     const label = { active: '在用项目名册截止', frozen: '冻结项目名册截止', changes: '项目变化截止' }[key];
     const legacy = !at && isStale(data) && staleText(data);
     const merged = key === 'active' && !hero.hidden && Date.parse(data?.at) === Date.parse(home?.at);
@@ -188,7 +188,7 @@
         html: `<p class="row__main">${status.lamp}${name({ ...it, href })}</p>${detail}` };
     }), '没有冻结的项目');
   }
-  const changesNote = document.createElement('p'); changesNote.className = 'row__sub'; changesNote.hidden = true; $('changes').append(changesNote);
+  const changesNote = document.createElement('p'); changesNote.className = 'row__sub'; changesNote.hidden = true; $('changes-footer').append(changesNote);
   const changeRow = it => ({ key: it.id, project: it.project, group: it.project || it.id, groupLabel: it.name, secret: secretName(it.name, changeViewer),
     href: it.href || (it.project ? `/live/project/?id=${encodeURIComponent(it.project)}` : ''),
     cls: 'row row--flat pj-item pj-item--change',

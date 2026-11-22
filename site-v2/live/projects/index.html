@@ -35,7 +35,11 @@
 #activity .pj-heat-name { white-space: normal; flex-wrap: wrap; row-gap: 1px; }
 #activity .pj-heat-label { overflow: visible; overflow-wrap: anywhere; text-overflow: clip; }
 #activity .pj-heat-private { white-space: normal; }
-.pj-changes-actions { display: flex; align-items: center; gap: 14px; break-inside: avoid; }
+.pj-changes-footer { display: grid; gap: 10px; padding-top: 16px; }
+.pj-changes-footer:not(:has(.pj-changes-actions > :not([hidden]), > .row__sub:not([hidden]))) { display: none; }
+.pj-changes-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.pj-changes-actions:not(:has(> :not([hidden]))) { display: none; }
+.pj-changes-footer > .row__sub { margin: 0; line-height: 20px; }
 #active .pj-fig__mark { white-space: normal; overflow: visible; }
 /* 画册（2026-11-20 本人选“二 画册”）：在用的排三列白卡，顶上一条 4:1 插画（照本人选的那张图），下面名字、说明、大数、一行补充，最底下绿点和改动时间；
    变化按项目一张白卡，顶上一条细插画。图没到时先铺占位色，字照常先出。 */
@@ -99,10 +103,10 @@
 .pj-mini.is-hot .pj-mini__name { font-size: 18px; line-height: 26px; }
 .pj-mini__big { margin: 2px 0 0; font-size: 15px; line-height: 32px; color: #141413; }
 .pj-mini__big b { margin-right: 4px; font-size: 28px; font-weight: 700; color: #00A650; font-variant-numeric: tabular-nums; }
-#recent-artifacts .pj-extra__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 24px; align-items: start; }
+#recent-artifacts .pj-extra__list { columns: 330px; column-gap: 24px; }
 #recent-artifacts .pj-extra__all { flex: none; }
 #recent-artifacts .pj-extra__all[hidden] { display: none; }
-.pj-art { min-width: 0; padding: 16px 20px 6px; border-radius: 18px; }
+.pj-art { min-width: 0; margin-bottom: 24px; padding: 16px 20px 6px; border-radius: 18px; break-inside: avoid; }
 .pj-art__head { display: flex; align-items: center; gap: 12px; padding-bottom: 10px; }
 .pj-art__head .pj-mini__pic { width: 40px; height: 40px; border-radius: 10px; }
 .pj-art__head .row__title { min-width: 0; overflow-wrap: anywhere; font-size: 17px; line-height: 24px; font-weight: 700; letter-spacing: .03em; color: #141413; }
@@ -118,7 +122,9 @@
 .pj-art > details > .live-disclosure { padding: 4px 0 10px; }
 #changes :is(#changes-list, #changes-rest) { display: block; columns: 2; column-gap: 24px; }
 #changes :is(#changes-list, #changes-rest) > .pj-list-group { margin: 0 0 24px; break-inside: avoid; }
-#changes .pj-changes-actions .more { margin-left: 0; }
+#changes .pj-changes-actions .more { margin: 0; translate: none; }
+#changes-more .more__chev { rotate: 90deg; }
+#changes-more[aria-expanded="true"] .more__chev { rotate: -90deg; }
 </style></head>
 <body class="page page--live page--l2"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
 <main class="stage" id="stage"><div class="field" aria-hidden="true"></div>
@@ -138,7 +144,8 @@
 <div class="pj-sec pj-sec--flat pj-roster-section" id="frozen"><ul class="pj-figs" id="frozen-list"></ul>
     <button class="more" id="frozen-more" type="button" hidden></button><div class="fold" id="frozen-box"><div><ul class="pj-figs" id="frozen-rest"></ul></div></div></div>
 <section class="pj-sec pj-changes-wide" id="changes" data-mo-rise><p class="part" data-keep>近 7 天全部变化</p><div class="pj-changes-columns"><ul class="rows list" id="changes-list"></ul>
-  <div class="fold" id="changes-box"><div><ul class="rows list" id="changes-rest"></ul></div></div><div class="pj-changes-actions"><button class="more" id="changes-more" type="button" hidden></button><button class="more" id="next" type="button" hidden>更多变化 ›</button></div></div></section></main>
+  <div class="fold" id="changes-box"><div><ul class="rows list" id="changes-rest"></ul></div></div></div>
+  <footer class="pj-changes-footer" id="changes-footer"><div class="pj-changes-actions"><button class="more" id="changes-more" type="button" hidden></button><button class="more" id="next" type="button" hidden>更多变化 ›</button></div></footer></section></main>
 <script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-header.js"></script><script src="/live/_lib/live-ui.js"></script>
 <script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-chart.js"></script><script src="/live/_lib/live-viz.js"></script><script src="/live/_lib/live-project-viz.js"></script><script src="/live/_lib/live-project-look.js"></script><script src="/live/projects/page.js"></script>
 </body></html>

@@ -75,8 +75,8 @@
     $('kind-pick').insertAdjacentHTML('beforeend', `<option value="${kind}">${labels[kind]}</option>`);
   }
   const closedCard = cards.get('closed');
+  closedCard.more.setAttribute('aria-controls', 'closed-box');
   closedCard.more.after(closedCard.next);
-  const batch = document.createElement('button'); batch.id = 'closed-batch'; batch.type = 'button'; batch.className = 'more'; batch.textContent = '再看 5 条 ›'; batch.hidden = true; cards.get('closed').box.firstElementChild.append(batch);
   function balanceBoard(force = false) {
     const shown = [...cards].filter(([kind,c]) => kind !== 'closed' && !c.el.hidden), picked = $('kind-pick').value;
     const key = shown.map(([kind]) => kind).join() + picked + query;
@@ -272,28 +272,33 @@
     const hidden = viewer !== 'public' || query ? 0 : (key === 'closed' ? closedHidden : groupHidden.get(key)) || 0;
     const count = partial ? key === 'closed' ? '已读 ' + items.length + ' 件' : '已读部分' + (items.length ? ' · ' + items.length + ' 件' : '') : (known ? items.length + hidden : '—') + ' 件';
     U.html(cards.get(key).title, (viewer === 'owner' ? labels[key] : labels[key].replaceAll('你', '本人')) + '（' + count + '）');
-    if (key === 'closed') $('closed-batch').hidden = viewer === 'owner' || items.length <= 5 + closedBatch;
     const media = { computer: '电脑办', phone: '手机办', in_person: '到场办' };
-    const rank = { computer: 0, phone: 1, in_person: 2 };
-    if (key === 'closed') items.sort((a, b) => (rank[a.mobile] ?? 3) - (rank[b.mobile] ?? 3));
+    const rank = { computer: 0, phone: 1, in_person: 2, other: 3 };
+    const method = it => Object.hasOwn(media, it?.mobile) ? it.mobile : 'other';
+    if (key === 'closed') items.sort((a, b) => rank[method(a)] - rank[method(b)]);
+    const grouped = key === 'closed' && items.length > 0 && method(items[0]) !== method(items.at(-1));
     // 本人版列表默认给全；访客照旧先摆 5 条。
     const ul = $(key + '-list'), limit = viewer === 'owner' ? Infinity : 5, main = items.slice(0, limit), rest = items.slice(limit), pinned = new Set([...ul.children].filter(n => n.matches('.is-expanded,[data-text-open="true"],:hover,:focus-within')).map(n => n.dataset.key));
     if (key !== 'closed') for (let i = rest.length - 1; i >= 0; i--) if (pinned.has(rest[i].id)) main.push(...rest.splice(i, 1));
     const draw = (group, previous) => group.flatMap(it => {
-      if (key !== 'closed' || items.every(row => row.mobile === it.mobile)) return [renderer(it)];
-      const heading = previous !== it.mobile;
-      previous = it.mobile;
-      return heading ? [{ key: 'method-' + (it.mobile || 'other'), cls: 'items-done-group', html: '<span>' + (media[it.mobile] || '办理方式未记录') + '</span>' }, renderer(it)] : [renderer(it)];
+      if (!grouped) return [renderer(it)];
+      const current = method(it), heading = previous !== current;
+      previous = current;
+      return heading ? [{ key: 'method-' + current, cls: 'items-done-group', html: '<span>' + (media[current] || '办理方式未记录') + '</span>' }, renderer(it)] : [renderer(it)];
     });
     const showClosedHidden = key === 'closed' && !!hidden;
     const hiddenParts = showClosedHidden ? Object.entries(KIND)
       .filter(([kind]) => (!KIND[closedKind] || kind === closedKind) && closedCounts[kind] > 0)
       .map(([kind, label]) => label.replaceAll('你', '本人') + ' ' + closedCounts[kind] + ' 条') : [];
-    $(key + '-private').hidden = !showClosedHidden;
-    $(key + '-private').textContent = showClosedHidden ? `另有 ${hidden} 条仅本人可见${hiddenParts.length ? '：' + hiddenParts.join('、') : ''}，标题和内容都没给访客看` : '';
+    const laterHidden = key === 'later' && known ? hidden : 0;
+    $(key + '-private').hidden = !showClosedHidden && !laterHidden;
+    $(key + '-private').textContent = showClosedHidden ? `另有 ${hidden} 条仅本人可见${hiddenParts.length ? '：' + hiddenParts.join('、') : ''}，标题和内容都没给访客看` : laterHidden ? `另有 ${laterHidden} 件仅本人可见` : '';
     U.list(ul, main.length ? draw(main) : hidden ? [] : wait(empty), { animate });
-    U.list($(key + '-rest'), draw(key === 'closed' ? rest.slice(0, closedBatch) : rest, main.at(-1)?.mobile), { animate });
-    $(key + '-more').hidden = !rest.length; U.html($(key + '-more'), `还有 ${rest.length} 条 <span class="more__chev">›</span>`); details(ul); details($(key + '-rest')); renderSelection();
+    U.list($(key + '-rest'), draw(rest, method(main.at(-1))), { animate });
+    const more = $(key + '-more'), label = `还有 ${rest.length} 条`;
+    more.hidden = !rest.length;
+    U.html(more, (key === 'closed' ? `<span class="lb-more__open">${label}</span><span class="lb-more__shut">收起</span>` : label) + ' <span class="more__chev">›</span>');
+    details(ul); details($(key + '-rest')); renderSelection();
   }
   let openRows = null, openReading = null, openStarted = false, readOpen;
   function showOpenMore() {
@@ -351,7 +356,7 @@
       const items = Array.isArray(d?.items) ? [...new Map(d.items.map(it => [it.id, it])).values()] : null;
       const incomplete = ['partial', 'unknown', 'warming'].includes(d?.q) || d?.counts?.q === 'partial' || d?.partial?.includes('items');
       openRows = openReading = { kind, items, incomplete, counts: d?.counts, version: d?.source_rev,
-        hidden: d?.hidden, cursor: items == null ? null : d.next, at: meta.at, depth: 1, target };
+        hidden: d?.hidden, laterHidden: d?.hidden_summary?.counts?.later, cursor: items == null ? null : d.next, at: meta.at, depth: 1, target };
       draw(replace);
       if (target > 1) readOpen();
     } });
@@ -397,13 +402,14 @@
     const hidden = viewer === 'public' && !query ? page?.hidden ?? needs.items_hidden ?? 0 : 0;
     groupHidden.clear();
     if (hidden && rows && !partial) for (const key of Object.keys(KIND)) {
-      const extra = (counts?.[key] ?? 0) - rows.filter(it => it.kind === key).length;
+      const extra = key === 'later' && Number.isSafeInteger(page?.laterHidden) ? page.laterHidden
+        : (counts?.[key] ?? 0) - rows.filter(it => it.kind === key).length;
       if (extra > 0) groupHidden.set(key, extra);
     }
     const placed = [...groupHidden.values()].reduce((sum, n) => sum + n, 0);
-    // 定稿：藏掉的合成全表一行，写在整张表底下；分得清是哪组的，件数仍算进那组标题。
+    // 全表底下注明隐项；能对上组的件数计入组标题，「放着」组另就地解释标题与可见行数的差额。
     if (placed !== hidden) groupHidden.clear();
-    $('items-private').hidden = !hidden;
+    $('items-private').hidden = !hidden || groupHidden.get('later') === hidden;
     // 写清藏了几条、各是哪组、藏了哪几样；不写是哪一类私事。
     const hiddenParts = [...groupHidden].map(([key, n]) => `${labels[key].replaceAll('你', '本人')} ${n} 条`);
     $('items-private').textContent = hidden ? `另有 ${hidden} 条仅本人可见${hiddenParts.length ? '：' + hiddenParts.join('、') : ''}，标题和内容都没给访客看` : '';
@@ -451,12 +457,11 @@
     }
     showOpenMore(); renderSelection();
   }, missingHome);
-  let closedItems = [], closedPacket = null, next = null, closedBatch = 5;
+  let closedItems = [], closedPacket = null, next = null;
   function redrawClosed() {
     const shown = collections.get('closed');
     if (shown) list('closed', shown.items, shown.empty, shown.renderer, true, shown.partial);
   }
-  $('closed-batch').addEventListener('click', () => { closedBatch += 5; redrawClosed(); });
   function renderClosed(d, append = false) {
     closedPacket = append ? { ...closedPacket, ...d, hidden: closedPacket?.hidden ?? d.hidden, hidden_summary: closedPacket?.hidden_summary ?? d.hidden_summary } : d;
     closedItems = append ? [...new Map([...closedItems, ...d.items].map(it => [it.id, it])).values()] : d.items || [];
