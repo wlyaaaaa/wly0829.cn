@@ -285,8 +285,10 @@
       : !maintenance && d.unreadable_total > 0 ? '部分已登记任务的运行状态没读到'
       : partial && !U.offline?.() ? text.length ? text : missing.length ? missing : [received.length ? '运行记录覆盖不完整' : '任务运行记录没读到'] : [];
     $('coverage-label').hidden = $('coverage').hidden = true;
-    $('sources').hidden = !d.hidden;
-    U.list($('sources'), d.hidden ? [{ key: 'hidden', cls: 'row row--flat', html: `<p class="row__sub">另有 ${d.hidden} 个${U.fieldHtml(d.hidden_what || '任务', { name: '任务', place: 'label', kind: viewer })}，${U.fieldHtml({ hidden: 1 }, { place: 'body', kind: viewer })}</p>` }] : []);
+    // 计划任务的“另有 N 项仅本人可见”写在页头总数旁边，这里只留给维护记录用
+    const sideHidden = maintenance && d.hidden;
+    $('sources').hidden = !sideHidden;
+    U.list($('sources'), sideHidden ? [{ key: 'hidden', cls: 'row row--flat', html: `<p class="row__sub">另有 ${d.hidden} 个${U.fieldHtml(d.hidden_what || '任务', { name: '任务', place: 'label', kind: viewer })}，${U.fieldHtml({ hidden: 1 }, { place: 'body', kind: viewer })}</p>` }] : []);
     const moved = changeCounts(page);
     U.html(changesTitle, moved?.title || '任务变化');
     U.list($('changes'), !Array.isArray(d.changes7) ? empty('任务变更记录没读到') : d.changes7.length ? d.changes7.map(c => ({
@@ -449,8 +451,10 @@
     if (page?.q === 'warming') { headline = '正在准备'; U.html($('head'), U.head(headline)); $('note').hidden = true; $('asof').hidden = true; U.html($('stats'), ''); L.tone(hero, 'off'); heroRead.done(); return; }
     const total = page?.total, rounds = maintenanceRounds(page);
     const observed = Number.isInteger(rounds) && (rounds > 0 || rounds === 0 && page?.q === 'ok');
+    // 访客版少列的几项写在总数旁边（M507；本人 11-22 07:44：藏了什么要写清）
+    const ownerOnly = !maintenance && viewer === 'public' && Number.isInteger(page?.hidden) && page.hidden > 0 ? page.hidden : 0;
     headline = maintenance ? observed ? `已观察到 ${rounds} 次` : '维护记录未读到'
-      : total != null ? `登记 ${total} 项计划任务` : 'Windows 计划任务名册未读到';
+      : total != null ? `登记 ${total} 项计划任务${ownerOnly ? ` · 另有 ${ownerOnly} 项仅本人可见` : ''}` : 'Windows 计划任务名册未读到';
     const cutoff = /^数据截止 /;
     const status = U.status(page && { ...page, why: cutoff.test(page.why) ? '任务名册暂时没更新' : page.why, stale_text: cutoff.test(page.stale_text) ? null : page.stale_text }, { showZeroFixing: false });
     const heading = status.lamp + U.head(headline, { lamp: false });
