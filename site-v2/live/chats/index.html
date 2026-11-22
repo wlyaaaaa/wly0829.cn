@@ -9,17 +9,17 @@
 <style>
 /* 下半截：分组看板（_lib/live-board.*），比上半截宽，左右伸到和自动任务页一样宽 */
 .page--chats .chat-lower { --wide: min(1856px, calc(100vw - 64px)); margin: 34px calc((var(--col) - var(--wide)) / 2) 0; }
-.page--chats .chat-lower > .part { margin: 0 0 12px 2px; }
+.page--chats .chat-lower { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; align-items: start; }
+.page--chats #active > .part { margin: 0 0 12px 2px; }
 .chat-board .lb-card__head { min-height: 80px; padding-block: 10px; }
 .chat-board .lb-card--items .lb-rows { gap: 7px; }
 .chat-board .lb-card--items .lb-rows > .lb-item { padding-block: 8px; }
-#chat-board .chat-context { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 10px; }
-#chat-board .chat-context [data-steady] { white-space: normal; }
+.chat-board .chat-context { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 10px; }
+.chat-board .row__text [data-steady] { white-space: normal; overflow-wrap: anywhere; }
 .chat-board .lb-item :is(.row__line, .chat-think, .helpers) { margin-top: 3px; }
 .chat-board .helper { line-height: 19px; }
-.page--chats #chat-recent-board { margin-top: 32px; }
 .page--chats .lb-card[data-key="waiting"]:not(.lb-card--quiet) { border: 1px solid #00A650; }
-#chat-board .lb-card--quiet .lb-card__head { min-height: 0; padding: 10px 16px; grid-template-columns: 34px minmax(0, 1fr); border-radius: inherit; }
+.chat-board .lb-card--quiet .lb-card__head { min-height: 0; padding: 10px 16px; grid-template-columns: 34px minmax(0, 1fr); border-radius: inherit; }
 .page--chats .lb-card--quiet .lb-card__badge { width: 34px; height: 34px; }
 .page--chats .lb-card--quiet :is(.lb-card__art, .lb-card__sub) { display: none; }
 /* 每栏卡头的插画（画风变量：对清以后换图只改这里；暂时借自动任务页的画） */
@@ -39,16 +39,16 @@
 .page--chats .chat-steps--fill > i { display: block; height: 100%; border-radius: 3px; background: #7cc49a; }
 .page--chats .lb-item > .row__text > .row__line { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .page--chats .chat-pill--link { text-decoration: underline; text-underline-offset: 2px; }
-.page--chats .chat-think { margin: 4px 0 0; }
-.page--chats .chat-think > summary { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; cursor: pointer; list-style: none; }
-.page--chats .chat-think > summary::-webkit-details-marker { display: none; }
-.page--chats .chat-think[open] > summary { -webkit-line-clamp: unset; display: block; }
-.page--chats .chat-think--excerpt > summary, .page--chats .chat-think--excerpt[open] > summary { display: flex; gap: 8px; align-items: baseline; }
-.page--chats .chat-think__preview { min-width: 0; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.page--chats .chat-think__open, .page--chats .chat-think__shut { flex: none; color: var(--ink-soft); }
-.page--chats .chat-think__shut, .page--chats .chat-think[open] .chat-think__open { display: none; }
-.page--chats .chat-think[open] .chat-think__shut { display: inline; }
-.page--chats .chat-think > p { margin: 4px 0 0; white-space: pre-wrap; }
+.page--chats .chat-think { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 8px; align-items: center; margin: 4px 0 0; }
+.chat-think__preview { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chat-think .chat-think__toggle { margin: 0; height: 24px; translate: none; color: #00813f; background: rgb(0 166 80 / .07); }
+.chat-think .chat-think__toggle:is(:hover, [aria-expanded="true"]) { background: rgb(0 166 80 / .14); }
+.chat-think__full { grid-column: 1 / -1; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.chat-think__shut, .chat-think__full,
+.chat-think__toggle[aria-expanded="true"] .chat-think__open,
+.chat-think:has(> [aria-expanded="true"]) .chat-think__excerpt { display: none; }
+.chat-think__toggle[aria-expanded="true"] .chat-think__shut { display: inline; }
+.chat-think__toggle[aria-expanded="true"] + .chat-think__full { display: block; }
 .page--chats .lb-item .helpers { margin-top: 8px; }
 .page--chats .lb-card__note { margin: 0 22px 14px; }
 </style>
@@ -70,8 +70,10 @@
 <div id="chat-counts" class="chat-counts"></div>
 <div class="chat-plots"><div><p class="part">近 7 天 · 同时有几个 AI 在干活（含帮手）</p><div id="chat-concurrent"></div><div id="chat-current-reading" class="row__sub" hidden></div><p class="chat-end-date" id="chat-end-date"></p></div><div><p class="part">每天开了几个对话</p><div id="chat-days"></div></div></div>
 </div></div></section>
-<section class="chat-lower" data-mo-rise id="active"><p class="part l2-part" hidden>全部在干的、等着的</p><div class="chat-board" id="chat-board"></div></section>
+<div class="chat-lower" data-mo-rise>
+<section id="active"><p class="part l2-part" hidden>全部在干的、等着的</p><div class="chat-board" id="chat-board"></div></section>
 <div class="chat-board" id="chat-recent-board"></div>
+</div>
 </main>
-<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-header.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-chart.js"></script><script src="/live/_lib/live-viz.js"></script><script src="/live/_lib/live-board.js"></script><script src="/live/chats/draw10.js"></script><script src="/live/chats/page.js"></script>
+<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-header.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-chart.js"></script><script src="/live/_lib/live-viz.js"></script><script src="/live/_lib/live-board.js"></script><script src="/live/chats/draw10.js"></script><script src="/live/chats/helper-purpose.js"></script><script src="/live/chats/page.js"></script>
 </body></html>

@@ -94,17 +94,13 @@
     }
     return typeof v === 'string' ? v.trim() : '';
   }
-  const placeholder = /^(?:.*[：:])?(?:帮手|对话|可信设备可见|正在换说法|没有(?:标题|记录)|未命名的 AI 活|GPT 派单)$|仅本人可见$/;
-  const chinese = value => /\p{Script=Han}/u.test(value) && !placeholder.test(value);
-  const disclosure = (label, html, open = false) => html ? `<details class="row__sub"${open ? ' open' : ''}><summary class="more">${label}</summary><p style="overflow-wrap:anywhere">${html}</p></details>` : '';
   function helperWords(h) {
-    if (contentLocked(chat, viewer) || contentLocked(h, viewer)) return { name: '', detail: '', mark: '' };
-    const raw = field(h.title, h, chat, 'title'), localized = field(field(h.localized?.title, h.localized, null, 'title'), h, chat);
-    const own = visibleText(raw), title = [localized, raw, !chat.helper_counts && field(h.summary, h, chat)].find(v => chinese(visibleText(v))) || (own && !placeholder.test(own) ? raw : null);
-    const name = title ? chatCell(title, '帮手名', chat, viewer === 'owner' || title === localized || title === raw ? 0 : 80, true) : '';
-    const words = visibleText(raw);
-    const original = words && !placeholder.test(words) && words !== visibleText(title) && chatCell(raw, '帮手名', chat, 0, true);
-    return { name, detail: disclosure('帮手原名', original), mark: markOf(title || h.title, h) };
+    if (contentLocked(chat, viewer) || contentLocked(h, viewer)) return { name: '', mark: '' };
+    const task = U.chatHelperPurpose(h, chat, viewer, field);
+    const mark = markOf(task?.purpose || h.title, h);
+    const name = task ? chatCell(task.purpose, '帮手名', chat, task.limit, true)
+      : viewer === 'public' && mark === 'owner' ? '' : '未记录具体任务';
+    return { name, mark };
   }
   // 什么时候：同一天只写钟点，前一天写“昨天”，再早写日子；断开时也照这样写。整页（页头、帮手、过程记录）只用这一种写法。
   const activityOf = h => { if (h.state === 'running' || !Number.isFinite(Date.parse(h.at))) return U.chatFields.helperActivity(h, at); const verb = h.state === 'done' ? '完成于' : h.state === 'stopped' ? '停止于' : h.state === 'failed' ? '出错于' : '最后记录于'; return `${verb} ${stamp(h.at)}`; };
@@ -113,12 +109,12 @@
   // 帮手一行：状态、名字、型号、最后记录时间和已有操作。
   function row(d, index) {
     if (d.q === 'warming') return { key: d.id || `helper-${index}`, cls: 'route-row route-row--empty', html: '<p class="route-row__line">正在准备</p>' };
-    const { name, detail } = helperWords(d), state = chatState(d);
+    const { name } = helperWords(d), state = chatState(d);
     const model = who(d), head = name || U.fieldHtml(model || (!state ? '一个帮手' : ''));
     const activity = activityOf(d);
     const canOpen = !contentLocked(chat, viewer) && !contentLocked(d, viewer);
     const meta = ['帮手', name && model, activity].filter(Boolean).join(' · ');
-    return { key: d.id || `helper-${index}`, cls: `route-row${d.state === 'running' ? ' is-now' : ''}`, html: `${U.status(d, { small: true }).lamp}${R.ico('doc', 'route-row__ico')}<div class="route-row__main"><p class="route-row__line">${state ? `<b class="route-word">${esc(state)}</b>` : ''}<span class="route-row__name">${head}</span></p><p class="route-row__sub">${U.fieldHtml(meta, { name: '对话内容', kind: viewer })}</p>${detail}${U.draw10?.helperDetailHtml?.(d, viewer, chat) || ''}</div><div class="route-row__acts">${canOpen ? actions(d) : ''}</div>` };
+    return { key: d.id || `helper-${index}`, cls: `route-row${d.state === 'running' ? ' is-now' : ''}`, html: `${U.status(d, { small: true }).lamp}${R.ico('doc', 'route-row__ico')}<div class="route-row__main"><p class="route-row__line">${state ? `<b class="route-word">${esc(state)}</b>` : ''}<span class="route-row__name">${head}</span></p><p class="route-row__sub">${U.fieldHtml(meta, { name: '对话内容', kind: viewer })}</p>${U.draw10?.helperDetailHtml?.(d, viewer, chat) || ''}</div><div class="route-row__acts">${canOpen ? actions(d) : ''}</div>` };
   }
 
   // —— 航线：计划逐行作站点，不改名、不加项；只照数据画勾和“在做”，当前这一步按 step_index 标出 ——
@@ -205,8 +201,8 @@
     const list = startTimes().map(([key, at, word]) => ({ key, at, word, name: esc(U.chatFields.originLabel(chat)) }));
     const reply = [detailReply(chat), chat.latest_reply, chat.reply].filter(v => validTime(v?.at)).sort((a, b) => Date.parse(b.at) - Date.parse(a.at))[0];
     for (const [i, h] of (Array.isArray(chat.helpers) ? chat.helpers : []).entries()) if (validTime(h.at)) {
-      const { name, detail, mark } = helperWords(h), model = U.fieldText(U.draw10 ? U.draw10.modelName(h) : h.model, viewer);
-      list.push({ key: `h-${h.id || i}`, at: h.at, word: chatState(h), name: name || U.fieldHtml(model), sub: name ? ['帮手', model].filter(Boolean).join(' · ') : '', detail, lamp: U.status(h, { small: true }).lamp, mark });
+      const { name, mark } = helperWords(h), model = U.fieldText(U.draw10 ? U.draw10.modelName(h) : h.model, viewer);
+      list.push({ key: `h-${h.id || i}`, at: h.at, word: chatState(h), name: name || U.fieldHtml(model), sub: name ? ['帮手', model].filter(Boolean).join(' · ') : '', lamp: U.status(h, { small: true }).lamp, mark });
     }
     for (const [key, v, word, name] of [['summary', chat.summary, '摘要', '写好正式摘要'], ['reply', reply, '回复', '发出最新回复']]) if (v && typeof v === 'object' && v.at)
       list.push({ key, at: v.at, word, name: esc(name) });
@@ -222,7 +218,7 @@
   function drawLog(list = events()) {
     const b = R.batch('log', list.length, viewer === 'owner' ? { first: 50, step: 50, unit: '条' } : { first: 10, step: 20, unit: '条' }), shown = list.slice(0, b.shown), note = $('log-note');
     U.html($('log-part'), list.length > shown.length ? `最近 ${shown.length} 条 · 共 ${list.length} 条` : list.length ? `共 ${list.length} 条` : '');
-    U.list($('log'), shown.map(e => ({ key: e.key, cls: 'route-row route-row--log', html: `<time class="route-row__time">${esc(stamp(e.at))}</time><div class="route-row__main"><div style="min-width:0;flex:1"><p class="route-row__line">${e.lamp || ''}<b class="route-word">${esc(e.word)}</b><span class="route-row__name">${e.name || ''}</span></p>${e.detail || ''}</div>${e.sub ? `<p class="route-row__sub">${U.fieldHtml(e.sub, { name: '对话内容', kind: viewer })}</p>` : ''}</div>` })), { animate: !first });
+    U.list($('log'), shown.map(e => ({ key: e.key, cls: 'route-row route-row--log', html: `<time class="route-row__time">${esc(stamp(e.at))}</time><div class="route-row__main"><div style="min-width:0;flex:1"><p class="route-row__line">${e.lamp || ''}<b class="route-word">${esc(e.word)}</b><span class="route-row__name">${e.name || ''}</span></p></div>${e.sub ? `<p class="route-row__sub">${U.fieldHtml(e.sub, { name: '对话内容', kind: viewer })}</p>` : ''}</div>` })), { animate: !first });
     const words = [!list.length && esc(U.collectionText('过程记录')), marks(new Set(shown.map(e => e.mark).filter(Boolean)), '帮手名')].filter(Boolean).join('<span class="route-note__sep">·</span>');
     note.hidden = !words; U.html(note, words);
     U.html($('log-more'), b.html);
