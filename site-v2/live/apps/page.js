@@ -74,7 +74,30 @@
     };
   }
   const keys = ['contention', 'cpu', 'memory'];
+  // 应用趋势的线（M342）：整段没有一个数的不画、不进图例；同一程序的几个进程（后台还没并成一行时）按时刻相加成一条，
+  // 图例里同一程序只出现一次；每个程序一种颜色（均值、峰值同色，峰值总在上面），四色轮换会让好几条线同色。
+  const APP_COLORS = ['#16a6c4', '#7a63e8', '#e2639f', '#3f87ee', '#e8913f', '#2e9a62', '#b5562d', '#c49a00', '#5b6b7d', '#a03fb8', '#0f7c8c', '#d04a3a'];
+  const programOf = s => typeof s.program === 'string' ? s.program : typeof s.label === 'string' ? (/^(?:均值|峰值)\s*·\s*(.+)$/.exec(s.label.trim())?.[1] ?? /^(.+)\s+(?:均值|峰值)$/.exec(s.label.trim())?.[1] ?? null) : null;
+  function appSeries(list) {
+    const lines = new Map();
+    for (const s of list || []) {
+      if (!s.points?.some(p => Number.isFinite(p[1]))) continue;
+      const key = typeof s.label === 'string' ? s.label.trim() : `id:${s.id}`, was = lines.get(key);
+      if (!was) { lines.set(key, { ...s, points: s.points.map(p => [...p]) }); continue; }
+      const at = new Map(was.points.map(p => [p[0], p]));
+      for (const [t, v] of s.points) {
+        if (!Number.isFinite(v)) continue;
+        const p = at.get(t);
+        if (p) p[1] = Number.isFinite(p[1]) ? p[1] + v : v; else { const q = [t, v]; was.points.push(q); at.set(t, q); }
+      }
+      was.points.sort((a, b) => a[0] - b[0]);
+    }
+    const programs = [...new Set([...lines.values()].map(programOf).filter(Boolean))];
+    return [...lines.values()].map(s => { const i = programs.indexOf(programOf(s)); return i < 0 ? s : { ...s, hue: APP_COLORS[i % APP_COLORS.length] }; });
+  }
+  const appPack = pack => pack && Array.isArray(pack.series) ? { ...pack, series: appSeries(pack.series) } : pack;
   function merge(d) {
+    if (d) d = { ...d, cpu: appPack(d.cpu), memory: appPack(d.memory) };
     return { ...D.merge(d, keys), series: keys.flatMap((k) => (d?.[k]?.series || []).map((s) => {
       const window = d[k].window;
       return { ...s, id: `${k}:${s.id}`, from: window?.from ?? s.from ?? d[k].from, to: window?.to ?? s.to ?? d[k].to };
@@ -99,7 +122,9 @@
     const peak = pairable && available.includes(peaks[0]) ? peaks[0] : null;
     const reading = r => `${r.kind} ${seriesText(r.s, unit)}`;
     const latest = lead && join([pname(lead.name), stamp(new Date(t * 1000).toISOString()), reading(lead), pairable && (peak ? reading(peak) : '峰值未记录')]);
-    const highest = unit === '%' && Number.isFinite(pack?.peak_pct) && `本时段所展示应用最高 ${Number(pack.peak_pct.toFixed(2))}%`;
+    // 最高值按图上画出来的线算（几个进程并成一条以后可能比后台单条的 peak_pct 高），和纵轴对得上
+    const drawn = (pack?.series || []).flatMap(s => (s.points || []).map(p => p[1]).filter(Number.isFinite)), top = drawn.length ? Math.max(...drawn) : pack?.peak_pct;
+    const highest = unit === '%' && Number.isFinite(top) && `本时段所展示应用最高 ${Number(top.toFixed(2))}%`;
     const since = pack?.recorded_from ?? pack?.accumulating?.since ?? pack?.since;
     const start = Number.isFinite(Date.parse(since)) ? `${pack.recorded_from ? '首个有数日期' : '累计起点'} ${window.LiveUI.date(since)}` : '';
     return join([latest, highest, start], '。') || (available.length ? '读数口径未标明' : off() ? '' : '该采样时段没有读数');
@@ -112,20 +137,25 @@
     const onRead = (values, t) => {
       if (t != null || selected === 'contention') return;
       const latest = lastBucket(data?.[selected]);
-      for (const { id, at } of values) if (at !== latest) el.querySelector(`.grp__hero [data-line="${CSS.escape(id)}"] b`).textContent = '该时刻未记录';
+      // 最后一个钟点没数的线：写它最近一次有数的值和钟点，不再一半写“该时刻未记录”（M342）
+      const series = merge(data)?.series || [], unit = selected === 'memory' ? 'GB' : '%';
+      for (const { id, at } of values) if (at !== latest) {
+        const last = series.find(s => s.id === id)?.points?.filter(p => Number.isFinite(p[1])).at(-1), b = el.querySelector(`.grp__hero [data-line="${CSS.escape(id)}"] b`);
+        if (b) b.textContent = last ? `${C.value(last[1], unit)}（最近 ${window.LiveUI.time(new Date(last[0] * 1000).toISOString())}）` : '这段时间没有数';
+      }
     };
     el.querySelector('.apps-trend-back').addEventListener('click', () => { selected = 'contention'; draw(); });
     function draw() {
       const payload = merge(data), all = payload?.series || [], next = JSON.stringify(all.map((s) => [s.id, s.label]));
       if (!chart || next !== signature) {
         chart?.destroy(); el.querySelector('.grp__hero').replaceChildren(); el.querySelector('.grp__chips').dataset.keys = '';
-        chart = C.create(el.querySelector('.grp__hero'), { size: 'hero', lines: all.map((s) => ({ id: s.id, label: lineLabel(s.label) })), palette: hues, sync, floor: 0, onRead }); signature = next;
+        chart = C.create(el.querySelector('.grp__hero'), { size: 'hero', lines: all.map((s) => ({ id: s.id, label: lineLabel(s.label), hue: s.hue })), palette: hues, sync, floor: 0, onRead }); signature = next;
       }
-      const list = keys.map((k, i) => ({ key: k, label: ['前台和后台怎样分资源', '应用 CPU 趋势', '应用内存趋势'][i], lines: all.filter((s) => s.id.startsWith(`${k}:`)).map((s) => ({ id: s.id, label: lineLabel(s.label) })), unit: k === 'memory' ? 'GB' : '%', on: k === selected }));
+      const list = keys.map((k, i) => ({ key: k, label: ['前台和后台怎样分资源', '应用 CPU 趋势', '应用内存趋势'][i], lines: all.filter((s) => s.id.startsWith(`${k}:`)).map((s) => ({ id: s.id, label: lineLabel(s.label), hue: s.hue })), unit: k === 'memory' ? 'GB' : '%', on: k === selected }));
       const picked = list.find((x) => x.key === selected);
       chart.show(picked.lines.map((s) => s.id), { title: picked.label, unit: picked.unit, floor: 0 });
       if (payload) chart.set(payload); else chart.wait(off() ? '这块没存下来，连上后补上。' : window.LiveUI.collectionText());
-      cells.set(list.filter((c) => c.key !== 'contention').map((c) => ({ ...c, text: trendReading(data?.[c.key], c.unit) })), payload);
+      cells.set(list.filter((c) => c.key !== 'contention').map((c) => ({ ...c, text: trendReading(appPack(data?.[c.key]), c.unit) })), payload);
       el.querySelector('.apps-trend-back').setAttribute('aria-pressed', String(selected === 'contention'));
     }
     return { set: draw };

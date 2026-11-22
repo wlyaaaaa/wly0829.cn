@@ -244,14 +244,16 @@
         return { key: pt.id, cls: 'row row--flat', html: `<span></span><div class="row__text"><p class="row__main"><a class="row__title" href="${esc(route(`/live/backup/?id=${encodeURIComponent(group.set)}&point=${encodeURIComponent(pt.id)}`))}">${title}</a><span class="row__meta">${group.kind === 'system' ? '整机恢复' : '文件恢复'}</span></p><p class="row__sub">${[`能退回 ${esc(stamp(pt.at))}`, scope, esc(recovery([pt])), notes(pt.gap), pt.id === group.points?.[0]?.id ? extra : ''].filter(Boolean).join(' · ')}</p></div>` };
       });
       if (!rows.length && extra) rows.push({ key: `restore-history:${group.set}:${group.kind}`, cls: 'row row--flat', html: `<span></span><p class="row__sub">${extra}</p>` });
-      if (rows.length <= 5) return rows;
-      return [...rows.slice(0, 5), { key: `restore-more:${group.set}:${group.kind}`, cls: 'backup-more', html: `<details><summary class="more live-disclosure"><span class="disclosure-closed">展开（还有 ${rows.length - 5} 条）</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary><ul class="rows list">${rows.slice(5).map(row => `<li class="${row.cls}">${row.html}</li>`).join('')}</ul></details>` }];
+      // 右栏每类先露最近一份（能退回到哪天），更早的收进“展开”，不再比左栏长出一大截（空白扫描 1123）
+      const first = 1;
+      if (rows.length <= first) return rows;
+      return [...rows.slice(0, first), { key: `restore-more:${group.set}:${group.kind}`, cls: 'backup-more', html: `<details><summary class="more live-disclosure"><span class="disclosure-closed">展开（还有 ${rows.length - first} 条）</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary><ul class="rows list">${rows.slice(first).map(row => `<li class="${row.cls}">${row.html}</li>`).join('')}</ul></details>` }];
     });
     U.list($('points'), restored.length ? restored : empty(restoreText(d)));
     const coverage = [d.coverage?.local_note, d.columns?.local?.note].some(note => note && sp(note) === sp(d.coverage)) ? '' : U.fieldHtml(d.coverage, { name: '备份范围', place: 'body', kind: viewer });
     U.html($('coverage'), coverage); $('coverage').hidden = !coverage;
     if (!lit) { lit = true; L.lightUp([hero, $('sets'), $('points')]); }
-    U.land();
+    U.land({ keepOnBack: true });
   }
   window.Live.watch('backups', null, { phase(s) { if (s.data == null) { homeRead.set(s); detailReads.forEach(r => r.set(s)); } },
     data(d, meta) {

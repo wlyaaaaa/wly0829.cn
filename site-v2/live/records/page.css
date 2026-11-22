@@ -46,3 +46,20 @@
 #record-body .knowledge-md .knowledge-table { width: auto; margin: 2px 0 10px; border-collapse: collapse; font-size: 13px; line-height: 20px; }
 #record-body .knowledge-md .knowledge-table :is(th, td) { overflow-wrap: break-word; padding: 4px 8px; border: 1px solid rgb(20 20 19 / .1); text-align: left; vertical-align: top; font-weight: 400; }
 #record-body .knowledge-md .knowledge-table th { font-weight: 600; background: rgb(20 20 19 / .03); }
+/* 我的说明书一组的目录（本人版，M421）：两栏编号，名字加一句开头，点了跳到下面那一项的全文 */
+#record-body .book__top:has(.record-toc) { display: block; margin-bottom: 18px; }
+#record-body .record-toc { padding: 4px 4px 14px; border-bottom: 1px solid rgb(20 20 19 / .08); }
+#record-body .record-toc__head { margin: 0; font-size: 18px; line-height: 26px; font-weight: 700; color: #141413; }
+#record-body .record-toc__head small { margin-left: 10px; font-size: 13px; font-weight: 400; color: var(--muted); }
+#record-body .record-toc__sub { margin: 2px 0 10px; font-size: 13px; line-height: 20px; color: var(--muted); }
+#record-body .record-toc__list { columns: 2; column-gap: 36px; margin: 0; padding: 0; list-style: none; }
+#record-body .record-toc__list li { break-inside: avoid; }
+#record-body .record-toc__list a { display: grid; grid-template-columns: 30px minmax(0, 1fr); align-items: baseline; padding: 7px 8px; border-top: 1px solid rgb(20 20 19 / .06); border-radius: 8px; color: inherit; text-decoration: none; transition: background-color .15s; }
+#record-body .record-toc__list a:hover { background: rgb(0 166 80 / .06); }
+#record-body .record-toc__list a[aria-current] { background: rgb(0 166 80 / .1); box-shadow: inset 3px 0 #00A650; }
+#record-body .record-toc__list a[aria-current] b { color: #00813f; }
+#record-body .record-toc__n { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+#record-body .record-toc__t { min-width: 0; }
+#record-body .record-toc__t b { display: block; font-size: 14.5px; line-height: 21px; font-weight: 600; color: #141413; }
+#record-body .record-toc__t small { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12.5px; line-height: 19px; color: #6b6a64; }
+#record-body .book-row { scroll-margin-top: 96px; }

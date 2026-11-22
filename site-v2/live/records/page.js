@@ -287,8 +287,39 @@
       empty: uncertain ? text(emptyNote) : extra?.empty || (hiddenOnly ? hidden || U.hiddenMore?.(d.hidden, '项', d.hidden_what || '记录') || marker({ visibility: 'owner' }, recordViewer, '这些记录') : text(emptyNote)),
     });
     drawRecordNote(d, [extra?.note, !publicSkills && !hiddenOnly && d.hidden && (hidden || U.hiddenMore?.(d.hidden, '项', d.hidden_what || '记录'))]);
+    drawToc(ordered);
     recordRead.done();
     U.land();
+    // 说明书（认识）本人版一次取全：目录要列全这一组，点哪一项都能直接跳到全文（M421）
+    if (knowledge && recordViewer === 'owner' && next != null && !tocLoading) { tocLoading = true; (async () => { try { while (next != null) { const was = next; await loadNext(); if (next === was) break; } } finally { tocLoading = false; } })(); }
+  }
+  // 我的说明书一组（本人版）：全文照旧铺开，上面一个目录列全每一项，点名字跳到那一项的全文（M421，本人 11-22 14:04 选 B）
+  let tocLoading = false;
+  function drawToc(ordered) {
+    let box = book.el.top.querySelector('.record-toc');
+    if (!knowledge || recordViewer !== 'owner' || ordered.length < 2) { box?.remove(); return; }
+    if (!box) {
+      box = document.createElement('nav'); box.className = 'record-toc'; box.setAttribute('aria-label', '这一组的目录'); book.el.top.append(box);
+      box.addEventListener('click', e => {
+        const link = e.target.closest('a[data-toc]');
+        if (!link) return;
+        e.preventDefault();
+        const tr = book.reveal(link.dataset.toc);
+        box.querySelectorAll('a[aria-current]').forEach(a => a.removeAttribute('aria-current')); link.setAttribute('aria-current', 'true');
+        if (!tr) return;
+        tr.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        tr.classList.remove('is-flash'); void tr.offsetWidth; tr.classList.add('is-flash');
+      });
+    }
+    const plain = value => U.fieldText(value, recordViewer).trim();
+    const rows = ordered.filter(r => r && !r.private_count).map((r, i) => {
+      const key = String(recordKey(r) || `record-${i}`), name = plain(r.title || r.name || r.label || '') || `第 ${i + 1} 项`;
+      const first = plain(r.text || '').replace(/[#*`>|]/g, '').replace(/\s+/g, ' ').trim().split(/(?<=[。！？])/)[0];
+      const current = box.querySelector(`a[aria-current][data-toc="${CSS.escape(key)}"]`) ? ' aria-current="true"' : '';
+      return `<li><a href="#" data-toc="${esc(key)}"${current}><span class="record-toc__n">${String(i + 1).padStart(2, '0')}</span><span class="record-toc__t"><b>${esc(name)}</b>${first ? `<small>${esc(first)}</small>` : ''}</span></a></li>`;
+    });
+    const total = Math.max(Number.isFinite(recordTotal) ? recordTotal : 0, rows.length);
+    U.html(box, `<p class="record-toc__head">这一组 ${total} 项${rows.length < total ? `<small>其余 ${total - rows.length} 项正在读</small>` : ''}</p><p class="record-toc__sub">点名字跳到那一项的全文；全文在下面，一个字不少</p><ol class="record-toc__list">${rows.join('')}</ol>`);
   }
   function drawRecordNote(d, extra = []) {
     if (groupPrivate && recordViewer === 'public') {

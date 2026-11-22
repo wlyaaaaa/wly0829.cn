@@ -138,14 +138,14 @@
     const absent=all===null&&(!!U.offline?.()||['none','gone'].includes(phase));['hero','attention','all-records'].forEach(id=>$(id).hidden=absent);$('missing').hidden=!absent;if(absent){$('missing').innerHTML=`<span class="lamp" aria-hidden="true"></span>${U.offline?.()?'这块没存下来，连上后补上。':'通知发送记录暂时读不到'}`;return;}
     const wait=all===null&&!['none','gone'].includes(phase),series=key=>payload?.series.find(s=>s.id===key)?.points.map(p=>p[1])||[];
     const known=series('total').filter(Number.isFinite),peak=known.length?Math.max(...known):null;
-    const figure=(key,label,value,fields)=>({key,label,value,unit:'条',text:value!=null&&fields.some(k=>lower(page?.delivery24??page,k))?`至少 ${value} 条`:undefined});
-    const kinds=new Set(issues.map(kindOf)),title=!issues.length?'没到的提醒':kinds.size===1&&kinds.has('unsure')?`还没确认到没到的 ${issues.length} 条`:kinds.size===1&&kinds.has('failed')?`没到的 ${issues.length} 条`:`没到或还没确认的 ${issues.length} 条`;
+    const figure=(key,label,value,fields)=>({key,label,value,unit:'次',text:value!=null&&fields.some(k=>lower(page?.delivery24??page,k))?`至少 ${value} 次`:undefined});
+    const kinds=new Set(issues.map(kindOf)),title=!issues.length?'没到的提醒':kinds.size===1&&kinds.has('unsure')?`还没确认到没到的 ${issues.length} 次`:kinds.size===1&&kinds.has('failed')?`没到的 ${issues.length} 次`:`没到或还没确认的 ${issues.length} 次`;
     boards.attention.set([{key:'attention',...page?.groups?.find(g=>g.key==='attention'),name:title,wait,line:attentionScope,palette:['apricot','violet'],figures:[],build:attentionChapter}]);
     boards.overview.set([{key:'overview',...page?.groups?.find(g=>g.key==='overview'),name:'每小时发了多少',wait,line:payload?.scope||U.collectionText(),palette:['teal','blue'],
       figures:[figure('peak',payload&&!payload.complete?'有记录的一小时最多':'一小时最多',peak,['total']),figure('latest-hour','最后一小时没到',series('attention').at(-1)??null,['attention','failed','pending','unconfirmed'])],
-      chips:[{key:'hourly',label:'每小时的提醒',unit:'条',floor:0,lines:[{id:'sent',label:'到了',hue:'teal'},{id:'attention',label:'没到或没确认',hue:'apricot'}]}],
+      chips:[{key:'hourly',label:'每小时的提醒',unit:'次',floor:0,lines:[{id:'sent',label:'到了',hue:'teal'},{id:'attention',label:'没到或没确认',hue:'apricot'}]}],
       say:()=>payload?.note||'每小时到了多少、没到多少'}]);
-    boards.history.set([{key:'history',...page?.groups?.find(g=>g.key==='history'),name:'每一条',wait,line:!all?U.collectionText():(historyScope||'这次没读到明细'),palette:['blue','teal'],figures:[],build:historyChapter}]);
+    boards.history.set([{key:'history',...page?.groups?.find(g=>g.key==='history'),name:'每一次',wait,line:!all?U.collectionText():(historyScope||'这次没读到明细'),palette:['blue','teal'],figures:[],build:historyChapter}]);
     if(payload)Object.values(boards).forEach(b=>b.data(payload));
     if(all){heroRead.done();L.lightUp([hero,...Object.values(boards).flatMap(b=>b.cards())]);}
     if(all===null&&['none','gone'].includes(phase))rates.set(null);
@@ -164,7 +164,7 @@
       const sent=supplied?aggregate?.sent:hasRows?rows.filter(r=>r.status==='sent').length:null,total=supplied?aggregate?.total:hasRows?rows.length:null;
       if(U.offline?.()&&sent==null&&total==null)return null;
       const rate=validCount(sent)&&validCount(total)&&total>0&&sent<=total?sent/total:null,q=supplied?aggregate:d,markedValue=[sent,total].find(v=>v&&typeof v==='object');
-      const sub=sent==null||total==null?[sent!=null?`到了 ${countText(q,'sent',sent)} 条`:'',total!=null?`共 ${countText(q,'total',total)} 条`:''].filter(Boolean).join(' · '):`到了 ${countText(q,'sent',sent)} / ${countText(q,'total',total)} 条`;
+      const sub=sent==null||total==null?[sent!=null?`到了 ${countText(q,'sent',sent)} 次`:'',total!=null?`共 ${countText(q,'total',total)} 次`:''].filter(Boolean).join(' · '):`到了 ${countText(q,'sent',sent)} / ${countText(q,'total',total)} 次`;
       return {key,label:key==='all'?'全部':channel(aggregate||rows[0]||{channel:key}),text:markedValue??(rate!=null?`${Number((100*rate).toFixed(1))}%`:total===0?(full?'这 7 天没有发':'这部分没有发'):U.collectionText()),frac:rate,hue:full?['violet','teal','blue'][i<3?i:Array.from(key).reduce((n,c)=>(n+c.codePointAt(0))%3,0)]:'apricot',sub:markedValue||sub};
     }).filter(Boolean));
     const email=channels?.find(r=>kind(r)==='email');
@@ -180,7 +180,7 @@
     U.html($('rates-note'),[...new Set(notes)].map(v=>typeof v==='string'?esc(plainGap(v)):shown(v,'记录范围')).join(' · '));
     $('rates-note').hidden=!$('rates-note').innerHTML;
   }
-  const plainGap=v=>v.replace(/^发送日志未覆盖完整七天或有不完整记录，只统计(?:有记录|已读)的批次$/,'记录不满 7 天或有残缺，只算有记录的').replace('只统计已读批次','只算有记录的').replace(/批次/g,'条').replace(/批/g,'条');
+  const plainGap=v=>v.replace(/^发送日志未覆盖完整七天或有不完整记录，只统计(?:有记录|已读)的批次$/,'记录不满 7 天或有残缺，只算有记录的').replace('只统计已读批次','只算有记录的').replace(/批次/g,'次').replace(/批/g,'次');
   function emailGapRows(rows,scope=emailScope){
     return scope?(rows||[]).filter(r=>isMail(r)&&r.status!=='sent'&&parse(at(r))>=scope.from&&parse(at(r))<=scope.to):[];
   }
@@ -249,8 +249,8 @@
     });
     const total=points.reduce((n,p)=>n+(p[3]??0),0),sent=points.reduce((n,p)=>n+(p[1]??0),0);
     const scope=complete?'近 24 小时':reported?'有记录的部分':'已读到的记录';
-    const note=!points.some(p=>p[3]!=null)?'这段时间每小时发了多少还没读到':complete&&total>0&&total===sent?`近 24 小时 ${total} 条全部到了`:
-      [`${scope} ${total} 条，到了 ${sent} 条`,!complete&&validCount(summary?.total)?`这段时间一共 ${countText(summary,'total',summary.total)} 条`:''].filter(Boolean).join(' · ');
+    const note=!points.some(p=>p[3]!=null)?'这段时间每小时发了多少还没读到':complete&&total>0&&total===sent?`近 24 小时 ${total} 次全部到了`:
+      [`${scope} ${total} 次，到了 ${sent} 次`,!complete&&validCount(summary?.total)?`这段时间一共 ${countText(summary,'total',summary.total)} 次`:''].filter(Boolean).join(' · ');
     const series=['sent','attention','total'].map((id,i)=>({id,label:['到了','没到或没确认','全部'][i],unit:'条',points:points.map(p=>[p[0],p[i+1]])}));
     const a=new Date(from).toISOString(),b=new Date(end).toISOString();return {from:a,to:b,series,complete,scope:`${interval(a,b)} · ${scope}`,note,bucket_seconds:3600,missing_intervals};
   }
@@ -339,11 +339,11 @@
     const parts=[['failed','没到'],['not_started','没发出去'],['unsure','还没确认到没到']].map(([k,label])=>{
       const list=rows.filter(r=>!r.private_count&&!hiddenBatch(r)&&kindOf(r)===k);if(!list.length)return '';
       const groups=new Map();for(const r of list){const key=`${channel(r)}（${k==='not_started'?shortWhy(r)||'还在排队':shortWhy(r)}）`;groups.set(key,(groups.get(key)??0)+1);}
-      const detail=[...groups].map(([key,n])=>key.replace('（',` ${n} 条（`)).join('、');
-      return `${list.length} 条${label}：${detail}`;
+      const detail=[...groups].map(([key,n])=>key.replace('（',` ${n} 次（`)).join('、');
+      return `${list.length} 次${label}：${detail}`;
     }).filter(Boolean);
     const hidden=rows.reduce((n,r)=>n+(r.private_count||(hiddenBatch(r)?1:0)),0);
-    if(hidden)parts.push(`另有 ${hidden} 条没到的提醒仅本人可见`);
+    if(hidden)parts.push(`另有 ${hidden} 次没到的提醒仅本人可见`);
     return parts.join('；');
   }
   function renderDelivery({first:d,rows,next,sources}){
@@ -365,11 +365,13 @@
     // 首句按渠道说：手机没有“已弹出”回执，只能说发到手机几条；邮件说交给 Gmail 几条。后台给了近 24 小时分渠道的数才这样写。
     const perChannel=Array.isArray(summary?.channels)?[['phone','发到手机'],['email','邮件交给 Gmail']].map(([id,label])=>{
       const c=summary.channels.find(c=>c.channel===id||id==='email'&&c.channel==='mail');
-      return c&&validCount(c.sent)&&!(validCount(c.total)&&c.total===0)?`${label} ${countText(c,'sent',c.sent)} 条`:'';
+      return c&&validCount(c.sent)&&!(validCount(c.total)&&c.total===0)?`${label} ${countText(c,'sent',c.sent)} 次`:'';
     }).filter(Boolean).join('、'):'';
-    headline=!validCount(totals.total)?'近 24 小时发了多少条提醒，还没读到'
-      :totals.total===0?`近 24 小时${scope}没有给${you()}发提醒`
-      :`近 24 小时${scope}给${you()}发了 ${countText(summary||d,'total',totals.total)} 条提醒，${perChannel||(allArrived?'全部到了':`到了 ${validCount(totals.sent)?countText(summary||d,'sent',totals.sent):U.collectionText()} 条`)}`;
+    // 后台按“发送批次”数：一次发送可能含两件事，所以写“次”不写“条”；近 24 小时这句写它自己的截止时刻，和下面明细读到的时刻分开（M501、M063）
+    const dayEnd=summary&&Number.isFinite(parse(summary.to))?`（截至 ${stamp(summary.to)}）`:'',most=Math.max(1,...recent.map(r=>Number.isFinite(r.count)?r.count:1)),multi=most>1?`（有的一次含 ${most} 件事）`:'';
+    headline=!validCount(totals.total)?'近 24 小时发了多少次提醒，还没读到'
+      :totals.total===0?`近 24 小时${dayEnd}${scope}没有给${you()}发提醒`
+      :`近 24 小时${dayEnd}${scope}给${you()}发了 ${countText(summary||d,'total',totals.total)} 次提醒${multi}，${perChannel||(allArrived?'全部到了':`到了 ${validCount(totals.sent)?countText(summary||d,'sent',totals.sent):U.collectionText()} 次`)}`;
     const row=all[0];
     const gaps=d.coverage?.gaps||[],failed=d.read_error??(gaps.some(g=>g.reason==='log_unavailable')||/打不开|读取失败|读取超时/.test(provided(d.gap)||''));
     const sourceAt=Object.hasOwn(d,'source_at')?d.source_at:observed?.to??d.coverage?.at??d.at,stale=d.gray_reason==='stale'||d.q==='stale'||d.stale===true||d.state==='stale';
@@ -381,7 +383,8 @@
     const oldReading=stale&&!failed&&['gray','off'].includes(d.level)&&Number.isFinite(parse(sourceAt));
     const staleLine=oldReading?`记录读到 ${stamp(sourceAt)} 为止`:'';
     // 后台的 why 是第一条没到的结果类别（“结果未知”这类），首屏那句已经说清，不再重复。
-    const why=oldReading&&cutoffOnly(d.why)||/^(?:结果未确认|结果未知|失败|未开始)$/.test(U.sp(d.why||''))?'':d.why;
+    // 后台汇总句“通知尚未确认送达等 N 项”“通知发送失败等 N 项”和上面逐条点名的是同一组数，有那一行时不再说第二遍（M278）
+    const why=oldReading&&cutoffOnly(d.why)||/^(?:结果未确认|结果未知|失败|未开始)$/.test(U.sp(d.why||''))||issues.length&&/^通知(?:尚未确认送达|发送失败)/.test(U.sp(d.why||''))?'':d.why;
     const missingNames={...gapNames,at:'发完的时刻',queue_seconds:'排队用时',send_seconds:'发送用时',delivery24:'近 24 小时的统计',delivery7:'近 7 天的统计',attention_rows:'没到的清单',...d.missing_names};
     // 没到的那几条上一行已经逐条点名，这里不再另写“N 项要处理”
     const header=U.status({...d,gray_count:undefined,attention_count:issues.length?0:d.attention_count,why:why||(!failed&&['gray','off'].includes(d.level)&&!oldReading?'通知记录没有更新':undefined),
@@ -390,7 +393,7 @@
     const coverageNotes=[...new Set([...(d.coverage?.missing||[]),...namedMissing,...sources.filter(incomplete).map(o=>o.gap),...gaps.map(g=>g.text||combine([gapNames[g.reason]&&'缺'+gapNames[g.reason],interval(g.from,g.to)]))])].filter(v=>v&&!(oldReading&&cutoffOnly(v)));
     U.html($('head'),header.lamp+U.head(headline,{lamp:false}));
     const problems=problemLine(issues);
-    U.html($('note'),problems?`${esc(problems)} <a class="more" href="#attention">看是哪几条 ›</a>`:'');
+    U.html($('note'),problems?`${esc(problems)} <a class="more" href="#attention">看是哪几次 ›</a>`:'');
     U.html($('latest'),row?`最近一条：${shown(stamp(at(row)),'时刻')}，发到${shown(channel(row),'渠道')}，${shown(stateWord(row),'到没到')}`:'');
     const attentionNote=$('attention-note');
     U.html(attentionNote,[header.note].filter(Boolean).map(line=>`<span>${line}</span>`).join(''));
@@ -400,9 +403,10 @@
     const bounds=[times.at(-1),times[0],...sources.flatMap(o=>[o.records_window?.from,o.records_window?.to])]
       .filter(t=>Number.isFinite(parse(t))).sort((a,b)=>parse(a)-parse(b));
     const span=interval(bounds[0],bounds.at(-1));
-    historyScope=Array.isArray(d.rows)?`已读到 ${all.length} 条${span?`（${span}）`:''}`:'';
+    historyScope=Array.isArray(d.rows)?`已读到 ${all.length} 次${span?`（${span}）`:''}`:'';
     const week=d.delivery7?.channels,weekSent=Array.isArray(week)&&week.every(r=>validCount(r.sent)&&validCount(r.total))?[week.reduce((n,r)=>n+r.sent,0),week.reduce((n,r)=>n+r.total,0)]:null;
-    U.html($('all-sub'),weekSent?`近 7 天 ${weekSent[1]} 条，到了 ${weekSent[0]} 条 · 里面有每小时的走势和每一条的明细`:'近 7 天的比例、每小时的走势和每一条的明细');
+    const weekEnd=Number.isFinite(parse(d.delivery7?.to))?`（截至 ${stamp(d.delivery7.to)}）`:'';
+    U.html($('all-sub'),weekSent?`近 7 天${weekEnd}${weekSent[1]} 次，到了 ${weekSent[0]} 次 · 里面有每小时的走势和每一次的明细`:'近 7 天的比例、每小时的走势和每一次的明细');
     L.tone(hero,header.tone);paint();updateHistoryControl();if(first){first=false;boards.attention.open('attention',true);boards.overview.open('overview',true);boards.history.open('history',true);}
   }
   paint();boards.attention.open('attention',true);
