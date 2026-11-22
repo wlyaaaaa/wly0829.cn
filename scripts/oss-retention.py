@@ -335,6 +335,9 @@ def collect_verified(args):
         if not (shared()/'rollback-retention.json').is_file():
             raise ValueError('Finalized publication requires its rollback inventory')
     rollback = rollback_keep(args.preparation, plan, args.commit, persist=not dry_run, immediate_only=finalized)
+    # The frozen predecessor is still verified. Finalized releases keep only current and in-flight references.
+    if finalized:
+        rollback = set()
     keep.update(rollback)
     retired, pending, missing_plans = [], [], False
     for path in (shared() / 'pins').glob('*.json'):
@@ -451,7 +454,17 @@ def collect_verified(args):
             require_lock(args.lock_holder)
             if baseline != state_fingerprints():
                 raise ValueError('Retention inventory changed before saving verified deletions')
-            for key in set(deleted) | absent:
+            removed = set(deleted) | absent
+            if finalized:
+                rollback_path = state_root/'rollback-retention.json'
+                rollback_log = read(rollback_path)
+                for record in rollback_log['records'].values():
+                    objects = record.get('objects', {})
+                    verified = {key: objects.pop(key) for key in removed & objects.keys()}
+                    if verified:
+                        record.setdefault('retired_objects', {}).update(verified)
+                write(rollback_path, rollback_log)
+            for key in removed:
                 managed['objects'].pop(key)
             write(state_root/'managed.json', managed)
     result['status'] = 'incomplete' if deferred or missing_plans or 'bucket_after_error' in result else 'complete'

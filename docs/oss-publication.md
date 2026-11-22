@@ -37,7 +37,7 @@ HTML 资源属性、srcset、内联 CSS 和 JSON 都按原页面地址解析；J
 
 发布持既有 `wly0829-publication` 短锁，保留对象 pin，先上传变化资源，再传变化 HTML，最后更新清单。资源设置真实 MIME 和不可变长期缓存头；只对本次新传对象 HEAD 核大小及 ETag/Content-MD5，未变对象继承已核回执。再 GET 首页、驾驶舱、`/computer-access/` 与本次变化页，核 200 和 HTML 哈希。HEAD 是大小与对象内容摘要核对，不标作完整 GET 正文证明。
 
-部署、公网页面回读和成功基线登记都通过后，发布器持同一把锁调用 `scripts/oss-retention.py` 的回收逻辑。当前版、上一版和仍在途的发布引用的对象受保护。逐个核对剩余已登记对象的准确名称、版本、大小和 ETag，然后批量提交精确对象名单并回读实删结果。预演、仅上传、部署或公网回读失败时跳过回收。
+部署、公网页面回读和成功基线登记都通过后，发布器持同一把锁调用 `scripts/oss-retention.py` 的回收逻辑。当前版和仍在途的发布引用的对象受保护。上一版独用的图片和其他生成对象随本次回收清理。逐个核对剩余已登记对象的准确名称、版本、大小和 ETag，然后批量提交精确对象名单并回读实删结果。预演、仅上传、部署或公网回读失败时跳过回收。
 
 本次发布输出目录的 `oss-retention-plan.json` 保存精确计划，`oss-retention.json` 保存实删对象名、数量、字节数、删前和删后的 GetBucketStat 读数及残留。默认输出目录在 `E:\Cache\wly-site-build\publish-runs`，以 `publish-receipt.json` 内 `oss_retention.receipt` 为准。桶统计有延迟，实际删除按精确对象回读验收。补跑入口见 [发布与扫描](publish-and-scan.md#正式发布后回收-oss-旧对象)。
 

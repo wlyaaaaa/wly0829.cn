@@ -139,7 +139,7 @@
 ### 第 7 步 发布、结果页、收尾
 
 - 按本轮清单构建、扫描、预演、发布和回读，命令见第十三节。回读完成后发手机通知（`pwsh -NoProfile -File E:\PCConfig\tools\Send-OwnerNotice.ps1 -Text "一句话"`）。
-- 新版线上回读通过后，清理已退役的旧页和仍出旧内容的缓存。逐个回查旧地址，确认已失效或落到预定的新地址。上一版独用的 OSS 对象保留 7 天供退回，期满后的回收按[回收回执和补跑入口](publish-and-scan.md#正式发布后回收-oss-旧对象)逐个核对。
+- 新版线上回读通过后，清理已退役的旧页和仍出旧内容的缓存。逐个回查旧地址，确认已失效或落到预定的新地址。上一版独用的 OSS 图和其他生成对象随本次回收删除，当前版仍引用的对象和正在发布的对象继续保留。删除按[回收回执和补跑入口](publish-and-scan.md#正式发布后回收-oss-旧对象)逐个核对。
 - 做结果页（见第十二节）。
 - 回读成功后，批次程序按页推进编辑账。共用表有改动的，按第十五节存回私有登记原处。
 - 顺带看到的事按第十节推荐卡片。记两三行“这次卡在哪”。
@@ -277,7 +277,7 @@ python -B -X utf8 tools/update.py --batch $batch result
 - **构建、预览：** 仓库根 `npm run build` 得到 `dist/`（不提交）；命令、实况垫底文件要设的环境变量见 [发布与扫描](publish-and-scan.md)。网页源预览用 `python -X utf8 -I site-v2/建站流水线/工具/preview.py`。
 - **压图。** 组装时 `压图.py` 清理未引用素材，把实际采用的静态无损正文 WebP 按原尺寸压小（质量 90，保留透明度和色彩描述），已是有损 WebP 的图按原字节沿用。也可在提交前用 `python -B -X utf8 site-v2/site-assembly/压图.py '@图清单.txt'` 压本次采用的图源，清单每行写一个 WebP 路径。图源只存一份现用 WebP，临时 PNG 用完删。
 - **OSS、Pages：** HTML 交 GitHub Pages，图片、字体、脚本、样式交 OSS，见 [OSS 资源契约](oss-publication.md)。
-- **发布、回读：** 照 [发布与扫描](publish-and-scan.md) 的“发布做什么”，看 `publish-receipt.json` 是 `published` 才算发出。发布成功后会自动回收 OSS 旧对象，回收结果和回执路径看同一文件的 `oss_retention`。
+- **发布、回读：** 照 [发布与扫描](publish-and-scan.md) 的“发布做什么”，看 `publish-receipt.json` 是 `published` 才算发出。发布成功后会自动回收 OSS 旧对象，回收结果和回执路径看同一文件的 `oss_retention`。已回收的旧版素材需要从可用的旧版成品补传后才能用于退回。
 - **私有输入。** 在本轮网站工作副本的根目录运行以下命令，从现有登记照原相对路径复制三张共用表、规则公开改写和流水线工具。所需稿件可重复传 `--project <项目ID>`。准备正式发布时沿用 README 登记的 `.publish/private/live-project.json`。
 
 ```powershell
