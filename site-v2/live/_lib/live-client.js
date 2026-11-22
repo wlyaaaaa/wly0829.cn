@@ -342,7 +342,7 @@
   //   idle 刚开始读，2.5 秒内只留卡框；wait 过了 2.5 秒还在读；slow 过了 10 秒还在读；
   //   接口回 202（正在准备）也算还在读，隔 2、4、8…秒（最多 15 秒）再问一次。
   //   ready 有数（电脑不在线时存下的旧数也算）；none 读完了、这块就是没有数；gone 连不上、这块又没存下来。
-  // 每分钟重读、手动重读、换回前台再读，都不出加载样子。
+  // 定时重读、手动重读、换回前台再读，都不出加载样子。
   // 页面要跟着变，watch 时给 phase 回调：每次 link 之后都会调；2.5 秒、10 秒到点时只调 phase（没接的页面不受打扰）。
   const WAIT_MS = 2500, SLOW_MS = 10000;
   const later = (fn, ms) => { const t = setTimeout(fn, ms); t?.unref?.(); return t; };
@@ -511,9 +511,16 @@
     if (timer) clearInterval(timer);
     timer = null;
   }
+  const ACTIVITY_POLL_SECONDS = 30, DEFAULT_POLL_SECONDS = 60;
+  const pollSeconds = e => e.path === 'screen' || e.path === 'chats' || /^chats\/[^/?]+$/.test(e.path)
+    ? ACTIVITY_POLL_SECONDS : DEFAULT_POLL_SECONDS;
   function startPolling() {
     if (!timer && !publicPaused && currentEntries().some(e => e.listeners.size)) {
-      timer = setInterval(() => { if (!document.hidden) refresh(true); }, 60000);
+      let activityOnly = false;
+      timer = setInterval(() => {
+        activityOnly = !activityOnly;
+        if (!document.hidden) refresh(activityOnly ? 'activity' : true);
+      }, ACTIVITY_POLL_SECONDS * 1000);
     }
   }
   function pausePublication(e) {
@@ -737,7 +744,8 @@
   }
   async function refresh(onlyDue, fresh = false) {
     if (pairing) return pairing.then(() => refresh(onlyDue, fresh));
-    if (publicPaused && onlyDue === true) return { ok: false, at: null };
+    const polling = onlyDue === true || onlyDue === 'activity';
+    if (publicPaused && polling) return { ok: false, at: null };
     // 点页面上的刷新：和浏览器刷新一样从头读。页面早先顺手取过、现在没在显示的那几份（翻页、展开、探测）
     // 当作已退订：不再拿它们上一回（或还在路上那一读）的“连不上”压住整页，也不再重读，页面再要时 get 会重新订上；
     // 正在显示的每份都整份重读，不带上一回的条件和重试计时。
@@ -745,7 +753,10 @@
       clearFailure(e); e.etag = null;
       if (!e.listeners.size) { e.stopped = true; e.receivedAt = null; end(e); }
     }
-    const active = [...entries.values()].filter(e => !e.stopped && (e.listeners.size || e.receivedAt != null && e.validatedLink?.state === 'offline')).map(e => {
+    const active = [...entries.values()].filter(e => !e.stopped
+      && (onlyDue !== 'activity' || pollSeconds(e) === ACTIVITY_POLL_SECONDS
+        && !e.failure && e.validatedLink?.state !== 'offline')
+      && (e.listeners.size || e.receivedAt != null && e.validatedLink?.state === 'offline')).map(e => {
       if (e.token === device()) return e;
       const next = entry(e.resource, e.query);
       if (e.listeners.size) next.stopped = false;
@@ -757,7 +768,7 @@
     const probe = publicPaused && (active[0] || entry(pausedEntry.resource, pausedEntry.query));
     const states = probe ? [await read(probe)] : [];
     if (publicPaused) return { ok: false, at: null };
-    const due = onlyDue === true ? active.filter(e => e.failure || !e.refresh_seconds || e.refresh_seconds <= 60
+    const due = polling ? active.filter(e => e.failure || !e.refresh_seconds || e.refresh_seconds <= pollSeconds(e)
       || Date.now() - e.requestedAt >= e.refresh_seconds * 1000) : active;
     states.push(...await Promise.all(due.filter(e => e !== probe).map(e => read(e, false, undefined, true))));
     if (probe && !publicPaused) window.LiveUI?.publicPause?.(false, publicPauseText);
