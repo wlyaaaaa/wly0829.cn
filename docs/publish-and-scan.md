@@ -70,7 +70,9 @@ npm run build
 两条线实际发布时共用正式入口和发布锁，先用最近一次正式成功的成品比对。另一线先发就重新核基线。下列直跑发布器的命令适用于已授权的独立整份成品发布，按需更新从 [批次入口](update.md#十三本轮清单怎么跑) 调用该工具。
 
 ```powershell
-# 预演计划；输出是本地预演，不上传或部署。
+# 纯本地预演计划，使用已核对的上一版清单和本地成品。
+python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <扫描结果绝对路径> --previous-manifest <前版清单> --previous-site-dist <前版本地成品> --dry-run
+# 不指定前版时，预演会读取远端发布基线。
 python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <扫描结果绝对路径> --dry-run
 # 只上传并回读资源；此时公网网页尚未切换。
 python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <扫描结果绝对路径> --upload-only

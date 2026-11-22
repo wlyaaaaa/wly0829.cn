@@ -487,7 +487,7 @@ def review_preserved_scripts(args, source, previous, saved, retained):
     return len(owners)
 
 
-def artifact_commit(dist, plan, output, source_commit):
+def artifact_commit(dist, plan, output, source_commit, local_parent=None):
     destination = output/'site-dist'
     destination.mkdir()
     def git(*args):
@@ -498,9 +498,13 @@ def artifact_commit(dist, plan, output, source_commit):
     git('config', 'user.name', 'Site publisher')
     git('config', 'user.email', 'site-publisher@users.noreply.github.com')
     git('remote', 'add', 'origin', 'https://github.com/wlyaaaaa/wly0829.cn.git')
-    remote = net('git', *GIT_NET, '-C', destination, 'ls-remote', 'origin', 'refs/heads/site-dist', timeout=GIT_TIMEOUT)
-    if remote:
-        net('git', *GIT_NET, '-C', destination, 'fetch', '--depth=1', 'origin', 'site-dist', timeout=GIT_TIMEOUT)
+    if local_parent is None:
+        remote = net('git', *GIT_NET, '-C', destination, 'ls-remote', 'origin', 'refs/heads/site-dist', timeout=GIT_TIMEOUT)
+        if remote:
+            net('git', *GIT_NET, '-C', destination, 'fetch', '--depth=1', 'origin', 'site-dist', timeout=GIT_TIMEOUT)
+            git('checkout', '-B', 'site-dist', 'FETCH_HEAD')
+    elif (local_parent / '.git').exists():
+        git('fetch', '--depth=1', str(local_parent.resolve()), 'HEAD')
         git('checkout', '-B', 'site-dist', 'FETCH_HEAD')
     for rel in git('ls-files').splitlines():
         if rel not in {*plan['github_files'], 'release-identity.json'}:
@@ -661,8 +665,11 @@ def publish(args):
             'command': ['python', '-B', '-X', 'utf8', 'site-astro/tools/publish_site.py', '--retention-only', str(output)]}
         if args.dry_run:
             check_input_proofs(args.dist, source, previous, build, source_commit, enforce_drift=batch is None)
+            local_parent = getattr(args, 'previous_site_dist', None)
+            if local_parent and not (local_parent / '.git').exists() and (saved_root := saved.get('site_dist', {}).get('root')):
+                local_parent = Path(saved_root)
             receipt['site_dist'] = step('local_site_dist_commit', lambda:
-                    artifact_commit(args.dist, plan, output, source_commit))
+                    artifact_commit(args.dist, plan, output, source_commit, local_parent))
             receipt['status'] = 'dry_run'
             return receipt
         step('pin', lambda: retention.pin(preparation))
