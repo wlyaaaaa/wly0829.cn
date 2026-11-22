@@ -128,7 +128,18 @@
     }).join('')}</ul><p class="cl-key"><i class="is-used"></i>蓝＝占用${anyFreed ? '<i class="is-freed"></i>绿＝这轮腾出的<i class="is-free"></i>白＝原本就空' : '<i class="is-free"></i>白＝空闲'}${rows.some(x => x.v.state === 'offline' || num(x.v.free) == null && num(x.r?.free_after) == null) ? '<i class="is-none"></i>斜线＝离线或没读到' : ''}</p>`;
   }
 
-  function progress(run, viewer) {
+  // 规则中文名：先用回执里 rules[] 的 label、failures[] 的 rule_name，再用上面的对照表；都没有就不写规则名，不露英文 id（M538）
+  function ruleName(id, g, viewer) {
+    if (!id || K.isPlaceholder(id)) return id || '';
+    for (const r of g?.runs || []) {
+      const hit = (Array.isArray(r.rules) && r.rules.find(x => x?.id === id)?.label) || (Array.isArray(r.failures) && r.failures.find(x => x?.rule_id === id)?.rule_name);
+      const name = hit && K.field(hit, '清理规则名称', viewer);
+      if (name && name !== id) return name;
+    }
+    return RULE_NAMES[id] || (/^[\w.-]+$/.test(id) ? '' : id);
+  }
+
+  function progress(run, viewer, g) {
     const p = run.progress;
     if (viewer !== 'owner' && K.locked(p)) return '清理进度仅本人可见';
     const gap = K.field(run.progress_gap, '清理进度缺因', viewer);
@@ -138,7 +149,7 @@
     const entries = K.field(p?.removed_entries, '移除项数', viewer);
     const counts = [entries && (K.isPlaceholder(entries) ? entries : `移除 ${entries} 项`),
       p?.removed_logical_bytes != null && `文件大小 ${readAmount(p.removed_logical_bytes, '移除文件大小', viewer)}`].filter(Boolean).join(' · ');
-    const title = [step, RULE_NAMES[rule] || rule].filter(Boolean).join(' ');
+    const title = [step, ruleName(rule, g, viewer)].filter(Boolean).join(' ');
     return [title, counts, at(run.progress_at) && `${hm(run.progress_at)} 读到`, gap].filter(Boolean).join(' · ');
   }
 
@@ -166,7 +177,7 @@
     const nextAt = g.next ? new Date(g.next).toISOString() : '';
     const nextText = g.next ? `下次${g.estimated ? '约 ' : ' '}${U.date(nextAt) === U.date(new Date().toISOString()) || g.next - Date.now() < 18 * 3600000 ? hm(nextAt) : when(nextAt)}` : '下次';
     const nextNote = [g.running ? `正在跑 · ${hm(g.running.started_at)} 开始` : lastNote,
-      g.running && [progress(g.running, viewer), g.c.q === 'stale' && '旧读数'].filter(Boolean).join(' · '),
+      g.running && [progress(g.running, viewer, g), g.c.q === 'stale' && '旧读数'].filter(Boolean).join(' · '),
       g.estimated && `读不到自动任务的下次时间，按上次加 ${g.hours} 小时估`].filter(Boolean).map(esc).join('<br>');
     const third = `<li${g.estimated || !g.next ? ' data-tone="gray"' : ''}>${ICON.clock}<div><b>${esc(nextText)}</b>${g.next ? '' : '<span class="cl-dash">—</span>'}${nextNote ? `<span>${nextNote}</span>` : ''}</div></li>`;
     const kept = num(g.last?.skipped_unsaved_conversations);
