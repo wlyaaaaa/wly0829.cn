@@ -197,7 +197,10 @@
     const counts = [['today', '今天'], ['week', '近 7 天']].map(([key, label]) => {
       const d = stats[key];
       if (d?.q === 'warming') return `<div><h2>${label}</h2><p class="row__sub">正在准备</p></div>`;
-      const models = d?.models && (U.draw10?.modelRows(d.models) || d.models);
+      // 只因还有几条记录没确认开没开才不全的（下面单写了几条、暂未计入），已确认的对话数照实写，不写“至少”
+      const pendingOnly = d?.unconfirmed_openings > 0 && !String(d?.gap ?? '').includes('只有部分主对话有记录');
+      const sure = m => { if (!pendingOnly || !Array.isArray(m?.partial)) return m; const partial = m.partial.filter(k => k !== 'opened'); return partial.length ? { ...m, partial } : { ...m, q: 'ok', partial, gap: null }; };
+      const models = d?.models && (U.draw10?.modelRows(d.models) || d.models).map(sure);
       const firstGap = models?.[0]?.gap;
       const modelGap = typeof firstGap === 'string' && models.every(m => m.gap === firstGap) ? firstGap : '';
       const modelList = models ? models.map(m => {
@@ -206,7 +209,7 @@
         return `<p><small>${model || '型号没记下'} · ${counts}${m.gap && !modelGap ? ' · ' + gapHtml(m.gap) : ''}</small></p>`;
       }).join('') : `<p class="row__sub">${esc(U.collectionText('各型号', stats))}</p>`;
       const notes = [...new Set([d?.gap, modelGap].filter(Boolean))].map(gap => `<p><small>${gapHtml(gap)}</small></p>`).join('');
-      return `<div><h2>${label}</h2><p>${n(d?.opened, d, 'opened', '对话')} · ${n(d?.helpers, d, 'helpers', '帮手')} <small>${n(d?.manual_opened, d, 'manual_opened', '本人对话')}</small></p>${notes}${modelList}</div>`;
+      return `<div><h2>${label}</h2><p>${n(d?.opened, sure(d), 'opened', '对话')} · ${n(d?.helpers, d, 'helpers', '帮手')} <small>${n(d?.manual_opened, d, 'manual_opened', '本人对话')}</small></p>${notes}${modelList}</div>`;
     }).join('');
     U.html($('chat-counts'), counts);
     const historyQ = current?.history_q ?? (current?.q === 'warming' ? 'warming' : undefined);

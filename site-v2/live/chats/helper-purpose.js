@@ -17,4 +17,5 @@
     }
     return null;
   };
+  U.chatHelperPurpose.placeholder = placeholder;
 })();
