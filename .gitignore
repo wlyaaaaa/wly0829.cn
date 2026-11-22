@@ -52,6 +52,8 @@ site-v2/**/__pycache__/
 # Rule rendering diagnostics contain private source comparisons.
 site-v2/first-layer/rules-page/demo/self-check.json
 site-v2/first-layer/rules-page/demo/*.diff.txt
+/site-v2/first-layer/rules-page/demo/index.html
+/site-v2/first-layer/rules-page/demo/topic-*.html
 
 # New image sources are the WebP files used by the site; PNG exports stay temporary.
 site-v2/**/*.png

@@ -248,7 +248,7 @@ python -B -X utf8 tools/update.py --batch $batch result
 
 选页用 `pages` 对象，每页给稳定的英文编号、`route`、`title`、`reason`。需要转定稿的页另填 `project`、`draft_page`、`draft_dir`；只改右栏用 `details_only:true`，换图在 `images` 里按现行图编号登记采用文件。新页用 `new:true`，留待下次用 `deferred` 写原因。受影响的列表页等记在 `references`。报告额外事项放 `notes`。需推进页账的页用 `checked_sources` 记录源仓库、提交和北京时间，必要时用 `ledger_page` 对齐历史页号。
 
-`renames` 按页列改名命中，`before` 留选中旧图，`convert` 只转换名单中选定的稿和图。正式构建前按 [README](../README.md) 挂本轮已登记的 `public`、`owner` 实况回执配置，备用包导出器用这次发布对应的 PCConfig 工作树。构建改写跟踪的规则样稿时，按 [源码提交与封存说明](publish-and-scan.md#工作副本依赖与构建) 处理。对照封存成品差异，将确实连带变化的实况、规则、列表和其他页面写进 `pages` 或 `references`。改共享外壳时对同一 `dist` 用 `--pages all --out '<本轮目录>/scan'`，之后仍用本批次 `publish`。
+`renames` 按页列改名命中，`before` 留选中旧图，`convert` 只转换名单中选定的稿和图。正式构建前按 [README](../README.md) 挂本轮已登记的 `public`、`owner` 实况回执配置，备用包导出器用这次发布对应的 PCConfig 工作树。规则样稿由构建生成。对照封存成品差异，将确实连带变化的实况、规则、列表和其他页面写进 `pages` 或 `references`。改共享外壳时对同一 `dist` 用 `--pages all --out '<本轮目录>/scan'`，之后仍用本批次 `publish`。
 
 `publish` 用当前正式基线比对成品。选页之外的变化先核原因和计划再发。`result` 从逐页回读、OSS 回收回执和前后图生成底稿，`result --report-generator '<本轮实际生成者型号>'` 只生成本地草稿（`-NoOpen`）。按第 7 步补齐，主持按汇报页技能用 `-OpenPath` 正式打开同一页。重新查看批次用 `status`。
 
