@@ -31,6 +31,13 @@
     if (first) return `看帮手记录（${left > 5 ? `先看 5 条，共 ${left} 条` : `${left} 条`}） ›`;
     return left > 5 ? `再看 5 条帮手记录（还有 ${left} 条） ›` : `再看 ${left} 条帮手记录 ›`;
   }
+  // 一行放得下、也没截字的思考摘要，不摆“展开摘要”（点了也看不到更多）；没露出来的先不量
+  const fitThoughts = () => document.querySelectorAll('.chat-think:not([data-cut])').forEach(el => {
+    const preview = el.querySelector('.chat-think__preview');
+    if (preview.clientWidth && el.querySelector('.chat-think__toggle').getAttribute('aria-expanded') !== 'true')
+      el.classList.toggle('chat-think--fits', preview.scrollWidth <= preview.clientWidth);
+  });
+  document.fonts?.ready.then(fitThoughts);
   document.addEventListener('click', e => {
     const toggle = e.target.closest('.chat-think__toggle');
     if (toggle) toggle.setAttribute('aria-expanded', String(toggle.getAttribute('aria-expanded') !== 'true'));
@@ -122,7 +129,7 @@
     const steps = !locked && progress ? `<span class="chat-steps" aria-hidden="true">${plan.map(p => `<i data-status="${esc(stepState(p) || '')}"></i>`).join('')}</span>` : '';
     const thoughtFull = locked ? '' : chatCell(c.thinking, '思考摘要', c, 0, true);
     const thoughtShort = viewer === 'public' && thoughtFull ? chatCell(c.thinking, '思考摘要', c, 40, true) : thoughtFull;
-    const thought = thoughtFull ? `<div class="chat-think row__sub">` +
+    const thought = thoughtFull ? `<div class="chat-think row__sub"${thoughtShort !== thoughtFull ? ' data-cut' : ''}>` +
       `<span class="chat-think__preview">思考摘要<span class="chat-think__excerpt">：${thoughtShort}</span></span>` +
       '<button class="more chat-think__toggle" type="button" aria-expanded="false"><span class="chat-think__open">展开摘要</span><span class="chat-think__shut">收起摘要</span> <span class="more__chev" aria-hidden="true">›</span></button>' +
       `<p class="chat-think__full">${thoughtFull}</p></div>` : '';
@@ -308,6 +315,7 @@
     }
     board.layout(true);
     recentBoard.layout(true);
+    fitThoughts();
   }
   function renderRecent() {
     $('recent').hidden = !!U.offline?.() && !recentUsable && homeChats?.recent == null;
@@ -332,6 +340,7 @@
     $('recent-next').hidden = nextRecentCursor() == null; U.html($('recent-next'), '继续读 ›');
     if (recentUsable) recentRead.done();
     recentBoard.layout(true);
+    fitThoughts();
     U.land();
   }
   function missing(text, temporary = false) { U.html($('head'), U.head('AI 对话', { lamp: false })); U.html($('chat-note'), U.fieldHtml(text, { name: 'AI 对话', place: 'body', kind: viewer })); if (temporary) { $('head').querySelector('.lamp')?.setAttribute('data-tone', 'off'); L.tone($('hero'), 'off', 'off'); } if (!activeChats) U.list($('active-list'), wait(text)); }
