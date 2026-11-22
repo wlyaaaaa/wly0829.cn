@@ -3,8 +3,8 @@
 'use strict';
 const home = window.HOME, layer = home.fx;
 const garden = layer.parentElement.querySelector('.garden');
-// ?fx=模块名（逗号分开）只给调参页挑着看；不是开关：一个认得的名字都没有就照常全开。
-const filter = new URLSearchParams(location.search).get('fx')?.split(',').filter(name => name);
+// 仅调参页的嵌入预览可以挑模块。直接打开首页始终挂全部动效。
+const filter = parent === window ? null : new URLSearchParams(location.search).get('fx')?.split(',');
 const registry = [
   { name: 'waterfall', title: '瀑布', api: 'WlyWaterfall', z: 0,
     sliders: [['speed','速度',1,.05,'倍'],['drops','水滴',1,.05,'倍'],['splash','水花',1,.05,'倍']] },
