@@ -80,6 +80,11 @@ class ScanGlanceTests(unittest.TestCase):
                     if width == 390: self.assertGreater(metrics['touch'], 0)
                     page.evaluate((ROOT / 'site-astro/tools/scan_glance_dom.js').read_text('utf8'))
                     self.assertEqual(page.evaluate('(c)=>scanGlance(c).failures', config), [])
+                    page.locator('#action').evaluate("e => {e.disabled = true; e.style.pointerEvents = 'none'; e.dataset.disabledReason = 'Waiting for current state'}")
+                    self.assertEqual(page.evaluate('(c)=>scanGlance(c).failures', config), [])
+                    page.locator('#action').evaluate("e => {delete e.dataset.disabledReason}")
+                    self.assertEqual(page.evaluate('(c)=>scanGlance(c).failures.map(f=>f.message)', config), ['禁用却没有说明原因'])
+                    page.locator('#action').evaluate("e => {e.disabled = false; e.style.pointerEvents = ''}")
                     page.locator('#action').evaluate("e=>e.insertAdjacentHTML('afterend','<div style=\"position:absolute;left:1100px;top:2400px;width:200px;height:60px;background:white\"></div>')")
                     blocked = page.evaluate('(c)=>scanGlance(c).failures.filter(f=>f.category==="blocked")', config)
                     self.assertEqual([f['selector'] for f in blocked], ['#action'])
@@ -224,7 +229,9 @@ class ScanGlanceTests(unittest.TestCase):
             '<div class="cut"><span id="badText">Permanently clipped words</span></div>' \
             '<div class="outer" style="width:100px"><div class="scroller" style="width:200px"><div class="stage" style="width:400px"><span id="outerCut" style="position:absolute;left:350px">END</span></div></div></div>' \
             '<div class="outer"><div class="scroller"><div class="stage"><div class="cut"><span id="innerBad">Clipped inside scroll content</span></div><div class="vertical"><span id="verticalText">Vertically clipped</span></div></div></div></div>' \
-            '<div class="covered"><button id="blockedButton">Really blocked</button><div id="cover"></div></div>'
+            '<div class="covered"><button id="blockedButton">Really blocked</button><div id="cover"></div></div>' \
+            '<div class="task-compact"><a class="row__title" href="/task/">Task detail</a>' \
+            '<p id="taskPurpose" class="cut task-purpose" style="white-space:nowrap;text-overflow:ellipsis" title="Full purpose available in detail">Full purpose available in detail</p></div>'
         config = scan.read_json(ROOT / "site-astro/tools/scan_glance.json")
         with tempfile.TemporaryDirectory(prefix='scan-scroll-', dir=r'E:\Cache') as temp, sync_playwright() as pw:
             browser = pw.chromium.launch_persistent_context(temp, executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe', headless=True, viewport={"width":390,"height":844})
@@ -235,6 +242,7 @@ class ScanGlanceTests(unittest.TestCase):
                 clipped = {f["selector"] for f in dom["failures"] if f["category"] == "clipped"}
                 blocked = {f["selector"] for f in dom["failures"] if f["category"] == "blocked"}
                 self.assertNotIn("#panText", clipped); self.assertNotIn("#panButton", blocked)
+                self.assertNotIn("#taskPurpose", clipped)
                 self.assertTrue({"#badText", "#innerBad", "#verticalText", "#unreachable", "#outerCut"}.issubset(clipped))
                 self.assertIn("#blockedButton", blocked)
                 page.eval_on_selector('#scroll', "e => {const a=e.getBoundingClientRect(),r=document.querySelector('#panText').getBoundingClientRect();e.scrollLeft+=(r.left+r.right-a.left-a.right)/2}")
@@ -403,6 +411,29 @@ class ScanGlanceTests(unittest.TestCase):
             subprocess.run([sys.executable, "-B", "-X", "utf8", str(ROOT / "site-astro/tools/link_check.py"),
                 str(result), "--dist", str(dist), "--skip", ""], check=True, capture_output=True)
             self.assertEqual([item["href"] for item in json.loads(result.read_text("utf8"))["items"]], ["/p/卡.html#卡-09"])
+
+    def test_links_check_anchors_created_by_live_page_scripts(self):
+        with tempfile.TemporaryDirectory() as temp:
+            dist = Path(temp); result = dist / "result.json"
+            fixtures = {
+                "chats": "board.card('done', {ids: {el: 'recent'}});",
+                "items": "for (const kind of ['closed', 'reports']) {\n"
+                         "  const c = board.card(kind, {ids: {el: kind}});\n}",
+                "project": "function block(key, kind) { el.id = key; }\n"
+                           "if (location.hash === '#artifacts') block('artifacts', 'rows');\n"
+                           "if (location.hash === '#missing') showNotice();",
+            }
+            for route, script in fixtures.items():
+                directory = dist / "live" / route; directory.mkdir(parents=True)
+                (directory / "index.html").write_text(
+                    f'<script defer src="/releases/current/live/{route}/page.js"></script>', encoding="utf-8")
+                (directory / "page.js").write_text(script, encoding="utf-8")
+            links = ("/live/chats/#recent", "/live/items/#closed", "/live/items/#reports",
+                     "/live/project/?id=demo#artifacts", "/live/project/?id=demo#missing")
+            (dist / "index.html").write_text("".join(f'<a href="{link}">read</a>' for link in links), encoding="utf-8")
+            subprocess.run([sys.executable, "-B", "-X", "utf8", str(ROOT / "site-astro/tools/link_check.py"),
+                str(result), "--dist", str(dist), "--skip", ""], check=True, capture_output=True)
+            self.assertEqual([item["href"] for item in json.loads(result.read_text("utf8"))["items"]], [links[-1]])
 
 class ScanProxyTests(unittest.TestCase):
     def setUp(self):

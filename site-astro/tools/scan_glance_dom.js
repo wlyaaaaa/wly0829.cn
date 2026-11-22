@@ -46,7 +46,10 @@ window.scanGlance = config => {
         scrollLeft = Math.max(scrollLeft, left); scrollRight = Math.min(scrollRight, right);
       }
       // 标签有意省略，所属按钮仍提供完整名称；只豁免横向省略，不放过纵向裁字。
-      const ellipsis = s.textOverflow === 'ellipsis' && norm(a.closest('button[aria-label]')?.getAttribute('aria-label')).includes(r.text);
+      const buttonLabel = norm(a.closest('button[aria-label]')?.getAttribute('aria-label'));
+      const taskRow = a.matches('.task-purpose[title]') && a.closest('.task-compact');
+      const taskTooltip = taskRow && taskRow.querySelector('a.row__title[href]') ? norm(a.title) : '';
+      const ellipsis = s.textOverflow === 'ellipsis' && (buttonLabel.includes(r.text) || taskTooltip.includes(r.text));
       const withinScroll = scrollLeft >= left - t.clip_tolerance_px && scrollRight <= right + t.clip_tolerance_px;
       const bounded = a.matches(q.clip_bounds), x = !ellipsis && (bounded || /^(hidden|clip)$/u.test(s.overflowX)), y = bounded || /^(hidden|clip)$/u.test(s.overflowY), out = z => { const l = withinScroll ? Math.max(z.left, scrollLeft) : z.left, r = withinScroll ? Math.min(z.right, scrollRight) : z.right; return (x && r > l && (l < left - t.clip_tolerance_px || r > right + t.clip_tolerance_px)) || (y && (z.top < top - t.clip_tolerance_px || z.bottom > bottom + t.clip_tolerance_px)); }, escaped = r.rs.some(out) && glyphs(r).some(out);
       const scrollExcess=(!ellipsis&&/^(hidden|clip)$/u.test(s.overflowX)&&a.scrollWidth>a.clientWidth+t.clip_tolerance_px)||(/^(hidden|clip)$/u.test(s.overflowY)&&a.scrollHeight>a.clientHeight+t.clip_tolerance_px), scaled=s.transform!=='none'||[...a.children].some(e=>css(e).transform!=='none');
@@ -119,7 +122,14 @@ window.scanGlance = config => {
   for(const e of body.querySelectorAll('a,button,[role="button"]')) if(visible(e)) {const r=controlRect(e);if(r)probes.push({e,r,kind:'control',x:(r.left+r.right)/2+scrollX,y:(r.top+r.bottom)/2+scrollY});}
   probes.sort((a,b)=>a.y-b.y); let bucket=-1;
   for(const p of probes) { const next=Math.floor(p.y/(innerHeight*t.probe_band_fraction)); if(next!==bucket){bucket=next;scrollTo({top:Math.max(0,next*innerHeight*t.probe_band_fraction-innerHeight*t.probe_margin_fraction),left:origin.x,behavior:'instant'});} const current=p.kind==='control'?controlRect(p.e):null;if(p.kind==='control'&&!current)continue;const x=current?(current.left+current.right)/2:p.x-scrollX,y=current?(current.top+current.bottom)/2:p.y-scrollY; if(x<0 || x>=innerWidth || y<0 || y>=innerHeight) continue; const hit=document.elementFromPoint(x,y);
-    if(p.kind==='control') {const e=p.e, disabled=e.disabled || e.getAttribute('aria-disabled')==='true', reason=norm(e.dataset.disabledReason || e.getAttribute('aria-description') || (e.getAttribute('aria-describedby') || '').split(/\s+/u).map(id=>document.getElementById(id)?.textContent).join(' ')), written=reason || new RegExp(q.disabled_reason_pattern,'u').test(norm(e.title+' '+e.textContent)); if(css(e).pointerEvents==='none' || !hit || (hit!==e && !e.contains(hit)) || (disabled && !written)) blocked.push(pack(e,e.textContent,disabled&&!written?'禁用却没有说明原因':css(e).pointerEvents==='none'?'pointer-events 为 none':'中心点被其他元素挡住',{blocker:hit?sel(hit):null}, {left:p.r.left,top:p.r.top+origin.y-scrollY,width:p.r.width,height:p.r.height})); }
+    if (p.kind === 'control') {
+      const e = p.e, disabled = e.disabled || e.getAttribute('aria-disabled') === 'true';
+      const reason = norm(e.dataset.disabledReason || e.getAttribute('aria-description') || (e.getAttribute('aria-describedby') || '').split(/\s+/u).map(id => document.getElementById(id)?.textContent).join(' '));
+      const written = reason || new RegExp(q.disabled_reason_pattern, 'u').test(norm(e.title + ' ' + e.textContent));
+      if (disabled && written) continue;
+      const message = disabled ? '禁用却没有说明原因' : css(e).pointerEvents === 'none' ? 'pointer-events 为 none' : !hit || (hit !== e && !e.contains(hit)) ? '中心点被其他元素挡住' : null;
+      if (message) blocked.push(pack(e, e.textContent, message, {blocker:hit?sel(hit):null}, {left:p.r.left,top:p.r.top+origin.y-scrollY,width:p.r.width,height:p.r.height}));
+    }
     else { const disabledPaint=media.filter(r=>{if(css(r.e).pointerEvents!=='none'||allow(r.e)||!r.e.matches('img,canvas,video,'+q.cards))return false;const z=r.e.getBoundingClientRect();return x>=z.left&&x<=z.right&&y>=z.top&&y<=z.bottom;}).map(r=>[r.e,r.e.getAttribute('style')]); try { for(const [e] of disabledPaint)e.style.setProperty('pointer-events','auto','important'); const cover=document.elementFromPoint(x,y)?.closest('img,canvas,video,'+q.cards);
       if(!cover || cover.contains(p.e) || p.e.contains(cover) || allow(cover) || state(cover).alpha<t.opaque_alpha) continue; const s=css(cover), opaque=/^(IMG|CANVAS|VIDEO)$/u.test(cover.tagName) || (s.backgroundImage!=='none') || /rgb\(/u.test(s.backgroundColor) || /rgba\([^,]+,[^,]+,[^,]+,\s*1\)/u.test(s.backgroundColor), key=sel(p.e)+'|'+sel(cover); if(opaque&&!coveredSeen.has(key)){coveredSeen.add(key);overlaps.push(pack(p.e,p.text,'文字中心被不透明图片或卡片盖住',{otherSelector:sel(cover)},{left:p.r.left,top:p.r.top+origin.y-scrollY,width:p.r.width,height:p.r.height}));}
     } finally { for(const [e,style] of disabledPaint)style===null?e.removeAttribute('style'):e.setAttribute('style',style); } } }

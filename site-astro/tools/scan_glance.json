@@ -7,7 +7,7 @@
     "duplicate_image_width": 250, "duplicate_image_height": 150, "probe_band_fraction": 0.5, "probe_margin_fraction": 0.25
   },
   "selectors": {
-    "overlap_allow": ".ts-art", "cards": ".card,.ts-card,.table-card,.sequence-card",
+    "overlap_allow": ".ts-art,.stage > .world > img.shell", "cards": ".card,.ts-card,.table-card,.sequence-card",
     "imbalance_rows": ".row,.steps,.sequence-row,.sides,.ct-quote,.ct-source_text_card,.ct-points_card,.ct-list-cards,.ct-dialogue-items,.feature-group-grid,.c-hub-entry-cards",
     "clip_bounds": ".ts-o,.card,.ts-card,.c-slot-live-frame", "image_frames": "figure:has(img,svg,canvas,video),.ill:has(img,svg,canvas,video),.slot-shot-frame,.image-frame,[data-image-frame]",
     "loading": ".image-loading-wrap,.image-placeholder,.skeleton,[aria-busy=\"true\"]",

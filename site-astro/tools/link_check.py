@@ -18,10 +18,38 @@ for root, _, files in os.walk(a.dist):
 ids_cache = {}
 
 
+def live_ids_of(path, source):
+    rel = os.path.relpath(path, a.dist).replace("\\", "/")
+    if not rel.startswith("live/"):
+        return set()
+    script_rel = rel.rsplit("/", 1)[0] + "/page.js"
+    scripts = re.findall(r'<script\b[^>]*\bsrc\s*=\s*(["\x27])(.*?)\1', source, re.I)
+    if not any(urllib.parse.urlsplit(url).path.lstrip("/") == script_rel
+               or urllib.parse.urlsplit(url).path.endswith("/" + script_rel) for _, url in scripts):
+        return set()
+    script = os.path.join(a.dist, *script_rel.split("/"))
+    if not os.path.isfile(script):
+        return set()
+    with open(script, encoding="utf-8") as handle:
+        code = handle.read()
+    literal = r'["\x27]([\w-]+)["\x27]'
+    # LiveBoard uses ids.el for the card's DOM id, including cards created in a loop.
+    ids = set(re.findall(r'\bids:\s*\{\s*el:\s*' + literal, code))
+    for _, values in re.findall(r'\bfor\s*\(const (\w+) of (\[[^\]\n]+\])\)\s*\{\s*'
+                                r'const \w+ = [^\n]*?\.card\(\1, [^\n]*?ids:\s*\{\s*el:\s*\1\b', code):
+        ids.update(re.findall(literal, values))
+    # Project sections created on demand by a deep link also own their block key as id.
+    if "function block(key, kind)" in code and "el.id = key;" in code:
+        ids.update(set(re.findall(r'\bblock\(\s*' + literal + r'\s*,', code)) &
+                   set(re.findall(r'\blocation\.hash\s*===\s*["\x27]#([\w-]+)["\x27]', code)))
+    return ids
+
+
 def ids_of(path):
     if path not in ids_cache:
         s = open(path, encoding="utf-8", errors="replace").read()
         ids = set(H.unescape(x[1]) for x in re.findall(r'\bid\s*=\s*([\"\x27])(.*?)\1', s))
+        ids.update(live_ids_of(path, s))
         # 项目页的卡片由同目录 content.js 的 window.PAGE_DATA 在运行时画出（公用/page.js：卡片 id、展开后的 <id>-detail-<i>），
         # 静态 HTML 里没有这些 id，按数据补上。
         page = re.search(r'<body\b[^>]*\sdata-page\s*=\s*([\"\x27])(.*?)\1', s)
