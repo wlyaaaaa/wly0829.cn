@@ -297,21 +297,30 @@
     return panel(`要${own()}出面`, `<div class="aw-owner__main"><h3>${lamp(row, false)}${link(target, rowTitle(row))}</h3><p>${field(row.state_text)}</p>${more}</div>${actions}`,
       { id: 'owner-strip', cls: 'aw-owner', symbol: 'alert', extra: `<span class="aw-head-note">${rows.length} 件</span>` });
   }
-  function typeCard(t) {
+  // 后台撤掉的类：明写 retired，或新后台总包里八类和自动修理的小类都没有它（“AI 约好的事”换成了同名的新类别，不算撤）。
+  // 撤了的卡上不画开关，写“已撤”，后台给了原因照写；旧后台总包没有 categories，照旧。
+  function retiredType(data, t) {
+    if (t.retired === true) return true;
+    const kinds = data?.categories;
+    if (!Array.isArray(kinds) || readonly(t.id)) return false;
+    return !kinds.some(c => c.id === t.id || c.title === t.title || list(c.subcategories).some(s => s.id === t.id));
+  }
+  function typeCard(t, retired = false) {
     const [description] = descriptions[t.id] || [''];
     const readOnly = readonly(t.id);
     const c = t.counts || {}, config = configFor(t), ta = when(config.until_at);
     const items = [[c.running, '在修'], [c.queue, '准备派'], [c.followup, '等复查']].filter(([n]) => n > 0);
-    const info = !readOnly && config.mode === 'paused' ? (ta ? `暂停到 ${ta}` : '暂停中')
+    const info = retired ? ['已撤', U.fieldText(t.reason, audience)].filter(Boolean).join(' · ')
+      : !readOnly && config.mode === 'paused' ? (ta ? `暂停到 ${ta}` : '暂停中')
       : !readOnly && config.mode === 'off' ? ['已关', c.running > 0 && `${c.running} 件正在收尾`].filter(Boolean).join(' · ')
         : items.length ? items.map(([n, label]) => `${n} 件${label}`).join(' · ')
           : c.occupied > 0 ? `${c.occupied} 件已占位`
             : list(t.sources).some(s => s.at) ? '正常 · 没有活' : '这里还看不到';
-    const model = readOnly ? readonlyNote : modelText(t) ? `<p class="aw-type__model">${modelText(t)}</p>` : '';
+    const model = readOnly ? readonlyNote : retired ? '' : modelText(t) ? `<p class="aw-type__model">${modelText(t)}</p>` : '';
     const art = ART[t.id] ? `<img class="aw-type__art" src="${esc(ART[t.id])}" alt="" width="76" height="76" loading="lazy">` : icon('gear');
-    return `<article class="aw-type${config.mode === 'off' || config.mode === 'paused' ? ' is-off' : ''}" data-type-id="${esc(t.id)}">${art}<div class="aw-type__body">
+    return `<article class="aw-type${retired || config.mode === 'off' || config.mode === 'paused' ? ' is-off' : ''}" data-type-id="${esc(t.id)}">${art}<div class="aw-type__body">
       <h3>${link(route(t.href) || typeHref(t.id), field(t.title, '类型'), 'aw-type__link')}</h3>
-      <p class="aw-type__covers">${esc(description)}</p><p class="aw-type__state${info === '这里还看不到' ? ' is-missing' : ''}">${['yellow', 'red'].includes(t.level) ? lamp(t) : ''}${esc(info)}</p>${model}${message(t.id)}</div>${readOnly ? '' : toggle(t, true)}</article>`;
+      <p class="aw-type__covers">${esc(description)}</p><p class="aw-type__state${info === '这里还看不到' ? ' is-missing' : ''}">${['yellow', 'red'].includes(t.level) ? lamp(t) : ''}${esc(info)}</p>${model}${message(t.id)}</div>${readOnly || retired ? '' : toggle(t, true)}</article>`;
   }
   function trend(data) {
     const weeks = list(data.weeks).filter(week => Number.isInteger(week.open) && week.open >= 0).slice(-4);
@@ -357,7 +366,7 @@
     const intro = panel('AI 修毛病', guide + tiles, { id: 'repair', symbol: 'wrench', cls: 'aw-repair-intro' });
     const types = list(data.types);
     return `<div class="aw-top aw-top--repair">${intro}${slots(data)}</div>` + recent
-      + panel(`各类自动任务 · ${types.length} 类`, `<div class="aw-types">${types.map(typeCard).join('')}</div>`,
+      + panel(`各类自动任务 · ${types.length} 类`, `<div class="aw-types">${types.map(t => typeCard(t, retiredType(data, t))).join('')}</div>`,
         { id: 'types', symbol: 'stack', extra: `<span class="aw-head-note">${audience === 'owner' ? '配对设备可以开关和暂停' : '开关和暂停只有本人配对的设备能改'}，档位跟模型清单走</span>` });
   }
   function overview(data) {
@@ -532,6 +541,8 @@
   }
   const feedbackFor = (id, reply) => {
     if (reply.status === 'saved') feedback = { id, text: '已保存' };
+    // 后台回“已撤”时照写它给的说明，不说“没存上”
+    else if (reply.status === 'retired') feedback = { id, text: reply.message || '已撤' };
     else if (reply.error !== 'cockpit_owner_required') feedback = { id, text: reply.status === 'unknown' ? '没确认是否保存，请刷新后查看' : '没存上，再试一次' };
   };
   function applySaved(id, reply) {
