@@ -72,6 +72,7 @@
 #changes .pj-item--change .pj-at { font-size: 13px; line-height: 23px; color: #6b6a64; }
 #changes .pj-list-group .list { border-bottom: 0; }
 #active .pj-card .pj-fig__v.is-long .pj-stat-piece { display: inline; white-space: normal; }
+#active .pj-card .pj-fig__v.is-long.pj-fig__reading-note { display: block; font-size: 14px; font-weight: 400; line-height: 21px; }
 /* 窗口不到 1280 宽时，整句读数不再两行截断、字小一号；一句短话放不下也换行，不切掉（M248）。1440 宽和手机（按 1440 等比缩小）不受影响 */
 @media (max-width: 1279px) { #active .pj-card .pj-fig__v.is-long { display: block; -webkit-line-clamp: unset; font-size: 17px; line-height: 25px; } #active .pj-card .pj-fig__v:not(.is-long) { white-space: normal; overflow-wrap: anywhere; } #active .pj-card .pj-fig__v:not(.is-long) .pj-stat-piece { display: inline; white-space: normal; } }
 /* 下面几块和画册一套：大标题加绿条；本地还没推的改动排成小卡，有没推提交的放大排前；最近成品按项目一张卡；变化卡片按内容多少自然排两栏。 */

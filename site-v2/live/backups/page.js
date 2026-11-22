@@ -9,6 +9,8 @@
   const route = href => { const u = new URL(href, location.href); if (p.has('fixture')) u.searchParams.set('fixture', p.get('fixture')); return u.pathname + u.search + u.hash; };
   const empty = text => [{ key: 'empty', cls: 'row row--flat row--empty', html: `<span></span><p class="row__sub">${U.fieldHtml(text, { name: '备份', place: 'body', kind: viewer })}</p>` }];
   const names = { local: '本机', g: 'G 盘', h: 'H 盘', drive: 'Drive', photos: '照片云' };
+  const protection = s => s.protection ?? D.protection(s.g?.retired === true ? { ...s, g: null } : s);
+  const hasBackupProblem = state => ['gap', 'local_copy_no_cloud', 'stale'].includes(state);
   const attention = s => !['complete', 'waiting'].includes(D.protection(s));
   let data = null, headline = '', lit = false, viewer = 'public';
   const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '备份' });
@@ -49,7 +51,9 @@
     const where = destinations.length ? destinations.map(k => names[k]).join('、') : offline() ? '' : U.collectionText();
     const restore = ps.length ? `${ps.length} 个恢复点 · 最近 ${stamp(ps.map(pt => pt.at).filter(Boolean).sort().at(-1))}` : '';
     const sub = [bits([where ? `去处 ${where}` : '', latest ? `${latest === 'local' ? '本机内容日期' : '已读副本内容日期'} ${stamp(s[latest].content_at)}` : '', restore]), state.note, nameNote !== name ? nameNote : ''].filter(Boolean).join(' · ');
-    return { key: s.id, cls: `row row--flat${attention(s) ? ` is-attention attention-${s.protection}` : ''}`, html: `${state.tone === 'green' ? '' : state.lamp}<div class="row__text"><p class="row__main"><a class="row__title" href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}`))}">${name} <span class="more__chev">›</span></a><span class="row__meta">${esc(status)}</span></p>${sub ? `<p class="row__sub">${sub}</p>` : ''}</div><div class="row__acts">${actionHtml(s)}</div>` };
+    const category = protection(s), marks = new Set(attention(s) ? ['is-attention', `attention-${category}`] : []);
+    if (hasBackupProblem(category)) marks.add('attention-gap');
+    return { key: s.id, cls: ['row row--flat', ...marks].join(' '), html: `${state.tone === 'green' ? '' : state.lamp}<div class="row__text"><p class="row__main"><a class="row__title" href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}`))}">${name} <span class="more__chev">›</span></a><span class="row__meta">${esc(status)}</span></p>${sub ? `<p class="row__sub">${sub}</p>` : ''}</div><div class="row__acts">${actionHtml(s)}</div>` };
   }
   function mergedTable(d, confirmedH, emptySets) {
     const field = (value, name) => U.fieldHtml(value, { name, place: 'body', kind: viewer });
@@ -80,8 +84,12 @@
     };
     const localPaths = s => {
       const paths = s.local_paths?.length ? s.local_paths : s.local?.location?.paths;
-      if (!paths?.length) return field(reason(s.missing?.local_paths || s.local?.missing?.location), '本地位置');
-      return `${field(paths[0].path, '本地位置')}${paths.length > 1 ? `<details><summary>另有 ${paths.length - 1} 个</summary>${paths.slice(1).map(p => field(p.path, '本地位置')).join('<br>')}</details>` : ''}`;
+      if (!paths?.length) return field(s.local_location_note || reason(s.missing?.local_paths || s.local?.missing?.location), '本地位置');
+      const path = value => {
+        const html = field(value, '本地位置'), plain = U.fieldText(value, viewer);
+        return html === esc(plain) && /^[a-z]:[\\/]/i.test(plain) ? html.replace(/([\\/])(?=[^\\/])/g, '$1<wbr>') : html;
+      };
+      return `${path(paths[0].path)}${paths.length > 1 ? `<details><summary>另有 ${paths.length - 1} 个</summary>${paths.slice(1).map(p => path(p.path)).join('<br>')}</details>` : ''}`;
     };
     const copyCell = (s, key) => {
       const copy = s[key], retired = key === 'g' && copy?.retired === true;
@@ -154,7 +162,7 @@
   function summary(d) {
     const sets = d.sets || [], supplied = d.summary || {};
     const fullList = Array.isArray(d.sets) && (supplied.sets == null || supplied.sets === sets.length);
-    const buckets = fullList ? sets.map(s => s.protection ?? D.protection(s.g?.retired === true ? { ...s, g: null } : s)) : null;
+    const buckets = fullList ? sets.map(protection) : null;
     const fromRows = (...states) => buckets?.filter(state => states.includes(state)).length;
     const value = (key, fallback) => Object.hasOwn(supplied, key) ? supplied[key] : fallback;
     const total = value('sets', fullList ? sets.length : null), unknown = value('unknown', fromRows('unknown'));

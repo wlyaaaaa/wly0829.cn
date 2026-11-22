@@ -467,9 +467,11 @@
         const freshEnd = !window.LiveUI?.offline?.() && Math.abs(Date.now() / 1000 - data.t1) < 90;
         const endText = freshEnd && on.some((l) => !l.series.stale && l.series.state !== 'stale' && l.series.points.at(-1)?.[1] != null && Math.abs(l.series.points.at(-1)[0] - data.t1) < 60) ? '现在' : when(data.t1, data);
         const endWidth = [...endText].reduce((n, c) => n + (/[一-鿿]/.test(c) ? 12 : 7), 0) + 14;
+        const startText = opts.showStartDate && data.t1 - data.t0 > 36 * 3600 ? md(new Date(data.t0 * 1000)) : '';
+        const startWidth = startText ? startText.length * 7 + 10 : 6;
         let ticks = timeTicks(data.t0, data.t1).filter(([t, text]) => {
           const xx = x(t), half = [...text].reduce((n, c) => n + (/[一-鿿]/.test(c) ? 12 : 7), 0) / 2;
-          return xx - half >= pad.left + 6 && xx + half <= W - (kind === 'hero' ? endWidth : 6);
+          return xx - half >= pad.left + startWidth && xx + half <= W - (kind === 'hero' ? endWidth : 6);
         });
         if (kind === 'hero' && ticks.length > 4) ticks = ticks.filter((_, i) => i % Math.ceil(ticks.length / 4) === 0);
         for (const [t, text] of ticks) {
@@ -477,6 +479,7 @@
           grid.append(el('line', { x1: xx, x2: xx, y1: pad.top - 4, y2: H - pad.bottom, class: 'is-time' }));
           labels.push(`<span class="chart__x" style="left:${xx}px">${esc(text)}</span>`);
         }
+        if (startText) labels.push(`<span class="chart__x is-now" style="left:${pad.left}px">${esc(startText)}</span>`);
         if (kind === 'hero') labels.push(`<span class="chart__x is-now" style="right:0">${esc(endText)}</span>`);
       }
       axis.innerHTML = labels.join('');
