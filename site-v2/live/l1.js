@@ -877,7 +877,9 @@
       growthReading = (growthTop.bytes > 0 ? `${fileGrowth(growthTop.name)} · 多占 ${U.nowrap(U.gb(growthTop.bytes))}` : '已测类别都没有增加')
         + (until ? `<small>${esc(until)}</small>` : '');
     }
-    const trafficText = traffic?.upload != null && traffic?.download != null ? `今天 ${quantity({ value: traffic.upload + traffic.download, q: isLower(traffic, 'upload') || isLower(traffic, 'download') ? 'partial' : 'ok' }, 'value', trafficBytes)}` : traffic?.upload != null || traffic?.download != null ? join([`上传 ${quantity(traffic, 'upload', trafficBytes)}`, `下载 ${quantity(traffic, 'download', trafficBytes)}`]) : '';
+    // 读数不是今天的（离线旧页过了半夜）写日期，不叫“今天”（M062）
+    const trafficAt = traffic?.from || traffic?.to, trafficDay = timed(trafficAt) && day(trafficAt) !== day(!lastState?.offline && lastState?.now || Date.now()) ? U.date(trafficAt) : '今天';
+    const trafficText = traffic?.upload != null && traffic?.download != null ? `${trafficDay} ${quantity({ value: traffic.upload + traffic.download, q: isLower(traffic, 'upload') || isLower(traffic, 'download') ? 'partial' : 'ok' }, 'value', trafficBytes)}` : traffic?.upload != null || traffic?.download != null ? join([`上传 ${quantity(traffic, 'upload', trafficBytes)}`, `下载 ${quantity(traffic, 'download', trafficBytes)}`]) : '';
     const diskFree = m['disk-free'], diskTime = sampleTime(diskFree)?.text;
     const trafficTime = traffic?.to && `${offline || oldReading(traffic) ? '上次截至' : '截至'} ${recordStamp(traffic.to)}`;
     const rows = [
@@ -1213,10 +1215,11 @@
     const backupRows = [...backups.items || []].sort((a, b) => Number(problem(b)) - Number(problem(a))).map(it => shortRow(it, [protection[it.protection], it.text], `/live/backup/?id=${encodeURIComponent(it.id)}`, it, '', true));
     paintList(parts.backups.main, backupRows, { animate: false });
     const points = (backups.restore || []).flatMap((set, i) => (set.points || []).map(p => ({ ...p, set: set.set ?? set.id ?? i, setName: set.name, scope: p.scope || (set.kind === 'system' ? '系统镜像' : '文件恢复点') }))).sort((a, b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0));
-    const latest = new Map(), remaining = [];
-    for (const p of points) if (latest.has(p.set)) remaining.push(p); else latest.set(p.set, p);
+    // 每类只列最新的一个恢复点，同一类较早的在备份页里看（M261）
+    const latest = new Map();
+    for (const p of points) if (!latest.has(p.set)) latest.set(p.set, p);
     const restored = points.some(p => p.restored_at), neverRestored = points.length && points.every(p => p.history_from && !p.restored_at);
-    const restoreRows = [...latest.values(), ...remaining].map(p => {
+    const restoreRows = [...latest.values()].map(p => {
       // 后台给了这类资料的名字就用名字（和备份页、详情同一个叫法），范围另写一行
       const named = p.setName && U.fieldText(p.setName, viewer) !== U.fieldText(p.scope, viewer);
       const label = U.fieldHtml(p.setName || p.scope, { name: '恢复点', place: 'label', kind: viewer }), body = named ? `范围：${U.fieldHtml(p.scope, { kind: viewer })}` : U.fieldHtml(p.scope, { kind: viewer });

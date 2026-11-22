@@ -72,7 +72,9 @@
 .pj-heat-cell:hover, .pj-heat-cell:focus-visible { outline: 2px solid #3b8f79; outline-offset: 1px; }
 .pj-heat-cell.is-picked { position: relative; z-index: 1; scale: 1.5; outline: 0; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1d1d1b, 0 3px 10px rgb(0 0 0 / .25); }
 .pj-heat-name.is-picked { color: #00813f; font-weight: 700; }
-.pj-heat-read.is-picked { color: #00813f; font-weight: 700; }
+.pj-heat { position: relative; }
+.pj-heat-tip { position: absolute; z-index: 2; translate: 0 -50%; padding: 3px 9px; border-radius: 7px; background: #1d1d1b; color: #fff; font-size: 12px; line-height: 18px; white-space: nowrap; pointer-events: none; box-shadow: 0 3px 10px rgb(0 0 0 / .22); }
+.pj-heat-tip[data-picked] { background: #00813f; font-weight: 700; }
 .pj-viz { min-width: 0; }
 .pj-viz .vz-bars__plot { height: 170px; }
 .pj-viz > div + div { margin-top: 18px; }

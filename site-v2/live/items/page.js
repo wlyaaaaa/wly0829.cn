@@ -39,8 +39,8 @@
   L.add($('hero'));
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   document.querySelectorAll('a[href^="/live/"]').forEach(a => a.href = route(a.getAttribute('href')));
+  // “近 7 天下去的”和别的组在同一块两栏里，接在短的那一栏下面（M504）
   const board = window.LiveBoard.create($('groups'), { columns: [], cols: 2 });
-  const historyBoard = window.LiveBoard.create($('closed-board'), { columns: [], cols: 1 });
   document.querySelector('.lbp-tools__end').insertAdjacentHTML('afterbegin', '<button id="open-next" class="more" type="button" hidden></button>');
   const openMore = $('open-next'); openMore.addEventListener('click', () => readOpen());
   const cards = new Map(), collections = new Map(), initialReads = new Set(); let query = '', balanceKey = '';
@@ -69,7 +69,7 @@
   const labels = { ...KIND, reports: '等你答的汇报', closed: '近 7 天下去的' };
   const hints = { choose: '需要你选择、确认或提供结论的事项。', do: '需要你确认、操作或提供信息的事项。', later: '放着，到了该办的时候再提醒。', know: '只需了解的进展与通知。', closed: '已经从等你的清单下去的事项。', reports: '还有问题等你答的汇报。' };
   for (const kind of ['do', 'choose', 'later', 'know', 'reports', 'closed']) {
-    const c = (kind === 'closed' ? historyBoard : board).card(kind, { icon: ({ do: 'sparkle', choose: 'chat', closed: 'check', reports: 'chat' })[kind] || 'clock', art: kind, tint: ({do:'peach',choose:'lilac',later:'cyan',know:'blue',reports:'pink',closed:'gold'})[kind], ids: { el: kind, main: kind+'-list', rest: kind+'-rest', more: kind+'-more', box: kind+'-box', next: kind === 'closed' ? 'closed-next' : kind+'-next' } });
+    const c = board.card(kind, { icon: ({ do: 'sparkle', choose: 'chat', closed: 'check', reports: 'chat' })[kind] || 'clock', art: kind, tint: ({do:'peach',choose:'lilac',later:'cyan',know:'blue',reports:'pink',closed:'gold'})[kind], ids: { el: kind, main: kind+'-list', rest: kind+'-rest', more: kind+'-more', box: kind+'-box', next: kind === 'closed' ? 'closed-next' : kind+'-next' } });
     c.title.dataset.keep = ''; c.title.textContent = labels[kind]; c.sub.textContent = hints[kind]; cards.set(kind, c);
     const privateFoot = document.createElement('p'); privateFoot.id = kind + '-private'; privateFoot.className = 'items-private'; privateFoot.hidden = true; $(kind + '-more').after(privateFoot);
     $('kind-pick').insertAdjacentHTML('beforeend', `<option value="${kind}">${labels[kind]}</option>`);
@@ -78,8 +78,8 @@
   closedCard.more.setAttribute('aria-controls', 'closed-box');
   closedCard.more.after(closedCard.next);
   function balanceBoard(force = false) {
-    const shown = [...cards].filter(([kind,c]) => kind !== 'closed' && !c.el.hidden), picked = $('kind-pick').value;
-    const key = shown.map(([kind]) => kind).join() + picked + query;
+    const shown = [...cards].filter(([kind,c]) => kind !== 'closed' && !c.el.hidden), picked = $('kind-pick').value, closed = cards.get('closed').el;
+    const key = shown.map(([kind]) => kind).join() + picked + query + closed.hidden;
     if (!force && key === balanceKey) return; balanceKey = key;
     const heights = shown.map(([,c]) => c.el.getBoundingClientRect().height + 22); let best = 1, delta = Infinity;
     for (let mask = 1; mask < (1 << shown.length) - 1; mask++) {
@@ -88,6 +88,10 @@
       if (diff < delta) { delta = diff; best = mask; }
     }
     shown.forEach(([,c],i) => { c.el.dataset.itemsCol = ''; c.el.style.setProperty('--items-column', picked ? '1 / -1' : best & (1 << i) ? '1' : '2'); });
+    // “近 7 天下去的”放进短的那一栏，接在那一栏最后一组下面；只剩它一张时占整宽
+    const left = heights.reduce((sum, h, i) => sum + (best & (1 << i) ? h : 0), 0), wide = !!picked || !shown.length;
+    closed.dataset.itemsCol = ''; closed.toggleAttribute('data-wide', wide);
+    closed.style.setProperty('--items-column', wide ? '1 / -1' : left * 2 <= heights.reduce((sum, h) => sum + h, 0) ? '1' : '2');
     board.layout();
     if (!picked) requestAnimationFrame(() => shown.sort(([,a],[,b]) => a.el.offsetTop - b.el.offsetTop || a.el.offsetLeft - b.el.offsetLeft).forEach(([kind]) => { const stat = $('stats').querySelector(`[data-kind="${kind}"]`); if (stat) $('stats').append(stat); }));
   }
@@ -101,8 +105,7 @@
         (kind === 'reports' && reportCount === 0) || !!picked && picked !== kind || !!status && (status === 'closed' ? kind !== 'closed' : kind === 'closed');
     }
     redrawClosed();
-    board.only(picked && picked !== 'closed' ? picked : null); historyBoard.only(null);
-    $('closed-board').hidden = cards.get('closed').el.hidden;
+    board.only(picked && picked !== 'closed' && status !== 'closed' ? picked : null);
     $('board-empty').hidden = [...cards].some(([, c]) => !c.el.hidden); showOpenMore(); balanceBoard();
   }
   $('kind-pick').addEventListener('change', filterBoard); $('state-pick').addEventListener('change', filterBoard);

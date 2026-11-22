@@ -305,8 +305,7 @@ function renderScreen(data, meta, pending = false, now) {
   // 本人的设备上一直写“等你”：这一回没读到是谁在看（实况脚本没取到），照这台设备上一回读到的算。
   let owner = meta?.viewer?.kind === 'owner';
   try {
-    if (sessionStorage.getItem('wly-live-view') === 'public') owner = false;
-    else if (meta?.viewer?.kind) { if (meta.source !== 'fixture') localStorage.setItem('wly-home-screen-viewer', meta.viewer.kind); }
+    if (meta?.viewer?.kind) { if (meta.source !== 'fixture') localStorage.setItem('wly-home-screen-viewer', meta.viewer.kind); }
     else owner = localStorage.getItem('wly-home-screen-viewer') === 'owner';
   } catch { /* 浏览器不让存：照这一回读到的算 */ }
   // 同一份访问权限下，某格暂时少了读数时沿用手上的数字。读数被撤回时随实况清空。

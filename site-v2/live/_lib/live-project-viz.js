@@ -32,27 +32,34 @@
     const name = r => { const label = U.fieldHtml?.(r.name, { name: '项目', place: 'label', kind: viewer }) ?? esc(r.name), moved = label !== esc(r.name), note = moved ? U.fieldHtml(r.name, { name: '项目', kind: viewer, marker: true }) : U.visibilityNote(r, viewer, '项目名'); return `<span class="pj-heat-name" title="${esc(r.name)}"><span class="pj-heat-label">${r.href ? `<a href="${esc(route(r.href))}">${label}</a>` : label}</span>${note && (moved || viewer === 'public') ? `<small class="pj-heat-private${viewer === 'public' ? ' has-note' : ''}">${note}</small>` : ''}</span>`; };
     host.innerHTML = `<div class="pj-heat-scroll"><div class="pj-heat" style="--days:${days.length}"><span></span>${days.map((d, i) => `<small class="${i === days.length - 1 ? 'is-last' : ''}">${(i % 7 === 0 && i < days.length - 4) || i === days.length - 1 ? esc(d.slice(5)) : ''}</small>`).join('')}${rows.map(r => `${name(r)}${days.map((d, i) => {
       const n = r.commits?.[i], label = `${U.fieldText?.(r.name) ?? r.name} · ${d.slice(5)} · ${finite(n) ? `${lower(r, 'commits') ? '至少 ' : ''}${n} 次提交` : U.collectionText('提交数', r)}`;
-      return `<button type="button" class="pj-heat-cell${!finite(n) ? ' is-unknown' : ''}" style="--heat:${heat(n)}" aria-label="${esc(label)}" title="${esc(label)}"></button>`;
+      return `<button type="button" class="pj-heat-cell${!finite(n) ? ' is-unknown' : ''}" style="--heat:${heat(n)}" aria-label="${esc(label)}"></button>`;
     }).join('')}`).join('')}</div></div>
     <div class="pj-heat-legend"><span>每天提交次数</span>${[[0, '0'], [1, '1–2'], [3, '3–5'], [6, '6+'], [null, U.collectionText()]].map(([n, label]) => `<span><i class="pj-heat-cell${n == null ? ' is-unknown' : ''}" style="--heat:${heat(n)}"></i>${label}</span>`).join('')}</div>
-    <p class="pj-note">${days.length ? `${esc(days[0].slice(5))} — ${esc(days.at(-1).slice(5))}` : ''}${viewer === 'owner' && data.hidden ? ` · ${U.hiddenMore(data.hidden, '个', data.hidden_what || '项目')}` : ''}</p><p class="pj-heat-read pj-note" aria-live="polite">指向或点一格查看提交数</p>`;
+    <p class="pj-note">${days.length ? `${esc(days[0].slice(5))} — ${esc(days.at(-1).slice(5))}` : ''}${viewer === 'owner' && data.hidden ? ` · ${U.hiddenMore(data.hidden, '个', data.hidden_what || '项目')}` : ''}</p><p class="pj-heat-read pj-note">指向或点一格查看提交数</p>`;
     bindHeat(host);
   }
-  // 点一格：这一格加粗框、放大，同一行的项目名一起亮，读数写“已选”；指着别的格子时临时显示那一格，移开回到已选的那格
+  // 点一格：这一格加粗框、放大，同一行的项目名一起亮，读数写在这一格旁边（M315）；指着别的格子时临时显示那一格，移开回到已选的那格
   function bindHeat(host) {
-    const read = host.querySelector('.pj-heat-read');
-    if (!read) return;
-    const idle = read.textContent;
+    const grid = host.querySelector('.pj-heat');
+    if (!grid) return;
+    const tip = document.createElement('span');
+    tip.className = 'pj-heat-tip'; tip.hidden = true; tip.setAttribute('aria-live', 'polite'); grid.append(tip);
     let picked = null;
     const rowName = el => { let n = el.previousElementSibling; while (n && !n.classList.contains('pj-heat-name')) n = n.previousElementSibling; return n; };
-    const show = el => { read.textContent = el.getAttribute('aria-label'); read.classList.toggle('is-picked', el === picked); };
-    const rest = () => { if (picked) show(picked); else { read.textContent = idle; read.classList.remove('is-picked'); } };
+    const show = el => {
+      tip.textContent = el.getAttribute('aria-label'); tip.toggleAttribute('data-picked', el === picked); tip.hidden = false;
+      // 放在格子右边，右边放不下就放左边；选中的格子放大了 1.5 倍，多让开一点
+      const gap = (el === picked ? el.offsetWidth / 4 : 0) + 8, right = el.offsetLeft + el.offsetWidth + gap;
+      tip.style.top = `${el.offsetTop + el.offsetHeight / 2}px`;
+      tip.style.left = `${right + tip.offsetWidth <= grid.clientWidth ? right : Math.max(0, el.offsetLeft - gap - tip.offsetWidth)}px`;
+    };
+    const rest = () => { if (picked) show(picked); else tip.hidden = true; };
     for (const el of host.querySelectorAll('button.pj-heat-cell')) {
       el.addEventListener('pointerenter', () => show(el));
       el.addEventListener('focus', () => show(el));
       el.addEventListener('pointerleave', rest);
       el.addEventListener('click', () => {
-        for (const on of host.querySelectorAll('.is-picked:not(.pj-heat-read)')) { on.classList.remove('is-picked'); on.removeAttribute('aria-pressed'); }
+        for (const on of host.querySelectorAll('.is-picked')) { on.classList.remove('is-picked'); on.removeAttribute('aria-pressed'); }
         picked = picked === el ? null : el;
         if (picked) { el.classList.add('is-picked'); el.setAttribute('aria-pressed', 'true'); rowName(el)?.classList.add('is-picked'); }
         rest();
