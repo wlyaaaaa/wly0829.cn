@@ -1,10 +1,10 @@
 {
-  "release_id": "be89a11abedfc8b0f8935afa49175b3b5f3c8f9c1724018a3a337b77895c055b",
-  "manifest_sha256": "5840b2cb5e79d66a34fa160cdd6d92daa145233ad05c113877b467823fe6620e",
-  "source_commit": "ecc8ac7cbaf9e9f93ff8ebc0285c954a8b48e666",
+  "release_id": "fba3861d2bf82dde8b1088214da1449d322194ab7af23f0aee3fe7394240b315",
+  "manifest_sha256": "6bb404fd76c8741b437022d9146e395c7cdb48a36b0e4d24845ccd71a0922cd6",
+  "source_commit": "448331314e6945148e367f39671793e247681899",
   "live_fallback": {
     "origin": "https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com",
-    "key": "releases/dad6454c3ce20b2f4f4ce4d4e6d9fc003aa31f003ace4faa68fd0c2e1fd81ee4/live/_fallback.json",
+    "key": "releases/02f38a3781cfb36ec34a251155b7e32dfd512b3bb4df04a37250206f9737a040/live/_fallback.json",
     "path": "/live/_fallback.json"
   }
 }
