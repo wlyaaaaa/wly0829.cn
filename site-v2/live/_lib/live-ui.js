@@ -1007,17 +1007,73 @@
     setTimeout(() => note.remove(), 6500);
   });
 
-  function connection(state) {
-    const stage = document.querySelector('body.page--live main.stage');
-    if (!stage) return;
-    let banner = stage.querySelector('.live-connection-banner');
-    if (!state.pageText) { banner?.remove(); return; }
-    if (!banner) {
-      banner = document.createElement('p'); banner.className = 'live-connection-banner'; banner.setAttribute('role', 'status');
-      const after = stage.querySelector(':scope > [data-live-view-row], :scope > .back');
-      if (after) after.after(banner); else stage.prepend(banner);
+  // 页顶那张卡（本人 11-23 选的 B，01:01 定了和页顶提醒合成一张）：和下面大卡同宽，一件事一行，什么事都没有时整张不出现。
+  // 连接那一行：琥珀小灯一直慢慢呼吸、循环箭头一直慢慢转，插头插画只跟着这一行出现（图在样式表里，这一行出现才下载）；
+  // 原因变了只换粗字。连上后灯变绿、写“已连上”，约 2 秒后只收走这一行。
+  // 页面原来的提醒列表（#notices）整个搬进这张卡，各条照旧由各页自己画、按钮和跳转不变；配对失效的说明也放成一行。
+  const CONN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M19.47 11.35A7.5 7.5 0 1 1 15.17 5.2"/><path d="M19.16 7.06 16.07 .66 12.27 8.82Z" fill="currentColor" stroke-width=".8"/></svg>';
+  let connBack = 0;
+  const connStage = () => document.querySelector?.('body.page--live main.stage');
+  const connFit = card => { card.hidden = !card.querySelector('.live-conn__row') && !card.querySelector('#notices > li'); };
+  function connCard(stage) {
+    let card = stage.querySelector(':scope > .live-conn');
+    if (card) return card;
+    card = document.createElement('section'); card.className = 'live-conn'; card.setAttribute('role', 'status'); card.hidden = true;
+    card.innerHTML = '<div class="live-conn__rows"></div>';
+    const notices = stage.querySelector(':scope > #notices');
+    const after = stage.querySelector(':scope > [data-live-view-row], :scope > .back');
+    if (notices) notices.before(card); else if (after) after.after(card); else stage.prepend(card);
+    if (notices) {
+      card.append(notices);
+      new MutationObserver(() => connFit(card)).observe(notices, { childList: true });
     }
-    if (banner.textContent !== state.pageText) banner.textContent = state.pageText;
+    connFit(card);
+    return card;
+  }
+  { const init = () => { const stage = connStage(); if (stage) connCard(stage); };
+    if (document.readyState === 'loading') document.addEventListener?.('DOMContentLoaded', init, { once: true }); else init(); }
+  function connection(state) {
+    const stage = connStage();
+    if (!stage) return;
+    const card = connCard(stage), rows = card.querySelector('.live-conn__rows');
+    const row = (key) => {
+      let el = rows.querySelector(`.live-conn__row[data-key="${key}"]`);
+      if (!el) { el = document.createElement('div'); el.className = 'live-conn__row'; el.dataset.key = key; rows.append(el); }
+      return el;
+    };
+    const put = (el, text) => { if (el && el.textContent !== text) el.textContent = text; };
+    const close = (el) => {
+      const only = !card.querySelector('#notices > li') && rows.children.length === 1, target = only ? card : el;
+      target.style.height = target.offsetHeight + 'px'; void target.offsetHeight;
+      target.classList.add('is-closing');
+      setTimeout(() => {
+        if (!el.classList.contains('is-back')) { target.classList.remove('is-closing'); target.style.height = ''; return; }
+        el.remove(); card.classList.remove('is-closing'); card.style.height = ''; connFit(card);
+      }, 520);
+    };
+    let link = rows.querySelector('.live-conn__row[data-key="link"]');
+    if (state.offline && !state.publicPaused) {
+      clearTimeout(connBack); connBack = 0;
+      if (!link) {
+        link = row('link');
+        link.innerHTML = `<span class="live-conn__art" aria-hidden="true"></span><span class="live-conn__lamp" aria-hidden="true"></span><span class="live-conn__say"><b></b><span class="live-conn__at"></span></span><span class="live-conn__wait"><span class="live-conn__spin" aria-hidden="true">${CONN_ICON}</span>连上后会自动换成最新的</span>`;
+        rows.prepend(link);
+      }
+      for (const el of [card, link]) { el.classList.remove('is-closing'); el.style.height = ''; }
+      link.classList.remove('is-back');
+      put(link.querySelector('b'), state.reason || '连不上实况服务');
+      put(link.querySelector('.live-conn__at'), state.pageAtText ? ` · 下面是 ${state.pageAtText} 的数据` : ' · 这页没有可显示的上次数据');
+    } else if (link && !link.classList.contains('is-back')) {
+      link.classList.add('is-back');
+      put(link.querySelector('b'), '已连上');
+      put(link.querySelector('.live-conn__at'), '');
+      connBack = setTimeout(() => { connBack = 0; if (link.isConnected && link.classList.contains('is-back')) close(link); }, 2000);
+    }
+    const pair = state.publicPaused ? '' : state.pairNotice || '';
+    const pairRow = rows.querySelector('.live-conn__row[data-key="pair"]');
+    if (pair) put(row('pair'), pair);
+    else pairRow?.remove();
+    connFit(card);
   }
 
   function publicPause(on, message) {
@@ -1074,7 +1130,7 @@
       if (!paused) at.setAttribute('aria-label', '正在重读');
       at.querySelector('.live-refresh-text')?.classList.remove('is-swapped');
       at.classList.add('is-refreshing');
-      try { await window.Live.refresh(); }
+      try { await window.Live.refresh(false, true); }
       finally {
         const elapsed = performance.now() - started; const wait = shrink + Math.max(1, Math.ceil((elapsed - shrink) / turn)) * turn - elapsed; if (wait > 0) await new Promise(resolve => setTimeout(resolve, wait));
         busy = false; at.classList.remove('is-refreshing'); at.removeAttribute('aria-busy'); at.setAttribute('aria-label', label); show(label);

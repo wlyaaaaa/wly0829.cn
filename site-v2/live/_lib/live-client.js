@@ -207,7 +207,9 @@
   const latestConnection = () => connectionEntries().filter(e => e.receivedAt != null)
     .sort((a, b) => b.receivedAt - a.receivedAt)[0]?.validatedLink;
   const offline = () => !publicPaused && latestConnection()?.state === 'offline';
-  const hostOffline = link => link?.reason === 'host-off' || link?.basis === 'heartbeat' && link.heartbeat === 'stopped';
+  // 只有确认关机（副屏那格回 on: false）才算没开机；心跳停了只说明电脑从那时起没回应，可能还开着。
+  const hostOffline = link => link?.reason === 'host-off';
+  const heartbeatStopped = link => link?.basis === 'heartbeat' && link.heartbeat === 'stopped';
   const latestStamp = stamps => stamps.filter(at => Number.isFinite(Date.parse(at))).sort((a, b) => Date.parse(a) - Date.parse(b)).at(-1) || null;
   const dataAt = e => e.data === null ? null : e.resource === 'screen' && offline()
     ? latestStamp((e.lastCells || []).filter(cell => cell.id !== 'computer' || !hostOffline(latestConnection())).map(cell => cell.source_at)) : e.at;
@@ -380,9 +382,9 @@
     let text = remoteText || e.error || '';
     const at = dataAt(e), resourceAt = !publicPaused && Number.isFinite(Date.parse(at)) ? at : null;
     const upTo = disconnected ? resourceAt || shownUpTo() : null;
-    const off = !publicPaused && hostOffline(link);
+    const off = !publicPaused && hostOffline(link), silent = !publicPaused && !off && heartbeatStopped(link);
     const seen = link.basis === 'heartbeat' && (link.seen || link.since);
-    const reason = disconnected ? off ? (Number.isFinite(Date.parse(seen)) ? `电脑自 ${shortStamp(seen)} 起连不上` : '电脑不在线')
+    const reason = disconnected ? off || silent ? (Number.isFinite(Date.parse(seen)) ? `电脑自 ${shortStamp(seen)} 起连不上` : '电脑不在线')
       : link.reason === 'service' ? '实况服务暂不可用'
       : link.reason === 'owner-read' ? '暂时读不到本人实况'
       : link.basis === 'browser' ? (globalThis.navigator?.onLine === false ? '当前设备未连接网络' : '连不上实况服务') : '连不上电脑' : '';
@@ -400,7 +402,9 @@
     return { meta: { at: publicPaused ? null : e.at, seq: e.seq, rev: e.rev, viewer,
       source: e.source, status: publicPaused ? 503 : e.status, withdrawn: !!e.withdrawn }, link, viewer, now,
       shownAt: resourceAt, cutoffAt: upTo, publicPaused, offline: disconnected, warming: !publicPaused && e.warming,
-      text, reason, hostOff: off, pageText: disconnected ? line(shownUpTo()) : pairNotice, phase: stage, say };
+      text, reason, hostOff: off, silent, pageAt: disconnected ? shownUpTo() : null,
+      pageAtText: disconnected && shownUpTo() ? shortStamp(shownUpTo()) : '',
+      pageText: disconnected ? line(shownUpTo()) : pairNotice, pairNotice, phase: stage, say };
   }
   function present(e) {
     const disconnected = offline(), detail = itemDetail(e);
@@ -689,7 +693,7 @@
         audience(e, viewer);
         const link = body?.link || { state: 'online', basis: 'response' };
         const hostOff = e.resource === 'screen' && body?.data?.cells?.some(cell => cell.id === 'computer' && cell.on === false);
-        observedConnection(e, hostOff || hostOffline(link) ? { ...link, state: 'offline', reason: 'host-off' } : link);
+        observedConnection(e, hostOff ? { ...link, state: 'offline', reason: 'host-off' } : heartbeatStopped(link) ? { ...link, state: 'offline' } : link);
         e.warming = response.status === 202 || body?.q === 'warming';
         if (fixture === null && itemDetail(e) && e.link.state === 'offline' && e.viewer.device !== 'invalid') {
           if (!wasFallback) forgetData(e, true);
@@ -731,9 +735,16 @@
     })().finally(() => { if (e.pending === request) e.pending = null; });
     return e.pending = request;
   }
-  async function refresh(onlyDue) {
-    if (pairing) return pairing.then(() => refresh(onlyDue));
+  async function refresh(onlyDue, fresh = false) {
+    if (pairing) return pairing.then(() => refresh(onlyDue, fresh));
     if (publicPaused && onlyDue === true) return { ok: false, at: null };
+    // 点页面上的刷新：和浏览器刷新一样从头读。页面早先顺手取过、现在没在显示的那几份（翻页、展开、探测）
+    // 当作已退订：不再拿它们上一回（或还在路上那一读）的“连不上”压住整页，也不再重读，页面再要时 get 会重新订上；
+    // 正在显示的每份都整份重读，不带上一回的条件和重试计时。
+    if (fresh) for (const e of entries.values()) {
+      clearFailure(e); e.etag = null;
+      if (!e.listeners.size) { e.stopped = true; e.receivedAt = null; end(e); }
+    }
     const active = [...entries.values()].filter(e => !e.stopped && (e.listeners.size || e.receivedAt != null && e.validatedLink?.state === 'offline')).map(e => {
       if (e.token === device()) return e;
       const next = entry(e.resource, e.query);
@@ -784,7 +795,7 @@
     if (!publicPaused && e?.listeners.size && e.token === device()) read(e, true);
     refresh();
   });
-  window.addEventListener?.('online', () => refresh());
+  window.addEventListener?.('online', () => refresh(false, true));
   function get(resource, query, card, { fallbackOnFailure = false } = {}) {
     if (pairing) return pairing.then(() => get(resource, query, card, { fallbackOnFailure }));
     const e = entry(resource, query);

@@ -121,7 +121,25 @@ html.mo-on .screen-panel.still .screen-cell.hotspot:active { backdrop-filter: br
 /* 有旧读数的格子给截止时间留位。 */
 .screen-cell.has-cutoff .cell-main { top: calc(var(--u) * 34); }
 .screen-cell.has-cutoff .cell-sub { top: calc(var(--u) * 75); }
-.live-connection-banner { position: fixed; top: 72px; left: 50%; translate: -50%; z-index: 30; width: max-content; max-width: 88vw; margin: 0; padding: 10px 18px; border: 1px solid #9ca79f; border-left: 4px solid #00a650; border-radius: 10px; background: #f7faf7; color: #263529; font: 700 16px/1.5 system-ui, sans-serif; }
+/* 读不到实况时的提示（本人 11-23 选的 A）：两个按钮正下方，同种玻璃质感，跟着画一起缩放（单位是定稿图像素）。不能点。 */
+.home-conn { position: absolute; left: 5.38%; top: 42.4%; z-index: 3; pointer-events: none; opacity: 0; transition: opacity .6s ease;
+  padding: calc(var(--unit) * 11) calc(var(--unit) * 20) calc(var(--unit) * 12); border-radius: calc(var(--unit) * 16);
+  background: rgb(255 255 255 / 58%); -webkit-backdrop-filter: blur(calc(var(--unit) * 14)) saturate(1.2); backdrop-filter: blur(calc(var(--unit) * 14)) saturate(1.2);
+  box-shadow: 0 calc(var(--unit) * 6) calc(var(--unit) * 20) rgb(84 60 48 / 16%), inset 0 0 0 calc(var(--unit) * 1.2) rgb(255 255 255 / 70%);
+  color: #2b2a28; font-family: "SiteHomeHan", "Segoe UI", system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; white-space: nowrap; }
+.home-conn[hidden] { display: none; }
+.home-conn.is-shown { opacity: 1; }
+.home-conn p { margin: 0; }
+.home-conn__line { display: flex; align-items: center; gap: calc(var(--unit) * 9); font-size: calc(var(--unit) * 17); line-height: 1.45; }
+.home-conn__line b { font-weight: 800; }
+.home-conn__at { color: #4d4a45; font-weight: 500; }
+.home-conn__sub { margin-top: calc(var(--unit) * 5) !important; padding-left: calc(var(--unit) * 21); color: #7b766e; font-size: calc(var(--unit) * 14); line-height: 1.4; }
+.home-conn__sub:empty { display: none; }
+.home-conn__lamp { flex: none; width: calc(var(--unit) * 12); height: calc(var(--unit) * 12); border-radius: 50%; background: #f28c1b;
+  box-shadow: 0 0 calc(var(--unit) * 10) rgb(242 140 27 / 70%); animation: home-conn-breathe 2.8s ease-in-out infinite; transition: background .45s, box-shadow .45s; }
+.home-conn.is-pair .home-conn__lamp { display: none; }
+.home-conn.is-back .home-conn__lamp { background: #00A650; box-shadow: 0 0 calc(var(--unit) * 10) rgb(0 166 80 / 60%); }
+@keyframes home-conn-breathe { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.8); } }
 
 /* ---------- 第 2 步：镜头退出来 ---------- */
 html.cine .screen { display: none; }
