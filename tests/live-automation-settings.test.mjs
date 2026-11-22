@@ -139,7 +139,7 @@ test('automation page lays out the A blocks with aligned tables, shared copy and
     assert.deepEqual(intakeRows.map(row => row.match(/<small>(.*?)<\/small>/)?.[1]), ['正在跑', '出错', '出错', '出错']);
     assert.match(overview, new RegExp(['各份备份（个人资料和照片视频、开发配置、微信、电脑使用记录、文档等）报失败或好久没更新',
       '系统镜像的恢复点、恢复包的完整性检查没过'].join('；')), 'the full 管 sentence is shown on the card');
-    assert.match(overview, /aw-type__state">正常 · 没有活<\/p><p class="aw-type__model">Sol · 默认 high/);
+    assert.match(overview, /aw-type__state">正常 · 没有活<\/p><p class="aw-type__model">Sol · high/);
     assert.match(render(audience, '', { example_href: '/live/automation/?work=fixed-1' }), /href="\/live\/automation\/\?work=fixed-1">看一件真的怎么修/);
     const work = { id: 'holder', title: '隔离修理', group: 'running', state_text: '已占位 · 会话状态未读到' };
     const rounds = [{ id: '1', label: '验收', status: 'running', requested_effort: 'xhigh', executor: '未确认型号' },
@@ -168,7 +168,7 @@ test('automation page lays out the A blocks with aligned tables, shared copy and
       assert.doesNotMatch(render(audience, type), /data-setting|默认档位|关了：|设置记录/);
     }
     const backup = render(audience, 'backup');
-    assert.match(backup, /默认档位 跟随模型清单（现在 high）<span class="aw-caret".*管：.*关了：.*aw-example-tag">比如<.*设置记录.*这里还看不到.*不管：<\/b>从备份里真把文件或整台电脑还原回来，这里不做/s);
+    assert.match(backup, /<span class="aw-type__model">Sol · high<\/span>.*管：.*关了：.*aw-example-tag">比如<.*设置记录.*这里还看不到.*不管：<\/b>从备份里真把文件或整台电脑还原回来，这里不做/s);
     assert.match(render(audience, 'backup', { setting_log: [] }), /设置记录.*还没改过设置/s);
   }
 });

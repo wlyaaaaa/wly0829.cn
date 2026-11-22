@@ -216,8 +216,12 @@
     write($('task-meta'), info.filter(Boolean).map(v => field(v, '任务说明')).join(' · '));
     write($('task-purpose'), field(d.purpose ?? d.text, '用途'));
     write($('task-week'), quiet ? `<div class="task-week"><strong>${quiet}</strong></div>` : kind === 'plan' ? week(d.days7, runs) : '');
-    U.html($('task-acts'), U.actions(d, [{ kind: 'copy', label: '问情况', intent: 'ask' }, { kind: 'copy', label: '问停法', intent: 'stop' }]), false);
-    $('task-acts').hidden = false;
+    // 后台给了这条任务能做的事（actions）就照它画，空的就不画；老包没有这个字段时照原来两个按钮，停用的不画“问停法”
+    const off = d.state === 'disabled' || d.enabled === false;
+    const acts = U.actions(d, Array.isArray(d.actions) ? d.actions
+      : [{ kind: 'copy', label: '问情况', intent: 'ask' }, ...(off ? [] : [{ kind: 'copy', label: '问停法', intent: 'stop' }])]);
+    U.html($('task-acts'), acts, false);
+    $('task-acts').hidden = !acts;
   }
   function nextRuns(d) {
     const known = Array.isArray(d.upcoming_runs) ? d.upcoming_runs : [];

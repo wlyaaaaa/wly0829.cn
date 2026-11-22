@@ -1010,9 +1010,12 @@
     const failures = (d.items || []).filter(row => row.source_readable !== false && row.enabled !== false &&
       (row.state === 'failed' || row.state == null && row.last?.result === 'failed'));
     // 这一轮没读到运行状态的照样列出来（M516）：名字和下次时间照写，状态写“这轮没读到”；上次出过事的排前面
-    const next = row => timed(row.next_at) ? ` · 下次 ${day(row.next_at) === day(state.now || Date.now()) ? '' : U.date(row.next_at) + ' '}${U.time(row.next_at)}` : '';
+    // 这轮没读到时后台把下次时间清空、另给上次读到的（last_read_next_at）：照写并说明是上次读到的；两个都没有就不写时间
+    const clock = t => `${day(t) === day(state.now || Date.now()) ? '' : U.date(t) + ' '}${U.time(t)}`;
+    const next = row => timed(row.next_at) ? ` · 下次 ${clock(row.next_at)}` : timed(row.last_read_next_at) ? ` · 上次读到的下次时间 ${clock(row.last_read_next_at)}` : '';
+    const nextOf = row => Date.parse(timed(row.next_at) ? row.next_at : row.last_read_next_at) || Infinity;
     const unread = (d.items || []).filter(row => row.source_readable === false && row.enabled !== false && row.state !== 'disabled')
-      .sort((a, b) => Number(['failed', 'warn'].includes(b.state)) - Number(['failed', 'warn'].includes(a.state)) || (Date.parse(a.next_at) || Infinity) - (Date.parse(b.next_at) || Infinity));
+      .sort((a, b) => Number(['failed', 'warn'].includes(b.state)) - Number(['failed', 'warn'].includes(a.state)) || nextOf(a) - nextOf(b));
     const samples = [
       ...failures.map(row => [row, '上次运行失败', true]),
       ...(d.running || []).map(row => [row, old ? '上次读到在跑' : '正在跑']),

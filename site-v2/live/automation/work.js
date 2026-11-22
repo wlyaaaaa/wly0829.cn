@@ -8,7 +8,7 @@
   const segment = encodeURIComponent;
   const resource = work ? `automation/work/${segment(work)}` : type ? `automation/types/${segment(type)}` : 'automation';
   const bar = U.topbar({ ask: () => '请看实况这页的自动任务，说明现在在后台跑什么、在修什么、什么时候再验、要不要我出面。' });
-  let legacyStop, state, configuration, busy = false, feedback, didLand = false;
+  let legacyStop, state, configuration, busy = false, feedback, didLand = false, category = false;
   const ready = () => requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
   const showLegacy = () => {
     root.hidden = true;
@@ -111,14 +111,31 @@
     return `<button type="button" class="more aw-control ${config.checked == null ? '' : 'aw-switch'}" data-setting="${action}" data-id="${esc(id)}"${attrs}${value}${config.name ? ` aria-label="${esc(config.name)}"` : ''}>${label}</button>`;
   }
   const configFor = t => t.setting || {};
-  const typeEffort = t => Object.hasOwn(configFor(t), 'effort') ? t.setting.effort : t.default_effort ?? undefined;
-  const rosterEffortLabel = t => t?.model_effort ? `跟随模型清单（现在 ${t.model_effort}）` : '跟随模型清单';
-  const typeEffortLabel = (t, effort) => effort === null ? rosterEffortLabel(t) : effort || '—';
+  // 档位跟模型清单走，页面不再能改（本人早先定的）；只照后台给的型号和档位写一句
+  const modelText = t => [t.model, t.model_effort || t.default_effort].filter(Boolean).map(esc).join(' · ');
   function toggle(t, compact = false) {
     const config = configFor(t), on = config.mode === 'on';
     const text = on ? '已开' : config.mode === 'paused' ? '暂停中' : config.mode === 'off' ? '已关' : '状态读不到';
     return control('toggle', t.id, compact ? '<span class="aw-sr">' + text + '</span>' : text,
       { checked: on, value: config.mode, name: `${U.fieldText(t.title, audience)} · ${text}` });
+  }
+  function settingBar(t) {
+    const until = when(configFor(t).until_at), model = modelText(t);
+    return `<div class="aw-settingbar">${toggle(t)}${control('pause', t.id, until ? `暂停到 ${esc(until)}` : '暂停到…')}${model ? `<span class="aw-type__model">${model}</span>` : ''}</div>`;
+  }
+  // 后台因为登录过期、额度用完把某几类停下来时（provider_pauses），把原因和开始时间贴到这几类上。
+  // 本人这边登录命令只挂在等你的事里，这里链过去；访客只看到原因和时间。
+  const pauseFor = (data, id) => list(data.provider_pauses).find(p => list(p.categories).includes(id));
+  function pauseText(p) {
+    const why = esc(p.text || (p.reason === 'login' ? '登录过期' : '额度用完'));
+    const item = audience === 'owner' && p.login_command && route(p.href);
+    return (item ? link(item, '登录过期，登录命令在等你的事里') : why) + (when(p.started_at) ? ` · ${when(p.started_at)} 起` : '');
+  }
+  function pauses(data) {
+    return list(data.provider_pauses).filter(p => list(p.categories).length).map(p => {
+      const names = p.categories.map(id => link(typeHref(id), field(list(data.categories).find(c => c.id === id)?.title || id, '类别'))).join('、');
+      return `<p class="glass aw-warning">${lamp({ level: 'yellow' })}${names}停着：${pauseText(p)}</p>`;
+    }).join('');
   }
   const group = (rows, name) => list(rows).filter(row => row.group === name);
   const rowTitle = (row, name = '这件活') => field(row.title, name);
@@ -284,15 +301,13 @@
     const [description] = descriptions[t.id] || [''];
     const readOnly = readonly(t.id);
     const c = t.counts || {}, config = configFor(t), ta = when(config.until_at);
-    const effort = typeEffort(t);
     const items = [[c.running, '在修'], [c.queue, '准备派'], [c.followup, '等复查']].filter(([n]) => n > 0);
     const info = !readOnly && config.mode === 'paused' ? (ta ? `暂停到 ${ta}` : '暂停中')
       : !readOnly && config.mode === 'off' ? ['已关', c.running > 0 && `${c.running} 件正在收尾`].filter(Boolean).join(' · ')
         : items.length ? items.map(([n, label]) => `${n} 件${label}`).join(' · ')
           : c.occupied > 0 ? `${c.occupied} 件已占位`
             : list(t.sources).some(s => s.at) ? '正常 · 没有活' : '这里还看不到';
-    const shown = effort === undefined ? '' : effort === null ? t.model_effort : effort;
-    const model = readOnly ? readonlyNote : shown ? `<p class="aw-type__model">${t.model ? `${esc(t.model)} · ` : ''}默认 ${esc(shown)}</p>` : '';
+    const model = readOnly ? readonlyNote : modelText(t) ? `<p class="aw-type__model">${modelText(t)}</p>` : '';
     const art = ART[t.id] ? `<img class="aw-type__art" src="${esc(ART[t.id])}" alt="" width="76" height="76" loading="lazy">` : icon('gear');
     return `<article class="aw-type${config.mode === 'off' || config.mode === 'paused' ? ' is-off' : ''}" data-type-id="${esc(t.id)}">${art}<div class="aw-type__body">
       <h3>${link(route(t.href) || typeHref(t.id), field(t.title, '类型'), 'aw-type__link')}</h3>
@@ -343,12 +358,12 @@
     const types = list(data.types);
     return `<div class="aw-top aw-top--repair">${intro}${slots(data)}</div>` + recent
       + panel(`各类自动任务 · ${types.length} 类`, `<div class="aw-types">${types.map(typeCard).join('')}</div>`,
-        { id: 'types', symbol: 'stack', extra: `<span class="aw-head-note">${audience === 'owner' ? '配对设备可以开关、暂停和改默认档位' : '开关、暂停和档位只有本人配对的设备能改'}</span>` });
+        { id: 'types', symbol: 'stack', extra: `<span class="aw-head-note">${audience === 'owner' ? '配对设备可以开关和暂停' : '开关和暂停只有本人配对的设备能改'}，档位跟模型清单走</span>` });
   }
   function overview(data) {
     const health = data.health || {};
     const warning = health.state_code === 'lost' ? `<p class="glass aw-warning">${lamp(health)}${field(health.text)}</p>` : '';
-    return warning + pageHead(data) + ownerStrip(group(data.works, 'owner')) + scheduledPanel(data) + intakePanel(data)
+    return warning + pauses(data) + pageHead(data) + ownerStrip(group(data.works, 'owner')) + scheduledPanel(data) + intakePanel(data)
       + repairBlock(data) + routinePanel(data)
       + `<p class="aw-foot-link"><a href="${esc(route('/live/tasks/'))}">Windows 计划任务<span class="aw-chev" aria-hidden="true">›</span></a></p>`;
   }
@@ -386,14 +401,13 @@
     return `<ul class="aw-log">${rows.map(row => `<li><time>${when(row.at)}</time><span>${field(row.text)}</span><small>${words(row.device, row.result)}</small></li>`).join('')}</ul>`;
   }
   function typePage(data) {
-    const c = data.counts || {}, config = configFor(data), rows = list(data.works);
-    const effort = typeEffort(data);
+    const c = data.counts || {}, rows = list(data.works);
     const [description, example, off, boundary] = descriptions[data.id] || [];
     const readOnly = readonly(data.id);
     const active = rows.filter(row => row.group !== 'done' && row.group !== 'decided');
     const past = rows.filter(row => !active.includes(row));
     const controls = readOnly ? readonlyNote
-      : `<div class="aw-settingbar">${toggle(data)}${control('pause', data.id, when(config.until_at) ? `暂停到 ${esc(when(config.until_at))}` : '暂停到…')}${control('type-effort', data.id, `默认档位 ${esc(typeEffortLabel(data, effort))}<span class="aw-caret" aria-hidden="true"></span>`, { value: effort })}</div>`;
+      : settingBar(data);
     const counters = stats([['在修', c.occupied ?? c.running, 'run'], ['等复查', c.followup, 'queue'], [`要${own()}`, c.owner, 'owner'], ['7 天修好', c.repaired, 'done']]);
     const art = ART[data.id] || hero;
     const head = `<section class="glass aw-hero aw-type-hero"><img alt="" src="${esc(art)}" class="aw-art">
@@ -406,6 +420,23 @@
     const lower = `<div class="aw-pair aw-type-pair">${panel('这一类的活', work)}${panel('从哪里发现', sources.length ? `<ul class="aw-sources">${sources.map(sourceRow).join('')}</ul>` : empty('这里还看不到'), { symbol: 'search' })}
       ${panel('结果和趋势 · 近 7 天', results(data, rows), { symbol: 'check', cls: readOnly ? 'aw-wide' : '' })}${readOnly ? '' : panel('设置记录', settingLog(data), { symbol: 'gear' })}</div>`;
     return head + lower + (boundary ? `<p class="glass aw-type-boundary"><b>不管：</b>${esc(boundary)}</p>` : '');
+  }
+  // 新八类的一页：照类型页的样子摆开关、暂停、型号档位，现在怎样（暂停原因、下次、在等什么），最近几次和设置记录。
+  function categoryPage(data, c) {
+    const pause = pauseFor(data, c.id), running = c.running === true;
+    const now = pause ? `停着，${pauseText(pause)}` : running ? '正在跑'
+      : at(c.next_at) ? `下次 ${when(c.next_at)}` : c.waiting_for ? field(c.waiting_for, '在等什么') : '';
+    const last = c.last_result && at(c.last_result.at) ? `${when(c.last_result.at)} · ${field(c.last_result.text, '结果')}` : '';
+    const controls = c.setting ? settingBar(c) : modelText(c) ? `<p class="aw-type__model">${modelText(c)}</p>` : '';
+    const head = `<section class="glass aw-hero aw-type-hero"><img alt="" src="${esc(ART[c.id] || hero)}" class="aw-art">
+      <div class="aw-lead"><div class="aw-type-top"><h1>${field(c.title, '类别名称')}</h1><div class="aw-type-settings">${controls}${message(c.id)}</div></div>
+      <div class="aw-type-top aw-type-top--lines">${now ? `<p class="aw-covers"><b>现在：</b>${now}</p>` : '<span></span>'}${last ? `<p class="aw-off"><b>上一次：</b>${last}</p>` : ''}</div></div></section>`;
+    const runs = !Array.isArray(c.recent_runs) ? empty('这里还看不到') : !c.recent_runs.length ? empty('还没有记录')
+      : `<ul class="aw-log">${c.recent_runs.map(run => `<li><time>${when(run.at)}</time><span>${link(route(run.ledger_href), field(run.summary, '这次做了什么'))}</span></li>`).join('')}</ul>`;
+    const known = new Set(list(data.types).map(t => t.id));
+    const subs = list(c.subcategories).map(t => `<li>${line(known.has(t.id) ? typeHref(t.id) : '', `<b>${field(t.title, '小类')}</b><small>${({ on: '已开', off: '已关', paused: '暂停中' })[t.setting?.mode] || ''}</small>`)}</li>`).join('');
+    return head + `<div class="aw-pair aw-type-pair">${panel('最近几次', runs, { symbol: 'check' })}${panel('设置记录', settingLog(c), { symbol: 'gear' })}
+      ${subs ? panel('各小类', `<ul class="aw-lines">${subs}</ul>`, { symbol: 'stack', cls: 'aw-wide' }) : ''}</div>`;
   }
   const verdict = value => ({ fixed: '按原条件验过', not_fixed: '没修好', waiting_verify: '等自然事件验收', deferred: '暂时不修',
     wont_fix: '定了不修', to_owner: `转给${own()}` })[value] || value;
@@ -434,12 +465,10 @@
     }).join('')}${coming.map(name => `<li class="is-future"><p class="aw-step"><span>${name}</span></p></li>`).join('')}</ol>`;
   }
   function workPage(data) {
-    const row = data.work || {}, cfg = data.setting || {};
-    const change = !['done', 'decided', 'owner'].includes(row.group)
-      ? control('work-effort', row.id, `下次用哪档：${esc(cfg.effort || '跟类型默认')}<span class="aw-caret" aria-hidden="true"></span>`, { value: cfg.effort }) : '';
+    const row = data.work || {};
     const status = `<p class="aw-work-state">${lamp(row, false)}<span>${field(row.state_text, '状态')}</span></p>
        <p class="aw-work-meta">${words(...chatActivity(row), row.attempts > 0 && `已修 ${row.attempts} 次`, at(data.next_at) && `下次看 ${when(data.next_at)}`)}</p>
-       ${data.next_step ? `<p class="aw-work-next"><b>接下来：</b>${field(data.next_step, '下一步')}</p>` : ''}${change}${message(row.id)}`;
+       ${data.next_step ? `<p class="aw-work-next"><b>接下来：</b>${field(data.next_step, '下一步')}</p>` : ''}${message(row.id)}`;
     const related = [
       [route(data.task_href || data.source?.href), '来源', data.source?.label || '来源'],
       [route(data.owner_href), '要办的事', `要${own()}出面的事`],
@@ -477,7 +506,13 @@
     back.textContent = work ? U.fieldText(data.type_title, audience) || '返回这一类' : type ? '自动任务' : '实况';
     const folds = new Map([...root.querySelectorAll('details[id], .aw-timeline li[id] details')]
       .map(el => [el.id || el.parentElement.id, el.open]));
-    U.html(root, work ? workPage(data) : type ? typePage(data) : overview(data), false);
+    const kind = category && list(data.categories).find(row => row.id === type);
+    if (category && !kind) {
+      delete root._html;
+      root.innerHTML = '<p class="glass aw-load">这件活或这一类没有读到</p>';
+      return;
+    }
+    U.html(root, work ? workPage(data) : kind ? categoryPage(data, kind) : type ? typePage(data) : overview(data), false);
     for (const [id, open] of folds) {
       const item = $(id), fold = item?.matches('details') ? item : item?.querySelector('details');
       if (fold) fold.open = open;
@@ -500,11 +535,8 @@
     else if (reply.error !== 'cockpit_owner_required') feedback = { id, text: reply.status === 'unknown' ? '没确认是否保存，请刷新后查看' : '没存上，再试一次' };
   };
   function applySaved(id, reply) {
-    const data = state?.data, t = type || work ? data : list(data?.types).find(t => t.id === id);
-    if (t && reply.current) {
-      t.setting = { ...t.setting, ...reply.current };
-      if (!work && Object.hasOwn(reply.current, 'effort')) t.default_effort = reply.current.effort ?? t.model_effort ?? null;
-    }
+    const data = state?.data, t = work || type && !category ? data : [...list(data?.types), ...list(data?.categories)].find(t => t.id === id);
+    if (t && reply.current) t.setting = { ...t.setting, ...reply.current };
     paint();
     void Live.refresh();
   }
@@ -532,25 +564,17 @@
     busy = false;
     if (access.status !== 'pass') { feedbackFor(id, access); paint(); return; }
     configuration = { op, id };
-    const pause = op === 'pause', opt = list(state?.data?.efforts);
-    const inherited = op === 'type-effort' ? rosterEffortLabel(state?.data) : '跟类型默认';
-    $('automation-setting-title').textContent = pause ? '暂停到几点' : op === 'type-effort' ? '这一类的默认档位' : '这件活下次用哪档';
-    const field = settings.querySelector('[data-fields]');
-    field.innerHTML = pause ? '<label>北京时间 <input required type="datetime-local" name="value"></label><p class="row__sub">已经在修的这一轮会先收尾。</p>'
-      : `<label>档位 <select name="value"><option value="">${esc(inherited)}</option>${opt.map(effort =>
-        `<option value="${esc(effort)}"${effort === value ? ' selected' : ''}>${esc(effort)}</option>`).join('')}</select></label>`;
-    if (!pause && value && !opt.includes(value)) form.elements.value.selectedIndex = -1;
+    $('automation-setting-title').textContent = '暂停到几点';
+    settings.querySelector('[data-fields]').innerHTML = '<label>北京时间 <input required type="datetime-local" name="value"></label><p class="row__sub">已经在修的这一轮会先收尾。</p>';
     form.querySelector('[data-dialog-result]').textContent = '';
-    form.querySelector('[type="submit"]').disabled = op === 'work-effort' && opt.length === 0;
     settings.showModal();
   }
   settings.querySelector('[data-cancel]').addEventListener('click', () => settings.close());
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (busy || !configuration) return;
-    const { op, id } = configuration, value = form.elements.value.value, pause = op === 'pause';
-    if (!pause && form.elements.value.selectedIndex < 0) return;
-    const reply = await save(pause ? 'type-mode' : op, id, pause ? { mode: 'paused', until_at: `${value}:00+08:00` } : value || null);
+    const { id } = configuration, value = form.elements.value.value;
+    const reply = await save('type-mode', id, { mode: 'paused', until_at: `${value}:00+08:00` });
     feedbackFor(id, reply);
     if (reply.status === 'saved') {
       settings.close();
@@ -566,6 +590,17 @@
     const item = group(state?.data?.works, 'owner').find(row => (row.owner_id || row.id) === id);
     if (item && await U.copy(Live.copy({ id, title: U.fieldText(item.title, audience) }, button.dataset.copyIntent))) U.flash(button, '已复制');
   });
-  Live.watch(resource, {}, { phase(next) { state = next; bar?.set(next); paint(); } });
+  // 新八类（替你看新消息、每周规矩复核这些）没有自己的读口：原地址读不到，就改读自动任务总包，从 categories 里按 id 找这一类。
+  // 原修理分项和单件仍走原地址；旧后台总包里没有 categories，照旧显示“没有读到”。
+  let watching;
+  const phase = next => {
+    if (type && !work && !category && next.meta?.status === 404) {
+      category = true;
+      queueMicrotask(() => { watching.stop(); watching = Live.watch('automation', {}, { phase }); });
+      return;
+    }
+    state = next; bar?.set(next); paint();
+  };
+  watching = Live.watch(resource, {}, { phase });
   ready();
 })();
