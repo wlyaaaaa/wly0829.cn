@@ -312,7 +312,8 @@
         if (folded !== usageItems) {
           paintShare(shareHost, share, usageItems);
           const height = shareHost.getBoundingClientRect().height;
-          if (height) { shareHost.style.minHeight = `${height}px`; legend.style.alignSelf = 'start'; }
+          // 只有分类图和排行并排时才按收起前的高度占位；窄窗口两块上下排，占位只会在圆环下面留一大块空白（M502）
+          if (height && getComputedStyle(row).gridTemplateColumns.split(' ').length > 1) { shareHost.style.minHeight = `${height}px`; legend.style.alignSelf = 'start'; }
         }
         paintShare(shareHost, share, folded);
       };

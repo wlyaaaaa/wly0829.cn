@@ -50,7 +50,8 @@
 .page--usage .use-windows { padding-top: 20px; border-top: 1px solid var(--hair); }
 .page--usage .use-where .vz-share { grid-template-columns:170px minmax(0,1fr); gap:20px; align-items:start; }
 .page--usage .use-where .vz-share__ring { justify-self:center; }
-@media (min-width: 1000px) {
+/* 两栏只在宽窗口排：1024 宽时圆环右边只剩约 400 像素，再分两栏类别名会被挤成一字一行（M499） */
+@media (min-width: 1280px) {
   .page--usage .use-where :is(.vz-share__list, .vz-rank__list):has(> :nth-child(7)) {
     columns: 2;
     column-gap: 28px;

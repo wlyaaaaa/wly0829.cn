@@ -103,8 +103,9 @@
 .pj-mini__big { margin: 2px 0 0; font-size: 15px; line-height: 32px; color: #141413; }
 .pj-mini__big b { margin-right: 4px; font-size: 28px; font-weight: 700; color: #00A650; font-variant-numeric: tabular-nums; }
 #recent-artifacts .pj-extra__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 24px; align-items: start; }
-/* 排好以后（page.js packCards）：每张卡占自己那一列、高多少就占多少行，下一张紧贴着排，不再按同排最高的卡留白（M487） */
-#recent-artifacts .pj-extra__list.is-packed { grid-auto-rows: 1px; grid-auto-flow: row dense; row-gap: 0; }
+/* 排法在 _lib/live-pack.js：每张卡放进最矮的一栏、卡贴着卡排；“再看几个项目”展开后接着上面几栏排，“收起”挪到展开的卡下面（M487） */
+#recent-artifacts .pj-extra__more[open] { position: relative; padding-bottom: 34px; }
+#recent-artifacts .pj-extra__more[open] > summary { position: absolute; left: 0; bottom: 0; }
 #recent-artifacts .pj-extra__all { flex: none; }
 #recent-artifacts .pj-extra__all[hidden] { display: none; }
 .pj-art { min-width: 0; padding: 16px 20px 6px; border-radius: 18px; }
@@ -148,5 +149,5 @@
   <div class="fold" id="changes-box"><div><ul class="rows list" id="changes-rest"></ul></div></div></div>
   <footer class="pj-changes-footer" id="changes-footer"><div class="pj-changes-actions"><button class="more" id="changes-more" type="button" hidden></button><button class="more" id="next" type="button" hidden>更多变化 ›</button></div></footer></section></main>
 <script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-header.js"></script><script src="/live/_lib/live-ui.js"></script>
-<script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-chart.js"></script><script src="/live/_lib/live-viz.js"></script><script src="/live/_lib/live-project-viz.js"></script><script src="/live/_lib/live-project-look.js"></script><script src="/live/projects/page.js"></script>
+<script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-chart.js"></script><script src="/live/_lib/live-viz.js"></script><script src="/live/_lib/live-project-viz.js"></script><script src="/live/_lib/live-project-look.js"></script><script src="/live/_lib/live-pack.js"></script><script src="/live/projects/page.js"></script>
 </body></html>

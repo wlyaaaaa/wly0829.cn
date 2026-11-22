@@ -38,6 +38,13 @@
 .page--backups .backup-grid td[data-copy]:is([data-state="complete"],[data-state="gap"],[data-state="stale"],[data-state="waiting"]) > b { font-weight: 600; font-variant-numeric: tabular-nums; }
 .page--backups .backup-grid th[scope="row"] { color: var(--ink); font-size: 14px; font-weight: 500; }
 .page--backups .backup-grid th[scope="row"] small { font-weight: 400; }
+/* 窗口不到 1280 宽：五个副本列加宽一点（资料名、本地位置让出），表头的记录时间在日期和钟点之间换行，不再横着串到隔壁列（M497）；1440 宽不变 */
+@media (max-width: 1279px) {
+  .page--backups .backup-grid col:nth-child(1) { width: 16% !important; } .page--backups .backup-grid col:nth-child(2) { width: 14% !important; }
+  .page--backups .backup-grid col:is(:nth-child(4), :nth-child(5), :nth-child(6)) { width: 8.5% !important; } .page--backups .backup-grid col:nth-child(10) { width: 8.5% !important; }
+  .page--backups .backup-grid thead th { padding-inline: 4px; }
+  .page--backups .backup-grid thead .backup-unit { white-space: normal; }
+}
 .page--backups .backup-name { display: flex; align-items: center; gap: 6px; }
 .page--backups .backup-name .lamp { flex: none; margin: 0; }
 .page--backups .backup-unit { white-space: nowrap; }
