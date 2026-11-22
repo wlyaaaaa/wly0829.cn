@@ -1,9 +1,15 @@
-/* 第一屏总图、第 4 节、第 10 节压缩图和结尾环的动效，进入视野播一遍。不开脚本时，图直接显示终态。 */
+/* 原理页的示意图各是一个文件，组装时和别的图一样改成 OSS 地址；衬底按 viewBox 先占好位，图到了页面不跳。
+   第一屏总图在页头预取，其余滑到附近再取；取回来内联进衬底，图里的字才用得上页面字体和 viz.css，下面的动效也才够得着。
+   慢就一直等，不设超时；真失败才隔 1、2.5、5 秒重取，和页眉 topbar.js 对图片的做法一样。
+   第一屏总图、第 4 节、第 10 节压缩图和结尾环的动效，图到了、进入视野播一遍。 */
 (function () {
   "use strict";
 
-  var ov = document.getElementById("viz-overview");
-  if (ov && "IntersectionObserver" in window && ov.getAnimations) {
+  var hooks = {};
+
+  // 第一屏总图
+  hooks["viz-overview"] = function (ov) {
+    if (!("IntersectionObserver" in window) || !ov.getAnimations) return;
     ov.classList.add("ov-armed", "ov-live");
     // 绿灯呼吸对齐页眉小绿灯的相位：页眉有 lamp-breathe 就照它，没有就从页面打开算起
     var syncBreath = function () {
@@ -41,23 +47,25 @@
         if (en.isIntersecting) syncBreath();
       });
     }, { threshold: [0, 0.3] }).observe(ov);
-  }
-  if ("IntersectionObserver" in window) {
-    var diagrams = new IntersectionObserver(function (entries, observer) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting || entry.intersectionRatio < 0.2) return;
-        observer.unobserve(entry.target);
-        entry.target.classList.replace("s4-ready", "s4-play");
-      });
-    }, { threshold: 0.2 });
-    document.querySelectorAll("#viz-s04 .viz__plate, #viz-s04-walls .viz__plate").forEach(function (plate) {
-      plate.classList.add("s4-ready");
-      diagrams.observe(plate);
+  };
+
+  // 第 4 节两张图：露出两成时播一遍
+  var diagrams = "IntersectionObserver" in window && new IntersectionObserver(function (entries, observer) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting || entry.intersectionRatio < 0.2) return;
+      observer.unobserve(entry.target);
+      entry.target.classList.replace("s4-ready", "s4-play");
     });
-  }
+  }, { threshold: 0.2 });
+  hooks["viz-s04"] = hooks["viz-s04-walls"] = function (figure, plate) {
+    if (!diagrams) return;
+    plate.classList.add("s4-ready");
+    diagrams.observe(plate);
+  };
+
   // 第 10 节压缩图：图露出六成时，线从左往右画出来一遍
-  var compact = document.querySelector("#viz-s10-compact .viz__plate");
-  if (compact && "IntersectionObserver" in window) {
+  hooks["viz-s10-compact"] = function (figure, compact) {
+    if (!("IntersectionObserver" in window)) return;
     compact.classList.add("s10c-ready");
     var co = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
@@ -67,9 +75,11 @@
       });
     }, { threshold: 0.6 });
     co.observe(compact);
-  }
-  var end = document.querySelector(".viz--chain-end");
-  if (end && "IntersectionObserver" in window) {
+  };
+
+  // 结尾那串环：整串露出来后褪色
+  hooks["viz-chain-end"] = function (end) {
+    if (!("IntersectionObserver" in window)) return;
     end.classList.add("is-armed");
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
@@ -79,5 +89,49 @@
       });
     }, { threshold: 1, rootMargin: "0px 0px -18% 0px" });
     io.observe(end);
+  };
+
+  var delays = [1000, 2500, 5000];
+  // 取回图、内联进衬底，再接上这张图的动效；接动效和放进图在同一拍里，第一帧就是待播的样子
+  var load = function (plate) {
+    var figure = plate.parentNode, source = plate.getAttribute("data-src"), tries = 0;
+    var attempt = function (url) {
+      plate.setAttribute("data-viz-state", tries ? "retry" : "pending");
+      fetch(url).then(function (response) {
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        return response.text();
+      }).then(function (text) {
+        plate.insertAdjacentHTML("afterbegin", text);
+        plate.removeAttribute("data-viz-state");
+        if (hooks[figure.id]) hooks[figure.id](figure, plate);
+      }, function () {
+        // 只有取图本身失败才重取；接动效出错不重取，免得同一张图放进去两遍
+        if (tries >= delays.length) { plate.setAttribute("data-viz-state", "failed"); return; }
+        setTimeout(function () {
+          var retry = new URL(source, document.baseURI);
+          retry.searchParams.set("image-retry", ++tries + "-" + Date.now());
+          attempt(retry.href);
+        }, delays[tries]);
+      });
+    };
+    attempt(source);
+  };
+
+  var plates = document.querySelectorAll(".viz__plate[data-src]");
+  if (!("IntersectionObserver" in window)) {
+    plates.forEach(load);
+    return;
   }
+  // 第一张（第一屏总图，页头已预取）马上放进去；其余滑到离视口一屏左右再取
+  var near = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      near.unobserve(entry.target);
+      load(entry.target);
+    });
+  }, { rootMargin: "900px 0px" });
+  plates.forEach(function (plate, i) {
+    if (i === 0) load(plate);
+    else near.observe(plate);
+  });
 })();

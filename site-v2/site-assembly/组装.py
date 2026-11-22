@@ -440,6 +440,15 @@ def web_fonts():
         if article:
             article_text += visible
         pages[page] = (raw, article, second_layer)
+    # 原理页的示意图是单独的 SVG 文件，滑到附近才内联进页面；图里的字照原来内嵌时一样算进这页要的字。
+    for figure in sorted((SITE / 'principles').rglob('*.svg')):
+        soup = BeautifulSoup(figure.read_text(encoding='utf-8'), 'html.parser')
+        for hidden in soup.select('script, style'):
+            hidden.decompose()
+        visible = soup.get_text(' ', strip=True) + ''.join(str(el.get(attr, '')) for el in soup.find_all(True)
+                                                          for attr in ('title', 'aria-label', 'placeholder'))
+        core_text += visible
+        article_text += visible
     # 字符串中的中英文由原家族分别负责；ASCII 及计数器数字始终完整。
     home_text = baseline + fixed_script_text((HOME_SRC / 'home.js').read_text(encoding='utf-8'))
     for folder in ('header', 'rules', 'principles', 'connect-auth', 'live', 'wall', 'trust-modal', 'app'):
@@ -1119,7 +1128,7 @@ def check_links():
             continue
         text = f.read_text(encoding='utf-8-sig')
         if f.suffix == '.html':
-            # 原理页是正文加 20 张内嵌示意图（约 168KB，压缩后约 48KB），不是数据塞进页面；数据另有下一条查。
+            # 原理页的示意图是单独的 SVG 文件、滑到附近才取，HTML 只剩正文；数据另有下一条查。
             if f.stat().st_size > 200_000: bad.append((f.relative_to(OUT).as_posix(), 'HTML 超过 200KB'))
             embedded = re.search(r'''data:[^"'\s]{0,120};base64,[A-Za-z0-9+/=]{4096}''', text) or any(len(b.encode('utf-8')) > 8192 and re.search(r'(?:^|=)\s*[\[{]', b) for b in re.findall(r'<script[^>]*>(.*?)</script>', text, re.S | re.I))
             if embedded: bad.append((f.relative_to(OUT).as_posix(), 'HTML 内嵌大段 base64/JSON 数据'))

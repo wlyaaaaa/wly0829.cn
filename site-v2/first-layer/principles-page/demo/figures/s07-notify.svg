@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 492" width="900" height="492" role="img" aria-labelledby="s07n-title s07n-desc">
+  <title id="s07n-title">什么事叫我们、怎么叫，送不到时怎么补</title>
+  <desc id="s07n-desc">对话里要我们答的，手机响，回原对话答；真要我们离开对话去办的，登进“等你的事”，手机和邮件同时到，AI 核实办完才关；AI 自己能办的、正常等待和例行检查，不响，同一件事也不响两遍。手机 2 分钟没送到补邮件，邮件也没送到，实况上记一条。派出去的助手和自动任务不直接叫我们，只发留言或登卡，修好就撤。右边是手机锁屏上的三条示意通知。</desc>
+  <style>
+    .s07n-clock { font-size: 40px; font-weight: 300; fill: var(--v-ink); letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+    .s07n-stop { fill: none; stroke: var(--v-faint); stroke-width: 1.25; stroke-linecap: round; }
+  </style>
+
+  <!-- 一、对话里要我们答的 -->
+  <text x="28" y="84" class="v-t v-t--b">对话里要我们答的</text>
+  <text x="28" y="101" class="v-g">就在那个对话里问</text>
+  <path class="v-l" d="M230,88 L410,88"/>
+  <path class="v-l v-l--we" d="M410,88 L590,88"/>
+  <circle class="v-a" cx="230" cy="88" r="6"/>
+  <circle class="v-w" cx="410" cy="88" r="6"/>
+  <circle class="v-w" cx="590" cy="88" r="6"/>
+  <text x="230" y="72" class="v-t" text-anchor="middle">AI 提问</text>
+  <text x="410" y="72" class="v-t" text-anchor="middle">手机响</text>
+  <text x="410" y="112" class="v-g" text-anchor="middle">人不在电脑前、夜里也照常响</text>
+  <text x="590" y="72" class="v-t" text-anchor="middle">回原对话答</text>
+
+  <!-- 二、真要我们离开对话去办的 -->
+  <text x="28" y="174" class="v-t v-t--b">真要我们离开对话去办的</text>
+  <text x="28" y="191" class="v-g">或没有对话在等、</text>
+  <text x="28" y="206" class="v-g">又要我们取舍的</text>
+  <path class="v-l" d="M236,178 L360,178 M360,178 Q367,178 367,171 Q367,164 374,164 L410,164 M360,178 Q367,178 367,185 Q367,192 374,192 L410,192"/>
+  <path class="v-l v-l--we" d="M410,164 L476,164 Q483,164 483,171 Q483,178 490,178 L590,178 M410,192 L476,192 Q483,192 483,185 Q483,178 490,178"/>
+  <path class="v-p" d="M230,172 A6,6 0 0 0 230,184 Z"/>
+  <path class="v-a" d="M230,172 A6,6 0 0 1 230,184 Z"/>
+  <circle class="v-w" cx="410" cy="164" r="6"/>
+  <circle class="v-w" cx="410" cy="192" r="6"/>
+  <circle class="v-a" cx="590" cy="178" r="6"/>
+  <text x="230" y="158" class="v-t" text-anchor="middle">登进“等你的事”</text>
+  <text x="230" y="202" class="v-g" text-anchor="middle">干活的 AI 或程序来登</text>
+  <text x="410" y="148" class="v-t" text-anchor="middle">手机</text>
+  <text x="410" y="216" class="v-t" text-anchor="middle">邮件</text>
+  <text x="428" y="182" class="v-g">同时到</text>
+  <text x="540" y="198" class="v-g" text-anchor="middle">我们去办</text>
+  <text x="590" y="162" class="v-t" text-anchor="middle">AI 核实办完才关</text>
+
+  <!-- 三、不响 -->
+  <text x="28" y="264" class="v-t v-t--b">AI 自己能办的</text>
+  <text x="28" y="281" class="v-g">正常的等待、例行检查</text>
+  <path class="v-l" style="stroke:var(--v-faint)" d="M235.4,268 L360,268"/>
+  <path class="s07n-stop" d="M366,261 L366,275"/>
+  <circle class="v-o" cx="230" cy="268" r="5.4"/>
+  <text x="380" y="272.5" class="v-t">不响</text>
+  <text x="380" y="290" class="v-g">同一件事也不响两遍</text>
+
+  <path class="v-sep" d="M28,318 L664,318"/>
+
+  <!-- 四、送不到时 -->
+  <text x="28" y="364" class="v-t v-t--b">送不到时</text>
+  <text x="28" y="381" class="v-g">统一的发送程序来补</text>
+  <path class="v-l" d="M230,368 L404.75,368 M415.25,368 L584.6,368"/>
+  <circle class="v-w" cx="230" cy="368" r="6"/>
+  <circle class="v-w0" cx="410" cy="368" r="5.25"/>
+  <circle class="v-o" cx="590" cy="368" r="5.4"/>
+  <text x="230" y="352" class="v-t" text-anchor="middle">手机</text>
+  <text x="320" y="358" class="v-g" text-anchor="middle">2 分钟没送到</text>
+  <text x="410" y="352" class="v-t" text-anchor="middle">补一封邮件</text>
+  <text x="500" y="358" class="v-g" text-anchor="middle">邮件也没送到</text>
+  <text x="590" y="352" class="v-t" text-anchor="middle">实况上记一条</text>
+  <text x="590" y="392" class="v-g" text-anchor="middle">列出没送到的每一条</text>
+
+  <!-- 五、派出去的助手和自动任务 -->
+  <text x="28" y="440" class="v-t v-t--b">派出去的助手、</text>
+  <text x="28" y="457" class="v-t v-t--b">后台的自动任务</text>
+  <path class="v-l" d="M230,446 L590,446"/>
+  <circle class="v-a" cx="230" cy="446" r="6"/>
+  <circle class="v-p" cx="410" cy="446" r="6"/>
+  <circle class="v-a" cx="590" cy="446" r="6"/>
+  <text x="290" y="436" class="v-g" text-anchor="middle">不直接叫我们</text>
+  <text x="410" y="430" class="v-t" text-anchor="middle">发一条留言或登一张卡</text>
+  <text x="410" y="470" class="v-g" text-anchor="middle">比如“备份失败，我在修”</text>
+  <text x="590" y="430" class="v-t" text-anchor="middle">修好了就撤</text>
+  <text x="590" y="470" class="v-g" text-anchor="middle">留言忘了撤，3 天后自己消失</text>
+
+  <!-- 手机锁屏（示意） -->
+  <rect class="v-ico" x="690" y="34" width="190" height="364" rx="30"/>
+  <rect class="v-fill-p" x="765" y="48" width="40" height="8" rx="4"/>
+  <text x="785" y="114" class="s07n-clock" text-anchor="middle">21:30</text>
+  <text x="785" y="136" class="v-g" text-anchor="middle">11月22日 星期日</text>
+  <rect class="v-fill-p" x="701" y="160" width="168" height="56" rx="12"/>
+  <text x="713" y="183" class="v-t v-t--b">等你回答｜原理页配图</text>
+  <text x="713" y="202" class="v-g">两张配图先改哪一张？</text>
+  <rect class="v-fill-p" x="701" y="224" width="168" height="56" rx="12"/>
+  <text x="713" y="247" class="v-t v-t--b">做完了｜原理页配图</text>
+  <text x="713" y="266" class="v-g">第 7 节的表换成了机制图</text>
+  <rect class="v-fill-p" x="701" y="288" width="168" height="56" rx="12"/>
+  <text x="713" y="311" class="v-t v-t--b">急·5分钟｜网站发布</text>
+  <text x="713" y="330" class="v-g">要扫码登录，二维码快过期</text>
+  <rect class="v-fill-p" x="745" y="382" width="80" height="4" rx="2"/>
+  <text x="785" y="424" class="v-g" text-anchor="middle">示意：第一行是标签｜哪个对话</text>
+  <text x="785" y="440" class="v-g" text-anchor="middle">第二行是这一轮的结果或问题</text>
+  <text x="785" y="456" class="v-g" text-anchor="middle">一分钟内同时来的几条合成一条</text>
+</svg>

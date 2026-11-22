@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 372" width="680" height="372" role="img" aria-labelledby="s09-title s09-desc">
+  <title id="s09-title">主持的对话关了，派出去的活照样干</title>
+  <desc id="s09-desc">Claude、Codex 和 Antigravity 派别家的模型都经派活包装器。GPT 交给 Codex 的后台任务服务，Claude 交给 Claude 的命令行，Gemini 交给 Antigravity 的命令行。每一单都有独立的后台程序带着。GPT 那一路断网、满载时，包装器等一等，在原对话里自动重试；Claude 那一路走不通、而 Antigravity 正好有同一型号同一档位时，包装器改走 Antigravity，新开对话重跑原单。</desc>
+  <style>.v-l.s09w-aside { stroke: var(--v-faint, #a8a69e); stroke-dasharray: 2 4; }</style>
+  <rect class="v-band" x="300" y="88" width="352" height="258" rx="10"/>
+
+  <text class="v-t v-t--l" x="30" y="34">主持的对话</text>
+  <text class="v-t" x="30" y="55">Claude、Codex 或 Antigravity</text>
+  <path class="v-l v-l--ai" d="M35 74H218 M218 69V79"/>
+  <circle class="v-a" cx="35" cy="74" r="5"/>
+  <text class="v-g" x="228" y="78">对话关了</text>
+
+  <path class="v-l" d="M84 74V217Q84 224 91 224H250"/>
+  <text class="v-g" x="94" y="150">派别家的模型</text>
+  <circle class="v-p" cx="170" cy="224" r="5.5"/>
+  <text class="v-t v-t--l" x="170" y="249" text-anchor="middle">派活包装器</text>
+
+  <text class="v-t v-t--l" x="322" y="117">每单由独立的后台程序带着</text>
+  <path class="v-l" d="M250 224V151Q250 144 257 144H322 M250 224H322 M250 224V297Q250 304 257 304H322"/>
+  <g class="v-t">
+    <circle class="v-p" cx="322" cy="144" r="4"/>
+    <text x="335" y="149">Codex 的后台任务服务</text>
+    <path class="v-l" d="M474 144H502"/>
+    <circle class="v-a" cx="502" cy="144" r="5"/>
+    <text x="516" y="149">GPT</text>
+
+    <circle class="v-p" cx="322" cy="224" r="4"/>
+    <text x="335" y="229">Claude 的命令行</text>
+    <path class="v-l" d="M474 224H502"/>
+    <circle class="v-a" cx="502" cy="224" r="5"/>
+    <text x="516" y="229">Claude</text>
+
+    <circle class="v-p" cx="322" cy="304" r="4"/>
+    <text x="335" y="309">Antigravity 的命令行</text>
+    <path class="v-l" d="M474 304H502"/>
+    <circle class="v-a" cx="502" cy="304" r="5"/>
+    <text x="516" y="309">Gemini</text>
+  </g>
+
+  <!-- 两路末端的旁注：空心墨环是有情况才发生、由包装器自己做的 -->
+  <path class="v-l s09w-aside" d="M502 152V161"/>
+  <circle class="v-o" cx="502" cy="166" r="4"/>
+  <text class="v-g"><tspan x="516" y="170">断网、满载时等一等，</tspan><tspan x="516" y="184">在原对话里自动重试</tspan></text>
+
+  <path class="v-l s09w-aside" d="M502 232V241"/>
+  <circle class="v-o" cx="502" cy="246" r="4"/>
+  <text class="v-g"><tspan x="516" y="250">走不通、Antigravity</tspan><tspan x="516" y="264">正好有同型号同档位时，</tspan><tspan x="516" y="278">改走它新开对话重跑原单</tspan></text>
+
+  <text class="v-g" x="322" y="331">主持的对话关了也照样干，中断后能回原会话接着做</text>
+</svg>
