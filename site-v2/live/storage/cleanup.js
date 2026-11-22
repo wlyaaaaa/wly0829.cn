@@ -142,10 +142,21 @@
     return [title, counts, at(run.progress_at) && `${hm(run.progress_at)} 读到`, gap].filter(Boolean).join(' · ');
   }
 
+  // 一轮里出错的项按件数从多到少：“规则中文名 · 原因 · N 项”；没有 failures 的旧回执返回 null，照旧只写件数（M328）
+  function failures(run, viewer) {
+    const list = Array.isArray(run?.failures) ? run.failures.filter(f => f && typeof f === 'object') : [];
+    if (!list.length) return null;
+    return list.map(f => ({ n: num(f.count) || 1, place: K.field(f.rule_name, '清理规则名称', viewer) || K.field(f.path_category, '清理位置', viewer) || '有一条规则', why: K.field(f.reason, '清理出错原因', viewer) || '没写原因' }))
+      .sort((a, b) => b.n - a.n).map(f => ({ n: f.n, text: `${f.place} · ${f.why} · ${f.n} 项` }));
+  }
+
   function tiles(g, viewer) {
     if (!g) return `<ul class="cl-tiles is-gray">${[['ok', '出错'], ['shield', '保护名单被删'], ['clock', '下次']].map(([i, k]) => `<li>${ICON[i]}<div><b>${k}</b><span class="cl-dash">—</span></div></li>`).join('')}</ul>`;
     const n = g.week.length, err = g.errors.length;
-    const first = err ? `<li data-tone="amber">${ICON.warn}<div><b>出错 ${err} 次</b><span>${esc(K.field(g.errors[0].error, '清理出错原因', viewer) || '最近一次出错没有写原因')}</span></div></li>`
+    // 最近出错那一轮写出原因：先露 3 条，其余收进“还有 N 项”（M328）
+    const fails = err ? failures(g.errors[0], viewer) || [] : [], restFails = fails.slice(3);
+    const failHtml = fails.slice(0, 3).map(f => `<span>${esc(f.text)}</span>`).join('') + (restFails.length ? `<details class="cl-fail-more"><summary class="more live-disclosure"><span class="disclosure-closed">还有 ${restFails.reduce((n, f) => n + f.n, 0)} 项</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary>${restFails.map(f => `<span>${esc(f.text)}</span>`).join('')}</details>` : '');
+    const first = err ? `<li data-tone="amber">${ICON.warn}<div><b>出错 ${err} 次</b><span>${esc(K.field(g.errors[0].error, '清理出错原因', viewer) || '最近一次出错没有写原因')}</span>${failHtml}</div></li>`
       : `<li>${ICON.ok}<div><b>出错 0 次</b><span>近 7 天 ${n} 轮都跑完</span></div></li>`;
     const hits = g.week.reduce((s, r) => s + (num(r.protected_hits) || 0), 0);
     const second = g.deleted ? `<li data-tone="red">${ICON.shield}<div><b>保护名单被删 ${g.deleted} 件</b><span>近 7 天 · 要马上看</span></div></li>`
@@ -327,5 +338,5 @@
       observer.observe(host);
     }
   }
-  window.StorageCleanup = { render, digest, alarm, trendData, ticks, trendReading };
+  window.StorageCleanup = { render, digest, alarm, failures, trendData, ticks, trendReading };
 })();
