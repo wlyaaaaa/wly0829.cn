@@ -7,11 +7,11 @@
   let at = null, viewer = 'public', pendingItems = new Set(), reportsData = null, reportCount = null, openTrend = null, recentClosed = null;
   const route = href => { const u = new URL(href, location.origin); if (u.origin !== location.origin) return href; if (params.has('fixture') && u.pathname.startsWith('/live/')) u.searchParams.set('fixture', params.get('fixture')); return u.pathname + u.search + u.hash; };
   const actions = it => {
-    const list = (it.actions || []).filter(a => !it.closed || !['done', 'later'].includes(a.intent)).map(a => ({ ...a, label: a.intent === 'ask' ? '问情况' : !a.label || typeof a.label === 'object' && !a.label.text && !a.label.value ? ({ done: '复制给 AI', ack: '我知道了', close_report: '关掉', later: '晚点提醒', decline: '不办了' })[a.intent] || (a.target === 'report' ? '看汇报' : '打开对话') : a.label }));
-    if (it.owner_source_id) for (const a of list) if (a.intent === 'done') a.label = '复制给 AI';
+    // M458：卡上不单独放“复制给 AI”，问情况就是复制给 AI（定稿卡-等你的事 开头，本人 11-22 16:04）
+    const list = (it.actions || []).filter(a => a.intent !== 'done' && (!it.closed || a.intent !== 'later')).map(a => ({ ...a, label: a.intent === 'ask' ? '问情况' : !a.label || typeof a.label === 'object' && !a.label.text && !a.label.value ? ({ ack: '我知道了', close_report: '关掉', later: '晚点提醒', decline: '不办了' })[a.intent] || (a.target === 'report' ? '看汇报' : '打开对话') : a.label }));
     if (!list.some(a => a.intent === 'ask')) list.unshift({ kind: 'copy', label: '问情况', intent: 'ask' });
     if (it.open && !list.some(a => a.kind === 'open')) list.push({ ...(typeof it.open === 'string' ? (/^(https?:|\/)/.test(it.open) ? { href: it.open } : { target: it.open }) : it.open), kind: 'open', label: it.open.label || '打开对话' });
-    return U.actions(it, list.map(a => typeof a.href === 'string' && a.href.startsWith('/live/') ? { ...a, href: route(a.href) } : a));
+    return U.goActions(it, list.map(a => typeof a.href === 'string' && a.href.startsWith('/live/') ? { ...a, href: route(a.href) } : a));
   };
   const optionActions = (d, q) => U.actions({ id: `${d.id}:question:${q.id}`, text: itemText(d) }, (q.options || []).map(o => ({ kind: 'copy', label: o, text: U.choiceText(d, itemText(d), q, o) })));
   function itemOrder(a, b) {
@@ -172,7 +172,7 @@
   const selected = new Set(), selectable = new Map(), groupHidden = new Map();
   const selection = $('item-selection'), selectionActions = $('item-selection-actions');
   function checkbox(it) {
-    if (viewer !== 'owner' || !it.actions?.some(action => U.itemIntent(it, action))) return '';
+    if (viewer !== 'owner' || !it.actions?.some(action => action.intent !== 'done' && U.itemIntent(it, action))) return '';
     selectable.set(it.id, it);
     return '<label class="items-choice"><input type="checkbox" data-select-item="' + esc(it.id) + '" aria-label="选择 ' + esc(itemText(it)) + '"' + (selected.has(it.id) ? ' checked' : '') + '></label>';
   }
@@ -188,7 +188,7 @@
       const item = available.get(id);
       for (const action of item.actions) {
         // 有后续的“不办了”和普通“不办了”合成一个按钮，确认框里再分组。
-        const intent = U.itemIntent(item, action), key = intent === 'decline_copy' ? 'decline' : intent;
+        const intent = action.intent === 'done' ? '' : U.itemIntent(item, action), key = intent === 'decline_copy' ? 'decline' : intent;
         if (key) operations.set(key, [...(operations.get(key) || []), item]);
       }
     }

@@ -130,9 +130,11 @@
       U.html(body, (issue && summary && !d.outcome_text ? `<small>${description ? '问题说明' : '当前进展'}</small>` : '') + sayHead + (note ? '' : notes));
     }
     if (note) { note.hidden = !notes || privateItem; U.html(note, notes); }
-    const acts = (d.actions || []).filter(a => !d.closed || !['done', 'later'].includes(a.intent)).map(a => a.intent === 'ask' ? { ...a, label: '问情况' } : a.intent === 'done' && d.owner_source_id ? { ...a, label: '复制给 AI' } : a);
+    // 不单独放“复制给 AI”，问情况就是复制给 AI（M458）；登记带的去处排第一（M491）
+    let acts = (d.actions || []).filter(a => a.intent !== 'done' && (!d.closed || a.intent !== 'later')).map(a => a.intent === 'ask' ? { ...a, label: '问情况' } : a);
     if (d.open && !acts.some(a => a.kind === 'open')) acts.push({ ...(typeof d.open === 'string' ? (/^(https?:|\/)/.test(d.open) ? { href: d.open } : { target: d.open }) : d.open), kind: 'open', label: d.open.label || '打开对话' });
-    part('acts').hidden = !acts.length; U.html(part('acts'), U.actions(d, acts));
+    acts = [...acts.filter(a => a.kind === 'open' && /^https:\/\//i.test(a.href || '')), ...acts.filter(a => !(a.kind === 'open' && /^https:\/\//i.test(a.href || '')))];
+    part('acts').hidden = !acts.length; U.html(part('acts'), U.goActions(d, acts));
     acts.forEach((a, i) => { if (a.kind === 'open' || ['done', 'decline', 'later'].includes(a.intent)) part('acts').querySelector(`[data-open="${i}"],[data-act="${i}"]`)?.setAttribute('data-needs-pc', ''); });
     L.tone(hero, status.tone);
     const field = value => say(value);

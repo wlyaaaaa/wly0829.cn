@@ -265,6 +265,11 @@ html.mo-on .page--live :is(.more, .back, .l2-nav__groups a):active { scale: var(
   color: #fff;
   box-shadow: 0 1px 2px rgb(20 20 19 / .22), 0 8px 18px -12px rgb(20 20 19 / .55);
 }
+/* 等你的事卡上登记带的去处（例：登录牛客）：排第一个，绿底白字带 ↗，点了新开那个网址（M491） */
+body.page--live .btn.btn--go { border-color: #00A650; background: #00A650; color: #fff; font-weight: 600; box-shadow: 0 6px 14px -8px rgb(0 166 80 / .7); }
+body.page--live .btn.btn--go:is(:hover, :focus-visible) { border-color: #008a43; background: #008a43; color: #fff; }
+body.page--live .btn.btn--go:active { background: #007639; }
+.btn__go { margin-left: 2px; font-weight: 700; }
 
 /* ============ AI 对话：在干的一张一段，帮手一人一行 ============ */
 .row--chat .row__title { font-weight: 600; }

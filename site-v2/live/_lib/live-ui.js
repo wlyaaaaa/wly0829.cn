@@ -833,6 +833,13 @@
     }).join('');
   }
 
+  // 等你的事卡上：登记带的去处（例：“登录牛客”和它的网址）排第一个，绿底白字带 ↗，一眼看得出能点、点了新开那个网址（M491）
+  function goActions(item, list) {
+    const open = a => a.kind === 'open' && typeof a.href === 'string' && /^https:\/\//i.test(a.href);
+    return actions(item, [...list.filter(open), ...list.filter(a => !open(a))])
+      .replace(/<a class="btn btn--sm"([^>]*target="_blank"[^>]*)>(.*?)<\/a>/g, '<a class="btn btn--sm btn--go"$1>$2 <span class="btn__go" aria-hidden="true">↗</span></a>');
+  }
+
   function knowledgeCells(r, owner, split = false) {
     const seen = new Set();
     const kind = owner ? 'owner' : 'public';
@@ -1560,5 +1567,5 @@
     return [labels[d.protection] || missing, ...notes].join('，');
   }
 
-  window.LiveUI = { restoreBack, programName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, fieldText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic };
+  window.LiveUI = { restoreBack, programName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, fieldText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic };
 })();

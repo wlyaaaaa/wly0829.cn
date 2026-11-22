@@ -557,7 +557,8 @@
   // —— 等你的事 ——
   function needRow(it, detail = '', end) {
     const loud = it.kind === 'choose' || it.kind === 'do';
-    const actions = (it.actions || []).map(a => a.intent === 'ask' ? { ...a, label: '问情况' } : a.intent === 'done' && it.owner_source_id ? { ...a, label: '复制给 AI' } : a);
+    // 卡上不单独放“复制给 AI”，问情况就是复制给 AI（M458，定稿卡-等你的事）
+    const actions = (it.actions || []).filter(a => a.intent !== 'done').map(a => a.intent === 'ask' ? { ...a, label: '问情况' } : a);
     const value = (v, label, format = v => v) => v == null ? '' : U.fieldHtml(v && typeof v === 'object' ? { ...v, value: format(v.value) ?? v.value, text: format(v.text) ?? v.text } : format(v), { name: label, kind: viewer });
     let sub = '';
     if (loud) {
@@ -582,7 +583,7 @@
       html: `${lamp({ ...it, level: it.light })}<div class="row__text">
           <p class="row__main"><span class="row__kind">${addressed(KIND[it.kind])}</span>${title(it, homeAddressed(it.text), 'items')}${fresh}${marks}</p>
           ${sub ? `<p class="row__sub">${sub}</p>` : ''}${detail}
-        </div><div class="row__acts">${U.actions(it, loud && !actions.some(a => a.label === '问情况') ? [{ kind: 'copy', label: '问情况', intent: 'ask' }, ...actions] : actions)}</div>`,
+        </div><div class="row__acts">${U.goActions(it, loud && !actions.some(a => a.label === '问情况') ? [{ kind: 'copy', label: '问情况', intent: 'ask' }, ...actions] : actions)}</div>`,
     };
   }
 

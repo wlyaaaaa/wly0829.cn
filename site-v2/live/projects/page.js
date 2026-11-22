@@ -91,6 +91,7 @@
     const empty = U.offline?.() ? '这块没存下来，连上后补上。' : '项目暂时读不到';
     U.html($('head'), status.lamp + U.head(text || (privateSummary ? '项目' : empty), { lamp: false }) + cutoff + (status.note ? ` <span class="row__meta">${status.note}</span>` : '') + (!frozenOnly && privateSummary ? ` <span class="row__meta">${U.fieldHtml(home.text, { name: '项目说明', kind: viewer })}</span>` : ''));
   }
+  let changesPack = null;
   function fill(key, rows, none) {
     const n = key === 'frozen' && !frozenOnly ? 0 : key === 'changes' ? 5 : Infinity; if (rows == null) { rows = []; none = U.offline?.() ? '这块没存下来，连上后补上。' : `${({ active: '在用的项目', frozen: '冻结的项目', changes: '项目变化' })[key]}暂时读不到`; $(`${key}`).style.minHeight = '0'; }
     rows = withLook(key, rows);
@@ -98,6 +99,8 @@
     if (key !== 'frozen' || !frozenOnly && rows.length > 6) rows = groupedRows(rows, key);
     U.list($(`${key}-list`), rows.length ? rows.slice(0, n) : none ? [empty(none, key !== 'changes')] : []); U.list($(`${key}-rest`), rows.slice(n));
     watchBands($(key));
+    // 项目变化：先列的几组和展开后的其余几组接着排两栏，展开后不在两块之间空一截（M486/M487）
+    if (key === 'changes') (changesPack ||= window.LivePack.create([$('changes-list'), $('changes-rest')], { cols: 2, gap: 24 })).fit();
     $(`${key}-more`).hidden = rows.length <= n; foldLabel(key, key === 'frozen' ? total : Math.max(0, rows.length - n));
     L.lightUp([hero, $('board'), $('notices')]);
   }
@@ -273,7 +276,7 @@
     };
     button.addEventListener('click', () => {
       const open = button.getAttribute('aria-expanded') !== 'true';
-      for (const ul of box.querySelectorAll('.pj-extra__list')) ul.packKey = '';
+      box.pack?.reset();
       for (const el of folds()) el.open = open;
       sync();
     });
@@ -282,27 +285,6 @@
       if (button.getAttribute('aria-expanded') === 'true') for (const el of folds()) el.open = true;
       sync();
     };
-  }
-  // 最近成品卡高矮不一（M487）：每张卡按顺序放进当时最矮的一列，第一排仍是前几张，同一列里卡贴着卡排，不按同排最高的卡留白。
-  // 卡里点“展开”只拉长自己那一列，别的卡不换列；列数变了（窗口宽度）、卡换了，或点“展开全部／收起全部”时才重新分列。
-  function packCards(ul) {
-    // 列数按整块的宽度算：“再看几个项目”那一组收在折叠里，自己的宽度不一定跟着窗口变。
-    const host = ul.closest('.pj-extra')?.querySelector('.pj-extra__list') || ul;
-    const fit = () => {
-      const cards = [...ul.children].filter(li => !li.classList.contains('is-leaving'));
-      const cols = Math.max(1, Math.floor((host.clientWidth + 24) / (330 + 24))), key = `${cols}|${cards.map(li => li.dataset.key).join()}`;
-      if (!cards.length || cards.some(li => !li.offsetHeight)) { ul.packKey = ''; return; }
-      if (key !== ul.packKey) {
-        ul.packKey = key;
-        const heights = Array(cols).fill(0);
-        for (const li of cards) { const col = heights.indexOf(Math.min(...heights)); li.style.gridColumn = String(col + 1); heights[col] += li.offsetHeight + 24; }
-      }
-      for (const li of cards) li.style.gridRowEnd = `span ${Math.ceil(li.offsetHeight) + 24}`;
-      ul.classList.add('is-packed');
-    };
-    if (!ul.packObserver) { ul.packObserver = new ResizeObserver(() => requestAnimationFrame(fit)); ul.packObserver.observe(ul); if (host !== ul) ul.packObserver.observe(host); }
-    for (const li of ul.children) ul.packObserver.observe(li);
-    fit();
   }
   function drawProjectExtras(d) {
     const field = v => U.fieldHtml(v, { kind: viewer });
@@ -320,7 +302,8 @@
       const more = box.querySelector('.pj-extra__more');
       more.hidden = !rest.length; more.querySelector('.disclosure-closed').textContent = `再看 ${rest.length} 个项目`;
       U.list(box.querySelector('[data-extra-rest]'), rest);
-      if (id === 'recent-artifacts') box.querySelectorAll('.pj-extra__list').forEach(packCards);
+      // 最近成品：卡按顺序放进最矮的一栏，“再看几个项目”展开后接着排（M487，共用 LivePack）
+      if (id === 'recent-artifacts') (box.pack ||= window.LivePack.create([...box.querySelectorAll('.pj-extra__list')], { min: 330, gap: 24 })).fit();
       box.syncDisclosure?.();
       watchBands(box);
     };

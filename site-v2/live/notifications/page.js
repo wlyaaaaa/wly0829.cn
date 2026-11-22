@@ -172,7 +172,8 @@
     emailScope=emailOpenScope??(full&&hasWindow(stats)&&validCount(email?.sent)&&validCount(email?.total)&&email.total>email.sent
       ?{count:email.total-email.sent,from:parse(stats.from),to:parse(stats.to)}:null);
     emailDetails.hidden=!emailScope;
-    if(emailScope)emailDetails.querySelector('summary').textContent=`看这 7 天没确认到的 ${emailScope.count} 封邮件`;
+    // 展开后按钮改说“收起”，一眼看得出已经打开、怎么收（M506）
+    if(emailScope)U.html(emailDetails.querySelector('summary'),`<span class="disclosure-closed">看这 7 天没确认到的 ${emailScope.count} 封邮件</span><span class="disclosure-open">收起这 ${emailScope.count} 封邮件</span><span class="disclosure-chev" aria-hidden="true">›</span>`);
     else emailDetails.open=false;
     if(emailDetails.open)drawEmailGaps();
     const notes=[interval(stats?.from,stats?.to),stats?.gap,...(channels||[]).map(r=>r.gap)].filter(Boolean);
