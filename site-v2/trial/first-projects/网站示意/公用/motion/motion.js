@@ -305,12 +305,8 @@
           const px = (v, side) => (v.endsWith('%') ? parseFloat(v) / 100 * side : parseFloat(v)) || 0;
           rec.open = { left: b.left, top: b.top, width: b.width, height: b.height, radius: Math.min(px(rh, b.width), px(rv, b.height)), bar: top };
           sessionStorage.setItem(`mo-open:${stripHash(to)}`, JSON.stringify({ back: stripHash(location.href), y: scrollY, rect: rec.open }));
-          // 点下去时板已经在长（2.8 点下去就开始长）：新页从板这一刻的位置接着长；退回时仍缩回原来那一块
-          if (pre && pre.el.isConnected) {
-            const p = pre.el.getBoundingClientRect();
-            rec.open = { left: p.left, top: p.top, width: p.width, height: p.height,
-              radius: parseFloat(getComputedStyle(pre.el).borderTopLeftRadius) || 0, bar: top, elapsed: performance.now() - pre.t0 };
-          }
+          // 点下去时板已经在长（2.8 点下去就开始长）：记下长了多久，新页沿同一条曲线从这一刻接着长；退回时仍缩回原来那一块
+          if (pre && pre.el.isConnected) rec.open.elapsed = performance.now() - pre.t0;
         }
       }
       let opened = null;
@@ -525,25 +521,33 @@
     const vw = innerWidth, vh = innerHeight, top = Math.min(r.bar || 0, vh - 1);
     const frames = fitFrames({ x: 0, y: top, w: vw, h: vh - top }, r, vw, vh);
     const pseudoElement = `::view-transition-${opening ? 'new' : 'old'}(root)`;
-    // 旧页上的板已经长了一段（2.8 点下去就开始长）：从板的位置接着长完剩下的，用减速的曲线，不重新起步；不再等新页
-    const going = opening && r.elapsed != null;
-    const total = ms('--mo-home') * SPEED;
-    const duration = going ? Math.max(240 * SPEED, total - r.elapsed) : total;
-    const fade = going ? Math.min(120 * SPEED, duration / 2) : ms('--mo-home-fade') * SPEED;
-    const options = { duration, easing: cssVar(going ? '--mo-out' : '--mo-move'), fill: 'forwards', pseudoElement };
+    const duration = ms('--mo-home') * SPEED, fade = ms('--mo-home-fade') * SPEED;
+    const options = { duration, easing: cssVar('--mo-move'), fill: 'forwards', pseudoElement };
     const anims = ['move', 'clip'].map(k => root.animate(opening ? [...frames[k]].reverse() : frames[k], options));
     anims.push(root.animate(opening ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 1 }, { opacity: 0 }],
       { duration: fade, delay: opening ? 0 : duration - fade, easing: 'linear', fill: opening ? 'backwards' : 'forwards', pseudoElement }));
-    if (!opening || going) return;
-    // 打开：新页的第一屏（字、图）画出来再长，不然长出来的是一片空白、看不出是从卡片长出来的；最多等 --mo-page-hold。
-    // 等的时候停在起点（那一块的位置、全透明），旧页原样在，看着就是刚按下去。
+    if (!opening) return;
+    // 旧页上的板已经长了一段（2.8 点下去就开始长），旧页定格在那一刻：新页沿同一条曲线、同样的时长从那一刻接着长，
+    // 不换成急停的曲线、不压短（压短了一揭开就弹满，淡入没完就盖过旧页，两页的字叠在一起）；板已经不透明了，新页照常淡入。
+    if (r.elapsed != null) {
+      anims[0].currentTime = anims[1].currentTime = Math.min(r.elapsed, duration);
+      if (r.elapsed < fade) anims[2].currentTime = r.elapsed;
+    }
+    // 打开：新页的第一屏（字、图、读数）画出来再长，不然长出来的是一片空白、看不出是从卡片长出来的；最多等 --mo-page-hold。
+    // 等的时候停在板定格的那一刻，旧页原样在，看着就是刚按下去。读数块在读时带 aria-busy（实况各页），第一屏里没有在读的才算画好。
     anims.forEach(a => a.pause());
-    let go = false;
-    const start = () => { if (go) return; go = true; anims.forEach(a => { try { a.play(); } catch {} }); };
+    let go = false, watch = null;
+    const start = () => { if (go) return; go = true; watch?.disconnect(); anims.forEach(a => { try { a.play(); } catch {} }); };
     setTimeout(start, ms('--mo-page-hold') * SPEED);
+    const reading = () => [...document.querySelectorAll('main [aria-busy="true"]')].some(inView);
+    const read = () => new Promise(resolve => {
+      if (!reading()) return resolve();
+      watch = new MutationObserver(() => { if (!reading()) { watch.disconnect(); resolve(); } });
+      watch.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['aria-busy'] });
+    });
     const painted = () => {
       const imgs = [...document.querySelectorAll('main img')].filter(img => img.loading !== 'lazy' && inView(img)).slice(0, 6);
-      Promise.all(imgs.map(decoded)).then(() => requestAnimationFrame(() => requestAnimationFrame(start)));
+      Promise.all([...imgs.map(decoded), read()]).then(() => requestAnimationFrame(() => requestAnimationFrame(start)));
     };
     if (domReady) painted(); else document.addEventListener('DOMContentLoaded', painted, { once: true });
   }
