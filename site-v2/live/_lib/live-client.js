@@ -7,8 +7,8 @@
   const base = site ? 'https://live.wly0829.cn/computer-access/live/v1/' : '/__live/';
   const PAIR_URL = site ? 'https://mcp.wly0829.cn/computer-access/api/cockpit-device/pair' : '/__computer/cockpit-device/pair';
   const fixture = new URLSearchParams(location.search).get('fixture');
-  // 首页、连接电脑等没有切换按钮，也沿用当前窗口已选的公开版。
-  const publicView = (() => {
+  // “看公开版”只管实况页（/live/ 下面）；根首页、授权与状态、连接电脑等没有访客版，本人设备上始终按本人读（本人 11-22 09:29，M518）。
+  const publicView = /^\/live(?:\/|$)/.test(location.pathname) && (() => {
     if (window.LiveView) return window.LiveView.isPublic();
     try { return window.sessionStorage?.getItem('wly-live-view') === 'public'; }
     catch { return false; } // 浏览器禁用会话存储时没有已保存的选择。

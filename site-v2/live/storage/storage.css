@@ -58,6 +58,7 @@
 .cl-rulebar { display: flex; gap: 2px; height: 16px; margin: 14px 0 14px; border-radius: 8px; overflow: hidden; }
 .cl-rulebar i { min-width: 3px; }
 .cl-rules { margin: 0; padding: 0; list-style: none; }
+.cl-rules-more > summary { margin-top: 6px; font-size: 13.5px; }
 .cl-rules li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 5px 0; font-size: 14px; line-height: 20px; color: var(--ink); }
 .cl-rules li > i { width: 10px; height: 10px; border-radius: 50%; }
 .cl-rules b { font-weight: 500; font-variant-numeric: tabular-nums; }

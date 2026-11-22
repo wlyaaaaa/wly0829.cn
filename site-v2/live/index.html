@@ -33,15 +33,11 @@
 .page--live #computer .kv__row:last-child dd { display: flex; flex-wrap: wrap; column-gap: 5px; }
 .page--live #computer .traffic-hour, .page--live #computer .kv__label { display: inline-block; white-space: nowrap; }
 .page--live #computer .traffic-hour { margin-inline-start: .55em; max-width: 100%; white-space: normal; }
-/* 窗口窄到读数那一栏快挤没了：海外流量名字放上一行，读数占整行，不伸出卡外（M415） */
+/* 窗口窄到读数那一栏快挤没了（如 1024 宽）：每行名字放上一行，读数占整行，不伸出卡外（M415、M515） */
 .page--live #computer .kv { container-type: inline-size; }
-@container (max-width: 200px) {
- .page--live #computer .kv__row:has(.traffic-hour) dt { grid-column: 2 / -1; }
- .page--live #computer .kv__row:has(.traffic-hour) dd { grid-column: 2 / -1; grid-row: 2; }
-}
 @container (max-width: 260px) {
- .page--live #computer .kv__row:is(:last-child,:has(small):not(:has(.traffic-hour))) dt { grid-column: 2 / -1; }
- .page--live #computer .kv__row:is(:last-child,:has(small):not(:has(.traffic-hour))) dd { grid-column: 2 / -1; grid-row: 2; }
+ .page--live #computer .kv__row dt { grid-column: 2 / -1; }
+ .page--live #computer .kv__row dd { grid-column: 2 / -1; grid-row: 2; }
  .page--live #computer .kv__row:last-child dd a { white-space: normal; }
 }
 @media (max-width: 760px) {
@@ -199,7 +195,7 @@
 .page--live #projects .project-group > h3 > span { font-size: 28px; }
 .page--live #projects .project-more { grid-column: 2; min-width: 0; font-size: 14px; }
 .page--live #projects .project-more > summary { cursor: pointer; padding: 2px 0 8px; }
-.page--live .board #projects .project-grid { display: grid; gap: 8px; grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+.page--live .board #projects .project-grid { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); margin: 0; padding: 0; list-style: none; }
 .page--live #projects .project-cell { position: relative; min-height: 88px; padding: 12px 14px; border: 1px solid rgb(255 255 255 / .8); background: rgb(255 255 255 / .68); border-radius: 14px; display: flex; flex-direction: column; justify-content: flex-start; }
 .page--live #projects .project-cell > a { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 600; color: inherit; text-decoration: none; }
 .page--live #projects .project-icon { width: 20px; height: 20px; flex: 0 0 20px; }

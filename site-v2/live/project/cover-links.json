@@ -1,6 +1,7 @@
 {
   "agents": "agents",
   "ai-cli-profile-manager": "ai-cli-profile-manager",
+  "cacb": "codex-agent-model-benchmark",
   "chinese-asr": "chineseasr",
   "codex-memory": "codex-memory",
   "codex-remote": "codex-local-remote",
@@ -32,5 +33,6 @@
   "video-scaffold": "video-scaffold",
   "wechat-direct": "wechatdirect",
   "wechat-history-ai-bridge": "wechat-history-ai-bridge",
+  "wly0829-cn": "wly0829.cn",
   "work-delivery": "work-delivery-copilot"
 }

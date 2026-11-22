@@ -505,6 +505,9 @@ a.row__title:hover { color: #00813f; }
   transition: background .2s ease, color .2s ease;
 }
 .l2-nav__groups a:hover { background: rgb(255 255 255 / .65); color: var(--ink); }
+/* 电脑下面八页的同层切换：在返回下面，这一页是白色小药丸（M017） */
+.l2-nav.live-siblings { margin: -4px 0 14px; }
+.live-siblings .l2-nav__groups a[aria-current] { background: rgb(255 255 255 / .8); color: var(--ink); font-weight: 600; }
 .chart-group { scroll-margin-top: calc(var(--bar-bottom) + 18px); }
 
 /* 两档小开关：选中的那一档是一颗白色小药丸 */

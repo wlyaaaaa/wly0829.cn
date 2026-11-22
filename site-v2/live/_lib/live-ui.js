@@ -1567,5 +1567,17 @@
     return [labels[d.protection] || missing, ...notes].join('，');
   }
 
+  // 电脑下面的八页：返回回电脑总览（各页 HTML 里写好），返回下面一排同层切换，这一页标出来（M016、M017）
+  (() => {
+    const pages = [['/live/storage/', '存储'], ['/live/traffic/', '海外流量'], ['/live/power/', '用电'], ['/live/smooth/', '卡顿与流畅'], ['/live/apps/', '谁在占'], ['/live/usage/', '使用时间'], ['/live/security/', '安全'], ['/live/environment/', '软件与环境']];
+    const back = document.querySelector?.('main a.back[href="/live/computer/"]');
+    if (!back || !pages.some(([path]) => path === location.pathname)) return;
+    const fixture = new URLSearchParams(location.search).get('fixture'), nav = document.createElement('nav');
+    nav.className = 'l2-nav live-siblings'; nav.setAttribute('aria-label', '电脑下面的几页');
+    nav.innerHTML = `<span class="l2-nav__groups">${pages.map(([path, label]) => path === location.pathname ? `<a aria-current="page">${label}</a>`
+      : `<a href="${path}${fixture == null ? '' : `?fixture=${encodeURIComponent(fixture)}`}">${label}</a>`).join('')}</span>`;
+    back.after(nav);
+  })();
+
   window.LiveUI = { restoreBack, programName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, fieldText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic };
 })();

@@ -23,12 +23,13 @@ test('LAN reader is only selected for a direct unpaired owner view', () => {
   }
 });
 
-test('home and computer connection keep the public selection without loading the view switch', () => {
+test('only live pages follow the public selection; home and computer connection read as the owner (M518)', () => {
   const device = 'A'.repeat(43);
-  for (const [url, resource, expected, expectedHeader] of [
-    ['http://192.168.31.235:8829/', 'screen', '/__live/screen', 'public'],
-    ['http://192.168.31.235:8829/mcp/', 'connect', '/__live/connect', 'public'],
-    ['https://wly0829.cn/mcp/', 'connect', 'https://live.wly0829.cn/computer-access/live/v1/connect', undefined],
+  for (const [url, resource, expected, expectedHeader, owner] of [
+    ['http://192.168.31.235:8829/live/', 'home', '/__live/home', 'public', false],
+    ['http://192.168.31.235:8829/', 'screen', 'http://192.168.31.235:18829/__live/screen', undefined, true],
+    ['http://192.168.31.235:8829/mcp/', 'connect', 'http://192.168.31.235:18829/__live/connect', undefined, true],
+    ['https://wly0829.cn/mcp/', 'connect', 'https://live.wly0829.cn/computer-access/live/v1/connect', undefined, true],
   ]) {
     const window = {sessionStorage: {getItem: key => key === 'wly-live-view' ? 'public' : null}};
     vm.runInNewContext(source, {window, location: new URL(url), document: {
@@ -37,7 +38,7 @@ test('home and computer connection keep the public selection without loading the
     const target = window.Live.readRequest(resource, '');
     assert.equal(target.url, expected);
     assert.equal(target.headers['X-Wly-View'], expectedHeader);
-    assert.equal(window.Live.readRequest(resource, device).headers['X-Cockpit-Device'], undefined);
+    assert.equal(window.Live.readRequest(resource, device).headers['X-Cockpit-Device'], owner ? device : undefined);
   }
 });
 

@@ -172,7 +172,11 @@
     if (!Array.isArray(g.last.rules)) return '<p class="cl-sub">最近一轮没记录每条规则腾出了多少。</p>';
     if (!list.length) return `<p class="cl-sub">${esc(withheld || '最近一轮没有到期要删的。')}</p>`;
     const sum = list.reduce((n, r) => n + r.freed_bytes, 0), name = r => K.field(r.label, '清理规则名称', viewer) || '规则';
-    return `<span class="cl-rulebar" role="img" aria-label="${esc(list.map(r => `${name(r)} ${K.size(r.freed_bytes)}`).join('，'))}">${list.map((r, i) => `<i style="width:${(r.freed_bytes / sum * 100).toFixed(2)}%;background:${RULE_HUES[Math.min(i, RULE_HUES.length - 1)]}"></i>`).join('')}</span><ul class="cl-rules">${list.map((r, i) => `<li><i style="background:${RULE_HUES[Math.min(i, RULE_HUES.length - 1)]}"></i><span>${esc(name(r))}</span><b>${esc(K.size(r.freed_bytes))}</b></li>`).join('')}</ul>${withheld ? `<p class="cl-sub">${esc(withheld)}</p>` : ''}`;
+    const row = (r, i) => `<li><i style="background:${RULE_HUES[Math.min(i, RULE_HUES.length - 1)]}"></i><span>${esc(name(r))}</span><b>${esc(K.size(r.freed_bytes))}</b></li>`;
+    // 规则多时先列腾出最多的 5 条，其余收进“展开”，免得这一栏比右边的走势图长出一大截、右边空着（M503）
+    const shown = list.length > 6 ? 5 : list.length, rest = list.slice(shown);
+    const more = rest.length ? `<details class="cl-rules-more" data-key="rules-more"><summary class="more live-disclosure"><span class="disclosure-closed">展开（还有 ${rest.length} 条）</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary><ul class="cl-rules">${rest.map((r, i) => row(r, i + shown)).join('')}</ul></details>` : '';
+    return `<span class="cl-rulebar" role="img" aria-label="${esc(list.map(r => `${name(r)} ${K.size(r.freed_bytes)}`).join('，'))}">${list.map((r, i) => `<i style="width:${(r.freed_bytes / sum * 100).toFixed(2)}%;background:${RULE_HUES[Math.min(i, RULE_HUES.length - 1)]}"></i>`).join('')}</span><ul class="cl-rules">${list.slice(0, shown).map(row).join('')}</ul>${more}${withheld ? `<p class="cl-sub">${esc(withheld)}</p>` : ''}`;
   }
 
   // —— 各盘空闲走势：同一坐标，自己画一张 SVG（几条线、还没开始记、缺测斜线、清理那一下的绿点） ——
