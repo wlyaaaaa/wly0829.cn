@@ -1,7 +1,7 @@
 // 存储：页首一句话（存储页自己判断最要紧的事），自动清理大卡（cleanup.js）、每块盘合并卡（disks.js），下面一排小卡。
 (() => {
   'use strict';
-  const U = window.LiveUI, Light = window.LiveLight, K = window.StorageKit, $ = id => document.getElementById(id), { esc } = U;
+  const U = window.LiveUI, Light = window.LiveLight, K = window.StorageKit, $ = id => document.getElementById(id), { esc, sp } = U;
   U.date = window.LiveChart.date;
   const params = new URLSearchParams(location.search), hero = $('hero');
   const route = href => { const url = new URL(href, location.href); if (params.has('fixture')) url.searchParams.set('fixture', params.get('fixture')); return url.pathname + url.search + url.hash; };
@@ -248,7 +248,8 @@
     U.list($('notices'), state.offline ? [{ key: 'storage', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${copy}${esc(sp(state.text))}</span>` }] : []);
   }
   function categoryRows(list, row, hidden) {
-    const limit = viewer === 'owner' ? list.length : 5;
+    // 本人版也先露 5 类，其余收进“还有 N 类”，免得这张卡比旁边两张长出一大截（M460）
+    const limit = 5;
     K.put($('categories'), list.length ? list.slice(0, limit).map(row).join('') : hidden ? '' :
       `<li class="pj-note">${U.offline?.() ? missed : '暂时读不到各用途的占用'}。</li>`);
     K.put($('categories-rest'), list.slice(limit).map(row).join(''));

@@ -206,8 +206,15 @@
     if (id === 'net') return m.value === 'wired' ? '有线' : m.value === 'wireless' ? `无线${m.ssid ? ` · ${m.ssid}` : ''}` : U.collectionText();
     return m.value;
   }
-  const laptopBattery = x => x.battery?.percent == null ? U.collectionText('电量', x.battery || x) : `电量 ${x.battery.percent}%${x.battery.charging ? ' · 接着电源' : ''}`;
-  const laptopStamp = (x, now) => x.state === 'online' ? U.staleText(x, x.at, now) : '';
+  // 笔记本在不在线只看连接那组（state、availability）；电量带自己读到的时间（battery.at），电量本身旧了或笔记本这会儿读不到时写“上次读到的”。
+  // 不再拿库存的 at 写“数据截止”，免得和“在线”打架（M253、M319）
+  const laptopBattery = (x, now) => {
+    const b = x.battery, t = Date.parse(b?.at);
+    if (b?.percent == null) return U.collectionText('电量', b || x);
+    const old = b.q === 'stale' || b.stale === true || Number.isFinite(b.stale_after) && Number.isFinite(t) && (now - t) / 1000 > b.stale_after;
+    const when = Number.isFinite(t) ? [U.date(b.at) !== U.date(now) && U.date(b.at), U.time(b.at)].filter(Boolean).join(' ') : '';
+    return `${old || laptopUnavailable(x) ? '上次读到的' : ''}电量 ${b.percent}%${b.charging ? ' · 接着电源' : ''}${when ? ` · ${when}` : ''}`;
+  };
   function hostRows(key) {
     const items = key === 'machine' ? [['os', '系统'], ['displays', '屏幕'], ['os-update', '系统更新']] : [['net', '连接']];
     let rows = items.map(([id, label]) => [label, hostText(id, metric(id)), id === 'os-update' && ['reboot_required', 'updates_pending'].includes(metric(id)?.value)]);
@@ -1003,12 +1010,11 @@
       let hw = [].concat(x.hw || []).filter(Boolean).flatMap(s => typeof s === 'object' ? [s] : sp(s).split(' · '));
       if (x.id === 'main') for (const [id, label] of [['gpu-model', '显卡'], ['cpu-model', 'CPU']]) { const m = metric(id); if (m?.value && !hw.some(s => typeof s === 'object' && s.hidden_what && s.hidden_what === m.value.hidden_what || typeof s === 'string' && (s.startsWith(label + '：') || s.startsWith(label + ':') || sp(m.value).startsWith(s) || s.includes(sp(m.value))))) hw.unshift(typeof m.value === 'object' ? m.value : `${label}：${sp(m.value)}`); }
       // 笔记本这会儿读不到时，下面的电量是上次读到的，写明，不跟“读不到”打架。
-      const battery = x.id === 'secondary_laptop' && (!offline() || x.battery?.percent != null) ? `<p class="row__sub">${U.fieldHtml(x.battery?.percent && typeof x.battery.percent === 'object' ? x.battery.percent : (laptopUnavailable(x) && x.battery?.percent != null ? '上次读到的' : '') + laptopBattery(x), { name: '电量' })}</p>` : '';
-      const stamp = laptopStamp(x, lastState?.now || at);
+      const battery = x.id === 'secondary_laptop' && (!offline() || x.battery?.percent != null) ? `<p class="row__sub">${U.fieldHtml(x.battery?.percent && typeof x.battery.percent === 'object' ? x.battery.percent : laptopBattery(x, Date.parse(lastState?.now || at) || Date.now()), { name: '电量' })}</p>` : '';
       // 笔记本的系统写在笔记本格里（原来夹在“机器自己”卡里）。
       const os = x.id === 'secondary_laptop' && x.os != null ? `<p class="row__sub">${U.fieldHtml(typeof x.os === 'object' ? x.os : `系统 ${sp(x.os)}`, { name: '笔记本系统' })}</p>` : '';
       hw = U.mergePrivateRows(hw, { kind: netViewer });
-      return `<div class="dev-spec">${pill}${notes ? `<p class="row__sub">${notes}</p>` : ''}${hw.length ? `<p class="row__sub row__hw"${x.hw_at ? ` title="${esc(`${U.date(x.hw_at)} ${U.time(x.hw_at)} 的硬件信息`)}"` : ''}>${hw.map(s => s.private_count ? `<span class="computer-hw-item">${U.privateSummary(s.private_count, { unit: '项' })}</span>` : `<span class="computer-hw-item" title="${U.fieldHtml(s, { name: '硬件信息', place: 'label' })}">${unitHtml(s)}</span>`).join('')}</p>` : ''}${os}${battery}${x.id === 'secondary_laptop' && stamp ? `<p class="row__sub">${U.fieldHtml(stamp, { name: '设备读数时间' })}</p>` : ''}</div>`;
+      return `<div class="dev-spec">${pill}${notes ? `<p class="row__sub">${notes}</p>` : ''}${hw.length ? `<p class="row__sub row__hw"${x.hw_at ? ` title="${esc(`${U.date(x.hw_at)} ${U.time(x.hw_at)} 的硬件信息`)}"` : ''}>${hw.map(s => s.private_count ? `<span class="computer-hw-item">${U.privateSummary(s.private_count, { unit: '项' })}</span>` : `<span class="computer-hw-item" title="${U.fieldHtml(s, { name: '硬件信息', place: 'label' })}">${unitHtml(s)}</span>`).join('')}</p>` : ''}${os}${battery}</div>`;
     }).join('') + remoteEntries(d.remote));
     U.html(hardwarePane, hardware, false);
     if (!hardware) hardwarePane.hidden = true;

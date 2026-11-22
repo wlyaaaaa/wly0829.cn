@@ -40,6 +40,12 @@
  .page--live #computer .kv__row dd { grid-column: 2 / -1; grid-row: 2; }
  .page--live #computer .kv__row:last-child dd a { white-space: normal; }
 }
+/* 手机卡同样：读数那一栏窄（如 1024 宽）时名字放上一行，读数占整行，不挤成一两个字一行（M526） */
+.page--live #phone .kv { container-type: inline-size; }
+@container (max-width: 300px) {
+ .page--live #phone .kv__row dt { grid-column: 2 / -1; }
+ .page--live #phone .kv__row dd { grid-column: 2 / -1; grid-row: 2; }
+}
 @media (max-width: 760px) {
  .page--live #computer[data-pic] { --win: 72px; }
  .page--live #computer .card__glass { padding-inline: 16px; }
