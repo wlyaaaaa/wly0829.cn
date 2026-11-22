@@ -606,7 +606,6 @@ PAGE = '''<!doctype html>
 
 <script src="/header/topbar.js"></script>
 <script src="/wall/wall.js"></script>
-{catalog_scripts}
 </body>
 </html>
 '''
@@ -625,17 +624,7 @@ def pick(cards, mode):
     return out
 
 
-def catalog_markup(kind, sections):
-    tag = 'a' if kind == 'projects' else 'div'
-    owner_card = (f'<{tag} class="piece piece--todo is-in"><span class="piece__frame">'
-                  f'<span class="todo__name"></span></span></{tag}>')
-    content = f'<template data-catalog="{kind}">{owner_card}</template>\n{sections}'
-    scripts = '\n'.join(f'<script src="/live/_lib/{name}.js" defer></script>'
-                        for name in ('live-view-switch', 'live-client', 'live-catalog'))
-    return content, scripts
-
-
-def write_projects_page(path, cards, mode, catalog=False):
+def write_projects_page(path, cards, mode):
     order = {pid: i for i, pid in enumerate(SETTINGS.get('项目先后', []))}
     chosen = sorted(pick(cards, mode), key=lambda c: order.get(c['ID'], len(order)))   # 照“项目先后”，没列到的排最后
     big = [c for c in chosen if c['核心']]
@@ -648,22 +637,19 @@ def write_projects_page(path, cards, mode, catalog=False):
         sections.append('  <section class="hang hang--small" aria-label="其余的项目">\n'
                         + '\n'.join(piece(c, 'p-' + c['ID']) for c in small) + '\n  </section>')
     path.parent.mkdir(parents=True, exist_ok=True)
-    content = '\n\n'.join(sections)
-    content, scripts = catalog_markup('projects', content) if catalog else (content, '')
     path.write_text(PAGE.format(title='项目', header=make_header('项目'), main_class='wall', main_attr='', wall_expect=WALL_EXPECT,
-                                sections=content, catalog_scripts=scripts), encoding='utf-8')
+                                sections='\n\n'.join(sections)), encoding='utf-8')
     return len(chosen)
 
 
-def write_skills_page(path, cards, mode, catalog=False):
+def write_skills_page(path, cards, mode):
     order = {sid: i for i, sid in enumerate(SETTINGS.get('技能先后', []))}
     chosen = sorted(pick(cards, mode), key=lambda c: order.get(c['ID'], len(order)))   # 照“技能先后”，没列到的排最后
     sections = ('  <section class="hang hang--small" aria-label="技能">\n'
                 + '\n'.join(piece(c, 's-' + c['ID'], c['项目ID']) for c in chosen) + '\n  </section>') if chosen else ''
     path.parent.mkdir(parents=True, exist_ok=True)
-    content, scripts = catalog_markup('skills', sections) if catalog else (sections, '')
     path.write_text(PAGE.format(title='技能', header=make_header('技能'), main_class='wall wall--skills', wall_expect=WALL_EXPECT,
-                                main_attr=' data-kin="on"', sections=content, catalog_scripts=scripts), encoding='utf-8')
+                                main_attr=' data-kin="on"', sections=sections), encoding='utf-8')
     return len(chosen)
 
 
@@ -705,8 +691,8 @@ def build_lists(projects, skills):
                 card['示意图'] = sample_art(key, f'/{pid}/{sid}.html')
             skill_cards.append(card)
 
-    n_p = write_projects_page(SITE / 'projects' / 'index.html', project_cards, '不摆', catalog=True)
-    n_s = write_skills_page(SITE / 'skills' / 'index.html', skill_cards, '不摆', catalog=True)
+    n_p = write_projects_page(SITE / 'projects' / 'index.html', project_cards, '不摆')
+    n_s = write_skills_page(SITE / 'skills' / 'index.html', skill_cards, '不摆')
     if SETTINGS.get('出三种摆法的比较页'):                     # 要再比一次时在设置里打开，出在 site/_样子/
         for m in PLACEHOLDER_MODES:
             write_projects_page(SITE / '_样子' / f'项目-{m}.html', project_cards, m)
@@ -1197,7 +1183,7 @@ SITE_ICONS = ('favicon.ico', 'icon-192.png', 'apple-touch-icon.png')
 
 
 def build_not_found():
-    text = PAGE.format(title='404', header=make_header(''), main_class='not-found', main_attr='', catalog_scripts='', wall_expect='',
+    text = PAGE.format(title='404', header=make_header(''), main_class='not-found', main_attr='', wall_expect='',
                        sections='<img src="/公用/404/404-插画.compressed.webp" width="1672" height="941" fetchpriority="high" alt=""><div class="not-found-copy"><h1>这里没有这页。</h1><p>地址可能已经变化，也可能从未存在。</p><a class="pill" href="/">返回系统首页</a></div>')
     style = '''<style>
 body{background:#f7f2ec}.not-found{position:relative;margin-top:79px}.not-found>img{display:block;width:100%;height:auto}
