@@ -55,6 +55,20 @@ OSS_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 _FINALIZE_CACHE = None
 
 
+def absolute_resource_keys(text, base, version=REWRITER_VERSION, known=None):
+    origins = oss_origins.aliases(base) if version >= 8 else (base,)
+    delimiter = ')' if known is None else ''
+    addresses = re.findall('(?:'+'|'.join(map(re.escape, origins))+r')/[^\s<>"\'\x60\]}'+delimiter+']+',
+                           html.unescape(text).replace('\\/', '/'))
+    keys = set()
+    for address in addresses:
+        key = unquote(urlsplit(html.unescape(address)).path).lstrip('/')
+        if key.startswith('releases/'):
+            # Quoted URLs can contain parentheses. An unquoted CSS url() has a closing delimiter.
+            keys.add(key.rstrip(')') if known is not None and key not in known else key)
+    return keys
+
+
 def measured(name, operation):
     started = time.perf_counter()
     try: return operation()
@@ -848,12 +862,7 @@ class Rewriter:
         return text.encode('utf8')
 
     def record_absolute_references(self, text):
-        origins = oss_origins.aliases(self.base) if self.version>=8 else (self.base,)
-        addresses = re.findall('(?:'+'|'.join(map(re.escape, origins))+r')/[^\s<>"\'`)\]}]+', html.unescape(text).replace('\\/', '/'))
-        for address in addresses:
-            key = unquote(urlsplit(html.unescape(address)).path).lstrip('/')
-            if key.startswith('releases/'):
-                self.absolute_references.add(key)
+        self.absolute_references.update(absolute_resource_keys(text, self.base, self.version))
 
 
 def offline_asset_keys(rewriter, source, inherited):
