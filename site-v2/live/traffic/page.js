@@ -11,6 +11,7 @@
   Light.add(hero);
   document.querySelectorAll('.l2-board .card').forEach(card => Light.add(card));
   let viewer = 'public', traffic = null, today = null, days = params.get('days') === '7' ? '7' : '1', watch = null, lit = false, trafficReads = [];
+  let shownDays = days;
   const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '海外流量' });
   const bytes = (n, lower = false, unit = 'B') => {
     if (!Number.isFinite(n)) return U.offline?.() ? '' : U.collectionText();
@@ -51,7 +52,7 @@
     }).filter(Boolean).join('；');
     gapNote.hidden = !gapNote.textContent;
     if (!d) { daily.set(null); $('days-quality').textContent = ''; return; }
-    U.html($('curve-window'), [days === '7' ? '近 7 天 · 小时均值' : '曲线画近 24 小时 · 小时均值，上面的总数从今天 0 点算', U.olderNote?.(d.curve?.at || d.at || d.curve?.to || d.to, d.curve || d)].filter(Boolean).map(esc).join(' · '));
+    U.html($('curve-window'), [shownDays === '7' ? '近 7 天 · 小时均值' : '曲线画近 24 小时 · 小时均值，上面的总数从今天 0 点算', U.olderNote?.(d.curve?.at || d.at || d.curve?.to || d.to, d.curve || d)].filter(Boolean).map(esc).join(' · '));
     const keys = ['upload', 'download'], rows = d.days || [], quality = Object.fromEntries(keys.map(key => [key, rows.map(day => dayPartial(day, key, d) ? 'partial' : 'ok')]));
     daily.set(d.days == null ? null : { labels: rows.map(day => ({ text: U.date(day.at || day.date), title: U.date(day.at || day.date) })), values: Object.fromEntries(keys.map(key => [key, rows.map(day => day[key] ?? null)])), quality });
     let column = 0; const lower = rows.flatMap((day, i) => keys.flatMap(key => day[key] > 0 ? (++column, quality[key][i] === 'partial' ? [column] : []) : []));
@@ -154,32 +155,31 @@
     link(s) { link('today', s); if (s.phase === 'none') renderHead(null); U.blockNote(hero.querySelector('.card__body'), s); },
   });
   function read() {
-    watch?.stop(); traffic = null;
-    trafficReads.forEach(r => r.done(false));
-    trafficReads = [U.reading($('totals'), { ghost: U.ghost.value(), slow: days === '7', name: '上传与下载' })];
-    trafficReads.push(curveRead, U.reading($('program-rank'), { ghost: U.ghost.rows(4), slow: false, name: '按程序' }), U.reading($('coverage'), { ghost: U.ghost.rows(1), slow: false, name: '读数范围' }));
+    watch?.stop();
+    if (!traffic) {
+      trafficReads.forEach(r => r.done(false));
+      trafficReads = [U.reading($('totals'), { ghost: U.ghost.value(), slow: days === '7', name: '上传与下载' })];
+      trafficReads.push(curveRead, U.reading($('program-rank'), { ghost: U.ghost.rows(4), slow: false, name: '按程序' }), U.reading($('coverage'), { ghost: U.ghost.rows(1), slow: false, name: '读数范围' }));
+      renderPrograms(null);
+    }
     document.querySelectorAll('[data-days]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.days === days)));
-    renderPrograms(null);
     const resource = params.has('fixture') && days === '7' ? 'computer/traffic7' : 'computer/traffic';
     watch = window.Live.watch(resource, { days }, {
       phase(s) { if (s.data == null && !traffic) { if (s.offline || ['none', 'gone'].includes(s.phase)) render(null); else trafficReads.forEach(r => r.set(s)); } },
       data(d, meta) {
         if (viewer !== meta.viewer.kind) { clearPrograms(); viewer = meta.viewer.kind; }
-        const shown = traffic != null; traffic = d;
+        const shown = traffic != null; traffic = d; shownDays = days;
         if (shown) U.anchor(() => render(d)); else render(d);
-        if (d) { trafficReads.forEach(r => r.done()); unhold(); }
+        if (d) trafficReads.forEach(r => r.done());
       },
       link(s) {
-        if (!s.data && (traffic || ['none', 'gone'].includes(s.phase))) { traffic = null; render(null); }
+        if (!s.data && ['none', 'gone', 'paused'].includes(s.phase)) { traffic = null; render(null); }
         link('traffic', s);
         document.querySelectorAll('.l2-col').forEach(el => U.blockNote(el, s));
       },
     });
   }
-  let held = null;
-  const hold = () => { const stage = document.getElementById('stage'); if (!stage) return; clearTimeout(held); stage.style.minHeight = `${stage.offsetHeight}px`; held = setTimeout(() => { stage.style.minHeight = ''; }, 8000); };
-  const unhold = () => { if (held == null) return; clearTimeout(held); held = setTimeout(() => { held = null; const stage = document.getElementById('stage'); if (stage) stage.style.minHeight = ''; }, 800); };
-  document.querySelectorAll('[data-days]').forEach(b => b.addEventListener('click', () => { if (U.offline?.() || b.dataset.days === days) return; hold(); days = b.dataset.days; const url = new URL(location.href); url.searchParams.set('days', days); history.replaceState(null, '', url); read(); }));
+  document.querySelectorAll('[data-days]').forEach(b => b.addEventListener('click', () => { if (U.offline?.() || b.dataset.days === days) return; days = b.dataset.days; const url = new URL(location.href); url.searchParams.set('days', days); history.replaceState(null, '', url); read(); }));
   U.onBeijingDayChange(() => { if (today) renderHead(today); if (traffic) render(traffic); });
   read(); requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
 })();

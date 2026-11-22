@@ -15,7 +15,7 @@
     ? (a, b) => Number(hasReading(b)) - Number(hasReading(a)) || (b.usage_seconds ?? -1) - (a.usage_seconds ?? -1)
     : (a, b) => Number(hasReading(b)) - Number(hasReading(a)) || (Date.parse(b.updated_at) || 0) - (Date.parse(a.updated_at) || 0));
   const orderText = d => d?.items?.some(a => a.usage_seconds != null) ? d.usage_from && d.usage_to ? `按近 ${Math.max(1, Math.ceil((Date.parse(d.usage_to) - Date.parse(d.usage_from)) / 86400000))} 天用得多少排` : '按用得多少排' : '按最近更新排';
-  const used = a => a.usage_seconds == null ? '—' : `${isPartial(a, 'usage_seconds') ? '至少 ' : ''}${window.LiveChart.value(a.usage_seconds, 's')}`;
+  const used = a => a.usage_seconds == null ? '—' : `${isPartial(a, 'usage_seconds') ? '至少 ' : ''}${U.minutes(a.usage_seconds / 60)}`;
   const categoryName = (a, fallback = blank()) => {
     const category = a.category, id = category && typeof category === 'object' ? category.id || category.key : category;
     if (isPrivate(category) || category?.visibility === 'pending' || category?.value != null) return category;

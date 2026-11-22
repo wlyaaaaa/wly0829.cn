@@ -734,6 +734,10 @@ a.row__title:hover { color: #00813f; }
   background: rgb(255 255 255 / .82);
   box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--grp-a, #16a6c4) 45%, transparent), 0 8px 20px -12px color-mix(in srgb, var(--grp-a, #16a6c4) 70%, transparent);
 }
+:is(.page--computer,.page--power) .vz-chip-cell.is-on {
+  background: #eaf7ef;
+  box-shadow: inset 0 0 0 1.5px #00a650;
+}
 .vz-chip-cell:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .vz-chip-cell__k { font-size: 14px; line-height: 20px; letter-spacing: .04em; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vz-chip-cell__v b { font-size: 22px; font-weight: 600; letter-spacing: .01em; }
@@ -1091,8 +1095,10 @@ a.dev-pill:hover { background: #fff; color: var(--ink); }
 .page--computer .computer-events__row small { font-size: 12px; color: var(--muted); text-align: right; }
 .page--computer .computer-events__track { position: relative; height: 2px; background: #dee8e6; }
 .page--computer .computer-events__dot { position: absolute; top: -5px; width: 12px; height: 12px; padding: 0; border: 2px solid #fff; border-radius: 50%; background: var(--event-color); transform: translateX(-50%); cursor: pointer; }
-.page--computer .computer-events__dot span { display: none; position: absolute; z-index: 5; bottom: 18px; right: -12px; width: max-content; max-width: 360px; padding: 9px 12px; border-radius: 9px; background: #f6faf9; color: #263c37; box-shadow: 0 5px 24px #153d3426; text-align: left; font-size: 13px; }
-.page--computer .computer-events__dot:hover span, .page--computer .computer-events__dot:focus-visible span { display: block; }
+.page--computer .computer-events__dot span { display: none; position: absolute; top: 18px; right: -12px; width: max-content; max-width: min(360px, 40vw); padding: 9px 12px; border-radius: 9px; background: #f6faf9; color: #263c37; box-shadow: 0 5px 24px #153d3426; text-align: left; font-size: 13px; }
+.page--computer .computer-events__dot--left span { left: -12px; right: auto; }
+.page--computer .computer-events__dot:is(:hover,:focus) { z-index: 2; box-shadow: 0 0 0 2px #00a650; }
+.page--computer .computer-events__dot:is(:hover,:focus) span { display: block; }
 .page--computer .computer-events__axis { display: flex; justify-content: space-between; margin: 8px 83px 0 128px; color: var(--muted); font-size: 12px; }
 
 /* 手机复核：原位标记、可读图例和单条日期轴。 */

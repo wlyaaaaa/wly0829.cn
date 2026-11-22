@@ -34,7 +34,16 @@
       for (const card of document.querySelectorAll('.grp[data-key]')) {
         const keys = map[card.dataset.key] || [card.dataset.key], messages = new Set();
         for (const key of keys) { notes(data?.[key], messages); notes(data?.blocks?.[key], messages); }
-        for (const text of messages) if (!seen.has(text)) { const el = document.createElement('span'); el.dataset.statNote = ''; el.textContent = text; card.querySelector('.grp__status')?.append(el); seen.add(text); }
+        const status = card.querySelector('.grp__status');
+        if (!status) continue;
+        for (const text of messages) if (!seen.has(text)) {
+          const el = document.createElement('span');
+          el.dataset.statNote = '';
+          el.textContent = (status.innerText.trim() ? ' · ' : '') + text;
+          status.append(el);
+          seen.add(text);
+        }
+        window.LiveViz?.cardLineTitle(status.parentElement);
       }
     });
   }

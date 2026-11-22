@@ -33,7 +33,7 @@ const hotspots = CONFIG.buttons.map((button) => {
 // ---------------------------------------------------------------- 机箱右边的副屏（四格）
 // 原画里它是一块没通电的白板。亮屏那张小图原位盖上去（屏、图标、分隔线是画好的），字和数是这里叠的活字；
 // 屏里会动的云、光、彩边和开机时流下来的光，由灯效模块画在它那张画布里（fx/lights.js 的 panel）。
-// 画布不在（被浏览器收走、慢机器关掉）时就是这张小图不动，字照常显示。
+// 画布不在时用同一张亮屏小图，字照常显示。
 const SCREEN = CONFIG.screen;
 const cellTargets = [
   ['ai', '/live/chats/'], ['need', '/live/items/'],
@@ -44,8 +44,8 @@ const panelArt = new Image();
 panelArt.crossOrigin = 'anonymous';
 panelArt.src = 'images/screen1-panel-v2.webp';
 const panelArtReady = panelArt.decode().then(() => true, () => false);
-// 灯效每帧来读的状态：放上去、按下的是第几格（没有是 -1），指针在画上的位置，哪格的数几时变的，哪格熄着，连不连得上，镜头退了几成。
-const panelState = { hover: -1, press: -1, ptr: null, pulse: [0, 0, 0, 0], off: [false, false, false, false], offline: false, sheen: 0,
+// 灯效每帧来读的状态：指针、点按、读数变化、电脑没开机和镜头进度。
+const panelState = { hover: -1, press: -1, ptr: null, pulse: [0, 0, 0, 0], hostOff: false, sheen: 0,
   temp: -1 };   // temp：CPU 多热，30℃ 算 0、90℃ 算 1（温度计图标的水银柱跟着走）；没读到是 -1
 const panelFx = { image: null, state: panelState,
   onBoot(schedule) { if (litMode !== 'still') { litMode = 'boot'; lightPanels(schedule); } },
@@ -80,7 +80,7 @@ function buildPanel(screen) {
       top: pct((SCREEN.edges[index] - ay0) / (ay1 - ay0)),
       height: pct((SCREEN.edges[index + 1] - SCREEN.edges[index]) / (ay1 - ay0))
     });
-    // 没开机、连不上时第四格的图标是开机键（和“电脑 没开机”对上）。画布在画时画布自己画；这一份只在没有画布、只有小图时用：
+    // 确认没开机时第四格的图标是开机键。画布在画时画布自己画；这一份只在没有画布、只有小图时用：
     // 画里那支温度计拿右边同样干净的一块底色盖掉，上面叠线条画的开机键（形状和画布里画的一样）。位置、大小见 style.css 的 .cell-pc
     if (id === 'computer') {
       const cover = element('b', '', element('i', 'cell-pc', link));
@@ -238,6 +238,7 @@ function paintCell(cell, view, href, sample, quiet) {
   if (behind) cueCell(cell, late);
   link.classList.toggle('is-waiting', !!view.wait);
   link.classList.toggle('is-off', !!view.off);
+  link.classList.toggle('has-cutoff', !!view.cutoff);
   link.href = href;
   link.setAttribute('aria-label', view.label + sample);
   if (title.textContent !== view.title) title.textContent = view.title;
@@ -267,6 +268,8 @@ function paintCell(cell, view, href, sample, quiet) {
 }
 // pending：数还在路上（第一次还没回话，或后端说正在准备）。回了话还是没有数，才写“还没读到”。
 const down = { offline: false, hostOff: false };
+const lastReadings = new Map();
+let lastViewer;
 // 屏上的数是几点的：当天只写时刻，隔天带上月-日（北京时间）。
 function cutoffText(at, now, prefix) {
   try {
@@ -276,7 +279,7 @@ function cutoffText(at, now, prefix) {
   } catch { return ''; }
 }
 function aiCellView(source, meta, owner, pending, now) {
-  const at = source?.source_at ?? source?.at;
+  const at = source?.source_at ?? source?.at ?? meta?.at;
   const stamp = Date.parse(at), age = (Date.parse(now) || Date.now()) - stamp;
   // /screen 的 n 只表示当前读数。过期时，同笔对话计数留在“上次 N 个在干”里。
   const last = source?.q === 'stale' && /^上次\s*(\d+)\s*个在干(?:\s*·|$)/.exec(source.text ?? '');
@@ -288,10 +291,13 @@ function aiCellView(source, meta, owner, pending, now) {
     view.unit = '个以上';
     view.label = `AI 在干活，至少 ${view.num} 个`;
   }
-  const old = down.offline || ['copy', 'fallback'].includes(meta?.source) || source?.stale || source?.q === 'stale' || age >= 120000;
+  const old = isOldReading(source, meta, age);
   view.sub = Number.isFinite(stamp) ? cutoffText(at, now, old ? '截止' : '记录于') : '上次读数';
   if (view.sub) view.label += `，${view.sub}`;
   return view;
+}
+function isOldReading(source, meta, age) {
+  return down.offline || ['copy', 'fallback'].includes(meta?.source) || source?.stale || source?.q === 'stale' || age >= 120000;
 }
 function renderScreen(data, meta, pending = false, now) {
   // 本人的设备上一直写“等你”：这一回没读到是谁在看（实况脚本没取到），照这台设备上一回读到的算。
@@ -301,20 +307,40 @@ function renderScreen(data, meta, pending = false, now) {
     else if (meta?.viewer?.kind) { if (meta.source !== 'fixture') localStorage.setItem('wly-home-screen-viewer', meta.viewer.kind); }
     else owner = localStorage.getItem('wly-home-screen-viewer') === 'owner';
   } catch { /* 浏览器不让存：照这一回读到的算 */ }
+  // 同一份访问权限下，某格暂时少了读数时沿用手上的数字。读数被撤回时随实况清空。
+  const viewer = `${meta?.viewer?.kind}:${meta?.viewer?.device}`;
+  if (!data || viewer !== lastViewer) lastReadings.clear();
+  lastViewer = viewer;
   const sample = meta?.source === 'fixture' ? '（示意数）' : '';
   const quiet = screenMotionOff() || document.hidden;
   cellTargets.forEach(([id, fallback], index) => {
-    const source = data?.cells?.find((item) => item.id === id);
-    const view = id === 'ai' ? aiCellView(source, meta, owner, pending, now)
-      : cellView(id, cellFacts(id, source), owner, pending, down);
-    if (down.offline && id !== 'ai' && (view.num || view.sub) && !view.off) {
-      const stamp = cutoffText(source.source_at ?? source.at ?? meta.at, now, '截止');
-      if (stamp) { view.sub = [view.sub, stamp].filter(Boolean).join('\n'); view.label += `，${stamp}`; }
+    let source = data?.cells?.find((item) => item.id === id);
+    let at = source?.source_at ?? source?.at ?? meta?.at;
+    const waiting = source?.q === 'warming';
+    const facts = cellFacts(id, waiting || source?.q === 'unknown' ? null : source);
+    const read = (entry, values, info) => id === 'ai' ? aiCellView(entry, info, owner, pending, now)
+      : cellView(id, values, owner, pending || waiting, down);
+    let view = read(source, facts, meta);
+    const previous = lastReadings.get(id);
+    const hasUptime = Number.isFinite(facts.uptime), time = Date.parse(at);
+    const retain = !view.off && previous && ((!view.num && (previous.hasNumber || !hasUptime)) || time < Date.parse(previous.at));
+    if (retain) {
+      ({ source, at } = previous);
+      view = read(source, previous.facts, { ...meta, at, source: 'copy' });
+    } else if (!view.off && source && (view.num || hasUptime) && Number.isFinite(time)) {
+      lastReadings.set(id, { source, at, facts, hasNumber: !!view.num });
+    }
+    const age = (Date.parse(now) || Date.now()) - Date.parse(at);
+    if (id !== 'ai' && !view.off && (view.num || view.sub) && (retain || isOldReading(source, meta, age))) {
+      const stamp = cutoffText(at, now, '截止');
+      if (stamp) { view.cutoff = true; view.sub = [view.sub, stamp].filter(Boolean).join('\n'); view.label += `，${stamp}`; }
     }
     let ring = -1;
     for (const panel of panels) ring = Math.max(ring, paintCell(panel.cells[index], view, fallback, sample, quiet));
-    panelState.off[index] = !!view.off;
-    if (id === 'computer') panelState.temp = view.num ? Math.min(1, Math.max(0, (Number(view.num) - 30) / 60)) : -1;
+    if (id === 'computer') {
+      panelState.hostOff = !!view.off;
+      panelState.temp = view.num ? Math.min(1, Math.max(0, (Number(view.num) - 30) / 60)) : -1;
+    }
     if (ring >= 0) panelState.pulse[index] = performance.now() + ring;   // 那圈光和字同时出来
   });
 }
@@ -726,11 +752,9 @@ liveClient.src = '/live/_lib/live-client.js';
 liveClient.onload = () => window.Live.watch('screen', {}, {
   link(state) {
     down.hostOff = state.hostOff;
-    down.offline = panelState.offline = state.offline;
-    for (const panel of panels) {
-      panel.box.classList.toggle('is-offline', down.offline);
-      panel.face.classList.toggle('night', down.offline);
-      for (const { link } of panel.cells) { if (state.text) link.title = state.text; else link.removeAttribute('title'); }
+    down.offline = state.offline;
+    for (const panel of panels) for (const { link } of panel.cells) {
+      if (state.text) link.title = state.text; else link.removeAttribute('title');
     }
     if (banner.textContent !== state.pageText) banner.textContent = state.pageText;
     banner.hidden = !state.pageText;
@@ -739,9 +763,8 @@ liveClient.onload = () => window.Live.watch('screen', {}, {
 });
 // 实况那份脚本没取到（断网、被拦）：没有数可等了，按连不上算，别让四格一直空着。
 liveClient.onerror = () => {
-  down.offline = panelState.offline = true;
+  down.offline = true;
   banner.textContent = '连不上实况服务 · 这页没有可显示的上次数据。'; banner.hidden = false;
-  for (const panel of panels) { panel.box.classList.add('is-offline'); panel.face.classList.add('night'); }
   renderScreen(null, null);
 };
 document.head.append(liveClient);

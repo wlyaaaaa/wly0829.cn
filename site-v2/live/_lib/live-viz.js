@@ -470,17 +470,19 @@
 
     function legendHtml() {
       const list = states.filter((st, i) => states.findIndex(s => s.label === st.label) === i);
+      const shown = rows.filter((r) => r.d);
+      const total = (st, r) => states.reduce((n, s, i) => n + (s.label === st.label ? r.tot[i] || 0 : 0), 0);
+      const observed = opts.interactiveObservedOnly ? list.filter(st => shown.some(r => total(st, r) > 0)) : list;
       // 只有一种时点了图上什么都不变：不做成能点的样子
-      const one = list.length < 2;
-      if (one || !list.some(st => st.id === pinned)) pinned = null;
-      if (one || !list.some(st => st.id === hovered)) hovered = null;
+      const canPick = id => observed.length > 1 && observed.some(st => st.id === id);
+      if (!canPick(pinned)) pinned = null;
+      if (!canPick(hovered)) hovered = null;
       focus = hovered ?? pinned;
       return list.map((st) => {
-        const total = r => states.reduce((n, s, i) => n + (s.label === st.label ? r.tot[i] || 0 : 0), 0);
-        const shown = rows.filter((r) => r.d);
-        const vals = shown.length === 1 ? `<span class="vz-legend__big">${durHtml(total(shown[0])) || '—'}</span>` : shown.map((r) => `<span><small>${esc(r.short || r.label)}</small> ${esc(dur(total(r)) || '—')}</span>`).join('');
-        const state = one ? ' is-static' : `${pinned === st.id ? ' is-picked' : ''}${focus != null && focus !== st.id ? ' is-dim' : ''}`;
-        return `<li class="vz-legend__item${state}" data-state="${esc(st.id)}"${one ? '' : ` tabindex="0" role="button" aria-pressed="${pinned === st.id}"`}>
+        const pickable = canPick(st.id);
+        const vals = shown.length === 1 ? `<span class="vz-legend__big">${durHtml(total(st, shown[0])) || '—'}</span>` : shown.map((r) => `<span><small>${esc(r.short || r.label)}</small> ${esc(dur(total(st, r)) || '—')}</span>`).join('');
+        const state = pickable ? `${pinned === st.id ? ' is-picked' : ''}${focus != null && focus !== st.id ? ' is-dim' : ''}` : ' is-static';
+        return `<li class="vz-legend__item${state}" data-state="${esc(st.id)}"${pickable ? ` tabindex="0" role="button" aria-pressed="${pinned === st.id}"` : ''}>
           <span class="vz-legend__name" title="${esc(sp(st.label))}">${chip(color(st.hue))}<b>${esc(sp(st.label).replace(/^[🟢🟡🔴🟠🔵🟣⚪⚫]\s*/u, ''))}</b></span>
           ${st.note ? `<span class="vz-legend__note">${esc(sp(st.note))}</span>` : ''}
           <span class="vz-legend__vals">${vals}</span></li>`;
@@ -561,7 +563,7 @@
       pinned = pinned === id ? null : id;
       // 刚取消时鼠标还停在这一项上：先不按“指着”再亮它，挪开再回来才算
       hovered = null; muted = pinned ? null : id;
-      legend.querySelectorAll('.vz-legend__item').forEach((n) => { const on = n.dataset.state === pinned; n.classList.toggle('is-picked', on); n.setAttribute('aria-pressed', String(on)); });
+      legend.querySelectorAll('.vz-legend__item[role="button"]').forEach((n) => { const on = n.dataset.state === pinned; n.classList.toggle('is-picked', on); n.setAttribute('aria-pressed', String(on)); });
       show();
     }
     legend.addEventListener('pointerover', (e) => { const id = itemOf(e)?.dataset.state ?? null; if (id !== muted) { muted = null; hovered = id; } show(); });
@@ -657,7 +659,7 @@
       const k = i ?? data.labels.length - 1, lab = data.labels[k];
       const raw = i == null ? (data.at || lab?.title || lab?.text) : (lab?.title || lab?.text), t = /^\d{4}-\d{2}-\d{2}(?:T|$)/.test(raw || '') ? sec(raw.length === 10 ? `${raw}T00:00:00+08:00` : raw) : NaN;
       const when = Number.isFinite(t) ? `${md(t)}${raw.length > 10 ? ' ' + hm(t) : ''}` : raw;
-      html(vals, `<span class="chart__val vz-bars__when">${esc(when || '')}</span>${series.map((s) => `<span class="chart__val" style="--c:${s.color}"><i class="chart__key${s.soft ? ' is-soft' : ''}"></i><span class="chart__label">${esc(s.label)}</span><b${data.values[s.id]?.[k] == null ? ' style="font-size:13px;font-weight:400;color:var(--muted)"' : ''}>${data.quality?.[s.id]?.[k] === 'partial' && data.values[s.id]?.[k] != null ? '至少 ' : ''}${esc(formatValue(data.values[s.id]?.[k], s.unit ?? unit) ?? opts.missingText ?? window.LiveUI.collectionText(s.label, data))}</b>${data.notes?.[s.id]?.[k] ? `<small style="font-size:12px">${esc(data.notes[s.id][k])}</small>` : ''}</span>`).join('')}`);
+      html(vals, `<span class="chart__val vz-bars__when">${esc(when || '')}</span>${series.map((s) => `<span class="chart__val" style="--c:${s.color}"><i class="chart__key${s.soft ? ' is-soft' : ''}"></i>${series.length > 1 ? `<span class="chart__label">${esc(s.label)}</span>` : ''}<b${data.values[s.id]?.[k] == null ? ' style="font-size:13px;font-weight:400;color:var(--muted)"' : ''}>${data.quality?.[s.id]?.[k] === 'partial' && data.values[s.id]?.[k] != null ? '至少 ' : ''}${esc(formatValue(data.values[s.id]?.[k], s.unit ?? unit) ?? opts.missingText ?? window.LiveUI.collectionText(s.label, data))}</b>${data.notes?.[s.id]?.[k] ? `<small style="font-size:12px">${esc(data.notes[s.id][k])}</small>` : ''}</span>`).join('')}`);
       xs.querySelectorAll('.vz-bars__lab').forEach((n, j) => n.classList.toggle('is-on', j === i));
     }
     const el = (tag, attrs) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); return n; };
@@ -676,7 +678,8 @@
       const ceil = opts.ceil ?? opts.max;
       const top = Math.max(Number.isFinite(ceil) ? ceil : 0, timeUnit ? Math.max(...totals, unit === '分钟' ? 60 : 3600) : Math.max(...totals, 0) || 1);
       const binary = unit === 'B' || unit === 'B/s' ? [2 ** 40, 2 ** 30, 2 ** 20, 1024].find((d) => top >= d) || 1 : 1;  // 字节刻度按 1024 取整
-      const step = smallGB && !ceil ? .01 : timeUnit ? (unit === '分钟' ? niceHours(top * 60, 4) / 60 : niceHours(top, 4)) : Math.max(unit === 'GB' ? .01 : 0, ['次', '人', '个', '项', '份'].includes(unit) ? Math.ceil(niceAny(top, 4)) : niceAny(top / binary, 4) * binary), max = smallGB && !ceil ? .01 : Math.max(Math.ceil(top * (Number.isFinite(ceil) ? 1 : 1.08) / step) * step, step);
+      const step = opts.axisStep ?? (smallGB && !ceil ? .01 : timeUnit ? (unit === '分钟' ? niceHours(top * 60, 4) / 60 : niceHours(top, 4)) : Math.max(unit === 'GB' ? .01 : 0, ['次', '人', '个', '项', '份'].includes(unit) ? Math.ceil(niceAny(top, 4)) : niceAny(top / binary, 4) * binary));
+      const max = smallGB && !ceil ? .01 : Math.max(Math.ceil(top * (Number.isFinite(ceil) ? 1 : 1.08) / step) * step, step);
       const y = (v) => base - (v / max) * (base - PAD.top);
       // 纵轴字先量宽：写不下（如“30 小时”“37.3 GB”）就把左边留宽，不让字挤出图外
       const yText = (v) => !v ? unit === 'GB' ? '0 GB' : '0' : timeUnit ? `${+(toSec(v, unit) / 3600).toFixed(1)} 小时` : opts.axisUnit === '' ? String(+v.toFixed(2)) : formatValue(v, unit);
@@ -1182,6 +1185,13 @@
   // 每组是一张整宽的卡，图表章节始终展开：左边大图、右边数字小格，点一格切换大图。
   // 黄、红的组排在前面；quiet 不放灯、不排序，章里可放页面自己的东西（build）。
   const LEVEL_ORDER = { red: 0, yellow: 1, ok: 2, none: 3 };
+  function cardLineTitle(line) {
+    const part = (el) => [...el.childNodes].map((n) => n.nodeType !== 1 ? n.textContent : getComputedStyle(n).display === 'none' ? ''
+      : (n.matches('span[data-block]') && n.previousElementSibling?.matches('span[data-block]') ? ' · ' : '') + n.textContent).join('')
+      .replace(/\s+/g, ' ').replace(/(?: ?· ?)+/g, ' · ').replace(/^[\s·]+|[\s·]+$/g, '');
+    const tip = [...line.querySelectorAll(':scope > .grp__said, :scope > .grp__status, :scope > .grp__cutoff')].map(part).filter(Boolean).join(' · ');
+    if (tip) line.title = tip; else line.removeAttribute('title');
+  }
   function board(host, opts = {}) {
     host.classList.add('vz-board');
     const items = new Map();
@@ -1345,7 +1355,11 @@
         }
         if (payload) { it.chart.set(payload); if (opts.reading) it.chart.point(null); }
       }
-      if (it.chips) it.chips.set((it.g.chips || []).filter((c) => c.key !== it.pick), payload);
+      if (it.chips) {
+        const choices = it.g.chips || [];
+        const visible = opts.keepChips ? choices.map(c => ({ ...c, on: c.key === it.pick })) : choices.filter(c => c.key !== it.pick);
+        it.chips.set(visible, payload);
+      }
       const said = it.chart ? say(it) : '';
       html(it.card.querySelector('.grp__say'), esc(sp(said)));
       it.extra?.set?.(it.g, payload);
@@ -1438,13 +1452,9 @@
       const reasonInLine = typeof g.why === 'string' && subtitle.split(' · ').includes(sp(g.why));
       const status = window.LiveUI.status(reasonInLine ? { ...g, text: g.why } : g, { missingNames: g.missingNames ?? undefined,
         cutoffShown: text => [...cutoff.keys()].some(shown => window.LiveUI.sameCutoffNote(shown, text)) });
-      html(it.card.querySelector('.grp__status'), [status.note, !g.empty && blockNotes(sourceNotes.map(b => ({ ...b, text: clean(b.text) })), subtitle, g.name)].filter(Boolean).join(' · '));
-      // 悬停提示照行里排出来的几句写、句句隔开（页上用样式补的“ · ”也补上）；读前那层“正在读…”和藏起来的不算
-      const lineEl = it.card.querySelector('.grp__line');
-      const part = (el) => [...el.childNodes].map((n) => n.nodeType !== 1 ? n.textContent : getComputedStyle(n).display === 'none' ? ''
-        : (n.matches('span[data-block]') && n.previousElementSibling?.matches('span[data-block]') ? ' · ' : '') + n.textContent).join('').replace(/\s+/g, ' ').replace(/(?: ?· ?)+/g, ' · ').replace(/^[\s·]+|[\s·]+$/g, '');
-      const tip = [...lineEl.querySelectorAll(':scope > .grp__said, :scope > .grp__status, :scope > .grp__cutoff')].map(part).filter(Boolean).join(' · ');
-      if (tip) lineEl.title = tip; else lineEl.removeAttribute('title');
+      const visibleNotes = ['power', 'smooth', 'security'].includes(opts.key) ? sourceNotes.filter(b => b.state !== 'unavailable') : sourceNotes;
+      html(it.card.querySelector('.grp__status'), [status.note, !g.empty && blockNotes(visibleNotes.map(b => ({ ...b, text: clean(b.text) })), subtitle, g.name)].filter(Boolean).join(' · '));
+      cardLineTitle(it.card.querySelector('.grp__line'));
       html(it.card.querySelector('.grp__gf'), g.grafana ? `<a class="gf" href="${esc(g.grafana)}" target="_blank" rel="noopener" data-gf data-needs-pc>Grafana <span class="more__chev">↗</span></a>` : '');
       window.LiveLight?.tone(it.card, g);
       settle(it, warn);
@@ -1692,5 +1702,5 @@
     };
   }
 
-  window.LiveViz = { timeline, heatmap, bars, share, rank, figures, chips, moments, audit, calendar, board, weave, block, blockState, blockGroup, blockData, chartQuery, chartWidth, watchChart, fmt, fmtHtml, warm, dur, durHtml, hues: HUE, stateHues: STATE_HUE, categoryHues: CAT_HUE, categoryNames: CAT_NAME, md, weekday, dayLabel };
+  window.LiveViz = { timeline, heatmap, bars, share, rank, figures, chips, moments, audit, calendar, board, cardLineTitle, weave, block, blockState, blockGroup, blockData, chartQuery, chartWidth, watchChart, fmt, fmtHtml, warm, dur, durHtml, hues: HUE, stateHues: STATE_HUE, categoryHues: CAT_HUE, categoryNames: CAT_NAME, md, weekday, dayLabel };
 })();

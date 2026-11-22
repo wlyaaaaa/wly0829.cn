@@ -555,10 +555,23 @@ def publish(args):
         oss.verify_manifest(source, require_remote=False)
         fingerprints = step('hash_dist', lambda: {path.relative_to(args.dist).as_posix(): oss.digest(path)
                             for path in sorted(args.dist.rglob('*')) if path.is_file()})
-        scan = oss.read(getattr(args, 'scan_result', None) or args.dist.parent/'scan-glance'/'scan-result.json')
+        scan_path = getattr(args, 'scan_result', None) or args.dist.parent/'scan-glance'/'scan-result.json'
+        scan = oss.read(scan_path)
         scanned = scan.get('dist_files_sha256', {})
         changed = sorted(rel for rel in fingerprints.keys() | scanned.keys() if fingerprints.get(rel) != scanned.get(rel))
-        if changed or (not args.dry_run and scan.get('failures') != []):
+        failures = scan.get('failures')
+        if not isinstance(failures, list):
+            raise ValueError('Scan result is missing its failures list')
+        if review_path := getattr(args, 'scan_review', None):
+            review = oss.read(review_path)
+            if review['scan_sha256'] != oss.digest(scan_path):
+                raise ValueError('Scan review belongs to a different scan result')
+            accepted = {row['index'] for row in review['findings'] if row['reason'].strip()}
+            if not accepted <= set(range(1, len(failures) + 1)):
+                raise ValueError('Scan review references a finding outside this scan result')
+            receipt['scan_review'] = {'path': str(review_path), **review}
+            failures = [row for index, row in enumerate(failures, 1) if index not in accepted]
+        if changed or (not args.dry_run and failures):
             raise ValueError('Dist differs from successful scan: '+(', '.join(changed) if changed else 'scan has failures'))
         if not args.dry_run:
             claim = json.loads(command('pwsh', '-NoProfile', '-File', LOCK, '-Mode', 'Acquire',
@@ -850,6 +863,8 @@ if __name__ == '__main__':
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--upload-only', action='store_true', help='upload and read back OSS assets, then stop before site-dist and Pages')
     parser.add_argument('--scan-result', type=Path)
+    parser.add_argument('--scan-review', type=Path,
+                        help='same-scan SHA-256 and numbered findings accepted after comparison with the running site')
     parser.add_argument('--previous-manifest', type=Path)
     parser.add_argument('--previous-site-dist', type=Path, help='local prior Pages artifact for selected-page rehearsal')
     parser.add_argument('--output', type=Path)

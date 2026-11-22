@@ -155,7 +155,7 @@
         return `<li class="pj-kv__row"><span class="pj-kv__k">${e(name)}</span><span class="pj-kv__v"><b>${recorded(count, ' 次')}</b><small>Claude ${claude} · Codex ${codex} · Antigravity ${agy == null ? noRecord : `至少 ${recorded(agy, ' 次')}`}</small></span></li>`;
       });
       return `<div><p class="pj-skill-period">近 ${days} 天</p>${rows?.length ? `<ul class="pj-kv">${rows.join('')}</ul>` : paragraph(top == null ? noRecord : '0 项')}</div>`;
-    }).join('') + paragraph(`数据截至 ${data.at ? stamp(data.at).slice(-5) : noRecord}`) +
+    }).join('') + paragraph(`数据截至 ${data.at ? stamp(data.at) : noRecord}`) +
       `<a class="more more--link" href="${e(href)}">全部技能 <span class="more__chev">›</span></a>`;
   }
   function batchProgress(data, id, stamp) {

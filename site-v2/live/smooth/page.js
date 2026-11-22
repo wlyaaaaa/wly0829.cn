@@ -116,7 +116,7 @@
   function timeline(el, label, key, row = '近 24 小时') {
     if (label) { const p = document.createElement('p'); p.className = 'grp-split__k'; p.textContent = label; el.append(p); }
     const host = document.createElement('div'); el.append(host);
-    const block = V.block(host, V.timeline(host, { rows: [{ key: 'day', label: row }] }), () => data, key);
+    const block = V.block(host, V.timeline(host, { rows: [{ key: 'day', label: row }], interactiveObservedOnly: key === 'stutters' }), () => data, key);
     // 后台给的行名一律是“近 24 小时”，会盖掉上面这个名字，所以这里换成这条带自己的名字。
     const named = p => p?.rows?.day ? { ...p, rows: { ...p.rows, day: { ...p.rows.day, label: row } } } : p;
     return { host, set: (pack) => block.set(named(timelinePack(pack, key))) };
@@ -293,7 +293,7 @@
     const time = line.querySelector('.grp__cutoff'), top = document.querySelector('#hero .head__cutoff')?.textContent;
     if (/^数据截止 (?:\d{2}-\d{2} )?\d{2}:\d{2}$/.test(time.textContent) &&
         [reported, top].some(note => U.sameCutoffNote(note, time.textContent))) time.textContent = '';
-    line.title = [...line.children].map(el => el.textContent).filter(Boolean).join(' · ');
+    V.cardLineTitle(line);
   }
   const detailBoard = { ...board, blocks(d, map, off) {
     summary = d?.summary;

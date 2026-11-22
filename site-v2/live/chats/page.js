@@ -1,4 +1,4 @@
-// 第二层：上半截总的情况和统计；下半截套分组看板（_lib/live-board.*）：按对话自己的状态分栏（在干、等你……），做完的（72 小时内）在最后一栏。
+// 第二层：上半截总的情况和统计；下半截左栏列在干等状态，右栏列等你和近 72 小时已结束。
 // 每栏先 5 张，其余展开；点名字或“看完整对话”进入详情。
 (() => {
   'use strict';
@@ -15,12 +15,13 @@
   const attention = c => ['waiting', 'failed', 'reconnecting'].includes(c.state);
   const lamp = payload => U.status(payload, { small: true }).lamp;
   const who = (c, place = 'body', bare = false) => [U.draw10?.modelHtml(c, { name: place === 'title' ? 'AI 帮手' : '型号', place, kind: viewer, bare }) ?? U.fieldHtml(c.model, { name: '型号', place, kind: viewer }), c.effort && U.fieldHtml(c.effort, { name: '型号', place, kind: viewer })].filter(Boolean).join(' · '), wait = text => [{ key: 'empty', cls: 'row row--flat row--empty', html: `<span></span><p class="row__sub">${U.fieldHtml(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读|正在准备/.test(text) ? '这块没存下来，连上后补上。' : text, { name: 'AI 对话', place: 'body', kind: viewer })}</p>` }];
-  // 下半截各栏：照对话数据里本来的状态分；在干、等你一直摆着，别的状态有对话才出来；做完的固定排最后
+  // 下半截各栏：照对话数据里本来的状态分；在干、等你一直摆着，别的状态有对话才出来。
   const COLUMN = { running: { name: '在干', about: 'AI 正在往下做的对话', icon: 'play', tint: 'green', art: 'running' }, waiting: { name: '等你', about: '要你回答或选一下才能接着做', icon: 'chat', tint: 'peach', art: 'waiting' }, queued: { name: '等着', about: '排着队，还没开始', icon: 'clock', tint: 'blue', art: 'queued' }, reconnecting: { name: '在重连', about: '连接断了，正在重新接上', icon: 'wifi', tint: 'cyan' }, failed: { name: '坏了', about: '出错停下来的对话', icon: 'alert', tint: 'pink' }, stopped: { name: '叫停', about: '中途叫停的对话', icon: 'moon' }, unknown: { name: '状态不明', about: '读到了对话，状态还没读准', icon: 'gear' } };
-  const board = window.LiveBoard.create($('chat-board'), { columns: [], cols: 2 });
+  const board = window.LiveBoard.create($('chat-board'), { cols: 1 });
   const runningCard = board.card('running', { ...COLUMN.running, ids: { main: 'active-list' } });
-  const waitingCard = board.card('waiting', COLUMN.waiting);
-  const recentBoard = window.LiveBoard.create($('chat-recent-board'), { columns: [], cols: 1 });
+  const recentBoard = window.LiveBoard.create($('chat-recent-board'), { cols: 1 });
+  const waitingCard = recentBoard.card('waiting', COLUMN.waiting);
+  waitingCard.el.hidden = true;
   const doneCard = recentBoard.card('done', { icon: 'check', tint: 'lilac', art: 'done', ids: { el: 'recent', title: 'recent-title', sub: 'recent-sub', main: 'recent-list', rest: 'recent-rest', more: 'recent-more', box: 'recent-box', next: 'recent-next' } });
   doneCard.el.querySelector('.lb-card__head').setAttribute('data-keep', ''); doneCard.el.insertAdjacentHTML('beforeend', '<p class="pj-note lb-card__note" id="recent-note"></p>');
   const recentTitle = '<b>近 72 小时已结束</b>';
@@ -30,7 +31,16 @@
     if (first) return `看帮手记录（${left > 5 ? `先看 5 条，共 ${left} 条` : `${left} 条`}） ›`;
     return left > 5 ? `再看 5 条帮手记录（还有 ${left} 条） ›` : `再看 ${left} 条帮手记录 ›`;
   }
+  // 一行放得下、也没截字的思考摘要，不摆“展开摘要”（点了也看不到更多）；没露出来的先不量
+  const fitThoughts = () => document.querySelectorAll('.chat-think:not([data-cut])').forEach(el => {
+    const preview = el.querySelector('.chat-think__preview');
+    if (preview.clientWidth && el.querySelector('.chat-think__toggle').getAttribute('aria-expanded') !== 'true')
+      el.classList.toggle('chat-think--fits', preview.scrollWidth <= preview.clientWidth);
+  });
+  document.fonts?.ready.then(fitThoughts);
   document.addEventListener('click', e => {
+    const toggle = e.target.closest('.chat-think__toggle');
+    if (toggle) toggle.setAttribute('aria-expanded', String(toggle.getAttribute('aria-expanded') !== 'true'));
     const btn = e.target.closest('[data-helpers-more]');
     if (!btn) return;
     const later = [...btn.closest('.helpers').querySelectorAll(':scope > .helper[hidden]')];
@@ -55,8 +65,14 @@
     return label === '本人' ? '' : label;
   }
   const detailHref = (id, hash = '') => esc(route(`/live/chat/?id=${encodeURIComponent(id)}${hash}`));
-  // 帮手名：有中文名先用中文名；本人版直接写名字，不加“帮手名：”前缀，访客版照旧在藏起来的地方写清
-  const helperTitle = (h, parent) => contentLocked(h, viewer) || contentLocked(parent, viewer) ? '' : chatCell(field(/\p{Script=Han}/u.test(U.fieldText(h.localized?.title, viewer) || '') ? h.localized.title : h.title, h, parent), '帮手名', parent, 0, viewer === 'owner');
+  function helperTitle(h, parent) {
+    if (contentLocked(h, viewer) || contentLocked(parent, viewer)) return '';
+    const task = U.chatHelperPurpose(h, parent, viewer);
+    if (task) return chatCell(task.purpose, '帮手名', parent, task.limit, true);
+    const name = field(h.title, h, parent);
+    return viewer === 'public' && (name.hidden || name.hidden_block || name.visibility === 'owner')
+      ? chatCell(name, '帮手名', parent) : '未记录具体任务';
+  }
   const clockWithSeconds = new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' });
   function duration(seconds) {
     const hours = Math.floor(seconds / 3600), mins = Math.floor(seconds / 60) % 60, secs = seconds % 60;
@@ -111,8 +127,12 @@
     const progress = locked ? (label || count) && `<span class="chat-pill">${esc(label || count)}</span>`
       : c.detail && plan[current] && label ? `<a class="chat-pill chat-pill--link" href="${detailHref(c.id, '#plan-box')}" aria-label="${label}，查看执行计划">${label} ›</a>` : '';
     const steps = !locked && progress ? `<span class="chat-steps" aria-hidden="true">${plan.map(p => `<i data-status="${esc(stepState(p) || '')}"></i>`).join('')}</span>` : '';
-    const thoughtFull = locked ? '' : chatCell(c.thinking, '思考摘要', c, 0, true), thoughtShort = thoughtFull && chatCell(c.thinking, '思考摘要', c, viewer === 'owner' ? 0 : 40, true);  // 本人版思考摘要不截字
-    const thought = thoughtFull ? thoughtShort !== thoughtFull ? `<details class="chat-think chat-think--excerpt row__sub"><summary><span class="chat-think__preview">思考摘要：${thoughtShort}</span><span class="chat-think__open">展开摘要</span><span class="chat-think__shut">收起摘要</span></summary><p>${thoughtFull}</p></details>` : `<p class="chat-think row__sub">思考摘要：${thoughtFull}</p>` : '';
+    const thoughtFull = locked ? '' : chatCell(c.thinking, '思考摘要', c, 0, true);
+    const thoughtShort = viewer === 'public' && thoughtFull ? chatCell(c.thinking, '思考摘要', c, 40, true) : thoughtFull;
+    const thought = thoughtFull ? `<div class="chat-think row__sub"${thoughtShort !== thoughtFull ? ' data-cut' : ''}>` +
+      `<span class="chat-think__preview">思考摘要<span class="chat-think__excerpt">：${thoughtShort}</span></span>` +
+      '<button class="more chat-think__toggle" type="button" aria-expanded="false"><span class="chat-think__open">展开摘要</span><span class="chat-think__shut">收起摘要</span> <span class="more__chev" aria-hidden="true">›</span></button>' +
+      `<p class="chat-think__full">${thoughtFull}</p></div>` : '';
     // 帮手：在做和出错的先露前 5 个，其余收着按批看
     const busy = h => h.private_count || ['running', 'failed'].includes(h.state);
     const helperFirst = [...helpers.filter(busy), ...(locked ? helpers.filter(h => !busy(h)) : [])].slice(0, 5);
@@ -125,7 +145,7 @@
     const runningPreview = !Array.isArray(c.helpers);
     const groupedPreview = runningPreview && helpers.length === 1 && helpers[0].private_count;
     const busyCount = helperPeople(helpers), allCount = c.helper_counts?.total ?? c.helpers?.total;
-    const helperPreview = runningPreview && helpers.length && !groupedPreview ? `<li class="row__sub">下面是在干的 ${busyCount} 个帮手${knownCount(allCount) && allCount > busyCount ? `（一共 ${allCount} 个，${c.detail ? '全部在完整对话里' : '其余已结束'}）` : ''}</li>` : '';
+    const helperPreview = runningPreview && helpers.length && !groupedPreview ? `<li class="row__sub">正在帮这场对话做事的有 ${busyCount} 个${knownCount(allCount) && allCount > busyCount ? `（一共 ${allCount} 个，${c.detail ? '全部在完整对话里' : '其余已结束'}）` : ''}</li>` : '';
     const waitBadge = waitLabel ? `<span class="chat-pill">${esc(waitLabel)}</span>` : '';
     const detailAction = href ? `<a class="btn btn--sm chat-detail-link" href="${href}" data-mo-press>${locked ? '看对话详情' : '看完整对话'} <span aria-hidden="true">›</span></a>` : '';
     const rowActions = locked ? '' : actions(c);
@@ -177,7 +197,10 @@
     const counts = [['today', '今天'], ['week', '近 7 天']].map(([key, label]) => {
       const d = stats[key];
       if (d?.q === 'warming') return `<div><h2>${label}</h2><p class="row__sub">正在准备</p></div>`;
-      const models = d?.models && (U.draw10?.modelRows(d.models) || d.models);
+      // 只因还有几条记录没确认开没开才不全的（下面单写了几条、暂未计入），已确认的对话数照实写，不写“至少”
+      const pendingOnly = d?.unconfirmed_openings > 0 && !String(d?.gap ?? '').includes('只有部分主对话有记录');
+      const sure = m => { if (!pendingOnly || !Array.isArray(m?.partial)) return m; const partial = m.partial.filter(k => k !== 'opened'); return partial.length ? { ...m, partial } : { ...m, q: 'ok', partial, gap: null }; };
+      const models = d?.models && (U.draw10?.modelRows(d.models) || d.models).map(sure);
       const firstGap = models?.[0]?.gap;
       const modelGap = typeof firstGap === 'string' && models.every(m => m.gap === firstGap) ? firstGap : '';
       const modelList = models ? models.map(m => {
@@ -186,7 +209,7 @@
         return `<p><small>${model || '型号没记下'} · ${counts}${m.gap && !modelGap ? ' · ' + gapHtml(m.gap) : ''}</small></p>`;
       }).join('') : `<p class="row__sub">${esc(U.collectionText('各型号', stats))}</p>`;
       const notes = [...new Set([d?.gap, modelGap].filter(Boolean))].map(gap => `<p><small>${gapHtml(gap)}</small></p>`).join('');
-      return `<div><h2>${label}</h2><p>${n(d?.opened, d, 'opened', '对话')} · ${n(d?.helpers, d, 'helpers', '帮手')} <small>${n(d?.manual_opened, d, 'manual_opened', '本人对话')}</small></p>${notes}${modelList}</div>`;
+      return `<div><h2>${label}</h2><p>${n(d?.opened, sure(d), 'opened', '对话')} · ${n(d?.helpers, d, 'helpers', '帮手')} <small>${n(d?.manual_opened, d, 'manual_opened', '本人对话')}</small></p>${notes}${modelList}</div>`;
     }).join('');
     U.html($('chat-counts'), counts);
     const historyQ = current?.history_q ?? (current?.q === 'warming' ? 'warming' : undefined);
@@ -276,8 +299,8 @@
     for (const key of Object.keys(COLUMN)) {
       const list = byState.get(key) || [], fixed = key === 'running' || key === 'waiting';
       if (!fixed && !list.length) { const old = board.get(key); if (old) old.el.hidden = true; continue; }
-      const card = board.card(key, COLUMN[key]); card.el.hidden = false;
-        if (!card.bound) { card.bound = true; U.fold(card.more, card.box); }
+      const card = key === 'waiting' ? waitingCard : board.card(key, COLUMN[key]); card.el.hidden = false;
+      if (!card.bound) { card.bound = true; U.fold(card.more, card.box); }
       const rows = list.map(c => chat(c, at)), count = peopleIn(list);
       if (key === 'running' && d.hidden) rows.push({ key: 'hidden', cls: 'row row--flat', html: U.hiddenMore?.(d.hidden, '场', d.hidden_what || '对话') || '' });
       const main = rows.slice(0, 5), rest = rows.slice(5), restCount = rest.reduce((n, r, i) => n + (list[i + 5]?.private_count || 1), 0);
@@ -293,9 +316,9 @@
       U.list(card.main, main.length || emptyWaiting ? main : wait(empty));
       U.list(card.rest, rest); card.more.hidden = !rest.length; U.html(card.more, `<span class="lb-more__open">展开（还有 ${restCount} 个）</span><span class="lb-more__shut">收起</span> <span class="more__chev">›</span>`);
     }
-    const hasWaiting = byState.has('waiting'), waitingEdge = hasWaiting ? board.el.firstElementChild : board.el.lastElementChild;
-    if (waitingCard.el !== waitingEdge) board.el[hasWaiting ? 'prepend' : 'append'](waitingCard.el);
     board.layout(true);
+    recentBoard.layout(true);
+    fitThoughts();
   }
   function renderRecent() {
     $('recent').hidden = !!U.offline?.() && !recentUsable && homeChats?.recent == null;
@@ -320,6 +343,7 @@
     $('recent-next').hidden = nextRecentCursor() == null; U.html($('recent-next'), '继续读 ›');
     if (recentUsable) recentRead.done();
     recentBoard.layout(true);
+    fitThoughts();
     U.land();
   }
   function missing(text, temporary = false) { U.html($('head'), U.head('AI 对话', { lamp: false })); U.html($('chat-note'), U.fieldHtml(text, { name: 'AI 对话', place: 'body', kind: viewer })); if (temporary) { $('head').querySelector('.lamp')?.setAttribute('data-tone', 'off'); L.tone($('hero'), 'off', 'off'); } if (!activeChats) U.list($('active-list'), wait(text)); }

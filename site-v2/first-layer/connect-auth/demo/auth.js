@@ -206,6 +206,7 @@
   }
   const offlineNote = document.createElement('p'); offlineNote.className = 'auth-offline'; document.querySelector('.cells').after(offlineNote);
   function render() {
+    const missingStatus = '授权状态暂时读不到，刷新后再试。';
     offlineNote.hidden = !disconnected;
     controls.hidden = !pending || disconnected;
     queryButton.disabled = busy; cancelButton.disabled = busy && !attempt || !!pending?.action;
@@ -218,7 +219,9 @@
       cell.classList.toggle('has-receipt', !disconnected && !!lockedAt[key]);
       const stateLine = cell.querySelector('.cell__state');
       const loading = reading && !disconnected && !state;
-      stateLine.textContent = disconnected ? '连不上' : loading ? '正在读…' : privateState ? '' : key === 'win' ? winMessage || ({ locked: '已锁屏', unlocked: '没锁', no_session: '没有登录' }[grant?.state] || '还没读到') : active ? untilText(grant.expires_at_unix * 1000) : !grant || grant.state === 'unknown' ? '状态未知' : key === 'pd' ? '锁着' : '关着';
+      stateLine.textContent = disconnected ? '连不上' : loading ? '正在读…' : !state ? missingStatus
+        : privateState ? '' : key === 'win' ? winMessage || ({ locked: '已锁屏', unlocked: '没锁', no_session: '没有登录' }[grant?.state] || '还没读到')
+        : active ? untilText(grant.expires_at_unix * 1000) : !grant || grant.state === 'unknown' ? '状态未知' : key === 'pd' ? '锁着' : '关着';
       if (privateState && !disconnected) {
         const note = document.createElement('button'); note.type = 'button'; note.className = 'trust-note'; note.dataset.trustView = '';
         note.textContent = '可信设备可见'; stateLine.append(note);
@@ -234,7 +237,7 @@
       for (const [label, kind] of actions) {
         const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.dataset.kind = kind;
         // 禁用时写明原因（悬停可见，扫描也认 data-disabled-reason）；条件和原来一样
-        const why = !state ? '授权状态还没读到' : !state.entry ? '办理入口还没读到' : local ? '' : busy ? '正在办上一步'
+        const why = !state ? missingStatus : !state.entry ? '办理入口还没读到' : local ? '' : busy ? '正在办上一步'
           : pending ? '还有一步在等确认' : !privateState && (!fresh() || !state.state_version) ? '状态不是最新的，刷新后再试' : '';
         b.disabled = !!why; if (why) { b.dataset.disabledReason = why; b.title = why; }
         const inline = local || kind === 'close' && meta.viewer?.kind === 'owner' && !privateState;

@@ -42,7 +42,7 @@
     return ['rewritten', 'owner'].map(visibility => {
       const names = [...new Set(fields.filter(([name, v]) => v.visibility === visibility && !(viewer === 'public' && (name === '对话标题' && visibility === 'owner' || name === '最新进展' && latest.includes(`live-mark--${visibility}`)))).map(([name]) => name))];
       if (!names.length) return '';
-      if (visibility === 'owner' && viewer === 'public') return marker({ visibility }, viewer, names.join('、'));
+      if (visibility === 'owner') return viewer === 'public' ? marker({ visibility }, viewer, names.join('、')) : '';
       return `${marker({ visibility }, viewer, names.join('、'))}：${names.join('、')}`;
     }).filter(Boolean).join('；');
   }
@@ -85,7 +85,7 @@
   // 一行里名字的标记：整页只写一次“帮手名仅本人可见”或“换了说法”，不在每一行重复；先认结构标记（hidden、visibility）。
   const markOf = (value, item) => { const v = field(value, item, chat, value === item?.title ? 'title' : 'text'); return v.hidden || v.visibility === 'owner' ? 'owner' : v.visibility === 'rewritten' ? 'rewritten' : ''; };
   const plainName = (value, item, label) => { const v = field(value, item, chat), mark = markOf(value, item), raw = text(v); if (mark === 'owner' && viewer === 'public') return ''; if (mark) return raw == null || raw === '' ? '' : U.fieldHtml(raw, { name: label, kind: viewer }); return chatCell(v, label, chat, 0, true); };
-  const marks = (kinds, label) => [kinds.has('owner') && !(viewer === 'owner' && wholeOwner()) && U.fieldHtml(viewer === 'owner' ? { text: label, visibility: 'owner' } : { text: null, visibility: 'owner', hidden_what: label }, { name: label, kind: viewer }), kinds.has('rewritten') && U.fieldHtml({ text: label, visibility: 'rewritten' }, { name: label, kind: viewer })].filter(Boolean).join('<span class="route-note__sep">·</span>');
+  const marks = (kinds, label) => [kinds.has('owner') && viewer !== 'owner' && U.fieldHtml(viewer === 'owner' ? { text: label, visibility: 'owner' } : { text: null, visibility: 'owner', hidden_what: label }, { name: label, kind: viewer }), kinds.has('rewritten') && U.fieldHtml({ text: label, visibility: 'rewritten' }, { name: label, kind: viewer })].filter(Boolean).join('<span class="route-note__sep">·</span>');
   function visibleText(v) {
     while (v && typeof v === 'object') {
       const restricted = v.hidden || v.hidden_block || v.visibility === 'owner' || v.public === 'owner';
@@ -94,17 +94,17 @@
     }
     return typeof v === 'string' ? v.trim() : '';
   }
-  const placeholder = /^(?:.*[：:])?(?:帮手|对话|可信设备可见|正在换说法|没有(?:标题|记录)|未命名的 AI 活|GPT 派单)$|仅本人可见$/;
-  const chinese = value => /\p{Script=Han}/u.test(value) && !placeholder.test(value);
-  const disclosure = (label, html, open = false) => html ? `<details class="row__sub"${open ? ' open' : ''}><summary class="more">${label}</summary><p style="overflow-wrap:anywhere">${html}</p></details>` : '';
   function helperWords(h) {
     if (contentLocked(chat, viewer) || contentLocked(h, viewer)) return { name: '', detail: '', mark: '' };
-    const raw = field(h.title, h, chat, 'title'), localized = field(field(h.localized?.title, h.localized, null, 'title'), h, chat);
-    const own = visibleText(raw), title = [localized, raw, !chat.helper_counts && field(h.summary, h, chat)].find(v => chinese(visibleText(v))) || (own && !placeholder.test(own) ? raw : null);
-    const name = title ? chatCell(title, '帮手名', chat, viewer === 'owner' || title === localized || title === raw ? 0 : 80, true) : '';
-    const words = visibleText(raw);
-    const original = words && !placeholder.test(words) && words !== visibleText(title) && chatCell(raw, '帮手名', chat, 0, true);
-    return { name, detail: disclosure('帮手原名', original), mark: markOf(title || h.title, h) };
+    const task = U.chatHelperPurpose(h, chat, viewer, field);
+    const mark = markOf(task?.purpose || h.title, h);
+    const name = task ? chatCell(task.purpose, '帮手名', chat, task.limit, true)
+      : viewer === 'public' && mark === 'owner' ? '' : '未记录具体任务';
+    // 本人版照样给全：派活时的原名（多是内部代号）收在“帮手原名”里，点开能看；访客版不放
+    const raw = field(h.title, h, chat, 'title'), words = viewer === 'owner' ? visibleText(raw) : '';
+    const original = words && !U.chatHelperPurpose.placeholder.test(words) && words !== visibleText(task?.purpose) && chatCell(raw, '帮手名', chat, 0, true);
+    const detail = original ? `<details class="row__sub"><summary class="more">帮手原名</summary><p style="overflow-wrap:anywhere">${original}</p></details>` : '';
+    return { name, detail, mark };
   }
   // 什么时候：同一天只写钟点，前一天写“昨天”，再早写日子；断开时也照这样写。整页（页头、帮手、过程记录）只用这一种写法。
   const activityOf = h => { if (h.state === 'running' || !Number.isFinite(Date.parse(h.at))) return U.chatFields.helperActivity(h, at); const verb = h.state === 'done' ? '完成于' : h.state === 'stopped' ? '停止于' : h.state === 'failed' ? '出错于' : '最后记录于'; return `${verb} ${stamp(h.at)}`; };

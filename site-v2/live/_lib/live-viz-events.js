@@ -33,7 +33,8 @@
           const first = stamp(group.from), last = stamp(group.to), when = first === last ? first : `${first} 至 ${last}`;
           const count = group.count > 1 ? ` · ${first === last ? '同一分钟' : '该时段'} ${group.count} 条` : '';
           const text = `${when}（北京时间） · ${[...group.names].join('、')}${count}`;
-          return `<button type="button" class="computer-events__dot"${group.count > 1 ? ` data-count="×${group.count}"` : ''} style="left:${100 * (group.at - start) / (end - start)}%;--event-color:${hue}" aria-label="${esc(text)}"><span>${esc(text)}</span></button>`;
+          const position = 100 * (group.at - start) / (end - start);
+          return `<button type="button" class="computer-events__dot${position <= 50 ? ' computer-events__dot--left' : ''}"${group.count > 1 ? ` data-count="×${group.count}"` : ''} style="left:${position}%;--event-color:${hue}" aria-label="${esc(text)}"><span>${esc(text)}</span></button>`;
         }).join('')}</div><small>${window.ComputerStat?.partial(d, 'events_count') ? '至少 ' : complete ? '' : '已读 '}${points.length} 次</small></div>`;
       }).join('');
       const title = complete ? '事件时间带' : U.offline?.() ? '最近记录' : U.collectionText("最近记录 · 30 天完整事件");

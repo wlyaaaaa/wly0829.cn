@@ -113,7 +113,10 @@
     const b = bar(v, barW, last, viewer);
     const forecast = K.forecast(v, d), key = K.letter(v) || v.id;
     const sub = unread ? (v.state === 'offline' ? '离线' : '容量还没读到') : forecast.text;
-    return { b, html: `<li><details class="dk-row" id="storage-disk-${esc(key)}" data-key="${esc(key)}"><summary class="dk-sum">${K.lamp(unread ? 'gray' : K.tone(v, forecast))}<b class="dk-name">${esc(K.volName(v, viewer))}</b><span class="dk-about">${esc(about)}</span><span class="dk-cell">${b.html}${b.caption ? `<small class="dk-cap">${b.caption}</small>` : ''}</span><span class="dk-left"><b>${esc(free)}</b><span>${esc(sub)}</span></span><span class="dk-go" aria-hidden="true">›</span></summary>${detail(v, b, forecast, viewer)}</details></li>` };
+    const capacityAt = U.fieldText(v.read_at ?? v.source_at, viewer);
+    const capacityNote = !unread && v.state !== 'offline' && at(capacityAt) != null
+      ? `<small class="dk-cap">容量读于 <time datetime="${esc(capacityAt)}">${esc(when(capacityAt))}</time></small>` : '';
+    return { b, html: `<li><details class="dk-row" id="storage-disk-${esc(key)}" data-key="${esc(key)}"><summary class="dk-sum">${K.lamp(unread ? 'gray' : K.tone(v, forecast))}<b class="dk-name">${esc(K.volName(v, viewer))}</b><span class="dk-about">${esc(about)}</span><span class="dk-cell">${b.html}${capacityNote}${b.caption ? `<small class="dk-cap">${b.caption}</small>` : ''}</span><span class="dk-left"><b>${esc(free)}</b><span>${esc(sub)}</span></span><span class="dk-go" aria-hidden="true">›</span></summary>${detail(v, b, forecast, viewer)}</details></li>` };
   }
 
   function legend(rows, gray) {

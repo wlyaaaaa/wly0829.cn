@@ -865,10 +865,8 @@
     const devices = [...(d.devices || [])];
     const phone = phoneData || devices.some(x => x.id === 'phone') ? phoneConnection(phoneData, devices.find(x => x.id === 'phone')) : null;
     if (phone && !devices.some(x => x.id === 'phone')) devices.push({ id: 'phone' });
-    // 多久写满：和存储页同一个结论——后台按近 14 天空闲的实际变化（含自动清理）算 days_to_full；算不出时照写原因（60 天内不会满／数据还不够预测）。
-    // 不再并排写“本周已用增减”：那是另一段时间的整卷变化，和 14 天走势对不上，读起来像两个数打架。
-    const diskFill = x => x.days_to_full != null ? `按近 14 天走势，${isLower(x, 'days_to_full') || x.days_to_full < 1 ? '' : '约 '}${quantity(x, 'days_to_full', daysText)}满`
-      : typeof x.days_to_full_reason === 'string' && x.days_to_full_reason ? (/不会满$/.test(x.days_to_full_reason) ? `按近 14 天走势，${x.days_to_full_reason}` : `多久写满：${x.days_to_full_reason}`) : '';
+    const diskGrowth = x => x.growth == null ? '' : x.growth === 0 ? '本周已用无变化'
+      : `本周已用${x.growth < 0 ? '减少' : '增加'} ${quantity(x, 'growth', n => U.gb(Math.abs(n)))}`;
     const used = m.memory?.value, total = m['memory-total']?.value, traffic = d.traffic, growthTop = d.storage_growth_top;
     const fileGrowth = value => U.fieldHtml(value, { name: '分类占用', kind: viewer });
     let growthReading = `<span class="row__sub">${fileGrowth(d.storage_growth_gap || '这次没读到能对比的分类记录')}</span>`;
@@ -886,7 +884,7 @@
       ['显卡', withReadings(pair(m.gpu, val(m['gpu-temp'], x => quantity(x, 'value', fmtTemp))), ['占用', m.gpu], ['温度', m['gpu-temp']])],
       ['内存', withReadings(used != null || total != null ? `用了 ${U.nowrap(quantity(m.memory, 'value', U.gb))} · ${U.nowrap(`共 ${quantity(m['memory-total'], 'value', U.gb)}`)}` : null,
         ['已用', m.memory], ['总容量', m['memory-total']])],
-      ['最紧的盘', val(m['disk-free'], x => { const label = x.note || (x.drive ? sp(x.drive).replace(/([A-Za-z]):?\s*(?:盘)?/g, '$1 盘') : x.label === '最紧的盘' ? '' : typeof x.label === 'string' ? x.label.replace(/剩余$/, '') : x.label) || ''; const growth = diskFill(x); return `<span class="disk-note">${U.fieldHtml(label, { name: '磁盘', kind: viewer })}</span> 还剩 ${U.nowrap(quantity(x, 'value', U.gb))}${diskTime ? `<small>${esc(diskTime)}</small>` : ''}${growth ? `<small>${U.nowrap(growth)}</small>` : ''}`; }), diskFree, '/live/storage/'],
+      ['最紧的盘', val(m['disk-free'], x => { const label = x.note || (x.drive ? sp(x.drive).replace(/([A-Za-z]):?\s*(?:盘)?/g, '$1 盘') : x.label === '最紧的盘' ? '' : typeof x.label === 'string' ? x.label.replace(/剩余$/, '') : x.label) || ''; const growth = diskGrowth(x); return `<span class="disk-note">${U.fieldHtml(label, { name: '磁盘', kind: viewer })}</span> 还剩 ${U.nowrap(quantity(x, 'value', U.gb))}${diskTime ? `<small>${esc(diskTime)}</small>` : ''}${growth ? `<small>${U.nowrap(growth)}</small>` : ''}`; }), diskFree, '/live/storage/'],
       ['近 7 天占空间涨得最多', growthReading, false, '/live/storage/'],
       ['海外流量', traffic ? U.nowrap(trafficText) + (traffic.hour_bytes != null ? ` <span class="traffic-hour">${U.nowrap(`近一小时 ${quantity(traffic, 'hour_bytes', trafficBytes)}`)}</span>` : '') + (trafficTime ? `<small>${esc(trafficTime)}</small>` : '') + (traffic.q === 'partial' && traffic.gap ? `<small>${U.fieldHtml(traffic.gap, { name: '流量说明', kind: viewer })}</small>` : '') : null, false, '/live/traffic/'],
       ['设备', devices.filter(x => x.id !== 'main').map(x => {

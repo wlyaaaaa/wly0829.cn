@@ -226,23 +226,12 @@
     if (missing.length) content.push(`<span style="color:var(--route-muted, #848b87)">${missing.map(esc).join('；')}</span>`);
     return content.length ? `<details class="row__sub"><summary class="more">帮手详情</summary>${content.map(html => `<p style="white-space:pre-wrap;overflow-wrap:anywhere">${html}</p>`).join('')}</details>` : '';
   }
-  function estimateRows(d) {
-    const text = r => [['reported','报过工期'],['on_time','按时'],['late','超时'],['missing_actual','缺实际工时']].filter(([k]) => r[k] != null).map(([k,n]) => `${n} ${r[k]} 个`).join(' · ');
-    const average = r => Number.isFinite(r?.avg_over_min) ? `平均超时 ${r.avg_over_min} 分钟` : '';
-    const rows = modelRows(d?.models || []).filter(m => Number.isFinite(m.avg_over_min)).map(m => ({ name: modelName(m), text: average(m), sub: text(m) }));
-    return { text: text(d || {}), average: average(d), sample: d?.late > 0 ? `按有实际工时且超时的 ${d.late} 个对话计算` : d?.late === 0 ? '有实际记录的对话没有超时' : '', rows };
-  }
   function mount({ row, readViewer }) {
     const hero = document.querySelector('#hero .card__body'), notice = document.createElement('p'); notice.className = 'row__sub'; notice.dataset.official = ''; notice.hidden = true; hero.append(notice);
-    function card(id, after, body) {
-      const el = Object.assign(document.createElement('section'), { id, className: 'card chat-stats', hidden: true });
-      el.innerHTML = `<div class="card__glass glass"><div class="card__body">${body}</div></div>`;
-      after.after(el);
-      return el;
-    }
-    const accuracy = card('chat-accuracy', document.getElementById('chat-recent-board'), '<div class="accuracy-head"><p class="part">近 30 天 · 做完的对话，工期准不准</p><strong data-average></strong></div><p class="row__sub" data-summary></p><p class="row__sub" data-since></p><ul class="accuracy-models" data-models></ul>');
     const doneTitle = '近 30 天 · 做完的对话';
-    const done = card('chat-done30', accuracy, `<details><summary class="part">${doneTitle}</summary><p class="row__sub" data-since></p><ul class="rows list"></ul></details><div data-error role="status"></div>`);
+    const done = Object.assign(document.createElement('section'), { id: 'chat-done30', className: 'card chat-stats', hidden: true });
+    done.innerHTML = `<div class="card__glass glass"><div class="card__body"><details><summary class="part">${doneTitle}</summary><p class="row__sub" data-since></p><ul class="rows list"></ul></details><div data-error role="status"></div></div></div>`;
+    document.querySelector('.chat-lower').after(done);
     const disclosure = done.querySelector('details'), summary = disclosure.querySelector('summary');
     const range = disclosure.querySelector('[data-since]'), list = disclosure.querySelector('ul');
     const doneRead = U.reading(done.querySelector('[data-error]'), { name: doneTitle, ghost: '' });
@@ -259,14 +248,7 @@
       U.html(notice, esc(message).replaceAll('\n', '<br>'));
     };
     window.Live.watch('chats', null, { data(d) { baseStatus = d?.official_status; drawNotice(); } });
-    window.Live.watch('chats',{window:'72h'},{data(d) {
-      recentStatus = d?.official_status; drawNotice();
-      const e=d?.stats?.estimate_accuracy, view=estimateRows(e); accuracy.hidden=!e || !view.text;
-      U.html(accuracy.querySelector('[data-average]'), esc(view.average || '没有实际工时记录'));
-      U.html(accuracy.querySelector('[data-summary]'), esc(view.text));
-      U.html(accuracy.querySelector('[data-since]'), esc([view.sample, e?.since && `从 ${U.date(e.since)} 开始记`].filter(Boolean).join(' · ')));
-      U.html(accuracy.querySelector('[data-models]'), view.rows.map(m => `<li><b>${esc(m.name)}</b><span>${esc(m.text)}</span><small>${esc(m.sub)}</small></li>`).join(''));
-    }});
+    window.Live.watch('chats', { window: '72h' }, { data(d) { recentStatus = d?.official_status; drawNotice(); } });
     window.Live.watch('chats',{window:'30d'},{data(d,meta) {
       const items = d?.items;
       done.hidden = !Array.isArray(items);
@@ -286,5 +268,5 @@
       U.list(list, rows, { animate: disclosure.open });
     }, link: doneUnavailable });
   }
-  U.draw10 = { badge, detail, compactionDisclosure, official, estimateRows, mount, modelName, bareModel, modelHue, modelRows, modelHtml, sourceHtml, helperDetailHtml };
+  U.draw10 = { badge, detail, compactionDisclosure, official, mount, modelName, bareModel, modelHue, modelRows, modelHtml, sourceHtml, helperDetailHtml };
 })();
