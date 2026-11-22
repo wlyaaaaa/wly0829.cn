@@ -379,7 +379,7 @@
       notes.push(fieldHtml(cutoff, { name: '数据截止时刻' }));
     }
     if (data.attention_count > 0) notes.push(`${esc(data.attention_count)} 项要处理`);
-    if (data.gray_count > 0) notes.push(`${esc(data.gray_count)} 项读不准`);
+    if (data.gray_count > 0) notes.push(`${esc(data.gray_count)} 项读数还不能确认`);
     if (data.ai_fixing_count != null && (showZeroFixing !== false || data.ai_fixing_count !== 0)) notes.push(nowrap(`AI 在修 ${data.ai_fixing_count} 件`));
     return {
       tone, lamp: `<span class="lamp${small ? ' lamp--sm' : ''}" data-tone="${tone}" aria-hidden="true"></span>`,
@@ -620,11 +620,16 @@
   }
 
   // 一件一件写回，各记各的结果：没生效的写清是哪件、为什么；写回接口说“还没确认”的（unconfirmed）单算，不当失败。
-  async function writeItems(live, items, action) {
-    const saved = [], failed = [];
+  async function writeItems(live, items, action, followReceipt = false) {
+    const saved = [], failed = [], requests = [];
     let pending = 0, unconfirmed = 0;
     for (const item of items) {
       const result = await live.applyOwnerItems([item], action);
+      // 先逐条提交，未完成的回执可以同时核对。
+      requests.push(followReceipt && (result.pending || result.unconfirmed) ? live.applyOwnerItems([item], action, true) : result);
+    }
+    for (const [index, result] of (await Promise.all(requests)).entries()) {
+      const item = items[index];
       if (result.saved?.length) saved.push(...result.saved);
       else if (result.pending) pending += result.pending;
       else if (result.unconfirmed) unconfirmed += result.unconfirmed;
@@ -632,13 +637,13 @@
     }
     const failedText = failed.map(f => `「${f.name}」：${f.message.replace(/[。.]+$/, '')}`).join('；');
     const text = word => [`${word} ${saved.length} 件` + (pending ? `，正在写入 ${pending} 件` : '') + '。',
-      unconfirmed && `还没确认 ${unconfirmed} 件，再点一次可继续核对。`,
+      unconfirmed && (followReceipt ? `暂时没读到 ${unconfirmed} 件的结果，稍后刷新可以看最新状态。` : `还没确认 ${unconfirmed} 件，再点一次可继续核对。`),
       failed.length && `没生效 ${failed.length} 件：${failedText}。`].filter(Boolean).join('\n');
     return { saved, pending, unconfirmed, failed, text };
   }
 
   function itemFeedback(trigger, message, ms = 6500) {
-    const notices = document.getElementById('notices');
+    const notices = document.getElementById('item-action-receipts') || document.getElementById('notices');
     const note = document.createElement(notices ? 'li' : 'span');
     note.className = notices ? 'notice glass' : 'row__feedback';
     note.setAttribute('role', 'status');
@@ -660,6 +665,11 @@
     if (wording.action && writes.some(item => !item.item_version || !item.owner_actions?.includes(wording.action))) {
       itemFeedback(trigger, '这件事刚刚有变化，请重读后再试。'); return;
     }
+    const lane = document.getElementById('item-action-receipts');
+    const followReceipt = !!lane && !!wording.action;
+    const project = saved => {
+      if (followReceipt) lane.dispatchEvent(new CustomEvent('item-write', { detail: { items: writes, saved } }));
+    };
     // 本人版列全：选了几件就列几件。
     const names = (rows, id = '') => `<ul${id ? ` id="${id}"` : ''} class="live-item-confirm__name live-item-confirm__list">${rows.map(item => `<li>${esc(fieldText(item.text || item.title, 'owner'))}</li>`).join('')}</ul>`;
     const dialog = document.createElement('dialog');
@@ -695,11 +705,13 @@
     dialog.querySelector('[data-apply]').addEventListener('click', async () => {
       items.forEach(item => itemWrites.add(item.id));
       dialog.close();
+      project(null);
       try {
         if (direct) {
           // 先复制（要趁这次点按），再按各卡原编号写回；两组结果分开报。
           const ok = await copy(follow.map(item => live.copy(item, 'decline')).join('\n\n'));
-          const result = await writeItems(live, direct, wording.action);
+          const result = await writeItems(live, direct, wording.action, followReceipt);
+          project(result.saved);
           itemFeedback(trigger, result.text('已撤下') + '\n有后续的 ' + follow.length + ' 件' + (ok ? '已复制，粘贴到 AI 对话发送。' : '没复制成，请再试。'), result.failed.length || result.unconfirmed ? 20000 : 6500);
           complete([...result.saved, ...(ok ? follow.map(item => item.id) : [])]);
           await live.refresh();
@@ -711,7 +723,8 @@
           if (ok) complete(items.map(item => item.id));
           return;
         }
-        const result = await writeItems(live, items, wording.action), { saved, pending, unconfirmed, failed } = result;
+        const result = await writeItems(live, items, wording.action, followReceipt), { saved, pending, unconfirmed, failed } = result;
+        project(saved);
         if (saved.length === 1 && items.length === 1) {
           const detail = trigger.closest('.dossier-card');
           const state = detail?.querySelector('[data-part="state"]');
@@ -721,8 +734,12 @@
           }
         }
         const count = !failed.length && !pending && !unconfirmed ? wording.saved + '（' + items.length + ' 件）' : result.text('已生效');
-        itemFeedback(trigger, items.length > 1 ? count : saved.length ? wording.saved : pending ? '已收到，正在写入这件事。' : unconfirmed ? '还没确认结果，再点一次可继续核对。' : failed[0].message,
-          items.length > 1 && (failed.length || unconfirmed) ? 20000 : 6500);
+        const failure = followReceipt && failed.length
+          ? `${({ dismiss: '没关掉', ack: '没记下已知', snooze: '没改好提醒时间' })[wording.action]}：${failed[0].message}` : failed[0]?.message;
+        const message = items.length > 1 ? count : saved.length ? wording.saved : pending ? '已收到，正在写入这件事。'
+          : unconfirmed ? followReceipt ? '暂时没读到办理结果，稍后刷新可以看最新状态。' : '还没确认结果，再点一次可继续核对。' : failure;
+        const name = followReceipt && items.length === 1 ? fieldText(items[0].text || items[0].title, 'owner') : '';
+        itemFeedback(trigger, name ? `${message}\n${name}` : message, (followReceipt || items.length > 1) && (failed.length || unconfirmed) ? 20000 : 6500);
         complete(saved);
         await live.refresh();
       } finally {

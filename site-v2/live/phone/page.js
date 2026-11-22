@@ -11,7 +11,7 @@
   const groupPics = { usage: '/live/img/s1900-phone-corridor-v1.webp', network: '/live/img/s1900-phone-tower-v1.webp', collect: '/live/img/grp-phone-collect.webp', battery: '/live/img/grp-phone-battery.webp', storage: '/live/img/grp-phone-storage.webp', apps: '/live/img/grp-phone-apps.webp' };
   const palettes = [['violet', 'blue'], ['teal', 'blue'], ['blue', 'violet'], ['pink', 'apricot'], ['apricot', 'violet'], ['violet', 'teal']];
   let phone = null, viewer = 'public', done = false, linkOff = false, trafficProject = null, trafficDays = null, trafficDaysWatch = null;
-  const ranges = {}, watches = {}, generations = {}, chartStates = {};
+  const ranges = {}, shownRanges = {}, watches = {}, generations = {}, chartStates = {};
   const packs = new Map(), chartDone = new Set(), sync = C.sync(), metric = id => phone?.metrics?.find(m => m.id === id);
   const isPartial = (o, key) => o?.lower_bound === true || o?.at_least === true || o?.q === 'partial' && (o.partial == null || o.partial.includes(key));
   const pcOffline = () => linkOff || !!U.offline?.(), unread = () => pcOffline() ? '' : U.collectionText(), missing = '这块没存下来，连上后补上。';
@@ -254,9 +254,9 @@
   function rangeBar(el, key, label) {
     const nav = document.createElement('div'); nav.className = 'phone-range';
     nav.innerHTML = `<span>${label}</span><span class="seg" role="group" aria-label="${label}"><button type="button" data-needs-pc data-range="24h" aria-pressed="true">24 小时</button><button type="button" data-needs-pc data-range="7d" aria-pressed="false">近 7 天</button></span>`;
+    for (const button of nav.querySelectorAll('[data-range]')) button.setAttribute('aria-pressed', String(button.dataset.range === (ranges[key] || '24h')));
     el.append(nav); nav.addEventListener('click', e => { const b = e.target.closest('[data-range]'); if (!b || pcOffline() || (ranges[key] || '24h') === b.dataset.range) return;
       ranges[key] = b.dataset.range; for (const x of nav.querySelectorAll('[data-range]')) x.setAttribute('aria-pressed', String(x === b));
-      const card = el.closest('.grp'); if (card) { card.style.minHeight = `${card.offsetHeight}px`; holds[key] = card; }
       watchCharts([key]); });
   }
   function buildChapter(el, group) {
@@ -279,7 +279,7 @@
       const decorate = () => timelineLabels(host, data, key);
       new ResizeObserver(() => requestAnimationFrame(decorate)).observe(host);
       setters.push(() => {
-        const s = series(key, id), restricted = s?.visibility === 'owner' && viewer !== 'owner', daily = days && ranges[key] === '7d';
+        const s = series(key, id), restricted = s?.visibility === 'owner' && viewer !== 'owner', daily = days && shownRanges[key] === '7d';
         host.hidden = !!restricted || !!daily; host.parentElement.hidden = !!daily;
         const dayBars = series(key, 'usage-days')?.bars;
         if (dayHost) { dayHost.parentElement.hidden = !daily; days.set(dayBars ? { ...dayBars, labels: dayBars.labels?.map(l => typeof l.text === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(l.text) ? { ...l, title: l.title || l.text, text: l.text.slice(5) } : l) } : null); }
@@ -323,8 +323,8 @@
         paintUsageShare();
       }).observe(shareHost);
       const heat = V.heatmap(chartHost(el, '几点在用 · 近 14 天'), { max: 60, what: '用了', today: true, ramp: 'hue', hue: 'pink' });
-      setters.push(() => { const apps = series(key, 'usage-apps'), categories = series(key, 'usage-categories'), quiet = ranges[key] === '7d' ? '' : idleToday();
-        const period = ({ today: '今天', last_7_calendar_days: '近 7 天' })[categories?.basis] ?? (ranges[key] === '7d' ? '近 7 天' : '今天');
+      setters.push(() => { const apps = series(key, 'usage-apps'), categories = series(key, 'usage-categories'), quiet = shownRanges[key] === '7d' ? '' : idleToday();
+        const period = ({ today: '今天', last_7_calendar_days: '近 7 天' })[categories?.basis] ?? (shownRanges[key] === '7d' ? '近 7 天' : '今天');
         const values = categories?.basis ? categories.items?.map(item => item.value).filter(Number.isFinite) : null;
         shareOptions.center = `${period}${categories?.center_label || '已归类应用用时'}`;
         shareOptions.centerValue = values?.length ? values.reduce((total, value) => total + value, 0) : undefined;
@@ -372,7 +372,7 @@
     else if (key === 'battery') {
       rangeBar(el, key, '电量和温度走势');
       const stack = document.createElement('div'); stack.className = 'phone-battery-overlay'; el.append(stack);
-      const host = chartHost(stack, '淡色底是在充电 · 左轴电量，右轴温度'), chart = C.create(host, { size: 'hero', lines: [{ id: 'battery', label: '电量', hue: 'violet' }], floor: 0, ceil: 100, sync });
+      const host = chartHost(stack, '淡色底是在充电 · 左轴电量，右轴温度'), chart = C.create(host, { size: 'hero', lines: [{ id: 'battery', label: '电量', hue: 'violet' }], floor: 0, ceil: 100, showStartDate: true, sync });
       const tempHost = chartHost(stack, '淡色底是在充电 · 左轴电量，右轴温度'); tempHost.parentElement.classList.add('phone-temp');
       const temp = C.create(tempHost, { size: 'hero', lines: [{ id: 'battery_temp', label: '电池温度', hue: 'pink' }], floor: 'auto', unit: '℃', sync,
         onRead(values) { const cell = tempHost.querySelector('.chart__val b'); if (cell) cell.textContent = temperature(values[0]?.value); } });
@@ -471,11 +471,11 @@
     const on = metric('screen_on');
     const at = [phone?.usage?.comparison?.current_to, on?.coverage?.to, on?.at_precision === 'date' ? null : on?.at]
       .find(t => typeof t === 'string' && /[T ]\d{2}:\d{2}/.test(t) && Number.isFinite(seconds(t)));
-    return `${text}（${at ? `当日截至 ${stamp(at)}，` : ''}与此前 7 天的全天平均比较）`;
+    return at ? `当天的亮屏时间读到 ${stamp(at)}，此前 7 天同一时刻的平均还没读到` : '';
   }
   function line(key) {
     const r = phone?.received;
-    if (key === 'usage') return compareText(phone?.usage?.compare_text) || '';
+    if (key === 'usage') return shownRanges.usage === '7d' ? '' : compareText(phone?.usage?.compare_text) || '';
     if (key === 'network') return val('net_kind') == null && pcOffline() ? '' : `${pcOffline() ? '上网走' : '现在走'} ${val('net_kind') === 'wifi' ? 'WiFi' : netText()}`;
     if (key === 'collect') return (r?.gap?.text || phone?.collect?.gaps?.some(g => g.kind === 'data_gap' && !g.recovered)) ? '有数据缺口，见最近的空档' : (r?.complete30 == null ? pcOffline() ? '' : U.collectionText("近 30 天") : r.complete30 ? '近 30 天数据收全了' : phone?.collect?.since ? `线路从 ${U.date(phone.collect.since)} 起才有记录` : '近 30 天数据有缺');
     if (key === 'battery') return val('charging') == null ? pcOffline() ? '' : U.collectionText("充电状态 · ") : val('charging') ? '在充电' : '没充电';
@@ -561,7 +561,7 @@
     const keys = [...new Set([...Object.keys(names), ...(phone?.groups || []).map(g => g.key || g.id).filter(Boolean)])];
     board.set(keys.map((key, i) => {
       const given = phone?.groups?.find(g => (g.key || g.id) === key);
-      const name = names[key] || [given?.label, given?.name, given?.title, given?.text].find(value => value && (typeof value !== 'string' || value.trim())) || key;
+      const name = key === 'usage' && shownRanges.usage === '7d' ? '近 7 天怎么用的' : names[key] || [given?.label, given?.name, given?.title, given?.text].find(value => value && (typeof value !== 'string' || value.trim())) || key;
       if (!Object.hasOwn(names, key)) {
         const color = Array.from(key).reduce((n, c) => (n + c.codePointAt(0)) % palettes.length, 0);
         return {
@@ -571,7 +571,7 @@
           })),
         };
       }
-      if (done && phone?.state === 'unknown' && !pcOffline()) return { key, name: names[key], pic: groupPics[key], palette: palettes[i], ...phone?.groups?.find(g => g.key === key), line: `${names[key]}暂时读不到`, empty: true, figures: [] };
+      if (done && phone?.state === 'unknown' && !pcOffline()) return { key, name, pic: groupPics[key], palette: palettes[i], ...given, line: `${name}暂时读不到`, empty: true, figures: [] };
       const g = phone?.groups?.find(g => g.key === key), raw = phone?.blocks?.[key], block = raw && { ...raw, reason: sp(raw.reason), summary: sp(g?.reason) }, b = V.blockState(block, pcOffline());
       const missingNames = g?.partial?.length ? { ...missingReadingNames(phone?.metrics, g.missing_readings), ...g.missingNames } : g?.missingNames;
       const compact = key === 'battery' || key === 'storage', status = compact && g ? U.status(g, { missingNames }).note || '' : '';
@@ -602,7 +602,7 @@
       const unique = distinctNotes(lineText, statusShowsReason && sp(g?.why), statusShowsReason && sp(g?.stale_text));
       const blockText = unique(b?.text);
       const gaps = partial.map(o => o.gap).filter(text => text && !inStatus(text)).map(text => unique(humanText(text))).filter(Boolean);
-      return { ...g, key, name: key === 'usage' && ranges.usage === '7d' ? '近 7 天怎么用的' : names[key], pic: groupPics[key], palette: palettes[i], missingNames, reason: compact && typeof reason === 'string' && reason && !marked(reason) ? [...new Set([lineText, humanText(reason)].filter(Boolean))].join(' · ') : reason,
+      return { ...g, key, name, pic: groupPics[key], palette: palettes[i], missingNames, reason: compact && typeof reason === 'string' && reason && !marked(reason) ? [...new Set([lineText, humanText(reason)].filter(Boolean))].join(' · ') : reason,
         line: lineText, wait: !done || b?.wait || !chartDone.has(key),
         empty: partial.length ? false : b?.empty, blocks: [...(blockText ? [{ key: names[key], ...b, text: blockText }] : []), ...gaps.map(text => ({ key: names[key], state: 'partial', text }))], figures: figs, build: buildChapter };
     }));
@@ -613,7 +613,7 @@
       for (const node of card.querySelectorAll('.grp__said')) node.classList.toggle('row__sub', /这块还没算好/.test(node.textContent));
       tidyGroupStatus(card, card.dataset.key);
       if (card.dataset.key === 'usage' && !card.querySelector('.grp__extra:not([hidden])') && !card.querySelector('.grp__line').textContent.trim()) {
-        U.html(card.querySelector('.grp__said'), chartDone.has('usage') ? '今天的使用记录暂时读不到' : '正在读使用记录');
+        U.html(card.querySelector('.grp__said'), chartDone.has('usage') ? `${shownRanges.usage === '7d' ? '近 7 天' : '今天'}的使用记录暂时读不到` : '正在读使用记录');
       }
       lineTip(card);
       for (const fig of card.querySelectorAll('.grp__fig')) { fig.toggleAttribute('data-lower', isPartial(metric(fig.dataset.key), 'value')); fig.toggleAttribute('data-accumulating', metric(fig.dataset.key)?.value === null && !!metric(fig.dataset.key)?.accumulating); }
@@ -704,12 +704,10 @@
       U.blockNote(hero.querySelector('.card__body'), s);
     },
   });
-  const holds = {};
-  const release = key => { const card = holds[key]; if (!card) return; delete holds[key]; requestAnimationFrame(() => requestAnimationFrame(() => { card.style.minHeight = ''; })); };
   function watchCharts(keys = Object.keys(names)) {
     for (const key of keys) {
     const current = generations[key] = (generations[key] || 0) + 1, span = ranges[key] || '24h';
-    watches[key]?.stop(); packs.delete(key); chartDone.delete(key); refresh();
+    watches[key]?.stop();
     const width = () => {
       const card = $(`grp-${key}`), chapter = card?.querySelector('.grp__chapter'), plot = V.chartWidth(chapter);
       if (plot || !chapter) return plot;
@@ -721,14 +719,18 @@
       data(d, meta) {
         if (current !== generations[key] || !d) return;
         const p = meta.source === 'fixture' && d.ranges ? d.ranges[span] : d;
+        shownRanges[key] = span;
         chartDone.add(key); packs.set(key, { ...p, series: (p.series || []).filter(s => s.group === key) });
-        board.data({ ...p, series: [...packs.values()].flatMap(p => p.series || []) }); refresh(); release(key);
+        board.data({ ...p, series: [...packs.values()].flatMap(p => p.series || []) }); refresh();
         if (phone) Light.tone(hero, U.status(phone).tone);
       },
       phase(s) {
         if (current !== generations[key] || s.data != null) return;
-        board.groupPhase(key, s);
-        if (['none', 'gone'].includes(s.phase)) { chartDone.add(key); refresh(); release(key); }
+        if (!packs.has(key)) board.groupPhase(key, s);
+        if (['none', 'gone', 'paused'].includes(s.phase)) {
+          shownRanges[key] = span; chartDone.add(key); packs.delete(key);
+          board.data({ series: [...packs.values()].flatMap(p => p.series || []) }); refresh();
+        }
       },
       link(s) { if (current === generations[key]) { chartStates[key] = s; U.blockNote($(`grp-${key}`), s); } },
     }); }

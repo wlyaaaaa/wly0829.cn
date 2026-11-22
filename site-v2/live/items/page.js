@@ -44,6 +44,21 @@
   document.querySelector('.lbp-tools__end').insertAdjacentHTML('afterbegin', '<button id="open-next" class="more" type="button" hidden></button>');
   const openMore = $('open-next'); openMore.addEventListener('click', () => readOpen());
   const cards = new Map(), collections = new Map(), initialReads = new Set(); let query = '', balanceKey = '';
+  const hiddenWhileWriting = new Map();
+  const hiddenByWrite = item => {
+    const entry = hiddenWhileWriting.get(item.id);
+    return viewer === 'owner' && entry && (entry.pending || entry.version === item.item_version);
+  };
+  $('item-action-receipts').addEventListener('item-write', ({ detail: { items, saved } }) => {
+    for (const item of items) {
+      if (saved === null || saved.includes(item.id)) hiddenWhileWriting.set(item.id, { pending: saved === null, version: item.item_version });
+      else hiddenWhileWriting.delete(item.id);
+    }
+    // 旧滚动锚点可能正是要撤下的那行，不能再用它锁位置。
+    U.anchor.stop();
+    redrawItems();
+    if (reportsData) renderReports(reportsData);
+  });
   function redrawItems() { for (const [key, c] of collections) list(key, c.items, c.empty, c.renderer, true, c.partial); balanceBoard(true); }
   $('due-sort').addEventListener('change', redrawItems);
   function dueOrder(items) {
@@ -60,8 +75,8 @@
     $('kind-pick').insertAdjacentHTML('beforeend', `<option value="${kind}">${labels[kind]}</option>`);
   }
   const closedCard = cards.get('closed');
+  closedCard.more.setAttribute('aria-controls', 'closed-box');
   closedCard.more.after(closedCard.next);
-  const batch = document.createElement('button'); batch.id = 'closed-batch'; batch.type = 'button'; batch.className = 'more'; batch.textContent = '再看 5 条 ›'; batch.hidden = true; cards.get('closed').box.firstElementChild.append(batch);
   function balanceBoard(force = false) {
     const shown = [...cards].filter(([kind,c]) => kind !== 'closed' && !c.el.hidden), picked = $('kind-pick').value;
     const key = shown.map(([kind]) => kind).join() + picked + query;
@@ -78,6 +93,9 @@
   }
   function filterBoard() {
     const picked = $('kind-pick').value, status = $('state-pick').value;
+    $('stats').querySelectorAll('[data-kind]').forEach(button => {
+      button.setAttribute('aria-pressed', String(status !== 'closed' && button.dataset.kind === picked));
+    });
     for (const [kind, c] of cards) {
       c.el.hidden = kind === 'closed' && status === 'closed' ? picked === 'reports' :
         (kind === 'reports' && reportCount === 0) || !!picked && picked !== kind || !!status && (status === 'closed' ? kind !== 'closed' : kind === 'closed');
@@ -88,6 +106,13 @@
     $('board-empty').hidden = [...cards].some(([, c]) => !c.el.hidden); showOpenMore(); balanceBoard();
   }
   $('kind-pick').addEventListener('change', filterBoard); $('state-pick').addEventListener('change', filterBoard);
+  $('stats').addEventListener('click', event => {
+    const button = event.target.closest('button[data-kind]');
+    if (!button) return;
+    $('kind-pick').value = button.getAttribute('aria-pressed') === 'true' ? '' : button.dataset.kind;
+    if ($('state-pick').value === 'closed') $('state-pick').value = '';
+    filterBoard();
+  });
   document.querySelectorAll('a[href="#reports"]').forEach(a => a.addEventListener('click', e => { if (reportCount !== 0) return; e.preventDefault(); $('kind-pick').value = 'reports'; filterBoard(); }));
   $('search').addEventListener('submit', e => e.preventDefault());
   $('q').addEventListener('input', () => { query = $('q').value.trim().toLowerCase(); redrawItems(); if (reportsData) renderReports(reportsData); });
@@ -235,7 +260,7 @@
     collections.set(key, { items, empty, renderer, partial });
     const known = Array.isArray(items);
     const closedKind = key === 'closed' ? $('kind-pick').value : '';
-    items = (items || []).filter(it => (!query || matchesQuery(it)) && (!KIND[closedKind] || it.kind === closedKind));
+    items = (items || []).filter(it => (key === 'closed' || !hiddenByWrite(it)) && (!query || matchesQuery(it)) && (!KIND[closedKind] || it.kind === closedKind));
     if (key !== 'closed' && key !== 'reports') {
       U.blockNote($(key), null);
       items = dueOrder(items);
@@ -247,28 +272,33 @@
     const hidden = viewer !== 'public' || query ? 0 : (key === 'closed' ? closedHidden : groupHidden.get(key)) || 0;
     const count = partial ? key === 'closed' ? '已读 ' + items.length + ' 件' : '已读部分' + (items.length ? ' · ' + items.length + ' 件' : '') : (known ? items.length + hidden : '—') + ' 件';
     U.html(cards.get(key).title, (viewer === 'owner' ? labels[key] : labels[key].replaceAll('你', '本人')) + '（' + count + '）');
-    if (key === 'closed') $('closed-batch').hidden = viewer === 'owner' || items.length <= 5 + closedBatch;
     const media = { computer: '电脑办', phone: '手机办', in_person: '到场办' };
-    const rank = { computer: 0, phone: 1, in_person: 2 };
-    if (key === 'closed') items.sort((a, b) => (rank[a.mobile] ?? 3) - (rank[b.mobile] ?? 3));
+    const rank = { computer: 0, phone: 1, in_person: 2, other: 3 };
+    const method = it => Object.hasOwn(media, it?.mobile) ? it.mobile : 'other';
+    if (key === 'closed') items.sort((a, b) => rank[method(a)] - rank[method(b)]);
+    const grouped = key === 'closed' && items.length > 0 && method(items[0]) !== method(items.at(-1));
     // 本人版列表默认给全；访客照旧先摆 5 条。
     const ul = $(key + '-list'), limit = viewer === 'owner' ? Infinity : 5, main = items.slice(0, limit), rest = items.slice(limit), pinned = new Set([...ul.children].filter(n => n.matches('.is-expanded,[data-text-open="true"],:hover,:focus-within')).map(n => n.dataset.key));
     if (key !== 'closed') for (let i = rest.length - 1; i >= 0; i--) if (pinned.has(rest[i].id)) main.push(...rest.splice(i, 1));
     const draw = (group, previous) => group.flatMap(it => {
-      if (key !== 'closed' || items.every(row => row.mobile === it.mobile)) return [renderer(it)];
-      const heading = previous !== it.mobile;
-      previous = it.mobile;
-      return heading ? [{ key: 'method-' + (it.mobile || 'other'), cls: 'items-done-group', html: '<span>' + (media[it.mobile] || '办理方式未记录') + '</span>' }, renderer(it)] : [renderer(it)];
+      if (!grouped) return [renderer(it)];
+      const current = method(it), heading = previous !== current;
+      previous = current;
+      return heading ? [{ key: 'method-' + current, cls: 'items-done-group', html: '<span>' + (media[current] || '办理方式未记录') + '</span>' }, renderer(it)] : [renderer(it)];
     });
     const showClosedHidden = key === 'closed' && !!hidden;
     const hiddenParts = showClosedHidden ? Object.entries(KIND)
       .filter(([kind]) => (!KIND[closedKind] || kind === closedKind) && closedCounts[kind] > 0)
       .map(([kind, label]) => label.replaceAll('你', '本人') + ' ' + closedCounts[kind] + ' 条') : [];
-    $(key + '-private').hidden = !showClosedHidden;
-    $(key + '-private').textContent = showClosedHidden ? `另有 ${hidden} 条仅本人可见${hiddenParts.length ? '：' + hiddenParts.join('、') : ''}，标题和内容都没给访客看` : '';
+    const laterHidden = key === 'later' && known ? hidden : 0;
+    $(key + '-private').hidden = !showClosedHidden && !laterHidden;
+    $(key + '-private').textContent = showClosedHidden ? `另有 ${hidden} 条仅本人可见${hiddenParts.length ? '：' + hiddenParts.join('、') : ''}，标题和内容都没给访客看` : laterHidden ? `另有 ${laterHidden} 件仅本人可见` : '';
     U.list(ul, main.length ? draw(main) : hidden ? [] : wait(empty), { animate });
-    U.list($(key + '-rest'), draw(key === 'closed' ? rest.slice(0, closedBatch) : rest, main.at(-1)?.mobile), { animate });
-    $(key + '-more').hidden = !rest.length; U.html($(key + '-more'), `还有 ${rest.length} 条 <span class="more__chev">›</span>`); details(ul); details($(key + '-rest')); renderSelection();
+    U.list($(key + '-rest'), draw(rest, method(main.at(-1))), { animate });
+    const more = $(key + '-more'), label = `还有 ${rest.length} 条`;
+    more.hidden = !rest.length;
+    U.html(more, (key === 'closed' ? `<span class="lb-more__open">${label}</span><span class="lb-more__shut">收起</span>` : label) + ' <span class="more__chev">›</span>');
+    details(ul); details($(key + '-rest')); renderSelection();
   }
   let openRows = null, openReading = null, openStarted = false, readOpen;
   function showOpenMore() {
@@ -326,7 +356,7 @@
       const items = Array.isArray(d?.items) ? [...new Map(d.items.map(it => [it.id, it])).values()] : null;
       const incomplete = ['partial', 'unknown', 'warming'].includes(d?.q) || d?.counts?.q === 'partial' || d?.partial?.includes('items');
       openRows = openReading = { kind, items, incomplete, counts: d?.counts, version: d?.source_rev,
-        hidden: d?.hidden, cursor: items == null ? null : d.next, at: meta.at, depth: 1, target };
+        hidden: d?.hidden, laterHidden: d?.hidden_summary?.counts?.later, cursor: items == null ? null : d.next, at: meta.at, depth: 1, target };
       draw(replace);
       if (target > 1) readOpen();
     } });
@@ -372,13 +402,14 @@
     const hidden = viewer === 'public' && !query ? page?.hidden ?? needs.items_hidden ?? 0 : 0;
     groupHidden.clear();
     if (hidden && rows && !partial) for (const key of Object.keys(KIND)) {
-      const extra = (counts?.[key] ?? 0) - rows.filter(it => it.kind === key).length;
+      const extra = key === 'later' && Number.isSafeInteger(page?.laterHidden) ? page.laterHidden
+        : (counts?.[key] ?? 0) - rows.filter(it => it.kind === key).length;
       if (extra > 0) groupHidden.set(key, extra);
     }
     const placed = [...groupHidden.values()].reduce((sum, n) => sum + n, 0);
-    // 定稿：藏掉的合成全表一行，写在整张表底下；分得清是哪组的，件数仍算进那组标题。
+    // 全表底下注明隐项；能对上组的件数计入组标题，「放着」组另就地解释标题与可见行数的差额。
     if (placed !== hidden) groupHidden.clear();
-    $('items-private').hidden = !hidden;
+    $('items-private').hidden = !hidden || groupHidden.get('later') === hidden;
     // 写清藏了几条、各是哪组、藏了哪几样；不写是哪一类私事。
     const hiddenParts = [...groupHidden].map(([key, n]) => `${labels[key].replaceAll('你', '本人')} ${n} 条`);
     $('items-private').textContent = hidden ? `另有 ${hidden} 条仅本人可见${hiddenParts.length ? '：' + hiddenParts.join('、') : ''}，标题和内容都没给访客看` : '';
@@ -416,7 +447,8 @@
     U.html($('stats'), Object.entries(KIND).map(([key, label]) => {
       const value = counts?.[key], bounded = lower(key);
       const shown = value == null || bounded && value === 0 ? '—' : `${bounded ? '至少 ' : ''}${esc(value)}`;
-      return `<div class="lbp-stat" data-kind="${key}">${window.LiveBoard.icon('check')}<b>${shown}</b><small>${viewer === 'owner' ? label : label.replaceAll('你', '本人')}</small></div>`;
+      const pressed = $('kind-pick').value === key && $('state-pick').value !== 'closed';
+      return `<button class="lbp-stat" type="button" data-kind="${key}" aria-controls="groups" aria-pressed="${pressed}">${window.LiveBoard.icon('check')}<b>${shown}</b><small>${viewer === 'owner' ? label : label.replaceAll('你', '本人')}</small></button>`;
     }).join(''));
     L.tone($('hero'), { ...needs, level: needs.header_level ?? needs.level });
     for (const key of Object.keys(KIND)) {
@@ -425,15 +457,14 @@
     }
     showOpenMore(); renderSelection();
   }, missingHome);
-  let closedItems = [], closedPacket = null, next = null, closedBatch = 5;
+  let closedItems = [], closedPacket = null, next = null;
   function redrawClosed() {
     const shown = collections.get('closed');
     if (shown) list('closed', shown.items, shown.empty, shown.renderer, true, shown.partial);
   }
-  $('closed-batch').addEventListener('click', () => { closedBatch += 5; redrawClosed(); });
   function renderClosed(d, append = false) {
     closedPacket = append ? { ...closedPacket, ...d, hidden: closedPacket?.hidden ?? d.hidden, hidden_summary: closedPacket?.hidden_summary ?? d.hidden_summary } : d;
-    closedItems = append ? [...closedItems, ...(d.items || [])] : d.items || [];
+    closedItems = append ? [...new Map([...closedItems, ...d.items].map(it => [it.id, it])).values()] : d.items || [];
     next = d.next;
     const partial = next != null;
     const empty = d.items == null ? U.collectionText() : partial ? '已读范围还没有这类事项' : '近 7 天没有下去的事';
@@ -444,10 +475,26 @@
     U.html($('closed-next'), '再往前读 ›');
   }
   watch('items/closed', d => renderClosed(d), text => { list('closed', null, text); recentClosed = null; renderSide(); $('closed-next').hidden = true; });
-  $('closed-next').addEventListener('click', async () => { $('closed-next').disabled = true; try { const r = await window.Live.get('items/closed', { project, cursor: next }); if (r.data && r.meta?.viewer?.kind === viewer && r.meta.at === states.get('items/closed')?.meta?.at) U.anchor(() => renderClosed(r.data, true)); else U.html($('closed-next'), esc(r.warming ? '正在读' : r.text || U.collectionText())); } finally { $('closed-next').disabled = false; } });
+  $('closed-next').addEventListener('click', async (event) => {
+    const button = event.currentTarget, cursor = next, kind = viewer;
+    if (cursor == null) return;
+    button.disabled = true;
+    try {
+      const r = await window.Live.get('items/closed', { project, cursor });
+      if (viewer !== kind || next !== cursor) return;
+      // 续页的采集时刻可能晚于首屏，同一受众的事项按编号合并。
+      if (r.viewer?.kind === kind && Array.isArray(r.data?.items) && r.meta.status >= 200 && r.meta.status < 400) {
+        U.anchor(() => renderClosed(r.data, true));
+      } else {
+        U.html(button, r.warming ? '正在读' : '这一批没读到，重试 ›');
+      }
+    } finally {
+      button.disabled = false;
+    }
+  });
   function renderReports(d) {
     reportsData = d;
-    const rows = d.items?.filter(it => (!query || matchesQuery(it)) && !pendingItems.has(it.owner_item || it.item_id || it.item || it.id) && !(it.actions || []).some(a => a.href && pendingItems.has(new URL(a.href, location.origin).searchParams.get('id'))));
+    const rows = d.items?.filter(it => !hiddenByWrite(it) && (!query || matchesQuery(it)) && !pendingItems.has(it.owner_item || it.item_id || it.item || it.id) && !(it.actions || []).some(a => a.href && pendingItems.has(new URL(a.href, location.origin).searchParams.get('id'))));
     const drawn = rows?.length ? rows.map(it => ({ key: it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : U.status({ ...it, level: it.light }, { small: true }).lamp}<div class="row__text"><p class="row__main"><span class="row__title">${U.fieldHtml(it.text && typeof it.text === 'object' ? { ...it, ...it.text } : it, { name: '待答汇报', place: 'title', kind: viewer })}</span></p><p class="row__sub">${[it.unanswered != null ? `${sp(it.unanswered)} 题没答` : !U.offline?.() && U.collectionText(), it.opened && `${U.date(it.opened)} ${U.time(it.opened)} 弹出`].filter(Boolean).join(' · ')}</p></div><div class="row__acts">${actions(it)}${checkbox(it)}</div>` })) : viewer === 'public' && !query && d.hidden ? [] : wait(d.items == null ? U.collectionText() : d.items.length ? '汇报里的待答问题已列在前面的事里' : '没有两小时没答的汇报');
     reportCount = rows == null ? null : rows.length + (viewer === 'public' && !query ? d.hidden || 0 : 0); filterBoard();
     U.html(cards.get('reports').title, `${viewer === 'owner' ? '等你答的汇报' : '等本人答的汇报'}（${reportCount ?? '—'} 件）`);

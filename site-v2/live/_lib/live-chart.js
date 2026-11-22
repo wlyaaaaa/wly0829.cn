@@ -131,7 +131,7 @@
     const raw = span / n, p = 10 ** Math.floor(Math.log10(raw)), f = raw / p;
     return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p;
   }
-  function scale(lo, hi, { floor, ceil, unit, formatValue, lines = 4 }) {
+  function scale(lo, hi, { floor, ceil, unit, labelled, lines = 4 }) {
     if (unit === 'GB' && lo >= 0 && hi < .01) return { min: 0, max: .01, ticks: [0, .01] };
     const integerBatches = unit === '批' && ceil == null;
     let min = floor === 'auto' ? lo - (hi - lo) * .3 : 0;
@@ -149,6 +149,11 @@
     if (integerBatches) max = Math.ceil(max / step) * step;
     const ticks = [];
     for (let v = Math.ceil(min / step) * step; v <= max + step * 1e-6; v += step) ticks.push(v);
+    if (labelled && hi > (ticks.at(-1) ?? -Infinity) + step * 1e-6) {
+      const top = Math.min(ceil ?? Infinity, Math.ceil(hi / step) * step);
+      if (top > (ticks.at(-1) ?? -Infinity)) ticks.push(top);
+      max = Math.max(max, top);
+    }
     return { min, max, ticks };
   }
 
@@ -430,7 +435,7 @@
           note.className = 'chart__gap-note';
           note.style.cssText = fits ? 'position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)'
             : 'margin:4px 0 0;font-size:12px;color:#68665f;overflow-wrap:anywhere';
-          note.textContent = `缺测 ${gapTime(from)}–${gapTime(to)}，${explanation}`;
+          note.textContent = `${gapTime(from)}–${gapTime(to)} 没有读数，${explanation}`;
           gapNotes ??= host.appendChild(document.createElement('div'));
           gapNotes.append(note);
         }
@@ -462,9 +467,11 @@
         const freshEnd = !window.LiveUI?.offline?.() && Math.abs(Date.now() / 1000 - data.t1) < 90;
         const endText = freshEnd && on.some((l) => !l.series.stale && l.series.state !== 'stale' && l.series.points.at(-1)?.[1] != null && Math.abs(l.series.points.at(-1)[0] - data.t1) < 60) ? '现在' : when(data.t1, data);
         const endWidth = [...endText].reduce((n, c) => n + (/[一-鿿]/.test(c) ? 12 : 7), 0) + 14;
+        const startText = opts.showStartDate && data.t1 - data.t0 > 36 * 3600 ? md(new Date(data.t0 * 1000)) : '';
+        const startWidth = startText ? startText.length * 7 + 10 : 6;
         let ticks = timeTicks(data.t0, data.t1).filter(([t, text]) => {
           const xx = x(t), half = [...text].reduce((n, c) => n + (/[一-鿿]/.test(c) ? 12 : 7), 0) / 2;
-          return xx - half >= pad.left + 6 && xx + half <= W - (kind === 'hero' ? endWidth : 6);
+          return xx - half >= pad.left + startWidth && xx + half <= W - (kind === 'hero' ? endWidth : 6);
         });
         if (kind === 'hero' && ticks.length > 4) ticks = ticks.filter((_, i) => i % Math.ceil(ticks.length / 4) === 0);
         for (const [t, text] of ticks) {
@@ -472,6 +479,7 @@
           grid.append(el('line', { x1: xx, x2: xx, y1: pad.top - 4, y2: H - pad.bottom, class: 'is-time' }));
           labels.push(`<span class="chart__x" style="left:${xx}px">${esc(text)}</span>`);
         }
+        if (startText) labels.push(`<span class="chart__x is-now" style="left:${pad.left}px">${esc(startText)}</span>`);
         if (kind === 'hero') labels.push(`<span class="chart__x is-now" style="right:0">${esc(endText)}</span>`);
       }
       axis.innerHTML = labels.join('');
@@ -729,7 +737,7 @@
           }
         }
       }
-      scaleOpts = { floor: view.floor, ceil: view.ceil, unit, formatValue: opts.formatValue, lines: pad.lines || 2 };
+      scaleOpts = { floor: view.floor, ceil: view.ceil, unit, labelled: !tiny, lines: pad.lines || 2 };
       sc = scale(lo, hi, scaleOpts);
       wait.hidden = true;
       host.classList.remove('is-empty');

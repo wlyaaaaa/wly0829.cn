@@ -35,7 +35,7 @@
     });
   }
   function updateCutoff(key, data) {
-    const section = $(key), at = stamp(data?.at);
+    const section = $(key === 'changes' ? 'changes-footer' : key), at = stamp(data?.at);
     const label = { active: '在用项目名册截止', frozen: '冻结项目名册截止', changes: '项目变化截止' }[key];
     const legacy = !at && isStale(data) && staleText(data);
     const merged = key === 'active' && !hero.hidden && Date.parse(data?.at) === Date.parse(home?.at);
@@ -187,7 +187,7 @@
         html: `<p class="row__main">${status.lamp}${name({ ...it, href })}</p>${detail}` };
     }), '没有冻结的项目');
   }
-  const changesNote = document.createElement('p'); changesNote.className = 'row__sub'; changesNote.hidden = true; $('changes').append(changesNote);
+  const changesNote = document.createElement('p'); changesNote.className = 'row__sub'; changesNote.hidden = true; $('changes-footer').append(changesNote);
   const changeRow = it => ({ key: it.id, project: it.project, group: it.project || it.id, groupLabel: it.name, secret: secretName(it.name, changeViewer),
     href: it.href || (it.project ? `/live/project/?id=${encodeURIComponent(it.project)}` : ''),
     cls: 'row row--flat pj-item pj-item--change',
@@ -273,6 +273,7 @@
     };
     button.addEventListener('click', () => {
       const open = button.getAttribute('aria-expanded') !== 'true';
+      for (const ul of box.querySelectorAll('.pj-extra__list')) ul.packKey = '';
       for (const el of folds()) el.open = open;
       sync();
     });
@@ -281,6 +282,27 @@
       if (button.getAttribute('aria-expanded') === 'true') for (const el of folds()) el.open = true;
       sync();
     };
+  }
+  // 最近成品卡高矮不一（M487）：每张卡按顺序放进当时最矮的一列，第一排仍是前几张，同一列里卡贴着卡排，不按同排最高的卡留白。
+  // 卡里点“展开”只拉长自己那一列，别的卡不换列；列数变了（窗口宽度）、卡换了，或点“展开全部／收起全部”时才重新分列。
+  function packCards(ul) {
+    // 列数按整块的宽度算：“再看几个项目”那一组收在折叠里，自己的宽度不一定跟着窗口变。
+    const host = ul.closest('.pj-extra')?.querySelector('.pj-extra__list') || ul;
+    const fit = () => {
+      const cards = [...ul.children].filter(li => !li.classList.contains('is-leaving'));
+      const cols = Math.max(1, Math.floor((host.clientWidth + 24) / (330 + 24))), key = `${cols}|${cards.map(li => li.dataset.key).join()}`;
+      if (!cards.length || cards.some(li => !li.offsetHeight)) { ul.packKey = ''; return; }
+      if (key !== ul.packKey) {
+        ul.packKey = key;
+        const heights = Array(cols).fill(0);
+        for (const li of cards) { const col = heights.indexOf(Math.min(...heights)); li.style.gridColumn = String(col + 1); heights[col] += li.offsetHeight + 24; }
+      }
+      for (const li of cards) li.style.gridRowEnd = `span ${Math.ceil(li.offsetHeight) + 24}`;
+      ul.classList.add('is-packed');
+    };
+    if (!ul.packObserver) { ul.packObserver = new ResizeObserver(() => requestAnimationFrame(fit)); ul.packObserver.observe(ul); if (host !== ul) ul.packObserver.observe(host); }
+    for (const li of ul.children) ul.packObserver.observe(li);
+    fit();
   }
   function drawProjectExtras(d) {
     const field = v => U.fieldHtml(v, { kind: viewer });
@@ -298,6 +320,7 @@
       const more = box.querySelector('.pj-extra__more');
       more.hidden = !rest.length; more.querySelector('.disclosure-closed').textContent = `再看 ${rest.length} 个项目`;
       U.list(box.querySelector('[data-extra-rest]'), rest);
+      if (id === 'recent-artifacts') box.querySelectorAll('.pj-extra__list').forEach(packCards);
       box.syncDisclosure?.();
       watchBands(box);
     };

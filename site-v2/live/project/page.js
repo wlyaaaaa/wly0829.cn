@@ -116,13 +116,16 @@
   const hasValue = m => !!cardReading(m) || !!window.ProjectAdditions?.structuredMetric(m, stamp, projectViewer) || m.count != null || isPrivate(m) || m.rewrite === 'pending' || m.text != null || (m.value && typeof m.value === 'object' ? m.value.hidden || m.value.rewrite === 'pending' || m.value.text != null || m.value.count != null || m.value.value != null : m.value != null);
   const restricted = v => v?.hidden || v?.hidden_block || v?.visibility === 'pending' || v?.rewrite === 'pending' || projectViewer === 'public' && (v?.visibility === 'owner' || v?.public === 'owner');
   const hookEvents = { UserPromptSubmit: '发消息后', SessionStart: '新开对话时', PreToolUse: '工具运行前', PostToolUse: '工具运行后' };
+  const agentsTimed = m => id === 'agents' && ['hook_prompt', 'hook_session', 'hook_tools', 'hook_errors', 'quotes_recent'].includes(m.id);
   function cardReading(m) {
-    if (id !== 'agents' || !['hook_prompt', 'hook_session', 'hook_tools', 'quotes_recent'].includes(m.id)) return null;
+    if (!agentsTimed(m)) return null;
     const source = m.value && typeof m.value === 'object' ? m.value : m;
     if (restricted(m) || restricted(source)) return restricted(m) ? m : source;
     const raw = source.text ?? m.text;
+    const dated = typeof raw === 'string' && /^截至/.test(raw), quote = dated ? raw : m.window_text ?? raw;
     const text = m.id === 'quotes_recent'
-      ? m.window_text ?? (typeof raw === 'string' ? raw.replace(/\d{4,}(?=\s*条)/g, n => num(+n)) : [7, 1].filter(n => Number.isFinite(source[n])).map(n => `近 ${n === 7 ? '7 天' : '24 小时'} ${num(source[n])} 条`).join(' · '))
+      ? typeof quote === 'string' ? quote.replace(/\d{4,}(?=\s*条)/g, n => num(+n)) : quote ?? [7, 1].filter(n => Number.isFinite(source[n])).map(n => `近 ${n === 7 ? '7 天' : '24 小时'} ${num(source[n])} 条`).join(' · ')
+      : dated ? raw
       : m.summary_zh ?? source.summary_zh ?? (typeof raw === 'string' ? raw.replace(/\b(UserPromptSubmit|SessionStart|PreToolUse|PostToolUse)\b/g, word => hookEvents[word]) : raw);
     return text && typeof text === 'object' ? text : text ? { ...source, value: undefined, text } : null;
   }
@@ -169,8 +172,9 @@
   // mark 是仅本人可见、换了说法这类标记；lead 是“一句解释”（接口的 note）；all 是全部小字（卡里只露 lead，其余收进“说明”）。
   function subPieces(m) {
     const note = m.note && metricNote(m.note), html = v => U.fieldHtml(v, { name: '读数说明', kind: projectViewer });
-    const windowAt = id === 'agents' && m.id === 'quotes_recent' && !restricted(m) && !restricted(m.value) && (m.window_as_of || m.at);
-    const windowDate = windowAt && stamp(windowAt), lead = windowDate && m.window_text == null ? `统计截至 ${windowDate}` : note;
+    const windowAt = agentsTimed(m) && !restricted(m) && !restricted(m.value) && (m.window_as_of || m.source_at || m.at);
+    const windowDate = windowAt && stamp(windowAt), lead = /此后未更新/.test(note || '') ? note
+      : windowDate ? `数据截至 ${windowDate}${isStale(m) ? '，此后未更新' : ''}` : note;
     const gap = m.value?.gap || m.gap;
     const pieces = [m.checked_at && `最近检查成功 ${stamp(m.checked_at)}`, typeof m.scope === 'string' && metricNote(m.scope), note, id === 'agents' && m.id === 'release' && m.at && `${stamp(m.at)} 生效`, gap && (!windowDate || !metricNote(gap).includes(windowDate)) && gap, !windowAt && staleText(m, m.at), !windowAt && m.mode === 'static' && !isStale(m) && !U.offline?.() && m.at && `${shortDate(m.at)} 取的`];
     return { mark: (!isPrivate(m) && marker(m, projectViewer, m.hidden_what || '这项读数')) || '', lead: lead ? html(lead) : '', all: [...new Set(pieces.filter(Boolean).map(html))] };
@@ -935,13 +939,20 @@
       const text = U.fieldHtml(label, { name: '读数', place: 'label' });
       return id === 'wly0829.cn' ? text.replace('（按浏览器算）', '<span class="live-unit">（按浏览器算）</span>') : text;
     };
-    if (h && typeof h === 'object' && h.text) {
-      const m = h.id && (d.sections || []).flatMap(s => s.metrics || []).find(x => x.id === h.id);
+    const metricId = typeof h === 'string' ? h : h?.id;
+    const m = metricId && (d.sections || []).flatMap(s => s.metrics || []).find(x => x.id === metricId);
+    const remote = m?.value ?? h?.value;
+    if (id === 'pcconfig' && metricId === 'remote' && !restricted(h) && !restricted(h?.text) && !restricted(m) && !restricted(remote) && !m?.private && Number.isFinite(remote?.total)) {
+      const words = metricText(remote.text || m?.text || h?.text || '');
+      const total = lower(m, 'value') || lower(remote, 'total') ? '<small class="pj-atleast">至少</small>' : '';
+      const { cadence, desktop } = m ? lineOf(m) : {};
+      head.push(cell(readingLabel(m?.label || 'AI 远程用电脑') + (cadence || ''), `${total}<b>${esc(num(remote.total))}</b><small>次</small>`, { wide: true, href: m && metricHref(m), sub: esc([words, desktop].filter(Boolean).join(' · ')) }));
+    } else if (h && typeof h === 'object' && h.text) {
       const { cadence, desktop } = m ? lineOf(m) : {};
       const words = headline({ ...d, headline: { ...h, at: null } });
       head.push(cell(m?.label ? readingLabel(m.label) + (cadence || '') : '现在', esc(words), { kind: 'text', wide: sentence(words), sub: id === 'agents' && h.id === 'release' && h.at ? esc(`${stamp(h.at)} 生效`) : esc(desktop || '') }));
     } else if (typeof h === 'string' && headline(d)) {
-      const m = (d.sections || []).flatMap(s => s.metrics || []).find(x => x.id === h), v = value(m), { line, cadence } = lineOf(m);
+      const v = value(m), { line, cadence } = lineOf(m);
       head.push(cell(readingLabel(m.label) + (cadence || ''), v.html, { kind: v.long ? 'text' : '', wide: v.long && sentence(v.plain), title: `${metricText(m.label)} ${v.plain}`, href: metricHref(m), sub: id === 'agents' && m.id === 'release' && m.at ? esc(`${stamp(m.at)} 生效`) : line }));
     }
     if (d.changes7 != null) {

@@ -925,11 +925,11 @@
       return (site || Boolean(lanBase)) && fixture === null && !publicView && !offline() &&
         viewerKind === 'owner' && !!token && token === viewerToken;
     },
-    async applyOwnerItems(items, action) {
+    async applyOwnerItems(items, action, followReceipt = false) {
       const saved = [];
       let pending = 0, unconfirmed = 0, message = '没有确认保存，请重读这件事。';
       for (const item of items) {
-        const result = await window.Live.ownerAction(item, action);
+        const result = await window.Live.ownerAction(item, action, followReceipt);
         if (result.status === 'applied') saved.push(item.id);
         else if (result.status === 'waiting_undo') pending++;
         else if (result.status === 'unknown') { unconfirmed++; message = result.message; }
@@ -938,7 +938,7 @@
       }
       return { saved, pending, unconfirmed, message };
     },
-    async ownerAction(item, action) {
+    async ownerAction(item, action, followReceipt = false) {
       if (!window.Live.canOwnerAct()) return { status: 'error', error: 'cockpit_owner_required', message: '不是可信设备' };
       const token = device();
       const key = JSON.stringify([token, item.id, item.item_version, action]);
@@ -951,12 +951,25 @@
         ownerWrites.set(key, write);
       }
       write.request ||= (async () => {
-        let result = await sendOwnerAction(token, write.data);
+        let result = followReceipt ? null : await sendOwnerAction(token, write.data);
         // 后端按原请求编号先查回执，事项已经变动也仍能确认原操作。
-        if (!result && device() === token && window.Live.canOwnerAct()) result = await sendOwnerAction(token, write.data);
+        if (followReceipt) {
+          const started = Date.now();
+          let lastReply = started;
+          while ((!result || result.status === 'waiting_undo') && device() === token && Date.now() - lastReply < 90000) {
+            await new Promise(resolve => setTimeout(resolve, Date.now() - started < 60000 ? 3000 : 15000));
+            if (device() !== token) break;
+            result = window.Live.canOwnerAct() ? await sendOwnerAction(token, write.data) : null;
+            if (result) lastReply = Date.now();
+          }
+          if (result?.status === 'waiting_undo' || result?.error === 'cockpit_owner_required') result = null;
+        } else if (!result && device() === token && window.Live.canOwnerAct()) {
+          result = await sendOwnerAction(token, write.data);
+        }
         write.request = null;
         if (result && result.status !== 'waiting_undo') ownerWrites.delete(key);
-        return result || { status: 'unknown', message: '还没确认结果，再点一次可继续核对。' };
+        return result || { status: 'unknown', message: followReceipt
+          ? '暂时没读到办理结果，稍后刷新可以看最新状态。' : '还没确认结果，再点一次可继续核对。' };
       })();
       return write.request;
     }

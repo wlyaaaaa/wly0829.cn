@@ -140,7 +140,7 @@
     const figures = off() ? g.figures?.filter((f) => f.value != null || f.line) : g.figures;
     return { ...given, ...g, figures: figures?.some((f) => f.value != null || f.line || f.text && f.text !== '还没读到') ? figures : [], line: has ? g.line : '', level: given?.level, reason: ['red', 'yellow'].includes(given?.level) ? window.LiveUI.sp(given.reason) : '' };
   }
-  const board = V.board($('board'), { key: 'power', sync, onCount(c) {
+  const board = V.board($('board'), { key: 'power', sync, keepChips: true, onCount(c) {
     D.count(c);
     const hero = $('hero');
     const status = window.LiveUI.status(data); window.LiveLight.tone(hero, status.tone);

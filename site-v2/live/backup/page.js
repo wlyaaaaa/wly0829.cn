@@ -127,9 +127,10 @@
     coverage.hidden = false;
   }
 
-  function locationHtml(copy, paths) {
+  function locationHtml(copy, paths, note) {
     const loc = copy?.location, entries = loc?.paths || paths || (loc?.path != null ? [{ path: loc.path }] : null);
-    if (entries?.length) return `${pathHtml(entries[0].path)}${entries.length > 1 ? `<details><summary>共 ${entries.length} 个位置，另有 ${entries.length - 1} 个</summary>${entries.slice(1).map(p => pathHtml(p.path)).join('')}</details>` : ''}`;
+    if (entries?.length) return `${pathHtml(entries[0].path)}${entries.length > 1 ? `<details><summary>共 ${entries.length} 个位置，另有 ${entries.length - 1} 个</summary><ul class="backup-locations">${entries.slice(1).map(p => `<li>${pathHtml(p.path)}</li>`).join('')}</ul></details>` : ''}`;
+    if (note) return said(note, '本机原件说明');
     const reason = copy?.missing?.location?.reason_code;
     return said(({ generated_from_system_inventory: '由系统信息生成，没有原件目录', task_profile_binding_unavailable: '这次备份使用的用户目录还没记录', backup_manifest_unavailable: '备份清单暂时读不到', source_config_unavailable: '来源配置暂时读不到', not_recorded: '还没记录位置', read_failed: '位置读取失败', not_applicable: '不适用' })[reason] || (offline() ? '—' : U.collectionText('备份位置')), '备份位置');
   }
@@ -151,10 +152,10 @@
     $('media-section').hidden = id !== 'personal_media';
     if (id === 'personal_media') U.html($('media-counts'), table(['类别', '个数', '大小'], [['photos', '照片'], ['videos', '视频'], ['music', '音乐'], ['audio', '录音']].map(([key, name]) => { const m = set.media?.find(m => m.id === key); return [name, count(m, 'count') + gap(m), esc(count(m, 'bytes', U.gb.scaled))]; }), '照片、视频、音乐、录音'));
     U.html($('copies'), table(['去处', '本地文件夹', '情况', '内容时间', '核对时间'], PLACES.map(([key, name], i) => {
-      const copy = set[key], c = copies[i];
-      if (c.skip) return [name, '—', '不适用', '—', '—'];
+      const copy = set[key], c = copies[i], localNote = key === 'local' && set.local_location_note;
+      if (c.skip) return [name, localNote ? said(localNote, '本机原件说明') : '—', '不适用', '—', '—'];
       const detail = [copy?.bytes != null && esc(count(copy, 'bytes', U.gb)), copy && c.why, key === 'local' && esc(D.sourceSubset(copy, stamp)), c.retired && copy.reason && said(copy.reason, '停用说明')].filter(Boolean).join(' · ');
-      return [`${name}${copy?.scope ? `<small>${said(copy.scope === set.id ? set.name : copy.scope, '备份范围')}</small>` : ''}`, locationHtml(copy, key === 'local' ? set.local_paths : null), `${esc(c.lead)}${detail ? `<small>${detail}</small>` : ''}${gap(copy)}` || '—', evidenceTime(c.content), evidenceTime(c.checked)];
+      return [`${name}${copy?.scope ? `<small>${said(copy.scope === set.id ? set.name : copy.scope, '备份范围')}</small>` : ''}`, locationHtml(copy, key === 'local' ? set.local_paths : null, localNote), `${esc(c.lead)}${detail ? `<small>${detail}</small>` : ''}${gap(copy)}` || '—', evidenceTime(c.content), evidenceTime(c.checked)];
     })));
     const targets = notApplicable(set.transfer_summary) ? [] : Object.keys(CLOUDS).filter(key => !notApplicable(set[key])), clouds = targets.filter(key => set[key]);
     $('cloud-section').hidden = !targets.length;

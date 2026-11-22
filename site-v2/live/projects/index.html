@@ -35,7 +35,11 @@
 #activity .pj-heat-name { white-space: normal; flex-wrap: wrap; row-gap: 1px; }
 #activity .pj-heat-label { overflow: visible; overflow-wrap: anywhere; text-overflow: clip; }
 #activity .pj-heat-private { white-space: normal; }
-.pj-changes-actions { display: flex; align-items: center; gap: 14px; break-inside: avoid; }
+.pj-changes-footer { display: grid; gap: 10px; padding-top: 16px; }
+.pj-changes-footer:not(:has(.pj-changes-actions > :not([hidden]), > .row__sub:not([hidden]))) { display: none; }
+.pj-changes-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.pj-changes-actions:not(:has(> :not([hidden]))) { display: none; }
+.pj-changes-footer > .row__sub { margin: 0; line-height: 20px; }
 #active .pj-fig__mark { white-space: normal; overflow: visible; }
 /* 画册（2026-11-20 本人选“二 画册”）：在用的排三列白卡，顶上一条 4:1 插画（照本人选的那张图），下面名字、说明、大数、一行补充，最底下绿点和改动时间；
    变化按项目一张白卡，顶上一条细插画。图没到时先铺占位色，字照常先出。 */
@@ -72,8 +76,8 @@
 #changes .pj-item--change .pj-at { font-size: 13px; line-height: 23px; color: #6b6a64; }
 #changes .pj-list-group .list { border-bottom: 0; }
 #active .pj-card .pj-fig__v.is-long .pj-stat-piece { display: inline; white-space: normal; }
-/* 窗口不到 1280 宽时，整句读数不再两行截断、字小一号；一句短话放不下也换行，不切掉（M248）。1440 宽和手机（按 1440 等比缩小）不受影响 */
-@media (max-width: 1279px) { #active .pj-card .pj-fig__v.is-long { display: block; -webkit-line-clamp: unset; font-size: 17px; line-height: 25px; } #active .pj-card .pj-fig__v:not(.is-long) { white-space: normal; overflow-wrap: anywhere; } #active .pj-card .pj-fig__v:not(.is-long) .pj-stat-piece { display: inline; white-space: normal; } }
+/* 窗口不到 1280 宽时，整句读数不再两行截断，按正文字号写、不加粗；一句短话放不下也换行，不切掉（M248）。1440 宽和手机（按 1440 等比缩小）不受影响 */
+@media (max-width: 1279px) { #active .pj-card .pj-fig__v.is-long { display: block; -webkit-line-clamp: unset; font-size: 14px; font-weight: 400; line-height: 21px; } #active .pj-card .pj-fig__v:not(.is-long) { white-space: normal; overflow-wrap: anywhere; } #active .pj-card .pj-fig__v:not(.is-long) .pj-stat-piece { display: inline; white-space: normal; } }
 /* 下面几块和画册一套：大标题加绿条；本地还没推的改动排成小卡，有没推提交的放大排前；最近成品按项目一张卡；变化卡片按内容多少自然排两栏。 */
 .pj-extra { margin-top: 44px; }
 .pj-extra > .part, #activity .card__body > .part { display: flex; align-items: center; gap: 12px; margin: 0 0 6px; font-size: 22px; line-height: 30px; font-weight: 700; letter-spacing: .06em; color: #141413; }
@@ -99,6 +103,8 @@
 .pj-mini__big { margin: 2px 0 0; font-size: 15px; line-height: 32px; color: #141413; }
 .pj-mini__big b { margin-right: 4px; font-size: 28px; font-weight: 700; color: #00A650; font-variant-numeric: tabular-nums; }
 #recent-artifacts .pj-extra__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 24px; align-items: start; }
+/* 排好以后（page.js packCards）：每张卡占自己那一列、高多少就占多少行，下一张紧贴着排，不再按同排最高的卡留白（M487） */
+#recent-artifacts .pj-extra__list.is-packed { grid-auto-rows: 1px; grid-auto-flow: row dense; row-gap: 0; }
 #recent-artifacts .pj-extra__all { flex: none; }
 #recent-artifacts .pj-extra__all[hidden] { display: none; }
 .pj-art { min-width: 0; padding: 16px 20px 6px; border-radius: 18px; }
@@ -117,7 +123,9 @@
 .pj-art > details > .live-disclosure { padding: 4px 0 10px; }
 #changes :is(#changes-list, #changes-rest) { display: block; columns: 2; column-gap: 24px; }
 #changes :is(#changes-list, #changes-rest) > .pj-list-group { margin: 0 0 24px; break-inside: avoid; }
-#changes .pj-changes-actions .more { margin-left: 0; }
+#changes .pj-changes-actions .more { margin: 0; translate: none; }
+#changes-more .more__chev { rotate: 90deg; }
+#changes-more[aria-expanded="true"] .more__chev { rotate: -90deg; }
 </style></head>
 <body class="page page--live page--l2"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
 <main class="stage" id="stage"><div class="field" aria-hidden="true"></div>
@@ -137,7 +145,8 @@
 <div class="pj-sec pj-sec--flat pj-roster-section" id="frozen"><ul class="pj-figs" id="frozen-list"></ul>
     <button class="more" id="frozen-more" type="button" hidden></button><div class="fold" id="frozen-box"><div><ul class="pj-figs" id="frozen-rest"></ul></div></div></div>
 <section class="pj-sec pj-changes-wide" id="changes" data-mo-rise><p class="part" data-keep>近 7 天全部变化</p><div class="pj-changes-columns"><ul class="rows list" id="changes-list"></ul>
-  <div class="fold" id="changes-box"><div><ul class="rows list" id="changes-rest"></ul></div></div><div class="pj-changes-actions"><button class="more" id="changes-more" type="button" hidden></button><button class="more" id="next" type="button" hidden>更多变化 ›</button></div></div></section></main>
+  <div class="fold" id="changes-box"><div><ul class="rows list" id="changes-rest"></ul></div></div></div>
+  <footer class="pj-changes-footer" id="changes-footer"><div class="pj-changes-actions"><button class="more" id="changes-more" type="button" hidden></button><button class="more" id="next" type="button" hidden>更多变化 ›</button></div></footer></section></main>
 <script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-header.js"></script><script src="/live/_lib/live-ui.js"></script>
 <script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-chart.js"></script><script src="/live/_lib/live-viz.js"></script><script src="/live/_lib/live-project-viz.js"></script><script src="/live/_lib/live-project-look.js"></script><script src="/live/projects/page.js"></script>
 </body></html>

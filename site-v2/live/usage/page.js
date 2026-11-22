@@ -114,8 +114,9 @@
   function versus(now, before, what = '') {
     if (now == null || before == null) return '';
     const d = now - before;
-    if (Math.abs(d) < 5 * 60) return `和前 ${span()}差不多`;
-    return `比前 ${span()}${d > 0 ? '多' : '少'}${what} ${dur(Math.abs(d))}`;
+    const period = span(), past = `${/^\d/.test(period) ? '前 ' : '前'}${period}`;
+    if (Math.abs(d) < 5 * 60) return `和${past}差不多`;
+    return `比${past}${d > 0 ? '多' : '少'}${what} ${dur(Math.abs(d))}`;
   }
 
   // ================= 页头 + 跟平常不一样的 =================
@@ -291,7 +292,7 @@
             : '旧读数只含部分日期。');
           const yearState = usage?.deferred?.year && usage.blocks?.year?.state;
           const unread = yearState === 'computing' ? '正在读…' : yearState === 'unavailable' ? '暂时读不到' : usage?.year ? '没有使用记录' : missing();
-          U.html(el.querySelector('[data-x="total"]'), k.total != null ? `<b>${k.lower ? '至少 ' : ''}${Math.round(k.total / 3600)}</b><small>小时</small>` : `<span class="vz-none">${unread}</span>`);
+          U.html(el.querySelector('[data-x="total"]'), k.total != null ? `<b>${k.lower ? '至少 ' : ''}${Math.round(k.total / 3600)}</b> <small>小时</small>` : `<span class="vz-none">${unread}</span>`);
           U.html(el.querySelector('[data-x="best"]'), k.best ? `最长的一天 ${k.lower ? '至少 ' : ''}${U.fieldHtml(dur(k.best.value))} · ${U.fieldHtml(k.best.day)}` : '');
         } };
       } },
@@ -300,9 +301,9 @@
       line: (d) => { const l = daysForView(d); if (!l?.length) return ''; const a = l.slice(-8, -1).filter((x) => x.active != null && !cutStart(d, x.day)); return a.length ? `${a[0].day.slice(5)}–${a.at(-1).day.slice(5)} ${a.length} 个整天日均 ${lowerRows(a, 'active') ? '至少 ' : ''}${dur(a.reduce((s, x) => s + x.active, 0) / a.length)}` : ''; },
       build(el) {
         el.innerHTML = `<div class="use-two use-days"><div><div data-x="days"></div><p class="use-compare-key" data-x="days-key"></p></div><div><div data-x="cmp"></div><p class="use-compare-key" data-x="cmp-key"></p></div></div>`;
-        const days = V.bars(el.querySelector('[data-x="days"]'), { title: '每天的在用时长', ceil: 24 * 3600, labelWidth: 34, series: [{ id: 'active', label: '在用', hue: 'pink' }] });
+        const days = V.bars(el.querySelector('[data-x="days"]'), { title: '每天的在用时长', ceil: 24 * 3600, axisStep: 6 * 3600, labelWidth: 34, series: [{ id: 'active', label: '在用', hue: 'pink' }] });
         // 右图每根柱是一天：浅色是上周同一天，深色是这一天；图例的数随指着的那一天变，不是 7 天合计。
-        const cmp = V.bars(el.querySelector('[data-x="cmp"]'), { title: '近 7 天每天和上周同一天比', ceil: 24 * 3600, series: [{ id: 'last', label: '上周同一天', hue: 'apricot', soft: true }, { id: 'this', label: '当天', hue: 'pink' }] });
+        const cmp = V.bars(el.querySelector('[data-x="cmp"]'), { title: '近 7 天每天和上周同一天比', ceil: 24 * 3600, axisStep: 6 * 3600, series: [{ id: 'last', label: '上周同一天', hue: 'apricot', soft: true }, { id: 'this', label: '当天', hue: 'pink' }] });
         return { set: () => {
           const list = comparisonDays(usage), key = el.querySelector('[data-x="cmp-key"]');
           const cutoff = comparisonCutoff(usage, list);
@@ -662,9 +663,11 @@
 
   const usageCallbacks = {
     // 读前各章在雾里写“正在读…”（board 管），读完没数才写“还没读到”
-    phase(state) { if (!rawUsage && state.data == null) { heroRead.set(state); board.phase(state); } },
+    phase(state) {
+      if (!rawUsage && state.data == null && !['none', 'gone'].includes(state.phase)) { heroRead.set(state); board.phase(state); }
+    },
     data(raw, meta) {
-      if (raw || [200, 204].includes(meta.status)) selectRange();
+      if (raw || [200, 204].includes(meta.status)) shownRange = usageRange;
       viewer = meta.viewer.kind; rawUsage = receiveUsageHead(raw, meta);
       drawnOffline = !!U.offline?.();
       usage = usageForView(V.blockData(rawUsage, drawnOffline));
@@ -678,7 +681,7 @@
       if (!lit) { lit = true; requestAnimationFrame(() => Light.lightUp([hero, ...board.cards(), notices])); }
     },
     link(state) {
-      const empty = state.phase === 'none' && [200, 204].includes(state.meta.status);
+      const empty = state.data == null && ['none', 'gone'].includes(state.phase);
       if (empty && shownRange !== usageRange ||
           rawUsage && state.data == null && (state.publicPaused || state.viewer.kind !== viewer)) {
         usageCallbacks.data(null, state.meta);
@@ -693,7 +696,11 @@
       Light.offline(state.offline);
       renderNotices(state);
       if (usage) renderLinks(usage);
-      if (!usage && state.phase === 'none') { heroRead.set(state); board.phase(state); U.html(part('head'), U.head(state.text || U.collectionText(), { lamp: false })); }
+      if (!usage && empty) {
+        const text = state.phase === 'gone' || state.meta.status >= 400 ? `${rangeLabel()}的使用时间暂时读不到` : state.text || U.collectionText('使用时间');
+        U.html(part('head'), U.head(text, { lamp: false }));
+        heroRead.done(); board.phase(state);
+      }
       if (!lit && (state.phase === 'none' || state.phase === 'gone')) { lit = true; requestAnimationFrame(() => Light.lightUp([hero, ...board.cards(), notices])); }
       [hero.querySelector('.card__body'), ...board.cards()].forEach(el => U.blockNote(el, state));
     },
@@ -818,13 +825,6 @@
     }
   }
   let usageRange = '72h', usageWatch = null, rangeGeneration = 0;
-  function selectRange() {
-    if (shownRange === usageRange) return;
-    shownRange = usageRange;
-    for (const button of rangePicker.querySelectorAll('[data-range]')) {
-      button.setAttribute('aria-pressed', String(button.dataset.range === shownRange));
-    }
-  }
   const usageQuery = () => ({ range: usageRange, limit: 5 });
   function watchUsage() {
     usageWatch?.stop();
@@ -835,6 +835,7 @@
     const button = e.target.closest('[data-range]');
     if (!button || button.dataset.range === usageRange) return;
     usageRange = button.dataset.range;
+    for (const option of rangePicker.querySelectorAll('[data-range]')) option.setAttribute('aria-pressed', String(option === button));
     clearDeferredUsage();
     recoveryUsed = false;
     recovery = null;

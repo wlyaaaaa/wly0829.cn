@@ -206,14 +206,7 @@
     if (first === block && previous && !previous.textContent.trimEnd().endsWith('·')) block.before(' · ');
     // 悬停提示只写行里看得见的几句，句句用“ · ”隔开（样式补的分隔也补上；藏起来的不算）。
     // 后面统计说明（data-stat-note）是下一轮微任务才加进来的，等它加完再写。
-    const line = status.parentElement;
-    queueMicrotask(() => {
-      const part = el => [...el.childNodes].map(n => n.nodeType !== 1 ? n.textContent : getComputedStyle(n).display === 'none' ? ''
-        : (n.matches('span[data-block], span[data-stat-note]') && n.previousElementSibling ? ' · ' : '') + n.textContent).join('')
-        .replace(/\s+/g, ' ').replace(/(?: ?· ?)+/g, ' · ').replace(/^[\s·]+|[\s·]+$/g, '');
-      const tip = [...line.querySelectorAll(':scope > .grp__said, :scope > .grp__status, :scope > .grp__cutoff')].map(part).filter(Boolean).join(' · ');
-      if (tip) line.title = tip; else line.removeAttribute('title');
-    });
+    queueMicrotask(() => V.cardLineTitle(status.parentElement));
   }
   const board = V.board(document.getElementById('board'), { key: 'security', sync, reading(id, point, t) {
     if (id === 'start' || id === 'exit') return point?.value != null ? { ...point, caption: t == null ? '最近实测' : '' } : t != null ? { text: '没记录' } : null;
