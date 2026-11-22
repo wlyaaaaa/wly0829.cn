@@ -197,6 +197,13 @@
       return { key: p.id, cls: `run${picked || (!point && p === points[0]) ? ' is-now' : ''}${picked ? ' is-picked' : ''}`, html: `${U.status(p, { small: true }).lamp}<p class="run__main"><a class="fe-l3b-point" ${picked ? 'aria-current="true"' : ''} href="${esc(route(`/live/backup/?id=${encodeURIComponent(id)}&point=${encodeURIComponent(p.id)}`))}">${stamp(p.at)} <span>${picked ? '就是这份' : '这份 ›'}</span></a></p><p class="fe-l3b-point-note">${kind}${size ? ` · ${esc(size)}` : ''}${scope}${note ? `<br>${U.fieldHtml(note, { name: '备份内容', kind: viewer })}` : ''}</p>${pickedFacts ? `<p class="fe-l3b-point-pick">${U.fieldHtml(pickedFacts, { name: '备份内容', kind: viewer })}</p>` : ''}${pickedMore ? `<p class="fe-l3b-point-pick">${pickedMore}</p>` : ''}` };
     });
     for (const group of groups || []) { const text = group.points?.length ? '' : notes(group.restore_sessions?.text, group.gap); if (text) restored.push({ key: `restore-history:${group.kind}`, cls: 'run', html: `<p class="fe-l3b-point-note">${U.fieldHtml(text, { name: '备份内容', kind: viewer })}</p>` }); }
+    const failedRows = (groups || []).flatMap(group => (group.failed_points || []).map(p => {
+      const status = p.state === 'unknown' ? '未核实' : '备份失败';
+      const reason = p.reason ? `<p class="fe-l3b-point-note">${said(p.reason, '失败原因')}</p>` : '';
+      return { key: `restore-failed:${group.kind}:${p.id ?? p.at}`, cls: 'run',
+        html: `<p class="run__main">${stamp(p.at)} · ${status}</p>${reason}` };
+    }));
+    restored.splice(points?.length ? 1 : 0, 0, ...failedRows);
     if (point) pointLimit = Math.max(pointLimit, restored.findIndex(row => row.key === point) + 1);
     U.list($('points'), restored.length || pointsResult ? restored.slice(0, pointLimit) : [{ key: 'none', cls: 'run run--empty', html: `<p class="run__none">${restoreResult}</p>` }]);
     nextBatch($('points-section'), restored.length, pointLimit, () => { pointLimit += 5; renderSet(); });
