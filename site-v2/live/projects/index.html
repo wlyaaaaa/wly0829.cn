@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>项目 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/connect-auth/glass.css"><link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css"><link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/live/_lib/live-project-look.css"><link rel="stylesheet" href="/live/_lib/live-viz.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script>
+<style>
+#active { min-height: 182px; }
+.pj-list-group { grid-column:1 / -1; list-style:none; min-width:0; break-inside:avoid; }
+#stage .pj-list-group > details > .live-disclosure { margin-top: 8px; font-size: 13px; font-weight: 400; color: var(--muted); }
+.pj-short > summary { display:flex; align-items:baseline; gap:8px; cursor:pointer; }
+.pj-short > summary > span:first-child { min-width:0; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.pj-short > summary .more { flex:none; }
+.pj-short > summary .more__chev { margin-left: 0; }
+.pj-short[open] > summary .more__chev { rotate: 90deg; }
+#changes .pj-changes-columns { columns: auto; }
+#changes :is(#changes-list, #changes-rest) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 38px; align-items: start; }
+#changes .pj-list-group { grid-column: auto; }
+#changes .pj-list-group > .part { display: flex; align-items: center; gap: 8px; min-height: 30px; margin: 0 0 6px; }
+#changes .pj-item--change { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; }
+#changes .pj-item--change .row__text { grid-column: 1; }
+#changes .pj-item--change .pj-at { grid-column: 2; padding-inline-start: 0; }
+.pj-short[open] > summary > span:first-child { display:none; }
+#frozen .row__title, #changes .row__title { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
+.page--l2 .card--hero[data-pic] .card__glass { min-height: 192px; }
+:is(#active, #frozen) .pj-figs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+#active .pj-fig__sub { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+#active .pj-fig__scope { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal; max-height: 36px; }
+#active .pj-grid-ghost .fog__text { display: block; white-space: nowrap; overflow: hidden; }
+#active .pj-grid-ghost .pj-fig__v { margin-top: 4px; }
+#activity > .part { margin-left: 0; }
+#board { grid-template-columns: minmax(0, 1fr); }
+#activity { margin-top: 24px; }
+.pj-heat-halves { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+#activity .pj-heat { grid-template-columns: 170px repeat(var(--days), minmax(9px, 1fr)); }
+#activity .pj-heat-name { white-space: normal; flex-wrap: wrap; row-gap: 1px; }
+#activity .pj-heat-label { overflow: visible; overflow-wrap: anywhere; text-overflow: clip; }
+#activity .pj-heat-private { white-space: normal; }
+.pj-changes-actions { display: flex; align-items: center; gap: 14px; break-inside: avoid; }
+#active .pj-fig__mark { white-space: normal; overflow: visible; }
+/* 画册（2026-11-20 本人选“二 画册”）：在用的排三列白卡，顶上一条 4:1 插画（照本人选的那张图），下面名字、说明、大数、一行补充，最底下绿点和改动时间；
+   变化按项目一张白卡，顶上一条细插画。图没到时先铺占位色，字照常先出。 */
+:is(#active, #frozen) .pj-figs { gap: 24px; }
+#active .pj-list-group > .part, #changes > .part { display: flex; align-items: center; gap: 12px; margin: 30px 0 16px; font-size: 22px; line-height: 30px; font-weight: 700; letter-spacing: .06em; color: #141413; }
+#active .pj-list-group > .part::before, #changes > .part::before { content: ""; flex: none; width: 5px; height: 22px; border-radius: 3px; background: #00A650; }
+#active-list > .pj-list-group:first-child > .part { margin-top: 12px; }
+#stage #active .pj-list-group > details > .live-disclosure, #stage #changes .pj-list-group > details > .live-disclosure { margin-top: 14px; font-size: 14px; color: #3d3d3a; }
+:is(#active, #frozen) details > .pj-figs { margin-top: 24px; }
+.pj-card, #changes .pj-list-group { border: 1px solid rgb(20 20 19 / .06); border-radius: 18px; background: #fff; box-shadow: 0 1px 2px rgb(20 20 19 / .05), 0 16px 34px -20px rgb(70 55 30 / .32); overflow: hidden; }
+:is(#active, #frozen) .pj-fig.pj-card { display: flex; flex-direction: column; padding: 0; }
+.pj-band-link { display: block; flex: none; }
+.pj-band { display: block; overflow: hidden; }
+.pj-band > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pj-band--card { aspect-ratio: 4 / 1; }
+.pj-band--strip { height: 84px; }
+.pj-band--strip > img { object-position: center 42%; }
+.pj-card__body { display: flex; flex: 1; flex-direction: column; min-width: 0; padding: 14px 20px 16px; }
+#active .pj-card :is(.pj-fig__link, .pj-fig__k), #frozen .pj-card .row__title { font-size: 20px; line-height: 28px; font-weight: 700; letter-spacing: .03em; color: #141413; }
+:is(#active, #frozen) .pj-card .pj-fig__sub { margin-top: 2px; font-size: 13.5px; line-height: 20px; letter-spacing: .02em; color: #6b6a64; }
+#active .pj-card :is(.pj-fig__link, .pj-fig__k) + .pj-fig__sub { font-size: 14.5px; line-height: 22px; color: #3d3d3a; }
+#active .pj-card .pj-fig__v { margin-top: 6px; font-size: 28px; line-height: 36px; font-weight: 700; letter-spacing: .01em; color: #141413; }
+#active .pj-card .pj-fig__v.is-long { font-size: 19px; line-height: 27px; white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+#active .pj-card .pj-fig__scope { -webkit-line-clamp: 1; max-height: 20px; margin-top: 4px; }
+#active .pj-card .pj-recent { order: 9; display: flex; align-items: center; gap: 7px; margin-top: auto; padding-top: 10px; font-size: 13.5px; line-height: 20px; color: #3d3d3a; }
+#active .pj-card .pj-recent::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: #00A650; }
+#changes :is(#changes-list, #changes-rest) { gap: 24px; }
+#changes .pj-list-group { display: flex; flex-direction: column; padding: 0 20px 12px; }
+#changes .pj-list-group > .pj-band-link { margin: 0 -20px; }
+#changes .pj-list-group > .part { margin: 12px 0 4px; min-height: 0; }
+#changes .pj-list-group > .part .row__title { font-size: 18px; line-height: 26px; font-weight: 700; letter-spacing: .03em; color: #141413; }
+#changes .pj-item--change { padding-block: 11px; border-top: 1px solid rgb(20 20 19 / .08); }
+#changes .pj-item--change .row__sub { margin: 0; font-size: 15px; line-height: 23px; letter-spacing: .02em; color: #262522; }
+#changes .pj-item--change .pj-at { font-size: 13px; line-height: 23px; color: #6b6a64; }
+#changes .pj-list-group .list { border-bottom: 0; }
+#active .pj-card .pj-fig__v.is-long .pj-stat-piece { display: inline; white-space: normal; }
+/* 窗口不到 1280 宽时，整句读数不再两行截断、字小一号；一句短话放不下也换行，不切掉（M248）。1440 宽和手机（按 1440 等比缩小）不受影响 */
+@media (max-width: 1279px) { #active .pj-card .pj-fig__v.is-long { display: block; -webkit-line-clamp: unset; font-size: 17px; line-height: 25px; } #active .pj-card .pj-fig__v:not(.is-long) { white-space: normal; overflow-wrap: anywhere; } #active .pj-card .pj-fig__v:not(.is-long) .pj-stat-piece { display: inline; white-space: normal; } }
+/* 下面几块和画册一套：大标题加绿条；本地还没推的改动排成小卡，有没推提交的放大排前；最近成品按项目一张卡；变化卡片按内容多少自然排两栏。 */
+.pj-extra { margin-top: 44px; }
+.pj-extra > .part, #activity .card__body > .part { display: flex; align-items: center; gap: 12px; margin: 0 0 6px; font-size: 22px; line-height: 30px; font-weight: 700; letter-spacing: .06em; color: #141413; }
+.pj-extra > .part::before, #activity .card__body > .part::before { content: ""; flex: none; width: 5px; height: 22px; border-radius: 3px; background: #00A650; }
+#activity .card__body > .part { margin-bottom: 14px; }
+.pj-extra__note { margin: 0 0 16px 17px; font-size: 13.5px; line-height: 20px; color: #6b6a64; }
+.pj-extra__note:empty { margin: 0 0 10px; }
+.pj-extra__list { list-style: none; margin: 0; padding: 0; }
+.pj-extra__more[hidden] { display: none; }
+.pj-extra__more > .pj-extra__list { margin-top: 16px; }
+#stage .pj-extra__more > .live-disclosure, #stage .pj-art > details > .live-disclosure { font-size: 14px; color: #3d3d3a; }
+.pj-mini__pic { flex: none; width: 48px; height: 48px; border-radius: 12px; overflow: hidden; }
+.pj-mini__pic > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+#unpushed .pj-extra__list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-flow: dense; gap: 16px; }
+.pj-mini, .pj-art { border: 1px solid rgb(20 20 19 / .06); background: #fff; box-shadow: 0 1px 2px rgb(20 20 19 / .05), 0 14px 30px -20px rgb(70 55 30 / .32); }
+.pj-mini { display: flex; align-items: center; gap: 14px; min-width: 0; padding: 14px 16px; border-radius: 16px; }
+.pj-mini__text { min-width: 0; }
+.pj-mini__name { margin: 0; overflow: hidden; font-size: 16px; line-height: 23px; font-weight: 700; letter-spacing: .03em; color: #141413; white-space: nowrap; text-overflow: ellipsis; }
+.pj-mini__sub { margin: 2px 0 0; font-size: 13.5px; line-height: 20px; color: #4a4944; }
+.pj-mini.is-hot { grid-column: span 2; gap: 18px; padding: 18px 22px; }
+.pj-mini.is-hot .pj-mini__pic { width: 76px; height: 76px; border-radius: 16px; }
+.pj-mini.is-hot .pj-mini__name { font-size: 18px; line-height: 26px; }
+.pj-mini__big { margin: 2px 0 0; font-size: 15px; line-height: 32px; color: #141413; }
+.pj-mini__big b { margin-right: 4px; font-size: 28px; font-weight: 700; color: #00A650; font-variant-numeric: tabular-nums; }
+#recent-artifacts .pj-extra__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 24px; align-items: start; }
+#recent-artifacts .pj-extra__all { flex: none; }
+#recent-artifacts .pj-extra__all[hidden] { display: none; }
+.pj-art { min-width: 0; padding: 16px 20px 6px; border-radius: 18px; }
+.pj-art__head { display: flex; align-items: center; gap: 12px; padding-bottom: 10px; }
+.pj-art__head .pj-mini__pic { width: 40px; height: 40px; border-radius: 10px; }
+.pj-art__head .row__title { min-width: 0; overflow-wrap: anywhere; font-size: 17px; line-height: 24px; font-weight: 700; letter-spacing: .03em; color: #141413; }
+.pj-art__rows { list-style: none; margin: 0; padding: 0; }
+.pj-art__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 12px; padding: 11px 0; border-top: 1px solid rgb(20 20 19 / .08); }
+.pj-art__row.is-many { grid-template-columns: minmax(0, 1fr); }
+.pj-art__title { margin: 0; font-size: 15px; line-height: 22px; font-weight: 600; color: #1f1e1c; overflow-wrap: anywhere; }
+.pj-art__count { display: inline-block; margin-left: 4px; padding: 0 8px; border-radius: 999px; background: #e7f5ec; font-size: 12.5px; line-height: 20px; font-weight: 700; color: #00A650; vertical-align: 1px; }
+.pj-art__sub { margin: 2px 0 0; font-size: 13.5px; line-height: 20px; color: #4a4944; overflow-wrap: anywhere; }
+.pj-art .acts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
+.pj-art__caption { margin-right: 2px; font-size: 13px; color: #6b6a64; }
+.pj-art .pj-at { padding: 0; font-size: 13px; line-height: 22px; color: #6b6a64; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.pj-art > details > .live-disclosure { padding: 4px 0 10px; }
+#changes :is(#changes-list, #changes-rest) { display: block; columns: 2; column-gap: 24px; }
+#changes :is(#changes-list, #changes-rest) > .pj-list-group { margin: 0 0 24px; break-inside: avoid; }
+#changes .pj-changes-actions .more { margin-left: 0; }
+</style></head>
+<body class="page page--live page--l2"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage"><div class="field" aria-hidden="true"></div>
+<a class="back" href="/live/#projects" data-back data-mo-rise>实况</a><ul class="notices" id="notices" aria-live="polite"></ul>
+<article class="card card--hero card--project" id="hero" data-pic="right" data-tone="none" data-mo-rise>
+  <div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="/live/img/projects.webp" alt="" aria-hidden="true">
+  <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/projects.webp" width="1000" height="1000" alt=""></span>
+  <div class="card__body fog-bare"><p class="card__head" id="head"></p><div class="pj-summary" id="pj-summary"></div><p class="hero__note" id="published"></p>
+  <div class="hero__links"><a class="more more--link" href="/live/projects/" id="all-link">在用和冻结的 ›</a><a class="more more--link" href="/live/projects/?state=frozen" id="frozen-link">只看冻结的 ›</a></div></div></div>
+</article>
+<div class="l2-board pj-board is-single" id="board">
+<section class="l2-col"><div class="pj-sec pj-sec--flat" id="active"><p class="part l2-part" data-keep>在用的</p><ul class="pj-figs" id="active-list"></ul>
+    <button class="more" id="active-more" type="button" hidden></button><div class="fold" id="active-box"><div><ul class="pj-figs" id="active-rest"></ul></div></div>
+</div></section>
+</div>
+<section class="pj-sec card" id="activity"><div class="card__glass glass"><div class="card__body"><p class="part">近 30 天项目活跃</p><div id="activity-chart"></div></div></div></section>
+<div class="pj-sec pj-sec--flat pj-roster-section" id="frozen"><ul class="pj-figs" id="frozen-list"></ul>
+    <button class="more" id="frozen-more" type="button" hidden></button><div class="fold" id="frozen-box"><div><ul class="pj-figs" id="frozen-rest"></ul></div></div></div>
+<section class="pj-sec pj-changes-wide" id="changes" data-mo-rise><p class="part" data-keep>近 7 天全部变化</p><div class="pj-changes-columns"><ul class="rows list" id="changes-list"></ul>
+  <div class="fold" id="changes-box"><div><ul class="rows list" id="changes-rest"></ul></div></div><div class="pj-changes-actions"><button class="more" id="changes-more" type="button" hidden></button><button class="more" id="next" type="button" hidden>更多变化 ›</button></div></div></section></main>
+<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-header.js"></script><script src="/live/_lib/live-ui.js"></script>
+<script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-chart.js"></script><script src="/live/_lib/live-viz.js"></script><script src="/live/_lib/live-project-viz.js"></script><script src="/live/_lib/live-project-look.js"></script><script src="/live/projects/page.js"></script>
+</body></html>

@@ -1,0 +1,43 @@
+{
+  "title": "配置搬家箱",
+  "theme": {
+    "p": "#212243",
+    "soft": "#e5e2db",
+    "accent": "#7cabc7"
+  },
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "10.6rem"],
+    "去〔备份与恢复〕": [
+      "go-backup-v3.compressed.webp",
+      "13rem"
+    ],
+    "去〔AI 存档室〕项目页": [
+      "go-ai-v3.compressed.webp",
+      "8rem"
+    ],
+    "去〔Steam 衣橱〕项目页": [
+      "go-steam-v3.compressed.webp",
+      "8rem"
+    ],
+    "去〔微信收发室〕项目页": [
+      "go-wechat-v3.compressed.webp",
+      "16rem"
+    ]
+  },
+  "detailArt": [
+    "detail-v3.compressed.webp",
+    "4rem"
+  ],
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "配置搬家箱",
+      "meta": "配置搬家箱 · 总览",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    }
+  }
+}

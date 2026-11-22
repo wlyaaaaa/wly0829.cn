@@ -1,0 +1,88 @@
+{
+  "title": "一人制片厂",
+  "theme": {
+    "p": "#9F2419",
+    "soft": "#F2E2D7",
+    "accent": "#D43622"
+  },
+  "background": "assets/background.webp",
+  "projectNav": "project",
+  "skillNav": null,
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "11.4rem"],
+    "去〔纪实镜头〕": [
+      "button-01-v1.compressed.webp",
+      "13rem"
+    ],
+    "去〔出片质检〕": [
+      "button-02-v1.compressed.webp",
+      "13rem"
+    ],
+    "去〔图文动画〕": [
+      "button-03-v1.compressed.webp",
+      "13rem"
+    ],
+    "去〔网页拍成片〕": [
+      "button-04-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔中文速记员〕项目页": [
+      "button-05-v1.compressed.webp",
+      "19rem"
+    ],
+    "去〔识字放大镜〕项目页": [
+      "button-06-v1.compressed.webp",
+      "19rem"
+    ],
+    "回〔一人制片厂〕项目页": [
+      "button-07-v1.compressed.webp",
+      "19rem"
+    ]
+  },
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "一人制片厂",
+      "meta": "一人制片厂",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    },
+    "纪实镜头": {
+      "slug": "纪实镜头",
+      "file": "纪实镜头.html",
+      "title": "纪实镜头",
+      "meta": "纪实镜头",
+      "nav": "项目",
+      "imagePrefix": "纪实镜头"
+    },
+    "出片质检": {
+      "slug": "出片质检",
+      "file": "出片质检.html",
+      "title": "出片质检",
+      "meta": "出片质检",
+      "nav": "项目",
+      "imagePrefix": "出片质检"
+    },
+    "网页拍成片": {
+      "slug": "网页拍成片",
+      "file": "网页拍成片.html",
+      "title": "网页拍成片",
+      "meta": "网页拍成片",
+      "nav": "项目",
+      "imagePrefix": "网页拍成片"
+    },
+    "图文动画": {
+      "slug": "图文动画",
+      "file": "图文动画.html",
+      "title": "图文动画",
+      "meta": "图文动画",
+      "nav": "项目",
+      "imagePrefix": "图文动画"
+    }
+  },
+  "detailArt": [
+    "button-08-v1.compressed.webp",
+    "4rem"
+  ]
+}

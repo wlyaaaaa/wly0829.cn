@@ -1,0 +1,56 @@
+{
+  "title": "文书工坊",
+  "theme": {
+    "p": "#26447F",
+    "soft": "#E6E5E1",
+    "accent": "#DFA93E"
+  },
+  "background": "assets/background.webp",
+  "projectNav": "project",
+  "skillNav": "personal-formal-documents",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "12.4rem"],
+    "去〔起草文书〕技能页": [
+      "draft-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔原件书架〕项目页": [
+      "sources-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔手机直取〕技能页": [
+      "phone-v1.compressed.webp",
+      "16rem"
+    ],
+    "回〔文书工坊〕项目页": [
+      "project-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔我的说明书〕项目页": [
+      "manual-v1.compressed.webp",
+      "18rem"
+    ]
+  },
+  "detailArt": [
+    "detail-v1.compressed.webp",
+    "4rem"
+  ],
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "文书工坊",
+      "meta": "文书工坊 · 总览",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    },
+    "起草文书": {
+      "slug": "personal-formal-documents",
+      "file": "personal-formal-documents.html",
+      "title": "起草文书",
+      "meta": "技能 · 起草文书",
+      "nav": "技能",
+      "imagePrefix": "起草文书"
+    }
+  }
+}

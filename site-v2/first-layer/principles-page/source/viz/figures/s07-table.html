@@ -1,0 +1,91 @@
+<div class="s07-paths">
+  <section>
+    <header class="s07-path-head">
+      <div>
+        <h3>手机先响</h3>
+        <span class="s07-note">手机 2 分钟没送到，补发邮件</span>
+      </div>
+      <svg viewBox="0 0 132 50" aria-hidden="true">
+        <path class="v-l" d="M6 21H110"/>
+        <circle class="v-p" cx="6" cy="21" r="3"/>
+        <circle class="v-w" cx="56" cy="21" r="4"/>
+        <circle class="v-w0" cx="110" cy="21" r="4"/>
+        <text class="v-t" text-anchor="middle" x="56" y="42">手机</text>
+        <text class="v-t" text-anchor="middle" x="110" y="42">邮件</text>
+      </svg>
+    </header>
+    <dl class="s07-stops">
+      <div>
+        <dt><span>实况</span>AI 对话<span>我们开的对话</span></dt>
+        <dd class="s07-dialogue">
+          <strong>等你回答</strong><span>提问即响，回复后撤。10 分钟没回，自动挂进“等你的事”，手机再响一次。</span>
+          <strong>做完了</strong><span>交出结果且没提问时响</span>
+          <strong>AI 停了</strong><span>满 10 分钟未恢复才响</span>
+        </dd>
+      </div>
+      <div>
+        <dt><span>实况</span>等你的事</dt>
+        <dd>
+          <strong>要你知道</strong>留 3、5 或 7 天。<br>
+          <strong>你放着</strong>登记时响一次，条目不过期。
+        </dd>
+      </div>
+      <div>
+        <dt><span>只留在原页</span>大工程汇报页</dt>
+        <dd><strong>汇报页更新</strong> AI 标了“要你看”才发手机通知，20 分钟没看再补邮件。</dd>
+      </div>
+    </dl>
+  </section>
+  <section>
+    <header class="s07-path-head">
+      <h3>手机和邮件同时发</h3>
+      <svg viewBox="0 0 132 50" aria-hidden="true">
+        <path class="v-l" d="M6 25H35M61 12H35V38H61"/>
+        <circle class="v-p" cx="6" cy="25" r="3"/>
+        <circle class="v-w" cx="61" cy="12" r="4"/>
+        <circle class="v-w" cx="61" cy="38" r="4"/>
+        <text class="v-t" x="73" y="16">手机</text>
+        <text class="v-t" x="73" y="42">邮件</text>
+      </svg>
+    </header>
+    <dl class="s07-stops">
+      <div>
+        <dt><span>实况</span>等你的事</dt>
+        <dd>
+          <strong>要你选、要你做</strong>的事，在任何对话里答了，一两分钟内按原编号收掉。说办完了就停催，由 AI 核实后收掉。<br>
+          <strong>大问题</strong>，例如原件可能丢失。
+        </dd>
+      </div>
+      <div>
+        <dt><span>实况入口</span>报告</dt>
+        <dd><strong>答题</strong> 普通汇报页打开即发，邮件列全题目、选项和 AI 建议。满 2 小时未答才在这里留一条。</dd>
+      </div>
+      <div>
+        <dt><span>实况可选</span>AI 留言</dt>
+        <dd><strong>急·N分钟</strong>，如几分钟内要我们扫码。AI 可登记到实况，过期自动撤。</dd>
+      </div>
+    </dl>
+  </section>
+</div>
+<div class="s07-exception">
+  <strong><span class="viz-dot viz-dot--ai" aria-hidden="true"></span>AI 留言</strong>
+  <span>例如“备份失败，我在修”。手机、邮件、实况各由 AI 决定发不发。修好了，由发留言的那个 AI 撤掉。忘了撤，3 天后自己消失。</span>
+</div>
+<div class="s07-exception s07-exception--quiet">
+  <strong>不通知</strong>
+  <span>AI 自己能办的事、正常等待和例行检查。每轮自动任务的结论留在实况里，点开“自动任务”能看到谁在修、修到第几次、谁验的。</span>
+</div>
+<section class="s07-fallback">
+  <h3>送不到时，程序怎么兜底</h3>
+  <div class="s07-fallback-flow">
+    <div class="s07-step s07-step--conditional"><strong>手机 2 分钟没送到</strong></div>
+    <div class="s07-step">
+      <strong>补一封邮件</strong>
+      <span class="s07-note">邮件也没送到就转实况</span>
+    </div>
+    <div class="s07-step s07-step--conditional">
+      <strong>实况登记“要你知道｜有 N 条通知没送到”</strong>
+      <span class="s07-note">列出每条的原标题和正文，这条记录不再触发补发。</span>
+    </div>
+  </div>
+</section>

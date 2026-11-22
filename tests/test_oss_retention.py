@@ -32,6 +32,10 @@ class RetentionTests(unittest.TestCase):
             profile='fixture', lock_holder='fixture', report=self.root / 'report.json')
         public = patch.object(retention, 'predecessor', return_value={'release_id': None})
         public.start(); self.addCleanup(public.stop); self.public_patch = public
+        stats = patch.object(retention, 'bucket_stat', side_effect=[{'objects': 10, 'bytes': 45}, {'objects': 9, 'bytes': 41}]*8)
+        stats.start(); self.addCleanup(stats.stop)
+        lock = patch.object(retention, 'require_lock')
+        lock.start(); self.addCleanup(lock.stop)
 
     def version(self, key):
         return {'key': key, 'size': 4, 'etag': 'A' * 32, 'kind': 'version', 'version_id': 'null', 'is_latest': True}
@@ -91,6 +95,11 @@ class RetentionTests(unittest.TestCase):
         self.assertNotIn('_v.gif', batch); self.assertEqual(listings.call_args_list[0].args[2], [self.obsolete, partial])
         self.assertIn('_v.gif', retention.read(self.shared/'managed.json')['objects'])
         self.assertEqual(retention.read(self.args.report)['deleted_objects'], 1)
+        self.assertEqual(retention.read(self.args.report)['deleted_bytes'], 4)
+        self.assertEqual(retention.read(self.args.report)['deleted_keys'], [self.obsolete])
+        self.assertEqual(retention.read(self.args.report)['bucket_before']['objects'], 10)
+        self.assertEqual(retention.read(self.args.report)['bucket_after']['objects'], 9)
+        self.assertEqual(retention.read(self.root/'report-plan.json')['planned_bytes'], 4)
         self.assertEqual(retention.read(self.args.report)['status'], 'incomplete')
         self.assertIn(partial, retention.read(self.args.report)['deferred'])
         self.assertTrue(pin_path.exists()); self.assertEqual(len(commands.call_args_list), 3)
@@ -138,23 +147,29 @@ class RetentionTests(unittest.TestCase):
             report = retention.read(self.args.report)
             self.assertEqual(report['status'], 'incomplete')
             self.assertIn('changed' if not error else 'delete failed', report['reason'])
-            if error: self.assertIsNone(report['deleted_objects'])
+            if error: self.assertEqual(report['unverified_keys'], [self.obsolete])
             else: self.assertFalse(any('delete-multiple-objects' in call.args for call in calls.call_args_list))
 
     def test_dry_run_keeps_rollback_references_and_does_not_retire_own_pin(self):
         own = self.shared/'pins/own.json'; plan = self.root/'own-plan.json'; retention.write(plan, {})
-        retention.write(own, {'schema': 'wly.oss-pin.v1', 'bucket': retention.BUCKET, 'plan': str(plan),
-                             'plan_sha256': retention.digest(plan), 'release_id': 'published', 'objects': {self.keep: self.fingerprint}})
+        duplicate = own.with_name('upload-only.json')
+        for pin in (own, duplicate):
+            retention.write(pin, {'schema': 'wly.oss-pin.v1', 'bucket': retention.BUCKET, 'plan': str(plan),
+                'plan_sha256': retention.digest(plan), 'identity_sha256': 'same', 'release_id': 'published', 'objects': {self.keep: self.fingerprint}})
         current = {'release_id': 'published', 'rollback_ref': 'old', 'oss': {'asset_base_url': retention.BASE, 'objects': {'x': {'key': self.keep}}, 'reference_keys': [self.pending]}}
         self.args.dry_run = True
         with patch.object(retention, 'shared', return_value=self.shared), patch.object(retention, 'manifest', return_value=current), \
              patch.object(retention, 'rollback_keep', return_value={self.obsolete}) as rollback, \
              patch.object(retention, 'predecessor', return_value=current), \
-             patch.object(retention, 'plan_pin', return_value=(own, {'plan_sha256': retention.digest(plan)}, {'release_id': 'published'})), \
+             patch.object(retention, 'plan_pin', return_value=(own, {'plan_sha256': retention.digest(plan), 'identity_sha256': 'same'}, {'release_id': 'published'})), \
              patch.object(retention, 'exact_versions', return_value={}) as listings, patch.object(retention, 'command', return_value='live refs/heads/main') as calls:
             self.assertEqual(retention.collect(self.args), 0)
-        self.assertTrue(own.exists()); self.assertEqual(listings.call_args.args[2], [])
-        self.assertFalse(rollback.call_args.kwargs['persist']); self.assertEqual(calls.call_count, 1)
+            self.assertTrue(own.exists() and duplicate.exists()); self.assertEqual(listings.call_args.args[2], [])
+            self.assertFalse(rollback.call_args.kwargs['persist']); self.assertEqual(calls.call_count, 1)
+            self.args.dry_run = False
+            self.assertEqual(retention.collect(self.args), 0)
+        self.assertFalse(own.exists() or duplicate.exists())
+        self.assertEqual(retention.read(self.args.report)['retired_pins'], ['own', 'upload-only'])
 
     def test_another_preparation_that_reuses_current_assets_is_not_a_completed_pin(self):
         own = self.shared/'pins/own.json'; plan = self.root/'future-plan.json'; retention.write(plan, {})
@@ -174,7 +189,7 @@ class RetentionTests(unittest.TestCase):
         current = {'rollback_ref': 'old', 'oss': {'asset_base_url': retention.BASE, 'objects': {'x': {'key': self.keep}}}}
         self.args.max_keys = 1
         with patch.object(retention, 'shared', return_value=self.shared), patch.object(retention, 'manifest', return_value=current), \
-             patch.object(retention, 'plan_pin', return_value=(self.shared/'pins/own.json', {}, {})), \
+             patch.object(retention, 'plan_pin', return_value=(self.shared/'pins/own.json', {}, {})), patch.object(retention, 'require_lock'), \
              patch.object(retention, 'exact_versions', return_value={}) as listings, patch.object(retention, 'command', return_value='live refs/heads/main') as calls:
             self.assertEqual(retention.collect(self.args), 1)
         self.assertEqual(listings.call_args.args[2], [self.obsolete]); self.assertEqual(calls.call_count, 1)
@@ -363,6 +378,7 @@ class RetentionTests(unittest.TestCase):
             clock.now.return_value = now + timedelta(days=7)
             self.assertNotIn(self.obsolete, retention.rollback_keep(self.preparation, {}, 'third'))
             self.assertNotIn(self.obsolete, retention.rollback_keep(self.preparation, plan, 'first'))
+            self.assertIn(self.obsolete, retention.rollback_keep(self.preparation, plan, 'first', immediate_only=True))
             snapshot.write_text('{}')
             with self.assertRaisesRegex(ValueError, 'snapshot changed'): retention.rollback_keep(self.preparation, plan)
 
@@ -379,6 +395,8 @@ class RetentionTests(unittest.TestCase):
             state = retention.read(inventory); record = state['records'][plan['previous_publication_sha256']]
             record['retired_objects'] = {key: record['objects'].pop(key) for key in (self.obsolete, self.pending)}
             retention.write(inventory, state)
+            self.assertEqual(retention.retired_predecessor_keys(old := retention.read(snapshot)), {self.obsolete, self.pending})
+            self.assertEqual(retention.retired_predecessor_keys({**old, 'release_id': 'different'}), set())
             self.assertEqual(retention.rollback_keep(self.preparation, plan, 'same'), {self.keep})
             self.assertEqual(retention.read(inventory)['records'], state['records'])
             self.assertEqual(retention.digest(snapshot), plan['previous_publication_sha256'])

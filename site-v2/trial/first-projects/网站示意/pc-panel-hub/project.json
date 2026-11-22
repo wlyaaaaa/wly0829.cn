@@ -1,0 +1,87 @@
+{
+  "title": "机箱小屏",
+  "theme": {
+    "p": "#2C2F31",
+    "soft": "#E6E3D9",
+    "accent": "#E86405"
+  },
+  "background": "assets/background.webp",
+  "projectNav": "project",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "9.8rem"],
+    "去〔竖屏仪表盘〕": [
+      "button-01-v1.compressed.webp",
+      "10.12rem"
+    ],
+    "去〔曲面屏〕": [
+      "button-02-v1.compressed.webp",
+      "8.01rem"
+    ],
+    "去〔小屏自愈〕": [
+      "button-03-v1.compressed.webp",
+      "9.15rem"
+    ],
+    "去〔手机互通〕": [
+      "button-04-v1.compressed.webp",
+      "9.26rem"
+    ],
+    "回〔机箱小屏〕项目页": [
+      "button-05-v1.compressed.webp",
+      "12.58rem"
+    ],
+    "去〔电脑大本营〕项目页": [
+      "button-07-v1.compressed.webp",
+      "13.92rem"
+    ],
+    "去〔随身桌面〕项目页": [
+      "button-08-v1.compressed.webp",
+      "13.40rem"
+    ],
+    "去〔翠幕屏保〕项目页": [
+      "button-09-v1.compressed.webp",
+      "12.97rem"
+    ],
+    "去〔电脑心电图〕项目页": [
+      "button-10-v1.compressed.webp",
+      "14.27rem"
+    ]
+  },
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "机箱小屏",
+      "meta": "机箱小屏",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    },
+    "竖屏仪表盘": {
+      "slug": "竖屏仪表盘",
+      "file": "竖屏仪表盘.html",
+      "title": "竖屏仪表盘",
+      "meta": "竖屏仪表盘",
+      "nav": "项目",
+      "imagePrefix": "竖屏仪表盘"
+    },
+    "曲面屏": {
+      "slug": "曲面屏",
+      "file": "曲面屏.html",
+      "title": "曲面屏",
+      "meta": "曲面屏",
+      "nav": "项目",
+      "imagePrefix": "曲面屏"
+    },
+    "小屏自愈": {
+      "slug": "小屏自愈",
+      "file": "小屏自愈.html",
+      "title": "小屏自愈",
+      "meta": "小屏自愈",
+      "nav": "项目",
+      "imagePrefix": "小屏自愈"
+    }
+  },
+  "detailArt": [
+    "button-06-v1.compressed.webp",
+    "4rem"
+  ]
+}

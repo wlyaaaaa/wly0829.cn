@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>安全 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css">
+<link rel="stylesheet" href="/connect-auth/glass.css">
+<link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css">
+<link rel="stylesheet" href="/live/_lib/live-page.css">
+<link rel="stylesheet" href="/live/_lib/live-viz.css">
+<link rel="stylesheet" href="/motion/motion.css">
+<style>
+#hero .card__body { padding-right: min(calc(var(--win) * .6), 45%); }
+#hero .card__head:has(> .lamp) { position: relative; padding-left: var(--gut); }
+#hero .card__head > .lamp { position: absolute; top: 0; left: 0; }
+#hero .head__lead { min-width: 0; white-space: normal; overflow-wrap: anywhere; text-wrap: pretty; }
+#hero .security-count { white-space: nowrap; }
+#hero [data-part="basis"] { margin-top: 10px; overflow-wrap: anywhere; }
+#hero [data-part="note"]:not([hidden]) { display: block; }
+#hero [data-part="note"] > span { display: block; margin-left: 0; font: inherit; color: inherit; }
+.page--security .grp[data-key="protection"] .grp__figs { grid-template-columns: minmax(0, 1fr); }
+.page--security .security-protection--summary { grid-template-columns: repeat(5, minmax(0, 1fr)); width: 100%; gap: 14px; margin: 0; }
+.page--security .security-protection--summary > div { display: block; border: 0; padding: 0; }
+.page--security .security-protection--summary dd { margin-top: 4px; font-size: 21px; font-weight: 600; line-height: 30px; white-space: nowrap; }
+.page--security .security-protection--summary dd small { display: block; font-size: 12px; line-height: 18px; font-weight: 400; color: var(--muted); }
+.page--security .security-missing { font-size: 13px; font-weight: 400; color: var(--muted); }
+.page--security .vz-audit__head { grid-template-columns: 20px minmax(250px, 1fr) 168px minmax(0, 1.5fr) 20px; }
+.page--security :is([data-key="services"], [data-key="impersonation"]) .vz-audit__name > .stat-gap:first-child { display: block; margin-left: 0; overflow-wrap: normal; }
+.page--security .vz-audit__n { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: baseline; gap: 2px 4px; text-align: right; white-space: normal; }
+.page--security .vz-audit__n > span { min-width: 0; }
+.page--security .vz-audit__n > span:last-child { white-space: nowrap; }
+.page--security .vz-audit__n b { display: inline-block; min-width: 44px; text-align: right; }
+.page--security .vz-audit__pills { flex-wrap: wrap; }
+.page--security .security-audit-link { font-size: 13px; font-weight: 400; color: var(--muted); }
+.page--security .vz-audit__rows > .security-audit-group { display: block; border: 0; padding: 0; }
+.page--security .security-audit-group .vz-audit__rows { margin-left: 0; }
+.page--security .security-audit-group > .vz-note { margin: 12px 0 4px; }
+.page--security .security-clue-why { display: block; margin-left: 0; color: var(--muted); }
+.page--security .security-life { margin-right: 24px; }
+.page--security .security-life .chart__plot { height: 240px; }
+.page--security .grp[data-key="impersonation"] .grp__chapter { padding-bottom: 12px; }
+.page--security .grp[data-key="impersonation"] .grp__head { min-height: 80px; padding-block: 10px; }
+@media (max-width:600px) {
+  .page--security .stage { width:auto; max-width:100%; margin-inline:16px; padding-inline:0; }
+  #hero .card__body { padding-right: min(38%, 88px); }
+  .page--security :is(.grp,.grp.is-open) { --win:80px; }
+  .page--security .grp__head, .page--security .grp.is-open .grp__head { grid-template-columns:18px minmax(0,1fr) 104px; gap:8px; padding-inline:16px; }
+  .page--security .grp__figs { grid-column:2 / -1; grid-row:2; grid-template-columns:minmax(0,1fr); width:100%; }
+  .page--security .grp__acts { grid-column:3; grid-row:1; }
+  .page--security .grp .grp__chapter { padding-inline:16px; }
+  .page--security .security-protection--summary { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .page--security .security-protection--summary dd { white-space:normal; overflow-wrap:anywhere; }
+  .page--security .vz-audit__head { grid-template-columns:20px minmax(0,1fr) 20px; gap:8px; }
+  .page--security .vz-audit__chev { grid-column:3; grid-row:1; }
+  .page--security :is(.vz-audit__name,.vz-pill) { min-width:0; max-width:100%; white-space:normal; overflow-wrap:anywhere; }
+  .page--security .vz-pill { height:auto; min-height:24px; }
+  .page--security :is(.vz-audit__n,.vz-audit__pills) { grid-column:2; justify-content:flex-start; text-align:left; }
+  .page--security .vz-audit__rows { margin-left:0; }
+  .page--security .vz-audit__rows li { grid-template-columns:56px minmax(0,1fr); overflow-wrap:anywhere; }
+  .page--security .vz-audit__c { grid-column:2; }
+  .page--security .security-life { margin-right:0; }
+}
+</style>
+<script src="/motion/motion.js"></script>
+</head>
+<body class="page page--live page--l2 page--data page--security">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div>
+  <a class="back" href="/live/" data-back data-mo-rise>实况</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card card--hero card--quiet" id="hero" data-pic="right" data-tone="none" data-mo-rise style="--pic-y:52%">
+    <div class="card__glow" aria-hidden="true"></div>
+    <img class="card__tint" src="/live/img/head-security.webp" alt="" aria-hidden="true">
+    <div class="card__glass glass">
+      <span class="card__pic" aria-hidden="true"><img src="/live/img/head-security.webp" width="1000" height="1000" alt=""></span>
+      <div class="card__body">
+        <p class="card__head" data-part="head"><span class="head__lead">正在读</span></p>
+        <p class="hero__note" data-part="basis" hidden></p>
+        <p class="hero__count" data-part="count" hidden></p>
+        <p class="hero__note" data-part="note" hidden></p>
+        <div class="hero__links" data-part="links"><a class="more more--link" href="/live/computer/">电脑 ›</a></div>
+      </div>
+    </div>
+  </article>
+  <nav class="l2-nav" aria-label="数据组"><span class="l2-nav__groups">安全</span><span class="l2-nav__end"></span></nav>
+  <section class="vz-board" id="board" data-mo-rise aria-label="安全"></section>
+</main>
+<script src="/trust-modal/trust-modal.js"></script>
+<script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script>
+<script src="/live/_lib/live-ui.js"></script>
+<script src="/header/topbar.js"></script>
+<script src="/live/_lib/live-light.js"></script>
+<script src="/live/_lib/live-chart.js"></script>
+<script src="/live/_lib/live-viz.js"></script>
+<script src="/live/_lib/live-stat.js"></script>
+<script src="/live/smooth/detail.js"></script>
+<script src="/live/computer/adaptive.js"></script><script src="/live/security/page.js"></script>
+</body>
+</html>

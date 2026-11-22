@@ -1,0 +1,26 @@
+{
+  "title": "微信收发室",
+  "theme": {"p": "#3C5534", "soft": "#E8E7DA", "accent": "#B58045"},
+  "background": "assets/background.webp",
+  "projectNav": "project",
+  "skillNav": "wechat-direct",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "12rem"],
+    "去〔代管微信〕技能页": ["button-01-v1.compressed.webp", "16rem"],
+    "去〔替我回话〕技能页": ["button-02-v1.compressed.webp", "16rem"],
+    "去〔录音转文字〕技能页": ["button-03-v1.compressed.webp", "16rem"],
+    "去〔微信记录桥〕项目页": ["button-04-v1.compressed.webp", "16rem"],
+    "去〔中文速记员〕项目页": ["button-05-v1.compressed.webp", "16rem"],
+    "去〔电脑大本营〕项目页": ["button-06-v1.compressed.webp", "16rem"],
+    "回〔微信收发室〕项目页": ["button-07-v1.compressed.webp", "16rem"],
+    "去〔实时接话〕": ["button-08-v1.compressed.webp", "12rem"],
+    "去〔翻聊天记录〕": ["button-09-v1.compressed.webp", "12rem"]
+  },
+  "detailArt": ["button-10-v1.compressed.webp", "4rem"],
+  "sections": {
+    "总览": {"slug": "project", "file": "project.html", "title": "微信收发室", "meta": "微信收发室", "nav": "项目", "imagePrefix": "总览"},
+    "实时接话": {"slug": "实时接话", "file": "实时接话.html", "title": "实时接话", "meta": "实时接话", "nav": "项目", "imagePrefix": "实时接话"},
+    "翻聊天记录": {"slug": "翻聊天记录", "file": "翻聊天记录.html", "title": "翻聊天记录", "meta": "翻聊天记录", "nav": "项目", "imagePrefix": "翻聊天记录"},
+    "代管微信": {"slug": "wechat-direct", "file": "wechat-direct.html", "title": "代管微信", "meta": "代管微信", "nav": "技能", "imagePrefix": "代管微信"}
+  }
+}

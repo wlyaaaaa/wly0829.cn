@@ -1,0 +1,25 @@
+{
+  "title": "翠幕屏保",
+  "theme": {
+    "p": "#053600",
+    "soft": "#e2e4d4",
+    "accent": "#b3824a"
+  },
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "buttonArt": {"看本项目实况": ["cover-live-v1.webp", "11rem"]},
+  "detailArt": [
+    "detail-v1.compressed.webp",
+    "4rem"
+  ],
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "翠幕屏保",
+      "meta": "翠幕屏保 · 总览",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    }
+  }
+}

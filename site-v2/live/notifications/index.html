@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>通知发送回执 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/connect-auth/glass.css"><link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css"><link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/live/_lib/live-viz.css"><link rel="stylesheet" href="/live/notifications/page.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script></head>
+<body class="page page--live page--l2 page--data page--notifications"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage"><div class="field" aria-hidden="true"></div><a class="back" href="/live/" data-back data-mo-rise>实况</a><ul class="notices" id="notices" aria-live="polite"></ul>
+<article class="card card--hero" id="hero" data-pic="right" data-mo-rise><div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="/live/img/notify.webp" alt="" aria-hidden="true">
+<div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/notify.webp" width="1000" height="1000" alt=""></span><div class="card__body">
+<p class="card__head" id="head"><span class="lamp" aria-hidden="true"></span><span class="head__lead">正在读…</span></p><p class="hero__note notify-problems" id="note">提醒到了没有、没到的是哪条、为什么</p><p class="hero__note" id="latest"></p><p class="hero__note" id="attention-note" hidden></p>
+<p class="hero__note notify-meaning">“到了”“发到手机”是指发送程序确认已经推到手机，“交给 Gmail”是 Gmail 已经收下发出；手机上弹没弹出、看没看过，这里不知道。</p>
+<div class="hero__links"><a class="more" href="/live/items/">等你的事 ›</a><a class="more" href="/live/environment/">软件与环境 ›</a></div></div></div></article>
+<p class="delivery-note" id="missing" hidden>这块没存下来，连上后补上。</p>
+<section id="attention" class="vz-board" data-mo-rise aria-label="没到的提醒"></section>
+<details class="notify-all" id="all-records" data-mo-rise><summary class="notify-all__head glass"><span class="notify-all__title">全部记录</span><span class="notify-all__sub" id="all-sub">近 7 天的比例、每小时的走势和每一条的明细</span><span class="notify-all__act"><span class="notify-all__closed">点开看</span><span class="notify-all__open">收起</span><span class="more__chev" aria-hidden="true">›</span></span></summary>
+<section class="l2-board" id="rate-section" aria-label="近七天按渠道看到了多少"><div class="l2-col glass delivery-rate-card" style="grid-column:1/-1"><p class="part" id="rates-title">近 7 天到了多少</p><div id="delivery-rates"></div><p class="delivery-note" id="rates-note">没有记录</p><details id="email-gaps" hidden><summary class="more live-disclosure"></summary><div data-email-gaps aria-live="polite"></div></details></div></section>
+<section id="overview" class="vz-board" aria-label="每小时发了多少"></section><section id="history" class="vz-board" aria-label="每一条提醒"></section><p class="delivery-note notify-coverage" id="coverage-note" hidden></p></details></main>
+<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-chart.js"></script><script src="/live/_lib/live-viz.js"></script><script src="/live/notifications/page.js"></script></body></html>

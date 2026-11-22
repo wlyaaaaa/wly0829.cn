@@ -14,6 +14,7 @@ class PublicContentIncrementalTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix='public-incremental-') as folder:
             root = Path(folder); script = root / 'scripts/verify-public-content.mjs'
             script.parent.mkdir(); shutil.copyfile(ROOT / 'scripts/verify-public-content.mjs', script)
+            shutil.copyfile(ROOT / 'scripts/site_public_words.py', script.parent/'site_public_words.py')
             (root / '.gitignore').write_text('site-astro/.cache/\ndist/\n')
             (root / 'dist').mkdir(); (root / 'dist/index.html').write_text('<title>fixture</title>')
             (root / 'dist/app.js').write_text('const fixture = true;')
@@ -25,6 +26,8 @@ class PublicContentIncrementalTests(unittest.TestCase):
                 return result.returncode, json.loads(result.stdout)
             self.assertEqual(scan()[1]['scan_mode'], 'full')
             self.assertEqual(scan()[1]['scanned_file_count'], 0)
+            blocked = root/'dist/value.txt'; blocked.write_text('13900000000')
+            self.assertEqual(scan()[1]['findings'][0]['category'], '手机号'); self.assertEqual(scan()[0], 1); blocked.unlink()
             cache = root / 'site-astro/.cache/public-content.json'
             for source in [root / 'safe.txt', root / 'dist/safe.bin']:
                 source.write_text('A' * 28); self.assertEqual(scan()[1]['scanned_file_count'], 1)

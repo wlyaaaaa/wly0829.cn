@@ -21,7 +21,7 @@
 - `oss-plan.json`：源包与输出身份、大小、版本对象键、引用闭包、逐字符 URL 改写记录、控制文件例外与汇总。本地准备状态不会冒充远端通过。
 - `release-manifest.json`：`files` 对应 Pages 文件，`oss.objects` 对应 OSS 对象；已有批次、基线或回退字段保持它们原来的历史证据身份。
 
-控制文件包括 `CNAME`、存在时的 `.nojekyll`、`robots.txt`、`sitemap.xml` 和发布清单，保留域名及抓取行为。当前 `site-dist` 成品另带最小 `.github/workflows/pages.yml`，使成品 push 能触发部署；该目录和 `.git` 不进入 Pages 上传包。
+控制文件包括 `CNAME`、存在时的 `.nojekyll`、`robots.txt`、`sitemap.xml` 和发布清单，保留域名及抓取行为。根目录另保留 favicon.ico、apple-touch-icon.png 和 icon-192.png，后者从改写版本 10 开始留在 Pages，旧清单中的 OSS 图标继续按原对象凭证校验。当前 `site-dist` 成品另带最小 `.github/workflows/pages.yml`，使成品 push 能触发部署；该目录和 `.git` 不进入 Pages 上传包。
 
 ## 确定性地址改写
 
@@ -37,7 +37,9 @@ HTML 资源属性、srcset、内联 CSS 和 JSON 都按原页面地址解析；J
 
 发布持既有 `wly0829-publication` 短锁，保留对象 pin，先上传变化资源，再传变化 HTML，最后更新清单。资源设置真实 MIME 和不可变长期缓存头；只对本次新传对象 HEAD 核大小及 ETag/Content-MD5，未变对象继承已核回执。再 GET 首页、驾驶舱、`/computer-access/` 与本次变化页，核 200 和 HTML 哈希。HEAD 是大小与对象内容摘要核对，不标作完整 GET 正文证明。
 
-本次发布不做整库 GET、不运行 seal、不清理线上对象。回收能力仍在所属保留工具中，与发布分开；`rollback_keep` 等实际仍被 pin/collect 使用的留存能力保持。旧恢复专用封口登记和旧上传/回退 CLI 已退役。
+部署、公网页面回读和成功基线登记都通过后，发布器持同一把锁调用 `scripts/oss-retention.py` 的回收逻辑。当前版、上一版和仍在途的发布引用的对象受保护。逐个核对剩余已登记对象的准确名称、版本、大小和 ETag，然后批量提交精确对象名单并回读实删结果。预演、仅上传、部署或公网回读失败时跳过回收。
+
+本次发布输出目录的 `oss-retention-plan.json` 保存精确计划，`oss-retention.json` 保存实删对象名、数量、字节数、删前和删后的 GetBucketStat 读数及残留。默认输出目录在 `E:\Cache\wly-site-build\publish-runs`，以 `publish-receipt.json` 内 `oss_retention.receipt` 为准。桶统计有延迟，实际删除按精确对象回读验收。补跑入口见 [发布与扫描](publish-and-scan.md#正式发布后回收-oss-旧对象)。
 
 CI 使用 Ubuntu，只部署成品，不运行源码构建、扫描、公开内容门或旧全包核验。`upload-pages-artifact@v5` 的官方 tar 代码始终排 `.git`、`.github`；当前设置 `include-hidden-files: true`，保留成品中其余隐藏文件，不使用不存在的 exclude 输入。实际定义见 [官方 action.yml](https://raw.githubusercontent.com/actions/upload-pages-artifact/v5/action.yml)。
 
@@ -48,11 +50,3 @@ CI 使用 Ubuntu，只部署成品，不运行源码构建、扫描、公开内�
 定稿器中的继承资源解析仍需准确历史提交中的 `site-release/release-manifest.json`；资源复制和继承逻辑仅存于 `prepare-oss-release.py`，hybrid 装配、全量验证、旧 Git 提取回退及其 CLI 已删。当前回退通过同一个 Pages workflow 的 `sha` 输入部署实际旧 `site-dist` SHA，具体命令见 [发布与扫描](publish-and-scan.md)，没有备用源码重建链。
 
 本地准备器保留 `--test-loopback` 的测试材料语义：loopback 计划明确为 `test_only`，不能作为生产传送。已有受控静态补取回执记录首次失败和一次实际补取、响应正文及 MIME/CORS，不能冒充原生冷网络或速度达标。记录这些迁移材料不表示本轮上传、Pages 部署或旧回退已执行。
-
-## 未合入的准备：IPv6 资源地址
-
-**合入已准备的 IPv6 资源地址改动。** 分支 `prep/oss-ipv6-20261106` 只做了切换准备，未合并、未上传 OSS、未发布；等本次内容更新一起发布。默认读取地址改为 `<桶名>.cn-shanghai.oss.aliyuncs.com`，保留 IPv4 和旧地址，不改桶配置或网络。
-
-现役主桶的图片、样式、脚本、字体、视频各 2 个真实对象已逐次比对：新旧正文、类型和缓存头一致；两种网站 Referer、无 Referer、字体和脚本 CORS 及预检一致，旧域名一次断连后原样重试成功。两个新域名证书均通过，主桶的真实 IPv4/IPv6 请求均成功。第二桶的旧、新地址及现有身份列举都返回 `NoSuchBucket`，没有可验的真实对象；不新建、不恢复该桶。
-
-合入后跑完整测试和正式构建，核最终 HTML/CSS/JS/JSON/字体引用、重试允许来源与分享图片都使用新地址，再按 [发布与扫描](publish-and-scan.md) 做变化页扫描、发布预演、正式发布和公网回读；域名切换会让几乎全部页面成为变化页。准备阶段只做单元和小范围构建，Chrome 已用真实网站来源预览切换后的资源入口；线上旧 CSS/JS 内部依赖仍要等正式构建发布后复验。冻结原件及 `scripts/site-ui-baseline.json` 的旧 URL 是历史证据，保留不改，构建副本统一切换。上线回读全部通过后由本次更新删除本节；回退办法见 [OSS 资源契约](oss-publication.md)。

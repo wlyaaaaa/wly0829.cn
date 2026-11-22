@@ -1,0 +1,48 @@
+/* 页头第二行：“共 N 项”和“截至 …”之间也用同一个点隔开，不粘成“共 1 项截至 …” */
+.book-hero__sub > span:not([hidden]) ~ #record-at:not([hidden])::before { content: "·"; margin: 0 10px; color: #b4b1a6; }
+.book-hero__sub .book-hero__all { margin-left: 12px; color: #00A650; font-weight: 600; text-decoration: none; }
+.book-hero__sub .book-hero__all:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* 单页账簿只有“这一项、情况、时刻”这几列、列宽全写死时，多出来的宽给“这一项”，不再全堆到序号列（# 一列 507 像素）；另有不定宽列的表照旧 */
+#record-body .book--sheet .book-table:not(:has(col:not(.book-col-no, .book-col-name, .book-col-state, .book-col-at))) .book-col-name { width: auto; }
+/* 整张表没有一行带灯或标记时，不留那 22 像素的空位，名字和表头“这一项”对齐 */
+#record-body .book-table:not(:has(.book-mark:not(:empty))) .book-mark { display: none; }
+/* 非技能明细按实际行数收高，两项也不用撑出一整块空白。 */
+#record-body:not(:has(.book-picks)) .book__pages { min-height: 0; }
+.book .book-detail__metric { display: inline-block; white-space: nowrap; }
+#record-body .book-table:has(.book-col-bar) {
+  .book-col-no { width: 35px; }
+  .book-no { padding-inline: 7px; white-space: nowrap; }
+  .book-col-name { width: auto; }
+  .book-col-bar { width: 15%; }
+  .book-col-num { width: 70px; }
+  .book-col-last { width: 100px; }
+  .book-name { padding-inline: 8px 6px; }
+  .book-num, .book-cell--last { padding-inline-start: 8px !important; }
+  :is(th, td):last-child { padding-inline-end: 8px; }
+  .book-detail__kv { display: grid; gap: 4px; margin: 4px 0 0; font-size: 13px; line-height: 20px; }
+  .book-detail__host { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px; }
+  .book-detail__host > b { white-space: nowrap; min-width: 44px; margin: 0; }
+  .book-detail__metrics { display: flex; flex-wrap: wrap; gap: 0 6px; }
+}
+#record-body .book-pick__list { display: flex; margin-inline-end: -12px; }
+#record-body .book-pick__item { flex: 1 1 auto; padding-inline: 3px; }
+#record-body .book-pick__name { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+.book .book-table:has(.book-col-host_version) tr > :is(th, td) { padding-inline: 6px; }
+.book .book-table:has(.book-col-host_version) .book-row.has-detail > td:last-child { padding-right: 36px; }
+.book-table:has(.book-col-host_version) .book-mark:empty { display: none; }
+@media (min-width: 1360px) {
+  .book-table:has(.book-col-host_version) :is(.book-cell--secondary_laptop, .book-cell--phone) small { font-size: 12px; white-space: nowrap; }
+}
+/* 说明书正文按 Markdown 排好：小标题加粗另起一行，空行分段，列表、表格照样子摆，不露井号、星号、反引号 */
+#record-body .knowledge-md { white-space: normal; overflow-wrap: anywhere; }
+#record-body .knowledge-md p { margin: 0 0 10px; }
+#record-body .knowledge-md > :last-child { margin-bottom: 0; }
+#record-body .knowledge-md .knowledge-h { margin: 16px 0 6px; font-weight: 600; color: var(--ink, #141413); }
+#record-body .knowledge-md > .knowledge-h:first-child { margin-top: 4px; }
+#record-body .knowledge-md :is(ul, ol) { margin: 0 0 8px; padding-left: 1.4em; }
+#record-body .knowledge-md li + li { margin-top: 2px; }
+#record-body .knowledge-md b { font-weight: 600; }
+#record-body .knowledge-md code { font-family: inherit; font-size: .94em; padding: 0 4px; border-radius: 5px; background: rgb(20 20 19 / .05); }
+#record-body .knowledge-md .knowledge-table { width: auto; margin: 2px 0 10px; border-collapse: collapse; font-size: 13px; line-height: 20px; }
+#record-body .knowledge-md .knowledge-table :is(th, td) { overflow-wrap: break-word; padding: 4px 8px; border: 1px solid rgb(20 20 19 / .1); text-align: left; vertical-align: top; font-weight: 400; }
+#record-body .knowledge-md .knowledge-table th { font-weight: 600; background: rgb(20 20 19 / .03); }

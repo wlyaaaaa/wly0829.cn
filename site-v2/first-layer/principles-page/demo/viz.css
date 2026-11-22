@@ -1,0 +1,372 @@
+/* 原理页配图共用样式。
+   三种颜色只表示谁在做：墨色是程序，蓝色是 AI，绿色是我们（取页眉小绿灯的绿）。
+   线一律 1.25px 圆头；实线是一次的事，虚线是周期的事，细点线是钩子。
+   图用内联 SVG 放进页面（不要用 img 引），这里的类才管得到图里的线和字。
+   页面变量 --paper --ink --muted --tint --sans --serif --text --measure 来自 /rules/rules.css。 */
+
+.viz {
+  --v-ink: #141413;
+  --v-ai: #2563d9;
+  --v-we: #00a650;
+  --v-muted: #74736d;
+  --v-faint: #a8a69e;
+  --v-rule: #e3e0d7;
+  --v-fade: #d6d3c9;            /* 结尾那串环褪成的浅灰 */
+  --v-ink-tint: rgb(20 20 19 / .07);
+  --v-ai-tint: #dfe8fb;
+  --v-we-tint: #dcf2e4;
+  --v-sans: var(--sans, "SiteSans", "HarmonyOS Sans SC", "PingFang SC", "Microsoft YaHei UI", sans-serif);
+  --v-serif: var(--serif, "SiteSerif", "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif);
+
+  margin: 2.5em 0 2.9em;
+  padding: 0;
+  font-family: var(--v-sans);
+  letter-spacing: .02em;
+}
+
+/* 衬底：很浅的一层，小圆角；图直接画在上面，不再套白卡 */
+.viz__plate {
+  background: var(--tint, rgb(20 20 19 / .042));
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.viz svg, .viz__plate > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--v-sans);
+}
+
+/* 图注：衬底下左对齐的灰色小黑体；头一句近黑 */
+.viz__cap {
+  margin: 13px auto 0;   /* 本人 11-14 19:46：可视化的图解都居中 */
+  max-width: 43em;
+  text-align: center;
+  font-family: var(--v-sans);
+  font-size: 13.5px;
+  line-height: 1.65;
+  letter-spacing: .02em;
+  color: var(--v-muted);
+}
+.viz__lead { color: var(--v-ink); }
+/* 第一屏总图的图注比别的长几个字：放宽一点折成三行，行长拉匀，不留短尾巴 */
+#viz-overview .viz__cap { max-width: 48em; text-wrap: balance; }
+
+/* 破栏：左边到目录右沿，右边到右栏左沿（1920 宽时约 1170px）。
+   12、13、63 是 rules.css 三列网格的份数：正文栏左边 12 份、右边 13 份、一共 63 份。 */
+.viz--wide {
+  --v-fr: calc((100vw - var(--measure, 37.8em)) / 63);
+  margin-left: calc(var(--v-fr) * -12 + 2px);
+  margin-right: calc(var(--v-fr) * -13 + 2px);
+}
+
+/* 引言末句下和第 11 节结尾的小串：不要衬底，贴着上一段 */
+.viz--chain { margin: -.35em 0 2.4em; }
+.viz--chain .viz__plate { background: none; border-radius: 0; }
+
+/* —— 图里的线 —— */
+.v-l {
+  fill: none;
+  stroke: var(--v-ink);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.v-l--dash { stroke-dasharray: 5 5.5; }          /* 周期的事 */
+.v-l--dot { stroke-dasharray: .1 4.4; }          /* 钩子 */
+.v-l--we { stroke: var(--v-we); }
+.v-l--ai { stroke: var(--v-ai); }
+
+/* —— 环：按谁做上色 —— */
+.v-p { fill: var(--v-ink); }
+.v-a { fill: var(--v-ai); }
+.v-w { fill: var(--v-we); }
+.v-w0 { fill: #fff; stroke: var(--v-we); stroke-width: 1.5; }   /* 有条件才要我们：空心 */
+.v-o { fill: #fff; stroke: var(--v-ink); stroke-width: 1.25; }  /* 空心墨环：一个时点 */
+
+/* —— 框：一个东西 —— */
+.v-box { fill: #fff; stroke: var(--v-ink); stroke-width: 1.25; }
+.v-band { fill: #fff; }
+.v-fill-we { fill: var(--v-we-tint); }
+.v-fill-ai { fill: var(--v-ai-tint); }
+.v-fill-p { fill: var(--v-ink-tint); }
+.v-ico { fill: #fff; stroke: var(--v-ink); stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
+
+/* —— 图里的字 —— */
+.v-t { font-size: 12.5px; fill: var(--v-ink); letter-spacing: .02em; }
+.v-t--b { font-weight: 500; }
+.v-t--l { font-size: 14px; font-weight: 500; }
+.v-g { font-size: 11px; fill: var(--v-muted); letter-spacing: .02em; }
+.v-n { font-size: 10.5px; fill: var(--v-muted); letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+.v-q { font-family: var(--v-serif); font-size: 13px; font-weight: 500; fill: var(--v-ink); letter-spacing: .02em; }
+.v-q--l { font-size: 16px; }
+.v-sep { fill: none; stroke: var(--v-rule); stroke-width: 1; }
+
+/* —— 第一屏总图（overview）专用，由 make_overview.py 生成 ——
+   两翼的线和主线同一种墨色，只是更细；左翼虚线按周期分六档：空隙一律 4，只用短划的长短表示周期，
+   1 秒级、2 分钟级、3 小时级、4 天级、5 周级、6 月级，越勤划越短。butt 头是为了让最短那档仍是短划、不成点。 */
+.v-wing { stroke-width: 1; stroke-linecap: butt; }
+.v-wing--ai { stroke: var(--v-ai); }                    /* 这一段是 AI 在做 */
+.v-fan { stroke-width: .7; }                             /* 右翼散开的线：细，散开点才不糊成一团黑 */
+.v-check { stroke-width: 1; }                            /* 验收回流的墨色那段 */
+.v-tier-1 { stroke-dasharray: 2 4; }
+.v-tier-2 { stroke-dasharray: 4 4; }
+.v-tier-3 { stroke-dasharray: 7 4; }
+.v-tier-4 { stroke-dasharray: 11 4; }
+.v-tier-5 { stroke-dasharray: 17 4; }
+.v-tier-6 { stroke-dasharray: 27 4; }
+.v-a0 { fill: #fff; stroke: var(--v-ai); stroke-width: 1.5; }   /* 空心蓝圈：AI 有情况才接手 */
+.v-l--we-main { stroke-width: 1.6; }                    /* 绿灯伸出去的三根线 */
+.v-brace, .v-ground { stroke-width: 1; stroke: var(--v-faint); }
+.v-lamp-ring { fill: rgb(0 166 80 / .13); }             /* 页眉小绿灯外那 3px 的淡圈 */
+.v-col { font-size: 15px; font-weight: 500; letter-spacing: .14em; }   /* 列名 */
+.v-col--p { fill: var(--v-ink); }
+.v-col--a { fill: var(--v-ai); }
+.v-col--w { fill: var(--v-we); }
+.v-k { font-size: 11.5px; fill: var(--v-ink); letter-spacing: .02em; }  /* 两翼每条线的叫法 */
+.v-sec { font-size: 11.5px; fill: var(--v-muted); letter-spacing: .02em; } /* 节号和节名 */
+.v-nn { font-size: 11px; fill: var(--v-muted); letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+.v-colband--p { fill: rgb(20 20 19 / .022); }           /* 五列底色（可选），比衬底还淡 */
+.v-colband--a { fill: rgb(37 99 217 / .045); }
+.v-colband--w { fill: rgb(0 166 80 / .05); }
+
+/* —— 第一屏总图的动效（viz.js 加类名才开始） ——
+   默认样式就是最终画面：不开脚本、系统要求减少动效时就停在这里。
+   ov-armed 开场前的样子：左翼被一块和衬底同色的盖板盖着，记号和后半程的线没亮，绿灯暗着（不是没有）；字始终在。
+            盖板只盖左翼的线，规则线、钩子、字和记号都画在它上面；不动 <clipPath>，WebKit 上也稳。
+   ov-play  图第一次进入视野时加上，开场只播一遍，约 3.2 秒；每个记号和线的起点 --d、时长 --t 写在图里。
+   ov-live  常驻：绿灯呼吸（照页眉小绿灯 lamp-breathe，3.4 秒，脚本对齐相位）；左翼虚线朝绿灯流动，
+            一圈正好一个“短划＋空隙”，所以无缝，六档由快到慢（约 10 到 0.8px/秒）；右翼不动。
+   ov-paused 图不在视野里时全部暂停。 */
+.ov-flash { opacity: 0; }
+.ov-mk, .ov-glow, .ov-flash { transform-box: fill-box; transform-origin: center; }
+.ov-cover { display: none; transform-box: fill-box; transform-origin: 100% 50%; }
+.ov-cover-paper { fill: var(--paper, #faf9f5); }
+.ov-cover-tint { fill: var(--tint, rgb(20 20 19 / .042)); }
+
+.ov-armed .ov-cover { display: inline; }
+.ov-armed .ov-mk { opacity: 0; }
+.ov-armed .ov-draw { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+.ov-armed .ov-fade, .ov-armed .ov-halo { opacity: 0; }
+.ov-armed .ov-lamp-core { opacity: .28; }
+
+.ov-play .ov-cover { animation: ov-uncover var(--t) cubic-bezier(.3, .55, .5, 1) both; }
+.ov-play .ov-mk { animation: ov-pop .26s cubic-bezier(.2, .7, .3, 1) var(--d) both; }
+.ov-play .ov-draw { animation: ov-draw var(--t) cubic-bezier(.25, .6, .4, 1) var(--d) both; }
+.ov-play .ov-fade { animation: ov-fade .3s ease-out var(--d) both; }
+.ov-play .ov-halo, .ov-play .ov-lamp-core { animation: ov-on .3s ease-out var(--d) both; }
+.ov-play .ov-flash { animation: ov-flash .42s ease-out 2.9s both; }
+
+.ov-live .ov-glow { animation: ov-breathe 3.4s ease-in-out infinite; }
+.ov-live .ov-left .v-tier-1 { animation: ov-flow-1 .6s linear infinite; }
+.ov-live .ov-left .v-tier-2 { animation: ov-flow-2 1.27s linear infinite; }
+.ov-live .ov-left .v-tier-3 { animation: ov-flow-3 2.75s linear infinite; }
+.ov-live .ov-left .v-tier-4 { animation: ov-flow-4 6s linear infinite; }
+.ov-live .ov-left .v-tier-5 { animation: ov-flow-5 15s linear infinite; }
+.ov-live .ov-left .v-tier-6 { animation: ov-flow-6 38.75s linear infinite; }
+
+.ov-paused, .ov-paused * { animation-play-state: paused !important; }
+
+@keyframes ov-uncover { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+@keyframes ov-pop { from { opacity: 0; transform: scale(.3); } to { opacity: 1; transform: scale(1); } }
+@keyframes ov-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes ov-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ov-on { from { opacity: .28; } to { opacity: 1; } }
+@keyframes ov-flash {
+  0% { opacity: 0; transform: scale(1); }
+  35% { opacity: 1; transform: scale(1.55); }
+  100% { opacity: 0; transform: scale(1.9); }
+}
+/* 页眉 lamp-breathe 是外圈 3→4px、光晕 18→30px 的一呼一吸；这里用光晕的缩放和深浅照着做 */
+@keyframes ov-breathe {
+  0%, 100% { opacity: .78; transform: scale(.9); }
+  50% { opacity: 1; transform: scale(1.22); }
+}
+@keyframes ov-flow-1 { to { stroke-dashoffset: -6; } }
+@keyframes ov-flow-2 { to { stroke-dashoffset: -8; } }
+@keyframes ov-flow-3 { to { stroke-dashoffset: -11; } }
+@keyframes ov-flow-4 { to { stroke-dashoffset: -15; } }
+@keyframes ov-flow-5 { to { stroke-dashoffset: -21; } }
+@keyframes ov-flow-6 { to { stroke-dashoffset: -31; } }
+
+/* —— 结尾那串环：其余褪成浅灰，只剩绿点 ——
+   不开脚本时直接是褪完的样子；脚本先把它恢复成彩色，读到这里再褪。 */
+.viz--chain-end .v-p,
+.viz--chain-end .v-a { fill: var(--v-fade); transition: fill 1.8s ease .25s; }
+.viz--chain-end .v-l { stroke: var(--v-fade); transition: stroke 1.8s ease .25s; }
+.viz--chain-end.is-armed .v-p { fill: var(--v-ink); transition: none; }
+.viz--chain-end.is-armed .v-a { fill: var(--v-ai); transition: none; }
+.viz--chain-end.is-armed .v-l { stroke: var(--v-ink); transition: none; }
+
+/* —— 引言那句道理里的三个色点：只加点，不改字 —— */
+.viz-dot {
+  display: inline-block;
+  width: .5em;
+  height: .5em;
+  margin: 0 .22em 0 .1em;
+  border-radius: 50%;
+  vertical-align: .12em;
+  background: #141413;
+}
+.viz-dot--ai { background: #2563d9; }
+.viz-dot--we { background: #00a650; }
+
+/* —— 第 7 节的通知路径与实况入口 —— */
+.viz--notifications .viz__plate {
+  padding: 24px 28px;
+  color: var(--v-ink);
+  font-size: 14px;
+  line-height: 1.65;
+}
+.viz--notifications .s07-paths {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 36px;
+}
+.viz--notifications .s07-paths::before {
+  content: "";
+  position: absolute;
+  inset: 0 50% 0 auto;
+  border-left: 1px solid var(--v-rule);
+}
+.viz--notifications .s07-paths > section,
+.viz--notifications .s07-stops {
+  display: grid;
+  grid-template-rows: subgrid;
+}
+.viz--notifications .s07-paths > section { grid-row: span 4; }
+.viz--notifications .s07-stops {
+  grid-row: span 3;
+  margin: 0;
+}
+.viz--notifications .s07-path-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 124px;
+  align-items: start;
+  gap: 8px;
+  padding: 0 0 14px;
+}
+.viz--notifications .s07-path-head svg { align-self: center; }
+.viz--notifications .s07-path-head h3 {
+  margin: 0;
+  font: 600 21px/1.35 var(--v-serif);
+  color: var(--v-ink);
+}
+.viz--notifications .s07-note {
+  display: block;
+  color: var(--v-muted);
+  font-size: 13px;
+}
+.viz--notifications .s07-stops > div,
+.viz--notifications .s07-exception {
+  display: grid;
+  grid-template-columns: 102px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--v-rule);
+}
+.viz--notifications .s07-stops dt {
+  font-size: 15px;
+  font-weight: 600;
+}
+.viz--notifications .s07-stops dt span {
+  display: block;
+  color: var(--v-muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+.viz--notifications .s07-stops dd { margin: 0; }
+.viz--notifications .s07-dialogue {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 2px 10px;
+}
+.viz--notifications .s07-exception--quiet { color: var(--v-muted); }
+.viz--notifications .s07-fallback {
+  margin-top: 6px;
+  padding-top: 15px;
+  border-top: 1px solid var(--v-faint);
+}
+.viz--notifications .s07-fallback h3 {
+  margin: 0 0 11px;
+  color: var(--v-ink);
+  font-size: 15px;
+  font-weight: 600;
+}
+.viz--notifications .s07-fallback-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.7fr);
+}
+.viz--notifications .s07-step {
+  position: relative;
+  padding: 15px 12px 0 0;
+}
+.viz--notifications .s07-step:last-child { padding-right: 0; }
+.viz--notifications .s07-step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  inset: 4px 0 auto 0;
+  border-top: 1.25px solid var(--v-ink);
+}
+.viz--notifications .s07-step::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 8px;
+  height: 8px;
+  box-sizing: border-box;
+  border: 1.25px solid var(--v-ink);
+  border-radius: 50%;
+  background: var(--v-ink);
+}
+.viz--notifications .s07-step--conditional::after {
+  background: var(--paper, #faf9f5);
+}
+.viz--notifications .viz__cap { text-wrap: balance; }
+
+/* 第 4 节。两级库、墙、旁注都沿用文章的角色颜色与线宽。 */
+.s4-title, .s4-heading, .s4-label, .s4-scenario {
+  fill: var(--v-ink);
+  font-weight: 550;
+}
+.s4-title { font-size: 36px; }
+.s4-heading { font-size: 25px; }
+.s4-label { font-size: 18px; }
+.s4-label.v-a { fill: var(--v-ai); }
+.s4-scenario { font-size: 16px; }
+.s4-cell { fill: var(--v-ink); font-size: 15.5px; }
+.s4-sub { fill: #51534e; font-size: 15px; }
+.s4-small { fill: #62645d; font-size: 14px; }
+.s4-card { fill: var(--paper, #faf9f5); stroke: #bcbbb1; stroke-width: 1.25; }
+.s4-master-key { color: var(--v-we); }
+.s4-source-lines { stroke: #62645d; }
+.s4-key-pair { fill: var(--v-ink-tint); }
+.s4-key-row { color: var(--v-ink); }
+.s4-key-row .s4-label { fill: currentColor; }
+.s4-key-wire { stroke: currentColor; }
+.s4-aside-line { stroke: var(--v-faint); stroke-dasharray: 2 4; }
+.s4-data-box { fill: var(--paper, #faf9f5); stroke: var(--v-we); stroke-width: 1.5; }
+.s4-delivery { opacity: 0; }
+#viz-s04 .viz__cap, #viz-s04-walls .viz__cap { max-width: 50em; text-wrap: balance; }
+
+.s4-ready .s4-reply { opacity: 0; }
+.s4-ready .s4-unlock, .s4-play .s4-unlock { stroke-dasharray: 1; }
+.s4-ready .s4-unlock { stroke-dashoffset: 1; }
+.s4-play .s4-unlock { animation: ov-draw .55s ease-out backwards; }
+.s4-ready .s4-traveler { transform: translateX(-69px); }
+.s4-play .s4-key-row { animation: s4-key-light .68s ease-in-out var(--d); }
+.s4-play .s4-key-wire { animation: s4-wire-light .68s ease-in-out var(--d); }
+.s4-play .s4-delivery { animation: s4-deliver .72s ease-in-out 3.45s; }
+.s4-play .s4-reply { animation: s4-result .38s ease-out 4.17s backwards; }
+.s4-play .s4-traveler { animation: s4-stop .78s cubic-bezier(.35,.05,.2,1) var(--d) backwards; }
+@keyframes s4-key-light { 30%, 65% { color: var(--v-we); } }
+@keyframes s4-wire-light { 30%, 65% { stroke-width: 3; } }
+@keyframes s4-result { from { opacity: 0; transform: translateY(5px); } }
+@keyframes s4-deliver {
+  0% { offset-distance: 0%; opacity: 0; }
+  12%, 88% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+@keyframes s4-stop { from { transform: translateX(-69px); } }

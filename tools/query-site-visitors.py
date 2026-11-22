@@ -16,12 +16,15 @@ import json
 import os
 from pathlib import Path
 import re
+import secrets
 import select
 import socket
 import shutil
 from statistics import median
 import struct
 import subprocess
+import sys
+import tempfile
 from threading import Lock, Thread
 import time
 import zlib
@@ -29,15 +32,21 @@ from urllib.parse import parse_qs, unquote, urlsplit
 from urllib.request import Request, urlopen
 
 TZ = timezone(timedelta(hours=8))
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_CACHE = Path(r"E:\Cache\wly-site-visitors")
 BUCKET = "wly0829-access-logs-shanghai"
 SOURCE = "wly0829-img-media-shanghai"
+PIXEL_URL = f"https://{SOURCE}.oss-cn-shanghai.aliyuncs.com/_v.gif"
+MAX_EXIT_INTERVAL = timedelta(minutes=45)
 SLS_ENDPOINT = "cn-shanghai.dualstack.log.aliyuncs.com"
 PREFIX = "access/" + SOURCE + "/"
 TOKEN = re.compile(r'"((?:\\.|[^"\\])*)"|\[([^\]]*)\]|([^\s"\[\]]+)')
+LOG_ESCAPE = re.compile(r'\\(["\\])')
 BOT = re.compile(r"bot|crawl|spider|headless|curl|wget|python|probe|lighthouse|uptime|httpclient|scanner|playwright|puppeteer", re.I)
 BROWSER = re.compile(r"Chrome/|Firefox/|Safari/|Edg/|OPR/|SamsungBrowser/", re.I)
 AI_BOTS = ("GPTBot", "ClaudeBot", "PerplexityBot", "Bytespider", "Amazonbot", "meta-externalagent", "Google-Extended")
 NETWORK_ERRORS = (OSError, ValueError, RuntimeError, struct.error, EOFError, zlib.error)
+BEACON_ID = re.compile(r"[A-Za-z0-9_-]{1,96}")
 
 
 def network_failure(error):
@@ -135,14 +144,34 @@ def dates(start, end):
     return [start + timedelta(days=i) for i in range((end - start).days + 1)]
 
 
+def ip_text(raw):
+    address = ipaddress.ip_address(raw)
+    return str(getattr(address, "ipv4_mapped", None) or address)
+
+
+@lru_cache(maxsize=1)
+def public_project_ids():
+    try:
+        data = json.loads((ROOT / "site-v2/live/project/cover-links.json").read_text("utf-8"))
+        return frozenset((*data.keys(), *data.values(), "wly0829.cn"))
+    except (OSError, ValueError):
+        return frozenset({"wly0829.cn"})
+
+
 def parse_uri(uri):
     uri = unquote(uri) if uri.lower().startswith("%2f") else uri
     parsed = urlsplit(uri)
     query = parse_qs(parsed.query, keep_blank_values=True)
     params = {name: query.get("x-" + name, query.get(name, [""]))[0]
-              for name in ("v", "p", "ref", "self", "monitor", "event", "id", "visible", "ttfb", "dom", "load", "first", "entry", "cv-session")}
+              for name in ("v", "p", "ref", "self", "monitor", "event", "id", "visible", "ttfb", "dom", "load", "first", "entry", "cv-session", "audience", "network-probe", "action")}
     params["p"] = urlsplit(params["p"]).path or "未知页面"
     params["ref"] = urlsplit(params["ref"]).hostname or "直接访问/未知"
+    via = query.get("x-via", ())
+    params["via"] = via[0] if len(via) == 1 and "via" not in query and re.fullmatch(r"[A-Za-z0-9-]{1,32}", via[0]) else ""
+    for name, allowed in (("target", {"github", "pdf"}), ("project", None), ("audience-source", {"device"})):
+        values = query.get("x-" + name, ())
+        if len(values) == 1 and values[0] in (public_project_ids() if allowed is None else allowed):
+            params[name] = values[0]
     return unquote(parsed.path), params
 
 
@@ -151,12 +180,12 @@ def parse_line(line):
     for match in TOKEN.finditer(line):
         if line[pos:match.start()].strip():
             raise ValueError("Unmatched log token")
-        value = next(value for value in match.groups() if value is not None)
-        fields.append(re.sub(r'\\(["\\])', r'\1', value))
+        value = match[match.lastindex]
+        fields.append(LOG_ESCAPE.sub(r'\1', value) if "\\" in value else value)
         pos = match.end()
     if line[pos:].strip() or len(fields) < 17 or "\ufffd" in line:
         raise ValueError("Incomplete OSS log")
-    ip = str(ipaddress.ip_address(fields[0]))
+    ip = ip_text(fields[0])
     stamp = datetime.strptime(fields[3], "%d/%b/%Y:%H:%M:%S %z").astimezone(TZ)
     method, uri, protocol = fields[4].split()
     if not protocol.startswith("HTTP/"):
@@ -178,7 +207,7 @@ def parse_sls_row(row):
         path, params = parse_uri(re.sub(r"\s+HTTP/\d+(?:\.\d+)?$", "", uri))
         operation = row["operation"]
         return {"time": datetime.fromtimestamp(float(row["__time__"]), TZ),
-                "ip": str(ipaddress.ip_address(row["client_ip"])),
+                "ip": ip_text(row["client_ip"]),
                 "method": row["http_method"],
                 "status": int(row["http_status"]), "path": path, "params": params,
                 "ua": ua,
@@ -387,8 +416,10 @@ def sync_logs(args, start, end):
         identity = args.bucket + "/" + key
         local = cache / (hashlib.sha256(identity.encode()).hexdigest() + ".log")
         previous = index.get(identity, {})
-        if not (local.exists() and previous.get("etag") == row["etag"]
-                and local.stat().st_size == row["size"] and previous.get("sha256") == digest(local)):
+        checksum = None
+        if local.exists() and previous.get("etag") == row["etag"] and local.stat().st_size == row["size"]:
+            checksum = digest(local)
+        if checksum is None or previous.get("sha256") != checksum:
             temporary = local.with_suffix(f".{os.getpid()}.tmp")
             try:
                 cli_run([args.aliyun, "ossutil", "cp", f"oss://{args.bucket}/{key}", str(temporary),
@@ -396,11 +427,12 @@ def sync_logs(args, start, end):
                          "--endpoint", "oss-cn-shanghai.aliyuncs.com", "--force", "--no-progress", "--loglevel", "off"])
                 if temporary.stat().st_size != row["size"]:
                     raise ValueError("Incomplete log download")
+                checksum = digest(temporary)
                 temporary.replace(local)
             finally:
                 temporary.unlink(missing_ok=True)
             downloaded += 1
-        index[identity] = {"etag": row["etag"], "size": row["size"], "sha256": digest(local)}
+        index[identity] = {"etag": row["etag"], "size": row["size"], "sha256": checksum}
         paths.append(local)
     temporary = index_path.with_suffix(f".{os.getpid()}.tmp")
     temporary.write_text(json.dumps(index, ensure_ascii=False), "utf-8")
@@ -411,23 +443,25 @@ def sync_logs(args, start, end):
 def sls_logs(args, start, end, legacy_fallback=False):
     if not args.sls_project:
         raise ValueError("SLS 项目未配置；请指定 --sls-project")
-    cv_query = getattr(args, "cv", False) and not legacy_fallback
+    snapshot = getattr(args, "snapshot_beacons", False)
+    cv_query = getattr(args, "cv", False) and not legacy_fallback and not snapshot
     deep_read = getattr(args, "deep_read", False)
-    records, offset, page_size = [], 0, 10000 if cv_query or deep_read else 100
+    sql_paging = (deep_read or snapshot) and not cv_query
+    records, offset, page_size = [], 0, 10000 if cv_query or sql_paging else 100
     search = f"__topic__:oss_access_log AND bucket:{SOURCE}"
     if cv_query:
-        # 所有现代 /cv 信标都有非空访问编号；旧版入口信标用于触发完整回查。
-        search += " | SELECT * WHERE regexp_like(request_uri, '(?i)x-cv-session(?:=|%3d)[A-Za-z0-9-]+|x-event(?:=|%3d)entry') LIMIT 10000"
-    elif deep_read or legacy_fallback:
+        search += (" | SELECT * WHERE regexp_like(request_uri, '(?i)x-cv-session(?:=|%3d)[A-Za-z0-9-]+"
+                   "|x-event(?:=|%3d)entry|x-network-probe(?:=|%3d)[A-Za-z0-9_-]+') LIMIT 10000")
+    elif sql_paging or legacy_fallback:
         search += ' AND (request_uri: "/_v.gif" OR request_uri: "%2F_v.gif")'
     while True:
         # 原始查询每页最多 100 条；SQL 大页减少中断后补查积压的逐页开销。
         page_query = (search + f" | SELECT * ORDER BY __time__ ASC, request_id ASC LIMIT {offset}, {page_size}"
-                      if deep_read and not cv_query else search)
+                      if sql_paging else search)
         body = {"from": int(start.timestamp()), "to": int(end.timestamp()),
                 "query": page_query,
-                "line": 0 if deep_read and not cv_query else page_size,
-                "offset": 0 if deep_read and not cv_query else offset, "reverse": False}
+                "line": 0 if sql_paging else page_size,
+                "offset": 0 if sql_paging else offset, "reverse": False}
         command = [args.aliyun, "sls", "GetLogsV2", "--project", args.sls_project,
                    "--logstore", args.sls_logstore, "--region", "cn-shanghai",
                    "--endpoint", SLS_ENDPOINT, "--read-timeout", "20", "--connect-timeout", "10",
@@ -468,9 +502,11 @@ def sls_logs(args, start, end, legacy_fallback=False):
         offset += len(data)
 
 
-def source_windows(start, end, now, begin_at=None):
-    begin = begin_at if begin_at is not None else datetime.combine(start, datetime.min.time(), TZ) - timedelta(seconds=30)
-    finish = datetime.combine(end + timedelta(days=1), datetime.min.time(), TZ) + timedelta(seconds=30)
+def source_windows(start, end, now, begin_at=None, padding=timedelta()):
+    begin = (begin_at or datetime.combine(start, datetime.min.time(), TZ) - timedelta(seconds=30)) - padding
+    finish = datetime.combine(end + timedelta(days=1), datetime.min.time(), TZ) + timedelta(seconds=30) + padding
+    if begin >= finish:
+        return []
     cutoff = now - timedelta(days=7)
     windows = []
     if begin < cutoff:
@@ -484,7 +520,10 @@ def sync_cloud(args, start, end, now):
     paths, records, file_range = [], [], None
     sync = {"mode": "hybrid", "listed_objects": 0, "objects": 0, "downloaded": 0, "reused": 0, "sources": []}
     begin_at = args.since.astimezone(TZ) - timedelta(minutes=30) if getattr(args, "deep_read", False) else None
-    for source, begin, finish in source_windows(start, end, now, begin_at):
+    if getattr(args, "launch_at", None) and not getattr(args, "freeze_legacy", None):
+        begin_at = max(begin_at or datetime.combine(start, datetime.min.time(), TZ), args.launch_at)
+    padding = MAX_EXIT_INTERVAL if getattr(args, "external_only", False) else timedelta()
+    for source, begin, finish in source_windows(start, end, now, begin_at, padding):
         segment = {"source": source, "from": begin, "to": finish}
         if source == "oss_archive":
             paths, archive_sync = sync_logs(args, begin.date(), finish.date())
@@ -529,7 +568,17 @@ def deep_visitors(events, since, locations, history):
     return {"checked_at": datetime.now(TZ).isoformat(), "visitors": list(qualified.values())}
 
 
-def visitor_metrics(events, history, start, end, networks=None, city=None, org=None, deep_since=None, cv_only=False):
+def dwell_sample(rows, fallback):
+    visible = [(r["time"], value) for r in rows if r["params"]["event"] in ("leave", "resume", "heartbeat")
+               and (value := metric(r["params"], "visible")) is not None]
+    seconds = max(value for _, value in visible) if visible else fallback
+    reported = max((stamp for stamp, _ in visible), default=None)
+    return {"seconds": round(seconds, 2) if seconds is not None else None,
+            "method": "visible_beacon" if visible else "time_gap_estimate" if seconds is not None else "unknown",
+            "last_report_at": reported.isoformat() if reported is not None else None}
+
+
+def visitor_metrics(events, history, start, end, networks=None, city=None, org=None, deep_since=None, cv_only=False, on_events=None):
     locations = {ip: {"province": "未知", "city": "未知", "operator": "未知", "organization": "未知机构网络"} for ip in {r["ip"] for r in events}}
     if networks:
         try:
@@ -537,6 +586,9 @@ def visitor_metrics(events, history, start, end, networks=None, city=None, org=N
             locations = {ip: networks(ip) for ip in locations}
         except NETWORK_ERRORS as error:
             networks.metadata = network_failure(error)
+    if on_events:
+        on_events(events, locations)
+        events = [row for row in events if row["params"]["event"] != "action"]
     regions, organizations, apps, speed, groups, people = Counter(), Counter(), Counter(), defaultdict(lambda: defaultdict(list)), defaultdict(list), defaultdict(list)
     views = sorted((r for r in events if r["params"]["event"] in ("", "view")), key=lambda r: r["time"])
     fallback = {}
@@ -561,11 +613,7 @@ def visitor_metrics(events, history, start, end, networks=None, city=None, org=N
     for rows in groups.values():
         rows.sort(key=lambda r: r["time"])
         row, location = rows[0], locations[rows[0]["ip"]]
-        visible = [(r["time"], value) for r in rows if r["params"]["event"] in ("leave", "resume", "heartbeat") and (value := metric(r["params"], "visible")) is not None]
-        seconds, method = (max(value for _, value in visible), "visible_beacon") if visible else (row.get("fallback_seconds"), "time_gap_estimate")
-        reported = max((stamp for stamp, _ in visible), default=None)
-        item = {"seconds": round(seconds, 2) if seconds is not None else None, "method": method if seconds is not None else "unknown",
-                "last_report_at": reported.isoformat() if reported is not None else None}
+        item = dwell_sample(rows, row.get("fallback_seconds"))
         dwell[row["params"]["p"]].append(item)
         if row["params"]["v"]:
             visitor_dwell[row["params"]["v"]][row["params"]["p"]].append(item)
@@ -599,16 +647,16 @@ def visitor_metrics(events, history, start, end, networks=None, city=None, org=N
         group["unique_visitors"] += 1
     result["entry"] = entries
     if cv_only:
-        sessions = defaultdict(list)
+        sessions, legacy = defaultdict(list), defaultdict(list)
         for row in events:
-            marker = row["params"]["cv-session"]
+            if row["params"]["entry"] == "live-cv":
+                continue
+            visitor, marker = row["params"]["v"], row["params"]["cv-session"]
             if marker:
-                sessions[(row["params"]["v"], marker)].append(row)
+                sessions[(visitor, marker)].append(row)
+            elif visitor:
+                legacy[visitor].append(row)
         # 旧版只给首次 /cv 入口和首页标记；后续页面仅可按同一编号的 30 分钟活动窗口推测。
-        legacy = defaultdict(list)
-        for row in events:
-            if row["params"]["v"] and not row["params"]["cv-session"]:
-                legacy[row["params"]["v"]].append(row)
         for visitor, rows in legacy.items():
             current = None
             for row in sorted(rows, key=lambda item: item["time"]):
@@ -626,14 +674,8 @@ def visitor_metrics(events, history, start, end, networks=None, city=None, org=N
             for index, view in enumerate(views):
                 instance = [row for row in rows if row["params"]["id"] == view["params"]["id"]
                             and row["params"]["p"] == view["params"]["p"]]
-                visible = [value for row in instance if row["params"]["event"] in ("leave", "resume", "heartbeat")
-                           and (value := metric(row["params"], "visible")) is not None]
                 gap = (views[index + 1]["time"] - view["time"]).total_seconds() if index + 1 < len(views) else None
-                seconds = max(visible) if visible else gap if gap is not None and 0 <= gap <= 1800 else None
-                opened[view["params"]["p"]].append({"seconds": round(seconds, 2) if seconds is not None else None,
-                    "method": "visible_beacon" if visible else "time_gap_estimate" if seconds is not None else "unknown",
-                    "last_report_at": max((row["time"].isoformat() for row in instance if row["params"]["event"] in ("leave", "resume", "heartbeat")
-                                           and metric(row["params"], "visible") is not None), default=None)})
+                opened[view["params"]["p"]].append(dwell_sample(instance, gap if gap is not None and 0 <= gap <= 1800 else None))
             first_row = next((row for row in rows if row["params"]["event"] == "entry"), rows[0])
             network = locations[first_row["ip"]]
             visits.append({"visitor": visitor, "session": marker, "first_at": first_row["time"].isoformat(),
@@ -658,8 +700,8 @@ def visitor_metrics(events, history, start, end, networks=None, city=None, org=N
     return result
 
 
-def analyze(paths, start, end, include_self=False, include_monitor=False, extra_records=(), file_range=None, networks=None, history=None, city=None, org=None, deep_since=None, cv_only=False):
-    records, seen, malformed, duplicates = list(extra_records), set(), 0, 0
+def load_records(paths, extra_records=(), file_range=None):
+    records, malformed = list(extra_records), 0
     for path in paths:
         opener = gzip.open if path.suffix == ".gz" else open
         with opener(path, "rt", encoding="utf-8-sig", errors="replace") as stream:
@@ -674,18 +716,95 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
                 if file_range and not file_range[0] <= row["time"] < file_range[1]:
                     continue
                 records.append(row)
-    unique = []
+    return records, malformed
+
+
+def freeze_legacy(path, paths, records, file_range, launch_at, start, end, sync):
+    records, malformed = load_records(paths, records, file_range)
+    if malformed:
+        raise ValueError("日志有损坏行，未冻结")
+    unique = {row["identity"]: row for row in records if start <= row["time"].date() <= end and row["time"] < launch_at}
+    archive = {"schema": "site-visitors.legacy.v1", "launch_at": launch_at.isoformat(),
+               "start": start.isoformat(), "end": end.isoformat(), "sync": sync, "records": list(unique.values()), "complete": False}
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with gzip.open(path, "xt", encoding="utf-8") as stream:
+        json.dump(archive, stream, ensure_ascii=False, default=lambda value: value.isoformat())
+    path.chmod(0o444)
+    return {"status": "frozen", "records": len(unique), "launch_at": launch_at.isoformat(), "complete": False, "sources": sync["sources"]}
+
+
+def classified_beacon(row):
+    params = row["params"]
+    event = params.get("event")
+    return (row["bucket"] == SOURCE and row["path"] == "/_v.gif" and row["status"] == 200
+            and row["method"] == "GET" and row["operation"] == "GetObject"
+            and (event in {"view", "perf", "entry", "leave", "resume", "heartbeat"} or
+                 event == "action" and params.get("action") in {"email_copy", "external_link", "download", "project_link"})
+            and params.get("audience") in {"external", "internal"})
+
+
+def excluded_open(row, reason):
+    p = row["params"]
+    if (p["event"] != "view" or not p["p"].startswith("/") or row["path"] != "/_v.gif" or row["status"] != 200
+            or row["method"] != "GET" or row["operation"] != "GetObject"
+            or not BEACON_ID.fullmatch(p["v"]) or not BEACON_ID.fullmatch(p["id"])):
+        return None
+    paired = p["audience"] == "internal" and p.get("audience-source") == "device"
+    return 0 if paired or reason == "self" else {"monitor": 1, "bot": 2}.get(reason)
+
+
+def send_exit_probe(path):
+    nonce = secrets.token_urlsafe(18)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as stream:
+        stream.write(nonce + "\n")
+    try:
+        subprocess.run(["curl.exe", "--ipv4", "--noproxy", "*", "--silent", "--head", "--max-time", "4",
+                        f"{PIXEL_URL}?x-network-probe={nonce}"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                       timeout=5, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+    except (OSError, subprocess.TimeoutExpired):
+        pass  # No matching OSS receipt means no coverage for this probe.
+
+
+def exit_observations(records, probes):
+    observed = set()
     for row in records:
-        if row["identity"] in seen:
-            duplicates += 1
+        nonce = row["params"].get("network-probe")
+        if nonce not in probes or row["bucket"] != SOURCE or row["path"] != "/_v.gif" or row["method"] != "HEAD" or row["status"] != 200:
             continue
-        seen.add(row["identity"])
-        unique.append(row)
-    records = unique
+        address = ipaddress.ip_address(row["ip"])
+        if address.version == 4 and address.is_global and not address.is_multicast:
+            observed.add((row["time"], str(address)))
+    return sorted(observed)
+
+
+def analyze(paths, start, end, include_self=False, include_monitor=False, extra_records=(), file_range=None, networks=None, history=None, city=None, org=None, deep_since=None, cv_only=False, launch_at=None, page=None, entry=None, *, external_only=False, exit_probes=None, on_events=None, on_excluded_opens=None):
+    records, malformed = load_records(paths, extra_records, file_range)
+    observations = exit_observations(records, exit_probes or set()) if external_only else []
+    exit_times = [stamp for stamp, _ in observations]
+
+    def observed_exit(stamp):
+        index = bisect.bisect_right(exit_times, stamp)
+        if 0 < index < len(observations):
+            (before, first), (after, last) = observations[index - 1:index + 1]
+            if first == last and after - before <= MAX_EXIT_INTERVAL:
+                return first
+
+    records = [row for row in records if launch_at is None or row["time"] >= launch_at]
     history = history if history is not None else {}
+    external_since = history.get("external_since") if external_only else None
+    if external_only and (observed := min((row["time"].isoformat() for row in records if classified_beacon(row)), default=None)):
+        external_since = history["external_since"] = min(external_since or observed, observed)
+    records = [row for row in records if (page is None or row["params"]["p"].rstrip("/") == page.rstrip("/"))
+               and (entry is None or row["params"]["entry"] == entry)]
+    unique = {}
+    for row in records:
+        unique.setdefault(row["identity"], row)
+    duplicates = len(records) - len(unique)
+    records = unique.values()
     first = history.setdefault("first_seen", {})
     first_entry = history.setdefault("first_entry", {})
-    excluded, allowed = defaultdict(list), defaultdict(list)
+    nearby = defaultdict(list)
     filtered = Counter()
     def exclusion(row):
         params, ua = row["params"], row["ua"]
@@ -698,26 +817,36 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
             return "bot"
         if not ("Mozilla/" in ua and BROWSER.search(ua)) and not (monitor and include_monitor):
             return "non_browser"
+        if external_only:
+            if not classified_beacon(row):
+                return "unclassified"
+            if params["audience"] == "internal":
+                return "internal"
+            address = ipaddress.ip_address(row["ip"])
+            if not address.is_global or address.is_multicast:
+                return "internal_network"
+            home = observed_exit(row["time"]) if address.version == 4 else None
+            if home is None or str(address) == home:
+                return "network_unverified" if home is None else "shared_exit"
         return ""
     for row in records:
         if row["path"] == "/_v.gif" and row["status"] == 200:
             reason = exclusion(row)
-            target = excluded if reason in ("self", "monitor") else allowed if not reason else None
-            if target is not None:
-                target[(row["ip"], row["ua"])].append(row["time"].timestamp())
-    for mapping in (excluded, allowed):
-        for values in mapping.values():
-            values.sort()
-    def near(mapping, row):
-        values, stamp = mapping[(row["ip"], row["ua"])], row["time"].timestamp()
+            if not reason or reason in ("self", "monitor"):
+                nearby[(bool(reason), row["ip"], row["ua"])].append(row["time"].timestamp())
+    for values in nearby.values():
+        values.sort()
+    def near(is_excluded, row):
+        values, stamp = nearby[(is_excluded, row["ip"], row["ua"])], row["time"].timestamp()
         offset = bisect.bisect_left(values, stamp - 30)
         return offset < len(values) and values[offset] <= stamp + 30
-    daily = {day.isoformat(): {"visitors": set(), "ips": set(), "pv": 0, "log_lines": 0} for day in dates(start, end)}
+    daily = {day.isoformat(): {"visitors": set(), "ips": set(), "pv": 0, "log_lines": 0, "covered": False} for day in dates(start, end)}
     visitors, ips, pages, refs, devices = set(), set(), Counter(), Counter(), Counter()
     no_id = 0
-    events, ai_requests = [], defaultdict(list)
+    events, ai_requests, uncertain_days, view_ids = [], defaultdict(list), set(), set()
+    excluded_opens = {}
     for row in records:
-        if row["bucket"] == SOURCE and row["path"] == "/_v.gif" and row["status"] == 200 and not exclusion(row) and row["params"]["v"]:
+        if row["bucket"] == SOURCE and row["path"] == "/_v.gif" and row["status"] == 200 and not exclusion(row) and row["params"]["v"] and row["params"]["event"] != "action":
             stamp, visitor = row["time"].isoformat(), row["params"]["v"]
             first[visitor] = min(first.get(visitor, stamp), stamp)
             if row["params"]["entry"] and stamp < first_entry.get(visitor, {}).get("first_at", "9999"):
@@ -727,24 +856,42 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
         day = row["time"].date().isoformat()
         if day not in daily or row["bucket"] != SOURCE:
             continue
-        daily[day]["log_lines"] += 1
+        if not external_only or classified_beacon(row):
+            daily[day]["log_lines"] += 1
+            if external_only and observed_exit(row["time"]) and ipaddress.ip_address(row["ip"]).version == 4:
+                daily[day]["covered"] = True
         for name in AI_BOTS:
             if name.casefold() in row["ua"].casefold():
                 ai_requests[name].append(day)
         reason = exclusion(row)
         beacon = row["path"] == "/_v.gif"
-        if not reason and not beacon and near(excluded, row) and not near(allowed, row):
+        if not reason and not beacon and near(True, row) and not near(False, row):
             reason = "marked_resource_window"
         if reason:
+            if external_only and on_excluded_opens and (kind := excluded_open(row, reason)) is not None:
+                key, at = (row["params"]["v"], row["params"]["id"]), row["time"]
+                prev_at, prev_kind = excluded_opens.get(key, (at, kind))
+                excluded_opens[key] = min(prev_at, at), min(prev_kind, kind)
+            if reason in {"network_unverified", "shared_exit"} or (beacon and row["params"].get("audience") == "unknown"):
+                uncertain_days.add(day)
             filtered[reason] += 1
             continue
         if row["method"] != "GET" or row["operation"] != "GetObject":
             continue
+        params = row["params"]
+        if params["event"] == "action":
+            if external_only and on_events:
+                events.append(row)
+            continue
+        if external_only and params["event"] == "view" and params["id"]:
+            instance = (params["v"], params["id"])
+            if instance in view_ids:
+                continue
+            view_ids.add(instance)
         ips.add(row["ip"])
         daily[day]["ips"].add(row["ip"])
         if not beacon or row["status"] != 200:
             continue
-        params = row["params"]
         events.append(row)
         if params["v"]:
             visitors.add(params["v"])
@@ -759,14 +906,35 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
         ua = row["ua"].lower()
         devices["平板" if "ipad" in ua or ("android" in ua and "mobile" not in ua)
                 else "手机" if "mobile" in ua or "iphone" in ua else "电脑"] += 1
-    output_daily = [{"date": day, "unique_visitors": len(row["visitors"]), "unique_ips": len(row["ips"]),
-                     "pageviews": row["pv"], "log_lines": row["log_lines"],
-                     "coverage": "observed_partial" if row["log_lines"] else "no_logs"} for day, row in daily.items()]
-    enhancements = visitor_metrics(events, history, start, end, networks, city, org, deep_since, cv_only)
+    output_daily = []
+    for day, row in daily.items():
+        coverage = "observed_partial" if row["log_lines"] else "no_logs"
+        if external_only and (external_since is None or day < external_since[:10]):
+            coverage = "before_external_scope"
+        elif external_only and (row["log_lines"] and not row["covered"] or day in uncertain_days and not row["ips"]):
+            coverage = "network_unverified"
+        counts = dict(unique_visitors=len(row["visitors"]), unique_ips=len(row["ips"]), pageviews=row["pv"])
+        if external_only and coverage != "observed_partial":
+            counts = dict.fromkeys(counts)
+        output_daily.append(dict(date=day, coverage=coverage, log_lines=row["log_lines"], **counts))
+    total = dict(unique_visitors=len(visitors), unique_ips=len(ips), pageviews=sum(pages.values()))
+    if external_only and not ips and (uncertain_days or not any(row["coverage"] == "observed_partial" for row in output_daily)):
+        total = dict.fromkeys(total)
+    sink = None
+    if external_only and (on_events or on_excluded_opens):
+        archive_readable = not malformed and file_range and any(
+            file_range[0] <= row["time"] < file_range[1] - timedelta(seconds=30) and start <= row["time"].date() <= end for row in records)
+        if on_excluded_opens:
+            on_excluded_opens(excluded_opens.values(), archive_readable, external_since)
+        if on_events:
+            sink = lambda events, locations: on_events(events, locations, observations, archive_readable)
+    enhancements = visitor_metrics(events, history, start, end, networks, city, org, deep_since, cv_only, sink)
     enhancements["ai_crawler_lower_bound"] = {"by_ua": {name: {"requests": len(values), "dates": dict(Counter(values))} for name, values in ai_requests.items()},
                                                "note": "只是下限，看不到只抓网页的爬虫；UA 声称身份不代表经过身份验证。"}
-    return {**enhancements, "timezone": "Asia/Shanghai", "start": start.isoformat(), "end": end.isoformat(), "daily": output_daily,
-            "total": {"unique_visitors": len(visitors), "unique_ips": len(ips), "pageviews": sum(pages.values())},
+    return {**enhancements, "count_scope": "external_only" if external_only else "legacy_or_diagnostic",
+            "external_since": external_since,
+            "timezone": "Asia/Shanghai", "start": start.isoformat(), "end": end.isoformat(), "daily": output_daily,
+            "total": total,
             "top_pages": dict(pages.most_common(20)), "referrers": dict(refs.most_common(20)), "device_classes": dict(devices),
             "log_coverage": {"files": len(paths), "malformed_lines": malformed, "duplicate_lines": duplicates,
                              "first_observed": min((r["time"] for r in records), default=None),
@@ -779,13 +947,103 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
                       "停留是已收到的累计可见时长：离开、恢复前台和每 15 秒前台心跳按同一页面实例取最大值，再跨实例相加；隐藏时不计时、不发心跳。last_report_at 是最近合法可见时长信标的事件时间，不证明认真阅读或访问已结束；15 秒采样仍叠加 SLS 约 3 分钟延迟。没有合法可见时长信标时用相邻页时间差（最多 30 分钟），最后一页及丢失事件保持未知。",
                       "打开速度为 Navigation Timing 的 responseStart、domComplete、loadEventEnd 各减 startTime，即导航开始后的累计完成毫秒数；仅统计有字段的页面打开，按省份/运营商给中位数。",
                       "以访客编号为主：同一浏览器跨天只算一次；换设备、清存储会多算，共用浏览器会少算。",
-                      "IP 是浏览器访问图片桶的替代口径：换网络可能多算，共用 IP 可能少算，缓存资源可能漏算。",
-                      "本人/巡检资源仅按同 IP 与同 UA 的信标前后 30 秒排除；附近有正常信标时保留资源，避免误删共享 IP。",
+                      ("外来来访仅用可分类的页面信标；未分类旧数据和图片请求不计入访客、访问与独立 IP。" if external_only else
+                       "本人/巡检资源按同 IP 与同 UA 的信标前后 30 秒排除；附近有正常信标时保留资源。"),
                       "近 7 天 SLS 实时日志约延迟 3 分钟，更早的 OSS 转存最多延迟 48 小时；SLS 首次开通不回填之前的访问，no_logs 或计数为 0 均不是零访客的确证。"]}
 
 
-def main():
-    parser = argparse.ArgumentParser(description="按北京时间查询网站访客（输出 JSON）")
+def read_launch_at(path):
+    try:
+        config = json.loads(path.read_text("utf-8-sig"))
+    except FileNotFoundError:
+        return None
+    stamp = config.get("launch_at") if isinstance(config, dict) else None
+    if not isinstance(stamp, str):
+        raise ValueError("上线配置必须有带时区的 launch_at")
+    launch_at = datetime.fromisoformat(stamp)
+    if launch_at.tzinfo is None:
+        raise ValueError("上线时刻必须带时区")
+    return launch_at.astimezone(TZ)
+
+
+def initialize_era(path, launch_at):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=path.parent) as staging:
+        temporary = Path(staging) / path.name
+        temporary.write_text(json.dumps({"launch_at": launch_at.isoformat()}) + "\n", encoding="utf-8")
+        try:
+            os.link(temporary, path)
+        except FileExistsError:
+            if read_launch_at(path) != launch_at:
+                raise ValueError("已有不同的上线时刻，保留现有配置") from None
+
+
+def live_producer():
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import live_project
+    return live_project
+
+
+def due_snapshot(registry, instant):
+    producer = live_producer()
+    sources = producer.read(registry)["project_sources"]["wlyaaaaa/wly0829.cn"]["sources"]
+    paths = {key: sources[f"website.{key}"]["path"] for key in ("public", "owner")}
+    try:
+        snapshots = [producer.read(path) for path in paths.values()]
+        fresh = all(row.get("count_scope") == "external_only" and instant - datetime.fromisoformat(row["times"]["visitors"]) < timedelta(hours=1) for row in snapshots)
+    except (FileNotFoundError, ValueError, TypeError, KeyError):
+        fresh = False
+    return None if fresh else paths
+
+
+def start_site_era(argv):
+    parser = argparse.ArgumentParser(prog="query-site-visitors.py start-site-era", description="登记实际的上线时刻并刷新实况访客统计")
+    parser.add_argument("--launch-at", type=datetime.fromisoformat, help="带时区的实际上线时刻，省略时取当前北京时间")
+    parser.add_argument("--cache-dir", type=Path, default=DEFAULT_CACHE)
+    parser.add_argument("--execute", action="store_true", help="写入配置并查询；默认只预演")
+    args = parser.parse_args(argv)
+    now = datetime.now(TZ)
+    launch_at = args.launch_at or now
+    if launch_at.tzinfo is None or launch_at > now:
+        parser.error("--launch-at 须为带时区的实际上线时刻，不得晚于现在")
+    launch_at = launch_at.astimezone(TZ)
+    cache = args.cache_dir.resolve()
+    path = cache / "site-era.json"
+    archive = cache / f"legacy-{launch_at:%Y%m%dT%H%M%S-%f}.json.gz"
+
+    def quote(value):
+        return "'" + str(value).replace("'", "''") + "'"
+
+    try:
+        existing = read_launch_at(path)
+        if existing is not None and existing != launch_at:
+            raise ValueError(f"{path} 已登记 {existing.isoformat()}，保留现有配置")
+        print(f"{'执行' if args.execute else '预演'}：{path} -> {json.dumps({'launch_at': launch_at.isoformat()})}")
+        print(f"用这条分界刷新近 7 天访客实况，登记路径见 {ROOT / '.publish/private/live-project.json'}")
+        print(f"上线至少 5 分钟后执行（{(launch_at + timedelta(minutes=5)).isoformat()} 起）：")
+        print(f"python -B -X utf8 {quote(Path(__file__).resolve())} --cache-dir {quote(cache)} "
+              f"--freeze-legacy {quote(archive)} --start 1970-01-01 --end {launch_at.date()}")
+        if args.execute:
+            live_producer().read_live_paths(ROOT, require_registered=True)
+            if existing is None:
+                initialize_era(path, launch_at)
+            return main(["--cache-dir", str(cache)], require_live=True)
+    except (OSError, ValueError) as error:
+        parser.exit(1, f"{error}\n")
+    return 0
+
+
+def main(argv=None, *, require_live=False, on_events=None, beacon_only=False, on_excluded_opens=None):
+    argv = sys.argv[1:] if argv is None else argv
+    if argv[:1] == ["start-site-era"]:
+        return start_site_era(argv[1:])
+    parser = argparse.ArgumentParser(description="按北京时间查询网站访客；配置上线时刻后默认只算新站，旧记录仅用 --legacy-archive 显式查（JSON）")
+    parser.epilog = "新站上线请用 start-site-era --help"
+    parser.add_argument("--era-config", type=Path, help="上线配置 JSON；默认 <cache-dir>/site-era.json 的 launch_at（带时区 ISO）")
+    parser.add_argument("--legacy-archive", type=Path, help="只读冻结旧档，不联网；未指定日期时查询整份旧档")
+    parser.add_argument("--freeze-legacy", type=Path, help="导出上线前日志为只读 gzip JSON；须明确 --start/--end，不覆盖已有档案")
+    parser.add_argument("--page", help="只看指定页面路径（忽略末尾斜线）；/cv 跳转不算 PV，逐次入口用 --cv")
+    parser.add_argument("--entry", help="只看指定入口标记，例如 cv；后续页面详情用 --cv")
     parser.add_argument("--deep-read", action="store_true", help="查询新达标的深读访客；30 分钟空闲切访问，只用可见信标")
     parser.add_argument("--cv", action="store_true", help="逐次查询 /cv 入口访问及后续页面")
     parser.add_argument("--since", type=datetime.fromisoformat, help="深读检查起点 ISO 时间（必须带时区）")
@@ -798,7 +1056,7 @@ def main():
     parser.add_argument("--start", type=date.fromisoformat)
     parser.add_argument("--end", type=date.fromisoformat)
     parser.add_argument("--logs-dir", type=Path, help="只分析本地日志，不访问 OSS 或 SLS")
-    parser.add_argument("--cache-dir", type=Path, default=Path(r"E:\Cache\wly-site-visitors"))
+    parser.add_argument("--cache-dir", type=Path, default=DEFAULT_CACHE)
     parser.add_argument("--aliyun", default=r"E:\Tools\aliyun-cli\aliyun.exe")
     parser.add_argument("--profile", default="website-images")
     parser.add_argument("--bucket", default=BUCKET)
@@ -807,7 +1065,12 @@ def main():
     parser.add_argument("--sls-logstore", default="oss-log-store")
     parser.add_argument("--include-self", action="store_true")
     parser.add_argument("--include-monitor", action="store_true")
-    args = parser.parse_args()
+    parser.add_argument("--monitor-sources", type=Path, help=argparse.SUPPRESS)
+    args = parser.parse_args(argv)
+    if args.legacy_archive and (args.logs_dir or args.freeze_legacy or args.deep_read):
+        parser.error("--legacy-archive 不与本地日志、冻结或深读提醒混用")
+    if args.freeze_legacy and (not args.start or not args.end or args.cv or args.deep_read or args.page or args.entry):
+        parser.error("冻结须明确 --start/--end，不能筛页面、入口或提醒")
     if bool(args.deep_read) != bool(args.since) or (args.deep_read and (args.since.tzinfo is None or args.start or args.end or args.month or args.around or args.days is not None or args.include_self or args.include_monitor or args.cv)):
         parser.error("--deep-read 与带时区的 --since 配对使用，不能指定日期窗口或包含本人/巡检")
     if bool(args.start) != bool(args.end) or (args.start and args.days is not None) or (args.days is not None and args.days < 1):
@@ -831,35 +1094,102 @@ def main():
     if start > end:
         parser.error("起始日期不得晚于结束日期")
     try:
+        config_path = args.era_config or args.cache_dir / "site-era.json"
+        args.launch_at = read_launch_at(config_path) if not args.legacy_archive else None
+        if (args.freeze_legacy or require_live) and not args.launch_at:
+            raise ValueError("冻结或上线刷新前须配置上线时刻")
         records, file_range, checked_at = [], None, datetime.now(TZ)
-        if args.logs_dir:
+        local_only = bool(args.logs_dir or args.legacy_archive)
+        external_only = not (args.legacy_archive or args.include_self or args.include_monitor)
+        args.external_only = external_only and not args.freeze_legacy
+        full_snapshot = (not any((local_only, args.freeze_legacy, args.deep_read, args.cv, args.around, args.month,
+                                  args.include_self, args.include_monitor, args.page, args.entry))
+                         and end == checked_at.date() and (end - start).days == 6)
+        probe_path = args.cache_dir / "internal-visitor-probes.txt"
+        official_probe = (args.monitor_sources and args.cv and args.days == 2 and not local_only
+                          and args.cache_dir.resolve() == DEFAULT_CACHE.resolve() and os.environ.get("AGENTS_BACKGROUND_AUTOMATION") == "1")
+        snapshot_paths = snapshot_error = None
+        if official_probe:
+            send_exit_probe(probe_path)
+            try:
+                snapshot_paths = due_snapshot(args.monitor_sources, checked_at)
+            except (OSError, ValueError, TypeError, KeyError):
+                snapshot_error = "snapshot_registry_unavailable"
+        args.snapshot_beacons = bool(snapshot_paths) or beacon_only
+        if snapshot_paths:
+            start = end - timedelta(days=6)
+        exit_probes = set(probe_path.read_text("utf-8").splitlines()) if external_only and probe_path.is_file() else set()
+        if args.legacy_archive:
+            with gzip.open(args.legacy_archive, "rt", encoding="utf-8") as stream:
+                archive = json.load(stream)
+            if archive["schema"] != "site-visitors.legacy.v1":
+                raise ValueError("旧档格式不兼容")
+            records, paths = archive["records"], []
+            for row in records:
+                row["time"] = datetime.fromisoformat(row["time"])
+                if isinstance(row["identity"], list):
+                    row["identity"] = tuple(row["identity"])
+            if not any((args.start, args.days, args.month, args.around)):
+                start = min((r["time"].date() for r in records), default=date.fromisoformat(archive["start"]))
+                end = max((r["time"].date() for r in records), default=date.fromisoformat(archive["end"]))
+            sync = {"mode": "frozen_legacy", "sources": archive["sync"]["sources"]}
+        elif args.logs_dir:
             if not args.logs_dir.is_dir():
                 raise ValueError("日志目录不存在")
             paths = sorted(p for p in args.logs_dir.rglob("*") if p.is_file() and p.suffix in ("", ".log", ".gz"))
             sync = {"mode": "local_only", "sources": [{"source": "local_logs"}]}
         else:
             paths, records, sync, file_range = sync_cloud(args, start, end, checked_at)
-        history_path = args.cache_dir / "visitor-history.json"
-        history = json.loads(history_path.read_text("utf-8")) if not args.logs_dir and history_path.exists() else {}
+        if args.freeze_legacy:
+            print(json.dumps(freeze_legacy(args.freeze_legacy, paths, records, file_range, args.launch_at, start, end, sync), ensure_ascii=False, default=lambda value: value.isoformat()))
+            return 0
+        era_suffix = "-" + hashlib.sha256(args.launch_at.isoformat().encode()).hexdigest()[:12] if args.launch_at else ""
+        scope_suffix = "-external-v1" if external_only else ""
+        history_path = args.cache_dir / f"visitor-history{scope_suffix}{era_suffix}.json"
+        history = json.loads(history_path.read_text("utf-8")) if not local_only and history_path.exists() else {}
         cached = any((args.cache_dir / "networks" / name).is_file() for name in ("ip2region_v4.xdb", "ip2region_v6.xdb", "ip2asn-combined.tsv.gz"))
         database_state = {"status": "unavailable", "reason": "本地模式未缓存地区库，不访问网络；地区/机构保持未知"}
         try:
-            networks = None if args.logs_dir and not cached else OfflineNetworks(args.cache_dir, download=not args.logs_dir)
+            networks = None if local_only and not cached else OfflineNetworks(args.cache_dir, download=not local_only)
         except NETWORK_ERRORS as error:
             networks, database_state = None, network_failure(error)
-        output = analyze(paths, start, end, args.include_self, args.include_monitor, records, file_range, networks, history, args.city, args.org, args.since, args.cv)
+        sink = None
+        exclusions = None
+        if args.logs_dir or not args.cv or args.snapshot_beacons:
+            if on_events:
+                sink = lambda events, locations, observations, archive: on_events(events, locations, observations, archive, args, sync, checked_at, start, end)
+            if on_excluded_opens:
+                exclusions = lambda rows, archive, since: on_excluded_opens(rows, archive, since, args, sync, checked_at, start, end)
+        output = analyze(paths, start, end, args.include_self, args.include_monitor, records, file_range, networks, history, args.city, args.org, args.since, args.cv, args.launch_at, args.page, args.entry,
+                         external_only=external_only, exit_probes=exit_probes, on_events=sink, on_excluded_opens=exclusions)
+        output["site_scope"] = {"mode": "frozen_legacy" if args.legacy_archive else "new_site" if args.launch_at else "all_observed", "launch_at": args.launch_at}
         output["offline_network_databases"] = networks.metadata if networks else database_state
-        if not args.logs_dir:
+        if not local_only and not args.page and not args.entry and external_only:
             args.cache_dir.mkdir(parents=True, exist_ok=True)
             temporary = history_path.with_suffix(f".{os.getpid()}.tmp")
             temporary.write_text(json.dumps(history, ensure_ascii=False), "utf-8")
             temporary.replace(history_path)
         output["log_coverage"]["sources"] = sync["sources"]
         output["sync"] = sync
+        if snapshot_paths:
+            try:
+                live_producer().visitors(ROOT, output, checked_at.isoformat(), require_registered=True, registered_paths=snapshot_paths)
+            except (OSError, ValueError, TypeError, KeyError):
+                snapshot_error = "snapshot_write_failed"
+        if require_live:
+            try:
+                live_producer().visitors(ROOT, output, checked_at.isoformat(), require_registered=True)
+            except (OSError, ValueError, KeyError, IndexError) as error:
+                print(f"实况快照更新失败（{type(error).__name__}）。请用同一个 --launch-at 重试。", file=sys.stderr)
+                return 1
+        elif full_snapshot:
+            live_producer().record('visitors', ROOT, output, checked_at.isoformat())
         if args.deep_read:
-            output["deep_read"]["checked_at"] = checked_at.isoformat()
+            output["deep_read"].update(checked_at=checked_at.isoformat(), **{key: output[key] for key in ("site_scope", "count_scope", "external_since")})
         selected = output["deep_read"] if args.deep_read else {"start": output["start"], "end": output["end"],
-                    "cv": output["cv"], "log_coverage": output["log_coverage"], "sync": output["sync"]} if args.cv else output
+                    **{key: output[key] for key in ("cv", "site_scope", "count_scope", "external_since", "log_coverage", "sync")}} if args.cv else output
+        if snapshot_error:
+            selected["snapshot_refresh_error"] = snapshot_error
         print(json.dumps(selected, ensure_ascii=False, indent=2, default=lambda value: value.isoformat()))
     except (OSError, ValueError, RuntimeError, struct.error, subprocess.TimeoutExpired) as error:
         if isinstance(error, CloudCommandError):

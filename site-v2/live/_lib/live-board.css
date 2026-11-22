@@ -1,0 +1,291 @@
+/* 分组看板（共用模版）：一长串分好组的清单摆成横排几栏的看板。版式照本人 11-17 20:15 点头的设计图“新模版 · 分组看板”。
+   配 _lib/live-board.js 用：看板整块由 LiveBoard.create 生成；页面写 <body class="… page--board">，页头用下面的 .lbp-*（可以不用）。
+   卡片、圆角、按钮、搜索框照实况现有的共用样式（.glass、.more、.l2-search、.l2-filter）；卡头按组上色的淡渐变和彩色徽章照 08 模版（本人同意的样子里本来就有）。
+   跟画风有关的值都集中在下面几个变量里，要换只改这里；组的颜色只从光圈色板（_lib/live.css 的 --glow-*）取，色板改了这里自动跟上；
+   每张卡的插画地址由页面用 --lb-art 给。
+   视口固定 1440，不按屏宽换排版；手机上整页缩小。 */
+
+:root {
+  /* —— 画风变量 —— */
+  --lb-card-radius: var(--r-big, 24px);                 /* 卡的圆角，和实况的卡一样 */
+  --lb-head-a: .2;                                      /* 卡头渐变最浓处（左边）的浓度；要淡，不要大片颜色 */
+  --lb-head-b: .06;                                     /* 卡头渐变中段的浓度，往右淡没 */
+  --lb-badge-a: .26;                                    /* 圆徽章底色的浓度 */
+  --lb-badge-ring: inset 0 0 0 1px rgb(255 255 255 / .8), 0 1px 2px rgb(20 20 19 / .07), 0 4px 10px -6px rgb(20 28 36 / .16);
+  --lb-art-opacity: 1;                                  /* 卡头右边插画的浓淡 */
+  --lb-row-hover: rgb(255 255 255 / .6);                /* 鼠标放上去那一行的底，和 .more 悬停一样 */
+  --lb-link-hover: #00813f;                             /* 能点的字悬停变色，和实况的行标题一样 */
+  --lb-bad: #c0504a;                                    /* “没跑成”这类状态字 */
+  --lb-busy: #2f74b8;                                   /* “正在跑” */
+  --lb-soft: #9c9a92;                                   /* 列名、次要的字 */
+  --lbp-stat-bg: rgb(255 255 255 / .62);                /* 页头读数格：和实况的小药丸按钮同一种底 */
+  --lbp-stat-ring: inset 0 0 0 1px rgb(20 20 19 / .06);
+  --lb-act-ring: rgb(20 20 19 / .14);                   /* 行尾“问情况”的浅灰描边 */
+  --lb-act-ring-hover: rgb(20 20 19 / .3);
+  --lb-act-ink: #6b6a64;                                /* 行尾按钮的字 */
+}
+/* 每组的颜色：页面给 look.tint（光圈色板里的名字），这里只换成对应的 --glow-*；页面不给时 live-board.js 按顺序轮一个，所以每张卡都有颜色 */
+.lb-card[data-tint="green"] { --lb-tint: var(--glow-green); }
+.lb-card[data-tint="lilac"] { --lb-tint: var(--glow-lilac); }
+.lb-card[data-tint="cyan"] { --lb-tint: var(--glow-cyan); }
+.lb-card[data-tint="blue"] { --lb-tint: var(--glow-blue); }
+.lb-card[data-tint="aqua"] { --lb-tint: var(--glow-aqua); }
+.lb-card[data-tint="pink"] { --lb-tint: var(--glow-pink); }
+.lb-card[data-tint="peach"] { --lb-tint: var(--glow-peach); }
+.lb-card[data-tint="gold"] { --lb-tint: var(--glow-gold); }
+.lb-card {
+  --lb-head-bg: none;
+  --lb-badge-bg: rgb(255 255 255 / .62);
+  --lb-badge-ink: var(--ink-soft, #3d3d3a);
+}
+.lb-card[data-tint] {
+  --lb-head-bg: linear-gradient(100deg, rgb(var(--lb-tint) / var(--lb-head-a)) 0%, rgb(var(--lb-tint) / var(--lb-head-b)) 55%, transparent 88%);
+  --lb-badge-bg: radial-gradient(circle at 32% 28%, rgb(255 255 255 / .95), rgb(var(--lb-tint) / var(--lb-badge-a)));
+  --lb-badge-ink: color-mix(in srgb, rgb(var(--lb-tint)) 78%, #1d1d1b);
+}
+
+/* ============ 页面：比别的第二层宽，三栏才摆得下 ============ */
+body.page--board { --col: min(1856px, calc(100vw - 64px)); }
+.page--board .stage { padding-bottom: 12vh; }
+
+/* ============ 页头：左边标题、中间总的情况、右边一张小卡 ============ */
+.lbp-top {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 2.2fr) minmax(0, 1fr);
+  gap: var(--gap, 22px);
+  align-items: stretch;
+}
+.lbp-title { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.lbp-title img { flex: none; width: 92px; height: 92px; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+.lbp-title h1 { margin: 0; font-family: var(--black); font-weight: 900; font-size: 32px; line-height: 40px; letter-spacing: .04em; color: var(--ink); white-space: nowrap; }
+.lbp-title p { margin: 8px 0 0; font-size: 14px; line-height: 23px; letter-spacing: .03em; color: #6b6a64; }
+/* 数据截止几点：标题下一行小灰字（不是统计数，不进读数格） */
+.lbp-title p.lbp-asof { margin-top: 6px; font-size: 12.5px; line-height: 18px; letter-spacing: .04em; color: var(--lb-soft); }
+
+.page--board .card--hero[data-pic] { --win: clamp(240px, 36%, 470px); }
+.page--board .card--hero .card__glass { min-height: 0; padding: 26px 30px 24px; }
+.page--board .card--hero .head__lead { font-size: 28px; line-height: 36px; }
+
+/* 页头读数格：一排四格，图标 + 大数 + 一句小字 */
+.lbp-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; max-width: 820px; margin: 16px 0 0 var(--gut); }
+.lbp-stats:empty { display: none; }
+.lbp-stat {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 7px;
+  min-width: 0;
+  padding: 9px 11px 10px;
+  border-radius: 14px;
+  background: var(--lbp-stat-bg);
+  box-shadow: var(--lbp-stat-ring);
+}
+.lbp-stat .lb-ico { width: 18px; height: 18px; color: color-mix(in srgb, rgb(var(--lbp-tint)) 78%, #1d1d1b); }
+/* 读数格的小图标也按色板上色，不用灰线条：页面给 data-stat，认不得的用蓝 */
+.lbp-stat { --lbp-tint: var(--glow-blue); }
+.lbp-stat[data-stat="running"] { --lbp-tint: var(--glow-green); }
+.lbp-stat[data-stat="added"] { --lbp-tint: var(--glow-aqua); }
+.lbp-stat[data-stat="changed"] { --lbp-tint: var(--glow-peach); }
+.lbp-stat[data-stat="attention"] { --lbp-tint: var(--glow-pink); }
+.lbp-stat b { min-width: 0; font-size: 20px; line-height: 26px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; white-space: normal; overflow-wrap: anywhere; }
+.lbp-stat b.is-word { font-size: 14px; font-weight: 500; color: var(--muted); }
+.lbp-stat small { grid-column: 1 / -1; min-width: 0; font-size: 12.5px; line-height: 17px; letter-spacing: .04em; color: var(--muted); white-space: normal; overflow-wrap: anywhere; }
+
+/* 右边小卡：标题一行，下面的清单在卡里滚，不把页头撑高 */
+.lbp-side { display: flex; flex-direction: column; min-width: 0; min-height: 0; padding: 20px 22px 14px; }
+.lbp-side > .part { margin: 0 0 6px 2px; }
+.lbp-side__list { flex: 1 1 auto; min-height: 96px; contain: size; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+.lbp-side .list { border-bottom: 0; }
+
+/* 工具条：搜索、两个下拉、右边几个去处 */
+.lbp-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 12px; margin: 24px 0 20px; }
+.lbp-tools > * { margin: 0; }
+.lbp-search { flex: none; flex-wrap: nowrap; }
+.lbp-search input { width: 420px; padding-left: 36px; background: rgb(255 255 255 / .72) no-repeat 12px 50% / 16px url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2374736d' stroke-width='2' stroke-linecap='round'><circle cx='10.8' cy='10.8' r='6'/><path d='M15.4 15.4l4.4 4.4'/></svg>"); }
+.lbp-tools .l2-filter select { max-width: 240px; padding-right: 30px; appearance: none; background: rgb(255 255 255 / .72) no-repeat right 11px center / 11px url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%2374736d' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M2.5 4.5 6 8l3.5-3.5'/></svg>"); cursor: pointer; }
+.lbp-tools__end { display: flex; align-items: center; gap: 2px; margin-left: auto !important; }
+.lbp-tools__end .more { margin: 0; translate: 0 0; }
+
+/* ============ 看板：几栏瀑布流。卡按栏摆，行高 4px 一格，卡占几格由 live-board.js 量出来 ============ */
+.lb {
+  --lb-row-cols: 10px var(--lb-grid) 64px;   /* 灯 | 页面给的几列 | 按钮（“问情况”一直露字） */
+  display: grid;
+  grid-template-columns: repeat(var(--lb-cols, 3), minmax(0, 1fr));
+  grid-auto-rows: 4px;
+  grid-auto-flow: row dense;
+  column-gap: var(--lb-gap, 22px);
+  align-items: start;
+}
+.lb > .lb-card { align-self: start; }
+.lb > .lb-card.is-away, .lb > .lb-card[hidden] { display: none; }
+
+/* ============ 一张卡 ============ */
+.lb-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--lb-card-radius);
+  scroll-margin-top: calc(var(--bar-bottom) + 18px);
+}
+.lb-card.glass { position: relative; }
+.lb-card__head {
+  position: relative;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 14px;
+  min-height: 92px;
+  padding: 16px 20px 12px;
+  border-radius: var(--lb-card-radius) var(--lb-card-radius) 0 0;
+  background: var(--lb-head-bg);
+  overflow: hidden;
+}
+.lb-card__badge {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--lb-badge-bg);
+  box-shadow: var(--lb-badge-ring);
+  color: var(--lb-badge-ink);
+}
+.lb-ico { width: 22px; height: 22px; fill: currentColor; fill-opacity: .14; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.lb-card__words { position: relative; z-index: 1; min-width: 0; padding-right: 30%; }
+.lb-card__title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; margin: 0; font-size: 19px; line-height: 26px; font-weight: 700; letter-spacing: .03em; color: var(--ink); }
+.lb-card__title b { font-weight: 700; }
+.lb-card__title .lamp { align-self: center; }
+.lb-card__count { font-size: 13.5px; font-weight: 500; letter-spacing: .04em; color: var(--muted); white-space: nowrap; }
+.lb-card__sub { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; margin: 4px 0 0; font-size: 13px; line-height: 19px; letter-spacing: .03em; color: #77756e; }
+.lb-card__sub:empty { display: none; }
+.lb-card__art {
+  position: absolute;
+  z-index: 0;
+  top: 2px;
+  right: 4px;
+  bottom: 0;
+  width: 42%;
+  background: var(--lb-art, none) no-repeat 100% 50% / contain;
+  opacity: var(--lb-art-opacity);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 34%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 34%);
+  pointer-events: none;
+}
+
+/* 列名一行：和每一行用同一套列宽 */
+.lb-card__cols {
+  display: grid;
+  grid-template-columns: var(--lb-row-cols);
+  column-gap: 8px;
+  padding: 10px 20px 7px;
+  border-bottom: 1px solid var(--hair);
+  font-size: 12.5px;
+  line-height: 18px;
+  letter-spacing: .06em;
+  color: var(--lb-soft);
+  white-space: nowrap;
+}
+.lb-card__cols > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+/* 一行都还没摆出来（例如整组收着）就不写列名 */
+.lb-card:has(> .lb-rows:empty):not(:has(> .lb-fold.is-open)) .lb-card__cols { display: none; }
+
+/* ============ 一行：灯 | 各列 | 按钮；要留意的原因等另起一行，有才写 ============ */
+.lb-card .lb-rows { padding: 0 10px; border-bottom: 0; }
+.lb-card .lb-rows > .lb-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--lb-row-cols);
+  column-gap: 8px;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 10px;
+  border-top: 1px solid var(--hair);
+  border-radius: 10px;
+  transition: background-color .2s ease;
+}
+.lb-card .lb-rows > .lb-row:first-child { border-top: 0; padding-top: 6px; }
+.lb-card .lb-rows > .lb-row:hover { background-color: var(--lb-row-hover); }
+.lb-card .lb-rows > .lb-row--empty { display: block; min-height: 0; padding: 10px 10px; }
+.lb-row__lamp { grid-column: 1; display: grid; place-items: center; }
+.lb-row__lamp .lamp { margin: 0; }
+.lb-cell { min-width: 0; margin: 0; font-size: 13px; line-height: 19px; letter-spacing: .02em; color: #5e5c56; overflow-wrap: anywhere; }
+/* 名字、说明最多两行，名字下面的小字一行，再长的省略，全文点进去看 */
+.lb-clip { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin: 0; }
+.lb-clip1 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; margin: 1px 0 0; }
+.lb-cell--name { font-size: 14px; line-height: 20px; font-weight: 500; color: var(--ink); }
+.lb-cell--name > .lb-sub { font-weight: 400; }
+.lb-cell--time { display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; line-height: 18px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.lb-cell--time > * { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.lb-sub { font-size: 12px; line-height: 17px; color: var(--lb-soft); }
+.lb-run { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; font-size: 12px; line-height: 17px; color: var(--lb-soft); overflow: visible !important; }
+.lb-run [data-result="failed"] { color: var(--lb-bad); font-weight: 500; }
+.lb-run [data-result="running"] { color: var(--lb-busy); }
+.lb-row__extra { grid-column: 2 / -1; margin: 3px 0 1px; font-size: 12.5px; line-height: 18px; letter-spacing: .03em; color: #8f8d86; overflow-wrap: anywhere; }
+.lb-row__extra .row__meta { margin-left: 0; white-space: normal; }
+
+/* 名字的链接撑满整行：点行里的空处也进详情；行里别的能点的东西浮在它上面 */
+.lb-row .row__title { color: inherit; text-decoration: none; }
+.lb-row .row__title::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.lb-row .row__title:focus-visible { outline: none; }
+.lb-row .row__title:focus-visible::after { outline: 2px solid var(--ink); outline-offset: -2px; }
+.lb-row:hover .row__title { color: var(--lb-link-hover); }
+.lb-row :is(.lb-link, .row__acts, .lb-run > *, .lb-row__extra a, .lb-row__extra button, .live-mark, .trust-note) { position: relative; z-index: 1; }
+.lb-link { color: inherit; text-decoration: none; transition: color .2s ease; }
+.lb-link:hover { color: var(--lb-link-hover); }
+
+/* 行尾按钮：一直露着字（手机没有鼠标悬停，不能靠悬停才露出来），浅灰描边、不抢眼，点得到就行 */
+.lb-row > .row__acts { grid-column: -2; grid-row: 1; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; gap: 4px; margin: 0; padding: 0; }
+:is(.lb-row, .lb-item) > .row__acts .btn {
+  flex: none;
+  min-width: 0;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid var(--lb-act-ring);
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--lb-act-ink);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+:is(.lb-row, .lb-item) > .row__acts .btn:is(:hover, :focus-visible) { border-color: var(--lb-act-ring-hover); background: rgb(255 255 255 / .7); color: var(--lb-link-hover); }
+
+/* ============ 卡底：展开 / 收起、展开后“继续看” ============ */
+.lb-card .lb-fold > * > .lb-rows > .lb-row:first-child { border-top: 1px solid var(--hair); padding-top: 6px; }
+.lb-card__more, .lb-card__next { align-self: center; margin: 4px auto 10px; translate: 0 0; }
+.lb-card__next { display: flex; }
+.lb-card__more .more__chev { rotate: 90deg; }
+.lb-card__more[aria-expanded="true"] .more__chev { rotate: -90deg; }
+.lb-card__more[aria-expanded="true"] .lb-more__open, .lb-card__more:not([aria-expanded="true"]) .lb-more__shut { display: none; }
+.lb-card > .live-fallback-note { margin: 0 20px 12px; }
+/* 最后一列的列名离线时会长成“原定下次运行”，让它伸进右边空着的按钮列，不省略 */
+.lb-card__cols > span:nth-last-child(2) { overflow: visible; text-overflow: clip; }
+
+/* ============ 卡片清单（columns 给空数组）：每一行是一小张卡 ============ */
+:root {
+  --lb-item-bg: rgb(255 255 255 / .55);                 /* 卡里每一小张卡的底 */
+  --lb-item-radius: 16px;
+  --lb-item-ring: inset 0 0 0 1px rgb(20 20 19 / .05);
+}
+.lb-card--items .lb-rows { display: grid; gap: 10px; padding: 6px 14px 4px; }
+.lb-card--items .lb-fold > * > .lb-rows { padding-top: 10px; }
+.lb-card--items .lb-rows > .lb-item {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: 8px;
+  padding: 12px 14px 12px 12px;
+  border: 0;
+  border-radius: var(--lb-item-radius);
+  background: var(--lb-item-bg);
+  box-shadow: var(--lb-item-ring);
+}
+.lb-card--items .lb-rows > .lb-item:first-child { padding-top: 12px; }
+.lb-card--items .lb-rows > .lb-item > .lamp { grid-column: 1; margin: 7px 0 0; }
+.lb-card--items .lb-rows > .lb-item > .row__text { grid-column: 2; min-width: 0; }
+.lb-card--items .lb-rows > .lb-item > .row__acts { grid-column: 3; grid-row: 1; display: flex; flex-direction: row; justify-content: flex-end; align-items: center; gap: 4px; margin: -2px 0 0; padding-left: 8px; }
+.lb-card--items .lb-rows > .row--empty { padding: 10px 6px; background: none; box-shadow: none; }

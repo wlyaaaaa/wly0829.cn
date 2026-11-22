@@ -1,0 +1,414 @@
+/* 明细账簿（共用模版）：一长张明细表摆成左右两页。排法照本人 11-17 19:53 点头的设计图“新模版 · 逐项明细”
+   （上面一排搜索、排序、摘要卡；下面左右两页，序号列、皇冠和钟标出摘要卡里那几行，点一行在原地展开，底下“再看 20 条”）。
+   外观照实况这一家（本人 21:40 定）：外框是半透明渐变的玻璃卡（.glass），表摆在里面一张白底圆角卡上，线都是细线；
+   不用书皮、纸纹、书签那套。逐项明细的页头是实况的大图头卡，画和两种淡色随项目换（_lib/live-project-look.js）。
+   配 _lib/live-book.js 用：页面写 <body class="… page--book">，账簿整块由 LiveBook.create 生成。
+   视口固定 1440，不按屏宽换排版；手机上整页缩小。 */
+
+/* ============ 页面：比别的第三层宽，账簿两页才摆得下四列 ============ */
+body.page--book {
+  --col: min(1700px, calc(100vw - 160px));
+  --pad: calc(var(--bar-bottom) + 18px);
+
+  /* —— 画风都收在这一段：照实况这一家（玻璃卡、白底圆角卡、细线），颜色只用网站现有的 —— */
+  --book-ink: var(--ink, #262521);
+  --book-muted: var(--muted, #85827a);
+  --book-line: rgb(20 20 19 / .065);              /* 行与行之间的细线 */
+  --book-head-line: rgb(20 20 19 / .11);          /* 表头下面那条 */
+  --book-accent: #00a650;                         /* 强调色：网站的绿，不按项目换 */
+  --book-accent-ring: rgb(0 166 80 / .14);
+  --book-warm: #e8890c;                           /* 钟（很久没用）：实况琥珀灯的颜色 */
+  --book-field-bg: rgb(255 255 255 / .74);        /* 搜索框、排序框、“再看 20 条”：白底圆角 */
+  --book-field-shadow: inset 0 0 0 1px rgb(20 20 19 / .08), 0 6px 16px -12px rgb(20 20 19 / .28);
+  --book-sheet-bg: rgb(255 255 255 / .6);         /* 玻璃卡里那张白底圆角卡 */
+  --book-sheet-shadow: inset 0 0 0 1px rgb(255 255 255 / .75), 0 1px 0 rgb(20 20 19 / .03);
+  --book-sheet-radius: var(--r-mid, 20px);
+  --book-split: rgb(20 20 19 / .08);              /* 左右两页中间那条细线 */
+  --book-bar-track: rgb(20 20 19 / .06);
+  --book-bar: linear-gradient(90deg, rgb(0 166 80 / .3), rgb(0 166 80 / .6));
+  --book-bar-top: linear-gradient(90deg, rgb(0 166 80 / .48), rgb(0 166 80 / .82));
+  --book-tint-top: rgb(0 166 80 / .085);          /* 用得最多那几行的浅底 */
+  --book-tint-top2: rgb(0 166 80 / .065);
+  --book-tint-top3: rgb(0 166 80 / .045);
+  --book-tint-warm: rgb(242 138 0 / .075);        /* 很久没用那几行的浅底 */
+  --book-pick-green: 0 166 80;                    /* 摘要卡角上那点颜色 */
+  --book-pick-warm: 242 138 0;
+  --book-pick-bg: linear-gradient(135deg, rgb(255 255 255 / .84), rgb(255 255 255 / .5));
+  --book-pick-shadow: 0 14px 30px -24px rgb(20 20 19 / .34);
+  --book-detail-bg: rgb(20 20 19 / .032);         /* 点开那一行的说明框 */
+  --book-hover: rgb(20 20 19 / .025);
+
+  /* 分组账簿（AI 账本）：五种结果的颜色取实况现有的颜色
+     （绿 = .tag--new，红、蓝、琥珀 = 灯的深色，紫 = “对外换了说法”小标），组头、小标签都只用它们的淡底 */
+  --tone-green: 0 129 63;
+  --tone-red: 192 40 31;
+  --tone-violet: 119 87 165;
+  --tone-blue: 82 102 186;
+  --tone-amber: 184 106 0;
+  --tone-gray: 116 115 109;
+  --book-group-bg: rgb(255 255 255 / .5);
+  --book-group-head: .085;
+  --book-group-ring: .14;
+  --book-tag-bg: .1;
+}
+/* —— 项目自己的颜色（逐项明细）：records/page.js 用 LiveProjectLook 在 body 上写 --pj-glow-a、--pj-glow-b 并加 .book-look。
+     页面底色、舞台后面的光、页头玻璃后面的光随这两色；强调色（网站的绿）、行里的标记、摘要卡不随项目换。 —— */
+/*    --book-own 是两色里更有颜色的那一色（records/page.js 挑），一眼认得出“这页是蓝的”靠它；另一色垫在旁边。 */
+body.page--book.book-look {
+  --book-own: var(--pj-glow-b);
+  --book-look-wash: 78%;     /* 左上角、右上角项目颜色的浓度 */
+  --book-look-base: 40%;     /* 整页铺底的浓度（往下淡到底纸） */
+  --book-look-card: 62%;     /* 页头卡整张渐变的浓度 */
+  background:
+    radial-gradient(70% 58% at 0% 0%, color-mix(in srgb, var(--book-own) var(--book-look-wash), transparent), transparent 76%) fixed,
+    radial-gradient(58% 56% at 100% 0%, color-mix(in srgb, var(--pj-glow-a) var(--book-look-wash), transparent), transparent 74%) fixed,
+    linear-gradient(180deg, color-mix(in srgb, var(--book-own) var(--book-look-base), var(--paper, #faf9f5)), color-mix(in srgb, var(--book-own) 14%, var(--paper, #faf9f5)) 90%) fixed;
+}
+body.book-look .field {
+  background:
+    radial-gradient(560px 440px at 18% 260px, color-mix(in srgb, var(--book-own) 44%, transparent), transparent 78%),
+    radial-gradient(560px 480px at 72% 520px, color-mix(in srgb, var(--pj-glow-a) 36%, transparent), transparent 78%),
+    radial-gradient(640px 520px at 30% 1300px, color-mix(in srgb, var(--book-own) 30%, transparent), transparent 76%);
+}
+/* 页头卡整张一道项目颜色的渐变（垫在玻璃后面） */
+.book-look .book-hero .card__glow { background: linear-gradient(105deg, color-mix(in srgb, var(--book-own) var(--book-look-card), #fff) 0%, color-mix(in srgb, var(--pj-glow-a) 70%, #fff) 70%, color-mix(in srgb, var(--book-own) 50%, #fff) 100%); }
+/* 页头玻璃后面的两团光换成项目的两色，从中间一直化到边上，不留实边 */
+.book-look .book-hero .glow .blob--a { background: radial-gradient(closest-side, color-mix(in srgb, var(--book-own) 80%, transparent), color-mix(in srgb, var(--book-own) 30%, transparent) 55%, transparent); }
+.book-look .book-hero .glow .blob--b { background: radial-gradient(closest-side, color-mix(in srgb, var(--pj-glow-a) 72%, transparent), color-mix(in srgb, var(--pj-glow-a) 26%, transparent) 55%, transparent); }
+
+.page--book .stage { padding-bottom: 14vh; }
+.page--book .back { position: relative; z-index: 2; margin-bottom: 4px; }
+
+/* ============ 页头：实况的大图头卡（live-page.css 的 .card--hero），这里只补第二行和几颗钮 ============ */
+.page--book .book-hero .card__glass { min-height: 0; }   /* 字少的项目（没有简介、最近变化）页头收矮 */
+.book-hero__sub { display: flex; flex-wrap: wrap; align-items: baseline; margin: 10px 0 0; font-size: 16px; line-height: 26px; letter-spacing: .03em; color: #57564f; font-variant-numeric: tabular-nums; }
+.book-hero__sub:not(:has(> :not([hidden]))) { display: none; }
+.book-hero__sub > span + span::before { content: "·"; margin: 0 10px; color: #b4b1a6; }
+.book-hero__sub > span:first-child[hidden] + span::before { content: none; }
+.book-hero .rec-say { margin: 4px 0 0; font-size: 14.5px; line-height: 23px; color: var(--book-muted); }
+.book-hero__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin-top: 8px; }
+.book-hero__meta:not(:has(> :not([hidden]))) { display: none; }
+.book-hero .rec-meta { margin: 0; font-size: 13.5px; color: var(--book-muted); }
+.book-hero .rec-acts { margin: 0; }
+
+/* ============ 账簿上面一排：搜索、排序、摘要卡 ============ */
+.book-host { position: relative; }
+.book-tools { display: flex; align-items: center; gap: 22px; margin: 22px 0 0; }
+.book-tools.has-picks { min-height: 104px; }
+.book-search {
+  flex: 0 0 330px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  height: 50px;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: var(--book-field-bg);
+  box-shadow: var(--book-field-shadow);
+  transition: box-shadow .2s ease, background-color .2s ease;
+  cursor: text;
+}
+.book-search:hover { background: rgb(255 255 255 / .9); }
+.book-search:focus-within { background: #fff; box-shadow: inset 0 0 0 1.5px var(--book-accent), 0 0 0 4px var(--book-accent-ring); }
+.book-search input { flex: 1; min-width: 0; height: 100%; margin: 0; padding: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 15.5px; letter-spacing: .02em; color: var(--book-ink); }
+.book-search input::placeholder { color: #9d9a90; }
+.book-search .book-ico { width: 20px; height: 20px; color: #6f6d65; }
+.book-sort { flex: none; display: flex; align-items: center; gap: 8px; font-size: 15.5px; letter-spacing: .03em; color: #45443e; }
+.book-sort__box { position: relative; display: inline-flex; align-items: center; }
+.book-sort select {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 50px;
+  padding: 0 48px 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--book-field-bg);
+  box-shadow: var(--book-field-shadow);
+  font: inherit;
+  font-size: 15px;
+  letter-spacing: .02em;
+  color: var(--book-ink);
+  cursor: pointer;
+  transition: background-color .2s ease, box-shadow .2s ease;
+}
+.book-sort select:hover { background: rgb(255 255 255 / .92); }
+.book-sort select:focus-visible { outline: 0; box-shadow: inset 0 0 0 1.5px var(--book-accent), 0 0 0 4px var(--book-accent-ring); }
+.book-sort__box .book-ico { position: absolute; right: 18px; width: 17px; height: 17px; color: #55544d; pointer-events: none; }
+
+/* 摘要卡：半透明白卡，左上角一点点颜色（绿 = 用得最多，琥珀 = 很久没用） */
+.book-picks { flex: 1 1 auto; display: grid; grid-template-columns: repeat(var(--picks, 2), minmax(0, 1fr)); gap: 18px; min-width: 0; margin-left: 4px; }
+.book-picks:empty { visibility: hidden; }
+.book-pick {
+  --pick: var(--book-pick-green);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 15px 18px 15px 22px;
+  border: 0;
+  border-radius: var(--r-mid, 20px);
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  background: radial-gradient(90% 150% at 0% 0%, rgb(var(--pick) / .11), transparent 62%), var(--book-pick-bg);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .8), inset 0 0 0 1px rgb(var(--pick) / .12), var(--book-pick-shadow);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+  transition: translate .22s var(--mo-out, ease), box-shadow .22s ease, scale var(--mo-release, 220ms) var(--mo-out, ease);
+}
+.book-pick[data-tone="warm"] { --pick: var(--book-pick-warm); }
+.book-pick:hover { translate: 0 -2px; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .9), inset 0 0 0 1px rgb(var(--pick) / .2), 0 18px 34px -24px rgb(20 20 19 / .4); }
+.book-pick:focus-visible { outline: 2px solid var(--book-accent); outline-offset: 3px; }
+.book-pick:disabled { cursor: default; translate: none; }
+.book-pick__head { display: flex; align-items: center; gap: 9px; font-size: 16px; line-height: 22px; letter-spacing: .03em; color: var(--book-ink); }
+.book-pick__head > b { font-weight: 700; }
+.book-pick__sub { font-weight: 500; color: #5d5b55; }
+.book-pick__sub::before { content: "·"; margin: 0 7px 0 0; }
+.book-pick__head > .book-ico--next { width: 17px; height: 17px; margin-left: auto; color: #8a877e; transition: translate .22s var(--mo-out, ease); }
+.book-pick:hover .book-pick__head > .book-ico--next { translate: 3px 0; }
+.book-pick__list { display: grid; grid-template-columns: repeat(3, minmax(0, auto)); justify-content: start; }
+.book-pick__item { display: flex; flex-direction: column; gap: 3px; min-width: 0; padding: 0 12px; border-left: 1px solid rgb(20 20 19 / .08); }
+.book-pick__item:first-child { padding-left: 2px; border-left: 0; }
+.book-pick__name { overflow: hidden; font-size: 13px; line-height: 20px; color: #34332d; white-space: nowrap; text-overflow: ellipsis; }
+.book-pick__val { font-size: 14px; line-height: 20px; color: #5f5d54; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.book-pick__none { font-size: 14px; color: var(--book-muted); }
+
+/* ============ 账簿：一张玻璃卡，里面一张白底圆角卡摆左右两页 ============ */
+.book { position: relative; margin-top: 24px; padding: 14px; }
+.book--glass { border-radius: var(--r-big, 28px); }
+.book__pages {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 260px;
+  border-radius: var(--book-sheet-radius);
+  background: var(--book-sheet-bg);
+  box-shadow: var(--book-sheet-shadow);
+}
+.book--sheet .book__pages { grid-template-columns: minmax(0, 1fr); }
+.book-page { position: relative; min-width: 0; padding: 8px 22px 16px; }
+.book--spread .book-page + .book-page::before { content: ""; position: absolute; left: 0; top: 16px; bottom: 16px; width: 1px; background: var(--book-split); }
+.book__pages > .fog { grid-column: 1 / -1; padding: 24px 32px; }
+.book__caption { position: relative; z-index: 2; margin: 0 0 10px 22px; font-size: 13.5px; letter-spacing: .06em; color: var(--book-muted); }
+.book__top:empty { display: none; }
+
+/* ============ 表 ============ */
+.book-table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; text-align: left; font-variant-numeric: tabular-nums; }
+.book-col-no { width: 54px; }
+.book-col-bar { width: 22%; }
+.book-col-num { width: 80px; }
+.book-col-last { width: 136px; }
+.book-col-state { width: 34%; }
+.book-col-at { width: 150px; }
+.book--sheet .book-col-name { width: 24%; }
+.book--sheet .book-col-say { width: auto; }
+.book--sheet .book-col-at { width: 170px; }
+.book-table th {
+  padding: 14px 12px 11px;
+  border-bottom: 1px solid var(--book-head-line);
+  font-size: 14.5px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  color: #6b6a64;
+  white-space: nowrap;
+}
+.book-table th.book-no { padding-left: 14px; color: #8a8880; }
+.book-table td {
+  height: 39px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--book-line);
+  font-size: 15.5px;
+  line-height: 24px;
+  letter-spacing: .02em;
+  color: var(--book-ink);
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+.book-table td.book-no { padding-left: 14px; font-size: 13.5px; color: #9a988f; letter-spacing: .04em; }
+.book-table td small { margin-left: 8px; font-size: 12.5px; line-height: 20px; color: var(--book-muted); }
+.book-cell small { display: block; margin-left: 0 !important; }
+.book-name__in { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.book-mark { flex: 0 0 22px; display: inline-grid; place-items: center; height: 22px; margin-left: -4px; }
+.book-mark:empty { flex-basis: 22px; }   /* 没有皇冠、钟的行也留同宽的位，名字左边对齐 */
+.book-mark .lamp { margin: 0; }
+.book-name__text { min-width: 0; }
+.book-name__text .btn { margin-left: 8px; vertical-align: 1px; }
+.book-table .book-cell--say { vertical-align: top; padding-top: 12px; padding-bottom: 12px; }
+.book-table .book-cell--say > :first-child { margin-top: 0; }
+.book--sheet .book-name, .book--sheet .book-cell--at { vertical-align: top; padding-top: 12px; }
+.book-num { padding-left: 16px !important; font-weight: 500; white-space: nowrap; }
+.book-cell--last, .book-cell--at { color: #3c3b35; white-space: nowrap; }
+.book-cell--last { padding-left: 20px !important; }
+
+/* 次数条：最多的那一项画满，其余照比例；0 是一条空槽，没读到的不画 */
+.book-bar { padding-right: 4px !important; }
+.book-bar__track { display: block; height: 8px; border-radius: 999px; background: var(--book-bar-track); overflow: hidden; }
+.book-bar__fill { display: block; width: var(--w); min-width: 6px; height: 100%; border-radius: inherit; background: var(--book-bar); transform-origin: left center; }
+.book-bar__fill.is-zero { min-width: 0; width: 0; }
+.book-row.is-top-1 .book-bar__fill { background: var(--book-bar-top); }
+
+/* 摘要卡里那几行：用得最多的浅绿、很久没用的浅琥珀，前面一顶皇冠或一个钟 */
+.book-row > td { transition: background-color .3s ease; }
+.book-row:is(.is-top, .is-old) > td:first-child { border-radius: 10px 0 0 10px; }
+.book-row:is(.is-top, .is-old) > td:last-child { border-radius: 0 10px 10px 0; }
+.book-row:is(.is-top-1, .is-top-2) > td { background: var(--book-tint-top); border-bottom-color: transparent; }
+.book-row.is-top-2 > td { background: var(--book-tint-top2); }
+.book-row.is-top-3 > td { background: var(--book-tint-top3); border-bottom-color: transparent; }
+.book-row.is-old > td { background: var(--book-tint-warm); border-bottom-color: transparent; }
+.book-row.is-attention > td { background: rgb(242 138 0 / .07); }
+.book-row.has-detail { cursor: pointer; }
+.book-row.has-detail:not(.is-top, .is-old, .is-attention):hover > td { background-color: var(--book-hover); }
+.book-row.has-detail:is(.is-top, .is-old):hover > td { filter: brightness(.985); }
+
+.book-ico { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.book-ico--crown { width: 21px; height: 21px; stroke-width: 1.1; fill: #f2b632; stroke: #c4860f; }
+.book-ico--crown .book-ico__base { stroke-width: 2.2; }
+.book-ico--crown[data-place="2"] { fill: #cfd4dc; stroke: #8f98a5; }
+.book-ico--crown[data-place="3"] { fill: #f0a95e; stroke: #bf6c22; }
+.book-ico--clock, .book-ico--time { color: var(--book-warm); stroke-width: 2; }
+.book-ico--bars { fill: rgb(0 166 80 / .78); stroke: none; }
+.book-pick .book-ico--bars, .book-pick .book-ico--time { width: 21px; height: 21px; }
+
+/* 展开说明 */
+.book-open {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin: 0 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #85827a;
+  cursor: pointer;
+  opacity: .85;
+  transition: background-color .2s ease, color .2s ease, opacity .2s ease;
+}
+.book-row:hover .book-open, .book-row.is-open .book-open { opacity: 1; }
+.book-open .book-ico { width: 15px; height: 15px; transition: rotate .28s var(--mo-out, ease); }
+.book-row:hover .book-open, .book-open:focus-visible { color: #4c4b45; background: rgb(20 20 19 / .06); }
+.book-open[aria-expanded="true"] .book-ico { rotate: 180deg; }
+.book-open:focus-visible { outline: 2px solid var(--book-accent); outline-offset: 1px; }
+.book-detail > td { padding: 0 12px 12px; border-bottom: 1px solid var(--book-line); }
+.book-detail__in { padding: 9px 14px; border-radius: 12px; background: var(--book-detail-bg); font-size: 14px; line-height: 22px; letter-spacing: .02em; color: #55534b; }
+.book-detail__in p { margin: 0; }
+.book-detail__in p + p { margin-top: 6px; }
+.book-detail__kv { display: flex; flex-wrap: wrap; gap: 4px 22px; font-size: 13.5px; color: #6a685f; font-variant-numeric: tabular-nums; }
+.book-detail__host > b { margin-right: 8px; font-weight: 600; color: #45443d; }
+.book-detail__basis { color: var(--book-muted); }
+.book-row.is-open > td { border-bottom-color: transparent; }
+
+/* 数据多了的收口：长名字最多两行，状态原因、状态一句，长说明露三行；点开这一行（.is-open）整行放开 */
+.book-clip { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+.book-clip--2 { -webkit-line-clamp: 2; line-clamp: 2; }
+.book-clip--1 { -webkit-line-clamp: 1; line-clamp: 1; }
+.book-row.is-open .book-clip { display: block; -webkit-line-clamp: unset; line-clamp: none; overflow: visible; }
+.book-name__text small { display: block; margin: 1px 0 0 !important; }
+.book-row:not(.is-open) .book-cell--say > p:first-child { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
+.book--sheet .book-table td { vertical-align: top; padding-top: 11px; padding-bottom: 11px; }
+.book-wide { font-size: 14px !important; color: var(--book-muted) !important; }
+.book-empty { margin: 34px 4px 30px; font-size: 15px; line-height: 26px; color: var(--book-muted); }
+
+/* ============ 底边：再看 20 条（白底圆角钮，和搜索框一套） ============ */
+.book-foot { position: relative; z-index: 2; display: flex; justify-content: center; margin-top: 14px; }
+.book-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 22px 0 26px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--book-field-bg);
+  box-shadow: var(--book-field-shadow);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  color: var(--book-ink);
+  cursor: pointer;
+  transition: background-color .2s ease, translate .2s var(--mo-out, ease), scale var(--mo-release, 220ms) var(--mo-out, ease);
+}
+.book-more:hover { background: #fff; translate: 0 -1px; }
+.book-more:focus-visible { outline: 2px solid var(--book-accent); outline-offset: 3px; }
+.book-more:disabled { cursor: progress; opacity: .7; }
+.book-more .book-ico { width: 17px; height: 17px; stroke-width: 2.2; color: #6f6d65; }
+.book-found { margin: 10px 0 0 22px; font-size: 13.5px; color: var(--book-muted); }
+.book-found:empty { display: none; }
+#record-section > .fe-l3b-note { margin: 18px 0 0 22px; }
+#record-section > .fe-l3b-note:empty { display: none; }
+
+/* ============ 处理结果、档案检查那几组小表：一张白底圆角卡 ============ */
+.book-notes:not(:empty):not([hidden]) {
+  --rec-text: 0px;
+  margin-top: 24px;
+  padding: 6px 36px 24px;
+  border-radius: var(--r-big, 28px);
+  background: var(--book-sheet-bg);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .8), 0 22px 44px -36px rgb(20 20 19 / .3);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
+}
+.book-notes .rec-part { margin-top: 26px; }
+.book-notes #archive-records { margin-left: -10px; }
+
+/* ============ 动效：新摆出来的行由上往下浮出来，第一次条从左边长出来；点摘要卡时那几行亮一下 ============ */
+html .book-row.is-new { animation: book-row-in calc(460ms * var(--sp, 1)) var(--mo-out, cubic-bezier(.16, 1, .3, 1)) both; animation-delay: calc(var(--k, 0) * 18ms * var(--sp, 1)); }
+html .is-growing .book-row.is-new .book-bar__fill { animation: book-grow calc(900ms * var(--sp, 1)) cubic-bezier(.22, .9, .24, 1) both; animation-delay: calc((var(--k, 0) * 18ms + 140ms) * var(--sp, 1)); }
+html .book-row.is-flash > td { animation: book-flash calc(1500ms * var(--sp, 1)) ease both; }
+html .book-detail:not([hidden]) .book-detail__in { animation: book-open calc(280ms * var(--sp, 1)) var(--mo-out, ease) both; }
+@keyframes book-row-in { from { opacity: 0; translate: 0 7px; } }
+@keyframes book-grow { from { scale: 0 1; } }
+@keyframes book-flash { 25% { box-shadow: inset 0 0 0 999px rgb(0 166 80 / .12); } }
+@keyframes book-open { from { opacity: 0; translate: 0 -4px; } }
+
+/* 连不上：字和条褪一点色，灯熄成灰（live.css） */
+.live-off .book-bar__fill { filter: grayscale(.6); }
+
+/* ============ 分组的账簿（AI 账本）：玻璃外框，一组一个淡色组头，每组先 5 条 ============ */
+.book--groups { margin-top: 0; padding: 16px 18px 20px; }
+.book--groups .book__pages, .book--plain .book__pages { min-height: 0; border-radius: 0; background: none; box-shadow: none; }
+.book--groups .book-page, .book--plain .book-page { padding: 0; }
+.book--plain { margin-top: 0; padding: 0; border-radius: 0; }
+.book--groups .book__top { position: relative; z-index: 3; margin-bottom: 6px; }
+.book-group { --tone: var(--tone-gray); margin-top: 12px; border-radius: 18px; background: var(--book-group-bg); box-shadow: inset 0 0 0 1px rgb(var(--tone) / var(--book-group-ring)); overflow: hidden; }
+.book-group[data-tone="green"] { --tone: var(--tone-green); }
+.book-group[data-tone="red"] { --tone: var(--tone-red); }
+.book-group[data-tone="violet"] { --tone: var(--tone-violet); }
+.book-group[data-tone="blue"] { --tone: var(--tone-blue); }
+.book-group[data-tone="amber"] { --tone: var(--tone-amber); }
+.book-group--bare { margin-top: 0; border-radius: 0; background: none; box-shadow: none; overflow: visible; }
+.book-group__head { display: flex; align-items: center; gap: 8px; margin: 0; padding: 9px 18px; background: linear-gradient(90deg, rgb(var(--tone) / var(--book-group-head)), rgb(var(--tone) / calc(var(--book-group-head) / 3)) 70%, transparent); font-size: 16px; line-height: 24px; color: var(--book-ink); }
+.book-group__head b { font-weight: 700; letter-spacing: .03em; }
+.book-group__n { font-weight: 500; color: var(--book-muted); font-variant-numeric: tabular-nums; }
+.book-ico--group { flex: 0 0 22px; width: 22px; height: 22px; color: rgb(var(--tone)); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.book-group .book-table { padding: 0 6px; }
+.book-group .book-table th { padding: 8px 12px 6px; font-size: 13.5px; font-weight: 500; color: #6d6b63; }
+.book-group .book-table td { height: 36px; padding: 6px 12px; font-size: 15px; vertical-align: top; }
+.book-group .book-table tbody > tr:last-child > td { border-bottom-color: transparent; }
+.book-group .book-empty { margin: 8px 0 12px; text-align: center; font-size: 14px; line-height: 22px; }
+.book-group__more { display: block; margin: 0 0 8px 54px; }
+.book-group--bare .book-group__more { margin-left: 44px; }
+.book--groups .book-col-name { width: 32%; }
+.book--groups .book-col-tag { width: 112px; }
+.book--groups .book-col-at { width: 132px; }
+.book--groups .book-col-age { width: 82px; }
+.book--groups .book-col-project { width: 15%; }
+.book--groups .book-col-reason { width: auto; }
+.book--groups .book-table col:last-child { width: auto; }   /* 列少的小表：最后一列吃掉剩下的宽，序号列不被撑宽 */
+.book--groups .book-name__text a { color: inherit; text-decoration: none; }
+.book--groups .book-name__text a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.book--groups .book-row.is-attention > td { background: none; }   /* 组头已经标了颜色，组里不再整行上底色 */
+.book--groups .book-detail__in { background: rgb(var(--tone, var(--tone-gray)) / .05); }
+.book--groups .book-detail__in p + p { margin-top: 0; }
+/* 展开的小箭头挂在行尾；分组表没有灯的行不留灯位，字和表头对齐 */
+.book tr.book-row { position: relative; }
+.book .book-open { position: absolute; top: 7px; right: 8px; }
+.book tr.book-row > td:last-child, .book thead th:last-child { padding-right: 42px; }
+.book--groups .book-mark:empty { display: none; }

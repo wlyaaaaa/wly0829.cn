@@ -1,0 +1,207 @@
+{
+  "projects": {
+    "personal-media": [
+      "照片视频录音管理"
+    ],
+    "agents": [
+      "AI 规则与技能基座"
+    ],
+    "pcconfig": [
+      "电脑配置与恢复"
+    ],
+    "localocr": [
+      "本地文字识别"
+    ],
+    "github-index": [
+      "GitHub 项目总索引"
+    ],
+    "document-materials": [
+      "文书和材料制作"
+    ],
+    "personal-materials": [
+      "个人材料查找"
+    ],
+    "chinese-asr": [
+      "中文语音转写"
+    ],
+    "learning": [
+      "学习方法"
+    ],
+    "timeaudit": [
+      "电脑使用与性能记录"
+    ],
+    "personal-health": [
+      "个人健康"
+    ],
+    "devconfig-backup": [
+      "开发配置备份"
+    ],
+    "vault-tool": [
+      "本地加密库"
+    ],
+    "ai-cli-profile-manager": [
+      "AI 工具配置管理"
+    ],
+    "work-delivery": [
+      "工作支持与交付"
+    ],
+    "daily-preferences": [
+      "个人理解库"
+    ],
+    "personal-expression": [
+      "个人表达"
+    ],
+    "wechat-direct": [
+      "微信聊天读取"
+    ],
+    "proxyclean": [
+      "代理上网修复"
+    ],
+    "codex-memory": [
+      "AI 工作区备份与恢复"
+    ],
+    "meshclip-kit": [
+      "双机剪贴板"
+    ],
+    "video-scaffold": [
+      "本地视频制作"
+    ],
+    "sunshine-remote-streaming": [
+      "远程电脑串流"
+    ],
+    "typora-theme-pack": [
+      "Typora 薄荷主题"
+    ],
+    "openclaw-gateway": [
+      "OpenClaw 网关"
+    ],
+    "wechat-history-ai-bridge": [
+      "微信历史桥"
+    ],
+    "pc-panel-hub": [
+      "双屏信息中心"
+    ],
+    "emerald-veil": [
+      "屏保与壁纸"
+    ],
+    "steam-millennium-config-backup": [
+      "Steam 外观备份"
+    ],
+    "ramdisk-guardian": [
+      "内存盘守护"
+    ],
+    "cacb": [
+      "AI 模型评测"
+    ],
+    "codex-remote": [
+      "Codex 远程"
+    ],
+    "password-center": [
+      "密码中心"
+    ],
+    "remote-control": [
+      "电脑远程控制"
+    ],
+    "personal-finance": [
+      "个人财务"
+    ],
+    "phone-collector": [
+      "手机采集"
+    ]
+  },
+  "skills": {
+    "browser-control-continuity": [
+      "网页上的事接着办"
+    ],
+    "cloud-asset-channel": [
+      "省流量的云端素材"
+    ],
+    "dispatch-work": [
+      "派活和验收"
+    ],
+    "image-generation": [
+      "生图"
+    ],
+    "media-person-self": [
+      "照片录音里有没有我"
+    ],
+    "news-quickcheck": [
+      "中外消息快查"
+    ],
+    "project-entry-gate": [
+      "改项目前先核对"
+    ],
+    "report-page": [
+      "汇报网页"
+    ],
+    "cockpit": [
+      "看驾驶舱"
+    ],
+    "google-workspace-direct": [
+      "邮件和云盘"
+    ],
+    "phone-direct": [
+      "手机直取"
+    ],
+    "timeaudit-diagnostics": [
+      "查电脑卡顿"
+    ],
+    "localocr": [
+      "本地文字识别"
+    ],
+    "chinese-asr": [
+      "中文语音转写技能"
+    ],
+    "personal-formal-documents": [
+      "个人正式文书技能"
+    ],
+    "personal-materials": [
+      "找文件原件"
+    ],
+    "personal-media": [
+      "找照片和录音"
+    ],
+    "personal-health": [
+      "健康问题"
+    ],
+    "vault-workflow": [
+      "加密库操作"
+    ],
+    "work-delivery": [
+      "工作支持与交付技能"
+    ],
+    "daily-preferences": [
+      "记得我是谁"
+    ],
+    "wechat-direct": [
+      "看微信聊天"
+    ],
+    "proxy-network": [
+      "代理与网络"
+    ],
+    "authorization-file-broker": [
+      "加密文件"
+    ],
+    "local-secret-broker": [
+      "密码和本人验证"
+    ],
+    "design-with-owner": [
+      "无页"
+    ],
+    "model-research": [
+      "无页"
+    ],
+    "reply-as-me": [
+      "替我拟消息"
+    ],
+    "tailscale-safe-exposure": [
+      "远程只让自己连"
+    ],
+    "md-to-pdf": [
+      ""
+    ],
+    "pdf-render-safe": [
+      ""
+    ]
+  }
+}

@@ -13,6 +13,7 @@ from http.client import IncompleteRead, RemoteDisconnected
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
+from xml.etree import ElementTree
 from xml.sax.saxutils import escape
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -128,7 +129,7 @@ def oss_contract():
     return contract
 
 
-def rollback_keep(preparation, plan, commit=None, persist=True):
+def rollback_keep(preparation, plan, commit=None, persist=True, immediate_only=False):
     """Freeze the confirmed predecessor; moving rollback refs never replace it."""
     path = shared() / 'rollback-retention.json'
     state = read(path) if path.exists() else {'schema': 'wly.oss-rollback-retention.v1', 'bucket': BUCKET, 'records': {}}
@@ -167,7 +168,19 @@ def rollback_keep(preparation, plan, commit=None, persist=True):
         if key not in live: row.pop('objects', None)
     if persist:
         write(path, state)
+    if immediate_only:
+        return set(objects) if snapshot_sha else set()
     return {key for row in live.values() for key in row['objects']}
+
+
+def retired_predecessor_keys(previous):
+    if not previous:
+        return set()
+    path = shared() / 'rollback-retention.json'
+    if not path.is_file():
+        return set()
+    return {key for row in read(path)['records'].values() if row['release_id'] == previous['release_id']
+            for key in row.get('retired_objects', {})}
 
 
 def require_lock(holder):
@@ -255,9 +268,30 @@ def versions(cli, profile, prefix=''):
 
 def exact_versions(cli, profile, keys):
     """A key is a provider prefix; filter adjacent names after complete pagination."""
+    if len(keys) > 32:
+        rows = versions(cli, profile)
+        return {key: rows[key] for key in keys if key in rows}
     with ThreadPoolExecutor(max_workers=8) as pool:
         pages = pool.map(lambda key: (key, versions(cli, profile, key)), keys)
         return {key: page[key] for key, page in pages if key in page}
+
+
+def bucket_stat(cli, profile):
+    raw = command(cli, 'ossutil', 'api', 'get-bucket-stat', '--bucket', BUCKET, '--profile', profile,
+                  '--region', 'cn-shanghai', '--endpoint', 'oss-cn-shanghai.aliyuncs.com')
+    root = ElementTree.fromstring(raw)
+    return {field: int(root.findtext(f'{{*}}{tag}')) for field, tag in
+            (('objects', 'ObjectCount'), ('bytes', 'Storage'), ('provider_updated_at', 'LastModifiedTime'))}
+
+
+def delete_exact(cli, profile, keys, batch):
+    body = '<Delete><Quiet>false</Quiet>' + ''.join('<Object><Key>' + escape(key) +
+        '</Key><VersionId>null</VersionId></Object>' for key in keys) + '</Delete>'
+    batch.write_text(body, encoding='utf-8')
+    response = command(cli, 'ossutil', 'api', 'delete-multiple-objects', '--bucket', BUCKET,
+                       '--delete', 'file://' + batch.as_posix(), '--profile', profile, '--region', 'cn-shanghai',
+                       '--endpoint', 'oss-cn-shanghai.aliyuncs.com')
+    batch.with_suffix('.result.txt').write_text(response, encoding='utf-8')
 
 
 def collect(args):
@@ -290,14 +324,19 @@ def collect_verified(args):
     keep = {row['key'] for row in current['oss']['objects'].values()}
     keep.update(current['oss'].get('reference_keys', []))
     own, own_value, plan = plan_pin(args.preparation)
-    if 'rollback_ref' not in current:
-        snapshot_sha = plan.get('previous_publication_sha256', '')
-        if (len(snapshot_sha) != 64 or any(char not in '0123456789abcdef' for char in snapshot_sha)
-                or not (shared()/'rollback-retention.json').is_file()):
-            raise ValueError('Finalized publication requires its frozen predecessor fingerprint and rollback inventory')
-    rollback = rollback_keep(args.preparation, plan, args.commit, persist=not dry_run)
+    finalized = 'rollback_ref' not in current
+    if finalized:
+        saved_path = shared()/'published.json'
+        saved = read(saved_path) if saved_path.is_file() else {}
+        if saved.get('oss_plan_sha256') and (saved.get('commit') != args.commit or saved['oss_plan_sha256'] != own_value['plan_sha256']):
+            raise ValueError('OSS retention plan differs from the successful publication')
+        if not plan.get('previous_publication_sha256') and not saved.get('oss_plan_sha256'):
+            raise ValueError('Finalized publication requires its frozen predecessor fingerprint')
+        if not (shared()/'rollback-retention.json').is_file():
+            raise ValueError('Finalized publication requires its rollback inventory')
+    rollback = rollback_keep(args.preparation, plan, args.commit, persist=not dry_run, immediate_only=finalized)
     keep.update(rollback)
-    retired, pending, missing_plans = None, [], False
+    retired, pending, missing_plans = [], [], False
     for path in (shared() / 'pins').glob('*.json'):
         value = read(path)
         if value.get('schema') != 'wly.oss-pin.v1' or value.get('bucket') != BUCKET:
@@ -316,10 +355,11 @@ def collect_verified(args):
             continue
         if plan_sha != value['plan_sha256'] or (source_sha is not None and source_sha != plan_sha):
             raise ValueError('Unknown or changed in-flight pin; collection is incomplete')
-        if (path == own and value['plan_sha256'] == own_value['plan_sha256'] and current.get('release_id')
-                and value.get('release_id') == plan.get('release_id') == current['release_id']
+        same_plan = (path == own and value['plan_sha256'] == own_value['plan_sha256']
+                     or value.get('identity_sha256') and value['identity_sha256'] == own_value.get('identity_sha256'))
+        if (same_plan and current.get('release_id') and value.get('release_id') == plan.get('release_id') == current['release_id']
                 and set(value['objects']) <= keep):
-            retired = path
+            retired.append(path)
         else:
             keep.update(value['objects'])
             pending.append({'pin_id': path.stem, 'plan_sha256': value['plan_sha256'], 'objects': len(value['objects'])})
@@ -335,11 +375,12 @@ def collect_verified(args):
             deferred[key] = 'Outside the registered generated release scope; retained'
         else:
             eligible.append(key)
-    budget = getattr(args, 'max_keys', 1000)
-    if budget < 1:
+    budget = getattr(args, 'max_keys', None)
+    if budget is not None and budget < 1:
         raise ValueError('Exact-key read budget must be positive')
-    for key in eligible[budget:]:
-        deferred[key] = 'Exact-key read budget reached; retained for the next on-demand update'
+    if budget is not None:
+        for key in eligible[budget:]:
+            deferred[key] = 'Exact-key read budget reached; retained for the next on-demand update'
     inspected = eligible[:budget]
     before = exact_versions(args.cli, args.profile, inspected)
     absent = set(inspected) - set(before)
@@ -347,54 +388,75 @@ def collect_verified(args):
         rows = before[key]; item = rows[0]; proof = managed['objects'][key]
         if len(rows) != 1 or item['kind'] != 'version' or item['version_id'] != 'null' or item['is_latest'] is not True:
             deferred[key] = 'Unexpected object version; retained'
-        elif item['size'] != proof['bytes'] or not proof['etag'] or item['etag'] != proof['etag']:
+        elif item['size'] != proof['bytes'] or not proof['etag'] or item['etag'].upper() != proof['etag'].upper():
             deferred[key] = 'Missing or differing verification receipt; retained'
         else: targets.append(key)
     args.report.parent.mkdir(parents=True, exist_ok=True)
     result = {'schema': 'wly.oss-collection.v1', 'status': 'incomplete' if deferred or missing_plans else 'complete',
               'dry_run': dry_run, 'deferred': deferred, 'pending_pins': pending,
-              'retired_pin': retired.stem if retired else None, 'candidate_objects': len(candidates),
+              'retired_pin': own.stem if own in retired else None, 'retired_pins': sorted(path.stem for path in retired),
+              'candidate_objects': len(candidates),
               'inspected_objects': len(inspected), 'max_keys': budget, 'already_absent_objects': len(absent),
-              'planned_keys': targets, 'deleted_objects': 0, 'deleted_bytes': 0,
+              'planned_keys': targets, 'planned_bytes': sum(before[key][0]['size'] for key in targets),
+              'deleted_keys': [], 'deleted_objects': 0, 'deleted_bytes': 0,
               'rollback_retained_objects': len(rollback), 'retained_objects': len(keep)}
-    write(args.report.with_name(args.report.stem+'-plan.json'), {**result, 'status': 'dry_run'})
+    plan_path = args.report.with_name(args.report.stem+'-plan.json')
+    result['plan'] = str(plan_path)
+    write(plan_path, {**result, 'status': 'dry_run', 'dry_run': True})
     if dry_run:
         write(args.report, {**result, 'status': 'dry_run'})
         return 1 if deferred or missing_plans else 0
+    result['bucket_before'] = bucket_stat(args.cli, args.profile)
+    write(args.report, {**result, 'status': 'planned'})
     if retired:
         require_lock(args.lock_holder)
-        retired.unlink()
-    baseline = {str(path): digest(path) for path in shared().rglob('*.json')}
-    deleted = []
-    for start in range(0, len(targets), 1000):
-        keys = targets[start:start + 1000]
-        require_lock(args.lock_holder)
-        if baseline != {str(path): digest(path) for path in shared().rglob('*.json')}:
-            raise ValueError('Retention inventory changed after the fresh collection plan')
-        if command('git', 'ls-remote', 'origin', 'refs/heads/site-dist').split()[0] != args.commit:
-            raise ValueError('Production site-dist changed after the fresh collection plan')
-        fresh = exact_versions(args.cli, args.profile, keys)
-        if fresh != {key: before[key] for key in keys}:
-            raise ValueError('Exact object versions changed after the fresh collection plan')
-        body = '<Delete><Quiet>false</Quiet>' + ''.join('<Object><Key>' + escape(key) + '</Key><VersionId>null</VersionId></Object>' for key in keys) + '</Delete>'
-        batch = args.report.parent / ('oss-delete-' + str(start) + '.xml')
-        batch.write_text(body, encoding='utf-8')
-        require_lock(args.lock_holder)
-        write(args.report, {**result, 'status': 'deleting', 'deleted_objects': None, 'deleted_bytes': None})
-        response = command(args.cli, 'ossutil', 'api', 'delete-multiple-objects', '--bucket', BUCKET, '--delete', 'file://' + str(batch).replace('\\', '/'),
-                         '--profile', args.profile, '--region', 'cn-shanghai', '--endpoint', 'oss-cn-shanghai.aliyuncs.com')
-        batch.with_suffix('.result.txt').write_text(response, encoding='utf-8')
-        after = exact_versions(args.cli, args.profile, keys)
-        deleted.extend(key for key in keys if key not in after)
-        for key in after:
-            deferred[key] = 'Exact target remains after deletion; retained'
-    result.update(status='incomplete' if deferred or missing_plans else 'complete', deferred=deferred,
-                  deleted_objects=len(deleted), deleted_bytes=sum(managed['objects'][key]['bytes'] for key in deleted))
-    for key in set(deleted) | absent:
-        managed['objects'].pop(key)
-    write(shared()/'managed.json', managed)
+        for path in retired:
+            path.unlink()
+    state_root = shared()
+
+    def state_fingerprints():
+        paths = (*state_root.glob('*.json'), *(state_root/'pins').glob('*.json'))
+        return {str(path): digest(path) for path in paths}
+
+    baseline = state_fingerprints()
+    deleted = result['deleted_keys']
+    try:
+        for start in range(0, len(targets), 1000):
+            keys = targets[start:start + 1000]
+            require_lock(args.lock_holder)
+            if baseline != state_fingerprints():
+                raise ValueError('Retention inventory changed after the fresh collection plan')
+            if command('git', 'ls-remote', 'origin', 'refs/heads/site-dist').split()[0] != args.commit:
+                raise ValueError('Production site-dist changed after the fresh collection plan')
+            fresh = exact_versions(args.cli, args.profile, keys)
+            if fresh != {key: before[key] for key in keys}:
+                raise ValueError('Exact object versions changed after the fresh collection plan')
+            require_lock(args.lock_holder)
+            write(args.report, {**result, 'status': 'deleting', 'unverified_keys': keys})
+            delete_exact(args.cli, args.profile, keys, args.report.parent / f'oss-delete-{start}.xml')
+            after = exact_versions(args.cli, args.profile, keys)
+            deleted.extend(key for key in keys if key not in after)
+            for key in after:
+                deferred[key] = 'Exact target remains after deletion; retained'
+            result.update(deleted_objects=len(deleted), deleted_bytes=sum(before[key][0]['size'] for key in deleted))
+            write(args.report, {**result, 'status': 'planned'})
+    finally:
+        result = read(args.report)
+        try:
+            result['bucket_after'] = bucket_stat(args.cli, args.profile)
+        except Exception as error:
+            result['bucket_after_error'] = str(error)
+        write(args.report, result)
+        if deleted or absent:
+            require_lock(args.lock_holder)
+            if baseline != state_fingerprints():
+                raise ValueError('Retention inventory changed before saving verified deletions')
+            for key in set(deleted) | absent:
+                managed['objects'].pop(key)
+            write(state_root/'managed.json', managed)
+    result['status'] = 'incomplete' if deferred or missing_plans or 'bucket_after_error' in result else 'complete'
     write(args.report, result)
-    return 1 if deferred or missing_plans else 0
+    return int(result['status'] != 'complete')
 
 
 def main():
@@ -404,7 +466,7 @@ def main():
         parser.add_argument('--' + name)
     parser.add_argument('--report', type=Path)
     parser.add_argument('--dry-run', action='store_true')
-    parser.add_argument('--max-keys', type=int, default=1000, help='maximum exact managed keys inspected per on-demand collection')
+    parser.add_argument('--max-keys', type=int, help='limit exact managed keys inspected in this collection')
     args = parser.parse_args()
     try:
         require_lock(args.lock_holder)

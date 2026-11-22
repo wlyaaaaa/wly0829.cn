@@ -1,0 +1,254 @@
+/* 航线（共用模版）：长过程页——一个对话是第一张——一眼看出走到哪一步、正在干什么、派了多少帮手。
+   排版照本人 11-17 20:15 点头的设计图“新模版 · 一个对话 v2”：页头大标题直接落在底上、右上一幅淡出去的插画；
+   下面一条横的航线卡（左边“执行计划”，右边站点），再下面三栏等高：正在执行（带一幅小插画）｜思考摘要 + 帮手 ｜过程记录。
+   配 _lib/live-route.js 用：页面写 <body class="… page--route">，航线站点、分批、“展开”由 LiveRoute 生成和管。
+   视口固定 1440，不按屏宽换排版；手机上整页缩小。只有带灯字段的行有小灯，正常的行前面不画圆点。
+
+   画风（配色、底纹、质感、阴影、插画）11-17 21:22 起先冻住，本人还在对：和画风有关的值全在下面“画风”这一组变量里，
+   对清以后整套换只改这一组；下面的规则只管排版，不再写死颜色、阴影和图。 */
+
+/* ============ 页面 ============ */
+body.page--route {
+  --col: min(1480px, calc(100vw - 100px));   /* 三栏仍有余量，版心与其他实况页贴近 */
+  --pad: calc(var(--bar-bottom) + 16px);
+  --route-gap: 18px;
+
+  /* —— 画风：只改这一组 —— */
+  --route-accent: #1fae63;                       /* 走过的线、勾、当前这一站、小图标 */
+  --route-accent-deep: #128a4b;                  /* 绿字：状态胶囊、当前站的字、链接 */
+  --route-accent-fill: linear-gradient(180deg, #43cf84, #1fae63);   /* 做完的站点 */
+  --route-accent-now: linear-gradient(180deg, #2fc276, #179a55);    /* 当前站点 */
+  --route-accent-glow: rgb(47 191 115 / .4);
+  --route-accent-trail: linear-gradient(90deg, #5ad493, #2fbf73);   /* 走过的那段线 */
+  --route-accent-soft: rgb(222 246 232 / .92);   /* 状态胶囊、当前站的浅底 */
+  --route-now-pill: linear-gradient(180deg, rgb(226 247 235 / .95), rgb(210 242 224 / .95));
+  --route-ink: #1b211e;
+  --route-soft: #4c5450;
+  --route-muted: #848b87;
+  --route-line: #dfe3e1;                          /* 没走到的线、空心站点的圈 */
+  --route-rule: rgb(20 40 30 / .055);             /* 行与行之间的细线 */
+  --route-r: 22px;                                /* 卡的圆角 */
+  --route-card-bg: linear-gradient(180deg, rgb(255 255 255 / .8) 0%, rgb(255 255 255 / .62) 100%);
+  --route-card-edge: rgb(255 255 255 / .75);
+  --route-card-shadow: 0 1px 0 rgb(255 255 255 / .95) inset, 0 18px 40px -26px rgb(30 60 45 / .3), 0 3px 10px -6px rgb(30 60 45 / .12);
+  --route-card-blur: blur(16px) saturate(150%);
+  --route-now-bg: linear-gradient(180deg, rgb(255 255 255 / .86) 0%, rgb(241 251 245 / .86) 46%, rgb(222 246 233 / .9) 100%);
+  --route-badge-bg: radial-gradient(circle at 35% 30%, #ffffff 0%, #eefaf3 55%, #dcf3e6 100%);
+  --route-badge-shadow: 0 0 0 1px rgb(31 174 99 / .12), 0 6px 14px -8px rgb(31 120 70 / .45);
+  --route-chip-bg: rgb(244 247 245 / .9);
+  --route-pill-bg: rgb(255 255 255 / .8);         /* 最新进展那条、“看全部”这类钮 */
+  --route-pill-shadow: 0 0 0 1px rgb(20 40 30 / .07), 0 6px 14px -10px rgb(20 40 30 / .4);
+  --route-bolt: #f0a020;
+  --route-art-head: url("/live/img/route-head.webp");      /* 页头右上的插画，1800×600 */
+  --route-art-now: url("/live/img/route-now.webp");        /* 正在执行卡底下的小插画，800×800 */
+  --route-art-corner: url("/live/img/route-flowers.webp"); /* 思考摘要、帮手卡右下角的花，透明底 720×540 */
+}
+.page--route .stage { padding-bottom: 10vh; }
+.page--route .back { position: relative; z-index: 2; margin-bottom: 2px; }
+.route-ico { width: 1em; height: 1em; flex: none; display: block; }
+.route-art { display: block; background: center / contain no-repeat; pointer-events: none; user-select: none; }
+
+/* ============ 页头 ============ */
+.route-head { display: block; min-height: 196px; margin-bottom: 14px; }
+.route-head .card__glow { inset: -70px -60px -30px -60px; border-radius: 0; overflow: visible; }
+/* 标题区的光：一层渐变、边缘全透明、模糊，裁在标题区里，上下边淡出，不留弧线 */
+.route-head .card__glow {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 45px, #000 calc(100% - 50px), transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 0, #000 45px, #000 calc(100% - 50px), transparent 100%);
+}
+.route-head .glow .blob--a {
+  width: 640px !important;   /* 盖过 live-light.js 写在行内的尺寸 */
+  height: 420px !important;
+  left: calc(240px - 38%);   /* 中心落到“网站发布前”后面，左边出屏一截 */
+  top: calc(25% - 130px);    /* 中心略高于标题文字中线 */
+  background: radial-gradient(closest-side,
+    rgb(var(--glow-a) / calc(.46 * var(--glow-alpha-a, 1))) 0%,
+    rgb(var(--glow-a) / calc(.32 * var(--glow-alpha-a, 1))) 35%,
+    rgb(var(--glow-a) / calc(.13 * var(--glow-alpha-a, 1))) 65%,
+    transparent 100%);
+  filter: blur(30px);
+}
+.route-head__art {
+  position: absolute;
+  z-index: 0;
+  top: -104px;
+  right: -40px;
+  width: min(1180px, 66%);
+  height: 340px;
+  background-image: var(--route-art-head);
+  background-size: cover;
+  background-position: 62% 46%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / .35) 14%, #000 36%), linear-gradient(180deg, transparent 0%, #000 22%, #000 70%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / .35) 14%, #000 36%), linear-gradient(180deg, transparent 0%, #000 22%, #000 70%, transparent 100%);
+  mask-composite: intersect;
+}
+.route-head .card__body { position: relative; z-index: 1; max-width: min(1060px, 64%); padding: 14px 0 0; }
+.route-head .card__head { column-gap: 14px; row-gap: 6px; align-items: center; }
+.route-head .card__head > .lamp { width: 14px; height: 14px; }
+.route-head .head__lead { font-size: 40px; line-height: 52px; font-weight: 800; letter-spacing: .02em; color: var(--route-ink); white-space: normal; }
+.route-head .head__lead.row__sub { font-size: 30px; }
+.route-head .card__head > .head__tail:last-child {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--route-accent-soft);
+  color: var(--route-accent-deep);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+.route-head .row__meta { font-size: 14px; color: var(--route-muted); }
+.route-head__meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 29px; overflow: hidden; margin: 10px 0 0; font-size: 16px; line-height: 26px; letter-spacing: .02em; color: var(--route-soft); font-variant-numeric: tabular-nums; }
+.route-head__meta > span { position: relative; white-space: nowrap; }
+/* 竖线放在每一项左边的空当里；换行后行首那根落在框外被裁掉 */
+.route-head__meta > span::before { content: ""; position: absolute; left: -15px; top: 6px; width: 1px; height: 14px; background: var(--route-line); }
+.route-head__meta a { color: var(--route-accent-deep); font-weight: 600; text-decoration: none; }
+.route-head__meta a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.route-head__row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: 16px; }
+.route-head__acts { display: flex; flex-wrap: wrap; gap: 10px; }
+.route-head__acts .btn { white-space: nowrap; }
+
+/* 最新进展：一条小白条，只露一句，“展开”看全文 */
+.route-say { display: flex; align-items: flex-start; gap: 10px; min-width: 0; max-width: min(860px, 100%); padding: 9px 16px 9px 12px; border-radius: 14px; background: var(--route-pill-bg); box-shadow: var(--route-pill-shadow); }
+.route-say:has(> [data-part="say"][hidden]) { display: none; }
+.route-say__icon { flex: none; display: grid; place-items: center; width: 24px; height: 24px; margin-top: 1px; color: var(--route-bolt); font-size: 19px; }
+.route-say__text { flex: 1 1 auto; min-width: 0; margin: 0; font-size: 16px; line-height: 26px; font-weight: 600; color: var(--route-ink); text-wrap: pretty; }
+
+/* ============ 一句收起：[data-clip] 先只露 --clip-lines 行，.is-open 全开 ============ */
+[data-clip] { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: var(--clip-lines, 1); overflow: hidden; }
+[data-clip].is-open { display: block; -webkit-line-clamp: unset; overflow: visible; }
+.route-clip__more { flex: none; align-self: flex-start; margin: 0; padding: 1px 2px; border: 0; background: none; color: var(--route-accent-deep); font: inherit; font-size: 14px; line-height: 26px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.route-clip__more:hover { text-decoration: underline; text-underline-offset: 3px; }
+.route-clip__more:focus-visible, .route-more:focus-visible, .route-h__fold:focus-visible, .route-stop__dot:focus-visible { outline: 2px solid var(--route-ink); outline-offset: 2px; border-radius: 6px; }
+
+/* ============ 卡 ============ */
+.route-card { position: relative; min-width: 0; overflow: hidden; border-radius: var(--route-r); padding: 22px 26px 20px; background: var(--route-card-bg); border: 1px solid var(--route-card-edge); box-shadow: var(--route-card-shadow); -webkit-backdrop-filter: var(--route-card-blur); backdrop-filter: var(--route-card-blur); }
+.route-h { position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; margin: 0; font-size: 20px; line-height: 28px; font-weight: 800; letter-spacing: .03em; color: var(--route-ink); }
+.route-h__text { margin: 0; font: inherit; color: inherit; }
+.route-h__tail { margin-left: auto; font-size: 15px; font-weight: 600; letter-spacing: .02em; color: var(--route-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.route-badge { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--route-badge-bg); box-shadow: var(--route-badge-shadow); color: var(--route-accent); font-size: 21px; }
+.route-h__fold { margin-left: auto; display: grid; place-items: center; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--route-pill-bg); color: var(--route-soft); font-size: 19px; cursor: pointer; transition: rotate .25s ease; }
+.route-h__fold:hover { color: var(--route-ink); }
+.route-h__fold[aria-expanded="true"] { rotate: 180deg; }
+.route-note { position: relative; z-index: 1; margin: 10px 0 0; font-size: 13.5px; line-height: 22px; color: var(--route-muted); }
+.route-note__sep { margin: 0 8px; color: var(--route-line); }
+.route-foot { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 14px; }
+.route-foot:empty { display: none; }
+.route-more { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--route-pill-bg); box-shadow: var(--route-pill-shadow); color: var(--route-ink); font: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: translate .2s ease; }
+.route-more:hover { translate: 0 -1px; }
+.route-more .route-ico { font-size: 16px; color: var(--route-soft); }
+.route-more__left { font-weight: 400; color: var(--route-muted); }
+.route-more__left::before { content: "·"; margin: 0 6px 0 2px; }
+.route-more--quiet { background: none; box-shadow: none; color: var(--route-muted); padding: 0 6px; }
+.route-more--quiet:hover { color: var(--route-ink); }
+
+/* ============ 航线卡 ============ */
+.route-plan { display: grid; grid-template-columns: 236px minmax(0, 1fr); gap: 20px; align-items: start; padding: 24px 30px 22px; margin-bottom: var(--route-gap); }
+.route-plan.is-empty { align-items: center; padding-block: 18px; }
+.route-plan__label { display: flex; align-items: flex-start; gap: 14px; padding-top: 4px; }
+.route-plan__label .route-h__text { font-size: 21px; line-height: 30px; font-weight: 800; letter-spacing: .04em; color: var(--route-ink); }
+.route-plan__sub { margin: 4px 0 0; font-size: 14.5px; line-height: 22px; color: var(--route-muted); font-variant-numeric: tabular-nums; }
+.route-plan__line { min-width: 0; }
+.route-plan__note { margin: 6px 0 0; text-align: right; font-size: 13.5px; line-height: 22px; color: var(--route-muted); }
+.route-plan.is-empty .route-plan__note { margin: 0; text-align: left; font-size: 15px; color: var(--route-soft); }
+.route-line { --stops: 7; display: grid; grid-template-columns: repeat(var(--stops), minmax(0, 1fr)); row-gap: 22px; margin: 0; padding: 0; list-style: none; }
+.route-stop { position: relative; display: flex; flex-direction: column; align-items: center; min-width: 0; padding: 0 6px; text-align: center; }
+/* 两站之间的线：从这一站中心画到下一站中心；走过的（当前这一步之前）是主色 */
+.route-stop::after { content: ""; position: absolute; z-index: 0; top: 17px; left: 50%; width: 100%; height: 3px; border-radius: 3px; background: var(--route-line); }
+.route-stop:last-child::after, .route-stop:nth-child(7n)::after { content: none; }
+.route-stop.is-passed::after { background: var(--route-accent-trail); box-shadow: 0 0 10px var(--route-accent-glow); }
+.route-stop__dot { position: relative; z-index: 1; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 2px var(--route-line), 0 3px 8px -4px rgb(20 40 30 / .25); color: var(--route-soft); font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.route-stop__dot b { font-weight: 700; }
+.route-stop.is-done .route-stop__dot { background: var(--route-accent-fill); box-shadow: 0 0 0 4px var(--route-accent-soft); color: #fff; font-size: 19px; }
+.route-stop.is-done .route-stop__dot .route-ico { stroke-width: 2.6; }
+.route-stop.is-now .route-stop__dot { background: var(--route-accent-now); color: #fff; box-shadow: 0 0 0 5px var(--route-accent-soft), 0 0 22px 4px var(--route-accent-glow); }
+.route-stop__say { display: flex; flex-direction: column; align-items: center; gap: 3px; margin-top: 12px; min-width: 0; max-width: 100%; }
+.route-stop__word { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; line-height: 20px; font-weight: 700; color: var(--route-ink); white-space: nowrap; }
+.route-stop.is-pending .route-stop__word { font-weight: 500; color: var(--route-muted); }
+.route-stop.is-done .route-stop__word { color: var(--route-accent-deep); }
+.route-stop__text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; max-width: 100%; font-size: 14px; line-height: 21px; color: var(--route-soft); text-wrap: balance; overflow-wrap: anywhere; }
+.route-stop.is-now .route-stop__say { padding: 7px 14px 8px; margin-top: 8px; border-radius: 14px; background: var(--route-now-pill); }
+.route-stop.is-now .route-stop__word { color: var(--route-accent-deep); }
+.route-stop.is-now .route-stop__text { font-weight: 700; color: var(--route-ink); -webkit-line-clamp: 4; }
+.route-stop--fold .route-stop__dot { border: 0; cursor: pointer; font-size: 18px; letter-spacing: 1px; color: var(--route-muted); }
+.route-stop--fold .route-stop__dot:hover { color: var(--route-ink); }
+.route-more--line { height: auto; padding: 4px 12px; font-size: 13.5px; font-weight: 600; color: var(--route-soft); }
+.route-plan__note .route-more--line { margin-left: 2px; }
+
+/* ============ 三栏 ============ */
+.route-cols { display: grid; grid-template-columns: minmax(0, .94fr) minmax(0, 1.1fr) minmax(0, 1fr); gap: var(--route-gap); align-items: stretch; }
+.route-mid { display: flex; flex-direction: column; gap: var(--route-gap); min-width: 0; }
+.route-mid > .route-crew { flex: 1 1 auto; }
+
+/* 正在执行：当前这一步写大，底下一幅小插画 */
+.route-now { display: flex; flex-direction: column; padding: 26px 30px 0; background: var(--route-now-bg); }
+.route-now__step { position: relative; z-index: 1; margin: 22px 0 0; font-size: 15px; line-height: 22px; font-weight: 600; color: var(--route-accent-deep); font-variant-numeric: tabular-nums; }
+.route-now__text { position: relative; z-index: 1; margin: 8px 0 0; font-size: 30px; line-height: 42px; font-weight: 800; letter-spacing: .02em; color: var(--route-ink); text-wrap: balance; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+.route-now__step[hidden] + .route-now__text { margin-top: 22px; }
+.route-now #words { position: relative; z-index: 1; margin-top: 16px; }
+.route-facts { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; column-gap: 10px; row-gap: 6px; }
+.route-fact { grid-column: 1; margin: 0; font-size: 15px; line-height: 26px; color: var(--route-soft); text-wrap: pretty; }
+.route-fact__k { font-weight: 600; color: var(--route-ink); }
+.route-facts > .route-clip__more { grid-column: 2; }
+.route-now__art { position: relative; z-index: 0; flex: 1 1 200px; width: 100%; min-height: 180px; max-height: 420px; margin: 8px 0 0; background-position: center 70%; background-image: var(--route-art-now); -webkit-mask-image: radial-gradient(closest-side, #000 62%, transparent 100%); mask-image: radial-gradient(closest-side, #000 62%, transparent 100%); }
+
+/* 思考摘要：收成两行，右上角的小箭头展开 */
+.route-think { --clip-lines: 2; padding-bottom: 22px; }
+.route-think__text { position: relative; z-index: 1; margin: 12px 0 0; padding-right: 132px; padding-left: 52px; font-size: 15.5px; line-height: 26px; color: var(--route-soft); text-wrap: pretty; }
+.route-think__text.is-open { padding-right: 0; }
+.route-corner { position: absolute; z-index: 0; right: -14px; bottom: -22px; width: 200px; aspect-ratio: 4 / 3; background-image: var(--route-art-corner); opacity: .92; }
+.route-think .route-corner { width: 180px; right: -10px; }
+.route-think:has(.route-think__text.is-open) .route-corner { opacity: .35; }
+
+/* 帮手 */
+.route-crew { display: flex; flex-direction: column; padding-bottom: 22px; }
+.route-tally { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
+.route-tally__lead { align-self: center; font-size: 13.5px; color: var(--route-muted); }
+.route-chip { display: inline-flex; align-items: baseline; gap: 6px; padding: 3px 12px; border-radius: 999px; background: var(--route-chip-bg); font-size: 13.5px; line-height: 22px; color: var(--route-soft); }
+.route-chip b { font-size: 15px; font-weight: 700; color: var(--route-ink); font-variant-numeric: tabular-nums; }
+.route-crew .route-foot { padding-top: 4px; }
+.route-crew .route-corner { right: -18px; bottom: -26px; }
+
+/* 行：帮手、过程记录共用 */
+.route-rows { position: relative; z-index: 1; margin: 6px 0 0; padding: 0; list-style: none; }
+.route-row { display: flex; align-items: flex-start; gap: 12px; min-width: 0; padding: 10px 0; border-bottom: 1px solid var(--route-rule); }
+.route-row:last-child { border-bottom: 0; }
+.route-row > .lamp { margin-top: 8px; }
+.route-row__ico { margin-top: 3px; font-size: 18px; color: var(--route-muted); opacity: .8; }
+.route-row__main { flex: 1 1 auto; min-width: 0; }
+.route-row__line { display: flex; align-items: baseline; gap: 12px; min-width: 0; margin: 0; font-size: 15px; line-height: 24px; color: var(--route-ink); }
+.route-word { flex: none; font-weight: 700; white-space: nowrap; }
+.route-row__name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--route-soft); }
+.route-row__name .trust-note, .route-row__name .live-mark { white-space: nowrap; }
+.route-row__sub { margin: 1px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13.5px; line-height: 21px; color: var(--route-muted); font-variant-numeric: tabular-nums; }
+.route-row__acts { flex: none; display: flex; gap: 8px; align-self: center; }
+.route-row__acts:empty { display: none; }
+.route-row.is-now .route-word { color: var(--route-accent-deep); }
+.route-row--empty .route-row__line { color: var(--route-muted); }
+
+/* 过程记录：左边一列时刻，正常的行前面不画圆点 */
+.route-log { display: flex; flex-direction: column; }
+.route-rows--log { margin-top: 10px; }
+.route-row--log { gap: 14px; padding: 8px 0; }
+.route-row--log .route-row__main { display: flex; align-items: baseline; gap: 14px; }
+.route-row--log .route-row__line { flex: 1 1 auto; }
+.route-row--log .route-row__line > .lamp { align-self: center; margin-right: -4px; }
+.route-row--log .route-row__sub { flex: 0 1 auto; max-width: 34%; margin: 0; }
+.route-row__time { flex: none; width: 92px; padding-top: 1px; font-size: 13.5px; line-height: 24px; color: var(--route-muted); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+.route-log .route-foot { margin-top: auto; padding-top: 14px; }
+
+/* ============ 本人版给全文（本人 11-22 06:49）：页头那句、思考摘要、帮手和过程记录每行都不截；访客版不变 ============ */
+.route-think__lead { display: block; margin-bottom: 6px; font-weight: 700; color: var(--route-ink); }
+.route-body--full .route-think__text { padding-right: 0; }
+.route-body--full .route-think .route-corner { opacity: .35; }
+.route-body--full .route-row__name, .route-body--full .route-row__sub { overflow: visible; text-overflow: clip; white-space: normal; overflow-wrap: anywhere; }
+.route-body--full .route-row__name .trust-note, .route-body--full .route-row__name .live-mark { white-space: normal; }
+.route-body--full .route-row--log .route-row__main { flex-direction: column; align-items: stretch; gap: 1px; }
+.route-body--full .route-row--log .route-row__sub { max-width: none; }
+.route-body--full .route-now__text { -webkit-line-clamp: unset; overflow: visible; }
+

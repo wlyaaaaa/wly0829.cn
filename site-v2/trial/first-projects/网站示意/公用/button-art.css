@@ -1,0 +1,25 @@
+.pill {display:block;width:var(--button-width);padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;line-height:0;flex:none}
+.pill img {display:block;width:100%;height:auto;border:0;border-radius:0;pointer-events:none}
+.pill.pill--text {padding:.55rem .9rem;border:1px solid var(--link);border-radius:999px;background:var(--paper);color:var(--p);font:700 1rem/1.25 PageSans,sans-serif;white-space:nowrap}
+.pill--art {position:relative;min-height:1.5rem}
+.pill--art > img {position:absolute;inset:0;height:100%;object-fit:contain}
+:is(.pill--art, .more.art) > :is(.button-label, .more-label) {
+  position:absolute;inset:0;display:grid;place-items:center;padding:.08rem .25rem;
+  border:1px solid var(--line);border-radius:.55rem;background:var(--paper);color:var(--ink);
+  font:700 .875rem/1.1 PageSans,sans-serif;text-align:center;
+}
+.more.art > .more-label {writing-mode:horizontal-tb;letter-spacing:0;font-size:.75rem;padding-inline:0}
+:is(.pill--art, .more.art) > img,
+.more.art > b {opacity:0}
+/* 写字的白底牌只是按钮图迟迟不到时的备用：先空着等 1 秒，图到了就直接出图，正常进页不先闪一下白底字牌；
+   1 秒还没到才露出字牌，图到了再换。project-label-late 只管露不露（visibility），淡出仍归 project-button-out。 */
+:is(.pill--art, .more.art) > :is(.button-label, .more-label) {animation:project-label-late 0s linear 1s both}
+:is(.pill--art, .more.art).has-button-art > img,
+.more.art.has-button-art > b {animation:project-button-in .16s both}
+:is(.pill--art, .more.art).has-button-art > :is(.button-label, .more-label) {animation:project-button-out .16s both, project-label-late 0s linear 1s both}
+@keyframes project-button-in {from {opacity:0} to {opacity:1}}
+@keyframes project-button-out {from {opacity:1} to {opacity:0}}
+@keyframes project-label-late {from {visibility:hidden}}
+a.pill:hover,button.pill:enabled:hover {filter:brightness(1.05)}
+.pill:disabled {opacity:1;cursor:default}
+.picture-actions--placed {flex-wrap:wrap;row-gap:0}

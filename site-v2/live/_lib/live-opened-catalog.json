@@ -1,0 +1,21 @@
+[
+  "page/home", "page/apps", "page/backup", "page/backups", "page/chat", "page/chats",
+  "page/computer", "page/environment", "page/issue", "page/item", "page/items", "page/ledger",
+  "page/notifications", "page/phone", "page/phone/apps", "page/power", "page/project", "page/projects",
+  "page/records", "page/security", "page/smooth", "page/storage", "page/task", "page/tasks",
+  "page/traffic", "page/usage", "card/home/needs", "card/home/chats", "card/home/ledger", "card/home/computer",
+  "card/home/phone", "card/home/tasks", "card/home/backups", "card/home/projects", "card/apps/details", "card/backup/files",
+  "card/backup/locations", "card/backups/backup", "card/backups/sets", "card/backups/restore", "card/chat/helpers", "card/chat/log",
+  "card/chats/chat", "card/chats/detail", "card/chats/thinking", "card/chats/helpers", "card/chats/recent", "card/computer/storage",
+  "card/computer/traffic", "card/computer/power", "card/computer/smooth", "card/computer/apps", "card/computer/usage", "card/computer/security",
+  "card/computer/environment", "card/computer/stability", "card/computer/display-recovery", "card/environment/runtime", "card/environment/startup", "card/issue/summary",
+  "card/issue/questions", "card/issue/events", "card/issue/raw", "card/item/summary", "card/item/questions", "card/item/events",
+  "card/item/raw", "card/items/item", "card/items/detail", "card/items/summary", "card/ledger/issue", "card/ledger/working",
+  "card/ledger/waiting", "card/notifications/associations", "card/notifications/batches", "card/notifications/message", "card/phone/apps", "card/phone/notifications",
+  "card/phone/backups", "card/phone/details", "card/project/records", "card/project/detail", "card/project/section", "card/project/notes",
+  "card/project/version-history", "card/projects/project", "card/projects/records", "card/projects/active", "card/projects/frozen", "card/projects/changes",
+  "card/security/audit", "card/storage/volumes", "card/storage/ssd", "card/storage/categories", "card/storage/database", "card/task/runs",
+  "card/task/summary", "card/tasks/task", "card/records/archives",
+  "card/environment/software", "card/records/book-group", "card/records/book-row",
+  "card/notifications/process", "card/task/run-result", "card/chat/route-detail", "card/ledger/book-group"
+]

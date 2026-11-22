@@ -1,0 +1,90 @@
+---
+// 驾驶舱：Astro 原生页（O6 裁定的 b 做法），外壳、页头、目录条、页尾和全站一样。
+// 首帧用仓库固定公开样本画好最终版式（src/cockpit/snapshot.json，见 build-data.js），标明样本时间。
+// 浏览器里 src/cockpit/client.js 读新数据、原地换字，不换版式。
+import Site from '../../layouts/Site.astro';
+import { pathToFileURL } from 'node:url';
+import { ENDPOINTS, LOCAL, latest, safe } from '../../cockpit/build-data.js';
+import { normalize } from '../../cockpit/model.js';
+import { page } from '../../cockpit/render.js';
+import '../../cockpit/cockpit.css';
+import '../../cockpit/refresh-button.css';
+import riverJs from '../../../../scripts/today-river.js?url&no-inline';
+import riverCss from '../../../../scripts/today-river.css?url';
+import birdConfig from '../../cockpit/hero.config.json?url&no-inline';
+import livingEngine from '../../chrome/living-engine.json';
+import motionRuntime from '../../../public/_living/quality-runtime/manifest.json';
+
+const snapshot = await latest();
+const view = normalize(snapshot);
+
+// 项目名 → 项目页地址（项目页的唯一来源是 sources/pages/*/page.json）
+const authorPages = import.meta.glob('../../../../sources/pages/*/page.json', { eager: true, import: 'default' }) as Record<string, any>;
+// 接口里的项目显示名有的和页面标题不同，按驾驶舱页面登记里的 live_anchors（api_project ↔ site_title）对上
+const byTitle = Object.fromEntries(Object.values(authorPages).filter((p: any) => ['project', 'frozen'].includes(p?.kind) && p.title && p.url).map((p: any) => [p.title, p.url]));
+const anchors = (authorPages['../../../../sources/pages/cockpit/page.json']?.registry?.live_anchors || []) as any[];
+const projectUrls = { ...byTitle, ...Object.fromEntries(anchors.filter((a) => a.api_project && byTitle[a.site_title]).map((a) => [a.api_project, byTitle[a.site_title]])) };
+
+// 今天的河的图（河脚本从 #page-data 的 today_river_assets 取地址）
+const riverFiles = import.meta.glob('../../../../sources/creative/today-river/assets2/*.{webp,png}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+const riverAssets = Object.fromEntries(Object.entries(riverFiles).map(([path, url]) => [path.split('/').pop(), url]));
+
+// 驾驶舱的标题图、插画、图标（sources/assets/cockpit/）
+const imgFiles = import.meta.glob('../../../../sources/assets/cockpit/*.png', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+const img = Object.fromEntries(Object.entries(imgFiles).map(([path, url]) => [path.split('/').pop(), url]));
+
+const toc = [
+  { id: 'top', label: '开头' }, { id: 'need-you', label: '要我处理' }, { id: 'tasks', label: '自动任务' }, { id: 'computer', label: '电脑' },
+  { id: 'today', label: '今天' }, { id: 'backup', label: '备份和云端' }, { id: 'projects', label: '项目' },
+];
+// 总览屏共用脚本（public/_overview/，首页小屏也用它）：构建时直接按文件导入，画首帧
+const ov = await import(/* @vite-ignore */ new URL('public/_overview/overview-screen.js', pathToFileURL(process.cwd() + '/')).href);
+// 目录条标签图：全站脚本会把有导航标签图的项（“开头”“项目”）换成图，但量尺寸要靠 #toc-label-data；
+// 驾驶舱没有这份数据时这两项被换成宽 0 的空图。这里用和其他页同一个来源（各页运行件里的 toc-label-data，加页面数据里的 nav_labels）
+// 给驾驶舱的标签补上这份数据；哪个标签找不到图就不写进去，那一项保留原文字。
+const runtimeFiles = import.meta.glob('../../chrome/runtime/*.json', { eager: true, import: 'default' }) as Record<string, any>;
+const labelData: Record<string, any> = {};
+for (const rt of Object.values(runtimeFiles)) {
+  for (const part of [...(rt?.head || []), rt?.tail || '']) {
+    const m = typeof part === 'string' && part.match(/<script[^>]*id="toc-label-data"[^>]*>(.*?)<\/script>/s);
+    if (m) try { Object.assign(labelData, JSON.parse(m[1])); } catch { /* 坏数据跳过 */ }
+  }
+}
+const cockpitRuntime = runtimeFiles['../../chrome/runtime/cockpit.json'];
+const navLabels = (() => { const m = cockpitRuntime?.tail?.match(/<script id="page-data" type="application\/json">(.*?)<\/script>/s); try { return m ? JSON.parse(m[1]).shared?.nav_labels || {} : {}; } catch { return {}; } })();
+const tocLabels = Object.fromEntries(toc.map((t) => [t.label, labelData[t.label] || navLabels[t.label]]).filter(([, v]) => v && v.src && v.size));
+
+// 首屏景物沿用全站活画引擎，恢复已有十项背景动效；样式与脚本按 Site.astro 的规则换成现行地址。
+// hero.config.json 对应当前裁边与白设备、蓝绿灯光；小鸟仍停在原生页木桌落点，手机插画收起时整层不出现。
+const engineRt = runtimeFiles['../../chrome/runtime/agents.json'];
+const engineUrl = (s: string) => Object.entries(motionRuntime.urls).reduce((x, [from, to]) => x.replaceAll(from, to as string), s.replace(`/_living/_engine/${livingEngine.deployed}`, `/_living/_engine/${livingEngine.fixed}`));
+const livingCss = (engineRt?.head || []).find((h: string) => h.startsWith('<link data-living-runtime')) || '';
+const jsAt = (engineRt?.tail || '').indexOf('<script data-living-runtime'), jsEnd = jsAt < 0 ? -1 : engineRt.tail.indexOf('</' + 'script>', jsAt);
+const livingTags = engineUrl(livingCss + (jsEnd < 0 ? '' : engineRt.tail.slice(jsAt, jsEnd + 9)));
+// phase: 'snapshot'：首帧是固定公开样本，页面上写明是几点的、整体灰着，浏览器读到新数据再换（读不到时写“读不到（最后 HH:MM 读到）”）
+const html = page(view, { now: new Date(), offline: false, phase: 'snapshot', projectUrls, img, ov, birdConfig });
+const boot = safe({ endpoints: ENDPOINTS, local: LOCAL, snapshot, projectUrls, img });
+---
+<Site title="驾驶舱" kind="cockpit" url="/cockpit/" page="cockpit" toc={toc}>
+  <script is:inline type="application/json" id="toc-label-data" set:html={safe(tocLabels)}></script>
+  <script is:inline>/* 主导航标出当前页是驾驶舱（下划线），和发布时导航修复的写法一致 */document.querySelectorAll('a[href="/cockpit/"]').forEach((a)=>{if(a.closest('header,#menu,footer,.primary-nav'))a.setAttribute('aria-current','page');});</script>
+  <link rel="stylesheet" href={riverCss} />
+  <link rel="stylesheet" href="/_overview/overview-screen.css" />
+  <Fragment set:html={livingTags} />
+  <noscript><style>.cp-snap-reading{display:none}</style></noscript>
+  <div class="cp-page"><Fragment set:html={html} /></div>
+  <div class="cockpit-refresh-wrap">
+    <button type="button" class="cockpit-refresh" data-cockpit-refresh aria-label="刷新驾驶舱数据" title="立刻重读电脑">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
+    </button>
+    <span class="cockpit-refresh-note" data-cockpit-refresh-note role="status" hidden></span>
+  </div>
+  <script is:inline id="cockpit-boot" type="application/json" set:html={boot}></script>
+  <script is:inline type="module" set:html={`(()=>{const n=document.getElementById('page-data');if(!n)return;try{const d=JSON.parse(n.textContent);d.today_river_assets=${safe(riverAssets)};n.textContent=JSON.stringify(d);}catch{}})();`}></script>
+  <script is:inline type="module" src="/_overview/overview-screen.js"></script>
+  <script is:inline type="module" src={riverJs}></script>
+</Site>
+<script>
+  import '../../cockpit/client.js';
+  import '../../cockpit/refresh-button.js';
+</script>

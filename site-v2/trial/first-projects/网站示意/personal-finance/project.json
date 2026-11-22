@@ -1,0 +1,64 @@
+{
+  "title": "账房先生",
+  "theme": {
+    "p": "#7C2724",
+    "soft": "#EEE2D8",
+    "accent": "#B98535"
+  },
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "skillNav": "personal-finance",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "12rem"],
+    "去〔对账报数〕技能页": [
+      "go-skill-v1.compressed.webp",
+      "15rem"
+    ],
+    "去〔我的说明书〕项目页": [
+      "go-profile-v1.compressed.webp",
+      "15rem"
+    ],
+    "去〔记得我是谁〕技能页": [
+      "go-memory-v1.compressed.webp",
+      "15rem"
+    ],
+    "去〔手机直取〕技能页": [
+      "go-phone-v1.compressed.webp",
+      "15rem"
+    ],
+    "回〔账房先生〕项目页": [
+      "return-project-v1.compressed.webp",
+      "15rem"
+    ],
+    "去〔账房先生〕项目页": [
+      "go-project-v1.compressed.webp",
+      "15rem"
+    ],
+    "去〔密码中心〕项目页": [
+      "go-password-v1.compressed.webp",
+      "15rem"
+    ]
+  },
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "账房先生",
+      "meta": "账房先生 · 总览",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    },
+    "对账报数": {
+      "slug": "personal-finance",
+      "file": "personal-finance.html",
+      "title": "对账报数",
+      "meta": "技能 · 对账报数",
+      "nav": "技能",
+      "imagePrefix": "对账报数"
+    }
+  },
+  "detailArt": [
+    "detail-v1.compressed.webp",
+    "4rem"
+  ]
+}

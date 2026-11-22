@@ -1,0 +1,26 @@
+/* fe-l3a 续作一：仅这三页的排字与账本结局灯。 */
+.page--l3 .rec-meta { column-gap: 20px; overflow: hidden; }
+.page--l3 .rec-meta > span { position: relative; }
+.page--l3 .rec-meta > span + span::before { position: absolute; left: -12px; top: 0; margin: 0; }
+.rec-prose, .rec-say, .run__out, .run__what { text-wrap: pretty; }
+.issue-event-actor, .issue-event-extra { overflow-wrap: anywhere; }
+.issue-event-extra a { color: #00A650; }
+.dossier-card--state #facts:has(.issue-reading) .rec-fact { grid-template-columns: 116px minmax(0, 1fr); }
+.rec-tail { white-space: nowrap; }
+.page--l3[data-record="issue"] [data-part="head"] { padding-left: 0; }
+
+/* 左右都有记录时，把对应的卡排成两行，原始记录放在下面。 */
+[data-record="item"] .dossier__grid[data-shape="two"]:not(:has(#questions:not([hidden]))):has(#related:not([hidden])) {
+  :is(.dossier__main, .dossier__side, .dossier__more) { display: contents; }
+  .dossier-card--why { grid-area: 1 / 1; }
+  .dossier-card--state { grid-area: 1 / 2; }
+  #history-box { grid-area: 2 / 1; }
+  #related { grid-area: 2 / 2; }
+  :is(#raw, #coverage) { grid-column: 1 / -1; }
+}
+
+[data-record="issue"] .dossier__grid[data-shape="two"] > .dossier__main { display: contents; }
+[data-record="issue"] .dossier__grid[data-shape="two"] > .dossier__side { grid-area: 1 / 2; }
+[data-record="issue"] .dossier__grid[data-shape="two"]:has(.dossier-card--why:not([hidden])):has(#questions:not([hidden])) > .dossier__side { grid-row-end: span 2; }
+[data-record="issue"] .dossier__grid[data-shape="two"] .dossier__main > :is(#history-box, #coverage) { grid-column: 1 / -1; }
+.card--record.is-lit .rec-outcome::after { animation: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--l-base) 12%, transparent), 0 0 8px color-mix(in srgb, var(--l-glow) 35%, transparent); }

@@ -1,0 +1,18 @@
+{
+  "title": "微信记录桥",
+  "theme": {"p": "#2C3644", "soft": "#E6E4DB", "accent": "#A76447"},
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "12rem"],
+    "去〔微信收发室〕项目页": ["go-wechat-v1.compressed.webp", "16rem"],
+    "去〔电脑大本营〕项目页": ["go-pcconfig-v1.compressed.webp", "16rem"]
+  },
+  "detailArt": ["detail-v1.compressed.webp", "4rem"],
+  "sections": {
+    "总览": {
+      "slug": "project", "file": "project.html", "title": "微信记录桥",
+      "meta": "微信记录桥 · 总览", "nav": "项目", "imagePrefix": "总览"
+    }
+  }
+}

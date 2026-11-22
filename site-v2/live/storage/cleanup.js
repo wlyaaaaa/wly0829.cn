@@ -1,0 +1,327 @@
+// 自动清理卡：近 7 天腾出多少、各盘这轮腾出和还剩、出错 / 保护名单 / 下次几点、按规则分、各盘空闲走势。
+// 数据：computer/storage 的 cleanup（自动清理自动任务每轮写回执，后台转给页面），字段见交回里的数据约定；
+// 缺 cleanup 时这张卡照样画“现在还剩”和走势，其余灰掉写原因。
+(() => {
+  'use strict';
+  const U = window.LiveUI, K = window.StorageKit, { esc } = U, DAY = 86400000;
+  const RULE_HUES = ['#f3a6c4', '#9fbdf4', '#c4b2f2', '#9fdcd6', '#f6c88f', '#cfd5df'];
+  const at = s => { const t = Date.parse(s); return Number.isFinite(t) ? t : null; };
+  const num = n => Number.isFinite(n) ? n : null;
+  const hm = s => U.time(s) || '';
+  const when = s => s ? `${U.date(s)} ${U.time(s)}` : '';
+  const readAmount = (value, label, viewer) => {
+    const text = K.field(value, label, viewer);
+    return K.isPlaceholder(text) ? text : K.size(K.raw(value));
+  };
+  const RULE_NAMES = {
+    'website-cache': '网站施工缓存', 'website-work': '网站施工目录', 'codex-temp': 'Codex 临时目录',
+    'claude-temp': 'Claude 临时目录', 'antigravity-temp': 'Antigravity 临时目录', 'shared-temp': '共享临时目录',
+    'claude-session-temp': 'Claude 会话临时目录', 'codex-work': 'Codex 施工目录', 'windows-dumps': 'Windows 转储',
+    'driver-diagnostics': '驱动诊断', diagnostics: '诊断记录', 'owner-temp': '个人临时目录', 'windows-temp': 'Windows 临时目录',
+    'nvidia-downloads': '显卡驱动下载缓存', 'cloudmusic-cache': '网易云音乐缓存',
+    'retired-restore-contents': '已退役的恢复产物', 'retired-claude-migration': '已退役的 Claude 迁移产物',
+  };
+  const ICON = {
+    ok: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="m7.8 12.3 2.9 2.9 5.6-6"/></svg>',
+    shield: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8 4.6 5.6v5.8c0 4.6 3.1 8.4 7.4 9.8 4.3-1.4 7.4-5.2 7.4-9.8V5.6z"/><path d="m8.6 12.1 2.4 2.4 4.4-4.7"/></svg>',
+    clock: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="M12 7v5.3l3.4 2"/></svg>',
+    warn: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="M12 7.2v6.2M12 16.6v.2"/></svg>',
+  };
+
+  // 回执整理成页面要用的几样：最近一轮、近 7 天每天、出错 / 保护名单合计、下次几点。
+  function digest(d, now = Date.now()) {
+    const c = d?.cleanup;
+    if (!c || typeof c !== 'object') return null;
+    const runs = (Array.isArray(c.runs) ? c.runs : []).filter(r => at(r.started_at) || at(r.finished_at)).sort((a, b) => (at(b.finished_at) ?? at(b.started_at)) - (at(a.finished_at) ?? at(a.started_at)));
+    const done = runs.filter(r => r.result !== 'running' && at(r.finished_at));
+    const last = done[0] || null, week = done.filter(r => now - at(r.finished_at) < 7 * DAY);
+    const days = Array.from({ length: 7 }, (_, i) => { const t = now - (6 - i) * DAY; return { key: K.dayKey(t), bytes: 0, runs: 0 }; });
+    for (const r of week) { const day = days.find(x => x.key === K.dayKey(at(r.finished_at))); if (day) { day.bytes += num(r.freed_bytes) || 0; day.runs++; } }
+    const errors = week.filter(r => r.result === 'error'), deleted = week.reduce((n, r) => n + (num(r.protected_deleted) || 0), 0);
+    const hours = num(c.interval_hours) || 6;
+    let next = at(c.next_run_at), estimated = false;
+    if (!next && last) { next = at(last.finished_at) + hours * 3600000; estimated = true; }
+    const overdue = !!last && now - at(last.finished_at) > (hours * 2 + 1) * 3600000;
+    return { c, runs, last, week, days, total: days.reduce((n, x) => n + x.bytes, 0), errors, deleted, hours, next, estimated, overdue, running: runs[0]?.result === 'running' ? runs[0] : null };
+  }
+
+  // 给页首用：保护名单被删 > 出错或没按时跑；都没有返回 null（再看盘会不会满）。
+  function alarm(d) {
+    const g = digest(d);
+    if (!g) return null;
+    if (g.deleted > 0) return { tone: 'red', text: `保护名单里有 ${g.deleted} 件被删了 · 自动清理近 7 天` };
+    if (g.last?.result === 'error') return { tone: 'amber', text: `自动清理上一轮出错 · ${when(g.last.finished_at)}` };
+    if (g.overdue) return { tone: 'amber', text: `自动清理没按时跑 · 上次 ${when(g.last.finished_at)}` };
+    return null;
+  }
+
+  function pill(g) {
+    if (!g?.last && !g?.running) return '<span class="cl-pill" data-tone="gray"><i></i>这页还没读到自动清理结果</span>';
+    if (g.deleted > 0) return '<span class="cl-pill" data-tone="red"><i></i>保护名单被删</span>';
+    if (g.last?.result === 'error') return '<span class="cl-pill" data-tone="amber"><i></i>上一轮出错</span>';
+    if (g.overdue) return '<span class="cl-pill" data-tone="amber"><i></i>没按时跑</span>';
+    if (g.running) return '<span class="cl-pill" data-tone="green"><i></i>正在跑</span>';
+    return '<span class="cl-pill" data-tone="green"><i></i>运行正常</span>';
+  }
+
+  function receiptRows(source, viewer, kind, fields, render) {
+    const { visible, hidden } = K.splitRows(source, viewer);
+    const withheld = K.hiddenRows(hidden, kind, fields);
+    return visible.map(render).concat(withheld || []).join('<br>') ||
+      (Array.isArray(source) ? '没有记录项' : '这轮没读到明细');
+  }
+
+  function receipts(g, viewer) {
+    if (!g.week.length) return '';
+    const amount = (value, label) => readAmount(value, label, viewer);
+    const items = g.week.map(run => {
+      const result = run.result === 'error' ? '出错' : '跑完';
+      const summary = [when(run.finished_at), result,
+        run.freed_bytes != null ? `腾出 ${amount(run.freed_bytes, '本轮腾出量')}` :
+          K.field(run.freed_bytes_gap, '本轮腾出量缺因', viewer) || '腾出量没读到'].join(' · ');
+      const disks = receiptRows(run.volumes, viewer, '清理磁盘记录', '磁盘名称及前后余量', v =>
+        esc(`${K.volName(v, viewer)} · 空闲 ${amount(v.free_before, '清理前余量')} → ${amount(v.free_after, '清理后余量')} · 腾出 ${amount(v.freed_bytes, '腾出量')}`));
+      const rules = receiptRows(run.rules, viewer, '清理规则记录', '规则名称和清理量', r => {
+        const basis = r.bytes_basis === 'removed_logical_bytes' ? '移除文件大小' : r.bytes_basis === 'net_free_change' ? '空闲净增' : '腾出';
+        return esc(`${K.field(r.label, '清理规则名称', viewer) || '规则'} · ${basis} ${amount(r.freed_bytes, '规则清理量')}`);
+      });
+      return `<details class="st-detail" data-key="${esc('cleanup-' + (run.id || run.finished_at))}"><summary class="live-disclosure">${esc(summary)}</summary><p class="cl-sub">各盘<br>${disks}</p><p class="cl-sub">各规则<br>${rules}</p></details>`;
+    });
+    return `<details class="st-detail" data-key="cleanup-receipts"><summary class="live-disclosure">近 7 天逐轮明细</summary>${items.join('')}</details>`;
+  }
+
+  function total(g, viewer) {
+    if (!g?.last) return '<p class="cl-k">近 7 天共腾出</p><p class="cl-big is-gray">—</p>';
+    const max = Math.max(...g.days.map(x => x.bytes), 1);
+    const bars = g.days.map((x, i) => `<li${i === 6 ? ' class="is-today"' : ''}><b style="--h:${x.bytes ? Math.max(4, Math.round(x.bytes / max * 66)) : 2}px" title="${esc(`${x.key} 腾出 ${K.size(x.bytes)} · ${x.runs} 轮`)}"></b><span>${esc(x.key)}</span>${i === 6 || x.bytes === max && x.bytes ? `<em>${esc(K.size(x.bytes))}</em>` : ''}</li>`).join('');
+    const recent = num(g.last.freed_bytes);
+    const last = `最近一轮 ${when(g.last.finished_at)} ${recent == null ? '腾出量没读到' : `腾出 ${K.size(recent)}`}`;
+    const incomplete = g.week.some(run => num(run.freed_bytes) == null);
+    const measured = g.week.some(run => num(run.freed_bytes) != null);
+    return `<p class="cl-k">近 7 天${incomplete ? '已知腾出' : '共腾出'}</p><p class="cl-big">${esc(K.size(measured ? g.total : null))}</p><p class="cl-sub">${esc(last)}</p><ol class="cl-days" aria-label="近 7 天每天腾出">${bars}</ol>${receipts(g, viewer)}`;
+  }
+
+  // 一根条 = 整块盘：灰蓝是已用，绿段是这轮刚腾出的，白色是其余空闲。没读到的盘（离线、还没接进读数）也留一行灰的写原因。
+  function volumes(d, g, viewer) {
+    const all = (d?.volumes || []).filter(v => K.letter(v) !== 'F');
+    const live = new Map(all.map(v => [K.letter(v), v]));
+    const fromRun = K.splitRows(g?.last?.volumes, viewer).visible.map(r => ({ r, v: live.get(K.letter(r)) || { id: r.id } }));
+    const seen = new Set(fromRun.map(x => K.letter(x.v) || K.letter(x.r)));
+    const rest = all.filter(v => !seen.has(K.letter(v))).sort(K.order).map(v => ({ r: null, v }));
+    const rows = [...fromRun.sort((a, b) => (num(b.r.freed_bytes) || 0) - (num(a.r.freed_bytes) || 0)), ...rest];
+    if (all.length && !live.has('V') && !seen.has('V')) rows.push({ r: null, v: { id: 'V:' }, missing: true });
+    if (!rows.length) return '<p class="cl-sub">盘的容量还没读到。</p>';
+    const anyFreed = rows.some(x => x.v.state !== 'offline' && num(x.r?.freed_bytes) > 0);
+    return `<ul class="cl-vols">${rows.map(({ r, v, missing }) => {
+      if (v.state === 'offline') {
+        const text = [K.offlineRead(v, viewer), num(v.free) != null && `当时还剩 ${K.size(v.free)}`].filter(Boolean).join(' · ');
+        return `<li class="is-gray"><span class="cl-vol">${esc(K.volName(v))}</span><span class="cl-bar is-gray"></span><span class="cl-vol__t">${esc(text)}</span></li>`;
+      }
+      const free = num(v.free) ?? num(r?.free_after), totalBytes = num(v.total), freed = Math.max(0, num(r?.freed_bytes) || 0);
+      const why = missing ? '还没接进存储读数' : v.state === 'offline' ? '离线，没读到' : '容量没读到';
+      const left = free == null ? why : `还剩 ${K.size(free)}`;
+      const text = !r || free == null ? left : freed > 0 ? `腾出 ${K.size(freed)} · ${left}` : `没有到期的 · ${left}`;
+      const bar = totalBytes > 0 && free != null
+        ? `<span class="cl-bar" role="img" aria-label="${esc(`${K.volName(v)} ${text}`)}"><i style="width:${((totalBytes - free) / totalBytes * 100).toFixed(2)}%"></i>${freed ? `<b style="width:${(Math.min(freed, free) / totalBytes * 100).toFixed(2)}%"></b>` : ''}</span>`
+        : `<span class="cl-bar is-gray" title="${esc(`${K.volName(v)}${why}`)}"></span>`;
+      return `<li${free == null ? ' class="is-gray"' : ''}><span class="cl-vol">${esc(K.volName(v))}</span>${bar}<span class="cl-vol__t">${esc(text)}</span></li>`;
+    }).join('')}</ul><p class="cl-key"><i class="is-used"></i>蓝＝占用${anyFreed ? '<i class="is-freed"></i>绿＝这轮腾出的<i class="is-free"></i>白＝原本就空' : '<i class="is-free"></i>白＝空闲'}${rows.some(x => x.v.state === 'offline' || num(x.v.free) == null && num(x.r?.free_after) == null) ? '<i class="is-none"></i>斜线＝离线或没读到' : ''}</p>`;
+  }
+
+  function progress(run, viewer) {
+    const p = run.progress;
+    if (viewer !== 'owner' && K.locked(p)) return '清理进度仅本人可见';
+    const gap = K.field(run.progress_gap, '清理进度缺因', viewer);
+    const event = K.field(p?.event, '清理步骤', viewer), rule = K.field(p?.rule, '清理规则', viewer);
+    const step = ({ checking: '正在检查', candidate: '检查到待清项目', removed: '已移除', skipped: '已跳过' })[event] ||
+      (K.isPlaceholder(event) ? event : rule && '正在处理');
+    const entries = K.field(p?.removed_entries, '移除项数', viewer);
+    const counts = [entries && (K.isPlaceholder(entries) ? entries : `移除 ${entries} 项`),
+      p?.removed_logical_bytes != null && `文件大小 ${readAmount(p.removed_logical_bytes, '移除文件大小', viewer)}`].filter(Boolean).join(' · ');
+    const title = [step, RULE_NAMES[rule] || rule].filter(Boolean).join(' ');
+    return [title, counts, at(run.progress_at) && `${hm(run.progress_at)} 读到`, gap].filter(Boolean).join(' · ');
+  }
+
+  function tiles(g, viewer) {
+    if (!g) return `<ul class="cl-tiles is-gray">${[['ok', '出错'], ['shield', '保护名单被删'], ['clock', '下次']].map(([i, k]) => `<li>${ICON[i]}<div><b>${k}</b><span class="cl-dash">—</span></div></li>`).join('')}</ul>`;
+    const n = g.week.length, err = g.errors.length;
+    const first = err ? `<li data-tone="amber">${ICON.warn}<div><b>出错 ${err} 次</b><span>${esc(K.field(g.errors[0].error, '清理出错原因', viewer) || '最近一次出错没有写原因')}</span></div></li>`
+      : `<li>${ICON.ok}<div><b>出错 0 次</b><span>近 7 天 ${n} 轮都跑完</span></div></li>`;
+    const hits = g.week.reduce((s, r) => s + (num(r.protected_hits) || 0), 0);
+    const second = g.deleted ? `<li data-tone="red">${ICON.shield}<div><b>保护名单被删 ${g.deleted} 件</b><span>近 7 天 · 要马上看</span></div></li>`
+      : `<li>${ICON.shield}<div><b>保护名单被删 0 件</b><span>近 7 天一直是 0${hits ? ` · 碰到保护名单 ${hits} 次，都跳过了` : ''}</span></div></li>`;
+    const minutes = num(g.last?.duration_seconds) ?? (g.last && at(g.last.started_at) ? (at(g.last.finished_at) - at(g.last.started_at)) / 1000 : null);
+    const lastNote = g.last ? `上次 ${hm(g.last.finished_at)} 跑完${minutes != null ? ` · 用时 ${Math.max(1, Math.round(minutes / 60))} 分钟` : ''}` : '';
+    const nextAt = g.next ? new Date(g.next).toISOString() : '';
+    const nextText = g.next ? `下次${g.estimated ? '约 ' : ' '}${U.date(nextAt) === U.date(new Date().toISOString()) || g.next - Date.now() < 18 * 3600000 ? hm(nextAt) : when(nextAt)}` : '下次';
+    const nextNote = [g.running ? `正在跑 · ${hm(g.running.started_at)} 开始` : lastNote,
+      g.running && [progress(g.running, viewer), g.c.q === 'stale' && '旧读数'].filter(Boolean).join(' · '),
+      g.estimated && `读不到自动任务的下次时间，按上次加 ${g.hours} 小时估`].filter(Boolean).map(esc).join('<br>');
+    const third = `<li${g.estimated || !g.next ? ' data-tone="gray"' : ''}>${ICON.clock}<div><b>${esc(nextText)}</b>${g.next ? '' : '<span class="cl-dash">—</span>'}${nextNote ? `<span>${nextNote}</span>` : ''}</div></li>`;
+    const kept = num(g.last?.skipped_unsaved_conversations);
+    const firstTile = g.last ? first : `<li data-tone="gray">${ICON.ok}<div><b>出错</b><span class="cl-dash">—</span></div></li>`;
+    const secondTile = g.last ? second : `<li data-tone="gray">${ICON.shield}<div><b>保护名单被删</b><span class="cl-dash">—</span></div></li>`;
+    return `<ul class="cl-tiles">${firstTile}${secondTile}${third}</ul>${kept ? `<p class="cl-foot"><b>${kept} 个</b>原话没存完的对话先留着，存完再清</p>` : ''}`;
+  }
+
+  function rules(g, viewer) {
+    const { visible, hidden } = K.splitRows(g?.last?.rules, viewer);
+    const withheld = K.hiddenRows(hidden, '清理规则记录', '规则名称和腾出量');
+    const list = visible.filter(r => num(r.freed_bytes) > 0).sort((a, b) => b.freed_bytes - a.freed_bytes);
+    if (!g?.last) return '<p class="cl-big cl-big--sm is-gray">—</p>';
+    if (!Array.isArray(g.last.rules)) return '<p class="cl-sub">最近一轮没记录每条规则腾出了多少。</p>';
+    if (!list.length) return `<p class="cl-sub">${esc(withheld || '最近一轮没有到期要删的。')}</p>`;
+    const sum = list.reduce((n, r) => n + r.freed_bytes, 0), name = r => K.field(r.label, '清理规则名称', viewer) || '规则';
+    return `<span class="cl-rulebar" role="img" aria-label="${esc(list.map(r => `${name(r)} ${K.size(r.freed_bytes)}`).join('，'))}">${list.map((r, i) => `<i style="width:${(r.freed_bytes / sum * 100).toFixed(2)}%;background:${RULE_HUES[Math.min(i, RULE_HUES.length - 1)]}"></i>`).join('')}</span><ul class="cl-rules">${list.map((r, i) => `<li><i style="background:${RULE_HUES[Math.min(i, RULE_HUES.length - 1)]}"></i><span>${esc(name(r))}</span><b>${esc(K.size(r.freed_bytes))}</b></li>`).join('')}</ul>${withheld ? `<p class="cl-sub">${esc(withheld)}</p>` : ''}`;
+  }
+
+  // —— 各盘空闲走势：同一坐标，自己画一张 SVG（几条线、还没开始记、缺测斜线、清理那一下的绿点） ——
+  // 横轴固定画到今天：近 30 天（历史满 45 天时近 60 天）。数据开始前那段写“还没开始记”，中间和末尾缺的画斜线写“没记录”。
+  function trendData(d, g, now = Date.now()) {
+    const vols = (d?.volumes || []).filter(v => K.letter(v) !== 'F');
+    const runs = (g?.week || []).filter(r => at(r.started_at) && at(r.finished_at));
+    const longest = Math.max(0, ...vols.map(v => { const p = (v.space_history?.points || []).filter(x => Number.isFinite(x?.[1])); return p.length ? (p.at(-1)[0] - p[0][0]) / 86400 : 0; }));
+    const win = longest >= 45 ? 60 : 30, from = now - win * DAY, to = now;
+    const series = [], stamps = new Set();
+    for (const v of vols.sort(K.order)) {
+      const id = K.letter(v);
+      for (const p of v.space_history?.points || []) if (Number.isFinite(p?.[0])) stamps.add(p[0] * 1000);
+      const pts = K.trail(v, d).filter(([t]) => t >= from && t <= to);
+      const real = pts.filter(p => p[1] != null);
+      if (real.length) series.push({ id, v, pts, color: K.hue(v), short: real.at(-1)[0] - real[0][0] < 3 * DAY });
+    }
+    if (!series.length) return null;
+    const real = series.flatMap(s => s.pts.filter(p => p[1] != null).map(p => p[0]));
+    const first = Math.min(...real), last = Math.max(...real);
+    const gaps = [];
+    for (const t of [...stamps].filter(t => t > first && t < last).sort((a, b) => a - b)) {
+      if (series.every(s => s.pts.find(p => p[0] === t)?.[1] == null)) {
+        const prev = gaps.at(-1);
+        if (prev && Math.abs(prev[1] - t) < 1000) prev[1] = t + DAY; else gaps.push([t, t + DAY]);
+      }
+    }
+    const tail = to - last > 1.5 * DAY ? [last, to] : null;
+    if (tail) gaps.push(tail);
+    const marks = [];
+    for (const r of runs) for (const x of r.volumes || []) {
+      if (!(num(x.freed_bytes) >= 50 * K.GiB) || !Number.isFinite(x.free_after) || !series.some(s => s.id === K.letter(x))) continue;
+      marks.push({ id: K.letter(x), t: at(r.finished_at), v: x.free_after, bytes: x.freed_bytes });
+    }
+    return { series, from, to, win, last: tail ? last : null, before: first - from > DAY / 2 ? [from, first] : null,
+      gaps: gaps.map(([a, b]) => [Math.max(a, from), Math.min(b, to)]).filter(([a, b]) => b > a), marks };
+  }
+
+  function ticks(max) {
+    const unit = [1, K.KiB, K.MiB, K.GiB].findLast(n => n <= max) || 1;
+    const steps = max >= K.TiB ? [256, 512, 1024, 2048, 4096, 8192] : [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 400, 512];
+    const step = steps.map(n => n * unit).find(n => n * 4 >= max) || Math.ceil(max / (4 * unit)) * unit;
+    const top = Math.max(step, Math.ceil(max / step) * step);
+    return { top, list: Array.from({ length: top / step + 1 }, (_, i) => ({ n: i * step, text: i ? K.size(i * step) : '0' })) };
+  }
+
+  function trendReading(data, time) {
+    const day = K.dayId(time);
+    return data.series.flatMap(series => {
+      const point = series.pts.filter(([t, n]) => n != null && K.dayId(t) === day)
+        .reduce((best, p) => !best || Math.abs(p[0] - time) < Math.abs(best[0] - time) ? p : best, null);
+      return point ? [{ series, point }] : [];
+    });
+  }
+
+  function drawTrend(host, data) {
+    if (!host) return;
+    if (!data) { host.innerHTML = '<p class="cl-sub">各盘的空闲走势还没有记录。</p>'; return; }
+    const W = Math.max(320, host.clientWidth || 720), H = 236, L = 64, R = 34, T = 30, B = 26;
+    const x = t => L + (t - data.from) / (data.to - data.from) * (W - L - R);
+    const max = Math.max(...data.series.flatMap(s => s.pts.map(p => p[1] ?? 0)));
+    const ax = ticks(max * 1.04), y = n => T + (1 - n / ax.top) * (H - T - B);
+    const svg = [`<svg class="cl-trend__svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="各盘空闲走势">`,
+      '<defs><pattern id="cl-hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="rgb(140 140 150 / .06)"/><line x1="0" y1="0" x2="0" y2="7" stroke="rgb(140 140 150 / .28)" stroke-width="2"/></pattern></defs>'];
+    for (const tk of ax.list) svg.push(`<line class="cl-grid" x1="${L}" x2="${W - R}" y1="${y(tk.n).toFixed(1)}" y2="${y(tk.n).toFixed(1)}"/><text class="cl-ytxt" x="${L - 10}" y="${(y(tk.n) + 4).toFixed(1)}" text-anchor="end">${esc(tk.text)}</text>`);
+    if (data.before) {
+      const x0 = x(data.before[0]), x1 = x(data.before[1]);
+      svg.push(`<rect class="cl-before" x="${x0.toFixed(1)}" y="${T}" width="${(x1 - x0).toFixed(1)}" height="${H - T - B}"/><line class="cl-start" x1="${x1.toFixed(1)}" x2="${x1.toFixed(1)}" y1="${T}" y2="${H - B}"/>`);
+      const wide = x1 - x0 > 90;
+      svg.push(`<text class="cl-gaptxt" x="${(wide ? (x0 + x1) / 2 : x0).toFixed(1)}" y="${wide ? (T + H - B) / 2 + 4 : T - 8}" text-anchor="${wide ? 'middle' : 'start'}">还没开始记</text>`);
+    }
+    for (const [a, b] of data.gaps) {
+      const x0 = x(a), x1 = x(b);
+      svg.push(`<rect x="${x0.toFixed(1)}" y="${T}" width="${(x1 - x0).toFixed(1)}" height="${H - T - B}" fill="url(#cl-hatch)"/>`);
+      if (x1 - x0 > 46) svg.push(`<text class="cl-gaptxt" x="${((x0 + x1) / 2).toFixed(1)}" y="${((T + H - B) / 2 + 4).toFixed(1)}" text-anchor="middle">没记录</text>`);
+    }
+    const n = Math.max(2, Math.min(5, Math.floor((W - L - R) / 130)));
+    for (let i = 0; i < n; i++) { const t = data.from + (data.to - data.from) * i / (n - 1); svg.push(`<text class="cl-xtxt" x="${x(t).toFixed(1)}" y="${H - 6}" text-anchor="${i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}">${esc(i === n - 1 ? '今天' : K.dayKey(t))}</text>`); }
+    const ends = [];
+    for (const s of data.series) {
+      const real = s.pts.filter(p => p[1] != null), [lastAt, lastFree] = real.at(-1);
+      if (s.short) {
+        const byDay = new Map(real.map(p => [K.dayKey(p[0]), p]));
+        byDay.forEach(([t, v]) => svg.push(`<circle class="cl-dot" cx="${x(t).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3.6" fill="${s.color}"><title>${esc(`${K.volName(s.v)} ${K.dayKey(t)} 空闲 ${K.size(v)}`)}</title></circle>`));
+        const [t0, v0] = real[0];
+        svg.push(`<text class="cl-newtxt" x="${(x(t0) - 8).toFixed(1)}" y="${(y(v0) + 4).toFixed(1)}" text-anchor="end" fill="${s.color}">${esc(`${K.letter(s.v)} 盘刚开始记`)}</text>`);
+      } else {
+        let path = '', pen = false;
+        for (const [t, v] of s.pts) { if (v == null) { pen = false; continue; } path += `${pen ? 'L' : 'M'}${x(t).toFixed(1)} ${y(v).toFixed(1)}`; pen = true; }
+        svg.push(`<path class="cl-line" d="${path}" stroke="${s.color}"><title>${esc(`${K.volName(s.v)} ${K.dayKey(lastAt)} 空闲 ${K.size(lastFree)}`)}</title></path>`);
+      }
+      if (!s.short) ends.push({ s, y: y(lastFree), x: x(lastAt) });
+    }
+    ends.sort((a, b) => a.y - b.y);
+    for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 17) ends[i].y = ends[i - 1].y + 17;
+    const overflow = ends.length ? Math.max(0, ends.at(-1).y - (H - B)) : 0;
+    for (const e of ends) svg.push(`<text class="cl-end" x="${(Math.min(e.x, W - R) + 8).toFixed(1)}" y="${(e.y - overflow + 4).toFixed(1)}" fill="${e.s.color}">${esc(K.letter(e.s.v) || K.volName(e.s.v))}</text>`);
+    const big = [...data.marks].sort((a, b) => b.bytes - a.bytes);
+    big.forEach((m, i) => {
+      const mx = x(m.t), my = y(m.v);
+      svg.push(`<circle class="cl-mark" cx="${mx.toFixed(1)}" cy="${my.toFixed(1)}" r="4.5"/>`);
+      if (i) return;
+      const label = `自动清理 +${K.size(m.bytes)}`, w = label.length * 12.5 + 8, px = Math.min(Math.max(L, mx - w + 14), W - R - w), py = Math.max(2, my - 32);
+      svg.push(`<line class="cl-mark__stem" x1="${mx.toFixed(1)}" x2="${mx.toFixed(1)}" y1="${(py + 20).toFixed(1)}" y2="${(my - 5).toFixed(1)}"/><rect class="cl-mark__pill" x="${px.toFixed(1)}" y="${py.toFixed(1)}" width="${w.toFixed(1)}" height="20" rx="10"/><text class="cl-mark__txt" x="${(px + w / 2).toFixed(1)}" y="${(py + 14).toFixed(1)}" text-anchor="middle">${esc(label)}</text>`);
+    });
+    svg.push('<g class="cl-guide" aria-hidden="true"></g></svg>', '<div class="cl-hover" role="tooltip" hidden></div>');
+    host.innerHTML = svg.join('');
+    const plot = host.querySelector('svg'), tip = host.querySelector('.cl-hover'), guide = plot.querySelector('.cl-guide');
+    function show(clientX) {
+      const rect = plot.getBoundingClientRect();
+      const pos = Math.max(L, Math.min(W - R, (clientX - rect.left) * W / rect.width));
+      const t = data.from + (pos - L) / (W - L - R) * (data.to - data.from);
+      const readings = trendReading(data, t);
+      guide.innerHTML = `<line x1="${pos}" x2="${pos}" y1="${T}" y2="${H - B}"/>` +
+        readings.map(({ series, point: [ts, value] }) => `<circle cx="${x(ts)}" cy="${y(value)}" r="4" fill="${series.color}"/>`).join('');
+      tip.innerHTML = `<b>${esc(K.dayKey(t))}</b>` + (readings.length ? readings.map(({ series, point: [ts, value] }) =>
+        `<span>${esc(K.volName(series.v))} 还剩 ${esc(K.size(value))} · ${esc(U.time(new Date(ts).toISOString()))}</span>`).join('') : '<span>这天没有读到空闲空间</span>');
+      tip.hidden = false;
+      tip.style.left = `${Math.max(0, Math.min(host.clientWidth - tip.offsetWidth, pos + 12))}px`;
+    }
+    U.pointing(plot, e => { host._hoverX = e.clientX; show(e.clientX); }, () => {
+      host._hoverX = null; tip.hidden = true; guide.innerHTML = '';
+    });
+    if (host._hoverX != null) show(host._hoverX);
+  }
+
+  let lastTrend = null, observer = null;
+  function render(d, viewer = 'public', withheld = '') {
+    const card = document.getElementById('cleanup-card');
+    if (!card) return;
+    const g = digest(d);
+    K.put(document.getElementById('cleanup-pill'), pill(g));
+    const hours = g?.hours || 6;
+    const note = K.field(g?.c?.summary, '自动清理说明', viewer) || `每 ${hours} 小时一轮 · 到期的缓存、临时目录、施工产物和旧 AI 对话直接永久删`;
+    K.put(document.getElementById('cleanup-note'), esc([note, withheld].filter(Boolean).join(' · ')));
+    K.put(document.getElementById('cleanup-total'), total(g, viewer));
+    K.put(document.getElementById('cleanup-vols-k'), g?.last?.volumes?.length ? '各盘 · 最近一轮腾出 / 现在还剩' : '各盘 · 现在还剩');
+    K.put(document.getElementById('cleanup-vols'), volumes(d, g, viewer));
+    K.put(document.getElementById('cleanup-tiles'), tiles(g, viewer));
+    K.put(document.getElementById('cleanup-rules'), rules(g, viewer));
+    const data = trendData(d, g);
+    K.put(document.getElementById('cleanup-trend-k'), data ? `各盘空闲 · 近 ${data.win} 天${data.last ? ` · 读数截至 ${esc(K.dayKey(data.last))}` : ''}` : '各盘空闲');
+    const host = document.getElementById('cleanup-trend');
+    const key = JSON.stringify(data);
+    if (key !== lastTrend?.key || host.clientWidth !== lastTrend?.w) { lastTrend = { key, w: host.clientWidth, data }; drawTrend(host, data); }
+    if (!observer && typeof ResizeObserver === 'function') {
+      observer = new ResizeObserver(() => { if (lastTrend && host.clientWidth !== lastTrend.w) { lastTrend.w = host.clientWidth; drawTrend(host, lastTrend.data); } });
+      observer.observe(host);
+    }
+  }
+  window.StorageCleanup = { render, digest, alarm, trendData, ticks, trendReading };
+})();

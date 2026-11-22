@@ -47,19 +47,47 @@ class StatusCompressionTests(unittest.TestCase):
                     proxy = scan.make_server(Path(temp), Path(temp) / "out")
                     threading.Thread(target=proxy.serve_forever, daemon=True).start()
                     try:
-                        for path in ("/__status?view=cockpit&refresh=1", "/__proxy/live/computer-access/state?view=cockpit"):
+                        for path in ("/__status?view=cockpit&refresh=1", "/__proxy/live/computer-access/state?view=cockpit",
+                                     "/__live/home?project=agents"):
                             with urllib.request.urlopen(proxy.base + path, timeout=5) as response:
                                 self.assertEqual(response.read(), body)
                                 self.assertEqual(int(response.headers["Content-Length"]), len(body))
                                 self.assertIsNone(response.headers.get("Content-Encoding"))
                         self.assertEqual(seen, [("/computer-access/api/status?view=cockpit&refresh=1", "gzip"),
-                                                ("/computer-access/state?view=cockpit", "gzip")])
+                                                ("/computer-access/state?view=cockpit", "gzip"),
+                                                ("/computer-access/live/v1/home?project=agents", "gzip")])
+                        self.assertTrue(scan.is_live(proxy.base + "/__live/home"))
                     finally:
                         proxy.shutdown(); proxy.server_close(); proxy.upstream_pool.clear()
         finally:
             origin.shutdown(); origin.server_close()
 
 class ScanGlanceTests(unittest.TestCase):
+    def test_mobile_context_scales_fixed_width_and_still_detects_cover(self):
+        from playwright.sync_api import sync_playwright
+        from PIL import Image
+        config = scan.read_json(ROOT / 'site-astro/tools/scan_glance.json')
+        fixture = '<meta name="viewport" content="width=1440"><style>body{margin:0}main{width:1440px;height:4000px}button{position:absolute;left:1100px;top:2400px;width:200px;height:60px}</style><main><button id="action">Action</button></main>'
+        with tempfile.TemporaryDirectory(prefix='scan-mobile-', dir=r'E:\Cache') as temp, sync_playwright() as pw:
+            for width, height in scan.VIEWPORTS:
+                context = scan.scan_context(pw.chromium, Path(temp) / str(width),
+                    r'C:\Program Files\Google\Chrome\Application\chrome.exe', width, height)
+                try:
+                    page = context.new_page(); page.route('**/*', lambda route: route.abort()); page.set_content(fixture)
+                    metrics = page.evaluate('({width:innerWidth,scale:visualViewport.scale,touch:navigator.maxTouchPoints})')
+                    self.assertEqual(metrics['width'], 1440 if width == 390 else width)
+                    self.assertAlmostEqual(metrics['scale'], 390 / 1440 if width == 390 else 1, places=5)
+                    if width == 390: self.assertGreater(metrics['touch'], 0)
+                    page.evaluate((ROOT / 'site-astro/tools/scan_glance_dom.js').read_text('utf8'))
+                    self.assertEqual(page.evaluate('(c)=>scanGlance(c).failures', config), [])
+                    page.locator('#action').evaluate("e=>e.insertAdjacentHTML('afterend','<div style=\"position:absolute;left:1100px;top:2400px;width:200px;height:60px;background:white\"></div>')")
+                    blocked = page.evaluate('(c)=>scanGlance(c).failures.filter(f=>f.category==="blocked")', config)
+                    self.assertEqual([f['selector'] for f in blocked], ['#action'])
+                    shot = Path(temp) / f'{width}.png'; page.screenshot(path=str(shot), full_page=True)
+                    with Image.open(shot) as image:
+                        self.assertEqual(image.width, 1440 if width == 390 else width)
+                finally: context.close()
+
     def test_declared_local_meta_refresh_waits_for_destination(self):
         from playwright.sync_api import sync_playwright
         with tempfile.TemporaryDirectory(prefix='meta-refresh-', dir=r'E:\Cache') as temp, sync_playwright() as pw:
@@ -275,7 +303,7 @@ class ScanGlanceTests(unittest.TestCase):
             dist = Path(temp); hashes = {"/": "a", "/x/": "b"}
             self.assertEqual(scan.select_pages(dist, "changed", hashes, {}), ["/", "/x/"])
             self.assertEqual(scan.select_pages(dist, "changed", hashes, {"/": "a"}), ["/x/"])
-            self.assertEqual(scan.select_pages(dist, "all", hashes | {"/cv/": "r", "/system/": "r"}, {}), ["/", "/x/"])
+            self.assertEqual(scan.select_pages(dist, "all", hashes | {"/cv/": "r", "/cv/live/": "r", "/system/": "r"}, {}), ["/", "/x/"])
             self.assertEqual(scan.select_pages(dist, "/,x/index.html", hashes, {}), ["/", "/x/"])
             with self.assertRaisesRegex(ValueError, "成品缺少页面"):
                 scan.select_pages(dist, "/missing/", hashes, {})
@@ -364,6 +392,17 @@ class ScanGlanceTests(unittest.TestCase):
             subprocess.run([sys.executable, "-B", str(ROOT / "site-astro/tools/link_check.py"),
                 str(result), "--dist", str(dist), "--skip", ""], check=True, capture_output=True)
             self.assertEqual([item["href"] for item in json.loads(result.read_text("utf8"))["items"]], ["#missing"])
+    def test_links_accept_card_ids_drawn_from_page_data(self):
+        # 项目页的卡片由同目录 content.js 的 PAGE_DATA 在运行时画出，id 写在数据里，不在静态 HTML 里
+        with tempfile.TemporaryDirectory() as temp:
+            dist = Path(temp); result = dist / "result.json"; (dist / "p").mkdir()
+            (dist / "p" / "content.js").write_text('window.PAGE_DATA = {"卡": [{"id": "卡-02", "detail": ["一", "二"]}]};', encoding="utf-8")
+            (dist / "p" / "卡.html").write_text('<body data-page="卡"></body>', encoding="utf-8")
+            (dist / "x.html").write_text("<a href='/p/卡.html#卡-02'>card</a><a href='/p/卡.html#卡-02-detail-1'>detail</a>"
+                "<a href='/p/卡.html#卡-09'>bad</a>", encoding="utf-8")
+            subprocess.run([sys.executable, "-B", "-X", "utf8", str(ROOT / "site-astro/tools/link_check.py"),
+                str(result), "--dist", str(dist), "--skip", ""], check=True, capture_output=True)
+            self.assertEqual([item["href"] for item in json.loads(result.read_text("utf8"))["items"]], ["/p/卡.html#卡-09"])
 
 class ScanProxyTests(unittest.TestCase):
     def setUp(self):

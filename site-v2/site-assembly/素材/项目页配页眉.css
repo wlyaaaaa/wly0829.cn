@@ -1,0 +1,43 @@
+/* 项目页、技能页（流水线做的）换上全站页眉以后要配的几处。流水线的 page.css、button-art.css 和页眉原件都不改。
+   1. 两边都有叫 .pill 的按钮：页眉里的照页眉原件的样子，图里的照 button-art.css 的样子，互不串。
+   2. 流水线原来的白条页眉不要了（留着一个看不见的空壳给 page.js 量高度，量出来是 0）。
+   3. 悬浮页眉压在第一张图上：图往下让出页眉的位置，让出来那条露背景。
+   4. 展开细节时那一层盖住整个窗口（连页眉一起），不再从白条下面开始。 */
+
+/* 1a. 页眉里的按钮：把 button-art.css 串进来的几样改回页眉原件的样子 */
+.topbar .pill {
+  display: inline-flex;
+  width: auto;
+  height: 34px;
+  padding: 0 15px;
+  border-radius: 999px;
+  line-height: 1;
+  background: rgb(255 255 255 / .56);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .62), 0 1px 2px rgb(20 20 19 / .06);
+}
+.topbar .pill:hover { filter: none; background: rgb(255 255 255 / .94); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .9), 0 10px 20px -12px rgb(20 20 19 / .4); }
+.topbar .pill[aria-current="page"] { background: var(--ink); color: #fff; box-shadow: 0 1px 2px rgb(20 20 19 / .22), 0 8px 18px -12px rgb(20 20 19 / .55); }
+
+/* 1b. 图里的按钮：把页眉原件串进来的几样改回 button-art.css 的样子 */
+main .pill, dialog .pill {
+  height: auto;
+  font-size: inherit;
+  letter-spacing: normal;
+  white-space: normal;
+  transition: filter .15s ease;
+}
+main .pill:hover, main .pill:active, dialog .pill:hover, dialog .pill:active {
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+/* 2 */
+.site-header { display: none !important; }
+
+/* 3 */
+#pictures { margin-top: calc(12px + 55px + 14px); }
+.picture { scroll-margin-top: calc(12px + 55px + 14px); }
+
+/* 4 */
+#details { inset: 0; height: 100%; }

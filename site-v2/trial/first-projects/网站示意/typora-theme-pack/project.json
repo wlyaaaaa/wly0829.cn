@@ -1,0 +1,26 @@
+{
+  "title": "薄荷稿纸",
+  "theme": {
+    "p": "#265E39",
+    "soft": "#E6E8DA",
+    "accent": "#CEA04E"
+  },
+  "background": "assets/background.webp",
+  "projectNav": "project",
+  "skillNav": null,
+  "buttonArt": {"看本项目实况": ["cover-live-v1.webp", "11.5rem"]},
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "薄荷稿纸",
+      "meta": "薄荷稿纸 · 总览",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    }
+  },
+  "detailArt": [
+    "detail-v1.compressed.webp",
+    "4rem"
+  ]
+}

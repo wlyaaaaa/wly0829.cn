@@ -1,0 +1,56 @@
+{
+  "title": "说话手册",
+  "theme": {
+    "p": "#881d1c",
+    "soft": "#f0e1d7",
+    "accent": "#946042"
+  },
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "skillNav": null,
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "12rem"],
+    "去〔替我回话〕技能页": [
+      "reply-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔我的说明书〕项目页": [
+      "preferences-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔密码中心〕项目页": [
+      "password-v1.compressed.webp",
+      "16rem"
+    ],
+    "回〔说话手册〕项目页": [
+      "return-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔代笔〕": [
+      "writing-v1.compressed.webp",
+      "11rem"
+    ]
+  },
+  "detailArt": [
+    "detail-v1.compressed.webp",
+    "4rem"
+  ],
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "说话手册",
+      "meta": "说话手册",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    },
+    "代笔": {
+      "slug": "代笔",
+      "file": "代笔.html",
+      "title": "代笔",
+      "meta": "代笔",
+      "nav": "项目",
+      "imagePrefix": "代笔"
+    }
+  }
+}

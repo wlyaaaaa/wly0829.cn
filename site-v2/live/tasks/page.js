@@ -1,0 +1,498 @@
+// 计划任务按 Windows 登记用途分组；旧维护链接继续显示当天维护记录。
+(() => {
+  'use strict';
+  const U = window.LiveUI, L = window.LiveLight, $ = id => document.getElementById(id), { esc, sp } = U;
+  const p = new URLSearchParams(location.search), maintenance = p.get('scope') === 'ai-today', scope = maintenance ? 'ai-today' : 'scheduled';
+  const project = p.get('project'), fixture = p.has('fixture'), pageName = maintenance ? '今天 AI 后台自动维护' : '计划任务';
+  const route = href => { const u = new URL(href, location.href); if (fixture) u.searchParams.set('fixture', p.get('fixture')); return u.pathname + u.search + u.hash; };
+  if (maintenance) {
+    document.title = `${pageName} · 实况`; document.querySelector('h1').textContent = pageName;
+    $('task-intro').textContent = '按北京时间统计当天已观察到的维护运行。';
+    $('other-tasks').insertAdjacentHTML('beforebegin', '<a class="more" href="/live/tasks/">计划任务 ›</a>');
+  }
+  const scheduledPacket = d => d && Object.hasOwn(d, 'readable_total') && Object.hasOwn(d, 'unreadable_total');
+  const maintenanceRounds = d => Object.hasOwn(d || {}, 'maintenance_rounds') ? d.maintenance_rounds : d?.total;
+  const linkedProject = id => typeof id === 'string' && id && id !== 'project-b9c775111c7c33539ba1941c'; // 电脑上别的软件是任务分类。
+  if (project) { const all = new URL(location.href); all.searchParams.delete('project'); $('project-clear').href = all.pathname + all.search; $('project-filter').hidden = false; }
+  if (project) $('other-tasks').href = route(`/live/automation/?project=${encodeURIComponent(project)}`);
+  const hero = $('hero'), sections = new Map(), stamp = at => at ? `${U.date(at)} ${U.time(at)}` : U.collectionText();
+  let viewer = 'public', page = null, rows = [], watch = null, cursor = null, query = p.get('q') || '', headline = '', now = null, coverageNote = '';
+  let board = null, dataAt = null, batchAt = null, pick = p.get('group') || '', projectList = null, projectKey = '', generation = 0;
+  let runningReading = null;
+  const taskLiveWords = new WeakMap();
+  function taskWords() {
+    for (const el of document.querySelectorAll('[data-task-state]')) {
+      const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), off = U.offline?.();
+      for (let node; (node = walk.nextNode());) {
+        const previous = taskLiveWords.get(node), live = previous?.shown === node.textContent ? previous.live : node.textContent;
+        const shown = off ? live.replace(/正在跑|本轮|这一轮|下次|已跑|刚开始|还在跑/g, word => ({ '正在跑': '断开前在跑', '本轮': '断开前这一轮', '这一轮': '断开前这一轮', '下次': '原定下次', '已跑': '断开前已跑', '刚开始': '断开前刚开始', '还在跑': '断开前还在跑' })[word]) : live;
+        taskLiveWords.set(node, { live, shown }); if (node.textContent !== shown) node.textContent = shown;
+      }
+    }
+  }
+  const nextAt = at => `${U.date(at) === U.date(now || Date.now()) ? '今天' : U.date(at)} ${U.time(at)}`;
+  const MODE = { event: '有事才跑', on_demand: '叫了才跑', resident: '一直开着', service_loop: '一直开着' };
+  const empty = text => [{ key: 'empty', cls: 'row row--flat row--empty lb-row--empty', html: `<span></span><p class="row__sub">${U.fieldHtml(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读|正在准备/.test(sp(text)) ? '这块没存下来，连上后补上。' : text, { name: '自动任务', place: 'body', kind: viewer })}</p>` }];
+  // 上次出错、这次没读到运行状态的任务，后台标 scheduled_issue 并算进“项要处理”，表里也按要处理排前面
+  const attention = t => maintenance ? ['red', 'amber'].includes(U.status(t).tone) : ['failed', 'warn'].includes(taskState(t)) || t.scheduled_issue === true;
+  // 没有下次时间的任务：按 Windows 登记的触发方式写“登录时”“开机时”这类，不写“没读到”
+  function triggerWhen(t) {
+    if (!Array.isArray(t.trigger_types)) return '';
+    const kinds = t.trigger_types.filter(k => typeof k === 'string' && k && k !== '按计划');
+    if (!t.trigger_types.length) return '叫了才跑';
+    if (!kinds.length) return '没有下一次';
+    return kinds.length > 2 ? `${kinds.slice(0, 2).join('、')}等` : kinds.join('、');
+  }
+  // 上次结果没读到时，用后台给的原因写短一点
+  function unknownWhy(t) {
+    const s = typeof t.status_text === 'string' ? t.status_text : '';
+    return /暂未读到/.test(s) ? '这次没读到' : /被终止/.test(s) ? '被终止' : /结果(?:的含义)?未确认/.test(s) ? '结果未确认' : '';
+  }
+  // 要留意的任务：写后台给的原因；后台只标了要留意、没给具体原因的，照实说
+  function warnWhy(t) {
+    const pick = v => typeof v === 'string' ? v.trim() : typeof v?.text === 'string' ? v.text.trim() : '';
+    const said = [pick(t.problem?.reason), pick(t.output), pick(t.status_note), pick(t.why)].find(v => v && !/^(?:任务有当前问题|运行有异常|有 \d+ 件事要留意)$/.test(v));
+    return said || '后台只标了要留意，没给具体原因，点进去看最近几次';
+  }
+  const notRunningReason = t => ({ disabled: '停用', on_demand: '按需', never: '从没跑过' })[t.not_running_reason];
+  // 看板：列名和列宽；每组的徽章、插画；不认识的组用通用齿轮和现成插画，按 id 固定分色
+  const COLUMNS = [
+    { label: '任务名', width: 'minmax(0, 1fr)' },
+    ...(maintenance ? [{ label: '说明', width: 'minmax(0, 1fr)' }] : []),
+    { label: '上次运行', width: 'minmax(77px, .42fr)' }, { label: '<span data-task-state>下次</span>运行', width: 'minmax(77px, .42fr)' },
+  ];
+  const LOOK = {
+    'ai-today': { name: '今天 AI 后台自动维护', icon: 'sparkle', tint: 'gold', art: 'ai' },
+    online: { name: '云端和 GitHub', icon: 'loop', tint: 'green', art: 'online' },
+    ai: { name: 'AI 工作', icon: 'sparkle', tint: 'gold', art: 'ai' }, upkeep: { name: '电脑维护', icon: 'wrench', tint: 'aqua', art: 'upkeep' }, hardware: { name: '硬件和灯效', icon: 'chip', tint: 'lilac', art: 'hardware' },
+    backup: { name: '备份', icon: 'stack', tint: 'blue', art: 'backup' }, daily: { name: '听写和日常记录', icon: 'mic', tint: 'peach', art: 'daily' }, remote: { name: '远程和网络', icon: 'wifi', tint: 'cyan', art: 'remote' },
+    vendor: { name: '第三方软件自带', icon: 'box', tint: 'pink', art: 'vendor' }, 'ai-schedule': { name: 'AI 定时任务（Claude、Codex）', icon: 'chat', tint: 'lilac', art: 'ai-schedule' }, disabled: { name: '已停用', icon: 'moon', tint: 'blue', art: 'idle', last: true },
+  };
+  const look = id => {
+    if (Object.hasOwn(LOOK, id)) return LOOK[id];
+    const colors = ['green', 'gold', 'aqua', 'lilac', 'blue', 'peach', 'cyan', 'pink'];
+    let hash = 0x811c9dc5;
+    for (const ch of String(id)) hash = Math.imul(hash ^ ch.codePointAt(0), 0x01000193);
+    return { icon: 'gear', tint: colors[(hash >>> 0) % colors.length], art: 'generic' };
+  };
+  const bar = U.topbar({ ask: () => `请看实况${pageName}：${headline || U.collectionText()}。请说明现在的情况。` });
+  L.add(hero); document.querySelectorAll('.stage a[href^="/live/"]').forEach(a => a.href = route(a.getAttribute('href')));
+  const changesBox = $('changes').closest('.l2-col');
+  // 右栏是固定高度、栏内滚动的：点开“变化”时把栏滚到展开内容的开头，点了马上看得到
+  $('changes-box').addEventListener('toggle', e => {
+    if (!e.target.open) return;
+    const side = $('task-side'), head = $('changes-title');
+    // 展开的内容是一点点长出来的，跟着长几帧，直到“变化”标题停在栏顶
+    const start = performance.now(), follow = () => { side.scrollTop += head.getBoundingClientRect().top - side.getBoundingClientRect().top - 8; if (performance.now() - start < 700) requestAnimationFrame(follow); };
+    requestAnimationFrame(follow);
+  });
+  const changesTitle = $('changes-title') || changesBox.querySelector('.part');
+  document.querySelectorAll('#groups > .part, #changes + .part').forEach(el => el.setAttribute('data-keep', ''));
+  changesBox.querySelectorAll(':scope > .part').forEach(el => el.setAttribute('data-keep', ''));
+  const heroRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '自动任务' });
+  const groupsRead = U.reading($('groups'), { ghost: U.ghost.rows(4) }), changesRead = U.reading(changesBox, { ghost: U.ghost.rows(3), slow: false });
+  document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
+  function week(d) {
+    if (U.offline?.() && !Array.isArray(d.days7)) return '';
+    const labels = { ok: '跑成了', failed: '没跑成', none: '没跑' }, days = d.days7;
+    if (!Array.isArray(days) || days.every(day => day.state == null || day.state === 'unknown')) return '';
+    return `<div class="task-week"><div class="task-days" role="group" aria-label="近 7 天${d.days7_from ? `，记录从 ${U.date(d.days7_from)} ${U.time(d.days7_from)} 起` : ''}" data-from="${esc(d.days7_from || '')}">${Array.isArray(days) ? [...days].sort((a, b) => a.date.localeCompare(b.date)).map(day => { const label = `${U.date(day.date)} ${labels[day.state] || U.collectionText()}`; return day.state == null || day.state === 'unknown' ? `<span class="rec-none" data-state="unknown" aria-label="${esc(label)}" title="${esc(label)}">—</span>` : `<button class="task-day" type="button" data-state="${day.state == null ? 'unknown' : esc(day.state)}" aria-label="${esc(label)}"><span class="task-day-tip">${esc(label)}</span></button>`; }).join('') : `<span class="rec-none">${U.collectionText()}</span>`}</div></div>`;
+  }
+  function taskName(t) {
+    if (viewer === 'public' && (t.visibility === 'owner' || t.public === 'owner' || t.hidden || t.hidden_block || t.content_locked)) return { visibility: 'owner' };
+    if (Object.hasOwn(t, 'display_name')) return t.display_name;
+    const raw = t.name;
+    if (typeof raw !== 'string' || /(?:仅本人可见|可信设备可见|正在换说法)$/.test(raw.trim())) return raw;
+    if (raw === 'PlatformExperiencesHelper_DeleteShortcut') return '系统快捷方式清理';
+    if (!/[\u3400-\u9fff]/.test(raw) && (/[\\_]|^[a-z]{2,}(?:[A-Z][a-z]+){2,}$/.test(raw) || /^[\da-f]{8}-[\da-f-]{27}$/i.test(raw))) {
+      return typeof t.project_name === 'string' && t.project_name.trim() || '用途未登记的任务';
+    }
+    return raw;
+  }
+  const changeName = c => {
+    const name = taskName(c), raw = typeof c.name === 'string' ? c.name.replace(/\s+[\da-f]{8}$/i, '') : '';
+    if (name === '用途未登记的任务' && raw) return `用途未登记的任务（${raw}）`;
+    return typeof name === 'string' && !/[\u3400-\u9fff]/.test(name) ? name.replace(/\s+[\da-f]{8}$/i, '') : name;
+  };
+  const stateDot = (value, label = '') => `<i class="task-state-dot" data-state="${value}" ${label ? `role="img" aria-label="${label}"` : 'aria-hidden="true"'}></i>`;
+  const shortStatus = { ok: '成功', failed: '出错', warn: '要留意', running: '正在跑', disabled: '停用', never: '没跑过', unknown: '没读到' };
+  function taskState(t) {
+    if (t.enabled === false || t.state === 'disabled' || t.not_running_reason === 'disabled') return 'disabled';
+    if (t.source_readable === false) return 'unknown';
+    if (t.not_running_reason === 'never') return 'never';
+    if (t.state === 'failed') return 'failed';
+    if (t.state === 'warn') return 'warn';
+    return { running: 'running', success: 'ok', never: 'never' }[t.state]
+      || (['ok', 'failed'].includes(t.last?.result) ? t.last.result : 'unknown');
+  }
+  function task(t, coverage) {
+    const detail = route(`/live/task/?id=${encodeURIComponent(t.id)}`), last = t.last, lastAt = last?.start || last?.end;
+    const resultKey = last?.result || t.result || ({ failed: 'failed', running: 'running' })[t.state] || '';
+    const result = { ok: '跑成', failed: '没跑成', running: '正在跑', unknown: '结果不明' }[last?.result || t.result] || { failed: '没跑成', warn: '要留意', late: '晚了', running: '正在跑' }[t.state] || (U.offline?.() ? '' : U.collectionText());
+    const hidden = viewer === 'public' && (t.visibility === 'owner' || t.public === 'owner' || t.hidden);
+    const text = typeof t.text === 'string' ? t.text.replace(/^(?:\d{2}:\d{2}\s*)?(?:没跑成|跑成)\s*[·，:：]\s*/, '') : t.text;
+    const privateField = v => v && typeof v === 'object' && (v.hidden || v.visibility === 'owner' || v.public === 'owner') && v.text == null && v.value == null;
+    // 说明只露一句：取第一句，全文放在悬停提示里，点进详情看
+    const sentence = typeof text === 'string' ? (text.match(/^[\s\S]*?[。！!？?\n](?=\s*\S)/)?.[0].trim() || text) : text;
+    const description = [text && !privateField(t.text) && U.fieldHtml(sentence, { name: '说明', place: 'body', kind: viewer }), (privateField(t.project_name) || privateField(t.text)) && U.fieldHtml({ ...(privateField(t.text) ? t.text : t.project_name), hidden_what: '说明' }, { name: '说明', place: 'body', kind: viewer })].filter(Boolean);
+    const projectName = !hidden && t.project_name && !privateField(t.project_name) ? U.fieldHtml(t.project_name, { name: '项目', place: 'body', kind: viewer }) : '';
+    const projectCell = projectName && linkedProject(t.project) ? `<a class="lb-link" href="${esc(route(`/live/project/?id=${encodeURIComponent(t.project)}`))}">${projectName}</a>` : projectName;
+    const reason = notRunningReason(t) || (t.state === 'disabled' ? '停用' : '');
+    const plan = t.schedule ? U.fieldHtml(t.schedule, { name: '运行周期', place: 'body', kind: viewer }) : '';
+    // 近 7 天每天的小方块只给出过事的任务画；正常的只写时间和结果
+    const trouble = Array.isArray(t.days7) && t.days7.some(day => day?.state === 'failed');
+    const field = (value, name) => U.fieldHtml(value, { name, kind: viewer });
+    const outcome = field(Object.hasOwn(t, 'status_text') ? t.status_text : result, '运行结果');
+    const lastCell = [lastAt && `<span aria-label="上次${last.start ? '运行' : '结束'} ${esc(stamp(lastAt))}">${stamp(lastAt)}</span>`, (outcome || trouble) && `<span class="lb-run"><span data-task-state data-result="${esc(resultKey)}">${outcome}</span>${trouble ? week(t) : ''}</span>`];
+    const next = taskNext(t), nextField = Object.hasOwn(t, 'next_at') ? t.next_at : t.next;
+    const nextText = next ? nextAt(next) : nextField ? field(nextField, '下次运行') : reason || MODE[t.mode] || '';
+    const name = taskName(t), title = U.fieldHtml(name || '自动任务', { name: '自动任务', place: 'title', kind: viewer });
+    if (!maintenance) {
+      const state = taskState(t), lastState = lastAt ? last?.result || 'unknown' : state === 'never' ? 'never' : '';
+      const scheduled = state === 'disabled' ? '停用' : next ? nextAt(next)
+        : MODE[t.mode] || (t.not_running_reason === 'on_demand' ? '按需' : triggerWhen(t) || '没读到');
+      const triggerTitle = !next && Array.isArray(t.trigger_types) && t.trigger_types.length ? ` title="${esc(`触发方式：${t.trigger_types.join('、')}`)}"` : '';
+      // 这次没读到运行状态的行一律写“这次没读到”（卡头也这样说），上次读到的结果放在指上去的提示里
+      const shown = t.source_readable === false ? 'unread' : state === 'warn' ? 'warn' : lastState;
+      const lastWord = shown === 'unread' ? '这次没读到' : shown === 'warn' ? shortStatus.warn
+        : lastState === 'unknown' ? state === 'disabled' ? '停用前结果不明' : unknownWhy(t) || shortStatus.unknown : shortStatus[lastState] || shortStatus.unknown;
+      const lastTitle = shown === 'warn' ? ` title="${esc(warnWhy(t))}"` : (shown === 'unread' || lastState === 'unknown') && typeof t.status_text === 'string' ? ` title="${esc(t.status_text)}"` : '';
+      const why = shown === 'warn' && !hidden ? `<p class="lb-sub task-why">${U.fieldHtml(warnWhy(t), { name: '原因', place: 'body', kind: viewer })}</p>` : '';
+      const registeredPurpose = t.purpose ?? sentence;
+      const purposeText = typeof registeredPurpose === 'string' ? registeredPurpose.split(/[。；，]/u, 1)[0].trim() : registeredPurpose;
+      const purpose = !hidden && purposeText && (typeof purposeText !== 'string' || !/^(?:在跑|正在跑|到点没跑|已停用|停用|所需状态未读到)$/u.test(purposeText))
+        ? field(purposeText, '用途') : description[1] || projectName;
+      const fullPurpose = !hidden ? U.fieldText(registeredPurpose ?? t.project_name, viewer) : '';
+      const actions = viewer === 'owner' ? U.actions(t, t.actions || [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : '';
+      return { key: t.id, cls: `row row--flat lb-row task-compact${attention(t) ? ' is-attention' : ''}`, html:
+        `<span class="lb-row__lamp">${stateDot(state, shortStatus[state])}</span><div class="lb-cell lb-cell--name"><p><a class="row__title" href="${esc(detail)}">${title}</a></p>${purpose ? `<p class="lb-sub task-purpose" title="${esc(fullPurpose)}">${purpose}</p>` : ''}${why}</div>
+        <div class="lb-cell lb-cell--time task-last">${lastAt ? `<time>${stamp(lastAt)}</time>` : ''}${lastState ? `<span data-task-state${lastTitle}>${stateDot(shown === 'unread' ? 'unknown' : shown)}${esc(lastWord)}</span>` : '—'}${trouble ? week(t) : ''}</div>
+        <div class="lb-cell lb-cell--time"><span data-task-state${triggerTitle}>${esc(scheduled)}</span></div><div class="row__acts">${actions}</div>` };
+    }
+    const nameBody = U.fieldHtml(name, { name: '自动任务', kind: viewer, marker: true });
+    const nameNote = /live-mark|trust-note/.test(nameBody) ? nameBody.slice(nameBody.startsWith(`${title} `) ? title.length + 1 : 0) : '';
+    const status = U.status(t, { small: true });
+    const unreliable = Array.isArray(coverage) && coverage.some(c => c?.id === t.id && c.reliable === false);
+    const note = (!description.length || ['red', 'amber', 'blue'].includes(status.tone)) && status.note !== outcome && !/^(?:数据截止|这次没读到|没有记录)/.test(status.note) && status.note;
+    const extra = [nameNote && `<span class="row__meta">${nameNote}</span>`, maintenance && Number.isInteger(t.rounds) && `已观察到 ${t.rounds} 次`, t.source_readable === false && '已登记，本轮没读到运行状态', note, unreliable && '这段运行记录不可靠', t.ledger_id && `<a class="lb-link" href="${esc(route(`/live/issue/?id=${encodeURIComponent(t.ledger_id)}`))}">关联账本 ›</a>`].filter(Boolean).join(' · ');
+    const rawName = t.name && !hidden && t.name !== name && (viewer === 'owner' || typeof name === 'string' && name.trim() && !/(?:仅本人可见|可信设备可见|正在换说法)$/.test(name.trim()));
+    const facts = [rawName && `原名称：${field(t.name, '原名称')}`, plan && `原调度：${plan}`, t.at && `明细采集：${stamp(t.at)}`, t.duration && taskDuration(t.duration)].filter(Boolean);
+    return { key: t.id, cls: `row row--flat lb-row${attention(t) ? ' is-attention' : ''}`, html: `<span class="lb-row__lamp">${status.lamp}</span><div class="lb-cell lb-cell--name"><p class="lb-clip"><a class="row__title" href="${esc(detail)}">${title}</a></p>${projectCell ? `<p class="lb-sub lb-clip1">${projectCell}</p>` : ''}</div><p class="lb-cell lb-clip"${typeof text === 'string' && !privateField(t.text) ? ` title="${esc(text)}"` : ''}>${description.join(' ')}</p><div class="lb-cell lb-cell--time">${lastCell.filter(Boolean).join('')}</div><div class="lb-cell lb-cell--time">${nextText ? `<span>${nextText}</span>` : ''}</div><div class="row__acts">${U.actions(t, t.actions || [{ kind: 'copy', label: '问情况', intent: 'ask' }])}</div>${extra ? `<p class="lb-row__extra row__sub">${extra}</p>` : ''}${facts.length ? `<details class="lb-row__extra"><summary class="lb-link">运行详情</summary><p>${facts.join(' · ')}</p></details>` : ''}` };
+  }
+  function taskDuration(d) {
+    if (!d) return '';
+    const seconds = n => `${Number(n.toFixed(1))} 秒`;
+    return [d.median_seconds != null && `典型耗时 ${seconds(d.median_seconds)}`, d.samples != null && `有效样本 ${d.samples} 轮`, d.elapsed_seconds != null && `<span data-task-state>本轮已跑 ${seconds(d.elapsed_seconds)}</span>`, d.gap && U.fieldHtml(d.gap, { kind: viewer })].filter(Boolean).join(' · ');
+  }
+  function groupCount(group, loaded, incomplete = false) {
+    if (maintenance) return `${incomplete ? '已读到' : '共'} ${loaded} 种动作`;
+    if (group?.total != null) return `共 ${group.total} 项`;
+    return `已读到 ${group?.known_total ?? loaded} 项`;
+  }
+  function registeredGroup(group) { return group?.count != null && !Object.hasOwn(group, 'total') && !Object.hasOwn(group, 'known_total') ? { ...group, total: group.count } : group; }
+  function purposeCount(d, cell) {
+    return d?.purpose_unregistered_count == null ? '' : cell('unregistered', 'gear', esc(d.purpose_unregistered_count), '<span title="按已读 Windows 任务计数">用途未登记</span>');
+  }
+
+  function waiting(text) {
+    for (const s of sections.values()) { s.el.hidden = true; U.list(s.main, empty(text)); U.list(s.rest, []); s.more.hidden = true; }
+    board?.layout();
+    let ul = $('task-empty') || (!sections.size ? $('groups').querySelector('ul') : null);
+    if (!ul) { ul = document.createElement('ul'); ul.className = 'rows list'; ul.id = 'task-empty'; $('groups').append(ul); }
+    ul.hidden = false; U.list(ul, empty(text));
+    U.html($('coverage'), U.fieldHtml(text, { name: '读取情况', place: 'body', kind: viewer }));
+    U.html(changesTitle, '任务变化'); U.list($('changes'), empty(text)); $('next').hidden = true;
+    const upcoming = $('upcoming'); if (upcoming) upcoming.hidden = true;
+  }
+  async function loadGroup(id, append = false) {
+    const s = sections.get(id), ticket = generation;
+    if (!s.remote) return true;
+    s.next.disabled = true;
+    try {
+      const r = await window.Live.get('tasks', { scope, project, q: query || null, group: id, cursor: append ? s.cursor : null });
+      if (ticket !== generation || r.meta?.viewer?.kind !== viewer || r.meta?.at !== batchAt || !maintenance && !scheduledPacket(r.data)) return false;
+      U.blockNote(s.el, r);
+      if (!Array.isArray(r.data?.items)) return false;
+      s.loadedRows = [...new Map([...(append ? s.loadedRows : []), ...(taskGroups({ task_purpose_catalog: page?.task_purpose_catalog }, r.data.items).get(id) || [])].map(t => [t.id, t])).values()];
+      s.cursor = r.data.next;
+      U.list(s.rest, s.loadedRows.filter(t => !s.preview.has(t.id)).map(t => task(t, r.data.coverage ?? page?.coverage)));
+      s.next.hidden = !s.cursor;
+      L.lightUp([s.el]);
+      return true;
+    } finally { s.next.disabled = false; taskWords(); }
+  }
+  function render(d, append = false) {
+    function changeDetail(c) {
+      if (typeof c.owner_detail !== 'string' || !c.owner_detail.trim()) return '';
+      return `<details><summary>变更详情</summary><p class="row__sub">${esc(c.owner_detail)}</p></details>`;
+    }
+    if (d?.q === 'warming') { page = d; waiting('正在准备'); taskHead(); groupsRead.done(); changesRead.done(); return; }
+    if (d && !maintenance && !scheduledPacket(d)) {
+      page = null; rows = []; dataAt = null;
+      waiting('当前数据还不能单独核对 Windows 登记，等任务名册更新。');
+      U.html($('head'), U.head('Windows 计划任务名册未读到')); groupsRead.done(false); changesRead.done(false); heroRead.done(false); return;
+    }
+    page = append ? { ...page, next: d.next } : d; const received = fixture && scope === 'ai-today' && d?.ai_today ? d.ai_today : d?.items ?? (d?.groups?.some(g => Array.isArray(g.items)) ? d.groups.flatMap(g => g.items || []) : null);
+    $('groups').dataset.audience = viewer;
+    if (received == null) { waiting(U.collectionText('任务', d)); taskHead(); if (d != null) { groupsRead.done(false); changesRead.done(false); } return; }
+    d = page;
+    const incoming = received || []; rows = append ? [...new Map([...rows, ...incoming].map(t => [t.id, t])).values()] : incoming;
+    const shown = U.order(fixture ? rows.filter(t => (!project || t.project === project) && sp(t.name).toLowerCase().includes(query.toLowerCase())) : rows, attention, `tasks:${scope || ''}:${project || ''}:${query}`);
+    const groups = taskGroups(page, shown);
+    const labels = new Map((page?.groups || d?.groups || []).map(g => [g.id, g.name || g.label || g.id]));
+    if (!board) { $('groups').replaceChildren(); board = window.LiveBoard.create($('groups'), { columns: COLUMNS }); }
+    let cards = 0;
+    for (const [id, list] of groups) {
+      const visible = Math.min(5, list.length);
+      if (!sections.has(id)) { const c = board.card(id, look(id)); sections.set(id, c); U.fold(c.more, c.box, () => loadGroup(id)); c.next.addEventListener('click', () => loadGroup(id, true)); }
+      const group = registeredGroup((page.groups || []).find(g => g.id === id));
+      const groupName = group?.name || group?.label || group?.title || group?.text;
+      const incomplete = page.next != null && page.next !== '' || page.task_list_complete === false || group?.q === 'partial' || maintenance && page.q !== 'ok';
+      const count = groupCount(group, list.length, incomplete), size = maintenance ? list.length : group?.total ?? group?.known_total ?? list.length;
+      const gap = group?.gap || (group?.q === 'partial' && group?.total == null ? U.collectionText('这一组的件数', group) : '');
+      const groupHidden = viewer === 'public' && groupName && typeof groupName === 'object' && (groupName.hidden || groupName.visibility === 'owner' || groupName.public === 'owner' || groupName.rewrite === 'pending') && groupName.text == null && groupName.value == null;
+      const s = sections.get(id); s.remote = Array.isArray(group?.items) && list.length < size; s.preview = new Set(list.slice(0, visible).map(t => t.id));
+      const bare = (maintenance || group?.total === 0) && !list.length; s.el.hidden = bare; if (!bare) cards++;
+      const name = (typeof LOOK === 'undefined' || !Object.hasOwn(LOOK, id) ? null : LOOK[id].name) || groupName || groups.labels?.get(id) || labels.get(id) || (id === 'ai-today' ? '今天 AI 后台自动维护' : id === 'other' ? '其他' : id), status = U.status(group);
+      s.label = `${sp(name)}（${count}）`;
+      U.html(s.title, `<b>${U.fieldHtml(name, { name: '任务分组', place: 'label', kind: viewer })}</b><span class="lb-card__count">${U.fieldHtml(count, { kind: viewer })}</span>${status.lamp}`);
+      // 卡头第二行：有缺口、有灯的原因先写；都没有就写这一组排在前面的几件
+      const names = list.slice(0, 3).filter(t => viewer === 'owner' || !(t.hidden || t.hidden_block || t.content_locked)).map(t => U.fieldText(taskName(t), viewer)).filter(name => name && !/(?:仅本人可见|可信设备可见|正在换说法)$/.test(name.trim()));
+      const about = [gap && U.fieldHtml(gap, { kind: viewer }), status.note, groupHidden && U.fieldHtml(groupName, { name: '任务分组', place: 'body', kind: viewer }), scope === 'ai-today' && group?.project_name && U.fieldHtml(group.project_name, { name: '项目', place: 'body', kind: viewer })].filter(Boolean);
+      U.html(s.sub, about.length ? about.join(' · ') : names.length ? `${U.fieldHtml(names.join('、'), { kind: viewer })}${size > names.length ? ' 等' : ''}` : '');
+      const row = t => task(t, page.coverage);
+      const remaining = Math.max(0, Math.max(size, list.length) - visible);
+      U.list(s.main, list.slice(0, visible).map(row)); U.list(s.rest, (s.loadedRows || list.slice(visible)).filter(t => !s.preview.has(t.id)).map(row));
+      s.more.hidden = remaining === 0;
+      U.html(s.more, `<span class="lb-more__open">${incomplete && group?.total == null ? '展开' : `展开（还有 ${remaining} 条）`}</span><span class="lb-more__shut">收起</span> <span class="more__chev">›</span>`);
+    }
+    for (const [id, s] of sections) if (!groups.has(id)) s.el.hidden = true;
+    const tail = [...sections.values()].filter(s => !s.el.hidden).at(-1);
+    const disabled = sections.get('disabled');
+    for (const s of sections.values()) s.el.classList.toggle('task-full', !maintenance && (s === disabled || cards > 1 && cards % 3 === 1 && s === tail));
+    board.layout(); pickGroup(); pickProjects();
+    const noTasks = maintenance && (d.q !== 'ok' || maintenanceRounds(d) !== 0) ? '还没读到维护明细'
+      : query ? '没有这个名字的任务' : maintenance ? `${project ? '这个项目' : ''}今天没有 AI 后台自动维护` : '没有任务';
+    let none = $('task-empty'); if (!none) { none = document.createElement('ul'); none.className = 'rows list'; none.id = 'task-empty'; $('groups').append(none); } none.hidden = cards > 0; U.list(none, empty(noTasks));
+    const ranges = Array.isArray(d.coverage) ? d.coverage : [];
+    const plainSources = { '部分宿主运行尚无模型执行证据': '有些任务跑了，但还没对上 AI 实际干活的记录' };
+    const missing = (d.missing_sources || []).map(s => typeof s === 'string' ? plainSources[s] || s : s.text || s.name || s);
+    const partial = d.q === 'partial' || d.coverage?.q === 'partial' || ranges.some(c => c.complete === false) || missing.length;
+    const wording = ranges.length ? ranges.map(c => c.text).filter(Boolean) : [d.coverage?.text].filter(Boolean);
+    const text = wording.flatMap(value => typeof value === 'object' ? [value] : value.split(/[，；,;]/).filter(s => /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|有缺口|不完整/.test(s)));
+    const runtimeMissing = rows.filter(t => t.source_readable === false).length;
+    coverageNote = !maintenance && runtimeMissing ? `${runtimeMissing} 项这次没读到运行状态，表里标着“这次没读到”，指上去能看上次读到的结果`
+      : !maintenance && d.unreadable_total > 0 ? '部分已登记任务的运行状态没读到'
+      : partial && !U.offline?.() ? text.length ? text : missing.length ? missing : [received.length ? '运行记录覆盖不完整' : '任务运行记录没读到'] : [];
+    $('coverage-label').hidden = $('coverage').hidden = true;
+    $('sources').hidden = !d.hidden;
+    U.list($('sources'), d.hidden ? [{ key: 'hidden', cls: 'row row--flat', html: `<p class="row__sub">另有 ${d.hidden} 个${U.fieldHtml(d.hidden_what || '任务', { name: '任务', place: 'label', kind: viewer })}，${U.fieldHtml({ hidden: 1 }, { place: 'body', kind: viewer })}</p>` }] : []);
+    const moved = changeCounts(page);
+    U.html(changesTitle, moved?.title || '任务变化');
+    U.list($('changes'), !Array.isArray(d.changes7) ? empty('任务变更记录没读到') : d.changes7.length ? d.changes7.map(c => ({
+      key: c.id, cls: 'row row--flat',
+      html: `<span></span><div class="row__text"><p class="row__main"><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(c.id)}`))}">${U.fieldHtml(changeName(c) || '自动任务', { name: '自动任务', place: 'title', kind: viewer })}</a><span class="row__meta">${esc({ added: '新增', disabled: '停用了', missing: '现在找不到', enabled: typeof c.label === 'string' && c.label || '又开启' }[c.kind] || '有变化')} · ${stamp(c.at)}</span></p>${changeDetail(c)}</div>`,
+    })) : empty(moved.empty));
+    taskHead(moved);
+    cursor = d.next; $('next').hidden = !cursor; groupsRead.done(); changesRead.done(); L.lightUp([hero, $('groups'), $('changes')]);
+    if (!maintenance) drawUpcoming(listedTasks(groups)); U.land(); taskWords();
+  }
+  async function readAllTasks(first, fetchPage, limit = 10) {
+    let full = first;
+    for (let n = 1; full?.next != null && full.next !== '' && n < limit; n++) {
+      let r; try { r = await fetchPage(full.next); } catch { break; }
+      if (!Array.isArray(r?.data?.items) || !maintenance && !scheduledPacket(r.data)) break;
+      full = { ...full, items: [...new Map([...(full.items || []), ...r.data.items].map(t => [t.id, t])).values()], next: r.data.next };
+    }
+    return full;
+  }
+  function taskNext(t) {
+    const value = Object.hasOwn(t, 'next_at') ? t.next_at : t.next;
+    const at = value && typeof value === 'object' ? U.fieldText(value, viewer) : value;
+    return Number.isFinite(Date.parse(at)) ? at : null;
+  }
+  function upcomingTasks(items, at) {
+    const start = Date.parse(at), runAt = t => Date.parse(taskNext(t));
+    return items.filter(t => taskState(t) !== 'disabled' && runAt(t) > start && runAt(t) <= start + 86400000)
+      .sort((a, b) => runAt(a) - runAt(b));
+  }
+  function drawUpcoming(items) {
+    const list = dataAt ? upcomingTasks(page?.upcoming ?? items, dataAt) : [], box = $('upcoming');
+    const complete = dataAt && page?.unreadable_total === 0 && (Array.isArray(page?.upcoming) || !page?.next && page?.total != null);
+    box.hidden = false;
+    box.querySelector('.part').textContent = dataAt ? `${complete ? '24 小时排程' : '已读到的排程'} · ${nextAt(dataAt)} 起${complete ? '' : ' 24 小时'}` : '24 小时排程';
+    const entry = t => ({ key: t.id, cls: 'row row--flat', html: `<time class="row__meta" datetime="${esc(taskNext(t))}">${nextAt(taskNext(t))}</time><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(t.id)}`))}">${U.fieldHtml(taskName(t), { name: '自动任务', place: 'title', kind: viewer })}</a>` });
+    U.list(box.querySelector('ul'), list.length ? list.slice(0, 6).map(entry) : empty(complete ? '没有排定运行的任务' : '还没读全下次运行时间'), { animate: false });
+    U.list(box.querySelector('details ul'), list.slice(6).map(entry), { animate: false });
+    box.querySelector('details').hidden = list.length <= 6;
+    const moreLabel = `<span class="disclosure-closed">再看 ${list.length - 6} 个</span><span class="disclosure-open">收起</span><span class="disclosure-chev" aria-hidden="true">›</span>`;
+    const summary = box.querySelector('summary'); if (summary.innerHTML !== moreLabel) summary.innerHTML = moreLabel;
+  }
+  const listedTasks = groups => [...new Map([...groups.values()].flat().map(t => [t.id, t])).values()];
+  function taskGroups(d, shown) {
+    const groups = new Map();
+    groups.labels = new Map();
+    const catalog = d.task_purpose_catalog || {};
+    const purposes = catalog.purposes || catalog;
+    const entries = Array.isArray(purposes) ? purposes : Object.entries(purposes).map(([id, value]) => ({ id, ...(typeof value === 'object' ? value : { group: value }) }));
+    const catalogGroups = catalog.groups || [];
+    for (const group of Array.isArray(catalogGroups) ? catalogGroups : Object.entries(catalogGroups).map(([id, value]) => ({ id, ...(typeof value === 'object' ? value : { name: value }) }))) groups.labels.set(group.id, group.name || group.label || group.title || group.text || group.id);
+    const members = new Map(shown.map(t => [t.id, t]));
+    for (const g of maintenance ? [] : d.groups || []) {
+      if (g.id === 'not_running') continue;
+      for (const t of g.items || []) if (!members.has(t.id)) members.set(t.id, { group: g.id, ...t });
+    }
+    for (const t of members.values()) {
+      const purpose = typeof t.purpose === 'object' ? t.purpose : entries.find(p => p.id === t.purpose);
+      const group = Object.hasOwn(t, 'group') ? t.group : purpose?.group || t.purpose;
+      const id = typeof group === 'object' ? group?.id : group;
+      const key = !maintenance && taskState(t) === 'disabled' ? 'disabled'
+        : id && id !== 'not_running' ? id : maintenance ? 'ai-today' : 'other';
+      const label = (typeof group === 'object' ? group?.name || group?.label || group?.title || group?.text : null) || t.group_name || t.group_label || purpose?.group_name;
+      if (label) groups.labels.set(key, label);
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(t);
+    }
+    for (const g of d.groups || []) if (g.id !== 'not_running' && !groups.has(g.id) && (Array.isArray(g.items) || g.total != null || g.known_total != null)) groups.set(g.id, []);
+    if (groups.has('disabled')) {
+      const stopped = groups.get('disabled'); groups.delete('disabled'); groups.set('disabled', stopped);
+    }
+    return groups;
+  }
+  // “全部分组”：只看一组时这一组整宽摆开、自动展开；记在网址的 group= 里，刷新、分享都还在
+  function pickGroup() {
+    const sel = $('group-pick'), list = [...sections].filter(([, s]) => !s.el.hidden)
+      .sort(([a], [b]) => Number(a === 'disabled') - Number(b === 'disabled'));
+    const key = list.map(([id, s]) => `${id}\u0001${s.label}`).join('\u0002');
+    if (sel.dataset.key !== key) { sel.dataset.key = key; sel.replaceChildren(new Option('全部分组', ''), ...list.map(([id, s]) => new Option(s.label, id))); }
+    const want = pick && list.some(([id]) => id === pick) ? pick : '';
+    sel.value = want;
+    if (board.single !== (want || null)) {
+      const c = board.only(want || null), s = want && sections.get(want);
+      if (s && !s.more.hidden && s.more.getAttribute('aria-expanded') !== 'true') s.more.click();
+      if (c && document.readyState === 'complete') c.el.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+  }
+  $('group-pick').addEventListener('change', e => {
+    pick = e.target.value; const u = new URL(location.href); pick ? u.searchParams.set('group', pick) : u.searchParams.delete('group'); history.replaceState(history.state, '', u);
+    if (board) pickGroup();
+  });
+  // “全部项目”：读到的任务里出现过的项目，加上项目清单里在用的项目；选了就带 project= 重开这一页
+  function pickProjects() {
+    if (projectList === null) { projectList = []; Promise.resolve(window.Live.get?.('projects', { state: 'active' })).then(r => { projectList = Array.isArray(r?.data?.items) ? r.data.items : []; pickProjects(); }).catch(() => {}); }
+    const open = v => v != null && v !== '' && !(typeof v === 'object' && (v.hidden || v.visibility === 'owner' || v.public === 'owner' || v.rewrite === 'pending') && v.text == null && v.value == null);
+    const seen = new Map();
+    for (const t of [...rows, ...[...sections.values()].flatMap(s => s.loadedRows || [])]) if (typeof t.project === 'string' && t.project && open(t.project_name) && !(viewer === 'public' && t.visibility === 'owner')) seen.set(t.project, sp(t.project_name));
+    for (const it of projectList) if (typeof it.id === 'string' && open(it.name) && !seen.has(it.id)) seen.set(it.id, sp(it.name));
+    if (project && !seen.has(project)) seen.set(project, open(page?.project_name) ? sp(page.project_name) : '当前项目');
+    const list = [...seen].sort((a, b) => a[1].localeCompare(b[1], 'zh-CN')), key = list.map(x => x.join('\u0001')).join('\u0002'), sel = $('project-pick');
+    if (key !== projectKey) { projectKey = key; sel.replaceChildren(new Option('全部项目', ''), ...list.map(([id, name]) => new Option(name, id))); }
+    sel.value = project || '';
+  }
+  $('project-pick').addEventListener('change', e => { const u = new URL(location.href); e.target.value ? u.searchParams.set('project', e.target.value) : u.searchParams.delete('project'); u.searchParams.delete('group'); location.assign(u.pathname + u.search + u.hash); });
+  function link(s) {
+    const dayChanged = s.now && U.date(s.now) !== U.date(now);
+    now = s.now || now; if (dayChanged && page) render(page);
+    bar?.set(s); L.offline(s.offline);
+    U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer })}</span>` }] : []);
+    if (!page && !s.data) waiting(s.warming ? '正在读' : s.text || U.collectionText());
+    let note = s.fallbackNote || s.meta?.fallbackNote || '';
+    const source = s.data?.source_at ?? s.data?.at ?? s.shownAt ?? s.meta?.at;
+    if (note.startsWith('数据截止 ')) note = Date.parse(source) === Date.parse(dataAt) ? '' : note.replace('数据截止 ', '清单来源截至 ');
+    U.blockNote($('groups'), { fallbackNote: note });
+    if (page && !maintenance) drawUpcoming(listedTasks(taskGroups(page, rows)));
+    taskWords();
+  }
+  function load() {
+    generation++; watch?.stop();
+    for (const s of sections.values()) { s.loadedRows = null; s.cursor = null; s.box._loaded = false; s.next.hidden = true; }
+    page = null; rows = []; dataAt = null; runningReading = null; coverageNote = ''; waiting('正在读'); taskHead();
+    watch = window.Live.watch('tasks', { scope, project, q: query || null }, {
+      phase(s) { if (!page) { groupsRead.set(s); changesRead.set(s); } },
+      data(d, meta) {
+        const ticket = ++generation, kind = meta.viewer?.kind || 'public';
+        if (kind !== viewer) for (const s of sections.values()) { s.loadedRows = null; s.cursor = null; s.box._loaded = false; s.next.hidden = true; }
+        const paint = packet => {
+          if (viewer !== kind) runningReading = null;
+          viewer = kind; batchAt = meta.at; now = meta.now || meta.at;
+          dataAt = maintenance ? packet?.at : Object.hasOwn(packet || {}, 'roster_at') ? packet.roster_at : packet?.at ?? meta.at;
+          const reading = scheduledRunning(packet);
+          if (reading && (!runningReading || Date.parse(reading.at) >= Date.parse(runningReading.at))) runningReading = reading;
+          if (page) U.anchor(() => render(packet)); else render(packet);
+        };
+        // 首批已到就先画，重读则留着原来的完整列表，等同一批分页到齐后再换。
+        if (!page || page.q === 'warming' || kind !== viewer || !d) paint(d);
+        readAllTasks(d, async cursor => {
+          if (ticket !== generation) return null;
+          const result = await window.Live.get('tasks', { scope, project, q: query || null, cursor });
+          if (result.meta?.viewer?.kind !== kind) return null;
+          if (result.meta?.at === meta.at) return result;
+          if (Date.parse(result.meta?.at) > Date.parse(meta.at)) void window.Live.get('tasks', { scope, project, q: query || null });
+          return null;
+        }).then(all => { if (ticket === generation && all !== page && (!all?.next || !page || page.next)) paint(all); });
+      }, link,
+    });
+  }
+  $('q').value = query; let timer; $('search').addEventListener('submit', e => { e.preventDefault(); clearTimeout(timer); query = $('q').value.trim(); const u = new URL(location.href); query ? u.searchParams.set('q', query) : u.searchParams.delete('q'); history.replaceState(null, '', u); load(); }); $('q').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(() => $('search').requestSubmit(), 300); });
+  $('next').addEventListener('click', async () => { const ticket = generation; $('next').disabled = true; try { const r = await window.Live.get('tasks', { scope, project, q: query || null, cursor }); if (ticket !== generation) return; if (r.data && r.meta?.at === batchAt && r.meta?.viewer?.kind === viewer) U.anchor(() => render(r.data, true)); else U.html($('coverage'), U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '读取情况', place: 'body', kind: viewer })); } finally { $('next').disabled = false; } });
+  function scheduledRunning(packet) {
+    if (maintenance || !packet || !dataAt) return null;
+    if (Object.hasOwn(packet, 'running_reading')) return packet.running_reading;
+    const items = packet.items || [];
+    const pageOnly = !packet.state_counts && (packet.next != null || packet.total != null && items.length < packet.total);
+    const partial = pageOnly || packet.total == null || packet.unreadable_total > 0;
+    const count = packet.state_counts ? packet.state_counts.running || 0
+      : items.filter(t => (!pageOnly || t.source_readable === true) && taskState(t) === 'running').length;
+    return count || !partial ? { count, at: dataAt, partial, pageOnly } : null;
+  }
+  function taskHead(moved) {
+    if (page?.q === 'warming') { headline = '正在准备'; U.html($('head'), U.head(headline)); $('note').hidden = true; $('asof').hidden = true; U.html($('stats'), ''); L.tone(hero, 'off'); heroRead.done(); return; }
+    const total = page?.total, rounds = maintenanceRounds(page);
+    const observed = Number.isInteger(rounds) && (rounds > 0 || rounds === 0 && page?.q === 'ok');
+    headline = maintenance ? observed ? `已观察到 ${rounds} 次` : '维护记录未读到'
+      : total != null ? `登记 ${total} 项计划任务` : 'Windows 计划任务名册未读到';
+    const cutoff = /^数据截止 /;
+    const status = U.status(page && { ...page, why: cutoff.test(page.why) ? '任务名册暂时没更新' : page.why, stale_text: cutoff.test(page.stale_text) ? null : page.stale_text }, { showZeroFixing: false });
+    const heading = status.lamp + U.head(headline, { lamp: false });
+    U.html($('head'), heading);
+    if (project) U.html($('project-label'), [linkedProject(project) && typeof page?.project_name === 'string' ? `<a href="${esc(route(`/live/project/?id=${encodeURIComponent(project)}`))}">${U.fieldHtml(page.project_name, { name: '项目筛选', kind: viewer })} ›</a>` : U.fieldHtml(page?.project_name || page?.project_name_gap || U.collectionText('项目名称', page), { name: '项目筛选', kind: viewer }), !maintenance && U.fieldHtml(total != null ? `${String(total).startsWith('至少') ? '' : '共 '}${total} 件` : U.collectionText('任务总数', page), { name: '项目筛选', kind: viewer })].filter(Boolean).join(' · '));
+    const note = [...[coverageNote].flat(), scope === 'ai-today' && '今天 AI 后台自动维护', rows.some(t => Array.isArray(t.days7) && t.days7.some(day => day?.state === 'failed')) && '近 7 天出过事的任务画了每天的小方块（灰格是那天没记录）', ...new Set(rows.map(t => t.days7_gap).filter(Boolean))].filter(Boolean).map(value => U.fieldHtml(value, { name: '任务说明', place: 'body', kind: viewer })).join(' · ');
+    const rosterOld = Date.now() - Date.parse(dataAt) > (Number(page?.stale_after) || 360) * 1000;
+    const statusNote = !maintenance && dataAt && page?.gray_reason === 'stale' ? rosterOld ? `任务名册停在 ${U.time(dataAt)}，之后没更新` : ''
+      : status.note.replace(/(?:^| · )(?:有 \d+ 件事要留意|\d+ 项要处理)(?: · |$)/gu, ' · ').replace(/^(?: · )|(?: · )$/g, '');
+    U.html($('note'), [note, statusNote].filter(Boolean).join(' · ')); $('note').hidden = !note && !statusNote;
+    drawStats(moved);
+    L.tone(hero, page);
+    if (page) heroRead.done(); taskWords();
+  }
+  function changeCounts(d) {
+    const list = d?.changes7, kinds = { added: 'added', disabled: 'changed', missing: 'changed', enabled: 'changed' };
+    if (!Array.isArray(list)) return null;
+    // 旧包的 to 是组装时刻，只能证明记录起点。
+    const modern = Object.hasOwn(d, 'changes_window');
+    const window = modern ? d.changes_window : Array.isArray(d.coverage) && d.coverage.find(c => c?.id === 'identity-changes');
+    const start = Date.parse(window?.from), end = Date.parse(window?.to);
+    const since = modern && end - start >= 7 * 864e5 ? '近 7 天' : Number.isFinite(start) ? `${U.date(window.from)} 起` : modern && Number.isFinite(end) ? `截至 ${U.date(window.to)}` : '已读';
+    const title = since === '已读' ? '已读变化' : `${since}的变化${modern && Number.isFinite(start) && Number.isFinite(end) ? `（截至 ${U.date(window.to)} ${U.time(window.to)}）` : ''}`;
+    const empty = `${since === '已读' ? '已读范围内' : since}没有任务变化`;
+    const countable = list.every(c => Object.hasOwn(kinds, c?.kind));
+    return { since, title, empty, countable, added: list.filter(c => kinds[c?.kind] === 'added').length, changed: list.filter(c => kinds[c?.kind] === 'changed').length };
+  }
+  function drawStats(moved = changeCounts(page)) {
+    const off = U.offline?.(), icon = window.LiveBoard.icon, at = page && dataAt;
+    const cell = (key, glyph, value, label) => value == null || value === '' ? '' : `<div class="lbp-stat" data-stat="${key}">${icon(glyph)}<b${/\d/.test(sp(value)) ? '' : ' class="is-word"'}>${value}</b><small>${label}</small></div>`;
+    const missingText = meta => off ? null : U.collectionText('', meta);
+    U.html($('stats'), !maintenance && page ? [
+      page?.purpose_unregistered_count != null ? purposeCount(page, cell) : '',
+      cell('readable', 'check', page.readable_total, '知道在做什么'),
+      cell('unreadable', 'alert', page.unreadable_total, '只知道名字'),
+      runningReading ? cell('running', 'play', esc(`${runningReading.partial ? '至少 ' : ''}${runningReading.count}`), `${runningReading.stale ? '上次' : '截至'}${esc(nextAt(runningReading.at))} 已确认在跑${runningReading.pageOnly ? ' · 已读部分' : ''}`)
+        : cell('running', 'play', '没读到', '当前运行状态'),
+      moved?.countable ? cell('added', 'plus', esc(moved.added), `${moved.since}新增`) : '',
+      moved?.countable ? cell('changed', 'refresh', esc(moved.changed), `${moved.since}状态变化`) : '',
+      page && Object.hasOwn(page, 'attention_count') ? cell('attention', 'alert', page.attention_count != null ? esc(page.attention_count) : missingText(page), '项要处理') : '',
+    ].join('') : '');
+    U.html($('asof'), at ? esc(`${maintenance ? '维护记录' : '任务名册'}截至 ${U.date(at) === U.date(now || Date.now()) ? '' : `${U.date(at)} `}${U.time(at)}`) : ''); $('asof').hidden = !at;
+  }
+  load(); requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
+})();

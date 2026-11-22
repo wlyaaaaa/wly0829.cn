@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import vm from "node:vm";
-import { GRANT_STAGE_KEY, adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, canRestartUnsubmittedGrant, capacity, createGrantAttempt, createGrantRecovery, saveGrantRequest, createStatusReader, durationMinutes, errorMessages, grantLabel, grantResultNeedsQuery, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, markGrantVerificationSubmitted, memorySpecification, networkConnection, readGrantStage, queryResultUpdate, rate, reductionAction, reductionFailureResult, resourceReadLabel, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
+import { GRANT_STAGE_KEY, HOST_ORIGIN, adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, canRestartUnsubmittedGrant, capacity, createGrantAttempt, createGrantRecovery, saveGrantRequest, createStatusReader, durationMinutes, errorMessages, grantLabel, grantResultNeedsQuery, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, markGrantVerificationSubmitted, memorySpecification, networkConnection, readGrantStage, queryResultUpdate, rate, reductionAction, reductionFailureResult, resourceReadLabel, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
 
 test("all three close requests carry the paired device and settle unpaired rejection", async () => {
   const source = await readFile(new URL("../scripts/b2-live-runtime.js", import.meta.url), "utf8");
@@ -20,7 +20,7 @@ test("all three close requests carry the paired device and settle unpaired rejec
           status: { state_version: "v1", public_actions: { lock_data: true, end_unrestricted: true, lock_windows: true },
             personal_data: { state: "unlocked", expires_at_unix: 200 }, unrestricted: { state: "active", expires_at_unix: 200 }, host: { screen_state: "unlocked" } },
           localStorage: { getItem(key) { assert.equal(key, "wly-cockpit-device"); if (stored === "unreadable") throw Error("storage unavailable"); return stored; } },
-          reader: { invalidate() {}, read() {} }, crypto: { randomUUID: () => "fake-request" }, clock: () => 100, render() {},
+          reader: { invalidate() {}, read() {} }, crypto: { randomUUID: () => "fake-request" }, clock: () => 100, createGrantRecovery: () => ({ start() {} }), render() {},
           rememberAction: value => { result = value; }, message: text => { notice = text; },
           apiRequest, canEndGrant, unresolvedAction, successfulReductionSnapshot, queryResultUpdate, reductionFailureResult, errorMessages };
         vm.runInNewContext(closeSource + "\nthis.close = lock;", env);
@@ -46,6 +46,39 @@ test("only a complete authoritative grant updates remaining time and returns the
   assert.equal(next.state_version, "");
   assert.equal(before.personal_data.expires_at_unix, 100);
   for (const invalid of [{ ...success, state: "partial" }, { ...success, state: "unknown" }, { state: "succeeded" }, { state: "succeeded", personal_data: { state: "unknown", expires_at_unix: 300 } }]) assert.equal(successfulGrantSnapshot(before, invalid, true), null);
+});
+
+test("authorization calls reuse the paired device and busy verification is known unsubmitted", async () => {
+  const caller = globalThis.fetch, storage = Object.getOwnPropertyDescriptor(globalThis, "localStorage");
+  const token = "p".repeat(43), calls = [];
+  try {
+    Object.defineProperty(globalThis, "localStorage", { configurable: true, value: { getItem: () => token } });
+    globalThis.fetch = async (url, options) => {
+      assert.equal(options.headers["X-Cockpit-Device"], token);
+      calls.push(new URL(url).pathname.replace("/computer-access/api", ""));
+      const busy = url.endsWith("/verify") && calls.length === 2;
+      return new Response(JSON.stringify(busy ? { status: "error", error: "public_request_temporarily_busy" }
+        : { request_id: "req", state: url.endsWith("/verify") ? "succeeded" : "pending", csrf_token: "fixture" }), { status: busy ? 503 : 200 });
+    };
+    const api = (path, options) => apiRequest(HOST_ORIGIN, path, options);
+    const attempt = createGrantAttempt({ requestId: "req", body: {}, api, onCreated() {} });
+    const result = await attempt.run("012345");
+    assert.equal(result.factor_submitted, false);
+    assert.equal(result.request_created, true);
+    assert.equal(result.state, "pending");
+    assert.equal(grantResultNeedsQuery(result), true);
+    let sending = 0;
+    const retry = createGrantAttempt({ requestId: "req", existing: true, api, onCreated() {}, onVerificationStarted() { sending++; } });
+    assert.equal((await retry.run("123456")).state, "succeeded");
+    assert.equal(retry.factorSubmitted, true);
+    assert.equal(sending, 1);
+    await api("/requests/cooldown");
+    assert.deepEqual(calls, ["/requests", "/requests/req/verify", "/requests/req", "/requests/req/verify", "/requests/cooldown"]);
+  } finally {
+    globalThis.fetch = caller;
+    if (storage) Object.defineProperty(globalThis, "localStorage", storage);
+    else delete globalThis.localStorage;
+  }
 });
 
 test("reducing actions settle explicit precreate rejection without inventing certainty for lost responses", () => {
@@ -259,30 +292,17 @@ test("status reads do not overlap and a late old poll cannot overwrite operation
   assert.deepEqual(seen, ["new-state"]);
 });
 
-// 授权页自 2026-10-10（aaee4dbf，合并 72a20ee1）起由 site-astro/sources/retained-home-cockpit/computer-access.html 构建，
-// 旧 React 外壳（app/computer-access.jsx 经 server/render-route.jsx）不再产出该路由；以下断言对准现行页面的同等行为。
-test("built route preserves the complete static shell and only allows submitting from the formal origins", async () => {
+test("built authorization page preserves the S13 form and state DOM", async () => {
   const html = await readFile(new URL("../dist/computer-access/index.html", import.meta.url), "utf8");
-  // 不跑脚本也能看到三项状态、各自的锁定/结束按钮和“读不到不冒充锁着”的说明
-  for (const text of ["授权与状态", "个人资料", "无限制授权", "Windows 锁屏", "锁定 Windows", "当前状态未知", "空心灰圈：读不到", "读不到电脑，暂时不能办理"]) assert.ok(html.includes(text), text);
-  for (const id of ["personal-data", "unrestricted", "windows", "apply"]) assert.ok(html.includes(`id="${id}"`), id);
-  for (const action of ["lock-personal-data", "lock-unrestricted", "lock-windows"]) assert.ok(html.includes(`"action":"${action}"`), action);
-  assert.match(html, /"text":"结束"[^{}]*"action":"lock-unrestricted"/);
-  // 静态外壳不带验证码输入框，也没有旧版表单
-  assert.ok(!html.includes('id="ca-totp"'));
-  assert.ok(!/<form\b|<input\b/.test(html));
-  assert.ok(!html.includes('class="flow-field"'));
-  assert.match(html, /href="https:\/\/wly0829.cn\/computer-access\/"/);
-  assert.match(html, /<a class="nav-link" href="\/computer-access\/" aria-current="page">/);
-  assert.ok(!html.includes("需要结束访问时"));
-  // 状态在前、办理在后
-  assert.ok(html.indexOf('id="personal-data"') < html.indexOf('id="apply"'));
-  // 只有 wly0829.cn / mcp.wly0829.cn 顶层打开时才放行办理；本机预览和被嵌入时只能看
-  assert.ok(html.includes("const formal = ['https://wly0829.cn', 'https://mcp.wly0829.cn'].includes(location.origin) && window.top === window"));
-  // 跨站只送来源、不送完整地址（发布侧同一策略见 scripts/prepare-oss-release.py 的 OSS_REFERRER_POLICY）
+  for (const key of ["pd", "ur", "win"]) {
+    const cell = html.match(new RegExp(`<article\\b[^>]*class="cell"[^>]*data-key="${key}"[\\s\\S]*?<\\/article>`))?.[0];
+    assert.ok(cell, key);
+    for (const name of ["cell__state", "cell__acts"]) assert.ok(cell.includes(`class="${name}"`), name);
+  }
+  for (const id of ["dealbar", "deal-tpl"]) assert.ok(html.includes(`id="${id}"`), id);
+  assert.equal((html.match(/aria-label="第 [1-6] 位"/g) || []).length, 6);
+  assert.ok(html.indexOf('id="cell-pd"') < html.indexOf('id="dealbar"'));
   assert.match(html, /name="referrer" content="strict-origin-when-cross-origin"/);
-  assert.ok(html.includes('href="/cockpit/#computer"'));
-  assert.ok(!html.includes('class="ca-card ca-network-card"'));
 });
 
 
@@ -347,18 +367,19 @@ test("initial page GET expires during slow hydration and retains service failure
   assert.equal(failures[0].httpStatus, 502);
 });
 
-test("built access page binds the current grant model and recovery runtime", async () => {
+test("built access page binds the current grant model, formal origins and recovery runtime", async () => {
   const dist = new URL("../dist/", import.meta.url);
   const html = await readFile(new URL("computer-access/index.html", dist), "utf8");
   const manifest = JSON.parse(await readFile(new URL("release-manifest.json", dist), "utf8"));
-  const runtimeUrl = html.match(/(?:data-)?src="([^"]*b2-typeset-[\w]+\.js)"/)?.[1];
+  const runtimeUrl = html.match(/<script\b[^>]*src="([^"]*\/auth\.js)"/)?.[1];
   assert.ok(runtimeUrl, "access runtime is referenced");
   const artifact = url => Object.entries(manifest.oss.objects).find(([, row]) => row.url === url)?.[0];
   const runtimePath = artifact(runtimeUrl);
   assert.ok(runtimePath, "access runtime belongs to the finalized manifest");
   const runtime = await readFile(new URL(runtimePath, dist), "utf8");
-  assert.match(runtime, /createGrantRecovery\(\(\)=>query\(\{automatic:true\}\)/);
-  const modelUrl = new URL(runtime.match(/from ['"]([^'"]*b2-access-model[^'"]*\.js)['"]/)?.[1], runtimeUrl).href;
+  assert.match(runtime, /createGrantRecovery\(\(\) => query\(\)/);
+  assert.match(runtime, /const local = !isAccessOrigin\(location\.origin, window\.top === window\)/);
+  const modelUrl = new URL(runtime.match(/import\(['"]([^'"]*computer-access-model\.js)['"]\)/)?.[1], runtimeUrl).href;
   const modelPath = artifact(modelUrl);
   assert.ok(modelPath, "current access model belongs to the finalized manifest");
   assert.equal(await readFile(new URL(modelPath, dist), "utf8"), await readFile(new URL("../app/computer-access-model.js", import.meta.url), "utf8"));
@@ -367,14 +388,13 @@ test("built access page binds the current grant model and recovery runtime", asy
 test("computer routes stay in the current tab while external links retain their target", async () => {
   const html = await readFile(new URL("../dist/computer-access/index.html", import.meta.url), "utf8");
   const anchors = html.match(/<a\b[^>]*>/g) || [];
-  for (const route of ["/mcp/", "/computer-access/", "/cockpit/"]) {
+  for (const route of ["/mcp/", "/computer-access/", "/live/"]) {
     const tags = anchors.filter(tag => tag.includes(`href="${route}"`));
     assert.ok(tags.length, route);
     for (const tag of tags) assert.ok(!tag.includes('target="_blank"'), tag);
   }
   for (const tag of anchors.filter(tag => /href="\//.test(tag))) assert.ok(!tag.includes('target="_blank"'), tag);
-  // 唯一另开标签页的是看大图的“完整尺寸”，保持另开并带 noopener
-  assert.match(html, /<a target="_blank" rel="noopener">完整尺寸<\/a>/);
+  for (const tag of anchors.filter(tag => /href="https?:/.test(tag))) assert.match(tag, /target="_blank"[^>]*rel="[^"]*noopener/);
 });
 
 test("hardware specifications preserve actual inventory and dynamic link evidence", () => {
@@ -426,14 +446,16 @@ test("HTTP service failure retains status for friendly connection diagnosis with
   finally { globalThis.fetch = original; }
 });
 
-test("home and MCP summaries only provide links to the common authority page", async () => {
-  // 首页（2026-10-09 起由 retained-home-cockpit/home.html 构建）和 MCP 页只给去授权页的链接，自己不收验证码、不提交
-  const pages = { "index.html": /"text":"授权与状态 →","href":"\/computer-access\/"/, "mcp/index.html": /<a class="lk"[^>]*href="\/computer-access\/">授权与状态<\/a>/ };
-  for (const [route, entry] of Object.entries(pages)) {
+test("home and MCP never collect a verification code and MCP links to the authority page", async () => {
+  for (const route of ["index.html", "mcp/index.html"]) {
     const html = await readFile(new URL(`../dist/${route}`, import.meta.url), "utf8");
-    assert.match(html, entry, route); assert.match(html, /<a class="nav-link" href="\/computer-access\/">/, route);
+    if (route === "mcp/index.html") assert.match(html, /<a class="pill" href="\/computer-access\/">授权与状态<\/a>/);
     assert.ok(!html.includes('id="ca-totp"'), route); assert.ok(!/<form\b|<input\b/.test(html), route);
     assert.ok(!/method:\s*["']POST/.test(html), route);
+    if (route === "mcp/index.html") {
+      for (const name of ["who", "pc"]) assert.match(html, new RegExp(`class="seg glass"[^>]*data-name="${name}"`));
+      assert.ok(html.includes('id="sheet"'));
+    }
   }
 
 });
@@ -540,8 +562,58 @@ test("request-not-found permits fresh input only when this exact request is know
   const missing = { data: { error: "public_request_not_found" } };
   assert.equal(canRestartUnsubmittedGrant({ factor_submitted: false }, null, missing), true);
   for (const flag of [true, undefined]) assert.equal(canRestartUnsubmittedGrant({ factor_submitted: flag }, null, missing), false);
-  assert.equal(canRestartUnsubmittedGrant({ factor_submitted: false }, { state: "pending" }), true);
+  assert.equal(canRestartUnsubmittedGrant({ factor_submitted: false }, { state: "pending" }), false);
   assert.equal(canRestartUnsubmittedGrant({ factor_submitted: false }, { state: "verifying" }), false);
   assert.equal(canRestartUnsubmittedGrant({ factor_submitted: false }, { state: "pending", factor_submitted: true }), false);
   assert.equal(canRestartUnsubmittedGrant({ factor_submitted: false }, null, { httpStatus: 404 }), false);
+});
+
+test('v2 adapter reuses create/verify, queries uncertainty, cancels only the request and reads lock receipts', async () => {
+  const source = await readFile(new URL('../site-v2/first-layer/connect-auth/demo/auth.js', import.meta.url), 'utf8');
+  for (const outcome of ['succeeded', 'failed', 'unknown', 'busy']) {
+    const calls = [], original = { state_version: 'v1', personal_data: { state: 'unlocked' } };
+    const env = { local: false, base: '', state: structuredClone(original), fields: { pd: 'personal_data' }, kinds: { pd: 'personal-data', ur: 'unrestricted', win: 'windows' }, meta: { viewer: { kind: 'owner' } },
+      busy: false, pending: null, disconnected: false, openKey: null, fresh: () => true, crypto: { randomUUID: () => 'same-request' }, clock: () => 100, createGrantRecovery: () => ({ start() {} }), render() {}, message() {}, notice: { prepend() {} },
+      window: { Live: { refresh() {} } }, localStorage: { getItem: () => 'synthetic-device' }, createGrantAttempt, canRestartUnsubmittedGrant, reductionFailureResult, errorMessages };
+    env.remember = value => { env.pending = grantResultNeedsQuery(value) ? { ...value, key: value.key || env.pending?.key || 'pd' } : null; };
+    env.receipt = value => { if (value) { env.result = value; env.remember(value); } };
+    env.apiRequest = async (base, path, options) => {
+      calls.push({ path, options });
+      if (path === '/requests') return { request_id: 'same-request', state: 'pending', csrf_token: 'synthetic-csrf' };
+      if (path.endsWith('/verify') && outcome === 'unknown') throw Error('network');
+      if (outcome === 'busy') {
+        if (calls.length === 2) throw { data: { error: 'public_request_rate_limited' } };
+        if (path === '/requests/same-request') return { request_id: 'same-request', state: 'pending', csrf_token: 'fresh-csrf' };
+        assert.equal(env.pending.factor_submitted, true);
+        return { request_id: 'same-request', state: 'succeeded' };
+      }
+      return { request_id: 'same-request', state: outcome === 'unknown' ? 'succeeded' : outcome };
+    };
+    vm.runInNewContext(source.slice(source.indexOf('  async function query('), source.indexOf('  queryButton.onclick')) + '\nthis.submit=submit;this.query=query;this.lock=lock;', env);
+    await env.submit('pd', '8', true, '012345');
+    assert.equal(calls[0].options.body.state_version, 'v1'); assert.equal(calls[0].options.body.combined, true);
+    assert.equal(calls[1].options.csrf, 'synthetic-csrf'); assert.equal(calls[1].options.body.totp, '012345');
+    if (outcome === 'unknown') { assert.equal(env.pending.factor_submitted, true); await env.submit('pd', '8', false, '123456'); assert.equal(calls.length, 2); await env.query(); assert.equal(calls[2].path, '/requests/same-request'); }
+    else if (outcome === 'busy') {
+      assert.equal(env.pending.request_id, 'same-request');
+      assert.equal(env.pending.factor_submitted, false);
+      env.pending = JSON.parse(JSON.stringify(env.pending));
+      await env.query();
+      assert.equal(env.pending.request_id, 'same-request');
+      assert.equal(env.pending.factor_submitted, false);
+      await env.submit('pd', '72', false, '123456');
+      assert.deepEqual(calls.slice(2).map(call => call.path), ['/requests/same-request', '/requests/same-request', '/requests/same-request/verify']);
+      assert.equal(calls.at(-1).options.csrf, 'fresh-csrf');
+      assert.equal(calls.at(-1).options.body.totp, '123456');
+      assert.equal(env.result.state, 'succeeded');
+      assert.equal(env.pending, null);
+    } else assert.equal(env.result.state, outcome);
+    env.pending = null; env.fresh = () => false; const before = calls.length; await env.submit('pd', '8', false, '123456'); assert.equal(calls.length, before);
+    env.fresh = () => true;
+    for (const key of ['pd', 'ur', 'win']) { env.pending = null; await env.lock(key); assert.equal(calls.at(-1).options.device, 'synthetic-device'); assert.equal(calls.at(-1).path, '/locks/' + env.kinds[key]); }
+    env.pending = { request_id: 'same-request' }; env.apiRequest = async (base, path, options) => { calls.push({ path, options }); return { request_id: 'same-request', state: options ? 'cancelled' : 'pending', csrf_token: 'new-csrf' }; };
+    await env.query(true); assert.equal(calls.at(-1).path, '/requests/same-request/cancel'); assert.equal(calls.at(-1).options.csrf, 'new-csrf'); assert.deepEqual(env.state, original);
+    env.local = true; let opened = 0; env.entry = () => { opened++; }; const count = calls.length;
+    await env.submit('pd', '8', false, '123456'); await env.query(); await env.lock('win'); assert.equal(opened, 3); assert.equal(calls.length, count);
+  }
 });

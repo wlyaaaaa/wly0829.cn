@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 292" width="680" height="292" role="img" aria-labelledby="s09-title s09-desc">
+  <title id="s09-title">主持的对话关了，派出去的活照样干</title>
+  <desc id="s09-desc">Claude、Codex 和 Antigravity 派别家的模型都经派活包装器。GPT 交给 Codex 的后台任务服务，Claude 交给 Claude 的命令行，Gemini 交给 Antigravity 的命令行。每一单都有独立的后台程序带着。</desc>
+  <rect class="v-band" x="300" y="88" width="352" height="178" rx="10"/>
+
+  <text class="v-t v-t--l" x="30" y="34">主持的对话</text>
+  <text class="v-t" x="30" y="55">Claude、Codex 或 Antigravity</text>
+  <path class="v-l v-l--ai" d="M35 74H218 M218 69V79"/>
+  <circle class="v-a" cx="35" cy="74" r="5"/>
+  <text class="v-g" x="228" y="78">对话关了</text>
+
+  <path class="v-l" d="M84 74V177Q84 184 91 184H250"/>
+  <text class="v-g" x="94" y="121">派别家的模型</text>
+  <circle class="v-p" cx="170" cy="184" r="5.5"/>
+  <text class="v-t v-t--l" x="170" y="209" text-anchor="middle">派活包装器</text>
+
+  <text class="v-t v-t--l" x="322" y="117">每单由独立的后台程序带着</text>
+  <path class="v-l" d="M250 184V151Q250 144 257 144H322 M250 184H322 M250 184V217Q250 224 257 224H322"/>
+  <g class="v-t">
+    <circle class="v-p" cx="322" cy="144" r="4"/>
+    <text x="335" y="149">Codex 的后台任务服务</text>
+    <path class="v-l" d="M505 144H556"/>
+    <circle class="v-a" cx="556" cy="144" r="5"/>
+    <text x="570" y="149">GPT</text>
+
+    <circle class="v-p" cx="322" cy="184" r="4"/>
+    <text x="335" y="189">Claude 的命令行</text>
+    <path class="v-l" d="M505 184H556"/>
+    <circle class="v-a" cx="556" cy="184" r="5"/>
+    <text x="570" y="189">Claude</text>
+
+    <circle class="v-p" cx="322" cy="224" r="4"/>
+    <text x="335" y="229">Antigravity 的命令行</text>
+    <path class="v-l" d="M505 224H556"/>
+    <circle class="v-a" cx="556" cy="224" r="5"/>
+    <text x="570" y="229">Gemini</text>
+  </g>
+  <text class="v-g" x="322" y="251">主持的对话关了也照样干，中断后能回原会话接着做</text>
+</svg>

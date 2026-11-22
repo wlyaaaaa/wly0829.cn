@@ -1,0 +1,52 @@
+{
+  "title": "识字放大镜",
+  "theme": {
+    "p": "#2C3E5C",
+    "soft": "#E6E4DE",
+    "accent": "#A4332A"
+  },
+  "background": "assets/background.jpg",
+  "projectNav": "project",
+  "skillNav": "skill",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "14rem"],
+    "去〔看图识字〕技能页": [
+      "go-skill-v1.compressed.webp",
+      "16rem"
+    ],
+    "看实况": [
+      "button-live-v2.compressed.webp",
+      "12rem"
+    ],
+    "去〔电脑大本营〕项目页": [
+      "go-computer-v1.compressed.webp",
+      "16rem"
+    ],
+    "回〔识字放大镜〕项目页": [
+      "return-project-v1.compressed.webp",
+      "16rem"
+    ]
+  },
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "识字放大镜",
+      "meta": "识字放大镜 · 总览",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    },
+    "看图识字": {
+      "slug": "skill",
+      "file": "localocr.html",
+      "title": "看图识字",
+      "meta": "技能 · 看图识字",
+      "nav": "技能",
+      "imagePrefix": "看图识字"
+    }
+  },
+  "detailArt": [
+    "detail-v1.compressed.webp",
+    "4rem"
+  ]
+}

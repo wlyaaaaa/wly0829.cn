@@ -1,0 +1,284 @@
+{
+  "title": "AI 百工谱",
+  "theme": {
+    "p": "#2F221F",
+    "soft": "#E7E2D8",
+    "accent": "#A67329"
+  },
+  "background": "assets/background.webp",
+  "projectNav": "project",
+  "skillNav": "model-research",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "13.5rem"],
+    "去〔一本规矩〕": [
+      "button-01-01-v1.compressed.webp",
+      "14.8rem"
+    ],
+    "去〔规矩落地〕": [
+      "button-01-02-v1.compressed.webp",
+      "13.5rem"
+    ],
+    "去〔规则页〕": [
+      "button-01-03-v1.compressed.webp",
+      "14.8rem"
+    ],
+    "去〔原话为凭〕": [
+      "button-01-04-v1.compressed.webp",
+      "13.8rem"
+    ],
+    "去〔工期账本〕": [
+      "button-01-05-v1.compressed.webp",
+      "14.8rem"
+    ],
+    "去〔派出去的活〕": [
+      "button-01-06-v1.compressed.webp",
+      "13.8rem"
+    ],
+    "去〔新模型摸底〕技能页": [
+      "button-01-07-v1.compressed.webp",
+      "16rem"
+    ],
+    "看实况": [
+      "button-01-08-v3.compressed.webp",
+      "11.5rem"
+    ],
+    "去〔云端中转〕技能页": [
+      "button-01-09-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔项目把门〕技能页": [
+      "button-02-01-v1.compressed.webp",
+      "14.1rem"
+    ],
+    "去〔我的说明书〕项目页": [
+      "button-02-02-v1.compressed.webp",
+      "14.1rem"
+    ],
+    "去〔四处打听〕技能页": [
+      "button-02-03-v1.compressed.webp",
+      "14.1rem"
+    ],
+    "去〔网页跑腿〕技能页": [
+      "button-02-04-v1.compressed.webp",
+      "14.1rem"
+    ],
+    "去〔替我回话〕技能页": [
+      "button-02-05-v1.compressed.webp",
+      "14.1rem"
+    ],
+    "去〔先问再做〕技能页": [
+      "button-02-06-v1.compressed.webp",
+      "14.1rem"
+    ],
+    "去〔排成 PDF〕技能页": [
+      "button-02-07-v1.compressed.webp",
+      "14.1rem"
+    ],
+    "去〔逐页过目〕技能页": [
+      "button-02-08-v1.compressed.webp",
+      "14.1rem"
+    ],
+    "回〔AI 百工谱〕项目页": [
+      "button-02-09-v1.compressed.webp",
+      "14.1rem"
+    ],
+    "去〔密码中心〕项目页": [
+      "button-03-01-v1.compressed.webp",
+      "12rem"
+    ],
+    "去〔AI 发射台〕项目页": [
+      "button-03-02-v1.compressed.webp",
+      "14.3rem"
+    ],
+    "去〔网络看护〕技能页": [
+      "button-03-03-v1.compressed.webp",
+      "14.3rem"
+    ],
+    "去〔收信取码〕技能页": [
+      "button-03-04-v1.compressed.webp",
+      "14.3rem"
+    ],
+    "去〔电脑大本营〕项目页": [
+      "button-03-05-v1.compressed.webp",
+      "14.3rem"
+    ],
+    "去〔起草文书〕技能页": [
+      "button-03-06-v1.compressed.webp",
+      "14.3rem"
+    ],
+    "去〔代管微信〕技能页": [
+      "button-03-07-v1.compressed.webp",
+      "14.3rem"
+    ],
+    "去〔薄荷稿纸〕项目页": [
+      "button-03-08-v1.compressed.webp",
+      "14.4rem"
+    ],
+    "去〔AI 百工谱〕项目页": [
+      "button-03-09-v1.compressed.webp",
+      "14.3rem"
+    ],
+    "去〔一页说清〕技能页": [
+      "按钮-补586e927d-01.compressed.webp",
+      "14.1rem"
+    ],
+    "去〔派活验收〕技能页": [
+      "按钮-补586e927d-02.compressed.webp",
+      "14.1rem"
+    ],
+    "去〔画图改图〕技能页": [
+      "按钮-补586e927d-03.compressed.webp",
+      "14.1rem"
+    ]
+  },
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "AI 百工谱",
+      "meta": "AI 百工谱",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    },
+    "一本规矩": {
+      "slug": "一本规矩",
+      "file": "一本规矩.html",
+      "title": "一本规矩",
+      "meta": "一本规矩",
+      "nav": "项目",
+      "imagePrefix": "一本规矩"
+    },
+    "规矩落地": {
+      "slug": "规矩落地",
+      "file": "规矩落地.html",
+      "title": "规矩落地",
+      "meta": "规矩落地",
+      "nav": "项目",
+      "imagePrefix": "规矩落地"
+    },
+    "派出去的活": {
+      "slug": "派出去的活",
+      "file": "派出去的活.html",
+      "title": "派出去的活",
+      "meta": "派出去的活",
+      "nav": "项目",
+      "imagePrefix": "派出去的活"
+    },
+    "原话为凭": {
+      "slug": "原话为凭",
+      "file": "原话为凭.html",
+      "title": "原话为凭",
+      "meta": "原话为凭",
+      "nav": "项目",
+      "imagePrefix": "原话为凭"
+    },
+    "工期账本": {
+      "slug": "工期账本",
+      "file": "工期账本.html",
+      "title": "工期账本",
+      "meta": "工期账本",
+      "nav": "项目",
+      "imagePrefix": "工期账本"
+    },
+    "新模型摸底": {
+      "slug": "model-research",
+      "file": "model-research.html",
+      "title": "新模型摸底",
+      "meta": "新模型摸底",
+      "nav": "技能",
+      "imagePrefix": "新模型摸底"
+    },
+    "先问再做": {
+      "slug": "design-with-owner",
+      "file": "design-with-owner.html",
+      "title": "先问再做",
+      "meta": "先问再做",
+      "nav": "技能",
+      "imagePrefix": "先问再做"
+    },
+    "四处打听": {
+      "slug": "news-quickcheck",
+      "file": "news-quickcheck.html",
+      "title": "四处打听",
+      "meta": "四处打听",
+      "nav": "技能",
+      "imagePrefix": "四处打听"
+    },
+    "网页跑腿": {
+      "slug": "browser-control-continuity",
+      "file": "browser-control-continuity.html",
+      "title": "网页跑腿",
+      "meta": "网页跑腿",
+      "nav": "技能",
+      "imagePrefix": "网页跑腿"
+    },
+    "云端中转": {
+      "slug": "cloud-asset-channel",
+      "file": "cloud-asset-channel.html",
+      "title": "云端中转",
+      "meta": "云端中转",
+      "nav": "技能",
+      "imagePrefix": "云端中转"
+    },
+    "项目把门": {
+      "slug": "project-entry-gate",
+      "file": "project-entry-gate.html",
+      "title": "项目把门",
+      "meta": "项目把门",
+      "nav": "技能",
+      "imagePrefix": "项目把门"
+    },
+    "替我回话": {
+      "slug": "reply-as-me",
+      "file": "reply-as-me.html",
+      "title": "替我回话",
+      "meta": "替我回话",
+      "nav": "技能",
+      "imagePrefix": "替我回话"
+    },
+    "排成 PDF": {
+      "slug": "md-to-pdf",
+      "file": "md-to-pdf.html",
+      "title": "排成 PDF",
+      "meta": "排成 PDF",
+      "nav": "技能",
+      "imagePrefix": "排成 PDF"
+    },
+    "逐页过目": {
+      "slug": "pdf-render-safe",
+      "file": "pdf-render-safe.html",
+      "title": "逐页过目",
+      "meta": "逐页过目",
+      "nav": "技能",
+      "imagePrefix": "逐页过目"
+    },
+    "派活验收": {
+      "slug": "dispatch-work",
+      "file": "dispatch-work.html",
+      "title": "派活验收",
+      "meta": "派活验收",
+      "nav": "技能",
+      "imagePrefix": "派活验收"
+    },
+    "画图改图": {
+      "slug": "image-generation",
+      "file": "image-generation.html",
+      "title": "画图改图",
+      "meta": "画图改图",
+      "nav": "技能",
+      "imagePrefix": "画图改图"
+    },
+    "一页说清": {
+      "slug": "report-page",
+      "file": "report-page.html",
+      "title": "一页说清",
+      "meta": "一页说清",
+      "nav": "技能",
+      "imagePrefix": "一页说清"
+    }
+  },
+  "detailArt": [
+    "button-01-10-v1.compressed.webp",
+    "4rem"
+  ]
+}

@@ -55,6 +55,10 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
 - Accuracy and owner usefulness outrank persuasion. Do not hide current rules,
   generations, limitations, evidence gaps or implementation state merely to
   make the site look cleaner or stronger.
+- Live sizes, file sizes, traffic and byte-based speeds use 1024-based units
+  everywhere (1 KB = 1024 B, 1 GB = 1024 MB) and are written B, KB, MB, GB, TB,
+  with `/s` for speeds; the live pages never show a 1000-based variant.
+  Frontend pages format raw bytes through `LiveUI.trafficBytes`.
 - `professional_detailed_plain_language` means professional depth and plain
   language must exist together; it never means removing technical detail or
   replacing it with a short marketing summary. Every project, module, rule and
@@ -257,8 +261,8 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   hairlines. Motion must be visible within a short observation while remaining
   readable. Curves stay smooth; no particles, radial bursts, pointer dents,
   sharp peaks, glows or decorative technology wallpaper.
-- Respect reduced-motion preferences and keep page content independently
-  scrollable above the background.
+- No reduced-motion adaptation; motion is always on (see AGENTS.md). Keep page
+  content independently scrollable above the background.
 
 ### 日常维护取舍
 
@@ -284,7 +288,7 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
 
 ### 个人财务页的内容与更新边界
 
-个人财务页只讲账单收取、对账、消费与还款的区分、月度报数这些做法；金额、余额、商家和账单一律不公开。本人点名该页时才更新。
+个人财务页只讲账单收取、对账、消费与还款的区分、月度报数这些做法；金额、余额、商家和账单一律不公开。
 
 ### 手机采集App页的公开内容
 

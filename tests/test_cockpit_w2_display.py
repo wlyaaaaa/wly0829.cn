@@ -21,7 +21,7 @@ const assert = require('node:assert/strict');
     sections: {
       computer: [{ id: 'computer_health', title: '处理器', text: '电脑读数：处理器 24%，52℃', state: 'ok', observed_at: '2026-10-12T00:29:00+08:00' },
                  { id: 'system_resources', title: '内存/系统资源', text: '系统内核内存 8.5 GB，偏高；可分页内核内存 6.8 GB，偏高', state: 'attention', observed_at: '2026-10-12T00:29:00+08:00' },
-                 { id: 'traffic', title: '套餐流量', text: '已用 521 GB', state: 'unavailable', observed_at: '2026-10-10T14:18:00+08:00' }],
+                 { id: 'proxy_traffic', title: '本机代理流量', text: '今天上网 5.1 GB', state: 'unavailable', observed_at: '2026-10-10T14:18:00+08:00' }],
       remote: [{ id: 'remote', title: '远程连接', text: '远程连接在线', state: 'ok' }],
       backup_cloud: [{ id: 'drive_upload', title: 'Google Drive 上传', text: '上传器：现在有没有在上传还不知道。18:47 读到时没在传。', state: 'ok' }],
     },

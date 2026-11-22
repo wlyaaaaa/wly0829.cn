@@ -1,0 +1,36 @@
+/* 仅原理页的副标题、名单和两边列滚动；基础排版共用 /rules/rules.css。 */
+.principles-subtitle {
+  margin: 18px 0 0;
+  font: 400 calc(var(--text) * 1.12)/1.7 var(--serif);
+  color: var(--muted);
+}
+.principles-page .rules-toc, .principles-page .rules-meta {
+  max-height: calc(100dvh - var(--stick) - 24px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  overscroll-behavior: contain;
+}
+.principles-page .rules-meta .mentioned { grid-template-columns: 1fr; gap: 14px; }
+.principles-page .publication-note {
+  margin: 0;
+  padding: 12.5px 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+.principles-page .section-number { display: none; }
+.principles-page .rules-layout { container-type: inline-size; }
+.principles-page .viz--wide {
+  --v-fr: min(calc((100cqw - var(--measure)) / 63),
+    calc((100cqw - var(--measure) - 222px) / 48),
+    calc((100cqw - var(--measure) - 262px) / 49),
+    calc((100cqw - var(--measure) - 484px) / 34));
+}
+/* 破栏的图和左右两栏之间各留 24px，不贴着目录的横线和右栏的字 */
+.principles-page .viz--wide {
+  margin-left: calc(var(--v-fr) * -12 + 24px);
+  margin-right: calc(var(--v-fr) * -13 + 24px);
+}
+/* 电脑窗口拉窄、三列一起按比例缩时（见 /rules/rules.css），两栏之间只剩窄缝：破栏的图就收在原文这一栏里，不往外伸。 */
+@media (max-width: 1139.98px) {
+  .principles-page .viz--wide { margin-left: 0; margin-right: 0; }
+}

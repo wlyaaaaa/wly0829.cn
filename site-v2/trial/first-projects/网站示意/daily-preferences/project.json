@@ -1,0 +1,37 @@
+{
+  "title": "我的说明书",
+  "theme": {"p": "#123B4B", "soft": "#E4E4DC", "accent": "#D5A333"},
+  "background": "assets/background.webp",
+  "projectNav": "project",
+  "skillNav": "daily-preferences",
+  "detailArt": ["button-00-v1.compressed.webp", "4rem"],
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "10.8rem"],
+    "去〔记得我是谁〕技能页": ["button-01-v1.compressed.webp", "11.5rem"],
+    "去〔说错就改〕": ["button-02-v1.compressed.webp", "7.96rem"],
+    "去〔替我回话〕技能页": ["button-03-v1.compressed.webp", "9.49rem"],
+    "去〔有据可查〕": ["button-04-v1.compressed.webp", "6.92rem"],
+    "去〔健康参谋〕项目页": ["button-05-v1.compressed.webp", "9.46rem"],
+    "去〔电脑心电图〕项目页": ["button-06-v1.compressed.webp", "9.91rem"],
+    "去〔手机电脑记录〕": ["button-07-v1.compressed.webp", "8.72rem"],
+    "去〔花销对账〕": ["button-08-v1.compressed.webp", "7.69rem"],
+    "回〔我的说明书〕项目页": ["button-09-v1.compressed.webp", "11.4rem"],
+    "去〔新材料入库〕": ["button-10-v1.compressed.webp", "9.48rem"],
+    "去〔密码中心〕项目页": ["button-11-v1.compressed.webp", "10.98rem"],
+    "去〔微信收发室〕项目页": ["button-12-v1.compressed.webp", "11.36rem"],
+    "去〔账房先生〕项目页": ["button-13-v1.compressed.webp", "10.68rem"],
+    "看实况": ["button-live-v2.compressed.webp", "10.02rem"],
+    "去〔手机直取〕技能页": ["button-15-v1.compressed.webp", "11.04rem"],
+    "去〔收信取码〕技能页": ["button-16-v1.compressed.webp", "10.85rem"],
+    "去〔手机日记本〕项目页": ["button-17-v1.compressed.webp", "11.06rem"]
+  },
+  "sections": {
+    "总览": {"slug": "project", "file": "project.html", "title": "我的说明书", "meta": "我的说明书", "nav": "项目", "imagePrefix": "总览"},
+    "记得我是谁": {"slug": "daily-preferences", "file": "daily-preferences.html", "title": "记得我是谁", "meta": "记得我是谁", "nav": "技能", "imagePrefix": "记得我是谁"},
+    "说错就改": {"slug": "说错就改", "file": "说错就改.html", "title": "说错就改", "meta": "说错就改", "nav": "项目", "imagePrefix": "说错就改"},
+    "有据可查": {"slug": "有据可查", "file": "有据可查.html", "title": "有据可查", "meta": "有据可查", "nav": "项目", "imagePrefix": "有据可查"},
+    "花销对账": {"slug": "花销对账", "file": "花销对账.html", "title": "花销对账", "meta": "花销对账", "nav": "项目", "imagePrefix": "花销对账"},
+    "新材料入库": {"slug": "新材料入库", "file": "新材料入库.html", "title": "新材料入库", "meta": "新材料入库", "nav": "项目", "imagePrefix": "新材料入库"},
+    "手机电脑记录": {"slug": "手机电脑记录", "file": "手机电脑记录.html", "title": "手机电脑记录", "meta": "手机电脑记录", "nav": "项目", "imagePrefix": "手机电脑记录"}
+  }
+}

@@ -62,7 +62,7 @@ infrastructure after its content is removed.
 - Search and navigation work by keyboard and touch; long reference pages remain
   readable on mobile.
 - The white-and-green full-page background visibly moves without moving the
-  content, and respects reduced-motion settings.
+  content; no reduced-motion adaptation, motion is always on (see AGENTS.md).
 - Build, direct routes, custom 404, desktop/mobile overflow, console and public
   deployment all pass.
 

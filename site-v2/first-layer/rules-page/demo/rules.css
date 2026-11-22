@@ -1,0 +1,485 @@
+/* 规则文章页（约法和十个专题共用）
+   排法学那张三列文章页：题目居中，下面左目录、中原文、右信息，顶对齐，列间大片留白。
+   以 1920×1065 为准；窗口宽 1440–2560 都按同一个比例排。想调的量都在 :root 里。 */
+
+:root {
+  --paper: #faf9f5;
+  --ink: #141413;
+  --ink-soft: #3d3d3a;      /* 表格、代码里的字 */
+  --muted: #74736d;         /* 两边列的灰字 */
+  --faint: #a8a69e;         /* 条号、编号、owner 行 */
+  --line: #e3e0d7;          /* 很细的浅灰线 */
+  --tint: rgb(20 20 19 / .042);
+
+  --serif: "SiteSerif", "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+  --sans: "SiteSans", "HarmonyOS Sans SC", "HarmonyOS Sans", "PingFang SC", "Microsoft YaHei UI", sans-serif;
+  --mono: "SiteMono", "Cascadia Mono", Consolas, "SiteSans", "HarmonyOS Sans SC", monospace;
+
+  /* 正文字号：1920 宽时 18px；1440 时 16.5px，2560 时 19px */
+  --text: clamp(16.5px, calc(.4vw + 10.3px), 19px);
+  --track: .02em;           /* 中文正文略松一点字距 */
+  --measure: 37.8em;        /* 一行约 37 个字 */
+  --side: 13.5px;           /* 左右两列的字 */
+  --stick: 100px;           /* 两边列停住的位置、点目录后标题落到的位置：在浮动页眉（底边 67px）下面 */
+}
+
+html { background: var(--paper); }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: rgb(20 20 19 / .12); }
+
+.rules-page,
+.rules-page * { box-sizing: border-box; }
+
+.rules-page { padding: 132px 0 26vh; }
+
+/* —— 题目 —— */
+.rules-title {
+  padding: 0 12vw;
+  margin-bottom: 84px;
+  text-align: center;
+}
+
+/* 专题页题目上面那行小字“我的 AI 约法 · 专题”：小、灰，前半句能点回约法。
+   加了这一行的题目区往上让出 20px，题目只比约法页低 14px，上下留白不挤。 */
+.rules-title:has(.rules-kicker) { margin-top: -20px; }
+
+.rules-kicker {
+  margin: 0 0 14px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 20px;
+  letter-spacing: .06em;
+  color: var(--faint);
+}
+
+.rules-kicker a {
+  color: var(--muted);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .35em;
+  text-decoration-color: rgb(20 20 19 / .2);
+  transition: color .2s ease, text-decoration-color .2s ease;
+}
+
+.rules-kicker a:hover {
+  color: var(--ink);
+  text-decoration-color: var(--ink);
+}
+
+.rules-kicker-sep { letter-spacing: .1em; }
+
+.rules-title h1 {
+  margin: 0;
+  font-family: "SiteSansBlack", "HarmonyOS Sans SC Black", var(--sans);
+  font-weight: 900;
+  font-size: calc(var(--text) * 2.25);
+  line-height: 1.25;
+  letter-spacing: .02em;
+  color: var(--ink);
+}
+
+/* —— 三列：左 4%–19%，中约 31%–68%，右 81%–95%（1920 宽时） —— */
+.rules-layout {
+  display: grid;
+  /* 左右两列给个最小宽度：1440 宽时专题名一行一个、目录不折行；1920 时比例照旧（这两个下限在 1920 不起作用） */
+  grid-template-columns: 4fr minmax(222px, 15fr) 12fr var(--measure) 13fr minmax(262px, 14fr) 5fr;
+  align-items: start;
+  font-size: var(--text);
+}
+
+/* 电脑窗口拉窄到放不下上面三列的下限（222 + 原文一行 + 262，约 1108 宽，再留出滚动条）：
+   还是这三列，按 1108 宽时的比例一起缩，不再撑出横向滚动、右栏不被截掉。1440 宽和手机（按 1440 宽等比缩小）不受影响。 */
+@media (max-width: 1139.98px) {
+  .rules-layout { grid-template-columns: 1fr 22fr 2fr 62fr 2fr 26fr 1fr; }
+}
+
+/* —— 左列：本篇目录 —— */
+.rules-toc {
+  grid-column: 2;
+  position: sticky;
+  top: var(--stick);
+  max-width: 340px;
+  font-family: var(--sans);
+  font-size: var(--side);
+  line-height: 1.45;
+  letter-spacing: .02em;
+}
+
+.rules-toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rules-toc li { border-top: 1px solid var(--line); }
+
+.rules-toc a {
+  display: grid;
+  grid-template-columns: 2.5em 1fr;
+  padding: 12.5px 0;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .3s ease;
+}
+
+.toc-number {
+  color: var(--faint);
+  font-size: 12px;
+  line-height: 19.6px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .04em;
+  transition: color .3s ease;
+}
+
+/* 小项：缩到大项的字下面，不编号，线也从这里起 */
+.rules-toc .toc-level-2 { margin-left: 2.5em; }
+.rules-toc .toc-level-2 a { grid-template-columns: 1fr; padding: 9px 0; }
+
+/* 悬停只加一条细下划线、颜色不变，不和“当前项”（深色、加粗）混 */
+.rules-toc a:hover .toc-label {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .3em;
+  text-decoration-color: rgb(20 20 19 / .3);
+}
+
+/* 读到哪一节：字变深、变粗一点 */
+.rules-toc a.is-current {
+  color: var(--ink);
+  font-weight: 500;
+}
+.rules-toc a.is-current .toc-number { color: var(--ink-soft); }
+
+/* —— 右列：版本、发布、适用范围、专题 —— */
+.rules-meta {
+  grid-column: 6;
+  position: sticky;
+  top: var(--stick);
+  max-width: 340px;
+  font-family: var(--sans);
+  font-size: var(--side);
+  line-height: 1.45;
+  letter-spacing: .02em;
+}
+
+.rules-meta dl { margin: 0; }
+
+.rules-meta dl > div {
+  display: grid;
+  grid-template-columns: 6.6em 1fr;
+  padding: 12.5px 0;
+  border-top: 1px solid var(--line);
+}
+
+.rules-meta dt {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.rules-meta dd {
+  margin: 0;
+  color: var(--muted);
+}
+
+.rules-meta ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rules-meta li + li { margin-top: 11px; }
+
+.rules-meta a {
+  color: inherit;
+  text-decoration: none;
+  transition: color .25s ease;
+}
+
+.rules-meta a:hover { color: var(--ink); }
+
+.rules-meta a[aria-current] {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* 约法和专题是上下两层：约法名在上，十个专题缩进一格、用一条细竖线挂在它下面。
+   上层（约法名）只是字深一点、不加粗；当前页才加粗，专题里的当前页竖线上再深一小段。 */
+.rules-meta .meta-charter { padding-bottom: 11px; }   /* 和专题之间的行距同十个专题之间一样 */
+.rules-meta .meta-charter dd { color: var(--ink-soft); }
+
+.rules-meta .meta-topics {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.rules-meta .meta-topics ul {
+  position: relative;
+  margin-left: .4em;
+  padding-left: 1em;
+  border-left: 1px solid #d9d5ca;
+}
+
+/* 竖线往上接到约法名底下 */
+.rules-meta .meta-topics ul::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: -11px;
+  height: 11px;
+  border-left: 1px solid #d9d5ca;
+}
+
+.rules-meta .meta-topics a { position: relative; }
+
+.rules-meta .meta-topics a[aria-current]::before {
+  content: "";
+  position: absolute;
+  left: calc(-1em - 1px);
+  top: 1px;
+  bottom: 1px;
+  border-left: 1px solid var(--ink);
+}
+
+/* —— 中列：原文 —— */
+.rules-body {
+  grid-column: 4;
+  min-width: 0;
+  counter-reset: rule-section;
+  font-size: var(--text);
+  line-height: 1.85;
+  letter-spacing: var(--track);
+  text-align: left;               /* 不两端对齐：路径、命令多，对齐了会把字撑开 */
+  overflow-wrap: break-word;
+  font-kerning: normal;
+}
+
+.rules-body > :first-child { margin-top: 0; }
+.rules-body > :last-child { margin-bottom: 0; }
+
+.rules-body [id] { scroll-margin-top: var(--stick); }
+
+.rules-body p { margin: 0 0 1.5em; }
+
+/* 专题开头那行 owner：不起眼的一行小灰字 */
+.rules-body .doc-owner {
+  margin-bottom: 2.2em;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.6;
+  letter-spacing: .03em;
+  color: var(--faint);
+}
+.rules-body .doc-owner code {
+  padding: 0;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+}
+.rules-body .doc-owner + * { margin-top: 0; }
+
+/* 标题和小组名用黑体 */
+.rules-body h2,
+.rules-body h3,
+.rules-body h4,
+.rules-body p[id] {
+  font-family: var(--sans);
+  color: var(--ink);
+  text-align: left;
+  letter-spacing: .015em;
+}
+
+.rules-body h2 {
+  margin: calc(var(--text) * 5.56) 0 calc(var(--text) * 1.3);
+  font-size: 1.55em;
+  font-weight: 700;
+  line-height: 1.45;
+  counter-increment: rule-section;
+}
+
+.rules-body h2::before {
+  content: counter(rule-section, decimal-leading-zero);
+  font-size: 12px;
+  color: var(--faint);
+  font-weight: 400;
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+  vertical-align: middle;
+  margin-right: 12px;
+}
+
+.rules-body h3 {
+  margin: 2.4em 0 .8em;
+  font-size: 1.06em;
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.rules-body h4 {
+  margin: 2em 0 .6em;
+  font-size: 1em;
+  font-weight: 700;
+}
+
+/* 单独成行的加粗小组名（说话、理解我、做事……） */
+.rules-body p[id] {
+  margin: 2.2em 0 .7em;
+  font-size: .94em;
+  line-height: 1.6;
+}
+.rules-body p[id] strong { font-weight: 700; }
+
+.rules-body h2 + p[id],
+.rules-body h3 + p[id] { margin-top: 1.4em; }
+
+/* 加粗的领句 */
+.rules-body strong { font-weight: 600; }
+
+/* 条号（L15）：照原文留着，调浅 */
+.rules-body .rule-ref {
+  color: var(--faint);
+  font-weight: 400;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+.rules-body h2 .rule-ref,
+.rules-body h3 .rule-ref { font-weight: 400; }
+
+/* 链接：细下划线，不变色 */
+.rules-body a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .32em;
+  text-decoration-color: rgb(20 20 19 / .38);
+  transition: text-decoration-color .2s ease;
+}
+.rules-body a:hover { text-decoration-color: var(--ink); }
+
+/* 列表 */
+.rules-body ul,
+.rules-body ol {
+  margin: 0 0 1.05em;
+  padding-left: 1.3em;
+}
+
+.rules-body li { margin: 0 0 .55em; }
+.rules-body li:last-child { margin-bottom: 0; }
+
+.rules-body ul > li {
+  position: relative;
+  list-style: none;
+}
+
+.rules-body ul > li::before {
+  content: "";
+  position: absolute;
+  left: -1.05em;
+  top: calc(.925em - 2px);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #b9b6ad;
+}
+
+.rules-body ol > li::marker {
+  color: var(--faint);
+  font-family: var(--sans);
+  font-size: .86em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 嵌套的一层：短横、字小半号 */
+.rules-body li > ul,
+.rules-body li > ol {
+  margin: .45em 0 .2em;
+  font-size: .95em;
+}
+.rules-body li > ul > li::before {
+  top: .93em;
+  width: .5em;
+  height: 1px;
+  border-radius: 0;
+}
+
+.rules-body li > p { margin: 0 0 .45em; }
+.rules-body li > p:last-child { margin-bottom: 0; }
+
+/* 行内代码：等宽、小一号、很淡的底，不扎眼 */
+.rules-body code {
+  padding: .1em .32em;
+  border-radius: 4px;
+  background: var(--tint);
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: .82em;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* 代码块（只有 Codex 适配那一处） */
+.rules-body pre {
+  margin: .3em 0 1.5em;
+  padding: 1.1em 1.35em;
+  border-radius: 6px;
+  background: rgb(20 20 19 / .034);
+  overflow-x: auto;
+  text-align: left;
+  line-height: 1.7;
+}
+.rules-body pre code {
+  padding: 0;
+  background: none;
+  font-size: 13.5px;
+  white-space: pre-wrap;          /* 长命令折行显示，不藏在横向滚动里 */
+  overflow-wrap: anywhere;
+}
+
+/* 表格：只用横线，黑体小一号，放得进中列 */
+.rules-body table {
+  width: 100%;
+  margin: .5em 0 1.7em;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.7;
+  letter-spacing: .015em;
+  text-align: left;
+}
+
+.rules-body th {
+  padding: 0 1.2em .65em 0;
+  border-bottom: 1px solid #cdc9bf;
+  color: var(--ink);
+  font-weight: 500;
+  vertical-align: bottom;
+}
+
+.rules-body td {
+  padding: .8em 1.2em .8em 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-soft);
+  vertical-align: top;
+}
+
+.rules-body th:last-child,
+.rules-body td:last-child { padding-right: 0; }
+
+.rules-body td:first-child { color: var(--ink); }
+.rules-body th:first-child,
+.rules-body td:first-child { min-width: 5.6em; }   /* 两三个字的类别名不被挤成一字一行 */
+
+.rules-body table code { font-size: .9em; }
+.rules-body table strong { font-weight: 500; color: var(--ink); }

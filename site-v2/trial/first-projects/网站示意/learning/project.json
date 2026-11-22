@@ -1,0 +1,63 @@
+{
+  "title": "AI 私塾",
+  "theme": {
+    "p": "#223672",
+    "soft": "#e5e4e0",
+    "accent": "#c78839"
+  },
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "10.8rem"],
+    "去〔动手实验课〕": [
+      "go-lab-v1.compressed.webp",
+      "12rem"
+    ],
+    "回〔AI 私塾〕项目页": [
+      "return-project-v1.compressed.webp",
+      "14rem"
+    ],
+    "去〔我的说明书〕项目页": [
+      "go-preferences-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔电脑大本营〕项目页": [
+      "go-computer-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔密码中心〕项目页": [
+      "go-password-v1.compressed.webp",
+      "15rem"
+    ],
+    "去〔识字放大镜〕项目页": [
+      "go-ocr-v1.compressed.webp",
+      "9rem"
+    ],
+    "去〔中文速记员〕项目页": [
+      "go-asr-v1.compressed.webp",
+      "9.5rem"
+    ]
+  },
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "AI 私塾",
+      "meta": "AI 私塾 · 总览",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    },
+    "动手实验课": {
+      "slug": "lab",
+      "file": "动手实验课.html",
+      "title": "动手实验课",
+      "meta": "AI 私塾 · 动手实验课",
+      "nav": "项目",
+      "imagePrefix": "动手实验课"
+    }
+  },
+  "detailArt": [
+    "detail-v1.compressed.webp",
+    "4rem"
+  ]
+}

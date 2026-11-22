@@ -1,0 +1,36 @@
+{
+  "title": "掌上 Codex",
+  "theme": {
+    "p": "#213f81",
+    "soft": "#e5e5e1",
+    "accent": "#bd9373"
+  },
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "12rem"],
+    "去〔随身桌面〕项目页": [
+      "go-desktop-v1.compressed.webp",
+      "15rem"
+    ],
+    "去〔电脑大本营〕项目页": [
+      "go-computer-v1.compressed.webp",
+      "15rem"
+    ]
+  },
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "掌上 Codex",
+      "meta": "掌上 Codex · 总览",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    }
+  },
+  "detailArt": [
+    "detail-v1.compressed.webp",
+    "4rem"
+  ]
+}
+

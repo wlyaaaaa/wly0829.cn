@@ -1,0 +1,343 @@
+[
+  {
+    "项目": "agents",
+    "图名": "一页说清-02",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\agents-一页说清-02-改前.png"
+  },
+  {
+    "项目": "agents",
+    "图名": "先问再做-10",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\agents-先问再做-10-改前.png"
+  },
+  {
+    "项目": "agents",
+    "图名": "新模型摸底-06",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\agents-新模型摸底-06-重转核.png",
+    "image": "assets/新模型摸底-06-v2.webp"
+  },
+  {
+    "项目": "agents",
+    "图名": "替我回话-03",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\agents-替我回话-03-改前.png"
+  },
+  {
+    "项目": "agents",
+    "图名": "网页跑腿-04",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\agents-网页跑腿-04-重转核.png",
+    "image": "assets/网页跑腿-04-v3.webp"
+  },
+  {
+    "项目": "ai-cli-profile-manager",
+    "图名": "总览-03",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\ai-cli-profile-manager-总览-03-重转核.png",
+    "image": "assets/总览-03-v2.webp"
+  },
+  {
+    "项目": "chinese-asr",
+    "图名": "回听核对-02",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\chinese-asr-回听核对-02-重转核.png",
+    "image": "assets/回听核对-02-v1.webp"
+  },
+  {
+    "项目": "chinese-asr",
+    "图名": "开口输入-06",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\chinese-asr-开口输入-06-重转核.png",
+    "image": "assets/开口输入-06-v1.webp"
+  },
+  {
+    "项目": "chinese-asr",
+    "图名": "开口输入-09",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\chinese-asr-开口输入-09-重转核.png",
+    "image": "assets/开口输入-09-v1.webp"
+  },
+  {
+    "项目": "chinese-asr",
+    "图名": "录音转文字-03",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\chinese-asr-录音转文字-03-改前.png"
+  },
+  {
+    "项目": "chinese-asr",
+    "图名": "总览-02",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\chinese-asr-总览-02-改前.png"
+  },
+  {
+    "项目": "chinese-asr",
+    "图名": "总览-04",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\chinese-asr-总览-04-重转核.png",
+    "image": "assets/总览-04-v2.webp"
+  },
+  {
+    "项目": "chinese-asr",
+    "图名": "总览-11",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\chinese-asr-总览-11-重转核.png",
+    "image": "assets/总览-11-v3.webp"
+  },
+  {
+    "项目": "chinese-asr",
+    "图名": "长录音接力-04",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\chinese-asr-长录音接力-04-重转核.png",
+    "image": "assets/长录音接力-04-v2.webp"
+  },
+  {
+    "项目": "codex-memory",
+    "图名": "对话存得牢-01",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\codex-memory-对话存得牢-01-改前.png"
+  },
+  {
+    "项目": "codex-memory",
+    "图名": "对话存得牢-02",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\codex-memory-对话存得牢-02-重转核.png",
+    "image": "assets/对话存得牢-02-v2.webp"
+  },
+  {
+    "项目": "codex-memory",
+    "图名": "换机不丢对话-02",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\codex-memory-换机不丢对话-02-重转核.png",
+    "image": "assets/换机不丢对话-02-v2.webp"
+  },
+  {
+    "项目": "daily-preferences",
+    "图名": "手机电脑记录-03",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\daily-preferences-手机电脑记录-03-重转核.png",
+    "image": "assets/手机电脑记录-03-v3.webp"
+  },
+  {
+    "项目": "daily-preferences",
+    "图名": "手机电脑记录-04",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\daily-preferences-手机电脑记录-04-重转核.png",
+    "image": "assets/手机电脑记录-04-v1.webp"
+  },
+  {
+    "项目": "daily-preferences",
+    "图名": "手机电脑记录-09",
+    "盖住": true,
+    "盖住哪几个字": "第二颗红按钮覆盖“软件、什么版本”的下沿及“清单按真正导出的…”行首",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\daily-preferences-手机电脑记录-09-重转核.png",
+    "image": "assets/手机电脑记录-09-v4.webp"
+  },
+  {
+    "项目": "daily-preferences",
+    "图名": "新材料入库-07",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\daily-preferences-新材料入库-07-重转核.png",
+    "image": "assets/新材料入库-07-v4.webp"
+  },
+  {
+    "项目": "devconfig-backup",
+    "图名": "总览-02",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\devconfig-backup-总览-02-改前.png"
+  },
+  {
+    "项目": "devconfig-backup",
+    "图名": "总览-03",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\devconfig-backup-总览-03-重转核.png",
+    "image": "assets/总览-03-v4.webp"
+  },
+  {
+    "项目": "learning",
+    "图名": "动手实验课-12",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\learning-动手实验课-12-改前.png"
+  },
+  {
+    "项目": "password-center",
+    "图名": "四把钥匙-01",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\password-center-四把钥匙-01-改前.png"
+  },
+  {
+    "项目": "password-center",
+    "图名": "密码取用-01",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\password-center-密码取用-01-改前.png"
+  },
+  {
+    "项目": "password-center",
+    "图名": "密码取用-05",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\password-center-密码取用-05-重转核.png",
+    "image": "assets/密码取用-05-v4.webp"
+  },
+  {
+    "项目": "password-center",
+    "图名": "总览-01",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\password-center-总览-01-改前.png"
+  },
+  {
+    "项目": "password-center",
+    "图名": "总览-03",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\password-center-总览-03-改前.png"
+  },
+  {
+    "项目": "password-center",
+    "图名": "总览-05",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\password-center-总览-05-重转核.png",
+    "image": "assets/总览-05-v4.webp"
+  },
+  {
+    "项目": "password-center",
+    "图名": "总览-07",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\password-center-总览-07-改前.png"
+  },
+  {
+    "项目": "password-center",
+    "图名": "限时通行证-09",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\password-center-限时通行证-09-重转核.png",
+    "image": "assets/限时通行证-09-v4.webp"
+  },
+  {
+    "项目": "pc-panel-hub",
+    "图名": "总览-02",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\pc-panel-hub-总览-02-改前.png"
+  },
+  {
+    "项目": "pc-panel-hub",
+    "图名": "总览-03",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\pc-panel-hub-总览-03-改前.png"
+  },
+  {
+    "项目": "pc-panel-hub",
+    "图名": "曲面屏-02",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\pc-panel-hub-曲面屏-02-重转核.png",
+    "image": "assets/曲面屏-02-v4.webp"
+  },
+  {
+    "项目": "personal-materials",
+    "图名": "总览-02",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\personal-materials-总览-02-改前.png"
+  },
+  {
+    "项目": "personal-media",
+    "图名": "认得出我-02",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\personal-media-认得出我-02-重转核.png",
+    "image": "assets/认得出我-02-v4.webp"
+  },
+  {
+    "项目": "sunshine-remote-streaming",
+    "图名": "窗口归位-01",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\sunshine-remote-streaming-窗口归位-01-改前.png"
+  },
+  {
+    "项目": "timeaudit",
+    "图名": "每秒体征-01",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\timeaudit-每秒体征-01-改前.png"
+  },
+  {
+    "项目": "timeaudit",
+    "图名": "每秒体征-06",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\timeaudit-每秒体征-06-重转核.png",
+    "image": "assets/每秒体征-06-v4.webp"
+  },
+  {
+    "项目": "timeaudit",
+    "图名": "记录不断线-01",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "全量\\收尾四处\\timeaudit-记录不断线-01-改前.png"
+  },
+  {
+    "项目": "timeaudit",
+    "图名": "记录不断线-09",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\timeaudit-记录不断线-09-重转核.png",
+    "image": "assets/记录不断线-09-v4.webp"
+  },
+  {
+    "项目": "video-scaffold",
+    "图名": "图文动画-08",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\video-scaffold-图文动画-08-重转核.png",
+    "image": "assets/图文动画-08-v4.webp"
+  },
+  {
+    "项目": "wechat-direct",
+    "图名": "实时接话-05",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\wechat-direct-实时接话-05-重转核.png",
+    "image": "assets/实时接话-05-v4.webp"
+  },
+  {
+    "项目": "wechat-direct",
+    "图名": "总览-02",
+    "盖住": false,
+    "盖住哪几个字": "",
+    "依据截图": "E:\\Cache\\wly-site-build\\refresh-runs\\site-plan-20261111\\全量\\收尾四处\\wechat-direct-总览-02-重转核.png",
+    "image": "assets/总览-02-v4.webp"
+  }
+]

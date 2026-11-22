@@ -2,6 +2,7 @@ import importlib.util
 import gzip
 from io import BytesIO
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.client import HTTPConnection
 import os
 from pathlib import Path
 import threading
@@ -16,6 +17,40 @@ with patch.dict(os.environ, PROXIES): spec.loader.exec_module(preview)
 
 
 class PreviewStatusTest(unittest.TestCase):
+    def test_live_allowlist_and_304(self):
+        seen = []
+        class API(BaseHTTPRequestHandler):
+            def log_message(self, *args): pass
+            def do_GET(self):
+                seen.append((self.path, self.headers.get('X-Cockpit-Device'), self.headers.get('If-None-Match')))
+                self.send_response(304 if self.headers.get('If-None-Match') == '"sample"' else 200)
+                self.send_header('ETag', '"sample"'); self.send_header('Content-Encoding', 'gzip'); self.end_headers()
+                if not self.headers.get('If-None-Match'): self.wfile.write(gzip.compress(b'{}'))
+        upstream = ThreadingHTTPServer(('127.0.0.1', 0), API)
+        server = preview.PreviewServer(('127.0.0.1', 0), preview.Preview)
+        server.upstream_port = upstream.server_port
+        threads = [threading.Thread(target=s.serve_forever, daemon=True) for s in (upstream, server)]
+        for thread in threads: thread.start()
+        connection = HTTPConnection('127.0.0.1', server.server_port)
+        try:
+            for headers, expected in (({'X-Cockpit-Device': 'A'*43, 'Accept-Encoding': 'gzip'}, 200), ({'If-None-Match': '"sample"'}, 304)):
+                connection.request('GET', '/__live/home', headers=headers); response = connection.getresponse()
+                self.assertEqual(response.status, expected); self.assertEqual(response.getheader('ETag'), '"sample"')
+                body = response.read()
+                self.assertEqual(gzip.decompress(body) if body else body, b'{}' if expected == 200 else b'')
+            self.assertEqual(seen, [('/computer-access/live/v1/home', 'A'*43, None), ('/computer-access/live/v1/home', None, '"sample"')])
+            for method, path in (('POST', '/__live/home'), ('GET', '/__computer/locks/windows'), ('GET', '/__live/http://example.test')):
+                connection.request(method, path); response = connection.getresponse(); response.read()
+                self.assertIn(response.status, (404, 405))
+            for headers in ({}, {'Origin': 'https://other.example.test'}, {'Origin': f'http://127.0.0.1:{server.server_port}', 'X-Wly-View': 'public'}):
+                connection.request('POST', '/__computer/cockpit/actions', headers=headers)
+                response = connection.getresponse(); response.read()
+                self.assertEqual(response.status, 403)
+            self.assertEqual(len(seen), 2)
+        finally:
+            connection.close()
+            for service, thread in zip((upstream, server), threads): service.shutdown(); service.server_close(); thread.join()
+
     def test_direct_fallback_and_invalid_json(self):
         self.assertEqual(preview.STATUS_ENDPOINTS, ('https://mcp.wly0829.cn/computer-access/api/status', 'https://live.wly0829.cn/computer-access/state'))
         seen = []

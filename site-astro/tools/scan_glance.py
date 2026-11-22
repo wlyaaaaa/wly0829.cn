@@ -11,6 +11,7 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parents[1] / 'scripts'))
 import oss_origins
 from page_checks import issue, write_checks
+from site_public_words import scan_baseline as scan_sensitive_baseline
 UPSTREAMS = {"mcp": "https://mcp.wly0829.cn", "live": "https://live.wly0829.cn", "oss": oss_origins.configured_base()}
 UPSTREAMS.update({f"oss-{bucket}-{i}": origin for bucket in oss_origins.BUCKETS for i, origin in enumerate(
     oss_origins.aliases('https://'+bucket+'.cn-shanghai.oss.aliyuncs.com')) if origin != UPSTREAMS['oss']})
@@ -44,8 +45,8 @@ def select_pages(dist, mode, hashes, previous, allow_missing=False):
     else: selected = [route_name(x.strip()) for x in mode.split(",") if x.strip()]
     missing = set(selected) - hashes.keys()
     if missing and not allow_missing: raise ValueError(f"成品缺少页面：{sorted(missing)}")
-    # 这两个旧入口只跳转首页；首页本身照常扫描，不再重复扫跳转别名。
-    return sorted(set(selected) - {"/cv/", "/system/"})
+    # 跳转页的显示效果由落地页覆盖。
+    return sorted(set(selected) - {"/cv/", "/cv/live/", "/system/"})
 
 def successful_routes(selected, rows, unchanged=True):
     expected = {f"{w}x{h}" for w, h in VIEWPORTS}
@@ -190,6 +191,8 @@ class Preview(http.server.SimpleHTTPRequestHandler):
         self.reply_complete = False
         head = self.command == "HEAD"; upstream = None
         if self.path.startswith("/__status"): upstream = UPSTREAMS["mcp"] + "/computer-access/api/status" + self.path[len("/__status"):]
+        # 新实况在非正式域名下读 /__live/<资源>（和 preview_site.py 一样），这里转给正式实况接口
+        if self.path.startswith("/__live/"): upstream = UPSTREAMS["live"] + "/computer-access/live/v1/" + self.path[len("/__live/"):]
         for key, host in UPSTREAMS.items():
             prefix = "/__proxy/" + key
             if self.path.startswith(prefix + "/"): upstream = host + self.path[len(prefix):]
@@ -216,7 +219,7 @@ class Preview(http.server.SimpleHTTPRequestHandler):
     do_HEAD = do_GET
 def is_live(url):
     parts = urlsplit(url)
-    return parts.hostname in ("mcp.wly0829.cn", "live.wly0829.cn") or parts.path.startswith(("/__status", "/__proxy/mcp/", "/__proxy/live/"))
+    return parts.hostname in ("mcp.wly0829.cn", "live.wly0829.cn") or parts.path.startswith(("/__status", "/__live/", "/__proxy/mcp/", "/__proxy/live/"))
 def finding(category, message, selector="html", rect=None):
     return {"category": category, "message": message, "selector": selector, "rect": rect}
 def settle(page, activity, pending, all_images=False):
@@ -264,20 +267,30 @@ def classify_alias_leaves(row):
             row['failures'].remove(item)
 
 
+def scan_context(chromium, profile, chrome, width, height):
+    return chromium.launch_persistent_context(str(profile), executable_path=chrome, headless=True,
+        viewport={"width": width, "height": height}, device_scale_factor=1,
+        is_mobile=width == 390, has_touch=width == 390, reduced_motion="reduce", service_workers="block")
+
+
 def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_results=None):
     from playwright.sync_api import sync_playwright
     from PIL import Image
     Image.MAX_IMAGE_PIXELS = None
     results = []; script = (HERE / "scan_glance_dom.js").read_text(encoding="utf-8")
     with sync_playwright() as pw:
-        browser = pw.chromium.launch_persistent_context(str(scratch / f"chrome-{worker}"), executable_path=args.chrome, headless=True, device_scale_factor=1, reduced_motion="reduce", service_workers="block")
-        browser.set_default_timeout(30000)
-        browser.add_init_script("try { localStorage.setItem('wly-site-self', '1'); } catch {}")
-        browser.route("**/*", lambda route: route.continue_() if route.request.method in ("GET", "HEAD", "OPTIONS") else route.abort())
+        contexts = {}
         for route, width, height in jobs:
+            if (width, height) not in contexts:
+                context = scan_context(pw.chromium, scratch / f"chrome-{worker}-{width}", args.chrome, width, height)
+                context.set_default_timeout(30000)
+                context.add_init_script("try { localStorage.setItem('wly-site-self', '1'); } catch {}")
+                context.route("**/*", lambda route: route.continue_() if route.request.method in ("GET", "HEAD", "OPTIONS") else route.abort())
+                contexts[width, height] = context
+            browser = contexts[width, height]
             attempts = []
             for attempt in range(2):
-                page = browser.new_page(); page.set_viewport_size({"width": width, "height": height})
+                page = browser.new_page()
                 row = {"page": route, "viewport": f"{width}x{height}", "failures": [], "hints": [], "live_unavailable": [], "seconds": {}}
                 mark = [time.monotonic()]
                 def tick(label):
@@ -309,6 +322,7 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_res
                     row['navigation'] = []
                     wait_meta_refresh(page, base, row['navigation'])
                     row['final_route'] = urlsplit(page.url).path
+                    row['browser_context'] = dict(mobile=width == 390, **page.evaluate('({layout_width: innerWidth, visual_width: visualViewport.width, scale: visualViewport.scale})'))
                     page.evaluate("document.querySelectorAll('img[loading=lazy],img[data-ts-src]').forEach(i => {if(i.getClientRects().length && getComputedStyle(i).visibility !== 'hidden'){if(!i.getAttribute('src') && i.dataset.tsSrc)i.src=i.dataset.tsSrc;i.loading='eager';}})")
                     tick("load"); settle(page, activity, pending); tick("initial_settle")
                     y = 0; steps = 0
@@ -319,7 +333,9 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_res
                     # 布局可能在步进中增长；真正到达当前页底，给页脚观察器渲染帧来激活懒图。
                     page.evaluate("async () => {window.scrollTo({top:document.documentElement.scrollHeight,left:0,behavior:'instant'});await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));}")
                     settle(page, activity, pending, all_images=True)
-                    page.evaluate("window.scrollTo({top:0,left:0,behavior:'instant'})"); settle(page, activity, pending, all_images=True)
+                    # 回顶后页眉要下一帧才恢复可点，等两帧再查控件，否则会把上一帧收起的页眉误报成点不到。
+                    page.evaluate("async () => {window.scrollTo({top:0,left:0,behavior:'instant'});await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));}")
+                    settle(page, activity, pending, all_images=True)
                     page.evaluate(script + "\n;void 0;"); dom = page.evaluate("(config)=>window.scanGlance(config)", config)
                     row["failures"].extend(classify_images(dom["failures"], (proxy_results or {}) | resource_errors)); row["hints"].extend(dom["hints"])
                     for item in link_items:
@@ -334,6 +350,9 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_res
                 classify_alias_leaves(row)
                 try:
                     shot = args.out / "screenshots" / (stem + ".png")
+                    if width == 390:
+                        mobile_shot = args.out / "screenshots" / (stem + "--viewport.png")
+                        page.screenshot(path=str(mobile_shot), timeout=30000); row["viewport_screenshot"] = str(mobile_shot)
                     page.screenshot(path=str(shot), full_page=True, timeout=30000); row["screenshot"] = str(shot)
                     row["screens"] = []
                     for n, section in enumerate(page.locator("section.ts-screen").all()):
@@ -355,7 +374,7 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_res
                 if attempt or not retryable_transport(row): break
             if len(attempts) > 1: row = dict(row, attempts=attempts)
             results.append(row)
-        browser.close()
+        for browser in contexts.values(): browser.close()
     return results
 def main():
     parser = argparse.ArgumentParser()
@@ -366,6 +385,10 @@ def main():
     if not args.dist.is_dir(): parser.error("dist 不存在")
     args.out.mkdir(parents=True, exist_ok=True); (args.out / "screenshots").mkdir(exist_ok=True)
     started = time.monotonic(); config = read_json(args.config); result_path = args.out / "scan-result.json"
+    baseline = scan_sensitive_baseline(args.dist)
+    if baseline:
+        report = json.dumps({'status': 'blocked', 'failures': baseline}, ensure_ascii=False, indent=2)
+        result_path.write_text(report, encoding='utf-8'); print(report); return 1
     previous = scan_baseline(read_json(result_path)) if result_path.exists() else {}
     dist_files = file_inventory(args.dist)
     hashes = {route_name(rel): digest for rel, digest in dist_files.items() if rel.endswith(".html")}

@@ -160,9 +160,9 @@ class Ledger:
             data["pages"].setdefault(slug, {})["pending_review"] = review
             self.write(data)
 
-    def advance_page(self, slug, checked_sources, publication):
+    def advance_page(self, slug, checked_sources, publication, *, route=None, project=None):
         """只接正式发布回执；失败页留待续，其他页/来源标记不动。"""
-        route = self.pages[slug]["url"].lstrip("/")
+        route = (route or self.pages[slug]["url"]).lstrip("/")
         relative = route if route.endswith(".html") else route.rstrip("/") + "/index.html" if route else "index.html"
         back = publication.get("readback", {}).get(relative, {})
         if (publication.get("schema") != "wly.site-publication.v1" or publication.get("status") not in {None, "published"}
@@ -177,7 +177,8 @@ class Ledger:
         published_at = datetime.fromisoformat(publication["verified_at_beijing"].replace("Z", "+00:00"))
         if any(datetime.fromisoformat(s["time"].replace("Z", "+00:00")) > published_at for s in checked_sources.values()):
             return False
-        data = self.read(self.book_for(slug))
+        book = self.book_for(project if project and slug not in self.pages and not slug.startswith("skill-") else slug)
+        data = self.read(book)
         page = data["pages"].setdefault(slug, {})
         if "pending_review" in page:
             checked_at = page["pending_review"].get("checked_at")

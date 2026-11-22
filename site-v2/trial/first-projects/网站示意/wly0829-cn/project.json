@@ -1,0 +1,32 @@
+{
+  "title": "个人网站",
+  "theme": {"p": "#434C6F", "soft": "#E9E6E0", "accent": "#FDD335"},
+  "background": "assets/背景-v1.compressed.webp",
+  "projectNav": "project",
+  "skillNav": "cockpit",
+  "buttonArt": {
+    "去〔AI 百工谱〕项目页": ["to-agents-v1.webp", "12.93rem"],
+    "去〔一页说清〕技能页": ["to-report-v1.webp", "10.13rem"],
+    "去〔个人网站〕项目页": ["to-project-v1.webp", "9.72rem"],
+    "去〔实况值守〕技能页": ["to-cockpit-v1.webp", "12.86rem"],
+    "去〔密码中心〕项目页": ["to-password-v1.webp", "9.78rem"],
+    "去〔故障值班〕": ["to-incidents-v1.webp", "7.45rem"],
+    "去〔电脑大本营〕项目页": ["to-pcconfig-v1.webp", "13.45rem"],
+    "去〔电脑户口本〕": ["to-inventory-v1.webp", "8.26rem"],
+    "去〔画图改图〕技能页": ["to-image-v1.webp", "12.83rem"],
+    "去〔网页跑腿〕技能页": ["to-browser-v1.webp", "10.51rem"],
+    "去〔网页验货〕技能页": ["to-web-check-v1.webp", "12.62rem"],
+    "回〔个人网站〕项目页": ["back-project-v1.webp", "10.01rem"],
+    "看本项目实况": ["live-project-v1.webp", "7.6rem"],
+    "看等你的事": ["live-needs-v1.webp", "7.61rem"],
+    "看 AI 账本": ["live-ledger-v1.webp", "7.55rem"],
+    "看 AI 对话": ["live-chats-v1.webp", "7.54rem"],
+    "看自动任务": ["live-automation-v1.webp", "7.64rem"]
+  },
+  "sections": {
+    "总览": {"slug": "project", "file": "project.html", "title": "个人网站", "meta": "个人网站 · 总览", "nav": "项目", "imagePrefix": "总览"},
+    "实况值守": {"slug": "cockpit", "file": "cockpit.html", "title": "实况值守", "meta": "技能 · 实况值守", "nav": "技能", "imagePrefix": "实况值守"},
+    "网页验货": {"slug": "web-compat-check", "file": "web-compat-check.html", "title": "网页验货", "meta": "技能 · 网页验货", "nav": "技能", "imagePrefix": "网页验货"}
+  },
+  "detailArt": ["detail-v1.webp", "4rem"]
+}

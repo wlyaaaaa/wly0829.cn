@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>任务详情 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css">
+<link rel="stylesheet" href="/connect-auth/glass.css">
+<link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css">
+<link rel="stylesheet" href="/live/_lib/live-page.css">
+<link rel="stylesheet" href="/live/_lib/live-record.css">
+<link rel="stylesheet" href="/live/_lib/live-dossier.css">
+<link rel="stylesheet" href="/live/_lib/live-board.css">
+<link rel="stylesheet" href="/motion/motion.css">
+<link rel="stylesheet" href="/live/task/page.css">
+<script src="/motion/motion.js"></script>
+</head>
+<body class="page page--live page--l3 page--task" data-record="task">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage dossier task-detail" id="stage">
+  <nav class="task-crumb" aria-label="当前位置">
+    <a href="/live/#tasks" id="root-link">实况</a><a class="back" href="/live/tasks/" data-back>计划任务</a><a id="crumb-group" hidden></a><strong id="crumb-name" aria-current="page" hidden></strong>
+  </nav>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+
+  <article class="glass task-hero" id="hero">
+    <div class="task-hero__art" aria-hidden="true"></div>
+    <div class="task-hero__copy">
+      <h1 id="name">正在读任务</h1>
+      <p id="task-status" hidden></p><p id="task-meta" hidden></p><p id="task-purpose" hidden></p>
+      <div id="task-week" hidden></div><div class="rec-acts" id="task-acts" hidden></div>
+    </div>
+  </article>
+
+  <div id="task-body" hidden>
+    <dl class="task-stats" id="task-stats"></dl>
+    <section class="glass task-card task-failure" id="failure" hidden>
+      <header><span class="lb-card__badge" data-icon-name="alert"></span><h2>上次为什么出错</h2></header>
+      <div class="task-failure__text" id="failure-text"></div><div id="failure-checks"></div>
+    </section>
+    <div class="task-columns" id="rec">
+      <section class="glass task-card task-history" id="run-results">
+        <header><span class="lb-card__badge" data-icon-name="clock"></span><h2>最近几次</h2></header>
+        <div id="runs"></div>
+        <details id="more-runs" hidden><summary class="live-disclosure"></summary><div id="runs-rest"></div></details>
+        <p class="task-reading" id="run-coverage" hidden></p>
+      </section>
+      <aside class="task-aside">
+        <section class="glass task-card" id="future" hidden>
+          <header><span class="lb-card__badge" data-icon-name="moon"></span><h2>接下来 3 次</h2></header>
+          <ol id="future-runs"></ol><p class="task-reading" id="future-note" hidden></p>
+        </section>
+        <section class="glass task-card task-about" id="about">
+          <header><span class="lb-card__badge" data-icon-name="gear"></span><h2 id="about-title">这个任务</h2></header>
+          <dl id="facts"></dl>
+        </section>
+      </aside>
+    </div>
+  </div>
+</main>
+<script src="/trust-modal/trust-modal.js"></script>
+<script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script>
+<script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script>
+<script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-board.js"></script><script src="/live/task/page.js"></script>
+</body>
+</html>

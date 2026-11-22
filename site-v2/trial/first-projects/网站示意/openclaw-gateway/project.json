@@ -1,0 +1,19 @@
+{
+  "title": "AI 传令站",
+  "theme": {"p": "#88201E", "soft": "#F0E2D7", "accent": "#DDAF29"},
+  "background": "assets/background.jpg",
+  "projectNav": "project",
+  "skillNav": null,
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "8.8rem"],
+    "去〔电脑大本营〕项目页": ["go-pcconfig-v1.compressed.webp", "16rem"],
+    "去〔AI 存档室〕项目页": ["go-archive-v1.compressed.webp", "16rem"],
+    "去〔升级不翻车〕": ["go-upgrade-v1.compressed.webp", "16rem"],
+    "回〔AI 传令站〕项目页": ["return-project-v1.compressed.webp", "16rem"]
+  },
+  "sections": {
+    "总览": {"slug": "project", "file": "project.html", "title": "AI 传令站", "meta": "AI 传令站 · 总览", "nav": "项目", "imagePrefix": "总览"},
+    "升级不翻车": {"slug": "upgrade", "file": "升级不翻车.html", "title": "升级不翻车", "meta": "AI 传令站 · 升级不翻车", "nav": "项目", "imagePrefix": "升级不翻车"}
+  },
+  "detailArt": ["detail-v1.compressed.webp", "4rem"]
+}

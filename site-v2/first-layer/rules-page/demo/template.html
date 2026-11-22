@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>规则</title>
+<link rel="stylesheet" href="../../header/demo/topbar.css">
+<link rel="stylesheet" href="rules.css">
+<link rel="stylesheet" href="/motion/motion.css">
+<script src="/motion/motion.js"></script>
+</head>
+<body>
+$header
+<main class="rules-page" data-rule-release="$version" data-rule-page="$page_key">
+  <div class="rules-title">$kicker$source_title</div>
+  <div class="rules-layout">
+    <nav class="rules-toc" aria-label="本篇目录"><ol>$toc</ol></nav>
+    <article class="rules-body" id="rules-body">$body</article>
+    <aside class="rules-meta" aria-label="版本与专题">
+      <dl>
+        <div><dt>版本</dt><dd>$version</dd></div>
+        <div><dt>发布</dt><dd>$date <small>北京时间</small></dd></div>
+        <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
+        <div class="meta-charter"><dt>约法</dt><dd>$charter</dd></div>
+        <div class="meta-topics"><dt>专题</dt><dd><ul>$topics</ul></dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 $charter_words 字<br>$topic_words 字</dd></div>
+      </dl>
+    </aside>
+  </div>
+</main>
+<script src="../../header/demo/topbar.js"></script>
+<script src="/live/_lib/live-view-switch.js"></script>
+<script src="rules.js"></script>
+</body>
+</html>

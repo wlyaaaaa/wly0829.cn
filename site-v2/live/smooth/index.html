@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>卡顿与流畅 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css">
+<link rel="stylesheet" href="/connect-auth/glass.css">
+<link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css">
+<link rel="stylesheet" href="/live/_lib/live-page.css">
+<link rel="stylesheet" href="/live/_lib/live-viz.css">
+<link rel="stylesheet" href="/motion/motion.css">
+<style>
+.page--smooth .grp__main { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+.page--smooth .grp__main > .grp__lead { grid-row: 2; }
+.page--smooth .grp__main > .grp__chips { grid-row: 1; }
+.page--smooth .grp__chips .vz-chips { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.page--smooth .vz-tl__row { grid-template-columns: 30px minmax(0, 1fr); }
+.page--smooth .vz-tl__label { grid-column: 1 / -1; grid-row: 1; display: block; margin-bottom: 6px; white-space: nowrap; }
+.page--smooth .vz-tl__plot { grid-row: 2; }
+.page--smooth .vz-tl__axis { grid-row: 3; }
+.page--smooth .vz-rank--detail .vz-rank__name small { word-break: keep-all; line-height: 1.7; }
+.page--smooth .vz-moment__t { white-space: nowrap; }
+.page--smooth .hero__warns a { display: inline; }
+.page--smooth .hero__warns { font-size: 15px; line-height: 23px; }
+.page--smooth .hero__warns { display:flex; flex-wrap:wrap; gap:4px 20px; }
+.page--smooth [data-key="fps"] .grp__main { grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); }
+.page--smooth [data-key="fps"] .grp__main > :is(.grp__lead,.grp__chips) { grid-row:1; min-width:0; }
+.page--smooth [data-key="fps"] .grp__main:has(.grp__chips:empty) { grid-template-columns: minmax(0, 1fr); }
+.page--smooth [data-key="fps"].fps-no-curves .grp__main { display: none; }
+.page--smooth [data-key="fps"].fps-no-curves .grp__extra { margin-top: 0; }
+.smooth-fps-empty { margin: 0 0 16px; }
+.page--smooth [data-key="fps"] .grp__hero.is-empty :is(.chart__vals, .chart__plot > :not(.chart__wait)) { display: none; }
+.page--smooth [data-key="fps"] .grp__hero.is-empty .chart__plot { height: auto; min-height: 0; background: none; }
+.page--smooth [data-key="fps"] .grp__hero.is-empty .chart__wait { position: static; display: block; padding: 8px 0; text-align: left; }
+.page--smooth :is([data-key="stutters"], [data-key="apps"]) .grp__chapter { container-type: inline-size; }
+.page--smooth [data-key="apps"] .grp-split { grid-template-columns: minmax(0, 1fr); align-items: start; }
+.stutter-layout { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "timeline" "daily" "moments" "gap"; gap: 24px 32px; align-items: start; }
+.stutter-layout > [data-x="moments"] { grid-area: moments; }
+.stutter-layout .vz-moment--empty { color: var(--ink-soft); font-size: 15px; }
+.page--smooth .grp[data-no-stutter] .grp__lamp .lamp:is([data-tone="gray"], [data-tone="grey"], [data-tone="off"]) { visibility: hidden; }
+.stutter-layout > [data-x="timeline"] { grid-area: timeline; }
+.stutter-layout > [data-x="daily"] { grid-area: daily; }
+.stutter-layout > .stat-gap { grid-area: gap; color: #5f5d57; font-size: 12px; line-height: 20px; }
+.stutter-layout > .stat-gap:empty { display: none; }
+.stutter-layout .vz-legend { margin-inline: 30px 8px; }
+.stutter-layout .vz-legend__name b { text-wrap: balance; }
+.page--smooth [data-key="fps"] .vz-legend {
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  margin-inline: 30px 0;
+}
+.page--smooth :is(.stutter-layout,[data-key="fps"]) .vz-legend__name b,
+.page--smooth [data-key="apps"] :is(.vz-rank__label, .vz-rank__name small, .grp__said) {
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  overflow: visible;
+  text-overflow: clip;
+}
+.page--smooth [data-key="apps"] .vz-rank__name small { word-break: keep-all; overflow-wrap: break-word; }
+.page--smooth .grp__chapter .stat-gap { margin-inline-start: 0; }
+.page--smooth .grp[data-key="stutters"] .grp__line { flex-wrap: wrap; row-gap: 0; }
+.page--smooth .grp[data-key="stutters"] .grp__status { white-space: normal; overflow: visible; }
+.stutter-layout .chart__head { display: grid; gap: 8px; }
+.stutter-layout .chart__vals { justify-content: flex-start; justify-self: start; margin-left: 0; font-size: 13px; }
+.stutter-layout .vz-bars { --chart-h: 130px; }
+.page--smooth .l2-nav > span { color: var(--muted); font-size: 13px; }
+@container (min-width: 660px) {
+  .page--smooth [data-key="apps"] .grp-split { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
+  .page--smooth [data-key="apps"] .grp-split.is-unbalanced { grid-template-columns: minmax(0,1fr); }
+  .stutter-layout {
+    grid-template-columns: minmax(230px, .7fr) minmax(0, 1.3fr);
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas: "moments timeline" "moments daily" "moments ." "gap gap";
+  }
+}
+@container (width < 1080px) {
+  .page--smooth [data-key="apps"] .grp-split.is-unbalanced > :last-child { order: -1; }
+}
+@container (min-width: 1080px) {
+  .page--smooth [data-key="apps"] .grp-split.is-unbalanced { grid-template-columns: minmax(0,2fr) minmax(0,1fr); }
+  .page--smooth .is-unbalanced [data-x="apps"] .vz-rank__list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 18px; }
+}
+</style>
+<script src="/motion/motion.js"></script>
+</head>
+<body class="page page--live page--l2 page--data page--smooth">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div>
+  <a class="back" href="/live/" data-back data-mo-rise>实况</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card card--hero card--quiet" id="hero" data-pic="right" data-tone="none" data-mo-rise style="--pic-y:52%">
+    <div class="card__glow" aria-hidden="true"></div>
+    <img class="card__tint" src="/live/img/head-smooth.webp" alt="" aria-hidden="true">
+    <div class="card__glass glass">
+      <span class="card__pic" aria-hidden="true"><img src="/live/img/head-smooth.webp" width="1000" height="1000" alt=""></span>
+      <div class="card__body">
+        <p class="card__head" data-part="head"><span class="head__lead">正在读</span></p>
+        <p class="hero__count" data-part="count" hidden></p>
+        <p class="hero__note" data-part="note" hidden></p>
+        <div class="hero__links" data-part="links"><a class="more more--link" href="/live/computer/">电脑 <span class="more__chev">›</span></a></div>
+      </div>
+    </div>
+  </article>
+  <nav class="l2-nav l2-nav--data" aria-label="看各组"><span>近 24 小时 · 一帧 50 毫秒以上算卡顿，100 毫秒以上算严重</span></nav>
+  <section class="vz-board" id="board" data-mo-rise aria-label="卡顿与流畅各组"></section>
+</main>
+<script src="/trust-modal/trust-modal.js"></script>
+<script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script>
+<script src="/live/_lib/live-ui.js"></script>
+<script src="/header/topbar.js"></script>
+<script src="/live/_lib/live-light.js"></script>
+<script src="/live/_lib/live-chart.js"></script>
+<script src="/live/_lib/live-viz.js"></script>
+<script src="/live/_lib/live-stat.js"></script>
+<script src="/live/smooth/detail.js"></script>
+<script src="/live/computer/adaptive.js"></script><script src="/live/smooth/page.js"></script>
+</body>
+</html>

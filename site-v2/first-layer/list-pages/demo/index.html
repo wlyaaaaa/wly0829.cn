@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>项目 · 试看</title>
+<!-- 页眉用的是定稿的原件，一个字不改 -->
+<link rel="stylesheet" href="../../header/demo/topbar.css">
+<link rel="stylesheet" href="wall.css">
+</head>
+<body>
+
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float">
+  <div class="topbar__glass"></div>
+
+  <nav class="topbar__group" aria-label="主导航">
+    <a class="pill" href="#">实况</a>
+    <a class="pill" href="#">原理</a>
+    <a class="pill" href="#">规则</a>
+    <a class="pill" href="skills.html">技能</a>
+    <a class="pill" href="index.html" aria-current="page">项目</a>
+  </nav>
+
+  <a class="brand" href="#" aria-label="Inside a Personal Agent，回首页">
+    <span class="brand__lamp"></span>
+    <span class="brand__word">Inside a Personal Agent</span>
+  </a>
+
+  <div class="topbar__group topbar__group--right">
+    <a class="pill" href="#">连接电脑</a>
+    <a class="pill" href="#">授权与状态</a>
+    <button class="pill pill--icon" type="button" aria-label="菜单" title="菜单（里面放什么还没定）">
+      <span class="burger"><i></i><i></i><i></i></span>
+    </button>
+  </div>
+</header>
+
+<!-- 页眉下面不放标题（本人 11-13 16:41 选的），直接就是第一张画 -->
+<main class="wall" id="wall">
+  <!-- 最要紧的几个：一行一张大画，一屏两张。这里用的是六个核心项目的例图 -->
+  <section class="hang hang--big" aria-label="最要紧的几个项目">
+    <a class="piece" id="p-pcconfig" href="#">
+      <img class="piece__glow" src="img/pcconfig-glow.png" alt="" aria-hidden="true">
+      <span class="piece__frame"><img class="piece__art" src="img/pcconfig.jpg" width="1983" height="793" alt="电脑大本营"></span>
+    </a>
+    <a class="piece" id="p-chineseasr" href="#">
+      <img class="piece__glow" src="img/chineseasr-glow.png" alt="" aria-hidden="true">
+      <span class="piece__frame"><img class="piece__art" src="img/chineseasr.jpg" width="1983" height="793" alt="语音识别"></span>
+    </a>
+    <a class="piece" id="p-agents" href="#">
+      <img class="piece__glow" src="img/agents-glow.png" alt="" aria-hidden="true">
+      <span class="piece__frame"><img class="piece__art" src="img/agents.jpg" width="1983" height="793" alt="规则和技能的源头"></span>
+    </a>
+    <a class="piece" id="p-aicli" href="#">
+      <img class="piece__glow" src="img/aicli-glow.png" alt="" aria-hidden="true">
+      <span class="piece__frame"><img class="piece__art" src="img/aicli.jpg" width="1983" height="793" alt="AI 工具启动器"></span>
+    </a>
+    <a class="piece" id="p-passwordcenter" href="#">
+      <img class="piece__glow" src="img/passwordcenter-glow.png" alt="" aria-hidden="true">
+      <span class="piece__frame"><img class="piece__art" src="img/passwordcenter.jpg" width="1983" height="793" alt="密码中心"></span>
+    </a>
+    <a class="piece" id="p-panelhub" href="#">
+      <img class="piece__glow" src="img/panelhub-glow.png" alt="" aria-hidden="true">
+      <span class="piece__frame"><img class="piece__art" src="img/panelhub.jpg" width="1983" height="793" alt="机箱小屏"></span>
+    </a>
+  </section>
+
+  <!-- 其余的：一行两张小画。代理清道夫是真封面，另外五张是为了看样子编的 -->
+  <section class="hang hang--small" aria-label="其余的项目">
+    <a class="piece" id="p-proxyclean" href="#">
+      <img class="piece__glow" src="img/proxyclean-glow.png" alt="" aria-hidden="true">
+      <span class="piece__frame"><img class="piece__art" src="img/proxyclean.jpg" width="1300" height="520" alt="代理清道夫"></span>
+    </a>
+    <a class="piece" id="p-media" href="#">
+      <img class="piece__glow" src="img/media-glow.png" alt="" aria-hidden="true">
+      <span class="piece__frame"><img class="piece__art" src="img/media.jpg" width="1300" height="520" alt="影音档案馆"></span>
+    </a>
+    <a class="piece" id="p-finance" href="#">
+      <img class="piece__glow" src="img/finance-glow.png" alt="" aria-hidden="true">
+      <span class="piece__frame"><img class="piece__art" src="img/finance.jpg" width="1300" height="520" alt="账房先生"></span>
+    </a>
+    <a class="piece" id="p-health" href="#">
+      <img class="piece__glow" src="img/health-glow.png" alt="" aria-hidden="true">
+      <span class="piece__frame"><img class="piece__art" src="img/health.jpg" width="1300" height="520" alt="健康参谋"></span>
+    </a>
+    <a class="piece" id="p-wechat" href="#">
+      <img class="piece__glow" src="img/wechat-glow.png" alt="" aria-hidden="true">
+      <span class="piece__frame"><img class="piece__art" src="img/wechat.jpg" width="1300" height="520" alt="微信收发室"></span>
+    </a>
+    <a class="piece" id="p-timeaudit" href="#">
+      <img class="piece__glow" src="img/timeaudit-glow.png" alt="" aria-hidden="true">
+      <span class="piece__frame"><img class="piece__art" src="img/timeaudit.jpg" width="1300" height="520" alt="电脑心电图"></span>
+    </a>
+  </section>
+
+  <p class="wall__end">试看页到这里。真页会接着往下排完其余的项目。</p>
+</main>
+
+<aside class="knobs" id="knobs" data-folded="false" data-page="项目页">
+  <div class="knobs__head"><b>调这一页</b><button type="button" id="knobs-fold">收起</button></div>
+  <label>大画高矮<input type="range" id="k-bigh" min="28" max="54" step="1" value="41"><output></output></label>
+  <label>光晕浓淡<input type="range" id="k-glow" min="0" max="100" step="5" value="100"><output></output></label>
+  <p class="knobs__out" id="knobs-out"></p>
+  <button type="button" id="knobs-copy">复制这组数</button>
+</aside>
+
+<script src="../../header/demo/topbar.js"></script>
+<script src="wall.js"></script>
+</body>
+</html>

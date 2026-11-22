@@ -298,7 +298,7 @@ test('AI handoff deduplicates exact IDs and copies source time without private d
 });
 test('generic notices retain their friendly issue context in display and copied text',()=>{
  const app=cockpit(),data=fixture(),message='这次没有完成。AI 会在下次治理里处理。',issue={id:'public-issue',title:'统计本机代理流量',public_message:message};data.cockpit={detail_groups:{need_you:[],ai_following:[issue],deferred:[],history:[]}};app.set(data);
- const row={id:'traffic',title:'套餐流量',public_message:message,notice_kind:'warn',ai_hint:{issue_ids:[issue.id],task_name:'PRIVATE_TASK',last_error:'PRIVATE_ERROR'}},sentence=app.cpPublicSentence(row);assert.equal(sentence,issue.title+'：'+message);assert.match(app.cpCopyPrompt([app.cpCopyMeta(row,sentence)],'item',''),/统计本机代理流量：这次没有完成/);assert.doesNotMatch(sentence,/PRIVATE_|套餐流量/);
+ const row={id:'proxy_traffic',title:'本机代理流量',public_message:message,notice_kind:'warn',ai_hint:{issue_ids:[issue.id],task_name:'PRIVATE_TASK',last_error:'PRIVATE_ERROR'}},sentence=app.cpPublicSentence(row);assert.equal(sentence,issue.title+'：'+message);assert.match(app.cpCopyPrompt([app.cpCopyMeta(row,sentence)],'item',''),/统计本机代理流量：这次没有完成/);assert.doesNotMatch(sentence,/PRIVATE_/);
  assert.equal(app.cpPublicSentence({...issue,public_message:issue.title+'：'+message}),issue.title+'：'+message);assert.equal(app.cpPublicSentence({plain:{name:'检查电脑记录备份'},public_message:message}),'检查电脑记录备份：'+message);
 });
 
@@ -317,4 +317,14 @@ test('stutter page copy prompts send AI to the local registries by item id',()=>
   assert.doesNotMatch(text,/ai_hint|18793|\/computer-access|api\/status|[A-Za-z]:\\|registries\/|\.json/,key);}
  assert.match(copy['one-prompt'],/编号 \{id\}/);assert.match(copy['felt-prompt'],/编号 \{id\}/);
  const page=readFileSync(new URL('../scripts/stutter-page.js',import.meta.url),'utf8');assert.doesNotMatch(page,/one-missing-prompt|missing-hint/);
+});
+
+test('only the phone usage ring folds small categories into the existing other bucket', () => {
+  const source = readFileSync(new URL('../site-v2/live/phone/page.js', import.meta.url), 'utf8');
+  const fold = vm.runInNewContext(source.slice(source.indexOf('  function usageSlices('), source.indexOf('  function paintShare(')) + 'usageSlices',
+    { U:{fieldText:String}, marked:()=>false, isPartial:()=>false });
+  const rows = [{id:'main',value:86},{id:'boundary',value:3},{id:'small',value:2,label:'购物'},{id:'private',value:2,label:'私人名',visibility:'owner'},
+    {id:'undisclosed-category',value:1,label:'不公开的类别'},{id:'other',value:6,members:['已公开',{label:'私人另名',visibility:'owner'}]}];
+  const result = JSON.stringify(fold(rows,'public'));
+  assert.deepEqual(JSON.parse(result), [rows[0],rows[1],{id:'other',label:'其他',hue:'stone',tooltip:'购物、已公开',value:11,q:'ok'}]);
 });

@@ -223,6 +223,60 @@ class OssReleaseTests(unittest.TestCase):
         expected=text.replace(b'const image="scene.png"',b'const image="https://example.oss.invalid/releases/one/_shared/scene.png"')
         self.assertEqual(rewriter.rewrite(text,'_shared/comic.js'),expected)
 
+    def test_nested_templates_rewrite_expression_literals_and_following_images(self):
+        text = br'''const view=`<li>${(() => {
+          // } ` '/live/img/ignored.webp'
+          /* } ` "/live/img/ignored.webp" */
+          const pattern=/[}`"']/g;
+          if(flag) /[}`]/.test('}');
+          return ({items:[flag ? `/live/img/a.webp` : '/live/img/b.webp'], note:"}"}).items[0];
+        })()}</li>`;
+        const image='/live/img/after.webp';
+        const escaped=`escaped \` \${'/live/img/ignored.webp'}`;'''
+        files = {'live/page.js': {}, **{'live/img/'+name+'.webp': {} for name in ('a','b','after','ignored')}}
+        rewrite = oss.Rewriter(files, 'https://example.oss.invalid', 'releases/one', 'https://wly0829.cn', version=9)
+        expected = text
+        for name in ('a','b','after'):
+            path = ('/live/img/'+name+'.webp').encode()
+            expected = expected.replace(path, b'https://example.oss.invalid/releases/one'+path)
+        self.assertEqual(rewrite.rewrite(text, 'live/page.js'), expected)
+        self.assertEqual(rewrite.references['live/page.js'], {'live/img/'+name+'.webp' for name in ('a','b','after')})
+        self.assertFalse(rewrite.missing)
+        excluded = []
+        literals = list(oss.javascript_literals(text.decode(), excluded))
+        outer = next(m for m in literals if m.start() == text.index(b'`'))
+        self.assertEqual(outer[0], text[text.index(b'`'):text.index(b'</li>`')+6].decode())
+        for match in literals:
+            self.assertEqual(text[match.start('value'):match.end('value')].decode(), match['value'])
+        masked = list(text.decode())
+        for start, end in excluded: masked[start:end] = ' '*(end-start)
+        self.assertIn('return ({items:[flag ?', ''.join(masked))
+        self.assertNotIn('ignored.webp', ''.join(masked))
+
+    def test_template_expressions_keep_constant_url_analysis_and_mask_raw_helpers(self):
+        text = b'''const view=`new URL('assets/'+shot.src,location.href) ${(() => {
+          const path='/live/img/'; const base=document.currentScript && document.currentScript.src || document.baseURI;
+          return new URL(path+'a.webp',base);
+        })()}`;'''
+        rewrite = oss.Rewriter({'live/page.js':{}, 'live/img/a.webp':{}}, 'https://example.oss.invalid',
+                               'releases/one', 'https://wly0829.cn', version=9)
+        expected = text.replace(b"path+'a.webp'", b'"https://example.oss.invalid/releases/one/live/img/a.webp"')
+        self.assertEqual(rewrite.rewrite(text, 'live/page.js'), expected)
+
+    def test_template_parser_version_keeps_legacy_replay_and_ordinary_bytes(self):
+        files = {'live/page.js':{}, 'live/img/a.webp':{}, 'live/img/b.webp':{}}
+        raw = b"const view=`${flag ? '/live/img/a.webp' : '/live/img/b.webp'}`;"
+        ordinary = br'''// '/live/img/b.webp'
+        if(flag) /["'`]/.test(''); else /[}]/.test('}');
+        const view=`<li>${count}</li>`; const image='/live/img/a.webp';'''
+        for version in range(3, 10):
+            with self.subTest(version=version):
+                rewrite = oss.Rewriter(files, 'https://example.oss.invalid', 'releases/one', 'https://wly0829.cn', version=version)
+                expected = raw if version<9 else raw.replace(b"'/live/img/", b"'https://example.oss.invalid/releases/one/live/img/")
+                self.assertEqual(rewrite.rewrite(raw, 'live/page.js'), expected)
+                expected = ordinary.replace(b"image='/live/img/", b"image='https://example.oss.invalid/releases/one/live/img/")
+                self.assertEqual(rewrite.rewrite(ordinary, 'live/page.js'), expected)
+
     def test_lazy_picture_and_lazy_css_addresses_are_versioned(self):
         files={'index.html':{},'_shared/a.avif':{},'_shared/b.webp':{}}
         text=b'<source data-lazy-srcset="/_shared/a.avif 640w"><div data-lazy-style="background:url(\'/ _shared/b.webp\')"></div>'.replace(b'/ _shared',b'/_shared')
@@ -302,18 +356,65 @@ class OssReleaseTests(unittest.TestCase):
         self.assertEqual((output/'oss/search-index.js').read_bytes(), (self.source/'search-index.js').read_bytes())
         oss.verify_local(output)
 
+    def test_live_fallback_is_an_oss_asset_and_fetch_is_rewritten(self):
+        fallback = self.source/'live/_fallback.json'
+        fallback.parent.mkdir(parents=True, exist_ok=True)
+        fallback.write_text('{"v":1,"resources":{"home":{"data":{}}}}', encoding='utf-8')
+        client = self.source/'live/_lib/live-client.js'
+        client.parent.mkdir(parents=True, exist_ok=True)
+        client.write_text("fetch('/live/_fallback.json', {credentials: 'omit'})", encoding='utf-8')
+        manifest = oss.read(self.source/oss.MANIFEST)
+        manifest['files'] = {rel: row for rel, row in oss.inventory(self.source).items() if rel != oss.MANIFEST}
+        oss.write(self.source/oss.MANIFEST, manifest)
+        output, plan = self.prepare()
+        self.assertIn('live/_fallback.json', plan['objects'])
+        self.assertNotIn('live/_fallback.json', plan['github_files'])
+        url = plan['objects']['live/_fallback.json']['url']
+        self.assertIn(url, (output/'oss/live/_lib/live-client.js').read_text('utf-8'))
+        self.assertIn("credentials: 'omit'", (output/'oss/live/_lib/live-client.js').read_text('utf-8'))
+        oss.verify_local(output)
+
+    def test_large_text_replays_the_same_bytes_and_dependencies_without_caching(self):
+        owner = 'live/_fallback.json'
+        asset = 'live/assets/cover.webp'
+        files = {owner: {}, asset: {}}
+        args = (files, 'https://assets.example.test', 'releases/example', 'https://wly0829.cn')
+        plain = oss.Rewriter(*args, version=9)
+        cached = oss.Rewriter(*args, version=9)
+        cache = oss.FinalizeCache(self.source, True, {})
+        small = b'{"first":"value"}'
+        data = b'{"image":"/live/assets/cover.webp","padding":"0123456789012345"}'
+        with patch.object(cache, 'MAX_REWRITE_BYTES', len(data) - 1):
+            cache.rewrite(cached, small, 'other.json')
+            results = [cache.rewrite(cached, data, owner) for _ in range(2)]
+        expected = plain.rewrite(data, owner)
+        self.assertEqual(results, [expected, expected])
+        self.assertEqual(cached.references, plain.references)
+        self.assertEqual(cached.absolute_references, plain.absolute_references)
+        self.assertEqual(cached.changes, plain.changes)
+        self.assertEqual(len(cache.kept), 1)
+
     def test_root_icons_stay_on_pages_while_svg_uses_oss(self):
-        icons = {'favicon.ico': b'ICO fixture\x00\xff', 'apple-touch-icon.png': b'PNG fixture\x00\xff'}
+        icons = {'favicon.ico': b'ICO fixture\x00\xff', 'icon-192.png': b'192 PNG fixture\x00\xff',
+                 'apple-touch-icon.png': b'PNG fixture\x00\xff'}
         for name, raw in {**icons, 'favicon.svg': b'<svg xmlns="http://www.w3.org/2000/svg"/>'}.items():
             (self.source/name).write_bytes(raw)
         page = self.source/'index.html'
-        page.write_bytes(b'<link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" href="/apple-touch-icon.png">'+page.read_bytes())
+        page.write_bytes(b'<link rel="icon" href="/favicon.svg">'
+                         b'<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">'
+                         b'<link rel="apple-touch-icon" href="/apple-touch-icon.png">'+page.read_bytes())
         manifest = oss.read(self.source/oss.MANIFEST)
         manifest['files'] = {rel: row for rel, row in oss.inventory(self.source).items() if rel != oss.MANIFEST}
         manifest['release_id'] = oss.hashlib.sha256(json.dumps(manifest['files'], sort_keys=True).encode()).hexdigest()
         oss.write(self.source/oss.MANIFEST, manifest)
-        output, plan = self.prepare()
+        base = 'https://fixture-bucket.oss-cn-beijing.aliyuncs.com'
+        legacy = oss.prepare(self.source, base, 'releases/fixture', self.root/'legacy', rewriter_version=9, offline=True)
+        output = self.root/'output'
+        plan = oss.prepare(self.source, base, 'releases/fixture', output, offline=True)
         published = oss.read(output/'github'/oss.MANIFEST)
+        self.assertEqual(legacy['objects']['icon-192.png']['content_type'], 'image/png')
+        self.assertFalse('icon-192.png' in legacy['github_files'])
+        self.assertEqual(plan['objects'], {rel: row for rel, row in legacy['objects'].items() if rel != 'icon-192.png'})
         for name, raw in icons.items():
             with self.subTest(name=name):
                 self.assertIn(name, plan['github_files']); self.assertIn(name, published['files'])
@@ -322,7 +423,11 @@ class OssReleaseTests(unittest.TestCase):
                 self.assertFalse((output/'oss'/name).exists())
         self.assertIn('favicon.svg', plan['objects'])
         self.assertIn('href="/apple-touch-icon.png"', (output/'github/index.html').read_text())
+        self.assertIn('type="image/png" sizes="192x192" href="/icon-192.png"', (output/'github/index.html').read_text())
+        self.assertIn(legacy['objects']['icon-192.png']['url'], (self.root/'legacy/github/index.html').read_text())
         oss.verify_local(output)
+        oss.verify_local(self.root/'legacy')
+        oss.verify_manifest(published, require_remote=False)
 
     def test_unrecorded_source_or_target_change_is_rejected(self):
         output, _ = self.prepare()
@@ -411,7 +516,15 @@ class OssReleaseTests(unittest.TestCase):
             server.server_close()
 
     def test_release_requires_bound_get_evidence_and_rejects_changed_contract(self):
-        output, plan = self.prepare()
+        icon = self.source/'icon-192.png'
+        icon.write_bytes(b'192 PNG fixture')
+        source_manifest = oss.read(self.source/oss.MANIFEST)
+        source_manifest['files'][icon.name] = dict(bytes=icon.stat().st_size, sha256=oss.digest(icon))
+        oss.write(self.source/oss.MANIFEST, source_manifest)
+        output = self.root/'output'
+        plan = oss.prepare(self.source, 'https://fixture-bucket.oss-cn-beijing.aliyuncs.com', 'releases/fixture', output,
+                           rewriter_version=9, offline=True)
+        self.assertIn(icon.name, plan['objects'])
         manifest = oss.read(output/'github'/oss.MANIFEST)
         with self.assertRaisesRegex(ValueError, 'GET evidence'):
             oss.verify_manifest(manifest)
@@ -437,7 +550,7 @@ class OssReleaseTests(unittest.TestCase):
             proof = altered['oss']['verification']
             if change == 'stale': proof['release_id'] = 'another-release'
             elif change == 'missing': proof['objects'].pop('assets/main.js')
-            elif change == 'body': proof['objects']['assets/main.js']['sha256'] = '0'*64
+            elif change == 'body': proof['objects'][icon.name]['sha256'] = '0'*64
             elif change == 'cors': proof['objects']['assets/main.js']['headers'] = {}
             elif change == 'range': proof['objects']['projects/demo/assets/hero.mp4'].pop('range')
             elif change == 'loopback': altered['oss']['asset_base_url'] = 'http://127.0.0.1:8080'
@@ -549,7 +662,7 @@ class OssReleaseTests(unittest.TestCase):
         manifest=oss.read(self.source/oss.MANIFEST)
         manifest['files']={k:v for k,v in oss.inventory(self.source).items()if k!=oss.MANIFEST};oss.write(self.source/oss.MANIFEST,manifest)
         previous=None
-        for version in (1,2,3,4,5):
+        for version in range(1, oss.REWRITER_VERSION + 1):
             with self.subTest(version=version):
                 prepared,proof=oss.current_home_links(self.source,version)
                 if version<4:

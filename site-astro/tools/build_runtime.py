@@ -359,7 +359,7 @@ def album_index(dist, snapshot, changed_routes):
 
 def visitor_html(body):
     script = (ROOT / 'scripts/visitor-beacon.js').read_text('utf8').strip()
-    body = re.sub(r'<script data-site-visitors>[\s\S]*?</script>\s*', '', body)
+    body = re.sub(r'<script\b[^>]*\bdata-site-visitors\b[^>]*>[\s\S]*?</script>\s*', '', body)
     email = (ROOT / 'scripts/footer-email-copy.js').read_text('utf8').strip()
     body = re.sub(r'<script data-footer-email-copy>[\s\S]*?</script>\s*', '', body)
     body = re.sub(r'<script data-header-menu>[\s\S]*?</script>\s*', '', body)

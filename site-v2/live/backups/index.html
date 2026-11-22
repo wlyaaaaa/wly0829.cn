@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>备份 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/connect-auth/glass.css"><link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css"><link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script><style>.page--l2 .card--hero[data-pic] .card__glass { min-height: 192px; } .backup-bit { display: inline-block; white-space: nowrap; }</style></head>
+<body class="page page--live page--l2 page--backups"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage"><div class="field" aria-hidden="true"></div><a class="back" href="/live/#backups" data-back data-mo-rise>实况</a><ul class="notices" id="notices" aria-live="polite"></ul>
+<article class="card card--hero" id="hero" data-pic="right" data-mo-rise><div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="/live/img/backups.webp" alt="" aria-hidden="true">
+<div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/backups.webp" width="1000" height="1000" alt=""></span><div class="card__body">
+<p class="card__head" id="head"></p><p class="hero__note" id="note"></p><div class="hero__links"><a class="more" href="#restore">能退回哪一天 ›</a></div></div></div></article>
+<div class="backup-summary" id="backup-summary"></div><div class="backup-matrix" id="backup-matrix" aria-label="各类资料在各去处的副本"></div>
+<div class="l2-board"><section class="l2-col" data-mo-rise><p class="part" data-keep>每类资料的副本</p><ul class="rows list" id="sets"></ul>
+<button class="more" type="button" id="more" hidden></button><div class="fold" id="rest-box"><div><ul class="rows list" id="rest"></ul></div></div><p class="pj-note" id="coverage"></p></section>
+<section class="l2-col" id="restore" data-mo-rise><p class="part" data-keep>恢复点与最近一次恢复</p><ul class="rows list" id="points"></ul></section></div></main>
+<style>
+.page--backups #more[aria-expanded="true"] .more__shut, .page--backups #more:not([aria-expanded="true"]) .more__open { display: none; }
+.page--backups .hero__note:not([hidden]) { display: block; }
+.page--backups .backup-grid td[data-state] { background: transparent; color: var(--ink); border-radius: 0; }
+.page--backups .backup-grid td[data-state="gap"] { color: #a14b3a; box-shadow: inset 0 -1px #d8aa91; }
+.page--backups .backup-grid td[data-state="stale"] { color: #94631e; background: #fff0d6; border-radius: 8px; }
+.page--backups .backup-grid td[data-state="none"], .page--backups .backup-grid td[data-state="unknown"] { color: var(--muted); }
+.page--backups .backup-grid th:first-child { width: auto; }
+.page--backups .backup-grid th:not(:first-child) { width: auto; color: var(--ink); }
+.page--backups .backup-grid { font-size: 13px; border-spacing: 4px; }
+.page--backups .backup-grid :is(th,td) { vertical-align: top; padding: 4px 7px; overflow-wrap: anywhere; line-height: 1.4; }
+.page--backups .backup-grid thead tr > th { color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--hair); white-space: normal; }
+.page--backups .backup-grid caption { padding: 0 7px 6px; text-align: left; }
+.page--backups .backup-grid caption > span { display: block; }
+.page--backups .backup-grid small { margin-top: 2px; font-size: 11.5px; line-height: 1.35; }
+.page--backups .backup-grid :is(thead, td[data-copy]) small { color: var(--muted); font-weight: 400; white-space: normal; }
+.page--backups .backup-grid td[data-copy][data-state="complete"] { color: #176b4c; }
+.page--backups .backup-grid td[data-copy][data-state="waiting"] { color: #536896; }
+.page--backups .backup-grid td[data-copy="drive"] { padding-inline: 2px; }
+.page--backups .backup-grid b { font-weight: 400; }
+.page--backups .backup-grid td[data-copy]:is([data-state="complete"],[data-state="gap"],[data-state="stale"],[data-state="waiting"]) > b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.page--backups .backup-grid th[scope="row"] { color: var(--ink); font-size: 14px; font-weight: 500; }
+.page--backups .backup-grid th[scope="row"] small { font-weight: 400; }
+.page--backups .backup-name { display: flex; align-items: center; gap: 6px; }
+.page--backups .backup-name .lamp { flex: none; margin: 0; }
+.page--backups .backup-unit { white-space: nowrap; }
+.page--backups .row__title { display: -webkit-inline-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; max-width: 100%; vertical-align: bottom; }
+.page--backups .backup-grid .backup-location { background: transparent; border-radius: 0; font-size: 12px; }
+.page--backups .backup-grid .backup-restore > a { display: block; white-space: nowrap; }
+.page--backups .backup-grid summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+.page--backups .backup-note > summary { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; list-style-position: inside; }
+.page--backups .backup-note > div { font-size: 12px; font-weight: 400; }
+.page--backups .backup-summary { grid-template-columns: repeat(4,minmax(0,1fr)); align-items: stretch; }
+.page--backups .backup-summary b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.page--backups .backup-summary .backup-drive { min-width: 0; word-break: normal; overflow-wrap: normal; }
+.page--backups .backup-drive .drive-numbers { display: block; font-size: 18px; line-height: 1.4; }
+.page--backups .backup-drive .drive-count { display: inline-block; white-space: nowrap; }
+.page--backups .backup-summary .backup-wait { color: #536896; font-weight: 600; }
+.page--backups .backup-bit { white-space: normal; }
+</style>
+<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-viz-grid.js"></script><script src="/live/backups/page.js"></script></body></html>
+

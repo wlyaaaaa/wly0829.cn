@@ -1,0 +1,10 @@
+{
+  "title": "随身桌面",
+  "theme": {"p": "#7E1C13", "soft": "#EFE1D6", "accent": "#B67B32"},
+  "background": "assets/background.webp",
+  "projectNav": "project",
+  "skillNav": "tailscale-safe-exposure",
+  "buttonArt": {"看本项目实况": ["cover-live-v1.webp", "10rem"],"去〔只让自己连〕技能页": ["button-01-v1.compressed.webp", "16rem"], "去〔电脑大本营〕项目页": ["button-02-v1.compressed.webp", "16rem"], "去〔机箱小屏〕项目页": ["button-03-v1.compressed.webp", "16rem"], "去〔网络看护〕技能页": ["button-04-v1.compressed.webp", "16rem"], "回〔随身桌面〕项目页": ["button-05-v1.compressed.webp", "16rem"], "去〔随身桌面〕项目页": ["button-06-v1.compressed.webp", "16rem"], "去〔窗口归位〕": ["button-07-v1.compressed.webp", "11rem"], "看实况": ["live-v2.compressed.webp", "11rem"]},
+  "sections": {"总览": {"slug": "project", "file": "project.html", "title": "随身桌面", "meta": "随身桌面", "imagePrefix": "总览", "nav": "项目"}, "窗口归位": {"slug": "窗口归位", "file": "窗口归位.html", "title": "窗口归位", "meta": "窗口归位", "imagePrefix": "窗口归位", "nav": "项目"}, "只让自己连": {"slug": "tailscale-safe-exposure", "file": "tailscale-safe-exposure.html", "title": "只让自己连", "meta": "只让自己连", "imagePrefix": "只让自己连", "nav": "技能"}},
+  "detailArt": ["button-09-v1.compressed.webp", "4rem"]
+}

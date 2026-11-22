@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>一件事 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css">
+<link rel="stylesheet" href="/connect-auth/glass.css">
+<link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css">
+<link rel="stylesheet" href="/live/_lib/live-page.css">
+<link rel="stylesheet" href="/live/_lib/live-record.css">
+<link rel="stylesheet" href="/live/item/record.css">
+<link rel="stylesheet" href="/live/_lib/live-dossier.css">
+<link rel="stylesheet" href="/motion/motion.css">
+<script src="/motion/motion.js"></script>
+<style>.rec-meta>span,.run__when,.trust-note,.btn{white-space:nowrap}.row__title,.rec-fact dt{word-break:keep-all}.rec-acts{gap:10px;flex-wrap:wrap}.rec-meta>span{white-space:normal;overflow-wrap:anywhere}.is-unavailable .head__lead{font-size:14px;line-height:22px;color:var(--muted)}</style>
+</head>
+<body class="page page--live page--l3" data-record="item">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage dossier" id="stage">
+  <div class="field" aria-hidden="true"></div>
+  <a class="back" href="/live/items/" data-back data-mo-rise>等你的事</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card card--record dossier__hero" id="hero" data-tone="off" data-pic="right" data-mo-rise>
+    <div class="card__glow" aria-hidden="true"></div>
+    <img class="card__tint" src="/live/img/needs.webp" alt="" aria-hidden="true">
+    <div class="card__glass glass">
+      <span class="card__pic" aria-hidden="true"><img src="/live/img/needs.webp" width="1000" height="1000" alt=""></span>
+      <div class="card__body">
+        <p class="dossier__kicker" data-keep><span data-part="lamp" hidden></span><span>一件事</span></p>
+        <p class="card__head" data-part="head"></p>
+        <div class="dossier__lead" data-part="lead" hidden></div>
+        <button class="more dossier__unfold" type="button" id="lead-more" aria-expanded="false" hidden></button>
+        <p class="rec-meta" data-part="meta" hidden></p>
+      </div>
+    </div>
+  </article>
+  <div class="dossier__grid" data-shape="two">
+    <div class="dossier__main rec" id="rec">
+      <section class="dossier-card dossier-card--why glass" data-auto data-mo-rise hidden>
+        <span class="dossier-card__tint" aria-hidden="true"></span>
+        <span class="dossier-card__art" aria-hidden="true"></span>
+        <h2 class="dossier-card__title"><span class="dossier-icon" data-icon="why" aria-hidden="true"></span>为什么</h2>
+        <p class="rec-say rec-prose" data-part="say" data-fill hidden></p>
+      </section>
+      <section class="dossier-card dossier-card--ask glass" id="questions" data-mo-rise hidden>
+        <span class="dossier-card__tint" aria-hidden="true"></span>
+        <h2 class="dossier-card__title"><span class="dossier-icon" data-icon="ask" aria-hidden="true"></span><span class="rec-part">要本人选的</span></h2>
+        <div class="rec-copy" id="question-text"></div>
+        <div class="fold" id="questions-box-rest"><div><div class="rec-copy" id="question-rest"></div></div></div>
+        <button class="more" type="button" id="questions-more" aria-expanded="false" hidden></button>
+      </section>
+      <section class="dossier-card rec-runs glass" id="history-box" data-mo-rise>
+        <h2 class="dossier-card__title rec-part" data-keep><span class="dossier-icon" data-icon="time" aria-hidden="true"></span>经过</h2>
+        <ol class="runs" id="events"></ol>
+        <div class="fold" id="events-box-rest"><div><ol class="runs" id="events-rest"></ol></div></div>
+        <button class="more" type="button" id="events-more" hidden></button>
+        <button class="more" type="button" id="earlier" hidden>继续读更早的经过 ›</button>
+      </section>
+      <p class="rec-part" id="coverage"></p>
+    </div>
+    <aside class="dossier__side">
+      <section class="dossier-card dossier-card--state glass" data-auto data-mo-rise hidden>
+        <span class="dossier-card__tint" aria-hidden="true"></span>
+        <div class="card__body">
+          <h2 class="dossier-card__title"><span class="dossier-icon" data-icon="state" aria-hidden="true"></span>状态</h2>
+          <p class="dossier__state" data-part="state" data-fill hidden></p>
+          <p class="dossier__note" data-part="note" data-fill hidden></p>
+          <div id="about" data-fill hidden><dl class="rec-facts" id="facts"></dl></div>
+          <div class="rec-acts" data-part="acts" data-fill hidden></div>
+        </div>
+      </section>
+      <div class="dossier__more" data-follow="rec">
+        <section class="dossier-card glass" id="related" data-mo-rise hidden>
+          <h2 class="dossier-card__title"><span class="dossier-icon" data-icon="link" aria-hidden="true"></span>相关链接</h2>
+          <div id="links"></div>
+        </section>
+        <section class="dossier-card dossier-card--raw glass" id="raw" data-mo-rise hidden>
+          <h2 class="dossier-card__title"><button class="dossier-card__title dossier-fold" type="button" id="raw-more" aria-expanded="false" aria-controls="raw-box"><span class="dossier-icon" data-icon="raw" aria-hidden="true"></span>原始记录<span class="dossier-fold__chev" aria-hidden="true">›</span></button></h2>
+          <div class="fold" id="raw-box"><div><dl class="rec-facts" id="raw-facts"></dl></div></div>
+        </section>
+      </div>
+    </aside>
+  </div>
+</main>
+<script src="/trust-modal/trust-modal.js"></script>
+<script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script>
+<script src="/live/_lib/live-ui.js"></script>
+<script src="/live/item/record-text.js"></script>
+<script src="/header/topbar.js"></script>
+<script src="/live/_lib/live-light.js"></script>
+<script src="/live/_lib/live-dossier.js"></script>
+<script src="/live/item/page.js"></script>
+</body>
+</html>

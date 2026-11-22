@@ -1,0 +1,363 @@
+/* 档案卡：单条详情页的共用模版（本人 11-17 20:15 同意的设计图“21-一件事-新模版-v2”）。一件事先用，以后“账本一条”“一类备份”这类单条详情照这个摆。
+   排在 live.css、live-page.css、live-record.css 后面引；灯、光、画、按钮、时间线、说明行照旧用那几份，这里只把它们摆成档案卡。
+
+   页头：一张玻璃（沿用 card--record 的灯、光、画），从上到下：一枚小签（灯 + 这是什么）、一句短标题、普通字号的长说明（太长先收着）、一行灰字。
+   下面两栏：左边宽一栏讲来龙去脉（要你选的、为什么、经过），右边窄一栏讲现在怎样和去处（状态和按钮、相关链接、原始记录）。
+   哪张卡没内容就不出来；左栏整栏空了，右栏几张卡横着排成一行（live-dossier.js 写 .dossier__grid 的 data-shape）。
+
+   用法：
+   <main class="stage dossier">
+     <article class="card card--record dossier__hero" data-pic="right">…card__body 里：p.dossier__kicker[data-keep]、p.card__head、div.dossier__lead、button.dossier__unfold、p.rec-meta…</article>
+     <div class="dossier__grid"><div class="dossier__main">卡…</div><aside class="dossier__side">卡…</aside></div>
+   </main>
+   一张卡：<section class="dossier-card glass"[ data-auto]><span class="dossier-card__tint"></span><h2 class="dossier-card__title"><span class="dossier-icon" data-icon="why"></span>为什么</h2>…</section>
+   图标 data-icon：why 为什么（账本一条那页是“结论”）、ask 要你选的、time 经过、state 状态（data-state="closed" 了结画勾，再有 data-good 是绿勾）、link 相关链接、raw 原始记录；
+     一类备份那页：copies 副本各在哪里、media 照片视频音乐录音的个数、verify 核对结果、restore 能退回哪一天、wait 在等与没传成的。
+   标题后面跟一枚状态小签：p.card__head 加 data-tag，U.head 里“ · ”后面那一段就摆成小签（一类备份的“齐了”“副本情况还在采集”）。
+   没有状态卡的页（一类备份）按钮放在页头最下面（div.rec-acts），和标题左边对齐。
+   卡里照旧放实况的表（.fe-l3b-table）、说明（.fe-l3b-note）、时间线（ol.runs）：卡里不再缩进 --rec-text，一张卡分两块时第二块小标题用 p.dossier-card__sub。
+   一段话先一句、点开看其余：<details class="dossier-text"><summary>第一句</summary><p>其余</p></details>（经过一条用 run__full）。
+
+   画风（本人 11-17 21:40 定：照实况首页、电脑、使用时间、通知送达那一家——梦幻粉彩、柔光、花、彩虹，白色圆角卡，圆形粉彩小图标）：配色、底色、质感、阴影、插画全在下面 .dossier 的“画风”一组变量里，整套换只改这几行，下面的规则不写死这类值。
+   玻璃质感、灯、光、按钮、折叠、字色（--ink、--muted、--hair）用实况现有的共用样式，不在这里。 */
+
+.dossier {
+  --rec-key: 128px;
+
+  /* —— 画风：照设计图的部分。改画风只改这一组 —— */
+  --dossier-radius: 22px;                                   /* 下面各张卡的圆角（实况现有大玻璃是 --r-big 24px） */
+  --dossier-row-radius: 14px;                               /* 经过一条、链接一行的圆角 */
+  --dossier-accent: #8a70cc;                                /* 经过、相关链接的主色：点、图标、箭头 */
+  --dossier-line: rgb(125 104 196 / .24);                   /* 经过那条竖线 */
+  --dossier-dot-ring: #b4a8dc;                              /* 经过空心点的圈 */
+  --dossier-row-bg: rgb(243 240 250 / .78);                 /* 经过一条、链接一行的底 */
+  --dossier-row-bg-hover: rgb(255 255 255 / .92);
+  --dossier-row-edge: inset 0 0 0 1px rgb(255 255 255 / .7);
+  --dossier-chip-bg: rgb(255 255 255 / .58);                /* 页头小签的底和边 */
+  --dossier-chip-edge: inset 0 0 0 1px rgb(255 255 255 / .8), 0 1px 2px rgb(20 20 19 / .05);
+  --dossier-ok: #2f9e62;                                    /* 为什么的图标、办完了的勾 */
+  --dossier-ok-text: #2b8a57;                               /* 办完了时“状态”两个字 */
+  --dossier-ask: #c27a12;                                   /* 要你选的图标 */
+  --dossier-plain-icon: #8f8d86;                            /* 没办完时状态图标 */
+  --dossier-raw-icon: #6f6e68;                              /* 原始记录图标 */
+  --dossier-why-tint: linear-gradient(100deg, rgb(206 236 216 / .62) 0%, rgb(232 246 236 / .3) 42%, rgb(255 255 255 / 0) 72%);
+  --dossier-state-tint: linear-gradient(165deg, rgb(222 243 229 / .72) 0%, rgb(236 248 240 / .4) 55%, rgb(255 255 255 / .1) 100%);
+  --dossier-ask-tint: linear-gradient(165deg, rgb(255 240 214 / .55), rgb(255 255 255 / 0) 60%);
+  --dossier-why-art: url("/live/img/dossier-corner-v1.webp"); /* 为什么（结论）卡右下角的粉彩小花（11-17 Luna 画）；none 就不垫 */
+  --dossier-hero-pic-opacity: .94;                          /* 页头画：设计图比实况第三层原来（.5、略虚）清楚 */
+  --dossier-hero-pic-filter: saturate(1.02);
+  --dossier-hero-tint-opacity: .22;
+  --dossier-btn-bg: rgb(255 255 255 / .78);                 /* 状态卡里按钮的底（大一号） */
+  --dossier-tag-text: var(--ink-soft);                      /* 标题后面那枚状态小签的字（底和边同页头小签） */
+  --dossier-sky: #4f8fc4;                                   /* 副本卡图标 */
+  --dossier-pink: #c46a9a;                                  /* 照片视频音乐录音卡图标 */
+  --dossier-icon-size: 32px;                                /* 卡片标题前那枚圆形粉彩小章 */
+  --dossier-icon-edge: inset 0 0 0 1.5px rgb(255 255 255 / .85), 0 2px 8px rgb(126 104 196 / .14);
+  --dossier-icon-mint: radial-gradient(circle at 32% 26%, #fff 0%, #e2f6ea 46%, #c8ecd6 100%);
+  --dossier-icon-peach: radial-gradient(circle at 32% 26%, #fff 0%, #fff0df 46%, #ffdcc2 100%);
+  --dossier-icon-lilac: radial-gradient(circle at 32% 26%, #fff 0%, #efe9fd 46%, #ddd3f7 100%);
+  --dossier-icon-sky: radial-gradient(circle at 32% 26%, #fff 0%, #e4f1fc 46%, #cbe2f6 100%);
+  --dossier-icon-pink: radial-gradient(circle at 32% 26%, #fff 0%, #fdeaf3 46%, #f6d3e4 100%);
+  --dossier-icon-mist: radial-gradient(circle at 32% 26%, #fff 0%, #f1f0f5 46%, #e2e0ea 100%);
+  --dossier-bad: #c4524c;                                   /* 没跑成的叉 */
+  --dossier-icon-rose: radial-gradient(circle at 32% 26%, #fff 0%, #fde8e6 46%, #f7d0cc 100%);
+  --dossier-task-result-art: url("/live/img/dossier-task-result-v1.webp");   /* 一个任务右栏三张卡右下的小画（11-17 Luna 照批准的设计图画） */
+  --dossier-task-next-art: url("/live/img/dossier-task-next-v1.webp");
+  --dossier-task-stop-art: url("/live/img/dossier-task-stop-v1.webp");
+}
+
+/* ============ 页头 ============ */
+.dossier__hero[data-pic] { --win: clamp(340px, 40%, 540px); }
+.dossier__hero .card__glass { min-height: 268px; padding: 30px 44px 30px; }
+.dossier__hero[data-pic="right"] .card__body { padding-right: calc(var(--win) * .5); }
+.dossier__hero.card--record .card__pic img { opacity: var(--dossier-hero-pic-opacity); filter: var(--dossier-hero-pic-filter); scale: 1; }
+.dossier__hero.card--record[data-pic="right"] .card__pic {
+  -webkit-mask-image: linear-gradient(270deg, #000 0%, #000 34%, rgb(0 0 0 / .9) 44%, rgb(0 0 0 / .66) 56%, rgb(0 0 0 / .36) 68%, rgb(0 0 0 / .12) 80%, transparent 92%);
+  mask-image: linear-gradient(270deg, #000 0%, #000 34%, rgb(0 0 0 / .9) 44%, rgb(0 0 0 / .66) 56%, rgb(0 0 0 / .36) 68%, rgb(0 0 0 / .12) 80%, transparent 92%);
+}
+.dossier__hero.card--record .card__tint { opacity: var(--dossier-hero-tint-opacity); }
+
+/* 小签：灯 + 这是什么 */
+.dossier__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  margin: 0 0 14px;
+  padding: 0 13px 0 11px;
+  border-radius: 999px;
+  background: var(--dossier-chip-bg);
+  box-shadow: var(--dossier-chip-edge);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  color: var(--ink-soft);
+}
+.dossier__kicker > [data-part="lamp"] { display: inline-flex; }
+.dossier__kicker .lamp { width: 10px; height: 10px; }
+
+/* 短标题：和第二层页头同一种粗字；整句拆不开、还很长时小一号 */
+.dossier__hero .card__head,
+.dossier__hero .card__head:not(:has(> .lamp)) { padding-left: 0; }
+.dossier__hero .head__lead { font-size: 36px; line-height: 48px; letter-spacing: .02em; white-space: normal; text-wrap: balance; }
+.dossier__hero .card__head.is-long .head__lead { font-size: 28px; line-height: 40px; }
+.dossier__hero .card__head + * { margin-top: 12px; }
+
+/* 长说明：普通正文，超过五行先收着 */
+.dossier__lead {
+  max-width: 900px;
+  font-size: 17px;
+  line-height: 30px;
+  letter-spacing: .03em;
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+.dossier__lead > p { margin: 0; white-space: pre-line; text-wrap: pretty; }
+.dossier__lead > p + p { margin-top: 8px; }
+/* 收着时按整行收：live-dossier.js 量出五行以内最后一整行的底，写进 --lead-cut；不淡出半行 */
+.dossier__lead.is-clamped:not(.is-open) { max-height: var(--lead-cut, 150px); overflow: hidden; }
+.dossier__unfold { margin: 10px 0 0; translate: -10px 0; }
+.dossier__unfold[aria-expanded="true"] .more__chev { rotate: -90deg; }
+.dossier__unfold:not([aria-expanded="true"]) .more__chev { rotate: 90deg; }
+.dossier__hero .rec-meta { margin: 14px 0 0; }
+.dossier__hero .rec-acts { margin: 20px 0 0; }
+
+/* 标题后面的状态小签（p.card__head[data-tag] 里 U.head 的后半段） */
+.dossier__hero .card__head[data-tag] { align-items: center; column-gap: 14px; row-gap: 8px; }
+.dossier__hero .card__head[data-tag] > .head__tail {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 3px 14px;
+  border-radius: 999px;
+  background: var(--dossier-chip-bg);
+  box-shadow: var(--dossier-chip-edge);
+  font-size: 14.5px;
+  line-height: 22px;
+  color: var(--dossier-tag-text);
+  white-space: normal;
+}
+
+/* ============ 下面两栏 ============ */
+.dossier__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr);
+  gap: var(--gap);
+  align-items: start;
+  margin-top: var(--gap);
+}
+.dossier__main, .dossier__side, .dossier__more { display: grid; gap: var(--gap); align-content: start; min-width: 0; }
+.dossier__grid[data-shape="main"] { grid-template-columns: minmax(0, 1fr); }
+.dossier__grid[data-shape="main"] > .dossier__side,
+.dossier__grid[data-shape="side"] > .dossier__main,
+.dossier__grid[data-shape="none"] { display: none; }
+/* 左栏整栏空了：状态、相关链接、原始记录横着排成一行，有几张排几列 */
+.dossier__grid[data-shape="side"] > .dossier__side { grid-column: 1 / -1; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); align-items: start; }
+.dossier__grid[data-shape="side"] .dossier__more { display: contents; }
+.dossier__main > .rec-part:empty { display: none; }
+.dossier__main > .rec-part { margin: 0 0 0 26px; }
+
+/* ============ 一张卡（玻璃用实况现有的 .glass） ============ */
+.dossier-card { --rec-text: 0px; position: relative; min-width: 0; padding: 22px 26px 24px; border-radius: var(--dossier-radius); }
+.dossier-card__tint { position: absolute; z-index: -1; inset: 0; border-radius: inherit; pointer-events: none; }
+.dossier-card__title,
+.dossier-card__title.rec-part {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 0 0 14px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 26px;
+  letter-spacing: .05em;
+  color: var(--ink);
+}
+.dossier-card__title .rec-part { margin: 0; font: inherit; letter-spacing: inherit; color: inherit; }
+.dossier-card__sub { margin: 26px 0 0; font-size: 14px; font-weight: 600; line-height: 22px; letter-spacing: .08em; color: var(--ink-soft); }
+.dossier-card > :last-child:is(.fe-l3b-note) { margin-bottom: 0; }
+.dossier-card .fe-l3b-table caption { padding-top: 6px; }
+.dossier-card .fe-l3b-table + .fe-l3b-more, .dossier-card [data-batch-more] { margin-top: 10px; }
+
+/* 图标：一枚圆形粉彩小章（底是淡彩渐变、一圈白边），中间一笔画的小图；颜色、底色都取画风变量 */
+.dossier-icon { position: relative; flex: none; width: var(--dossier-icon-size); height: var(--dossier-icon-size); border-radius: 50%; background: var(--icon-bg, var(--dossier-icon-mist)); box-shadow: var(--dossier-icon-edge); }
+.dossier-icon::after { content: ""; position: absolute; inset: 24%; background: currentColor; -webkit-mask: var(--icon) center / contain no-repeat; mask: var(--icon) center / contain no-repeat; }
+.dossier-icon[data-icon="why"] { color: var(--dossier-ok); --icon-bg: var(--dossier-icon-mint); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' ><path d='M12 1.8c.7 5.3 3.2 8.4 9.4 10.1v.2c-6.2 1.7-8.7 4.8-9.4 10.1h-.1c-.7-5.3-3.2-8.4-9.4-10.1v-.2C8.7 10.2 11.2 7.1 11.9 1.8z'/></svg>"); }
+.dossier-icon[data-icon="ask"] { color: var(--dossier-ask); --icon-bg: var(--dossier-icon-peach); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M8.6 8.6a3.5 3.5 0 0 1 6.8 1.2c0 2.4-3.4 3-3.4 5.2'/><circle cx='12' cy='19.4' r='.9' fill='black' stroke='none'/></svg>"); }
+.dossier-icon[data-icon="time"] { color: var(--dossier-accent); --icon-bg: var(--dossier-icon-lilac); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='5' r='2.6'/><circle cx='5.2' cy='18.6' r='2.6'/><circle cx='18.8' cy='18.6' r='2.6'/><path d='M10.8 7.3 6.4 16.2M13.2 7.3l4.4 8.9M7.9 18.6h8.2'/></svg>"); }
+.dossier-icon[data-icon="link"] { color: var(--dossier-accent); --icon-bg: var(--dossier-icon-lilac); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M10 14a4.6 4.6 0 0 0 6.5 0l3.3-3.3a4.6 4.6 0 0 0-6.5-6.5l-1.1 1.1'/><path d='M14 10a4.6 4.6 0 0 0-6.5 0l-3.3 3.3a4.6 4.6 0 0 0 6.5 6.5l1.1-1.1'/></svg>"); }
+.dossier-icon[data-icon="raw"] { color: var(--dossier-raw-icon); --icon-bg: var(--dossier-icon-mist); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M9 6h11M9 12h11M9 18h11'/><circle cx='4.5' cy='6' r='1' fill='black' stroke='none'/><circle cx='4.5' cy='12' r='1' fill='black' stroke='none'/><circle cx='4.5' cy='18' r='1' fill='black' stroke='none'/></svg>"); }
+.dossier-icon[data-icon="state"] { color: var(--dossier-plain-icon); --icon-bg: var(--dossier-icon-mist); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' ><circle cx='12' cy='12' r='5.2'/></svg>"); }
+.dossier-icon[data-icon="copies"] { color: var(--dossier-sky); --icon-bg: var(--dossier-icon-sky); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><rect x='3.5' y='4' width='17' height='6' rx='2'/><rect x='3.5' y='14' width='17' height='6' rx='2'/><path d='M7 7h.01M7 17h.01'/></svg>"); }
+.dossier-icon[data-icon="media"] { color: var(--dossier-pink); --icon-bg: var(--dossier-icon-pink); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4.5' width='18' height='15' rx='2.5'/><circle cx='9' cy='10' r='1.6'/><path d='m4 18 5.2-4.6 3.6 3 2.6-2.2L20 18'/></svg>"); }
+.dossier-icon[data-icon="verify"] { color: var(--dossier-ok); --icon-bg: var(--dossier-icon-mint); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2.8 19.5 6v5.6c0 4.6-3.2 8.2-7.5 9.6-4.3-1.4-7.5-5-7.5-9.6V6z'/><path d='m8.6 12 2.4 2.4 4.4-4.6'/></svg>"); }
+.dossier-icon[data-icon="restore"] { color: var(--dossier-ok); --icon-bg: var(--dossier-icon-mint); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'><path d='m5 12.6 4.6 4.6L19.2 7.4'/></svg>"); }
+.dossier-icon[data-icon="wait"] { color: var(--dossier-ask); --icon-bg: var(--dossier-icon-peach); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'><path d='M12 5.5V12l4.4 2.8'/></svg>"); }
+.dossier-card[data-state="closed"] .dossier-icon[data-icon="state"] { color: var(--dossier-plain-icon); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'><path d='m5 12.6 4.6 4.6L19.2 7.4'/></svg>"); }
+.dossier-icon[data-icon="fail"] { color: var(--dossier-bad); --icon-bg: var(--dossier-icon-rose); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.8' stroke-linecap='round'><path d='M7 7l10 10M17 7 7 17'/></svg>"); }
+.dossier-icon[data-icon="clock"] { color: var(--dossier-accent); --icon-bg: var(--dossier-icon-lilac); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='8.6'/><path d='M12 7.4V12l3.2 2'/></svg>"); }
+.dossier-icon[data-icon="stop"] { color: var(--dossier-ask); --icon-bg: var(--dossier-icon-peach); --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'><path d='M12 3.6v7.6'/><path d='M7.2 6.6a7.6 7.6 0 1 0 9.6 0'/></svg>"); }
+
+/* 为什么：左边一抹底色，右下角垫一张小画（地址在 --dossier-why-art） */
+.dossier-card--why { min-height: 140px; padding-right: 250px; overflow: hidden; }
+.dossier-card--why > .dossier-card__tint { background: var(--dossier-why-tint); }
+.dossier-card__art {
+  position: absolute;
+  z-index: -1;
+  right: -6px;
+  bottom: -10px;
+  width: 330px;
+  aspect-ratio: 3 / 2;
+  background: var(--card-art, var(--dossier-why-art)) right bottom / contain no-repeat;
+  mix-blend-mode: multiply;
+  opacity: .95;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 38%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 38%);
+}
+.dossier__side .dossier-card--why { min-height: 150px; padding-right: 128px; }
+.dossier__side .dossier-card--why .dossier-card__art { width: 230px; right: -8px; bottom: -12px; }
+.dossier-card--why .rec-say { margin: 0; font-size: 16.5px; line-height: 28px; color: var(--ink); }
+.dossier-card--why .rec-say > small { display: block; margin-top: 4px; font-size: 13.5px; line-height: 22px; color: var(--muted); }
+
+/* 状态：一行小字“状态”，一行大字，下面几行说明，再下面按钮 */
+.dossier-card--state > .dossier-card__tint { background: var(--dossier-state-tint); }
+:is(.dossier-card--state, .dossier-card--fact) .dossier-card__title { margin-bottom: 6px; font-size: 15px; color: var(--ink-soft); }
+.dossier-card--state[data-good] .dossier-icon[data-icon="state"] { color: var(--dossier-ok); --icon-bg: var(--dossier-icon-mint); }
+.dossier-card--state[data-good] .dossier-card__title { color: var(--dossier-ok-text); }
+.dossier__state { margin: 0 0 0 calc(var(--dossier-icon-size) + 11px); font-family: var(--black); font-size: 27px; font-weight: 900; line-height: 36px; letter-spacing: .03em; color: var(--ink); }
+.dossier__note { margin: 6px 0 0 calc(var(--dossier-icon-size) + 11px); font-size: 13.5px; line-height: 22px; color: var(--muted); }
+.dossier__note > small { display: block; font-size: inherit; }
+.dossier-card--state .rec-facts { margin: 14px 0 0; border: 0; }
+.dossier-card--state .rec-fact { grid-template-columns: 96px minmax(0, 1fr); padding: 8px 0; border-top: 1px solid var(--hair); }
+.dossier-card--state .rec-fact > dt { font-size: 13.5px; line-height: 23px; }
+.dossier-card--state .rec-fact > dd { font-size: 15px; line-height: 23px; }
+.dossier-card--state .rec-acts { gap: 8px 10px; margin: 16px 0 0; }
+.dossier-card--state .btn--sm { height: 36px; padding: 0 16px; font-size: 14px; background: var(--dossier-btn-bg); }
+.dossier-card--state .btn--sm.is-done { background: var(--ink); }
+.dossier-card--state .row__feedback, .dossier-card--state .row__receipt { flex-basis: 100%; margin: 4px 0 0; }
+
+/* 一张卡右下垫一幅小画（--card-art），字让开画 */
+.dossier-card--art { min-height: 150px; padding-right: 150px; overflow: hidden; }
+.dossier-card--art .dossier-card__art { width: 220px; right: -6px; bottom: -10px; }
+.dossier-card__text { margin: 0 0 0 calc(var(--dossier-icon-size) + 11px); font-size: 15.5px; line-height: 26px; color: var(--ink); overflow-wrap: anywhere; }
+
+/* 一张卡分几节（一个任务的“近 7 天运行记录”：这一轮、每一次、这个任务）：节标题一行灰字，节与节之间一条细线 */
+.dossier-card__part > .rec-part:first-child { margin: 0 0 8px; }
+.dossier-card__part:not([hidden]) ~ .dossier-card__part:not([hidden]) { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--hair); }
+.dossier-card__part .fe-l3b-stats { margin: 10px 0 6px; }
+
+/* 页头放进左栏（一个任务）：灰字、说明、按钮都和标题左边对齐 */
+.dossier__hero .rec-say { margin: 12px 0 0; }
+.dossier__main > .dossier__hero .card__glass { min-height: 240px; }
+
+/* 要你选的：先 5 题，其余“还有 N 个问题” */
+.dossier-card--ask > .dossier-card__tint { background: var(--dossier-ask-tint); }
+.dossier .dossier-card--ask .rec-copy { margin: 0; }
+.dossier .dossier-card--ask .rec-copy p { margin: 0 0 10px; }
+.dossier .dossier-card--ask .rec-acts { margin: 0 0 16px; }
+.dossier .dossier-card--ask .rec-acts:last-child { margin-bottom: 0; }
+.dossier .dossier-card--ask .fold .rec-copy { padding-top: 0; }
+.dossier-ask { display: flex; align-items: center; gap: 10px 20px; padding: 11px 0; border-top: 1px solid var(--hair); }
+.dossier-ask:first-child { border-top: 0; padding-top: 2px; }
+.dossier .dossier-card--ask .dossier-ask > p { flex: 1 1 auto; min-width: 0; margin: 0; }
+.dossier .dossier-card--ask .dossier-ask > .rec-acts { flex: 0 1 auto; justify-content: flex-end; margin: 0; }
+.dossier .dossier-card--ask .fold .dossier-ask:first-child { border-top: 1px solid var(--hair); padding-top: 11px; }
+.dossier .dossier-card--ask > .more { margin: 2px 0 0 0; translate: -10px 0; }
+
+/* 经过：一条竖线串起来，每一次一块圆角底；最新那一次的点实心 */
+.dossier .rec-runs > .rec-part { margin: 0 0 12px; }
+.dossier .run { grid-template-columns: 34px minmax(0, 1fr); padding: 4px 0; }
+.dossier .run.is-day { padding-top: 4px; }
+.dossier .run::before { left: 11.5px; background: var(--dossier-line); }
+.dossier .runs > .run:first-child::before { top: 23.5px; }
+.dossier .runs > .run:last-child::before { bottom: calc(100% - 23.5px); }
+.dossier .rec-runs.has-more > .runs > .run:last-child::before { bottom: -6px; background: linear-gradient(var(--dossier-line), transparent); }
+.dossier .rec-runs.has-more:has(> .fold.is-open) > .runs > .run:last-child::before { bottom: 0; background: var(--dossier-line); }
+.dossier .run::after { content: ""; position: absolute; z-index: 0; left: 34px; right: 0; top: 4px; bottom: 4px; border-radius: var(--dossier-row-radius); background: var(--dossier-row-bg); box-shadow: var(--dossier-row-edge); }
+.dossier .run--empty::after { display: none; }
+.dossier .run > .lamp { position: relative; z-index: 1; margin: 19.5px 0 0 7.5px; }
+.dossier .run__main, .dossier .run__out { position: relative; z-index: 1; }
+.dossier .run__main { padding: 12px 18px 0; }
+.dossier .run__main:last-child { padding-bottom: 12px; }
+.dossier .run:not(:has(> .lamp)) > .run__main::before {
+  content: "";
+  position: absolute;
+  left: -27.5px;
+  top: 18.5px;
+  width: 10px;
+  height: 10px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: inset 0 0 0 2px var(--dossier-dot-ring);
+}
+.dossier .run.is-now:not(:has(> .lamp)) > .run__main::before { background: var(--dossier-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--dossier-accent) 18%, transparent); }
+.dossier .run--empty > .run__main::before { display: none; }
+.dossier .run__what > b { font-weight: 600; }
+.dossier .run__out { margin: 0; padding: 3px 18px 12px calc(18px + var(--rec-key)); }
+.dossier .run__none { padding: 6px 0 2px; }
+/* 能退回哪一天：一份一块，日期一行、范围和恢复记录一行灰字，都在那块底里 */
+.dossier .run > .fe-l3b-point-note { position: relative; z-index: 1; margin: 0; padding: 2px 18px 12px; }
+.dossier .run > .fe-l3b-point-note:only-child { padding-top: 12px; }
+.dossier .run__main:has(> .fe-l3b-point) { padding-bottom: 0; }
+/* 一条经过话多：先一句，点这一句（后面一个“›”）展开其余 */
+.dossier .run__full > summary, .dossier-text > summary { color: inherit; }
+.dossier .run__full > p { margin: 4px 0 0; }
+.dossier-text > p { margin: 6px 0 0; }
+.dossier .rec-runs > .more { margin: 8px 0 0 24px; }
+
+/* 相关链接：一行一块，能点的整行都能点 */
+.dossier-link {
+  position: relative;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: 58px;
+  padding: 8px 16px 8px 14px;
+  border-radius: var(--dossier-row-radius);
+  background: var(--dossier-row-bg);
+  box-shadow: var(--dossier-row-edge);
+  transition: background .2s ease;
+}
+.dossier-link + .dossier-link { margin-top: 8px; }
+.dossier-link.has-href:hover { background: var(--dossier-row-bg-hover); }
+.dossier-link__icon { width: 20px; height: 20px; background: var(--dossier-accent); -webkit-mask: var(--doc) center / contain no-repeat; mask: var(--doc) center / contain no-repeat; --doc: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'><path d='M6 2.8h8.2L19 7.6v12.6a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3.8a1 1 0 0 1 1-1z'/><path d='M14 2.8v5h5M8.5 12.5h7M8.5 16.5h5'/></svg>"); }
+.dossier-link__text { display: flex; flex-direction: column; min-width: 0; }
+.dossier-link__label { font-size: 12.5px; line-height: 18px; letter-spacing: .06em; color: var(--muted); }
+.dossier-link__name { font-size: 15.5px; font-weight: 500; line-height: 24px; letter-spacing: .03em; color: var(--ink); overflow-wrap: anywhere; }
+.dossier .dossier-link a.dossier-link__name { color: var(--ink); }
+.dossier-link a.dossier-link__name::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.dossier-link a.dossier-link__name:focus-visible { outline: none; }
+.dossier-link:has(a:focus-visible) { outline: 2px solid var(--ink); outline-offset: 2px; }
+.dossier-link__note { position: relative; z-index: 1; margin-top: 2px; font-size: 13px; color: var(--muted); }
+.dossier-link__chev { font-size: 22px; line-height: 1; color: var(--dossier-accent); transition: translate .2s ease; }
+.dossier-link.has-href:hover .dossier-link__chev { translate: 3px 0; }
+
+/* 原始记录：默认收着，点标题那一行展开 */
+.dossier-fold {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.dossier-fold:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; border-radius: 8px; }
+.dossier-fold__chev { margin-left: auto; font-size: 20px; font-weight: 400; color: var(--muted); rotate: 90deg; transition: rotate calc(220ms * var(--sp)) var(--mo-move, ease); }
+.dossier-fold[aria-expanded="true"] .dossier-fold__chev { rotate: -90deg; }
+.dossier-card--raw { padding-top: 20px; padding-bottom: 20px; }
+.dossier-card--raw .dossier-card__title { margin: 0; }
+.dossier-card--raw .rec-facts { margin: 14px 0 0; border-bottom: 0; }
+.dossier-card--raw .rec-fact { grid-template-columns: 84px minmax(0, 1fr); padding: 9px 0; }
+.dossier-card--raw .rec-fact > dd { font-size: 14.5px; line-height: 23px; }
+
+/* 连不上：卡里的字和页头一样褪一点；灯和光由 live.css、live-light.js 管 */
+.live-off .dossier-card { transition: opacity calc(600ms * var(--sp)) ease; }
+
+/* 一张卡里只有一组说明（一个任务的“这个任务”）：不要上下两条框线 */
+.dossier-card--facts .rec-facts { margin: 0; border-top: 0; border-bottom: 0; }
+.dossier-card--facts .rec-fact { grid-template-columns: 96px minmax(0, 1fr); padding: 9px 0; }
+.dossier-card--facts .rec-fact:first-child { padding-top: 0; }
+.dossier-card--facts .rec-fact > dd { font-size: 15px; line-height: 24px; }

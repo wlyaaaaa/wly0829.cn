@@ -1,0 +1,91 @@
+{
+  "title": "电脑心电图",
+  "theme": {
+    "p": "#122B4B",
+    "soft": "#E4E3DC",
+    "accent": "#B51F17"
+  },
+  "background": "assets/background.webp",
+  "projectNav": "project",
+  "skillNav": null,
+  "buttonArt": {
+    "去〔记录不断线〕": [
+      "button-01-v1.compressed.webp",
+      "12rem"
+    ],
+    "去〔每秒体征〕": [
+      "button-02-v1.compressed.webp",
+      "12rem"
+    ],
+    "去〔程序底细〕": [
+      "button-03-v1.compressed.webp",
+      "12rem"
+    ],
+    "去〔卡顿问诊〕技能页": [
+      "button-04-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔我的说明书〕项目页": [
+      "button-05-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔密码中心〕项目页": [
+      "button-06-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔电脑大本营〕项目页": [
+      "button-07-v1.compressed.webp",
+      "16rem"
+    ],
+    "回〔电脑心电图〕项目页": [
+      "button-08-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔备份与恢复〕": [
+      "button-09-v1.compressed.webp",
+      "12rem"
+    ],
+    "看实况": [
+      "button-live-v2.compressed.webp",
+      "12rem"
+    ]
+  },
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "电脑心电图",
+      "meta": "电脑心电图",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    },
+    "记录不断线": {
+      "slug": "记录不断线",
+      "file": "记录不断线.html",
+      "title": "记录不断线",
+      "meta": "记录不断线",
+      "nav": "项目",
+      "imagePrefix": "记录不断线"
+    },
+    "每秒体征": {
+      "slug": "每秒体征",
+      "file": "每秒体征.html",
+      "title": "每秒体征",
+      "meta": "每秒体征",
+      "nav": "项目",
+      "imagePrefix": "每秒体征"
+    },
+    "程序底细": {
+      "slug": "程序底细",
+      "file": "程序底细.html",
+      "title": "程序底细",
+      "meta": "程序底细",
+      "nav": "项目",
+      "imagePrefix": "程序底细"
+    }
+  },
+  "detailArt": [
+    "button-11-v1.compressed.webp",
+    "4rem"
+  ]
+}

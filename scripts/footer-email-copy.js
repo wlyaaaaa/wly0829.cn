@@ -6,6 +6,7 @@
     event.preventDefault();
     try {
       await navigator.clipboard.writeText('hello@wly0829.cn');
+      document.dispatchEvent(new Event('site-email-copied'));
       if (!notice) {
         notice = document.createElement('div');
         notice.dataset.footerEmailCopyStatus = '';

@@ -1,0 +1,52 @@
+{
+  "title": "手机日记本",
+  "theme": {
+    "p": "#031A35",
+    "soft": "#E2E1DA",
+    "accent": "#D29F37"
+  },
+  "background": "assets/background.webp",
+  "projectNav": "project",
+  "skillNav": null,
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "10rem"],
+    "去〔手机互通〕": [
+      "phone-link.compressed.webp",
+      "8.56rem"
+    ],
+    "去〔我的说明书〕项目页": [
+      "my-manual.compressed.webp",
+      "12.42rem"
+    ],
+    "去〔手机直取〕技能页": [
+      "phone-direct.compressed.webp",
+      "12.05rem"
+    ],
+    "去〔电脑大本营〕项目页": [
+      "pc-base.compressed.webp",
+      "11.97rem"
+    ],
+    "去〔密码中心〕项目页": [
+      "password-center.compressed.webp",
+      "12.03rem"
+    ],
+    "去〔健康参谋〕项目页": [
+      "health-adviser.compressed.webp",
+      "11.30rem"
+    ]
+  },
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "手机日记本",
+      "meta": "手机日记本 · 总览",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    }
+  },
+  "detailArt": [
+    "detail.compressed.webp",
+    "4rem"
+  ]
+}

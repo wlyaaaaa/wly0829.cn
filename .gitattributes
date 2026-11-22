@@ -16,3 +16,7 @@ sources/living/** -text
 sources/bird/** -text
 config/build.json -text
 config/assembled-rules-pin.json -text
+
+# Final v2 sources keep the accepted original bytes.
+site-v2/** -text
+

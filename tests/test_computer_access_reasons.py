@@ -1,22 +1,31 @@
-"""授权页办理区：还没读到状态、读不到电脑时，每个变灰的按钮都写明原因（扫描器“禁用要说明原因”同一判据）。
-读最终成品 dist，用扫描器自己的本机预览服务；实时状态请求在浏览器里拦下（一直不回或直接断开），不连真实电脑。"""
+"""授权页：状态未读到或过旧时禁用按钮写原因；连不上时三格不留操作按钮。
+读最终成品 dist，用本机预览和合成读层，不连接真实电脑。"""
 import importlib.util
 import json
-import re
 import threading
 import unittest
 from pathlib import Path
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / 'dist'
 CHROME = Path(r'C:\Program Files\Google\Chrome\Application\chrome.exe')
 TOOLS = ROOT / 'site-astro' / 'tools'
 
-INFO = """() => { const s = document.getElementById('computer-access-02');
-  const bs = [...s.querySelectorAll('button[data-b2-action]')].filter(b => b.getClientRects().length && getComputedStyle(b).visibility !== 'hidden');
-  return { phase: document.body.dataset.b2StatusPhase, wait: s.querySelector('.o3-wait')?.innerText ?? '',
-    buttons: bs.map(b => ({ action: b.dataset.b2Action, disabled: b.disabled, reason: b.dataset.disabledReason || '',
-      title: b.title, described: (b.getAttribute('aria-describedby') || '').split(/\\s+/).map(id => document.getElementById(id)?.textContent || '').join(' ') })) }; }"""
+INFO = """() => ({states: [...document.querySelectorAll('.cell__state')].map(e => e.textContent),
+  buttons: [...document.querySelectorAll('.cell__acts button')].map(b => ({disabled: b.disabled,
+    reason: b.dataset.disabledReason || '', title: b.title}))})"""
+
+LIVE = """mode => { window.Live = {refresh() {}, watch(resource, query, callbacks) {
+  const now = Date.now(), at = new Date(now - 600000).toISOString();
+  const meta = {source: 'net', at, viewer: {kind: 'owner'}};
+  if (mode === 'stale') callbacks.data({entry: '/computer-access/', state_version: 'synthetic',
+    personal_data: {state: 'unlocked', expires_at_unix: now / 1000 + 3600},
+    unrestricted: {state: 'inactive'}, windows: {state: 'locked'},
+    policy: {default_minutes: 1440, minimum_minutes: 30, maximum_minutes: 4320, factor: {available: false}}}, meta);
+  callbacks.link({meta, viewer: meta.viewer, offline: mode === 'error',
+    link: {state: mode === 'error' ? 'offline' : mode === 'stale' ? 'online' : 'unknown', basis: 'browser'}});
+}}; }"""
 
 
 class ComputerAccessReasonTests(unittest.TestCase):
@@ -26,7 +35,6 @@ class ComputerAccessReasonTests(unittest.TestCase):
         from playwright.sync_api import sync_playwright
         spec = importlib.util.spec_from_file_location('scan_glance', TOOLS / 'scan_glance.py')
         sg = importlib.util.module_from_spec(spec); spec.loader.exec_module(sg)
-        pattern = re.compile(sg.read_json(TOOLS / 'scan_glance.json')['selectors']['disabled_reason_pattern'])
         import tempfile
         with tempfile.TemporaryDirectory(prefix='ca-reasons-') as out:
             server = sg.make_server(DIST, out, 0, sg.read_json(DIST / 'release-manifest.json') if (DIST / 'release-manifest.json').is_file() else {})
@@ -34,27 +42,36 @@ class ComputerAccessReasonTests(unittest.TestCase):
             try:
                 with sync_playwright() as p:
                     browser = p.chromium.launch(executable_path=str(CHROME), headless=True)
-                    for mode, want in (('loading', '正在读取电脑状态'), ('error', '读不到电脑')):
+                    for mode in ('loading', 'stale', 'error'):
                         for width, height in ((1920, 1080), (390, 844)):
                             with self.subTest(mode=mode, width=width):
                                 context = browser.new_context(viewport={'width': width, 'height': height})
-                                for glob in ('**/__proxy/mcp/**', '**/__proxy/live/**', '**/__status*'):
-                                    context.route(glob, (lambda route: None) if mode == 'loading' else (lambda route: route.abort()))
+                                def local_only(route):
+                                    request = route.request
+                                    if request.method not in ('GET', 'HEAD') or not request.url.startswith(server.base + '/'):
+                                        return route.abort()
+                                    if urlsplit(request.url).path.startswith('/__proxy/') and sg.original_url(request.url).split('?')[0] not in server.local_objects:
+                                        return route.abort()
+                                    route.continue_()
+                                context.route('**/*', local_only)
+                                context.add_init_script('(' + LIVE + ')(' + json.dumps(mode) + ')')
                                 page = context.new_page(); errors = []
                                 page.on('pageerror', lambda error: errors.append(str(error)))
                                 page.goto(server.base + '/computer-access/', wait_until='load', timeout=60000)
-                                page.wait_for_function("(m) => document.body.dataset.b2StatusPhase === m", arg=mode, timeout=60000)
-                                page.wait_for_timeout(500)
+                                page.wait_for_selector('body.is-ready')
                                 info = page.evaluate(INFO)
                                 context.close()
                                 self.assertEqual(errors, [])
-                                self.assertIn(want, info['wait'])
+                                if mode == 'error':
+                                    self.assertEqual(info['states'], ['连不上'] * 3)
+                                    self.assertEqual(info['buttons'], [])
+                                    continue
                                 disabled = [b for b in info['buttons'] if b['disabled']]
-                                self.assertGreaterEqual(len(disabled), 9, info)
+                                self.assertTrue(disabled, info)
+                                self.assertEqual(len(disabled), len(info['buttons']), info)
                                 for b in disabled:
                                     self.assertTrue(b['reason'], b)
-                                    self.assertIn(want, b['described'], b)
-                                    self.assertTrue(pattern.search(b['title']), b)
+                                    self.assertEqual(b['title'], b['reason'], b)
                     browser.close()
             finally:
                 server.shutdown(); server.server_close()

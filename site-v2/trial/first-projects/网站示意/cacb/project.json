@@ -1,0 +1,59 @@
+{
+  "title": "AI 考场",
+  "theme": {
+    "p": "#41322a",
+    "soft": "#e8e3d9",
+    "accent": "#b34c36"
+  },
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "skillNav": null,
+  "buttonArt": {
+    "看本项目实况": [
+      "cover-live-v1.webp",
+      "13.95rem"
+    ],
+    "去〔阅卷监考〕": [
+      "go-review-v1.compressed.webp",
+      "13rem"
+    ],
+    "回〔AI 考场〕项目页": [
+      "return-project-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔电脑大本营〕项目页": [
+      "go-pcconfig-v1.compressed.webp",
+      "18rem"
+    ],
+    "去〔AI 百工谱〕项目页": [
+      "go-lal-v1.compressed.webp",
+      "17rem"
+    ],
+    "去〔新模型摸底〕技能页": [
+      "go-model-v1.compressed.webp",
+      "18rem"
+    ]
+  },
+  "detailArt": [
+    "detail-v1.compressed.webp",
+    "4rem"
+  ],
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "AI 考场",
+      "meta": "AI 考场 · 总览",
+      "imagePrefix": "总览",
+      "nav": "项目"
+    },
+    "阅卷监考": {
+      "slug": "阅卷监考",
+      "file": "阅卷监考.html",
+      "title": "阅卷监考",
+      "meta": "AI 考场 · 阅卷监考",
+      "imagePrefix": "阅卷监考",
+      "nav": "项目"
+    }
+  }
+}

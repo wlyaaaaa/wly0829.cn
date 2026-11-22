@@ -76,9 +76,7 @@ export function markGrantVerificationSubmitted(storage, requestId) {
   }
 }
 export function canRestartUnsubmittedGrant(request, response, failure) {
-  return request?.factor_submitted === false && (response
-    ? response.state === "pending" && response.factor_submitted !== true
-    : failure?.data?.error === "public_request_not_found");
+  return request?.factor_submitted === false && !response && failure?.data?.error === "public_request_not_found";
 }
 
 export function grantResultNeedsQuery(result) {
@@ -150,7 +148,8 @@ export function reductionFailureResult(failure, requestId, action, lookupOnly = 
   const beforeCreation = !lookupOnly && new Set([
     "public_state_changed", "public_lock_disabled", "public_windows_lock_disabled",
     "public_owner_end_disabled", "public_request_invalid", "public_origin_not_allowed",
-    "public_request_rate_limited", "public_request_too_large", "cockpit_owner_required",
+    "public_request_rate_limited", "public_request_capacity", "public_request_source_capacity",
+    "public_request_temporarily_busy", "public_request_too_large", "cockpit_owner_required",
   ]).has(code);
   return { ...failure?.data, request_id: requestId, action,
     state: beforeCreation ? "failed" : failure?.data?.state || "unknown", error: code,
@@ -261,12 +260,13 @@ export function canRetryVerification(result) {
 
 // A single user submit retains the server's create -> verify binding. Cancellation
 // waits for create when necessary, and suppresses the old verification response.
-export function createGrantAttempt({ requestId, body, api, onCreated, onVerificationStarted = () => {} }) {
+export function createGrantAttempt({ requestId, body, api, onCreated, onVerificationStarted = () => {}, existing = false }) {
   let createdPromise, current, cancelled = false, code = "", cancelPromise, factorSubmitted = false;
   const rejectedBeforeCreation = failure => new Set([
     "public_state_changed", "public_totp_cooldown", "public_totp_not_ready",
     "public_duration_total_exceeds_72_hours", "personal_access_duration_hours_invalid",
-    "public_request_capacity", "public_request_invalid", "public_origin_not_allowed",
+    "public_request_capacity", "public_request_source_capacity", "public_request_rate_limited",
+    "public_request_temporarily_busy", "public_request_invalid", "public_origin_not_allowed",
   ]).has(failure?.data?.error);
   const rejectedResult = (failure, cancel = false) => ({
     schema: "pcconfig.public-access-result.v1", request_id: requestId,
@@ -278,11 +278,12 @@ export function createGrantAttempt({ requestId, body, api, onCreated, onVerifica
     get factorSubmitted() { return factorSubmitted; },
     async run(input) {
       code = input;
-      createdPromise = api("/requests", { method: "POST", body: { ...body, request_id: requestId } });
+      createdPromise = existing ? api(`/requests/${encodeURIComponent(requestId)}`)
+        : api("/requests", { method: "POST", body: { ...body, request_id: requestId } });
       try { current = await createdPromise; }
       catch (failure) {
         code = "";
-        if (rejectedBeforeCreation(failure)) return cancelled ? null : rejectedResult(failure);
+        if (!existing && rejectedBeforeCreation(failure)) return cancelled ? null : rejectedResult(failure);
         throw failure;
       }
       onCreated(current);
@@ -296,10 +297,16 @@ export function createGrantAttempt({ requestId, body, api, onCreated, onVerifica
       code = "";
       onVerificationStarted(current.request_id);
       factorSubmitted = true;
-      const result = await api(`/requests/${encodeURIComponent(current.request_id)}/verify`, {
-        method: "POST", csrf: current.csrf_token, body: { totp: submitted }, timeout: 30000,
-      });
-      return cancelled ? null : result;
+      try {
+        const result = await api(`/requests/${encodeURIComponent(current.request_id)}/verify`, {
+          method: "POST", csrf: current.csrf_token, body: { totp: submitted }, timeout: 30000,
+        });
+        return cancelled ? null : result;
+      } catch (failure) {
+        if (!["public_request_temporarily_busy", "public_request_rate_limited"].includes(failure?.data?.error)) throw failure;
+        factorSubmitted = false;
+        return cancelled ? null : { ...rejectedResult(failure), state: "pending", request_created: true };
+      }
     },
     cancel() {
       cancelled = true;
@@ -308,7 +315,7 @@ export function createGrantAttempt({ requestId, body, api, onCreated, onVerifica
         let prepared;
         try { prepared = current || await createdPromise; }
         catch (failure) {
-          if (rejectedBeforeCreation(failure)) return rejectedResult(failure, true);
+          if (!existing && rejectedBeforeCreation(failure)) return rejectedResult(failure, true);
           throw failure;
         }
         if (["failed", "expired", "cancelled", "succeeded", "partial"].includes(prepared.state)) return prepared;
@@ -365,6 +372,9 @@ export const errorMessages = {
   public_totp_cooldown: "验证暂不可用（冷却中），请等候显示的可重试时间。已有授权不受影响。",
   public_totp_not_ready: "主机验证器暂不可用，请稍后重新检查。",
   public_access_busy: "主机正在处理另一项操作，请查看当前状态，稍后手动重试。",
+  public_request_temporarily_busy: "主机正在办理其他请求，请稍后重试。",
+  public_request_rate_limited: "这条连接的提交过于频繁，请稍后重试。",
+  public_request_source_capacity: "这条连接的待办或近期办理记录已满，请稍后重试。",
   public_access_entry_failed: "主机办理服务发生故障，尚未确认授权成功。请查询本次结果。",
   public_access_response_unknown: "提交结果暂无法确认。请查询本次结果，不要重复提交。",
   public_lock_disabled: "公网资料锁定入口已停用。",
@@ -393,7 +403,14 @@ export const errorMessages = {
   disabled: "此操作已由主机停用。",
 };
 
-export async function apiRequest(base, path, { method = "GET", body, csrf, device, signal, timeout = path.startsWith('/status') ? 8000 : 10000 } = {}) {
+function savedAccessDevice() {
+  try {
+    const token = localStorage.getItem("wly-cockpit-device");
+    return /^[A-Za-z0-9_-]{43}$/.test(token || "") ? token : undefined;
+  } catch { return undefined; }
+}
+
+export async function apiRequest(base, path, { method = "GET", body, csrf, device = (base === "" || base === HOST_ORIGIN) ? savedAccessDevice() : undefined, signal, timeout = path.startsWith('/status') ? 8000 : 10000 } = {}) {
   const controller = new AbortController();
   const abort = () => controller.abort();
   signal?.addEventListener("abort", abort, { once: true });

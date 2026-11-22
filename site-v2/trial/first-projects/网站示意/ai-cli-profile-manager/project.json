@@ -1,0 +1,84 @@
+{
+  "title": "AI 发射台",
+  "theme": {
+    "p": "#263B75",
+    "soft": "#E6E4E0",
+    "accent": "#E99435"
+  },
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "skillNav": "project",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "10.8rem"],
+    "去〔桌面换模型〕": [
+      "button-01.compressed.webp",
+      "12rem"
+    ],
+    "去〔组队干活〕": [
+      "button-02.compressed.webp",
+      "12rem"
+    ],
+    "去〔长任务托管〕": [
+      "button-03.compressed.webp",
+      "12rem"
+    ],
+    "去〔AI 百工谱〕项目页": [
+      "button-04.compressed.webp",
+      "14rem"
+    ],
+    "去〔密码中心〕项目页": [
+      "button-05.compressed.webp",
+      "14rem"
+    ],
+    "去〔电脑大本营〕项目页": [
+      "button-06.compressed.webp",
+      "14rem"
+    ],
+    "回〔AI 发射台〕项目页": [
+      "button-07.compressed.webp",
+      "14rem"
+    ],
+    "去〔AI 发射台〕项目页": [
+      "button-08.compressed.webp",
+      "14rem"
+    ]
+  },
+  "detailArt": [
+    "button-09.compressed.webp",
+    "4rem"
+  ],
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "AI 发射台",
+      "meta": "AI 发射台",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    },
+    "桌面换模型": {
+      "slug": "桌面换模型",
+      "file": "桌面换模型.html",
+      "title": "桌面换模型",
+      "meta": "桌面换模型",
+      "nav": "项目",
+      "imagePrefix": "桌面换模型"
+    },
+    "组队干活": {
+      "slug": "组队干活",
+      "file": "组队干活.html",
+      "title": "组队干活",
+      "meta": "组队干活",
+      "nav": "项目",
+      "imagePrefix": "组队干活"
+    },
+    "长任务托管": {
+      "slug": "长任务托管",
+      "file": "长任务托管.html",
+      "title": "长任务托管",
+      "meta": "长任务托管",
+      "nav": "项目",
+      "imagePrefix": "长任务托管"
+    }
+  }
+}

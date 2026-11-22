@@ -11,7 +11,7 @@ if (distArgument >= 0 && !process.argv[distArgument + 1]) throw new Error("--dis
 const distRoot = distArgument >= 0 ? path.resolve(process.argv[distArgument + 1]) : path.join(projectRoot, "dist");
 const forceFull = !process.argv.includes("--incremental") || process.argv.includes("--full") || process.env.SITE_PUBLIC_FULL === "1";
 const secretPatterns = [
-  ["OpenAI-style key", /\bsk-[A-Za-z0-9_-]{20,}/],
+  ["OpenAI-style key", /\bsk-(?:(?:proj|svcacct|ant-api03)-)?[A-Za-z0-9_]{20,}(?:-[A-Za-z0-9_]+)*/],
   ["GitHub token", /gh[pousr]_[A-Za-z0-9]{20,}/],
   ["GitHub fine-grained token", /github_pat_[A-Za-z0-9_]{20,}/],
   ["Google API key", /AIza[0-9A-Za-z_-]{30,}/],
@@ -59,6 +59,12 @@ try {
 }
 
 const distHtmlFiles = distFiles.filter((file) => path.extname(file).toLowerCase() === ".html");
+if (distFiles.length) {
+  const baseline = execFileSync(process.platform === "win32" ? "python" : "python3", ["-B", "-X", "utf8", "-c",
+    "import json,sys; from site_public_words import scan_baseline; print(json.dumps(scan_baseline(sys.argv[1]),ensure_ascii=False))",
+    distRoot], { cwd: scriptDirectory, windowsHide: true }).toString("utf8");
+  findings.push(...JSON.parse(baseline).map(hit => ({ ...hit, type: "baseline_value" })));
+}
 const distJavaScriptFiles = distFiles.filter((file) => path.extname(file).toLowerCase() === ".js");
 let remoteJavaScriptCount = 0;
 let remoteArtifactCount = 0;

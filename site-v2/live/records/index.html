@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>项目逐项明细 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css">
+<link rel="stylesheet" href="/connect-auth/glass.css">
+<link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css">
+<link rel="stylesheet" href="/live/_lib/live-page.css">
+<link rel="stylesheet" href="/live/_lib/live-record.css">
+<link rel="stylesheet" href="/live/_lib/live-project-look.css">
+<link rel="stylesheet" href="/live/_lib/live-book.css">
+<link rel="stylesheet" href="/live/records/page.css">
+<link rel="stylesheet" href="/motion/motion.css">
+<script src="/motion/motion.js"></script>
+</head>
+<body class="page page--live page--l3 page--book">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div>
+  <a class="back" href="/live/projects/" id="back" data-mo-rise>项目</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card card--hero card--project book-hero" id="hero" data-tone="none" data-pic="right" data-mo-rise>
+    <div class="card__glow" aria-hidden="true"></div><img class="card__tint" width="1000" height="1000" alt="" aria-hidden="true" decoding="async" hidden>
+    <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img width="1000" height="1000" alt="" decoding="async" hidden></span>
+      <div class="card__body">
+        <p class="card__head" id="head"></p>
+        <p class="book-hero__sub"><span id="sub-name" hidden></span><span id="record-title" hidden></span><time id="record-at" hidden></time></p>
+        <p class="rec-say" id="say" hidden></p>
+        <div class="book-hero__meta"><p class="rec-meta" id="meta" hidden></p><div class="rec-acts" id="acts" hidden></div></div>
+      </div>
+    </div>
+  </article>
+  <div class="rec" id="rec">
+    <section id="summary" class="book-notes" data-mo-rise></section>
+    <section id="record-section" data-mo-rise hidden>
+      <div id="record-body"></div>
+      <p class="fe-l3b-note" id="record-note" role="status"></p>
+    </section>
+  </div>
+</main>
+<script src="/trust-modal/trust-modal.js"></script>
+<script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script>
+<script src="/live/_lib/live-ui.js"></script>
+<script src="/header/topbar.js"></script>
+<script src="/live/_lib/live-light.js"></script>
+<script src="/live/_lib/live-project-look.js"></script><script src="/live/_lib/live-book.js"></script>
+<script src="/live/project/additions.js"></script><script src="/live/records/page.js"></script>
+</body>
+</html>

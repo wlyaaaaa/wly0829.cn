@@ -1,0 +1,226 @@
+/* 实况第三层共用：像一页记录，靠近原理、规则那种文章页。一个任务、一个条目、一份备份明细、一个对话、项目的逐项明细都用这一份。
+   页面与第二层同宽；页头一张安静的玻璃（灯和光照第一层，那张卡的画收淡、略虚地垫在右边）；下面只有字、细线和小灯。
+   回路（.back）、能点进去的“›”（a.more）来自 live-page.css；卡、灯、光、“还有 N 条”、往下长开来自 live.css。
+
+   竖着对齐：页头的灯在 --rec-lamp，字从 --rec-text 起；下面时间线的小灯和页头那颗灯同一条竖线，
+   分节小字、说明的名字和页头的字同一条竖线。各种第三层页都照这两条线摆，整页才像一页记录。 */
+
+/* ============ 页面 ============ */
+.page--l3 {
+  --col: min(1360px, calc(100vw - 160px));
+  --pad: calc(var(--bar-bottom) + 22px);
+  --rec-lamp: 44px;               /* 页头玻璃的左内边距，也是页头那颗灯的左边 */
+  --rec-text: 70px;               /* 灯 12 + 间距 13 + 外距 1：页头的字、分节小字、说明的名字都从这里起 */
+  --rec-key: 118px;               /* 时间线的时刻、说明的名字那一列宽 */
+}
+
+/* ============ 页头：一张安静的玻璃，灯 + 一句总的话 + 一行灰字 + 一句现在怎样 + 按钮 ============
+   用法：<article class="card card--record" data-tone="off" data-pic="right">，里面 card__glow、card__tint、card__glass、card__pic、card__body，
+   和第一层的卡一样；画用第一层那块卡的同一张（任务页 /live/img/tasks.webp）。
+   LiveLight.add / tone 照第一层（有 data-pic 时光自己让到离画远的左边）；还没读到、没有这条时 tone 写 off：灯灭着、没有光。 */
+.card--record .card__glass { padding: 36px var(--rec-lamp) 28px; }
+.card--record[data-pic] .card__glass { min-height: 226px; }
+
+/* 页头的画：第二层是一扇清楚的画窗；第三层收淡、略虚，从右往左化进玻璃里——看得出是那张画，又不抢字 */
+.card--record[data-pic] { --win: clamp(320px, 40%, 560px); }
+.card--record .card__pic img { opacity: .5; filter: blur(1.5px) saturate(.9); scale: 1.04; }
+.card--record[data-pic="right"] .card__pic {
+  -webkit-mask-image: linear-gradient(270deg, #000 0%, rgb(0 0 0 / .85) 22%, rgb(0 0 0 / .5) 48%, rgb(0 0 0 / .18) 72%, transparent 92%);
+  mask-image: linear-gradient(270deg, #000 0%, rgb(0 0 0 / .85) 22%, rgb(0 0 0 / .5) 48%, rgb(0 0 0 / .18) 72%, transparent 92%);
+}
+.card--record[data-pic="right"] .card__body { padding-right: calc(var(--win) * .42); }
+.card--record .card__tint { opacity: .16; }
+.card--record .card__head { column-gap: 13px; }
+.card--record .card__head:not(:has(> .lamp)) { padding-left: calc(var(--rec-text) - var(--rec-lamp)); }
+.card--record .head__lead { font-size: 34px; line-height: 44px; white-space: normal; }
+.card--record .head__tail { font-size: 17px; }
+
+.card[data-tone="off"] .card__head > .lamp::before { opacity: 1; }
+.card[data-tone="off"] .card__head > .lamp::after { opacity: 0; transform: scale(.35); animation: none; }
+
+.rec-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 0;
+  margin: 6px 0 0 calc(var(--rec-text) - var(--rec-lamp));
+  font-size: 14.5px;
+  line-height: 22px;
+  letter-spacing: .04em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.card__head + .rec-meta { margin-top: 6px; }
+.rec-meta > span + span::before { content: "·"; margin: 0 9px; color: #c4c2ba; }
+.rec-say {
+  margin: 16px 0 0 calc(var(--rec-text) - var(--rec-lamp));
+  font-size: 16px;
+  line-height: 26px;
+  letter-spacing: .03em;
+  color: var(--ink);
+}
+.rec-acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 0 calc(var(--rec-text) - var(--rec-lamp));
+}
+
+/* ============ 页头下面：分节一行灰的小字（不是主标题），和页头的字对齐 ============ */
+.rec-part {
+  margin: 40px 0 8px var(--rec-text);
+  font-size: 13px;
+  letter-spacing: .1em;
+  color: #9c9a92;
+  font-variant-numeric: tabular-nums;
+}
+.rec-part b { font-weight: 500; color: #c0281f; }
+
+/* ============ 时间线：每一次前面一颗小灯，串成一条线 ============
+   用法：<ol class="runs">，一次一行（LiveUI.list 按编号更新）：
+   <li class="run[ is-now]"><span class="lamp lamp--sm" data-tone="green|amber|red"></span>
+     <p class="run__main"><span class="run__when"><span class="run__day[ is-same]">11-16</span>06:05</span><span class="run__what" data-result="ok|failed|running|unknown"><b>跑成</b><small>用了 1 分钟</small></span></p>
+     <p class="run__out">一句成果</p></li>
+   最新的那一次加 .is-now，只有它的灯呼吸；别的灯亮着不呼吸。和上一行同一天的日期加 .is-same，淡一点；换了一天的那一行加 .is-day，上面多空一点，一天一天分得开。
+   多的收进 .fold 里另一张 <ol class="runs">，“更早的 N 次 ›”放在 fold 后面；外面那层 .rec-runs 有收着的时候加 .has-more，线往下淡出去。 */
+.runs { list-style: none; margin: 0; padding: 0; }
+.run {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--rec-text) minmax(0, 1fr);
+  padding: 9px 0 10px;
+}
+.run.is-day { padding-top: 21px; }
+.run > .lamp { grid-column: 1; grid-row: 1 / 3; align-self: start; margin: 7.5px 0 0 calc(var(--rec-lamp) + 2px); }
+.run::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--rec-lamp) + 5.5px);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgb(20 20 19 / .11);
+}
+.runs > .run:first-child::before { top: 20.5px; }
+.runs > .run:last-child::before { bottom: calc(100% - 20.5px); }
+.rec-runs.has-more > .runs > .run:last-child::before { bottom: -6px; background: linear-gradient(rgb(20 20 19 / .11), transparent); }
+.rec-runs.has-more:has(> .fold.is-open) > .runs > .run:last-child::before { bottom: 0; background: rgb(20 20 19 / .11); }
+.fold .runs > .run:first-child::before { top: 0; }
+.run.is-leaving::before { display: none; }
+
+/* 只有最新那一次的灯呼吸；别的亮着、带一圈不动的淡光 */
+.runs .run:not(.is-now) > .lamp--sm::after {
+  animation: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--l-base) 11%, transparent), 0 0 6px 1px color-mix(in srgb, var(--l-glow) 34%, transparent);
+}
+
+.run__main {
+  grid-column: 2;
+  display: flex;
+  align-items: baseline;
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 23px;
+  letter-spacing: .03em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.run__when { flex: none; width: var(--rec-key); font-weight: 600; letter-spacing: .02em; white-space: nowrap; }
+.run__day { margin-right: 7px; font-weight: 500; color: var(--ink-soft); }
+.run__day.is-same { color: #b6b4ac; }
+.run__what { min-width: 0; }
+.run__what > b { font-weight: 500; }
+.run__what[data-result="failed"] > b { color: #c0281f; }
+.run__what[data-result="unknown"] > b { color: #b86a00; }
+.run__what[data-result="running"] > b { color: #00813f; }
+.run__what > small { margin-left: 10px; font-size: 13.5px; color: var(--muted); }
+.run__what > small::before { content: "·"; margin-right: 10px; color: #c4c2ba; }
+.run__out {
+  grid-column: 2;
+  margin: 2px 0 0 var(--rec-key);
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: .03em;
+  color: #6f6e68;
+}
+
+/* 空的时候一行真话：“还没读到”或“这 7 天没有跑过的记录”；没有灯、没有线 */
+.run--empty::before { display: none; }
+.run__none { grid-column: 2; margin: 0; font-size: 14.5px; line-height: 23px; color: #a8a69e; }
+
+.rec-runs > .more { margin: 4px 0 0 calc(var(--rec-text) - 10px); translate: 0 0; }
+.rec-runs > .more[aria-expanded="true"] .more__chev { rotate: -90deg; }
+
+/* ============ 说明：名字 | 内容，一样一行，细线隔开 ============
+   用法：<dl class="rec-facts"><div class="rec-fact"><dt>做什么</dt><dd>…</dd></div>…</dl>；没读到的 dd 里写 <span class="rec-none">还没读到</span>。 */
+.rec-facts { margin: 0 0 0 var(--rec-text); border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
+.rec-fact {
+  display: grid;
+  grid-template-columns: var(--rec-key) minmax(0, 1fr);
+  align-items: baseline;
+  padding: 13px 0 14px;
+}
+.rec-fact + .rec-fact { border-top: 1px solid var(--hair); }
+.rec-fact > dt { grid-column: 1; font-size: 14px; line-height: 24px; letter-spacing: .06em; color: var(--muted); }
+.rec-fact > dd {
+  grid-column: 2;
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 25px;
+  letter-spacing: .03em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.rec-fact > dd a { color: inherit; text-decoration: none; border-radius: 4px; transition: color .2s ease; }
+.rec-fact > dd a:hover { color: #00813f; }
+.rec-fact > dd small { margin-left: 10px; font-size: 13.5px; color: var(--muted); }
+.rec-none { font-size: 14.5px; color: #a8a69e; }
+
+/* ============ 连不上：字和线褪一点色，灯熄成灰（live.css），光收回（live-light.js） ============ */
+.rec { transition: opacity calc(600ms * var(--sp)) ease, filter calc(600ms * var(--sp)) ease; }
+
+/* fe-l3a：一件事、一个对话、账本一条；沿用任务页，只补正文与选择的排字。 */
+.rec-prose { white-space: pre-line; overflow-wrap: anywhere; }
+.rewrite-pending { color: #a8a69e; }
+.rec-copy { margin: 0 0 0 var(--rec-text); font-size: 15.5px; line-height: 26px; color: var(--ink); }
+.rec-copy p { margin: 14px 0 8px; }
+.rec-copy ul { margin: 0 0 18px; padding-left: 21px; color: var(--ink-soft); }
+.rec-copy li + li { margin-top: 5px; }
+.page--l3[data-record="issue"] [data-part="head"] { padding-left: calc(var(--rec-text) - var(--rec-lamp)); }
+
+/* fe-l3b：备份、项目逐项明细及任务一轮。沿样板的两条竖线，表格也像一页记录。 */
+.fe-l3b-table { width: calc(100% - var(--rec-text)); margin: 0 0 0 var(--rec-text); border-collapse: collapse; text-align: left; font-variant-numeric: tabular-nums; }
+.fe-l3b-table th { padding: 12px 12px 10px 0; border-bottom: 1px solid var(--hair); color: var(--muted); font-size: 12.5px; font-weight: 400; letter-spacing: .04em; }
+.fe-l3b-table td { padding: 14px 12px 14px 0; border-bottom: 1px solid var(--hair); color: var(--ink); font-size: 14px; line-height: 23px; vertical-align: top; overflow-wrap: anywhere; }
+.fe-l3b-table td:first-child { min-width: 88px; }
+.fe-l3b-table td:last-child, .fe-l3b-table th:last-child { padding-right: 0; }
+.fe-l3b-table td small { display: block; color: var(--muted); font-size: 12.5px; line-height: 21px; }
+.fe-l3b-table a, .fe-l3b-point { color: inherit; text-decoration: none; transition: color .2s; }
+.fe-l3b-table a:hover, .fe-l3b-point:hover { color: #00813f; }
+.fe-l3b-note { margin: 16px 0 14px var(--rec-text); color: var(--muted); font-size: 13.5px; line-height: 24px; letter-spacing: .02em; }
+.fe-l3b-stats { display: flex; gap: 18px 30px; flex-wrap: wrap; margin: 20px 0 18px var(--rec-text); }
+.fe-l3b-stats > div { min-width: 110px; }
+.fe-l3b-stats dt { color: var(--muted); font-size: 12.5px; line-height: 22px; }
+.fe-l3b-stats dd { margin: 3px 0 0; color: var(--ink); font-size: 24px; line-height: 32px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.fe-l3b-more { margin-left: calc(var(--rec-text) - 10px); translate: 0 0; }
+.fe-l3b-point { display: block; width: 100%; }
+.fe-l3b-point > span:last-child { float: right; color: var(--muted); font-size: 13px; font-weight: 400; }
+.fe-l3b-point[aria-current] { color: #00813f; }
+.fe-l3b-point-note { grid-column: 2; margin: 4px 0 0; color: var(--muted); font-size: 13.5px; line-height: 23px; }
+.fe-l3b-table caption { padding: 20px 0 8px; color: var(--muted); font-size: 13px; letter-spacing: .08em; text-align: left; }
+.run__when[href] { color: inherit; text-decoration: none; }
+.run__when[href]:hover { color: #00813f; }
+.fe-l3b-table details { margin-top: 6px; color: var(--muted); font-size: 13px; }
+.fe-l3b-table summary { cursor: pointer; }
+.fe-l3b-table details p { margin: 8px 0 0; }
+#archive-records { margin-left: calc(var(--rec-text) - 10px); }
+#run-results { scroll-margin-top: 100px; }
+.fe-l3b-count-table { width: calc(100% - var(--rec-text)); table-layout: fixed; }
+.fe-l3b-table td > :first-child { margin-top: 0; }
+.fe-l3b-knowledge-table td:nth-child(2) > p:first-of-type { margin-top: 0; }
+.fe-l3b-count-table th:first-child { width: 74%; }
+.fe-l3b-count-table th:last-child, .fe-l3b-count-table td:last-child { text-align: right; }
+.fe-l3b-task-table { table-layout: fixed; }
+.fe-l3b-task-table th:nth-child(1) { width: 30%; }
+.fe-l3b-task-table th:nth-child(2) { width: 18%; }
+.fe-l3b-task-table th:nth-child(3) { width: 16%; }
+.fe-l3b-task-table th:nth-child(4) { width: 36%; }

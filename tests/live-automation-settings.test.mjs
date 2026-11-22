@@ -1,0 +1,174 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import { readFileSync } from 'node:fs';
+
+const code = name => readFileSync(new URL('../site-v2/live/' + name, import.meta.url), 'utf8');
+const token = 't'.repeat(43);
+function client(origin, key, response, isPublic = false) {
+  const calls = [];
+  let popups = 0;
+  const window = { LiveView: { isPublic: () => isPublic }, TrustModal: { show() { popups++; } } };
+  vm.runInNewContext(code('_lib/live-client.js'), { window, location: new URL(origin + '/live/automation/'),
+    document: { addEventListener() {} }, localStorage: { getItem: () => key }, URLSearchParams, Intl, Date,
+    AbortSignal, setTimeout, clearTimeout, fetch: async (url, request) => {
+      calls.push([url, request]);
+      return response();
+    } });
+  return { save: window.Live.automationSetting, calls, popups: () => popups };
+}
+
+test('automation settings require pairing, use each origin own path, and never retry failed writes', async () => {
+  const request = { operation: 'type-mode', id: 'backup', value: { mode: 'off' } };
+  for (const [origin, endpoint] of [
+    ['https://wly0829.cn', 'https://mcp.wly0829.cn/computer-access/api/cockpit/automation-settings'],
+    ['http://127.0.0.1:5412', '/__computer/cockpit/automation-settings'],
+  ]) {
+    const get = (status, body) => () => Response.json(body, { status });
+    const good = client(origin, token, get(200, { status: 'saved', current: { mode: 'off' } }));
+    assert.equal((await good.save(request)).status, 'saved');
+    assert.equal(good.calls.length, 1);
+    const [[url, sent]] = good.calls;
+    assert.equal(url, endpoint);
+    assert.equal(sent.headers['X-Cockpit-Device'], token);
+    assert.deepEqual(JSON.parse(sent.body), request);
+    const follow = { operation: 'type-effort', id: 'backup', value: null };
+    const reset = client(origin, token, get(200, { status: 'saved', current: { effort: null } }));
+    assert.equal((await reset.save(follow)).current.effort, null);
+    assert.deepEqual(JSON.parse(reset.calls[0][1].body), follow);
+    const revoked = client(origin, token, get(403, { status: 'error', error: 'cockpit_owner_required' }));
+    assert.equal((await revoked.save(request)).error, 'cockpit_owner_required');
+    assert.equal(revoked.popups(), 1);
+    assert.equal(revoked.calls.length, 1);
+    for (const [key, publicView] of [['', false], [token, true]]) {
+      const guest = client(origin, key, get(200, {}), publicView);
+      assert.equal((await guest.save({ operation: 'access' })).error, 'cockpit_owner_required');
+      assert.equal(guest.calls.length, 0);
+      assert.equal(guest.popups(), 1);
+    }
+  }
+});
+
+test('automation lamp reads the background-AI level, reason and attention count, and turns gray without a level', () => {
+  const window = {};
+  vm.runInNewContext(code('automation/presentation.js'), { window });
+  const { lamp, tag } = window.AutomationPresentation;
+  const data = { level: 'blue', why: '示例备份由 AI 接手', attention_count: 0, failed: 17 };
+  assert.deepEqual({ ...lamp(data) }, { level: 'blue', why: data.why, attention: 0 });
+  assert.equal(lamp(data, true).level, 'gray');
+  assert.deepEqual({ ...lamp({ ...data, level: undefined }) }, { level: 'gray', why: '读不到后台 AI 的状态', attention: null });
+  assert.deepEqual({ ...lamp({ level: 'green' }) }, { level: 'green', why: '', attention: null });
+  assert.equal(tag('repair', 'Sol', String), '<span class="auto-tag" data-kind="repair">修毛病 · Sol</span>');
+  assert.equal(tag('unknown', 'Sol', String), '');
+});
+
+test('automation page lays out the A blocks with aligned tables, shared copy and read-only categories for owner and visitor', () => {
+  const types = ['backup', 'ai-review', 'ai-stalled'].map(id => ({ id, title: id, setting: { mode: 'on', effort: null }, model_effort: 'high', model: 'Sol', sources: [{ at: '2026-11-20T01:00:00Z' }] }));
+  const routines = [{ id: 'claude-guidance', producer: 'Claude', label: 'Claude 指导', trigger_text: '一件活三次没修好时', today_count: 0, at: '2026-11-20T11:39:00Z', plan_count: 1 }];
+  const other_automatic_chats = [{ id: 'event-root', producer: 'Codex', label: '事件叫起', state_text: '正在跑', actual_model: 'GPT Sol' }];
+  const scheduled_activities = [
+    { id: 'codex-weekly', producer: 'Codex', label: '每周基座体检', period: '每周一 09:00 (Asia/Shanghai)', state_text: '正在跑', status: 'warn', level: 'yellow', at: '2026-11-20T00:00:00Z',
+      recent_runs: [{ at: '2026-11-20T09:00:00Z', chat_state: 'running', actual_model: 'GPT Sol' }, { at: '2026-11-19T09:00:00Z', status: 'failed' }] },
+    { id: 'claude-once', producer: 'Claude', label: '隔离一次性', state_text: '跑完了', status: 'no_conclusion', period: '一次性', href: '/live/task/?id=claude-once',
+      at: '2026-11-20T08:00:00Z' },
+    { id: 'claude-paused', producer: 'Claude', label: '隔离暂停', state_text: '已暂停', status: 'ok' },
+    { id: 'antigravity-missed', producer: 'Antigravity', label: '隔离漏跑任务', state_text: '等下次', period: '每小时',
+      status: 'warn', level: 'yellow', notice: '到点未启动', stop: '在原平台暂停', next_at: '2026-11-20T14:00:00Z' },
+  ];
+  const intake = { next_at: '2026-11-21T13:00:00Z', runs: [{ at: '2026-11-20T13:00:00Z', reason: 'urgent', reason_text: '法院短信',
+    sources: [{ name: '短信', read_to: '2026-11-20T12:58:00Z' }], recorded: [{ title: '隔离开庭通知', href: '/live/item/?id=x' }], recorded_count: 1,
+    told: '发了手机提醒', folded: 37, status: 'ok' }] };
+  function render(audience, type = '', extra = {}, detail = null) {
+    const listeners = new Map(), root = { querySelectorAll: () => [], addEventListener() {} };
+    const dialog = { querySelector: () => ({ addEventListener() {} }) };
+    const window = { Live: { watch(key, _, events) { listeners.set(key, events.phase); } },
+      LiveUI: { esc: String, fieldHtml: value => value ?? '', fieldText: String, topbar() {}, minutes: n => `${n} 分钟`,
+        status: data => ({ lamp: data?.level ? `<span data-level="${data.level}"></span>` : '' }),
+        date: value => value.slice(0, 10), time: value => value.slice(11, 16),
+        html(el, html) { el.innerHTML = html; } },
+      LiveLight: { lightUp() {} }, LiveBoard: { icon: () => '' } };
+    const context = { window, URL, URLSearchParams, requestAnimationFrame() {},
+      location: new URL('https://wly0829.cn/live/automation/' + (detail ? '?work=' + detail.work.id : type ? '?type=' + type : '')),
+      document: { getElementById: id => ({ 'work-queue': root, 'automation-legacy': {}, 'automation-setting': dialog })[id], querySelector: () => ({}) } };
+    vm.createContext(context);
+    vm.runInContext(code('automation/presentation.js'), context);
+    vm.runInContext(code('automation/work.js'), context);
+    listeners.get(detail ? 'automation/work/' + detail.work.id : type ? 'automation/types/' + type : 'automation')({ now: '2026-11-21T02:00:00Z', data: { ...types.find(row => row.id === type),
+      enabled: true, audience, types, routines, scheduled_activities, other_automatic_chats, ...extra, ...detail } });
+    return root.innerHTML;
+  }
+  for (const audience of ['owner', 'public']) {
+    const overview = render(audience, '', { owner_intake: intake, summary: { running: 2, ran_today: 21, owner: 0, errors_7d: 1 },
+      running_now: [{ id: 'r1', kind: 'repair', who: 'Sol', title: '隔离修理', model: 'GPT-6.2 Sol' }] });
+    assert.match(overview, /怎么发现.*怎么算好/s);
+    assert.doesNotMatch(overview, /看一件真的怎么修/);
+    assert.match(overview, /data-tone="zero"><dt>[^<]*要(你|本人)/);
+    assert.match(overview, /id="running-now".*隔离修理.*修毛病 · Sol.*GPT-6.2 Sol/s);
+    const order = ['id="ai-scheduled"', 'id="owner-intake"', 'id="repair"', 'id="types"', 'id="routines"', 'Windows 计划任务'].map(key => overview.indexOf(key));
+    assert.deepEqual([...order].sort((a, b) => a - b), order);
+    assert.ok(order.every(n => n > 0));
+    const scheduled = overview.match(/<section id="ai-scheduled".*?<\/section>/s)[0];
+    assert.match(scheduled, /名字.*哪家.*多久一次.*现在.*上一次.*下一次/s);
+    assert.equal((scheduled.match(/data-vendor="claude"/g) || []).length, 1, 'a vendor is written once per group');
+    assert.doesNotMatch(scheduled.split('</header>')[1].replace(/<div class="aw-more">.*?<\/div>/gs, ''), /·/, 'cells are aligned columns, not dot-joined strings');
+    assert.match(scheduled.match(/id="routine-codex-weekly".*?<\/details>/s)[0], /data-level="yellow".*每周基座体检.*每周一 09:00<.*正在跑.*需留意.*最近几次.*正在跑.*GPT Sol.*出错/s);
+    assert.doesNotMatch(scheduled, /Asia\/Shanghai/);
+    assert.match(scheduled, /href="\/live\/task\/\?id=claude-once">隔离一次性.*一次性.*跑完了.*没结论.*无下次排期/s);
+    assert.match(scheduled, /id="routine-claude-paused"[^]*?隔离暂停.*?aw-dash.*?已暂停/s);
+    assert.match(scheduled, /id="routine-antigravity-missed".*到点未启动.*在原平台暂停/s);
+    assert.doesNotMatch(scheduled, /Claude 指导|事件叫起/);
+    const daily = overview.match(/<section id="routines".*?<\/section>/s)[0];
+    assert.match(daily, /例行的 AI 活.*名字.*什么时候跑.*今天.*最近一次.*Claude 指导.*一件活三次没修好时.*写回 1 份.*事件叫起.*正在跑/s);
+    const yours = overview.match(/<section id="owner-intake".*?<\/section>/s)[0];
+    assert.match(yours, /收起几条.*急件.*法院短信.*短信 2026-11-20 12:58.*37 条/s);
+    const said = render(audience, '', { level: 'yellow', why: '有 3 件事要留意', attention_count: 3 });
+    assert.match(said, /有 3 件事要留意/);
+    assert.doesNotMatch(said, /项要关注/, 'the count is said once');
+    if (audience === 'owner') assert.match(yours, /隔离开庭通知.*发了手机提醒/s);
+    else assert.doesNotMatch(yours, /隔离开庭通知|发了手机提醒/);
+    assert.match(render(audience), /id="owner-intake".*这里还看不到/s);
+    assert.match(render(audience, '', { owner_intake: { runs: [] } }), /id="owner-intake".*还没跑过/s);
+    const intakeRuns = render(audience, '', { owner_intake: { runs: [
+      { at: '2026-11-21T01:04:00Z', status: 'running', level: 'blue' },
+      { at: '2026-11-21T01:03:00Z', status: 'failed', level: 'yellow' },
+      { at: '2026-11-21T01:02:00Z', status: 'failed', level: null },
+      { at: '2026-11-21T01:01:00Z', status: 'failed' },
+    ] } }).match(/<section id="owner-intake".*?<\/section>/s)[0];
+    const intakeRows = intakeRuns.split('<div class="aw-tr" role="row">').slice(1);
+    assert.deepEqual(intakeRows.map(row => row.match(/data-level="(.*?)"/)?.[1]), ['blue', 'yellow', undefined, undefined]);
+    assert.deepEqual(intakeRows.map(row => row.match(/<small>(.*?)<\/small>/)?.[1]), ['正在跑', '出错', '出错', '出错']);
+    assert.match(overview, new RegExp(['各份备份（个人资料和照片视频、开发配置、微信、电脑使用记录、文档等）报失败或好久没更新',
+      '系统镜像的恢复点、恢复包的完整性检查没过'].join('；')), 'the full 管 sentence is shown on the card');
+    assert.match(overview, /aw-type__state">正常 · 没有活<\/p><p class="aw-type__model">Sol · 默认 high/);
+    assert.match(render(audience, '', { example_href: '/live/automation/?work=fixed-1' }), /href="\/live\/automation\/\?work=fixed-1">看一件真的怎么修/);
+    const work = { id: 'holder', title: '隔离修理', group: 'running', state_text: '已占位 · 会话状态未读到' };
+    const rounds = [{ id: '1', label: '验收', status: 'running', requested_effort: 'xhigh', executor: '未确认型号' },
+      { id: '2', label: '修理', chat_state: 'running', chat_state_text: '在跑', actual_model: 'GPT Sol', last_activity_at: '2026-11-20T09:00:00Z' }];
+    const detail = render(audience, '', {}, { work, rounds });
+    assert.match(detail, /已占位 · 会话状态未读到.*验收 · 会话状态未读到.*修理 · 在跑 · GPT Sol · 上次动静 2026-11-20 09:00/s);
+    assert.doesNotMatch(detail, /进行中|xhigh|未确认型号/);
+    assert.match(detail, /id="round-1" class="is-past".*id="round-2" class="is-current".*class="is-future".*独立验收.*class="is-future".*关单/s);
+    assert.match(detail, /修理路线：AI 修 3 次.*第 4 次/);
+    assert.doesNotMatch(render(audience, '', {}, { work: { ...work, group: 'done' }, rounds }), /is-current|is-future/);
+    const verification = { id: 'verify', type_id: 'acceptance', title: '核实本人事项', group: 'followup', state_text: '等回执再核实' };
+    const waiting = render(audience, '', {}, { work: verification, rounds: [
+      { id: 'r1', label: '验收', end_at: '2026-11-21T00:00:00Z', verdict: 'not_fixed', proof: { business: '没修好' } },
+    ] });
+    assert.match(waiting, /等回执再核实.*核实结论.*还不能确认/s);
+    assert.doesNotMatch(waiting, /is-future|修理路线|关单|没修好/);
+    const confirmed = render(audience, '', {}, { work: { ...verification, group: 'done', state_text: '已经核实' }, rounds: [
+      { id: 'r2', label: '验收', end_at: '2026-11-21T01:00:00Z', verdict: 'fixed', proof: { business: '回执符合原条件' } },
+    ] });
+    assert.match(confirmed, /已经核实.*核实结论.*回执符合原条件/s);
+    assert.doesNotMatch(confirmed, /is-future|修理路线|关单/);
+    assert.equal((overview.match(/class="aw-readonly"/g) || []).length, 2);
+    assert.equal((overview.match(/data-setting="toggle"/g) || []).length, 1);
+    for (const type of ['ai-review', 'ai-stalled']) {
+      assert.match(render(audience, type), /这一类只显示，不派人修.*管：.*比如.*不管：/s);
+      assert.doesNotMatch(render(audience, type), /data-setting|默认档位|关了：|设置记录/);
+    }
+    const backup = render(audience, 'backup');
+    assert.match(backup, /默认档位 跟随模型清单（现在 high）<span class="aw-caret".*管：.*关了：.*aw-example-tag">比如<.*设置记录.*这里还看不到.*不管：<\/b>从备份里真把文件或整台电脑还原回来，这里不做/s);
+    assert.match(render(audience, 'backup', { setting_log: [] }), /设置记录.*还没改过设置/s);
+  }
+});

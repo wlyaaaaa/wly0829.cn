@@ -20,9 +20,9 @@ UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/142.0.0.0 Safari/537.36"
 START, END = date(2026, 10, 11), date(2026, 10, 12)
 
 
-def log(time="12/Oct/2026:10:00:00 +0800", v="visitor-A", p="/", ip="203.0.113.1", ua=UA,
+def log(time="12/Oct/2026:10:00:00 +0800", v="visitor-A", p="/", ip="93.184.216.34", ua=UA,
         extra=None, path="/_v.gif", status=200, request_id=None):
-    params = {"x-v": v, "x-p": p, "x-ref": "", **(extra or {})}
+    params = {"x-v": v, "x-p": p, "x-ref": "", "x-audience": "external", "x-event": "view", **(extra or {})}
     uri = path + "?" + urlencode(params)
     fields = [ip, "-", "-", f"[{time}]", json.dumps(f"GET {uri} HTTP/1.1"), str(status), "43", "1",
               '"https://wly0829.cn/"', json.dumps(ua), '"host"', json.dumps(request_id or time + uri),
@@ -32,6 +32,180 @@ def log(time="12/Oct/2026:10:00:00 +0800", v="visitor-A", p="/", ip="203.0.113.1
 
 
 class VisitorTests(unittest.TestCase):
+    def seed_exit(self, cache):
+        cache.mkdir(exist_ok=True)
+        instants = [datetime(2026, 10, 12, 9, tzinfo=query.TZ) + timedelta(minutes=i) for i in range(0, 181, 30)]
+        (cache / 'internal-visitor-probes.txt').write_text(''.join(f'{i}\n' for i in range(len(instants))))
+        self.root.joinpath('probes.log').write_text(''.join(self.probe(at, str(i)) for i, at in enumerate(instants)))
+
+    def probe(self, when, nonce, ip='93.184.216.36'):
+        return log(when.strftime('%d/%b/%Y:%H:%M:%S %z'), ip=ip, extra={'x-network-probe': nonce}).replace('GET /', 'HEAD /')
+
+    def era_cli(self, *args):
+        if not {'--freeze-legacy', '--legacy-archive'}.intersection(map(str, args)):
+            self.seed_exit(self.root / "cache")
+        with patch.object(sys, "argv", [query.__file__, "--cache-dir", str(self.root / "cache"), *map(str, args)]), patch("builtins.print") as printed:
+            self.assertEqual(query.main(), 0)
+            return json.loads(printed.call_args.args[0])
+
+    def era_fixture(self):
+        (self.root / "visits.log").write_text(log(v="old") + log("12/Oct/2026:11:00:00 +0800", v="new", p="/cv/", extra={"x-entry": "cv", "x-event": "entry", "x-cv-session": "new-session"})
+                                              + log("12/Oct/2026:11:00:01 +0800", v="new", extra={"x-entry": "cv", "x-cv-session": "new-session"}), "utf-8")
+        return ("--logs-dir", self.root, "--start", "2026-10-12", "--end", "2026-10-12")
+
+    def test_unconfigured_era_keeps_existing_counts(self):
+        result = self.era_cli(*self.era_fixture())
+        self.assertEqual(result["total"], {"unique_visitors": 2, "unique_ips": 1, "pageviews": 2})
+        self.assertEqual(result["site_scope"]["mode"], "all_observed")
+
+    def test_all_visit_dimensions_share_the_external_beacon_filter(self):
+        old = log("11/Oct/2026:10:00:00 +0800", v="old", extra={"x-audience": ""})
+        page_open = log(v="outside", p="/public/", ip="::ffff:93.184.216.34", extra={"x-id": "outside-page"}, request_id="open")
+        rows = page_open + page_open.replace('"open"', '"retry"') + log(v="resource", path="/image.webp", ip="93.184.216.35")
+        rows += log(v="paired", extra={"x-audience": "internal"}) + log(v="owner", extra={"x-self": "1"})
+        rows += log(v="lan", ip="192.168.1.5") + log(v="tailnet", ip="100.73.0.5") + log(v="nat", ip="93.184.216.36")
+        (self.root / "visits.log").write_text(old + rows, "utf-8")
+        result = self.era_cli("--logs-dir", self.root, "--start", START, "--end", END)
+        self.assertEqual((result["count_scope"], result["external_since"]), ("external_only", "2026-10-12T10:00:00+08:00"))
+        self.assertEqual(result["total"], {"unique_visitors": 1, "unique_ips": 1, "pageviews": 1})
+        self.assertEqual((result["top_pages"], result["device_classes"]), ({"/public/": 1}, {"电脑": 1}))
+        self.assertEqual((result["daily"][0]["coverage"], result["daily"][1]["pageviews"]), ("before_external_scope", 1))
+
+    def test_launch_exact_boundary_applies_to_totals_cv_and_deep_read(self):
+        args = self.era_fixture(); config = self.root / "cache/site-era.json"; config.parent.mkdir()
+        config.write_text('{"launch_at":"2026-10-12T11:00:00+08:00"}', "utf-8")
+        result = self.era_cli(*args)
+        self.assertEqual(result["total"]["unique_visitors"], 1)
+        self.assertEqual(result["log_coverage"]["first_observed"], "2026-10-12T11:00:00+08:00")
+        self.assertEqual(result["entry"]["cv"]["unique_visitors"], 1)
+        self.assertEqual(self.era_cli(*args, "--cv")["cv"]["count"], 1)
+        deep = self.era_cli("--logs-dir", self.root, "--deep-read", "--since", "2026-10-12T09:00:00+08:00")
+        self.assertEqual(deep["site_scope"]["mode"], "new_site")
+        launch = datetime.fromisoformat("2026-10-12T11:00:00+08:00")
+        with patch.object(query, "sls_logs", return_value=[]) as sls:
+            query.sync_cloud(SimpleNamespace(deep_read=False, launch_at=launch), END, END, launch + timedelta(hours=1))
+            self.assertEqual(sls.call_args.args[1], launch)
+
+    def test_event_capture_keeps_actions_and_two_entries_out_of_ordinary_counts(self):
+        self.seed_exit(self.root)
+        shown = self.root.joinpath('probes.log').read_text()
+        for visitor, p, entry in [('resume', '/cv/', 'cv'), ('meeting', '/live/', 'live-cv')]:
+            props = {'x-id': visitor, 'x-entry': entry, 'x-cv-session': visitor}
+            shown += log(v=visitor, p=p, extra=props | {'x-event': 'entry'}) + log(v=visitor, p='/', extra=props)
+        shown += log(v='action-only', p='/live/?ignored=1', extra={'x-event': 'action', 'x-action': 'email_copy', 'x-entry': 'cv'})
+        events = []
+        result = self.analyze([shown], external_only=True, cv_only=True, exit_probes={str(i) for i in range(7)},
+                              on_events=lambda received, *_: events.extend(row['params'] for row in received))
+        self.assertEqual([(p['v'], p['p']) for p in events if p['event'] == 'action'], [('action-only', '/live/')])
+        self.assertEqual((result['total']['pageviews'], result['total']['unique_visitors'], result['cv']['count']), (2, 2, 1))
+
+    def test_frozen_legacy_reads_old_records_offline_and_never_appends(self):
+        args = self.era_fixture(); config = self.root / "era.json"; archive = self.root / "legacy.json.gz"
+        config.write_text('{"launch_at":"2026-10-12T11:00:00+08:00"}', "utf-8")
+        frozen = self.era_cli(*args, "--era-config", config, "--freeze-legacy", archive)
+        self.addCleanup(archive.chmod, 0o666)
+        self.assertEqual(frozen["records"], 1)
+        self.assertFalse(archive.stat().st_mode & 0o222)
+        before = archive.read_bytes()
+        with patch.object(query, "sync_cloud", side_effect=AssertionError("no cloud")), patch.object(query, "OfflineNetworks", side_effect=AssertionError("no download")):
+            result = self.era_cli("--legacy-archive", archive, "--era-config", config)
+        self.assertEqual(result["total"]["pageviews"], 1)
+        self.assertEqual(set(result["visitor_dwell"]), {"old"})
+        self.assertEqual(result["site_scope"]["mode"], "frozen_legacy")
+        with self.assertRaises(FileExistsError):
+            query.freeze_legacy(archive, [], [], None, datetime.fromisoformat("2026-10-12T11:00:00+08:00"), START, END, {"sources": []})
+        self.assertEqual(archive.read_bytes(), before)
+
+    def test_page_and_entry_filters_select_cv_without_counting_redirect_as_read(self):
+        args = self.era_fixture()
+        result = self.era_cli(*args, "--page", "/cv")
+        self.assertEqual((result["total"]["unique_visitors"], result["total"]["pageviews"]), (1, 0))
+        self.assertEqual(result["page_dwell"], {})
+        self.assertEqual(self.era_cli(*args, "--entry", "cv")["total"]["pageviews"], 1)
+
+    def test_new_site_does_not_inherit_legacy_first_seen_or_entry(self):
+        cache = self.root / "cache"; cache.mkdir()
+        (cache / "site-era.json").write_text('{"launch_at":"2026-10-12T11:00:00+08:00"}', "utf-8")
+        old = '{"first_seen":{"same":"2026-10-01T10:00:00+08:00"},"first_entry":{"same":{"entry":"cv","first_at":"2026-10-01T10:00:00+08:00"}}}'
+        (cache / "visitor-history.json").write_text(old, "utf-8")
+        with patch.object(query, "sync_cloud", return_value=([self.root / 'probes.log'], [query.parse_line(log("12/Oct/2026:11:00:00 +0800", v="same"))], {"sources": []}, None)), patch.object(query, "OfflineNetworks", side_effect=ValueError("not cached")):
+            result = self.era_cli("--start", "2026-10-12", "--end", "2026-10-12")
+        self.assertEqual(result["entry"]["cv"]["unique_visitors"], 0)
+        self.assertEqual((cache / "visitor-history.json").read_text("utf-8"), old)
+
+    def test_start_site_era_previews_and_refuses_a_different_stamp(self):
+        cache = self.root / "new cache"
+        config = cache / "site-era.json"
+        cli = ["start-site-era", "--cache-dir", str(cache), "--launch-at", "2026-10-12T18:00:00+00:00"]
+        with patch("builtins.print") as printed, patch.object(query, "sync_cloud", side_effect=AssertionError("no cloud")):
+            self.assertEqual(query.main(cli), 0)
+        self.assertFalse(cache.exists())
+        self.assertIn("2026-10-13T02:00:00+08:00", printed.call_args_list[0].args[0])
+        self.assertIn("--end 2026-10-13", printed.call_args.args[0])
+        cache.mkdir()
+        original = '{"launch_at":"2026-10-12T18:01:00+00:00"}'
+        config.write_text(original, "utf-8")
+        with patch.object(query, "live_producer", side_effect=AssertionError("no live write")), patch("sys.stderr"):
+            with self.assertRaises(SystemExit) as refusal:
+                query.main(cli + ["--execute"])
+        self.assertEqual(refusal.exception.code, 1)
+        with self.assertRaises(ValueError):
+            query.initialize_era(config, datetime.fromisoformat(cli[-1]))
+        self.assertEqual(config.read_text("utf-8"), original)
+
+    def test_start_site_era_replaces_registered_legacy_traffic(self):
+        live = query.live_producer()
+        now = datetime.now(query.TZ)
+        launch = (now - timedelta(minutes=5)).replace(microsecond=0)
+        earlier = (launch - timedelta(minutes=1)).strftime("%d/%b/%Y:%H:%M:%S %z")
+        cv = {"x-entry": "cv", "x-cv-session": "old-session"}
+        rows = [query.parse_line(log(earlier, p="/cv/", extra={**cv, "x-event": "entry"})),
+                query.parse_line(log(earlier, p="/old/", extra={**cv, "x-id": "old-page"})),
+                query.parse_line(log(earlier, p="/old/", extra={**cv, "x-id": "old-page", "x-event": "leave", "x-visible": "20"}))]
+        proofs = [query.parse_line(self.probe(launch + timedelta(minutes=minutes), str(minutes))) for minutes in (-20, 15)]
+        old = query.analyze([], launch.date() - timedelta(days=1), now.date(), extra_records=rows + proofs, external_only=True, exit_probes={'-20', '15'})
+        public, owner = [self.root / "registered" / (audience + ".json") for audience in ("public", "owner")]
+        live.write(self.root / ".publish/private/live-project.json", {"public": str(public), "owner": str(owner)})
+        live.save(self.root, "publication", {}, now.isoformat(), "", routes=["/old/"])
+        # An in-flight old query may get a later timestamp than the first new-era query.
+        old_checked = (now + timedelta(minutes=1)).isoformat()
+        live.visitors(self.root, old, old_checked)
+        self.assertEqual(live.read(owner)["metrics"]["cv_visitors"], 1)
+        self.assertEqual(live.read(public)["metrics"]["dwell"][0]["observed_seconds"], 20)
+        cache = self.root / "cache"
+        cli = ["start-site-era", "--cache-dir", str(cache), "--launch-at", launch.isoformat(), "--execute"]
+        with patch.object(query, "ROOT", self.root), patch.object(query, "sync_cloud", return_value=([], rows, {"sources": []}, None)), \
+                patch.object(query, "OfflineNetworks", side_effect=ValueError("no network")), patch("builtins.print"):
+            with patch.object(live, "write", side_effect=PermissionError), patch("sys.stderr"):
+                self.assertEqual(query.main(cli), 1)
+            self.assertEqual(query.read_launch_at(cache / "site-era.json"), launch)
+            self.assertEqual(query.main(cli), 0)
+        self.assertEqual(query.read_launch_at(cache / "site-era.json"), launch)
+        for path in (public, owner):
+            data = live.read(path)
+            self.assertEqual(data["visitor_launch_at"], launch.isoformat())
+            metrics = data["metrics"]
+            self.assertEqual((metrics["visitors"], metrics["pageviews"], metrics["top_pages"], metrics["dwell"]), (None, None, None, None))
+        self.assertIsNone(live.read(owner)["metrics"]["cv_visitors"])
+        self.assertNotIn("cv_visitors", live.read(public)["metrics"])
+        with self.assertRaises(ValueError):
+            live.visitors(self.root, old, old_checked)
+        self.assertIsNone(live.read(owner)["metrics"]["pageviews"])
+
+    def test_live_package_distinguishes_assets_and_references(self):
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
+        import live_project
+        objects = {k: dict(key=k, content_type=t, bytes=n) for k, t, n in
+                   [('used', 'image/webp', 30), ('unused', 'image/webp', 50), ('font', 'font/woff2', 10)]}
+        value = live_project.package(dict(files={'index.html': {'bytes': 7}, 'map.xml': {}},
+            oss=dict(objects=objects, reference_keys=['used', 'font'])), 'x_')
+        self.assertEqual(tuple(value['x_' + k] for k in ('html_files', 'images', 'used_images',
+            'image_bytes', 'used_image_bytes', 'resource_bytes', 'index_bytes')), (1, 2, 1, 80, 30, 90, 7))
+        with tempfile.TemporaryDirectory() as folder:
+            live_project.save_views(Path(folder), {}, 'build', {}, '2026-11-16T09:00:00+08:00', '', None, 'new', ())
+            live_project.save_views(Path(folder), {}, 'publication', {'local_build': '旧写法'}, '2026-11-12T13:00:00+08:00', '', None, 'old', ())
+            self.assertEqual(live_project.read(Path(folder) / '.live/public.json')['times']['version'], '2026-11-16T09:00:00+08:00')
+
     def setUp(self):
         cache = Path(r"E:\Cache")
         self.temporary = tempfile.TemporaryDirectory(prefix="wly-visitors-test-", dir=cache if cache.is_dir() else None)
@@ -105,7 +279,9 @@ class VisitorTests(unittest.TestCase):
             return ""
         with patch.object(query, "list_objects", side_effect=listing) as listing_mock, patch.object(query, "cli_run", side_effect=download) as cloud:
             paths, first = query.sync_logs(args, END, END)
-            _, second = query.sync_logs(args, END, END)
+            with patch.object(query, "digest", wraps=query.digest) as checksums:
+                _, second = query.sync_logs(args, END, END)
+                self.assertEqual(checksums.call_count, 2)
             self.assertEqual((first["downloaded"], second["reused"], cloud.call_count), (2, 2, 2))
             self.assertEqual(listing_mock.call_count, 2)
             paths[0].write_bytes(b"x" * len(text.encode()))
@@ -119,8 +295,9 @@ class VisitorTests(unittest.TestCase):
             self.assertEqual(query.list_objects(args, "prefix"), [])
             self.assertEqual(cloud.call_args.args[0][-2:], ["--cli-cursor", "next"])
         self.root.joinpath("sample.log").write_text(log(), "utf-8")
+        self.seed_exit(self.root)
         result = subprocess.run([sys.executable, "-B", "-X", "utf8", str(Path(query.__file__)), "--logs-dir", str(self.root),
-                                 "--start", "2026-10-12", "--end", "2026-10-12"], capture_output=True, check=True)
+                                 "--cache-dir", str(self.root), "--start", "2026-10-12", "--end", "2026-10-12"], capture_output=True, check=True)
         self.assertEqual(json.loads(result.stdout)["total"]["unique_visitors"], 1)
 
     def sls_row(self):
@@ -149,7 +326,7 @@ class VisitorTests(unittest.TestCase):
     def test_cross_source_resource_exclusion_and_archive_cutoff(self):
         self.root.joinpath("boundary.log").write_text(log("05/Oct/2026:11:59:50 +0800", path="/image.png") + log("05/Oct/2026:12:00:31 +0800", v="too-late"), "utf-8")
         cutoff = datetime(2026, 10, 5, 12, tzinfo=query.TZ)
-        marked = {**self.sls_row(), "__time__": cutoff.timestamp(), "request_uri": "/_v.gif?x-v=self&x-self=1"}
+        marked = {**self.sls_row(), "client_ip": "93.184.216.34", "__time__": cutoff.timestamp(), "request_uri": "/_v.gif?x-v=self&x-self=1"}
         result = query.analyze([self.root / "boundary.log"], cutoff.date(), cutoff.date(),
             extra_records=[query.parse_sls_row(marked)], file_range=(cutoff - timedelta(minutes=1), cutoff + timedelta(seconds=30)))
         self.assertEqual(result["total"], {"unique_visitors": 0, "unique_ips": 0, "pageviews": 0})
@@ -164,6 +341,9 @@ class VisitorTests(unittest.TestCase):
         self.assertEqual(windows[1][2], now + timedelta(seconds=1))
         self.assertEqual(query.source_windows(END, END, now)[0][0], "sls_realtime")
         self.assertEqual(query.source_windows(date(2026, 10, 1), date(2026, 10, 1), now)[0][0], "oss_archive")
+        unpadded = query.source_windows(START, START, now)[0]
+        padded = query.source_windows(START, START, now, padding=query.MAX_EXIT_INTERVAL)[0]
+        self.assertEqual(padded[1:], (unpadded[1] - query.MAX_EXIT_INTERVAL, unpadded[2] + query.MAX_EXIT_INTERVAL))
         with patch.object(query, "sync_logs", return_value=([], {"objects": 0})) as archive, patch.object(query, "sls_logs", return_value=[]) as realtime:
             _, _, sync, _ = query.sync_cloud(SimpleNamespace(), date(2026, 10, 5), END, now)
         self.assertEqual(archive.call_args.args[1:], (date(2026, 10, 4), date(2026, 10, 5)))
@@ -215,7 +395,7 @@ class VisitorTests(unittest.TestCase):
             with self.subTest(deep_read=deep_read, cv=cv), patch.object(query, "cli_run", return_value=json.dumps(page)) as cloud:
                 records = query.sls_logs(args, start, end)
             self.assertEqual([record["path"] for record in records], ["/_v.gif", "/_v.gif"])
-            expected = base + " | SELECT * WHERE regexp_like(request_uri, '(?i)x-cv-session(?:=|%3d)[A-Za-z0-9-]+|x-event(?:=|%3d)entry') LIMIT 10000" if cv else base + ' AND (request_uri: "/_v.gif" OR request_uri: "%2F_v.gif")' if deep_read else base
+            expected = base + " | SELECT * WHERE regexp_like(request_uri, '(?i)x-cv-session(?:=|%3d)[A-Za-z0-9-]+|x-event(?:=|%3d)entry|x-network-probe(?:=|%3d)[A-Za-z0-9_-]+') LIMIT 10000" if cv else base + ' AND (request_uri: "/_v.gif" OR request_uri: "%2F_v.gif")' if deep_read else base
             if deep_read:
                 expected += " | SELECT * ORDER BY __time__ ASC, request_id ASC LIMIT 0, 10000"
             self.assertEqual(json.loads(cloud.call_args.args[0][-1]),
@@ -614,6 +794,7 @@ class VisitorTests(unittest.TestCase):
     def test_cv_cli_local_logs(self):
         (self.root / "cv.log").write_text(log(p="/cv/", extra={"x-event": "entry", "x-cv-session": "visit"})
                                           + log(p="/", extra={"x-cv-session": "visit"}), "utf-8")
+        self.seed_exit(self.root / "cache")
         done = subprocess.run([sys.executable, "-B", "-X", "utf8", str(Path(__file__).with_name("query-site-visitors.py")),
                                "--cv", "--start", "2026-10-12", "--end", "2026-10-12", "--logs-dir", str(self.root),
                                "--cache-dir", str(self.root / "cache")], capture_output=True, text=True, encoding="utf-8")
@@ -640,7 +821,8 @@ class VisitorTests(unittest.TestCase):
         self.assertEqual(sum(page["visible_seconds"] for page in people["multi"]["pages"]), 180)
         self.assertEqual(people["project"]["first_at"], "2026-10-12T10:02:00+08:00")
         self.assertNotIn("203.0.113.1", json.dumps(output))
-        self.assertEqual(set(json.loads(subprocess.run([sys.executable, "-B", "-X", "utf8", query.__file__, "--logs-dir", str(self.root), "--cache-dir", str(self.root), "--deep-read", "--since", since.isoformat(), "--json"], capture_output=True, check=True).stdout)), {"checked_at", "visitors"})
+        self.seed_exit(self.root)
+        self.assertEqual(set(json.loads(subprocess.run([sys.executable, "-B", "-X", "utf8", query.__file__, "--logs-dir", str(self.root), "--cache-dir", str(self.root), "--deep-read", "--since", since.isoformat(), "--json"], capture_output=True, check=True).stdout)), {"checked_at", "visitors", "site_scope", "count_scope", "external_since"})
 
     def test_offline_ipv4_ipv6_network_database_boundaries(self):
         root = self.root / "networks"
@@ -676,9 +858,10 @@ class VisitorTests(unittest.TestCase):
                 self.assertEqual(cloud.call_args.args[1:3], expected)
 
     def test_database_failures_preserve_counts_and_report_unknown(self):
+        self.seed_exit(self.root)
         for phase in ("init", "prepare"):
             networks = Mock(); networks.prepare.side_effect = EOFError("203.0.113.1 must stay local")
-            with patch.object(sys, "argv", [query.__file__, "--cache-dir", str(self.root), "--start", "2026-10-12", "--end", "2026-10-12"]), patch.object(query, "sync_cloud", return_value=([], [query.parse_line(log())], {"sources": []}, None)), patch.object(query, "OfflineNetworks", return_value=networks, side_effect=ValueError("broken partial cache") if phase == "init" else None), patch("builtins.print") as printed:
+            with patch.object(sys, "argv", [query.__file__, "--cache-dir", str(self.root), "--start", "2026-10-12", "--end", "2026-10-12"]), patch.object(query, "sync_cloud", return_value=([self.root / 'probes.log'], [query.parse_line(log())], {"sources": []}, None)), patch.object(query, "OfflineNetworks", return_value=networks, side_effect=ValueError("broken partial cache") if phase == "init" else None), patch("builtins.print") as printed:
                 self.assertEqual(query.main(), 0); result = json.loads(printed.call_args.args[0])
                 self.assertEqual(result["total"]["pageviews"], 1); self.assertEqual(result["region_pageviews"], {"未知/未知": 1}); self.assertEqual(result["offline_network_databases"]["status"], "error"); self.assertNotIn("203.0.113.1", json.dumps(result))
 

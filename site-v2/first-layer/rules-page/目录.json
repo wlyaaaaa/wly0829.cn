@@ -1,0 +1,123 @@
+{
+  "AGENTS.md": {"toc": [
+    {"label": "最要紧的几条", "heading": "最要紧的（到哪个项目都算数）", "level": 1},
+    {"label": "我是这样的人、要什么", "heading": "我是这样的人、要什么", "level": 1},
+    {"label": "说话", "heading": "说话", "level": 2},
+    {"label": "理解我", "heading": "理解我", "level": 2},
+    {"label": "做事", "heading": "做事", "level": 2},
+    {"label": "我的资料和电脑", "heading": "我的资料和电脑", "level": 2},
+    {"label": "被我纠正、质疑时", "heading": "被我纠正、质疑，或我说“以后……”时（L7、L30）", "level": 1},
+    {"label": "做这些事先看", "heading": "做这些事先看", "level": 1}
+  ]},
+  "agents.authorization.md": {"toc": [
+    {"label": "直接做的和要本人同意的", "heading": "直接做的和要本人同意的", "level": 1},
+    {"label": "长期授权", "heading": "长期授权", "level": 1},
+    {"label": "同意协议的执行办法", "heading": "同意协议的执行办法", "level": 2},
+    {"label": "主对话代为确认", "heading": "根会话代确认的执行办法", "level": 2},
+    {"label": "子代理和项目规则不扩大授权", "heading": "子代理和项目规则不扩大授权", "level": 1},
+    {"label": "无限制授权", "heading": "无限制授权", "level": 1},
+    {"label": "受信任的 AI", "heading": "受信任的 AI", "level": 1}
+  ]},
+  "agents.protected-actions.md": {"toc": [
+    {"label": "重大的事", "heading": "重大的事", "level": 1},
+    {"label": "重大动作前的把关", "heading": "重大动作前的把关", "level": 1},
+    {"label": "GitHub 重大动作", "heading": "GitHub 重大动作", "level": 1},
+    {"label": "本人验证方式", "heading": "本人验证方式", "level": 1},
+    {"label": "各产品各管各的", "heading": "各产品各管各的", "level": 1}
+  ]},
+  "agents.privacy-data.md": {"toc": [
+    {"label": "个人资料的锁和解锁", "heading": "个人资料的锁和解锁", "level": 1},
+    {"label": "可信位置和原样保存", "heading": "可信位置和原样保存", "level": 1},
+    {"label": "公开个人数据分级表", "heading": "公开个人数据分级表", "level": 1},
+    {"label": "私人仓库收口", "heading": "私人仓库收口", "level": 1},
+    {"label": "备份跟着原件走", "heading": "备份跟着原件走", "level": 1}
+  ]},
+  "agents.context-sources.md": {"toc": [
+    {"label": "事实找谁", "heading": "事实找谁", "level": 1},
+    {"label": "冻结的项目", "heading": "冻结的项目", "level": 1},
+    {"label": "日用、偶用、存档三档", "heading": "三档维护", "level": 1},
+    {"label": "长任务接续", "heading": "长任务接续", "level": 1},
+    {"label": "先读哪份文件", "heading": "碰到项目和压缩后先读哪份", "level": 2},
+    {"label": "上下文压缩后的复核", "heading": "压缩后的后台复核", "level": 2},
+    {"label": "一样东西只存一处", "heading": "一样东西只存一处", "level": 2},
+    {"label": "写之前先查", "heading": "写之前先查", "level": 2},
+    {"label": "经验和规矩记到哪", "heading": "共享经验的落点", "level": 2}
+  ]},
+  "agents.execution-coordination.md": {"toc": [
+    {"label": "分工和选型号的规矩", "heading": "本人定的分工和型号规矩（原约法 L22、L23）", "level": 1},
+    {"label": "派子代理的原则", "heading": "派子代理的原则", "level": 1},
+    {"label": "发现项目整体有毛病", "heading": "发现项目整体有毛病", "level": 1},
+    {"label": "派活松紧怎么定", "heading": "派活松紧怎么定", "level": 1},
+    {"label": "改动与花费成比例", "heading": "改动与花费成比例", "level": 1},
+    {"label": "卡住了怎么办", "heading": "卡住了怎么办", "level": 1},
+    {"label": "做错了怎么办", "heading": "做错了怎么办", "level": 1},
+    {"label": "Claude 做不了的交 Codex", "heading": "Claude 受限的事项交给 Codex", "level": 1},
+    {"label": "派子代理和接着原任务", "heading": "原生派发与原线程接续", "level": 1},
+    {"label": "多个任务同时改东西", "heading": "多个任务同时改东西", "level": 1}
+  ]},
+  "agents.engineering-delivery.md": {"toc": [
+    {"label": "目标优先于实现", "heading": "目标优先于实现", "level": 1},
+    {"label": "本人的话怎么分类", "heading": "本人的话怎么分类、怎么对待；AI 写的稿子可以改", "level": 1},
+    {"label": "怎样才算禁令", "heading": "禁令两条件，两条同时满足才算；拿不准就不判禁令：", "level": 2},
+    {"label": "依赖出问题要修好", "heading": "依赖出问题要修好", "level": 1},
+    {"label": "验证", "heading": "验证", "level": 1},
+    {"label": "仓库和过程材料", "heading": "仓库和过程材料", "level": 1},
+    {"label": "下载、临时文件和清理", "heading": "下载、临时文件和清理", "level": 1},
+    {"label": "Git 收尾", "heading": "Git 收尾", "level": 1},
+    {"label": "日常技术默认", "heading": "日常技术默认", "level": 1}
+  ]},
+  "agents.capabilities-runtime.md": {"toc": [
+    {"label": "选能力", "heading": "选能力", "level": 1},
+    {"label": "登录是否影响判断", "heading": "登录是否影响判断", "level": 2},
+    {"label": "桌面应用的注册表视图", "heading": "桌面应用的注册表视图", "level": 1},
+    {"label": "常用入口", "heading": "常用入口", "level": 1},
+    {"label": "云端素材通道", "heading": "云端素材通道", "level": 1},
+    {"label": "浏览器", "heading": "浏览器", "level": 1},
+    {"label": "汇报、网站和自动运行", "heading": "汇报、网站和自动运行的东西", "level": 1},
+    {"label": "软件更新和兼容", "heading": "软件更新和兼容", "level": 1},
+    {"label": "安装位置、配置和约定", "heading": "安装位置、配置和本机约定", "level": 1}
+  ]},
+  "agents.rule-release.md": {"toc": [
+    {"label": "哪版规则在生效", "heading": "什么算活动规则", "level": 1},
+    {"label": "读规则", "heading": "读规则", "level": 1},
+    {"label": "发布和回退", "heading": "发布和回退", "level": 1},
+    {"label": "验证", "heading": "验证", "level": 1}
+  ]},
+  "agents.claude-adapter.md": {"toc": [
+    {"label": "身份", "heading": "身份", "level": 1},
+    {"label": "思考档位", "heading": "思考档位", "level": 1},
+    {"label": "派子代理的不同处", "heading": "派子代理：Claude 的不同处", "level": 1},
+    {"label": "派 GPT", "heading": "派 GPT", "level": 2},
+    {"label": "宿主接线", "heading": "宿主接线", "level": 1},
+    {"label": "Hook 和个人资料状态", "heading": "Hook 和个人资料状态", "level": 1},
+    {"label": "无限制授权", "heading": "无限制授权", "level": 1},
+    {"label": "受信任 AI 的其他能力", "heading": "受信任 AI 的其他能力", "level": 1},
+    {"label": "官方升级", "heading": "官方升级", "level": 1}
+  ]},
+  "agents.codex-adapter.md": {"toc": [
+    {"label": "入口和新消息", "heading": "入口和新消息", "level": 1},
+    {"label": "主持设计时请本人定", "heading": "Codex 主持设计时怎样请本人定", "level": 1},
+    {"label": "读取聊天结果", "heading": "读取聊天结果", "level": 1},
+    {"label": "自动任务和收尾", "heading": "自动任务和收尾", "level": 1},
+    {"label": "无限制授权", "heading": "无限制授权", "level": 1},
+    {"label": "派子代理的不同处", "heading": "派子代理：Codex 的不同处", "level": 1},
+    {"label": "用共用包装器派发", "heading": "经共用包装器派发", "level": 2},
+    {"label": "新消息里的状态", "heading": "新消息里的状态", "level": 1},
+    {"label": "官方升级", "heading": "官方升级", "level": 1}
+  ]},
+  "agents.antigravity-adapter.md": {"toc": [
+    {"label": "入口和规则加载", "heading": "入口和规则加载", "level": 1},
+    {"label": "身份", "heading": "身份", "level": 1},
+    {"label": "思考档位和原生子代理", "heading": "思考档位和原生子代理", "level": 1},
+    {"label": "派别家", "heading": "派别家（共用包装器）", "level": 1},
+    {"label": "钩子", "heading": "钩子", "level": 1},
+    {"label": "浏览器", "heading": "浏览器", "level": 1},
+    {"label": "生图", "heading": "生图", "level": 1},
+    {"label": "临时目录", "heading": "临时目录", "level": 1},
+    {"label": "技能、MCP 和记忆", "heading": "技能、MCP 和记忆", "level": 1},
+    {"label": "提问、收尾和另开对话", "heading": "提问、收尾和另开对话", "level": 1},
+    {"label": "额度和 AI 点数", "heading": "额度和 AI 点数", "level": 1},
+    {"label": "官方升级", "heading": "官方升级", "level": 1},
+    {"label": "缺口", "heading": "缺口", "level": 1}
+  ]}
+}

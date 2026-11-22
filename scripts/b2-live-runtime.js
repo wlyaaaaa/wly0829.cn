@@ -223,7 +223,7 @@ function taskGroupName(id){
 function inventoryRows(){
  const groups=list('backup_inventory');if(!groups)return [{text:'备份副本证据读不到'}];
  const protection={verified_copy:'副本已核实',unverified_copy:'副本还未核实',no_copy:'没有副本',unknown:'副本证据读不到',unavailable:'副本证据读不到',original:'原件'};
- const freshness={within_policy:'在登记期限内',overdue:'已超期',stale:'记录已过期',unknown:'新旧读不到',unavailable:'新旧读不到'};
+ const freshness={within_policy:'在登记期限内',overdue:'已超期',stale:'记录已过期',unknown:'新旧读不到',unavailable:'新旧读不到',not_applicable:'旧副本，不再每日更新'};
  return groups.map(group=>({key:'inventory:'+group.id,text:group.name||'备份位置',children:(group.items||[]).map(x=>cpRaw(x,cpName(x,'备份副本'),cpFacts([['位置',group.name],['保护情况',x.role==='original'?'原件':protection[x.protection]||'副本状态读不到'],['新旧',x.role==='original'?'此项是原件登记':freshness[x.freshness]||'新旧读不到'],['数量',Number.isInteger(x.count)?x.count+' 项':'数量读不到'],['容量',capacity(x.bytes)],['最近成功',time(timestamp(x.last_success_at))],['下次运行',time(timestamp(x.next_run_at))]])))}));
 }
 function cloudRows(){
@@ -610,7 +610,7 @@ function cpInsightRows(){
  const trafficAt=stamp(traffic.observed_at),trafficDate=Number.isFinite(trafficAt)?dateKey(trafficAt):{},trafficFresh=fresh(traffic.observed_at,600)&&trafficDate.year===current.year&&trafficDate.month===current.month&&trafficDate.day===current.day;
  rows.computer.push({text:'本机代理流量：'+(trafficFresh?'今天 ':'记录当日 ')+amount(total(proxy))+'；近60分钟 '+amount(total(hour)),state:trafficFresh&&total(proxy)!==null&&total(hour)!==null?'ok':'unknown',
   details:[when(traffic.observed_at),'采样状态：'+(traffic.mihomo_status||'尚未读到'),...[[proxy,'今天'],[hour,'近60分钟']].flatMap(([g,label])=>Array.isArray(g?.top)?g.top.slice(0,5).map(p=>label+'程序：'+(p.name||p.process||'程序未登记')+' '+amount(total(p))):[label+'程序分组未读到']),
-   '只计本机经过Mihomo的代理流量；直连、Windows记账和套餐消耗分别保留，不相加。']});
+   '只计本机经过Mihomo的代理流量；直连、Windows记账分别保留，不相加。']});
  const bill=status?.aliyun_billing||{},locked=bill.state==='waiting_for_unlock',billFresh=fresh(bill.observed_at,bill.max_age_seconds||3900)&&bill.state==='ok';
  const spendLabel=bill.billing_cycle===month?'本月已花':bill.billing_cycle?bill.billing_cycle+' 已花':'费用月份未登记，已花';
  const errors={api_timeout:'本次取数超时',permission_denied:'本次取数未获许可',api_failed:'本次取数失败',billing_incomplete:'本次账单未取完整'};
@@ -735,7 +735,7 @@ function renderCockpit(){
  const closed=key=>authorizationFresh(status?.[key])&&['locked','inactive','revoked','expired'].includes(status?.[key]?.state);const labels=[['个人资料',closed('personal_data')?'正常锁着':compactGrant('personal_data'),grantState(status?.personal_data),'personal_data'],['无限制授权',closed('unrestricted')?'正常关着':compactGrant('unrestricted'),grantState(status?.unrestricted),'unrestricted'],['Windows',windowsFresh()?({'locked':'已锁屏','unlocked':'未锁屏','no_session':'没人登录'})[status?.host?.screen_state]||'未知':'读不到',windowsFresh()?'ok':'unknown'],['电脑',online()?'在线':'读不到',online()?'ok':'unknown']];
  syncChildren(ui.grants,labels.map(([label,text,state,key])=>{const item=cpNode('div','cp-authority');item.dataset.state=state;item.append(cpNode('span',null,label),cpNode('strong',null,text));if(label==='电脑')item.append(cpNode('small',null,(online()?'':'当时：')+cpUptime()));if(key&&authorizationFresh(status?.[key])&&remainingMinutes(status[key],clock())>0)item.append(cpNode('small',null,'到 '+time(status[key].expires_at_unix).replace('今天 ','')));return item;}));
  const byId=new Map((cockpit?.schema==='pcconfig.cockpit.v1'?cockpit.cards||[]:[]).map(card=>[card.id,card])),insight=cpInsightRows();const gaps=(ready?cockpit.source_gaps||[]:[]).filter(gap=>clock()-timestamp(gap.since)>600);
- for(const [section,ids,fallbacks]of [[ui.computer,['computer_health','disk_space','traffic'],['电脑读数当前未知','磁盘剩余当前未知','套餐流量尚未读到']],[ui.remote,['remote'],['远程状态当前未知']],[ui.cloud,['backups','drive_upload'],['备份当前情况未知','Google 云盘：现在有没有在上传还不知道。']]]){
+ for(const [section,ids,fallbacks]of [[ui.computer,['computer_health','disk_space','proxy_traffic'],['电脑读数当前未知','磁盘剩余当前未知','本机代理流量尚未读到']],[ui.remote,['remote'],['远程状态当前未知']],[ui.cloud,['backups','drive_upload'],['备份当前情况未知','Google 云盘：现在有没有在上传还不知道。']]]){
   const nodes=section===ui.computer?[cpInsightNode(insight.computer[0])]:[];for(let i=0;i<ids.length;i++){if(section===ui.computer&&ids[i]==='computer_health')continue;const row=cpDisplay(byId.get(ids[i]),fallbacks[i]);if(row)nodes.push(row);}if(section===ui.computer)nodes.push(...insight.computer.slice(1).map(cpInsightNode));if(section===ui.cloud)nodes.push(...insight.cloud.map(cpInsightNode));
   for(const gap of gaps)if((gap.card_ids||[]).some(id=>ids.includes(id))&&!gap.source_id?.startsWith('backup_inventory.')){const item=typed?.find(row=>row.source_id===gap.source_id&&row.kind==='source_gap');if(item)nodes.push(cpItemNode(item));}syncChildren(section.body,nodes);
  }

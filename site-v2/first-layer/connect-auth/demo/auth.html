@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>授权与状态 · 试看</title>
+<!-- 页眉用的是定稿的原件，一个字不改 -->
+<link rel="stylesheet" href="../../header/demo/topbar.css">
+<link rel="stylesheet" href="glass.css">
+<link rel="stylesheet" href="../../trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/motion/motion.css">
+<script src="/motion/motion.js"></script>
+</head>
+<body class="page page--auth">
+
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float">
+  <div class="topbar__glass"></div>
+
+  <nav class="topbar__group" aria-label="主导航">
+    <a class="pill" href="#">实况</a>
+    <a class="pill" href="#">原理</a>
+    <a class="pill" href="../../rules-page/demo/index.html">规则</a>
+    <a class="pill" href="../../list-pages/demo/skills.html">技能</a>
+    <a class="pill" href="../../list-pages/demo/index.html">项目</a>
+  </nav>
+
+  <a class="brand" href="#" aria-label="Inside a Personal Agent，回首页">
+    <span class="brand__lamp"></span>
+    <span class="brand__word">Inside a Personal Agent</span>
+  </a>
+
+  <div class="topbar__group topbar__group--right">
+    <a class="pill" href="connect.html">连接电脑</a>
+    <a class="pill" href="auth.html" aria-current="page">授权与状态</a>
+  </div>
+</header>
+
+<main class="stage" id="stage">
+  <!-- 玻璃后面的光场 -->
+  <div class="field" aria-hidden="true"></div>
+
+  <section class="cells" aria-label="授权与状态">
+
+    <article class="cell" id="cell-pd" data-key="pd" style="--d:0" data-mo-rise>
+      <div class="cell__glow" aria-hidden="true"></div>
+      <div class="cell__glass glass">
+        <span class="lamp" aria-hidden="true"></span>
+        <h2 class="cell__name">个人资料</h2>
+        <p class="cell__state" aria-live="polite"></p>
+        <div class="cell__acts"></div>
+      </div>
+    </article>
+
+    <article class="cell" id="cell-ur" data-key="ur" style="--d:1" data-mo-rise>
+      <div class="cell__glow" aria-hidden="true"></div>
+      <div class="cell__glass glass">
+        <span class="lamp" aria-hidden="true"></span>
+        <h2 class="cell__name">无限制授权</h2>
+        <p class="cell__state" aria-live="polite"></p>
+        <div class="cell__acts"></div>
+      </div>
+    </article>
+
+    <article class="cell" id="cell-win" data-key="win" style="--d:2" data-mo-rise>
+      <div class="cell__glow" aria-hidden="true"></div>
+      <div class="cell__glass glass">
+        <span class="lamp" aria-hidden="true"></span>
+        <h2 class="cell__name">Windows</h2>
+        <p class="cell__state" aria-live="polite"></p>
+        <div class="cell__acts"></div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- 办的时候：三块下面横着展开的一整条 -->
+  <div class="dealbar" id="dealbar">
+    <div class="dealbar__inner">
+      <div class="dealbar__wrap">
+        <span class="dealbar__notch" aria-hidden="true"></span>
+        <div class="dealbar__glass glass">
+          <div class="dealbar__deals"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="links" aria-label="介绍" style="--d:3" data-mo-rise>
+    <a class="link" href="/password-center/限时通行证.html#限时通行证-05" data-mo-press>
+      <img class="link__glow" src="img/pass.webp" alt="" aria-hidden="true" style="--gx:8%">
+      <span class="link__glass glass">
+        <span class="link__pic" style="--x0:.014; --x1:.414; --yc:.45">
+          <img src="img/pass.webp" width="2172" height="724" alt="">
+        </span>
+        <span class="link__text">
+          <span class="link__kicker">密码中心</span>
+          <span class="link__title">限时通行证</span>
+        </span>
+        <svg class="link__arrow" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 14 14 4M6.2 4H14v7.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </a>
+  </nav>
+</main>
+
+<!-- 办的时候那一条里排成一行的东西：多久、两项一起办、（结果那一句）、6 位码、验证 -->
+<template id="deal-tpl">
+  <div class="deal">
+    <div class="hours" role="radiogroup">
+      <button class="chip" type="button" role="radio" data-h="0.5" data-mo-press>0.5 小时</button>
+      <button class="chip" type="button" role="radio" data-h="2" data-mo-press>2 小时</button>
+      <button class="chip" type="button" role="radio" data-h="8" data-mo-press>8 小时</button>
+      <button class="chip" type="button" role="radio" data-h="24" data-mo-press>24 小时</button>
+      <label class="chip chip--own" role="radio" data-mo-press><input type="text" inputmode="decimal" maxlength="4" autocomplete="off" aria-label="自己填几小时，0.5 到 72">小时</label>
+    </div>
+    <label class="both"><input type="checkbox">两项一起办</label>
+    <span class="go__msg" aria-live="polite"></span>
+    <div class="code" role="group" aria-label="6 位码">
+      <input inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="第 1 位">
+      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 2 位">
+      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 3 位">
+      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 4 位">
+      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 5 位">
+      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 6 位">
+    </div>
+    <div class="go">
+      <button class="btn btn--ink go__btn" type="button" disabled data-mo-press>验证</button>
+    </div>
+  </div>
+</template>
+
+<script src="../../header/demo/topbar.js"></script>
+<script src="../../trust-modal/trust-modal.js"></script>
+<script src="/live/_lib/live-view-switch.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>

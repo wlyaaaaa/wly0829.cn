@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=1440"><title>AI 对话 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/connect-auth/glass.css"><link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css"><link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script>
+<link rel="stylesheet" href="/live/_lib/live-viz.css"><link rel="stylesheet" href="/live/_lib/live-board.css"><link rel="stylesheet" href="/live/chats/stats.css">
+<style>.helper{flex-wrap:wrap}.helper__who,.helper__at,[data-steady]{white-space:nowrap}.row__acts{margin-left:auto}.chat-ended-label{margin:12px 0 4px;list-style:none}.chat-ended-label h3{margin:0;font-size:14px;color:var(--ink-soft)}#recent:not(:has(> .lb-fold.is-open)) #recent-list > .chat-ended-extra{display:none}#recent-list > .chat-ended-extra{transition:opacity calc(200ms * var(--sp)) ease calc(120ms * var(--sp))}@starting-style{#recent-list > .chat-ended-extra{opacity:0}}</style>
+<style>
+/* 下半截：分组看板（_lib/live-board.*），比上半截宽，左右伸到和自动任务页一样宽 */
+.page--chats .chat-lower { --wide: min(1856px, calc(100vw - 64px)); margin: 34px calc((var(--col) - var(--wide)) / 2) 0; }
+.page--chats .chat-lower > .part { margin: 0 0 12px 2px; }
+.chat-board .lb-card__head { min-height: 80px; padding-block: 10px; }
+.chat-board .lb-card--items .lb-rows { gap: 7px; }
+.chat-board .lb-card--items .lb-rows > .lb-item { padding-block: 8px; }
+#chat-board .chat-context { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 10px; }
+#chat-board .chat-context [data-steady] { white-space: normal; }
+.chat-board .lb-item :is(.row__line, .chat-think, .helpers) { margin-top: 3px; }
+.chat-board .helper { line-height: 19px; }
+.page--chats #chat-recent-board { margin-top: 32px; }
+.page--chats .lb-card[data-key="waiting"]:not(.lb-card--quiet) { border: 1px solid #00A650; }
+#chat-board .lb-card--quiet .lb-card__head { min-height: 0; padding: 10px 16px; grid-template-columns: 34px minmax(0, 1fr); border-radius: inherit; }
+.page--chats .lb-card--quiet .lb-card__badge { width: 34px; height: 34px; }
+.page--chats .lb-card--quiet :is(.lb-card__art, .lb-card__sub) { display: none; }
+/* 每栏卡头的插画（画风变量：对清以后换图只改这里；暂时借自动任务页的画） */
+.page--chats .lb-card[data-art="running"] { --lb-art: url("/live/img/chats-col-running.webp"); }
+.page--chats .lb-card[data-art="waiting"] { --lb-art: url("/live/img/chats-col-waiting.webp"); }
+.page--chats .lb-card[data-art="queued"] { --lb-art: url("/live/img/chats-col-queued.webp"); }
+.page--chats .lb-card[data-art="done"] { --lb-art: url("/live/img/chats-col-done.webp"); }
+/* 一小张对话卡：名字后面跟“第几步”“帮手几个”两颗小药丸，下面型号、步骤条、最新进展、思考摘要、帮手 */
+.page--chats .lb-item .row__main { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+.page--chats .lb-item .row__title { font-size: 15px; line-height: 22px; }
+.page--chats .chat-pill { display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: 999px; background: rgb(255 255 255 / .7); box-shadow: inset 0 0 0 1px rgb(20 20 19 / .07); font-size: 12px; font-weight: 400; letter-spacing: .03em; color: var(--muted); white-space: nowrap; }
+.page--chats .chat-steps { display: flex; gap: 3px; height: 5px; margin: 8px 0 2px; max-width: 260px; }
+.page--chats .chat-steps > i { flex: 1; border-radius: 3px; background: rgb(20 20 19 / .08); }
+.page--chats .chat-steps > i:is([data-status="completed"],[data-status="done"]) { background: rgb(var(--glow-green) / .75); }
+.page--chats .chat-steps > i[data-status="in_progress"], .page--chats .chat-steps > i[data-status="running"] { background: #9db8e8; }
+.page--chats .chat-steps--fill { display: block; border-radius: 3px; background: rgb(20 20 19 / .08); overflow: hidden; }
+.page--chats .chat-steps--fill > i { display: block; height: 100%; border-radius: 3px; background: #7cc49a; }
+.page--chats .lb-item > .row__text > .row__line { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.page--chats .chat-pill--link { text-decoration: underline; text-underline-offset: 2px; }
+.page--chats .chat-think { margin: 4px 0 0; }
+.page--chats .chat-think > summary { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; cursor: pointer; list-style: none; }
+.page--chats .chat-think > summary::-webkit-details-marker { display: none; }
+.page--chats .chat-think[open] > summary { -webkit-line-clamp: unset; display: block; }
+.page--chats .chat-think--excerpt > summary, .page--chats .chat-think--excerpt[open] > summary { display: flex; gap: 8px; align-items: baseline; }
+.page--chats .chat-think__preview { min-width: 0; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.page--chats .chat-think__open, .page--chats .chat-think__shut { flex: none; color: var(--ink-soft); }
+.page--chats .chat-think__shut, .page--chats .chat-think[open] .chat-think__open { display: none; }
+.page--chats .chat-think[open] .chat-think__shut { display: inline; }
+.page--chats .chat-think > p { margin: 4px 0 0; white-space: pre-wrap; }
+.page--chats .lb-item .helpers { margin-top: 8px; }
+.page--chats .lb-card__note { margin: 0 22px 14px; }
+</style>
+<link rel="stylesheet" href="/live/chats/draw10.css">
+</head>
+<body class="page page--live page--l2 page--chats">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+<div class="field" aria-hidden="true"></div><a class="back" href="/live/#chats" data-back data-mo-rise>实况</a>
+<ul class="notices" id="notices" aria-live="polite"></ul>
+<article class="card card--hero" id="hero" data-pic="right" data-mo-rise>
+<div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="/live/img/chats.webp" alt="" aria-hidden="true">
+<div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/chats.webp" width="1000" height="1000" alt=""></span>
+<div class="card__body"><p class="card__head" id="head"><span class="lamp" aria-hidden="true"></span><span class="head__lead">AI 对话</span></p><p class="hero__note row__sub" id="chat-note">正在读</p>
+<div id="chat-sources"></div>
+<div class="hero__links"><a class="more more--link" href="#active">看各列对话 ›</a><a class="more more--link" href="#recent">72 小时内已结束的 ›</a></div></div></div>
+</article>
+<section class="card chat-stats" aria-label="对话统计"><div class="card__glass glass"><div class="card__body">
+<div id="chat-counts" class="chat-counts"></div>
+<div class="chat-plots"><div><p class="part">近 7 天 · 同时有几个 AI 在干活（含帮手）</p><div id="chat-concurrent"></div><div id="chat-current-reading" class="row__sub" hidden></div><p class="chat-end-date" id="chat-end-date"></p></div><div><p class="part">每天开了几个对话</p><div id="chat-days"></div></div></div>
+</div></div></section>
+<section class="chat-lower" data-mo-rise id="active"><p class="part l2-part" hidden>全部在干的、等着的</p><div class="chat-board" id="chat-board"></div></section>
+<div class="chat-board" id="chat-recent-board"></div>
+</main>
+<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-header.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-chart.js"></script><script src="/live/_lib/live-viz.js"></script><script src="/live/_lib/live-board.js"></script><script src="/live/chats/draw10.js"></script><script src="/live/chats/page.js"></script>
+</body></html>

@@ -1,0 +1,196 @@
+/* 电脑页的读数、展开和缺测：沿用站内组件，只修本页拥挤处。 */
+/* 收起时让字随顶栏淡去，底色随顶栏上移，滚过的正文不会透出来。 */
+.page--computer .topbar .topbar__glass { background-color: var(--paper); }
+.page--computer .topbar[data-hidden="true"] { opacity: 1; }
+.page--computer .topbar :is(.topbar__group, .brand) { transition: opacity .28s ease; }
+.page--computer .topbar[data-hidden="true"] :is(.topbar__group, .brand) { opacity: 0; transition: opacity .7s ease .12s; }
+.mo-vt-nav .page--computer .topbar[data-hidden="true"] :is(.topbar__group, .brand) { opacity: 1; transition: none; }
+
+.page--computer .grp__fk, .page--computer .vz-weave__name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.page--computer .grp__fk { min-height: 18px; line-height: 20px; letter-spacing: 0; }
+.page--computer .grp__fv, .page--computer .vz-chip-cell__v { word-break: keep-all; font-variant-numeric: tabular-nums; }
+.page--computer .vz-chip-cell__v { display: block; min-width: 0; font-size: 16px; line-height: 26px; white-space: pre-line; overflow-wrap: anywhere; }
+.page--computer .vz-chip-cell__v .vz-reading { grid-template-rows: minmax(26px, auto) auto !important; }
+.page--computer .vz-chip-cell__v .vz-reading__caption { white-space: normal !important; overflow-wrap: anywhere; }
+.page--computer .vz-chip-cell__v .vz-reading__value { white-space: normal !important; word-break: normal; overflow-wrap: anywhere; }
+.page--computer .vz-chip-cell__k { overflow: visible; white-space: normal; overflow-wrap: anywhere; }
+.page--computer .vz-chip-cell { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) 30px; }
+.page--computer .vz-chip-cell:disabled { cursor: default; translate: none; }
+.page--computer .vz-chip-cell:disabled .vz-chip-cell__spark { display: none; }
+.page--computer .vz-chip-cell__spark .chart__svg { max-width: 100%; }
+.page--computer :is(.chart__vals, .chart__val) { min-width: 0; max-width: 100%; }
+.page--computer .chart__val { flex-wrap: wrap; white-space: normal; }
+.page--computer .chart__val b:has(.vz-reading) { min-width: 0; max-width: 100%; }
+.page--computer .vz-reading { display: block; min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+.page--computer .grp__fig:has(.vz-reading__caption) { grid-template-rows: 18px auto 30px; }
+.page--computer .vz-chip-cell:has(.vz-none) { grid-template-rows: auto; min-height: 0; padding: 10px 12px; background: none; border-color: transparent; box-shadow: none; }
+.page--computer .vz-chip-cell:has(.vz-none) .vz-chip-cell__spark { display: none; }
+.page--computer .grp__lead:has(.grp__hero.is-empty) .grp__say { display: none; }
+.page--computer .grp__hero.is-empty .chart__plot { height: 32px; min-height: 32px; margin: 0; background: none; }
+.page--computer .grp__hero.is-empty .chart__wait { justify-content: start; padding: 0; }
+.page--computer .grp__hero.is-empty .chart__vals { display: none; }
+/* Keep the long-term heading and the full date, sample count and duration legible. */
+.page--computer .grp[data-key="long"] .chart__name { flex-shrink: 0; }
+.page--computer .grp[data-key="long"] .vz-reading { grid-template-rows: minmax(26px, auto) auto !important; }
+.page--computer .grp[data-key="long"] .vz-reading__caption {
+  overflow: visible !important;
+  white-space: normal !important;
+  word-break: normal;
+}
+.page--computer .grp__main:has(.grp__hero.is-empty) { align-items: start; }
+.page--computer .grp[data-key="cpu"] .grp__lead:has(.grp__hero.chart:not(.is-empty)) {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+.page--computer .grp[data-key="cpu"] .grp__lamp:has(.lamp[data-tone="gray"]) { visibility: hidden; }
+.page--computer .grp[data-key="cpu"] .grp__hero.chart:not(.is-empty) { display: flex; flex: 1; flex-direction: column; }
+.page--computer .grp[data-key="cpu"] .grp__hero:not(.is-empty) .chart__plot { flex: 1; min-height: var(--chart-h); }
+/* 三列等宽对齐：最后一行不满三条时也按列排，不被拉宽。 */
+.page--computer .stability-events { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 24px; }
+.page--computer .stability-events .row { min-width: 0; padding: 12px 0; border: 0; border-top: 1px solid var(--hair); }
+.page--computer .stability-times { color: var(--muted); font-weight: 400; white-space: nowrap; }
+.page--computer .stability-less, .page--computer .vz-more[open] .stability-more { display: none; }
+.page--computer .vz-more[open] .stability-less { display: inline; }
+.computer-responsiveness { margin-bottom: 20px; }
+.computer-responsiveness .card__glass { padding: 22px 32px; }
+.computer-responsiveness dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 0; }
+.computer-responsiveness dd { margin: 4px 0 0; overflow-wrap: anywhere; }
+.computer-responsiveness .l2-part { margin: 0; }
+.computer-responsiveness__detail { margin: 16px 0 8px; }
+.computer-responsiveness .row__sub { margin-bottom: 0; }
+.page--computer .grp[data-key="machine"] .rows { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 28px; }
+.page--computer .grp[data-key="machine"] :is(.row, .row__text) { min-width: 0; overflow-wrap: anywhere; }
+.page--computer .grp[data-key="machine"] .row__main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 5px; }
+.page--computer .grp[data-key="machine"] .row__meta { margin: 0; white-space: normal; }
+.page--computer [data-host-readings] .row { --gut: 0px; }
+.page--computer [data-draw10-network] .vz-more > .more { margin-left: 0; padding-inline-start: 0; translate: none; }
+.page--computer .computer-display { display: block; }
+.page--computer .display-recovery { margin-top: 3px; font-size: 13.5px; line-height: 20px; color: var(--muted); }
+.page--computer .display-recovery summary { font: inherit; }
+.page--computer .vz-chip-cell[data-key="threads"] .vz-reading__value { font-size: 22px; font-weight: 600; }
+.page--computer .computer-logins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 28px; margin: 0; padding: 0; list-style: none; }
+.page--computer .computer-logins > li { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+.page--computer #weave { --wn: 230px; --wv: 156px; }
+.page--computer #weave .vz-weave__hit { min-height: 42px; height: auto; }
+.page--computer #weave .vz-weave__name { white-space: normal; overflow-wrap: anywhere; line-height: 19px; }
+.page--computer .grp[data-key="apps"] .vz-rank__name { display: block; white-space: normal; }
+.page--computer .grp[data-key="apps"] .vz-rank__name small { display: block; margin: 2px 0 0; }
+.page--computer .grp__status, .page--computer .grp__said { word-break: keep-all; }
+.page--computer .grp__chapter { padding-bottom: 24px; }
+
+.page--computer .computer-chart-end { margin: 8px 0; color: var(--muted); font-size: 14px; line-height: 24px; }
+.page--computer .computer-chart-end[hidden] { display: none; }
+.page--computer [data-traffic-separate] { margin: 0 22px 8px 64px; color: var(--ink-soft); font-size: 14px; line-height: 24px; }
+.page--computer .has-no-charts .grp__main, .page--computer .has-no-charts .grp__spark, .page--computer .grp[data-key="cpu"].has-no-charts .grp__extra { display: none; }
+.page--computer #weave-card.has-no-charts #weave { display: none; }
+.page--computer :is(#weave > .fog, .grp__ghost) .fog__chart { min-height: 112px; }
+.page--computer .grp[data-key="cpu"] .grp__extra:has([data-x="tl"] > .fog) { min-height: 174px; }
+.page--computer #weave-card.has-no-charts .card__body { min-height: 0; }
+.page--computer .grp.has-no-charts.is-gone .grp__chapter { display: block; }
+
+.page--computer .card--machine .head__lead { word-break: keep-all; }
+.page--computer .row__meta { overflow-wrap: anywhere; min-width: 0; }
+.live-offline .page--computer .mach__pt { background: transparent; box-shadow: none; border: 1px solid var(--muted); }
+.live-offline .page--computer .mach__tag { animation: none; box-shadow: inset 0 0 0 1px rgb(20 20 19 / .12); background: rgb(251 250 247 / .9); }
+.live-offline .page--computer .mach__tag.is-none { display: none; }
+
+.page--computer .mach { inset: 0; height: 100%; aspect-ratio: auto; translate: none; }
+.page--computer .mach > img { object-fit: cover; object-position: center; }
+
+.page--computer .grp-trio[hidden], .page--computer .vz-exits[hidden] { display: none; }
+
+.page--computer .grp.is-unread .grp__head, .page--computer .grp.is-unread .grp__fold { display: none; }
+.page--computer .grp.is-unread .card__body { padding: 18px 32px; }
+.page--computer .grp.is-unread [data-unread] { margin: 0; }
+.page--computer .card--machine.is-unread .mach { display: none; }
+.page--computer .card--machine.is-unread .card__glass, .page--computer .card--machine.is-unread .card__body { min-height: 0; }
+.page--computer .card--machine.is-unread .card__body { width: auto; padding: 22px 32px; }
+.page--computer .weave-card__head { align-items: center; }
+.page--computer .weave-card__head .seg { margin-left: auto; }
+.page--computer .weave-card__head .seg [data-range] { transition-property: color; }
+
+/* 清单有自己的浅色栏，右侧插画保留整幅可读的画面。 */
+.page--computer .card--machine .card__glass { display: grid; grid-template-columns: 1fr 1fr; }
+.page--computer .card--machine .card__body { grid-area: 1 / 1; width: auto; max-width: none; padding: 32px; background: rgb(250 249 244 / .96); }
+.page--computer .card--machine .mach { position: relative; grid-area: 1 / 2; min-height: 450px; }
+.page--computer .hero__devs, .page--computer .hero__devs.has-hardware { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); max-width: none; margin-left: 0; gap: 12px 20px; }
+.page--computer .hero__devs .dev-spec { min-width: 0; padding: 10px 0; border-top: 1px solid var(--hair); }
+.page--computer .hero__warns, .page--computer .hero__count, .page--computer .hero__note { margin-left: 0; }
+.computer-impact > small { display: block; }
+.page--computer .hero__warns a, .page--computer .hero__devs .dev-pill { display: flex; gap: 8px; min-width: 0; min-height: 24px; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; font-size: 14px; line-height: 24px; }
+.page--computer .computer-hw-item, .page--computer .remote-link > a { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal; }
+.page--computer .hero__devs .row__sub { margin: 4px 0 0; font-size: 12px; line-height: 20px; }
+.desktop-config__summary { margin: 2px 0 4px; color: var(--muted); font-size: 12px; line-height: 19px; }
+.desktop-config__summary > div { display: grid; grid-template-columns: 43px minmax(0, 1fr); align-items: baseline; gap: 7px; }
+.desktop-config__summary dt { justify-self: start; padding: 0 5px; border-radius: 12px; background: rgb(20 20 19 / .08); font-size: 11px; line-height: 16px; }
+.desktop-config__summary dd, .desktop-config dl, .desktop-config dd { margin: 0; }
+.desktop-config__action { border: 0; padding: 0; background: none; color: #008342; font: 600 13px/24px var(--sans); cursor: pointer; scroll-margin-top: 85px; }
+.desktop-config__action:hover { text-decoration: underline; }
+.desktop-config__action > span:last-child { display: inline-block; margin-left: 6px; }
+.desktop-config__action[aria-expanded="false"] > span:nth-child(2), .desktop-config__action[aria-expanded="true"] > span:first-child { display: none; }
+.desktop-config__action[aria-expanded="true"] > span:last-child { rotate: 90deg; }
+.desktop-config { grid-column: 1 / -1; min-width: 0; padding: 20px 32px 30px; border-top: 1px solid var(--hair); background: rgb(250 249 244 / .96); scroll-margin-top: 85px; }
+.desktop-config__head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--hair); }
+.desktop-config__head h2 { display: flex; align-items: center; gap: 10px; margin: 0; font: 500 16px/1.4 var(--sans); scroll-margin-top: 85px; }
+.desktop-config__head h2 b { font-size: 24px; }
+.desktop-config__columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px; }
+.desktop-config__group { margin-top: 20px; }
+.desktop-config__group h3 { margin: 0 0 5px; padding-left: 9px; border-left: 4px solid #00A650; font: 700 17px/1.3 var(--sans); }
+.desktop-config__group dl > div { display: grid; grid-template-columns: 100px minmax(0, 1fr); gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--hair); font-size: 14px; line-height: 1.45; }
+.desktop-config__group dt { color: var(--muted); }
+.desktop-config__columns > :last-child > :last-child dl > div { grid-template-columns: 175px minmax(0, 1fr); }
+.page--computer .l2-nav a, .page--computer .l2-nav button { font-size: 14px; }
+.page--computer .grp__fig.is-bare .grp__fv { font-size: 21px; font-weight: 600; line-height: 30px; }
+.page--computer .stability-panel { margin: 0 0 20px; }
+.page--computer .stability-panel .grp__head { min-height: 66px; }
+.page--computer .stability-panel .grp__figs { display: none; }
+.page--computer .stability-panel .grp__title { grid-column: 2 / 4; }
+.page--computer #weave :is(.vz-weave__events, .vz-weave__over) { overflow: clip; }
+.page--computer #weave .vz-weave__when.is-low { bottom: 0; }
+.page--computer #weave-title { display: inline-grid; font-family: var(--sans); font-size: 23px; font-weight: 600; }
+.page--computer #weave-title span { grid-area: 1 / 1; font: inherit; color: inherit; }
+.page--computer #weave-title [aria-hidden="true"] { opacity: 0; pointer-events: none; }
+.page--computer .mach__tag:is([data-goto="memory"], [data-goto="network"]) { translate: -100% -50%; }
+.page--computer .mach__tag:is([data-goto="memory"], [data-goto="network"]):hover { translate: -100% calc(-50% - 2px); }
+.page--computer .grp[data-key="stutter"] .grp__figs, .page--computer .grp[data-key="apps"] .grp__figs { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.page--computer .grp[data-key="stutter"] .grp__fig, .page--computer .grp[data-key="apps"] .grp__fig { align-content:start; }
+.page--computer .grp[data-key="stutter"] .grp__fv, .page--computer .grp[data-key="apps"] .grp__fv { min-height:30px; line-height:30px; }
+.page--computer .grp[data-key="power"] .grp__fk { white-space:normal; overflow:visible; line-height:20px; }
+.page--computer .grp[data-key="power"] .grp__fig { grid-template-rows:40px 30px 30px; }
+.page--computer .stut-group { grid-column:1 / -1; min-width:0; }
+
+@media (min-width: 721px) {
+  .page--computer .grp[data-key="machine"] .rows > .row:nth-child(-n+2) { border-top: 0; padding-top: 2px; }
+}
+
+@media (max-width: 720px) {
+  .page--computer .chart__head:has(.vz-reading__caption) { display: block; }
+  .page--computer .chart__vals:has(.vz-reading) { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(135px,100%),1fr)); }
+  .page--computer .chart__val:has(.vz-reading) { flex-wrap: nowrap; }
+  .page--computer .grp[data-key="machine"] .rows, .page--computer .computer-logins { grid-template-columns: minmax(0, 1fr); }
+  .page--computer .grp[data-pic] .card__body { padding-inline: 0; }
+  .page--computer .grp .grp__chapter { padding-inline: 20px; }
+  .page--computer [data-traffic-separate] { margin-inline: 20px; }
+  .page--computer .grp__main { grid-template-columns: minmax(0, 1fr); }
+  .page--computer .exit-row { grid-template-columns: 12px minmax(0, 1fr) minmax(0, 1fr) !important; overflow-wrap: anywhere; }
+  .page--computer .exit-row > small { grid-column: 2 / -1; }
+  .page--computer #weave { --wg: 44px; --wn: 68px; --wv: 88px; --wgap: 6px; }
+  .page--computer #weave .vz-weave__v .vz-reading { grid-template-rows: 26px 34px !important; }
+  .page--computer #weave .vz-weave__v .vz-reading__caption { white-space: normal !important; }
+  .page--computer #weave .vz-weave__v time { display: block; }
+}
+/* 长期先看一张主图，其余读数排在图下。 */
+.page--computer [data-key="long"] .grp__main { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.page--computer [data-key="long"] .vz-chips { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.page--computer [data-key="long"] .vz-chip-cell:last-child { grid-column: auto; }
+.page--computer .chart__head:has(+ .grp__say) .chart__name::after { content: none; }
+.page--computer [data-key="long"] .vz-chip-cell { align-content: start; grid-template-rows: auto minmax(0,1fr) 30px; }
+.page--computer [data-key="long"] .vz-chip-cell__v .vz-reading__value { white-space: nowrap !important; }
+.page--computer [data-key="long"] .vz-chip-cell:is([data-key="seconds"], [data-key="samples"], [data-key="heat"]) .vz-chip-cell__v > span {
+  display: grid !important; grid-template-columns: 2.4em minmax(0,1fr); align-items: start;
+}
+.page--computer .computer-events__dot[data-count]::before {
+  content: attr(data-count); position: absolute; left: 13px; top: -4px; white-space: nowrap;
+  color: var(--ink-soft); font: 11px/14px var(--sans);
+}

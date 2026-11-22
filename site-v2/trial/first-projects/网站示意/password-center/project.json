@@ -1,0 +1,10 @@
+{
+  "title": "密码中心",
+  "theme": {"p": "#23452A", "soft": "#E5E5D9", "accent": "#B4AE80"},
+  "background": "assets/background.webp",
+  "projectNav": "project",
+  "skillNav": "local-secret-broker",
+  "buttonArt": {"看本项目实况": ["cover-live-v1.webp", "9rem"],"回〔密码中心〕项目页": ["button-01-01.compressed.webp", "9rem"], "去〔密码取用〕技能页": ["button-01-02.compressed.webp", "9rem"], "去〔文件上锁〕技能页": ["button-01-03.compressed.webp", "9rem"], "去〔四把钥匙〕": ["button-01-04.compressed.webp", "9rem"], "去〔限时通行证〕": ["button-01-05.compressed.webp", "9rem"], "去〔手机密码库〕": ["button-01-06.compressed.webp", "9rem"], "去〔密码存根〕": ["button-02-01.compressed.webp", "9rem"], "去〔备份与恢复〕": ["button-02-02.compressed.webp", "9rem"], "去〔AI 百工谱〕项目页": ["button-02-03.compressed.webp", "9rem"], "去〔电脑心电图〕项目页": ["button-02-04.compressed.webp", "9rem"], "去〔电脑大本营〕项目页": ["button-02-05.compressed.webp", "9rem"], "去〔加密保险箱〕项目页": ["button-02-06.compressed.webp", "9rem"]},
+  "detailArt": ["button-01-07.compressed.webp", "4rem"],
+  "sections": {"总览": {"slug": "project", "file": "project.html", "title": "密码中心", "meta": "密码中心", "nav": "项目", "imagePrefix": "总览"}, "密码取用": {"slug": "local-secret-broker", "file": "local-secret-broker.html", "title": "密码取用", "meta": "密码取用", "nav": "技能", "imagePrefix": "密码取用"}, "四把钥匙": {"slug": "四把钥匙", "file": "四把钥匙.html", "title": "四把钥匙", "meta": "四把钥匙", "nav": "项目", "imagePrefix": "四把钥匙"}, "限时通行证": {"slug": "限时通行证", "file": "限时通行证.html", "title": "限时通行证", "meta": "限时通行证", "nav": "项目", "imagePrefix": "限时通行证"}, "文件上锁": {"slug": "authorization-file-broker", "file": "authorization-file-broker.html", "title": "文件上锁", "meta": "文件上锁", "nav": "技能", "imagePrefix": "文件上锁"}, "手机密码库": {"slug": "手机密码库", "file": "手机密码库.html", "title": "手机密码库", "meta": "手机密码库", "nav": "项目", "imagePrefix": "手机密码库"}, "密码存根": {"slug": "密码存根", "file": "密码存根.html", "title": "密码存根", "meta": "密码存根", "nav": "项目", "imagePrefix": "密码存根"}}
+}

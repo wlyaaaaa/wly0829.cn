@@ -1,10 +1,11 @@
 node_modules/
+.cache/
 dist/
 .env*
 npm-debug.log*
 .DS_Store
 
-# The only private document is the explicit packaging/exclusion rule.
+# Private design and packaging sources live in the registered companion.
 docs/design/private-content-rules.md
 
 # Screenshot iterations are reproducible QA artifacts, not maintained docs.
@@ -22,3 +23,41 @@ __pycache__/
 # Astro 样板的全站试验副本和日志（任务临时）
 site-astro-trial/
 trial-*.log
+# Rebuildable v2 outputs; private companion links are listed separately below.
+site-v2/site-assembly/.图缓存/
+site-v2/site-assembly/.拼装中/
+site-v2/site-assembly/site/
+site-v2/site-assembly/压图缓存/
+site-v2/site-assembly/字体子集缓存/
+site-v2/**/__pycache__/
+
+# Private companion inputs, linked on this computer only.
+/site-v2/trial/first-projects/*/*
+!/site-v2/trial/first-projects/*/外层.json
+!/site-v2/trial/first-projects/网站示意/*
+!/site-v2/trial/first-projects/工具/*
+!/site-v2/trial/first-projects/表/*
+/site-v2/trial/first-projects/网站示意/**/*.py
+/site-v2/trial/first-projects/网站示意/**/验收/
+/site-v2/trial/first-projects/网站示意/**/tmp/
+/site-v2/trial/first-projects/画风登记.md
+/site-v2/trial/first-projects/公开页禁用词.txt
+/site-v2/trial/first-projects/叫法表-名字.md
+/site-v2/trial/first-projects/工具/fill_order.py
+/site-v2/trial/first-projects/表/归属表.md
+/site-v2/配置/规则公开改写.json
+/site-v2/建站流水线/
+/site-v2/内容方针.md
+
+# Rule rendering diagnostics contain private source comparisons.
+site-v2/first-layer/rules-page/demo/self-check.json
+site-v2/first-layer/rules-page/demo/*.diff.txt
+
+# New image sources are the WebP files used by the site; PNG exports stay temporary.
+site-v2/**/*.png
+.live/
+
+# 原字体只在本机，不进公开仓库。
+/site-v2/site-assembly/素材/字体/*.ttf
+/site-v2/site-assembly/素材/字体/*.ttc
+/site-v2/site-assembly/素材/字体/*.otf

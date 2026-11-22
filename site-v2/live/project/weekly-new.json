@@ -1,0 +1,38 @@
+{
+  "week": {
+    "from": "2026-11-11",
+    "to": "2026-11-17"
+  },
+  "items": [
+    {
+      "skill": "web-compat-check",
+      "change": "做好的网页一次查遍 Firefox、Safari 内核和手机模拟，问题列表配截图",
+      "say": "这个网页做完了，帮我查查在苹果手机和 Firefox 上有没有错位、报错、点不动的地方。",
+      "href": ""
+    },
+    {
+      "skill": "report-page",
+      "change": "好几天的大活只开一页固定进度页，在办什么、几点收工一眼看清，有新问题推到手机",
+      "say": "这活要做好几天，开一页进度页给我，要我定的事放上面，有新的发手机叫我。",
+      "href": "/agents/report-page.html"
+    },
+    {
+      "skill": "news-quickcheck",
+      "change": "出方案、选型前先去 GitHub、Reddit、小红书看同类做法和用户抱怨",
+      "say": "我想做个记账小工具，先看看别人做过什么、用户都在抱怨什么，再给我出方案。",
+      "href": "/agents/news-quickcheck.html"
+    },
+    {
+      "skill": "report-page",
+      "change": "要你拍板的事一多，自动按轻重分三级排好，不要紧的一级能一键全按 AI 建议",
+      "say": "这十几件要我定的事按轻重排一下，不要紧的我直接全按你的建议。",
+      "href": "/agents/report-page.html"
+    },
+    {
+      "skill": "report-page",
+      "change": "改稿时改前改后逐处对照，删了哪几个字、加了哪几个字自动标出来",
+      "say": "把这段产品介绍改一遍，改前改后逐句列给我，标出改了哪几个字。",
+      "href": "/agents/report-page.html"
+    }
+  ]
+}

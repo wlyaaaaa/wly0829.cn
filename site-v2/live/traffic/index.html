@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=1440"><title>海外流量 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/connect-auth/glass.css">
+<link rel="stylesheet" href="/trust-modal/trust-modal.css"><link rel="stylesheet" href="/live/_lib/live.css">
+<link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script>
+<style id="days-quality"></style><style>
+.page--traffic .more, .page--traffic .vz-rank__v, .page--traffic .pj-fig__v > b, .page--traffic #month-total > span { white-space: nowrap; }
+.page--traffic #traffic-days { padding-left: 26px; }
+.page--traffic #traffic-days .chart__y { left: -26px; width: 62px !important; }
+.page--traffic #coverage .row__sub { text-wrap: pretty; }
+.page--traffic #traffic-empty { display: flex; align-items: center; gap: 10px; }
+.page--traffic #traffic-curve.is-empty .chart__plot { height: auto; min-height: 0; margin: 0; }
+.page--traffic #traffic-curve.is-empty .chart__wait { position: static; transform: none; padding: 12px 0; }
+.page--traffic #traffic-curve.is-empty .chart__head { display: none; }
+.page--traffic .l2-board { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; align-items: stretch; }
+.page--traffic .traffic-wide { grid-column: 1 / -1; min-width: 0; }
+.page--traffic .l2-board .grp { --win: 190px; margin: 0; }
+.page--traffic .l2-board .grp__chapter { min-width: 0; }
+.page--traffic .l2-board .grp__head { grid-template-columns: 22px minmax(0,1fr) auto; column-gap: 16px; }
+.page--traffic .l2-board .grp__acts { grid-column: 3; }
+.page--traffic #totals { margin: 0 0 12px; }
+.page--traffic #coverage { --gut: 0px; margin: 0 0 8px; }
+.page--traffic #coverage .row { padding: 0; border: 0; }
+.page--traffic #traffic-curve { padding-left: 30px; }
+.page--traffic #traffic-curve .chart__y { left: -30px; width: 66px !important; }
+.page--traffic #traffic-curve .chart__plot { height: 230px; }
+.page--traffic #traffic-days { margin-top: 28px; }
+.page--traffic #hero #head:not(:has(> .lamp)) { padding-inline-start: var(--gut); }
+.page--traffic #head + .hero__note:not([hidden]),
+.page--traffic #traffic-why[hidden] + #month-total { margin-top: 24px; }
+.page--traffic #month-total, .page--traffic #month-total :is(span,small) { font-size: 14px; line-height: 22px; }
+.page--traffic .vz-mark { background: none; box-shadow: none; color: var(--ink-soft); text-shadow: none; }
+.page--traffic #program-card { --win: clamp(280px, 28%, 380px); }
+.page--traffic #program-card .card__glass { min-height: 380px; }
+.page--traffic #program-card .card__pic {
+  top: 50%; bottom: auto; aspect-ratio: 1; transform: translateY(-50%);
+  mask-image: linear-gradient(to right, transparent, #000 30%);
+}
+.page--traffic #program-card .card__pic img {
+  object-fit: contain; transform: none;
+  mask-image: linear-gradient(transparent, #000 7% 93%, transparent);
+}
+.page--traffic #program-rank .vz-rank__row { padding-block: 8px; }
+.page--traffic #program-separate { margin: 0; padding: 8px 0; border-top: 1px solid var(--hair); }
+.page--traffic #program-rank .vz-rank__name small { color: #4a4944; }
+.page--traffic #program-details { margin-top: 10px; padding: 10px 22px 10px 64px; }
+.page--traffic #program-details summary { cursor: pointer; font-size: 14px; }
+.page--traffic #program-detail-rows { margin-top: 8px; }
+.traffic-network-heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.traffic-network-heading:has(+ .panel-table) { margin-bottom: 12px; }
+.traffic-network-heading :is(h2,p) { margin: 0; }
+.traffic-network-heading h2 { font-size: 20px; line-height: 27px; }
+.page--traffic .panel-table { overflow-x: auto; }
+.page--traffic :is(.panel-table table, .traffic-network-table) { width: 100%; border-collapse: collapse; font-size: 13px; line-height: 20px; }
+.page--traffic :is(.panel-table, .traffic-network-table) :is(th, td) { padding: 5px 10px; border-bottom: 1px solid var(--hair); text-align: left; white-space: nowrap; }
+.page--traffic .panel-table :is(th, td):nth-child(2) { min-width: 0; max-width: none; white-space: nowrap; }
+.page--traffic .traffic-network-detail, .page--traffic .traffic-network-detail :is(th, td) { white-space: normal; overflow-wrap: anywhere; }
+.page--traffic .traffic-network-detail dd { margin-inline-start: 0; }
+</style>
+<style>.page--l2 .card--hero[data-pic] .card__glass { min-height: 192px; }</style><link rel="stylesheet" href="/live/_lib/live-viz.css"></head>
+<body class="page page--live page--l2 page--resources page--traffic">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div><a class="back" href="/live/" data-back data-mo-rise>实况</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card card--hero" id="hero" data-tone="off" data-pic="right" data-mo-rise style="--pic-y:52%">
+    <div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="/live/img/traffic.webp" alt="" aria-hidden="true">
+    <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/traffic.webp" width="1000" height="1000" alt=""></span><div class="card__body">
+      <p class="card__head" id="head">今日已记录的海外代理流量</p>
+      <p class="hero__note" id="traffic-why" hidden></p>
+      <p class="hero__note" id="month-total">本月累计没有记录 · 只算走代理的</p><div class="hero__links"><a class="more more--link" href="/live/computer/">电脑 ›</a><a class="more more--link" href="/live/storage/">存储 ›</a></div>
+    </div></div>
+  </article>
+  <p class="pj-note" id="traffic-empty" hidden>这块没存下来，连上后补上。</p><div class="l2-board">
+    <section class="card grp grp--quiet l2-col traffic-wide" data-pic="right" data-tone="none" data-mo-rise>
+      <div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="/live/img/grp-network.webp" alt="" aria-hidden="true"><div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/grp-network.webp" alt=""></span><div class="card__body grp__body">
+      <div class="grp__head"><span class="grp__lamp"></span><span class="grp__title"><b class="grp__name">上传与下载</b><span class="grp__line panel-window" id="curve-window">近 24 小时 · 小时均值</span></span><span class="grp__acts"><span class="seg" role="group" aria-label="时间段"><button type="button" data-days="1" data-needs-pc aria-pressed="true">今天</button><button type="button" data-days="7" data-needs-pc aria-pressed="false">近 7 天</button></span></span></div>
+      <div class="grp__chapter"><ul class="pj-figs" id="totals"><li class="pj-fig"><span class="pj-fig__k">上传</span><span class="pj-fig__v" id="upload-value"></span></li><li class="pj-fig"><span class="pj-fig__k">下载</span><span class="pj-fig__v" id="download-value"></span></li></ul><ul class="rows list" id="coverage" aria-label="读数范围"></ul>
+        <div id="traffic-curve"></div><p class="pj-note" id="traffic-gap-note" hidden></p><div id="traffic-days"></div>
+      </div>
+      </div></div>
+    </section>
+    <div class="traffic-wide" role="group" aria-labelledby="program-title">
+      <section class="card grp grp--quiet l2-col" id="program-card" data-pic="right" data-tone="none" data-mo-rise>
+        <div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="/live/img/use-where.webp" alt="" aria-hidden="true"><div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/use-where.webp" alt=""></span><div class="card__body grp__body">
+        <div class="grp__head"><span class="grp__lamp"></span><span class="grp__title"><b class="grp__name" id="program-title">今日已记录的海外代理流量</b><span class="grp__line panel-window" id="program-window"></span></span></div>
+        <div class="grp__chapter"><div class="vz-rank--detail" id="program-rank"></div><p class="row__sub" id="program-separate" hidden></p></div></div></div>
+      </section>
+      <details class="glass" id="program-details" hidden>
+        <summary>更多程序</summary>
+        <div class="panel-table" id="program-detail-rows"></div>
+      </details>
+    </div>
+  </div>
+</main>
+<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-chart.js"></script><script src="/live/_lib/live-viz.js"></script><script src="/live/traffic/page.js"></script>
+</body></html>

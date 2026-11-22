@@ -1,0 +1,59 @@
+{
+  "schema": "pcconfig.cockpit-view.v1",
+  "display_only": true,
+  "status": "pass",
+  "served_at": "2026-01-01T00:00:00+08:00",
+  "collected_at": "2026-01-01T00:00:00+08:00",
+  "snapshot_id": "demo-snapshot-0001",
+  "cache_state": "ready",
+  "verdict": {
+    "severity": "ok",
+    "state": "ok",
+    "text": "示意快照，不代表真实运行状态。"
+  },
+  "counts": {
+    "need_you": 1,
+    "ai_following": 0
+  },
+  "need_you": [
+    {
+      "id": "demo-owner-task",
+      "title": "示意事项：核对示例材料",
+      "ask_kind": "do",
+      "state": "pending",
+      "at": "2026-01-01T00:00:00+08:00"
+    }
+  ],
+  "ai_following": [],
+  "sections": {
+    "computer": [],
+    "remote": [],
+    "backup_cloud": [],
+    "today": []
+  },
+  "projects": {
+    "state": "ok",
+    "observed_at": "2026-01-01T00:00:00+08:00",
+    "items": []
+  },
+  "automation": {
+    "state": "ok",
+    "observed_at": "2026-01-01T00:00:00+08:00",
+    "groups": [],
+    "items": [
+      {
+        "id": "demo-automation",
+        "name": "示例自动任务",
+        "group": "mine",
+        "state": "success",
+        "enabled": true,
+        "mine": true,
+        "runs_today": true,
+        "last_run_at": "2026-01-01T00:00:00+08:00",
+        "next_run_at": "2026-01-01T01:00:00+08:00",
+        "schedule": "每小时",
+        "what": "示例检查"
+      }
+    ]
+  }
+}

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>谁在占 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css">
+<link rel="stylesheet" href="/connect-auth/glass.css">
+<link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css">
+<link rel="stylesheet" href="/live/_lib/live-page.css">
+<link rel="stylesheet" href="/live/_lib/live-viz.css">
+<link rel="stylesheet" href="/motion/motion.css">
+<style>
+#board .vz-note, #board .grp__say { font-size: 13px; line-height: 22px; color: #6b6a64; }
+.page--apps .grp__fk { word-break: keep-all; }
+/* 卡头一行里，统计说明（如“这张榜单没有统计各行的显存”）和前面的截至时间之间补“ · ” */
+.page--apps .grp__status > span + span[data-stat-note]::before { content: ' · '; }
+.page--apps .hero__warns a { display:inline; }
+.page--apps .hero__warns li { line-height:23px; }
+.page--apps [data-key="hangs"] .vz-tl__row { grid-template-columns:220px minmax(0,1fr); }
+.page--apps [data-key="hangs"] .vz-tl__label { white-space:normal; overflow:hidden; overflow-wrap:anywhere; line-height:22px; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; cursor:pointer; }
+.page--apps .vz-legend { display: flex; flex-wrap: wrap; gap: 8px 32px; }
+.page--apps [data-key="resources"] .chart__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+}
+.page--apps [data-key="resources"] .chart__vals { justify-content: flex-start; margin: 0; }
+.page--apps [data-key="resources"] .chart__val { max-width: 100%; }
+.page--apps [data-key="resources"] .chart__key { flex: none; }
+.page--apps [data-key="resources"] :is(.grp__chips,.vz-chip-cell,.vz-chip-cell__spark) { min-width: 0; }
+.page--apps [data-key="resources"] .grp__chips { grid-template-columns: minmax(0, 1fr); }
+.page--apps [data-key="resources"] .grp__chips:has(> .vz-chip-cell) { align-self: stretch; }
+.page--apps [data-key="resources"] .vz-chip-cell { grid-template-columns: minmax(0,1fr); }
+.page--apps [data-key="resources"] .vz-chip-cell:has(.chart--spark:not(.is-empty)) { grid-template-rows: auto auto minmax(48px, 1fr); }
+.page--apps [data-key="resources"] .chart--spark:not(.is-empty) .chart__plot { height: 100%; }
+.page--apps [data-key="resources"] .vz-chip-cell__v { display: block; min-width: 0; white-space: normal; overflow-wrap: anywhere; line-height: 1.5; margin-block: 4px; }
+.page--apps [data-key="resources"] :is(.chart__name, .chart__label),
+.page--apps .grp:is([data-key="top"], [data-key="background"]) .vz-rank--pill .vz-rank__label {
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  overflow: visible;
+}
+.page--apps .grp:is([data-key="top"], [data-key="background"]) .vz-rank--pill { container-type: inline-size; }
+.page--apps .grp:is([data-key="top"], [data-key="background"]) .vz-rank--pill > .vz-rank__list { display: grid; gap: 2px 24px; grid-template-columns: minmax(0, 1fr); }
+.page--apps .grp:is([data-key="top"], [data-key="background"]) .vz-rank--pill .vz-rank__row { margin: 0; padding-block: 5px 8px; }
+.page--apps .grp:is([data-key="top"], [data-key="background"]) .vz-rank--pill .vz-rank__name { overflow-wrap: anywhere; }
+.page--apps .grp:is([data-key="top"], [data-key="background"]) .vz-rank__name small {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+@container (min-width: 820px) {
+  .page--apps .grp:is([data-key="top"], [data-key="background"]) .vz-rank--pill > .vz-rank__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .page--apps .grp:is([data-key="top"], [data-key="background"]) .vz-rank--pill :is(.vz-rank__row--empty, .vz-rank__row--private) { grid-column: 1 / -1; }
+}
+</style>
+<script src="/motion/motion.js"></script>
+</head>
+<body class="page page--live page--l2 page--data page--apps">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div>
+  <a class="back" href="/live/" data-back data-mo-rise>实况</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card card--hero card--quiet" id="hero" data-pic="right" data-tone="none" data-mo-rise style="--pic-y: 52%">
+    <div class="card__glow" aria-hidden="true"></div>
+    <img class="card__tint" src="/live/img/head-apps.webp" alt="" aria-hidden="true">
+    <div class="card__glass glass">
+      <span class="card__pic" aria-hidden="true"><img src="/live/img/head-apps.webp" width="1000" height="1000" alt=""></span>
+      <div class="card__body">
+        <p class="card__head" data-part="head"><span class="head__lead">正在读</span></p>
+        <p class="hero__count" data-part="count" hidden></p>
+        <p class="hero__note" data-part="note" hidden></p>
+        <div class="hero__links" data-part="links"><a class="more more--link" href="/live/computer/">电脑 <span class="more__chev">›</span></a></div>
+      </div>
+    </div>
+  </article>
+  <nav class="l2-nav l2-nav--data" aria-label="数据组"><span class="l2-nav__groups"><span>应用</span></span></nav>
+  <section class="vz-board" id="board" data-mo-rise aria-label="谁在占"></section>
+</main>
+<script src="/trust-modal/trust-modal.js"></script>
+<script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script>
+<script src="/live/_lib/live-ui.js"></script>
+<script src="/header/topbar.js"></script>
+<script src="/live/_lib/live-light.js"></script>
+<script src="/live/_lib/live-chart.js"></script>
+<script src="/live/_lib/live-viz.js"></script>
+<script src="/live/_lib/live-stat.js"></script>
+<script src="/live/smooth/detail.js"></script>
+<script src="/live/apps/page.js"></script>
+<script src="/live/apps/tasks.js"></script>
+</body>
+</html>

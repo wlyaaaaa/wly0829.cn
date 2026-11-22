@@ -1,0 +1,68 @@
+{
+  "title": "AI 存档室",
+  "theme": {
+    "p": "#9f0f1c",
+    "soft": "#f2e0d7",
+    "accent": "#b37f27"
+  },
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "skillNav": null,
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "12rem"],
+    "去〔对话存得牢〕": [
+      "go-archive-v1.compressed.webp",
+      "10rem"
+    ],
+    "去〔换机不丢对话〕": [
+      "go-move-v1.compressed.webp",
+      "10rem"
+    ],
+    "去〔配置搬家箱〕项目页": [
+      "go-config-v1.compressed.webp",
+      "10rem"
+    ],
+    "回〔AI 存档室〕项目页": [
+      "return-project-v1.compressed.webp",
+      "10rem"
+    ],
+    "去〔备份与恢复〕": [
+      "go-backup-v1.compressed.webp",
+      "10rem"
+    ],
+    "看实况": [
+      "button-live-v2.compressed.webp",
+      "10rem"
+    ]
+  },
+  "detailArt": [
+    "detail-v1.compressed.webp",
+    "4rem"
+  ],
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "AI 存档室",
+      "meta": "AI 存档室 · 总览",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    },
+    "对话存得牢": {
+      "slug": "对话存得牢",
+      "file": "对话存得牢.html",
+      "title": "对话存得牢",
+      "meta": "AI 存档室 · 对话存得牢",
+      "nav": "项目",
+      "imagePrefix": "对话存得牢"
+    },
+    "换机不丢对话": {
+      "slug": "换机不丢对话",
+      "file": "换机不丢对话.html",
+      "title": "换机不丢对话",
+      "meta": "AI 存档室 · 换机不丢对话",
+      "nav": "项目",
+      "imagePrefix": "换机不丢对话"
+    }
+  }
+}

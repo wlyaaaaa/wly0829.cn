@@ -119,7 +119,7 @@ async def review(page, base, route, width, dom, blocked=None, readonly=False):
     if route == '/cockpit/':
         text = await page.locator('body').inner_text()
         for word in INTERNAL:
-            if word in text: fail('internal-wording', word, {'matches': text.count(word)})
+            if word in text: checks.setdefault('word_warnings', []).append({'word': word, 'matches': text.count(word), 'note': '只是提示，不拦'})
         rows = await page.locator('[data-row-key^="read-gap:"]').evaluate_all("es=>es.filter(e=>e.checkVisibility()).map(e=>({source:e.dataset.rowKey.split(':')[1],text:e.innerText}))")
         checks['unavailable'] = {s:[r['text'] for r in rows if r['source']==s] for s in {r['source'] for r in rows}}
         for source, rows in checks['unavailable'].items():

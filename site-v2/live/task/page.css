@@ -1,0 +1,149 @@
+html:has(.page--task) { background: var(--task-bg, #f6f4f0); --task-tint: #f6f4f0; --task-art: none; }
+html:has(.page--task[data-variant="plan"]) { --task-art: url("/live/img/dossier-task-v1.webp"); }
+html:has(.page--task[data-scheme="backup"]) { --task-bg: #e5f2fc; --task-tint: #d9ecf8; --task-art: url("/live/img/tasks-grp-backup.webp"); }
+html:has(.page--task[data-scheme="hardware"]) { --task-bg: #fdede7; --task-tint: #fbe2d8; --task-art: url("/live/img/tasks-grp-hardware.webp"); }
+html:has(.page--task[data-scheme="ai"]) { --task-bg: #f2eafb; --task-tint: #e9dbf6; --task-art: url("/live/img/tasks-grp-ai.webp"); }
+html:has(.page--task[data-scheme="daily"]) { --task-bg: #fff0ec; --task-tint: #fae0dc; --task-art: url("/live/img/tasks-grp-daily.webp"); }
+html:has(.page--task[data-scheme="upkeep"]) { --task-bg: #e8f6f0; --task-tint: #d8eee6; --task-art: url("/live/img/tasks-grp-upkeep.webp"); }
+html:has(.page--task[data-scheme="remote"]) { --task-bg: #e3f5f6; --task-tint: #d2edef; --task-art: url("/live/img/tasks-grp-remote.webp"); }
+html:has(.page--task[data-scheme="online"]) { --task-bg: #eaf5e9; --task-tint: #dcefdc; --task-art: url("/live/img/tasks-grp-online.webp"); }
+html:has(.page--task[data-scheme="vendor"]) { --task-bg: #f8edf3; --task-tint: #f2dfe9; --task-art: url("/live/img/tasks-grp-vendor.webp"); }
+html:has(.page--task[data-variant="pickup"]) { --task-bg: #f0e8fc; --task-tint: #ecddf9; --task-art: url("/live/img/task-pickup-repair.webp"); }
+html:has(.page--task[data-scheme="pickup-review"]) { --task-art: url("/live/img/task-pickup-review.webp"); }
+html:has(.page--task[data-scheme="pickup-accept"]) { --task-art: url("/live/img/task-pickup-accept.webp"); }
+html:has(.page--task[data-variant="schedule"]) { --task-bg: #dff1f7; --task-tint: #c4e5f2; --task-art: url("/live/img/task-ai-calendar.webp"); }
+.page.page--task { background: var(--task-bg, #f6f4f0); }
+.page--task #stage { width: min(100% - 48px, 1536px); padding-bottom: 38px; }
+.page--task .topbar { background-color: color-mix(in srgb, var(--task-bg, #f6f4f0) 86%, white); }
+.page--task .glass { border: 1px solid rgb(255 255 255 / .78); border-radius: 22px; }
+.task-crumb { position: relative; display: flex; align-items: center; flex-wrap: wrap; gap: 10px; min-height: 30px; margin: 4px 8px 10px; padding-right: 144px; font-size: 15px; }
+.task-crumb a { text-decoration: none; }
+.task-crumb a::after { content: "›"; margin-left: 10px; color: #666675; }
+.task-crumb .back { display: inline; height: auto; margin: 0; padding: 0; background: none; font: inherit; color: inherit; }
+.task-crumb .back::before { content: none; }
+.task-crumb [data-live-view-row] { display: contents !important; }
+.task-crumb #wly-preview-view { position: absolute !important; inset: 50% 0 auto auto !important; translate: 0 -50%; }
+.task-hero { position: relative; isolation: isolate; min-height: 218px; overflow: hidden; background: linear-gradient(115deg, rgb(255 255 255 / .64), var(--task-tint)); }
+.task-hero__copy { position: relative; z-index: 1; padding: 22px 36px 23px; max-width: 58%; }
+.task-hero__art { position: absolute; inset: 0 0 0 43%; background: var(--task-art) center right / auto 125% no-repeat; pointer-events: none; }
+.page--task[data-variant="plan"] .task-hero__art { right: 27px; }
+.page--task[data-scheme="hardware"] .task-hero__art { background-size: auto 140%; }
+.page--task:is([data-variant="pickup"], [data-variant="schedule"]) .task-hero { min-height: 250px; }
+.page--task:is([data-variant="pickup"], [data-variant="schedule"]) .task-hero__art {
+  inset-inline-start: auto;
+  width: min(55%, 780px);
+  background-size: cover;
+  background-position: center 31%;
+  mask-image: linear-gradient(90deg, transparent, #000 16%);
+}
+.page--task[data-variant="schedule"] .task-hero { --task-tint: #cfebf5; }
+.task-hero h1 { margin: 0 0 7px; font: 800 38px/1.18 var(--sans); overflow-wrap: anywhere; }
+.task-hero p { margin: 4px 0; color: #4d515d; font-size: 15px; line-height: 1.48; overflow-wrap: anywhere; }
+.task-hero #task-status { color: var(--ink); font-weight: 600; font-size: 16px; }
+.task-status__note { display: block; margin-top: 2px; color: #5b6070; font-size: 13px; font-weight: 400; }
+.task-hero .rec-acts { margin: 10px 0 0; }
+.task-hero .rec-acts .btn { min-width: 92px; text-align: center; }
+.task-provider { display: inline-flex; vertical-align: middle; padding: 3px 10px; border-radius: 99px; background: #eee6f9; color: #554674; font-size: 13px; font-weight: 600; }
+.task-provider[data-provider="codex"] { background: #e4f1eb; color: #176442; }
+h1 .task-provider { margin-left: .6em; }
+.task-week { margin-top: 7px; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 3px 13px; align-items: start; }
+.task-week strong { margin-top: 3px; font-size: 14px; }
+.task-week ol { display: flex; list-style: none; gap: 12px; padding: 0; margin: 0; }
+.task-week li { display: grid; justify-items: center; gap: 3px; font-size: 12px; font-variant-numeric: tabular-nums; }
+.task-mark { display: block; width: 17px; height: 17px; border: 1px solid #b6c0c8; border-radius: 5px; background: #d7dee4; }
+.task-mark[data-state="ok"], .task-dot[data-state="ok"], .task-dot[data-state="done"] { background: #00A650; border-color: transparent; }
+.task-mark[data-state="failed"], .task-dot[data-state="failed"] { background: #d75b68; border-color: transparent; }
+.task-mark[data-state="running"] { background: #5c7e9b; border-color: transparent; }
+.task-mark[data-state="unknown"] { border: 1px dashed #6f7d89; background: transparent; }
+.task-mark[data-state="started"] { border: 1px dashed #6f7d89; background: radial-gradient(circle at center, #8a94a1 0 27%, transparent 30%); }
+.task-mark[data-state="observed-ok"] { border: 1px dashed #00A650; background: radial-gradient(circle at center, #00A650 0 27%, transparent 30%); }
+.task-week__key { grid-column: 2; display: flex; flex-wrap: wrap; gap: 4px 12px; color: #505867; font-size: 12px; }
+.task-week__key > span { display: inline-flex; align-items: center; gap: 4px; }
+.task-week__key .task-mark { width: 10px; height: 10px; border-radius: 2px; }
+.task-dot { display: inline-block; width: 9px; height: 9px; flex: none; border: 1px solid #8a94a1; border-radius: 50%; }
+.task-dot[data-state="running"], .task-dot[data-state="accepted"] { background: #5c7e9b; border-color: transparent; }
+.task-result { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.task-result[data-state="failed"] { color: #a83948; }
+.task-result[data-state="ok"], .task-result[data-state="done"] { color: #187041; }
+/* 统计格和下面卡片拉开一点，“最近几次”“这个任务”的标题不和统计格挤成一块 */
+.task-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 13px 0 26px; }
+.task-stat { display: flex; flex-direction: column-reverse; align-items: center; justify-content: center; gap: 3px; margin: 0; min-height: 76px; padding: 8px 15px; background: rgb(255 255 255 / .62); border-radius: 19px; }
+.task-stat dt { font-size: 14px; color: #535762; }
+.task-stat dd { margin: 0; font-size: 27px; font-weight: 750; line-height: 1.18; font-variant-numeric: tabular-nums; }
+.task-stat dd[data-unknown] { font-size: 25px; font-weight: 650; color: #545969; }
+.task-stat dd[data-why] { font-size: 19px; }
+/* 第一张卡多一行小字时，四张卡都留出同样的底边，大数字仍然对齐 */
+.task-stats:has(.task-stat__note) .task-stat { position: relative; padding-bottom: 24px; }
+.task-stat__note { position: absolute; left: 0; right: 0; bottom: 7px; text-align: center; font-size: 12px; color: #6b7080; }
+.task-stat dd small { font-size: .52em; font-weight: 600; }
+.task-stat[data-stat="success"] { background: #eaf5ee; }
+.task-stat[data-stat="failure"] { background: #fae8eb; }
+.task-stat[data-stat="today"] { background: linear-gradient(114deg, #fff, #e9daf8); box-shadow: inset 0 0 0 1px #d8c3f2; }
+.task-stat[data-stat="today"] dd { font-size: 33px; }
+.task-columns { display: grid; align-items: start; grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr); gap: 18px; }
+.task-stats[hidden] + .task-columns { margin-top: 13px; }
+.task-aside { display: grid; gap: 12px; }
+.task-card { padding: 11px 22px 15px; background: rgb(255 255 255 / .58); min-width: 0; }
+.task-card header { display: flex; gap: 11px; align-items: center; margin-bottom: 8px; }
+.task-card header .lb-card__badge { flex: none; width: 34px; height: 34px; color: #7153ab; background: #efebfa; }
+.task-card h2 { margin: 0; font-size: 20px; }
+.task-failure { margin: 0 0 13px; background: #fbedf2; }
+.page--task[data-scheme="backup"] .task-failure { background: rgb(255 255 255 / .75); border-left: 4px solid #e6abb5; }
+.task-failure header .lb-card__badge { color: #a83948; background: #fae0e6; }
+.task-failure p { margin: 3px 0; }
+.task-failure__text, .task-checks { padding-left: 45px; }
+.task-checks { display: flex; flex-wrap: wrap; gap: 5px 20px; list-style: none; margin: 7px 0 0; }
+.task-timeline { margin: 0 0 0 8px; padding: 0 0 0 14px; list-style: none; border-left: 2px solid #cbd0e0; }
+.task-timeline li { position: relative; border-bottom: 1px solid rgb(37 42 65 / .08); }
+.task-timeline li::before { content: ""; position: absolute; left: -20px; top: 11px; width: 9px; height: 9px; box-sizing: border-box; border: 2px solid #bfc3d3; border-radius: 50%; background: #f7f7f9; }
+.page--task[data-variant="schedule"] .task-timeline li::before { border-color: #95b6cd; }
+.task-row { display: grid; grid-template-columns: 128px 88px minmax(156px, max-content) minmax(0, 1fr) auto; align-items: baseline; gap: 9px; padding: 6px 1px; min-height: 34px; }
+.task-row > span { overflow-wrap: anywhere; }
+.task-row > .task-row__duration { white-space: nowrap; }
+.task-row--labels { margin-left: 24px; min-height: 0; color: #545b67; font-size: 13px; }
+/* 计划任务：结果一栏放得下“没记到结束”“结果码没登记” */
+.page--task[data-variant="plan"] .task-row { grid-template-columns: 128px 112px 150px minmax(0, 1fr) auto; }
+/* 展开更早的记录后，“收起”放到最后，不夹在第 6、第 7 次中间 */
+#more-runs { position: relative; }
+#more-runs[open] { padding-bottom: 30px; }
+#more-runs[open] > summary { position: absolute; left: 0; bottom: 0; }
+.task-card dl { margin: 0; }
+.task-card dl > div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; padding: 6px 0; border-bottom: 1px solid rgb(37 42 65 / .07); }
+.task-card dl dt { color: #505565; }
+.task-card dl dd { margin: 0; overflow-wrap: anywhere; }
+.task-card dl div:last-child { border: 0; }
+.task-card :is(p,li,td,th,summary,dl) { font-size: 14px; line-height: 1.45; }
+.task-card .task-reading { margin: 7px 0 0; color: #545b67; font-size: 13px; }
+.task-card .task-run-extra { padding: 1px 4px 7px; margin: 0; }
+.task-card .task-run-extra p { margin: 4px 0; }
+.task-card .task-run-extra summary { cursor: pointer; color: #4c5368; }
+.task-card table { width: 100%; border-collapse: collapse; }
+.task-card th, .task-card td { text-align: left; vertical-align: top; border-bottom: 1px solid rgb(37 42 65 / .08); padding: 6px 8px 6px 0; }
+.task-card th { color: #555971; font-weight: 600; }
+.task-card td:first-child, .task-card .task-link, .task-row time { white-space: nowrap; }
+.task-card .task-link { font-size: 13px; }
+.task-run-duration { display: block; color: #545b67; font-size: 12px; }
+.task-card #future-runs { margin: 0; padding: 0 0 0 46px; list-style: none; }
+.task-card #future-runs li { border-bottom: 1px solid rgb(37 42 65 / .08); padding: 5px 0; }
+.task-offline .task-dot, .task-offline .task-mark { filter: grayscale(1); }
+
+/* With a short history, keep upcoming dates on the right and give the facts the full row below. */
+.page--task[data-variant="schedule"] .task-columns:not(:has(#runs li[data-time]:nth-child(3))) {
+  .task-aside { display: contents; }
+  .task-about { grid-column: 1 / -1; }
+  #facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 30px; }
+}
+
+.page--task[data-variant="plan"] .task-columns:not(:has(details[open])) .task-aside { align-self: stretch; }
+.page--task[data-variant="plan"] .task-about { display: flex; flex-direction: column; }
+.page--task[data-variant="plan"] #facts { flex: 1; display: grid; }
+.page--task[data-variant="plan"] #facts > div { align-items: center; }
+
+/* Closed run details share the row. An opened record uses the width of the timeline. */
+.page--task[data-variant="plan"] .task-timeline > li:has(> details:not([open])) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 12px;
+}
+.page--task[data-variant="plan"] .task-timeline > li > details:not([open]) { padding: 0; }

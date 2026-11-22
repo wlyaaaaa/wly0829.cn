@@ -1,0 +1,53 @@
+/* 整站里列表页多出来的两样（列表页试看页里没有）：没做好的项目怎么占位、示意图角上的小标。
+   wall.css 是定稿的原件，不改；要调占位的样子改这里。 */
+
+/* 占位卡：同样大小的画框，只有名字和“还在做”，不发光、点不了 */
+.piece--todo .piece__frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .55em;
+  background: #f1efe8;
+  box-shadow: inset 0 0 0 1px rgb(20 20 19 / .06);
+}
+.todo__name { font-size: clamp(18px, 1.6vw, 28px); font-weight: 600; letter-spacing: .08em; color: #5d5d57; }
+.hang--big .todo__name { font-size: clamp(24px, 2.3vw, 40px); }
+.todo__note { font-size: 13px; letter-spacing: .14em; color: #a3a39b; }
+@media (hover: hover) {
+  .piece--todo.is-in:hover .piece__frame { transform: none; box-shadow: inset 0 0 0 1px rgb(20 20 19 / .06); }
+}
+
+/* 示意图：角上一个小标，说明这张还不是那个项目的真封面 */
+.piece__tag {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: .12em;
+  color: #fff;
+  background: rgb(20 20 19 / .55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+/* 封面图的 alt 仍给读屏；同位置的文字让浏览器页内查找能定位到画框。 */
+.piece__find-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  color: transparent;
+  forced-color-adjust: none;
+  pointer-events: none;
+  font-size: 1.25rem;
+}
+.piece__find-label::selection { color: #141413; background: #00A650; }
+
+/* 画没到时保留画框的尺寸，用项目名接住返回动画。 */
+.piece__art:is([data-src],[data-image-state]) {opacity:0}
+.piece__art:is([data-src],[data-image-state]) ~ .piece__find-label {color:var(--ink)}
+.piece__frame:has(> .piece__art:is([data-src],[data-image-state]))::after {display:none}

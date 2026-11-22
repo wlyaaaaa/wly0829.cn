@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>AI 账本 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/connect-auth/glass.css"><link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live-viz.css"><link rel="stylesheet" href="/live/_lib/live.css"><link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/live/_lib/live-book.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script><style>.page--l2 .tag { font-size: 12px; }</style><style>.page--l2 .card--hero[data-pic] .card__glass { min-height: 192px; }</style><style>.rec-meta>span,.run__when,.trust-note,.btn{white-space:nowrap}.row__title,.rec-fact dt{word-break:keep-all}.rec-acts{gap:10px;flex-wrap:wrap}</style>
+</head>
+<body class="page page--live page--l2 page--ledger page--book"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage"><div class="field" aria-hidden="true"></div>
+<a class="back" href="/live/#ledger" data-back data-mo-rise>实况</a><ul class="notices" id="notices" aria-live="polite"></ul>
+<article class="card card--hero card--project" id="hero" data-pic="right" data-tone="none" data-mo-rise>
+  <div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="/live/img/ledger.webp" alt="" aria-hidden="true">
+  <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/ledger.webp" width="1000" height="1000" alt=""></span>
+  <div class="card__body fog-bare"><p class="card__head" id="head"></p><p class="hero__note" id="hero-note"></p>
+  <div class="hero__links"><a class="more more--link" href="#current">手上的 ›</a><a class="more more--link" href="#history">近 7 天的结果 ›</a></div></div></div>
+</article>
+<div class="l2-board" id="board">
+  <section class="card glass ledger-now" id="current" data-mo-rise>
+  <div class="ledger-now__bar" data-keep><p class="ledger-now__title"><b>账本里还在跟进的事</b></p>
+  <button class="ledger-now__btn" id="working-more" type="button"></button><span class="ledger-now__sep" aria-hidden="true"></span><button class="ledger-now__btn" id="waiting-more" type="button"></button><button class="pill-btn" id="wait-order" type="button" aria-pressed="false">等最久的先看</button></div>
+  <div class="fold" id="working-box"><div><div class="ledger-now__book" id="working-book"></div></div></div>
+  <div class="fold" id="waiting-box"><div><div class="ledger-now__book" id="waiting-book"></div></div></div></section>
+  <section class="ledger-book" id="history" data-mo-rise>
+  <div class="ledger-paper">
+  <div class="l2-nav ledger-nav" id="ledger-nav"><div class="l2-filter" id="outcome" role="group" aria-label="按结果看"><button class="pill-btn" type="button" data-outcome="" aria-pressed="false">全部结果</button><button class="pill-btn" type="button" data-outcome="fixed" aria-pressed="false">修好</button><button class="pill-btn" type="button" data-outcome="not_fixed" aria-pressed="false">没修好</button><button class="pill-btn" type="button" data-outcome="wont_fix" aria-pressed="false">定了不修</button><button class="pill-btn" type="button" data-outcome="deferred" aria-pressed="false">暂时不修</button><button class="pill-btn" type="button" data-outcome="to_owner" aria-pressed="false">转交</button></div><p class="pj-note ledger-nav__end"><span id="history-label">近 7 天的结果</span><span class="pj-note" id="coverage"></span></p></div>
+  <div id="history-book"></div><p id="history-empty" class="ledger-empty" role="status" hidden></p><img class="ledger-corner" src="/live/img/ledger-corner.webp" width="900" height="424" alt="" aria-hidden="true" decoding="async">
+  <div class="ledger-foot"><button class="more" id="next" type="button" hidden>继续看 ›</button><button class="more more--link" id="earlier" type="button">更早的 ›</button></div>
+  </div></section>
+</div></main>
+<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script>
+<script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-viz.js"></script><script src="/live/_lib/live-book.js"></script><script src="/live/ledger/wait-order.js"></script><script src="/live/ledger/page.js"></script>
+<style>
+.page--ledger #wait-order { flex-shrink: 0; white-space: nowrap; }
+#repeat-fixes .row:has(a.row__title) { position: relative; }
+#repeat-fixes a.row__title::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
+#repeat-fixes a.row__title:focus-visible { outline: none; }
+#repeat-fixes a.row__title:focus-visible::after { outline: 2px solid var(--ink); outline-offset: -2px; }
+#repeat-fixes .row :is(a:not(.row__title), button, summary, [role="button"], [role="link"]) { position: relative; z-index: 2; }
+/* AI 账本：上面“现在 AI 手上的”一条玻璃卡（在做、在等两颗按钮，点开是两张小表），下面一本按结果分组的账簿（live-book.css 的分组样子）。
+   颜色、底纹只用实况现有的（玻璃卡、.tag、.pill-btn、灯色），色值收在 live-book.css 的 --tone-* 和 --book-group-*。 */
+.page--ledger .filter-count { margin-left: 5px; font-size: 12px; color: var(--muted); }
+.page--ledger #board { grid-template-columns: minmax(0, 1fr); row-gap: 26px; }
+.page--ledger #hero .head__tail { font-size: 17px; line-height: 30px; font-weight: 500; color: #5d5b55; }
+.page--ledger #hero .head__tail::before { margin: 0 10px 0 4px; }
+.page--ledger #hero-note { display: block; }   /* 一行字照常排：数字变动时拆出来的小段不按弹性盒拉开间距 */
+.ledger-now { padding: 0; }
+.ledger-now__bar { display: grid; grid-template-columns: minmax(210px, 1.1fr) minmax(0, 1fr) 1px minmax(0, 1fr) auto; align-items: center; gap: 0 22px; padding: 16px 26px; }
+.ledger-now__title { display: grid; gap: 2px; margin: 0; }
+.ledger-now__title b { font-size: 20px; line-height: 28px; font-weight: 700; letter-spacing: .02em; color: var(--ink); }
+.ledger-now__bar { min-height: 76px; }
+.ledger-now__sep { align-self: stretch; background: rgb(20 20 19 / .08); }
+.ledger-now__btn { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 8px 12px; border: 0; border-radius: 14px; background: none; font: inherit; text-align: left; color: inherit; cursor: pointer; transition: background-color .2s ease; }
+.ledger-now__btn:hover, .ledger-now__btn[aria-expanded="true"] { background: rgb(255 255 255 / .55); }
+.ledger-now__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.ledger-now__t { display: grid; min-width: 0; }
+.ledger-now__t b { font-size: 17px; line-height: 24px; font-weight: 700; color: var(--ink); }
+.ledger-now__btn .more__chev { margin-left: auto; color: var(--muted); transition: rotate .2s ease; }
+.ledger-now__btn[aria-expanded="true"] .more__chev { rotate: 90deg; }
+.ledger-now__ico { flex: 0 0 28px; width: 28px; height: 28px; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.ledger-now__ico[data-tag="working"] { color: rgb(var(--tone-green)); }
+.ledger-now__ico[data-tag="working"] path { fill: currentColor; stroke: none; }
+.ledger-now__ico[data-tag="waiting"] { color: rgb(var(--tone-amber)); }
+.ledger-now__ico circle, .ledger-now__ico[data-tag="waiting"] path { stroke: currentColor; }
+.ledger-now__book { padding: 0 22px 14px; }
+.ledger-now > .fog { padding: 0 26px 18px; }
+#history .ledger-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin: 0; padding: 15px calc(var(--ledger-corner-width) + 30px) 2px 24px; }
+.ledger-nav__end { display: flex; min-width: 0; flex-wrap: wrap; justify-content: flex-end; gap: 0 8px; margin: 0 0 0 auto; text-align: right; }
+.ledger-nav__end > .pj-note { margin: 0; }
+.ledger-nav__end > #coverage:not(:empty)::before { content: "·"; margin-right: 8px; }
+.ledger-empty { margin: 0; padding: 12px 24px 8px; color: var(--muted); font-size: 14px; line-height: 22px; }
+.ledger-foot { display: flex; justify-content: center; gap: 18px; padding: 8px 24px 20px; }
+:where(#current, #history .ledger-paper) > .live-fallback-note { margin: 0 24px 12px; }
+#history .ledger-paper:has(> .live-fallback-note) { padding-bottom: 10px; }
+#history .ledger-paper:has(#history-empty:not([hidden])) .book--groups { padding-bottom: 0; }
+.ledger-foot .more { margin: 0; translate: none; }
+.ledger-tag { --tone: var(--tone-gray); color: rgb(var(--tone)); background: rgb(var(--tone) / var(--book-tag-bg)); box-shadow: none; }
+.ledger-tag:is([data-tag="fixed"], [data-tag="working"]) { --tone: var(--tone-green); }
+.ledger-tag[data-tag="not_fixed"] { --tone: var(--tone-red); }
+.ledger-tag[data-tag="wont_fix"] { --tone: var(--tone-violet); }
+.ledger-tag[data-tag="deferred"] { --tone: var(--tone-blue); }
+.ledger-tag:is([data-tag="to_owner"], [data-tag="waiting"]) { --tone: var(--tone-amber); }
+.ledger-when { white-space: nowrap; font-size: 14px; color: #5d5b55; }
+.ledger-detail { display: grid; gap: 3px; padding: 0 0 4px; font-size: 14px; line-height: 22px; color: #55534c; }
+.ledger-detail p { margin: 0; }
+.ledger-detail__say { color: var(--ink); }
+.ledger-detail__links { display: flex; flex-wrap: wrap; gap: 2px 18px; }
+.ledger-detail__acts { margin-top: 4px; }
+.ledger-name { display: flex; align-items: flex-start; gap: 8px; min-width: 0; }
+.ledger-name > .tag { flex: none; margin-top: 2px; }
+.ledger-name__t { min-width: 0; }
+/* 手上那两张小表：标题、说明按内容分宽，“跟了”放最右、靠右 */
+.ledger-now .ledger-now__book .book-table col:is(.book-col-name, .book-col-reason) { width: auto; }
+.ledger-now .ledger-now__book .book-table col.book-col-age { width: 120px; }
+.ledger-now .ledger-now__book .book-table thead th:last-child, .ledger-now .ledger-now__book tr.book-row > td.book-cell--age { text-align: right; }
+#history .ledger-paper {
+  position: relative; isolation: isolate;
+  --ledger-corner-width: 242px;
+  --ledger-outline: shape(from 32px 0, hline to calc(50% - 46px),
+    curve to 50% 8px with calc(50% - 19px) 0 / calc(50% - 9px) 3px,
+    curve to calc(50% + 46px) 0 with calc(50% + 9px) 3px / calc(50% + 19px) 0,
+    hline to calc(100% - 32px), curve to 100% 32px with calc(100% - 14px) 0 / 100% 14px,
+    vline to calc(100% - 38px), curve to calc(100% - 32px) calc(100% - 8px) with 100% calc(100% - 18px) / calc(100% - 14px) calc(100% - 8px),
+    hline to calc(50% + 46px), curve to 50% 100% with calc(50% + 19px) calc(100% - 8px) / calc(50% + 9px) 100%,
+    curve to calc(50% - 46px) calc(100% - 8px) with calc(50% - 9px) 100% / calc(50% - 19px) calc(100% - 8px),
+    hline to 32px, curve to 0 calc(100% - 38px) with 14px calc(100% - 8px) / 0 calc(100% - 18px),
+    vline to 32px, curve to 32px 0 with 0 14px / 14px 0, close);
+}
+#history .ledger-paper::before, #history .ledger-paper::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  border-radius: 32px;
+  clip-path: var(--ledger-outline);
+  pointer-events: none;
+}
+#history .ledger-paper::before { inset: 0; background: linear-gradient(color-mix(in srgb, var(--paper) 86%, rgb(var(--tone-green))), color-mix(in srgb, var(--paper) 78%, rgb(var(--tone-green)))); box-shadow: inset 0 0 0 1px var(--book-split), inset 0 0 0 4px var(--book-sheet-bg); }
+#history .ledger-paper::after { inset: 3px 7px 6px; background: var(--paper); box-shadow: inset 0 0 0 1px var(--book-line); }
+@supports not (clip-path: shape(from 0 0, line to 100% 100%, close)) {
+  #history .ledger-paper { --ledger-outline: polygon(0 0, calc(50% - 28px) 0, 50% 7px, calc(50% + 28px) 0, 100% 0, 100% calc(100% - 7px), calc(50% + 28px) calc(100% - 7px), 50% 100%, calc(50% - 28px) calc(100% - 7px), 0 calc(100% - 7px)); }
+}
+#history-book .book--groups { padding: 6px 18px 76px; background: none; box-shadow: none; backdrop-filter: none; }
+.ledger-corner { position: absolute; right: 10px; bottom: 6px; width: var(--ledger-corner-width); height: auto; pointer-events: none; user-select: none; }
+</style></body></html>

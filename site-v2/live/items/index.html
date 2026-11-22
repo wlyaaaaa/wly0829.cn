@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=1440"><title>等你的事 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/connect-auth/glass.css"><link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css"><link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/live/_lib/live-board.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script>
+<style>
+.page--items .lb-card[data-art="do"] { --lb-art: url('/live/items/art/do-v1.webp'); }
+.page--items .lb-card[data-art="choose"] { --lb-art: url('/live/items/art/choose-v1.webp'); }
+.page--items .lb-card[data-art="later"] { --lb-art: url('/live/items/art/later-v1.webp'); }
+.page--items .lb-card[data-art="know"] { --lb-art: url('/live/items/art/know-v1.webp'); }
+.page--items .lb-card[data-art="reports"] { --lb-art: url('/live/items/art/reports-v1.webp'); }
+.page--items .lb-card[data-art="closed"] { --lb-art: url('/live/items/art/closed-v1.webp'); }
+.page--items .lb-card--items .lb-rows > .lb-item { border-radius: 0; background: none; box-shadow: none; border-bottom: 1px solid var(--hair); }
+.page--items .lb-rows { gap: 0; }
+.page--items .lb-item { --gut: 0px; }
+.page--items .row__acts { max-width: 238px; flex-wrap: wrap; }
+.page--items .row__title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.page--items [data-text-open="true"] .row__title,.page--items .is-expanded .row__title,.page--items[data-viewer="owner"] .row__title { -webkit-line-clamp: unset; }
+.page--items .row__main { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+.page--items .row__main .row__title { flex: 1 1 100%; min-width: 0; }
+.page--items .row__meta { margin-left: 0; }
+.page--items .item-expand { margin: 0; padding: 0; min-height: 20px; font-size: 12px; }
+.page--items .item-options { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.page--items .row__sub>.item-bit { display: inline; }
+.page--items .item-bit+.item-bit:before { content: ' · '; }
+.page--items .brief > summary { cursor: pointer; list-style: none; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+.page--items .brief > summary::-webkit-details-marker { display: none; }
+.page--items .lb-item > .row__acts .btn { width: auto; padding: 0 10px; gap: 4px; font-size: 12.5px; letter-spacing: .03em; }
+.page--items .lb-item > .row__acts .btn::before { display: none; }
+.page--items #hero .card__glass { min-height: 0; padding: 20px 26px; }
+.page--items .hero__note { display: block; letter-spacing: 0; word-spacing: normal; }
+.page--items .lb-card__title { display: block; letter-spacing: 0; }
+.page--items .lb-card__more { display: block; text-align: center; }
+.page--items .lbp-side__list { contain: none; min-height: 0; overflow: visible; }
+.page--items .lbp-side__list > .more { margin-left: 0; translate: 0 0; padding-left: 0; }
+.closed-peek { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--hair); font-size: 15.5px; line-height: 23px; color: var(--ink); text-decoration: none; }
+.closed-peek span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.closed-peek time { color: var(--muted); }
+.trend-last { margin: 4px 0; font-size: 14px; }
+.needs-trend { width: 100%; height: 112px; overflow: visible; }
+.needs-trend__grid { stroke: var(--muted); stroke-opacity: .18; }
+.needs-trend__line { fill: none; stroke: #00A650; stroke-width: 2; }
+.needs-trend circle { fill: #00A650; }
+.needs-trend text { font-size: 10px; fill: var(--muted); }
+.page--items #closed-board { margin-top: 22px; }
+.page--items #closed-board .lb-rows { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 20px; }
+.page--items #closed-board .lb-rows:not(:has(> .lb-item:nth-child(4))) { grid-template-columns: minmax(0, 1fr); }
+.page--items #closed-board .lb-item:has(a.row__title) { position: relative; }
+.page--items #closed-board .lb-item a.row__title::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
+.page--items #closed-board .lb-item a.row__title:focus-visible { outline: none; }
+.page--items #closed-board .lb-item a.row__title:focus-visible::after { outline: 2px solid var(--ink); outline-offset: -2px; }
+.page--items #closed-board .lb-item :is(a:not(.row__title), button, summary, [role="button"], [role="link"]) { position: relative; z-index: 2; }
+.page--items #groups .lb-card[data-items-col] { grid-column: var(--items-column) !important; }
+.page--items #stats small { font-size: 14px; line-height: 19px; color: var(--ink-soft); }
+
+/* 多选：勾上一件，底部浮出一条和页眉同料的胶囊栏；按钮沿用实况的白色小胶囊，只确认一次 */
+.items-selection { position:fixed; left:50%; bottom:28px; z-index:40; display:flex; align-items:center; gap:10px; max-width:calc(100vw - 48px); box-sizing:border-box; padding:7px 8px 7px 18px; border:1px solid rgb(255 255 255 / .9); border-radius:999px; background:rgb(255 255 255 / .84); -webkit-backdrop-filter:blur(20px) saturate(170%); backdrop-filter:blur(20px) saturate(170%); box-shadow:inset 0 1px 0 #fff, 0 1px 2px rgb(20 20 19 / .06), 0 22px 44px -20px rgb(20 28 36 / .42); transform:translate(-50%, 0); transition:opacity .22s ease, transform .32s cubic-bezier(.2,.8,.2,1), visibility 0s; }
+.items-selection:not(.is-open) { opacity:0; visibility:hidden; pointer-events:none; transform:translate(-50%, 18px); transition:opacity .18s ease, transform .22s ease, visibility 0s .22s; }
+.items-selection__count { margin:0; font-size:14px; font-weight:600; letter-spacing:.02em; white-space:nowrap; color:var(--ink); }
+.items-selection__count b { display:inline-grid; place-items:center; min-width:22px; height:22px; margin:0 5px; padding:0 6px; box-sizing:border-box; border-radius:999px; background:#00A650; color:#fff; font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; }
+.items-selection__sep { width:1px; height:20px; background:rgb(20 20 19 / .12); }
+#item-selection-actions { display:flex; gap:8px; }
+.items-selection .btn--sm { height:32px; padding:0 15px; font-size:13px; }
+.items-selection [data-batch-action]:hover { box-shadow:inset 0 0 0 1px rgb(0 166 80 / .5), 0 10px 20px -12px rgb(20 20 19 / .4); }
+.items-selection .items-selection__clear { background:transparent; box-shadow:none; color:var(--muted); }
+.items-selection .items-selection__clear:hover { background:rgb(20 20 19 / .05); color:var(--ink); box-shadow:none; }
+body:has(.items-selection.is-open) .stage { padding-bottom:110px; }
+.items-choice { display:inline-grid; place-items:center; width:28px; height:28px; border-radius:9px; cursor:pointer; }
+.items-choice:hover { background:rgb(20 20 19 / .05); }
+.items-choice input { -webkit-appearance:none; appearance:none; width:18px; height:18px; margin:0; border-radius:6px; background:rgb(255 255 255 / .85); box-shadow:inset 0 0 0 1.5px rgb(20 20 19 / .24); cursor:pointer; transition:background-color .15s ease, box-shadow .15s ease; }
+.items-choice input:hover { box-shadow:inset 0 0 0 1.5px rgb(20 20 19 / .46); }
+.items-choice input:checked { background:#00A650 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.6 6.3l2.2 2.2 4.6-4.9' fill='none' stroke='white' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%2F%3E%3C%2Fsvg%3E") center / 13px 13px no-repeat; box-shadow:none; }
+.items-choice input:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+.page--items .lb-card--items .lb-rows > .lb-item:has(.items-choice input:checked) { background:rgb(0 166 80 / .06); box-shadow:0 0 0 7px rgb(0 166 80 / .06); border-radius:3px; }
+.items-done-group { grid-column:1/-1; margin:12px 0 2px; padding:0 0 6px 30px; border-bottom:1px solid var(--hair); color:var(--ink-soft); font-size:13px; font-weight:650; letter-spacing:.06em; }
+.items-done-group:first-child { margin-top:2px; }
+.items-private { display:flex; align-items:center; gap:7px; margin:2px 30px 18px 46px; color:var(--muted); font-size:14px; line-height:20px; }
+.items-private[hidden] { display:none; }
+.items-private::before { content:"🔒"; font-size:12px; opacity:.8; }
+#items-private { margin:12px 0 0 4px; }
+</style></head><body class="page page--live page--l2 page--board page--items"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage"><div class="field" aria-hidden="true"></div><a class="back" href="/live/#needs" data-back data-mo-rise>实况</a><ul class="notices" id="notices" aria-live="polite"></ul>
+<div class="lbp-top"><div class="lbp-title" data-mo-rise><img src="/live/img/tasks-icon.webp" alt="" width="360" height="360"><div><h1>等你的事</h1><p>需要你查看、确认或处理的事项，<br>分组呈现，快速跟进。</p></div></div><article class="card card--hero" id="hero" data-pic="right" data-mo-rise>
+
+<div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="/live/img/needs.webp" alt="" aria-hidden="true">
+<div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/needs.webp" width="1000" height="1000" alt=""></span>
+<div class="card__body"><p class="card__head" id="head"></p>
+<p class="hero__note" id="note"></p><div class="lbp-stats" id="stats"></div></div></div>
+</article><section class="lbp-side glass" data-mo-rise><p class="part">近 7 天的变化</p><div class="lbp-side__list"><div id="side-body">正在读关闭记录</div><a class="more" href="#closed">近 7 天下去的 ›</a><a class="more" href="#reports">等答的汇报 ›</a></div></section></div>
+<div class="lbp-tools"><form class="l2-search lbp-search" id="search" role="search"><input id="q" type="search" aria-label="搜索事项" placeholder="搜索事项"><button class="pill-btn" type="submit">查找</button></form><label class="l2-filter"><select id="kind-pick" aria-label="按类型看"><option value="">全部类型</option></select></label><label class="l2-filter"><select id="state-pick" aria-label="按状态看"><option value="">全部状态</option><option value="pending">待处理</option><option value="closed">已关闭</option></select></label><label class="l2-filter"><select id="due-sort" aria-label="事项排序"><option value="">默认顺序</option><option value="due">按到期时间看</option></select></label><div class="lbp-tools__end"><a class="more" href="#reports">等答的汇报 ›</a></div></div><div class="items-selection" id="item-selection" role="toolbar" aria-label="多选操作" aria-hidden="true" inert><p class="items-selection__count" id="item-selection-count" aria-live="polite"></p><span class="items-selection__sep" aria-hidden="true"></span><div id="item-selection-actions"></div><button class="btn btn--sm items-selection__clear" type="button" data-clear>取消选择</button></div><div id="groups" data-mo-rise></div><p class="items-private" id="items-private" hidden></p><div id="closed-board" data-mo-rise></div><p class="pj-note" id="board-empty" hidden>没有符合筛选的事项</p></main>
+<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-header.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-board.js"></script><script src="/live/items/page.js"></script>
+</body></html>

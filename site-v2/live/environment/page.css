@@ -1,0 +1,90 @@
+﻿/* 沿用电脑页的体检单，只收紧本页的数字、画窗和展开明细。 */
+#board { gap: 18px; }#board > .vz-board { margin-top: 0; }
+.l2-nav--data { margin-left: 0; padding-left: 0; }.l2-nav--data .l2-nav__groups { margin-left: 0; }.l2-nav__groups > span { font-size: 14px; color: var(--muted); }
+#hero, #board .grp, #board .grp.is-open { --win: 220px; }
+#hero .card__body { padding-right: var(--win); }
+#hero #head:not(:has(> .lamp)) { padding-inline-start: var(--gut); }
+@media (max-width: 1440px) { #hero, #board .grp, #board .grp.is-open { --win: 160px; } }
+#board .grp__head, #board .grp.is-open .grp__head { grid-template-columns: 22px minmax(0, 1fr) auto 44px; min-height: 100px; }
+#board .grp__title { flex-direction: column; align-items: flex-start; gap: 5px; }
+#board .grp__line { font-size: 15px; line-height: 24px; }
+#board .grp__figs { grid-template-columns: repeat(2, 156px); gap: 24px; }
+#board .grp__fig { width: 156px; }
+#board .grp.is-open .grp__figs { position: static; opacity: 1; visibility: visible; pointer-events: auto; }
+#board .grp__fk { overflow: visible; text-overflow: clip; white-space: nowrap; font-size: 13px; letter-spacing: 0; }
+#board .grp__fv { font-size: 23px; line-height: 32px; }
+#board .grp__fv b { font-size: 27px; }
+#board .grp__acts { min-width: 44px; }
+#board .grp__chapter { padding-top: 0; padding-bottom: 22px; }
+#board .grp__ghost .fog__chart { min-height: 225px; }
+#board [data-section="software"] .grp__ghost .fog__chart { min-height: 340px; }
+#board [data-section="runtime"] .grp__ghost .fog__chart { min-height: 150px; }
+.env-note { margin: 0 0 14px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+.env-details { margin-top: 14px; font-size: 14px; line-height: 1.8; }
+.env-details > summary, .env-path > summary { cursor: pointer; color: var(--ink-soft); }
+.env-details[open] > summary { margin-bottom: 16px; }
+.env-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 13px; line-height: 1.65; }
+.env-table th, .env-table td { padding: 10px 14px 10px 0; text-align: left; font-weight: 400; word-break: normal; overflow-wrap: normal; }
+.env-table th { color: var(--muted); font-size: 12px; }.env-table td { border-top: 1px solid rgb(95 103 96 / .12); }
+.env-differences { list-style: none; margin: 0; padding: 0; }
+.env-differences li { display: grid; position: relative; grid-template-columns: minmax(0, 1fr); align-items: center; padding: 11px 0; font-size: 14px; border-bottom: 1px solid rgb(95 103 96 / .1); }
+.env-runtime { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+.env-runtime p { margin: 0 0 12px; font-size: 16px; white-space: nowrap; }
+.env-runtime dl { display: grid; grid-template-columns: 100px minmax(0, 1fr); gap: 8px 12px; margin: 0; font-size: 13px; line-height: 1.7; }
+.env-runtime dt { color: var(--muted); }.env-runtime dd { margin: 0; word-break: normal; overflow-wrap: anywhere; }
+.env-startup { list-style: none; margin: 0; padding: 0; }
+.env-startup > li { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(200px, 1.2fr) 70px 90px; align-items: baseline; gap: 20px; padding: 12px 0; border-top: 1px solid rgb(95 103 96 / .1); font-size: 14px; line-height: 1.7; }
+.env-startup > li > span { word-break: normal; overflow-wrap: normal; }.env-startup > li > span:nth-child(2) { color: var(--muted); font-size: 13px; }
+.env-path { display: contents; font-size: 12px; }.env-path > summary { white-space: nowrap; }
+.env-path code { grid-column: 1 / -1; font-size: 12px; white-space: pre-wrap; word-break: normal; overflow-wrap: anywhere; color: var(--muted); }
+.env-scope { margin-top: 16px; margin-bottom: 0; }
+
+.env-path-text { grid-column: 1 / -1; font: inherit; font-size: 14px; overflow-wrap: anywhere; color: var(--muted); }
+.env-table { font-size: 14px; line-height: 1.8; border-radius: 12px; background: rgb(255 255 255 / .35); }
+.env-table th, .env-table td { padding: 12px 14px; }
+.env-table th { font-size: 13px; color: var(--ink-soft); }
+.env-table tbody tr:nth-child(even) { background: rgb(225 236 228 / .18); }
+.env-details > summary { list-style: none; }
+.env-details > summary::-webkit-details-marker { display: none; }
+.env-details > summary::after { content: " ›"; display: inline-block; margin-left: 8px; }
+.env-details[open] > summary::after { transform: rotate(90deg); }
+
+.env-startup > li > .env-program { min-width: 0; overflow-wrap: anywhere; }
+
+.env-table td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.env-table td:last-child .lamp--sm {
+  display: inline-block;
+  vertical-align: middle;
+  margin-inline-end: .35em;
+}
+#board .grp.is-unread .grp__head, #board .grp.is-unread .grp__fold { display: none; }
+#board .grp.is-unread .card__body { padding: 18px 32px; }
+#board .grp.is-unread [data-unread] { margin: 0; }
+[data-unread][hidden] { display: none; }
+#hero.is-unread .card__pic, #hero.is-unread .card__tint, #hero.is-unread .card__body > :not(#head) { display: none; }
+#hero.is-unread .card__body { min-height: 0; padding: 22px 32px; }
+#hero.is-unread .card__head { margin: 0; }
+#hero.is-unread .card__glass { min-height: 0; padding: 0; }
+
+#board .grp.is-open .grp__head { min-height: 76px; padding-block: 12px; }
+
+.env-differences li > .lamp { position: absolute; left: -26px; }
+.env-table th:first-child, .env-table td:first-child { padding-left: 0; width: 22%; }
+.env-table th:nth-child(4) { width: 14%; }
+.env-table th:last-child { width: 24%; }
+.env-table th { white-space: nowrap; }
+.env-differences + .env-details { margin-top: 14px; }
+@media (max-width:600px) {
+  .page--environment .stage { width:auto; max-width:100%; margin-inline:16px; padding-inline:0; }
+  #hero .card__body { padding-right:24px; }
+  #board .grp, #board .grp.is-open { --win:80px; }
+  #board .grp__head, #board .grp.is-open .grp__head { grid-template-columns:18px minmax(0,1fr) 44px; gap:8px; padding-inline:16px; }
+  #board .grp__figs { grid-column:2 / -1; grid-row:2; grid-template-columns:repeat(2,minmax(0,1fr)); width:100%; gap:12px; }
+  #board .grp__fig { width:auto; }
+  #board .grp__acts { grid-column:3; grid-row:1; }
+  #board .grp .grp__chapter { padding-inline:16px; }
+  #board :is(.grp__fk,.grp__line), .env-table :is(th,td), .env-startup > li > span { white-space:normal; overflow-wrap:anywhere; }
+  .env-runtime, .env-startup > li { grid-template-columns:minmax(0,1fr); gap:8px; }
+  .env-runtime dl { grid-template-columns:80px minmax(0,1fr); }
+  .env-table :is(th,td) { padding:8px 4px; }
+}

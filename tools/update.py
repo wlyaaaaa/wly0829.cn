@@ -1,427 +1,369 @@
-"""update：固定本次来源、列范围、接草稿试建与三关回执，整包发布后逐页记账。"""
+"""The selected-page checklist used by the existing website update instructions."""
 import argparse
-import importlib.util
-from datetime import timedelta
-from hashlib import sha256
+import hashlib
 import json
-from pathlib import Path
+import re
 import subprocess
 import sys
-import uuid
+import time
+from contextlib import contextmanager
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "scripts/content-refresh"))
-from editorial_ledger import Ledger, atomic_write_bytes, atomic_write_text
-from block_tool import asset_rows, draft_updates
-from update_gates import GATES, Run, draft_hash, git, locked, now, protected_inputs, read, timestamp, write
-from update_numbers import numbers, require_numbers
-import update_batch
+sys.path[:0] = [str(ROOT / part) for part in ("scripts/content-refresh", "site-astro/tools")]
+from editorial_ledger import Ledger, atomic_write_bytes, companion_root, read_json, write_json
+import selected_project
 
-MANUAL = {"learning", "personal-health", "cacb", "codex-remote", "personal-finance"}
-FROZEN = {"frozen", "冻结", "已冻结", "historical", "历史"}
-REPOSITORIES = Path("E:/PCConfig/registries/repository-paths.json")
-SUPPLY = Path("E:/.agents/config/personal-skill-supply.json")
-EXCLUSIONS = Path("E:/PCConfig/registries/site_repo_exclusions.json")
+RUNS = Path("E:/Cache/wly-site-build/refresh-runs")
+SCHEMA = "wly.selected-site-update.v1"
+FINGERPRINT = re.compile(r"[a-f0-9]{40}")
+REPORT = Path("E:/.agents/skills/report-page/scripts/New-ReportPage.ps1")
+STEPS = dict(renames="查改名", before="保留改前图", convert="改稿换进网页", scan="验成品", publish="发布回读")
 
 
-def route(value):
-    return value if value.endswith(("/", ".html")) else value + "/"
+def now():
+    return datetime.now(timezone(timedelta(hours=8))).isoformat(timespec="seconds")
 
 
-def inventory(store):
-    """作者页 + 保留页 + 代码页，HTML frozen 不等于产品冻结。"""
-    roots = [(route(p["route"]), "website" if p["id"] == "wly0829-cn" else "project-" + p["id"])
-             for p in store.projects if p.get("enabled") and p.get("route")]
-    stopped = [route(p["url"]) for p in store.pages.values() if p.get("url") and
-               (p.get("kind") in {"frozen", "skill-redirect"} or p.get("status") in FROZEN)]
-    result = {}
-    for slug, data in store.pages.items():
-        if data.get("url"):
-            result[route(data["url"])] = dict(page=slug, book=store.book_for(slug))
-    manifest = store.root / "site-astro/sources/frozen-site/manifest.json"
-    snapshot = read(manifest) if manifest.exists() else {}
-    extra = set(snapshot.get("routes", []))
-    extra.update("/" + p.removesuffix("index.html") if p.endswith("index.html") else "/" + p for p in snapshot.get("pages", {}))
-    if (store.root / "scripts/build-site.py").exists(): extra.add("/cv/")
-    for path in (store.root / "site-astro/src/pages").rglob("*.astro"):
-        name = path.relative_to(store.root / "site-astro/src/pages").as_posix()
-        if "[" not in name:
-            extra.add("/" if name == "index.astro" else route("/" + name.removesuffix(".astro").removesuffix("/index")))
-    for url in extra:
-        url = route(url)
-        if url not in result:
-            book = next((b for prefix, b in sorted(roots, reverse=True) if url.startswith(prefix)), "website")
-            result[url] = dict(page=url.strip("/").replace("/", "--") or "home", book=book)
-    for url, row in result.items():
-        row.update(url=url, frozen=any(url.startswith(prefix) for prefix in stopped),
-                   top_level=url.count("/") <= 2 and row["book"] in {"website", "rules"})
-    return list(result.values())
+def python(script, *args, check=True):
+    return subprocess.run([sys.executable, "-B", "-X", "utf8", str(ROOT / script), *map(str, args)],
+                          cwd=ROOT, check=check).returncode
 
 
-def changes(store, repositories, supply, exclusions):
-    site = {p.get("source", {}).get("repo", "").lower() for p in store.projects}
-    local = {r["repo"].lower() for r in repositories}
-    if not local: raise ValueError("仓库登记为空，不能据此认定项目消失")
-    ignored = {s.lower() for s in read(exclusions)["excluded"]}
-    installed = {s["name"] for s in supply["skills"] if s.get("install") is True}
-    installed -= {s["name"] for s in supply.get("retired_skills", [])}
-    aliases = {"learning": "career-development", "document-materials": "personal-formal-documents"}
-    skills = {aliases.get(s[6:], s[6:]) for s, p in store.pages.items() if s.startswith("skill-") and p.get("kind") == "skill"}
-    omitted = set(read(store.root / "config/skill-site-exclusions.json")["excluded"])
-    return dict(new_repositories=sorted(local - site - ignored),
-                missing_projects=sorted(r for r in site - local if "/" in r),
-                new_skills=sorted(installed - skills - omitted))
+def get_active():
+    paths = [p for p in RUNS.glob("update-*/update-batch.json") if not read_json(p).get("finished_at")]
+    if len(paths) > 1:
+        raise ValueError("有多趟更新未结束，请明确传 --batch")
+    return paths[0] if paths else None
 
 
-def start(root, directory, requested_at, projects=(), pages=(), scope=None, numbers_only=False,
-          first_pass=False, repositories=REPOSITORIES, supply=SUPPLY, exclusions=EXCLUSIONS):
-    root = Path(root).resolve(); requested = timestamp(requested_at)
-    if requested > now(): raise ValueError("开口时间不能在未来")
-    store = Ledger(root); catalog = inventory(store)
-    carry_file = store.companion / "files/update-dropped.json"
-    carry = read(carry_file) if carry_file.exists() else {}
-    catalog += [r["scope"] for p, r in carry.items() if p not in {v["page"] for v in catalog}]
-    named = set(projects); named_pages = set(pages)
-    known = {p["id"] for p in store.projects} | {r["book"] for r in catalog}
-    if named - known or named_pages - {r["page"] for r in catalog}:
-        raise ValueError("点名中有未登记的项目或页面")
-    repo_rows = read(repositories)["entries"]
-    bindings = {r["repo"].lower(): Path(r["path"]) for r in repo_rows}
-    question = changes(store, repo_rows, read(supply), exclusions)
-    links = root / "sources/creative/static-home/highlights-page.json"
-    highlights = {route(link["href"]) for s in read(links)["screens"] for link in s.get("links", [])} if links.exists() else set()
-    allowed = read(scope) if scope else None
-    if allowed is not None:
-        if not isinstance(allowed, list) or any(not isinstance(item, str) for item in allowed):
-            raise ValueError("范围名单须为项目 ID、账名或页名的 JSON 数组")
-        allowed = set(allowed)
-        if allowed - known - {r["page"] for r in catalog}: raise ValueError("范围名单含未登记项")
-    books = {r["book"]: store.read(r["book"]) for r in catalog}
-    snapshots, failures = {}, {}
-    selected = []
-    for row in catalog:
-        book = row["book"]; pid = book.removeprefix("project-")
-        is_named = pid in named or book in named or row["page"] in named_pages
-        if not first_pass and (row["frozen"] or (pid in MANUAL and not is_named)):
-            continue
-        if not first_pass and allowed is not None and not is_named and not ({pid, book, row["page"]} & allowed):
-            continue
-        if (named_pages or named) and scope is None and not first_pass and not is_named:
-            continue
-        data = books[book]
-        sources = data["source_repositories"] if not row["frozen"] else ["wlyaaaaa/wly0829.cn"]
-        for source in sources:
-            if source in snapshots or source in failures: continue
-            try:
-                checkout = bindings[source.lower()]
-                snapshots[source] = dict(commit=git(checkout, "rev-parse", "HEAD"), observed_at=now().isoformat())
-            except (KeyError, OSError, subprocess.SubprocessError) as error:
-                failures[source] = f"{source}: {type(error).__name__}"
-        old = data["pages"]
-        changed = not sources or any(s in failures for s in sources) or any(any(p.get("checked_sources", {}).get(s, {}).get("commit") != snapshots.get(s, {}).get("commit")
-                                        for s in sources) for p in old.values()) or not old
-        if not (first_pass or is_named or numbers_only or changed or row["page"] in carry): continue
-        review = old.get(row["page"], {}).get("semantic_review", {}).get("checked_at", "")
-        row.update(named=is_named, highlighted=any(row["url"].startswith(h) for h in highlights),
-                   last_review=review, review_scope="frozen-notice" if row["frozen"] else "whole-page",
-                   blocked=(["账里未登记来源仓库"] if not sources else [failures[s] for s in sources if s in failures]))
-        if row["page"] in carry: row.update(retry=carry[row["page"]])
-        selected.append(row)
-    selected.sort(key=lambda r: ("retry" not in r, not r["top_level"], not r["named"], not r["highlighted"],
-                                 timestamp(r["last_review"]).timestamp() if r["last_review"] else 0, r["page"]))
-    small = numbers_only or (0 < sum(r["named"] for r in selected) <= 3)
-    deadline = None if first_pass else (requested + timedelta(hours=3 if small else 12)).isoformat()
-    directory = Path(directory).resolve()
-    if directory.is_relative_to(root): raise ValueError("本次目录必须在公开工作树之外")
-    directory.mkdir(parents=True, exist_ok=False)
-    cutoff = now().isoformat()
-    scope_data = dict(cutoff=cutoff, sources=snapshots, source_failures=failures, pages=selected, questions=question)
-    write(directory / "scope.json", scope_data)
-    lines = ["# 一道多选题", "", "以下变化哪些要上站或调整去向？可多选；未选的继续保留现状，新页另开一件活。", ""]
-    labels = dict(new_repositories="新仓库", missing_projects="登记项目未找到", new_skills="新技能")
-    lines += [f"- [ ] {labels[kind]}：{item}" for kind, items in question.items() for item in items]
-    atomic_write_text(directory / "questions.md", "\n".join(lines) + "\n", encoding="utf-8")
-    state = dict(schema="wly.update-run.v1", status="open" if selected else "no-changes", run_id=uuid.uuid4().hex, root=str(root), requested_at=requested_at,
-                 cutoff=cutoff, deadline=deadline, first_pass=first_pass, scope="scope.json", events=[],
-                 protected_inputs=protected_inputs(root),
-                 pages={r["page"]: dict(status="pending", repairs=0, passed=[], blocked=r["blocked"]) for r in selected},
-                 timings=[dict(page=None, step="scope", round=1, started_at=requested_at, ended_at=cutoff, budget_seconds=None)])
-    write(directory / "state.json", state)
-    Run(directory).summary(state)
-    return state
-
-
-def replace_asset_rows(raw, page, rows):
-    if [r for r in asset_rows(raw) if r.get("page") == page] == rows: return raw
-    replacement = b"".join((json.dumps(r, ensure_ascii=False) + "\n").encode("utf-8") for r in rows)
-    result = []; inserted = False
-    for line in raw.splitlines(keepends=True):
-        if line.strip() and json.loads(line).get("page") == page:
-            if not inserted: result.append(replacement); inserted = True
-        else: result.append(line)
-    if not inserted: result.append((b"\n" if raw and not raw.endswith(b"\n") else b"") + replacement)
-    return b"".join(result)
-
-
-def merge(directory):
-    """三关回执决定哪些草稿可进作者源；同一能力的去处按账同进同退。"""
-    require_numbers(directory)
-    run = Run(directory)
-    with locked(run.directory):
-        state = run.load(); root = Path(state["root"]); store = Ledger(root)
-        drafts = run.directory / "drafts"
-        if git(root, "status", "--porcelain", "--untracked-files=all"):
-            raise ValueError("合入前作者工作树须干净，不能混入别的修改")
-        scope = {r["page"]: r for r in read(run.directory / "scope.json")["pages"]}
-        candidates = {p: drafts / p for p in state["pages"] if (drafts / p / "draft.json").is_file()
-                      and not state["pages"][p].get("merged_commit")}
-        groups = [{d["page"] for d in cap.get("destinations", [])}
-                  for book in {r["book"] for r in scope.values()} for cap in store.read(book)["capabilities"]]
-        ready = {p for p, row in state["pages"].items() if row["status"] == "ready" and set(row["passed"]) == set(GATES)}
-        peers = set().union(*groups) | candidates.keys()
-        failures = {p: state["pages"].get(p, {}).get("reason") or "三关或草稿未齐" for p in peers
-                    if p not in ready or p not in candidates and not state["pages"].get(p, {}).get("merged_commit")}
-        registry_file = "sources/refresh/registry.json"; registry = read(root / registry_file)
-        asset_map = "sources/assets/_library/asset-map.jsonl"
-        map_raw = (root / asset_map).read_bytes() if (root / asset_map).is_file() else b""
-        updates = {}
-        for p in sorted(candidates.keys() - failures.keys()):
-            try:
-                if state["pages"][p].get("draft_sha256") != draft_hash(run.directory, p): raise ValueError("过关后草稿已变，须重走三关")
-                updates[p] = draft_updates(root, candidates[p])
-            except (ValueError, KeyError, OSError) as error:
-                failures[p] = str(error)
-        blocking = {p: {p} for p in failures}
-        for _ in groups:  # 传播原始失败原因；重叠能力的传递同组也不能半合入。
-            for group in groups:
-                causes = set().union(*(blocking.get(p, set()) for p in group))
-                if causes:
-                    for p in group: blocking[p] = blocking.get(p, set()) | causes
-        allowed = candidates.keys() - blocking.keys()
-        deferred = {p: dict(reason="；".join(f"{q}：{failures[q]}" for q in sorted(blocking[p])),
-                            draft=str(candidates[p]), scope=scope[p]) for p in candidates.keys() & blocking.keys()}
-        for p, row in deferred.items(): write(candidates[p] / "deferred.json", row)
-        payloads = {}; merged_map = map_raw
-        for p in sorted(allowed):
-            files, rows, materials = updates[p]; payloads.update(files)
-            replacements = {r["id"]: r for r in rows}
-            registry["records"] = [replacements.pop(r["id"], r) if r.get("page") == p else r
-                                   for r in registry["records"] if r.get("page") != p or r["id"] in replacements] + list(replacements.values())
-            if materials is not None: merged_map = replace_asset_rows(merged_map, p, materials)
-        if merged_map != map_raw:
-            payloads[asset_map] = merged_map
-            marker_file = "sources/assets/_library/REQUESTS-READY.json"; marker = read(root / marker_file)
-            marker["asset_map_sha256"] = sha256(merged_map).hexdigest()
-            payloads[marker_file] = (json.dumps(marker, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
-        if allowed and registry != read(root / registry_file):
-            payloads[registry_file] = (json.dumps(registry, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
-        changed = {f: raw for f, raw in payloads.items() if not (root / f).exists() or (root / f).read_bytes() != raw}
-        before = {f: (root / f).read_bytes() if (root / f).exists() else None for f in changed}
-        commit = git(root, "rev-parse", "HEAD")
+@contextmanager
+def run_lock(batch):
+    # All entrypoints for this run share a Windows file lock. The OS releases it on interruption.
+    import msvcrt
+    batch.parent.mkdir(parents=True, exist_ok=True)
+    lock_dir = RUNS if batch.is_relative_to(RUNS.resolve()) else batch.parent
+    with (lock_dir / ".update.lock").open("a+b") as handle:
+        handle.seek(0)
         try:
-            for f, raw in changed.items():
-                target = root / f; target.parent.mkdir(parents=True, exist_ok=True); atomic_write_bytes(target, raw)
-            if changed:
-                git(root, "add", "--", *changed)
-                git(root, "commit", "-m", "Merge accepted page drafts", "-m", "变化：过关草稿进入作者源，未过页保留原内容。")
-                commit = git(root, "rev-parse", "HEAD")
-        except (OSError, subprocess.SubprocessError):
-            try: git(root, "reset", "--", *changed)
-            finally:
-                for f, raw in before.items():
-                    if raw is None: (root / f).unlink(missing_ok=True)
-                    else: atomic_write_bytes(root / f, raw)
-            raise
-        for p in allowed: state["pages"][p].update(merged_commit=commit, draft=str(candidates[p]))
-        carry_file = store.companion / "files/update-dropped.json"
-        carry = read(carry_file) if carry_file.exists() else {}
-        for p in allowed: carry.pop(p, None)
-        carry.update({p: dict(r, scope={k: v for k, v in r["scope"].items() if k != "retry"}) for p, r in deferred.items()})
-        write(carry_file, carry)
-        receipt = dict(merged=sorted(allowed), deferred=deferred, commit=commit, files=sorted(changed))
-        write(run.directory / "merge.json", receipt)
-        write(run.directory / "state.json", state)
-        run.summary(state)
-        return receipt
-
-
-def site_publisher(root):
-    spec = importlib.util.spec_from_file_location("update_publisher", root / "site-astro/tools/publish_site.py")
-    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
-    return module
-
-
-def confirm_publication(directory, receipt):
-    """只接受本次冻结包的正式回读；中断后可用同一回执补记。"""
-    run = Run(directory)
-    with locked(run.directory):
-        state = run.load(); root = Path(state["root"])
-        batch_file = run.directory / state["publication_batch"]; batch = read(batch_file)
-        receipt = Path(receipt).resolve()
-        if receipt != batch_file.parent / "live/publish-receipt.json": raise ValueError("不是本趟正式发布回执")
-        proof = read(receipt); publisher = site_publisher(root); dist = root / "dist"
-        if (batch["run_id"] != state["run_id"] or proof.get("update_batch") != batch
-                or proof.get("schema") != "wly.publish-receipt.v1" or proof.get("status") != "published"
-                or proof.get("dry_run") is not False or not proof.get("deployment")
-                or any(proof.get(key) != batch[key] for key in ("source_commit", "release_id", "manifest_sha256"))):
-            raise ValueError("发布回执与本轮冻结成品不一致")
-        result = dict(status="published", pages=sorted(batch["pages"]), receipt=str(receipt))
-        if all(state["pages"][p].get("publication") == receipt.relative_to(run.directory).as_posix() for p in batch["pages"]): return result
-        if publisher.oss.digest(dist / "release-manifest.json") != batch["manifest_sha256"]: raise ValueError("本趟冻结成品已变")
-        source = read(dist / "release-manifest.json")
-        # 成功回执已绑定当时源码；补记只核原包，允许作者源随后推进或收尾中断。
-        publisher.check_input_proofs(dist, source, {}, read(dist / ".build-receipt.json"), batch["source_commit"], verify_source=False)
-        publication = dict(schema="wly.site-publication.v1", status="published", deployment=proof["deployment"],
-                           source_commit=batch["source_commit"], verified_at_beijing=proof["completed_at_beijing"], readback=proof["get"])
-        for page, row in batch["pages"].items():
-            back = proof["get"].get(publisher.runtime.nav.route_file(row["route"]), {})
-            expected = source["input_fingerprints"]["routes"][row["route"]]["output_sha256"]
-            if (state["pages"][page].get("merged_commit") != row["merged_commit"] or back.get("status") != "pass"
-                    or back.get("http") != 200 or back.get("sha256") != expected or back.get("expected_sha256") != expected):
-                raise ValueError("本趟页缺成功回读：" + page)
-        store = Ledger(root)
-        for page, row in batch["pages"].items():
-            if not store.advance_page(page, row["checked_sources"], publication): raise ValueError("发布核对点未接受：" + page)
-            state["pages"][page].update(status="published", publication=receipt.relative_to(run.directory).as_posix())
-        if batch.get("registry_pending"):
-            from freshness import sync_registry
-            state["registry_sync"] = sync_registry(root / "sources/refresh/registry.json",
-                [r for r in batch["registry_pending"] if r["page"] in batch["pages"]])
-            if git(root, "diff", "--name-only", "--", "sources/refresh/registry.json"):
-                git(root, "commit", "--only", "-m", "Record verified publication checks", "--", "sources/refresh/registry.json")
-        write(run.directory / "state.json", state); run.summary(state)
-        return result
-
-
-def publish(directory, dry_run=False, legacy_baseline_reason=None, confirm=None):
-    if confirm: return confirm_publication(directory, confirm)
-    run = Run(directory)
-    with locked(run.directory):
-        state = run.load(); root = Path(state["root"]); store = Ledger(root)
-        scope = read(run.directory / "scope.json"); catalog = {r["page"]: r for r in scope["pages"]}
-        accepted = {p: row for p, row in state["pages"].items() if row.get("merged_commit") and row["status"] != "published"}
-        publisher = site_publisher(root)
-        previous = publisher.retention.predecessor() if not accepted and str(legacy_baseline_reason or "").strip() else None
-        legacy_swap = bool(previous and not previous.get("input_fingerprints"))
-        if not legacy_swap: require_numbers(directory)
-        if not accepted and not legacy_swap: raise ValueError("没有本趟已合入、尚未发布的页")
-        if git(root, "status", "--porcelain", "--untracked-files=all"): raise ValueError("成包前作者工作树须干净")
-        for row in accepted.values(): git(root, "merge-base", "--is-ancestor", row["merged_commit"], "HEAD")
-        output = run.directory / ("publish-" + uuid.uuid4().hex); output.mkdir()
-        timing = dict(page=None, step="publish", round=1 + sum(t["step"] == "publish" for t in state["timings"]), started_at=now().isoformat())
-        state["timings"].append(timing); write(run.directory / "state.json", state)
+            msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+        except OSError:
+            raise ValueError("这一趟已经在跑，请等当前命令结束") from None
         try:
-            builder = publisher.load("build-site")
-            builder.build(check_lock_only=True)
-            builder.refresh_home_highlights()
-            home_files = ["site-astro/sources/retained-home-cockpit/" + p for p in ("home.html", "dependencies.json", "assets")]
-            home_files.append("site-astro/sources/frozen-site/manifest.json")
-            git(root, "add", "--", *home_files)
-            if git(root, "diff", "--cached", "--name-only"):
-                git(root, "commit", "-m", "Freeze homepage inputs for publication", "-m", "变化：首页亮点重画与本趟源码一起冻结。")
-            source_commit = git(root, "rev-parse", "HEAD")
-            with (output / "prepare.log").open("w", encoding="utf-8") as log:
-                def command(*args):
-                    subprocess.run([str(x) for x in args], cwd=root, check=True, stdout=log, stderr=subprocess.STDOUT)
-                command(sys.executable, "-B", "-X", "utf8", root / "scripts/build-site.py")
-                dist = root / "dist"; source = read(dist / "release-manifest.json")
-                if source.get("source_commit") != source_commit: raise ValueError("构建没有冻结实际源码提交")
-                pages = {}
-                for p, row in accepted.items():
-                    sources = store.read(catalog[p]["book"])["source_repositories"]
-                    if not sources: raise ValueError("账里未登记来源仓库：" + p)
-                    pages[p] = dict(route=catalog[p]["url"], merged_commit=row["merged_commit"], checked_sources={s: dict(
-                        commit=scope["sources"][s]["commit"], time=scope["sources"][s]["observed_at"], materials_path=str(run.directory / "scope.json")) for s in sources})
-                prefixes = tuple("sources/pages/" + p + "/" for p in pages)
-                allowed = {r["route"] for r in pages.values()}
-                allowed.update(url for url, row in source["input_fingerprints"]["routes"].items() if any(k.startswith(prefixes) for k in row["inputs"]))
-                highlights = publisher.load("prepare-home-highlights")
-                if any(p.relative_to(root).as_posix().startswith(prefixes) for p in highlights.input_paths()): allowed.add("/")
-                numbers_dir = run.directory / "numbers"; closure = {}
-                if (numbers_dir / "result.json").is_file():
-                    from freshness import close_run
-                    closure = close_run(root, read(numbers_dir / "result.json"), read(numbers_dir / "apply-report.json"), dist)
-                    write(output / "freshness.json", closure)
-                batch = dict(run_id=state["run_id"], batch_id=output.name, source_commit=source_commit,
-                    release_id=source["release_id"], manifest_sha256=publisher.oss.digest(dist / "release-manifest.json"),
-                    pages=pages, page_count=len(pages), allowed_routes=sorted(allowed), legacy_baseline_reason=legacy_baseline_reason,
-                    registry_pending=closure.get("registry_pending", []))
-                batch_file = output / "batch.json"; write(batch_file, batch)
-                state["publication_batch"] = batch_file.relative_to(run.directory).as_posix(); write(run.directory / "state.json", state)
-                command(sys.executable, "-B", "-X", "utf8", root / "site-astro/tools/scan_glance.py", "--dist", dist, "--out", output / "scan")
-                base = [sys.executable, "-B", "-X", "utf8", root / "site-astro/tools/publish_site.py", "--dist", dist,
-                        "--scan-result", output / "scan/scan-result.json", "--update-batch", batch_file]
-                command(*base, "--dry-run", "--output", output / "dry-run")
-                if not dry_run: command(*base, "--output", output / "live")
-            timing["result"] = "dry_run" if dry_run else "published"
+            yield
         finally:
-            timing.update(ended_at=now().isoformat(), artifact=str(output.relative_to(run.directory)))
-            write(run.directory / "state.json", state); run.summary(state)
-    return dict(status="dry_run", batch=str(batch_file)) if dry_run else confirm_publication(directory, output / "live/publish-receipt.json")
+            handle.seek(0)
+            msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+
+
+def init(batch, plan):
+    if batch.exists():
+        raise ValueError("已有这趟清单，请用 status 接着跑")
+    active = get_active() if batch.is_relative_to(RUNS.resolve()) else None
+    if active:
+        raise ValueError(f"先继续这趟更新：{active}")
+    pages = plan["pages"]
+    if not pages:
+        raise ValueError("清单没有选定页")
+    routes = set()
+    for ident, row in pages.items():
+        if not re.fullmatch(r"[a-z0-9][a-z0-9_.-]*", ident):
+            raise ValueError(f"无效页编号：{ident}")
+        if not row["title"].strip() or not row["reason"].strip():
+            raise ValueError(f"漏写页名或改动原因：{ident}")
+        route = row["route"]
+        parsed = urlsplit(route)
+        if not route.startswith("/") or parsed.netloc or parsed.query or parsed.fragment or ".." in Path(route).parts or "\\" in route:
+            raise ValueError(f"无效页地址：{route}")
+        if route in routes:
+            raise ValueError(f"重复页：{route}")
+        routes.add(route)
+    if any(not entry["old"].strip() or not entry["new"].strip() for entry in plan.get("renames", [])):
+        raise ValueError("改名记录须同时写原称呼和现称呼")
+    return {**plan, "schema": SCHEMA, "run_id": batch.parent.name, "created_at": now(),
+            "repository": str(ROOT), "progress": {}, "attempts": []}
+
+
+def before(state, folder):
+    prior = state["progress"].get("before", {}).get("output", {})
+    return {ident: selected_project.snapshot_before(ROOT, folder, ident, row, prior.get(ident, {}))
+            for ident, row in state["pages"].items() if row.get("images") and not row.get("new")}
+
+
+def convert(state, folder):
+    grouped, assets, evidence = {}, {}, {}
+    selected = {key: row for key, row in state["pages"].items() if row.get("draft_dir") and not row.get("deferred")}
+    if selected:
+        converter = selected_project.dependencies(companion_root(ROOT))
+    for ident, row in selected.items():
+        if row.get("images") and not row.get("new") and ident not in state["progress"].get("before", {}).get("output", {}):
+            raise ValueError(f"先为这张页保存改前图：{row['title']}")
+        web, settings = selected_project.section(ROOT, row)
+        path = web / "content.js"
+        raw = grouped[path] if path in grouped else path.read_bytes().decode("utf-8")
+        grouped[path], images = selected_project.prepare_page(ROOT, folder, ident, row, converter, raw, web, settings)
+        assets.update({target: (report_image, data) for target, report_image, data in images.values()})
+        evidence[ident] = {"images": {key: str(values[1]) for key, values in images.items()},
+                           "inputs": selected_project.input_hashes(row)}
+    for target, (report_image, data) in assets.items():
+        selected_project.save_image(target, data)
+        selected_project.save_image(report_image, data)
+    for path, raw in grouped.items():
+        atomic_write_bytes(path, raw.encode("utf-8"))
+    return evidence
+
+
+def renames(state, folder):
+    terms = state.get("renames", [])
+    if any(not entry["old"].strip() or not entry["new"].strip() for entry in terms):
+        raise ValueError("改名记录须同时写原称呼和现称呼")
+    output = folder / "rename-hits.json"
+    if not terms:
+        write_json(output, {})
+        return str(output)
+    inputs = [(row["route"], Path(row["path"])) for row in state.get("rename_inputs", [])]
+    drafts = Path(state["drafts_dir"]) if "drafts_dir" in state else None
+    for project in sorted((ROOT / selected_project.WEB).iterdir()):
+        config = project / "project.json"
+        if drafts is None or not config.is_file():
+            continue
+        for name, section in read_json(config)["sections"].items():
+            source = drafts / project.name / "稿" / (name + ".md")
+            if source.is_file():
+                route = f"/{project.name}/{section.get('file', section['slug'] + '.html')}"
+                inputs.append((route, source))
+    layer = ROOT / "site-v2/first-layer"
+    sources = {"connect-auth/demo": ("/computer-access/",), "list-pages/demo": ("/projects/", "/skills/"),
+               "principles-page/source/文稿": ("/principles/",), "rules-page/demo": ("/rules/",),
+               "header/demo": ("共用导航",), "trust-modal": ("设备验证弹窗",)}
+    for relative, routes in sources.items():
+        inputs.extend((route, file) for file in sorted((layer / relative).glob("*"))
+                      if file.suffix in {".md", ".html", ".js"} for route in routes)
+    found = {}
+    for route, source in inputs:
+        data = source.read_text("utf-8-sig")
+        hits = [term for term in terms if term["old"] in data]
+        if hits:
+            found.setdefault(route, []).append({"file": str(source), "renames": hits})
+    write_json(output, found)
+    return str(output)
+
+
+def publishable(state):
+    return {ident: row for ident, row in state["pages"].items() if not row.get("deferred")}
+
+
+def allowed_routes(state):
+    return sorted({row["route"] for row in publishable(state).values()} | set(state.get("references", [])))
+
+
+def seal(state, folder, dist):
+    from publish_site import runtime
+    manifest_path = dist / "release-manifest.json"
+    manifest = read_json(manifest_path)
+    source = manifest["source_commit"]
+    rows = publishable(state)
+    if not rows or not FINGERPRINT.fullmatch(source):
+        raise ValueError("须先提交本轮源文件，再用成功封存的成品发布")
+    converted = state["progress"].get("convert", {}).get("output", {})
+    if any(row.get("draft_dir") and converted.get(ident, {}).get("inputs") != selected_project.input_hashes(row)
+           for ident, row in rows.items()):
+        raise ValueError("选定稿或图有新变化，先转页并重新构建")
+    pages, hashes = {}, {}
+    for ident, row in rows.items():
+        rel = runtime.nav.route_file(row["route"])
+        row_source = row.get("merged_commit", source)
+        if not FINGERPRINT.fullmatch(row_source) or subprocess.run(
+                ["git", "merge-base", "--is-ancestor", row_source, source], cwd=ROOT).returncode:
+            raise ValueError(f"本轮成品没有合入 {row['title']} 的提交")
+        if not (dist / rel).is_file():
+            raise ValueError(f"本轮成品缺选定页：{row['route']}")
+        hashes[rel] = manifest["files"][rel]["sha256"]
+        pages[ident] = {"route": row["route"], "merged_commit": row_source}
+    frozen = {"run_id": state["run_id"], "batch_id": state["run_id"], "source_commit": source,
+              "release_id": manifest["release_id"], "manifest_sha256": hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
+              "pages": pages, "allowed_routes": allowed_routes(state), "html_hashes": hashes}
+    identity = folder / "publisher-batch.json"
+    if identity.is_file() and read_json(identity) != frozen and any(not attempt["dry_run"] for attempt in state["attempts"]):
+        raise ValueError("已有实发回执，继续使用原成品")
+    write_json(identity, frozen)
+    return identity
+
+
+def collect(state, folder, final_only=False):
+    sealed = folder / "publisher-batch.json"
+    if not sealed.is_file():
+        return {}
+    from publish_site import runtime
+    frozen = read_json(sealed)
+    receipt = runtime.retention.shared() / "published.json"
+    history = [read_json(receipt)] if receipt.is_file() else []
+    for attempt in state["attempts"]:
+        path = Path(attempt["directory"]) / "publish-receipt.json"
+        if not attempt["dry_run"] and path.is_file():
+            proof = read_json(path)
+            if proof.get("deployment") and proof.get("completed_at_beijing"):
+                history.append({**proof, "schema": "wly.site-publication.v1",
+                                "status": "published", "local_attempt": proof["status"] != "published", "readback": proof["get"],
+                                "verified_at_beijing": proof["completed_at_beijing"]})
+    found = {}
+    for proof in history:
+        if (final_only and proof.get("local_attempt")) or proof.get("update_batch") != frozen or not proof.get("deployment"):
+            continue
+        for ident, row in frozen["pages"].items():
+            rel = runtime.nav.route_file(row["route"])
+            back = proof.get("readback", {}).get(rel, {})
+            if (back.get("status") == "pass" and back.get("http") == 200
+                    and back.get("sha256") == back.get("expected_sha256") == frozen["html_hashes"][rel]):
+                found.setdefault(ident, proof)
+    return found
+
+
+def result(state, folder):
+    rows, galleries = [], []
+    before_images = state["progress"].get("before", {}).get("output", {})
+    after_images = state["progress"].get("convert", {}).get("output", {})
+    attempt = state["attempts"][-1] if state["attempts"] else {}
+    receipt_file = Path(attempt["directory"]) / "publish-receipt.json" if attempt else None
+    receipt = read_json(receipt_file) if receipt_file and receipt_file.is_file() else {}
+    for ident, row in state["pages"].items():
+        proof = state.get("public_readback", {}).get(ident)
+        label = "已上线" if proof else "待下次" if row.get("deferred") else "未上线"
+        if label == "未上线" and receipt.get("status") == "dry_run":
+            label = "预演通过"
+        if row.get("new"):
+            label += " · 新页"
+        rows.append([row["title"], row.get("deferred") or row["reason"], label])
+        pictures = [dict(src=path, caption=phase + " · " + picture, private=True)
+                    for picture, after in after_images.get(ident, {}).get("images", {}).items()
+                    for phase, path in (("改前", before_images.get(ident, {}).get(picture)), ("改后", after))
+                    if path]
+        if pictures:
+            galleries.append({"type": "heading", "level": 3, "text": row["title"]})
+            galleries.append({"type": "gallery", "items": pictures})
+    steps = [[STEPS[name], f"{proof['seconds']:.1f} 秒"] for name, proof in state["progress"].items() if name in STEPS]
+    blocks = [{"type": "table", "columns": ["页", "为什么改", "结果"], "rows": rows}, *galleries]
+    if notes := state.get("notes"):
+        blocks.append({"type": "points", "items": notes})
+    if error := receipt.get("error"):
+        blocks.append({"type": "text", "text": "发布停在 " + error})
+    if steps:
+        blocks.append({"type": "table", "columns": ["这一步", "用时"], "rows": steps})
+    output = folder / "update-result.json"
+    write_json(output, {"title": "网站更新结果", "kind": "report", "report_id": state["run_id"],
+                        "no_question_reason": "这页记录更新内容和发布回读。", "blocks": blocks})
+    return output
+
+
+def update_ledger(state, folder, batch):
+    for ident, proof in collect(state, folder).items():
+        row = state["pages"][ident]
+        state.setdefault("public_readback", {})[ident] = proof["commit"]
+        advanced = state.setdefault("ledger_updated", [])
+        if ident not in advanced and row.get("checked_sources"):
+            if Ledger(ROOT).advance_page(row.get("ledger_page", ident), row["checked_sources"], proof,
+                                         route=row["route"], project=row.get("project")):
+                advanced.append(ident)
+        write_json(batch, state)
+    if collect(state, folder, final_only=True).keys() == publishable(state).keys():
+        required = {ident for ident, row in publishable(state).items() if row.get("checked_sources")}
+        if required <= set(state.get("ledger_updated", [])):
+            state.setdefault("finished_at", now())
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    sub = parser.add_subparsers(dest="action", required=True)
-    begin = sub.add_parser("start")
-    begin.add_argument("--root", type=Path, default=ROOT)
-    begin.add_argument("--requested-at", required=True, help="本人开口的带时区时间")
-    begin.add_argument("--project", action="append", default=[])
-    begin.add_argument("--page", action="append", default=[])
-    begin.add_argument("--scope", type=Path, help="范围名单 JSON 数组：项目 ID、账名或页名；不填按全部动了的项目")
-    begin.add_argument("--numbers-only", action="store_true")
-    begin.add_argument("--first-pass", action="store_true", help="仅全站头一遍：全页入围，无总截止")
-    for key, default in (("repositories", REPOSITORIES), ("supply", SUPPLY), ("exclusions", EXCLUSIONS)):
-        begin.add_argument("--" + key, type=Path, default=default)
-    numeric = sub.add_parser("numbers")
-    numeric.add_argument("--budget", type=float, default=300, help="取数默认预算，只记用时不截断")
-    numeric.add_argument("--only", help="明确只换这些页的数字，逗号分隔；默认取全部已登记允许页")
-    sub.add_parser("merge")
-    publishing = sub.add_parser("publish")
-    publication_action = publishing.add_mutually_exclusive_group()
-    publication_action.add_argument("--dry-run", action="store_true")
-    publishing.add_argument("--legacy-baseline-reason", help="首趟旧式基线整站换版的明确理由")
-    publication_action.add_argument("--confirm", type=Path, help="正式回读已成功时，仅补记本趟账")
-    trial = sub.add_parser("trial")
-    for name in ("baseline-dist", "baseline-rendered", "checks-input"):
-        trial.add_argument("--" + name, type=Path, required=True)
-    for action in ("status", "begin", "repair", "step-start", "step-end", "pass", "reject", "drop", "record-published", "finish"):
-        cmd = sub.add_parser(action)
-        cmd.add_argument("--page")
-        cmd.add_argument("--step")
-        cmd.add_argument("--artifact")
-        cmd.add_argument("--reason", default="")
-        cmd.add_argument("--budget", type=float)
-        cmd.add_argument("--event-id", help="重发同一操作时沿用，避免重复计数")
-    update_batch.register(sub)
-    for cmd in sub.choices.values(): cmd.add_argument("--run-dir", type=Path, required=True)
+    parser.add_argument("--batch", type=Path)
+    commands = parser.add_subparsers(dest="action", required=True)
+    commands.add_parser("init").add_argument("--plan", required=True, type=Path)
+    for name in ("status", "before", "convert"):
+        commands.add_parser(name)
+    commands.add_parser("renames").add_argument("--plan", type=Path)
+    commands.add_parser("scan").add_argument("--dist", required=True, type=Path)
+    publish = commands.add_parser("publish")
+    publish.add_argument("--dist", required=True, type=Path)
+    publish.add_argument("--previous-manifest", type=Path)
+    publish.add_argument("--previous-site-dist", type=Path)
+    publish.add_argument("--dry-run", action="store_true")
+    commands.add_parser("result").add_argument("--report-generator")
     args = parser.parse_args()
-    try:
-        if args.action.startswith("batch-"):
-            state = update_batch.main(args)
-        elif args.action == "start":
-            state = start(args.root, args.run_dir, args.requested_at, args.project, args.page, args.scope,
-                          args.numbers_only, args.first_pass, args.repositories, args.supply, args.exclusions)
-        elif args.action == "status":
-            run = Run(args.run_dir)
-            with locked(run.directory): state = run.load(); run.summary(state)
-        elif args.action == "numbers":
-            state = numbers(args.run_dir, args.budget, args.only)
-        elif args.action == "merge":
-            state = merge(args.run_dir)
+    if args.action == "publish" and (args.previous_manifest or args.previous_site_dist) and not args.dry_run:
+        parser.error("实发采用登记的上次成功发布；自选上次成品只用于演练")
+    if args.action == "renames" and args.plan:
+        plan = args.plan.resolve()
+        folder = plan.parent
+        if folder.is_relative_to(ROOT):
+            parser.error("本轮资料须放在公开源码仓库之外")
+        with run_lock(folder / "update-batch.json"):
+            print(renames(read_json(plan), folder))
+        return 0
+    path = args.batch or get_active()
+    if not path:
+        parser.error("没有在跑的更新；开始时传 --batch")
+    batch = path.resolve()
+    folder = batch.parent
+    if folder.is_relative_to(ROOT):
+        parser.error("更新清单须放在公开源码仓库之外")
+    with run_lock(batch):
+        if args.action == "init":
+            write_json(batch, init(batch, read_json(args.plan)))
+            print(batch)
+            return 0
+        state = read_json(batch)
+        if state["schema"] != SCHEMA or state["repository"] != str(ROOT):
+            raise ValueError("更新清单不属于此工作树")
+        if args.action == "status":
+            print(json.dumps(state, ensure_ascii=False, indent=2))
+            return 0
+        started = time.monotonic()
+        output = None
+        code = 0
+        if args.action in ("before", "convert", "renames"):
+            step = {"before": lambda: before(state, folder), "convert": lambda: convert(state, folder),
+                    "renames": lambda: renames(state, folder)}[args.action]
+            output = step()
+        elif args.action == "scan":
+            code = python("site-astro/tools/scan_glance.py", "--dist", args.dist.resolve(), "--pages",
+                          ",".join(allowed_routes(state)), "--out", folder / "scan", check=False)
+            output = str(folder / "scan/scan-result.json")
         elif args.action == "publish":
-            state = publish(args.run_dir, args.dry_run, args.legacy_baseline_reason, args.confirm)
-        elif args.action == "trial":
-            from update_trial import trial
-            state = trial(args.run_dir, args.baseline_dist, args.baseline_rendered, args.checks_input)
-        else:
-            if args.action in {"begin", "repair"} or args.action == "step-start" and args.page:
-                require_numbers(args.run_dir)
-            state = Run(args.run_dir).apply(args.action, args.page, args.step, args.artifact, args.reason, args.budget, args.event_id)
-        print(json.dumps(dict(run_dir=str(args.run_dir), **state), ensure_ascii=False, indent=2))
-    except (ValueError, KeyError, OSError, subprocess.SubprocessError) as error:
-        parser.exit(1, f"update: {error}\n")
+            identity = seal(state, folder, args.dist.resolve())
+            if not args.dry_run:
+                update_ledger(state, folder, batch)
+            if not state.get("finished_at"):
+                attempt = folder / f"publish-{len(state['attempts']) + 1:02}"
+                state["attempts"].append({"directory": str(attempt), "dry_run": args.dry_run})
+                write_json(batch, state)
+                command = ["--dist", args.dist.resolve(), "--update-batch", identity, "--scan-result",
+                           folder / "scan/scan-result.json", "--output", attempt]
+                if args.previous_manifest:
+                    command.extend(["--previous-manifest", args.previous_manifest.resolve()])
+                if args.previous_site_dist:
+                    command.extend(["--previous-site-dist", args.previous_site_dist.resolve()])
+                if args.dry_run:
+                    command.append("--dry-run")
+                code = python("site-astro/tools/publish_site.py", *command, check=False)
+                output = str(attempt / "publish-receipt.json")
+                if not args.dry_run:
+                    update_ledger(state, folder, batch)
+        elif not state.get("finished_at"):
+            update_ledger(state, folder, batch)
+        state["progress"][args.action] = {"time": now(), "seconds": round(time.monotonic() - started, 3),
+                                           "status": "failed" if code else "done", "output": output}
+        write_json(batch, state)
+        if args.action in ("publish", "result"):
+            report = result(state, folder)
+            if args.action == "result" and args.report_generator:
+                subprocess.run(["pwsh", "-NoProfile", "-File", str(REPORT), "-ContentPath", str(report),
+                                "-OutputPath", str(folder / "网站更新结果.html"), "-Directory", str(folder),
+                                "-KeepDays", "0", "-NoOpen", "-OwnerAsked", "-Generator", args.report_generator], check=True)
+            print(report)
+        elif output:
+            print(json.dumps(output, ensure_ascii=False))
+        return code
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

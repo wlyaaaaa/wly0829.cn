@@ -1,0 +1,187 @@
+/* “项目”“技能”两张顶层页的试看：一面白墙，挂着一张张自己会发光的画。两页共用这一份。
+   本人说过的：页眉下面不放标题；一屏应该看到两个项目；最要紧的几个一行一张大画，其余一行两张小画。
+   想调的量都在 :root 里；右下角的小面板改的也是这几个量。 */
+
+:root {
+  --wall: #faf9f5;
+  --ink: #141413;
+  --big-vh: 41;                                   /* 大画的高占窗口高的百分之几。41 = 刚打开的第一屏正好两张整的 */
+  --big-h: calc(var(--big-vh) * 1vh);
+  --col: min(calc(var(--big-h) * 2.5), 72vw);     /* 墙上这一列的宽：大画是 5:2，所以宽 = 高 × 2.5。两页同一个宽 */
+  --gap-big: 5.5vh;                               /* 上下两张大画之间的白墙 */
+  --gap-small: clamp(14px, 1.5vw, 26px);          /* 小画之间的白墙 */
+  --glow: 1;                                      /* 光晕浓淡，0 没有，1 最浓。本人 11-13 16:46 在试看页上调的是 100 */
+  --ease: cubic-bezier(.22, .9, .24, 1);
+}
+
+html { scroll-behavior: auto; }
+
+body {
+  margin: 0;
+  background: var(--wall);
+  color: var(--ink);
+  font-family: "SiteSans", "HarmonyOS Sans SC", "PingFang SC", "Noto Sans SC", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* —— 墙 —— 页眉下面直接就是第一张画：让出悬浮页眉的位置（12 + 55），再留一点缝 */
+.wall {
+  position: relative;
+  z-index: 0;
+  width: var(--col);
+  margin: 0 auto;
+  padding: calc(79px + 2.2vh) 0 14vh;
+}
+
+.wall__end {
+  margin: 12vh 0 0;
+  text-align: center;
+  font-size: 13.5px;
+  letter-spacing: .06em;
+  color: #9a9a94;
+}
+
+/* 截图自查用（网址带 #reveal=all 时）：关掉所有过渡，拍到的就是最后的样子 */
+.no-anim *, .no-anim *::before, .no-anim *::after { transition: none !important; animation: none !important; }
+
+/* —— 画怎么挂 —— */
+.hang { display: grid; }
+.hang--big { grid-template-columns: 1fr; row-gap: var(--gap-big); }
+
+.hang--small {
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-small);
+  margin-top: var(--gap-big);
+}
+
+/* 技能页：全是小画，一行两张，画更扁（3:1） */
+.wall--skills .hang--small { margin-top: 0; }
+.wall--skills .piece { aspect-ratio: 3 / 1; }
+
+/* 一张画。注意：.piece 自己不能加 transform、opacity，不然后一张的光晕会盖到前一张画上 */
+.piece {
+  position: relative;
+  display: block;
+  aspect-ratio: 5 / 2;
+  border-radius: 26px;                 /* 和页眉那块玻璃同一个弧度 */
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hang--small .piece { border-radius: 17px; }
+
+.piece:focus-visible { outline: 2px solid var(--ink); outline-offset: 5px; }
+
+/* 光晕：同一张画虚化、调淡，垫在画后面，比画大一圈；相邻两张的光在中间融到一起 */
+.piece__glow {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 50%;
+  width: 150%;
+  height: 190%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  transition: opacity 1.5s ease .12s;
+}
+
+.piece.is-in .piece__glow { opacity: var(--glow); }
+
+/* 画框 */
+.piece__frame {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  background: #f1efe8;
+  box-shadow:
+    0 1px 1px rgb(20 20 19 / .05),
+    0 20px 44px -26px rgb(20 28 36 / .42);
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+  transition:
+    opacity .9s ease,
+    transform 1.1s var(--ease),
+    box-shadow .5s ease;
+}
+
+.piece.is-in .piece__frame { opacity: 1; transform: translate3d(0, 0, 0); }
+.hang--small .piece:nth-child(even) .piece__frame { transition-delay: .09s; }
+
+/* 画原样放满画框，一点不裁：封面上的字贴着边，裁一点就缺字 */
+.piece__art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* 鼠标放上去：这张抬起来、光更亮，别的退后一点 */
+@media (hover: hover) {
+  .piece.is-in:hover .piece__frame {
+    transform: translate3d(0, -6px, 0);
+    transition-delay: 0s;
+    box-shadow:
+      0 1px 1px rgb(20 20 19 / .05),
+      0 34px 60px -28px rgb(20 28 36 / .5);
+  }
+
+  .piece.is-in:hover .piece__glow { opacity: min(1, calc(var(--glow) + .25)); transition: opacity .45s ease; }
+
+  .wall:has(.piece:hover) .piece.is-in:not(:hover) .piece__frame {
+    opacity: .76;
+    transition: opacity .45s ease, transform 1.1s var(--ease), box-shadow .5s ease;
+  }
+
+  /* 技能页：鼠标放到一张上，同一个项目名下的几张（同门）一起亮着，不退后 */
+  .wall:has(.piece:hover) .piece.is-in.is-kin:not(:hover) .piece__frame { opacity: 1; }
+  .piece.is-in.is-kin .piece__glow { opacity: min(1, calc(var(--glow) + .2)); transition: opacity .45s ease; }
+}
+
+/* —— 右下角：调这一页（只是试看用的，不属于页面本身）—— */
+.knobs {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 90;
+  width: 248px;
+  padding: 12px 14px 14px;
+  border-radius: 16px;
+  background: rgb(255 255 255 / .86);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 0 0 1px rgb(20 20 19 / .07), 0 18px 40px -20px rgb(20 28 36 / .4);
+  font-size: 13px;
+  color: #2a2a27;
+}
+
+.knobs[hidden] { display: none; }
+.knobs__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.knobs__head b { font-size: 13px; letter-spacing: .04em; }
+
+.knobs button {
+  border: 0;
+  border-radius: 999px;
+  padding: 5px 11px;
+  font: inherit;
+  font-size: 12px;
+  color: inherit;
+  background: rgb(20 20 19 / .06);
+  cursor: pointer;
+}
+
+.knobs button:hover { background: rgb(20 20 19 / .11); }
+.knobs label { display: grid; grid-template-columns: 62px 1fr 26px; align-items: center; gap: 8px; margin: 7px 0; }
+.knobs input[type="range"] { width: 100%; accent-color: #141413; }
+.knobs output { text-align: right; font-variant-numeric: tabular-nums; color: #6f6f69; }
+.knobs__out { margin: 9px 0 9px; font-size: 12px; line-height: 1.5; color: #55554f; }
+.knobs[data-folded="true"] > :not(.knobs__head) { display: none; }
+.knobs[data-folded="true"] { width: auto; }
+.knobs[data-folded="true"] .knobs__head { margin: 0; gap: 12px; }

@@ -1,0 +1,21 @@
+{
+  "data.**.schema": "序列化格式编号，用于生产端和读取端判断结构版本。",
+  "data.**.state_version": "运行状态的格式版本，用于程序选择解码方式。",
+  "data.**.path_key": "程序归并同一来源使用的路径键。",
+  "data.**.run_keys": "自动任务逐次结果的索引键，供程序定位回执。",
+  "data.**.issue_key": "AI 账本按这个键合并同一事项。",
+  "data.**.event_id": "后端关联同一事件的编号。",
+  "data.**.item_ids": "后端关联已登记事项的编号列表。",
+  "data.**.thread_ids": "后端关联处理会话的编号列表。",
+  "data.**.panel_id": "后端标识对应面板的编号。",
+  "data.**.raw_name": "来源的原始标识，用来关联已转换的显示名称。",
+  "data.**.title_source": "标题取值来源标记，用于生成显示文案。",
+  "data.**.name_source": "名称取值来源标记，用于生成显示文案。",
+  "data.**.phase_source": "阶段取值来源标记，用于生成显示文案。",
+  "data.**.time_source": "时间取值来源标记，用于生成显示文案。",
+  "data.**.observed_at_unix": "采集时刻的 Unix 数字，用于后端排序和新鲜度判断。",
+  "data.**.expires_at_unix": "到期时刻的 Unix 数字，用于后端判断是否过期。",
+  "data.**.cooldown_until_unix": "后端下次可以尝试的 Unix 时刻，用于调度。",
+  "data.**.refresh_mode": "Live 客户端读取数据时使用的刷新策略。",
+  "data.**.cpu_c": "后端已把温度写进 screen.cells[].text，简报格子按 text 显示。"
+}

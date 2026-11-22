@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>电脑 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css">
+<link rel="stylesheet" href="/connect-auth/glass.css">
+<link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css">
+<link rel="stylesheet" href="/live/_lib/live-page.css">
+<link rel="stylesheet" href="/live/_lib/live-viz.css">
+<link rel="stylesheet" href="/live/computer/page.css">
+<link rel="stylesheet" href="/motion/motion.css">
+<script src="/motion/motion.js"></script>
+</head>
+<body class="page page--live page--l2 page--data page--computer">
+
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+
+<!-- 第二层：电脑。页头是一幅打开的玻璃机箱，读数标签直接标在画上；第一句下面先说“几组里几组要留意”。
+     下面一组一行（LiveViz.board）：要留意的排前面、带灯和原因、自己展开；正常的一行（一句话 + 几个大数字 + 走势小线），点开成章（大图 + 数字小格）。 -->
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div>
+
+  <a class="back" href="/live/" data-back data-mo-rise>实况</a>
+
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+
+  <article class="card card--hero card--machine" id="hero" data-pic="right" data-mo-rise>
+    <div class="card__glow" aria-hidden="true"></div>
+    <div class="card__glass glass">
+      <div class="mach" aria-hidden="false">
+        <img src="/live/img/head-computer.webp" width="2000" height="667" alt="">
+        <svg class="mach__lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" data-part="lines"></svg>
+        <div data-part="tags"></div>
+      </div>
+      <div class="card__body">
+        <p class="card__head" data-part="head"><span class="lamp" aria-hidden="true"></span><span class="head__lead">正在读</span></p>
+        <p class="hero__count" data-part="count" hidden></p>
+        <ul class="hero__warns" data-part="warns" hidden></ul>
+        <p class="hero__note" data-part="note" hidden></p>
+        <div class="hero__devs" data-part="devs"></div>
+      </div>
+      <section class="desktop-config" id="desktop-config" aria-labelledby="desktop-config-title" hidden></section>
+    </div>
+  </article>
+
+  <nav class="l2-nav l2-nav--data" aria-label="去别的地方">
+    <span class="l2-nav__groups">
+      
+      <span class="hero__gf" data-part="grafana"></span>
+      <a href="/live/laptop/">笔记本 ›</a>
+    </span>
+  </nav>
+
+  <section class="stability-panel" aria-labelledby="stability-title">
+    <h2 class="l2-part" id="stability-title">台式机稳不稳</h2>
+    <p class="row__sub" id="stability-summary">没有记录</p>
+    <button class="more" type="button" id="stability-more" aria-expanded="false" aria-controls="stability-box" hidden>展开近 30 天 ›</button>
+    <div class="fold" id="stability-box" aria-hidden="true" inert><div id="stability-detail"></div></div>
+  </section>
+
+  <div id="stutters"></div>
+  <section class="card computer-responsiveness" id="responsiveness" aria-label="近 5 分钟电脑响应" hidden></section>
+  <section class="vz-board" id="board" data-mo-rise aria-label="各组"></section>
+
+  <!-- 各组下面：同一条时间轴看全部（织锦）。三十多条线一条一行细丝带，指着哪一分钟一条竖线贯穿所有行；最近卡过那几次是粉色竖带；点一行原地展开成大图 -->
+  <article class="card weave-card" id="weave-card" data-tone="none" data-mo-rise>
+    <div class="card__glow" aria-hidden="true"></div>
+    <div class="card__glass glass">
+      <div class="card__body">
+        <p class="weave-card__head">
+          <b id="weave-title"><span data-weave-title="24h" aria-hidden="false">近 24 小时</span><span data-weave-title="7d" aria-hidden="true">近 7 天</span></b><span id="weave-bucket">分钟均值</span>
+          <span class="seg" role="group" aria-label="短期曲线时间段">
+            <button type="button" data-range="24h" data-needs-pc aria-pressed="true" aria-controls="weave">24 小时</button>
+            <button type="button" data-range="7d" data-needs-pc aria-pressed="false" aria-controls="weave">近 7 天</button>
+          </span>
+        </p>
+        <div id="weave"></div>
+      </div>
+    </div>
+  </article>
+</main>
+
+<script src="/trust-modal/trust-modal.js"></script>
+<script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script>
+<script src="/live/_lib/live-ui.js"></script>
+<script src="/header/topbar.js"></script>
+<script src="/live/_lib/live-light.js"></script>
+<script src="/live/_lib/live-chart.js"></script>
+<script src="/live/_lib/live-viz.js"></script>
+<script src="/live/_lib/live-computer-stat.js"></script>
+<script src="/live/_lib/live-viz-events.js"></script>
+<script src="/live/computer/responsiveness.js"></script>
+<script src="/live/computer/display-recovery.js"></script><script src="/live/computer/draw10.js"></script><script src="/live/computer/adaptive.js"></script><script src="/live/computer/chart-viewport.js"></script><script src="/live/computer/page.js"></script>
+</body>
+</html>

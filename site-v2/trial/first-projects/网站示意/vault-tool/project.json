@@ -1,0 +1,30 @@
+{
+  "title": "加密保险箱",
+  "theme": {"p": "#18402E", "soft": "#E4E5D9", "accent": "#B58B48"},
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "skillNav": "vault-workflow",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "10.4rem"],
+    "去〔双层密码〕": ["go-double-v1.compressed.webp", "12rem"],
+    "去〔保险箱存取〕技能页": ["go-skill-v1.compressed.webp", "15rem"],
+    "去〔文件上锁〕技能页": ["go-file-v1.compressed.webp", "14rem"],
+    "回〔加密保险箱〕项目页": ["return-project-v1.compressed.webp", "15rem"],
+    "去〔密码中心〕项目页": ["go-password-v1.compressed.webp", "14rem"]
+  },
+  "detailArt": ["detail-v1.compressed.webp", "4rem"],
+  "sections": {
+    "总览": {
+      "slug": "project", "file": "project.html", "title": "加密保险箱",
+      "meta": "加密保险箱 · 总览", "nav": "项目", "imagePrefix": "总览"
+    },
+    "双层密码": {
+      "slug": "double-password", "file": "双层密码.html", "title": "双层密码",
+      "meta": "加密保险箱 · 双层密码", "nav": "项目", "imagePrefix": "双层密码"
+    },
+    "保险箱存取": {
+      "slug": "vault-workflow", "file": "vault-workflow.html", "title": "保险箱存取",
+      "meta": "技能 · 保险箱存取", "nav": "技能", "imagePrefix": "保险箱存取"
+    }
+  }
+}

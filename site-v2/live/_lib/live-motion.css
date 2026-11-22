@@ -1,0 +1,16 @@
+.page--computer .chart:not(.is-empty) .chart__svg { animation: none; }
+html:not(.mo-on) .computer-responsiveness .more__chev { transition: none; }
+@media print { .page--computer .chart__curves { clip-path: none !important; opacity: 1 !important; } }
+html.mo-on .page--live main details::details-content {
+  interpolate-size: allow-keywords;
+  height: 0;
+  opacity: 0;
+  overflow: clip;
+  transition: height calc(220ms * var(--sp)) var(--mo-move, ease),
+    opacity calc(200ms * var(--sp)) ease, content-visibility calc(220ms * var(--sp)) allow-discrete;
+}
+html.mo-on .page--live main details[open]::details-content { height: auto; opacity: 1; }
+
+/* 对话纸面带着画和卡片实底展开，标题在纸面快落稳时由 live-motion.js 淡入。 */
+html.live-chat-arrival .page--route .route-head .card__body { visibility: hidden; }
+html.live-chat-arrival.mo-vt-open::view-transition-new(root) { opacity: 1 !important; }

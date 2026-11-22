@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>一个对话 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css">
+<link rel="stylesheet" href="/connect-auth/glass.css">
+<link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css">
+<link rel="stylesheet" href="/live/_lib/live-page.css">
+<link rel="stylesheet" href="/live/_lib/live-record.css">
+<link rel="stylesheet" href="/live/_lib/live-route.css">
+<link rel="stylesheet" href="/motion/motion.css">
+<style>
+/* 光晕左右最多伸到页边留白的外沿。 */
+.route-head .card__glow { inset-inline: max(-60px, calc((var(--col) - 100vw) / 2)); }
+.route-say__text > .trust-note.live-mark--owner { flex-direction: row-reverse; padding: 0; background: transparent; border: 0; box-shadow: none; }
+.route-say__text > .trust-note.live-mark--owner:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.route-cols { align-items: start; }
+.route-mid > .route-crew { flex: none; }
+.route-cols:has(> .route-mid[hidden]) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.route-mid[hidden] { display: none; }
+.route-log .route-foot:empty { display: none; }
+#plan-box { scroll-margin-top: 70px; }
+.route-body.route-body--locked .route-cols { grid-template-columns: minmax(0, 1fr); }
+#plan .route-stop__text { -webkit-line-clamp: unset; }
+.route-say__text, .route-fact, .route-think__text { white-space: pre-wrap; overflow-wrap: anywhere; }
+</style>
+<script src="/motion/motion.js"></script>
+<script src="/live/_lib/live-motion.js"></script>
+</head>
+<body class="page page--live page--l3 page--route">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div>
+  <a class="back" href="/live/chats/" data-back data-mo-rise>AI 对话</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card route-head" id="hero" data-tone="off" data-pic="right" data-mo-rise>
+    <div class="card__glow" aria-hidden="true"></div>
+    <span class="route-art route-head__art" aria-hidden="true"></span>
+    <div class="card__body">
+      <p class="card__head" data-part="head"></p>
+      <p class="row__sub" data-part="privacy" hidden></p>
+      <p class="route-head__meta" data-part="meta" hidden></p>
+      <div class="route-head__row">
+        <div class="route-say"><span class="route-say__icon" aria-hidden="true"></span><p class="route-say__text" data-part="say" data-clip="say" hidden></p><button type="button" class="route-clip__more" data-clip-for="say" hidden>展开</button></div>
+        <div class="route-head__acts" data-part="acts" hidden></div>
+      </div>
+    </div>
+  </article>
+  <div class="route-body" id="rec">
+    <section class="route-card route-plan" id="plan-box" data-mo-rise>
+      <div class="route-plan__label"><span class="route-badge" data-ico="plan" aria-hidden="true"></span><div><h2 class="route-h__text rec-part">计划</h2><p class="route-plan__sub" id="plan-sub"></p></div></div>
+      <div class="route-plan__line"><ol class="route-line" id="plan"></ol><p class="route-plan__note" id="plan-note" hidden></p></div>
+    </section>
+    <div class="route-cols" data-mo-rise>
+      <section class="route-card route-now" id="now-box">
+        <h2 class="route-h"><span class="route-badge" data-ico="now" aria-hidden="true"></span><span class="route-h__text" id="now-label">正在执行</span></h2>
+        <p class="route-now__step" id="now-step"></p>
+        <p class="route-now__text" id="now-text"></p>
+        <section id="words"><div class="route-facts" id="facts"></div></section>
+        <span class="route-art route-now__art" aria-hidden="true"></span>
+      </section>
+      <div class="route-mid">
+        <section class="route-card route-think" id="think-box" hidden>
+          <h2 class="route-h"><span class="route-badge" data-ico="think" aria-hidden="true"></span><span class="route-h__text">思考摘要</span><button type="button" class="route-h__fold" data-clip-for="thinking" data-clip-icon aria-label="展开思考摘要" hidden></button></h2>
+          <p class="route-think__text" id="thinking" data-clip="thinking"></p>
+          <span class="route-art route-corner" aria-hidden="true"></span>
+        </section>
+        <section class="route-card route-crew" id="helpers-box">
+          <h2 class="route-h"><span class="route-badge" data-ico="crew" aria-hidden="true"></span><span class="route-h__text">帮手（子任务）</span><span class="route-h__tail" id="helpers-part"></span></h2>
+          <p class="route-tally" id="helpers-tally" hidden></p>
+          <ol class="route-rows" id="helpers"></ol>
+          <p class="route-note" id="helpers-note" hidden></p>
+          <div class="route-foot" id="helpers-more"></div>
+          <span class="route-art route-corner" aria-hidden="true"></span>
+        </section>
+      </div>
+      <section class="route-card route-log" id="log-box">
+        <h2 class="route-h"><span class="route-badge" data-ico="log" aria-hidden="true"></span><span class="route-h__text">过程记录</span><span class="route-h__tail" id="log-part"></span></h2>
+        <ol class="route-rows route-rows--log" id="log"></ol>
+        <p class="route-note" id="log-note" hidden></p>
+        <div class="route-foot" id="log-more"></div>
+      </section>
+    </div>
+  </div>
+</main>
+<script src="/trust-modal/trust-modal.js"></script>
+<script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script>
+<script src="/live/_lib/live-ui.js"></script>
+<script src="/live/item/record-text.js"></script>
+<script src="/header/topbar.js"></script>
+<script src="/live/_lib/live-light.js"></script>
+<script src="/live/_lib/live-route.js"></script>
+<script src="/live/chats/draw10.js"></script><script src="/live/chat/page.js"></script>
+</body>
+</html>

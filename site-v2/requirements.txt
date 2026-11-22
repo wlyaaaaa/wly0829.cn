@@ -1,0 +1,9 @@
+Pillow==12.3.0
+numpy==2.5.1
+beautifulsoup4==4.15.0
+fonttools==4.63.0
+brotli==1.2.0
+markdown-it-py==4.2.0
+mistune==3.3.3
+Markdown==3.10.2
+Pygments==2.20.0

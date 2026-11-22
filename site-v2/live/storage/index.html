@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=1440"><title>存储 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/connect-auth/glass.css">
+<link rel="stylesheet" href="/trust-modal/trust-modal.css"><link rel="stylesheet" href="/live/_lib/live.css">
+<link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script>
+<style>.page--l2 .card--hero[data-pic] .card__glass { min-height: 192px; }</style><link rel="stylesheet" href="/live/_lib/live-viz.css"><link rel="stylesheet" href="/live/storage/storage.css"><style>.resource-panel { margin-top: 28px; } .resource-panel > .part { margin-top: 0; } .panel-window { font-size: 12px; } .panel-table { overflow-x: auto; } .panel-table table { border-collapse: collapse; font-size: 12.5px; line-height: 20px; white-space: nowrap; } .panel-table th,.panel-table td { padding: 8px 12px; border-bottom: 1px solid var(--hair); text-align: left; } .resource-panel .vz-rank__name small { font-size: 13px; line-height: 20px; }</style></head>
+<body class="page page--live page--l2 page--resources page--storage">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div><a class="back" href="/live/" data-back data-mo-rise>实况</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card card--hero" id="hero" data-pic="right" data-mo-rise style="--pic-y:52%">
+    <div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="/live/img/computer.webp" alt="" aria-hidden="true">
+    <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/computer.webp" width="1000" height="1000" alt=""></span><div class="card__body">
+      <p class="card__head" id="head"></p>
+      <p class="hero__note" id="hero-note">存储</p><div class="hero__links"><a class="more more--link" href="/live/computer/">电脑 ›</a><a class="more more--link" href="/live/traffic/">海外流量 ›</a></div>
+    </div></div>
+  </article>
+  <div class="l2-board">
+<section class="card grp resource-card storage-wide" id="cleanup-card" data-pic="right" data-mo-rise aria-labelledby="cleanup-title">
+      <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/grp-disk.webp" alt=""></span><div class="card__body">
+        <div class="resource-head cl-head"><div class="cl-title"><h2 class="grp__name cl-name" id="cleanup-title">自动清理</h2><span id="cleanup-pill"></span></div><p class="pj-note" id="cleanup-note"></p></div>
+        <div class="grp__chapter cl-body" id="cleanup-body">
+          <div class="cl-panel cl-top">
+            <section class="cl-col" id="cleanup-total"></section>
+            <section class="cl-col"><p class="cl-k" id="cleanup-vols-k"></p><div id="cleanup-vols"></div></section>
+            <section class="cl-col" id="cleanup-tiles"></section>
+          </div>
+          <div class="cl-panel cl-bottom">
+            <section class="cl-col"><p class="cl-k">按规则 · 最近一轮</p><div id="cleanup-rules"></div></section>
+            <section class="cl-col"><p class="cl-k" id="cleanup-trend-k"></p><div class="cl-trend" id="cleanup-trend"></div></section>
+          </div>
+        </div>
+      </div></div>
+    </section>
+<section class="card grp resource-card storage-wide" id="disks-card" data-pic="right" data-mo-rise aria-labelledby="disks-title">
+      <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/dossier-backup-v1.webp" alt=""></span><div class="card__body">
+        <div class="resource-head dk-head"><h2 class="grp__name" id="disks-title">每块盘</h2><p class="pj-note" id="disks-note"></p></div>
+        <div class="grp__chapter" id="disks-box"><ul class="dk-rows" id="disks"></ul><p class="dk-foot" id="disks-foot"></p></div>
+      </div></div>
+    </section>
+<article class="card grp resource-card storage-mini" id="categories-card" data-pic="right" data-mo-rise>
+      <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/backups.webp" loading="lazy" alt=""></span><div class="card__body">
+        <div class="resource-head"><h2 class="grp__name">按用途 · 从大到小</h2><p class="pj-note" id="measured"></p></div>
+        <div class="grp__chapter"><p class="pj-note" id="categories-private" hidden></p><ul class="st-list" id="categories"></ul><button class="more" id="categories-more" hidden></button><div class="fold" id="categories-box"><div><ul class="st-list" id="categories-rest"></ul></div></div><section id="category-growth"></section><p class="pj-note" id="categories-note" hidden>类别有重叠，加起来不等于全盘。</p></div>
+      </div></div>
+    </article>
+<article class="card grp resource-card storage-mini" id="ssd-card" data-pic="right" data-mo-rise>
+      <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/grp-memory.webp" loading="lazy" alt=""></span><div class="card__body">
+        <div class="resource-head"><h2 class="grp__name">谁在大量写 SSD</h2><p class="pj-note" id="ssd-period"></p></div>
+        <div class="grp__chapter resource-panel" id="ssd-panel"><div class="vz-rank--detail" id="ssd-rank"></div><p class="pj-note" id="ssd-private" hidden></p><div class="st-ssd-foot"><span class="pj-note" id="ssd-count"></span><button class="more" type="button" id="ssd-more" hidden>展开原表 ›</button></div><div class="fold" id="ssd-box"><div><div class="panel-table" id="ssd-table" tabindex="0" role="region" aria-label="SSD 写入 · 原表"></div></div></div></div>
+      </div></div>
+    </article>
+<article class="card grp resource-card storage-mini" id="health-card" data-pic="right" data-mo-rise>
+      <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/grp-long.webp" loading="lazy" alt=""></span><div class="card__body">
+        <div class="resource-head"><h2 class="grp__name">磁盘健康</h2></div>
+        <div class="grp__chapter"><div id="disk-health"></div></div>
+      </div></div>
+    </article>
+<article class="card grp resource-card storage-mini storage-new-card" id="storage-totals-card" data-mo-rise>
+      <div class="card__glass glass"><div class="card__body">
+        <div class="resource-head"><h2 class="grp__name">读写流量</h2><span class="seg" role="group" aria-label="存储流量期间"><button type="button" data-storage-period="24h" aria-pressed="true">近 24 小时</button><button type="button" data-storage-period="7d" aria-pressed="false">近 7 天</button></span></div>
+        <div class="grp__chapter"><div class="pj-figs" id="storage-totals"></div><details class="st-detail"><summary class="live-disclosure">估算</summary><p class="pj-note" id="storage-totals-period"></p></details></div>
+      </div></div>
+    </article>
+<article class="card grp resource-card storage-mini" id="database-card" data-pic="right" data-mo-rise>
+      <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/dossier-backup-v1.webp" loading="lazy" alt=""></span><div class="card__body">
+        <div class="resource-head"><h2 class="grp__name">TimeAudit 数据库</h2></div>
+        <div class="grp__chapter"><div class="pj-figs" id="database-summary"></div><details class="st-detail" id="database-details"><summary class="live-disclosure">按周分区 · 展开</summary><div class="panel-table" id="database-table" tabindex="0" role="region" aria-label="数据库规模明细"></div></details></div>
+      </div></div>
+    </article>
+<article class="card grp resource-card storage-mini storage-new-card" id="cloud-card" data-pic="right" data-mo-rise style="--pic-y:24%">
+      <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/traffic.webp" loading="lazy" alt=""></span><div class="card__body">
+        <div class="resource-head"><h2 class="grp__name">云端</h2></div>
+        <div class="grp__chapter"><section class="resource-panel" id="cloud-draw10" hidden></section></div>
+      </div></div>
+    </article>
+  </div>
+</main>
+<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-header.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-chart.js"></script><script src="/live/_lib/live-viz.js"></script><script src="/live/_lib/live-viz-grid.js"></script><script src="/live/storage/kit.js"></script><script src="/live/storage/cleanup.js"></script><script src="/live/storage/disks.js"></script><script src="/live/storage/growth.js"></script><script src="/live/storage/draw10.js"></script><script src="/live/storage/page.js"></script>
+<style>
+.page--storage .l2-board { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; align-items: start; }
+.page--storage { --col: min(1760px,calc(100vw - 80px)); }
+.resource-card .card__pic { right: 0; top: 0; bottom: auto; width: 168px; height: 126px; }
+.page--storage .resource-card[data-pic="right"] .card__body { padding: 0; } .resource-head { min-height: 112px; padding: 24px 150px 16px 32px; }
+.resource-head .pj-note { margin: 6px 0 0; font-size: 12px; line-height: 18px; } .page--storage .resource-card .grp__chapter { padding: 0 32px 26px; margin-top: 0; }
+.resource-card .grp__name { font-size: 20px; } .resource-card .rows .row { position: relative; grid-template-columns: minmax(0,1fr); padding: 12px 0; min-height: 64px; }
+.resource-card .rows .row__text { grid-column: 1; min-width: 0; } .resource-card .row__main { display: flex; justify-content: space-between; gap: 10px; }
+.resource-card .row__meta { flex-shrink: 0; margin-left: auto; text-align: right; font-size: 13px; } .resource-card .row__title { font-size: 14px; min-width: 0; }
+.page--storage #ssd-rank .vz-rank__label { display: block; }
+.page--storage #ssd-rank .vz-rank__row { break-inside: avoid; min-height: 34px; margin: 0 0 4px; padding: 4px 8px; }
+.page--storage #ssd-rank .vz-rank__row:has(> .vz-rank__v) { grid-template-columns: minmax(0,1fr) auto; column-gap: 6px; align-items: center; }
+.page--storage #ssd-rank .vz-rank__name { grid-column: 1; }
+.page--storage #ssd-rank :is(.vz-mark,.vz-rank__name small) { display: none; }
+.page--storage #ssd-rank .vz-rank__bar { inset: 0; height: auto; border-radius: 12px; overflow: hidden; } .page--storage #ssd-rank .vz-rank__bar > i { border-radius: 0; opacity: .18; }
+.page--storage #ssd-rank .vz-rank__v { font-size: 14px; font-weight: 400; } .page--storage .is-unavailable .card__glass { min-height: 0; }
+.page--storage .is-unavailable .head__lead { font-size: 14px; line-height: 22px; color: var(--muted); }
+.page--storage .storage-new-card .resource-head { min-height: 0; padding-right: 32px; }
+.page--storage .storage-new-card .card__body { padding: 0; }
+.page--storage #storage-totals-card .resource-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; }
+.page--storage #storage-totals-card .grp__name { white-space: normal; }
+.page--storage #storage-totals-card .seg { margin: 0; }
+.page--storage #database-table table { width: 100%; white-space: normal; table-layout: fixed; }
+.page--storage #database-table th, .page--storage #database-table td { overflow-wrap: anywhere; }
+.page--storage .storage-cleanup { margin-top: 6px; }
+.page--storage .storage-cleanup > summary { font-size: 13px; font-weight: 400; color: var(--muted); }
+.page--storage .storage-cleanup .row__sub { overflow-wrap: anywhere; }
+.page--storage .storage-cleanup[open] { max-width:60ch; }
+.page--storage .storage-cleanup .row__sub { line-height:1.7; margin-top:8px; }
+
+.page--storage .resource-head { min-height: 100px; padding: 24px 112px 16px 24px; }
+.page--storage .resource-card .grp__chapter { padding: 0 24px 24px; }
+.page--storage .resource-card .card__pic { width: 130px; height: 100px; }
+.page--storage .resource-card .rows .row { min-height: 0; padding-block: 10px; }
+</style>
+</body></html>

@@ -36,13 +36,15 @@ sys.path.insert(0, str(ROOT / 'scripts/content-refresh'))
 from editorial_ledger import atomic_write_text
 MANIFEST = 'release-manifest.json'
 PLAN = 'oss-plan.json'
+REWRITER_VERSION = 10
 # These files describe the HTML host rather than page content. Moving robots or
 # the sitemap to OSS would change crawler behavior; CNAME/.nojekyll are Pages
 # controls. Search ownership TXT must also remain at the site's root.
 # The release manifest remains the existing online recovery entry.
-HOST_CONTROLS = {MANIFEST, 'CNAME', '.nojekyll', 'robots.txt', 'sitemap.xml', 'sogousiteverification.txt', 'favicon.ico', 'apple-touch-icon.png'}
+HOST_CONTROLS = {MANIFEST, 'CNAME', '.nojekyll', 'robots.txt', 'sitemap.xml', 'sogousiteverification.txt', 'favicon.ico', 'icon-192.png', 'apple-touch-icon.png'}
 TEXT_ASSETS = {'.js', '.mjs', '.css', '.svg', '.json', '.webmanifest'}
 STRINGS = re.compile(r'(?P<quote>["\'`])(?P<value>(?:\\.|(?!(?P=quote)).)*)(?P=quote)', re.S)
+TEMPLATE = re.compile(r'(?P<quote>`)(?P<value>.*)`', re.S)
 TAG = re.compile(r'<[^>]+>', re.S)
 ATTR = re.compile(r'(?P<name>[^\s=<>/]+)\s*=\s*(?P<q>["\'])(?P<value>.*?)(?P=q)', re.S)
 ALL_ATTR = re.compile(r'(?P<name>[^\s=<>/]+)\s*=\s*(?:(?P<q>["\'])(?P<quoted>.*?)(?P=q)|(?P<unquoted>[^\s>]+))', re.S)
@@ -70,8 +72,10 @@ def rewrite_cached(rewriter, data, owner, html_files=None):
 
 class FinalizeCache:
     """Local acceleration only; cache state never enters a release identity."""
+    MAX_REWRITE_BYTES = 4 * 1024 * 1024
+
     def __init__(self, dist, full, timings):
-        self.dist = dist; self.path = ROOT/'site-astro/.cache'/('finalize-'+hashlib.sha256(str(dist).encode()).hexdigest()[:16]+'.json')
+        self.dist = dist; self.path = ROOT/'site-astro/.cache'/('finalize-v2-'+hashlib.sha256(str(dist).encode()).hexdigest()[:16]+'.json')
         self.identity = [str(dist), digest(__file__), digest(Path(oss_origins.__file__)), digest(Path(__file__).with_name('prepare-home-entry-links.py'))]
         try: previous = read(self.path) if not full else {}
         except (OSError, ValueError): previous = {}
@@ -102,6 +106,10 @@ class FinalizeCache:
 
     def rewrite(self, rewriter, data, owner):
         rewriter.changes.pop(owner, None)
+        if len(data) > self.MAX_REWRITE_BYTES:
+            # Rewalk large snapshots without retaining Base64 or their lookup table.
+            self.rewritten += 1
+            return rewriter.rewrite(data, owner)
         if rewriter not in self.contracts:
             self.contracts[rewriter] = hashlib.sha256(json.dumps(sorted(rewriter.files)).encode()).hexdigest()
         def contract(row):
@@ -119,10 +127,13 @@ class FinalizeCache:
         if row is None:
             prior = rewriter.absolute_references; rewriter.absolute_references = set(); missing = len(rewriter.missing)
             rewriter._cache_inputs = set(); rewriter._cache_previous = set()
-            result = rewriter.rewrite(data, owner)
-            row = {'data': base64.b64encode(result).decode(), 'sha256': hashlib.sha256(result).hexdigest(), 'changes': rewriter.changes.get(owner),
-                   'refs': sorted(rewriter.references.get(owner, ())), 'absolute': sorted(rewriter.absolute_references),
-                   'missing': rewriter.missing[missing:], 'inputs': sorted(rewriter._cache_inputs), 'lookups': sorted(rewriter._cache_previous)}
+            try:
+                result = rewriter.rewrite(data, owner)
+                row = {'data': base64.b64encode(result).decode(), 'sha256': hashlib.sha256(result).hexdigest(), 'changes': rewriter.changes.get(owner),
+                       'refs': sorted(rewriter.references.get(owner, ())), 'absolute': sorted(rewriter.absolute_references),
+                       'missing': rewriter.missing[missing:], 'inputs': sorted(rewriter._cache_inputs), 'lookups': sorted(rewriter._cache_previous)}
+            finally:
+                del rewriter._cache_inputs, rewriter._cache_previous
             row['contract'] = contract(row)
             rewriter.absolute_references.update(prior); self.rewritten += 1
         else:
@@ -186,9 +197,9 @@ def csp_with_sources(policy, requirements):
     return ';'.join(segments)
 
 
-def javascript_literals(text, excluded=None):
+def javascript_literals(text, excluded=None, version=9, _start=0, _expression=False):
     """Observe quoted literals while skipping comments and regular expressions."""
-    index=0;regex_allowed=True;last_word=None;parentheses=[];jump_pending=False
+    index=_start;regex_allowed=True;last_word=None;parentheses=[];jump_pending=False;braces=0
     controls={'if','while','for','with','switch','catch'}
     expression_words={'return','throw','case','delete','typeof','void','new','in','of','yield','await','instanceof','else','do','break','continue','debugger'}
     while index<len(text):
@@ -206,6 +217,23 @@ def javascript_literals(text, excluded=None):
             if excluded is not None: excluded.append((index, len(text) if end<0 else end+2))
             if jump_pending and '\n' in text[index:end if end>=0 else len(text)]:regex_allowed=True;last_word=None;jump_pending=False
             index=len(text) if end<0 else end+2;continue
+        if char=='`' and version>=9:
+            start=segment=index;index+=1
+            while index<len(text):
+                if text[index]=='\\':index+=2;continue
+                if text[index]=='`':
+                    index+=1
+                    if excluded is not None:excluded.append((segment,index))
+                    yield TEMPLATE.match(text,start,index)
+                    break
+                if text.startswith('${',index):
+                    # Mask template text, leaving interpolation code visible to
+                    # constant-URL analysis. Recursive scans keep source offsets.
+                    if excluded is not None:excluded.append((segment,index+2))
+                    index=yield from javascript_literals(text,excluded,version,index+2,True)
+                    segment=index-1
+                else:index+=1
+            regex_allowed=False;last_word=None;continue
         if char in '\"\'`':
             match=STRINGS.match(text,index)
             if match:
@@ -233,6 +261,11 @@ def javascript_literals(text, excluded=None):
             if last_word in {'break','continue'}:jump_pending=True
             continue
         jump_pending=False
+        if _expression:
+            if char=='{':braces+=1
+            elif char=='}':
+                if not braces:return index+1
+                braces-=1
         if char=='(':
             parentheses.append(last_word in controls);regex_allowed=True
         elif char==')':regex_allowed=parentheses.pop() if parentheses else False
@@ -241,6 +274,7 @@ def javascript_literals(text, excluded=None):
         elif char=='.':regex_allowed=False
         elif char=='/':regex_allowed=True
         last_word=None;index+=1
+    return index
 
 
 def stamp():
@@ -294,8 +328,12 @@ def release_identifier(source, base, prefix, github, objects):
                                     sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
 
+def host_controls(version):
+    return HOST_CONTROLS - {'icon-192.png'} if version < 10 else HOST_CONTROLS
+
+
 def current_home_links(source, version=4, rule_pin=None):
-    if version not in (1,2,3,4,5,6,7,8):raise ValueError('Unsupported homepage navigation replay version')
+    if version not in range(1, REWRITER_VERSION + 1):raise ValueError('Unsupported homepage navigation replay version')
     raw=(Path(source)/'index.html').read_bytes()
     if not all(value in raw for value in (b'home-01-link-1-0', b'home-01-link-2-0')):
         return raw,None
@@ -317,13 +355,14 @@ def verify_manifest(manifest, require_remote=True):
     files, objects = manifest['files'], oss['objects']
     if not objects or not any(x.endswith(('.js', '.mjs')) for x in objects):
         raise ValueError('OSS release lacks runtime objects')
-    if any(not (rel.endswith('.html') or rel in HOST_CONTROLS) for rel in files):
+    controls = host_controls(oss.get('rewriter_version', 1))
+    if any(not (rel.endswith('.html') or rel in controls) for rel in files):
         raise ValueError('Unexpected asset retained in HTML-host inventory')
     for rel, obj in objects.items():
         if rel.startswith('/') or '\\' in rel or any(x in ('', '.', '..') for x in rel.split('/')):
             raise ValueError('Invalid OSS object path: ' + rel)
         # Keep existing, wrongly split Sogou publications readable as predecessors.
-        if rel in files or rel.endswith('.html') or rel in HOST_CONTROLS - {'sogousiteverification.txt'}:
+        if rel in files or rel.endswith('.html') or rel in controls - {'sogousiteverification.txt'}:
             raise ValueError('OSS object overlaps HTML-host inventory: ' + rel)
         key = obj.get('key', '')
         validate_target(base, key[:-len(rel)-1])
@@ -383,10 +422,10 @@ def verify_manifest(manifest, require_remote=True):
 
 class Rewriter:
     def __init__(self, files, base, prefix, origin, version=1, source_root=None):
-        if version not in (1,2,3,4,5,6,7,8):
+        if version not in range(1, REWRITER_VERSION + 1):
             raise ValueError('Unknown OSS asset rewriter version')
         self.files = files
-        self.assets = set(files) - {x for x in files if x.endswith('.html')} - HOST_CONTROLS
+        self.assets = set(files) - {x for x in files if x.endswith('.html')} - host_controls(version)
         self.base, self.prefix, self.origin = base, prefix, origin.rstrip('/')
         self.changes = {}
         self.references = {}
@@ -410,7 +449,7 @@ class Rewriter:
         return 'connect'
 
     def literal_dependencies(self, text, owner, context):
-        literals = javascript_literals(text) if context == 'js' else STRINGS.finditer(text)
+        literals = javascript_literals(text, version=self.version) if context == 'js' else STRINGS.finditer(text)
         for match in literals:
             found = self.resolve(match['value'], owner, context)
             if found:
@@ -460,7 +499,7 @@ class Rewriter:
         if not consumes_oss:
             for match in BLOCK.finditer(text):
                 context = 'css' if match['tag'].lower() == 'style' else 'json' if re.search(r'type=["\']application/(?:ld\+)?json',match.group(0).split('>',1)[0],re.I) else 'js'
-                literals = javascript_literals(match['body']) if context == 'js' else STRINGS.finditer(match['body'])
+                literals = javascript_literals(match['body'], version=self.version) if context == 'js' else STRINGS.finditer(match['body'])
                 values = [item['value'] for item in literals]
                 if context == 'css': values += [item['value'].strip() for item in CSS_URL.finditer(match['body'])]
                 if any(self.is_oss_resource(value,owner,context) for value in values): consumes_oss = True; break
@@ -626,7 +665,7 @@ class Rewriter:
 
     def strings(self, text, owner, context, offset=0, ignored_spans=()):
         edits = []
-        literals=javascript_literals(text) if context=='js' and self.version>=3 else STRINGS.finditer(text)
+        literals=javascript_literals(text, version=self.version) if context=='js' and self.version>=3 else STRINGS.finditer(text)
         for m in literals:
             if any(start <= m.start() and m.end() <= end for start, end in ignored_spans):
                 continue
@@ -642,7 +681,7 @@ class Rewriter:
 
     def constant_url_edits(self, text, owner, offset):
         excluded = []
-        literals = list(javascript_literals(text, excluded))
+        literals = list(javascript_literals(text, excluded, version=self.version))
         masked = list(text)
         for start, end in excluded:
             masked[start:end] = ' ' * (end-start)
@@ -694,7 +733,7 @@ class Rewriter:
     def javascript(self, text, owner, offset=0):
         dynamic, spans = self.constant_url_edits(text, owner, offset) if self.version>=7 else ([], [])
         edits = dynamic + self.strings(text, owner, 'js', offset, ignored_spans=spans)
-        literal_spans={(m.start('value'),m.end('value')) for m in javascript_literals(text)} if self.version>=3 else None
+        literal_spans={(m.start('value'),m.end('value')) for m in javascript_literals(text, version=self.version)} if self.version>=3 else None
         if '__vite__mapDeps=' in text:
             # Vite's sole preload URL prefix becomes empty because dependency
             # literals are now absolute URLs. No control flow is modified.
@@ -826,7 +865,9 @@ def offline_asset_keys(rewriter, source, inherited):
         if Path(rel).suffix in TEXT_ASSETS:
             rewriter.rewrite((source/rel).read_bytes(), rel)
     graph = {rel: set(refs) for rel, refs in rewriter.references.items()}
-    options = {'scheme': 'raw-dependency-closure.v1', 'rewriter_version': rewriter.version,
+    # Version 10 only changes the icon partition. Its affected dependencies are already in the graph.
+    key_version = 9 if rewriter.version == 10 else rewriter.version
+    options = {'scheme': 'raw-dependency-closure.v1', 'rewriter_version': key_version,
                'base': rewriter.base, 'origin': rewriter.origin}
     keys = {}
     for rel in sorted(local):
@@ -885,7 +926,7 @@ def preserved_resource_keys(manifest, html_files, base):
     return set(previous.get('reference_keys', ())) | {row['key'] for field in ('objects', 'local_objects') for row in previous.get(field, {}).values()}
 
 
-def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=8, previous_manifest=None, offline=False, html_files=None):
+def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=REWRITER_VERSION, previous_manifest=None, offline=False, html_files=None):
     source, output = Path(source).resolve(), Path(output).resolve()
     if output == source or output.is_relative_to(source) or source.is_relative_to(output):
         raise ValueError('Source and new output must be disjoint')
@@ -942,9 +983,10 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     output.mkdir(parents=True)
     home_bytes,home_proof=measured('home', lambda: current_home_links(source,version=rewriter_version)) if html_files is None or 'index.html' in html_files else ((source/'index.html').read_bytes(), None)
     objects, github, virtual = {}, {}, {}
+    controls = host_controls(rewriter_version)
     for rel in actual:
         if rel in inherited: continue
-        host = rel.endswith('.html') or rel in HOST_CONTROLS
+        host = rel.endswith('.html') or rel in controls
         destination = output / ('github' if host else 'oss') / rel
         destination.parent.mkdir(parents=True, exist_ok=True)
         if rel == MANIFEST:
@@ -988,7 +1030,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
             'github_files': github, 'objects': objects, 'url_changes': rewriter.changes,
             'closure': {k: sorted(v) for k, v in sorted(rewriter.references.items())},
             'reference_keys': sorted(rewriter.absolute_references),
-            'host_control_exceptions': sorted(set(actual) & HOST_CONTROLS),
+            'host_control_exceptions': sorted(set(actual) & controls),
             'summary': {'html_files': sum(x.endswith('.html') for x in github), 'objects': len(objects),
                         'object_bytes': sum(x['bytes'] for x in objects.values()),
                         'mp4_files': sum(x.endswith('.mp4') for x in objects),
@@ -1018,6 +1060,16 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     return plan
 
 
+def release_identity(manifest, manifest_sha256):
+    identity = {'release_id': manifest['release_id'], 'manifest_sha256': manifest_sha256,
+                'source_commit': manifest.get('source_commit', 'Unknown')}
+    fallback = manifest.get('oss', {}).get('objects', {}).get('live/_fallback.json')
+    if fallback:
+        identity['live_fallback'] = {'origin': manifest['oss']['asset_base_url'], 'key': fallback['key'],
+                                     'path': '/live/_fallback.json'}
+    return identity
+
+
 def finalize_dist(dist, full=False, timings=None, source_commit=None, html_files=None):
     global _FINALIZE_CACHE
     if source_commit is not None and source_commit != 'Unknown' and not re.fullmatch('[a-f0-9]{40}', source_commit):
@@ -1030,8 +1082,7 @@ def finalize_dist(dist, full=False, timings=None, source_commit=None, html_files
         if source_commit is not None and final.get('source_commit') != source_commit:
             final['source_commit'] = source_commit
             measured('manifest', lambda: write(Path(dist)/MANIFEST, final))
-        identity = {'release_id': final['release_id'], 'manifest_sha256': digest(Path(dist)/MANIFEST),
-                    'source_commit': final.get('source_commit', 'Unknown')}
+        identity = release_identity(final, digest(Path(dist)/MANIFEST))
         identity_path = Path(dist)/'release-identity.json'
         if not identity_path.is_file() or read(identity_path) != identity:
             measured('manifest', lambda: write(identity_path, identity))
@@ -1253,7 +1304,7 @@ def main():
     p.add_argument('--output', required=True)
     p.add_argument('--html-origin', default='https://wly0829.cn')
     p.add_argument('--test-loopback', action='store_true', help='Local rehearsal only; publisher rejects this plan')
-    p.add_argument('--rewriter-version',type=int,choices=(2,3,4,5,6,7,8),default=8)
+    p.add_argument('--rewriter-version',type=int,choices=range(2, REWRITER_VERSION + 1),default=REWRITER_VERSION)
     p.add_argument('--previous-manifest',type=Path,help='Reuse exact objects and original receipts from this sealed release')
     for command in ('verify-local',):
         p = commands.add_parser(command)

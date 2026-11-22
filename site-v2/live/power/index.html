@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>用电 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css">
+<link rel="stylesheet" href="/connect-auth/glass.css">
+<link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css">
+<link rel="stylesheet" href="/live/_lib/live-page.css">
+<link rel="stylesheet" href="/live/_lib/live-viz.css">
+<link rel="stylesheet" href="/motion/motion.css">
+<script src="/motion/motion.js"></script>
+</head>
+<body class="page page--live page--l2 page--data page--power">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div>
+  <a class="back" href="/live/" data-back data-mo-rise>实况</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card card--hero" id="hero" data-pic="right" data-tone="none" data-mo-rise style="--pic-y:52%">
+    <div class="card__glow" aria-hidden="true"></div>
+    <img class="card__tint" src="/live/img/head-power.webp" alt="" aria-hidden="true">
+    <div class="card__glass glass">
+      <span class="card__pic" aria-hidden="true"><img src="/live/img/head-power.webp" width="900" height="900" alt=""></span>
+      <div class="card__body">
+        <p class="card__head" data-part="head"><span class="head__lead">正在读</span></p>
+        <p class="hero__count" data-part="count" hidden></p>
+        <p class="hero__note" data-part="note" hidden></p>
+        <div class="hero__links" data-part="links"><a class="more more--link" href="/live/computer/">电脑 <span class="more__chev">›</span></a></div>
+      </div>
+    </div>
+  </article>
+  <nav class="l2-nav l2-nav--data" aria-label="查看各组"><span class="l2-nav__groups"><span>用电</span></span></nav>
+  <section class="vz-board" id="board" data-mo-rise aria-label="用电各组"></section>
+</main>
+<script src="/trust-modal/trust-modal.js"></script>
+<script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script>
+<script src="/live/_lib/live-ui.js"></script>
+<script src="/header/topbar.js"></script>
+<script src="/live/_lib/live-light.js"></script>
+<script src="/live/_lib/live-chart.js"></script>
+<script src="/live/_lib/live-viz.js"></script>
+<script src="/live/_lib/live-stat.js"></script>
+<script src="/live/smooth/detail.js"></script>
+<script src="/live/computer/adaptive.js"></script><script src="/live/power/page.js"></script>
+<style>
+.page--power .hero__warns { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+.page--power .hero__warns li { display: flex; flex-wrap: wrap; gap: 4px 8px; }
+.page--power .hero__note { display: block; }
+.page--power .hero__note > span { display: inline; }
+.page--power .hero__note > span + span::before { content: ' · '; }
+.page--power .hero__note .stat-gap { margin-left: 0; }
+.page--power .grp[data-key="power"] .vz-chips { grid-template-columns: minmax(0, 1fr); }
+.page--power .grp:is([data-key="power"], [data-key="scenes"]) .grp__chapter { container-type: inline-size; }
+.page--power .grp[data-key="scenes"] .grp-split { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.page--power .grp[data-key="scenes"] .vz-rank__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  column-gap: 24px;
+}
+.page--power .grp[data-key="scenes"] .vz-rank__row--empty { grid-column: 1 / -1; }
+@container (max-width: 640px) {
+  .page--power .grp[data-key="power"] .grp__main { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+}
+.page--power .grp[data-key="supply"] .grp-split > :last-child { grid-column: 1 / -1; }
+.page--power .grp[data-key="supply"] [data-rank="2"] > .vz-rank__list { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+.page--power .grp[data-key="apps"] .grp__fig { grid-template-rows: auto 30px 30px; }
+.page--power .grp[data-key="apps"] .grp__fk { white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+.page--power :is([data-key="apps"], [data-key="supply"] [data-rank="2"]) .vz-rank__name { display: block; white-space: normal; overflow-wrap: anywhere; }
+.page--power .grp[data-key="apps"] .vz-rank__label { white-space: normal; }
+.page--power [data-app-rank] .vz-rank__name { padding-inline-start: 25px; }
+.page--power .power-app-icon { position: absolute; inset-inline-start: 0; }
+.page--power .grp[data-key="supply"] [data-rank="2"] .vz-rank__row { align-content: start; row-gap: 4px; }
+.page--power .grp[data-key="supply"] [data-rank="2"] .vz-rank__name { display: contents; }
+.page--power .grp[data-key="supply"] [data-rank="2"] .vz-rank__name small { grid-column: 1 / -1; grid-row: 2; margin: 0; }
+.page--power .grp[data-key="supply"] [data-rank="2"] .vz-rank__v { grid-column: 2; grid-row: 1; }
+</style>
+</body>
+</html>
+

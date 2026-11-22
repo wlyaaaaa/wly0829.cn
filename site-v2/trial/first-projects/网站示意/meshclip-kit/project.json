@@ -1,0 +1,30 @@
+{
+  "title": "隔空剪贴板",
+  "theme": {
+    "p": "#0D4A94",
+    "soft": "#E3E6E3",
+    "accent": "#FBBE48"
+  },
+  "background": "assets/background.webp",
+  "projectNav": "project",
+  "buttonArt": {
+    "去〔电脑大本营〕项目页": [
+      "go-computer-v1.compressed.webp",
+      "16rem"
+    ]
+  },
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "隔空剪贴板",
+      "meta": "隔空剪贴板 · 总览",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    }
+  },
+  "detailArt": [
+    "detail-v1.compressed.webp",
+    "4rem"
+  ]
+}

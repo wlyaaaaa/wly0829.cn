@@ -1,0 +1,18 @@
+{
+  "title": "工作副驾",
+  "theme": {"p": "#1C2456", "soft": "#E5E2DD", "accent": "#E4B655"},
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "skillNav": "work-delivery",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "12rem"],
+    "去〔工作出稿〕技能页": ["go-skill-v1.compressed.webp", "16rem"],
+    "回〔工作副驾〕项目页": ["return-project-v1.compressed.webp", "16rem"],
+    "去〔我的说明书〕项目页": ["go-personal-v1.compressed.webp", "17rem"]
+  },
+  "sections": {
+    "总览": {"slug": "project", "file": "project.html", "title": "工作副驾", "meta": "工作副驾 · 总览", "imagePrefix": "总览", "nav": "项目"},
+    "工作出稿": {"slug": "work-delivery", "file": "work-delivery.html", "title": "工作出稿", "meta": "技能 · 工作出稿", "imagePrefix": "工作出稿", "nav": "技能"}
+  },
+  "detailArt": ["detail-v1.compressed.webp", "4rem"]
+}

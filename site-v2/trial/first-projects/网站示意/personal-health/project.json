@@ -1,0 +1,60 @@
+{
+  "title": "健康参谋",
+  "theme": {
+    "p": "#1b4e28",
+    "soft": "#e5e6d8",
+    "accent": "#d18642"
+  },
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "skillNav": "personal-health",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "12.2rem"],
+    "去〔健康答疑〕技能页": [
+      "go-health-v1.compressed.webp",
+      "17rem"
+    ],
+    "去〔我的说明书〕项目页": [
+      "go-profile-v1.compressed.webp",
+      "17rem"
+    ],
+    "去〔电脑大本营〕项目页": [
+      "go-pc-v1.compressed.webp",
+      "17rem"
+    ],
+    "去〔手机日记本〕项目页": [
+      "go-phone-v1.compressed.webp",
+      "17rem"
+    ],
+    "去〔密码中心〕项目页": [
+      "go-password-v1.compressed.webp",
+      "17rem"
+    ],
+    "回〔健康参谋〕项目页": [
+      "return-project-v1.compressed.webp",
+      "17rem"
+    ]
+  },
+  "detailArt": [
+    "detail-v1.compressed.webp",
+    "4rem"
+  ],
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "健康参谋",
+      "meta": "健康参谋 · 总览",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    },
+    "健康答疑": {
+      "slug": "personal-health",
+      "file": "personal-health.html",
+      "title": "健康答疑",
+      "meta": "健康答疑 · 技能",
+      "nav": "技能",
+      "imagePrefix": "健康答疑"
+    }
+  }
+}

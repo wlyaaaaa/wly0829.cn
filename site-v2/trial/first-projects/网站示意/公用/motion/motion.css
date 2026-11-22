@@ -1,0 +1,380 @@
+/* 全站通用动效（预览版，照 demo\手感规格.md）。
+   - 只有 <html> 带 mo-on（motion.js 一开头加）时才生效；脚本没跑起来 = 内容照样全显示。动效一直开着，不做“减少动态”适配（见网站 AGENTS.md）。
+   - mo-hide：等着出现的东西先藏好（脚本在头部加，第一次画之前就生效）；脚本出错时摘掉它，内容立刻全露出来。
+   - 所有时长、距离、倍数都在下面 :root 里；出现、换页、细节栏的时长乘 --mo-speed，悬停和按下不乘。
+   - 只动 transform 一家（translate、scale、transform）、opacity、filter。 */
+
+@view-transition { navigation: auto; }
+html.mo-on:has(.topbar) { scrollbar-gutter: stable; }
+
+:root {
+  --mo-speed: 1;
+  --mo-out: cubic-bezier(0.16, 1, 0.3, 1);     /* 出现 */
+  --mo-move: cubic-bezier(0.65, 0, 0.35, 1);   /* 两个位置之间搬动 */
+  --mo-in: cubic-bezier(0.5, 0, 0.9, 0.4);     /* 离开 */
+
+  /* 1.1 换页：旧页看得见地退场（淡掉、略虚），新页内容不等它退完、交叠着按 1.2 升上来，中间没有一帧空白 */
+  --mo-nav-swap: 200ms;      /* 页眉里黑色那块淡换 */
+  --mo-page-out: 320ms;      /* 旧页退场这么长 */
+  --mo-page-blur: 8px;       /* 旧页退场时虚到这么多（同一个项目里换页背景一样，不虚） */
+  --mo-page-ease: cubic-bezier(0.33, 0, 0.4, 1);   /* 一开始就看得出在退，最后轻轻没掉（不是撑住再一下掉光） */
+  --mo-page-in-at: 0ms;      /* 新页内容从旧页开始退场后这么久起出现 */
+  --mo-page-hold: 250ms;     /* 旧页先停着，等新页内容画出来（图片页等第一张图显出来）再退，最多等这么久 */
+
+  /* 1.2 内容出现 */
+  --mo-rise: 600ms;
+  --mo-rise-y: 14px;
+  --mo-rise-step: 80ms;      /* 块与块 */
+  --mo-card-step: 60ms;      /* 卡与卡（最多错几张在 motion.js 顶部） */
+  --mo-glow: 800ms;          /* 列表卡的光晕 */
+  --mo-glow-delay: 120ms;
+
+  /* 1.3 能点的块 */
+  --mo-hover: 200ms;
+  --mo-press: 90ms;
+  --mo-release: 220ms;
+  --mo-press-scale: .97;
+  --mo-lift: -1px;
+  /* 首页的 5 个按钮（本人 11-14 21:44 定“改成看得出来”）：按钮画在图里，这块透明区域只能借底下的画变亮、加影子 */
+  --mo-home-press: .985;
+  --mo-home-hover-filter: brightness(1.1) saturate(1.06);    /* 放上去：画里的按钮本身变亮（起步 1.08，量下来偏轻） */
+  --mo-home-press-filter: brightness(.94) saturate(1);       /* 按住：暗一点 */
+  --mo-home-hover-shadow: 0 12px 26px rgb(40 60 50 / .26), 0 3px 8px rgb(40 60 50 / .18), 0 0 0 1.5px rgb(255 255 255 / .75), inset 0 0 0 0 rgb(0 0 0 / 0);
+  --mo-home-press-shadow: 0 2px 6px rgb(40 60 50 / .24), 0 1px 2px rgb(40 60 50 / .12), 0 0 0 1.5px rgb(255 255 255 / .6), inset 0 2px 6px rgb(0 0 0 / .12);
+
+  /* 2.1 封面变大成第 1 张 */
+  --mo-cover: 520ms;
+  --mo-cover-back: 440ms;
+  --mo-cover-out: 240ms;     /* 封面落位、接收画面就绪后的目录淡出 */
+
+  /* 2.3 同一个项目里换页 */
+  --mo-col-out: 320ms;       /* 同一张背景：旧的一列淡出（新页的图解码好就开始显出来，和它交叠） */
+  --mo-bg-swap: 400ms;       /* 换了项目：背景淡换 */
+
+  /* 2.4 每张图从模糊变清楚（主持 11-14 21:0x 重定）：先糊着显出来，再从糊变清楚 */
+  --mo-focus-fade: 160ms;    /* 先显出来（透明度 0→1，线性），这时候是糊的 */
+  --mo-focus: 900ms;         /* 再从糊变清楚 */
+  --mo-focus-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --mo-focus-blur: 16px;
+  --mo-focus-scale: 1.03;
+  --mo-focus-quick-fade: 100ms;  /* 滚得快时缩短按钮等候 */
+  --mo-focus-quick: 220ms;
+
+  /* 2.5 背景慢慢漂（不乘快慢，按钟点算；主持 11-14 21:1x 重定，原来 1.04、1.2%、70 秒、95 秒看不出在动） */
+  --mo-drift-scale: 1.06;
+  --mo-drift-amp: 2.5vw;
+  --mo-drift-amp-y: min(2.5vw, 3vh);   /* 竖着放大只多出 3% 的高，漂过头会露边 */
+  --mo-drift-x: 40s;         /* 横向一圈 */
+  --mo-drift-y: 56s;         /* 纵向一圈 */
+  --mo-dust-in: 800ms;       /* 光斑第一次出来时整层淡入（同一个项目里换页不重来；乘快慢） */
+
+  /* 2.2 回首页缩进机箱 / 从首页玻璃长出来 */
+  --mo-home: 620ms;
+  --mo-home-fade: 160ms;     /* 缩进去的最后这么长淡掉 */
+  /* 2.8 点开一块、退回这一块（实况卡片、列表里的一行）：直接用上面 2.2 这两个数，手感和首页按钮一样 */
+
+  /* 2.6 图上的跳转按钮和“细节”小牌 */
+  --mo-btn-after: 440ms;     /* 图开始变清楚后多久落 */
+  --mo-btn: 420ms;
+  --mo-btn-y: -10px;
+  --mo-btn-from: 1.04;
+  --mo-btn-over: .985;       /* 落定时过头 1.5% */
+  --mo-btn-step: 70ms;
+  --mo-btn-lift: -3px;
+  --mo-btn-sink: 1px;
+  --mo-btn-press-scale: .975;
+  --mo-btn-hover: 200ms;
+  --mo-btn-press: 90ms;
+  --mo-btn-release: 260ms;
+  --mo-btn-shadow: drop-shadow(0 3px 5px rgb(56 43 23 / .18));
+  --mo-btn-shadow-hover: drop-shadow(0 10px 14px rgb(56 43 23 / .22));
+  --mo-btn-shadow-press: drop-shadow(0 1px 2px rgb(56 43 23 / .2));
+
+  /* 2.7 细节栏 */
+  --mo-sheet: 560ms;
+  --mo-sheet-lag: 60ms;      /* 纸比图晚这么久 */
+  --mo-sheet-text: 240ms;    /* 纸上的字在最后这么长里淡入 */
+  --mo-sheet-dim: 300ms;     /* 别的东西暗下去 */
+  --mo-sheet-close: 420ms;
+  --mo-flip: 260ms;
+  --mo-flip-x: 16px;
+  --mo-flip-text: 180ms;
+
+  /* 通用弹窗：原生 dialog（细节栏除外）、popover、data-mo-panel */
+  --mo-pop-in: 350ms;
+  --mo-pop-y: 12px;
+  --mo-pop-out: 220ms;
+}
+
+/* ———————————— 共用的几段 ———————————— */
+@keyframes mo-rise { from { opacity: 0; translate: 0 var(--mo-rise-y); } to { opacity: 1; translate: 0 0; } }
+@keyframes mo-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes mo-fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes mo-safe { to { opacity: 1; } }
+
+/* ———————————— 1.2 顶层：几大块先后出现 ———————————— */
+/* 规则页四块；以后的顶层页给大块写 data-mo-rise（按阅读顺序）就有。 */
+html.mo-hide :is(.rules-title, .rules-toc, .rules-body, .rules-meta, [data-mo-rise]):not(.mo-shown) {
+  opacity: 0;
+  animation: mo-safe 0s linear 3s forwards;   /* 保险：脚本卡住，3 秒后自己露出来 */
+}
+html.mo-on .mo-rise {
+  animation: mo-rise calc(var(--mo-rise) * var(--mo-speed)) var(--mo-out) var(--mo-d, 0ms) both;
+}
+
+/* 列表页的封面卡：沿用 wall.css 的过渡，只把进场的数换掉；悬停那一套不动。 */
+html.mo-hide .wall .piece:not(.mo-shown) .piece__frame {
+  opacity: 0 !important;
+  transform: translate3d(0, var(--mo-rise-y), 0) !important;
+}
+html.mo-hide .wall .piece:not(.mo-shown) .piece__glow { opacity: 0 !important; }
+html.mo-on .wall .piece.mo-entering .piece__frame {
+  transition:
+    opacity calc(var(--mo-rise) * var(--mo-speed)) var(--mo-out) var(--mo-d, 0ms),
+    transform calc(var(--mo-rise) * var(--mo-speed)) var(--mo-out) var(--mo-d, 0ms),
+    box-shadow .5s ease;
+}
+html.mo-on .wall .piece.mo-entering .piece__glow {
+  transition: opacity calc(var(--mo-glow) * var(--mo-speed)) ease calc(var(--mo-d, 0ms) + var(--mo-glow-delay));
+}
+/* 后退回列表、那张封面要接住缩回来的图：直接到位，不演进场 */
+html.mo-on .wall .piece.mo-now :is(.piece__frame, .piece__glow) { transition: none !important; }
+
+/* ———————————— 1.3 能点的块 ———————————— */
+/* 首页的按钮：放上去 200 毫秒，画里的按钮变亮、四周一圈柔影和细亮边，像抬起一点（不上下挪，挪了就和画里的按钮错位）；
+   按住 90 毫秒，暗一点、影子收紧、里面一层向下的暗，缩到 0.985；松开 220 毫秒回去（脚本加 mo-rel）。不碰时和原来一模一样。
+   原来 style.css 的“蒙 12% 的白”在动效开着时不用（几乎看不出来）。 */
+html.mo-on .hotspot {
+  transition: backdrop-filter var(--mo-hover) ease, box-shadow var(--mo-hover) ease, scale var(--mo-release) var(--mo-out);
+}
+html.mo-on .hotspot:hover { background-color: transparent; backdrop-filter: var(--mo-home-hover-filter); box-shadow: var(--mo-home-hover-shadow); }
+html.mo-on .hotspot:active {
+  backdrop-filter: var(--mo-home-press-filter); box-shadow: var(--mo-home-press-shadow); scale: var(--mo-home-press);
+  transition-duration: var(--mo-press);
+}
+html.mo-on .hotspot.mo-rel:not(:active) { transition-duration: var(--mo-release); }
+/* 以后的顶层页：成块能点的东西写 data-mo-press，照页眉按钮的手感。 */
+html.mo-on [data-mo-press] {
+  transition: translate var(--mo-hover) var(--mo-out), scale var(--mo-release) var(--mo-out), box-shadow var(--mo-hover) ease;
+}
+@media (hover: hover) {
+  html.mo-on [data-mo-press]:hover { translate: 0 var(--mo-lift); }
+}
+html.mo-on [data-mo-press]:active { translate: 0 0; scale: var(--mo-press-scale); transition-duration: var(--mo-press); }
+
+/* ———————————— 2.4 每张图从模糊变清楚 ———————————— */
+@keyframes mo-focus { from { filter: blur(var(--mo-focus-blur)); scale: var(--mo-focus-scale); } to { filter: blur(0); scale: 1; } }
+html.mo-hide #pictures > .picture:not([data-initial-cover], .mo-shown) > img { opacity: 0; }
+html.mo-on #pictures > .picture[data-initial-cover] > img:not([data-cover-pending]),
+html.mo-on #pictures > .picture.mo-focus > img {
+  animation:
+    mo-fade-in calc(var(--mo-focus-fade) * var(--mo-speed)) linear,
+    mo-focus calc(var(--mo-focus) * var(--mo-speed)) var(--mo-focus-ease) calc(var(--mo-focus-fade) * var(--mo-speed)) backwards;
+}
+html.mo-on #pictures > .picture.mo-focus > img { animation-fill-mode: both, backwards; }
+html.mo-on #pictures > .picture.mo-focus.mo-quick > img {
+  animation-duration: calc(var(--mo-focus-quick-fade) * var(--mo-speed)), calc(var(--mo-focus-quick) * var(--mo-speed));
+  animation-delay: 0s, calc(var(--mo-focus-quick-fade) * var(--mo-speed));
+}
+/* 目录进入由整个页面淡换。直达时把占位标题留到原画淡入完成。 */
+html.mo-on #pictures > .picture > img[data-cover-carried]:not([data-cover-pending]) {
+  animation: none;
+}
+html.mo-on [data-initial-cover] > .picture-title-fallback {
+  opacity: 0; visibility: hidden;
+  transition: opacity calc(var(--mo-focus-fade) * var(--mo-speed)) linear,
+    visibility 0s calc(var(--mo-focus-fade) * var(--mo-speed));
+}
+html.mo-on [data-initial-cover]:has(> img[data-cover-pending]) > .picture-title-fallback {
+  opacity: 1; visibility: visible; transition: none;
+}
+html.mo-cover-refresh #pictures > [data-initial-cover] {
+  background: var(--paper) var(--mo-refresh-cover) center top / 100% auto no-repeat;
+}
+html.mo-cover-refresh #pictures > [data-initial-cover]:not(:has(> img[data-cover-error])) > .picture-title-fallback { display: none; }
+html.mo-cover-refresh #pictures > .picture[data-initial-cover] > img:not([data-cover-pending]) {
+  animation: mo-fade-in calc(var(--mo-focus-fade) * var(--mo-speed)) linear;
+}
+@media (hover: none) { :root { --mo-focus-blur: 10px; } html.mo-on .picture { overflow: clip; } }
+
+/* ———————————— 2.6 图上的按钮：落上去、悬停、按下 ———————————— */
+@keyframes mo-drop {
+  0% { translate: 0 0; scale: 1; animation-timing-function: var(--mo-out); }
+  25% { translate: 0 var(--mo-btn-y); scale: var(--mo-btn-from); }
+  78% { translate: 0 0; scale: var(--mo-btn-over); animation-timing-function: ease-in-out; }
+  100% { translate: 0 0; scale: 1; }
+}
+html.mo-on .mo-drop { animation: mo-drop calc(var(--mo-btn) * var(--mo-speed)) linear var(--mo-d, 0ms); }
+
+html.mo-on main .picture-actions > .pill {
+  filter: var(--mo-btn-shadow);
+  transition: filter var(--mo-btn-hover) ease, translate var(--mo-btn-hover) var(--mo-out), scale var(--mo-btn-hover) var(--mo-out);
+}
+html.mo-on main .more { transition: translate var(--mo-btn-hover) var(--mo-out), scale var(--mo-btn-hover) var(--mo-out); }
+html.mo-on main .more.art img {
+  filter: var(--mo-btn-shadow);
+  transition: transform .15s ease, filter var(--mo-btn-hover) ease;   /* .15s 是原有的小牌放大 1.07，保留 */
+}
+@media (hover: hover) {
+  html.mo-on main .picture-actions > :is(a.pill, button.pill:enabled):hover {
+    translate: 0 var(--mo-btn-lift);
+    filter: brightness(1.05) var(--mo-btn-shadow-hover);
+  }
+  html.mo-on main .more:hover { translate: 0 var(--mo-btn-lift); }
+  html.mo-on main .more.art:hover img { filter: var(--mo-btn-shadow-hover); }
+}
+html.mo-on main .picture-actions > :is(a.pill, button.pill:enabled):active {
+  translate: 0 var(--mo-btn-sink);
+  scale: var(--mo-btn-press-scale);
+  filter: brightness(1.05) var(--mo-btn-shadow-press);
+  transition-duration: var(--mo-btn-press);
+}
+html.mo-on main .more:active { translate: 0 var(--mo-btn-sink); scale: var(--mo-btn-press-scale); transition-duration: var(--mo-btn-press); }
+html.mo-on main .more.art:active img { filter: var(--mo-btn-shadow-press); transition-duration: .15s, var(--mo-btn-press); }
+/* 松开：脚本在松手那一下加 mo-rel，回去用 260 毫秒（顶层 220 毫秒） */
+html.mo-on main .picture-actions > .pill.mo-rel,
+html.mo-on main .more.mo-rel { transition-duration: var(--mo-btn-release); }
+html.mo-on main .more.art.mo-rel img { transition-duration: .15s, var(--mo-btn-release); }
+html.mo-on [data-mo-press].mo-rel { transition-duration: var(--mo-hover), var(--mo-release), var(--mo-hover); }
+
+/* ———————————— 2.5 背景慢慢漂 + 浮尘光斑 ———————————— */
+@keyframes mo-drift-x { from { translate: calc(var(--mo-drift-amp) * -1) 0; } to { translate: var(--mo-drift-amp) 0; } }
+@keyframes mo-drift-y { from { transform: translateY(calc(var(--mo-drift-amp-y) * -1)); } to { transform: translateY(var(--mo-drift-amp-y)); } }
+html.mo-on body[data-page]::before {
+  scale: var(--mo-drift-scale);
+  will-change: transform, translate;
+  animation:
+    mo-drift-x calc(var(--mo-drift-x) / 2) ease-in-out var(--mo-phase-x, 0s) infinite alternate,
+    mo-drift-y calc(var(--mo-drift-y) / 2) ease-in-out var(--mo-phase-y, 0s) infinite alternate;
+}
+
+.mo-dust { display: none; }
+html.mo-on .mo-dust {
+  display: block; position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; contain: strict;
+  opacity: 0; transition: opacity calc(var(--mo-dust-in) * var(--mo-speed)) ease;
+}
+html.mo-on .mo-dust.is-ready { opacity: 1; }
+html.mo-on .mo-dust.is-instant { transition: none; }
+.mo-dust i {
+  position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s); margin: calc(var(--s) / -2);
+  border-radius: 50%; background: radial-gradient(closest-side, var(--c) 22%, color-mix(in srgb, var(--c) 55%, transparent) 58%, transparent);   /* 中间一小块是实的，往外淡到透明 */
+  opacity: var(--a); will-change: translate, opacity;
+  animation:
+    mo-dust-move var(--t) ease-in-out var(--td) infinite alternate,
+    mo-dust-pulse var(--p) ease-in-out var(--pd) infinite alternate;
+}
+@keyframes mo-dust-move { from { translate: 0 0; } to { translate: var(--dx) var(--dy); } }
+@keyframes mo-dust-pulse { from { opacity: calc(var(--a) * .6); } to { opacity: var(--a); } }   /* 最浓值的 60%～100% */
+/* 切到后台时光斑停；回到前台由 motion.js 按钟点重新对相位。背景漂不停：停了就和钟点对不上，下一页会跳（后台标签页浏览器本来就不画）。 */
+html.mo-bg-paused .mo-dust i { animation-play-state: paused; }
+
+/* ———————————— 2.7 细节栏：图在纸上面，纸从图背后抽出来 ———————————— */
+html.mo-on .detail-shot { z-index: 2; }
+html.mo-on .drawer { z-index: 1; }
+html.mo-on #pictures { transition: opacity calc(var(--mo-sheet-close) * var(--mo-speed)) ease; }
+html.mo-on body.reading #pictures {
+  opacity: 0;
+  transition: opacity calc(var(--mo-sheet-dim) * var(--mo-speed)) ease, visibility 0s linear calc(var(--mo-sheet-dim) * var(--mo-speed));
+}
+html.mo-on body.reading.mo-closing #pictures { visibility: visible; opacity: 1; transition: opacity calc(var(--mo-sheet-close) * var(--mo-speed)) ease; }
+
+/* ———————————— 1.1 / 2.1 / 2.3 换页（只在支持跨页面视图过渡的浏览器里有；别的浏览器就是普通换页） ———————————— */
+/* 页眉：左边主导航整组、中间的字、右边的按钮各自起名，玻璃留在底图里照常模糊；两页相同的地方看不出变化，黑色那块淡换。
+   中间的字也单独起名：旧页退场时要虚，字留在底图里会跟着虚出一圈毛边。
+   右边那组各页按钮个数不一样（实况页多“几点读到”“问情况”两颗），整组起名会从宽变窄、看着像收起来；
+   所以按颗起名（motion.js 的 nameBarRight）：两页都有的按地址认、原地不动，只在一边有的原地淡出、淡入，不滑、不伸缩。 */
+html.mo-vt-nav .topbar__group:not(.topbar__group--right) { view-transition-name: mo-nav-l; }
+html.mo-vt-nav .topbar__group--right > * { view-transition-class: mo-nav-r; }
+html.mo-vt-nav .topbar .brand { view-transition-name: mo-nav-c; }
+html.mo-vt::view-transition-group(mo-nav-l),
+html.mo-vt::view-transition-group(mo-nav-c),
+html.mo-vt::view-transition-old(mo-nav-l),
+html.mo-vt::view-transition-new(mo-nav-l),
+html.mo-vt::view-transition-old(mo-nav-c),
+html.mo-vt::view-transition-new(mo-nav-c) { animation-duration: calc(var(--mo-nav-swap) * var(--mo-speed)); }
+/* 单独一条：不认识 *.类名 写法的浏览器只丢这一条（按颗的按钮用浏览器默认的 250 毫秒），不连累上面 */
+html.mo-vt::view-transition-group(*.mo-nav-r),
+html.mo-vt::view-transition-old(*.mo-nav-r),
+html.mo-vt::view-transition-new(*.mo-nav-r) { animation-duration: calc(var(--mo-nav-swap) * var(--mo-speed)); }
+
+/* 整页：旧的一层盖在新的上面淡掉（略虚），底下的新页一直是满的，所以中间不露白；
+   新页的内容不等旧页退完，同时就按 1.2 升上来（motion.js 的 arrivalAt），两边交叠，没有一帧空白。 */
+/* 虚得比淡得快：前三分之一就虚到七成多，旧字先化成一层雾，和升上来的新字叠着也不打架 */
+@keyframes mo-page-leave {
+  0% { opacity: 1; filter: blur(0); }
+  35% { filter: blur(calc(var(--mo-page-blur) * .75)); }
+  100% { opacity: 0; filter: blur(var(--mo-page-blur)); }
+}
+html.mo-vt::view-transition-old(root),
+html.mo-vt::view-transition-new(root) { mix-blend-mode: normal; }
+html.mo-vt::view-transition-new(root) { animation: none; }
+html.mo-vt::view-transition-old(root) { z-index: 1; animation: mo-page-leave calc(var(--mo-page-out) * var(--mo-speed)) var(--mo-page-ease) both; }
+html.mo-vt-same::view-transition-old(root) { animation: mo-fade-out calc(var(--mo-col-out) * var(--mo-speed)) var(--mo-page-ease) both; }
+html.mo-vt-other::view-transition-old(root) { animation: mo-fade-out calc(var(--mo-bg-swap) * var(--mo-speed)) var(--mo-move) both; }
+/* 2.1 封面落位前目录一直可见，首图按钮只在交接以后出现。 */
+html.mo-vt-cover::view-transition-old(root) { animation: none; }
+/* 淡换时先化开旧目录图里的字，避免和落位的封面或错误说明叠读。 */
+html.mo-vt-cover-handoff::view-transition-old(root) { filter: blur(calc(3 * var(--mo-page-blur))); }
+html.mo-vt-cover [data-initial-cover] > :is(.picture-actions, .more) { visibility: hidden; }
+html.mo-vt-cover::view-transition-group(mo-cover) { overflow: hidden; transform-origin: 0 0; }
+html.mo-vt-cover::view-transition-old(mo-cover) { animation: none; opacity: 1; }
+.mo-cover-replay-stage { position: fixed; inset: 0; z-index: 3; background: #faf9f5; pointer-events: none; }
+.mo-cover-replay {
+  position: absolute; overflow: hidden; display: grid; place-items: center;
+  background: #f1efe8; color: var(--ink); font-size: 2rem; font-weight: 700; pointer-events: none;
+  box-shadow: inset 0 0 0 1px #14141314, 0 20px 44px -26px #141c2459;
+}
+.mo-cover-replay > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* 2.1 退出：当前屏幕的页眉以下缩回卡片，新列表在下面静止接住。 */
+html.mo-vt-uncover::view-transition-group(root) { animation: none; }
+html.mo-vt-uncover::view-transition-old(root) {
+  animation: none; transform-origin: 0 0;
+  clip-path: inset(var(--mo-exit-top, 0px) 0 0 0);
+}
+html.mo-vt-uncover::view-transition-new(root) { animation: none; }
+/* 起了名却没配上对的（比如列表上找不到那张封面）：跟着整页一起淡掉 */
+html.mo-vt:not(.mo-vt-uncover)::view-transition-old(mo-cover) { animation-duration: calc(var(--mo-page-out) * var(--mo-speed)); }
+
+/* 2.2 整个页面（含页眉）进出首页玻璃，几何动画由脚本读取真实玻璃位置（等比缩放、按玻璃裁切，不压扁）。 */
+html:is(.mo-vt-home-in,.mo-vt-home-out)::view-transition-group(root) { animation: none; }
+html:is(.mo-vt-home-in,.mo-vt-home-out)::view-transition-old(root),
+html:is(.mo-vt-home-in,.mo-vt-home-out)::view-transition-new(root) { animation: none; transform-origin: 0 0; mix-blend-mode: normal; }
+html.mo-vt-home-in::view-transition-old(root), html.mo-vt-home-out::view-transition-new(root) { z-index: 2; }
+
+/* 2.8 点开一块（data-mo-open）：新页从那一块长满页眉以下；退回来缩回那一块。旧页、新页底图都不动，几何由 motion.js 的 flyOpen 演。 */
+html:is(.mo-vt-open,.mo-vt-close)::view-transition-group(root) { animation: none; }
+html:is(.mo-vt-open,.mo-vt-close)::view-transition-old(root),
+html:is(.mo-vt-open,.mo-vt-close)::view-transition-new(root) { animation: none; transform-origin: 0 0; mix-blend-mode: normal; }
+html.mo-vt-open::view-transition-new(root), html.mo-vt-close::view-transition-old(root) { z-index: 2; }
+/* 页眉由脚本生成：新页第一帧画出来时页眉常常还没生成，旧页那几块就成了单边的，照默认 200 毫秒淡掉，
+   而新页页眉那一片被裁在外面，整条页眉会空大半秒（1920 宽的窗口上看得到）。这两种过渡里单边的页眉块原样留到结束。 */
+html:is(.mo-vt-open,.mo-vt-close)::view-transition-old(mo-nav-l):only-child,
+html:is(.mo-vt-open,.mo-vt-close)::view-transition-old(mo-nav-c):only-child { animation: none; }
+html:is(.mo-vt-open,.mo-vt-close)::view-transition-old(*.mo-nav-r):only-child { animation: none; }
+
+html.mo-vt-nav .topbar { transform: none !important; opacity: 1 !important; transition: none !important; }
+/* 首页回场备用路径：旧页快照等机箱图就绪时盖在这一层上。 */
+html.mo-sheet-wait::after { content: ""; position: fixed; inset: 0; z-index: 99; background: var(--paper, #faf9f6); pointer-events: none; }
+
+
+/* ———————————— 通用弹窗：原生 dialog（细节栏 #details 有自己的 2.7，除外）、popover、data-mo-panel ———————————— */
+/* 出现：从下方 12 像素上来并淡入；消失：只淡出。data-mo-panel 用 hidden 属性开关。
+   不支持 @starting-style / display 过渡的浏览器：直接出现、直接消失。 */
+html.mo-on :where(dialog:not(#details), [popover], [data-mo-panel]) {
+  transition:
+    opacity calc(var(--mo-pop-out) * var(--mo-speed)) var(--mo-in),
+    display calc(var(--mo-pop-out) * var(--mo-speed)) allow-discrete,
+    overlay calc(var(--mo-pop-out) * var(--mo-speed)) allow-discrete;
+}
+html.mo-on :where(dialog:not(#details):not([open]), [popover]:not(:popover-open), [data-mo-panel][hidden]) { opacity: 0; }
+html.mo-on :where(dialog:not(#details)[open], [popover]:popover-open, [data-mo-panel]:not([hidden])) {
+  opacity: 1; translate: 0 0;
+  transition:
+    opacity calc(var(--mo-pop-in) * var(--mo-speed)) var(--mo-out),
+    translate calc(var(--mo-pop-in) * var(--mo-speed)) var(--mo-out),
+    display calc(var(--mo-pop-in) * var(--mo-speed)) allow-discrete,
+    overlay calc(var(--mo-pop-in) * var(--mo-speed)) allow-discrete;
+}
+@starting-style {
+  html.mo-on :where(dialog:not(#details)[open], [popover]:popover-open, [data-mo-panel]:not([hidden])) { opacity: 0; translate: 0 var(--mo-pop-y); }
+}

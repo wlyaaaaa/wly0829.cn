@@ -10,12 +10,14 @@ import shutil
 import ssl
 import stat
 import subprocess
+import sys
 import time
 from http.client import IncompleteRead, RemoteDisconnected
 from types import SimpleNamespace
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from urllib.error import HTTPError, URLError
+from urllib.parse import unquote, urlsplit
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -25,6 +27,7 @@ CLI = r'E:\Tools\aliyun-cli\aliyun.exe'
 LOCK = r'E:\.agents\tools\Invoke-ShortLock.ps1'
 WORD_CONFIG = Path('E:/PCConfig/registries/site_public_words.json')
 PUBLISH_RUNS = Path(r'E:\Cache\wly-site-build\publish-runs')
+UNPUBLISHED_PREFIXES = ('live/_fixtures/',)
 
 def prune_publish_runs(base=PUBLISH_RUNS, pointer=None):
     """Keep three newest receipts plus the currently published commit, after retention succeeds."""
@@ -58,33 +61,36 @@ def prune_publish_runs(base=PUBLISH_RUNS, pointer=None):
         removed.append(str(path))
     return {'kept': [str(p) for p in runs if p in keep], 'removed': removed}
 
-def scan_public_words(dist, source_root=None):
-    """Check final text artifacts and tracked source text before any upload."""
+def scan_public_words(dist, source_root=None, approved=None):
+    """Check final text and tracked source, excluding non-display build records."""
     dist, source_root = Path(dist), Path(source_root or ROOT)
     if not dist.is_dir():
         raise ValueError('Dist directory does not exist: ' + str(dist))
     config = word_policy.load_policy(WORD_CONFIG)
     expression = word_policy.word_pattern(config)
     matcher = re.compile(expression)
-    exceptions = {}
-    for row in config['exceptions']:
-        exceptions.setdefault((row['file'], row['word']), []).append(row['text'])
+    approved = approved if approved is not None else []
     hits = []
+    # 编码数据不是访客能读的文字：data: 地址里的 base64 段当空白（保留列号），*.b64.js 整份不查
+    encoded = re.compile(r'data:[A-Za-z0-9.+/-]*;base64,[A-Za-z0-9+/=]+')
     def check_line(rel, line_no, line, scope):
+        if rel.endswith('.b64.js'):
+            return
+        line = encoded.sub(lambda m: ' ' * len(m.group()), line)
         for match in matcher.finditer(line):
             word, pos = match.group(), match.start()
-            if any(any(start <= pos < start + len(text) for start in
-                       (m.start() for m in re.finditer(re.escape(text), line)))
-                   for text in exceptions.get((rel, word), [])):
+            if word_policy.allow_word_exception(config, rel, line, match, approved):
                 continue
             hits.append({'scope': scope, 'file': rel, 'line': line_no, 'column': pos+1, 'word': word,
                          'context': line[max(0, pos-40):pos] + '【' + word + '】' + line[match.end():match.end()+40]})
-    text_extensions = {'.html', '.js', '.mjs', '.json', '.txt', '.xml', '.md', '.svg', '.css', '.ps1', '.webmanifest'}
     for path in sorted(dist.rglob('*')):
-        if not path.is_file() or path.suffix.lower() not in text_extensions:
+        relative = path.relative_to(dist).as_posix()
+        if relative.startswith(UNPUBLISHED_PREFIXES) or relative in word_policy.CHECK_RECORDS or not path.is_file() or path.suffix.lower() not in word_policy.TEXT_EXTENSIONS:
             continue
-        rel = 'dist/' + path.relative_to(dist).as_posix()
+        rel = 'dist/' + relative
         body = path.read_text('utf-8-sig')
+        if path.suffix.lower() == '.json':
+            body = word_policy.apply_public_judgments(body, matcher, rel, approved)
         if path.suffix.lower() == '.html': body = html.unescape(body)
         for line_no, line in enumerate(body.splitlines(), 1):
             check_line(rel, line_no, line, 'dist')
@@ -104,9 +110,31 @@ def load(name, directory=ROOT/'scripts'):
     return module
 
 oss, retention, word_policy = load('prepare-oss-release'), load('oss-retention'), load('site_public_words')
+live_fallback = load('live_fallback')
 runtime = load('build_runtime', ROOT/'site-astro/tools')
+import selected_publish
 
-def check_input_proofs(dist, source, previous, build, source_commit, verify_source=True):
+def check_publication_text(dist, output=None):
+    approved = []
+    blocking = word_policy.scan_baseline(dist, exclude=UNPUBLISHED_PREFIXES, policy=word_policy.load_policy(WORD_CONFIG))
+    hits = scan_public_words(dist, approved=approved)
+    sensitive_files = {hit['file'] for hit in blocking}
+    hits = [{k: v for k, v in hit.items() if k not in {'context', 'word'}} if hit['file'] in sensitive_files else hit for hit in hits]
+    approved = [hit for hit in approved if hit['file'] not in sensitive_files]
+    report = {'hits': hits, 'blocking_hits': blocking, 'ai_same': approved,
+              'notice': '仅本人可见词或底线命中时停止发布。其他词表命中只是提示，不拦。'}
+    if output:
+        output.mkdir(parents=True, exist_ok=True)
+        runtime.atomic_write_text(output/'word-check.json', json.dumps(report, ensure_ascii=False, indent=2), 'utf-8')
+    print(json.dumps({**report, 'status': 'blocked' if blocking else 'pass'}, ensure_ascii=False))
+    return report
+
+def check_live_fallback(dist):
+    """发布（含干跑）前确认实况垫底文件覆盖所有固定公开入口。"""
+    data = live_fallback.read_checked_fallback(Path(dist)/'live/_fallback.json')
+    return len(data['resources'])
+
+def check_input_proofs(dist, source, previous, build, source_commit, verify_source=True, enforce_drift=True):
     value = source.get('input_fingerprints')
     if not value or value != build.get('input_fingerprints') or build.get('status') != 'built':
         raise ValueError('Manifest input fingerprints differ from the successful build receipt')
@@ -114,7 +142,7 @@ def check_input_proofs(dist, source, previous, build, source_commit, verify_sour
     if any(commit != source_commit for commit in (build.get('source_commit'), source.get('source_commit'),
             identity.get('source_commit'), value['source_identity']['source_commit'])):
         raise ValueError('Source commit differs from the frozen build identity')
-    if identity.get('release_id') != source['release_id'] or identity.get('manifest_sha256') != oss.digest(dist/oss.MANIFEST):
+    if identity != oss.release_identity(source, oss.digest(dist/oss.MANIFEST)):
         raise ValueError('Release identity differs from the frozen manifest')
     rows = {runtime.nav.route_file(route): row for route, row in value['routes'].items()}
     rows.update(value['site_files'])
@@ -128,7 +156,8 @@ def check_input_proofs(dist, source, previous, build, source_commit, verify_sour
             raise ValueError('Built output differs from its input proof: '+rel)
     if verify_source: runtime.verify_inputs(value)
     result = runtime.reconcile(dist, value, previous or {})
-    if result['drift']: raise ValueError('Unchanged inputs produced changed output: '+', '.join(result['drift']))
+    if enforce_drift and result['drift']:
+        raise ValueError('Unchanged inputs produced changed output: '+', '.join(result['drift']))
     return result
 
 def check_update_batch(batch, source, source_commit, manifest_sha256, reconciliation):
@@ -148,7 +177,9 @@ def check_update_batch(batch, source, source_commit, manifest_sha256, reconcilia
         return '首发用旧式基准：' + batch['legacy_baseline_reason']
     if baseline != 'published':
         raise ValueError('Update publication requires a successful publication baseline')
-    unexpected = sorted(row['path'] for row in reconciliation['pages'] if row['path'] not in allowed)
+    page_changes = [*reconciliation['pages'], *reconciliation.get('site_files', [])]
+    unexpected = sorted(row['path'] for row in page_changes if row['path'].endswith('.html')
+                        and not row['path'].startswith(UNPUBLISHED_PREFIXES) and row['path'] not in allowed)
     if unexpected:
         raise ValueError('Publication changed pages outside this update batch: ' + ', '.join(unexpected))
     return '本趟过关页及登记引用页'
@@ -331,6 +362,83 @@ def pages(commit, timeout):
     raise TimeoutError('Pages run '+str(run_id)+' success is unconfirmed for '+commit+
                        ('; last connection error: '+last_error if last_error else ''))
 
+def publication_manifest(source, retained=None, previous=None):
+    """Keep preview-only data in dist while publishing a consistent subset."""
+    keep = lambda rows: {rel: row for rel, row in rows.items() if not rel.startswith(UNPUBLISHED_PREFIXES)}
+    objects, files = keep(source['oss']['objects']), keep(source['files'])
+    retained = retained or {}
+    if objects == source['oss']['objects'] and files == source['files'] and not retained: return source
+    for rel in retained:
+        files[rel] = previous['files'][rel]
+    cloud = {**source['oss'], 'objects': objects, 'retained_objects': keep(source['oss'].get('retained_objects', {}))}
+    removed_keys = {row['key'] for rel, row in source['oss']['objects'].items() if rel not in objects}
+    references = set(cloud['reference_keys']) - removed_keys
+    if retained:
+        references.update(previous['oss'].get('reference_keys', ()))
+        references.update(row['key'] for row in previous['oss']['objects'].values())
+    cloud['reference_keys'] = sorted(references)
+    result = {**source, 'files': files, 'oss': cloud}
+    result['release_id'] = oss.release_identifier(cloud['source_release_id'], cloud['asset_base_url'], cloud['prefix'], files, objects)
+    return oss.verify_manifest(result, require_remote=False)
+
+
+def preserve_unselected(args, source, previous, saved, batch, reconciliation):
+    prior = getattr(args, 'previous_site_dist', None) or saved.get('site_dist', {}).get('root')
+    local = Path(prior) if prior else None
+
+    def read_previous(rel):
+        path = local / rel if local else None
+        if path and path.is_file():
+            return path.read_bytes()
+        if args.dry_run:
+            # An offline rehearsal without prior HTML still reports the genuine
+            # scope difference through the normal publisher gate.
+            raise FileNotFoundError(rel)
+        return retention.public_read(oss.quote(rel, safe='/'))
+
+    changed = reconciliation['pages'] + reconciliation['site_files']
+    allowed = selected_publish.routes(batch, runtime.nav.route_file)
+    try:
+        return selected_publish.preserve_html(args.dist, source, previous, changed, allowed, read_previous, ROOT)
+    except FileNotFoundError:
+        if not args.dry_run:
+            raise
+        return {}
+
+
+def review_preserved_scripts(args, source, previous, saved, retained):
+    cloud = previous['oss']
+    known = selected_publish.known_addresses(cloud)
+    old = {row['key']: row for row in cloud['objects'].values()}
+    path = retention.shared()/'managed.json'
+    if path.is_file():
+        old = {**retention.read(path)['objects'], **old}
+    current = {row['url'] for row in source['oss']['objects'].values()}
+    policy = word_policy.load_policy(WORD_CONFIG)
+    words = policy.get('owner_row_words', [])
+    owner_rows = re.compile(word_policy.word_pattern({'words': words})) if words else None
+    local = getattr(args, 'previous_site_dist', None) or saved.get('dist_root')
+    owners = {}
+    for page, raw in retained.items():
+        for match in selected_publish.ASSET.finditer(raw):
+            url, rel = match[0].decode(), known.get(match[0], '')
+            if selected_publish.PROJECT_DATA.fullmatch(rel) and url not in current:
+                owners.setdefault((url, rel), page)
+    for (url, rel), page in owners.items():
+        key = unquote(urlsplit(url).path.lstrip('/'))
+        sha = old.get(key, {}).get('sha256')
+        local_file = Path(local)/rel if local else None
+        raw = local_file.read_bytes() if local_file and local_file.is_file() else b''
+        if sha and hashlib.sha256(raw).hexdigest() != sha and not args.dry_run:
+            with urlopen(Request(url, headers={'Accept-Encoding': 'identity'}), timeout=PAGE_TIMEOUT) as response:
+                raw = response.read()
+        if not sha or hashlib.sha256(raw).hexdigest() != sha:
+            raise ValueError(f'无法核验保留页的旧内容脚本：{page} 引用 {rel}')
+        if word_policy.baseline_hits(raw.decode('utf-8-sig'), 'dist/'+rel, owner_rows, policy):
+            raise ValueError(f'保留页的旧内容脚本不符合现行公开要求：{page} 引用 {rel}')
+    return len(owners)
+
+
 def artifact_commit(dist, plan, output, source_commit):
     destination = output/'site-dist'
     destination.mkdir()
@@ -353,7 +461,8 @@ def artifact_commit(dist, plan, output, source_commit):
         target = destination/rel
         if not target.exists() or oss.digest(target) != row['sha256']:
             target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(dist/rel, target)
+            prepared = output/'publication'/rel
+            shutil.copyfile(prepared if prepared.is_file() else dist/rel, target)
     git('add', '--all')
     changed = git('diff', '--cached', '--name-only').splitlines()
     for line in git('ls-files', '-s').splitlines():
@@ -384,16 +493,13 @@ def publish(args):
             receipt['steps_seconds'][name] = round(time.monotonic()-before, 3)
 
     try:
-        hits = step('public_word_gate', lambda: scan_public_words(args.dist))
-        blocking = [hit for hit in hits if not (getattr(args, 'defer_source_word_cleanup', False) and hit['scope'] == 'source')]
-        runtime.atomic_write_text(output/'word-check.json', json.dumps({'hits': hits, 'blocking_hits': blocking,
-            'source_cleanup_deferred': getattr(args, 'defer_source_word_cleanup', False)}, ensure_ascii=False, indent=2), 'utf-8')
+        blocking = step('public_word_gate', lambda: check_publication_text(args.dist, output))['blocking_hits']
         if blocking:
-            raise ValueError(f'Public word gate blocked {len(blocking)} occurrence(s); see {output / "word-check.json"}; '
-                             'AI wording review: docs/publish-and-scan.md, public word gate paragraph')
+            raise ValueError(f'Public baseline gate blocked {len(blocking)} occurrence(s); see {output / "word-check.json"}')
         source = oss.read(args.dist/oss.MANIFEST)
         if not source.get('finalized_dist'):
             raise ValueError('Run prepare-oss-release.py finalize-dist --dist '+str(args.dist)+' then scan that final dist')
+        receipt['live_fallback_resources'] = check_live_fallback(args.dist)
         oss.verify_manifest(source, require_remote=False)
         fingerprints = step('hash_dist', lambda: {path.relative_to(args.dist).as_posix(): oss.digest(path)
                             for path in sorted(args.dist.rglob('*')) if path.is_file()})
@@ -402,13 +508,26 @@ def publish(args):
         changed = sorted(rel for rel in fingerprints.keys() | scanned.keys() if fingerprints.get(rel) != scanned.get(rel))
         if changed or (not args.dry_run and scan.get('failures') != []):
             raise ValueError('Dist differs from successful scan: '+(', '.join(changed) if changed else 'scan has failures'))
+        if not args.dry_run:
+            claim = json.loads(command('pwsh', '-NoProfile', '-File', LOCK, '-Mode', 'Acquire',
+                            '-Name', 'wly0829-publication', '-Holder', args.lock_holder,
+                            '-Minutes', '30', '-Reason', 'Incremental website publication', '-Json'))
+            if claim.get('status') not in ('acquired', 'renewed'):
+                raise ValueError('Cannot acquire publication lock')
+            owned = claim['status'] == 'acquired'
         previous = step('previous_manifest', lambda: oss.verify_manifest(oss.read(args.previous_manifest))
                         if args.previous_manifest else retention.predecessor())
+        previous_for_retention = previous
+        saved = {}
         if previous:
             saved_path = retention.shared()/'published.json'
             saved = retention.read(saved_path) if saved_path.is_file() else {}
             if saved.get('manifest', {}).get('release_id') == previous['release_id']:
                 previous = {**previous, '_build_files': saved.get('build_files', {})}
+            else:
+                if previous.get('publication_readback_required') and saved.get('manifest'):
+                    previous_for_retention = oss.verify_manifest(saved['manifest'])
+                saved = {}
         build = oss.read(args.dist/'.build-receipt.json') if (args.dist/'.build-receipt.json').is_file() else {}
         source_commit = args.source_commit or build.get('source_commit') or source.get('source_commit') or 'Unknown'
         if source_commit != 'Unknown' and not oss.re.fullmatch('[a-f0-9]{40}', source_commit):
@@ -416,26 +535,66 @@ def publish(args):
         receipt['source_commit'] = source_commit
         receipt['source_commit_evidence'] = ('explicit task baseline' if args.source_commit else
                 'build receipt' if build.get('source_commit') else 'source manifest' if source.get('source_commit') else 'Unknown')
-        receipt['published_reconciliation'] = check_input_proofs(args.dist, source, previous, build, source_commit)
-        receipt.update(release_id=source['release_id'], manifest_sha256=oss.digest(args.dist/oss.MANIFEST))
         batch = oss.read(args.update_batch) if getattr(args, 'update_batch', None) else None
+        reconciliation = check_input_proofs(args.dist, source, previous, build, source_commit,
+                                            enforce_drift=batch is None)
+        receipt.update(release_id=source['release_id'], manifest_sha256=oss.digest(args.dist/oss.MANIFEST))
+        retained = {}
         if batch is not None:
             receipt['update_batch'] = batch
             receipt['update_baseline'] = check_update_batch(batch, source, source_commit, receipt['manifest_sha256'],
-                                                           receipt['published_reconciliation'])
+                                                           {**reconciliation, 'pages': [], 'site_files': []})
+            retained = preserve_unselected(args, source, previous, saved, batch, reconciliation)
+            for group in ('pages', 'site_files'):
+                reconciliation[group] = [change for change in reconciliation[group] if change['path'] not in retained]
+            reconciliation['drift'] = [rel for rel in reconciliation['drift'] if rel not in retained]
+            check_update_batch(batch, source, source_commit, receipt['manifest_sha256'], reconciliation)
+            if reconciliation['drift']:
+                raise ValueError('Unchanged inputs produced changed output: '+', '.join(reconciliation['drift']))
+            receipt['preserved_unselected_html'] = sorted(retained)
+            if retained:
+                receipt['reviewed_preserved_scripts'] = step('retained_publication_review',
+                    lambda: review_preserved_scripts(args, source, previous, saved, retained))
+        receipt['published_reconciliation'] = reconciliation
         preparation = output
-        plan = {'schema': 'wly.oss-release-plan.v1', 'release_id': source['release_id'], 'asset_base_url': source['oss']['asset_base_url'],
-                'test_only': False, 'remote_verified': False, 'objects': source['oss']['objects'],
+        published = publication_manifest(source, retained, previous)
+        generated = {}
+        if published is not source:
+            folder = output/'publication'
+            folder.mkdir()
+            for rel, raw in retained.items():
+                target = folder / rel
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(raw)
+            oss.write(folder/oss.MANIFEST, published)
+            oss.write(folder/'release-identity.json', oss.release_identity(published, oss.digest(folder/oss.MANIFEST)))
+            generated = {rel: {'bytes': (folder/rel).stat().st_size, 'sha256': oss.digest(folder/rel)}
+                         for rel in (oss.MANIFEST, 'release-identity.json', *retained)}
+        receipt['excluded_files'] = [rel for rel in fingerprints if rel.startswith(UNPUBLISHED_PREFIXES)]
+        receipt['publication_release_id'] = published['release_id']
+        plan = {'schema': 'wly.oss-release-plan.v1', 'release_id': published['release_id'], 'asset_base_url': published['oss']['asset_base_url'],
+                'test_only': False, 'remote_verified': False, 'objects': published['oss']['objects'],
                 'github_files': {rel: {'bytes': (args.dist/rel).stat().st_size, 'sha256': fingerprints[rel]}
-                                 for rel in fingerprints if rel not in source['oss']['objects'] and rel != '.build-receipt.json'},
-                'retained_objects': dict(source['oss'].get('retained_objects', {})), 'reference_keys': source['oss']['reference_keys']}
+                                 for rel in fingerprints if not rel.startswith(UNPUBLISHED_PREFIXES) and rel not in source['oss']['objects'] and rel != '.build-receipt.json'},
+                'retained_objects': dict(published['oss'].get('retained_objects', {})), 'reference_keys': published['oss']['reference_keys']}
+        plan['github_files'].update(generated)
+        receipt['publication_manifest_sha256'] = plan['github_files'][oss.MANIFEST]['sha256']
         assets = delta(plan['objects'], (previous or {}).get('oss', {}).get('objects', {}))
         uploads = delta(plan['objects'], (previous or {}).get('oss', {}).get('objects', {}), include_url=False)
+        retired = retention.retired_predecessor_keys(previous)
+        for rel, row in plan['objects'].items():
+            if row['key'] in retired:
+                assets[rel] = uploads[rel] = row
+                plan['retained_objects'].pop(rel, None)
         origin_readbacks = assets.keys() - uploads.keys()
         if previous:
             proofs = {row['key']: previous['oss']['verification']['objects'][rel] for rel, row in previous['oss']['objects'].items()}
             plan['retained_objects'].update({rel: proofs[row['key']] for rel, row in plan['objects'].items() if rel not in assets and row['key'] in proofs})
-            oss.write(output/'previous-publication.json', previous)
+            if previous['release_id'] == published['release_id'] and (snapshot := saved.get('oss_predecessor')):
+                if oss.digest(snapshot['path']) != snapshot['sha256']:
+                    raise ValueError('Previous publication snapshot changed')
+                previous_for_retention = oss.read(snapshot['path'])
+            oss.write(output/'previous-publication.json', previous_for_retention)
             plan['previous_publication_sha256'] = oss.digest(output/'previous-publication.json')
         oss.write(output/oss.PLAN, plan)
         documents = delta(plan['github_files'], (previous or {}).get('files', {}))
@@ -446,22 +605,15 @@ def publish(args):
         receipt['planned_bytes'] = sum(row['bytes'] for row in [*uploads.values(), *documents.values()])+plan['github_files'][oss.MANIFEST]['bytes']
         receipt['estimated_transfer_seconds'] = round(receipt['planned_bytes']/10_000_000, 3)
         receipt['estimate_bytes_per_second'] = 10_000_000
-        receipt['oss_retention'] = {'status': 'skipped_by_request' if getattr(args, 'skip_retention', False) else 'deferred',
+        receipt['oss_retention'] = {'status': 'skipped_by_request' if getattr(args, 'skip_retention', False) else 'pending_publication',
             'deleted_objects': 0, 'deleted_bytes': 0, 'rollback_ref': source.get('rollback_ref'),
-            'reason': 'Run separately after successful publication and publication-lock release',
             'command': ['python', '-B', '-X', 'utf8', 'site-astro/tools/publish_site.py', '--retention-only', str(output)]}
         if args.dry_run:
-            check_input_proofs(args.dist, source, previous, build, source_commit)
+            check_input_proofs(args.dist, source, previous, build, source_commit, enforce_drift=batch is None)
             receipt['site_dist'] = step('local_site_dist_commit', lambda:
                     artifact_commit(args.dist, plan, output, source_commit))
             receipt['status'] = 'dry_run'
             return receipt
-        claim = json.loads(command('pwsh', '-NoProfile', '-File', LOCK, '-Mode', 'Acquire',
-                        '-Name', 'wly0829-publication', '-Holder', args.lock_holder,
-                        '-Minutes', '30', '-Reason', 'Incremental website publication', '-Json'))
-        if claim.get('status') not in ('acquired', 'renewed'):
-            raise ValueError('Cannot acquire publication lock')
-        owned = claim['status'] == 'acquired'
         step('pin', lambda: retention.pin(preparation))
 
         def renew_lock():
@@ -515,19 +667,19 @@ def publish(args):
             receipt['status'] = 'uploaded_only'
             return receipt
         renew_lock()
-        manifest = dict(source)
+        manifest = {**published, 'oss': dict(published['oss'])}
         manifest['oss']['verification'] = {'schema': 'wly.oss-incremental-verification.v1',
             'release_id': plan['release_id'], 'complete': True, 'verified_at_beijing': oss.stamp(),
             'method': 'uploaded HEAD size and MD5; unchanged retained receipts',
             'objects': {**plan['retained_objects'], **receipt['head']}}
-        # Preserve actual HEAD proofs before deployment; deletion is a separate invocation.
+        # Preserve actual HEAD proofs before deployment.
         verification = {**manifest['oss']['verification'], 'plan_sha256': retention.digest(output/oss.PLAN)}
         step('retention_proofs', lambda: retention.write(output/'remote-verification.json', verification))
         pin_path = step('retention_inventory', lambda: retention.pin(preparation))
         receipt['oss_retention_pin'] = {'path': str(pin_path), 'plan_sha256': verification['plan_sha256'],
                                        'storage': 'plan_snapshot in shared Git pin'}
 
-        check_input_proofs(args.dist, source, previous, build, source_commit)
+        check_input_proofs(args.dist, source, previous, build, source_commit, enforce_drift=batch is None)
         receipt['site_dist'] = step('local_site_dist_commit', lambda:
                 artifact_commit(args.dist, plan, output, source_commit))
         receipt['commit'] = receipt['site_dist']['commit']
@@ -548,11 +700,38 @@ def publish(args):
         check_input_proofs(args.dist, source, previous, build, source_commit)
         step('successful_manifest_last', lambda: retention.write(retention.shared()/'published.json', {
             'schema': 'wly.site-publication.v1', 'commit': receipt['commit'], 'deployment': receipt['deployment'],
-            'source_commit': source_commit, **({'update_batch': batch} if batch is not None else {}),
+            'source_commit': source_commit, 'site_dist': receipt['site_dist'], 'dist_root': str(args.dist),
+            'oss_plan_sha256': verification['plan_sha256'],
+            'oss_predecessor': {'path': str(output/'previous-publication.json'), 'sha256': plan['previous_publication_sha256']}
+                if 'previous_publication_sha256' in plan else None,
+            **({'update_batch': batch} if batch is not None else {}),
             'manifest': manifest, 'build_files': {rel: {'bytes': (args.dist/rel).stat().st_size, 'sha256': oss.digest(args.dist/rel)}
                 for rel in (oss.MANIFEST, 'release-identity.json')}, 'readback': receipt['get'], 'verified_at_beijing': oss.stamp()}))
         receipt['status'] = 'published'
         receipt['publication_status'] = 'published'
+        oss.write(output/'publish-receipt.json', receipt)
+        if receipt['oss_retention']['status'] != 'skipped_by_request':
+            report = output/'oss-retention.json'
+            try:
+                renew_lock()
+                step('oss_retention', lambda: collect_output(args, output, receipt))
+                collected = retention.read(report)
+            except Exception as error:
+                collected = {'status': 'incomplete', 'reason': str(error)}
+                if not report.is_file():
+                    retention.write(report, collected)
+                else:
+                    collected = retention.read(report)
+            summary_fields = ('status', 'reason', 'deleted_objects', 'deleted_bytes', 'bucket_before', 'bucket_after', 'plan')
+            receipt['oss_retention'].update({key: collected[key] for key in summary_fields if key in collected}, receipt=str(report))
+            if receipt['oss_retention']['status'] != 'complete':
+                print('发布已成功，OSS 回收未完成：' + str(report), file=sys.stderr)
+        sys.path.insert(0, str(ROOT / 'scripts'))
+        try:
+            import live_project
+            live_project.record('publication', ROOT, retention.read(retention.shared()/'published.json'))
+        except Exception as error:
+            print('发布已成功，实况登记失败：' + str(error), file=sys.stderr)
         return receipt
     except Exception as error:
         receipt.update(status='failed', error=str(error))
@@ -570,6 +749,13 @@ def publish(args):
             command('pwsh', '-NoProfile', '-File', LOCK, '-Mode', 'Release',
                     '-Name', 'wly0829-publication', '-Holder', args.lock_holder, '-Json')
 
+def collect_output(args, preparation, publication, report=None):
+    return retention.collect(SimpleNamespace(preparation=preparation, commit=publication['commit'],
+        rollback=publication.get('oss_retention', {}).get('rollback_ref'), cli=CLI, profile='website-images',
+        lock_holder=args.lock_holder, report=report or preparation/'oss-retention.json', dry_run=args.dry_run,
+        max_keys=getattr(args, 'retention_max_keys', None)))
+
+
 def collect_after_publication(args):
     preparation = args.retention_only.resolve()
     publication = retention.read(preparation/'publish-receipt.json')
@@ -581,10 +767,9 @@ def collect_after_publication(args):
     if claim.get('status') != 'acquired':
         raise ValueError('Standalone retention must acquire a fresh lock after publication releases it')
     try:
-        report = preparation/'oss-retention.json'
-        code = retention.collect(SimpleNamespace(preparation=preparation, commit=publication['commit'],
-            rollback=publication.get('oss_retention', {}).get('rollback_ref'), cli=CLI, profile='website-images',
-            lock_holder=args.lock_holder, report=report, dry_run=args.dry_run, max_keys=args.retention_max_keys))
+        label = 'dry-run' if args.dry_run else 'retry'
+        report = preparation/f'oss-retention-{label}-{time.time_ns()}'/'oss-retention.json'
+        code = collect_output(args, preparation, publication, report)
         result = {'status': 'retention_dry_run' if args.dry_run else 'retention_complete' if not code else 'retention_incomplete',
                   'publication_status': 'published', 'oss_retention': retention.read(report), 'exit_code': code,
                   'receipt': str(report)}
@@ -603,33 +788,25 @@ if __name__ == '__main__':
     operation.add_argument('--retention-only', type=Path, metavar='PUBLICATION_OUTPUT',
                            help='collect old objects separately using a successful publication output directory')
     operation.add_argument('--word-check-only', type=Path, metavar='DIST',
-                           help='read-only sensitive-word check of a completed dist')
+                           help='read-only baseline check and non-blocking word hints for a completed dist')
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--upload-only', action='store_true', help='upload and read back OSS assets, then stop before site-dist and Pages')
     parser.add_argument('--scan-result', type=Path)
     parser.add_argument('--previous-manifest', type=Path)
+    parser.add_argument('--previous-site-dist', type=Path, help='local prior Pages artifact for selected-page rehearsal')
     parser.add_argument('--output', type=Path)
     parser.add_argument('--source-commit')
     parser.add_argument('--update-batch', type=Path, help='frozen accepted-page batch from tools/update.py')
     parser.add_argument('--pages-timeout', type=int, default=PAGES_CONFIRM_TIMEOUT,
                         help='total confirmation budget, including dispatch, queue and the 15-minute Pages job')
     parser.add_argument('--upload-workers', type=int, default=12, help='parallel OSS uploads; existing identical objects are skipped')
-    parser.add_argument('--retention-max-keys', type=int, default=1000, help='maximum exact obsolete managed keys checked by --retention-only')
-    parser.add_argument('--skip-retention', action='store_true', help='compatibility flag: publication always defers cloud cleanup to a separate command')
-    parser.add_argument('--defer-source-word-cleanup', action='store_true', help='record pending source cleanup separately; final artifact hits still block')
+    parser.add_argument('--retention-max-keys', type=int, help='limit exact obsolete managed keys checked by collection')
+    parser.add_argument('--skip-retention', action='store_true', help='explicitly skip collection for this publication')
+    parser.add_argument('--defer-source-word-cleanup', action='store_true', help='compatibility flag; word hints never block')
     parser.add_argument('--lock-holder', default='codex:publish:'+ROOT.parent.name)
     options = parser.parse_args()
     if options.word_check_only:
-        hits = scan_public_words(options.word_check_only)
-        blocking = [hit for hit in hits if not (options.defer_source_word_cleanup and hit['scope'] == 'source')]
-        if options.output:
-            options.output.mkdir(parents=True, exist_ok=True)
-            runtime.atomic_write_text(options.output/'word-check.json', json.dumps({'hits': hits, 'blocking_hits': blocking,
-                'source_cleanup_deferred': options.defer_source_word_cleanup}, ensure_ascii=False, indent=2), 'utf-8')
-        print(json.dumps({'status': 'blocked' if blocking else 'source_cleanup_deferred' if hits else 'pass',
-                         'hits': len(hits), 'blocking_hits': len(blocking), 'first_hits': blocking[:3],
-                         **({'review': 'AI wording review: docs/publish-and-scan.md, public word gate paragraph'} if blocking else {})}, ensure_ascii=False))
-        raise SystemExit(bool(blocking))
+        raise SystemExit(bool(check_publication_text(options.word_check_only, options.output)['blocking_hits']))
     if options.dist and options.output is None:
         PUBLISH_RUNS.mkdir(parents=True, exist_ok=True)
         options.output = PUBLISH_RUNS/('publish-'+str(time.time_ns()))

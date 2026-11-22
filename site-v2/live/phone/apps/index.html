@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>手机全部应用 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css">
+<link rel="stylesheet" href="/connect-auth/glass.css">
+<link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css">
+<link rel="stylesheet" href="/live/_lib/live-page.css">
+<link rel="stylesheet" href="/motion/motion.css">
+<style>
+.phone-apps__sheet { overflow:hidden; border:1px solid var(--hair); border-radius:18px; background:rgb(255 255 255 / .3); }
+.phone-apps__table thead { background:rgb(23 145 107 / .07); }
+.phone-apps__table { width:100%; table-layout:fixed; }
+.phone-apps__table td { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.phone-apps__table tbody tr:hover { background:rgb(23 145 107 / .045); }
+.phone-apps__table td:not(:first-child) { font-variant-numeric:tabular-nums; }
+.phone-apps__table td:nth-last-child(-n+2) { white-space:nowrap; }
+.phone-apps__table td .live-mark.live-mark--owner { padding-block:0; }
+.phone-apps [data-app-more] { margin-inline-start:0; padding-inline-start:15px; translate:none; }
+.phone-apps #hidden { margin-inline-start:15px; }
+#ordering { margin:0 0 18px; }
+</style>
+<script src="/motion/motion.js"></script>
+</head>
+<body class="page page--live page--l3 page--phone">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage" id="stage">
+  <div class="field" aria-hidden="true"></div>
+  <a class="back" href="/live/phone/" id="back" data-mo-rise>手机</a>
+  <ul class="notices" id="notices" aria-live="polite"></ul>
+  <article class="card card--hero card--quiet" id="hero" data-pic="right" data-tone="none" data-mo-rise>
+    <div class="card__glow" aria-hidden="true"></div>
+    <img class="card__tint" src="/live/img/grp-phone-apps.webp" alt="" aria-hidden="true">
+    <div class="card__glass glass">
+      <span class="card__pic" aria-hidden="true"><img src="/live/img/grp-phone-apps.webp" width="900" height="900" alt=""></span>
+      <div class="card__body">
+        <p class="card__head" id="head"><span class="head__lead">正在读</span></p>
+        <p class="use-note" id="partial" hidden></p>
+      </div>
+    </div>
+  </article>
+  <section class="pj-sec phone-apps" data-mo-rise aria-label="全部应用">
+    <p class="use-note" id="ordering"></p>
+    <div class="l2-search"><label for="search">搜索应用</label><input id="search" type="search" placeholder="名称或类别" autocomplete="off"><span id="count" role="status" aria-live="polite"></span></div>
+    <div id="apps-list"></div>
+    <p class="use-note" id="hidden" hidden></p>
+  </section>
+</main>
+<script src="/trust-modal/trust-modal.js"></script>
+<script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script>
+<script src="/live/_lib/live-ui.js"></script>
+<script src="/header/topbar.js"></script>
+<script src="/live/_lib/live-light.js"></script>
+<script src="/live/_lib/live-chart.js"></script>
+<script src="/live/phone/apps/page.js"></script>
+</body>
+</html>

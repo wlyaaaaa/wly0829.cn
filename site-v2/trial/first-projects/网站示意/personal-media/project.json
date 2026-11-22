@@ -1,0 +1,35 @@
+{
+  "title": "影音档案馆",
+  "theme": {"p": "#814723", "soft": "#efe5d8", "accent": "#d96b5c"},
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "skillNav": "personal-media",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "13.6rem"],
+    "去〔照片去留〕": ["button-01-v1.compressed.webp", "11.55rem"],
+    "去〔找照片找录音〕技能页": ["button-02-v1.compressed.webp", "16.87rem"],
+    "去〔认得出我〕技能页": ["button-03-v1.compressed.webp", "15.26rem"],
+    "看实况": ["button-live-v2.compressed.webp", "12.4rem"],
+    "去〔手机瘦身〕": ["button-05-v1.compressed.webp", "11.9rem"],
+    "去〔手机直取〕技能页": ["button-06-v1.compressed.webp", "16.78rem"],
+    "去〔云端存底〕": ["button-07-v1.compressed.webp", "11.88rem"],
+    "去〔备份与恢复〕": ["button-08-v1.compressed.webp", "13.55rem"],
+    "回〔影音档案馆〕项目页": ["button-10-v1.compressed.webp", "11.76rem"],
+    "去〔我的说明书〕项目页": ["button-11-v1.compressed.webp", "11.76rem"],
+    "去〔原件书架〕项目页": ["button-12-v1.compressed.webp", "11.76rem"],
+    "去〔中文速记员〕项目页": ["button-13-v1.compressed.webp", "11.76rem"],
+    "去〔网页跑腿〕技能页": ["button-14-v1.compressed.webp", "11.83rem"],
+    "去〔电脑大本营〕项目页": ["button-15-v1.compressed.webp", "11.83rem"],
+    "去〔密码中心〕项目页": ["button-16-v1.compressed.webp", "11.76rem"],
+    "去〔录音转文字〕技能页": ["button-17-v1.compressed.webp", "11.76rem"]
+  },
+  "detailArt": ["button-09-v1.compressed.webp", "4rem"],
+  "sections": {
+    "总览": {"slug": "project", "file": "project.html", "title": "影音档案馆", "meta": "影音档案馆", "nav": "项目", "imagePrefix": "总览"},
+    "照片去留": {"slug": "照片去留", "file": "照片去留.html", "title": "照片去留", "meta": "照片去留", "nav": "项目", "imagePrefix": "照片去留"},
+    "手机瘦身": {"slug": "手机瘦身", "file": "手机瘦身.html", "title": "手机瘦身", "meta": "手机瘦身", "nav": "项目", "imagePrefix": "手机瘦身"},
+    "云端存底": {"slug": "云端存底", "file": "云端存底.html", "title": "云端存底", "meta": "云端存底", "nav": "项目", "imagePrefix": "云端存底"},
+    "找照片找录音": {"slug": "personal-media", "file": "personal-media.html", "title": "找照片找录音", "meta": "找照片找录音", "nav": "技能", "imagePrefix": "找照片找录音"},
+    "认得出我": {"slug": "media-person-self", "file": "media-person-self.html", "title": "认得出我", "meta": "认得出我", "nav": "技能", "imagePrefix": "认得出我"}
+  }
+}

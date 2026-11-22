@@ -1,0 +1,39 @@
+{
+  "title": "Steam 衣橱",
+  "theme": {
+    "p": "#2F415C",
+    "soft": "#E7E5DE",
+    "accent": "#BB5443"
+  },
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "buttonArt": {
+    "看本项目实况": ["cover-live-v1.webp", "11.5rem"],
+    "去〔备份与恢复〕": [
+      "go-backup-v2.compressed.webp",
+      "12rem"
+    ],
+    "去〔配置搬家箱〕项目页": [
+      "go-config-v2.compressed.webp",
+      "16rem"
+    ],
+    "去〔电脑大本营〕项目页": [
+      "go-computer-v2.compressed.webp",
+      "16rem"
+    ]
+  },
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "file": "project.html",
+      "title": "Steam 衣橱",
+      "meta": "Steam 衣橱 · 总览",
+      "nav": "项目",
+      "imagePrefix": "总览"
+    }
+  },
+  "detailArt": [
+    "detail-v2.compressed.webp",
+    "4rem"
+  ]
+}

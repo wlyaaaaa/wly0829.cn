@@ -1,0 +1,145 @@
+{
+  "title": "电脑大本营",
+  "theme": {
+    "p": "#507064",
+    "soft": "#eaeade",
+    "accent": "#b36f3b"
+  },
+  "background": "assets/背景-v1.webp",
+  "skillNav": "phone-direct",
+  "buttonArt": {
+    "去〔备份与恢复〕": [
+      "go-backup-v1.compressed.webp",
+      "12rem"
+    ],
+    "看实况": [
+      "live-v2.compressed.webp",
+      "10rem"
+    ],
+    "去〔网络看护〕技能页": [
+      "go-network-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔手机直取〕技能页": [
+      "go-phone-v1.compressed.webp",
+      "16rem"
+    ],
+    "去〔卡顿问诊〕技能页": [
+      "go-diagnostics-v1.compressed.webp",
+      "16rem"
+    ],
+    "回〔电脑大本营〕项目页": [
+      "return-project-v1.compressed.webp",
+      "17rem"
+    ],
+    "去〔电脑心电图〕项目页": [
+      "go-timeaudit-v1.compressed.webp",
+      "17rem"
+    ],
+    "去〔收信取码〕技能页": [
+      "go-mail-v3.compressed.webp",
+      "16rem"
+    ],
+    "去〔电脑户口本〕": [
+      "go-inventory-v1.compressed.webp",
+      "12rem"
+    ],
+    "去〔AI 远程操作〕": [
+      "go-remote-v2.compressed.webp",
+      "12rem"
+    ],
+    "去〔故障值班〕": [
+      "go-incidents-v1.compressed.webp",
+      "12rem"
+    ],
+    "去〔手机互通〕": [
+      "go-phone-link-v1.compressed.webp",
+      "12rem"
+    ],
+    "去〔软件保养〕": [
+      "go-software-v1.compressed.webp",
+      "12rem"
+    ],
+    "去〔密码中心〕项目页": [
+      "go-password-v1.compressed.webp",
+      "17rem"
+    ]
+  },
+  "sections": {
+    "总览": {
+      "slug": "project",
+      "title": "电脑大本营",
+      "meta": "电脑大本营 · 总览",
+      "imagePrefix": "总览",
+      "nav": "项目"
+    },
+    "子页-备份与恢复": {
+      "slug": "backup",
+      "title": "备份与恢复",
+      "meta": "电脑大本营 · 备份与恢复",
+      "imagePrefix": "备份与恢复",
+      "nav": "项目"
+    },
+    "技能-phone-direct": {
+      "slug": "phone-direct",
+      "title": "手机直取",
+      "meta": "技能 · 手机直取",
+      "imagePrefix": "手机直取",
+      "nav": "技能"
+    },
+    "技能-google-workspace-direct": {
+      "slug": "google-workspace-direct",
+      "title": "收信取码",
+      "meta": "技能 · 收信取码",
+      "imagePrefix": "收信取码",
+      "nav": "技能"
+    },
+    "技能-timeaudit-diagnostics": {
+      "slug": "timeaudit-diagnostics",
+      "title": "卡顿问诊",
+      "meta": "技能 · 卡顿问诊",
+      "imagePrefix": "卡顿问诊",
+      "nav": "技能"
+    },
+    "子页-AI 远程操作": {
+      "slug": "remote",
+      "title": "AI 远程操作",
+      "meta": "电脑大本营 · AI 远程操作",
+      "imagePrefix": "AI 远程操作",
+      "nav": "项目"
+    },
+    "子页-故障值班": {
+      "slug": "incidents",
+      "title": "故障值班",
+      "meta": "电脑大本营 · 故障值班",
+      "imagePrefix": "故障值班",
+      "nav": "项目"
+    },
+    "子页-软件保养": {
+      "slug": "software",
+      "title": "软件保养",
+      "meta": "电脑大本营 · 软件保养",
+      "imagePrefix": "软件保养",
+      "nav": "项目"
+    },
+    "子页-电脑户口本": {
+      "slug": "inventory",
+      "title": "电脑户口本",
+      "meta": "电脑大本营 · 电脑户口本",
+      "imagePrefix": "电脑户口本",
+      "nav": "项目"
+    },
+    "子页-手机互通": {
+      "slug": "phone-link",
+      "title": "手机互通",
+      "meta": "电脑大本营 · 手机互通",
+      "imagePrefix": "手机互通",
+      "nav": "项目"
+    }
+  },
+  "projectNav": "project",
+  "detailArt": [
+    "detail-v1.compressed.webp",
+    "4rem"
+  ]
+}

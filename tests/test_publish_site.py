@@ -1,5 +1,5 @@
 import importlib.util, tempfile, types, unittest.mock
-import io, ssl
+import io, json, ssl
 from http.client import HTTPResponse, IncompleteRead, RemoteDisconnected
 from pathlib import Path
 spec = importlib.util.spec_from_file_location('publisher', Path(__file__).resolve().parents[1]/'site-astro/tools/publish_site.py')
@@ -10,6 +10,98 @@ class PublishTests(unittest.TestCase):
         gate.start(); self.addCleanup(gate.stop)
         proofs = unittest.mock.patch.object(publisher, 'check_input_proofs', return_value={})
         proofs.start(); self.addCleanup(proofs.stop)
+        self.real_check_live_fallback = publisher.check_live_fallback
+        fallback = unittest.mock.patch.object(publisher, 'check_live_fallback', return_value=1)
+        fallback.start(); self.addCleanup(fallback.stop)
+    def test_update_batch_rejects_unselected_html_in_common_outputs(self):
+        commit, digest = 'a'*40, 'b'*64
+        batch = {'run_id': 'run', 'batch_id': 'batch', 'source_commit': commit,
+                 'release_id': 'fixture', 'manifest_sha256': digest,
+                 'pages': {'changed': {'route': '/changed/', 'merged_commit': commit}},
+                 'allowed_routes': ['/changed/']}
+        reconciliation = {'baseline': 'published', 'pages': [{'path': 'changed/index.html'}],
+                          'site_files': [{'path': 'sitemap.xml'}]}
+        self.assertTrue(publisher.check_update_batch(batch, {'release_id': 'fixture'}, commit, digest, reconciliation))
+        reconciliation['site_files'].append({'path': '404.html'})
+        with self.assertRaisesRegex(ValueError, '404.html'):
+            publisher.check_update_batch(batch, {'release_id': 'fixture'}, commit, digest, reconciliation)
+
+    def test_only_shared_address_changes_preserve_the_unselected_html(self):
+        base = 'https://fixture-bucket.oss-cn-beijing.aliyuncs.com'
+        path = 'example/content.js'
+        reports = ('first.html', 'second.html', 'third.html')
+
+        def fixture(label):
+            key = f'releases/{label}/{path}'
+            url = f'{base}/{key}'
+            pages = {rel: f'<body data-page="{Path(rel).stem}"><script src="{url}"></script></body>'.encode()
+                     for rel in reports}
+            manifest = {'source_commit': label*40, 'oss': {'asset_base_url': base,
+                        'objects': {path: {'key': key, 'url': url}}, 'reference_keys': ['_v.gif']},
+                        'files': {rel: {'sha256': publisher.hashlib.sha256(raw).hexdigest()}
+                                  for rel, raw in pages.items()}}
+            return pages, manifest
+
+        old, previous = fixture('a')
+        new, source = fixture('b')
+        raw_old = b'window.PROJECT_CONFIG = {"pages":{}};\nwindow.PAGE_DATA = {"first":["old"],"second":["same"],"third":["old"]};'
+        raw_new = b'window.PROJECT_CONFIG = {"pages":{}};\nwindow.PAGE_DATA = {"first":["edited"],"second":["same"],"third":["edited"]};'
+        with tempfile.TemporaryDirectory() as temporary, unittest.mock.patch.object(
+                publisher.selected_publish, 'git_file', side_effect=(raw_old, raw_new)):
+            dist = Path(temporary)
+            for rel, raw in new.items():
+                (dist / rel).write_bytes(raw)
+            changes = [{'path': rel} for rel in reports]
+            retained = publisher.selected_publish.preserve_html(
+                dist, source, previous, changes, {'first.html'}, old.__getitem__, None)
+            self.assertEqual(retained, {'second.html': old['second.html']})
+
+    def test_preserved_script_must_match_its_old_hash_and_current_public_words(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            folder = Path(temporary)
+            rel, key = 'example/content.js', 'releases/earlier/example/content.js'
+            file, base = folder/rel, 'https://example.test'
+            url = f'{base}/{key}'
+            file.parent.mkdir()
+            raw = '已撤出的句子'.encode('utf-8')
+            file.write_bytes(raw)
+            previous = {'oss': {'asset_base_url': base, 'objects': {
+                rel: {'key': key, 'url': url, 'sha256': publisher.hashlib.sha256(raw).hexdigest()}}}}
+            source = {'oss': {'objects': {}}}
+            args = types.SimpleNamespace(previous_site_dist=folder, dry_run=True)
+            retained = {'example/old.html': f'<script src="{url}"></script>'.encode()}
+            with unittest.mock.patch.object(publisher.retention, 'shared', return_value=folder):
+                with unittest.mock.patch.object(publisher.word_policy, 'load_policy',
+                                                  return_value={'owner_row_words': ['已撤出的句子']}):
+                    with self.assertRaisesRegex(ValueError, 'example/old.html'):
+                        publisher.review_preserved_scripts(args, source, previous, {}, retained)
+                file.write_bytes(b'other payload')
+                with self.assertRaisesRegex(ValueError, '无法核验'):
+                    publisher.review_preserved_scripts(args, source, previous, {}, retained)
+
+    def test_publication_stops_without_a_usable_live_fallback(self):
+        required = {'home', 'tasks', 'projects?state=active'}
+        with tempfile.TemporaryDirectory() as temporary, unittest.mock.patch.object(
+            publisher.live_fallback, 'load_exporter'
+        ) as exporter:
+            dist = Path(temporary); path = dist/'live/_fallback.json'
+            with self.assertRaisesRegex(ValueError, '缺失或读不出'): self.real_check_live_fallback(dist)
+            path.parent.mkdir()
+            body = {'v': 1, 'at': '2026-11-17T00:00:00+08:00', 'viewer': {'kind': 'public'}, 'data': {}}
+            def write(resources):
+                payload = {'publication': {'policy': 'policy-10'}, 'resources': resources}
+                path.write_text(json.dumps(payload), 'utf-8')
+                return payload
+            write({'items': None, 'tasks': {**body, 'viewer': {'kind': 'owner'}}})
+            with self.assertRaisesRegex(ValueError, '缺少入口 home.*身份非公开 tasks.*正文无效 items'):
+                self.real_check_live_fallback(dist)
+            resources = dict.fromkeys(required | {'tasks?cursor=2'}, body)
+            write(dict(resources, **{'tasks?cursor=2': {**body, 'viewer': {'kind': 'owner'}}}))
+            with self.assertRaisesRegex(ValueError, '身份非公开 tasks\\?cursor=2'):
+                self.real_check_live_fallback(dist)
+            payload = write(resources)
+            self.assertEqual(self.real_check_live_fallback(dist), 4)
+            exporter.return_value.check_fallback_publication.assert_called_once_with(payload, require_metadata=True)
     def test_old_run_with_readonly_git_object_is_pruned_without_removing_retained_runs(self):
         with tempfile.TemporaryDirectory() as temporary:
             folder = Path(temporary)
@@ -24,10 +116,12 @@ class PublishTests(unittest.TestCase):
             self.assertEqual(len(result['removed']), 1)
             self.assertTrue(all((folder/f'publish-{number}').is_dir() for number in range(2, 5)))
 
-    def test_publication_defers_retirement_and_preserves_head_proofs_and_failure_state(self):
-        for fail_page, fail_cleanup, skip_retention, recovered in ((False, False, False, False), (False, True, False, False),
-                (True, False, False, False), (False, False, True, False), (False, False, False, True), (True, False, False, True)):
-            with self.subTest(fail_page=fail_page, fail_cleanup=fail_cleanup), tempfile.TemporaryDirectory() as temporary:
+    def test_publication_collects_after_success_and_preserves_head_proofs_and_failure_state(self):
+        for fail_page, fail_cleanup, skip_retention, recovered, revive in (
+                (False, False, False, False, False), (False, True, False, False, False),
+                (True, False, False, False, False), (False, False, True, False, False),
+                (False, False, False, True, True), (True, False, False, True, False)):
+            with self.subTest(fail_page=fail_page, fail_cleanup=fail_cleanup, revive=revive), tempfile.TemporaryDirectory() as temporary:
                 folder = Path(temporary); root = folder/'dist'; root.mkdir()
                 for rel in ('index.html', 'cockpit/index.html', 'computer-access/index.html', 'unchanged/index.html', 'a.js'):
                     target = root/rel; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(b'fixture')
@@ -43,9 +137,16 @@ class PublishTests(unittest.TestCase):
                 def proof(item, dist):
                     rel, row = item
                     return rel, {'status': 'pass', 'http': 200, 'bytes': row['bytes'], 'sha256': row['sha256'], 'headers': {'ETag': '"'+'a'*32+'"'}}
+                head_calls = []
+                def probe(item, dist):
+                    head_calls.append(item[0])
+                    if revive and len(head_calls) == 1:
+                        raise FileNotFoundError('retired remote object')
+                    return proof(item, dist)
                 def collect(args):
                     self.assertIsNone(args.rollback)
                     self.assertTrue((shared/'published.json').exists())
+                    self.assertEqual(publisher.retention.read(folder/'run/publish-receipt.json')['status'], 'published')
                     registered = publisher.retention.read(shared/'managed.json')['objects']
                     self.assertTrue(all(row['etag'] == 'a'*32 for row in registered.values()))
                     if fail_cleanup: raise OSError('cloud delete failed')
@@ -57,11 +158,14 @@ class PublishTests(unittest.TestCase):
                         'schema': 'wly.oss-incremental-verification.v1', 'release_id': source['release_id'], 'complete': True,
                         'objects': {rel: proof((rel, row), root)[1] for rel, row in source['oss']['objects'].items()}}},
                         'publication_readback_required': True}
-                with unittest.mock.patch.object(publisher.retention, 'predecessor', return_value=previous), \
+                with unittest.mock.patch.dict('sys.modules', {'live_project': types.SimpleNamespace(record=unittest.mock.Mock(side_effect=RuntimeError('record fixture failed')))}), \
+                     unittest.mock.patch.object(publisher.retention, 'predecessor', return_value=previous), \
+                     unittest.mock.patch.object(publisher.retention, 'retired_predecessor_keys',
+                        return_value={source['oss']['objects']['a.js']['key']} if revive else set()), \
                      unittest.mock.patch.object(publisher.retention, 'shared', return_value=shared), \
                      unittest.mock.patch.object(publisher.retention, 'collect', side_effect=collect) as cleanup, \
-                     unittest.mock.patch.object(publisher, 'head', side_effect=proof), \
-                     unittest.mock.patch.object(publisher, 'command', return_value='{"status":"acquired"}'), \
+                     unittest.mock.patch.object(publisher, 'head', side_effect=probe), \
+                     unittest.mock.patch.object(publisher, 'command', return_value='{"status":"acquired"}') as commands, \
                      unittest.mock.patch.object(publisher, 'artifact_commit', return_value={'root': str(root), 'commit': 'a'*40, 'changed_files': []}), \
                      unittest.mock.patch.object(publisher, 'pages', return_value=42), \
                      unittest.mock.patch.object(publisher, 'get_page', side_effect=lambda item: (item[0],
@@ -80,11 +184,20 @@ class PublishTests(unittest.TestCase):
                         self.assertEqual(saved['manifest']['input_fingerprints'], {'fixture': 'kept'})
                         self.assertEqual(saved['build_files']['release-identity.json']['sha256'], publisher.oss.digest(root/'release-identity.json'))
                         self.assertIn('unchanged/index.html', result['get'])
-                        cleanup.assert_not_called()
                         registered = publisher.retention.read(shared/'managed.json')['objects']
                         self.assertTrue(all(row['etag'] == 'a'*32 for row in registered.values()))
-                        self.assertEqual(result['oss_retention']['status'], 'skipped_by_request' if skip_retention else 'deferred')
+                        if skip_retention:
+                            cleanup.assert_not_called()
+                        else:
+                            cleanup.assert_called_once()
+                            self.assertEqual(result['oss_retention']['receipt'], str(folder/'run/oss-retention.json'))
+                        self.assertEqual(result['oss_retention']['status'], 'skipped_by_request' if skip_retention
+                                         else 'incomplete' if fail_cleanup else 'complete')
                         self.assertEqual(result['oss_retention']['deleted_objects'], 0)
+                        if revive:
+                            self.assertEqual(head_calls, ['a.js', 'a.js'])
+                            self.assertEqual(result['uploaded_files'], 1)
+                            self.assertEqual(sum(call.args[1:3] == ('ossutil', 'cp') for call in commands.call_args_list), 1)
                 attempt = publisher.retention.read(shared/'last-attempt.json')
                 self.assertEqual(attempt['status'], 'failed' if fail_page else result['status'])
                 self.assertEqual((attempt['dry_run'], attempt['source_commit']), (False, 'Unknown'))
@@ -95,10 +208,17 @@ class PublishTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary); receipt = {'publication_status': 'published', 'dry_run': False, 'commit': 'a'*40}
             publisher.retention.write(root/'publish-receipt.json', receipt)
-            publisher.retention.write(root/'oss-retention.json', {'status': 'complete'})
+            original_report = root/'oss-retention.json'
+            publisher.retention.write(original_report, {'status': 'incomplete'})
             args = types.SimpleNamespace(retention_only=root, lock_holder='cleanup', dry_run=False, retention_max_keys=1000)
-            with unittest.mock.patch.object(publisher, 'command', return_value='{"status":"acquired"}') as commands, unittest.mock.patch.object(publisher.retention, 'collect', return_value=0) as collect:
-                self.assertEqual(publisher.collect_after_publication(args)['status'], 'retention_complete')
+            def finish(options):
+                publisher.retention.write(options.report, {'status': 'complete'})
+                return 0
+            with unittest.mock.patch.object(publisher, 'command', return_value='{"status":"acquired"}') as commands, unittest.mock.patch.object(publisher.retention, 'collect', side_effect=finish) as collect:
+                result = publisher.collect_after_publication(args)
+                self.assertEqual(result['status'], 'retention_complete')
+                self.assertEqual(publisher.retention.read(original_report)['status'], 'incomplete')
+                self.assertTrue(Path(result['receipt']).parent.name.startswith('oss-retention-retry-'))
                 self.assertEqual(collect.call_args.args[0].commit, receipt['commit'])
                 self.assertIn('Release', commands.call_args.args)
                 receipt['dry_run'] = True; publisher.retention.write(root/'publish-receipt.json', receipt)
@@ -345,6 +465,53 @@ class PublishTests(unittest.TestCase):
         old = {'a.js': {'key': 'releases/old/a.js', 'sha256': 'a'}, 'index.html': {'sha256': 'b'}}
         self.assertEqual(set(publisher.delta({'old/a.js': old['a.js'], 'index.html': {'sha256': 'c'}}, old)), {'index.html'})
         self.assertEqual(set(publisher.delta({'a.js': {'key': 'releases/new/a.js', 'sha256': 'a'}}, old)), {'a.js'})
+    def test_publication_omits_fixtures_but_preserves_preview_and_bound_metadata(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            folder = Path(temporary); root = folder/'dist'; root.mkdir()
+            fixture_value = 'DEMO_ONLY'
+            for rel, text in {'index.html': '<h1>public</h1>', 'a.js': 'console.log(1)',
+                              'live/_fixtures/demo/index.html': f'password="{fixture_value}"',
+                              'live/_fixtures/demo/home.json': json.dumps({'password': fixture_value}, separators=(',', ':')),
+                              'live/public.json': '{"ok":true}'}.items():
+                path = root/rel; path.parent.mkdir(parents=True, exist_ok=True); path.write_text(text, 'utf-8')
+            publisher.oss.write(root/'release-manifest.json', {'release_id': 'fixture', 'files': publisher.oss.inventory(root)})
+            original = publisher.oss.finalize_dist(root, source_commit='a'*40)
+            publisher.oss.write(root/'.build-receipt.json', {'source_commit': 'a'*40})
+            fingerprints = {p.relative_to(root).as_posix(): publisher.oss.digest(p) for p in root.rglob('*') if p.is_file()}
+            scan = folder/'scan.json'; publisher.oss.write(scan, {'failures': [], 'dist_files_sha256': fingerprints})
+            options = types.SimpleNamespace(output=folder/'run', dist=root, scan_result=scan, previous_manifest=None, source_commit=None, dry_run=True)
+            real = publisher.command
+            with unittest.mock.patch.object(publisher.retention, 'predecessor', return_value=None), \
+                 unittest.mock.patch.object(publisher, 'command', side_effect=lambda *a, **kw: '' if 'ls-remote' in a else real(*a, **kw)):
+                receipt = publisher.publish(options)
+            self.assertEqual(receipt['status'], 'dry_run')
+            self.assertEqual(len(receipt['excluded_files']), 2)
+            plan = publisher.oss.read(folder/'run/oss-plan.json')
+            artifact = Path(receipt['site_dist']['root'])
+            published = publisher.oss.read(artifact/'release-manifest.json')
+            publisher.oss.verify_manifest(published, require_remote=False)
+            self.assertNotEqual(original['release_id'], published['release_id'])
+            for rows in (plan['objects'], plan['github_files'], published['files'], published['oss']['objects']):
+                self.assertFalse(any(rel.startswith('live/_fixtures/') for rel in rows))
+            self.assertIn('live/public.json', plan['objects'])
+            self.assertFalse((artifact/'live/_fixtures').exists())
+            identity = publisher.oss.read(artifact/'release-identity.json')
+            self.assertEqual(identity['release_id'], published['release_id'])
+            self.assertEqual(identity['manifest_sha256'], publisher.oss.digest(artifact/'release-manifest.json'))
+            self.assertEqual({p.relative_to(root).as_posix(): publisher.oss.digest(p) for p in root.rglob('*') if p.is_file()}, fingerprints)
+
+    def test_publication_baseline_skips_fixtures_without_exempting_live_data(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary); demo = root/'live/_fixtures/home.json'
+            demo.parent.mkdir(parents=True); demo.write_text('{"password":"DEMO_ONLY"}', 'utf-8')
+            with unittest.mock.patch.object(publisher.word_policy, 'baseline_hits', wraps=publisher.word_policy.baseline_hits) as scan:
+                self.assertEqual(publisher.check_publication_text(root)['blocking_hits'], [])
+                scan.assert_not_called()
+            self.assertEqual({hit['file'] for hit in publisher.word_policy.scan_baseline(root)}, {'dist/live/_fixtures/home.json'})
+            public = root/'live/current.json'; public.write_bytes(demo.read_bytes())
+            hits = publisher.check_publication_text(root)['blocking_hits']
+            self.assertEqual({hit['file'] for hit in hits}, {'dist/live/current.json'})
+
     def test_dry_run_commits_a_local_orphan_without_remote_writes(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)/'dist'; root.mkdir()

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>连接电脑 · 试看</title>
+<!-- 页眉用的是定稿的原件，一个字不改 -->
+<link rel="stylesheet" href="../../header/demo/topbar.css">
+<link rel="stylesheet" href="glass.css">
+<link rel="stylesheet" href="/motion/motion.css">
+<script src="/motion/motion.js"></script>
+</head>
+<body class="page page--connect">
+
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float">
+  <div class="topbar__glass"></div>
+
+  <nav class="topbar__group" aria-label="主导航">
+    <a class="pill" href="#">实况</a>
+    <a class="pill" href="#">原理</a>
+    <a class="pill" href="../../rules-page/demo/index.html">规则</a>
+    <a class="pill" href="../../list-pages/demo/skills.html">技能</a>
+    <a class="pill" href="../../list-pages/demo/index.html">项目</a>
+  </nav>
+
+  <a class="brand" href="#" aria-label="Inside a Personal Agent，回首页">
+    <span class="brand__lamp"></span>
+    <span class="brand__word">Inside a Personal Agent</span>
+  </a>
+
+  <div class="topbar__group topbar__group--right">
+    <a class="pill" href="connect.html" aria-current="page">连接电脑</a>
+    <a class="pill" href="auth.html">授权与状态</a>
+  </div>
+</header>
+
+<main class="stage" id="stage">
+  <!-- 玻璃后面的光场 -->
+  <div class="field" aria-hidden="true"></div>
+
+  <div class="pick" style="--d:0" data-mo-rise>
+    <div class="seg glass" role="radiogroup" aria-labelledby="lbl-who" data-name="who">
+      <span class="seg__label" id="lbl-who">接谁</span>
+      <div class="seg__track">
+        <span class="seg__thumb" aria-hidden="true"></span>
+        <button class="seg__opt" type="button" role="radio" data-v="chatgpt" data-mo-press>ChatGPT</button>
+        <button class="seg__opt" type="button" role="radio" data-v="claude" data-mo-press>Claude</button>
+        <button class="seg__opt" type="button" role="radio" data-v="codex" data-mo-press>Codex</button>
+        <button class="seg__opt" type="button" role="radio" data-v="agent" data-mo-press>Agent</button>
+        <button class="seg__opt" type="button" role="radio" data-v="self" data-mo-press>我自己看桌面</button>
+      </div>
+    </div>
+    <div class="seg glass" role="radiogroup" aria-labelledby="lbl-pc" data-name="pc">
+      <span class="seg__label" id="lbl-pc">接哪台</span>
+      <div class="seg__track">
+        <span class="seg__thumb" aria-hidden="true"></span>
+        <button class="seg__opt" type="button" role="radio" data-v="main" data-mo-press>主机</button>
+        <button class="seg__opt" type="button" role="radio" data-v="sub" data-mo-press>副机</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="sheet" style="--d:1" aria-live="polite" data-mo-rise>
+    <div class="sheet__glow" aria-hidden="true"></div>
+    <div class="sheet__glass glass">
+      <div class="sheet__body">
+        <div class="sheet__content" id="sheet"></div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="links links--two" aria-label="介绍" style="--d:2" data-mo-rise>
+    <a class="link" href="/pcconfig/remote.html#remote-01" data-mo-press>
+      <img class="link__glow" src="img/remote.webp" alt="" aria-hidden="true" style="--gx:62%">
+      <span class="link__glass glass">
+        <span class="link__pic" style="--x0:.5; --x1:.82; --yc:.58">
+          <img src="img/remote.webp" width="2172" height="724" alt="">
+        </span>
+        <span class="link__text">
+          <span class="link__kicker">电脑大本营</span>
+          <span class="link__title">AI 远程操作</span>
+        </span>
+        <svg class="link__arrow" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 14 14 4M6.2 4H14v7.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </a>
+    <a class="link" href="/sunshine-remote-streaming/project.html#project-02" data-mo-press>
+      <img class="link__glow" src="img/desk.webp" alt="" aria-hidden="true" style="--gx:70%">
+      <span class="link__glass glass">
+        <span class="link__pic" style="--x0:.5547; --x1:.795; --yc:.425">
+          <img src="img/desk.webp" width="1983" height="793" alt="">
+        </span>
+        <span class="link__text">
+          <span class="link__kicker">远程串流</span>
+          <span class="link__title">随身桌面</span>
+        </span>
+        <svg class="link__arrow" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 14 14 4M6.2 4H14v7.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </a>
+  </nav>
+</main>
+
+<script src="../../header/demo/topbar.js"></script>
+<script src="connect.js"></script>
+</body>
+</html>

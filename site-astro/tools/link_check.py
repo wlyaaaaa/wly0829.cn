@@ -21,7 +21,20 @@ ids_cache = {}
 def ids_of(path):
     if path not in ids_cache:
         s = open(path, encoding="utf-8", errors="replace").read()
-        ids_cache[path] = set(H.unescape(x[1]) for x in re.findall(r'\bid\s*=\s*([\"\x27])(.*?)\1', s))
+        ids = set(H.unescape(x[1]) for x in re.findall(r'\bid\s*=\s*([\"\x27])(.*?)\1', s))
+        # 项目页的卡片由同目录 content.js 的 window.PAGE_DATA 在运行时画出（公用/page.js：卡片 id、展开后的 <id>-detail-<i>），
+        # 静态 HTML 里没有这些 id，按数据补上。
+        page = re.search(r'<body\b[^>]*\sdata-page\s*=\s*([\"\x27])(.*?)\1', s)
+        content = os.path.join(os.path.dirname(path), "content.js")
+        if page and os.path.isfile(content):
+            text = open(content, encoding="utf-8", errors="replace").read()
+            if "window.PAGE_DATA = " in text:
+                data = json.JSONDecoder().raw_decode(text.split("window.PAGE_DATA = ", 1)[1])[0]
+                for item in data.get(H.unescape(page.group(2)), []):
+                    if isinstance(item, dict) and item.get("id"):
+                        ids.add(item["id"])
+                        ids.update(f'{item["id"]}-detail-{i}' for i in range(len(item.get("detail") or [])))
+        ids_cache[path] = ids
     return ids_cache[path]
 
 

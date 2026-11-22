@@ -1,0 +1,14 @@
+{
+  "title": "内存盘守夜人",
+  "theme": {"p": "#22385F", "soft": "#E5E4DE", "accent": "#DF7D59"},
+  "background": "assets/背景-v1.webp",
+  "projectNav": "project",
+  "buttonArt": {"看本项目实况": ["cover-live-v1.webp", "11rem"]},
+  "sections": {
+    "总览": {
+      "slug": "project", "file": "project.html", "title": "内存盘守夜人",
+      "meta": "内存盘守夜人 · 总览", "imagePrefix": "总览", "nav": "项目"
+    }
+  },
+  "detailArt": ["detail-v1.compressed.webp", "4rem"]
+}

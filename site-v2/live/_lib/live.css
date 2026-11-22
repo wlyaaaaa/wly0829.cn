@@ -1,0 +1,927 @@
+/* 实况共用：卡、灯、光、画、行、按钮、出事时的横条。第一、二、三层都引这一份。
+   玻璃（.glass）、按钮底子（.btn）、颜色和字体变量来自全站 /connect-auth/glass.css；页眉来自 /header/topbar.css。
+   光、灯、画的做法照本人选定的样板（front\sample\光-样板.html）：速度快、绿光再明显一点、黄光改过的（加浓了一点）、红光原样、没灯的卡彩虹。
+   会动的光由 live-light.js 摆；这里只管颜色、大小和过渡。所有时长乘全站 --mo-speed。 */
+
+@import url("./live-motion.css");
+
+/* ============ 页面骨架 ============ */
+.page--live {
+  --col: min(1360px, calc(100vw - 160px));
+  --pad: calc(var(--bar-bottom) + 34px);
+  --gut: 25px;                      /* 第一行灯的位置：灯 12 + 间距 13；下面各行的字和第一行的字对齐 */
+  --sp: var(--mo-speed, 1);
+  --t-lamp: calc(200ms * var(--sp));
+  --t-tone: calc(600ms * var(--sp));
+  --t-swap: calc(200ms * var(--sp));
+}
+.page--live .stage { padding-bottom: 16vh; opacity: 1; transition: none; }
+.page--live [hidden] { display: none !important; }
+
+/* 玻璃后面的光场：长页从上到下都铺一点，玻璃才有东西可透；左右只铺到窗口边，不撑出横向滚动 */
+html:has(.page--live) { overflow-x: clip; }
+.page--live .field {
+  top: 0;
+  bottom: 0;
+  left: calc((var(--col) - 100vw) / 2);
+  right: calc((var(--col) - 100vw) / 2);
+  height: auto;
+  background:
+    radial-gradient(560px 440px at 18% 260px, rgb(255 210 168 / .2), rgb(255 216 180 / .07) 55%, transparent 78%),
+    radial-gradient(520px 460px at 66% 420px, rgb(214 210 236 / .17), rgb(220 216 238 / .06) 55%, transparent 78%),
+    radial-gradient(620px 520px at 40% 1050px, rgb(240 232 220 / .2), transparent 74%),
+    radial-gradient(560px 480px at 82% 1350px, rgb(255 236 214 / .16), transparent 72%),
+    radial-gradient(640px 520px at 24% 1800px, rgb(220 214 240 / .14), transparent 74%);
+}
+
+/* 两栏：左边宽一栏是你和 AI 的事，右边窄一栏是机器的状态；最长的项目横在最底下 */
+.board {
+  display: grid;
+  grid-template-columns: minmax(0, 1.36fr) minmax(0, 1fr);
+  gap: var(--gap);
+  align-items: start;
+}
+.board__col { display: grid; gap: var(--gap); align-content: start; min-width: 0; }
+.board__wide { grid-column: 1 / -1; }
+
+/* ============ 卡 ============ */
+.card {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  scroll-margin-top: calc(var(--bar-bottom) + 20px);
+}
+.page--live .card--link { cursor: pointer; transition: translate calc(var(--mo-hover, 200ms) * var(--sp)) var(--mo-out), scale calc(var(--mo-release, 220ms) * var(--sp)) var(--mo-move); }
+.card--link .card__glass { transition: box-shadow calc(var(--mo-hover, 200ms) * var(--sp)) var(--mo-out), background-color calc(var(--mo-hover, 200ms) * var(--sp)) ease; }
+.card--link:hover { translate: 0 -2px; }
+.card--link:hover .card__glass { background-color: rgb(255 255 255 / .14); box-shadow: 0 9px 18px -8px rgb(20 20 19 / .15), 0 26px 48px -24px rgb(20 20 19 / .24); }
+.page--live .card--link.is-pressed { scale: var(--mo-press-scale, .97); transition-duration: calc(var(--mo-press, 90ms) * var(--sp)); }
+.card--link:focus-visible { outline: 2px solid #00813f; outline-offset: 6px; border-radius: var(--r-big); }
+.card[data-tone="none"], .card:not([data-tone]) { --gut: 0px; }
+
+.card__glass {
+  grid-area: 1 / 1;
+  z-index: 1;
+  overflow: hidden;
+  padding: 26px 28px 24px;
+}
+.card__body {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  transition: opacity calc(600ms * var(--sp)) ease, filter calc(600ms * var(--sp)) ease;
+}
+
+/* 第一行：灯 + 一句总的话。前半句大，后半句轻一号，窄的时候后半句自己换行 */
+.card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 12px;
+  row-gap: 2px;
+  margin: 0;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.card__head > .lamp { align-self: center; margin-right: 1px; }
+.head__lead {
+  font-family: var(--black);
+  font-weight: 900;
+  font-size: 26px;
+  line-height: 34px;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+.head__tail {
+  font-size: 16.5px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: .03em;
+  color: var(--ink-soft);
+}
+.head__tail--link { color: inherit; text-decoration: none; }
+.head__rewrite { font-size: 13px; font-weight: 400; line-height: 19px; color: var(--muted); }
+a.head__tail { color: var(--ink-soft); text-decoration: none; border-radius: 6px; }
+a.head__tail:hover { color: var(--ink); }
+.card__head + * { margin-top: 14px; }
+
+/* 还没做的块：只占位置，让整页的节奏看得出来 */
+
+/* ============ 小标签：新、仅我可见、对外换了说法、定时启动、后面做 ============ */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 6px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: .04em;
+  white-space: nowrap;
+  color: var(--muted);
+  box-shadow: inset 0 0 0 1px rgb(20 20 19 / .1);
+  vertical-align: 1px;
+}
+.tag--new { color: #00813f; background: rgb(0 166 80 / .1); box-shadow: none; }
+.tag--todo { color: #a8a69e; box-shadow: inset 0 0 0 1px rgb(20 20 19 / .08); align-self: center; }
+
+/* ============ 行 ============ */
+.rows { list-style: none; margin: 0; padding: 0; }
+.row {
+  display: grid;
+  grid-template-columns: var(--gut) minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: 0;
+  padding: 10px 0 11px;
+  border-top: 1px solid var(--hair);
+}
+.row:first-child { border-top: 0; padding-top: 2px; }
+.row > .lamp { grid-column: 1; margin: 8px 0 0 2px; }
+.row__text { grid-column: 2; min-width: 0; }
+.row__acts {
+  grid-column: 3;
+  display: flex;
+  gap: 6px;
+  padding-left: 16px;
+  margin-top: -2px;
+}
+
+.row__main {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 500;
+  line-height: 23px;
+  letter-spacing: .03em;
+  color: var(--ink);
+}
+.row__main > .tag { margin-left: 8px; }
+.row__kind { font-size: 14px; color: var(--muted); }
+.row__kind::after { content: "·"; margin: 0 8px; color: #c4c2ba; }
+.row__meta { margin-left: 8px; font-size: 13.5px; font-weight: 400; color: #68665f; white-space: nowrap; }
+
+.row__line {
+  margin: 3px 0 0;
+  font-size: 14.5px;
+  line-height: 22px;
+  letter-spacing: .03em;
+  color: #4a4944;
+}
+.row__sub .tag { height: 18px; margin-right: 7px; padding: 0 6px; font-size: 12px; vertical-align: 0; }
+.row__sub {
+  margin: 2px 0 0;
+  font-size: 13px;
+  line-height: 19px;
+  letter-spacing: .04em;
+  color: #8f8d86;
+  font-variant-numeric: tabular-nums;
+}
+.row__receipt { min-height: 19px; }
+.card--machine .hero__devs.has-hardware { margin: 16px 0 0 var(--gut); flex-direction: row; flex-wrap: wrap; gap: 8px; }
+.hero__devs.has-hardware .dev-spec { flex-basis: calc(50% - 4px); min-width: 0; }
+.hero__devs.has-hardware .row__hw { margin: 5px 0 4px; font-size: 13px; line-height: 1.55; }
+
+/* 一行的单行款：标题和灰字排一行（做完的对话、要你知道） */
+.row--flat { padding: 8px 0 9px; }
+.row--flat .row__acts { margin-top: -3px; }
+
+/* 收着的、点开的 */
+.more {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  margin-left: var(--gut);
+  padding: 0 10px;
+  margin-top: 2px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font: inherit;
+  font-size: 13.5px;
+  letter-spacing: .04em;
+  color: var(--muted);
+  cursor: pointer;
+  translate: -10px 0;
+  transition: background .2s ease, color .2s ease;
+}
+.more:hover { background: rgb(255 255 255 / .6); color: var(--ink); }
+.more:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.more[aria-expanded="true"] .more__chev { rotate: 90deg; }
+/* 按下的反馈：“还有 N 条”、回路、第二层的横排入口，和全站 data-mo-press 同一套数（按住 90 毫秒缩到 .97，松开 220 毫秒回来）；底色照旧 */
+html.mo-on .page--live :is(.more, .back, .l2-nav__groups a) {
+  transition: background .2s ease, color .2s ease, scale var(--mo-release, 220ms) var(--mo-out);
+}
+html.mo-on .page--live :is(.more, .back, .l2-nav__groups a):active { scale: var(--mo-press-scale, .97); transition-duration: .2s, .2s, var(--mo-press, 90ms); }
+.more__chev { display: inline-block; margin-left: 4px; transition: rotate calc(220ms * var(--sp)) var(--mo-move, ease); }
+
+/* 往下长开：先撑开位置，内容再淡入 */
+.fold {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows calc(220ms * var(--sp)) var(--mo-move, ease);
+}
+.fold > * { min-height: 0; overflow: hidden; opacity: 0; transition: opacity calc(200ms * var(--sp)) ease; }
+.fold.is-open { grid-template-rows: 1fr; }
+.fold.is-open > * { opacity: 1; transition-delay: calc(120ms * var(--sp)); }
+.fold > * > .rows > .row:first-child { border-top: 1px solid var(--hair); padding-top: 10px; }
+
+.fold__msg { margin: 6px 0 4px var(--gut); font-size: 13.5px; color: var(--muted); }
+
+/* 一张卡最底下的一行入口 */
+.card__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+}
+.card__foot .more { margin-left: calc(var(--gut) - 10px); translate: 0 0; }
+.card__foot .more + .more { margin-left: 0; }
+.more--strong { color: var(--ink); font-weight: 500; }
+
+/* 一块里分段的小字（例：72 小时内做完的） */
+.part {
+  display: block;
+  margin: 14px 0 2px var(--gut);
+  font-size: 12.5px;
+  letter-spacing: .08em;
+  color: #a8a69e;
+}
+
+/* ============ 按钮：页眉圆角小按钮的小一号 ============ */
+.btn--sm {
+  height: 28px;
+  min-width: 0;
+  padding: 0 12px;
+  font-size: 12.5px;
+  letter-spacing: .05em;
+  text-decoration: none;
+}
+.btn--sm.is-done {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 1px 2px rgb(20 20 19 / .22), 0 8px 18px -12px rgb(20 20 19 / .55);
+}
+
+/* ============ AI 对话：在干的一张一段，帮手一人一行 ============ */
+.row--chat .row__title { font-weight: 600; }
+.helpers {
+  list-style: none;
+  margin: 8px 0 2px;
+  padding: 2px 0 2px 13px;
+  border-left: 1px solid rgb(20 20 19 / .09);
+}
+.helper {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 12px;
+  font-size: 13.5px;
+  line-height: 23px;
+  letter-spacing: .03em;
+  color: #5d5c56;
+}
+.helper__who { color: var(--ink-soft); font-weight: 500; }
+.helper__title { color: #8f8d86; }
+.helper__at { color: #a8a69e; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.helper--sum { color: #a8a69e; grid-template-columns: 1fr; }
+
+/* ============ 电脑：名字一列、读数一列 ============ */
+.kv { margin: 0; display: grid; }
+.kv__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--gut) 76px minmax(0, 1fr);
+  align-items: baseline;
+  padding: 4px 0;
+}
+.kv__row > .lamp { grid-column: 1; align-self: center; margin-left: 2px; }
+.kv dt { grid-column: 2; font-size: 14px; letter-spacing: .04em; color: var(--muted); }
+.kv dd {
+  grid-column: 3;
+  margin: 0;
+  font-size: 15px;
+  line-height: 23px;
+  letter-spacing: .03em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.kv dd small { display: block; font-size: 13px; line-height: 19px; color: #8f8d86; letter-spacing: .04em; }
+.kv__link::after { content: ''; position: absolute; inset: 0; }
+.kv__link, [data-part="published"] a { color: inherit; text-decoration: none; }
+.kv__link:hover, [data-part="published"] a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.ledger-counts:empty { display: none; }
+#ledger [data-part="main"]:empty { display: none; }
+.ledger-counts { margin: 8px 0; padding-bottom: 8px; border-bottom: 1px solid var(--hair); font-size: 13px; }
+.kv + .card__note { margin-top: 10px; }
+.card__note {
+  margin: 0 0 0 var(--gut);
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: .03em;
+  color: #5d5c56;
+}
+
+/* ============ 出事时才有的横条：连不上、还没读到、AI 出口不通、手机通知没送到、只看某个项目 ============ */
+.notices { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; margin: 0 0 var(--gap); padding: 0; }
+.notices:empty { display: none; }
+.notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 46px;
+  padding: 6px 8px 6px 18px;
+  border-radius: 999px;
+  font-size: 14.5px;
+  letter-spacing: .03em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.notice:not(:has(.btn)) { padding-right: 20px; }
+.notice > .lamp { width: 9px; height: 9px; }
+.notice__x { width: 30px; padding: 0; font-size: 16px; }
+.live-connection-banner { margin: 0 0 16px; padding: 12px 18px; border: 1px solid #9ca79f; border-left: 4px solid #00a650; border-radius: 10px; background: #f7faf7; color: #263529; font-size: 16px; font-weight: 700; line-height: 1.5; }
+
+/* ============ 页眉右边：几点读到、问情况 ============ */
+/* 点“几点读到”重读：药丸从左右两边同时往正中收，收成一颗圆按钮停在原来的正中，图标跟着滑到正中，到了再转；
+   读完从正中往两边慢慢展开，字最后淡回来。本人 08:25“慢慢滑到居中”、09:21“按一下左右缩小到居中显示”。
+   按钮本身的位置和宽度不变（旁边的按钮不动，也不会因为从“按内容撑开”的宽度起步而第一下没动画），缩的是画在底下的那层药丸（::before）。
+   图标用画好的 SVG（不用字体里的 ↻，那个在不同字体里样子怪）。live-ui.js 读这两个数算等多久。 */
+:root { --live-at-slide: 760ms; --live-at-turn: 1100ms; }
+.topbar .live-at {
+  --live-at-ease: cubic-bezier(.45, .05, .25, 1);
+  --live-at-t: calc(var(--live-at-slide) * var(--sp, 1));
+  min-width: 0;
+  position: relative;
+  isolation: isolate;
+  gap: 7px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--muted, #74736d);
+  font-variant-numeric: tabular-nums;
+}
+.topbar .live-at::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 999px;
+  background: rgb(255 255 255 / .7);
+  box-shadow: inset 0 0 0 1px rgb(20 20 19 / .1), 0 2px 6px rgb(20 20 19 / .04);
+  transition: left var(--live-at-t) var(--live-at-ease), right var(--live-at-t) var(--live-at-ease), background .2s ease;
+}
+.topbar .live-at:hover { background: transparent; box-shadow: none; color: #141413; }
+.topbar .live-at:hover::before { background: rgb(255 255 255 / .94); }
+.live-refresh-icon { position: absolute; left: 15px; top: calc(50% - 8px); display: block; width: 16px; height: 16px; transition: left var(--live-at-t) var(--live-at-ease); }
+.live-refresh-icon svg { display: block; width: 16px; height: 16px; }
+/* 展开时字等药丸展开过半再淡回来；收起时字一开始就淡掉 */
+.live-refresh-text { display: block; margin-left: 23px; transition: opacity calc(var(--live-at-t) * .45) ease calc(var(--live-at-t) * .55); }
+.topbar .live-at.is-refreshing::before { left: calc(50% - 17px); right: calc(50% - 17px); }
+/* 转圈时图标用一种深灰，不跟着指针在不在上面变：点的时候指针在上面是近黑、移开又变回浅灰，转到一半颜色跳 */
+.topbar .live-at.is-refreshing, .topbar .live-at.is-refreshing:hover { color: #4a4944; }
+.is-refreshing .live-refresh-icon { left: calc(50% - 8px); animation: live-refresh-turn calc(var(--live-at-turn) * var(--sp, 1)) cubic-bezier(.45, .1, .45, .9) var(--live-at-t) infinite; }
+.is-refreshing .live-refresh-text { opacity: 0; transition-duration: calc(var(--live-at-t) * .3); transition-delay: 0s; }
+@keyframes live-refresh-turn { to { rotate: 1turn; } }
+.topbar .live-ask { margin-right: 10px; }
+.head__link { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; color: inherit; text-decoration: none; border-radius: 8px; }
+.head__link:hover .head__tail, .rows a:hover { color: var(--ink); }
+.rows a { color: inherit; text-decoration: none; }
+.detail-toggle { border: 0; border-radius: 4px; padding: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.detail-toggle:hover { color: #00813f; }
+.is-expanded > .row__text > .row__main .more__chev { rotate: 90deg; }
+.row__detail { margin-top: 3px; }
+.row__detail.is-open { margin-top: 10px; }
+.row__feedback { grid-column: 2 / -1; margin-top: 6px; color: var(--ink-soft); }
+.row__detail > div { border-left: 2px solid rgb(0 166 80 / .2); padding-left: 12px; }
+.row__detail .row__line + .row__line { margin-top: 8px; }
+.project-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 28px; margin-top: 18px; }
+.project-cell { min-width: 0; padding: 12px 0; border-bottom: 1px solid var(--hair); font-size: 15px; line-height: 23px; }
+.project-cell > a { display: flex; justify-content: space-between; gap: 12px; }
+.project-cell > small { display: block; color: var(--muted); font-size: 12px; }
+.project-cell > .project-reading {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: 2lh;
+  overflow-wrap: anywhere;
+}
+.automation-preview-detail { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 12px; margin: 4px 0 0; }
+.automation-preview-detail dt { font-weight: 600; }
+.automation-preview-detail dd { min-width: 0; margin: 0; }
+.project-cell > span { color: var(--muted); }
+.project-changes { margin-top: 12px; }
+.project-changes .row { padding: 5px 0; }
+.project-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; margin-top: 14px; font-size: 13.5px; line-height: 22px; color: var(--muted); }
+.project-footer > * { margin: 0; font: inherit; }
+.project-footer .more { margin: 0; translate: none; font-size: inherit; }
+.project-footer a { display: inline-flex; align-items: center; height: 30px; padding: 0 10px; border-radius: 999px; color: inherit; text-decoration: none; }
+.project-footer a:hover { background: rgb(255 255 255 / .6); color: var(--ink); text-decoration: none; }
+.task-change { display: inline-block; white-space: nowrap; }
+.notice-target { scroll-margin-top: 110px; animation: live-focus calc(900ms * var(--sp)) var(--mo-out, ease) both; }
+@keyframes live-focus { 0% { filter: blur(7px); opacity: .2; } 18% { opacity: 1; } 100% { filter: blur(0); opacity: 1; } }
+/* 从别处点进来要看的那一行（?item=、?attention=、?source=）：淡入之后一直留一圈绿框和浅绿底，停稳后一眼认得出是哪一行。
+   自动任务、AI 账本、问题三页归另一条线，保持原来只淡入一下 */
+body:not(.page--automation, .page--ledger, [data-record="issue"]) .notice-target { outline: 2px solid rgb(0 166 80 / .6); outline-offset: 3px; border-radius: 12px; background-image: linear-gradient(rgb(0 166 80 / .08), rgb(0 166 80 / .08)); }
+
+/* 淡换：数变了，只换那个数 */
+.is-swapped { animation: live-swap var(--t-swap) ease both; }
+@keyframes live-swap { from { opacity: .15; } to { opacity: 1; } }
+
+/* ============ 灯：页眉正中那颗的画法（左上一点高光、外面一圈淡环、会呼吸），换颜色 ============ */
+@property --l-hi   { syntax: "<color>"; inherits: true; initial-value: #e2ffee; }
+@property --l-mid  { syntax: "<color>"; inherits: true; initial-value: #55e79e; }
+@property --l-base { syntax: "<color>"; inherits: true; initial-value: #00a650; }
+@property --l-deep { syntax: "<color>"; inherits: true; initial-value: #008e45; }
+@property --l-glow { syntax: "<color>"; inherits: true; initial-value: rgb(0 190 95); }
+
+.lamp {
+  --l-hi: #e2ffee; --l-mid: #55e79e; --l-base: #00a650; --l-deep: #008e45; --l-glow: rgb(0 190 95);
+  position: relative;
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: --l-hi var(--t-tone) ease, --l-mid var(--t-tone) ease, --l-base var(--t-tone) ease, --l-deep var(--t-tone) ease, --l-glow var(--t-tone) ease;
+}
+.lamp--sm { width: 8px; height: 8px; }
+.page--live .board :is(#ledger, #projects) .card__head > .lamp { display: none; }
+
+[data-tone="amber"] .lamp:not([data-tone]), .lamp[data-tone="amber"],
+[data-tone="yellow"] .lamp:not([data-tone]), .lamp[data-tone="yellow"] {
+  --l-hi: #fff4d8; --l-mid: #ffc247; --l-base: #f28a00; --l-deep: #c86400; --l-glow: rgb(246 146 0);
+}
+[data-tone="red"] .lamp:not([data-tone]), .lamp[data-tone="red"] {
+  --l-hi: #ffe2de; --l-mid: #ff6e62; --l-base: #e1271e; --l-deep: #b0150f; --l-glow: rgb(236 46 36);
+}
+.lamp[data-tone="green"] {
+  --l-hi: #e2ffee; --l-mid: #55e79e; --l-base: #00a650; --l-deep: #008e45; --l-glow: rgb(0 190 95);
+}
+[data-tone="blue"] .lamp:not([data-tone]), .lamp[data-tone="blue"] {
+  --l-hi: #edf1ff; --l-mid: #b0c0ff; --l-base: #7186df; --l-deep: #5266ba; --l-glow: rgb(113 134 223);
+}
+
+/* 灭着：灰色空心小圆 */
+.lamp::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px #b9b6ad;
+  transition: opacity var(--t-lamp) ease;
+}
+/* 亮着：彩色的灯，会呼吸 */
+.lamp::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, var(--l-hi) 0%, var(--l-mid) 26%, var(--l-base) 60%, var(--l-deep) 100%);
+  opacity: 0;
+  transform: scale(.35);
+  transition: opacity var(--t-lamp) ease, transform var(--t-lamp) var(--mo-out, ease);
+}
+.is-lit .lamp::before { opacity: 0; }
+.is-lit .lamp::after {
+  opacity: 1;
+  transform: none;
+  animation: lamp-breathe 3.4s ease-in-out infinite;
+}
+.is-lit .lamp--sm::after { animation-name: lamp-breathe-sm; }
+
+/* 数据旧了、没读全、连不上：只把对应小灯画成灰圈。 */
+:is([data-tone="gray"], [data-tone="grey"], [data-tone="灰"], [data-tone="off"]) .lamp:not([data-tone])::before,
+.lamp:is([data-tone="gray"], [data-tone="grey"], [data-tone="灰"], [data-tone="off"])::before { opacity: 1; }
+:is([data-tone="gray"], [data-tone="grey"], [data-tone="灰"], [data-tone="off"]) .lamp:not([data-tone])::after,
+.lamp:is([data-tone="gray"], [data-tone="grey"], [data-tone="灰"], [data-tone="off"])::after { opacity: 0; transform: scale(.35); animation: none; }
+
+/* 连不上：全部熄成灰，不呼吸 */
+.live-off .lamp:not([data-tone])::before { opacity: 1; transition-duration: var(--t-tone); }
+.live-off .lamp:not([data-tone])::after { opacity: 0; transform: scale(.35); animation: none; transition-duration: var(--t-tone); }
+/* 离线仍保留卡片内容和背景光。 */
+.page--live.live-off .board .card__body { opacity: 1; filter: none; }
+
+/* 手机独立连不上时熄灯，其他卡照自己的连接状态。 */
+#phone { --gut: 25px; }
+#phone[data-phone-state="offline"] .card__head > .lamp:not([data-tone])::before,
+#phone[data-phone-state="unknown"] .card__head > .lamp:not([data-tone])::before { opacity: 1; }
+#phone[data-phone-state="offline"] .card__head > .lamp:not([data-tone])::after,
+#phone[data-phone-state="unknown"] .card__head > .lamp:not([data-tone])::after { opacity: 0; transform: scale(.35); animation: none; }
+#phone .card__note { position: relative; }
+#phone .card__note > .lamp { position: absolute; left: -23px; top: 16px; }
+#phone .card__note > .btn { margin-left: 6px; }
+#phone .kv dd .btn { margin-left: 8px; }
+#phone .card__head { display: block; position: relative; padding-left: 25px; margin-right: calc(var(--win) * -.6); }
+#phone .card__head > .lamp { position: absolute; left: 0; top: 11px; margin: 0; }
+#phone .head__link { display: block; }
+#phone .head__lead { white-space: normal; }
+#phone .head__tail { margin-left: 8px; white-space: nowrap; }
+
+@keyframes lamp-breathe {
+  0%, 100% {
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--l-base) 12%, transparent),
+      0 0 8px 1px color-mix(in srgb, var(--l-glow) 42%, transparent),
+      0 0 18px 3px color-mix(in srgb, var(--l-glow) 14%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--l-base) 17%, transparent),
+      0 0 13px 2px color-mix(in srgb, var(--l-glow) 72%, transparent),
+      0 0 30px 7px color-mix(in srgb, var(--l-glow) 28%, transparent);
+  }
+}
+@keyframes lamp-breathe-sm {
+  0%, 100% { box-shadow: 0 0 0 2px color-mix(in srgb, var(--l-base) 12%, transparent), 0 0 6px 1px color-mix(in srgb, var(--l-glow) 40%, transparent); }
+  50%      { box-shadow: 0 0 0 3px color-mix(in srgb, var(--l-base) 16%, transparent), 0 0 10px 2px color-mix(in srgb, var(--l-glow) 62%, transparent); }
+}
+
+/* ============ 光：铺在玻璃正后面，裁在卡里，玻璃把它磨开。位置、飘、呼吸、漫出收回由 live-light.js 算 ============ */
+.card__glow {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: var(--r-big);
+  overflow: hidden;
+  pointer-events: none;
+}
+.glow { position: absolute; inset: 0; opacity: 0; }
+.blob {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  will-change: transform, opacity;
+}
+
+/* 每个虚化圆圈独立随机单色或双色；绿色抽取权重为其他色的 1.5 倍。 */
+:root {
+  --glow-green: 0 166 80; --glow-sage: 108 167 140; --glow-lilac: 150 92 190; --glow-cyan: 65 153 182; --glow-blue: 80 106 196;
+  --glow-coral: 216 115 105; --glow-pink: 193 80 139; --glow-peach: 227 151 115; --glow-red: 225 39 30; --glow-amber: 242 138 0;
+}
+.glow .blob--a {
+  background: radial-gradient(60% 65% at 34% 45%, rgb(var(--glow-a) / calc(.30 * var(--glow-alpha-a, 1))) 0%, rgb(var(--glow-a) / calc(.12 * var(--glow-alpha-a, 1))) 50%, transparent 100%), radial-gradient(60% 65% at 66% 55%, rgb(var(--glow-b) / calc(.28 * var(--glow-alpha-b, 1))) 0%, rgb(var(--glow-b) / calc(.10 * var(--glow-alpha-b, 1))) 50%, transparent 100%);
+}
+.glow .blob--b {
+  background: radial-gradient(60% 65% at 34% 45%, rgb(var(--glow-a) / calc(.19 * var(--glow-alpha-a, 1))) 0%, rgb(var(--glow-a) / calc(.075 * var(--glow-alpha-a, 1))) 50%, transparent 100%), radial-gradient(60% 65% at 66% 55%, rgb(var(--glow-b) / calc(.17 * var(--glow-alpha-b, 1))) 0%, rgb(var(--glow-b) / calc(.065 * var(--glow-alpha-b, 1))) 50%, transparent 100%);
+}
+/* 光直接铺在页头玻璃里、没有毛玻璃再磨一层的页头（计划任务详情、笔记本、自动任务）：照 AI 对话详情页头（live-route.css）的做法，
+   渐变到圆边就全透明、再糊开，上下边淡出，不留弧线、不被卡边切平 */
+:is(.task-hero, .automation-hero, .laptop-hero) > .card__glow {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 45px, #000 calc(100% - 50px), transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 0, #000 45px, #000 calc(100% - 50px), transparent 100%);
+}
+:is(.task-hero, .automation-hero, .laptop-hero) > .card__glow .glow .blob--a {
+  background: radial-gradient(closest-side,
+    rgb(var(--glow-a) / calc(.46 * var(--glow-alpha-a, 1))) 0%,
+    rgb(var(--glow-a) / calc(.32 * var(--glow-alpha-a, 1))) 35%,
+    rgb(var(--glow-a) / calc(.13 * var(--glow-alpha-a, 1))) 65%,
+    transparent 100%);
+  filter: blur(30px);
+}
+
+/* ============ 画：卡片一侧一条，边缘化进玻璃 ============ */
+.card[data-pic] { --win: clamp(160px, 28%, 250px); }
+.card[data-pic] .card__glass { min-height: 150px; }
+
+.card__pic {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--win);
+  overflow: hidden;
+  pointer-events: none;
+}
+.card__pic img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--pic-x, 50%) var(--pic-y, 50%);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.card[data-pic="right"] .card__pic {
+  right: 0;
+  -webkit-mask-image: linear-gradient(270deg, #000 0%, #000 30%, rgb(0 0 0 / .93) 38%, rgb(0 0 0 / .78) 47%, rgb(0 0 0 / .55) 56%, rgb(0 0 0 / .32) 65%, rgb(0 0 0 / .14) 74%, rgb(0 0 0 / .04) 82%, transparent 90%);
+  mask-image: linear-gradient(270deg, #000 0%, #000 30%, rgb(0 0 0 / .93) 38%, rgb(0 0 0 / .78) 47%, rgb(0 0 0 / .55) 56%, rgb(0 0 0 / .32) 65%, rgb(0 0 0 / .14) 74%, rgb(0 0 0 / .04) 82%, transparent 90%);
+}
+.card[data-pic="left"] .card__pic {
+  left: 0;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 30%, rgb(0 0 0 / .93) 38%, rgb(0 0 0 / .78) 47%, rgb(0 0 0 / .55) 56%, rgb(0 0 0 / .32) 65%, rgb(0 0 0 / .14) 74%, rgb(0 0 0 / .04) 82%, transparent 90%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 30%, rgb(0 0 0 / .93) 38%, rgb(0 0 0 / .78) 47%, rgb(0 0 0 / .55) 56%, rgb(0 0 0 / .32) 65%, rgb(0 0 0 / .14) 74%, rgb(0 0 0 / .04) 82%, transparent 90%);
+}
+/* 字让开画：画朝玻璃那一侧四成已经淡没了，字可以伸进去 */
+.card[data-pic="right"] .card__body { padding-right: calc(var(--win) * .6); }
+.card[data-pic="left"] .card__body { padding-left: calc(var(--win) * .6 + 10px); }
+
+/* 画的颜色透过玻璃：同一张画虚化后垫在玻璃后面，只在画那一侧 */
+.card__tint {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(30px) saturate(1.1);
+  opacity: .26;
+  clip-path: inset(0 round var(--r-big));
+  pointer-events: none;
+  user-select: none;
+  transition: opacity calc(700ms * var(--sp)) ease;
+}
+.card[data-pic="right"] .card__tint {
+  object-position: 80% 40%;
+  -webkit-mask-image: linear-gradient(270deg, #000 0 22%, transparent 50%);
+  mask-image: linear-gradient(270deg, #000 0 22%, transparent 50%);
+}
+.card[data-pic="left"] .card__tint {
+  object-position: 20% 40%;
+  -webkit-mask-image: linear-gradient(90deg, #000 0 22%, transparent 50%);
+  mask-image: linear-gradient(90deg, #000 0 22%, transparent 50%);
+}
+
+.live-hidden .lamp::after, .live-hidden .topbar .brand__lamp { animation-play-state: paused !important; }
+
+/* ============ 加载中：雾里显影（方案 front\brainstorm\加载中-独立.md 方向一；摆法在 live-ui.js 的 reading） ============
+   在读的块加 data-read：idle 刚开始读（0.4 秒内：位置留着，雾不出现）、wait 在读、slow 读了 10 秒还没到、gone 存不下（一句灰字，不动）。
+   在读时块里真内容先藏着，只摆 .fog：糊开的示意字、珍珠白小灯；卡加 .is-fogged，玻璃后面一团很淡的珍珠白光慢慢飘。
+   加载中不比正常的卡多动任何一样东西：只有这团光在飘（和正常的光一样 6 秒一圈）、第一行那颗灯轻轻呼吸；所有在读的块同一个节拍（--fog-sync）。
+   数到了：.is-clearing 由糊变清（900 毫秒，和“从通知点进来先糊后清”同一组数），珍珠光淡出、状态色的光由 live-light.js 漫出来。 */
+.fog { display: none; }
+[data-read] > .fog { display: block; }
+span[data-read] > .fog, [data-read] > span.fog { display: inline; }
+[data-read] > :not(.fog):not([data-keep]) { display: none !important; }
+[data-read="idle"] > .fog { visibility: hidden; }
+[data-read="wait"] > .fog, [data-read="slow"] > .fog { animation: fog-in calc(320ms * var(--sp)) ease both; }
+@keyframes fog-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* 糊开的示意字：墨色很淡、糊得读不出，不是灰方块 */
+.fog__text {
+  color: rgb(20 20 19 / .34);
+  filter: blur(4.5px);
+  user-select: none;
+  -webkit-user-select: none;
+}
+.fog__text.head__lead { color: rgb(20 20 19 / .3); filter: blur(6px); }
+/* 第一行灯旁边那句清楚的“正在读…” */
+.fog__note { align-self: center; font-size: 14.5px; line-height: 22px; letter-spacing: .05em; color: #8f8d86; white-space: nowrap; }
+.fog__more { display: none; margin-left: 10px; }
+[data-read="slow"] .fog__more { display: inline; animation: fog-in calc(600ms * var(--sp)) ease both; }
+.fog__head + .fog__line { margin-top: 10px; }
+.fog__line {
+  margin: 8px 0 0 var(--gut);
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: .03em;
+}
+.card--record .fog__line { margin-left: calc(var(--rec-text, 61px) - var(--rec-lamp, 36px)); }
+/* 第一层的卡：还没上色时 --gut 是 0，雾里几行照有灯的卡对齐（灯 12 + 间距 13）；没灯的卡（账本、项目）雾里也不摆灯、从头对齐 */
+.card:not(.card--record) .fog > :is(.fog__line, .fog__slow, .fog__say) { margin-left: 25px; }
+.card:not(.card--record) .fog-bare > .fog > :is(.fog__line, .fog__slow, .fog__say) { margin-left: 0; }
+.fog-bare > .fog > .fog__head > .lamp { display: none; }
+.fog__line:nth-of-type(2) .fog__text { color: rgb(20 20 19 / .26); }
+
+/* 一串行的示意：每行前面一颗不呼吸的珍珠小点 */
+.fog__row { display: grid; grid-template-columns: var(--rec-text, var(--gut)) minmax(0, 1fr); align-items: start; padding: 9px 0 10px; }
+.fog__row > .lamp { margin: 8px 0 0 calc(var(--rec-lamp, 0px) + 2px); }
+.fog__row > .fog__line { margin: 0; line-height: 25px; }
+.fog__row > .fog__line .fog__text:last-child { font-size: 14px; color: rgb(20 20 19 / .22); }
+
+/* 一格曲线：一条糊开的、柔柔发光的珍珠色光带 */
+.fog__chart { position: relative; display: block; height: 100%; min-height: 90px; }
+.fog__band {
+  position: absolute;
+  left: 2%;
+  right: 2%;
+  top: 38%;
+  height: 34%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgb(226 212 186 / .55) 18%, rgb(214 206 236 / .5) 50%, rgb(204 228 234 / .5) 80%, transparent);
+  filter: blur(14px);
+}
+
+/* 珍珠白小灯：和页眉那颗一样的画法、一样轻的呼吸，只是还没有颜色 */
+.lamp--pearl {
+  --l-hi: #ffffff; --l-mid: #fdfdfb; --l-base: #eceae6; --l-deep: #c9c7c2; --l-glow: rgb(178 186 206);
+}
+:is(.card, .page--live) [data-read] > .fog .lamp.lamp--pearl::before { opacity: 0; }
+:is(.card, .page--live) [data-read] > .fog .lamp.lamp--pearl::after {
+  opacity: 1;
+  transform: none;
+  animation: lamp-breathe calc(3.4s * var(--sp)) ease-in-out var(--fog-sync, 0s) infinite;
+}
+:is(.card, .page--live) [data-read] > .fog .lamp--pearl.lamp--sm::after {
+  animation: none;
+  box-shadow: 0 0 0 2px rgb(222 224 232 / .5), 0 0 7px 1px rgb(178 186 206 / .55);
+}
+
+
+.fog__slow { display: none; margin: 14px 0 0 var(--gut); font-size: 14.5px; line-height: 22px; letter-spacing: .05em; color: #8f8d86; }
+.card--record .fog__slow { margin-left: calc(var(--rec-text, 61px) - var(--rec-lamp, 36px)); }
+.rec-runs .fog__slow { margin-left: var(--rec-text, var(--gut)); }
+[data-read="slow"] .fog__slow { display: block; animation: fog-in calc(600ms * var(--sp)) ease both; }
+span.fog__slow { margin: 0 0 0 8px; }
+[data-read="slow"] span.fog__slow { display: inline; }
+
+/* 存不下：卡收成一句话。名字清楚、深灰；下面一行浅灰；灯是灭着的灰圈；不动 */
+.fog__name { color: #5d5c56; }
+.fog__say { margin: 8px 0 0 var(--gut); font-size: 14.5px; line-height: 22px; letter-spacing: .03em; color: #8f8d86; }
+.card--record .fog__say { margin-left: calc(var(--rec-text, 61px) - var(--rec-lamp, 36px)); }
+[data-read="gone"] > .fog { animation: none; }
+
+/* 数到了：先糊后清（只加在刚显出来的那几块上，别的不动） */
+.is-clearing { animation: fog-clear calc(900ms * var(--sp)) var(--mo-out, ease) both; }
+/* 从雾里那层的程度起步变清，不比雾更糊（雾：字糊开约 5 像素、墨色三成左右） */
+@keyframes fog-clear { 0% { filter: blur(4.5px); opacity: .45; } 100% { filter: blur(0); opacity: 1; } }
+
+/* 电脑不在线时页眉灯熄成灰圈，卡片背景光照常。 */
+.live-off .topbar .brand__lamp {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px #b9b6ad;
+  animation: none;
+  transition: background var(--t-tone, 600ms) ease, box-shadow var(--t-tone, 600ms) ease;
+}
+
+
+/* 窄电脑窗口：只收紧实况新增的按钮；灯固定在标题第一行，长标题在灯右边换行。 */
+.live-unit { display: inline; white-space: nowrap; }
+@media (max-width: 1440px) {
+  .live-unit { display: inline; white-space: nowrap; }
+  .page--live .row__kind { white-space: nowrap; }
+  .page--live .topbar .live-at { padding-inline: 10px; font-size: 12px; }
+  .page--live .topbar .live-at:not(.is-refreshing) .live-refresh-icon { left: 10px; }
+  .page--live .topbar .live-ask { margin-right: 0; padding-inline: 12px; }
+  .page--live .board .card__head:has(> .lamp) { position: relative; padding-left: 25px; }
+  .page--live .board .card__head > .lamp { position: absolute; left: 0; top: 11px; margin: 0; }
+  .page--live .board .card__head:has(> .lamp) .head__link { display: block; min-width: 0; max-width: 100%; text-wrap: balance; }
+  .page--live .board .card__head:has(> .lamp) .head__link > .head__tail:last-child { margin-left: 12px; }
+  .page--live .board .card__head:has(> .lamp) .head__lead { max-width: 100%; white-space: normal; }
+}
+
+/* 第一层复核：不拆读数和词，副行借用按钮下方的宽度。 */
+.page--live .board .l1-unit { display: inline; white-space: nowrap; }
+.page--live #needs .row__text { display: contents; }
+.page--live #needs .row__main { grid-column: 2; grid-row: 1; }
+.page--live #needs .row__sub { grid-column: 2 / -1; }
+.page--live #needs .row__detail { grid-column: 2 / -1; }
+.page--live #needs .row__acts { grid-row: 1; }
+.page--live #tasks .head__lead { white-space: nowrap; }
+.page--live #ledger .ledger-counts { white-space: nowrap; font-size: 12px; letter-spacing: 0; }
+.page--live #projects .project-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.page--live #needs .row__main:has(> .tag--new) .row__title { max-width: calc(100% - 40px); }
+.page--live #computer .kv__row:last-child a { white-space: nowrap; }
+#phone .kv__row > .lamp { align-self: start; margin-top: 8px; }
+#phone .glow { transform: scale(.5); transform-origin: 20% 0; }
+.page--live .board .rewrite-pending { color: var(--muted); }
+.page--live #chats .row--flat .row__meta { white-space: normal; }
+.page--live #computer [data-part="stability"] { margin-left: var(--gut); }
+#phone .card__head { margin-right: 0; }
+/* 第一层没有总状态时灭灯，背景光不跟着变。 */
+.page--live .board .card[data-tone="none"] .card__head > .lamp::before,
+.page--live .board .card[data-tone="off"] .lamp::before { opacity: 1 !important; }
+.page--live .board .card[data-tone="none"] .card__head > .lamp::after,
+.page--live .board .card[data-tone="off"] .lamp::after { opacity: 0 !important; animation: none; }
+.card--warming .card__body > :not([data-part="head"]):not([data-part="status"]) { display: none; }
+.live-offline .lamp:not([data-tone])::before { opacity: 1 !important; box-shadow: inset 0 0 0 1.5px #b9b6ad !important; }
+.live-offline .lamp:not([data-tone])::after { opacity: 0 !important; animation: none !important; box-shadow: none !important; }
+.live-offline .topbar .brand__lamp { background: transparent !important; box-shadow: inset 0 0 0 1.5px #b9b6ad !important; animation: none !important; }
+.live-offline .notices .notice { min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; backdrop-filter: none; font-size: 17px; line-height: 27px; color: var(--ink); }
+.live-offline .notices .notice::before, .live-offline .notices .notice > .lamp { display: none; }
+.live-offline [data-read="gone"], .live-offline .card__glass:has(> [data-read="gone"]) { min-height: 0 !important; height: auto !important; }
+[data-read="unavailable"], .card__glass:has(> [data-read="unavailable"]) { min-height: 0 !important; height: auto !important; }
+[data-read="unavailable"] .fog__say { display: flex; align-items: center; gap: 13px; margin: 0 !important; color: var(--muted); }
+[data-read="unavailable"] .lamp:not([data-tone])::after { opacity: 0 !important; animation: none !important; }
+[data-read="unavailable"] .lamp:not([data-tone])::before { opacity: 1 !important; box-shadow: inset 0 0 0 1.5px #b9b6ad !important; }
+.live-offline [data-needs-pc] { color: var(--muted); opacity: .5; filter: grayscale(1); cursor: default; }
+.live-pc-note { display: none; font-size: 13px; line-height: 21px; color: var(--muted); margin-left: 8px; }
+.live-offline .live-pc-note { display: inline; }
+.live-offline .chart.is-empty :is(.chart__head,.chart__plot > :not(.chart__wait)) { display: none; }
+.live-offline .chart.is-empty .chart__plot { height: auto !important; min-height: 0; margin: 0; }
+.live-offline .chart.is-empty .chart__wait { position: static; display: block; padding: 8px 0; text-align: left; }
+.accumulating-note, .grp__fig[data-accumulating] .grp__fv { color: var(--muted); font-size: 13px; font-weight: 400; line-height: 1.6; white-space: normal; }
+/* 看图复核：文字留在内容区；短读数、日期和标签整段换行。 */
+.page--live.page--computer .hero__devs { display: grid; grid-template-columns: minmax(0, 1fr); max-width: 340px; }
+.page--live.page--computer .hero__devs .dev-spec { width: 100%; min-width: 0; }
+.page--live.page--computer .hero__devs .dev-pill { height: auto; min-height: 30px; flex-wrap: wrap; padding-block: 5px; }
+.page--live.page--computer .hero__devs :is(.row__sub,.computer-hw-item) { white-space: normal; overflow-wrap: anywhere; }
+.page--live.page--computer .remote-link a { overflow-wrap: anywhere; }
+.page--live .board :is(#backups,#phone,#projects)[data-pic="right"] .card__body { padding-right: var(--win); }
+.page--live .board #backups .card__head { flex-wrap: wrap; }
+.page--live .board #phone .head__lead { white-space: normal; overflow-wrap: normal; word-break: keep-all; }
+.page--live .board #projects .project-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.page--live.page--l2 .grp__title { overflow-wrap: anywhere; }
+.page--live.page--l2 .grp__acts { grid-column: 4; min-width: 0; }
+.page--live :is(.grp__fv,.vz-bars__lab,.vz-moment__t,.vz-tl__label,.vz-chip-cell__k,.dev-pill b) { white-space: nowrap; word-break: keep-all; }
+.page--live .vz-rank--detail .vz-rank__name { word-break: keep-all; }
+/* 本人选定 A：小锁胶囊、浅紫换说法标签、灰色加载条。 */
+.page--live :is(.live-mark.live-mark--owner,.live-mark.live-mark--pending,.live-mark.live-mark--rewritten) { display: inline-flex; align-items: center; gap: 6px; margin: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; color: #72716d; font: 400 13px/20px var(--sans); text-decoration: none; vertical-align: baseline; cursor: default; }
+.page--live .live-mark.live-mark--owner { padding: 2px 9px; border-radius: 999px; background: #ececea; color: #666560; white-space: nowrap; }
+.page--live .live-mark__lock { font-size: 12px; filter: grayscale(1); }
+.page--live .live-mark.live-mark--rewritten { margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: #eee7f7; color: #7757a5; white-space: nowrap; }
+.page--live .live-mark.live-mark--pending { width: min(100%, 420px); gap: 12px; color: #96948e; white-space: nowrap; }
+.page--live .live-mark--pending::before { content: ''; flex: 1; min-width: 96px; height: 12px; border-radius: 999px; background: linear-gradient(90deg,#dededc 20%,#eeedeb 50%,#dededc 80%); background-size: 200% 100%; animation: live-mark-loading 1.8s linear infinite; }
+@keyframes live-mark-loading { to { background-position: -200% 0; } }
+.page--live .head__marker { flex-basis: 100%; margin-left: var(--gut); font-size: 13px; line-height: 20px; }
+.page--live .head__cutoff { display: block; flex-basis: 100%; margin-left: var(--gut); color: var(--muted); font-size: 14px; line-height: 22px; }
+.page--live #phone .head__cutoff { margin-left: 0; }
+.page--live .vz-rank__name:has(.live-mark) { display: block; }
+.page--live .vz-rank__name:has(.live-mark) > small { display: block; margin-left: 0; }
+
+.page--live button.trust-note[data-trust-view] { border: 1px solid #cbcfc7; cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; max-inline-size: min(100%, 16em); text-align: left; }
+.page--live button.trust-note[data-trust-view]:hover { color: #474b45; background: #e1e4de; text-decoration-style: solid; }
+.page--live button.trust-note[data-trust-view]:focus-visible { outline: 2px solid #00A650; outline-offset: 3px; }
+.page--live .live-mark__label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* 展开说明占用所在行的空间，下面的内容随行下移。 */
+.page--live :has(> #live-privacy-note) { flex-wrap: wrap; }
+#live-privacy-note {
+  display: block;
+  flex: 0 0 100%;
+  grid-column: 1 / -1;
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: min(100%, 22rem);
+  margin: 6px 0 2px;
+  padding: 8px 11px;
+  border: 1px solid #d7ddd4;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink, #242a23);
+  font: 14px/1.6 var(--sans, sans-serif);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+/* 离线复用各页现有横条，不另外叠一条；状态动画停，装饰光色照旧。 */
+.live-offline #notices > :is(.notice, .l1-unreadable-note) { padding: 14px 20px; border: 1px solid #d5d6d0; border-radius: 12px; background: #eeefeb; color: #4d5149; font-size: 16px; font-weight: 600; line-height: 1.6; }
+.live-offline .lamp::after, .live-offline .live-mark--pending::before, .live-offline .live-refresh-icon { animation: none !important; }
+
+/* 暂停公开时，卡框留着，数、正文和控件一起收起。 */
+.live-public-paused .page--live .stage * { visibility: hidden !important; }
+.live-public-paused .page--live .stage :is([data-live-pause-frame], [data-live-pause-frame] > .card__glass, .live-pause-text) { visibility: visible !important; }
+.live-public-paused .page--live .stage [data-live-pause-frame] { position: relative; }
+.live-public-paused .page--live .stage [data-live-pause-frame]::before,
+.live-public-paused .page--live .stage [data-live-pause-frame]::after,
+.live-public-paused .page--live .live-ask { display: none !important; }
+.live-pause-text { position: absolute; top: 18px; left: 22px; z-index: 2; margin: 0; color: var(--muted); }
+.live-pause-fallback { min-height: 72px; }
+
+/* 项目筛选提示每次进入时单独升起，退场沿用横条列表。 */
+.notice--filter[data-key="filter"] {
+  animation: mo-rise calc(var(--mo-rise, 600ms) * var(--sp)) var(--mo-out, ease) both;
+}
+.chat-tag { display: inline-flex; align-items: center; height: 18px; margin: 0 2px; padding: 0 6px; border-radius: 6px; background: rgb(20 20 19 / .05); font-size: 11.5px; color: #6b6a64; white-space: nowrap; vertical-align: 1px; }
+
+/* 自动任务的小标：定时 · Codex、修毛病 · Sol、例行 · Claude（首页卡和自动任务页共用）。 */
+.auto-tag { display: inline-flex; align-items: center; flex: none; padding: 1px 9px; border-radius: 999px; background: #efeaf7; color: #574a72;
+  font-size: 12.5px; font-weight: 600; line-height: 21px; white-space: nowrap; letter-spacing: .01em; }
+.auto-tag[data-kind="scheduled"] { background: #fcefdc; color: #8f5410; }
+.auto-tag[data-kind="repair"] { background: #ebe4fa; color: #5a429c; }
+.auto-tag[data-kind="routine"] { background: #e2ebf9; color: #2f548c; }
+.auto-tag[data-kind="other"] { background: #ecebe6; color: #57564f; }
+.auto-row-gap { display: inline-block; width: 8px; height: 8px; }
+
+.live-item-confirm {
+  position: fixed; inset: 0; box-sizing: border-box; width: 100%; height: 100%;
+  max-width: none; max-height: none; margin: 0; padding: 16vh 0 28px;
+  border: 0; background: transparent; color: var(--ink, #202420); overflow: auto;
+}
+.live-item-confirm[open] { display: grid; justify-items: center; align-content: start; }
+.live-item-confirm::backdrop { background: rgb(255 255 255 / .59); backdrop-filter: blur(3px); }
+.live-item-confirm__card {
+  position: relative; box-sizing: border-box;
+  width: min(440px, calc(var(--item-confirm-width, 100vw) - 28px));
+  zoom: var(--item-confirm-zoom, 1); padding: 26px 24px 22px;
+  border: 1px solid rgb(255 255 255 / .94); border-radius: 23px;
+  background: linear-gradient(112deg, rgb(235 248 231 / .8), rgb(249 231 252 / .68)) top / 100% 95px no-repeat,
+    rgb(255 255 255 / .93);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 15px 39px rgb(44 56 47 / .18);
+  animation: live-item-confirm-in 190ms ease-out both;
+}
+.live-item-confirm__card h2 { margin: 0 29px 13px 0; font-size: 28px; line-height: 1.2; font-weight: 800; }
+.live-item-confirm__card p { margin: 0 0 13px; font-size: 15px; line-height: 1.65; overflow-wrap: anywhere; }
+.live-item-confirm__name { padding: 8px 12px; border-radius: 10px; background: rgb(25 35 28 / .06); font-weight: 650; }
+.live-item-confirm__list { margin: 0 0 13px; padding: 8px 12px 8px 30px; font-size: 15px; line-height: 1.6; }
+.live-item-confirm__list li + li { margin-top: 3px; }
+.live-item-confirm__card .live-item-confirm__group { margin: 0 0 6px; font-weight: 700; }
+.live-item-confirm__list .live-item-confirm__more { list-style: none; margin-left: -18px; color: var(--muted, #74736d); font-weight: 500; }
+.live-item-confirm__buttons { display: flex; flex-wrap: wrap; justify-content: end; gap: 9px; margin-top: 19px; }
+.live-item-confirm__buttons button {
+  min-height: 44px; padding: 7px 16px; border: 1px solid #d5d8d4; border-radius: 999px;
+  background: white; color: inherit; font: inherit; font-size: 15px; font-weight: 650; cursor: pointer;
+}
+.live-item-confirm__buttons [data-apply] { background: #00A650; border-color: #00A650; color: #fff; }
+.live-item-confirm__x {
+  position: absolute; top: 12px; right: 11px; width: 40px; height: 40px;
+  border: 0; border-radius: 50%; background: transparent; color: #807a83;
+  font-size: 21px; cursor: pointer;
+}
+.live-item-confirm button:focus-visible { outline: 2px solid #00A650; outline-offset: 2px; }
+@keyframes live-item-confirm-in { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: scale(1); } }
