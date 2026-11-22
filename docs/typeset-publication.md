@@ -1,5 +1,7 @@
 # 源包准备与独立排版检查
 
+> **历史材料。** 旧排版链和它的命令用于追溯。现行构建、发布、扫描见 [发布与扫描](publish-and-scan.md)；仍被现役调用的 OSS 库见 [OSS 资源契约](oss-publication.md)。
+
 当前维护从仓库根 `npm run build` 开始，发布只用本机 `site-astro/tools/publish_site.py`。本页保留源包、量测、阅读和迁移的技术契约，方便核对现成输入与恢复材料；它不是另一条构建或发布流程。日常命令见 [发布与扫描](publish-and-scan.md)，差量传送与回执见 [发布与扫描](publish-and-scan.md)。
 
 ## 共用排版层第 1 版
@@ -70,4 +72,4 @@ python -B -X utf8 scripts/run-typeset-checks.py --mode geometry `
 | `C:\Windows\Fonts\STXINGKA.TTF` | Version 1.02 | 4016288 | `7f901dfb0526d542740264fb5ba8dfe483293ad060270d273593e2f04a69d080` |
 | `C:\Windows\Fonts\FZSTK.TTF` | Version 1.00 | 7574196 | `0b5a903376fe4d97306c943b690b04a5080889b4f87f8d704962939d3ceef1c4` |
 
-当前源包库、单次独立检查与历史迁移证据各自核对；保存这些材料不表示旧批处理、旧推送或自动回退流程仍可用。当前成品回退和实际公网确认见 [发布与扫描](publish-and-scan.md)。
+现役构建沿用的库见 [OSS 资源契约](oss-publication.md)。现在需要修复成品时，走 [成品恢复](publish-and-scan.md#成品恢复)。

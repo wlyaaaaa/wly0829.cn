@@ -245,6 +245,23 @@ def result(state, folder):
             galleries.append({"type": "gallery", "items": pictures})
     steps = [[STEPS[name], f"{proof['seconds']:.1f} 秒"] for name, proof in state["progress"].items() if name in STEPS]
     blocks = [{"type": "table", "columns": ["页", "为什么改", "结果"], "rows": rows}, *galleries]
+    for entry in reversed(state["attempts"]):
+        path = Path(entry["directory"]) / "publish-receipt.json"
+        if entry["dry_run"] or not path.is_file():
+            continue
+        published = read_json(path)
+        if published.get("status") != "published":
+            continue
+        retention = published.get("oss_retention", {})
+        status = retention.get("status")
+        if published.get("retained_reference_gaps"):
+            cleanup = "部分旧对象待核引用"
+        else:
+            cleanup = {"complete": "已完成（旧网址和缓存另核）", "incomplete": "未完成",
+                       "skipped_by_request": "本次跳过", "pending_publication": "等待回收回执"}.get(status, "未取得回执")
+        blocks.append({"type": "table", "columns": ["收尾", "结果"],
+                       "rows": [["网站发布", "已发布并回读"], ["OSS 旧对象回收", cleanup]]})
+        break
     if notes := state.get("notes"):
         blocks.append({"type": "points", "items": notes})
     if error := receipt.get("error"):

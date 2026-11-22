@@ -4,9 +4,9 @@
 
 ## 目标与输入
 
-正式资源目标仍为 `wly0829-img-media-shanghai`、`cn-shanghai`；公共读取地址由 `config/build.json` 的 `asset_base_url` 决定，默认 `https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com`，同时支持 IPv4 与 IPv6。桶、对象和管理端点不变；旧的 `<桶名>.oss-cn-shanghai.aliyuncs.com` 继续可用。回退时只把该配置改回旧读取地址并沿原构建、扫描、发布流程重发；紧急回退仍可直接部署已保留的旧 `site-dist`。此前北京桶只保留原备用关系。
+正式资源目标仍为 `wly0829-img-media-shanghai`、`cn-shanghai`；公共读取地址由 `config/build.json` 的 `asset_base_url` 决定，默认 `https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com`，同时支持 IPv4 与 IPv6。桶、对象和管理端点不变；旧的 `<桶名>.oss-cn-shanghai.aliyuncs.com` 继续可用。若需改回旧读取地址，改配置后重新构建、扫描和发布。此前北京桶只保留原备用关系。
 
-构建只改副本中的精确资源来源，覆盖图片、样式、脚本、字体、视频、重试允许来源、分享图片和下载资源；冻结原件及历史 URL、哈希、验收基线保持原始事实。改写版本 8 接续同桶旧、新地址，旧版本 1–7 仍按原语义重放。内容未变的对象保留原 key，地址变化重新做新域名 HEAD；这一步失败会停止，不转为覆盖上传。旧清单、回滚和在途对象仍按同桶精确 key 保留。`wly0829-assets-shanghai-20261003` 只剩兼容测试，2026-11-06 只读检查返回 `NoSuchBucket`，没有把它列作现役素材来源。
+构建只改副本中的精确资源来源，覆盖图片、样式、脚本、字体、视频、重试允许来源、分享图片和下载资源；冻结原件及历史 URL、哈希、验收基线保持原始事实。改写版本 8 接续同桶旧、新地址，旧版本 1–7 仍按原语义重放。内容未变的对象保留原 key，地址变化重新做新域名 HEAD；这一步失败会停止，不转为覆盖上传。只为当前引用和在途发布保护对象，历史清单用于定位和回查。`wly0829-assets-shanghai-20261003` 只剩兼容测试，2026-11-06 只读检查返回 `NoSuchBucket`，没有把它列作现役素材来源。
 
 本机发布器沿用 `E:\Tools\aliyun-cli\aliyun.exe` 和已有 `website-images` profile，不查看或复制凭据，不另登录，不改桶、Referer 或 CORS 设置。素材不因跨来源而重画、重编码或改分辨率。视频挂载、遮罩和封面需要它们自己的真实来源证据；准备器只改资源地址，不替产品选择新的媒体。
 
@@ -47,6 +47,6 @@ CI 使用 Ubuntu，只部署成品，不运行源码构建、扫描、公开内�
 
 准备库继续解析旧完整 GET、HEAD/CRC64/MD5、混合复用以及同版本机内容核验回执。它们分别保留原 `release_id`、checker 身份、对象指纹与核验方法，不把旧全包封口写成新发布的必要步骤，也不把新 HEAD 改名为旧正文核验。
 
-定稿器中的继承资源解析仍需准确历史提交中的 `site-release/release-manifest.json`；资源复制和继承逻辑仅存于 `prepare-oss-release.py`，hybrid 装配、全量验证、旧 Git 提取回退及其 CLI 已删。当前回退通过同一个 Pages workflow 的 `sha` 输入部署实际旧 `site-dist` SHA，具体命令见 [发布与扫描](publish-and-scan.md)，没有备用源码重建链。
+定稿器的遗留资源解析仍使用对应历史提交中的 `site-release/release-manifest.json`。资源复制和继承逻辑在 `prepare-oss-release.py`。成品恢复按 [现役恢复入口](publish-and-scan.md#成品恢复) 从可用源码重新组装并发布，上一版独用素材随新版清理。
 
 本地准备器保留 `--test-loopback` 的测试材料语义：loopback 计划明确为 `test_only`，不能作为生产传送。已有受控静态补取回执记录首次失败和一次实际补取、响应正文及 MIME/CORS，不能冒充原生冷网络或速度达标。记录这些迁移材料不表示本轮上传、Pages 部署或旧回退已执行。

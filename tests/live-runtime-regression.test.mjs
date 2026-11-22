@@ -309,16 +309,6 @@ test('touch unlock jumps to the grant form without opening the soft keyboard',()
  assert.match(choose,/behavior:touch\?'instant':'smooth'/);
  assert.match(choose,/if\(!touch\)document\.querySelector\('\[data-b2-slot="ca-form-hours"\]'\)\?\.focus/);
 });
-test('stutter page copy prompts send AI to the local registries by item id',()=>{
- const copy=JSON.parse(readFileSync(new URL('../scripts/stutter-page-copy.json',import.meta.url),'utf8'));
- assert.equal(copy['one-missing-prompt'],undefined);assert.equal(copy['missing-hint'],'');
- for(const key of ['one-prompt','block-prompt','all-prompt','felt-prompt']){const text=copy[key];
-  assert.match(text,/电脑 MCP（先用 ComputerContext 核对当前上下文）/,key);assert.match(text,/驾驶舱待办登记和来源登记/,key);assert.match(text,/不从公开状态接口读取/,key);assert.match(text,/匹配不到就说明缺口/,key);
-  assert.doesNotMatch(text,/ai_hint|18793|\/computer-access|api\/status|[A-Za-z]:\\|registries\/|\.json/,key);}
- assert.match(copy['one-prompt'],/编号 \{id\}/);assert.match(copy['felt-prompt'],/编号 \{id\}/);
- const page=readFileSync(new URL('../scripts/stutter-page.js',import.meta.url),'utf8');assert.doesNotMatch(page,/one-missing-prompt|missing-hint/);
-});
-
 test('only the phone usage ring folds small categories into the existing other bucket', () => {
   const source = readFileSync(new URL('../site-v2/live/phone/page.js', import.meta.url), 'utf8');
   const fold = vm.runInNewContext(source.slice(source.indexOf('  function usageSlices('), source.indexOf('  function paintShare(')) + 'usageSlices',

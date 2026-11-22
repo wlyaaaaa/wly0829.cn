@@ -1,24 +1,22 @@
 # 构建、扫描与发布操作
 
-更新规矩见 [网站怎么更新](update.md)。以下只列现有工具的操作入口。
+按需更新从 [网站怎么更新](update.md) 的批次入口走，发布同一批次的选页。以下是组装、扫描、回收及独立发布整份成品时使用的共用工具。QA 和按需更新各用自己的源码、成品和回执；家里 QA 站另有安排，按需发布只切公网。
 
 ## 工作副本、依赖与构建
 
-唯一构建入口为仓库根 `npm run build`，内部走 `scripts/build-site.py`：从 `site-v2/` 组装讲解页和 `site-v2/live/` 的实况快照，叠成完整 `dist/`，最后调用原有 OSS 准备库做离线地址改写。旧 `/cockpit/` 四个地址只生成保留查询参数和 hash 的小跳转页，不再运行 Astro。后端、查询与发布工具沿用原入口。
+在本轮工作副本从仓库根运行 `npm run build`。`scripts/build-site.py` 组装 `site-v2/` 网页源和 `site-v2/live/` 的实况前端，生成完整 `dist/`，最后离线改写 OSS 资源地址。旧 `/cockpit/` 四个地址由同一构建生成跳转，保留查询参数和 hash。
 
-本次迁移工作副本是 `E:\Cache\wly-site-build\v2-wt`、分支 `site-v2/20261115`，从含 `f38a351a9` 的本地 main 建立。只作本地提交，不推送、不合并、不上传。下次更新沿用任务主持选定的独立工作副本，先核对归属和未提交改动；本次不替以后按需更新定工作流。
+按 [README](../README.md) 配齐本机输入。正式构建从包含本轮提交的干净工作副本开始。预览只读已有 `dist/`，结束后关闭本任务起的预览进程。
 
 ```powershell
-npm ci --prefix site-astro --ignore-scripts
-python -m pip install -r site-v2/requirements.txt
 npm run build
 python -B -X utf8 site-v2/site-assembly/组装.py --只检查 --output dist
 npm run preview -- --host 127.0.0.1 --port 5194
 ```
 
-私有输入通过伴随库 manifest 映射到本机忽略路径，详见 [网站怎么更新](update.md)。`site-v2/site-assembly/` 的图、字体及压图缓存可重建；源码和成品不依赖旧 `refresh-runs` 目录。预览只启动本任务自己的会话，结束后停止自己的进程；已有8829、8830服务不动。
-
 `dist/.build-receipt.json` 记录真实源码身份、输入指纹、文件清单、构建时间与各步骤耗时，`release-manifest.json` 与 `release-identity.json` 由现有准备库封口；没有成功封口就不进入正式发布。源码未提交时记 `Unknown`，不冒充提交版本。可复现的发布清单不写每次变化的构建时钟，实际时间只在构建回执里。
+
+`site-v2/first-layer/rules-page/demo/` 的 `index.html` 和 `topic-*.html` 由活动规则生成，作为本地构建产物忽略。模板、样式和脚本仍在仓库。正式更新时把确应上线的规则首页和变化专题列进选页；构建回执的 `source_commit` 应与本轮源码提交一致。
 
 内容缓存放在忽略的 `.cache/site-assembly/`，删除后自动重建；规则页缓存包含当前活动规则指针、实际规则和模板内容。`python -B -X utf8 scripts/build-site.py --full --cache-dir .cache/cold-build` 用一个新的空缓存目录验证全冷构建。`python -B -X utf8 tests/test_incremental_build.py` 会实际改一页、对比增量与空缓存构建的完整文件名和 SHA-256（构建回执含时钟与耗时，单独排除），最后还原源文件。
 
@@ -47,7 +45,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --word-check-only <dist>
 发布前用浏览器核直达路由、自定义 404、键盘导航、电脑和手机无横向溢出、控制台无错。驾驶舱等分本人版和公开版的页面，用本人默认 Chrome 的新标签页核本人版，检查首屏、下一屏和实时数据，用完关闭本任务标签页；无头浏览器只检查公开版。授权与状态页同时核与驾驶舱的联动，不代本人提交授权、解锁或锁屏。
 目录路由的 canonical、Open Graph 和 sitemap 地址核对为实际返回 200 的尾斜杠网址。
 新版普通公开页由组装器写入 canonical 和 Open Graph 正式地址（目录页保留尾斜杠、内容页保留 `.html`）；404 保持 noindex 且不加 canonical，站点所有权验证文件照常发布但不进 sitemap。
-`npm run test:built` 按新版成品验证；授权页接真接口前，保留 `built route preserves the complete static shell...` 和 `built access page binds the current grant model...` 两项原检查失败作为上线闸门，其余项目必须通过。本人已定本轮授权页只做前端，真接口由后续任务接入。
+`npm run test:built` 对已有 `dist/` 跑现役成品检查。授权页按当轮真实接口和发布范围核对。
 
 ## 发布做什么
 
@@ -67,10 +65,14 @@ $env:WLY_LIVE_FALLBACK_CMD = 'python -B -X utf8 E:\PCConfig\tools\remote-compute
 npm run build
 ```
 
-构建和发布预演会核对包内所有资源的访客身份、同一次发布的数据及当前访客规则。换版时先用新后端生成云端和随站副本，再更新边缘接口与网站。日常构建可以不设这些变量。
+构建和发布预演会核对随站备用包使用的访客规则及资源身份。涉及后端契约换版时，先用发布对应的后端生成云端和随站副本，再更新边缘接口及网站。普通本地构建可以省略备用包变量。
+
+两条线实际发布时共用正式入口和发布锁，先用最近一次正式成功的成品比对。另一线先发就重新核基线。下列直跑发布器的命令适用于已授权的独立整份成品发布，按需更新从 [批次入口](update.md#十三本轮清单怎么跑) 调用该工具。
 
 ```powershell
-# 预演计划；输出是本地预演，不上传或部署。
+# 纯本地预演计划，使用已核对的上一版清单和本地成品。
+python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <扫描结果绝对路径> --previous-manifest <前版清单> --previous-site-dist <前版本地成品> --dry-run
+# 不指定前版时，预演会读取远端发布基线。
 python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <扫描结果绝对路径> --dry-run
 # 只上传并回读资源；此时公网网页尚未切换。
 python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <扫描结果绝对路径> --upload-only
@@ -82,32 +84,19 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <
 
 从输出目录的 `publish-receipt.json` 读取上传计划、实际文件与字节、HEAD/GET 结果、源码与成品身份、Pages 运行网址、部署标识及每步耗时。`uploaded_only` 是只上传，`published` 是部署和公网回读通过；成功基线在 Git 共享目录 `wly-oss/published.json`。已部署但最终回读失败时，沿相同入口续发同版；恢复证明由发布器核验。
 
-### 从升级页切换到新版的首发
+新版于 2026-11-22 完成从升级页的首发切换。旧站清单仅留作首发历史，日常使用最近的正式成功基线。
 
-升级页没有发布清单。首发使用旧站最后一次真实发布 `4bcbecaab4123d4c5c566787f873d5e6730fe0eb` 的已核验清单作为比较基线，按全站首发构建和扫描。首发直接运行发布器，省略 `--update-batch`，使用完整新版页面。以下命令从 Git 共享目录导出当时验收留下的原清单，运行前把 `$dist` 和 `$scan` 改成本轮实际路径。
-
-```powershell
-$dist = Resolve-Path <完整新版成品目录>
-$scan = Resolve-Path <全站扫描的scan-result.json>
-$saved = Join-Path (git rev-parse --path-format=absolute --git-common-dir) 'wly-oss/published.json'
-$previous = Join-Path $dist.Path '..\previous-4bcbecaab.json'
-$baseline = Get-Content -LiteralPath $saved -Raw | ConvertFrom-Json -AsHashtable -DateKind String
-if ($baseline.commit -ne '4bcbecaab4123d4c5c566787f873d5e6730fe0eb') { throw '请取首发交接中保存的 4bcbecaab 原清单' }
-$baseline.manifest | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $previous -Encoding utf8
-python -B -X utf8 site-astro/tools/publish_site.py --dist $dist.Path --scan-result $scan.Path --previous-manifest $previous --dry-run
-# 预演通过且本次上线已获授权后发布。
-python -B -X utf8 site-astro/tools/publish_site.py --dist $dist.Path --scan-result $scan.Path --previous-manifest $previous
-```
-
-新包重新采用已退役的旧对象键时，发布器重新 HEAD 核验，缺失或不符就从本次成品补传，传完再次 HEAD 核验。仅有远端引用而没有本地字节的对象无法靠此补传，首发包须保留这些引用所需的素材。
-
-首发退回升级页时，按成品回退命令用 `d28893f0a5a5a9bf09e7d066928be24bc0045d9c`。旧站最后一次真实发布的清单供首发比较，旧站专用素材已经退役。
+新包重新采用已退役的旧对象键时，发布器重新 HEAD 核验，缺失或不符就从本次成品补传，再次核验。重新采用的资源需要在本次成品有原字节。
 
 ## 正式发布后回收 OSS 旧对象
 
 部署、公网回读和成功基线登记都通过后，发布器在同一把发布锁里回收旧对象。预演、仅上传以及发布失败时跳过回收。新版保留当前清单引用和在途发布占用。上一版独用的图和其他生成对象在本次回收时删除，只按核对过大小、ETag 和版本的精确对象名操作。
 
+选页发版保留未改页所需的旧资源，从保留的旧 HTML 及经核验的资源字节追到间接依赖。`publish-receipt.json` 的 `retained_reference_gaps` 如有条目，查看记录的页面或对象及原因。缺证据的上一版对象暂时保留，在结果页记下这部分待查内容。
+
 每次回收在本次发布输出目录写 `oss-retention-plan.json` 和 `oss-retention.json`。前者列计划删除的精确对象和字节数，后者列实删对象、字节数、残留或错误，以及删除前后的 GetBucketStat 对象数、容量和统计时间。桶统计可能延迟，实删以逐对象回读为准。`publish-receipt.json` 的 `oss_retention` 给出状态和回执路径，回收出错时已发布结果仍显示 `published`。
+
+发布成功和旧版清理分别记结果。用上版清单和本轮退役、改址记录核普通旧网址，确认 404/410 或实际到达新版目标。普通访问仍出旧字节时，在对应缓存来源处理后再读一次。OSS 回收补跑只覆盖对象清理，旧网址和缓存回查见 [收尾步骤](update.md#第-7-步-发布结果页收尾)。
 
 要补跑或预演回收，从 `publish-receipt.json` 的 `oss_retention.command` 取命令，用当前成功发布的输出目录：
 
@@ -126,8 +115,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发�
 
 ## EdgeOne live 函数单独发布
 
-实况依次读取电脑、电脑最后上传到阿里云的公开副本、网站成品的 `live/_fallback.json`。公网从同版 `release-identity.json` 读取 OSS 对象地址，家网预览从这份身份文件读取本地封包路径。电脑的后端上传程序在第 10 次安装完成、访客入口开启后首次上传 `live/v1/fallback.json`，以后电脑开着时每 10 分钟更新一次；首次上传前读不到就继续用打包副本。
-云函数用 EdgeOne 非 default 命名空间的独立 Cache API 缓存阿里云对象，时长集中在 `edge/edgeone/edge-functions/[[path]].js` 的 `OSS_CACHE_SECONDS`，当前为 1800 秒（30 分钟）；回浏览器仍为 `no-store`，离线与否由页面按数据的 `stale_after` 判断。
+实况先读电脑。EdgeOne 读不到时会从 OSS 取 `policy-10` 公开备用包的生成时刻和受众证明，响应为 `no-store`。浏览器也可通过同版 `release-identity.json` 读随站 `live/_fallback.json` 的元数据，公网用 OSS 地址、家网预览用本地路径。备用包只说明生成时刻，离线提示按页面实际读到的数据展示。
 
 `live.wly0829.cn` 的实时状态转发由腾讯云 EdgeOne Pages（现称 Makers）项目承载。以后把 `edge/edgeone/edge-functions/[[path]].js` 的改动推送到 main，GitHub 工作流会更新函数专用部署分支，EdgeOne 自动发布；需要重发同一版时，也可以用下面的一条命令完成，无需再登录腾讯云。普通请求是“把最新 main 的 live 转发函数上线”，完成后应从公网主入口读到实际的新行为。前面的 `publish_site.py` 只更新 OSS 与 GitHub Pages，不会更新 EdgeOne 函数。
 
@@ -154,66 +142,6 @@ gh workflow enable edgeone-live.yml --repo wlyaaaaa/wly0829.cn
 
 停用工作流不会撤回线上部署或关闭 live 服务，期间 main 的函数改动不会自动上线；恢复后显式重部署当前 main，避免遗漏停用期间的改动。EdgeOne 的生产自动部署复选框由平台默认开启且不可操作，因此停止入口在 GitHub 工作流一侧。
 
-## 旧站其他独立检查入口（历史）
+## 成品恢复
 
-离线链接与锚点检查由扫描器调用 `link_check.py`。`check.py` 提供逐屏原文、窄栏/表格宽度及空卡检查；`check-site-ui.py` 提供交互与历史基线检查；`run-typeset-checks.py` 和 `check-typeset-*` 提供几何、阅读位置与恢复检查，按任务所需选择，不作为另一条发布流程。
-
-## 旧站取数工具操作（历史，已退役）
-
-旧取数工具的参数、来源表和回执格式见 [取数工具说明](../scripts/content-refresh/README.md)。以下入口供当前工具接线和故障诊断使用，更新范围仍按 [网站怎么更新](update.md)。
-
-```powershell
-# 只盘点。
-python -B -X utf8 scripts/content-refresh/refresh.py --inventory --strict --output <本次目录/盘点>
-# 当前工具的默认批量取数；targeted 限定人工核对和讲解清单，不筛自动取数来源。
-python -B -X utf8 scripts/content-refresh/refresh.py --strict --no-report --output <本次目录/取数>
-python -B -X utf8 scripts/content-refresh/refresh.py --strict --no-report --targeted <页id,...> --output <本次目录/取数>
-# 只有本人明确点名才携带此标记。
-python -B -X utf8 scripts/content-refresh/refresh.py --strict --no-report --manual-owner-request personal-health --output <本次目录/取数>
-# 本路诊断。
-python -B -X utf8 scripts/content-refresh/refresh.py --inventory --strict --only <页id,...> --output <本次目录/本路盘点>
-```
-
-盘点结果见 `dated-inventory.json`、`fact-tasks.md`；取数结果见 `result.json`、`number-edits.json`。应用、合稿及闭环入口的参数见取数工具说明；`--total-seconds`、`--item-seconds` 可调整现有读取预算。冻结路由盘点用 `site-astro/tools/frozen_inventory.py --routes <路由清单> --output <盘点.json>`，转换操作见 [冻结页转换](frozen-conversion.md)。
-
-## 旧站计划与作者源入口（历史，不用于新版）
-
-只读计划与 v2 结果包字段见 [AI 刷新计划适配合同](maintenance/ai-panel-refresh.md)。
-
-```powershell
-npm run refresh:ai -- --project <Registry项目id>
-npm run refresh:ai -- --project personal-health --manual-owner-request
-npm run refresh:ai -- --all
-npm run verify:ai-refresh -- --bundle <ai-result.json>
-npm run impact -- --project agents --path AGENTS.md
-npm run impact -- --project agents --path AGENTS.md --material-change
-```
-
-计划只定位来源、采集入口、当前作者源与指纹，不写正文。`--manual-owner-request` 仅携带本次已存在的本人点名事实。路径命中只是候选，`--material-change` 表示已确认漂移。
-
-规则作者源由现有 `python scripts/prepare-astro-release.py refresh --output <本轮回执.json>` 从已核验的 current E release 更新到 `sources/rules`；构建再验证该快照并排版原文。Skills 目录和详情由 `sources/pages/skills-home`、`sources/pages/skill-*` 拥有。旧 React 专用的 `refresh:agents-snapshot` 与 `verify:snapshot` 已退役；文件指纹只说明作者输入是否变化，不代替当前活动规则与来源证据的核验。
-
-## 旧站独立阅读与几何检查（历史，已退役）
-
-`check-typeset-site.py` 现在只读已有 `dist`，不构建、不发布，也不管理旧批处理账本。阅读计划或现成构建报告必须含 `pages` 对象及每页 `url`，且对应实际成品；报告和浏览器缓存写在 `dist` 外。
-
-```powershell
-python -B -X utf8 scripts/check-typeset-site.py `
-  --dist dist --build-report <本代reading-plan或build-report.json> `
-  --out <任务目录/reading.json> --pages <非首页的页名>
-```
-
-检查保留阅读位置、反复转屏、页内目录、刷新与历史导航矩阵，以及实际 HTML/脚本响应和成品字节不变检查。直接使用 `check-typeset-reading.py` 时也会排除首页和首页别名（首页是保留 HTML，不是排版阅读页）；不会用旧运行件补丁重建成品。
-
-`run-typeset-checks.py` 的独立几何与 QA 能力继续保留。几何模式需要已经提供 `/__typeset/measure` 的本机预览，普通静态 `dist` 不自动提供该接口；输入、量测和证据契约见 [源包与独立检查](typeset-publication.md)。这些检查按具体任务使用，不接回 CI、不暗中触发重建或发布。
-
-## 成品部署与回退
-
-从发布回执的 `site_dist.commit` 取得成品 SHA，按回执所列 GitHub 运行网址定位本次 run id。重部署旧成品使用同一工作流的 `sha` 输入：
-
-```powershell
-gh workflow run pages.yml --repo wlyaaaaa/wly0829.cn --ref main -f sha=<旧site-dist提交SHA>
-gh run watch <上条命令对应的run-id> --repo wlyaaaaa/wly0829.cn --exit-status
-```
-
-运行成功后核公网 `release-identity.json`、资源清单和关键页字节，分别记录源码 SHA、成品 SHA 与实际部署 ID。`github-pages` 环境保持只允许 `main`。回退后的公网版本与本机 `wly-oss/published.json` 不同时，下次增量发布先核真实前版，必要时传已核验的 `--previous-manifest`。源包与旧清单恢复材料见 [OSS 资源契约](oss-publication.md)。
+发布回执保留源码 SHA、成品 SHA 和实际部署 ID，用于定位同一版。发现问题时先在源码修复，重新组装并发布，回读公网成品和涉及的页面。如确需恢复旧内容，从可用源码重建并确保本次成品含所需资源，再走同一发布入口。新版成功后会清理上一版独用素材，旧成品 SHA 只作追溯。

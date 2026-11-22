@@ -362,7 +362,7 @@ def pages(commit, timeout):
     raise TimeoutError('Pages run '+str(run_id)+' success is unconfirmed for '+commit+
                        ('; last connection error: '+last_error if last_error else ''))
 
-def publication_manifest(source, retained=None, previous=None):
+def publication_manifest(source, retained=None, previous=None, retained_keys=()):
     """Keep preview-only data in dist while publishing a consistent subset."""
     keep = lambda rows: {rel: row for rel, row in rows.items() if not rel.startswith(UNPUBLISHED_PREFIXES)}
     objects, files = keep(source['oss']['objects']), keep(source['files'])
@@ -373,9 +373,7 @@ def publication_manifest(source, retained=None, previous=None):
     cloud = {**source['oss'], 'objects': objects, 'retained_objects': keep(source['oss'].get('retained_objects', {}))}
     removed_keys = {row['key'] for rel, row in source['oss']['objects'].items() if rel not in objects}
     references = set(cloud['reference_keys']) - removed_keys
-    if retained:
-        references.update(previous['oss'].get('reference_keys', ()))
-        references.update(row['key'] for row in previous['oss']['objects'].values())
+    references.update(retained_keys)
     cloud['reference_keys'] = sorted(references)
     result = {**source, 'files': files, 'oss': cloud}
     result['release_id'] = oss.release_identifier(cloud['source_release_id'], cloud['asset_base_url'], cloud['prefix'], files, objects)
@@ -406,18 +404,71 @@ def preserve_unselected(args, source, previous, saved, batch, reconciliation):
         return {}
 
 
+def previous_objects(cloud):
+    path = retention.shared()/'managed.json'
+    managed = retention.read(path)['objects'] if path.is_file() else {}
+    return {**managed, **{row['key']: row for row in cloud['objects'].values()}}
+
+
+def verified_old_asset(args, saved, rel, url, sha):
+    if not sha:
+        raise ValueError('缺少旧对象指纹')
+    for root in (getattr(args, 'previous_site_dist', None), saved.get('dist_root')):
+        path = Path(root)/rel if root else None
+        if path and path.is_file():
+            raw = path.read_bytes()
+            if hashlib.sha256(raw).hexdigest() == sha:
+                return raw
+    if not args.dry_run:
+        with urlopen(Request(url, headers={'Accept-Encoding': 'identity'}), timeout=PAGE_TIMEOUT) as response:
+            raw = response.read()
+        if hashlib.sha256(raw).hexdigest() == sha:
+            return raw
+    raise ValueError('旧对象内容无法按 SHA-256 核验')
+
+
+def retained_resources(args, source, previous, saved, retained):
+    cloud = previous['oss']
+    base = cloud['asset_base_url']
+    old = previous_objects(cloud)
+    current = {row['key'] for row in source['oss']['objects'].values()}
+    known = current | old.keys()
+    pending = [(page, key) for page, raw in retained.items()
+               for key in oss.absolute_resource_keys(raw.decode('utf-8-sig'), base, known=known)]
+    keys, gaps = set(), {}
+    while pending:
+        page, key = pending.pop()
+        if key in current or key in keys:
+            continue
+        keys.add(key)
+        if key not in old:
+            gaps[key] = {'page': page, 'reason': '缺少旧对象登记'}
+            continue
+        parts = key.split('/', 2)
+        if len(parts) != 3 or Path(parts[2]).suffix not in oss.TEXT_ASSETS:
+            continue
+        rel = parts[2]
+        url = base + '/' + oss.quote(key, safe='/~!$&()*+,;=:@-._')
+        try:
+            raw = verified_old_asset(args, saved, rel, url, old.get(key, {}).get('sha256'))
+            pending.extend((page, child) for child in oss.absolute_resource_keys(raw.decode('utf-8-sig'), base, known=known))
+        except (OSError, IncompleteRead, ValueError) as error:
+            gaps[key] = {'page': page, 'reason': str(error)}
+    if gaps:
+        # Without a dependency body any object from its predecessor may still be live.
+        keys.update(cloud.get('reference_keys', ()))
+        keys.update(row['key'] for row in cloud['objects'].values())
+    return keys, gaps
+
+
 def review_preserved_scripts(args, source, previous, saved, retained):
     cloud = previous['oss']
     known = selected_publish.known_addresses(cloud)
-    old = {row['key']: row for row in cloud['objects'].values()}
-    path = retention.shared()/'managed.json'
-    if path.is_file():
-        old = {**retention.read(path)['objects'], **old}
+    old = previous_objects(cloud)
     current = {row['url'] for row in source['oss']['objects'].values()}
     policy = word_policy.load_policy(WORD_CONFIG)
     words = policy.get('owner_row_words', [])
     owner_rows = re.compile(word_policy.word_pattern({'words': words})) if words else None
-    local = getattr(args, 'previous_site_dist', None) or saved.get('dist_root')
     owners = {}
     for page, raw in retained.items():
         for match in selected_publish.ASSET.finditer(raw):
@@ -427,19 +478,16 @@ def review_preserved_scripts(args, source, previous, saved, retained):
     for (url, rel), page in owners.items():
         key = unquote(urlsplit(url).path.lstrip('/'))
         sha = old.get(key, {}).get('sha256')
-        local_file = Path(local)/rel if local else None
-        raw = local_file.read_bytes() if local_file and local_file.is_file() else b''
-        if sha and hashlib.sha256(raw).hexdigest() != sha and not args.dry_run:
-            with urlopen(Request(url, headers={'Accept-Encoding': 'identity'}), timeout=PAGE_TIMEOUT) as response:
-                raw = response.read()
-        if not sha or hashlib.sha256(raw).hexdigest() != sha:
-            raise ValueError(f'无法核验保留页的旧内容脚本：{page} 引用 {rel}')
+        try:
+            raw = verified_old_asset(args, saved, rel, url, sha)
+        except (OSError, IncompleteRead, ValueError) as error:
+            raise ValueError(f'无法核验保留页的旧内容脚本：{page} 引用 {rel}') from error
         if word_policy.baseline_hits(raw.decode('utf-8-sig'), 'dist/'+rel, owner_rows, policy):
             raise ValueError(f'保留页的旧内容脚本不符合现行公开要求：{page} 引用 {rel}')
     return len(owners)
 
 
-def artifact_commit(dist, plan, output, source_commit):
+def artifact_commit(dist, plan, output, source_commit, local_parent=None):
     destination = output/'site-dist'
     destination.mkdir()
     def git(*args):
@@ -450,9 +498,13 @@ def artifact_commit(dist, plan, output, source_commit):
     git('config', 'user.name', 'Site publisher')
     git('config', 'user.email', 'site-publisher@users.noreply.github.com')
     git('remote', 'add', 'origin', 'https://github.com/wlyaaaaa/wly0829.cn.git')
-    remote = net('git', *GIT_NET, '-C', destination, 'ls-remote', 'origin', 'refs/heads/site-dist', timeout=GIT_TIMEOUT)
-    if remote:
-        net('git', *GIT_NET, '-C', destination, 'fetch', '--depth=1', 'origin', 'site-dist', timeout=GIT_TIMEOUT)
+    if local_parent is None:
+        remote = net('git', *GIT_NET, '-C', destination, 'ls-remote', 'origin', 'refs/heads/site-dist', timeout=GIT_TIMEOUT)
+        if remote:
+            net('git', *GIT_NET, '-C', destination, 'fetch', '--depth=1', 'origin', 'site-dist', timeout=GIT_TIMEOUT)
+            git('checkout', '-B', 'site-dist', 'FETCH_HEAD')
+    elif (local_parent / '.git').exists():
+        git('fetch', '--depth=1', str(local_parent.resolve()), 'HEAD')
         git('checkout', '-B', 'site-dist', 'FETCH_HEAD')
     for rel in git('ls-files').splitlines():
         if rel not in {*plan['github_files'], 'release-identity.json'}:
@@ -552,7 +604,7 @@ def publish(args):
         reconciliation = check_input_proofs(args.dist, source, previous, build, source_commit,
                                             enforce_drift=batch is None)
         receipt.update(release_id=source['release_id'], manifest_sha256=oss.digest(args.dist/oss.MANIFEST))
-        retained = {}
+        retained, retained_keys = {}, set()
         if batch is not None:
             receipt['update_batch'] = batch
             receipt['update_baseline'] = check_update_batch(batch, source, source_commit, receipt['manifest_sha256'],
@@ -568,9 +620,12 @@ def publish(args):
             if retained:
                 receipt['reviewed_preserved_scripts'] = step('retained_publication_review',
                     lambda: review_preserved_scripts(args, source, previous, saved, retained))
+                retained_keys, gaps = step('retained_resource_dependencies',
+                    lambda: retained_resources(args, source, previous, saved, retained))
+                receipt['retained_reference_gaps'] = gaps
         receipt['published_reconciliation'] = reconciliation
         preparation = output
-        published = publication_manifest(source, retained, previous)
+        published = publication_manifest(source, retained, previous, retained_keys)
         generated = {}
         if published is not source:
             folder = output/'publication'
@@ -623,8 +678,11 @@ def publish(args):
             'command': ['python', '-B', '-X', 'utf8', 'site-astro/tools/publish_site.py', '--retention-only', str(output)]}
         if args.dry_run:
             check_input_proofs(args.dist, source, previous, build, source_commit, enforce_drift=batch is None)
+            local_parent = getattr(args, 'previous_site_dist', None)
+            if local_parent and not (local_parent / '.git').exists() and (saved_root := saved.get('site_dist', {}).get('root')):
+                local_parent = Path(saved_root)
             receipt['site_dist'] = step('local_site_dist_commit', lambda:
-                    artifact_commit(args.dist, plan, output, source_commit))
+                    artifact_commit(args.dist, plan, output, source_commit, local_parent))
             receipt['status'] = 'dry_run'
             return receipt
         step('pin', lambda: retention.pin(preparation))
@@ -713,7 +771,7 @@ def publish(args):
         check_input_proofs(args.dist, source, previous, build, source_commit)
         step('successful_manifest_last', lambda: retention.write(retention.shared()/'published.json', {
             'schema': 'wly.site-publication.v1', 'commit': receipt['commit'], 'deployment': receipt['deployment'],
-            'source_commit': source_commit, 'site_dist': receipt['site_dist'], 'dist_root': str(args.dist),
+            'source_commit': source_commit, 'site_dist': receipt['site_dist'], 'dist_root': str(args.dist.resolve()),
             'oss_plan_sha256': verification['plan_sha256'],
             'oss_predecessor': {'path': str(output/'previous-publication.json'), 'sha256': plan['previous_publication_sha256']}
                 if 'previous_publication_sha256' in plan else None,

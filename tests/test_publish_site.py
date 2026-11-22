@@ -56,6 +56,41 @@ class PublishTests(unittest.TestCase):
                 dist, source, previous, changes, {'first.html'}, old.__getitem__, None)
             self.assertEqual(retained, {'second.html': old['second.html']})
 
+    def test_retained_html_keeps_old_dependencies_but_not_replaced_image(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            fixed = {
+                'index.html': '<h1>Home</h1>', 'changed.html': '<img src="/new.webp">',
+                'unchanged.html': '<script src="/a.js"></script>',
+                'a.js': 'console.log("changed");', 'new.webp': 'new image',
+            }
+            old = {**fixed, 'changed.html': '<img src="/old.webp">', 'old.webp': 'old image',
+                   'a.js': 'fetch("./data.json")', 'data.json': '{"image":"leaf.webp"}', 'assets/leaf.webp': 'used image'}
+
+            del old['new.webp']
+
+            def build(name, files):
+                dist = root/name
+                for rel, text in files.items():
+                    path = dist/rel; path.parent.mkdir(parents=True, exist_ok=True); path.write_text(text, 'utf-8')
+                publisher.oss.write(dist/'release-manifest.json', {'release_id': name, 'files': publisher.oss.inventory(dist)})
+                return dist, publisher.oss.finalize_dist(dist, full=True)
+
+            before, previous = build('old', old)
+            _, source = build('new', fixed)
+            args = types.SimpleNamespace(previous_site_dist=before, dry_run=True)
+            retained = {'unchanged.html': (before/'unchanged.html').read_bytes()}
+            with unittest.mock.patch.object(publisher.retention, 'shared', return_value=root):
+                keys, gaps = publisher.retained_resources(args, source, previous, {}, retained)
+            publication = publisher.publication_manifest(source, retained, previous, keys)
+            old_objects = {rel: row['key'] for rel, row in previous['oss']['objects'].items()}
+            refs = set(publication['oss']['reference_keys'])
+            self.assertEqual(gaps, {})
+            self.assertEqual(refs.intersection(old_objects.values()),
+                             {old_objects[rel] for rel in ('a.js', 'data.json', 'assets/leaf.webp')})
+            self.assertNotIn(old_objects['old.webp'], refs)
+            self.assertEqual(publication['files']['unchanged.html'], previous['files']['unchanged.html'])
+
     def test_preserved_script_must_match_its_old_hash_and_current_public_words(self):
         with tempfile.TemporaryDirectory() as temporary:
             folder = Path(temporary)

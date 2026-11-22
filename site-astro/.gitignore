@@ -1,7 +1,7 @@
 node_modules/
 dist/
 .astro/
-# 生成物：tools/extract_chrome.py、adapt_motion.py、pack_living.py、convert_page.py 重建（见 README）
+# Keep local artifacts from older generations out of Git.
 public/assets/
 public/_shared/
 public/_living/
@@ -11,10 +11,8 @@ public/_chrome/
 public/_astro/
 public/_how-demo/
 src/content/pages/_stress/
-# 区块排版的中间文件和结果：tools/render_blocks.py 每次生成时重建（npm run build 会先跑它）
 .cache/
 src/content/rendered/
-# 首页、驾驶舱、授权页：tools/retain_home_cockpit.py 从候选站抄来
 src/chrome/retained/
 public/cockpit/
 public/computer-access/
