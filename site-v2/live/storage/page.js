@@ -1,7 +1,7 @@
 // 存储：页首一句话（存储页自己判断最要紧的事），自动清理大卡（cleanup.js）、每块盘合并卡（disks.js），下面一排小卡。
 (() => {
   'use strict';
-  const U = window.LiveUI, Light = window.LiveLight, K = window.StorageKit, $ = id => document.getElementById(id), { esc } = U;
+  const U = window.LiveUI, Light = window.LiveLight, K = window.StorageKit, $ = id => document.getElementById(id), { esc, sp } = U;
   U.date = window.LiveChart.date;
   const params = new URLSearchParams(location.search), hero = $('hero');
   const route = href => { const url = new URL(href, location.href); if (params.has('fixture')) url.searchParams.set('fixture', params.get('fixture')); return url.pathname + url.search + url.hash; };

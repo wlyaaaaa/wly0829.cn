@@ -945,7 +945,8 @@
     const battery = join([value('battery') == null ? U.collectionText('电量', m.battery) : quantity(m.battery, 'value', n => `${n}%`), charging == null ? '' : charging ? '在充电' : '没充电', temp == null ? '' : quantity(m.battery_temp, 'value', n => `${n}℃`)]);
     const kind = value('net_kind'), trafficId = m.traffic_today ? 'traffic_today' : 'traffic_today_mobile';
     const wifiField = value('ssid') && typeof value('ssid') === 'object' ? { visibility: m.ssid?.visibility, ...value('ssid') } : m.ssid;
-    const trafficCutoff = readingTimes([trafficId]);
+    // 上网那行只在行尾写一次“截至”（同这张卡别的行）；行尾读不到时间才把流量自己的时间写在流量后面（M532）
+    const netCutoff = readingTimes(['net_kind', 'carrier', 'ssid']), trafficCutoff = !netCutoff && readingTimes([trafficId]);
     const trafficUse = value(trafficId) == null ? '' : ` · ${esc(`${dayLabel(m[trafficId], '上次')}手机流量 ${quantity(m[trafficId], 'value', U.gb.scaled)}`)}${trafficCutoff ? ' · ' + trafficCutoff : ''}`;
     const wifiName = value('ssid') != null || m.ssid?.visibility ? U.fieldHtml(wifiField, { name: 'WiFi 名称', kind: viewer }) : U.collectionText("WiFi 名称", m.ssid);
     const net = (kind === 'wifi' ? `WiFi${wifiName ? ` · ${wifiName}` : ''}` : kind && typeof kind === 'object' ? U.fieldHtml(kind, { name: '联网方式', kind: viewer }) : kind === 'none' ? '没网' : ['sim1', 'sim2'].includes(kind) ? [kind.toUpperCase(), value('carrier') ? U.fieldHtml(value('carrier') && typeof value('carrier') === 'object' ? { visibility: m.carrier?.visibility, ...value('carrier') } : m.carrier, { name: '运营商', kind: viewer }) : U.collectionText("运营商", m.carrier)].filter(Boolean).join(' · ') : U.collectionText()) + trafficUse;
