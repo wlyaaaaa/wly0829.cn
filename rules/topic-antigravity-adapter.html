@@ -20,8 +20,8 @@
 <meta property="og:description" content="owner: E:\.agents">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/540207abf4dd0ec7de97154ce3796271cd94057b003ee3d654446b6160de16b6/%E5%85%AC%E7%94%A8/fonts/ui-ac38aa837995a377.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/95972aa92c3a41746bcb05fae12a549d5eaa54e57f2804bcf62c629cf8c5ab62/%E5%85%AC%E7%94%A8/fonts/article-2633ad8da732d2c3.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/3dd5515dd295ab33e9a2405b0996b60fde40655fbfe3ddb41c0f09833d54aaab/%E5%85%AC%E7%94%A8/fonts/ui-1bef37c61aa90af1.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/85f369a41cda8fc06c3321942e432bdb17cacd2d68ebe77f4cf588410be077c0/%E5%85%AC%E7%94%A8/fonts/article-a6c541fa810dc37e.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
 <body>
@@ -46,7 +46,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E481" data-rule-page="topic-antigravity-adapter">
+<main class="rules-page" data-rule-release="E485" data-rule-page="topic-antigravity-adapter">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="antigravity-适配">Antigravity 适配</h1></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#入口和规则加载"><span class="toc-number">01</span><span class="toc-label">入口和规则加载</span></a></li>
@@ -68,7 +68,7 @@
 <h2 id="入口和规则加载">入口和规则加载</h2>
 <ul>
 <li>活动版约法和导航由规则发布器写进 Antigravity 读的全局规则位置（插件 <code>personal-env</code> 的规则目录，具体落点以发布器为准），加载时已在上下文；后面接着 Antigravity 入口结尾“Gemini 容易错的（主持时）”那段。专题按文中当版的绝对路径读。规则源码 <code>E:\.agents\AGENTS.md</code> 不是活动规则，插件规则不引用它；插件里的规则入口只由发布器写，PCConfig 的安装器不写同一份。</li>
-<li>Antigravity 对规则有两条硬限制：展开后单个规则文件最多 24,000 字节，超出按行截掉；全局和常驻规则共用约 20,000 token 的预算，超了会把部分正文降成文件指针。所以约法和入口结尾分文件放，约法太长时按章节切成几份，每份都随版本核对；约法要整段进上下文，被截断或降成文件指针就算入口没装好。</li>
+<li>Antigravity 对规则有两条硬限制：展开后单个规则文件最多 24,000 字节，超出按行截掉；全局和常驻规则共用约 20,000 token 的预算，超了会把部分正文降成文件指针。所以约法和入口结尾分文件放，约法太长时按章节切成几份，每份都随版本核对；约法要整段进上下文，被截断或降成文件指针就算入口没装好。约法三家共用，发布器按这 20,000 估算拦发布：超了不发，回头删约法或入口结尾里的重复。</li>
 <li>项目里的 <code>AGENTS.md</code>、<code>GEMINI.md</code> 和 <code>.agents/rules/*.md</code> 会沿工作目录往上加载。在规则源码仓库 <code>E:\.agents</code> 里工作时，源码 <code>AGENTS.md</code> 可能被当成项目规则读到；以全局规则里的活动版为准，源码只是待审材料。</li>
 <li>Antigravity 没有原生的压缩前后事件；长对话压缩后规则是否原样还在，待实测。</li>
 </ul>
@@ -180,8 +180,8 @@
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E481</dd></div>
-        <div><dt>发布</dt><dd>2026-11-22 10:50 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E485</dd></div>
+        <div><dt>发布</dt><dd>2026-11-23 01:54 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -195,7 +195,7 @@
 <li><a href="topic-claude-adapter.html">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html" aria-current="page">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 6,458 字<br>Antigravity 适配 3,576 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 7,251 字<br>Antigravity 适配 3,612 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/agents/规矩落地.html#规矩落地-02">AI 百工谱 · 规矩落地</a></dd></div>
       </dl>
     </aside>
