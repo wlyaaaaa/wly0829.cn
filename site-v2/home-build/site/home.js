@@ -770,35 +770,49 @@ firstScreenReady.then(() => setTimeout(stillPanels, 6000));
 // 首页只订阅副屏小包；一分钟重读与后台暂停由实况共用取数层负责。
 const liveClient = document.createElement('script');
 // 读不到实况时的提示（本人 11-23 选的 A）：在“实时状态”“它如何工作”两个按钮正下方，跟着画一起缩放，不是按钮、不挡东西。
-// 一直显示到连上；连上后灯变绿、写“连上了”，约 2 秒淡出。副屏和动效照常。
+// 只在连不上时出现，一直显示到连上；连上了不换字、不变绿，带着原样慢慢收走（本人 11-23：首页没有“连上了”这一步）。
+// 出来、收走的动法在 style.css 的 .home-conn；来回抖时同一枚签顺着当下的样子掉头，不闪、不叠两层。副屏和动效照常。
 const tip = element('div', 'home-conn', pane);
 tip.setAttribute('role', 'status'); tip.hidden = true;
 tip.innerHTML = '<p class="home-conn__line"><span class="home-conn__lamp" aria-hidden="true"></span><b></b><span class="home-conn__at"></span></p><p class="home-conn__sub"></p>';
 const [tipSay, tipAt, tipSub] = ['b', '.home-conn__at', '.home-conn__sub'].map((selector) => tip.querySelector(selector));
-let tipTimer = 0, tipOff = false;
+let tipHide = 0, tipNext = null, tipSize = null;
+function tipWrite({ pair, say, at, sub }) {
+  tip.classList.toggle('is-pair', pair);
+  tipSay.textContent = say; tipAt.textContent = at; tipSub.textContent = sub;
+}
+// 签在画面上时换字：旧字先淡掉，外框从旧大小慢慢变到新大小，新字再淡进来，不一下跳大跳小。
+function tipText(next) {
+  if (tipNext) { tipNext = next; return; }            // 旧字正在淡掉，淡完写最新的这一份
+  if (tip.classList.contains('is-pair') === next.pair && tipSay.textContent === next.say
+    && tipAt.textContent === next.at && tipSub.textContent === next.sub) return;
+  if (tip.hidden) { tipWrite(next); return; }
+  tipNext = next;
+  const lines = [...tip.children];
+  const fade = lines.map((line) => line.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180, easing: 'ease-in', fill: 'forwards' }));
+  fade[0].onfinish = () => {
+    const from = [tip.offsetWidth, tip.offsetHeight];
+    tipSize?.cancel();
+    tipWrite(tipNext); tipNext = null;
+    const to = [tip.offsetWidth, tip.offsetHeight];
+    for (const step of fade) step.cancel();
+    if (from[0] !== to[0] || from[1] !== to[1]) tipSize = tip.animate([
+      { width: `${from[0]}px`, height: `${from[1]}px` }, { width: `${to[0]}px`, height: `${to[1]}px` }
+    ], { duration: 520, easing: 'cubic-bezier(.45,0,.2,1)' });
+    for (const line of lines) line.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, delay: 120, easing: 'ease-out', fill: 'backwards' });
+  };
+}
 // 家里网站上这台设备的配对失效时，原来顶上那句说明也放在这里（不亮灯）。
 function connectionTip(off, reason, at, sub, pair = '') {
   if (off || pair) {
-    clearTimeout(tipTimer);
-    tip.classList.toggle('is-pair', !off);
-    tipSay.textContent = off ? reason || '连不上实况服务' : pair;
-    tipAt.textContent = !off ? '' : at ? ` · 右边屏上是 ${at} 的数据` : ' · 右边屏上暂时没有数';
-    tipSub.textContent = off ? sub : '';
-    tip.classList.remove('is-back');
+    clearTimeout(tipHide);
+    tipText({ pair: !off, say: off ? reason || '连不上实况服务' : pair,
+      at: !off ? '' : at ? ` · 右边屏上是 ${at} 的数据` : ' · 右边屏上暂时没有数', sub: off ? sub : '' });
     if (tip.hidden) { tip.hidden = false; void tip.offsetWidth; }
     tip.classList.add('is-shown');
-    tipOff = !!off;
-  } else if (tip.hidden || tip.classList.contains('is-back')) {
-    // 没事，或者“连上了”正在显示、等它自己淡出
-  } else if (!tipOff) {
-    tip.classList.remove('is-shown', 'is-pair'); tip.hidden = true;
-  } else {
-    tip.classList.add('is-back');
-    tipSay.textContent = '连上了'; tipAt.textContent = ''; tipSub.textContent = '';
-    tipTimer = setTimeout(() => {
-      tip.classList.remove('is-shown');
-      tipTimer = setTimeout(() => { tip.hidden = true; tip.classList.remove('is-back'); tipOff = false; }, 700);
-    }, 2000);
+  } else if (tip.classList.contains('is-shown')) {
+    tip.classList.remove('is-shown');
+    tipHide = setTimeout(() => { tip.hidden = true; }, 900);   // 收走的动画（style.css 里 0.8 秒）走完再拿掉
   }
 }
 liveClient.src = '/live/_lib/live-client.js';
