@@ -108,7 +108,8 @@
     const c = r.conversation, d = chat?.data;
     // 访客版对话看不到时分两种：后台写 private 是藏了，照新私事规则写清这里是什么、所以不予展示；not_saved 或没写原因的照旧写没存下来
     const hiddenFromVisitor = !c.available && c.reason === 'private';
-    const hiddenText = c.why || '这里是这一轮 AI 的对话，所以不予展示';
+    // 被藏的对话照新私事规则写“…仅本人可见”（定稿卡-私事；“这里是……，所以不予展示”是给一大块私事材料用的，不用在对话上）
+    const hiddenText = c.why || '这一轮对话的计划、思考摘要和回复仅本人可见';
     const reply = d && (d.latest_reply ?? d.reply);
     const thinking = d && F(d.thinking, '思考摘要'), answer = reply && F(U.chatJoinedReply(reply, viewer), '最后的回复');
     // 计划：和 AI 对话详情页同一份 plan，做完的打勾、正在做的那一步标出来
@@ -120,7 +121,8 @@
     // 对话自己的状态和这一轮的结局分开写（约定：对话 state 和业务 status 各自显示）
     const talkState = { running: '对话还在跑', done: '对话已结束', failed: '对话出错停了', unknown: '对话状态不明' }[c.state || d?.state] || '';
     // 本人版：后台标了这份对话对访客藏着（unavailable_reason=private 或给了 hidden_why），在原位挂“访客看不到”；对话照常给
-    const tag = viewer === 'owner' && (c.reason === 'private' || c.why) ? U.visitorHiddenTag('这一轮的对话', c.why, viewer) : '';
+    // 原因照全站“访客看不到”小签带上；后台的原因句可能以“访客看不到：”打头，去掉免得重复
+    const tag = viewer === 'owner' && (c.reason === 'private' || c.why) ? U.visitorHiddenTag('这一轮的对话', c.why.replace(/^访客看不到[：:]\s*/, ''), viewer) : '';
     const full = c.available ? `<a class="ar-go" href="${esc(c.href)}">看完整对话 <span aria-hidden="true">›</span></a>${tag}`
       : hiddenFromVisitor ? tag : `<p class="ar-none ar-nofull">这一轮没有能打开的完整对话。</p>${tag}`;
     return `<section class="tp-panel ar-card ar-talk"><details class="ar-fold" id="ar-talk"><summary class="live-disclosure"><h2>AI 的思考摘要和最后的回复</h2>${talkState ? `<small class="ar-talkstate">${talkState}</small>` : ''}<span class="ar-open">展开 ›</span><span class="ar-shut">收起 ‹</span></summary>${body}</details>${full}</section>`;
