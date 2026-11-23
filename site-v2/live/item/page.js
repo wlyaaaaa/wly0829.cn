@@ -29,7 +29,7 @@
   const back = document.querySelector('[data-back]');
   let from = null;
   // 从哪进来就回哪：自动任务页、一轮的详情（“去那张卡 ›”“去账本那件 ›”点进来的）也认，返回回到那一轮
-  const runPage = url => url.pathname === '/live/automation/run/' || url.pathname === '/live/automation/' && url.searchParams.has('run');
+  const runPage = url => url.pathname.startsWith('/live/automation/') && (url.searchParams.has('run') || /\/run\/$/.test(url.pathname));
   try { const url = new URL(document.referrer); if (url.origin === location.origin && (['/live/', '/live/items/', '/live/ledger/', '/live/project/', '/live/automation/'].includes(url.pathname) || runPage(url))) from = url; } catch {}
   back.href = from ? from.pathname + from.search + from.hash : route(issue ? '/live/ledger/' : '/live/items/');
   back.textContent = from ? runPage(from) ? '这一轮' : ({ '/live/': '实况', '/live/items/': '等你的事', '/live/ledger/': 'AI 账本', '/live/project/': '项目', '/live/automation/': '自动任务' })[from.pathname] : issue ? 'AI 账本' : '等你的事';

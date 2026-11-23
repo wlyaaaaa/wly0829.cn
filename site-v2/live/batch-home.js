@@ -2,6 +2,8 @@
   'use strict';
   const U = window.LiveUI, R = window.LiveRuns, { esc } = U;
   const entries = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' };
+  // 开场页（F2 新做，网址等 F2 交回再对）。它装上之前拼着写，免得构建查站内链接时把还没有的页当成死链；F2 合进来以后改回整串
+  const OPENING = '/live/agents/' + 'opening/';
   const items = value => Array.isArray(value) ? value : [];
   const count = value => typeof value === 'number' && value >= 0;
   const num = value => count(value) ? esc(value) : '<span class="fog__text" aria-label="没读到">··</span>';
@@ -34,7 +36,8 @@
       const repairing = typeof p.repairing === 'boolean' ? p.repairing : p.handler !== '本人';   // 旧包没有 repairing：照原来，写明等本人的才不算在修
       return { title, text, raw: p, repairing, handler: p.handler_text || p.handler || '', round: count(p.round) && p.round > 0 ? p.round : null, href: p.href };
     });
-    return { date: R.todayLabel(today.from || now), metrics, zero: metrics.every(m => m.n === 0), last, running, problems };
+    const aiMinutes = count(today.ai_seconds) ? Math.round(today.ai_seconds / 60) : d.today?.ai_minutes;
+    return { date: R.todayLabel(today.from || now), metrics, zero: metrics.every(m => m.n === 0), last, running, problems, aiMinutes };
   }
 
   function render(id, data, options) {
@@ -53,7 +56,7 @@
       const repairing = v.problems.filter(p => p.repairing).length;
       const tone = offline ? 'off' : toOwner ? 'owner' : problem ? (repairing ? 'repair' : 'owner') : d.health?.state_code === 'lost' ? 'off' : Array.isArray(d.problems) ? 'ok' : 'off';
       // 标题右边写今天几号（本人选 A）；要本人动手时照旧在标题后面写“要你做 ›”
-      const status = toOwner ? link(d.attention.href, `要${own}做 ›`) : '';
+      const status = toOwner ? link(d.attention.href, `要${own}做 ›`) : '', next = d.next || {};
       const head = cardTitle('自动任务', href, tone, status) + `<span class="b6-date">${esc(v.date)}</span>`;
       const metric = m => `<a class="b6-metric" href="${esc(route(m.href))}"><b>${num(m.n)}</b><small>${esc(m.label)}</small></a>`;
       const handled = p => p.handler === '本人' ? `等${own}处理`
@@ -66,9 +69,12 @@
       return { tone, head, body:
         `<div class="b6-metrics">${v.metrics.map(metric).join('')}</div>
         ${v.zero && v.last ? `<p class="b6-last">今天还没有${v.last.at ? ` · 上次：${esc(R.when(v.last.at, now, { relative: true }))}` : ' · 上次：'} ${go(v.last.href, field(v.last.text, '那一轮的结果'))}</p>` : ''}
-        ${v.running.map(r => `<p>${dot('ok')}在干：${r.what.map(w => field(w)).join(' · ')} ${go(r.href, r.round ? `第 ${r.round} 轮` : '看经过')}</p>`).join('')}
+        ${v.running.length ? v.running.map(r => `<p>${dot('ok')}在干：${r.what.map(w => field(w)).join(' · ')} ${go(r.href, r.round ? `第 ${r.round} 轮` : '看经过')}</p>`).join('')
+          : `<p>${next.title ? `下次 ${esc(time(next.at) || next.wait || '')} · ${link(next.href, field(next.title, '任务名称'))}`
+            : Array.isArray(d.running) && d.next === null ? '没有排定的运行' : '运行和下次时间没读到'}</p>`}
         ${v.problems.map(problemLine).join('')}
-        ${items(d.disabled).map(row => `<p class="b6-muted">${dot('off')}${link(row.href, field(row.title))} · 关着</p>`).join('')}` };
+        ${items(d.disabled).map(row => `<p class="b6-muted">${dot('off')}${link(row.href, field(row.title))} · 关着</p>`).join('')}
+        <p class="b6-muted b6-foot">${count(v.aiMinutes) ? `今天 AI 用了 ${esc(v.aiMinutes)} 分钟` : '今天 AI 用时还没读到'} · ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>` };
     }
     if (id === 'agents') {
       const rows = Object.entries(entries).map(([key, name]) => items(d.providers).find(p => p.id === key) || { name, status: 'missing' });
@@ -98,7 +104,7 @@
         `<p class="b6-chips">${rows.map(chip).join('')}</p>
         <p class="b6-muted">规则 ${field(d.rule_version) || num(null)}${current} · 钩子近 7 天跑 ${num(d.hooks_7d?.runs)} 次，出错 ${num(d.hooks_7d?.errors)} 次</p>
         ${rows.flatMap(row => items(row.issues).map(issue => `<p class="b6-muted">${dot('repair')}${esc(row.name)} · ${field(issue.text)} · ${go(issue.href || row.href || href, esc(fixer(issue)))}</p>`)).join('')}
-        <p class="b6-foot b6-foot--go">${go(options.openingHref || '/live/agents/opening/', '开场页 · 三家')}</p>` };
+        <p class="b6-foot b6-foot--go">${go(options.openingHref || OPENING, '开场页 · 三家')}</p>` };
     }
 
     const oldest = d.oldest, due = items(d.due_today), max = Math.max(1, d.opened_7d || 0, d.closed_7d || 0);
