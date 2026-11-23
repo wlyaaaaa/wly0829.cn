@@ -502,7 +502,9 @@
     return { ...value, text: homeAddressed(value.text), value: homeAddressed(value.value) };
   }
   const returning = performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
-  const direct = () => focusId || cards[location.hash.slice(1)];
+  // 后退、前进回来时以离开时存下的位置为准：地址里的“#卡片”是当初点进来时的，不再把页面拉回那张卡（M598）。
+  const leftAt = returning ? history.state?.liveUI : null;
+  const direct = () => focusId || (!leftAt && cards[location.hash.slice(1)]);
   const saved = returning && !direct() ? history.state?.liveUI : null;
   let restoreY = saved?.y ?? (returning && !direct() ? history.state?.liveY : null);
   let restoreCard = saved?.homeCard, restoreTimer, paintedRev, pinned = false, netPainted = false;
@@ -541,7 +543,7 @@
   }, { passive: true });
   window.addEventListener('pageshow', e => {
     const saved = history.state?.liveUI;
-    if (!e.persisted || !saved || direct()) return;
+    if (!e.persisted || !saved || focusId) return;
     restoreY = saved.y;
     restoreCard = saved.homeCard;
     restoreTimer = setTimeout(() => requestAnimationFrame(restoreHome), 650);
@@ -1376,7 +1378,7 @@
     else detail?.click();
     return opened;
   }
-  let hashFocused = false;
+  let hashFocused = !!saved;
   // 从这张卡点开的下一层退回来时，全站动效会把总览滚回点开那一刻的位置、让那一页缩回这张卡：这时只画框，不再挪页面，
   // 不然先挪的这一下会被列表的位置保持带着走，纸面就缩到别的卡上（M229）。
   const shrinkingBack = (() => {

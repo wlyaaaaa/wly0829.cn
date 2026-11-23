@@ -80,21 +80,24 @@
   markLiveView();
   const plainClick = e => e.button === 0 && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey;
   // 正文的返回链接只在上一条历史确实是同一目的地时恢复原页位置。
-  function restoreBack(e) {
-    const link = e.currentTarget;
+  function restoreBack(e, link = e.currentTarget) {
     if (e.defaultPrevented || !plainClick(e) || (link.target && link.target !== '_self') || link.hasAttribute('download')) return;
     const index = liveNavigation?.currentEntry?.index;
     const entry = index > 0 ? liveNavigation.entries()[index - 1] : null;
     if (!entry?.url || entry.getState()?.livePublicView !== window.LiveView?.isPublic()) return;
     const previous = new URL(entry.url);
-    // 回实况首页的链接带“#卡片”：上一条去掉 # 后面那段就是实况首页时直接后退，回到离开时的位置（M229）。
-    // 自动任务、AI 账本、问题三页归另一条线，照旧要求 # 也相同。
-    const liveHome = link.pathname === '/live/' && !document.body?.matches('.page--automation, .page--ledger, [data-record="issue"]');
+    // 回实况首页的链接带“#卡片”：上一条去掉 # 后面那段就是实况首页时直接后退，回到离开时的位置（M229、M598，各页一样）。
+    const liveHome = link.pathname === '/live/';
     if (previous.origin !== link.origin || previous.pathname !== link.pathname || previous.search !== link.search ||
         (link.hash && !liveHome && previous.hash !== link.hash)) return;
     e.preventDefault();
     history.back();
   }
+  // 没自己接上面这个的页（自动任务）点“返回总览”也一样回到点进来的那张卡；自己接了的页先处理，这里见已拦下就不动（M598）。
+  document.addEventListener('click', e => {
+    const link = e.target instanceof Element && e.target.closest('a[data-back][href]');
+    if (link && link.pathname === '/live/') restoreBack(e, link);
+  });
 
   // 页眉链接照地址回实况总览；已经在总览时回到页首。
   function liveHeaderBack() {
