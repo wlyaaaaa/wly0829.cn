@@ -301,38 +301,22 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-foot:not(:has(> :not([hidden]):not(.pj-led))) { display: none; }
 .pj-rh-events p { margin: 6px 0 0; font-size: 13px; line-height: 21px; color: #5d5c56; }
 
-/* 规则效果图：保留整段数据和指向读数，轴上只放短日期。 */
-#artifacts, #rule-effect { container-type: inline-size; }
-#rule-effect [data-addition-chart="rule-effect"] {
-  --rule-hook: #77756e;
-  & .vz-bars__plot { animation: none; }
-  & :is(.chart__y, .vz-bars__lab:not(.is-on)) { color: #56544e; }
-  & .chart__grid line { stroke: rgb(20 20 19 / .16); }
-  & .chart__grid line.is-base { stroke: rgb(20 20 19 / .25); }
-  & .vz-bars__body path[fill$="-corrections)"] { fill: var(--pj-accent); }
-  & .vz-bars__body path[fill$="-hooks)"] { fill: var(--rule-hook); }
-  & .chart__val:last-child .chart__key { --c: var(--rule-hook); }
-  & .chart__name:empty { display: none; }
-  & .chart__vals { min-width: 0; gap: 4px 12px; }
-  & .chart__val { min-width: 0; white-space: normal; }
-  & .chart__val b { min-width: 0; white-space: nowrap; }
-  & .vz-bars__when { display: block; overflow-wrap: anywhere; }
-  & .vz-bars__lab:first-child { align-items: flex-start; }
-  & .vz-bars__lab:last-child:not(:first-child) { align-items: flex-end; }
-}
+#artifacts { container-type: inline-size; }
 @container (width < 260px) {
   #artifacts .pj-at { grid-column: 2; padding-left: 0; }
-  #rule-effect [data-addition-chart="rule-effect"] { overflow-x: auto; }
-  #rule-effect [data-addition-chart="rule-effect"] :is(.vz-bars__plot, .vz-bars__x) { min-width: 260px; }
 }
 
-/* 技能使用：累计、近 7 天、近 30 天上下三组，每组两条长条 */
-.pj-card .pj-viz--skills .pj-skill-period { margin: 10px 0 4px; }
-.pj-card .pj-viz--skills > div:first-child .pj-skill-period { margin-top: 0; }
+/* 规则仓：搬到智能体页的几块，原处只留一行链过去 */
+.pj-moved-head { display: inline-flex; align-items: center; gap: 4px; color: var(--ink); font-weight: 700; text-decoration: none; }
+.pj-moved-head:hover { color: var(--pj-accent); }
+.pj-moved-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0; font-size: 14.5px; line-height: 24px; color: #3d3d3a; }
+.pj-moved-line a { color: inherit; text-decoration: none; }
+.pj-moved-line a:hover { color: var(--pj-accent); }
+.pj-moved-line b { font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums; color: var(--pj-accent); }
+.pj-moved-line > span { color: var(--muted); }
 .pj-device-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
 .pj-device-table th, .pj-device-table td { padding: 7px 5px; border-bottom: 1px solid rgb(70 68 57 / .12); vertical-align: top; overflow-wrap: anywhere; }
-.pj-device-table small, .pj-viz--skills .pj-kv__v small { display: block; color: var(--muted); font-size: 12px; }
-.pj-card .pj-viz--skills .pj-kv { grid-template-columns: minmax(0, 1fr); }
+.pj-device-table small { display: block; color: var(--muted); font-size: 12px; }
 .pj-card .pj-viz .vz-bars__plot { height: 150px; }
 #site_update_todo .pj-kv { grid-template-columns: minmax(0, 1fr); }
 #site-visitors [data-visit-rank] { margin: 4px 0 12px; }
