@@ -325,6 +325,16 @@
         block.remove();
       }
     }
+    // 卡头已写“数据截止 HH:MM”时，摘要、卡顿两块各自的“截至 MM-DD HH:MM”是同一时刻，不再说第二遍（M677）
+    const day = t => t.includes(' ') ? t : `${U.date(Date.now())} ${t}`;
+    const said = status.textContent.match(/数据截[止至] ((?:\d{2}-\d{2} )?\d{2}:\d{2})/)?.[1];
+    for (const block of status.querySelectorAll('[data-block]')) {
+      const at = block.textContent.match(/·\s*截[止至] ((?:\d{2}-\d{2} )?\d{2}:\d{2})$/)?.[1];
+      if (!said || !at || day(said) !== day(at)) continue;
+      const separator = block.previousSibling;
+      if (separator?.nodeType === Node.TEXT_NODE) separator.textContent = separator.textContent.replace(/\s*·\s*$/, '');
+      block.remove();
+    }
     const time = line.querySelector('.grp__cutoff'), top = document.querySelector('#hero .head__cutoff')?.textContent;
     if (/^数据截止 (?:\d{2}-\d{2} )?\d{2}:\d{2}$/.test(time.textContent) &&
         [reported, top].some(note => U.sameCutoffNote(note, time.textContent))) time.textContent = '';

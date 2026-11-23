@@ -65,7 +65,8 @@ h1 .task-provider { margin-left: .6em; }
 .task-result { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
 .task-result[data-state="failed"] { color: #a83948; }
 .task-result[data-state="ok"], .task-result[data-state="done"] { color: #187041; }
-/* 部分完成的那一轮：沿用计划任务列表“要留意”的黄点和字色（M381） */
+/* 部分完成的那一轮和那一天：沿用计划任务列表“要留意”的黄点和字色（M381、M676） */
+.task-mark[data-state="warn"] { background: #d99a32; border-color: transparent; }
 .task-dot[data-state="warn"] { background: #d99a32; border-color: transparent; }
 .task-result[data-state="warn"] { color: #9a6514; }
 /* 统计格和下面卡片拉开一点，“最近几次”“这个任务”的标题不和统计格挤成一块 */

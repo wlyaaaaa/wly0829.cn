@@ -94,7 +94,8 @@
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   function week(d) {
     if (U.offline?.() && !Array.isArray(d.days7)) return '';
-    const labels = { ok: '跑成了', failed: '没跑成', none: '没跑' }, days = d.days7;
+    // 当天有部分完成：后台 days7 的 state=warn（同一天先算出错，其次成功，再次部分完成，M676）
+    const labels = { ok: '跑成了', failed: '没跑成', warn: '部分完成', none: '没跑' }, days = d.days7;
     if (!Array.isArray(days) || days.every(day => day.state == null || day.state === 'unknown')) return '';
     return `<div class="task-week"><div class="task-days" role="group" aria-label="近 7 天${d.days7_from ? `，记录从 ${U.date(d.days7_from)} ${U.time(d.days7_from)} 起` : ''}" data-from="${esc(d.days7_from || '')}">${Array.isArray(days) ? [...days].sort((a, b) => a.date.localeCompare(b.date)).map(day => { const label = `${U.date(day.date)} ${labels[day.state] || U.collectionText()}`; return day.state == null || day.state === 'unknown' ? `<span class="rec-none" data-state="unknown" aria-label="${esc(label)}" title="${esc(label)}">—</span>` : `<button class="task-day" type="button" data-state="${day.state == null ? 'unknown' : esc(day.state)}" aria-label="${esc(label)}"><span class="task-day-tip">${esc(label)}</span></button>`; }).join('') : `<span class="rec-none">${U.collectionText()}</span>`}</div></div>`;
   }

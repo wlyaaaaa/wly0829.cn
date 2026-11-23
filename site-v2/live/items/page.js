@@ -243,7 +243,7 @@
     // 收起时那一句是纯文字，各小段之间补上和展开后一样的“ · ”，不挤成一串（M670）
     const text = html.replace(/<\/span>(?=<span class="item-bit[\s"])/g, '</span> · ').replace(/<[^>]*>/g, '');
     const first = text.match(/^.*?[。！？\n]/)?.[0] || text.slice(0, 100);
-    return text.length > first.length ? `<details class="brief"><summary>${first} <span class="more__chev">›</span></summary><div>${html}</div></details>` : html;
+    return text.length > first.length ? `<details class="brief"><summary><span class="brief__text">${first}</span> <span class="more__chev">›</span></summary><div>${html}</div></details>` : html;
     }
     const flags = it.text && typeof it.text === 'object' ? it.text : it, hidden = viewer === 'public' && (it.visibility === 'owner' || it.public === 'owner' || flags.visibility === 'owner' || flags.public === 'owner');
     const placeholder = hidden || viewer === 'public' && (flags.hidden || flags.rewrite === 'pending' && !flags.text && !flags.value);

@@ -129,21 +129,23 @@
   }
   $('root-link').href = route('/live/#tasks');
   for (const el of document.querySelectorAll('[data-icon-name]')) U.html(el, window.LiveBoard.icon(el.dataset.iconName), false);
-  const weekLabel = { ok: '有成功记录', failed: '有出错记录', none: '没有新启动', 'observed-ok': '至少一轮成功', started: '跑过，结果未确认', unknown: '全天记录未读全' };
+  const weekLabel = { ok: '有成功记录', failed: '有出错记录', warn: '有部分完成', none: '没有新启动', 'observed-ok': '至少一轮成功', started: '跑过，结果未确认', unknown: '全天记录未读全' };
   const dayMark = (state, key = false) => `<span class="task-mark${key ? '' : ' task-day'}" data-state="${state}" aria-hidden="true"></span>`;
   function week(days, runs) {
     const dateKey = t => new Date(t + BJ).toISOString().slice(0, 10), evidence = new Map();
     for (const run of runs) {
       if (run.start == null) continue;
       const date = dateKey(run.start);
-      if (!evidence.has(date) || run.result === 'failed' || run.result === 'ok' && evidence.get(date) !== 'failed') evidence.set(date, run.result);
+      if (!evidence.has(date) || run.result === 'failed' || run.result === 'ok' && evidence.get(date) !== 'failed'
+        || run.result === 'warn' && !['failed', 'ok'].includes(evidence.get(date))) evidence.set(date, run.result);
     }
     const dates = Array.isArray(days) && days.length ? days : Array.from({ length: 7 }, (_, i) => ({ date: dateKey(dayStart(now) - (6 - i) * DAY), state: null }));
     const cells = dates.map(day => {
       const sawRun = evidence.has(day.date), outcome = evidence.get(day.date);
       const failed = day.state === 'failed' || outcome === 'failed';
+      // 当天有部分完成（后台 days7 的 state=warn；旧包从已读到的轮次看出）：同一天先算出错，其次成功，再次部分完成（M676）
       const state = failed ? 'failed' : day.state === 'ok' || outcome === 'ok'
-        ? day.partial || day.state !== 'ok' ? 'observed-ok' : 'ok' : day.state === 'none' && !sawRun ? 'none' : 'unknown';
+        ? day.partial || day.state !== 'ok' ? 'observed-ok' : 'ok' : day.state === 'warn' || outcome === 'warn' ? 'warn' : day.state === 'none' && !sawRun ? 'none' : 'unknown';
       const started = day.started || sawRun;
       const name = failed && (day.partial || day.state !== 'failed') ? '至少一轮出错' : weekLabel[state === 'unknown' && started ? 'started' : state];
       // 那天表里列着运行、只是没确认结果的，格子说“跑过，结果未确认”，不说“全天记录未读全”
@@ -158,19 +160,20 @@
     return Number.isInteger(n) && n >= 0 && (exact || n > 0) ? `${exact ? '' : '<small>至少 </small>'}${n}<small> 次</small>` : '';
   }
   // 后台按全部运行记录算好的统计（runs_summary）：分页以后只拿到最新 50 次，统计照它，不拿已载入的几条重算（M643）
-  // 部分完成的轮次（result=warn，M381）：后台统计还算在 unknown 里。给了 warn 就照它；没给时全部轮次都已载入才按已载入的数出来，
-  // 没载入完又见到部分完成的，只说“没记到结果或部分完成”，不硬拆
+  // 部分完成的轮次（result=warn，M381、M676）：新包单给 warn，unknown 只算真没结果，两个数都直接用；
+  // 旧包没有 warn、部分完成还算在 unknown 里：全部轮次都已载入才按已载入的数出来再从 unknown 里减，没载入完又见到部分完成的，只说“没记到结果或部分完成”，不硬拆
   function partialRuns(d, s, runs, unknown) {
-    if (Number.isInteger(s.warn) && s.warn >= 0) return { warn: Math.min(s.warn, unknown), mixed: false };
+    if (Number.isInteger(s.warn) && s.warn >= 0) return { warn: s.warn, unread: unknown, mixed: false };
     const page = pageOf(d), all = !page || (deepCursor === undefined ? page.next_cursor == null : deepCursor == null);
     const from = time(s.from), to = valid(time(s.to)) ? time(s.to) : now;
     const seen = (runs || []).filter(r => r.result === 'warn' && r.start != null && (!valid(from) || r.start >= from) && r.start <= to).length;
-    return all ? { warn: Math.min(seen, unknown), mixed: false } : { warn: 0, mixed: seen > 0 };
+    const warn = all ? Math.min(seen, unknown) : 0;
+    return { warn, unread: unknown - warn, mixed: !all && seen > 0 };
   }
   function summaryMetrics(d, s, kind, runs) {
     const plan = kind === 'plan', exact = s.exact === true, span = exact && s.covered !== true, from = time(s.from);
     const n = v => Number.isInteger(v) && v >= 0 ? v : 0, total = n(s.total), ok = n(s.ok), failed = n(s.failed), running = n(s.running);
-    const { warn, mixed } = partialRuns(d, s, runs, n(s.unknown)), unread = n(s.unknown) - warn;
+    const { warn, unread, mixed } = partialRuns(d, s, runs, n(s.unknown));
     const why = v => v || !plan ? '' : running ? '还在跑' : total ? '已读部分没有' : '';
     const besides = plan && exact ? [warn && `${warn} 次部分完成`, unread && `${unread} 次没记到结果${mixed ? '或部分完成' : ''}`, running && `${running} 次还在跑`].filter(Boolean).join('，') : '';
     const totalRow = ['total', `${span && valid(from) ? `${stamp(from)} 起` : '近 7 天'}${besides ? `<small class="task-stat__note">${besides}</small>` : ''}`, count(s.total, exact)];
