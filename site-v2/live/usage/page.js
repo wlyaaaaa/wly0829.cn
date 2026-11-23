@@ -40,6 +40,8 @@
   const hm = (t) => new Date((t + BJ) * 1000).toISOString().slice(11, 16);
   const md = (t) => dayKey(t).slice(5);
   const sec = (iso) => Date.parse(iso) / 1000;
+  // 数字旁边写明算到几点：页头和“用在哪”各读各的汇总，截止时刻可能差几分钟（M349）。
+  const upTo = (iso) => { const t = sec(iso); return Number.isFinite(t) ? `（截至 ${md(t) === md(Date.now() / 1000) ? '' : md(t) + ' '}${hm(t)}）` : ''; };
   const FOCUS_MIN_SECONDS = 15 * 60;
   function rangeText(window) {
     const from = sec(window?.from), to = sec(window?.to);
@@ -130,7 +132,7 @@
     const s = d?.summary, w = sp(d?.window?.label || rangeLabel());
     const activeLabel = typeof s?.active_label === 'string' && s.active_label.trim();
     const focusLabel = typeof s?.focus_label === 'string' && s.focus_label.trim();
-    const active = s?.active != null && `${activeLabel ? `${w} ${activeLabel}` : `${w}用了`} ${read(s, 'active')}`;
+    const active = s?.active != null && `${activeLabel ? `${w} ${activeLabel}` : `${w}用了`} ${read(s, 'active')}${upTo(d?.window?.to)}`;
     const focus = s?.focus != null && (active || focusLabel) && `${active ? '' : `${w} `}${focusLabel || '专注时间'} ${read(s, 'focus')}`;
     return [active, focus].filter(Boolean).join(' · ') || missing();
   }
@@ -356,7 +358,7 @@
           <div class="use-windows"><p class="use-two__k">窗口标题排行</p><p class="use-note" data-x="titles-dates" hidden></p><div data-x="titles"></div><p class="use-note" data-x="tnote" hidden></p></div>
         </div>`;
         const shareHost = el.querySelector('[data-x="share"]'), appHost = el.querySelector('[data-x="apps"]'), titleHost = el.querySelector('[data-x="titles"]');
-        const share = block('categories', shareHost, V.share(shareHost, { center: '应用使用时长' }));
+        const shareOpts = { center: '应用使用时长' }, share = block('categories', shareHost, V.share(shareHost, shareOpts));
         // 避免逐条入场反复测布局。窗口标题可有上千条，沿用分批展开。
         const apps = block('apps', appHost, V.rank(appHost, { mark: true, animate: false, trailing: rankTrailing }));
         const titles = block('titles', titleHost, V.rank(titleHost, { show: 24, batch: 100, animate: false, trailing: rankTrailing,
@@ -379,6 +381,7 @@
             node.hidden = !dates || dates === whereRange(d, 'categories');
             node.textContent = dates;
           }
+          shareOpts.center = `应用使用时长${upTo(d?.blocks?.categories?.window?.to ?? d?.blocks?.categories?.at)}`;
           share.set(d?.categories ? d.categories.map((c) => ({ id: c.id, label: c.label || CAT[c.id] || c.id, value: c.seconds, hue: catHue(c.id) })) : null);
           markShare();
           const programs = U.mergePrivateRows(appRows(d), { value: r => r.private_value, kind: viewer });

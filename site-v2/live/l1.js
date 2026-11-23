@@ -566,7 +566,7 @@
     }
     if (it.kind === 'know') sub = elapsed(it.episode_at || it.born);
     if (it.rewrite === 'pending' && it.at) sub = [sub, `${U.date(it.at)} ${U.time(it.at)}`].filter(Boolean).join(' · ');
-    if (viewer === 'owner' && it.origin?.name) sub = join([sub, U.capText(it.origin.name, 30, true)]);
+    if (viewer === 'owner' && U.originName(it.origin, it)) sub = join([sub, U.capText(U.originName(it.origin, it), 30, true)]);
     if (viewer === 'public' && it.visibility === 'owner') sub = '';
     const fresh = seen.isNew(it.episode_at || it.born, at) ? tags([['新', 'tag--new']]) : '';
     // 本人版给完整版，不挂“仅你可见”。
@@ -1286,6 +1286,15 @@
     if (!data || Object.hasOwn(data, 'source_at') || Object.hasOwn(data, 'at') || oldReading(data)) return blockAt(data);
     return home?.at ?? at;
   }
+  // AI 对话卡读数不全时只说一句：是正在重读，还是这次没读全；上面那行统计是几点的（M242）。
+  function chatGapNote(d, shown) {
+    const reasons = [...(d.gray_items || []).map(g => g?.reason), ...Object.values(d.missing || {}).map(r => r?.reason_code ?? r?.reason ?? r)]
+      .map(r => sp(U.fieldText(r, viewer)));
+    const tried = recordStamp(blockAt(d), d.at_precision);
+    const reading = reasons.some(r => /还在读|warming/.test(r)), gap = d.read_error || d.refresh_error || reasons.some(r => !/还在读|warming/.test(r));
+    const lead = [(gap || !reading) && `${tried ? tried + ' ' : '这次'}没读全`, reading && '正在重读'].filter(Boolean).join('，');
+    return esc([lead, shown && (shown === tried ? '上面是读到的部分' : `先显示 ${shown} 的统计`)].filter(Boolean).join('，'));
+  }
   function paintStatus(id, data) {
     const p = parts[id], end = cutoffAt(id, data), stamp = recordStamp(end, data?.at_precision);
     const staleText = U.fieldHtml(data?.stale_text, { name: '数据截止时刻', kind: viewer });
@@ -1303,7 +1312,9 @@
     const state = U.status(['ledger', 'projects'].includes(id) ? null : gray ? { ...data, gray_count: 0 } : data, { showZeroFixing: id === 'needs' });
     p.head.querySelector(':scope > .lamp')?.remove();
     if (state.lamp) p.head.insertAdjacentHTML('afterbegin', state.lamp);
-    const note = [...(state.note || staleText).split(' · ').filter(text => !(existing || cutoff) || !matchesCutoff(text)), grayNote, cutoff].filter(Boolean).join(' · ');
+    const chatGap = id === 'chats' && (state.tone === 'gray' || gray) && chatGapNote(data, chatReading);
+    const note = chatGap ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].join(' · ')
+      : [...(state.note || staleText).split(' · ').filter(text => !(existing || cutoff) || !matchesCutoff(text)), grayNote, cutoff].filter(Boolean).join(' · ');
     p.status.hidden = !note; U.html(p.status, note);
     Light.tone(cards[id], cardTone(id, data, state));
   }

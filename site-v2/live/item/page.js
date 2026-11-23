@@ -184,7 +184,7 @@
     $('related').hidden = !refs.length; U.html($('links'), refs.join(''));
     // 原始记录保留拆标题前的原文。
     if (dossier) {
-      const raw = [fact('原文', say(d.text ?? (d.rewrite === 'pending' ? d : null), '事项')), d.id && fact('编号', esc(d.id)), d.changed && fact('最近更新', when(d.changed))].filter(Boolean);
+      const raw = [fact('原文', say(d.text ?? (d.rewrite === 'pending' ? d : null), '事项')), d.changed && fact('最近更新', when(d.changed))].filter(Boolean);
       $('raw').hidden = !raw.length; U.html($('raw-facts'), raw.join(''));
     }
     const eventBody = e => !e.text || [e.label, d.text, issue ? summary : d.closed?.text].includes(e.text) ? '' : e.text;
