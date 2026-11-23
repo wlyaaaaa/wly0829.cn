@@ -58,7 +58,7 @@ html:has(body.page--tape) { background: #f7f7f5; }
   border-right: 1px solid rgb(255 255 255 / .16);
 }
 .tp-ticker__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--tp-green); box-shadow: 0 0 0 0 rgb(0 166 80 / .7); animation: tp-breathe 1.6s ease-out infinite; }
-.tp-ticker[data-state="off"] .tp-ticker__dot { background: var(--tp-gray); animation: none; }
+.tp-ticker[data-state="off"] .tp-ticker__dot { background: var(--tp-gray); --tp-pulse-color: 115 119 116; }
 .tp-ticker__window { position: relative; flex: 1; min-width: 0; height: 100%; overflow: hidden;
   mask-image: linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 40px), transparent); }
 .tp-ticker__track { position: absolute; top: 0; left: 0; display: flex; align-items: center; height: 100%; white-space: nowrap; will-change: transform;
@@ -75,7 +75,7 @@ html:has(body.page--tape) { background: #f7f7f5; }
 .tp-ticker__item.is-new strong { animation: tp-new 1.2s ease 3; }
 a.tp-ticker__item:hover { color: #fff; }
 @keyframes tp-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@keyframes tp-breathe { 0% { box-shadow: 0 0 0 0 rgb(0 166 80 / .7); } 70% { box-shadow: 0 0 0 8px rgb(0 166 80 / 0); } 100% { box-shadow: 0 0 0 0 rgb(0 166 80 / 0); } }
+@keyframes tp-breathe { 0% { box-shadow: 0 0 0 0 rgb(var(--tp-pulse-color, 0 166 80) / .7); } 70% { box-shadow: 0 0 0 8px rgb(var(--tp-pulse-color, 0 166 80) / 0); } 100% { box-shadow: 0 0 0 0 rgb(var(--tp-pulse-color, 0 166 80) / 0); } }
 @keyframes tp-new { 50% { color: #4fd88c; } }
 
 /* ============ 页头 ============ */
