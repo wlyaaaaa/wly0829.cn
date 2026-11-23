@@ -163,9 +163,11 @@
       const purpose = !hidden && purposeText && (typeof purposeText !== 'string' || !/^(?:在跑|正在跑|到点没跑|已停用|停用|所需状态未读到)$/u.test(purposeText))
         ? field(purposeText, '用途') : description[1] || projectName;
       const fullPurpose = !hidden ? U.fieldText(registeredPurpose ?? t.project_name, viewer) : '';
+      // 备份任务：后台给了最近一次核验过的备份（如“最近已核验备份 11-23 01:40，大部分成功，有文件跳过”）就单列一行，上次运行那格照旧（M607）
+      const verified = t.last_verified_backup?.text != null ? `<p class="lb-sub task-verified">${field(t.last_verified_backup.text, '最近已核验备份')}</p>` : '';
       const actions = viewer === 'owner' ? U.actions(t, t.actions || [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : '';
       return { key: t.id, cls: `row row--flat lb-row task-compact${attention(t) ? ' is-attention' : ''}`, html:
-        `<span class="lb-row__lamp">${stateDot(state, shortStatus[state])}</span><div class="lb-cell lb-cell--name"><p><a class="row__title" href="${esc(detail)}">${title}</a></p>${purpose ? `<p class="lb-sub task-purpose" title="${esc(fullPurpose)}">${purpose}</p>` : ''}${why}</div>
+        `<span class="lb-row__lamp">${stateDot(state, shortStatus[state])}</span><div class="lb-cell lb-cell--name"><p><a class="row__title" href="${esc(detail)}">${title}</a></p>${purpose ? `<p class="lb-sub task-purpose" title="${esc(fullPurpose)}">${purpose}</p>` : ''}${verified}${why}</div>
         <div class="lb-cell lb-cell--time task-last">${lastAt ? `<time>${stamp(lastAt)}</time>` : ''}${lastState ? `<span data-task-state${lastTitle}>${stateDot(shown === 'unread' ? 'unknown' : shown)}${esc(lastWord)}</span>` : '—'}${trouble ? week(t) : ''}</div>
         <div class="lb-cell lb-cell--time"><span data-task-state${triggerTitle}>${esc(scheduled)}</span></div><div class="row__acts">${actions}</div>` };
     }

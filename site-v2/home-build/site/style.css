@@ -146,11 +146,17 @@ html.mo-on .screen-panel.still .screen-cell.hotspot:active { backdrop-filter: br
 .home-conn__line { display: flex; align-items: center; gap: calc(var(--unit) * 9); font-size: calc(var(--unit) * 17); line-height: 1.45; }
 .home-conn__line b { font-weight: 800; }
 .home-conn__at { color: #4d4a45; font-weight: 500; }
-.home-conn__sub { margin-top: calc(var(--unit) * 5) !important; padding-left: calc(var(--unit) * 21); color: #7b766e; font-size: calc(var(--unit) * 14); line-height: 1.4; }
+.home-conn__sub { margin-top: calc(var(--unit) * 5) !important; color: #7b766e; font-size: calc(var(--unit) * 14); line-height: 1.4; }
 .home-conn__sub:empty { display: none; }
-.home-conn__lamp { flex: none; width: calc(var(--unit) * 12); height: calc(var(--unit) * 12); border-radius: 50%; background: #f28c1b;
-  box-shadow: 0 0 calc(var(--unit) * 10) rgb(242 140 27 / 70%); animation: home-conn-breathe 2.8s ease-in-out infinite; }
-.home-conn.is-pair .home-conn__lamp { display: none; }
+/* 连没连上的颜色只在“实时状态”按钮那颗点上（本人 11-23 20:57），小签只留字。
+   连不上：先用按钮底色的一小块软圆盖住画里的绿点，上面一颗橙点（#f28c1b）一直呼吸；连上了整颗淡掉，露回画里的绿点。 */
+.home-lamp { position: absolute; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgb(194 231 187) 64%, rgb(198 232 191 / 0) 100%);
+  opacity: 0; transition: opacity .8s cubic-bezier(.4,0,.6,1); }
+html.home-off .home-lamp { opacity: 1; transition: opacity .6s cubic-bezier(.25,.1,.25,1); }
+.home-lamp i { position: absolute; inset: 0; border-radius: 50%; animation: home-conn-breathe 2.8s ease-in-out infinite;
+  background: radial-gradient(circle at 42% 38%, rgb(255 236 212 / 90%) 0, rgb(255 236 212 / 0) 13%),
+    radial-gradient(closest-side, #f7a040 0, #f28c1b 38%, #e27a10 54%, rgb(242 140 27 / 50%) 57%, rgb(242 140 27 / 0) 100%); }
 @keyframes home-conn-breathe { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.8); } }
 
 /* ---------- 第 2 步：镜头退出来 ---------- */

@@ -25,11 +25,22 @@
   // —— 页头：这周替你做成了 ——
   function results(d) {
     const r = d.results_7d || {};
-    const cell = (label, value, unit, tail, key) => `<div class="au-win"><p class="au-win__label">${label}</p>
-      ${known(value) ? `<p class="tp-big">${big(value, 'win-' + key)}<small>${unit}</small></p>${tail ? `<p class="au-win__tail">${tail}</p>` : ''}` : '<p class="tp-big tp-fog">还没采上</p>'}</div>`;
+    // 没有数时后台说了为什么空（如翻译官没登记项目），就照写那句，不写“还没采上”
+    const cell = (label, value, unit, tail, key, why) => `<div class="au-win"><p class="au-win__label">${label}</p>
+      ${known(value) ? `<p class="tp-big">${big(value, 'win-' + key)}<small>${unit}</small></p>${tail ? `<p class="au-win__tail">${tail}</p>` : ''}`
+        : why ? `<p class="tp-big tp-fog">空着</p><p class="au-win__tail">${why}</p>` : '<p class="tp-big tp-fog">还没采上</p>'}</div>`;
+    const translatorWhy = F(r.translator_versions_missing ?? list(d.categories).find(c => c.id === 'translator')?.result_7d?.missing_reason, '为什么空着');
     return `<section class="tp-panel au-wins" id="results"><div class="tp-panel__head"><h2>这周替${you()}做成了<small>近 7 天</small></h2><span class="tp-asof">截至 ${esc(when(r.at || d.at))}</span></div>
-      <div class="tp-grid au-wins__grid tp-divide">${cell('修好', r.repaired, '件', '', 'repaired')}${cell('记下', r.messages_logged, '件', `消息给${you()}`, 'messages')}
-      ${cell('规矩改好', r.rules_fixed, '处', '', 'rules')}${cell('翻译官出了', r.translator_versions, '版', '', 'translator')}</div>${missingWeek(d)}</section>`;
+      <div class="tp-grid au-wins__grid tp-divide">${cell('修好', r.repaired, '件', basis(r.repaired_basis), 'repaired')}${cell('记下', r.messages_logged, '件', `消息给${you()}`, 'messages')}
+      ${cell('规矩改好', r.rules_fixed, '处', '', 'rules')}${cell('翻译官出了', r.translator_versions, '版', '', 'translator', translatorWhy)}</div>${missingWeek(d)}</section>`;
+  }
+  // 后台给的口径说明 {text, from}：数下面照写一行小字（自动修理的“修好”、成和坏、账本的修好各数各的）；
+  // 页上已经写了起算日（shown）或 text 里自己写了日子的，不再补“几号起”
+  const dated = text => /\d{1,2} *[-月.\/] *\d{1,2}/.test(text);
+  function basis(b, shown) {
+    const text = b ? U.fieldText(b.text, viewer).trim() : '';
+    if (!text) return '';
+    return F(b.text, '口径说明') + (!shown && T.stamp(b.from) && !dated(text) ? ` ·&nbsp;${esc(T.day(b.from))}&nbsp;起` : '');
   }
   // 这周的合计后台没给时写为什么：派活记录从哪天才有
   function missingWeek(d) {
@@ -136,7 +147,8 @@
     if (!days.length) return '<span class="tp-fog">还没采上</span>';
     const since = T.stamp(s.recorded_since), late = since && since > (T.stamp(s.from) || 0) + 86400000;
     const nums = known(s.success) ? `成 ${int(s.success)} · 坏 ${int(s.failed)}` : '还没采上';
-    return `<div class="au-trend">${T.posneg(days, { width: 150, height: 34 })}<span${s.failed ? ' data-bad' : ''}>${nums}${late ? `<small> · ${esc(when(s.recorded_since))} 起记</small>` : ''}</span></div>`;
+    const why = basis(s.basis, late);
+    return `<div class="au-trend">${T.posneg(days, { width: 150, height: 34 })}<span${s.failed ? ' data-bad' : ''}>${nums}${late ? `<small> · ${esc(when(s.recorded_since))} 起记</small>` : ''}</span></div>${why ? `<small class="au-basis">${why}</small>` : ''}`;
   }
   function table(d) {
     const cats = IDS.map(id => list(d.categories).find(c => c.id === id)).filter(Boolean);
@@ -193,6 +205,7 @@
     return `<div class="au-mech"><p class="tp-sub au-mech__title">${F(cn(c.title))}怎么干</p>${flow}
       <p class="au-trigger"><b>怎么触发</b>${esc(g.trigger || '')}</p>${stepText}
       <div class="tp-grid au-stats">${stat('近 30 天成', s.success, '次', 'ok')}${stat('坏', s.failed, '次', s.failed ? 'bad' : 'off')}${stat('平均', known(s.average_seconds) ? Math.max(1, Math.round(s.average_seconds / 60)) : null, '分钟', 'blue')}</div>
+      ${basis(s.basis) ? `<p class="tp-small au-basis">成和坏：${basis(s.basis)}</p>` : ''}
       ${extra.join('')}
       <div class="au-more">
         <details class="tp-details" id="prompt-${c.id}"><summary>提示词原文</summary><pre>${c.prompt_template ? F(c.prompt_template, '提示词') : '这一类没有固定的提示词：' + esc(c.id === 'weekly-laptop' ? '按巡检清单跑程序，坏了才叫 AI。' : '后台这版没给原文。')}</pre></details>

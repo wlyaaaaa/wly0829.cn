@@ -71,6 +71,7 @@
 .lg-split { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; margin-top: 16px; }
 .lg-split > .tp-panel { margin: 0; }
 .lg-done .tp-seg { margin-bottom: 10px; }
+.lg-basis { margin: -4px 0 10px; }
 .lg-settled { margin: 0; padding: 0; list-style: none; }
 .lg-settled li { display: grid; grid-template-columns: 74px minmax(0, 1fr) auto; align-items: baseline; gap: 4px 12px; margin: 0 -8px; padding: 8px; border-bottom: 1px solid var(--tp-hair); border-radius: 6px; font-size: 14px; line-height: 21px; }
 .lg-settled li .tp-tag { justify-self: start; }

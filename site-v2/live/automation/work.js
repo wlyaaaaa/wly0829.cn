@@ -5,6 +5,13 @@
   const settings = $('automation-setting'), form = settings.querySelector('form'), back = document.querySelector('[data-back]');
   const params = new URLSearchParams(location.search), type = params.get('type'), work = params.get('work');
   const scope = params.get('project'), detail = work || type;
+  // 不带单件、类别、项目直接开这个地址：旧总览已经下线（M611），回新的自动任务页
+  if (!detail && !scope) {
+    const next = new URL('/live/automation/', location.origin);
+    if (params.has('fixture')) next.searchParams.set('fixture', params.get('fixture'));
+    location.replace(next.pathname + next.search + location.hash);
+    return;
+  }
   const segment = encodeURIComponent;
   const resource = work ? `automation/work/${segment(work)}` : type ? `automation/types/${segment(type)}` : 'automation';
   const bar = U.topbar({ ask: () => '请看实况这页的自动任务，说明现在在后台跑什么、在修什么、什么时候再验、要不要我出面。' });
@@ -36,9 +43,7 @@
   const total = n => Number.isInteger(n) && n >= 0 ? n : '—';
   const span = seconds => Number.isFinite(seconds) && seconds >= 0 ? U.minutes(seconds / 60) : '';
   const lamp = (data, small = true) => U.status(data, { small }).lamp;
-  const dash = '<span class="aw-dash" aria-label="没有">—</span>';
   const pill = (text, tone) => text ? `<span class="aw-pill" data-tone="${esc(tone)}">${esc(text)}</span>` : '';
-  const locked = value => audience === 'public' && value?.visibility === 'owner';
   const route = (path, next = {}) => {
     if (typeof path !== 'string' || !path.startsWith('/live/')) return '';
     const url = new URL(path, location.origin);
@@ -68,13 +73,6 @@
     const n = total(count), zero = n === 0 || n === '—';
     return `<div data-tone="${zero ? 'zero' : tone}"><dt>${id ? `<a href="#${id}">${label}</a>` : label}</dt><dd>${n}</dd></div>`;
   }).join('')}</dl>`;
-  const signal = data => {
-    const s = P.lamp(data, state?.offline);
-    // 状态说明里已经说了几件要留意，就不再接一句“N 项要关注”。
-    const said = new RegExp(`(^|[^0-9])${s.attention} ?[件项]|要(留意|关注)`).test(s.why ? U.fieldText(s.why, audience) : '');
-    const reason = [s.why && field(s.why, '状态说明'), s.attention > 0 && !said && `${s.attention} 项要关注`].filter(Boolean).join(' · ');
-    return `<p class="aw-signal">${lamp(s, false)}<span>${reason || (s.level === 'green' ? '都正常' : '')}</span></p>`;
-  };
   const hero = '/live/img/automation-hero.webp', tea = '/live/automation/art-tea.webp';
   const dossier = '/live/automation/art-work.webp';
   const ART = {
@@ -88,7 +86,6 @@
   };
   const readonly = id => id === 'ai-review' || id === 'ai-stalled';
   const readonlyNote = '<p class="aw-readonly">这一类只显示，不派人修</p>';
-  const explanation = (name, text, cls = '') => text ? `<p class="aw-explanation ${cls}"><b>${name}</b><span>${esc(text)}</span></p>` : '';
   // 每类四句：管、比如、关了、不管（本人审定的原句，备份、软件和工具、规则和技能按定稿第六轮⑤改成白话）。
   const descriptions = {
     'computer': ["硬盘空间突然往下掉，内存守护没压住内存上涨，系统记录里的蓝屏、非正常关机、致命硬件和磁盘错误", "内存守护碰到打不开的进程就整轮停摆 → AI 改成跳过它接着查 → 重载后真跑不再报错才算好", "守护照常报警，页面上看得到，只是没人去查谁在狂写盘、吃内存", "电脑卡顿不派人修，只用来让不急的重活错开"],
@@ -131,12 +128,6 @@
     const item = audience === 'owner' && p.login_command && route(p.href);
     return (item ? link(item, '登录过期，登录命令在等你的事里') : why) + (when(p.started_at) ? ` · ${when(p.started_at)} 起` : '');
   }
-  function pauses(data) {
-    return list(data.provider_pauses).filter(p => list(p.categories).length).map(p => {
-      const names = p.categories.map(id => link(typeHref(id), field(list(data.categories).find(c => c.id === id)?.title || id, '类别'))).join('、');
-      return `<p class="glass aw-warning">${lamp({ level: 'yellow' })}${names}停着：${pauseText(p)}</p>`;
-    }).join('');
-  }
   const group = (rows, name) => list(rows).filter(row => row.group === name);
   const rowTitle = (row, name = '这件活') => field(row.title, name);
   const chatActivity = row => [row.actual_model, row.actual_effort, at(row.last_activity_at) && `上次动静 ${when(row.last_activity_at)}`, row.helper_activity];
@@ -148,234 +139,9 @@
   const workRows = (rows, name = '这里没有活') => rows.length
     ? `<ul class="aw-lines">${rows.map(workLine).join('')}</ul>` : empty(name);
 
-  // —— 表：带表头，分列对齐；有更多内容的行点开看 ——
-  function table(columns, rows, cls) {
-    return `<div class="aw-table ${cls}" role="table"><div class="aw-tr aw-th" role="row"><span></span>${columns.map(name => `<span role="columnheader">${name}</span>`).join('')}<span></span></div>${rows.join('')}</div>`;
-  }
-  function tableRow({ id = '', light = '', cells, more = '' }) {
-    const lead = `<span class="aw-td aw-td--lamp">${light || ''}</span>`;
-    const body = lead + cells.map(cell => `<span class="aw-td" role="cell">${cell || dash}</span>`).join('');
-    return more
-      ? `<details class="aw-tr aw-tr--fold"${id ? ` id="${esc(id)}"` : ''} role="row"><summary>${body}<span class="aw-td aw-fold" aria-hidden="true"></span></summary><div class="aw-more">${more}</div></details>`
-      : `<div class="aw-tr"${id ? ` id="${esc(id)}"` : ''} role="row">${body}<span class="aw-td"></span></div>`;
-  }
-  const engines = ['Claude', 'Codex', 'Antigravity'];
-  const engine = row => engines.find(name => name.toLowerCase() === String(row.producer || row.scheduler || '').toLowerCase());
   const resultPill = { ok: ['正常', 'ok'], done: ['正常', 'ok'], success: ['正常', 'ok'], warn: ['需留意', 'warn'], failed: ['出错', 'bad'],
     error: ['出错', 'bad'], no_conclusion: ['没结论', 'off'], launched: ['已启动', 'run'], running: ['正在跑', 'run'] };
-  const statePill = { '正在跑': 'run', '等下次': 'wait', '已暂停': 'off', '跑完了': 'done' };
   const result = status => pill(...(resultPill[status] || []));
-  function history(row) {
-    const runs = list(row.recent_runs).filter(run => at(run.at));
-    const notes = words(row.purpose, row.notice || row.error, row.stop, row.stop_effect || row.impact);
-    const now = words(...chatActivity(row));
-    return [notes && `<p>${notes}</p>`, now && `<p>这一轮：${now}</p>`, runs.length && `<p class="aw-more__title">最近几次</p><ul>${runs.map(run =>
-      `<li><time>${when(run.at)}</time>${run.chat_state === 'running' ? pill('正在跑', 'run') : result(run.status) || '<span class="aw-dim">结果未读到</span>'}${run.actual_model ? `<span class="aw-dim">${field(run.actual_model)}</span>` : ''}</li>`).join('')}</ul>`]
-      .filter(Boolean).join('');
-  }
-  function scheduledRow(row, vendor) {
-    const title = field(row.label || row.name || row.title, '任务名');
-    const target = route(row.href);
-    const state_text = typeof row.state_text === 'string' ? row.state_text : '';
-    const failedAt = row.notice && (row.error_at || row.at);
-    const last = failedAt ? `<time>${when(failedAt)}</time>${pill(row.notice, 'warn')}`
-      : row.at ? `<time>${when(row.at)}</time>${result(row.status)}` : '';
-    const next = row.next_at ? `<time>${when(row.next_at)}</time>` : ['已暂停', '跑完了'].includes(state_text) ? '<span class="aw-dim">无下次排期</span>' : '';
-    const who = vendor ? `<span class="aw-vendor" data-vendor="${esc(vendor.toLowerCase())}">${esc(vendor)}</span>` : '';
-    return tableRow({ id: row.id ? `routine-${row.id}` : '', light: row.level ? lamp(row) : '',
-      cells: [`<b>${link(target, title)}</b>`, who || '<span></span>', row.period ? cadence(row.period) : '',
-        state_text ? pill(state_text, statePill[state_text] || 'off') : '', last, next], more: history(row) });
-  }
-  // 全站都按北京时间，排期里的“(Asia/Shanghai)”不写。
-  function cadence(value) {
-    return field(typeof value === 'string' ? value.replace(/\s*[（(]Asia\/Shanghai[）)]/g, '') : value);
-  }
-  function scheduledPanel(data) {
-    const rows = list(data.scheduled_activities);
-    let body;
-    if (!Array.isArray(data.scheduled_activities)) body = empty('这里还看不到');
-    else {
-      const lines = [], missing = [];
-      for (const name of engines) {
-        const items = rows.filter(row => engine(row) === name);
-        if (!items.length) missing.push(name);
-        items.forEach((row, i) => lines.push(scheduledRow(row, i ? '' : name)));
-      }
-      rows.filter(row => !engine(row)).forEach(row => lines.push(scheduledRow(row, row.producer || '')));
-      const notes = [...list(data.scheduled_gaps).map(text => field(text)), missing.length && `${missing.join('、')}：这里没有定时任务`].filter(Boolean);
-      body = (lines.length ? table(['名字', '哪家', '多久一次', '现在', '上一次', '下一次'], lines, 'aw-table--sched') : empty('还没有定时任务'))
-        + notes.map(text => `<p class="aw-table-note">${text}</p>`).join('');
-    }
-    return panel('你设的定时任务', body, { id: 'ai-scheduled', symbol: 'clock', extra: '<span class="aw-head-note">Claude · Codex · Antigravity</span>' });
-  }
-  function intakePanel(data) {
-    const v = data.owner_intake, mine = audience === 'owner';
-    let body;
-    if (!v || typeof v !== 'object' || !Array.isArray(v.runs)) body = empty('这里还看不到');
-    else if (!v.runs.length) body = empty('还没跑过');
-    else {
-      const columns = ['什么时候', '为什么跑', '各来源读到几点', mine ? '记进了哪几件' : '记进', ...(mine ? ['告诉你什么'] : []), '收起几条'];
-      const rows = v.runs.map(run => {
-        const reason = run.reason === 'urgent' ? `${pill('急件', 'warn')}${run.reason_text ? field(run.reason_text) : ''}`
-          : run.reason_text ? field(run.reason_text) : '每天定时那次';
-        const sources = list(run.sources).filter(s => s?.name).map(s => `${field(s.name)} ${when(s.read_to) || '—'}`).join('、');
-        const recorded = mine && Array.isArray(run.recorded)
-          ? run.recorded.length ? run.recorded.map(item => link(route(item.href), field(item.title, '记进的事'))).join('、') : '<span class="aw-dim">没有</span>'
-          : Number.isInteger(run.recorded_count) ? `${run.recorded_count} 件` : '';
-        const told = mine ? [run.told ? field(run.told) : '<span class="aw-dim">没找你</span>'] : [];
-        const light = run.level ? lamp(run) : '';
-        const state = run.status === 'failed' ? '出错' : run.status === 'running' ? '正在跑' : '';
-        const time = `<b>${when(run.at)}</b>${state ? ` <small>${state}</small>` : ''}`;
-        return tableRow({ light, cells: [time, reason, sources ? `<span class="aw-small">${sources}</span>` : '', recorded, ...told,
-          Number.isInteger(run.folded) ? `${run.folded} 条` : ''] });
-      });
-      body = table(columns, rows, `aw-table--intake${mine ? '' : ' aw-table--intake-public'}`)
-        + (mine ? '' : `<p class="aw-table-note">案件、短信原文和告诉本人的话只在本人设备上显示，这里只给次数和条数。</p>`);
-    }
-    return panel(`${own()}的事`, body, { id: 'owner-intake', symbol: 'chat',
-      extra: v?.next_at ? `<span class="aw-head-note">下次 ${when(v.next_at)}</span>` : '' });
-  }
-  function routineRow(row) {
-    const title = field(row.label || row.name || row.title, '来源名称');
-    const target = route(row.href);
-    const name = typeof row.label === 'string' ? row.label : '';
-    const who = row.producer && !name.includes(row.producer) ? `<small class="aw-who">${field(row.producer)}</small>` : '';
-    const trigger = row.trigger_text || row.trigger || row.period;
-    const today = Number.isInteger(row.today_count) ? `${row.today_count} 次` : '';
-    const running = row.chat_state === 'running' || row.state_text === '正在跑';
-    const last = running ? `${pill('正在跑', 'run')}${row.at ? `<span class="aw-dim">${when(row.at)} 起</span>` : ''}`
-      : row.at ? `<time>${when(row.at)}</time>${Number.isInteger(row.plan_count) ? `<span>写回 ${row.plan_count} 份</span>` : result(row.status)}`
-        : row.gap ? `<span class="aw-dim">${field(row.gap)}</span>` : '';
-    return tableRow({ id: row.id ? `routine-${row.id}` : '', light: row.level ? lamp(row) : '',
-      cells: [`<b>${link(target, title)}</b>${who}`, trigger ? field(trigger) : '', today, last], more: history(row) });
-  }
-  function routinePanel(data) {
-    const jobs = list(data.routines), rows = [...(jobs.length ? jobs : list(data.sources)), ...list(data.other_automatic_chats)];
-    const body = rows.length ? table(['名字', '什么时候跑', '今天', '最近一次'], rows.map(routineRow), 'aw-table--routine') : empty('这里还看不到');
-    return panel('例行的 AI 活', body, { id: 'routines', symbol: 'refresh' });
-  }
-  function nowRow(row) {
-    const target = locked(row.title) ? '' : route(row.href);
-    const meta = words(row.model, when(row.started_at) && `${when(row.started_at)} 起`, row.detail);
-    return `<li>${line(target, `${lamp({ level: 'green' })}<span class="aw-now__main"><b>${field(row.title, '名字')}</b>${P.tag(row.kind, row.who, esc)}</span>${meta ? `<small>${meta}</small>` : ''}`)}</li>`;
-  }
-  function runningNow(data) {
-    const rows = data.running_now;
-    // 最多摊开 5 个，多的收起，页头不至于被撑得太高。
-    const body = !Array.isArray(rows) ? empty('这里还看不到') : !rows.length ? empty('这会儿没有在跑的后台 AI')
-      : `<ul class="aw-now">${rows.slice(0, 5).map(nowRow).join('')}</ul>${rows.length > 5 ? `<details id="running-more" class="aw-now-more"><summary class="aw-more-link">再看 ${rows.length - 5} 个</summary><ul class="aw-now">${rows.slice(5).map(nowRow).join('')}</ul></details>` : ''}`;
-    const n = Array.isArray(rows) ? `<span class="aw-head-note">${rows.length} 个</span>` : '';
-    return panel('现在在跑', body, { id: 'running-now', symbol: 'play', cls: 'aw-now-panel', extra: n });
-  }
-  function pageHead(data) {
-    const s = data.summary, idle = data.card?.state_code === 'idle';
-    const tiles = s && typeof s === 'object' ? stats([['正在跑', s.running, 'run', 'running-now'], ['今天跑过', s.ran_today, 'done'],
-      [`要${own()}`, s.owner, 'owner', s.owner > 0 ? 'owner-strip' : ''], ['近 7 天出错', s.errors_7d, 'bad']]) : empty('这里还看不到');
-    const lead = `不用${own()}开口、在后台自己跑起来的 AI 活都在这：${own()}设的定时任务、AI 修毛病、例行的 AI 活。`;
-    return `<div class="aw-top aw-top--page"><section class="glass aw-hero aw-page-hero"><img alt="" src="${esc(idle ? tea : hero)}" class="aw-art">
-      <div class="aw-lead"><h1>自动任务</h1><p class="automation-lead">${lead}</p>${tiles}${signal(data)}</div></section>${runningNow(data)}</div>`;
-  }
-  function slots(data) {
-    const rows = [...list(data.slots)].sort((a, b) => Number(a.id) - Number(b.id));
-    return panel('4 个位置', rows.length ? `<ul class="aw-slots">${rows.map((slot, i) => {
-      const problem = ['yellow', 'red'].includes(slot.work?.level);
-      const dot = slot.occupied ? problem ? lamp(slot.work) : '<span class="aw-slot-dot is-on" aria-label="占着"></span>' : '<span class="aw-slot-dot" aria-label="空着"></span>';
-      const target = slot.work && (route(slot.work.href) || workHref(slot.work.id));
-      return `<li class="${slot.occupied ? 'is-on' : ''}">${dot}<b>${field(slot.label || (i === 3 ? '急事位' : `位置 ${i + 1}`))}</b>
-       <span class="aw-slot-state">${field(slot.status_text || (slot.occupied ? '已占用' : '空着'))}</span>
-       ${slot.work ? link(target, rowTitle(slot.work), 'aw-slot-work') : '<span></span>'}</li>`;
-    }).join('')}</ul>` : empty('位置暂时读不到'), { id: 'positions', cls: 'aw-positions', symbol: 'chip' });
-  }
-  function ownerStrip(rows) {
-    const row = rows[0];
-    if (!row) return '';
-    const target = route(row.owner_href) || route(row.href) || workHref(row.id);
-    const actions = locked(row.title) ? '' : `<div class="aw-buttons" data-owner-id="${esc(row.owner_id || row.id)}">${[
-      ['ask', '问情况'], ['done', '我办完了'], ['later', '晚点提醒'],
-    ].map(([intent, label]) => `<button type="button" class="more" data-copy-intent="${intent}">${label}</button>`).join('')}</div>`;
-    const more = rows.length > 1 ? `<p class="aw-dim">另外还有 ${rows.length - 1} 件，在下面“现在怎么样”里</p>` : '';
-    return panel(`要${own()}出面`, `<div class="aw-owner__main"><h3>${lamp(row, false)}${link(target, rowTitle(row))}</h3><p>${field(row.state_text)}</p>${more}</div>${actions}`,
-      { id: 'owner-strip', cls: 'aw-owner', symbol: 'alert', extra: `<span class="aw-head-note">${rows.length} 件</span>` });
-  }
-  // 后台撤掉的类：明写 retired，或新后台总包里八类和自动修理的小类都没有它（“AI 约好的事”换成了同名的新类别，不算撤）。
-  // 撤了的卡上不画开关，写“已撤”，后台给了原因照写；旧后台总包没有 categories，照旧。
-  function retiredType(data, t) {
-    if (t.retired === true) return true;
-    const kinds = data?.categories;
-    if (!Array.isArray(kinds) || readonly(t.id)) return false;
-    return !kinds.some(c => c.id === t.id || c.title === t.title || list(c.subcategories).some(s => s.id === t.id));
-  }
-  function typeCard(t, retired = false) {
-    const [description] = descriptions[t.id] || [''];
-    const readOnly = readonly(t.id);
-    const c = t.counts || {}, config = configFor(t), ta = when(config.until_at);
-    const items = [[c.running, '在修'], [c.queue, '准备派'], [c.followup, '等复查']].filter(([n]) => n > 0);
-    const info = retired ? ['已撤', U.fieldText(t.reason, audience)].filter(Boolean).join(' · ')
-      : !readOnly && config.mode === 'paused' ? (ta ? `暂停到 ${ta}` : '暂停中')
-      : !readOnly && config.mode === 'off' ? ['已关', c.running > 0 && `${c.running} 件正在收尾`].filter(Boolean).join(' · ')
-        : items.length ? items.map(([n, label]) => `${n} 件${label}`).join(' · ')
-          : c.occupied > 0 ? `${c.occupied} 件已占位`
-            : list(t.sources).some(s => s.at) ? '正常 · 没有活' : '这里还看不到';
-    const model = readOnly ? readonlyNote : retired ? '' : modelText(t) ? `<p class="aw-type__model">${modelText(t)}</p>` : '';
-    const art = ART[t.id] ? `<img class="aw-type__art" src="${esc(ART[t.id])}" alt="" width="76" height="76" loading="lazy">` : icon('gear');
-    return `<article class="aw-type${retired || config.mode === 'off' || config.mode === 'paused' ? ' is-off' : ''}" data-type-id="${esc(t.id)}">${art}<div class="aw-type__body">
-      <h3>${link(route(t.href) || typeHref(t.id), field(t.title, '类型'), 'aw-type__link')}</h3>
-      <p class="aw-type__covers">${esc(description)}</p><p class="aw-type__state${info === '这里还看不到' ? ' is-missing' : ''}">${['yellow', 'red'].includes(t.level) ? lamp(t) : ''}${esc(info)}</p>${model}${message(t.id)}</div>${readOnly || retired ? '' : toggle(t, true)}</article>`;
-  }
-  function trend(data) {
-    const weeks = list(data.weeks).filter(week => Number.isInteger(week.open) && week.open >= 0).slice(-4);
-    const caption = weeks.length === 4 || !weeks.length ? '这四周' : `近 ${weeks.length} 周`;
-    const max = Math.max(1, ...weeks.map(week => week.open));
-    const bars = weeks.map(week => `<span title="${esc(at(week.end_at))} · ${week.open} 件" style="--aw-bar:${Math.max(3, 34 * week.open / max)}px"></span>`).join('');
-    const reading = weeks.length
-      ? `<b>每周末没结的 ${weeks.map(week => week.open).join(' → ')}</b><span class="aw-week-bars" aria-hidden="true">${bars}</span>`
-      : '<b>刚开始记录，满一周后显示</b>';
-    return `<div class="aw-state-row"><h3>${caption}</h3><div class="aw-week-reading">${reading}</div></div>`;
-  }
-  function repairBlock(data) {
-    const rows = list(data.works), counts = data.counts || {}, health = data.health || {};
-    const active = group(rows, 'running'), queue = group(rows, 'queue'), owners = group(rows, 'owner');
-    const repaired = Array.isArray(data.benefits7) ? data.benefits7 : group(rows, 'done').filter(row => row.verified);
-    const idle = data.card?.state_code === 'idle';
-    const statusRows = [
-      ['queue', '准备派', queue, counts.queue, counts.overdue > 0 ? `${counts.overdue} 件超时没人领` : counts.queue > 0 && '没有超时没人领'],
-      ['running', '在修', active, counts.occupied ?? counts.running, false],
-      ['owner', `要${own()}出面`, owners, counts.owner, false],
-      ['recent', '最近变好', repaired, counts.repaired, false],
-    ];
-    const stateRow = (id, label, items, n, note) => `<div id="${id}" class="aw-state-row"><h3>${label}</h3>
-      <div><p class="aw-state-count">${n === 0 ? '没有' : `${total(n)} 件`}${note ? ` · ${esc(note)}` : ''}</p>${items.length ? workRows(items.slice(0, 3)) : ''}
-      ${items.length > 3 ? `<details><summary class="aw-more-link">再看 ${items.length - 3} 件</summary>${workRows(items.slice(3))}</details>` : ''}</div></div>`;
-    const skipped = idle ? '<div class="aw-state-row"><h3>准备派、在修、等办理</h3><div><p class="aw-state-count">都没有</p></div></div><span id="queue"></span><span id="running"></span><span id="owner"></span>' : '';
-    const lastStart = at(health.last_started_at), oldest = span(health.oldest_wait_seconds);
-    const observed = words(
-      lastStart && `最近开工 ${when(health.last_started_at)}`,
-      oldest ? `最老待领 ${oldest}` : counts.queue === 0 && '没有待领的',
-      Number.isInteger(health.starts_today) && `今天开了 ${health.starts_today} 轮`);
-    const healthText = health.state_code !== 'ok' || !observed ? field(health.text || '还没读到派活程序状态') : '';
-    const watch = `<div id="health" class="aw-state-row"><h3>有人在看吗</h3><div><p class="aw-state-count">${lamp(health)}${[healthText, observed].filter(Boolean).join(' · ')}</p></div></div>`;
-    const waiting = group(rows, 'followup');
-    const recent = panel('现在怎么样', skipped + statusRows.slice(idle ? 3 : 0).map(args => stateRow(...args)).join('')
-      + watch + (waiting.length ? stateRow('followup', '等验收和复查', waiting, counts.followup) : '') + trend(data), { id: 'repair-state' });
-    const tiles = stats([['在修', counts.occupied ?? counts.running, 'run', 'running'], ['准备派', counts.queue, 'queue', 'queue'],
-      [`要${own()}`, counts.owner, 'owner', 'owner'], ['7 天修好', counts.repaired, 'done', 'recent']]);
-    const example = route(data.example_href);
-    const guide = explanation('怎么发现', "程序跑完本来就留回执，AI 碰到毛病也会递一条；派活程序每 5 分钟看一遍，收件箱一有新的也马上看，有要修、到期要验的才叫 AI。")
-      + explanation('怎么算好', "修的 AI 说了不算，要另一个 AI 验过，或等下次真跑后再核；三次不好 Claude 出方案，第四次还不好才找你；真要你做或选的，当场就找你。")
-      + (example ? `<p><a class="aw-example-link" href="${esc(example)}">看一件真的怎么修 <span aria-hidden="true">→</span></a></p>` : '');
-    const intro = panel('AI 修毛病', guide + tiles, { id: 'repair', symbol: 'wrench', cls: 'aw-repair-intro' });
-    const types = list(data.types);
-    return `<div class="aw-top aw-top--repair">${intro}${slots(data)}</div>` + recent
-      + panel(`各类自动任务 · ${types.length} 类`, `<div class="aw-types">${types.map(t => typeCard(t, retiredType(data, t))).join('')}</div>`,
-        { id: 'types', symbol: 'stack', extra: `<span class="aw-head-note">${audience === 'owner' ? '配对设备可以开关和暂停' : '开关和暂停只有本人配对的设备能改'}，档位跟模型清单走</span>` });
-  }
-  function overview(data) {
-    const health = data.health || {};
-    const warning = health.state_code === 'lost' ? `<p class="glass aw-warning">${lamp(health)}${field(health.text)}</p>` : '';
-    return warning + pauses(data) + pageHead(data) + ownerStrip(group(data.works, 'owner')) + scheduledPanel(data) + intakePanel(data)
-      + repairBlock(data) + routinePanel(data)
-      + `<p class="aw-foot-link"><a href="${esc(route('/live/tasks/'))}">Windows 计划任务<span class="aw-chev" aria-hidden="true">›</span></a></p>`;
-  }
   function message(id) {
     const text = feedback?.id === id ? feedback.text : '';
     return `<p class="row__sub aw-update" role="status"${text ? '' : ' hidden'}>${esc(text)}</p>`;
@@ -521,7 +287,7 @@
       root.innerHTML = '<p class="glass aw-load">这件活或这一类没有读到</p>';
       return;
     }
-    U.html(root, work ? workPage(data) : kind ? categoryPage(data, kind) : type ? typePage(data) : overview(data), false);
+    U.html(root, work ? workPage(data) : kind ? categoryPage(data, kind) : typePage(data), false);
     for (const [id, open] of folds) {
       const item = $(id), fold = item?.matches('details') ? item : item?.querySelector('details');
       if (fold) fold.open = open;

@@ -125,3 +125,5 @@
 .au-why-missing { margin: 10px 0 0; }
 .au-use__since { display: block; margin-top: 4px; font-size: 12.5px; font-weight: 500; color: #6c6b64; }
 .au-trend > span small { display: inline; color: #8a8981; }
+.au-basis { max-width: 230px; margin-top: 4px; }
+p.au-basis { max-width: none; margin: -6px 0 14px; }
