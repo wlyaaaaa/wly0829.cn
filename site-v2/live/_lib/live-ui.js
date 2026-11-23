@@ -1678,5 +1678,15 @@
     back.after(nav);
   })();
 
-  window.LiveUI = { justSaved, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, visitorHiddenMark, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  // 内存的总量、类型、频率、时序、同步：后台低频从机器上取（hardware.memory 或 memory.spec），值为 null 或没给的项不写，带截至哪天（M654）。
+  function memorySpec(mem, at, total = false) {
+    if (!mem || typeof mem !== 'object') return '';
+    const raw = typeof mem.timings === 'string' ? mem.timings.trim() : '', timings = /^\d/.test(raw) ? `C${raw}` : raw;
+    const speed = Number.isFinite(mem.freq_mts) ? mem.type ? `${sp(mem.type)}-${mem.freq_mts}` : `${mem.freq_mts} MT/s` : '';
+    const sync = ({ synchronous: '同步', asynchronous: '异步' })[mem.sync] || '';
+    const parts = [total && Number.isFinite(mem.total_gb) ? `${+mem.total_gb.toFixed(1)} GB` : '', speed, timings, sync].filter(Boolean);
+    const when = mem.source_at ?? at;
+    return parts.length ? [...parts, Number.isFinite(Date.parse(when)) ? `截至 ${date(when)}` : ''].filter(Boolean).join(' · ') : '';
+  }
+  window.LiveUI = { memorySpec, justSaved, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, visitorHiddenMark, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();

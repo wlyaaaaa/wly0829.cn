@@ -242,6 +242,19 @@
     if (net?.value === 'wireless' && net.ssid) return `无线 · ${U.fieldHtml(typeof net.ssid === 'object' ? net.ssid : { ...net, value: net.ssid }, { name: '无线网络名称', kind: netViewer })}`;
     return unitHtml(text, label);
   }
+  // 从机器上低频读到的规格（data.hardware）：有哪项摆哪项，带截至哪天；回包没有就不显示（M654）。
+  function hardwareSpecHtml() {
+    const h = computer?.hardware;
+    if (!h || typeof h !== 'object') return '';
+    const text = v => v == null || v === '' ? '' : U.fieldHtml(v, { name: '硬件规格', kind: netViewer });
+    const size = n => !Number.isFinite(n) || n <= 0 ? '' : n >= 1e12 ? `${+(n / 1e12).toFixed(1)} TB` : `${Math.round(n / 1e9)} GB`;   // 硬盘按包装上的十进制写
+    const disk = d => d && typeof d === 'object' && !d.visibility && !d.hidden ? U.esc([d.model, size(d.capacity_bytes), d.bus_type].filter(Boolean).map(U.sp).join(' · ')) : text(d);
+    const rows = [['处理器', text(h.cpu)], ['主板', [text(h.board), h.bios != null && h.bios !== '' ? `BIOS ${text(h.bios)}` : ''].filter(Boolean).join(' · ')], ['显卡', (Array.isArray(h.gpu) ? h.gpu : [h.gpu]).map(text).filter(Boolean).join('<br>')],
+      ['内存', U.memorySpec(h.memory ?? computer?.memory?.spec, h.source_at, true).split(' · ').filter(Boolean).map(part => `<span class="live-unit">${U.esc(part)}</span>`).join(' · ')], ['硬盘', (Array.isArray(h.disks) ? h.disks : []).map(disk).filter(Boolean).join('<br>')]].filter(([, html]) => html);
+    if (!rows.length) return '';
+    const at = Number.isFinite(Date.parse(h.source_at)) ? ` · 截至 ${U.esc(U.date(h.source_at))}` : '';
+    return `<p class="row__sub computer-hardware__at">从机器上读到的规格${at}</p><dl class="desktop-config__summary computer-hardware">${rows.map(([label, html]) => `<div><dt>${label}</dt><dd>${html}</dd></div>`).join('')}</dl>`;
+  }
   function hostChapter(el) { return { set() { U.html(el, hostRows('machine')); } }; }
   const iso = time => Number.isFinite(time) ? new Date(time * 1000).toISOString() : Number.isFinite(Date.parse(time)) ? time : null;
   const gb = v => v / 2 ** 30;
@@ -1016,7 +1029,7 @@
         // 数和单位不拆行（“32 GB”不折成“32 / GB”）。
         const summary = rows.filter(row => row.brief).map(row => `<div><dt>${esc(row.label)}</dt><dd>${unitHtml(row.brief === true ? row.spec : row.brief, row.label)}</dd></div>`).join('');
         return `<div class="dev-spec">${pill}${notes ? `<p class="row__sub">${notes}</p>` : ''}
-          <dl class="desktop-config__summary">${summary}</dl>
+          <dl class="desktop-config__summary">${summary}</dl>${hardwareSpecHtml()}
           <button class="desktop-config__action" type="button" aria-controls="desktop-config" aria-expanded="${!hardwarePane.hidden}" data-desktop-config-toggle>
             <span>全部配置（${shown} 项${former ? `，另有以前的主屏 ${former} 台` : ''}）</span><span>收起</span><span aria-hidden="true">›</span></button></div>`;
       }

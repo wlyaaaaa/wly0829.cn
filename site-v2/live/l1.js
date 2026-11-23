@@ -899,11 +899,12 @@
     const trafficText = traffic?.upload != null && traffic?.download != null ? `${trafficDay} ${quantity({ value: traffic.upload + traffic.download, q: isLower(traffic, 'upload') || isLower(traffic, 'download') ? 'partial' : 'ok' }, 'value', trafficBytes)}` : traffic?.upload != null || traffic?.download != null ? join([`上传 ${quantity(traffic, 'upload', trafficBytes)}`, `下载 ${quantity(traffic, 'download', trafficBytes)}`]) : '';
     const diskFree = m['disk-free'], diskTime = sampleTime(diskFree)?.text;
     const trafficTime = traffic?.to && `${offline || oldReading(traffic) ? '上次截至' : '截至'} ${recordStamp(traffic.to)}`;
+    const memorySpec = U.memorySpec?.(d?.hardware?.memory ?? d?.memory?.spec, d?.hardware?.source_at);   // 频率、时序、同步：回包里有才写（M654）
     const rows = [
       ['CPU', withReadings(pair(m.cpu, temperature), ['占用', m.cpu], ['温度', cpu, screen?.cpu_at]), m.cpu],
       ['显卡', withReadings(pair(m.gpu, val(m['gpu-temp'], x => quantity(x, 'value', fmtTemp))), ['占用', m.gpu], ['温度', m['gpu-temp']])],
-      ['内存', withReadings(used != null || total != null ? `用了 ${U.nowrap(quantity(m.memory, 'value', U.gb))} · ${U.nowrap(`共 ${quantity(m['memory-total'], 'value', U.gb)}`)}` : null,
-        ['已用', m.memory], ['总容量', m['memory-total']])],
+      ['内存', (text => text && memorySpec ? `${text}<small>${memorySpec.split(' · ').map(part => `<span class="live-unit">${esc(part)}</span>`).join(' · ')}</small>` : text)(withReadings(used != null || total != null ? `用了 ${U.nowrap(quantity(m.memory, 'value', U.gb))} · ${U.nowrap(`共 ${quantity(m['memory-total'], 'value', U.gb)}`)}` : null,
+        ['已用', m.memory], ['总容量', m['memory-total']]))],
       ['最紧的盘', val(m['disk-free'], x => { const label = x.note || (x.drive ? sp(x.drive).replace(/([A-Za-z]):?\s*(?:盘)?/g, '$1 盘') : x.label === '最紧的盘' ? '' : typeof x.label === 'string' ? x.label.replace(/剩余$/, '') : x.label) || ''; const growth = diskGrowth(x); return `<span class="disk-note">${U.fieldHtml(label, { name: '磁盘', kind: viewer })}</span> 还剩 ${U.nowrap(quantity(x, 'value', U.gb))}${diskTime ? `<small>${esc(diskTime)}</small>` : ''}${growth ? `<small>${U.nowrap(growth)}</small>` : ''}`; }), diskFree, '/live/storage/'],
       ['近 7 天占空间涨得最多', growthReading, false, '/live/storage/'],
       ['海外流量', traffic ? U.nowrap(trafficText) + (traffic.hour_bytes != null ? ` <span class="traffic-hour">${U.nowrap(`近一小时 ${quantity(traffic, 'hour_bytes', trafficBytes)}`)}</span>` : '') + (trafficTime ? `<small>${esc(trafficTime)}</small>` : '') + (traffic.q === 'partial' && traffic.gap ? `<small>${U.fieldHtml(traffic.gap, { name: '流量说明', kind: viewer })}</small>` : '') : null, false, '/live/traffic/'],
@@ -947,7 +948,9 @@
     const primary = metrics.find(x => typeof value(x.id) === 'number');
     const screenGap = !offline && !unknown && value('screen_on') == null ? m.screen_on?.gap || d?.blocks?.usage?.reason || d?.reason || usage : '';
     const fallbackHead = !offline && (screenGap || /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|没读全|还不准/.test(text)) ? join([value('screen_on') != null && usage, value('unlocks') != null && unlocks, value('battery') != null ? `电量 ${quantity(m.battery, 'value', n => `${n}%`)}` : primary && `${primary.label || ''} ${quantity(primary, 'value')} ${primary.unit || ''}`, !screenGap && text]) : text;
-    const phoneHead = fallbackHead;
+    // 手机型号：回包里手机的市场名（data.device，没有就用电脑那块登记的手机名 hw），接在“解锁 N 次”那一行后面；都没有就不写。
+    const model = d?.device?.market_name ?? home?.computer?.devices?.find(x => x.id === 'phone')?.hw;
+    const phoneHead = !unknown && typeof model === 'string' && model.trim() ? `${fallbackHead} · ${model.trim()}` : fallbackHead;
     const readingTimes = ids => [...new Set(ids.map(id => {
       const metric = m[id], sampled = metric?.source_at ?? metric?.at;
       if (!timed(sampled) || value(id) == null) return '';
@@ -969,6 +972,7 @@
     const storage = join([value('storage_free') == null ? U.collectionText("剩余空间", m.storage_free) : `还剩 ${quantity(m.storage_free, 'value', U.gb.scaled)}`, value('storage_total') == null ? U.collectionText("总容量", m.storage_total) : `共 ${quantity(m.storage_total, 'value', U.gb.scaled)}`]);
     const days = value('storage_days_to_full');
     const growth = days != null && days <= 60 ? join([value('storage_week_growth') != null && `这周涨 ${quantity(m.storage_week_growth, 'value', U.gb.scaled)}`, `照这样${isLower(m.storage_days_to_full, 'value') || days < 1 ? '' : '约'} ${quantity(m.storage_days_to_full, 'value', daysText)}满`]) : '';
+    const memory = join([value('memory_used') == null ? '' : `已用 ${quantity(m.memory_used, 'value', U.gb.scaled)}`, value('memory_total') == null ? '' : `共 ${quantity(m.memory_total, 'value', U.gb.scaled)}`]);
     const pendingStorage = [...new Set(['storage_week_growth', 'storage_days_to_full'].filter(id => m[id]?.value === null && m[id]?.accumulating).map(id => U.accumulatingText(m[id].accumulating)))].join(' · ');
     const batteryStatus = U.status(m.battery), storageStatus = U.status(m.storage_free);
     const batteryHot = ['amber', 'red'].includes(batteryStatus.tone), storageHot = ['amber', 'red'].includes(storageStatus.tone);
@@ -976,11 +980,12 @@
       ['电量', esc(battery), ['battery', 'charging', 'battery_temp'], m.battery],
       ['上网', net, ['net_kind', 'carrier', 'ssid']],
       ['存储', U.nowrap(storage) + (growth ? `<small>${U.nowrap(growth)}</small>` : '') + (pendingStorage ? `<small class="accumulating-note">${U.nowrap(pendingStorage)}</small>` : ''), ['storage_free', 'storage_total'], m.storage_free],
+      ...(memory ? [['内存', esc(memory), ['memory_used', 'memory_total'], m.memory_used]] : []),
       ...(offline ? [[screenLabel, esc(join([duration, unlocks])), ['screen_on', 'unlocks']]] : []),
     ];
     U.html(p.kv, unknown ? '' : rows.map(([label, html, ids, status]) => {
       const warn = ['amber', 'red'].includes(U.status(status).tone), cutoff = readingTimes(ids);
-      const group = { 上网: 'network', 存储: 'storage' }[label];
+      const group = { 上网: 'network', 存储: 'storage', 内存: 'storage' }[label];
       const title = group ? `<a href="${esc(href('phone'))}#grp-${group}">${label} ›</a>` : label;
       return `<div class="kv__row">${lamp(status)}<dt>${title}</dt><dd>${html}${cutoff ? ` <small>${cutoff}</small>` : ''}${warn ? U.actions({ id: `phone-${ids[0]}`, text: `${label} ${sp(html.replace(/<[^>]*>/g, ''))}` }, [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : ''}</dd></div>`;
     }).join(''));

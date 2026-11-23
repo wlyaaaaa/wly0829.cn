@@ -130,6 +130,8 @@
 .desktop-config__summary > div { display: grid; grid-template-columns: 43px minmax(0, 1fr); align-items: baseline; gap: 7px; }
 .desktop-config__summary dt { justify-self: start; padding: 0 5px; border-radius: 12px; background: rgb(20 20 19 / .08); font-size: 11px; line-height: 16px; }
 .desktop-config__summary dd, .desktop-config dl, .desktop-config dd { margin: 0; }
+/* 从机器上读到的规格（M654）：和上面的配置摘要隔开一点 */
+.page--computer .hero__devs .computer-hardware__at { margin: 10px 0 2px; font-size: 11px; line-height: 16px; }
 .desktop-config__action { border: 0; padding: 0; background: none; color: #008342; font: 600 13px/24px var(--sans); cursor: pointer; scroll-margin-top: 85px; }
 .desktop-config__action:hover { text-decoration: underline; }
 .desktop-config__action > span:last-child { display: inline-block; margin-left: 6px; }

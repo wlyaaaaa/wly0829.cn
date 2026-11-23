@@ -69,6 +69,8 @@
 .page--phone .phone-changes { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px 32px; }
 .page--phone .phone-changes > .use-note { margin:0; padding:8px 0; border-bottom:1px solid var(--hair); }
 .page--phone .phone-changes > details { grid-column:1 / -1; }
+.page--phone .phone-changes__side { display:grid; gap:14px; align-content:start; }
+.page--phone .phone-changes__side > .use-note { margin:0; }
 .page--phone [data-key="storage"] .vz-share { grid-template-columns:170px minmax(280px,500px); justify-content:start; }
 .page--phone .grp__acts { position:absolute; top:16px; right:18px; }
 .page--phone [data-key="usage"] .use-two { grid-template-columns:minmax(0,39fr) minmax(0,61fr); gap:22px; }
@@ -135,7 +137,7 @@
         <ul class="hero__warns" data-part="warns" hidden></ul>
         <p class="hero__note" data-part="note" hidden></p>
         <div class="hero__devs" data-part="devs"></div>
-        <p class="row__sub" data-part="system"></p>
+        <div class="row__sub phone-spec-host" data-part="system"></div>
       </div>
     </div>
   </article>

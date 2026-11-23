@@ -995,6 +995,16 @@ a.dev-pill:hover { background: #fff; color: var(--ink); }
 .page--phone .hero__devs { max-width: 380px; gap: 8px; }
 .page--phone .hero__devs .dev-pill { font-size: 13px; }
 .page--phone .card--machine .row__sub { margin-top: 15px; max-width: 380px; font-size: 13px; line-height: 22px; }
+/* 首屏底下的型号和规格：照电脑页台式机那一块，左边灰底小签、右边读数（M643） */
+.page--phone .phone-spec { display: grid; gap: 4px; margin: 0; }
+.page--phone .phone-spec > div { display: grid; grid-template-columns: max-content minmax(0, 1fr); align-items: baseline; gap: 8px; }
+.page--phone .phone-spec dt { padding: 0 6px; border-radius: 12px; background: rgb(20 20 19 / .08); font-size: 11px; line-height: 17px; }
+.page--phone .phone-spec dd { margin: 0; overflow-wrap: anywhere; }
+.page--phone .phone-spec small { margin-left: 6px; font-size: 11px; color: var(--muted); }
+.page--phone .phone-spec__at { margin: 6px 0 0; font-size: 11px; line-height: 16px; color: var(--muted); }
+/* 内存那行下面的用量条，样子照电脑页的比例条 */
+.page--phone .phone-meter { display: block; width: min(320px, 100%); height: 6px; margin-top: 7px; border-radius: 999px; background: rgb(20 20 19 / .07); overflow: hidden; --c: #8b6cf0; }
+.page--phone .phone-meter > i { display: block; width: calc(var(--v, 0) * 100%); height: 100%; border-radius: inherit; background: linear-gradient(90deg, color-mix(in srgb, var(--c) 35%, transparent), var(--c)); }
 .page--phone .phone-chart { margin: 0 0 28px; min-width: 0; }
 .page--phone .phone-chart[hidden], .page--phone .phone-chart > [hidden] { display: none; }
 .page--phone .phone-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 30px; margin: 18px 0; }

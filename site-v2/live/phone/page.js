@@ -468,19 +468,51 @@
       ${['battery_cycles', 'battery_health'].filter(id => val(id) != null).map(id =>
         detail(id === 'battery_cycles' ? '循环次数' : '电池健康', readValue(id))).join('')}</dl>`;
     if (key === 'storage') return `<dl class="phone-details">
-      <div><dt>内存</dt><dd>${[!pcOffline() || val('memory_used') != null ? `已用 ${readHtml('memory_used', '内存已用')}` : '', !pcOffline() || val('memory_total') != null ? `共 ${readHtml('memory_total', '内存总量')}` : ''].filter(Boolean).join(' · ')}</dd></div></dl>
+      <div><dt>内存</dt><dd>${[!pcOffline() || val('memory_used') != null ? `已用 ${readHtml('memory_used', '内存已用')}` : '', !pcOffline() || val('memory_total') != null ? `共 ${readHtml('memory_total', '内存总量')}` : ''].filter(Boolean).join(' · ')}${memoryMeter()}</dd></div></dl>
       ${d?.growth_text ? paragraph(d.growth_text) : ''}
       <p class="phone-links"><a href="${route('/live/backup/?id=personal_media')}">手机照片备份到哪天 ›</a></p>`;
-    const s = d?.system, kinds = { added: '新装', updated: '更新', removed: '卸载' };
-    const changes = d?.changes7 == null ? paragraph(null) : [...new Set(d.changes7.map(a => a.kind || 'unknown'))].map(kind => {
-      const rows = d.changes7.filter(a => (a.kind || 'unknown') === kind).sort((a,b) => Date.parse(b.at) - Date.parse(a.at));
-      return `<section><h3 class="use-two__k">${fh(kinds[kind] || (kind === 'unknown' ? '未分类' : kind), '变化类别')}</h3>${shortList(rows, a => `<p class="use-note">${stampHtml(a.at)} · ${listName(a, d.changes7, d)}</p>`, '条')}</section>`;
-    }).join('') || paragraph('近 7 天没有变化');
-    return `<h3 class="use-two__k">近 7 天的变化</h3>${markNote('应用变化名称', d?.changes7?.map(a => a.name ?? a))}<div class="phone-changes">${changes}</div>
+    const s = d?.system;
+    // 更新看近 7 天；新装、卸载很少，看近 90 天（本人 11-24 00:39）。近 90 天的覆盖不全写清从哪天起有，旧后台没有 changes90 按“未读到”（M642）。
+    const changeRows = rows => shortList([...rows].sort((a, b) => Date.parse(b.at) - Date.parse(a.at)), a => `<p class="use-note">${stampHtml(a.at)} · ${listName(a)}</p>`, '条');
+    const updated = Array.isArray(d?.changes7) ? d.changes7.filter(a => a.kind === 'updated') : null;
+    const c90 = d?.changes90, items90 = Array.isArray(c90?.items) && c90.q !== 'unknown' ? c90.items : null, partial90 = !!items90 && c90.q === 'partial';
+    const from90 = partial90 && Number.isFinite(Date.parse(c90.coverage?.from)) ? U.date(c90.coverage.from) : '';
+    const recent = (kind, word) => {
+      if (!items90) return paragraph(`近 90 天的${word}记录未读到`);
+      const rows = items90.filter(a => a.kind === kind);
+      return rows.length ? changeRows(rows) : paragraph(partial90 ? `这段记录里没有${word}` : `近 90 天没有${word}`);
+    };
+    const section = (title, body) => `<section><h3 class="use-two__k">${title}</h3>${body}</section>`;
+    const changes = section('更新 · 近 7 天', updated == null ? paragraph(null) : updated.length ? changeRows(updated) : paragraph('近 7 天没有更新'))
+      + `<div class="phone-changes__side">${partial90 ? paragraph(`近 90 天记录不全${from90 ? `，从 ${from90} 起才有` : ''}`) : ''}${section('新装 · 近 90 天', recent('added', '新装'))}${section('卸载 · 近 90 天', recent('removed', '卸载'))}</div>`;
+    return `<h3 class="use-two__k">应用装卸和更新</h3>${markNote('应用变化名称', [...(d?.changes7 || []), ...(items90 || [])].map(a => a.name ?? a))}<div class="phone-changes">${changes}</div>
       <dl class="phone-details">${[['model', '型号'], ['android', 'Android'], ['build', '系统版本']]
         .map(([k, label]) => detail(label, s?.[k])).join('')}${detail('开机多久', s?.uptime_s && typeof s.uptime_s === 'object' ? s.uptime_s : V.dur(s?.uptime_s))}
         ${s?.last_boot ? detail('上次重启', stampValue(s.last_boot)) : ''}</dl>
       <p class="phone-links"><a href="${route('/live/phone/apps/')}">全部${val('apps_count') == null ? '' : ` ${readHtml('apps_count', '应用数量')} 个`}应用 ›</a></p>`;
+  }
+  // 内存那行下面一条用量条，样子照电脑页的比例条（M643）。
+  function memoryMeter() {
+    const used = val('memory_used'), total = val('memory_total');
+    if (typeof used !== 'number' || typeof total !== 'number' || !(total > 0)) return '';
+    const share = Math.max(0, Math.min(1, used / total));
+    return `<span class="phone-meter" role="img" aria-label="内存已用 ${Math.round(share * 100)}%"><i style="--v:${share.toFixed(3)}"></i></span>`;
+  }
+  // 首屏底下的型号和规格，样子照电脑页台式机那一块（M643）。规格从机器上低频取（data.device），回包里有哪项才显示哪项，带截至哪天。
+  const screenText = v => !v || typeof v !== 'object' ? '' : v.visibility || v.hidden ? fh(v, '屏幕') : [Number.isFinite(v.width_px) && Number.isFinite(v.height_px) ? `${v.width_px}×${v.height_px}` : '', Number.isFinite(v.refresh_hz) ? `${v.refresh_hz} Hz` : ''].filter(Boolean).join(' · ');
+  function specHtml(s, dev) {
+    const ram = dev?.ram_nominal_gb, rom = dev?.storage_nominal_gb;
+    const rows = [
+      ['型号', [dev?.market_name && fh(dev.market_name, '手机型号'), s?.model && fh(s.model, '手机型号')].filter(Boolean).join(' · ')],
+      ['处理器', dev?.soc ? fh(dev.soc, '处理器') : ''],
+      ['规格', ram != null || rom != null ? `${[ram != null && `${fh(ram, '运行内存')} GB 运行内存`, rom != null && `${fh(rom, '存储')} GB 存储`].filter(Boolean).join(' + ')}<small>标称</small>` : ''],
+      ['电池', Number.isFinite(dev?.battery_mah) ? `${Math.round(dev.battery_mah).toLocaleString('en-US')} mAh` : dev?.battery_mah ? fh(dev.battery_mah, '电池容量') : ''],
+      ['屏幕', screenText(dev?.screen)],
+      ['系统', [dev?.os_version && fh(dev.os_version, '系统'), s?.android != null && !/android/i.test(typeof dev?.os_version === 'string' ? dev.os_version : '') && `Android ${fh(s.android, 'Android 版本')}`, s?.build && fh(s.build, '系统版本')].filter(Boolean).join(' · ')],
+      ['补丁', s?.patch ? fh(s.patch, '安全补丁') : ''],
+    ].filter(([, html]) => html);
+    const at = Number.isFinite(Date.parse(dev?.source_at)) && (dev.market_name || dev.soc || ram != null || rom != null || dev.os_version || dev.battery_mah || dev.screen) ? `<p class="phone-spec__at">规格截至 ${esc(U.date(dev.source_at))}</p>` : '';
+    return rows.length ? `<dl class="phone-spec">${rows.map(([label, html]) => `<div><dt>${label}</dt><dd>${html}</dd></div>`).join('')}</dl>${at}` : '';
   }
   function compareText(text) {
     if (typeof text !== 'string' || !/^(?:今天亮屏)?比近\s*7\s*天平均[多少]\s*\d+(?:\.\d+)?\s*分钟[。.]?$/.test(text.trim())) return text;
@@ -673,7 +705,7 @@
     // 电脑连不上时下面摆的是存下的数，“电脑”这颗跟页顶那句一致写连不上，不照存下来时的“连着”
     U.html(part('devs'), [{ ...phone?.link, name: ({ computer: '电脑', phone: '手机' })[phone?.link?.device || phone?.link?.id || 'computer'] || phone?.link?.label || phone?.link?.name || phone?.link?.title || phone?.link?.text || phone?.link?.device || phone?.link?.id, state: phone?.state, text: linkOff ? '连不上' : `${connected ? '连着' : phone?.state === 'offline' ? '连不上' : unread()}${routeName ? ` · 经 ${routeName}` : ''}` },{ name: '个人采集', ...phone?.collect?.collector }, ...helpers.filter(h => ['MacroDroid', 'TailSocks'].includes(h.name))].map(h => `<span class="dev-pill">${U.status(h, { small: true }).lamp}<b>${fh(h.name, '辅助应用', 'label')}</b>${fh(h.text || (h.state === 'online' ? '在跑' : h.state === 'offline' ? '没在跑' : unread()), '设备状态')}</span>`).join(''));
     const s = phone?.apps?.system;
-    U.html(part('system'), [s?.model && fh(s.model, '手机型号'), s?.android != null ? `Android ${fh(s.android, 'Android 版本')}` : '', s?.patch ? `安全补丁 ${fh(s.patch, '安全补丁')}` : ''].filter(Boolean).join(' · ') || fh(pcOffline() ? '' : U.collectionText('型号和系统')));
+    U.html(part('system'), specHtml(s, phone?.device));   // 规格只摆取到过的项，不写“未读到”（本人 11-24 01:40）
     U.html(part('lines'), tags.map(t => `<line x1="${t[3][0]}" y1="${t[3][1]}" x2="${t[4][0]}" y2="${t[4][1]}"/>`).join(''), false);
     U.html(part('tags'), tags.map(([key, label, id, pt, pos]) => {
       const value = id === 'sim2' ? (sp(val('net_kind')).startsWith('sim') ? netText() : reading('default_data_sim')) : reading(id);
