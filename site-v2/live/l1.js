@@ -46,7 +46,8 @@
   const cards = Object.fromEntries(IDS.map((id) => [id, $(id)]));
   const columns = [...document.querySelectorAll('.board__col')], balancedCards = IDS.filter(id => id !== 'projects').map(id => cards[id]);
   // 首页默认预览：先满足已有下限，只有两栏无法用默认条数贴齐时才考虑加行。
-  const previewRange = { needs: [3, 5], active: [3, 5], done: [3, 5], tasks: [3, 5], backups: [3, 5], projectChanges: [3, 5], projectGroup: [5, 5] };
+  // 左栏有智能体、AI 账本两张卡（本人 11-22 23:33）：做完的对话最少可以只列 1 条来配平两栏；在干的对话照旧全列（M489，第 6 批原样）
+  const previewRange = { needs: [3, 5], active: [3, 5], done: [1, 5], tasks: [3, 5], backups: [3, 5], projectChanges: [3, 5], projectGroup: [5, 5] };
   const cardGroups = { needs: ['needs'], chats: ['active', 'done'], tasks: ['tasks'], backups: ['backups'] };
   const defaultCounts = Object.fromEntries(Object.entries(previewRange).map(([id, [, max]]) => [id, max]));
   const previewCards = [cards.chats, cards.automation], alignTolerance = 8;
@@ -169,8 +170,9 @@
     return { height, available: Object.fromEntries(keys.map((key, i) => [key, groups[i].length])) };
   }
   function balanceDesktopCards(measured, gap, allowOverflow = true) {
-    // 卡片位置固定（M044）：备份在左栏、计划任务跟自动任务在右栏，只靠条数配平两栏，不按高度换栏。
-    const layouts = [[['needs', 'chats', 'backups', 'agents'], ['computer', 'phone', 'automation', 'ledger', 'tasks']]];
+    // 卡片位置固定（M044）：备份在左栏、计划任务跟自动任务在右栏；智能体和 AI 账本在左栏、自动任务在右栏（本人 11-22 23:33，M489）。
+    // 只靠条数配平两栏，不按高度换栏。
+    const layouts = [[['needs', 'chats', 'backups', 'agents', 'ledger'], ['computer', 'phone', 'automation', 'tasks']]];
     const available = Object.assign({}, ...Object.values(measured[0]).map(m => m.available));
     const keys = Object.keys(available), total = counts => keys.reduce((sum, key) => sum + counts[key], 0);
     const getHeight = (layout, counts) => layout.map((ids, side) => ids.reduce((sum, id) => sum + (measured[side][id].fixed ?? measured[side][id].height(counts)), (ids.length - 1) * gap));
