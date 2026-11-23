@@ -32,6 +32,50 @@
     ['agents.privacy-data.md', ['个人资料与数据处理', 'privacy-data']], ['agents.context-sources.md', ['事实来源与任务上下文', 'context-sources']],
     ['agents.engineering-delivery.md', ['工程与交付', 'engineering-delivery']], ['agents.execution-coordination.md', ['分工与并行施工', 'execution-coordination']],
   ]);
+  // 每条钩子“为什么要它”：用人话说这条防的是什么。照钩子说明表（E:\.agents\config\hook-catalog.json）和三家适配专题写，后台给了 hook.why 就用后台的。
+  const SAME = {
+    prompt: 'AI 自己不知道现在几点、个人资料锁没锁、你上回还有几道题没答；这条在你每发一条消息时补上，免得它把时间算错、在资料锁着时去用私人资料，或把还没结的题忘了。',
+    helper: '派出去的帮手是从零开始的，不知道现在几点、自己是什么型号和档位、个人资料能不能用；这条在它开场时告诉它，免得它把时间写错或越过资料锁。',
+    compact: '压缩不删对话，可压缩以后 AI 只看得到摘要；这条在压缩前把这次任务放在哪、做到哪写进摘要，让它接得上。翻译官管“你要什么”，这条管“这次做到哪”。',
+    stop: 'AI 收工时容易留尾巴：资料锁拦过的事没办、后台的活没人盯、回复写成了英文；这条收工前查一遍，有就让它再补一轮。正常收工就记进实况、按条件推手机。',
+  };
+  const WHY = {
+    C01: 'AI 每次开对话都是一张白纸，不知道这是哪个项目、《他要什么》放在哪；这条在打开、恢复和压缩后递上路径，免得它凭印象找、找错项目动手。',
+    C02: '规矩会改版，开着的对话读到的可能还是旧版；这条开场时核一下入口是不是当前版，不是就指出新版在哪，免得照旧规矩办事。',
+    C03: SAME.prompt,
+    C04: '有些动作照规矩不该这样做（用错浏览器、派活走错路、反复读同一张图这类）；这条在动手前拦下，当场改对，不用事后返工。',
+    C05: 'AI 埋头干活时容易忘了登记工程、报估时、该查网时查网、长等时盯着；这条在工具用完时顺手提一句，不拦它。',
+    C06: SAME.compact,
+    C09: SAME.stop,
+    C10: 'AI 收工后后台还有活在跑、却没人等结果，结果就没人收；这条等主对话空着够久还没人管，就叫醒原对话一次去收，每件只叫一次。',
+    C11: SAME.helper,
+    C12: '记下帮手干完没有，“空等时叫醒”靠它判断后台还有没有活，免得白叫醒或该叫的没叫。',
+    C13: '让 Claude 桌面版里的花费面板跟着对话一起出来，不用自己去找就看得到这次花了多少。',
+    C14: '窗口晚一步才挂到对话上时补挂花费面板，免得这次对话看不到花费。',
+    C15: '前面没挂上的，每轮开始再补挂一次，保证花费面板在。',
+    C16: '花费有变化时让面板下次画的时候刷新，免得一直显示旧数。',
+    C17: '真正把花费画到面板上；没有它面板是空的。',
+    C18: '对话出错停下了，你不在跟前就不知道它停了；这条把停下的原因交给实况推手机，碰上服务繁忙或限流还会等十分钟自己重试一次。',
+    X01: 'Codex 开对话时不知道规矩是不是当前版、这是哪个项目；这条开场时核一下规矩入口，再递上工程和《他要什么》的位置，免得照旧规矩办事或在别的项目里动手。',
+    X02: SAME.prompt,
+    X03: SAME.helper,
+    X04: '有些调用照规矩不该这样做（走错浏览器入口、派帮手走错路、查订阅、用过时的型号）；这条在动手前拦下，当场改对。',
+    X05: '工具用完时顺手提醒该查网、该报估时、该压缩了，并认出你已经答过的弹题和处理过的审批，免得同一件事反复问你。',
+    X06: SAME.compact,
+    X08: 'Codex 停下来等批准时，你不在电脑前它就一直卡着；这条把要你批准的事推到手机。',
+    X09: SAME.stop,
+    X11: 'Codex 碰到要批准的动作，由它自带的审核模型代批，不用每次停下来等你；它看着不妥的照样拦下。',
+    X12: '给 Codex 的浏览器和电脑操作插件报一声“这一轮结束了”，让它把手上的操作收尾。',
+    X13: '你按停时通知浏览器和电脑操作插件也停手，免得对话停了它还在点。',
+    X14: '帮手干完时，让浏览器和电脑操作插件把那个帮手的操作收尾。',
+    X15: '你按停以后，还在等的审批提醒就过时了；这条把它撤掉，免得停了还收到要你批准的推送。',
+    A01: 'Antigravity 开对话时核一下规矩入口是不是当前版；桌面上的主对话再提醒它标一下这次能不能给外人看，免得照旧规矩办事，或把私事写在外人看得到的地方。',
+    A02: 'Antigravity 没有“收到消息”和“压缩前”这两个当口；这条在每次叫模型前补上时间、资料状态、没答的题和刚才的工具错误，顶上那两个当口的活。',
+    A04: '有些工具照规矩不该这样用（比如用它自带的生图、查订阅）；这条在动手前拦下。派帮手时还顺手告诉帮手时间、资料状态和型号。',
+    A05: '工具报错了模型自己未必注意到；这条把错误递给下一次叫模型，并登记你已经答过的弹题。',
+    A06: SAME.stop,
+  };
+  const whyOf = hook => F(hook.why, '为什么要它') || esc(WHY[hook.id] || '');
   const REASONS = [['larger_orders', '单子比想的大'], ['rework', '返工'], ['missed_follow_up', '漏想的后续活'], ['long_tests', '长测试'], ['scope_added', '中途加需求']];
   const SIZES = [['small', '小单'], ['medium', '中单'], ['large', '大单']];
 
@@ -74,16 +118,24 @@
     const tone = c.fail.length || issues.length ? (owner ? 'owner' : 'repair') : c.unknown ? 'off' : 'ok';
     const word = owner ? `要${T.you(viewer)}看` : c.fail.length ? `差 ${c.fail.length} 处` : c.unknown ? `${c.unknown} 项没读到` : '全对上';
     const ringColor = tone === 'ok' ? T.TONE.ok : tone === 'off' ? T.TONE.off : T.TONE.repair;
-    const list1 = issues.length ? issues.map(i => `<li><span class="tp-dot" data-tone="${owner ? 'owner' : 'repair'}"></span><span>${F(i.text)}${i.handler || i.round
-        ? `<small>${[i.handler && `${F(i.handler)}在修`, i.round && `第 ${int(i.round)} 轮`].filter(Boolean).join(' · ')}</small>` : ''}</span></li>`).join('')
+    // 每处毛病写谁在修、第几轮，能点的点到那一轮或那件事；只有一处时写在“差 1 处”下面，不在清单里再写一遍
+    const fixer = i => i.handler_text ? F(i.handler_text, '谁在修') : i.handler ? `${F(i.handler, '谁在修')}${i.repairing === false ? '' : '在修'}` : '';
+    const fixText = i => [fixer(i) || (owner ? '' : '还没人接手'), known(i.round) && `第 ${int(i.round)} 轮`].filter(Boolean).join(' · ');
+    const fixLink = (i, html) => html && T.path(i.href) ? `<a href="${esc(T.path(i.href))}">${html} ›</a>` : html;
+    const list1 = issues.length ? issues.map(i => `<li><span class="tp-dot" data-tone="${owner ? 'owner' : 'repair'}"></span><span>${F(i.text)}${issues.length > 1 && fixText(i)
+        ? `<small>${fixLink(i, fixText(i))}</small>` : ''}</span></li>`).join('')
       : c.fail.map(r => `<li><span class="tp-dot" data-tone="repair"></span><span>${r.href ? `<a href="${esc(r.href)}">${esc(r.text)}</a>` : esc(r.text)}</span></li>`).join('');
+    const lead = issues.find(i => fixer(i)) || issues.find(i => T.path(i.href)) || issues[0];
+    const fix = owner || !(c.fail.length || issues.length) ? ''
+      : `<p class="ag-fix">${lead ? fixLink(lead, fixText(lead)) : '还没人接手'}</p>`;
     const stats = d.hook_stats?.totals?.[h.id] || {};
     return `<article class="ag-score tp-flashable" data-host="${h.id}">
       <header><span>${h.name}</span><small>${[x.entry?.version && `规矩 ${esc(x.entry.version)}`, known(stats.installed) && `钩子装着 ${stats.installed} 条 · 定稿 ${stats.expected} 条`].filter(Boolean).join(' · ')}</small></header>
-      <div class="ag-score__main"><div><p class="ag-score__word" data-tone="${tone}">${word}</p>
+      <div class="ag-score__main"><div><p class="ag-score__word" data-tone="${tone}">${word}</p>${fix}
         <p class="tp-small">${c.fail.length ? `${c.total} 项里 ${c.pass} 项照规矩` : `${c.total} 项都照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
         ${T.ring(c.pass, c.total, { color: ringColor })}</div>
-      ${list1 ? `<ul class="ag-diff">${list1}</ul>` : '<p class="ag-ok">规矩、记忆、审批和钩子都和定稿一样。</p>'}</article>`;
+      ${list1 ? `<ul class="ag-diff">${list1}</ul>` : '<p class="ag-ok">规矩、记忆、审批和钩子都和定稿一样。</p>'}
+      <p class="ag-backwork">${link(`/live/automation/?family=${h.id}`, '看它的后台工作 ›')}</p></article>`;
   }
   function statusSection(d) {
     return `<section class="tp-panel" id="status"><div class="tp-panel__head"><h2>三家现在管得对不对</h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
@@ -261,7 +313,8 @@
     const version = entries.map(e => e.current === true ? `${esc(e.version || '')} 当前版` : e.current === false ? `不是当前版 ${esc(e.version || '')}` : '没读到');
     const rows = [
       row('开场先读的规矩', version, { diff: entries.map(e => e.current === false) }),
-      row('入口规则多少字', entries.map(e => known(e.characters) ? `${int(e.characters)} 字` : '没读到')),
+      // 开场页那一格点进开场页，直接落在这一家（本人 11-24 01:36 定 FEDQ2 选 A）
+      row('入口规则多少字', HOSTS.map((h, i) => `${known(entries[i].characters) ? `${int(entries[i].characters)} 字` : '没读到'}${link(`/live/agents/opening/?family=${h.id}`, '看开场页 ›')}`)),
       row('自带记忆', HOSTS.map(memory), { diff: HOSTS.map(h => x(h).memory === true) }),
       row('对话装多满会压缩', HOSTS.map(compact)),
       row('动手前停不停下等批准', HOSTS.map((h, i) => waits[i] ? `不停，直接动手<a class="tp-link" href="#hooks-pre-tool">要拦的几样在钩子“动工具前” ›</a>` : '会停下等批准'),
@@ -310,7 +363,9 @@
       known(m.continued) && `让 AI 多跑 ${int(m.continued)} 轮`].filter(Boolean).join(' · ') : F(hook.metrics_state) || '近 7 天没有运行记录';
     const tag = hook.id ? (hook.installed ? (hook.enabled === false ? '<span class="tp-tag" data-tone="soft">装着，平时不跑</span>' : '<span class="tp-tag" data-tone="ok">装着</span>')
       : '<span class="tp-tag" data-tone="repair">定稿要装，还没装上</span>') : '<span class="tp-tag" data-tone="repair">装着，说明表里没写</span>';
+    const why = whyOf(hook);
     return `<article class="ag-hook" data-host="${String(hook.host || '').toLowerCase()}"><h3>${nameOf(hook)} ${tag}</h3>
+      ${why ? `<p class="ag-why"><b>为什么要它</b>${why}</p>` : ''}
       <dl>${facts.filter(([, v]) => v).map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
       <p class="ag-hook__num">近 7 天 · ${numbers}</p>
       ${sample?.text != null ? `<details class="tp-details" id="sample-${esc(hook.host + '-' + hook.key)}"><summary>最近一次塞给 AI 的原样 · ${esc(when(sample.at))}</summary><pre>${F(sample.text, '这次塞的内容')}</pre></details>` : ''}</article>`;
