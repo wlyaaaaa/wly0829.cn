@@ -21,7 +21,10 @@
   const plain = (v, key, label = names[key] || '', meta = data[key]) => v == null || v === '' ? (offline() ? '—' : U.collectionText(label, meta)) : typeof v === 'object' ? sp(v) : String(v);
   const value = (v, key, label, meta) => esc(sp(plain(v, key, label, meta)));
   const list = d => d?.items, runtime = d => d?.items && Object.assign({ windows: d.items[0]?.windows }, Object.fromEntries(d.items.map(r => [r.runtime_id || r.name, r])));
-  const comparisonNote = rows => { const n = rows.filter(r => ['channel_mismatch', 'unknown'].includes(r.relation)).length; return n ? `${n} 个软件没法直接比版本` : ''; };
+  // 两边版本都没读到、或比较结果不是“相同／落后／更新”的，算没法比，不算进“0 个落后”（M436）。
+  const noVersion = v => v == null || v === '';
+  const compared = r => ['equal', 'behind', 'ahead'].includes(r.relation) && !(noVersion(r.current_version) && noVersion(r.target_version));
+  const comparisonNote = rows => { const n = rows.filter(r => !compared(r)).length; return n ? `${n} 个软件没法直接比版本` : ''; };
   const warn = r => !['equal', 'ahead'].includes(r);
   const count = (n, unit, meta, key = 'total') => window.ComputerStat.text(n, unit, meta, key);
   const indicator = (row, level) => U.status({
@@ -206,7 +209,7 @@
     const rows = list(data.software);
     hero.classList.toggle('is-unread', !offline() && !rows && Object.keys(phases).length === 3 && Object.values(phases).every(p => ['none', 'gone', 'ready'].includes(p)));
     $('note').textContent = rows ? comparisonNote(rows) : ''; $('note').hidden = !$('note').textContent;
-    if (rows) { const behind = rows.filter(r => r.relation === 'behind').length; U.html($('head'), status.lamp + U.head(`${window.ComputerStat.text(data.software.total ?? rows.length, '个', data.software, 'total')}软件 · ${count(behind, '个', data.software, 'behind')}版本落后`, { lamp: false })); heroRead.done(); }
+    if (rows) { const behind = rows.filter(r => compared(r) && r.relation === 'behind').length, none = rows.length && !rows.some(compared); U.html($('head'), status.lamp + U.head(`${window.ComputerStat.text(data.software.total ?? rows.length, '个', data.software, 'total')}软件 · ${none ? '还没读到版本，没法比新旧' : `${count(behind, '个', data.software, 'behind')}版本落后`}`, { lamp: false })); heroRead.done(); }
     else if (Object.keys(phases).length === 3 && Object.values(phases).every(p => ['none', 'gone', 'ready'].includes(p))) { U.html($('head'), status.lamp + U.head(offline() ? '软件与环境' : '软件与环境暂时读不到', { lamp: false })); heroRead.done(); }
     if (!lit && Object.keys(data).length) { lit = true; L.lightUp([hero, ...Object.values(boards).flatMap(b => b.cards())]); }
   }

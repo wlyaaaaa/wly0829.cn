@@ -62,7 +62,47 @@
     return v==null?'':esc(String(v));
   }
   const hiddenBatch=r=>viewer!=='owner'&&(r.hidden||marked(r));
-  const titleOf=r=>{const v=r.title??r.text??r.body;return v==null||v===''?'':shown(v,'提醒标题');};
+  // 标题在本人版的 reminders[].title 里（一次可能含几件事）；开头和类别重名的那段去掉，免得写两遍（M306）
+  const bare=(t,c)=>c&&typeof t==='string'&&t.startsWith(c)&&/^\s*[｜|·:：]/.test(t.slice(c.length))?t.slice(c.length).replace(/^\s*[｜|·:：]\s*/,'')||t:t;
+  const reminderTitles=r=>[...new Set((Array.isArray(r.reminders)?r.reminders:[]).map(x=>x?.title).filter(t=>t!=null&&t!==''))];
+  const titleOf=r=>{const v=r.title??r.text??r.body;if(v!=null&&v!=='')return shown(v,'提醒标题');const c=className(r);return reminderTitles(r).map(t=>shown(bare(t,c),'提醒标题')).filter(Boolean).join('；');};
+  // 同一件事走另一路（邮件那次看手机，手机那次看邮件）怎样：后台在 reminders[].other_channel 给；没给就写没有记录（M306）
+  const channelName=c=>['mail','email'].includes(c)?'邮件':c==='phone'?'手机':typeof c==='string'?c:'';
+  function others(r){
+    const name=isMail(r)?'手机':'邮件',list=Array.isArray(r.reminders)&&r.reminders.length?r.reminders:[{}];
+    return list.map(x=>{
+      const o=x?.other_channel,ok=!!o&&typeof o==='object',k=ok?kindOf(o):'';
+      return {title:x?.title,name:ok&&channelName(o.channel)||name,state:ok?stateWords[k]:'没有记录',at:ok&&Number.isFinite(parse(o.at))?o.at:null,code:ok&&k!=='sent'?o.error_code:null};
+    });
+  }
+  function otherLine(r){
+    const list=others(r),name=list[0].name;
+    if(list.length===1)return `同一件事走${name}：${[list[0].at&&stamp(list[0].at),list[0].state].filter(Boolean).join(' ')}`;
+    const counts=new Map();for(const o of list)counts.set(o.state,(counts.get(o.state)??0)+1);
+    return `这 ${list.length} 件事走${name}：${counts.size===1?`都${list[0].state}`:[...counts].map(([s,n])=>`${s} ${n} 件`).join('、')}`;
+  }
+  // 原始原因代码的人话；没收录的只给代码
+  const detailWords={effect_unknown:'Gmail 发信接口没回“已发出”，也没给邮件编号，可能发出去了也可能没有',provider_response_invalid:'发信程序的回话看不懂',provider_response_oversize:'发信程序的回话太长，没法读',
+    process_timeout:'发信程序超时',mail_timeout:'发信程序超时',phone_timeout:'等手机回话超时',process_start_failed:'发信程序没启动起来',mail_worker_start_failed:'发信程序没启动起来',
+    process_interrupted:'正发的时候通知程序重启了',mail_exception:'发信程序出错了',phone_exception:'推手机的程序出错了',dry_run:'只是试发，没有真的发'};
+  const clock=t=>{const n=parse(t);if(!Number.isFinite(n))return '';const s=new Date(n+8*HOUR).toISOString(),day=s.slice(5,10);return `${day===beijingDay(Date.now()).slice(5)?'':day+' '}${s.slice(11,19)}`;};
+  const detailKey=r=>`${r.channel}|${at(r)}`;
+  const detailOpen=new Set();
+  // 明细 = 原始记录：提醒原标题、几个时刻精确到秒、原始原因代码。同一件事另一路怎样卡片上已经写了，一次含几件事或另一路也出了错时才在这里逐件写
+  function detailHtml(r){
+    const list=others(r),key=detailKey(r);
+    const title=o=>viewer!=='owner'?lock('提醒原标题'):`提醒原标题：${o.title?esc(o.title):'没记下'}`;
+    const road=o=>`走${esc(o.name)}：${esc([o.at&&clock(o.at),o.state].filter(Boolean).join(' '))}${o.code?`（原始原因 <code>${esc(o.code)}</code>）`:''}`;
+    const which=list.length>1?`<p>这次一起发了 ${list.length} 件事：</p><ul>${list.map(o=>`<li>${title(o)}<span class="notify-other"> · 同一件事${road(o)}</span></li>`).join('')}</ul>`
+      :`<p>${title(list[0])}</p>${list[0].code?`<p>同一件事${road(list[0])}</p>`:''}`;
+    const times=[[r.queued_at,'排上队'],[r.started_at,'开始发'],[r.at,'结束']].filter(([t])=>typeof t==='string'&&Number.isFinite(parse(t))).map(([t,w])=>`${clock(t)} ${w}`).join(' → ');
+    const code=typeof r.error_detail_code==='string'&&r.error_detail_code?r.error_detail_code:typeof r.error_code==='string'?r.error_code:'',meaning=detailWords[code];
+    return `<details class="notify-detail" data-detail-key="${esc(key)}"${detailOpen.has(key)?' open':''}><summary class="more live-disclosure delivery-more"><span class="delivery-more__closed">看明细</span><span class="delivery-more__open">收起明细</span><span class="more__chev" aria-hidden="true">›</span></summary>`
+      +`<div class="delivery-detail">${which}`
+      +(times?`<p>时间：${esc(times)}</p>`:'')
+      +(code?`<p>原始原因：<code>${esc(code)}</code>${meaning?`，${esc(meaning)}`:''}${typeof r.result==='string'&&r.result?`；记录里写的结果是“${esc(r.result)}”`:''}</p>`:'')
+      +'</div></details>';
+  }
   function notificationLinks(r){
     if(!Array.isArray(r.keys)||viewer!=='owner')return '';
     const ids=[...new Set(r.keys.filter(key=>typeof key==='string'&&key.startsWith('pending:')).map(key=>key.slice(8).replace(/:urgent$/,'')).filter(Boolean))];
@@ -79,17 +119,17 @@
   const rates=V.figures($('delivery-rates'));
   let page=null,all=null,issues=[],history=[],payload=null,viewer='public',now=null,cutoff=null,phase='idle',first=true,headline='',attentionScope='',historyScope='';
   let reading=null,shown_=null,collecting=false,redraw=false,emailScope=null,emailOpenScope=null;
-  const bar=U.topbar({ask:()=>`帮我看看通知发送回执：${headline||U.collectionText()}，没到的是哪几条、为什么。`});
+  const bar=U.topbar({ask:()=>`帮我看看通知发送回执：${headline||U.collectionText()}，没到的是哪几次、为什么。`});
   function hourReading(id,point,t,surface){
     if(surface!=='hero'||point?.value==null||!Number.isFinite(point.at)||!payload)return null;
     const start=point.at*1000,end=Math.min(Math.floor(start/HOUR)*HOUR+HOUR,parse(payload.to));
     const a=new Date(start).toISOString(),b=new Date(end).toISOString();
-    return {value:point.value,unit:'条',caption:interval(a,b)||stamp(a)};
+    return {value:point.value,unit:'次',caption:interval(a,b)||stamp(a)};
   }
   L.add(hero);
   document.querySelectorAll('.stage a[href^="/live/"]').forEach(a=>{if(fixture){const u=new URL(a.href);u.searchParams.set('fixture',params.get('fixture'));a.href=u;}});
   const mode=key=>{const bins=new Map();all.filter(r=>r.status==='sent'&&typeof r[key]==='number').forEach(r=>bins.set(r[key],(bins.get(r[key])??0)+1));return [...bins].sort((a,b)=>b[1]-a[1])[0]?.[0];};
-  const privateLine=(r,unit='条')=>r.private_count?lock(`另有 ${r.private_count} ${unit}提醒`):lock('这条提醒');
+  const privateLine=(r,unit='次')=>r.private_count?lock(`另有 ${r.private_count} ${unit}提醒`):lock('这条提醒');
   const batchFolds=new Set();
   function rememberBatchFold(e){
     const key=e.target.dataset.batchFold;if(!key)return;
@@ -97,17 +137,23 @@
   }
   function attentionChapter(el){
     el.innerHTML='<div data-attention-groups></div><p class="delivery-note" data-attention-private hidden></p>';
+    // 明细开着的那几张，数据刷新重画后照样开着；点卡片空白处也能开合明细
+    el.addEventListener('toggle',e=>{const key=e.target.dataset?.detailKey;if(!key)return;if(e.target.open)detailOpen.add(key);else detailOpen.delete(key);},true);
+    el.addEventListener('click',e=>{
+      if(e.target.closest('a,summary,.delivery-detail')||getSelection?.().toString())return;
+      const detail=e.target.closest('.stut__card')?.querySelector('.notify-detail');if(detail)detail.open=!detail.open;
+    });
     function draw(){
       const cards=issues.map(r=>r.private_count||hiddenBatch(r)?`<div class="delivery-private">${privateLine(r)}</div>`
         :`<div class="stut__card" data-status="${esc(kindOf(r))}"><span class="stut__t"><small>${at(r)&&typeof at(r)==='object'?'':U.date(at(r))===U.date(new Date().toISOString())?'':esc(U.date(at(r)))}</small>${at(r)&&typeof at(r)==='object'?shown(at(r),'时刻'):esc(U.time(at(r)))}</span>`
           +`<span class="stut__s">${shown(stateWord(r),'到没到')}</span><span class="stut__w"><b class="notify-what">${what(r)} · 走${shown(channel(r),'渠道')}</b>`
-          +`<span class="notify-why">${esc(stuck(r))}</span>${notificationLinks(r)?`<span class="notify-link">${notificationLinks(r)}</span>`:''}`
-          +`${took(r)?`<small class="notify-took">${shown(took(r),'耗时')}</small>`:''}</span></div>`);
+          +`<span class="notify-why">${esc(stuck(r))}</span><span class="notify-other">${esc(otherLine(r))}</span>${notificationLinks(r)?`<span class="notify-link">${notificationLinks(r)}</span>`:''}`
+          +`${took(r)?`<small class="notify-took">${shown(took(r),'耗时')}</small>`:''}</span>${detailHtml(r)}</div>`);
       U.html(el.querySelector('[data-attention-groups]'),issues.length?`<div class="stut">${cards.join('')}</div>`
         :`<p class="delivery-note">${Array.isArray(page?.attention_rows)?page.attention_window?.complete===false?`有记录的部分里，给${you()}的提醒都到了`:`近 24 小时给${you()}的提醒都到了`:page?.attention_rows===null?'没到的清单这次没读到':'已读到的记录里，提醒都到了'}</p>`);
       const note=el.querySelector('[data-attention-private]'),count=issues.filter(r=>!r.private_count&&!hiddenBatch(r)).length;
       note.hidden=viewer==='owner'||!count;
-      note.textContent=note.hidden?'':`这 ${count} 条各是哪件事，仅本人可见。`;
+      note.textContent=note.hidden?'':`这 ${count} 次各是哪件事，仅本人可见。`;
     }
     return {set:draw};
   }
@@ -117,19 +163,19 @@
     el.querySelector('[data-delivery-more]').onclick=()=>collect();
     function draw(){
       const q=mode('queue_seconds'),s=mode('send_seconds');
-      el.querySelector('[data-baseline]').textContent=q!=null&&s!=null?`平常一条从排队到发完大约 ${sec(q+s)}。`:'';
+      el.querySelector('[data-baseline]').textContent=q!=null&&s!=null?`平常一次提醒从排队到发完大约 ${sec(q+s)}。`:'';
       const table=rows=>'<table class="delivery-table"><thead><tr><th>时间</th><th>什么提醒</th><th>走哪路</th><th>到没到</th></tr></thead><tbody>'+rows.map(r=>{
         if(r.private_count||hiddenBatch(r))return `<tr><td colspan="4">${privateLine(r)}</td></tr>`;
         const k=kindOf(r),links=notificationLinks(r);
         return `<tr data-status="${esc(k)}"><td>${shown(stamp(at(r)),'时刻')}</td><td>${what(r)}${links?`<div>${links}</div>`:''}</td><td>${shown(way(r),'路线')}</td>`
-          +`<td><span class="notify-state">${shown(stateWord(r),'到没到')}</span>${k!=='sent'?`<div class="notify-why">${esc(stuck(r))}</div>`:''}${took(r)?`<small class="notify-took">${shown(took(r),'耗时')}</small>`:''}</td></tr>`;
+          +`<td><span class="notify-state">${shown(stateWord(r),'到没到')}</span>${k!=='sent'?`<div class="notify-why">${esc(stuck(r))}</div><div class="notify-other">${esc(otherLine(r))}</div>`:''}${took(r)?`<small class="notify-took">${shown(took(r),'耗时')}</small>`:''}</td></tr>`;
       }).join('')+'</tbody></table>';
       const groups=new Map();
       for(const r of history){const key=r.private_count||hiddenBatch(r)?'private':isMail(r)?'email':r.channel||'other';if(!groups.has(key))groups.set(key,[]);groups.get(key).push(r);}
-      const note=el.querySelector('[data-history-private]');note.hidden=viewer==='owner'||!history.length;note.textContent=note.hidden?'':'每一条对应哪件事，仅本人可见。';
+      const note=el.querySelector('[data-history-private]');note.hidden=viewer==='owner'||!history.length;note.textContent=note.hidden?'':'每一次对应哪件事，仅本人可见。';
       U.html(el.querySelector('[data-history-groups]'),[...groups].map(([key,items])=>{
         const id=`channel-${key}`,label=key==='private'?'其他提醒':key==='email'?'邮件':key==='phone'?'手机':channel(items[0])||'其他';
-        return `<section class="delivery-group"><p class="delivery-note">${esc(label)} · ${items.length} 条</p>${table(items.slice(0,5))}${items.length>5?`<details data-batch-fold="${esc(id)}"${batchFolds.has(id)?' open':''}><summary class="more live-disclosure delivery-more"><span class="delivery-more__closed">展开（还有 ${items.length-5} 条）</span><span class="delivery-more__open">收起</span><span class="more__chev" aria-hidden="true">›</span></summary>${table(items.slice(5))}</details>`:''}</section>`;
+        return `<section class="delivery-group"><p class="delivery-note">${esc(label)} · ${items.length} 次</p>${table(items.slice(0,5))}${items.length>5?`<details data-batch-fold="${esc(id)}"${batchFolds.has(id)?' open':''}><summary class="more live-disclosure delivery-more"><span class="delivery-more__closed">展开（还有 ${items.length-5} 次）</span><span class="delivery-more__open">收起</span><span class="more__chev" aria-hidden="true">›</span></summary>${table(items.slice(5))}</details>`:''}</section>`;
       }).join(''));
     }
     return {set:draw};
@@ -139,7 +185,8 @@
     const wait=all===null&&!['none','gone'].includes(phase),series=key=>payload?.series.find(s=>s.id===key)?.points.map(p=>p[1])||[];
     const known=series('total').filter(Number.isFinite),peak=known.length?Math.max(...known):null;
     const figure=(key,label,value,fields)=>({key,label,value,unit:'次',text:value!=null&&fields.some(k=>lower(page?.delivery24??page,k))?`至少 ${value} 次`:undefined});
-    const kinds=new Set(issues.map(kindOf)),title=!issues.length?'没到的提醒':kinds.size===1&&kinds.has('unsure')?`还没确认到没到的 ${issues.length} 次`:kinds.size===1&&kinds.has('failed')?`没到的 ${issues.length} 次`:`没到或还没确认的 ${issues.length} 次`;
+    // 有没到的时，几次、怎么了首屏那句已经说过，这块标题只说下面列的是什么（M278）
+    const title=issues.length?'具体是哪几次':'没到的提醒';
     boards.attention.set([{key:'attention',...page?.groups?.find(g=>g.key==='attention'),name:title,wait,line:attentionScope,palette:['apricot','violet'],figures:[],build:attentionChapter}]);
     boards.overview.set([{key:'overview',...page?.groups?.find(g=>g.key==='overview'),name:'每小时发了多少',wait,line:payload?.scope||U.collectionText(),palette:['teal','blue'],
       figures:[figure('peak',payload&&!payload.complete?'有记录的一小时最多':'一小时最多',peak,['total']),figure('latest-hour','最后一小时没到',series('attention').at(-1)??null,['attention','failed','pending','unconfirmed'])],
@@ -192,7 +239,7 @@
     }
     const cards=rows.map(r=>r.private_count||hiddenBatch(r)
       ?`<li>${privateLine(r,'封')}</li>`
-      :`<li><b>${esc(U.date(at(r))+' '+U.time(at(r)))}</b> · ${what(r)} · ${esc(stateWord(r))}<div class="notify-why">${esc(stuck(r))}</div></li>`);
+      :`<li><b>${esc(U.date(at(r))+' '+U.time(at(r)))}</b> · ${what(r)} · ${esc(stateWord(r))}<div class="notify-why">${esc(stuck(r))}</div><div class="notify-other">${esc(otherLine(r))}</div></li>`);
     const missing=(emailOpenScope??emailScope)?.count>rows.length;
     U.html($('email-gaps').querySelector('[data-email-gaps]'),(cards.length?`<ul class="rows list">${cards.join('')}</ul>`:'')
       +(missing?`<p class="delivery-note">${collecting?'正在查这一周的邮件…':U.offline?.()?'其余几封没有存到这份离线数据里。':'其余几封暂时没读到。'}</p>`:''));
@@ -210,7 +257,7 @@
   });
   const validCount=n=>Number.isInteger(n)&&n>=0,incomplete=o=>o?.complete===false||['partial','unknown'].includes(o?.q)||lower(o,'total')||lower(o,'sent');
   const hasWindow=w=>parse(w?.from)<=parse(w?.to);
-  const gapNames={log_unavailable:'发送记录',before_first_receipt:'最早一条之前的记录',unknown_start:'记录从哪天开始',invalid_receipt:'发送结果',missing_completion_time:'发完的时刻'};
+  const gapNames={log_unavailable:'发送记录',before_first_receipt:'最早一次之前的记录',unknown_start:'记录从哪天开始',invalid_receipt:'发送结果',missing_completion_time:'发完的时刻'};
   function hourly(d,summary,from,end,recent,counts,loadedFrom,loadedTo,detailComplete){
     const start=Math.floor(from/HOUR)*HOUR,bins=Array.from({length:Math.floor((end-start)/HOUR)+1},()=>null);
     const source=summary?.hourly,reported=Array.isArray(source),gaps=(d.coverage?.gaps||[]).filter(g=>!hasWindow(g)||parse(g.to)>from&&parse(g.from)<=end);
@@ -251,7 +298,7 @@
     const scope=complete?'近 24 小时':reported?'有记录的部分':'已读到的记录';
     const note=!points.some(p=>p[3]!=null)?'这段时间每小时发了多少还没读到':complete&&total>0&&total===sent?`近 24 小时 ${total} 次全部到了`:
       [`${scope} ${total} 次，到了 ${sent} 次`,!complete&&validCount(summary?.total)?`这段时间一共 ${countText(summary,'total',summary.total)} 次`:''].filter(Boolean).join(' · ');
-    const series=['sent','attention','total'].map((id,i)=>({id,label:['到了','没到或没确认','全部'][i],unit:'条',points:points.map(p=>[p[0],p[i+1]])}));
+    const series=['sent','attention','total'].map((id,i)=>({id,label:['到了','没到或没确认','全部'][i],unit:'次',points:points.map(p=>[p[0],p[i+1]])}));
     const a=new Date(from).toISOString(),b=new Date(end).toISOString();return {from:a,to:b,series,complete,scope:`${interval(a,b)} · ${scope}`,note,bucket_seconds:3600,missing_intervals};
   }
   function attentionRows(d,rows){
@@ -339,6 +386,7 @@
     const parts=[['failed','没到'],['not_started','没发出去'],['unsure','还没确认到没到']].map(([k,label])=>{
       const list=rows.filter(r=>!r.private_count&&!hiddenBatch(r)&&kindOf(r)===k);if(!list.length)return '';
       const groups=new Map();for(const r of list){const key=`${channel(r)}（${k==='not_started'?shortWhy(r)||'还在排队':shortWhy(r)}）`;groups.set(key,(groups.get(key)??0)+1);}
+      if(groups.size===1)return [...groups.keys()][0].replace('（',` ${list.length} 次${label}（`);
       const detail=[...groups].map(([key,n])=>key.replace('（',` ${n} 次（`)).join('、');
       return `${list.length} 次${label}：${detail}`;
     }).filter(Boolean);
@@ -371,7 +419,7 @@
     const dayEnd=summary&&Number.isFinite(parse(summary.to))?`（截至 ${stamp(summary.to)}）`:'',most=Math.max(1,...recent.map(r=>Number.isFinite(r.count)?r.count:1)),multi=most>1?`（有的一次含 ${most} 件事）`:'';
     headline=!validCount(totals.total)?'近 24 小时发了多少次提醒，还没读到'
       :totals.total===0?`近 24 小时${dayEnd}${scope}没有给${you()}发提醒`
-      :`近 24 小时${dayEnd}${scope}给${you()}发了 ${countText(summary||d,'total',totals.total)} 次提醒${multi}，${perChannel||(allArrived?'全部到了':`到了 ${validCount(totals.sent)?countText(summary||d,'sent',totals.sent):U.collectionText()} 次`)}`;
+      :`近 24 小时${dayEnd}${scope}给${you()}发了 ${countText(summary||d,'total',totals.total)} 次提醒${multi} · ${perChannel||(allArrived?'全部到了':`到了 ${validCount(totals.sent)?countText(summary||d,'sent',totals.sent):U.collectionText()} 次`)}`;
     const row=all[0];
     const gaps=d.coverage?.gaps||[],failed=d.read_error??(gaps.some(g=>g.reason==='log_unavailable')||/打不开|读取失败|读取超时/.test(provided(d.gap)||''));
     const sourceAt=Object.hasOwn(d,'source_at')?d.source_at:observed?.to??d.coverage?.at??d.at,stale=d.gray_reason==='stale'||d.q==='stale'||d.stale===true||d.state==='stale';
@@ -384,7 +432,8 @@
     const staleLine=oldReading?`记录读到 ${stamp(sourceAt)} 为止`:'';
     // 后台的 why 是第一条没到的结果类别（“结果未知”这类），首屏那句已经说清，不再重复。
     // 后台汇总句“通知尚未确认送达等 N 项”“通知发送失败等 N 项”和上面逐条点名的是同一组数，有那一行时不再说第二遍（M278）
-    const why=oldReading&&cutoffOnly(d.why)||/^(?:结果未确认|结果未知|失败|未开始)$/.test(U.sp(d.why||''))||issues.length&&/^通知(?:尚未确认送达|发送失败)/.test(U.sp(d.why||''))?'':d.why;
+    const ownWhy=issues.length&&typeof d.why==='string'?d.why.split('；').filter(s=>!/^有\s*\d+\s*件事要留意$/.test(U.sp(s))).join('；'):d.why;
+    const why=oldReading&&cutoffOnly(ownWhy)||/^(?:结果未确认|结果未知|失败|未开始)$/.test(U.sp(ownWhy||''))||issues.length&&/^通知(?:尚未确认送达|发送失败)/.test(U.sp(ownWhy||''))?'':ownWhy;
     const missingNames={...gapNames,at:'发完的时刻',queue_seconds:'排队用时',send_seconds:'发送用时',delivery24:'近 24 小时的统计',delivery7:'近 7 天的统计',attention_rows:'没到的清单',...d.missing_names};
     // 没到的那几条上一行已经逐条点名，这里不再另写“N 项要处理”
     const header=U.status({...d,gray_count:undefined,attention_count:issues.length?0:d.attention_count,why:why||(!failed&&['gray','off'].includes(d.level)&&!oldReading?'通知记录没有更新':undefined),
@@ -394,7 +443,7 @@
     U.html($('head'),header.lamp+U.head(headline,{lamp:false}));
     const problems=problemLine(issues);
     U.html($('note'),problems?`${esc(problems)} <a class="more" href="#attention">看是哪几次 ›</a>`:'');
-    U.html($('latest'),row?`最近一条：${shown(stamp(at(row)),'时刻')}，发到${shown(channel(row),'渠道')}，${shown(stateWord(row),'到没到')}`:'');
+    U.html($('latest'),row?`最近一次：${shown(stamp(at(row)),'时刻')}，发到${shown(channel(row),'渠道')}，${shown(stateWord(row),'到没到')}`:'');
     const attentionNote=$('attention-note');
     U.html(attentionNote,[header.note].filter(Boolean).map(line=>`<span>${line}</span>`).join(''));
     attentionNote.hidden=!attentionNote.innerHTML;

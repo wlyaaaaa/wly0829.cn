@@ -56,6 +56,11 @@
     return days && Number.isFinite(end)
       ? rangeText({ from: new Date((end - days * 86400) * 1000).toISOString(), to: block.at }) : '';
   }
+  // 用在哪、专注时间读的是另一轮汇总的前台记录，截止时刻可能比使用状态时间带早一些：写明早多少，免得当成同一段（M349）。
+  function foregroundLag(d, to) {
+    const end = sec(d?.window?.to), t = sec(to);
+    return end - t >= 60 ? `前台记录汇总到 ${hm(t)}，比使用状态时间带（到 ${hm(end)}）早 ${dur(end - t)}` : '';
+  }
   function sourceReading(iso, meta) {
     if (!iso) return '';
     const old = U.offline?.() || meta?.state === 'stale' || Date.now() - Date.parse(iso) > 120000;
@@ -188,6 +193,18 @@
     return d?.apps ? d.apps.map((a, i) => S.row({ key: `app:${i}`, private_value: a.name_field ?? a.name, name: sp(U.programName(a.name)), mark: usageMark(a.name), sub: a.name_field && typeof a.name_field === 'object' ? a.name_field : CAT[a.category] || '', value: a.seconds, text: a.seconds == null ? (U.offline?.() ? '' : U.collectionText('使用时长', a)) : dur(a.seconds), hue: catHue(a.category) }, a, 'seconds')) : null;
   }
   const statesForView = (states) => states.map((s) => ({ ...s, label: { work: '在用', active: '在用', sleep: '睡着' }[s.id] || s.label, note: '' }));
+  // 屏幕关闭、睡着、关机这几样，后台在这段时间一条记录都没有时给来源说明（summary.state_notes）：
+  // 图例上不写一排“0 分钟”（像测过是零），写“没有这类记录”和来源说明；有记录的照常写时长，0 就是测过的 0。
+  const STATE_NOTE_KEYS = { 'screen-off': 'display_off', sleep: 'sleep', off: 'off' };
+  function stateNotes(d) {
+    const notes = d?.summary?.state_notes, out = new Map();
+    if (!notes || typeof notes !== 'object') return out;
+    for (const [id, key] of Object.entries(STATE_NOTE_KEYS)) {
+      const note = notes[key], total = d.summary[key];
+      if (typeof note === 'string' && note.trim() && !(total > 0)) out.set(id, sp(note).replace(/缺测时段的状态无法判断。?$/, '').trim());
+    }
+    return out;
+  }
   function dayStrips(day) {
     if (!day) return [];
     const from = sec(day.from), to = sec(day.to);
@@ -249,7 +266,7 @@
         const rows = ['day', 'day1', 'day2'].map(key => ({ key, label: '' }));
         const tl = block('day', el.firstElementChild, V.timeline(el.firstElementChild, { rows, actualEnd: true }));
         return { set: () => {
-          const d = usage, states = statesForView(d?.states || []), payload = {};
+          const d = usage, unnoted = stateNotes(d), states = statesForView(d?.states || []).map(s => unnoted.has(s.id) ? { ...s, note: unnoted.get(s.id) } : s), payload = {};
           const gap = states.length;
           states.push({ id: 'unrecorded', label: '缺测', hue: 'stone' });
           const strips = dayStrips(d?.day && { ...d.day, spans: d.day.spans?.map(([t, i]) => [t, i ?? gap]) });
@@ -262,12 +279,16 @@
           tl.set(d ? { states, rows: payload } : null);
           const note = el.querySelector('[data-x="tl-note"]');
           const missed = gapSpans(d?.day);
+          for (const id of unnoted.keys()) {
+            const vals = el.querySelector(`.vz-legend__item[data-state="${CSS.escape(id)}"] .vz-legend__vals`);
+            if (vals) vals.innerHTML = '<span>没有这类记录</span>';
+          }
           note.textContent = [sourceReading(d?.day?.recorded_to, d?.blocks?.day),
-            missed.total >= 60 && `缺测是电脑没采到使用状态的时段，不算在用也不算离开（共 ${dur(missed.total)}，${missed.longest <= 120 ? '都是一两分钟以内的零碎空档' : `最长一段 ${dur(missed.longest)}`}）`,
+            missed.total >= 60 && `缺测是电脑没采到使用状态的时段，不算在用也不算离开${unnoted.size ? '，也判断不了是不是关屏、睡着或关机' : ''}（共 ${dur(missed.total)}，${missed.longest <= 120 ? '都是一两分钟以内的零碎空档' : `最长一段 ${dur(missed.longest)}`}）`,
             d?.day?.restart_points?.length ? '◆ 是开机或重启的时刻，之前什么时候关的机没有记下来' :
               d?.day && d.day.restart_points === null ? '暂时读不到系统关机记录' : ''].filter(Boolean).join(' · ');
           note.hidden = !note.textContent;
-          if (S.partial(d?.day, 'spans')) el.querySelectorAll('.vz-legend__vals > span').forEach(n => { if (!n.textContent.includes('至少')) n.append(' · 至少'); });
+          if (S.partial(d?.day, 'spans')) el.querySelectorAll('.vz-legend__vals > span').forEach(n => { if (!n.textContent.includes('至少') && !unnoted.has(n.closest('[data-state]')?.dataset.state)) n.append(' · 至少'); });
         } };
       } },
     { key: 'year', name: (d) => {
@@ -329,6 +350,7 @@
       },
       build(el) {
         el.innerHTML = `<div class="use-where">
+          <p class="use-note" data-x="where-lag" hidden></p>
           <div data-x="share"></div>
           <div><p class="use-two__k">哪个程序在前台最久<small>只算人在用（键鼠在动）的时候</small></p><p class="use-note" data-x="apps-dates" hidden></p><div data-x="apps"></div></div>
           <div class="use-windows"><p class="use-two__k">窗口标题排行</p><p class="use-note" data-x="titles-dates" hidden></p><div data-x="titles"></div><p class="use-note" data-x="tnote" hidden></p></div>
@@ -349,6 +371,9 @@
         shareHost.addEventListener('pointerover', markShare); shareHost.addEventListener('pointerleave', markShare);
         return { set: () => {
           const d = usage;
+          const lag = el.querySelector('[data-x="where-lag"]');
+          lag.textContent = foregroundLag(d, d?.blocks?.categories?.window?.to);
+          lag.hidden = !lag.textContent;
           for (const key of ['apps', 'titles']) {
             const node = el.querySelector(`[data-x="${key}-dates"]`), dates = whereRange(d, key);
             node.hidden = !dates || dates === whereRange(d, 'categories');
@@ -495,7 +520,7 @@
           const categories = new Set((d?.focus || []).map((f) => (d.apps || []).find((a) => appName(a.name) === appName(f.app))?.category || 'other'));
           U.html(el.querySelector('[data-x="focus-key"]'), categories.size > 1 ? [...categories].map((c) => `<span><i style="--c:${V.hues[catHue(c)] || catHue(c)}"></i>${U.fieldHtml(CAT[c] || c, { name: '应用分类', place: 'label' })}</span>`).join('') : '');
           const note = el.querySelector('[data-x="focus-dates"]');
-          note.textContent = d?.focus_min_seconds === FOCUS_MIN_SECONDS ? rangeText(d.focus_window) : '';
+          note.textContent = d?.focus_min_seconds === FOCUS_MIN_SECONDS ? [rangeText(d.focus_window), foregroundLag(d, d.focus_window?.to)].filter(Boolean).join(' · ') : '';
           note.hidden = !note.textContent;
           showRecent(d);
         } };
@@ -651,7 +676,8 @@
   function ask() {
     if (!usage) return '';
     const s = usage.summary || {};
-    const said = [headText(usage), s.on != null && `开机 ${read(s, 'on')}`, s.away != null && `人不在 ${read(s, 'away')}`, s.display_off != null && `屏幕关着 ${read(s, 'display_off')}`, s.sleep != null && `睡着 ${read(s, 'sleep')}`,
+    const unnoted = stateNotes(usage), stateText = (id, key) => unnoted.has(id) ? '没有这类记录' : read(s, key);
+    const said = [headText(usage), s.on != null && `开机 ${read(s, 'on')}`, s.away != null && `人不在 ${read(s, 'away')}`, s.display_off != null && `屏幕关着 ${stateText('screen-off', 'display_off')}`, s.sleep != null && `睡着 ${stateText('sleep', 'sleep')}`,
       usage.apps?.length && `前台记录：${usage.apps.slice(0, 3).map((a) => `${sp(a.name)} ${read(a, 'seconds')}`).join('、')}`].filter(Boolean);
     return `请看实况使用时间${at ? `（${U.time(at)} 的数）` : ''}：${said.join('；')}。请说明现在的情况。`;
   }
