@@ -54,6 +54,8 @@
 .cl-tiles li[data-tone="red"] b { color: #cf2f47; }
 .cl-tiles.is-gray b { color: var(--muted); font-weight: 600; font-size: 16px; }
 .cl-tiles li > div > span { display: block; margin-top: 2px; font-size: 13px; line-height: 19px; color: var(--muted); }
+.cl-fail-more > summary { margin: 2px 0 0; font-size: 13px; }
+.cl-fail-more > span { display: block; margin-top: 2px; font-size: 13px; line-height: 19px; color: var(--muted); overflow-wrap: anywhere; }
 .cl-foot { margin: 6px 0 0 48px; font-size: 13px; line-height: 19px; color: var(--muted); }
 .cl-rulebar { display: flex; gap: 2px; height: 16px; margin: 14px 0 14px; border-radius: 8px; overflow: hidden; }
 .cl-rulebar i { min-width: 3px; }
