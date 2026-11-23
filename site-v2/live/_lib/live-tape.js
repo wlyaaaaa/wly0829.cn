@@ -89,7 +89,7 @@
       set(rows, { off = false } = {}) {
         rows = list(rows).filter(r => r && (r.text || r.html));
         bar.dataset.state = off ? 'off' : 'on';
-        const sign = JSON.stringify(rows.map(r => [r.at, r.actor, r.text, r.html, r.tone]));
+        const sign = JSON.stringify([!rows.length && off, rows.map(r => [r.at, r.actor, r.text, r.html, r.tone])]);
         if (sign === last) return;
         last = sign;
         const keys = rows.map(r => `${r.at}|${r.actor}|${r.text || r.html}`);
@@ -97,7 +97,8 @@
         const html = rows.map((r, i) => item(r, !first && !known.has(keys[i]))).join('');
         known = new Set(keys);
         // 两遍拼起来，滚到一半无缝接回开头；内容不够一屏时多拼几遍
-        track.innerHTML = html || '<span class="tp-ticker__item">这会儿没有新消息</span>';
+        // 没有快讯时照样滚（动效一直开着），只把字写清：读不到这一页时不说成“没有新消息”
+        track.innerHTML = html || `<span class="tp-ticker__item">${off ? '这一页的读数没读到，快讯先空着' : '这会儿没有新消息'}</span>`;
         const one = track.scrollWidth, need = Math.max(2, Math.ceil((bar.clientWidth * 2) / Math.max(1, one)));
         const unit = track.innerHTML;
         track.innerHTML = unit.repeat(need % 2 ? need + 1 : need);

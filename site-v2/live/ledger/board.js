@@ -11,7 +11,7 @@
   const EVENT = { Add: '登记', Reopen: '又出现', Review: '看了一次', attempt: '处理了一轮', Close: '了结', Claim: '接手', ReleaseClaim: '放手，等人接', Handoff: '交接', Defer: '改期', Snooze: '改期', Check: '看了一次' };
   const ROUND = { not_fixed: '这一轮没修好', deferred: '先放一放', superseded: '并进了别的一件' };
   const DAY = 86400000;
-  let state, viewer = 'public', filter = params.get('outcome') || '', showAll = false, picked = params.get('id') || null, asked = picked, pickedState = null, landed = false;
+  let state, viewer = 'public', filter = params.get('outcome') || '', showAll = false, picked = params.get('id') || null, asked = picked, autoPick = !picked, pickedState = null, landed = false;
   let older = [], olderNext, olderBusy = false;
   const F = (v, name) => T.field(v, viewer, name);
   const you = () => T.you(viewer);
@@ -37,6 +37,9 @@
       : `<div class="lg-pairs">${[['新进', s.opened_7d ?? s.new7, '#7a63e8'], ['了结', s.closed_7d, '#00a650']].map(([l, n, c]) =>
         `<div class="tp-bar"><span>${l}</span><span class="tp-bar__track"><span class="tp-bar__fill" style="--fill:${c};width:${known(n) ? Math.min(100, n / Math.max(1, (s.opened_7d || 0), (s.closed_7d || 0)) * 100) : 0}%"></span></span><span class="tp-bar__num">${known(n) ? int(n) : '··'}</span></div>`).join('')}</div>`;
     const avg = s.average_days_to_close, trend = list(s.avg_close_days_7);
+    // 后台按天给（三位小数）；不到一天写小时，不到一小时写分钟
+    const peak = Math.max(avg || 0, ...trend.map(x => x.days || 0));
+    const unit = peak >= 1 ? { per: 1, name: '天' } : peak * 24 >= 1 ? { per: 24, name: '小时' } : { per: 1440, name: '分钟' };
     const oldest = s.oldest || null;
     const dots = oldest && known(oldest.check_count) && known(oldest.check_limit)
       ? `<span class="lg-dots">${Array.from({ length: oldest.check_limit }, (_, i) => `<i${i < oldest.check_count ? ' class="is-on"' : ''}></i>`).join('')}</span>看过 ${int(oldest.check_count)} 次 · 最多 ${int(oldest.check_limit)} 次` : '';
@@ -44,8 +47,8 @@
       <section class="tp-panel lg-cell"><h2>AI 手上</h2><p class="tp-big lg-hand">${big(open, 'open')}<small>件</small></p><p class="tp-small">${known(s.oldest_days) ? `最早一件记下 ${int(s.oldest_days)} 天了` : ''}</p></section>
       <section class="tp-panel lg-cell"><h2>近 7 天 · 新进 ${known(s.opened_7d ?? s.new7) ? int(s.opened_7d ?? s.new7) : '··'} · 了结 ${known(s.closed_7d) ? int(s.closed_7d) : '··'}</h2>${pair}
         <p class="tp-legend"><span><i class="tp-swatch" style="background:#7a63e8"></i>新进</span><span><i class="tp-swatch" style="background:#00a650"></i>了结</span>${known(s.opened_7d) && known(s.closed_7d) ? `<span>${s.opened_7d > s.closed_7d ? '进的比出的多，在堆' : '出的不比进的少'}</span>` : ''}</p></section>
-      <section class="tp-panel lg-cell"><h2>平均几天了结</h2><p class="tp-big">${known(avg) ? `${big(avg, 'avg', 'dec')}<small>天</small>` : '<span class="tp-fog">还没采上</span>'}</p>
-        ${trend.length > 1 ? T.line({ series: [{ color: '#00a650', values: trend.map(x => x.days) }], labels: trend.map(x => day(x.date + 'T12:00:00+08:00')), width: 300, height: 110, max: T.niceMax(Math.max(...trend.map(x => x.days || 0), 1)), fmt: v => dec(v), draw: !drawn }) : '<p class="tp-small">只算近 7 天了结的，从 AI 接手算到了结。</p>'}</section>
+      <section class="tp-panel lg-cell"><h2>平均多久了结</h2><p class="tp-big">${known(avg) ? `${big(avg * unit.per, 'avg', unit.per === 1440 ? 'int' : 'dec')}<small>${unit.name}</small>` : '<span class="tp-fog">还没采上</span>'}</p>
+        ${trend.filter(x => known(x.days)).length > 1 ? T.line({ series: [{ color: '#00a650', values: trend.map(x => known(x.days) ? x.days * unit.per : null) }], labels: trend.map(x => day(x.date + 'T12:00:00+08:00')), width: 300, height: 110, max: T.niceMax(Math.max(...trend.map(x => (x.days || 0) * unit.per), 1)), fmt: v => dec(v), draw: !drawn }) + `<p class="tp-small">每天往前 7 天的平均，单位${unit.name}；没有了结的日子空着。</p>` : '<p class="tp-small">只算近 7 天了结的，从 AI 接手算到了结。</p>'}</section>
       <section class="tp-panel lg-cell lg-oldest"><h2>跟得最久</h2>${oldest ? `<p class="lg-oldest__t">${link(oldest.href, F(titleOf(items.find(it => it.id === oldest.id) || oldest), '事项标题'))}</p>
         <p class="tp-big">${big(oldest.days ?? oldest.age_days, 'oldest')}<small>天</small></p><p class="tp-small lg-oldest__n">${dots}</p>` : `<p class="tp-empty">${open === 0 ? '没有未了结的事' : '最早那件没读到'}</p>`}</section></div>`;
   }
@@ -79,15 +82,15 @@
     const shown = showAll ? items : items.slice(0, 10);
     const rows = shown.map(it => {
       const acc = stamp(it.accepted), nx = stamp(nextOf(it)), over = it.overdue || (nx && nx < now);
-      const checks = list(it.checks).map(c => stamp(c.at)).filter(Boolean);
+      const checks = list(it.checks).filter(c => stamp(c.at));
       const running = it.running?.href;
       const tag = running ? link(it.running.href, '正在办 ›', 'tp-tag lg-running') : it.state === 'working' ? '<span class="tp-tag lg-running">正在办</span>' : it.state === 'deferred' ? '<span class="tp-tag" data-tone="soft">暂时不修</span>'
         : it.outcome === 'not_fixed' ? '<span class="tp-tag" data-tone="bad">没修好</span>' : it.outcome === 'wont_fix' ? `<span class="tp-tag" data-tone="soft">${you()}定了不修</span>` : '';
       const meta = [it.registered_by && `${esc(it.registered_by)} 记的`, (it.wait?.text || it.when) && waitText(it.wait?.text || it.when),
-        nx && !full(it) ? `${over ? '<b class="lg-over">该看了</b> ' : ''}下次看 ${esc(when(nextOf(it)))}` : '', checkText(it),
+        nx && !full(it) ? (over ? `<b class="lg-over">该看了</b> 原定 ${esc(when(nextOf(it)))}` : `下次看 ${esc(when(nextOf(it)))}`) : '', checkText(it),
         it.done_when && `算完：${F(it.done_when, '怎么算完')}`].filter(Boolean).join(' · ');
       const bar = acc ? `<i class="lg-bar" style="left:${x(acc)}%;width:${Math.max(.6, x(now) - x(acc))}%"></i><i class="lg-start${acc < from ? ' is-cut' : ''}" style="left:${x(acc)}%"></i>` : '';
-      const dots = checks.map(t => `<i class="lg-check" style="left:${x(t)}%" title="${esc(when(new Date(t).toISOString()))} 看过"></i>`).join('');
+      const dots = checks.map(c => `<i class="lg-check" style="left:${x(stamp(c.at))}%" title="${esc(when(c.at))} 看过${c.text ? '：' + esc(U.fieldText(c.text, viewer)) : ''}"></i>`).join('');
       const next = nx && !full(it) ? `${nx > now ? `<i class="lg-link" style="left:${x(now)}%;width:${Math.max(0, x(nx) - x(now))}%"></i>` : ''}<i class="lg-next${over ? ' is-over' : ''}${nx > to ? ' is-far' : ''}" style="left:${x(nx)}%" title="下次看 ${esc(when(nextOf(it)))}"></i>${nx > to ? `<span class="lg-farlabel">${esc(day(nextOf(it)))} ›</span>` : ''}` : '';
       return `<li class="lg-item${picked === it.id ? ' is-picked' : ''}" data-pick="${esc(it.id)}"><div class="lg-item__text"><button type="button" class="lg-title" data-pick="${esc(it.id)}">${F(titleOf(it), '事项标题')}</button>${tag}<p>${meta}</p></div>
         <div class="lg-lane">${bar}${dots}${next}</div></li>`;
@@ -251,12 +254,13 @@
     ask: () => 'AI 账本里还欠着哪些事、哪件该看了、最近了结了什么？先用大白话说，别动手。',
     onState(next) {
       state = next; draw();
-      if (!pickedState && next.data) { const id = picked || next.data.summary?.oldest?.id || owed(next.data)[0]?.id; if (id) pick(id, true); }
-      else if (picked && pickedState && pickedState.data === undefined && next.data) pick(picked, true);
+      if (!next.data) return;
+      const want = autoPick ? next.data.summary?.oldest?.id || owed(next.data)[0]?.id : picked;
+      if (want && (want !== picked || !pickedState || pickedState.data === undefined)) pick(want, true);
     } });
   page.root.addEventListener('click', e => {
     const p = e.target.closest('button[data-pick]'), f = e.target.closest('[data-filter]');
-    if (p) { pick(p.dataset.pick); return; }
+    if (p) { autoPick = false; pick(p.dataset.pick); return; }
     if (f) { filter = f.dataset.filter; T.keep(page.root, `[data-filter="${filter}"]`, draw); return; }
     if (e.target.closest('[data-more]')) { showAll = !showAll; T.keep(page.root, '[data-more]', draw); return; }
     if (e.target.closest('[data-older]')) readOlder();

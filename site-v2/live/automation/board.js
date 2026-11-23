@@ -29,17 +29,32 @@
       ${known(value) ? `<p class="tp-big">${big(value, 'win-' + key)}<small>${unit}</small></p>${tail ? `<p class="au-win__tail">${tail}</p>` : ''}` : '<p class="tp-big tp-fog">还没采上</p>'}</div>`;
     return `<section class="tp-panel au-wins" id="results"><div class="tp-panel__head"><h2>这周替${you()}做成了<small>近 7 天</small></h2><span class="tp-asof">截至 ${esc(when(r.at || d.at))}</span></div>
       <div class="tp-grid au-wins__grid tp-divide">${cell('修好', r.repaired, '件', '', 'repaired')}${cell('记下', r.messages_logged, '件', `消息给${you()}`, 'messages')}
-      ${cell('规矩改好', r.rules_fixed, '处', '', 'rules')}${cell('翻译官出了', r.translator_versions, '版', '', 'translator')}</div></section>`;
+      ${cell('规矩改好', r.rules_fixed, '处', '', 'rules')}${cell('翻译官出了', r.translator_versions, '版', '', 'translator')}</div>${missingWeek(d)}</section>`;
   }
+  // 这周的合计后台没给时写为什么：派活记录从哪天才有
+  function missingWeek(d) {
+    const r = d.results_7d || {};
+    if (['repaired', 'messages_logged', 'rules_fixed', 'translator_versions'].some(k => known(r[k]))) return '';
+    const since = list(d.categories).map(c => T.stamp(c.result_7d?.recorded_since)).filter(Boolean).sort((a, b) => a - b)[0];
+    const from = T.stamp(r.from);
+    return `<p class="tp-small au-why-missing">${since && (!from || since > from) ? `派活记录从 ${esc(when(new Date(since).toISOString()))} 才有，不满一整周，后台先不给这周的合计。` : '这周的合计后台还没给。'}</p>`;
+  }
+  // 几秒、几分钟、几小时几分
+  const spent = s => s < 60 ? [Math.round(s), '秒'] : s < 3600 ? [Math.round(s / 60), '分钟'] : null;
   function usage(d) {
     const seconds = d.results_7d?.ai_seconds ?? d.ai_usage?.total?.seven_day_seconds;
     const days = list(d.ai_usage?.total?.days_7);
-    const label = known(seconds) ? `<span class="tp-mid">${big(Math.floor(seconds / 3600), 'use-h')}<small>小时</small> ${big(Math.round(seconds % 3600 / 60), 'use-m')}<small>分</small></span>` : '<span class="tp-fog">还没采上</span>';
+    const u = d.ai_usage || {}, since = T.stamp(u.covered_since), weekStart = T.stamp(d.results_7d?.from) || Date.now() - 7 * 86400000;
+    const short = known(seconds) && spent(seconds);
+    const label = !known(seconds) ? '<span class="tp-fog">还没采上</span>'
+      : short ? `<span class="tp-mid">${big(short[0], 'use-m')}<small>${short[1]}</small></span>`
+      : `<span class="tp-mid">${big(Math.floor(seconds / 3600), 'use-h')}<small>小时</small> ${big(Math.round(seconds % 3600 / 60), 'use-m')}<small>分</small></span>`;
+    const covered = known(seconds) && since && since > weekStart ? `<small class="au-use__since">从 ${esc(when(u.covered_since))} 起记，更早的没有记录</small>` : '';
     const names = ['日', '一', '二', '三', '四', '五', '六'];
-    const chart = days.length ? T.columns({ rows: days.map((x, i) => ({ label: i === days.length - 1 ? '今天' : names[new Date(x.date + 'T12:00:00+08:00').getDay()],
-      parts: [{ value: (x.seconds || 0) / 3600, color: i === days.length - 1 ? '#00a650' : '#9fdcb9' }], text: known(x.seconds) ? `${dec(x.seconds / 3600)}h` : '' })),
-      width: 380, height: 150, fmt: v => `${dec(v)}h`, grow: !drawn }) : '<p class="tp-small">每天各用多久还没采上，先只有这周合计。</p>';
-    return `<section class="tp-panel au-use" id="usage"><div class="tp-panel__head"><h2>这周后台 AI 共用了</h2></div><p class="au-use__num">${label}</p>${chart}</section>`;
+    const chart = days.some(x => known(x.seconds)) ? T.columns({ rows: days.map((x, i) => ({ label: i === days.length - 1 ? '今天' : names[new Date(x.date + 'T12:00:00+08:00').getDay()],
+      parts: [{ value: (x.seconds || 0) / 3600, color: i === days.length - 1 ? '#00a650' : '#9fdcb9' }], text: known(x.seconds) ? `${dec(x.seconds / 3600)}h` : '没记' })),
+      width: 380, height: 150, fmt: v => `${dec(v)}h`, grow: !drawn }) : `<p class="tp-small">每天各用多久后台还没分开给${known(seconds) ? '，先只有合计' : ''}。</p>`;
+    return `<section class="tp-panel au-use" id="usage"><div class="tp-panel__head"><h2>这周后台 AI 共用了</h2></div><p class="au-use__num">${label}${covered}</p>${chart}</section>`;
   }
 
   // —— 现在在跑 ——
@@ -111,14 +126,17 @@
   }
   function lastCell(c) {
     const r = c.last_result;
-    if (!r) return mode(c) === 'off' ? `<span class="tp-muted">关着${c.id === 'weekly-live' ? '，网站上线收尾做完再开' : ''}</span>` : '<span class="tp-muted">近 30 天没跑过</span>';
+    const since = c.recent_stats?.recorded_since;
+    if (!r) return mode(c) === 'off' ? `<span class="tp-muted">关着${c.id === 'weekly-live' ? '，网站上线收尾做完再开' : ''}</span>`
+      : `<span class="tp-muted">${since ? `${esc(when(since))} 起还没跑过` : '还没有运行记录'}</span>`;
     return `${F(r.text, '上次结果')}<small>${esc(when(r.at))}</small>`;
   }
   function trendCell(c) {
     const days = list(c.daily_30d), s = c.recent_stats || {};
     if (!days.length) return '<span class="tp-fog">还没采上</span>';
+    const since = T.stamp(s.recorded_since), late = since && since > (T.stamp(s.from) || 0) + 86400000;
     const nums = known(s.success) ? `成 ${int(s.success)} · 坏 ${int(s.failed)}` : '还没采上';
-    return `<div class="au-trend">${T.posneg(days, { width: 150, height: 34 })}<span${s.failed ? ' data-bad' : ''}>${nums}</span></div>`;
+    return `<div class="au-trend">${T.posneg(days, { width: 150, height: 34 })}<span${s.failed ? ' data-bad' : ''}>${nums}${late ? `<small> · ${esc(when(s.recorded_since))} 起记</small>` : ''}</span></div>`;
   }
   function table(d) {
     const cats = IDS.map(id => list(d.categories).find(c => c.id === id)).filter(Boolean);

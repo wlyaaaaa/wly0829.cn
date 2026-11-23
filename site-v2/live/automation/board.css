@@ -120,3 +120,6 @@
 .au-dialog__buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
 .au-dialog__buttons button { padding: 5px 14px; border: 1px solid var(--tp-line); border-radius: 8px; background: #fff; font: inherit; cursor: pointer; }
 .au-dialog__buttons button[type="submit"] { background: var(--tp-green); border-color: var(--tp-green); color: #fff; font-weight: 700; }
+.au-why-missing { margin: 10px 0 0; }
+.au-use__since { display: block; margin-top: 4px; font-size: 12.5px; font-weight: 500; color: #6c6b64; }
+.au-trend > span small { display: inline; color: #8a8981; }
