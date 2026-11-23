@@ -222,9 +222,11 @@
     Promise.all([loadedRelease, releaseId()]).then(([was, now]) => { if (was && now && was !== now) reloadPage(); });
   }
   let mainResource = null;
-  const isMain = e => !mainResource || e.resource === mainResource;
+  // 翻页取的一批（带 cursor）只管它自己那一处：读不到不算整页连不上，也不当本页主数据（M553）
+  const paged = e => new URLSearchParams(e.query).has('cursor');
+  const isMain = e => !paged(e) && (!mainResource || e.resource === mainResource);
   const freshArrived = e => { clearTimeout(e.freshWait); e.freshWait = 0; };
-  const awaitFresh = e => { if (!e.freshWait) e.freshWait = later(() => { e.freshWait = 0; staleAfterWait(e); }, FRESH_WAIT_MS); };
+  const awaitFresh = e => { if (!e.freshWait && !paged(e)) e.freshWait = later(() => { e.freshWait = 0; staleAfterWait(e); }, FRESH_WAIT_MS); };
   function staleAfterWait(e) {
     if (publicPaused || e.stopped || e.token !== device()) return;
     if (isMain(e)) {
@@ -532,6 +534,7 @@
       audience(e, { kind: 'public', device: 'invalid' });
     }
     e.error = status === 403 ? '这部分只对本人开放' : [404, 410, 503].includes(status) ? '暂时读不到' : body?.text || '';
+    if (paged(e)) return;
     const reachable = status >= 400 && status < 500 || /^live_((source|variant|detail)_unavailable|publication_revoked)$/.test(body?.error || '');
     const reason = via || (body?.error === 'owner_read_failed' ? 'owner-read' :
       body?.error === 'preview_upstream_not_listening' || [500, 503].includes(status) && !body?.error?.startsWith('snapshot_') ? 'service' : 'unreachable');
@@ -614,7 +617,7 @@
     rememberScreen(e);
   }
   async function retryFailure(e, retryCopy, notListening = false) {
-    if (publicPaused) return;
+    if (publicPaused || paged(e)) return;
     restoreBrowserCopy(e);
     const f = e.failure ||= { tries: 0, fallback: later(async () => {
       f.fallback = null;
@@ -864,7 +867,17 @@
     if (e.pending) opened.card(card);
     // 返回时，点开才读的明细也先照存下的画；现读在后台补，不挡住回来的第一帧。
     if (returning && e.data !== null && (fixture !== null || e.viewer.kind === 'owner')) { read(e, true, card); return Promise.resolve(present(e)); }
-    return read(e, true, card, fallbackOnFailure);
+    if (!paged(e)) return read(e, true, card, fallbackOnFailure);
+    // 这一批没读到（连不上或服务出错）：隔 2 秒、5 秒自己再取，还不行才交回页面在那一处写“这一批没读到”（M553）
+    return (async () => {
+      let state = await read(e, true, card);
+      for (const wait of [2000, 5000]) {
+        if (state.data != null || state.meta?.status >= 400 && state.meta.status < 500 || e.stopped) break;
+        await new Promise(resolve => later(resolve, wait));
+        state = await read(e, true, card);
+      }
+      return state;
+    })();
   }
   function afterReady(ready, callbacks) {
     // 请求和静态资源一起起跑。画面准备好时只交付每种通知的最新状态。
@@ -960,7 +973,8 @@
     try {
       const response = await fetch(url, { method: 'POST', cache: 'no-store', credentials: site ? 'omit' : 'same-origin',
         headers: { 'Content-Type': 'application/json', ...(site ? { 'X-Cockpit-Device': token } : opened.headers(token)) },
-        body: JSON.stringify(data), signal: AbortSignal.timeout(15000) });
+        // 后台忙时一笔要一分多钟才回（11-23 本人点的两笔 76、88 秒）：等足两分钟，别 15 秒就放弃再排一笔
+        body: JSON.stringify(data), signal: AbortSignal.timeout(120000) });
       const result = await response.json();
       if (response.status === 403 && result?.error === 'cockpit_owner_required') {
         viewerKind = 'public';
@@ -984,8 +998,10 @@
         const card = item.owner_source_id ? '事项原编号 ' + item.owner_source_id : '实况事项 ' + item.id;
         return card + (text ? '（' + text + '）' : '') + '。我的回答：____。请处理后按编号关卡，要我做什么直接问我。';
       }
-      if (item.owner_source_id && ['done', 'decline'].includes(intent)) {
+      if (item.owner_source_id && ['done', 'decline', 'ask'].includes(intent)) {
         const heading = '事项原编号 ' + item.owner_source_id + (text ? '（' + text + '）' : '') + '。';
+        // 问情况就是复制给 AI（本人 11-22 16:04）：带原编号，AI 能按编号查、按编号关
+        if (intent === 'ask') return heading + '请说明这件事现在的情况；我已经办完的，请核实后按编号关卡；要我做什么直接问我。';
         if (intent === 'done') return heading + '我已办完，请核实后按编号关卡，要我做什么直接问我。';
         if (item.decline_followup) return heading + '这一项我不办了。后续请处理：' + item.decline_followup;
       }
@@ -1000,16 +1016,16 @@
     },
     async applyOwnerItems(items, action, followReceipt = false) {
       const saved = [];
-      let pending = 0, unconfirmed = 0, message = '没有确认保存，请重读这件事。';
+      let pending = 0, unconfirmed = 0, message = '没有确认保存，请重读这件事。', error = '';
       for (const item of items) {
         const result = await window.Live.ownerAction(item, action, followReceipt);
         if (result.status === 'applied') saved.push(item.id);
         else if (result.status === 'waiting_undo') pending++;
         else if (result.status === 'unknown') { unconfirmed++; message = result.message; }
-        else if (result.error === 'cockpit_owner_required') message = '不是可信设备';
-        else if (result.message) message = result.message;
+        else if (result.error === 'cockpit_owner_required') { message = '不是可信设备'; error = result.error; }
+        else { if (result.message) message = result.message; error = result.error || ''; }
       }
-      return { saved, pending, unconfirmed, message };
+      return { saved, pending, unconfirmed, message, error };
     },
     async ownerAction(item, action, followReceipt = false) {
       if (!window.Live.canOwnerAct()) return { status: 'error', error: 'cockpit_owner_required', message: '不是可信设备' };
@@ -1024,15 +1040,16 @@
         ownerWrites.set(key, write);
       }
       write.request ||= (async () => {
-        let result = followReceipt ? null : await sendOwnerAction(token, write.data);
-        // 后端按原请求编号先查回执，事项已经变动也仍能确认原操作。
+        let result = await sendOwnerAction(token, write.data);
+        // 后端按原请求编号先查回执，事项已经变动也仍能确认原操作；没回或还在写，就拿同一编号接着查。
         if (followReceipt) {
           const started = Date.now();
           let lastReply = started;
-          while ((!result || result.status === 'waiting_undo') && device() === token && Date.now() - lastReply < 90000) {
+          // 读数卡住时页面会显示连不上，这里照样拿同一编号去查；最多查两分半钟。
+          while ((!result || result.status === 'waiting_undo') && device() === token && Date.now() - lastReply < 90000 && Date.now() - started < 150000) {
             await new Promise(resolve => setTimeout(resolve, Date.now() - started < 60000 ? 3000 : 15000));
             if (device() !== token) break;
-            result = window.Live.canOwnerAct() ? await sendOwnerAction(token, write.data) : null;
+            result = await sendOwnerAction(token, write.data);
             if (result) lastReply = Date.now();
           }
           if (result?.status === 'waiting_undo' || result?.error === 'cockpit_owner_required') result = null;

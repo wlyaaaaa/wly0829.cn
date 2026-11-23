@@ -177,6 +177,15 @@
     const pictures = { protection: '/live/img/card-security-protect.webp', impersonation: '/live/img/grp-cpu.webp', lifecycle: '/live/img/grp-network.webp', audit: '/live/img/card-security-audit.webp' };   // 图址写全，构建才认得出、换成云端地址
     return { ...given, key, name, pic: pictures[key], line: present ? line : '', figures: figures.some((f) => f.value != null || f.line) ? figures : [], palette: ['teal', 'violet'], reason: U.sp(given?.reason || given?.why), grafana: data?.grafana?.href, ...rest };
   }
+  // 卡里还画着上一轮的读数时，卡头不写“没有记录”：写上次读到是几点、多久读一次，和图上的“最近实测”说同一个时刻（M451）
+  const drawn = { lifecycle: d => d?.lifecycle?.series?.length > 0, audits: d => d?.audits != null, 'audits.impersonation': d => d?.audits?.impersonation != null };
+  function lastRead(g, d) {
+    const reason = U.sp(g.reason || g.why);
+    if (!drawn[g.key]?.(d) || !/^(?:没有记录|还没读到|暂时读不到)$/.test(reason)) return g;
+    const block = d?.blocks?.[g.key] || g, at = block.window?.to ?? block.to ?? block.at ?? g.at, every = block.refresh_seconds ?? g.refresh_seconds;
+    const cadence = every >= 3600 && every % 3600 === 0 ? `每${every === 3600 ? '' : ` ${every / 3600} 个`}小时读一次` : every > 0 ? `每 ${fmt(every, '秒')}读一次` : '';
+    return at ? { ...g, reason: [`上次读到 ${stamp(at)}`, cadence].filter(Boolean).join(' · ') } : g;
+  }
   const summaryGroup = d => d?.groups?.find(g => (g.key ?? g.id) === 'summary');
   const sentences = items => items.flatMap(item => U.sp(item).split('；').map(s => s.trim()).filter(Boolean));
   function headerStatusData(d) {
@@ -310,7 +319,7 @@
   });
   D.mount({ resource: 'computer/security', statusData: headerStatusData, board: { ...board, blocks(d, map, offline) {
     const legacy = summaryGroup(d);
-    board.blocks(legacy ? { ...d, groups: d.groups.filter(g => g !== legacy) } : d, map, offline);
+    board.blocks(d?.groups ? { ...d, groups: d.groups.filter(g => g !== legacy).map(g => lastRead(g, d)) } : d, map, offline);
   } }, merge: lifecycleData, render(d) {
     data = d;
     const life = d?.lifecycle, points = life?.series?.[0]?.points, step = life?.step ?? (points?.length > 1 ? points[1][0] - points[0][0] : null);
