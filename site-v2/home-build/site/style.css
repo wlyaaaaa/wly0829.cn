@@ -154,6 +154,8 @@ html.cine .screen { display: none; }
 html:not(.cine) .track { display: none; }
 /* 滚动距离：一屏半，夹在 1100 到 1500 像素之间（滚轮十一到十五格）。 */
 .track { position: relative; height: calc(100vh + clamp(1100px, 150vh, 1500px)); }
+/* 滑到底就停：触控板、触屏在页顶页底不回弹，不露出画下面的底色（M585）。 */
+html.cine { overscroll-behavior-y: none; }
 .stage { position: sticky; top: 0; height: 100vh; overflow: hidden; isolation: isolate; contain: layout paint; }
 .stage::before { content: ''; position: absolute; inset: -24px; background: url("images/screen1-clean-v2.webp") center / 100% 100%; filter: blur(20px); }
 .stage.secondary-ready::before { display: none; }
