@@ -144,7 +144,9 @@
         original && D.sourceSubset(copy, stamp),
         copy?.content_at && `${content} ${stamp(copy.content_at).trim()}`,
         cloud && !(batchFailed && refresh === 'failed') && refreshLabels[refresh]];
-      return cell(state, label, lines, causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
+      // 后台给了这份副本这一轮的状态（如“本轮大部分成功，有文件跳过”）就照它写、不再绿色“齐了”；没给照旧（M607）
+      const told = state === 'complete' && copy?.status_text != null && sp(U.fieldText?.(copy.status_text, viewer) ?? copy.status_text).trim();
+      return cell(told ? 'gap' : state, told || label, lines, causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
     };
     const sets = U.mergePrivateRows(U.order((d.sets || []).filter(s => s.name), attention, 'backups'), { value: s => s.name, kind: viewer });
     const rows = sets.map(s => {
