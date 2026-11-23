@@ -172,6 +172,26 @@
     }
   });
   const daily = window.LiveViz.bars($('chat-days'), { stack: true, unit: '个', series: [{ id: 'claude', label: 'Claude', hue: 'apricot' }, { id: 'gpt', label: 'Codex', hue: 'teal' }, { id: 'antigravity', label: 'Antigravity', hue: 'violet' }] });
+  // “今天”“近 7 天”两栏并排时底边拉齐：长的那栏从后往前把型号收进“展开”，总数行、说明行都算进高度，至少露 1 个型号；
+  // 只多 1 个型号不收（收了也要多一行“展开”）。数据刷新、换窗口宽时重新算（M460）
+  function fitModels() {
+    const box = $('chat-counts'), parts = [...box.querySelectorAll(':scope > div')].map(col => ({ col,
+      rows: [...col.querySelectorAll(':scope > .chat-model-row')], more: col.querySelector(':scope > .chat-models-more') })).filter(part => part.more && part.rows.length);
+    parts.forEach(({ rows, more }) => { rows.forEach(row => row.classList.remove('is-extra')); more.hidden = true; });
+    if (parts.length !== 2 || getComputedStyle(box).gridTemplateColumns.split(' ').filter(Boolean).length < 2) return;
+    const end = col => Math.max(...[...col.children].filter(el => el.offsetHeight).map(el => el.getBoundingClientRect().bottom));
+    const [a, b] = parts, long = end(a.col) > end(b.col) ? a : b, target = Math.min(end(a.col), end(b.col)), { rows, more } = long;
+    const slack = rows[0].offsetHeight / 2;
+    if (end(long.col) - target < slack) return;
+    more.hidden = false;
+    const tail = more.getBoundingClientRect().bottom - rows.at(-1).getBoundingClientRect().bottom;
+    let keep = rows.length;
+    while (keep > 1 && rows[keep - 1].getBoundingClientRect().bottom + (keep < rows.length ? tail : 0) > target + slack) keep -= 1;
+    if (rows.length - keep < 2) { more.hidden = true; return; }
+    rows.slice(keep).forEach(row => row.classList.add('is-extra'));
+    more.querySelector('.chat-models-left').textContent = rows.length - keep;
+  }
+  if (typeof ResizeObserver === 'function') new ResizeObserver(() => fitModels()).observe($('chat-counts'));
   function renderStats(stats, temporary = false) {
     const current = stats?.concurrent, { from, to } = current?.window ?? current ?? {}, peak = current?.peak;
     const plots = $('chat-counts').parentElement.querySelector('.chat-plots'); plots.style.display = stats ? '' : 'none';
@@ -194,9 +214,8 @@
     U.html(reading, [currentText, gap && U.fieldHtml(gap, { name: '统计说明', place: 'body' })].filter(Boolean).join(' · '));
     reading.hidden = !currentText && !gap;
     const gapHtml = gap => U.fieldHtml(gap, { name: '统计说明', place: 'body' });
-    // 两栏按型号露一样多行（至少 5 行），多出来的收进“展开”，免得“近 7 天”比“今天”长出一大截、左下空着（M460）
+    // 型号先全写出来，比另一栏长的那栏由 fitModels 按高度收进“展开”（M460）
     const modelsOf = key => stats[key]?.models && (U.draw10?.modelRows(stats[key].models) || stats[key].models);
-    const keep = Math.max(5, Math.min(...['today', 'week'].map(key => modelsOf(key)?.length ?? 0)));
     const counts = [['today', '今天'], ['week', '近 7 天']].map(([key, label]) => {
       const d = stats[key];
       if (d?.q === 'warming') return `<div><h2>${label}</h2><p class="row__sub">正在准备</p></div>`;
@@ -209,16 +228,17 @@
       const modelRow = m => {
         const model = U.draw10?.modelHtml(m, { name: '型号', place: 'body', kind: viewer }) ?? U.fieldHtml(m.model, { name: '型号', place: 'body' });
         const counts = `${n(m.opened, m, 'opened', '对话')} · ${n(m.helpers, m, 'helpers', '帮手')}`;
-        return `<p><small>${model || '型号没记下'} · ${counts}${m.gap && !modelGap ? ' · ' + gapHtml(m.gap) : ''}</small></p>`;
+        return `<p class="chat-model-row"><small>${model || '型号没记下'} · ${counts}${m.gap && !modelGap ? ' · ' + gapHtml(m.gap) : ''}</small></p>`;
       };
-      const shown = models && models.length > keep + 1 ? keep : models?.length, open = $('chat-counts').querySelector(`details[data-models="${key}"]`)?.open;
-      const modelList = models ? models.slice(0, shown).map(modelRow).join('') + (models.length > shown
-        ? `<details class="chat-models-more" data-models="${key}"${open ? ' open' : ''}><summary class="more live-disclosure"><span class="disclosure-closed">展开（还有 ${models.length - shown} 个型号）</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary>${models.slice(shown).map(modelRow).join('')}</details>` : '')
+      const open = $('chat-counts').querySelector(`details[data-models="${key}"]`)?.open;
+      const modelList = models ? models.map(modelRow).join('')
+        + `<details class="chat-models-more" data-models="${key}"${open ? ' open' : ''} hidden><summary class="more live-disclosure"><span class="disclosure-closed">展开（还有 <span class="chat-models-left">0</span> 个型号）</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary></details>`
         : `<p class="row__sub">${esc(U.collectionText('各型号', stats))}</p>`;
       const notes = [...new Set([d?.gap, modelGap].filter(Boolean))].map(gap => `<p><small>${gapHtml(gap)}</small></p>`).join('');
       return `<div><h2>${label}</h2><p>${n(d?.opened, sure(d), 'opened', '对话')} · ${n(d?.helpers, d, 'helpers', '帮手')} <small>${n(d?.manual_opened, d, 'manual_opened', '本人对话')}</small></p>${notes}${modelList}</div>`;
     }).join('');
     U.html($('chat-counts'), counts);
+    fitModels();
     const historyQ = current?.history_q ?? (current?.q === 'warming' ? 'warming' : undefined);
     if (Array.isArray(current?.series) && historyQ !== 'warming') concurrent.set({ ...current, from, to, q: historyQ });
     else concurrent.wait(U.offline?.() ? '这块没存下来，连上后补上。' : historyQ === 'warming' ? '正在准备' : stats.accumulating ? U.accumulatingText(stats.accumulating) : U.collectionText('同时在干的对话', stats));

@@ -150,7 +150,12 @@
       return [`${vendorNames.get(s.id) || s.id}：${summary}`, ...times.filter(([, at]) => at).map(([label, at]) => `${label} ${stamp(at)}`)].join(' · ');
     })).join('\n');
   }
-  const modelName = row => (Object.hasOwn(row, 'model_text') ? row.model_text : row.model) ?? (appName(row) ? '型号没记下' : undefined);
+  // 没记下型号的：Antigravity 的写 Gemini Carbon（本人 11-23 07:53：“这个应该是gemini carbon 暂时这样改就行了”），别家照旧写“型号没记下”（M541）
+  const modelName = row => {
+    const name = Object.hasOwn(row, 'model_text') ? row.model_text : row.model;
+    if ((name == null || name === '' || name === '型号没记下') && (row.vendor === 'antigravity' || appName(row) === 'Antigravity')) return 'Gemini Carbon';
+    return name ?? (appName(row) ? '型号没记下' : undefined);
+  };
   // 前面已有软件标签时，型号不再重复软件名：标签 Claude 后接 Opus 5.5，而不是 Claude Claude Opus 5.5
   const bareModel = row => { const name = modelName(row), app = appName(row); return typeof name === 'string' && app && name.startsWith(app + ' ') ? name.slice(app.length + 1) : name; };
   // 复用对话页图表色。旧包的点仍是青色，只有带家族字段的新包启用分色。
