@@ -217,9 +217,11 @@
     return head + `<div class="aw-pair aw-type-pair">${panel('最近几次', runs, { symbol: 'check' })}${panel('设置记录', settingLog(c), { symbol: 'gear' })}
       ${subs ? panel('各小类', `<ul class="aw-lines">${subs}</ul>`, { symbol: 'stack', cls: 'aw-wide' }) : ''}</div>`;
   }
+  // 后台的英文代号（deferred 这类）一律换成中文；没见过的代号不照抄英文，留空
+  const code = value => typeof value === 'string' && /^[a-z][a-z_]*$/.test(value) ? '' : value;
   const verdict = value => ({ fixed: '按原条件验过', not_fixed: '没修好', waiting_verify: '等自然事件验收', deferred: '暂时不修',
-    wont_fix: '定了不修', to_owner: `转给${own()}` })[value] || value;
-  const execution = value => ({ completed: '正常结束', failed: '失败', interrupted: '没跑完' })[value] || value;
+    wont_fix: '定了不修', to_owner: `转给${own()}` })[value] || code(value);
+  const execution = value => ({ completed: '正常结束', failed: '失败', interrupted: '没跑完' })[value] || verdict(value);
   const facts = rows => list(rows).filter(row => row.text).map(row =>
     `<div><dt>${field(row.label)}</dt><dd>${field(row.text, row.label)}</dd></div>`).join('');
   function rounds(data, row) {
@@ -243,6 +245,12 @@
         ${labels ? `<dl class="aw-facts">${labels}</dl>` : empty('还没有本轮结果')}</details></li>`;
     }).join('')}${coming.map(name => `<li class="is-future"><p class="aw-step"><span>${name}</span></p></li>`).join('')}</ol>`;
   }
+  // 修理路线和这件的结果：照后台详情给的 repair_route、result_text 两段写；后台没给路线时写现行说法
+  function repairRoute(data) {
+    const route = field(data.repair_route, '修理路线') || `同一件修两轮还没好，由做事的 AI 判断值不值得让${own()}知道或请${own()}选，不用的只记在账本里。`;
+    const result = field(data.result_text, '这件的结果');
+    return `<p class="aw-path-note">修理路线：${route}</p>${result ? `<p class="aw-path-note">结果：${result}</p>` : ''}`;
+  }
   function workPage(data) {
     const row = data.work || {};
     const status = `<p class="aw-work-state">${lamp(row, false)}<span>${field(row.state_text, '状态')}</span></p>
@@ -263,7 +271,7 @@
       ${panel('状态', status, { symbol: 'check', cls: 'aw-green' })}${panel('经过', rounds(data, row), { symbol: 'flow' })}
       <div class="aw-side">${data.execution_seconds != null ? panel('这件花了多久', `<p class="aw-took">${words(`执行 ${span(data.execution_seconds)}`, Number.isFinite(data.elapsed_seconds) && `从发现起 ${span(data.elapsed_seconds)}`)}</p>`, { symbol: 'clock' }) : ''}
       ${relations ? panel('关联', `<ul class="aw-relations">${relations}</ul>`, { symbol: 'link' }) : ''}</div></div>`
-      + (row.type_id === 'acceptance' ? '' : `<p class="aw-path-note">修理路线：AI 修 3 次 → 没好交 Claude 出方案 → 第 4 次 → 再不好交给${own()}</p>`);
+      + (row.type_id === 'acceptance' ? '' : repairRoute(data));
   }
   function paint() {
     const data = state?.data;

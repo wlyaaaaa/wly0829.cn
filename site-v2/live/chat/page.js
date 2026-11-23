@@ -67,8 +67,9 @@
   back.href = route('/live/chats/');
   let from = null;
   try { from = document.referrer ? new URL(document.referrer) : null; } catch { from = null; }
-  if (from?.origin === location.origin && ['/live/', '/live/chats/', '/live/project/'].includes(from.pathname)) {
-    back.href = from.pathname + from.search; back.textContent = from.pathname === '/live/' ? '实况' : from.pathname === '/live/project/' ? '项目' : 'AI 对话';
+  // 从自动任务的一轮详情点“看完整对话”进来的，回到那一轮（后台的对话不进 AI 对话列表）
+  if (from?.origin === location.origin && ['/live/', '/live/chats/', '/live/project/', '/live/automation/run/'].includes(from.pathname)) {
+    back.href = from.pathname + from.search; back.textContent = from.pathname === '/live/' ? '实况' : from.pathname === '/live/project/' ? '项目' : from.pathname === '/live/automation/run/' ? '这一轮' : 'AI 对话';
     back.addEventListener('click', U.restoreBack);
   }
   part('meta').addEventListener('click', e => {

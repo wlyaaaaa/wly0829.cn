@@ -66,14 +66,20 @@
 .au-trend > span { font-size: 12.5px; color: #57564f; white-space: nowrap; }
 .au-trend > span[data-bad] { color: var(--tp-red); }
 .au-switchcell { white-space: nowrap; }
-.au-switch { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px 0 4px; border: 0; border-radius: 999px; background: #c9c7bf; color: #fff; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; vertical-align: middle; transition: background .2s ease; }
-.au-switch i { width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgb(0 0 0 / .2); }
+/* 开关：点一下圆钮滑到另一头、底色跟着变；“开”写在左边空出来的地方，“关”写在右边 */
+.au-switch { position: relative; display: inline-block; width: 58px; height: 28px; padding: 0; border: 0; border-radius: 999px; background: #c9c7bf; color: #fff; font: inherit; font-size: 13px; font-weight: 700; line-height: 28px; cursor: pointer; vertical-align: middle; transition: background-color .3s ease; }
+.au-switch i { position: absolute; top: 4px; left: 4px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgb(0 0 0 / .2); transition: transform .3s cubic-bezier(.3, .7, .35, 1.15); }
+.au-switch span { position: absolute; top: 0; right: 10px; }
+.au-switch[aria-checked="true"] i { transform: translateX(30px); }
+.au-switch[aria-checked="true"] span { right: auto; left: 10px; }
 .au-switch[aria-checked="true"] { background: var(--tp-green); }
 .au-switch[data-mode="paused"] { background: var(--tp-amber); }
 .au-switch:focus-visible, .au-pausebtn:focus-visible, .au-mini:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .au-pausebtn { margin-left: 6px; padding: 3px 9px; border: 1px solid var(--tp-line); border-radius: 7px; background: #fff; font: inherit; font-size: 12.5px; color: #3d3d3a; cursor: pointer; vertical-align: middle; }
 .au-pausebtn:hover { border-color: var(--ink); }
-.au-switchcell small { display: block; margin-top: 4px; }
+.au-switchcell small { display: block; min-height: 19px; margin-top: 4px; max-width: 190px; font-size: 12.5px; color: #57564f; white-space: normal; }
+.au-switchcell small[data-tone="ok"] { color: var(--tp-green-ink); font-weight: 700; }
+.au-switchcell small[data-tone="bad"] { color: var(--tp-red); }
 .au-state { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 700; color: #fff; background: var(--tp-green); }
 .au-state[data-mode="off"] { background: var(--tp-gray); }
 .au-state[data-mode="paused"] { background: var(--tp-amber); }
@@ -118,7 +124,8 @@
 
 .au-dialog { padding: 20px 22px; border: 1px solid var(--tp-line); border-radius: 14px; box-shadow: 0 20px 50px -20px rgb(0 0 0 / .35); font-family: var(--sans); }
 .au-dialog h2 { margin: 0 0 12px; font-size: 18px; }
-.au-dialog input { margin-left: 8px; font: inherit; }
+.au-when { display: flex; align-items: center; gap: 8px; margin: 0; }
+.au-when select { padding: 5px 8px; border: 1px solid var(--tp-line); border-radius: 8px; background: #fff; font: inherit; font-variant-numeric: tabular-nums; }
 .au-dialog__buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
 .au-dialog__buttons button { padding: 5px 14px; border: 1px solid var(--tp-line); border-radius: 8px; background: #fff; font: inherit; cursor: pointer; }
 .au-dialog__buttons button[type="submit"] { background: var(--tp-green); border-color: var(--tp-green); color: #fff; font-weight: 700; }
@@ -127,3 +134,69 @@
 .au-trend > span small { display: inline; color: #8a8981; }
 .au-basis { max-width: 230px; margin-top: 4px; }
 p.au-basis { max-width: none; margin: -6px 0 14px; }
+
+/* ============ 上半部：照 AI 对话页的用法（本人 11-24 01:36 FEDQ1 选 A） ============ */
+/* 一排分类按钮：全部 + 八类，后面跟着这一类在上半部有几张卡；摘一句只写今天几句 */
+.au-cats { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 2px 0 22px; }
+.au-cat { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 16px; border: 1px solid var(--tp-line); border-radius: 999px; background: #fff; font: inherit; font-size: 14px; font-weight: 600; color: #3d3d3a; cursor: pointer; box-shadow: 0 1px 2px rgb(20 20 19 / .05); transition: background .2s ease, color .2s ease, border-color .2s ease; }
+.au-cat b { font-family: var(--mono); font-weight: 600; color: #6c6b64; transition: color .2s ease; }
+.au-cat:hover { border-color: rgb(20 20 19 / .3); color: var(--ink); }
+.au-cat[aria-pressed="true"] { background: var(--tp-green); border-color: var(--tp-green); color: #fff; }
+.au-cat[aria-pressed="true"] b { color: #fff; }
+.au-cat:focus-visible, .au-chip button:focus-visible, .au-older__toggle:focus-visible, .au-day:focus-visible, .au-sec__back:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.au-chip { display: inline-flex; align-items: center; gap: 4px; height: 32px; padding: 0 6px 0 12px; border-radius: 999px; background: var(--tp-green-soft); font-size: 13.5px; font-weight: 700; color: var(--tp-green-ink); }
+.au-chip button { width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: none; font: inherit; font-size: 15px; line-height: 22px; color: inherit; cursor: pointer; }
+.au-chip button:hover { background: rgb(0 166 80 / .16); }
+
+/* 在干、出毛病的、近 72 小时跑完的：一轮一张白卡，左边一颗灯，右边“看经过 ›” */
+.au-sec { margin: 0 0 22px; scroll-margin-top: calc(var(--bar-bottom) + 16px); }
+.au-sec__head { display: flex; align-items: baseline; gap: 2px; margin: 0 0 10px 2px; font-family: var(--black); font-size: 26px; line-height: 34px; letter-spacing: .02em; }
+.au-sec__head b { font-weight: inherit; }
+.au-sec__back { margin-left: auto; padding: 0; border: 0; background: none; font: inherit; font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--tp-green-ink); cursor: pointer; }
+.au-empty { margin: 0; padding: 16px 22px; border: 1px dashed var(--tp-line); border-radius: var(--tp-r); background: #fff; font-size: 15px; color: #57564f; }
+.au-card { position: relative; display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; align-items: center; gap: 0 14px; margin: 0 0 10px; padding: 14px 22px 15px 20px; border: 1px solid var(--tp-line); border-radius: var(--tp-r); background: #fff; box-shadow: 0 1px 0 rgb(20 20 19 / .03), 0 10px 28px -22px rgb(20 20 19 / .3); transition: border-color .2s ease, box-shadow .2s ease; }
+.au-card:hover { border-color: rgb(20 20 19 / .22); box-shadow: 0 1px 0 rgb(20 20 19 / .03), 0 14px 30px -20px rgb(20 20 19 / .35); }
+.au-card__dot { align-self: center; width: 13px; height: 13px; border-radius: 50%; background: var(--tp-gray); }
+.au-card[data-tone="ok"] .au-card__dot, .au-card[data-tone="run"] .au-card__dot { background: var(--tp-green); }
+.au-card[data-tone="bad"] .au-card__dot { background: var(--tp-red); }
+.au-card[data-tone="warn"] .au-card__dot { background: #f0b400; }
+.au-card__dot.is-live { animation: tp-breathe 1.6s ease-out infinite; }
+.au-card__body { min-width: 0; }
+.au-card__cat { margin: 0 0 2px; font-size: 13px; line-height: 18px; color: #57564f; }
+.au-card__title { margin: 0; font-family: var(--black); font-size: 19px; line-height: 27px; letter-spacing: .01em; }
+.au-card__title a { color: inherit; text-decoration: none; }
+.au-card__title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1.5px; }
+.au-card__outs { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 4px 0 0; font-size: 14px; line-height: 21px; }
+.au-card__outs > span { color: #3d3d3a; }
+.au-card__meta { margin: 4px 0 0; font-size: 14px; line-height: 21px; color: #57564f; }
+.au-card__meta .tp-link { font-weight: 700; }
+.au-card__rounds { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 0; }
+.au-card__rounds a { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border: 1px solid var(--tp-line); border-radius: 999px; background: #fafaf8; font-size: 12.5px; color: #3d3d3a; text-decoration: none; white-space: nowrap; }
+.au-card__rounds a[data-tone="bad"] { border-color: rgb(217 59 59 / .3); color: var(--tp-red); }
+.au-card__rounds a:hover { border-color: rgb(20 20 19 / .3); }
+.tp a.au-card__go { display: inline-flex; align-items: center; gap: 4px; padding: 6px 4px 6px 12px; font-size: 15px; font-weight: 700; color: var(--tp-green-ink); text-decoration: none; white-space: nowrap; }
+.tp a.au-card__go:hover { text-decoration: underline; text-underline-offset: 3px; }
+.au-capped { margin: -10px 0 16px 2px; }
+
+/* 更早的 · 近 30 天按天看 */
+.au-older { margin: 4px 0 30px; text-align: center; }
+.au-older__toggle { padding: 6px 10px; border: 0; background: none; font: inherit; font-size: 17px; font-weight: 800; color: var(--tp-green-ink); cursor: pointer; }
+.au-older__toggle:hover { text-decoration: underline; text-underline-offset: 4px; }
+.au-days { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; margin: 12px 0 0; text-align: left; }
+.au-day { display: grid; gap: 1px; padding: 8px 12px; border: 1px solid var(--tp-line); border-radius: 10px; background: #fff; font: inherit; text-align: left; cursor: pointer; transition: border-color .2s ease, background .2s ease; }
+.au-day b { font-family: var(--mono); font-size: 15px; font-weight: 700; }
+.au-day small { font-size: 12px; color: #6c6b64; }
+.au-day span { font-size: 13px; color: #3d3d3a; }
+.au-day em { font-style: normal; color: var(--tp-red); }
+.au-day:hover:not(:disabled) { border-color: var(--tp-green); }
+.au-day[aria-pressed="true"] { border-color: var(--tp-green); background: var(--tp-green-soft); }
+.au-day:disabled { cursor: default; opacity: .55; }
+
+/* 下半部：这周做成了多少、八类总表 */
+.au-lower { margin-top: 8px; padding-top: 26px; border-top: 1px solid var(--tp-line); }
+
+/* 一类怎么干里“为什么这样做”“坏了怎么办”两块直接摊开，不做收起（本人 11-24 02:03：收起两个字被挤成竖排，建议不要收起） */
+.au-block { border: 1px solid var(--tp-hair); border-radius: 9px; background: #fafaf8; }
+.au-block__title { margin: 0; padding: 9px 14px 0; font-size: 13.5px; font-weight: 700; color: #3d3d3a; }
+/* 提示词原文仍收着（太长）。它的 summary 带 live-disclosure，躲开实况第二层通用的“展开后把 ::after 转 90 度”（那条会把“收起”转成竖排）；字也不许折行 */
+.au-more .tp-details > summary::after { flex: none; white-space: nowrap; }
