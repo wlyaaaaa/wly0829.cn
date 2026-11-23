@@ -2,7 +2,7 @@
 // 本人 11-24 01:36 定的（FEDQ2 选 A）：智能体下面另开一页，三家用页签切换；和规则页一样的段收成一行、点开看原文，
 // 只这一家有的展开、标“只有 X 有”；附开场时程序另外补的几行；右栏三家比一比。
 // 数据读 /computer-access/live/v1/agents/startup（后台第 7 件）：进这一页才读，智能体页不预读。
-// 网址 ?family=claude|codex|antigravity 直接落在这一家，不带时落在 Claude；#startup 落在“开场时程序另外补的几行”。
+// 网址 ?family=claude|codex|antigravity 直接落在这一家（旧链接的 ?host= 也认），不带时落在 Claude；#startup 落在“开场时程序另外补的几行”。
 // 访客版和本人版一样，只过全站禁词过滤（后台做）；这页不另藏东西。
 (() => {
   'use strict';
@@ -10,7 +10,8 @@
   const { HOSTS, list, known, int, when, link } = T;
   const HOOK_NAMES = { SessionStart: '开场给项目指路', Rules: '核对规则版本', PostCompactRewake: '压缩后接着办', PreInvocation: '叫模型前补状态' };
   const pick = id => HOSTS.some(h => h.id === id) ? id : 'claude';
-  let family = pick(new URLSearchParams(location.search).get('family'));
+  const query = new URLSearchParams(location.search);
+  let family = pick(String(query.get('family') || query.get('host') || '').toLowerCase());   // 后台旧链接带 ?host= 的也认
   let state, viewer = 'public', landed = false;
 
   // —— 取数：后台给什么，都在这一段转成页面要的样子；约定改了只改这一段 ——
@@ -248,7 +249,7 @@
     if (!pickBtn || pickBtn.dataset.family === family) return;
     family = pick(pickBtn.dataset.family);
     const url = new URL(location.href);
-    url.searchParams.set('family', family);
+    url.searchParams.delete('host'); url.searchParams.set('family', family);
     url.hash = '';
     history.replaceState(history.state, '', url.pathname + url.search);
     T.keep(page.root, `${pickBtn.closest('.op-side') ? '.op-side' : '.op-tabs'} [data-family="${family}"]`, draw);

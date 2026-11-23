@@ -28,12 +28,19 @@
     if (model && host === 'Claude' && !/^claude\b/i.test(model)) model = `Claude ${model}`;
     return [model || host, typeof w.effort === 'string' && w.effort.trim()].filter(Boolean).join(' ');
   }
-  // 一轮的地址：后台给了站内地址就用；没给照数据约定拼。
-  function runHref(run) {
-    if (typeof run?.href === 'string' && run.href.startsWith('/live/')) return run.href;
-    return run?.category && run?.run_id ? `${PAGE}?type=${encodeURIComponent(run.category)}&run=${encodeURIComponent(run.run_id)}` : '';
+  // 一轮的地址一律写成一轮的详情页 /live/automation/run/?type=<类>&run=<轮号>。后台给的站内地址照用；
+  // 它给的是旧写法 /live/automation/?type=…&run=…（自动任务页进来也会转过去）就改写成详情页，少转一次；没给照类别和轮号拼。
+  const RUN_PAGE = `${PAGE}run/`;
+  function runPage(href) {
+    if (typeof href !== 'string' || !href.startsWith(`${PAGE}?`)) return href;
+    const url = new URL(href, location.origin);
+    return url.searchParams.has('run') ? RUN_PAGE + url.search + url.hash : href;
   }
-  // 自动任务页只看某一类、某一天、某一家或在跑的（参数名先照单子写，F1 交回后对一遍）。
+  function runHref(run) {
+    if (typeof run?.href === 'string' && run.href.startsWith('/live/')) return runPage(run.href);
+    return run?.category && run?.run_id ? `${RUN_PAGE}?type=${encodeURIComponent(run.category)}&run=${encodeURIComponent(run.run_id)}` : '';
+  }
+  // 自动任务页只看某一类、某一天、某一家或在跑的：?category= &date=today|YYYY-MM-DD &family=claude|codex|antigravity &status=running|completed|incomplete（照自动任务页）。
   function listHref({ category, date, family, status } = {}) {
     const q = new URLSearchParams();
     for (const [key, value] of Object.entries({ category, date, family, status })) if (value) q.set(key, value);
@@ -90,5 +97,5 @@
     if (window.LiveUI?.restoreBack) link.addEventListener('click', window.LiveUI.restoreBack);
     return true;
   }
-  window.LiveRuns = { CATEGORY, categoryName, worker, runHref, listHref, when, todayLabel, runName, sources, timed, backToReferrer };
+  window.LiveRuns = { CATEGORY, categoryName, worker, runHref, runPage, listHref, when, todayLabel, runName, sources, timed, backToReferrer };
 })();

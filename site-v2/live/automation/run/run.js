@@ -8,7 +8,7 @@
   const params = new URLSearchParams(location.search);
   const category = R.CATS.includes(params.get('type')) ? params.get('type') : '', id = params.get('run') || '';
   const back = T.path('/live/automation/', { category });
-  let state, viewer = 'public', board = null, siblings = null;
+  let state, viewer = 'public', board = null, siblings = null, fromReferrer = false;
   const F = (v, name) => T.field(v, viewer, name);
   const you = () => T.you(viewer);
   const name = () => R.catName(category, viewer, list(board?.data?.categories).find(c => c.id === category)?.title);
@@ -123,7 +123,7 @@
   function draw() {
     const backLink = document.querySelector('[data-back]');
     viewer = T.viewerOf(state);
-    if (backLink && category) { backLink.textContent = U.fieldText(name(), viewer); backLink.href = back; }
+    if (backLink && category && !fromReferrer) { backLink.textContent = U.fieldText(name(), viewer); backLink.href = back; }
     page.tick.set(R.ticker(board?.data, null, viewer), { off: !!board?.offline });
     const d = state?.data;
     if (!category || !id) { T.paint(page.root, '<p class="tp-placeholder" role="status">网址里没写是哪一轮。</p>'); return; }
@@ -149,6 +149,8 @@
   page = T.boot({ resource: `automation/runs/${encodeURIComponent(category || '_')}/${encodeURIComponent(id || '_')}`, back,
     ask: () => `请看实况自动任务里这一轮（${name()}）：为什么开、做成了什么、哪里没做成、要不要我出面。先用大白话说，别动手。`,
     onState(next) { state = next; draw(); } });
+  // 从实况首页、等你的事、账本、AI 对话、智能体点进来的，返回回那一页（首页落回那张卡）；别的照旧回这一类（live-runs.js 的来回的路）
+  fromReferrer = !!window.LiveRuns?.backToReferrer(document.querySelector('[data-back]'));
   if (category) Live.watch('automation/runs', { category }, { phase(st) { siblings = R.page(st.data, viewer); if (state) draw(); } });
   Live.watch('automation', {}, { phase(st) { board = st; if (state) draw(); } });
   page.root.addEventListener('click', e => {

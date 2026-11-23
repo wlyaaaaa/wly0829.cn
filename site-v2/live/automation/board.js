@@ -2,7 +2,7 @@
 // 页头、一排分类按钮、在干、出毛病的、近 72 小时跑完的（一轮一张卡，自动修理一件一张卡）、更早的按天看；
 // 下半部是这周做成了多少、八类总表（开关、几点跑、用谁、上次结果、近 30 天，点一行原地展开怎么干）。
 // 读 /computer-access/live/v1/automation 和每一轮的列表 automation/runs（取数和转换在 runs.js）。
-// 网址：?category=<类> 只看一类；?family=claude|codex|antigravity 只看一家；?date=today|YYYY-MM-DD 只看那天；?status=running|completed|incomplete 只看一种结局；
+// 网址：?category=<类> 只看一类；?family=claude|codex|antigravity 只看一家（旧链接的 ?host= 也认）；?date=today|YYYY-MM-DD 只看那天；?status=running|completed|incomplete 只看一种结局；
 // ?type=<类> 照旧展开八类表里那一行。一轮的详情在 /live/automation/run/?type=<类>&run=<轮号>（后台给的 ?type=…&run=… 转过去）。
 // 单件活（?work=）、修理的小类（?type=backup 这类）、按项目看（?project=）仍走原来的页 /live/automation/work/。
 (() => {
@@ -33,7 +33,8 @@
   const DAY = /^\d{4}-\d{2}-\d{2}$/;
   const filter = {
     category: IDS.includes(params.get('category')) ? params.get('category') : null,
-    family: Object.hasOwn(R.FAMILIES, params.get('family') || '') ? params.get('family') : null,
+    // 只看一家一律写 ?family=；后台旧链接带 ?host= 的也认
+    family: [params.get('family'), params.get('host')].map(v => String(v || '').toLowerCase()).find(v => Object.hasOwn(R.FAMILIES, v)) || null,
     date: params.get('date') === 'today' || DAY.test(params.get('date') || '') ? params.get('date') : null,
     status: ['running', 'completed', 'incomplete'].includes(params.get('status')) ? params.get('status') : null,
   };
@@ -44,6 +45,7 @@
     const dateChanged = Object.hasOwn(next, 'date') && next.date !== filter.date;
     Object.assign(filter, next);
     const url = new URL(location.href);
+    url.searchParams.delete('host');
     for (const key of ['category', 'family', 'date', 'status']) if (filter[key]) url.searchParams.set(key, filter[key]); else url.searchParams.delete(key);
     history.replaceState(history.state, '', url.pathname + url.search + url.hash);
     if (dateChanged) watchRuns();

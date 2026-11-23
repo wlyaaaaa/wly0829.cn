@@ -2,8 +2,7 @@
   'use strict';
   const U = window.LiveUI, R = window.LiveRuns, { esc } = U;
   const entries = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' };
-  // 开场页（F2 新做，网址等 F2 交回再对）。它装上之前拼着写，免得构建查站内链接时把还没有的页当成死链；F2 合进来以后改回整串
-  const OPENING = '/live/agents/' + 'opening/';
+  const OPENING = '/live/agents/opening/';
   const items = value => Array.isArray(value) ? value : [];
   const count = value => typeof value === 'number' && value >= 0;
   const num = value => count(value) ? esc(value) : '<span class="fog__text" aria-label="没读到">··</span>';
@@ -34,7 +33,7 @@
     const problems = items(d.problems).map(p => {
       const title = U.fieldText(p.title, viewer), text = U.fieldText(p.text, viewer);
       const repairing = typeof p.repairing === 'boolean' ? p.repairing : p.handler !== '本人';   // 旧包没有 repairing：照原来，写明等本人的才不算在修
-      return { title, text, raw: p, repairing, handler: p.handler_text || p.handler || '', round: count(p.round) && p.round > 0 ? p.round : null, href: p.href };
+      return { title, text, raw: p, repairing, handler: p.handler_text || p.handler || '', round: count(p.round) && p.round > 0 ? p.round : null, href: R.runPage(p.href) };
     });
     const aiMinutes = count(today.ai_seconds) ? Math.round(today.ai_seconds / 60) : d.today?.ai_minutes;
     return { date: R.todayLabel(today.from || now), metrics, zero: metrics.every(m => m.n === 0), last, running, problems, aiMinutes };
@@ -58,7 +57,7 @@
       // 点这一家那一行：到智能体页“三家各干了多少活”那块（#work），高亮这一家；后台给了这一家的地址就用它（网址只看一家一律 ?family=，F1 定的）
       const base = typeof t?.href === 'string' && t.href.startsWith('/live/agents/') ? t.href : `/live/agents/?family=${key}`;
       return { ...p, name: p.name || name, color: HOST_COLOR[key], issues, fixing: issues.length ? busy.length > 0 : p.status === 'repair',
-        round: busy.map(i => i.round).find(r => count(r) && r > 0) || null, fixHref: fix.href || null,
+        round: busy.map(i => i.round).find(r => count(r) && r > 0) || null, fixHref: R.runPage(fix.href) || null,
         workHref: base.includes('#') ? base : `${base}#work`,
         // “上次”：这一家今天的数是证实的 0 时，用 last_at 里对应那一项（工时没有就看开工）
         today: t ? { hours: hoursOf(t.actual_minutes), starts: t.starts, said: t.messages, last: last.work || last.starts || null } : null };
