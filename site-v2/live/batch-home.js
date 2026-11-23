@@ -27,7 +27,7 @@
       const status = offline ? '电脑连不上' : toOwner ? link(d.attention.href, `要${own}做 ›`) : problem ? (repairing ? `AI 在修 ${repairing} 类` : `等${own}处理 ${problems.length} 类`) : tone === 'ok' ? '都正常' : '状态没读到';
       const today = d.today || {}, next = d.next || {};
       return { tone, head: cardTitle('自动任务', href, tone, status), body:
-        `<p><span class="b6-badge">今天替${own}做成的</span></p>
+        `<p><span class="b6-badge">今天 0 点起替${own}做成的</span></p>
         <div class="b6-metrics">${fact(today.repaired, '修好')}${fact(today.messages_logged, `新消息记下给${own}`)}${fact(today.rules_fixed, '规矩里改好')}</div>
         ${running.length ? running.map(row => `<p>${dot('ok')}这会儿在跑：${link(row.href, field(row.title, '运行名称'))}${row.model || count(row.minutes) ? `<small class="b6-run-meta">${[field(row.model), count(row.minutes) && esc(U.minutes(row.minutes))].filter(Boolean).join(' · ')}</small>` : ''}</p>`).join('')
           : `<p>${next.title ? `下次 ${esc(time(next.at) || next.wait || '')} · ${link(next.href, field(next.title, '任务名称'))}`
@@ -64,7 +64,7 @@
     return { tone: d.repair && !offline ? 'repair' : count(d.open) && !offline ? 'ok' : 'off',
       head: cardTitle('AI 账本', href, d.repair && !offline ? 'repair' : count(d.open) && !offline ? 'ok' : 'off', ''),
       body: `<div class="b6-ledger-top"><strong>手上 <em>${num(d.open)}</em> 件</strong><div>${bar(d.opened_7d, '近 7 天新进', 'in')}${bar(d.closed_7d, '了结', 'out')}</div></div>
-      <p><span class="b6-badge">跟得最久</span> ${oldest ? `${link(oldest.href, field(oldest.title, '事项标题'))} · ${num(oldest.days)} 天` : d.open === 0 ? '没有未了结的事' : '最早那件没读到'}</p>${checks}
+      <p><span class="b6-badge">跟得最久</span> ${oldest ? `${link(oldest.href, field(oldest.title, '事项标题'))} · ${num(oldest.days)} 天` : field(d.oldest_text) || (d.open === 0 ? '没有未了结的事' : '最早那件没读到')}</p>${checks}
       <p><span class="b6-badge">今天到日子 ${num(Array.isArray(d.due_today) ? due.length : null)} 件</span></p>
       ${[...due].sort((a,b) => Number(Boolean(b.overdue)) - Number(Boolean(a.overdue))).slice(0,3).map(row => `<p class="b6-due">${link(row.href || (row.id ? '/live/issue/?id=' + encodeURIComponent(row.id) : ''), field(row.title || row.text, '事项标题'))}<small>${row.overdue ? '过期 · ' : ''}${esc(time(row.next_at) || U.fieldText(row.wait?.text, viewer))}</small></p>`).join('')}
       ${d.repair ? `<p>${dot('repair')}${link(d.repair.href, '已交自动修理')}${d.repair.text && U.fieldText(d.repair.text, viewer).replace(/[\s。.]+$/, '') !== '已交自动修理' ? ' · ' + field(d.repair.text) : ''}</p>` : ''}` };
