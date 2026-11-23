@@ -222,9 +222,11 @@
     Promise.all([loadedRelease, releaseId()]).then(([was, now]) => { if (was && now && was !== now) reloadPage(); });
   }
   let mainResource = null;
-  const isMain = e => !mainResource || e.resource === mainResource;
+  // 翻页取的一批（带 cursor）只管它自己那一处：读不到不算整页连不上，也不当本页主数据（M553）
+  const paged = e => new URLSearchParams(e.query).has('cursor');
+  const isMain = e => !paged(e) && (!mainResource || e.resource === mainResource);
   const freshArrived = e => { clearTimeout(e.freshWait); e.freshWait = 0; };
-  const awaitFresh = e => { if (!e.freshWait) e.freshWait = later(() => { e.freshWait = 0; staleAfterWait(e); }, FRESH_WAIT_MS); };
+  const awaitFresh = e => { if (!e.freshWait && !paged(e)) e.freshWait = later(() => { e.freshWait = 0; staleAfterWait(e); }, FRESH_WAIT_MS); };
   function staleAfterWait(e) {
     if (publicPaused || e.stopped || e.token !== device()) return;
     if (isMain(e)) {
@@ -532,6 +534,7 @@
       audience(e, { kind: 'public', device: 'invalid' });
     }
     e.error = status === 403 ? '这部分只对本人开放' : [404, 410, 503].includes(status) ? '暂时读不到' : body?.text || '';
+    if (paged(e)) return;
     const reachable = status >= 400 && status < 500 || /^live_((source|variant|detail)_unavailable|publication_revoked)$/.test(body?.error || '');
     const reason = via || (body?.error === 'owner_read_failed' ? 'owner-read' :
       body?.error === 'preview_upstream_not_listening' || [500, 503].includes(status) && !body?.error?.startsWith('snapshot_') ? 'service' : 'unreachable');
@@ -614,7 +617,7 @@
     rememberScreen(e);
   }
   async function retryFailure(e, retryCopy, notListening = false) {
-    if (publicPaused) return;
+    if (publicPaused || paged(e)) return;
     restoreBrowserCopy(e);
     const f = e.failure ||= { tries: 0, fallback: later(async () => {
       f.fallback = null;
@@ -864,7 +867,17 @@
     if (e.pending) opened.card(card);
     // 返回时，点开才读的明细也先照存下的画；现读在后台补，不挡住回来的第一帧。
     if (returning && e.data !== null && (fixture !== null || e.viewer.kind === 'owner')) { read(e, true, card); return Promise.resolve(present(e)); }
-    return read(e, true, card, fallbackOnFailure);
+    if (!paged(e)) return read(e, true, card, fallbackOnFailure);
+    // 这一批没读到（连不上或服务出错）：隔 2 秒、5 秒自己再取，还不行才交回页面在那一处写“这一批没读到”（M553）
+    return (async () => {
+      let state = await read(e, true, card);
+      for (const wait of [2000, 5000]) {
+        if (state.data != null || state.meta?.status >= 400 && state.meta.status < 500 || e.stopped) break;
+        await new Promise(resolve => later(resolve, wait));
+        state = await read(e, true, card);
+      }
+      return state;
+    })();
   }
   function afterReady(ready, callbacks) {
     // 请求和静态资源一起起跑。画面准备好时只交付每种通知的最新状态。
