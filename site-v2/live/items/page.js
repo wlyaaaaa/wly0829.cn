@@ -470,7 +470,10 @@
   function closedRows(items) {
     const seen = new Map();
     for (const raw of items) {
-      const it = { ...raw, text: unprefix(raw.text), title: unprefix(raw.title) }, key = viewer === 'owner' ? it.kind + '|' + U.fieldText(it.text ?? it.title, 'owner').replace(/\s+/g, '').replace(/[。.]$/, '') : it.id;
+      // 访客版也并：看得到的同一句并成一条；仅本人可见的各算各的，件数照旧
+      const it = { ...raw, text: unprefix(raw.text), title: unprefix(raw.title) }, shown = U.fieldText(it.text ?? it.title, viewer) || '';
+      const hiddenRow = viewer !== 'owner' && (it.visibility === 'owner' || it.public === 'owner' || it.text?.visibility === 'owner' || /仅本人可见/.test(shown));
+      const key = hiddenRow || !shown ? it.id : it.kind + '|' + shown.replace(/\s+/g, '').replace(/[。.]$/, '');
       if (seen.has(key)) seen.get(key).repeats++; else seen.set(key, { ...it, repeats: 1 });
     }
     return [...seen.values()];
