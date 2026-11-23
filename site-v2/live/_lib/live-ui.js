@@ -459,6 +459,13 @@
     }
     return '';
   }
+  // 本人版：访客版整条藏掉的（后台在本人版这一条上留 visibility: 'owner'），原位挂“访客看不到”小签，点开写清藏了什么、为什么（M648）。
+  // 访客版不挂；只藏其中一句的，访客版原位已写“〈哪一样〉仅本人可见”，这里不管。后台给了 visitor_hidden_why 就把原因带上。
+  function visitorHiddenMark(item, what = '这一条', kind = viewer) {
+    if (kind !== 'owner' || !(item?.visibility === 'owner' || item?.public === 'owner')) return '';
+    const why = typeof item.visitor_hidden_why === 'string' ? item.visitor_hidden_why.trim() : '';
+    return explanationButton('rewritten', '访客看不到', what, `访客版看不到${what}的标题和内容。${why ? `原因：${why.replace(/[。.]?$/, '。')}` : ''}`);
+  }
   const hiddenMore = (n, unit, what) => n > 0 ? privateSummary(n, { unit, what }) : '';
   function escapeNotes(text) {
     // 只让共用函数生成的固定结构通过，其余内容一律按文字显示。
@@ -1671,5 +1678,5 @@
     back.after(nav);
   })();
 
-  window.LiveUI = { justSaved, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  window.LiveUI = { justSaved, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, visitorHiddenMark, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();

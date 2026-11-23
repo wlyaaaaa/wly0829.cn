@@ -575,8 +575,8 @@
     if (viewer === 'owner' && U.originName(it.origin, it)) sub = join([sub, U.capText(U.originName(it.origin, it), 30, true)]);
     if (viewer === 'public' && it.visibility === 'owner') sub = '';
     const fresh = seen.isNew(it.episode_at || it.born, at) ? tags([['新', 'tag--new']]) : '';
-    // 本人版给完整版，不挂“仅你可见”。
-    const marks = (viewer === 'owner' && it.visibility !== 'owner' ? `<span class="head__rewrite">${U.visibilityNote(it, viewer)}</span>` : '');
+    // 本人版给完整版，不挂“仅你可见”；访客版整件藏掉的，本人版挂“访客看不到”（M648）。
+    const marks = viewer !== 'owner' ? '' : `<span class="head__rewrite">${it.visibility === 'owner' || it.public === 'owner' ? U.visitorHiddenMark(it, '这件事', viewer) : U.visibilityNote(it, viewer)}</span>`;
     return {
       key: it.id,
       cls: 'row',
@@ -732,7 +732,7 @@
     const lockedMeta = locked ? [c.stage, c.project_name, c.born && ('开始于 ' + U.time(c.born)),
       c.compaction?.count > 0 && ('压缩 ' + c.compaction.count + ' 次'),
       ...new Set(helperRows.map(h => h.model || h.model_text).filter(Boolean))].filter(Boolean).map(esc) : [];
-    const meta = [[U.chatFields.appTag(c), who(c)].filter(Boolean).join(' '), esc(state), hint && esc(hint), helperText && esc((lastState?.offline ? '离线前' : '') + helperText), ...lockedMeta]
+    const meta = [[U.chatFields.appTag(c), who(c)].filter(Boolean).join(' '), esc(state), hint && esc(hint), helperText && esc((lastState?.offline ? '离线前' : '') + helperText), ...lockedMeta, U.visitorHiddenMark(c, '这场对话', viewer)]
       .filter(Boolean).map(part => `<span class="chat-meta-part">${part}</span>`).join(' ');
     return { key: c.id, cls: 'row row--chat row--compact', html: `${lamp(c)}<div class="row__text"><p class="row__main">${chatTitle(c, heading)}<span class="row__meta">${meta}</span></p>${locked ? '<p class="row__sub">计划、思考摘要和回复仅本人可见</p>' : preview}${progress || worked ? `<p class="row__sub chat-progress-line">${[progress, worked].filter(Boolean).join(' · ')}</p>` : ''}${detail}</div><div class="row__acts">${chatActions(c)}</div>` };
   }
