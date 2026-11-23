@@ -9,6 +9,7 @@ on:
         required: true
 
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
@@ -49,6 +50,20 @@ jobs:
           path: .
           include-hidden-files: true
           retention-days: 1
+      - name: Wait for the uploaded Pages artifact
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_NAME: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          for attempt in {1..20}; do
+            if gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts" --jq '.artifacts[].name' | grep -Fx "$ARTIFACT_NAME"; then
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Pages artifact '$ARTIFACT_NAME' did not become visible" >&2
+          exit 1
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
