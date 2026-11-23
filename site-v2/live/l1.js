@@ -773,12 +773,16 @@
   }
 
   const oldReading = d => d?.stale || ['stale', 'old'].includes(d?.q) || ['stale', 'old'].includes(d?.state) || d?.read_error || /最近一次记录于/.test(sp(d?.stale_text || d?.text));
-  const chatCountsAt = d => Object.hasOwn(d, 'source_at') && d.source_at == null ? null : d.window?.to || blockAt(d);
+  // 在干、等回答按新样本自己的时刻（source_at）写，和根首页一样；完整统计（近 72 小时那一窗）的时刻不拿来顶（M606）
+  const chatCountsAt = d => Object.hasOwn(d, 'source_at') ? d.source_at : d.window?.to || blockAt(d);
   function chatSnapshot(d) {
     const observed = chatCountsAt(d);
     const old = lastState?.offline || oldReading(d) || timed(observed) && new Date(lastState?.now || Date.now()) - Date.parse(observed) >= 120000;
     const counts = d.last_counts && d.running == null && d.waiting == null && d.done72 == null ? d.last_counts : d;
-    return { counts, observed: counts === d ? observed : counts.at || counts.window?.to, old: old || counts !== d };
+    const shown = counts === d ? observed : counts.at || counts.window?.to;
+    // 完整统计这一轮没写成：那一窗的截止比样本早 2 分钟以上，近 72 小时做完数照实写还没读到
+    const statsBehind = timed(counts.window?.to) && timed(shown) && Date.parse(shown) - Date.parse(counts.window.to) >= 120000;
+    return { counts, observed: shown, old: old || counts !== d, statsBehind };
   }
   function chatCardHead({ summary, recorded, marker, url }) {
     const arrow = url ? ' <span class="head__tail chat-head-arrow" aria-hidden="true">›</span>' : '';
@@ -790,11 +794,11 @@
   }
   function renderChats(d) {
     if (!hasCardData('chats', d)) { emptyCard('chats', d); return; }
-    const p = parts.chats, { counts, observed, old } = chatSnapshot(d);
+    const p = parts.chats, { counts, observed, old, statsBehind } = chatSnapshot(d);
     const recorded = recordStamp(observed) || (old && sp(d.stale_text || d.text).match(/最近一次记录于\s*((?:\d{2}-\d{2}\s+)?\d\d:\d\d)/)?.[1]);
     const concurrent = counts.running != null && `${quantity(counts, 'running')} 个${old && !recorded ? '当时' : ''}在干`;
     const waiting = counts.waiting != null && addressed(`${quantity(counts, 'waiting')} 个等你回答`);
-    const pieces = [concurrent, waiting, counts.done72 != null && `近 72 小时做完 ${quantity(counts, 'done72')} 个`];
+    const pieces = [concurrent, waiting, counts.done72 != null && (statsBehind ? '近 72 小时做完数还没读到' : `近 72 小时做完 ${quantity(counts, 'done72')} 个`)];
     const missing = [counts.running == null && '在干数', counts.done72 == null && '近 72 小时做完数'].filter(Boolean);
     const marker = typeof d.text === 'object' && d.text;
     const summary = join(pieces);
