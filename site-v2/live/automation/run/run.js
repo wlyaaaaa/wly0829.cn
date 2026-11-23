@@ -157,7 +157,8 @@
   // 全部几类（不含摘一句）一次读：数据约定写了列表可带 exclude=excerpt。后台还不认这个参数（回 4xx）时停掉这一份，快讯条退回只排这一类
   let allRuns = null;
   allRuns = Live.watch('automation/runs', { exclude: 'excerpt' }, { phase(st) {
-    if (st.status >= 400 && st.status < 500) { setTimeout(() => allRuns?.stop()); others = null; }
+    const status = st.meta?.status;
+    if (status >= 400 && status < 500) { setTimeout(() => allRuns?.stop()); others = null; }
     else others = R.page(st.data, viewer);
     if (state) draw();
   } });
