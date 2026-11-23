@@ -18,13 +18,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  prepare:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    timeout-minutes: 10
     steps:
       - name: Check out main
         uses: actions/checkout@v6
@@ -42,7 +39,6 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v6
       - name: Upload prepared artifact
-        id: upload
         uses: actions/upload-pages-artifact@v5
         with:
           # The action always excludes .git and .github, including hidden-file uploads.
@@ -50,29 +46,17 @@ jobs:
           path: .
           include-hidden-files: true
           retention-days: 1
+
+  deploy:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-          ARTIFACT_ID: ${{ steps.upload.outputs.artifact_id }}
-        run: |
-          # Use the uploaded artifact ID directly. The separate artifact name index can lag.
-          oidc="$(curl -fsS --max-time 20 -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -er '.value')"
-          echo "::add-mask::$oidc"
-          pages="repos/$GITHUB_REPOSITORY/pages/deployments"
-          deployment="$(jq -cn --argjson id "$ARTIFACT_ID" --arg sha "$GITHUB_SHA" --arg token "$oidc"             '{artifact_id:$id,pages_build_version:$sha,oidc_token:$token}' | gh api --method POST "$pages" --input -)"
-          id="$(jq -er '.id' <<< "$deployment")"
-          echo "page_url=$(jq -er '.page_url' <<< "$deployment")" >> "$GITHUB_OUTPUT"
-          for attempt in {1..120}; do
-            status="$(gh api "$pages/$id" --jq '.status')" || status=unknown_status
-            case "$status" in
-              succeed) echo "Pages deployment $id succeeded"; exit 0 ;;
-              deployment_failed|deployment_content_failed|deployment_cancelled|deployment_lost)
-                echo "Pages deployment $id ended with $status" >&2; exit 1 ;;
-            esac
-            sleep 5
-          done
-          echo "Pages deployment $id timed out" >&2
-          gh api --method POST "$pages/$id/cancel"
-          exit 1
+        uses: actions/deploy-pages@v5
+        with:
+          artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
