@@ -1,8 +1,7 @@
 <!doctype html>
-<html lang="zh-CN">
-<head><meta name="referrer" content="strict-origin-when-cross-origin"><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>AI 账本 · 实况</title>
+<html lang="zh-CN"><head><meta name="referrer" content="strict-origin-when-cross-origin"><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>AI 账本 · 实况</title>
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/79376fe0a57cdf8bdb3d0f35f5b46e8ad182309dc6afc26e8084e7c31d70520c/connect-auth/glass.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ea5101dcb96bd7df846c4c896b753ae7a1948ef8f5c243b3e1be2a3855055830/trust-modal/trust-modal.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0becd6b9fb291285f95d2bd0cc6bdfc03b5a7c3b1e34f8f688a76c5e0f4097a4/live/_lib/live-viz.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/fbb0de9bf0bdfba06559440f9dcb34c52b058874cc9d6c3c2ffd26a3ac4f5553/live/_lib/live.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbe171a6dac8e531cce49388080ab17a1adbc94d10b51b54d3ae3b9333d6e73a/live/_lib/live-page.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8eb048c160e444e5bc727bee9776db12a86dd34127908dc98e00dc2914251bef/live/_lib/live-book.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ab3727f799c9230353a52ed4cba0808edb318f5571cf54cac1208be0d59d52fa/motion/motion.css"><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/42fd4573ad1c2f00293a36f4c3983722753fc547c53d951c18967c75a300adbb/motion/motion.js"></script><style>.page--l2 .tag { font-size: 12px; }</style><style>.page--l2 .card--hero[data-pic] .card__glass { min-height: 192px; }</style><style>.rec-meta>span,.run__when,.trust-note,.btn{white-space:nowrap}.row__title,.rec-fact dt{word-break:keep-all}.rec-acts{gap:10px;flex-wrap:wrap}</style>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/fbb0de9bf0bdfba06559440f9dcb34c52b058874cc9d6c3c2ffd26a3ac4f5553/live/_lib/live.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbe171a6dac8e531cce49388080ab17a1adbc94d10b51b54d3ae3b9333d6e73a/live/_lib/live-page.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/96563485ca58ec3b6e2ba3abc0961532421e9eb35f97899dcc7bdad67d0ad1c0/live/_lib/live-tape.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e11098f8d53ad55165fe880cc40b351f0d07b1bc3f4ff6df738f0415a0cd65b9/live/ledger/board.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ab3727f799c9230353a52ed4cba0808edb318f5571cf54cac1208be0d59d52fa/motion/motion.css"><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/42fd4573ad1c2f00293a36f4c3983722753fc547c53d951c18967c75a300adbb/motion/motion.js"></script>
 <meta name="color-scheme" content="only light">
 <style>:root{color-scheme:only light}</style>
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -10,130 +9,22 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="canonical" href="https://wly0829.cn/live/ledger/">
 <meta property="og:url" content="https://wly0829.cn/live/ledger/">
-<meta name="description" content="查看 AI 正在跟进的事项、处理经过和最近完成的结果。">
+<meta name="description" content="查看 AI 答应了还没了结的每一件、下次什么时候看，最近了结的和反复出现的。">
 <meta property="og:title" content="AI 账本 · 实况">
-<meta property="og:description" content="查看 AI 正在跟进的事项、处理经过和最近完成的结果。">
+<meta property="og:description" content="查看 AI 答应了还没了结的每一件、下次什么时候看，最近了结的和反复出现的。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/531e0a6e71c56084529cf5d817693615cef489a846cbfb148653aea81328c48c/%E5%85%AC%E7%94%A8/fonts/ui-80e213c96e4788d5.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/195e88537e95167a02b6aed97c3cd0e708da49ca83fc7bd8850ed88dd7051d0b/%E5%85%AC%E7%94%A8/fonts/live-ca5c8139da87dec2.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/fe9ab0957f7fddea83155b42b098551b8218915275ae45bce44f4e6553b310f4/%E5%85%AC%E7%94%A8/fonts/ui-ef15458e6ab86ac3.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/2a14fcee38b69f447a2faaf0ebeaff84fff3f767548fbfdca382fa2a9274c7cc/%E5%85%AC%E7%94%A8/fonts/live-2d8aa41afc5dbc4c.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
-</head>
-<body class="page page--live page--l2 page--ledger page--book"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
-<main class="stage" id="stage"><div class="field" aria-hidden="true"></div>
-<a class="back" href="/live/#ledger" data-back data-mo-rise>实况</a><ul class="notices" id="notices" aria-live="polite"></ul>
-<article class="card card--hero card--project" id="hero" data-pic="right" data-tone="none" data-mo-rise>
-  <div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/2a8c859d906e050ee0c1fb5f5e032ae6a4cbec78681c19e4e6d68ee92655c3f3/live/img/ledger.webp" alt="" aria-hidden="true">
-  <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/2a8c859d906e050ee0c1fb5f5e032ae6a4cbec78681c19e4e6d68ee92655c3f3/live/img/ledger.webp" width="1000" height="1000" alt=""></span>
-  <div class="card__body fog-bare"><p class="card__head" id="head"></p><p class="hero__note" id="hero-note"></p>
-  <div class="hero__links"><a class="more more--link" href="#current">手上的 ›</a><a class="more more--link" href="#history">近 7 天的结果 ›</a></div></div></div>
-</article>
-<div class="l2-board" id="board">
-  <section class="card glass ledger-now" id="current" data-mo-rise>
-  <div class="ledger-now__bar" data-keep><p class="ledger-now__title"><b>账本里还在跟进的事</b></p>
-  <button class="ledger-now__btn" id="working-more" type="button"></button><span class="ledger-now__sep" aria-hidden="true"></span><button class="ledger-now__btn" id="waiting-more" type="button"></button><button class="pill-btn" id="wait-order" type="button" aria-pressed="false">等最久的先看</button></div>
-  <div class="fold" id="working-box"><div><div class="ledger-now__book" id="working-book"></div></div></div>
-  <div class="fold" id="waiting-box"><div><div class="ledger-now__book" id="waiting-book"></div></div></div></section>
-  <section class="ledger-book" id="history" data-mo-rise>
-  <div class="ledger-paper">
-  <div class="l2-nav ledger-nav" id="ledger-nav"><div class="l2-filter" id="outcome" role="group" aria-label="按结果看"><button class="pill-btn" type="button" data-outcome="" aria-pressed="false">全部结果</button><button class="pill-btn" type="button" data-outcome="fixed" aria-pressed="false">修好</button><button class="pill-btn" type="button" data-outcome="not_fixed" aria-pressed="false">没修好</button><button class="pill-btn" type="button" data-outcome="wont_fix" aria-pressed="false">定了不修</button><button class="pill-btn" type="button" data-outcome="deferred" aria-pressed="false">暂时不修</button><button class="pill-btn" type="button" data-outcome="to_owner" aria-pressed="false">转交</button></div><p class="pj-note ledger-nav__end"><span id="history-label">近 7 天的结果</span><span class="pj-note" id="coverage"></span></p></div>
-  <div id="history-book"></div><p id="history-empty" class="ledger-empty" role="status" hidden></p><img class="ledger-corner" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/fd5cdaa5dc64295fd0faeabc2c10a4af35ac00fcc38e488cdd8b52fc7edcd0df/live/img/ledger-corner.webp" width="900" height="424" alt="" aria-hidden="true" decoding="async">
-  <div class="ledger-foot"><button class="more" id="next" type="button" hidden>继续看 ›</button><button class="more more--link" id="earlier" type="button">更早的 ›</button></div>
-  </div></section>
-</div></main>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b602737c9961ba9acd007f91d63c1921c8a9dca967be5010d4795431bc299fd/trust-modal/trust-modal.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e725a7764dfccaabe41b069e838c7b9da8a2ddcd00a7c0818e17d7cf32522330/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/95efda5e19c61f52d8d04dae6812a89ca92396e4c238f60759ef107e1e568e61/live/_lib/live-client.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/5e28c3c2789a4a7517c957e80ee5f03fc203572ecf2647fa65080d46ae8ffe0a/live/_lib/live-ui.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0b0ac15a1196e21faaba47127a219a29719d1a6457fc4ecf809608acb5bf42ae/live/_lib/live-light.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/480100c9675675dad01d30673e1c806543ec8ecc4cf893046370d737dcef9e59/live/_lib/live-viz.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/af3b5413b4903b92acb4b3db7dd7b9db171d5b22d75ecdcd79ca5c373b4a7129/live/_lib/live-book.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d238ff6c12cf7fd8a13ef409233de37c5686a5a7c4a4d083e11158099ccd265e/live/ledger/wait-order.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/fb6dd5861a48be2712481b35f85a8c153de1a04df23da9df7d3c9fb11956f1a7/live/ledger/page.js"></script>
-<style>
-.page--ledger #wait-order { flex-shrink: 0; white-space: nowrap; }
-#repeat-fixes .row:has(a.row__title) { position: relative; }
-#repeat-fixes a.row__title::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
-#repeat-fixes a.row__title:focus-visible { outline: none; }
-#repeat-fixes a.row__title:focus-visible::after { outline: 2px solid var(--ink); outline-offset: -2px; }
-#repeat-fixes .row :is(a:not(.row__title), button, summary, [role="button"], [role="link"]) { position: relative; z-index: 2; }
-/* AI 账本：上面“现在 AI 手上的”一条玻璃卡（在做、在等两颗按钮，点开是两张小表），下面一本按结果分组的账簿（live-book.css 的分组样子）。
-   颜色、底纹只用实况现有的（玻璃卡、.tag、.pill-btn、灯色），色值收在 live-book.css 的 --tone-* 和 --book-group-*。 */
-.page--ledger .filter-count { margin-left: 5px; font-size: 12px; color: var(--muted); }
-.page--ledger #board { grid-template-columns: minmax(0, 1fr); row-gap: 26px; }
-.page--ledger #hero .head__tail { font-size: 17px; line-height: 30px; font-weight: 500; color: #5d5b55; }
-.page--ledger #hero .head__tail::before { margin: 0 10px 0 4px; }
-.page--ledger #hero-note { display: block; }   /* 一行字照常排：数字变动时拆出来的小段不按弹性盒拉开间距 */
-.ledger-now { padding: 0; }
-.ledger-now__bar { display: grid; grid-template-columns: minmax(210px, 1.1fr) minmax(0, 1fr) 1px minmax(0, 1fr) auto; align-items: center; gap: 0 22px; padding: 16px 26px; }
-.ledger-now__title { display: grid; gap: 2px; margin: 0; }
-.ledger-now__title b { font-size: 20px; line-height: 28px; font-weight: 700; letter-spacing: .02em; color: var(--ink); }
-.ledger-now__bar { min-height: 76px; }
-.ledger-now__sep { align-self: stretch; background: rgb(20 20 19 / .08); }
-.ledger-now__btn { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 8px 12px; border: 0; border-radius: 14px; background: none; font: inherit; text-align: left; color: inherit; cursor: pointer; transition: background-color .2s ease; }
-.ledger-now__btn:hover, .ledger-now__btn[aria-expanded="true"] { background: rgb(255 255 255 / .55); }
-.ledger-now__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
-.ledger-now__t { display: grid; min-width: 0; }
-.ledger-now__t b { font-size: 17px; line-height: 24px; font-weight: 700; color: var(--ink); }
-.ledger-now__btn .more__chev { margin-left: auto; color: var(--muted); transition: rotate .2s ease; }
-.ledger-now__btn[aria-expanded="true"] .more__chev { rotate: 90deg; }
-.ledger-now__ico { flex: 0 0 28px; width: 28px; height: 28px; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-.ledger-now__ico[data-tag="working"] { color: rgb(var(--tone-green)); }
-.ledger-now__ico[data-tag="working"] path { fill: currentColor; stroke: none; }
-.ledger-now__ico[data-tag="waiting"] { color: rgb(var(--tone-amber)); }
-.ledger-now__ico circle, .ledger-now__ico[data-tag="waiting"] path { stroke: currentColor; }
-.ledger-now__book { padding: 0 22px 14px; }
-.ledger-now > .fog { padding: 0 26px 18px; }
-#history .ledger-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin: 0; padding: 15px calc(var(--ledger-corner-width) + 30px) 2px 24px; }
-.ledger-nav__end { display: flex; min-width: 0; flex-wrap: wrap; justify-content: flex-end; gap: 0 8px; margin: 0 0 0 auto; text-align: right; }
-.ledger-nav__end > .pj-note { margin: 0; }
-.ledger-nav__end > #coverage:not(:empty)::before { content: "·"; margin-right: 8px; }
-.ledger-empty { margin: 0; padding: 12px 24px 8px; color: var(--muted); font-size: 14px; line-height: 22px; }
-.ledger-foot { display: flex; justify-content: center; gap: 18px; padding: 8px 24px 20px; }
-:where(#current, #history .ledger-paper) > .live-fallback-note { margin: 0 24px 12px; }
-#history .ledger-paper:has(> .live-fallback-note) { padding-bottom: 10px; }
-#history .ledger-paper:has(#history-empty:not([hidden])) .book--groups { padding-bottom: 0; }
-.ledger-foot .more { margin: 0; translate: none; }
-.ledger-tag { --tone: var(--tone-gray); color: rgb(var(--tone)); background: rgb(var(--tone) / var(--book-tag-bg)); box-shadow: none; }
-.ledger-tag:is([data-tag="fixed"], [data-tag="working"]) { --tone: var(--tone-green); }
-.ledger-tag[data-tag="not_fixed"] { --tone: var(--tone-red); }
-.ledger-tag[data-tag="wont_fix"] { --tone: var(--tone-violet); }
-.ledger-tag[data-tag="deferred"] { --tone: var(--tone-blue); }
-.ledger-tag:is([data-tag="to_owner"], [data-tag="waiting"]) { --tone: var(--tone-amber); }
-.ledger-when { white-space: nowrap; font-size: 14px; color: #5d5b55; }
-.ledger-detail { display: grid; gap: 3px; padding: 0 0 4px; font-size: 14px; line-height: 22px; color: #55534c; }
-.ledger-detail p { margin: 0; }
-.ledger-detail__say { color: var(--ink); }
-.ledger-detail__links { display: flex; flex-wrap: wrap; gap: 2px 18px; }
-.ledger-detail__acts { margin-top: 4px; }
-.ledger-name { display: flex; align-items: flex-start; gap: 8px; min-width: 0; }
-.ledger-name > .tag { flex: none; margin-top: 2px; }
-.ledger-name__t { min-width: 0; }
-/* 手上那两张小表：标题、说明按内容分宽，“跟了”放最右、靠右 */
-.ledger-now .ledger-now__book .book-table col:is(.book-col-name, .book-col-reason) { width: auto; }
-.ledger-now .ledger-now__book .book-table col.book-col-age { width: 120px; }
-.ledger-now .ledger-now__book .book-table thead th:last-child, .ledger-now .ledger-now__book tr.book-row > td.book-cell--age { text-align: right; }
-#history .ledger-paper {
-  position: relative; isolation: isolate;
-  --ledger-corner-width: 242px;
-  --ledger-outline: shape(from 32px 0, hline to calc(50% - 46px),
-    curve to 50% 8px with calc(50% - 19px) 0 / calc(50% - 9px) 3px,
-    curve to calc(50% + 46px) 0 with calc(50% + 9px) 3px / calc(50% + 19px) 0,
-    hline to calc(100% - 32px), curve to 100% 32px with calc(100% - 14px) 0 / 100% 14px,
-    vline to calc(100% - 38px), curve to calc(100% - 32px) calc(100% - 8px) with 100% calc(100% - 18px) / calc(100% - 14px) calc(100% - 8px),
-    hline to calc(50% + 46px), curve to 50% 100% with calc(50% + 19px) calc(100% - 8px) / calc(50% + 9px) 100%,
-    curve to calc(50% - 46px) calc(100% - 8px) with calc(50% - 9px) 100% / calc(50% - 19px) calc(100% - 8px),
-    hline to 32px, curve to 0 calc(100% - 38px) with 14px calc(100% - 8px) / 0 calc(100% - 18px),
-    vline to 32px, curve to 32px 0 with 0 14px / 14px 0, close);
-}
-#history .ledger-paper::before, #history .ledger-paper::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  border-radius: 32px;
-  clip-path: var(--ledger-outline);
-  pointer-events: none;
-}
-#history .ledger-paper::before { inset: 0; background: linear-gradient(color-mix(in srgb, var(--paper) 86%, rgb(var(--tone-green))), color-mix(in srgb, var(--paper) 78%, rgb(var(--tone-green)))); box-shadow: inset 0 0 0 1px var(--book-split), inset 0 0 0 4px var(--book-sheet-bg); }
-#history .ledger-paper::after { inset: 3px 7px 6px; background: var(--paper); box-shadow: inset 0 0 0 1px var(--book-line); }
-@supports not (clip-path: shape(from 0 0, line to 100% 100%, close)) {
-  #history .ledger-paper { --ledger-outline: polygon(0 0, calc(50% - 28px) 0, 50% 7px, calc(50% + 28px) 0, 100% 0, 100% calc(100% - 7px), calc(50% + 28px) calc(100% - 7px), 50% 100%, calc(50% - 28px) calc(100% - 7px), 0 calc(100% - 7px)); }
-}
-#history-book .book--groups { padding: 6px 18px 76px; background: none; box-shadow: none; backdrop-filter: none; }
-.ledger-corner { position: absolute; right: 10px; bottom: 6px; width: var(--ledger-corner-width); height: auto; pointer-events: none; user-select: none; }
-</style><script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/691a18256ada23451dec379364c53d2bc51aafbfbbe085002808ea041944be4e/_site/visitor-beacon.js"></script>
+</head><body class="page page--live page--l2 page--tape page--ledger-board">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage"><div class="field" aria-hidden="true"></div>
+<div id="tp-ticker"></div>
+<a class="back" href="/live/#ledger" data-back data-mo-rise>实况</a>
+<div id="tp-root" class="tp"><p class="tp-placeholder" role="status">正在读 AI 账本…</p></div>
+</main>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b602737c9961ba9acd007f91d63c1921c8a9dca967be5010d4795431bc299fd/trust-modal/trust-modal.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e725a7764dfccaabe41b069e838c7b9da8a2ddcd00a7c0818e17d7cf32522330/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/95efda5e19c61f52d8d04dae6812a89ca92396e4c238f60759ef107e1e568e61/live/_lib/live-client.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/4f921c6a1cc123cc83c6732ae4307862c0c2a070bc3d926b2aa896c55e5af256/live/_lib/live-ui.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/93f2b5992f4f517f031e021b96233f3be0a29ed9b5075414a72490a7790a68f0/live/_lib/live-tape.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8295041bf700f401a7dc26cc414970b8087c1b622e719a04f6842efe69870ec7/live/ledger/board.js"></script>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/691a18256ada23451dec379364c53d2bc51aafbfbbe085002808ea041944be4e/_site/visitor-beacon.js"></script>
 <script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
 </body></html>

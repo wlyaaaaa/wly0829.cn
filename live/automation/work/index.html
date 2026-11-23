@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta name="referrer" content="strict-origin-when-cross-origin"><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>自动任务 · 实况</title>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/79376fe0a57cdf8bdb3d0f35f5b46e8ad182309dc6afc26e8084e7c31d70520c/connect-auth/glass.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ea5101dcb96bd7df846c4c896b753ae7a1948ef8f5c243b3e1be2a3855055830/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/fbb0de9bf0bdfba06559440f9dcb34c52b058874cc9d6c3c2ffd26a3ac4f5553/live/_lib/live.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbe171a6dac8e531cce49388080ab17a1adbc94d10b51b54d3ae3b9333d6e73a/live/_lib/live-page.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/28dcc91b4fa342bfa18644bc0902de270c20821e6fe6483f4b23bc713eab1100/live/_lib/live-board.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ab3727f799c9230353a52ed4cba0808edb318f5571cf54cac1208be0d59d52fa/motion/motion.css"><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/42fd4573ad1c2f00293a36f4c3983722753fc547c53d951c18967c75a300adbb/motion/motion.js"></script>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bbe2ea28b6d489a114709e2d4dbe4e2557a1be2135414d5ad1bfaa379781ff25/live/automation/page.css"><meta name="color-scheme" content="only light">
+<style>:root{color-scheme:only light}</style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://wly0829.cn/live/automation/work/">
+<meta property="og:url" content="https://wly0829.cn/live/automation/work/">
+<meta name="description" content="查看一件自动接的活、一个小类或一个项目的触发与最近结果。">
+<meta property="og:title" content="自动任务 · 实况">
+<meta property="og:description" content="查看一件自动接的活、一个小类或一个项目的触发与最近结果。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/fe9ab0957f7fddea83155b42b098551b8218915275ae45bce44f4e6553b310f4/%E5%85%AC%E7%94%A8/fonts/ui-ef15458e6ab86ac3.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/2a14fcee38b69f447a2faaf0ebeaff84fff3f767548fbfdca382fa2a9274c7cc/%E5%85%AC%E7%94%A8/fonts/live-2d8aa41afc5dbc4c.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
+</head>
+<body class="page page--live page--l2 page--board page--automation">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage"><div class="field" aria-hidden="true"></div><a class="back" href="/live/#automation" data-back data-mo-rise>实况</a>
+<div id="work-queue" class="aw" data-mo-rise><p class="glass aw-load" role="status">正在读自动任务…</p></div>
+<div id="automation-legacy" hidden>
+<div class="automation-top" data-mo-rise>
+  <section class="glass automation-hero">
+    <img class="automation-hero__art" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7d356eba91f3142d4ba6fea18698496c4dd34ce316ee1b9a88a6d26a98388645/live/img/automation-hero.webp" alt="" width="360" height="360">
+    <div class="automation-hero__body">
+      <h1>自动任务</h1>
+      <p class="automation-lead">AI 自己接活、按约定时间开工</p>
+      <dl id="stats" class="automation-stats" aria-live="polite"></dl>
+      <p id="notice" class="row__sub" aria-live="polite">正在读</p>
+    </div>
+  </section>
+  <section class="glass automation-recent">
+    <header><span class="lb-card__badge" id="recent-icon"></span><h2>最近 AI 自己开工</h2><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0b48daa51e749768385f26b4786b49fdaf272a357bd89c274143c33f20f6cbc1/live/img/tasks-grp-online.webp" width="88" height="54" alt=""></header>
+    <ol id="recent" class="rows list"></ol>
+    <p id="recent-note" class="row__sub" hidden></p>
+  </section>
+</div>
+<div id="groups" class="automation-groups" data-mo-rise></div>
+<a class="more automation-windows" id="scheduled-link" href="/live/tasks/">Windows 计划任务 ›</a>
+</div>
+<dialog id="automation-setting" class="glass aw-dialog" aria-labelledby="automation-setting-title">
+  <form><h2 id="automation-setting-title"></h2><div data-fields></div><div class="aw-buttons">
+    <button type="button" class="more" data-cancel>取消</button><button type="submit" class="more more--strong">保存</button>
+  </div><p class="row__sub" role="status" data-dialog-result></p></form>
+</dialog>
+</main>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b602737c9961ba9acd007f91d63c1921c8a9dca967be5010d4795431bc299fd/trust-modal/trust-modal.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e725a7764dfccaabe41b069e838c7b9da8a2ddcd00a7c0818e17d7cf32522330/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/95efda5e19c61f52d8d04dae6812a89ca92396e4c238f60759ef107e1e568e61/live/_lib/live-client.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/4f921c6a1cc123cc83c6732ae4307862c0c2a070bc3d926b2aa896c55e5af256/live/_lib/live-ui.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0b0ac15a1196e21faaba47127a219a29719d1a6457fc4ecf809608acb5bf42ae/live/_lib/live-light.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/3919eaf7cdae0631464919c0913a41e613826d70593fbf9622271ffe6d1fd782/live/_lib/live-board.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/27365deec9aae8b83ffb5b49035d8fcb56bd1247672d70ba4b84b20dd5aa878d/live/automation/presentation.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/895ffea9ee3e34d7f237ff9a21c64fd6701e48e0b47b4587c3d0a6ca979c4db1/live/automation/page.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/4d9c3c07bb3cf33c891a9a840d7fef26cd5639b96bfe348e6070f46a3209cbcf/live/automation/work.js"></script>
+<script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/691a18256ada23451dec379364c53d2bc51aafbfbbe085002808ea041944be4e/_site/visitor-beacon.js"></script>
+<script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
+</body></html>
