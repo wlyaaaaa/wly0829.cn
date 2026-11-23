@@ -40,6 +40,8 @@
   const hm = (t) => new Date((t + BJ) * 1000).toISOString().slice(11, 16);
   const md = (t) => dayKey(t).slice(5);
   const sec = (iso) => Date.parse(iso) / 1000;
+  // 数字旁边写明算到几点：页头和“用在哪”各读各的汇总，截止时刻可能差几分钟（M349）。
+  const upTo = (iso) => { const t = sec(iso); return Number.isFinite(t) ? `（截至 ${md(t) === md(Date.now() / 1000) ? '' : md(t) + ' '}${hm(t)}）` : ''; };
   const FOCUS_MIN_SECONDS = 15 * 60;
   function rangeText(window) {
     const from = sec(window?.from), to = sec(window?.to);
@@ -130,7 +132,7 @@
     const s = d?.summary, w = sp(d?.window?.label || rangeLabel());
     const activeLabel = typeof s?.active_label === 'string' && s.active_label.trim();
     const focusLabel = typeof s?.focus_label === 'string' && s.focus_label.trim();
-    const active = s?.active != null && `${activeLabel ? `${w} ${activeLabel}` : `${w}用了`} ${read(s, 'active')}`;
+    const active = s?.active != null && `${activeLabel ? `${w} ${activeLabel}` : `${w}用了`} ${read(s, 'active')}${upTo(d?.window?.to)}`;
     const focus = s?.focus != null && (active || focusLabel) && `${active ? '' : `${w} `}${focusLabel || '专注时间'} ${read(s, 'focus')}`;
     return [active, focus].filter(Boolean).join(' · ') || missing();
   }
@@ -196,6 +198,8 @@
   // 屏幕关闭、睡着、关机这几样，后台在这段时间一条记录都没有时给来源说明（summary.state_notes）：
   // 图例上不写一排“0 分钟”（像测过是零），写“没有这类记录”和来源说明；有记录的照常写时长，0 就是测过的 0。
   const STATE_NOTE_KEYS = { 'screen-off': 'display_off', sleep: 'sleep', off: 'off' };
+  // 关机离线怎么算（本人 11-23 17:20：电脑卡死期间属于关机，不属于缺测）；哪段算关机由后台按这条算好给，页面照画（M593）
+  const OFF_NOTE = '开机或重启（◆）前面那段空白，从最后一次采到算起；卡死后重启也算';
   function stateNotes(d) {
     const notes = d?.summary?.state_notes, out = new Map();
     if (!notes || typeof notes !== 'object') return out;
@@ -266,7 +270,7 @@
         const rows = ['day', 'day1', 'day2'].map(key => ({ key, label: '' }));
         const tl = block('day', el.firstElementChild, V.timeline(el.firstElementChild, { rows, actualEnd: true }));
         return { set: () => {
-          const d = usage, unnoted = stateNotes(d), states = statesForView(d?.states || []).map(s => unnoted.has(s.id) ? { ...s, note: unnoted.get(s.id) } : s), payload = {};
+          const d = usage, unnoted = stateNotes(d), states = statesForView(d?.states || []).map(s => s.id === 'off' ? { ...s, note: OFF_NOTE } : unnoted.has(s.id) ? { ...s, note: unnoted.get(s.id) } : s), payload = {};
           const gap = states.length;
           states.push({ id: 'unrecorded', label: '缺测', hue: 'stone' });
           const strips = dayStrips(d?.day && { ...d.day, spans: d.day.spans?.map(([t, i]) => [t, i ?? gap]) });
@@ -279,13 +283,16 @@
           tl.set(d ? { states, rows: payload } : null);
           const note = el.querySelector('[data-x="tl-note"]');
           const missed = gapSpans(d?.day);
+          // 横带上画着这类的段（比如后台算好的关机），图例就照段写时长，不写“没有这类记录”
+          const drawn = new Set(strips.flatMap(st => st.spans.map(([, i]) => states[i]?.id)));
           for (const id of unnoted.keys()) {
+            if (drawn.has(id)) continue;
             const vals = el.querySelector(`.vz-legend__item[data-state="${CSS.escape(id)}"] .vz-legend__vals`);
             if (vals) vals.innerHTML = '<span>没有这类记录</span>';
           }
           note.textContent = [sourceReading(d?.day?.recorded_to, d?.blocks?.day),
-            missed.total >= 60 && `缺测是电脑没采到使用状态的时段，不算在用也不算离开${unnoted.size ? '，也判断不了是不是关屏、睡着或关机' : ''}（共 ${dur(missed.total)}，${missed.longest <= 120 ? '都是一两分钟以内的零碎空档' : `最长一段 ${dur(missed.longest)}`}）`,
-            d?.day?.restart_points?.length ? '◆ 是开机或重启的时刻，之前什么时候关的机没有记下来' :
+            missed.total >= 60 && `缺测是电脑没关机、却没采到使用状态的时段（开机后还没采到的那一小会儿也算），不算在用也不算离开（共 ${dur(missed.total)}，${missed.longest <= 120 ? '都是一两分钟以内的零碎空档' : `最长一段 ${dur(missed.longest)}`}）`,
+            d?.day?.restart_points?.length ? '◆ 是开机或重启的时刻，它前面那段空白算关机（卡死后重启也算），从最后一次采到算起' :
               d?.day && d.day.restart_points === null ? '暂时读不到系统关机记录' : ''].filter(Boolean).join(' · ');
           note.hidden = !note.textContent;
           if (S.partial(d?.day, 'spans')) el.querySelectorAll('.vz-legend__vals > span').forEach(n => { if (!n.textContent.includes('至少') && !unnoted.has(n.closest('[data-state]')?.dataset.state)) n.append(' · 至少'); });
@@ -356,7 +363,7 @@
           <div class="use-windows"><p class="use-two__k">窗口标题排行</p><p class="use-note" data-x="titles-dates" hidden></p><div data-x="titles"></div><p class="use-note" data-x="tnote" hidden></p></div>
         </div>`;
         const shareHost = el.querySelector('[data-x="share"]'), appHost = el.querySelector('[data-x="apps"]'), titleHost = el.querySelector('[data-x="titles"]');
-        const share = block('categories', shareHost, V.share(shareHost, { center: '应用使用时长' }));
+        const shareOpts = { center: '应用使用时长' }, share = block('categories', shareHost, V.share(shareHost, shareOpts));
         // 避免逐条入场反复测布局。窗口标题可有上千条，沿用分批展开。
         const apps = block('apps', appHost, V.rank(appHost, { mark: true, animate: false, trailing: rankTrailing }));
         const titles = block('titles', titleHost, V.rank(titleHost, { show: 24, batch: 100, animate: false, trailing: rankTrailing,
@@ -379,6 +386,7 @@
             node.hidden = !dates || dates === whereRange(d, 'categories');
             node.textContent = dates;
           }
+          shareOpts.center = `应用使用时长${upTo(d?.blocks?.categories?.window?.to ?? d?.blocks?.categories?.at)}`;
           share.set(d?.categories ? d.categories.map((c) => ({ id: c.id, label: c.label || CAT[c.id] || c.id, value: c.seconds, hue: catHue(c.id) })) : null);
           markShare();
           const programs = U.mergePrivateRows(appRows(d), { value: r => r.private_value, kind: viewer });

@@ -177,6 +177,15 @@
     const pictures = { protection: '/live/img/card-security-protect.webp', impersonation: '/live/img/grp-cpu.webp', lifecycle: '/live/img/grp-network.webp', audit: '/live/img/card-security-audit.webp' };   // 图址写全，构建才认得出、换成云端地址
     return { ...given, key, name, pic: pictures[key], line: present ? line : '', figures: figures.some((f) => f.value != null || f.line) ? figures : [], palette: ['teal', 'violet'], reason: U.sp(given?.reason || given?.why), grafana: data?.grafana?.href, ...rest };
   }
+  // 卡里还画着上一轮的读数时，卡头不写“没有记录”：写上次读到是几点、多久读一次，和图上的“最近实测”说同一个时刻（M451）
+  const drawn = { lifecycle: d => d?.lifecycle?.series?.length > 0, audits: d => d?.audits != null, 'audits.impersonation': d => d?.audits?.impersonation != null };
+  function lastRead(g, d) {
+    const reason = U.sp(g.reason || g.why);
+    if (!drawn[g.key]?.(d) || !/^(?:没有记录|还没读到|暂时读不到)$/.test(reason)) return g;
+    const block = d?.blocks?.[g.key] || g, at = block.window?.to ?? block.to ?? block.at ?? g.at, every = block.refresh_seconds ?? g.refresh_seconds;
+    const cadence = every >= 3600 && every % 3600 === 0 ? `每${every === 3600 ? '' : ` ${every / 3600} 个`}小时读一次` : every > 0 ? `每 ${fmt(every, '秒')}读一次` : '';
+    return at ? { ...g, reason: [`上次读到 ${stamp(at)}`, cadence].filter(Boolean).join(' · ') } : g;
+  }
   const summaryGroup = d => d?.groups?.find(g => (g.key ?? g.id) === 'summary');
   const sentences = items => items.flatMap(item => U.sp(item).split('；').map(s => s.trim()).filter(Boolean));
   function headerStatusData(d) {
@@ -190,8 +199,27 @@
     return reasons.includes(why) || lead && reasons.includes(why.slice(lead.length).trim())
       ? { ...d, why: undefined } : d;
   }
+  // 程序身份筛查按小时读：小字只说一次几点读到、下次约几点读；这一轮真没读到才写没读到，并写清显示的是几点的数（M572）
+  function impersonationReading(d) {
+    const g = d?.groups?.find(x => (x.key ?? x.id) === 'audits.impersonation'), at = g?.at;
+    if (!g || ['red', 'yellow'].includes(g.level) || !Number.isFinite(Date.parse(at))) return '';
+    const short = t => U.date(t) === U.date(Date.now()) ? U.time(t) : stamp(t), every = g.refresh_seconds ?? d?.audits?.refresh_seconds;
+    const failed = g.read_error === true || Object.values(g.missing || {}).some(r => (r?.reason_code ?? r?.reason ?? r) === 'read_failed');
+    const round = d?.audits?.at, tried = failed && Date.parse(round) > Date.parse(at) ? round : at;
+    const next = every > 0 ? Date.parse(tried) + every * 1000 : NaN;
+    const later = !Number.isFinite(next) ? '' : next > Date.now() ? `下次约 ${short(next)} 读` : `本该 ${short(next)} 再读，还没读到新数`;
+    const said = failed ? `${tried !== at ? short(tried) + ' 这一轮' : '这次'}没读到，下面是 ${short(at)} 读到的数` : `${short(at)} 读到`;
+    return [said, later].filter(Boolean).join(' · ');
+  }
   function formatImpersonation(card) {
     const status = card.querySelector('.grp__status');
+    const reading = impersonationReading(data);
+    if (status && reading) {
+      const keep = status.textContent.split(' · ').map(s => s.trim()).filter(s => /项要处理$|^AI 在修|AI 已接手/.test(s));
+      U.html(status, [reading, ...keep].map(U.esc).join(' · '));
+      queueMicrotask(() => V.cardLineTitle(status.parentElement));
+      return;
+    }
     const block = status.querySelector('[data-block="audits.impersonation"]:not([data-state="unavailable"])');
     if (!block) return;
     const warning = status.firstChild;
@@ -310,7 +338,7 @@
   });
   D.mount({ resource: 'computer/security', statusData: headerStatusData, board: { ...board, blocks(d, map, offline) {
     const legacy = summaryGroup(d);
-    board.blocks(legacy ? { ...d, groups: d.groups.filter(g => g !== legacy) } : d, map, offline);
+    board.blocks(d?.groups ? { ...d, groups: d.groups.filter(g => g !== legacy).map(g => lastRead(g, d)) } : d, map, offline);
   } }, merge: lifecycleData, render(d) {
     data = d;
     const life = d?.lifecycle, points = life?.series?.[0]?.points, step = life?.step ?? (points?.length > 1 ? points[1][0] - points[0][0] : null);

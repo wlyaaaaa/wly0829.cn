@@ -18,7 +18,7 @@
   const bar = U.topbar({ ask: () => `请看实况备份：${headline || U.collectionText()}。请说明现在的情况。` });
   L.add(hero); U.fold($('more'), $('rest-box')); document.querySelector('[data-back]').href = route('/live/#backups');
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
-  const tableText = value => esc(value).replace(/(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}|\d+ 类(?:读到记录|读取失败|未登记|不适用)|不适用|\d+ 项读数不完整/g, '<span class="backup-unit">$&</span>');
+  const tableText = value => esc(value).replace(/(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}|\d+ 类(?:读到记录|本次没读到|未登记|不适用)|不适用|\d+ 项读数不完整/g, '<span class="backup-unit">$&</span>');
   const wrapSummary = html => html.replace(/ · (?![^<]*>)/g, '&nbsp;· ');
   const points = (d, id) => (d.restore || []).filter(r => r.set === id).flatMap(r => (r.points || []).map(pt => ({ ...pt, kind: r.kind })));
   const restoreText = (d, s) => {
@@ -63,18 +63,20 @@
     const local = d.columns?.local;
     const localNote = local?.note ?? (local?.has_inventory_gaps ? '现有备份记录没有完整的本机原件库存' : !local ? d.coverage?.local_note : '');
     const retainedAt = d.at ? stamp(d.at).trim() : sp(d.gap ?? d.summary?.gap).match(/(?:保留|沿用) (.+?) 的记录/)?.[1];
-    const batchNote = batchFailed ? `<span>本次未刷新${retainedAt ? `，沿用 ${esc(retainedAt)} 的记录` : ''}</span>` : '';
+    // 这次整批没读到：只在表头说一次沿用几点的记录，格子里“上次确认”是旧数、“本次没读到”是还等更新的（M260）。
+    const retainedShort = d.at && U.date(d.at) === U.date(Date.now()) ? U.time(d.at) : retainedAt;
+    const batchNote = batchFailed ? `<span>${retainedAt ? `下表沿用 ${esc(retainedShort)} 的记录` : '这次没读到，下表是上一次的记录'}。带“上次确认”的是旧数，带“本次没读到”的还等更新。</span>` : '';
     const localCaption = localNote ? `<span>${field(localNote, '本机说明')}</span>` : '';
     const caption = batchNote || localCaption ? `<caption class="pj-note">${batchNote}${localCaption}</caption>` : '';
-    const refreshLabels = { read: '本次读到清单', failed: '本次未刷新', not_recorded: '本次读取未登记', not_applicable: '本次无需读清单' };
+    const refreshLabels = { read: '本次读到清单', failed: '本次没读到', not_recorded: '本次读取未登记', not_applicable: '本次无需读清单' };
     const columnHead = (key, name) => {
       const { observed_at, refresh_counts } = d.columns?.[key] || {};
-      const reads = Object.entries({ read: '读到记录', failed: '读取失败', not_recorded: '未登记', not_applicable: '不适用' })
+      const reads = Object.entries({ read: '读到记录', failed: '本次没读到', not_recorded: '未登记', not_applicable: '不适用' })
         .filter(([state]) => refresh_counts?.[state] > 0).map(([state, label]) => `${refresh_counts[state]} 类${label}`);
       const time = reads.length && !batchFailed && observed_at ? `<small>记录时间<br>${tableText(stamp(observed_at).trim())}</small>` : '';
       return `<th scope="col">${esc(name)}${time}${reads.map(read => `<small>${tableText(read)}</small>`).join('')}</th>`;
     };
-    const reasons = { generated_from_system_inventory: '由系统信息生成，没有原件目录', task_profile_binding_unavailable: '没登记来源目录', backup_manifest_unavailable: '备份清单暂时读不到', source_config_unavailable: '来源配置暂时读不到' };
+    const reasons = { generated_from_system_inventory: '由系统信息生成，没有原件目录', task_profile_binding_unavailable: '没登记来源目录', backup_manifest_unavailable: '备份清单暂时读不到', source_config_unavailable: '来源配置暂时读不到', read_failed: '本次没读到' };
     const reason = value => {
       if (value?.visibility || value?.public || value?.hidden || value?.hidden_block) return value;
       const text = typeof value === 'string' ? value : value?.text || value?.reason;
@@ -184,7 +186,8 @@
       ? `${n} 类尚未证实` : `${number(key, n)} 类${label}`).join(' · ');
     const totals = D.backupTotals(sets.map(s => ({ ...s, name: U.fieldText?.(s.name, viewer) ?? sp(s.name) })), supplied), drive = totals.drive;
     const local = Object.hasOwn(supplied, 'local_only') ? supplied : { local_only: fromRows('local_copy_no_cloud'), q: unknown > 0 ? 'partial' : 'ok' };
-    U.html($('note'), wrapSummary([tableText(counts), state.note.replace(/\d+ 项读数不完整/g, '<span class="backup-unit">$&</span>')].filter(Boolean).join(' · '))); $('note').hidden = !counts && !state.note;
+    const stateNote = d.read_error === true ? state.note.split(' · ').filter(text => !U.isReadingCutoff(text)).join(' · ') : state.note;
+    U.html($('note'), wrapSummary([tableText(counts), stateNote.replace(/\d+ 项读数不完整/g, '<span class="backup-unit">$&</span>')].filter(Boolean).join(' · '))); $('note').hidden = !counts && !stateNote;
     L.tone(hero, d); homeRead.done();
     const hConfirmed = copy => copy && copy.required !== false && copy.retired !== true && (
       Object.hasOwn(copy, 'confirmed_state') || Object.hasOwn(copy, 'confirmed_at')

@@ -128,7 +128,8 @@
   }
   L.add(hero);
   document.querySelectorAll('.stage a[href^="/live/"]').forEach(a=>{if(fixture){const u=new URL(a.href);u.searchParams.set('fixture',params.get('fixture'));a.href=u;}});
-  const mode=key=>{const bins=new Map();all.filter(r=>r.status==='sent'&&typeof r[key]==='number').forEach(r=>bins.set(r[key],(bins.get(r[key])??0)+1));return [...bins].sort((a,b)=>b[1]-a[1])[0]?.[0];};
+  // 还没读到明细（读不到接口、正在读）时 all 是 null：没有数就不写“平常大约多久”，不报脚本错（M552）
+  const mode=key=>{const bins=new Map();(all||[]).filter(r=>r.status==='sent'&&typeof r[key]==='number').forEach(r=>bins.set(r[key],(bins.get(r[key])??0)+1));return [...bins].sort((a,b)=>b[1]-a[1])[0]?.[0];};
   const privateLine=(r,unit='次')=>r.private_count?lock(`另有 ${r.private_count} ${unit}提醒`):lock('这条提醒');
   const batchFolds=new Set();
   function rememberBatchFold(e){
@@ -181,7 +182,9 @@
     return {set:draw};
   }
   function paint(){
-    const absent=all===null&&(!!U.offline?.()||['none','gone'].includes(phase));['hero','attention','all-records'].forEach(id=>$(id).hidden=absent);$('missing').hidden=!absent;if(absent){$('missing').innerHTML=`<span class="lamp" aria-hidden="true"></span>${U.offline?.()?'这块没存下来，连上后补上。':'通知发送记录暂时读不到'}`;return;}
+    // 断线又没存下来：几张卡照常摆着，各自写“这块没存下来，连上后补上。”，不收成整页一行字（M552）
+    if(all===null&&(!!U.offline?.()||phase==='gone'))return;
+    const absent=all===null&&phase==='none';['hero','attention','all-records'].forEach(id=>$(id).hidden=absent);$('missing').hidden=!absent;if(absent){$('missing').innerHTML=`<span class="lamp" aria-hidden="true"></span>通知发送记录暂时读不到`;return;}
     const wait=all===null&&!['none','gone'].includes(phase),series=key=>payload?.series.find(s=>s.id===key)?.points.map(p=>p[1])||[];
     const known=series('total').filter(Number.isFinite),peak=known.length?Math.max(...known):null;
     const figure=(key,label,value,fields)=>({key,label,value,unit:'次',text:value!=null&&fields.some(k=>lower(page?.delivery24??page,k))?`至少 ${value} 次`:undefined});
@@ -486,7 +489,7 @@
       redraw=false;
       U.blockNote(hero.querySelector('.card__body'),!s.offline&&fallback&&s.shownAt&&['copy','fallback'].includes(s.meta?.source)?{...s,fallbackNote:`这次没有读到新记录，正在显示 ${U.date(s.shownAt)} 的上一份通知明细。`}:s);
     },
-    phase(s){phase=s.phase;if(!s.data){heroRead.set(s);Object.values(boards).forEach(b=>b.phase(s));if(s.phase==='none'||s.phase==='gone')clearDelivery();}}
+    phase(s){phase=s.phase;if(!s.data){heroRead.set(s);Object.values(boards).forEach(b=>b.phase(s));if(s.phase==='none')clearDelivery();}}
   });
   requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('is-ready')));
 })();
