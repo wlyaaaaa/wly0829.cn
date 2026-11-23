@@ -11,7 +11,7 @@
   const PAGES = [
     { id: 'needs', name: '等你的事', href: '/live/items/', scoped: true },
     { id: 'chats', name: 'AI 对话', href: '/live/chats/' },
-    { id: 'agents', name: '智能体' }, // 智能体的新页还没做好，先不给去处，卡上也不出链接
+    { id: 'agents', name: '智能体', href: '/live/agents/' },
     { id: 'ledger', name: 'AI 账本', href: '/live/ledger/', scoped: true },
     { id: 'automation', name: '自动任务', href: '/live/automation/', scoped: true },
     { id: 'computer', name: '电脑', href: '/live/computer/' },
@@ -1038,8 +1038,7 @@
   function paintBatchCards(data) {
     for (const id of ['agents', 'automation', 'ledger']) {
       const card = cards[id], p = parts[id];
-      // 智能体的新页还没做好，这张卡先不链：标题、三家的小标都不带链接，整张卡也不当成能点（本人 11-23 07:47 选 A）
-      const view = window.LiveBatchHome.render(id, data[id], { viewer, route, href: id === 'agents' ? '' : href(id), offline: !!lastState?.offline });
+      const view = window.LiveBatchHome.render(id, data[id], { viewer, route, href: href(id), offline: !!lastState?.offline });
       U.html(p.head, view.head);
       U.html(p.batch, view.body);
       p.batch.hidden = false;
