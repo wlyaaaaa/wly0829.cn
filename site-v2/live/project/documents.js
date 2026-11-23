@@ -2,13 +2,16 @@ const namespace = '__documents';
 const prefix = `/${namespace}/`;
 const policy = `<!doctype html><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; form-action 'none'; base-uri 'none'">`;
 
-// 项目文档只登记在家里网站的局域网读口上（PCConfig owner_documents，接在 home_lan_live）；
-// 公网 mcp.wly0829.cn 没有这个入口，去探只会被跨域拦下、误报“没读到”，所以公网不探。
+// 项目文档（PCConfig owner_documents）有两个读口：家里网站走局域网读口；
+// 公网 wly0829.cn 只给已配对设备，走 mcp.wly0829.cn/computer-access（只读 GET/HEAD）。没配对的不探。
 function connection() {
   const port = Number(document.querySelector('meta[name="wly-lan-live-port"]')?.content);
   if (location.protocol === 'http:' && Number.isInteger(port) && port >= 1024 && port <= 65535 &&
       port !== Number(location.port)) return { origin: `http://${location.hostname}:${port}`, base: '', token: '' };
-  return null;
+  if (location.protocol !== 'https:' || !['wly0829.cn', 'www.wly0829.cn'].includes(location.hostname)) return null;
+  let token = '';
+  try { token = localStorage.getItem('wly-cockpit-device') || ''; } catch { /* 存储关闭时按没配对算。 */ }
+  return /^[A-Za-z0-9_-]{43}$/.test(token) ? { origin: 'https://mcp.wly0829.cn', base: '/computer-access', token } : null;
 }
 
 function eligible(state) {
