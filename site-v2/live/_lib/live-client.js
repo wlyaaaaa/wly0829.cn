@@ -455,7 +455,8 @@
   }
   function present(e) {
     const disconnected = offline(), detail = itemDetail(e);
-    if (disconnected && fixture === null && (detail || e.viewer.kind === 'public') && e.data !== null) forgetData(e, true);
+    // 访客确认连不上时清掉已显示的数；根首页副屏（screen）例外：四格本来就是公开数，留着断开前的数、标上是几点的，和本人版一样（M608）。
+    if (disconnected && fixture === null && (detail || e.viewer.kind === 'public' && e.resource !== 'screen') && e.data !== null) forgetData(e, true);
     const observed = latestConnection();
     const link = disconnected ? (observed?.state === 'offline' ? observed : { ...e.link, state: 'offline', basis: 'browser' }) : e.link;
     const state = snapshot(e, link);
