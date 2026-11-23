@@ -21,10 +21,14 @@
     }).join('')}</ul>`;
     const more = recent.length > 5 ? `<details class="vz-more"><summary class="more"><span class="stability-more">展开（还有 ${recent.length - 5} 条）</span><span class="stability-less">收起</span> <span class="more__chev">›</span></summary>${rows(recent.slice(5))}</details>` : '';
     const end = clock(data.window_end);
+    // 没读到时写后台给的原因（current_hung_gap、recent_hung_gap）；读数在、只是本页 15 秒没等到新采样的，写停在几点。
+    const why = gap => typeof gap === 'string' && gap.trim() ? (/^正在/.test(gap.trim()) ? '' : '没读到：') + esc(gap.trim()) : '';
+    const stale = data.current_hung_count != null && clock(data.activity_last_sample_at);
+    const hungGap = why(data.current_hung_gap) || (stale ? `没读到：进程采样停在 ${stale}，已超过 15 秒没更新` : '当前无响应状态未读到');
     return {
       values: [spike == null ? esc(data.frametime_gap || '没有可统计的帧时间样本') : count(spike, '次') + last(spike, data.last_spike_at),
-        (hung == null ? '当前无响应状态未读到' : hung === 0 ? '现在没有' : count(hung, '个')) + (hung > 0 && names.length ? ` · ${names.map(esc).join('、')}` : ''),
-        past == null ? '近 5 分钟无响应的程序未读到' : count(past, '个程序') + last(past, data.last_hung_at)],
+        (hung == null ? hungGap : hung === 0 ? '现在没有' : count(hung, '个')) + (hung > 0 && names.length ? ` · ${names.map(esc).join('、')}` : ''),
+        past == null ? why(data.recent_hung_gap) || '近 5 分钟无响应的程序未读到' : count(past, '个程序') + last(past, data.last_hung_at)],
       details: recent.length ? `<p class="l2-part">无响应明细 · 程序窗口不响应，和画面卡顿分开算</p>${rows(recent.slice(0, 5))}${more}` : '',
       end: end ? `统计到 ${end}` : '',
     };
