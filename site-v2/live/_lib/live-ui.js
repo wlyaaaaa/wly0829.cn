@@ -1141,6 +1141,23 @@
     const show = (text) => html(at, paused ? esc(text) : `<span class="live-refresh-icon" aria-hidden="true">${icon}</span><span class="live-refresh-text">${esc(text)}</span>`);
     const waiting = setTimeout(() => { if (!label) { label = '正在读'; if (!busy) show(label); } }, 2500);
     // 点一下就等于浏览器刷新（本人 M513：页面上的刷新没用、浏览器刷新就好）：整页重新载入，拿到最新版网页和最新数据。
+    // 动画照 r62：药丸先收成圆（--live-at-slide）再重新载入；新页面一出来就是收好、接着转的样子，这一轮数据读完、
+    // 转到整圈（--live-at-turn）再从正中展开。点的时刻和当时的字记在 sessionStorage，转圈和等多久都从点下去那一刻算。
+    const RESUME = 'wly-live-refresh-at';
+    let readDone; const read = new Promise(resolve => { readDone = resolve; });
+    const resumed = (() => { try { const v = JSON.parse(sessionStorage.getItem(RESUME)); sessionStorage.removeItem(RESUME); return Date.now() - v?.at < 20000 ? v : null; } catch { return null; } })();
+    if (resumed) {
+      busy = true; label = resumed.label || '';
+      show(label);
+      at.setAttribute('aria-busy', 'true'); at.setAttribute('aria-label', '正在重读');
+      at.classList.add('is-refreshing'); // 按钮刚建出来，第一次排版就是收好的样子，不会再收一遍
+      const shrink = ms('--live-at-slide', '760ms') * speed(), turn = ms('--live-at-turn', '1100ms') * speed();
+      const spin = at.querySelector('.live-refresh-icon'); if (spin) spin.style.animationDelay = `${shrink - (Date.now() - resumed.at)}ms`;
+      read.then(async () => {
+        const elapsed = Date.now() - resumed.at; const wait = shrink + Math.max(1, Math.ceil((elapsed - shrink) / turn)) * turn - elapsed; if (wait > 0) await new Promise(resolve => setTimeout(resolve, wait));
+        busy = false; at.classList.remove('is-refreshing'); at.removeAttribute('aria-busy'); at.setAttribute('aria-label', label); show(label);
+      });
+    }
     at.addEventListener('click', () => {
       if (busy) return;
       busy = true;
@@ -1148,7 +1165,8 @@
       if (!paused) at.setAttribute('aria-label', '正在重读');
       at.querySelector('.live-refresh-text')?.classList.remove('is-swapped');
       at.classList.add('is-refreshing');
-      if (window.Live?.reload) window.Live.reload(); else location.reload();
+      try { sessionStorage.setItem(RESUME, JSON.stringify({ at: Date.now(), label })); } catch { /* 记不下：新页面照常显示，只少展开那一段 */ }
+      setTimeout(() => { if (window.Live?.reload) window.Live.reload(); else location.reload(); }, ms('--live-at-slide', '760ms') * speed());
     });
     askBtn.addEventListener('click', async (e) => {
       if (guard(e)) return;
@@ -1171,7 +1189,7 @@
         }
         paused = !!state.publicPaused;
         if (paused) {
-          clearTimeout(waiting);
+          clearTimeout(waiting); readDone();
           label = state.text;
           document.title = `${label} · 实况`;
           at.setAttribute('aria-label', label);
@@ -1179,7 +1197,7 @@
           return;
         }
         const stamp = state.offline ? state.cutoffAt : state.shownAt, atText = stamp ? `${time(stamp)} ${state.offline ? '最后一份' : '读到'}` : '';
-        if (stamp || state.offline || state.phase === 'none') clearTimeout(waiting);
+        if (stamp || state.offline || state.phase === 'none') { clearTimeout(waiting); readDone(); }
         label = state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : atText || (state.offline ? '连不上' : state.phase === 'none' ? collectionText() : label);
         if (!busy) show(label);
       },
@@ -1252,6 +1270,11 @@
     el._html = next;
     return true;
   }
+
+  const ms = (name, fallback) => {
+    const v = cssVar(name, fallback);
+    return parseFloat(v) * (/ms$/.test(v) ? 1 : 1000);
+  };
 
   // 列表按条目编号更新：没变的不动；变了的原地淡换；新来的先撑开位置再落下淡入；下去的淡出、下面的合拢
   function list(ul, rows, { animate = true } = {}) {

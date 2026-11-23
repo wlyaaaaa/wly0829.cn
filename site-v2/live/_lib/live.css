@@ -351,13 +351,16 @@ body.page--live .btn.btn--go:active { background: #007639; }
 .notice__x { width: 30px; padding: 0; font-size: 16px; }
 /* 页顶那张卡（本人 11-23 选的 B，01:01 定了和页顶提醒合成一张）：和下面大卡同一个样子（11-23 08:06 改）——同样的玻璃、圆角、阴影、
    第一行灯 + 大字 + 轻一号的后半句，右边同样铺一整幅画、边缘淡进玻璃，画的颜色透过玻璃垫在那一侧。一件事一行；卡本身不能点、没有叉。
-   画跟着整张卡走（卡出现才下载），连上后不再单独收走；没什么要说了整张卡收起。连接那一行的灯和箭头一直在动，连上后灯变正绿、约 2 秒后收走这一行。 */
+   画跟着整张卡（卡出现才下载）。连接那一行的灯和箭头一直在动，连上后灯变正绿、约 2 秒后收走这一行；没什么要说了整张卡收起。
+   画的两处动作照 r62 原值：卡挂出来时画自己再慢一点淡进来（.9s）；连上、卡里没别的事要收起时，画先自己淡掉（.6s），再照常收起
+   （卡里还有别的提醒、整张卡留着时，画跟着卡留着）。 */
 .live-conn { --win: clamp(160px, 28%, 250px); --conn-art: url("/live/img/connection-scene-v1.webp");
   overflow: hidden; margin: 0 0 var(--gap, 22px); padding-block: 12px; box-sizing: border-box; color: var(--ink);
   animation: live-conn-in .6s ease; transition: height .5s var(--mo-out, ease), opacity .5s ease, margin .5s ease, padding .5s ease; }
 .live-conn[hidden] { display: none; }
 .live-conn.is-closing { height: 0 !important; margin-bottom: 0; padding-block: 0; opacity: 0; }
-.live-conn__pic, .live-conn__tint { position: absolute; z-index: 0; pointer-events: none; }
+.live-conn__pic, .live-conn__tint { position: absolute; z-index: 0; pointer-events: none; animation: live-conn-in .9s ease; transition: opacity .6s ease; }
+.live-conn:not(:has(#notices > li, .live-conn__row:not([data-key="link"]))):has(.live-conn__row[data-key="link"].is-back) :is(.live-conn__pic, .live-conn__tint) { opacity: 0; }
 .live-conn__pic { top: 0; right: 0; bottom: 0; width: var(--win); background: var(--conn-art) center / cover no-repeat;
   -webkit-mask-image: linear-gradient(270deg, #000 0%, #000 30%, rgb(0 0 0 / .93) 38%, rgb(0 0 0 / .78) 47%, rgb(0 0 0 / .55) 56%, rgb(0 0 0 / .32) 65%, rgb(0 0 0 / .14) 74%, rgb(0 0 0 / .04) 82%, transparent 90%);
   mask-image: linear-gradient(270deg, #000 0%, #000 30%, rgb(0 0 0 / .93) 38%, rgb(0 0 0 / .78) 47%, rgb(0 0 0 / .55) 56%, rgb(0 0 0 / .32) 65%, rgb(0 0 0 / .14) 74%, rgb(0 0 0 / .04) 82%, transparent 90%); }
@@ -388,7 +391,8 @@ body.page--live .btn.btn--go:active { background: #007639; }
 /* 点“几点读到”重读：药丸从左右两边同时往正中收，收成一颗圆按钮停在原来的正中，图标跟着滑到正中，到了再转；
    读完从正中往两边慢慢展开，字最后淡回来。本人 08:25“慢慢滑到居中”、09:21“按一下左右缩小到居中显示”。
    按钮本身的位置和宽度不变（旁边的按钮不动，也不会因为从“按内容撑开”的宽度起步而第一下没动画），缩的是画在底下的那层药丸（::before）。
-   图标用画好的 SVG（不用字体里的 ↻，那个在不同字体里样子怪）。点下去整页重新载入（等于浏览器刷新），这段动画只在新页面接上之前播一下。 */
+   图标用画好的 SVG（不用字体里的 ↻，那个在不同字体里样子怪）。live-ui.js 读这两个数算等多久。
+   点下去等于浏览器刷新：收成圆以后整页重新载入，新页面接着转，这一轮数据读完、转满一圈再展开。 */
 :root { --live-at-slide: 760ms; --live-at-turn: 1100ms; }
 .topbar .live-at {
   --live-at-ease: cubic-bezier(.45, .05, .25, 1);
