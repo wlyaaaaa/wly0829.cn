@@ -604,9 +604,12 @@
       const note = count === 0 ? '没有在等的事' : `${exact ? `有 ${count} 件 · ` : ''}电脑开机后自动补上是哪几件`;
       rows.push({ key: 'empty', cls: 'row row--flat row--preview-note', html: `<span></span><p class="row__sub">${note}</p>` });
     }
-    if (hidden) rows.push({ key: 'private-needs', cls: 'row row--flat row--preview-note', html: '<p class="row__sub">另有 ' + hidden + ' 条仅本人可见</p>' });
+    // 访客：写清藏了几件、各是哪一类（后台 hidden_summary 已按类数好），标题和内容不露。
+    const kinds = d.hidden_summary?.counts || {}, hiddenKinds = [['do', '要本人做'], ['choose', '要本人选']].filter(([k]) => kinds[k] > 0);
+    const hiddenWhat = hiddenKinds.reduce((n, [k]) => n + kinds[k], 0) === hidden ? hiddenKinds.map(([k, label]) => `${kinds[k]} 件${label}`).join('、') : `${hidden} 件要本人做或选的事`;
+    if (hidden) rows.push({ key: 'private-needs', cls: 'row row--flat row--preview-note', html: `<p class="row__sub">另有 ${esc(hiddenWhat)}，标题和内容只有本人看得到</p>` });
     paintList(p.main, rows, { animate: false });
-    // 藏掉的几件已合成“另有 N 条仅本人可见”，“还有 N 条”只数看得见的。
+    // 藏掉的几件已合成上面“另有……只有本人看得到”一行，“还有 N 条”只数看得见的。
     needsTotal = (project ? all.length : count - hidden - (extra ? 1 : 0)) + Number(!!focusedRow && targetIndex < 0);
     fitCard('needs');
     U.html(p.summary, [['know', '要你知道'], ['later', '你放着']].map(([k, label]) => `${addressed(label)} ${quantity(d.counts, k)} 件`).join(' · ') + (count === 0 ? '' : oldestWait(d, all, end)));
