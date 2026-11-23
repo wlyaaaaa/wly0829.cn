@@ -38,6 +38,9 @@
     return it.age_days > 0 ? `挂了 ${sp(it.age_days)} 天` : '';
   }
   const bar = U.topbar({ ask: () => `请看实况等你的事：${$('head').textContent}。请说明各项现在的情况。` });
+  // 访客版页头不把访客当“你”：标题和第一句写“本人”，和数字卡“等本人”一个说法；本人版照原样（M681）
+  const titleParts = [document.querySelector('.lbp-title h1'), document.querySelector('.lbp-title p > span')].filter(Boolean).map(el => [el, el.textContent]);
+  const pageTitle = () => titleParts.forEach(([el, text]) => { el.textContent = viewer === 'public' ? text.replaceAll('你', '本人') : text; });
   L.add($('hero'));
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   document.querySelectorAll('a[href^="/live/"]').forEach(a => a.href = route(a.getAttribute('href')));
@@ -378,6 +381,7 @@
   watch('home', (d, meta) => {
     viewer = meta.viewer?.kind || 'public';
     document.body.dataset.viewer = viewer;   // 本人版标题不收行
+    pageTitle();
     at = meta.now || meta.at;
     const needs = d.needs; if (d.q === 'warming' || needs?.q === 'warming') { missingHome('正在准备'); return; } if (!needs) { missingHome(U.collectionText()); return; }
     const embedded = Object.hasOwn(needs, 'items'), page = !embedded && openRows?.kind === viewer ? openRows : null;
