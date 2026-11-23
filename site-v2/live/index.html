@@ -118,7 +118,6 @@
 .page--live .l1-options { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
 .page--live #needs .row__sub, .page--live #chats [data-steady] { text-wrap: pretty; }
 .page--live #backups .head__tail { text-wrap: pretty; }
-.page--live #ledger .card__glass { display: grid; align-items: center; }
 .live-unreadable .board { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .live-unreadable .board__col { display: contents; }
 .live-unreadable .board__wide { grid-column: auto; }
@@ -147,12 +146,10 @@
 .page--live :is(#needs,#chats,#tasks,#backups,#ledger) .row__text > :is(.row__sub,.row__line,.helpers) { display: none; }
 .page--live #needs .row__text { grid-column: 2; grid-row: 1; }
 .page--live #chats .row--chat .row__main { grid-column: auto; grid-row: auto; }
-.page--live #ledger .card__glass { display: block; }
 .page--live .card--empty .card__body > :not([data-part="head"]):not([data-part="status"]) { display: none !important; }
 .page--live .card--empty .card__glass { min-height: 0; padding-block: 20px; }
 .page--live .card--empty .head__lead { font: 400 15px/24px var(--sans); color: var(--muted); }
 .page--live #ledger { --gut: 25px; }
-.page--live #ledger .card__glass { min-height: 174px; }
 .page--live :is(#needs,#chats,#tasks,#automation)[data-pic="right"] .card__body { padding-right: var(--win); }
 .page--live :is(#needs,#chats) .row__acts { padding-left: 10px; }
 .page--live :is(#backups,#tasks,#automation,#computer) .head__link { display: grid; grid-template-columns: minmax(0, 1fr) auto; row-gap: 2px; }
@@ -190,11 +187,6 @@
 .page--live #needs .row__main { grid-column: 2; grid-row: 1; }
 .page--live #needs .row__text > .row__sub { display: block; white-space: normal; margin-top: 4px; }
 .page--live #needs .needs-summary { margin: 12px 0 0 var(--gut); }
-.page--live #ledger .card__glass { min-height: 0; }
-.page--live #ledger .card__head { margin-bottom: 0; }
-.page--live #ledger .card__pic { display: none; }
-.page--live #ledger .card__body { padding-right: 0; }
-.page--live #ledger .head__link { flex-wrap: wrap; }
 .page--live #backups [data-part="main"] .row { grid-template-columns: var(--gut) minmax(0, 1fr) auto; }
 .page--live #backups .row__title { font-weight: 400; }
 .page--live:not(.live-unreadable) .card__body:has(.card__head > .lamp) > :is([data-part="status"],[data-part="gap"],[data-part="why"]) { margin-inline-start: 25px; }
@@ -259,13 +251,73 @@
  .page--live #chats .row--chat { grid-template-columns: var(--gut) minmax(0, 1fr); margin-inline-end: calc(16px - var(--win)); }
  .page--live #chats .row--chat > .row__acts { grid-column: 2; grid-row: 2; justify-content: flex-start; margin-top: 0; padding-left: 0; }
 }
+.page--live .b6-card .card__glass { min-height: 195px; }
+.page--live .b6-card .card__pic { width: min(41%, 285px); inset-block: auto 0; height: 100%; }
+.page--live .b6-card .card__pic img { object-fit: contain; object-position: right bottom; }
+.page--live .b6-card .card__body { padding-right: min(33%, 213px); }
+.page--live .b6-card .card__head { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.page--live .b6-card .head__link { display: inline-flex !important; }
+.b6-body { position: relative; color: #233330; line-height: 1.55; font-size: 14px; }
+.b6-body p { margin: 8px 0; }
+.b6-body a,.b6-status a { color: inherit; text-decoration: none; }
+.b6-body a:hover,.b6-status a:hover { text-decoration: underline; }
+.b6-dot { display: inline-block; width: .65em; height: .65em; border-radius: 50%; background: #a8adb1; margin-right: .48em; }
+.b6-dot[data-kind="ok"] { background: #00A650; box-shadow: 0 0 .7em #00a65078; }
+.b6-dot[data-kind="repair"] { background: #7292b1; box-shadow: 0 0 .7em #7292b186; }
+.b6-dot[data-kind="owner"] { background: #dfa326; box-shadow: 0 0 .7em #e5b13b6e; }
+.b6-status { font-size: 14px; color: #44504c; font-weight: 500; }
+.b6-badge,.b6-chip { display: inline-block; background: #e4f4e8; border-radius: 99px; padding: 2px 9px; margin-right: 3px; color: #214c32; }
+.b6-chip { margin: 0; background: #eef0f0; color: #33453e; white-space: nowrap; font-weight: 650; }
+.b6-chip[data-kind="ok"] { background: #e9f6ec; color: #194c32; }
+.b6-chip[data-kind="repair"] { background: #e7eef7; color: #344e68; }
+.b6-chip[data-kind="owner"] { background: #f9eed4; color: #765617; }
+.b6-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.b6-agent-line,.b6-ledger-top { display: flex; align-items: center; gap: 10px; }
+.b6-agent-line strong,.b6-ledger-top strong,.b6-metrics b { font-size: 34px; line-height: 1.14; color: #0a532b; letter-spacing: -.04em; }
+.b6-ledger-top { gap: 18px; flex-wrap: wrap; }
+.b6-ledger-top strong { font-size: 29px; }
+.b6-ledger-top > div { min-width: 108px; font-size: 12px; }
+.b6-meter { display: block; height: 5px; background: #daddda; border-radius: 99px; margin: 1px 0 4px; overflow: hidden; }
+.b6-meter i { display: block; height: 100%; border-radius: inherit; background: #00A650; }
+.b6-metrics { display: flex; text-align: center; margin: 12px 0 14px; }
+.b6-metrics > div { padding: 0 13px; border-right: 1px solid #263f402b; }
+.b6-metrics > div:first-child { padding-left: 2px; }
+.b6-metrics > div:last-child { border-right: 0; }
+.b6-metrics small { display: block; }
+.b6-run-meta { display: block; padding-left: 1.2em; color: #4a5756; }
+.b6-muted,.b6-due small { color: #4a5756; font-size: 12px; }
+.b6-foot,.b6-due { border-top: 1px solid #293c411a; padding-top: 5px; }
+.b6-due { display: flex; justify-content: space-between; gap: 8px; }
+.b6-body .fog__text { position: static; opacity: .62; filter: blur(2px); }
+/* 把关：标题和 › 贴着；账本标题也有状态灯；状态词里的数字是智能体卡的大数；小字不小于 13px */
+.page--live .b6-card .head__link { column-gap: 8px; }
+.page--live .board .b6-card .card__head .head__link > .head__tail:last-child { margin-left: 0; }
+.page--live .board #ledger.b6-card .card__head > .lamp { display: block; }
+.b6-status { font-size: 15px; }
+.b6-num { font-size: 26px; line-height: 1; font-weight: 800; color: #0a532b; letter-spacing: -.03em; margin-right: 2px; }
+.b6-chips { gap: 6px; }
+.b6-chip { padding: 2px 8px; font-size: 13px; font-weight: 600; }
+.b6-muted, .b6-due small, .b6-metrics small { font-size: 13px; }
+.b6-ledger-top strong { font-size: 22px; color: #0a532b; }
+.b6-ledger-top strong em { font-style: normal; font-size: 36px; letter-spacing: -.04em; }
+.b6-ledger-top > div { flex: 0 1 210px; font-size: 13px; }
+.b6-meter { height: 6px; }
+.b6-meter[data-kind="in"] i { background: #7fcf9c; }
+.b6-due small { flex: none; white-space: nowrap; }
+/* 电脑窗口窄（如 1024 宽）：右栏只剩三百来像素，画缩小、字让开得少一点，标题和三个数不被挤成一字一行 */
+@media (max-width: 1279px) {
+ .page--live .board .b6-card .card__pic { width: min(30%, 285px); }
+ .page--live .board :is(#agents,#automation,#ledger).b6-card[data-pic="right"] .card__body { padding-right: min(24%, 213px); }
+ .b6-metrics > div { padding: 0 9px; }
+ .b6-metrics small { word-break: keep-all; }
+}
 </style>
 </head>
 <body class="page page--live live-first-read">
 
 <header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
 
-<!-- 排版：等你的事、AI 对话在左；电脑、手机、自动任务在右；其余卡片按实际高度分配，项目通栏放在最底下。
+<!-- 排版：左栏放等你的事、AI 对话、备份和智能体；右栏放电脑、手机、自动任务、账本和计划任务。
      出事时才有的横条（连不上、AI 出口不通、手机通知没送到、只看某个项目）在两栏上面。
      l1.js 等第一份内容和分栏摆好，再给视口内的块接全站入场。 -->
 <main class="stage" id="stage">
@@ -293,6 +345,23 @@
           <div class="card__body"></div>
         </div>
       </article>
+
+      <article class="card" id="backups" data-pic="right">
+        <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="/live/img/backups.webp" alt="" aria-hidden="true">
+        <div class="card__glass glass">
+          <span class="card__pic" aria-hidden="true"><img src="/live/img/backups.webp" width="1000" height="1000" alt=""></span>
+          <div class="card__body"></div>
+        </div>
+      </article>
+
+      <article class="card b6-card" id="agents" data-pic="right">
+        <div class="card__glow" aria-hidden="true"></div>
+        <div class="card__glass glass">
+          <span class="card__pic" aria-hidden="true"><img src="/live/img/b6-agents-v1.webp" width="560" height="560" loading="lazy" alt=""></span>
+          <div class="card__body"><p class="card__head" data-part="head"><span class="head__lead">智能体</span></p><div class="b6-body" data-part="batch"></div></div>
+        </div>
+      </article>
     </div>
 
     <div class="board__col">
@@ -305,26 +374,23 @@
         </div>
       </article>
 
-      <article class="card" id="automation" data-pic="right">
+      <article class="card b6-card" id="automation" data-pic="right">
         <div class="card__glow" aria-hidden="true"></div>
-        <img class="card__tint" src="/live/img/automation-hero.webp" alt="" aria-hidden="true">
         <div class="card__glass glass">
-          <span class="card__pic" aria-hidden="true"><img src="/live/img/automation-hero.webp" width="360" height="360" alt=""></span>
-          <div class="card__body">
-            <p class="card__head" data-part="head"><a class="head__link" href="/live/automation/"><span class="head__lead">自动任务</span><span class="head__tail" aria-hidden="true">›</span></a></p>
-            <p class="row__sub" data-part="status">AI 自动接活和 AI 定时任务</p>
-            <ul class="rows task-preview" data-part="main"></ul>
-            <p class="row__sub auto-state-footer" data-part="automation-footer" hidden></p>
-          </div>
+          <span class="card__pic" aria-hidden="true"><img src="/live/img/b6-automation-v1.webp" width="560" height="560" loading="lazy" alt=""></span>
+          <div class="card__body"><p class="card__head" data-part="head">
+            <a class="head__link" href="/live/automation/"><span class="head__lead">自动任务</span><span class="head__tail" aria-hidden="true">›</span></a>
+          </p><div class="b6-body" data-part="batch"></div></div>
         </div>
       </article>
 
-      <article class="card" id="ledger" data-pic="right">
+      <article class="card b6-card" id="ledger" data-pic="right">
         <div class="card__glow" aria-hidden="true"></div>
-        <img class="card__tint" src="/live/img/ledger.webp" alt="" aria-hidden="true">
         <div class="card__glass glass">
-          <span class="card__pic" aria-hidden="true"><img src="/live/img/ledger.webp" width="1000" height="1000" alt=""></span>
-          <div class="card__body"></div>
+          <span class="card__pic" aria-hidden="true"><img src="/live/img/b6-ledger-v1.webp" width="560" height="560" loading="lazy" alt=""></span>
+          <div class="card__body"><p class="card__head" data-part="head">
+            <a class="head__link" href="/live/ledger/"><span class="head__lead">AI 账本</span><span class="head__tail" aria-hidden="true">›</span></a>
+          </p><div class="b6-body" data-part="batch"></div></div>
         </div>
       </article>
 
@@ -338,15 +404,6 @@
             <p class="row__sub" data-part="status">Windows 登记的任务</p>
             <ul class="rows task-preview" data-part="main"></ul>
           </div>
-        </div>
-      </article>
-
-      <article class="card" id="backups" data-pic="right">
-        <div class="card__glow" aria-hidden="true"></div>
-        <img class="card__tint" src="/live/img/backups.webp" alt="" aria-hidden="true">
-        <div class="card__glass glass">
-          <span class="card__pic" aria-hidden="true"><img src="/live/img/backups.webp" width="1000" height="1000" alt=""></span>
-          <div class="card__body"></div>
         </div>
       </article>
     </div>
@@ -369,7 +426,7 @@
 <script src="/live/_lib/live-light.js"></script>
 <script src="/live/_lib/live-project-look.js"></script>
 <script src="/live/chats/draw10.js"></script>
-<script src="/live/automation/presentation.js"></script>
+<script src="/live/batch-home.js"></script>
 <script src="/live/l1.js"></script>
 </body>
 </html>
