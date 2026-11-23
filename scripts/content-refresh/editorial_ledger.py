@@ -1,7 +1,7 @@
 """网站的编辑底稿：私有存放，核对草稿只在该页发布回读后生效。"""
 import argparse
 from collections import Counter
-from datetime import datetime
+from datetime import date, datetime, timedelta, timezone
 import hashlib
 import json
 import os
@@ -79,6 +79,26 @@ def valid_time(value):
         return bool(datetime.fromisoformat(str(value).replace("Z", "+00:00")).tzinfo)
     except ValueError:
         return False
+
+
+def validate_sources(sources):
+    if not sources or any(not re.fullmatch(r"[a-f0-9]{40}", s.get("commit", ""))
+                          or not valid_time(s.get("time")) for s in sources.values()):
+        raise ValueError("每个来源须有完整提交号和带时区的核对时间")
+
+
+def validate_book_reviews(reviews):
+    for book, review in reviews.items():
+        if not re.fullmatch(r"website|(?:project|skill)-[a-z0-9][a-z0-9._-]*", book):
+            raise ValueError(f"无效的逐条核对账名：{book}")
+        if "reviewed_sources" in review:
+            validate_sources(sources := review["reviewed_sources"])
+            if book.startswith("skill-") and any(s.get("path") != "skills/" + book[6:] for s in sources.values()):
+                raise ValueError(f"{book} 的来源须记技能路径 skills/{book[6:]}")
+        if "last_deep_read" in review:
+            day = review["last_deep_read"]
+            if book.startswith("skill-") or date.fromisoformat(day).isoformat() != day:
+                raise ValueError(f"{book} 的细读日期须是项目的 YYYY-MM-DD")
 
 
 class Ledger:
@@ -171,9 +191,7 @@ class Ledger:
                 or back.get("status") != "pass" or back.get("http") != 200
                 or not re.fullmatch(r"[a-f0-9]{64}", str(back.get("sha256") or "")) or back["sha256"] != back.get("expected_sha256")):
             return False
-        if not checked_sources or any(not re.fullmatch(r"[a-f0-9]{40}", s.get("commit", ""))
-                                      or not valid_time(s.get("time")) for s in checked_sources.values()):
-            raise ValueError("每个来源须有完整提交号和带时区的核对时间")
+        validate_sources(checked_sources)
         published_at = datetime.fromisoformat(publication["verified_at_beijing"].replace("Z", "+00:00"))
         if any(datetime.fromisoformat(s["time"].replace("Z", "+00:00")) > published_at for s in checked_sources.values()):
             return False
@@ -189,6 +207,23 @@ class Ledger:
         data["source_repositories"] = sorted(set(data["source_repositories"]) | checked_sources.keys())
         self.write(data)
         return True
+
+    def advance_book(self, book, review, verified_at):
+        data = self.read(book)
+        planned = review.get("reviewed_sources", {})
+        sources = {repo: row for repo, row in planned.items()
+                   if datetime.fromisoformat(row["time"].replace("Z", "+00:00")) <= verified_at}
+        day = review.get("last_deep_read", "")
+        verified_day = verified_at.astimezone(timezone(timedelta(hours=8))).date().isoformat()
+        if sources:
+            known = {**data.get("reviewed_sources", {}), **sources}
+            data["reviewed_sources"] = dict({repo.casefold(): (repo, row) for repo, row in known.items()}.values())
+            data["source_repositories"] = sorted(set(data["source_repositories"]) | sources.keys())
+        if day and day <= verified_day:
+            data["last_deep_read"] = max(day, data.get("last_deep_read", ""))
+        if sources or day and day <= verified_day:
+            self.write(data)
+        return sorted(set(planned) - sources.keys()) + (["last_deep_read"] if day > verified_day else [])
 
     def migrate(self, legacy):
         """保留旧证据原值；旧 based_on 是参考，绝不伪装成本轮发布核对点。"""

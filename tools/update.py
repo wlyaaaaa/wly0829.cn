@@ -13,7 +13,9 @@ from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / part) for part in ("scripts/content-refresh", "site-astro/tools")]
-from editorial_ledger import Ledger, atomic_write_bytes, companion_root, read_json, write_json
+from editorial_ledger import (
+    Ledger, atomic_write_bytes, companion_root, read_json, validate_book_reviews, valid_time, write_json,
+)
 import selected_project
 
 RUNS = Path("E:/Cache/wly-site-build/refresh-runs")
@@ -82,8 +84,73 @@ def init(batch, plan):
         routes.add(route)
     if any(not entry["old"].strip() or not entry["new"].strip() for entry in plan.get("renames", [])):
         raise ValueError("改名记录须同时写原称呼和现称呼")
+    validate_book_reviews(plan.get("book_reviews", {}))
     return {**plan, "schema": SCHEMA, "run_id": batch.parent.name, "created_at": now(),
             "repository": str(ROOT), "progress": {}, "attempts": []}
+
+
+def git_at(path, *args):
+    proc = subprocess.run(["git", "-C", path, *args], capture_output=True, text=True, encoding="utf-8")
+    return proc.stdout.strip() if proc.returncode == 0 else None
+
+
+def ranges():
+    ledger = Ledger(ROOT)
+    registry = Path("E:/PCConfig/registries")
+    paths = {row["repo"].casefold(): row["path"] for row in read_json(registry / "repository-paths.json")["entries"]}
+    policy = {row["repo"].casefold(): row["website"]["visibility"]
+              for row in read_json(registry / "website-projects.json")["entries"]}
+    table = ledger.companion / "files/site-v2/trial/first-projects/表/归属表.md"
+    catalog = table.read_text("utf-8-sig")
+    projects = {row["id"]: row.get("source", {}).get("repo", "") for row in ledger.projects}
+    print("| 账 | 来源仓库 | 本机仓库 | 路径范围 | 起点 | 最早页账参考 | 本机 HEAD | 非合并提交 | 上次细读 | 状态 |")
+    print("|---|---|---|---|---|---|---|---:|---|---|")
+    for title, prefix in (("项目表", "project-"), ("技能表", "skill-")):
+        section = re.search(r"^## " + title + r"\s*\n(.*?)(?=^## |\Z)", catalog, re.M | re.S)[1]
+        rows = [[cell.strip() for cell in line.strip("|").split("|")] for line in section.splitlines() if line.startswith("|")]
+        status_column = rows[0].index("状态")
+        for row in sorted(rows[2:]):
+            ident = row[0]
+            if row[status_column] not in {"做完", "要做"}:
+                continue
+            book = "website" if prefix == "project-" and ident == "wly0829-cn" else prefix + ident
+            data = ledger.read(book)
+            skill = prefix == "skill-"
+            primary = "wlyaaaaa/.agents" if skill else projects.get(ident, "")
+            if "/" not in primary:
+                primary = next(iter(data["source_repositories"]), "") if len(data["source_repositories"]) == 1 else ""
+            audited = {repo.casefold(): (repo, detail) for repo, detail in data.get("reviewed_sources", {}).items()}
+            reviewed = {**({primary.casefold(): (primary, {})} if primary or not audited else {}), **audited}
+            for key, (repo, detail) in sorted(reviewed.items()):
+                path, tip, count = paths.get(key), None, "—"
+                scope = detail.get("path", "skills/" + ident) if skill else ""
+                start = detail.get("commit")
+                reference = None if start else min(
+                    (source for page in data["pages"].values() for name, source in page.get("checked_sources", {}).items()
+                     if name.casefold() == key and valid_time(source.get("time"))),
+                    key=lambda source: datetime.fromisoformat(source["time"].replace("Z", "+00:00")), default=None)
+                if policy.get(key) == "frozen_static":
+                    status = "冻结"
+                elif policy.get(key) == "hidden":
+                    status = "不上网站"
+                elif not path or not (Path(path) / ".git").exists() or not (tip := git_at(path, "rev-parse", "HEAD")):
+                    status = "本机仓库未登记或不可读"
+                else:
+                    if scope and not (Path(path) / scope).is_dir() and (plugin := next(Path(path).glob(f"plugins/*/{scope}/SKILL.md"), None)):
+                        scope = plugin.parent.relative_to(path).as_posix()
+                    basis = start or (reference or {}).get("commit")
+                    status = "可读" if basis else "待定起点"
+                    if basis:
+                        if git_at(path, "merge-base", "--is-ancestor", basis, tip) is None:
+                            status = "起点不在本机 HEAD 历史"
+                        else:
+                            count = git_at(path, "rev-list", "--full-history", "--no-merges", "--count", f"{basis}..{tip}",
+                                           *(("--", scope) if scope else ())) or "—"
+                            if count != "—" and not start:
+                                count += "（页账参考）"
+                cells = (book, repo or "无登记", path or "无登记", scope or "全仓", start or "无记录",
+                         (reference or {}).get("commit", "—"), tip or "—", count, data.get("last_deep_read", "无记录"), status)
+                print("| " + " | ".join(cells) + " |")
 
 
 def before(state, folder):
@@ -284,9 +351,23 @@ def update_ledger(state, folder, batch):
                                          route=row["route"], project=row.get("project")):
                 advanced.append(ident)
         write_json(batch, state)
-    if collect(state, folder, final_only=True).keys() == publishable(state).keys():
+    final = collect(state, folder, final_only=True)
+    if not state.get("finished_at") and final.keys() == publishable(state).keys():
         required = {ident for ident, row in publishable(state).items() if row.get("checked_sources")}
         if required <= set(state.get("ledger_updated", [])):
+            if reviews := state.get("book_reviews"):
+                if any(proof.get("schema") != "wly.site-publication.v1" or proof.get("status") not in {None, "published"}
+                       for proof in final.values()):
+                    return
+                # A local receipt's completion time also includes work after readback.
+                times = [p.get("started_at_beijing" if "local_attempt" in p else "verified_at_beijing") for p in final.values()]
+                if not all(map(valid_time, times)):
+                    return
+                verified_at = min(datetime.fromisoformat(t.replace("Z", "+00:00")) for t in times)
+                ledger = Ledger(ROOT)
+                for book, review in reviews.items():
+                    if skipped := ledger.advance_book(book, review, verified_at):
+                        print(f"{book} 晚于发布回读，未记入：{', '.join(skipped)}", file=sys.stderr)
             state.setdefault("finished_at", now())
 
 
@@ -305,7 +386,11 @@ def main():
     publish.add_argument("--previous-site-dist", type=Path)
     publish.add_argument("--dry-run", action="store_true")
     commands.add_parser("result").add_argument("--report-generator")
+    commands.add_parser("ranges", help="只读列出项目和技能的下轮取材范围")
     args = parser.parse_args()
+    if args.action == "ranges":
+        ranges()
+        return 0
     if args.action == "publish" and (args.previous_manifest or args.previous_site_dist) and not args.dry_run:
         parser.error("实发采用登记的上次成功发布；自选上次成品只用于演练")
     if args.action == "renames" and args.plan:
