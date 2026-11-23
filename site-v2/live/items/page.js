@@ -38,9 +38,12 @@
     return it.age_days > 0 ? `挂了 ${sp(it.age_days)} 天` : '';
   }
   const bar = U.topbar({ ask: () => `请看实况等你的事：${$('head').textContent}。请说明各项现在的情况。` });
-  // 访客版页头不把访客当“你”：标题和第一句写“本人”，和数字卡“等本人”一个说法；本人版照原样（M681）
+  // 访客版页头不把访客当“你”：标题和第一句写“本人”，和数字卡“等本人”一个说法；本人版照原样（M681）。
+  // 第一次显示前就定好：这台设备存着有效配对标记、又没切到“看公开版”的按本人版写，其余按访客版写（页头随动效在脚本跑完后才露出来）；回包到了再按 viewer 核一次
   const titleParts = [document.querySelector('.lbp-title h1'), document.querySelector('.lbp-title p > span')].filter(Boolean).map(el => [el, el.textContent]);
-  const pageTitle = () => titleParts.forEach(([el, text]) => { el.textContent = viewer === 'public' ? text.replaceAll('你', '本人') : text; });
+  const pageTitle = (kind = viewer) => titleParts.forEach(([el, text]) => { el.textContent = kind === 'public' ? text.replaceAll('你', '本人') : text; });
+  const pairedHere = (() => { try { return /^[A-Za-z0-9_-]{43}$/.test(localStorage.getItem('wly-cockpit-device') || '') && !window.LiveView?.isPublic?.(); } catch { return false; } })();
+  pageTitle(pairedHere ? 'owner' : 'public');
   L.add($('hero'));
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   document.querySelectorAll('a[href^="/live/"]').forEach(a => a.href = route(a.getAttribute('href')));
