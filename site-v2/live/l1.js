@@ -1606,7 +1606,20 @@
     const computer = home?.computer;
     if (!computer || computer.q === 'warming' || lastState?.offline || state.meta?.viewer?.kind !== viewer) return;
     if (!window.Live.mergeHardware(computer.metrics, state.data?.metrics)) return;
-    const render = () => renderComputer(computer, home.screen, home.phone);
+    // “读不准：CPU 温度（最近一次记录于 …）”跟着页面上的温度走：读数是新的就不再说读不准，旧了只把时刻换成这次读到的（M602）
+    const temp = computer.metrics?.find(m => m.id === 'cpu-temp');
+    let grayChanged = false;
+    if (temp?.value != null && timed(temp.at) && Array.isArray(computer.gray_items)) {
+      const old = temp.stale_after > 0 && Date.now() - Date.parse(temp.at) > temp.stale_after * 1000;
+      const next = computer.gray_items.flatMap(g => {
+        const reason = typeof g?.reason === 'string' ? g.reason : '';
+        if (sp(U.fieldText(g?.name, viewer)) !== 'CPU 温度' || !/最近一次记录于 /.test(reason)) return [g];
+        grayChanged = true;
+        return old ? [{ ...g, reason: reason.replace(/最近一次记录于 [^，,]+/, `最近一次记录于 ${recordStamp(temp.at)}`) }] : [];
+      });
+      if (grayChanged) Object.assign(computer, { gray_items: next, gray_count: next.length });
+    }
+    const render = () => { renderComputer(computer, home.screen, home.phone); if (grayChanged) paintStatus('computer', computer); };
     if (settling()) render(); else U.anchor(render);
   } });
 
