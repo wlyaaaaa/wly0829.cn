@@ -51,6 +51,8 @@
   const contentKey = s => s.replace(/[\s。！？]+$/gu, '').trim();
   const newBody = (values, shown) => {
     const seen = new Set(shown.filter(s => typeof s === 'string').flatMap(s => sentences(s).map(contentKey)));
+    // 带可见性标记的那段（不是纯文字）也记进写过的句子，后面同一句不再重复写一遍
+    values.filter(s => s && typeof s === 'object').forEach(s => sentences(U.fieldText(s, viewer) || '').forEach(line => { const key = contentKey(line); if (key) seen.add(key); }));
     return values.filter(Boolean).map(s => typeof s !== 'string' ? s : sentences(s).filter(line => {
       const key = contentKey(line);
       if (!key || seen.has(key)) return false;
@@ -131,7 +133,7 @@
     }
     if (note) { note.hidden = !notes || privateItem; U.html(note, notes); }
     // 不单独放“复制给 AI”，问情况就是复制给 AI（M458）；登记带的去处排第一（M491）
-    let acts = (d.actions || []).filter(a => a.intent !== 'done' && (!d.closed || a.intent !== 'later')).map(a => a.intent === 'ask' ? { ...a, label: '问情况' } : a);
+    let acts = (d.actions || []).filter(a => a.intent !== 'done' && (!d.closed || !['later', 'ack', 'decline', 'close_report'].includes(a.intent))).map(a => a.intent === 'ask' ? { ...a, label: '问情况' } : a);
     if (d.open && !acts.some(a => a.kind === 'open')) acts.push({ ...(typeof d.open === 'string' ? (/^(https?:|\/)/.test(d.open) ? { href: d.open } : { target: d.open }) : d.open), kind: 'open', label: d.open.label || '打开对话' });
     acts = [...acts.filter(a => a.kind === 'open' && /^https:\/\//i.test(a.href || '')), ...acts.filter(a => !(a.kind === 'open' && /^https:\/\//i.test(a.href || '')))];
     part('acts').hidden = !acts.length; U.html(part('acts'), U.goActions(d, acts));
@@ -189,7 +191,12 @@
     }
     const eventBody = e => !e.text || [e.label, d.text, issue ? summary : d.closed?.text].includes(e.text) ? '' : e.text;
     const eventReadings = new Map();
+    const sameEvent = new Set();
     const usefulHistory = historyRows.filter(e => {
+      // 同一分钟、同一件事、同一句话的经过只留一条（本人 11-23 截图里“16:51 登记事项”写了两遍）
+      const twin = [e.at && when(e.at), e.label || e.event, eventBody(e), e.outcome].join('|');
+      if (sameEvent.has(twin)) return false;
+      sameEvent.add(twin);
       const fields = issueReadings?.event(e, viewer, when, eventBody(e));
       if (fields?.actor || fields?.extra) { eventReadings.set(e, fields); return true; }
       return e.label || e.event || eventBody(e) || e.outcome || e.at && e.text;
