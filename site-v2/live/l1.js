@@ -1545,7 +1545,7 @@
     Light.lightUp([notices, ...mainCards].filter(card => !firstScreen.includes(card)), true);
     firstScreen.forEach((el, i) => {
       el.style.setProperty('--mo-d', `calc(var(--mo-rise-step) * var(--mo-speed) * ${i})`);
-      el.classList.add('mo-rise');
+      if (!root.hasAttribute('data-mo-home-arrival')) el.classList.add('mo-rise');
     });
     await firstScreen.at(-1)?.getAnimations().find(a => a.animationName === 'mo-rise')?.finished.catch(() => {});
     for (const el of firstScreen) { el.classList.remove('mo-rise'); el.style.removeProperty('--mo-d'); }
