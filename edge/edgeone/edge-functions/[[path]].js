@@ -2,6 +2,40 @@ const prefix = '/computer-access/live/v1/';
 const origins = new Set(['https://wly0829.cn', 'https://www.wly0829.cn']);
 const OSS_FALLBACK_URL = 'https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/live/v1/fallback.json';
 const FALLBACK_POLICY = 'policy-10'; // Same generation as the PCConfig exporter and live client.
+async function transformBytes(stream, bytes) {
+  const writer = stream.writable.getWriter(), reader = stream.readable.getReader();
+  const reading = async () => {
+    const chunks = []; let length = 0;
+    for (;;) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      const chunk = ArrayBuffer.isView(value) ? new Uint8Array(value.buffer, value.byteOffset, value.byteLength) : new Uint8Array(value);
+      chunks.push(chunk); length += chunk.byteLength;
+    }
+    const result = new Uint8Array(length); let offset = 0;
+    for (const chunk of chunks) { result.set(chunk, offset); offset += chunk.byteLength; }
+    return result;
+  };
+  const writing = async () => { await writer.write(bytes); await writer.close(); };
+  const [body] = await Promise.all([reading(), writing()]);
+  return body;
+}
+const gunzip = bytes => transformBytes(new DecompressionStream('gzip'), bytes);
+
+function acceptsGzip(header) {
+  const weights = new Map();
+  for (const item of (header || '').toLowerCase().split(',')) {
+    const [encoding, ...params] = item.split(';').map(part => part.trim());
+    let weight = 1;
+    for (const param of params) {
+      const [key, value] = param.split('=');
+      if (key.trim() === 'q') weight = Number(value);
+    }
+    weights.set(encoding, weight > 0 && weight <= 1);
+  }
+  return weights.get('gzip') ?? weights.get('*') ?? false;
+}
+
 async function cloudSnapshot(resource) {
   // The fixed OSS address cannot prove that its audience is still current.
   const response = await fetch(OSS_FALLBACK_URL, {cache: 'no-store', signal: AbortSignal.timeout(5000)});
@@ -45,9 +79,10 @@ export default async function onRequest({request, env = {}}) {
     if (empty) await upstream.body?.cancel();
     // 新接口照旧读整包（10 秒内读不全才能改回云端备用包）。运行时通常已替我们解压；开头仍是 gzip 的 1f 8b 就原样转给浏览器并标上 gzip。
     const bytes = empty || old ? null : new Uint8Array(await upstream.arrayBuffer());
-    const packed = bytes?.[0] === 0x1f && bytes[1] === 0x8b && /gzip/i.test(upstream.headers.get('Content-Encoding') || '');
+    const gzipBytes = bytes?.[0] === 0x1f && bytes[1] === 0x8b;
+    const packed = gzipBytes && /gzip/i.test(upstream.headers.get('Content-Encoding') || '');
     if (!old && upstream.status >= 500) {
-      const plain = async () => JSON.parse(new TextDecoder().decode(packed ? new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer()) : bytes));
+      const plain = async () => JSON.parse(new TextDecoder().decode(packed ? await gunzip(bytes) : bytes));
       const preserve503 = upstream.status === 503 && (request.method === 'HEAD' ||
         ['live_public_paused', 'live_publication_revoked', 'live_detail_unavailable'].includes((bytes && await plain().catch(() => null))?.error));
       if (!preserve503) {
@@ -55,9 +90,26 @@ export default async function onRequest({request, env = {}}) {
         throw Error('origin');
       }
     }
-    const body = empty ? null : old ? upstream.body : bytes;
+    let body = empty ? null : old ? upstream.body : bytes;
     for (const key of ['Content-Type', 'ETag', 'Date']) if (upstream.headers.has(key)) headers.set(key, upstream.headers.get(key));
-    if (packed) headers.set('Content-Encoding', 'gzip');
+    const encoding = request.headers.get('Accept-Encoding'), gzip = acceptsGzip(encoding);
+    let codec = gzip ? 'not-encoded' : encoding === null ? 'no-accept-encoding' : 'identity-requested';
+    if (packed && encoding !== null && !gzip) body = await gunzip(bytes);
+    else if (packed) headers.set('Content-Encoding', 'gzip');
+    else if (!gzipBytes && bytes?.length && gzip && upstream.status === 200 &&
+             /^application\/json(?:\s*;|$)/i.test(headers.get('Content-Type') || '')) {
+      let phase = 'constructor';
+      try {
+        const stream = new CompressionStream('gzip');
+        phase = 'stream';
+        body = await transformBytes(stream, bytes);
+        headers.set('Content-Encoding', 'gzip');
+      } catch {
+        // Keep the readable upstream response if local encoding fails.
+        codec = typeof CompressionStream === 'function' ? 'encoder-' + phase + '-error' : 'encoder-unavailable';
+      }
+    }
+    if (!old && !empty && upstream.status === 200) headers.set('X-Live-Compression', headers.has('Content-Encoding') ? 'gzip' : codec);
     return new Response(body, {status: upstream.status, headers});
   } catch { if (old) return new Response('Upstream unavailable', {status: 504, headers}); }
   finally { clearTimeout(timer); }

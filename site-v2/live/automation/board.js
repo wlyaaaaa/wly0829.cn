@@ -117,7 +117,10 @@
     const why = p.reason === 'login' ? '登录过期' : '额度用完';
     // 本人版：登录过期一律写这句并链到那张卡；后台还没给卡的地址时先链到等你的事清单
     const card = viewer === 'owner' && p.reason === 'login';
-    return (card ? link(p.href || '/live/items/', `登录过期，登录命令在等${you()}的事里 ›`, 'tp-link au-warn') : esc(U.fieldText(p.text, viewer) || why)) + (p.started_at ? ` · ${esc(when(p.started_at))} 起` : '');
+    // 后台的 text 自己带了“停着：”开头、也写了几点起：外面已经写了“停着”，开头去掉；text 里有那个钟点就不再补“· 几点起”。没带的照旧
+    const text = card ? '' : U.fieldText(p.text, viewer).replace(/^停着[：:，,]\s*/, '');
+    const since = p.started_at && !(text && text.includes(T.clock(p.started_at))) ? ` · ${esc(when(p.started_at))} 起` : '';
+    return (card ? link(p.href || '/live/items/', `登录过期，登录命令在等${you()}的事里 ›`, 'tp-link au-warn') : esc(text || why)) + since;
   }
 
   // —— 八行总表 ——

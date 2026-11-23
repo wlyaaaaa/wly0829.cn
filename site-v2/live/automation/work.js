@@ -124,9 +124,13 @@
   // 本人这边登录命令只挂在等你的事里，这里链过去；访客只看到原因和时间。
   const pauseFor = (data, id) => list(data.provider_pauses).find(p => list(p.categories).includes(id));
   function pauseText(p) {
-    const why = esc(p.text || (p.reason === 'login' ? '登录过期' : '额度用完'));
+    // 后台的 text 自己带了“停着：”开头、也写了几点起：调用处已经写了“停着”，开头去掉；text 里有那个钟点就不再补“· 几点起”。没带的照旧
+    const text = String(p.text || '').replace(/^停着[：:，,]\s*/, '');
+    const why = esc(text || (p.reason === 'login' ? '登录过期' : '额度用完'));
     const item = audience === 'owner' && p.login_command && route(p.href);
-    return (item ? link(item, '登录过期，登录命令在等你的事里') : why) + (when(p.started_at) ? ` · ${when(p.started_at)} 起` : '');
+    const clock = instant(p.started_at) && U.time(instant(p.started_at));
+    const since = when(p.started_at) && !(!item && text && clock && text.includes(clock)) ? ` · ${when(p.started_at)} 起` : '';
+    return (item ? link(item, '登录过期，登录命令在等你的事里') : why) + since;
   }
   const group = (rows, name) => list(rows).filter(row => row.group === name);
   const rowTitle = (row, name = '这件活') => field(row.title, name);
