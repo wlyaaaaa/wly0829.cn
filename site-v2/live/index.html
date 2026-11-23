@@ -304,6 +304,10 @@
 .b6-meter { height: 6px; }
 .b6-meter[data-kind="in"] i { background: #7fcf9c; }
 .b6-due small { flex: none; white-space: nowrap; }
+/* 和别的卡对到同一条左边线（标题灯后面那条线）：计划任务的行、三张新卡的内容都从这条线起；新卡行首的状态小圆点挂在线外，和别的卡的行灯一样 */
+.page--live:not(.live-unreadable) #tasks .card__body:has(.card__head > .lamp) > .task-preview,
+.page--live:not(.live-unreadable) .b6-card .card__body:has(.card__head > .lamp) > .b6-body { margin-inline-start: 25px; }
+.page--live:not(.live-unreadable) .b6-card .b6-body > p:not(.b6-checks) > .b6-dot:first-child { margin-left: -25px; margin-right: calc(25px - .65em); }
 /* 电脑窗口窄（如 1024 宽）：右栏只剩三百来像素，画缩小、字让开得少一点，标题和三个数不被挤成一字一行 */
 @media (max-width: 1279px) {
  .page--live .board .b6-card .card__pic { width: min(30%, 285px); }
