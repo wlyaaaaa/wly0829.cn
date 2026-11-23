@@ -55,8 +55,8 @@
       // 在修：只有 repairing 为真才算（约定 §10）；旧包没有 repairing 时写了谁在修就算。第几轮、点到哪一轮取在修那几处里第一处写明了的
       const busy = issues.filter(i => i.repairing === true || i.repairing == null && (i.handler || i.handler_text));
       const fix = busy.find(i => typeof i.href === 'string' && i.href.startsWith('/live/')) || {};
-      // 点这一家那一行：到智能体页“三家各干了多少活”那块（#work），高亮这一家；后台给了这一家的地址就用它
-      const base = typeof t?.href === 'string' && t.href.startsWith('/live/agents/') ? t.href : `/live/agents/?host=${key}`;
+      // 点这一家那一行：到智能体页“三家各干了多少活”那块（#work），高亮这一家；后台给了这一家的地址就用它（网址只看一家一律 ?family=，F1 定的）
+      const base = typeof t?.href === 'string' && t.href.startsWith('/live/agents/') ? t.href : `/live/agents/?family=${key}`;
       return { ...p, name: p.name || name, color: HOST_COLOR[key], issues, fixing: issues.length ? busy.length > 0 : p.status === 'repair',
         round: busy.map(i => i.round).find(r => count(r) && r > 0) || null, fixHref: fix.href || null,
         workHref: base.includes('#') ? base : `${base}#work`,
@@ -67,23 +67,24 @@
       hours: hoursOf(total.actual_minutes), said: total.messages };
   }
   // 首页 AI 账本卡：新账起（后台清零重算，从正式生效那一刻算），AI 在跟几件、今天到日子、跟得最久、新账起进了结。
-  // 取数照数据约定 §11：data.ledger.new_ledger = {started_at, open, opened, closed, due, overdue}，每个数 {count, href}；
-  // href 是账本页 ?view=open|opened|closed|due|overdue，点了到账本页筛好的那几件，件数和卡上一样。new_ledger 为 null 是还没生效。
-  const DAY = 86400000;
-  function ledgerView(d, { viewer, now }) {
-    const nl = d.new_ledger && typeof d.new_ledger === 'object' ? d.new_ledger : null, nowAt = R.timed(now) ? Date.parse(now) : Date.now();
-    const num = (x, view) => ({ n: count(x?.count) ? x.count : null, href: typeof x?.href === 'string' && x.href.startsWith('/live/') ? x.href : `/live/ledger/?view=${view}` });
-    // 今天没有到日子的：写下一件哪天看。约定没给这个数，先从卡上现有的 items 里挑下次最早的那件
-    const next = items(d.items).filter(it => R.timed(it.next_at) && Date.parse(it.next_at) > nowAt).sort((a, b) => Date.parse(a.next_at) - Date.parse(b.next_at))[0] || null;
+  // 取数照数据约定 §11：data.ledger.new_ledger = {started_at, open, opened, closed, due, overdue, next_due, opened_7d?, closed_7d?}，每个数 {count, href}；
+  // href 是账本页 ?view=…，点了到账本页筛好的那几件，件数和卡上一样。new_ledger 为 null 是还没生效。
+  function ledgerView(d, { viewer }) {
+    const nl = d.new_ledger && typeof d.new_ledger === 'object' ? d.new_ledger : null;
+    const site = h => typeof h === 'string' && h.startsWith('/live/') ? h : null;
+    const num = (x, view) => ({ n: count(x?.count) ? x.count : null, href: site(x?.href) || `/live/ledger/?view=${view}` });
+    // 今天没有到日子的：写下一件哪天看，用后台给的 next_due={date（北京日期）, href}；没有下一件时后台给 null
+    const nd = nl?.next_due, next = nd && /^\d{4}-\d\d-\d\d/.test(nd.date || '') ? { day: nd.date.slice(5, 10), href: site(nd.href) } : null;
     const oldest = d.oldest ? { ...d.oldest, title: d.oldest.title ?? d.oldest.plain_title ?? d.oldest.text } : null;
-    const oldestText = U.fieldHtml(d.oldest_text, { name: '跟得最久', kind: viewer }) || (oldest ? '' : '现在没有 AI 正在跟的事');
+    // 一件也没有时卡上整句写“AI 暂无待跟事项”；手上有事但后台没挑出最久那件，就不写这一行（不写“现在没有 AI 正在跟的事”自相矛盾）
+    const oldestText = U.fieldHtml(d.oldest_text, { name: '跟得最久', kind: viewer });
     const base = { next, oldest, oldestText };
     if (nl) {
       const since = R.timed(nl.started_at) ? nl.started_at : null;
-      // 新账起满 7 天改写“近 7 天进 · 了结”：约定 §11 还没给近 7 天的两个数，后台给了 opened_7d/closed_7d（同样 {count, href}）才换，没给照旧写新账起
-      const week = !!since && nowAt - Date.parse(since) >= 7 * DAY && !!nl.opened_7d && !!nl.closed_7d;
+      // 新账满 7 个整天后后台才给 opened_7d/closed_7d（同样 {count, href}，view=opened_7d/closed_7d），给了就改写“近 7 天进 · 了结”，没给照旧写新账起
+      const week = !!nl.opened_7d && !!nl.closed_7d;
       return { ...base, since, week, open: num(nl.open, 'open'), due: num(nl.due, 'due'), overdue: num(nl.overdue, 'overdue'),
-        opened: week ? num(nl.opened_7d, 'opened') : num(nl.opened, 'opened'), closed: week ? num(nl.closed_7d, 'closed') : num(nl.closed, 'closed') };
+        opened: week ? num(nl.opened_7d, 'opened_7d') : num(nl.opened, 'opened'), closed: week ? num(nl.closed_7d, 'closed_7d') : num(nl.closed, 'closed') };
     }
     // 后台写了 new_ledger:null：新账还没生效，卡上写“正在重算”。旧包根本没有这个字段：照原来的字段画；账本页筛不出同样件数的数只写字、不带链接
     if (Object.hasOwn(d, 'new_ledger')) return { ...base, pending: true };
@@ -162,7 +163,7 @@
     }
 
     // AI 账本卡（本人 11-24 02:45 选 A，照 v3）：AI 在跟几件、今天到日子、跟得最久、新账起进了结；每个数点了到账本页筛好的那几件
-    const v = ledgerView(d, { viewer, now });
+    const v = ledgerView(d, { viewer });
     const tone = d.repair && !offline ? 'repair' : !v.pending && count(v.open.n) && !offline ? 'ok' : 'off';
     const head = cardTitle('AI 账本', href, tone, '') + (v.since ? `<span class="b6-date">${esc(U.date(v.since))} 新账起</span>` : '');
     if (v.pending) return { tone, head, body: `<div class="b6-big"><strong>正在重算</strong></div><p class="b6-muted">新账从正式生效那一刻起算，算好了这里写 AI 在跟几件。</p>` };
@@ -175,7 +176,7 @@
     const looked = !oldest || !count(oldest.check_count) ? '' : oldest.check_count >= limit ? ` · ${esc(limit)} 次看满了` : ` · 第 ${esc(oldest.check_count + 1)} 次看`;
     const dueLine = v.due.n == null ? `今天到日子 ${num(null)} 件`
       : v.due.n > 0 ? `${go(v.due.href, `今天到日子 ${esc(v.due.n)} 件`)}${v.overdue.n > 0 ? ` ${v.overdue.href ? `<a class="b6-big__aside" href="${esc(route(v.overdue.href))}">` : '<span class="b6-big__aside">'}过期的 ${esc(v.overdue.n)} 件排最前${v.overdue.href ? '</a>' : '</span>'}` : ''}`
-      : `今天没有到日子的${v.next ? ` · ${go(v.next.href, `下一件 ${esc(U.date(v.next.next_at))}`)}` : ''}`;
+      : `今天没有到日子的${v.next ? ` · ${go(v.next.href, `下一件 ${esc(v.next.day)}`)}` : ''}`;
     return { tone, head, body:
       `<div class="b6-big"><strong>AI 在跟 <em>${v.open.n == null ? num(null) : `<a href="${esc(route(v.open.href))}">${esc(v.open.n)}</a>`}</em> 件</strong></div>
       <p>${dueLine}</p>

@@ -1,9 +1,9 @@
-// 实况 · 智能体页：从首页智能体卡点某一家进来（?host=claude|codex|antigravity#work）时，
+// 实况 · 智能体页：从首页智能体卡点某一家进来（?family=claude|codex|antigravity#work；后台旧链接带 ?host= 的也认）时，
 // 停在“三家各干了多少活”那块（滚动由 page.js 认 #work），把这一家那一格亮成绿框。
 // 页面每轮读数整块重画，重画后再亮回去；只第一次淡入，之后不再重播，免得每轮闪一下。
 (() => {
   'use strict';
-  const p = new URLSearchParams(location.search), host = String(p.get('host') || p.get('family') || '').toLowerCase();
+  const p = new URLSearchParams(location.search), host = String(p.get('family') || p.get('host') || '').toLowerCase();
   if (!/^(claude|codex|antigravity)$/.test(host)) return;
   const root = document.getElementById('tp-root');
   if (!root) return;

@@ -335,11 +335,11 @@
 .b6-big strong { font-size: 22px; line-height: 1.2; color: #0a532b; }
 .b6-big strong em { font-style: normal; font-size: 36px; letter-spacing: -.04em; }
 .b6-big__aside { color: #4a5756; font-size: 13.5px; }
-.b6-hosts { list-style: none; margin: 8px 0 10px; padding: 0; display: grid; grid-template-columns: max-content max-content minmax(0, 1fr); gap: 8px 12px; align-items: center; }
-.b6-host { display: contents; }
+/* 每家一行照 v3 顺着排：家名、小签、今天的数；卡窄（1024 宽）放不下时今天的数整段换到下一行，不在字中间折行 */
+.b6-hosts { list-style: none; margin: 8px 0 10px; padding: 0; display: grid; gap: 8px; }
+.b6-host { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
 .b6-host__name { display: inline-flex; align-items: center; gap: 8px; font-weight: 650; color: #20302b !important; }
 .b6-host__name i { width: .66em; height: .66em; border-radius: 3px; background: var(--host); }
-.b6-hosts .b6-chip { justify-self: start; }
 .b6-host__work { color: #4a5756 !important; font-size: 13.5px; }
 .b6-foot--split { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 22px; color: #44504c; }
 .b6-empty { margin: 14px 0 10px; font-size: 16px; color: #0a532b; font-weight: 600; }
