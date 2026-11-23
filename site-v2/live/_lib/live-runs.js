@@ -87,7 +87,8 @@
   // 给一轮的详情页、自动任务页用的“从哪进来就回哪”：上一页是认得的实况页，就把返回改成回那一页（回实况首页落回那张卡，
   // 上一条历史正好是那页时直接后退、回到离开时的位置）；认不得的不动，照页面原来写的返回。
   const FROM = { '/live/': '实况', '/live/items/': '等你的事', '/live/item/': '这件事', '/live/ledger/': 'AI 账本', '/live/issue/': '账本这件',
-    '/live/chats/': 'AI 对话', '/live/agents/': '智能体' };
+    '/live/chats/': 'AI 对话', '/live/chat/': '这场对话', '/live/agents/': '智能体' };
+  // 单场对话（/live/chat/?id=…）点“来源：…那一轮 ›”进来的，返回回那场对话，网址原样带 id（验收 11-24 07:36）
   function backToReferrer(link, { card = '#automation' } = {}) {
     let url;
     try { url = new URL(document.referrer); } catch { return false; }
