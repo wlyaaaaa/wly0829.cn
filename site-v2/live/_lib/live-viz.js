@@ -370,7 +370,14 @@
         g.addColorStop(1, c);
         return g;
       });
-      const alpha = (s) => (focus == null || states[s].label === states.find(st => st.id === focus)?.label ? 1 : .16);
+      const chosen = (s) => focused && states[s]?.label === lit;
+      const alpha = (s) => (!focused || chosen(s) ? 1 : .1);
+      // 选中的那种整段实色、描一圈深色边，叠在最上面：灰、黑、白这几类本来就淡，光把别的调淡分不出亮的是哪段（M594）
+      const outline = (x, y, w, h) => {
+        ctx.save(); ctx.globalAlpha = 1; ctx.lineWidth = 1.5 * dpr; ctx.strokeStyle = 'rgba(28, 36, 48, .88)';
+        ctx.strokeRect(x + .75 * dpr, y + .75 * dpr, Math.max(w - 1.5 * dpr, .5 * dpr), Math.max(h - 1.5 * dpr, .5 * dpr)); ctx.restore();
+      };
+      const solid = (s) => states[s].hue === 'stone' ? 'rgb(168, 163, 152)' : fills[s];
       if ((to - from) / w > 3600) {
         // 粗的横带（一格像素超过 1 小时）：一天一竖条，从下往上按 states 的顺序叠这一天各状态占几成——
         // 一年看下来是一道起伏的“地形”：哪天用得多一眼看得出，细到小时的去看下面那条
@@ -387,8 +394,9 @@
             if (!tot[s]) continue;
             const h = (tot[s] / all) * H;
             ctx.globalAlpha = alpha(s);
-            ctx.fillStyle = fills[s];
+            ctx.fillStyle = chosen(s) ? solid(s) : fills[s];
             ctx.fillRect(x0, y - h, x1 - x0, h);
+            if (chosen(s)) outline(x0, y - h, x1 - x0, h);
             y -= h;
           }
         }
@@ -402,6 +410,13 @@
             ctx.fillStyle = fills[s];
             ctx.fillRect(c, 0, e - c, H);
           }
+          c = e;
+        }
+        if (focused) for (let c = 0; c < n;) {
+          const s = col[c];
+          let e = c + 1;
+          while (e < n && col[e] === s) e++;
+          if (s >= 0 && chosen(s)) { ctx.globalAlpha = 1; ctx.fillStyle = solid(s); ctx.fillRect(c, 0, e - c, H); outline(c, 0, e - c, H); }
           c = e;
         }
         // 太短看不见的段不撑宽着画（撑宽的一多，比例就和图下的数对不上），只在它附近留 3 像素悬停区，提示里查得到
@@ -527,7 +542,8 @@
       if (restart != null) {
         r.cursor.hidden = true;
         const stamp = bj(restart).toISOString().slice(5, 19).replace('T', ' ');
-        tip.show(`<b>开机或重启</b><span>${esc(stamp)} · 关机时刻不明</span>`, (box.left - hostBox.left) * scale + px, tipY);
+        const before = spans.findLast(([t0]) => t0 < restart);
+        tip.show(`<b>开机或重启</b><span>${esc(stamp)} · ${states[before?.[1]]?.id === 'off' ? '前面那段算关机' : '关机时刻不明'}</span>`, (box.left - hostBox.left) * scale + px, tipY);
         return;
       }
       const marked = r.marks.findLast((m) => px >= m.left && px <= m.right);

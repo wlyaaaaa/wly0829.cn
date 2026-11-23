@@ -472,6 +472,13 @@
     const cut = s => { const t = [...s.replace(/\\n/g, '\n').replace(/\*\*|__|\x60/g, '').replace(/^#{1,6}\s+/gm, '').replace(oneLine ? /\s*\n\s*/g : /\n{3,}/g, oneLine ? ' ' : '\n\n').trim()]; return t.length > n ? t.slice(0, n).join('').trimEnd() + '…' : t.join(''); };
     return typeof value === 'string' ? cut(value) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([k, v]) => [k, ['value', 'text', 'label'].includes(k) && typeof v === 'string' ? cut(v) : v])) : value;
   }
+  // 事项来源的名字：内部编号（pcconfig-auto-source-…、owner-2026…、pending-… 这类）不给人看；是项目编号就换成项目名，没有人话名字就不写（本人 11-23 16:50）。
+  function originName(origin, item) {
+    const name = origin?.label || origin?.text || origin?.name;
+    if (!name || typeof name !== 'string' || !/^[\w.-]+$/u.test(name.trim())) return name || '';
+    if (name === 'news-quickcheck') return '资讯查询';
+    return name === item?.project && typeof item?.project_name === 'string' ? item.project_name : '';
+  }
   function fieldText(value, kind = viewer) {
     if (typeof value === 'number' && !Number.isFinite(value)) return '';
     if (value && typeof value === 'object') {
@@ -1390,7 +1397,8 @@
     let cancelled = false;
     const stop = () => { cancelled = true; };
     window.addEventListener('wheel', stop, { once: true, passive: true });
-    function hold() { if (cancelled || run !== anchorRun || !el.isConnected || performance.now() >= end) { window.removeEventListener('wheel', stop); return; } const dy = el.getBoundingClientRect().top - top; if (Math.abs(dy) > .5) window.scrollBy(0, dy); requestAnimationFrame(hold); }
+    // 顶住的那一行被收起（hidden、整块读不到时只留卡头）就不再顶：它的位置读出来是 0，再顶会每帧往上推、整页跳到页顶（M528）
+    function hold() { if (cancelled || run !== anchorRun || !el.isConnected || !el.getClientRects().length || performance.now() >= end) { window.removeEventListener('wheel', stop); return; } const dy = el.getBoundingClientRect().top - top; if (Math.abs(dy) > .5) window.scrollBy(0, dy); requestAnimationFrame(hold); }
     hold();
   }
   anchor.stop = () => { anchorRun++; };
@@ -1655,5 +1663,5 @@
     back.after(nav);
   })();
 
-  window.LiveUI = { justSaved, restoreBack, programName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  window.LiveUI = { justSaved, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();

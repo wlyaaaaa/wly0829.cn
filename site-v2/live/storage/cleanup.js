@@ -20,6 +20,15 @@
     'driver-diagnostics': '驱动诊断', diagnostics: '诊断记录', 'owner-temp': '个人临时目录', 'windows-temp': 'Windows 临时目录',
     'nvidia-downloads': '显卡驱动下载缓存', 'cloudmusic-cache': '网易云音乐缓存',
     'retired-restore-contents': '已退役的恢复产物', 'retired-claude-migration': '已退役的 Claude 迁移产物',
+    // 下面这些和后台 public_dashboard_storage.py 的 CLEANUP_LABELS 同名同义（M538）
+    'registered-worktrees': '登记的施工目录', 'idle-ai-git': '闲置 AI 分支', 'ai-build-cache': 'AI 构建缓存',
+    'approved-old-website-docs': '已批准清理的网站旧文档', 'cinebench-textures': 'Cinebench 纹理资源', 'discovered-git': '发现的 Git 目录',
+    'discovered-wrapper_temp': '发现的启动器临时目录', 'jetbrains-old-rebuildable-cache': 'JetBrains 可重建的旧缓存',
+    'mcp-compile-cache': 'MCP 编译缓存', 'mcp-installer-files': 'MCP 安装文件', 'nvidia-dxcache': 'NVIDIA DirectX 着色器缓存',
+    'report-pages': 'AI 汇报网页', 'retired-claude-vm-bundle-cache': '已退役的 Claude 虚拟机缓存', 'user-temp-installers': '用户临时安装包',
+    'user-temp-test-fixtures': '用户临时测试材料', 'v-codex-cache': 'V 盘 Codex 缓存', 'v-codex-temp': 'V 盘 Codex 临时目录',
+    'v-personal-scratch': 'V 盘个人暂存目录', 'v-work-scratch': 'V 盘工作暂存目录', 'website-direct-copy-cache': '网站直接复制缓存',
+    'website-release-assets': '网站发布素材', 'website-source-generated': '网站源码生成产物', 'windows-delivery-optimization': 'Windows 传递优化缓存',
   };
   const ICON = {
     ok: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="m7.8 12.3 2.9 2.9 5.6-6"/></svg>',
@@ -128,7 +137,8 @@
     }).join('')}</ul><p class="cl-key"><i class="is-used"></i>蓝＝占用${anyFreed ? '<i class="is-freed"></i>绿＝这轮腾出的<i class="is-free"></i>白＝原本就空' : '<i class="is-free"></i>白＝空闲'}${rows.some(x => x.v.state === 'offline' || num(x.v.free) == null && num(x.r?.free_after) == null) ? '<i class="is-none"></i>斜线＝离线或没读到' : ''}</p>`;
   }
 
-  // 规则中文名：先用回执里 rules[] 的 label、failures[] 的 rule_name，再用上面的对照表；都没有就不写规则名，不露英文 id（M538）
+  // 规则中文名：先用回执里 rules[] 的 label、failures[] 的 rule_name，再用上面的对照表；
+  // 都没有就返回空，由 progress() 写一句“这条规则还没有中文名”，不露英文 id（M538）
   function ruleName(id, g, viewer) {
     if (!id || K.isPlaceholder(id)) return id || '';
     for (const r of g?.runs || []) {
@@ -149,7 +159,8 @@
     const entries = K.field(p?.removed_entries, '移除项数', viewer);
     const counts = [entries && (K.isPlaceholder(entries) ? entries : `移除 ${entries} 项`),
       p?.removed_logical_bytes != null && `文件大小 ${readAmount(p.removed_logical_bytes, '移除文件大小', viewer)}`].filter(Boolean).join(' · ');
-    const title = [step, ruleName(rule, g, viewer)].filter(Boolean).join(' ');
+    const name = ruleName(rule, g, viewer);
+    const title = rule && !name ? `${step}（这条规则还没有中文名）` : [step, name].filter(Boolean).join(' ');
     return [title, counts, at(run.progress_at) && `${hm(run.progress_at)} 读到`, gap].filter(Boolean).join(' · ');
   }
 

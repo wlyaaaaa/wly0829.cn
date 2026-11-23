@@ -159,10 +159,10 @@
           link(s) { if (s.data == null && ['none', 'gone'].includes(s.phase)) { reading.set(s); if (s.phase === 'none') U.html(target, `<p class="row__sub">${s.offline || U.offline?.() ? '这块没存下来，连上后补上。' : U.collectionText()}</p>`); finish(false); } U.blockNote(target, s); },
           data(d) { if (!d) return;
             if (viewer === 'public' && (d.visibility === 'owner' || d.public === 'owner')) { U.html(target, `<p class="row__line">${U.visibilityNote({ visibility: 'owner' }, viewer, '这件事的内容')}</p>`); reading.done(); finish(true); return; }
-            U.html(target, (d.detail_text ? `<p class="row__line" style="white-space: pre-line">${U.fieldHtml(U.capText(d.detail_text, 200), { kind: viewer })}</p>` : '') + (d.questions || []).map(q => `<p class="row__line" style="white-space: pre-line">${U.fieldHtml(U.capText(q.text && typeof q.text === 'object' ? q.text : q, 200), { kind: viewer })} </p><div class="item-options">${optionActions(d, q)}</div>`).join('') + (d.history || []).filter(h => h.text !== '事项已加入等你的清单').map(h => `<p class="row__sub">${U.date(h.at)} ${U.time(h.at)} · ${U.fieldHtml(h.text, { kind: viewer })}</p>`).join('') + (d.origin?.href ? `<a class="more" href="${esc(route(d.origin.href))}">${U.fieldHtml(d.origin.name, { name: '来源', place: 'label', kind: viewer })} ›</a>` : ''));
+            U.html(target, (d.detail_text ? `<p class="row__line" style="white-space: pre-line">${U.fieldHtml(U.capText(d.detail_text, 200), { kind: viewer })}</p>` : '') + (d.questions || []).map(q => `<p class="row__line" style="white-space: pre-line">${U.fieldHtml(U.capText(q.text && typeof q.text === 'object' ? q.text : q, 200), { kind: viewer })} </p><div class="item-options">${optionActions(d, q)}</div>`).join('') + (d.history || []).filter(h => h.text !== '事项已加入等你的清单').map(h => `<p class="row__sub">${U.date(h.at)} ${U.time(h.at)} · ${U.fieldHtml(h.text, { kind: viewer })}</p>`).join('') + (d.origin?.href ? `<a class="more" href="${esc(route(d.origin.href))}">${U.fieldHtml(U.originName(d.origin, d) || '打开来源', { name: '来源', place: 'label', kind: viewer })} ›</a>` : ''));
             reading.done(); finish(true);
             if (d.rewrite === 'pending' && itemText(d) != null && itemText(d) !== '') target.insertAdjacentHTML('afterbegin', `<p class="row__line">${U.fieldHtml(d.text && typeof d.text === 'object' ? { ...d, ...d.text } : d, { kind: viewer })}${d.at ? ` · ${U.date(d.at)} ${U.time(d.at)}` : ''}</p>`);
-            if (d.origin && !d.origin.href) target.insertAdjacentHTML('beforeend', `<p class="row__sub">来源：${U.fieldHtml({ ...d.origin, text: d.origin.name || d.origin.text || U.collectionText() }, { kind: viewer })}</p>`);
+            if (d.origin && !d.origin.href && U.originName(d.origin, d)) target.insertAdjacentHTML('beforeend', `<p class="row__sub">来源：${U.fieldHtml({ ...d.origin, text: U.originName(d.origin, d) }, { kind: viewer })}</p>`);
             if (d.closed) target.insertAdjacentHTML('beforeend', `<p class="row__sub">${U.fieldHtml(closedText(d), { kind: viewer })} · ${U.date(d.closed.at)} ${U.time(d.closed.at)}</p>${d.closed.to ? `<a class="more" href="${esc(route('/live/item/?id=' + encodeURIComponent(d.closed.to)))}">看并入的事 ›</a>` : ''}`);
           },
         });
@@ -246,7 +246,7 @@
     let closing = it.closed?.text && (typeof it.closed.text === 'object' ? it.closed.text : viewer === 'public' ? it.closed.text.replace(/^你(?=办完了|说不办了)/, '本人') : it.closed.text);
     if (typeof closing === 'string' && it.closed?.kind === 'expired') closing = closing.replace(expiredText, '展示期已到');
     const mobile = it.mobile && typeof it.mobile === 'object' ? it.mobile : ({ phone: '手机能办', computer: '要在电脑上办', in_person: '要本人到场' })[it.mobile];
-    const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, viewer === 'owner' && U.capText(it.origin?.name, 30, true)];
+    const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, viewer === 'owner' && U.originName(it.origin, it) && U.capText(U.originName(it.origin, it), 30, true)];
     if (closed && KIND[it.kind]) sub.unshift(viewer === 'public' ? KIND[it.kind].replaceAll('你', '本人') : KIND[it.kind]);
     const titleText = U.fieldHtml(hidden ? { visibility: 'owner' } : U.capText(flags, 30, true), { name: closed ? '已关闭事项' : '待办事项', place: 'title', kind: viewer });
     // 占位行的标题已写清“〈哪一样〉仅本人可见”时，旁边不再重复同一句。
@@ -470,7 +470,10 @@
   function closedRows(items) {
     const seen = new Map();
     for (const raw of items) {
-      const it = { ...raw, text: unprefix(raw.text), title: unprefix(raw.title) }, key = viewer === 'owner' ? it.kind + '|' + U.fieldText(it.text ?? it.title, 'owner').replace(/\s+/g, '').replace(/[。.]$/, '') : it.id;
+      // 访客版也并：看得到的同一句并成一条；仅本人可见的各算各的，件数照旧
+      const it = { ...raw, text: unprefix(raw.text), title: unprefix(raw.title) }, shown = U.fieldText(it.text ?? it.title, viewer) || '';
+      const hiddenRow = viewer !== 'owner' && (it.visibility === 'owner' || it.public === 'owner' || it.text?.visibility === 'owner' || /仅本人可见/.test(shown));
+      const key = hiddenRow || !shown ? it.id : it.kind + '|' + shown.replace(/\s+/g, '').replace(/[。.]$/, '');
       if (seen.has(key)) seen.get(key).repeats++; else seen.set(key, { ...it, repeats: 1 });
     }
     return [...seen.values()];

@@ -746,7 +746,8 @@
         freshArrived(e);
         if (!loadedRelease && fixture === null && isMain(e)) loadedRelease = releaseId();
         const wasFallback = e.source === 'fallback';
-        const instance = /^"live-([a-f0-9]{16})-/.exec(response.headers.get('ETag'))?.[1];
+        // 公网回来的是弱标签 W/"live-…"；弱标签也要认出后台实例，否则后台重载后旧标签页停在旧数上
+        const instance = /^(?:W\/)?"live-([a-f0-9]{16})-/.exec(response.headers.get('ETag'))?.[1];
         const viewer = body?.viewer;
         audience(e, viewer);
         const link = body?.link || { state: 'online', basis: 'response' };

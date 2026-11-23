@@ -199,8 +199,27 @@
     return reasons.includes(why) || lead && reasons.includes(why.slice(lead.length).trim())
       ? { ...d, why: undefined } : d;
   }
+  // 程序身份筛查按小时读：小字只说一次几点读到、下次约几点读；这一轮真没读到才写没读到，并写清显示的是几点的数（M572）
+  function impersonationReading(d) {
+    const g = d?.groups?.find(x => (x.key ?? x.id) === 'audits.impersonation'), at = g?.at;
+    if (!g || ['red', 'yellow'].includes(g.level) || !Number.isFinite(Date.parse(at))) return '';
+    const short = t => U.date(t) === U.date(Date.now()) ? U.time(t) : stamp(t), every = g.refresh_seconds ?? d?.audits?.refresh_seconds;
+    const failed = g.read_error === true || Object.values(g.missing || {}).some(r => (r?.reason_code ?? r?.reason ?? r) === 'read_failed');
+    const round = d?.audits?.at, tried = failed && Date.parse(round) > Date.parse(at) ? round : at;
+    const next = every > 0 ? Date.parse(tried) + every * 1000 : NaN;
+    const later = !Number.isFinite(next) ? '' : next > Date.now() ? `下次约 ${short(next)} 读` : `本该 ${short(next)} 再读，还没读到新数`;
+    const said = failed ? `${tried !== at ? short(tried) + ' 这一轮' : '这次'}没读到，下面是 ${short(at)} 读到的数` : `${short(at)} 读到`;
+    return [said, later].filter(Boolean).join(' · ');
+  }
   function formatImpersonation(card) {
     const status = card.querySelector('.grp__status');
+    const reading = impersonationReading(data);
+    if (status && reading) {
+      const keep = status.textContent.split(' · ').map(s => s.trim()).filter(s => /项要处理$|^AI 在修|AI 已接手/.test(s));
+      U.html(status, [reading, ...keep].map(U.esc).join(' · '));
+      queueMicrotask(() => V.cardLineTitle(status.parentElement));
+      return;
+    }
     const block = status.querySelector('[data-block="audits.impersonation"]:not([data-state="unavailable"])');
     if (!block) return;
     const warning = status.firstChild;

@@ -413,21 +413,25 @@
           if (end < toX) gaps.push([end, toX, '', null, null, i]);
         });
         const laneHeight = tracks.length > 1 ? Math.min(18, height / tracks.length) : height;
+        // 页面给了关机时段（最后一次采到 → 开机或重启那一刻）：盖住它的空白写“关机 起–止”，不写“没记录”（M590）
+        const offs = on.flatMap(l => l.series.chart_window?.off_intervals || []);
+        const shutdown = (a, b) => { const o = offs.find(([s, e]) => Math.min(b, x(e)) - Math.max(a, x(s)) > Math.min(b - a, x(e) - x(s)) / 2); return o ? `关机 ${clock.format(new Date(o[0] * 1000))}–${clock.format(new Date(o[1] * 1000))}` : ''; };
         for (const [a, b, reason, from, to, i, explicit] of gaps) {
           const width = b - a; if (!explicit && width < 2) continue;
           const track = tracks[i], top = pad.top + i * laneHeight;
           const gap = el('g', { class: 'chart__gap', ...(track.id ? { 'data-line': track.id } : {}) });
           gap.append(el('rect', { x: a, y: top, width, height: laneHeight, fill: `url(#${id}-gap)`, ...maskAttr }));
           svg.append(gap);
-          if (!reason && width <= 54) continue;
+          const off = shutdown(a, b);
+          if (!reason && !off && width <= 54) continue;
           const label = el('text', { x: (a + b) / 2, y: top + laneHeight / 2 + (tracks.length > 1 ? 4 : 0), fill: '#a8a69e', 'font-size': 12, 'text-anchor': 'middle' });
-          const explanation = track.label && reason ? `${track.label}：${reason}` : reason;
+          const explanation = off || (track.label && reason ? `${track.label}：${reason}` : reason);
           label.textContent = explanation || '没记录';
           gap.append(label);
-          if (!reason) continue;
+          if (!reason && !off) continue;
           const fits = label.getComputedTextLength() + 12 <= width;
           if (!fits) {
-            if (width > 54) label.textContent = '没记录';
+            if (width > 54) label.textContent = off ? '关机' : '没记录';
             else label.remove();
           }
           // SVG 整体对读屏隐藏，图下的说明始终可读。
@@ -435,7 +439,7 @@
           note.className = 'chart__gap-note';
           note.style.cssText = fits ? 'position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)'
             : 'margin:4px 0 0;font-size:12px;color:#68665f;overflow-wrap:anywhere';
-          note.textContent = `${gapTime(from)}–${gapTime(to)} 没有读数，${explanation}`;
+          note.textContent = off ? `${off}，电脑关着，这段没有读数` : `${gapTime(from)}–${gapTime(to)} 没有读数，${explanation}`;
           gapNotes ??= host.appendChild(document.createElement('div'));
           gapNotes.append(note);
         }

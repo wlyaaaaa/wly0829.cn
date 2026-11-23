@@ -1188,13 +1188,20 @@
     ].filter(Boolean));
   }
 
+  // 电脑关机（卡死后重启也算）那段：从开机前最后一次采到，算到这次开机的那一刻；开机时刻 = 连续开机读数的时刻减去开机多久（M590）
+  function offIntervals(s, from, to) {
+    const up = metric('uptime'), boot = Date.parse(up?.at) / 1000 - up?.value;
+    if (!Number.isFinite(boot) || !(boot > Date.parse(from) / 1000 && boot < Date.parse(to) / 1000) || !Array.isArray(s.points)) return [];
+    const last = s.points.reduce((m, [t, v]) => t < boot && v != null && Number.isFinite(v) && t > m ? t : m, -Infinity);
+    return Number.isFinite(last) && boot - last > 120 ? [[last, boot]] : [];
+  }
   function timedSeries(s, pack) {
     const from = s.from ?? pack.from, to = s.to ?? pack.to;
     const daily = s.group === '长期' || s.id === 'disk-free' && Date.parse(to) - Date.parse(from) > 7 * DAY * 1000;
     const bucketSeconds = s.bucket_seconds ?? s.step_seconds ?? (daily ? DAY : pack.bucket_seconds ?? pack.step_seconds ?? 0);
     const gaps = s.group === '长期' && !s.id.endsWith('-eff-90d') ? longGaps(s, pack) : null;
     const chart_window = { from, to, bucket_seconds: bucketSeconds, bucket_offset_seconds: daily ? -BEIJING_OFFSET : 0,
-      missing_intervals: gaps?.length ? gaps : s.missing_intervals ?? pack.missing_intervals ?? gaps };
+      missing_intervals: gaps?.length ? gaps : s.missing_intervals ?? pack.missing_intervals ?? gaps, off_intervals: offIntervals(s, from, to) };
     return { state: pack.state, reason: pack.reason, aggregation: pack.aggregation, ...s, from, to, chart_window,
       ...(!hasSamples(s) && s.gap ? { reason: s.gap } : {}) };
   }
