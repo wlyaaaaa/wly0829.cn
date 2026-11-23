@@ -9,7 +9,11 @@
 <style>
 /* 下半截：分组看板（_lib/live-board.*），比上半截宽，左右伸到和自动任务页一样宽 */
 .page--chats .chat-lower { --wide: min(1856px, calc(100vw - 64px)); margin: 34px calc((var(--col) - var(--wide)) / 2) 0; }
-.page--chats .chat-lower { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; align-items: start; }
+.page--chats .chat-lower { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; align-items: start; }
+/* 近 72 小时已结束占整行，排成几列，每列不窄于 400px（M534） */
+.page--chats #recent-list { grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 7px 12px; }
+.page--chats #recent-list > :is(.chat-ended-label, .row--empty) { grid-column: 1 / -1; }
+.page--chats #recent-list > .lb-item { align-content: start; }
 .page--chats #active > .part { margin: 0 0 12px 2px; }
 .chat-board .lb-card__head { min-height: 80px; padding-block: 10px; }
 .chat-board .lb-card--items .lb-rows { gap: 7px; }

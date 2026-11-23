@@ -1,5 +1,5 @@
-// 第二层：上半截总的情况和统计；下半截左栏列在干等状态，右栏列等你和近 72 小时已结束。
-// 每栏先 5 张，其余展开；点名字或“看完整对话”进入详情。
+// 第二层：上半截总的情况和统计；下半截第一排“在干｜等你”并排（别的状态有对话才出来，补到矮的那栏），下面整行列近 72 小时已结束。
+// 在干、等你每栏先 5 张；已结束的每组先露一整排；其余展开；点名字或“看完整对话”进入详情。
 (() => {
   'use strict';
   const U = window.LiveUI, L = window.LiveLight, $ = id => document.getElementById(id), { esc, sp } = U;
@@ -17,10 +17,10 @@
   const who = (c, place = 'body', bare = false) => [U.draw10?.modelHtml(c, { name: place === 'title' ? 'AI 帮手' : '型号', place, kind: viewer, bare }) ?? U.fieldHtml(c.model, { name: '型号', place, kind: viewer }), c.effort && U.fieldHtml(c.effort, { name: '型号', place, kind: viewer })].filter(Boolean).join(' · '), wait = text => [{ key: 'empty', cls: 'row row--flat row--empty', html: `<span></span><p class="row__sub">${U.fieldHtml(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读|正在准备/.test(text) ? '这块没存下来，连上后补上。' : text, { name: 'AI 对话', place: 'body', kind: viewer })}</p>` }];
   // 下半截各栏：照对话数据里本来的状态分；在干、等你一直摆着，别的状态有对话才出来。
   const COLUMN = { running: { name: '在干', about: 'AI 正在往下做的对话', icon: 'play', tint: 'green', art: 'running' }, waiting: { name: '等你', about: '要你回答或选一下才能接着做', icon: 'chat', tint: 'peach', art: 'waiting' }, queued: { name: '等着', about: '排着队，还没开始', icon: 'clock', tint: 'blue', art: 'queued' }, reconnecting: { name: '在重连', about: '连接断了，正在重新接上', icon: 'wifi', tint: 'cyan' }, failed: { name: '坏了', about: '出错停下来的对话', icon: 'alert', tint: 'pink' }, stopped: { name: '叫停', about: '中途叫停的对话', icon: 'moon' }, unknown: { name: '状态不明', about: '读到了对话，状态还没读准', icon: 'gear' } };
-  const board = window.LiveBoard.create($('chat-board'), { cols: 1 });
+  const board = window.LiveBoard.create($('chat-board'), { cols: 2 });
   const runningCard = board.card('running', { ...COLUMN.running, ids: { main: 'active-list' } });
+  const waitingCard = board.card('waiting', COLUMN.waiting);
   const recentBoard = window.LiveBoard.create($('chat-recent-board'), { cols: 1 });
-  const waitingCard = recentBoard.card('waiting', COLUMN.waiting);
   waitingCard.el.hidden = true;
   const doneCard = recentBoard.card('done', { icon: 'check', tint: 'lilac', art: 'done', ids: { el: 'recent', title: 'recent-title', sub: 'recent-sub', main: 'recent-list', rest: 'recent-rest', more: 'recent-more', box: 'recent-box', next: 'recent-next' } });
   doneCard.el.querySelector('.lb-card__head').setAttribute('data-keep', ''); doneCard.el.insertAdjacentHTML('beforeend', '<p class="pj-note lb-card__note" id="recent-note"></p>');
@@ -323,37 +323,36 @@
       U.list(card.main, main.length || emptyWaiting ? main : wait(empty));
       U.list(card.rest, rest); card.more.hidden = !rest.length; U.html(card.more, `<span class="lb-more__open">展开（还有 ${restCount} 个）</span><span class="lb-more__shut">收起</span> <span class="more__chev">›</span>`);
     }
+    board.el.querySelectorAll(':scope > .lb-card').forEach(el => { el.style.minHeight = ''; });
     board.layout(true);
+    even();
     recentBoard.layout(true);
     fitThoughts();
     fitRecent();
   }
-  // 右栏（等本人和近 72 小时已结束）比左栏长出一大截时，已结束的从后往前再多收几条进“展开”，每组至少露 1 条；
-  // 左栏变高（展开、来了新对话）或换了窗口宽时重新算（M460）
-  let recentRows = new Map();
-  const cardsHeight = host => [...host.querySelectorAll(':scope > .lb > .lb-card')].filter(c => !c.hidden)
-    .reduce((sum, c, i) => sum + c.getBoundingClientRect().height + (i ? 22 : 0), 0);
+  // 第一排两栏底边拉齐：矮的那栏最后一张卡拉长到和另一栏一样高；卡变高变矮（展开、来了新对话、换窗口宽）时重新拉（M534）
+  const evenWatch = typeof ResizeObserver === 'function' ? new ResizeObserver(() => even()) : null, evenSeen = new WeakSet();
+  function even() {
+    const cards = [...board.el.children].filter(el => el.matches('.lb-card') && !el.hidden && !el.classList.contains('is-away'));
+    cards.forEach(el => { el.style.minHeight = ''; if (!evenSeen.has(el)) { evenSeen.add(el); evenWatch?.observe(el); } });
+    const height = [0, 0], last = [];
+    for (const el of cards) { const k = Math.min(1, Math.max(0, (parseInt(el.style.gridColumn, 10) || 1) - 1)); height[k] += el.getBoundingClientRect().height + 22; last[k] = el; }
+    const low = height[0] < height[1] ? 0 : 1, gap = Math.abs(height[0] - height[1]);
+    if (last[0] && last[1] && gap >= 1) last[low].style.minHeight = `${last[low].getBoundingClientRect().height + gap}px`;
+  }
+  // 近 72 小时已结束占整行、排成几列：每组先露一整排（这一排放得下几个就露几个），多的进“展开”；换了窗口宽重新算（M534）
+  let recentRows = new Map(), recentCols = 3;
   function fitRecent() {
     const list = $('recent-list'), more = $('recent-more'), open = $('recent-box').classList.contains('is-open');
     const rows = [...list.children].filter(li => recentRows.has(li.dataset.key));
-    if (!open && $('recent').getBoundingClientRect().height) {
-      rows.forEach(li => li.classList.toggle('chat-ended-extra', recentRows.get(li.dataset.key).extra));
-      list.querySelectorAll(':scope > .chat-ended-label').forEach(label => label.classList.remove('chat-ended-extra'));
-      const over = () => cardsHeight($('chat-recent-board')) - cardsHeight($('chat-board'));
-      // 从最后一条往前收，最前面那条一直露着；一组收空了，组名也一起收
-      for (const li of rows.filter(li => !li.classList.contains('chat-ended-extra')).slice(1).reverse()) {
-        const h = li.getBoundingClientRect().height;
-        if (!h || over() < h / 2) break;
-        li.classList.add('chat-ended-extra');
-        if (li.previousElementSibling?.matches('.chat-ended-label')) li.previousElementSibling.classList.add('chat-ended-extra');
-      }
-    }
+    if (list.offsetWidth) recentCols = Math.max(1, getComputedStyle(list).gridTemplateColumns.split(' ').filter(Boolean).length);
+    rows.forEach(li => li.classList.toggle('chat-ended-extra', recentRows.get(li.dataset.key).i >= recentCols));
     const left = rows.filter(li => li.classList.contains('chat-ended-extra')).reduce((sum, li) => sum + recentRows.get(li.dataset.key).count, 0);
     more.hidden = !left && !open;
     U.html(more, `<span class="lb-more__open">展开（还有 ${left} 个）</span><span class="lb-more__shut">收起</span> <span class="more__chev">›</span>`);
   }
   $('recent-more').addEventListener('click', () => requestAnimationFrame(fitRecent));
-  if (typeof ResizeObserver === 'function') new ResizeObserver(() => fitRecent()).observe($('chat-board'));
+  if (typeof ResizeObserver === 'function') new ResizeObserver(() => fitRecent()).observe($('recent-list'));
   function renderRecent() {
     $('recent').hidden = !!U.offline?.() && !recentUsable && homeChats?.recent == null;
     if (!recentUsable && !homeChats?.recent?.length && !U.offline?.() && [404, 503].includes(recentState?.meta?.status)) { U.list($('recent-list'), wait('最近结束的对话暂时读不到')); U.list($('recent-rest'), []); $('recent-more').hidden = $('recent-next').hidden = true; recentRead.done(); return; }
@@ -364,10 +363,10 @@
       key, name, rows: (rows || []).filter(c => states.includes(c.state))
         .map(c => ({ ...chat(c, at, true), count: c.private_count || 1 })),
     }));
-    // 每组先摆 5 个，多的留在本组后面、点“展开”才露出来：组名只出一次，展开后仍按组、组里按时间排。
+    // 每组先摆一整排，多的留在本组后面、点“展开”才露出来：组名只出一次，展开后仍按组、组里按时间排。
     const main = sections.flatMap(({ key, name, rows }) => rows.length ? [{ key: `ended:${key}`, cls: 'chat-ended-label', html: `<h3>${name}</h3>` },
-      ...rows.map((row, i) => i < 5 ? row : { ...row, cls: `${row.cls} chat-ended-extra` })] : []);
-    recentRows = new Map(main.filter(row => row.count).map(row => [row.key, { count: row.count, extra: row.cls.includes('chat-ended-extra') }]));
+      ...rows.map((row, i) => ({ ...row, i, cls: i < recentCols ? row.cls : `${row.cls} chat-ended-extra` }))] : []);
+    recentRows = new Map(main.filter(row => row.count).map(row => [row.key, { count: row.count, i: row.i }]));
     U.html($('recent-title'), recentTitle + (label ? `<span class="lb-card__count">${esc(label)}</span>` : ''), false);
     U.list($('recent-list'), main.length ? main : wait(label === '0 个' ? '72 小时内没有结束的对话'
       : label ? '暂时只读到数量' : recentState?.warming ? '正在读' : U.collectionText()));
