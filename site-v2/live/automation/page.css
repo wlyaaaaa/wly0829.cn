@@ -356,6 +356,7 @@ a.aw-line:hover { background: #f5f0fb; color: inherit; }
 .aw-facts dd { overflow-wrap: anywhere; }
 .aw-timeline .aw-facts { border-top: 1px solid #ffffffd0; margin-top: 10px; }
 .aw .aw-path-note { padding: 14px 4px 0; border-top: 1px solid var(--hair); color: var(--muted); font-size: 15px; }
+.aw .aw-path-note + .aw-path-note { padding-top: 4px; border-top: 0; }
 
 /* —— 要你出面、页尾 —— */
 .aw-owner { background: linear-gradient(110deg, #fff4e8d0, #fffffff0); }

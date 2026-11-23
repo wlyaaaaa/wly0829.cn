@@ -102,7 +102,8 @@ test('automation work page shows one work and the read-only categories for owner
     assert.match(detail, /已占位 · 会话状态未读到.*验收 · 会话状态未读到.*修理 · 在跑 · GPT Sol · 上次动静 2026-11-20 09:00/s);
     assert.doesNotMatch(detail, /进行中|xhigh|未确认型号/);
     assert.match(detail, /id="round-1" class="is-past".*id="round-2" class="is-current".*class="is-future".*独立验收.*class="is-future".*关单/s);
-    assert.match(detail, /修理路线：AI 修 3 次.*第 4 次/);
+    assert.match(detail, /修理路线：同一件修两轮还没好/);
+    assert.match(render(audience, '', {}, { work, rounds, repair_route: '路线甲', result_text: '结果乙' }), /修理路线：路线甲.*结果：结果乙/s);
     assert.doesNotMatch(render(audience, '', {}, { work: { ...work, group: 'done' }, rounds }), /is-current|is-future/);
     const verification = { id: 'verify', type_id: 'acceptance', title: '核实本人事项', group: 'followup', state_text: '等回执再核实' };
     const waiting = render(audience, '', {}, { work: verification, rounds: [
