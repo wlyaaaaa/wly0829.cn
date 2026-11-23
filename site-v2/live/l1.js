@@ -1186,6 +1186,12 @@
       .map(r => sp(U.fieldText(r, viewer)));
     const tried = recordStamp(blockAt(d), d.at_precision);
     const reading = reasons.some(r => /还在读|warming/.test(r)), gap = d.read_error || d.refresh_error || reasons.some(r => !/还在读|warming/.test(r));
+    // 后台重载后续扫完整名单：上一份完整名单还在（做完数照常有），读不全的只是“本轮还在读取”，后台随手给同一项记的 read_failed 不算真失败；
+    // 卡头已写着名单自己的截止（截至 … 的近 72 小时做完），这里不再说“没读全，正在重读”。没有留存名单或真读失败照旧。
+    const named = new Set((d.gray_items || []).map(g => U.fieldText(g?.name, viewer)));
+    const ownGap = d.read_error || d.refresh_error || [...(d.gray_items || []).map(g => g?.reason), ...Object.entries(d.missing || {}).filter(([key]) => !named.has(key)).map(([, r]) => r?.reason_code ?? r?.reason ?? r)]
+      .some(r => !/还在读|warming/.test(sp(U.fieldText(r, viewer))));
+    if (reading && !ownGap && d.done72 != null) return '';
     const lead = [(gap || !reading) && `${tried ? tried + ' ' : '这次'}没读全`, reading && '正在重读'].filter(Boolean).join('，');
     return esc([lead, shown && (shown === tried ? '上面是读到的部分' : `先显示 ${shown} 的统计`)].filter(Boolean).join('，'));
   }
@@ -1210,7 +1216,7 @@
     p.head.querySelector(':scope > .lamp')?.remove();
     if (state.lamp) p.head.insertAdjacentHTML('afterbegin', state.lamp);
     const chatGap = id === 'chats' && (state.tone === 'gray' || gray) && chatGapNote(data, chatStamps.length ? '' : chatReading);
-    const note = chatGap ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].join(' · ')
+    const note = typeof chatGap === 'string' ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].filter(Boolean).join(' · ')
       : [...(state.note || staleText).split(' · ').filter(text => !(existing || cutoff) || !matchesCutoff(text)), grayNote, cutoff].filter(Boolean).join(' · ');
     p.status.hidden = !note; U.html(p.status, note);
     Light.tone(cards[id], cardTone(id, data, state));
