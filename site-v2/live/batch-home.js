@@ -63,7 +63,7 @@
         today: t ? { hours: hoursOf(t.actual_minutes), starts: t.starts, said: t.messages, last: last.work || last.starts || null } : null };
     });
     return { rows, current, date: R.todayLabel(/^\d{4}-\d\d-\d\d$/.test(today?.date || '') ? `${today.date}T12:00:00+08:00` : now),
-      hours: hoursOf(total.actual_minutes), said: total.messages };
+      hours: hoursOf(total.actual_minutes), said: total.messages, noToday: !today, at: time(d.at) };
   }
   // 首页 AI 账本卡：新账起（后台清零重算，从正式生效那一刻算），AI 在跟几件、今天到日子、跟得最久、新账起进了结。
   // 取数照数据约定 §11：data.ledger.new_ledger = {started_at, open, opened, closed, due, overdue, next_due, opened_7d?, closed_7d?}，每个数 {count, href}；
@@ -151,12 +151,14 @@
       const hours = x => count(x) ? (x >= 10 ? Math.round(x) : Math.round(x * 10) / 10) : null;
       const work = row => {
         const t = row.today;
-        if (!t) return `<span class="b6-host__work">今天的数 ${num(null)}</span>`;
+        if (!t) return `<span class="b6-host__work">${v.noToday ? '' : `今天的数 ${num(null)}`}</span>`;
         if (t.hours === 0 && t.starts === 0) return `<a class="b6-host__work" href="${esc(route(row.workHref))}">今天还没开工${t.last ? ` · 上次 ${esc(U.date(t.last))}` : ''} ›</a>`;
         return `<a class="b6-host__work" href="${esc(route(row.workHref))}">${num(hours(t.hours))} 小时 · 开工 ${num(t.starts)} 件 · ${own}说 ${num(t.said)} 句 ›</a>`;
       };
       return { tone, head: cardTitle('智能体', href, tone, status) + `<span class="b6-date">${esc(v.date)}</span>`, body:
-        `<div class="b6-big"><strong>今天三家干了 <em>${num(hours(v.hours))}</em> 小时</strong><span class="b6-big__aside">${own}说了 ${num(v.said)} 句</span></div>
+        // 后台这一块没给今天的数（today 为空）：不画“··”免得像还在加载，写明没送到、最近一次是几点读到的（主持 11-24 06:12）
+        (v.noToday ? `<div class="b6-big"><strong>今天的数还没送到</strong>${v.at ? `<span class="b6-big__aside">最近一次记录于 ${esc(v.at)}</span>` : ''}</div>`
+          : `<div class="b6-big"><strong>今天三家干了 <em>${num(hours(v.hours))}</em> 小时</strong><span class="b6-big__aside">${own}说了 ${num(v.said)} 句</span></div>`) + `
         <ul class="b6-hosts">${v.rows.map(row => `<li class="b6-host" style="--host:${row.color}"><a class="b6-host__name" href="${esc(route(row.workHref))}"><i aria-hidden="true"></i>${esc(row.name)}</a>${chip(row)}${work(row)}</li>`).join('')}</ul>
         <p class="b6-foot b6-foot--split"><span>规则 ${field(d.rule_version) || num(null)}${v.current}</span>${go(options.openingHref || OPENING, '开场页 · 三家')}</p>` };
     }
