@@ -270,7 +270,7 @@
       U.blockNote($(key), null);
       items = dueOrder(items);
     }
-    // 访客：组标题的件数把藏掉的事算进去，和顶上小格对得上；“另有 N 条仅本人可见”全表只在底下写一行，组里不写。
+    // 访客：组标题的件数把藏掉的事算进去，和顶上小格对得上；藏掉的在那一组里写“另有 N 件仅本人可见”，标题和看得到的行对得上。
     const closedSummary = key === 'closed' ? closedPacket : null;
     const closedCounts = closedSummary?.hidden_summary?.counts || {};
     const closedHidden = KIND[closedKind] ? closedCounts[closedKind] : closedSummary?.hidden;
@@ -295,9 +295,9 @@
     const hiddenParts = showClosedHidden ? Object.entries(KIND)
       .filter(([kind]) => (!KIND[closedKind] || kind === closedKind) && closedCounts[kind] > 0)
       .map(([kind, label]) => label.replaceAll('你', '本人') + ' ' + closedCounts[kind] + ' 条') : [];
-    const laterHidden = key === 'later' && known ? hidden : 0;
-    $(key + '-private').hidden = !showClosedHidden && !laterHidden;
-    $(key + '-private').textContent = showClosedHidden ? `另有 ${hidden} 条仅本人可见${hiddenParts.length ? '：' + hiddenParts.join('、') : ''}，标题和内容都没给访客看` : laterHidden ? `另有 ${laterHidden} 件仅本人可见，标题和内容都没给访客看` : '';
+    const groupHiddenHere = Object.hasOwn(KIND, key) && known ? hidden : 0;
+    $(key + '-private').hidden = !showClosedHidden && !groupHiddenHere;
+    $(key + '-private').textContent = showClosedHidden ? `另有 ${hidden} 条仅本人可见${hiddenParts.length ? '：' + hiddenParts.join('、') : ''}，标题和内容都没给访客看` : groupHiddenHere ? `另有 ${groupHiddenHere} 件仅本人可见，标题和内容都没给访客看` : '';
     U.list(ul, main.length ? draw(main) : hidden ? [] : wait(empty), { animate });
     U.list($(key + '-rest'), draw(rest, method(main.at(-1))), { animate });
     const more = $(key + '-more'), label = `还有 ${rest.length} 条`;
@@ -361,7 +361,7 @@
       const items = Array.isArray(d?.items) ? [...new Map(d.items.map(it => [it.id, it])).values()] : null;
       const incomplete = ['partial', 'unknown', 'warming'].includes(d?.q) || d?.counts?.q === 'partial' || d?.partial?.includes('items');
       openRows = openReading = { kind, items, incomplete, counts: d?.counts, version: d?.source_rev,
-        hidden: d?.hidden, laterHidden: d?.hidden_summary?.counts?.later, cursor: items == null ? null : d.next, at: meta.at, depth: 1, target };
+        hidden: d?.hidden, hiddenCounts: d?.hidden_summary?.counts, cursor: items == null ? null : d.next, at: meta.at, depth: 1, target };
       draw(replace);
       if (target > 1) readOpen();
     } });
@@ -407,14 +407,14 @@
     const hidden = viewer === 'public' && !query ? page?.hidden ?? needs.items_hidden ?? 0 : 0;
     groupHidden.clear();
     if (hidden && rows && !partial) for (const key of Object.keys(KIND)) {
-      const extra = key === 'later' && Number.isSafeInteger(page?.laterHidden) ? page.laterHidden
+      const extra = Number.isSafeInteger(page?.hiddenCounts?.[key]) ? page.hiddenCounts[key]
         : (counts?.[key] ?? 0) - rows.filter(it => it.kind === key).length;
       if (extra > 0) groupHidden.set(key, extra);
     }
     const placed = [...groupHidden.values()].reduce((sum, n) => sum + n, 0);
-    // 全表底下注明隐项；能对上组的件数计入组标题，「放着」组另就地解释标题与可见行数的差额。
+    // 能对上组的件数计入组标题，并在那一组里就地写“另有 N 件仅本人可见”，标题和看得到的行对得上；对不上组的才合成全表底下一行。
     if (placed !== hidden) groupHidden.clear();
-    $('items-private').hidden = !hidden || groupHidden.get('later') === hidden;
+    $('items-private').hidden = !hidden || placed === hidden;
     // 写清藏了几条、各是哪组、藏了哪几样；不写是哪一类私事。
     const hiddenParts = [...groupHidden].map(([key, n]) => `${labels[key].replaceAll('你', '本人')} ${n} 条`);
     $('items-private').textContent = hidden ? `另有 ${hidden} 条仅本人可见${hiddenParts.length ? '：' + hiddenParts.join('、') : ''}，标题和内容都没给访客看` : '';
