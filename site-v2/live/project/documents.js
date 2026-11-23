@@ -2,13 +2,13 @@ const namespace = '__documents';
 const prefix = `/${namespace}/`;
 const policy = `<!doctype html><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; form-action 'none'; base-uri 'none'">`;
 
+// 项目文档只登记在家里网站的局域网读口上（PCConfig owner_documents，接在 home_lan_live）；
+// 公网 mcp.wly0829.cn 没有这个入口，去探只会被跨域拦下、误报“没读到”，所以公网不探。
 function connection() {
   const port = Number(document.querySelector('meta[name="wly-lan-live-port"]')?.content);
   if (location.protocol === 'http:' && Number.isInteger(port) && port >= 1024 && port <= 65535 &&
       port !== Number(location.port)) return { origin: `http://${location.hostname}:${port}`, base: '', token: '' };
-  if (location.protocol !== 'https:' || !['wly0829.cn', 'www.wly0829.cn'].includes(location.hostname)) return null;
-  const token = localStorage.getItem('wly-cockpit-device');
-  return /^[A-Za-z0-9_-]{43}$/.test(token || '') ? { origin: 'https://mcp.wly0829.cn', base: '/computer-access', token } : null;
+  return null;
 }
 
 function eligible(state) {

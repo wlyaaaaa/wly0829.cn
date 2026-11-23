@@ -1166,6 +1166,14 @@
       U.blockNote(hero.querySelector('.card__body'), state);
     }),
   });
+  // 硬件小包：页面看得见时约每 5 秒取一次，只换 CPU 占用、内存和 CPU 温度这几行，不重取整包（M519）
+  // 小包不带 rev，data 只来第一次；每读完一次都会来的是 link。
+  window.Live.watch('computer/hardware', null, {
+    link: state => {
+      if (!computer || offline() || state.meta?.viewer?.kind !== netViewer) return;
+      if (window.Live.mergeHardware(computer.metrics, state.data?.metrics)) keepWeavePosition(() => { refresh(); renderHero(computer); });
+    },
+  });
 
   // —— 24 小时／近 7 天：换一档就换一份曲线（近 7 天是小时均值），组的样子不变 ——
   function updateChartTargets() {

@@ -376,7 +376,7 @@
       : '';
     const note = items.length || recent?.hidden || missing ? [
       recent.at && `成品数据截至 ${stamp(recent.at)}`, missing || recent.q === 'partial' && '只列已读到的成品',
-      recent.hidden > 0 && `另有 ${esc(recent.hidden)} 样不公开`,
+      recent.hidden > 0 && `另有 ${esc(recent.hidden)} 件成品仅本人可见，名称和内容都没给访客看`,
     ].filter(Boolean).join(' · ') : '';
     section('recent-artifacts', '最近成品', cards.slice(0, 9), note, cards.slice(9));
   }

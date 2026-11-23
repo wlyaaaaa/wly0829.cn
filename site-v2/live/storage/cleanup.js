@@ -29,6 +29,11 @@
     'user-temp-test-fixtures': '用户临时测试材料', 'v-codex-cache': 'V 盘 Codex 缓存', 'v-codex-temp': 'V 盘 Codex 临时目录',
     'v-personal-scratch': 'V 盘个人暂存目录', 'v-work-scratch': 'V 盘工作暂存目录', 'website-direct-copy-cache': '网站直接复制缓存',
     'website-release-assets': '网站发布素材', 'website-source-generated': '网站源码生成产物', 'windows-delivery-optimization': 'Windows 传递优化缓存',
+    // 下面这些是 automatic_cleanup.py 代码里写死、后台 CLEANUP_LABELS 还没收的规则（M538）
+    'codex-derived': 'Codex 衍生文件', 'claude-artifact': 'Claude 过程产物', 'discovered-ai': '发现的 AI 临时目录',
+    'discovered-cache': '发现的缓存目录', 'discovered-owner_rule': '本人定过要清的目录', 'discovered-child-worktree': '发现的子任务工作树',
+    'downloads-redownload': '能重新下载的下载文件', 'retired-archive': '已退役的归档', 'weekly-judgment': '每周判定可删的项目',
+    'empty-directories': '空文件夹',
   };
   const ICON = {
     ok: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="m7.8 12.3 2.9 2.9 5.6-6"/></svg>',
@@ -92,7 +97,7 @@
         esc(`${K.volName(v, viewer)} · 空闲 ${amount(v.free_before, '清理前余量')} → ${amount(v.free_after, '清理后余量')} · 腾出 ${amount(v.freed_bytes, '腾出量')}`));
       const rules = receiptRows(run.rules, viewer, '清理规则记录', '规则名称和清理量', r => {
         const basis = r.bytes_basis === 'removed_logical_bytes' ? '移除文件大小' : r.bytes_basis === 'net_free_change' ? '空闲净增' : '腾出';
-        return esc(`${K.field(r.label, '清理规则名称', viewer) || '规则'} · ${basis} ${amount(r.freed_bytes, '规则清理量')}`);
+        return esc(`${ruleLabel(r, viewer)} · ${basis} ${amount(r.freed_bytes, '规则清理量')}`);
       });
       return `<details class="st-detail" data-key="${esc('cleanup-' + (run.id || run.finished_at))}"><summary class="live-disclosure">${esc(summary)}</summary><p class="cl-sub">各盘<br>${disks}</p><p class="cl-sub">各规则<br>${rules}</p></details>`;
     });
@@ -149,12 +154,19 @@
     return RULE_NAMES[id] || (/^[\w.-]+$/.test(id) ? '' : id);
   }
 
+  // 回执 rules[] 的 label：后台对照表没收的规则会把英文 id 原样当 label 发来，这时按上面的表换成中文（M538）
+  function ruleLabel(r, viewer) {
+    const text = K.field(r?.label, '清理规则名称', viewer);
+    if (!text || !/^[\w.-]+$/.test(text)) return text || '规则';
+    return RULE_NAMES[text] || RULE_NAMES[r.id] || '还没有中文名的规则';
+  }
+
   function progress(run, viewer, g) {
     const p = run.progress;
     if (viewer !== 'owner' && K.locked(p)) return '清理进度仅本人可见';
     const gap = K.field(run.progress_gap, '清理进度缺因', viewer);
     const event = K.field(p?.event, '清理步骤', viewer), rule = K.field(p?.rule, '清理规则', viewer);
-    const step = ({ checking: '正在检查', candidate: '检查到待清项目', removed: '已移除', skipped: '已跳过' })[event] ||
+    const step = ({ checking: '正在检查', candidate: '检查到待清项目', deleting: '正在删除', removed: '已移除', skipped: '已跳过' })[event] ||
       (K.isPlaceholder(event) ? event : rule && '正在处理');
     const entries = K.field(p?.removed_entries, '移除项数', viewer);
     const counts = [entries && (K.isPlaceholder(entries) ? entries : `移除 ${entries} 项`),
@@ -204,7 +216,7 @@
     if (!g?.last) return '<p class="cl-big cl-big--sm is-gray">—</p>';
     if (!Array.isArray(g.last.rules)) return '<p class="cl-sub">最近一轮没记录每条规则腾出了多少。</p>';
     if (!list.length) return `<p class="cl-sub">${esc(withheld || '最近一轮没有到期要删的。')}</p>`;
-    const sum = list.reduce((n, r) => n + r.freed_bytes, 0), name = r => K.field(r.label, '清理规则名称', viewer) || '规则';
+    const sum = list.reduce((n, r) => n + r.freed_bytes, 0), name = r => ruleLabel(r, viewer);
     const row = (r, i) => `<li><i style="background:${RULE_HUES[Math.min(i, RULE_HUES.length - 1)]}"></i><span>${esc(name(r))}</span><b>${esc(K.size(r.freed_bytes))}</b></li>`;
     // 规则多时先列腾出最多的 5 条，其余收进“展开”，免得这一栏比右边的走势图长出一大截、右边空着（M503）
     const shown = list.length > 6 ? 5 : list.length, rest = list.slice(shown);

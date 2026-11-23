@@ -397,6 +397,7 @@ const CAMERA = { from: 0.015, to: 0.95, startSpeed: 0.24, accelerate: 0.24, endS
 const REST_TOP = 0.02;   // 进度小于它：第一屏的两个按钮可点
 const REST_END = 0.965;  // 进度大于它：第二屏的三个按钮可点
 const STEPS = 120;       // 每条关键帧的采样数
+const SETTLED = Math.max(CAMERA.to, ...SCREEN2_TEXT.map((spec) => spec[6]));   // 镜头停稳、第二屏的字全显完的进度：页底就在这里
 
 const cameraEase = (() => {
   const count = 600;
@@ -609,8 +610,12 @@ function layoutCamera() {
   const blurFor = (gap) => (gap <= 60 ? 20 : Math.min(blurLimit, 20 + (gap - 60) * 0.35));
   extension.style.setProperty('--blur', `${blurFor(Math.max(garden.left, garden.top))}px`);
   backdrop.style.setProperty('--blur', `${blurFor(Math.max(second.left, second.top))}px`);
+  // 滚动距离照 style.css 量（先摘掉上次写的高度）；页面只留到镜头停稳、第二屏最后一个按钮显完（SETTLED）为止，
+  // 后面那段滑了画面不再变的路不留（M585）。进度仍按整段距离算，每个滚动位置上的画面和原来一样。
+  track.style.removeProperty('height');
   trackTop = track.offsetTop;
   travel = Math.max(1, track.offsetHeight - stage.offsetHeight);
+  track.style.height = `${stage.offsetHeight + Math.ceil(travel * SETTLED)}px`;
 }
 
 function buildAnimations() {
@@ -663,7 +668,9 @@ function scrollSpan() {
 function readProgress() {
   if (pinned !== null) return pinned;
   const span = scrollSpan();
-  return clamp01((window.scrollY - span.start) / span.length);
+  const progress = (window.scrollY - span.start) / span.length;
+  // 镜头模式下页底就是 SETTLED，那时画面已和进度 1 一样：按 1 算，第二屏三个按钮照常可点
+  return camera && progress >= SETTLED - 1 / span.length ? 1 : clamp01(progress);
 }
 
 const viewportKey = () => `${root.clientWidth}x${ruler.offsetHeight}`;

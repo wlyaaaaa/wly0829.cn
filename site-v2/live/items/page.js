@@ -295,7 +295,7 @@
       .map(([kind, label]) => label.replaceAll('你', '本人') + ' ' + closedCounts[kind] + ' 条') : [];
     const laterHidden = key === 'later' && known ? hidden : 0;
     $(key + '-private').hidden = !showClosedHidden && !laterHidden;
-    $(key + '-private').textContent = showClosedHidden ? `另有 ${hidden} 条仅本人可见${hiddenParts.length ? '：' + hiddenParts.join('、') : ''}，标题和内容都没给访客看` : laterHidden ? `另有 ${laterHidden} 件仅本人可见` : '';
+    $(key + '-private').textContent = showClosedHidden ? `另有 ${hidden} 条仅本人可见${hiddenParts.length ? '：' + hiddenParts.join('、') : ''}，标题和内容都没给访客看` : laterHidden ? `另有 ${laterHidden} 件仅本人可见，标题和内容都没给访客看` : '';
     U.list(ul, main.length ? draw(main) : hidden ? [] : wait(empty), { animate });
     U.list($(key + '-rest'), draw(rest, method(main.at(-1))), { animate });
     const more = $(key + '-more'), label = `还有 ${rest.length} 条`;

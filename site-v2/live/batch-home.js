@@ -34,7 +34,7 @@
             : Array.isArray(d.running) && d.next === null ? '没有排定的运行' : '运行和下次时间没读到'}</p>`}
         ${problems.map(row => `<p>${dot('repair')}${link(row.href, field(row.title))} · ${[field(row.text), field(row.handler), row.round > 0 && `第 ${row.round} 轮`].filter(Boolean).join(' · ')}</p>`).join('')}
         ${items(d.disabled).map(row => `<p class="b6-muted">${dot('off')}${link(row.href, field(row.title))} · 关着</p>`).join('')}
-        <p class="b6-muted b6-foot">今天 AI 用了 ${num(today.ai_minutes)} 分钟 · ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>` };
+        <p class="b6-muted b6-foot">${count(today.ai_minutes) ? `今天 AI 用了 ${esc(today.ai_minutes)} 分钟` : '今天 AI 用时还没读到'} · ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>` };
     }
     if (id === 'agents') {
       const rows = Object.entries(entries).map(([key, name]) => items(d.providers).find(p => p.id === key) || { name, status: 'missing' });
@@ -67,7 +67,7 @@
       <p><span class="b6-badge">跟得最久</span> ${oldest ? `${link(oldest.href, field(oldest.title, '事项标题'))} · ${num(oldest.days)} 天` : d.open === 0 ? '没有未了结的事' : '最早那件没读到'}</p>${checks}
       <p><span class="b6-badge">今天到日子 ${num(Array.isArray(d.due_today) ? due.length : null)} 件</span></p>
       ${[...due].sort((a,b) => Number(Boolean(b.overdue)) - Number(Boolean(a.overdue))).slice(0,3).map(row => `<p class="b6-due">${link(row.href || (row.id ? '/live/issue/?id=' + encodeURIComponent(row.id) : ''), field(row.title || row.text, '事项标题'))}<small>${row.overdue ? '过期 · ' : ''}${esc(time(row.next_at) || U.fieldText(row.wait?.text, viewer))}</small></p>`).join('')}
-      ${d.repair ? `<p>${dot('repair')}${link(d.repair.href, '已交自动修理')}${d.repair.text ? ' · ' + field(d.repair.text) : ''}</p>` : ''}` };
+      ${d.repair ? `<p>${dot('repair')}${link(d.repair.href, '已交自动修理')}${d.repair.text && U.fieldText(d.repair.text, viewer).replace(/[\s。.]+$/, '') !== '已交自动修理' ? ' · ' + field(d.repair.text) : ''}</p>` : ''}` };
   }
   window.LiveBatchHome = { render };
 })();

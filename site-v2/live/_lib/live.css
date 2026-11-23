@@ -56,7 +56,10 @@ html:has(.page--live) { overflow-x: clip; }
 .card--link:hover { translate: 0 -2px; }
 .card--link:hover .card__glass { background-color: rgb(255 255 255 / .14); box-shadow: 0 9px 18px -8px rgb(20 20 19 / .15), 0 26px 48px -24px rgb(20 20 19 / .24); }
 .page--live .card--link.is-pressed { scale: var(--mo-press-scale, .97); transition-duration: calc(var(--mo-press, 90ms) * var(--sp)); }
-.card--link:focus-visible { outline: 2px solid #00813f; outline-offset: 6px; border-radius: var(--r-big); }
+/* 键盘选中：和鼠标移上去一样轻轻抬起，玻璃边那圈细高光换成很淡的正绿；不另套框（本人 11-23 18:34） */
+.card--link:focus-visible { outline: none; translate: 0 -2px; }
+.card--link:focus-visible .card__glass { background-color: rgb(255 255 255 / .14); box-shadow: 0 9px 18px -8px rgb(20 20 19 / .15), 0 26px 48px -24px rgb(20 20 19 / .24); }
+.card--link:focus-visible .card__glass::after { padding: 1.5px; background: rgb(0 166 80 / .5); }
 .card[data-tone="none"], .card:not([data-tone]) { --gut: 0px; }
 
 .card__glass {

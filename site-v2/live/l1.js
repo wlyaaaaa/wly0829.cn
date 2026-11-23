@@ -502,7 +502,9 @@
     return { ...value, text: homeAddressed(value.text), value: homeAddressed(value.value) };
   }
   const returning = performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
-  const direct = () => focusId || cards[location.hash.slice(1)];
+  // 后退、前进回来时以离开时存下的位置为准：地址里的“#卡片”是当初点进来时的，不再把页面拉回那张卡（M598）。
+  const leftAt = returning ? history.state?.liveUI : null;
+  const direct = () => focusId || (!leftAt && cards[location.hash.slice(1)]);
   const saved = returning && !direct() ? history.state?.liveUI : null;
   let restoreY = saved?.y ?? (returning && !direct() ? history.state?.liveY : null);
   let restoreCard = saved?.homeCard, restoreTimer, paintedRev, pinned = false, netPainted = false;
@@ -541,7 +543,7 @@
   }, { passive: true });
   window.addEventListener('pageshow', e => {
     const saved = history.state?.liveUI;
-    if (!e.persisted || !saved || direct()) return;
+    if (!e.persisted || !saved || focusId) return;
     restoreY = saved.y;
     restoreCard = saved.homeCard;
     restoreTimer = setTimeout(() => requestAnimationFrame(restoreHome), 650);
@@ -604,9 +606,12 @@
       const note = count === 0 ? '没有在等的事' : `${exact ? `有 ${count} 件 · ` : ''}电脑开机后自动补上是哪几件`;
       rows.push({ key: 'empty', cls: 'row row--flat row--preview-note', html: `<span></span><p class="row__sub">${note}</p>` });
     }
-    if (hidden) rows.push({ key: 'private-needs', cls: 'row row--flat row--preview-note', html: '<p class="row__sub">另有 ' + hidden + ' 条仅本人可见</p>' });
+    // 访客：写清藏了几件、各是哪一类（后台 hidden_summary 已按类数好），标题和内容不露。
+    const kinds = d.hidden_summary?.counts || {}, hiddenKinds = [['do', '要本人做'], ['choose', '要本人选']].filter(([k]) => kinds[k] > 0);
+    const hiddenWhat = hiddenKinds.reduce((n, [k]) => n + kinds[k], 0) === hidden ? hiddenKinds.map(([k, label]) => `${kinds[k]} 件${label}`).join('、') : `${hidden} 件要本人做或选的事`;
+    if (hidden) rows.push({ key: 'private-needs', cls: 'row row--flat row--preview-note', html: `<p class="row__sub">另有 ${esc(hiddenWhat)}，标题和内容只有本人看得到</p>` });
     paintList(p.main, rows, { animate: false });
-    // 藏掉的几件已合成“另有 N 条仅本人可见”，“还有 N 条”只数看得见的。
+    // 藏掉的几件已合成上面“另有……只有本人看得到”一行，“还有 N 条”只数看得见的。
     needsTotal = (project ? all.length : count - hidden - (extra ? 1 : 0)) + Number(!!focusedRow && targetIndex < 0);
     fitCard('needs');
     U.html(p.summary, [['know', '要你知道'], ['later', '你放着']].map(([k, label]) => `${addressed(label)} ${quantity(d.counts, k)} 件`).join(' · ') + (count === 0 ? '' : oldestWait(d, all, end)));
@@ -1373,7 +1378,7 @@
     else detail?.click();
     return opened;
   }
-  let hashFocused = false;
+  let hashFocused = !!saved;
   // 从这张卡点开的下一层退回来时，全站动效会把总览滚回点开那一刻的位置、让那一页缩回这张卡：这时只画框，不再挪页面，
   // 不然先挪的这一下会被列表的位置保持带着走，纸面就缩到别的卡上（M229）。
   const shrinkingBack = (() => {
@@ -1597,6 +1602,28 @@
   subscribe();
   // AI 留言不随“只看某个项目”变，单独订一份；有变化就重画页顶那张卡
   window.Live.watch('ai-messages', null, { data(d) { aiMessages = Array.isArray(d?.items) ? d.items : null; if (lastState) renderNotices(lastState); } });
+  // 硬件小包：页面看得见时约每 5 秒取一次，只换电脑卡里的 CPU 占用、内存和 CPU 温度，不重取整包（M519）
+  // 小包不带 rev，data 只来第一次；每读完一次都会来的是 link。
+  window.Live.watch('computer/hardware', null, { link(state) {
+    const computer = home?.computer;
+    if (!computer || computer.q === 'warming' || lastState?.offline || state.meta?.viewer?.kind !== viewer) return;
+    if (!window.Live.mergeHardware(computer.metrics, state.data?.metrics)) return;
+    // “读不准：CPU 温度（最近一次记录于 …）”跟着页面上的温度走：读数是新的就不再说读不准，旧了只把时刻换成这次读到的（M602）
+    const temp = computer.metrics?.find(m => m.id === 'cpu-temp');
+    let grayChanged = false;
+    if (temp?.value != null && timed(temp.at) && Array.isArray(computer.gray_items)) {
+      const old = temp.stale_after > 0 && Date.now() - Date.parse(temp.at) > temp.stale_after * 1000;
+      const next = computer.gray_items.flatMap(g => {
+        const reason = typeof g?.reason === 'string' ? g.reason : '';
+        if (sp(U.fieldText(g?.name, viewer)) !== 'CPU 温度' || !/最近一次记录于 /.test(reason)) return [g];
+        grayChanged = true;
+        return old ? [{ ...g, reason: reason.replace(/最近一次记录于 [^，,]+/, `最近一次记录于 ${recordStamp(temp.at)}`) }] : [];
+      });
+      if (grayChanged) Object.assign(computer, { gray_items: next, gray_count: next.length });
+    }
+    const render = () => { renderComputer(computer, home.screen, home.phone); if (grayChanged) paintStatus('computer', computer); };
+    if (settling()) render(); else U.anchor(render);
+  } });
 
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
 })();

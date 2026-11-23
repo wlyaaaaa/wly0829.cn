@@ -208,7 +208,9 @@
     const round = d?.audits?.at, tried = failed && Date.parse(round) > Date.parse(at) ? round : at;
     const next = every > 0 ? Date.parse(tried) + every * 1000 : NaN;
     const later = !Number.isFinite(next) ? '' : next > Date.now() ? `下次约 ${short(next)} 读` : `本该 ${short(next)} 再读，还没读到新数`;
-    const said = failed ? `${tried !== at ? short(tried) + ' 这一轮' : '这次'}没读到，下面是 ${short(at)} 读到的数` : `${short(at)} 读到`;
+    // 这一轮的时刻和读到数的时刻落在同一分钟，只说一次
+    const said = !failed ? `${short(at)} 读到` : tried === at ? `这次没读到，下面是 ${short(at)} 读到的数`
+      : short(tried) === short(at) ? `${short(at)} 这一轮没读到` : `${short(tried)} 这一轮没读到，下面是 ${short(at)} 读到的数`;
     return [said, later].filter(Boolean).join(' · ');
   }
   function formatImpersonation(card) {
@@ -217,6 +219,8 @@
     if (status && reading) {
       const keep = status.textContent.split(' · ').map(s => s.trim()).filter(s => /项要处理$|^AI 在修|AI 已接手/.test(s));
       U.html(status, [reading, ...keep].map(U.esc).join(' · '));
+      // 卡头另写着的读数时刻（“最近一次记录于 …”“上次读到 … · 每小时读一次”）和这一句重了，只留这一句
+      for (const part of card.querySelectorAll('.grp__said, .grp__cutoff')) if (/^(?:最近一次记录于|上次读到|数据截[止至]|截至)\s*\d/.test(part.textContent.trim())) U.html(part, '');
       queueMicrotask(() => V.cardLineTitle(status.parentElement));
       return;
     }
