@@ -149,7 +149,25 @@
     const host = el.querySelector('[data-x="daily"]');
     const daily = V.block(host, V.bars(host, { title: '近 7 天每天卡了几次', unit: '次', stack: true, series: [{ id: 'events', label: '卡顿', hue: 'pink' }] }), () => data, 'daily_stutters');
     let days = [];
-    new MutationObserver(() => { const b = host.querySelector('.chart__vals b'); if (!b) return; const i = [...host.querySelectorAll('.vz-bars__lab')].findIndex((n) => n.classList.contains('is-on')), row = days[i < 0 ? days.length - 1 : i], text = S.text(row, 'events', (v) => `${v} 次`); if (b.textContent !== text) b.textContent = text; let gap = host.querySelector('[data-stat-gap]'); const message = S.partial(row, 'events') && row?.events != null ? row.gap || '' : ''; if (message && !gap) { gap = document.createElement('small'); gap.dataset.statGap = ''; gap.className = 'stat-gap'; host.querySelector('.chart__vals').append(gap); } if (gap) U.html(gap, U.fieldHtml(message, { name: '当天卡顿统计' }), false); if (!message) gap?.remove(); }).observe(host, { childList: true, characterData: true, subtree: true });
+    new MutationObserver(() => {
+      const value = host.querySelector('.chart__vals b');
+      if (!value) return;
+      const selected = [...host.querySelectorAll('.vz-bars__lab')].findIndex((label) => label.classList.contains('is-on'));
+      const row = days[selected < 0 ? days.length - 1 : selected];
+      const text = row?.events == null && row?.gap && !U.offline?.()
+        ? U.sp(row.gap) : S.text(row, 'events', (count) => `${count} 次`);
+      if (value.textContent !== text) value.textContent = text;
+      let gap = host.querySelector('[data-stat-gap]');
+      const message = S.partial(row, 'events') && row?.events != null ? row.gap || '' : '';
+      if (message && !gap) {
+        gap = document.createElement('small');
+        gap.dataset.statGap = '';
+        gap.className = 'stat-gap';
+        host.querySelector('.chart__vals').append(gap);
+      }
+      if (gap) U.html(gap, U.fieldHtml(message, { name: '当天卡顿统计' }), false);
+      if (!message) gap?.remove();
+    }).observe(host, { childList: true, characterData: true, subtree: true });
     return { set(g) {
       const st = data?.stutters, meta = data?.blocks?.stutters;
       list = mergedEvents();
