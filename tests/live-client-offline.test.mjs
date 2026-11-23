@@ -85,10 +85,11 @@ test('offline owner copy uses the displayed generation and Beijing date', async 
     assert.equal(state.text, `连不上电脑 · 下面是 ${expected} 的数据。`); assert.equal(state.shownAt, at);
     assert.equal(state.meta.seq, 2); assert.equal(state.data.screen.old, undefined);
     broken = true;
-    // 没读到先等，等满 10 秒还没有新的才挂“连不上”
+    // 读不到新的：10 秒内照旧；满 10 秒仍按后台最后说的（连不上电脑），只标上是几点的数（M587、M588）
     assert.equal((await client.get('home')).text, `连不上电脑 · 下面是 ${expected} 的数据。`);
     lapse();
-    assert.equal((await client.get('home')).text, `连不上实况服务 · 下面是 ${expected} 的数据。`);
+    const slow = await client.get('home');
+    assert.equal(slow.text, `连不上电脑 · 下面是 ${expected} 的数据。`);
   }
 });
 
@@ -109,8 +110,15 @@ test('offline screen retains proven readings, and a rejected device drops its ow
   reply = () => Response.json({}, {status: 503});
   assert.equal((await read()).offline, false);
   lapse();
+  // 主数据 10 秒没到、已经画出来了：不挂连不上，标上是几点的数（M587、M588）
+  const slow = await read();
+  assert.equal(slow.offline, false); assert.equal(slow.fallbackNote, '这是 08:00 的数，这次刷新慢了，正在重读。');
+  // 浏览器真断网才挂连不上，副屏照旧拼上读到过的读数
+  sandbox.navigator = {onLine: false};
+  reply = () => Promise.reject(new TypeError('offline'));
   const old = await read();
-  assert.equal(old.text, '实况服务暂不可用 · 下面是 08:00 的数据。');
+  delete sandbox.navigator;
+  assert.equal(old.text, '当前设备未连接网络 · 下面是 08:00 的数据。');
   assert.equal(old.data.cells.find(c => c.id === 'computer').cpu_c, 52);
   assert.equal(old.data.cells.find(c => c.id === 'need').n, 0);
   reply = () => Response.json({error: 'snapshot_metadata_only', at}, {status: 503, headers: {
@@ -222,8 +230,13 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   assert.equal(requested[0], 'https://live.wly0829.cn/computer-access/live/v1/home');
   assert.equal([...stored.keys()].filter(key => key.startsWith(normal) || key.startsWith(forced)).length, 0);
   offline = true;
-  // 本页主数据（home）等满 10 秒还没有新的才算整页连不上；别的读口读不到不算
+  // 本页主数据（home）等满 10 秒还没有新的：已经画出来的访客数据留着，标上是几点的数，不算连不上（M587、M588）
   await client.get('home'); lapse();
+  const slow = await client.get('home');
+  assert.equal(slow.data.text, 'safe'); assert.equal(slow.offline, false); assert.match(slow.fallbackNote, /这次刷新慢了，正在重读/);
+  // 浏览器真断网才算整页连不上：访客数据清掉，只用备用包的元数据
+  sandbox.navigator = {onLine: false};
+  await client.get('home');
   assert.equal((await client.get('projects')).data, null);
   await fallbackRead();
   assert.equal((await client.get('projects')).meta.at, null);

@@ -229,8 +229,12 @@
   const awaitFresh = e => { if (!e.freshWait && !paged(e)) e.freshWait = later(() => { e.freshWait = 0; staleAfterWait(e); }, FRESH_WAIT_MS); };
   function staleAfterWait(e) {
     if (publicPaused || e.stopped || e.token !== device()) return;
-    if (isMain(e)) {
+    if (isMain(e) && (e.data === null || e.source === 'copy' || e.source === 'fallback')) {
       observedConnection(e, { state: 'offline', basis: e.missStatus ? 'response' : 'browser', reason: e.missReason || 'unreachable' });
+    } else if (isMain(e)) {
+      // 主数据 10 秒没到、这一页已经读到并画出来了（不是浏览器存的副本）：不算连不上、不清（本人版访客版一样），标上是几点的数，重读照常（M587、M588）。
+      // 连不上只认浏览器断网、心跳停了、电脑关机这几种明确信号；后台明确撤回照旧立刻清。
+      if (Number.isFinite(Date.parse(e.at))) e.fallbackNote = `这是 ${shortStamp(e.at)} 的数，这次刷新慢了，正在重读。`;
     } else {
       if (!e.error) e.error = '暂时读不到';
       if (e.data !== null && Number.isFinite(Date.parse(e.at))) e.fallbackNote = `这是 ${shortStamp(e.at)} 的旧数，现在读不到新的。`;
@@ -238,8 +242,11 @@
     settle(e);
     emit(e);
   }
-  const latestConnection = () => connectionEntries().filter(e => e.receivedAt != null)
-    .sort((a, b) => b.receivedAt - a.receivedAt)[0]?.validatedLink;
+  // 整页在不在线由主口说了算：主口答过就只看主口，辅助口读到了只管它自己那一块（M587、M588）。
+  const latestConnection = () => {
+    const answered = connectionEntries().filter(e => e.receivedAt != null), main = answered.filter(isMain);
+    return (main.length ? main : answered).sort((a, b) => b.receivedAt - a.receivedAt)[0]?.validatedLink;
+  };
   const offline = () => !publicPaused && latestConnection()?.state === 'offline';
   // 只有确认关机（副屏那格回 on: false）才算没开机；心跳停了只说明电脑从那时起没回应，可能还开着。
   const hostOffline = link => link?.reason === 'host-off';
