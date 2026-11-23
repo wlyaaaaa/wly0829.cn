@@ -467,6 +467,11 @@
     return escapeNotes(text);
   }
   const hiddenBlockText = value => value?.hidden_block ? `${value.hidden_block}的原文仅本人可见` : '';
+  // 等你的事字数兜底（M560，后台登卡另限字数）：字面的 \n 当换行，**、反引号、行首 # 这类记号不显示；超过 n 个字用“…”收住，oneLine 时换行压成空格
+  function capText(value, n, oneLine = false) {
+    const cut = s => { const t = [...s.replace(/\\n/g, '\n').replace(/\*\*|__|\x60/g, '').replace(/^#{1,6}\s+/gm, '').replace(oneLine ? /\s*\n\s*/g : /\n{3,}/g, oneLine ? ' ' : '\n\n').trim()]; return t.length > n ? t.slice(0, n).join('').trimEnd() + '…' : t.join(''); };
+    return typeof value === 'string' ? cut(value) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([k, v]) => [k, ['value', 'text', 'label'].includes(k) && typeof v === 'string' ? cut(v) : v])) : value;
+  }
   function fieldText(value, kind = viewer) {
     if (typeof value === 'number' && !Number.isFinite(value)) return '';
     if (value && typeof value === 'object') {
@@ -597,15 +602,23 @@
   function mergePrivateRows(rows) { return rows; }
   const INTENT = { done: '复制给 AI', decline: '不办了', later: '晚点提醒', ack: '我知道了', close_report: '关掉' };
   const CONFIRM_ITEM = {
-    decline: { action: 'dismiss', title: '这件不办了？', note: '马上从“等你的事”撤下，记进退出记录，手机不再提醒。', cancel: '再想想', confirm: '不办了', saved: '已撤下这件事', state: '你说不办了' },
+    decline: { action: 'dismiss', title: '这件不办了？', note: '马上从“等你的事”撤下，记进退出记录，手机不再提醒。', cancel: '再想想', confirm: '不办了', saved: '已关掉，记为你不办了', state: '你说不办了' },
     done: { title: '复制办理结果？', note: '把这段话贴给 AI。AI 核实后按编号关卡。', cancel: '取消', confirm: '复制给 AI' },
     decline_copy: { title: '复制给 AI 处理后续？', note: '把这段话贴给 AI，请它处理卡上写的后续。', cancel: '取消', confirm: '复制给 AI' },
-    later: { action: 'snooze', title: '晚点再提醒？', note: '移到“你放着”，明天上午 10 点再提醒。', cancel: '取消', confirm: '明天再提醒', saved: '已移到你放着，明天上午 10 点再提醒', state: '晚点再提醒' },
-    ack: { action: 'ack', title: '确认已知？', note: '马上从“等你的事”撤下，并写入退出记录。', cancel: '取消', confirm: '我知道了', saved: '已记为本人已知', state: '本人已知' },
-    close_report: { action: 'dismiss', title: '关掉这份汇报？', note: '从“等你答的汇报”撤下，保留原链接和关闭记录。', cancel: '取消', confirm: '关掉', saved: '已关掉汇报', state: '汇报已关闭' },
+    later: { action: 'snooze', title: '晚点再提醒？', note: '移到“你放着”，明天上午 10 点再提醒。', cancel: '取消', confirm: '明天再提醒', saved: '已放到你放着，明早 10:00 再提醒', state: '晚点再提醒' },
+    ack: { action: 'ack', title: '确认已知？', note: '马上从“等你的事”撤下，并写入退出记录。', cancel: '取消', confirm: '我知道了', saved: '已记下：我知道了', state: '本人已知' },
+    close_report: { action: 'dismiss', title: '关掉这份汇报？', note: '从“等你答的汇报”撤下，保留原链接和关闭记录。', cancel: '取消', confirm: '关掉', saved: '已关掉这份汇报', state: '汇报已关闭' },
   };
   const MANY_TITLE = { decline: '这 N 件都不办了？', done: '复制这 N 件的办理结果？', decline_copy: '复制这 N 件的后续给 AI？',
     later: '这 N 件都晚点再提醒？', ack: '这 N 件都确认已知？', close_report: '关掉这 N 份汇报？' };
+  // 没保存上时给本人看的原因：后台回的错误名换成人话（错误名留在回执的 data-error 上，查问题用）
+  const FAILED_TEXT = {
+    cockpit_action_not_allowed: '后台现在不让这张卡这样办，没保存上。卡先留着，可以点“问情况”交给 AI 处理。',
+    cockpit_item_changed: '这张卡刚有变化，没保存上。点“再点一次”会按最新的再保存。',
+    cockpit_item_buttons_disabled: '电脑这会儿没开放卡上的按钮，没保存上。稍后再点一次。',
+    cockpit_owner_required: '这台设备没配对，没保存上。',
+    cockpit_device_rate_limited: '点得太多了，没保存上。过几分钟再点一次。',
+  };
   const itemWrites = new Set();
   function itemIntent(item, action) {
     if (item.closed || !action || !['copy', 'direct'].includes(action.kind)) return '';
@@ -624,19 +637,16 @@
 
   // 一件一件写回，各记各的结果：没生效的写清是哪件、为什么；写回接口说“还没确认”的（unconfirmed）单算，不当失败。
   async function writeItems(live, items, action, followReceipt = false) {
-    const saved = [], failed = [], requests = [];
+    const saved = [], failed = [];
     let pending = 0, unconfirmed = 0;
-    for (const item of items) {
-      const result = await live.applyOwnerItems([item], action);
-      // 先逐条提交，未完成的回执可以同时核对。
-      requests.push(followReceipt && (result.pending || result.unconfirmed) ? live.applyOwnerItems([item], action, true) : result);
-    }
+    // 每件各发一笔；后台慢、没回的，按同一提交编号接着查到真结果（定稿：异步的成功失败回执）。
+    const requests = items.map(item => live.applyOwnerItems([item], action, followReceipt));
     for (const [index, result] of (await Promise.all(requests)).entries()) {
       const item = items[index];
       if (result.saved?.length) saved.push(...result.saved);
       else if (result.pending) pending += result.pending;
       else if (result.unconfirmed) unconfirmed += result.unconfirmed;
-      else failed.push({ name: fieldText(item.text || item.title, 'owner'), message: String(result.message || '没有确认保存，请重读这件事。') });
+      else failed.push({ item, name: fieldText(item.text || item.title, 'owner'), error: result.error || '', message: String(result.message || '没有确认保存，请重读这件事。') });
     }
     const failedText = failed.map(f => `「${f.name}」：${f.message.replace(/[。.]+$/, '')}`).join('；');
     const text = word => [`${word} ${saved.length} 件` + (pending ? `，正在写入 ${pending} 件` : '') + '。',
@@ -645,16 +655,40 @@
     return { saved, pending, unconfirmed, failed, text };
   }
 
-  function itemFeedback(trigger, message, ms = 6500) {
-    const notices = document.getElementById('item-action-receipts') || document.getElementById('notices');
-    const note = document.createElement(notices ? 'li' : 'span');
-    note.className = notices ? 'notice glass' : 'row__feedback';
-    note.setAttribute('role', 'status');
-    note.textContent = message;
-    note.style.whiteSpace = 'pre-line';   // 多选结果分行写
-    if (notices) notices.prepend(note); else trigger.after(note);
-    setTimeout(() => note.remove(), ms);
+  // 刚办成的卡：后台读数要过几分钟才跟上，这期间刷新页面也先不显示它（按卡的版本认，读数一变就照读数显示；最多 10 分钟）
+  const SAVED_KEY = 'wly-live-saved-writes';
+  function savedWrites() {
+    try { const all = JSON.parse(localStorage.getItem(SAVED_KEY) || '{}'), now = Date.now(); for (const [id, v] of Object.entries(all)) if (!(now - v.at < 600000)) delete all[id]; return all; }
+    catch { return {}; }
   }
+  function rememberSaved(rows) {
+    if (!rows.length) return;
+    try { const all = savedWrites(); for (const item of rows) all[item.id] = { version: item.item_version, kind: item.kind, at: Date.now() }; localStorage.setItem(SAVED_KEY, JSON.stringify(all)); } catch { /* 存不下就只靠本页 */ }
+  }
+  function justSaved(item) { const hit = item && savedWrites()[item.id]; return !!hit && !item.closed && hit.version === item.item_version && hit.kind === item.kind; }   // 晚点提醒后到了“你放着”就照常显示
+  // 回执弹窗（定稿：异步的成功失败回执；本人 11-23 11:51 要弹窗告诉他保存成功还是失败）：先写“正在保存…”，后台真结果回来再换；失败的留着，能再点一次。
+  function itemReceipt(head = '正在保存…', detail = '') {
+    let lane = document.getElementById('item-action-receipts');
+    if (!lane) { lane = document.createElement('ul'); lane.id = 'item-action-receipts'; lane.className = 'notices'; document.body.append(lane); }
+    const note = document.createElement('li');
+    note.setAttribute('role', 'status');
+    lane.prepend(note);
+    let timer;
+    const set = (state, text, { name = detail, retry, error } = {}) => {
+      clearTimeout(timer);
+      note.className = 'notice glass live-receipt is-' + state;
+      if (error) note.dataset.error = error;   // 后台回的错误名，查问题用
+      note.innerHTML = `<span class="live-receipt__icon" aria-hidden="true"></span><b class="live-receipt__head">${esc(text)}</b>${name ? `<span class="live-receipt__name">${esc(name)}</span>` : ''}${state === 'busy' ? '' : `<span class="live-receipt__acts">${retry ? '<button type="button" class="btn btn--sm" data-retry>再点一次</button>' : ''}<button type="button" class="btn btn--sm" data-close>关掉</button></span>`}`;
+      note.querySelector('[data-retry]')?.addEventListener('click', () => { note.remove(); retry(); }, { once: true });
+      note.querySelector('[data-close]')?.addEventListener('click', () => note.remove(), { once: true });
+      if (state === 'ok') timer = setTimeout(() => note.remove(), 9000);
+    };
+    set('busy', head);
+    return { set };
+  }
+  function itemFeedback(trigger, message) { itemReceipt().set(/^(?:已|好)/.test(message) ? 'ok' : 'fail', message); }
+  // 再点一次用页面上最新的那份（版本变了的卡，重读后按新版本提交）。
+  const latestItem = item => [...actionSets.values()].reverse().find(it => it.id === item.id && it.item_version) || item;
 
   function confirmItems(trigger, items, intent, complete = () => {}) {
     // “不办了”一次选进普通卡和有后续的卡：同一个确认框分两组，普通卡按原编号撤下，有后续的复制给 AI。
@@ -669,10 +703,51 @@
       itemFeedback(trigger, '这件事刚刚有变化，请重读后再试。'); return;
     }
     const lane = document.getElementById('item-action-receipts');
-    const followReceipt = !!lane && !!wording.action;
-    const project = saved => {
-      if (followReceipt) lane.dispatchEvent(new CustomEvent('item-write', { detail: { items: writes, saved } }));
+    const followReceipt = !!wording.action;
+    // 等你的事页：写着的先从清单撤下，没写上的回来（定稿：失败卡回来）。
+    const project = (saved, rows = writes) => {
+      if (followReceipt && lane) lane.dispatchEvent(new CustomEvent('item-write', { detail: { items: rows, saved } }));
     };
+    const nameOf = item => fieldText(item.text || item.title, 'owner');
+    // 点下去马上有动静：按钮换成“正在办…”，弹窗写“正在保存…”。
+    const busy = on => {
+      if (on) { trigger.dataset.busyLabel ??= trigger.textContent; trigger.textContent = '正在办…'; trigger.disabled = true; trigger.classList.add('is-busy'); return; }
+      if (trigger.dataset.busyLabel != null) trigger.textContent = trigger.dataset.busyLabel;
+      delete trigger.dataset.busyLabel; trigger.disabled = false; trigger.classList.remove('is-busy');
+    };
+    async function save(rows, extra = '') {
+      rows.forEach(item => itemWrites.add(item.id));
+      busy(true); project(null, rows);
+      const receipt = itemReceipt('正在保存…', rows.length > 1 ? `${rows.length} 件` : nameOf(rows[0]));
+      try {
+        // 后台忙时一笔要几分钟才写进去：没结果就按同一编号接着查，回执先写“还在保存”，最多再查三轮（约 7 分钟）
+        const saved = [], failed = [];
+        let pending = rows;
+        for (let round = 0; pending.length && round < 4; round++) {
+          if (round) receipt.set('busy', '还在保存…电脑这会儿忙，结果回来就告诉你');
+          const result = await writeItems(live, pending, wording.action, true);
+          saved.push(...result.saved); failed.push(...result.failed);
+          pending = pending.filter(item => !result.saved.includes(item.id) && !result.failed.some(f => f.item === item));
+        }
+        rememberSaved(rows.filter(item => saved.includes(item.id)));
+        project(saved, rows);
+        const detail = saved.length === 1 && rows.length === 1 && trigger.closest('.dossier-card');
+        const state = detail && detail.querySelector('[data-part="state"]');
+        if (state) { state.textContent = wording.state; detail.querySelectorAll('[aria-haspopup="dialog"]').forEach(button => button.remove()); }
+        const left = rows.filter(item => !saved.includes(item.id));
+        if (!left.length) receipt.set('ok', wording.saved + (rows.length > 1 ? `（${rows.length} 件）` : ''), { name: extra || (rows.length > 1 ? '' : nameOf(rows[0])) });
+        else {
+          const why = failed.length ? failed.map(f => (rows.length > 1 ? `「${f.name}」：` : '') + (FAILED_TEXT[f.error] || f.message)).join('\n') : '电脑在忙，还没回结果；稍后刷新看，或者再点一次。';
+          receipt.set('fail', rows.length > 1 ? `保存上 ${saved.length} 件，没保存上 ${left.length} 件` : failed.length ? '没保存上' : '还没确认保存上',
+            { name: (rows.length > 1 ? '' : nameOf(rows[0]) + '\n') + why + (extra ? '\n' + extra : ''), error: failed.map(f => f.error).filter(Boolean).join(','), retry: () => save(left.map(latestItem)) });
+        }
+        complete(saved);
+        await live.refresh();
+      } finally {
+        rows.forEach(item => itemWrites.delete(item.id));
+        busy(false);
+      }
+    }
     // 本人版列全：选了几件就列几件。
     const names = (rows, id = '') => `<ul${id ? ` id="${id}"` : ''} class="live-item-confirm__name live-item-confirm__list">${rows.map(item => `<li>${esc(fieldText(item.text || item.title, 'owner'))}</li>`).join('')}</ul>`;
     const dialog = document.createElement('dialog');
@@ -685,7 +760,7 @@
       ${direct ? `<div id="live-item-confirm-name"><p class="live-item-confirm__group">直接撤下（${direct.length} 件）</p>${names(direct)}<p class="live-item-confirm__group">有后续，复制给 AI（${follow.length} 件）</p>${names(follow)}</div>`
         : items.length === 1 ? `<p id="live-item-confirm-name" class="live-item-confirm__name">${esc(fieldText(items[0].text || items[0].title, 'owner'))}</p>`
         : names(items, 'live-item-confirm-name')}
-      <p id="live-item-confirm-note">${esc(direct ? '直接撤下的马上从“等你的事”撤下，记进退出记录，手机不再提醒；有后续的复制成一段话，贴给 AI 处理卡上写的后续。' : answering ? '把这段话贴给 AI，填上你的回答或办理结果。AI 处理后按编号关卡。' : wording.note)}</p>
+      <p id="live-item-confirm-note">${esc(direct ? '直接撤下的马上从“等你的事”撤下，记进退出记录，手机不再提醒；有后续的复制成一段话，贴给 AI 处理卡上写的后续。' : answering ? '把这段话贴给 AI，填上你的回答或办理结果。AI 处理后按编号关卡。' : intent === 'decline' && items.every(item => item.kind === 'choose') ? '这次不管了；好了以后再坏，直接给你卡。' : wording.note)}</p>
       <div class="live-item-confirm__buttons">
         <button type="button" data-cancel autofocus>${esc(wording.cancel)}</button>
         <button type="button" data-apply>${esc(wording.confirm)}</button>
@@ -706,48 +781,22 @@
       trigger.focus({ preventScroll: true });
     }, { once: true });
     dialog.querySelector('[data-apply]').addEventListener('click', async () => {
-      items.forEach(item => itemWrites.add(item.id));
       dialog.close();
-      project(null);
-      try {
-        if (direct) {
-          // 先复制（要趁这次点按），再按各卡原编号写回；两组结果分开报。
-          const ok = await copy(follow.map(item => live.copy(item, 'decline')).join('\n\n'));
-          const result = await writeItems(live, direct, wording.action, followReceipt);
-          project(result.saved);
-          itemFeedback(trigger, result.text('已撤下') + '\n有后续的 ' + follow.length + ' 件' + (ok ? '已复制，粘贴到 AI 对话发送。' : '没复制成，请再试。'), result.failed.length || result.unconfirmed ? 20000 : 6500);
-          complete([...result.saved, ...(ok ? follow.map(item => item.id) : [])]);
-          await live.refresh();
-          return;
-        }
-        if (!wording.action) {
-          const ok = await copy(items.map(item => live.copy(item, intent === 'decline_copy' ? 'decline' : intent)).join('\n\n'));
-          itemFeedback(trigger, ok ? '已复制，粘贴到 AI 对话发送。' : '没复制成，请再试。');
-          if (ok) complete(items.map(item => item.id));
-          return;
-        }
-        const result = await writeItems(live, items, wording.action, followReceipt), { saved, pending, unconfirmed, failed } = result;
-        project(saved);
-        if (saved.length === 1 && items.length === 1) {
-          const detail = trigger.closest('.dossier-card');
-          const state = detail?.querySelector('[data-part="state"]');
-          if (state) {
-            state.textContent = wording.state;
-            detail.querySelectorAll('[aria-haspopup="dialog"]').forEach(button => button.remove());
-          }
-        }
-        const count = !failed.length && !pending && !unconfirmed ? wording.saved + '（' + items.length + ' 件）' : result.text('已生效');
-        const failure = followReceipt && failed.length
-          ? `${({ dismiss: '没关掉', ack: '没记下已知', snooze: '没改好提醒时间' })[wording.action]}：${failed[0].message}` : failed[0]?.message;
-        const message = items.length > 1 ? count : saved.length ? wording.saved : pending ? '已收到，正在写入这件事。'
-          : unconfirmed ? followReceipt ? '暂时没读到办理结果，稍后刷新可以看最新状态。' : '还没确认结果，再点一次可继续核对。' : failure;
-        const name = followReceipt && items.length === 1 ? fieldText(items[0].text || items[0].title, 'owner') : '';
-        itemFeedback(trigger, name ? `${message}\n${name}` : message, (followReceipt || items.length > 1) && (failed.length || unconfirmed) ? 20000 : 6500);
-        complete(saved);
-        await live.refresh();
-      } finally {
-        items.forEach(item => itemWrites.delete(item.id));
+      if (direct) {
+        // 先复制（要趁这次点按），再按各卡原编号写回；两组结果在同一张回执里报。
+        const ok = await copy(follow.map(item => live.copy(item, 'decline')).join('\n\n'));
+        if (ok) complete(follow.map(item => item.id));
+        await save(direct, `有后续的 ${follow.length} 件` + (ok ? '已复制，粘贴到 AI 对话发送。' : '没复制成，请再试。'));
+        return;
       }
+      if (!wording.action) {
+        // 有后续的“不办了”、办完了：不写后台，复制一段带卡编号的话给 AI，卡留着等 AI 按编号关。
+        const ok = await copy(items.map(item => live.copy(item, intent === 'decline_copy' ? 'decline' : intent)).join('\n\n'));
+        itemReceipt().set(ok ? 'ok' : 'fail', ok ? '已复制，粘贴到 AI 对话发送' : '没复制成，请再点一次', { name: ok ? (intent === 'decline_copy' ? 'AI 办完后续再关这张卡。' : 'AI 核实后按编号关卡。') : '' });
+        if (ok) complete(items.map(item => item.id));
+        return;
+      }
+      await save(items);
     }, { once: true });
     size();
     viewport?.addEventListener('resize', size);
@@ -828,11 +877,13 @@
     const binding = `data-item="${esc(item.id)}" data-action-set="${key}"`;
     return list.map((a, i) => {
       const label = fieldHtml(a.label || a.href?.label || '问情况', { name: a.kind === 'open' ? '打开' : '问情况', place: 'button' }), pc = a.kind === 'open' || INTENT[a.intent] ? ' data-needs-pc' : '';
+      // 每种按钮占固定的一列（问情况／关掉类／晚点提醒），哪行少一个也不挪位（本人 11-23 圈的对不齐）
+      const slot = ` data-slot="${a.kind === 'open' ? 'go' : a.intent === 'later' ? 'later' : INTENT[a.intent] ? 'close' : a.intent === 'ask' || a.label === '问情况' ? 'ask' : 'go'}"`;
       if (a.kind === 'open' && typeof a.href === 'string' && a.href && !/^(file:|[a-z]:[\\/]|\\\\)/i.test(a.href)) {
-        return `<a class="btn btn--sm" href="${esc(a.href)}"${/^https:\/\//i.test(a.href) ? ' target="_blank" rel="noopener"' : ''} ${binding} data-open="${i}"${pc} data-mo-press>${label}</a>`;
+        return `<a class="btn btn--sm" href="${esc(a.href)}"${/^https:\/\//i.test(a.href) ? ' target="_blank" rel="noopener"' : ''} ${binding} data-open="${i}"${slot}${pc} data-mo-press>${label}</a>`;
       }
       const markup = itemIntent(item, a) ? ' aria-haspopup="dialog"' : INTENT[a.intent] ? ' data-receipt-intent' : '';
-      return `<button class="btn btn--sm" type="button" ${binding} data-act="${i}"${markup}${pc} data-mo-press>${label}</button>`;
+      return `<button class="btn btn--sm" type="button" ${binding} data-act="${i}"${markup}${slot}${pc} data-mo-press>${label}</button>`;
     }).join('');
   }
 
@@ -1604,5 +1655,5 @@
     back.after(nav);
   })();
 
-  window.LiveUI = { restoreBack, programName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, fieldText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  window.LiveUI = { justSaved, restoreBack, programName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();
