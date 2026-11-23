@@ -198,6 +198,8 @@
   // 屏幕关闭、睡着、关机这几样，后台在这段时间一条记录都没有时给来源说明（summary.state_notes）：
   // 图例上不写一排“0 分钟”（像测过是零），写“没有这类记录”和来源说明；有记录的照常写时长，0 就是测过的 0。
   const STATE_NOTE_KEYS = { 'screen-off': 'display_off', sleep: 'sleep', off: 'off' };
+  // 关机离线怎么算（本人 11-23 17:20：电脑卡死期间属于关机，不属于缺测）；哪段算关机由后台按这条算好给，页面照画（M593）
+  const OFF_NOTE = '开机或重启（◆）前面那段空白，从最后一次采到算起；卡死后重启也算';
   function stateNotes(d) {
     const notes = d?.summary?.state_notes, out = new Map();
     if (!notes || typeof notes !== 'object') return out;
@@ -206,21 +208,6 @@
       if (typeof note === 'string' && note.trim() && !(total > 0)) out.set(id, sp(note).replace(/缺测时段的状态无法判断。?$/, '').trim());
     }
     return out;
-  }
-  // 卡死、关机都算关机：空白后面紧跟开机或重启（◆）的，从最后一次采到算到 ◆ 那一刻记“关机离线”；◆ 之后到重新采到的一小段和别的空白照旧算缺测（M593）
-  function withShutdowns(day, offIdx) {
-    const restarts = day?.restart_points || [];
-    if (!day?.spans?.length || !restarts.length || !(offIdx >= 0)) return { day, off: 0 };
-    const to = sec(day.to), spans = [];
-    let off = 0;
-    day.spans.forEach(([t, s], i) => {
-      const end = day.spans[i + 1]?.[0] ?? to, boot = s == null && restarts.find(r => r > t && r <= end + 180);
-      if (boot == null || boot === false) { spans.push([t, s]); return; }
-      const stop = Math.min(boot, end);
-      spans.push([t, offIdx]); off += stop - t;
-      if (stop < end) spans.push([stop, null]);
-    });
-    return { day: { ...day, spans }, off };
   }
   function dayStrips(day) {
     if (!day) return [];
@@ -283,12 +270,10 @@
         const rows = ['day', 'day1', 'day2'].map(key => ({ key, label: '' }));
         const tl = block('day', el.firstElementChild, V.timeline(el.firstElementChild, { rows, actualEnd: true }));
         return { set: () => {
-          const d = usage, unnoted = stateNotes(d), shut = withShutdowns(d?.day, (d?.states || []).findIndex(s => s.id === 'off')), day = shut.day;
-          if (shut.off > 0) unnoted.delete('off');
-          const states = statesForView(d?.states || []).map(s => unnoted.has(s.id) ? { ...s, note: unnoted.get(s.id) } : s.id === 'off' && shut.off > 0 ? { ...s, note: '从电脑最后一次采到算到开机或重启（◆）' } : s), payload = {};
+          const d = usage, unnoted = stateNotes(d), states = statesForView(d?.states || []).map(s => s.id === 'off' ? { ...s, note: OFF_NOTE } : unnoted.has(s.id) ? { ...s, note: unnoted.get(s.id) } : s), payload = {};
           const gap = states.length;
           states.push({ id: 'unrecorded', label: '缺测', hue: 'stone' });
-          const strips = dayStrips(day && { ...day, spans: day.spans?.map(([t, i]) => [t, i ?? gap]) });
+          const strips = dayStrips(d?.day && { ...d.day, spans: d.day.spans?.map(([t, i]) => [t, i ?? gap]) });
           rows.forEach((r, i) => {
             const strip = strips[i], node = el.querySelector(`[data-row="${r.key}"]`);
             if (node) node.hidden = !!d?.day && !strip;
@@ -297,15 +282,14 @@
           });
           tl.set(d ? { states, rows: payload } : null);
           const note = el.querySelector('[data-x="tl-note"]');
-          const missed = gapSpans(day);
+          const missed = gapSpans(d?.day);
           for (const id of unnoted.keys()) {
             const vals = el.querySelector(`.vz-legend__item[data-state="${CSS.escape(id)}"] .vz-legend__vals`);
             if (vals) vals.innerHTML = '<span>没有这类记录</span>';
           }
           note.textContent = [sourceReading(d?.day?.recorded_to, d?.blocks?.day),
-            missed.total >= 60 && `缺测是电脑没采到使用状态的时段，不算在用也不算离开${shut.off > 0 ? '' : unnoted.size ? '，也判断不了是不是关屏、睡着或关机' : ''}（共 ${dur(missed.total)}，${missed.longest <= 120 ? '都是一两分钟以内的零碎空档' : `最长一段 ${dur(missed.longest)}`}）`,
-            shut.off > 0 ? '◆ 是开机或重启的时刻，它前面那段空白算关机（卡死后重启也算），从最后一次采到算起' :
-            d?.day?.restart_points?.length ? '◆ 是开机或重启的时刻，之前什么时候关的机没有记下来' :
+            missed.total >= 60 && `缺测是电脑没关机、却没采到使用状态的时段（开机后还没采到的那一小会儿也算），不算在用也不算离开（共 ${dur(missed.total)}，${missed.longest <= 120 ? '都是一两分钟以内的零碎空档' : `最长一段 ${dur(missed.longest)}`}）`,
+            d?.day?.restart_points?.length ? '◆ 是开机或重启的时刻，它前面那段空白算关机（卡死后重启也算），从最后一次采到算起' :
               d?.day && d.day.restart_points === null ? '暂时读不到系统关机记录' : ''].filter(Boolean).join(' · ');
           note.hidden = !note.textContent;
           if (S.partial(d?.day, 'spans')) el.querySelectorAll('.vz-legend__vals > span').forEach(n => { if (!n.textContent.includes('至少') && !unnoted.has(n.closest('[data-state]')?.dataset.state)) n.append(' · 至少'); });
