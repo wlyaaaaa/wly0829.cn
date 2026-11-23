@@ -2,7 +2,25 @@ const prefix = '/computer-access/live/v1/';
 const origins = new Set(['https://wly0829.cn', 'https://www.wly0829.cn']);
 const OSS_FALLBACK_URL = 'https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/live/v1/fallback.json';
 const FALLBACK_POLICY = 'policy-10'; // Same generation as the PCConfig exporter and live client.
-const gunzip = bytes => new Response(new Response(bytes).body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+async function transformBytes(stream, bytes) {
+  const writer = stream.writable.getWriter(), reader = stream.readable.getReader();
+  const reading = async () => {
+    const chunks = []; let length = 0;
+    for (;;) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      const chunk = ArrayBuffer.isView(value) ? new Uint8Array(value.buffer, value.byteOffset, value.byteLength) : new Uint8Array(value);
+      chunks.push(chunk); length += chunk.byteLength;
+    }
+    const result = new Uint8Array(length); let offset = 0;
+    for (const chunk of chunks) { result.set(chunk, offset); offset += chunk.byteLength; }
+    return result;
+  };
+  const writing = async () => { await writer.write(bytes); await writer.close(); };
+  const [body] = await Promise.all([reading(), writing()]);
+  return body;
+}
+const gunzip = bytes => transformBytes(new DecompressionStream('gzip'), bytes);
 
 function acceptsGzip(header) {
   const weights = new Map();
@@ -80,13 +98,15 @@ export default async function onRequest({request, env = {}}) {
     else if (packed) headers.set('Content-Encoding', 'gzip');
     else if (!gzipBytes && bytes?.length && gzip && upstream.status === 200 &&
              /^application\/json(?:\s*;|$)/i.test(headers.get('Content-Type') || '')) {
+      let phase = 'constructor';
       try {
-        const stream = new Response(bytes).body.pipeThrough(new CompressionStream('gzip'));
-        body = await new Response(stream).arrayBuffer();
+        const stream = new CompressionStream('gzip');
+        phase = 'stream';
+        body = await transformBytes(stream, bytes);
         headers.set('Content-Encoding', 'gzip');
       } catch {
         // Keep the readable upstream response if local encoding fails.
-        codec = typeof CompressionStream === 'function' ? 'encoder-error' : 'encoder-unavailable';
+        codec = typeof CompressionStream === 'function' ? 'encoder-' + phase + '-error' : 'encoder-unavailable';
       }
     }
     if (!old && !empty && upstream.status === 200) headers.set('X-Live-Compression', headers.has('Content-Encoding') ? 'gzip' : codec);
