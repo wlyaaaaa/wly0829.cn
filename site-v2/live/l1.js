@@ -1186,6 +1186,7 @@
       }
       p.status.hidden = !summary;
       U.html(p.status, scheduled ? U.nowrap(summary) : esc(summary), false);
+      if (scheduled) U.blockNote(cards[id].querySelector('.card__body'), state); // 10 秒拿不到新的：只在这张卡写明下面是几点的旧数
       paintList(p.main, rows, { animate: false });
       fitCard(id);
     };

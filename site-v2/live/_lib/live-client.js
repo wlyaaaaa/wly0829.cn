@@ -204,6 +204,38 @@
   let publicPaused = false, publicationVersion = 0, pausedEntry;
   let connectionSequence = 0;
   const observedConnection = (e, link) => { e.receivedAt = ++connectionSequence; e.link = e.validatedLink = link; };
+  // 等电脑当轮的新数据最多 10 秒（本人 11-23 09:04）：10 秒内拿到就照常显示、不挂提示；公网回的是云端存的那份（X-Live-Source: oss）不算拿到。
+  // 10 秒到了本页主数据（页面第一个订的那份，实况首页是 home）还没有新的，就挂“连不上 · 下面是几点的数据”；浏览器自己断网立刻挂。
+  // 辅助读口（ai-messages、tasks 这类）10 秒拿不到新的，只在它那一块写明下面是几点的旧数，不把整页报成连不上。一读到新的就收。
+  const FRESH_WAIT_MS = 10000;
+  // 连上那一刻：整页所有块马上重取；网站出了新版就整页重新载入，回到原来看的位置（本人 07:52“连上我看公网还不是新的页面”）。
+  const RELOAD_Y = 'wly-live-reload-y';
+  let loadedRelease = null, restoreY = (() => { try { const y = sessionStorage.getItem(RELOAD_Y); sessionStorage.removeItem(RELOAD_Y); return y == null ? null : Number(y); } catch { return null; } })();
+  const releaseId = () => fetch('/release-identity.json' + '?at=' + Date.now(), { cache: 'no-store', credentials: 'omit', signal: AbortSignal.timeout(8000) })
+    .then(r => r.ok ? r.json() : null).then(j => j?.release_id || null).catch(() => null);
+  function reloadPage() {
+    try { sessionStorage.setItem(RELOAD_Y, String(Math.round(globalThis.scrollY || 0))); } catch { /* 存不下就只靠浏览器自己回到原位置 */ }
+    location.reload();
+  }
+  function reconnected() {
+    later(() => refresh(false), 0);
+    Promise.all([loadedRelease, releaseId()]).then(([was, now]) => { if (was && now && was !== now) reloadPage(); });
+  }
+  let mainResource = null;
+  const isMain = e => !mainResource || e.resource === mainResource;
+  const freshArrived = e => { clearTimeout(e.freshWait); e.freshWait = 0; };
+  const awaitFresh = e => { if (!e.freshWait) e.freshWait = later(() => { e.freshWait = 0; staleAfterWait(e); }, FRESH_WAIT_MS); };
+  function staleAfterWait(e) {
+    if (publicPaused || e.stopped || e.token !== device()) return;
+    if (isMain(e)) {
+      observedConnection(e, { state: 'offline', basis: e.missStatus ? 'response' : 'browser', reason: e.missReason || 'unreachable' });
+    } else {
+      if (!e.error) e.error = '暂时读不到';
+      if (e.data !== null && Number.isFinite(Date.parse(e.at))) e.fallbackNote = `这是 ${shortStamp(e.at)} 的旧数，现在读不到新的。`;
+    }
+    settle(e);
+    emit(e);
+  }
   const latestConnection = () => connectionEntries().filter(e => e.receivedAt != null)
     .sort((a, b) => b.receivedAt - a.receivedAt)[0]?.validatedLink;
   const offline = () => !publicPaused && latestConnection()?.state === 'offline';
@@ -420,6 +452,7 @@
   }
   function emit(e, onlyPhase = false) {
     const state = present(e);
+    if (connectionOffline && !state.offline && !publicPaused) reconnected();
     const changed = connectionOffline !== state.offline || state.offline && pageAt !== shownUpTo(); connectionOffline = state.offline; pageAt = shownUpTo();
     document.documentElement?.classList?.toggle('live-offline', offline());
     window.LiveLight?.offline(offline());
@@ -435,6 +468,10 @@
       listener.callbacks.phase?.(state);
     }
     if (changed) for (const other of currentEntries()) if (other !== e && other.listeners.size) emit(other);
+    if (restoreY != null && isMain(e) && e.data !== null) {
+      const y = restoreY; restoreY = null;
+      requestAnimationFrame(() => requestAnimationFrame(() => scrollTo(0, y)));
+    }
     return state;
   }
   function save(e) {
@@ -498,6 +535,11 @@
     const reachable = status >= 400 && status < 500 || /^live_((source|variant|detail)_unavailable|publication_revoked)$/.test(body?.error || '');
     const reason = via || (body?.error === 'owner_read_failed' ? 'owner-read' :
       body?.error === 'preview_upstream_not_listening' || [500, 503].includes(status) && !body?.error?.startsWith('snapshot_') ? 'service' : 'unreachable');
+    if (!body?.link && !reachable && !(e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped')) {
+      e.missReason = reason; e.missStatus = status;
+      if (globalThis.navigator?.onLine !== false) { awaitFresh(e); return; }
+      freshArrived(e); // 浏览器断网时立刻挂；10 秒的等待从重新联网后那一读算起
+    } else freshArrived(e);
     observedConnection(e, body?.link || (reachable
       ? { state: 'online', basis: 'response', since: e.link?.since || clock() }
       : e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped' ? e.validatedLink
@@ -581,9 +623,12 @@
     }, 15000) };
     clearTimeout(f.retry);
     // 本机首页在服务尚未监听时把前几次问询摊开；15 秒离线副本计时照旧。
-    const delays = notListening ? [2000, 2000, 2000, 2000, 6000] : [2000, 4000, 8000];
-    if (f.tries < delays.length) f.retry = later(() => { if (!document.hidden && e.token === device() && e.failure === f) read(e); }, delays[f.tries++]);
-    if (retryCopy && e.source !== 'fallback') { await useFallback(e, f); if (e.failure === f) settle(e); }
+    // 读不到时先隔 2、4 秒再问，之后一直每 10 秒问一次，不越隔越久；页面切到后台时停，切回来马上重读（visibilitychange）。
+    const delays = notListening ? [2000, 2000, 2000, 2000, 6000] : [2000, 4000];
+    const delay = f.tries < delays.length ? delays[f.tries] : 10000;
+    f.tries++;
+    f.retry = later(() => { if (!document.hidden && e.token === device() && e.failure === f) read(e); }, delay);
+    if ((retryCopy || offline()) && e.source !== 'fallback') { await useFallback(e, f); if (e.failure === f) settle(e); }
   }
   function fallbackMetadata(e, at, proof) {
     if (e.withdrawn || e.viewer.kind === 'owner' && e.data !== null || typeof at !== 'string' ||
@@ -619,6 +664,7 @@
     fallbackMetadata(e, file?.at, file?.proof);
   }
   async function useFallback(e, failure) {
+    if (!offline()) return;
     await usePackagedCopy(e);
     if (fixture !== null || publicPaused || e.failure !== failure || e.token !== device() || itemDetail(e)) return;
     if (e.source !== 'fallback' && Number.isFinite(Date.parse(e.at))) {
@@ -629,7 +675,7 @@
   function read(e, isInitial = false, card, retryCopy = false) {
     if (e.pending && e.requestVersion === publicationVersion) return e.pending;
     const version = e.requestVersion = publicationVersion;
-    begin(e);
+    begin(e); awaitFresh(e);
     e.requestedAt = Date.now();
     const request = (async () => {
       let response, body, directLan = false;
@@ -683,17 +729,19 @@
       if (oss) {
         failed(e, 503, null, via || 'unreachable');
         restoreBrowserCopy(e);
-        if (fixture === null && body?.error === 'snapshot_metadata_only') fallbackMetadata(e, body.at, {
+        if (fixture === null && body?.error === 'snapshot_metadata_only' && offline()) fallbackMetadata(e, body.at, {
           policy: response.headers.get('X-Live-Fallback-Policy'), audience: response.headers.get('X-Live-Fallback-Audience')
         });
-        await retryFailure(e, retryCopy); settle(e); return emit(e);
+        await retryFailure(e, retryCopy); if (e.data !== null || offline()) settle(e); return emit(e);
       }
       e.status = response.status; e.error = '';
       if (response.status === 304) {
-        clearFailure(e); e.fallbackNote = '';
+        clearFailure(e); freshArrived(e); e.fallbackNote = '';
         observedConnection(e, e.validatedLink?.basis === 'heartbeat' ? e.validatedLink : { state: 'online', basis: 'response' });
         e.source = fixture === null ? 'net' : 'fixture';
       } else if (response.ok) {
+        freshArrived(e);
+        if (!loadedRelease && fixture === null && isMain(e)) loadedRelease = releaseId();
         const wasFallback = e.source === 'fallback';
         const instance = /^"live-([a-f0-9]{16})-/.exec(response.headers.get('ETag'))?.[1];
         const viewer = body?.viewer;
@@ -784,6 +832,7 @@
       return { stop() { stopped = true; subscription?.stop(); } };
     }
     const e = entry(resource, query), listener = { callbacks, version: undefined, entry: e };
+    mainResource ||= resource;
     e.stopped = false;
     e.listeners.add(listener);
     opened.first(e);
@@ -921,7 +970,9 @@
     } catch { /* 原请求可能已经写入，须按同一提交编号核对。 */ }
     return null;
   }
-  window.Live = { watch, refresh, open, paired, offline, readRequest, automationSetting, upTo: shownUpTo, stamp, returningHome,
+  // 浏览器自己断网时马上重读一次，立刻挂“连不上”（联网时的重读在上面 online 那一行）。
+  globalThis.addEventListener?.('offline', () => { if (!publicPaused) refresh(false); });
+  window.Live = { reload: reloadPage, watch, refresh, open, paired, offline, readRequest, automationSetting, upTo: shownUpTo, stamp, returningHome,
     get, afterReady, markOpened: opened.card,
     copy(item, intent = 'ask') {
       if (intent === 'stop' && /^task-/.test(item.id)) {
