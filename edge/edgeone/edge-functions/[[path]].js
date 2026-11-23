@@ -2,7 +2,7 @@ const prefix = '/computer-access/live/v1/';
 const origins = new Set(['https://wly0829.cn', 'https://www.wly0829.cn']);
 const OSS_FALLBACK_URL = 'https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/live/v1/fallback.json';
 const FALLBACK_POLICY = 'policy-10'; // Same generation as the PCConfig exporter and live client.
-async function cloudSnapshot() {
+async function cloudSnapshot(resource) {
   // The fixed OSS address cannot prove that its audience is still current.
   const response = await fetch(OSS_FALLBACK_URL, {cache: 'no-store', signal: AbortSignal.timeout(5000)});
   if (!response.ok) throw Error('snapshot');
@@ -10,7 +10,9 @@ async function cloudSnapshot() {
   if (value?.metadata_only !== true || proof?.policy !== FALLBACK_POLICY ||
       typeof proof.audience !== 'string' || !/^[a-f0-9]{64}$/.test(proof.audience) ||
       typeof value.at !== 'string' || !Number.isFinite(Date.parse(value.at))) throw Error('snapshot');
-  return {at: new Date(value.at).toISOString(), audience: proof.audience};
+  const observed = value.resources?.[resource]?.at;
+  const at = typeof observed === 'string' && Number.isFinite(Date.parse(observed)) ? new Date(observed).toISOString() : null;
+  return {at, audience: proof.audience};
 }
 export default async function onRequest({request, env = {}}) {
   const url = new URL(request.url), old = url.pathname === '/computer-access/state';
@@ -25,7 +27,7 @@ export default async function onRequest({request, env = {}}) {
   if (!old && !url.pathname.startsWith(prefix)) return fail('not_found', '没有这个接口', 404);
   if (request.method === 'OPTIONS') return new Response(null, {status: 204, headers});
   if (!['GET', 'HEAD'].includes(request.method)) return fail('method', '只接受读取', 405);
-  const controller = new AbortController(), timer = setTimeout(() => controller.abort(), old ? 6000 : 5000);
+  const controller = new AbortController(), timer = setTimeout(() => controller.abort(), old ? 6000 : 10000);
   let connection = 'unreachable';
   try {
     const query = old ? new URLSearchParams([...url.searchParams].filter(([k,v]) => k === 'view' && v === 'cockpit' || k === 'refresh' && v === '1')) : url.searchParams;
@@ -49,7 +51,12 @@ export default async function onRequest({request, env = {}}) {
   finally { clearTimeout(timer); }
   headers.set('X-Live-Connection', connection);
   try {
-    const {at, audience} = await cloudSnapshot();
+    const query = new URLSearchParams(url.searchParams);
+    query.delete('refresh');
+    query.delete('opened');
+    const variant = String(query);
+    const resource = url.pathname.slice(prefix.length) + (variant ? '?' + variant : '');
+    const {at, audience} = await cloudSnapshot(resource);
     headers.set('X-Live-Source', 'oss');
     headers.set('X-Live-Fallback-Policy', FALLBACK_POLICY);
     headers.set('X-Live-Fallback-Audience', audience);
