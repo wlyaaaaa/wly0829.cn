@@ -21,7 +21,7 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/531e0a6e71c56084529cf5d817693615cef489a846cbfb148653aea81328c48c/%E5%85%AC%E7%94%A8/fonts/ui-80e213c96e4788d5.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/026a30567ee5294ef4e0c6924b249ac00f7c74233438fb9ee6ae71c140349ec4/%E5%85%AC%E7%94%A8/fonts/article-ac16c19127303b63.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/33263df680a275a38b2dedc37232a6b3f8072e0f8129547a5977a1d1e6c4e3d0/%E5%85%AC%E7%94%A8/fonts/article-4078c1d034eb7a3a.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
 <body>
@@ -46,18 +46,21 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E488" data-rule-page="topic-context-sources">
+<main class="rules-page" data-rule-release="E490" data-rule-page="topic-context-sources">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="事实来源与任务上下文">事实来源与任务上下文</h1></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#事实找谁"><span class="toc-number">01</span><span class="toc-label">事实找谁</span></a></li>
 <li class="toc-level-1"><a href="#冻结的项目"><span class="toc-number">02</span><span class="toc-label">冻结的项目</span></a></li>
-<li class="toc-level-1"><a href="#三档维护"><span class="toc-number">03</span><span class="toc-label">日用、偶用、存档三档</span></a></li>
+<li class="toc-level-1"><a href="#三档维护"><span class="toc-number">03</span><span class="toc-label">三档维护</span></a></li>
 <li class="toc-level-1"><a href="#长任务接续"><span class="toc-number">04</span><span class="toc-label">长任务接续</span></a></li>
-<li class="toc-level-2"><a href="#碰到项目和压缩后先读哪份"><span class="toc-label">先读哪份文件</span></a></li>
-<li class="toc-level-2"><a href="#压缩后的后台复核"><span class="toc-label">上下文压缩后的复核</span></a></li>
+<li class="toc-level-2"><a href="#碰到项目和压缩后先读哪份"><span class="toc-label">碰到项目和压缩后先读哪份</span></a></li>
+<li class="toc-level-2"><a href="#压缩前后"><span class="toc-label">压缩前后</span></a></li>
 <li class="toc-level-2"><a href="#一样东西只存一处"><span class="toc-label">一样东西只存一处</span></a></li>
 <li class="toc-level-2"><a href="#写之前先查"><span class="toc-label">写之前先查</span></a></li>
-<li class="toc-level-2"><a href="#共享经验的落点"><span class="toc-label">经验和规矩记到哪</span></a></li></ol></nav>
+<li class="toc-level-2"><a href="#共享经验的落点"><span class="toc-label">共享经验的落点</span></a></li>
+<li class="toc-level-2"><a href="#怎么写规矩本人定的原文原在约法"><span class="toc-label">怎么写规矩（本人定的原文，原在约法）。</span></a></li>
+<li class="toc-level-2"><a href="#写进哪一层"><span class="toc-label">写进哪一层：</span></a></li>
+<li class="toc-level-2"><a href="#不错误抽象"><span class="toc-label">不错误抽象：</span></a></li></ol></nav>
     <article class="rules-body" id="rules-body">
 <p class="doc-owner">owner: <code>E:\.agents</code></p>
 <p>这里说清事实找谁、哪些项目冻结、项目分几档维护，以及长任务怎么接续。授权、施工和执行结果由各自专题负责。</p>
@@ -176,16 +179,15 @@
 </tbody>
 </table>
 <h2 id="长任务接续">长任务接续</h2>
-<p>开对话、压缩和恢复时不注入决定短表或要求表；压缩和恢复时只按下面带回本人话摘要和之后的新话。AI 读的是全局规则和当前项目的规则。原生子代理跳过 SessionStart 时从派单和原任务状态接续，不额外读原话。不改全局窗口、不强制换对话。</p>
+<p>开对话、压缩和恢复时不注入决定短表、要求表或以前的原话，只按下面递工程和《他要什么》的位置。AI 读的是全局规则和当前项目的规则。原生子代理跳过 SessionStart 时从派单和原任务状态接续，不额外读原话。不改全局窗口、不强制换对话。</p>
 <p>短任务单写本人要的产出、进度（包括已完成与未结）、下一步和证据位置；更正、已定事实和授权更新到原处。交接、设计和施工文档在原处改成现状，不另建“本人原话”稿、不贴聊天原文。摘要和计划不产生新需求；经验、决定和必要事实按<a href="#%E5%85%B1%E4%BA%AB%E7%BB%8F%E9%AA%8C%E7%9A%84%E8%90%BD%E7%82%B9">共享经验的落点</a>归位。简单任务不机械建文档，不建全景个人库或新的记忆服务，不记录隐藏推理。</p>
 <p>README 只给 AI 和维护使用，简短列出现行入口，不再另写一份给本人看的长文档。给本人看的说明和指南统一由网站 <code>wly0829.cn</code> 从各自唯一来源生成。急救步骤不上网站：网站不再单设急救页（本人 2026-11-13 定：他从没看过，不要了），急救步骤只留 PCConfig 的来源给 AI 读，加上 F 盘救急 U 盘和 G/H 备份盘根目录的短说明。本人日常只看实况，见<a href="topic-capabilities-runtime.html#%E6%B1%87%E6%8A%A5%E7%BD%91%E7%AB%99%E5%92%8C%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E4%B8%9C%E8%A5%BF">能力与运行方式</a>“本人只看实况”。项目的 AGENTS 只写这个项目真正不同的地方；实现或入口变了、影响到它写的承诺时同步更新。网站取材和去副本按下一节执行。</p>
 <p>第三方 CLI 长任务由 AICLI 和具体项目负责接续，不再交给个人技能；到自然边界保存检查点，恢复时先接当前产出和未结事项，再按下一步需要读取项目规则、Git 状态和源码。</p>
 <p>通过电脑 MCP 操作项目，以及个人项目中需要电脑智能体执行的后续事项，归入电脑端对应项目现有需求、待办或接续入口，由电脑 Codex／Claude 在相应操作时承接并提醒。无论本人从手机还是通过 MCP 发起，包括媒体库按需更新，都不在 ChatGPT 新增任务，也不另建 ChatGPT 定时提醒来代替项目接续；本人另行明确指定提醒方式时按新指示。记录后续条件不等于立即执行，也不等于获准向另一个现有会话发送任务。</p>
 <h3 id="碰到项目和压缩后先读哪份">碰到项目和压缩后先读哪份</h3>
 <p>约法和导航在各家入口里，压缩后原样还在，不另行重灌、不要求重读（Antigravity 压缩后是否原样还在见<a href="topic-antigravity-adapter.html#%E5%85%A5%E5%8F%A3%E5%92%8C%E8%A7%84%E5%88%99%E5%8A%A0%E8%BD%BD">Antigravity 适配</a>）。对话中途读过的专题、项目规则和攻略，以及 Codex 的技能正文，压缩后不保证还在；漏读项目做法的根子多在没认出这次在做哪个项目，不在压缩本身。所以程序按 AI 实际碰到的东西认项目：读写了登记项目目录里的文件、用了登记给该项目的技能，以及本人消息里提到项目名。这几样对所有项目一样适用；不为单个项目写专门的认法（比如按某项目的联系人名单认），这些痕迹之外的由 AI 自己判断在做哪个项目。同一对话第一次碰到某项目时给 AI 一行：项目规则位置和该项目规则开头“做什么之前先读哪份”的短表；每次压缩后再给一行：这次对话碰过的项目（同样带短表）、用过的技能、读过的专题，有任务状态文件时再给它的位置；这一行由 Claude、Codex 根会话的钩子给，Antigravity 没有压缩事件，做不到（见<a href="topic-antigravity-adapter.html#%E7%BC%BA%E5%8F%A3">Antigravity 适配</a>）。只给位置不给全文，只提醒不拦，同一项目同一对话不逐条重复。AI 在下一步用到哪份时重读哪份。短表由各项目在自己规则开头维护，只写位置，做法仍以所指文件为准；没出过漏读问题的项目不必补。</p>
-<h3 id="压缩后的后台复核">压缩后的后台复核</h3>
-<p>Claude、Codex 根会话压缩或恢复时只带最新已核的“本人话摘要”和摘要之后本人新说的原话（最多最近 15 条）。首次压缩不带原话，主持照定稿和交接继续；第一份摘要做好后提醒。以后摘要未到就沿上一版和定稿继续，之后本人新说的话优先，迟到的摘要不覆盖。每轮的本人消息清单和连发防漏答照常。根会话压缩前更新已有的短任务状态，没有入口时用本任务的 work/task-state.md。</p>
-<p>钩子按事件自动启动 Sol 一起做摘要和复核。本人原话只取自本对话，结果只回本对话；这是<a href="topic-privacy-data.html#%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99%E7%9A%84%E9%94%81%E5%92%8C%E8%A7%A3%E9%94%81">不受资料锁限制的后台自动任务</a>，资料锁着也照常做。做第一份摘要前先补齐当前对话在第一次压缩前的全部本人消息，可按每批 40 条分批核；补不全就写明从哪条开始覆盖，不说已核全部。以后只读上一份摘要后的新增本人消息、相关问答和产物，按事项更新。没受影响的条目原样保留，只有受影响的才改、新增或标作废。摘要分“本人定的”“本人问了还没答的”“AI 的理解”“已作废”，每条带时间和源消息编号。决定只收本人明说或选过的内容，保留条件和范围；沉默、举例和猜想不算决定，提问仍写成问句。AI 的理解标“未经本人确认”。复核只找交接落后于最新说法、漏做或违反要求（含漏答本人问过的事）、没做完说成完成或说过了头；有证据且会改变下一步或需向本人纠错的，合成一条提醒。空结果和失败只记后台，没有新本人消息不跑。Antigravity 没有压缩事件，每累计 15 条新本人消息走同一套，更新后在下次模型调用前给一行位置和变化。</p>
+<h3 id="压缩前后">压缩前后</h3>
+<p>三家根会话开对话、恢复和压缩以后，钩子只递位置：这个对话在哪个登记过的工程、它的《他要什么》第几版在哪（工程的《他要什么》由翻译官照本人的话写，见模型清单“读懂人的话”一行）、工程卡和任务进度在哪；不再带本人话摘要和以前的原话，也不把原话当依据。压缩后、动手做这个工程的事之前先读《他要什么》，再照定稿、交接和任务进度接着做；之后本人新说的话优先。每轮的本人消息清单和连发防漏答照常。根会话压缩前更新已有的短任务状态，没有入口时用本任务的 work/task-state.md（这份给接手的人读；要钩子带回它的位置，用已绑定的入口或 task-state.json）。Antigravity 没有压缩事件，每次叫模型前都带这一行位置。</p>
 <p>纯技术工作不依赖资料解锁（约法 L18）。资料锁着或未知、又到了压缩预警时，根会话若已确认整个现有会话确为纯技术，可用技术范围登记记录当前原话边界及确为技术资料的证据位置，命令见该运维文档。登记由 AI 做，不请本人另行批准；新增或改写的真人消息不继承旧判断。旧历史混有私人内容或范围不明时不登记整段技术，仍走原资料入口，不先读私人历史来补这个判断。该登记不解锁资料、不放行私人库；未读取的部分继续列为未覆盖。</p>
 <p>重大动作仍按原把关规则。</p>
 <p>程序入口、暂停开关和各家实际支持的事件见上下文 Hook 运维，Antigravity 的见<a href="topic-antigravity-adapter.html#%E9%92%A9%E5%AD%90">Antigravity 适配</a>。纯模型主动换窗与原生压缩分别验收，不能从一种事件的成功推定另一种也已接通。</p>
@@ -195,7 +197,7 @@
 <h3 id="写之前先查">写之前先查</h3>
 <p>写本人的事前先用 <code>pwsh -NoProfile -File E:\.agents\tools\Find-ExistingRecord.ps1 -Term &lt;词,词&gt;</code> 查已有记录，查法和结果处理见命令帮助及输出。</p>
 <h3 id="共享经验的落点">共享经验的落点</h3>
-<p>Claude、Codex 的自动记忆都已关闭，Antigravity 的还没核实（见<a href="topic-antigravity-adapter.html#%E6%8A%80%E8%83%BDmcp-%E5%92%8C%E8%AE%B0%E5%BF%86">Antigravity 适配</a>）；不往各自的记忆区写内容，关闭配置见各自适配专题。规则写现在怎么做，本人定的句子留半句为什么；改过几次、以前怎么定的放 Git 历史。主持平时只用当前对话、本人话摘要和相应定稿；只有发布批准（由程序核对出处）、核实一句话是不是本人说的、或确需原样发出去时，才按源消息编号取原话。本人明确要核一句旧话又没有编号，先定位它出自的对话或证据，再按编号核实。当前对话内按需要看当时在回答什么、后来有没有改口、这句是要求还是判断；本人亲历和自己的情况以本人为准，外部事实和原因靠原始材料和实际结果核实。查不到不等于本人没说过，看不到前后文就只当线索。AI 转述只是 AI 的理解；照原话做错了，仍算理解错。</p>
+<p>Claude、Codex 的自动记忆都已关闭，Antigravity 的还没核实（见<a href="topic-antigravity-adapter.html#%E6%8A%80%E8%83%BDmcp-%E5%92%8C%E8%AE%B0%E5%BF%86">Antigravity 适配</a>）；不往各自的记忆区写内容，关闭配置见各自适配专题。规则写现在怎么做，本人定的句子留半句为什么；改过几次、以前怎么定的放 Git 历史。主持平时只用当前对话、工程的《他要什么》和相应定稿；只有发布批准（由程序核对出处）、核实一句话是不是本人说的、或确需原样发出去时，才按源消息编号取原话。本人明确要核一句旧话又没有编号，先定位它出自的对话或证据，再按编号核实。当前对话内按需要看当时在回答什么、后来有没有改口、这句是要求还是判断；本人亲历和自己的情况以本人为准，外部事实和原因靠原始材料和实际结果核实。查不到不等于本人没说过，看不到前后文就只当线索。AI 转述只是 AI 的理解；照原话做错了，仍算理解错。</p>
 <p><strong>原话。</strong> 三家宿主只将核实为本人输入的正文原样存档；钩子注入、程序派单与自动续作不写入本人原话目录。旧非本人记录移到旁边保留。即时存档和后台补漏沿现有自动任务处理，不受资料锁限制；读取仍受资料访问规则约束。原话档案不进默认搜索，跨对话仅按编号取。位置、格式和补存见运维说明。</p>
 <p>跨任务查旧资料，按现有项目的定稿、办事记录和证据位置接续；任务单不贴旧原话；本人这次说的那句照派活技能给原文。只存档的会话留给原会话接续和按编号核实。</p>
 <p><strong>要不要记，收尾时再想，大部分不用记。</strong> 和开场那一页“被我纠正、质疑……”那段一致：</p>
@@ -203,7 +205,7 @@
 <li>只管这一次的：提问、好奇、本次安排和选项回答、当场改了就完的纠正、“这次先别……”、对眼前这一张图、一个设计、一个视频的评价。留在对话和任务状态里，不写任何地方；这件东西换个对话还要接着做、到时候找不到这句话的，记到它自己的文件里。</li>
 <li>下次不看规矩也不会再错的：假如规则里没有这一句，AI 在这件事上也不会做错（常识，或者现有规则已经能推出来），那它只是本人当时提醒注意，不记；反复出错的不算这一类，按下面“出了错修根因”办。</li>
 <li>以后还会用到、现有做法又没覆盖的：禁令、长期授权、长期要求和偏好。记到做那件事时读得到的地方（见下面“写进哪一层”），提交说明写源消息 UUID，回复里一句话说明写在哪。</li>
-<li>有期限的写明“至 YYYY-MM-DD”，到期由每周治理删掉；跟型号代际有关的写进模型清单，随换代更新。</li>
+<li>有期限的写明“至 YYYY-MM-DD”，到期由每周规矩复核删掉；跟型号代际有关的写进模型清单，随换代更新。</li>
 </ul>
 <p><strong>什么能删。</strong> 重复、过时或 AI 自己加的做法可以自主删改；本人仍然要的结果、禁令和授权范围，不因挪到专题、技能或项目就变成 AI 可以取消的；本人定过的纯技术做法，前提变了或有明显更好的，照约法直接改并说清改了什么；涉及取舍、花钱、删唯一数据的，带着建议请他定。施工碰到和约法打架的具体做法，按约法顺手改掉，说清改了哪句。</p>
 <p id="怎么写规矩本人定的原文原在约法"><strong>怎么写规矩（本人定的原文，原在约法）。</strong></p>
@@ -262,12 +264,12 @@
 </tr>
 </tbody>
 </table>
-<p>两基座周治理长期每周运行，做什么以自动任务定义为准；现役定义为 Codex 自动化 <code>github</code> 的 <code>E:\Data\AppData\Codex\automations\github\automation.toml</code>，定位见 <code>E:\PCConfig\registries\task_purpose_catalog.json</code>。每周任务不再把原话写成规则；不改讲 AI 怎么做事的句子，只修坏的、清到期的，看到毛病写进当周体检结果。反复出现而根因没修掉的问题继续跟进，修程序或具体做法。周治理按任务定义跑时是后台自动任务，资料锁着、到期或状态不明都照常取用私人内容；本人在对话里让 AI 跑一轮时仍按资料锁办，见<a href="topic-privacy-data.html#%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99%E7%9A%84%E9%94%81%E5%92%8C%E8%A7%A3%E9%94%81">《个人资料与数据处理》“公开内容和后台自动任务”</a>。整理时合并同类并保留原话语境，不把 AI 的猜测写成本人决定。网站不单设每周复核，更新按<a href="topic-capabilities-runtime.html#%E6%B1%87%E6%8A%A5%E7%BD%91%E7%AB%99%E5%92%8C%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E4%B8%9C%E8%A5%BF">能力与运行方式“汇报、网站和自动运行的东西”</a>。</p>
+<p>每周规矩复核是实况自动任务里的一类，每周跑一次，做什么以派活程序里这一类的提示为准（定位见 <code>E:\PCConfig\registries\task_purpose_catalog.json</code>）：查这周改过的、给 AI 看的字（约法、入口、专题、技能、项目规则、运行手册、钩子里给模型看的话）有没有和别处说反，顺带跑断链、重复内容、写死的易变数字和型号、过期的“至某日”这些零碎检查。它不读原话、不把原话写成规则；没跟上新说法的旧句自己改（改专题里讲 AI 怎么做事的句子，照约法先派没看过的子代理对全文查打不打架），约法、入口结尾那段、三个受保护专题和禁令、授权范围不改，登“要你选”，题干写两句原文和出处。实况上的说法对不对由“实况每周对一遍”查。反复出现而根因没修掉的问题交自动修理。规矩复核按任务定义跑时是后台自动任务，资料锁着、到期或状态不明都照常取用私人内容；本人在对话里让 AI 跑一轮时仍按资料锁办，见<a href="topic-privacy-data.html#%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99%E7%9A%84%E9%94%81%E5%92%8C%E8%A7%A3%E9%94%81">《个人资料与数据处理》“公开内容和后台自动任务”</a>。不把 AI 的猜测写成本人决定。网站不单设每周复核，更新按<a href="topic-capabilities-runtime.html#%E6%B1%87%E6%8A%A5%E7%BD%91%E7%AB%99%E5%92%8C%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E4%B8%9C%E8%A5%BF">能力与运行方式“汇报、网站和自动运行的东西”</a>。</p>
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E488</dd></div>
-        <div><dt>发布</dt><dd>2026-11-23 10:24 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E490</dd></div>
+        <div><dt>发布</dt><dd>2026-11-23 16:55 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -281,7 +283,7 @@
 <li><a href="topic-claude-adapter.html">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 7,312 字<br>事实来源与任务上下文 7,368 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 7,303 字<br>事实来源与任务上下文 7,205 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/agents/规矩落地.html#规矩落地-02">AI 百工谱 · 规矩落地</a></dd></div>
       </dl>
     </aside>

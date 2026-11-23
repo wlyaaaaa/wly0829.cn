@@ -21,7 +21,7 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/531e0a6e71c56084529cf5d817693615cef489a846cbfb148653aea81328c48c/%E5%85%AC%E7%94%A8/fonts/ui-80e213c96e4788d5.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/026a30567ee5294ef4e0c6924b249ac00f7c74233438fb9ee6ae71c140349ec4/%E5%85%AC%E7%94%A8/fonts/article-ac16c19127303b63.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/33263df680a275a38b2dedc37232a6b3f8072e0f8129547a5977a1d1e6c4e3d0/%E5%85%AC%E7%94%A8/fonts/article-4078c1d034eb7a3a.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
 <body>
@@ -46,7 +46,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E488" data-rule-page="topic-codex-adapter">
+<main class="rules-page" data-rule-release="E490" data-rule-page="topic-codex-adapter">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="codex-适配">Codex 适配</h1></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#入口和新消息"><span class="toc-number">01</span><span class="toc-label">入口和新消息</span></a></li>
@@ -64,8 +64,8 @@
 <h2 id="入口和新消息">入口和新消息</h2>
 <p><strong>Claude 登录与网页（本人禁令，源消息 <code>01a19bbb-5824-71d2-bbc1-eca9aebe1c36</code>）：</strong> 除非本人对相应动作单独授权，Codex 在任何时候都不得尝试登录 Claude，也不得打开、拉取或读取 Claude 网页。自行操作、使用已登录会话、调用浏览器或 OpenCLI、委派子代理或通过其他工具代为操作，都受同一禁令约束。提到 Opus、要求准备复核稿或要求复核，本身不授权登录或访问网页。</p>
 <p>Codex home 里的 <code>AGENTS.md</code> 由发布器写入活动版本的完整约法和导航，加载入口时就已在上下文中；专题按文中当版的绝对路径读取。Hook 定位 Codex home 时优先用 <code>CODEX_HOME</code>，未设置时用 <code>~/.codex</code>。开场 Hook 只核对入口和活动版本，一致只给短回执，不一致按提醒先读本版根规则，不再注入约法全文。真实的新消息和自动续作、上下文压缩、工具消息分开看；Hook 会把个人资料状态带进来，Hook 缺失或投递不明时资料状态按不明处理；不明或锁着时怎么办按<a href="topic-privacy-data.html#%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99%E7%9A%84%E9%94%81%E5%92%8C%E8%A7%A3%E9%94%81">个人资料的锁和解锁</a>。调用 MCP 不改变本机 Codex 原来的任务入口。新消息、Hook、子代理的真实身份和执行结果从本机现役入口核实，不从标题、模型自述或别的宿主遗留的环境借身份。</p>
-<p>SessionStart 的 startup/compact/resume 按<a href="topic-context-sources.html#%E9%95%BF%E4%BB%BB%E5%8A%A1%E6%8E%A5%E7%BB%AD">长任务接续</a>处理；compact/resume 按<a href="topic-context-sources.html#%E5%8E%8B%E7%BC%A9%E5%90%8E%E7%9A%84%E5%90%8E%E5%8F%B0%E5%A4%8D%E6%A0%B8">后台复核规则</a>接摘要和新增原话，每轮本人消息清单照常。原生子代理压缩跳过 SessionStart 时从原任务状态接续。</p>
-<p>根会话压缩后的本人话摘要和只读复核按<a href="topic-context-sources.html#%E5%8E%8B%E7%BC%A9%E5%90%8E%E7%9A%84%E5%90%8E%E5%8F%B0%E5%A4%8D%E6%A0%B8">共用复核规则</a>执行。此项已授权自动任务使用共用 GPT 后台包装器，并保留真实 Codex 父会话号，不扩大其他任务的调用范围。程序换窗与原生压缩分开核验，入口见运维说明。</p>
+<p>SessionStart 的 startup/compact/resume 按<a href="topic-context-sources.html#%E9%95%BF%E4%BB%BB%E5%8A%A1%E6%8E%A5%E7%BB%AD">长任务接续</a>处理；三种都照<a href="topic-context-sources.html#%E5%8E%8B%E7%BC%A9%E5%89%8D%E5%90%8E">压缩前后</a>递工程和《他要什么》的位置，不再接旧摘要和原话；每轮本人消息清单照常。原生子代理压缩跳过 SessionStart 时从原任务状态接续。</p>
+<p>程序换窗与原生压缩分开核验，入口见运维说明。</p>
 <p>Codex 自动记忆的关闭配置是 <code>memories=false</code>、<code>generate_memories=false</code>、<code>use_memories=false</code>；需要留下的内容统一按<a href="topic-context-sources.html#%E5%85%B1%E4%BA%AB%E7%BB%8F%E9%AA%8C%E7%9A%84%E8%90%BD%E7%82%B9">共享经验的落点</a>处理，Codex 工具的已核实教训归本专题。</p>
 <p><strong>浏览器</strong>：只读公开搜索、读取和不操作页面的只读站内搜索直接做。Codex 桌面根和原生子代理的网页操作、渲染、登录及截图，默认经共用包装器派 GPT 用本人 Chrome。具体派发、通道、本地预览例外和 GPT 额度用完等故障的退路先读 <code>browser-control-continuity</code> 技能；这是可由本人当场改的默认。</p>
 <h2 id="codex-主持设计时怎样请本人定">Codex 主持设计时怎样请本人定</h2>
@@ -81,7 +81,7 @@
 <p>在 <code>functions.exec</code> 内解析返回的 JSON，只输出本次所需字段或消息，并对输出设总字数上限；更多内容按游标或明确选择续取，不直接 <code>text</code> 整个结果或把原始大数组回灌上下文。调用参数以当前工具能力为准；必须完整阅读的规则或原文仍要分段取齐。</p>
 <h2 id="自动任务和收尾">自动任务和收尾</h2>
 <ul>
-<li>Codex 自动任务每跑一轮，同样用结论回执命令把一句人话结论写进实况，见<a href="topic-capabilities-runtime.html#%E6%B1%87%E6%8A%A5%E7%BD%91%E7%AB%99%E5%92%8C%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E4%B8%9C%E8%A5%BF">能力与运行方式</a>“自动任务的结论写进实况”。</li>
+<li>Codex 自带的自动化只用来叫回当前对话；长期按时跑、或以后某天要做的事，登记成实况“自动任务”或“AI 约好的事”（见 cockpit 技能“往实况里加东西”）。已有的 Codex 自动任务每跑一轮，同样用结论回执命令把一句人话结论写进实况，见<a href="topic-capabilities-runtime.html#%E6%B1%87%E6%8A%A5%E7%BD%91%E7%AB%99%E5%92%8C%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E4%B8%9C%E8%A5%BF">能力与运行方式</a>“自动任务的结论写进实况”。</li>
 <li>Codex 没有结构化的收尾工具：本轮有要本人定或做的事时，最后一条回复的最后一行写“【等你】&lt;一句人话&gt;”；钩子只递问题和答复事实，由 AI 判断并登记、更新或关闭实况原事项；没有等本人的事就不写这一行。</li>
 </ul>
 <h2 id="无限制授权">无限制授权</h2>
@@ -113,14 +113,14 @@
 <p>上例的 <code>-ContinueOnQuota</code> 只在同额度根会话仍能正常调用时启用；根会话也调不动时才是真的用完，按<a href="topic-claude-adapter.html">Claude 适配</a>“模型调不动时按原因处理”换家并告诉本人。怎么派一单见 <code>dispatch-work</code> 技能，全部字段和参数见派发说明；修改仓库用任务专用工作树，只读用 <code>-WorkDir '&lt;已有目录&gt;'</code>。</p>
 <h2 id="新消息里的状态">新消息里的状态</h2>
 <p>Hook 每条真实新消息和子代理启动带来共享资料、本人接管及可核实的型号和档位；未知如实写，子代理启动不借父记录。根状态未知用 <code>StatusPersonalEnvironment</code> 回读；个人资料的判断、解锁和缺口交回按<a href="topic-privacy-data.html#%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99%E7%9A%84%E9%94%81%E5%92%8C%E8%A7%A3%E9%94%81">资料锁</a>与<a href="topic-execution-coordination.html#%E6%B4%BE%E5%AD%90%E4%BB%A3%E7%90%86%E7%9A%84%E5%8E%9F%E5%88%99">派子代理的原则</a>“根核验规则和判断资料需求”一条，纯技术工作继续。</p>
-<p>Stop 与 Claude 共用版本、明确 Report 目标集合、验收和资料缺口检查；首次拦截按真实原因补解锁或验收，同轮第二次只提示。边界核验失败只放行受影响检查并留诊断码。Hook 不按任务自行决定模型职责、档位或是否委派，不加派发许可、不按关键词弹验证；结构化派发参数中的已登记前代和兼容档位，由 Hook 按统一模型登记规范化并保留原请求。原生旧代理确实无法换型续作时，返回 <code>model_migration_required</code>，由根按所有入口一起换代接续，不绕宿主限制。具体接线见状态钩子。</p>
+<p>收工（Stop）和 Claude 一样只查 3 样：资料锁拦住了还没处理、共用包装器派的 GPT 子任务在跑却没挂 Watch、给本人的回复主要是英文；命中的合成一次拦下，同轮第二次只提示；正常收工记实况、按通知条件推手机。本人按停这一轮时，<code>Interrupt</code> 钩子撤掉本轮还在等的审批提醒，免得停了还收到过时的审批。边界核验失败只放行受影响检查并留诊断码。Hook 不按任务自行决定模型职责、档位或是否委派，不加派发许可、不按关键词弹验证；结构化派发参数中的已登记前代和兼容档位，由 Hook 按统一模型登记规范化并保留原请求。原生旧代理确实无法换型续作时，返回 <code>model_migration_required</code>，由根按所有入口一起换代接续，不绕宿主限制。具体接线见状态钩子。</p>
 <h2 id="官方升级">官方升级</h2>
 <p>Codex 的版本号、构建号、带版本的安装目录和更新批次都不能当可用性门槛。密码中心沿本人 Windows 账户的真实祖先链识别登记包族的 Codex 桌面应用本体，日常调用自动选择 <code>codex-root</code>；从 Claude 桌面启动的 Codex 子进程按其 Claude 祖先识别为 <code>claude-root</code>，不按模型名称改换主体。官方更新后仍按同一账户、包族和桌面本体核验，无需运行时密钥续绑。受管 Hook 的内容哈希只保护 Hook 自身；缺了可选的宿主信息，只让依赖它的那项能力变成不明或不可用，普通项目照常。</p>
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E488</dd></div>
-        <div><dt>发布</dt><dd>2026-11-23 10:24 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E490</dd></div>
+        <div><dt>发布</dt><dd>2026-11-23 16:55 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -134,7 +134,7 @@
 <li><a href="topic-claude-adapter.html">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html" aria-current="page">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 7,312 字<br>Codex 适配 3,799 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 7,303 字<br>Codex 适配 3,872 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/agents/规矩落地.html#规矩落地-02">AI 百工谱 · 规矩落地</a></dd></div>
       </dl>
     </aside>

@@ -21,7 +21,7 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/531e0a6e71c56084529cf5d817693615cef489a846cbfb148653aea81328c48c/%E5%85%AC%E7%94%A8/fonts/ui-80e213c96e4788d5.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/026a30567ee5294ef4e0c6924b249ac00f7c74233438fb9ee6ae71c140349ec4/%E5%85%AC%E7%94%A8/fonts/article-ac16c19127303b63.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/33263df680a275a38b2dedc37232a6b3f8072e0f8129547a5977a1d1e6c4e3d0/%E5%85%AC%E7%94%A8/fonts/article-4078c1d034eb7a3a.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
 <body>
@@ -46,7 +46,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E488" data-rule-page="topic-antigravity-adapter">
+<main class="rules-page" data-rule-release="E490" data-rule-page="topic-antigravity-adapter">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="antigravity-适配">Antigravity 适配</h1></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#入口和规则加载"><span class="toc-number">01</span><span class="toc-label">入口和规则加载</span></a></li>
@@ -107,17 +107,17 @@
 <tbody>
 <tr>
 <td><code>SessionStart</code></td>
-<td>核对规则版本：一致给一行回执，不一致给活动版的路径</td>
-<td>程序已做，装上后生效</td>
+<td>核对规则版本：一致给一行回执，不一致给活动版的路径；桌面根对话提醒标“能／不能给外人看”；递工程和《他要什么》的位置</td>
+<td>程序已做，装上后生效；根对话身份稍晚才认出时，由叫模型前补上提醒</td>
 </tr>
 <tr>
 <td><code>PreInvocation</code></td>
-<td>核实后存档本人原话、递本轮本人消息清单；按<a href="topic-context-sources.html#%E5%8E%8B%E7%BC%A9%E5%90%8E%E7%9A%84%E5%90%8E%E5%8F%B0%E5%A4%8D%E6%A0%B8">后台复核规则</a>更新摘要，下次调用前提示位置和变化</td>
-<td>来源从本地桌面对话数据库核对，钩子输入自身不证明来源；档位仍拿不到，项目指路还没接。北京时间、资料状态和型号照常</td>
+<td>核实后存档本人原话、递本轮本人消息清单；每次都带工程和《他要什么》的位置（没有压缩事件，靠这一句兜住压缩，见<a href="topic-context-sources.html#%E5%8E%8B%E7%BC%A9%E5%89%8D%E5%90%8E">压缩前后</a>）</td>
+<td>来源从本地桌面对话数据库核对，钩子输入自身不证明来源；档位仍拿不到。北京时间、资料状态和型号照常</td>
 </tr>
 <tr>
 <td><code>PreToolUse</code></td>
-<td>自带生图只给 GPT 额度真用完的本单后备；要登录的网页提醒走包装器</td>
+<td>自带生图只给 GPT 额度真用完的本单后备；要登录的网页提醒走包装器；派帮手（<code>invoke_subagent</code>）时补北京时间、资料状态、型号来源和工程位置</td>
 <td>默认拦 <code>generate_image</code> 和明确点名的 <code>image-generator</code> 子代理；包装器确认 GPT 有未到期的实际拒绝记录，或在当前任务收到 GPT 结构化 <code>usageLimitExceeded</code> 且可安全重派时，放行生图后备；登录网页改在每轮首次调用时提醒</td>
 </tr>
 <tr>
@@ -127,8 +127,8 @@
 </tr>
 <tr>
 <td><code>Stop</code></td>
-<td>查一次资料和验收缺口，可补的要求接着做一次，第二次只提示</td>
-<td>还没接（程序现在只清本轮状态）</td>
+<td>收工只查 3 样：资料锁拦住了还没处理、共用包装器派的 GPT 子任务在跑却没挂 Watch、给本人的回复主要是英文；首次命中请宿主补一轮，第二次只提示；正常收工也记实况、推手机</td>
+<td>程序已做；桌面上补一轮的效果待实测</td>
 </tr>
 <tr>
 <td>压缩前后、子代理起止</td>
@@ -170,18 +170,18 @@
 <p>每项写缺什么、影响什么；接通或核实后改掉这一项。</p>
 <ul>
 <li><strong>钩子</strong>：开场核对活动版、每轮北京时间、各次模型调用前取资料状态、生图拦截和登录网页提醒照常；未安装前资料状态按不明办。这些状态提示不授予权限。桌面对话里的显式用户输入有客户端消息编号时才入本人原话档；同号只存一次，钩子注入和命令行会话排除。符合这一来源的消息可以按<a href="topic-rule-release.html#%E5%8F%91%E5%B8%83%E5%92%8C%E5%9B%9E%E9%80%80">发布规则</a>提供批准。</li>
-<li><strong>没有压缩前后、子代理起止事件</strong>：按新增本人消息更新<a href="topic-context-sources.html#%E5%8E%8B%E7%BC%A9%E5%90%8E%E7%9A%84%E5%90%8E%E5%8F%B0%E5%A4%8D%E6%A0%B8">本人话摘要</a>，在模型调用前提示；项目恢复、子代理登记和结束兜底仍靠长任务记录和包装器回执。</li>
+<li><strong>没有压缩前后、子代理起止事件</strong>：靠每次叫模型前都带工程和《他要什么》的位置兜住压缩；派帮手时的开场几行由动工具前那道钩子补；子代理登记和结束兜底仍靠长任务记录和包装器回执。</li>
 <li><strong>原生子代理的类别对应哪款型号、名额上限</strong>：等额度恢复本机核对（档位能指定，本人 2026-11-19 说测过），影响本家能不能照清单派 Neon、Hydrogen。</li>
 <li><strong>自动记忆、压缩后规则是否原样还在</strong>：待实测或核实。</li>
 <li><strong>实况、思考摘要标记与打开对话</strong>：实况“AI 对话”已显示 Antigravity 原生提问和轮末提问的待答状态，答复后更新。思考摘要的“能／不能”标记已按完整对话号生效。从实况点“打开对话”可在主驾驶打开已登记的原对话。手机提问通知未接直跳原对话。</li>
-<li><strong>自动任务的结论回执</strong>：现有回执入口只支持 Claude 和 Codex。Antigravity 的自动任务结论还没有接入实况“自动任务”。</li>
+<li><strong>自动任务的结论回执</strong>：现有回执入口只支持 Claude 和 Codex。Antigravity 的自动任务结论还没有接入实况“自动任务”；长期按时跑或以后某天要做的事，照 cockpit 技能登记成实况“自动任务”或“AI 约好的事”。</li>
 <li><strong>最高权限</strong>：没登记，见上文“身份”。</li>
 </ul>
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E488</dd></div>
-        <div><dt>发布</dt><dd>2026-11-23 10:24 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E490</dd></div>
+        <div><dt>发布</dt><dd>2026-11-23 16:55 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -195,7 +195,7 @@
 <li><a href="topic-claude-adapter.html">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html" aria-current="page">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 7,312 字<br>Antigravity 适配 3,629 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 7,303 字<br>Antigravity 适配 3,799 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/agents/规矩落地.html#规矩落地-02">AI 百工谱 · 规矩落地</a></dd></div>
       </dl>
     </aside>

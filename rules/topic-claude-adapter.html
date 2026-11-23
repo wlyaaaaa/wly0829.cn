@@ -21,7 +21,7 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/531e0a6e71c56084529cf5d817693615cef489a846cbfb148653aea81328c48c/%E5%85%AC%E7%94%A8/fonts/ui-80e213c96e4788d5.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/026a30567ee5294ef4e0c6924b249ac00f7c74233438fb9ee6ae71c140349ec4/%E5%85%AC%E7%94%A8/fonts/article-ac16c19127303b63.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/33263df680a275a38b2dedc37232a6b3f8072e0f8129547a5977a1d1e6c4e3d0/%E5%85%AC%E7%94%A8/fonts/article-4078c1d034eb7a3a.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
 <body>
@@ -46,7 +46,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E488" data-rule-page="topic-claude-adapter">
+<main class="rules-page" data-rule-release="E490" data-rule-page="topic-claude-adapter">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="claude-适配">Claude 适配</h1></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#身份"><span class="toc-number">01</span><span class="toc-label">身份</span></a></li>
@@ -136,18 +136,19 @@
 <li>本任务的 AI 临时内容删不掉时按<a href="topic-engineering-delivery.html#%E4%B8%8B%E8%BD%BD%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6%E5%92%8C%E6%B8%85%E7%90%86">工程与交付</a>留给自动清理。其他因 Claude 硬限制卡住的已授权事项，按<a href="topic-execution-coordination.html#claude-%E5%8F%97%E9%99%90%E7%9A%84%E4%BA%8B%E9%A1%B9%E4%BA%A4%E7%BB%99-codex">Claude 受限的事项交给 Codex</a>提醒本人并提供接手提示词。</li>
 <li><strong>文件预览</strong>：工作区外的链接按 Claude 入口模板的文件预览要求办理；该模板随活动版本部署，命令行目录设置不能代替桌面预览权限。</li>
 <li><strong>按命令文字拦截的删除</strong>：Claude 桌面版会拦住同一条 PowerShell 命令里同时出现 <code>Remove-Item</code> 和 <code>E:\PCConfig</code> 字样的调用；它只看命令文字，不看实际删什么，被拦时整条命令都不执行。删任务临时目录单独写一条命令，读 <code>E:\PCConfig</code> 的 git 命令放另一条。临时文件按<a href="topic-engineering-delivery.html#%E4%B8%8B%E8%BD%BD%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6%E5%92%8C%E6%B8%85%E7%90%86">工程与交付的清理入口</a>处理。</li>
-<li><strong>自动任务的结果送回等结果的对话</strong>：用 <code>scheduled-tasks</code> 建的任务到点在它自己的新会话里运行，本人看不见那个会话；桌面版 <code>notifyOnCompletion</code> 的完成通知只对 Dispatch 会话生效，Code 页的对话收不到。建任务时在任务说明里写一行 <code>【结果送到】local_&lt;完整会话号&gt;</code> 指定等结果的对话，确实不用送的写 <code>【结果送到】不转发</code>；没写这一行时按正文里“发给/转到 local_…”找，再没有就是建任务的对话。运行时送回和兜底由上下文 Hook提示，见该页的结果转发说明。</li>
+<li><strong>宿主自带的定时只用来叫回当前对话</strong>：长期按时跑、或以后某天要做的事，登记成实况“自动任务”或“AI 约好的事”（见 cockpit 技能“往实况里加东西”）；<code>scheduled-tasks</code> 只用在几小时内要这个对话接着干的时候。它建的任务到点在自己的新会话里运行，本人看不见那个会话；桌面版 <code>notifyOnCompletion</code> 的完成通知只对 Dispatch 会话生效，Code 页的对话收不到。建任务时在任务说明里写一行 <code>【结果送到】local_&lt;完整会话号&gt;</code> 指定等结果的对话，确实不用送的写 <code>【结果送到】不转发</code>；没写这一行时按正文里“发给/转到 local_…”找，再没有就是建任务的对话。到点运行的任务照这一行自己用 <code>send_message</code> 把结果发回那个对话；钩子不再检查漏送，结论回执缺了仍由钩子补写（见上下文 Hook的结果转发说明）。</li>
 <li><strong>“联系某个对话”是发给已开着的那个对话</strong>：本人说联系、交给、转给某个对话（或“合适的对话”），是用 <code>mcp__ccd_session_mgmt__send_message</code> 把事发给那个已有对话，不新开对话；找不到是哪个时先按标题和最近活动找，仍不确定再问本人一句。</li>
 <li><strong>写路径和中文的坑</strong>：Bash 工具会先把命令里的双反斜杠变成单个（单引号里也一样），Bash 再吃掉引号外的反斜杠，所以引号外的 Windows 路径写一个还是两个反斜杠都会坏（<code>E:\\.agents\\skills</code> 最后成了 <code>E:.agentsskills</code>，读不到文件，写文件则落到别处）；在 Bash 里写路径用正斜杠 <code>E:/...</code> 或放进单引号。内联脚本里的 Windows 路径会让 <code>\3</code>、<code>\r</code> 这类被当成转义、写出控制字符；PowerShell 工具的命令要整体再解析一次，双引号字符串里的中文弯引号“”会被当成引号，整条命令报语法错、一步都不执行。所以含 Windows 路径、中文引号的文字（脚本、提交说明、文档片段）先用 Write 工具写成文件，路径用原始字符串，写完检查没有控制字符。给 <code>pwsh -File</code> 传数组参数会被拼成一个字符串，要传数组就在当前会话里用 <code>&amp;</code> 调用，或改用 <code>-Command</code>。</li>
 </ul>
 <h2 id="hook-和个人资料状态">Hook 和个人资料状态</h2>
 <p>约法和导航由发布器渲染进用户级 <code>~/.claude/CLAUDE.md</code>，加载入口时就已在上下文中。<code>SessionStart</code> 只核对入口与活动版本：一致只给短回执，不一致按提示先读本版根规则；不再注入约法全文或专题路径 JSON。</p>
-<p>根会话压缩或恢复时按<a href="topic-context-sources.html#%E5%8E%8B%E7%BC%A9%E5%90%8E%E7%9A%84%E5%90%8E%E5%8F%B0%E5%A4%8D%E6%A0%B8">后台复核规则</a>接摘要和新增原话。摘要和只读复核由同一后台任务完成；有实质问题在工具后、恢复或新消息时提示，正常工作不等。每轮仍递本人消息清单。触发与暂停见上下文 Hook 运维。</p>
+<p>根会话开对话、恢复和压缩以后，<code>SessionStart</code> 照<a href="topic-context-sources.html#%E5%8E%8B%E7%BC%A9%E5%89%8D%E5%90%8E">压缩前后</a>递工程和《他要什么》的位置，不再接旧摘要和原话；根对话开场另提醒标“能／不能给外人看”（见 cockpit 技能“AI 对话”）。压缩前 <code>PreCompact</code> 补存原话、给压缩留下任务位置。每轮仍递本人消息清单。</p>
 <p><code>UserPromptSubmit</code> 每条真实新消息带来会话坐标、可核实的型号和档位、共享资料状态及已核验的无限制授权。资料需求和本人验证由根负责，按<a href="topic-privacy-data.html#%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99%E7%9A%84%E9%94%81%E5%92%8C%E8%A7%A3%E9%94%81">个人资料锁与解锁</a>和<a href="topic-execution-coordination.html#%E6%B4%BE%E5%AD%90%E4%BB%A3%E7%90%86%E7%9A%84%E5%8E%9F%E5%88%99">派子代理的原则</a>“根核验规则和判断资料需求”一条执行；纯技术工作继续。同一条实况提醒、健康提醒每会话只提示一次或状态变化时再提示。</p>
-<p>Stop 核对本轮真实 Report 的明确目标集合，未解锁的资料拦截、漏挂 Watch 或验收缺口可拦一次。根按原因解锁并重试或补做、补挂 Watch、补齐验收，子代理缺口须读完整报告；同轮第二次只提示。</p>
-<p>根会话有 GPT 等候、原生后台 Agent 或 Bash/PowerShell 等未完成后台任务时，受管 Stop 用一个会话级 <code>asyncRewake</code>（异步唤醒）保活等待，按主代理最近真实活动加 55 分钟计时；新消息、主代理工具调用和下一次停止刷新活动，多个任务共用一次唤醒。未完成状态优先读宿主 <code>background_tasks</code>，GPT 执行器状态作补判；任务全结束或无法确认还在后台运行时以退出码 0 静默结束，仍有后台任务且主代理空闲达到 55 分钟时以退出码 2 叫醒。子代理自己的进度和 SendMessage 发出时刻不算主代理活动。连续 10 次叫醒都没有本人消息、也没有叫醒那一轮之外的主代理工具调用，就不再叫醒，任务完成通知照常，之后有本人消息或真实工具调用重新计数；GPT 子任务在跑却没有活的 Watch 时不受这个次数限制，仍然叫醒。长时间等候指一个命令或它等的事必须 7 小时后才执行、7 小时内必定不执行（例如定时 7 小时后才跑、邮件明确 7 小时后才到）；这时跑 <code>python -B E:\.agents\tools\claude_root_runtime.py keepalive-skip-background --session-id &lt;完整会话号&gt;</code>，后台任务不再触发保活，任务完成通知照常。随时可能结束或到来的等候（GPT 子任务、微信消息）不算，拿不准就不关。程序在本会话第一次挂后台命令时和每次因后台任务叫醒时都会提醒，不用记；本人发新消息后开关失效，下次叫醒会再提醒。该保活不改 Watch/Resume 的内部续等或子任务执行；宿主能力依据见官方 <a href="https://code.claude.com/docs/en/hooks#limitations">asyncRewake 与后台 Hook</a>及 <a href="https://code.claude.com/docs/en/hooks#stop-input">Stop 输入</a>。</p>
+<p>收工（Stop）只查 3 样：资料锁拦住了还没处理、GPT 子任务在跑却没挂 Watch、给本人的回复主要是英文。命中的合成一次拦下，根照原因解锁重试或补做、补挂 Watch、改用中文重写；同轮第二次只提示。正常收工照原入口记实况、推手机。</p>
+<p>出错停下（宿主确认这一轮以错误结束：限流、服务忙、账号或计费出错等）时，<code>StopFailure</code> 把原因交给实况，确认后 2 分钟推手机；限流、服务忙的，原轮 10 分钟没动静才请原对话重试一次（桌面上实际续不续得上待实测）。</p>
+<p>根会话收工后还有原生后台 Agent、Bash/PowerShell 后台任务或 GPT 子任务在跑、又没人在等时，受管 Stop 用一个会话级 <code>asyncRewake</code>（异步唤醒）等着，按主代理最近真实活动加 55 分钟计时；新消息、主代理工具调用和下一次停止刷新活动。未完成状态优先读宿主 <code>background_tasks</code>，GPT 执行器状态作补判；任务全结束或无法确认还在后台运行时以退出码 0 静默结束，仍有后台任务且主代理空闲达到 55 分钟时以退出码 2 叫醒。同一件后台活只叫醒一次，叫醒那一轮不推手机。子代理自己的进度和 SendMessage 发出时刻不算主代理活动。该保活不改 Watch/Resume 的内部续等或子任务执行；宿主能力依据见官方 <a href="https://code.claude.com/docs/en/hooks#limitations">asyncRewake 与后台 Hook</a>及 <a href="https://code.claude.com/docs/en/hooks#stop-input">Stop 输入</a>。</p>
 <p>程序细节、部署和维护只见上下文 Hook 运维，验证等待见<a href="topic-privacy-data.html#%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99%E7%9A%84%E9%94%81%E5%92%8C%E8%A7%A3%E9%94%81">个人资料的锁和解锁</a>。回执不放在回复开头，先回答本人当前的问题。</p>
-<p>Stop 复用两宿主共同的版本、验收和缺口检查；资料与明确汇报验收问题合并原因，不生成 personal_data_need 状态，不启动任务。Hook 不授予资料或操作权限，不按关键词自动弹验证窗口。</p>
+<p>Stop 不生成 personal_data_need 状态，不启动任务。Hook 不授予资料或操作权限，不按关键词自动弹验证窗口。</p>
 <p>Claude、本机、图形界面和电脑 MCP 共用资料状态。用 <code>CheckPersonalDataAccess -PrivacyLevel factor</code>，不必传 <code>RootTaskId</code>、<code>PromptId</code>；业务入口的 <code>personal_data_access.py</code> 已检查，不额外前置检查。Hook 缺失或投递不明时按状态不明处理，用 <code>StatusPersonalEnvironment</code> 正式回读，身份由密码中心核验。锁着或不明不取用私人资料；最高权限智能体自己锁上、还能恢复的先自己恢复（见<a href="topic-privacy-data.html#%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99%E7%9A%84%E9%94%81%E5%92%8C%E8%A7%A3%E9%94%81">个人资料与数据处理</a>），其余本人自己的问题先验证解锁，通过后再查资料、派活和完整作答，不降级回答。</p>
 <h2 id="无限制授权">无限制授权</h2>
 <p>本人要给当前 Claude 对话开无限制授权时，Hook 识别明确请求，直接调用已安装的 <code>Invoke-OwnerTakeover.ps1 -Operation Open -HostTaskId &lt;session_id&gt; -HostHarness claude-code</code>；本人在窗口里只填时长和范围，并完成一次本人验证。只有根会话的真实提示会打开窗口，子代理和工作流子会话不会。模型不手动串 <code>Configure/Prepare/Activate/Check</code>，也不重复打开。</p>
@@ -167,8 +168,8 @@
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E488</dd></div>
-        <div><dt>发布</dt><dd>2026-11-23 10:24 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E490</dd></div>
+        <div><dt>发布</dt><dd>2026-11-23 16:55 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -182,7 +183,7 @@
 <li><a href="topic-claude-adapter.html" aria-current="page">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 7,312 字<br>Claude 适配 6,958 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 7,303 字<br>Claude 适配 6,874 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/agents/规矩落地.html#规矩落地-02">AI 百工谱 · 规矩落地</a></dd></div>
       </dl>
     </aside>
