@@ -314,7 +314,7 @@
     if (list.q === 'warming') U.list($('active-list'), wait('正在准备'));
     else if (!temporary || activeChats) {
       const none = list.active?.length || list.hidden ? null : list.active == null || list.q === 'unknown' ? U.collectionText() : U.offline?.() ? '断开前没有在干或等着的对话' : '没有在干或等着的对话';
-      drawActive(list, activeChats ? activeAt : d?.at || homeAt || at, none);
+      drawActive(list, list.source_at ?? (activeChats ? activeAt : d?.at || homeAt || at), none);
       U.land();
     }
     activeRead.done();
