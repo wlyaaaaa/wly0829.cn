@@ -6,7 +6,7 @@
   const project = p.get('project'), fixture = p.has('fixture'), pageName = maintenance ? '今天 AI 后台自动维护' : '计划任务';
   const route = href => { const u = new URL(href, location.href); if (fixture) u.searchParams.set('fixture', p.get('fixture')); return u.pathname + u.search + u.hash; };
   if (maintenance) {
-    document.title = `${pageName} · 实况`; document.querySelector('h1').textContent = pageName;
+    document.title = `${pageName} · 实况`; document.querySelector('h1').innerHTML = esc(pageName).replace('后台', '后台<wbr>'); document.body.classList.add('tasks--ai-today');
     $('task-intro').textContent = '按北京时间统计当天已观察到的维护运行。';
     $('other-tasks').insertAdjacentHTML('beforebegin', '<a class="more" href="/live/tasks/">计划任务 ›</a>');
   }
@@ -165,9 +165,13 @@
       const fullPurpose = !hidden ? U.fieldText(registeredPurpose ?? t.project_name, viewer) : '';
       // 备份任务：后台给了最近一次核验过的备份（如“最近已核验备份 11-23 01:40，大部分成功，有文件跳过”）就单列一行，上次运行那格照旧（M607）
       const verified = t.last_verified_backup?.text != null ? `<p class="lb-sub task-verified">${field(t.last_verified_backup.text, '最近已核验备份')}</p>` : '';
+      // 后台标了这一项 AI 已接手在修（ai_fixing，灯是蓝的）：行灯换成蓝的，名字下写“AI 在修”，和页头“AI 在修 N 件”、工作详情一个说法；上次运行那格照旧写上次的结果（M159）
+      const fixing = t.ai_fixing === true || t.level === 'blue';
+      const fixAt = fixing && taskNext({ next_at: t.ai_next_at });
+      const fixNote = fixing ? `<p class="lb-sub task-fixing">AI 在修${fixAt ? ` · ${esc(nextAt(fixAt))} 接着修` : ''}</p>` : '';
       const actions = viewer === 'owner' ? U.actions(t, t.actions || [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : '';
-      return { key: t.id, cls: `row row--flat lb-row task-compact${attention(t) ? ' is-attention' : ''}`, html:
-        `<span class="lb-row__lamp">${stateDot(state, shortStatus[state])}</span><div class="lb-cell lb-cell--name"><p><a class="row__title" href="${esc(detail)}">${title}</a></p>${purpose ? `<p class="lb-sub task-purpose" title="${esc(fullPurpose)}">${purpose}</p>` : ''}${verified}${why}</div>
+      return { key: t.id, cls: `row row--flat lb-row task-compact${attention(t) ? ' is-attention' : ''}${fixing ? ' is-fixing' : ''}`, html:
+        `<span class="lb-row__lamp">${fixing ? stateDot('fixing', 'AI 在修') : stateDot(state, shortStatus[state])}</span><div class="lb-cell lb-cell--name"><p><a class="row__title" href="${esc(detail)}">${title}</a></p>${purpose ? `<p class="lb-sub task-purpose" title="${esc(fullPurpose)}">${purpose}</p>` : ''}${verified}${fixNote}${why}</div>
         <div class="lb-cell lb-cell--time task-last">${lastAt ? `<time>${stamp(lastAt)}</time>` : ''}${lastState ? `<span data-task-state${lastTitle}>${stateDot(shown === 'unread' ? 'unknown' : shown)}${esc(lastWord)}</span>` : '—'}${trouble ? week(t) : ''}</div>
         <div class="lb-cell lb-cell--time"><span data-task-state${triggerTitle}>${esc(scheduled)}</span></div><div class="row__acts">${actions}</div>` };
     }

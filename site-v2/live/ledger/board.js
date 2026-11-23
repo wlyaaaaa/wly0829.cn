@@ -40,6 +40,7 @@
     // 后台按天给（三位小数）；不到一天写小时，不到一小时写分钟
     const peak = Math.max(avg || 0, ...trend.map(x => x.days || 0));
     const unit = peak >= 1 ? { per: 1, name: '天' } : peak * 24 >= 1 ? { per: 24, name: '小时' } : { per: 1440, name: '分钟' };
+    // 跟得最久：后台只挑 AI 正在跟的事；一件都没有时 oldest 是 null，空着时先照写后台给的 oldest_text，没给再用原来那句
     const oldest = s.oldest || null;
     const dots = oldest && known(oldest.check_count) && known(oldest.check_limit)
       ? `<span class="lg-dots">${Array.from({ length: oldest.check_limit }, (_, i) => `<i${i < oldest.check_count ? ' class="is-on"' : ''}></i>`).join('')}</span>看过 ${int(oldest.check_count)} 次 · 最多 ${int(oldest.check_limit)} 次` : '';
@@ -50,7 +51,7 @@
       <section class="tp-panel lg-cell"><h2>平均多久了结</h2><p class="tp-big">${known(avg) ? `${big(avg * unit.per, 'avg', unit.per === 1440 ? 'int' : 'dec')}<small>${unit.name}</small>` : '<span class="tp-fog">还没采上</span>'}</p>
         ${trend.filter(x => known(x.days)).length > 1 ? T.line({ series: [{ color: '#00a650', values: trend.map(x => known(x.days) ? x.days * unit.per : null) }], labels: trend.map(x => day(x.date + 'T12:00:00+08:00')), width: 300, height: 110, max: T.niceMax(Math.max(...trend.map(x => (x.days || 0) * unit.per), 1)), fmt: v => dec(v), draw: !drawn }) + `<p class="tp-small">每天往前 7 天的平均，单位${unit.name}；没有了结的日子空着。</p>` : '<p class="tp-small">只算近 7 天了结的，从 AI 接手算到了结。</p>'}</section>
       <section class="tp-panel lg-cell lg-oldest"><h2>跟得最久</h2>${oldest ? `<p class="lg-oldest__t">${link(oldest.href, F(titleOf(items.find(it => it.id === oldest.id) || oldest), '事项标题'))}</p>
-        <p class="tp-big">${big(oldest.days ?? oldest.age_days, 'oldest')}<small>天</small></p><p class="tp-small lg-oldest__n">${dots}</p>` : `<p class="tp-empty">${open === 0 ? '没有未了结的事' : '最早那件没读到'}</p>`}</section></div>`;
+        <p class="tp-big">${big(oldest.days ?? oldest.age_days, 'oldest')}<small>天</small></p><p class="tp-small lg-oldest__n">${dots}</p>` : `<p class="tp-empty">${s.oldest_text != null && U.fieldText(s.oldest_text, viewer).trim() ? F(s.oldest_text, '跟得最久') : open === 0 ? '没有未了结的事' : '最早那件没读到'}</p>`}</section></div>`;
   }
   function pairBars(days) {
     const max = T.niceMax(Math.max(1, ...days.flatMap(x => [x.opened || 0, x.closed || 0])));
@@ -144,7 +145,7 @@
       <div class="tp-seg" role="group" aria-label="按结果看"><button type="button" data-filter="" aria-pressed="${!filter}">全部 ${int(rows.length)}</button>${Object.keys(SETTLED).map(k =>
         `<button type="button" data-filter="${k}" aria-pressed="${filter === k}">${settledLabel(k)} ${int(counts[k])}</button>`).join('')}</div>
       ${why7 && known(fixed7) ? `<p class="tp-small lg-basis">近 7 天修好 ${int(fixed7)} 件：${why7}</p>` : ''}
-      <ul class="lg-settled">${groupRows(shown).slice(0, 40).map(({ rows: [r, ...rest] }) => `<li class="${[r, ...rest].some(x => x.id === picked) ? 'is-picked' : ''}"><span class="tp-tag" data-tone="${TONE[r.settled]}">${settledLabel(r.settled)}</span>
+      <ul class="lg-settled">${groupRows(shown).map(({ rows: [r, ...rest] }) => `<li class="${[r, ...rest].some(x => x.id === picked) ? 'is-picked' : ''}"><span class="tp-tag" data-tone="${TONE[r.settled]}">${settledLabel(r.settled)}</span>
         <span><button type="button" class="lg-title" data-pick="${esc(r.id)}">${F(titleOf(r), '事项标题')}</button>${rest.length ? `<span class="lg-x">同样的 ${int(rest.length + 1)} 件</span>` : ''}</span>${r.settled === 'to_owner' && r.owner_href ? link(r.owner_href, `已放进等${you()}的事 ›`) : ''}<time>${esc(rest.length ? span(rest.at(-1).at, r.at) : when(r.at))}</time></li>`).join('')
         || `<li class="tp-empty">${filter ? '已读到的记录里没有这一类。' : '已读到的记录里还没有了结的。'}</li>`}</ul>
       <div class="lg-done__foot">${next ? `<button type="button" class="lg-more" data-older${olderBusy ? ' disabled' : ''}>${olderBusy ? '正在读…' : '看更早的 ›'}</button>` : ''}<span class="tp-small">已读到 ${int(rows.length)} 件${next ? '，还有更早的' : ''}</span></div></section>`;
@@ -205,7 +206,7 @@
     return `<section class="tp-panel lg-repeat" id="repeat"><div class="tp-panel__head"><h2>反复出现<small>修好了又出现的同一件，近 30 天</small></h2></div>
       <ul class="lg-replist">${rows.map(it => {
         const times = (list(it.reopen_at).length ? list(it.reopen_at) : [it.first_at, it.last_at]).map(stamp).filter(t => t && t >= from);
-        return `<li><button type="button" class="lg-title" data-pick="${esc(it.id)}">${F(titleOf(it), '反复出现的问题')}</button><span class="lg-rep__n">又发生 ${int(it.reopen_count)} 次</span>
+        return `<li${picked === it.id ? ' class="is-picked"' : ''}><button type="button" class="lg-title" data-pick="${esc(it.id)}">${F(titleOf(it), '反复出现的问题')}</button><span class="lg-rep__n">又发生 ${int(it.reopen_count)} 次</span>
           <div class="lg-rep__axis">${[0, 5, 10, 15, 20, 25, 30].map(n => `<span style="left:${n / 30 * 100}%"${n === 0 ? ' data-edge="start"' : n === 30 ? ' data-edge="end"' : ''}>${esc(day(new Date(from + n * DAY).toISOString()))}</span>`).join('')}${times.map(t => `<i style="left:${x(t)}%" title="${esc(when(new Date(t).toISOString()))}"></i>`).join('')}</div></li>`;
       }).join('')}</ul>${list(rows[0]?.reopen_at).length ? '' : '<p class="tp-small">每次又出现的日子还没采上，先画第一次和最近一次。</p>'}</section>`;
   }

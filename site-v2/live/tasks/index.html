@@ -17,6 +17,10 @@
 .page--tasks .lb-card[data-art="ai-schedule"] { --lb-art: url("/live/img/tasks-grp-ai-schedule.webp"); }
 .page--tasks .lb-card[data-art="idle"] { --lb-art: url("/live/img/tasks-grp-idle.webp"); }
 .page--tasks .hero__note { display:block; letter-spacing:0; word-spacing:normal; }
+/* 维护明细（?scope=ai-today）的标题长：标题和说明在左边自己那一栏里折行，不伸到中间读数卡底下 */
+.tasks--ai-today .lbp-title > div { min-width: 0; }
+.tasks--ai-today .lbp-title h1 { white-space: normal; word-break: keep-all; }
+@media (min-width: 1280px) { .tasks--ai-today .lbp-title h1 { font-size: 26px; line-height: 34px; } }
 .page--tasks #project-filter { gap: 4px; padding: 0 4px 0 12px; height: 34px; border-radius: 12px; background: rgb(255 255 255 / .5); box-shadow: inset 0 0 0 1px rgb(20 20 19 / .06); font-size: 13.5px; color: var(--ink-soft); }
 .page--tasks #project-filter .more { margin: 0; translate: 0 0; }
 .page--tasks #project-label a { color: inherit; text-decoration: none; }
@@ -70,6 +74,9 @@
 .task-state-dot[data-state="running"] { background: #5e83a9; }
 .task-state-dot[data-state="warn"] { background: #d99a32; }
 .task-compact .task-why { margin: 1px 0 0; color: #9a6514; font-size: 12px; line-height: 16px; }
+/* AI 已接手在修：和页头灯的蓝一个色（M159） */
+.task-state-dot[data-state="fixing"] { background: #7186df; box-shadow: 0 0 0 3px rgb(113 134 223 / .22); }
+.task-compact .task-fixing { margin: 1px 0 0; color: #5266ba; font-size: 12px; line-height: 16px; font-weight: 600; }
 .task-state-dot[data-state="unknown"] { background: transparent; border: 1px solid #aaa9a4; }
 .page--tasks #next:not([hidden]) { display: flex; margin: 18px auto 0; translate: 0 0; }
 /* 近 7 天的小方块：放在“上次运行”那一格的第二行 */

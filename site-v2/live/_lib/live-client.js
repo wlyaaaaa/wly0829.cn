@@ -458,7 +458,9 @@
   function present(e) {
     const disconnected = offline(), detail = itemDetail(e);
     // 访客确认连不上时清掉已显示的数；根首页副屏（screen）例外：四格本来就是公开数，留着断开前的数、标上是几点的，和本人版一样（M608）。
-    if (disconnected && fixture === null && (detail || e.viewer.kind === 'public' && !['screen', 'backups'].includes(e.resource)) && e.data !== null) forgetData(e, true);
+    // 已读的备份总表和计划任务名册也保留；备用包提供的名册是在断开时用的（M449、M473）。
+    const keepShown = ['screen', 'backups', 'tasks'].includes(e.resource) || e.source === 'fallback';
+    if (disconnected && fixture === null && (detail || e.viewer.kind === 'public' && !keepShown) && e.data !== null) forgetData(e, true);
     const observed = latestConnection();
     const link = disconnected ? (observed?.state === 'offline' ? observed : { ...e.link, state: 'offline', basis: 'browser' }) : e.link;
     const state = snapshot(e, link);
@@ -654,12 +656,20 @@
     f.retry = later(() => { if (!document.hidden && e.token === device() && e.failure === f) read(e); }, delay);
     if ((retryCopy || offline()) && e.source !== 'fallback') { await useFallback(e, f); if (e.failure === f) settle(e); }
   }
-  function fallbackMetadata(e, at, proof) {
+  function fallbackMetadata(e, at, proof, packet = null) {
     // 手上已有数（这一页读到的，或浏览器存的上次副本）就接着显示、带它自己的时刻，本人版访客版一样；
     // 备用包只有生成时刻，不拿它把有的数清成横杠，也不删上次副本（M608）。
     if (e.withdrawn || e.data !== null || typeof at !== 'string' ||
         !Number.isFinite(Date.parse(at)) || proof?.policy !== visitorPolicy || !validAudience(proof.audience)) return;
     forgetData(e);
+    // 随站备用包里带了计划任务名册（tasks?scope=scheduled，后台只准这一份带正文，别的仍只有时刻）：访客版没读到过时就画它，写明是几点的数（M473）
+    const own = e.viewer.kind === 'public' && e.path === 'tasks?scope=scheduled' && packet?.viewer?.kind === 'public' && packet.data && typeof packet.data === 'object'
+      && Object.keys(packet.data).length && Number.isFinite(Date.parse(packet.at)) ? packet : null;
+    if (own) {
+      Object.assign(e, { data: siteVisitScope(e, own.data), at: new Date(own.at).toISOString(), rev: 'fallback-' + proof.audience + ':' + own.seq,
+        source: 'fallback', fallbackNote: `这是公开备用包里北京时间 ${stamp(own.at)} 的数，现在读不到新的。` });
+      return;
+    }
     Object.assign(e, { at: new Date(at).toISOString(), rev: 'metadata-' + proof.audience, source: 'fallback',
       fallbackNote: `公开备用包生成于北京时间 ${stamp(at)}，详情暂时读不到。` });
   }
@@ -678,7 +688,7 @@
       }).catch(() => null).then(file => {
         const proof = file?.publication;
         if (file?.metadata_only === true && proof?.policy === visitorPolicy && validAudience(proof.audience)) {
-          return { at: file.at, proof };
+          return { at: file.at, proof, resources: file.resources && typeof file.resources === 'object' ? file.resources : {} };
         }
         if (fallback === request) fallback = null;
         return null;
@@ -687,7 +697,7 @@
     }
     const file = await fallback;
     if (publicPaused || !failure || e.failure !== failure) return;
-    fallbackMetadata(e, file?.at, file?.proof);
+    fallbackMetadata(e, file?.at, file?.proof, file?.resources?.[e.path] || null);
   }
   async function useFallback(e, failure) {
     if (!offline()) return;

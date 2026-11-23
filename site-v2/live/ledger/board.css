@@ -4,6 +4,8 @@
 .lg-title:hover { color: var(--tp-green-ink); text-decoration: underline; text-underline-offset: 3px; }
 .lg-title:focus-visible, .lg-more:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 4px; }
 .is-picked { background: var(--tp-green-soft); }
+/* 点中的那一行（还欠着的、最近了结的、反复出现的）：淡绿底加左边一道绿，右栏详情在屏外时也认得出点的是哪条 */
+:is(.lg-item, .lg-settled li, .lg-replist li).is-picked { background: var(--tp-green-soft); box-shadow: inset 3px 0 0 var(--tp-green); }
 .lg-more { margin-top: 10px; padding: 5px 14px; border: 1px solid var(--tp-line); border-radius: 8px; background: #fff; font: inherit; font-size: 13.5px; font-weight: 600; color: #3d3d3a; cursor: pointer; }
 .lg-more:hover { border-color: var(--ink); }
 .lg-more[disabled] { cursor: progress; color: var(--muted); }
@@ -97,7 +99,7 @@
 /* 反复出现 */
 .lg-repeat { margin-top: 16px; }
 .lg-replist { margin: 0; padding: 0; list-style: none; }
-.lg-replist li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; padding: 10px 0 14px; border-bottom: 1px solid var(--tp-hair); }
+.lg-replist li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; margin: 0 -10px; padding: 10px 10px 14px; border-bottom: 1px solid var(--tp-hair); border-radius: 8px; transition: background .2s ease; }
 .lg-replist .lg-title { font-size: 15px; line-height: 22px; }
 .lg-rep__n { font-family: var(--black); font-size: 18px; color: var(--tp-red); white-space: nowrap; }
 .lg-rep__axis { grid-column: 1 / -1; position: relative; height: 30px; margin: 0 8px; border-top: 1px solid var(--tp-line); }
