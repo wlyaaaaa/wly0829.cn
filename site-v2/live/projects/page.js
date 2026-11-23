@@ -81,9 +81,14 @@
       ?? (Number.isFinite(active) && Number.isFinite(frozen) ? active + frozen : null);
     const privateSummary = home?.text && typeof home.text === 'object';
     const summary = privateSummary ? '' : sp(home?.text).split(' · ').filter(s => !/^数据截止\s/.test(s)).join(' · ');
-    const counts = [Number.isFinite(active) && `${active} 个在用`, Number.isFinite(frozen) && `${frozen} 个冻结`].filter(Boolean).join(' · ');
+    // 约法“全部项目”不含冻结：总数和代码字数只算在用的（日用、偶用），冻结的另写一句（本人 11-24 02:45 定的那一批）
+    const size = activeRoster?.code_size, inUse = Number.isFinite(size?.active) ? size.active : active, cold = Number.isFinite(size?.frozen) ? size.frozen : frozen;
+    const wan = n => (n / 1e4).toLocaleString('zh-CN', { maximumFractionDigits: 1 });
+    const code = !size ? '' : Number.isFinite(size.code_chars) ? `代码 ${wan(size.code_chars)} 万字`
+      : Number.isFinite(size.observed_code_chars) ? `代码至少 ${wan(size.observed_code_chars)} 万字${Number.isFinite(size.covered) && Number.isFinite(inUse) ? `（数到 ${size.covered}／${inUse} 个）` : ''}` : '';
+    const counts = [Number.isFinite(inUse) && `共 ${inUse} 个在用项目`, code, Number.isFinite(cold) && cold > 0 && `另有 ${cold} 个冻结，不算在内`].filter(Boolean).join(' · ');
     const text = frozenOnly ? Number.isFinite(frozenRoster?.total) ? `共 ${frozenRoster.total} 个冻结项目` : '冻结的项目'
-      : [Number.isFinite(total) && `共 ${total} 个项目`, counts || summary].filter(Boolean).map(sp).join(' · ');
+      : Number.isFinite(inUse) ? counts : [Number.isFinite(total) && `共 ${total} 个项目`, summary].filter(Boolean).map(sp).join(' · ');
     const sourceAt = frozenOnly ? frozenRoster?.source_at ?? frozenRoster?.at : home?.source_at ?? home?.at
       ?? activeRoster?.at ?? frozenRoster?.at;
     const at = sourceAt && stamp(sourceAt), sameRoster = at && Date.parse(home?.at) === Date.parse(states.get('active')?.data?.at);

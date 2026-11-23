@@ -118,3 +118,54 @@
 .ag-hook dt { color: var(--muted); }
 .ag-hook dd { margin: 0; }
 .ag-hook__num { margin: 8px 0 0; font-size: 13px; color: #3d3d3a; font-variant-numeric: tabular-nums; }
+
+/* 六、从规则仓项目页搬来的三块：你跟三家说了多少、三家常用的技能、AI 最常被拦在哪。
+   右上切换和“三家各干了多少活”同一种（.tp-seg）；点一家：这家的行和小签亮起来、别家的柱段和横条变淡，数换成这一家的。 */
+.ag-mhead { display: flex; align-items: center; gap: 14px; flex: none; }
+.ag-mgrid { grid-template-columns: 330px minmax(0, 1fr); gap: 28px; align-items: start; }
+.ag-mgrid > * + * { border-left: 1px solid var(--tp-hair); padding-left: 26px; }
+.ag-mbig { margin: 2px 0 14px; font-family: var(--black); font-size: 26px; line-height: 1.35; }
+.ag-mbig b { margin: 0 4px; font-family: var(--tp-num); font-size: 56px; line-height: 1; color: var(--tp-green); vertical-align: -5px; }
+.ag-mbig b small { margin-right: 4px; font-family: var(--sans); font-size: 18px; font-weight: 700; vertical-align: 6px; }
+.ag-fams { margin: 0; padding: 0; list-style: none; }
+.ag-fam { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; width: 100%; padding: 9px 12px; border: 0; border-bottom: 1px solid var(--tp-hair); border-radius: 8px;
+  background: none; font: inherit; text-align: left; color: var(--ink); cursor: pointer; transition: background .15s ease, opacity .15s ease, box-shadow .15s ease; }
+.ag-fam:hover { background: rgb(20 20 19 / .045); }
+.ag-fam:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+.ag-fam.is-on { background: color-mix(in srgb, var(--host) 15%, #fff); box-shadow: inset 4px 0 0 var(--host); }
+.ag-fam.is-off { opacity: .42; }
+.ag-fam__name { font-size: 17px; font-weight: 800; white-space: nowrap; }
+.ag-fam__num { font-size: 17px; text-align: right; font-variant-numeric: tabular-nums; }
+.ag-fam__num small { display: block; font-size: 12.5px; font-weight: 500; color: var(--muted); }
+.ag-mtoday { margin: 12px 0 0 12px; font-size: 14px; }
+.ag-cols .ag-seg { cursor: pointer; transition: opacity .2s ease; }
+.ag-cols .ag-seg:hover { opacity: .82; }
+.ag-cols .ag-seg.is-dim { opacity: .14; }
+.ag-cols .ag-val { font-size: 11.5px; font-weight: 700; fill: #3d3d3a; }
+.ag-cols .ag-val.is-focus { font-size: 12.5px; font-weight: 800; }
+.ag-mlegend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: 8px 0 0; }
+.ag-chip { display: inline-flex; align-items: center; padding: 3px 11px; border: 1px solid var(--tp-line); border-radius: 999px; background: #fff; font: inherit; font-size: 13px; font-weight: 700;
+  color: #3d3d3a; cursor: pointer; transition: background .15s ease, opacity .15s ease, border-color .15s ease; }
+.ag-chip:hover { border-color: var(--host); }
+.ag-chip:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.ag-chip.is-on { border-color: var(--host); background: color-mix(in srgb, var(--host) 16%, #fff); color: color-mix(in srgb, var(--host) 72%, #000); }
+.ag-chip.is-off { opacity: .42; }
+.ag-mhint { margin-left: 4px; font-size: 12.5px; color: var(--muted); }
+.ag-hrows { display: grid; gap: 12px; margin: 14px 0 0; }
+.ag-hrow { display: grid; grid-template-columns: 330px minmax(0, 1fr) 120px; align-items: center; gap: 18px; }
+.ag-hrow__name { min-width: 0; overflow: hidden; font-size: 16px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.ag-hrow__name small { font-size: 14px; font-weight: 600; color: #57564f; }
+.ag-hrow__track { display: flex; height: 20px; border-radius: 6px; background: rgb(20 20 19 / .06); overflow: hidden; }
+.ag-hrow__fill { display: flex; min-width: 6px; height: 100%; }
+.ag-hseg { min-width: 4px; height: 100%; padding: 0; border: 0; background: var(--fill); cursor: pointer; transition: opacity .2s ease; }
+.ag-hseg:hover { opacity: .82; }
+.ag-hseg.is-lower { background: color-mix(in srgb, var(--fill) 18%, #fff); outline: 1.5px dashed var(--fill); outline-offset: -1.5px; }
+.ag-hseg.is-dim { opacity: .14; }
+.ag-hrow__num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ag-hrow__num b { font-family: var(--tp-num); font-size: 22px; }
+.ag-hrow__num small { margin-left: 3px; font-size: 13px; color: #57564f; }
+.ag-mfoot { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 14px 0 0; }
+.ag-mfoot .tp-small { margin: 0; }
+.ag-mnote { margin: 12px 0 0; }
+@media (max-width: 1280px) { .ag-mgrid { grid-template-columns: 280px minmax(0, 1fr); } .ag-hrow { grid-template-columns: 240px minmax(0, 1fr) 104px; } }
+.ag-moved .tp-panel__head { flex-wrap: wrap; row-gap: 8px; }

@@ -139,7 +139,7 @@
       return rawValue({ ...m, value: null, text: '点各类右侧的「明细」进入对应页面' });
     }
     const special = window.ProjectAdditions?.lowerBoundValue(m) || window.ProjectAdditions?.timestampObject(m, stamp) || window.ProjectAdditions?.structuredMetric(m, stamp, projectViewer)
-      || window.ProjectAdditions?.rulesLengthReading?.(m, additions.corrections);
+      || window.ProjectAdditions?.rulesLengthReading?.(m);
     if (special) return { html: `<span class="pj-text">${esc(special)}</span>`, plain: special, long: true };
     if (m.rewrite === 'pending' && m.count == null && m.value == null && m.text == null || m.value?.hidden || m.value?.rewrite === 'pending' && m.value.count == null && !m.value.text) { const text = metricText(m.value && typeof m.value === 'object' ? m.value : m); return { html: `<span class="pj-text">${U.fieldHtml(m.value && typeof m.value === 'object' ? m.value : m, { name: '项目读数', kind: projectViewer })}</span>`, plain: text, long: true }; }
     const reading = cardReading(m);
@@ -450,7 +450,6 @@
     if (id === 'agents' || id === 'timeaudit') reads.push(fetch(id === 'agents' ? '/live/project/weekly-new.json' : '/live/project/before-after.json', { signal: AbortSignal.timeout(15000) }).then(r => r.ok ? r.json() : null).then(d => save(id === 'agents' ? 'weekly' : 'beforeAfter', d)).catch(() => {}));
     additionWatches.push(watch('computer', null, { data(d, meta) { if (!sameViewer(meta)) return; if (id === 'wly0829.cn') save('external', d?.external); save('batches', d?.batch_progress); } }));
     if (id === 'pcconfig') additionWatches.push(readSoftware(save, watch));
-    if (id === 'agents') additionWatches.push(watch('projects/agents/records', { section: params.has('fixture') ? 'skill_usage' : 'skill_rows' }, { data(d, meta) { if (sameViewer(meta) && window.ProjectAdditions.hasSkillUsage(d)) save('skillUsage', d); } }));
   }
   const sameViewer = meta => (meta?.viewer?.kind || 'public') === projectViewer;
   const getChanges = cursor => window.Live.get('projects/changes', { project: id, cursor }).catch(() => null);
@@ -576,18 +575,6 @@
     U.html(b.head, `<b>${esc(label)}</b>`); b.main.hidden = true;
     if (!b.viz) { b.viz = document.createElement('div'); b.viz.className = 'pj-viz'; b.cutoff.after(b.viz); }
     drawRecordCutoff(b); return b;
-  }
-  function skillUsageBlock(stats, legacy) {
-    const b = graphBlock('skill-usage', '技能使用');
-    b.group = 'skill-usage'; b.viz.classList.add('pj-viz--skills');
-    if (stats) {
-      delete b.viz.dataset.chart;
-      U.html(b.viz, window.ProjectAdditions.skillUsageSummary(stats, records(params.has('fixture') ? 'skill_usage' : 'skill_rows'), stamp));
-    } else {
-      b.viz._html = null;
-      window.LiveProjectViz.chart(b.viz, 'skills', legacy);
-    }
-    return b;
   }
   async function loadGraph(b, m) {
     b.metric = m;
@@ -716,11 +703,12 @@
     seq.forEach((g, i) => g.card.col = cols[i]);
   }
 
+  // 规则仓“更多数据”里 11-15 那次一次性摸底（fd03_*，“11-15 检查时……”）不会再更新，智能体页都有，不摆
+  const surveyRow = m => id === 'agents' && (/^fd03_/.test(m.id) || /^11-15 检查时/.test(String(m.label || '')));
   // 一段一张卡：同一段的数、逐项清单那几行、图都带同一个 group，摆的时候合进一张卡
   function renderBoard(animate) {
     const left = [], right = [], V = window.LiveProjectViz;
     const allMetrics = (proj?.sections || []).flatMap(s => s.metrics || []), skillUsage = id === 'agents' ? V.skillData(allMetrics) : null;
-    const stats = id === 'agents' && window.ProjectAdditions?.hasSkillUsage(additions.skillUsage) ? additions.skillUsage : null;
     // 还没有数：页头那一句已经说了（正在读／还没读到／连不上），下面整块先不摆
     if (proj) {
       for (const card of window.ProjectAdditions?.cards(id, proj, projectViewer, additions, stamp) || []) { const b = graphBlock(card.key, card.title); b.group = card.key; window.ProjectAdditions.render(card, b, U.html, window.LiveViz.bars); left.push(b); }
@@ -728,6 +716,13 @@
       const headId = typeof proj.headline === 'string' ? proj.headline : proj.headline?.id;
       for (const s of proj.sections || []) {
         const into = isMore(s) ? right : left;
+        // 规则仓的“后台提醒程序”整块在智能体页的钩子表里，这里只留一行链过去
+        if (id === 'agents' && s.id === 'hooks') {
+          const b = graphBlock(s.id, ''); b.group = s.id;
+          U.html(b.head, '<a class="pj-moved-head" href="/live/agents/#hooks">后台提醒程序跑多久、有没有出错，都在智能体页的钩子表 <span class="more__chev">›</span></a>');
+          U.html(b.viz, ''); into.push(b);
+          continue;
+        }
         const readings = id === 'wly0829.cn' ? window.ProjectSiteReadings : null;
         if (readings && s.id === 'site-visitors') {
           const b = graphBlock(s.id, s.label || '网站有谁来看');
@@ -753,7 +748,7 @@
         // 代表数已经在页头那一条里，卡里不再写一遍
         const duplicate = m => (headId != null && m.id === headId && !!headline(proj)) || (id === 'agents' && s.id === 'skills' && s.metrics.length === 1 && m.value === proj.counts?.skills);
         const intro = readings && s.id === 'scale' ? s.metrics?.find(m => m.id === 'missing_intros') : null;
-        const visible = (s.metrics || []).filter(m => m !== intro && m.label && (m.id !== 'next_first_step' || projectViewer === 'owner') && !duplicate(m) && !hideZero(m) && !(skillUsage && V.skills.includes(m.id))).map(m => ({ ...m, scope: descriptions.includes(m.scope) ? null : m.scope, note: descriptions.includes(m.note) ? null : m.note, gap: descriptions.includes(m.gap) ? null : m.gap }));
+        const visible = (s.metrics || []).filter(m => m !== intro && m.label && (m.id !== 'next_first_step' || projectViewer === 'owner') && !duplicate(m) && !hideZero(m) && !(skillUsage && V.skills.includes(m.id)) && !surveyRow(m)).map(m => ({ ...m, scope: descriptions.includes(m.scope) ? null : m.scope, note: descriptions.includes(m.note) ? null : m.note, gap: descriptions.includes(m.gap) ? null : m.gap }));
         if (s.metrics?.length && !intro && !visible.length && !s.items && !s.hidden && !s.rule_history && !(s.id === 'skills' && skillUsage)) continue;
         const arrays = visible.filter(m => m.expandable && m.section);
         const metrics = visible.filter(m => !arrays.includes(m) && (!U.offline?.() || hasValue(m)));
@@ -789,9 +784,6 @@
           U.html(b.head, `<b>规则版本</b>${gap ? `<span>${U.fieldHtml(gap, { name: '规则历史', kind: projectViewer })}</span>` : ''}`);
           ruleHistory(b.viz, r); b.allDetails = b.viz.querySelector('.pj-rh-events'); into.unshift(b);
         }
-        const usage = s.skill_usage || (s.id === 'skills' ? skillUsage : null);
-        if (usage && !stats) right.push(skillUsageBlock(null, usage));
-
         if (s.items) {
           // 逐项清单：前几行在这里，全部的逐项明细在第三层（卡右上角“看全部 ›”）
           const b = block(hasMetrics ? `${s.id}-items` : s.id, 'rows'); b.group = s.id;
@@ -799,8 +791,6 @@
           into.push(b);
         }
       }
-      if (stats) right.unshift(skillUsageBlock(stats));
-      else if (skillUsage && !(proj.sections || []).some(s => s.id === 'skills' || s.skill_usage)) right.unshift(skillUsageBlock(null, skillUsage));
       const artifactsTarget = location.hash === '#artifacts';
       if (artifactsTarget || proj.artifacts?.count || (proj.artifacts?.count === 0 && lower(proj.artifacts, 'count')) || (projectViewer === 'public' && (proj.artifacts?.hidden || arts?.hidden))) {
         const b = block('artifacts', 'rows');
@@ -1227,7 +1217,7 @@
         const locked = state.meta?.status === 403 && state.meta?.viewer?.kind === 'public';
         renderEmptyHero(locked ? { visibility: 'owner', hidden_what: '此项目的实况' } : missingText(state));
       }
-      [hero.querySelector('.card__body'), ...[...blocks.values()].filter(b => !b.artifacts && !b.changes && !(id === 'agents' && ['quotes', 'rule-effect'].includes(b.key))).map(b => b.el)].forEach(el => U.blockNote(el, state));
+      [hero.querySelector('.card__body'), ...[...blocks.values()].filter(b => !b.artifacts && !b.changes && !(id === 'agents' && ['quotes', 'agents-moved', 'hooks'].includes(b.key))).map(b => b.el)].forEach(el => U.blockNote(el, state));
     },
   }));
 

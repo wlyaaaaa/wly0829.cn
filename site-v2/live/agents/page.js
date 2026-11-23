@@ -106,7 +106,7 @@
       const name = NAMES[keyOf(hook)] || keyOf(hook);
       if (hook.id) add(Boolean(hook.installed), `钩子「${name}」装着`, `钩子「${name}」定稿要装，还没装上`, { href: `#hooks-${stationOf(hook)}` });
       else if (hook.installed) add(false, '', `钩子「${name}」装着，说明表里没写`, { href: `#hooks-${stationOf(hook)}` });
-      if (known(hook.metrics?.errors) && hook.metrics.errors > 0) add(false, '', `钩子「${name}」近 7 天出错 ${hook.metrics.errors} 次`, { href: `#hooks-${stationOf(hook)}` });
+      // 近 7 天出过的错是历史，不算“现在差几处”（数据约定第 10 节：当前差几处从 health 的清单取，旧错在历史）；钩子表里照样标“错 N”
     }
     const pass = rows.filter(r => r.ok === true).length, fail = rows.filter(r => r.ok === false), unknown = rows.filter(r => r.ok == null).length;
     return { rows, pass, fail, unknown, total: rows.length };
@@ -135,7 +135,7 @@
         <p class="tp-small">${c.fail.length ? `${c.total} 项里 ${c.pass} 项照规矩` : `${c.total} 项都照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
         ${T.ring(c.pass, c.total, { color: ringColor })}</div>
       ${list1 ? `<ul class="ag-diff">${list1}</ul>` : '<p class="ag-ok">规矩、记忆、审批和钩子都和定稿一样。</p>'}
-      <p class="ag-backwork">${link(`/live/automation/?family=${h.id}`, '看它的后台工作 ›')}</p></article>`;
+      <p class="ag-backwork">${link(`/live/automation/?host=${h.id}`, '看它的后台工作 ›')}</p></article>`;
   }
   function statusSection(d) {
     return `<section class="tp-panel" id="status"><div class="tp-panel__head"><h2>三家现在管得对不对</h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
@@ -368,7 +368,7 @@
       ${why ? `<p class="ag-why"><b>为什么要它</b>${why}</p>` : ''}
       <dl>${facts.filter(([, v]) => v).map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
       <p class="ag-hook__num">近 7 天 · ${numbers}</p>
-      ${sample?.text != null ? `<details class="tp-details" id="sample-${esc(hook.host + '-' + hook.key)}"><summary>最近一次塞给 AI 的原样 · ${esc(when(sample.at))}</summary><pre>${F(sample.text, '这次塞的内容')}</pre></details>` : ''}</article>`;
+      ${sample?.text != null ? `<details class="tp-details" id="sample-${esc(hook.host + '-' + hook.key)}"><summary class="live-disclosure">最近一次塞给 AI 的原样 · ${esc(when(sample.at))}</summary><pre>${F(sample.text, '这次塞的内容')}</pre></details>` : ''}</article>`;
   }
   function hooksSection(d) {
     const hs = d.hook_stats || {}, totals = hs.totals || {};
@@ -421,7 +421,7 @@
     if (!d) { T.paint(page.root, T.placeholder(state, '智能体')); page.tick.set([], { off: true }); return; }
     const html = `<div class="tp-head"><div><h1>智能体</h1><p>三家 AI 被管得对不对、估工期准不准、干了多少活，再往下是三家怎么被管：设置和钩子。</p></div>
         <p class="tp-head__side"><span>截至 ${esc(when(d.at))}</span>${HOSTS.map(h => `<span data-host="${h.id}"><i class="tp-swatch"></i>${h.name}</span>`).join('')}</p></div>
-      ${T.stateNote(state)}${statusSection(d)}${estimateSection(d)}${workSection(d)}${configSection(d)}${hooksSection(d)}`;
+      ${T.stateNote(state)}${statusSection(d)}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer) || ''}${configSection(d)}${hooksSection(d)}`;
     T.paint(page.root, html);
     page.tick.set(feed(d), { off: state.offline });
     if (!landed && location.hash) landed = T.reveal(location.hash.slice(1));
@@ -430,6 +430,9 @@
   const page = T.boot({ resource: 'agents', ask: () => '请看实况智能体页：三家规则、钩子和设置有没有对上，工期估得准不准。先用大白话说，别动手。',
     onState(next) { state = next; draw(); } });
   page.root.addEventListener('click', e => {
+    // 搬来的两块（你跟三家说了多少、三家常用的技能）：切换时段、点一家高亮
+    const moved = window.AgentsMoved?.click(e.target);
+    if (moved) { T.keep(page.root, moved, draw); return; }
     const cell = e.target.closest('[data-cell]'), seg = e.target.closest('[data-period]'), more = e.target.closest('[data-models]');
     if (cell) { expanded = expanded === cell.dataset.cell ? null : cell.dataset.cell; T.keep(page.root, `[data-cell="${cell.dataset.cell}"]`, draw); }
     if (more) { const id = more.dataset.models; modelsOpen.has(id) ? modelsOpen.delete(id) : modelsOpen.add(id); T.keep(page.root, `[data-models="${id}"]`, draw); }
