@@ -38,7 +38,26 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header><div class="site-header" aria-hidden="true"></div><main id="pictures" aria-label="原话存档介绍"><section class="picture" id="原话存档-01" data-initial-cover><img crossorigin="anonymous" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/27cd5e6eac7cfe335bc5f30eb4d2fd22a1eae3149a8b701199a4c01a857035de/agents/assets/%E5%8E%9F%E8%AF%9D%E5%AD%98%E6%A1%A3-01-v1.webp" data-cover-pending width="2172" height="724" alt="封面" fetchpriority="high"><h2 class="picture-title-fallback">原话存档</h2><p class="picture-cover-error" role="status">封面图暂时没加载出来。<br>我对 Claude、Codex 说过的每句话都一字不改地存着；AI 要说哪件事是我定的、我要的，得拿那句原话来对，它自己的总结不算数。</p></section></main>
-<dialog id="details" aria-labelledby="detail-title"><div class="detail-stage"><div class="detail-shot" title="点击图片收起"></div><aside class="drawer"><header style="--order:0"><div class="detail-meta"></div><h2 id="detail-title"></h2><div class="detail-count"></div><button id="close" type="button">收起 ×</button><i class="progress"></i></header><div class="detail-body" tabindex="0"></div></aside></div></dialog><script>(() => {
+<dialog id="details" aria-labelledby="detail-title"><div class="detail-stage"><div class="detail-shot" title="点击图片收起"></div><aside class="drawer"><header style="--order:0"><div class="detail-meta"></div><h2 id="detail-title"></h2><div class="detail-count"></div><button id="close" type="button">收起 ×</button><i class="progress"></i></header><div class="detail-body" tabindex="0"></div></aside></div></dialog>
+<script>
+(() => {
+  const chapter = location.hash.match(/-(0[1-7])$/)?.[1];
+  if (!chapter) return;
+  const id = '原话存档-' + chapter;
+  if (location.hash.toUpperCase() !== '#' + encodeURIComponent(id)) return;
+
+  const jump = () => {
+    const section = document.getElementById(id);
+    if (!section) return;
+    observer.disconnect();
+    section.scrollIntoView({block: 'start', behavior: 'instant'});
+  };
+  const observer = new MutationObserver(jump);
+  observer.observe(document.getElementById('pictures'), {childList: true});
+  jump();
+})();
+</script>
+<script>(() => {
   const cover = document.querySelector('[data-initial-cover] > img');
   if (cover) {
     const root = document.documentElement;
