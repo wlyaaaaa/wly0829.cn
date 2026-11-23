@@ -542,7 +542,8 @@
       if (restart != null) {
         r.cursor.hidden = true;
         const stamp = bj(restart).toISOString().slice(5, 19).replace('T', ' ');
-        tip.show(`<b>开机或重启</b><span>${esc(stamp)} · 关机时刻不明</span>`, (box.left - hostBox.left) * scale + px, tipY);
+        const before = spans.findLast(([t0]) => t0 < restart);
+        tip.show(`<b>开机或重启</b><span>${esc(stamp)} · ${states[before?.[1]]?.id === 'off' ? '前面那段算关机' : '关机时刻不明'}</span>`, (box.left - hostBox.left) * scale + px, tipY);
         return;
       }
       const marked = r.marks.findLast((m) => px >= m.left && px <= m.right);
