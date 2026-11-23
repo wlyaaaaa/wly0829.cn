@@ -45,7 +45,8 @@
     // 后台按天给（三位小数）；不到一天写小时，不到一小时写分钟
     const peak = Math.max(avg || 0, ...trend.map(x => x.days || 0));
     const unit = peak >= 1 ? { per: 1, name: '天' } : peak * 24 >= 1 ? { per: 24, name: '小时' } : { per: 1440, name: '分钟' };
-    // 跟得最久：后台只挑 AI 正在跟的事；一件都没有时 oldest 是 null，空着时先照写后台给的 oldest_text，没给再用原来那句
+    // 跟得最久：后台只挑 AI 正在跟的事；一件都没有时 oldest 是 null，空着时先照写后台给的 oldest_text，没给再用原来那句。
+    // 手上还有事（open 大于 0）时 oldest_text“现在没有 AI 正在跟的事”和“AI 手上 N 件”打架，不照写，写“最早那件没读到”（M675）
     const oldest = s.oldest || null;
     const dots = oldest && known(oldest.check_count) && known(oldest.check_limit)
       ? `<span class="lg-dots">${Array.from({ length: oldest.check_limit }, (_, i) => `<i${i < oldest.check_count ? ' class="is-on"' : ''}></i>`).join('')}</span>看过 ${int(oldest.check_count)} 次 · 最多 ${int(oldest.check_limit)} 次` : '';
@@ -56,7 +57,7 @@
       <section class="tp-panel lg-cell"><h2>平均多久了结</h2><p class="tp-big">${known(avg) ? `${big(avg * unit.per, 'avg', unit.per === 1440 ? 'int' : 'dec')}<small>${unit.name}</small>` : '<span class="tp-fog">还没采上</span>'}</p>
         ${trend.filter(x => known(x.days)).length > 1 ? T.line({ series: [{ color: '#00a650', values: trend.map(x => known(x.days) ? x.days * unit.per : null) }], labels: trend.map(x => day(x.date + 'T12:00:00+08:00')), width: 300, height: 110, max: T.niceMax(Math.max(...trend.map(x => (x.days || 0) * unit.per), 1)), fmt: v => dec(v), draw: !drawn }) + `<p class="tp-small">每天往前 7 天的平均，单位${unit.name}；没有了结的日子空着。</p>` : '<p class="tp-small">只算近 7 天了结的，从 AI 接手算到了结。</p>'}</section>
       <section class="tp-panel lg-cell lg-oldest"><h2>跟得最久</h2>${oldest ? `<p class="lg-oldest__t">${link(oldest.href, F(titleOf(items.find(it => it.id === oldest.id) || oldest), '事项标题'))}</p>
-        <p class="tp-big">${big(oldest.days ?? oldest.age_days, 'oldest')}<small>天</small></p><p class="tp-small lg-oldest__n">${dots}</p>` : `<p class="tp-empty">${s.oldest_text != null && U.fieldText(s.oldest_text, viewer).trim() ? F(s.oldest_text, '跟得最久') : open === 0 ? '没有未了结的事' : '最早那件没读到'}</p>`}</section></div>`;
+        <p class="tp-big">${big(oldest.days ?? oldest.age_days, 'oldest')}<small>天</small></p><p class="tp-small lg-oldest__n">${dots}</p>` : `<p class="tp-empty">${s.oldest_text != null && U.fieldText(s.oldest_text, viewer).trim() && !(open > 0) ? F(s.oldest_text, '跟得最久') : open === 0 ? '没有未了结的事' : '最早那件没读到'}</p>`}</section></div>`;
   }
   function pairBars(days) {
     const max = T.niceMax(Math.max(1, ...days.flatMap(x => [x.opened || 0, x.closed || 0])));

@@ -8,7 +8,7 @@
   const params = new URLSearchParams(location.search);
   const category = R.CATS.includes(params.get('type')) ? params.get('type') : '', id = params.get('run') || '';
   const back = T.path('/live/automation/', { category });
-  let state, viewer = 'public', board = null, siblings = null, fromReferrer = false;
+  let state, viewer = 'public', board = null, siblings = null, others = null, fromReferrer = false;
   const F = (v, name) => T.field(v, viewer, name);
   const you = () => T.you(viewer);
   const name = () => R.catName(category, viewer, list(board?.data?.categories).find(c => c.id === category)?.title);
@@ -22,7 +22,7 @@
   const span = m => !known(m) ? '' : m < 1 ? `${Math.max(1, Math.round(m * 60))} 秒` : m < 60 ? `${Math.round(m)} 分钟` : `${Math.floor(m / 60)} 小时 ${Math.round(m % 60)} 分`;
   function title(r) {
     const lead = r.subject ? `${F(r.subject.title, '这件活')} · 第 ${int(r.subject.round ?? 1)} 轮` : '';
-    const tail = r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
+    const tail = r.deferred ? R.deferredTitle(r, F) : r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
       : F(r.summary, '这一轮做了什么') || '跑完了';
     return lead && tail ? `${lead}：${tail}` : lead || tail;
   }
@@ -60,7 +60,7 @@
     const extra = [recorded && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${recorded}</ul>`,
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
       receipt.href && `<p>${link(receipt.href, '打开业务回执 ›')}</p>`].filter(Boolean).join('');
-    const empty = r.status === 'running' ? '还在跑，做完再写。' : r.status === 'incomplete' ? `没做成，这一轮没做出东西${r.reason ? `：${F(r.reason, '原因')}` : ''}。`
+    const empty = r.status === 'running' ? '还在跑，做完再写。' : r.deferred ? '暂时不修，等下一次检查再看；这一轮没做出要记下的东西。' : r.status === 'incomplete' ? `没做成，这一轮没做出东西${r.reason ? `：${F(r.reason, '原因')}` : ''}。`
       : r.outputCount > 0 ? `做出 ${int(r.outputCount)} 样，后台这一版没列出是哪几样。` : '这一轮没做出要记下的东西。';
     return `${rows ? `<ol class="ar-outs">${rows}</ol>` : `<p class="ar-none">${empty}</p>`}${extra}`;
   }
@@ -76,7 +76,8 @@
       if (T.stamp(r.startedAt)) steps.push({ at: r.startedAt, text: `${T.clock(r.startedAt)} ${r.resumes ? '接着做' : '开始'}`, tone: 'ok' });
       if (r.status === 'running') steps.push({ at: r.lastAt, text: `正在${U.fieldText(r.activity, viewer).replace(/^正在/, '') || '跑'}`, tone: 'live' });
       if (r.status === 'completed' && T.stamp(r.finishedAt)) steps.push({ at: r.finishedAt, text: `${T.clock(r.finishedAt)} 交回：${U.fieldText(r.summary, viewer) || '跑完了'}`, tone: 'ok' });
-      if (r.status === 'incomplete') steps.push({ at: r.finishedAt || r.lastAt, text: `${T.clock(r.finishedAt || r.lastAt)} 没做成${r.reason ? `：${U.fieldText(r.reason, viewer)}` : ''}`, tone: 'bad' });
+      if (r.deferred) steps.push({ at: r.finishedAt || r.lastAt, text: `${T.clock(r.finishedAt || r.lastAt)} 交回：${U.fieldText(r.summary, viewer) || '暂时不修'}`, tone: 'info' });
+      else if (r.status === 'incomplete') steps.push({ at: r.finishedAt || r.lastAt, text: `${T.clock(r.finishedAt || r.lastAt)} 没做成${r.reason ? `：${U.fieldText(r.reason, viewer)}` : ''}`, tone: 'bad' });
       const n = r.resumedBy && other(r.resumedBy);
       if (r.resumedBy) steps.push({ at: n?.startedAt, text: `${n ? `${T.clock(n.startedAt)} ` : '后来'}接着做了`, tone: 'ok', href: R.runPath(category, r.resumedBy) });
     }
@@ -124,7 +125,8 @@
     const backLink = document.querySelector('[data-back]');
     viewer = T.viewerOf(state);
     if (backLink && category && !fromReferrer) { backLink.textContent = U.fieldText(name(), viewer); backLink.href = back; }
-    page.tick.set(R.ticker(board?.data, null, viewer), { off: !!board?.offline });
+    // 快讯条照自动任务页：用每一轮的列表排开始、跑完、停了（摘一句不放）。后台的 feed 只留最近 30 条，常常全是摘一句，滤完就空了（M672）
+    page.tick.set(R.ticker(board?.data, others?.rows?.length ? others.rows : siblings?.rows || null, viewer), { off: !!board?.offline });
     const d = state?.data;
     if (!category || !id) { T.paint(page.root, '<p class="tp-placeholder" role="status">网址里没写是哪一轮。</p>'); return; }
     if (!d) { T.paint(page.root, T.placeholder(state, '这一轮')); return; }
@@ -152,6 +154,13 @@
   // 从实况首页、等你的事、账本、AI 对话、智能体点进来的，返回回那一页（首页落回那张卡）；别的照旧回这一类（live-runs.js 的来回的路）
   fromReferrer = !!window.LiveRuns?.backToReferrer(document.querySelector('[data-back]'));
   if (category) Live.watch('automation/runs', { category }, { phase(st) { siblings = R.page(st.data, viewer); if (state) draw(); } });
+  // 全部几类（不含摘一句）一次读：数据约定写了列表可带 exclude=excerpt。后台还不认这个参数（回 4xx）时停掉这一份，快讯条退回只排这一类
+  let allRuns = null;
+  allRuns = Live.watch('automation/runs', { exclude: 'excerpt' }, { phase(st) {
+    if (st.status >= 400 && st.status < 500) { setTimeout(() => allRuns?.stop()); others = null; }
+    else others = R.page(st.data, viewer);
+    if (state) draw();
+  } });
   Live.watch('automation', {}, { phase(st) { board = st; if (state) draw(); } });
   page.root.addEventListener('click', e => {
     const prompt = e.target.closest('[data-prompt]');

@@ -55,9 +55,12 @@
     const r = raw || {}, category = str(r.category), status = ['running', 'completed', 'incomplete'].includes(r.status) ? r.status : 'unknown';
     const who = whoOf(r.worker), started = r.started_at || r.queued_at;
     const minutes = num(r.duration_minutes) ?? (status !== 'running' ? minutesBetween(started, r.finished_at || r.last_activity_at) : null);
+    // 暂缓：后台把“暂时不修”（自动修理修了还没好、由做事的 AI 判断先等下一次检查点）记成 incomplete + outcome deferred。
+    // 这不是失败：页面上灰点、写“暂时不修”，不写“没做成”、不标红（M674）。status 照后台原样，筛选“没做成的”仍按后台分。
+    const deferred = status === 'incomplete' && str(r.outcome) === 'deferred';
     const subject = r.subject && (r.subject.id || r.subject.title) ? { id: r.subject.id || r.subject.title, title: r.subject.title, href: T.path(r.subject.href), round: num(r.subject.round) } : null;
     return {
-      key: `${category}:${r.run_id}`, category, id: str(r.run_id), status, trigger: r.trigger, who, family: familyOf(r.worker),
+      key: `${category}:${r.run_id}`, category, id: str(r.run_id), status, deferred, trigger: r.trigger, who, family: familyOf(r.worker),
       queuedAt: r.queued_at, startedAt: started, finishedAt: r.finished_at, lastAt: r.last_activity_at || r.finished_at || started,
       minutes, summary: r.summary, reason: r.reason, activity: r.activity, subject,
       outputs: list(r.outputs).map(o => output(o, viewer)), outputCount: num(r.output_count),
@@ -65,6 +68,12 @@
       conversation: r.conversation_available === true, receipt: r.receipt_available === true,
       href: runPath(category, r.run_id),
     };
+  }
+
+  // 暂缓那一轮的标题：“暂时不修：……”。后台的 summary 已经以原因开头（“暂时不修 · H 盘……”）就照写，不重复；F 是页面的转义写法
+  function deferredTitle(r, F) {
+    const reason = F(r.reason, '原因') || '暂时不修', summary = F(r.summary, '结果');
+    return !summary ? reason : summary.startsWith(reason) ? summary : `${reason}：${summary}`;
   }
 
   // 对话：后台给的是聊天读口地址 /computer-access/live/v1/chats/{id}（已按受众处理），页面拿号去读 chats/{id}、链到 /live/chat/?id={id}
@@ -116,7 +125,8 @@
         const actor = title(r.category), what = r.subject ? `${text(r.subject.title)}${r.subject.round ? ` 第 ${r.subject.round} 轮` : ''}` : text(r.summary);
         if (T.stamp(r.startedAt)) out.push({ at: r.startedAt, actor, html: `<span><em>开始</em>：${U.esc(what || '这一轮')}</span>`, href: r.href, tone: 'ok' });
         if (r.status === 'completed' && T.stamp(r.finishedAt)) out.push({ at: r.finishedAt, actor, html: `<span><em>跑完</em>：${U.esc(text(r.summary) || '跑完了')}</span>`, href: r.href, tone: 'ok' });
-        if (r.status === 'incomplete' && T.stamp(r.finishedAt || r.lastAt)) out.push({ at: r.finishedAt || r.lastAt, actor, html: `<span><em>停了</em>：${U.esc(text(r.reason) || '没做成')}</span>`, href: r.href, tone: 'bad' });
+        if (r.deferred && T.stamp(r.finishedAt || r.lastAt)) out.push({ at: r.finishedAt || r.lastAt, actor, html: `<span><em>暂时不修</em>：${U.esc(text(r.summary).replace(/^暂时不修\s*[·:：]\s*/, '') || '等下一次检查')}</span>`, href: r.href, tone: 'info' });
+        else if (r.status === 'incomplete' && T.stamp(r.finishedAt || r.lastAt)) out.push({ at: r.finishedAt || r.lastAt, actor, html: `<span><em>停了</em>：${U.esc(text(r.reason) || '没做成')}</span>`, href: r.href, tone: 'bad' });
       }
     } else {
       const excerpt = title('excerpt');
@@ -131,5 +141,5 @@
     return out.filter(r => T.stamp(r.at) > cut).sort((a, b) => T.stamp(b.at) - T.stamp(a.at)).slice(0, 30);
   }
 
-  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, minutesBetween, ticker };
+  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, minutesBetween, ticker, deferredTitle };
 })();

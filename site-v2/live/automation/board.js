@@ -142,7 +142,9 @@
     if (r.resumes) { const o = other(r.resumes); return link(R.runPath(r.category, r.resumes), `接着 ${o ? esc(when(o.startedAt)) + ' ' : '上次'}那一轮 ›`); }
     return '';
   }
-  const tone = r => r.status === 'running' ? 'run' : r.status === 'incomplete' ? 'bad' : r.status === 'completed' ? 'ok' : 'off';
+  // 暂缓（暂时不修）是灰点，和没做成的红点分开（M674）
+  const tone = r => r.status === 'running' ? 'run' : r.deferred ? 'off' : r.status === 'incomplete' ? 'bad' : r.status === 'completed' ? 'ok' : 'off';
+  const endText = r => r.deferred ? R.deferredTitle(r, F) : `没做成：${F(r.reason, '原因') || '原因没记下'}`;
   function card(d, v, c) {
     const r = c.run, since = T.stamp(r.startedAt);
     let head = `<p class="au-card__cat">${catLabel(d, c.category)}</p>`;
@@ -152,17 +154,17 @@
       if (r.status === 'running') title = what;
       else {
         head = `<p class="au-card__cat">${catLabel(d, c.category)} · ${what}</p>`;
-        title = r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : F(r.summary, '结果') || '跑完了';
+        title = r.status === 'incomplete' ? endText(r) : F(r.summary, '结果') || '跑完了';
       }
       const earlier = c.rounds.filter(x => x !== r);
-      if (earlier.length) body += `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">第 ${int(x.subject?.round ?? c.rounds.indexOf(x) + 1)} 轮 · ${range(x)} · ${x.status === 'incomplete' ? '没做成' : F(x.summary, '结果') || '跑完了'} ›</a>`).join('')}</p>`;
-    } else if (r.status === 'incomplete') title = `没做成：${F(r.reason, '原因') || '原因没记下'}`;
+      if (earlier.length) body += `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">第 ${int(x.subject?.round ?? c.rounds.indexOf(x) + 1)} 轮 · ${range(x)} · ${x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : F(x.summary, '结果') || '跑完了'} ›</a>`).join('')}</p>`;
+    } else if (r.status === 'incomplete') title = endText(r);
     else title = F(r.summary, '这一轮做了什么') || (r.status === 'running' ? '正在跑' : '跑完了');
     if (r.status === 'running') {
       const doing = F(r.activity, '正在干什么');
       meta = [who(r), since ? `${esc(T.clock(r.startedAt))} 起，<span data-ran="${since}">跑了 ${minutes((Date.now() - since) / 1000)}</span>` : '', doing && `正在${doing.replace(/^正在/, '')}`].filter(Boolean).join(' · ');
     } else {
-      body += r.status === 'incomplete' ? '' : outputs(r);
+      body += r.status === 'incomplete' && !r.deferred ? '' : outputs(r);
       meta = [range(r), who(r), F(r.trigger, '为什么开这一轮'), chain(r, v)].filter(Boolean).join(' · ');
     }
     if (c.kind === 'repair' && c.subject.href) meta += ` · ${link(c.subject.href, '这件的全部经过 ›')}`;

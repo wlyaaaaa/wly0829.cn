@@ -75,7 +75,7 @@
     // 今天没有到日子的：写下一件哪天看，用后台给的 next_due={date（北京日期）, href}；没有下一件时后台给 null
     const nd = nl?.next_due, next = nd && /^\d{4}-\d\d-\d\d/.test(nd.date || '') ? { day: nd.date.slice(5, 10), href: site(nd.href) } : null;
     const oldest = d.oldest ? { ...d.oldest, title: d.oldest.title ?? d.oldest.plain_title ?? d.oldest.text } : null;
-    // 一件也没有时卡上整句写“AI 暂无待跟事项”；手上有事但后台没挑出最久那件，就不写这一行（不写“现在没有 AI 正在跟的事”自相矛盾）
+    // 一件也没有时卡上整句写“AI 暂无待跟事项”；手上有事但后台没挑出最久那件，就不写这一行（后台照给 oldest_text“现在没有 AI 正在跟的事”也不写，免得自相矛盾，M671）
     const oldestText = U.fieldHtml(d.oldest_text, { name: '跟得最久', kind: viewer });
     const base = { next, oldest, oldestText };
     if (nl) {
@@ -179,7 +179,7 @@
     return { tone, head, body:
       `<div class="b6-big"><strong>AI 在跟 <em>${v.open.n == null ? num(null) : `<a href="${esc(route(v.open.href))}">${esc(v.open.n)}</a>`}</em> 件</strong></div>
       <p>${dueLine}</p>
-      ${oldest || v.oldestText ? `<p class="b6-last">跟得最久：${oldest ? `${oldest.next_at ? field(oldest.title, '事项标题') : go(oldest.href, field(oldest.title, '事项标题'))}${looked}${oldest.next_at ? ` · ${go(oldest.href, `下次 ${esc(U.date(oldest.next_at))}`)}` : ''}` : v.oldestText}</p>` : ''}
+      ${oldest || v.oldestText && v.open.n == null ? `<p class="b6-last">跟得最久：${oldest ? `${oldest.next_at ? field(oldest.title, '事项标题') : go(oldest.href, field(oldest.title, '事项标题'))}${looked}${oldest.next_at ? ` · ${go(oldest.href, `下次 ${esc(U.date(oldest.next_at))}`)}` : ''}` : v.oldestText}</p>` : ''}
       <p class="b6-foot">${flow}</p>` };
   }
   // AI 对话卡和 AI 对话页顶上那一行“后台另有 N 个在跑 ›”：数自动任务这会儿在跑的轮数（AI 对话不列后台的对话，本人定的）。
