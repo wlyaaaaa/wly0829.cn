@@ -135,7 +135,7 @@
         <p class="tp-small">${c.fail.length ? `${c.total} 项里 ${c.pass} 项照规矩` : `${c.total} 项都照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
         ${T.ring(c.pass, c.total, { color: ringColor })}</div>
       ${list1 ? `<ul class="ag-diff">${list1}</ul>` : '<p class="ag-ok">规矩、记忆、审批和钩子都和定稿一样。</p>'}
-      <p class="ag-backwork">${link(`/live/automation/?host=${h.id}`, '看它的后台工作 ›')}</p></article>`;
+      <p class="ag-backwork">${link(`/live/automation/?family=${h.id}`, '看它的后台工作 ›')}</p></article>`;
   }
   function statusSection(d) {
     return `<section class="tp-panel" id="status"><div class="tp-panel__head"><h2>三家现在管得对不对</h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>

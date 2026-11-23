@@ -119,7 +119,10 @@
 .ag-hook dd { margin: 0; }
 .ag-hook__num { margin: 8px 0 0; font-size: 13px; color: #3d3d3a; font-variant-numeric: tabular-nums; }
 
-/* 六、从规则仓项目页搬来的三块：你跟三家说了多少、三家常用的技能、AI 最常被拦在哪。
+/* 钩子“最近一次塞给 AI 的原样”：summary 带 live-disclosure 躲开第二层通用的“展开后把 ::after 转 90 度”，“收起”两个字也不许被挤得折行（照 F1） */
+.ag-hook .tp-details > summary::after { flex: none; white-space: nowrap; }
+
+/* 六、从规则仓项目页搬来的两块：你跟三家说了多少、三家常用的技能（“AI 最常被拦在哪”本人 03:00 取消）。
    右上切换和“三家各干了多少活”同一种（.tp-seg）；点一家：这家的行和小签亮起来、别家的柱段和横条变淡，数换成这一家的。 */
 .ag-mhead { display: flex; align-items: center; gap: 14px; flex: none; }
 .ag-mgrid { grid-template-columns: 330px minmax(0, 1fr); gap: 28px; align-items: start; }
@@ -167,5 +170,13 @@
 .ag-mfoot { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 14px 0 0; }
 .ag-mfoot .tp-small { margin: 0; }
 .ag-mnote { margin: 12px 0 0; }
-@media (max-width: 1280px) { .ag-mgrid { grid-template-columns: 280px minmax(0, 1fr); } .ag-hrow { grid-template-columns: 240px minmax(0, 1fr) 104px; } }
+/* 窄一点（1024 这类）跟“三家各干了多少活”一样改成上下排：大数和三家那几行并排在上，按天的柱子占满一整行，免得 30 根柱子挤成小字 */
+@media (max-width: 1280px) {
+  .ag-mgrid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .ag-mgrid > * + * { border-left: 0; padding-left: 0; border-top: 1px solid var(--tp-hair); padding-top: 14px; }
+  .ag-mleft { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 380px); column-gap: 32px; align-items: start; }
+  .ag-mleft .ag-mtoday { grid-column: 1; grid-row: 2; margin-left: 0; }
+  .ag-mleft .ag-fams { grid-column: 2; grid-row: 1 / span 2; }
+  .ag-hrow { grid-template-columns: 240px minmax(0, 1fr) 104px; }
+}
 .ag-moved .tp-panel__head { flex-wrap: wrap; row-gap: 8px; }

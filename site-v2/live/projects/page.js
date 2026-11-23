@@ -81,12 +81,9 @@
       ?? (Number.isFinite(active) && Number.isFinite(frozen) ? active + frozen : null);
     const privateSummary = home?.text && typeof home.text === 'object';
     const summary = privateSummary ? '' : sp(home?.text).split(' · ').filter(s => !/^数据截止\s/.test(s)).join(' · ');
-    // 约法“全部项目”不含冻结：总数和代码字数只算在用的（日用、偶用），冻结的另写一句（本人 11-24 02:45 定的那一批）
+    // 约法“全部项目”不含冻结：项目数只算在用的（日用、偶用），冻结的另写一句；文档、代码的字数和行数在下面那排，也只算在用的（本人 11-24 02:45 定的那一批）
     const size = activeRoster?.code_size, inUse = Number.isFinite(size?.active) ? size.active : active, cold = Number.isFinite(size?.frozen) ? size.frozen : frozen;
-    const wan = n => (n / 1e4).toLocaleString('zh-CN', { maximumFractionDigits: 1 });
-    const code = !size ? '' : Number.isFinite(size.code_chars) ? `代码 ${wan(size.code_chars)} 万字`
-      : Number.isFinite(size.observed_code_chars) ? `代码至少 ${wan(size.observed_code_chars)} 万字${Number.isFinite(size.covered) && Number.isFinite(inUse) ? `（数到 ${size.covered}／${inUse} 个）` : ''}` : '';
-    const counts = [Number.isFinite(inUse) && `共 ${inUse} 个在用项目`, code, Number.isFinite(cold) && cold > 0 && `另有 ${cold} 个冻结，不算在内`].filter(Boolean).join(' · ');
+    const counts = [Number.isFinite(inUse) && `共 ${inUse} 个在用项目`, Number.isFinite(cold) && cold > 0 && `另有 ${cold} 个冻结，不算在内`].filter(Boolean).join(' · ');
     const text = frozenOnly ? Number.isFinite(frozenRoster?.total) ? `共 ${frozenRoster.total} 个冻结项目` : '冻结的项目'
       : Number.isFinite(inUse) ? counts : [Number.isFinite(total) && `共 ${total} 个项目`, summary].filter(Boolean).map(sp).join(' · ');
     const sourceAt = frozenOnly ? frozenRoster?.source_at ?? frozenRoster?.at : home?.source_at ?? home?.at
@@ -260,7 +257,9 @@
       extraLanded = true;
       requestAnimationFrame(() => target.scrollIntoView());
     }
-    window.LiveProjectViz.summary($('pj-summary'), d?.summary, viewer); renderActivity(d?.activity);
+    // 文档字数、代码行数和代码字数用 code_size（数据约定第 10 节：同一份只算在用项目的合计）；它还没出数的那几项照旧用 summary
+    const size = d?.code_size && Object.fromEntries(['docs_chars', 'code_lines', 'code_chars', 'observed_code_chars', 'covered', 'active'].filter(k => Number.isFinite(d.code_size[k])).map(k => [k, d.code_size[k]]));
+    window.LiveProjectViz.summary($('pj-summary'), d?.summary && size ? { ...d.summary, ...size } : d?.summary, viewer); renderActivity(d?.activity);
     if (!U.offline?.() && !d?.summary) U.html($('pj-summary'), '<span class="pj-summary-none">近 7 天、文档、代码暂时读不到</span>');
     $('activity').querySelector('.part').hidden = !U.offline?.() && !d?.activity;
     if (!U.offline?.() && !d?.activity) U.html($('activity-chart'), '<p class="pj-note">近 30 天项目活跃暂时读不到</p>');
