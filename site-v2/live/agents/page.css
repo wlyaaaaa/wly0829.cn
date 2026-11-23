@@ -65,11 +65,12 @@
 .ag-hooktable tbody th { width: 130px; }
 .ag-heat { padding: 0 !important; background: color-mix(in srgb, var(--host) calc(var(--heat, 0) * 100%), #fff); border-left: 2px solid #fff; }
 .ag-heat button { display: flex; align-items: center; gap: 6px; width: 100%; min-height: 40px; padding: 8px 12px; border: 0; background: none; font: inherit; font-size: 13.5px; text-align: left; color: var(--ink); cursor: pointer; }
-.ag-heat button:hover { box-shadow: inset 0 0 0 2px rgb(20 20 19 / .35); }
+.ag-heat button { transition: background .15s ease; }
+.ag-heat button:hover { background: rgb(20 20 19 / .07); }
+.ag-heat button:hover .tp-chev { color: var(--ink); }
 .ag-heat button:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
 .ag-heat button[aria-expanded="true"] { box-shadow: inset 0 0 0 2px var(--ink); font-weight: 700; }
 .ag-heat button > span:first-child { flex: 1; min-width: 0; }
-.ag-chev { color: #57564f; }
 .ag-heat--none { padding: 10px 12px !important; background: #f6f6f3; font-size: 12.5px; line-height: 18px; color: var(--muted); }
 .ag-badge { flex: none; padding: 0 6px; border-radius: 5px; font-size: 11.5px; font-weight: 800; line-height: 18px; color: #fff; background: var(--tp-amber); }
 .ag-badge[data-tone="bad"] { background: var(--tp-red); }

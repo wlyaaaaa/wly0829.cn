@@ -105,3 +105,6 @@
 .lg-rep__axis span[data-edge="start"] { translate: 0 0; }
 .lg-rep__axis span[data-edge="end"] { translate: -100% 0; }
 .lg-x { margin-left: 8px; padding: 0 7px; border-radius: 999px; background: rgb(20 20 19 / .06); font-size: 12px; font-weight: 600; color: #57564f; white-space: nowrap; }
+.lg-more .tp-chev { font-size: inherit; color: inherit; }
+.lg-more:hover { background: rgb(20 20 19 / .04); }
+.lg-gap { margin: 4px 0 0; padding: 8px 12px; border-radius: 8px; background: rgb(20 20 19 / .04); }

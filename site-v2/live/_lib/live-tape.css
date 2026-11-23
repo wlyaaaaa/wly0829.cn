@@ -195,12 +195,20 @@ a.tp-ticker__item:hover { color: #fff; }
 .tp-flash { animation: tp-flash 1.1s ease; }
 @keyframes tp-flash { 0% { box-shadow: inset 0 0 0 2px var(--tp-green); } 100% { box-shadow: inset 0 0 0 2px transparent; } }
 
+/* 点开、收起的标记：和这一行字上下居中的箭头；点开后箭头朝上、写“收起” */
+.tp-chev { display: inline-flex; align-items: center; gap: 7px; font-style: normal; font-size: 12.5px; font-weight: 600; line-height: 18px; color: #57564f; white-space: nowrap; }
+.tp-chev::after { content: ""; flex: none; width: 6px; height: 6px; margin-top: -3px; border-right: 1.8px solid currentColor; border-bottom: 1.8px solid currentColor; rotate: 45deg; transition: rotate .2s ease, margin .2s ease; }
+[aria-expanded="true"] .tp-chev::after, .tp-chev.is-open::after { rotate: -135deg; margin-top: 3px; }
+
 /* 收着的原文 */
 .tp-details { margin: 8px 0 0; border: 1px solid var(--tp-hair); border-radius: 9px; background: #fafaf8; }
-.tp-details > summary { padding: 7px 12px; font-size: 13px; font-weight: 600; color: #3d3d3a; cursor: pointer; list-style: none; }
+.tp-details > summary { display: flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 9px; font-size: 13px; font-weight: 600; line-height: 18px; color: #3d3d3a; cursor: pointer; list-style: none; transition: background .15s ease; }
+.tp-details > summary:hover { background: rgb(20 20 19 / .05); }
 .tp-details > summary::-webkit-details-marker { display: none; }
-.tp-details > summary::after { content: " ⌄"; color: var(--muted); }
-.tp-details[open] > summary::after { content: " · 收起"; font-weight: 400; color: var(--muted); }
+.tp-details > summary::after { content: ""; order: 2; margin-left: auto; font-size: 12.5px; font-weight: 600; color: #57564f; }
+.tp-details[open] > summary::after { content: "收起"; }
+.tp-details > summary::before { content: ""; order: 3; flex: none; width: 6px; height: 6px; margin: -3px 2px 0 0; border-right: 1.8px solid #57564f; border-bottom: 1.8px solid #57564f; rotate: 45deg; transition: rotate .2s ease, margin .2s ease; }
+.tp-details[open] > summary::before { rotate: -135deg; margin-top: 3px; }
 .tp-details pre { margin: 0; padding: 4px 14px 12px; max-height: 340px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--mono); font-size: 12.5px; line-height: 19px; color: #3d3d3a; }
 
 .tp-placeholder { margin: 24px 0; padding: 40px; border: 1px dashed var(--tp-line); border-radius: var(--tp-r); text-align: center; color: var(--muted); }

@@ -24,12 +24,21 @@
 .au-run__line .tp-dot { width: 12px; height: 12px; }
 .au-run__line > span:not(.tp-dot) + span::before { content: "·"; margin-right: 18px; color: var(--muted); }
 .au-run__line .tp-link { font-weight: 700; }
-.au-progress { position: relative; display: flex; align-items: center; gap: 12px; margin-top: 12px; }
-.au-progress::before { content: ""; position: absolute; left: 0; right: 56px; height: 12px; border-radius: 999px; background: rgb(20 20 19 / .07); }
-.au-progress i { position: relative; display: block; height: 12px; width: 0; max-width: calc(100% - 56px); border-radius: 999px; background: var(--tp-green); transition: width 1s linear; }
-.au-progress b { position: absolute; right: 0; font-family: var(--black); font-size: 17px; }
+.au-progress { position: relative; display: flex; align-items: center; margin-top: 12px; --label: 200px; }
+.au-progress::before { content: ""; position: absolute; left: 0; right: var(--label); height: 12px; border-radius: 999px; background: rgb(20 20 19 / .07); }
+.au-progress i { position: relative; display: block; height: 12px; width: 0; max-width: calc(100% - var(--label)); border-radius: 999px; background: var(--tp-green); transition: width 1s linear; }
+.au-progress b { position: absolute; right: 0; width: calc(var(--label) - 14px); text-align: right; font-size: 13.5px; font-weight: 700; color: #3d3d3a; white-space: nowrap; }
 .au-progress.is-unknown i { width: 24%; animation: au-slide 2.4s ease-in-out infinite; }
-@keyframes au-slide { 0% { translate: 0 0; } 50% { translate: calc(300% - 30px) 0; } 100% { translate: 0 0; } }
+@keyframes au-slide { 0% { translate: 0 0; } 50% { translate: calc(316% - var(--label)) 0; } 100% { translate: 0 0; } }
+/* 按步数：做完的步实心，正在做的那一步一闪一闪，没到的灰 */
+.au-steps-bar { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)) 200px; align-items: center; gap: 4px; margin-top: 12px; }
+.au-steps-bar i { height: 12px; border-radius: 3px; background: rgb(20 20 19 / .07); }
+.au-steps-bar i:first-child { border-radius: 999px 3px 3px 999px; }
+.au-steps-bar i:nth-last-child(2) { border-radius: 3px 999px 999px 3px; }
+.au-steps-bar i.is-done { background: var(--tp-green); }
+.au-steps-bar i.is-now { background: rgb(0 166 80 / .4); animation: au-now 1.4s ease-in-out infinite; }
+@keyframes au-now { 50% { background: rgb(0 166 80 / .15); } }
+.au-steps-bar b { justify-self: end; font-size: 13.5px; font-weight: 700; color: #3d3d3a; white-space: nowrap; }
 
 /* 八行总表 */
 .au-table thead th:nth-child(1) { width: 20%; }
@@ -38,13 +47,16 @@
 .au-table thead th:nth-child(5) { width: 205px; }
 .au-table thead th:nth-child(6) { width: 140px; }
 .au-table td, .au-table th { padding-top: 12px; padding-bottom: 12px; }
-.au-row:hover > * { background: #fafaf7; }
+.au-row { cursor: pointer; }
+.au-row > * { transition: background .15s ease; }
+.au-row:hover > * { background: #f3f3ee; }
+.au-row:hover .tp-chev { color: var(--ink); }
 .au-row.is-open > * { background: var(--tp-green-soft); border-bottom-color: transparent; }
 .au-row[data-mode="off"] > :not(.au-switchcell) { color: var(--tp-gray); }
 .au-name { display: grid; gap: 2px; width: 100%; padding: 0; border: 0; background: none; font: inherit; text-align: left; color: inherit; cursor: pointer; }
 .au-name b { font-size: 16.5px; font-weight: 800; }
 .au-name span { font-size: 12.5px; font-weight: 400; color: #6c6b64; white-space: normal; }
-.au-name i { font-style: normal; font-size: 12.5px; font-weight: 600; color: var(--tp-green-ink); }
+.au-name .tp-chev { margin-top: 2px; color: var(--tp-green-ink); }
 .au-name:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
 .au-model { white-space: nowrap; }
 .au-warn { color: var(--tp-amber); font-weight: 700; }

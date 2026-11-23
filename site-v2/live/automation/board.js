@@ -43,6 +43,19 @@
   }
 
   // —— 现在在跑 ——
+  // 进度条在跑的时候不会满：有步数按步数算（做完的步实心，正在做的那一步闪），没有步数按预计时间算、最多到 95%
+  const lateText = end => Date.now() <= end ? `预计 ${esc(clock(new Date(end).toISOString()))} 完` : `比预计 ${esc(clock(new Date(end).toISOString()))} 晚了 ${minutes((Date.now() - end) / 1000)}`;
+  const timeShare = (from, to) => Math.max(0, Math.min(.95, (Date.now() - from) / (to - from)));
+  const timeText = (from, to) => Date.now() > to ? '按预计时间算：已过预计' : `按预计时间算：${Math.round(timeShare(from, to) * 100)}%`;
+  function progress(r, started, end) {
+    if (known(r.step) && known(r.steps) && r.steps > 0) {
+      const done = Math.max(0, Math.min(r.steps - 1, r.step - 1));
+      return `<div class="au-steps-bar" style="--n:${int(r.steps)}">${Array.from({ length: r.steps }, (_, i) => `<i${i < done ? ' class="is-done"' : i === done ? ' class="is-now"' : ''}></i>`).join('')}
+        <b>按步数：做完 ${int(done)} 步，共 ${int(r.steps)} 步</b></div>`;
+    }
+    if (started && end && end > started) return `<div class="au-progress"><i data-from="${started}" data-to="${end}" style="width:${timeShare(started, end) * 100}%"></i><b data-pct data-from="${started}" data-to="${end}">${timeText(started, end)}</b></div>`;
+    return '<div class="au-progress is-unknown"><i></i><b>进度没采上，只知道在跑</b></div>';
+  }
   function running(d) {
     const rows = list(d.active_categories), cats = list(d.categories);
     if (!rows.length) {
@@ -51,23 +64,21 @@
     }
     return `<section class="tp-panel au-run" id="running">${rows.map(r => {
       const cat = cats.find(c => c.id === r.category), started = T.stamp(r.started_at), end = T.stamp(r.estimated_end_at);
-      const steps = known(r.step) && known(r.steps) ? `第 ${int(r.step)} 步 / 共 ${int(r.steps)} 步${r.step_text ? `：${F(r.step_text)}` : ''}` : '';
-      const share = started && end && end > started ? 'time' : steps ? r.step / r.steps : null;
+      const steps = known(r.step) && known(r.steps) && r.steps > 0 ? `第 ${int(r.step)} 步 / 共 ${int(r.steps)} 步${r.step_text ? `：${F(r.step_text)}` : ''}` : '';
       return `<div class="au-run__row"><p class="au-run__line"><span class="tp-dot is-live" data-tone="ok"></span><b>现在在跑</b>
         <span>${cat ? link(`?type=${cat.id}#cat-${cat.id}`, F(cn(cat.title))) : ''}${r.title ? ` · ${link(r.href, F(r.title, '这件活'))}` : ''}</span>
         ${steps ? `<span>${steps}</span>` : ''}${started ? `<span data-since="${started}">已跑 ${minutes((Date.now() - started) / 1000)}</span>` : ''}
-        ${end ? `<span>预计 ${esc(clock(r.estimated_end_at))} 完</span>` : ''}</p>
-        <div class="au-progress${share == null ? ' is-unknown' : ''}"><i${share === 'time' ? ` data-from="${started}" data-to="${end}"` : share != null ? ` style="width:${share * 100}%"` : ''}></i>
-        ${share != null ? `<b data-pct${share === 'time' ? ` data-from="${started}" data-to="${end}"` : ''}>${share === 'time' ? '' : Math.round(share * 100) + '%'}</b>` : ''}</div></div>`;
+        ${end ? `<span data-late="${end}">${lateText(end)}</span>` : ''}</p>${progress(r, started, end)}</div>`;
     }).join('')}</section>`;
   }
   // 跑着的那条：已跑几分钟、进度条每秒往前走
   setInterval(() => {
     for (const el of document.querySelectorAll('[data-since]')) el.textContent = `已跑 ${minutes((Date.now() - Number(el.dataset.since)) / 1000)}`;
     for (const el of document.querySelectorAll('[data-from][data-to]')) {
-      const from = Number(el.dataset.from), to = Number(el.dataset.to), share = Math.max(0, Math.min(1, (Date.now() - from) / (to - from)));
-      if (el.tagName === 'I') el.style.width = `${share * 100}%`; else el.textContent = `${Math.round(share * 100)}%`;
+      const from = Number(el.dataset.from), to = Number(el.dataset.to);
+      if (el.tagName === 'I') el.style.width = `${timeShare(from, to) * 100}%`; else el.textContent = timeText(from, to);
     }
+    for (const el of document.querySelectorAll('[data-late]')) el.innerHTML = lateText(Number(el.dataset.late));
   }, 1000);
 
   function pauses(d) {
@@ -78,8 +89,9 @@
   }
   function pauseText(p) {
     const why = p.reason === 'login' ? '登录过期' : '额度用完';
-    const card = viewer === 'owner' && p.href && p.reason === 'login';
-    return (card ? link(p.href, `登录过期，登录命令在等${you()}的事里 ›`) : esc(U.fieldText(p.text, viewer) || why)) + (p.started_at ? ` · ${esc(when(p.started_at))} 起` : '');
+    // 本人版：登录过期一律写这句并链到那张卡；后台还没给卡的地址时先链到等你的事清单
+    const card = viewer === 'owner' && p.reason === 'login';
+    return (card ? link(p.href || '/live/items/', `登录过期，登录命令在等${you()}的事里 ›`, 'tp-link au-warn') : esc(U.fieldText(p.text, viewer) || why)) + (p.started_at ? ` · ${esc(when(p.started_at))} 起` : '');
   }
 
   // —— 八行总表 ——
@@ -116,8 +128,8 @@
       <table class="tp-table au-table"><thead><tr><th scope="col">任务</th><th scope="col">什么时候跑</th><th scope="col">用谁</th><th scope="col">上次结果</th><th scope="col">近 30 天</th><th scope="col">开关</th></tr></thead>
       <tbody>${cats.map(c => {
         const g = G[c.id] || {}, expanded = open === c.id, p = pauseOf(d, c.id);
-        return `<tr id="cat-${c.id}" class="au-row${expanded ? ' is-open' : ''}${p ? ' is-paused' : ''}" data-mode="${esc(mode(c) || '')}">
-          <th scope="row"><button type="button" class="au-name" data-open="${c.id}" aria-expanded="${expanded}" aria-controls="mech-${c.id}"><b>${F(cn(c.title))}</b><span>${esc(g.short || '')}</span><i aria-hidden="true">${expanded ? '收起' : '怎么干 ›'}</i></button></th>
+        return `<tr id="cat-${c.id}" data-row="${c.id}" class="au-row${expanded ? ' is-open' : ''}${p ? ' is-paused' : ''}" data-mode="${esc(mode(c) || '')}">
+          <th scope="row"><button type="button" class="au-name" data-open="${c.id}" aria-expanded="${expanded}" aria-controls="mech-${c.id}"><b>${F(cn(c.title))}</b><span>${esc(g.short || '')}</span><i class="tp-chev" aria-hidden="true">${expanded ? '收起' : '怎么干'}</i></button></th>
           <td>${whenCell(d, c)}</td><td class="au-model">${[c.model, c.model_effort].filter(Boolean).map(esc).join(' · ') || '没读到'}</td>
           <td>${lastCell(c)}</td><td>${trendCell(c)}</td><td class="au-switchcell">${switchCell(c, offline)}</td></tr>
           ${expanded ? `<tr id="mech-${c.id}" class="au-mechrow"><td colspan="6">${mechanism(d, c)}</td></tr>` : ''}`;
@@ -173,7 +185,8 @@
       ${T.stateNote(state)}<div class="tp-grid au-top">${results(d)}${usage(d)}</div>${running(d)}${pauses(d)}${table(d)}`);
     drawn = true;
     page.tick.set(feed(d), { off: state.offline });
-    if (!landed && (location.hash || open)) landed = T.reveal(location.hash.slice(1) || `cat-${open}`);
+    // 只在进页那一次按地址里的 #… 或 ?type= 滚过去；之后点开一行不再跳，“收起”留在原处
+    if (!landed) { landed = true; if (location.hash || typeParam) T.reveal(location.hash.slice(1) || `cat-${typeParam}`); }
   }
 
   async function save(id, value) {
@@ -207,7 +220,10 @@
     ask: () => '请看实况自动任务页：八类后台 AI 活现在在跑什么、哪类坏了或停着、要不要我出面。先用大白话说，别动手。',
     onState(next) { state = next; draw(); } });
   page.root.addEventListener('click', async e => {
-    const opener = e.target.closest('[data-open]'), toggle = e.target.closest('[data-toggle]'), pause = e.target.closest('[data-pause]');
+    const toggle = e.target.closest('[data-toggle]'), pause = e.target.closest('[data-pause]');
+    // 整行都能点开：点在开关、暂停、链接以外的地方，等于点了这一行的名字
+    const row = !e.target.closest('a, button, input') && e.target.closest('tr[data-row]');
+    const opener = e.target.closest('[data-open]') || (row && page.root.querySelector(`[data-open="${row.dataset.row}"]`));
     if (opener) {
       open = open === opener.dataset.open ? null : opener.dataset.open;
       const url = new URL(location.href);
