@@ -67,7 +67,7 @@
       <p><span class="b6-badge">跟得最久</span> ${oldest ? `${link(oldest.href, field(oldest.title, '事项标题'))} · ${num(oldest.days)} 天` : d.open === 0 ? '没有未了结的事' : '最早那件没读到'}</p>${checks}
       <p><span class="b6-badge">今天到日子 ${num(Array.isArray(d.due_today) ? due.length : null)} 件</span></p>
       ${[...due].sort((a,b) => Number(Boolean(b.overdue)) - Number(Boolean(a.overdue))).slice(0,3).map(row => `<p class="b6-due">${link(row.href || (row.id ? '/live/issue/?id=' + encodeURIComponent(row.id) : ''), field(row.title || row.text, '事项标题'))}<small>${row.overdue ? '过期 · ' : ''}${esc(time(row.next_at) || U.fieldText(row.wait?.text, viewer))}</small></p>`).join('')}
-      ${d.repair ? `<p>${dot('repair')}${link(d.repair.href, '已交自动修理')}${d.repair.text ? ' · ' + field(d.repair.text) : ''}</p>` : ''}` };
+      ${d.repair ? `<p>${dot('repair')}${link(d.repair.href, '已交自动修理')}${d.repair.text && U.fieldText(d.repair.text, viewer).replace(/[\s。.]+$/, '') !== '已交自动修理' ? ' · ' + field(d.repair.text) : ''}</p>` : ''}` };
   }
   window.LiveBatchHome = { render };
 })();
