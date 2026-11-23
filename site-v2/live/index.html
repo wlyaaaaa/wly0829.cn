@@ -40,6 +40,12 @@
  .page--live #computer .kv__row dd { grid-column: 2 / -1; grid-row: 2; }
  .page--live #computer .kv__row:last-child dd a { white-space: normal; }
 }
+/* 手机卡同样：读数那一栏窄（如 1024 宽）时名字放上一行，读数占整行，不挤成一两个字一行（M526） */
+.page--live #phone .kv { container-type: inline-size; }
+@container (max-width: 300px) {
+ .page--live #phone .kv__row dt { grid-column: 2 / -1; }
+ .page--live #phone .kv__row dd { grid-column: 2 / -1; grid-row: 2; }
+}
 @media (max-width: 760px) {
  .page--live #computer[data-pic] { --win: 72px; }
  .page--live #computer .card__glass { padding-inline: 16px; }
@@ -60,6 +66,12 @@
 .page--live :is(#tasks,#automation) .task-preview .row:has(> .row__acts) { grid-template-columns: minmax(0, 1fr) auto; column-gap: 8px; }
 .page--live :is(#tasks,#automation) .task-preview .row > .row__text { grid-column: 1; margin: 0; white-space: normal; overflow: visible; overflow-wrap: anywhere; }
 .page--live :is(#tasks,#automation) .task-preview .row > .row__acts { grid-column: 2; margin: 0; padding: 0; }
+/* 计划任务卡：任务行的字和标题、副标题同一条左边线（留出灯那一列），和副标题之间留出和别的卡一样的空 */
+.page--live #tasks .task-preview { margin-top: 8px; }
+.page--live #tasks .task-preview .row { grid-template-columns: var(--gut) minmax(0, 1fr); padding: 6px 0; }
+.page--live #tasks .task-preview .row:has(> .row__acts) { grid-template-columns: var(--gut) minmax(0, 1fr) auto; column-gap: 0; }
+.page--live #tasks .task-preview .row > .row__text { grid-column: 2; }
+.page--live #tasks .task-preview .row > .row__acts { grid-column: 3; padding-left: 8px; }
 .page--live #automation .automation-preview-head {
   display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px;
   min-width: 0; margin: 0; font-size: 15.5px; font-weight: 500; line-height: 23px;

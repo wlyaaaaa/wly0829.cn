@@ -255,7 +255,15 @@
       state.shown += o.page;
       draw('more');
     });
-    return { set, sortBy, pages: el.pages, columns: o.columns, el };
+    // 跳到某一行（目录点名字用）：还没摆出来的就把“再看 20 条”一起展开；搜索把它滤掉了就先清掉搜索。返回那一行
+    function reveal(key) {
+      let list = arrange(state.rows, { query: state.query, sort: state.sort }), i = list.findIndex(r => r.key === key);
+      if (i < 0 && state.query) { el.q.value = ''; state.query = ''; list = arrange(state.rows, { sort: state.sort }); i = list.findIndex(r => r.key === key); draw('view'); }
+      if (i < 0) return null;
+      if (!state.groups && i >= state.shown) { state.shown = Math.ceil((i + 1) / o.page) * o.page; draw('more'); }
+      return [...el.pages.querySelectorAll('tbody > .book-row')].find(tr => tr.dataset.key === key) || null;
+    }
+    return { set, sortBy, reveal, pages: el.pages, columns: o.columns, el };
   }
 
   window.LiveBook = { create, arrange, rank, pages, moreLabel, fold };

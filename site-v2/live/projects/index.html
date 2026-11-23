@@ -32,6 +32,8 @@
 #activity { margin-top: 24px; }
 .pj-heat-halves { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
 #activity .pj-heat { grid-template-columns: 170px repeat(var(--days), minmax(9px, 1fr)); }
+/* 窗口不到 1280 宽：左右两半放不下 30 天的格子（11-14 往后被截掉），改成上下两半，格子不超过 16px；1440 宽不变（M250） */
+@media (max-width: 1279px) { .pj-heat-halves { grid-template-columns: minmax(0, 1fr); gap: 18px; } #activity .pj-heat { grid-template-columns: 170px repeat(var(--days), minmax(9px, 16px)); } }
 #activity .pj-heat-name { white-space: normal; flex-wrap: wrap; row-gap: 1px; }
 #activity .pj-heat-label { overflow: visible; overflow-wrap: anywhere; text-overflow: clip; }
 #activity .pj-heat-private { white-space: normal; }

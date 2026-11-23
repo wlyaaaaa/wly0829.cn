@@ -1,7 +1,7 @@
 // 存储：页首一句话（存储页自己判断最要紧的事），自动清理大卡（cleanup.js）、每块盘合并卡（disks.js），下面一排小卡。
 (() => {
   'use strict';
-  const U = window.LiveUI, Light = window.LiveLight, K = window.StorageKit, $ = id => document.getElementById(id), { esc } = U;
+  const U = window.LiveUI, Light = window.LiveLight, K = window.StorageKit, $ = id => document.getElementById(id), { esc, sp } = U;
   U.date = window.LiveChart.date;
   const params = new URLSearchParams(location.search), hero = $('hero');
   const route = href => { const url = new URL(href, location.href); if (params.has('fixture')) url.searchParams.set('fixture', params.get('fixture')); return url.pathname + url.search + url.hash; };
@@ -163,7 +163,10 @@
   function cleanupWhy(d) {
     const alarm = window.StorageCleanup?.alarm(d), g = alarm && window.StorageCleanup.digest(d);
     if (!g) return '';
-    const reason = g.deleted > 0 ? '看被删的是哪几件' : g.last?.result === 'error' ? `出错原因：${K.field(g.last.error, '清理出错原因', viewer) || '这一轮没写原因'}` : `每 ${g.hours} 小时该跑一轮，上次是 ${when(g.last.finished_at)}`;
+    // 有出错明细时页首直接写最多的两条原因，其余说“还有 N 项”；旧回执没有明细照旧写件数（M328）
+    const fails = g.last?.result === 'error' && window.StorageCleanup.failures?.(g.last, viewer), restFails = fails ? fails.slice(2).reduce((n, f) => n + f.n, 0) : 0;
+    const why = fails ? fails.slice(0, 2).map(f => f.text).join('；') + (restFails ? `；还有 ${restFails} 项` : '') : K.field(g.last?.error, '清理出错原因', viewer) || '这一轮没写原因';
+    const reason = g.deleted > 0 ? '看被删的是哪几件' : g.last?.result === 'error' ? `出错原因：${why}` : `每 ${g.hours} 小时该跑一轮，上次是 ${when(g.last.finished_at)}`;
     return `<a href="#cleanup-card">${esc(reason)}，看下面“自动清理” ›</a>`;
   }
   function attention(d) {
@@ -248,7 +251,8 @@
     U.list($('notices'), state.offline ? [{ key: 'storage', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${copy}${esc(sp(state.text))}</span>` }] : []);
   }
   function categoryRows(list, row, hidden) {
-    const limit = viewer === 'owner' ? list.length : 5;
+    // 本人版也先露 5 类，其余收进“还有 N 类”，免得这张卡比旁边两张长出一大截（M460）
+    const limit = 5;
     K.put($('categories'), list.length ? list.slice(0, limit).map(row).join('') : hidden ? '' :
       `<li class="pj-note">${U.offline?.() ? missed : '暂时读不到各用途的占用'}。</li>`);
     K.put($('categories-rest'), list.slice(limit).map(row).join(''));

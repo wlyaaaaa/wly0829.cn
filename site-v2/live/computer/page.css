@@ -15,6 +15,11 @@
 .page--computer .vz-chip-cell__v .vz-reading__value { white-space: normal !important; word-break: normal; overflow-wrap: anywhere; }
 .page--computer .vz-chip-cell__k { overflow: visible; white-space: normal; overflow-wrap: anywhere; }
 .page--computer .vz-chip-cell { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) 30px; }
+/* 窗口窄（如 1024 宽）时右边读数小格也排两列，不排成一长条比左边的图长出一大截（M460）；1440 宽本来就是两列 */
+@media (min-width: 721px) {
+  .page--computer .grp:not([data-key="long"]) .grp__chips.vz-chips { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .page--computer .grp__chips .vz-chip-cell__k { white-space: normal; overflow: visible; text-overflow: clip; }
+}
 .page--computer .vz-chip-cell:disabled { cursor: default; translate: none; }
 .page--computer .vz-chip-cell:disabled .vz-chip-cell__spark { display: none; }
 .page--computer .vz-chip-cell__spark .chart__svg { max-width: 100%; }

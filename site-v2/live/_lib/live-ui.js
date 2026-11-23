@@ -308,15 +308,17 @@
 
   // 复用通知的落点：展开目标所在折叠，露出后滚过去并亮一下。
   let landed = false;
-  function land() {
+  // keepOnBack：退回来时筛出的几行照样亮着（位置由退回恢复，不再滚），目前只有备份总表用（M115）。
+  function land({ keepOnBack = false } = {}) {
     if (landed) return;
-    if (returned) { landed = true; return; }
+    if (returned && !keepOnBack) { landed = true; return; }
     const p = new URLSearchParams(location.search), id = p.get('item');
     if (!id && !p.has('attention') && !p.has('source')) return;
     const kind = p.get('attention'), cls = p.has('source') ? `source-${p.get('source')}` : kind === '1' ? 'is-attention' : `attention-${kind}`;
     const targets = [...document.querySelectorAll('[data-key]')].filter(el => id ? el.dataset.key === id : el.classList.contains(cls));
     if (!targets.length) return;
     landed = true;
+    if (returned) { targets.forEach(el => el.classList.add('notice-target')); return; }
     for (const el of targets) {
       for (let box = el.closest('.fold'); box; box = box.parentElement?.closest('.fold')) box._liveOpen?.();
     }
@@ -1015,19 +1017,26 @@
     setTimeout(() => note.remove(), 6500);
   });
 
-  // 页顶那张卡（本人 11-23 选的 B，01:01 定了和页顶提醒合成一张）：和下面大卡同宽，一件事一行，什么事都没有时整张不出现。
-  // 连接那一行：琥珀小灯一直慢慢呼吸、循环箭头一直慢慢转，插头插画只跟着这一行出现（图在样式表里，这一行出现才下载）；
-  // 原因变了只换粗字。连上后灯变绿、写“已连上”，约 2 秒后只收走这一行。
+  // 页顶那张卡（本人 11-23 选的 B，01:01 定了和页顶提醒合成一张）：和下面大卡同宽、同一个样子（玻璃、右边一整幅画），一件事一行，
+  // 什么事都没有时整张不出现；出现时从 0 撑开、收起时合拢，下面的卡跟着滑，不跳。
+  // 连接那一行：琥珀小灯一直慢慢呼吸、循环箭头一直慢慢转；画在样式表里，卡出现才下载。
+  // 原因变了只换粗字。连上后灯变绿、写“已连上”，约 2 秒后收走这一行；卡里没别的事就整张收起。
   // 页面原来的提醒列表（#notices）整个搬进这张卡，各条照旧由各页自己画、按钮和跳转不变；配对失效的说明也放成一行。
   const CONN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M19.47 11.35A7.5 7.5 0 1 1 15.17 5.2"/><path d="M19.16 7.06 16.07 .66 12.27 8.82Z" fill="currentColor" stroke-width=".8"/></svg>';
   let connBack = 0;
   const connStage = () => document.querySelector?.('body.page--live main.stage');
-  const connFit = card => { card.hidden = !card.querySelector('.live-conn__row') && !card.querySelector('#notices > li'); };
+  const connFit = card => {
+    const was = card.hidden;
+    card.hidden = !card.querySelector('.live-conn__row') && !card.querySelector('#notices > li');
+    if (!was || card.hidden || card.classList.contains('is-closing')) return;
+    card.style.height = '0px'; void card.offsetHeight; card.style.height = card.scrollHeight + 'px';
+    setTimeout(() => { if (!card.classList.contains('is-closing')) card.style.height = ''; }, 520);
+  };
   function connCard(stage) {
     let card = stage.querySelector(':scope > .live-conn');
     if (card) return card;
-    card = document.createElement('section'); card.className = 'live-conn'; card.setAttribute('role', 'status'); card.hidden = true;
-    card.innerHTML = '<div class="live-conn__rows"></div>';
+    card = document.createElement('section'); card.className = 'live-conn glass'; card.setAttribute('role', 'status'); card.hidden = true;
+    card.innerHTML = '<span class="live-conn__tint" aria-hidden="true"></span><span class="live-conn__pic" aria-hidden="true"></span><div class="live-conn__rows"></div>';
     const notices = stage.querySelector(':scope > #notices');
     const after = stage.querySelector(':scope > [data-live-view-row], :scope > .back');
     if (notices) notices.before(card); else if (after) after.after(card); else stage.prepend(card);
@@ -1064,7 +1073,7 @@
       clearTimeout(connBack); connBack = 0;
       if (!link) {
         link = row('link');
-        link.innerHTML = `<span class="live-conn__art" aria-hidden="true"></span><span class="live-conn__lamp" aria-hidden="true"></span><span class="live-conn__say"><b></b><span class="live-conn__at"></span></span><span class="live-conn__wait"><span class="live-conn__spin" aria-hidden="true">${CONN_ICON}</span>连上后会自动换成最新的</span>`;
+        link.innerHTML = `<span class="live-conn__lamp" aria-hidden="true"></span><span class="live-conn__say"><b></b><span class="live-conn__at"></span></span><span class="live-conn__wait"><span class="live-conn__spin" aria-hidden="true">${CONN_ICON}</span>连上后会自动换成最新的</span>`;
         rows.prepend(link);
       }
       for (const el of [card, link]) { el.classList.remove('is-closing'); el.style.height = ''; }
@@ -1073,8 +1082,9 @@
       put(link.querySelector('.live-conn__at'), state.pageAtText ? ` · 下面是 ${state.pageAtText} 的数据` : ' · 这页没有可显示的上次数据');
     } else if (link && !link.classList.contains('is-back')) {
       link.classList.add('is-back');
+      const upTo = window.Live?.upTo?.() || state.shownAt;
       put(link.querySelector('b'), '已连上');
-      put(link.querySelector('.live-conn__at'), '');
+      put(link.querySelector('.live-conn__at'), upTo ? ` · 数据已更新到 ${time(upTo)}` : '');
       connBack = setTimeout(() => { connBack = 0; if (link.isConnected && link.classList.contains('is-back')) close(link); }, 2000);
     }
     const pair = state.publicPaused ? '' : state.pairNotice || '';
@@ -1130,19 +1140,33 @@
     const icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M19.47 11.35A7.5 7.5 0 1 1 15.17 5.2"/><path d="M19.16 7.06 16.07 .66 12.27 8.82Z" fill="currentColor" stroke-width=".8"/></svg>';
     const show = (text) => html(at, paused ? esc(text) : `<span class="live-refresh-icon" aria-hidden="true">${icon}</span><span class="live-refresh-text">${esc(text)}</span>`);
     const waiting = setTimeout(() => { if (!label) { label = '正在读'; if (!busy) show(label); } }, 2500);
-    at.addEventListener('click', async (e) => {
+    // 点一下就等于浏览器刷新（本人 M513：页面上的刷新没用、浏览器刷新就好）：整页重新载入，拿到最新版网页和最新数据。
+    // 动画照 r62：药丸先收成圆（--live-at-slide）再重新载入；新页面一出来就是收好、接着转的样子，这一轮数据读完、
+    // 转到整圈（--live-at-turn）再从正中展开。点的时刻和当时的字记在 sessionStorage，转圈和等多久都从点下去那一刻算。
+    const RESUME = 'wly-live-refresh-at';
+    let readDone; const read = new Promise(resolve => { readDone = resolve; });
+    const resumed = (() => { try { const v = JSON.parse(sessionStorage.getItem(RESUME)); sessionStorage.removeItem(RESUME); return Date.now() - v?.at < 20000 ? v : null; } catch { return null; } })();
+    if (resumed) {
+      busy = true; label = resumed.label || '';
+      show(label);
+      at.setAttribute('aria-busy', 'true'); at.setAttribute('aria-label', '正在重读');
+      at.classList.add('is-refreshing'); // 按钮刚建出来，第一次排版就是收好的样子，不会再收一遍
+      const shrink = ms('--live-at-slide', '760ms') * speed(), turn = ms('--live-at-turn', '1100ms') * speed();
+      const spin = at.querySelector('.live-refresh-icon'); if (spin) spin.style.animationDelay = `${shrink - (Date.now() - resumed.at)}ms`;
+      read.then(async () => {
+        const elapsed = Date.now() - resumed.at; const wait = shrink + Math.max(1, Math.ceil((elapsed - shrink) / turn)) * turn - elapsed; if (wait > 0) await new Promise(resolve => setTimeout(resolve, wait));
+        busy = false; at.classList.remove('is-refreshing'); at.removeAttribute('aria-busy'); at.setAttribute('aria-label', label); show(label);
+      });
+    }
+    at.addEventListener('click', () => {
       if (busy) return;
       busy = true;
-      const started = performance.now(), shrink = ms('--live-at-slide', '760ms') * speed(), turn = ms('--live-at-turn', '1100ms') * speed();
       at.setAttribute('aria-busy', 'true');
       if (!paused) at.setAttribute('aria-label', '正在重读');
       at.querySelector('.live-refresh-text')?.classList.remove('is-swapped');
       at.classList.add('is-refreshing');
-      try { await window.Live.refresh(false, true); }
-      finally {
-        const elapsed = performance.now() - started; const wait = shrink + Math.max(1, Math.ceil((elapsed - shrink) / turn)) * turn - elapsed; if (wait > 0) await new Promise(resolve => setTimeout(resolve, wait));
-        busy = false; at.classList.remove('is-refreshing'); at.removeAttribute('aria-busy'); at.setAttribute('aria-label', label); show(label);
-      }
+      try { sessionStorage.setItem(RESUME, JSON.stringify({ at: Date.now(), label })); } catch { /* 记不下：新页面照常显示，只少展开那一段 */ }
+      setTimeout(() => { if (window.Live?.reload) window.Live.reload(); else location.reload(); }, ms('--live-at-slide', '760ms') * speed());
     });
     askBtn.addEventListener('click', async (e) => {
       if (guard(e)) return;
@@ -1165,7 +1189,7 @@
         }
         paused = !!state.publicPaused;
         if (paused) {
-          clearTimeout(waiting);
+          clearTimeout(waiting); readDone();
           label = state.text;
           document.title = `${label} · 实况`;
           at.setAttribute('aria-label', label);
@@ -1173,7 +1197,7 @@
           return;
         }
         const stamp = state.offline ? state.cutoffAt : state.shownAt, atText = stamp ? `${time(stamp)} ${state.offline ? '最后一份' : '读到'}` : '';
-        if (stamp || state.offline || state.phase === 'none') clearTimeout(waiting);
+        if (stamp || state.offline || state.phase === 'none') { clearTimeout(waiting); readDone(); }
         label = state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : atText || (state.offline ? '连不上' : state.phase === 'none' ? collectionText() : label);
         if (!busy) show(label);
       },

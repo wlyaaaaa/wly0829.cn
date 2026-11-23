@@ -91,13 +91,13 @@
     U.html(detailRows, '', false);
     $('program-rank').querySelector('.vz-rank__list').replaceChildren();
   }
+  // AI 三家不管量多少都在列表里有自己的一行（本人 11-23 08:06：“Claude去哪了”；M025：“antigravity去哪里了”）
+  const AI_FAMILIES = [/claude/i, /codex/i, /antigravity/i];
+  const byTotal = (a, b) => (b.total ?? -1) - (a.total ?? -1);
   function renderPrograms(d) {
     const table = d?.program_table, source = table?.rows ?? d?.programs ?? [];
     // 和电脑页网络卡同一句人话（M042）：后台原话写的是“独立侧车实测……”
     const separate = U.separateTraffic(table?.separate && { ...table.separate, note: U.separateTrafficNote });
-    const separateRow = $('program-separate');
-    separateRow.hidden = !separate;
-    U.html(separateRow, separate ? `<b>${esc(separate.name)}</b> · ${U.nowrap(separate.summary)}` : '', false);
     if (!source.length && !separate) clearPrograms();
     const label = d?.window?.label || '';
     const week = /近\s*[7七]/.test(label) || !/今天|今日/.test(label) && days === '7';
@@ -107,8 +107,7 @@
     const basis = table?.basis?.replace(/^今日|^今天/, period) || `${period}已记录的海外代理流量`;
     $('program-title').textContent = [basis, '按代理计数归到程序'].join(' · ');
     $('program-window').textContent = cutoff ? `数据截至 ${U.date(cutoff).slice(-5)} ${U.time(cutoff)}` : d ? '没有记录采集时间' : '';
-    if (!source.length) programs.wait(d ? '按程序暂时读不到' : '正在读');
-    if (!source.length && !separate) return;
+    if (!source.length && !separate) { programs.wait(d ? '按程序暂时读不到' : '正在读'); return; }
     const rows = source.map(p => {
       const total = Number.isFinite(p.upload) && Number.isFinite(p.download) ? p.upload + p.download : null;
       const original = U.fieldText(p.detail?.process_name ?? p.name, viewer).trim();
@@ -121,11 +120,20 @@
       const note = [proxyClaude && '按代理计数', sp(p.gap)].filter(Boolean).join(' · ');
       const sub = tightText([`上传 ${upload}`, `下载 ${download}`, note].filter(Boolean).join(' · '));
       return { key: p.id, name, original, total, value: total == null ? null : total / 2 ** 30, text, sub, upload, download, note };
-    }).sort((a, b) => (b.total ?? -1) - (a.total ?? -1));
-    if (rows.length) programs.set(rows.slice(0, 5));
-    summary.textContent = [rows.length && `查看全部 ${rows.length} 个程序明细${rows.length > 5 ? `（含其余 ${rows.length - 5} 个）` : ''}`, separate && (rows.length ? '另含单独记的 Claude 流量' : '查看单独记的 Claude 流量')].filter(Boolean).join(' · ');
-    const displayRows = separate ? [...rows, { ...separate, key: 'claude-sidecar', original: '—', text: separate.total }] : rows;
-    const body = displayRows.map(r => `<tr data-key="${esc(r.key)}">${[r.name, r.original, r.upload, r.download, r.text, r.note].map(v => `<td>${esc(v)}</td>`).join('')}</tr>`).join('');
+    });
+    // Claude 单独实测的那笔和别的程序一样排进列表；不加进代理总数，行上一句话说清，计量时段放在明细的说明里
+    if (separate) {
+      const total = table.separate.upload + table.separate.download;
+      rows.push({ key: 'claude-sidecar', name: separate.name, original: '—', total, value: total / 2 ** 30, text: separate.total, upload: separate.upload, download: separate.download,
+        sub: tightText(`上传 ${separate.upload} · 下载 ${separate.download} · 单独实测，不计入代理总数`), note: separate.note });
+    }
+    rows.sort(byTotal);
+    const family = r => AI_FAMILIES.findIndex(re => re.test(r.name) || re.test(r.original));
+    const shown = rows.slice(0, 5);
+    for (const i of AI_FAMILIES.keys()) if (!shown.some(r => family(r) === i)) { const hit = rows.find(r => family(r) === i); if (hit) shown.push(hit); }
+    programs.set(shown.sort(byTotal));
+    summary.textContent = `查看全部 ${rows.length} 个程序明细${rows.length > shown.length ? `（含其余 ${rows.length - shown.length} 个）` : ''}`;
+    const body = rows.map(r => `<tr data-key="${esc(r.key)}">${[r.name, r.original, r.upload, r.download, r.text, r.note].map(v => `<td>${esc(v)}</td>`).join('')}</tr>`).join('');
     U.html(detailRows, `<table><thead><tr><th>软件</th><th>原进程</th><th>上传</th><th>下载</th><th>合计</th><th>说明</th></tr></thead><tbody>${body}</tbody></table>`, false);
     details.hidden = false;
   }

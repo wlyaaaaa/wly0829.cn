@@ -29,3 +29,6 @@
 #chat-sources > p, #chat-sources ul { margin-inline-start:var(--gut); }
 #chat-sources ul { padding-inline-start:0; overflow-wrap:anywhere; }
 .page--chats .l2-part { margin:24px 0 12px; font-size:17px; font-weight:600; color:var(--ink); letter-spacing:.03em; }
+/* 按型号明细多出来的收进“展开”（M460） */
+.chat-counts .chat-models-more > summary { margin: 2px 0 0; font-size: 12.5px; } .chat-counts .chat-models-more[open] > summary .more__chev { rotate: 90deg; }
+.chat-counts > div:not(:has(> .chat-models-more[open])) > .chat-model-row.is-extra { display: none; }

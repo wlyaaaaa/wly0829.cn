@@ -128,7 +128,18 @@
     }).join('')}</ul><p class="cl-key"><i class="is-used"></i>蓝＝占用${anyFreed ? '<i class="is-freed"></i>绿＝这轮腾出的<i class="is-free"></i>白＝原本就空' : '<i class="is-free"></i>白＝空闲'}${rows.some(x => x.v.state === 'offline' || num(x.v.free) == null && num(x.r?.free_after) == null) ? '<i class="is-none"></i>斜线＝离线或没读到' : ''}</p>`;
   }
 
-  function progress(run, viewer) {
+  // 规则中文名：先用回执里 rules[] 的 label、failures[] 的 rule_name，再用上面的对照表；都没有就不写规则名，不露英文 id（M538）
+  function ruleName(id, g, viewer) {
+    if (!id || K.isPlaceholder(id)) return id || '';
+    for (const r of g?.runs || []) {
+      const hit = (Array.isArray(r.rules) && r.rules.find(x => x?.id === id)?.label) || (Array.isArray(r.failures) && r.failures.find(x => x?.rule_id === id)?.rule_name);
+      const name = hit && K.field(hit, '清理规则名称', viewer);
+      if (name && name !== id) return name;
+    }
+    return RULE_NAMES[id] || (/^[\w.-]+$/.test(id) ? '' : id);
+  }
+
+  function progress(run, viewer, g) {
     const p = run.progress;
     if (viewer !== 'owner' && K.locked(p)) return '清理进度仅本人可见';
     const gap = K.field(run.progress_gap, '清理进度缺因', viewer);
@@ -138,14 +149,25 @@
     const entries = K.field(p?.removed_entries, '移除项数', viewer);
     const counts = [entries && (K.isPlaceholder(entries) ? entries : `移除 ${entries} 项`),
       p?.removed_logical_bytes != null && `文件大小 ${readAmount(p.removed_logical_bytes, '移除文件大小', viewer)}`].filter(Boolean).join(' · ');
-    const title = [step, RULE_NAMES[rule] || rule].filter(Boolean).join(' ');
+    const title = [step, ruleName(rule, g, viewer)].filter(Boolean).join(' ');
     return [title, counts, at(run.progress_at) && `${hm(run.progress_at)} 读到`, gap].filter(Boolean).join(' · ');
+  }
+
+  // 一轮里出错的项按件数从多到少：“规则中文名 · 原因 · N 项”；没有 failures 的旧回执返回 null，照旧只写件数（M328）
+  function failures(run, viewer) {
+    const list = Array.isArray(run?.failures) ? run.failures.filter(f => f && typeof f === 'object') : [];
+    if (!list.length) return null;
+    return list.map(f => ({ n: num(f.count) || 1, place: K.field(f.rule_name, '清理规则名称', viewer) || K.field(f.path_category, '清理位置', viewer) || '有一条规则', why: K.field(f.reason, '清理出错原因', viewer) || '没写原因' }))
+      .sort((a, b) => b.n - a.n).map(f => ({ n: f.n, text: `${f.place} · ${f.why} · ${f.n} 项` }));
   }
 
   function tiles(g, viewer) {
     if (!g) return `<ul class="cl-tiles is-gray">${[['ok', '出错'], ['shield', '保护名单被删'], ['clock', '下次']].map(([i, k]) => `<li>${ICON[i]}<div><b>${k}</b><span class="cl-dash">—</span></div></li>`).join('')}</ul>`;
     const n = g.week.length, err = g.errors.length;
-    const first = err ? `<li data-tone="amber">${ICON.warn}<div><b>出错 ${err} 次</b><span>${esc(K.field(g.errors[0].error, '清理出错原因', viewer) || '最近一次出错没有写原因')}</span></div></li>`
+    // 最近出错那一轮写出原因：先露 3 条，其余收进“还有 N 项”（M328）
+    const fails = err ? failures(g.errors[0], viewer) || [] : [], restFails = fails.slice(3);
+    const failHtml = fails.slice(0, 3).map(f => `<span>${esc(f.text)}</span>`).join('') + (restFails.length ? `<details class="cl-fail-more"><summary class="more live-disclosure"><span class="disclosure-closed">还有 ${restFails.reduce((n, f) => n + f.n, 0)} 项</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary>${restFails.map(f => `<span>${esc(f.text)}</span>`).join('')}</details>` : '');
+    const first = err ? `<li data-tone="amber">${ICON.warn}<div><b>出错 ${err} 次</b><span>${esc(K.field(g.errors[0].error, '清理出错原因', viewer) || '最近一次出错没有写原因')}</span>${failHtml}</div></li>`
       : `<li>${ICON.ok}<div><b>出错 0 次</b><span>近 7 天 ${n} 轮都跑完</span></div></li>`;
     const hits = g.week.reduce((s, r) => s + (num(r.protected_hits) || 0), 0);
     const second = g.deleted ? `<li data-tone="red">${ICON.shield}<div><b>保护名单被删 ${g.deleted} 件</b><span>近 7 天 · 要马上看</span></div></li>`
@@ -155,7 +177,7 @@
     const nextAt = g.next ? new Date(g.next).toISOString() : '';
     const nextText = g.next ? `下次${g.estimated ? '约 ' : ' '}${U.date(nextAt) === U.date(new Date().toISOString()) || g.next - Date.now() < 18 * 3600000 ? hm(nextAt) : when(nextAt)}` : '下次';
     const nextNote = [g.running ? `正在跑 · ${hm(g.running.started_at)} 开始` : lastNote,
-      g.running && [progress(g.running, viewer), g.c.q === 'stale' && '旧读数'].filter(Boolean).join(' · '),
+      g.running && [progress(g.running, viewer, g), g.c.q === 'stale' && '旧读数'].filter(Boolean).join(' · '),
       g.estimated && `读不到自动任务的下次时间，按上次加 ${g.hours} 小时估`].filter(Boolean).map(esc).join('<br>');
     const third = `<li${g.estimated || !g.next ? ' data-tone="gray"' : ''}>${ICON.clock}<div><b>${esc(nextText)}</b>${g.next ? '' : '<span class="cl-dash">—</span>'}${nextNote ? `<span>${nextNote}</span>` : ''}</div></li>`;
     const kept = num(g.last?.skipped_unsaved_conversations);
@@ -327,5 +349,5 @@
       observer.observe(host);
     }
   }
-  window.StorageCleanup = { render, digest, alarm, trendData, ticks, trendReading };
+  window.StorageCleanup = { render, digest, alarm, failures, trendData, ticks, trendReading };
 })();

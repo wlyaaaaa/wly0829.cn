@@ -191,7 +191,7 @@
   }
   function registeredGroup(group) { return group?.count != null && !Object.hasOwn(group, 'total') && !Object.hasOwn(group, 'known_total') ? { ...group, total: group.count } : group; }
   function purposeCount(d, cell) {
-    return d?.purpose_unregistered_count == null ? '' : cell('unregistered', 'gear', esc(d.purpose_unregistered_count), '<span title="按已读 Windows 任务计数">用途未登记</span>');
+    return d?.purpose_unregistered_count == null ? '' : cell('unregistered', 'gear', esc(d.purpose_unregistered_count), '<span title="任务清单里还没写明这项是做什么用的（按已读到的 Windows 任务计）">项没写用途</span>');
   }
 
   function waiting(text) {
@@ -291,10 +291,12 @@
     U.list($('sources'), sideHidden ? [{ key: 'hidden', cls: 'row row--flat', html: `<p class="row__sub">另有 ${d.hidden} 个${U.fieldHtml(d.hidden_what || '任务', { name: '任务', place: 'label', kind: viewer })}，${U.fieldHtml({ hidden: 1 }, { place: 'body', kind: viewer })}</p>` }] : []);
     const moved = changeCounts(page);
     U.html(changesTitle, moved?.title || '任务变化');
-    U.list($('changes'), !Array.isArray(d.changes7) ? empty('任务变更记录没读到') : d.changes7.length ? d.changes7.map(c => ({
+    const detailLock = viewer === 'public' && Array.isArray(d.changes7) && d.changes7.length && !d.changes7.some(c => typeof c.owner_detail === 'string')
+      ? [{ key: 'detail-lock', cls: 'row row--flat', html: `<span></span><p class="row__sub">${U.fieldHtml({ value: null, visibility: 'owner', hidden_what: '每条变化的详情（任务在电脑上的原名和最近运行时间）' }, { place: 'body', kind: viewer })}</p>` }] : [];
+    U.list($('changes'), !Array.isArray(d.changes7) ? empty('任务变更记录没读到') : d.changes7.length ? [...detailLock, ...d.changes7.map(c => ({
       key: c.id, cls: 'row row--flat',
       html: `<span></span><div class="row__text"><p class="row__main"><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(c.id)}`))}">${U.fieldHtml(changeName(c) || '自动任务', { name: '自动任务', place: 'title', kind: viewer })}</a><span class="row__meta">${esc({ added: '新增', disabled: '停用了', missing: '现在找不到', enabled: typeof c.label === 'string' && c.label || '又开启' }[c.kind] || '有变化')} · ${stamp(c.at)}</span></p>${changeDetail(c)}</div>`,
-    })) : empty(moved.empty));
+    }))] : empty(moved.empty));
     taskHead(moved);
     cursor = d.next; $('next').hidden = !cursor; groupsRead.done(); changesRead.done(); L.lightUp([hero, $('groups'), $('changes')]);
     if (!maintenance) drawUpcoming(listedTasks(groups)); U.land(); taskWords();
@@ -488,8 +490,9 @@
     const missingText = meta => off ? null : U.collectionText('', meta);
     U.html($('stats'), !maintenance && page ? [
       page?.purpose_unregistered_count != null ? purposeCount(page, cell) : '',
-      cell('readable', 'check', page.readable_total, '知道在做什么'),
-      cell('unreadable', 'alert', page.unreadable_total, '只知道名字'),
+      // 这两格加起来是登记总数，说的是 Windows 计划任务里的设置读没读到，和“用途写没写”是两回事（M452）
+      cell('readable', 'check', page.readable_total, '<span title="什么时候跑、跑哪个程序、开没开，都从 Windows 计划任务里读到了">项读到了 Windows 设置</span>'),
+      cell('unreadable', 'alert', page.unreadable_total, '<span title="Windows 计划任务里这几项的设置这轮没读到，只知道叫什么">项只读到名字</span>'),
       runningReading ? cell('running', 'play', esc(`${runningReading.partial ? '至少 ' : ''}${runningReading.count}`), `${runningReading.stale ? '上次' : '截至'}${esc(nextAt(runningReading.at))} 已确认在跑${runningReading.pageOnly ? ' · 已读部分' : ''}`)
         : cell('running', 'play', '没读到', '当前运行状态'),
       moved?.countable ? cell('added', 'plus', esc(moved.added), `${moved.since}新增`) : '',

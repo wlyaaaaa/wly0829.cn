@@ -57,18 +57,21 @@
     const mark = field && !rowMark ? '' : U.visibilityNote(a, viewer, a.hidden_what || '应用名');
     const label = hidden && rowMark ? '' : field ? U.fieldHtml(name, { name: '应用名', kind: viewer }) : U.trustText(U.sp(name ?? blank()), viewer);
     const category = publicCategory(a, viewer, hidden ? '—' : blank());
-    return `<tr><td>${label ? `<b>${label}</b>` : ''}${mark ? ` <span class="phone-mark">${mark}</span>` : ''}</td>
-      ${column('category') ? `<td>${U.fieldHtml(typeof category === 'string' ? U.sp(category) : category, { name: '类别', kind: viewer })}</td>` : ''}${data?.items?.some(a => a.usage_seconds != null) ? `<td>${esc(used(a))}</td>` : ''}${column('installed_at') ? `<td>${esc(a.installed_at_missing && !a.installed_at ? '—' : stamp(a.installed_at))}</td>` : ''}${column('updated_at') ? `<td>${esc(stamp(a.updated_at))}</td>` : ''}</tr>`;
+    // 不在装机清单、只在用量记录里出现的（后台标 in_inventory: false）：两样时间本来就没有，写“—”并在名字旁标出来，和表下说明对上（M380）。
+    const outside = a.in_inventory === false;
+    return `<tr><td>${label ? `<b>${label}</b>` : ''}${mark ? ` <span class="phone-mark">${mark}</span>` : ''}${outside ? ' <span class="phone-mark">不在装机清单</span>' : ''}</td>
+      ${column('category') ? `<td>${U.fieldHtml(typeof category === 'string' ? U.sp(category) : category, { name: '类别', kind: viewer })}</td>` : ''}${data?.items?.some(a => a.usage_seconds != null) ? `<td>${esc(used(a))}</td>` : ''}${column('installed_at') ? `<td>${esc(outside || a.installed_at_missing && !a.installed_at ? '—' : stamp(a.installed_at))}</td>` : ''}${column('updated_at') ? `<td>${esc(outside && !a.updated_at ? '—' : stamp(a.updated_at))}</td>` : ''}</tr>`;
   }
   // 表里“—”是什么意思：安装时间是手机报了统一的默认时间；使用时长是这几天的用量记录里没有它。
   function blanks(items, hasUsage) {
     // 装机清单里有、但安装时间被认成默认值的（有“最近更新”）；装机清单里没有、只在用量记录里出现的（两样时间都没有）。
-    const preset = column('installed_at') ? items.filter(a => a.installed_at_missing && !a.installed_at && a.updated_at).length : 0;
-    const outside = data?.total != null && (data?.loaded ?? items.length) > data.total ? (data.loaded ?? items.length) - data.total : 0;
+    const preset = column('installed_at') ? items.filter(a => a.installed_at_missing && !a.installed_at && a.updated_at && a.in_inventory !== false).length : 0;
+    const marked = items.some(a => a.in_inventory != null) ? items.filter(a => a.in_inventory === false).length : null;
+    const outside = marked ?? (data?.total != null && (data?.loaded ?? items.length) > data.total ? (data.loaded ?? items.length) - data.total : 0);
     const noUsage = hasUsage ? items.filter(a => a.usage_seconds == null).length : 0;
     const since = data?.usage_from ? stamp(data.usage_from) : '';
-    const lines = [preset && `安装时间是“—”的 ${preset} 个：手机给它们报的是出厂或系统统一写入的默认时间，看不出真正哪天装的。`,
-      outside && `另有 ${outside} 个不在装机清单里（系统应用或应用分身），只在用量记录里出现，所以没有安装和更新时间。`,
+    const lines = [preset && `装机清单里安装时间是“—”的 ${preset} 个：手机给它们报的是出厂或系统统一写入的默认时间，看不出真正哪天装的。`,
+      outside && `标“不在装机清单”的 ${outside} 个（系统应用或应用分身）只在用量记录里出现，手机的装机清单不列它们，所以没有安装和更新时间。`,
       noUsage && `使用时长是“—”的 ${noUsage} 个：${since ? `${since} 起` : '这几天'}手机的用量记录里没有它（没打开过，或手机没记下）。`].filter(Boolean);
     return lines.map(line => `<p class="use-note">${esc(line)}</p>`).join('');
   }

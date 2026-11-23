@@ -536,6 +536,16 @@ function loadStage() {
   const primary = loadBatch(first, updateBackdrop);
   firstScreenReady = primary.ready;
   primary.visible.then(() => {
+    // 白纸开场：原画（和副屏小图）就绪后从旧开场的落墨位置晕开。
+    panelArtReady.then(() => {
+      if (!root.classList.contains('home-opening')) return;
+      root.classList.add('home-washing');
+      root.addEventListener('animationend', function finishOpening(event) {
+        if (event.animationName !== 'home-paper-wash') return;
+        root.classList.remove('home-opening', 'home-washing');
+        root.removeEventListener('animationend', finishOpening);
+      });
+    });
     const second = images.filter(i => !first.includes(i));
     second.forEach(i => { i.style.opacity = '0'; i.style.transition = 'opacity .6s'; i.fetchPriority = 'low'; });
     const secondary = loadBatch(second, updateBackdrop);
@@ -728,6 +738,11 @@ refresh();
 
 // ---------------------------------------------------------------- 留给后面动效的接口
 window.HOME = {
+  showAtEnd() {
+    const { start, length } = scrollSpan();
+    window.scrollTo({ top: start + length, behavior: 'instant' });
+    update();
+  },
   paneAtEnd() {
     const at = placement('screen2', stage.clientWidth, stage.clientHeight);
     return { left: Math.round(at.left) + WINDOW.x * at.scale, top: Math.round(at.top) + WINDOW.y * at.scale,

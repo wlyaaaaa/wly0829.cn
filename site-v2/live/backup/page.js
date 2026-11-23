@@ -111,7 +111,10 @@
   const ASSET_CATEGORY = { boot_media: '启动介质', recovery_tools: '恢复工具', bios_settings: 'BIOS 设置', documentation: '使用说明', windows_iso: 'Windows 安装镜像', winpe_build_material: 'WinPE 制作材料', drivers: '驱动程序', bios_drivers: 'BIOS 与驱动', hash_manifest: '校验清单', core_recovery: '恢复包核心材料' };
   let set = null, bundle = null, bundleSource, verification = null, verificationAt = null, viewer = 'public';
   Light.add(hero);
-  document.querySelector('[data-back]').href = route('/live/backups/');
+  // 从备份总表带着筛选（如“有问题”attention=gap）点进来的：“‹ 备份”回到原来那张带筛选的总表，能后退就直接后退（M115）
+  const backLink = document.querySelector('[data-back]'), cameFrom = (() => { try { const u = new URL(document.referrer); return u.origin === location.origin && u.pathname === '/live/backups/' && u.search ? u : null; } catch { return null; } })();
+  backLink.href = cameFrom ? cameFrom.pathname + cameFrom.search : route('/live/backups/');
+  backLink.addEventListener('click', U.restoreBack);
   const bar = U.topbar({ ask: () => set ? `请看实况备份 ${sp(set.name || '一类备份')}：${copySummary(set).text}。请说明这类资料的副本和校验情况。` : '' });
   function showUnavailable(text = missing()) {
     heroRead.done(false); copiesRead.done(false); U.html($('head'), lampTo('') + U.head(text, { lamp: false })); $('rec').hidden = true; Light.tone(hero, null);

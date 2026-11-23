@@ -339,6 +339,7 @@ html.mo-vt:not(.mo-vt-uncover)::view-transition-old(mo-cover) { animation-durati
 html:is(.mo-vt-home-in,.mo-vt-home-out)::view-transition-group(root) { animation: none; }
 html:is(.mo-vt-home-in,.mo-vt-home-out)::view-transition-old(root),
 html:is(.mo-vt-home-in,.mo-vt-home-out)::view-transition-new(root) { animation: none; transform-origin: 0 0; mix-blend-mode: normal; }
+html.mo-vt-local::view-transition-old(root) { opacity: 0; }
 html.mo-vt-home-in::view-transition-old(root), html.mo-vt-home-out::view-transition-new(root) { z-index: 2; }
 
 /* 2.8 点开一块（data-mo-open）：新页从那一块长满页眉以下；退回来缩回那一块。旧页、新页底图都不动，几何由 motion.js 的 flyOpen 演。 */

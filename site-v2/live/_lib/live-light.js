@@ -274,7 +274,7 @@
     // 页面自己设计了光（标了 card__glow）或已经接上的，不动
     const main = document.querySelector('main');
     if (cards.size || !main || main.querySelector('.card__glow')) return;
-    const hero = main.querySelector(HERO) || main.querySelector('.glass');
+    const hero = main.querySelector(HERO) || main.querySelector('.glass:not(.live-conn)');
     if (!hero || hero.closest('.grp,.lb-card,.row,.grp__fig')) return;
     if (!hero.querySelector('.card__glow')) {
       // 光垫在首卡自己的底色上面、所有内容下面

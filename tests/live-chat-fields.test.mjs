@@ -42,7 +42,9 @@ test('conversation cards show privacy once, keep specific errors, and identify A
   assert.equal(repeatsState('做完了', {state: 'done'}, 'public'), true);
   const chat = {id: 'antigravity:fixture', model: null, dispatched_by: {kind: 'session'}};
   assert.equal(originLabel(chat), 'Antigravity · 别的对话开的');
-  assert.equal(window.LiveUI.draw10.modelName(chat), '型号没记下');
+  // 本人 11-23：Antigravity 没记型号的写 Gemini Carbon，别家照旧写“型号没记下”（M541）。
+  assert.equal(window.LiveUI.draw10.modelName(chat), 'Gemini Carbon');
+  assert.equal(window.LiveUI.draw10.modelName({id: 'claude:fixture', model: null}), '型号没记下');
 });
 
 test('the shared conversation labels distinguish a question from a finished reply in every client', () => {
