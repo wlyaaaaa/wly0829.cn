@@ -903,7 +903,12 @@
     });
     // M666：后台给了缺组 missing_readings 就照它写（两版都写出缺的组名），能对上分组的带上次读到的时刻。
     const givenMissing = Array.isArray(computer?.missing_readings) ? [...new Set(computer.missing_readings.map(g => sp(U.fieldText(g?.name ?? g)).trim()).filter(Boolean))] : null;
-    const lacking = givenMissing?.length ? givenMissing.map(name => { const g = groups.unread.find(x => sp(U.fieldText(x.name)).trim() === name); return `${esc(name)}${g ? `（${unreadNote(g)}）` : ''}`; }) : unread;
+    // 卡顿只缺使用状态覆盖时灯是绿的、不进 unread，但仍列在 missing_readings 里：详情回落到同一个包的 groups.stutter，
+    // 那一行的 at 是数据截止、recorded_at 是最后一笔合格帧（M004，第 15 轮真包）
+    const stutterRow = (computer?.groups || []).find(x => x.key === 'stutter');
+    const rowFallback = name => name === names.stutter && stutterRow ? { key: 'stutter', name, ...(Object.hasOwn(stutterRow, 'recorded_at') ? { recorded_at: stutterRow.recorded_at } : {}),
+      observed_at: stutterRow.at, missing: stutterRow.missing, read_error: stutterRow.read_error } : null;
+    const lacking = givenMissing?.length ? givenMissing.map(name => { const g = groups.unread.find(x => sp(U.fieldText(x.name)).trim() === name) || rowFallback(name); return `${esc(name)}${g ? `（${unreadNote(g)}）` : ''}`; }) : unread;
     const known = computer?.attention_count != null || computer?.attention_groups != null || computer?.attention_summary || !!givenMissing?.length;
     const lines = [`<b>已确认异常 ${confirmed.length} 组</b>${confirmed.length ? ' · ' + confirmed.join('；') : ''}`,
       lacking.length && `<b>读数暂缺 ${lacking.length} 组</b> · ${lacking.join('、')}`,
