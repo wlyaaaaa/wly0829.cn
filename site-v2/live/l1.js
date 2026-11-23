@@ -1224,6 +1224,7 @@
     const chatGap = id === 'chats' && (state.tone === 'gray' || gray) && chatGapNote(data, chatStamps.length ? '' : chatReading);
     const note = typeof chatGap === 'string' ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].filter(Boolean).join(' · ')
       : [lackNote, ...(state.note || staleText).split(' · ').filter(text => (!(existing || cutoff) || !matchesCutoff(text)) && !(lackNote && /^缺：/.test(text))), grayNote, cutoff].filter(Boolean).join(' · ');
+    p.status.classList.toggle('status--missing-groups', Boolean(lackNote));
     p.status.hidden = !note; U.html(p.status, note);
     Light.tone(cards[id], cardTone(id, data, state));
   }
