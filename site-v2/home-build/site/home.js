@@ -478,6 +478,19 @@ const screen1Text = SCREEN1_TEXT.map((spec) => {
   feather(box, spec[4]);
   return box;
 });
+// “实时状态”按钮上那颗点就是连没连上的灯（本人 11-23 20:55“连不上还是绿的吗”、20:57“上面有颜色；就不用下面在搞个颜色”）：
+// 连上是画里原来那颗绿点；连不上时在它上面盖一颗呼吸的橙点，连上了慢慢收走、露回绿点。样子在 style.css 的 .home-lamp。
+// 位置是字层图里那颗绿点的中心（定稿图像素），放进按钮那块字里，跟着一起缩放、一起淡出；静态那张画上也放一颗。
+const LAMP_AT = [246.2, 360.8], LAMP_SIZE = 24;
+function statusLamp(host, [x0, y0, x1, y1]) {
+  const lamp = element('span', 'home-lamp', host);
+  lamp.setAttribute('aria-hidden', 'true');
+  Object.assign(lamp.style, { left: `${(LAMP_AT[0] - x0) / (x1 - x0) * 100}%`, top: `${(LAMP_AT[1] - y0) / (y1 - y0) * 100}%`,
+    width: `${LAMP_SIZE / (x1 - x0) * 100}%` });
+  element('i', '', lamp);
+}
+statusLamp(screen1Text[0], SCREEN1_TEXT[0]);
+statusLamp(stillScene, [0, 0, SRC_W, SRC_H]);
 const glass = element('div', 'glass', pane);
 const sheen = element('div', 'sheen', glass);
 const shades = [shade];
@@ -774,7 +787,7 @@ const liveClient = document.createElement('script');
 // 出来、收走的动法在 style.css 的 .home-conn；来回抖时同一枚签顺着当下的样子掉头，不闪、不叠两层。副屏和动效照常。
 const tip = element('div', 'home-conn', pane);
 tip.setAttribute('role', 'status'); tip.hidden = true;
-tip.innerHTML = '<p class="home-conn__line"><span class="home-conn__lamp" aria-hidden="true"></span><b></b><span class="home-conn__at"></span></p><p class="home-conn__sub"></p>';
+tip.innerHTML = '<p class="home-conn__line"><b></b><span class="home-conn__at"></span></p><p class="home-conn__sub"></p>';
 const [tipSay, tipAt, tipSub] = ['b', '.home-conn__at', '.home-conn__sub'].map((selector) => tip.querySelector(selector));
 let tipHide = 0, tipNext = null, tipSize = null;
 function tipWrite({ pair, say, at, sub }) {
@@ -804,6 +817,7 @@ function tipText(next) {
 }
 // 家里网站上这台设备的配对失效时，原来顶上那句说明也放在这里（不亮灯）。
 function connectionTip(off, reason, at, sub, pair = '') {
+  root.classList.toggle('home-off', !!off);           // “实时状态”按钮上那颗点跟着变橙、变回绿（.home-lamp）
   if (off || pair) {
     clearTimeout(tipHide);
     tipText({ pair: !off, say: off ? reason || '连不上实况服务' : pair,
