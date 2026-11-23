@@ -47,7 +47,10 @@
     const kind = OUTPUT[o?.kind] ? o.kind : 'document', meta = OUTPUT[kind];
     const action = str(o?.action_text) || (o?.action === 'created' ? '新建了' : o?.action === 'updated' ? '更新了' : '');
     const where = viewer === 'owner' ? meta.where : meta.where.replace('等你的事', '等本人的事');
-    return { kind, id: o?.id, title: o?.title, action, where: str(o?.card_text) || where, version: o?.version, href: T.path(o?.href), go: meta.go };
+    // 提交：后台给的是 GitHub 地址（站外）。本人版照给链接；访客版不给：本人的仓库有公开有私有，后台没标是哪种，访客点到私有的会 404（验收 11-24 07:15）
+    const github = kind === 'commit' && typeof o?.href === 'string' && o.href.startsWith('https://github.com/');
+    return { kind, id: o?.id, title: o?.title, action, where: str(o?.card_text) || where, version: o?.version,
+      href: T.path(o?.href) || (github && viewer === 'owner' ? o.href : ''), github, go: meta.go };
   }
 
   // 列表一行

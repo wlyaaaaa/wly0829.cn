@@ -26,8 +26,10 @@
     return T.stamp(b) ? `${when(a)}–${T.dayKey(a) === T.dayKey(b) ? T.clock(b) : when(b)}` : `${when(a)} 起`;
   };
   const span = m => !known(m) ? '' : m < 1 ? `${Math.max(1, Math.round(m * 60))} 秒` : m < 60 ? `${Math.round(m)} 分钟` : `${Math.floor(m / 60)} 小时 ${Math.round(m % 60)} 分`;
+  const nth = r => known(r.subject?.round) && r.subject.round > 0 ? r.subject.round : null;
   function title(r) {
-    const lead = r.subject ? `${F(r.subject.title, '这件活')} · 第 ${int(r.subject.round ?? 1)} 轮` : '';
+    // 第几轮只用后台给的 subject.round；没给就不写（和列表对得上，验收 11-24 07:15）
+    const lead = r.subject ? `${F(r.subject.title, '这件活')}${nth(r) ? ` · 第 ${int(nth(r))} 轮` : ''}` : '';
     const tail = r.deferred ? R.deferredTitle(r, F, !!lead) : r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
       : F(r.summary, '这一轮做了什么') || '跑完了';
     return lead && tail ? `${lead}：${tail}` : lead || tail;
@@ -48,7 +50,7 @@
     if (r.why) return `<p>${F(r.why, '为什么开这一轮')}</p>`;
     const parts = [];
     if (r.trigger) parts.push(`按“${F(r.trigger, '为什么开这一轮')}”开的这一轮。`);
-    if (r.subject) parts.push(`修的是“${F(r.subject.title, '这件活')}”，这是第 ${int(r.subject.round ?? 1)} 轮。`);
+    if (r.subject) parts.push(`修的是“${F(r.subject.title, '这件活')}”${nth(r) ? `，这是第 ${int(nth(r))} 轮` : ''}。`);
     if (r.resumes) {
       const o = other(r.resumes);
       parts.push(o ? `${esc(when(o.startedAt))} 那一轮${o.reason ? `因为${F(o.reason, '原因')}` : ''}没做成，这一轮接着做。` : '前一轮没做成，这一轮接着做。');
@@ -58,9 +60,12 @@
   }
 
   // —— 这一轮做成了什么：每件右边“去那张卡 ›”“去账本那件 ›” ——
+  // 提交在 GitHub 上：本人版给链接并标“访客看不到”，访客版写已提交、为什么不放链接（后台没标仓库公开还是私有）
+  const GITHUB_WHY = '本人的 GitHub 仓库有一部分是私有的，访客点开会打不开';
   function outputs(r) {
     const rows = r.outputs.map((o, i) => `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${o.version ? ` 第 ${esc(o.version)} 版` : ''}` : ''}</p>
-      ${o.href ? `<a class="tp-link" href="${esc(o.href)}">${esc(o.go)} ›</a>` : `<span class="tp-small">${o.kind === 'commit' ? '还没发布，没有能打开的地址' : '没有能打开的地址'}</span>`}</li>`).join('');
+      ${o.href ? `<a class="tp-link" href="${esc(o.href)}">${esc(o.go)} ›</a>${o.github ? U.visitorHiddenTag('这次提交的链接', GITHUB_WHY, viewer) : ''}`
+        : `<span class="tp-small">${o.github ? `已提交 · 访客版不放提交链接（${GITHUB_WHY}）` : o.kind === 'commit' ? '还没发布，没有能打开的地址' : '没有能打开的地址'}</span>`}</li>`).join('');
     const receipt = r.receipt || {};
     const recorded = list(receipt.recorded).map(x => `<li>${F(x.title ?? x.text ?? x, '记下的事')}</li>`).join('');
     const extra = [recorded && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${recorded}</ul>`,

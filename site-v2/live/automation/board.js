@@ -150,14 +150,16 @@
     let head = `<p class="au-card__cat">${catLabel(d, c.category)}</p>`;
     let title, body = '', meta;
     if (c.kind === 'repair') {
-      const round = r.subject?.round ?? c.rounds.indexOf(r) + 1, what = `${F(c.subject.title, '这件活') || '一件活'} · 第 ${int(round)} 轮`;
+      // 第几轮只用后台给的 subject.round；没给就不写，不按列表里排第几自己编（列表和详情要对得上，验收 11-24 07:15）
+      const nth = x => known(x.subject?.round) && x.subject.round > 0 ? x.subject.round : null;
+      const what = `${F(c.subject.title, '这件活') || '一件活'}${nth(r) ? ` · 第 ${int(nth(r))} 轮` : ''}`;
       if (r.status === 'running') title = what;
       else {
         head = `<p class="au-card__cat">${catLabel(d, c.category)} · ${what}</p>`;
         title = r.status === 'incomplete' ? endText(r, true) : F(r.summary, '结果') || '跑完了';
       }
       const earlier = c.rounds.filter(x => x !== r);
-      if (earlier.length) body += `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">第 ${int(x.subject?.round ?? c.rounds.indexOf(x) + 1)} 轮 · ${range(x)} · ${x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : F(x.summary, '结果') || '跑完了'} ›</a>`).join('')}</p>`;
+      if (earlier.length) body += `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">${nth(x) ? `第 ${int(nth(x))} 轮 · ` : ''}${range(x)} · ${x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : F(x.summary, '结果') || '跑完了'} ›</a>`).join('')}</p>`;
     } else if (r.status === 'incomplete') title = endText(r);
     else title = F(r.summary, '这一轮做了什么') || (r.status === 'running' ? '正在跑' : '跑完了');
     if (r.status === 'running') {
