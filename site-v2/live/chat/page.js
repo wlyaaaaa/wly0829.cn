@@ -304,6 +304,12 @@
     U.html(part('head'), U.status({ ...chat, level: chat.header_level ?? chat.level }).lamp + U.head(title, { lamp: false }) + (hiddenName ? chatCell(name, '对话标题', chat) : '') + U.visitorHiddenMark(chat, '这场对话', viewer) + (note ? `<span class="row__meta">${note}</span>` : '') + `<span class="head__tail">${esc(state)}</span>`);
     part('head').querySelector('.head__lead')?.classList.toggle('rewrite-pending', !locked && pending(name));
     part('privacy').hidden = !locked; U.html(part('privacy'), locked ? `${lockedFields}仅本人可见` : '');
+    // 这场对话是哪一轮自动任务开的：后台 automation_run=[类, 轮号]，照等你的事、账本写“来源：…那一轮 ›”，点了到那一轮（验收 11-24 07:28）
+    const run = Array.isArray(chat.automation_run) && typeof chat.automation_run[0] === 'string' && typeof chat.automation_run[1] === 'string' && chat.automation_run[1] ? chat.automation_run : null;
+    const LR = window.LiveRuns, [runAt] = U.chatStart(chat);
+    const runLabel = run && [LR?.categoryName(run[0], viewer) || '自动任务', runAt && LR ? `${LR.when(runAt)} 那一轮` : '那一轮'].join(' · ');
+    part('source').hidden = !run;
+    U.html(part('source'), run ? `来源：<a href="${esc(route(`/live/automation/run/?type=${encodeURIComponent(run[0])}&run=${encodeURIComponent(run[1])}`))}">${esc(runLabel)} ›</a>` : '');
     part('say').hidden = !latest; U.html(part('say'), latest);
     U.html(part('acts'), locked ? '' : actions(chat)); part('acts').hidden = !part('acts').textContent;
     rec.classList.toggle('route-body--locked', locked);
@@ -351,7 +357,7 @@
   }
   function missing(message, denied = false) {
     clearRendered();
-    U.html(part('head'), denied ? marker({ visibility: 'owner' }, 'public', '对话标题、' + lockedFields) : U.head(message)); for (const name of ['meta', 'say', 'acts', 'privacy']) part(name).hidden = true;
+    U.html(part('head'), denied ? marker({ visibility: 'owner' }, 'public', '对话标题、' + lockedFields) : U.head(message)); for (const name of ['meta', 'say', 'acts', 'privacy', 'source']) part(name).hidden = true;
     L.tone(hero, 'off'); rec.hidden = true; requestAnimationFrame(lightUp);
   }
   if (!id) missing('没有说是哪个对话');
