@@ -77,7 +77,11 @@
     const oldest = d.oldest ? { ...d.oldest, title: d.oldest.title ?? d.oldest.plain_title ?? d.oldest.text } : null;
     // 一件也没有时卡上整句写“AI 暂无待跟事项”；手上有事但后台没挑出最久那件，就不写这一行（后台照给 oldest_text“现在没有 AI 正在跟的事”也不写，免得自相矛盾，M671）
     const oldestText = U.fieldHtml(d.oldest_text, { name: '跟得最久', kind: viewer });
-    const base = { next, oldest, oldestText };
+    // 今天到日子那几件：后台 due_today=[{id, title|text, href, next_at, overdue}]，卡里最多列 3 件，过期的排最前，其余照下次看的时刻先后（本人定，主持 11-24 06:34 转）
+    const at = r => Date.parse(r.next_at) || Infinity;
+    const dueItems = items(d.due_today).filter(r => r && typeof r === 'object').map((r, i) => ({ ...r, i, title: r.title ?? r.plain_title ?? r.text }))
+      .sort((a, b) => (b.overdue === true) - (a.overdue === true) || at(a) - at(b) || a.i - b.i);
+    const base = { next, oldest, oldestText, dueItems };
     if (nl) {
       const since = R.timed(nl.started_at) ? nl.started_at : null;
       // 新账满 7 个整天后后台才给 opened_7d/closed_7d（同样 {count, href}，view=opened_7d/closed_7d），给了就改写“近 7 天进 · 了结”，没给照旧写新账起
@@ -100,6 +104,9 @@
     // 能点过去的绿字（“第 2 轮 ›”“已交自动修理 ›”）；地址不在站内就只写字、不带箭头
     const go = (path, text) => typeof path === 'string' && path.startsWith('/live/')
       ? `<a class="b6-go" href="${esc(route(path))}">${text} ›</a>` : text;
+    // 字长的绿链接（上一轮的结果、事项标题）：允许换行，免得窄卡里被截掉；“›”用不断行空格跟前面的字连着
+    const goWrap = (path, text) => typeof path === 'string' && path.startsWith('/live/')
+      ? `<a class="b6-go b6-go--wrap" href="${esc(route(path))}">${text}&nbsp;›</a>` : text;
     const attention = path => typeof path === 'string' && /^\/live\/(?:items?\/|[?#])/.test(path);
     const d = data || {};
     if (id === 'automation') {
@@ -120,7 +127,7 @@
       };
       return { tone, head, body:
         `<div class="b6-metrics">${v.metrics.map(metric).join('')}</div>
-        ${v.zero && v.last ? `<p class="b6-last">今天还没有${v.last.at ? ` · 上次：${esc(R.when(v.last.at, now, { relative: true }))}` : ' · 上次：'} ${go(v.last.href, field(v.last.text, '那一轮的结果'))}</p>` : ''}
+        ${v.zero && v.last ? `<p class="b6-last">今天还没有${v.last.at ? ` · 上次：${esc(R.when(v.last.at, now, { relative: true }))}` : ' · 上次：'} ${goWrap(v.last.href, field(v.last.text, '那一轮的结果'))}</p>` : ''}
         ${v.running.length ? v.running.map(r => `<p>${dot('ok')}在干：${r.what.map(w => field(w)).join(' · ')} ${go(r.href, r.round ? `第 ${r.round} 轮` : '看经过')}</p>`).join('')
           : `<p>${next.title ? `下次 ${esc(time(next.at) || next.wait || '')} · ${link(next.href, field(next.title, '任务名称'))}`
             : Array.isArray(d.running) && d.next === null ? '没有排定的运行' : '运行和下次时间没读到'}</p>`}
@@ -178,9 +185,17 @@
     const dueLine = v.due.n == null ? `今天到日子 ${num(null)} 件`
       : v.due.n > 0 ? `${go(v.due.href, `今天到日子 ${esc(v.due.n)} 件`)}${v.overdue.n > 0 ? ` ${v.overdue.href ? `<a class="b6-big__aside" href="${esc(route(v.overdue.href))}">` : '<span class="b6-big__aside">'}过期的 ${esc(v.overdue.n)} 件排最前${v.overdue.href ? '</a>' : '</span>'}` : ''}`
       : `今天没有到日子的${v.next ? ` · ${go(v.next.href, `下一件 ${esc(v.next.day)}`)}` : ''}`;
+    // 列出来的每一件：标题点了到那件；过期的写“过期”，到点了写“该看了 · 原定几点”，还没到点写“下次几点”
+    const clock = x => U.date(x) === U.date(now) ? U.time(x) : time(x);
+    const dueItem = r => {
+      const due = R.timed(r.next_at) ? r.next_at : null, passed = due && Date.parse(due) <= Date.parse(now);
+      const when = r.overdue === true ? `过期${due ? ` · 原定 ${esc(time(due))}` : ''}` : due ? (passed ? `该看了 · 原定 ${esc(clock(due))}` : `下次 ${esc(clock(due))}`) : '';
+      return `<p class="b6-due-item">${dot(r.overdue === true || passed ? 'owner' : 'ok')}${goWrap(r.href, field(r.title, '事项标题'))}${when ? ` <span class="b6-muted">· ${when}</span>` : ''}</p>`;
+    };
     return { tone, head, body:
       `<div class="b6-big"><strong>AI 在跟 <em>${v.open.n == null ? num(null) : `<a href="${esc(route(v.open.href))}">${esc(v.open.n)}</a>`}</em> 件</strong></div>
       <p>${dueLine}</p>
+      ${v.due.n > 0 ? v.dueItems.slice(0, 3).map(dueItem).join('') : ''}
       ${oldest || v.oldestText && v.open.n == null ? `<p class="b6-last">跟得最久：${oldest ? `${oldest.next_at ? field(oldest.title, '事项标题') : go(oldest.href, field(oldest.title, '事项标题'))}${looked}${oldest.next_at ? ` · ${go(oldest.href, `下次 ${esc(U.date(oldest.next_at))}`)}` : ''}` : v.oldestText}</p>` : ''}
       <p class="b6-foot">${flow}</p>` };
   }
