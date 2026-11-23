@@ -571,7 +571,7 @@ window.PAGE_DATA = {
           "href": "/pcconfig/project.html"
         }
       ],
-      "imageText": "子页-备份与恢复\n\n系统盘每天一份镜像，常用的文件夹再存进两块备份盘；换新电脑、笔记本出事、台式机坏了，都有照原样回来的路。"
+      "imageText": "备份与恢复\n\n系统盘每天一份镜像，常用的文件夹再存进两块备份盘；换新电脑、笔记本出事、台式机坏了，都有照原样回来的路。"
     },
     {
       "id": "backup-02",
@@ -615,7 +615,7 @@ window.PAGE_DATA = {
     {
       "id": "backup-04",
       "title": "新电脑上，原样回来",
-      "image": "assets/备份与恢复-04-v5.webp",
+      "image": "assets/备份与恢复-04-v6.webp",
       "width": 1774,
       "height": 887,
       "detail": [
@@ -859,7 +859,7 @@ window.PAGE_DATA = {
           "href": "/live/ledger/?project=pcconfig"
         }
       ],
-      "imageText": "子页-故障值班\n\n电脑和我各个项目出了事，有人值班：每晚 3 点把各个项目自查一遍，每五分钟把新故障派给 AI 去修，每周再查一遍漏；修了两轮还没好，才叫我出面。"
+      "imageText": "故障值班\n\n电脑和我各个项目出了事，有人值班：每晚 3 点把各个项目自查一遍，每五分钟把新故障派给 AI 去修，每周再查一遍漏；修了两轮还没好，才叫我出面。"
     },
     {
       "id": "incidents-02",

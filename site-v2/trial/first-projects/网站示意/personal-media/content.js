@@ -1005,7 +1005,7 @@ window.PAGE_DATA = {
     {
       "id": "云端存底-05",
       "title": "一传几小时，不用 AI 守着",
-      "image": "assets/云端存底-05-v7.webp",
+      "image": "assets/云端存底-05-v8.webp",
       "width": 1774,
       "height": 887,
       "detail": [
@@ -1051,7 +1051,7 @@ window.PAGE_DATA = {
     {
       "id": "云端存底-07",
       "title": "断了也不多出一份",
-      "image": "assets/云端存底-07-v3.webp",
+      "image": "assets/云端存底-07-v4.webp",
       "width": 1774,
       "height": 887,
       "detail": [
