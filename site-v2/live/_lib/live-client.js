@@ -26,6 +26,8 @@
   // v2：上线时换前缀，各设备上 v1 存下的旧副本（上线前几天的数）一次作废，并顺手删掉
   const prefix = 'wly-live-v2:' + (fixture === null ? 'net' : 'fixture:' + fixture) + ':' + (publicView ? 'public:' : '');
   const visitorNetCopy = /^wly-live-v2:net:(?:public:)?(?:none|[a-f0-9]+):public:/;
+  // 访客也留一份备份总表（backups）：读不到时退回上次读到的那份、标上几点的，不整页变空（M449）。其余访客数据照旧不留。
+  const visitorBackupCopy = /^wly-live-v2:net:(?:public:)?(?:none|[a-f0-9]+):public:backups$/;
   const ownerNetCopy = /^wly-live-v2:net:(?:public:)?(?:none|[a-f0-9]+):owner:([^?]+)/;
   // 与后台 owner_original_resource 一致：这些详情只在当前页面保留原文。
   const ownerOriginalResource = resource => /^(?:chats|items|reports|projects)\//.test(resource) &&
@@ -36,7 +38,7 @@
     for (let i = localStorage.length - 1; i >= 0; i--) {
       const key = localStorage.key(i);
       const resource = ownerNetCopy.exec(key)?.[1];
-      if (key?.startsWith('wly-live-v1:') || visitorNetCopy.test(key) || ownerOriginalResource(resource)) localStorage.removeItem(key);
+      if (key?.startsWith('wly-live-v1:') || visitorNetCopy.test(key) && !visitorBackupCopy.test(key) || ownerOriginalResource(resource)) localStorage.removeItem(key);
     }
   } catch { /* 浏览器可能禁用存储。 */ }
   // 演示：?fixture&slow=3000 让示意数晚 3 秒到（看加载中）；slow=12000 看“这块要多读一会儿”。真数不认这个开关。
@@ -315,7 +317,7 @@
   let pairing = paired;
   paired?.then(() => { pairing = null; });
   const cacheKey = (e, kind) => e.identity + ':' + kind + ':' + e.path;
-  const canKeepBrowserCopy = e => fixture !== null || e.viewer.kind === 'owner' && !ownerOriginalResource(e.resource);
+  const canKeepBrowserCopy = e => fixture !== null || e.viewer.kind === 'owner' && !ownerOriginalResource(e.resource) || e.resource === 'backups' && !e.query;
   const visitMetrics = new Set('visitors pageviews daily top_pages devices cohorts dwell speed crawlers'.split(' '));
   const oldVisits = (m, section) => m?.external_visits !== true && (visitMetrics.has(m?.id) || (section === 'more-data' && m?.visibility === 'owner' && m.mode === 'static'));
   function siteVisitScope(e, data) {
@@ -456,7 +458,7 @@
   function present(e) {
     const disconnected = offline(), detail = itemDetail(e);
     // 访客确认连不上时清掉已显示的数；根首页副屏（screen）例外：四格本来就是公开数，留着断开前的数、标上是几点的，和本人版一样（M608）。
-    if (disconnected && fixture === null && (detail || e.viewer.kind === 'public' && e.resource !== 'screen') && e.data !== null) forgetData(e, true);
+    if (disconnected && fixture === null && (detail || e.viewer.kind === 'public' && !['screen', 'backups'].includes(e.resource)) && e.data !== null) forgetData(e, true);
     const observed = latestConnection();
     const link = disconnected ? (observed?.state === 'offline' ? observed : { ...e.link, state: 'offline', basis: 'browser' }) : e.link;
     const state = snapshot(e, link);
