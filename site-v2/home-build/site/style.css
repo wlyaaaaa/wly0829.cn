@@ -1,6 +1,14 @@
 :root { color-scheme: light; background: #f7f2ec; }
 * { box-sizing: border-box; }
 body { margin: 0; }
+/* 开场只揭开现有画面。白纸先盖住首帧，图就绪后从旧开场的落墨位置晕开。 */
+@property --home-wash-radius { syntax: '<percentage>'; inherits: false; initial-value: -20%; }
+html.home-opening::after {
+  content: ''; position: fixed; inset: 0; z-index: 40; pointer-events: none; background: white;
+  mask-image: radial-gradient(circle farthest-corner at 58% 30%, transparent var(--home-wash-radius), #000 calc(var(--home-wash-radius) + 20%));
+}
+html.home-washing::after { animation: home-paper-wash 2.2s cubic-bezier(.22, .61, .36, 1) both; }
+@keyframes home-paper-wash { to { --home-wash-radius: 100%; } }
 .scroll-cue { position: fixed; z-index: 1; left: 50%; bottom: 1rem; transform: translateX(-50%); width: 2rem; height: 2rem; border-radius: 50%; background: #fffC; color: #252c29; }
 .scroll-cue::before { content: ''; position: absolute; inset: .55rem .68rem .82rem; border: solid currentColor; border-width: 0 2px 2px 0; transform: rotate(45deg); }
 .scroll-cue:hover, .scroll-cue:focus-visible { background: #fff; color: #00a650; }

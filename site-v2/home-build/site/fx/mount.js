@@ -83,6 +83,9 @@ async function refresh() {
   if (!enabled()) { dispose(active); active = []; resolution = 0; home.screen?.still(); return; }
   try {
     await imagesReady();
+    // 白纸开场或缩回机箱先播完，再分配画布，避免慢机把第一帧卡住。
+    const paper = document.getAnimations().find(a => a.animationName === 'home-paper-wash');
+    await Promise.all([paper?.finished.catch(() => {}), window.__motionHomeReturnFinished]);
     const image = await imageSource();
     if (ticket !== generation || !enabled()) return;
     // 把固定电脑视口的缩小算进去，额外留 25% 放大余量；桌面和 Ctrl 缩放仍是原清晰度。

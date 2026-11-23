@@ -49,7 +49,7 @@
     routeStyle.textContent = `@view-transition { navigation: ${value ? 'none' : 'auto'}; }`;
   }
   const KEY = 'mo-nav';
-  const VT_CLASSES = ['mo-vt', 'mo-vt-nav', 'mo-vt-top', 'mo-vt-same', 'mo-vt-other', 'mo-vt-cover', 'mo-vt-cover-handoff', 'mo-vt-uncover', 'mo-vt-home-in', 'mo-vt-home-out', 'mo-vt-open', 'mo-vt-close'];
+  const VT_CLASSES = ['mo-vt', 'mo-vt-nav', 'mo-vt-top', 'mo-vt-same', 'mo-vt-other', 'mo-vt-cover', 'mo-vt-cover-handoff', 'mo-vt-uncover', 'mo-vt-home-in', 'mo-vt-home-out', 'mo-vt-open', 'mo-vt-close', 'mo-vt-local'];
   const supported = 'IntersectionObserver' in window && 'animate' in Element.prototype &&
     !!window.CSS && CSS.supports('translate', '1px') && CSS.supports('scale', '1');
   const on = supported;      // 浏览器缺功能才不起动画，内容照常显示
@@ -142,8 +142,12 @@
       root.style.setProperty('--mo-refresh-cover', `url("${rec.reloadCover}")`);
       root.classList.add('mo-cover-refresh');
     }
+    if (rec?.home === 'out' && location.pathname === '/live/') root.dataset.moHomeArrival = '';
     if (webkit && (rec?.open || rec?.close || rec?.compatHome)) compatRoute(true);
-    if (rec?.home === 'in' && location.pathname === '/') window.__motionHomeAtEnd = true;
+    if (location.pathname === '/') {
+      if (rec?.home === 'in') window.__motionHomeAtEnd = true;
+      else root.classList.add('home-opening');
+    }
     if (rec && rec.bg && rec.fromKind === 'inner' && dirOf(rec.from) === dirOf(location.href)) {
       root.style.setProperty('--project-background', rec.bg);
     }
@@ -226,15 +230,15 @@
     for (const el of document.querySelectorAll('.mo-now')) el.classList.remove('mo-now');
   }
 
-  // 返回首页用当前实况的只读 DOM 快照盖住等图阶段，再把这张页面缩进玻璃。
-  function homeSnapshot() {
+  // 没拿到浏览器快照时，用离开页的静态画面缩回机箱玻璃。
+  function pageSnapshot() {
     const copy = document.body.cloneNode(true), originals = document.body.querySelectorAll('*'), clones = copy.querySelectorAll('*');
     originals.forEach((el, i) => {
       if (!el.getAnimations().length) return;
       const css = getComputedStyle(el);
       for (const p of ['transform', 'translate', 'scale', 'opacity', 'filter', 'box-shadow']) clones[i].style.setProperty(p, css.getPropertyValue(p));
     });
-    copy.querySelectorAll('script,.mo-sheet').forEach(el => el.remove());
+    copy.querySelectorAll('script,iframe,.mo-sheet').forEach(el => el.remove());
     const styles = [...document.head.querySelectorAll('link[rel="stylesheet"],style')].map(el => el.outerHTML).join('');
     return { html: `<!doctype html><html class="${root.className}" style="${root.style.cssText}"><head><base href="${location.href}">${styles}<style>*,*::before,*::after{animation:none!important;transition:none!important}</style></head>${copy.outerHTML}</html>`, y: scrollY };
   }
@@ -256,7 +260,7 @@
     vt?.updateCallbackDone.catch(() => {});
     if (dead || !e.activation) { vt?.skipTransition(); return; }
     // 浏览器返回只给 traverse 时，也保留原生快照，由到达页核对是否回到原卡。
-    if (!e.activation.entry) { if (location.pathname === '/') vt?.skipTransition(); return; }
+    if (!e.activation.entry) return;
     try {
       const to = e.activation.entry.url, kind = pageKind(), bar = document.getElementById('topbar');
       const rec = { t: Date.now(), from: location.href, to, fromKind: kind, nav: e.activation.navigationType,
@@ -269,7 +273,10 @@
           sessionStorage.setItem(`mo-list-page:${listURL(location.href)}:${new URL(to).pathname}`, String(scrollY));
         }
       }
-      if (kind !== 'home' && lastLink?.matches('.brand') && new URL(to).pathname === '/') { rec.home = 'in'; rec.bar = false; }
+      if (kind !== 'home' && new URL(to).pathname === '/' && (lastLink?.matches('.brand') || rec.nav === 'traverse')) {
+        rec.home = 'in'; rec.bar = false;
+        if (/^\/live(?:\/|$)/.test(location.pathname)) rec.snapshot = pageSnapshot();
+      }
       if (kind === 'inner') rec.bg = root.style.getPropertyValue('--project-background');
       if (kind === 'inner' && rec.nav === 'reload' && stripHash(to) === stripHash(location.href)) {
         const art = document.querySelector(coverArt);
@@ -281,7 +288,7 @@
       }
       // 2.2 从首页进别的页：5 个按钮都一样，新页从被点的那个按钮的位置长到满屏（第一屏本人 11-14 21:05 定，第二屏 21:58 定“和那两个一样”）。
       // 回首页不变（仍缩进第二屏的玻璃）。算不出按钮位置（按钮不在屏幕里、没有大小）才按 1.1 普通换页。
-      if (kind === 'home' && lastLink?.matches('.hotspot')) {
+      if (kind === 'home' && lastLink?.matches('.hotspot') && stripHash(lastLink.href) === stripHash(to)) {
         const b = lastLink.getBoundingClientRect(), cs = getComputedStyle(lastLink);
         if (b.width > 1 && b.height > 1 && b.bottom > 0 && b.top < innerHeight && b.right > 0 && b.left < innerWidth) {
           // 按钮的圆角写的是“横 / 竖”两个百分比：换成像素，取小的那个
@@ -309,6 +316,13 @@
           if (pre && pre.el.isConnected) rec.open.elapsed = performance.now() - pre.t0;
         }
       }
+      // 点下去以后、换页之前这一块被重画了（实况刷新）：照点下去那一刻记下的位置、圆角、滚动位置展开，退回也缩回这里。
+      if (!rec.open && kind !== 'home' && clickedOpen?.to === stripHash(to)) {
+        rec.open = { ...clickedOpen.rect };
+        sessionStorage.setItem(`mo-open:${stripHash(to)}`, JSON.stringify({ back: stripHash(location.href), y: clickedOpen.y, rect: rec.open }));
+        if (pre && pre.el.isConnected) rec.open.elapsed = performance.now() - pre.t0;
+      }
+      clickedOpen = null;
       let opened = null;
       try { opened = JSON.parse(sessionStorage.getItem(`mo-open:${stripHash(location.href)}`) || 'null'); } catch {}
       if (!rec.open && opened && opened.back === stripHash(to)) rec.close = { ...opened.rect, bar: top, y: opened.y };
@@ -328,7 +342,6 @@
       if (webkit) {
         rec.compatHome = (rec.home === 'out' && new URL(to).pathname === '/live/') ||
           (rec.home === 'in' && /^\/live(?:\/|$)/.test(location.pathname));
-        if (rec.compatHome && rec.home === 'in') rec.snapshot = homeSnapshot();
         if (rec.open || rec.close || rec.compatHome) { compatRoute(true); vt?.skipTransition(); }
       }
       if (vt && rec.bar) { root.classList.add('mo-vt-nav'); nameBarRight(); }
@@ -348,6 +361,13 @@
   let still = false;        // 2.8 退回来：第一屏不演 1.2，直接在位（页面要知道的话听 document 上的 motion:still）
   const homeReturn = rec => webkit && rec?.compatHome && rec.home === 'in' ? { home: true, snapshot: rec.snapshot } : null;
   let compatReturn = homeReturn(initialRecord);
+  // Chrome 可能在首页正文到得晚时舍弃原生快照。趁解析首页，先把旧页的备用画面读齐。
+  let homeCover = !webkit && initialRecord?.home === 'in' && initialRecord.snapshot ? snapshotSurface(initialRecord.snapshot) : null;
+  if (homeCover) homeCover.el.style.opacity = '0';
+  function returnHome(rec) {
+    shrinkHome(homeCover || snapshotSurface(rec.snapshot));
+    homeCover = null;
+  }
 
   addEventListener('pagereveal', e => {
     const vt = e.viewTransition;
@@ -360,6 +380,7 @@
     document.querySelectorAll('.mo-sheet').forEach(x => x.remove());   // 从“返回秒开”缓存回来：打开时留下的板不能进新快照
     let rec = null;
     try { rec = readRecord(); sessionStorage.removeItem(KEY); } catch {}
+    if (rec?.home === 'in') window.HOME?.showAtEnd?.();
     compatReturn = homeReturn(rec);
     const compatible = webkit && (rec?.open || rec?.close || rec?.compatHome);
     const departed = !rec && !webkit && previousOpen();
@@ -369,12 +390,15 @@
     }
     if (compatible) vt?.skipTransition();
     clearNames();
+    if (rec?.home === 'out' && location.pathname === '/live/') root.dataset.moHomeArrival = '';
     if (!vt && rec?.exit && pageKind() === 'list') pairUncover(rec);
     if (vt && !compatible) {
       if (dead) vt.skipTransition();
       else {
         try { arrive(vt, rec); } catch (err) { console.error('[motion]', err); vt.skipTransition(); clearNames(); }
       }
+    } else if (!dead && !compatible && rec?.home === 'in' && rec.snapshot) {
+      returnHome(rec);
     } else if (!dead && !webkit && rec?.close) {
       still = true;
       const close = () => shrinkCard(rec.close, rec.close.y);
@@ -382,6 +406,13 @@
       else close();
     } else if (!dead && canReplayCover(rec)) {
       replayCover(rec);
+    } else if (!dead && !compatible && rec?.home === 'out' && document.startViewTransition) {
+      // 慢网让浏览器放弃跨页快照时，新页仍从按钮原位展开。
+      root.classList.add('mo-vt-local');
+      const local = document.startViewTransition(() => arrive(local, rec));
+      local.ready.catch(() => {});
+      local.updateCallbackDone.catch(() => {});
+      local.finished.catch(clearNames);
     }
     revealed = true;
     maybeStart();
@@ -398,9 +429,11 @@
 
   function arrive(vt, rec) {
     dropVtAnims();
-    // 保险：过渡 3 秒还没完（某个浏览器里动画卡住了），直接跳到新页，页面不能一直停在快照上点不动
-    const watchdog = setTimeout(() => { try { vt.skipTransition(); } catch {} }, 3000 * SPEED);
+    // 冷回首页保留原有的等待时限。
+    const waitsForArt = rec?.home === 'in';
+    const watchdog = setTimeout(() => { try { vt.skipTransition(); } catch {} }, waitsForArt ? T.navRecordMaxAge : 3000 * SPEED);
     vt.finished.then(() => clearTimeout(watchdog), () => clearTimeout(watchdog));
+    if (rec?.home === 'in') window.__motionHomeReturnFinished = vt.finished.catch(() => {});
     const kind = pageKind();
     const paired = rec?.exit && kind === 'list' && pairUncover(rec);
     let type = 'top';
@@ -428,7 +461,11 @@
       root.style.setProperty('--mo-exit-top', `${rec.exit.top}px`);
       vt.ready.then(() => roundUncover(rec)).catch(() => {});
     }
-    if (rec?.home) vt.ready.then(() => flyHome(vt, rec)).catch(() => {});
+    if (rec?.home) vt.ready.then(() => {
+      homeCover?.el.remove();
+      homeCover = null;
+      flyHome(vt, rec);
+    }, () => { if (rec.home === 'in' && rec.snapshot) returnHome(rec); }).catch(() => {});
     if (type === 'open' || type === 'close') {
       // 第一屏不演 1.2，直接在位：打开时长出来的那一片里就是新页本来的样子（不是一片空白再升上来）；退回来时这一页是静止的底图
       still = true;
@@ -510,8 +547,25 @@
     const frames = fitFrames({ x: 0, y: 0, w: vw, h: vh }, pane, vw, vh);
     const pseudoElement = `::view-transition-${incoming ? 'old' : 'new'}(root)`;
     const duration = ms('--mo-home') * SPEED, fade = ms('--mo-home-fade') * SPEED;
-    playFrames(frames, !incoming, { duration, easing: cssVar('--mo-move'), fill: 'forwards', pseudoElement });
-    if (incoming) root.animate([{ opacity: 1 }, { opacity: 0 }], { duration: fade, delay: duration - fade, fill: 'forwards', pseudoElement });
+    const anims = playFrames(frames, !incoming, { duration, easing: cssVar('--mo-move'), fill: 'forwards', pseudoElement });
+    if (!incoming) {
+      // 新页长出按钮以后再盖住旧画，让原按钮的字随着换页渐隐。
+      if (!root.classList.contains('mo-vt-local')) {
+        root.animate([{ opacity: 0 }, { opacity: 1 }], { duration: fade, fill: 'both', pseudoElement });
+      }
+      return;
+    }
+    anims.push(root.animate([{ opacity: 1 }, { opacity: 0 }], { duration: fade, delay: duration - fade, fill: 'forwards', pseudoElement }));
+    // 收回去之前保留原页快照，等第二屏机箱画好，不能先缩向一片空白。
+    anims.forEach(a => a.pause());
+    let holding = true;
+    const release = () => { holding = false; };
+    vt.finished.then(release, release);
+    const start = () => Promise.resolve(window.HOME?.firstScreenReady).then(() => requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (holding) anims.forEach(a => a.play());
+    })));
+    if (window.HOME || document.readyState === 'complete') start();
+    else document.addEventListener('DOMContentLoaded', start, { once: true });
   }
 
   // 2.8 点开一块 / 退回这一块：和 2.2 同一个算法、同一组时长和曲线（--mo-home、--mo-move、--mo-home-fade）。
@@ -686,6 +740,7 @@
     } catch { return null; }
   }
   let pre = null;            // 正在长的板（跨页过渡接着用）
+  let clickedOpen = null;    // 点下去那一刻记下的：去哪、哪一块（位置、圆角、页眉底）、滚动位置
   function sheet(from, to, { fadeIn = false, fadeOut = false } = {}) {
     const el = document.createElement('div');
     el.className = 'mo-sheet';
@@ -707,7 +762,7 @@
     return { el, move, duration, t0: performance.now() };
   }
   const fullBelow = top => ({ left: 0, top, width: innerWidth, height: innerHeight - top, radius: 0 });
-  const dropSheets = () => { pre = null; document.querySelectorAll('.mo-sheet').forEach(x => x.remove()); };
+  const dropSheets = () => { pre = null; clickedOpen = null; document.querySelectorAll('.mo-sheet').forEach(x => x.remove()); };
   function barBottom() {
     const bar = document.getElementById('topbar');
     return bar && bar.dataset.hidden !== 'true' ? Math.max(0, bar.getBoundingClientRect().bottom) : 0;
@@ -739,6 +794,7 @@
       dropSheets();
       if (crossDoc && !webkit) {
         pre = sheet(rect, fullBelow(top), { fadeIn: true });
+        if (!home) clickedOpen = { to: stripHash(a.href), rect: { ...rect, bar: top }, y: scrollY };
         const mine = pre;
         setTimeout(() => { if (pre === mine) dropSheets(); }, 10000);   // 十秒还没跳走（被拦下、取消了）：收掉
         return;
@@ -758,6 +814,30 @@
       try { sessionStorage.setItem(SHEET_KEY, JSON.stringify({ from: stripHash(location.href), t: Date.now() })); } catch {}
     });
   }
+  function shrinkHome(cover) {
+    root.classList.add('mo-sheet-wait');
+    if (cover) cover.el.style.removeProperty('opacity');
+    const ready = () => {
+      window.HOME?.showAtEnd?.();
+      return Promise.all([cover?.ready, window.HOME?.firstScreenReady]);
+    };
+    const loaded = window.HOME || document.readyState === 'complete' ? ready() :
+      new Promise(resolve => document.addEventListener('DOMContentLoaded', () => resolve(ready()), { once: true }));
+    window.__motionHomeReturnFinished = loaded.then(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))).then(() => {
+      const pane = window.HOME?.paneAtEnd?.() || glassAtEnd(), duration = ms('--mo-home') * SPEED, fade = ms('--mo-home-fade') * SPEED;
+      root.classList.remove('mo-sheet-wait');
+      if (!cover) {
+        const s = sheet(fullBelow(0), pane, { fadeOut: true });
+        return s.move.finished.finally(() => s.el.remove());
+      }
+      const frames = fitFrames({ x: 0, y: 0, w: innerWidth, h: innerHeight }, pane, innerWidth, innerHeight);
+      const options = { duration, easing: cssVar('--mo-move'), fill: 'forwards' };
+      const anims = ['move', 'clip'].map(k => cover.el.animate(frames[k], options));
+      anims.push(cover.el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: fade, delay: duration - fade, fill: 'forwards' }));
+      anims.forEach(a => { a.startTime = document.timeline.currentTime; });
+      return anims[0].finished.finally(() => cover.el.remove());
+    }).catch(() => {}).finally(() => compatRoute(false));
+  }
   if (on && (!crossDoc || webkit)) {
     const backFrom = () => compatReturn || previousOpen();
     const shrink = opened => {
@@ -765,25 +845,7 @@
       sessionStorage.removeItem(SHEET_KEY);
       dropSheets();
       if (opened.home) {
-        root.classList.add('mo-sheet-wait');
-        const cover = opened.cover || (opened.snapshot && snapshotSurface(opened.snapshot));
-        const track = document.querySelector('.track'), stage = track?.querySelector('.stage');
-        if (track && stage) scrollTo({ top: track.offsetTop + track.offsetHeight - stage.offsetHeight, behavior: 'instant' });
-        Promise.all([cover?.ready, window.HOME?.firstScreenReady]).then(() => requestAnimationFrame(() => requestAnimationFrame(() => {
-          const pane = window.HOME?.paneAtEnd?.() || glassAtEnd();
-          if (cover) {
-            const frames = fitFrames({ x: 0, y: 0, w: innerWidth, h: innerHeight }, pane, innerWidth, innerHeight), duration = ms('--mo-home') * SPEED, fade = ms('--mo-home-fade') * SPEED;
-            const options = { duration, easing: cssVar('--mo-move'), fill: 'forwards' };
-            const anims = ['move', 'clip'].map(k => cover.el.animate(frames[k], options));
-            anims.push(cover.el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: fade, delay: duration - fade, fill: 'forwards' }));
-            anims.forEach(a => { a.startTime = document.timeline.currentTime; });
-            anims[0].finished.then(() => { cover.el.remove(); compatRoute(false); }, () => cover.el.remove());
-          } else {
-            const s = sheet(fullBelow(0), pane, { fadeOut: true });
-            s.move.finished.then(() => { s.el.remove(); compatRoute(false); }, () => s.el.remove());
-          }
-          root.classList.remove('mo-sheet-wait');
-        })));
+        shrinkHome(opened.cover || (opened.snapshot && snapshotSurface(opened.snapshot)));
         return;
       }
       shrinkCard(opened.rect, opened.y);
