@@ -75,8 +75,16 @@
     const reasons = unverified.filter(([, reason]) => reason).map(([label, reason]) =>
       `<span class="backup-evidence-label">${label}：</span>${said(reason, label)}`);
     if (unknown.length) reasons.unshift(`${unknown.join('、').replace(/、([^、]+)$/, '和$1')}尚未核实`);
+    // 这次没备份成：回包里给了几点试的、为什么、下一步，放在说明最前面（M376）。
+    const failedAt = anomaly && copy?.last_attempt_at ? `${stamp(copy.last_attempt_at)} 这次没备份成` : '';
+    const cause = anomaly && copy?.failure_reason != null ? copy.failure_reason : null;
+    const failure = [failedAt && esc(failedAt) + (cause != null ? '：' + said(cause, '失败原因') : ''),
+      !failedAt && cause != null && `<span class="backup-evidence-label">失败原因：</span>${said(cause, '失败原因')}`,
+      anomaly && copy?.next_step != null && `<span class="backup-evidence-label">下一步：</span>${said(copy.next_step, '下一步')}`].filter(Boolean).join(' · ');
+    if (failure) reasons.unshift(failure);
+    const failureText = failedAt ? failedAt + (cause != null ? '：' + U.fieldText(cause, viewer) : '') : cause != null ? `失败原因：${U.fieldText(cause, viewer)}` : '';
     const first = anomaly || status ? `${name} ${lead}` : quantity ? `已读 ${name} ${quantity}` : checked || content ? name : '';
-    return { name, text: [first, checked, content].filter(Boolean).join(' · '), lead, checked, content, quantity, why: reasons.join(' · '), anomaly, confirmed, retired };
+    return { name, text: [first, failureText, checked, content].filter(Boolean).join(' · '), lead, checked, content, quantity, why: reasons.join(' · '), anomaly, confirmed, retired };
   }
   function copySummary(d) {
     const copies = PLACES.map(([key, name]) => copyEvidence(d[key], key, name, d.copy_summary));

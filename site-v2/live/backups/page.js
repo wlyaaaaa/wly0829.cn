@@ -73,7 +73,7 @@
       const { observed_at, refresh_counts } = d.columns?.[key] || {};
       const reads = Object.entries({ read: '读到记录', failed: '本次没读到', not_recorded: '未登记', not_applicable: '不适用' })
         .filter(([state]) => refresh_counts?.[state] > 0).map(([state, label]) => `${refresh_counts[state]} 类${label}`);
-      const time = reads.length && !batchFailed && observed_at ? `<small>记录时间<br>${tableText(stamp(observed_at).trim())}</small>` : '';
+      const time = reads.length && !batchFailed && observed_at ? `<small>本次读于<br>${tableText(stamp(observed_at).trim())}</small>` : '';
       return `<th scope="col">${esc(name)}${time}${reads.map(read => `<small>${tableText(read)}</small>`).join('')}</th>`;
     };
     const reasons = { generated_from_system_inventory: '由系统信息生成，没有原件目录', task_profile_binding_unavailable: '没登记来源目录', backup_manifest_unavailable: '备份清单暂时读不到', source_config_unavailable: '来源配置暂时读不到', read_failed: '本次没读到' };
@@ -138,7 +138,8 @@
         .concat(details.filter(line => !emptyWord(line.replace(/<[^>]*>/g, '').replace(/^[^：]*：/, ''))));
       const lines = [cold && confirmed && anomaly && hLabel, uploadNote !== label && uploadNote, waitNote !== label && waitNote, unconfirmed,
         cloud && copy?.sent == null && copy?.total != null && `共 ${D.transferCount(copy, 'total', key)}`,
-        !cloud && copy?.count != null && `${D.count(copy, 'count')} 份`,
+        // 份数是哪一份清单上的：带上清单时刻，和表头“本次读于”分开（M580）。
+        !cloud && copy?.count != null && `${D.count(copy, 'count')} 份${copy.checked_at ? ` · 按 ${stamp(copy.checked_at).trim()} 清单` : ''}`,
         copy?.failed > 0 && `失败 ${D.transferCount(copy, 'failed', key)}`,
         (cold ? confirmed : historical && historical !== 'unknown') && confirmedAt && `上次核对 ${stamp(confirmedAt).trim()}`,
         original && D.sourceSubset(copy, stamp),

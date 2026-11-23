@@ -209,7 +209,8 @@ function cellFacts(id, cell) {
 // wait：数还在路上（第一次还没回话）。这一格先不出字，只是亮着的屏和图标；数到了，小字和数一起亮出来。
 // 屏上不做“加载中”的样子（本人 11-16 07:53：尽可能不要加载，只有真数和没开机两种）。
 function cellView(id, facts, owner, pending, down) {
-  const missing = pending ? '' : down.offline ? '—' : '还没读到';
+  // 实况暂停对外：没有数可等，四格照常出字，写明暂不公开（M414）。
+  const missing = pending ? '' : down.paused ? '暂不公开' : down.offline ? '—' : '还没读到';
   if (id === 'computer') {
     if (down.hostOff) return { title: '电脑', num: '', unit: '', sub: '', note: '没开机', off: true, label: '电脑没开机' };
     const cpu = Number.isFinite(facts.cpu) ? String(Math.round(facts.cpu)) : '';
@@ -269,7 +270,7 @@ function paintCell(cell, view, href, sample, quiet) {
   return 0;
 }
 // pending：数还在路上（第一次还没回话，或后端说正在准备）。回了话还是没有数，才写“还没读到”。
-const down = { offline: false, hostOff: false, silent: false };
+const down = { offline: false, hostOff: false, silent: false, paused: false };
 const lastReadings = new Map();
 let lastViewer;
 // 屏上的数是几点的：当天只写时刻，隔天带上月-日（北京时间）。
@@ -835,12 +836,13 @@ liveClient.onload = () => window.Live.watch('screen', {}, {
     down.hostOff = state.hostOff;
     down.silent = !!state.silent;
     down.offline = state.offline;
+    down.paused = !!state.publicPaused;
     for (const panel of panels) for (const { link } of panel.cells) {
       if (state.text) link.title = state.text; else link.removeAttribute('title');
     }
     // 失败后先隔 2、4、8 秒各再试一次，之后跟着每分钟重读一起试（live-client.js 的 retryFailure 和 startPolling）。
     connectionTip(state.offline, state.reason, state.pageAtText, '每分钟自动再试，连上就换成最新的', state.pairNotice);
-    renderScreen(state.data, state.meta, state.warming || state.publicPaused, state.offline ? null : state.now);
+    renderScreen(state.data, state.meta, state.warming, state.offline ? null : state.now);
   }
 });
 // 实况那份脚本没取到（断网、被拦）：没有数可等了，按连不上算，别让四格一直空着。这时页面不会自己再试。
