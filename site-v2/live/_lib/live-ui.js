@@ -1082,8 +1082,9 @@
       put(link.querySelector('.live-conn__at'), state.pageAtText ? ` · 下面是 ${state.pageAtText} 的数据` : ' · 这页没有可显示的上次数据');
     } else if (link && !link.classList.contains('is-back')) {
       link.classList.add('is-back');
+      const upTo = window.Live?.upTo?.() || state.shownAt;
       put(link.querySelector('b'), '已连上');
-      put(link.querySelector('.live-conn__at'), '');
+      put(link.querySelector('.live-conn__at'), upTo ? ` · 数据已更新到 ${time(upTo)}` : '');
       connBack = setTimeout(() => { connBack = 0; if (link.isConnected && link.classList.contains('is-back')) close(link); }, 2000);
     }
     const pair = state.publicPaused ? '' : state.pairNotice || '';
@@ -1147,7 +1148,7 @@
       if (!paused) at.setAttribute('aria-label', '正在重读');
       at.querySelector('.live-refresh-text')?.classList.remove('is-swapped');
       at.classList.add('is-refreshing');
-      location.reload();
+      if (window.Live?.reload) window.Live.reload(); else location.reload();
     });
     askBtn.addEventListener('click', async (e) => {
       if (guard(e)) return;

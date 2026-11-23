@@ -72,7 +72,9 @@ test('offline owner copy uses the displayed generation and Beijing date', async 
   for (const [now, at, expected] of [['2026-11-15T22:16:00Z', '2026-11-15T22:14:00Z', '06:14'], ['2026-11-15T16:01:00Z', '2026-11-15T14:40:00Z', '11-15 22:40']]) {
     let packet = {v: 1, seq: 2, rev: 'new', at, now, data: {screen: {}}, viewer: {kind: 'owner', device: 'ok'}, link: {state: 'online', basis: 'response'}};
     let broken = false;
-    const sandbox = {window: {}, location: new URL('https://example.test/live/'), URLSearchParams, Intl, Date, AbortSignal, setTimeout, clearTimeout,
+    const waits = [], lapse = () => waits.splice(0).forEach(fn => fn());
+    const sandbox = {window: {}, location: new URL('https://example.test/live/'), URLSearchParams, Intl, Date, AbortSignal, clearTimeout,
+      setTimeout: (fn, ms) => ms === 10000 ? (waits.push(fn), 0) : setTimeout(fn, ms),
       document: {addEventListener() {}}, localStorage: {getItem() {return null;}, setItem() {}, removeItem() {}},
       fetch: async () => {if (broken) throw Error('network'); return {ok: true, status: 200, headers: new Headers(), json: async () => packet};}};
     vm.runInNewContext(source, sandbox); const client = sandbox.window.Live;
@@ -83,8 +85,9 @@ test('offline owner copy uses the displayed generation and Beijing date', async 
     assert.equal(state.text, `连不上电脑 · 下面是 ${expected} 的数据。`); assert.equal(state.shownAt, at);
     assert.equal(state.meta.seq, 2); assert.equal(state.data.screen.old, undefined);
     broken = true;
-    // 一次、两次没读到只当读得慢，不挂“连不上”；连着第三次才算。
-    await client.get('home'); await client.get('home');
+    // 没读到先等，等满 10 秒还没有新的才挂“连不上”
+    assert.equal((await client.get('home')).text, `连不上电脑 · 下面是 ${expected} 的数据。`);
+    lapse();
     assert.equal((await client.get('home')).text, `连不上实况服务 · 下面是 ${expected} 的数据。`);
   }
 });
@@ -96,14 +99,16 @@ test('offline screen retains proven readings, and a rejected device drops its ow
     setItem: (key, value) => stored.set(key, value), removeItem: key => stored.delete(key)};
   const packet = (cells, rev) => Response.json({at, now: at, viewer, rev, seq: rev, data: {cells}});
   let reply = () => packet([{id: 'need', n: 0}, {id: 'computer', cpu_c: 52, uptime: 3600}], 1);
+  const waits = [], lapse = () => waits.splice(0).forEach(fn => fn());
   const sandbox = {window: {}, location: new URL('https://example.test/'), URLSearchParams, Intl, Date, AbortSignal,
-    setTimeout, clearTimeout, document: {addEventListener() {}}, localStorage, fetch: async () => reply()};
+    setTimeout: (fn, ms) => ms === 10000 ? (waits.push(fn), 0) : setTimeout(fn, ms), clearTimeout, document: {addEventListener() {}}, localStorage, fetch: async () => reply()};
   vm.runInNewContext(source, sandbox);
   const read = () => sandbox.window.Live.get('screen');
   await read();
   reply = () => packet([{id: 'need', n: null}], 2); await read();
   reply = () => Response.json({}, {status: 503});
-  await read(); await read();
+  assert.equal((await read()).offline, false);
+  lapse();
   const old = await read();
   assert.equal(old.text, '实况服务暂不可用 · 下面是 08:00 的数据。');
   assert.equal(old.data.cells.find(c => c.id === 'computer').cpu_c, 52);
@@ -113,7 +118,7 @@ test('offline screen retains proven readings, and a rejected device drops its ow
   }});
   const reopened = {...sandbox, window: {}};
   vm.runInNewContext(source, reopened);
-  await reopened.window.Live.get('screen'); await reopened.window.Live.get('screen');
+  await reopened.window.Live.get('screen'); lapse();
   const edge = await reopened.window.Live.get('screen');
   assert.equal(edge.viewer.kind, 'owner');
   assert.equal(edge.data.cells.find(c => c.id === 'computer').cpu_c, 52);
@@ -185,9 +190,10 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
     getItem: key => stored.get(key), setItem: (key, value) => stored.set(key, value), removeItem: key => stored.delete(key)};
   const audience = 'a'.repeat(64);
   let paused = false, offline = false, fallbackRead, packagedPolicy = 'policy-9';
+  const waits = [], lapse = () => waits.splice(0).forEach(fn => fn());
   const requested = [];
   const sandbox = {window: {}, location: new URL('https://wly0829.cn/live/'), URLSearchParams, Intl, Date, AbortSignal, clearTimeout,
-    setTimeout(fn, ms) { if (ms === 15000) fallbackRead = fn; return 0; },
+    setTimeout(fn, ms) { if (ms === 15000) fallbackRead = fn; if (ms === 10000) waits.push(fn); return 0; },
     setInterval: () => 0, document: {addEventListener() {}}, localStorage,
     fetch: async url => {
       requested.push(url);
@@ -216,8 +222,8 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   assert.equal(requested[0], 'https://live.wly0829.cn/computer-access/live/v1/home');
   assert.equal([...stored.keys()].filter(key => key.startsWith(normal) || key.startsWith(forced)).length, 0);
   offline = true;
-  // 主页也读不到、某一份连着三次读不到，才算整页连不上
-  await client.get('home'); await client.get('projects'); await client.get('projects');
+  // 本页主数据（home）等满 10 秒还没有新的才算整页连不上；别的读口读不到不算
+  await client.get('home'); lapse();
   assert.equal((await client.get('projects')).data, null);
   await fallbackRead();
   assert.equal((await client.get('projects')).meta.at, null);
@@ -267,7 +273,7 @@ test('authority clears a withdrawn detail and never fills it from a saved public
   response = () => Response.json({error: 'live_publication_revoked'}, {status: 503});
   assert.equal((await client.get('home')).meta.withdrawn, true);
   assert.deepEqual(shown, ['synthetic title', null, 'synthetic title', null]);
-  assert.equal(requested.every(url => url.startsWith('https://live.wly0829.cn/')), true);
+  assert.equal(requested.filter(url => !url.startsWith('/release-identity.json')).every(url => url.startsWith('https://live.wly0829.cn/')), true);
 });
 
 test('an offline public preview cannot paint previous task names or conversation text', async () => {
