@@ -36,6 +36,7 @@
   const SIZES = [['small', '小单'], ['medium', '中单'], ['large', '大单']];
 
   let state, viewer = 'public', expanded = null, period = 'all';
+  const modelsOpen = new Set();  // 哪几家的型号清单展开了全部
   const drawn = new Set();       // 图只在第一次出现时描线、长柱
   const cellsBefore = new Map(); // 钩子格上一轮的次数：变了闪一下
   const F = (v, name) => field(v, viewer, name);
@@ -212,9 +213,12 @@
     const orders = known(w.work_orders) ? w.work_orders : known(w.orders) ? w.orders - list(w.models).filter(summaryModel).reduce((s, m) => s + m.count, 0) : null;
     const cell = (label, value, unit, key, fmt) => `<div class="ag-work__row"><span>${label}</span>${lost && key !== 'orders' ? `<b class="tp-fog">还没采上</b>`
       : known(value) ? `<b class="tp-mid">${big(value, `work-${h.id}-${key}-${period}`, fmt)}<small>${unit}</small></b>` : `<b class="tp-fog">没读到</b>`}</div>`;
+    // 型号是普通清单，不做成像按钮的圆角小签；超过 4 种的“另 N 种”是真按钮，就地展开全部、再点收起（本人 11-23 23:53：“这种怎么都按不了？”）
+    const open = modelsOpen.has(h.id), shown = open ? models : models.slice(0, 4);
+    const more = models.length > 4 ? `<button type="button" class="ag-more" data-models="${h.id}" aria-expanded="${open}">${open ? '收起' : `另 ${models.length - 4} 种`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
     return `<article class="ag-work" data-host="${h.id}"><header>${h.name}</header>
       ${cell('开工', w.starts, '件', 'starts')}${cell('总工时', known(w.actual_minutes) ? w.actual_minutes / 60 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
-      <p class="ag-models">${models.slice(0, 4).map(m => `<span class="tp-pill">${esc(MODEL(m.model))} · ${esc(m.effort)} <b>${int(m.count)}</b></span>`).join('') || '<span class="tp-muted">没有派单</span>'}${models.length > 4 ? `<span class="tp-pill">另 ${models.length - 4} 种</span>` : ''}</p>
+      <div class="ag-modelbox"><p class="ag-models__head">派出去的单按型号 · 档位分</p>${shown.length ? `<ul class="ag-models">${shown.map(m => `<li><span>${esc(MODEL(m.model))} · ${esc(m.effort)}</span><b>${int(m.count)}</b></li>`).join('')}</ul>` : '<p class="tp-muted ag-models__none">没有派单</p>'}${more}</div>
       ${lost ? '<p class="tp-small">开工和工时这一家还没采上，派单数是派活工具记的。</p>' : ''}</article>`;
   }
   function workSection(d) {
@@ -235,10 +239,13 @@
 
   // —— 四、开场和接续 · 动手和权限 ——
   function row(label, cells, { diff = [], note = '' } = {}) {
-    // 相邻三家一样的合成一格只写一次
+    // 相邻几家一样的合成一格只写一次；合成的格子和别的格子一样靠左，开头小字写是哪几家一样（本人 11-23 23:53：“怎么排版还奇形怪状的？”）
     const out = [];
-    cells.forEach((c, i) => { const last = out.at(-1); if (last && last.html === c && !diff[i] && !last.diff) last.span++; else out.push({ html: c, span: 1, diff: diff[i] }); });
-    return `<tr><th scope="row">${label}${note ? `<small>${note}</small>` : ''}</th>${out.map(c => `<td${c.span > 1 ? ` colspan="${c.span}" class="is-same"` : c.diff ? ' class="is-diff"' : ''}>${c.span === 3 ? '三家一样：' : c.span === 2 ? '' : ''}${c.html}</td>`).join('')}</tr>`;
+    cells.forEach((c, i) => { const last = out.at(-1); if (last && last.html === c && !diff[i] && !last.diff) last.span++; else out.push({ html: c, span: 1, diff: diff[i], from: i }); });
+    const same = c => c.span === HOSTS.length ? '三家一样' : `${HOSTS.slice(c.from, c.from + c.span).map(h => h.name).join('、')} 一样`;
+    return `<tr><th scope="row">${label}${note ? `<small>${note}</small>` : ''}</th>${out.map(c => c.span > 1
+      ? `<td colspan="${c.span}" class="ag-same"><span class="ag-same__who">${same(c)}</span>${c.html}</td>`
+      : `<td${c.diff ? ' class="is-diff"' : ''}>${c.html}</td>`).join('')}</tr>`;
   }
   function configSection(d) {
     const x = h => hostData(d, h);
@@ -257,7 +264,7 @@
       row('入口规则多少字', entries.map(e => known(e.characters) ? `${int(e.characters)} 字` : '没读到')),
       row('自带记忆', HOSTS.map(memory), { diff: HOSTS.map(h => x(h).memory === true) }),
       row('对话装多满会压缩', HOSTS.map(compact)),
-      row('动手前停不停下等批准', HOSTS.map((h, i) => waits[i] ? `不停，直接动手${link('#hooks-pre-tool', '要拦的几样在钩子“动工具前” ›')}` : '会停下等批准'),
+      row('动手前停不停下等批准', HOSTS.map((h, i) => waits[i] ? `不停，直接动手<a class="tp-link" href="#hooks-pre-tool">要拦的几样在钩子“动工具前” ›</a>` : '会停下等批准'),
         { diff: waits.map(w => !w) }),
       row('谁能自己解开资料锁', HOSTS.map(unlock), { note: link('/rules/topic-authorization.html', '规则 ›') }),
       row('多接的工具', HOSTS.map(tools), { note: '电脑接口、Google 以外，能点名用的' }),
@@ -368,8 +375,9 @@
   const page = T.boot({ resource: 'agents', ask: () => '请看实况智能体页：三家规则、钩子和设置有没有对上，工期估得准不准。先用大白话说，别动手。',
     onState(next) { state = next; draw(); } });
   page.root.addEventListener('click', e => {
-    const cell = e.target.closest('[data-cell]'), seg = e.target.closest('[data-period]');
+    const cell = e.target.closest('[data-cell]'), seg = e.target.closest('[data-period]'), more = e.target.closest('[data-models]');
     if (cell) { expanded = expanded === cell.dataset.cell ? null : cell.dataset.cell; T.keep(page.root, `[data-cell="${cell.dataset.cell}"]`, draw); }
+    if (more) { const id = more.dataset.models; modelsOpen.has(id) ? modelsOpen.delete(id) : modelsOpen.add(id); T.keep(page.root, `[data-models="${id}"]`, draw); }
     if (seg) { period = seg.dataset.period; T.keep(page.root, `[data-period="${seg.dataset.period}"]`, draw); }
   });
 })();

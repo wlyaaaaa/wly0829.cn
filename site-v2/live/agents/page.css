@@ -37,8 +37,8 @@
 .ag-legend { margin-top: 10px; }
 .ag-bases { display: grid; gap: 8px; margin: 10px 0; }
 .ag-bases p { display: flex; justify-content: space-between; gap: 12px; margin: 0; padding: 8px 12px; border: 1px dashed var(--tp-line); border-radius: 9px; font-size: 14px; }
-.ag-est2 .ag-base .tp-bar { grid-template-columns: 128px minmax(0, 1fr) 56px; }
-.ag-base .tp-small { margin: 2px 0 0 140px; }
+.ag-est2 .ag-base .tp-bar { grid-template-columns: 164px minmax(0, 1fr) 72px; }
+.ag-base .tp-small { margin: 2px 0 0 176px; }
 .ag-base.is-ref .tp-bar > span:first-child { color: #6c6b64; }
 .ag-say { margin: 12px 0 8px; padding: 8px 12px; border-radius: 9px; background: rgb(20 20 19 / .05); font-size: 15px; font-weight: 700; color: var(--ink); }
 
@@ -50,13 +50,32 @@
 .ag-work__row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin: 0 14px; padding: 9px 0; border-bottom: 1px solid var(--tp-hair); font-size: 14px; color: #57564f; }
 .ag-work__row .tp-mid { font-size: 30px; color: var(--ink); }
 .ag-work__row .tp-fog { font-size: 14px; }
-.ag-models { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 14px 12px; }
+/* 卡片竖排：三行大数在上，型号清单接在下面，“另 N 种”贴在清单末尾；同一排三张卡一样高 */
+.ag-works { align-items: stretch; }
+.ag-work { display: flex; flex-direction: column; }
+.ag-modelbox { margin: 10px 14px 12px; }
+.ag-models__head { margin: 0 0 4px; font-size: 12.5px; color: var(--muted); }
+.ag-models { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; margin: 0; padding: 0; list-style: none; font-size: 13px; line-height: 20px; color: #3d3d3a; }
+.ag-models li { display: flex; justify-content: space-between; gap: 8px; min-width: 0; }
+.ag-models li span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ag-models li b { flex: none; font-family: var(--mono); font-weight: 600; font-variant-numeric: tabular-nums; }
+.ag-models__none { margin: 0; font-size: 13px; }
+.ag-more { display: inline-flex; align-items: center; gap: 6px; margin: 6px 0 0 -8px; padding: 3px 8px; border: 0; border-radius: 7px; background: none; font: inherit; font-size: 13px; font-weight: 700; color: var(--tp-green-ink); cursor: pointer; transition: background .15s ease; }
+.ag-more:hover { background: rgb(0 166 80 / .1); }
+.ag-more:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.ag-more .tp-chev { color: inherit; }
 .ag-work > .tp-small { margin: -4px 14px 12px; }
+.ag-work__row > span { white-space: nowrap; }
+/* 窗口窄时三张卡占满一行、按周的图挪到下面，免得“总工时”一字一行、型号被截断 */
+@media (max-width: 1280px) { .ag-workgrid { grid-template-columns: minmax(0, 1fr); } .ag-workgrid > div:last-child { max-width: 560px; } }
 
 /* 四、设置表 */
 .ag-config th[data-host], .ag-hooktable th[data-host] { color: var(--host); }
-.ag-config tbody th { width: 190px; }
-.ag-config td { width: calc((100% - 190px) / 3); }
+.ag-config { table-layout: fixed; }
+.ag-config thead th:first-child, .ag-config tbody th { width: 190px; }
+/* 合成一格的和单格一样靠左；开头小字写哪几家一样，读起来是“三家一样  E493 当前版” */
+.ag-config td.ag-same { text-align: left; color: #3d3d3a; }
+.ag-same__who { display: inline-block; margin-right: 10px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
 .ag-config td .tp-link { display: inline-block; margin-left: 10px; font-weight: 500; }
 .ag-foot { margin: 12px 0 0; }
 
