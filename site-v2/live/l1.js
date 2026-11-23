@@ -268,6 +268,7 @@
         <button class="more" type="button" data-part="closed" hidden></button>
       </div>`,
     chats: `<p class="card__head" data-part="head"></p>
+      <p class="row__sub chat-background" data-part="background" hidden></p>
       <div data-part="sources" style="overflow-wrap:anywhere" hidden></div>
       <ul class="rows" data-part="active"></ul>
       <span class="part" data-part="done-label"></span>
@@ -814,6 +815,10 @@
     const summary = join(pieces);
     const heading = chatCardHead({ summary, recorded, marker, url: href('chats'), stamps: split && stamps });
     U.html(p.head, heading + (missing.length && !marker ? `<br><span class="row__sub">${esc(U.collectionText(missing.join('、')))}</span>` : ''));
+    // 这张卡不列后台的对话（本人定的）；后台自动任务这会儿在跑的另起一行，点了到自动任务页
+    const background = !lastState?.offline && window.LiveBatchHome.backgroundRunning(home?.automation);
+    p.background.hidden = !(background?.n > 0);
+    U.html(p.background, background?.n > 0 ? `<a class="b6-go" href="${esc(route(background.href))}">后台另有 ${background.n} 个在跑 ›</a>` : '');
     if (p.sources) renderChatSources(p.sources, d);
     const rank = c => c.state === 'waiting' ? 0 : c.state === 'failed' ? 1 : ['running', 'queued', 'reconnecting'].includes(c.state) ? 2 : c.source === 'manual' ? 3 : 4;
     const runningNow = sample ? running.n : d.running;
@@ -1058,7 +1063,7 @@
   function paintBatchCards(data) {
     for (const id of ['agents', 'automation', 'ledger']) {
       const card = cards[id], p = parts[id];
-      const view = window.LiveBatchHome.render(id, data[id], { viewer, route, href: href(id), offline: !!lastState?.offline });
+      const view = window.LiveBatchHome.render(id, data[id], { viewer, route, href: href(id), offline: !!lastState?.offline, now: lastState?.now || data.at });
       U.html(p.head, view.head);
       U.html(p.batch, view.body);
       p.batch.hidden = false;

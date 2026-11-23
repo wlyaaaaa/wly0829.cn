@@ -404,9 +404,12 @@
   function missing(text, temporary = false) { U.html($('head'), U.head('AI 对话', { lamp: false })); U.html($('chat-note'), U.fieldHtml(text, { name: 'AI 对话', place: 'body', kind: viewer })); if (temporary) { $('head').querySelector('.lamp')?.setAttribute('data-tone', 'off'); L.tone($('hero'), 'off', 'off'); } if (!activeChats) U.list($('active-list'), wait(text)); }
   renderStats(null); missing('正在读'); U.list($('recent-list'), wait('正在读'));
   let first = true, activityMinute = null, homeOffline = false;
+  // 这页不列后台的对话（本人定的）；后台自动任务这会儿在跑的，顶上另起一行“后台另有 N 个在跑 ›”，点了到自动任务页
+  const drawBackground = auto => { const n = U.offline?.() ? 0 : Number.isInteger(auto?.running_total) ? auto.running_total : Array.isArray(auto?.running) ? auto.running.length : 0; $('chat-background').hidden = !(n > 0); U.html($('chat-background'), n > 0 ? `<a class="chat-background" href="${esc(route('/live/automation/'))}">后台另有 ${n} 个在跑 ›</a>` : ''); };
   window.LiveHeader.watch(null, { phase(s) { if (!homeChats && !activeChats) { heroRead.set(s); activeRead.set(s); } }, data(d, meta) {
     readViewer(meta); const draw = () => {
       homeChats = d?.chats || null; homeSources = { data: homeChats, viewer }; drawSources(); homeAt = meta.at;
+      drawBackground(d?.automation);
       if (!homeChats && !activeChats) { missing(U.collectionText()); if (d != null) { heroRead.done(false); if (!activeChats) activeRead.done(false); } }
       render(homeChats, meta.at); renderRecent();
     };
