@@ -173,7 +173,7 @@
     const ref = (name, html, href = '', note = '') => refs.push(dossier ? D.link({ label: name, html, href: href && route(href), note }) : fact(name, (href ? `<a href="${esc(route(href))}">${html} ›</a>` : html) + (note ? `<small>${note}</small>` : '')));
     const add = (name, href, label) => { if (href) ref(name, U.fieldHtml(label || name), href); };
     if (d.origin) {
-      const o = d.origin, mark = marker(o, viewer), name = o.label || o.text || (o.name === 'news-quickcheck' ? '资讯查询' : /^[\w.-]+$/u.test(o.name || '') ? '' : o.name);
+      const o = d.origin, mark = marker(o, viewer), name = U.originName(o, d);
       if (viewer === 'public' && (o.visibility === 'owner' || o.public === 'owner' || o.hidden)) ref('来源', mark);
       else if (name || o.href || o.query) ref('来源', say(name || o.query || '打开来源'), o.href, [name && o.query && say(o.query), mark].filter(Boolean).join(' · '));
     }

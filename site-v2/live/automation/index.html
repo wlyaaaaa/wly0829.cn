@@ -1,37 +1,16 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>自动任务 · 实况</title>
 <link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/connect-auth/glass.css"><link rel="stylesheet" href="/trust-modal/trust-modal.css">
-<link rel="stylesheet" href="/live/_lib/live.css"><link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/live/_lib/live-board.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script>
-<link rel="stylesheet" href="/live/automation/page.css"></head>
-<body class="page page--live page--l2 page--board page--automation">
+<link rel="stylesheet" href="/live/_lib/live.css"><link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/live/_lib/live-tape.css"><link rel="stylesheet" href="/live/automation/board.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script>
+</head><body class="page page--live page--l2 page--tape page--automation-board">
 <header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
-<main class="stage"><div class="field" aria-hidden="true"></div><a class="back" href="/live/#automation" data-back data-mo-rise>实况</a>
-<div id="work-queue" class="aw" data-mo-rise><p class="glass aw-load" role="status">正在读自动任务…</p></div>
-<div id="automation-legacy" hidden>
-<div class="automation-top" data-mo-rise>
-  <section class="glass automation-hero">
-    <img class="automation-hero__art" src="/live/img/automation-hero.webp" alt="" width="360" height="360">
-    <div class="automation-hero__body">
-      <h1>自动任务</h1>
-      <p class="automation-lead">AI 自己接活、按约定时间开工</p>
-      <dl id="stats" class="automation-stats" aria-live="polite"></dl>
-      <p id="notice" class="row__sub" aria-live="polite">正在读</p>
-    </div>
-  </section>
-  <section class="glass automation-recent">
-    <header><span class="lb-card__badge" id="recent-icon"></span><h2>最近 AI 自己开工</h2><img src="/live/img/tasks-grp-online.webp" width="88" height="54" alt=""></header>
-    <ol id="recent" class="rows list"></ol>
-    <p id="recent-note" class="row__sub" hidden></p>
-  </section>
-</div>
-<div id="groups" class="automation-groups" data-mo-rise></div>
-<a class="more automation-windows" id="scheduled-link" href="/live/tasks/">Windows 计划任务 ›</a>
-</div>
-<dialog id="automation-setting" class="glass aw-dialog" aria-labelledby="automation-setting-title">
-  <form><h2 id="automation-setting-title"></h2><div data-fields></div><div class="aw-buttons">
-    <button type="button" class="more" data-cancel>取消</button><button type="submit" class="more more--strong">保存</button>
-  </div><p class="row__sub" role="status" data-dialog-result></p></form>
-</dialog>
+<main class="stage"><div class="field" aria-hidden="true"></div>
+<div id="tp-ticker"></div>
+<a class="back" href="/live/#automation" data-back data-mo-rise>实况</a>
+<div id="tp-root" class="tp"><p class="tp-placeholder" role="status">正在读自动任务…</p></div>
+<dialog id="au-pause" class="au-dialog" aria-labelledby="au-pause-title"><form><h2 id="au-pause-title">暂停到几点</h2>
+<label>北京时间 <input required type="datetime-local" name="value"></label><p class="tp-small">已经在跑的这一轮会先收尾。</p>
+<div class="au-dialog__buttons"><button type="button" data-cancel>取消</button><button type="submit">保存</button></div><p class="tp-small" role="status" data-result></p></form></dialog>
 </main>
-<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-board.js"></script><script src="/live/automation/presentation.js"></script><script src="/live/automation/page.js"></script><script src="/live/automation/work.js"></script>
+<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-tape.js"></script><script src="/live/automation/mechanisms.js"></script><script src="/live/automation/board.js"></script>
 </body></html>

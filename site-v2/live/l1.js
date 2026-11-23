@@ -11,7 +11,7 @@
   const PAGES = [
     { id: 'needs', name: '等你的事', href: '/live/items/', scoped: true },
     { id: 'chats', name: 'AI 对话', href: '/live/chats/' },
-    { id: 'agents', name: '智能体' }, // 智能体的新页还没做好，先不给去处，卡上也不出链接
+    { id: 'agents', name: '智能体', href: '/live/agents/' },
     { id: 'ledger', name: 'AI 账本', href: '/live/ledger/', scoped: true },
     { id: 'automation', name: '自动任务', href: '/live/automation/', scoped: true },
     { id: 'computer', name: '电脑', href: '/live/computer/' },
@@ -349,7 +349,7 @@
   const recordStamp = (value, precision) => timed(value) ? join([day(value) !== day(!lastState?.offline && lastState?.now || Date.now()) && U.date(value), U.time(value, precision)]).replace(' · ', ' ') || U.date(value) : '';
   function hasCardData(id, d) {
     if (!d || d.q === 'warming') return false;
-    if (id === 'chats') return d.unconnected_source_count === null || Number.isInteger(d.unconnected_source_count) && d.unconnected_source_count > 0 || [d.running, d.waiting, d.done72, d.last_counts?.running, d.last_counts?.done72].some(v => v != null) || [...d.active || [], ...d.recent || [], ...d.fallback || []].length > 0;
+    if (id === 'chats') return d.unconnected_source_count === null || Number.isInteger(d.unconnected_source_count) && d.unconnected_source_count > 0 || [d.running, d.waiting, d.done72, d.last_counts?.running, d.last_counts?.done72, d.running_sample?.n].some(v => v != null) || [...d.active || [], ...d.recent || [], ...d.fallback || []].length > 0;
     if (id === 'backups') return (d.summary?.sets ?? d.sets) != null || (d.items || []).length > 0 || d.restore?.some(set => set.points?.length || set.failed_points?.length);
     if (id === 'needs') return d.counts != null || (d.items || []).length > 0;
     if (['agents', 'automation', 'ledger'].includes(id)) return true;
@@ -773,36 +773,49 @@
   }
 
   const oldReading = d => d?.stale || ['stale', 'old'].includes(d?.q) || ['stale', 'old'].includes(d?.state) || d?.read_error || /最近一次记录于/.test(sp(d?.stale_text || d?.text));
-  const chatCountsAt = d => Object.hasOwn(d, 'source_at') && d.source_at == null ? null : d.window?.to || blockAt(d);
+  // 在干、等回答按新样本自己的时刻（source_at）写，和根首页一样；完整统计（近 72 小时那一窗）的时刻不拿来顶（M606）
+  const chatCountsAt = d => Object.hasOwn(d, 'source_at') ? d.source_at : d.window?.to || blockAt(d);
   function chatSnapshot(d) {
     const observed = chatCountsAt(d);
     const old = lastState?.offline || oldReading(d) || timed(observed) && new Date(lastState?.now || Date.now()) - Date.parse(observed) >= 120000;
     const counts = d.last_counts && d.running == null && d.waiting == null && d.done72 == null ? d.last_counts : d;
     return { counts, observed: counts === d ? observed : counts.at || counts.window?.to, old: old || counts !== d };
   }
-  function chatCardHead({ summary, recorded, marker, url }) {
+  function chatCardHead({ summary, recorded, marker, url, stamps }) {
     const arrow = url ? ' <span class="head__tail chat-head-arrow" aria-hidden="true">›</span>' : '';
     const title = `<span class="chat-head-title"><span class="head__lead">AI 对话</span> <small class="chat-head-scope">不含定时和自动</small>${arrow}</span>`;
     const stamp = recorded ? `<span data-recorded="${esc(recorded)}">${esc(recorded)} 记录：</span> ` : '';
-    const stats = summary ? ` <span class="head__tail chat-head-summary">${stamp}${esc(summary)}</span>` : '';
+    const stats = summary ? ` <span class="head__tail chat-head-summary"${stamps ? ` data-stamps="${esc(stamps.join('|'))}"` : ''}>${stamp}${esc(summary)}</span>` : '';
     const link = url ? `<a class="head__link chat-head-link" href="${esc(url)}">${title}${stats}</a>` : title;
     return link + (marker ? `<span class="head__marker">${U.fieldHtml(marker, { name: 'AI 对话', kind: viewer })}</span>` : '');
   }
   function renderChats(d) {
     if (!hasCardData('chats', d)) { emptyCard('chats', d); return; }
     const p = parts.chats, { counts, observed, old } = chatSnapshot(d);
-    const recorded = recordStamp(observed) || (old && sp(d.stale_text || d.text).match(/最近一次记录于\s*((?:\d{2}-\d{2}\s+)?\d\d:\d\d)/)?.[1]);
-    const concurrent = counts.running != null && `${quantity(counts, 'running')} 个${old && !recorded ? '当时' : ''}在干`;
-    const waiting = counts.waiting != null && addressed(`${quantity(counts, 'waiting')} 个等你回答`);
-    const pieces = [concurrent, waiting, counts.done72 != null && `近 72 小时做完 ${quantity(counts, 'done72')} 个`];
-    const missing = [counts.running == null && '在干数', counts.done72 == null && '近 72 小时做完数'].filter(Boolean);
+    // 在干数用后台的新样本 running_sample {n, at, q}（和根首页同一个读数、同一个时刻）；旧包没有才退回原字段（M606）
+    const sample = d.running_sample && typeof d.running_sample === 'object' ? d.running_sample : null;
+    const running = sample ? { n: Number.isInteger(sample.n) ? sample.n : null, at: sample.at } : { n: counts.running, at: observed };
+    const runningOld = sample ? lastState?.offline || sample.q === 'stale' || timed(sample.at) && new Date(lastState?.now || Date.now()) - Date.parse(sample.at) >= 120000 : old;
+    // 在干、等回答、近 72 小时做完各有各的时刻：一样就共用开头的“几点记录”，不一样各自贴上，不拿旧时刻顶新读数
+    const runningAt = recordStamp(running.at), waitingAt = recordStamp(observed), doneAt = recordStamp(counts.window?.to ?? counts.at);
+    const has = { running: running.n != null, waiting: counts.waiting != null, done: counts.done72 != null };
+    const stamps = [...new Set([has.running && runningAt, has.waiting && waitingAt, has.done && doneAt].filter(Boolean))], split = stamps.length > 1;
+    const recorded = split ? (has.running ? runningAt : waitingAt) : stamps[0] || recordStamp(observed) || (old && sp(d.stale_text || d.text).match(/最近一次记录于\s*((?:\d{2}-\d{2}\s+)?\d\d:\d\d)/)?.[1]);
+    const runningText = sample ? `${sample.q === 'partial' ? '至少 ' : ''}${running.n}` : quantity(counts, 'running');
+    const concurrent = has.running && `${runningText} 个${runningOld && !(split ? runningAt : recorded) ? '当时' : ''}在干`;
+    const waiting = has.waiting && addressed(`${quantity(counts, 'waiting')} 个等你回答`);
+    const done = has.done && `近 72 小时做完 ${quantity(counts, 'done72')} 个`;
+    const own = (piece, at, label) => !piece || !split || !at || at === recorded ? piece : label(piece, at);
+    const pieces = [own(concurrent, runningAt, (t, at) => `${t}（${at} 记录）`), own(waiting, waitingAt, (t, at) => `${t}（${at} 记录）`), own(done, doneAt, (t, at) => `截至 ${at} 的${t}`)];
+    const missing = [running.n == null && '在干数', counts.done72 == null && '近 72 小时做完数'].filter(Boolean);
     const marker = typeof d.text === 'object' && d.text;
     const summary = join(pieces);
-    const heading = chatCardHead({ summary, recorded, marker, url: href('chats') });
+    const heading = chatCardHead({ summary, recorded, marker, url: href('chats'), stamps: split && stamps });
     U.html(p.head, heading + (missing.length && !marker ? `<br><span class="row__sub">${esc(U.collectionText(missing.join('、')))}</span>` : ''));
     if (p.sources) renderChatSources(p.sources, d);
     const rank = c => c.state === 'waiting' ? 0 : c.state === 'failed' ? 1 : ['running', 'queued', 'reconnecting'].includes(c.state) ? 2 : c.source === 'manual' ? 3 : 4;
-    const active = (d.active || []).filter(c => c.state !== 'done'), working = active.length > 0 || d.running > 0 || d.waiting > 0;
+    const runningNow = sample ? running.n : d.running;
+    const active = (d.active || []).filter(c => c.state !== 'done'), working = active.length > 0 || runningNow > 0 || d.waiting > 0;
     const all = [...new Map((working ? active : [...d.recent || [], ...d.fallback || []]).map(c => [c.id, c])).values()].sort((a, b) => rank(a) - rank(b) || Date.parse(b.at) - Date.parse(a.at));
     const activePreview = working ? all : [];
     const recent = [...new Map([...(d.recent || []), ...(d.fallback || [])].filter(c => c.state === 'done').map(c => [c.id, c])).values()].sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
@@ -814,7 +827,7 @@
     paintList(p['recent-rest'], preview.slice(activeEnd + shown.done), { animate: false });
     chatWorking = working;
     // 列出来的在干行比计数多（比如状态不明的）时按列出来的算，多出来没摆的也写进“还有 N 个”，不悄悄藏掉。
-    chatTotal = working ? Math.max(d.total ?? (d.running || 0) + (d.waiting || 0), all.length) : all.length;
+    chatTotal = working ? Math.max(sample ? (runningNow || 0) + (d.waiting || 0) : d.total ?? (d.running || 0) + (d.waiting || 0), all.length) : all.length;
     fitCard('chats');
     U.html(p['done-label'], recent.length ? '已完成' : '');
     balanceHome();
@@ -1043,8 +1056,7 @@
   function paintBatchCards(data) {
     for (const id of ['agents', 'automation', 'ledger']) {
       const card = cards[id], p = parts[id];
-      // 智能体的新页还没做好，这张卡先不链：标题、三家的小标都不带链接，整张卡也不当成能点（本人 11-23 07:47 选 A）
-      const view = window.LiveBatchHome.render(id, data[id], { viewer, route, href: id === 'agents' ? '' : href(id), offline: !!lastState?.offline });
+      const view = window.LiveBatchHome.render(id, data[id], { viewer, route, href: href(id), offline: !!lastState?.offline });
       U.html(p.head, view.head);
       U.html(p.batch, view.body);
       p.batch.hidden = false;
@@ -1182,8 +1194,11 @@
     const staleText = U.fieldHtml(data?.stale_text, { name: '数据截止时刻', kind: viewer });
     const endNote = stamp ? `数据截至 ${stamp}` : '';
     const matchesCutoff = text => endNote && U.sameCutoffNote(endNote, text);
-    const chatReading = id === 'chats' && p.head.querySelector('.chat-head-summary [data-recorded]')?.dataset.recorded;
-    const existing = endNote && (chatReading === stamp || [p.head, p.note].some(el => el && !el.hidden &&
+    const chatSummary = id === 'chats' && p.head.querySelector('.chat-head-summary');
+    const chatReading = chatSummary && chatSummary.querySelector('[data-recorded]')?.dataset.recorded;
+    // 卡头分时写的（在干、等回答、做完数各自几点）：截止时刻卡头里有就不重复；读不全的说明不再说“先显示几点的统计”
+    const chatStamps = chatSummary?.dataset?.stamps?.split('|') || [];
+    const existing = endNote && (chatReading === stamp || chatStamps.includes(stamp) || [p.head, p.note].some(el => el && !el.hidden &&
       [...el.querySelectorAll('.head__cutoff'), el].some(node => node.textContent.split(' · ').some(matchesCutoff))));
     const difference = Date.parse(home?.at ?? at) - Date.parse(end);
     const cutoff = endNote && !existing && data?.q !== 'warming' && difference >= 15 * 60 * 1000 ? esc(endNote) : '';
@@ -1194,7 +1209,7 @@
     const state = U.status(['ledger', 'projects'].includes(id) ? null : gray ? { ...data, gray_count: 0 } : data, { showZeroFixing: id === 'needs' });
     p.head.querySelector(':scope > .lamp')?.remove();
     if (state.lamp) p.head.insertAdjacentHTML('afterbegin', state.lamp);
-    const chatGap = id === 'chats' && (state.tone === 'gray' || gray) && chatGapNote(data, chatReading);
+    const chatGap = id === 'chats' && (state.tone === 'gray' || gray) && chatGapNote(data, chatStamps.length ? '' : chatReading);
     const note = chatGap ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].join(' · ')
       : [...(state.note || staleText).split(' · ').filter(text => !(existing || cutoff) || !matchesCutoff(text)), grayNote, cutoff].filter(Boolean).join(' · ');
     p.status.hidden = !note; U.html(p.status, note);

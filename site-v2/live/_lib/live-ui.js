@@ -475,12 +475,15 @@
     const cut = s => { const t = [...s.replace(/\\n/g, '\n').replace(/\*\*|__|\x60/g, '').replace(/^#{1,6}\s+/gm, '').replace(oneLine ? /\s*\n\s*/g : /\n{3,}/g, oneLine ? ' ' : '\n\n').trim()]; return t.length > n ? t.slice(0, n).join('').trimEnd() + '…' : t.join(''); };
     return typeof value === 'string' ? cut(value) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([k, v]) => [k, ['value', 'text', 'label'].includes(k) && typeof v === 'string' ? cut(v) : v])) : value;
   }
-  // 事项来源的名字：内部编号（pcconfig-auto-source-…、owner-2026…、pending-… 这类）不给人看；是项目编号就换成项目名，没有人话名字就不写（本人 11-23 16:50）。
+  // 事项来源的名字：内部编号和来源码（pcconfig-auto-source-…、owner-2026…、pending-…、owner-intake 这类）不给人看（本人 11-23 16:50；M603）。
+  // “来源码 · 型号”这样拼起来的逐段看：认得的来源码换成人话，是项目编号的换成项目名，认不出的、夹着内部编号的那段不写。
+  const ORIGIN_NAMES = { 'news-quickcheck': '资讯查询', 'owner-intake': '新消息登记', 'report-page': '汇报页' };
+  const internalCode = s => /^[\w.-]+$/u.test(s) && (/[-_]/.test(s) || /^[a-z0-9.]+$/.test(s)) && !/^(?:low|medium|high|xhigh|ultra|max)$/.test(s) || /\b[a-z][a-z0-9]*(?:-[a-z0-9]+){2,}\b/.test(s);
   function originName(origin, item) {
     const name = origin?.label || origin?.text || origin?.name;
-    if (!name || typeof name !== 'string' || !/^[\w.-]+$/u.test(name.trim())) return name || '';
-    if (name === 'news-quickcheck') return '资讯查询';
-    return name === item?.project && typeof item?.project_name === 'string' ? item.project_name : '';
+    if (!name || typeof name !== 'string') return name || '';
+    return name.split(' · ').map(s => s.trim()).filter(Boolean).map(s => Object.hasOwn(ORIGIN_NAMES, s) ? ORIGIN_NAMES[s]
+      : s === item?.project && typeof item?.project_name === 'string' ? item.project_name : internalCode(s) ? '' : s).filter(Boolean).join(' · ');
   }
   function fieldText(value, kind = viewer) {
     if (typeof value === 'number' && !Number.isFinite(value)) return '';

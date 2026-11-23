@@ -1,0 +1,110 @@
+/* 实况 · AI 账本（新版）：版式。共用的行情屏样子在 /live/_lib/live-tape.css。 */
+
+.lg-title { padding: 0; border: 0; background: none; font: inherit; font-weight: 700; color: var(--ink); text-align: left; cursor: pointer; }
+.lg-title:hover { color: var(--tp-green-ink); text-decoration: underline; text-underline-offset: 3px; }
+.lg-title:focus-visible, .lg-more:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 4px; }
+.is-picked { background: var(--tp-green-soft); }
+.lg-more { margin-top: 10px; padding: 5px 14px; border: 1px solid var(--tp-line); border-radius: 8px; background: #fff; font: inherit; font-size: 13.5px; font-weight: 600; color: #3d3d3a; cursor: pointer; }
+.lg-more:hover { border-color: var(--ink); }
+.lg-more[disabled] { cursor: progress; color: var(--muted); }
+
+/* 首屏四块 */
+.lg-top { grid-template-columns: minmax(0, .9fr) minmax(0, 1.3fr) minmax(0, 1.15fr) minmax(0, 1.35fr); margin-bottom: 16px; }
+.lg-top > .tp-panel { margin: 0; display: flex; flex-direction: column; }
+.lg-cell h2 { margin: 0 0 10px; font-size: 16px; font-weight: 700; line-height: 22px; color: #3d3d3a; }
+.lg-cell .tp-big { margin: 4px 0 6px; }
+.lg-cell .tp-big small { margin-left: 4px; font-family: var(--sans); font-size: 18px; font-weight: 600; }
+.lg-hand { font-size: 88px; }
+.lg-cell .tp-chart { width: 100%; height: auto; margin-top: auto; }
+.lg-cell .tp-legend { margin-top: 6px; }
+.lg-pairs { display: grid; gap: 8px; margin: 8px 0; }
+.lg-oldest__t { margin: 0; font-size: 15px; line-height: 22px; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.lg-oldest__t a.tp-link { white-space: normal; color: var(--ink); }
+.lg-oldest__t a.tp-link:hover { color: var(--tp-green-ink); }
+.lg-oldest .tp-big { margin-top: auto; }
+.lg-oldest__n { display: flex; align-items: center; gap: 8px; margin: 0; }
+.lg-dots { display: inline-flex; gap: 4px; }
+.lg-dots i { width: 10px; height: 10px; border: 1.5px solid var(--ink); border-radius: 50%; }
+.lg-dots i.is-on { background: var(--ink); }
+
+/* 还欠着的每一件：左边是事，右边是时间轨道 */
+.lg-live { display: inline-flex; align-items: center; gap: 6px; margin-left: 12px; padding: 1px 9px; border-radius: 999px; background: var(--tp-green-soft); color: var(--tp-green-ink); font-family: var(--sans); font-size: 13px; font-weight: 700; letter-spacing: 0; vertical-align: 4px; }
+.lg-live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--tp-green); animation: tp-breathe 1.6s ease-out infinite; }
+.lg-board { position: relative; --text: 560px; --gap: 28px; }
+.lg-head, .lg-item { display: grid; grid-template-columns: var(--text) minmax(0, 1fr); gap: var(--gap); }
+.lg-head { padding-bottom: 6px; border-bottom: 1px solid var(--tp-line); }
+.lg-axis { position: relative; height: 18px; }
+.lg-axis span { position: absolute; top: 0; translate: -50% 0; font-family: var(--mono); font-size: 11.5px; color: #6c6b64; white-space: nowrap; }
+.lg-list { margin: 0; padding: 0; list-style: none; }
+.lg-item { margin: 0 -10px; padding: 10px 10px; border-bottom: 1px solid var(--tp-hair); border-radius: 8px; transition: background .2s ease; }
+.lg-item:hover { background: #fafaf7; }
+.lg-item.is-picked { background: var(--tp-green-soft); }
+.lg-item__text { min-width: 0; }
+.lg-item__text .lg-title { font-size: 15px; line-height: 22px; margin-right: 8px; }
+.lg-item__text .tp-tag { vertical-align: 1px; }
+.lg-item__text p { margin: 3px 0 0; font-size: 13px; line-height: 20px; color: #6c6b64; }
+.lg-running { background: var(--tp-green) !important; color: #fff; text-decoration: none; }
+.lg-over { color: var(--tp-amber); }
+.lg-lane { position: relative; align-self: center; height: 26px; }
+.lg-lane::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px dashed rgb(20 20 19 / .1); }
+.lg-bar { position: absolute; top: 50%; height: 6px; translate: 0 -50%; border-radius: 3px; background: rgb(20 20 19 / .16); }
+.lg-start { position: absolute; top: 50%; width: 8px; height: 8px; translate: -50% -50%; border-radius: 50%; background: #57564f; }
+.lg-start.is-cut { width: 0; height: 0; border-radius: 0; background: none; border: 5px solid transparent; border-right: 7px solid #57564f; translate: -60% -50%; }
+.lg-check { position: absolute; top: 50%; width: 11px; height: 11px; translate: -50% -50%; border: 2px solid #fff; border-radius: 50%; background: var(--ink); box-sizing: content-box; }
+.lg-link { position: absolute; top: 50%; border-top: 2px dotted rgb(20 20 19 / .3); }
+.lg-next { position: absolute; top: 50%; width: 10px; height: 10px; translate: -50% -50%; border: 2px solid var(--ink); border-radius: 50%; background: #fff; }
+.lg-next.is-over { border-color: var(--tp-amber); background: var(--tp-amber); animation: lg-due 1.6s ease-out infinite; }
+.lg-next.is-far { left: 100% !important; }
+.lg-farlabel { position: absolute; right: 12px; top: -1px; font-family: var(--mono); font-size: 11.5px; color: #6c6b64; }
+@keyframes lg-due { 0% { box-shadow: 0 0 0 0 rgb(212 136 6 / .55); } 100% { box-shadow: 0 0 0 9px rgb(212 136 6 / 0); } }
+.lg-now { position: absolute; top: 0; bottom: 0; left: calc(var(--text) + var(--gap) + (100% - var(--text) - var(--gap)) * var(--x) / 100); width: 0; border-left: 1.5px solid var(--tp-green); pointer-events: none; transition: left 1s linear; }
+.lg-now span { position: absolute; top: auto; bottom: -22px; left: 0; translate: -50% 0; white-space: nowrap; padding: 0 6px; border-radius: 4px; background: var(--tp-green); color: #fff; font-size: 11px; font-weight: 700; line-height: 18px; }
+.lg-key { margin-top: 26px; }
+.lg-key span { display: inline-flex; align-items: center; gap: 6px; }
+.lg-key i { display: inline-block; }
+.lg-key__bar { width: 22px; height: 6px; border-radius: 3px; background: rgb(20 20 19 / .16); }
+.lg-key__check { width: 10px; height: 10px; border-radius: 50%; background: var(--ink); }
+.lg-key__next { width: 8px; height: 8px; border: 2px solid var(--ink); border-radius: 50%; }
+.lg-key__over { width: 10px; height: 10px; border-radius: 50%; background: var(--tp-amber); }
+
+/* 最近了结的 + 点开一件 */
+.lg-split { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; margin-top: 16px; }
+.lg-split > .tp-panel { margin: 0; }
+.lg-done .tp-seg { margin-bottom: 10px; }
+.lg-settled { margin: 0; padding: 0; list-style: none; }
+.lg-settled li { display: grid; grid-template-columns: 74px minmax(0, 1fr) auto; align-items: baseline; gap: 4px 12px; margin: 0 -8px; padding: 8px; border-bottom: 1px solid var(--tp-hair); border-radius: 6px; font-size: 14px; line-height: 21px; }
+.lg-settled li .tp-tag { justify-self: start; }
+.lg-settled li .lg-title { font-weight: 600; }
+.lg-settled li > a.tp-link { grid-column: 2; font-size: 13px; }
+.lg-settled time { grid-column: 3; grid-row: 1; font-family: var(--mono); font-size: 12.5px; color: #6c6b64; white-space: nowrap; }
+.lg-settled li.tp-empty { display: block; }
+.lg-done__foot { display: flex; align-items: center; gap: 14px; margin-top: 4px; }
+.lg-done__foot .lg-more { margin-top: 6px; }
+.lg-detail { position: sticky; top: 84px; border-top: 3px solid var(--tp-green); }
+.lg-detail__t { margin: 0 0 8px; font-size: 18px; line-height: 27px; font-weight: 800; }
+.lg-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+.lg-chips .tp-pill { white-space: normal; }
+.lg-steps { position: relative; margin: 14px 0 8px; padding: 0 0 0 22px; list-style: none; }
+.lg-steps::before { content: ""; position: absolute; left: 6px; top: 8px; bottom: 8px; border-left: 2px solid var(--tp-line); }
+.lg-steps li { position: relative; margin: 0 0 10px; font-size: 14px; line-height: 21px; color: #3d3d3a; }
+.lg-steps li::before { content: ""; position: absolute; left: -21px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--ink); border: 2px solid #fff; box-sizing: content-box; }
+.lg-steps li b { display: block; font-family: var(--mono); font-size: 12.5px; font-weight: 600; color: #6c6b64; }
+.lg-steps li.is-next::before { background: #fff; border: 2px solid var(--ink); width: 8px; height: 8px; }
+.lg-steps li.is-next { color: #6c6b64; }
+.lg-rel { margin: 8px 0 0; }
+
+/* 反复出现 */
+.lg-repeat { margin-top: 16px; }
+.lg-replist { margin: 0; padding: 0; list-style: none; }
+.lg-replist li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; padding: 10px 0 14px; border-bottom: 1px solid var(--tp-hair); }
+.lg-replist .lg-title { font-size: 15px; line-height: 22px; }
+.lg-rep__n { font-family: var(--black); font-size: 18px; color: var(--tp-red); white-space: nowrap; }
+.lg-rep__axis { grid-column: 1 / -1; position: relative; height: 30px; margin: 0 8px; border-top: 1px solid var(--tp-line); }
+.lg-rep__axis span { position: absolute; top: 8px; translate: -50% 0; white-space: nowrap; font-family: var(--mono); font-size: 11px; color: #8a8981; }
+.lg-rep__axis i { position: absolute; top: 0; width: 11px; height: 11px; translate: -50% -50%; border-radius: 50%; background: var(--tp-red); border: 2px solid #fff; box-sizing: content-box; }
+.lg-rep__axis span[data-edge="start"] { translate: 0 0; }
+.lg-rep__axis span[data-edge="end"] { translate: -100% 0; }
+.lg-x { margin-left: 8px; padding: 0 7px; border-radius: 999px; background: rgb(20 20 19 / .06); font-size: 12px; font-weight: 600; color: #57564f; white-space: nowrap; }
+.lg-more .tp-chev { font-size: inherit; color: inherit; }
+.lg-more:hover { background: rgb(20 20 19 / .04); }
+.lg-gap { margin: 4px 0 0; padding: 8px 12px; border-radius: 8px; background: rgb(20 20 19 / .04); }
