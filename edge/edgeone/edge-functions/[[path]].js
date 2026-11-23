@@ -75,6 +75,7 @@ export default async function onRequest({request, env = {}}) {
     let body = empty ? null : old ? upstream.body : bytes;
     for (const key of ['Content-Type', 'ETag', 'Date']) if (upstream.headers.has(key)) headers.set(key, upstream.headers.get(key));
     const encoding = request.headers.get('Accept-Encoding'), gzip = acceptsGzip(encoding);
+    let codec = gzip ? 'not-encoded' : encoding === null ? 'no-accept-encoding' : 'identity-requested';
     if (packed && encoding !== null && !gzip) body = await gunzip(bytes);
     else if (packed) headers.set('Content-Encoding', 'gzip');
     else if (!gzipBytes && bytes?.length && gzip && upstream.status === 200 &&
@@ -85,8 +86,10 @@ export default async function onRequest({request, env = {}}) {
         headers.set('Content-Encoding', 'gzip');
       } catch {
         // Keep the readable upstream response if local encoding fails.
+        codec = typeof CompressionStream === 'function' ? 'encoder-error' : 'encoder-unavailable';
       }
     }
+    if (!old && !empty && upstream.status === 200) headers.set('X-Live-Compression', headers.has('Content-Encoding') ? 'gzip' : codec);
     return new Response(body, {status: upstream.status, headers});
   } catch { if (old) return new Response('Upstream unavailable', {status: 504, headers}); }
   finally { clearTimeout(timer); }
