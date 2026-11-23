@@ -795,6 +795,8 @@ def publish(args):
                     collected = retention.read(report)
             summary_fields = ('status', 'reason', 'deleted_objects', 'deleted_bytes', 'bucket_before', 'bucket_after', 'plan')
             receipt['oss_retention'].update({key: collected[key] for key in summary_fields if key in collected}, receipt=str(report))
+            if collected.get('bucket_stat_failed') or collected.get('bucket_after_error'):
+                receipt['oss_retention']['bucket_stat_failed'] = True
             if receipt['oss_retention']['status'] != 'complete':
                 print('发布已成功，OSS 回收未完成：' + str(report), file=sys.stderr)
         sys.path.insert(0, str(ROOT / 'scripts'))
@@ -812,13 +814,34 @@ def publish(args):
         receipt['completed_at_beijing'] = oss.stamp()
         if not args.dry_run:  # 驾驶舱读的固定“最近一次正式尝试”，与 published.json 同目录；尽力写，写不成不改变结果和退出码
             try:
-                retention.write(retention.shared()/'last-attempt.json', {key: receipt[key] for key in LAST_ATTEMPT_KEYS if key in receipt})
+                save_last_attempt(retention.shared()/'last-attempt.json', receipt)
             except Exception:
                 pass
         oss.write(output/'publish-receipt.json', receipt)
         if owned:
             command('pwsh', '-NoProfile', '-File', LOCK, '-Mode', 'Release',
                     '-Name', 'wly0829-publication', '-Holder', args.lock_holder, '-Json')
+
+def save_last_attempt(path, receipt):
+    latest = {key: receipt[key] for key in LAST_ATTEMPT_KEYS if key in receipt}
+    try:
+        previous = retention.read(path)
+    except (OSError, ValueError):
+        previous = {}
+    readings = [previous.get('last_bucket_stat')] if isinstance(previous, dict) else []
+    for attempt in (previous, latest):
+        if (isinstance(attempt, dict) and attempt.get('schema') == 'wly.publish-receipt.v1'
+                and attempt.get('dry_run') is False and (attempt.get('publication_status') == 'published' or attempt.get('status') == 'published')):
+            stats = attempt.get('oss_retention')
+            if isinstance(stats, dict):
+                readings.extend(stats.get(key) for key in ('bucket_before', 'bucket_after'))
+    if latest_stat := max((row for row in reversed(readings) if isinstance(row, dict)
+            and type(row.get('bytes')) is int and row['bytes'] >= 0
+            and type(row.get('provider_updated_at')) is int and row['provider_updated_at'] > 0),
+            key=lambda row: row['provider_updated_at'], default=None):
+        latest['last_bucket_stat'] = {key: latest_stat[key] for key in ('bytes', 'provider_updated_at')}
+    retention.write(path, latest)
+
 
 def collect_output(args, preparation, publication, report=None):
     return retention.collect(SimpleNamespace(preparation=preparation, commit=publication['commit'],

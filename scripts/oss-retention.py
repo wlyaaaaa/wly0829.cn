@@ -409,7 +409,11 @@ def collect_verified(args):
     if dry_run:
         write(args.report, {**result, 'status': 'dry_run'})
         return 1 if deferred or missing_plans else 0
-    result['bucket_before'] = bucket_stat(args.cli, args.profile)
+    try:
+        result['bucket_before'] = bucket_stat(args.cli, args.profile)
+    except Exception as error:
+        write(args.report, {**result, 'status': 'incomplete', 'reason': str(error), 'bucket_stat_failed': True})
+        raise
     write(args.report, {**result, 'status': 'planned'})
     if retired:
         require_lock(args.lock_holder)
