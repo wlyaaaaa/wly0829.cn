@@ -1,0 +1,110 @@
+/* 实况 · 自动任务（新版）：版式。共用的行情屏样子在 /live/_lib/live-tape.css；原来的单件活、小类、按项目看仍用 page.css（在 /live/automation/work/）。 */
+
+.au-top { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+.au-top > .tp-panel { display: flex; flex-direction: column; }
+.au-wins__grid { flex: 1; align-content: center; }
+.au-top > .tp-panel { margin: 0 0 16px; }
+.au-wins__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; }
+.au-win { padding: 2px 18px 0; }
+.au-win:first-child { padding-left: 4px; }
+.au-win__label { margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #3d3d3a; }
+.au-win .tp-big { font-size: 80px; margin: 6px 0 0; }
+.au-win .tp-big small { font-size: 19px; }
+.au-win__tail { margin: 6px 0 0; font-size: 14px; color: #57564f; }
+.au-win .tp-big.tp-fog { font-size: 20px; }
+.au-use .tp-panel__head { margin-bottom: 4px; }
+.au-use__num { margin: 0 0 6px; }
+.au-use__num .tp-mid { font-size: 40px; }
+
+/* 现在在跑 */
+.au-run { padding: 16px 24px; }
+.au-run__row + .au-run__row { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--tp-hair); }
+.au-run__line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; margin: 0; font-size: 16px; }
+.au-run__line b { font-family: var(--black); font-size: 21px; padding-right: 18px; border-right: 1px solid var(--tp-line); }
+.au-run__line .tp-dot { width: 12px; height: 12px; }
+.au-run__line > span:not(.tp-dot) + span::before { content: "·"; margin-right: 18px; color: var(--muted); }
+.au-run__line .tp-link { font-weight: 700; }
+.au-progress { position: relative; display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+.au-progress::before { content: ""; position: absolute; left: 0; right: 56px; height: 12px; border-radius: 999px; background: rgb(20 20 19 / .07); }
+.au-progress i { position: relative; display: block; height: 12px; width: 0; max-width: calc(100% - 56px); border-radius: 999px; background: var(--tp-green); transition: width 1s linear; }
+.au-progress b { position: absolute; right: 0; font-family: var(--black); font-size: 17px; }
+.au-progress.is-unknown i { width: 24%; animation: au-slide 2.4s ease-in-out infinite; }
+@keyframes au-slide { 0% { translate: 0 0; } 50% { translate: calc(300% - 30px) 0; } 100% { translate: 0 0; } }
+
+/* 八行总表 */
+.au-table thead th:nth-child(1) { width: 20%; }
+.au-table thead th:nth-child(2) { width: 15%; }
+.au-table thead th:nth-child(3) { width: 12%; }
+.au-table thead th:nth-child(5) { width: 205px; }
+.au-table thead th:nth-child(6) { width: 140px; }
+.au-table td, .au-table th { padding-top: 12px; padding-bottom: 12px; }
+.au-row:hover > * { background: #fafaf7; }
+.au-row.is-open > * { background: var(--tp-green-soft); border-bottom-color: transparent; }
+.au-row[data-mode="off"] > :not(.au-switchcell) { color: var(--tp-gray); }
+.au-name { display: grid; gap: 2px; width: 100%; padding: 0; border: 0; background: none; font: inherit; text-align: left; color: inherit; cursor: pointer; }
+.au-name b { font-size: 16.5px; font-weight: 800; }
+.au-name span { font-size: 12.5px; font-weight: 400; color: #6c6b64; white-space: normal; }
+.au-name i { font-style: normal; font-size: 12.5px; font-weight: 600; color: var(--tp-green-ink); }
+.au-name:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+.au-model { white-space: nowrap; }
+.au-warn { color: var(--tp-amber); font-weight: 700; }
+.au-warn a.tp-link { color: var(--tp-amber); white-space: normal; }
+.au-ok { color: var(--tp-green-ink); font-weight: 700; }
+.au-trend { display: grid; gap: 2px; justify-items: start; }
+.au-trend > span { font-size: 12.5px; color: #57564f; white-space: nowrap; }
+.au-trend > span[data-bad] { color: var(--tp-red); }
+.au-switchcell { white-space: nowrap; }
+.au-switch { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px 0 4px; border: 0; border-radius: 999px; background: #c9c7bf; color: #fff; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; vertical-align: middle; transition: background .2s ease; }
+.au-switch i { width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgb(0 0 0 / .2); }
+.au-switch[aria-checked="true"] { background: var(--tp-green); }
+.au-switch[data-mode="paused"] { background: var(--tp-amber); }
+.au-switch:focus-visible, .au-pausebtn:focus-visible, .au-mini:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.au-pausebtn { margin-left: 6px; padding: 3px 9px; border: 1px solid var(--tp-line); border-radius: 7px; background: #fff; font: inherit; font-size: 12.5px; color: #3d3d3a; cursor: pointer; vertical-align: middle; }
+.au-pausebtn:hover { border-color: var(--ink); }
+.au-switchcell small { display: block; margin-top: 4px; }
+.au-state { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 700; color: #fff; background: var(--tp-green); }
+.au-state[data-mode="off"] { background: var(--tp-gray); }
+.au-state[data-mode="paused"] { background: var(--tp-amber); }
+.au-foot { margin: 12px 0 0; }
+
+/* 一类的机制 */
+.au-mechrow > td { padding: 0 !important; background: #fbfbf9; }
+.au-mech { padding: 18px 22px 22px; border-top: 2px solid var(--tp-green); }
+.au-mech__title { font-family: var(--black); font-size: 20px; }
+.au-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 0; margin: 8px 0 14px; padding: 0; list-style: none; }
+.au-flow li { display: flex; align-items: center; gap: 8px; padding: 9px 14px; border: 1.5px solid #9fdcb9; border-radius: 10px; background: #fff; font-size: 14.5px; font-weight: 700; }
+.au-flow li span { display: grid; place-items: center; width: 22px; height: 22px; border: 1.5px solid currentColor; border-radius: 50%; font-size: 12px; }
+.au-flow li + li::before { content: "→"; margin: 0 12px 0 -26px; padding-right: 0; color: #6c6b64; font-weight: 400; }
+.au-flow li + li { margin-left: 30px; }
+.au-flow li:nth-child(4n+2) { border-color: #f1c4dd; }
+.au-flow li:nth-child(4n+3) { border-color: #c9c2f2; }
+.au-flow li:nth-child(4n+4) { border-color: #f3d39b; }
+.au-trigger { margin: 0 0 10px; font-size: 14px; line-height: 22px; }
+.au-trigger b, .au-why b { display: inline-block; min-width: 76px; margin-right: 10px; color: #3d3d3a; }
+.au-steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 6px 22px; margin: 0 0 14px; font-size: 13.5px; line-height: 21px; color: #3d3d3a; }
+.au-steps p { margin: 0; }
+.au-steps b { margin-right: 8px; }
+.au-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0 0 14px; }
+.au-stat { padding: 10px 16px; border: 1px solid var(--tp-hair); border-left: 4px solid var(--tp-green); border-radius: 10px; background: #fff; }
+.au-stat[data-tone="bad"] { border-left-color: var(--tp-red); }
+.au-stat[data-tone="off"] { border-left-color: var(--tp-gray); }
+.au-stat[data-tone="blue"] { border-left-color: var(--tp-codex); }
+.au-stat p { margin: 0; font-size: 14px; color: #57564f; }
+.au-stat .tp-big { font-size: 48px; color: var(--ink); }
+.au-extra { margin: 0 0 12px; }
+.au-subs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.au-subs .tp-pill[data-mode="off"] { color: var(--tp-gray); }
+.au-mini { margin-left: 4px; padding: 0 6px; border: 1px solid var(--tp-line); border-radius: 5px; background: #fff; font: inherit; font-size: 12px; cursor: pointer; }
+.au-mini-table { max-width: 760px; }
+.au-recent { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 13.5px; }
+.au-recent b { display: inline-block; min-width: 90px; font-family: var(--mono); font-weight: 600; color: #57564f; }
+.au-more { display: grid; gap: 8px; }
+.au-why { padding: 2px 14px 12px; font-size: 13.5px; line-height: 21px; }
+.au-why p { margin: 6px 0 0; }
+
+.au-dialog { padding: 20px 22px; border: 1px solid var(--tp-line); border-radius: 14px; box-shadow: 0 20px 50px -20px rgb(0 0 0 / .35); font-family: var(--sans); }
+.au-dialog h2 { margin: 0 0 12px; font-size: 18px; }
+.au-dialog input { margin-left: 8px; font: inherit; }
+.au-dialog__buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+.au-dialog__buttons button { padding: 5px 14px; border: 1px solid var(--tp-line); border-radius: 8px; background: #fff; font: inherit; cursor: pointer; }
+.au-dialog__buttons button[type="submit"] { background: var(--tp-green); border-color: var(--tp-green); color: #fff; font-weight: 700; }
