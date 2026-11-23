@@ -81,6 +81,9 @@
 .lg-settled li > a.tp-link { grid-column: 2; font-size: 13px; }
 .lg-settled time { grid-column: 3; grid-row: 1; font-family: var(--mono); font-size: 12.5px; color: #6c6b64; white-space: nowrap; }
 .lg-settled li.tp-empty { display: block; }
+/* 首页 AI 账本卡点进来的那几件（?view=）：标题下面一行小字写哪天记下、第几次看 */
+.lg-view__sub { display: block; font-size: 12.5px; line-height: 19px; color: #6c6b64; }
+.lg-view .lg-settled li > span > a { font-weight: 600; }
 .lg-done__foot { display: flex; align-items: center; gap: 14px; margin-top: 4px; }
 .lg-done__foot .lg-more { margin-top: 6px; }
 .lg-detail { position: sticky; top: 84px; border-top: 3px solid var(--tp-green); }

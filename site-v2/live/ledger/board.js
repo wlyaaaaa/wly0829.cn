@@ -13,6 +13,11 @@
   const DAY = 86400000;
   let state, viewer = 'public', filter = params.get('outcome') || '', showAll = false, picked = params.get('id') || null, asked = picked, autoPick = !picked, pickedState = null, landed = false;
   let older = [], olderNext, olderBusy = false;
+  // 首页 AI 账本卡点进来的那几件：?view=open|opened|closed|due|overdue|opened_7d|closed_7d（数据约定-前端升级 §11）。读 ledger?view=…，
+  // 后台返回 {view, started_at, items, total, next}，件数和卡上那个数是同一份；续页把 next 当 cursor，保留 view
+  const VIEW = { open: 'AI 在跟的', opened: '新账起进的', closed: '新账起了结的', due: '今天到日子的', overdue: '过期没看的', opened_7d: '近 7 天进的', closed_7d: '近 7 天了结的' };
+  const view = Object.hasOwn(VIEW, params.get('view') || '') ? params.get('view') : '';
+  let viewMore = [], viewNext, viewBusy = false;
   const F = (v, name) => T.field(v, viewer, name);
   const you = () => T.you(viewer);
   const titleOf = it => it.plain_title != null && U.fieldText(it.plain_title, viewer).trim() ? it.plain_title : it.text;
@@ -225,11 +230,45 @@
     return rows.filter(r => !r.at || Date.now() - stamp(r.at) < 3 * DAY).sort((a, b) => (stamp(b.at) || 9e15) - (stamp(a.at) || 9e15)).slice(0, 30);
   }
 
+  // —— 首页卡点进来的那几件（?view=） ——
+  function viewList(d) {
+    const rows = [...list(d.items), ...viewMore], next = viewMore.length ? viewNext : d.next;
+    const total = known(d.total) ? d.total : rows.length, since = d.started_at || d.new_ledger?.started_at;
+    const row = it => {
+      const out = outcomeOf(it), done = Boolean(SETTLED[out]), nx = nextOf(it);
+      const over = !done && (it.overdue || (stamp(nx) && stamp(nx) < Date.now()));
+      const tag = done ? `<span class="tp-tag" data-tone="${TONE[out]}">${settledLabel(out)}</span>` : over ? '<span class="tp-tag" data-tone="bad">过期</span>'
+        : it.state === 'working' ? '<span class="tp-tag lg-running">正在办</span>' : '<span class="tp-tag" data-tone="soft">在跟</span>';
+      const meta = done ? (it.at ? `了结 ${esc(when(it.at))}` : '') : nx && !full(it) ? `${over ? '原定' : '下次看'} ${esc(when(nx))}` : full(it) ? '看满了' : '';
+      const sub = [it.accepted && `${esc(when(it.accepted))} 记下`, !done && checkText(it)].filter(Boolean).join(' · ');
+      return `<li>${tag}<span>${link(it.href || (it.id ? `/live/issue/?id=${encodeURIComponent(it.id)}` : ''), F(titleOf(it), '事项标题'))}${sub ? `<small class="lg-view__sub">${sub}</small>` : ''}</span><time>${meta}</time></li>`;
+    };
+    return `<section class="tp-panel lg-done lg-view" id="view"><div class="tp-panel__head"><h2>${VIEW[view]} ${int(total)} 件${view === 'due' ? '<small>过期的排最前</small>' : ''}</h2>
+        <span class="tp-asof">${since ? `新账从 ${esc(day(since))} ${esc(T.clock(since))} 起算` : '新账正在重算'} · ${link('/live/ledger/', '看全部账本 ›')}</span></div>
+      <ul class="lg-settled">${rows.map(row).join('') || `<li class="tp-empty">${!since ? '新账算好了这里列出来。' : d.view === view ? '这一类现在一件都没有。' : '这份清单后台还没给。'}</li>`}</ul>
+      <div class="lg-done__foot">${next ? `<button type="button" class="lg-more" data-viewmore${viewBusy ? ' disabled' : ''}>${viewBusy ? '正在读…' : '再读 50 件 ›'}</button>` : ''}<span class="tp-small">已列出 ${int(rows.length)} 件，共 ${int(total)} 件</span></div></section>`;
+  }
+  async function readViewMore() {
+    const d = state?.data, cursor = viewMore.length ? viewNext : d?.next;
+    if (!cursor || viewBusy) return;
+    viewBusy = true; draw();
+    const s = await Live.get('ledger', { ...(project ? { project } : {}), view, cursor }).catch(() => null);
+    viewBusy = false;
+    if (Array.isArray(s?.data?.items)) { viewMore = viewMore.concat(s.data.items); viewNext = s.data.next; }
+    T.keep(page.root, '[data-viewmore], .lg-view .lg-done__foot', draw);
+  }
+
   let drawn = false;
   function draw() {
     const d = state?.data;
     viewer = T.viewerOf(state);
     if (!d) { T.paint(page.root, T.placeholder(state, 'AI 账本')); page.tick.set([], { off: true }); return; }
+    if (view) {
+      T.paint(page.root, `<div class="tp-head"><div><h1>AI 账本</h1><p>从首页 AI 账本卡点进来的那几件；点一件看它的完整经过。</p></div>
+        <p class="tp-head__side"><span>截至 ${esc(when(d.at || d.as_of))}</span></p></div>${T.stateNote(state)}${viewList(d)}`);
+      page.tick.set([], { off: state.offline });
+      return;
+    }
     T.paint(page.root, `<div class="tp-head"><div><h1>AI 账本</h1><p>上面是 AI 还欠着的每一件，实时；下面是最近了结的和反复出现的，更早的翻页看。点一件看它的完整经过。</p></div>
         <p class="tp-head__side">${project ? `<span>只看项目 ${esc(project)} · ${link('/live/ledger/', '看全部 ›')}</span>` : ''}<span>截至 ${esc(when(d.at))}</span></p></div>
       ${T.stateNote(state)}${top(d)}${track(d)}<div class="tp-grid lg-split">${settled(d)}${detail(d)}</div>${repeats(d)}`);
@@ -261,11 +300,11 @@
   }
 
   let page;
-  page = T.boot({ resource: 'ledger', query: project ? { project } : {}, back: '/live/#ledger',
+  page = T.boot({ resource: 'ledger', query: { ...(project ? { project } : {}), ...(view ? { view } : {}) }, back: '/live/#ledger',
     ask: () => 'AI 账本里还欠着哪些事、哪件该看了、最近了结了什么？先用大白话说，别动手。',
     onState(next) {
       state = next; draw();
-      if (!next.data) return;
+      if (!next.data || view) return;
       const want = autoPick ? next.data.summary?.oldest?.id || owed(next.data)[0]?.id : picked;
       if (want && (want !== picked || !pickedState || pickedState.data === undefined)) pick(want, true);
     } });
@@ -275,5 +314,6 @@
     if (f) { filter = f.dataset.filter; T.keep(page.root, `[data-filter="${filter}"]`, draw); return; }
     if (e.target.closest('[data-more]')) { showAll = !showAll; T.keep(page.root, '[data-more]', draw); return; }
     if (e.target.closest('[data-older]')) readOlder();
+    if (e.target.closest('[data-viewmore]')) readViewMore();
   });
 })();
