@@ -5,7 +5,7 @@ visitor to read, clone and quote. The website itself is primarily the owner's
 personal AI collaboration workspace; public presentation is secondary.
 
 - **是什么：** 本人的个人网站 wly0829.cn。讲解页、首页和实况前端的现役源码在 `site-v2/`，实况入口是 `/live/`。
-- **入口：** [README](README.md) 说明如何配齐本机输入并用 `npm run build` 组装 `dist/`。[发布与扫描](docs/publish-and-scan.md) 说明如何用同一成品预览、验收和发布。本人说“更新网站”才跑 [按需更新](docs/update.md)，每次盘点全站、按变化选页；项目完善与修毛病、发 QA 版各按自己的任务推进。
+- **入口：** [README](README.md) 说明如何配齐本机输入并用 `npm run build` 组装 `dist/`。[发布与扫描](docs/publish-and-scan.md) 说明如何用同一成品预览、验收和发布。本人说“更新网站”或“更新网页”（同义）才跑 [按需更新](docs/update.md)，每次盘点全站、按变化选页；项目完善与修毛病、发 QA 版各按自己的任务推进。
 - **不做什么、归谁：** 驾驶舱数据归 PCConfig 状态服务；全局规则归 `.agents`。按需更新时发现别的项目的问题：小问题顺手修，改在那个项目自己的仓库里；大问题登记给本人。
 - **没有手机版：** 不为手机另做一套版式。手机打开就是电脑版，整页按电脑的样子等比缩小到屏幕宽度，不出现横着滚，双指放大不禁用（现在的做法是每页视口那一行写 `width=1440`）。
 - **动效一直开着：** 每页动效对所有人照常播放。不做“减少动态”适配，系统开了减少动态也不减；不设计任何关掉动效的情况，开关、网址参数、连不上时停动效都不做，状态用颜色和文字表示。禁令（本人 2026-11-20，源 b020ac8d-b5f5-4ea9-8996-4f944d9d7d55），要改先问本人。
