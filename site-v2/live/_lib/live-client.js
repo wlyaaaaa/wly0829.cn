@@ -560,7 +560,7 @@
   const pollSeconds = e => e.path === 'screen' || e.path === 'chats' || /^chats\/[^/?]+$/.test(e.path)
     ? ACTIVITY_POLL_SECONDS : DEFAULT_POLL_SECONDS;
   // 读得到的每样按自己的 refresh_seconds 到期就取（M519）；整包最快 30 秒一次，只有硬件小包按它的 5 秒。
-  const pollEvery = e => e.path === HARDWARE ? e.refresh_seconds || TICK_SECONDS
+  const pollEvery = e => e.path === HARDWARE && e.refresh_seconds ? e.refresh_seconds
     : Math.max(e.refresh_seconds || pollSeconds(e), ACTIVITY_POLL_SECONDS);
   const healthy = e => !e.failure && e.validatedLink?.state !== 'offline';
   function startPolling() {
