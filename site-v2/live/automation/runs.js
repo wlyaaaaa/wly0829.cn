@@ -87,7 +87,9 @@
     const id = /\/chats\/([^/?#]+)/.exec(href)?.[1] || (/^\/live\/chat\/\?(?:.*&)?id=([^&#]+)/.exec(href)?.[1]);
     const chat = id ? decodeURIComponent(id) : '';
     return { available: conv?.available === true && !!chat, id: chat, resource: chat ? `chats/${encodeURIComponent(chat)}` : '',
-      href: chat ? T.path('/live/chat/', { id: chat }) : '', state: str(conv?.state) };
+      href: chat ? T.path('/live/chat/', { id: chat }) : '', state: str(conv?.state),
+      // 看不到的原因：private 是对访客藏了（hidden_why 写为什么），not_saved 是真没存下来；后台第 17 轮起给（主持 11-24 07:24）
+      reason: ['private', 'not_saved'].includes(conv?.unavailable_reason) ? conv.unavailable_reason : '', why: str(conv?.hidden_why) };
   }
   // 一轮的详情
   function detail(raw, viewer) {

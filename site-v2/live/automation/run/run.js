@@ -106,6 +106,9 @@
   }
   function conversation(r) {
     const c = r.conversation, d = chat?.data;
+    // 访客版对话看不到时分两种：后台写 private 是藏了，照新私事规则写清这里是什么、所以不予展示；not_saved 或没写原因的照旧写没存下来
+    const hiddenFromVisitor = !c.available && c.reason === 'private';
+    const hiddenText = c.why || '这里是这一轮 AI 的对话，所以不予展示';
     const reply = d && (d.latest_reply ?? d.reply);
     const thinking = d && F(d.thinking, '思考摘要'), answer = reply && F(U.chatJoinedReply(reply, viewer), '最后的回复');
     // 计划：和 AI 对话详情页同一份 plan，做完的打勾、正在做的那一步标出来
@@ -113,10 +116,13 @@
     // 最新活动：对话还在跑时它正在干什么（和 AI 对话详情页读同一个 doing / progress）
     const latest = d && F(d.doing ?? d.progress, '最新活动');
     const body = thinking || answer || plan || latest ? `${plan ? `<p class="ar-sub">计划</p><ol class="ar-plan">${plan}</ol>` : ''}${latest ? `<p class="ar-sub">最新活动</p><p class="ar-pre">${latest}</p>` : ''}${thinking ? `<p class="ar-sub">思考摘要</p><p class="ar-pre">${thinking}</p>` : ''}${answer ? `<p class="ar-sub">最后的回复</p><p class="ar-pre">${answer}</p>` : ''}`
-      : `<p class="ar-none">${!c.available ? '这一轮的对话没存下来，看上面的回执。' : d ? '这份对话里没有计划、思考摘要和回复。' : chat?.phase === 'none' || chat?.meta?.status >= 400 ? '这一轮的对话没读到。' : '正在读这一轮的对话…'}</p>`;
+      : `<p class="ar-none">${!c.available ? (hiddenFromVisitor ? esc(hiddenText) : '这一轮的对话没存下来，看上面的回执。') : d ? '这份对话里没有计划、思考摘要和回复。' : chat?.phase === 'none' || chat?.meta?.status >= 400 ? '这一轮的对话没读到。' : '正在读这一轮的对话…'}</p>`;
     // 对话自己的状态和这一轮的结局分开写（约定：对话 state 和业务 status 各自显示）
     const talkState = { running: '对话还在跑', done: '对话已结束', failed: '对话出错停了', unknown: '对话状态不明' }[c.state || d?.state] || '';
-    const full = c.available ? `<a class="ar-go" href="${esc(c.href)}">看完整对话 <span aria-hidden="true">›</span></a>` : '<p class="ar-none ar-nofull">这一轮没有能打开的完整对话。</p>';
+    // 本人版：后台标了这份对话对访客藏着（unavailable_reason=private 或给了 hidden_why），在原位挂“访客看不到”；对话照常给
+    const tag = viewer === 'owner' && (c.reason === 'private' || c.why) ? U.visitorHiddenTag('这一轮的对话', c.why, viewer) : '';
+    const full = c.available ? `<a class="ar-go" href="${esc(c.href)}">看完整对话 <span aria-hidden="true">›</span></a>${tag}`
+      : hiddenFromVisitor ? tag : `<p class="ar-none ar-nofull">这一轮没有能打开的完整对话。</p>${tag}`;
     return `<section class="tp-panel ar-card ar-talk"><details class="ar-fold" id="ar-talk"><summary class="live-disclosure"><h2>AI 的思考摘要和最后的回复</h2>${talkState ? `<small class="ar-talkstate">${talkState}</small>` : ''}<span class="ar-open">展开 ›</span><span class="ar-shut">收起 ‹</span></summary>${body}</details>${full}</section>`;
   }
 
