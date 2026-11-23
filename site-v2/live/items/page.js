@@ -6,6 +6,8 @@
   const matchesQuery = it => { const field = it.text && typeof it.text === 'object' ? { ...it, ...it.text } : it; return !(viewer === 'public' && (field.hidden || field.visibility === 'owner' || field.public === 'owner')) && U.fieldText(field).toLowerCase().includes(query); };
   let at = null, viewer = 'public', pendingItems = new Set(), reportsData = null, reportCount = null, openTrend = null, recentClosed = null;
   const route = href => { const u = new URL(href, location.origin); if (u.origin !== location.origin) return href; if (params.has('fixture') && u.pathname.startsWith('/live/')) u.searchParams.set('fixture', params.get('fixture')); return u.pathname + u.search + u.hash; };
+  // M567：同一件事了结后又重新打开时编号不变；关闭清单的链接带上那次了结的时刻，详情页才找得到当时的结局。
+  const closedHref = it => route('/live/item/?id=' + encodeURIComponent(it.id) + (it.closed?.at ? '&closed=' + encodeURIComponent(it.closed.at) : ''));
   const actions = it => {
     // M458：卡上不单独放“复制给 AI”，问情况就是复制给 AI（定稿卡-等你的事 开头，本人 11-22 16:04）
     const list = (it.actions || []).filter(a => a.intent !== 'done' && (!it.closed || !['later', 'ack', 'decline', 'close_report'].includes(a.intent))).map(a => ({ ...a, label: a.intent === 'ask' ? '问情况' : !a.label || typeof a.label === 'object' && !a.label.text && !a.label.value ? ({ ack: '我知道了', close_report: '关掉', later: '晚点提醒', decline: '不办了' })[a.intent] || (a.target === 'report' ? '看汇报' : '打开对话') : a.label }));
@@ -122,7 +124,7 @@
   const readers = { home: [U.reading($('hero').querySelector('.card__body'), { ghost: U.ghost.card(1), name: '等你的事' }), ...Object.keys(KIND).map(key => U.reading($(key), { ghost: U.ghost.rows(2), slow: false }))], 'items/closed': [U.reading($('closed'), { ghost: U.ghost.rows(4) })], reports: [U.reading($('reports'), { ghost: U.ghost.rows(3) })] };
   for (const key of [...Object.keys(KIND), 'closed', 'reports']) U.fold($(key + '-more'), $(key + '-box'));
   function sideHtml(trend, closed) {
-    if (!Array.isArray(trend)) return closed == null ? `<p>${U.collectionText()}</p>` : closed.length ? [...closed].sort((a,b) => Date.parse(b.closed?.at || 0) - Date.parse(a.closed?.at || 0)).slice(0, 4).map(it => `<a class="closed-peek" href="${esc(route('/live/item/?id='+encodeURIComponent(it.id)))}"><span>${U.fieldHtml(it.text && typeof it.text === 'object' ? {...it,...it.text} : it, {kind:viewer})}</span><time>${U.date(it.closed?.at)}</time></a>`).join('') : '<p>近 7 天没有下去的事</p>';
+    if (!Array.isArray(trend)) return closed == null ? `<p>${U.collectionText()}</p>` : closed.length ? [...closed].sort((a,b) => Date.parse(b.closed?.at || 0) - Date.parse(a.closed?.at || 0)).slice(0, 4).map(it => `<a class="closed-peek" href="${esc(closedHref(it))}"><span>${U.fieldHtml(it.text && typeof it.text === 'object' ? {...it,...it.text} : it, {kind:viewer})}</span><time>${U.date(it.closed?.at)}</time></a>`).join('') : '<p>近 7 天没有下去的事</p>';
     const days = trend.slice(-7), values = days.map(d => d.open).filter(Number.isFinite);
     const min = values.length ? Math.min(...values) : 0, max = Math.max(min, ...values);
     const step = Math.max(max >= 10 ? 2 : 1, Math.ceil((max - min + 2) / 4));
@@ -252,7 +254,7 @@
     // 占位行的标题已写清“〈哪一样〉仅本人可见”时，旁边不再重复同一句。
     const markSaid = mark.replace(/<[^>]*>|🔒/g, '').trim(), shownMark = placeholder && markSaid === titleText.replace(/<[^>]*>/g, '').trim() ? '' : mark;
     const archivedTitle = titleText;   // 已关掉的不再加“当时记录：”，直接说是什么事（本人 11-23 11:54）
-    const title = placeholder ? `<span class="row__title">${titleText}</span>` : closed ? `<a class="row__title" href="${esc(route('/live/item/?id=' + encodeURIComponent(it.id)))}">${archivedTitle}</a>` : it.detail ? `<button class="row__title detail-toggle" type="button" data-detail="${esc(it.id)}">${titleText} <span class="more__chev">›</span></button>` : `<span class="row__title">${titleText}</span>`;
+    const title = placeholder ? `<span class="row__title">${titleText}</span>` : closed ? `<a class="row__title" href="${esc(closedHref(it))}">${archivedTitle}</a>` : it.detail ? `<button class="row__title detail-toggle" type="button" data-detail="${esc(it.id)}">${titleText} <span class="more__chev">›</span></button>` : `<span class="row__title">${titleText}</span>`;
     const subtitle = sub.filter(s => s && !(/正在换说法|仅本人可见/.test(sp(s)) && sp(s) === itemText(it)) && !(hidden && /仅本人可见|可信设备可见/.test(sp(s))) && !(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读/.test(sp(s)))).map(s => `<span class="item-bit${s === deadline || /^(?:已等|约 |\d\d-\d\d)/.test(sp(s)) ? ' item-keep' : ''}">${U.fieldHtml(s, { kind: viewer })}</span>`).join('');
     // M225：卡片只报自己的记录时刻；整组采集时刻（stale_text/gap）已在页头说过，不再逐卡重复。
     const { lamp, note } = U.status({ ...it, source_at: itemRecordedAt(it), stale_text: null, gap: null, level: it.light }, { small: true });

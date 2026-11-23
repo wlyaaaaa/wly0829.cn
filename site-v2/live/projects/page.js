@@ -134,7 +134,9 @@
     }
     if (value == null) return '';
     if (typeof value === 'object') return sp(value);
-    const reading = sp(value).trim().replace(/^现存日志内/, '现有日志内');
+    let reading = sp(value).trim().replace(/^现存日志内/, '现有日志内');
+    // M316：AI 发射台这一项后台写成“09-16 01:09 用过旧版本”，意思是那次测的不是现在装的版本。
+    if (it.id === 'ai-cli-profile-manager' && h?.id === 'latest_agent') reading = reading.replace(/\s*用过旧版本$/, '（当时还是旧版本）');
     if (!reading) return '';
     const numeric = /^[+-]?\d+(?:[,.]\d+)*(?:\/\d+)?$/.test(reading);
     const unit = !numeric ? '' : days ? (Number.isFinite(v) && (h.unit || '天')) : h.unit;
@@ -161,6 +163,9 @@
         if (range && (!scope || typeof scope === 'string' && !(scope.includes(from) && scope.includes(to)))) scope = [range, scope].filter(Boolean).join(' · ');
       }
       if (it.id === 'typora-theme-pack' && h?.id === 'menus' && scope === 'Current installed theme and configured menus; export was not run') scope = '当前已安装的主题和已配置的菜单，本次未执行导出';
+      // M316：项目自己起的读数名和说明，外人读不懂的几句换成人话；只换说法，数照后台给的。
+      if (it.id === 'ai-cli-profile-manager' && h?.id === 'latest_agent' && label === '最后一次实战（含旧版）') label = '最近一次让 AI 真干活的测试';
+      if (it.id === 'video-scaffold' && h?.id === 'films' && typeof scope === 'string') scope = scope.replace(/^已选的 (\d+) 组本地完整长版及各自成片目录；不是全历史或发布总数。.*$/s, '只算这台电脑上存着成片的 $1 部，不是做过的全部片子，也不是发出去的数量。');
       const labelHtml = label ? U.fieldHtml(label, { name: '项目读数', place: 'label', kind: viewer }) : '', labelBody = label ? U.fieldHtml(label, { kind: viewer }) : '';
       const scopeHtml = scope ? `<small class="pj-fig__sub pj-fig__scope" title="${esc(typeof scope === 'string' ? scope : '')}">${U.fieldHtml(scope, { name: '项目说明', kind: viewer })}</small>` : '';
       const readAt = observed && observed !== through && !marked && !text.includes(observed) && !(typeof scope === 'string' && scope.includes(observed)) ? `<small class="pj-fig__sub">读取于 ${esc(observed)}</small>` : '';

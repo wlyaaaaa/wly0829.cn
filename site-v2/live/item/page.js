@@ -183,6 +183,7 @@
     if (d.task && d.task_name) refs.push(dossier ? D.link({ label: '关联任务', html: U.fieldHtml(d.task_name), href: route(`/live/task/?id=${encodeURIComponent(d.task)}`) }) : fact('关联任务', `<a href="${esc(route(`/live/task/?id=${encodeURIComponent(d.task)}`))}">›${d.task_name ? ` ${U.fieldHtml(d.task_name)}` : ''}</a>`));
     else if (d.task_name) ref('关联任务', say(d.task_name));
     if (d.closed?.to) add('并入的事', `/live/item/?id=${encodeURIComponent(d.closed.to)}`, '看并入的事');
+    if (d.reopened) add('后来又打开了', `/live/item/?id=${encodeURIComponent(d.id)}`, '看现在这件');
     $('related').hidden = !refs.length; U.html($('links'), refs.join(''));
     // 原始记录保留拆标题前的原文。
     if (dossier) {
@@ -221,7 +222,7 @@
     requestAnimationFrame(() => L.lightUp([hero, ...$('events').children, $('rec'), $('notices')]));
   }
   function clearRecord() {
-    revision++;
+    revision++; closedRound = undefined; closedAsk++;
     record = at = next = coverage = foldedRuns = null;
     searching = $('earlier').disabled = false;
     historyRows = []; pages.clear();
@@ -260,6 +261,29 @@
     const latest = historyRows.find(e => e.id === current?.id && (e.state || e.outcome));
     if (!detail && current && latest?.at && Date.parse(latest.at) >= Date.parse(current.accepted)) record = { ...record, state: latest.state || record.state, ...(latest.outcome ? { outcome: latest.outcome, outcome_text: latest.text } : {}) };
     if (record) render();
+  }
+  // M567：从关闭清单点进来时网址带 closed=那次了结的时刻。这件事后来又重新打开（或又了结了一次）时，编号不变，
+  // 接口给的是现在这一轮；这时到关闭清单里找回那一轮，照它摆结局、了结说明和了结时刻，经过只留那一轮的，
+  // 按钮不给（按了会落到现在这一轮上），另给一条“看现在这件”。清单里找不到就照现在这一轮摆。
+  const closedAt = Date.parse(p.get('closed') || '');
+  let closedRound, closedAsk = 0, latestDetail = null;
+  const pastRound = (row, d) => {
+    const from = Date.parse(row.episode_at || row.born || '');
+    const history = (Array.isArray(d.history) ? d.history : []).filter(e => { const t = Date.parse(e.occurred_at || e.at || ''); return Number.isFinite(t) && t <= closedAt + 1000 && !(t < from - 1000); });
+    return { ...row, now: null, actions: [], detail_text: d.detail_text, history, reopened: true };
+  };
+  function showItem(d) {
+    latestDetail = d;
+    const show = r => { record = r; historyRows = itemHistory(r); render(); };
+    if (issue || !Number.isFinite(closedAt) || Date.parse(d.closed?.at) === closedAt) { show(d); return; }
+    if (closedRound !== undefined) { show(closedRound ? pastRound(closedRound, d) : d); return; }
+    const ask = ++closedAsk, kind = viewer;
+    window.Live.get('items/closed', null).catch(() => null).then(r => {
+      if (ask !== closedAsk || kind !== viewer) return;
+      const d = latestDetail, ok = Array.isArray(r?.data?.items) && (!r.meta?.viewer?.kind || r.meta.viewer.kind === viewer);
+      if (ok) closedRound = r.data.items.find(row => row.id === d.id && Date.parse(row.closed?.at) === closedAt) || null;
+      show(closedRound ? pastRound(closedRound, d) : d);
+    });
   }
   function itemHistory(d) {
     const born = d.episode_at || d.born, closed = d.closed;
@@ -307,7 +331,7 @@
       if (!d) { clearRecord(); return; }
       if (d?.q === 'warming') { record = d; empty('正在准备'); return; }
       at = meta.at;
-      if (!issue) { record = d; historyRows = itemHistory(d); render(); return; }
+      if (!issue) { showItem(d); return; }
       if (!ledger && !d.item?.id) return;
       coverage = d.coverage;
       if (ledger) { if (!Array.isArray(d.history)) { empty('这条账本暂时读不到'); return; } pages.set('', d); if (pages.size === 1) next = d.next; }
