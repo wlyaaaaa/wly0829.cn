@@ -36,21 +36,28 @@ export default async function onRequest({request, env = {}}) {
       if (url.searchParams.get('view') === 'cockpit') query.set('view', 'cockpit');
       if (url.searchParams.get('refresh') === '1') query.set('refresh', '1');
     }
-    const target = old ? '/computer-access/api/status' : url.pathname;
+    const target = old ? '/computer-access/api/status' : url.pathname, match = request.headers.get('If-None-Match');
+    // 新接口回源要 gzip：隧道里少传四五倍，回源那层也不再因替我们解压把 ETag 改成弱标签。
+    // If-None-Match 按标准做弱比较，去掉 W/ 再交给源站（源站只认原样的标签）。
     const upstream = await fetch((env.LIVE_ORIGIN || 'https://mcp.wly0829.cn') + target + (String(query) ? '?' + query : ''), {
-      method: old ? 'GET' : request.method, headers: {Accept: 'application/json', 'Accept-Encoding': 'identity', ...(validDevice ? {'X-Cockpit-Device': device} : {}), ...(request.headers.has('If-None-Match') ? {'If-None-Match': request.headers.get('If-None-Match')} : {})}, signal: controller.signal, redirect: 'manual', cache: 'no-store'});
-    if (!old && upstream.status >= 500) {
-      const preserve503 = upstream.status === 503 && (request.method === 'HEAD' ||
-        ['live_public_paused', 'live_publication_revoked', 'live_detail_unavailable'].includes((await upstream.clone().json().catch(() => null))?.error));
-      if (!preserve503) {
-        if ([500, 503].includes(upstream.status)) connection = 'service';
-        await upstream.body?.cancel(); throw Error('origin');
-      }
-    }
+      method: old ? 'GET' : request.method, headers: {Accept: 'application/json', 'Accept-Encoding': old ? 'identity' : 'gzip', ...(validDevice ? {'X-Cockpit-Device': device} : {}), ...(match ? {'If-None-Match': old ? match : match.replace(/W\//g, '')} : {})}, signal: controller.signal, redirect: 'manual', cache: 'no-store'});
     const empty = request.method === 'HEAD' || [101, 103, 204, 205, 304].includes(upstream.status);
     if (empty) await upstream.body?.cancel();
-    const body = empty ? null : old ? upstream.body : await upstream.arrayBuffer();
+    // 新接口照旧读整包（10 秒内读不全才能改回云端备用包）。运行时通常已替我们解压；开头仍是 gzip 的 1f 8b 就原样转给浏览器并标上 gzip。
+    const bytes = empty || old ? null : new Uint8Array(await upstream.arrayBuffer());
+    const packed = bytes?.[0] === 0x1f && bytes[1] === 0x8b && /gzip/i.test(upstream.headers.get('Content-Encoding') || '');
+    if (!old && upstream.status >= 500) {
+      const plain = async () => JSON.parse(new TextDecoder().decode(packed ? new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer()) : bytes));
+      const preserve503 = upstream.status === 503 && (request.method === 'HEAD' ||
+        ['live_public_paused', 'live_publication_revoked', 'live_detail_unavailable'].includes((bytes && await plain().catch(() => null))?.error));
+      if (!preserve503) {
+        if ([500, 503].includes(upstream.status)) connection = 'service';
+        throw Error('origin');
+      }
+    }
+    const body = empty ? null : old ? upstream.body : bytes;
     for (const key of ['Content-Type', 'ETag', 'Date']) if (upstream.headers.has(key)) headers.set(key, upstream.headers.get(key));
+    if (packed) headers.set('Content-Encoding', 'gzip');
     return new Response(body, {status: upstream.status, headers});
   } catch { if (old) return new Response('Upstream unavailable', {status: 504, headers}); }
   finally { clearTimeout(timer); }
