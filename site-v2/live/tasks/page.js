@@ -51,7 +51,7 @@
   // 要留意的任务：写后台给的原因；后台只标了要留意、没给具体原因的，照实说
   function warnWhy(t) {
     const pick = v => typeof v === 'string' ? v.trim() : typeof v?.text === 'string' ? v.text.trim() : '';
-    const said = [pick(t.problem?.reason), pick(t.output), pick(t.status_note), pick(t.why)].find(v => v && !/^(?:任务有当前问题|运行有异常|有 \d+ 件事要留意)$/.test(v));
+    const said = [pick(t.problem?.reason), t.last?.result === 'warn' && pick(t.last.output), pick(t.output), pick(t.status_note), pick(t.why)].find(v => v && !/^(?:任务有当前问题|运行有异常|有 \d+ 件事要留意)$/.test(v));
     return said || '后台只标了要留意，没给具体原因，点进去看最近几次';
   }
   const notRunningReason = t => ({ disabled: '停用', on_demand: '按需', never: '从没跑过' })[t.not_running_reason];
@@ -154,7 +154,8 @@
       const triggerTitle = !next && Array.isArray(t.trigger_types) && t.trigger_types.length ? ` title="${esc(`触发方式：${t.trigger_types.join('、')}`)}"` : '';
       // 这次没读到运行状态的行一律写“这次没读到”（卡头也这样说），上次读到的结果放在指上去的提示里
       const shown = t.source_readable === false ? 'unread' : state === 'warn' ? 'warn' : lastState;
-      const lastWord = shown === 'unread' ? '这次没读到' : shown === 'warn' ? shortStatus.warn
+      // 上次那一轮只做完一部分（last.result=warn，M381）写“部分完成”，黄点照旧
+      const lastWord = shown === 'unread' ? '这次没读到' : shown === 'warn' ? lastState === 'warn' ? '部分完成' : shortStatus.warn
         : lastState === 'unknown' ? state === 'disabled' ? '停用前结果不明' : unknownWhy(t) || shortStatus.unknown : shortStatus[lastState] || shortStatus.unknown;
       const lastTitle = shown === 'warn' ? ` title="${esc(warnWhy(t))}"` : (shown === 'unread' || lastState === 'unknown') && typeof t.status_text === 'string' ? ` title="${esc(t.status_text)}"` : '';
       const why = shown === 'warn' && !hidden ? `<p class="lb-sub task-why">${U.fieldHtml(warnWhy(t), { name: '原因', place: 'body', kind: viewer })}</p>` : '';

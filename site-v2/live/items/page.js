@@ -240,7 +240,8 @@
   function row(it, closed = false, shared = '') {
     function brief(html) {
     if (viewer === 'owner') return html;   // 本人版给全文，不收成一句
-    const text = html.replace(/<[^>]*>/g, '');
+    // 收起时那一句是纯文字，各小段之间补上和展开后一样的“ · ”，不挤成一串（M670）
+    const text = html.replace(/<\/span>(?=<span class="item-bit[\s"])/g, '</span> · ').replace(/<[^>]*>/g, '');
     const first = text.match(/^.*?[。！？\n]/)?.[0] || text.slice(0, 100);
     return text.length > first.length ? `<details class="brief"><summary>${first} <span class="more__chev">›</span></summary><div>${html}</div></details>` : html;
     }

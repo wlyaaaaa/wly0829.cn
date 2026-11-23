@@ -53,11 +53,12 @@
     ok: variant === 'pickup' ? '处理完' : variant === 'schedule' ? '完成' : '成功',
     done: variant === 'pickup' ? '处理完' : '已完成', failed: variant === 'pickup' ? '没处理成' : variant === 'schedule' ? '没跑成' : '出错',
     running: offline ? '断开前在跑' : '正在跑', disabled: '停用', paused: '已暂停', never: '未运行', accepted: '已接手',
+    warn: '部分完成',   // 只做完一部分的那一轮（后台 result=warn，如原话补漏“这次只补完一部分消息”），用列表“要留意”的黄色（M381）
   })[state] || '结果未读到';
   // 计划任务某一轮结果没读到时写清缘故：没记到结束、结束了但结果未确认（和列表同一个说法），或结果码的含义没登记
   const unknownRun = r => !r ? '' : r.end == null && r.start != null ? '没记到结束' : r.exit_code != null ? '结果码没登记' : r.end != null ? '结果未确认' : '';
   const result = (state, variant, run) => {
-    const result = ['ok', 'done', 'failed', 'running', 'disabled', 'paused', 'never', 'accepted'].includes(state) ? state : 'unknown';
+    const result = ['ok', 'done', 'failed', 'warn', 'running', 'disabled', 'paused', 'never', 'accepted'].includes(state) ? state : 'unknown';
     return `<span class="task-result" data-state="${result}"><i class="task-dot" data-state="${result}" aria-hidden="true"></i>${result === 'unknown' && variant === 'plan' && esc(unknownRun(run)) || label(result, variant)}</span>`;
   };
   const runTime = r => r.start ?? r.end;
@@ -70,7 +71,7 @@
   }
   function runsOf(d) {
     const list = Array.isArray(d.runs) && d.runs.length ? d.runs : d.recent || [], runs = new Map(), plan = variantOf(d) === 'plan';
-    const strength = { ok: 3, failed: 3, done: 2, running: 1 };
+    const strength = { ok: 3, failed: 3, warn: 3, done: 2, running: 1 };
     for (const source of [...list, ...(d.last ? [d.last] : [])]) {
       if (!source || protectedField(source)) continue;
       const run = asRun(source), at = runTime(run);
@@ -157,11 +158,21 @@
     return Number.isInteger(n) && n >= 0 && (exact || n > 0) ? `${exact ? '' : '<small>至少 </small>'}${n}<small> 次</small>` : '';
   }
   // 后台按全部运行记录算好的统计（runs_summary）：分页以后只拿到最新 50 次，统计照它，不拿已载入的几条重算（M643）
-  function summaryMetrics(d, s, kind) {
+  // 部分完成的轮次（result=warn，M381）：后台统计还算在 unknown 里。给了 warn 就照它；没给时全部轮次都已载入才按已载入的数出来，
+  // 没载入完又见到部分完成的，只说“没记到结果或部分完成”，不硬拆
+  function partialRuns(d, s, runs, unknown) {
+    if (Number.isInteger(s.warn) && s.warn >= 0) return { warn: Math.min(s.warn, unknown), mixed: false };
+    const page = pageOf(d), all = !page || (deepCursor === undefined ? page.next_cursor == null : deepCursor == null);
+    const from = time(s.from), to = valid(time(s.to)) ? time(s.to) : now;
+    const seen = (runs || []).filter(r => r.result === 'warn' && r.start != null && (!valid(from) || r.start >= from) && r.start <= to).length;
+    return all ? { warn: Math.min(seen, unknown), mixed: false } : { warn: 0, mixed: seen > 0 };
+  }
+  function summaryMetrics(d, s, kind, runs) {
     const plan = kind === 'plan', exact = s.exact === true, span = exact && s.covered !== true, from = time(s.from);
-    const n = v => Number.isInteger(v) && v >= 0 ? v : 0, total = n(s.total), ok = n(s.ok), failed = n(s.failed), running = n(s.running), unread = n(s.unknown);
+    const n = v => Number.isInteger(v) && v >= 0 ? v : 0, total = n(s.total), ok = n(s.ok), failed = n(s.failed), running = n(s.running);
+    const { warn, mixed } = partialRuns(d, s, runs, n(s.unknown)), unread = n(s.unknown) - warn;
     const why = v => v || !plan ? '' : running ? '还在跑' : total ? '已读部分没有' : '';
-    const besides = plan && exact ? [unread && `${unread} 次没记到结果`, running && `${running} 次还在跑`].filter(Boolean).join('，') : '';
+    const besides = plan && exact ? [warn && `${warn} 次部分完成`, unread && `${unread} 次没记到结果${mixed ? '或部分完成' : ''}`, running && `${running} 次还在跑`].filter(Boolean).join('，') : '';
     const totalRow = ['total', `${span && valid(from) ? `${stamp(from)} 起` : '近 7 天'}${besides ? `<small class="task-stat__note">${besides}</small>` : ''}`, count(s.total, exact)];
     const success = ['success', kind === 'pickup' ? '处理完' : kind === 'schedule' ? '完成' : '成功', count(s.ok, s.success_exact === true), '', why(ok)];
     const failure = ['failure', kind === 'schedule' ? '没跑成' : '出错', count(s.failed, s.success_exact === true), '', why(failed)];
@@ -172,7 +183,7 @@
       rows: kind === 'pickup' ? [['today', '今天', count(s.today, s.today_exact === true)], totalRow, success, average] : [totalRow, success, failure, average] };
   }
   function metrics(d, runs, kind) {
-    if (d.runs_summary && typeof d.runs_summary === 'object') return summaryMetrics(d, d.runs_summary, kind);
+    if (d.runs_summary && typeof d.runs_summary === 'object') return summaryMetrics(d, d.runs_summary, kind, runs);
     const start = dayStart(now) - 6 * DAY, today = dayStart(now), coverage = d.coverage;
     const coveredTo = time(coverage?.to);
     const recent = runs.filter(r => r.start != null && r.start >= start);
@@ -188,7 +199,8 @@
     const exact = covered || span;
     const good = counted.filter(r => completeResults.includes(r.result)), bad = counted.filter(r => r.result === 'failed');
     const running = counted.filter(r => r.result === 'running').length;
-    const unread = counted.filter(r => !completeResults.includes(r.result) && !['failed', 'running'].includes(r.result)).length;
+    const warn = counted.filter(r => r.result === 'warn').length;
+    const unread = counted.filter(r => !completeResults.includes(r.result) && !['failed', 'running', 'warn'].includes(r.result)).length;
     const knownOutcomes = counted.every(r => completeResults.includes(r.result) || r.result === 'failed');
     const durations = counted.map(r => r.length).filter(valid);
     const lastSample = time(d.runs_at ?? d.at ?? packetAt);
@@ -196,7 +208,7 @@
     const todayCount = readsToday ? count(d.today_runs, d.today_runs_q === 'ok')
       : count(recent.filter(r => r.start >= today).length, covered);
     const plan = kind === 'plan', why = n => n || !plan ? '' : running ? '还在跑' : counted.length ? '已读部分没有' : '';
-    const besides = plan && exact ? [unread && `${unread} 次没记到结果`, running && `${running} 次还在跑`].filter(Boolean).join('，') : '';
+    const besides = plan && exact ? [warn && `${warn} 次部分完成`, unread && `${unread} 次没记到结果`, running && `${running} 次还在跑`].filter(Boolean).join('，') : '';
     const total = ['total', `${span ? `${stamp(from)} 起` : '近 7 天'}${besides ? `<small class="task-stat__note">${besides}</small>` : ''}`, count(counted.length, exact)];
     const success = ['success', kind === 'pickup' ? '处理完' : kind === 'schedule' ? '完成' : '成功', count(good.length, exact && (span || knownOutcomes)), '', why(good.length)];
     const failure = ['failure', kind === 'schedule' ? '没跑成' : '出错', count(bad.length, exact && (span || knownOutcomes)), '', why(bad.length)];
@@ -249,7 +261,7 @@
     const due = upcoming[0], original = valid(time(d.next_plan?.original_at)) ? time(d.next_plan.original_at) : kind === 'plan' ? pastNext(d) : NaN;
     const pending = kind === 'plan' && text(d.next_plan?.pending_text);
     const stopped = ['disabled', 'paused'].includes(d.state);
-    const completed = kind === 'plan' ? ['ok', 'failed'] : ['ok', 'done', 'failed'];
+    const completed = kind === 'plan' ? ['ok', 'failed', 'warn'] : ['ok', 'done', 'failed', 'warn'];
     const originalFinished = valid(original) && last?.start >= original && completed.includes(last.result);
     const resident = kind === 'plan' && ['resident', 'service_loop', 'on_demand', 'event'].includes(d.mode);
     const planStatus = stopped ? kind === 'plan' && d.state === 'disabled' ? disabledStatus(d) : showLast && label(d.state, kind)

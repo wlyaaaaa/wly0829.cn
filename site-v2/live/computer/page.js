@@ -859,8 +859,23 @@
       const bucket = ['gray', 'off'].includes(level) ? 'unread' : ['red', 'yellow', 'blue'].includes(level) ? key === 'audits.impersonation' ? 'review' : 'confirmed' : '';
       if (bucket) groups[bucket].push({ ...known, key, level, name: names[key] || known?.name || key });
     }
-    const at = g => g.at && Number.isFinite(Date.parse(g.at))
-      ? [U.date(g.at) === U.date(Date.now()) ? '' : U.date(g.at), U.time(g.at)].filter(Boolean).join(' ') : '';
+    const when = t => t && Number.isFinite(Date.parse(t)) ? [U.date(t) === U.date(Date.now()) ? '' : U.date(t), U.time(t)].filter(Boolean).join(' ') : '';
+    const at = g => when(g.at);
+    // 卡顿（M004、M616）：“最后读到”只写最后一笔合格帧（recorded_at），统计截止时刻另写“数据截止”（observed_at；
+    // 旧包这一项的 at 就是截止时刻）；缺帧写缺了什么、为什么（部分记录），只有 read_error 才写读取失败。
+    // 旧包这一项没有 recorded_at 时用电脑分组“卡顿”那一行的，再没有就不写“最后读到”。
+    const stutterNote = g => {
+      const row = (computer?.groups || []).find(x => x.key === 'stutter') || {};
+      const pick = key => Object.hasOwn(g, key) ? g[key] : row[key];
+      const known = Object.hasOwn(g, 'recorded_at') || Object.hasOwn(row, 'recorded_at');
+      const last = known && pick('recorded_at'), until = Object.hasOwn(g, 'observed_at') ? g.observed_at : Object.hasOwn(g, 'recorded_at') ? null : g.at;
+      const gaps = [g.missing, row.missing].find(m => m && typeof m === 'object' && Object.keys(m).some(k => /[\u3400-\u9fff]/.test(k)));
+      const reasons = gaps ? (Object.hasOwn(gaps, '卡顿采样') ? [gaps['卡顿采样']] : Object.values(gaps)).filter(v => v != null && U.fieldText(v).trim()) : [];
+      const why = pick('read_error') === true ? '这次读取失败' : reasons.length ? `${reasons.map(v => U.fieldHtml(v, { name: '缺数原因' })).join('、')}，只有部分记录` : '';
+      const times = [known && (when(last) ? '最后读到 ' + esc(when(last)) : '没读到合格帧记录'), when(until) && '数据截止 ' + esc(when(until))].filter(Boolean).join('，');
+      return [why, times].filter(Boolean).join('；') || '判断用的读数不全';
+    };
+    const unreadNote = g => { if (g.key === 'stutter') return stutterNote(g); const stamp = at(g); return stamp ? '最后读到 ' + esc(stamp) : '没读到上次记录'; };
     const who = g => g.ai_fixing === true ? 'AI 已接手' : '还没有 AI 接手';
     const label = g => U.fieldHtml(g.name, { name: '检测分组' });
     const confirmed = groups.confirmed.map(g => g.key === 'network' ? networkLoss(g) : g).map(g => [label(g), at(g) && esc(at(g)) + ' 读到', who(g)].filter(Boolean).join('，'));
@@ -876,8 +891,7 @@
         if (!offline() && (t > since && m.q === 'ok' && !stale(m) && !m.read_error || t >= since && Date.now() - t <= 180000)) return [];
         g = { ...g, at: measured.at };
       }
-      const stamp = at(g);
-      return [`${label(g)}（${stamp ? '最后读到 ' + esc(stamp) : '没读到上次记录'}）`];
+      return [`${label(g)}（${unreadNote(g)}）`];
     });
     const review = groups.review.map(g => {
       const href = route('/live/security/') + '#grp-impersonation';
@@ -889,7 +903,7 @@
     });
     // M666：后台给了缺组 missing_readings 就照它写（两版都写出缺的组名），能对上分组的带上次读到的时刻。
     const givenMissing = Array.isArray(computer?.missing_readings) ? [...new Set(computer.missing_readings.map(g => sp(U.fieldText(g?.name ?? g)).trim()).filter(Boolean))] : null;
-    const lacking = givenMissing?.length ? givenMissing.map(name => { const g = groups.unread.find(x => sp(U.fieldText(x.name)).trim() === name); const stamp = g && at(g); return `${esc(name)}${g ? `（${stamp ? '最后读到 ' + esc(stamp) : '没读到上次记录'}）` : ''}`; }) : unread;
+    const lacking = givenMissing?.length ? givenMissing.map(name => { const g = groups.unread.find(x => sp(U.fieldText(x.name)).trim() === name); return `${esc(name)}${g ? `（${unreadNote(g)}）` : ''}`; }) : unread;
     const known = computer?.attention_count != null || computer?.attention_groups != null || computer?.attention_summary || !!givenMissing?.length;
     const lines = [`<b>已确认异常 ${confirmed.length} 组</b>${confirmed.length ? ' · ' + confirmed.join('；') : ''}`,
       lacking.length && `<b>读数暂缺 ${lacking.length} 组</b> · ${lacking.join('、')}`,

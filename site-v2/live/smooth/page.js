@@ -260,6 +260,23 @@
       tl.set(known > 0 ? pack : null);
     } };
   }
+  // 卡顿明细的卡头（M616）：“最近一次记录于”写最后一笔合格帧（recorded_at），截止时刻由页头和汇总自己的 window.to 写；
+  // 缺帧是部分记录，照各块给的缺项写缺了什么、为什么，只有 read_error 才写读取失败。
+  // 旧包这一组没有 recorded_at、缺项只有通用的 read_failed：时刻改用汇总的 recorded_at（也没有就不写时刻），缺项换成各块的真实缺项。
+  const lastStamp = t => [U.date(t) === U.date(Date.now()) ? '' : U.date(t), U.time(t)].filter(Boolean).join(' ');
+  function stutterGiven(given) {
+    if (!given || given.gray_reason !== 'partial') return given;
+    const blocks = [data?.blocks?.stutters, data?.blocks?.summary, data?.stutters, data?.summary];
+    if (Object.hasOwn(given, 'read_error') ? given.read_error === true : blocks.some(b => b?.read_error === true || b?.error)) return given;
+    const named = m => m && typeof m === 'object' ? Object.fromEntries(Object.entries(m).filter(([k]) => /[\u3400-\u9fff]/.test(k))) : {};
+    const real = Object.assign({}, ...blocks.map(b => named(b?.missing)), named(given.missing));
+    const keys = Object.keys(real), out = { ...given, partial: keys, missing: real };
+    if (!Object.hasOwn(given, 'recorded_at') && typeof given.why === 'string') {
+      const recorded = blocks.map(b => b?.recorded_at).find(t => t && Number.isFinite(Date.parse(t)));
+      out.why = given.why.replace(/[，,]?\s*最近一次记录于 (?:\d{2}-\d{2} )?\d{2}:\d{2}/, recorded ? `，最近一次记录于 ${lastStamp(recorded)}` : '');
+    }
+    return out;
+  }
   function groups() {
     const s = data?.summary, app = data?.apps?.[0], appName = appLabel(app?.display_label ?? app?.app);
     const usage = data?.usage, active = coveredSeconds(usage, s => s.id === 'active' || /^(?:在用|正常使用|正常工作)$/.test(U.sp(s.label)));
@@ -283,7 +300,7 @@
     const curves = [...data?.fps?.series || [], ...data?.frametime?.series || [], ...data?.jitter?.series || []];
     const hasCurve = id => measured(curves.find(line => line.id === id));
     const knownGroups = out.map((g) => {
-      const given = data?.groups?.find(x => (x.key ?? x.id) === g.key);
+      const found = data?.groups?.find(x => (x.key ?? x.id) === g.key), given = g.key === 'stutters' ? stutterGiven(found) : found;
       const givenNames = g.key === 'stutters' ? [...new Set([...(s?.missing_readings || []), ...(data?.blocks?.summary?.missing_readings || []), ...(data?.blocks?.stutters?.missing_readings || [])])] : data?.blocks?.[g.key]?.missing_readings;
       const names = uncovered(givenNames?.length || g.key !== 'stutters' ? givenNames : grayNames(data), s);
       const frames = g.key === 'fps' && !!data;
