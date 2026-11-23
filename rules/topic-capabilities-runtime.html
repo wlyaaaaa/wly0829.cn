@@ -6,8 +6,8 @@
 <title>能力与运行方式 · 规则</title>
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/62df9fc2f2bafa6f91f0edad48f76e655700bf0b7119ecd61e2042b2b6800da1/rules/rules.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css">
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/54adab6f5f1c38d32d81211ebe636a94efde3080463f852b986bbf430c63cf7b/motion/motion.js"></script>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ab3727f799c9230353a52ed4cba0808edb318f5571cf54cac1208be0d59d52fa/motion/motion.css">
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/42fd4573ad1c2f00293a36f4c3983722753fc547c53d951c18967c75a300adbb/motion/motion.js"></script>
 <meta name="color-scheme" content="only light">
 <style>:root{color-scheme:only light}</style>
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -20,7 +20,7 @@
 <meta property="og:description" content="owner: E:\.agents">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6eeb599814aabe1e47ebff77053af583d5a2b2348a8f21dc37021e18f343b04d/%E5%85%AC%E7%94%A8/fonts/ui-4f322b04c46ae20b.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/531e0a6e71c56084529cf5d817693615cef489a846cbfb148653aea81328c48c/%E5%85%AC%E7%94%A8/fonts/ui-80e213c96e4788d5.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/026a30567ee5294ef4e0c6924b249ac00f7c74233438fb9ee6ae71c140349ec4/%E5%85%AC%E7%94%A8/fonts/article-ac16c19127303b63.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
@@ -46,7 +46,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E485" data-rule-page="topic-capabilities-runtime">
+<main class="rules-page" data-rule-release="E488" data-rule-page="topic-capabilities-runtime">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="能力与运行方式">能力与运行方式</h1></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#选能力"><span class="toc-number">01</span><span class="toc-label">选能力</span></a></li>
@@ -68,7 +68,7 @@
 <li><strong>三家一起装。</strong> 本人日常用 Claude、Codex 和 Antigravity 三个智能体。给其中一家接上或改动的能力和接线（钩子、技能、MCP、插件、宿主设置这类），另两家也同样接、同样改；能共用一份的共用一份，不各写一套。哪家没有对应机制的，用它最接近的办法做到同样效果，做不到的写明缺口（Antigravity 的缺口记在<a href="topic-antigravity-adapter.html#%E7%BC%BA%E5%8F%A3">Antigravity 适配</a>）。只为绕开某一家自己的毛病（比如它的命令拦截）加的，只改那一家；只该跑一次的事（比如自动任务）不各家各跑一份；派活、选型号的分工照<a href="topic-execution-coordination.html">分工与并行施工</a>，不归本条管（本人 2026-11-15，源消息 43af21a6-773c-41da-943a-94cb9aca6171）。</li>
 <li><strong>快速操作由 AI 执行。</strong> 本人提出“快速操作”“快速开关”“一键开关”时，默认由 AI 使用现有工具直接执行并回读结果。不要把它理解为让本人点击快捷方式、运行命令或照步骤操作，也不要因此自行新增快捷方式或按钮。只有本人明确选择手动操作，或实际流程确实需要本人在场时，才交本人完成对应步骤（出处：<code>docs/owner-decisions/2026-10.md</code>“快速操作由 AI 执行”）。</li>
 <li><strong>界面上的点选默认交本人。</strong> 现在的点屏工具（computer use）还不够成熟，需要在软件界面上点选的操作（例如安全软件里恢复被禁止的启动项、Codex 桌面里编辑自动任务），AI 先查清并写好几步说明交本人点，点完由 AI 回读结果；AI 不主动用点屏工具代点，本人明确要 AI 点时照办。命令行、配置文件和官方命令能完成的照常由 AI 做；浏览器里的网页操作按下文“浏览器”一节。</li>
-<li><strong>本人正在用电脑时不抢前台。</strong> 本人此刻是不是正在这台电脑上操作，由 AI 当场判断；AI 操作时发现他在抢（指针被挪走、窗口被切走、他在打字），就算在操作，马上让出来。他在操作时，AI 不把窗口或网页拉到最前、不动系统的鼠标指针和键盘、不抢输入焦点：会打断他手上的事，他打的字也可能落进 AI 的窗口。AI 自己要做的改在后台做（后台标签页、不跳到前面的窗口、命令行）。非要在屏幕上做的（比如本人让 AI 代点界面），AI 自己另开一块虚拟显示器（开关工具登记在下文“本机小工具”清单里），把窗口放上去，用不动指针、不抢焦点的办法操作（比如界面自动化接口），用完关掉；本人的主电脑和副驾驶笔记本都这样。主电脑上本来就有的那块虚拟显示器是本人关了主屏时自己用的，不给 AI 占。汇报网页做好后弹到最前、要他亲手登录或操作的网页拉到最前，是本人要的原设计，照旧。他当场叫 AI 拉到前面或用鼠标键盘时照办（本人 2026-11-15，源消息 3322e055-090a-4d52-ab9e-c6da3f8bd157、3281cb97-ccef-43ff-b586-97e498e8d199、0873c94e-573e-47cc-97ca-88764f8323aa）。</li>
+<li><strong>AI 操作电脑一律不抢前台，不判断本人在不在用。</strong> 本人随时可能在用，AI 不花时间判断，一律不把窗口或网页拉到最前、不动系统的鼠标指针和键盘、不抢输入焦点：会打断他手上的事，他打的字也可能落进 AI 的窗口。AI 自己要做的在后台做（后台标签页、不跳到前面的窗口、命令行）。非要在屏幕上做的（比如本人让 AI 代点界面），直接开 AI 专用虚拟显示器：主电脑 <code>pwsh -NoProfile -File E:\PCConfig\tools\Invoke-AiVirtualDisplay.ps1 -Action Open</code>，副驾驶笔记本把路径换成 <code>V:\GitHub\PCConfig\tools\</code>；挪窗口、截图、关屏见 <code>E:\PCConfig\docs\runtime\ai-virtual-display.md</code>。开关屏时工具自己等键鼠停下，等不到会报错，过一会儿重试即可。把窗口放上去，用不动指针、不抢焦点的办法操作（比如界面自动化接口），用完关掉。主电脑上本来就有的那块虚拟显示器是本人关了主屏时自己用的，不给 AI 占。汇报网页做好后弹到最前、要他亲手登录或操作的网页拉到最前，是本人要的原设计，照旧。他当场叫 AI 拉到前面或用鼠标键盘时照办（本人 2026-11-15，源消息 3322e055-090a-4d52-ab9e-c6da3f8bd157、3281cb97-ccef-43ff-b586-97e498e8d199、0873c94e-573e-47cc-97ca-88764f8323aa；2026-11-23 本人说 AI 难以判断他在不在用、判断浪费时间，改成不判断）。</li>
 <li>能力缺失或真的不兼容时，只停依赖它的那部分，其余继续，用人话说清影响；不悄悄降质量、删功能或绕过身份、权限和保护要求。本人自己的能力坏了要修好或正式替换（见<a href="topic-engineering-delivery.html">工程与交付</a>）；暂缓、回退旧版或局部停用只是处置状态，不算修好。</li>
 <li>有用的英文第一次出现时加简短中文释义，代码、路径、常见缩写和精确标识除外。关键的没做完的事必须说，不为了模板完整输出无用字段。</li>
 <li><strong>短时流程要跟住。</strong> 验证码、登录确认这类要趁有效期处理的流程，在当前任务里主动盯着实际能读的来源，收到就及时完成已授权的后续操作；不刚开始等就改成几分钟后的自动任务然后结束。按来源的真实能力和时间窗口选现成的等待或有界轮询；完成、取消、窗口结束或来源读不了时，说明结果或缺口并结束等待。这不要求为几小时后的事一直挂着，也不新建全局轮询器或后台服务。</li>
@@ -76,7 +76,7 @@
 <h3 id="登录是否影响判断">登录是否影响判断</h3>
 <p>同一来源有本人可用的对应账号时，始终优先用该账号的登录态搜索和读取。公开结果可以并行补充、交叉核对，不能因为公开页面能打开就跳过可用的登录态。账号下的内容、排序、可见范围和字段可能不同；使用个性化结果时标明适用的账号和人群，推断更大总体前核对覆盖范围和取样偏差。</p>
 <ul>
-<li>只有对应账号暂不可用时才重新登录：按 浏览器技能 先去密码中心找凭据，手机号登录先自己收验证码，短信和邮箱一起等。找不到凭据、等不到验证码、要扫码或本人验证时，再请本人完成具体那一步；不因此绕开该站，也不先论证值不值得请（本人 2026-11-11，源消息 7cb84c72-b6c8-4b65-b392-21c715b69e1d）。本人在电脑前就把登录页拉到 Chrome 最前面（命令见 news-quickcheck 技能），说清登上后多看到什么、影响哪项判断。他睡着、出门也照常进实况、发通知和邮件，按事项去重；先做不依赖它的部分。没有查询在等时不为登录单独找他。保留进度，登上后从原目标继续核实。</li>
+<li>只有对应账号暂不可用时才重新登录：按 浏览器技能 先去密码中心找凭据，手机号登录先自己收验证码，短信和邮箱一起等。找不到凭据、等不到验证码、要扫码或本人验证时，再请本人完成具体那一步；不因此绕开该站，也不先论证值不值得请（本人 2026-11-11，源消息 7cb84c72-b6c8-4b65-b392-21c715b69e1d）。登录页用脚本拉到 Chrome 最前面，本人在不在电脑前由脚本判断，AI 不另判断（命令见 news-quickcheck 技能），说清登上后多看到什么、影响哪项判断。他睡着、出门也照常进实况、发通知和邮件，按事项去重；先做不依赖它的部分。没有查询在等时不为登录单独找他。保留进度，登上后从原目标继续核实。</li>
 <li>他登上之前，已有依据确认所需事实、范围和时期等价，或差异不会影响这次判断的，可以先用公开证据作答，说明依据和范围。不同平台和旧记录分别计数。</li>
 <li>目标是把本人要的事办成。遇到故障，AI 根据已有证据、剩余时间和这一路对结论的重要性，判断该刷新、等候、换等价来源还是请本人验证。空白或暂时断线时，沿原账号和原目标有界重试；明确限流则按站方要求退避再试。单站失败保留其他来源已核实的事实；多个独立来源一起出现解析、连接或握手错误时，先按 <code>proxy-network</code> 核本机网络与对应出口。空白、网络故障和限流都不能证明掉线。重要数据仍缺就保留目标和可重试时间，恢复后继续，旧记录注明时间。已提交的消息或其他有副作用的动作不自动重发。</li>
 <li>遇到验证码，先确认拦住的是本人账号、当前设备或请求，还是公共读取工具的出口，再看站方要求的是短信登录、扫码确认、人机验证还是信任设备。验证码本身的有效期和验证后会话的有效期分别核实；站方未说明的时长就说未知。有依据表明一次正常验证能长期复用，可以现在做；短时或效力未知的验证若关系本题关键数据，也及时办理。只有确需本人动手时才把相应验证页交给他，完成后回读原目标。</li>
@@ -146,8 +146,8 @@
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E485</dd></div>
-        <div><dt>发布</dt><dd>2026-11-23 01:54 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E488</dd></div>
+        <div><dt>发布</dt><dd>2026-11-23 10:24 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -161,7 +161,7 @@
 <li><a href="topic-claude-adapter.html">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 7,251 字<br>能力与运行方式 6,970 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 7,312 字<br>能力与运行方式 7,011 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/agents/规矩落地.html#规矩落地-02">AI 百工谱 · 规矩落地</a></dd></div>
       </dl>
     </aside>

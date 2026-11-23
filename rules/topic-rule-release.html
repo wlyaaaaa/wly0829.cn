@@ -6,8 +6,8 @@
 <title>规则发布与恢复 · 规则</title>
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/62df9fc2f2bafa6f91f0edad48f76e655700bf0b7119ecd61e2042b2b6800da1/rules/rules.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css">
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/54adab6f5f1c38d32d81211ebe636a94efde3080463f852b986bbf430c63cf7b/motion/motion.js"></script>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ab3727f799c9230353a52ed4cba0808edb318f5571cf54cac1208be0d59d52fa/motion/motion.css">
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/42fd4573ad1c2f00293a36f4c3983722753fc547c53d951c18967c75a300adbb/motion/motion.js"></script>
 <meta name="color-scheme" content="only light">
 <style>:root{color-scheme:only light}</style>
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -20,7 +20,7 @@
 <meta property="og:description" content="owner: E:\.agents">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6eeb599814aabe1e47ebff77053af583d5a2b2348a8f21dc37021e18f343b04d/%E5%85%AC%E7%94%A8/fonts/ui-4f322b04c46ae20b.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/531e0a6e71c56084529cf5d817693615cef489a846cbfb148653aea81328c48c/%E5%85%AC%E7%94%A8/fonts/ui-80e213c96e4788d5.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/026a30567ee5294ef4e0c6924b249ac00f7c74233438fb9ee6ae71c140349ec4/%E5%85%AC%E7%94%A8/fonts/article-ac16c19127303b63.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
@@ -46,7 +46,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E485" data-rule-page="topic-rule-release">
+<main class="rules-page" data-rule-release="E488" data-rule-page="topic-rule-release">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="规则发布与恢复">规则发布与恢复</h1></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#什么算活动规则"><span class="toc-number">01</span><span class="toc-label">哪版规则在生效</span></a></li>
@@ -70,7 +70,7 @@
 <li><strong>限制句按意思判断。</strong> 发布门对改变措辞、缩短、挪位置或改成指向同版仍有效的同一规则做一次 Sol medium 语义比对，限制的对象、范围、条件和强度都不变就自动放行，不请本人同意；判定为改写的旧句和目标版本证据写入发布回执及版本记录。真正放宽、删除限制，要用发布入口的 <code>-OwnerApproval &lt;源消息UUID&gt;</code> 指向本人原话（可以列几条）。原话里本人在谈改规则（说到规则、约法或约法条号，例如“L14 必要时可改”），就是明确同意改规则，直接放行；否则发布门做一次 Sol medium 比对，确认每处改动都符合原话里本人真正想要的结果就放行，不另外问本人。规则写本意、不照抄字面：补全本意显然包含的同类对象和说法可以放行；违背原话方向、放宽到本意没涉及的对象，或只是 AI 自己提的、本人没反对的，不放行。比对不可用或拿不准时，按要本人同意处理。</li>
 <li><strong>批准的来源。</strong> Claude、Codex、Antigravity 都按源消息编号核实。存档用于定位，由现行发布程序核实原生出处；摘要、注入、派单和仅存档无原生出处的文字不作批准。Antigravity 的发布批准从固定产品目录读取原生会话，核对桌面对话来源、显式用户输入和客户端消息编号，并逐字匹配正文；不采用档案自带的路径。</li>
 <li><strong>约法和各家入口。</strong> 改动 <code>AGENTS.md</code>、<code>templates/claude-home/CLAUDE.md</code>、<code>templates/codex-home/AGENTS.md</code>、<code>templates/antigravity-home/</code> 下入口模板的任何一句（加句、改句、删句）：先在回复里给本人看这句，他点头，发布写 <code>-OwnerApproval &lt;他那条消息的 UUID&gt;</code>。本人看过并同意的设计稿里列出的句子，算已经给他看过、点过头；<code>-OwnerApproval</code> 用他同意设计稿的那条消息的 UUID。程序只认这是他真发的消息，不判断里面有没有“规则”二字，也不比对意思，他回“嗯”也行；这条回复同意的是不是这句改动，由改的模型自己核对。<a href="topic-execution-coordination.html#%E6%9C%AC%E4%BA%BA%E5%AE%9A%E7%9A%84%E5%88%86%E5%B7%A5%E5%92%8C%E5%9E%8B%E5%8F%B7%E8%A7%84%E7%9F%A9%E5%8E%9F%E7%BA%A6%E6%B3%95-l22l23">分工与并行施工的“本人定的分工和型号规矩”</a>一节也一样。别的对话已经提交、推上主线还没发的规则改句（约法、入口和专题都算），默认算本人批准过（本人 2026-11-23）：给本人看、等他点头是推之前那个对话的事；发布时一起发，不为它停下等本人点头，也不回头核它批没批；发布门要编号时，把那边的批准编号一并写进 <code>-OwnerApproval</code>。</li>
-<li><strong>查打架。</strong> 动约法、各家入口结尾和本目录专题里讲 AI 怎么做事的句子，给本人看或发布之前，改句负责人安排没看过稿子的子代理核对一次；一句话同时动几处也只派一个；修坏了的（报错、命令和路径、写的和实际对不上）、技能和项目文档里的具体做法不用派。给它改前改后、约法全文、三家的入口结尾和讲同一件事的专题，不给拟句的理由，也不说这句是谁要的。它只报四样：和哪句说法相反；和哪句重复；哪个词在别处指的是另一个东西、哪个指代找不到；新句本身站不站得住（做不到、有漏洞、和事实对不上）。派谁按模型清单的复核分工。起草人可改措辞；主持核对意思和范围，未定的取舍请本人定。发布程序不拦这一步。</li>
+<li><strong>查打架。</strong> 动约法、各家入口结尾和本目录专题里讲 AI 怎么做事的句子，给本人看或发布之前，改句负责人安排没看过稿子的子代理核对一次；一句话同时动几处也只派一个；修坏了的（报错、命令和路径、写的和实际对不上）、技能和项目文档里的具体做法不用派。给它改前改后、约法全文、三家的入口结尾和讲同一件事的专题，不给拟句的理由，也不说这句是谁要的。它只报四样：和哪句说法相反；和哪句重复；哪个词在别处指的是另一个东西、哪个指代找不到；新句本身站不站得住（做不到、有漏洞、和事实对不上）。选人按模型清单 <code>routing.effort_rule</code> 的查打架施工项，交 Sol xhigh。起草人可改措辞；主持核对意思和范围，未定的取舍请本人定。发布程序不拦这一步。</li>
 <li><strong>并发。</strong> 发布器会核对当前指针的校验值；如果别的任务刚发布过，先重读并把它的结果并进来，不覆盖。新的发布必须包含当前在用的那次提交。不为发布新建队列、后台服务或全局施工平台。</li>
 <li><strong>失败和回退。</strong> 发布失败时恢复原来的指针和入口，旧版本照常可用。指针缺失但 <code>releases</code> 下仍有 <code>E*</code> 目录时，报 <code>e_rules_current_pointer_missing</code>；按现存目录的 <code>release.json</code> 重建指针后再核验。成功后只留“当前”和“上一版”两份可重建的目录，历史由私有 Git 保存。回退把正文、目录和入口模板一起恢复到上一版；不改写历史代号，也不重建同一个代号来冒充回退。</li>
 <li><strong>入口模板随版本部署。</strong> 发布器将各家模板中的版本号和根规则占位符替换为本版代号与 <code>AGENTS.md</code> 全文（约法和导航），本版文件的相对链接改为发布目录下的绝对路径，锚点保留；非本版文件沿用源码绝对路径。渲染后的 <code>templates/codex-home/AGENTS.md</code> 写到发布器配置的 Codex home 的 <code>AGENTS.md</code>；渲染后的 <code>templates/claude-home/CLAUDE.md</code> 写到 <code>~/.claude/CLAUDE.md</code>，根会话和加载用户级入口的子代理直接带上约法；渲染后的 Antigravity 模板写到 Antigravity 读的全局规则位置，约法整段进上下文，不被降成文件指针（位置和单文件大小限制见<a href="topic-antigravity-adapter.html#%E5%85%A5%E5%8F%A3%E5%92%8C%E8%A7%84%E5%88%99%E5%8A%A0%E8%BD%BD">Antigravity 适配</a>）。Hook 核对时优先用 <code>CODEX_HOME</code> 定位 Codex home，未设置时用 <code>~/.codex</code>。release 记录、校验值和核验覆盖渲染后的字节，回退逐字节恢复上一版入口；无占位符的旧模板保持原样。笔记本约法同步由既有每周定时巡检处理，普通约法更新不单独登记实况本人事项，也不要求本人手动启动按需巡检；由笔记本从主机当前活动规则同步约法段，主机不反向写笔记本，连不上时保留笔记本现有规则。</li>
@@ -83,8 +83,8 @@
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E485</dd></div>
-        <div><dt>发布</dt><dd>2026-11-23 01:54 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E488</dd></div>
+        <div><dt>发布</dt><dd>2026-11-23 10:24 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -98,7 +98,7 @@
 <li><a href="topic-claude-adapter.html">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 7,251 字<br>规则发布与恢复 3,066 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 7,312 字<br>规则发布与恢复 3,074 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/agents/规矩落地.html#规矩落地-02">AI 百工谱 · 规矩落地</a></dd></div>
       </dl>
     </aside>

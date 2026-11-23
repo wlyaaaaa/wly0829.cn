@@ -6,8 +6,8 @@
 <title>Claude 适配 · 规则</title>
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/62df9fc2f2bafa6f91f0edad48f76e655700bf0b7119ecd61e2042b2b6800da1/rules/rules.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbc447c87497edd69621e959b6fcdedb86fd5cb533060c9e316911faacc3357e/motion/motion.css">
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/54adab6f5f1c38d32d81211ebe636a94efde3080463f852b986bbf430c63cf7b/motion/motion.js"></script>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ab3727f799c9230353a52ed4cba0808edb318f5571cf54cac1208be0d59d52fa/motion/motion.css">
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/42fd4573ad1c2f00293a36f4c3983722753fc547c53d951c18967c75a300adbb/motion/motion.js"></script>
 <meta name="color-scheme" content="only light">
 <style>:root{color-scheme:only light}</style>
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -20,7 +20,7 @@
 <meta property="og:description" content="owner: E:\.agents">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6eeb599814aabe1e47ebff77053af583d5a2b2348a8f21dc37021e18f343b04d/%E5%85%AC%E7%94%A8/fonts/ui-4f322b04c46ae20b.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/531e0a6e71c56084529cf5d817693615cef489a846cbfb148653aea81328c48c/%E5%85%AC%E7%94%A8/fonts/ui-80e213c96e4788d5.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/026a30567ee5294ef4e0c6924b249ac00f7c74233438fb9ee6ae71c140349ec4/%E5%85%AC%E7%94%A8/fonts/article-ac16c19127303b63.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
@@ -46,7 +46,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E485" data-rule-page="topic-claude-adapter">
+<main class="rules-page" data-rule-release="E488" data-rule-page="topic-claude-adapter">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="claude-适配">Claude 适配</h1></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#身份"><span class="toc-number">01</span><span class="toc-label">身份</span></a></li>
@@ -79,7 +79,7 @@
 </tr>
 <tr>
 <td>medium</td>
-<td>均衡；Opus 5.5 的默认档，常规检索、调研、实现和审查够用</td>
+<td>均衡，适合检索、调研、实现和审查中写清了做法的轻量子任务</td>
 </tr>
 <tr>
 <td>high</td>
@@ -95,7 +95,7 @@
 </tr>
 </tbody>
 </table>
-<p>本人定过主对话的起步选择：Fable high（2026-11-10），Opus xhigh，难题、完善底座这类难活临时升到 max（2026-10-30）。本人新开对话时选一次，App 会记住。AI 自己开的新对话按模型清单通用档位规则：Opus 做明确的任务用 medium，要判断用 xhigh，最难的用 max；Fable 只有本人点名才开，一般 high。AI 用 <code>start_session</code> 另开对话时，档位只能给到发起对话自己的档位或更低，写高了会被悄悄压低（Fable high 的对话开 Opus xhigh，实际是 high）；要更高的，开完马上用 <code>set_session_effort</code> 调，下一轮起生效。</p>
+<p>本人定过主对话的起步选择：Fable high（2026-11-10），Opus xhigh，难题、完善底座这类难活临时升到 max（2026-10-30）。本人新开对话时选一次，App 会记住。Claude 主持默认 Opus xhigh，AI 开新的主持对话时显式写 xhigh。明确的轻量子任务可用 Opus medium，其他档位按模型清单。Fable 只有本人点名才开，一般 high。AI 用 <code>start_session</code> 另开对话时，档位只能给到发起对话自己的档位或更低，写高了会被悄悄压低（Fable high 的对话开 Opus xhigh，实际是 high）；要更高的，开完马上用 <code>set_session_effort</code> 调，下一轮起生效。</p>
 <p>Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工作流），只在本会话有效；提示词里出现“ultracode”一词只让这一轮改用编排，不改变档位。<code>auto</code> 表示没固定档位，以实际记录为准。</p>
 <h2 id="派子代理claude-的不同处">派子代理：Claude 的不同处</h2>
 <p>共同原则见<a href="topic-execution-coordination.html">分工与并行施工</a>，可派范围见 <code>config/model-roster.json</code>。</p>
@@ -104,7 +104,7 @@
 <li><strong>模型调不动时按原因处理。</strong> 派出的 GPT（Sol、Terra、Luna、Astra）、Gemini 或 Claude 子代理调不动时，不降型号、不降思考档位，也不收回来自己写（模型清单那一行另写了候选顺序或后备的，照那一行）。额度或订阅用完（结构化 <code>usageLimitExceeded</code>，或 <code>usage limit</code>、<code>credits</code>、<code>spend cap</code>、<code>quota</code> 等明确额度报错）或模型对该账号失效（账号被停、该账号用不了该型号，如 <code>model not found</code>、<code>not supported</code>、<code>does not have access</code>）时，这款这会儿算用不了（经包装器派的 Claude 型号调不通时，按模型清单 <code>model_unavailable</code> 查 Antigravity 的同一型号、同一档位；Claude 已有未到期的拒绝记录时不先派 Claude，直接走同型号、同档位的后备，Antigravity 的 Claude 和 GPT 池也有未到期的拒绝记录时回用尽和重置时间）：照模型清单那一行“用不了交谁”换人接着做（那一行列的同家别的池子、免费后备或别家），并照报错原样告诉本人。本人在对话里就当面说一声；本人不在时，由 AI 判断后用 E:\PCConfig\tools\Set-OwnerItem.ps1 按出错账号去重登记实况一条，写清哪家、哪个账号用不了、活已换给谁。那家恢复后新活回原来的分工，接手者已经做完的那单不再续，由 AI 用一次实际调用核实可用后关闭该事项。登录失效（401）是能修的原因：先重新登录修好，再接回原任务，不换家；经包装器实际派出的 Claude 型号报登录失效时，可试 Antigravity 同型号，能用就这一轮先在那边做完，登录照样要修。不预先查额度；所需工具或身份不可用时按实际原因修复，仍不通交回卡点。</li>
 <li><strong>短时限流自动重试。</strong> 经包装器派的，没有额度标记的 429、<code>rate limit</code>、<code>too many requests</code>，和满载、5xx 一样交包装器自动重试；报错给了等待时间就按它退避，不算这家用不了，仍不降型号、不降思考档位、不换家。Agent 工具派的原生子代理靠宿主自己的重试，仍不通按上一条的原因处理。</li>
 <li><strong>本人说“派API”才走 API。</strong> 没有这句话时默认派桌面子代理，不自己提议或改走 API，钩子也不拦 Agent 工具。本人在当前对话说“派API”后，接下来的前 3 个 Claude 档位子代理走 API，第 4 个起回桌面；要再用本人再说一次，只在当前对话有效。开始时告诉本人一句“接下来 3 个走 API”。不为选路预查 API 余额或记账期；本人明确开口要看余额时照<a href="topic-execution-coordination.html#%E6%9C%AC%E4%BA%BA%E5%AE%9A%E7%9A%84%E5%88%86%E5%B7%A5%E5%92%8C%E5%9E%8B%E5%8F%B7%E8%A7%84%E7%9F%A9%E5%8E%9F%E7%BA%A6%E6%B3%95-l22l23">分工与并行施工</a>。走 API 时用 PowerShell 工具在后台（<code>run_in_background:true</code>，<code>timeout</code> 7200000）运行 <code>E:\.agents\tools\Invoke-ClaudeApiChild.ps1 -Agent &lt;同名档位类型&gt; -PromptFile &lt;派单绝对路径&gt; -WorkDir &lt;工作目录绝对路径&gt; -TaskName &lt;短名，只用字母、数字和连字符&gt;</code>；型号、档位、派单内容和分工都和桌面一样，换通道不算降级。API 子代理不加载 MCP，要用浏览器、Google、副机这类 MCP 工具的活不占名额，直接派桌面并说一句。读回执：<code>succeeded</code> 就读 <code>result_file</code> 验收；<code>use_desktop=true</code> 时按回执的 <code>next_step</code> 用 Agent 工具派同一档位类型，<code>did_work=false</code> 原样重派，<code>did_work=true</code> 派单后附回执里的 <code>handoff_note</code> 接着做；没拿到回执也按 <code>use_desktop=true</code> 处理，派单后加一句“先看工作目录的 git 状态，已经做过的不重做”。<code>quota_exhausted</code> 时告诉本人一句“API 余额没了，已转桌面”，这个对话余下的名额直接走桌面，不再试；<code>key_problem</code>、<code>key_delivery_failed</code> 另外告诉本人一句。</li>
-<li>内置的 <code>general-purpose</code>、<code>Explore</code>、<code>Plan</code> 连型号带档位都跟根会话走，根会话开 max 时它们也按 max 跑，拿来做检索很贵；20 分钟内能查完的检索根会话自己做（见<a href="topic-execution-coordination.html#%E6%9C%AC%E4%BA%BA%E5%AE%9A%E7%9A%84%E5%88%86%E5%B7%A5%E5%92%8C%E5%9E%8B%E5%8F%B7%E8%A7%84%E7%9F%A9%E5%8E%9F%E7%BA%A6%E6%B3%95-l22l23">分工与并行施工的“本人定的分工和型号规矩”</a>）；成批的只读检索和机械小事按模型清单「查资料、取原文、筛选、批量核对」和 <code>routing.current_generation_defaults.gpt_mechanical</code> 选，调不动时按“模型调不动时按原因处理”和“短时限流自动重试”两条办理。<code>Explore</code>、<code>Plan</code> 不读 CLAUDE.md，只做只读检索。Agent 工具的 <code>model</code> 参数只换型号、不换档位，不用它派 Sonnet。</li>
+<li>内置的 <code>general-purpose</code>、<code>Explore</code>、<code>Plan</code> 连型号带档位都跟根会话走，根会话开 max 时它们也按 max 跑，拿来做检索很贵；一般检索 20 分钟内能查完的由根会话自己做（见<a href="topic-execution-coordination.html#%E6%9C%AC%E4%BA%BA%E5%AE%9A%E7%9A%84%E5%88%86%E5%B7%A5%E5%92%8C%E5%9E%8B%E5%8F%B7%E8%A7%84%E7%9F%A9%E5%8E%9F%E7%BA%A6%E6%B3%95-l22l23">分工与并行施工的“本人定的分工和型号规矩”</a>）。本人纠正、质问时按 Claude 入口结尾的第二条和模型清单查原文。成批的只读检索和机械小事按模型清单「查资料、取原文、筛选、批量核对」和 <code>routing.current_generation_defaults.gpt_mechanical</code> 选，调不动时按“模型调不动时按原因处理”和“短时限流自动重试”两条办理。<code>Explore</code>、<code>Plan</code> 不读 CLAUDE.md，只做只读检索。Agent 工具的 <code>model</code> 参数只换型号、不换档位，不用它派 Sonnet。</li>
 <li>派 GPT、Gemini 时走下面的包装器入口，不把 Codex 的 <code>openai_child</code> 或它的专用判断角色当作 Claude 的接口。</li>
 <li>工作流（Workflow）是确定性的多代理编排，适合大范围扇出、交叉核对和可恢复的批量活；只在本人开启 Ultracode、明确要求或技能要求时用，每个 <code>agent()</code> 显式传 <code>effort</code>。扇出规模按任务、风险和实际可用容量定，按需保存可接续的检查点，不查询剩余额度，也不按额度削减分工或质量。开着 Ultracode 时，系统每轮会催“实质的活都开工作流、不计成本”；以约法为准，值不值照算。本人没开口要的，先说目标（见 dispatch-work 技能“派之前”）；商量方向的对话用不着工作流。</li>
 <li>独立复核按共同原则安排；重大动作前的把关见<a href="topic-protected-actions.html#%E9%87%8D%E5%A4%A7%E5%8A%A8%E4%BD%9C%E5%89%8D%E7%9A%84%E6%8A%8A%E5%85%B3">重大动作与本人验证</a>，谁动手谁把关，不限型号和档位。</li>
@@ -130,7 +130,7 @@
 <li><strong>浏览器</strong>：只读公开搜索、读取和不操作页面的只读站内搜索直接调用；网页操作、渲染、本地预览和截图默认经包装器派 GPT 走 AppServer，用本人 Chrome，型号和档位按模型清单「操作电脑和浏览器、截图」一行，截图交 Claude 看成品和抽查。具体通道、后台标签页、禁用的 Claude 浏览器、故障退路和 GPT 额度用完的后备先读 <code>browser-control-continuity</code> 技能；这是可由本人当场改的默认。</li>
 <li><strong>要在新会话里验收的</strong>（MCP、技能）：用真正的新桌面会话，运行中的会话仍持旧 MCP。Hook 不用新开：运行中的会话安装后十几秒就换上新钩子（2026-11-07 看图上限实测，根会话和子代理都真触发了），当场真跑就能验。开验收会话或子代理都先想清楚档位并显式设定，不沿用根会话的档位（根会话的档位常比验收要的高；<code>start_session</code> 不传 <code>effort</code>、<code>model</code> 就沿用根会话的）：安装或触发检查按模型清单 <code>routing.scenarios</code> 的「Claude 装没装好的验收清单」一行；日常回答表现验收按通用档位，通常 medium，不开 max。也可以给可复制提示，首行注明型号和档位，让本人新开、选好后粘贴；结果交回或由根回读。MCP 原命令可按 <code>%USERPROFILE%\.claude.json</code> 的 <code>mcpServers</code> 跑 stdio 作补充，两种证据分开。嵌套 <code>claude -p</code> 没登录、也非新桌面会话，不能代替，不为它登录或转交凭据。</li>
 <li><strong>权限</strong>：用户设置里全局使用 <code>permissions.defaultMode=bypassPermissions</code>，和 Codex 的完全访问对等；不用 auto 模式或 <code>autoMode</code> 条目复制授权。宿主固定拦截的操作（删除盘根或一级目录、<code>Remove-Item</code> 通配、前台长时间 sleep 等）不是停工理由：已确认可直接删除的对象用字面子路径，清理受阻按<a href="topic-engineering-delivery.html#%E4%B8%8B%E8%BD%BD%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6%E5%92%8C%E6%B8%85%E7%90%86">工程与交付</a>办理；长等候用后台任务或 Monitor。</li>
-<li><strong>给本人的回答写在回他那一轮的最后一段。</strong> 本人只看最终输出，不看思考摘要；两次工具调用之间的文字可能被缩成一句摘要，夹在中间的答案会被缩没。被子代理或命令唤醒的那一轮，本人等于没看见；那一轮得出的结论，留到他下一条消息时再说，或写进汇报页。本人在线等时可以先说一句结论，没核实的说成暂定；清理、登记放在写最后一段之前做，最后一段把答案完整再说一遍。</li>
+<li><strong>给本人的回答写在回他那一轮的最后一段。</strong> 本人只看最终输出，不看思考摘要；两次工具调用之间的文字可能被缩成一句摘要，夹在中间的答案会被缩没。被子代理或命令唤醒的那一轮，本人等于没看见；那一轮得出的结论，留到他下一条消息时再说，或写进汇报页。本人在线等时可以先说一句结论，没核实的说成暂定；清理、登记放在写最后一段之前做，最后一段把答案完整再说一遍。本人问了问题、正在纠正你、等你答话时，这一轮只做答这句要的事，答完就结束这一轮（已经在跑的子任务照跑，没做完的下一轮接着做），不在同一轮里接着扩查、改东西；弹出收尾问题框后紧接着写最后一段，不再干别的。他中途发来新消息（会并进正在跑的这一轮），先把手上已有的答案连同对新消息能当场答的写成最后一段发出去，不攒着重写整段。</li>
 <li>桌面版自带说明里“提交、推送要先问”“收尾的小框里问要不要开工”这类，以约法为准，约法已经交给你的不问；收尾的小框用来问还没弄清的那一点。</li>
 <li><strong>本人不在时不弹要他点的东西。</strong> 本人说去睡了、出门了，或说只看最终汇报时，不发新对话提议卡片，也不在收尾框里提问：提议卡片会让这个对话在侧栏显示“需要你”，本人会以为任务卡住了。要提的后续事项和问题写进最终汇报；本人睡着、出门也照常进实况、发通知和邮件，同一件事不用反复催。</li>
 <li>本任务的 AI 临时内容删不掉时按<a href="topic-engineering-delivery.html#%E4%B8%8B%E8%BD%BD%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6%E5%92%8C%E6%B8%85%E7%90%86">工程与交付</a>留给自动清理。其他因 Claude 硬限制卡住的已授权事项，按<a href="topic-execution-coordination.html#claude-%E5%8F%97%E9%99%90%E7%9A%84%E4%BA%8B%E9%A1%B9%E4%BA%A4%E7%BB%99-codex">Claude 受限的事项交给 Codex</a>提醒本人并提供接手提示词。</li>
@@ -167,8 +167,8 @@
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E485</dd></div>
-        <div><dt>发布</dt><dd>2026-11-23 01:54 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E488</dd></div>
+        <div><dt>发布</dt><dd>2026-11-23 10:24 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -182,7 +182,7 @@
 <li><a href="topic-claude-adapter.html" aria-current="page">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 7,251 字<br>Claude 适配 6,781 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 7,312 字<br>Claude 适配 6,958 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/agents/规矩落地.html#规矩落地-02">AI 百工谱 · 规矩落地</a></dd></div>
       </dl>
     </aside>
