@@ -148,25 +148,35 @@
         <span class="tp-bar__num">${int(sum)}</span></div>`; }).join('')}</div>
       <p class="tp-legend ag-legend">${hosts.map(h => `<span data-host="${h.id}"><i class="tp-swatch"></i>${h.name}</span>`).join('')}</p>`;
   }
+  // 三种估法各对上几件。本人 11-23：先别写“谁更准”；原来的“程序 29%”其实是“全按中等大小算”的对照，不是开工时程序真推荐的。
+  // 读后台 work_stats.estimate_baselines：{ scope, samples, rows:[{id, hits, samples, basis}], hosts:{<家>:{rows}} }，
+  // id 是 all_medium（全按中等大小算的对照）、program_at_start（开工时程序推荐的）、ai_reported（实际报给本人的）。没出数时写“在核”，不下结论。
+  const BASES = [['program_at_start', '开工时程序推荐的'], ['ai_reported', `实际报给${'{you}'}的`], ['all_medium', '全按中等大小算（对照）']];
   function compare(d) {
-    let n = 0, ai = 0, prog = 0;
-    const per = [];
-    for (const h of HOSTS) {
-      const c = stats(d, h).estimate?.program_comparison;
-      if (!c?.samples || missing(d, h)) continue;
-      n += c.samples; ai += c.ai_accuracy * c.samples; prog += c.program_accuracy * c.samples;
-      per.push({ h, c });
+    const b = d.work_stats?.estimate_baselines, rows = list(b?.rows);
+    const name = label => label.replace('{you}', T.you(viewer));
+    const find = (list_, id) => list(list_).find(r => r.id === id);
+    const ready = BASES.every(([id]) => { const r = find(rows, id); return r && known(r.hits) && known(r.samples) && r.samples > 0; });
+    if (!ready) {
+      return `<p class="tp-sub">三种估法各对上几件 <small>对照口径在核</small></p>
+        <div class="ag-bases">${BASES.map(([, label]) => `<p><span>${esc(name(label))}</span><b class="tp-fog">在核</b></p>`).join('')}</div>
+        <p class="tp-small">后台正在把这三个数分开算，每个带口径和件数；出数以前不比哪种更准。</p>`;
     }
-    if (!n) return `<p class="tp-sub">谁估得准</p><p class="tp-empty">${esc(stats(d, HOSTS[0]).estimate?.program_comparison_reason || '还没有同时记下 AI 估的和估算程序算的完工记录。')}</p>`;
-    ai /= n; prog /= n;
-    const winner = ai > prog ? 'AI 自己报的更准' : ai < prog ? '估算程序更准' : '两边一样准';
-    const bar = (label, v, win) => `<div class="tp-bar"><span>${label}</span><span class="tp-bar__track"><span class="tp-bar__fill" style="--fill:${win ? 'var(--tp-green)' : '#b9b7ae'};width:${v * 100}%"></span></span><span class="tp-bar__num">${pct(v)}</span></div>`;
-    const dev = v => known(v) ? `${v > 0 ? '+' : '−'}${Math.abs(Math.round(v * 100))}%` : '';
-    return `<p class="tp-sub">谁估得准 <small>同一批 ${int(n)} 件，两边各自落在允许范围内的比例</small></p>
-      <div class="tp-bars">${bar('估算程序', prog, prog > ai)}${bar('AI 自己报的', ai, ai >= prog)}</div>
-      <p class="ag-verdict"><span aria-hidden="true">✓</span>${winner}</p>
-      <p class="tp-small">${per.map(({ h, c }) => `<span data-host="${h.id}" class="tp-hostname">${h.name}</span> AI ${pct(c.ai_accuracy)} 对程序 ${pct(c.program_accuracy)}；中位偏差 AI ${dev(c.ai_median_deviation)}、程序 ${dev(c.program_median_deviation)}`).join('<br>')}</p>
-      <p class="tp-small">偏差是“实际比估的多百分之几”，负数是估多了。</p>`;
+    const share = r => r.hits / r.samples;
+    const bar = ([id, label]) => { const r = find(rows, id);
+      return `<div class="ag-base${id === 'all_medium' ? ' is-ref' : ''}"><div class="tp-bar"><span>${esc(name(label))}</span><span class="tp-bar__track"><span class="tp-bar__fill" style="--fill:${id === 'all_medium' ? '#cfcdc5' : '#8f8d85'};width:${share(r) * 100}%"></span></span><span class="tp-bar__num">${int(r.hits)}/${int(r.samples)}</span></div>
+        ${r.basis ? `<p class="tp-small">${F(r.basis, '口径')}</p>` : ''}</div>`; };
+    const p = find(rows, 'program_at_start'), a = find(rows, 'ai_reported'), gap = a.hits - p.hits;
+    const same = p.samples === a.samples, close = same && Math.abs(gap) <= Math.max(2, Math.round(p.samples * .03));
+    const say = !same ? `两个数算的件数不一样（${int(p.samples)} 件对 ${int(a.samples)} 件），先不放在一起比。`
+      : close ? `开工时程序推荐的和实际报的差不多：${int(p.hits)} 件对 ${int(a.hits)} 件。`
+      : `同一批 ${int(p.samples)} 件里，实际报的比程序推荐的${gap > 0 ? '多' : '少'}对上 ${int(Math.abs(gap))} 件（${int(a.hits)} 对 ${int(p.hits)}）。`;
+    const per = HOSTS.map(h => ({ h, r: b.hosts?.[h.id]?.rows })).filter(x => BASES.every(([id]) => known(find(x.r, id)?.hits)));
+    return `<p class="tp-sub">三种估法各对上几件 <small>${b.scope ? F(b.scope, '口径') : `同一批 ${int(p.samples)} 件`}，落在允许范围内算对上${b.at ? ` · 截至 ${esc(when(b.at))}` : ''}</small></p>
+      <div class="tp-bars">${BASES.map(bar).join('')}</div>
+      <p class="ag-say">${say}</p>
+      ${per.length ? `<p class="tp-small">${per.map(({ h, r }) => `<span data-host="${h.id}" class="tp-hostname">${h.name}</span> ${BASES.map(([id, label]) => `${esc(name(label).replace('（对照）', ''))} ${int(find(r, id).hits)}/${int(find(r, id).samples)}`).join(' · ')}`).join('<br>')}</p>` : ''}
+      <p class="tp-small">“全按中等大小算”只是对照：假设每件都按中等估，不是程序开工时真给的数。</p>`;
   }
   function estimateSection(d) {
     const ws = d.work_stats;

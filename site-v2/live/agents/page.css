@@ -35,8 +35,12 @@
 .ag-stack .tp-bar__fill { min-width: 16px; }
 .ag-est2 .tp-bar { grid-template-columns: 104px minmax(0, 1fr) 40px; }
 .ag-legend { margin-top: 10px; }
-.ag-verdict { display: flex; align-items: center; gap: 8px; margin: 12px 0 8px; padding: 8px 12px; border-radius: 9px; background: var(--tp-green-soft); font-size: 16px; font-weight: 800; color: var(--tp-green-ink); }
-.ag-verdict span { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--tp-green); color: #fff; font-size: 12px; }
+.ag-bases { display: grid; gap: 8px; margin: 10px 0; }
+.ag-bases p { display: flex; justify-content: space-between; gap: 12px; margin: 0; padding: 8px 12px; border: 1px dashed var(--tp-line); border-radius: 9px; font-size: 14px; }
+.ag-est2 .ag-base .tp-bar { grid-template-columns: 128px minmax(0, 1fr) 56px; }
+.ag-base .tp-small { margin: 2px 0 0 140px; }
+.ag-base.is-ref .tp-bar > span:first-child { color: #6c6b64; }
+.ag-say { margin: 12px 0 8px; padding: 8px 12px; border-radius: 9px; background: rgb(20 20 19 / .05); font-size: 15px; font-weight: 700; color: var(--ink); }
 
 /* 三、干活量 */
 .ag-workgrid { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; align-items: start; }
