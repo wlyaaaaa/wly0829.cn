@@ -25,7 +25,6 @@ LEGACY_REDIRECTS = {
     '/cockpit/': '/live/', '/cockpit/storage/': '/live/storage/',
     '/cockpit/stutter/': '/live/computer/#stutters', '/cockpit/ai/': '/live/ledger/',
     '/system/': '/', '/how/': '/principles/', '/learning/': '/learning/project.html',
-    '/rescue/': '/mcp/',
 }
 sys.path.insert(0, str(ROOT / 'scripts'))
 sys.path.insert(0, str(ROOT / 'scripts/content-refresh'))
@@ -159,7 +158,7 @@ def legacy_routes(dist, runtime):
                                   if re.fullmatch(r'/projects/[^/]+/', alias)})
                 break
     redirects = {}
-    for route in sorted(routes):
+    for route in sorted(routes - {'/rescue/'}):
         path = dist / runtime.nav.route_file(route)
         if path.exists():
             continue
