@@ -283,7 +283,10 @@
           tl.set(d ? { states, rows: payload } : null);
           const note = el.querySelector('[data-x="tl-note"]');
           const missed = gapSpans(d?.day);
+          // 横带上画着这类的段（比如后台算好的关机），图例就照段写时长，不写“没有这类记录”
+          const drawn = new Set(strips.flatMap(st => st.spans.map(([, i]) => states[i]?.id)));
           for (const id of unnoted.keys()) {
+            if (drawn.has(id)) continue;
             const vals = el.querySelector(`.vz-legend__item[data-state="${CSS.escape(id)}"] .vz-legend__vals`);
             if (vals) vals.innerHTML = '<span>没有这类记录</span>';
           }
