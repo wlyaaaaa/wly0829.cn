@@ -105,14 +105,14 @@
     const stillWorking = c.state === 'done' && workingHelpers(c);
     const activity = [stillWorking ? '对话已结束' : completed && !U.chatFields.quota(c, viewer) && stateText(c), stillWorking && `后台帮手另在处理（${stillWorking} 个）`, clock].filter(Boolean).join(' · ');
     const timing = [Number.isFinite(c.elapsed_seconds) && `历时 ${duration(c.elapsed_seconds)}`, Number.isFinite(actual) && `实际工时 ${duration(actual)}`,
-      e?.planned_min != null && `报 ${e.planned_min} 分钟`, e?.over_min > 0 && `超 ${e.over_min} 分钟`, startedAt && `${startLabel} ${stamp(startedAt)}`, activity].filter(Boolean).join(' · ');
+      e?.planned_min != null && `报 ${Math.round(e.planned_min)} 分钟`, Math.round(e?.over_min) > 0 && `超 ${Math.round(e.over_min)} 分钟`, startedAt && `${startLabel} ${stamp(startedAt)}`, activity].filter(Boolean).join(' · ');
     const name = field(c.title, c), marked = name.hidden || viewer === 'public' && name.visibility === 'owner' || name.rewrite === 'pending' && !name.text;
     const displayName = typeof name.text === 'string' ? { ...name, value: plain(name.text), text: plain(name.text) } : name;
-    const titleHtml = locked ? '对话标题仅本人可见' : U.fieldHtml(name.text || marked ? displayName : '无标题', { name: '对话', place: 'title', kind: viewer });
+    const titleHtml = locked ? '仅本人可见' : U.fieldHtml(name.text || marked ? displayName : '无标题', { name: '对话', place: 'title', kind: viewer });
     const href = c.detail ? detailHref(c.id) : '';
     const title = href ? `<a class="row__title" href="${href}">${titleHtml} <span class="more__chev" aria-hidden="true">›</span></a>`
       : titleHtml ? `<span class="row__title">${titleHtml}</span>` : '';
-    const titleMark = locked ? '' : marked ? chatCell(name, '对话名', c) : viewer === 'owner' && name.visibility === 'owner' ? '' : U.visibilityNote(name, viewer, '对话名');
+    const titleMark = locked ? '' : viewer === 'owner' && U.visitorHiddenMark(c, '这场对话', viewer) || (marked ? chatCell(name, '对话名', c) : viewer === 'owner' && name.visibility === 'owner' ? '' : U.visibilityNote(name, viewer, '对话名'));
     const waitLabel = c.state === 'waiting' && stateText(c);
     const raw = locked ? null : U.chatProgressText(c.text ?? c.doing, c, viewer) ?? c.latest_reply, preview = U.chatPreviewSummary(raw, c, viewer);
     const repeatsStatus = (waitLabel || completed && !stillWorking) && U.chatFields.repeatsState(preview, c, viewer);
@@ -329,7 +329,6 @@
       const card = key === 'waiting' ? waitingCard : board.card(key, COLUMN[key]); card.el.hidden = false;
       if (!card.bound) { card.bound = true; U.fold(card.more, card.box); }
       const rows = list.map(c => chat(c, at)), count = peopleIn(list);
-      if (key === 'running' && d.hidden) rows.push({ key: 'hidden', cls: 'row row--flat', html: U.hiddenMore?.(d.hidden, '场', d.hidden_what || '对话') || '' });
       const main = rows.slice(0, 5), rest = rows.slice(5), restCount = rest.reduce((n, r, i) => n + (list[i + 5]?.private_count || 1), 0);
       const countText = fixed && Number.isFinite(d[key]) && d[key] < count ? `已列出 ${count} 场` : fixed ? chatCount(d, key, count) : `${count} 个`;
       const emptyWaiting = key === 'waiting' && countText === '0 个', publicWaiting = key === 'waiting' && viewer === 'public';

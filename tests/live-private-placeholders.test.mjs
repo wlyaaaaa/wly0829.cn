@@ -19,15 +19,28 @@ test('choice answers copied to AI name the card and the question, so same-titled
   assert.match(U.choiceText({id: 'pending-c'}, '没有原编号的卡', question, '乙'), /^实况事项 pending-c（没有原编号的卡），题号 Q1/);
 });
 
-test('visitors are told which part is owner-only; old rewrite-pending placeholders read the same way', () => {
+test('visitors see plain words where something is still withheld: no lock, no "另有 N 条" summary (new privacy rule 11-24)', () => {
   const pending = {value: null, visibility: 'pending', rewrite: 'pending', hidden_what: '事项内容'};
   assert.equal(U.fieldText(pending, 'public'), '事项内容仅本人可见');
   assert.equal(U.fieldHtml(pending, {name: '待办事项', place: 'title', kind: 'public'}), '事项内容仅本人可见');
-  assert.equal(plain(U.fieldHtml(pending, {name: '这件事的内容', kind: 'public'})), '🔒事项内容仅本人可见');
+  assert.equal(plain(U.fieldHtml(pending, {name: '这件事的内容', kind: 'public'})), '事项内容仅本人可见');
   assert.equal(U.fieldHtml({visibility: 'owner'}, {name: '待办事项', place: 'title', kind: 'public'}), '标题仅本人可见');
-  assert.equal(plain(U.fieldHtml({value: null, visibility: 'owner', hidden_what: '对话标题'}, {kind: 'public'})), '🔒对话标题仅本人可见');
-  assert.equal(plain(U.privateSummary(3, {unit: '项', what: '记录'})), '🔒另有 3 项记录仅本人可见');
+  assert.equal(plain(U.fieldHtml({value: null, visibility: 'owner', hidden_what: '对话标题'}, {kind: 'public'})), '对话标题仅本人可见');
+  assert.doesNotMatch(U.fieldHtml({value: null, visibility: 'owner', hidden_what: '对话标题'}, {kind: 'public'}), /🔒|<button/);
+  assert.equal(U.privateSummary(3, {unit: '项', what: '记录'}), '');
+  assert.equal(U.hiddenMore(3, '项', '记录'), '');
   assert.equal(U.fieldHtml('来电号码：可信设备可见', {place: 'label', kind: 'public'}), '来电号码仅本人可见');
+  // 一大块：原位一句普通字“这里是……，所以不予展示”
+  const block = {value: null, visibility: 'owner', hidden_block: '这份材料的正文（8 页）'};
+  assert.equal(plain(U.fieldHtml(block, {kind: 'public'})), '这里是这份材料的正文（8 页），所以不予展示');
+  assert.equal(U.fieldText(block, 'public'), '这里是这份材料的正文（8 页），所以不予展示');
+});
+
+test('the owner version marks what visitors cannot see with the shared "访客看不到" tag', () => {
+  assert.match(plain(U.visitorHiddenTag('这批文件的文件名', '量大', 'owner')), /^访客看不到$/);
+  assert.match(U.visitorHiddenTag('这批文件的文件名', '量大', 'owner'), /访客版看不到这批文件的文件名。原因：量大。/);
+  assert.equal(U.visitorHiddenTag('这批文件的文件名', '量大', 'public'), '');
+  assert.match(plain(U.visitorHiddenMark({content_locked: true}, '这场对话', 'owner')), /^访客看不到$/);
 });
 
 test('the owner version shows the original words with no lock and no owner-only label', () => {

@@ -28,7 +28,8 @@
     const visible = viewer === 'owner' ? rows : rows.filter(row => !locked(row));
     return { visible, hidden: rows.length - visible.length };
   }
-  const hiddenRows = (count, item, fields) => count ? `另有 ${count} 条${item}仅本人可见，${fields}均未公开` : '';
+  // 新私事规则（本人 11-24 02:56）：访客侧不再写“另有 N 条……仅本人可见”。
+  const hiddenRows = () => '';
   // 盘的用途：后台给 volumes[].purpose 就用后台的；没给按盘符对照（H 盘卷标是一串数字，要对照表）。
   const PURPOSE = { C: '系统', D: '游戏', E: '软件', F: '恢复 U 盘', G: '数据', H: '备份', V: '开发盘' };
   const ORDER = 'CDEGHVF';

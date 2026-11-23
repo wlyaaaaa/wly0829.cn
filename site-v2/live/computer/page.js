@@ -887,9 +887,12 @@
         g.strong > 0 && `其中 ${g.strong} 个要尽快确认`, at(g) && `${at(g)} 读到`, g.ai_fixing === true ? 'AI 在逐个核对' : '下一步：交给 AI 逐个核对签名和安装位置，你不用自己查；现在还没有 AI 接手'].filter(Boolean);
       return `<a href="${esc(href)}">${label(g)}${screening ? ' · 看是哪几个 ›' : ''}</a>（${esc(fields.join('；'))}）`;
     });
-    const known = computer?.attention_count != null || computer?.attention_groups != null || computer?.attention_summary;
+    // M666：后台给了缺组 missing_readings 就照它写（两版都写出缺的组名），能对上分组的带上次读到的时刻。
+    const givenMissing = Array.isArray(computer?.missing_readings) ? [...new Set(computer.missing_readings.map(g => sp(U.fieldText(g?.name ?? g)).trim()).filter(Boolean))] : null;
+    const lacking = givenMissing?.length ? givenMissing.map(name => { const g = groups.unread.find(x => sp(U.fieldText(x.name)).trim() === name); const stamp = g && at(g); return `${esc(name)}${g ? `（${stamp ? '最后读到 ' + esc(stamp) : '没读到上次记录'}）` : ''}`; }) : unread;
+    const known = computer?.attention_count != null || computer?.attention_groups != null || computer?.attention_summary || !!givenMissing?.length;
     const lines = [`<b>已确认异常 ${confirmed.length} 组</b>${confirmed.length ? ' · ' + confirmed.join('；') : ''}`,
-      unread.length && `<b>读数暂缺 ${unread.length} 组</b> · ${unread.join('、')}`,
+      lacking.length && `<b>读数暂缺 ${lacking.length} 组</b> · ${lacking.join('、')}`,
       review.length && `<b>需核实 ${review.length} 组</b> · ${review.join('、')}`].filter(Boolean);
     part('count').hidden = !known;
     U.html(part('count'), known ? lines.map(line => `<span style="flex-basis:100%">${line}</span>`).join('') : '');

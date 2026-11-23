@@ -286,10 +286,13 @@
     const changes = canShorten && Array.isArray(it.changes) && it.changes.length ? it.changes : display !== title ? [typeof title === 'string' ? title.replace(/([。！？])\s*；/g, '$1') : title] : [];
     const details = changes.length ? `<details${artifactVersion ? ' open' : ''}><summary class="live-disclosure">查看改动${Number.isFinite(it.change_count) ? `（${num(it.change_count)} 条）` : ''}</summary>${changes.map(change => `<p class="row__sub">${text(change)}</p>`).join('')}</details>` : '';
     const publicLink = projectViewer === 'public' && typeof it.open === 'string' && !it.web_open ? { href: it.open, label: '打开成品' } : it.web_open;
-    const target = !artifactVersion && U.artifactAction({ ...it, web_open: publicLink }, projectViewer, route);
+    // 新私事规则：登记时填了 open_note 的成品，访客版在打开链接的位置显示这句普通字（“这里是……，所以不予展示”）；本人版照给链接，旁边挂“访客看不到”。
+    const openNote = U.fieldText(it.open_note, projectViewer).trim();
+    const target = !artifactVersion && !(openNote && projectViewer === 'public') && U.artifactAction({ ...it, web_open: publicLink }, projectViewer, route);
     const action = target ? projectViewer === 'public'
       ? `<a class="btn btn--sm" href="${esc(target.href)}"${/^https?:/i.test(target.href) ? ' target="_blank" rel="noopener"' : ''} data-mo-press>${esc(target.label)}</a>`
-      : pcActions(item, [target]) : '';
+      : pcActions(item, [target]) + (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, projectViewer) : '') : '';
+    const noteLine = !artifactVersion && openNote && projectViewer === 'public' ? `<p class="row__sub">${esc(openNote)}</p>` : '';
     const canOpen = projectViewer === 'owner' && !!target && (typeof target.href === 'string' || !!target.href?.target && !!target.href?.item_id);
     const note = canOpen ? '' : marker(it, projectViewer, it.hidden_what || '产物文件');
     const explanation = titleVisible ? it.recent_detail || '这项成品已有登记，内容说明待补充。' : '';
@@ -299,7 +302,7 @@
     return {
       key: item.id,
       cls: 'row row--flat pj-item',
-      html: `<span></span><div class="row__text"><p class="row__main"><span class="row__title">${name}</span></p><p class="row__sub">${[explanation ? U.fieldHtml(explanation, { name: '产物说明', kind: projectViewer }) : '', note].filter(Boolean).join(' · ')}</p>${solves}${details}${action ? `<div class="acts">${action}</div>` : ''}</div><span class="pj-at">${sharedAt ? '' : esc(stamp(it.at, it.at_precision))}</span>`,
+      html: `<span></span><div class="row__text"><p class="row__main"><span class="row__title">${name}</span></p><p class="row__sub">${[explanation ? U.fieldHtml(explanation, { name: '产物说明', kind: projectViewer }) : '', note].filter(Boolean).join(' · ')}</p>${solves}${details}${action ? `<div class="acts">${action}</div>` : noteLine}</div><span class="pj-at">${sharedAt ? '' : esc(stamp(it.at, it.at_precision))}</span>`,
     };
   }
 

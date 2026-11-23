@@ -46,7 +46,7 @@
       return `${marker({ visibility }, viewer, names.join('、'))}：${names.join('、')}`;
     }).filter(Boolean).join('；');
   }
-  const chatTitle = d => contentLocked(d, viewer) ? '对话标题仅本人可见' : (viewer === 'public' && (field(d.title, d).visibility === 'owner' || d.title?.hidden) || pending(field(d.title, d)) ? '对话' : plain(U.fieldText(d.title, viewer)) || U.chatShortName({ ...d, started_at: d.session_started_at, born: null }, viewer) || '没有标题');
+  const chatTitle = d => contentLocked(d, viewer) ? '仅本人可见' : (viewer === 'public' && (field(d.title, d).visibility === 'owner' || d.title?.hidden) || pending(field(d.title, d)) ? '对话' : plain(U.fieldText(d.title, viewer)) || U.chatShortName({ ...d, started_at: d.session_started_at, born: null }, viewer) || '没有标题');
   const when = at => at ? stamp(at) : U.collectionText("时刻");
   const projectInfo = d => { const p = d.project, n = d.project_name, hidden = [p, n].find(v => v?.visibility === 'owner' || v?.public === 'owner'); if (viewer === 'public' && hidden) return marker({ visibility: 'owner' }, viewer, '项目名称'); const id = text(p), name = text(n); return id && name ? `<a href="${esc(route(`/live/project/?id=${encodeURIComponent(id)}`))}">${U.fieldHtml(name)} ›</a>` : U.offline?.() ? '' : `<span class="rec-none">${U.collectionText()}</span>`; };
   function actions(d) {
@@ -292,7 +292,7 @@
     }
     if (validTime(chat.at)) dates.push(`主对话更新 ${when(chat.at)}`);
     if (validTime(end)) dates.push(`${hasNewTimes() ? '数据截止' : '最近一条记录'} ${when(end)}`);
-    const meta = [who(chat, true), U.chatFields.originLabel(chat, false), locked && stageLabel(chat), progress, ...dates, e?.planned_min != null && `报 ${e.planned_min} 分钟`, timing, e?.over_min > 0 && `超了 ${U.minutes(e.over_min)}`, helpers === 0 ? '没有派帮手' : helpers && `帮手 ${helpers} 个`].filter(Boolean);
+    const meta = [who(chat, true), U.chatFields.originLabel(chat, false), locked && stageLabel(chat), progress, ...dates, e?.planned_min != null && `报 ${Math.round(e.planned_min)} 分钟`, timing, e?.over_min > 0 && `超了 ${U.minutes(e.over_min)}`, helpers === 0 ? '没有派帮手' : helpers && `帮手 ${helpers} 个`].filter(Boolean);
     const project = (chat.project || chat.project_name) && projectInfo(chat);
     const app = U.chatFields.appTag(chat);
     part('meta').hidden = !meta.length && !project && !app;

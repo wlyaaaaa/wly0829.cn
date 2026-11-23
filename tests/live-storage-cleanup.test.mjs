@@ -31,7 +31,7 @@ test('存储占位优先读结构化标记，旧用语作为普通文本', () =>
   assert.equal(K.splitRows([record, {}], 'owner').visible.length, 2);
 });
 
-test('逐盘本人版列出全部用途，公开版说明哪些字段藏起来了', () => {
+test('逐盘本人版列出全部用途，公开版不再合成“另有 N 条……仅本人可见”（新私事规则 11-24）', () => {
   const elements = new Map(['disks', 'disks-note', 'disks-foot'].map(id => [id, { querySelectorAll: () => [] }]));
   const { StorageDisks: disks } = load({ getElementById: id => elements.get(id) });
   const categories = Array.from({ length: 12 }, (_, i) => ({ label: `用途项 ${i + 1}`, bytes: (15 - i) * GiB }));
@@ -45,7 +45,7 @@ test('逐盘本人版列出全部用途，公开版说明哪些字段藏起来�
   assert.doesNotMatch(owner, /还有 \d+ 条|仅本人可见|🔒/);
   disks.render(data, 'public');
   const publicHtml = elements.get('disks').innerHTML;
-  assert.match(publicHtml, /另有 1 条用途记录仅本人可见，用途名称和大小均未公开/);
+  assert.doesNotMatch(publicHtml, /另有 \d+ 条/);
   assert.match(publicHtml, /用途名称仅本人可见/);
   assert.doesNotMatch(publicHtml, /不可给访客的用途原名/);
 });

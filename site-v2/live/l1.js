@@ -603,17 +603,13 @@
     const closed = focus && closedNoticeRow(focus), targetIndex = rows.findIndex(row => row.key === focus?.id);
     const focusedRow = closed || (targetIndex < 0 && focus?.item?.kind && !focus.closed && needRow(focus.item, noticeDetail(focus.item), end));
     if (focusedRow) rows.splice(Math.max(0, targetIndex), targetIndex < 0 ? 0 : 1, focusedRow);
-    const hidden = viewer === 'public' ? d.waiting_hidden || 0 : 0;
-    if (!rows.length && count != null && !hidden) {
+    // 新私事规则（本人 11-24 02:56）：访客版不再按件藏，也不再写“另有 N 件……只有本人看得到”。
+    const hidden = 0;
+    if (!rows.length && count != null) {
       const note = count === 0 ? '没有在等的事' : `${exact ? `有 ${count} 件 · ` : ''}电脑开机后自动补上是哪几件`;
       rows.push({ key: 'empty', cls: 'row row--flat row--preview-note', html: `<span></span><p class="row__sub">${note}</p>` });
     }
-    // 访客：写清藏了几件、各是哪一类（后台 hidden_summary 已按类数好），标题和内容不露。
-    const kinds = d.hidden_summary?.counts || {}, hiddenKinds = [['do', '要本人做'], ['choose', '要本人选']].filter(([k]) => kinds[k] > 0);
-    const hiddenWhat = hiddenKinds.reduce((n, [k]) => n + kinds[k], 0) === hidden ? hiddenKinds.map(([k, label]) => `${kinds[k]} 件${label}`).join('、') : `${hidden} 件要本人做或选的事`;
-    if (hidden) rows.push({ key: 'private-needs', cls: 'row row--flat row--preview-note', html: `<p class="row__sub">另有 ${esc(hiddenWhat)}，标题和内容只有本人看得到</p>` });
     paintList(p.main, rows, { animate: false });
-    // 藏掉的几件已合成上面“另有……只有本人看得到”一行，“还有 N 条”只数看得见的。
     needsTotal = (project ? all.length : count - hidden - (extra ? 1 : 0)) + Number(!!focusedRow && targetIndex < 0);
     fitCard('needs');
     U.html(p.summary, [['know', '要你知道'], ['later', '你放着']].map(([k, label]) => `${addressed(label)} ${quantity(d.counts, k)} 件`).join(' · ') + (count === 0 ? '' : oldestWait(d, all, end)));
@@ -688,7 +684,7 @@
     return { field, label };
   }
   function chatTitle(c, { field, hidden, label } = chatHeading(c)) {
-    if (viewer === 'public' && c.content_locked) return c.detail === false ? '<span class="row__title">对话标题仅本人可见</span>' : title({ ...c, visibility: 'same' }, '对话标题仅本人可见', 'chats');
+    if (viewer === 'public' && c.content_locked) return c.detail === false ? '<span class="row__title">仅本人可见</span>' : title({ ...c, visibility: 'same' }, '仅本人可见', 'chats');
     if (hidden) return `<span class="row__title">${U.fieldHtml(field, { name: 'AI 对话', place: 'title', kind: viewer })}</span><span class="row__meta">${U.fieldHtml(field, { name: '对话名', kind: viewer })}</span>`;
     const note = field.visibility === 'rewritten' || field.public === 'rewrite' ? U.fieldHtml({ visibility: 'rewritten' }, { kind: viewer }) : '';
     if (c.detail === false) return `<span class="row__title">${U.fieldHtml(label, { kind: viewer, place: 'title', name: '对话' })}</span>${note}`;
@@ -710,7 +706,7 @@
     const helperRows = Array.isArray(c.helpers) ? c.helpers : c.helpers?.active || [];
     const helpers = U.chatFields.workingHelpers(c);
     const detail = helperRows.some(h => h.owner_detail != null) ? chatHelperDetails(helperRows, viewer) : '';
-    const e = c.estimate, work = [e?.planned_min != null && `报 ${e.planned_min} 分钟`, e?.worked_min != null && `已干 ${e.worked_min} 分钟`, e?.over_min > 0 && `超 ${e.over_min} 分钟`].filter(Boolean).join(' · ');
+    const e = c.estimate, work = [e?.planned_min != null && `报 ${Math.round(e.planned_min)} 分钟`, e?.worked_min != null && `已干 ${Math.round(e.worked_min)} 分钟`, Math.round(e?.over_min) > 0 && `超 ${Math.round(e.over_min)} 分钟`].filter(Boolean).join(' · ');
     const gap = (key, label) => {
       const g = Array.isArray(c.field_gaps) ? c.field_gaps.find(g => g.field === key) : c.field_gaps?.[key];
       return U.fieldText(typeof g === 'string' ? g : g?.reason || g?.gap, viewer).trim() || U.collectionText(label);
@@ -1220,11 +1216,14 @@
     for (const g of gray || []) { const why = U.fieldText(g?.reason, viewer) || '原因没记下'; grayWhy.set(why, [...(grayWhy.get(why) || []), g?.name]); }
     const grayNote = gray && '读不准：' + [...grayWhy].map(([why, names]) => `${names.slice(0, 3).map(n => U.fieldHtml(n, { name: '读数名称', kind: viewer })).join('、')}${names.length > 3 ? ` 等 ${names.length} 项` : ''}（${esc(why)}）`).join('；');
     const state = U.status(['ledger', 'projects'].includes(id) ? null : gray ? { ...data, gray_count: 0 } : data, { showZeroFixing: id === 'needs' });
+    // M666：缺读数两版都写出缺的组名：“读数暂缺 2 组 · 卡顿、程序身份筛查”（字段 data.computer / data.phone 的 missing_readings）
+    const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(Boolean))] : [];
+    const lackNote = lacking.length ? `读数暂缺 ${lacking.length} 组 · ${esc(lacking.join('、'))}` : '';
     p.head.querySelector(':scope > .lamp')?.remove();
     if (state.lamp) p.head.insertAdjacentHTML('afterbegin', state.lamp);
     const chatGap = id === 'chats' && (state.tone === 'gray' || gray) && chatGapNote(data, chatStamps.length ? '' : chatReading);
     const note = typeof chatGap === 'string' ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].filter(Boolean).join(' · ')
-      : [...(state.note || staleText).split(' · ').filter(text => !(existing || cutoff) || !matchesCutoff(text)), grayNote, cutoff].filter(Boolean).join(' · ');
+      : [lackNote, ...(state.note || staleText).split(' · ').filter(text => (!(existing || cutoff) || !matchesCutoff(text)) && !(lackNote && /^缺：/.test(text))), grayNote, cutoff].filter(Boolean).join(' · ');
     p.status.hidden = !note; U.html(p.status, note);
     Light.tone(cards[id], cardTone(id, data, state));
   }

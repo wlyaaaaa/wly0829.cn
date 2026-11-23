@@ -421,19 +421,15 @@
     const lock = type === 'owner' ? '<span class="live-mark__lock" aria-hidden="true">🔒</span>' : '';
     return `<button type="button" class="trust-note live-mark live-mark--${type}${group ? ' live-mark--group' : ''}" title="${esc(label)} · 点开看说明" data-trust-context="${esc(subject)}" data-trust-explanation="${esc(explanation)}" aria-expanded="false" aria-controls="live-privacy-note" data-trust-view>${lock}<span class="live-mark__label">${esc(label)}</span></button>`;
   }
-  function privacyLock(what, { name = '', block = '', group = false } = {}) {
+  // 新私事规则（本人 11-24 02:56）：访客版只有被标对话里写的字能藏，写成普通字，不画锁、不打码、不变灰。
+  // 一大块的（hidden_block）原位写“这里是……，所以不予展示”；其余后台还标着藏的，只写“〈哪一样〉仅本人可见”这句普通字。
+  const blockSentence = block => `这里是${String(block).replace(/^这里是|，?所以不予展示[。.]?$/g, '')}，所以不予展示`;
+  function privacyLock(what, { name = '', block = '' } = {}) {
+    if (block) return `<span class="live-mark live-mark--plain">${esc(blockSentence(block))}</span>`;
     const specific = name && /^这个项目的(?:内容|说明)$/.test(what || '') ? name : what;
-    const subject = (specific || block || name || '这项内容').replace(/[，：:]$/, '');
-    const context = name && name.replace(/[，：:]$/, '') !== subject && name !== block ? `${name}：` : '';
-    const intro = block ? `以下是${block}，属于隐私信息，不予公开。`
-      : group ? `${subject}${/未公开|不公开|不对外展示|隐藏/.test(subject) ? '' : '未公开'}。`
-        : `这里藏的是${subject}。`;
-    const seen = block ? '这部分的原文' : group
-      ? /应用.*名/.test(subject) ? '这些应用的名称' : `这些${subject.replace(/^(?:另有|其中)\s*\d+\s*[项件个条份处次]?\s*/, '').replace(/未公开$|不对外展示$/, '') || '条目'}的原文`
-      : subject.replace(/[。.]$/, '').replace(/(?:原文)?$/, '原文');
-    // 访客版写清藏了什么：“〈哪一样〉仅本人可见”。
+    const subject = (specific || name || '这项内容').replace(/[，：:]$/, '');
     const label = /仅本人可见/.test(subject) ? subject : `${subject}仅本人可见`;
-    return explanationButton('owner', label, subject, `${context}${intro}本人能看到${seen}。`, group);
+    return `<span class="live-mark live-mark--plain">${esc(label)}</span>`;
   }
   function rewriteNote(name, kind) {
     const label = kind === 'owner' ? '对外换了说法' : '换了说法', subject = name || '这句话';
@@ -448,8 +444,8 @@
     if (privateField(item) || pendingField(item)) {
       // 本人版给完整版：不画锁，不写“仅本人可见”。
       if (kind === 'owner') return '';
-      if (plain) return `${label || '这项原文'}仅本人可见`;
-      return privacyLock(label.replace(/[，：:]$/, ''), { name: what, block: item.hidden_block, group: /^(?:另有|其中)\s*\d+/.test(label) });
+      if (plain) return item.hidden_block ? blockSentence(item.hidden_block) : `${label || '这项原文'}仅本人可见`;
+      return privacyLock(label.replace(/[，：:]$/, ''), { name: what, block: item.hidden_block });
     }
     if (item?.visibility === 'rewritten' || item?.public === 'rewrite') {
       // 访客：只是把号码、私事句换成“仅本人可见”，不是换了说法，不再挂“换了说法”。
@@ -462,11 +458,18 @@
   // 本人版：访客版整条藏掉的（后台在本人版这一条上留 visibility: 'owner'），原位挂“访客看不到”小签，点开写清藏了什么、为什么（M648）。
   // 访客版不挂；只藏其中一句的，访客版原位已写“〈哪一样〉仅本人可见”，这里不管。后台给了 visitor_hidden_why 就把原因带上。
   function visitorHiddenMark(item, what = '这一条', kind = viewer) {
-    if (kind !== 'owner' || !(item?.visibility === 'owner' || item?.public === 'owner')) return '';
+    if (kind !== 'owner' || !(item?.visibility === 'owner' || item?.public === 'owner' || item?.content_locked === true)) return '';
     const why = typeof item.visitor_hidden_why === 'string' ? item.visitor_hidden_why.trim() : '';
     return explanationButton('rewritten', '访客看不到', what, `访客版看不到${what}的标题和内容。${why ? `原因：${why.replace(/[。.]?$/, '。')}` : ''}`);
   }
-  const hiddenMore = (n, unit, what) => n > 0 ? privateSummary(n, { unit, what }) : '';
+  // 本人版：访客看不到的东西（被标对话、窗口标题、备份文件名、给了 open_note 的成品正文）在原位挂同一个“访客看不到”小签，点开写清看不到什么、为什么。
+  function visitorHiddenTag(what, why = '', kind = viewer) {
+    if (kind !== 'owner' || !what) return '';
+    const reason = typeof why === 'string' && why.trim() ? `原因：${why.trim().replace(/[。.]?$/, '。')}` : '';
+    return explanationButton('rewritten', '访客看不到', what, `访客版看不到${what}。${reason}`);
+  }
+  // 新私事规则：访客侧不再画“另有 N 条仅本人可见”。
+  const hiddenMore = () => '';
   function escapeNotes(text) {
     // 只让共用函数生成的固定结构通过，其余内容一律按文字显示。
     return String(text ?? '').split(/(<button type="button" class="trust-note live-mark live-mark--(?:owner(?: live-mark--group)?|rewritten)" title="[^"<>]*" data-trust-context="[^"<>]*" data-trust-explanation="[^"<>]*" aria-expanded="false" aria-controls="live-privacy-note" data-trust-view>(?:<span class="live-mark__lock" aria-hidden="true">🔒<\/span>)?<span class="live-mark__label">[^<]*<\/span><\/button>)/g).map((part, index) => index % 2 ? part : esc(part)).join('');
@@ -478,7 +481,7 @@
     }
     return escapeNotes(text);
   }
-  const hiddenBlockText = value => value?.hidden_block ? `${value.hidden_block}的原文仅本人可见` : '';
+  const hiddenBlockText = value => value?.hidden_block ? blockSentence(value.hidden_block) : '';
   // 等你的事字数兜底（M560，后台登卡另限字数）：字面的 \n 当换行，**、反引号、行首 # 这类记号不显示；超过 n 个字用“…”收住，oneLine 时换行压成空格
   function capText(value, n, oneLine = false) {
     const cut = s => { const t = [...s.replace(/\\n/g, '\n').replace(/\*\*|__|\x60/g, '').replace(/^#{1,6}\s+/gm, '').replace(oneLine ? /\s*\n\s*/g : /\n{3,}/g, oneLine ? ' ' : '\n\n').trim()]; return t.length > n ? t.slice(0, n).join('').trimEnd() + '…' : t.join(''); };
@@ -591,7 +594,7 @@
     if (kind === 'public') {
       // 旧的“待改”占位没有可给的原文，和私事一样显示。
       if (privateField(v) || pendingField(v) && (v.value == null && v.text == null || v.visibility === 'pending')) return place === 'body' ? privacyLock(fieldText(v.hidden_what) || name, { block: v.hidden_block })
-        : esc(`${fieldText(v.hidden_what) || (place === 'title' ? '标题' : name || '这一项')}仅本人可见`);
+        : esc(v.hidden_block ? blockSentence(v.hidden_block) : `${fieldText(v.hidden_what) || (place === 'title' ? '标题' : name || '这一项')}仅本人可见`);
       const old = typeof value === 'string' && /^(?:([^<>]*)：)?可信设备可见$/.exec(s);
       if (old) return esc(`${old[1] || name || '这一项'}仅本人可见`);
       if (place === 'body' && v.visibility === 'rewritten' && s) return esc(s);
@@ -618,9 +621,8 @@
     // 旧“待改”占位但原字照给的，只给字；没给字的写清藏的是哪一样。
     return visible ? esc(s) : privacyLock(what, { name, block: v.hidden_block });
   }
-  function privateSummary(count, { unit = '件', what = '' } = {}) {
-    return privacyLock(`另有 ${count} ${unit}${what}`, { group: true });
-  }
+  // 新私事规则：访客侧不再画“另有 N 条仅本人可见”（后台也不再按条藏）。
+  function privateSummary() { return ''; }
   function mergePrivateRows(rows) { return rows; }
   const INTENT = { done: '复制给 AI', decline: '不办了', later: '晚点提醒', ack: '我知道了', close_report: '关掉' };
   const CONFIRM_ITEM = {
@@ -1688,5 +1690,5 @@
     const when = mem.source_at ?? at;
     return parts.length ? [...parts, Number.isFinite(Date.parse(when)) ? `截至 ${date(when)}` : ''].filter(Boolean).join(' · ') : '';
   }
-  window.LiveUI = { memorySpec, justSaved, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, visitorHiddenMark, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  window.LiveUI = { memorySpec, justSaved, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();

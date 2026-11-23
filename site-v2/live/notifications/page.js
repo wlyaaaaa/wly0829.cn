@@ -130,7 +130,8 @@
   document.querySelectorAll('.stage a[href^="/live/"]').forEach(a=>{if(fixture){const u=new URL(a.href);u.searchParams.set('fixture',params.get('fixture'));a.href=u;}});
   // 还没读到明细（读不到接口、正在读）时 all 是 null：没有数就不写“平常大约多久”，不报脚本错（M552）
   const mode=key=>{const bins=new Map();(all||[]).filter(r=>r.status==='sent'&&typeof r[key]==='number').forEach(r=>bins.set(r[key],(bins.get(r[key])??0)+1));return [...bins].sort((a,b)=>b[1]-a[1])[0]?.[0];};
-  const privateLine=(r,unit='次')=>r.private_count?lock(`另有 ${r.private_count} ${unit}提醒`):lock('这条提醒');
+  // 新私事规则（本人 11-24 02:56）：不再合成“另有 N 次提醒仅本人可见”；后台还单条藏着的只写一句普通字。
+  const privateLine=(r)=>r.private_count?'':lock('这条提醒');
   const batchFolds=new Set();
   function rememberBatchFold(e){
     const key=e.target.dataset.batchFold;if(!key)return;
@@ -153,8 +154,8 @@
       U.html(el.querySelector('[data-attention-groups]'),issues.length?`<div class="stut">${cards.join('')}</div>`
         :`<p class="delivery-note">${Array.isArray(page?.attention_rows)?page.attention_window?.complete===false?`有记录的部分里，给${you()}的提醒都到了`:`近 24 小时给${you()}的提醒都到了`:page?.attention_rows===null?'没到的清单这次没读到':'已读到的记录里，提醒都到了'}</p>`);
       const note=el.querySelector('[data-attention-private]'),count=issues.filter(r=>!r.private_count&&!hiddenBatch(r)).length;
-      note.hidden=viewer==='owner'||!count;
-      note.textContent=note.hidden?'':`这 ${count} 次各是哪件事，仅本人可见。`;
+      // 新私事规则（本人 11-24 02:56）：程序写的提醒原样给，不再写“各是哪件事，仅本人可见”。
+      note.hidden=true;note.textContent='';void count;
     }
     return {set:draw};
   }
@@ -173,7 +174,7 @@
       }).join('')+'</tbody></table>';
       const groups=new Map();
       for(const r of history){const key=r.private_count||hiddenBatch(r)?'private':isMail(r)?'email':r.channel||'other';if(!groups.has(key))groups.set(key,[]);groups.get(key).push(r);}
-      const note=el.querySelector('[data-history-private]');note.hidden=viewer==='owner'||!history.length;note.textContent=note.hidden?'':'每一次对应哪件事，仅本人可见。';
+      const note=el.querySelector('[data-history-private]');note.hidden=true;note.textContent='';
       U.html(el.querySelector('[data-history-groups]'),[...groups].map(([key,items])=>{
         const id=`channel-${key}`,label=key==='private'?'其他提醒':key==='email'?'邮件':key==='phone'?'手机':channel(items[0])||'其他';
         return `<section class="delivery-group"><p class="delivery-note">${esc(label)} · ${items.length} 次</p>${table(items.slice(0,5))}${items.length>5?`<details data-batch-fold="${esc(id)}"${batchFolds.has(id)?' open':''}><summary class="more live-disclosure delivery-more"><span class="delivery-more__closed">展开（还有 ${items.length-5} 次）</span><span class="delivery-more__open">收起</span><span class="more__chev" aria-hidden="true">›</span></summary>${table(items.slice(5))}</details>`:''}</section>`;
@@ -394,7 +395,7 @@
       return `${list.length} 次${label}：${detail}`;
     }).filter(Boolean);
     const hidden=rows.reduce((n,r)=>n+(r.private_count||(hiddenBatch(r)?1:0)),0);
-    if(hidden)parts.push(`另有 ${hidden} 次没到的提醒仅本人可见`);
+    void hidden;   // 新私事规则：不再写“另有 N 次……仅本人可见”
     return parts.join('；');
   }
   function renderDelivery({first:d,rows,next,sources}){

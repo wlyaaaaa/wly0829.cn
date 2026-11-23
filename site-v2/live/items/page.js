@@ -73,7 +73,6 @@
   for (const kind of ['do', 'choose', 'later', 'know', 'reports', 'closed']) {
     const c = board.card(kind, { icon: ({ do: 'sparkle', choose: 'chat', closed: 'check', reports: 'chat' })[kind] || 'clock', art: kind, tint: ({do:'peach',choose:'lilac',later:'cyan',know:'blue',reports:'pink',closed:'gold'})[kind], ids: { el: kind, main: kind+'-list', rest: kind+'-rest', more: kind+'-more', box: kind+'-box', next: kind === 'closed' ? 'closed-next' : kind+'-next' } });
     c.title.dataset.keep = ''; c.title.textContent = labels[kind]; c.sub.textContent = hints[kind]; cards.set(kind, c);
-    const privateFoot = document.createElement('p'); privateFoot.id = kind + '-private'; privateFoot.className = 'items-private'; privateFoot.hidden = true; $(kind + '-more').after(privateFoot);
     $('kind-pick').insertAdjacentHTML('beforeend', `<option value="${kind}">${labels[kind]}</option>`);
   }
   const closedCard = cards.get('closed');
@@ -174,10 +173,13 @@
   }
   const sourceAt = data => Object.hasOwn(data, 'source_at') ? data.source_at : data.at;
   const itemRecordedAt = it => it.recorded_at || it.changed || it.born;
-  const selected = new Set(), selectable = new Map(), groupHidden = new Map();
+  const selected = new Set(), selectable = new Map();
   const selection = $('item-selection'), selectionActions = $('item-selection-actions');
+  // M663：访客版按钮照样摆出来（多选框也是），没配对的设备点了只提示“不是可信设备”，什么都不改（定稿卡-等你的事 第一节第 4 条）。
+  const CLOSE_INTENTS = ['ack', 'later', 'decline', 'close_report'];
+  const pickIntent = (it, action) => viewer === 'owner' ? (action.intent === 'done' ? '' : U.itemIntent(it, action)) : CLOSE_INTENTS.includes(action.intent) ? action.intent : '';
   function checkbox(it) {
-    if (viewer !== 'owner' || !it.actions?.some(action => action.intent !== 'done' && U.itemIntent(it, action))) return '';
+    if (!it.actions?.some(action => pickIntent(it, action))) return '';
     selectable.set(it.id, it);
     return '<label class="items-choice" data-slot="pick" title="多选：勾上几件，一起确认"><input type="checkbox" data-select-item="' + esc(it.id) + '" aria-label="选择 ' + esc(itemText(it)) + '"' + (selected.has(it.id) ? ' checked' : '') + '></label>';
   }
@@ -187,13 +189,13 @@
       const id = box.dataset.selectItem, item = selectable.get(id);
       if (item) available.set(id, item);
     }
-    for (const id of selected) if (!available.has(id) || viewer !== 'owner') selected.delete(id);
+    for (const id of selected) if (!available.has(id)) selected.delete(id);
     const operations = new Map();
     for (const id of selected) {
       const item = available.get(id);
       for (const action of item.actions) {
         // 有后续的“不办了”和普通“不办了”合成一个按钮，确认框里再分组。
-        const intent = action.intent === 'done' ? '' : U.itemIntent(item, action), key = intent === 'decline_copy' ? 'decline' : intent;
+        const intent = pickIntent(item, action), key = intent === 'decline_copy' ? 'decline' : intent;
         if (key) operations.set(key, [...(operations.get(key) || []), item]);
       }
     }
@@ -270,18 +272,15 @@
       U.blockNote($(key), null);
       items = dueOrder(items);
     }
-    // 访客：组标题的件数把藏掉的事算进去，和顶上小格对得上；藏掉的在那一组里写“另有 N 件仅本人可见”，标题和看得到的行对得上。
-    const closedSummary = key === 'closed' ? closedPacket : null;
-    const closedCounts = closedSummary?.hidden_summary?.counts || {};
-    const closedHidden = KIND[closedKind] ? closedCounts[closedKind] : closedSummary?.hidden;
-    const hidden = viewer !== 'public' || query ? 0 : (key === 'closed' ? closedHidden : groupHidden.get(key)) || 0;
-    const count = partial ? key === 'closed' ? '已读 ' + items.length + ' 件' : '已读部分' + (items.length ? ' · ' + items.length + ' 件' : '') : (known ? items.length + hidden : '—') + ' 件';
+    // 新私事规则（本人 11-24 02:56）：访客版不再按条藏，组标题只数看得到的行，也不再写“另有 N 件仅本人可见”。
+    const count = partial ? key === 'closed' ? '已读 ' + items.length + ' 件' : '已读部分' + (items.length ? ' · ' + items.length + ' 件' : '') : (known ? items.length : '—') + ' 件';
     U.html(cards.get(key).title, (viewer === 'owner' ? labels[key] : labels[key].replaceAll('你', '本人')) + '（' + count + '）');
-    const media = { computer: '电脑办', phone: '手机办', in_person: '到场办' };
-    const rank = { computer: 0, phone: 1, in_person: 2, other: 3 };
-    const method = it => Object.hasOwn(media, it?.mobile) ? it.mobile : 'other';
-    if (key === 'closed') items.sort((a, b) => rank[method(a)] - rank[method(b)]);
+    // M665：近 7 天下去的按事情本来的类别分组（要你做／要你选／你放着／要你知道），不再按“电脑办／手机办”分、不再有“其他”这一组（本人 11-24 02:21）。
+    const order = Object.keys(KIND), rank = it => { const i = order.indexOf(it?.kind); return i < 0 ? order.length : i; };
+    const method = it => Object.hasOwn(KIND, it?.kind) ? it.kind : '';
+    if (key === 'closed') items.sort((a, b) => rank(a) - rank(b));
     const grouped = key === 'closed' && items.length > 0 && method(items[0]) !== method(items.at(-1));
+    const groupName = kind => KIND[kind] ? viewer === 'public' ? KIND[kind].replaceAll('你', '本人') : KIND[kind] : '没写类别';
     // 本人版列表默认给全；访客照旧先摆 5 条。
     const ul = $(key + '-list'), limit = viewer === 'owner' ? Infinity : 5, main = items.slice(0, limit), rest = items.slice(limit), pinned = new Set([...ul.children].filter(n => n.matches('.is-expanded,[data-text-open="true"],:hover,:focus-within')).map(n => n.dataset.key));
     if (key !== 'closed') for (let i = rest.length - 1; i >= 0; i--) if (pinned.has(rest[i].id)) main.push(...rest.splice(i, 1));
@@ -289,16 +288,9 @@
       if (!grouped) return [renderer(it)];
       const current = method(it), heading = previous !== current;
       previous = current;
-      return heading ? [{ key: 'method-' + current, cls: 'items-done-group', html: '<span>' + (media[current] || '其他') + '</span>' }, renderer(it)] : [renderer(it)];
+      return heading ? [{ key: 'method-' + current, cls: 'items-done-group', html: '<span>' + esc(groupName(current)) + '</span>' }, renderer(it)] : [renderer(it)];
     });
-    const showClosedHidden = key === 'closed' && !!hidden;
-    const hiddenParts = showClosedHidden ? Object.entries(KIND)
-      .filter(([kind]) => (!KIND[closedKind] || kind === closedKind) && closedCounts[kind] > 0)
-      .map(([kind, label]) => label.replaceAll('你', '本人') + ' ' + closedCounts[kind] + ' 条') : [];
-    const groupHiddenHere = Object.hasOwn(KIND, key) && known ? hidden : 0;
-    $(key + '-private').hidden = !showClosedHidden && !groupHiddenHere;
-    $(key + '-private').textContent = showClosedHidden ? `另有 ${hidden} 条仅本人可见${hiddenParts.length ? '：' + hiddenParts.join('、') : ''}，标题和内容都没给访客看` : groupHiddenHere ? `另有 ${groupHiddenHere} 件仅本人可见，标题和内容都没给访客看` : '';
-    U.list(ul, main.length ? draw(main) : hidden ? [] : wait(empty), { animate });
+    U.list(ul, main.length ? draw(main) : wait(empty), { animate });
     U.list($(key + '-rest'), draw(rest, method(main.at(-1))), { animate });
     const more = $(key + '-more'), label = `还有 ${rest.length} 条`;
     more.hidden = !rest.length;
@@ -404,20 +396,6 @@
         if (partial) counts.q = 'partial';
       }
     }
-    const hidden = viewer === 'public' && !query ? page?.hidden ?? needs.items_hidden ?? 0 : 0;
-    groupHidden.clear();
-    if (hidden && rows && !partial) for (const key of Object.keys(KIND)) {
-      const extra = Number.isSafeInteger(page?.hiddenCounts?.[key]) ? page.hiddenCounts[key]
-        : (counts?.[key] ?? 0) - rows.filter(it => it.kind === key).length;
-      if (extra > 0) groupHidden.set(key, extra);
-    }
-    const placed = [...groupHidden.values()].reduce((sum, n) => sum + n, 0);
-    // 能对上组的件数计入组标题，并在那一组里就地写“另有 N 件仅本人可见”，标题和看得到的行对得上；对不上组的才合成全表底下一行。
-    if (placed !== hidden) groupHidden.clear();
-    $('items-private').hidden = !hidden || placed === hidden;
-    // 写清藏了几条、各是哪组、藏了哪几样；不写是哪一类私事。
-    const hiddenParts = [...groupHidden].map(([key, n]) => `${labels[key].replaceAll('你', '本人')} ${n} 条`);
-    $('items-private').textContent = hidden ? `另有 ${hidden} 条仅本人可见${hiddenParts.length ? '：' + hiddenParts.join('、') : ''}，标题和内容都没给访客看` : '';
     const lower = key => counts?.q === 'partial' && (!Array.isArray(counts.partial) || counts.partial.includes(key));
     const waiting = (counts?.choose ?? 0) + (counts?.do ?? 0), waitingLower = ['choose', 'do'].some(lower);
     const total = waitingLower ? waiting || null : counts?.choose != null && counts?.do != null ? waiting : null;
@@ -462,7 +440,7 @@
     }
     showOpenMore(); renderSelection();
   }, missingHome);
-  let closedItems = [], closedPacket = null, next = null;
+  let closedItems = [], next = null;
   function redrawClosed() {
     const shown = collections.get('closed');
     if (shown) list('closed', shown.items, shown.empty, shown.renderer, true, shown.partial);
@@ -481,13 +459,13 @@
     return [...seen.values()];
   }
   function renderClosed(d, append = false) {
-    closedPacket = append ? { ...closedPacket, ...d, hidden: closedPacket?.hidden ?? d.hidden, hidden_summary: closedPacket?.hidden_summary ?? d.hidden_summary } : d;
     closedItems = append ? [...new Map([...closedItems, ...d.items].map(it => [it.id, it])).values()] : d.items || [];
     next = d.next;
     const partial = next != null;
     const empty = d.items == null ? U.collectionText() : partial ? '已读范围还没有这类事项' : '近 7 天没有下去的事';
     list('closed', d.items == null ? null : closedRows(closedItems), empty, it => row(it, true), true, partial);
     recentClosed = d.items == null ? null : closedRows(closedItems);
+    if (reportsData) renderReports(reportsData);
     renderSide();
     $('closed-next').hidden = !next;
     U.html($('closed-next'), '再往前读 ›');
@@ -510,14 +488,19 @@
       button.disabled = false;
     }
   });
+  // M662：“近 7 天下去的”里已经记着关掉的汇报，上面“等你答的汇报”不再挂着（两处、两版同一个结果）。
+  // 同一份汇报关掉后又重新弹出（编号不变，M567）时，按弹出时刻比：关掉的时刻不早于这次弹出，才算已经关了。
+  const closedAt = () => new Map(closedItems.map(it => [it.id, Date.parse(it.closed?.at) || 0]));
+  const closedSince = (gone, id, opened) => gone.has(id) && gone.get(id) >= (Date.parse(opened) || 0);
+  // M663：访客版也摆“关掉”，点了只提示“不是可信设备”。
+  const reportActions = it => viewer === 'owner' || (it.actions || []).some(a => a.intent === 'close_report') ? it : { ...it, actions: [...(it.actions || []), { kind: 'direct', intent: 'close_report', label: '关掉' }] };
   function renderReports(d) {
     reportsData = d;
-    const rows = d.items?.filter(it => !hiddenByWrite(it) && !U.justSaved(it) && (!query || matchesQuery(it)) && !pendingItems.has(it.owner_item || it.item_id || it.item || it.id) && !(it.actions || []).some(a => a.href && pendingItems.has(new URL(a.href, location.origin).searchParams.get('id'))));
-    const drawn = rows?.length ? rows.map(it => ({ key: it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : U.status({ ...it, level: it.light }, { small: true }).lamp}<div class="row__text"><p class="row__main"><span class="row__title">${U.fieldHtml(it.text && typeof it.text === 'object' ? { ...it, ...it.text } : it, { name: '待答汇报', place: 'title', kind: viewer })}</span></p><p class="row__sub">${[it.unanswered != null ? `${sp(it.unanswered)} 题没答` : !U.offline?.() && U.collectionText(), it.opened && `${U.date(it.opened)} ${U.time(it.opened)} 弹出`].filter(Boolean).join(' · ')}</p></div><div class="row__acts">${actions(it)}${checkbox(it)}</div>` })) : viewer === 'public' && !query && d.hidden ? [] : wait(d.items == null ? U.collectionText() : d.items.length ? '汇报里的待答问题已列在前面的事里' : '没有两小时没答的汇报');
-    reportCount = rows == null ? null : rows.length + (viewer === 'public' && !query ? d.hidden || 0 : 0); filterBoard();
+    const gone = closedAt();
+    const rows = d.items?.filter(it => !hiddenByWrite(it) && !U.justSaved(it) && (!query || matchesQuery(it)) && !closedSince(gone, it.id, it.opened) && !closedSince(gone, it.owner_item || it.item_id || it.item, it.opened) && !pendingItems.has(it.owner_item || it.item_id || it.item || it.id) && !(it.actions || []).some(a => a.href && pendingItems.has(new URL(a.href, location.origin).searchParams.get('id')))).map(reportActions);
+    const drawn = rows?.length ? rows.map(it => ({ key: it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : U.status({ ...it, level: it.light }, { small: true }).lamp}<div class="row__text"><p class="row__main"><span class="row__title">${U.fieldHtml(it.text && typeof it.text === 'object' ? { ...it, ...it.text } : it, { name: '待答汇报', place: 'title', kind: viewer })}</span></p><p class="row__sub">${[it.unanswered != null ? `${sp(it.unanswered)} 题没答` : !U.offline?.() && U.collectionText(), it.opened && `${U.date(it.opened)} ${U.time(it.opened)} 弹出`].filter(Boolean).join(' · ')}</p></div><div class="row__acts">${actions(it)}${checkbox(it)}</div>` })) : wait(d.items == null ? U.collectionText() : d.items.length ? '汇报里的待答问题已列在前面的事里' : '没有两小时没答的汇报');
+    reportCount = rows == null ? null : rows.length; filterBoard();
     U.html(cards.get('reports').title, `${viewer === 'owner' ? '等你答的汇报' : '等本人答的汇报'}（${reportCount ?? '—'} 件）`);
-    const reportsHidden = viewer === 'public' && !query ? d.hidden || 0 : 0;
-    $('reports-private').hidden = !reportsHidden; $('reports-private').textContent = reportsHidden ? '另有 ' + reportsHidden + ' 条仅本人可见，标题和内容都没给访客看' : '';
     const shown = viewer === 'owner' ? drawn.length : 5;   // 本人版列全
     U.list($('reports-rest'), drawn.slice(shown)); $('reports-more').hidden = drawn.length <= shown; U.html($('reports-more'), `展开（还有 ${Math.max(0, drawn.length - shown)} 条） ›`); U.list($('reports-list'), drawn.slice(0, shown)); renderSelection();
   }

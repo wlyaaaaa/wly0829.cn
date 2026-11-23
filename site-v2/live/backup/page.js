@@ -272,6 +272,7 @@
     const text = [[result, completed].filter(Boolean).join(' · '), [scope, excluded].filter(Boolean).join(' · '),
       gScope && '只核对材料完整性，未做实际启动或恢复验证。',
       d.file_count == null ? offline() ? '' : U.collectionText('核对的文件数', d) : `这次核对了 ${count(d, 'file_count')} 份文件`,
+      viewer === 'public' && Object.hasOwn(d, 'file_name_count') && nameSentence(d.file_name_count, '这次核对的'),
       d.freshly_hashed_file_count != null && d.reused_member_count != null ? (d.reused_member_count > 0 ? `其中 ${count(d, 'freshly_hashed_file_count')} 份这次重新算了一遍校验码；另外 ${count(d, 'reused_member_count')} 份上次核过以后没动过，沿用上次的结果` : `${count(d, 'freshly_hashed_file_count')} 份都重新算了一遍校验码`) : '', U.olderNote?.(d.at, d)].filter(Boolean);
     const summary = text.length ? `${point && !d.point ? `<p class="fe-l3b-note">${offline() ? '下面是最近一次核对，未对应到这份备份。' : `${U.collectionText('这一份的对应结果', d)}，下面是最近一次核对。`}</p>` : ''}${text.map(line => `<p class="fe-l3b-note">${said(line)}</p>`).join('')}` : `<p class="fe-l3b-note">${esc(missing('这份备份核对的结果'))}</p>`;
     const timed = d.rows?.some(row => verificationTime(row));
@@ -289,9 +290,18 @@
   const ownerFile = value => value?.hidden_block || value?.hidden || value?.visibility === 'owner' || value?.public === 'owner';
   const fileName = value => viewer === 'public' && ownerFile(value) ? '—' : pathHtml(value, '文件名');
   const privateNames = d => /^文件名(?:仅本人|可信设备)可见[。.]?$/u.test(typeof d?.text === 'string' ? d.text : '');
+  // 新私事规则（本人 11-24 02:56）：备份文件名访客版不给，原位按后台给的 file_name_count 拼一句普通字，说清有多少个、本人版能看到全部；
+  // 0 是已读且空（不写），null 是没读到或来源本来没有清单（不编数）。本人版原位挂“访客看不到”。
+  const countWords = n => n >= 10000 ? `${(Math.round(n / 1000) / 10).toLocaleString('zh-CN')} 万个` : `${n.toLocaleString('zh-CN')} 个`;
+  // 个人影音的清单是待传、失败和未核对的名册（scope: pending_or_failed），句子写明是这类名册（后台 03:53 定稿）。
+  const nameSentence = (n, what, pending = false) => Number.isSafeInteger(n) ? n > 0 ? (pending ? `这里是 ${countWords(n)}待传、失败或未核对的文件名，本人版能看到全部，所以不予展示` : `这里是${what} ${countWords(n)}文件名，本人版能看到全部，所以不予展示`) : ''
+    : pending ? '这里是待传、失败或未核对的文件名，本人版能看到全部，所以不予展示' : `这里是${what}文件名，本人版能看到全部，所以不予展示`;
+  const NAMES_WHY = '备份文件名是程序自己记下的，量大、没人逐条看过，访客版只写有多少个';
   function filePrivacy(d) {
-    const slot = $('files-privacy'), hidden = viewer === 'public' && !notApplicable(d) && (privateNames(d) || (d?.hidden_count ?? d?.hidden) > 0 || d?.items?.some(item => ownerFile(item.name)));
-    if (slot) { U.html(slot, hidden ? U.fieldHtml({ visibility: 'owner', hidden_what: '这批文件的具体名称' }, { name: '文件名', kind: viewer }) : ''); slot.hidden = !hidden; }
+    const slot = $('files-privacy'), counted = Number.isSafeInteger(d?.file_name_count);
+    const withheld = !notApplicable(d) && (counted ? d.file_name_count > 0 : privateNames(d) || (d?.hidden_count ?? d?.hidden) > 0 || d?.items?.some(item => ownerFile(item.name)));
+    const html = !withheld ? '' : viewer === 'owner' ? U.visitorHiddenTag('这批文件的文件名', NAMES_WHY, viewer) : esc(nameSentence(counted ? d.file_name_count : null, '这次备份的', d?.scope === 'pending_or_failed'));
+    if (slot) { U.html(slot, html); slot.hidden = !html; }
   }
   function stopFiles() {
     filesWatch?.stop();
@@ -351,7 +361,7 @@
       : totalKnown && d.total != null ? count(d, 'total') : concealed ? '0' : Array.isArray(d.items) ? `${d.next || d.total > files.length ? '至少 ' : ''}${visible}` : null;
     const hidden = modern ? (d.hidden_count == null ? null : count(d, 'hidden_count'))
       : d.hidden != null ? count(d, 'hidden') : concealed && d.total > 0 ? count(d, 'total') : named.length > visible ? `至少 ${named.length - visible}` : null;
-    const size = total == null ? '可列文件数尚未核实' : `可列文件 ${total} 条`, hiddenText = hidden != null ? `文件名未公开 ${hidden} 条` : modern || concealed ? '未公开文件名的条数尚未核实' : '';
+    const size = total == null ? '可列文件数尚未核实' : `可列文件 ${total} 条`, hiddenText = Object.hasOwn(d, 'file_name_count') ? '' : hidden != null ? `文件名未公开 ${hidden} 条` : modern || concealed ? '未公开文件名的条数尚未核实' : '';
     const showTime = id !== 'recovery-kit' || files.some(item => verificationTime(item));
     U.html($('files'), `<p class="fe-l3b-note">${[id === 'personal_media' ? CLOUDS[filesTarget] : '', size, hiddenText, oldest != null && `最早一份至少等了 ${said(oldest)} 天`].filter(Boolean).join(' · ')}${gap(d)}${d.text && !privateNames(d) ? `<br>${said(d.text)}` : ''}</p>`
       + (d.types?.length ? table(['资料类别', '份数'], d.types.filter(t => t.type).map(t => [said(t.type), count(t, 'count') + gap(t)]), '资料类别') : !Array.isArray(d.types) && !offline() ? `<p class="fe-l3b-note">${esc(U.collectionText('资料分类', d))}</p>` : '')

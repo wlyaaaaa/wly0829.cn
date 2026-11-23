@@ -23,12 +23,8 @@
   };
   const isPrivate = field => field?.visibility === 'owner' || field?.public === 'owner' || field?.hidden || field?.hidden_block;
   const hiddenName = a => isPrivate(a) || isPrivate(a.name);
-  // 应用名藏起来的行：用后台给的具名占位（“应用类别仅本人可见”）；后台没给占位的也照这样写清藏的是类别。
-  const publicCategory = (a, kind, fallback) => {
-    if (kind !== 'public' || !hiddenName(a)) return categoryName(a, fallback);
-    const given = categoryName(a, '');
-    return isPrivate(given) || typeof given === 'string' && /仅本人可见$/.test(given.trim()) ? given : '应用类别仅本人可见';
-  };
+  // 新私事规则（本人 11-24 02:56）：应用名不再上锁（原来标过的 11 个由后台程序换成“（一个手机应用）”），类别照给。
+  const publicCategory = (a, kind, fallback) => categoryName(a, fallback);
   function readable(value, kind) {
     if (typeof value === 'string') return value;
     if (!value || kind !== 'owner' && isPrivate(value) || value.visibility === 'pending') return '';
@@ -47,9 +43,8 @@
   }
   const privateApps = () => (data?.items || []).filter(hiddenName);
   function hiddenApps(searching) {
-    if (viewer === 'owner') return '';
-    const count = data?.hidden_names ?? data?.hidden ?? data?.hidden_groups?.find(g => g.what === '应用名')?.count ?? privateApps().length;
-    return count > 0 ? `其中 ${count} 个应用的名称仅本人可见${searching ? '（全表统计）' : ''}` : '';
+    // 新私事规则：访客侧不再画“其中 N 个应用的名称仅本人可见”这把应用名锁。
+    void searching; return '';
   }
   function appRow(a) {
     const name = a.name, field = name != null && typeof name === 'object', hidden = hiddenName(a) && (viewer !== 'owner' || name == null);

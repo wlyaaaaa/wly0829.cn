@@ -352,6 +352,10 @@
         sub = field(it.recent_detail || '这项成品已有登记，内容说明待补充。');
         const publicLink = audience === 'public' && typeof it.open === 'string' && !it.web_open ? { href: it.open, label: '打开成品' } : it.web_open;
         open = U.artifactAction({ ...it, web_open: publicLink }, audience, route);
+        // 新私事规则：登记时填了 open_note（“这里是这份材料的正文（8 页），所以不予展示”）的成品，访客版在打开链接的位置显示这句普通字；本人版照给链接，旁边挂“访客看不到”。
+        const openNote = U.fieldText(it.open_note, audience).trim();
+        if (openNote && audience === 'public') { open = null; item = { ...item, openNote }; }
+        else if (openNote) item = { ...item, ownerNote: U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, audience) };
       }
       const sig = secret && audience === 'public' ? item.id : `${title}\u0000${sub}`;
       let row = group.rows.find(r => r.sig === sig);
@@ -363,9 +367,9 @@
       : U.actions(item, [action]);
     const rowHtml = r => {
       const one = r.members.length === 1, m = r.members[0], when = x => x.at ? stamp(x.at) : '';
-      if (one) return `<li class="pj-art__row"><div class="pj-art__text"><p class="pj-art__title">${r.title}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}${m.open ? `<div class="acts">${openAction(m.item, m.open)}</div>` : ''}</div><span class="pj-at">${esc(when(m))}</span></li>`;
+      if (one) return `<li class="pj-art__row"><div class="pj-art__text"><p class="pj-art__title">${r.title}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}${m.open ? `<div class="acts">${openAction(m.item, m.open)}${m.item.ownerNote || ''}</div>` : m.item.openNote ? `<p class="pj-art__sub">${esc(m.item.openNote)}</p>` : m.item.ownerNote ? `<div class="acts">${m.item.ownerNote}</div>` : ''}</div><span class="pj-at">${esc(when(m))}</span></li>`;
       const caption = r.members.find(x => x.open)?.open.label;
-      const times = r.members.map(x => x.open ? openAction(x.item, { ...x.open, label: when(x) || x.open.label }) : `<span class="pj-at">${esc(when(x))}</span>`).join('');
+      const times = r.members.map(x => x.open ? openAction(x.item, { ...x.open, label: when(x) || x.open.label }) + (x.item.ownerNote || '') : `<span class="pj-at">${esc([when(x), x.item.openNote].filter(Boolean).join(' · '))}</span>`).join('');
       return `<li class="pj-art__row is-many"><div class="pj-art__text"><p class="pj-art__title">${r.title} <span class="pj-art__count">×${r.members.length}</span></p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}<div class="acts pj-art__times">${typeof caption === 'string' ? `<span class="pj-art__caption">${esc(caption)}</span>` : ''}${times}</div></div></li>`;
     };
     const SHOW = 3;
@@ -381,7 +385,6 @@
       : '';
     const note = items.length || recent?.hidden || missing ? [
       recent.at && `成品数据截至 ${stamp(recent.at)}`, missing || recent.q === 'partial' && '只列已读到的成品',
-      recent.hidden > 0 && `另有 ${esc(recent.hidden)} 件成品仅本人可见，名称和内容都没给访客看`,
     ].filter(Boolean).join(' · ') : '';
     section('recent-artifacts', '最近成品', cards.slice(0, 9), note, cards.slice(9));
   }

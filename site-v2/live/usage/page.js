@@ -176,7 +176,7 @@
   // ================= 各章 =================
   function titleRows(d) {
     const appCat = new Map((d?.apps || []).map((a) => [a.name, a.category]));
-    return d?.titles ? d.titles.map((t, i) => { const title = visibleTitle(t); return S.row({ key: String(t.key ?? t.id ?? `title:${i}`), visibility: t.visibility, private_value: t.title_field ?? t.title, name: sp(title ?? t.app), sub: title != null ? sp(t.app) : '', value: t.seconds, text: t.seconds == null ? (U.offline?.() ? '' : U.collectionText('使用时长', t)) : dur(t.seconds), hue: catHue(appCat.get(t.app)) }, t, 'seconds'); }) : null;
+    return d?.titles ? d.titles.map((t, i) => { const title = visibleTitle(t); return S.row({ key: String(t.key ?? t.id ?? `title:${i}`), visibility: t.visibility, private_value: t.title_field ?? t.title, name: sp(title ?? t.app), sub: title != null ? sp(t.app) : Number.isSafeInteger(t.window_title_count) && t.window_title_count > 0 ? `${countWords(t.window_title_count)}窗口标题` : '', value: t.seconds, text: t.seconds == null ? (U.offline?.() ? '' : U.collectionText('使用时长', t)) : dur(t.seconds), hue: catHue(appCat.get(t.app)) }, t, 'seconds'); }) : null;
   }
   function visibleTitle(row) {
     if (viewer === 'public' && row.visibility === 'owner') return null;
@@ -186,10 +186,20 @@
     const text = field.text ?? field.value;
     return typeof text === 'string' || typeof text === 'number' ? String(text) : null;
   }
-  function titleVisibility(rows) {
-    if (viewer === 'owner') return '';
-    const hidden = rows?.find((r) => r.visibility === 'owner') || rows?.map(r => r.title).find(t => t?.visibility === 'owner' || t?.public === 'owner');
-    return hidden ? U.fieldHtml(hidden, { name: '窗口标题', kind: viewer }) : '';
+  // 新私事规则（本人 11-24 02:56）：窗口标题访客版不给，原位按后台给的条数拼一句普通字，说清有多少个、本人版能看到全部；
+  // window_title_count 是 0 就是已读且空，null 是没读到或来源本来没有清单：不编数。本人版在原位挂“访客看不到”。
+  const countWords = n => n >= 10000 ? `${(Math.round(n / 1000) / 10).toLocaleString('zh-CN')} 万个` : `${n.toLocaleString('zh-CN')} 个`;
+  // 排行用 data.window_title_count（按程序合并的不同标题数）；最近的前台记录用 data.recent_window_title_count（带标题的记录次数），两个数不混用（后台 03:53 定稿）。
+  function titleVisibility(rows, d = usage, recentList = false) {
+    if (!rows?.length) return '';
+    if (viewer === 'owner') return U.visitorHiddenTag('这里的窗口标题', '窗口标题是电脑自己记下的，量大、没人逐条看过，访客版只写有多少个', viewer);
+    const hidden = rows.find((r) => r.visibility === 'owner') || rows.map(r => r.title_field ?? r.title).find(t => t?.visibility === 'owner' || t?.public === 'owner' || t?.hidden);
+    if (!hidden) return '';
+    const n = recentList ? d?.recent_window_title_count : d?.window_title_count, label = typeof d?.window?.label === 'string' ? d.window.label.trim() : '';
+    const scope = label ? `${label}的` : '这段时间的', valid = Number.isSafeInteger(n) && n >= 0;
+    if (valid && n === 0) return '';
+    return esc(recentList ? valid ? `这里是${scope} ${n.toLocaleString('zh-CN')} 次前台记录里的窗口标题，本人版能看到全部，所以不予展示` : `这里是${scope}前台记录里的窗口标题，本人版能看到全部，所以不予展示`
+      : valid ? `这里是${scope} ${countWords(n)}窗口标题，本人版能看到全部，所以不予展示` : `这里是${scope}窗口标题，本人版能看到全部，所以不予展示`);
   }
   function appRows(d) {
     return d?.apps ? d.apps.map((a, i) => S.row({ key: `app:${i}`, private_value: a.name_field ?? a.name, name: sp(U.programName(a.name)), mark: usageMark(a.name), sub: a.name_field && typeof a.name_field === 'object' ? a.name_field : CAT[a.category] || '', value: a.seconds, text: a.seconds == null ? (U.offline?.() ? '' : U.collectionText('使用时长', a)) : dur(a.seconds), hue: catHue(a.category) }, a, 'seconds')) : null;
@@ -454,7 +464,7 @@
           U.html(node, line);
         }
         function showRecentPrivacy(rows) {
-          const note = el.querySelector('[data-x="rnote"]'), privacy = titleVisibility(rows);
+          const note = el.querySelector('[data-x="rnote"]'), privacy = titleVisibility(rows, usage, true);
           note.hidden = !privacy;
           U.html(note, privacy);
         }
