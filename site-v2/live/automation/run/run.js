@@ -22,7 +22,7 @@
   const span = m => !known(m) ? '' : m < 1 ? `${Math.max(1, Math.round(m * 60))} 秒` : m < 60 ? `${Math.round(m)} 分钟` : `${Math.floor(m / 60)} 小时 ${Math.round(m % 60)} 分`;
   function title(r) {
     const lead = r.subject ? `${F(r.subject.title, '这件活')} · 第 ${int(r.subject.round ?? 1)} 轮` : '';
-    const tail = r.deferred ? R.deferredTitle(r, F) : r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
+    const tail = r.deferred ? R.deferredTitle(r, F, !!lead) : r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
       : F(r.summary, '这一轮做了什么') || '跑完了';
     return lead && tail ? `${lead}：${tail}` : lead || tail;
   }

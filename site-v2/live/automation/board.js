@@ -144,7 +144,7 @@
   }
   // 暂缓（暂时不修）是灰点，和没做成的红点分开（M674）
   const tone = r => r.status === 'running' ? 'run' : r.deferred ? 'off' : r.status === 'incomplete' ? 'bad' : r.status === 'completed' ? 'ok' : 'off';
-  const endText = r => r.deferred ? R.deferredTitle(r, F) : `没做成：${F(r.reason, '原因') || '原因没记下'}`;
+  const endText = (r, subjectShown = false) => r.deferred ? R.deferredTitle(r, F, subjectShown) : `没做成：${F(r.reason, '原因') || '原因没记下'}`;
   function card(d, v, c) {
     const r = c.run, since = T.stamp(r.startedAt);
     let head = `<p class="au-card__cat">${catLabel(d, c.category)}</p>`;
@@ -154,7 +154,7 @@
       if (r.status === 'running') title = what;
       else {
         head = `<p class="au-card__cat">${catLabel(d, c.category)} · ${what}</p>`;
-        title = r.status === 'incomplete' ? endText(r) : F(r.summary, '结果') || '跑完了';
+        title = r.status === 'incomplete' ? endText(r, true) : F(r.summary, '结果') || '跑完了';
       }
       const earlier = c.rounds.filter(x => x !== r);
       if (earlier.length) body += `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">第 ${int(x.subject?.round ?? c.rounds.indexOf(x) + 1)} 轮 · ${range(x)} · ${x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : F(x.summary, '结果') || '跑完了'} ›</a>`).join('')}</p>`;

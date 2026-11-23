@@ -70,10 +70,12 @@
     };
   }
 
-  // 暂缓那一轮的标题：“暂时不修：……”。后台的 summary 已经以原因开头（“暂时不修 · H 盘……”）就照写，不重复；F 是页面的转义写法
-  function deferredTitle(r, F) {
-    const reason = F(r.reason, '原因') || '暂时不修', summary = F(r.summary, '结果');
-    return !summary ? reason : summary.startsWith(reason) ? summary : `${reason}：${summary}`;
+  // 暂缓那一轮的标题：“暂时不修：……”。后台的 summary 已经以原因开头（“暂时不修 · H 盘……”）就照写，不重复；
+  // 这一轮修的那件（subject）已经写在前面时，summary 里再带那件的名字就只写原因，免得一句话里同一件写两遍。F 是页面的转义写法
+  function deferredTitle(r, F, subjectShown = false) {
+    const reason = F(r.reason, '原因') || '暂时不修', summary = F(r.summary, '结果'), thing = subjectShown && r.subject ? F(r.subject.title, '这件活') : '';
+    if (!summary || thing && summary.includes(thing)) return reason;
+    return summary.startsWith(reason) ? summary : `${reason}：${summary}`;
   }
 
   // 对话：后台给的是聊天读口地址 /computer-access/live/v1/chats/{id}（已按受众处理），页面拿号去读 chats/{id}、链到 /live/chat/?id={id}
