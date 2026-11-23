@@ -358,7 +358,9 @@
       ctx.beginPath();
       ctx.roundRect(0, 0, n, H, radius);
       ctx.clip();
-      ctx.fillStyle = 'rgba(20, 20, 19, .04)';
+      // 点了（或指着）图例：横带上只有那一种亮着，别的段和灰色“没记录”的底一起变淡，一眼看得出选中了哪段（M445）
+      const focused = focus != null;
+      ctx.fillStyle = focused ? 'rgba(20, 20, 19, .012)' : 'rgba(20, 20, 19, .04)';
       ctx.fillRect(0, 0, n, H);
       const fills = states.map((st) => {
         if (st.hue === 'stone') return 'rgba(201, 197, 187, .42)';   // 没有记录：很淡的石灰色平涂
@@ -418,7 +420,7 @@
       const gloss = ctx.createLinearGradient(0, 0, 0, H);
       gloss.addColorStop(0, 'rgba(255,255,255,.42)');
       gloss.addColorStop(.42, 'rgba(255,255,255,0)');
-      gloss.addColorStop(1, 'rgba(20,20,19,.06)');
+      gloss.addColorStop(1, focused ? 'rgba(20,20,19,.02)' : 'rgba(20,20,19,.06)');
       ctx.fillStyle = gloss;
       ctx.fillRect(0, 0, n, H);
       ctx.restore();

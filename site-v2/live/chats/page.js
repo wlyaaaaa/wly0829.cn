@@ -334,13 +334,15 @@
       const countText = fixed && Number.isFinite(d[key]) && d[key] < count ? `已列出 ${count} 场` : fixed ? chatCount(d, key, count) : `${count} 个`;
       const emptyWaiting = key === 'waiting' && countText === '0 个', publicWaiting = key === 'waiting' && viewer === 'public';
       const label = publicWaiting ? '等本人' : COLUMN[key].name;
-      const titleCount = emptyWaiting ? `${U.offline?.() ? '断开前' : ''}没有对话在等回复` : countText;
+      const titleCount = emptyWaiting ? '0 个' : countText;
       card.el.classList.toggle('lb-card--quiet', emptyWaiting);
       U.html(card.title, `<b>${label}</b><span class="lb-card__count">${esc(titleCount)}</span>`, false);
-      U.html(card.sub, emptyWaiting ? '' : esc(publicWaiting ? '要本人回答或选一下才能接着做' : COLUMN[key].about));
+      U.html(card.sub, esc(publicWaiting ? '要本人回答或选一下才能接着做' : COLUMN[key].about));
       const empty = countText === '0 个' ? `${U.offline?.() ? '断开前' : ''}没有${label}的对话`
         : countText ? '暂时只读到数量' : key === 'running' && none ? none : U.collectionText();
-      U.list(card.main, main.length || emptyWaiting ? main : wait(empty));
+      // “等你”没对话时和“在干”一样高：卡头照常，下面正中放一个勾和一句话，看着是有意空着，不是一大块空白（M534）
+      const idle = emptyWaiting && [{ key: 'idle', cls: 'chat-idle', html: `<span class="chat-idle__mark">${window.LiveBoard.icon('check')}</span><b>${U.offline?.() ? '断开前' : '现在'}没有对话在等${publicWaiting ? '本人' : '你'}回复</b>` }];
+      U.list(card.main, idle || (main.length ? main : wait(empty)));
       U.list(card.rest, rest); card.more.hidden = !rest.length; U.html(card.more, `<span class="lb-more__open">展开（还有 ${restCount} 个）</span><span class="lb-more__shut">收起</span> <span class="more__chev">›</span>`);
     }
     board.el.querySelectorAll(':scope > .lb-card').forEach(el => { el.style.minHeight = ''; });

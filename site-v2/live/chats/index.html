@@ -23,9 +23,11 @@
 .chat-board .lb-item :is(.row__line, .chat-think, .helpers) { margin-top: 3px; }
 .chat-board .helper { line-height: 19px; }
 .page--chats .lb-card[data-key="waiting"]:not(.lb-card--quiet) { border: 1px solid #00A650; }
-.chat-board .lb-card--quiet .lb-card__head { min-height: 0; padding: 10px 16px; grid-template-columns: 34px minmax(0, 1fr); border-radius: inherit; }
-.page--chats .lb-card--quiet .lb-card__badge { width: 34px; height: 34px; }
-.page--chats .lb-card--quiet :is(.lb-card__art, .lb-card__sub) { display: none; }
+.page--chats .lb-card--quiet > .lb-rows:first-of-type { flex: 1; grid-template-rows: minmax(0, 1fr) auto minmax(0, 2fr); }
+.page--chats .lb-rows > .chat-idle { grid-row: 2; display: grid; justify-items: center; gap: 14px; padding: 28px 16px; text-align: center; }
+.page--chats .chat-idle__mark { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: rgb(0 166 80 / .07); box-shadow: inset 0 0 0 1px rgb(0 166 80 / .18); color: #00A650; }
+.page--chats .chat-idle__mark .lb-ico { width: 30px; height: 30px; fill-opacity: 0; }
+.page--chats .chat-idle > b { font-size: 15px; line-height: 22px; font-weight: 500; letter-spacing: .04em; color: #5f5d57; }
 /* 每栏卡头的插画（画风变量：对清以后换图只改这里；暂时借自动任务页的画） */
 .page--chats .lb-card[data-art="running"] { --lb-art: url("/live/img/chats-col-running.webp"); }
 .page--chats .lb-card[data-art="waiting"] { --lb-art: url("/live/img/chats-col-waiting.webp"); }
