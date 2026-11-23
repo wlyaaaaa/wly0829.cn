@@ -168,15 +168,8 @@
     return { height, available: Object.fromEntries(keys.map((key, i) => [key, groups[i].length])) };
   }
   function balanceDesktopCards(measured, gap, allowOverflow = true) {
-    const fixedRight = ['computer', 'phone', 'automation', 'ledger'];
-    const flexible = ['tasks', 'backups'];
-    const layouts = Array.from({ length: 2 ** flexible.length }, (_, mask) => {
-      const sides = flexible.map((_, i) => (mask >> i) & 1);
-      return [
-        ['needs', 'chats', ...flexible.filter((_, i) => !sides[i])],
-        [...fixedRight, ...flexible.filter((_, i) => sides[i])],
-      ];
-    });
+    // 卡片位置固定（M044）：备份在左栏、计划任务跟自动任务在右栏，只靠条数配平两栏，不按高度换栏。
+    const layouts = [[['needs', 'chats', 'backups'], ['computer', 'phone', 'automation', 'ledger', 'tasks']]];
     const available = Object.assign({}, ...Object.values(measured[0]).map(m => m.available));
     const keys = Object.keys(available), total = counts => keys.reduce((sum, key) => sum + counts[key], 0);
     const getHeight = (layout, counts) => layout.map((ids, side) => ids.reduce((sum, id) => sum + (measured[side][id].fixed ?? measured[side][id].height(counts)), (ids.length - 1) * gap));

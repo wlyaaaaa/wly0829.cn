@@ -273,7 +273,7 @@
     const t = ratio && metric('memory-total'), stamp = iso(m.at), unit = pressure ? '%' : ['B', 'GiB'].includes(m.unit) ? 'GB' : m.unit;
     if (ratio && (!['B', 'GB'].includes(m.unit) || !stamp || Date.parse(stamp) !== Date.parse(t?.at) || t.unit !== m.unit || !Number.isFinite(t.value) || t.value <= 0)) return null;
     const value = ratio ? m.value / t.value * 100 : m.unit === 'B' ? gb(m.value) : m.value;
-    const text = id === 'threads' ? `${Math.round(value).toLocaleString('en-US')} ${unit || '个'}` : Stat.partial(m) ? Stat.text(value, unit, m) : undefined;
+    const text = id === 'threads' ? `${Math.round(value).toLocaleString('en-US')} ${unit || '个'}` : id === 'net-loss' && unit === '%' && !Stat.partial(m) ? lossText(value) : Stat.partial(m) ? Stat.text(value, unit, m) : undefined;
     const origin = m.timestamp_basis === 'provider_read' ? '传感器读回' : '实测';
     const caption = disk ? (offline() ? '上次已读盘最高温' : '已读盘最高温')
       : [id === 'net-jitter' ? '最近 15 次探测' : ratio ? '按已用／总容量' : '', (stale(m) || offline() || m.read_error === true ? '上次' : '') + origin].filter(Boolean).join(' · ');
@@ -310,7 +310,7 @@
     }
     const stamp = iso(source?.at ?? (long ? s?.last_measured_at : null)) || iso(last?.lastAt);
     const basis = s?.latest_instant_at && iso(source?.at) === s.latest_instant_at ? '即时实测' : source && source === temperature ? '分钟均值' : bucket(s);
-    const label = long && pointerTime == null ? (surface === 'hero' ? '最后实测' : '') : [surface !== 'weave' && !same && OLD_HISTORY[id] && historyName(s), surface !== 'weave' || basis !== weaveBucket() ? basis : ''].filter(Boolean).join(' · ');
+    const label = long && pointerTime == null ? (surface === 'hero' ? '最后实测' : '') : [surface !== 'weave' && !same && OLD_HISTORY[id] && historyName(s), surface !== 'weave' || basis !== weaveBucket() || id === 'net-loss' ? basis : ''].filter(Boolean).join(' · ');
     const day = long && chartGroups.get('长期')?.day_coverage?.find(d => d.day_start === beijingDay(Date.parse(stamp) / 1000));
     const device = id.startsWith('cpu-') ? 'cpu' : 'gpu';
     const duration = V.dur(day?.[device + '_seconds']);
@@ -354,7 +354,16 @@
   }
   function judge(key) {
     const given = computer?.groups?.find((g) => (g.key ?? g.id) === key);
-    return given || null;
+    return key === 'network' ? networkLoss(given) : given || null;
+  }
+  // 丢包按后台给的一位小数写（13.3%），首屏读数签、网络卡和告警写同一个数。
+  const lossText = v => `${Number(v.toFixed(1))}%`;
+  // 网络组的判断和丢包读数是同一个“最近 15 次探测丢包”。读数比判断新时，首屏、告警、网络卡都写读数的值和时刻（M021）。
+  function networkLoss(g) {
+    const m = metric('net-loss'), at = iso(m?.at);
+    if (!g || !Number.isFinite(m?.value) || m.unit !== '%' || !at || Date.parse(at) < (Date.parse(g.at) || 0)) return g || null;
+    const text = `最近 15 次探测丢包 ${lossText(m.value)}`, swap = s => typeof s === 'string' && /最近\s*15\s*次探测丢包/.test(s) ? text : s;
+    return { ...g, at, source_at: at, reason: swap(g.reason), why: swap(g.why) };
   }
   function scopeGroupStatus(card) {
     const { why, reason, stale_text: savedCutoff } = card;
@@ -841,7 +850,7 @@
       ? [U.date(g.at) === U.date(Date.now()) ? '' : U.date(g.at), U.time(g.at)].filter(Boolean).join(' ') : '';
     const who = g => g.ai_fixing === true ? 'AI 已接手' : '还没有 AI 接手';
     const label = g => U.fieldHtml(g.name, { name: '检测分组' });
-    const confirmed = groups.confirmed.map(g => [label(g), at(g) && esc(at(g)) + ' 读到', who(g)].filter(Boolean).join('，'));
+    const confirmed = groups.confirmed.map(g => g.key === 'network' ? networkLoss(g) : g).map(g => [label(g), at(g) && esc(at(g)) + ' 读到', who(g)].filter(Boolean).join('，'));
     const instantIds = { cpu: 'cpu-temp', disk: 'disk-free', network: 'net-loss' };
     const unread = groups.unread.flatMap(g => {
       const id = instantIds[g.key];
@@ -849,8 +858,9 @@
       if (measured?.at) {
         const m = metric(id);
         // The packet can replace readings without recomputing its earlier attention summary.
-        if (!offline() && m.q === 'ok' && !stale(m) && !m.read_error
-            && Date.parse(measured.at) > (Date.parse(g.at) || 0)) return [];
+        // 3 分钟内刚读到的也不算暂缺（M021：一两分钟前刚读到的被写成暂缺）。
+        const t = Date.parse(measured.at), since = Date.parse(g.at) || 0;
+        if (!offline() && (t > since && m.q === 'ok' && !stale(m) && !m.read_error || t >= since && Date.now() - t <= 180000)) return [];
         g = { ...g, at: measured.at };
       }
       const stamp = at(g);
@@ -1000,12 +1010,15 @@
       if (x.id === 'main' && x.configuration?.length) {
         const rows = x.configuration;
         hardware = hardwareDetails(rows, inner);
+        // 标题数和展开里列出的对上：主机、硬盘、屏幕（含水冷屏）算项数，以前的主屏另写（M264）。
+        const shown = rows.filter(row => ['host', 'storage', 'screens'].includes(row.group)).length + (rows.some(row => row.screen) ? 1 : 0);
+        const former = rows.filter(row => row.group === 'former').length;
         // 数和单位不拆行（“32 GB”不折成“32 / GB”）。
         const summary = rows.filter(row => row.brief).map(row => `<div><dt>${esc(row.label)}</dt><dd>${unitHtml(row.brief === true ? row.spec : row.brief, row.label)}</dd></div>`).join('');
         return `<div class="dev-spec">${pill}${notes ? `<p class="row__sub">${notes}</p>` : ''}
           <dl class="desktop-config__summary">${summary}</dl>
           <button class="desktop-config__action" type="button" aria-controls="desktop-config" aria-expanded="${!hardwarePane.hidden}" data-desktop-config-toggle>
-            <span>全部配置（${rows.length} 项）</span><span>收起</span><span aria-hidden="true">›</span></button></div>`;
+            <span>全部配置（${shown} 项${former ? `，另有以前的主屏 ${former} 台` : ''}）</span><span>收起</span><span aria-hidden="true">›</span></button></div>`;
       }
       let hw = [].concat(x.hw || []).filter(Boolean).flatMap(s => typeof s === 'object' ? [s] : sp(s).split(' · '));
       if (x.id === 'main') for (const [id, label] of [['gpu-model', '显卡'], ['cpu-model', 'CPU']]) { const m = metric(id); if (m?.value && !hw.some(s => typeof s === 'object' && s.hidden_what && s.hidden_what === m.value.hidden_what || typeof s === 'string' && (s.startsWith(label + '：') || s.startsWith(label + ':') || sp(m.value).startsWith(s) || s.includes(sp(m.value))))) hw.unshift(typeof m.value === 'object' ? m.value : `${label}：${sp(m.value)}`); }

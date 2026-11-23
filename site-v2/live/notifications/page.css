@@ -75,3 +75,22 @@
 .notify-all[open] .notify-all__closed, .notify-all:not([open]) .notify-all__open { display: none; }
 .notify-all .l2-board { margin-top: 18px; }
 .page--notifications .notify-coverage { margin: 18px 0 0 64px; }
+/* 首句太长时换行，不截（M278）：前半句大字可以折行，分渠道那半句在 head__tail 里轻一号 */
+.page--notifications #head .head__lead { flex: 1 1 0; min-width: 0; white-space: normal; text-wrap: balance; }
+.page--notifications #head > .head__tail { flex-basis: 100%; }
+.page--notifications #head:has(> .lamp) > .head__tail { padding-left: var(--gut); }
+
+/* 没到的那几张卡：同一件事另一路怎样、点开看明细（M306） */
+#attention .notify-other { color: var(--ink-soft, #55524b); }
+#attention .stut { align-items: start; }
+#attention .notify-detail { grid-column: 1 / -1; margin-top: 4px; }
+#attention .notify-detail > summary { margin: 0 0 0 calc(80px + 136px + 24px); translate: none; }
+#attention .notify-detail .delivery-detail { margin-top: 8px; background: rgb(246 241 233 / .9); color: var(--ink-soft, #55524b); cursor: auto; }
+#attention .delivery-detail p { margin: 0; }
+#attention .delivery-detail ul { margin: 0 0 4px; padding: 0; list-style: none; }
+#attention .delivery-detail li { color: var(--ink, #2b2a27); }
+#attention .delivery-detail code { padding: 0 5px; border-radius: 6px; background: rgb(0 0 0 / .05); font-size: 13px; }
+#attention .stut__card:has(.notify-detail[open]) { background: #fff; box-shadow: inset 0 0 0 1.5px rgb(163 106 33 / .3), 0 10px 24px -14px rgb(163 106 33 / .45); }
+.delivery-table .notify-other, .page--notifications #email-gaps .notify-other { color: var(--muted); font-size: 13px; }
+/* 窗口窄时一行一张，免得字挤成一长条 */
+@media (max-width: 1199px) { #attention .stut { grid-template-columns: minmax(0, 1fr); } }

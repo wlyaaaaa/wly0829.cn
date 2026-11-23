@@ -85,6 +85,7 @@
     $('say').hidden = !description; U.html($('say'), description);
   }
   function knowledgeCells(r) {
+    r = { ...r, text: uncite(r.text), detail: uncite(r.detail) };
     const kind = recordViewer === 'owner' ? 'owner' : 'public', parts = U.knowledgeCells(r, kind === 'owner', true);
     // 共用件把正文原样转义成一段字；这里认出那一段，换成排好版的 Markdown，其余（原话、证据时段、标签、按钮）不动。
     const typeset = (value, name, wrap, html) => {
@@ -97,6 +98,31 @@
     // 正文里有“〔…省略〕”的：源头导出时就省掉了，后台给缺因（body_gap），紧跟正文写一句为什么
     if (typeof r.body_gap === 'string' && r.body_gap) parts[1] += `<p class="knowledge-prose" style="color:var(--muted, #8f8d86)">${esc(r.body_gap)}</p>`;
     return parts;
+  }
+  // 说明书正文里给 AI 回查用的出处注脚：（明示 31）（52fbe706）（OR-444）（〔编号或数额省略〕、…）（某目录 下同前缀文件：…）这类，
+  // 本人读不懂、也点不开（M363）。括号里只有出处的，整个括号去掉；括号里还有别的话的，只去掉出处那一段（“11/5，明示 612”→“11/5”）。
+  // 正文里的“〔金额省略〕”这类是源头就省掉的字，不动，由缺因那句交代。
+  const CITE_HEX = /(?=[0-9a-f]{0,7}[a-f])[0-9a-f]{8}/.source;
+  const CITE_ID = `(?:#?\\d+|L\\d+|${CITE_HEX}(?:-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?(?:\\.json)?|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}(?:\\.json)?|#?〔(?:编号或数额|本机位置)省略〕|OR-\\d+)`;
+  const CITE_ONE = `(?:(?:明示|原话|记录|材料)\\s*)?\\x60?${CITE_ID}\\x60?`;
+  const CITE_ONLY = new RegExp(`^(?:(?:(?:见|核|据)\\s*)?${CITE_ONE}(?:\\s*(?:、|—|–|-|和|及|与)\\s*${CITE_ONE})*\\s*(?:等)?|\\x60?(?:[A-Za-z]:\\\\[^\\s，；（）\\x60]*|〔本机位置省略〕)\\x60?\\s*下同前缀文件[：:]\\s*${CITE_HEX}(?:\\s*、\\s*${CITE_HEX})*)$`);
+  const CITE_STRONG = /明示|原话|〔(?:编号或数额|本机位置)省略〕|OR-\d|\d{5}|(?=[0-9a-f]{0,7}[a-f])[0-9a-f]{8}/;
+  const CITE_MINGSHI = /明示\s*\d+(?:\s*[、—–-]\s*\d+)*/.source;
+  // 一段话末尾的“…、明示 12”“…与明示 12”（“参与”的“与”不算）、开头的“明示 12 及…”
+  const CITE_TAIL = new RegExp(`(?:\\s*、|([^参\\s])\\s*(?:与|和|及))\\s*${CITE_MINGSHI}$`), CITE_HEAD = new RegExp(`^${CITE_MINGSHI}\\s*(?:及|和|与)\\s*`);
+  function uncite(s) {
+    if (typeof s !== 'string' || !/明示|原话|省略〕|OR-\d|\d{5}|[0-9a-f]{8}/.test(s)) return s;
+    return s.replace(/ ?（([^（）\n]{1,240})）/g, (all, inner) => {
+      const parts = inner.split(/([，；。,;]\s*)/), kept = [];
+      for (let i = 0; i < parts.length; i += 2) {
+        let seg = parts[i].replace(/^[\s、]+/, '').trim();
+        if (!seg || CITE_ONLY.test(seg) && CITE_STRONG.test(seg)) continue;
+        seg = seg.replace(CITE_TAIL, '$1').replace(CITE_HEAD, '').replace(/^[\s、]+/, '');
+        if (seg) kept.push(seg, parts[i + 1] || '');
+      }
+      const out = kept.join('').replace(/[，；。,;\s]+$/, '');
+      return !out ? '' : out === inner ? all : `${all.startsWith(' ') ? ' ' : ''}（${out}）`;
+    });
   }
   // 说明书正文是后台给的 Markdown（标题、空行分段、列表、表格、**加粗**、`代码`、[字](地址)）：照样子排出来，不露井号、星号、反引号。
   // 进来的已是转义过的字，这里只认这几种记号、只生成这几种标签。
@@ -244,6 +270,7 @@
     const field = recordAt && artifactRecordFields[section];
     const received = (d.items || []).filter(r => !recordAt || (field ? r[field] : d.at) === recordAt);
     items = append ? [...items, ...received] : received;
+    if (append) fillMiss = 0;
     next = recordAt && (field || d.at !== recordAt) ? null : d.next;
     recordTotal = recordAt && (field || d.at !== recordAt) ? items.length : d.total; recordSource = d; drawRecordTitle(); drawHeader();
     const privateRow = r => r?.visibility === 'owner' || r?.public === 'owner' || r?.hidden_block || r?.hidden;
@@ -256,6 +283,7 @@
       book.set([]);
       drawRecordNote(d);
       recordRead.done();
+      if (!append) fillAll();
       return;
     }
     const siteTodo = section.startsWith('site_todo_');
@@ -290,12 +318,36 @@
     drawToc(ordered);
     recordRead.done();
     U.land();
-    // 说明书（认识）本人版一次取全：目录要列全这一组，点哪一项都能直接跳到全文（M421）
-    if (knowledge && recordViewer === 'owner' && next != null && !tocLoading) { tocLoading = true; (async () => { try { while (next != null) { const was = next; await loadNext(); if (next === was) break; } } finally { tocLoading = false; } })(); }
+    if (!append) fillAll();
   }
+  // 说明书（认识）本人版一次取全：目录要列全这一组，点哪一项都能直接跳到全文（M421）。
+  // 某一批没读到（慢、超时、服务还在准备、一时连不上）不就此停下：隔 2、4、8、15 秒，之后每 30 秒再取，直到列齐；
+  // 没读到的这段时间，目录头和账簿底下写清还差几项、正在重取，不悄悄少列（M548）。新的第一批到了就从头再取。
+  let fillRun = 0, fillOn = 0, fillMiss = 0, tocRows = [];
+  function fillAll() {
+    const run = ++fillRun;
+    fillMiss = 0;
+    if (!knowledge || recordViewer !== 'owner' || next == null) return;
+    fillOn = run;
+    (async () => {
+      while (run === fillRun && next != null) {
+        const was = next;
+        await loadNext();
+        if (run !== fillRun) return;
+        if (next !== was) continue;
+        fillMiss++;
+        drawToc(tocRows);
+        drawRecordNote(recordSource, [missingRest()]);
+        await new Promise(done => setTimeout(done, [2, 4, 8, 15][fillMiss - 1] * 1000 || 30000));
+      }
+      if (run === fillRun) fillOn = 0;
+    })();
+  }
+  const restCount = () => Math.max(0, (Number.isFinite(recordTotal) ? recordTotal : 0) - items.filter(r => r && !r.private_count).length);
+  const missingRest = () => `${restCount() ? `还差 ${restCount()} 项` : '后面还有'}刚才没读到，正在重取`;
   // 我的说明书一组（本人版）：全文照旧铺开，上面一个目录列全每一项，点名字跳到那一项的全文（M421，本人 11-22 14:04 选 B）
-  let tocLoading = false;
   function drawToc(ordered) {
+    tocRows = ordered;
     let box = book.el.top.querySelector('.record-toc');
     if (!knowledge || recordViewer !== 'owner' || ordered.length < 2) { box?.remove(); return; }
     if (!box) {
@@ -314,12 +366,12 @@
     const plain = value => U.fieldText(value, recordViewer).trim();
     const rows = ordered.filter(r => r && !r.private_count).map((r, i) => {
       const key = String(recordKey(r) || `record-${i}`), name = plain(r.title || r.name || r.label || '') || `第 ${i + 1} 项`;
-      const first = plain(r.text || '').replace(/[#*`>|]/g, '').replace(/\s+/g, ' ').trim().split(/(?<=[。！？])/)[0];
+      const first = plain(uncite(r.text) || '').replace(/[#*`>|]/g, '').replace(/\s+/g, ' ').trim().split(/(?<=[。！？])/)[0];
       const current = box.querySelector(`a[aria-current][data-toc="${CSS.escape(key)}"]`) ? ' aria-current="true"' : '';
       return `<li><a href="#" data-toc="${esc(key)}"${current}><span class="record-toc__n">${String(i + 1).padStart(2, '0')}</span><span class="record-toc__t"><b>${esc(name)}</b>${first ? `<small>${esc(first)}</small>` : ''}</span></a></li>`;
     });
     const total = Math.max(Number.isFinite(recordTotal) ? recordTotal : 0, rows.length);
-    U.html(box, `<p class="record-toc__head">这一组 ${total} 项${rows.length < total ? `<small>其余 ${total - rows.length} 项正在读</small>` : ''}</p><p class="record-toc__sub">点名字跳到那一项的全文；全文在下面，一个字不少</p><ol class="record-toc__list">${rows.join('')}</ol>`);
+    U.html(box, `<p class="record-toc__head">这一组 ${total} 项${rows.length < total ? `<small>其余 ${total - rows.length} 项${fillMiss ? '刚才没读到，正在重取' : '正在读'}</small>` : ''}</p><p class="record-toc__sub">点名字跳到那一项的全文；全文在下面，一个字不少</p><ol class="record-toc__list">${rows.join('')}</ol>`);
   }
   function drawRecordNote(d, extra = []) {
     if (groupPrivate && recordViewer === 'public') {
@@ -549,6 +601,10 @@
     const at = d => d?.source_at || d?.observed_at || d?.at;
     if (s.data && (s.meta.viewer?.kind || 'public') === recordViewer && at(source) === at(s.data) && s.data.next !== cursor) {
       drawRecords(s.data, true); recordsStaleAt ||= isStale(s.data) ? s.data.at || s.meta.at : null; updateCutoff();
+    } else if (fillOn && fillOn === fillRun) {
+      // 说明书本人版正在一次取全：这一批没读到，由取全那边隔几秒再取（M548）。
+      // 这一批和第一批截止时刻不同 = 数据换了一版：先重读第一批，新的一版到了从头取。
+      if (s.data && at(source) !== at(s.data)) await window.Live.get(`projects/${enc(id)}/records`, { section });
     } else {
       U.html($('record-note'), locked(s) || s.offline ? missingHtml(s, sectionName) : '下一页暂时读不到，已读到的留在这里。');
     }

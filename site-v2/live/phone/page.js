@@ -114,14 +114,29 @@
       return [t, waiting && t >= cutoff ? pending : gap];
     });
   }
-  function cutoffText(data) {
-    const lanes = [['phone', '手机'], ['computer', '电脑']].map(([key, name]) => [name, data?.rows?.[key]]).filter(([, row]) => row?.spans?.length);
-    const parts = lanes.map(([name, row]) => { const at = recordedTo(row), to = seconds(row.to); return Number.isFinite(at) ? [name, at, to - at] : null; }).filter(Boolean);
+  function cutoffText(data, lanes = [['phone', '手机'], ['computer', '电脑']], clock = t => U.time(iso(t)), tail = true) {
+    const shown = lanes.map(([key, name]) => [name, data?.rows?.[key]]).filter(([, row]) => row?.spans?.length);
+    const parts = shown.map(([name, row]) => { const at = recordedTo(row), to = seconds(row.to); return Number.isFinite(at) ? [name, at, to - at] : null; }).filter(Boolean);
     if (!parts.length) return '';
-    const late = parts.filter(([, , tail]) => tail > PENDING_SECONDS);
-    return parts.map(([name, at]) => `${name}记到 ${U.time(iso(at))}`).join('，')
+    const late = parts.filter(([, , tail]) => tail > PENDING_SECONDS), times = new Map();
+    for (const [name, at] of parts) times.set(clock(at), [...(times.get(clock(at)) || []), name]);
+    return [...times].map(([at, names]) => `${names.join('、')}记到 ${at}`).join('，')
       + (parts.some(([, , tail]) => tail > 60 && tail <= PENDING_SECONDS) ? '；之后的一小段等下一轮记录（约每 30 分钟一轮），不算没记录' : '')
-      + (late.length ? `；${late.map(([name]) => name).join('、')}超过 35 分钟没有新记录` : '') + '。';
+      + (tail && late.length ? `；${late.map(([name]) => name).join('、')}超过 35 分钟没有新记录` : '') + '。';
+  }
+  // 采集图、上网图也写清各条记到几点和缺口怎么算（M380）：后台给的各条说明原样接上；上网图的“没记录”不是没网。
+  function timelineNote(id, data) {
+    if (id === 'usage-timeline') return cutoffText(data);
+    if (id === 'collect-timeline') {
+      const lanes = [['usage', '使用记录'], ['location', '定位'], ['packages', '装机清单'], ['runs', '采集执行情况']];
+      const notes = lanes.map(([key, name]) => { const note = data?.rows?.[key]?.note; return typeof note === 'string' && note.trim() ? `${name}：${sp(note).replace(/[。.]?$/, '。')}` : ''; }).filter(Boolean);
+      return [cutoffText(data, lanes, t => stamp(iso(t)), false), ...notes].filter(Boolean).join('');
+    }
+    if (id === 'network-timeline') {
+      const totals = stateTotals(data)?.day, gap = data?.states?.findIndex(s => s.id === 'unrecorded');
+      return cutoffText(data, [['day', '上网状态']]) + (gap >= 0 && totals?.[gap] > 60 ? '图上“没记录”是手机没留下上网状态的时段，不是没网。' : '');
+    }
+    return '';
   }
   function timeline(s) {
     if (s?.timeline) {
@@ -272,7 +287,7 @@
       };
       n.className = 'use-note'; host.after(n);
       // 两条带子各记到几点：最后一次记到之后的那一小段在图上是“等下一轮记录”，不是缺数据。
-      const cut = id === 'usage-timeline' ? document.createElement('p') : null;
+      const cut = ['usage-timeline', 'collect-timeline', 'network-timeline'].includes(id) ? document.createElement('p') : null;
       if (cut) { cut.className = 'use-note'; cut.hidden = true; n.after(cut); }
       const dayHost = id === 'usage-timeline' ? chartHost(el, '近 7 天每天亮屏') : null;
       const days = dayHost && V.bars(dayHost, { series: [{ id: 'screen', label: '亮屏', hue: 'violet' }], unit: '秒' });
@@ -294,7 +309,7 @@
           }
         }
         graph.set(data); decorate();
-        if (cut) { const text = cutoffText(data); cut.hidden = !text || !!daily; U.html(cut, esc(text)); }
+        if (cut) { const text = timelineNote(id, data); cut.hidden = !text || !!daily; U.html(cut, esc(text)); }
         U.html(host.previousElementSibling, fh(title, '图表', 'title'));
         const mark = nameMark(key === 'collect' ? '手机采集记录' : key === 'network' ? '手机上网记录' : '手机和电脑使用记录', [s, ...(s?.timeline?.states?.map(state => state.label) || [])]);
         n.hidden = !mark; U.html(n, mark);
