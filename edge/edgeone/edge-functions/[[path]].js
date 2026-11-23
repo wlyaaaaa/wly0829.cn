@@ -30,7 +30,12 @@ export default async function onRequest({request, env = {}}) {
   const controller = new AbortController(), timer = setTimeout(() => controller.abort(), old ? 6000 : 10000);
   let connection = 'unreachable';
   try {
-    const query = old ? new URLSearchParams([...url.searchParams].filter(([k,v]) => k === 'view' && v === 'cockpit' || k === 'refresh' && v === '1')) : url.searchParams;
+    let query = url.searchParams;
+    if (old) {
+      query = new URLSearchParams();
+      if (url.searchParams.get('view') === 'cockpit') query.set('view', 'cockpit');
+      if (url.searchParams.get('refresh') === '1') query.set('refresh', '1');
+    }
     const target = old ? '/computer-access/api/status' : url.pathname;
     const upstream = await fetch((env.LIVE_ORIGIN || 'https://mcp.wly0829.cn') + target + (String(query) ? '?' + query : ''), {
       method: old ? 'GET' : request.method, headers: {Accept: 'application/json', 'Accept-Encoding': 'identity', ...(validDevice ? {'X-Cockpit-Device': device} : {}), ...(request.headers.has('If-None-Match') ? {'If-None-Match': request.headers.get('If-None-Match')} : {})}, signal: controller.signal, redirect: 'manual', cache: 'no-store'});
