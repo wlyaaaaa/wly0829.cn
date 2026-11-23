@@ -20,6 +20,8 @@
     back.href = from.pathname + from.search; back.textContent = '自动任务';
   }
   let viewer = 'public', task, now = Date.now(), offline = false, packetAt = null, selected = false;
+  const RUN_BATCH = 50;
+  let restShown = RUN_BATCH;
   let detailWatches = [];
   const field = (v, name) => U.fieldHtml(v, { name, kind: viewer });
   const text = v => U.fieldText(v, viewer);
@@ -92,6 +94,7 @@
     write($('crumb-name'), field(d.display_name ?? d.name, '任务名'));
   }
   back.addEventListener('click', U.restoreBack);
+  $('runs-rest').addEventListener('click', e => { if (task && e.target.closest('[data-runs-more]')) { restShown += RUN_BATCH; render(task); } });
   $('root-link').href = route('/live/#tasks');
   for (const el of document.querySelectorAll('[data-icon-name]')) U.html(el, window.LiveBoard.icon(el.dataset.iconName), false);
   const weekLabel = { ok: '有成功记录', failed: '有出错记录', none: '没有新启动', 'observed-ok': '至少一轮成功', started: '跑过，结果未确认', unknown: '全天记录未读全' };
@@ -364,8 +367,13 @@
     $('more-runs').hidden = runs.length <= 6;
     const earlier = Math.max(0, runs.length - 6), moreLabel = `<span class="disclosure-closed">展开（更早的 ${earlier} 次）</span><span class="disclosure-open">收起（更早的 ${earlier} 次）</span><span class="disclosure-chev" aria-hidden="true">›</span>`;
     if ($('more-runs').querySelector('summary').innerHTML !== moreLabel) $('more-runs').querySelector('summary').innerHTML = moreLabel;
-    U.html($('runs-rest'), runs.length > 6 ? history(d, runs.slice(6), kind, open) : '', false);
-    if (old && runs.indexOf(old) >= 6) $('more-runs').open = true;
+    // 更早的一次只摆一批，底下“再看 50 次”接着摆；几千次一次全写进来会把页面卡死（M632）。要看的那一次在后面时摆到它为止。
+    const rest = runs.slice(6), target = old ? rest.indexOf(old) : -1;
+    if (target >= restShown) restShown = Math.ceil((target + 1) / RUN_BATCH) * RUN_BATCH;
+    const left = Math.max(0, rest.length - restShown);
+    U.html($('runs-rest'), rest.length ? history(d, rest.slice(0, restShown), kind, open)
+      + (left ? `<button type="button" class="more" data-runs-more>再看 ${Math.min(RUN_BATCH, left)} 次（还有 ${left} 次） ›</button>` : '') : '', false);
+    if (target >= 0) $('more-runs').open = true;
     write($('run-coverage'), quiet ? '' : readNotice(d, coverage, runs, covered));
     $('future').hidden = kind !== 'schedule';
     if (kind === 'schedule') {
