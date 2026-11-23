@@ -51,7 +51,7 @@
       b.at && `花费 ${when(b.at)} 读到`, K.field(b.gap, '花费说明', viewer)].filter(Boolean).join(' · ');
   }
   function cloudLine(name, facts, label = name) {
-    return `<section class="st-cloud" aria-label="${E(label)}"><b>${E(name)}</b><p>${facts.filter(Boolean).map(E).join(' · ')}</p></section>`;
+    return `<section class="st-cloud" aria-label="${E(label)}"><b>${E(name)}</b><p>${facts.filter(Boolean).map(f => `<span>${E(f)}</span>`).join(' · ')}</p></section>`;
   }
   function aliyun(a, b, viewer) {
     const used = hidden(a, viewer) ? '阿里云已用空间仅本人可见' : capacity(a?.used_bytes, '已用', viewer);
@@ -61,7 +61,8 @@
     const spend = K.isPlaceholder(month) ? month : Number.isFinite(amount) ? `本月 ${Number(amount.toFixed(2))} 元` : '';
     const note = [!hidden(a, viewer) && a?.at && `空间 ${when(a.at)} 读到`, billing(b, viewer)].filter(Boolean).join(' · ');
     const gap = K.field(a?.gap, '阿里云用量缺因', viewer);
-    const facts = [used || gap || '阿里云已用空间还没读到', spend,
+    // 这次没读到、后台留着上次容量并给了说明（如“这次没读到网站素材桶的容量”）：容量旁照写原句，统计时刻照旧（M434）
+    const facts = [used || gap || '阿里云已用空间还没读到', !hidden(a, viewer) && used && gap, spend,
       typeof days === 'number' ? `余额约可用 ${days} 天` : days,
       (!hidden(a, viewer) && a?.q === 'stale' || !hidden(b, viewer) && b?.q === 'stale') && '旧读数'];
     return { facts, note };

@@ -231,3 +231,5 @@
 .st-cloud { display: grid; grid-template-columns: 86px minmax(0, 1fr); align-items: baseline; gap: 10px; padding: 8px 0; font-size: 13px; }
 .st-cloud + .st-cloud { border-top: 1px solid var(--hair); }
 .st-cloud > p { margin: 0; overflow-wrap: anywhere; }
+/* 每一项（如“这次没读到网站素材桶的容量”“旧读数”）各自不拆行，换行只落在两项之间（M434） */
+.st-cloud > p > span { white-space: nowrap; }
