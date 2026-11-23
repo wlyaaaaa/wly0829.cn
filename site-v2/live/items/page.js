@@ -8,7 +8,7 @@
   const route = href => { const u = new URL(href, location.origin); if (u.origin !== location.origin) return href; if (params.has('fixture') && u.pathname.startsWith('/live/')) u.searchParams.set('fixture', params.get('fixture')); return u.pathname + u.search + u.hash; };
   const actions = it => {
     // M458：卡上不单独放“复制给 AI”，问情况就是复制给 AI（定稿卡-等你的事 开头，本人 11-22 16:04）
-    const list = (it.actions || []).filter(a => a.intent !== 'done' && (!it.closed || a.intent !== 'later')).map(a => ({ ...a, label: a.intent === 'ask' ? '问情况' : !a.label || typeof a.label === 'object' && !a.label.text && !a.label.value ? ({ ack: '我知道了', close_report: '关掉', later: '晚点提醒', decline: '不办了' })[a.intent] || (a.target === 'report' ? '看汇报' : '打开对话') : a.label }));
+    const list = (it.actions || []).filter(a => a.intent !== 'done' && (!it.closed || !['later', 'ack', 'decline', 'close_report'].includes(a.intent))).map(a => ({ ...a, label: a.intent === 'ask' ? '问情况' : !a.label || typeof a.label === 'object' && !a.label.text && !a.label.value ? ({ ack: '我知道了', close_report: '关掉', later: '晚点提醒', decline: '不办了' })[a.intent] || (a.target === 'report' ? '看汇报' : '打开对话') : a.label }));
     if (!list.some(a => a.intent === 'ask')) list.unshift({ kind: 'copy', label: '问情况', intent: 'ask' });
     if (it.open && !list.some(a => a.kind === 'open')) list.push({ ...(typeof it.open === 'string' ? (/^(https?:|\/)/.test(it.open) ? { href: it.open } : { target: it.open }) : it.open), kind: 'open', label: it.open.label || '打开对话' });
     return U.goActions(it, list.map(a => typeof a.href === 'string' && a.href.startsWith('/live/') ? { ...a, href: route(a.href) } : a));
@@ -159,7 +159,7 @@
           link(s) { if (s.data == null && ['none', 'gone'].includes(s.phase)) { reading.set(s); if (s.phase === 'none') U.html(target, `<p class="row__sub">${s.offline || U.offline?.() ? '这块没存下来，连上后补上。' : U.collectionText()}</p>`); finish(false); } U.blockNote(target, s); },
           data(d) { if (!d) return;
             if (viewer === 'public' && (d.visibility === 'owner' || d.public === 'owner')) { U.html(target, `<p class="row__line">${U.visibilityNote({ visibility: 'owner' }, viewer, '这件事的内容')}</p>`); reading.done(); finish(true); return; }
-            U.html(target, (d.detail_text ? `<p class="row__line">${U.fieldHtml(d.detail_text, { kind: viewer })}</p>` : '') + (d.questions || []).map(q => `<p class="row__line">${U.fieldHtml(q.text && typeof q.text === 'object' ? q.text : q, { kind: viewer })} </p><div class="item-options">${optionActions(d, q)}</div>`).join('') + (d.history || []).filter(h => h.text !== '事项已加入等你的清单').map(h => `<p class="row__sub">${U.date(h.at)} ${U.time(h.at)} · ${U.fieldHtml(h.text, { kind: viewer })}</p>`).join('') + (d.origin?.href ? `<a class="more" href="${esc(route(d.origin.href))}">${U.fieldHtml(d.origin.name, { name: '来源', place: 'label', kind: viewer })} ›</a>` : ''));
+            U.html(target, (d.detail_text ? `<p class="row__line" style="white-space: pre-line">${U.fieldHtml(U.capText(d.detail_text, 200), { kind: viewer })}</p>` : '') + (d.questions || []).map(q => `<p class="row__line" style="white-space: pre-line">${U.fieldHtml(U.capText(q.text && typeof q.text === 'object' ? q.text : q, 200), { kind: viewer })} </p><div class="item-options">${optionActions(d, q)}</div>`).join('') + (d.history || []).filter(h => h.text !== '事项已加入等你的清单').map(h => `<p class="row__sub">${U.date(h.at)} ${U.time(h.at)} · ${U.fieldHtml(h.text, { kind: viewer })}</p>`).join('') + (d.origin?.href ? `<a class="more" href="${esc(route(d.origin.href))}">${U.fieldHtml(d.origin.name, { name: '来源', place: 'label', kind: viewer })} ›</a>` : ''));
             reading.done(); finish(true);
             if (d.rewrite === 'pending' && itemText(d) != null && itemText(d) !== '') target.insertAdjacentHTML('afterbegin', `<p class="row__line">${U.fieldHtml(d.text && typeof d.text === 'object' ? { ...d, ...d.text } : d, { kind: viewer })}${d.at ? ` · ${U.date(d.at)} ${U.time(d.at)}` : ''}</p>`);
             if (d.origin && !d.origin.href) target.insertAdjacentHTML('beforeend', `<p class="row__sub">来源：${U.fieldHtml({ ...d.origin, text: d.origin.name || d.origin.text || U.collectionText() }, { kind: viewer })}</p>`);
@@ -177,7 +177,7 @@
   function checkbox(it) {
     if (viewer !== 'owner' || !it.actions?.some(action => action.intent !== 'done' && U.itemIntent(it, action))) return '';
     selectable.set(it.id, it);
-    return '<label class="items-choice"><input type="checkbox" data-select-item="' + esc(it.id) + '" aria-label="选择 ' + esc(itemText(it)) + '"' + (selected.has(it.id) ? ' checked' : '') + '></label>';
+    return '<label class="items-choice" data-slot="pick" title="多选：勾上几件，一起确认"><input type="checkbox" data-select-item="' + esc(it.id) + '" aria-label="选择 ' + esc(itemText(it)) + '"' + (selected.has(it.id) ? ' checked' : '') + '></label>';
   }
   function renderSelection() {
     const available = new Map();
@@ -246,12 +246,12 @@
     let closing = it.closed?.text && (typeof it.closed.text === 'object' ? it.closed.text : viewer === 'public' ? it.closed.text.replace(/^你(?=办完了|说不办了)/, '本人') : it.closed.text);
     if (typeof closing === 'string' && it.closed?.kind === 'expired') closing = closing.replace(expiredText, '展示期已到');
     const mobile = it.mobile && typeof it.mobile === 'object' ? it.mobile : ({ phone: '手机能办', computer: '要在电脑上办', in_person: '要本人到场' })[it.mobile];
-    const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), U.date(it.closed?.at)] : [it.now, it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, viewer === 'owner' && it.origin?.name];
+    const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, viewer === 'owner' && U.capText(it.origin?.name, 30, true)];
     if (closed && KIND[it.kind]) sub.unshift(viewer === 'public' ? KIND[it.kind].replaceAll('你', '本人') : KIND[it.kind]);
-    const titleText = U.fieldHtml(hidden ? { visibility: 'owner' } : flags, { name: closed ? '已关闭事项' : '待办事项', place: 'title', kind: viewer });
+    const titleText = U.fieldHtml(hidden ? { visibility: 'owner' } : U.capText(flags, 30, true), { name: closed ? '已关闭事项' : '待办事项', place: 'title', kind: viewer });
     // 占位行的标题已写清“〈哪一样〉仅本人可见”时，旁边不再重复同一句。
     const markSaid = mark.replace(/<[^>]*>|🔒/g, '').trim(), shownMark = placeholder && markSaid === titleText.replace(/<[^>]*>/g, '').trim() ? '' : mark;
-    const archivedTitle = closed && viewer === 'public' && it.kind === 'know' && !/^当时记录[：:]/.test(U.fieldText(flags, viewer)) ? `当时记录：${titleText}` : titleText;
+    const archivedTitle = titleText;   // 已关掉的不再加“当时记录：”，直接说是什么事（本人 11-23 11:54）
     const title = placeholder ? `<span class="row__title">${titleText}</span>` : closed ? `<a class="row__title" href="${esc(route('/live/item/?id=' + encodeURIComponent(it.id)))}">${archivedTitle}</a>` : it.detail ? `<button class="row__title detail-toggle" type="button" data-detail="${esc(it.id)}">${titleText} <span class="more__chev">›</span></button>` : `<span class="row__title">${titleText}</span>`;
     const subtitle = sub.filter(s => s && !(/正在换说法|仅本人可见/.test(sp(s)) && sp(s) === itemText(it)) && !(hidden && /仅本人可见|可信设备可见/.test(sp(s))) && !(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读/.test(sp(s)))).map(s => `<span class="item-bit${s === deadline || /^(?:已等|约 |\d\d-\d\d)/.test(sp(s)) ? ' item-keep' : ''}">${U.fieldHtml(s, { kind: viewer })}</span>`).join('');
     // M225：卡片只报自己的记录时刻；整组采集时刻（stale_text/gap）已在页头说过，不再逐卡重复。
@@ -263,7 +263,7 @@
     collections.set(key, { items, empty, renderer, partial });
     const known = Array.isArray(items);
     const closedKind = key === 'closed' ? $('kind-pick').value : '';
-    items = (items || []).filter(it => (key === 'closed' || !hiddenByWrite(it)) && (!query || matchesQuery(it)) && (!KIND[closedKind] || it.kind === closedKind));
+    items = (items || []).filter(it => (key === 'closed' || !hiddenByWrite(it) && !U.justSaved(it)) && (!query || matchesQuery(it)) && (!KIND[closedKind] || it.kind === closedKind));
     if (key !== 'closed' && key !== 'reports') {
       U.blockNote($(key), null);
       items = dueOrder(items);
@@ -287,7 +287,7 @@
       if (!grouped) return [renderer(it)];
       const current = method(it), heading = previous !== current;
       previous = current;
-      return heading ? [{ key: 'method-' + current, cls: 'items-done-group', html: '<span>' + (media[current] || '办理方式未记录') + '</span>' }, renderer(it)] : [renderer(it)];
+      return heading ? [{ key: 'method-' + current, cls: 'items-done-group', html: '<span>' + (media[current] || '其他') + '</span>' }, renderer(it)] : [renderer(it)];
     });
     const showClosedHidden = key === 'closed' && !!hidden;
     const hiddenParts = showClosedHidden ? Object.entries(KIND)
@@ -465,14 +465,24 @@
     const shown = collections.get('closed');
     if (shown) list('closed', shown.items, shown.empty, shown.renderer, true, shown.partial);
   }
+  // 已关掉的事：后台标题带“当时记录：”，去掉直接说是什么事；本人版同一句关过几次的并成一条，写关过几次（本人 11-23 11:54）
+  const unprefix = v => typeof v === 'string' ? v.replace(/^当时记录[：:]\s*/, '') : v && typeof v === 'object' ? { ...v, ...Object.fromEntries(['value', 'text'].filter(k => typeof v[k] === 'string').map(k => [k, v[k].replace(/^当时记录[：:]\s*/, '')])) } : v;
+  function closedRows(items) {
+    const seen = new Map();
+    for (const raw of items) {
+      const it = { ...raw, text: unprefix(raw.text), title: unprefix(raw.title) }, key = viewer === 'owner' ? it.kind + '|' + U.fieldText(it.text ?? it.title, 'owner').replace(/\s+/g, '').replace(/[。.]$/, '') : it.id;
+      if (seen.has(key)) seen.get(key).repeats++; else seen.set(key, { ...it, repeats: 1 });
+    }
+    return [...seen.values()];
+  }
   function renderClosed(d, append = false) {
     closedPacket = append ? { ...closedPacket, ...d, hidden: closedPacket?.hidden ?? d.hidden, hidden_summary: closedPacket?.hidden_summary ?? d.hidden_summary } : d;
     closedItems = append ? [...new Map([...closedItems, ...d.items].map(it => [it.id, it])).values()] : d.items || [];
     next = d.next;
     const partial = next != null;
     const empty = d.items == null ? U.collectionText() : partial ? '已读范围还没有这类事项' : '近 7 天没有下去的事';
-    list('closed', d.items == null ? null : closedItems, empty, it => row(it, true), true, partial);
-    recentClosed = d.items == null ? null : closedItems;
+    list('closed', d.items == null ? null : closedRows(closedItems), empty, it => row(it, true), true, partial);
+    recentClosed = d.items == null ? null : closedRows(closedItems);
     renderSide();
     $('closed-next').hidden = !next;
     U.html($('closed-next'), '再往前读 ›');
@@ -497,7 +507,7 @@
   });
   function renderReports(d) {
     reportsData = d;
-    const rows = d.items?.filter(it => !hiddenByWrite(it) && (!query || matchesQuery(it)) && !pendingItems.has(it.owner_item || it.item_id || it.item || it.id) && !(it.actions || []).some(a => a.href && pendingItems.has(new URL(a.href, location.origin).searchParams.get('id'))));
+    const rows = d.items?.filter(it => !hiddenByWrite(it) && !U.justSaved(it) && (!query || matchesQuery(it)) && !pendingItems.has(it.owner_item || it.item_id || it.item || it.id) && !(it.actions || []).some(a => a.href && pendingItems.has(new URL(a.href, location.origin).searchParams.get('id'))));
     const drawn = rows?.length ? rows.map(it => ({ key: it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : U.status({ ...it, level: it.light }, { small: true }).lamp}<div class="row__text"><p class="row__main"><span class="row__title">${U.fieldHtml(it.text && typeof it.text === 'object' ? { ...it, ...it.text } : it, { name: '待答汇报', place: 'title', kind: viewer })}</span></p><p class="row__sub">${[it.unanswered != null ? `${sp(it.unanswered)} 题没答` : !U.offline?.() && U.collectionText(), it.opened && `${U.date(it.opened)} ${U.time(it.opened)} 弹出`].filter(Boolean).join(' · ')}</p></div><div class="row__acts">${actions(it)}${checkbox(it)}</div>` })) : viewer === 'public' && !query && d.hidden ? [] : wait(d.items == null ? U.collectionText() : d.items.length ? '汇报里的待答问题已列在前面的事里' : '没有两小时没答的汇报');
     reportCount = rows == null ? null : rows.length + (viewer === 'public' && !query ? d.hidden || 0 : 0); filterBoard();
     U.html(cards.get('reports').title, `${viewer === 'owner' ? '等你答的汇报' : '等本人答的汇报'}（${reportCount ?? '—'} 件）`);

@@ -557,7 +557,7 @@
     let sub = '';
     if (loud) {
       const age = waitDays(it, end);
-      sub = [age != null && (age ? `等了 ${waitText(age)}` : '等了不到 1 天'), it.minutes != null && `约 ${it.minutes} 分钟`, it.due && `${U.date(it.due)} 前`, value(it.now, '为什么', homeAddressed), value(it.mobile, '在哪办', v => MOBILE[v])].filter(Boolean).join(' · ');
+      sub = [age != null && (age ? `等了 ${waitText(age)}` : '等了不到 1 天'), it.minutes != null && `约 ${it.minutes} 分钟`, it.due && `${U.date(it.due)} 前`, value(U.capText(it.now, 60, true), '为什么', homeAddressed), value(it.mobile, '在哪办', v => MOBILE[v])].filter(Boolean).join(' · ');
       if (!sub && !lastState?.offline) sub = U.collectionText('等待时间、用时和办理说明');
     }
     if (it.kind === 'later') {
@@ -566,7 +566,7 @@
     }
     if (it.kind === 'know') sub = elapsed(it.episode_at || it.born);
     if (it.rewrite === 'pending' && it.at) sub = [sub, `${U.date(it.at)} ${U.time(it.at)}`].filter(Boolean).join(' · ');
-    if (viewer === 'owner' && it.origin?.name) sub = join([sub, it.origin.name]);
+    if (viewer === 'owner' && it.origin?.name) sub = join([sub, U.capText(it.origin.name, 30, true)]);
     if (viewer === 'public' && it.visibility === 'owner') sub = '';
     const fresh = seen.isNew(it.episode_at || it.born, at) ? tags([['新', 'tag--new']]) : '';
     // 本人版给完整版，不挂“仅你可见”。
@@ -575,7 +575,7 @@
       key: it.id,
       cls: 'row',
       html: `${lamp({ ...it, level: it.light })}<div class="row__text">
-          <p class="row__main"><span class="row__kind">${addressed(KIND[it.kind])}</span>${title(it, homeAddressed(it.text), 'items')}${fresh}${marks}</p>
+          <p class="row__main"><span class="row__kind">${addressed(KIND[it.kind])}</span>${title(it, homeAddressed(U.capText(it.text, 30, true)), 'items')}${fresh}${marks}</p>
           ${sub ? `<p class="row__sub">${sub}</p>` : ''}${detail}
         </div><div class="row__acts">${U.goActions(it, loud && !actions.some(a => a.label === '问情况') ? [{ kind: 'copy', label: '问情况', intent: 'ask' }, ...actions] : actions)}</div>`,
     };
@@ -591,7 +591,8 @@
     const { count, exact, text } = waitingCount(d.counts, extra ? [...scoped, extra] : scoped);
     U.html(p.head, U.head(addressed(text), { href: href('needs') }) + (allNotUrgent(d) ? '<span class="head__rewrite">都不急</span>' : ''));
     const newest = (a, b) => Date.parse(b.episode_at || b.born) - Date.parse(a.episode_at || a.born);
-    const all = [...by('choose').sort(newest), ...by('do').sort(newest)];
+    // 刚在本页点过、已经办成的，后台读数跟上前先不显示
+    const all = [...by('choose').sort(newest), ...by('do').sort(newest)].filter(it => !U.justSaved(it));
     const rows = needsPreview(all).map(it => needRow(it, focus && it.id === focus.id ? noticeDetail(focus.item) : '', end));
     const closed = focus && closedNoticeRow(focus), targetIndex = rows.findIndex(row => row.key === focus?.id);
     const focusedRow = closed || (targetIndex < 0 && focus?.item?.kind && !focus.closed && needRow(focus.item, noticeDetail(focus.item), end));
@@ -636,9 +637,9 @@
   }
   function noticeDetail(item) {
     if (!item?.detail_text || viewer === 'public' && (item.visibility === 'owner' || item.public === 'owner')) return '';
-    const detail = U.fieldHtml(item.detail_text, { name: '事项详情', kind: viewer });
+    const detail = U.fieldHtml(U.capText(item.detail_text, 200), { name: '事项详情', kind: viewer });
     const opened = parts.needs.main.querySelector(`[data-key="${CSS.escape(item.id)}"] .notice-detail`)?.open;
-    return detail ? `<details class="row__sub notice-detail"${opened ? ' open' : ''}><summary>事项详情</summary><p>${detail}</p></details>` : '';
+    return detail ? `<details class="row__sub notice-detail"${opened ? ' open' : ''}><summary>事项详情</summary><p style="white-space: pre-line">${detail}</p></details>` : '';
   }
 
   // —— AI 对话 ——
