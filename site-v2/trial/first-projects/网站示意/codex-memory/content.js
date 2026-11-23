@@ -94,7 +94,7 @@ window.PROJECT_CONFIG = {
     "升级不翻车": "/openclaw-gateway/升级不翻车.html",
     "卡顿问诊": "/pcconfig/timeaudit-diagnostics.html",
     "原件书架": "/personal-materials/project.html",
-    "原话为凭": "/agents/原话为凭.html",
+    "原话存档": "/agents/原话存档.html",
     "双层密码": "/vault-tool/双层密码.html",
     "只让自己连": "/sunshine-remote-streaming/tailscale-safe-exposure.html",
     "四处打听": "/agents/news-quickcheck.html",
@@ -357,6 +357,8 @@ window.PAGE_DATA = {
         "不会同时写乱：Claude、Codex 两边轮流往这本账里写，不会同时写；程序半路断了，也不会一直占着、卡住下一次。",
         "多留一份：账本在热备盘上另留一份，写完读回来逐字比对；那块盘不在，只跳过这一份，本机照记。冷备盘上那份，由原有的往冷备盘抄东西的定时程序顺带抄过去。",
         "丢了怎么办：恢复时只要那本账；“记到哪天了”的记录丢了，重新扫一遍、重复的只算一个，就接上了。",
+        "进度记到哪：只记到真写进账的最后一条调用的时间；扫一遍没读到新调用，进度不往前挪。",
+        "旧记录本身坏了：有几份旧对话记录中间有一段成了空白（字节全是零），核实后登记在案；回执里单列哪份坏了、坏了多少，读得出的调用照样入账，不挡进度。没登记的新坏行，或登记过的那份文件又变了，仍算没扫完。所以“做完了”只说明读得出的都记上了，不等于以前的记录一点没缺。",
         "出处：`AI_USAGE_LEDGER.md`；`tools/ai_usage_ledger.py`；`tools/Invoke-AiUsageLedger.ps1`。"
       ],
       "buttons": [],

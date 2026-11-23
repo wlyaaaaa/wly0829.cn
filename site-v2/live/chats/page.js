@@ -301,7 +301,7 @@
       const sameTime = active && done && seen && seen === cutoff;
       const reading = text => `<span class="live-unit">（${esc(text)}）</span>`;
       const notes = [active && U.nowrap(active) + (seen && !sameTime ? reading(seen) : ''),
-        done && `近 72 小时做完 ${U.nowrap(done)}${cutoff && !sameTime ? reading(cutoff) : ''}`].filter(Boolean);
+        done && `近 72 小时已回复 ${U.nowrap(done)}${cutoff && !sameTime ? reading(cutoff) : ''}`].filter(Boolean);
       U.html($('chat-note'), notes.length ? notes.join(' · ') + (sameTime ? reading(seen) : '') : U.fieldHtml(d.text, { name: 'AI 对话', kind: viewer }), false);
       L.tone($('hero'), status);
     }

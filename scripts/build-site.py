@@ -16,6 +16,7 @@ from datetime import datetime, timedelta, timezone
 from concurrent.futures import ThreadPoolExecutor
 from importlib.metadata import version
 from pathlib import Path
+from urllib.parse import quote
 from xml.sax.saxutils import escape
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,6 +26,7 @@ LEGACY_REDIRECTS = {
     '/cockpit/': '/live/', '/cockpit/storage/': '/live/storage/',
     '/cockpit/stutter/': '/live/computer/#stutters', '/cockpit/ai/': '/live/ledger/',
     '/system/': '/', '/how/': '/principles/', '/learning/': '/learning/project.html',
+    '/agents/原话为凭.html': '/agents/原话存档.html',
 }
 sys.path.insert(0, str(ROOT / 'scripts'))
 sys.path.insert(0, str(ROOT / 'scripts/content-refresh'))
@@ -171,10 +173,14 @@ def legacy_routes(dist, runtime):
             target = '/404.html'
         title = re.search(r'<title>(.*?)</title>', (dist / runtime.nav.route_file(target.split('#', 1)[0])).read_text('utf-8'), re.S)[1]
         path.parent.mkdir(parents=True, exist_ok=True)
+        renamed_anchor = ''
+        if route == '/agents/原话为凭.html':
+            renamed_anchor = f'u.hash=u.hash.replace(/^#{quote("原话为凭")}-(?=\\d)/i,"#{quote("原话存档")}-");'
         path.write_text('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>' + title +
             '</title><meta property="og:title" content="' + title + '"><meta name="robots" content="noindex">' +
             '<link rel="canonical" href="https://wly0829.cn' + target + '"><meta http-equiv="refresh" content="0;url=' +
-            target + '"><script>const u=new URL(' + json.dumps(target) + ',location.href);u.search=location.search;u.hash=location.hash||u.hash;location.replace(u.href);</script></head><body><a href="' + target + '">打开页面</a></body></html>\n', encoding='utf-8', newline='')
+            target + '"><script>const u=new URL(' + json.dumps(target, ensure_ascii=False) + ',location.href);u.search=location.search;u.hash=location.hash||u.hash;' +
+            renamed_anchor + 'location.replace(u.href);</script></head><body><a href="' + target + '">打开页面</a></body></html>\n', encoding='utf-8', newline='')
         redirects[path.relative_to(dist).as_posix()] = target
     return redirects
 

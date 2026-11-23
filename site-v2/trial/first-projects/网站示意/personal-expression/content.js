@@ -84,7 +84,7 @@ window.PROJECT_CONFIG = {
     "升级不翻车": "/openclaw-gateway/升级不翻车.html",
     "卡顿问诊": "/pcconfig/timeaudit-diagnostics.html",
     "原件书架": "/personal-materials/project.html",
-    "原话为凭": "/agents/原话为凭.html",
+    "原话存档": "/agents/原话存档.html",
     "双层密码": "/vault-tool/双层密码.html",
     "只让自己连": "/sunshine-remote-streaming/tailscale-safe-exposure.html",
     "四处打听": "/agents/news-quickcheck.html",

@@ -22,8 +22,8 @@
       "button-01-03-v1.compressed.webp",
       "14.8rem"
     ],
-    "去〔原话为凭〕": [
-      "button-01-04-v1.compressed.webp",
+    "去〔原话存档〕": [
+      "button-01-04-v2.compressed.webp",
       "13.8rem"
     ],
     "去〔工期账本〕": [
@@ -164,13 +164,13 @@
       "nav": "项目",
       "imagePrefix": "派出去的活"
     },
-    "原话为凭": {
-      "slug": "原话为凭",
-      "file": "原话为凭.html",
-      "title": "原话为凭",
-      "meta": "原话为凭",
+    "原话存档": {
+      "slug": "原话存档",
+      "file": "原话存档.html",
+      "title": "原话存档",
+      "meta": "原话存档",
       "nav": "项目",
-      "imagePrefix": "原话为凭"
+      "imagePrefix": "原话存档"
     },
     "工期账本": {
       "slug": "工期账本",
