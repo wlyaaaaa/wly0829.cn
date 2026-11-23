@@ -79,6 +79,8 @@
   }
   markLiveView();
   const plainClick = e => e.button === 0 && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey;
+  // ?self=1 / ?self=0 只是本人设备记一下“别算进访客”，不改页面内容；比对上一页是不是同一目的地时不算它（M633）。
+  const pageSearch = href => { const u = new URL(href); u.searchParams.delete('self'); return u.search; };
   // 正文的返回链接只在上一条历史确实是同一目的地时恢复原页位置。
   function restoreBack(e, link = e.currentTarget) {
     if (e.defaultPrevented || !plainClick(e) || (link.target && link.target !== '_self') || link.hasAttribute('download')) return;
@@ -88,7 +90,7 @@
     const previous = new URL(entry.url);
     // 回实况首页的链接带“#卡片”：上一条去掉 # 后面那段就是实况首页时直接后退，回到离开时的位置（M229、M598，各页一样）。
     const liveHome = link.pathname === '/live/';
-    if (previous.origin !== link.origin || previous.pathname !== link.pathname || previous.search !== link.search ||
+    if (previous.origin !== link.origin || previous.pathname !== link.pathname || pageSearch(previous.href) !== pageSearch(link.href) ||
         (link.hash && !liveHome && previous.hash !== link.hash)) return;
     e.preventDefault();
     history.back();
