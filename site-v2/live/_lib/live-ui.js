@@ -663,9 +663,9 @@
   }
   function rememberSaved(rows) {
     if (!rows.length) return;
-    try { const all = savedWrites(); for (const item of rows) all[item.id] = { version: item.item_version, at: Date.now() }; localStorage.setItem(SAVED_KEY, JSON.stringify(all)); } catch { /* 存不下就只靠本页 */ }
+    try { const all = savedWrites(); for (const item of rows) all[item.id] = { version: item.item_version, kind: item.kind, at: Date.now() }; localStorage.setItem(SAVED_KEY, JSON.stringify(all)); } catch { /* 存不下就只靠本页 */ }
   }
-  function justSaved(item) { const hit = item && savedWrites()[item.id]; return !!hit && !item.closed && hit.version === item.item_version; }
+  function justSaved(item) { const hit = item && savedWrites()[item.id]; return !!hit && !item.closed && hit.version === item.item_version && hit.kind === item.kind; }   // 晚点提醒后到了“你放着”就照常显示
   // 回执弹窗（定稿：异步的成功失败回执；本人 11-23 11:51 要弹窗告诉他保存成功还是失败）：先写“正在保存…”，后台真结果回来再换；失败的留着，能再点一次。
   function itemReceipt(head = '正在保存…', detail = '') {
     let lane = document.getElementById('item-action-receipts');
