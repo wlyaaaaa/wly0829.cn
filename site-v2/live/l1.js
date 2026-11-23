@@ -1597,6 +1597,15 @@
   subscribe();
   // AI 留言不随“只看某个项目”变，单独订一份；有变化就重画页顶那张卡
   window.Live.watch('ai-messages', null, { data(d) { aiMessages = Array.isArray(d?.items) ? d.items : null; if (lastState) renderNotices(lastState); } });
+  // 硬件小包：页面看得见时约每 5 秒取一次，只换电脑卡里的 CPU 占用、内存和 CPU 温度，不重取整包（M519）
+  // 小包不带 rev，data 只来第一次；每读完一次都会来的是 link。
+  window.Live.watch('computer/hardware', null, { link(state) {
+    const computer = home?.computer;
+    if (!computer || computer.q === 'warming' || lastState?.offline || state.meta?.viewer?.kind !== viewer) return;
+    if (!window.Live.mergeHardware(computer.metrics, state.data?.metrics)) return;
+    const render = () => renderComputer(computer, home.screen, home.phone);
+    if (settling()) render(); else U.anchor(render);
+  } });
 
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
 })();

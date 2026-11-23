@@ -556,16 +556,21 @@
     if (timer) clearInterval(timer);
     timer = null;
   }
-  const ACTIVITY_POLL_SECONDS = 30, DEFAULT_POLL_SECONDS = 60;
+  const ACTIVITY_POLL_SECONDS = 30, DEFAULT_POLL_SECONDS = 60, TICK_SECONDS = 5, HARDWARE = 'computer/hardware';
   const pollSeconds = e => e.path === 'screen' || e.path === 'chats' || /^chats\/[^/?]+$/.test(e.path)
     ? ACTIVITY_POLL_SECONDS : DEFAULT_POLL_SECONDS;
+  // 读得到的每样按自己的 refresh_seconds 到期就取（M519）；整包最快 30 秒一次，只有硬件小包按它的 5 秒。
+  const pollEvery = e => e.path === HARDWARE ? e.refresh_seconds || TICK_SECONDS
+    : Math.max(e.refresh_seconds || pollSeconds(e), ACTIVITY_POLL_SECONDS);
+  const healthy = e => !e.failure && e.validatedLink?.state !== 'offline';
   function startPolling() {
     if (!timer && !publicPaused && currentEntries().some(e => e.listeners.size)) {
-      let activityOnly = false;
+      // 每 5 秒看一眼哪几样到期了，只取到期的；读不到、连不上的那几样仍照原来每 60 秒跟着带一次。页面藏起来时不取。
+      let ticks = 0;
       timer = setInterval(() => {
-        activityOnly = !activityOnly;
-        if (!document.hidden) refresh(activityOnly ? 'activity' : true);
-      }, ACTIVITY_POLL_SECONDS * 1000);
+        ticks++;
+        if (!document.hidden) refresh(ticks % (DEFAULT_POLL_SECONDS / TICK_SECONDS) ? 'due' : true);
+      }, TICK_SECONDS * 1000);
     }
   }
   function pausePublication(e) {
@@ -796,7 +801,7 @@
   }
   async function refresh(onlyDue, fresh = false) {
     if (pairing) return pairing.then(() => refresh(onlyDue, fresh));
-    const polling = onlyDue === true || onlyDue === 'activity';
+    const polling = onlyDue === true || onlyDue === 'due';
     if (publicPaused && polling) return { ok: false, at: null };
     // 点页面上的刷新：和浏览器刷新一样从头读。页面早先顺手取过、现在没在显示的那几份（翻页、展开、探测）
     // 当作已退订：不再拿它们上一回（或还在路上那一读）的“连不上”压住整页，也不再重读，页面再要时 get 会重新订上；
@@ -806,8 +811,7 @@
       if (!e.listeners.size) { e.stopped = true; e.receivedAt = null; end(e); }
     }
     const active = [...entries.values()].filter(e => !e.stopped
-      && (onlyDue !== 'activity' || pollSeconds(e) === ACTIVITY_POLL_SECONDS
-        && !e.failure && e.validatedLink?.state !== 'offline')
+      && (onlyDue !== 'due' || healthy(e))
       && (e.listeners.size || e.receivedAt != null && e.validatedLink?.state === 'offline')).map(e => {
       if (e.token === device()) return e;
       const next = entry(e.resource, e.query);
@@ -820,8 +824,8 @@
     const probe = publicPaused && (active[0] || entry(pausedEntry.resource, pausedEntry.query));
     const states = probe ? [await read(probe)] : [];
     if (publicPaused) return { ok: false, at: null };
-    const due = polling ? active.filter(e => e.failure || !e.refresh_seconds || e.refresh_seconds <= pollSeconds(e)
-      || Date.now() - e.requestedAt >= e.refresh_seconds * 1000) : active;
+    const due = polling ? active.filter(e => healthy(e) ? Date.now() - (e.requestedAt || 0) >= pollEvery(e) * 1000 - 1000
+      : e.failure || !e.refresh_seconds || e.refresh_seconds <= pollSeconds(e) || Date.now() - e.requestedAt >= e.refresh_seconds * 1000) : active;
     states.push(...await Promise.all(due.filter(e => e !== probe).map(e => read(e, false, undefined, true))));
     if (probe && !publicPaused) window.LiveUI?.publicPause?.(false, publicPauseText);
     return {
@@ -987,8 +991,23 @@
   }
   // 浏览器自己断网时马上重读一次，立刻挂“连不上”（联网时的重读在上面 online 那一行）。
   globalThis.addEventListener?.('offline', () => { if (!publicPaused) refresh(false); });
+  // 硬件小包（computer/hardware）并进页面已有的同名读数行：只在比原来新时换，缺数不盖、不补零；换了返回 true（M519）
+  function mergeHardware(rows, metrics) {
+    let changed = false;
+    for (const m of Array.isArray(metrics) ? metrics : []) {
+      const row = Array.isArray(rows) ? rows.find(r => r?.id === m?.id) : null, at = Date.parse(m?.at);
+      if (!row || m.value == null || !Number.isFinite(at) || at <= (Date.parse(row.source_at ?? row.at) || 0)) continue;
+      Object.assign(row, { value: m.value, at: m.at, q: 'ok', state: 'ok', refresh_seconds: m.refresh_seconds, stale_after: m.stale_after });
+      if ('source_at' in row) row.source_at = m.at;
+      if ('read_error' in row) row.read_error = false;
+      if ('cached' in row) row.cached = false;
+      for (const field of ['gap', 'stale', 'stale_text', 'refresh_error']) delete row[field];
+      changed = true;
+    }
+    return changed;
+  }
   window.Live = { reload: reloadPage, watch, refresh, open, paired, offline, readRequest, automationSetting, upTo: shownUpTo, stamp, returningHome,
-    get, afterReady, markOpened: opened.card,
+    get, afterReady, markOpened: opened.card, mergeHardware,
     copy(item, intent = 'ask') {
       if (intent === 'stop' && /^task-/.test(item.id)) {
         const name = String(item.name || item.title || '自动任务').replace(/\s+/g, ' ').slice(0, 90);
