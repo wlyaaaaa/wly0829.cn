@@ -22,6 +22,9 @@
   let viewer = 'public', task, now = Date.now(), offline = false, packetAt = null, selected = false;
   const RUN_BATCH = 50;
   let restShown = RUN_BATCH;
+  // 后台按页给运行记录（runs_page）时：更早的批次照游标取来放在这里，按开始的那一秒去重；首包刷新时已经摆出来的也留着，不出空档（M643）
+  let olderRuns = new Map(), olderViewer = null, deepCursor, pageLoading = false, pageFailed = false, pickedRun = null, pickAsked = false;
+  const pageOf = d => d?.runs_page && typeof d.runs_page === 'object' && Array.isArray(d.runs) ? d.runs_page : null;
   let detailWatches = [];
   const field = (v, name) => U.fieldHtml(v, { name, kind: viewer });
   const text = v => U.fieldText(v, viewer);
@@ -58,6 +61,7 @@
     return `<span class="task-result" data-state="${result}"><i class="task-dot" data-state="${result}" aria-hidden="true"></i>${result === 'unknown' && variant === 'plan' && esc(unknownRun(run)) || label(result, variant)}</span>`;
   };
   const runTime = r => r.start ?? r.end;
+  const keepRuns = rows => { for (const r of rows || []) { const t = time(r?.started ?? r?.start ?? r?.finished ?? r?.end); if (Number.isFinite(t)) olderRuns.set(Math.floor(t / 1000), r); } };
   const valid = Number.isFinite;
   function asRun(r) {
     const started = time(r.started ?? r.start), finished = time(r.finished ?? r.end);
@@ -94,7 +98,34 @@
     write($('crumb-name'), field(d.display_name ?? d.name, '任务名'));
   }
   back.addEventListener('click', U.restoreBack);
-  $('runs-rest').addEventListener('click', e => { if (task && e.target.closest('[data-runs-more]')) { restShown += RUN_BATCH; render(task); } });
+  $('runs-rest').addEventListener('click', e => {
+    if (!task || !e.target.closest('[data-runs-more]')) return;
+    if (pageOf(task)) loadOlder(); else { restShown += RUN_BATCH; render(task); }
+  });
+  const detailPath = () => `tasks/${encodeURIComponent(id)}`;
+  // 照游标向后台取下一批（每批 50 次）；没读到就在按钮上说一句，再点重读
+  function loadOlder() {
+    const cursor = deepCursor !== undefined ? deepCursor : task.runs_page.next_cursor, who = viewer;
+    if (pageLoading || !cursor) return;
+    pageLoading = true; pageFailed = false; render(task);
+    window.Live.get(detailPath(), { runs_cursor: cursor }).then(state => {
+      if (who !== viewer) return;
+      const rows = state?.data?.runs, page = state?.data?.runs_page;
+      if (!Array.isArray(rows) || !page || state.viewer?.kind !== viewer) { pageFailed = true; return; }
+      keepRuns(rows); deepCursor = page.next_cursor ?? null;
+    }, () => { pageFailed = true; }).finally(() => { pageLoading = false; if (task) render(task); });
+  }
+  // 旧链接要看的那一次不在已取的几批里：带 ?run= 让后台单独给出这一行（selected_run）
+  function askPicked() {
+    pickAsked = true;
+    const who = viewer;
+    window.Live.get(detailPath(), { run: legacyRun }).then(state => {
+      const row = state?.data?.selected_run;
+      if (who !== viewer || state.viewer?.kind !== viewer || !row || protectedField(row)) return;
+      pickedRun = asRun(row);
+      if (task) render(task);
+    }, () => {});
+  }
   $('root-link').href = route('/live/#tasks');
   for (const el of document.querySelectorAll('[data-icon-name]')) U.html(el, window.LiveBoard.icon(el.dataset.iconName), false);
   const weekLabel = { ok: '有成功记录', failed: '有出错记录', none: '没有新启动', 'observed-ok': '至少一轮成功', started: '跑过，结果未确认', unknown: '全天记录未读全' };
@@ -125,7 +156,23 @@
   function count(n, exact) {
     return Number.isInteger(n) && n >= 0 && (exact || n > 0) ? `${exact ? '' : '<small>至少 </small>'}${n}<small> 次</small>` : '';
   }
+  // 后台按全部运行记录算好的统计（runs_summary）：分页以后只拿到最新 50 次，统计照它，不拿已载入的几条重算（M643）
+  function summaryMetrics(d, s, kind) {
+    const plan = kind === 'plan', exact = s.exact === true, span = exact && s.covered !== true, from = time(s.from);
+    const n = v => Number.isInteger(v) && v >= 0 ? v : 0, total = n(s.total), ok = n(s.ok), failed = n(s.failed), running = n(s.running), unread = n(s.unknown);
+    const why = v => v || !plan ? '' : running ? '还在跑' : total ? '已读部分没有' : '';
+    const besides = plan && exact ? [unread && `${unread} 次没记到结果`, running && `${running} 次还在跑`].filter(Boolean).join('，') : '';
+    const totalRow = ['total', `${span && valid(from) ? `${stamp(from)} 起` : '近 7 天'}${besides ? `<small class="task-stat__note">${besides}</small>` : ''}`, count(s.total, exact)];
+    const success = ['success', kind === 'pickup' ? '处理完' : kind === 'schedule' ? '完成' : '成功', count(s.ok, s.success_exact === true), '', why(ok)];
+    const failure = ['failure', kind === 'schedule' ? '没跑成' : '出错', count(s.failed, s.success_exact === true), '', why(failed)];
+    const timed = n(s.duration_count), avg = timed && Number.isFinite(s.avg_duration_ms) ? duration(s.avg_duration_ms / 1000) : '';
+    const average = ['average', '平均用时', avg, timed ? `按 ${timed} 次有起止时刻的记录计算` : '没有读到完整起止时刻',
+      timed || !plan ? '' : running ? '还在跑' : total ? '没记到结束' : ''];
+    return { covered: s.covered === true, coverage: d.coverage,
+      rows: kind === 'pickup' ? [['today', '今天', count(s.today, s.today_exact === true)], totalRow, success, average] : [totalRow, success, failure, average] };
+  }
   function metrics(d, runs, kind) {
+    if (d.runs_summary && typeof d.runs_summary === 'object') return summaryMetrics(d, d.runs_summary, kind);
     const start = dayStart(now) - 6 * DAY, today = dayStart(now), coverage = d.coverage;
     const coveredTo = time(coverage?.to);
     const recent = runs.filter(r => r.start != null && r.start >= start);
@@ -277,7 +324,7 @@
     if (!open && !path && r.end == null && r.exit_code == null && !r.reason && !(!output && r.output)) return '';
     return `<details class="task-run-extra"${open ? ' open' : ''}${path ? ` data-results="${esc(path)}"` : ''}><summary>这次的记录</summary>${info.map(v => `<p>${v}</p>`).join('')}${path ? '<div data-result-content>正在读逐项结果</div>' : ''}</details>`;
   }
-  function history(d, rows, kind, open) {
+  function history(d, rows, kind, open, heads = true) {
     if (!rows.length) return d.coverage?.complete && Array.isArray(d.runs) && !d.runs.length
       ? '<p>已读区间内没有运行记录</p>' : '<p>这段时间的运行记录未读到</p>';
     const value = (v, name) => field(v, name) || '未读到';
@@ -287,7 +334,7 @@
     const checkedAt = time(d.runs_at ?? d.source_at ?? d.at ?? packetAt);
     const logFrom = time(d.coverage?.from), logTo = time(d.coverage?.to);
     const outsideLog = r => valid(logFrom) && valid(logTo) && r.start != null && (r.start < logFrom - 1000 || r.start > logTo + 1000);
-    const labels = kind === 'plan' ? '<div class="task-row task-row--labels"><span>时刻</span><span>结果</span><span>用时</span><span>触发方式</span></div>' : '';
+    const labels = kind === 'plan' && heads ? '<div class="task-row task-row--labels"><span>时刻</span><span>结果</span><span>用时</span><span>触发方式</span></div>' : '';
     return labels + `<ol class="task-timeline">${rows.map(r => {
       const output = kind === 'schedule' && field(runOutput(d, r), '本次成果');
       // 一小时以上只写到分钟，用时一栏放得下，不挤进触发方式
@@ -353,7 +400,7 @@
   const bar = U.topbar({ ask: () => task ? `请看实况的任务「${text(task.name)}」，说明怎么跑、最近结果及该关注什么。` : '' });
   const stopChecks = () => { detailWatches.forEach(w => w.stop()); detailWatches = []; };
   function render(d) {
-    const kind = variantOf(d), runs = runsOf(d), upcoming = nextRuns(d);
+    const page = pageOf(d), kind = variantOf(d), runs = runsOf(page ? { ...d, runs: [...d.runs, ...olderRuns.values()] } : d), upcoming = nextRuns(d);
     document.body.dataset.variant = kind;
     document.body.dataset.scheme = kind === 'plan' ? d.group || 'other' : kind === 'pickup' ? d.illustration_key || ART[d.id] || 'pickup-repair' : 'moon-calendar';
     $('task-body').hidden = false;
@@ -361,19 +408,27 @@
     const quiet = quietWeek(d, runs, kind, covered);
     crumbs(d, kind); renderHero(d, kind, upcoming, kind === 'pickup' && rows[0][2], runs, quiet);
     write($('task-stats'), quiet ? '' : rows.map(([key, label, number, note, reason]) => `<div class="glass task-stat" data-stat="${key}"><dt>${label}</dt><dd${number ? '' : reason ? ' data-unknown data-why' : ' data-unknown'}${note ? ` title="${esc(note)}"` : ''}>${number || esc(reason || '未读到')}</dd></div>`).join(''), false);
-    const old = legacyRun && runs.find(r => r.run_key === legacyRun), open = [...$('rec').querySelectorAll('[data-time]:has(details[open])')].map(el => Number(el.dataset.time));
-    if (old) open.push(runTime(old));
+    const total = page ? Math.max(runs.length, Number(page.total) || 0) : runs.length;
+    const cursor = page ? deepCursor !== undefined ? deepCursor : page.next_cursor ?? null : null;
+    const second = r => Math.floor(runTime(r) / 1000);
+    const old = legacyRun && (runs.find(r => r.run_key === legacyRun) || pickedRun && runs.find(r => second(r) === second(pickedRun))) || null;
+    // 要看的那一次比已取的都早：先摆已取的，“再看”按钮在中间，那一次单独摆在最后并展开
+    const detached = !old && pickedRun;
+    if (legacyRun && !old && page && cursor && !pickAsked) askPicked();
+    const open = [...$('rec').querySelectorAll('[data-time]:has(details[open])')].map(el => Number(el.dataset.time));
+    if (old || detached) open.push(runTime(old || detached));
     U.html($('runs'), history(d, runs.slice(0, 6), kind, open), false);
-    $('more-runs').hidden = runs.length <= 6;
-    const earlier = Math.max(0, runs.length - 6), moreLabel = `<span class="disclosure-closed">展开（更早的 ${earlier} 次）</span><span class="disclosure-open">收起（更早的 ${earlier} 次）</span><span class="disclosure-chev" aria-hidden="true">›</span>`;
+    $('more-runs').hidden = total <= 6;
+    const earlier = Math.max(0, total - 6), moreLabel = `<span class="disclosure-closed">展开（更早的 ${earlier} 次）</span><span class="disclosure-open">收起（更早的 ${earlier} 次）</span><span class="disclosure-chev" aria-hidden="true">›</span>`;
     if ($('more-runs').querySelector('summary').innerHTML !== moreLabel) $('more-runs').querySelector('summary').innerHTML = moreLabel;
     // 更早的一次只摆一批，底下“再看 50 次”接着摆；几千次一次全写进来会把页面卡死（M632）。要看的那一次在后面时摆到它为止。
+    // 后台分页时已取的都摆出来，“再看”向后台取下一批；老回包一次带全的照旧本地分批摆
     const rest = runs.slice(6), target = old ? rest.indexOf(old) : -1;
-    if (target >= restShown) restShown = Math.ceil((target + 1) / RUN_BATCH) * RUN_BATCH;
-    const left = Math.max(0, rest.length - restShown);
-    U.html($('runs-rest'), rest.length ? history(d, rest.slice(0, restShown), kind, open)
-      + (left ? `<button type="button" class="more" data-runs-more>再看 ${Math.min(RUN_BATCH, left)} 次（还有 ${left} 次） ›</button>` : '') : '', false);
-    if (target >= 0) $('more-runs').open = true;
+    if (!page && target >= restShown) restShown = Math.ceil((target + 1) / RUN_BATCH) * RUN_BATCH;
+    const shown = page ? rest : rest.slice(0, restShown), left = Math.max(0, total - 6 - shown.length - (detached ? 1 : 0));
+    const more = left && (!page || cursor) ? `<button type="button" class="more" data-runs-more${pageLoading ? ' disabled' : ''}>${pageFailed ? '这一批没读到，点这里再读 ›' : `再看 ${Math.min(RUN_BATCH, left)} 次（还有 ${left} 次） ›`}</button>` : '';
+    U.html($('runs-rest'), (shown.length ? history(d, shown, kind, open) : '') + more + (detached ? history(d, [detached], kind, open, !shown.length) : ''), false);
+    if (target >= 0 || detached) $('more-runs').open = true;
     write($('run-coverage'), quiet ? '' : readNotice(d, coverage, runs, covered));
     $('future').hidden = kind !== 'schedule';
     if (kind === 'schedule') {
@@ -393,7 +448,15 @@
       };
       el.ontoggle();
     }
-    if (old && !selected) { selected = true; requestAnimationFrame(() => $('run-results').scrollIntoView({ block: 'start' })); }
+    // 滚到要看的那一次（展开着）；更早的那几次是往下长开的，等长开的动效走完、页面够高了再滚，不然只滚得动一点点
+    if ((old || detached) && !selected) {
+      selected = true;
+      const at = runTime(old || detached);
+      requestAnimationFrame(() => Promise.allSettled($('more-runs').getAnimations({ subtree: true }).map(a => a.finished)).then(() => {
+        const row = $('rec').querySelector(`li[data-time="${at}"], tr[data-time="${at}"]`);
+        if (row?.getClientRects().length) row.scrollIntoView({ block: 'center' }); else $('run-results').scrollIntoView({ block: 'start' });
+      }));
+    }
   }
   function empty(message, denied = false) {
     stopChecks(); task = null; document.title = '任务详情 · 实况';
@@ -408,6 +471,8 @@
       phase(state) { if (!task) reading.set(state); },
       data(d, meta) {
         viewer = meta.viewer?.kind || 'public'; packetAt = meta.at; changed = true;
+        if (olderViewer !== viewer) { olderRuns = new Map(); deepCursor = undefined; pickedRun = null; pickAsked = false; olderViewer = viewer; }
+        else if (pageOf(task)) keepRuns(task.runs);
         task = d;
       },
       link(state) {
