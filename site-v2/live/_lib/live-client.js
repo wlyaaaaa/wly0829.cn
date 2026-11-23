@@ -231,6 +231,12 @@
     if (publicPaused || e.stopped || e.token !== device()) return;
     if (isMain(e) && (e.data === null || e.source === 'copy' || e.source === 'fallback')) {
       observedConnection(e, { state: 'offline', basis: e.missStatus ? 'response' : 'browser', reason: e.missReason || 'unreachable' });
+      // 一算连不上就马上取备用包的时刻，不再等失败后 15 秒那一下（M608）。
+      const f = e.failure;
+      if (f?.fallback && e.source !== 'fallback' && offline()) {
+        clearTimeout(f.fallback); f.fallback = null;
+        useFallback(e, f).then(() => { if (e.failure === f) { settle(e); emit(e); } });
+      }
     } else if (isMain(e)) {
       // 主数据 10 秒没到、这一页已经读到并画出来了（不是浏览器存的副本）：不算连不上、不清（本人版访客版一样），标上是几点的数，重读照常（M587、M588）。
       // 连不上只认浏览器断网、心跳停了、电脑关机这几种明确信号；后台明确撤回照旧立刻清。
@@ -646,9 +652,11 @@
     if ((retryCopy || offline()) && e.source !== 'fallback') { await useFallback(e, f); if (e.failure === f) settle(e); }
   }
   function fallbackMetadata(e, at, proof) {
-    if (e.withdrawn || e.viewer.kind === 'owner' && e.data !== null || typeof at !== 'string' ||
+    // 手上已有数（这一页读到的，或浏览器存的上次副本）就接着显示、带它自己的时刻，本人版访客版一样；
+    // 备用包只有生成时刻，不拿它把有的数清成横杠，也不删上次副本（M608）。
+    if (e.withdrawn || e.data !== null || typeof at !== 'string' ||
         !Number.isFinite(Date.parse(at)) || proof?.policy !== visitorPolicy || !validAudience(proof.audience)) return;
-    forgetData(e, e.viewer.kind === 'public');
+    forgetData(e);
     Object.assign(e, { at: new Date(at).toISOString(), rev: 'metadata-' + proof.audience, source: 'fallback',
       fallbackNote: `公开备用包生成于北京时间 ${stamp(at)}，详情暂时读不到。` });
   }
