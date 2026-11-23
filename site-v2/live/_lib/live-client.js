@@ -203,7 +203,10 @@
   const publicPauseText = '实况暂时不公开';
   let publicPaused = false, publicationVersion = 0, pausedEntry;
   let connectionSequence = 0;
-  const observedConnection = (e, link) => { e.receivedAt = ++connectionSequence; e.link = e.validatedLink = link; };
+  const observedConnection = (e, link) => { if (link?.state !== 'offline') { e.misses = 0; e.okAt = Date.now(); } e.receivedAt = ++connectionSequence; e.link = e.validatedLink = link; };
+  // 读得慢不算连不上（公网那头 5 秒没等到就先回云端那份）：同一份连着 3 次读不到、而且别的读口两分钟内也没读到过，
+  // 或者浏览器自己断网，才算连不上；主页读到了、只是某一份辅助的读不到，不把整页报成连不上。一读到就收。
+  const MISSES_TO_OFFLINE = 3, OTHERS_OK_MS = 120000;
   const latestConnection = () => connectionEntries().filter(e => e.receivedAt != null)
     .sort((a, b) => b.receivedAt - a.receivedAt)[0]?.validatedLink;
   const offline = () => !publicPaused && latestConnection()?.state === 'offline';
@@ -498,6 +501,11 @@
     const reachable = status >= 400 && status < 500 || /^live_((source|variant|detail)_unavailable|publication_revoked)$/.test(body?.error || '');
     const reason = via || (body?.error === 'owner_read_failed' ? 'owner-read' :
       body?.error === 'preview_upstream_not_listening' || [500, 503].includes(status) && !body?.error?.startsWith('snapshot_') ? 'service' : 'unreachable');
+    if (!body?.link && !reachable && !(e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped')) {
+      e.misses = (e.misses || 0) + 1;
+      const othersOk = connectionEntries().some(x => x !== e && !x.misses && x.okAt && Date.now() - x.okAt < OTHERS_OK_MS && x.validatedLink?.state !== 'offline');
+      if (globalThis.navigator?.onLine !== false && (e.misses < MISSES_TO_OFFLINE || othersOk)) return;
+    }
     observedConnection(e, body?.link || (reachable
       ? { state: 'online', basis: 'response', since: e.link?.since || clock() }
       : e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped' ? e.validatedLink
@@ -581,9 +589,10 @@
     }, 15000) };
     clearTimeout(f.retry);
     // 本机首页在服务尚未监听时把前几次问询摊开；15 秒离线副本计时照旧。
-    const delays = notListening ? [2000, 2000, 2000, 2000, 6000] : [2000, 4000, 8000];
+    // 连着 3 次读不到才算连不上，所以后面再隔 15、30 秒各问一次，恢复了不用等整分钟的定时重读就能收起。
+    const delays = notListening ? [2000, 2000, 2000, 2000, 6000] : [2000, 4000, 8000, 15000, 30000];
     if (f.tries < delays.length) f.retry = later(() => { if (!document.hidden && e.token === device() && e.failure === f) read(e); }, delays[f.tries++]);
-    if (retryCopy && e.source !== 'fallback') { await useFallback(e, f); if (e.failure === f) settle(e); }
+    if ((retryCopy || offline()) && e.source !== 'fallback') { await useFallback(e, f); if (e.failure === f) settle(e); }
   }
   function fallbackMetadata(e, at, proof) {
     if (e.withdrawn || e.viewer.kind === 'owner' && e.data !== null || typeof at !== 'string' ||
@@ -619,6 +628,7 @@
     fallbackMetadata(e, file?.at, file?.proof);
   }
   async function useFallback(e, failure) {
+    if (!offline()) return;
     await usePackagedCopy(e);
     if (fixture !== null || publicPaused || e.failure !== failure || e.token !== device() || itemDetail(e)) return;
     if (e.source !== 'fallback' && Number.isFinite(Date.parse(e.at))) {
@@ -683,10 +693,10 @@
       if (oss) {
         failed(e, 503, null, via || 'unreachable');
         restoreBrowserCopy(e);
-        if (fixture === null && body?.error === 'snapshot_metadata_only') fallbackMetadata(e, body.at, {
+        if (fixture === null && body?.error === 'snapshot_metadata_only' && offline()) fallbackMetadata(e, body.at, {
           policy: response.headers.get('X-Live-Fallback-Policy'), audience: response.headers.get('X-Live-Fallback-Audience')
         });
-        await retryFailure(e, retryCopy); settle(e); return emit(e);
+        await retryFailure(e, retryCopy); if (e.data !== null || offline()) settle(e); return emit(e);
       }
       e.status = response.status; e.error = '';
       if (response.status === 304) {

@@ -66,6 +66,12 @@
 .page--live :is(#tasks,#automation) .task-preview .row:has(> .row__acts) { grid-template-columns: minmax(0, 1fr) auto; column-gap: 8px; }
 .page--live :is(#tasks,#automation) .task-preview .row > .row__text { grid-column: 1; margin: 0; white-space: normal; overflow: visible; overflow-wrap: anywhere; }
 .page--live :is(#tasks,#automation) .task-preview .row > .row__acts { grid-column: 2; margin: 0; padding: 0; }
+/* 计划任务卡：任务行的字和标题、副标题同一条左边线（留出灯那一列），和副标题之间留出和别的卡一样的空 */
+.page--live #tasks .task-preview { margin-top: 8px; }
+.page--live #tasks .task-preview .row { grid-template-columns: var(--gut) minmax(0, 1fr); padding: 6px 0; }
+.page--live #tasks .task-preview .row:has(> .row__acts) { grid-template-columns: var(--gut) minmax(0, 1fr) auto; column-gap: 0; }
+.page--live #tasks .task-preview .row > .row__text { grid-column: 2; }
+.page--live #tasks .task-preview .row > .row__acts { grid-column: 3; padding-left: 8px; }
 .page--live #automation .automation-preview-head {
   display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px;
   min-width: 0; margin: 0; font-size: 15.5px; font-weight: 500; line-height: 23px;

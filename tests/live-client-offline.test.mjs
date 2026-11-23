@@ -82,7 +82,10 @@ test('offline owner copy uses the displayed generation and Beijing date', async 
     const state = await client.get('home');
     assert.equal(state.text, `连不上电脑 · 下面是 ${expected} 的数据。`); assert.equal(state.shownAt, at);
     assert.equal(state.meta.seq, 2); assert.equal(state.data.screen.old, undefined);
-    broken = true; assert.equal((await client.get('home')).text, `连不上实况服务 · 下面是 ${expected} 的数据。`);
+    broken = true;
+    // 一次、两次没读到只当读得慢，不挂“连不上”；连着第三次才算。
+    await client.get('home'); await client.get('home');
+    assert.equal((await client.get('home')).text, `连不上实况服务 · 下面是 ${expected} 的数据。`);
   }
 });
 
@@ -100,6 +103,7 @@ test('offline screen retains proven readings, and a rejected device drops its ow
   await read();
   reply = () => packet([{id: 'need', n: null}], 2); await read();
   reply = () => Response.json({}, {status: 503});
+  await read(); await read();
   const old = await read();
   assert.equal(old.text, '实况服务暂不可用 · 下面是 08:00 的数据。');
   assert.equal(old.data.cells.find(c => c.id === 'computer').cpu_c, 52);
@@ -109,6 +113,7 @@ test('offline screen retains proven readings, and a rejected device drops its ow
   }});
   const reopened = {...sandbox, window: {}};
   vm.runInNewContext(source, reopened);
+  await reopened.window.Live.get('screen'); await reopened.window.Live.get('screen');
   const edge = await reopened.window.Live.get('screen');
   assert.equal(edge.viewer.kind, 'owner');
   assert.equal(edge.data.cells.find(c => c.id === 'computer').cpu_c, 52);
@@ -211,6 +216,8 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   assert.equal(requested[0], 'https://live.wly0829.cn/computer-access/live/v1/home');
   assert.equal([...stored.keys()].filter(key => key.startsWith(normal) || key.startsWith(forced)).length, 0);
   offline = true;
+  // 主页也读不到、某一份连着三次读不到，才算整页连不上
+  await client.get('home'); await client.get('projects'); await client.get('projects');
   assert.equal((await client.get('projects')).data, null);
   await fallbackRead();
   assert.equal((await client.get('projects')).meta.at, null);

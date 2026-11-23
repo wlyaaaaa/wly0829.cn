@@ -349,32 +349,34 @@ body.page--live .btn.btn--go:active { background: #007639; }
 .notice:not(:has(.btn)) { padding-right: 20px; }
 .notice > .lamp { width: 9px; height: 9px; }
 .notice__x { width: 30px; padding: 0; font-size: 16px; }
-/* 页顶那张卡（本人 11-23 选的 B，01:01 定了和页顶提醒合成一张）：和下面大卡同宽的毛玻璃圆角卡，一件事一行；卡本身不能点、没有叉。
-   连接那一行的灯和箭头一直在动，连上后灯变正绿、约 2 秒后只收走这一行。插头插画只在连接那一行里（这一行出现才下载这张图）。 */
-.live-conn { position: relative; overflow: hidden; margin: 0 0 16px; border-radius: 18px; background: rgb(255 255 255 / .6);
-  -webkit-backdrop-filter: blur(18px) saturate(1.25); backdrop-filter: blur(18px) saturate(1.25);
-  box-shadow: 0 10px 30px rgb(72 58 96 / .1), inset 0 0 0 1px rgb(255 255 255 / .75); color: #262a30;
-  transition: height .5s var(--mo-out, ease), opacity .5s ease, margin .5s ease; }
+/* 页顶那张卡（本人 11-23 选的 B，01:01 定了和页顶提醒合成一张）：和下面大卡同一个样子（11-23 08:06 改）——同样的玻璃、圆角、阴影、
+   第一行灯 + 大字 + 轻一号的后半句，右边同样铺一整幅画、边缘淡进玻璃，画的颜色透过玻璃垫在那一侧。一件事一行；卡本身不能点、没有叉。
+   画跟着整张卡走（卡出现才下载），连上后不再单独收走；没什么要说了整张卡收起。连接那一行的灯和箭头一直在动，连上后灯变正绿、约 2 秒后收走这一行。 */
+.live-conn { --win: clamp(160px, 28%, 250px); --conn-art: url("/live/img/connection-plug-v1.webp");
+  overflow: hidden; margin: 0 0 var(--gap, 22px); padding-block: 12px; box-sizing: border-box; color: var(--ink);
+  animation: live-conn-in .6s ease; transition: height .5s var(--mo-out, ease), opacity .5s ease, margin .5s ease, padding .5s ease; }
 .live-conn[hidden] { display: none; }
-.live-conn.is-closing { height: 0 !important; margin-bottom: 0; opacity: 0; }
-.live-conn__row { position: relative; display: flex; align-items: center; gap: 14px; min-height: 66px; padding: 10px 28px; box-sizing: border-box;
-  font-size: 17px; line-height: 1.5; transition: height .5s var(--mo-out, ease), opacity .5s ease, padding .5s ease; }
-.live-conn__row > :not(.live-conn__art) { position: relative; }
+.live-conn.is-closing { height: 0 !important; margin-bottom: 0; padding-block: 0; opacity: 0; }
+.live-conn__pic, .live-conn__tint { position: absolute; z-index: 0; pointer-events: none; }
+.live-conn__pic { top: 0; right: 0; bottom: 0; width: var(--win); background: var(--conn-art) center / contain no-repeat;
+  -webkit-mask-image: linear-gradient(270deg, #000 0%, #000 30%, rgb(0 0 0 / .93) 38%, rgb(0 0 0 / .78) 47%, rgb(0 0 0 / .55) 56%, rgb(0 0 0 / .32) 65%, rgb(0 0 0 / .14) 74%, rgb(0 0 0 / .04) 82%, transparent 90%);
+  mask-image: linear-gradient(270deg, #000 0%, #000 30%, rgb(0 0 0 / .93) 38%, rgb(0 0 0 / .78) 47%, rgb(0 0 0 / .55) 56%, rgb(0 0 0 / .32) 65%, rgb(0 0 0 / .14) 74%, rgb(0 0 0 / .04) 82%, transparent 90%); }
+.live-conn__tint { inset: 0; background: var(--conn-art) 80% 40% / cover no-repeat; filter: blur(30px) saturate(1.1); opacity: .2;
+  -webkit-mask-image: linear-gradient(270deg, #000 0 22%, transparent 50%); mask-image: linear-gradient(270deg, #000 0 22%, transparent 50%); }
+.live-conn__rows, .live-conn > #notices { position: relative; z-index: 1; padding-right: calc(var(--win) * .6); }
+.live-conn__row { position: relative; display: flex; flex-wrap: wrap; align-items: center; column-gap: 13px; row-gap: 4px; padding: 14px 28px; box-sizing: border-box;
+  font-size: 16.5px; line-height: 24px; letter-spacing: .03em; color: var(--ink-soft); transition: height .5s var(--mo-out, ease), opacity .5s ease, padding .5s ease; }
 .live-conn__row.is-closing { height: 0 !important; min-height: 0; padding-block: 0; opacity: 0; }
 .live-conn__row + .live-conn__row { border-top: 1px solid rgb(40 40 60 / .07); }
 .live-conn__row[data-key="pair"] { font-weight: 600; color: #3d4249; }
-.live-conn__art { position: absolute; top: -8px; right: 0; bottom: -8px; width: 330px; pointer-events: none;
-  background: url("/live/img/connection-plug-v1.webp") right 14px center / auto 100% no-repeat;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 28%); mask-image: linear-gradient(to right, transparent, #000 28%);
-  animation: live-conn-in .9s ease; transition: opacity .6s ease; }
-.live-conn__row.is-back .live-conn__art { opacity: 0; }
 .live-conn__lamp { flex: none; width: 12px; height: 12px; border-radius: 50%; background: #f2a516;
   box-shadow: 0 0 0 4px rgb(242 165 22 / .16), 0 0 14px rgb(242 165 22 / .7);
   animation: live-conn-breathe 2.8s ease-in-out infinite; transition: background .45s ease, box-shadow .45s ease; }
 .live-conn__row.is-back .live-conn__lamp { background: #00A650; box-shadow: 0 0 0 4px rgb(0 166 80 / .16), 0 0 14px rgb(0 166 80 / .6); }
-.live-conn__say b { font-size: 19px; font-weight: 800; letter-spacing: .02em; }
-.live-conn__at { color: #61666e; font-weight: 500; }
-.live-conn__wait { display: inline-flex; align-items: center; gap: 8px; margin: 0 340px 0 auto; color: #8b9098; font-size: 15px; white-space: nowrap; transition: opacity .45s ease; }
+.live-conn__say { flex: 1 1 0; min-width: 0; }
+.live-conn__say b { font-family: var(--black); font-weight: 900; font-size: 26px; line-height: 34px; letter-spacing: .02em; color: var(--ink); }
+.live-conn__at { font-weight: 500; }
+.live-conn__wait { display: inline-flex; flex-basis: 100%; align-items: center; gap: 8px; margin-left: 25px; color: var(--muted); font-size: 15px; transition: opacity .45s ease; }
 .live-conn__row.is-back .live-conn__wait { opacity: 0; }
 .live-conn__spin { display: inline-flex; width: 18px; height: 18px; color: #7d838c; animation: live-conn-spin 3.2s linear infinite; }
 .live-conn__spin svg { width: 100%; height: 100%; }
@@ -386,7 +388,7 @@ body.page--live .btn.btn--go:active { background: #007639; }
 /* 点“几点读到”重读：药丸从左右两边同时往正中收，收成一颗圆按钮停在原来的正中，图标跟着滑到正中，到了再转；
    读完从正中往两边慢慢展开，字最后淡回来。本人 08:25“慢慢滑到居中”、09:21“按一下左右缩小到居中显示”。
    按钮本身的位置和宽度不变（旁边的按钮不动，也不会因为从“按内容撑开”的宽度起步而第一下没动画），缩的是画在底下的那层药丸（::before）。
-   图标用画好的 SVG（不用字体里的 ↻，那个在不同字体里样子怪）。live-ui.js 读这两个数算等多久。 */
+   图标用画好的 SVG（不用字体里的 ↻，那个在不同字体里样子怪）。点下去整页重新载入（等于浏览器刷新），这段动画只在新页面接上之前播一下。 */
 :root { --live-at-slide: 760ms; --live-at-turn: 1100ms; }
 .topbar .live-at {
   --live-at-ease: cubic-bezier(.45, .05, .25, 1);
@@ -458,6 +460,8 @@ body.page--live .btn.btn--go:active { background: #007639; }
 .project-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; margin-top: 14px; font-size: 13.5px; line-height: 22px; color: var(--muted); }
 .project-footer > * { margin: 0; font: inherit; }
 .project-footer .more { margin: 0; translate: none; font-size: inherit; }
+/* 第一个入口的字和卡里别的字同一条左边线（入口自带左右 10px 的底色留白） */
+.project-footer > :first-child { margin-left: -10px; }
 .project-footer a { display: inline-flex; align-items: center; height: 30px; padding: 0 10px; border-radius: 999px; color: inherit; text-decoration: none; }
 .project-footer a:hover { background: rgb(255 255 255 / .6); color: var(--ink); text-decoration: none; }
 .task-change { display: inline-block; white-space: nowrap; }
