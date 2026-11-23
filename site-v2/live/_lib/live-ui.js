@@ -1397,7 +1397,8 @@
     let cancelled = false;
     const stop = () => { cancelled = true; };
     window.addEventListener('wheel', stop, { once: true, passive: true });
-    function hold() { if (cancelled || run !== anchorRun || !el.isConnected || performance.now() >= end) { window.removeEventListener('wheel', stop); return; } const dy = el.getBoundingClientRect().top - top; if (Math.abs(dy) > .5) window.scrollBy(0, dy); requestAnimationFrame(hold); }
+    // 顶住的那一行被收起（hidden、整块读不到时只留卡头）就不再顶：它的位置读出来是 0，再顶会每帧往上推、整页跳到页顶（M528）
+    function hold() { if (cancelled || run !== anchorRun || !el.isConnected || !el.getClientRects().length || performance.now() >= end) { window.removeEventListener('wheel', stop); return; } const dy = el.getBoundingClientRect().top - top; if (Math.abs(dy) > .5) window.scrollBy(0, dy); requestAnimationFrame(hold); }
     hold();
   }
   anchor.stop = () => { anchorRun++; };
