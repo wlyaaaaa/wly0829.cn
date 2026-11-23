@@ -7,7 +7,13 @@
   const { list, known, int, link, when } = T;
   const params = new URLSearchParams(location.search);
   const category = R.CATS.includes(params.get('type')) ? params.get('type') : '', id = params.get('run') || '';
-  const back = T.path('/live/automation/', { category });
+  // 从自动任务页点进来的，返回回进来时那个网址，三家、状态这些筛选原样留着（验收 11-24 06:40）；
+  // 那一页没筛这一类时，返回链接写“自动任务”，不写这一类的名字
+  const fromList = (() => {
+    try { const u = new URL(document.referrer); return u.origin === location.origin && u.pathname === '/live/automation/' ? u : null; } catch { return null; }
+  })();
+  const back = fromList ? fromList.pathname + fromList.search + fromList.hash : T.path('/live/automation/', { category });
+  const listLabel = fromList && fromList.searchParams.get('category') !== category ? '自动任务' : '';
   let state, viewer = 'public', board = null, siblings = null, others = null, fromReferrer = false;
   const F = (v, name) => T.field(v, viewer, name);
   const you = () => T.you(viewer);
@@ -124,7 +130,7 @@
   function draw() {
     const backLink = document.querySelector('[data-back]');
     viewer = T.viewerOf(state);
-    if (backLink && category && !fromReferrer) { backLink.textContent = U.fieldText(name(), viewer); backLink.href = back; }
+    if (backLink && category && !fromReferrer) { backLink.textContent = listLabel || U.fieldText(name(), viewer); backLink.href = back; }
     // 快讯条照自动任务页：用每一轮的列表排开始、跑完、停了（摘一句不放）。后台的 feed 只留最近 30 条，常常全是摘一句，滤完就空了（M672）
     page.tick.set(R.ticker(board?.data, others?.rows?.length ? others.rows : siblings?.rows || null, viewer), { off: !!board?.offline });
     const d = state?.data;
