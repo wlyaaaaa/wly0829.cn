@@ -297,7 +297,7 @@
       const running = current('running', U.isStale(d) || U.offline?.() ? '当时在干' : '在干');
       const waiting = current('waiting', viewer === 'public' ? '等本人回答' : '等你回答');
       const done = chatCount(d, 'done72', 0), active = [running, waiting].filter(Boolean).join(' · ');
-      const seen = readAt(activeChats ? activeAt : d.at ?? homeAt), cutoff = readAt(d.window?.to || d.at || (activeChats ? activeAt : homeAt));
+      const seen = readAt(d.source_at ?? (activeChats ? activeAt : d.at ?? homeAt)), cutoff = readAt(d.window?.to || d.at || (activeChats ? activeAt : homeAt));
       const sameTime = active && done && seen && seen === cutoff;
       const reading = text => `<span class="live-unit">（${esc(text)}）</span>`;
       const notes = [active && U.nowrap(active) + (seen && !sameTime ? reading(seen) : ''),
