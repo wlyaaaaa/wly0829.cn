@@ -760,7 +760,7 @@
       ${direct ? `<div id="live-item-confirm-name"><p class="live-item-confirm__group">直接撤下（${direct.length} 件）</p>${names(direct)}<p class="live-item-confirm__group">有后续，复制给 AI（${follow.length} 件）</p>${names(follow)}</div>`
         : items.length === 1 ? `<p id="live-item-confirm-name" class="live-item-confirm__name">${esc(fieldText(items[0].text || items[0].title, 'owner'))}</p>`
         : names(items, 'live-item-confirm-name')}
-      <p id="live-item-confirm-note">${esc(direct ? '直接撤下的马上从“等你的事”撤下，记进退出记录，手机不再提醒；有后续的复制成一段话，贴给 AI 处理卡上写的后续。' : answering ? '把这段话贴给 AI，填上你的回答或办理结果。AI 处理后按编号关卡。' : wording.note)}</p>
+      <p id="live-item-confirm-note">${esc(direct ? '直接撤下的马上从“等你的事”撤下，记进退出记录，手机不再提醒；有后续的复制成一段话，贴给 AI 处理卡上写的后续。' : answering ? '把这段话贴给 AI，填上你的回答或办理结果。AI 处理后按编号关卡。' : intent === 'decline' && items.every(item => item.kind === 'choose') ? '这次不管了；好了以后再坏，直接给你卡。' : wording.note)}</p>
       <div class="live-item-confirm__buttons">
         <button type="button" data-cancel autofocus>${esc(wording.cancel)}</button>
         <button type="button" data-apply>${esc(wording.confirm)}</button>
