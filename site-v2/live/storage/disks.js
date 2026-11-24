@@ -63,10 +63,12 @@
     const measured = dirs.visible.some(r => usable(r) && r.complete !== false);
     const code = v.missing?.directories?.reason_code ?? v.missing?.directories?.reason ?? v.missing?.directories;
     const gap = K.field(v.directory_gap, '文件夹测量说明', viewer).replace(/[。.，,\s]+$/, ''), why = !measured && (MISSING[code] || '后台没给原因');
+    // 回包里这块盘一条文件夹读数都没有（如系统恢复 U 盘、只读整盘的盘）：条下只写后台那句原因，点开也不再留文件夹区、不重复这句（M683）
+    const none = !dirs.visible.length && !dirs.hidden;
     const cap = !measured && dirs.hidden ? '文件夹名称和大小仅本人可见' : stale ? `文件夹是 ${U.time(stale.measured)} 量的，早于 ${U.time(stale.finished)} 那轮自动清理（这盘腾出 ${K.size(stale.freed)}），带斜线的是清理前的大小`
-      : !measured && gap ? `文件夹没量到：${gap}` : why ? `文件夹没量到：${why}，只分已用和空闲` : '';
+      : none && gap ? gap : !measured && gap ? `文件夹没量到：${gap}` : why ? `文件夹没量到：${why}，只分已用和空闲` : '';
     const caption = [small, cap && esc(cap)].filter(Boolean).join(' · ');
-    return { html, cap, caption, stale, over: seg.over, unsplit: seg.parts.some(p => p.unsplit && p.label), folders: seg.parts.some(p => !p.free && !p.unsplit && p.label) };
+    return { html, cap, caption, stale, none, over: seg.over, unsplit: seg.parts.some(p => p.unsplit && p.label), folders: seg.parts.some(p => !p.free && !p.unsplit && p.label) };
   }
 
   function list(rows, empty, key, viewer, withheld) {
@@ -98,12 +100,16 @@
       v.directories_at && `文件夹 ${when(v.directories_at)} 量的${v.directories_complete === false ? '（没量全）' : ''}${v.folder_interval_minutes ? ` · 每 ${v.folder_interval_minutes} 分钟量一次` : ''}`,
       b?.stale && `这块盘 ${U.time(b.stale.finished)} 那轮自动清理腾出 ${K.size(b.stale.freed)}，条上带斜线的文件夹是清理前量的，下次量完才更新`,
       b?.over && '文件夹和已用不是同一时刻量的，加起来超过现在的已用；条上只画放得下的几个，“其他”按已用减去画出来的算',
-      v.directory_gap && K.field(v.directory_gap, '文件夹测量说明', viewer),
+      !b?.none && v.directory_gap && K.field(v.directory_gap, '文件夹测量说明', viewer),
       v.unclassified_usage?.length && '“其余占用”是没按用途分开的空间，可能包含左边已量到的文件夹和系统开销。两边有重叠，不能相加。',
       v.category_bytes_basis === 'allocated' ? '用途按文件在磁盘上实际占的空间统计' : v.category_bytes_basis === 'logical' ? '用途按文件本身的大小统计' : '',
     ].filter(Boolean);
     const key = K.letter(v) || v.id;
-    return `<div class="dk-more"><section><h4>全部最大的文件夹${b?.stale ? ' · 清理前量的' : ''}</h4>${list(entries(dirs, '文件夹', r => folder(r, viewer)), b?.cap || '这块盘没有文件夹读数', `${key}-dirs`, viewer, K.hiddenRows(dirs.hidden, '文件夹记录', '文件夹名称和大小'))}</section><section><h4>本盘用途</h4>${list(entries(cats, '用途', r => K.field(r.label, '用途名称', viewer)), '没有登记的用途', `${key}-cats`, viewer, K.hiddenRows(cats.hidden, '用途记录', '用途名称和大小'))}</section><section class="dk-notes"><h4>口径</h4>${notes.map(n => `<p>${esc(n)}</p>`).join('') || '<p>没有更多说明</p>'}</section></div>`;
+    const folders = b?.none ? '' : `<section><h4>全部最大的文件夹${b?.stale ? ' · 清理前量的' : ''}</h4>${list(entries(dirs, '文件夹', r => folder(r, viewer)), b?.cap || '这块盘没有文件夹读数', `${key}-dirs`, viewer, K.hiddenRows(dirs.hidden, '文件夹记录', '文件夹名称和大小'))}</section>`;
+    // 回包里这块盘一条用途都没登记（也不是访客版藏起来的）：不留“本盘用途”那一栏（M683）
+    const uses = !cats.visible.length && !cats.hidden ? '' : `<section><h4>本盘用途</h4>${list(entries(cats, '用途', r => K.field(r.label, '用途名称', viewer)), '没有登记的用途', `${key}-cats`, viewer, K.hiddenRows(cats.hidden, '用途记录', '用途名称和大小'))}</section>`;
+    const columns = 1 + !!folders + !!uses;
+    return `<div class="dk-more${columns === 2 ? ' dk-more--two' : columns === 1 ? ' dk-more--one' : ''}">${folders}${uses}<section class="dk-notes"><h4>口径</h4>${notes.map(n => `<p>${esc(n)}</p>`).join('') || '<p>没有更多说明</p>'}</section></div>`;
   }
 
   function row(v, barW, last, d, viewer) {
