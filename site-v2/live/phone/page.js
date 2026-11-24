@@ -200,7 +200,7 @@
         const none = always && label && !value && (li.dataset.state === 'shutdown' || rows[i] === 'computer');
         cell.style.display = value > 0 || none ? '' : 'none';
         if (none) {
-          const text = li.dataset.state === 'sleep' ? '未记录到睡眠' : Array.isArray(data.rows[rows[i]].off_spans) ? '未记录到关机' : '关机记录暂时读不到';
+          const text = li.dataset.state === 'sleep' ? '未记录到睡眠' : Array.isArray(data.rows[rows[i]].off_spans) ? '未记录到关机' : '关机记录读不到';
           cell.innerHTML = `<small>${esc(label)}</small> ${text}`;
         } else if (value > 0) {
           cell.innerHTML = cell.classList.contains('row__sub') ? `${rows.length > 1 && label ? `<small>${esc(label)}</small> ` : ''}${V.dur(value)}` : rows.length === 1 ? value >= 360000 ? `<b>${Math.round(value / 3600)}</b><small>小时</small>` : V.durHtml(value)
@@ -325,7 +325,7 @@
     const dayStart = day => Date.parse(`${day.date}T00:00:00+08:00`) / 1000;
     const clock = day => U.time(iso(dayStart(day) + day.elapsed_s));
     function zeroText(st, lane) {
-      if (st.id === 'shutdown') return lane === 'phone' && !Array.isArray(data.phoneOff) ? '关机记录暂时读不到' : '未记录到关机';
+      if (st.id === 'shutdown') return lane === 'phone' && !Array.isArray(data.phoneOff) ? '关机记录读不到' : '未记录到关机';
       if (st.id === 'sleep' && hasLane(st, lane)) return '未记录到睡眠';
       return '';
     }
