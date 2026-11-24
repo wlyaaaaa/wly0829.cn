@@ -83,6 +83,11 @@
   };
   const cooldownText = (until = cooldownUntil) => until > clock() ? `${untilText(until * 1000)} 再试` : '';
   const unlocking = () => openKey === 'win' && winUnlock;
+  // 没配对的设备一分钟内合计输错 12 次：所有没配对的设备暂停输码，到 cooldown_until_unix 为止；配对过的设备不受影响（密码中心 public_totp_anonymous_paused）。
+  // 大字写清是怎么回事，小字照回执带的说明显示，再写几点再试
+  const PAUSED = 'public_totp_anonymous_paused', pausedHead = '陌生设备输错太多次，输码暂停了';
+  errorMessages[PAUSED] = lockMessages[PAUSED] = `${pausedHead}，稍后再试；配对过的设备不受影响`;
+  const pausedName = (data, until, label = '') => [data?.message || '配对过的设备不受影响，稍后再试', [label, cooldownText(until)].filter(Boolean).join(' · ')].filter(Boolean).join('\n');
 
   function refreshCooldown() {
     if (local || busy || disconnected || cooldownRead || unlocking()) return;
@@ -193,7 +198,8 @@
       } else {
         const wait = cooldownText(windowsUnlockCooldown);
         if (unlocking()) message(wait);
-        failed('win', wait || lockMessages[value.error] || ({
+        if (value.error === PAUSED) failed('win', pausedHead, pausedName(value, windowsUnlockCooldown, 'Windows 解锁'));
+        else failed('win', wait || lockMessages[value.error] || ({
           public_windows_unlock_disabled: '解锁入口已停用',
           public_windows_credential_unavailable: '电脑上保存的登录凭据不可用，这次没解锁',
         }[value.error]) || '这次没解锁', 'Windows 解锁');
@@ -225,7 +231,8 @@
       else {
         if (!value.action && openKey !== key) setOpen(key, false);
         if (openKey === key) message(cooldownText());
-        failed(key, cooldownText() || errorMessages[value.error] || stateText || '这次没办成，请再试。', windows ? 'Windows 锁屏' : '');
+        if (value.error === PAUSED) failed(key, pausedHead, pausedName(value, cooldownUntil, windows ? 'Windows 锁屏' : ''));
+        else failed(key, cooldownText() || errorMessages[value.error] || stateText || '这次没办成，请再试。', windows ? 'Windows 锁屏' : '');
       }
     }
     remember(value);
@@ -324,7 +331,8 @@
         remember(null); lockIds[key] = requestId();
         if (Number.isFinite(data.cooldown_until_unix)) cooldownUntil = data.cooldown_until_unix;
         message(cooldownText());
-        failed(key, cooldownText() || lockMessages[reason], key === 'win' ? 'Windows 锁屏' : '');
+        if (reason === PAUSED) failed(key, pausedHead, pausedName(data, cooldownUntil, key === 'win' ? 'Windows 锁屏' : ''));
+        else failed(key, cooldownText() || lockMessages[reason], key === 'win' ? 'Windows 锁屏' : '');
       } else {
         if (code) lockIds[key] = requestId();   // 这个号已经有了结果，再输码换新号
         receipt(reductionFailureResult(error, id, action)); if (reason === 'cockpit_owner_required') window.TrustModal?.show();
