@@ -236,9 +236,10 @@
       days.set(x.date, { n: prev.n + n, bad: prev.bad + (x.failed || 0), had: prev.had || had });
     }
     const rows = [...days.entries()].sort((a, b) => b[0].localeCompare(a[0]));
+    // date 是北京日期 YYYY-MM-DD：按 UTC 解析再取 UTC 星期，不随浏览器本机时区变
     const week = ['日', '一', '二', '三', '四', '五', '六'];
     const grid = rows.length ? `<div class="au-days">${rows.map(([date, x]) => `<button type="button" class="au-day" data-day="${date}"${x.had ? '' : ' disabled'} aria-pressed="${dayOf(filter.date || '') === date}">
-      <b>${esc(date.slice(5))}</b><small>周${week[new Date(date + 'T12:00:00+08:00').getDay()]}</small><span>${x.had ? `${int(x.n)} 轮${x.bad ? `<em> · 坏 ${int(x.bad)}</em>` : ''}` : '没记'}</span></button>`).join('')}</div>`
+      <b>${esc(date.slice(5))}</b><small>周${week[new Date(date + 'T12:00:00Z').getUTCDay()]}</small><span>${x.had ? `${int(x.n)} 轮${x.bad ? `<em> · 坏 ${int(x.bad)}</em>` : ''}` : '没记'}</span></button>`).join('')}</div>`
       : '<p class="au-empty">近 30 天每天的轮数后台还没给。</p>';
     return `<div class="au-older"><button type="button" class="au-older__toggle" data-older aria-expanded="${olderOpen}">更早的 · 近 30 天按天看 <span aria-hidden="true">${olderOpen ? '‹' : '›'}</span></button>${olderOpen ? grid : ''}</div>`;
   }
@@ -282,8 +283,9 @@
       : short ? `<span class="tp-mid">${big(short[0], 'use-m')}<small>${short[1]}</small></span>`
       : `<span class="tp-mid">${big(Math.floor(seconds / 3600), 'use-h')}<small>小时</small> ${big(Math.round(seconds % 3600 / 60), 'use-m')}<small>分</small></span>`;
     const covered = known(seconds) && since && since > weekStart ? `<small class="au-use__since">从 ${esc(when(u.covered_since))} 起记，更早的没有记录</small>` : '';
+    // 星期照上面日期格子的取法，按北京日期本身算，不用浏览器本机时区
     const names = ['日', '一', '二', '三', '四', '五', '六'];
-    const chart = days.some(x => known(x.seconds)) ? T.columns({ rows: days.map((x, i) => ({ label: i === days.length - 1 ? '今天' : names[new Date(x.date + 'T12:00:00+08:00').getDay()],
+    const chart = days.some(x => known(x.seconds)) ? T.columns({ rows: days.map((x, i) => ({ label: i === days.length - 1 ? '今天' : names[new Date(x.date + 'T12:00:00Z').getUTCDay()],
       parts: [{ value: (x.seconds || 0) / 3600, color: i === days.length - 1 ? '#00a650' : '#9fdcb9' }], text: known(x.seconds) ? `${dec(x.seconds / 3600)}h` : '没记' })),
       width: 380, height: 150, fmt: v => `${dec(v)}h`, grow: !drawn }) : `<p class="tp-small">每天各用多久后台还没分开给${known(seconds) ? '，先只有合计' : ''}。</p>`;
     return `<section class="tp-panel au-use" id="usage"><div class="tp-panel__head"><h2>这周后台 AI 共用了</h2></div><p class="au-use__num">${label}${covered}</p>${chart}</section>`;
