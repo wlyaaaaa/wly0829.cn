@@ -24,6 +24,8 @@
 .ar-arrow { margin: 0 4px; color: #57564f; }
 .ar-num { display: grid; place-items: center; width: 24px; height: 24px; border: 1.6px solid currentColor; border-radius: 50%; font-size: 13px; font-weight: 700; }
 .ar-outs .tp-link { font-size: 15.5px; }
+/* 右边那一格：链接和它后面的“访客看不到”小签放在一起，同一格里排成一行（每行固定三格，小签单独放会掉到下一行的编号那一格） */
+.ar-out-go { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
 .ar-recorded { margin: 0; padding-left: 20px; font-size: 15px; line-height: 24px; }
 
 /* 经过：竖线串起来的点，没做成的那一段红点 */
