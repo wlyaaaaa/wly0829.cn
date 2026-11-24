@@ -287,7 +287,7 @@
     const open = modelsOpen.has(h.id), shown = open ? models : models.slice(0, 4);
     const more = models.length > 4 ? `<button type="button" class="ag-more" data-models="${h.id}" aria-expanded="${open}">${open ? '收起' : `另 ${models.length - 4} 种`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
     return `<article class="ag-work${dim(h.id)}" data-host="${h.id}"><header>${h.name}</header>
-      ${cell('开工', w.starts, '件', 'starts')}${cell('总工时', known(w.actual_minutes) ? w.actual_minutes / 60 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
+      ${cell('开工', w.starts, '件', 'starts')}${cell('总工时', known(w.actual_minutes) ? w.actual_minutes / 60 : w.starts === 0 ? 0 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
       <div class="ag-modelbox"><p class="ag-models__head">派出去的单按型号 · 档位分</p>${shown.length ? `<ul class="ag-models">${shown.map(m => `<li><span>${esc(MODEL(m.model))} · ${esc(m.effort)}</span><b>${int(m.count)}</b></li>`).join('')}</ul>` : '<p class="tp-muted ag-models__none">没有派单</p>'}${more}</div>
       ${lost ? '<p class="tp-small">开工和工时这一家还没采上，派单数是派活工具记的。</p>' : ''}</article>`;
   }

@@ -531,6 +531,9 @@ button.vz-moment__hit:hover { background: rgb(255 255 255 / .55); }
 .page--live .vz-legend__item::before, .page--live .vz-legend__name::before { content: none; display: none; }
 .page--live .vz-legend__name { min-width: 0; }
 .page--live .vz-chip { background: var(--c); border-radius: 50%; box-shadow: none; }
+/* 斜纹小方块：手机图的“等下一轮记录”，和横带上的斜纹一个样子（M696） */
+.vz-chip.vz-chip--hatch, .page--live .vz-chip.vz-chip--hatch { border-radius: 2px; box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 35%, transparent);
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--c) 72%, #fff) 0 1.6px, color-mix(in srgb, var(--c) 14%, #fff) 1.6px 3.8px); }
 .page--live .vz-rank__row { position: relative; margin: 6px 0; padding-block: 12px; }
 .page--live .vz-rank__bar { inset: auto 0 0; height: 4px; border-radius: 0; overflow: hidden; }
 .page--live .vz-rank__bar > i { min-width: 0; border-radius: 0; background: var(--c); box-shadow: none; }

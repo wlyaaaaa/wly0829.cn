@@ -233,6 +233,8 @@
     };
   }
   const chip = (c) => `<i class="vz-chip" style="--c:${c}"></i>`;
+  // 状态写了 pattern: 'hatch' 的（手机图的“等下一轮记录”）：小方块画成斜纹，和横带上一样（M696）
+  const stateChip = (st) => st?.pattern === 'hatch' ? `<i class="vz-chip vz-chip--hatch" style="--c:${color(st.hue)}"></i>` : chip(color(st?.hue));
 
   function waitBox(box, text) {
     if (text) text = emptyText(text);
@@ -362,7 +364,19 @@
       const focused = focus != null;
       ctx.fillStyle = focused ? 'rgba(20, 20, 19, .012)' : 'rgba(20, 20, 19, .04)';
       ctx.fillRect(0, 0, n, H);
+      // 斜纹：白底上一层很淡的本色，再画本色斜线；不透明，盖在别的段上也是同一个样子
+      const hatch = (c) => {
+        const p = Math.max(4, Math.round(6 * dpr)), tile = document.createElement('canvas'), g = tile.getContext('2d');
+        tile.width = tile.height = p;
+        g.fillStyle = '#fff'; g.fillRect(0, 0, p, p);
+        g.globalAlpha = .14; g.fillStyle = c; g.fillRect(0, 0, p, p);
+        g.globalAlpha = .62; g.strokeStyle = c; g.lineWidth = 1.6 * dpr; g.beginPath();
+        for (const k of [-p, 0, p]) { g.moveTo(k, p); g.lineTo(k + p, 0); }
+        g.stroke();
+        return ctx.createPattern(tile, 'repeat');
+      };
       const fills = states.map((st) => {
+        if (st.pattern === 'hatch') return hatch(color(st.hue));
         if (st.hue === 'stone') return 'rgba(201, 197, 187, .42)';   // 没有记录：很淡的石灰色平涂
         const c = color(st.hue), g = ctx.createLinearGradient(0, 0, 0, H);
         g.addColorStop(0, mix(c, .32));
@@ -377,7 +391,7 @@
         ctx.save(); ctx.globalAlpha = 1; ctx.lineWidth = 1.5 * dpr; ctx.strokeStyle = 'rgba(28, 36, 48, .88)';
         ctx.strokeRect(x + .75 * dpr, y + .75 * dpr, Math.max(w - 1.5 * dpr, .5 * dpr), Math.max(h - 1.5 * dpr, .5 * dpr)); ctx.restore();
       };
-      const solid = (s) => states[s].hue === 'stone' ? 'rgb(168, 163, 152)' : fills[s];
+      const solid = (s) => states[s].hue === 'stone' && states[s].pattern !== 'hatch' ? 'rgb(168, 163, 152)' : fills[s];
       if ((to - from) / w > 3600) {
         // 粗的横带（一格像素超过 1 小时）：一天一竖条，从下往上按 states 的顺序叠这一天各状态占几成——
         // 一年看下来是一道起伏的“地形”：哪天用得多一眼看得出，细到小时的去看下面那条
@@ -419,6 +433,16 @@
           if (s >= 0 && chosen(s)) { ctx.globalAlpha = 1; ctx.fillStyle = solid(s); ctx.fillRect(c, 0, e - c, H); outline(c, 0, e - c, H); }
           c = e;
         }
+        // 斜纹的段太短（比如 30 天图上末尾 10 分钟）也画到看得见，贴着它真实的位置（本人 11-24 点头的样子，M696）：
+        // 至少 6 像素宽——落在横带末尾时圆角会切掉一截，4 像素只剩一道细边
+        spans.forEach(([t, s], i) => {
+          if (s == null || states[s]?.pattern !== 'hatch') return;
+          const a = Math.max(0, (Math.max(t, from) - from) / per), b = Math.min(n, (Math.min(spans[i + 1]?.[0] ?? to, to) - from) / per), width = Math.min(6 * dpr, n);
+          if (!(b > a) || b - a >= width) return;
+          const left = Math.min(Math.max((a + b - width) / 2, 0), n - width);
+          ctx.globalAlpha = alpha(s); ctx.fillStyle = fills[s]; ctx.fillRect(left, 0, width, H);
+          if (chosen(s)) outline(left, 0, width, H);
+        });
         // 太短看不见的段不撑宽着画（撑宽的一多，比例就和图下的数对不上），只在它附近留 3 像素悬停区，提示里查得到
         spans.forEach(([t, s], i) => {
           if (s == null || !states[s]) return;
@@ -503,7 +527,7 @@
         const vals = shown.length === 1 ? `<span class="vz-legend__big">${durHtml(total(st, shown[0])) || '—'}</span>` : shown.map((r) => `<span><small>${esc(r.short || r.label)}</small> ${esc(dur(total(st, r)) || '—')}</span>`).join('');
         const state = pickable ? `${pinned === st.id ? ' is-picked' : ''}${focus != null && focus !== st.id ? ' is-dim' : ''}` : ' is-static';
         return `<li class="vz-legend__item${state}" data-state="${esc(st.id)}"${pickable ? ` tabindex="0" role="button" aria-pressed="${pinned === st.id}"` : ''}>
-          <span class="vz-legend__name" title="${esc(sp(st.label))}">${chip(color(st.hue))}<b>${esc(sp(st.label).replace(/^[🟢🟡🔴🟠🔵🟣⚪⚫]\s*/u, ''))}</b></span>
+          <span class="vz-legend__name" title="${esc(sp(st.label))}">${stateChip(st)}<b>${esc(sp(st.label).replace(/^[🟢🟡🔴🟠🔵🟣⚪⚫]\s*/u, ''))}</b></span>
           ${st.note ? `<span class="vz-legend__note">${esc(sp(st.note))}</span>` : ''}
           <span class="vz-legend__vals">${vals}</span></li>`;
       }).join('');
@@ -555,7 +579,7 @@
         const tot = new Array(states.length).fill(0);
         spans.forEach(([s0, s], i) => { const x0 = Math.max(s0, a), x1 = Math.min(spans[i + 1]?.[0] ?? to, b); if (x1 > x0 && states[s]) tot[s] += x1 - x0; });
         const top = tot.map((v, i) => [v, i]).filter(([v]) => v >= 60).sort((p, q) => q[0] - p[0]).slice(0, 3);
-        content = `<b>${esc(md(a))} ${esc(weekday(a))}</b>${top.map(([v, i]) => `<span>${chip(color(states[i].hue))}${esc(sp(states[i].label))} ${esc(dur(v))}</span>`).join('')}`;
+        content = `<b>${esc(md(a))} ${esc(weekday(a))}</b>${top.map(([v, i]) => `<span>${stateChip(states[i])}${esc(sp(states[i].label))} ${esc(dur(v))}</span>`).join('')}`;
       } else {
         let lo = 0, hi = spans.length - 1;
         while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (spans[mid][0] <= t) lo = mid; else hi = mid - 1; }
@@ -563,7 +587,7 @@
         a = Math.max(spans[lo][0], from); b = Math.min(spans[lo + 1]?.[0] ?? to, to);
         if (!st || t < spans[0][0]) { hide(); return; }
         const sameDay = dayStart(a) === dayStart(b - 1);
-        content = `<span>${chip(color(st.hue))}<b>${esc(sp(st.label))}</b></span><span>${esc(sameDay ? `${hm(a)}–${b >= to && !opts.actualEnd && !isOffline() ? '现在' : hm(b)}` : `${md(a)} ${hm(a)} – ${b >= to && !opts.actualEnd && !isOffline() ? '现在' : `${md(b)} ${hm(b)}`}`)}</span><span>${esc(dur(b - a))}</span>`;
+        content = `<span>${stateChip(st)}<b>${esc(sp(st.label))}</b></span><span>${esc(sameDay ? `${hm(a)}–${b >= to && !opts.actualEnd && !isOffline() ? '现在' : hm(b)}` : `${md(a)} ${hm(a)} – ${b >= to && !opts.actualEnd && !isOffline() ? '现在' : `${md(b)} ${hm(b)}`}`)}</span><span>${esc(dur(b - a))}</span>`;
       }
       const x0 = ((a - from) / (to - from)) * width, x1 = ((b - from) / (to - from)) * width;
       r.cursor.hidden = false;

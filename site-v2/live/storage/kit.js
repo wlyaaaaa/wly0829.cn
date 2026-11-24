@@ -30,12 +30,13 @@
   }
   // 新私事规则（本人 11-24 02:56）：访客侧不再写“另有 N 条……仅本人可见”。
   const hiddenRows = () => '';
-  // 盘的用途：后台给 volumes[].purpose 就用后台的；没给按盘符对照（H 盘卷标是一串数字，要对照表）。
-  const PURPOSE = { C: '系统', D: '游戏', E: '软件', F: '恢复 U 盘', G: '数据', H: '备份', V: '开发盘' };
+  // 盘的用途：后台给 volumes[].purpose 就用后台的。插着的 U 盘（回包 removable，F、H 和以后插的）盘符会变，只认后台给的，
+  // 没给就只写盘符（本人 11-24 08:50：“按实际读数判断、不写死盘符；识别不出用途时写盘符即可”）；本机固定盘没给才按盘符对照。
+  const PURPOSE = { C: '系统', D: '游戏', E: '软件', G: '数据', V: '开发盘' };
   const ORDER = 'CDEGHVF';
   const letter = v => (/^([a-z]):?$/i.exec(String(v?.id ?? v ?? ''))?.[1] || '').toUpperCase();
   const volName = (v, viewer) => letter(v) ? `${letter(v)} 盘` : field(v?.name ?? v?.id, '磁盘名称', viewer);
-  const purpose = (v, viewer) => field(v?.purpose, '磁盘用途', viewer) || PURPOSE[letter(v)] || '';
+  const purpose = (v, viewer) => field(v?.purpose, '磁盘用途', viewer) || (v?.removable === true ? '' : PURPOSE[letter(v)] || '');
   function offlineRead(v, viewer) {
     const stamp = field(v.read_at, '上次容量读数时间', viewer);
     const U = window.LiveUI;
