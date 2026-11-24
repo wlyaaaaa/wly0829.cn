@@ -189,7 +189,7 @@
   const itemRecordedAt = it => it.recorded_at || it.changed || it.born;
   const selected = new Set(), selectable = new Map();
   const selection = $('item-selection'), selectionActions = $('item-selection-actions');
-  // M663：访客版按钮照样摆出来（多选框也是），没配对的设备点了只提示“不是可信设备”，什么都不改（定稿卡-等你的事 第一节第 4 条）。
+  // M663：访客版按钮照样摆出来（多选框也是），没配对的设备点了弹全站共用的可信设备说明框（M803），什么都不改（定稿卡-等你的事 第一节第 4 条）。
   const CLOSE_INTENTS = ['ack', 'later', 'decline', 'close_report'];
   const pickIntent = (it, action) => viewer === 'owner' ? (action.intent === 'done' ? '' : U.itemIntent(it, action)) : CLOSE_INTENTS.includes(action.intent) ? action.intent : '';
   function checkbox(it) {
@@ -510,7 +510,7 @@
   // 同一份汇报关掉后又重新弹出（编号不变，M567）时，按弹出时刻比：关掉的时刻不早于这次弹出，才算已经关了。
   const closedAt = () => new Map(closedItems.map(it => [it.id, Date.parse(it.closed?.at) || 0]));
   const closedSince = (gone, id, opened) => gone.has(id) && gone.get(id) >= (Date.parse(opened) || 0);
-  // M663：访客版也摆“关掉”，点了只提示“不是可信设备”。
+  // M663：访客版也摆“关掉”，点了弹全站共用的可信设备说明框（M803）。
   const reportActions = it => viewer === 'owner' || (it.actions || []).some(a => a.intent === 'close_report') ? it : { ...it, actions: [...(it.actions || []), { kind: 'direct', intent: 'close_report', label: '关掉' }] };
   function renderReports(d) {
     reportsData = d;

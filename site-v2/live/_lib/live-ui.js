@@ -736,7 +736,8 @@
     const answering = intent === 'done' && items.some(item => item.kind === 'choose');
     const wording = CONFIRM_ITEM[intent], live = window.Live, writes = direct || items;
     if (!items.length || !wording || items.some(item => itemWrites.has(item.id)) || document.querySelector('.live-item-confirm[open]')) return;
-    if (!live?.canOwnerAct?.()) { itemFeedback(trigger, '不是可信设备'); return; }
+    // M803：访客（含本人切到看公开版）点关掉类按钮、多选后的处理按钮，和同页别的按钮一样弹全站共用的可信设备说明框；本人设备一时办不了的仍走短浮窗
+    if (!live?.canOwnerAct?.()) { if (viewer !== 'owner') window.TrustModal?.show(); else itemFeedback(trigger, '不是可信设备'); return; }
     if (wording.action && writes.some(item => !item.item_version || !item.owner_actions?.includes(wording.action))) {
       itemFeedback(trigger, '这件事刚刚有变化，请重读后再试。'); return;
     }

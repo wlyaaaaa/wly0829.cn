@@ -1063,7 +1063,8 @@
       if (!name || seen.has(row.id)) continue;
       seen.add(row.id);
       const label = status;
-      const ask = failed && kind === 'owner' && row.id && U.actions(
+      // 两版同一套按钮（本人禁令 11-24 14:16）：访客也摆“问情况”，点了由共用拦截弹可信设备说明框
+      const ask = failed && row.id && U.actions(
         { ...row, text: join([U.fieldText(row.display_name ?? row.name, kind), label, U.fieldText(row.problem?.reason, kind)]) },
         [row.actions?.find(action => action.kind === 'copy' && action.intent === 'ask') || { kind: 'copy', label: '问情况', intent: 'ask' }],
       );
