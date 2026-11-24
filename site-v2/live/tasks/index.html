@@ -113,9 +113,9 @@
 .lb-run .task-days .rec-none { border: 0; background: #dedcd5; font-size: 0; line-height: 0; overflow: hidden; vertical-align: top; }
 .lb-run .task-day-tip { bottom: 14px; left: -6px; font-size: 12.5px; }
 /* 强调绿边框只给“用途未登记”那一组（本人 11-24：“用途未登记计划任务才改成强调绿边框”，M779）；
-   从实况首页点“要处理”进来（?attention=1）时，要处理的行照旧淡入、滚到眼前，不再描全站通用的绿框和浅绿底 */
+   从别处点进来要看的那几行（?attention=1 要处理的、?item=、?source=）照旧淡入、滚到眼前，停稳后留一圈和点小方块同色的深色框、淡灰底，不用全站通用的绿框 */
 .page--tasks .lb-card[data-key="unregistered"] { outline: 2px solid #00a650; outline-offset: -2px; }
-body.page--tasks .lb-row.notice-target { outline: none; background-image: none; }
+body.page--tasks .lb-row.notice-target { outline: 2px solid rgb(38 60 55 / .6); outline-offset: 3px; background-image: linear-gradient(rgb(38 60 55 / .06), rgb(38 60 55 / .06)); }
 </style></head>
 <body class="page page--live page--l2 page--board page--tasks"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
 <main class="stage"><div class="field" aria-hidden="true"></div><a class="back" href="/live/#tasks" data-back data-mo-rise>实况</a><ul class="notices" id="notices" aria-live="polite"></ul>
