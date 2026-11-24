@@ -1,7 +1,7 @@
 const prefix = '/computer-access/live/v1/';
 const origins = new Set(['https://wly0829.cn', 'https://www.wly0829.cn']);
 const OSS_FALLBACK_URL = 'https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/live/v1/fallback.json';
-const FALLBACK_POLICY = 'policy-10'; // Same generation as the PCConfig exporter and live client.
+const FALLBACK_POLICY = 'policy-11'; // Same generation as the PCConfig exporter and live client.
 async function transformBytes(stream, bytes) {
   const writer = stream.writable.getWriter(), reader = stream.readable.getReader();
   const reading = async () => {

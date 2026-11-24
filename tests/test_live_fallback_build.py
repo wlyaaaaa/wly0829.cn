@@ -25,7 +25,7 @@ def test_live_fallback(tmp_path, monkeypatch, capsys, mode):
     out.write_text('stale', encoding='utf-8')
     fake = tmp_path / 'fake.py'
     body = {'v': 1, 'at': '2026-11-16', 'viewer': {'kind': 'public'}, 'data': {}}
-    publication = {'policy': 'policy-9' if mode == 'old-policy' else 'policy-10', 'audience': 'a'*64}
+    publication = {'policy': 'policy-9' if mode == 'old-policy' else 'policy-11', 'audience': 'a'*64}
     payload = {'v': 1, 'at': body['at'], 'publication': publication, 'metadata_only': True,
                'resources': {'home': body, 'projects?state=frozen': body}}
     if mode == 'partial':
@@ -51,7 +51,7 @@ def test_live_fallback(tmp_path, monkeypatch, capsys, mode):
         if mode == 'missing-home':
             assert '缺少入口 home' in str(stopped.value)
         if mode == 'old-policy':
-            assert '需要 policy-10' in str(stopped.value)
+            assert '需要 policy-11' in str(stopped.value)
     log = capsys.readouterr().out
     if mode in ('success', 'partial'):
         assert json.loads(out.read_text('utf-8')) == payload
@@ -114,7 +114,7 @@ def test_fallback_audience_changes_identity_and_object_without_changing_page(tmp
         (dist / 'index.html').write_text('<main>same</main><script src="/reader.js"></script>', 'utf-8')
         (dist / 'reader.js').write_text("fetch('/release-identity.json')", 'utf-8')
         (dist / 'live/_fallback.json').write_text(json.dumps({'seq': 1, 'publication': {
-            'policy': 'policy-10', 'audience': str(generation)*64}}), 'utf-8')
+            'policy': 'policy-11', 'audience': str(generation)*64}}), 'utf-8')
         oss.write(dist/oss.MANIFEST, {'schema': 'wly.hybrid-release.v1', 'release_id': str(generation),
                                      'files': oss.inventory(dist)})
         manifest = oss.finalize_dist(dist)

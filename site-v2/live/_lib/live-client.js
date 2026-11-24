@@ -32,7 +32,7 @@
   // 与后台 owner_original_resource 一致：这些详情只在当前页面保留原文。
   const ownerOriginalResource = resource => /^(?:chats|items|reports|projects)\//.test(resource) &&
     !['items/closed', 'projects/changes'].includes(resource);
-  const visitorPolicy = 'policy-10'; // 与后端导出和云端接口的访客规则代号一致。
+  const visitorPolicy = 'policy-11'; // 与后端导出和云端接口的访客规则代号一致。
   const validAudience = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
   try {
     for (let i = localStorage.length - 1; i >= 0; i--) {

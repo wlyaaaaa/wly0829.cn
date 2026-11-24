@@ -124,7 +124,7 @@ class PublishTests(unittest.TestCase):
             path.parent.mkdir()
             body = {'v': 1, 'at': '2026-11-17T00:00:00+08:00', 'viewer': {'kind': 'public'}, 'data': {}}
             def write(resources):
-                payload = {'publication': {'policy': 'policy-10'}, 'resources': resources}
+                payload = {'publication': {'policy': 'policy-11'}, 'resources': resources}
                 path.write_text(json.dumps(payload), 'utf-8')
                 return payload
             write({'items': None, 'tasks': {**body, 'viewer': {'kind': 'owner'}}})

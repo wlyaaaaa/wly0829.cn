@@ -5,7 +5,7 @@ import handle from '../edge/edgeone/edge-functions/[[path]].js';
 const oss = 'https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/live/v1/fallback.json';
 const origin = 'https://live.wly0829.cn/computer-access/live/v1/';
 const at = '2026-11-17T12:00:00.000Z';
-const policy = 'policy-10';
+const policy = 'policy-11';
 const audience = 'a'.repeat(64);
 const call = (path = 'home', method = 'GET', headers = {}) =>
   handle({request: new Request(origin + path, {method, headers})});

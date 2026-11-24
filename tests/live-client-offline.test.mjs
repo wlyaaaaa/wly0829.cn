@@ -166,7 +166,7 @@ test('offline screen retains proven readings, and a rejected device drops its ow
   assert.equal(old.data.cells.find(c => c.id === 'computer').cpu_c, 52);
   assert.equal(old.data.cells.find(c => c.id === 'need').n, 0);
   reply = () => Response.json({error: 'snapshot_metadata_only', at}, {status: 503, headers: {
-    'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-10', 'X-Live-Fallback-Audience': 'a'.repeat(64)
+    'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-11', 'X-Live-Fallback-Audience': 'a'.repeat(64)
   }});
   const reopened = {...sandbox, window: {}};
   vm.runInNewContext(source, reopened);
@@ -261,10 +261,10 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
       if (!offline) return Response.json({...packet, data: {text: 'safe'}});
       if (url.endsWith('/projects')) {
         return Response.json({...packet, data: {text: 'stale-edge-body'}},
-          {headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-10'}});
+          {headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-11'}});
       }
       return Response.json({error: 'snapshot_metadata_only', at, data: {text: 'stale-edge-body'}}, {status: 503,
-        headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-10', 'X-Live-Fallback-Audience': audience}});
+        headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-11', 'X-Live-Fallback-Audience': audience}});
     }};
   vm.runInNewContext(source, sandbox);
   const client = sandbox.window.Live, shown = [];
@@ -284,14 +284,14 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   assert.equal((await client.get('projects')).data, null);
   await fallbackRead();
   assert.equal((await client.get('projects')).meta.at, null);
-  packagedPolicy = 'policy-10';
+  packagedPolicy = 'policy-11';
   assert.equal((await client.get('projects')).data, null);
   await fallbackRead();
   const packaged = await client.get('projects');
   assert.equal(packaged.data, null);
   assert.equal(packaged.meta.rev, 'metadata-' + audience);
   assert.ok(requested.includes('https://assets.example.test/policy-9.json'));
-  assert.ok(requested.includes('https://assets.example.test/policy-10.json'));
+  assert.ok(requested.includes('https://assets.example.test/policy-11.json'));
   const edge = await client.get('home');
   assert.equal(edge.offline, true); assert.equal(edge.data.text, 'safe');
   assert.match(edge.text, / · 下面是 .+ 的数据。$/);

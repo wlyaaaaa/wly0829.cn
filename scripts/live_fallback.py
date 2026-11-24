@@ -5,7 +5,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-FALLBACK_POLICY = 'policy-10'
+FALLBACK_POLICY = 'policy-11'
 
 
 def load_exporter():
