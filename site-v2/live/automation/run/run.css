@@ -17,7 +17,8 @@
 
 /* 这一轮做成了什么：编号、东西、右边“去那张卡 ›” */
 .ar-outs { margin: 0; padding: 0; list-style: none; }
-.ar-outs li { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 14px 0; border-top: 1px solid var(--tp-hair); }
+/* 右边那一格最多占这一行的 40%：右边的字长了（访客版那段说明、点开的“访客看不到”说明）就在格里换行，标题那一列不被挤窄 */
+.ar-outs li { display: grid; grid-template-columns: 26px minmax(0, 1fr) fit-content(40%); align-items: center; gap: 12px; padding: 14px 0; border-top: 1px solid var(--tp-hair); }
 .ar-outs li:first-child { border-top: 0; padding-top: 2px; }
 .ar-outs p { margin: 0; font-size: 16px; line-height: 24px; }
 .ar-outs b { font-weight: 800; }
@@ -25,7 +26,7 @@
 .ar-num { display: grid; place-items: center; width: 24px; height: 24px; border: 1.6px solid currentColor; border-radius: 50%; font-size: 13px; font-weight: 700; }
 .ar-outs .tp-link { font-size: 15.5px; }
 /* 右边那一格：链接和它后面的“访客看不到”小签放在一起，同一格里排成一行（每行固定三格，小签单独放会掉到下一行的编号那一格） */
-.ar-out-go { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.ar-out-go { display: inline-flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px; white-space: nowrap; }
 .ar-recorded { margin: 0; padding-left: 20px; font-size: 15px; line-height: 24px; }
 
 /* 经过：竖线串起来的点，没做成的那一段红点 */
