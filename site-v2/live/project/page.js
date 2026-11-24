@@ -369,9 +369,10 @@
     const count = m.count == null ? '' : `${lower(m, 'count') ? '至少 ' : ''}${num(m.count)} 条`;
     const at = m.at && stamp(m.at, m.at_precision);
     // 时刻是“这件事最后一次发生”的（11-15 真机验收、最后整理于 11-21……）写那一句，不写“截至”
-    const meta = [count, m.moment || at && `截至 ${at}`].filter(Boolean).join(' · ');
+    // 同一张卡的卡底已经是这一句时，卡里这一行不再重复（cardTail 里收起）
+    const meta = [count, !m.moment && at && `截至 ${at}`].filter(Boolean).join(' · '); b.moment = m.moment || '';
     const linkLabel = U.fieldText(m.label, projectViewer) + '明细';
-    U.html(b.head, `<b>${name}</b>${meta ? `<span class="pj-record-meta">${esc(meta)}</span>` : ''}${href ? `<a class="more pj-record-link" href="${esc(href)}" aria-label="${esc(linkLabel)}">明细 <span class="more__chev">›</span></a>` : ''}`);
+    U.html(b.head, `<b>${name}</b>${meta || b.moment ? `<span class="pj-record-meta">${esc(meta)}${b.moment ? `<span class="pj-record-moment">${meta ? ' · ' : ''}${esc(b.moment)}</span>` : ''}</span>` : ''}${href ? `<a class="more pj-record-link" href="${esc(href)}" aria-label="${esc(linkLabel)}">明细 <span class="more__chev">›</span></a>` : ''}`);
     const knowledge = id === 'daily-preferences' && /^group-[0-5]$/.test(m.section);
     const hidden = m.value?.hidden_block || m.hidden_block || (isPrivate(m) ? m.value?.hidden_what || m.hidden_what : '');
     const notice = projectViewer !== 'public' ? '' : knowledge
@@ -678,6 +679,7 @@
     c.tail.querySelector('.pj-notes').hidden = !parts.length;
     const cut = c.tail.querySelector('.pj-cut'); cut.hidden = cuts.length !== 1; cut.textContent = cuts.length === 1 ? cuts[0] : '';
     c.tail.hidden = !parts.length && cuts.length !== 1;
+    for (const b of list) { const said = b.array && b.moment && b.head?.querySelector('.pj-record-moment'); if (said) said.hidden = cuts.length === 1 && cuts[0] === b.moment; }
   }
   function groupsOf(list) {
     const out = new Map();

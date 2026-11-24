@@ -446,7 +446,7 @@
   function projectTile(it) {
     const changed = it.changed?.at, h = it.headline, value = headline(it);
     // 代表数的时刻是“这件事最后一次发生”的（账本最后整理、片子最后变动……）：写那一句，不拿它当整张卡的“数据截至”（M769）
-    const moment = window.LiveProjectMoments?.headline(it) || '';
+    const moment = window.LiveProjectMoments?.headline(it, true) || '';
     const cutoff = !moment && (h?.at || h?.source_at) && recordStamp(blockAt(h), h?.at_precision);
     const recent = changed && !lastState?.offline && fresh('project-changes', changed) ? '<span class="project-recent">刚改</span>' : '';
     const nameNote = viewer === 'public' && it.name && typeof it.name === 'object' ? U.fieldHtml({ ...it.name, text: null, value: null }, { name: '项目名', kind: viewer }) : '';
