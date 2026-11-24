@@ -180,7 +180,7 @@
       if (el.picks) UI().html(el.picks, picksHtml(lists, o.picks, wait));
       el.caption.hidden = !state.caption; el.caption.innerHTML = state.caption || '';
       const label = state.groups ? '' : moreLabel(list.length - shown.length, state.hasNext, o.page, state.query);
-      el.foot.hidden = !label; el.more.querySelector('.book-more__t').textContent = label || '再看';
+      el.foot.hidden = !label; el.more.querySelector('.book-more__t').textContent = state.busy ? '正在读…' : label || '再看';
       el.found.textContent = state.query.trim() && list.length ? `找到 ${list.length} 项` : '';
     }
     function set(rows, info = {}) {
@@ -250,7 +250,9 @@
       const left = arrange(state.rows, { query: state.query }).length - state.shown;
       if (left <= 0 && state.hasNext && o.more) {
         state.busy = true; el.more.disabled = true;
-        try { await o.more(); } finally { state.busy = false; el.more.disabled = false; }
+        const text = el.more.querySelector('.book-more__t'), label = text.textContent;
+        text.textContent = '正在读…';
+        try { await o.more(); } finally { state.busy = false; el.more.disabled = false; text.textContent = label; }
       }
       state.shown += o.page;
       draw('more');
