@@ -67,16 +67,137 @@ def slug(text):
     return re.sub(r"\s", "-", re.sub(r"[^\w\-\s]", "", text.lower()))
 
 
-def load_document(path, output, rewrites):
-    source = path.read_text(encoding="utf-8-sig")
-    for row in rewrites:
-        if row["file"] != output:
+# 公开稿（本人 11-24 定稿）：访客版按全局《个人资料与数据处理》的两层边界，从本人稿自动生成，每个新规则版本照样能出。
+# 改写表是本机私有输入（site-v2/配置/规则公开改写.json，不进公开仓库）：
+#   {"替换": [{"old": 原词组, "new": 公开说法, "file": 可选，只改这一页}], "收起的词": [不对外点名的词]}
+#   旧格式（只有一个列表、每行带 file）照旧可用。
+# 1. 先按“替换”换掉确定的词组（每一处都换），能只改一处的只改那一处；
+# 2. 换完仍带“收起的词”的句子（以。！？；为界，加粗、行内代码、链接不拆开）从公开稿拿掉，整段空了就整段拿掉；
+# 3. 写着全局通用句的那一段（第一层边界本身），公开稿只留开头的加粗小标题和这句通用句。
+# 本人稿不经过这里，原样给配对设备。
+GENERIC = "公开版按实际情况说明事项的进展和结果。部分个人细节只在本人版显示。"
+SENTENCE_END = re.compile(r"[。！？；](?:[」”’）)]*)")
+ATOMIC = re.compile(r"\*\*.+?\*\*|`[^`\n]+`|\[[^\]\n]*\]\([^)\n]*\)")
+
+
+POLICY_KEYS = {"说明", "替换", "收起的词"}
+
+
+def kind_of(value):
+    return {dict: "对象", list: "列表", str: "文字", int: "数字", float: "数字", bool: "真假值", type(None): "null"}.get(type(value), type(value).__name__)
+
+
+def load_policy(raw, source="规则公开改写.json"):
+    """认两种结构：新格式对象 {"说明", "替换", "收起的词"}，旧格式（只有一个替换列表）。认不出的直接报错停下，不悄悄跳过。"""
+    def bad(where, want, value):
+        raise ValueError(f"{source}：{where}应是{want}，实际是{kind_of(value)}：{json.dumps(value, ensure_ascii=False)[:120]}")
+
+    def rows(value, where):
+        if not isinstance(value, list):
+            bad(where, "列表", value)
+        for i, row in enumerate(value, 1):
+            here = f"{where}第 {i} 项"
+            if not isinstance(row, dict):
+                bad(here, '对象 {"old", "new", "file"（可选）}', row)
+            extra = set(row) - {"old", "new", "file"}
+            if extra:
+                bad(here, '只带 "old"、"new"、"file"（可选）的对象', row)
+            for key in ("old", "new"):
+                if not isinstance(row.get(key), str) or (key == "old" and not row[key]):
+                    bad(f"{here}的“{key}”", "非空文字" if key == "old" else "文字", row.get(key))
+            if "file" in row and not (isinstance(row["file"], str) and row["file"]):
+                bad(f"{here}的“file”", "页面文件名（文字）", row["file"])
+        return value
+
+    if isinstance(raw, list):
+        return dict(replace=rows(raw, "旧格式列表"), hide=[])
+    if not isinstance(raw, dict):
+        bad("整个文件", '对象 {"替换", "收起的词"} 或旧格式列表', raw)
+    unknown = set(raw) - POLICY_KEYS
+    if unknown:
+        bad(f"顶层的“{'”“'.join(sorted(unknown))}”", "“说明”“替换”“收起的词”之一", {key: raw[key] for key in sorted(unknown)})
+    hide = raw.get("收起的词", [])
+    if not isinstance(hide, list):
+        bad("“收起的词”", "列表", hide)
+    for i, word in enumerate(hide, 1):
+        if not (isinstance(word, str) and word):
+            bad(f"“收起的词”第 {i} 项", "非空文字", word)
+    return dict(replace=rows(raw.get("替换", []), "“替换”"), hide=hide)
+
+
+def sentences(text):
+    """按句号、问号、分号切句；加粗、行内代码和链接里面不切，切点落在里面就挪到它后面。"""
+    spans = [m.span() for m in ATOMIC.finditer(text)]
+    cuts, start = [], 0
+    for match in SENTENCE_END.finditer(text):
+        end = match.end()
+        inside = next((b for a, b in spans if a < end < b), None)
+        end = inside if inside is not None else end
+        if end > start:
+            cuts.append(text[start:end])
+            start = end
+    if start < len(text):
+        cuts.append(text[start:])
+    return cuts
+
+
+def public_line(line, pattern):
+    """拿掉一行里带收起词的句子；返回新行和有没有改。整行只剩列表记号、引用记号或加粗小标题时返回空。"""
+    if not pattern.search(line):
+        return line, False
+    if line.lstrip().startswith("|"):
+        cells = line.split("|")
+        return "|".join((public_line(cell, pattern)[0] or " ") if pattern.search(cell) else cell for cell in cells), True
+    lead = re.match(r"^(\s*(?:[-*+]|\d+[.)]|>|#{1,6})?\s*)", line).group(1)
+    kept = []
+    for part in sentences(line[len(lead):]):
+        if pattern.search(part):
+            if kept and part.rstrip().endswith(("。", "！", "？")) and kept[-1].rstrip().endswith("；"):
+                kept[-1] = kept[-1].rstrip()[:-1] + "。"
+            continue
+        kept.append(part)
+    body = "".join(kept).strip()
+    if not body or re.fullmatch(r"\*\*[^*]+\*\*", body):
+        return "", True
+    return lead + body, True
+
+
+def public_source(source, output, policy):
+    for row in policy["replace"]:
+        if row.get("file") not in (None, output):
             continue
         count = source.count(row["old"])
         REWRITE_RESULTS.append(dict(file=output, old=row["old"], new=row["new"], occurrences=count))
-        if count > 1:
-            raise ValueError(f"{path.name}: 公开改写原句出现多次")
-        source = source.replace(row["old"], row["new"], 1)
+        if row.get("file") and count > 1:
+            raise ValueError(f"{output}: 公开改写原句出现多次")
+        source = source.replace(row["old"], row["new"])
+    if not policy["hide"]:
+        return source
+    pattern = re.compile("|".join(map(re.escape, policy["hide"])))
+    lines, fenced, result = source.split("\n"), False, []
+    for line in lines:
+        if line.lstrip().startswith(("```", "~~~")):
+            fenced = not fenced
+        if fenced or line.lstrip().startswith(("```", "~~~")):
+            result.append("" if pattern.search(line) else line)
+            continue
+        new, changed = public_line(line, pattern)
+        if changed and GENERIC.split("。")[0] in line:
+            label = re.match(r"^(\s*(?:[-*+]\s+)?)(\*\*[^*]+\*\*)?", line)
+            new = (label.group(1) or "") + ((label.group(2) + " ") if label.group(2) else "") + GENERIC
+        if changed:
+            REWRITE_RESULTS.append(dict(file=output, old=line, new=new, occurrences=1, kind="收起句子"))
+        if changed and not new.strip():
+            continue  # 整行拿掉，不留空行，免得把一张列表断成两张
+        result.append(new)
+    return "\n".join(result)
+
+
+def load_document(path, output, policy=None):
+    source = path.read_text(encoding="utf-8-sig")
+    original = source
+    if policy:
+        source = public_source(source, output, policy)
     soup = BeautifulSoup(MD.render(source), "html.parser")
     # CommonMark treats a full-width colon followed immediately by Han text
     # as literal markers. Repair only labels in ordinary list text, not code.
@@ -103,7 +224,7 @@ def load_document(path, output, rewrites):
         tag["id"] = anchor
         used.add(anchor)
     return dict(path=path, output=output, source=source, soup=soup, title=title,
-                targets=[*headings, *groups], ids=used)
+                targets=[*headings, *groups], ids=used, trimmed=source != original)
 
 
 def rewrite_links(documents, release):
@@ -220,9 +341,9 @@ def check_pages(documents):
         raise ValueError("正文逐字自检失败：" + "、".join(failed))
 
 
-def documents_for(release, topics, rewrites):
-    docs = [load_document(release / "AGENTS.md", "index.html", rewrites)]
-    docs += [load_document(release / f"docs/contracts/agents.{key}.md", f"topic-{key}.html", rewrites)
+def documents_for(release, topics, policy):
+    docs = [load_document(release / "AGENTS.md", "index.html", policy)]
+    docs += [load_document(release / f"docs/contracts/agents.{key}.md", f"topic-{key}.html", policy)
              for key, _ in topics]
     for doc in docs:
         doc["word_count"] = count_words(dom_text(doc["soup"])) - count_words(doc["title"].get_text())
@@ -241,7 +362,7 @@ def document_parts(doc, documents, config):
 
 
 def write_owner_pages(release, topics, config, metadata_raw, destination):
-    docs = documents_for(release, topics, ())
+    docs = documents_for(release, topics, None)
     hashes = {row["relative_path"]: row["sha256"]
               for row in json.loads(metadata_raw.decode("utf-8-sig"))["files"]}
     for doc in docs:
@@ -285,14 +406,19 @@ def main():
     release = args.release.resolve()
     records = HERE.parents[3] / ".publish/site-v2-rules"
     records.mkdir(parents=True, exist_ok=True)
-    rewrites = json.loads((HERE.parents[2] / "配置/规则公开改写.json").read_text(encoding="utf-8-sig"))
+    policy_path = HERE.parents[2] / "配置/规则公开改写.json"
+    policy = load_policy(json.loads(policy_path.read_text(encoding="utf-8-sig")), str(policy_path))
     topics_in_release = [(key, name) for key, name in TOPICS
                          if key != "antigravity-adapter" or (release / f"docs/contracts/agents.{key}.md").is_file()]
-    documents = documents_for(release, topics_in_release, rewrites)
+    documents = documents_for(release, topics_in_release, policy)
     (records / "流水线-规则改写结果.json").write_text(json.dumps(REWRITE_RESULTS, ensure_ascii=False, indent=2), encoding="utf-8")
-    for row in REWRITE_RESULTS:
-        if row["occurrences"] == 0:
-            print(f'规则公开改写未匹配：{row["file"]} → {row["old"]}')
+    matched = {row["old"] for row in REWRITE_RESULTS if row["occurrences"]}
+    for row in policy["replace"]:
+        if row["old"] not in matched:
+            print(f'规则公开改写未匹配：{row.get("file", "各页")} → {row["old"]}')
+    trimmed = sum(row.get("kind") == "收起句子" for row in REWRITE_RESULTS)
+    if trimmed:
+        print(f"规则公开稿：{trimmed} 处句子只给本人稿（详见 .publish/site-v2-rules/流水线-规则改写结果.json）")
     if not args.check_only:
         config = json.loads(args.toc.read_text(encoding="utf-8-sig")) if args.toc.exists() else {}
         metadata_raw = (release / "release.json").read_bytes()
@@ -316,9 +442,14 @@ def main():
             kicker = ('' if doc["output"] == "index.html" else
                       f'<p class="rules-kicker"><a href="index.html">{charter_title}</a>'
                       '<span class="rules-kicker-sep"> · </span>专题</p>')
-            page = template.substitute(title=title, kicker=kicker, header=header, charter=charter,
+            # 访客读到的都是公开版：醒目标出“公开版”，这一页有句子只给本人稿时再加一句“个别内容仅本人可见”。
+            public_mark = ('<p class="rules-public-mark" data-rule-public-mark><span class="rules-public-mark__tag">公开版</span>'
+                           + ('<span class="rules-public-mark__note">个别内容仅本人可见</span>' if doc["trimmed"] else '') + '</p>')
+            page = template.substitute(title=title, kicker=kicker, header=header, charter=charter, public_mark=public_mark,
                                        version=escape(version), date=date.strftime("%Y-%m-%d %H:%M"),
                                        page_key=Path(doc["output"]).stem, topics=topics, **parts)
+            if policy["hide"] and (hit := re.search("|".join(map(re.escape, policy["hide"])), page)):
+                raise ValueError(f'{doc["output"]}: 公开稿里还有只给本人稿的词（第 {page.count(chr(10), 0, hit.start()) + 1} 行）')
             (HERE / doc["output"]).write_text(page, encoding="utf-8")
     check_pages(documents)
     if args.owner_out and not args.check_only:

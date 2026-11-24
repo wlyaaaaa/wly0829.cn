@@ -96,8 +96,10 @@
   const path = 'rules/' + rulePage + '?release=' + encodeURIComponent(releaseId);
   const lanPort = Number(document.querySelector('meta[name="wly-lan-live-port"]')?.content);
   const lan = !official && location.protocol === 'http:' && location.port === '8829' && lanPort >= 1024 && lanPort <= 65535;
-  // 规则页没有访客版：本人设备照旧读本人正文，不跟实况页“看公开版”走；只有家网预览的公开入口按公开版看
-  const isPublic = () => !official && /(?:^|;\s*)wly-preview-view=public(?:;|$)/.test(document.cookie);
+  // 公开版和本人版（本人 11-24 定稿）：访客只拿到页面里的公开版；本人设备默认读本人原文，
+  // 用实况同一个“看公开版／回本人版”切换（live-view-switch.js，同一窗口记住）看公开版再切回。家网预览的公开入口也按公开版看。
+  const publicMark = page.querySelector("[data-rule-public-mark]");
+  const isPublic = () => window.LiveView?.isPublic?.() === true || !official && /(?:^|;\s*)wly-preview-view=public(?:;|$)/.test(document.cookie);
   const device = () => {
     try {
       const token = localStorage.getItem('wly-cockpit-device');
@@ -109,6 +111,7 @@
     if (owner === original) return;
     owner = original;
     [title, list, body, count].forEach((node, i) => { node.innerHTML = parts[i]; });
+    if (publicMark) publicMark.hidden = original;
     items = readItems();
     pinned = null;
     current = null;
@@ -138,13 +141,15 @@
       if (active !== request) return;
       if (!value || value.release !== releaseId || isPublic() || token !== device()) {
         render(publicParts, false);
+        window.LiveView?.owner?.({ kind: 'public' });
       } else {
         const heading = new DOMParser().parseFromString(value.source_title, 'text/html').querySelector('[data-source-title]');
         if (!heading) throw new Error('Missing rule title');
         render([heading.innerHTML, value.toc, value.body, '约法 ' + value.charter_words + ' 字<br>' + value.topic_words + ' 字'], true);
+        window.LiveView?.owner?.({ kind: 'owner' });
       }
     } catch {
-      if (active === request) render(publicParts, false);
+      if (active === request) { render(publicParts, false); window.LiveView?.owner?.({ kind: 'public' }); }
     } finally {
       if (active === request) timer = setTimeout(readOwner, 15000);
     }

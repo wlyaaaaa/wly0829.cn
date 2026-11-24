@@ -101,7 +101,7 @@
   }
   function external(data, stamp) {
     if (!data?.reachability?.length && !data?.expirations?.length) return null;
-    const names = { home: '首页', live: '实况首页', cv: '简历链接' };
+    const names = { home: '首页', live: '实况首页', cv: '专用链接' };
     const rows = (data.reachability || []).filter(r => names[r.id]).map(r => `${names[r.id]}：${r.success === true ? '打开成功' : r.success === false ? '没打开' : '没有记录'}${r.seconds == null ? '' : ` · ${number(r.seconds)} 秒`}${r.at ? ` · ${stamp(r.at)}` : ''}${r.q === 'partial' ? ' · 近 24 小时样本还没攒满' : ''}`);
     rows.push(...(data.expirations || []).map(r => `${r.host} ${r.kind === 'domain' ? '域名' : '证书'}：${r.expires_at ? stamp(r.expires_at, 'date') : '没有记录'}${r.remaining_days == null ? '' : ` · 还剩 ${number(r.remaining_days)} 天`}`));
     return { key: 'external', title: '外网打不打得开', html: rows.map(paragraph).join('') + paragraph('本机经公网路径最近一次检查。') };

@@ -908,7 +908,8 @@
       const c = color(r.hue, i), m = markOf(r);
       const name = field(r.name, opts.name || opts.title || '程序', 'title');
       const marker = name !== esc(sp(r.name)) ? field(r.name, opts.name || '程序', 'body', true) : '';
-      const note = marker.includes('live-mark') ? marker : '';
+      // visitor_tag：页面给的本人版小签（U.visitorLabel 生成），名字自己带了签就不再挂第二个
+      const note = marker.includes('live-mark') ? marker : r.visitor_tag || '';
       const sub = r.sub;
       return {
         key: r.key,

@@ -1,6 +1,9 @@
 const namespace = '__documents';
 const prefix = `/${namespace}/`;
 const policy = `<!doctype html><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; form-action 'none'; base-uri 'none'">`;
+// M684（本人 11-24 定稿）：来访人栏目整块只给本人看，访客看不到。栏目标题旁后台写的“仅你可见”小牌，换成全站同一个“访客看不到”紫色小签（样子同实况的 .live-mark--rewritten）。
+const VISITOR_TAG = '<span class="tag" style="border-radius:999px;padding:1px 8px;background:#eee7f7;color:#7757a5;font-size:13px;line-height:20px;font-weight:400">访客看不到</span>';
+const ownerTag = html => html.replace(/(<h1>[^<]*)<span class="tag">仅你可见<\/span>(<\/h1>)/, `$1${VISITOR_TAG}$2`);
 
 // 项目文档（PCConfig owner_documents）有两个读口：家里网站走局域网读口；
 // 公网 wly0829.cn 只给已配对设备，走 mcp.wly0829.cn/computer-access（只读 GET/HEAD）。没配对的不探。
@@ -91,7 +94,7 @@ export function mount(project, anchor, state) {
       anchor.before(frame);
     }
     current = url;
-    frame.srcdoc = policy + html.replace(/^\s*<!doctype html>/i, '');
+    frame.srcdoc = policy + ownerTag(html.replace(/^\s*<!doctype html>/i, ''));
   }
 
   async function read(url, fields) {

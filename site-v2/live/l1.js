@@ -579,7 +579,8 @@
     if (viewer === 'public' && it.visibility === 'owner') sub = '';
     const fresh = seen.isNew(it.episode_at || it.born, at) ? tags([['新', 'tag--new']]) : '';
     // 本人版给完整版，不挂“仅你可见”；访客版整件藏掉的，本人版挂“访客看不到”（M648）。
-    const marks = viewer !== 'owner' ? '' : `<span class="head__rewrite">${it.visibility === 'owner' || it.public === 'owner' ? U.visitorHiddenMark(it, '这件事', viewer) : U.visibilityNote(it, viewer)}</span>`;
+    // M684：后台在 visitor_labels 里标了这件事（'$'、text、title）的，照它挂两种签之一；没标的照旧。
+    const marks = viewer !== 'owner' ? '' : `<span class="head__rewrite">${U.visitorHiddenMark(it, '这件事', viewer, { keys: ['$', 'text', 'title'], rewrittenWhat: '这件事的说法' }) || U.visibilityNote(it, viewer)}</span>`;
     return {
       key: it.id,
       cls: 'row',
@@ -727,7 +728,9 @@
     const fieldLock = replyField && typeof replyField === 'object' && viewer === 'public' && c.visibility !== 'owner' && c.public !== 'owner' && (replyField.visibility === 'owner' || replyField.public === 'owner' || replyField.hidden || replyField.hidden_block);
     const reply = c.content_locked ? '' : fieldLock ? U.fieldHtml(replyField, { name: '最新进展', kind: viewer }) : U.chatFields.repeatsState(replyField, c, viewer) ? '' : chatWords(homeAddressed(replyField), c, replyField !== rawReply) || (!modern && chatWords(gap('latest_reply', '最新回复'), c));
     const toggle = viewer === 'owner' ? '' : '<button class="more chat-preview__toggle" type="button" aria-expanded="false" hidden>展开全文</button>';
-    const preview = reply ? `<div class="row__sub chat-preview"><p class="chat-preview__text">${reply}</p>${toggle}</div>` : '';
+    // M684：本人版回复预览访客那边不一样的，句末挂签；整场对访客藏着的只在 meta 那里挂一个。
+    const previewTag = viewer === 'owner' && reply && !U.visitorWholeHidden(c) ? U.visitorLabel(c, ['latest_reply', 'text', 'reply'], '这句最新回复', viewer) : '';
+    const preview = reply ? `<div class="row__sub chat-preview"><p class="chat-preview__text">${reply}${previewTag}</p>${toggle}</div>` : '';
     const helperText = helpers && (c.state === 'done' ? `后台帮手另在处理（${helpers} 个）` : `帮手 ${helpers} 个在干`);
     const lockedMeta = locked ? [c.stage, c.project_name, c.born && ('开始于 ' + U.time(c.born)),
       c.compaction?.count > 0 && ('压缩 ' + c.compaction.count + ' 次'),

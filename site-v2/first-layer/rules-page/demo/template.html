@@ -6,13 +6,14 @@
 <title>规则</title>
 <link rel="stylesheet" href="../../header/demo/topbar.css">
 <link rel="stylesheet" href="rules.css">
+<link rel="stylesheet" href="/trust-modal/trust-modal.css">
 <link rel="stylesheet" href="/motion/motion.css">
 <script src="/motion/motion.js"></script>
 </head>
 <body>
 $header
 <main class="rules-page" data-rule-release="$version" data-rule-page="$page_key">
-  <div class="rules-title">$kicker$source_title</div>
+  <div class="rules-title">$kicker$source_title$public_mark</div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol>$toc</ol></nav>
     <article class="rules-body" id="rules-body">$body</article>
@@ -29,6 +30,8 @@ $header
   </div>
 </main>
 <script src="../../header/demo/topbar.js"></script>
+<script src="/trust-modal/trust-modal.js"></script>
+<script src="/live/_lib/live-view-switch.js"></script>
 <script src="rules.js"></script>
 </body>
 </html>

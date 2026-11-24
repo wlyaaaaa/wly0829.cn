@@ -361,10 +361,17 @@
         sub = field(it.recent_detail || '这项成品已有登记，内容说明待补充。');
         const publicLink = audience === 'public' && typeof it.open === 'string' && !it.web_open ? { href: it.open, label: '打开成品' } : it.web_open;
         open = U.artifactAction({ ...it, web_open: publicLink }, audience, route);
-        // 新私事规则：登记时填了 open_note（“这里是这份材料的正文（8 页），所以不予展示”）的成品，访客版在打开链接的位置显示这句普通字；本人版照给链接，旁边挂“访客看不到”。
+        // 新私事规则：登记时填了 open_note（“这里是这份材料的正文（8 页），所以不予展示”）的成品，访客版在打开链接的位置显示这句普通字；本人版照给链接，旁边挂签。
+        // M684：访客那边正文看不到，挂“访客看不到”；后台给了 visitor_labels.open 时照它挂哪种。成品名称按 visitor_labels.title 挂在名称后面，改了名字的挂“对外换了说法”。
         const openNote = U.fieldText(it.open_note, audience).trim();
         if (openNote && audience === 'public') { open = null; item = { ...item, openNote }; }
-        else if (openNote) item = { ...item, ownerNote: U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, audience) };
+        else if (audience === 'owner') {
+          const ownerNote = U.visitorLabel(it, 'open', '这份成品的正文', audience) || (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, audience) : '');
+          if (ownerNote) item = { ...item, ownerNote };
+          const renamed = typeof it.public_title === 'string' && it.public_title.trim() && it.public_title.trim() !== U.fieldText(raw, audience).trim();
+          const nameTag = U.visitorLabel(it, ['$', 'title', 'recent_title'], '这份成品的名称', audience) || (renamed ? U.visitorRewrittenTag('这份成品的名称', '', audience) : '');
+          if (nameTag) title += nameTag;
+        }
       }
       const sig = secret && audience === 'public' ? item.id : `${title}\u0000${sub}`;
       let row = group.rows.find(r => r.sig === sig);

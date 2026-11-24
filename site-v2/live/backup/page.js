@@ -279,7 +279,9 @@
     // 每样恢复材料一行：先写看得懂的名字和核对结果；后台的技术原名、文件位置收在“原名和位置”里，要查再点开
     const kitName = row => { const raw = U.fieldText(row.name, viewer).trim(); return Object.hasOwn(KIT_NAMES, raw) ? KIT_NAMES[raw] : raw.replace(/CoreRecovery/g, '电脑恢复包'); };
     const kitOrigin = row => { const raw = U.fieldText(row.name, viewer).trim(), paths = (row.conclusions || []).filter(c => c.path), renamed = raw && kitName(row) !== raw;
-      return renamed || paths.length ? `<details class="backup-path"><summary>原名和位置</summary><div>${[renamed && said(row.name, '资产名称'), ...paths.map(c => pathHtml(c.path, '恢复材料路径'))].filter(Boolean).join('<br>')}</div></details>` : ''; };
+      // 本人版：恢复材料的位置不给访客的，后台在这条结论的 visitor_labels.path 上标 hidden，位置旁挂签
+      const pathTag = c => { const tag = viewer === 'owner' ? U.visitorLabel(c, 'path', '这个位置', viewer) : ''; return tag ? ` ${tag}` : ''; };
+      return renamed || paths.length ? `<details class="backup-path"><summary>原名和位置</summary><div>${[renamed && said(row.name, '资产名称'), ...paths.map(c => pathHtml(c.path, '恢复材料路径') + pathTag(c))].filter(Boolean).join('<br>')}</div></details>` : ''; };
     const assets = d.rows?.length ? table(['哪一类', '是什么', '核对结果', '几份文件', ...(timed ? ['核对时间'] : [])], d.rows.slice(0, assetLimit).map(row => [said(ASSET_CATEGORY[row.category] || row.category, '资产类别'), `${esc(kitName(row))}${(row.groups || []).length ? `<small>${(row.groups || []).map(group => said(MATERIAL[group] || group, '材料分组')).join('、')}</small>` : ''}${kitOrigin(row)}`, (row.conclusions || []).map(c => said(VERIFIED[c.status] || c.status, '校验结论')).join('<br>'), count(row, 'count'), ...(timed ? [verificationTime(row)] : [])]), '每样恢复材料核对得怎样', completed) : '';
     U.html($('verified'), summary + assets);
     nextBatch($('verified'), d.rows?.length || 0, assetLimit, () => { assetLimit += 5; renderVerification(); });
@@ -290,18 +292,22 @@
   const files = $('files'), filesStatus = $('files-status');
   const ownerFile = value => value?.hidden_block || value?.hidden || value?.visibility === 'owner' || value?.public === 'owner';
   const fileName = value => viewer === 'public' && ownerFile(value) ? '—' : pathHtml(value, '文件名');
+  // 本人版：后台在这一条文件的 visitor_labels 里标了文件名（name；旧条目用 file_name、filename、relative_path 同名键）的，文件名旁挂签，一条只挂一个；没标的不挂
+  const fileTag = item => { const tag = viewer === 'owner' ? U.visitorLabel(item, ['$', 'name', 'file_name', 'filename', 'relative_path'], '这个文件名', viewer) : ''; return tag ? ` ${tag}` : ''; };
   const privateNames = d => /^文件名(?:仅本人|可信设备)可见[。.]?$/u.test(typeof d?.text === 'string' ? d.text : '');
   // 新私事规则（本人 11-24 02:56）：备份文件名访客版不给，原位按后台给的 file_name_count 拼一句普通字，说清有多少个、本人版能看到全部；
-  // 0 是已读且空（不写），null 是没读到或来源本来没有清单（不编数）。本人版原位挂“访客看不到”。
+  // 0 是已读且空（不写），null 是没读到或来源本来没有清单（不编数）。
+  // 本人版不再在清单上方挂一个“访客看不到”：现在访客回包里照列文件名，访客看不到或换了说法的由后台逐条标在 visitor_labels 上，逐条挂签（fileTag）。
   const countWords = n => n >= 10000 ? `${(Math.round(n / 1000) / 10).toLocaleString('zh-CN')} 万个` : `${n.toLocaleString('zh-CN')} 个`;
   // 个人影音的清单是待传、失败和未核对的名册（scope: pending_or_failed），句子写明是这类名册（后台 03:53 定稿）。
   const nameSentence = (n, what, pending = false) => Number.isSafeInteger(n) ? n > 0 ? (pending ? `这里是 ${countWords(n)}待传、失败或未核对的文件名，本人版能看到全部，所以不予展示` : `这里是${what} ${countWords(n)}文件名，本人版能看到全部，所以不予展示`) : ''
     : pending ? '这里是待传、失败或未核对的文件名，本人版能看到全部，所以不予展示' : `这里是${what}文件名，本人版能看到全部，所以不予展示`;
-  const NAMES_WHY = '备份文件名是程序自己记下的，量大、没人逐条看过，访客版只写有多少个';
   function filePrivacy(d) {
     const slot = $('files-privacy'), counted = Number.isSafeInteger(d?.file_name_count);
-    const withheld = !notApplicable(d) && (counted ? d.file_name_count > 0 : privateNames(d) || (d?.hidden_count ?? d?.hidden) > 0 || d?.items?.some(item => ownerFile(item.name)));
-    const html = !withheld ? '' : viewer === 'owner' ? U.visitorHiddenTag('这批文件的文件名', NAMES_WHY, viewer) : esc(nameSentence(counted ? d.file_name_count : null, '这次备份的', d?.scope === 'pending_or_failed'));
+    // 访客回包里列了文件就照列（名字给了就是能看），只有名字真被收起的才写那句；没列清单的照旧按 file_name_count 写。
+    const listed = viewer === 'public' && Array.isArray(d?.items) && d.items.length > 0;
+    const withheld = !notApplicable(d) && (listed ? d.items.some(item => ownerFile(item.name)) : counted ? d.file_name_count > 0 : privateNames(d) || (d?.hidden_count ?? d?.hidden) > 0);
+    const html = !withheld || viewer === 'owner' ? '' : esc(nameSentence(counted ? d.file_name_count : null, '这次备份的', d?.scope === 'pending_or_failed'));
     if (slot) { U.html(slot, html); slot.hidden = !html; }
   }
   function stopFiles() {
@@ -372,7 +378,7 @@
     const showTime = id !== 'recovery-kit' || files.some(item => verificationTime(item));
     U.html($('files'), `<p class="fe-l3b-note">${[id === 'personal_media' ? CLOUDS[filesTarget] : '', size, hiddenText, oldest != null && `最早一份至少等了 ${said(oldest)} 天`].filter(Boolean).join(' · ')}${gap(d)}${d.text && !privateNames(d) ? `<br>${said(d.text)}` : ''}</p>`
       + (d.types?.length ? table(['资料类别', '份数'], d.types.filter(t => t.type).map(t => [said(t.type), count(t, 'count') + gap(t)]), '资料类别') : !Array.isArray(d.types) && !offline() ? `<p class="fe-l3b-note">${esc(U.collectionText('资料分类', d))}</p>` : '')
-      + (named.length ? table(['资料', '去处', '情况 / 原因', ...(showTime ? ['时刻'] : [])], named.slice(0, fileLimit).map(item => [fileName(item.name), said(CLOUDS[item.target]), `${STATE[item.state] ? said(STATE[item.state]) : ''}${item.reason ? `<small>${said(item.reason, '没传成的原因')}</small>` : ''}`, ...(showTime ? [id === 'recovery-kit' ? verificationTime(item) : stamp(item.at)] : [])]), '在等、没传成的资料') : '') + (U.olderNote?.(state.at, state) ? `<p class="fe-l3b-note">${esc(U.olderNote(state.at, state))}</p>` : ''));
+      + (named.length ? table(['资料', '去处', '情况 / 原因', ...(showTime ? ['时刻'] : [])], named.slice(0, fileLimit).map(item => [fileName(item.name) + fileTag(item), said(CLOUDS[item.target]), `${STATE[item.state] ? said(STATE[item.state]) : ''}${item.reason ? `<small>${said(item.reason, '没传成的原因')}</small>` : ''}`, ...(showTime ? [id === 'recovery-kit' ? verificationTime(item) : stamp(item.at)] : [])]), '在等、没传成的资料') : '') + (U.olderNote?.(state.at, state) ? `<p class="fe-l3b-note">${esc(U.olderNote(state.at, state))}</p>` : ''));
     const nextPage = fileLimit >= named.length && Boolean(d.next);
     nextBatch($('files'), named.length, fileLimit, async event => {
       if (!nextPage) { fileLimit += 5; renderFiles(state); return; }

@@ -869,10 +869,13 @@ span.fog__slow { margin: 0 0 0 8px; }
 .page--live :is(.grp__fv,.vz-bars__lab,.vz-moment__t,.vz-tl__label,.vz-chip-cell__k,.dev-pill b) { white-space: nowrap; word-break: keep-all; }
 .page--live .vz-rank--detail .vz-rank__name { word-break: keep-all; }
 /* 本人选定 A：小锁胶囊、浅紫换说法标签、灰色加载条。 */
-.page--live :is(.live-mark.live-mark--owner,.live-mark.live-mark--pending,.live-mark.live-mark--rewritten) { display: inline-flex; align-items: center; gap: 6px; margin: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; color: #72716d; font: 400 13px/20px var(--sans); text-decoration: none; vertical-align: baseline; cursor: default; }
+.page--live :is(.live-mark.live-mark--owner,.live-mark.live-mark--pending,.live-mark.live-mark--rewritten,.live-mark.live-mark--reworded) { display: inline-flex; align-items: center; gap: 6px; margin: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; color: #72716d; font: 400 13px/20px var(--sans); text-decoration: none; vertical-align: baseline; cursor: default; }
 .page--live .live-mark.live-mark--owner { padding: 2px 9px; border-radius: 999px; background: #ececea; color: #666560; white-space: nowrap; }
 .page--live .live-mark__lock { font-size: 12px; filter: grayscale(1); }
 .page--live .live-mark.live-mark--rewritten { margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: #eee7f7; color: #7757a5; white-space: nowrap; }
+/* M684 本人版第二种标签“对外换了说法”：和紫色“访客看不到”同一套胶囊，换成琥珀色，一眼分得开。 */
+.page--live .live-mark.live-mark--reworded { margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: #fbedd2; color: #8a5a00; white-space: nowrap; }
+.page--live button.trust-note.live-mark--reworded[data-trust-view] { border-color: #e9cf9d; }
 .page--live .live-mark.live-mark--pending { width: min(100%, 420px); gap: 12px; color: #96948e; white-space: nowrap; }
 .page--live .live-mark--pending::before { content: ''; flex: 1; min-width: 96px; height: 12px; border-radius: 999px; background: linear-gradient(90deg,#dededc 20%,#eeedeb 50%,#dededc 80%); background-size: 200% 100%; animation: live-mark-loading 1.8s linear infinite; }
 @keyframes live-mark-loading { to { background-position: -200% 0; } }
