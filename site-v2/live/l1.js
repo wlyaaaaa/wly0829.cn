@@ -1551,6 +1551,7 @@
     document.body.classList.add('live-unreadable');
     for (const id of HOME_IDS) { reads[id].done(false); emptyCard(id, null); }
     paintBatchCards({});
+    balanceHome(); // 读数前配平两栏时给 AI 对话或自动任务卡设的最小高度去掉，不然收成一句话的卡还撑成大空卡
     Light.offline(!!lastState?.offline);
     showHome();
   }
