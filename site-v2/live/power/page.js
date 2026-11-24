@@ -238,7 +238,10 @@
   }
   window.LiveUI.onBeijingDayChange(() => { if (data) board.set(groups()); });
   D.mount({ resource: 'computer/power', board,
-    merge(d) { const pack = D.merge({ ...d, efficiency: gameRange(d?.efficiency) }, ['power', 'efficiency']); return { ...pack, series: pack.series.map((s) => ({ ...s, label: ({ cpu: 'CPU', gpu: '显卡', platform: '主板和外设估算' })[s.id] || s.label })) }; },
+    merge(d) { const pack = D.merge({ ...d, efficiency: gameRange(d?.efficiency) }, ['power', 'efficiency']); return { ...pack, series: pack.series.map((s) => ({
+      ...s, label: ({ cpu: 'CPU', gpu: '显卡', platform: '主板和外设估算' })[s.id] || s.label,
+      ...(s.id === 'efficiency' ? { chart_window: { ...s.chart_window, off_spans: [] } } : {}),
+    })) }; },
     render(d, meta) {
       data = d; at = meta?.at || d?.window?.to || null; const list = groups(); board.set(list); window.LiveAdaptive?.tail($('board'), list);
       document.querySelectorAll('#board .grp__fv').forEach(v => { const m = /^(至少 )?([\d.]+) 度$/.exec(v.textContent); if (m) v.innerHTML = `${m[1] ? '<small>至少 </small>' : ''}<b>${m[2]}</b><small>度</small>`; });

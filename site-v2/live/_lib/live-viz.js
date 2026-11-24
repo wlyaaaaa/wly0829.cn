@@ -971,13 +971,6 @@
     const p = s?.points?.findLast(([, value]) => Number.isFinite(value));
     return p ? { id, label: s.label, value: p[1], unit: s.unit, at: p[0] } : null;
   }
-  function readingChart(host, config, { reading, sync }) {
-    const chart = window.LiveChart.create(host, config);
-    if (!reading) return chart;
-    const release = () => sync ? sync.at(null) : chart.point(null);
-    for (const type of ['pointerup', 'pointercancel']) host.querySelector('.chart__plot').addEventListener(type, release);
-    return chart;
-  }
   const missingReading = (meta, keepPlot = false) => `<span ${keepPlot ? 'style="color:var(--muted);font-weight:400"' : 'class="vz-none"'}>${esc(emptyText(window.LiveUI.collectionText(meta.label, meta)))}</span>`;
   function displayReading(reading, id, point, t, surface, meta) {
     const r = reading?.(id, point, t, surface);
@@ -1067,14 +1060,14 @@
             const b = host.querySelector(`[data-key="${CSS.escape(c.key)}"]`);
             const lines = (c.lines || []).map((l, i) => ({ id: l.id ?? l, label: l.label ?? '', hue: l.hue }));
             const cell = { b, v: b.querySelector('.vz-chip-cell__v'), chart: null, item: c };
-            if (lines.length && window.LiveChart) cell.chart = readingChart(b.querySelector('.vz-chip-cell__spark'), { size: 'spark', lines, palette: c.palette || opts.palette, sync: opts.sync, ceil: c.ceil, floor: c.floor ?? 'auto',
+            if (lines.length && window.LiveChart) cell.chart = window.LiveChart.create(b.querySelector('.vz-chip-cell__spark'), { size: 'spark', lines, palette: c.palette || opts.palette, sync: opts.sync, ceil: c.ceil, floor: c.floor ?? 'auto',
               onRead: (values, t) => {
                 const current = cell.item;
                 const one = v => v.value == null ? `<span class="vz-none">${emptyText(window.LiveUI.collectionText(current.label, { ...payload, ...current, ...v }))}</span>` : fmtHtml(v.value, current.unit ?? v.unit);
                 html(cell.v, t == null ? valueHtml(current) : customValue(current, values, t) ?? (!values.length ? `<span class="vz-none">${emptyText(window.LiveUI.collectionText(current.label, { ...payload, ...current }))}</span>` : current.text != null
                   ? esc(sp(values.map(v => `${values.length > 1 ? v.label + ' ' : ''}${v.value == null ? emptyText(window.LiveUI.collectionText(current.label, { ...payload, ...current, ...v })) : v.text}`).join('\n')))
                   : values.map(one).join('<i class="vz-chip-cell__dot">·</i>')));
-              } }, opts);
+              } });
             cells.set(c.key, cell);
           }
         }
@@ -1089,7 +1082,7 @@
           html(cell.v, valueHtml(c));
           cell.b.classList.toggle('is-on', !!c.on);
           cell.b.setAttribute('aria-pressed', String(!!c.on));
-          if (cell.chart && payload) { cell.chart.set(payload); if (opts.reading) cell.chart.point(null); }
+          if (cell.chart && payload) cell.chart.set(payload);
         }
       },
       wait(text) { host.innerHTML = `<p class="vz-wait">${esc(emptyText(text))}</p>`; host.dataset.keys = ''; cells.clear(); },
@@ -1310,7 +1303,7 @@
           const first = cl.find((c) => c.key === it.pick);
           const hero = it.card.querySelector('.grp__hero');
           it.view = view(first);
-          it.chart = readingChart(hero, { size: 'hero', lines, palette: g.palette, sync: opts.sync, ...it.view, show: ids(first), edgeDotLines: opts.edgeDotLines,
+          it.chart = window.LiveChart.create(hero, { size: 'hero', lines, palette: g.palette, sync: opts.sync, ...it.view, show: ids(first), edgeDotLines: opts.edgeDotLines,
             onRead: opts.reading && ((vals, t) => {
               const c = it.g.chips?.find(x => x.key === it.pick);
               if (!c) return;
@@ -1320,7 +1313,7 @@
                 if (custom != null || t != null && !p) n.querySelector('b').innerHTML = custom ?? missingReading(c);
               }
             }),
-          }, opts);
+          });
           if (g.titleFirst) it.card.querySelector('.chart__head').after(it.card.querySelector('.grp__say'));
           if (!payload && lastPhase === 'none') it.chart.wait(window.LiveUI.collectionText());
           if (cl.length > 1) {
@@ -1374,7 +1367,7 @@
             it.chart.show(ids(current), it.view = next);
           }
         }
-        if (payload) { it.chart.set(payload); if (opts.reading) it.chart.point(null); }
+        if (payload) it.chart.set(payload);
       }
       if (it.chips) {
         const choices = it.g.chips || [];
@@ -1398,7 +1391,7 @@
         figs.forEach((f, i) => {
           const el = box.querySelector(`[data-key="${CSS.escape(f.key)}"]`), v = el.querySelector('.grp__fv');
           const lineIds = [].concat(f.line || f.lines || []);
-          const chart = lineIds.length && window.LiveChart ? readingChart(el.querySelector('.grp__spark'), {
+          const chart = lineIds.length && window.LiveChart ? window.LiveChart.create(el.querySelector('.grp__spark'), {
             size: 'spark', lines: lineIds.map((id, j) => ({ id, hue: f.hue || (g.palette || [])[(i + j) % Math.max((g.palette || []).length, 1)] })), floor: f.floor ?? 'auto', ceil: f.ceil, sync: opts.sync,
             // 指着走势线：大数字换成那一分钟的
             onRead: (vals, t) => {
@@ -1407,7 +1400,7 @@
               const value = t != null && (point || opts.reading) ? fmtHtml(point?.value, cur.unit ?? point?.unit) || `<span class="vz-none">${window.LiveUI.collectionText()}</span>` : figValue(cur, it.g);
               html(v, custom ?? value, false);
             },
-          }, opts) : null;
+          }) : null;
           if (!chart) el.classList.add('is-bare'); else fog(it, el.querySelector('.grp__spark'));
           it.figs.set(f.key, { f, v, chart });
         });
@@ -1419,7 +1412,7 @@
         fig.f = f;
         const gap = fig.v.parentElement.querySelector('[data-figure-gap]'), note = field(f.label, '读数', 'label') !== esc(sp(f.label)) ? field(f.label, '读数', 'body', true) : '';
         gap.hidden = !f.gap && !note; gap.innerHTML = esc(sp(f.gap || '')) + note;
-        if (fig.chart && payload) { fig.chart.set(payload); if (opts.reading) fig.chart.point(null); } else html(fig.v, figValue(f, g));
+        if (fig.chart && payload) fig.chart.set(payload); else html(fig.v, figValue(f, g));
       }
     }
     function figValue(f, g) {
@@ -1569,12 +1562,13 @@
     const rowsEl = host.querySelector('.vz-weave__rows'), over = host.querySelector('.vz-weave__over'), whenEl = host.querySelector('.vz-weave__when'), axisEl = host.querySelector('.vz-weave__axis');
     const events = host.querySelector('.vz-weave__events');
     const rows = new Map();
-    let payload = null, span = null, marks = [], shape = '';
+    let payload = null, span = null, marks = [], shape = '', pointed = null;
     const AUTO = ['℃', 'MHz', 'V'];
     const x = (t) => (span ? ((t - span[0]) / (span[1] - span[0])) * 100 : 0);
     // 整张卡上的时刻小药丸：跟着 sync 一起指
     const me = {
       point(t) {
+        pointed = t;
         const off = t == null || !span || t < span[0] || t > span[1];
         whenEl.hidden = off;
         if (off) return;
@@ -1659,14 +1653,14 @@
       row.innerHTML = `<span class="vz-weave__g"></span>
         <div class="vz-weave__hit"><span class="vz-weave__name">${esc(sp(opts.label?.(s) || s.label || s.id))}</span><span class="vz-weave__rib"></span><span class="vz-weave__v"></span></div>`;
       const v = row.querySelector('.vz-weave__v'), entry = { row, series: s };
-      entry.chart = readingChart(row.querySelector('.vz-weave__rib'), {
+      entry.chart = window.LiveChart.create(row.querySelector('.vz-weave__rib'), {
         size: 'ribbon', lines: [{ id: s.id, label: s.label, hue }], floor: opts.floor?.(s) ?? (AUTO.includes(s.unit) ? 'auto' : 0), ceil: s.unit === '%' ? 100 : undefined, sync: opts.sync,
         onRead: (vals, t) => {
           const series = entry.series, p = vals[0];
           const custom = displayReading(opts.reading, series.id, p ?? (t == null && opts.reading ? latestPoint(payload, series.id) : null), t, 'weave', { ...payload, ...series });
           html(v, custom ?? (p ? esc(p.value == null ? window.LiveUI.collectionText() : p.text) : t != null && opts.reading ? missingReading(series) : ''), false);
         },
-      }, opts);
+      });
       return entry;
     }
 
@@ -1713,11 +1707,10 @@
           r.series = s;
           if (opts.reading) r.row.querySelector('.vz-weave__name').innerHTML = field(opts.label?.(s) || s.label || s.id, '读数', 'label');
           r.chart.set(next);
-          if (opts.reading) r.chart.point(null);
         }
-        me.point(null);
         drawAxis();
         drawMarks();
+        me.point(pointed);
       },
       marks(list) { marks = list || []; drawMarks(); },
     };

@@ -13,7 +13,7 @@
   function merge(d, keys) {
     const extra = (d?.groups || []).map(g => g.key ?? g.id);
     const packs = [...new Set([...keys, ...extra])].map(key => d?.[key] || d?.groups?.find(g => (g.key ?? g.id) === key)).filter(p => p?.series?.length);
-    return { from: d?.window?.from || packs[0]?.from, to: d?.window?.to || packs[0]?.to,
+    return { from: d?.window?.from || packs[0]?.from, to: d?.window?.to || packs[0]?.to, off_spans: d?.off_spans,
       series: packs.flatMap((p) => p.series.map((s) => ({ state: p.state, reason: p.reason, ...s, from: s.from || p.from, to: s.to || p.to }))) };
   }
   function noteHtml(notes) {
