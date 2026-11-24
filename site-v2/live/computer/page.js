@@ -900,7 +900,10 @@
       // 说清是什么、要做什么：程序身份筛查找出的是没签名或路径不常见的程序，要确认不是冒充的。
       const screening = /impersonation/.test(g.key || '');
       const fields = [Number.isInteger(g.programs) && (screening ? `${g.programs} 个程序没签名或路径不常见，要确认不是冒充的` : `${g.programs} 个程序名`),
-        g.strong > 0 && `其中 ${g.strong} 个要尽快确认`, at(g) && `${at(g)} 读到`, g.ai_fixing === true ? 'AI 在逐个核对' : '下一步：交给 AI 逐个核对签名和安装位置，你不用自己查；现在还没有 AI 接手'].filter(Boolean);
+        g.strong > 0 && `其中 ${g.strong} 个要尽快确认`, at(g) && `${at(g)} 读到`,
+        g.ai_fixing === true ? 'AI 在逐个核对'
+          : screening && g.strong === 0 ? '这些线索待核对，眼下不用你处理。'
+          : '下一步：交给 AI 逐个核对签名和安装位置，你不用自己查；现在还没有 AI 接手'].filter(Boolean);
       return `<a href="${esc(href)}">${label(g)}${screening ? ' · 看是哪几个 ›' : ''}</a>（${esc(fields.join('；'))}）`;
     });
     // M666：后台给了缺组 missing_readings 就照它写（两版都写出缺的组名），能对上分组的带上次读到的时刻。
