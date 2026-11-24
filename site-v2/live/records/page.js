@@ -70,6 +70,31 @@
     for (const img of hero.querySelectorAll('.card__pic img, .card__tint')) { img.addEventListener('load', () => { img.hidden = false; }, { once: true }); img.src = look.img; }
   });
   // 明细摆成一本账簿（_lib/live-book.js）：技能用量那种带次数条和两张摘要卡；长文字的“认识”用一整页
+  // 按字段摆的几张明细表（每列一个字段）：放在账簿建起来之前，账簿据此定摆一整页还是左右两页
+  const dailyCounts = [
+    ['date', '日期'], ['events', '使用事件数'], ['locations', '定位条数'],
+    ['step_buckets', '计步时段数'], ['package_snapshots', '应用清单数'], ['through', '数据截至'],
+  ];
+  const businessFields = {
+    'pcconfig/remote_tools': [['tool', '工具'], ['requests', '请求数'], ['state_text', '状态']],
+    'pcconfig/transport': [['http_status', 'HTTP 状态码'], ['requests', '响应数'], ['state_text', '状态']],
+    'pcconfig/nightly_progress': [['project', '项目'], ['phase', '检查阶段'], ['completed_count', '完成项数'], ['state_text', '结果']],
+    'pcconfig/inventory_report': [['at', '盘点时刻'], ['categories', '分类数'], ['state_text', '结果']],
+    // 第三项写 'time' 的是时刻，照别的时刻列写成“11-23 19:59”，不露原始时间串
+    'agents/skill_coverage': [['host', 'AI'], ['last_skill', '最近一次用技能', 'time'], ['completed', '账本记到', 'time'], ['state_text', '状态']],
+    'phone-collector/daily': dailyCounts,
+    'wly0829.cn/dwell': [
+      ['page', '页面'], ['observed_seconds', '累计可见秒数'], ['samples', '有时长的次数'],
+      ['unknown_opens', '时长未知的次数'], ['median_seconds', '时长中位数（秒）'], ['last_report_at', '最后回传时刻'],
+    ],
+  };
+  const ownerBusinessFields = {
+    'personal-materials/refresh_partial': [
+      ['label', '位置'], ['directory', '目录'], ['reason', '未走完的原因'], ['complete_at', '上次完整刷新'], ['attempted_at', '最后一次尝试'],
+    ],
+    'phone-collector/daily': [...dailyCounts, ['steps_recorded', '计步读数'], ['packages_changed', '应用清单变化']],
+  };
+  ownerBusinessFields['phone-collector/daily_exact'] = ownerBusinessFields['phone-collector/daily'];
   const skills = ['skill_rows', 'skill_rows_owner'].includes(section);
   const book = window.LiveBook.create($('record-body'), bookSetup());
   const headRead = U.reading(body, { ghost: U.ghost.card(2), name: '项目逐项明细' });
@@ -406,9 +431,10 @@
     const rows = ordered.map((r, i) => {
       const row = bookRow(r, data, i), n = A.recorded;
       if (row.wide || row.locked) return row;
-      const cells = [row.cells[0], n(r.d7), n(r.d30 ?? r.count), `${n(r.claude_d7)} / ${n(r.claude_d30 ?? r.claude)}`, `${n(r.codex_d7)} / ${n(r.codex_d30 ?? r.codex)}`,
+      const cells = [row.nameCell ?? row.cells[0], n(r.d7), n(r.d30 ?? r.count), `${n(r.claude_d7)} / ${n(r.claude_d30 ?? r.claude)}`, `${n(r.codex_d7)} / ${n(r.codex_d30 ?? r.codex)}`,
         [r.antigravity_d7, r.antigravity_d30].map(value => value == null ? n(value) : `至少 ${n(value)}`).join(' / '), text(r.last_at ? humanTime(r.last_at) : '没有记录')];
-      return { ...row, cells, sort: { ...row.sort, at: Date.parse(r.last_at) } };
+      // 名字格只放名字；Claude、Codex 各自的累计和最近一次点开这一行看。摘要卡“用得最多”写近 30 天、“很久没用”写最近一次（这张表第 2、3 格不是这两样）
+      return { ...row, cells, detail: row.skillMore || row.detail || '', pick: { count: cells[2], last: r.last ? text(stamp(r.last)) : cells[6] }, sort: { ...row.sort, at: Date.parse(r.last_at) } };
     });
     const note = data.unrecorded30?.length ? `近 30 天账本里没有记录：${data.unrecorded30.join('、')}` : '';
     return { columns, rows, note: text([note, 'Antigravity 列为可确认的技能原文件读取次数。'].filter(Boolean).join(' · ')), empty: data.items == null ? '没有记录' : '0 项' };
@@ -435,29 +461,6 @@
     const A = window.ProjectAdditions, columns = A?.measurementColumns(d);
     return columns?.length ? { columns: columns.map(c => ({ id: c.key, label: c.label })), rows: ordered.map((r, i) => ({ key: r.id || `measurement-${i}`, cells: columns.map(c => text(A.measurementCell(r, c.key, stamp))), sort: {}, title: U.fieldText(r.text || ''), text: U.fieldText(r.text || '') })) } : null;
   }
-  const dailyCounts = [
-    ['date', '日期'], ['events', '使用事件数'], ['locations', '定位条数'],
-    ['step_buckets', '计步时段数'], ['package_snapshots', '应用清单数'], ['through', '数据截至'],
-  ];
-  const businessFields = {
-    'pcconfig/remote_tools': [['tool', '工具'], ['requests', '请求数'], ['state_text', '状态']],
-    'pcconfig/transport': [['http_status', 'HTTP 状态码'], ['requests', '响应数'], ['state_text', '状态']],
-    'pcconfig/nightly_progress': [['project', '项目'], ['phase', '检查阶段'], ['completed_count', '完成项数'], ['state_text', '结果']],
-    'pcconfig/inventory_report': [['at', '盘点时刻'], ['categories', '分类数'], ['state_text', '结果']],
-    'agents/skill_coverage': [['host', 'AI'], ['last_skill', '最近使用的技能'], ['completed', '完成记录'], ['state_text', '状态']],
-    'phone-collector/daily': dailyCounts,
-    'wly0829.cn/dwell': [
-      ['page', '页面'], ['observed_seconds', '累计可见秒数'], ['samples', '有时长的次数'],
-      ['unknown_opens', '时长未知的次数'], ['median_seconds', '时长中位数（秒）'], ['last_report_at', '最后回传时刻'],
-    ],
-  };
-  const ownerBusinessFields = {
-    'personal-materials/refresh_partial': [
-      ['label', '位置'], ['directory', '目录'], ['reason', '未走完的原因'], ['complete_at', '上次完整刷新'], ['attempted_at', '最后一次尝试'],
-    ],
-    'phone-collector/daily': [...dailyCounts, ['steps_recorded', '计步读数'], ['packages_changed', '应用清单变化']],
-  };
-  ownerBusinessFields['phone-collector/daily_exact'] = ownerBusinessFields['phone-collector/daily'];
 
   function businessTable(d, ordered) {
     const key = `${id}/${section}`;
@@ -469,14 +472,14 @@
     const rows = ordered.map((r, i) => {
       const row = bookRow(r, d, i, r[name[0]]);
       if (row.wide) return row;
-      const cells = fields.map(([key, label]) => {
+      const cells = fields.map(([key, label, kind]) => {
         if (row.locked) return '';
         let value = r[key] ?? r[`${key}_gap`];
         if (key === 'through' && recordViewer === 'public') {
           const day = /^\d{4}-\d\d-\d\d/.exec(U.fieldText(value, 'public'));
           if (day) value = day[0];
         }
-        if (typeof value === 'string' && (key.endsWith('_at') || key === 'through')) value = format(value);
+        if (typeof value === 'string' && (key.endsWith('_at') || key === 'through' || kind === 'time')) value = format(value);
         return U.fieldHtml(value, { name: label, kind: recordViewer });
       });
       return { ...row, cells: [row.cells[0], ...cells] };
@@ -520,9 +523,11 @@
     const num = v => v == null || v === '' || !Number.isFinite(Number(v)) ? null : Number(v), when = v => { const t = Date.parse(v); return Number.isFinite(t) ? t : null; };
     const status = U.status?.(r, { small: true }) || {}, lamp = ['amber', 'red', 'blue', 'gray'].includes(status.tone);
     if (lamp && status.note) cells[0] += `<small>${status.note}</small>`;
-    if (skills) cells[0] += detailOf(r);
+    // 技能：只有一列次数的表把 Claude、Codex 各自的数摆在名字下面；三家分列的用量表（skillUsageTable）另取 nameCell、skillMore，各家的数有自己的列
+    const nameCell = cells[0], skillMore = skills ? detailOf(r) : '';
+    if (skills) cells[0] += skillMore;
     return {
-      key, cells, title: esc(labelText), text: labelText, attention: attention(r), detail, lamp: lamp ? status.lamp : '',
+      key, cells, nameCell, skillMore, title: esc(labelText), text: labelText, attention: attention(r), detail, lamp: lamp ? status.lamp : '',
       expand: knowledge && long,
       sort: { name: labelText.toLowerCase(), count: num(r.count), last: when(r.last), at: when(r.file_at || r.at || r.observed_utc) },
       bar: skills ? num(r.count) : null,
@@ -530,9 +535,11 @@
   }
   // 点开一行看到的：接口给的那句说明；技能还把 Claude、Codex 各自的次数和最近一次摆出来（只摆接口给了的字段）
   function detailOf(r) {
+    // 接口那句只是“名字：近 30 天（有）N 次（记录）”、和次数那一列同一个数时不再重复写；空格、冒号写法不同也算同一句
+    const squash = s => U.sp(String(s)).replace(/\s+/g, '').replace(/：/g, ':');
     const duplicate = skills && typeof r.text === 'string' && typeof (r.name || r.label) === 'string' && r.count != null &&
-      ['：', ': '].some(sep => [String(r.count), Number(r.count).toLocaleString('zh-CN')]
-        .some(value => U.sp(r.text).trim() === U.sp(`${r.name || r.label}${sep}近 30 天 ${value} 次`)));
+      [String(r.count), Number(r.count).toLocaleString('zh-CN')]
+        .some(value => [`近30天${value}次`, `近30天有${value}次记录`].some(tail => squash(r.text) === squash(`${r.name || r.label}:${tail}`)));
     const say = !duplicate && r.text && (r.name || r.label) && text(r.text) !== marker(r, recordViewer) ? `<p>${text(r.text)}</p>` : '';
     if (!skills) return say;
     const n = v => `${Number(v).toLocaleString('zh-CN')} 次`;
@@ -572,13 +579,14 @@
   // 账簿的样子：技能用量带次数条和“用得最多”“很久没用”两张摘要卡；“认识”一行好几句话，用一整页；别的明细左右两页
   function bookSetup() {
     const by = (id, label, key, dir) => ({ id, label, by: key, dir });
+    // 智能体的技能用量（skill_rows）是三家分列的七列表，和 skill_usage 一样摆一整页；一次摆出的行数和原来左右两页一样（40 行）
     if (skills) return {
-      name: '技能名称', more: loadNext, singleUntil: 8,
+      name: '技能名称', more: loadNext, singleUntil: 8, ...(skillUsageSection ? { spread: false, page: 40 } : {}),
       columns: [{ id: 'name', label: '技能名称' }, { id: 'count', label: '近 30 天用了几次', bar: true }, { id: 'last', label: '最近使用日期' }],
       sorts: [by('count-desc', '按近 30 天用了几次（降序）', 'count', -1), by('count-asc', '按近 30 天用了几次（升序）', 'count', 1), by('last-desc', '按最近使用日期（近的在前）', 'last', -1), by('last-asc', '按最近使用日期（久的在前）', 'last', 1), by('name', '按技能名称（A→Z）', 'name', 1)],
       picks: [
-        { id: 'top', title: '用得最多', sub: n => `前 ${n} 项`, by: 'count', dir: -1, n: 3, keep: r => r.sort.count > 0, icon: 'bars', tone: 'green', mark: 'crown', cell: 1, sort: 'count-desc' },
-        { id: 'old', title: '很久没用', sub: n => `最久的 ${n} 项`, by: 'last', dir: 1, n: 3, icon: 'time', tone: 'warm', mark: 'clock', cell: 2, sort: 'last-asc' },
+        { id: 'top', title: '用得最多', sub: n => `前 ${n} 项`, by: 'count', dir: -1, n: 3, keep: r => r.sort.count > 0, icon: 'bars', tone: 'green', mark: 'crown', value: r => r.pick?.count ?? r.cells?.[1] ?? '', sort: 'count-desc' },
+        { id: 'old', title: '很久没用', sub: n => `最久的 ${n} 项`, by: 'last', dir: 1, n: 3, icon: 'time', tone: 'warm', mark: 'clock', value: r => r.pick?.last ?? r.cells?.[2] ?? '', sort: 'last-asc' },
       ],
     };
     if (knowledge) return {
@@ -586,8 +594,10 @@
       columns: [{ id: 'name', label: '这一项' }, { id: 'say', label: '认识' }, { id: 'at', label: '整理时间' }],
       sorts: [{ id: 'given', label: '原来的顺序' }, by('at-desc', '按整理时间（新的在前）', 'at', -1), by('name', '按名称', 'name', 1)],
     };
+    // 按字段摆的明细表（手机采集每天、夜检进度这类，每列一个字段）和技能用量表一样摆一整页：左右两页时一列只剩百来像素，日期、项目名被拆在词中间；一次摆出的行数和原来两页一样（40 行）
+    const fieldTable = !!(businessFields[`${id}/${section}`] || ownerBusinessFields[`${id}/${section}`]);
     return {
-      name: '名称', more: loadNext, spread: !skillUsageSection, singleUntil: 8,
+      name: '名称', more: loadNext, spread: !skillUsageSection && !fieldTable, singleUntil: 8, ...(fieldTable ? { page: 40 } : {}),
       columns: [{ id: 'name', label: '这一项' }, { id: 'state', label: '情况' }, { id: 'at', label: '时刻' }],
       sorts: [{ id: 'given', label: '原来的顺序' }, by('at-desc', '按时刻（新的在前）', 'at', -1), by('at-asc', '按时刻（早的在前）', 'at', 1), by('name', '按名称', 'name', 1)],
     };

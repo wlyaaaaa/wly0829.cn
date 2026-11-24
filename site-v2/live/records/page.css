@@ -31,13 +31,22 @@
   .book-col-antigravity { width: 16%; }
   .book-col-last { width: 13%; }
   :is(th, td) { padding-inline: 6px; }
-  :is(th, .book-cell--last, .book-detail__metric) { white-space: normal; }
+  :is(th, .book-cell--last) { white-space: normal; }
   th { padding-inline: 4px; overflow-wrap: anywhere; }
   .book-cell--last { padding-inline-start: 6px !important; }
+  /* 点开一行：Claude、Codex 各自的近 30 天、近 7 天、累计、最近一次，几样之间留开 */
+  .book-detail__metrics { display: inline-flex; flex-wrap: wrap; gap: 0 12px; }
 }
+/* 整张表没有一行带展开箭头时，最后一列不再给箭头留 42 像素（手机采集每天的“数据截至”“应用清单变化”被挤成两行） */
+#record-body .book-table:not(:has(.book-open, .book-col-bar)) :is(thead th, tbody > tr.book-row > td):last-child { padding-right: 12px; }
+/* 皇冠、钟那几行悬停时不用 filter 变暗：filter 会让行尾的展开箭头跳到名字格末尾 */
+#record-body .book-row.has-detail:is(.is-top, .is-old):hover > td { filter: none; box-shadow: inset 0 0 0 100vmax rgb(20 20 19 / .015); }
 #record-body .book-pick__list { display: flex; margin-inline-end: -12px; }
+/* 摘要卡上的名字一行写完（照卡片本来的不换行），下面的数就齐在同一高度；搜索框让出一些宽度给两张卡，dispatch-work、media-person-self 这类长名字放得下 */
+#record-body .book-tools.has-picks .book-search { flex-basis: 200px; min-width: 0; }
 #record-body .book-pick__item { flex: 1 1 auto; padding-inline: 3px; }
-#record-body .book-pick__name { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+/* 夜检进度：项目名比旁边几列长得多，项目列放宽，wlyaaaaa/sunshine-remote-streaming 一行写完 */
+#record-body .book--sheet .book-table:has(.book-col-phase) .book-col-name { width: 34%; }
 .book .book-table:has(.book-col-host_version) tr > :is(th, td) { padding-inline: 6px; }
 .book .book-table:has(.book-col-host_version) .book-row.has-detail > td:last-child { padding-right: 36px; }
 .book-table:has(.book-col-host_version) .book-mark:empty { display: none; }
