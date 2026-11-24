@@ -102,7 +102,7 @@
   </nav>
 </main>
 
-<!-- 办的时候那一条里排成一行的东西：多久、两项一起办、（结果那一句）、6 位码、验证 -->
+<!-- 办的时候那一条里排成一行的东西：多久、补充到上限、两项一起办、（结果那一句）、6 位码、验证 -->
 <template id="deal-tpl">
   <div class="deal">
     <div class="hours" role="radiogroup">
@@ -112,6 +112,7 @@
       <button class="chip" type="button" role="radio" data-h="24" data-mo-press>24 小时</button>
       <label class="chip chip--own" role="radio" data-mo-press><input type="text" inputmode="decimal" maxlength="4" autocomplete="off" aria-label="自己填几小时，0.5 到 72">小时</label>
     </div>
+    <button class="chip chip--fill" type="button" data-mo-press>补充到上限</button>
     <label class="both"><input type="checkbox">两项一起办</label>
     <span class="go__msg" aria-live="polite"></span>
     <div class="code" role="group" aria-label="6 位码">
