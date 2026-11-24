@@ -141,6 +141,7 @@
       if (active !== request) return;
       if (!value || value.release !== releaseId || isPublic() || token !== device()) {
         render(publicParts, false);
+        window.LiveView?.owner?.({ kind: 'public' });
       } else {
         const heading = new DOMParser().parseFromString(value.source_title, 'text/html').querySelector('[data-source-title]');
         if (!heading) throw new Error('Missing rule title');
@@ -148,7 +149,7 @@
         window.LiveView?.owner?.({ kind: 'owner' });
       }
     } catch {
-      if (active === request) render(publicParts, false);
+      if (active === request) { render(publicParts, false); window.LiveView?.owner?.({ kind: 'public' }); }
     } finally {
       if (active === request) timer = setTimeout(readOwner, 15000);
     }
