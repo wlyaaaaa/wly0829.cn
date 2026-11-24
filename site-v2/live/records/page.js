@@ -106,8 +106,13 @@
   function updateCutoff() {
     const at = [projectStaleAt, recordsStaleAt].filter(Boolean).sort((a, b) => Date.parse(a) - Date.parse(b))[0];
     // 项目的一句话介绍在项目页写过；明细页每页都重复它（“电脑的户口本和总接线…”）只会让人以为和这份明细有关，这里不再写。
-    const description = at ? esc(staleText({ stale: true }, at)) : '';
+    const description = at && !shownCutoff(staleText({ stale: true }, at)) ? esc(staleText({ stale: true }, at)) : '';
     $('say').hidden = !description; U.html($('say'), description);
+  }
+  // 页头第二行的“截至 …”换成“数据截止 …”的写法比一比：同一分钟就算已经说过（M746）
+  function shownCutoff(text) {
+    const el = $('record-at'), shown = !el.hidden && el.dateTime ? staleText({ stale: true }, el.dateTime) : '';
+    return !!shown && U.sameCutoffNote(U.fieldText(text), shown);
   }
   function knowledgeCells(r) {
     r = { ...r, text: uncite(r.text), detail: uncite(r.detail) };
@@ -233,7 +238,8 @@
     if (!project) return;
     const group = project.sections?.find(s => s.id === section || s.metrics?.some(m => m.section === section || m.id === section));
     const source = recordSource || group?.metrics?.find(m => m.section === section || m.id === section) || group || project;
-    const status = U.status({ ...source, level: source?.header_level ?? source?.level });
+    // 页头第二行已写“截至 …”时，状态说明里同一时刻的“数据截止 …”不再说第二遍（M746）
+    const status = U.status({ ...source, level: source?.header_level ?? source?.level }, { cutoffShown: shownCutoff });
     U.html($('head'), status.lamp + U.head([titleText(project.name, '项目') || '项目', '项目逐项明细'].map(sp).join(' · '), { lamp: false }));
     L.tone(hero, status.tone);
     const meta = [project.changed?.at && `最近变化 ${stamp(project.changed.at)}`].filter(Boolean);

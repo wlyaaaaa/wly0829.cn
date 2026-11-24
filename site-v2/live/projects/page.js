@@ -75,7 +75,7 @@
     const roster = key => { const state = states.get(key); return state?.viewer?.kind === viewer ? state.data : null; };
     const activeRoster = roster('active'), frozenRoster = roster('frozen');
     const source = frozenOnly ? frozenRoster : home || activeRoster || frozenRoster;
-    const status = U.status(source); L.tone(hero, source);
+    L.tone(hero, source);
     const active = home?.active ?? activeRoster?.total, frozen = home?.frozen ?? frozenRoster?.total;
     const total = home?.total ?? activeRoster?.portfolio_total ?? frozenRoster?.portfolio_total
       ?? (Number.isFinite(active) && Number.isFinite(frozen) ? active + frozen : null);
@@ -90,6 +90,8 @@
       ?? activeRoster?.at ?? frozenRoster?.at;
     const at = sourceAt && stamp(sourceAt), sameRoster = at && Date.parse(home?.at) === Date.parse(states.get('active')?.data?.at);
     const cutoff = at ? ` <span class="row__meta">${U.isStale(source) ? '上次项目汇总' : '项目汇总截至'} ${esc(at)}${sameRoster ? '（含在用名册）' : ''}</span>` : '';
+    // 页头已写“项目汇总截至／上次项目汇总 …”时，状态说明里同一时刻的“最近一次记录于／数据截止 …”不再说第二遍（M746）
+    const status = U.status(source, { cutoffShown: text => !!at && U.sameCutoffNote(U.fieldText(text), U.staleText({ stale: true }, sourceAt)) });
     const empty = U.offline?.() ? '这块没存下来，连上后补上。' : '项目暂时读不到';
     U.html($('head'), status.lamp + U.head(text || (privateSummary ? '项目' : empty), { lamp: false }) + cutoff + (status.note ? ` <span class="row__meta">${status.note}</span>` : '') + (!frozenOnly && privateSummary ? ` <span class="row__meta">${U.fieldHtml(home.text, { name: '项目说明', kind: viewer })}</span>` : ''));
   }
