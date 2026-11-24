@@ -70,6 +70,31 @@
     for (const img of hero.querySelectorAll('.card__pic img, .card__tint')) { img.addEventListener('load', () => { img.hidden = false; }, { once: true }); img.src = look.img; }
   });
   // 明细摆成一本账簿（_lib/live-book.js）：技能用量那种带次数条和两张摘要卡；长文字的“认识”用一整页
+  // 按字段摆的几张明细表（每列一个字段）：放在账簿建起来之前，账簿据此定摆一整页还是左右两页
+  const dailyCounts = [
+    ['date', '日期'], ['events', '使用事件数'], ['locations', '定位条数'],
+    ['step_buckets', '计步时段数'], ['package_snapshots', '应用清单数'], ['through', '数据截至'],
+  ];
+  const businessFields = {
+    'pcconfig/remote_tools': [['tool', '工具'], ['requests', '请求数'], ['state_text', '状态']],
+    'pcconfig/transport': [['http_status', 'HTTP 状态码'], ['requests', '响应数'], ['state_text', '状态']],
+    'pcconfig/nightly_progress': [['project', '项目'], ['phase', '检查阶段'], ['completed_count', '完成项数'], ['state_text', '结果']],
+    'pcconfig/inventory_report': [['at', '盘点时刻'], ['categories', '分类数'], ['state_text', '结果']],
+    // 第三项写 'time' 的是时刻，照别的时刻列写成“11-23 19:59”，不露原始时间串
+    'agents/skill_coverage': [['host', 'AI'], ['last_skill', '最近一次用技能', 'time'], ['completed', '账本记到', 'time'], ['state_text', '状态']],
+    'phone-collector/daily': dailyCounts,
+    'wly0829.cn/dwell': [
+      ['page', '页面'], ['observed_seconds', '累计可见秒数'], ['samples', '有时长的次数'],
+      ['unknown_opens', '时长未知的次数'], ['median_seconds', '时长中位数（秒）'], ['last_report_at', '最后回传时刻'],
+    ],
+  };
+  const ownerBusinessFields = {
+    'personal-materials/refresh_partial': [
+      ['label', '位置'], ['directory', '目录'], ['reason', '未走完的原因'], ['complete_at', '上次完整刷新'], ['attempted_at', '最后一次尝试'],
+    ],
+    'phone-collector/daily': [...dailyCounts, ['steps_recorded', '计步读数'], ['packages_changed', '应用清单变化']],
+  };
+  ownerBusinessFields['phone-collector/daily_exact'] = ownerBusinessFields['phone-collector/daily'];
   const skills = ['skill_rows', 'skill_rows_owner'].includes(section);
   const book = window.LiveBook.create($('record-body'), bookSetup());
   const headRead = U.reading(body, { ghost: U.ghost.card(2), name: '项目逐项明细' });
@@ -436,30 +461,6 @@
     const A = window.ProjectAdditions, columns = A?.measurementColumns(d);
     return columns?.length ? { columns: columns.map(c => ({ id: c.key, label: c.label })), rows: ordered.map((r, i) => ({ key: r.id || `measurement-${i}`, cells: columns.map(c => text(A.measurementCell(r, c.key, stamp))), sort: {}, title: U.fieldText(r.text || ''), text: U.fieldText(r.text || '') })) } : null;
   }
-  const dailyCounts = [
-    ['date', '日期'], ['events', '使用事件数'], ['locations', '定位条数'],
-    ['step_buckets', '计步时段数'], ['package_snapshots', '应用清单数'], ['through', '数据截至'],
-  ];
-  const businessFields = {
-    'pcconfig/remote_tools': [['tool', '工具'], ['requests', '请求数'], ['state_text', '状态']],
-    'pcconfig/transport': [['http_status', 'HTTP 状态码'], ['requests', '响应数'], ['state_text', '状态']],
-    'pcconfig/nightly_progress': [['project', '项目'], ['phase', '检查阶段'], ['completed_count', '完成项数'], ['state_text', '结果']],
-    'pcconfig/inventory_report': [['at', '盘点时刻'], ['categories', '分类数'], ['state_text', '结果']],
-    // 第三项写 'time' 的是时刻，照别的时刻列写成“11-23 19:59”，不露原始时间串
-    'agents/skill_coverage': [['host', 'AI'], ['last_skill', '最近一次用技能', 'time'], ['completed', '账本记到', 'time'], ['state_text', '状态']],
-    'phone-collector/daily': dailyCounts,
-    'wly0829.cn/dwell': [
-      ['page', '页面'], ['observed_seconds', '累计可见秒数'], ['samples', '有时长的次数'],
-      ['unknown_opens', '时长未知的次数'], ['median_seconds', '时长中位数（秒）'], ['last_report_at', '最后回传时刻'],
-    ],
-  };
-  const ownerBusinessFields = {
-    'personal-materials/refresh_partial': [
-      ['label', '位置'], ['directory', '目录'], ['reason', '未走完的原因'], ['complete_at', '上次完整刷新'], ['attempted_at', '最后一次尝试'],
-    ],
-    'phone-collector/daily': [...dailyCounts, ['steps_recorded', '计步读数'], ['packages_changed', '应用清单变化']],
-  };
-  ownerBusinessFields['phone-collector/daily_exact'] = ownerBusinessFields['phone-collector/daily'];
 
   function businessTable(d, ordered) {
     const key = `${id}/${section}`;
@@ -593,8 +594,10 @@
       columns: [{ id: 'name', label: '这一项' }, { id: 'say', label: '认识' }, { id: 'at', label: '整理时间' }],
       sorts: [{ id: 'given', label: '原来的顺序' }, by('at-desc', '按整理时间（新的在前）', 'at', -1), by('name', '按名称', 'name', 1)],
     };
+    // 按字段摆的明细表（手机采集每天、夜检进度这类，每列一个字段）和技能用量表一样摆一整页：左右两页时一列只剩百来像素，日期、项目名被拆在词中间；一次摆出的行数和原来两页一样（40 行）
+    const fieldTable = !!(businessFields[`${id}/${section}`] || ownerBusinessFields[`${id}/${section}`]);
     return {
-      name: '名称', more: loadNext, spread: !skillUsageSection, singleUntil: 8,
+      name: '名称', more: loadNext, spread: !skillUsageSection && !fieldTable, singleUntil: 8, ...(fieldTable ? { page: 40 } : {}),
       columns: [{ id: 'name', label: '这一项' }, { id: 'state', label: '情况' }, { id: 'at', label: '时刻' }],
       sorts: [{ id: 'given', label: '原来的顺序' }, by('at-desc', '按时刻（新的在前）', 'at', -1), by('at-asc', '按时刻（早的在前）', 'at', 1), by('name', '按名称', 'name', 1)],
     };
