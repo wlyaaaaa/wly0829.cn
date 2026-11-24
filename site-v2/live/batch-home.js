@@ -43,10 +43,12 @@
 
   // 首页智能体卡：今天三家干了多久、本人说了几句；每家一行（家色、小签、今天的数）。被拦几次本人 11-24 03:00 定了不写（别处也不放）。
   // 取数照数据约定-前端升级 §11：data.agents.today = {date, providers:[{id, actual_minutes, starts, messages, last_at, href}], total}
+  // 工时按实际干活的时间算（本人 11-24 13:55 选 A，M728）：后台给了 today.activity（和智能体页“三家干了多少”同一份）就用它的 actual_minutes，没给照旧
   const HOST_COLOR = { claude: '#e8913f', codex: '#16a6c4', antigravity: '#7a63e8' };
   const hoursOf = m => count(m) ? m / 60 : null;
   function agentsView(d, { now }) {
     const today = d.today && typeof d.today === 'object' ? d.today : null, total = today?.total || {};
+    const act = today?.activity && typeof today.activity === 'object' ? today.activity : null;
     const current = d.rule_current === true || d.active_version && d.active_version === d.rule_version ? ' 当前版'
       : d.rule_current === false || d.active_version && d.rule_version && d.active_version !== d.rule_version ? `，不是当前版${d.active_version ? ` ${esc(d.active_version)}` : ''}` : '';
     const rows = Object.entries(entries).map(([key, name]) => {
@@ -62,10 +64,10 @@
         round: busy.map(i => i.round).find(r => count(r) && r > 0) || null, fixHref: R.runPage(fix.href) || null,
         workHref: base.includes('#') ? base : `${base}#work`,
         // “上次”：这一家今天的数是证实的 0 时，用 last_at 里对应那一项（工时没有就看开工）
-        today: t ? { hours: hoursOf(t.actual_minutes), starts: t.starts, said: t.messages, last: last.work || last.starts || null } : null };
+        today: t ? { hours: hoursOf(act ? act.hosts?.[key]?.actual_minutes : t.actual_minutes), starts: t.starts, said: t.messages, last: last.work || last.starts || null } : null };
     });
     return { rows, current, date: R.todayLabel(/^\d{4}-\d\d-\d\d$/.test(today?.date || '') ? `${today.date}T12:00:00+08:00` : now),
-      hours: hoursOf(total.actual_minutes), said: total.messages, noToday: !today, at: time(d.at) };
+      hours: hoursOf(act ? act.total?.actual_minutes : total.actual_minutes), said: total.messages, noToday: !today, at: time(d.at) };
   }
   // 首页 AI 账本卡：新账起（后台清零重算，从正式生效那一刻算），AI 在跟几件、今天到日子、跟得最久、新账起进了结。
   // 取数照数据约定 §11：data.ledger.new_ledger = {started_at, open, opened, closed, due, overdue, next_due, opened_7d?, closed_7d?}，每个数 {count, href}；
@@ -178,7 +180,8 @@
       return { tone, head: cardTitle('智能体', href, tone, status) + `<span class="b6-date">${esc(v.date)}</span>`, body:
         // 后台这一块没给今天的数（today 为空）：不画“··”免得像还在加载，写明没送到、最近一次是几点读到的（主持 11-24 06:12）
         (v.noToday ? `<div class="b6-big"><strong>今天的数还没送到</strong>${v.at ? `<span class="b6-big__aside">最近一次记录于 ${esc(v.at)}</span>` : ''}</div>`
-          : `<div class="b6-big"><strong>今天三家干了 <em>${num(hours(v.hours))}</em> 小时</strong><span class="b6-big__aside">${own}说了 ${num(v.said)} 句</span></div>`) + `
+          // 这句点进智能体页“三家干了多少”那块（#hours），不预先选哪一家（M738）
+          : `<div class="b6-big"><strong><a href="${esc(route('/live/agents/#hours'))}">今天三家干了 <em>${num(hours(v.hours))}</em> 小时 ›</a></strong><span class="b6-big__aside">${own}说了 ${num(v.said)} 句</span></div>`) + `
         <ul class="b6-hosts">${v.rows.map(row => `<li class="b6-host" style="--host:${row.color}"><a class="b6-host__name" href="${esc(route(row.workHref))}"><i aria-hidden="true"></i>${esc(row.name)}</a>${chip(row)}${work(row)}</li>`).join('')}</ul>
         <p class="b6-foot b6-foot--split">${ruleLine(`规则 ${field(d.rule_version) || num(null)}${v.current}`)}${go(options.openingHref || OPENING, '开场页 · 三家')}</p>` };
     }
