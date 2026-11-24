@@ -1103,8 +1103,7 @@
         // 和备份页同一条：云端有文件在等（等稳定的也算）时不写“0 类在等”，免得卡头说 0、点进去云端格说在等 N 个文件
         const filesWaiting = [backupCounts.drive, backupCounts.photos, backups.drive, backups.photos].some(c => (Number(c?.waiting) || 0) + (Number(c?.stable) || 0) > 0);
         const counts = destinations.filter(([k]) => backupCounts[k] != null && !(k === 'waiting' && backupCounts[k] === 0 && filesWaiting)).map(([k, label]) => `${quantity(backupCounts, k)} ${label}`);
-        const total = backupCounts.sets == null ? '备份' : `已登记 ${quantity(backupCounts, 'sets')} 类资料`;
-        text = [total, counts.join('、'), typeof text === 'object' && text];
+        text = ['备份', counts.join('、'), typeof text === 'object' && text];
       }
       if (id === 'projects') {
         const counts = isLower(d.projects, 'active') || !text ? projectCount(d.projects) : text;
