@@ -90,7 +90,9 @@
     const lead = !issue && cut.rest ? D.sentence(cut.rest) : { head: description ? '' : cut.rest, rest: '' };
     document.title = `${cut.rest ? sp(cut.title) : hasDistinctShort ? title : text(d)} · 实况`;
     const head = part('head');
-    U.html(head, (dossier ? '' : status.lamp) + U.head(cut.title, { name: issue ? '账本事项' : '事项', lamp: false }));
+    // M688：本人版标题旁挂签，按后台给在这件事上的 visitor_labels（标题键 text，'$' 是整件）；没有差异键的普通原文不挂
+    const visitorMark = !issue && viewer === 'owner' ? U.visitorLabel(d, ['$', 'text'], '这件事的说法', viewer) : '';
+    U.html(head, (dossier ? '' : status.lamp) + U.head(cut.title, { name: issue ? '账本事项' : '事项', lamp: false }) + (visitorMark ? `<span class="head__rewrite">${visitorMark}</span>` : ''));
     issueReadings?.breakHeading(head.querySelector('.head__lead'));
     if (dossier) {
       part('head').classList.toggle('is-long', [...cut.title].length > 40);
@@ -127,11 +129,13 @@
     const reason = issue && dossier && typeof summary === 'string' ? D.sentence(summary) : { head: summary, rest: '' };
     const now = /^(?:这次没读到|最近一次记录于|最近一次事项状态记录于)/u.test(U.fieldText(d.now, viewer)) ? null : d.now;
     const explanation = d.explanation?.why || (d.explanation?.visibility ? d.explanation : now);
-    const bodyFields = !issue && newBody([explanation?.visibility || explanation?.rewrite ? explanation : explanation?.text ?? explanation, lead.rest, d.detail_text],
-      [cut.title, lead.head, ...historyRows.map(e => e.text)]);
+    const bodyValues = [explanation?.visibility || explanation?.rewrite ? explanation : explanation?.text ?? explanation, lead.rest, d.detail_text], bodyShown = [cut.title, lead.head, ...historyRows.map(e => e.text)];
+    const bodyFields = !issue && newBody(bodyValues, bodyShown);
+    // M688：展开说明里真写出了 detail_text（排在最后一段）的，后台标了 detail_text 就在说明后挂签；和标题的签各在各处，一处只挂一个
+    const detailTag = !issue && viewer === 'owner' && d.detail_text && bodyFields.length > newBody(bodyValues.slice(0, 2), bodyShown).length ? U.visitorLabel(d, 'detail_text', '这件事的说明', viewer) : '';
     const issueSay = value => issueReadings ? issueReadings.conclusion(say(value)) : say(value);
     const sayHead = issue ? (summary ? (reason.rest ? `<details class="dossier-text"><summary>${issueSay(reason.head)}</summary><p>${issueSay(reason.rest)}</p></details>` : issueSay(summary)) : '')
-      : bodyFields.map(value => say(value).replace(/\n/g, '<br>')).join('<br>');
+      : bodyFields.map(value => say(value).replace(/\n/g, '<br>')).join('<br>') + (detailTag ? ` ${detailTag}` : '');
     if (body) {
       body.hidden = !sayHead && !(notes && !note);
       U.html(body, (issue && summary && !d.outcome_text ? `<small>${description ? '问题说明' : '当前进展'}</small>` : '') + sayHead + (note ? '' : notes));
