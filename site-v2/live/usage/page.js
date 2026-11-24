@@ -177,8 +177,11 @@
   // ================= 各章 =================
   function titleRows(d) {
     const appCat = new Map((d?.apps || []).map((a) => [a.name, a.category]));
-    return d?.titles ? d.titles.map((t, i) => { const title = visibleTitle(t); return S.row({ key: String(t.key ?? t.id ?? `title:${i}`), visibility: t.visibility, private_value: t.title_field ?? t.title, name: sp(title ?? t.app), sub: title != null ? sp(t.app) : Number.isSafeInteger(t.window_title_count) && t.window_title_count > 0 ? `${countWords(t.window_title_count)}窗口标题` : '', value: t.seconds, text: t.seconds == null ? (U.offline?.() ? '' : U.collectionText('使用时长', t)) : dur(t.seconds), hue: catHue(appCat.get(t.app)) }, t, 'seconds'); }) : null;
+    return d?.titles ? d.titles.map((t, i) => { const title = visibleTitle(t); return S.row({ key: String(t.key ?? t.id ?? `title:${i}`), visibility: t.visibility, private_value: t.title_field ?? t.title, name: sp(title ?? t.app), visitor_tag: visitorTag(t), sub: title != null ? sp(t.app) : Number.isSafeInteger(t.window_title_count) && t.window_title_count > 0 ? `${countWords(t.window_title_count)}窗口标题` : '', value: t.seconds, text: t.seconds == null ? (U.offline?.() ? '' : U.collectionText('使用时长', t)) : dur(t.seconds), hue: catHue(appCat.get(t.app)) }, t, 'seconds'); }) : null;
   }
+  // 本人版：后台在窗口标题这一条（排行 titles、最近前台 recent）的 visitor_labels 里标了窗口标题（title、'$'）或程序名（app）的，
+  // 在这一条原位挂签，一条只挂一个；没标的不挂。专注时间（focus）只画色条、不写标题，没有挂签的地方。程序排行（apps）用键 name。
+  const visitorTag = t => viewer !== 'owner' ? '' : U.visitorLabel(t, ['$', 'title'], '这条窗口标题', viewer) || U.visitorLabel(t, 'app', '这个程序名', viewer);
   function visibleTitle(row) {
     if (viewer === 'public' && row.visibility === 'owner') return null;
     const field = row.title;
@@ -188,12 +191,13 @@
     return typeof text === 'string' || typeof text === 'number' ? String(text) : null;
   }
   // 新私事规则（本人 11-24 02:56）：窗口标题访客版不给，原位按后台给的条数拼一句普通字，说清有多少个、本人版能看到全部；
-  // window_title_count 是 0 就是已读且空，null 是没读到或来源本来没有清单：不编数。本人版在原位挂“访客看不到”。
+  // window_title_count 是 0 就是已读且空，null 是没读到或来源本来没有清单：不编数。
+  // 本人版不再在整张清单下挂一个“访客看不到”：现在访客回包里给了窗口标题，访客看不到或换了说法的由后台逐条标在 visitor_labels 上，逐条挂签（visitorTag）。
   const countWords = n => n >= 10000 ? `${(Math.round(n / 1000) / 10).toLocaleString('zh-CN')} 万个` : `${n.toLocaleString('zh-CN')} 个`;
   // 排行用 data.window_title_count（按程序合并的不同标题数）；最近的前台记录用 data.recent_window_title_count（带标题的记录次数），两个数不混用（后台 03:53 定稿）。
   function titleVisibility(rows, d = usage, recentList = false) {
     if (!rows?.length) return '';
-    if (viewer === 'owner') return U.visitorHiddenTag('这里的窗口标题', '窗口标题是电脑自己记下的，量大、没人逐条看过，访客版只写有多少个', viewer);
+    if (viewer === 'owner') return '';
     const n = recentList ? d?.recent_window_title_count : d?.window_title_count, label = typeof d?.window?.label === 'string' ? d.window.label.trim() : '';
     const scope = label ? `${label}的` : '这段时间的', valid = Number.isSafeInteger(n) && n >= 0;
     // 访客回包里标题给了就照画，只有标题真被收起的才写那句。
@@ -205,7 +209,7 @@
       : valid ? `这里是${scope} ${countWords(n)}窗口标题，本人版能看到全部，所以不予展示` : `这里是${scope}窗口标题，本人版能看到全部，所以不予展示`);
   }
   function appRows(d) {
-    return d?.apps ? d.apps.map((a, i) => S.row({ key: `app:${i}`, private_value: a.name_field ?? a.name, name: sp(U.programName(a.name)), mark: usageMark(a.name), sub: a.name_field && typeof a.name_field === 'object' ? a.name_field : CAT[a.category] || '', value: a.seconds, text: a.seconds == null ? (U.offline?.() ? '' : U.collectionText('使用时长', a)) : dur(a.seconds), hue: catHue(a.category) }, a, 'seconds')) : null;
+    return d?.apps ? d.apps.map((a, i) => S.row({ key: `app:${i}`, private_value: a.name_field ?? a.name, name: sp(U.programName(a.name)), mark: usageMark(a.name), visitor_tag: viewer === 'owner' ? U.visitorLabel(a, ['$', 'name'], '这个程序名', viewer) : '', sub: a.name_field && typeof a.name_field === 'object' ? a.name_field : CAT[a.category] || '', value: a.seconds, text: a.seconds == null ? (U.offline?.() ? '' : U.collectionText('使用时长', a)) : dur(a.seconds), hue: catHue(a.category) }, a, 'seconds')) : null;
   }
   const statesForView = (states) => states.map((s) => ({ ...s, label: { work: '在用', active: '在用', sleep: '睡着' }[s.id] || s.label, note: '' }));
   // 屏幕关闭、睡着、关机这几样，后台在这段时间一条记录都没有时给来源说明（summary.state_notes）：
@@ -449,7 +453,7 @@
           const hues = new Map();
           for (const a of d.apps || []) if (!hues.has(a.name)) hues.set(a.name, catHue(a.category));
           return d.recent.map((r, i) => ({
-            key: `recent:${offset + i}`, name: r.app, mark: usageMark(r.app), hue: hues.get(r.app) || catHue(),
+            key: `recent:${offset + i}`, name: r.app, mark: usageMark(r.app), hue: hues.get(r.app) || catHue(), visitor_tag: visitorTag(r),
             get sub() { return [Number.isFinite(Date.parse(r.at)) && recentClock.format(new Date(r.at)), visibleTitle(r), S.partial(r, 'seconds') && r.gap].filter(Boolean).map(sp).join(' · '); },
             get text() { return read(r, 'seconds', n => n >= 60 ? dur(n) : Math.round(n) + ' 秒'); },
           }));
