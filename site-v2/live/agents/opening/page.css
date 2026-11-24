@@ -90,6 +90,8 @@
 .op-cmp__name .tp-swatch { width: 14px; height: 14px; margin-right: 10px; border-radius: 4px; }
 .op-cmp__num { font-size: 15.5px; line-height: 24px; color: #2f2f2b; font-variant-numeric: tabular-nums; }
 .op-cmp__only { font-size: 13px; line-height: 20px; color: #6c6b64; }
+/* 某家不是当前版：版本号放在这一家按钮正下方（按钮里面放不了链接），点了去规则页 */
+.op-cmp__ver { margin: 4px 0 0; padding: 0 0 14px; font-size: 13px; line-height: 20px; }   /* 整行落在按钮选中底色外面，不压边 */
 
 .op-fallback { margin-top: -8px; text-align: center; }
 
