@@ -184,10 +184,12 @@
   const METRIC_ALIAS = { cpu: 'cpu-usage_percent', 'cpu-temp': 'cpu-temperature_celsius', memory: 'memory-used_bytes', 'memory-total': 'memory-total_bytes', 'net-down': 'download_bytes_per_second' };
   const stale = m => m?.q === 'stale' || m?.state === 'stale' || m?.stale === true;
   const restricted = m => m?.hidden || m?.hidden_block || m?.visibility === 'owner' || m?.public === 'owner' || m?.visibility === 'pending' || m?.rewrite === 'pending';
+  // 这页读到过、后来连不上：已经显示的即时读数照样留着、标“上次实测”几点，不按“没存下来”收走；冷开用的上次副本照旧（M741）。
+  const liveRead = () => offline() && lastState?.meta?.source === 'net';
   const metric = (id) => {
     const m = computer?.metrics?.find(m => m.id === id || m.id === METRIC_ALIAS[id]);
     const b = V.blockState(m, gfOff);
-    const keep = stale(m) || m?.read_error === true && Number.isFinite(m.value) && !!iso(m.at);
+    const keep = stale(m) || !!m && (m.read_error === true || liveRead()) && Number.isFinite(m.value) && !!iso(m.at);
     return m && { ...m, at: m.sampled_at ?? m.at, value: restricted(m) && (netViewer !== 'owner' || m.visibility === 'pending') ? m : (b?.empty || b?.wait) && !keep ? null : m.value };
   };
   const series = (id) => charts?.series?.find((s) => s.id === id) || null;
