@@ -1140,7 +1140,7 @@
   // ———— 2.7 细节栏：给 公用\page.js 用的几个口子（page.js 里没有这个对象时照原来瞬间开合） ————
   const detail = (() => {
     const running = new Set();
-    let ghosts = [], hidden = null, openedTop = 0, openedId = null;
+    let ghosts = [], hidden = null, openedId = null;
     const track = a => { running.add(a); a.finished.then(() => running.delete(a), () => running.delete(a)); return a; };
     const parts = drawer => [...drawer.children];   // 标题区、正文、翻张
     function stop() {
@@ -1163,7 +1163,7 @@
       // 打开：图从页面上的位置搬到左边，纸晚 60 毫秒从图的右边缘后面抽出来，字最后淡入；别的东西由 motion.css 暗下去
       open({ shot, drawer, from, item }) {
         stop();
-        openedId = item.id; openedTop = from.top;
+        openedId = item.id;
         hide(item.id);
         const sheet = ms('--mo-sheet') * SPEED, lag = ms('--mo-sheet-lag') * SPEED, text = ms('--mo-sheet-text') * SPEED, move = cssVar('--mo-move');
         const end = getComputedStyle(shot).transform;
@@ -1180,7 +1180,7 @@
           { duration: text, delay: lag + sheet - text, easing: 'ease', fill: 'backwards' })));
       },
 
-      // 收起：反着演；页面先挪到最后看的那张，图搬回的就是那张的位置
+      // 收起：反着演；页面停在打开前的位置，图搬回最初点开的那张
       close({ shot, drawer, item }, done) {
         // 打开还没演完就收起：从这一刻的位置往回演，不先跳到终点
         const curShot = running.size ? getComputedStyle(shot).transform : null;
@@ -1194,13 +1194,11 @@
           // 不在这里摘掉，下次打开同一张时图会停在页面上的位置、纸一直是透明的。
           try { done(); } finally { document.body.classList.remove('mo-closing'); closing.forEach(a => a.cancel()); stop(); show(); }
         };
-        const img = document.querySelector(`#${CSS.escape(item.id)} > img`);
-        if (img && item.id !== openedId) {
-          const r0 = img.getBoundingClientRect();
-          window.scrollTo({ top: Math.max(0, scrollY + r0.top - openedTop), behavior: 'instant' });
-        }
+        // 翻过张再收起，页面也不挪，回到打开前的位置（M723）：图朝最初点开的那张原位收回去、边走边淡出，底下那张原样露出来
+        const flipped = item.id !== openedId;
+        const img = document.querySelector(`#${CSS.escape(flipped ? openedId : item.id)} > img`);
         const r = img && img.getBoundingClientRect();
-        hide(item.id);
+        if (flipped) show(); else hide(item.id);
         document.body.classList.add('mo-closing');
         const length = ms('--mo-sheet-close') * SPEED, move = cssVar('--mo-move');
         const cur = curShot || getComputedStyle(shot).transform;
@@ -1209,7 +1207,7 @@
         const dx = shot.getBoundingClientRect().right - drawer.getBoundingClientRect().right;
         const textOut = ms('--mo-sheet-text') * SPEED * length / (ms('--mo-sheet') * SPEED);
         const all = [
-          track(shot.animate([{ transform: cur }, { transform: target }], { duration: length, easing: move, fill: 'forwards' })),
+          track(shot.animate(flipped ? [{ transform: cur, opacity: 1 }, { transform: target, opacity: 0 }] : [{ transform: cur }, { transform: target }], { duration: length, easing: move, fill: 'forwards' })),
           track(drawer.animate([
             curDrawer ? { transform: curDrawer.transform, opacity: Number(curDrawer.opacity) } : { transform: 'translateX(0)', opacity: 1 },
             { opacity: 1, offset: 0.7 },
