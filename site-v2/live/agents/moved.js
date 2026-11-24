@@ -4,6 +4,8 @@
 // 这一家高亮、别的变淡，直接写出这一家的数；再点一次或点“全部”回到三家合起来。看哪一家是整页共用的一个（page.js 的 only），
 // 本人 11-24：“三个可点默认全部”“智能体页永远是打开默认全部”，点哪一处整页一起跟着变。
 // 技能先列用得最多的 5 个，“另 N 个技能”就地展开全部、再点收起（本人 11-24：“仍然不能展示全部（包括全部智能体和全部技能（带展开））”）。
+// 展开后最下面接着列这段时间没用过的技能（本人 16:35 照图点头）：名字灰字、条空着、右边琥珀色“没用过”；“另 N 个”的 N 算上它们。
+// 没用过 = 后台技能清单 skill_stats.catalog（键 label）里、这段时间所看的那几家一次都没用的；清单没给、或有一家只给了前 5 个、没采到，就不列。
 // 数据读 /agents 的 message_stats、skill_stats（数据约定-前端升级 第 10 节）；取数只在“取数”那一段，约定改了只改那一段。
 (() => {
   'use strict';
@@ -63,7 +65,10 @@
       }
       win[id] = { start: earliest(providers.map(p => dateKey(p.windows?.[id]?.start))), v, own, rows, onlyTop, starts: startsOf(providers, id) };
     }
-    return { at: s.as_of || s.observed_at, win, lower: Object.fromEntries(providers.map(p => [p.fam.id, p.lower_bound === true])),
+    // 全部技能清单：[{label}] 或 [名字]；没给是 null（这时不列没用过的）
+    const cat = Array.isArray(s.catalog) ? s.catalog : Array.isArray(s.catalog?.skills) ? s.catalog.skills : null;
+    const catalog = cat && [...new Set(cat.map(c => typeof c === 'string' ? c : c?.label).filter(c => typeof c === 'string' && c))];
+    return { at: s.as_of || s.observed_at, win, catalog, lower: Object.fromEntries(providers.map(p => [p.fam.id, p.lower_bound === true])),
       missing: HOSTS.filter(h => !providers.some(p => p.fam === h)), starts: Object.fromEntries(providers.map(p => [p.fam.id, dateKey(p.since)])),
       invalid: num(s.invalid_ledger_rows), href: '/live/records/?project=agents&section=skill_rows' };
   }
@@ -150,17 +155,23 @@
     // 三家合起来：按三家加起来的次数排；点了一家：换成这一家自己的技能、按它的次数排，别家那几段不画。先列前 5 个，展开看全部
     const every = f ? (w.own[f] || []) : [...w.rows.values()].sort((a, b) => sum(b.v, HOSTS) - sum(a.v, HOSTS)).map(r => r.name);
     const rows = (skillsOpen ? every : every.slice(0, TOP)).map(n => w.rows.get(n)).filter(Boolean);
+    const hs = f ? HOSTS.filter(h => h.id === f) : HOSTS;   // 只看一家时，下面的小字也只说这一家
+    // 这段时间所看的那几家一次都没用过的（清单里有、这几家次数都不大于 0）；有一家没采到或只给了前 5 个，判不了，不列
+    const judged = s.catalog && hs.every(h => !s.missing.includes(h) && !w.onlyTop.includes(h.name));
+    const unused = judged ? s.catalog.filter(n => !hs.some(h => (w.rows.get(n)?.v?.[h.id] || 0) > 0)) : [];
     const total = f ? w.v[f] : null;
     const line = !f ? '' : known(total) ? `${fam(f).name} ${lead(p, w.starts[f] || w.start)}一共用了${s.lower[f] ? '至少' : ''} ${int(total)} 次技能${total === 0 ? '' : `，用到 ${every.length} 个`}` : `${fam(f).name} 这段时间的技能没采到`;
-    const more = every.length > TOP ? `<button type="button" class="ag-more ag-skillmore" data-skills-more aria-expanded="${skillsOpen}">${skillsOpen ? '收起' : `另 ${every.length - TOP} 个技能`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
-    const hs = f ? HOSTS.filter(h => h.id === f) : HOSTS;   // 只看一家时，下面的小字也只说这一家
+    const hidden = Math.max(0, every.length - TOP) + unused.length;
+    const more = hidden ? `<button type="button" class="ag-more ag-skillmore" data-skills-more aria-expanded="${skillsOpen}">${skillsOpen ? '收起' : `另 ${hidden} 个技能`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
+    const never = skillsOpen && unused.length ? `<div class="ag-unused"><p class="ag-unused__head">没用过的 ${unused.length} 个</p><div class="ag-hrows">${unused.map(n =>
+      `<div class="ag-hrow is-unused"><span class="ag-hrow__name" title="${esc(n)}">${esc(n)}</span><span class="ag-hrow__track"></span><span class="ag-hrow__num"><b>没用过</b></span></div>`).join('')}</div></div>` : '';
     const later = hs.filter(h => p === 'all' && s.starts[h.id] && w.start && s.starts[h.id] > w.start).map(h => `${h.name} ${md(s.starts[h.id])} 起才有记录`);
     const notes = [line, ...later, w.onlyTop.length ? `${w.onlyTop.join('、')} 只给了用得最多的 5 个，别的技能这一家那一段没画` : '',
       s.missing.length ? `${s.missing.map(h => h.name).join('、')} 的技能还没采到` : '', hs.some(h => s.lower[h.id]) ? `${hs.filter(h => s.lower[h.id]).map(h => h.name).join('、')} 只记得到能确认的，写的是至少` : '',
       known(s.invalid) && s.invalid > 0 ? `技能记录里有 ${int(s.invalid)} 行坏了，没算进来` : ''].filter(Boolean);
     return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, s.at)}
       ${chips()}
-      ${rows.length ? bars(key, rows, HOSTS, '次', { lower: s.lower }) : '<p class="tp-empty">这段时间没有记录。</p>'}${more}
+      ${rows.length ? bars(key, rows, HOSTS, '次', { lower: s.lower }) : '<p class="tp-empty">这段时间没有记录。</p>'}${never}${more}
       <div class="ag-mfoot"><p class="tp-small">${notes.length ? `${esc(notes.join('；'))}。` : ''}</p>${T.link(s.href, '全部技能 ›')}</div></section>`;
   }
   window.AgentsMoved = {

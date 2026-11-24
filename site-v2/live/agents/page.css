@@ -36,19 +36,29 @@
 .ag-fix a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 /* 二、工期 */
-.ag-est { grid-template-columns: 250px minmax(0, 1fr) minmax(0, 1fr); gap: 26px; align-items: start; }
+.ag-est { grid-template-columns: 290px minmax(0, 1fr) minmax(0, 1fr); gap: 26px; align-items: start; }
 .ag-est > * + * { border-left: 1px solid var(--tp-hair); padding-left: 24px; }
-.ag-est2 { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 26px; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--tp-hair); }
+.ag-est2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 26px; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--tp-hair); }
 .ag-est2 > * + * { border-left: 1px solid var(--tp-hair); padding-left: 24px; }
-.ag-acc { display: grid; gap: 14px; }
+.ag-acc { display: grid; gap: 9px; }
 .ag-acc__row { display: grid; grid-template-columns: 96px minmax(0, 1fr); align-items: center; gap: 8px; }
 .ag-acc__row p { margin: 0; }
-.ag-acc__row .tp-big { font-size: 56px; }
-.ag-acc__row .tp-small { margin: 4px 0 0; }
+.ag-acc__row .tp-big { font-size: 42px; }
+/* 最上面的“全部”：三家合起来，字比三家大一号，和下面三家隔一道细线 */
+.ag-acc__row--all { padding-bottom: 10px; border-bottom: 1px solid var(--tp-hair); }
+.ag-acc__row--all .tp-hostname { font-size: 18px; }
+.ag-acc__row--all .tp-big { font-size: 58px; }
+.ag-acc__row .tp-small { margin: 0; }
+/* 准的比例：大数右边两行小字（按时几成、几件），四行都这样排；加了“全部”一行也不比右边两张图高 */
+.ag-acc__row > div { display: flex; align-items: center; gap: 12px; }
+.ag-acc__row .tp-small span { display: block; line-height: 19px; white-space: nowrap; }
 .ag-acc__row .tp-mid { font-size: 22px; }
 .ag-stack { display: flex; height: 100%; }
 .ag-stack .tp-bar__fill { min-width: 16px; }
 .ag-est2 .tp-bar { grid-template-columns: 104px minmax(0, 1fr) 40px; }
+/* 超时原因：图例在标题下面，柱子行距放宽，和右边“三种估法”分量匀一些 */
+.ag-reasons { gap: 20px; margin-top: 16px; }
+.ag-reasons .tp-bar__track { height: 22px; }
 .ag-bases { display: grid; gap: 8px; margin: 10px 0; }
 .ag-bases p { display: flex; justify-content: space-between; gap: 12px; margin: 0; padding: 8px 12px; border: 1px dashed var(--tp-line); border-radius: 9px; font-size: 14px; }
 .ag-est2 .ag-base .tp-bar { grid-template-columns: 164px minmax(0, 1fr) 72px; }
@@ -175,6 +185,13 @@
 .ag-hrow__num b { font-family: var(--tp-num); font-size: 22px; }
 .ag-hrow__num small { margin-left: 3px; font-size: 13px; color: #57564f; }
 .ag-skillmore { margin: 10px 0 0 -8px; }
+/* 展开后最下面“没用过的 N 个”：名字灰字、条空着、右边琥珀色“没用过”（和记录页同一个琥珀色 --book-warm） */
+.ag-unused { margin-top: 16px; }
+.ag-unused__head { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.ag-unused__head::after { content: ''; flex: 1; height: 1px; background: var(--tp-hair); }
+.ag-unused .ag-hrows { margin: 0; }
+.ag-hrow.is-unused .ag-hrow__name { color: #9a988f; }
+.ag-hrow.is-unused .ag-hrow__num b { font-family: var(--sans); font-size: 16px; font-weight: 800; color: var(--book-warm, #e8890c); }
 .ag-mfoot { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 14px 0 0; }
 .ag-mfoot .tp-small { margin: 0; }
 .ag-mnote { margin: 12px 0 0; }
