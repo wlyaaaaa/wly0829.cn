@@ -903,11 +903,11 @@
     const trafficTime = traffic?.to && `${offline || oldReading(traffic) ? '上次截至' : '截至'} ${recordStamp(traffic.to)}`;
     const memorySpec = U.memorySpec?.(d?.hardware?.memory ?? d?.memory?.spec, d?.hardware?.source_at);   // 频率、时序、同步：回包里有才写（M654）
     const rows = [
-      // CPU、显卡、内存三行和下面几行一样整行能点：名字后带“ ›”，读数整块是链接，到电脑页（M708；电脑页没有落到某一组的锚点，去页顶，页顶的机箱图就标着这三样）
-      ['CPU', withReadings(pair(m.cpu, temperature), ['占用', m.cpu], ['温度', cpu, screen?.cpu_at]), m.cpu, '/live/computer/'],
-      ['显卡', withReadings(pair(m.gpu, val(m['gpu-temp'], x => quantity(x, 'value', fmtTemp))), ['占用', m.gpu], ['温度', m['gpu-temp']]), null, '/live/computer/'],
+      // CPU、显卡、内存三行和下面几行一样整行能点：名字后带“ ›”，读数整块是链接，到电脑页“CPU 和显卡”“内存”那一组（M708）
+      ['CPU', withReadings(pair(m.cpu, temperature), ['占用', m.cpu], ['温度', cpu, screen?.cpu_at]), m.cpu, '/live/computer/#grp-cpu'],
+      ['显卡', withReadings(pair(m.gpu, val(m['gpu-temp'], x => quantity(x, 'value', fmtTemp))), ['占用', m.gpu], ['温度', m['gpu-temp']]), null, '/live/computer/#grp-cpu'],
       ['内存', (text => text && memorySpec ? `${text}<small>${memorySpec.split(' · ').map(part => `<span class="live-unit">${esc(part)}</span>`).join(' · ')}</small>` : text)(withReadings(used != null || total != null ? `用了 ${U.nowrap(quantity(m.memory, 'value', U.gb))} · ${U.nowrap(`共 ${quantity(m['memory-total'], 'value', U.gb)}`)}` : null,
-        ['已用', m.memory], ['总容量', m['memory-total']])), null, '/live/computer/'],
+        ['已用', m.memory], ['总容量', m['memory-total']])), null, '/live/computer/#grp-memory'],
       ['最紧的盘', val(m['disk-free'], x => { const label = x.note || (x.drive ? sp(x.drive).replace(/([A-Za-z]):?\s*(?:盘)?/g, '$1 盘') : x.label === '最紧的盘' ? '' : typeof x.label === 'string' ? x.label.replace(/剩余$/, '') : x.label) || ''; const growth = diskGrowth(x); return `<span class="disk-note">${U.fieldHtml(label, { name: '磁盘', kind: viewer })}</span> 还剩 ${U.nowrap(quantity(x, 'value', U.gb))}${diskTime ? `<small>${esc(diskTime)}</small>` : ''}${growth ? `<small>${U.nowrap(growth)}</small>` : ''}`; }), diskFree, '/live/storage/'],
       ['近 7 天占空间涨得最多', growthReading, false, '/live/storage/'],
       ['海外流量', traffic ? U.nowrap(trafficText) + (traffic.hour_bytes != null ? ` <span class="traffic-hour">${U.nowrap(`近一小时 ${quantity(traffic, 'hour_bytes', trafficBytes)}`)}</span>` : '') + (trafficTime ? `<small>${esc(trafficTime)}</small>` : '') + (traffic.q === 'partial' && traffic.gap ? `<small>${U.fieldHtml(traffic.gap, { name: '流量说明', kind: viewer })}</small>` : '') : null, false, '/live/traffic/'],

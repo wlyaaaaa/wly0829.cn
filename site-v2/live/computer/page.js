@@ -1399,7 +1399,20 @@
       board.open('stutter', true);
       requestAnimationFrame(() => $('board').querySelector('[data-key="stutter"]')?.scrollIntoView({ block: 'start' }));
     }
+    // 首页电脑卡 CPU、显卡、内存三行带 #grp-cpu／#grp-memory 跳来：落到“CPU 和显卡”“内存”那一组（M708，照手机页）
+    const key = location.hash.startsWith('#grp-') ? location.hash.slice(5) : '';
+    if (['cpu', 'memory'].includes(key) && $('board').querySelector(`.grp[data-key="${key}"]`)) { board.open(key, true); landOn(key); }
   }
+  // 带 #grp-… 跳来（首页卡上的行）：落到那一组以后，上面几块还会分几拨读完长高（图、列表），把它顶下去；
+  // 落地后 30 秒内上面每长高一次就把它拉回顶上，人自己滚、按键或点了就不再拉（M708）
+  let landKey = '', landUntil = 0;
+  const pinLanding = () => {
+    if (landKey && Date.now() < landUntil) $(`grp-${landKey}`)?.scrollIntoView({ block: 'start', behavior: 'instant' });
+    else landKey = '';
+  };
+  const landOn = key => { landKey = key; landUntil = Date.now() + 30000; requestAnimationFrame(pinLanding); };
+  new ResizeObserver(pinLanding).observe($('stage'));
+  for (const event of ['wheel', 'touchmove', 'pointerdown', 'keydown']) window.addEventListener(event, () => { landKey = ''; }, { passive: true });
   new ResizeObserver(() => { if (computer) renderTags(); }).observe(hero);
   window.addEventListener('hashchange', showAnchor); showAnchor();
 
