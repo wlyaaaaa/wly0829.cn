@@ -51,7 +51,7 @@
   };
   const readings = [
     ['visitors', '来访人数', '人'], ['pageviews', '看的次数', '次'], ['new_visitors', '新访客', '人'],
-    ['returning_visitors', '回头客', '人'], ['cv_opens', '简历打开', '次'],
+    ['returning_visitors', '回头客', '人'], ['cv_opens', '专用链接打开', '次'],
   ];
   const ranks = [['top_pages', 'page', '看得最多的页'], ['sources', 'category', '从哪来']];
   const count = (source, key, unit, metric = source) => Number.isFinite(source[key])
@@ -75,7 +75,7 @@
     host.dataset.readings = signature;
     const metrics = (section.metrics || []).filter(m => Object.hasOwn(periods, m.id));
     if (!metrics.length) { host.innerHTML = `<p class="pj-note">${missing}</p>`; return; }
-    const ownFields = [['regions', '地区'], ['networks', '网络'], ['cv_visits', '简历逐次']];
+    const ownFields = [['regions', '地区'], ['networks', '网络'], ['cv_visits', '专用链接逐次']];
     const privateRows = metrics.map(m => {
       const own = details?.[m.id];
       const rows = ownFields.filter(([key]) => own && Object.hasOwn(own, key));
