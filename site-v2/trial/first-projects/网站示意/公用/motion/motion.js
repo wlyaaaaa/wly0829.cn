@@ -1180,7 +1180,7 @@
           { duration: text, delay: lag + sheet - text, easing: 'ease', fill: 'backwards' })));
       },
 
-      // 收起：反着演；页面停在打开前的位置，图搬回最初点开的那张
+      // 收起：反着演；图搬回的是收起前正在看的那张，翻过张的页面先挪到那张
       close({ shot, drawer, item }, done) {
         // 打开还没演完就收起：从这一刻的位置往回演，不先跳到终点
         const curShot = running.size ? getComputedStyle(shot).transform : null;
@@ -1194,11 +1194,17 @@
           // 不在这里摘掉，下次打开同一张时图会停在页面上的位置、纸一直是透明的。
           try { done(); } finally { document.body.classList.remove('mo-closing'); closing.forEach(a => a.cancel()); stop(); show(); }
         };
-        // 翻过张再收起，页面也不挪，回到打开前的位置（M723）：图朝最初点开的那张原位收回去、边走边淡出，底下那张原样露出来
-        const flipped = item.id !== openedId;
-        const img = document.querySelector(`#${CSS.escape(flipped ? openedId : item.id)} > img`);
+        // 看哪张收起就停在哪张（M723）：翻过张的，页面直接挪到那张、图的上沿露在页眉下面（.picture 的 scroll-margin-top），
+        // 这时后面整页还是暗的，看不出跳；没翻过张的不挪，停在原处。图都朝收起前正在看的那张原位收回去
+        const pic = document.getElementById(item.id);
+        if (pic && item.id !== openedId) {
+          pic.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'instant' });
+          // 这张是从看图层飞回原位的，页面上不再“从糊变清楚”演一遍（照 initInner 的 settle 当演完），不然落位后会先糊一下
+          if (pic._mo !== 'done') { pic._mo = 'done'; if (!pic.hasAttribute('data-initial-cover')) pic.classList.add('mo-shown'); }
+        }
+        const img = pic && pic.querySelector(':scope > img');
         const r = img && img.getBoundingClientRect();
-        if (flipped) show(); else hide(item.id);
+        hide(item.id);
         document.body.classList.add('mo-closing');
         const length = ms('--mo-sheet-close') * SPEED, move = cssVar('--mo-move');
         const cur = curShot || getComputedStyle(shot).transform;
@@ -1207,7 +1213,7 @@
         const dx = shot.getBoundingClientRect().right - drawer.getBoundingClientRect().right;
         const textOut = ms('--mo-sheet-text') * SPEED * length / (ms('--mo-sheet') * SPEED);
         const all = [
-          track(shot.animate(flipped ? [{ transform: cur, opacity: 1 }, { transform: target, opacity: 0 }] : [{ transform: cur }, { transform: target }], { duration: length, easing: move, fill: 'forwards' })),
+          track(shot.animate([{ transform: cur }, { transform: target }], { duration: length, easing: move, fill: 'forwards' })),
           track(drawer.animate([
             curDrawer ? { transform: curDrawer.transform, opacity: Number(curDrawer.opacity) } : { transform: 'translateX(0)', opacity: 1 },
             { opacity: 1, offset: 0.7 },
