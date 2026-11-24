@@ -263,11 +263,11 @@
   // —— 几张图一起指同一分钟 ——
   function sync() {
     const charts = new Set();
-    let marked = null, said = '';
+    let pointed = null, marked = null, said = '';
     return {
-      add: (c) => { charts.add(c); if (marked != null) c.mark(marked, said); },
+      add: (c) => { charts.add(c); if (pointed != null) c.point(pointed); if (marked != null) c.mark(marked, said); },
       remove: (c) => charts.delete(c),
-      at: (t) => { for (const c of charts) c.point(t); },
+      at: (t) => { pointed = t; for (const c of charts) c.point(t); },
       mark: (t, text = '') => { marked = t; said = text; for (const c of charts) c.mark(t, text); },
     };
   }
@@ -698,6 +698,7 @@
       plot.addEventListener('pointermove', atPointer);
       plot.addEventListener('pointerleave', () => { if (pointerSource === source) clearPointer(); });
     } else window.LiveUI.pointing(plot, atPointer, () => { if (pointerSource === source) clearPointer(); else send(null); });
+    plot.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse') atPointer(e); });
     const me = { point, mark };
     opts.sync?.add(me);
 
@@ -807,7 +808,6 @@
 
     return {
       set(next) {
-        if (pointerSource && hover != null) clearPointer();
         payload = next;
         const had = render(false);
         if (data) {
