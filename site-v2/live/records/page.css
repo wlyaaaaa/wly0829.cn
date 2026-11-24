@@ -24,6 +24,17 @@
   .book-detail__host > b { white-space: nowrap; min-width: 44px; margin: 0; }
   .book-detail__metrics { display: flex; flex-wrap: wrap; gap: 0 6px; }
 }
+#record-body .book-table:has(.book-col-antigravity) {
+  .book-col-no { width: 35px; }
+  .book-col-name { width: 25%; }
+  :is(.book-col-d7, .book-col-d30) { width: 10%; }
+  .book-col-antigravity { width: 16%; }
+  .book-col-last { width: 13%; }
+  :is(th, td) { padding-inline: 6px; }
+  :is(th, .book-cell--last, .book-detail__metric) { white-space: normal; }
+  th { padding-inline: 4px; overflow-wrap: anywhere; }
+  .book-cell--last { padding-inline-start: 6px !important; }
+}
 #record-body .book-pick__list { display: flex; margin-inline-end: -12px; }
 #record-body .book-pick__item { flex: 1 1 auto; padding-inline: 3px; }
 #record-body .book-pick__name { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }

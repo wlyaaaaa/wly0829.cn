@@ -1204,6 +1204,19 @@
     const lead = [(gap || !reading) && `${tried ? tried + ' ' : '这次'}没读全`, reading && '正在重读'].filter(Boolean).join('，');
     return esc([lead, shown && (shown === tried ? '上面是读到的部分' : `先显示 ${shown} 的统计`)].filter(Boolean).join('，'));
   }
+  function stutterGapNote(data) {
+    const row = data.groups?.find(g => g.key === 'stutter');
+    const unread = data.attention_summary?.unread?.find(g => g.key === 'stutter');
+    const reading = { ...row, ...unread };
+    const gaps = [unread?.missing, row?.missing].find(m => m && Object.keys(m).some(k => /[\u3400-\u9fff]/.test(k)));
+    const reasons = gaps ? Object.hasOwn(gaps, '卡顿采样') ? [gaps['卡顿采样']] : Object.values(gaps) : [];
+    const reason = reasons.filter(v => U.fieldText(v, viewer).trim()).map(v => U.fieldHtml(v, { name: '卡顿缺数原因', kind: viewer })).join('、');
+    const hasFrame = Object.hasOwn(reading, 'recorded_at'), last = recordStamp(reading.recorded_at);
+    const until = recordStamp(reading.observed_at ?? row?.at ?? (!hasFrame && reading.at));
+    const why = reading.read_error === true ? '这次读取失败' : reason && (reading.lamp_q === 'ok' ? `历史记录不全，${reason}` : `${reason}，只有部分记录`);
+    const times = [hasFrame && (last ? `最后读到 ${last}` : '没读到合格帧记录'), until && `数据截止 ${until}`].filter(Boolean).join('，');
+    return [why, esc(times)].filter(Boolean).join('；');
+  }
   function paintStatus(id, data) {
     const p = parts[id], end = cutoffAt(id, data), stamp = recordStamp(end, data?.at_precision);
     const staleText = U.fieldHtml(data?.stale_text, { name: '数据截止时刻', kind: viewer });
@@ -1224,7 +1237,8 @@
     const state = U.status(['ledger', 'projects'].includes(id) ? null : gray ? { ...data, gray_count: 0 } : data, { showZeroFixing: id === 'needs' });
     // M666：缺读数两版都写出缺的组名：“读数暂缺 2 组 · 卡顿、程序身份筛查”（字段 data.computer / data.phone 的 missing_readings）
     const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(Boolean))] : [];
-    const lackNote = lacking.length ? `读数暂缺 ${lacking.length} 组 · ${esc(lacking.join('、'))}` : '';
+    const stutterNote = id === 'computer' && lacking.includes('卡顿') && stutterGapNote(data);
+    const lackNote = lacking.length ? `读数暂缺 ${lacking.length} 组 · ${lacking.map(name => esc(name) + (name === '卡顿' && stutterNote ? `（${stutterNote}）` : '')).join('、')}` : '';
     p.head.querySelector(':scope > .lamp')?.remove();
     if (state.lamp) p.head.insertAdjacentHTML('afterbegin', state.lamp);
     const chatGap = id === 'chats' && (state.tone === 'gray' || gray) && chatGapNote(data, chatStamps.length ? '' : chatReading);
