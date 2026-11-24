@@ -11,6 +11,7 @@
   const names = { local: '本机', g: 'G 盘', h: 'H 盘', drive: 'Drive', photos: '照片云' };
   const protection = s => s.protection ?? D.protection(s.g?.retired === true ? { ...s, g: null } : s);
   const hasBackupProblem = state => ['gap', 'local_copy_no_cloud', 'stale'].includes(state);
+  const TIER = { success: ['complete', '齐了'], mostly_successful: ['mostly', '大部分成功'], partial_success: ['partial', '部分成功'], failed: ['failed', '备份失败'] };
   const attention = s => !['complete', 'waiting'].includes(D.protection(s));
   let data = null, headline = '', lit = false, viewer = 'public';
   const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '备份' });
@@ -147,6 +148,13 @@
         cloud && !(batchFailed && refresh === 'failed') && refreshLabels[refresh]];
       // 后台给了这份副本这一轮的状态（如“本轮大部分成功，有文件跳过”）就照它写、不再绿色“齐了”；没给照旧（M607）
       const told = state === 'complete' && copy?.status_text != null && sp(U.fieldText?.(copy.status_text, viewer) ?? copy.status_text).trim();
+      // G、H 盘这一轮按备上、没备上的份数分了档（outcome.state，M780）：少数没备上写“大部分成功”（黄）、较多没备上写“部分成功”（橙）、全没备上才是“备份失败”（红），
+      // 和计划任务同一套颜色；后台没给分档或分不出的照旧
+      const tier = (key === 'g' || cold) && (told || anomaly === problem('failed')) && TIER[copy?.outcome?.state];
+      if (tier) {
+        const o = copy.outcome, counts = ['mostly', 'partial'].includes(tier[0]) && Number.isInteger(o.ok) && Number.isInteger(o.failed) ? `这轮备上 ${o.ok} 份、没备上 ${o.failed} 份` : '';
+        return cell(tier[0], tier[1], [told !== tier[1] && told, counts, ...lines], causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
+      }
       return cell(told ? 'gap' : state, told || label, lines, causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
     };
     const sets = U.mergePrivateRows(U.order((d.sets || []).filter(s => s.name), attention, 'backups'), { value: s => s.name, kind: viewer });
