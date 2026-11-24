@@ -45,6 +45,10 @@ button:focus-visible,a:focus-visible,.detail-body:focus-visible {outline:3px sol
 .picture:is([data-initial-cover], :has(> img[data-cover-pending])) > .picture-title-fallback {display:block;position:absolute;top:1rem;left:4%;max-width:65%;margin:0;font:700 2rem/1.35 PageSans,'Microsoft YaHei',sans-serif;color:var(--ink);pointer-events:none}
 [data-initial-cover]:not(:has(> img[data-cover-pending])) > .picture-title-fallback {visibility:hidden}
 body.reading {overflow:hidden}
+/* 看图层开着时后面整页不跟着滚轮、触摸板、方向键走，只有右边说明栏能滚（M723）：html 上有 overflow-x:clip，body 的 hidden 传不到窗口，要在 html 这一层锁；程序滚动照常，收起时动效落位不受影响。 */
+html:has(body.reading) {overflow:hidden}
+/* 看图层开着时顶上导航条照它自己“往下滑时收起”的样子收上去，不浮在看图层上；收起看图层后照常回来（M723） */
+body.reading #topbar {transform:translateY(calc(-100% - 28px));opacity:0;pointer-events:none;transition:transform .95s cubic-bezier(.4,0,.2,1),opacity .7s ease .12s}
 body.reading #pictures {visibility:hidden}
 #details {border:0;padding:0;margin:0;position:fixed;inset:var(--header-height) 0 0;width:100%;height:calc(100% - var(--header-height));max-width:none;max-height:none;overflow:hidden;background:transparent;color:var(--ink)}
 #details::backdrop {background:transparent}

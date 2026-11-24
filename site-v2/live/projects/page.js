@@ -172,9 +172,12 @@
       const scopeHtml = scope ? `<small class="pj-fig__sub pj-fig__scope" title="${esc(typeof scope === 'string' ? scope : '')}">${U.fieldHtml(scope, { name: '项目说明', kind: viewer })}</small>` : '';
       const readAt = observed && observed !== through && !marked && !text.includes(observed) && !(typeof scope === 'string' && scope.includes(observed)) ? `<small class="pj-fig__sub">读取于 ${esc(observed)}</small>` : '';
       const labelHidden = viewer === 'public' && labelBody.includes('live-mark--owner') && (label?.hidden || label?.visibility === 'owner' || label?.public === 'owner' || /^〔?[^〔〕<>]*(?:仅本人可见|可信设备可见)〕?$/.test(labelHtml.trim()));
-      const labelLine = label && !labelHidden ? `<small class="pj-fig__sub" title="${esc(typeof label === 'string' ? label : '')}">${labelHtml}</small>` : '';
+      // AI 百工谱的读数是现役规则版本号（E 加数字）：读数名和版本号点了去规则页，名字后带箭头，和项目页能点的读数一个样子（本人 11-24 13:00）
+      const rule = it.id === 'agents' && h?.id === 'release' && !marked && /^E\d+$/.test(text);
+      const labelLine = label && !labelHidden ? `<small class="pj-fig__sub" title="${esc(typeof label === 'string' ? label : '')}">${rule ? `<a class="row__title" href="/rules/">${labelHtml} <span class="more__chev">›</span></a>` : labelHtml}</small>` : '';
       const labelMark = labelBody !== labelHtml ? `<small class="pj-fig__mark">${labelBody}</small>` : '';
-      const valueLine = `<span class="pj-fig__v${/还没读到|还在采集|开始记|没有记录/.test(text) ? ' row__sub' : ''}${[...text].length > 11 ? ' is-long' : ''}" title="${esc(marked ? '' : text)}">${valueHtml}</span>`;
+      const valueLine = rule ? `<a class="pj-fig__link pj-fig__v" title="${esc(text)}" href="/rules/">${valueHtml}</a>`
+        : `<span class="pj-fig__v${/还没读到|还在采集|开始记|没有记录/.test(text) ? ' row__sub' : ''}${[...text].length > 11 ? ' is-long' : ''}" title="${esc(marked ? '' : text)}">${valueHtml}</span>`;
       const reading = (hasText ? labelLine + labelMark + valueLine : '') + (hasText || through ? scopeHtml + readAt : '');
       return { key: it.id, href: it.href, secret: hidden, group: ({ daily: '日用', occasional: '偶用' })[it.phase] || '未分档', cls: 'pj-fig', html: `${status.lamp}${it.href ? `<a class="pj-fig__link" title="${esc(it.name || it.label || it.title || it.id)}" href="${esc(route(it.href))}">${shown} ›</a>` : `<span class="pj-fig__k">${shown}</span>`}${reading}${hasText && window.LiveProjectViz.lower(h, 'value') && window.LiveProjectViz.gap(h) ? `<small class="pj-fig__sub">${U.fieldHtml(window.LiveProjectViz.gap(h), { name: '读数说明', kind: viewer })}</small>` : ''}${recent(it)}${phase ? `<small class="pj-fig__sub">${U.fieldHtml(phase, { name: '项目分档', kind: viewer })}</small>` : ''}${status.note ? `<small class="pj-fig__sub">${status.note}</small>` : ''}${note ? `<small class="pj-fig__mark">${note}</small>` : ''}` };
     }), '没有在用的项目');
