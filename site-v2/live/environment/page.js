@@ -163,13 +163,13 @@
     btn.textContent = left > 0 ? `还有 ${count(left, '个', data[key])} ›` : `继续看${names[key]} ›`; (el.querySelector('[data-software-more]') || el).append(btn);
     btn.addEventListener('click', async () => {
       if (offline() || loading.has(key)) return;
-      const current = data[key];
-      loading.add(key); btn.disabled = true;
+      const current = data[key], label = btn.textContent;
+      loading.add(key); btn.disabled = true; btn.textContent = '正在读…';
       try { const s = await window.Live.get(recordResource(key, current.next), { section: resources[key], cursor: current.next }, softwareReads.has(btn) ? softwareCard : undefined);
         if (data[key] !== current) return;
         if (s.data) { data[key] = { ...current, ...s.data, items: [...current.items, ...(s.data.items || [])] }; repaint(); }
         else btn.textContent = "下一页暂时读不到，再试一次 ›";
-      } finally { loading.delete(key); btn.disabled = false; }
+      } finally { loading.delete(key); btn.disabled = false; if (btn.textContent === '正在读…') btn.textContent = label; }
       const fold = key === 'software' ? '.env-normal > details' : '.env-details';
       if (data[key]?.next && el.querySelector(fold)?.open && !btn.isConnected) el.querySelector('[data-more-records]')?.click();
     });

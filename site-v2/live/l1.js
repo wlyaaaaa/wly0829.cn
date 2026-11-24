@@ -1293,7 +1293,8 @@
     async function load() {
       if (page !== changesPage || page.loading) return !!page.loaded;
       more.disabled = page.loading = true;
-      if (!page.loaded) paintProjectChanges(ul, page.items, true);
+      if (page.loaded) more.textContent = '正在读…';
+      else paintProjectChanges(ul, page.items, true);
       const r = await window.Live.get('projects/changes', page.cursor ? { cursor: page.cursor } : null);
       if (page !== changesPage || !home) return !!changesPage?.loaded;
       more.disabled = page.loading = false;

@@ -448,12 +448,12 @@
   }
   $('recent-next').addEventListener('click', async () => {
     const button = $('recent-next'), cursor = nextRecentCursor(), firstPage = pages.get(''); if (cursor == null) return;
-    button.disabled = true;
+    button.disabled = true; U.html(button, '正在读…', false);
     try { const r = await window.Live.get('chats', { window: '72h', cursor });
       if (firstPage !== pages.get('') || r.meta?.viewer?.kind !== viewer) return;
       if (Array.isArray(r.data?.items) && r.meta.at === recentAt) { pages.set(cursor, r.data); redrawRecent(); }
       else U.html(button, U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '继续读', place: 'button', kind: viewer }));
-    } finally { button.disabled = false; }
+    } finally { button.disabled = false; if (button.textContent === '正在读…') U.html(button, '继续读 ›', false); }
   });
   U.draw10?.mount({ row: chat, readViewer });
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
