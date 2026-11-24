@@ -78,9 +78,10 @@
 .task-compact .task-days .rec-none { background: #dedcd5; font-size: 0; }
 .task-state-dot { display: inline-block; box-sizing: border-box; flex: none; width: 8px; height: 8px; border-radius: 50%; background: #aaa9a4; }
 .task-state-dot[data-state="ok"] { background: #00a650; }
-.task-state-dot[data-state="failed"] { background: #c87774; }
+/* 结果颜色和近 7 天小方块、详情页、备份页同一套：成功绿、有出错但大部分成功（和部分完成）黄、部分成功橙、出错红（M779、M806） */
+.task-state-dot[data-state="failed"] { background: #d9443a; }
 .task-state-dot[data-state="running"] { background: #5e83a9; }
-.task-state-dot[data-state="warn"] { background: #d99a32; }
+.task-state-dot[data-state="warn"] { background: #e9b714; }
 .task-compact .task-why { margin: 1px 0 0; color: #9a6514; font-size: 12px; line-height: 16px; }
 /* AI 已接手在修：和页头灯的蓝一个色（M159） */
 .task-state-dot[data-state="fixing"] { background: #7186df; box-shadow: 0 0 0 3px rgb(113 134 223 / .22); }
@@ -92,17 +93,18 @@
 .task-days { display: flex; gap: 6px; width: max-content; }
 .task-day { position: relative; width: 15px; height: 15px; padding: 0; border: 1px solid #d9ddd7; border-radius: 4px; background: #f0f1ed; cursor: pointer; }
 .task-day[data-state="ok"] { background: rgb(var(--glow-green)); border-color: transparent; }
-.task-day[data-state="failed"] { background: #db7771; border-color: #db7771; }
-.task-day[data-state="warn"] { background: #d99a32; border-color: #d99a32; }
+.task-day[data-state="failed"] { background: #d9443a; border-color: #d9443a; }
+.task-day[data-state="partial"] { background: #ef7a22; border-color: #ef7a22; }
+.task-day:is([data-state="mostly"],[data-state="warn"]) { background: #e9b714; border-color: #e9b714; }
 .task-day[data-state="unknown"] { background: repeating-linear-gradient(135deg, #ddd 0 1px, transparent 1px 4px); border-style: dashed; }
 .live-offline .task-day { background: transparent; border-color: #aeb9b3; box-shadow: none; }
 .task-day-tip { display: none; position: absolute; z-index: 6; bottom: 23px; left: -8px; width: max-content; padding: 7px 10px; border-radius: 8px; background: #f6faf9; box-shadow: 0 5px 24px #153d3426; color: #263c37; font-size: 13px; white-space: nowrap; }
 .task-day:is(:hover,:focus) .task-day-tip { display: block; }
-.task-day:focus-visible { outline: 2px solid #00813f; outline-offset: 3px; }
-/* 小方块能点：手形、指上去放大，点了描绿框并弹出那天的结果 */
+.task-day:focus-visible { outline: 2px solid #263c37; outline-offset: 3px; }
+/* 小方块能点：手形、指上去放大，点了描深色框并弹出那天的结果（强调绿边框只给用途未登记的任务，M779） */
 .task-compact .task-days .task-day { cursor: pointer; transition: transform .15s; }
 .task-compact .task-days .task-day:hover { transform: scale(1.3); }
-.task-compact .task-days .task-day:focus { outline: 2px solid #00A650; outline-offset: 2px; }
+.task-compact .task-days .task-day:focus { outline: 2px solid #263c37; outline-offset: 2px; }
 /* 弹出的那天结果放在小方块下面，不盖住上面的上次运行时间 */
 .task-compact .task-day-tip { bottom: auto; top: 15px; }
 .lb-run .task-week { margin: 0; }
@@ -110,6 +112,10 @@
 .lb-run .task-day, .lb-run .task-days .rec-none { display: inline-block; box-sizing: border-box; width: 7px; height: 7px; border-radius: 2px; }
 .lb-run .task-days .rec-none { border: 0; background: #dedcd5; font-size: 0; line-height: 0; overflow: hidden; vertical-align: top; }
 .lb-run .task-day-tip { bottom: 14px; left: -6px; font-size: 12.5px; }
+/* 强调绿边框只给“用途未登记”那一组（本人 11-24：“用途未登记计划任务才改成强调绿边框”，M779）；
+   从实况首页点“要处理”进来（?attention=1）时，要处理的行照旧淡入、滚到眼前，不再描全站通用的绿框和浅绿底 */
+.page--tasks .lb-card[data-key="unregistered"] { outline: 2px solid #00a650; outline-offset: -2px; }
+body.page--tasks .lb-row.notice-target { outline: none; background-image: none; }
 </style></head>
 <body class="page page--live page--l2 page--board page--tasks"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
 <main class="stage"><div class="field" aria-hidden="true"></div><a class="back" href="/live/#tasks" data-back data-mo-rise>实况</a><ul class="notices" id="notices" aria-live="polite"></ul>
