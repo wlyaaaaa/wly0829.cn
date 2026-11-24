@@ -22,8 +22,9 @@
 //     onRead: (vals, t) => {},                       头上的数变了（指着、不指）：vals = [{ id, label, value, unit, text, at }]，at 是实际采样的秒或 null，t 是指着的秒或 null
 //     sync,
 //   });
-//   c.set({ from, to, series, missing_intervals, bucket_seconds })   每分钟重读后再调一次。返回这张图有没有线。
+//   c.set({ from, to, series, missing_intervals, off_spans, bucket_seconds })   每分钟重读后再调一次。返回这张图有没有线。
 //                                     missing_intervals 可省；[from, to, 原因文字?] 使用 Unix 秒，左闭右开；[] 表示没有缺测。
+//                                     off_spans 是使用记录确认的关机区间，同样用 Unix 秒，只分类斜纹中相交的部分。
 //                                     bucket_seconds 可省；点读只用所在桶的样本，首桶可从图窗起点截断。
 //                                     series.chart_window 可单独给 from/to、bucket_seconds、bucket_offset_seconds、missing_intervals。
 //   c.show(ids, { title, unit, floor, ceil, stack })   换成另几条线（300 毫秒淡换，纵轴范围和单位跟着换）
@@ -51,6 +52,7 @@
   let uid = 0;
 
   const clock = new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+  const shutdownText = ([from, to]) => `关机 ${clock.format(new Date(from * 1000))}–${clock.format(new Date(to * 1000))}`;
   const dayKey = new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', month: '2-digit', day: '2-digit' });
   const spaced = (s) => (window.LiveUI?.fieldText?.(s) ?? (typeof s === 'object' ? '' : String(s ?? ''))).replace(/([一-鿿])([0-9A-Za-z])/g, '$1 $2').replace(/([0-9A-Za-z%℃])([一-鿿])/g, '$1 $2');
   const esc = (s) => (window.LiveUI?.fieldText?.(s) ?? (typeof s === 'object' ? '' : String(s ?? ''))).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -413,16 +415,27 @@
           if (end < toX) gaps.push([end, toX, '', null, null, i]);
         });
         const laneHeight = tracks.length > 1 ? Math.min(18, height / tracks.length) : height;
-        // 页面给了关机时段（最后一次采到 → 开机或重启那一刻）：盖住它的空白写“关机 起–止”，不写“没记录”（M590）
-        const offs = on.flatMap(l => l.series.chart_window?.off_intervals || []);
-        const shutdown = (a, b) => { const o = offs.find(([s, e]) => Math.min(b, x(e)) - Math.max(a, x(s)) > Math.min(b - a, x(e) - x(s)) / 2); return o ? `关机 ${clock.format(new Date(o[0] * 1000))}–${clock.format(new Date(o[1] * 1000))}` : ''; };
-        for (const [a, b, reason, from, to, i, explicit] of gaps) {
-          const width = b - a; if (!explicit && width < 2) continue;
+        const together = split ? [] : [...new Set(on.map(l => l.time))].flatMap(t => t.offSpans).sort(([a], [b]) => a - b);
+        const classified = gaps.flatMap(([start, end, reason, from, to, i, explicit]) => {
+          if (!explicit && end - start < 2) return [];
+          const pieces = [];
+          let cursor = start;
+          for (const [offStart, offEnd] of split ? tracks[i].time.offSpans : together) {
+            const a = Math.max(cursor, x(offStart)), b = Math.min(end, x(offEnd));
+            if (!(a < b)) continue;
+            if (cursor < a) pieces.push([cursor, a, reason, from, offStart, i, explicit]);
+            pieces.push([a, b, '', null, null, i, explicit, shutdownText([offStart, offEnd])]);
+            cursor = b; from = offEnd;
+          }
+          if (cursor < end) pieces.push([cursor, end, reason, from, to, i, explicit]);
+          return pieces;
+        });
+        for (const [a, b, reason, from, to, i, explicit, off] of classified) {
+          const width = b - a;
           const track = tracks[i], top = pad.top + i * laneHeight;
           const gap = el('g', { class: 'chart__gap', ...(track.id ? { 'data-line': track.id } : {}) });
           gap.append(el('rect', { x: a, y: top, width, height: laneHeight, fill: `url(#${id}-gap)`, ...maskAttr }));
           svg.append(gap);
-          const off = shutdown(a, b);
           if (!reason && !off && width <= 54) continue;
           const label = el('text', { x: (a + b) / 2, y: top + laneHeight / 2 + (tracks.length > 1 ? 4 : 0), fill: '#a8a69e', 'font-size': 12, 'text-anchor': 'middle' });
           const explanation = off || (track.label && reason ? `${track.label}：${reason}` : reason);
@@ -594,7 +607,8 @@
           : sample(l, t);
         const v = p && p[1] != null && Number.isFinite(p[1]) ? p[1] : null;
         const unavailable = l.series.gap || l.series.reason;
-        const reason = t != null && v == null && (gapAt(l, t)?.[2] ||
+        const off = t != null && v == null && l.time.offSpans.find(([a, b]) => a <= t && t < b);
+        const reason = t != null && v == null && (off ? shutdownText(off) : gapAt(l, t)?.[2] ||
           (unavailable && !l.series.points.some(([, value]) => Number.isFinite(value)) && unavailable));
         const missing = l.time.bucketSeconds >= 86400 ? '这一天没采到' : l.time.bucketSeconds >= 3600 ? '这一小时没采到' : '这一分钟没采到';
         const text = formatValue(v, view.unit || l.series.unit) || (window.LiveUI?.offline?.() ? '' : reason || (t != null && l.time.bucketSeconds ? missing : window.LiveUI.collectionText(l.label, l.series)));
@@ -726,7 +740,8 @@
       const span = next[0].series.from ? next[0].series : payload;
       const readWindow = (frame, timing) => ({ t0: Date.parse(frame.from) / 1000, t1: Date.parse(frame.to) / 1000,
         bucketSeconds: Number.isFinite(timing.bucket_seconds) && timing.bucket_seconds > 0 ? timing.bucket_seconds : 0,
-        offset: timing.bucket_offset_seconds ?? 0, missingIntervals: Array.isArray(timing.missing_intervals) ? timing.missing_intervals : null });
+        offset: timing.bucket_offset_seconds ?? 0, missingIntervals: Array.isArray(timing.missing_intervals) ? timing.missing_intervals : null,
+        offSpans: (Array.isArray(timing.off_spans) ? timing.off_spans : []).filter(s => Number.isFinite(s?.[0]) && Number.isFinite(s[1]) && s[0] < s[1]).sort(([a], [b]) => a - b) });
       data = { ...readWindow(span, payload), hasValues };
       on = next.map(l => ({ ...l, time: l.series.chart_window ? readWindow({ ...span, ...l.series.chart_window }, { ...payload, ...l.series.chart_window }) : data }));
       const durations = on.filter(l => l.series.from && l.series.chart_window).map(l => l.time);

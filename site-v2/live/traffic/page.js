@@ -36,16 +36,18 @@
     curveRead.done(!!d);
     const explicit = [d?.curve?.missing_intervals, d?.curve?.gaps].find(Array.isArray);
     const missing = d?.curve ? curveGaps(d.curve, explicit ?? d.gaps) : [];
-    if (!d?.series?.some(s => s.points?.some(p => p[1] != null))) trend.wait(U.offline?.() ? '这块没存下来，连上后补上。' : '流量走势暂时读不到');
+    const plotted = d?.series?.some(s => s.points?.some(p => p[1] != null));
+    if (!plotted) trend.wait(U.offline?.() ? '这块没存下来，连上后补上。' : '流量走势暂时读不到');
     else {
-      const chart = { from: d.curve?.from, to: d.curve?.to, series: d.series, bucket_seconds: 3600 };
+      const chart = { from: d.curve?.from, to: d.curve?.to, series: d.series, bucket_seconds: 3600, off_spans: d.off_spans };
       // 旧包的顶层 gaps 只描述累计窗，曲线仍由实测点决定。
       if (explicit && (!explicit.length || missing.length) && Date.parse(chart.from) < Date.parse(chart.to)) chart.missing_intervals = missing;
       trend.set(chart);
     }
     const gapNote = $('traffic-gap-note');
-    const inlineNotes = explicit ? $('traffic-curve').querySelectorAll('.chart__gap-note') : [];
+    const inlineNotes = explicit ? [...$('traffic-curve').querySelectorAll('.chart__gap-note')].filter(n => !n.textContent.startsWith('关机 ')) : [];
     gapNote.textContent = missing.filter(([, , reason]) => reason).map(([from, to, reason], i) => {
+      if (plotted && explicit && d.off_spans?.some(([a, b]) => from < b && a < to)) return ''; // 曲线已切段并说明。
       if (inlineNotes[i] && inlineNotes[i].style.position !== 'absolute') return '';
       const start = new Date(from * 1000).toISOString(), end = new Date(to * 1000).toISOString();
       return `${when(start)}–${when(end)} ${reason}`;
