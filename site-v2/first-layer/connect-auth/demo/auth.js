@@ -19,7 +19,10 @@
   let reading = true;   // 第一份授权状态回来之前：三块都写“正在读…”，不摆按钮，不写像出错的“状态未知”
   let cooldownUntil = 0, cooldownRead = null;
   let notice = null, shown = null;   // 这一页最近一张成功／失败浮窗；刚办成、新读数还没跟上时先照回执显示的那几项
+  // Windows 解锁：自己的冷却、卡片上那行“待确认”；锁屏和解锁共用 Windows 那一块输码框，winUnlock 记开着的是解锁
+  let windowsUnlockCooldown = 0, windowsUnlockReceipt = '', winUnlock = false;
   if (!local) { try { pending = JSON.parse(sessionStorage.getItem(storageKey) || 'null'); } catch {} }
+  if (pending?.action === 'windows-unlock') windowsUnlockReceipt = '解锁结果待确认';
   const clock = () => (serverClock ? Date.parse(serverClock.at) + performance.now() - serverClock.received : Date.now()) / 1000;
   // 照定稿样板：到今天 18:30／到明天 10:04／到周一 10:04，按北京时间换日。
   const BJ = 8 * 3600e3;
@@ -36,10 +39,21 @@
       && meta.dataRead > readAfter && Math.abs(clock() - at) <= 120;
   };
   const grantKeys = (key, combined) => combined ? ['pd', 'ur'] : [key];
+  // Windows 解锁按钮：后台报解锁能用，电脑锁屏或没登录，而且这份读数在两分钟内
+  const canOfferWindowsUnlock = () => state?.policy?.actions?.unlock_windows === true &&
+    ['locked', 'no_session'].includes(state?.windows?.state) && Math.abs(clock() - state.windows.observed_at_unix) <= 120;
   function refreshAccess() {
     // Reads started before this action returned cannot enable another action.
     readAfter = window.Live.readSequence();
     return window.Live.refreshPath('access', true);
+  }
+  // 请求号：浏览器有 randomUUID 就用；局域网明文 HTTP 这类非安全环境没有它，用 getRandomValues 拼 UUIDv4（设版本位和变体位）
+  function requestId() {
+    if (typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+    const b = crypto.getRandomValues(new Uint8Array(16));
+    b[6] = b[6] & 0x0f | 0x40; b[8] = b[8] & 0x3f | 0x80;
+    const h = Array.from(b, n => n.toString(16).padStart(2, '0')).join('');
+    return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
   }
   const entry = () => { if (state?.entry) window.open(state.entry, '_blank', 'noopener'); };
   const unsure = '结果还没确认，页面会自己再核对。';
@@ -64,15 +78,16 @@
     public_totp_format_invalid: '请填完整的六位码', public_totp_cooldown: '要等一会儿，再试。',
     public_totp_not_ready: '验证器暂时用不了。', public_state_changed: '状态变了，请再按一次',
   };
-  const cooldownText = () => cooldownUntil > clock() ? `${untilText(cooldownUntil * 1000)} 再试` : '';
+  const cooldownText = (until = cooldownUntil) => until > clock() ? `${untilText(until * 1000)} 再试` : '';
+  const unlocking = () => openKey === 'win' && winUnlock;
 
   function refreshCooldown() {
-    if (local || busy || disconnected || cooldownRead) return;
+    if (local || busy || disconnected || cooldownRead || unlocking()) return;
     const before = actionSequence;
     cooldownRead = apiRequest(base, '/requests/cooldown', { timeout: 4000 }).then(value => {
       if (actionSequence !== before || !Number.isFinite(value.cooldown_until_unix)) return;
       cooldownUntil = value.cooldown_until_unix;
-      if (openKey) {
+      if (openKey && !unlocking()) {
         if (cooldownText()) message(cooldownText());
         deals[openKey].sync();
       }
@@ -86,7 +101,7 @@
     if (msg) {
       const root = deals[key].root, locking = root.classList.contains('is-lock');
       // 锁定、结束：上面一行说怎么办，下面一行只放“几点再试”这类要一直看着的话；码不对这类结果走浮窗
-      if (locking) { const hint = document.createElement('span'), note = document.createElement('span'); hint.className = 'lock-hint'; hint.textContent = `打开手机验证器，输入六位动态码后点${({ pd: '锁定', ur: '结束', win: '锁屏' })[key]}`; note.className = 'lock-error'; note.textContent = text && text !== '输动态码确认是本人' ? text : ''; msg.replaceChildren(hint, note); }
+      if (locking) { const hint = document.createElement('span'), note = document.createElement('span'); hint.className = 'lock-hint'; hint.textContent = `打开手机验证器，输入六位动态码后点${key === 'win' && winUnlock ? '解锁' : ({ pd: '锁定', ur: '结束', win: '锁屏' })[key]}`; note.className = 'lock-error'; note.textContent = text && text !== '输动态码确认是本人' ? text : ''; msg.replaceChildren(hint, note); }
       else msg.textContent = text;
       msg.classList.toggle('is-shown', locking || !!text);
     }
@@ -109,13 +124,14 @@
   }
   function begin(keys) { notice?.close(); notice = null; if (openKey) message(openKeyLocking() ? cooldownText() : ''); waiting(keys, true); }
   const openKeyLocking = () => !!openKey && deals[openKey].root.classList.contains('is-lock');
-  function failed(key, head) {
+  function failed(key, head, name = '') {
     waiting([], false);
-    toast(false, head);
+    toast(false, head, name);
     const root = openKey === key && deals[key]?.root;
     if (!root) return;
     root.classList.add('has-error');
     const code = root.querySelector('.code'); code.classList.remove('is-wrong'); void code.offsetWidth; code.classList.add('is-wrong');
+    code.querySelector('input')?.focus();   // 没办成要重输：码格已清空，光标回第一格
   }
   // 办成那一刻：灯荡开光波、卡片泛起绿光、时间翻到位（1 秒，一次）
   function celebrate(keys) {
@@ -125,12 +141,12 @@
   function settle(value) {
     const next = value.action ? successfulReductionSnapshot(state, value, true) || lockedSnapshot(value) : successfulGrantSnapshot(state, value, true);
     if (!next) return;
-    const keys = value.action ? [({ 'personal-data': 'pd', unrestricted: 'ur', windows: 'win' })[value.action]] : keysOf(value);
+    const keys = value.action ? [({ 'personal-data': 'pd', unrestricted: 'ur', windows: 'win', 'windows-unlock': 'win' })[value.action]] : keysOf(value);
     shown = { at: clock(), parts: Object.fromEntries(keys.map(k => [fields[k], next[fields[k]]])) };
     state = next;
   }
   function lockedSnapshot(value) {
-    if (value.action === 'windows') return state?.windows ? { ...state, state_version: '', windows: { ...state.windows, state: 'locked' } } : null;
+    if (value.action === 'windows' || value.action === 'windows-unlock') return state?.windows ? { ...state, state_version: '', windows: { ...state.windows, state: value.action === 'windows' ? 'locked' : 'unlocked' } } : null;
     const key = ({ 'personal-data': 'pd', unrestricted: 'ur' })[value.action];
     if (!key || state?.[fields[key]]?.state === 'private') return null;
     return { ...state, state_version: '', [fields[key]]: { ...state?.[fields[key]], state: key === 'pd' ? 'locked' : 'inactive', expires_at_unix: 0 } };
@@ -142,7 +158,7 @@
     return { ...value, ...Object.fromEntries(left) };
   }
   function successText(value, before) {
-    if (value.action) return [({ 'personal-data': '个人资料已锁上', unrestricted: '无限制授权已结束', windows: 'Windows 已锁屏' })[value.action], ''];
+    if (value.action) return [({ 'personal-data': '个人资料已锁上', unrestricted: '无限制授权已结束', windows: 'Windows 已锁屏', 'windows-unlock': 'Windows 已解锁' })[value.action], ''];
     const keys = keysOf(value), until = k => untilText(value[fields[k]].expires_at_unix * 1000);
     const verb = k => remainingMinutes(before?.[fields[k]], clock()) > 0 ? '已延长' : k === 'pd' ? '已解锁' : '已开启';
     const name = { pd: '个人资料', ur: '无限制授权' };
@@ -155,8 +171,29 @@
     // Store no factor, CSRF token or local authority; reload only queries this ID.
     if (pending) sessionStorage.setItem(storageKey, JSON.stringify(pending)); else sessionStorage.removeItem(storageKey);
   }
-  function receipt(value, directWrite = false) {
+  function receipt(value, directWrite = false, windowsAtSubmit = null) {
     if (!value) return;
+    if (value.action === 'windows-unlock') {
+      // Windows 解锁：只有 succeeded 算解开；失败像别的动作一样弹失败浮窗、码格标红；结果没出来的在卡片上写“待确认”，页面自己查原号
+      waiting([], false);
+      if (Number.isFinite(value.cooldown_until_unix)) windowsUnlockCooldown = value.cooldown_until_unix;
+      windowsUnlockReceipt = '';
+      if (value.state === 'succeeded') {
+        // 提交以后又来了更新的读数，就以读数为准，回执不盖掉它
+        if (windowsAtSubmit && state?.windows === windowsAtSubmit) settle(value);
+        setOpen(null); toast(true, successText(value)[0]);
+      } else if (grantResultNeedsQuery(value)) { windowsUnlockReceipt = '解锁结果待确认'; if (openKey === 'win') setOpen(null); }
+      else {
+        const wait = cooldownText(windowsUnlockCooldown);
+        if (unlocking()) message(wait);
+        failed('win', wait || lockMessages[value.error] || ({
+          public_windows_unlock_disabled: '解锁入口已停用',
+          public_windows_credential_unavailable: '电脑上保存的登录凭据不可用，这次没解锁',
+        }[value.error]) || '这次没解锁', 'Windows 解锁');
+      }
+      remember(value);
+      return;
+    }
     if (Number.isFinite(value.cooldown_until_unix)) cooldownUntil = value.cooldown_until_unix;
     const lockedKey = ({ 'personal-data': 'pd', unrestricted: 'ur' })[value.action];
     if (directWrite && value.state === 'succeeded' && lockedKey && state?.[fields[lockedKey]]?.state === 'private') {
@@ -171,6 +208,7 @@
         : { failed: '这次没办成，请再试。', expired: '超时了，请重新办。', partial: '有一项没办成，请看状态。' }[value.state];
       if (windows) winMessage = '';
       if (value.state === 'succeeded') {
+        if (windows) windowsUnlockReceipt = '';
         const before = state; settle(value);
         const [head, name] = successText(value, before);
         setOpen(null); toast(true, head, name);
@@ -180,10 +218,21 @@
       else {
         if (!value.action && openKey !== key) setOpen(key, false);
         if (openKey === key) message(cooldownText());
-        failed(key, cooldownText() || errorMessages[value.error] || stateText || '这次没办成，请再试。');
+        failed(key, cooldownText() || errorMessages[value.error] || stateText || '这次没办成，请再试。', windows ? 'Windows 锁屏' : '');
       }
     }
     remember(value);
+  }
+  // 查原请求明确查不到（第一次提交没到电脑，或回执已过五分钟）：上次的结果确认不了。收起这次请求，重新给输码入口，再办用新请求号；页面自己不重办
+  function lost(old) {
+    const key = ({ 'personal-data': 'pd', unrestricted: 'ur', windows: 'win', 'windows-unlock': 'win' })[old.action];
+    const needsCode = old.action === 'windows-unlock' || key === 'pd' || meta.viewer?.kind !== 'owner';
+    remember(null); waiting([], false); winMessage = ''; windowsUnlockReceipt = '';
+    toast(false, '上次的结果确认不了', needsCode ? '请输新码再办一次' : '请再按一次');
+    if (old.action === 'windows-unlock') {
+      if (canOfferWindowsUnlock()) { setOpen('win', true, true); message(cooldownText(windowsUnlockCooldown) || '输动态码确认是本人'); }
+      else windowsUnlockReceipt = '上次的结果确认不了';
+    } else if (key && needsCode) openLock(key);
   }
   async function query(cancel = false) {
     if (local) return entry();
@@ -192,6 +241,7 @@
     try {
       const old = pending, path = '/requests/' + encodeURIComponent(old.request_id);
       let value = await apiRequest(base, path);
+      if (old.action && value.error === 'public_request_not_found') return lost(old);
       if (cancel && value.csrf_token) value = await apiRequest(base, path + '/cancel', { method: 'POST', csrf: value.csrf_token, body: {} });
       const awaitingCode = !old.action && old.factor_submitted === false && value.state === 'pending';
       receipt({ ...value, action: old.action || value.action, request_created: true,
@@ -199,6 +249,8 @@
         ...(awaitingCode && { error: 'public_factor_not_submitted' }) });
     } catch (error) {
       if (!pending?.action && canRestartUnsubmittedGrant(pending, null, error)) { message('码还没提交，请重新办。'); remember(null); }
+      else if (pending?.action && error?.data?.error === 'public_request_not_found') lost(pending);
+      else if (pending?.action === 'windows-unlock') windowsUnlockReceipt = '解锁结果待确认';
       else message(unsure);
     }
     finally { busy = false; if (cancel || !pending) refreshAccess(); render(); }
@@ -210,7 +262,7 @@
     if (local) return entry();
     const retry = canRetryPending(key);
     if (busy || disconnected || (pending ? !retry : !grantKeys(key, combined).every(fresh) || !state?.state_version)) return;
-    const id = retry ? pending.request_id : crypto.randomUUID(); busy = true; actionSequence++;
+    const id = retry ? pending.request_id : requestId(); busy = true; actionSequence++;
     begin(grantKeys(key, combined));
     try {
       remember({ request_id: id, state: 'pending', request_created: retry, factor_submitted: false });
@@ -224,44 +276,62 @@
     }
     finally { attempt = null; busy = false; waiting([], false); refreshAccess(); render(); if (openKey) refreshCooldown(); if (pending) recovery.start(); }
   }
-  function openLock(key, id = crypto.randomUUID()) {
-    lockIds[key] = id; setOpen(key, true); message(cooldownText() || '输动态码确认是本人'); render(); refreshCooldown();
+  function openLock(key, id = requestId()) {
+    lockIds[key] = id; setOpen(key, true, false); message(cooldownText() || '输动态码确认是本人'); render(); refreshCooldown();
   }
-  // 锁定、结束：配对过的设备随时直接点（再点一下确认），不等“状态是最新的”；没配对的设备输动态码办。两种设备走同一个接口。
+  // 锁定、结束、锁屏：配对过的设备随时直接点（再点一下确认），不等“状态是最新的”；没配对的设备输动态码办。两种设备走同一个接口。
+  // 锁定个人资料例外：配对和没配对的设备都要输码（本人定：关闭个人资料授权须验证码）。带码的不附状态版本，对当前状态办，免得旧版本白白用掉一个码。
   async function lock(key, code) {
     if (local) return entry();
     const owner = meta.viewer?.kind === 'owner';
     if (busy || pending || disconnected) return;
-    if (!owner && !code) return openLock(key);
-    const action = kinds[key]; let id = code ? lockIds[key] : crypto.randomUUID(); busy = true; actionSequence++;
+    if ((!owner || key === 'pd') && !code) return openLock(key);
+    const action = kinds[key]; let id = code ? lockIds[key] : requestId(); busy = true; actionSequence++;
     begin([key]);
     try {
       for (let round = 0; ; round++) {
         remember({ request_id: id, action, state: 'pending' }); render();
         try {
-          const value = await apiRequest(base, '/locks/' + action, { method: 'POST', body: { request_id: id, ...(owner && state?.state_version ? { state_version: state.state_version } : {}), ...(code ? { totp: code } : {}) }, device: localStorage.getItem('wly-cockpit-device') });
+          const value = await apiRequest(base, '/locks/' + action, { method: 'POST', body: { request_id: id, ...(owner && !code && state?.state_version ? { state_version: state.state_version } : {}), ...(code ? { totp: code } : {}) }, device: localStorage.getItem('wly-cockpit-device') });
           if (value.status === 'blocked') throw { data: value };
           receipt({ ...value, action }, true);
           break;
         } catch (error) {
           // 配对过的设备拿着旧状态点的：重读一次、用新状态再办一次
           if (!(owner && !code && round === 0 && error?.data?.error === 'public_state_changed')) throw error;
-          remember(null); await refreshAccess(); id = crypto.randomUUID();
+          remember(null); await refreshAccess(); id = requestId();
         }
       }
     } catch (error) {
       const data = error.data, reason = data?.error;
       if (reason === 'public_totp_required') { remember(null); waiting([], false); openLock(key, id); }
       else if (code && (reason?.startsWith('public_totp_') || reason === 'totp_verification_failed' || reason === 'public_state_changed')) {
-        remember(null); lockIds[key] = crypto.randomUUID();
+        remember(null); lockIds[key] = requestId();
         if (Number.isFinite(data.cooldown_until_unix)) cooldownUntil = data.cooldown_until_unix;
         message(cooldownText());
-        failed(key, cooldownText() || lockMessages[reason]);
-      } else { receipt(reductionFailureResult(error, id, action)); if (reason === 'cockpit_owner_required') window.TrustModal?.show(); }
+        failed(key, cooldownText() || lockMessages[reason], key === 'win' ? 'Windows 锁屏' : '');
+      } else {
+        if (code) lockIds[key] = requestId();   // 这个号已经有了结果，再输码换新号
+        receipt(reductionFailureResult(error, id, action)); if (reason === 'cockpit_owner_required') window.TrustModal?.show();
+      }
     }
     finally { busy = false; waiting([], false); refreshAccess(); render(); if (openKey) refreshCooldown(); if (pending) recovery.start(); }
   }
   const recovery = createGrantRecovery(() => query(), { canQuery: () => !local && !!pending && !busy });
+  // Windows 解锁：配对和没配对的设备都输六位码；正文只有请求号和码，不附状态版本
+  async function unlockWindows(code) {
+    if (local) return entry();
+    if (busy || pending || disconnected || !fresh('win') || !canOfferWindowsUnlock() || windowsUnlockCooldown > clock() || !/^\d{6}$/.test(code)) return;
+    const request_id = requestId(), action = 'windows-unlock', windowsAtSubmit = state.windows;
+    busy = true; actionSequence++; windowsUnlockReceipt = '';
+    begin(['win']);
+    try {
+      remember({ request_id, action, state: 'pending' }); render();
+      const result = await apiRequest(base, '/unlocks/windows', { method: 'POST', body: { request_id, totp: code } });
+      receipt({ ...result, action }, true, windowsAtSubmit);
+    } catch (error) { receipt(reductionFailureResult(error, request_id, action)); }
+    finally { busy = false; waiting([], false); refreshAccess(); render(); if (pending) recovery.start(); }
+  }
   cancelButton.onclick = async () => {
     if (local) return entry();
     if (attempt) { try { receipt(await attempt.cancel()); } catch { message('取消还没确认，页面会自己再核对。'); } finally { refreshAccess(); } }
@@ -311,6 +381,7 @@
       own.setAttribute('aria-label', `自己填几小时，0.5 到 ${m === null ? 72 : roomHours(m)}`);
       const minutes = durationMinutes(hours);
       const keys = grantKeys(key, both.checked);
+      if (key === 'win' && winUnlock) { go.disabled = busy || !!pending || disconnected || !fresh('win') || !canOfferWindowsUnlock() || !/^\d{6}$/.test(code()) || windowsUnlockCooldown > clock(); return; }
       if (root.classList.contains('is-lock')) { go.disabled = busy || !!pending || disconnected || !/^\d{6}$/.test(code()) || cooldownUntil > clock(); return; }
       go.textContent = retry ? '重新验证' : '验证';
       if (retry) { go.disabled = busy || disconnected || !/^\d{6}$/.test(code()) || cooldownUntil > clock(); return; }
@@ -322,20 +393,25 @@
       box.onpaste = e => { root.classList.remove('has-error'); boxes.forEach(b => { b.placeholder = ''; }); e.preventDefault(); [...e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6 - i)].forEach((n, j) => { boxes[i + j].value = n; }); sync(); };
     });
     both.onchange = sync;
-    go.onclick = () => { const typed = code(); boxes.forEach(b => { b.value = ''; }); root.classList.contains('is-lock') ? lock(key, typed) : submit(key, hours, both.checked, typed); };
+    // 提交时把光标从码格里拿走：回车提交后格子里不留闪着的光标和黑框（本人 11-24 M800）
+    go.onclick = () => { const typed = code(); boxes.forEach(b => { b.value = ''; }); if (boxes.includes(document.activeElement)) document.activeElement.blur(); if (key === 'win' && winUnlock) unlockWindows(typed); else if (root.classList.contains('is-lock')) lock(key, typed); else submit(key, hours, both.checked, typed); };
     deals[key] = { root, sync, defaults() { if (!touched && Number.isFinite(state?.policy?.default_minutes)) pick(state.policy.default_minutes / 60); },
       clear() { if (!root.classList.contains('is-waiting') && !root.classList.contains('has-error')) boxes.forEach(b => { b.placeholder = ''; }); } };
   }
-  function setOpen(key, locking = deals[key]?.root.classList.contains('is-lock')) {
+  // unlock：Windows 那一块开的是解锁（样子和锁屏一样只有码格，按钮写“解锁”）；不给就沿用现在开着的那种
+  function setOpen(key, locking = deals[key]?.root.classList.contains('is-lock'), unlock = key === 'win' && unlocking()) {
     inlineAction = null;
-    openKey = key; bar.classList.toggle('is-open', !!key);
-    if (key) { deals[key].root.classList.toggle('is-lock', !!locking); deals[key].root.querySelector('.go__btn').classList.toggle('btn--ink', !locking); deals[key].root.querySelector('.go__btn').textContent = locking ? ({ pd: '锁定', ur: '结束', win: '锁屏' })[key] : '验证'; }
+    unlock = key === 'win' && !!unlock;
+    if (openKey === 'win' && (key !== 'win' || unlock !== winUnlock)) deals.win.root.querySelectorAll('.code input').forEach(box => { box.value = ''; });
+    openKey = key; winUnlock = unlock; bar.classList.toggle('is-open', !!key);
+    if (key) { deals[key].root.classList.toggle('is-lock', !!locking); deals[key].root.querySelector('.go__btn').classList.toggle('btn--ink', !locking); deals[key].root.querySelector('.go__btn').textContent = unlock ? '解锁' : locking ? ({ pd: '锁定', ur: '结束', win: '锁屏' })[key] : '验证'; }
     for (const k of ['pd', 'ur', 'win']) { cells[k].classList.toggle('is-open', key === k); deals[k].root.classList.toggle('is-active', key === k); }
-    if (key) { const b = cells[key].querySelector(`[data-kind="${locking ? 'close' : 'open'}"]`); if (b) wrap.style.setProperty('--nx', (b.getBoundingClientRect().left + b.offsetWidth / 2 - wrap.getBoundingClientRect().left) + 'px'); }
+    if (key) { const b = cells[key].querySelector(`[data-kind="${unlock ? 'unlock' : locking ? 'close' : 'open'}"]`); if (b) wrap.style.setProperty('--nx', (b.getBoundingClientRect().left + b.offsetWidth / 2 - wrap.getBoundingClientRect().left) + 'px'); }
   }
   const offlineNote = document.createElement('p'); offlineNote.className = 'auth-offline'; document.querySelector('.cells').after(offlineNote);
   function render() {
     const missingStatus = '授权状态暂时读不到，刷新后再试。';
+    if (unlocking() && !busy && !canOfferWindowsUnlock()) setOpen(null);
     offlineNote.hidden = !disconnected;
     cancelButton.disabled = busy && !attempt;
     for (const [key, cell] of Object.entries(cells)) {
@@ -355,23 +431,26 @@
       }
       let result = cell.querySelector('.cell__receipt');
       if (!result) { result = document.createElement('p'); result.className = 'cell__receipt'; result.setAttribute('aria-live', 'polite'); stateLine.after(result); }
-      result.hidden = disconnected || !lockedAt[key]; result.replaceChildren();
-      if (!result.hidden) { const title = document.createElement('strong'), time = document.createElement('span'); title.textContent = key === 'pd' ? '已锁上' : '已结束'; time.textContent = `${lockedAt[key]} ${key === 'pd' ? '锁上' : '结束'}`; result.append(title, time); }
+      result.hidden = disconnected || !(key === 'win' ? windowsUnlockReceipt : lockedAt[key]); result.replaceChildren();
+      if (!result.hidden && key === 'win') result.textContent = windowsUnlockReceipt;
+      else if (!result.hidden) { const title = document.createElement('strong'), time = document.createElement('span'); title.textContent = key === 'pd' ? '已锁上' : '已结束'; time.textContent = `${lockedAt[key]} ${key === 'pd' ? '锁上' : '结束'}`; result.append(title, time); }
       const acts = cell.querySelector('.cell__acts'); acts.replaceChildren();
       cell.querySelector('.cell__inline')?.remove();
-      const actions = disconnected || loading || key === 'win' && pending?.action === 'windows' ? [] : key === 'win' ? (grant?.state === 'locked' || grant?.state === 'no_session' ? [] : [['锁屏', 'close']])
+      const actions = disconnected || loading || key === 'win' && ['windows', 'windows-unlock'].includes(pending?.action) ? [] : key === 'win' ? (grant?.state === 'locked' || grant?.state === 'no_session' ? canOfferWindowsUnlock() ? [['解锁', 'unlock']] : [] : [['锁屏', 'close']])
         : [[active ? '延长' : key === 'pd' ? '解锁' : '开启', 'open'], ...(active || privateState ? [[key === 'pd' ? '锁定' : '结束', 'close']] : [])];
       for (const [label, kind] of actions) {
         const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.dataset.kind = kind;
         // 禁用时写明原因（悬停可见，扫描也认 data-disabled-reason）。锁定、结束随时能点，不等“状态是最新的”（本人 11-24）
         const anytime = kind === 'close' && !local;
         const why = !state ? missingStatus : !anytime && !state.entry ? '办理入口还没读到' : local ? '' : busy ? '正在办上一步'
-          : pending ? '还有一步在等确认' : !anytime && !privateState && (!fresh(key) || !state.state_version) ? '状态不是最新的，刷新后再试' : '';
+          : pending ? '还有一步在等确认' : !anytime && !privateState && (!fresh(key) || kind !== 'unlock' && !state.state_version) ? '状态不是最新的，刷新后再试' : '';
         b.disabled = !!why; if (why) { b.dataset.disabledReason = why; b.title = why; }
-        const inline = local || kind === 'close' && meta.viewer?.kind === 'owner' && !privateState;
+        // 配对设备点锁定个人资料也开码格（要输码），只有结束授权、锁屏还是“再点一下确认”
+        const inline = local || kind === 'close' && meta.viewer?.kind === 'owner' && !privateState && key !== 'pd';
         if (inline) b.setAttribute('aria-expanded', String(inlineAction?.key === key && inlineAction?.kind === kind));
+        else if (kind === 'unlock') b.setAttribute('aria-expanded', String(unlocking()));
         else if (kind === 'open' && !privateState) b.setAttribute('aria-expanded', String(openKey === key && !deals[key].root.classList.contains('is-lock')));
-        else if (kind === 'close') b.setAttribute('aria-expanded', String(openKey === key && deals[key].root.classList.contains('is-lock')));
+        else if (kind === 'close') b.setAttribute('aria-expanded', String(openKey === key && deals[key].root.classList.contains('is-lock') && !unlocking()));
         b.onclick = () => {
           if (inline) {
             const again = inlineAction?.key === key && inlineAction?.kind === kind;
@@ -379,6 +458,12 @@
             inlineAction = again ? null : { key, kind, label };
             render();
             if (!again) cells[key].querySelector('.cell__inline :is(a,button)')?.focus();
+          } else if (kind === 'unlock') {
+            const again = unlocking();
+            setOpen(again ? null : 'win', true, !again);
+            if (!again) message(cooldownText(windowsUnlockCooldown) || '输动态码确认是本人');
+            render();
+            cells.win.querySelector('[data-kind="unlock"]')?.focus();
           } else if (privateState) {
             if (kind === 'close') lock(key);
             else window.TrustModal?.show();

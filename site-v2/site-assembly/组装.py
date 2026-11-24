@@ -1014,7 +1014,7 @@ LIVE_CONSTRUCTION_ROUTES = {'live/backup', 'live/issue', 'live/item', 'live/reco
 # 这些字符串是运行时 API 或开发样本前缀，不是静态页面；其余链接仍逐个查文件。
 RUNTIME_REFS = {
     'app/computer-access-model.js': {'/computer-access/api', '/requests', '/status'},
-    'connect-auth/auth.js': {'/cancel', '/locks/', '/requests/', '/requests/cooldown'},
+    'connect-auth/auth.js': {'/cancel', '/locks/', '/requests/', '/requests/cooldown', '/unlocks/windows'},
     'live/_lib/live-client.js': {'/__computer/cockpit-device/pair', '/__computer/cockpit/open', '/__computer/cockpit/automation-settings', '/__live/', '/live/_fixtures/', '/release-identity.json', '.json'},
     # 使用时间页自己取明细续页和拆出去的块：本机预览走 /__live/，后端给的补取地址以接口路径开头
     'live/usage/page.js': {'/__live/', '/computer-access/live/v1/computer/usage?'},
