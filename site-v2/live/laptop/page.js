@@ -108,7 +108,8 @@
     const notes = [], add = (text, cls = '') => notes.push(`<li class="${cls}">${text}</li>`);
     const laptopRule = version(x?.rule_version), desktopRule = version(x?.desktop_rule_version);
     if (laptopRule && desktopRule && Number(laptopRule) < Number(desktopRule)) {
-      add(`规则版本 ${field(x.rule_version, '笔记本规则版本')}，台式机是 ${field(x.desktop_rule_version, '台式机规则版本')}，落后了`, 'laptop-alert');
+      // 写着规则版本号的这一句点了去规则页（本人 11-24 13:00），整句一个链接、带箭头
+      add(`<a class="row__title" href="/rules/">规则版本 ${field(x.rule_version, '笔记本规则版本')}，台式机是 ${field(x.desktop_rule_version, '台式机规则版本')}，落后了 <span class="more__chev">›</span></a>`, 'laptop-alert');
     }
     if (x?.reboot_pending === true) add('Windows 更新等重启', 'laptop-alert');
     if (!pending && (!laptopRule || !desktopRule)) add('规则版本对比这次没读全');

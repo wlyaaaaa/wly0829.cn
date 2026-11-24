@@ -196,8 +196,13 @@
     const section = typeof field === 'string' ? field : field?.value;
     return typeof section === 'string' && U.fieldText(field, projectViewer) === section ? section : '';
   }
+  // 规则版本号（E 加数字）点了去规则页（本人 11-24 13:00）：AI 百工谱的现役版本、上一版两个读数，和下面“规则版本”卡里的逐版号
+  const RULES = '/rules/';
+  const ruleVersion = v => typeof v === 'string' && /^E\d+$/.test(v);
+  const ruleLink = html => `<a class="row__title" href="${RULES}">${html}</a>`;
   function metricHref(m) {
     if (m.href) return route(m.href);
+    if (id === 'agents' && ['release', 'previous_release'].includes(m.id) && ruleVersion(m.value ?? m.text)) return RULES;
     const section = recordSection(m.section);
     if (['waiting', 'pending'].includes(m.id) || /等待|待核对/.test(m.label || '')) {
       const lists = [...new Set((proj?.sections || []).flatMap(s => (s.metrics || []).filter(x => x.expandable).map(x => recordSection(x.section))).filter(Boolean))];
@@ -865,7 +870,7 @@
     const kept = (history.events || []).filter(e => /^E\d+$/.test(e.version));
     const events = kept.map(e => {
       const when = e.at ? `${stamp(e.at)} 生效` : '生效时间暂时读不到';
-      return text([e.version, { published: '发布', rolled_back: '退回' }[e.kind], when, e.observed_at && `观察于 ${stamp(e.observed_at)}`, e.created_at && `目录创建于 ${stamp(e.created_at)}`, e.time_gap].filter(Boolean).join(' · '));
+      return text([e.version, { published: '发布', rolled_back: '退回' }[e.kind], when, e.observed_at && `观察于 ${stamp(e.observed_at)}`, e.created_at && `目录创建于 ${stamp(e.created_at)}`, e.time_gap].filter(Boolean).join(' · ')).replace(/^E\d+(?= · |$)/, ruleLink);
     });
     const historyGap = ruleHistoryGap(history);
     const gaps = [historyGap, ...(history.weekly || []).filter(w => !w.complete).map(w => `${w.week} 这一周未观察完整：已观察到发布 ${w.observed_published ?? '暂时读不到'} 次、退回 ${w.observed_rolled_back ?? '暂时读不到'} 次`)].filter(Boolean);
@@ -889,8 +894,8 @@
 
   function ruleTimeline(kept, current, text) {
     const index = kept.findLastIndex(e => e.version === current);
-    const dot = (e, i) => `<li${i === index ? ' aria-current="true"' : ''} class="${i === index ? 'is-now' : e.kind === 'rolled_back' ? 'is-back' : ''}"><i></i><b>${text(e.version)}</b><small>${text([e.kind === 'rolled_back' && '退回', e.at ? stamp(e.at) : '时刻未留'].filter(Boolean).join(' · '))}</small>${e.time_gap ? `<small>${text(e.time_gap)}</small>` : ''}</li>`;
-    return (index < 0 && current ? `<p class="pj-note">现役 ${text(current)}</p>` : '') + (kept.length ? `<ol class="pj-tl" style="--rule-count:${kept.length}" tabindex="0" aria-label="逐版生效时间，北京时间">${kept.map(dot).reverse().join('')}</ol>` : '');
+    const dot = (e, i) => `<li${i === index ? ' aria-current="true"' : ''} class="${i === index ? 'is-now' : e.kind === 'rolled_back' ? 'is-back' : ''}"><i></i><b>${ruleLink(text(e.version))}</b><small>${text([e.kind === 'rolled_back' && '退回', e.at ? stamp(e.at) : '时刻未留'].filter(Boolean).join(' · '))}</small>${e.time_gap ? `<small>${text(e.time_gap)}</small>` : ''}</li>`;
+    return (index < 0 && current ? `<p class="pj-note">现役 ${ruleVersion(current) ? ruleLink(text(current)) : text(current)}</p>` : '') + (kept.length ? `<ol class="pj-tl" style="--rule-count:${kept.length}" tabindex="0" aria-label="逐版生效时间，北京时间">${kept.map(dot).reverse().join('')}</ol>` : '');
   }
 
   // —— 页头 ——
@@ -945,7 +950,8 @@
     } else if (h && typeof h === 'object' && h.text) {
       const { cadence, desktop } = m ? lineOf(m) : {};
       const words = headline({ ...d, headline: { ...h, at: null } });
-      head.push(cell(m?.label ? readingLabel(m.label) + (cadence || '') : '现在', esc(words), { kind: 'text', wide: sentence(words), sub: id === 'agents' && h.id === 'release' && h.at ? esc(`${stamp(h.at)} 生效`) : esc(desktop || '') }));
+      head.push(cell(m?.label ? readingLabel(m.label) + (cadence || '') : '现在', esc(words), { kind: 'text', wide: sentence(words), sub: id === 'agents' && h.id === 'release' && h.at ? esc(`${stamp(h.at)} 生效`) : esc(desktop || ''),
+        href: id === 'agents' && h.id === 'release' && ruleVersion(h.value ?? h.text) ? RULES : '' }));
     } else if (typeof h === 'string' && headline(d)) {
       const v = value(m), { line, cadence } = lineOf(m);
       head.push(cell(readingLabel(m.label) + (cadence || ''), v.html, { kind: v.long ? 'text' : '', wide: v.long && sentence(v.plain), title: `${metricText(m.label)} ${v.plain}`, href: metricHref(m), sub: id === 'agents' && m.id === 'release' && m.at ? esc(`${stamp(m.at)} 生效`) : line }));
