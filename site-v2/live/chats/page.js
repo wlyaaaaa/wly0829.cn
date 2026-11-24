@@ -112,7 +112,8 @@
     const href = c.detail ? detailHref(c.id) : '';
     const title = href ? `<a class="row__title" href="${href}">${titleHtml} <span class="more__chev" aria-hidden="true">›</span></a>`
       : titleHtml ? `<span class="row__title">${titleHtml}</span>` : '';
-    const titleMark = locked ? '' : viewer === 'owner' && U.visitorHiddenMark(c, '这场对话', viewer) || (marked ? chatCell(name, '对话名', c) : viewer === 'owner' && name.visibility === 'owner' ? '' : U.visibilityNote(name, viewer, '对话名'));
+    // “访客看不到”小签只挂在标题那一行（同实况首页的事项、单场对话页），模型那一行不再重复挂一个（M692）
+    const titleMark = locked || viewer === 'owner' && U.visitorHiddenMark(c, '这场对话', viewer) ? '' : (marked ? chatCell(name, '对话名', c) : viewer === 'owner' && name.visibility === 'owner' ? '' : U.visibilityNote(name, viewer, '对话名'));
     const waitLabel = c.state === 'waiting' && stateText(c);
     const raw = locked ? null : U.chatProgressText(c.text ?? c.doing, c, viewer) ?? c.latest_reply, preview = U.chatPreviewSummary(raw, c, viewer);
     const repeatsStatus = (waitLabel || completed && !stillWorking) && U.chatFields.repeatsState(preview, c, viewer);

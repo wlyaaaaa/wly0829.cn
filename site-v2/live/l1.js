@@ -641,9 +641,10 @@
     const link = title({ ...item, id: item?.id || id }, item?.text || '查看原事项', 'items');
     return { key: id, cls: 'row row--flat', html: `<div class="row__text"><p class="row__main">${U.date(closed.at)} ${U.time(closed.at)} · ${label} · ${link}</p></div>` };
   }
+  // 展开后的事项详情整段照原文显示，不按字数截（M690）；卡面收起时那一行摘要的字数限制不动
   function noticeDetail(item) {
     if (!item?.detail_text || viewer === 'public' && (item.visibility === 'owner' || item.public === 'owner')) return '';
-    const detail = U.fieldHtml(U.capText(item.detail_text, 200), { name: '事项详情', kind: viewer });
+    const detail = U.fieldHtml(U.capText(item.detail_text, Infinity), { name: '事项详情', kind: viewer });
     const opened = parts.needs.main.querySelector(`[data-key="${CSS.escape(item.id)}"] .notice-detail`)?.open;
     return detail ? `<details class="row__sub notice-detail"${opened ? ' open' : ''}><summary>事项详情</summary><p style="white-space: pre-line">${detail}</p></details>` : '';
   }
