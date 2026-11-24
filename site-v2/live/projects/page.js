@@ -172,7 +172,10 @@
       if (it.id === 'video-scaffold' && h?.id === 'films' && typeof scope === 'string') scope = scope.replace(/^已选的 (\d+) 组本地完整长版及各自成片目录；不是全历史或发布总数。.*$/s, '只算这台电脑上存着成片的 $1 部，不是做过的全部片子，也不是发出去的数量。');
       const labelHtml = label ? U.fieldHtml(label, { name: '项目读数', place: 'label', kind: viewer }) : '', labelBody = label ? U.fieldHtml(label, { kind: viewer }) : '';
       const scopeHtml = scope ? `<small class="pj-fig__sub pj-fig__scope" title="${esc(typeof scope === 'string' ? scope : '')}">${U.fieldHtml(scope, { name: '项目说明', kind: viewer })}</small>` : '';
-      const readAt = observed && observed !== through && !marked && !text.includes(observed) && !(typeof scope === 'string' && scope.includes(observed)) ? `<small class="pj-fig__sub">读取于 ${esc(observed)}</small>` : '';
+      // 代表数的时刻是“这件事最后一次发生”的：写那一句，不写“读取于”（M769）
+      const moment = !marked && window.LiveProjectMoments?.headline(it);
+      const readAt = moment ? `<small class="pj-fig__sub">${esc(moment)}</small>`
+        : observed && observed !== through && !marked && !text.includes(observed) && !(typeof scope === 'string' && scope.includes(observed)) ? `<small class="pj-fig__sub">读取于 ${esc(observed)}</small>` : '';
       const labelHidden = viewer === 'public' && labelBody.includes('live-mark--owner') && (label?.hidden || label?.visibility === 'owner' || label?.public === 'owner' || /^〔?[^〔〕<>]*(?:仅本人可见|可信设备可见)〕?$/.test(labelHtml.trim()));
       // AI 百工谱的读数是现役规则版本号（E 加数字）：读数名和版本号点了去规则页，名字后带箭头，和项目页能点的读数一个样子（本人 11-24 13:00）
       const rule = it.id === 'agents' && h?.id === 'release' && !marked && /^E\d+$/.test(text);
