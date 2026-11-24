@@ -28,7 +28,7 @@
   "agents.privacy-data.md": {"toc": [
     {"label": "个人资料的锁和解锁", "heading": "个人资料的锁和解锁", "level": 1},
     {"label": "可信位置和原样保存", "heading": "可信位置和原样保存", "level": 1},
-    {"label": "公开个人数据分级表", "heading": "公开个人数据分级表", "level": 1},
+    {"label": "对外公开的边界", "heading": "对外公开的边界", "level": 1},
     {"label": "私人仓库收口", "heading": "私人仓库收口", "level": 1},
     {"label": "备份跟着原件走", "heading": "备份跟着原件走", "level": 1}
   ]},
@@ -38,7 +38,7 @@
     {"label": "日用、偶用、存档三档", "heading": "三档维护", "level": 1},
     {"label": "长任务接续", "heading": "长任务接续", "level": 1},
     {"label": "先读哪份文件", "heading": "碰到项目和压缩后先读哪份", "level": 2},
-    {"label": "上下文压缩后的复核", "heading": "压缩后的后台复核", "level": 2},
+    {"label": "上下文压缩前后", "heading": "压缩前后", "level": 2},
     {"label": "一样东西只存一处", "heading": "一样东西只存一处", "level": 2},
     {"label": "写之前先查", "heading": "写之前先查", "level": 2},
     {"label": "经验和规矩记到哪", "heading": "共享经验的落点", "level": 2}
