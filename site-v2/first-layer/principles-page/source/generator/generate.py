@@ -166,7 +166,8 @@ def build(published, site=SITE, output=OUTPUT):
     meta = (f'<dl><div><dt>发布</dt><dd>{escape(published)}</dd></div><div><dt>作者</dt><dd>吴乐阳</dd></div>'
             f'<div><dt>字数</dt><dd>{word_count:,} 字</dd></div></dl>')
     meta += '<p class="publication-note">本文记录的是 2026 年 11 月的样子，之后不再更新；现行规矩见<a href="/rules/">规则页</a>。</p><dl>'
-    for kind, label in (("projects", "文中提到的项目"), ("skills", "文中提到的技能"), ("pages", "文中提到的页面")):
+    # 右栏先列页面，再列项目、技能（本人 11-24 13:00）
+    for kind, label in (("pages", "文中提到的页面"), ("projects", "文中提到的项目"), ("skills", "文中提到的技能")):
         meta += f'<div class="mentioned"><dt>{label}</dt><dd><ul>'
         for row in names[kind]:
             name = escape(row["matched"])
