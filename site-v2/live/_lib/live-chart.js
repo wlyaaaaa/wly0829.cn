@@ -683,13 +683,18 @@
       pointerEvents = true;
       window.addEventListener('pointermove', e => { if (pointerSource && e.pointerType === 'mouse' && !pointerSource.plot.contains(e.target)) clearPointer(); }, true);
       window.addEventListener('pointerout', e => { if (e.pointerType === 'mouse' && !e.relatedTarget) clearPointer(); });
-      window.addEventListener('scroll', clearPointer, true);
+      window.addEventListener('scroll', () => {
+        if (!pointerSource) return;
+        const { plot, clientX, clientY } = pointerSource;
+        if (!plot.contains(document.elementFromPoint(clientX, clientY))) clearPointer();
+      }, true);
       window.addEventListener('blur', clearPointer);
       document.addEventListener('visibilitychange', () => { if (document.hidden) clearPointer(); });
     }
     const atPointer = (e) => {
       if (!data) return;
       pointerSource = e.pointerType === 'mouse' ? source : null;
+      if (pointerSource) { source.clientX = e.clientX; source.clientY = e.clientY; }
       const r = svg.getBoundingClientRect();
       const px = Math.min(Math.max((e.clientX - r.left) * W / r.width - pad.left, 0), W - pad.left);
       send(Math.round(data.t0 + (px / (W - pad.left)) * (data.t1 - data.t0)));
