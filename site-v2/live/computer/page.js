@@ -1018,7 +1018,7 @@
     return `<div class="desktop-config__head"><h2 id="desktop-config-title" tabindex="-1">${title}</h2>
       <button class="desktop-config__action" type="button" data-desktop-config-close>收起 <span aria-hidden="true">‹</span></button></div>
       <div class="desktop-config__columns"><div>${group('host', '主机')}${group('storage', '硬盘')}</div>
-      <div>${group('screens', '屏幕', screens)}${group('former', '以前的主屏')}</div></div>${hardwareSpecHtml()}`;
+      <div>${group('screens', '屏幕', screens)}${group('former', '以前的主屏')}${hardwareSpecHtml()}</div></div>`;
   }
 
   let homeDevices = null, devicesWatch = null, streamProject = null, streamWatch = null, streamAudience = null;
