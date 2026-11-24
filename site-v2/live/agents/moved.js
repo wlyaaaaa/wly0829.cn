@@ -137,7 +137,7 @@
     const todayText = !todayKnown ? '' : todayN > 0 ? `今天到 ${T.clock(t.at)} ${to}说了 ${int(todayN)} 句` : `今天到 ${T.clock(t.at)} 还没${to}说${lastAt ? ` · ${lastText(lastAt)}` : ''}`;
     return `<section class="tp-panel ag-moved" id="talk">${head(key, `${you()}跟三家说了多少`, t.win.all.start, t.at)}
       <div class="tp-grid ag-mgrid"><div class="ag-mleft">
-        <p class="ag-mbig">${esc(lead(p, f ? w.starts[f] || w.start : w.start))}${you()}${esc(to)}说了 ${bigNum(key, value || 0, f, lower)} 句</p>
+        <p class="ag-mbig">${esc(lead(p, f ? w.starts[f] || w.start : w.start))}${you()}${esc(to)}<span class="ag-mbig__tail">说了 ${bigNum(key, value || 0, f, lower)} 句</span></p>
         ${famRows(key, HOSTS, w.v, '句', { lower: w.lower, last: t.last, starts: t.starts, start: p === 'all' ? w.start : null })}
         ${todayText ? `<p class="tp-small ag-mtoday">${esc(todayText)}</p>` : ''}</div>
         <div>${days.length ? stackCols(key, days, HOSTS, '句') : '<p class="tp-empty">这段时间没有按天的记录。</p>'}${chips()}</div></div>

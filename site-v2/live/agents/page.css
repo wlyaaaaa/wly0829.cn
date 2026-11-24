@@ -134,6 +134,7 @@
 .ag-mgrid { grid-template-columns: 330px minmax(0, 1fr); gap: 28px; align-items: start; }
 .ag-mgrid > * + * { border-left: 1px solid var(--tp-hair); padding-left: 26px; }
 .ag-mbig { margin: 2px 0 14px; font-family: var(--black); font-size: 26px; line-height: 1.35; }
+.ag-mbig__tail { white-space: nowrap; }   /* “说了 12,562 句”整体换行，不在“说了”中间断 */
 .ag-mbig b { margin: 0 4px; font-family: var(--tp-num); font-size: 56px; line-height: 1; color: var(--tp-green); vertical-align: -5px; }
 .ag-mbig b small { margin-right: 4px; font-family: var(--sans); font-size: 18px; font-weight: 700; vertical-align: 6px; }
 .ag-fams { margin: 0; padding: 0; list-style: none; }
