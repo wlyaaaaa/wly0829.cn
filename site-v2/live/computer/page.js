@@ -1050,7 +1050,8 @@
     let hardware = '';
     part('devs').classList.toggle('has-hardware', list.some(hasHardware));
     U.html(part('devs'), list.filter(x => !offline() || ['online', 'offline'].includes(x.state) || hasHardware(x) || laptopUnavailable(x)).map((x) => {
-      const state = laptopUnavailable(x) || (offline() && /^(电脑不在线|不在线)$/.test(x.text || '') ? '连不上' : x.text || DEV_STATE[x.state] || '');
+      // 页面连不上时台式机不写“在线”（那是断开前的旧状态，和顶上“连不上电脑”打架），用现成的“连不上”（M741）。
+      const state = laptopUnavailable(x) || (offline() && (/^(电脑不在线|不在线)$/.test(x.text || '') || x.id === 'main' && !x.text && x.state === 'online') ? '连不上' : x.text || DEV_STATE[x.state] || '');
       const inner = `${U.status(x, { small: true }).lamp}<b>${U.fieldHtml(DEV_NAME[x.id] || x.label || x.name || x.title || x.text || x.id, { name: DEV_NAME[x.id] || '设备', place: 'label' })}</b>${U.fieldHtml(state, { name: '设备状态', place: 'label' })}`;
       const pc = x.pc || PC[x.id];
       const detail = { phone: '/live/phone/', secondary_laptop: '/live/laptop/' }[x.id];
