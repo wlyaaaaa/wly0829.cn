@@ -33,6 +33,8 @@
   const ownerOriginalResource = resource => /^(?:chats|items|reports|projects)\//.test(resource) &&
     !['items/closed', 'projects/changes'].includes(resource);
   const visitorPolicy = 'policy-11'; // 与后端导出和云端接口的访客规则代号一致。
+  // 云端、随站那两份备用数据只给实况页（/live/ 下）用；根首页副屏首次打开就断线暂不带数（本人 R10），照旧不取。
+  const backupPages = /^\/live(?:\/|$)/.test(location.pathname);
   const validAudience = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
   try {
     for (let i = localStorage.length - 1; i >= 0; i--) {
@@ -240,13 +242,15 @@
       observedConnection(e, { state: 'offline', basis: e.missStatus ? 'response' : 'browser', reason: e.missReason || 'unreachable' });
       // 一算连不上就马上取备用包的时刻，不再等失败后 15 秒那一下（M608）。
       const f = e.failure;
-      if (f?.fallback && e.source !== 'fallback' && offline()) {
+      if (f?.fallback && !onBackup(e) && offline()) {
         clearTimeout(f.fallback); f.fallback = null;
         useFallback(e, f).then(() => { if (e.failure === f) { settle(e); emit(e); } });
       }
     } else if (isMain(e)) {
       // 主数据 10 秒没到、这一页已经读到并画出来了（不是浏览器存的副本）：不算连不上、不清（本人版访客版一样），标上是几点的数，重读照常（M587、M588）。
       // 连不上只认浏览器断网、心跳停了、电脑关机这几种明确信号，或上面那条连续三次读不到；后台明确撤回照旧立刻清。
+      // 页顶那张卡写“正在刷新 · 这次没读到新的，正在重试”，读到新的就收（本人 11-24 20:34“首先要说明正在刷新”）。
+      e.lagging = true;
       if (Number.isFinite(Date.parse(e.at))) e.fallbackNote = `这是 ${shortStamp(e.at)} 的数，这次刷新慢了，正在重读。`;
     } else {
       if (!e.error) e.error = '暂时读不到';
@@ -264,6 +268,18 @@
   // 只有确认关机（副屏那格回 on: false）才算没开机；心跳停了只说明电脑从那时起没回应，可能还开着。
   const hostOffline = link => link?.reason === 'host-off';
   const heartbeatStopped = link => link?.basis === 'heartbeat' && link.heartbeat === 'stopped';
+  // 确认关机：副屏那格回 on: false，或边缘读到云端那份记着已关机（X-Live-Connection: host-off）。
+  // 没确认关机就只重试、留着手里那份，不用云端、随站那两份（本人 11-24 20:34）。
+  const confirmedOff = () => !publicPaused && offline() && hostOffline(latestConnection());
+  // 正在用云端或随站那份的正文（只有时刻的旧包不算）。
+  const onBackup = e => e.source === 'fallback' && e.data !== null;
+  function linkReason(link) {
+    const seen = link?.basis === 'heartbeat' && (link.seen || link.since);
+    return hostOffline(link) || heartbeatStopped(link) ? (Number.isFinite(Date.parse(seen)) ? `电脑自 ${shortStamp(seen)} 起连不上` : '电脑不在线')
+      : link?.reason === 'service' ? '实况服务暂不可用'
+      : link?.reason === 'owner-read' ? '暂时读不到本人实况'
+      : link?.basis === 'browser' ? (globalThis.navigator?.onLine === false ? '当前设备未连接网络' : '连不上实况服务') : '连不上电脑';
+  }
   const latestStamp = stamps => stamps.filter(at => Number.isFinite(Date.parse(at))).sort((a, b) => Date.parse(a) - Date.parse(b)).at(-1) || null;
   const dataAt = e => e.data === null ? null : e.resource === 'screen' && offline()
     ? latestStamp((e.lastCells || []).filter(cell => cell.id !== 'computer' || !hostOffline(latestConnection())).map(cell => cell.source_at)) : e.at;
@@ -437,11 +453,7 @@
     const at = dataAt(e), resourceAt = !publicPaused && Number.isFinite(Date.parse(at)) ? at : null;
     const upTo = disconnected ? resourceAt || shownUpTo() : null;
     const off = !publicPaused && hostOffline(link), silent = !publicPaused && !off && heartbeatStopped(link);
-    const seen = link.basis === 'heartbeat' && (link.seen || link.since);
-    const reason = disconnected ? off || silent ? (Number.isFinite(Date.parse(seen)) ? `电脑自 ${shortStamp(seen)} 起连不上` : '电脑不在线')
-      : link.reason === 'service' ? '实况服务暂不可用'
-      : link.reason === 'owner-read' ? '暂时读不到本人实况'
-      : link.basis === 'browser' ? (globalThis.navigator?.onLine === false ? '当前设备未连接网络' : '连不上实况服务') : '连不上电脑' : '';
+    const reason = disconnected ? linkReason(link) : '';
     const line = at => `${reason} · ${at ? `下面是 ${shortStamp(at)} 的数据。` : '这页没有可显示的上次数据。'}`;
     if (disconnected) text = line(upTo);
     if (publicPaused) text = publicPauseText;
@@ -458,7 +470,35 @@
       shownAt: resourceAt, cutoffAt: upTo, publicPaused, offline: disconnected, warming: !publicPaused && e.warming,
       text, reason, hostOff: off, silent, pageAt: disconnected ? shownUpTo() : null,
       pageAtText: disconnected && shownUpTo() ? shortStamp(shownUpTo()) : '',
-      pageText: disconnected ? line(shownUpTo()) : pairNotice, pairNotice, phase: stage, say };
+      pageText: disconnected ? line(shownUpTo()) : pairNotice, pairNotice, phase: stage, say, conn: connInfo() };
+  }
+  // 实况页页顶那张状态卡和页眉按钮怎么说（本人 11-24 20:34，选的 B，图 S1 五种）。根首页不看这一段。
+  //   retrying 刚读不到：先说正在刷新；lost 一直读不到但没确认关机：写正在重试，页上留着手里那份；
+  //   off 确认关机：写关机了，下面是哪一份（这台浏览器存的、云端存的、上线时带的），三样都没有才写没有可显示的。
+  function connInfo() {
+    if (publicPaused) return { stage: 'paused' };
+    const upTo = shownUpTo(), atLine = at => at ? ` · 下面是 ${shortStamp(at)} 的数据` : ' · 这页没有可显示的上次数据';
+    if (!offline()) return connectionEntries().some(e => e.lagging && isMain(e))
+      ? { stage: 'retrying', say: '正在刷新', at: atLine(upTo), wait: '这次没读到新的，正在重试' } : { stage: 'online' };
+    const link = latestConnection();
+    if (!hostOffline(link)) return { stage: 'lost', say: `${linkReason(link)}，正在重试`, at: atLine(upTo),
+      wait: globalThis.navigator?.onLine === false ? '这台设备没联网，先留着这份；联网后马上重读'
+        : '电脑没确认关机，先留着这份一直重试；确认关机后先显示云端存的那份，云端读不到再显示上线时带的那份' };
+    const say = Number.isFinite(Date.parse(link.off_at)) ? `电脑 ${shortStamp(link.off_at)} 关机了` : '电脑关机了';
+    // 说的是本页主数据那一份；主数据一样都没有、别的块有（比如旧随站包里的计划任务名册），说页上最新的那一块，和页眉按钮的时刻对得上
+    const shown = connectionEntries().filter(e => e.data !== null && Number.isFinite(Date.parse(e.at)));
+    const main = shown.find(e => isMain(e) && e.listeners.size) || shown.sort((a, b) => Date.parse(b.at) - Date.parse(a.at))[0]
+      || connectionEntries().find(e => isMain(e) && e.listeners.size) || connectionEntries().find(isMain);
+    if (main?.data != null && Number.isFinite(Date.parse(main.at))) {
+      const from = onBackup(main) && main.backupFrom || 'browser';
+      return { stage: 'off', say, from,
+        at: from === 'cloud' ? ` · 下面是云端存的最后一份（${shortStamp(main.at)}）` : from === 'release' ? ` · 下面是上线时带的那份（${stamp(main.at)}）`
+          : ` · 下面是这台浏览器存的最后一份（${shortStamp(main.at)}）`,
+        wait: from !== 'browser' && main.viewer.kind === 'owner' ? '这是访客能看的那份；开机连上后自动换成本人版最新的' : '开机连上后自动换成最新的' };
+    }
+    const meta = main?.backupMeta;
+    return { stage: 'off', say, from: null, at: ' · 这页没有可显示的上次数据', wait: meta
+      ? `${meta.from === 'cloud' ? '云端' : '上线时带的那份'}只记了最后一份是 ${shortStamp(meta.at)}，没存内容；开机连上后自动显示` : '开机连上后自动显示' };
   }
   function present(e) {
     const disconnected = offline(), detail = itemDetail(e);
@@ -518,7 +558,7 @@
   }
   function forgetData(e, forgetCopy = false) {
     if (forgetCopy) storage(cacheKey(e, e.viewer.kind), null);
-    Object.assign(e, { data: null, at: null, seq: -1, rev: null, etag: null, dataRead: null, lastCells: null, fallbackNote: '' });
+    Object.assign(e, { data: null, at: null, seq: -1, rev: null, etag: null, dataRead: null, lastCells: null, fallbackNote: '', backupFrom: null, backupMeta: null });
   }
   function audience(e, viewer) {
     if (!viewer) return;
@@ -544,7 +584,7 @@
       }
     }
   }
-  function failed(e, status, body, via) {
+  function failed(e, status, body, via, offAt) {
     e.status = status; e.warming = false;
     if (status === 403 || status === 410 || status === 404 && body?.error === 'live_missing') {
       e.withdrawn = true;
@@ -559,7 +599,10 @@
     const reachable = status >= 400 && status < 500 || /^live_((source|variant|detail)_unavailable|publication_revoked)$/.test(body?.error || '');
     const reason = via || (body?.error === 'owner_read_failed' ? 'owner-read' :
       body?.error === 'preview_upstream_not_listening' || [500, 503].includes(status) && !body?.error?.startsWith('snapshot_') ? 'service' : 'unreachable');
-    if (!body?.link && !reachable && !(e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped')) {
+    // 确认关机（边缘读到云端那份记着已关机）和心跳停了一样马上算；关机期间云端偶尔读不到也不改回“连不上”，读到新的才收。
+    const off = !reachable && (reason === 'host-off' || hostOffline(e.validatedLink));
+    if (reachable) e.lagging = false;
+    if (!body?.link && !reachable && !off && !(e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped')) {
       e.missReason = reason; e.missStatus = status;
       if (!e.missCount) e.missSince = Date.now();
       e.missCount = (e.missCount || 0) + 1;
@@ -569,6 +612,7 @@
     observedConnection(e, body?.link || (reachable
       ? { state: 'online', basis: 'response', since: e.link?.since || clock() }
       : e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped' ? e.validatedLink
+      : off ? { state: 'offline', basis: 'response', reason: 'host-off', off_at: offAt || e.validatedLink?.off_at || null }
       : { state: 'offline', basis: status ? 'response' : 'browser', reason }));
   }
   function clearFailure(e) {
@@ -659,27 +703,32 @@
     const delay = f.tries < delays.length ? delays[f.tries] : 10000;
     f.tries++;
     f.retry = later(() => { if (!document.hidden && e.token === device() && e.failure === f) read(e); }, delay);
-    if ((retryCopy || offline()) && e.source !== 'fallback') { await useFallback(e, f); if (e.failure === f) settle(e); }
+    if ((retryCopy || offline()) && !onBackup(e)) { await useFallback(e, f); if (e.failure === f) settle(e); }
   }
-  function fallbackMetadata(e, at, proof, packet = null) {
-    // 手上已有数（这一页读到的，或浏览器存的上次副本）就接着显示、带它自己的时刻，本人版访客版一样；
-    // 备用包只有生成时刻，不拿它把有的数清成横杠，也不删上次副本（M608）。
-    if (e.withdrawn || e.data !== null || typeof at !== 'string' ||
-        !Number.isFinite(Date.parse(at)) || proof?.policy !== visitorPolicy || !validAudience(proof.audience)) return;
-    forgetData(e);
-    // 随站备用包里带了计划任务名册（tasks?scope=scheduled，后台只准这一份带正文，别的仍只有时刻）：访客版没读到过时就画它，写明是几点的数（M473）
-    const own = e.viewer.kind === 'public' && e.path === 'tasks?scope=scheduled' && packet?.viewer?.kind === 'public' && packet.data && typeof packet.data === 'object'
-      && Object.keys(packet.data).length && Number.isFinite(Date.parse(packet.at)) ? packet : null;
-    if (own) {
-      Object.assign(e, { data: siteVisitScope(e, own.data), at: new Date(own.at).toISOString(), rev: 'fallback-' + proof.audience + ':' + own.seq,
-        source: 'fallback', fallbackNote: `这是公开备用包里北京时间 ${stamp(own.at)} 的数，现在读不到新的。` });
+  // 确认关机后才用备用数据（本人 11-24 20:34）：先云端那份（经边缘），云端读不到再随站那份；浏览器手里那份更新就留着手里的。
+  // 包的代号都是 policy-11，有没有正文看 metadata_only（后台 11-25 06:56）：带正文的每块就是访客回包——本人页面照样是本人连接状态，
+  // 只在这一块写明“访客备用数据”、哪一份、北京时间；这份不存进浏览器副本，也不算在线读数。旧包只有时刻，只记下几点，不清手上的数；
+  // 旧随站包里的访客计划任务名册照旧能画（M473）。
+  function useBackup(e, from, at, proof, packet) {
+    if (!backupPages || fixture !== null || e.withdrawn || itemDetail(e) || !confirmedOff() ||
+        proof?.policy !== visitorPolicy || !validAudience(proof.audience)) return;
+    const block = packet?.viewer?.kind === 'public' && packet.data && typeof packet.data === 'object' && !Array.isArray(packet.data) &&
+      Object.keys(packet.data).length && Number.isFinite(Date.parse(packet.at)) ? packet : null;
+    if (block) {
+      if (e.data !== null && Date.parse(e.at) >= Date.parse(block.at)) return;   // 手上那份不比它旧，接着用手上的
+      Object.assign(e, { data: siteVisitScope(e, block.data), at: new Date(block.at).toISOString(), etag: null,
+        rev: `fallback-${from}-${proof.audience}:${block.seq}`, source: 'fallback', backupFrom: from, backupMeta: null,
+        fallbackNote: `${e.viewer.kind === 'owner' ? '访客备用数据 · ' : ''}${from === 'cloud' ? '云端存的最后一份' : '上线时带的那份'} · 北京时间 ${stamp(block.at)}` });
       return;
     }
-    Object.assign(e, { at: new Date(at).toISOString(), rev: 'metadata-' + proof.audience, source: 'fallback',
-      fallbackNote: `公开备用包生成于北京时间 ${stamp(at)}，详情暂时读不到。` });
+    if (e.data !== null || !Number.isFinite(Date.parse(at)) || e.backupMeta?.from === 'cloud') return;
+    e.backupMeta = { from, at: new Date(at).toISOString() };
+    Object.assign(e, { at: e.backupMeta.at, rev: 'metadata-' + proof.audience, source: 'fallback',
+      fallbackNote: `${from === 'cloud' ? '云端' : '上线时带的那份'}只记了最后一份是北京时间 ${stamp(at)}，没存内容。` });
   }
+  const useCloud = e => e.cloud && useBackup(e, 'cloud', e.cloud.at, e.cloud.proof, e.cloud.packet);
   async function usePackagedCopy(e) {
-    if (fixture !== null || publicPaused || !offline() || e.withdrawn || e.link.reason === 'owner-read' || e.source === 'fallback') return;
+    if (fixture !== null || publicPaused || !backupPages || !confirmedOff() || e.withdrawn || e.link.reason === 'owner-read' || onBackup(e)) return;
     const failure = e.failure;
     if (!fallback) {
       // 发布时只换同版成品登记中的数据地址，页面脚本不随备用包换版。
@@ -692,8 +741,9 @@
         return fetch(address, options).then(json);
       }).catch(() => null).then(file => {
         const proof = file?.publication;
-        if (file?.metadata_only === true && proof?.policy === visitorPolicy && validAudience(proof.audience)) {
-          return { at: file.at, proof, resources: file.resources && typeof file.resources === 'object' ? file.resources : {} };
+        if (typeof file?.metadata_only === 'boolean' && proof?.policy === visitorPolicy && validAudience(proof.audience)) {
+          return { at: file.at, seq: file.seq, proof, content: file.metadata_only === false,
+            resources: file.resources && typeof file.resources === 'object' ? file.resources : {} };
         }
         if (fallback === request) fallback = null;
         return null;
@@ -701,14 +751,17 @@
       fallback = request;
     }
     const file = await fallback;
-    if (publicPaused || !failure || e.failure !== failure) return;
-    fallbackMetadata(e, file?.at, file?.proof, file?.resources?.[e.path] || null);
+    if (publicPaused || !failure || e.failure !== failure || !file) return;
+    // 按规范资源键取块，块要和整包同一代；旧包只有访客的计划任务名册带正文
+    const block = file.resources[e.path] || null;
+    const usable = block?.seq === file.seq && (file.content || e.viewer.kind === 'public' && e.path === 'tasks?scope=scheduled') ? block : null;
+    useBackup(e, 'release', block?.at || file.at, file.proof, usable);
   }
   async function useFallback(e, failure) {
     if (!offline()) return;
     await usePackagedCopy(e);
     if (fixture !== null || publicPaused || e.failure !== failure || e.token !== device() || itemDetail(e)) return;
-    if (e.source !== 'fallback' && Number.isFinite(Date.parse(e.at))) {
+    if (e.data !== null && e.source !== 'fallback' && Number.isFinite(Date.parse(e.at))) {
       const sameDay = dateFormat.format(Date.parse(e.at)) === dateFormat.format(Date.now());
       e.fallbackNote = `这是 ${sameDay ? time(e.at) : stamp(e.at)} 的旧数，现在读不到新的。`;
     }
@@ -774,11 +827,12 @@
       if (Number.isFinite(Date.parse(responseNow))) { e.now = new Date(responseNow).toISOString(); clockOffset = Date.parse(responseNow) - Date.now(); }
       const via = response.headers.get('X-Live-Connection');
       if (oss) {
-        failed(e, 503, null, via || 'unreachable');
+        failed(e, 503, null, via || 'unreachable', response.headers.get('X-Live-Host-Off-At'));
         restoreBrowserCopy(e);
-        if (fixture === null && body?.error === 'snapshot_metadata_only' && offline()) fallbackMetadata(e, body.at, {
-          policy: response.headers.get('X-Live-Fallback-Policy'), audience: response.headers.get('X-Live-Fallback-Audience')
-        });
+        // 云端那份：记下来，确认关机才用（带正文的是这一块的访客回包，旧包只有时刻）
+        e.cloud = fixture !== null ? null : { at: body?.at, packet: body?.error === 'snapshot_content' ? body : null,
+          proof: { policy: response.headers.get('X-Live-Fallback-Policy'), audience: response.headers.get('X-Live-Fallback-Audience') } };
+        useCloud(e);
         await retryFailure(e, retryCopy);
         if (obsolete()) return discarded();
         if (e.data !== null || offline()) settle(e);
@@ -786,13 +840,14 @@
       }
       e.status = response.status; e.error = '';
       if (response.status === 304) {
-        clearFailure(e); freshArrived(e); e.freshAt = Date.now(); e.missCount = 0; e.fallbackNote = '';
+        clearFailure(e); freshArrived(e); e.freshAt = Date.now(); e.missCount = 0; e.fallbackNote = ''; e.lagging = false; e.backupMeta = null;
         observedConnection(e, e.validatedLink?.basis === 'heartbeat' ? e.validatedLink : { state: 'online', basis: 'response' });
         e.source = fixture === null ? 'net' : 'fixture';
       } else if (response.ok) {
-        freshArrived(e); e.freshAt = Date.now(); e.missCount = 0;
+        freshArrived(e); e.freshAt = Date.now(); e.missCount = 0; e.lagging = false; e.backupMeta = null;
         if (!loadedRelease && fixture === null && isMain(e)) loadedRelease = releaseId();
         const wasFallback = e.source === 'fallback';
+        let renewed = false;
         // 公网回来的是弱标签 W/"live-…"；弱标签也要认出后台实例，否则后台重载后旧标签页停在旧数上
         const instance = /^(?:W\/)?"live-([a-f0-9]{16})-/.exec(response.headers.get('ETag'))?.[1];
         const viewer = body?.viewer;
@@ -816,16 +871,20 @@
           return emit(e);
         } else if (body?.data != null && (e.path !== ACCESS || response.status === 200) && (wasFallback || e.source === 'copy' ||
                    (instance && instance !== e.instance) || body.seq >= e.seq)) {
-          e.data = siteVisitScope(e, body.data); e.seq = body.seq; e.rev = body.rev; e.at = body.at;
+          e.data = siteVisitScope(e, body.data); e.seq = body.seq; e.rev = body.rev; e.at = body.at; renewed = true;
           if (e.path === ACCESS) e.dataRead = id;
           e.withdrawn = false;
           e.instance = instance;
           e.stale_after = body.stale_after; e.refresh_seconds = body.refresh_seconds;
         }
-        e.fallbackNote = '';
-        e.source = fixture === null ? 'net' : 'fixture';
-        if (e.path !== ACCESS || e.dataRead === id) e.etag = e.status === 403 ? null : response.headers.get('ETag');
-        save(e);
+        // 新的还没带正文（比如正在准备）：手上的备用那份接着标明是哪一份，不存进浏览器副本、不当在线读数
+        const keepBackup = wasFallback && !renewed && e.data !== null;
+        if (!keepBackup) {
+          e.fallbackNote = ''; e.backupFrom = null;
+          e.source = fixture === null ? 'net' : 'fixture';
+          if (e.path !== ACCESS || e.dataRead === id) e.etag = e.status === 403 ? null : response.headers.get('ETag');
+          save(e);
+        }
       } else {
         failed(e, response.status, body, via);
         if (![403, 404, 410].includes(response.status)) {

@@ -241,7 +241,7 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   const localStorage = {get length() {return stored.size;}, key: i => [...stored.keys()][i],
     getItem: key => stored.get(key), setItem: (key, value) => stored.set(key, value), removeItem: key => stored.delete(key)};
   const audience = 'a'.repeat(64);
-  let paused = false, offline = false, fallbackRead, packagedPolicy = 'policy-9';
+  let paused = false, offline = false, hostOff = false, fallbackRead, packagedPolicy = 'policy-9';
   const waits = [], lapse = () => waits.splice(0).forEach(fn => fn());
   const requested = [];
   const sandbox = {window: {}, location: new URL('https://wly0829.cn/live/'), URLSearchParams, Intl, Date, AbortSignal, clearTimeout,
@@ -259,12 +259,13 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
       }
       if (paused) return Response.json({error: 'live_public_paused'}, {status: 503});
       if (!offline) return Response.json({...packet, data: {text: 'safe'}});
+      const off = hostOff ? {'X-Live-Connection': 'host-off'} : {};
       if (url.endsWith('/projects')) {
         return Response.json({...packet, data: {text: 'stale-edge-body'}},
-          {headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-11'}});
+          {headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-11', ...off}});
       }
       return Response.json({error: 'snapshot_metadata_only', at, data: {text: 'stale-edge-body'}}, {status: 503,
-        headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-11', 'X-Live-Fallback-Audience': audience}});
+        headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-11', 'X-Live-Fallback-Audience': audience, ...off}});
     }};
   vm.runInNewContext(source, sandbox);
   const client = sandbox.window.Live, shown = [];
@@ -278,8 +279,16 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   await client.get('home'); lapse();
   const slow = await client.get('home');
   assert.equal(slow.data.text, 'safe'); assert.equal(slow.offline, false); assert.match(slow.fallbackNote, /这次刷新慢了，正在重读/);
-  // 浏览器真断网才算整页连不上：已经显示的访客数据留着、标上是几点的（本人 R12，M741）；没读到过的只用备用包的元数据
+  // 浏览器真断网才算整页连不上：已经显示的访客数据留着、标上是几点的（本人 R12，M741）；
+  // 没确认关机就不取云端、随站那两份（本人 11-24 20:34）
   sandbox.navigator = {onLine: false};
+  await client.get('home');
+  assert.equal((await client.get('projects')).data, null);
+  await fallbackRead();
+  assert.equal((await client.get('projects')).meta.rev, null);
+  assert.equal(requested.some(url => url === '/release-identity.json' || url.startsWith('https://assets.example.test/')), false);
+  // 确认关机（边缘读到云端那份记着已关机）才取随站那份；没读到过的只用备用包的元数据
+  delete sandbox.navigator; hostOff = true;
   await client.get('home');
   assert.equal((await client.get('projects')).data, null);
   await fallbackRead();
@@ -295,6 +304,7 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   const edge = await client.get('home');
   assert.equal(edge.offline, true); assert.equal(edge.data.text, 'safe');
   assert.match(edge.text, / · 下面是 .+ 的数据。$/);
+  assert.equal(edge.conn.stage, 'off'); assert.match(edge.conn.at, /下面是这台浏览器存的最后一份/);
   assert.deepEqual(shown, ['safe']);
   paused = true;
   assert.equal((await client.get('home')).publicPaused, true);
