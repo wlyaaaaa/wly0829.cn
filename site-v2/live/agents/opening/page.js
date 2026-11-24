@@ -211,8 +211,8 @@
     return `<aside class="tp-panel op-side"><h2>三家比一比</h2>${m.hosts.map(h => `<button type="button" class="op-cmp" data-family="${h.id}" data-host="${h.id}" aria-pressed="${h.id === family}">
       <span class="op-cmp__name"><i class="tp-swatch"></i>${h.name}</span>
       <span class="op-cmp__num">${h.present ? `${words(h.characters)} · 只它有的 ${h.only.length} 段` : '这一轮没读到'}</span>
-      ${h.only.length ? `<span class="op-cmp__only">${h.only.map(s => esc(cut(s, 22))).join('<br>')}</span>` : ''}
-      ${h.current === false ? `<span class="op-cmp__only op-warn">${esc(h.version || '')} 不是当前版</span>` : ''}</button>`).join('')}</aside>`;
+      ${h.only.length ? `<span class="op-cmp__only">${h.only.map(s => esc(cut(s, 22))).join('<br>')}</span>` : ''}</button>
+      ${h.current === false ? `<p class="op-cmp__ver op-warn" data-host="${h.id}">${h.version ? `${link(m.rulesHref, esc(h.version))} ` : ''}不是当前版</p>` : ''}`).join('')}</aside>`;
   }
   function charterOnly(m) {
     return `<div class="tp-panel op-main"><p class="tp-note" data-tone="off">这一轮只读到规则页的正文${m.charter?.version ? `（${link(m.rulesHref, esc(m.charter.version))}）` : ''}，三家开场页的原文没读到。</p>
