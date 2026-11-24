@@ -903,10 +903,11 @@
     const trafficTime = traffic?.to && `${offline || oldReading(traffic) ? '上次截至' : '截至'} ${recordStamp(traffic.to)}`;
     const memorySpec = U.memorySpec?.(d?.hardware?.memory ?? d?.memory?.spec, d?.hardware?.source_at);   // 频率、时序、同步：回包里有才写（M654）
     const rows = [
-      ['CPU', withReadings(pair(m.cpu, temperature), ['占用', m.cpu], ['温度', cpu, screen?.cpu_at]), m.cpu],
-      ['显卡', withReadings(pair(m.gpu, val(m['gpu-temp'], x => quantity(x, 'value', fmtTemp))), ['占用', m.gpu], ['温度', m['gpu-temp']])],
+      // CPU、显卡、内存三行和下面几行一样整行能点：名字后带“ ›”，读数整块是链接，到电脑页“CPU 和显卡”“内存”那一组（M708）
+      ['CPU', withReadings(pair(m.cpu, temperature), ['占用', m.cpu], ['温度', cpu, screen?.cpu_at]), m.cpu, '/live/computer/#grp-cpu'],
+      ['显卡', withReadings(pair(m.gpu, val(m['gpu-temp'], x => quantity(x, 'value', fmtTemp))), ['占用', m.gpu], ['温度', m['gpu-temp']]), null, '/live/computer/#grp-cpu'],
       ['内存', (text => text && memorySpec ? `${text}<small>${memorySpec.split(' · ').map(part => `<span class="live-unit">${esc(part)}</span>`).join(' · ')}</small>` : text)(withReadings(used != null || total != null ? `用了 ${U.nowrap(quantity(m.memory, 'value', U.gb))} · ${U.nowrap(`共 ${quantity(m['memory-total'], 'value', U.gb)}`)}` : null,
-        ['已用', m.memory], ['总容量', m['memory-total']]))],
+        ['已用', m.memory], ['总容量', m['memory-total']])), null, '/live/computer/#grp-memory'],
       ['最紧的盘', val(m['disk-free'], x => { const label = x.note || (x.drive ? sp(x.drive).replace(/([A-Za-z]):?\s*(?:盘)?/g, '$1 盘') : x.label === '最紧的盘' ? '' : typeof x.label === 'string' ? x.label.replace(/剩余$/, '') : x.label) || ''; const growth = diskGrowth(x); return `<span class="disk-note">${U.fieldHtml(label, { name: '磁盘', kind: viewer })}</span> 还剩 ${U.nowrap(quantity(x, 'value', U.gb))}${diskTime ? `<small>${esc(diskTime)}</small>` : ''}${growth ? `<small>${U.nowrap(growth)}</small>` : ''}`; }), diskFree, '/live/storage/'],
       ['近 7 天占空间涨得最多', growthReading, false, '/live/storage/'],
       ['海外流量', traffic ? U.nowrap(trafficText) + (traffic.hour_bytes != null ? ` <span class="traffic-hour">${U.nowrap(`近一小时 ${quantity(traffic, 'hour_bytes', trafficBytes)}`)}</span>` : '') + (trafficTime ? `<small>${esc(trafficTime)}</small>` : '') + (traffic.q === 'partial' && traffic.gap ? `<small>${U.fieldHtml(traffic.gap, { name: '流量说明', kind: viewer })}</small>` : '') : null, false, '/live/traffic/'],
@@ -987,9 +988,11 @@
     ];
     U.html(p.kv, unknown ? '' : rows.map(([label, html, ids, status]) => {
       const warn = ['amber', 'red'].includes(U.status(status).tone), cutoff = readingTimes(ids);
-      const group = { 上网: 'network', 存储: 'storage', 内存: 'storage' }[label];
-      const title = group ? `<a href="${esc(href('phone'))}#grp-${group}">${label} ›</a>` : label;
-      return `<div class="kv__row">${lamp(status)}<dt>${title}</dt><dd>${html}${cutoff ? ` <small>${cutoff}</small>` : ''}${warn ? U.actions({ id: `phone-${ids[0]}`, text: `${label} ${sp(html.replace(/<[^>]*>/g, ''))}` }, [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : ''}</dd></div>`;
+      // 每行和电脑卡能点的行一个样子：名字后带“ ›”，读数整块是链接、整行能点，到手机页对应那一组；“问情况”按钮放在链接外面（M708）
+      const group = { 电量: 'battery', 上网: 'network', 存储: 'storage', 内存: 'storage' }[label] || (ids.includes('screen_on') ? 'usage' : '');
+      const title = group ? `<span class="kv__label">${esc(label)} ›</span>` : esc(label);
+      const reading = `${html}${cutoff ? ` <small>${cutoff}</small>` : ''}`;
+      return `<div class="kv__row">${lamp(status)}<dt>${title}</dt><dd>${group ? `<a class="kv__link" href="${esc(href('phone'))}#grp-${group}" aria-label="${esc(label)}，查看详情">${reading}</a>` : reading}${warn ? U.actions({ id: `phone-${ids[0]}`, text: `${label} ${sp(html.replace(/<[^>]*>/g, ''))}` }, [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : ''}</dd></div>`;
     }).join(''));
     const received = d?.received;
     const reason = offline ? d.offline?.cause : received?.gap?.text || (!(batteryHot || storageHot) && ['yellow', 'red'].includes(d?.level) ? d?.reason : null);
