@@ -2,6 +2,9 @@
 .ag-hhead { align-items: flex-start; }
 .ag-hhead h2 small { white-space: nowrap; }
 .ag-hside { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex: none; }
+/* 时间那排选中的照本人点头的样子图：绿底白字（页面现成的强调绿），不用灰底里一块白 */
+.ag-hseg-pick button[aria-pressed="true"] { background: var(--tp-green); color: #fff; box-shadow: none; }
+.ag-hseg-pick button[aria-pressed="true"]:hover { color: #fff; }
 .ag-hgrid-wrap { grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 28px; align-items: start; }
 .ag-hgrid-wrap > * + * { border-left: 1px solid var(--tp-hair); padding-left: 26px; }
 .ag-hgrid-wrap.is-one { grid-template-columns: 380px minmax(0, 1fr); align-items: center; }
