@@ -100,8 +100,7 @@
     const lampOnly = parseFloat(br.paddingLeft) + parseFloat(br.paddingRight) + lamp.offsetWidth;
     const named = lampOnly + NAME_GAP + w;
     let next = 'center';
-    // 居中时站名和两边按钮之间也至少留 12（实况页右边多了“看公开版”，1440 宽贴得太近就往空的一边让）
-    if (2 * Math.max(left, right) + named + gaps > room) next = left + named + right + gaps <= room ? 'tight' : left + lampOnly + right + gaps <= room ? 'lamp' : 'zoom';
+    if (2 * Math.max(left, right) + named > room) next = left + named + right + gaps <= room ? 'tight' : left + lampOnly + right + gaps <= room ? 'lamp' : 'zoom';
     if (next === 'zoom') bar.style.setProperty('--fit-zoom', Math.max(.5, (room + frame) / (left + lampOnly + right + gaps + frame)).toFixed(3));
     else bar.style.removeProperty('--fit-zoom');
     if (bar.dataset.fit === next) return;
