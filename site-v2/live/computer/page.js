@@ -701,7 +701,9 @@
       if (one.latest_instant_at) return `图上最高 ${Chart.value(s.max, s.unit)}（${when}），各点平均 ${average} · ${ending}，此前为${bucket(one)}${one.minute_mean_end ? `（${bucket(one)}送到 ${U.time(one.minute_mean_end)}，之后的还没送来）` : ''}`;
       return `${bucket(one)}最高 ${Chart.value(s.max, s.unit)}（${when}），平均 ${average} · 曲线记录至 ${U.time(last)}`;
     }
-    return typeof s.label === 'object' ? s.label : [`${c.lines.length > 1 ? s.label || '' : ''}最高 ${Chart.value(s.max, s.unit)}（${when}），平均 ${average}`, coverage].filter(Boolean).join(' · ');
+    const jitter = one?.id === 'net-ping' && sums.find(x => x.id === 'net-jitter' && x.max > s.max);
+    return typeof s.label === 'object' ? s.label : [`${c.lines.length > 1 ? s.label || '' : ''}最高 ${Chart.value(s.max, s.unit)}（${when}），平均 ${average}`,
+      jitter && `抖动最高 ${Chart.value(jitter.max, jitter.unit)}`, coverage].filter(Boolean).join(' · ');
   }
   const weaveCard = $('weave-card');
   // 上面的读数卡增减时，留住正在看的短期曲线。

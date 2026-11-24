@@ -134,7 +134,8 @@
     return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p;
   }
   function scale(lo, hi, { floor, ceil, unit, labelled, lines = 4 }) {
-    if (unit === 'GB' && lo >= 0 && hi < .01) return { min: 0, max: .01, ticks: [0, .01] };
+    const upper = labelled && ceil == null && unit !== '%' && hi > 0 ? hi * 1.1 : Infinity;
+    if (unit === 'GB' && lo >= 0 && hi < .01 && upper >= .01) return { min: 0, max: .01, ticks: [0, .01] };
     const integerBatches = unit === '批' && ceil == null;
     let min = floor === 'auto' ? lo - (hi - lo) * .3 : 0;
     if (lo >= 0 && min < 0) min = 0;
@@ -155,6 +156,13 @@
       const top = Math.min(ceil ?? Infinity, Math.ceil(hi / step) * step);
       if (top > (ticks.at(-1) ?? -Infinity)) ticks.push(top);
       max = Math.max(max, top);
+    }
+    if (max > upper) {
+      // 只有原刻度偏高才改。顶格贴近峰值，给字留一个完整的格距。
+      const precision = 10 ** Math.floor(Math.log10(hi / big / 25)) * big;
+      max = Math.min(upper, Math.ceil((hi + precision * 1e-8) / precision) * precision);
+      while (ticks.length && ticks.at(-1) > max - (max - min) * .08) ticks.pop();
+      ticks.push(max);
     }
     return { min, max, ticks };
   }
