@@ -80,10 +80,24 @@
   const SIZES = [['small', '小单'], ['medium', '中单'], ['large', '大单']];
 
   let state, viewer = 'public', expanded = null, period = 'all';
+  // 看哪一家：null 是“全部”（三家都看）。本人 11-24 13:00：“三个可点默认全部”“智能体页永远是打开默认全部，只要不点”——
+  // 只放在内存里，不写网址、不写本地存储，刷新、重开都回到全部。页顶、各块图例、三家那几行点哪一处都改这同一个，整页一起跟着变。
+  let only = null;
   const modelsOpen = new Set();  // 哪几家的型号清单展开了全部
   const drawn = new Set();       // 图只在第一次出现时描线、长柱
   const cellsBefore = new Map(); // 钩子格上一轮的次数：变了闪一下
   const F = (v, name) => field(v, viewer, name);
+  const shown = () => only ? HOSTS.filter(h => h.id === only) : HOSTS;
+  const dim = id => only && id !== only ? ' ag-dim' : '';   // 只看一家时，别家的卡、行、列变淡
+  const dimAttr = id => only && id !== only ? ' class="ag-dim"' : '';
+  const ruleVer = (v, label = esc(v), cls) => v ? link('/rules/', label, cls) : '';   // 规矩版本号点了去规则页（本人 11-24：“规则E多少多少可以跳转到规则页”）
+  // 页顶那一排：全部｜Claude｜Codex｜Antigravity，和本页切时段的按钮同一种样子，一眼看得出能点
+  const picker = () => `<div class="tp-seg ag-pick" role="group" aria-label="看哪一家"><button type="button" data-only="all" aria-pressed="${!only}">全部</button>${HOSTS.map(h =>
+    `<button type="button" data-only="${h.id}" style="--host:${h.color}" aria-pressed="${only === h.id}"><i class="tp-swatch"></i>${h.name}</button>`).join('')}</div>`;
+  // 各块的图例：全部 + 三家，点一家整页只看它，再点一次或点“全部”回到三家
+  const chips = (hint = true) => `<p class="ag-mlegend"><button type="button" class="ag-chip ag-chip--all${only ? '' : ' is-on'}" data-only="all" aria-pressed="${!only}">全部</button>${HOSTS.map(h =>
+    `<button type="button" class="ag-chip${only === h.id ? ' is-on' : only ? ' is-off' : ''}" data-pick="${h.id}" aria-pressed="${only === h.id}" style="--host:${h.color}"><i class="tp-swatch"></i>${h.name}</button>`).join('')}
+    ${hint ? `<span class="ag-mhint">${only ? `整页只看 ${HOSTS.find(h => h.id === only).name}，按它自己的数画 · 再点一次或点“全部”回到三家` : '点一家，整页只看它'}</span>` : ''}</p>`;
   const hostData = (d, h) => d.hosts?.[h.name] || {};
   const keyOf = hook => String(hook.key || '').replace(/:external$/, '');
   const nameOf = hook => F(hook.title, '钩子名称') || esc(NAMES[keyOf(hook)] || keyOf(hook) || '额外配置的回调');
@@ -95,7 +109,7 @@
     const x = hostData(d, h), rows = [];
     const add = (ok, good, bad, extra = {}) => rows.push({ ok, text: ok === false ? bad : good, ...extra });
     const entry = x.entry || {};
-    add(entry.current ?? null, `开场读到的规矩是当前版 ${entry.version || ''}`, `开场读到的规矩不是当前版 ${entry.version || ''}`);
+    add(entry.current ?? null, `开场读到的规矩是当前版 ${entry.version || ''}`, `开场读到的规矩不是当前版 ${entry.version || ''}`, entry.version ? { href: '/rules/' } : {});
     if (h.id !== 'antigravity') {
       const off = x.memory === false && Object.values(x.memory_options || {}).every(v => v !== true);
       add(x.memory === true ? false : x.memory === false ? off : null, '自带记忆关着', '自带记忆开着，和规矩不一样');
@@ -129,13 +143,12 @@
     const fix = owner || !(c.fail.length || issues.length) ? ''
       : `<p class="ag-fix">${lead ? fixLink(lead, fixText(lead)) : '还没人接手'}</p>`;
     const stats = d.hook_stats?.totals?.[h.id] || {};
-    return `<article class="ag-score tp-flashable" data-host="${h.id}">
-      <header><span>${h.name}</span><small>${[x.entry?.version && `规矩 ${esc(x.entry.version)}`, known(stats.installed) && `钩子装着 ${stats.installed} 条 · 定稿 ${stats.expected} 条`].filter(Boolean).join(' · ')}</small></header>
+    return `<article class="ag-score tp-flashable${dim(h.id)}" data-host="${h.id}">
+      <header><span>${h.name}</span><small>${[x.entry?.version && ruleVer(x.entry.version, `规矩 ${esc(x.entry.version)}`, 'ag-rulever'), known(stats.installed) && `钩子装着 ${stats.installed} 条 · 定稿 ${stats.expected} 条`].filter(Boolean).join(' · ')}</small></header>
       <div class="ag-score__main"><div><p class="ag-score__word" data-tone="${tone}">${word}</p>${fix}
         <p class="tp-small">${c.fail.length ? `${c.total} 项里 ${c.pass} 项照规矩` : `${c.total} 项都照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
         ${T.ring(c.pass, c.total, { color: ringColor })}</div>
-      ${list1 ? `<ul class="ag-diff">${list1}</ul>` : '<p class="ag-ok">规矩、记忆、审批和钩子都和定稿一样。</p>'}
-      <p class="ag-backwork">${link(`/live/automation/?family=${h.id}`, '看它的后台工作 ›')}</p></article>`;
+      ${list1 ? `<ul class="ag-diff">${list1}</ul>` : '<p class="ag-ok">规矩、记忆、审批和钩子都和定稿一样。</p>'}</article>`;
   }
   function statusSection(d) {
     return `<section class="tp-panel" id="status"><div class="tp-panel__head"><h2>三家现在管得对不对</h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
@@ -151,7 +164,7 @@
       const e = stats(d, h).estimate || {};
       const body = missing(d, h) || !e.samples ? `<p class="tp-mid" data-tone="off">${esc(missing(d, h) ? '还没采上' : '没有完工记录')}</p>`
         : `<p class="tp-big">${big(e.accuracy * 100, 'acc-' + h.id)}<small>%</small></p><p class="tp-small">按时 <b>${pct(e.on_time)}</b> · ${int(e.samples)} 件</p>`;
-      return `<div class="ag-acc__row" data-host="${h.id}"><span class="tp-hostname">${h.name}</span><div>${body}</div></div>`;
+      return `<div class="ag-acc__row${dim(h.id)}" data-host="${h.id}"><span class="tp-hostname">${h.name}</span><div>${body}</div></div>`;
     }).join('')}</div>`;
   }
   function ratioPlot(d) {
@@ -168,10 +181,11 @@
     SIZES.forEach(([size, label], i) => {
       const y0 = rowY(i);
       out += `<text x="${pad.l - 10}" y="${y0 + 4}" text-anchor="end" style="font-size:12.5px;fill:#3d3d3a;font-weight:700">${label}</text><line class="tp-gridline" x1="${pad.l}" x2="${pad.l + w}" y1="${y0}" y2="${y0}"/>`;
-      HOSTS.forEach((hh, j) => {
+      const hosts = shown();
+      hosts.forEach((hh, j) => {
         const r = stats(d, hh).estimate?.size_ratios?.[size];
         if (!r?.samples || !known(r.actual_over_estimate) || missing(d, hh)) return;
-        const y = y0 + (j - 1) * 13, v = r.actual_over_estimate;
+        const y = y0 + (hosts.length === 1 ? 0 : (j - 1) * 13), v = r.actual_over_estimate;
         if (known(r.p25) && known(r.p75)) out += `<line x1="${x(r.p25)}" x2="${x(r.p75)}" y1="${y}" y2="${y}" stroke="${hh.color}" stroke-width="3" stroke-linecap="round" opacity=".45"/>`;
         out += `<circle cx="${x(v)}" cy="${y}" r="5.5" fill="${hh.color}" stroke="#fff" stroke-width="1.5"/><text x="${x(v) + 9}" y="${y + 4}" style="font-weight:700;fill:#3d3d3a">${dec(v, 2)}×</text>`;
       });
@@ -184,32 +198,35 @@
   }
   function trend(d) {
     const labels = weekLabels(d);
-    const series = HOSTS.filter(h => !missing(d, h)).map(h => ({ color: h.color, values: list(stats(d, h).weeks).map(w => w.estimate?.samples >= 3 ? w.estimate.accuracy : null) }));
-    const thin = HOSTS.filter(h => !missing(d, h)).map(h => ({ h, w: list(stats(d, h).weeks).at(-1) })).filter(({ w }) => w && w.estimate?.samples > 0 && w.estimate.samples < 3);
+    const series = shown().filter(h => !missing(d, h)).map(h => ({ color: h.color, values: list(stats(d, h).weeks).map(w => w.estimate?.samples >= 3 ? w.estimate.accuracy : null) }));
+    const thin = shown().filter(h => !missing(d, h)).map(h => ({ h, w: list(stats(d, h).weeks).at(-1) })).filter(({ w }) => w && w.estimate?.samples > 0 && w.estimate.samples < 3);
     return labels.length ? T.line({ series, labels, width: 470, height: 214, max: 1, draw: firstTime('trend') })
       + `<p class="tp-small">一周完工不到 3 件的不画点${thin.length ? `：这周 ${thin.map(({ h, w }) => `${h.name} ${w.estimate.samples} 件`).join('、')}` : ''}。</p>` : '<p class="tp-empty">还没有按周的记录。</p>';
   }
   function reasons(d) {
-    const hosts = HOSTS.filter(h => !missing(d, h));
+    const hosts = shown().filter(h => !missing(d, h));
     const rows = REASONS.map(([key, label]) => ({ label, parts: hosts.map(h => ({ h, n: stats(d, h).estimate?.overtime_reasons?.[key] || 0 })) }));
     const other = hosts.reduce((s, h) => { const r = stats(d, h).estimate?.overtime_reasons || {}; return s + (r.other || 0) + (r.unknown || 0); }, 0);
     const total = hosts.reduce((s, h) => s + (stats(d, h).estimate?.overtime_reasons?.overdue || 0), 0);
     const max = Math.max(1, ...rows.map(r => r.parts.reduce((s, p) => s + p.n, 0)));
-    return `<p class="tp-sub">超时原因 <small>超时共 ${int(total)} 件；“中途加需求”可能和别的原因同时算${other ? `，另有 ${int(other)} 件没写或写了别的原因` : ''}</small></p>
+    return `<p class="tp-sub">超时原因 <small>${only ? `${hosts[0]?.name || ''} ` : ''}超时共 ${int(total)} 件；“中途加需求”可能和别的原因同时算${other ? `，另有 ${int(other)} 件没写或写了别的原因` : ''}</small></p>
       <div class="tp-bars">${rows.map(r => { const sum = r.parts.reduce((s, p) => s + p.n, 0); return `<div class="tp-bar"><span>${r.label}</span>
         <span class="tp-bar__track"><span class="ag-stack" style="width:${sum / max * 100}%">${r.parts.filter(p => p.n).map(p => `<span class="tp-bar__fill" style="--fill:${p.h.color};flex:${p.n}">${p.n}</span>`).join('')}</span></span>
         <span class="tp-bar__num">${int(sum)}</span></div>`; }).join('')}</div>
-      <p class="tp-legend ag-legend">${hosts.map(h => `<span data-host="${h.id}"><i class="tp-swatch"></i>${h.name}</span>`).join('')}</p>`;
+      ${chips()}`;
   }
   // 三种估法各对上几件。本人 11-23：先别写“谁更准”；原来的“程序 29%”其实是“全按中等大小算”的对照，不是开工时程序真推荐的。
   // 读后台 work_stats.estimate_baselines：{ scope, samples, rows:[{id, hits, samples, basis}], hosts:{<家>:{rows}} }，
   // id 是 all_medium（全按中等大小算的对照）、program_at_start（开工时程序推荐的）、ai_reported（实际报给本人的）。没出数时写“在核”，不下结论。
   const BASES = [['program_at_start', '开工时程序推荐的'], ['ai_reported', `实际报给${'{you}'}的`], ['all_medium', '全按中等大小算（对照）']];
   function compare(d) {
-    const b = d.work_stats?.estimate_baselines, rows = list(b?.rows);
+    const b = d.work_stats?.estimate_baselines;
     const name = label => label.replace('{you}', T.you(viewer));
     const find = (list_, id) => list(list_).find(r => r.id === id);
-    const ready = BASES.every(([id]) => { const r = find(rows, id); return r && known(r.hits) && known(r.samples) && r.samples > 0; });
+    const ok = rs => BASES.every(([id]) => { const r = find(rs, id); return r && known(r.hits) && known(r.samples) && r.samples > 0; });
+    // 只看一家时换成这一家自己的三个数（后台 hosts.<家>.rows）；这一家没出数就照旧写三家合起来的
+    const mine = only && ok(b?.hosts?.[only]?.rows) ? b.hosts[only].rows : null, rows = mine || list(b?.rows);
+    const ready = ok(rows);
     if (!ready) {
       return `<p class="tp-sub">三种估法各对上几件 <small>对照口径在核</small></p>
         <div class="ag-bases">${BASES.map(([, label]) => `<p><span>${esc(name(label))}</span><b class="tp-fog">在核</b></p>`).join('')}</div>
@@ -225,10 +242,11 @@
       : close ? `开工时程序推荐的和实际报的差不多：${int(p.hits)} 件对 ${int(a.hits)} 件。`
       : `同一批 ${int(p.samples)} 件里，实际报的比程序推荐的${gap > 0 ? '多' : '少'}对上 ${int(Math.abs(gap))} 件（${int(a.hits)} 对 ${int(p.hits)}）。`;
     const per = HOSTS.map(h => ({ h, r: b.hosts?.[h.id]?.rows })).filter(x => BASES.every(([id]) => known(find(x.r, id)?.hits)));
-    return `<p class="tp-sub">三种估法各对上几件 <small>${b.scope ? F(b.scope, '口径') : `同一批 ${int(p.samples)} 件`}，落在允许范围内算对上${b.at ? ` · 截至 ${esc(when(b.at))}` : ''}</small></p>
+    const scope = mine ? `${HOSTS.find(h => h.id === only).name} 的 ${int(p.samples)} 件` : only ? `${HOSTS.find(h => h.id === only).name} 单独的数还没出，这里是三家合起来的` : b.scope ? F(b.scope, '口径') : `同一批 ${int(p.samples)} 件`;
+    return `<p class="tp-sub">三种估法各对上几件 <small>${scope}，落在允许范围内算对上${b.at ? ` · 截至 ${esc(when(b.at))}` : ''}</small></p>
       <div class="tp-bars">${BASES.map(bar).join('')}</div>
       <p class="ag-say">${say}</p>
-      ${per.length ? `<p class="tp-small">${per.map(({ h, r }) => `<span data-host="${h.id}" class="tp-hostname">${h.name}</span> ${BASES.map(([id, label]) => `${esc(name(label).replace('（对照）', ''))} ${int(find(r, id).hits)}/${int(find(r, id).samples)}`).join(' · ')}`).join('<br>')}</p>` : ''}
+      ${per.length ? `<p class="tp-small">${per.map(({ h, r }) => `<span class="ag-perhost${dim(h.id)}"><span data-host="${h.id}" class="tp-hostname">${h.name}</span> ${BASES.map(([id, label]) => `${esc(name(label).replace('（对照）', ''))} ${int(find(r, id).hits)}/${int(find(r, id).samples)}`).join(' · ')}</span>`).join('<br>')}</p>` : ''}
       <p class="tp-small">“全按中等大小算”只是对照：假设每件都按中等估，不是程序开工时真给的数。</p>`;
   }
   function estimateSection(d) {
@@ -268,7 +286,7 @@
     // 型号是普通清单，不做成像按钮的圆角小签；超过 4 种的“另 N 种”是真按钮，就地展开全部、再点收起（本人 11-23 23:53：“这种怎么都按不了？”）
     const open = modelsOpen.has(h.id), shown = open ? models : models.slice(0, 4);
     const more = models.length > 4 ? `<button type="button" class="ag-more" data-models="${h.id}" aria-expanded="${open}">${open ? '收起' : `另 ${models.length - 4} 种`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
-    return `<article class="ag-work" data-host="${h.id}"><header>${h.name}</header>
+    return `<article class="ag-work${dim(h.id)}" data-host="${h.id}"><header>${h.name}</header>
       ${cell('开工', w.starts, '件', 'starts')}${cell('总工时', known(w.actual_minutes) ? w.actual_minutes / 60 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
       <div class="ag-modelbox"><p class="ag-models__head">派出去的单按型号 · 档位分</p>${shown.length ? `<ul class="ag-models">${shown.map(m => `<li><span>${esc(MODEL(m.model))} · ${esc(m.effort)}</span><b>${int(m.count)}</b></li>`).join('')}</ul>` : '<p class="tp-muted ag-models__none">没有派单</p>'}${more}</div>
       ${lost ? '<p class="tp-small">开工和工时这一家还没采上，派单数是派活工具记的。</p>' : ''}</article>`;
@@ -281,11 +299,12 @@
     const first = weeks[0]?.week_start;
     const seg = `<div class="tp-seg" role="group" aria-label="看哪一段">${[['all', first ? `全部 · ${T.day(first + 'T00:00:00+08:00')} 起` : '全部'], ...weeks.map((w, i) => [w.week_start, labels[i]])]
       .map(([id, label]) => `<button type="button" data-period="${esc(id)}" aria-pressed="${period === id}">${esc(label)}</button>`).join('')}</div>`;
-    const rows = weeks.map((w, i) => ({ label: labels[i], parts: HOSTS.filter(h => !missing(d, h)).map(h => ({ color: h.color, value: (list(stats(d, h).weeks)[i]?.work?.actual_minutes || 0) / 60 })) }));
+    // 只看一家时柱子只画这一家、按它自己的数定高（Antigravity 叠在三家里几乎看不见），图例点哪家整页跟着变（本人 11-24：“三家各干了多少活右下角不能点”）
+    const rows = weeks.map((w, i) => ({ label: labels[i], parts: shown().filter(h => !missing(d, h)).map(h => ({ color: h.color, value: (list(stats(d, h).weeks)[i]?.work?.actual_minutes || 0) / 60 })) }));
     const highlight = period === 'all' ? -1 : weeks.findIndex(w => w.week_start === period);
     return `<section class="tp-panel" id="work"><div class="tp-panel__head"><h2>三家各干了多少活<small>按每次开工算，派出去的单不算摘一句</small></h2>${seg}</div>
       <div class="tp-grid ag-workgrid"><div class="tp-grid ag-works">${HOSTS.map(h => workCard(d, h)).join('')}</div>
-      <div><p class="tp-sub">按周比 · 工时（小时）</p>${columns(rows, highlight)}<p class="tp-legend">${HOSTS.filter(h => !missing(d, h)).map(h => `<span data-host="${h.id}"><i class="tp-swatch"></i>${h.name}</span>`).join('')}</p></div></div></section>`;
+      <div><p class="tp-sub">按周比 · 工时（小时）</p>${columns(rows, highlight)}${chips()}</div></div></section>`;
   }
   const columns = (rows, highlight) => T.columns({ rows, width: 440, height: 236, fmt: v => v >= 10 ? int(v) : dec(v), grow: firstTime('cols'), highlight });
 
@@ -295,9 +314,10 @@
     const out = [];
     cells.forEach((c, i) => { const last = out.at(-1); if (last && last.html === c && !diff[i] && !last.diff) last.span++; else out.push({ html: c, span: 1, diff: diff[i], from: i }); });
     const same = c => c.span === HOSTS.length ? '三家一样' : `${HOSTS.slice(c.from, c.from + c.span).map(h => h.name).join('、')} 一样`;
+    const off = c => only && !HOSTS.slice(c.from, c.from + c.span).some(h => h.id === only) ? ' ag-dim' : '';
     return `<tr><th scope="row">${label}${note ? `<small>${note}</small>` : ''}</th>${out.map(c => c.span > 1
-      ? `<td colspan="${c.span}" class="ag-same"><span class="ag-same__who">${same(c)}</span>${c.html}</td>`
-      : `<td${c.diff ? ' class="is-diff"' : ''}>${c.html}</td>`).join('')}</tr>`;
+      ? `<td colspan="${c.span}" class="ag-same${off(c)}"><span class="ag-same__who">${same(c)}</span>${c.html}</td>`
+      : `<td${c.diff || off(c) ? ` class="${[c.diff && 'is-diff', off(c).trim()].filter(Boolean).join(' ')}"` : ''}>${c.html}</td>`).join('')}</tr>`;
   }
   function configSection(d) {
     const x = h => hostData(d, h);
@@ -310,7 +330,7 @@
       : h.id === 'codex' ? (known(x(h).compact_tokens) ? `到 ${dec(x(h).compact_tokens / 10000)} 万 token 压缩${known(x(h).context_window) ? `<small>配的窗口是 ${dec(x(h).context_window / 10000)} 万，压缩线更低</small>` : ''}` : '没读到')
       : '无法设置<small>宿主不公开压缩线，也没有压缩当口</small>';
     const waits = HOSTS.map(h => x(h).waits_for_owner === false || /EAGER/.test(String(x(h).approval || '')));
-    const version = entries.map(e => e.current === true ? `${esc(e.version || '')} 当前版` : e.current === false ? `不是当前版 ${esc(e.version || '')}` : '没读到');
+    const version = entries.map(e => e.current === true ? `${ruleVer(e.version)} 当前版` : e.current === false ? `不是当前版 ${ruleVer(e.version)}` : '没读到');
     const rows = [
       row('开场先读的规矩', version, { diff: entries.map(e => e.current === false) }),
       // 开场页那一格点进开场页，直接落在这一家（本人 11-24 01:36 定 FEDQ2 选 A）
@@ -324,7 +344,7 @@
     ];
     const codexReview = x(HOSTS[1]).reviewer === 'auto_review';
     return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
-      <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead>
+      <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead>
       <tbody>${rows.join('')}</tbody></table>
       <p class="tp-small ag-foot">${codexReview ? 'Codex 遇到要批准的，由它自带的审核模型代批，不找人。' : ''}规矩原文在${link('/rules/', '规则页 ›')}</p></section>`;
   }
@@ -336,7 +356,7 @@
     const max = Math.max(1, ...HOSTS.flatMap(hh => STATIONS.map(([s]) => d.hook_stats?.cells?.[s]?.[hh.id]?.runs).filter(known)));
     if (!hooks.length) {
       const why = ABSENT[h.id]?.[station] || (station === 'compact' && h.id === 'antigravity' && U.fieldText(hostData(d, h).unavailable_hooks?.pre_compact, viewer)) || '这个当口没装钩子';
-      return `<td class="ag-heat ag-heat--none">${esc(why)}</td>`;
+      return `<td class="ag-heat ag-heat--none${dim(h.id)}">${esc(why)}</td>`;
     }
     const heat = known(cell.runs) && cell.runs > 0 ? Math.log10(cell.runs + 1) / Math.log10(max + 1) : 0;
     const key = `${station}/${h.id}`, before = cellsBefore.get(key);
@@ -346,7 +366,7 @@
     const badges = [known(cell.blocked) && cell.blocked > 0 && `<span class="ag-badge" data-tone="repair">拦 ${int(cell.blocked)}</span>`,
       known(cell.errors) && cell.errors > 0 && `<span class="ag-badge" data-tone="bad">错 ${int(cell.errors)}</span>`].filter(Boolean).join('');
     void total;
-    return `<td class="ag-heat${flash}" style="--heat:${(.05 + heat * .38).toFixed(3)}" data-host="${h.id}"><button type="button" data-cell="${key}" aria-expanded="${expanded === key}" aria-controls="hook-detail-${station}">
+    return `<td class="ag-heat${flash}${dim(h.id)}" style="--heat:${(.05 + heat * .38).toFixed(3)}" data-host="${h.id}"><button type="button" data-cell="${key}" aria-expanded="${expanded === key}" aria-controls="hook-detail-${station}">
       <span>${hooks.length} 条 · ${runs}${known(cell.median_ms) ? ` · ${ms(cell.median_ms)}` : ''}</span>${badges}<span class="tp-chev" aria-hidden="true">${expanded === key ? '收起' : ''}</span></button></td>`;
   }
   function ruleLink(rule) {
@@ -377,11 +397,11 @@
       const t = totals[h.id] || {};
       const parts = [`${int(t.hooks)} 条`, known(t.runs) ? `跑 ${big(t.runs, 'hooks-' + h.id)} 次` : '次数还没采上', known(t.median_ms) && `中位 ${ms(t.median_ms)}`,
         known(t.blocked) ? `拦 ${int(t.blocked)} 次` : '', known(t.errors) ? `出错 ${int(t.errors)} 次` : ''].filter(Boolean);
-      return `<p class="ag-hooktotal" data-host="${h.id}"><span class="tp-hostname">${h.name}</span>${parts.join(' · ')}</p>`;
+      return `<p class="ag-hooktotal${dim(h.id)}" data-host="${h.id}"><span class="tp-hostname">${h.name}</span>${parts.join(' · ')}</p>`;
     }).join('');
     const body = STATIONS.map(([id, label]) => {
       if (id === 'error') {
-        const rows = HOSTS.map(h => { const r = hostData(d, h).error_stop || {}; return `<span data-host="${h.id}"><b class="tp-hostname">${h.name}</b> ${F(r.status) || '没读到'}</span>`; }).join('');
+        const rows = HOSTS.map(h => { const r = hostData(d, h).error_stop || {}; return `<span data-host="${h.id}"${dimAttr(h.id)}><b class="tp-hostname">${h.name}</b> ${F(r.status) || '没读到'}</span>`; }).join('');
         return `<tr id="hooks-error"><th scope="row">${label}<small>推手机</small></th><td colspan="3" class="ag-errorrow">三家由实况程序统一看对话状态，确认是出错停下了就推手机，不算哪一家的钩子。<span class="ag-errorhosts">${rows}</span></td></tr>`;
       }
       const open = expanded?.startsWith(id + '/') ? expanded.split('/')[1] : '';
@@ -392,7 +412,7 @@
     }).join('');
     return `<section class="tp-panel" id="hooks"><div class="tp-panel__head"><h2>钩子<small>近 7 天 · 钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量</small></h2><span class="tp-asof">截至 ${esc(when(hs.at || d.at))}</span></div>
       <div class="ag-hooktotals">${head}</div>${noOutcome ? '<p class="tp-small">拦了几次、出错几次这两样还没采上，先只有次数和耗时。</p>' : ''}
-      <table class="tp-table ag-hooktable"><thead><tr><th scope="col">当口</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table>
+      <table class="tp-table ag-hooktable"><thead><tr><th scope="col">当口</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table>
       <p class="tp-small ag-foot">格子越深跑得越多；点开一格看这家在这个当口的每条钩子、六问和最近一次塞给 AI 的原样。</p></section>`;
   }
 
@@ -420,8 +440,8 @@
     viewer = T.viewerOf(state);
     if (!d) { T.paint(page.root, T.placeholder(state, '智能体')); page.tick.set([], { off: true }); return; }
     const html = `<div class="tp-head"><div><h1>智能体</h1><p>三家 AI 被管得对不对、估工期准不准、干了多少活，再往下是三家怎么被管：设置和钩子。</p></div>
-        <p class="tp-head__side"><span>截至 ${esc(when(d.at))}</span>${HOSTS.map(h => `<span data-host="${h.id}"><i class="tp-swatch"></i>${h.name}</span>`).join('')}</p></div>
-      ${T.stateNote(state)}${statusSection(d)}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer) || ''}${configSection(d)}${hooksSection(d)}`;
+        <div class="tp-head__side ag-headside"><span>截至 ${esc(when(d.at))}</span>${picker()}</div></div>
+      ${T.stateNote(state)}${statusSection(d)}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer, { only, chips }) || ''}${configSection(d)}${hooksSection(d)}`;
     T.paint(page.root, html);
     page.tick.set(feed(d), { off: state.offline });
     if (!landed && location.hash) landed = T.reveal(location.hash.slice(1));
@@ -430,7 +450,20 @@
   const page = T.boot({ resource: 'agents', ask: () => '请看实况智能体页：三家规则、钩子和设置有没有对上，工期估得准不准。先用大白话说，别动手。',
     onState(next) { state = next; draw(); } });
   page.root.addEventListener('click', e => {
-    // 搬来的两块（你跟三家说了多少、三家常用的技能）：切换时段、点一家高亮
+    // 看哪一家：data-only 直接选（页顶和“全部”），data-pick 是图例、三家那几行、柱段——点一家只看它，再点一次回到全部
+    const set = e.target.closest('[data-only]'), pick = e.target.closest('[data-pick]');
+    if (set || pick) {
+      const next = set ? (set.dataset.only === 'all' ? null : set.dataset.only) : only === pick.dataset.pick ? null : pick.dataset.pick;
+      if (next === only) return;
+      const el = set || pick, sec = el.closest('section[id]');
+      // 点了哪个按钮，重画后这个按钮停在原处；柱段这类不是按钮的，停住这一块的标题
+      const anchor = !sec ? `.tp-head [data-only="${next || 'all'}"]` : el.closest('.ag-mlegend') ? `#${sec.id} .ag-mlegend [data-${set ? 'only' : 'pick'}="${set ? set.dataset.only : pick.dataset.pick}"]` : `#${sec.id} .tp-panel__head`;
+      only = next;
+      if (only && expanded && expanded.split('/')[1] !== only) expanded = null;   // 别家展开着的钩子格收起来
+      T.keep(page.root, anchor, draw);
+      return;
+    }
+    // 搬来的两块（你跟三家说了多少、三家常用的技能）：切换时段、技能展开收起
     const moved = window.AgentsMoved?.click(e.target);
     if (moved) { T.keep(page.root, moved, draw); return; }
     const cell = e.target.closest('[data-cell]'), seg = e.target.closest('[data-period]'), more = e.target.closest('[data-models]');
