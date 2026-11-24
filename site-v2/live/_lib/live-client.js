@@ -309,11 +309,17 @@
         const response = await fetch(PAIR_URL, { method: 'POST', credentials: 'omit', cache: 'no-store',
           headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: match[1] }),
           signal: AbortSignal.timeout(12000) });
-        const body = response.ok ? await response.json() : null;
-        if (body?.status === 'pass' && /^[A-Za-z0-9_-]{43}$/.test(body.token || '')) {
+        const body = await response.json().catch(() => null);
+        if (response.ok && body?.status === 'pass' && /^[A-Za-z0-9_-]{43}$/.test(body.token || '')) {
           localStorage.setItem('wly-cockpit-device', body.token);
           if (device() === body.token) return '这台设备已设为本人设备，私人事项会直接显示';
         }
+        // 兑换时个人资料没解锁、无限制授权也没开（403），或读不到授权状态（503）：电脑没用掉这条链接，照实说
+        const refused = {
+          cockpit_pair_authorization_required: '要先在电脑上解锁个人资料或开着无限制授权，才能把这台加成可信设备；这条链接还能用',
+          cockpit_pair_authorization_unavailable: '暂时读不到授权状态，这条链接还能用，稍后再点',
+        }[!response.ok && body?.error];
+        if (refused) return refused;
       }
     } catch { /* 格式、接口和本地存储失败，都用同一句提示。 */ }
     return '配对链接无效或已过期，请让 AI 重新发一个';

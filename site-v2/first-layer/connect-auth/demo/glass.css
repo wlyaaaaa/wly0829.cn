@@ -945,6 +945,11 @@ html:has(> body.page--connect), body.page--connect { overflow-x: clip; }
 .page--auth .has-error .lock-error { display: block; }
 .page--auth .has-error .code input { background: #fff5ef; box-shadow: inset 0 0 0 1.5px #ad6248; }
 .page--auth .deal.is-lock .go__btn:disabled { opacity: .5; }
+/* 开授权那一行排满了（时长、补充到上限、两项一起办、码格、验证），中间放不下提示字，原来会压在码格底下：
+   有提示时把它放到这一行下面、靠右写全，这一条随之加高；这一行里各样东西的位置不变（码格前留出原来那句空着时的 10+14px），没提示时和原来一样 */
+.page--auth .deal.is-active:not(.is-lock):not(.is-retry):has(.go__msg.is-shown) { position: relative; padding-bottom: 28px; }
+.page--auth .deal.is-active:not(.is-lock):not(.is-retry):has(.go__msg.is-shown) .code { margin-left: 24px; }
+.page--auth .deal.is-active:not(.is-lock):not(.is-retry) .go__msg.is-shown { position: absolute; right: 0; bottom: 0; margin: 0; }
 
 .cell__inline { margin: 6px 0 0; font-size: 14px; }
 .cell__inline a { margin-left: 8px; }

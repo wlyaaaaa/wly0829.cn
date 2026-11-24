@@ -573,7 +573,7 @@ test('v2 adapter reuses create/verify, queries uncertainty, cancels only the req
   for (const outcome of ['succeeded', 'failed', 'unknown', 'busy']) {
     const calls = [], original = { state_version: 'v1', personal_data: { state: 'unlocked' } };
     const env = { local: false, base: '', state: structuredClone(original), fields: { pd: 'personal_data' }, kinds: { pd: 'personal-data', ur: 'unrestricted', win: 'windows' }, meta: { viewer: { kind: 'owner' } },
-      busy: false, pending: null, actionSequence: 0, disconnected: false, openKey: null, fresh: () => true, crypto: { randomUUID: () => 'same-request' }, clock: () => 100, createGrantRecovery: () => ({ start() {} }), render() {}, message() {}, begin() {}, waiting() {}, failed() {}, unsure: 'unsure', grantResultNeedsQuery, notice: { prepend() {} },
+      busy: false, pending: null, actionSequence: 0, disconnected: false, openKey: null, fresh: () => true, requestId: () => 'same-request', lockIds: {}, clock: () => 100, createGrantRecovery: () => ({ start() {} }), render() {}, message() {}, begin() {}, waiting() {}, failed() {}, unsure: 'unsure', grantResultNeedsQuery, notice: { prepend() {} },
       refreshAccess() {}, localStorage: { getItem: () => 'synthetic-device' }, createGrantAttempt, canRestartUnsubmittedGrant, reductionFailureResult, errorMessages };
     env.remember = value => { env.pending = grantResultNeedsQuery(value) ? { ...value, key: value.key || env.pending?.key || 'pd' } : null; };
     env.receipt = value => { if (value) { env.result = value; env.remember(value); } };
@@ -610,7 +610,7 @@ test('v2 adapter reuses create/verify, queries uncertainty, cancels only the req
     } else assert.equal(env.result.state, outcome);
     env.pending = null; env.fresh = () => false; const before = calls.length; await env.submit('pd', '8', false, '123456'); assert.equal(calls.length, before);
     env.fresh = () => true;
-    for (const key of ['pd', 'ur', 'win']) { env.pending = null; await env.lock(key); assert.equal(calls.at(-1).options.device, 'synthetic-device'); assert.equal(calls.at(-1).path, '/locks/' + env.kinds[key]); }
+    for (const key of ['pd', 'ur', 'win']) { env.pending = null; await env.lock(key, key === 'pd' ? '123456' : undefined); assert.equal(calls.at(-1).options.device, 'synthetic-device'); assert.equal(calls.at(-1).path, '/locks/' + env.kinds[key]); }
     env.pending = { request_id: 'same-request' }; env.apiRequest = async (base, path, options) => { calls.push({ path, options }); return { request_id: 'same-request', state: options ? 'cancelled' : 'pending', csrf_token: 'new-csrf' }; };
     await env.query(true); assert.equal(calls.at(-1).path, '/requests/same-request/cancel'); assert.equal(calls.at(-1).options.csrf, 'new-csrf'); assert.deepEqual(env.state, original);
     env.local = true; let opened = 0; env.entry = () => { opened++; }; const count = calls.length;
