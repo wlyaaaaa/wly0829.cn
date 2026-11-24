@@ -31,13 +31,18 @@
   .book-col-antigravity { width: 16%; }
   .book-col-last { width: 13%; }
   :is(th, td) { padding-inline: 6px; }
-  :is(th, .book-cell--last, .book-detail__metric) { white-space: normal; }
+  :is(th, .book-cell--last) { white-space: normal; }
   th { padding-inline: 4px; overflow-wrap: anywhere; }
   .book-cell--last { padding-inline-start: 6px !important; }
+  /* 点开一行：Claude、Codex 各自的近 30 天、近 7 天、累计、最近一次，几样之间留开 */
+  .book-detail__metrics { display: inline-flex; flex-wrap: wrap; gap: 0 12px; }
 }
+/* 皇冠、钟那几行悬停时不用 filter 变暗：filter 会让行尾的展开箭头跳到名字格末尾 */
+#record-body .book-row.has-detail:is(.is-top, .is-old):hover > td { filter: none; box-shadow: inset 0 0 0 100vmax rgb(20 20 19 / .015); }
 #record-body .book-pick__list { display: flex; margin-inline-end: -12px; }
-#record-body .book-pick__item { flex: 1 1 auto; padding-inline: 3px; }
-#record-body .book-pick__name { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+/* 名字放不下才换行，在连字符处断；每项至少有一个整词宽，不把一个词拆成两截（“cockpi / t”） */
+#record-body .book-pick__item { flex: 1 1 auto; min-width: auto; padding-inline: 3px; }
+#record-body .book-pick__name { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: break-word; }
 .book .book-table:has(.book-col-host_version) tr > :is(th, td) { padding-inline: 6px; }
 .book .book-table:has(.book-col-host_version) .book-row.has-detail > td:last-child { padding-right: 36px; }
 .book-table:has(.book-col-host_version) .book-mark:empty { display: none; }
