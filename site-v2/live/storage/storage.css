@@ -107,6 +107,8 @@
 .dk-go { font-size: 18px; color: var(--muted); transition: transform .2s ease; justify-self: center; }
 .dk-row[open] .dk-go { transform: rotate(90deg); }
 .dk-more { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.15fr); gap: 28px; padding: 6px 40px 18px 96px; }
+/* 没有文件夹读数的盘不留文件夹那一栏：用途照原宽，口径占剩下的（M683） */
+.dk-more--nofolders { grid-template-columns: minmax(0, 1fr) minmax(0, 2.15fr); }
 .dk-more h4 { margin: 4px 0 8px; font-size: 13px; line-height: 18px; font-weight: 700; color: var(--ink); }
 .dk-list { margin: 0; padding: 0; list-style: none; }
 .dk-list li { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; padding: 5px 0 8px; font-size: 13px; line-height: 18px; }
