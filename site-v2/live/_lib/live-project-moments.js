@@ -57,7 +57,8 @@
   function moment(projectId, key, m, changedAt) {
     const s = spec(projectId, key);
     if (!s || !m || failed(m) || s.when === 'stale' && !stale(m)) return null;
-    const at = m.source_at || m.at;
+    // 跟页面写“几时取的”用同一个时刻 at；页头“有多大”的 checked_at／source_at 是夜里复查的时刻，复查没重算时 at 不动
+    const at = m.at || m.source_at;
     if (s.code) {
       const measured = parse(at), changed = parse(changedAt);
       return Number.isFinite(measured) && Number.isFinite(changed) && measured >= changed ? `按 ${day(at)} 那版代码算` : null;
