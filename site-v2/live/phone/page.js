@@ -266,12 +266,14 @@
     qualify();
   }
   function chartHost(el, title) { const h = document.createElement('div'); h.className = 'phone-chart'; h.innerHTML = `<h3 class="use-two__k">${fh(title, '图表', 'title')}</h3><div></div>`; el.append(h); return h.lastElementChild; }
+  const rangeStatus = key => $(`grp-${key}`)?.querySelector('.phone-range [role="status"]');
   function rangeBar(el, key, label) {
     const nav = document.createElement('div'); nav.className = 'phone-range';
-    nav.innerHTML = `<span>${label}</span><span class="seg" role="group" aria-label="${label}"><button type="button" data-needs-pc data-range="24h" aria-pressed="true">24 小时</button><button type="button" data-needs-pc data-range="7d" aria-pressed="false">近 7 天</button></span>`;
+    nav.innerHTML = `<span>${label}</span><span class="fog__note" role="status"></span><span class="seg" role="group" aria-label="${label}"><button type="button" data-needs-pc data-range="24h" aria-pressed="true">24 小时</button><button type="button" data-needs-pc data-range="7d" aria-pressed="false">近 7 天</button></span>`;
     for (const button of nav.querySelectorAll('[data-range]')) button.setAttribute('aria-pressed', String(button.dataset.range === (ranges[key] || '24h')));
     el.append(nav); nav.addEventListener('click', e => { const b = e.target.closest('[data-range]'); if (!b || pcOffline() || (ranges[key] || '24h') === b.dataset.range) return;
       ranges[key] = b.dataset.range; for (const x of nav.querySelectorAll('[data-range]')) x.setAttribute('aria-pressed', String(x === b));
+      nav.querySelector('[role="status"]').textContent = `正在读${b.textContent.trim()}…`;
       watchCharts([key]); });
   }
   function buildChapter(el, group) {
@@ -766,6 +768,7 @@
     watches[key] = V.watchChart('phone/charts', key, span, width, {
       data(d, meta) {
         if (current !== generations[key] || !d) return;
+        rangeStatus(key)?.replaceChildren();
         const p = meta.source === 'fixture' && d.ranges ? d.ranges[span] : d;
         shownRanges[key] = span;
         chartDone.add(key); packs.set(key, { ...p, series: (p.series || []).filter(s => s.group === key) });
@@ -776,6 +779,7 @@
         if (current !== generations[key] || s.data != null) return;
         if (!packs.has(key)) board.groupPhase(key, s);
         if (['none', 'gone', 'paused'].includes(s.phase)) {
+          rangeStatus(key)?.replaceChildren();
           shownRanges[key] = span; chartDone.add(key); packs.delete(key);
           board.data({ series: [...packs.values()].flatMap(p => p.series || []) }); refresh();
         }
