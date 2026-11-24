@@ -31,7 +31,7 @@
     return `到${day} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
   }
   const fresh = () => online && meta.source === 'net' && Number.isFinite(Date.parse(meta.at)) && Math.abs(clock() - Date.parse(meta.at) / 1000) <= 120 && Date.parse(meta.at) / 1000 >= readAfter;
-  const windowsState = () => windowsUnlockedObservation !== null && state?.windows?.observed_at_unix === windowsUnlockedObservation ? 'unlocked' : state?.windows?.state;
+  const windowsState = () => windowsUnlockedObservation !== null && state?.windows === windowsUnlockedObservation ? 'unlocked' : state?.windows?.state;
   const canOfferWindowsUnlock = () => state?.policy?.actions?.unlock_windows === true &&
     ['locked', 'no_session'].includes(windowsState()) && Math.abs(clock() - state.windows.observed_at_unix) <= 120;
   const entry = () => { if (state?.entry) window.open(state.entry, '_blank', 'noopener'); };
@@ -88,15 +88,16 @@
     // Store no factor, CSRF token or local authority; reload only queries this ID.
     if (pending) sessionStorage.setItem(storageKey, JSON.stringify(pending)); else sessionStorage.removeItem(storageKey);
   }
-  function receipt(value, submittedNow = false) {
+  function receipt(value, windowsAtSubmit = null) {
     if (!value) return;
     if (value.action === 'windows-unlock') {
       if (Number.isFinite(value.cooldown_until_unix)) windowsUnlockCooldown = value.cooldown_until_unix;
       const waiting = grantResultNeedsQuery(value);
       const feedback = cooldownText(windowsUnlockCooldown) || lockMessages[value.error] || ({
         public_windows_unlock_disabled: '解锁入口已停用', public_request_not_found: '查不到这次解锁结果',
+        public_windows_credential_unavailable: '电脑上保存的登录凭据不可用，这次没解锁',
       }[value.error]) || '这次没解锁';
-      if (submittedNow && value.state === 'succeeded') windowsUnlockedObservation = state?.windows?.observed_at_unix ?? null;
+      if (value.state === 'succeeded') windowsUnlockedObservation = windowsAtSubmit;
       windowsUnlockReceipt = value.state === 'succeeded' ? '解锁已完成' : waiting ? '解锁结果待确认' : openKey === 'win' ? '' : feedback;
       if (openKey === 'win') {
         if (value.state === 'succeeded' || waiting) setOpen(null);
@@ -187,13 +188,14 @@
   async function unlockWindows(code) {
     if (local || busy || pending || !fresh() || !canOfferWindowsUnlock() || windowsUnlockCooldown > clock() || !/^\d{6}$/.test(code)) return;
     const request_id = crypto.randomUUID(), action = 'windows-unlock';
+    const windowsAtSubmit = state.windows;
     busy = true;
     windowsUnlockReceipt = '';
     try {
       remember({ request_id, action, state: 'pending' });
       render();
       const result = await apiRequest(base, '/unlocks/windows', { method: 'POST', body: { request_id, totp: code } });
-      receipt({ ...result, action }, true);
+      receipt({ ...result, action }, windowsAtSubmit);
     } catch (error) {
       receipt(reductionFailureResult(error, request_id, action));
     } finally {
