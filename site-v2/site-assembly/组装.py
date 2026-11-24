@@ -838,7 +838,7 @@ def connect_fixed():
     try:
         connect = runpy.run_path(str(CONNECT_VIEWS))['connect']
         registered = lambda name: json.loads((CONNECT_VIEWS.parents[2] / 'registries' / name).read_text(encoding='utf-8-sig'))
-        endpoints = connect({}, registered, lambda key: {}, {}, None)['data']['endpoints']
+        endpoints = connect({}, registered, {}, None)['data']['endpoints']
         return {'endpoints': {key: endpoints[key] for key in ('main', 'sub')}}
     except (OSError, ValueError, KeyError, TypeError) as error:
         print(f'  注意：连接电脑页的固定接法没算出来（{error}），页面照旧等实时读数')
