@@ -36,15 +36,35 @@
   }
   function updateCutoff(key, data) {
     const section = $(key === 'changes' ? 'changes-footer' : key), at = stamp(data?.at);
+    // 冻结名册的截至时刻跟着“冻结 N 个 ›”排在偶用那组右边；只看冻结的时候照旧写在名册底下
+    const host = key === 'frozen' && !frozenOnly ? $('frozen-head') : section;
     const label = { active: '在用项目名册截止', frozen: '冻结项目名册截止', changes: '项目变化截止' }[key];
     const legacy = !at && isStale(data) && staleText(data);
     const merged = key === 'active' && !hero.hidden && Date.parse(data?.at) === Date.parse(home?.at);
     const text = at && !merged ? `${label.replace(/截止$/, '截至')} ${at}` : legacy ? `${label.replace(/截止$/, '')} · ${legacy}` : '';
     let note = section.querySelector('[data-source-cutoff]');
-    if (!text) { note?.remove(); return; }
-    if (!note) { note = document.createElement('p'); note.className = 'row__sub'; note.dataset.sourceCutoff = ''; section.append(note); }
+    if (!text) { note?.remove(); if (key !== 'changes') alignFrozen(); return; }
+    if (!note) { note = document.createElement('p'); note.className = 'row__sub'; note.dataset.sourceCutoff = ''; }
+    if (note.parentElement !== host) host.append(note);
     note.textContent = text;
+    if (key !== 'changes') alignFrozen();
   }
+  // “冻结 N 个 ›”和下面那行截至时刻往上提，和偶用那组最后的“展开（还有 N 条）”同一行起（没有展开就和“在用项目名册截至”同一行）；
+  // 那组点开了、或两行都没有，就在下面右边自成一行。提多少按当时版面量；高度至少垫到左边最后一行字底下，下面的近 30 天不会压上来，也不多空一截。
+  function alignFrozen() {
+    const head = $('frozen-head');
+    head.style.marginTop = head.style.minHeight = '';
+    if (frozenOnly || $('board').hidden || $('frozen').dataset.read || !head.querySelector(':scope > :not([hidden])')) return;
+    const anchor = $('active-list').lastElementChild?.querySelector(':scope > details:not([open]) > summary') || $('active').querySelector('[data-source-cutoff]');
+    if (!anchor?.getClientRects().length) return;
+    // 按排版位置量（offsetTop 一层层加），不受切换名册时那下 6 像素的动效位移影响
+    const pageY = el => { let y = 0; for (let n = el; n; n = n.offsetParent) y += n.offsetTop; return y; };
+    const lift = pageY(head) - pageY(anchor);
+    if (lift <= 0) return;
+    head.style.marginTop = `${-lift}px`;
+    head.style.minHeight = `${Math.max(0, Math.round($('active').getBoundingClientRect().bottom - anchor.getBoundingClientRect().top))}px`;
+  }
+  if ('ResizeObserver' in window) new ResizeObserver(() => alignFrozen()).observe($('active'));
   let disconnected;
   const repaints = new Map(), remember = (key, draw) => (d, meta) => { repaints.set(key, () => draw(d, meta)); draw(d, meta); };
   let viewer = 'public', home = null, changes = null, changeRows = null, changeViewer = 'public', next = null;
@@ -270,7 +290,7 @@
     if (!U.offline?.() && !d?.activity) U.html($('activity-chart'), '<p class="pj-note">近 30 天项目活跃暂时读不到</p>');
 
   }
-  // 下面两块（本地还没推的改动、最近成品）和上面画册一套：大标题加绿条，白卡、深色正文，配项目小图。
+  // 下面两块（本地还没推的改动、成品）和上面画册一套：大标题加绿条，白卡、深色正文，配项目小图。
   const secretName = (field, kind = viewer) => kind === 'public' && !!field && typeof field === 'object' && !!(field.hidden || field.hidden_block || field.visibility === 'owner' || field.public === 'owner' || field.visibility === 'pending' || field.rewrite === 'pending');
   // 项目小图：名字不公开的不放图（只铺占位色），免得认出是哪个项目；外观表没到也先铺占位色。
   function miniPic(id, nameField, kind = viewer) {
@@ -309,7 +329,8 @@
         box = document.createElement('section'); box.id = id; box.className = `pj-sec pj-extra pj-extra--${id}`;
         box.innerHTML = '<p class="part"><span></span></p><p class="pj-extra__note" data-extra-note></p><ul class="pj-extra__list"></ul><details class="pj-extra__more"><summary class="live-disclosure"><span class="disclosure-closed"></span><span class="disclosure-open">收起</span><span class="disclosure-chev">›</span></summary><ul class="pj-extra__list" data-extra-rest></ul></details>';
         if (id === 'recent-artifacts') box.syncDisclosure = recentDisclosure(box);
-        (id === 'recent-artifacts' && $('unpushed') || $('activity')).after(box);
+        // 顺序：近 30 天项目活跃 → 全部变化 → 本地还没推的改动 → 成品（本人 11-24 20:34，汇报页选 A）
+        (id === 'recent-artifacts' && $('unpushed') || $('changes')).after(box);
       }
       box.hidden = frozenOnly; box.querySelector('.part > span').textContent = title;
       U.list(box.querySelector('ul'), rows); U.html(box.querySelector('[data-extra-note]'), note);
@@ -402,7 +423,7 @@
     const note = items.length || recent?.hidden || missing ? [
       recent.at && `成品数据截至 ${stamp(recent.at)}`, missing || recent.q === 'partial' && '只列已读到的成品',
     ].filter(Boolean).join(' · ') : '';
-    section('recent-artifacts', '最近成品', cards.slice(0, 9), note, cards.slice(9));
+    section('recent-artifacts', '成品', cards.slice(0, 9), note, cards.slice(9));
   }
   window.LiveHeader.watch(null, {
     phase: s => phase('home', s),
@@ -420,7 +441,7 @@
     renderHead(); renderOverview(d); update('active', () => renderActive(d?.items));
     if (d) reads.active.done();
   }), link: s => link('active', s) };
-  window.Live.watch('projects', { state: 'frozen' }, { phase: s => phase('frozen', s), data: remember('frozen', (d, meta) => { viewer = meta.viewer?.kind || 'public'; if (!d) return; update('frozen', () => renderFrozen(d.items)); reads.frozen.done(); }), link: s => link('frozen', s) });
+  window.Live.watch('projects', { state: 'frozen' }, { phase: s => phase('frozen', s), data: remember('frozen', (d, meta) => { viewer = meta.viewer?.kind || 'public'; if (!d) return; update('frozen', () => renderFrozen(d.items)); reads.frozen.done(); alignFrozen(); }), link: s => link('frozen', s) });
   const changeAt = d => d?.source_at || d?.at;
   const rosterChanges = { phase: s => phase('changes', s), data: remember('changes', (d, meta) => {
     if (!d) return;
@@ -447,6 +468,7 @@
     if (nextView === frozenOnly) return;
     frozenOnly = nextView;
     setRosterVisibility();
+    updateCutoff('frozen', states.get('frozen')?.data);
     for (const id of ['unpushed', 'recent-artifacts']) if (frozenOnly && $(id)) $(id).hidden = true;
     const overview = p.has('fixture') ? home : states.get('active')?.data;
     if (!frozenOnly && overview) renderOverview(overview);
