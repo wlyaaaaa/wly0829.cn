@@ -178,7 +178,7 @@
         <div class="lb-cell lb-cell--time"><span data-task-state${triggerTitle}>${esc(scheduled)}</span></div><div class="row__acts">${actions}</div>` };
     }
     const nameBody = U.fieldHtml(name, { name: '自动任务', kind: viewer, marker: true });
-    const nameNote = /live-mark|trust-note/.test(nameBody) ? nameBody.slice(nameBody.startsWith(`${title} `) ? title.length + 1 : 0) : '';
+    const nameNote = (/live-mark|trust-note/.test(nameBody) ? nameBody.slice(nameBody.startsWith(`${title} `) ? title.length + 1 : 0) : '') || U.visitorLabel(t, ['$', 'name', 'display_name'], '这个任务的名字', viewer);
     const status = U.status(t, { small: true });
     const unreliable = Array.isArray(coverage) && coverage.some(c => c?.id === t.id && c.reliable === false);
     const note = (!description.length || ['red', 'amber', 'blue'].includes(status.tone)) && status.note !== outcome && !/^(?:数据截止|这次没读到|没有记录)/.test(status.note) && status.note;

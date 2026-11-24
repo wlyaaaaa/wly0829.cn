@@ -255,6 +255,9 @@
     // 只有外文思考时，后台给缺因（field_gaps.thinking）：先说一句为什么是英文，再给原文
     const gap = thought && typeof chat.field_gaps?.thinking === 'string' ? chat.field_gaps.thinking : '';
     box.hidden = !thought; node.hidden = !thought;
+    // M684：思考摘要访客那边不一样的，在这块标题后挂签（整场藏着的只在页头挂）
+    const thinkHead = box.querySelector('.route-h__text');
+    if (thinkHead) U.html(thinkHead, '思考摘要' + (thought && viewer === 'owner' && !U.visitorWholeHidden(chat) ? U.visitorLabel(chat, 'thinking', '思考摘要', viewer) : ''));
     U.html(node, thought ? (title ? `<b class="route-think__lead">${title}</b>` : '') + (gap ? `<small class="route-think__lead" style="font-weight:400;color:var(--route-muted, #848b87)">${esc(gap)}</small>` : '') + thought : '');
   }
   // 本人版给全文：页头那句、思考摘要、过程记录和帮手的每一行都不收、不截；访客版照旧一句收起
@@ -329,14 +332,17 @@
     const summary = replyBody(U.chatProgressText(chat.summary, chat, viewer)), reply = replyBody(rawReply);
     if ((text(summary) != null || summary?.hidden || summary?.visibility === 'owner' || summary?.public === 'owner' || pending(summary) || summary?.q === 'warming') && (viewer === 'public' && field(summary, summary, chat).visibility === 'owner' || shown(summary) !== shown(say))) facts.push(['', chatCell(summary, '正式摘要', chat)]);
     const replyContent = hasReply || !!(rawReply && (markOf(rawReply, rawReply) || pending(rawReply) || rawReply.q === 'warming'));
+    // M684：最新回复访客那边不一样的（整块 reply / latest_reply，或正文对象里只换了词的 reply.visitor_labels.text），在这一行末挂签
+    const blockTag = (key, what) => viewer === 'owner' && !U.visitorWholeHidden(chat) ? U.visitorLabel(chat, key, what, viewer) : '';
+    const replyTag = blockTag(['reply', 'latest_reply'], '最新回复');
     if (!replyContent) facts.push(['最新回复', privateSaid(missingReply, chat), false]);
     else if (shown(reply) !== shown(say) && shown(reply) !== shown(summary)) {
-      facts.push(['最新回复', privateSaid(reply, chat)]);
+      facts.push(['最新回复', privateSaid(reply, chat) + replyTag]);
     }
     const prompt = chatCell(chat.task_prompt, '任务原文', chat);
     if (prompt && shown(chat.task_prompt) !== shown(say)) facts.push(['', prompt]);
     $('words').hidden = !facts.length; $('rec').hidden = false;
-    U.html($('plan-box').querySelector('.route-h__text'), '执行计划');
+    U.html($('plan-box').querySelector('.route-h__text'), '执行计划' + (plan.plan.length ? blockTag('plan', '执行计划') : ''));
     drawPlan(plan); drawNow(plan, facts); drawHelpers(); drawLog(log);
     R.reclip();
     if (first && location.hash === '#plan-box' && !$('plan-box').hidden) requestAnimationFrame(() => $('plan-box').scrollIntoView());

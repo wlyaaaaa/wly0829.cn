@@ -69,6 +69,8 @@
       outputs: list(r.outputs).map(o => output(o, viewer)), outputCount: num(r.output_count),
       resumes: str(r.resumes_run_id), resumedBy: str(r.resumed_by_run_id),
       conversation: r.conversation_available === true, receipt: r.receipt_available === true,
+      // M684：本人读口给的访客差异标记（conversation 标的是这轮所挂的对话），原样带着给页面挂签
+      labels: r.visitor_labels && typeof r.visitor_labels === 'object' ? r.visitor_labels : null,
       href: runPath(category, r.run_id),
     };
   }

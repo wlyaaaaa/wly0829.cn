@@ -300,7 +300,9 @@
   const NAMES_WHY = '备份文件名是程序自己记下的，量大、没人逐条看过，访客版只写有多少个';
   function filePrivacy(d) {
     const slot = $('files-privacy'), counted = Number.isSafeInteger(d?.file_name_count);
-    const withheld = !notApplicable(d) && (counted ? d.file_name_count > 0 : privateNames(d) || (d?.hidden_count ?? d?.hidden) > 0 || d?.items?.some(item => ownerFile(item.name)));
+    // 访客回包里列了文件就照列（名字给了就是能看），只有名字真被收起的才写那句；没列清单的照旧按 file_name_count 写。
+    const listed = viewer === 'public' && Array.isArray(d?.items) && d.items.length > 0;
+    const withheld = !notApplicable(d) && (listed ? d.items.some(item => ownerFile(item.name)) : counted ? d.file_name_count > 0 : privateNames(d) || (d?.hidden_count ?? d?.hidden) > 0);
     const html = !withheld ? '' : viewer === 'owner' ? U.visitorHiddenTag('这批文件的文件名', NAMES_WHY, viewer) : esc(nameSentence(counted ? d.file_name_count : null, '这次备份的', d?.scope === 'pending_or_failed'));
     if (slot) { U.html(slot, html); slot.hidden = !html; }
   }

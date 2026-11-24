@@ -432,8 +432,10 @@
     return `<span class="live-mark live-mark--plain">${esc(label)}</span>`;
   }
   function rewriteNote(name, kind) {
-    const label = kind === 'owner' ? '对外换了说法' : '换了说法', subject = name || '这句话';
-    return explanationButton('rewritten', label, subject, `${subject}对外换了说法。本人能看到原文。`);
+    // 本人版用第二种标签（visitorRewrittenTag）；访客版照旧。
+    if (kind === 'owner') return visitorRewrittenTag(name || '这句话', '', kind);
+    const subject = name || '这句话';
+    return explanationButton('rewritten', '换了说法', subject, `${subject}对外换了说法。本人能看到原文。`);
   }
   function privateDownload(name) {
     return explanationButton('owner', '演示文件下载仅本人可见', '这份演示文件', `下载权限仅给本人。本人能在电脑上打开或保存${name || '这份演示文件'}。`);
@@ -455,24 +457,53 @@
     }
     return '';
   }
-  // 本人版：访客版整条藏掉的（后台在本人版这一条上留 visibility: 'owner'），原位挂“访客看不到”小签，点开写清藏了什么、为什么（M648）。
-  // 访客版不挂；只藏其中一句的，访客版原位已写“〈哪一样〉仅本人可见”，这里不管。后台给了 visitor_hidden_why 就把原因带上。
-  function visitorHiddenMark(item, what = '这一条', kind = viewer) {
-    if (kind !== 'owner' || !(item?.visibility === 'owner' || item?.public === 'owner' || item?.content_locked === true)) return '';
-    const why = typeof item.visitor_hidden_why === 'string' ? item.visitor_hidden_why.trim() : '';
-    return explanationButton('rewritten', '访客看不到', what, `访客版看不到${what}的标题和内容。${why ? `原因：${why.replace(/[。.]?$/, '。')}` : ''}`);
+  // M684：本人版两种标签，全站同一个样子，访客版不挂（本人 11-24 定稿：两种一眼分得开）。
+  // 第一种“访客看不到”（紫色）：访客那边这一处看不到原内容，只有中性占位。第二种“对外换了说法”（琥珀色）：访客看到的是换过的说法。
+  // 后台在本人读口的显示对象上给可选 visitor_labels：键是同一对象里的字段名，'$' 表示整块；值只有 hidden / rewritten，隐藏优先，缺键不挂。
+  // 正文对象里只换了词时，标记给在字段自己身上（如 reply.visitor_labels.text），这里一并读。
+  function visitorFieldKind(item, keys = ['$']) {
+    const found = [], labels = item && typeof item === 'object' && item.visitor_labels && typeof item.visitor_labels === 'object' ? item.visitor_labels : null;
+    for (const key of [].concat(keys)) {
+      if (labels) found.push(labels[key]);
+      const own = key !== '$' && item && typeof item === 'object' ? item[key] : null;
+      if (own && typeof own === 'object' && own.visitor_labels && typeof own.visitor_labels === 'object') found.push(own.visitor_labels.$, own.visitor_labels.text, own.visitor_labels.value);
+    }
+    return found.includes('hidden') ? 'hidden' : found.includes('rewritten') ? 'rewritten' : '';
   }
+  // 访客版整条藏掉的（visibility: 'owner'、整场锁、visitor_labels 标了整块或标题 hidden），原位挂“访客看不到”，点开写清藏了什么、为什么（M648）；
+  // 只标了换说法的挂第二种签（rewrittenWhat 是换了说法的那一样）。后台给了 visitor_hidden_why 就把原因带上。
+  function visitorHiddenMark(item, what = '这一条', kind = viewer, { keys = ['$', 'title'], rewrittenWhat = `${what}的标题` } = {}) {
+    if (kind !== 'owner') return '';
+    const whole = item?.visibility === 'owner' || item?.public === 'owner' || item?.content_locked === true || visitorFieldKind(item, '$') === 'hidden';
+    const labeled = visitorFieldKind(item, keys);
+    if (!whole && labeled !== 'hidden') return labeled === 'rewritten' ? visitorRewrittenTag(rewrittenWhat, '', kind) : '';
+    const why = typeof item.visitor_hidden_why === 'string' ? item.visitor_hidden_why.trim() : '';
+    return explanationButton('rewritten', '访客看不到', what, `访客版看不到${what}的${whole ? '标题和内容' : '标题'}。${why ? `原因：${why.replace(/[。.]?$/, '。')}` : ''}`);
+  }
+  // 访客版整条都看不到的：页面据此不再在这一条的各块上重复挂签。
+  const visitorWholeHidden = (item, keys = ['$', 'title']) => !!item && (item.visibility === 'owner' || item.public === 'owner' || item.content_locked === true || visitorFieldKind(item, keys) === 'hidden');
   // 本人版：访客看不到的东西（被标对话、窗口标题、备份文件名、给了 open_note 的成品正文）在原位挂同一个“访客看不到”小签，点开写清看不到什么、为什么。
   function visitorHiddenTag(what, why = '', kind = viewer) {
     if (kind !== 'owner' || !what) return '';
     const reason = typeof why === 'string' && why.trim() ? `原因：${why.trim().replace(/[。.]?$/, '。')}` : '';
     return explanationButton('rewritten', '访客看不到', what, `访客版看不到${what}。${reason}`);
   }
+  function visitorRewrittenTag(what, why = '', kind = viewer) {
+    if (kind !== 'owner' || !what) return '';
+    const reason = typeof why === 'string' && why.trim() ? why.trim().replace(/[。.]?$/, '。') : '';
+    return explanationButton('reworded', '对外换了说法', what, `访客版看到的${what}是换过的说法，本人这边是原文。${reason}`);
+  }
+  // 按 visitor_labels 在原位挂两种签之一；keys 是这个位置显示的字段名（整块的位置带上 '$'）。
+  function visitorLabel(item, keys, what, kind = viewer) {
+    if (kind !== 'owner') return '';
+    const type = visitorFieldKind(item, keys);
+    return type === 'hidden' ? visitorHiddenTag(what, item?.visitor_hidden_why, kind) : type === 'rewritten' ? visitorRewrittenTag(what, '', kind) : '';
+  }
   // 新私事规则：访客侧不再画“另有 N 条仅本人可见”。
   const hiddenMore = () => '';
   function escapeNotes(text) {
     // 只让共用函数生成的固定结构通过，其余内容一律按文字显示。
-    return String(text ?? '').split(/(<button type="button" class="trust-note live-mark live-mark--(?:owner(?: live-mark--group)?|rewritten)" title="[^"<>]*" data-trust-context="[^"<>]*" data-trust-explanation="[^"<>]*" aria-expanded="false" aria-controls="live-privacy-note" data-trust-view>(?:<span class="live-mark__lock" aria-hidden="true">🔒<\/span>)?<span class="live-mark__label">[^<]*<\/span><\/button>)/g).map((part, index) => index % 2 ? part : esc(part)).join('');
+    return String(text ?? '').split(/(<button type="button" class="trust-note live-mark live-mark--(?:owner(?: live-mark--group)?|rewritten|reworded)" title="[^"<>]*" data-trust-context="[^"<>]*" data-trust-explanation="[^"<>]*" aria-expanded="false" aria-controls="live-privacy-note" data-trust-view>(?:<span class="live-mark__lock" aria-hidden="true">🔒<\/span>)?<span class="live-mark__label">[^<]*<\/span><\/button>)/g).map((part, index) => index % 2 ? part : esc(part)).join('');
   }
   function trustText(text, kind = viewer) {
     if (typeof text === 'number' && !Number.isFinite(text)) text = '';
@@ -1673,5 +1704,5 @@
     const when = mem.source_at ?? at;
     return parts.length ? [...parts, Number.isFinite(Date.parse(when)) ? `截至 ${date(when)}` : ''].filter(Boolean).join(' · ') : '';
   }
-  window.LiveUI = { memorySpec, justSaved, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  window.LiveUI = { memorySpec, justSaved, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();

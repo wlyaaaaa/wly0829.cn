@@ -196,8 +196,8 @@
     if (viewer === 'owner') return U.visitorHiddenTag('这里的窗口标题', '窗口标题是电脑自己记下的，量大、没人逐条看过，访客版只写有多少个', viewer);
     const n = recentList ? d?.recent_window_title_count : d?.window_title_count, label = typeof d?.window?.label === 'string' ? d.window.label.trim() : '';
     const scope = label ? `${label}的` : '这段时间的', valid = Number.isSafeInteger(n) && n >= 0;
-    if (valid && n === 0) return '';
-    if (!valid && !rows.some(r => {
+    // 访客回包里标题给了就照画，只有标题真被收起的才写那句。
+    if (valid && n === 0 || !rows.some(r => {
       const title = r.title_field ?? r.title;
       return r.visibility === 'owner' || title?.visibility === 'owner' || title?.public === 'owner' || title?.hidden;
     })) return '';
