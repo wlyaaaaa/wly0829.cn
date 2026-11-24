@@ -227,27 +227,27 @@
     const p = subPieces(m), desktop = id === 'pcconfig' && m.id === 'remote' ? window.ProjectAdditions?.desktopNote(m, projectViewer, lower) : '';
     // “这件事最后一次发生”的那一句（LiveProjectMoments）：一张卡里几项同一句时写在卡底一次（moment_shared），否则跟在这一项下面
     const moment = m.moment && !m.moment_shared ? U.fieldHtml(m.moment, { name: '读数说明', kind: projectViewer }) : '';
-    const line = [p.mark, desktop && esc(desktop), p.lead, moment].filter(Boolean).join(' · ');
-    return { line, desktop, cadence: window.ProjectAdditions?.metricCadence(m), extra: p.all.filter(x => x !== p.lead), labelText: metricText(m.label || '') };
+    const line = [p.mark, desktop && esc(desktop), p.lead].filter(Boolean).join(' · ');
+    return { line, moment, desktop, cadence: window.ProjectAdditions?.metricCadence(m), extra: p.all.filter(x => x !== p.lead), labelText: metricText(m.label || '') };
   }
   // 数字格：读数在上（大）、名字在下，一格一个数；字长的占一整行，最多两行，点一下看全
   function figRow(m) {
-    const v = value(m), href = metricHref(m), { line, extra, labelText, cadence } = lineOf(m);
+    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m);
     const label = `<span class="pj-fig__k" title="${esc(metricText(m.label))}">${U.fieldHtml(m.label, { name: '读数', place: 'label' })}${cadence || ''}${href ? ' <span class="more__chev">›</span>' : ''}</span>`;
     return {
       key: m.id, extra, labelText,
       cls: `pj-fig${v.long ? ' pj-fig--wide' : ''}${isStale(m) ? ' is-stale' : ''}`,
-      html: `${href ? `<a class="pj-fig__link" href="${esc(href)}">${label}</a>` : label}${href ? `<a class="pj-fig__link pj-fig__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-fig__v" title="${esc(v.plain)}"${v.long ? ' data-clamp' : ''}>${v.html}</span>`}${line ? `<small class="pj-fig__sub" title="${esc(plain(line))}">${subText(line)}</small>` : ''}`,
+      html: `${href ? `<a class="pj-fig__link" href="${esc(href)}">${label}</a>` : label}${href ? `<a class="pj-fig__link pj-fig__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-fig__v" title="${esc(v.plain)}"${v.long ? ' data-clamp' : ''}>${v.html}</span>`}${line ? `<small class="pj-fig__sub" title="${esc(plain(line))}">${subText(line)}</small>` : ''}${moment ? `<small class="pj-fig__sub pj-moment">${moment}</small>` : ''}`,
     };
   }
   // 两列小表（“更多数据”）：名字左、数右，一项一行；名字下一句解释
   function kvRow(m) {
-    const v = value(m), href = metricHref(m), { line, extra, labelText, cadence } = lineOf(m);
+    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m);
     const label = U.fieldHtml(m.label, { name: '读数', place: 'label' }) + (cadence || '');
     return {
       key: m.id, extra, labelText,
       cls: `pj-kv__row${v.long || v.plain.length > 9 ? ' pj-kv__row--wide' : ''}${isStale(m) ? ' is-stale' : ''}`,
-      html: `<span class="pj-kv__k">${href ? `<a href="${esc(href)}">${label} <span class="more__chev">›</span></a>` : label}${line ? `<small class="pj-kv__sub" title="${esc(plain(line))}">${subText(line)}</small>` : ''}</span>${href ? `<a class="pj-fig__link pj-kv__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-kv__v" title="${esc(v.plain)}"${v.long || v.plain.length > 9 ? ' data-clamp' : ''}>${v.html}</span>`}`,
+      html: `<span class="pj-kv__k">${href ? `<a href="${esc(href)}">${label} <span class="more__chev">›</span></a>` : label}${line ? `<small class="pj-kv__sub" title="${esc(plain(line))}">${subText(line)}</small>` : ''}${moment ? `<small class="pj-kv__sub pj-moment">${moment}</small>` : ''}</span>${href ? `<a class="pj-fig__link pj-kv__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-kv__v" title="${esc(v.plain)}"${v.long || v.plain.length > 9 ? ' data-clamp' : ''}>${v.html}</span>`}`,
     };
   }
   // 状态文字沿用原说法，灯只照后端 level 画。
@@ -970,7 +970,7 @@
       head.push(cell(m?.label ? readingLabel(m.label) + (cadence || '') : '现在', esc(words), { kind: 'text', wide: sentence(words), sub: id === 'agents' && h.id === 'release' && h.at ? esc(`${stamp(h.at)} 生效`) : esc(desktop || ''),
         href: id === 'agents' && h.id === 'release' && ruleVersion(h.value ?? h.text) ? RULES : '' }));
     } else if (typeof h === 'string' && headline(d)) {
-      const v = value(m), { line, cadence } = lineOf(m);
+      const v = value(m), { line: said, moment, cadence } = lineOf(m), line = [said, moment].filter(Boolean).join(' · ');
       head.push(cell(readingLabel(m.label) + (cadence || ''), v.html, { kind: v.long ? 'text' : '', wide: v.long && sentence(v.plain), title: `${metricText(m.label)} ${v.plain}`, href: metricHref(m), sub: id === 'agents' && m.id === 'release' && m.at ? esc(`${stamp(m.at)} 生效`) : line }));
     }
     if (d.changes7 != null) {
@@ -1178,6 +1178,8 @@
       if (raw && !raw.name) raw = { ...raw, name: raw.label || raw.title || raw.id || id };
       // 时刻是“这件事最后一次发生”的读数：不按多久算旧标旧，换成照这件事意思写的一句（M769 C 类）
       if (raw) raw = window.LiveProjectMoments?.settle(id, raw) ?? raw;
+      // 原话存档读数写成“到 X 为止：24 小时 N 条，7 天 N 条”，读数名也不再叫“近”
+      if (raw && id === 'agents' && Array.isArray(raw.sections)) raw = { ...raw, sections: raw.sections.map(s => Array.isArray(s?.metrics) ? { ...s, metrics: s.metrics.map(m => m?.id === 'quotes_recent' && typeof m.label === 'string' && quotesWindow(m, m.value && typeof m.value === 'object' ? m.value : m) ? { ...m, label: m.label.replace(/^近\s*7\s*天存下（含近\s*24\s*小时）$/, '7 天存下（含 24 小时）') } : m) } : s) };
       proj = raw;
       at = meta.at;
       const reads = first ? opening : [];

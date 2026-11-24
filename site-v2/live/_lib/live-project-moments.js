@@ -6,7 +6,7 @@
 //                                                   short：首页小卡一行放不下长句，用表里的 short（没有就用原句）
 // 只认表里的读数；读数本身读失败（read_error 之类）照旧标旧。真停了的（A 类）不在表里，照旧标旧。
 // when: 'stale' 的只在后台标了旧时才换（访客版回包里同一读数的时刻可能是取数时刻，没标旧就不动）；plain 只是不标旧，不另写一句（读数本身就是那个时刻）。
-// code：规模类读数（文件数、字数），读数时刻不早于页头“最近一次提交”才写“按 MM-DD 那版代码算”；早于提交的是真没重算，照旧。
+// code：规模类读数（文件数、字数），读数时刻不早于页头“最近一次提交”才写“按 MM-DD 那版代码算”（MM-DD 是那次提交的日子）；早于提交的是真没重算，照旧。
 (function (root, factory) {
   const api = factory();
   if (typeof module === 'object' && module.exports) module.exports = api;
@@ -26,8 +26,8 @@
   const TABLE = {
     'career-development': { ...each('completed started class_days quiz exercises known_minutes next_first_step', LEARN), progress_updated: { plain: true, when: 'stale' }, ...each('question_queue question_history', QUEUE) },
     'video-scaffold': { ...each('films duration latest checks versions legacy_chunks', FILMS), ...each('render_seconds render_fps', { say: '{d} 那一段测的' }), source_files: CODE },
-    'work-delivery-copilot': { ...each('usage office', { say: '工作记录最后更新于 {d}', short: '记录更新于 {d}' }), ...each('packages impact stale selected versions reporting_seconds launch_seconds', DEMO), latest_demo: PLAIN },
-    'daily-preferences': { cognitions: { say: '认识库最后变动于 {d}', short: '最后变动于 {d}' }, ...each('group-0 group-1 group-2 group-3 group-4 group-5', { say: '最后整理于 {d}' }) },
+    'work-delivery-copilot': { usage: { say: '工作记录最后更新于 {d}', short: '记录更新于 {d}' }, office: { say: '文件清单最后变动于 {d}' }, ...each('packages impact stale selected versions reporting_seconds launch_seconds', DEMO), latest_demo: PLAIN },
+    'daily-preferences': { cognitions: { say: '认识库最后变动于 {d}', short: '最后变动于 {d}' }, ...each('group-0 group-1 group-2 group-3 group-4 group-5', { say: '最后变动于 {d}' }) },
     'personal-finance': each('balance_date updated credit_until consumption_until credit_report asset_sources debt_sources references settled calendar_until credit_material calendar_entries calendar_days', BOOK),
     passwordcenter: { ...each('mobile_version mobile_code', { say: '{d} 装的' }), ...each('mobile_unlock mobile_sync', { say: '{d} 本人实测' }), desktop_installed: PLAIN },
     wechatdirect: { measurements: { say: '{d} 真机验收' }, environment: { say: '{d} 检查' } },
@@ -62,7 +62,7 @@
     const at = m.at || m.source_at;
     if (s.code) {
       const measured = parse(at), changed = parse(changedAt);
-      return Number.isFinite(measured) && Number.isFinite(changed) && measured >= changed ? `按 ${day(at)} 那版代码算` : null;
+      return Number.isFinite(measured) && Number.isFinite(changed) && measured >= changed ? `按 ${day(changedAt)} 那版代码算` : null;
     }
     if (s.plain) return '';
     const d = day(at);
